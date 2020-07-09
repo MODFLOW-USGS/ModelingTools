@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = False
+      Display = True
     end
     item
       Name = 'core code'
@@ -25767,6 +25767,23 @@ object TTaskHistory
         'Design and Planning'
         'PEST Observations'
         'PEST'
-        'Dialog boxes')
+        'Dialog boxes'
+        'Bug fix')
+    end
+    item
+      Date = 44021.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'MF-2015'
+        'core code'
+        'CHD'
+        'GHB'
+        'WEL'
+        'RIV'
+        'DRN'
+        'RCH'
+        'EVT'
+        'ETS'
+        'Testing')
     end>
 end

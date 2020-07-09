@@ -318,16 +318,25 @@ begin
   WriteInteger(Drn_Cell.Column+1);
   WriteFloat(Drn_Cell.Elevation);
 
-  if Drn_Cell.TimeSeriesName = '' then
-  begin
+//  if Drn_Cell.ConductanceParameterName = '' then
+//  begin
     WriteFloat(Drn_Cell.Conductance);
-  end
-  else
-  begin
-    WriteString(' ');
-    WriteString(Drn_Cell.TimeSeriesName);
-    WriteString(' ');
-  end;
+//  end
+//  else
+//  begin
+    //WriteFloat(Drn_Cell.Conductance * Drn_Cell.ConductanceParameterValue);
+//  end;
+
+//  if Drn_Cell.TimeSeriesName = '' then
+//  begin
+//    WriteFloat(Drn_Cell.Conductance);
+//  end
+//  else
+//  begin
+//    WriteString(' ');
+//    WriteString(Drn_Cell.TimeSeriesName);
+//    WriteString(' ');
+//  end;
 
 //  WriteFloat(Drn_Cell.Conductance);
   WriteIface(Drn_Cell.IFace);

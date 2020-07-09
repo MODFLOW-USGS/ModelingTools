@@ -889,8 +889,9 @@ resourcestring
   StrNoValueAssigned = 'No value assigned';
   StrStressPeriodD = 'Stress Period %d';
   StrWhenTheGhostNode = 'When the Ghost Node Correction package is enabled w' +
-  'ith the implicit option, the linear acceleration method in the solver mus' +
-  't be set to BICGSTAB instead of Conjugate Gradient,';
+  'ith the implicit option, the linear acceleration method in the Integrated' +
+  ' Model Solution package must be set to BICGSTAB instead of Conjugate ' +
+  'Gradient,';
 
 const
   // On Linux, @name is used to control the access permissions of files.

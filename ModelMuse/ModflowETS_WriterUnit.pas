@@ -1025,7 +1025,10 @@ begin
               end;
               ParameterValuesMf6 := ParamValues.Objects[Position] as TList;
               EtRateList := ParameterValuesMf6[TimeIndex];
-              WriteCellsMF6(DepthSurfaceCellList, EtRateList);
+              if EtRateList.Count > 0 then
+              begin
+                WriteCellsMF6(DepthSurfaceCellList, EtRateList);
+              end;
 
             end;
           end;

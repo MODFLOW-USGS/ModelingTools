@@ -19,6 +19,8 @@ type
     EndingTime: double;
     EvapotranspirationRateAnnotation: string;
     TimeSeriesName: string;
+    ETParameterName: string;
+    ETParameterValue: double;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -342,6 +344,8 @@ type
     function GetEvapotranspirationRate: double;
     function GetEvapotranspirationRateAnnotation: string;
     function GetTimeSeriesName: string;
+    function GetETParameterName: string;
+    function GetETParameterValue: double;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -364,6 +368,8 @@ type
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TEvtRecord read FValues write FValues;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    property ETParameterName: string read GetETParameterName;
+    property ETParameterValue: double read GetETParameterValue;
   end;
 
   TEvapotranspirationLayerCell = class(TEvapotranspirationCell)
@@ -757,6 +763,16 @@ end;
 function TEvt_Cell.GetLayer: integer;
 begin
   result := Values.Cell.Layer;
+end;
+
+function TEvt_Cell.GetETParameterName: string;
+begin
+  result := Values.ETParameterName;
+end;
+
+function TEvt_Cell.GetETParameterValue: double;
+begin
+  result := Values.ETParameterValue;
 end;
 
 function TEvt_Cell.GetEvapotranspirationRate: double;
@@ -2216,27 +2232,28 @@ end;
 { TEvtRecord }
 
 procedure TEvtRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
-//var
-//  CommentLength: Integer;
 begin
   Comp.Write(Cell, SizeOf(Cell));
   Comp.Write(EvapotranspirationRate, SizeOf(EvapotranspirationRate));
   Comp.Write(StartingTime, SizeOf(StartingTime));
   Comp.Write(EndingTime, SizeOf(EndingTime));
+  Comp.Write(EndingTime, SizeOf(ETParameterValue));
 
   WriteCompInt(Comp, Strings.IndexOf(EvapotranspirationRateAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(ETParameterName));
 
-//  CommentLength := Length(EvapotranspirationRateAnnotation);
-//  Comp.Write(CommentLength, SizeOf(CommentLength));
-//  Comp.WriteBuffer(Pointer(EvapotranspirationRateAnnotation)^,
-//    CommentLength * SizeOf(Char));
 end;
 
 procedure TEvtRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(EvapotranspirationRateAnnotation);
   Strings.Add(TimeSeriesName);
+  Strings.Add(ETParameterName);
+  {
+    ETParameterName: string;
+    ETParameterValue: double;
+  }
 end;
 
 procedure TEvtRecord.Restore(Decomp: TDecompressionStream;
@@ -2246,9 +2263,10 @@ begin
   EvapotranspirationRate := ReadCompReal(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
+  ETParameterValue := ReadCompReal(Decomp);
   EvapotranspirationRateAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
-//  EvapotranspirationRateAnnotation := ReadCompString(Decomp, Annotations);
+  ETParameterName := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TEvtSurfDepthRecord }

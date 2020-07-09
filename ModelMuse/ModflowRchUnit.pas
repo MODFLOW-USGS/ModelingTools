@@ -27,6 +27,8 @@ type
     EndingTime: double;
     RechargeRateAnnotation: string;
     TimeSeriesName: string;
+    RechargeParameterName: string;
+    RechargeParameterValue: double;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -230,6 +232,8 @@ type
     function GetRechargeRate: double;
     function GetRechargeRateAnnotation: string;
     function GetTimeSeriesName: string;
+    function GetRechargeParameterName: string;
+    function GetRechargeParameterValue: double;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -251,6 +255,8 @@ type
     property RechargeRate: double read GetRechargeRate;
     property RechargeRateAnnotation: string read GetRechargeRateAnnotation;
     property TimeSeriesName: string read GetTimeSeriesName;
+    property RechargeParameterName: string read GetRechargeParameterName;
+    property RechargeParameterValue: double read GetRechargeParameterValue;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
@@ -700,6 +706,16 @@ begin
   end;
 end;
 
+function TRch_Cell.GetRechargeParameterName: string;
+begin
+  result := Values.RechargeParameterName;
+end;
+
+function TRch_Cell.GetRechargeParameterValue: double;
+begin
+  result := Values.RechargeParameterValue;
+end;
+
 function TRch_Cell.GetRechargeRate: double;
 begin
   result := Values.RechargeRate;
@@ -872,6 +888,20 @@ begin
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.RchArray) - 1 do
       begin
         BoundaryValues := LocalBoundaryStorage.RchArray[BoundaryIndex];
+        if FCurrentParameter <> nil then
+        begin
+          BoundaryValues.RechargeRate :=
+            BoundaryValues.RechargeRate * FCurrentParameter.Value;
+          BoundaryValues.RechargeRateAnnotation := Format(Str0sMultipliedByT, [
+            BoundaryValues.RechargeRateAnnotation, FCurrentParameter.ParameterName]);
+          BoundaryValues.RechargeParameterName := FCurrentParameter.ParameterName;
+          BoundaryValues.RechargeParameterValue := FCurrentParameter.Value;
+        end
+        else
+        begin
+          BoundaryValues.RechargeParameterName := '';
+          BoundaryValues.RechargeParameterValue := 1;
+        end;
         Cell := TRch_Cell.Create;
         Cell.BoundaryIndex := BoundaryIndex;
         Assert(ScreenObject <> nil);
@@ -956,15 +986,16 @@ var
   ParamName: string;
   Model: TCustomModel;
   BoundaryList: TList;
-  StressPeriods: TModflowStressPeriods;
-  StartTime: Double;
-  EndTime: Double;
-  TimeCount: Integer;
+//  StressPeriods: TModflowStressPeriods;
+//  StartTime: Double;
+//  EndTime: Double;
+//  TimeCount: Integer;
   ItemIndex: Integer;
-  TimeSeriesList: TTimeSeriesList;
-  TimeSeries: TTimeSeries;
-  SeriesIndex: Integer;
-  InitialTime: Double;
+//  TimeSeriesList: TTimeSeriesList;
+//  TimeSeries: TTimeSeries;
+//  SeriesIndex: Integer;
+//  InitialTime: Double;
+  ArrayIndex: Integer;
 begin
   FCurrentParameter := nil;
   EvaluateArrayBoundaries(AModel);
@@ -1008,85 +1039,91 @@ begin
       if FCurrentParameter <> nil then
       begin
         BoundaryList := Param.Param.BoundaryList[AModel];
-        StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-        StartTime := StressPeriods.First.StartTime;
-        EndTime := StressPeriods.Last.EndTime;
-        TimeCount := BoundaryList.Count;
+//        StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
+//        StartTime := StressPeriods.First.StartTime;
+//        EndTime := StressPeriods.Last.EndTime;
+//        TimeCount := BoundaryList.Count;
         for ItemIndex := 0 to BoundaryList.Count - 1 do
         begin
           BoundaryStorage := BoundaryList[ItemIndex];
-          if BoundaryStorage.StartingTime > StartTime then
+          for ArrayIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
           begin
-            Inc(TimeCount);
+            BoundaryStorage.RchArray[ArrayIndex].RechargeParameterName := FCurrentParameter.ParameterName;
+            BoundaryStorage.RchArray[ArrayIndex].RechargeParameterValue := FCurrentParameter.Value;
           end;
-          StartTime := BoundaryStorage.EndingTime;
+//          if BoundaryStorage.StartingTime > StartTime then
+//          begin
+////            Inc(TimeCount);
+//          end;
+//          StartTime := BoundaryStorage.EndingTime;
         end;
-        BoundaryStorage := BoundaryList.Last;
-        if BoundaryStorage.EndingTime <= EndTime then
-        begin
-          Inc(TimeCount);
-        end;
+//        BoundaryStorage := BoundaryList.Last;
+//        if BoundaryStorage.EndingTime <= EndTime then
+//        begin
+////          Inc(TimeCount);
+//        end;
 
-        TimeSeriesList := FCurrentParameter.TimeSeriesList;
-        TimeSeries := TTimeSeries.Create;
-        TimeSeriesList.Add(TimeSeries);
-        TimeSeries.SeriesCount := Length(BoundaryStorage.RchArray);
-        TimeSeries.TimeCount := TimeCount;
-        TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-        TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-        for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-        begin
-          TimeSeries.SeriesNames[SeriesIndex] :=
-            Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-            TimeSeriesList.Count, SeriesIndex+1]);
-          TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-          TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-        end;
 
-        TimeCount := 0;
-        StartTime := StressPeriods.First.StartTime;
-        InitialTime := StartTime;
-        for ItemIndex := 0 to BoundaryList.Count - 1 do
-        begin
-          BoundaryStorage := BoundaryList[ItemIndex];
-          if BoundaryStorage.StartingTime > StartTime then
-          begin
-            TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-            for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-            begin
-              if ItemIndex > 0 then
-              begin
-                TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-              end
-              else
-              begin
-                TimeSeries.Values[SeriesIndex,TimeCount] :=
-                  BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
-              end;
-            end;
-            Inc(TimeCount);
-          end;
-          TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-          begin
-            TimeSeries.Values[SeriesIndex,TimeCount] :=
-              BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
-            BoundaryStorage.RchArray[SeriesIndex].TimeSeriesName :=
-              TimeSeries.SeriesNames[SeriesIndex];
-          end;
-          StartTime := BoundaryStorage.EndingTime;
-          Inc(TimeCount);
-        end;
-        BoundaryStorage := BoundaryList.Last;
-        if BoundaryStorage.EndingTime <= EndTime then
-        begin
-          TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-          begin
-            TimeSeries.Values[SeriesIndex,TimeCount] :=
-              BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
-          end;
-        end;
+//        TimeSeriesList := FCurrentParameter.TimeSeriesList;
+//        TimeSeries := TTimeSeries.Create;
+//        TimeSeriesList.Add(TimeSeries);
+//        TimeSeries.SeriesCount := Length(BoundaryStorage.RchArray);
+//        TimeSeries.TimeCount := TimeCount;
+//        TimeSeries.ParameterName := FCurrentParameter.ParameterName;
+//        TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
+//        begin
+//          TimeSeries.SeriesNames[SeriesIndex] :=
+//            Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
+//            TimeSeriesList.Count, SeriesIndex+1]);
+//          TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
+//          TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
+//        end;
+
+//        TimeCount := 0;
+//        StartTime := StressPeriods.First.StartTime;
+//        InitialTime := StartTime;
+//        for ItemIndex := 0 to BoundaryList.Count - 1 do
+//        begin
+////          BoundaryStorage := BoundaryList[ItemIndex];
+////          if BoundaryStorage.StartingTime > StartTime then
+////          begin
+//////            TimeSeries.Times[TimeCount] := StartTime - InitialTime;
+//////            for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
+//////            begin
+//////              if ItemIndex > 0 then
+//////              begin
+//////                TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
+//////              end
+//////              else
+//////              begin
+//////                TimeSeries.Values[SeriesIndex,TimeCount] :=
+//////                  BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
+//////              end;
+//////            end;
+//////            Inc(TimeCount);
+////          end;
+////          TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
+////          for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
+////          begin
+////            TimeSeries.Values[SeriesIndex,TimeCount] :=
+////              BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
+////            BoundaryStorage.RchArray[SeriesIndex].TimeSeriesName :=
+////              TimeSeries.SeriesNames[SeriesIndex];
+////          end;
+////          StartTime := BoundaryStorage.EndingTime;
+////          Inc(TimeCount);
+//        end;
+//        BoundaryStorage := BoundaryList.Last;
+//        if BoundaryStorage.EndingTime <= EndTime then
+//        begin
+////          TimeSeries.Times[TimeCount] := EndTime - InitialTime;
+////          for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
+////          begin
+////            TimeSeries.Values[SeriesIndex,TimeCount] :=
+////              BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
+////          end;
+//        end;
       end;
 
       for ValueIndex := 0 to Param.Param.Count - 1 do
@@ -1656,8 +1693,10 @@ begin
   WriteCompReal(Comp, RechargeRate);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
+  WriteCompReal(Comp, RechargeParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(RechargeRateAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RechargeParameterName));
 //  WriteCompString(Comp, RechargeRateAnnotation);
 end;
 
@@ -1665,6 +1704,7 @@ procedure TRchRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(RechargeRateAnnotation);
   Strings.Add(TimeSeriesName);
+  Strings.Add(RechargeParameterName);
 end;
 
 procedure TRchRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1673,8 +1713,10 @@ begin
   RechargeRate := ReadCompReal(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
+  RechargeParameterValue := ReadCompReal(Decomp);
   RechargeRateAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RechargeParameterName := Annotations[ReadCompInt(Decomp)];
 //  RechargeRateAnnotation := ReadCompString(Decomp, Annotations);
 end;
 

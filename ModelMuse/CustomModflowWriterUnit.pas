@@ -1071,6 +1071,7 @@ resourcestring
   StrTheSpecifiedHeadC = 'The specified head cell at (Layer,Row,Col) = (%0:d' +
   ',%1:d,%2:d) is invalid because the %3:s, %4:s, and %5:s data sets all hav' +
   'e values of zero at that cell.';
+  Str0sMultipliedByParam = '%0:s (multiplied by %1:s = %2:g)';
 
 var
 //  NameFile: TStringList;
@@ -4548,27 +4549,44 @@ begin
     for CellIndex := 0 to CellList.Count - 1 do
     begin
       Cell := CellList[CellIndex] as TValueCell;
-      if (AssignmentMethod = umAdd) and DataArray.IsValue[0, Cell.Row, Cell.Column] then
+      if (AssignmentMethod = umAdd)
+        and DataArray.IsValue[0, Cell.Row, Cell.Column] then
       begin
         DataArray.RealData[0, Cell.Row, Cell.Column] :=
           DataArray.RealData[0, Cell.Row, Cell.Column]
           + Cell.RealValue[0, Model] * Param.Value;
       end
-      else
+      else if Model.ModelSelection <> msModflow2015 then
       begin
         DataArray.RealData[0, Cell.Row, Cell.Column] :=
           Cell.RealValue[0, Model] * Param.Value;
+      end
+      else
+      begin
+        DataArray.RealData[0, Cell.Row, Cell.Column] :=
+          Cell.RealValue[0, Model];
       end;
-      NewAnnotation := Cell.RealAnnotation[0, Model]
-        + ' (multiplied by ' + Param.ParameterName + ' = '
-        + FloatToStr(Param.Value) + ')';
+      if Model.ModelSelection <> msModflow2015 then
+      begin
+        NewAnnotation := Format(Str0sMultipliedByParam,
+          [Cell.RealAnnotation[0, Model],
+          Param.ParameterName, Param.Value]);
+      end
+      else
+      begin
+        NewAnnotation := Cell.RealAnnotation[0, Model];
+      end;
+//      NewAnnotation := Cell.RealAnnotation[0, Model]
+//        + ' (multiplied by ' + Param.ParameterName + ' = '
+//        + FloatToStr(Param.Value) + ')';
       // reduce memory usage by preventing multiple copies of the same
       // annotation from being saved.
       if Annotation <> NewAnnotation then
       begin
         Annotation := NewAnnotation;
       end;
-      if (AssignmentMethod = umAdd) and DataArray.IsValue[0, Cell.Row, Cell.Column] then
+      if (AssignmentMethod = umAdd)
+        and DataArray.IsValue[0, Cell.Row, Cell.Column] then
       begin
         OldAnnotation := DataArray.Annotation[0, Cell.Row, Cell.Column];
         GroupedAnnotation := OldAnnotation
@@ -5790,9 +5808,12 @@ begin
       else
       begin
         Value := Cell.RealValue[DataArrayIndex, Model]*Param.Value;
-        Annotation := Cell.RealAnnotation[DataArrayIndex, Model]
-          + ' (multiplied by parameter '
-          + Param.ParameterName + ' = ' + FloatToStr(Param.Value) + ')';
+        Annotation := Format(Str0sMultipliedByParam,
+          [Cell.RealAnnotation[DataArrayIndex, Model],
+          Param.ParameterName, Param.Value]);
+//        Annotation := Cell.RealAnnotation[DataArrayIndex, Model]
+//          + ' (multiplied by parameter '
+//          + Param.ParameterName + ' = ' + FloatToStr(Param.Value) + ')';
       end;
 
       // Reduce the storage of duplicate strings.

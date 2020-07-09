@@ -339,13 +339,6 @@ begin
     rdgLinearOptions.Cells[Ord(scName), SmsOrdToRow(soRcloseOption)] := StrRcloseOption;
     rdgLinearOptions.Cells[Ord(scName), SmsOrdToRow(soRelaxationFactor)] := StrRelaxationFactor;
     rdgLinearOptions.Cells[Ord(scName), SmsOrdToRow(soScalingMethod)] := StrScalingMethod;
-//    rdgOptions.Cells[Ord(scName), Ord(soXmdLinearAcceleration)+1] := 'Linear acceleration (XMD block)';
-//    rdgOptions.Cells[Ord(scName), Ord(soRedBlackOrder)+1] := 'Use red-black ordering scheme';
-
-
-
-//    rdgOptions.SpecialFormat[Ord(scValue), Ord(soLinearSolver)+1] := rcf4String;
-//    rdgOptions.UseSpecialFormat[Ord(scValue), Ord(soLinearSolver)+1] := True;
 
     rdgLinearOptions.SpecialFormat[Ord(scValue), SmsOrdToRow(soInnerMaxIterations)] := rcf4Integer;
     rdgLinearOptions.UseSpecialFormat[Ord(scValue), SmsOrdToRow(soInnerMaxIterations)] := True;

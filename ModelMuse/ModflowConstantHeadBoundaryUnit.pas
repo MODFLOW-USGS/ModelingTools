@@ -44,6 +44,8 @@ type
     StartAnnotation: string;
     EndAnnotation: string;
     TimeSeriesName: string;
+    HeadParameterName: string;
+    HeadParameterValue: double;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -161,6 +163,8 @@ type
     function GetEndingHeadAnnotation: string;
     function GetStartingHeadAnnotation: string;
     function GetTimeSeriesName: string;
+    function GetHeadParameterName: string;
+    function GetHeadParameterValue: double;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -191,6 +195,8 @@ type
     property StartingHeadAnnotation: string read GetStartingHeadAnnotation;
     property EndingHeadAnnotation: string read GetEndingHeadAnnotation;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    property HeadParameterName: string read GetHeadParameterName;
+    property HeadParameterValue: double read GetHeadParameterValue;
   end;
 
 
@@ -627,6 +633,13 @@ begin
 //            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
           BoundaryValues.StartAnnotation := Format(Str0sMultipliedByT, [
             BoundaryValues.StartAnnotation, FCurrentParameter.ParameterName]);
+          BoundaryValues.HeadParameterName := FCurrentParameter.ParameterName;
+          BoundaryValues.HeadParameterValue := FCurrentParameter.Value;
+        end
+        else
+        begin
+          BoundaryValues.HeadParameterName := '';
+          BoundaryValues.HeadParameterValue := 1;
         end;
         Cell := TCHD_Cell.Create;
         Cell.BoundaryIndex := BoundaryIndex;
@@ -743,95 +756,95 @@ begin
       Times := ParamList.Objects[Position] as TList;
     end;
 
-    if FCurrentParameter <> nil then
-    begin
-      BoundaryList := Param.Param.BoundaryList[AModel];
-      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-      StartTime := StressPeriods.First.StartTime;
-      EndTime := StressPeriods.Last.EndTime;
-      TimeCount := BoundaryList.Count;
-      if TimeCount = 0 then
-      begin
-        frmErrorsAndWarnings.AddError(LocalModel, StrNoValidCHDBoundar,
-          Format(StrNoValidCHDBoundar2, [FCurrentParameter.ParameterName]));
-        Exit;
-      end;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          Inc(TimeCount);
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        Inc(TimeCount);
-      end;
-
-      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-      TimeSeries := TTimeSeries.Create;
-      TimeSeriesList.Add(TimeSeries);
-      TimeSeries.SeriesCount := Length(BoundaryStorage.ChdArray);
-      TimeSeries.TimeCount := TimeCount;
-      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-      for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-      begin
-        TimeSeries.SeriesNames[SeriesIndex] :=
-          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-          TimeSeriesList.Count, SeriesIndex+1]);
-        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-      end;
-
-      TimeCount := 0;
-      StartTime := StressPeriods.First.StartTime;
-      InitialTime := StartTime;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-          begin
-            if ItemIndex > 0 then
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-            end
-            else
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] :=
-                BoundaryStorage.ChdArray[SeriesIndex].StartingHead;
-            end;
-          end;
-          Inc(TimeCount);
-        end;
-        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.ChdArray[SeriesIndex].StartingHead;
-          BoundaryStorage.ChdArray[SeriesIndex].TimeSeriesName :=
-            TimeSeries.SeriesNames[SeriesIndex];
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-        Inc(TimeCount);
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.ChdArray[SeriesIndex].EndingHead;
-        end;
-      end;
-    end;
+//    if FCurrentParameter <> nil then
+//    begin
+//      BoundaryList := Param.Param.BoundaryList[AModel];
+//      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
+//      StartTime := StressPeriods.First.StartTime;
+//      EndTime := StressPeriods.Last.EndTime;
+//      TimeCount := BoundaryList.Count;
+//      if TimeCount = 0 then
+//      begin
+//        frmErrorsAndWarnings.AddError(LocalModel, StrNoValidCHDBoundar,
+//          Format(StrNoValidCHDBoundar2, [FCurrentParameter.ParameterName]));
+//        Exit;
+//      end;
+//      for ItemIndex := 0 to BoundaryList.Count - 1 do
+//      begin
+//        BoundaryStorage := BoundaryList[ItemIndex];
+//        if BoundaryStorage.StartingTime > StartTime then
+//        begin
+//          Inc(TimeCount);
+//        end;
+//        StartTime := BoundaryStorage.EndingTime;
+//      end;
+//      BoundaryStorage := BoundaryList.Last;
+//      if BoundaryStorage.EndingTime <= EndTime then
+//      begin
+//        Inc(TimeCount);
+//      end;
+//
+//      TimeSeriesList := FCurrentParameter.TimeSeriesList;
+//      TimeSeries := TTimeSeries.Create;
+//      TimeSeriesList.Add(TimeSeries);
+//      TimeSeries.SeriesCount := Length(BoundaryStorage.ChdArray);
+//      TimeSeries.TimeCount := TimeCount;
+//      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
+//      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
+//      for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
+//      begin
+//        TimeSeries.SeriesNames[SeriesIndex] :=
+//          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
+//          TimeSeriesList.Count, SeriesIndex+1]);
+//        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
+//        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
+//      end;
+//
+//      TimeCount := 0;
+//      StartTime := StressPeriods.First.StartTime;
+//      InitialTime := StartTime;
+//      for ItemIndex := 0 to BoundaryList.Count - 1 do
+//      begin
+//        BoundaryStorage := BoundaryList[ItemIndex];
+//        if BoundaryStorage.StartingTime > StartTime then
+//        begin
+//          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
+//          for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
+//          begin
+//            if ItemIndex > 0 then
+//            begin
+//              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
+//            end
+//            else
+//            begin
+//              TimeSeries.Values[SeriesIndex,TimeCount] :=
+//                BoundaryStorage.ChdArray[SeriesIndex].StartingHead;
+//            end;
+//          end;
+//          Inc(TimeCount);
+//        end;
+//        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
+//        begin
+//          TimeSeries.Values[SeriesIndex,TimeCount] :=
+//            BoundaryStorage.ChdArray[SeriesIndex].StartingHead;
+//          BoundaryStorage.ChdArray[SeriesIndex].TimeSeriesName :=
+//            TimeSeries.SeriesNames[SeriesIndex];
+//        end;
+//        StartTime := BoundaryStorage.EndingTime;
+//        Inc(TimeCount);
+//      end;
+//      BoundaryStorage := BoundaryList.Last;
+//      if BoundaryStorage.EndingTime <= EndTime then
+//      begin
+//        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
+//        begin
+//          TimeSeries.Values[SeriesIndex,TimeCount] :=
+//            BoundaryStorage.ChdArray[SeriesIndex].EndingHead;
+//        end;
+//      end;
+//    end;
 
 
     for ValueIndex := 0 to Param.Param.Count - 1 do
@@ -899,6 +912,16 @@ end;
 function TCHD_Cell.GetEndingHeadAnnotation: string;
 begin
   result := Values.EndAnnotation;
+end;
+
+function TCHD_Cell.GetHeadParameterName: string;
+begin
+  result := Values.HeadParameterName;
+end;
+
+function TCHD_Cell.GetHeadParameterValue: double;
+begin
+  result := Values.HeadParameterValue;
 end;
 
 function TCHD_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -1017,11 +1040,11 @@ begin
   WriteCompReal(Comp, EndingHead);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
+  WriteCompReal(Comp, HeadParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(StartAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(EndAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
-//  WriteCompString(Comp, StartAnnotation);
-//  WriteCompString(Comp, EndAnnotation);
+  WriteCompInt(Comp, Strings.IndexOf(HeadParameterName));
 end;
 
 procedure TChdRecord.RecordStrings(Strings: TStringList);
@@ -1029,6 +1052,7 @@ begin
   Strings.Add(StartAnnotation);
   Strings.Add(EndAnnotation);
   Strings.Add(TimeSeriesName);
+  Strings.Add(HeadParameterName);
 end;
 
 procedure TChdRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1038,11 +1062,11 @@ begin
   EndingHead := ReadCompReal(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
+  HeadParameterValue := ReadCompReal(Decomp);
   StartAnnotation := Annotations[ReadCompInt(Decomp)];
   EndAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
-//  StartAnnotation := ReadCompString(Decomp, Annotations);
-//  EndAnnotation := ReadCompString(Decomp, Annotations);
+  HeadParameterName := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TChdStorage }

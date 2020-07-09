@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="rma" FileType="bin">
-    <FileName Model_Name="rma" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
-    <FileName Model_Name="rma" FileType="bin">C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe</FileName>
-    <FileName Model_Name="rma" FileType="bin">C:\WRDAPP\Zonbud.3_01\Bin\zonbud.exe</FileName>
+    <FileName Model_Name="rma" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="rma" FileType="bin">..\..\..\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe</FileName>
+    <FileName Model_Name="rma" FileType="bin">..\..\..\WRDAPP\Zonbud.3_01\Bin\zonbud.exe</FileName>
   </bin>
   <ancillary Model_Name="rma" FileType="ancillary">
     <FileName Model_Name="rma" FileType="ancillary">rma.gpt</FileName>

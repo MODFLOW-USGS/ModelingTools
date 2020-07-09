@@ -499,6 +499,20 @@ begin
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.EvtArray) - 1 do
       begin
         BoundaryValues := LocalBoundaryStorage.EvtArray[BoundaryIndex];
+        if FCurrentParameter <> nil then
+        begin
+          BoundaryValues.EvapotranspirationRate :=
+            BoundaryValues.EvapotranspirationRate * FCurrentParameter.Value;
+          BoundaryValues.EvapotranspirationRateAnnotation := Format(Str0sMultipliedByT, [
+            BoundaryValues.EvapotranspirationRateAnnotation, FCurrentParameter.ParameterName]);
+          BoundaryValues.ETParameterName := FCurrentParameter.ParameterName;
+          BoundaryValues.ETParameterValue := FCurrentParameter.Value;
+        end
+        else
+        begin
+          BoundaryValues.ETParameterName := '';
+          BoundaryValues.ETParameterValue := 1;
+        end;
         Cell := TEvt_Cell.Create;
         Cell.BoundaryIndex := BoundaryIndex;
         Assert(ScreenObject <> nil);
@@ -602,15 +616,16 @@ var
   ParamName: string;
   Model: TPhastModel;
   BoundaryList: TList;
-  StressPeriods: TModflowStressPeriods;
-  StartTime: Double;
-  EndTime: Double;
-  TimeCount: Integer;
+//  StressPeriods: TModflowStressPeriods;
+//  StartTime: Double;
+//  EndTime: Double;
+//  TimeCount: Integer;
   ItemIndex: Integer;
-  TimeSeriesList: TTimeSeriesList;
-  TimeSeries: TTimeSeries;
-  SeriesIndex: Integer;
-  InitialTime: Double;
+//  TimeSeriesList: TTimeSeriesList;
+//  TimeSeries: TTimeSeries;
+//  SeriesIndex: Integer;
+//  InitialTime: Double;
+  ArrayIndex: Integer;
 begin
   FCurrentParameter := nil;
   EvaluateArrayBoundaries(AModel);
@@ -654,85 +669,90 @@ begin
       if FCurrentParameter <> nil then
       begin
         BoundaryList := Param.Param.BoundaryList[AModel];
-        StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-        StartTime := StressPeriods.First.StartTime;
-        EndTime := StressPeriods.Last.EndTime;
-        TimeCount := BoundaryList.Count;
+//        StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
+//        StartTime := StressPeriods.First.StartTime;
+//        EndTime := StressPeriods.Last.EndTime;
+//        TimeCount := BoundaryList.Count;
         for ItemIndex := 0 to BoundaryList.Count - 1 do
         begin
           BoundaryStorage := BoundaryList[ItemIndex];
-          if BoundaryStorage.StartingTime > StartTime then
+          for ArrayIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
           begin
-            Inc(TimeCount);
+            BoundaryStorage.EvtArray[ArrayIndex].ETParameterName := FCurrentParameter.ParameterName;
+            BoundaryStorage.EvtArray[ArrayIndex].ETParameterValue := FCurrentParameter.Value;
           end;
-          StartTime := BoundaryStorage.EndingTime;
+//          if BoundaryStorage.StartingTime > StartTime then
+//          begin
+////            Inc(TimeCount);
+//          end;
+//          StartTime := BoundaryStorage.EndingTime;
         end;
-        BoundaryStorage := BoundaryList.Last;
-        if BoundaryStorage.EndingTime <= EndTime then
-        begin
-          Inc(TimeCount);
-        end;
+//        BoundaryStorage := BoundaryList.Last;
+//        if BoundaryStorage.EndingTime <= EndTime then
+//        begin
+////          Inc(TimeCount);
+//        end;
 
-        TimeSeriesList := FCurrentParameter.TimeSeriesList;
-        TimeSeries := TTimeSeries.Create;
-        TimeSeriesList.Add(TimeSeries);
-        TimeSeries.SeriesCount := Length(BoundaryStorage.EvtArray);
-        TimeSeries.TimeCount := TimeCount;
-        TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-        TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-        for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
-        begin
-          TimeSeries.SeriesNames[SeriesIndex] :=
-            Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-            TimeSeriesList.Count, SeriesIndex+1]);
-          TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-          TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-        end;
+//        TimeSeriesList := FCurrentParameter.TimeSeriesList;
+//        TimeSeries := TTimeSeries.Create;
+//        TimeSeriesList.Add(TimeSeries);
+//        TimeSeries.SeriesCount := Length(BoundaryStorage.EvtArray);
+//        TimeSeries.TimeCount := TimeCount;
+//        TimeSeries.ParameterName := FCurrentParameter.ParameterName;
+//        TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
+//        begin
+//          TimeSeries.SeriesNames[SeriesIndex] :=
+//            Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
+//            TimeSeriesList.Count, SeriesIndex+1]);
+//          TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
+//          TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
+//        end;
 
-        TimeCount := 0;
-        StartTime := StressPeriods.First.StartTime;
-        InitialTime := StartTime;
-        for ItemIndex := 0 to BoundaryList.Count - 1 do
-        begin
-          BoundaryStorage := BoundaryList[ItemIndex];
-          if BoundaryStorage.StartingTime > StartTime then
-          begin
-            TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-            for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
-            begin
-              if ItemIndex > 0 then
-              begin
-                TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-              end
-              else
-              begin
-                TimeSeries.Values[SeriesIndex,TimeCount] :=
-                  BoundaryStorage.EvtArray[SeriesIndex].EvapotranspirationRate;
-              end;
-            end;
-            Inc(TimeCount);
-          end;
-          TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
-          begin
-            TimeSeries.Values[SeriesIndex,TimeCount] :=
-              BoundaryStorage.EvtArray[SeriesIndex].EvapotranspirationRate;
-            BoundaryStorage.EvtArray[SeriesIndex].TimeSeriesName :=
-              TimeSeries.SeriesNames[SeriesIndex];
-          end;
-          StartTime := BoundaryStorage.EndingTime;
-          Inc(TimeCount);
-        end;
-        BoundaryStorage := BoundaryList.Last;
-        if BoundaryStorage.EndingTime <= EndTime then
-        begin
-          TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
-          begin
-            TimeSeries.Values[SeriesIndex,TimeCount] :=
-              BoundaryStorage.EvtArray[SeriesIndex].EvapotranspirationRate;
-          end;
-        end;
+//        TimeCount := 0;
+//        StartTime := StressPeriods.First.StartTime;
+//        InitialTime := StartTime;
+//        for ItemIndex := 0 to BoundaryList.Count - 1 do
+//        begin
+////          BoundaryStorage := BoundaryList[ItemIndex];
+////          if BoundaryStorage.StartingTime > StartTime then
+////          begin
+//////            TimeSeries.Times[TimeCount] := StartTime - InitialTime;
+//////            for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
+//////            begin
+//////              if ItemIndex > 0 then
+//////              begin
+//////                TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
+//////              end
+//////              else
+//////              begin
+//////                TimeSeries.Values[SeriesIndex,TimeCount] :=
+//////                  BoundaryStorage.EvtArray[SeriesIndex].EvapotranspirationRate;
+//////              end;
+//////            end;
+//////            Inc(TimeCount);
+////          end;
+////          TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
+////          for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
+////          begin
+////            TimeSeries.Values[SeriesIndex,TimeCount] :=
+////              BoundaryStorage.EvtArray[SeriesIndex].EvapotranspirationRate;
+////            BoundaryStorage.EvtArray[SeriesIndex].TimeSeriesName :=
+////              TimeSeries.SeriesNames[SeriesIndex];
+////          end;
+////          StartTime := BoundaryStorage.EndingTime;
+////          Inc(TimeCount);
+//        end;
+//        BoundaryStorage := BoundaryList.Last;
+//        if BoundaryStorage.EndingTime <= EndTime then
+//        begin
+//          TimeSeries.Times[TimeCount] := EndTime - InitialTime;
+//          for SeriesIndex := 0 to Length(BoundaryStorage.EvtArray) - 1 do
+//          begin
+//            TimeSeries.Values[SeriesIndex,TimeCount] :=
+//              BoundaryStorage.EvtArray[SeriesIndex].EvapotranspirationRate;
+//          end;
+//        end;
       end;
 
       for ValueIndex := 0 to Param.Param.Count - 1 do

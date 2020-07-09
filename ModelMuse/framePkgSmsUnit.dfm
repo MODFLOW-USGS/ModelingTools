@@ -26,6 +26,9 @@ inherited framePkgSms: TframePkgSms
     ExplicitHeight = 324
     object tabBasic: TTabSheet
       Caption = 'Basic'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 296
       object lblPrintOption: TLabel
         Left = 16
@@ -259,6 +262,9 @@ inherited framePkgSms: TframePkgSms
     object tabNonLinear: TTabSheet
       Caption = 'Nonlinear'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 296
       object rdgNonlinearOptions: TRbwDataGrid4
         Left = 0
@@ -364,6 +370,9 @@ inherited framePkgSms: TframePkgSms
     object tabLinear: TTabSheet
       Caption = 'Linear'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 296
       object rdgLinearOptions: TRbwDataGrid4
         Left = 0

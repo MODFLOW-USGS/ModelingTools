@@ -6,6 +6,7 @@ inherited frmExportImage: TfrmExportImage
   ClientWidth = 721
   ShowHint = True
   OnClose = FormClose
+  ExplicitTop = -120
   ExplicitWidth = 737
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -47,15 +48,16 @@ inherited frmExportImage: TfrmExportImage
       object cpAnimation: TCategoryPanel
         Top = 416
         Height = 30
-        Caption = 'Animation'
+        Caption = '&Animation'
         Collapsed = True
         TabOrder = 0
         OnExpand = cpAnimationExpand
+        ExplicitTop = 60
         ExpandedHeight = 386
         object pnlAnimation: TPanel
           Left = 0
           Top = 0
-          Width = 245
+          Width = 243
           Height = 0
           Align = alClient
           BevelOuter = bvNone
@@ -63,7 +65,7 @@ inherited frmExportImage: TfrmExportImage
           object JvNetscapeSplitter1: TJvNetscapeSplitter
             Left = 0
             Top = 168
-            Width = 245
+            Width = 243
             Height = 10
             Cursor = crVSplit
             Align = alTop
@@ -78,17 +80,17 @@ inherited frmExportImage: TfrmExportImage
           object Panel1: TPanel
             Left = 0
             Top = -84
-            Width = 245
+            Width = 243
             Height = 84
             Align = alBottom
             TabOrder = 0
             DesignSize = (
-              245
+              243
               84)
             object rgDisplayChoice: TRadioGroup
               Left = 3
               Top = 6
-              Width = 238
+              Width = 236
               Height = 43
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Display choice'
@@ -144,7 +146,7 @@ inherited frmExportImage: TfrmExportImage
           object rdgDataSets: TRbwDataGrid4
             Left = 0
             Top = 178
-            Width = 245
+            Width = 243
             Height = 98
             Align = alClient
             ColCount = 2
@@ -215,15 +217,27 @@ inherited frmExportImage: TfrmExportImage
           object vstDataSets: TVirtualStringTree
             Left = 0
             Top = 0
-            Width = 245
+            Width = 243
             Height = 168
             Align = alTop
+            Colors.BorderColor = 15987699
+            Colors.DisabledColor = clGray
+            Colors.DropMarkColor = 15385233
+            Colors.DropTargetColor = 15385233
+            Colors.DropTargetBorderColor = 15385233
+            Colors.FocusedSelectionColor = 15385233
+            Colors.FocusedSelectionBorderColor = 15385233
+            Colors.GridLineColor = 15987699
+            Colors.HeaderHotColor = clBlack
+            Colors.HotColor = clBlack
+            Colors.SelectionRectangleBlendColor = 15385233
+            Colors.SelectionRectangleBorderColor = 15385233
+            Colors.SelectionTextColor = clBlack
+            Colors.TreeLineColor = 9471874
+            Colors.UnfocusedColor = clGray
+            Colors.UnfocusedSelectionColor = 13421772
+            Colors.UnfocusedSelectionBorderColor = 13421772
             Header.AutoSizeIndex = 0
-            Header.Font.Charset = DEFAULT_CHARSET
-            Header.Font.Color = clWindowText
-            Header.Font.Height = -11
-            Header.Font.Name = 'Tahoma'
-            Header.Font.Style = []
             Header.MainColumn = -1
             PopupMenu = pmChangeStates
             TabOrder = 1
@@ -240,24 +254,29 @@ inherited frmExportImage: TfrmExportImage
       object cpText: TCategoryPanel
         Top = 386
         Height = 30
-        Caption = 'Text'
+        Caption = '&Text'
         Collapsed = True
         TabOrder = 1
         OnExpand = cpTextExpand
+        ExplicitTop = 30
         ExpandedHeight = 386
         object pnlText: TPanel
           Left = 0
           Top = 0
-          Width = 245
+          Width = 243
           Height = 0
           Align = alClient
           TabOrder = 0
+          ExplicitLeft = -3
+          ExplicitTop = -3
+          ExplicitHeight = 360
           object lblTitle: TLabel
             Left = 11
             Top = 2
             Width = 28
             Height = 18
-            Caption = 'Title'
+            Caption = 'T&itle'
+            FocusControl = memoTitle
           end
           object sbText: TSpeedButton
             Left = 11
@@ -307,14 +326,16 @@ inherited frmExportImage: TfrmExportImage
             Top = 247
             Width = 117
             Height = 18
-            Caption = 'Color legend title'
+            Caption = '&Color legend title'
+            FocusControl = edColorLegendTitle
           end
           object lblContourLegendTitle: TLabel
             Left = 11
             Top = 304
             Width = 134
             Height = 18
-            Caption = 'Contour legend title'
+            Caption = 'C&ontour legend title'
+            FocusControl = edContourLegendTitle
           end
           object memoTitle: TMemo
             Left = 11
@@ -376,13 +397,13 @@ inherited frmExportImage: TfrmExportImage
       object cpView: TCategoryPanel
         Top = 0
         Height = 386
-        Caption = 'View'
+        Caption = '&View'
         TabOrder = 2
         OnExpand = cpViewExpand
         object Panel3: TPanel
           Left = 0
           Top = 0
-          Width = 245
+          Width = 243
           Height = 360
           Align = alClient
           TabOrder = 0
@@ -398,14 +419,14 @@ inherited frmExportImage: TfrmExportImage
             Top = 64
             Width = 191
             Height = 18
-            Caption = 'Model image height (pixels)'
+            Caption = 'Model image &height (pixels)'
           end
           object lblImageWidth: TLabel
             Left = 4
             Top = 128
             Width = 185
             Height = 18
-            Caption = 'Model image width (pixels)'
+            Caption = 'Model image &width (pixels)'
           end
           object comboView: TComboBox
             Left = 4
@@ -534,11 +555,12 @@ inherited frmExportImage: TfrmExportImage
       721
       105)
     object lblSavedSettings: TLabel
-      Left = 5
+      Left = 6
       Top = 8
       Width = 103
       Height = 18
-      Caption = 'Saved settings'
+      Caption = '&Saved settings'
+      FocusControl = comboSavedSettings
     end
     object btnHelp: TBitBtn
       Left = 629
@@ -567,7 +589,7 @@ inherited frmExportImage: TfrmExportImage
       Top = 6
       Width = 87
       Height = 58
-      Caption = 'Save settings'
+      Caption = 'S&ave settings'
       TabOrder = 0
       WordWrap = True
       OnClick = btnSaveSettingsClick
@@ -590,7 +612,7 @@ inherited frmExportImage: TfrmExportImage
       Width = 87
       Height = 58
       Anchors = [akTop, akRight]
-      Caption = 'Refresh'
+      Caption = '&Refresh'
       Glyph.Data = {
         76010000424D7601000000000000760000002800000020000000100000000100
         04000000000000010000130B0000130B00001000000000000000000000000000
@@ -613,7 +635,7 @@ inherited frmExportImage: TfrmExportImage
       Top = 6
       Width = 87
       Height = 58
-      Caption = 'Manage settings'
+      Caption = '&Manage settings'
       TabOrder = 1
       WordWrap = True
       OnClick = btnManageSettingsClick
@@ -624,7 +646,7 @@ inherited frmExportImage: TfrmExportImage
       Width = 122
       Height = 26
       Anchors = [akTop, akRight]
-      Caption = 'Save image'
+      Caption = 'Save &image'
       Glyph.Data = {
         76010000424D7601000000000000760000002800000020000000100000000100
         04000000000000010000130B0000130B00001000000000000000000000000000

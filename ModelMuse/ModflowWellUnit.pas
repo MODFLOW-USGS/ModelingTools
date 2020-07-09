@@ -32,6 +32,8 @@ type
     TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
+    PumpingParameterName: string;
+    PumpingParameterValue: double;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -144,6 +146,8 @@ type
     function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
+    function GetPumpingParameterName: string;
+    function GetPumpingParameterValue: double;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -166,6 +170,8 @@ type
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    property PumpingParameterName: string read GetPumpingParameterName;
+    property PumpingParameterValue: double read GetPumpingParameterValue;
   end;
 
   // @name represents the MODFLOW Well boundaries associated with
@@ -665,6 +671,16 @@ begin
   result := Values.MvrUsed;
 end;
 
+function TWell_Cell.GetPumpingParameterName: string;
+begin
+  result := Values.PumpingParameterName;
+end;
+
+function TWell_Cell.GetPumpingParameterValue: double;
+begin
+  result := Values.PumpingParameterValue;
+end;
+
 function TWell_Cell.GetPumpingRate: double;
 begin
   result := Values.PumpingRate;
@@ -821,6 +837,13 @@ begin
             BoundaryValues.PumpingRate * FCurrentParameter.Value;
           BoundaryValues.PumpingRateAnnotation := Format(Str0sMultipliedByT, [
             BoundaryValues.PumpingRateAnnotation, FCurrentParameter.ParameterName]);
+          BoundaryValues.PumpingParameterName := FCurrentParameter.ParameterName;
+          BoundaryValues.PumpingParameterValue := FCurrentParameter.Value;
+        end
+        else
+        begin
+          BoundaryValues.PumpingParameterName := '';
+          BoundaryValues.PumpingParameterValue := 1;
         end;
         Cell := TWell_Cell.Create;
         Cell.BoundaryIndex := BoundaryIndex;
@@ -856,16 +879,16 @@ var
   Position: integer;
   ParamName: string;
   LocalModel: TCustomModel;
-  TimeSeriesList: TTimeSeriesList;
-  BoundaryList: TList;
-  TimeSeries: TTimeSeries;
-  StartTime: Double;
-  StressPeriods: TModflowStressPeriods;
-  EndTime: Double;
-  TimeCount: Integer;
-  ItemIndex: Integer;
-  SeriesIndex: Integer;
-  InitialTime: Double;
+//  TimeSeriesList: TTimeSeriesList;
+//  BoundaryList: TList;
+//  TimeSeries: TTimeSeries;
+//  StartTime: Double;
+//  StressPeriods: TModflowStressPeriods;
+//  EndTime: Double;
+//  TimeCount: Integer;
+//  ItemIndex: Integer;
+//  SeriesIndex: Integer;
+//  InitialTime: Double;
 begin
   FCurrentParameter := nil;
 //  EvaluateArrayBoundaries;
@@ -915,89 +938,89 @@ begin
       Times := ParamList.Objects[Position] as TList;
     end;
 
-    if FCurrentParameter <> nil then
-    begin
-      BoundaryList := Param.Param.BoundaryList[AModel];
-      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-      StartTime := StressPeriods.First.StartTime;
-      EndTime := StressPeriods.Last.EndTime;
-      TimeCount := BoundaryList.Count;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          Inc(TimeCount);
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        Inc(TimeCount);
-      end;
-
-      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-      TimeSeries := TTimeSeries.Create;
-      TimeSeriesList.Add(TimeSeries);
-      TimeSeries.SeriesCount := Length(BoundaryStorage.WellArray);
-      TimeSeries.TimeCount := TimeCount;
-      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-      for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-      begin
-        TimeSeries.SeriesNames[SeriesIndex] :=
-          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-          TimeSeriesList.Count, SeriesIndex+1]);
-        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-      end;
-
-      TimeCount := 0;
-      StartTime := StressPeriods.First.StartTime;
-      InitialTime := StartTime;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-          begin
-            if ItemIndex > 0 then
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-            end
-            else
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] :=
-                BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
-            end;
-          end;
-          Inc(TimeCount);
-        end;
-        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
-          BoundaryStorage.WellArray[SeriesIndex].TimeSeriesName :=
-            TimeSeries.SeriesNames[SeriesIndex];
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-        Inc(TimeCount);
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
-        end;
-      end;
-    end;
+//    if FCurrentParameter <> nil then
+//    begin
+//      BoundaryList := Param.Param.BoundaryList[AModel];
+//      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
+//      StartTime := StressPeriods.First.StartTime;
+//      EndTime := StressPeriods.Last.EndTime;
+//      TimeCount := BoundaryList.Count;
+//      for ItemIndex := 0 to BoundaryList.Count - 1 do
+//      begin
+//        BoundaryStorage := BoundaryList[ItemIndex];
+//        if BoundaryStorage.StartingTime > StartTime then
+//        begin
+//          Inc(TimeCount);
+//        end;
+//        StartTime := BoundaryStorage.EndingTime;
+//      end;
+//      BoundaryStorage := BoundaryList.Last;
+//      if BoundaryStorage.EndingTime <= EndTime then
+//      begin
+//        Inc(TimeCount);
+//      end;
+//
+//      TimeSeriesList := FCurrentParameter.TimeSeriesList;
+//      TimeSeries := TTimeSeries.Create;
+//      TimeSeriesList.Add(TimeSeries);
+//      TimeSeries.SeriesCount := Length(BoundaryStorage.WellArray);
+//      TimeSeries.TimeCount := TimeCount;
+//      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
+//      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
+//      for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
+//      begin
+//        TimeSeries.SeriesNames[SeriesIndex] :=
+//          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
+//          TimeSeriesList.Count, SeriesIndex+1]);
+//        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
+//        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
+//      end;
+//
+//      TimeCount := 0;
+//      StartTime := StressPeriods.First.StartTime;
+//      InitialTime := StartTime;
+//      for ItemIndex := 0 to BoundaryList.Count - 1 do
+//      begin
+//        BoundaryStorage := BoundaryList[ItemIndex];
+//        if BoundaryStorage.StartingTime > StartTime then
+//        begin
+//          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
+//          for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
+//          begin
+//            if ItemIndex > 0 then
+//            begin
+//              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
+//            end
+//            else
+//            begin
+//              TimeSeries.Values[SeriesIndex,TimeCount] :=
+//                BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
+//            end;
+//          end;
+//          Inc(TimeCount);
+//        end;
+//        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
+//        begin
+//          TimeSeries.Values[SeriesIndex,TimeCount] :=
+//            BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
+//          BoundaryStorage.WellArray[SeriesIndex].TimeSeriesName :=
+//            TimeSeries.SeriesNames[SeriesIndex];
+//        end;
+//        StartTime := BoundaryStorage.EndingTime;
+//        Inc(TimeCount);
+//      end;
+//      BoundaryStorage := BoundaryList.Last;
+//      if BoundaryStorage.EndingTime <= EndTime then
+//      begin
+//        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
+//        for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
+//        begin
+//          TimeSeries.Values[SeriesIndex,TimeCount] :=
+//            BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
+//        end;
+//      end;
+//    end;
 
     for ValueIndex := 0 to Param.Param.Count - 1 do
     begin
@@ -1113,17 +1136,19 @@ begin
   WriteCompReal(Comp, PumpingRate);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
+  WriteCompReal(Comp, PumpingParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(PumpingRateAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
-//  WriteCompString(Comp, PumpingRateAnnotation);
 end;
 
 procedure TWellRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(PumpingRateAnnotation);
   Strings.Add(TimeSeriesName);
+  Strings.Add(PumpingParameterName);
 end;
 
 procedure TWellRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1132,11 +1157,12 @@ begin
   PumpingRate := ReadCompReal(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
+  PumpingParameterValue := ReadCompReal(Decomp);
   PumpingRateAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  PumpingParameterName := Annotations[ReadCompInt(Decomp)];
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
-//  PumpingRateAnnotation := ReadCompString(Decomp, Annotations);
 end;
 
 { TWellStorage }

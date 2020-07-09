@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4136
+4157
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4136,3 +4136,24 @@ GWT.gpt
 	Archive\GWT.ssm
 	Archive\usgs.GWT.reference
 	Archive\usgs.GWT_MT3D-USGS.reference
+ParamMf6Test.gpt
+	Archive\ParamMf6Test.axml
+	Archive\ParamMf6Test.chd
+	Archive\ParamMf6Test.dis
+	Archive\ParamMf6Test.drn
+	Archive\ParamMf6Test.evt
+	Archive\ParamMf6Test.ghb
+	Archive\ParamMf6Test.ic
+	Archive\ParamMf6Test.ims
+	Archive\ParamMf6Test.jtf
+	Archive\ParamMf6Test.nam
+	Archive\ParamMf6Test.nam.archive
+	Archive\ParamMf6Test.npf
+	Archive\ParamMf6Test.oc
+	Archive\ParamMf6Test.pval
+	Archive\ParamMf6Test.rch
+	Archive\ParamMf6Test.riv
+	Archive\ParamMf6Test.sto
+	Archive\ParamMf6Test.tdis
+	Archive\ParamMf6Test.wel
+	Archive\usgs.ParamMf6Test.reference

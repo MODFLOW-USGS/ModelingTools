@@ -10,6 +10,18 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
 type
   TRivRecord = record
     Cell: TCellLocation;
+    // With MODFLOW 6, Conductance includes the effect of the parameter,
+    // if any. In a template, the appropriate formula would be
+    // the parameter name times the conductance divided by the parameter
+    // value.
+    // For example,
+    //
+    // if ConductanceParameterName <> '' then
+    // begin
+    //   WriteString(ConductanceParameterName);
+    //   WriteString('*');
+    //   WriteFloat(Conductance/ConductanceParameterValue);
+    // end;
     Conductance: double;
     RiverStage: double;
     RiverBottom: double;
@@ -21,6 +33,8 @@ type
     TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
+    ConductanceParameterName: string;
+    ConductanceParameterValue: double;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList); 
@@ -159,6 +173,8 @@ type
     function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
+    function GetConductanceParameterName: string;
+    function GetConductanceParameterValue: double;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -175,6 +191,18 @@ type
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
   public
+    // With MODFLOW 6, Conductance includes the effect of the parameter,
+    // if any. In a template, the appropriate formula would be
+    // the parameter name times the conductance divided by the parameter
+    // value.
+    // For example,
+    //
+    // if ConductanceParameterName <> '' then
+    // begin
+    //   WriteString(ConductanceParameterName);
+    //   WriteString('*');
+    //   WriteFloat(Conductance/ConductanceParameterValue);
+    // end;
     property Conductance: double read GetConductance;
     property RiverBottom: double read GetRiverBottom;
     property RiverStage: double read GetRiverStage;
@@ -185,6 +213,8 @@ type
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    property ConductanceParameterName: string read GetConductanceParameterName;
+    property ConductanceParameterValue: double read GetConductanceParameterValue;
   end;
 
   // @name represents the MODFLOW River boundaries associated with
@@ -728,6 +758,16 @@ begin
   result := Values.ConductanceAnnotation;
 end;
 
+function TRiv_Cell.GetConductanceParameterName: string;
+begin
+  result := Values.ConductanceParameterName;
+end;
+
+function TRiv_Cell.GetConductanceParameterValue: double;
+begin
+  result := Values.ConductanceParameterValue;
+end;
+
 function TRiv_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -887,6 +927,13 @@ begin
 //            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
           BoundaryValues.ConductanceAnnotation := Format(Str0sMultipliedByT, [
             BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
+          BoundaryValues.ConductanceParameterName := FCurrentParameter.ParameterName;
+          BoundaryValues.ConductanceParameterValue := FCurrentParameter.Value;
+        end
+        else
+        begin
+          BoundaryValues.ConductanceParameterName := '';
+          BoundaryValues.ConductanceParameterValue := 1;
         end;
         Cell := TRiv_Cell.Create;
         Cell.BoundaryIndex := BoundaryIndex;
@@ -928,16 +975,16 @@ var
   ValueCount: Integer;
   Item: TCustomModflowBoundaryItem;
   LocalModel: TCustomModel;
-  BoundaryList: TList;
-  StressPeriods: TModflowStressPeriods;
-  StartTime: Double;
-  EndTime: Double;
-  TimeCount: Integer;
-  ItemIndex: Integer;
-  TimeSeriesList: TTimeSeriesList;
-  TimeSeries: TTimeSeries;
-  SeriesIndex: Integer;
-  InitialTime: Double;
+//  BoundaryList: TList;
+//  StressPeriods: TModflowStressPeriods;
+//  StartTime: Double;
+//  EndTime: Double;
+//  TimeCount: Integer;
+//  ItemIndex: Integer;
+//  TimeSeriesList: TTimeSeriesList;
+//  TimeSeries: TTimeSeries;
+//  SeriesIndex: Integer;
+//  InitialTime: Double;
 begin
   FCurrentParameter := nil;
   EvaluateListBoundaries(AModel);
@@ -1004,89 +1051,89 @@ begin
       Times := ParamList.Objects[Position] as TList;
     end;
 
-    if FCurrentParameter <> nil then
-    begin
-      BoundaryList := Param.Param.BoundaryList[AModel];
-      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-      StartTime := StressPeriods.First.StartTime;
-      EndTime := StressPeriods.Last.EndTime;
-      TimeCount := BoundaryList.Count;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          Inc(TimeCount);
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        Inc(TimeCount);
-      end;
-
-      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-      TimeSeries := TTimeSeries.Create;
-      TimeSeriesList.Add(TimeSeries);
-      TimeSeries.SeriesCount := Length(BoundaryStorage.RivArray);
-      TimeSeries.TimeCount := TimeCount;
-      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-      for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-      begin
-        TimeSeries.SeriesNames[SeriesIndex] :=
-          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-          TimeSeriesList.Count, SeriesIndex+1]);
-        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-      end;
-
-      TimeCount := 0;
-      StartTime := StressPeriods.First.StartTime;
-      InitialTime := StartTime;
-      for ItemIndex := 0 to BoundaryList.Count - 1 do
-      begin
-        BoundaryStorage := BoundaryList[ItemIndex];
-        if BoundaryStorage.StartingTime > StartTime then
-        begin
-          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-          for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-          begin
-            if ItemIndex > 0 then
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-            end
-            else
-            begin
-              TimeSeries.Values[SeriesIndex,TimeCount] :=
-                BoundaryStorage.RivArray[SeriesIndex].Conductance;
-            end;
-          end;
-          Inc(TimeCount);
-        end;
-        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.RivArray[SeriesIndex].Conductance;
-          BoundaryStorage.RivArray[SeriesIndex].TimeSeriesName :=
-            TimeSeries.SeriesNames[SeriesIndex];
-        end;
-        StartTime := BoundaryStorage.EndingTime;
-        Inc(TimeCount);
-      end;
-      BoundaryStorage := BoundaryList.Last;
-      if BoundaryStorage.EndingTime <= EndTime then
-      begin
-        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-        for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-        begin
-          TimeSeries.Values[SeriesIndex,TimeCount] :=
-            BoundaryStorage.RivArray[SeriesIndex].Conductance;
-        end;
-      end;
-    end;
+//    if FCurrentParameter <> nil then
+//    begin
+////      BoundaryList := Param.Param.BoundaryList[AModel];
+////      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
+////      StartTime := StressPeriods.First.StartTime;
+////      EndTime := StressPeriods.Last.EndTime;
+////      TimeCount := BoundaryList.Count;
+////      for ItemIndex := 0 to BoundaryList.Count - 1 do
+////      begin
+//////        BoundaryStorage := BoundaryList[ItemIndex];
+//////        if BoundaryStorage.StartingTime > StartTime then
+//////        begin
+//////          Inc(TimeCount);
+//////        end;
+//////        StartTime := BoundaryStorage.EndingTime;
+////      end;
+////      BoundaryStorage := BoundaryList.Last;
+////      if BoundaryStorage.EndingTime <= EndTime then
+////      begin
+////        Inc(TimeCount);
+////      end;
+//
+////      TimeSeriesList := FCurrentParameter.TimeSeriesList;
+////      TimeSeries := TTimeSeries.Create;
+////      TimeSeriesList.Add(TimeSeries);
+////      TimeSeries.SeriesCount := Length(BoundaryStorage.RivArray);
+////      TimeSeries.TimeCount := TimeCount;
+////      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
+////      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
+////      for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
+////      begin
+////        TimeSeries.SeriesNames[SeriesIndex] :=
+////          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
+////          TimeSeriesList.Count, SeriesIndex+1]);
+////        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
+////        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
+////      end;
+//
+////      TimeCount := 0;
+////      StartTime := StressPeriods.First.StartTime;
+////      InitialTime := StartTime;
+////      for ItemIndex := 0 to BoundaryList.Count - 1 do
+////      begin
+//////        BoundaryStorage := BoundaryList[ItemIndex];
+//////        if BoundaryStorage.StartingTime > StartTime then
+//////        begin
+////////          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
+////////          for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
+////////          begin
+////////            if ItemIndex > 0 then
+////////            begin
+////////              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
+////////            end
+////////            else
+////////            begin
+////////              TimeSeries.Values[SeriesIndex,TimeCount] :=
+////////                BoundaryStorage.RivArray[SeriesIndex].Conductance;
+////////            end;
+////////          end;
+////////          Inc(TimeCount);
+//////        end;
+//////        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
+//////        for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
+//////        begin
+////////          TimeSeries.Values[SeriesIndex,TimeCount] :=
+////////            BoundaryStorage.RivArray[SeriesIndex].Conductance;
+////////          BoundaryStorage.RivArray[SeriesIndex].TimeSeriesName :=
+////////            TimeSeries.SeriesNames[SeriesIndex];
+//////        end;
+//////        StartTime := BoundaryStorage.EndingTime;
+//////        Inc(TimeCount);
+////      end;
+////      BoundaryStorage := BoundaryList.Last;
+////      if BoundaryStorage.EndingTime <= EndTime then
+////      begin
+//////        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
+//////        for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
+//////        begin
+//////          TimeSeries.Values[SeriesIndex,TimeCount] :=
+//////            BoundaryStorage.RivArray[SeriesIndex].Conductance;
+//////        end;
+////      end;
+//    end;
 
     PriorTime := StartOfFirstStressPeriod;
     ValueCount := 0;
@@ -1198,10 +1245,12 @@ begin
   WriteCompReal(Comp, RiverBottom);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
+  WriteCompReal(Comp, ConductanceParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(RiverStageAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(RiverBottomAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 //  WriteCompString(Comp, ConductanceAnnotation);
@@ -1215,6 +1264,7 @@ begin
   Strings.Add(RiverStageAnnotation);
   Strings.Add(RiverBottomAnnotation);
   Strings.Add(TimeSeriesName);
+  Strings.Add(ConductanceParameterName);
 end;
 
 procedure TRivRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1225,15 +1275,21 @@ begin
   RiverBottom := ReadCompReal(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
+  ConductanceParameterValue := ReadCompReal(Decomp);
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   RiverStageAnnotation := Annotations[ReadCompInt(Decomp)];
   RiverBottomAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 //  ConductanceAnnotation := ReadCompString(Decomp, Annotations);
 //  RiverStageAnnotation := ReadCompString(Decomp, Annotations);
 //  RiverBottomAnnotation := ReadCompString(Decomp, Annotations);
+{
+    ConductanceParameterName: string;
+    ConductanceParameterValue: double;
+}
 end;
 
 { TRivStorage }

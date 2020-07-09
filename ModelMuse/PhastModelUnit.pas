@@ -9179,9 +9179,17 @@ const
   //                message for the user instead of issuing  a bug report.
   //               Bug fix: Fixed bug that could cause objects to fail to
   //                intersect all the correct cells in MODFLOW DISV models.
+  //    '4.2.0.25' Change: ModelMuse no longer produces times series files for
+  //                parameters in the DRN and RCH packages.
+  //    '4.2.0.26' Change: ModelMuse no longer produces times series files for
+  //                parameters. Instead, parameter values are incorporated
+  //                into the values in the package input file.
+  //               Bug fix: Fixed a bug that could cause an assertion failure
+  //                if recharge or evapotranspiration was used in
+  //                some of the stress periods but not in others.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.24';
+  IModelVersion = '4.2.0.26';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

@@ -15246,21 +15246,23 @@ var
   ShouldEnable: Boolean;
   ParamIndex: Integer;
 begin
-  ShouldEnable := frmGoPhast.ModelSelection = msModflow2015;
-  if ShouldEnable then
-  begin
-    ShouldEnable := False;
-    for ParamIndex := 1 to Frame.clbParameters.Items.Count - 1 do
-    begin
-      if Frame.clbParameters.State[ParamIndex] <> cbUnchecked then
-      begin
-        ShouldEnable := True;
-        break;
-      end;
-    end;
-  end;
-  Frame.comboTimeSeriesInterpolation.Enabled := ShouldEnable;
-  Frame.lblTimeSeriesInterpolation .Enabled := ShouldEnable;
+//  ShouldEnable := frmGoPhast.ModelSelection = msModflow2015;
+//  if ShouldEnable then
+//  begin
+//    ShouldEnable := False;
+//    for ParamIndex := 1 to Frame.clbParameters.Items.Count - 1 do
+//    begin
+//      if Frame.clbParameters.State[ParamIndex] <> cbUnchecked then
+//      begin
+//        ShouldEnable := True;
+//        break;
+//      end;
+//    end;
+//  end;
+//  Frame.comboTimeSeriesInterpolation.Enabled := ShouldEnable;
+//  Frame.lblTimeSeriesInterpolation .Enabled := ShouldEnable;
+  Frame.comboTimeSeriesInterpolation.Visible := False;
+  Frame.lblTimeSeriesInterpolation.Visible := False;
 
   FoundFirst := False;
   for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do

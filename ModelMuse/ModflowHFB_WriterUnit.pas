@@ -173,6 +173,8 @@ resourcestring
   StrNoValidHFBTimesH = 'No valid HFB times have been defined';
   StrInSNoValidHori = 'In %s, no valid Horizontal Flow Barrier times have be' +
   'en defined.';
+  Str0sMultipliedByTParam = '%0:s multiplied by the parameter value "%1:g" a' +
+  'ssigned to the parameter "%2:s."';
 
 { TModflowHfb_Writer }
 
@@ -1635,9 +1637,11 @@ begin
         result := HydraulicConductivityAnnotation;
         if Parameter <> nil then
         begin
-          result := result + ' multiplied by the parameter value "'
-            + FloatToStr(Parameter.Value) + '" assigned to the parameter "'
-            + Parameter.ParameterName + '."';
+          result := Format(Str0sMultipliedByTParam,
+            [result, Parameter.Value, Parameter.ParameterName]);
+//          result := result + ' multiplied by the parameter value "'
+//            + FloatToStr(Parameter.Value) + '" assigned to the parameter "'
+//            + Parameter.ParameterName + '."';
         end;
       end;
     1:
@@ -1774,9 +1778,11 @@ begin
         result := FHydraulicConductivityAnnotations[0];
         if FParameter <> nil then
         begin
-          result := result + ' multiplied by the parameter value "'
-            + FloatToStr(FParameter.Value) + '" assigned to the parameter "'
-            + FParameter.ParameterName + '."';
+          result := Format(Str0sMultipliedByTParam,
+            [result, FParameter.Value, FParameter.ParameterName]);
+//          result := result + ' multiplied by the parameter value "'
+//            + FloatToStr(FParameter.Value) + '" assigned to the parameter "'
+//            + FParameter.ParameterName + '."';
         end;
       end;
     1:
