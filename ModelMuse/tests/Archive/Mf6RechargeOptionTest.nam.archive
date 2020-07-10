@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 7/10/2020 by ModelMuse Version 4.2.0.27
+BEGIN OPTIONS
+  LIST ..\..\output\output.Mf6RechargeOptionTest\Mf6RechargeOptionTest.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.Mf6RechargeOptionTest\Mf6RechargeOptionTest.dis
+  IC6          ..\..\model\model.Mf6RechargeOptionTest\Mf6RechargeOptionTest.ic
+  NPF6         ..\..\model\model.Mf6RechargeOptionTest\Mf6RechargeOptionTest.npf
+  OC6          ..\..\model\model.Mf6RechargeOptionTest\Mf6RechargeOptionTest.oc
+  CHD6         ..\..\model\model.Mf6RechargeOptionTest\Mf6RechargeOptionTest.chd
+END PACKAGES

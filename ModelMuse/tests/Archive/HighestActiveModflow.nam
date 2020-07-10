@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 7/10/2020 by ModelMuse Version 4.2.0.27
+BEGIN OPTIONS
+  LIST HighestActiveModflow.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         HighestActiveModflow.dis
+  IC6          HighestActiveModflow.ic
+  NPF6         HighestActiveModflow.npf
+  OC6          HighestActiveModflow.oc
+  CHD6         HighestActiveModflow.chd
+  GHB6         HighestActiveModflow.ghb
+END PACKAGES

@@ -599,6 +599,7 @@ var
   RchCell: TRch_Cell;
   IDomain: TDataArray;
   UsedLocations: T2DSparseBooleanArray;
+  Layer: Integer;
 begin
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
 //  Assert(DepthSurfaceCellList.Count = RchRateList.Count);
@@ -611,11 +612,12 @@ begin
       begin
         RchCell.Layer := 0;
       end;
-      if OkLocationMF6(IDomain, UsedLocations, RchCell.Layer, RchCell.Row,
+      Layer := RchCell.Layer;
+      if OkLocationMF6(IDomain, UsedLocations, Layer, RchCell.Row,
         RchCell.Column, FRchPackage.LayerOption) then
       begin
         UsedLocations.Items[RchCell.Row, RchCell.Column] := True;
-        WriteInteger(RchCell.Layer+1);
+        WriteInteger(Layer+1);
         if not Model.DisvUsed then
         begin
           WriteInteger(RchCell.Row+1);

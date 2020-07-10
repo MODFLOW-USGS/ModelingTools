@@ -273,6 +273,9 @@
         <topicref type="topic" id="393234463988357" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-08-29T15:40:34.159Z" icon="0" href="ElevationToModelLayer">
           <caption translate="true">ElevationToModelLayer</caption>
         </topicref>
+        <topicref type="topic" id="440223741008536" build="ALL" modified="2020-07-10T11:58:05.902Z" icon="0" href="HighestActiveLayer">
+          <caption translate="true">HighestActiveLayer</caption>
+        </topicref>
         <topicref type="topic" id="393235548592026" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-08-29T14:28:19.843Z" icon="0" href="Layer">
           <caption translate="true">Layer</caption>
         </topicref>

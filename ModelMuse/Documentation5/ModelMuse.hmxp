@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4128</config-value>
+      <config-value name="autohelpstart">4129</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1006,6 +1006,7 @@ document.write('</frameset>');
       <helpcontext-number href="Henry_2D_Model" value="3771"/>
       <helpcontext-number href="HFB_Horizontal_Flow_Barrier_Package" value="3382"/>
       <helpcontext-number href="HFB_Horizontal_Flow_Barrier_Pane" value="3383"/>
+      <helpcontext-number href="HighestActiveLayer" value="4129"/>
       <helpcontext-number href="HighestVertexValue" value="3969"/>
       <helpcontext-number href="Hint_Display_Time_Dialog_Box" value="2370"/>
       <helpcontext-number href="Hints_and_the_Status_Bar" value="180"/>

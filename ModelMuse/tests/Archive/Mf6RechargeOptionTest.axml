@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Mf6RechargeOptionTest" FileType="bin">
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="bin">..\..\..\WRDAPP\mf6.1.1\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Mf6RechargeOptionTest" FileType="ancillary">
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="ancillary">Mf6RechargeOptionTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Mf6RechargeOptionTest" FileType="Model Input">
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.chd</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.dis</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.ic</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.ims</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.nam.archive</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.npf</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.oc</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">Mf6RechargeOptionTest.tdis</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Input">usgs.Mf6RechargeOptionTest.reference</FileName>
+  </model>
+  <output Model_Name="Mf6RechargeOptionTest" FileType="Model Output">
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.bhd</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.cbc</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.dis.grb</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.lst</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.Solution.CSV</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

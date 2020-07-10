@@ -772,6 +772,7 @@ var
   SegmentIndex: Integer;
   IDomain: TDataArray;
   UsedLocations: T2DSparseBooleanArray;
+  Layer: Integer;
 begin
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   UsedLocations := T2DSparseBooleanArray.Create(SPASmall, SPASmall);
@@ -784,14 +785,15 @@ begin
       begin
         EvtCell.Layer := 0;
       end;
-      if OkLocationMF6(IDomain, UsedLocations, EvtCell.Layer, EvtCell.Row,
+      Layer := EvtCell.Layer;
+      if OkLocationMF6(IDomain, UsedLocations, Layer, EvtCell.Row,
         EvtCell.Column, FEtsPackage.LayerOption) then
 //      if (IDomain.IntegerData[EvtCell.Layer, EvtCell.Row, EvtCell.Column] > 0)
 //        and (not UsedLocations.IsValue[EvtCell.Row, EvtCell.Column])  then
       begin
         UsedLocations.Items[EvtCell.Row, EvtCell.Column] := True;
         SurfDepthCell := DepthSurfaceCellList[CellIndex] as TEtsSurfDepth_Cell;
-        WriteInteger(EvtCell.Layer+1);
+        WriteInteger(Layer+1);
         if not Model.DisvUsed then
         begin
           WriteInteger(EvtCell.Row+1);

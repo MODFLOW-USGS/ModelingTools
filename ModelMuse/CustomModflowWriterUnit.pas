@@ -849,7 +849,7 @@ type
     procedure WriteEndPeriod;
     function OkLocationMF6(IDomain: TDataArray;
       UsedLocations: T2DSparseBooleanArray;
-      Layer, Row, Column: integer; Option: TLayerOption): boolean;
+      var Layer: integer; Row, Column: integer; Option: TLayerOption): boolean;
     function CountCellsMF6(RateList: TValueCellList; Option: TLayerOption): integer;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -8457,17 +8457,39 @@ begin
 end;
 
 function TCustomTransientArrayWriter.OkLocationMF6(IDomain: TDataArray;
-UsedLocations: T2DSparseBooleanArray; Layer, Row, Column: integer;
-Option: TLayerOption): boolean;
+  UsedLocations: T2DSparseBooleanArray; var Layer: integer; Row, Column: integer;
+  Option: TLayerOption): boolean;
+var
+  LayerIndex: Integer;
 begin
-  result := (IDomain.IntegerData[Layer, Row, Column] > 0) and
-    (not UsedLocations.IsValue[Row, Column]);
-  if result and (Option <> loSpecified) then
+  if Option = loTopActive then
   begin
-    if (Layer > 0) and (IDomain.IntegerData[Layer-1, Row, Column] > 0) then
+    result := False;
+    for LayerIndex := 0 to IDomain.LayerCount - 1 do
     begin
-      result := False;
+      result := (IDomain.IntegerData[LayerIndex, Row, Column] > 0);
+      if result then
+      begin
+        Layer := LayerIndex;
+        break;
+      end;
     end;
+  end
+  else
+  begin
+    result := (IDomain.IntegerData[Layer, Row, Column] > 0)
+
+//    if result and (Option <> loSpecified) then
+//    begin
+//      if (Layer > 0) and (IDomain.IntegerData[Layer-1, Row, Column] > 0) then
+//      begin
+//        result := False;
+//      end;
+//    end;
+  end;
+  if result then
+  begin
+    result := (not UsedLocations.IsValue[Row, Column]);
   end;
 end;
 
@@ -8479,6 +8501,7 @@ var
   IDomain: TDataArray;
   UsedLocations: T2DSparseBooleanArray;
   ValueCell: TValueCell;
+  Layer: Integer;
 begin
   result := 0;
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
@@ -8492,7 +8515,8 @@ begin
       begin
         ValueCell.Layer := 0;
       end;
-      if OkLocationMF6(IDomain, UsedLocations, ValueCell.Layer, ValueCell.Row,
+      Layer := ValueCell.Layer;
+      if OkLocationMF6(IDomain, UsedLocations, Layer, ValueCell.Row,
         ValueCell.Column, Option) then
       begin
         UsedLocations.Items[ValueCell.Row, ValueCell.Column] := True;

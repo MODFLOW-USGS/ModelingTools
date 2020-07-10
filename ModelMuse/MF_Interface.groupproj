@@ -1,60 +1,72 @@
-﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-		<PropertyGroup>
-			<ProjectGuid>{698574DF-FAF0-43CA-89B0-7E315ECD74A6}</ProjectGuid>
-		</PropertyGroup>
-		<ItemGroup>
-			<Projects Include="ModelMuse.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="..\ModelMonitor\ModelMonitor.dproj">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="..\SWI_ObsExtractor\SwiObsExtractor.dproj">
-				<Dependencies/>
-			</Projects>
-		</ItemGroup>
-		<ProjectExtensions>
-			<Borland.Personality>Default.Personality.12</Borland.Personality>
-			<Borland.ProjectType/>
-			<BorlandProject>
-				<Default.Personality/>
-			</BorlandProject>
-		</ProjectExtensions>
-		<Target Name="ModelMuse">
-			<MSBuild Projects="ModelMuse.dproj"/>
-		</Target>
-		<Target Name="ModelMuse:Clean">
-			<MSBuild Targets="Clean" Projects="ModelMuse.dproj"/>
-		</Target>
-		<Target Name="ModelMuse:Make">
-			<MSBuild Targets="Make" Projects="ModelMuse.dproj"/>
-		</Target>
-		<Target Name="ModelMonitor">
-			<MSBuild Projects="..\ModelMonitor\ModelMonitor.dproj"/>
-		</Target>
-		<Target Name="ModelMonitor:Clean">
-			<MSBuild Targets="Clean" Projects="..\ModelMonitor\ModelMonitor.dproj"/>
-		</Target>
-		<Target Name="ModelMonitor:Make">
-			<MSBuild Targets="Make" Projects="..\ModelMonitor\ModelMonitor.dproj"/>
-		</Target>
-		<Target Name="SwiObsExtractor">
-			<MSBuild Projects="..\SWI_ObsExtractor\SwiObsExtractor.dproj"/>
-		</Target>
-		<Target Name="SwiObsExtractor:Clean">
-			<MSBuild Targets="Clean" Projects="..\SWI_ObsExtractor\SwiObsExtractor.dproj"/>
-		</Target>
-		<Target Name="SwiObsExtractor:Make">
-			<MSBuild Targets="Make" Projects="..\SWI_ObsExtractor\SwiObsExtractor.dproj"/>
-		</Target>
-		<Target Name="Build">
-			<CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor"/>
-		</Target>
-		<Target Name="Clean">
-			<CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean"/>
-		</Target>
-		<Target Name="Make">
-			<CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make"/>
-		</Target>
-		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
-	</Project>
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{698574DF-FAF0-43CA-89B0-7E315ECD74A6}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ModelMuse.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\ModelMonitor\ModelMonitor.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\SWI_ObsExtractor\SwiObsExtractor.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ModelMuse">
+        <MSBuild Projects="ModelMuse.dproj"/>
+    </Target>
+    <Target Name="ModelMuse:Clean">
+        <MSBuild Projects="ModelMuse.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModelMuse:Make">
+        <MSBuild Projects="ModelMuse.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ModelMonitor">
+        <MSBuild Projects="..\ModelMonitor\ModelMonitor.dproj"/>
+    </Target>
+    <Target Name="ModelMonitor:Clean">
+        <MSBuild Projects="..\ModelMonitor\ModelMonitor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModelMonitor:Make">
+        <MSBuild Projects="..\ModelMonitor\ModelMonitor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SwiObsExtractor">
+        <MSBuild Projects="..\SWI_ObsExtractor\SwiObsExtractor.dproj"/>
+    </Target>
+    <Target Name="SwiObsExtractor:Clean">
+        <MSBuild Projects="..\SWI_ObsExtractor\SwiObsExtractor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SwiObsExtractor:Make">
+        <MSBuild Projects="..\SWI_ObsExtractor\SwiObsExtractor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="EnhancedTemplateProcessor">
+        <MSBuild Projects="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj"/>
+    </Target>
+    <Target Name="EnhancedTemplateProcessor:Clean">
+        <MSBuild Projects="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EnhancedTemplateProcessor:Make">
+        <MSBuild Projects="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

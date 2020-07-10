@@ -390,8 +390,8 @@ var
   BedPerpendicularAngle3DegreesSpecialImplementor: TSpecialImplementor;
   }
 
-//  HighestActiveLayer: TFunctionClass;
-//  HighestActiveLayerSpecialImplementor: TSpecialImplementor;
+  HighestActiveLayer: TFunctionClass;
+  HighestActiveLayerSpecialImplementor: TSpecialImplementor;
 
   SpecifiedHeadOnLayer: TFunctionClass;
   SpecifiedHeadOnLayerSpecialImplementor: TSpecialImplementor;
@@ -5192,6 +5192,37 @@ begin
   end;
 end;
 
+function EvaluateIntegerDataSetOnLayer(const DataSetName: string;
+  Values: array of pointer): Integer;
+var
+  DataArray: TDataArray;
+  ArrayLength: integer;
+  Column, Row, Layer: integer;
+begin
+  DataArray := TCustomModel(GlobalCurrentModel).
+    DataArrayManager.GetDataSetByName(DataSetName);
+  Assert(DataArray <> nil);
+  PushGlobalStack;
+  try
+    DataArray.Initialize;
+  finally
+    PopGlobalStack;
+  end;
+  ArrayLength := Length(Values);
+  Assert(ArrayLength = 1);
+  Layer := PInteger(Values[0])^ - 1;
+  if Layer < 0 then
+  begin
+    result := 0;
+  end
+  else
+  begin
+    Column := GlobalColumn - 1;
+    Row := GlobalRow - 1;
+    result := DataArray.IntegerData[Layer, Row, Column];
+  end;
+end;
+
 function _ActiveOnLayer(Values: array of pointer): boolean;
 var
   Layer: Integer;
@@ -5204,8 +5235,16 @@ begin
   result := False;
   if TCustomModel(GlobalCurrentModel).Grid <> nil then
   begin
-    DataArray := TCustomModel(GlobalCurrentModel).
-      DataArrayManager.GetDataSetByName(rsActive);
+    if GlobalCurrentModel.ModelSelection = msModflow2015 then
+    begin
+      DataArray := TCustomModel(GlobalCurrentModel).
+        DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    end
+    else
+    begin
+      DataArray := TCustomModel(GlobalCurrentModel).
+        DataArrayManager.GetDataSetByName(rsActive);
+    end;
     Assert(DataArray <> nil);
     PushGlobalStack;
     try
@@ -5221,7 +5260,14 @@ begin
       result := False;
       Exit;
     end;
-    result := EvaluateBooleanDataSetOnLayer(rsActive, Values);
+    if GlobalCurrentModel.ModelSelection = msModflow2015 then
+    begin
+      result := EvaluateIntegerDataSetOnLayer(K_IDOMAIN, Values) > 0;
+    end
+    else
+    begin
+      result := EvaluateBooleanDataSetOnLayer(rsActive, Values);
+    end;
   end
   else if TCustomModel(GlobalCurrentModel).Mesh3D <> nil then
   begin
@@ -5269,6 +5315,39 @@ begin
               result := False;
             end;
           end;
+      end;
+    end;
+  end;
+end;
+
+function _HighestActiveLayer(Values: array of pointer): Integer;
+var
+  InternalValues: array of pointer;
+  LayerIndex: Integer;
+begin
+  result := 0;
+  SetLength(InternalValues, 1);
+  if GlobalCurrentModel.ModelSelection = msPhast then
+  begin
+    for LayerIndex := TCustomModel(GlobalCurrentModel).LayerCount downto 1 do
+    begin
+      InternalValues[0] := Addr(LayerIndex);
+      if _ActiveOnLayer(InternalValues) then
+      begin
+        result := LayerIndex;
+        break;
+      end;
+    end;
+  end
+  else
+  begin
+    for LayerIndex := 1 to TCustomModel(GlobalCurrentModel).LayerCount do
+    begin
+      InternalValues[0] := Addr(LayerIndex);
+      if _ActiveOnLayer(InternalValues) then
+      begin
+        result := LayerIndex;
+        break;
       end;
     end;
   end;
@@ -6827,6 +6906,10 @@ begin
     and (frmGoPhast.ModelSelection <> msFootPrint)  then
   begin
     result.Add(rsActive);
+    if frmGoPhast.ModelSelection = msModflow2015 then
+    begin
+      result.Add(K_IDOMAIN);
+    end;
   end
   else if frmGoPhast.ModelSelection in SutraSelection then
   begin
@@ -6854,6 +6937,10 @@ begin
   begin
     result := inherited UsesVariable(Variable)
       or (Variable.Name = UpperCase(rsActive));
+    if (frmGoPhast.ModelSelection = msModflow2015) and not result then
+    begin
+      result := Variable.Name = UpperCase(K_IDOMAIN);
+    end;
   end
   else
   begin
@@ -8244,6 +8331,20 @@ initialization
   SpecifiedHeadOnLayerSpecialImplementor.Implementor := TSpecifiedHeadOnLayer;
   SpecialImplementors.Add(SpecifiedHeadOnLayerSpecialImplementor);
 
+  HighestActiveLayer := TFunctionClass.Create;
+  HighestActiveLayer.InputDataCount := 0;
+  HighestActiveLayer.OptionalArguments := 0;
+  HighestActiveLayer.IFunctionAddr := _HighestActiveLayer;
+  HighestActiveLayer.Name := 'HighestActiveLayer';
+  HighestActiveLayer.Prototype := StrGridOrMesh+'HighestActiveLayer';
+  HighestActiveLayer.AllowConversionToConstant := False;
+
+  HighestActiveLayerSpecialImplementor := TSpecialImplementor.Create;
+  HighestActiveLayerSpecialImplementor.FunctionClass := HighestActiveLayer;
+  HighestActiveLayerSpecialImplementor.Implementor := TActiveOnLayer;
+  SpecialImplementors.Add(HighestActiveLayerSpecialImplementor);
+
+
   BcfVcont := TFunctionClass.Create;
   BcfVcont.InputDataCount := 0;
   BcfVcont.OptionalArguments := 3;
@@ -8409,6 +8510,9 @@ finalization
   BedPerpendicularAngle3Degrees.Free;
   BedPerpendicularAngle3DegreesSpecialImplementor.Free;
   }
+
+  HighestActiveLayer.Free;
+  HighestActiveLayerSpecialImplementor.Free;
 
   SpecifiedHeadOnLayer.Free;
   SpecifiedHeadOnLayerSpecialImplementor.Free;

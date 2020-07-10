@@ -9187,9 +9187,20 @@ const
   //               Bug fix: Fixed a bug that could cause an assertion failure
   //                if recharge or evapotranspiration was used in
   //                some of the stress periods but not in others.
+  //    '4.2.0.27' Bug fix: With MODFLOW 6 models in which the "Top Active Cell"
+  //                option in the Recharge and Evapotransipiration packages
+  //                is selected, ModelMuse will automatically specify the
+  //                layer as the top active layer at a particular location.
+
+  //               Enhancement: Added new function: HighestActiveLayer. It
+  //                returns the highest layer at a particular location that is
+  //                active.
+  //               Change: The ActiveOnLayer function was changed for MODFLOW 6
+  //                models to return True in the IDOMAIN data set is greater
+  //                than 0.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.26';
+  IModelVersion = '4.2.0.27';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

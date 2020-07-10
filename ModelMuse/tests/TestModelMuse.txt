@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4157
+4186
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4157,3 +4157,32 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.tdis
 	Archive\ParamMf6Test.wel
 	Archive\usgs.ParamMf6Test.reference
+Mf6RechargeOptionTest.gpt
+	Archive\Mf6RechargeOptionTest.axml
+	Archive\Mf6RechargeOptionTest.chd
+	Archive\Mf6RechargeOptionTest.dis
+	Archive\Mf6RechargeOptionTest.ic
+	Archive\Mf6RechargeOptionTest.ims
+	Archive\Mf6RechargeOptionTest.nam
+	Archive\Mf6RechargeOptionTest.nam.archive
+	Archive\Mf6RechargeOptionTest.npf
+	Archive\Mf6RechargeOptionTest.oc
+	Archive\Mf6RechargeOptionTest.tdis
+	Archive\usgs.Mf6RechargeOptionTest.reference
+HighestActivePhast.gpt
+	Archive\HighestActivePhast.axml
+	Archive\HighestActivePhast.trans.dat
+	Archive\usgs.HighestActivePhast.reference
+HighestActiveModflow.gpt
+	Archive\HighestActiveModflow.axml
+	Archive\HighestActiveModflow.chd
+	Archive\HighestActiveModflow.dis
+	Archive\HighestActiveModflow.ghb
+	Archive\HighestActiveModflow.ic
+	Archive\HighestActiveModflow.ims
+	Archive\HighestActiveModflow.nam
+	Archive\HighestActiveModflow.nam.archive
+	Archive\HighestActiveModflow.npf
+	Archive\HighestActiveModflow.oc
+	Archive\HighestActiveModflow.tdis
+	Archive\usgs.HighestActiveModflow.reference

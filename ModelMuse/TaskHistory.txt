@@ -451,6 +451,10 @@ object TTaskHistory
     item
       Name = 'Anonymize Objects'
       Display = False
+    end
+    item
+      Name = 'Pest parameter substition'
+      Display = True
     end>
   History = <
     item
@@ -25784,6 +25788,13 @@ object TTaskHistory
         'RCH'
         'EVT'
         'ETS'
+        'Testing')
+    end
+    item
+      Date = 44022.000000000000000000
+      Categories.Strings = (
+        'Pest parameter substition'
+        'PEST'
         'Testing')
     end>
 end

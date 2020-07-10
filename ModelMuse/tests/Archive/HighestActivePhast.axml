@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="HighestActivePhast" FileType="bin">
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\hdf5.dll</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\phast.bat</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\phasthdf.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\phastinput.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\phast-msmpi.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\phast-mt.exe</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\szip.dll</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="bin">..\..\..\Program Files\USGS\phast-3.5.14000\bin\zlib.dll</FileName>
+  </bin>
+  <ancillary Model_Name="HighestActivePhast" FileType="ancillary">
+    <FileName Model_Name="HighestActivePhast" FileType="ancillary">HighestActivePhast.gpt</FileName>
+  </ancillary>
+  <model Model_Name="HighestActivePhast" FileType="Model Input">
+    <FileName Model_Name="HighestActivePhast" FileType="Model Input">HighestActivePhast.trans.dat</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="Model Input">RunPhast.bat.archive</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="Model Input">usgs.HighestActivePhast.reference</FileName>
+  </model>
+  <output Model_Name="HighestActivePhast" FileType="Model Output">
+    <FileName Model_Name="HighestActivePhast" FileType="Model Output">HighestActivePhast.h5</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="Model Output">HighestActivePhast.log</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="Model Output">HighestActivePhast.O.head</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="Model Output">HighestActivePhast.O.probdef</FileName>
+    <FileName Model_Name="HighestActivePhast" FileType="Model Output">HighestActivePhast.O.wel</FileName>
+  </output>
+</Model_Archive_List>
