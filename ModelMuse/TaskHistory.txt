@@ -25795,6 +25795,8 @@ object TTaskHistory
       Categories.Strings = (
         'Pest parameter substition'
         'PEST'
-        'Testing')
+        'Testing'
+        'Documentation'
+        'core code')
     end>
 end
