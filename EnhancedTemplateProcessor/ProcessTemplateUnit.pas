@@ -2,8 +2,16 @@ unit ProcessTemplateUnit;
 
 interface
 
-uses Classes, System.Generics.Collections, System.SysUtils, RbwParser,
-  System.Math;
+{$IFDEF FPC}
+  {$MODE DELPHI}
+{$ENDIF}
+
+uses Classes, Generics.Collections, SysUtils, RbwParser,
+  Math
+{$IFDEF FPC}
+  , SimpleTextWriter
+{$ENDIF}
+  ;
 
 type
   TParameter = record
@@ -32,9 +40,15 @@ type
   private
     FTemplateFileName: string;
     FPvalFileName: string;
-    FTemplateFile: TStreamReader;
-    FPValFile: TStreamReader;
-    FModelOutputFile: TStreamWriter;
+{$IFDEF FPC}
+  FTemplateFile: TSimpleStreamReader;
+  FPValFile: TSimpleStreamReader;
+  FModelOutputFile: TSimpleStreamWriter;
+{$ELSE}
+  FTemplateFile: TStreamReader;
+  FPValFile: TStreamReader;
+  FModelOutputFile: TStreamWriter;
+{$ENDIF}
     FParameters: TParameterDictionary;
     FParser: TRbwParser;
     FParameterDelimiter: Char;
@@ -60,7 +74,7 @@ procedure ProcessTemplate;
 implementation
 
 uses
-  System.StrUtils;
+  StrUtils;
 
 resourcestring
   StrUnableToReadTheN = 'Unable to read the number of parameters from the PV' +
@@ -112,7 +126,7 @@ begin
     begin
       DecimalPostion :=  Pos('.', result);
       if (Pos('E', result) = 0) and
-        ((DecimalPostion < AvailableWidth) and (DecimalPostion > 0)) then
+        ((DecimalPostion <= AvailableWidth) and (DecimalPostion > 0)) then
       begin
         result := Copy(result, 1, AvailableWidth);
       end
@@ -122,6 +136,8 @@ begin
         ExponentLength := Length(ExponentStr);
         if ExponentLength < AvailableWidth then
         begin
+          result := FloatToStrF(Value, ffExponent, AvailableWidth,
+            Max(0, AvailableWidth-Exponent-1));
           result := Copy(result, 1, AvailableWidth-ExponentLength) + ExponentStr
         end;
       end;
@@ -209,17 +225,30 @@ begin
   begin
     raise EBadFileName.Create('Template files must have an extension');
   end;
+  {$IFDEF FPC}
+  FTemplateFile := TSimpleStreamReader.Create(FTemplateFileName);
+  {$ELSE}
   FTemplateFile := TStreamReader.Create(FTemplateFileName);
+  {$ENDIF}
   if FPvalFileName <> '' then
   begin
+    {$IFDEF FPC}
+    FPValFile := TSimpleStreamReader.Create(FPvalFileName);
+    {$ELSE}
     FPValFile := TStreamReader.Create(FPvalFileName);
+    {$ENDIF}
   end
   else
   begin
     FPValFile := nil;
   end;
+  {$IFDEF FPC}
+  FModelOutputFile := TSimpleStreamWriter.Create(
+    ChangeFileExt(FTemplateFileName, ''));
+  {$ELSE}
   FModelOutputFile := TStreamWriter.Create(
     ChangeFileExt(FTemplateFileName, ''));
+  {$ENDIF}
 end;
 
 procedure TParameterProcessor.ProcessTemplate;
@@ -275,15 +304,12 @@ var
     FormulaDelimiterPosition := Pos (FFormulaDelimiter, ALine);
     while FormulaDelimiterPosition > 0 do
     begin
+      Inc(result);
       FormulaDelimiterPosition := PosEx (FFormulaDelimiter, ALine,
         Succ(FormulaDelimiterPosition));
       if FormulaDelimiterPosition > APosition then
       begin
         break;
-      end
-      else
-      begin
-        Inc(result);
       end;
     end;
 

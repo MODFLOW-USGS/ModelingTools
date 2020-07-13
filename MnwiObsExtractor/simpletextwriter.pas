@@ -29,12 +29,42 @@ type
   { TSimpleStreamReader }
 
   TSimpleStreamReader = class(TStreamReader)
+  private
+    function GetEndOfStream: Boolean;
+  public
     constructor Create(const FileName: string); reintroduce;
+    property EndOfStream: Boolean read GetEndOfStream;
+  end;
+
+  { TSimpleStreamWriter }
+
+  TSimpleStreamWriter = class(TFileStream)
+  public
+    Constructor Create(const AFileName: string);
+    procedure WriteLine(Value: Ansistring);
   end;
 
 implementation
 
+{ TSimpleStreamWriter }
+
+constructor TSimpleStreamWriter.Create(const AFileName: string);
+begin
+  inherited Create(AFileName, fmCreate or fmShareDenyWrite);
+end;
+
+procedure TSimpleStreamWriter.WriteLine(Value: Ansistring);
+begin
+  Value := Value + sLineBreak;
+  Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+end;
+
 { TSimpleStreamReader }
+
+function TSimpleStreamReader.GetEndOfStream: Boolean;
+begin
+  result := IsEof;
+end;
 
 constructor TSimpleStreamReader.Create(const FileName: string);
 begin
