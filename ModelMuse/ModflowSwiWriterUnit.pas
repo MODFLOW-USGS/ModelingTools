@@ -247,7 +247,7 @@ begin
         end;
 
         if (RowDirection <> 0) and (ColDirection <> 0)
-          and ((Cell1 <> nil) or (Cell3 <> nil))
+          and (Cell1 <> nil) and (Cell3 <> nil)
           and ActiveDataArray.BooleanData[ACell.Layer, NewRow, NewColumn]  then
         begin
           Cell2 := TInterpolatedObsCell.Create;

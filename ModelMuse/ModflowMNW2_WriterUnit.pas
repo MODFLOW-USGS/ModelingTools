@@ -762,12 +762,6 @@ var
   ComparisonsUsed: Boolean;
   CompIndex: Integer;
   CompItem: TObsCompareItem;
-//  InstructionFileName: string;
-//  ComparisonIndex: Integer;
-//  GloCompItem: TGlobalObsComparisonItem;
-//  FObsItemDictionary: TDictionary<string, TCustomObservationItem>;
-//  PriorItem1: TCustomObservationItem;
-//  PriorItem2: TCustomObservationItem;
   StartTime: Double;
   function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
   begin

@@ -8,6 +8,10 @@ uses System.UITypes,
   UndoItems, StrUtils, JvExControls, JvLinkLabel, ComCtrls, JvRichEdit,
   Vcl.Menus, System.Generics.Collections;
 
+{$IFDEF PEST}
+  {$DEFINE SWIObs}
+{$ENDIF}
+
 type
   TfrmFilesToArchive = class(TfrmCustomGoPhast)
     pnlBottom: TPanel;

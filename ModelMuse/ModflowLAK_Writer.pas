@@ -615,6 +615,9 @@ begin
         Exit;
       end;
 
+    end;
+    if ITMP1 = 1 then
+    begin
       WriteDataSet9(FStressPeriod);
     end;
   end;

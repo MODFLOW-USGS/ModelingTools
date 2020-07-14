@@ -9198,6 +9198,9 @@ const
   //               Change: The ActiveOnLayer function was changed for MODFLOW 6
   //                models to return True in the IDOMAIN data set is greater
   //                than 0.
+  //               Bug fix: Fixed bug in export of the MODFLOW-2005 Lake package
+  //                input file that could prevent data set 9 from being written
+  //                for some stress periods after the first stress period.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.27';

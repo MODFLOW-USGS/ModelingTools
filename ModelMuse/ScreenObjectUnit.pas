@@ -31403,6 +31403,9 @@ end;
 
 function TScreenObject.StoreModflowSwiObservations: Boolean;
 begin
+{$IFDEF PEST}
+  {$DEFINE SWIObs}
+{$ENDIF}
   {$IFDEF SWIObs}
   result := (FModflowBoundaries <> nil)
     and (ModflowSwiObservations <> nil) and ModflowSwiObservations.Used;

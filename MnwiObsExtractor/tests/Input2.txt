@@ -1,0 +1,17 @@
+BEGIN OUTPUT_FILES
+  LIST Test.lst
+  OBSERVATIONS_FILE test.obsvalues
+  #INSTRUCTION_FILE test.obsInstructions
+END OUTPUT_FILES
+
+BEGIN INPUT_FILES
+  MNW2 Mnw2Import.mnw_script
+  LAK streamLinkTest.Lake_script
+  SFR streamLinkTest.Sfr_script
+  SFR streamLinkTest.Gag_script
+  SUB ImportedSub.SubObsScript
+  SWT SwtExample.SwtObsScript
+  SWI SWI6-1.swi_obs_Script
+  DERIVED streamLinkTest.der_script
+  DERIVED Mnw2Import.der_script
+END INPUT_FILES

@@ -3763,6 +3763,10 @@ begin
   begin
     ObsType := motHwell;
   end
+  else
+  begin
+    Assert(False);
+  end;
 end;
 
 function TMnw2ObsItem.Units: string;

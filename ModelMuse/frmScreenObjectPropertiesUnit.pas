@@ -12324,6 +12324,9 @@ var
   Node: TJvPageIndexNode;
 begin
   FSWiObs_Node := nil;
+{$IFDEF PEST}
+  {$DEFINE SWIObs}
+{$ENDIF}
 {$IFNDEF SWIObs}
   Exit;
 {$ENDIF}
