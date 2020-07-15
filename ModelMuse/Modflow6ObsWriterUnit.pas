@@ -998,7 +998,7 @@ begin
     FlowObs.FCell := ACell.Cell;
     FlowObs.FOtherCell := ACell.Cell;
     Dec(FlowObs.FOtherCell.Layer);
-    FlowObs.FName := Format('fa_', [Obs.Name]);
+    FlowObs.FName := Format('fa_%s', [Obs.Name]);
     if (FlowObs.FOtherCell.Layer >= 0)
       and ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
       FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
@@ -1011,7 +1011,7 @@ begin
     FlowObs.FCell := ACell.Cell;
     FlowObs.FOtherCell := ACell.Cell;
     Inc(FlowObs.FOtherCell.Layer);
-    FlowObs.FName := Format('fb_', [Obs.Name]);
+    FlowObs.FName := Format('fb_%s', [Obs.Name]);
     if (FlowObs.FOtherCell.Layer < Model.LayerCount)
       and ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
       FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
@@ -1184,7 +1184,7 @@ var
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-          [OutputFileName, ObsFileFormat]));
+          [ExtractFileName(OutputFileName), ObsFileFormat]));
       end;
       Model.AddModelOutputFile(OutputFileName);
       OutputFileName := ExtractFileName(OutputFileName);
@@ -1406,7 +1406,7 @@ begin
     begin
       Assert(FileNameLines <> nil);
       FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-        [OutputFileName, OutputFormat]));
+        [ExtractFileName(OutputFileName), OutputFormat]));
     end;
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -1834,7 +1834,7 @@ begin
     begin
       Assert(FileNameLines <> nil);
       FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-        [OutputFileName, OutputFormat]));
+        [ExtractFileName(OutputFileName), OutputFormat]));
     end;
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -2167,7 +2167,7 @@ begin
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-          [OutputFileName, OutputFormat]));
+          [ExtractFileName(OutputFileName), OutputFormat]));
       end;
       OutputFileName := ExtractFileName(OutputFileName);
       WriteString(OutputFileName);
@@ -2519,7 +2519,7 @@ begin
     begin
       Assert(FileNameLines <> nil);
       FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-        [OutputFileName, OutputFormat]));
+        [ExtractFileName(OutputFileName), OutputFormat]));
     end;
     OutputFileName := ExtractFileName(OutputFileName);
     WriteString(OutputFileName);
@@ -2801,7 +2801,7 @@ begin
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-          [OutputFileName, OutputFormat]));
+          [ExtractFileName(OutputFileName), OutputFormat]));
       end;
       OutputFileName := ExtractFileName(OutputFileName);
       WriteString(OutputFileName);
@@ -3281,7 +3281,7 @@ begin
       begin
         Assert(FileNameLines <> nil);
         FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-          [OutputFileName, OutputFormat]));
+          [ExtractFileName(OutputFileName), OutputFormat]));
       end;
       OutputFileName := ExtractFileName(OutputFileName);
       WriteString(OutputFileName);

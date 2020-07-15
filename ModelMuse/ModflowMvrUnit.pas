@@ -1217,7 +1217,7 @@ end;
 
 function TMvrSourceStorage.GetCount: Integer;
 begin
-  result := Length(FMvrRecordArray);
+  result := Length(MvrRecordArray);
 end;
 
 function TMvrSourceStorage.GetMvrRecordArray: TMvrRecordArray;

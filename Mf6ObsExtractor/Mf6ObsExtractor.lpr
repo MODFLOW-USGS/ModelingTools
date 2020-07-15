@@ -80,7 +80,7 @@ begin
       try
         try
           InputHandler.ReadAndProcessInputFile(FileName);
-
+          WriteLn('normal termination');
         Except on E: Exception do
           begin
             WriteLn(E.message);

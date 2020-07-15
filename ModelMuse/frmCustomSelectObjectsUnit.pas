@@ -76,6 +76,10 @@ type
     FvstSutraGeneralizedTransportNode: PVirtualNode;
     FSutraGeneralizedTransportList: TList;
 
+    FvstSutraStateObsNode: PVirtualNode;
+    FSutraStateObsList: TList;
+
+
     FvstFootprintWellNode: PVirtualNode;
     FFootprintList: TList;
     FvstFootprintFeaturesNode: PVirtualNode;
@@ -421,6 +425,7 @@ resourcestring
   StrSUTRALake = 'SUTRA Lake';
   StrGeneralizedFlow = 'Generalized Flow';
   StrGeneralizedTranspor = 'Generalized Transport';
+  StrSUTRAStateObservat = 'SUTRA State Observations';
 
 {$R *.dfm}
 procedure TfrmCustomSelectObjects.vstObjectsInitNode(Sender: TBaseVirtualTree;
@@ -833,6 +838,11 @@ begin
     else if Node = FvstSutraGeneralizedFlowNode then
     begin
       Data.Caption := StrGeneralizedFlow;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstSutraStateObsNode then
+    begin
+      Data.Caption := StrSUTRAStateObservat;
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstSutraGeneralizedTransportNode then
@@ -1573,6 +1583,11 @@ begin
       InitializeData(FvstSutraLakeNode);
     end;
 
+    if AScreenObject.SutraBoundaries.SutraStateObs.Used then
+    begin
+      InitializeData(FvstSutraStateObsNode);
+    end;
+
     if AScreenObject.SutraBoundaries.GeneralFlowBoundary.Used then
     begin
       InitializeData(FvstSutraGeneralizedFlowNode);
@@ -1717,6 +1732,7 @@ begin
   vstCheckDeleteNode(FvstSutraLakeNode);
   vstCheckDeleteNode(FvstSutraGeneralizedFlowNode);
   vstCheckDeleteNode(FvstSutraGeneralizedTransportNode);
+  vstCheckDeleteNode(FvstSutraStateObsNode);
 
   vstCheckDeleteNode(FvstFootprintWellNode);
 
@@ -2096,6 +2112,8 @@ begin
   InitializeMF_BoundaryNode(FvstSutraLakeNode, PriorNode, FSutraLakeList);
   InitializeMF_BoundaryNode(FvstSutraGeneralizedFlowNode, PriorNode, FSutraGeneralizedFlowList);
   InitializeMF_BoundaryNode(FvstSutraGeneralizedTransportNode, PriorNode, FSutraGeneralizedTransportList);
+  InitializeMF_BoundaryNode(FvstSutraStateObsNode, PriorNode, FSutraStateObsList);
+
 
   // Add children of FvstFootprintFeaturesNode
   if FvstFootprintWellNode = nil then
@@ -2274,6 +2292,7 @@ begin
   FSutraLakeList.Free;
   FSutraGeneralizedFlowList.Free;
   FSutraGeneralizedTransportList.Free;
+  FSutraStateObsList.Free;
 
   FFootprintList.Free;
 
@@ -2362,6 +2381,7 @@ begin
   FSutraLakeList := TList.Create;
   FSutraGeneralizedFlowList := TList.Create;
   FSutraGeneralizedTransportList := TList.Create;
+  FSutraStateObsList := TList.Create;
 
   FFootprintList := TList.Create;
   FExapandedNodes := TStringList.Create;
@@ -2458,6 +2478,7 @@ begin
   FvstSutraLakeNode := nil;
   FvstSutraGeneralizedFlowNode := nil;
   FvstSutraGeneralizedTransportNode := nil;
+  FvstSutraStateObsNode := nil;
 
   FvstFootprintWellNode := nil;
 
@@ -2663,6 +2684,7 @@ begin
   FSutraLakeList.Sort(ScreenObjectCompare);
   FSutraGeneralizedFlowList.Sort(ScreenObjectCompare);
   FSutraGeneralizedTransportList.Sort(ScreenObjectCompare);
+  FSutraStateObsList.Sort(ScreenObjectCompare);
 
   FFootprintList.Sort(ScreenObjectCompare);
 

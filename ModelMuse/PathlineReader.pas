@@ -1246,6 +1246,8 @@ resourcestring
   '(not a number), that means that MODPATH probably attempted an illegal ' +
   'operation such as dividing by zero. That probably means there is ' +
   'something wrong with how you have set up MODPATH in your model.';
+  StrThereWasAnErrorW = 'There was an error when reading the file. The error' +
+  ' message was "%s"';
 
 const
   StrSTARTLAY: AnsiString = 'START_LAY';
@@ -8082,6 +8084,7 @@ begin
   Splitter:= TStringList.Create;
   AssignFile(FTextFile, FFileName);
   try
+    try
     Splitter.Delimiter := ' ';
     Reset(FTextFile);
     Readln(FTextFile, ALine);
@@ -8197,6 +8200,13 @@ begin
 
 //        LineSegmentIndex := StrToInt(Splitter[15]);
 
+      end;
+    end;
+    except on E: EInOutError do
+      begin
+        Beep;
+        MessageDlg(Format(StrThereWasAnErrorW, [E.Message]), mtError, [mbOK], 0);
+        Exit;
       end;
     end;
   finally

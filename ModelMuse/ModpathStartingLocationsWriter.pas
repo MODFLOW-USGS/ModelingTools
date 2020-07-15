@@ -84,6 +84,8 @@ resourcestring
   StrTheFollowingObject = 'The following objects were not used for defining ' +
   'MODPATH particles because the number of elevation formulas is not equal t' +
   'o 1 or because it was not a point object.';
+  StrInTheFollowingObj = 'In the following objects, no MODPATH release times' +
+  ' have been specified';
 //  StrNoMODPATHStarting = 'No MODPATH starting locations defined';
 //  StrNoObjectsDefineSt = 'No objects define starting locations for MODPATH';
 
@@ -122,6 +124,7 @@ var
   NameOfFile: string;
   StressPeriods: TModflowStressPeriods;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheFollowingObj);
   frmErrorsAndWarnings.BeginUpdate;
   try
     StressPeriods := Model.ModflowStressPeriods;
@@ -289,6 +292,7 @@ var
   NameOfFile: string;
   StressPeriods: TModflowStressPeriods;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheFollowingObj);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidMODPATHRefe);
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoMODPATHStarting);
   StressPeriods := Model.ModflowStressPeriods;
@@ -394,6 +398,12 @@ begin
   // data set 8
   WriteInteger(FLocationCount);
   FReleaseTimes := ScreenObject.ModpathParticles.ReleaseTimes;
+  if FReleaseTimes.Count = 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrInTheFollowingObj,
+      ScreenObject.Name, ScreenObject);
+    Exit;
+  end;
   ReleaseStartTime := FReleaseTimes[0].Time;
   WriteFloat(ReleaseStartTime);
   if FReleaseTimes.Count = 1 then

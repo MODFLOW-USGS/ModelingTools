@@ -118,9 +118,9 @@ begin
     Lines := TStringList.Create;
     try
       Lines.Add('BEGIN OPTIONS');
-      Lines.Add('  LISTING ' + ChangeFileExt(FileName, '.Mf6ObsExtInsLst'));
+      Lines.Add('  LISTING ' + ExtractFileName(ChangeFileExt(FileName, '.Mf6ObsExtInsLst')));
 //      Lines.Add('  VALUES ' + ChangeFileExt(FileName, '.Mf6Values'));
-      LinePostion := Lines.Add('  INSTRUCTION ' + ChangeFileExt(FileName, '.PestIns'));
+      LinePostion := Lines.Add('  INSTRUCTION ' + ExtractFileName(ChangeFileExt(FileName, '.PestIns')));
       Lines.Add('END OPTIONS');
       Lines.Add('');
 
@@ -144,8 +144,8 @@ begin
       FileName := ChangeFileExt(FileName, '.Mf6WriteIns');
       Lines.SaveToFile(FileName);
 
-      Lines[LinePostion] := '  VALUES ' + ChangeFileExt(FileName, '.Mf6Values');
-      FileName := ChangeFileExt(FileName, '.Mf6ExtractValues');
+      Lines[LinePostion] := '  VALUES ' + ExtractFileName(ChangeFileExt(FileName, '.Mf6Values'));
+      FileName := ExtractFileName(ChangeFileExt(FileName, '.Mf6ExtractValues'));
       Lines.SaveToFile(FileName);
 
     finally
