@@ -9191,8 +9191,7 @@ const
   //                option in the Recharge and Evapotransipiration packages
   //                is selected, ModelMuse will automatically specify the
   //                layer as the top active layer at a particular location.
-
-  //               Enhancement: Added new function: HighestActiveLayer. It
+  //    '4.2.0.28' Enhancement: Added new function: HighestActiveLayer. It
   //                returns the highest layer at a particular location that is
   //                active.
   //               Change: The ActiveOnLayer function was changed for MODFLOW 6
@@ -9203,7 +9202,7 @@ const
   //                for some stress periods after the first stress period.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.27';
+  IModelVersion = '4.2.0.28';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

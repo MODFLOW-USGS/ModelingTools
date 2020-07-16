@@ -192,7 +192,7 @@ begin
       end;
     end;
 
-    if ACol = Ord(pm6Weight) then
+    if ACol = Ord(pm6ObjectWeightFormula) then
     begin
       CanSelect := False;
       if TryGetObsSeries(ObsSeriesName, ObsSeries) then
@@ -203,8 +203,8 @@ begin
             begin
               if TryGetGenOb(ObsTypeName, GenOb) then
               begin
-                CanSelect := GenOb in [ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
-                  ogRch, ogEVT, ogMvr];
+//                CanSelect := GenOb in [ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
+//                  ogRch, ogEVT, ogMvr];
               end;
             end;
           osMaw:
@@ -285,6 +285,10 @@ begin
     RowOK := True;
     for ColIndex := 0 to Ord(pm6Weight) do
     begin
+      if ColIndex = Ord(pm6ObjectWeightFormula) then
+      begin
+        Continue;
+      end;
       if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
       begin
         RowOK := False;
