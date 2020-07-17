@@ -9201,6 +9201,16 @@ const
   //                input file that could prevent data set 9 from being written
   //                for some stress periods after the first stress period.
 
+  //               Bug fix: Fixed a bug that could cause an access violation
+  //                when displaying the Object Properties dialog box.
+  //               Bug fix: Corrected spelling of CUPBGO in the Object
+  //                Properties dialog box the the SUTRA Generalized Flow
+  //                Boundary
+  //               Bug fix: Fixed allowing multiple "Used" formulas to be
+  //                edited at once for SUTRA boundaries.
+  //               Bug fix: Fixed "Navigation|Go To" dialog box to work more
+  //                easily with SUTRA 2D models.
+
   // version number of ModelMuse.
   IModelVersion = '4.2.0.28';
   StrPvalExt = '.pval';

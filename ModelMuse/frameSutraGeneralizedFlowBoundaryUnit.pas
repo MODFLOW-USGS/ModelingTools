@@ -83,7 +83,7 @@ resourcestring
   StrLimit1CPQL1 = 'Limit 1 (CPQL1)';
   StrLimit2CPQL2 = 'Limit 2 (CPQL2)';
   StrInflowUUPBGI = 'Inflow U (UPBGI)';
-  StrOutflowUSpecificat = 'Outflow U Specification Method (CPBGO)';
+  StrOutflowUSpecificat = 'Outflow U Specification Method (CUPBGO)';
   StrOutflowUUPBGO = 'Outflow U (UPBGO)';
 
 {$R *.dfm}
@@ -530,7 +530,7 @@ procedure TframeSutraGeneralizedFlowBoundary.rdgSutraFeatureMouseUp(
   Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
-  EnableMultiEditControl(rdgSutraFeature, rdeFormula, [Ord(gfcPress1),
+  EnableMultiEditControl(rdgSutraFeature, rdeFormula, [Ord(gfcUsed), Ord(gfcPress1),
     Ord(gfcFlow1), Ord(gfcPress2), Ord(gfcFlow2), Ord(gfcInflowU),
     Ord(gfcOutflowU)]);
   EnableMultiEditControl(rdgSutraFeature, comboLimit, [Ord(gfcLimit1),

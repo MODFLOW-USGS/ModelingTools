@@ -987,6 +987,17 @@ begin
 
   FillComboWithModelNames(comboModel);
 
+  if frmGoPhast.ModelSelection in SutraSelection then
+  begin
+    if frmGoPhast.PhastModel.SutraMesh.MeshType <> mt3D then
+    begin
+      cbFront.Enabled := False;
+      cbSide.Enabled := False;
+      cbFront.Checked := False;
+      cbSide.Checked := False;
+    end;
+  end;
+
   GetData;
 end;
 

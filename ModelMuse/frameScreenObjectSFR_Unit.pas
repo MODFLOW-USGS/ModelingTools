@@ -315,6 +315,7 @@ type
     property GetParser: TGetParserEvent read FGetParser write FGetParser;
     property OnButtonClick: TGridButtonEvent read FOnButtonClick write SetOnButtonClick;
     property OnEdited: TNotifyEvent read FOnEdited write FOnEdited;
+    procedure Clear;
     { Public declarations }
   end;
 
@@ -1442,6 +1443,11 @@ begin
     FInitializing := False;
   end;
 
+end;
+
+procedure TframeScreenObjectSFR.Clear;
+begin
+  frameCrossSection1.Clear;
 end;
 
 procedure TframeScreenObjectSFR.ClearTable(Grid: TStringGrid);

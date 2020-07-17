@@ -906,7 +906,7 @@ begin
   begin
     Exit
   end;
-  Col := 1;
+  Col := Ord(sbgtUsed);
   for Index := Col to rdgSutraFeature.ColCount - 1 do
   begin
     if rdgSutraFeature.ColVisible[Index] then
@@ -922,11 +922,11 @@ end;
 procedure TframeSutraBoundary.rdeFormulaChange(Sender: TObject);
 begin
   inherited;
-  ChangeSelectedCellsInColumn(rdgSutraFeature, 1, rdeFormula.Text);
-  ChangeSelectedCellsInColumn(rdgSutraFeature, 2, rdeFormula.Text);
+  ChangeSelectedCellsInColumn(rdgSutraFeature, Ord(sbgtUsed), rdeFormula.Text);
+  ChangeSelectedCellsInColumn(rdgSutraFeature, Ord(sbgtVariable1), rdeFormula.Text);
   if rdgSutraFeature.ColCount >= 4 then
   begin
-    ChangeSelectedCellsInColumn(rdgSutraFeature, 3, rdeFormula.Text);
+    ChangeSelectedCellsInColumn(rdgSutraFeature, Ord(sbgtVariable2), rdeFormula.Text);
   end;
 end;
 
@@ -988,11 +988,13 @@ begin
   inherited;
   if rdgSutraFeature.ColCount = 3 then
   begin
-    EnableMultiEditControl(rdgSutraFeature, rdeFormula, 2);
+    EnableMultiEditControl(rdgSutraFeature, rdeFormula,
+      [Ord(sbgtUsed), Ord(sbgtVariable1)]);
   end
   else
   begin
-    EnableMultiEditControl(rdgSutraFeature, rdeFormula, [2,3]);
+    EnableMultiEditControl(rdgSutraFeature, rdeFormula,
+      [Ord(sbgtUsed), Ord(sbgtVariable1), Ord(sbgtVariable2)]);
   end;
 end;
 

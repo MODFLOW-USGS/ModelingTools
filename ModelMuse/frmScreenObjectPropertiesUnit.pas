@@ -5384,6 +5384,7 @@ begin
   end;
   FCurrentEdit := nil;
   FDataEdits.Clear;
+  frameScreenObjectSFR.Clear;
   IsLoaded := False;
 end;
 
@@ -15246,8 +15247,8 @@ var
   AScreenObject: TScreenObject;
   Boundary: TModflowParamBoundary;
   FoundFirst: Boolean;
-  ShouldEnable: Boolean;
-  ParamIndex: Integer;
+//  ShouldEnable: Boolean;
+//  ParamIndex: Integer;
 begin
 //  ShouldEnable := frmGoPhast.ModelSelection = msModflow2015;
 //  if ShouldEnable then

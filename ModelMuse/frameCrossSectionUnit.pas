@@ -39,6 +39,7 @@ type
     procedure DeleteItem(ItemIndex: Integer);
     procedure InsertItem(ItemIndex: Integer);
     procedure AddItem;
+    procedure Clear;
     { Public declarations }
   end;
 
@@ -134,6 +135,11 @@ begin
   end;
 end;
 
+procedure TframeCrossSection.Clear;
+begin
+  FChannelValuesList.Clear;
+end;
+
 procedure TframeCrossSection.ClearTable;
 var
   RowIndex: Integer;
@@ -151,7 +157,7 @@ end;
 procedure TframeCrossSection.DisplayData(ItemIndex: Integer);
 var
   index: Integer;
-  SfrBoundary: TSfrChannelCollection;
+  ChannelCollection: TSfrChannelCollection;
   Item: TSfrChannelItem;
   XS_Index: Integer;
   Row: Integer;
@@ -161,10 +167,10 @@ begin
     Exit;
   end;
   FItemIndex := ItemIndex;
-  SfrBoundary := FChannelValuesList[0];
-  if SfrBoundary.Count > ItemIndex then
+  ChannelCollection := FChannelValuesList[0];
+  if ChannelCollection.Count > ItemIndex then
   begin
-    Item := SfrBoundary[ItemIndex];
+    Item := ChannelCollection[ItemIndex];
     for XS_Index := 0 to 7 do
     begin
       Row := XS_Index + 1;
@@ -173,10 +179,10 @@ begin
     end;
     for index := 1 to FChannelValuesList.Count - 1 do
     begin
-      SfrBoundary := FChannelValuesList[index];
-      if SfrBoundary.Count > ItemIndex then
+      ChannelCollection := FChannelValuesList[index];
+      if ChannelCollection.Count > ItemIndex then
       begin
-        Item := SfrBoundary[ItemIndex];
+        Item := ChannelCollection[ItemIndex];
         for XS_Index := 0 to 7 do
         begin
           Row := XS_Index + 1;

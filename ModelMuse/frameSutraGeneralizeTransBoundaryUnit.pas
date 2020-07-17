@@ -424,7 +424,7 @@ procedure TframeSutraGeneralizeTransBoundary.rdgSutraFeatureMouseUp(
   Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
-  EnableMultiEditControl(rdgSutraFeature, rdeFormula, [Ord(gtcU1),
+  EnableMultiEditControl(rdgSutraFeature, rdeFormula, [Ord(gtcUsed), Ord(gtcU1),
     Ord(gtcQU1), Ord(gtcU2), Ord(gtcQU2)]);
 end;
 
