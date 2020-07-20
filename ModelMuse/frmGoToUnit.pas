@@ -188,7 +188,8 @@ implementation
 
 uses frmGoPhastUnit,
   DataSetUnit, FastGEO, PhastModelUnit, QuadTreeClass, UndoItems,
-  DrawMeshTypesUnit, MeshRenumberingTypes, ModflowIrregularMeshUnit;
+  DrawMeshTypesUnit, MeshRenumberingTypes, ModflowIrregularMeshUnit,
+  SutraMeshUnit;
 
 resourcestring
   StrElement = 'Element';

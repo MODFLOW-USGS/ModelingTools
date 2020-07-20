@@ -79,6 +79,10 @@ type
     FvstSutraStateObsNode: PVirtualNode;
     FSutraStateObsList: TList;
 
+    FvstModflowSubObsNode: PVirtualNode;
+    FModflowSubObsList: TList;
+    FvstModflowSwtObsNode: PVirtualNode;
+    FModflowSwtObsList: TList;
 
     FvstFootprintWellNode: PVirtualNode;
     FFootprintList: TList;
@@ -879,6 +883,16 @@ begin
     begin
       Data.Caption := Packages.CsubPackage.PackageIdentifier;
       Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstModflowSubObsNode then
+    begin
+      Data.Caption := 'SUB: Subsidence Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstModflowSwtObsNode then
+    begin
+      Data.Caption := 'SWT: Water-Table Subsidence Observations';
+      Node.CheckType := ctTriStateCheckBox;
     end;
 
 
@@ -1493,6 +1507,18 @@ begin
       InitializeData(FvstModflowCSubNode);
     end;
 
+    if (AScreenObject.ModflowSubObservations <> nil)
+      and AScreenObject.ModflowSubObservations.Used then
+    begin
+      InitializeData(FvstModflowSubObsNode);
+    end;
+
+    if (AScreenObject.ModflowSwtObservations <> nil)
+      and AScreenObject.ModflowSwtObservations.Used then
+    begin
+      InitializeData(FvstModflowSwtObsNode);
+    end;
+
     if (AScreenObject.Mt3dmsConcBoundary <> nil)
       and AScreenObject.Mt3dmsConcBoundary.Used then
     begin
@@ -1697,6 +1723,8 @@ begin
   vstCheckDeleteNode(FvstModflowHfbNode);
   vstCheckDeleteNode(FvstModflowMvrNode);
   vstCheckDeleteNode(FvstModflowCSubNode);
+  vstCheckDeleteNode(FvstModflowSubObsNode);
+  vstCheckDeleteNode(FvstModflowSwtObsNode);
 
 
 
@@ -2061,6 +2089,10 @@ begin
   InitializeMF_BoundaryNode(FvstModflowSfrNode, PriorNode, FSfrList);
   InitializeMF_BoundaryNode(FvstModflowSfrMF6Node, PriorNode, FSfrMf6List);
   InitializeMF_BoundaryNode(FvstModflowStrNode, PriorNode, FStrList);
+
+  InitializeMF_BoundaryNode(FvstModflowSubObsNode, PriorNode, FModflowSubObsList);
+  InitializeMF_BoundaryNode(FvstModflowSwtObsNode, PriorNode, FModflowSwtObsList);
+
   InitializeMF_BoundaryNode(FvstModflowGagNode, PriorNode, FSfrGagList);
   InitializeMF_BoundaryNode(FvstModflowUzfNode, PriorNode, FUzfList);
   InitializeMF_BoundaryNode(FvstModflowUzfMf6Node, PriorNode, FUzfMf6List);
@@ -2255,6 +2287,8 @@ begin
   FSwiObsList.Free;
   FHfbList.Free;
   FCSubList.Free;
+  FModflowSubObsList.Free;
+  FModflowSwtObsList.Free;
 
   FSwrReachList.Free;
   FSwrRainList.Free;
@@ -2342,6 +2376,8 @@ begin
   FUzfList := TList.Create;
   FUzfMf6List := TList.Create;
   FCSubList := TList.Create;
+  FModflowSubObsList := TList.Create;
+  FModflowSwtObsList := TList.Create;
 
   FSwrReachList := TList.Create;
   FSwrRainList := TList.Create;
@@ -2447,6 +2483,8 @@ begin
   FvstModflowHfbNode := nil;
   FvstModflowMvrNode := nil;
   FvstModflowCSubNode := nil;
+  FvstModflowSubObsNode := nil;
+  FvstModflowSwtObsNode := nil;
 
   FvstModflowSwrReachNode := nil;
   FvstModflowSwrRainNode := nil;
@@ -2657,6 +2695,8 @@ begin
   FUztSatList.Sort(ScreenObjectCompare);
   FUztUnsatList.Sort(ScreenObjectCompare);
   FCSubList.Sort(ScreenObjectCompare);
+  FModflowSubObsList.Sort(ScreenObjectCompare);
+  FModflowSwtObsList.Sort(ScreenObjectCompare);
 
   FSwrReachList.Sort(ScreenObjectCompare);
   FSwrRainList.Sort(ScreenObjectCompare);

@@ -567,6 +567,10 @@ var
 begin
   inherited;
   ANode := jvpltvNavigation.GetNodeAt(X,Y);
+  if ANode = nil then
+  begin
+    Exit;
+  end;
   if ((ANode = FLakeNode) or (ANode = FLakeInteractionsNode))
     and not ANode.Enabled then
   begin

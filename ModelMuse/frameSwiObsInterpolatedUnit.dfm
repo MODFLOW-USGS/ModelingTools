@@ -46,9 +46,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
         ExplicitLeft = 406
       end
       inherited seNumber: TJvSpinEdit
-        Height = 24
         OnChange = frameSwiObsseNumberChange
-        ExplicitHeight = 24
       end
     end
     inherited Grid: TRbwDataGrid4
@@ -62,7 +60,7 @@ object frameSwiObsInterpolated: TframeSwiObsInterpolated
       OnHorizontalScroll = frameSwiObsGridHorizontalScroll
       Columns = <
         item
-          AutoAdjustRowHeights = False
+          AutoAdjustRowHeights = True
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
