@@ -9200,8 +9200,7 @@ const
   //               Bug fix: Fixed bug in export of the MODFLOW-2005 Lake package
   //                input file that could prevent data set 9 from being written
   //                for some stress periods after the first stress period.
-
-  //               Bug fix: Fixed a bug that could cause an access violation
+  //    '4.2.0.29' Bug fix: Fixed a bug that could cause an access violation
   //                when displaying the Object Properties dialog box.
   //               Bug fix: Corrected spelling of CUPBGO in the Object
   //                Properties dialog box the the SUTRA Generalized Flow
@@ -9210,9 +9209,10 @@ const
   //                edited at once for SUTRA boundaries.
   //               Bug fix: Fixed "Navigation|Go To" dialog box to work more
   //                easily with SUTRA 2D models.
+  //               Enhancement: Not in released version. PEST Beta 1.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.28';
+  IModelVersion = '4.2.0.29';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
