@@ -611,6 +611,7 @@ type
     procedure SetPointProperty(var AField: TPoint; const NewValue: TPoint);
     procedure SetColorProperty(var AField: TColor; const NewValue: TColor);
     procedure SetDataTimeProperty(var AField: TDateTime; const NewValue: TDateTime);
+    procedure SetCharacterProperty(var AField: Char; const NewValue: Char);
   public
     property OnInvalidateModel: TNotifyEvent read FOnInvalidateModel;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -1134,6 +1135,16 @@ end;
 
 procedure TGoPhastPersistent.SetBooleanProperty(var AField: boolean;
   const NewValue: boolean);
+begin
+  if AField <> NewValue then
+  begin
+    AField := NewValue;
+    InvalidateModel;
+  end;
+end;
+
+procedure TGoPhastPersistent.SetCharacterProperty(var AField: Char;
+  const NewValue: Char);
 begin
   if AField <> NewValue then
   begin

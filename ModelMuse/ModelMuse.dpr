@@ -709,7 +709,8 @@ uses
   SutraPestObsWriterUnit in 'SutraPestObsWriterUnit.pas',
   frmManageSutraBoundaryObservationsUnit in 'frmManageSutraBoundaryObservationsUnit.pas' {frmManageSutraBoundaryObservations},
   framePestObsMf6Unit in 'framePestObsMf6Unit.pas' {framePestObsMf6: TFrame},
-  PestObsExtractorInputWriterUnit in 'PestObsExtractorInputWriterUnit.pas';
+  PestObsExtractorInputWriterUnit in 'PestObsExtractorInputWriterUnit.pas',
+  PestPropertiesUnit in 'PestPropertiesUnit.pas';
 
 {$R *.res}
 

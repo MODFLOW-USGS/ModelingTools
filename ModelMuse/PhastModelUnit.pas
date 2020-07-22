@@ -40,7 +40,8 @@ uses System.UITypes,
   FootprintPropertiesUnit, ModflowSwiObsUnit, ModflowRipPlantGroupsUnit,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
-  Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit;
+  Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
+  PestPropertiesUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -2194,6 +2195,7 @@ that affects the model output should also have a comment. }
     FSutraGlobalObservationComparisons: TGlobalObservationComparisons;
     FSutraFluxObs: TSutraFluxObs;
     FModflow6GlobalObservationComparisons: TGlobalObservationComparisons;
+    FPestProperties: TPestProperties;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -2414,6 +2416,7 @@ that affects the model output should also have a comment. }
 //    procedure WriteMf6ObsExtractorFile(FileName: string);
     procedure SetModflow6GlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
+    procedure SetPestProperties(const Value: TPestProperties);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3261,6 +3264,8 @@ that affects the model output should also have a comment. }
     property DirectObservationLines: TStringList read FDirectObservationLines;
     property DerivedObservationLines: TStringList read FDerivedObservationLines;
     property FileNameLines: TStringList read FFileNameLines;
+    property PestProperties: TPestProperties read FPestProperties
+      write SetPestProperties;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -9210,9 +9215,10 @@ const
   //               Bug fix: Fixed "Navigation|Go To" dialog box to work more
   //                easily with SUTRA 2D models.
   //               Enhancement: Not in released version. PEST Beta 1.
+  //    '4.2.0.30' No real change
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.29';
+  IModelVersion = '4.2.0.30';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -28202,6 +28208,7 @@ begin
   FSutraGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
   FModflow6GlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
 
+  FPestProperties := TPestProperties.Create(Invalidate);
 end;
 
 procedure TCustomModel.UpdateSutraTimeListNames;
@@ -28627,6 +28634,8 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+  FPestProperties.Free;
+
   FModflow6GlobalObservationComparisons.Free;
   FSutraGlobalObservationComparisons.Free;
   FModflowGlobalObservationComparisons.Free;
@@ -44670,6 +44679,11 @@ begin
     FPathLine := TPathLineReader.Create(self);
   end;
   FPathLine.Assign(Value);
+end;
+
+procedure TCustomModel.SetPestProperties(const Value: TPestProperties);
+begin
+  FPestProperties.Assign(Value);
 end;
 
 function TCustomModel.GetPathLine: TPathLineReader;

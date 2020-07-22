@@ -14,12 +14,15 @@ type
     MXL: integer;
     FCells: array of array of TDrn_Cell;
     MXACTD: integer;
+    FShouldWriteFile: Boolean;
+    FAbbreviation: string;
 //    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
     procedure WriteDataSets5To7;
     procedure InitializeCells;
+    procedure WriteFileInternal;
   protected
     function ObservationPackage: TModflowPackageSelection; override;
     function CellType: TValueCellType; override;
@@ -304,7 +307,12 @@ var
   Drn_Cell: TDrn_Cell;
   LocalLayer: integer;
   MvrKey: TMvrRegisterKey;
+  ParameterName: string;
+  MultiplierValue: double;
+  TemplateCharacter: string;
+  ExtendedTemplateCharacter: string;
 begin
+//  TemplateCharacter := nil;
   Inc(FBoundaryIndex);
   
   Drn_Cell := Cell as TDrn_Cell;
@@ -318,6 +326,29 @@ begin
   WriteInteger(Drn_Cell.Column+1);
   WriteFloat(Drn_Cell.Elevation);
 
+  if Model.PestUsed and (Model.ModelSelection = msModflow2015)
+    and WritingTemplate
+    and ( Drn_Cell.ConductanceParameterName <> '') then
+  begin
+    ParameterName := Drn_Cell.ConductanceParameterName;
+    if Drn_Cell.ConductanceParameterValue = 0 then
+    begin
+      MultiplierValue := 0.0;
+    end
+    else
+    begin
+      MultiplierValue := Drn_Cell.Conductance / Drn_Cell.ConductanceParameterValue;
+    end;
+    TemplateCharacter := Model.PestProperties.TemplateCharacter;
+    ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+    WriteString(Format(' %0:s            %1:s             %2:s%1:s * %3:g%0:s',
+      [ExtendedTemplateCharacter, TemplateCharacter, ParameterName,
+      MultiplierValue]));
+  end
+  else
+  begin
+    WriteFloat(Drn_Cell.Conductance);
+  end;
 //  if Drn_Cell.ConductanceParameterName = '' then
 //  begin
     WriteFloat(Drn_Cell.Conductance);
@@ -354,7 +385,7 @@ begin
 
   NewLine;
 
-  if Drn_Cell.MvrUsed and (MvrWriter <> nil) then
+  if Drn_Cell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
   begin
     MvrKey.StressPeriod := FStressPeriod;
     MvrKey.Index := FBoundaryIndex;
@@ -439,9 +470,7 @@ end;
 procedure TModflowDRN_Writer.WriteFile(const AFileName: string);
 var
 //  NameOfFile: string;
-  ShouldWriteFile: Boolean;
   ShouldWriteObservationFile: Boolean;
-  Abbreviation: string;
 begin
   if MvrWriter <> nil then
   begin
@@ -460,17 +489,17 @@ begin
     end;
     if Model.ModelSelection = msModflow2015 then
     begin
-      Abbreviation := 'DRN6';
+      FAbbreviation := 'DRN6';
     end
     else
     begin
-      Abbreviation := StrDRN;
+      FAbbreviation := StrDRN;
     end;
-    ShouldWriteFile := not Model.PackageGeneratedExternally(Abbreviation);
+    FShouldWriteFile := not Model.PackageGeneratedExternally(FAbbreviation);
     ShouldWriteObservationFile := ObservationPackage.IsSelected
       and not Model.PackageGeneratedExternally(StrDROB);
 
-    if not ShouldWriteFile and not ShouldWriteObservationFile then
+    if not FShouldWriteFile and not ShouldWriteObservationFile then
     begin
       Exit;
     end;
@@ -478,7 +507,7 @@ begin
     FNameOfFile := FileName(AFileName);
 //    FNameOfFile := NameOfFile;
 
-    if ShouldWriteFile or ShouldWriteObservationFile then
+    if FShouldWriteFile or ShouldWriteObservationFile then
     begin
       Evaluate;
       Application.ProcessMessages;
@@ -488,92 +517,98 @@ begin
       end;
       ClearTimeLists(Model);
     end;
-    if not ShouldWriteFile then
+    if not FShouldWriteFile then
     begin
       Exit;
     end;
     FNameOfFile := FileName(AFileName);
-    OpenFile(FNameOfFile);
-    try
-      frmProgressMM.AddMessage(StrWritingDRNPackage);
-      frmProgressMM.AddMessage(StrWritingDataSet0);
-      WriteDataSet0;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
 
-      if Model.ModelSelection = msModflow2015 then
-      begin
-        frmProgressMM.AddMessage(StrWritingOptions);
-        WriteOptionsMF6(FNameOfFile);
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-
-        frmProgressMM.AddMessage(StrWritingDimensions);
-        WriteDimensionsMF6;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-
-        if MAXBOUND = 0 then
-        begin
-          frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
-          Exit;
-        end;
-      end
-      else
-      begin
-        frmProgressMM.AddMessage(StrWritingDataSet1);
-        WriteDataSet1;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-
-        frmProgressMM.AddMessage(StrWritingDataSet2);
-        WriteDataSet2;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-
-        if MXACTD = 0 then
-        begin
-          frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
-          Exit;
-        end;
-      end;
-
-      if ShouldWriteFile then
-      begin
-        WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrDRN),
-          NameOfFile, foInput, Model);
-      end;
-
-//      if Model.ModelSelection <> msModflow2015 then
-      begin
-        frmProgressMM.AddMessage(StrWritingDataSets3and4);
-        WriteDataSets3And4;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingDataSets5to7);
-      WriteDataSets5To7;
-    finally
-      CloseFile;
+    WriteFileInternal;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
     end;
+//    OpenFile(FNameOfFile);
+//    try
+//      frmProgressMM.AddMessage(StrWritingDRNPackage);
+//      frmProgressMM.AddMessage(StrWritingDataSet0);
+//      WriteDataSet0;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      if Model.ModelSelection = msModflow2015 then
+//      begin
+//        frmProgressMM.AddMessage(StrWritingOptions);
+//        WriteOptionsMF6(FNameOfFile);
+//        Application.ProcessMessages;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//
+//        frmProgressMM.AddMessage(StrWritingDimensions);
+//        WriteDimensionsMF6;
+//        Application.ProcessMessages;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//
+//        if MAXBOUND = 0 then
+//        begin
+//          frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
+//          Exit;
+//        end;
+//      end
+//      else
+//      begin
+//        frmProgressMM.AddMessage(StrWritingDataSet1);
+//        WriteDataSet1;
+//        Application.ProcessMessages;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//
+//        frmProgressMM.AddMessage(StrWritingDataSet2);
+//        WriteDataSet2;
+//        Application.ProcessMessages;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//
+//        if MXACTD = 0 then
+//        begin
+//          frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
+//          Exit;
+//        end;
+//      end;
+//
+//      if ShouldWriteFile then
+//      begin
+//        WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrDRN),
+//          NameOfFile, foInput, Model);
+//      end;
+//
+////      if Model.ModelSelection <> msModflow2015 then
+//      begin
+//        frmProgressMM.AddMessage(StrWritingDataSets3and4);
+//        WriteDataSets3And4;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSets5to7);
+//      WriteDataSets5To7;
+//    finally
+//      CloseFile;
+//    end;
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -581,6 +616,105 @@ begin
   if Model.ModelSelection = msModflow2015 then
   begin
     WriteModflow6FlowObs(NameOfFile, FEvaluationType);
+  end;
+
+  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
+    and (FParamValues.Count > 0) then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TModflowDRN_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingDRNPackage);
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      frmProgressMM.AddMessage(StrWritingOptions);
+      WriteOptionsMF6(FNameOfFile);
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      frmProgressMM.AddMessage(StrWritingDimensions);
+      WriteDimensionsMF6;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      if MAXBOUND = 0 then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
+        Exit;
+      end;
+    end
+    else
+    begin
+      frmProgressMM.AddMessage(StrWritingDataSet1);
+      WriteDataSet1;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      frmProgressMM.AddMessage(StrWritingDataSet2);
+      WriteDataSet2;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      if MXACTD = 0 then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
+        Exit;
+      end;
+    end;
+
+    if FShouldWriteFile and not WritingTemplate then
+    begin
+      WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrDRN),
+        NameOfFile, foInput, Model);
+    end;
+
+//      if Model.ModelSelection <> msModflow2015 then
+    begin
+      frmProgressMM.AddMessage(StrWritingDataSets3and4);
+      WriteDataSets3And4;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets5to7);
+    WriteDataSets5To7;
+  finally
+    CloseFile;
   end;
 end;
 

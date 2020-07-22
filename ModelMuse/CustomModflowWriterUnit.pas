@@ -139,6 +139,7 @@ type
   }
   TCustomModflowWriter = class(TCustomFileWriter)
   private
+    FWritingTemplate: Boolean;
 
     // @name writes a header for DataArray using either
     // @link(WriteConstantU2DINT) or @link(WriteU2DRELHeader).
@@ -265,6 +266,8 @@ type
     // @param(Comment is used to identify the array being written.)
     Procedure WriteU2DRELHeader(const Comment: string;
       ArrayType: TModflowArrayType; const MF6_ArrayName: string); virtual;
+    // @name should be set to True when an input file template is being written.
+    property WritingTemplate: Boolean read FWritingTemplate write FWritingTemplate;
     // @name writes a line to the name file.
     class procedure WriteToNameFile(const Ftype: string;
       const UnitNumber: integer; FileName: string;

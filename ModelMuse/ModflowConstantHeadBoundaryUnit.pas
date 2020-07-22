@@ -711,16 +711,16 @@ var
   Position: integer;
   ParamName: string;
   LocalModel: TCustomModel;
-  BoundaryList: TList;
-  StressPeriods: TModflowStressPeriods;
-  StartTime: Double;
-  EndTime: Double;
-  TimeCount: Integer;
-  ItemIndex: Integer;
-  TimeSeriesList: TTimeSeriesList;
-  TimeSeries: TTimeSeries;
-  SeriesIndex: Integer;
-  InitialTime: Double;
+//  BoundaryList: TList;
+//  StressPeriods: TModflowStressPeriods;
+//  StartTime: Double;
+//  EndTime: Double;
+//  TimeCount: Integer;
+//  ItemIndex: Integer;
+//  TimeSeriesList: TTimeSeriesList;
+//  TimeSeries: TTimeSeries;
+//  SeriesIndex: Integer;
+//  InitialTime: Double;
 begin
   LocalModel := AModel as TCustomModel;
   FCurrentParameter := nil;
