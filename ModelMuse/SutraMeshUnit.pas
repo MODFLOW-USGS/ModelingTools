@@ -1067,6 +1067,7 @@ Type
     property ElementCenters[Angle: Double]: TRbwQuadTree read GetElementCenters;
     property NodesI[Index: Integer]: INode3D read GetNodeI;
     property ElementsI[Index: Integer]: IElement3D read GetElementI;
+    property UpdatingElevations: Boolean read FUpdatingElevations;
   published
     property Nodes: TSutraNode3D_Collection read FNodes write SetNodes stored False;
     property Elements: TSutraElement3D_Collection read FElements
@@ -9109,6 +9110,8 @@ var
   NodeActive: Boolean;
   TempActive: Boolean;
   NodeAbove: TSutraNode3D;
+  ActiveNodeDataArray: TDataArray;
+  NodeShouldBeActive: Boolean;
 begin
   if FUpdatingElevations or not (frmGoPhast.ModelSelection in SutraSelection) then
   begin
@@ -9122,6 +9125,7 @@ begin
     frmGoPhast.PhastModel.UpdateDataSetDimensions;
     frmGoPhast.PhastModel.InvalidateScreenObjects;
 
+    LocalModel := Model as TPhastModel;
     Elements.Clear;
     Nodes.Clear;
     BeginUpdate;
@@ -9137,7 +9141,6 @@ begin
       else
       begin
     //    try
-        LocalModel := Model as TPhastModel;
         if LocalModel.SutraLayerStructure.Count <= 1 then
         begin
           Exit;
@@ -9242,25 +9245,48 @@ begin
         end;
         Node3D.Active := TempActive;
       end;
-
     end;
+
+    ActiveNodeDataArray := LocalModel.DataArrayManager.GetDataSetByName(KNodeActive);
+    ActiveNodeDataArray.Initialize;
+
 
     for ColIndex := 0 to Mesh2D.Nodes .Count - 1 do
     begin
       NodeAbove := nil;
       for LayerIndex := 0 to LayerCount do
       begin
+        NodeShouldBeActive := ActiveNodeDataArray.BooleanData[LayerIndex, 0, ColIndex];
         Node3D := NodeArray[LayerIndex, ColIndex];
         Node3D.FTop := Node3D.Z;
         Node3D.FBottom := Node3D.Z;
+        if not NodeShouldBeActive  then
+        begin
+          Node3D.Active := False;
+        end;
         if Node3D.Active and (NodeAbove <> nil) and NodeAbove.Active then
         begin
           Node3D.FTop := (NodeAbove.Z + Node3D.Z)/2;
           NodeAbove.FBottom := Node3D.FTop;
         end;
 
+        if not NodeShouldBeActive then
+        begin
+
+          for ElementIndex := 0 to Node3D.FElements.Count - 1 do
+          begin
+            AnElement := Node3D.FElements[ElementIndex];
+            AnElement.Active := False;
+//            if AnElement.Active then
+//            begin
+//              TempActive := True;
+//              break;
+//            end;
+          end;
+        end;
+
         NodeAbove := Node3D
-      end;            ;
+      end;
     end;
 
     FActiveNodes.Clear;
@@ -9268,6 +9294,10 @@ begin
     begin
       ANode := Nodes[NodeIndex];
       ANode.UpdateActiveElementList;
+      if ANode.FActiveElements.Count = 0 then
+      begin
+        ANode.Active := False;
+      end;
       if ANode.Active then
       begin
         FActiveNodes.Add(ANode);

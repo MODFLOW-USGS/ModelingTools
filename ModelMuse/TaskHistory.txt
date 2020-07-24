@@ -274,7 +274,7 @@ object TTaskHistory
     end
     item
       Name = 'SUTRA Model'
-      Display = False
+      Display = True
     end
     item
       Name = '64 bit'
@@ -25869,5 +25869,15 @@ object TTaskHistory
       Categories.Strings = (
         'Pest parameter substition'
         'Documentation')
+    end
+    item
+      Date = 44035.000000000000000000
+    end
+    item
+      Date = 44036.000000000000000000
+      Categories.Strings = (
+        'Pest parameter substition'
+        'PEST'
+        'SUTRA Model')
     end>
 end

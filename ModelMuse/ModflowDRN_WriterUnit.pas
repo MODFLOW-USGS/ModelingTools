@@ -341,7 +341,7 @@ begin
     end;
     TemplateCharacter := Model.PestProperties.TemplateCharacter;
     ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-    WriteString(Format(' %0:s            %1:s             %2:s%1:s * %3:g%0:s',
+    WriteString(Format(' %0:s                   %1:s             %2:s%1:s * %3:g%0:s ',
       [ExtendedTemplateCharacter, TemplateCharacter, ParameterName,
       MultiplierValue]));
   end
@@ -351,7 +351,7 @@ begin
   end;
 //  if Drn_Cell.ConductanceParameterName = '' then
 //  begin
-    WriteFloat(Drn_Cell.Conductance);
+//    WriteFloat(Drn_Cell.Conductance);
 //  end
 //  else
 //  begin
@@ -639,6 +639,17 @@ begin
   try
     frmProgressMM.AddMessage(StrWritingDRNPackage);
     frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    if WritingTemplate then
+    begin
+      WriteString('ptf ');
+      WriteString(Model.PestProperties.TemplateCharacter);
+      NewLine;
+      WriteString('etf ');
+      WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+      NewLine;
+    end;
+
     WriteDataSet0;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then

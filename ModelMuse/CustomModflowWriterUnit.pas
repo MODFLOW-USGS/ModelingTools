@@ -4301,7 +4301,10 @@ begin
         NewLine;
       end;
 
-      Model.WritePValAndTemplate(PARNAM,PARVAL);
+      if not WritingTemplate then
+      begin
+        Model.WritePValAndTemplate(PARNAM,PARVAL);
+      end;
 
       // Make sure the maximum length of the name of instance is <= 10.
       GetInstanceRoot(PARNAM, ParamValues, InstanceRoot);
@@ -5088,7 +5091,10 @@ begin
         end;
         NewLine;
 
-        Model.WritePValAndTemplate(PARNAM,PARVAL);
+        if not WritingTemplate then
+        begin
+          Model.WritePValAndTemplate(PARNAM,PARVAL);
+        end;
 
         // Make sure the maximum length of the name of instance is <= 10.
         GetInstanceRoot(PARNAM, ParameterValues, InstanceRoot);

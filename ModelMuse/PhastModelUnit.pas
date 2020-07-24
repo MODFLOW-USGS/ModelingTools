@@ -255,6 +255,8 @@ const
   KSFTInitialConcentra = 'SFT_InitialConcentration';
   KSFTDispersion = 'SFT_Dispersion';
   KLakeTransportConce = 'Lake_Transport_Concentration';
+  KNodeActive = 'Active_Node';
+
 
 
   // @name is the name of the @link(TDataArray) that specifies
@@ -2003,6 +2005,7 @@ that affects the model output should also have a comment. }
     FDirectObservationLines: TStringList;
     FDerivedObservationLines: TStringList;
     FFileNameLines: TStringList;
+    FUpdatingMeshElevations: Boolean;
 //    FMeshFileName: string;
 
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
@@ -2417,6 +2420,7 @@ that affects the model output should also have a comment. }
     procedure SetModflow6GlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
     procedure SetPestProperties(const Value: TPestProperties);
+//    procedure OnNodeActiveDataSetChanged(Sender: TObject);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -2660,6 +2664,7 @@ that affects the model output should also have a comment. }
     property DataArrayManager: TDataArrayManager read FDataArrayManager;
 
     procedure OnActiveDataSetChanged(Sender: TObject);
+    procedure OnNodeActiveDataSetChanged(Sender: TObject);
     procedure Clear;
     constructor Create(AnOwner: TComponent); override;
     destructor Destroy; override;
@@ -9216,9 +9221,12 @@ const
   //                easily with SUTRA 2D models.
   //               Enhancement: Not in released version. PEST Beta 1.
   //    '4.2.0.30' No real change
+  //    '4.2.0.31' Enhancement: In 3D SUTRA models, there is a new data set
+  //                named Active_Node. Setting that data set to False at any
+  //                node makes the node inactive.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.30';
+  IModelVersion = '4.2.0.31';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -9827,6 +9835,7 @@ resourcestring
   'to download MODFLOW from the USGS web site and unzip the MODFLOW distribu' +
   'tion file. Once you have done that, select "Model|MODFLOW Program Locatio' +
   'ns" and enter the location of MODFLOW in the dialog box.';
+  StrNodeActive = KNodeActive;
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -31428,8 +31437,11 @@ begin
     PValFileName := ChangeFileExt(FileName, StrPvalExt);
     TemplateFileName := ChangeFileExt(FileName, StrJtf);
 
-    FPValFile.SaveToFile(PValFileName);
-    FTemplate.SaveToFile(TemplateFileName);
+//    if not WritingTemplate then
+//    begin
+      FPValFile.SaveToFile(PValFileName);
+      FTemplate.SaveToFile(TemplateFileName);
+//    end;
 
     if ModelSelection <> msModflow2015 then
     begin
@@ -31926,6 +31938,43 @@ end;
 procedure TCustomModel.SetEdgeDisplay(const Value: TCustomModflowGridEdgeDisplay);
 begin
   FEdgeDisplay := Value;
+end;
+
+procedure TCustomModel.OnNodeActiveDataSetChanged(Sender: TObject);
+var
+  NodeActiveDataArray: TDataArray;
+begin
+  if FUpdatingMeshElevations then
+  begin
+    Exit;
+  end;
+  NodeActiveDataArray := Sender as TDataArray;
+  Assert(NodeActiveDataArray <> nil);
+  Assert(NodeActiveDataArray.Name = kNodeActive);
+  if (not NodeActiveDataArray.UpToDate) and (SutraMesh <> nil) then
+  begin
+    FUpdatingMeshElevations := True;
+//    SutraMesh.BeginUpdate;
+    try
+      SutraMesh.ElevationsNeedUpdating := True;
+//      SutraMesh.ThreeDGridObserver.StopsTalkingTo(NodeActiveDataArray);
+      try
+//        SutraMesh.CheckUpdateElevations;
+      finally
+//        SutraMesh.ThreeDGridObserver.TalksTo(NodeActiveDataArray);
+
+      end;
+    finally
+//      SutraMesh.EndUpdate;
+
+      SutraMesh.NeedToRecalculateTopColors := True;
+      SutraMesh.NeedToRecalculateFrontColors := True;
+      frmGoPhast.frameTopView.ZoomBox.InvalidateImage32;
+      frmGoPhast.frameFrontView.ZoomBox.InvalidateImage32;
+      DiscretizationChanged;
+      FUpdatingMeshElevations := False;
+    end;
+  end;
 end;
 
 procedure TCustomModel.OnActiveDataSetChanged(Sender: TObject);
@@ -32552,6 +32601,14 @@ begin
   begin
     DataArray.OnUpToDateSet := FCustomModel.OnActiveDataSetChanged;
   end;
+
+  DataArray := GetDataSetByName(KNodeActive);
+  if (DataArray <> nil) and (FCustomModel.SutraMesh <> nil) then
+  begin
+    DataArray.OnUpToDateSet := FCustomModel.OnNodeActiveDataSetChanged;
+  end;
+
+
 end;
 
 function TDataArrayManager.CreateNewDataArray(const ClassType: TDataArrayType;
@@ -32606,7 +32663,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  ArrayCount = 156;
+  ArrayCount = 157;
 var
   Index: integer;
 begin
@@ -35140,7 +35197,20 @@ begin
   FDataArrayCreationRecords[Index].Visible := False;
   Inc(Index);
 
-
+  FDataArrayCreationRecords[Index].DataSetType := TDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtBoolean;
+  FDataArrayCreationRecords[Index].Name := StrNodeActive;
+  FDataArrayCreationRecords[Index].DisplayName := KNodeActive;
+  FDataArrayCreationRecords[Index].Formula := 'True';
+  FDataArrayCreationRecords[Index].Classification := StrHydrology;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.Sutra3DModel;
+  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaNodes;
+  FDataArrayCreationRecords[Index].AssociatedDataSets := '';
+//    StrMODFLOW6UZF6PacVks;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
 
   // See ArrayCount.
   Assert(Length(FDataArrayCreationRecords) = Index);
@@ -35481,7 +35551,12 @@ begin
     DS := DataSets[Index];
     if DS.Orientation = dso3D then
     begin
-      DS.Invalidate;
+      if (DS.Name <> kNodeActive)
+        or not (FCustomModel.ModelSelection in SutraSelection)
+        or not FCustomModel.SutraMesh.UpdatingElevations then
+      begin
+        DS.Invalidate;
+      end;
     end;
   end;
   for Index := 0 to BoundaryDataSetCount - 1 do
