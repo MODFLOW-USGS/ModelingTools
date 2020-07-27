@@ -889,7 +889,7 @@ begin
               end
               else
               begin
-                FNodeNumbers[LayerIndex,RowIndex,ColIndex] := -1;
+                FNodeNumbers.RemoveValue(LayerIndex,RowIndex,ColIndex);
               end;
             end;
           end;
@@ -1164,6 +1164,7 @@ var
   PriorPQDataArray: TDataArray;
   AnyChanged: Boolean;
   UseBCTime: Boolean;
+//  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1194,6 +1195,7 @@ begin
     WriteCommentLine('Data set 3');
   end;
 
+//  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   PQDataArray := PQTimeList[TimeIndex];
   if FNodeNumbers.MaxLayer < 0 then
@@ -1210,6 +1212,7 @@ begin
         for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
         begin
           if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
+//            and (FNodeNumbers[LayerIndex, RowIndex,ColIndex] <> 0) then
           begin
             if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin
@@ -1319,6 +1322,7 @@ var
   PriorUDataArray: TDataArray;
   AnyChanged: Boolean;
   UseBCTime: Boolean;
+//  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1352,6 +1356,8 @@ begin
   begin
     Exit;
   end;
+
+//  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   AnyChanged := False;
   if TimeIndex = 0 then
@@ -1363,6 +1369,7 @@ begin
         for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
         begin
           if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
+//            and (FNodeNumbers[LayerIndex, RowIndex,ColIndex] <> 0) then
           begin
             if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin
@@ -1461,6 +1468,7 @@ var
   PriorPQDataArray: TDataArray;
   AnyChanged: Boolean;
   UseBCTime: Boolean;
+//  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1495,6 +1503,7 @@ begin
   begin
     Exit;
   end;
+//  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   PQDataArray := PQTimeList[TimeIndex];
   AnyChanged := False;
@@ -1509,6 +1518,7 @@ begin
           for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
           begin
             if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
+//              and (FNodeNumbers[LayerIndex, RowIndex,ColIndex] <> 0) then
             begin
               if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
               begin
@@ -1619,6 +1629,7 @@ var
   PriorUDataArray: TDataArray;
   AnyChanged: Boolean;
   UseBCTime: Boolean;
+//  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -1651,6 +1662,7 @@ begin
   begin
     Exit;
   end;
+//  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   AnyChanged := False;
   if TimeIndex = 0 then
@@ -1662,6 +1674,7 @@ begin
         for ColIndex := FNodeNumbers.MinCol to FNodeNumbers.MaxCol do
         begin
           if FNodeNumbers.IsValue[LayerIndex, RowIndex,ColIndex] then
+//            and (FNodeNumbers[LayerIndex, RowIndex,ColIndex] <> 0) then
           begin
             if UDataArray.IsValue[LayerIndex, RowIndex,ColIndex] then
             begin

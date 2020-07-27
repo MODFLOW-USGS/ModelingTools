@@ -218,7 +218,7 @@ if (n > 0) and (hyp <> 0) then
 
 Installing GLScene
 http://glscene.sourceforge.net
-For compiling with Delphi 10.3, use GLScene_v1.8.
+For compiling with Delphi 10.4, use GLScene_v1.8.
 This version of GLScene comes as an installer. It copies files to the 
 hard drive but do not neccesarily install the components in the the DELPHI IDE.
 
@@ -235,6 +235,15 @@ with
   FreeAndNil(FListHandle);
 
 This change fixes a memory leak.
+
+In GlContext.pas, locate the line 
+  FGL.Close;
+at the end of procedure TGLContext.DestroyContext. Change it to 
+  if FGL <> nil then
+  begin
+    FGL.Close;
+  end;
+ 
 
 Open and read the readme.txt file in the top level directory of GLScene. 
 It directs you to a pdf on installing GLScene. Follow those instructions. 

@@ -9224,9 +9224,11 @@ const
   //    '4.2.0.31' Enhancement: In 3D SUTRA models, there is a new data set
   //                named Active_Node. Setting that data set to False at any
   //                node makes the node inactive.
+  //    '4.2.0.32' Bug fix: Fixed bug that could cause assertion failures when
+  //                exporting boundary conditions in SUTRA.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.31';
+  IModelVersion = '4.2.0.32';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
