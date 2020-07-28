@@ -25898,6 +25898,7 @@ object TTaskHistory
         'PEST'
         'Installer'
         'Testing'
-        'Documentation')
+        'Documentation'
+        'Import')
     end>
 end
