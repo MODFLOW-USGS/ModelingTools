@@ -24249,6 +24249,7 @@ var
   Index: Integer;
   Item: TScreenObjectEditItem;
   RowIndex: Integer;
+  ColIndex: Integer;
 begin
   if IsLoaded then
   begin
@@ -24271,8 +24272,15 @@ begin
     begin
       for RowIndex := 1 to Frame.rdgModflowBoundary.RowCount - 1 do
       begin
-        Frame.rdgModflowBoundary.Cells[3,RowIndex] :=
-          Frame.rdgModflowBoundary.Cells[2,RowIndex];
+        for ColIndex := 3 to Frame.rdgModflowBoundary.ColCount - 1 do
+        begin
+          if Odd(ColIndex) and
+            (Frame.rdgModflowBoundary.Cells[ColIndex,RowIndex] = '') then
+          begin
+            Frame.rdgModflowBoundary.Cells[ColIndex,RowIndex] :=
+              Frame.rdgModflowBoundary.Cells[ColIndex-1,RowIndex];
+          end;
+        end;
       end;
     end;
     StoreModflowBoundary(Frame, ParamType, FCHD_Node);
@@ -24519,7 +24527,7 @@ procedure TfrmScreenObjectProperties.frameChdParamrdgModflowBoundarySelectCell(
 begin
   inherited;
   frameChdParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
-  if (frmGoPhast.ModelSelection = msModflow2015) and (ACol = 3) then
+  if (frmGoPhast.ModelSelection = msModflow2015) and (ACol >= 3) and Odd(ACol) then
   begin
     CanSelect := False;
   end;

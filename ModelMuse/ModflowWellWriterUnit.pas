@@ -17,12 +17,14 @@ type
     FTabFileCount: Integer;
     FWellBoundaryList: TList<TMfWellBoundary>;
     MXACTW: integer;
+    FAbbreviation: string;
     procedure WriteNWT_Options;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSet2b;
     procedure WriteDataSets3And4;
     procedure WriteDataSets5To7;
+    procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
     class function Extension: string; override;
@@ -451,6 +453,8 @@ var
   Well_Cell: TWell_Cell;
   LocalLayer: integer;
   MvrKey: TMvrRegisterKey;
+  ParameterName: string;
+  MultiplierValue: double;
 begin
   Inc(FBoundaryIndex);
 
@@ -463,16 +467,37 @@ begin
     WriteInteger(Well_Cell.Row+1);
   end;
   WriteInteger(Well_Cell.Column+1);
-  if Well_Cell.TimeSeriesName = '' then
+
+  if Model.PestUsed and (Model.ModelSelection = msModflow2015)
+    and WritingTemplate
+    and ( Well_Cell.PumpingParameterName <> '') then
   begin
-    WriteFloat(Well_Cell.PumpingRate);
+    ParameterName := Well_Cell.PumpingParameterName;
+    if Well_Cell.PumpingParameterValue = 0 then
+    begin
+      MultiplierValue := 0.0;
+    end
+    else
+    begin
+      MultiplierValue := Well_Cell.PumpingRate / Well_Cell.PumpingParameterValue;
+    end;
+    WriteTemplateFormula(ParameterName, MultiplierValue);
   end
   else
   begin
-    WriteString(' ');
-    WriteString(Well_Cell.TimeSeriesName);
-    WriteString(' ');
+    WriteFloat(Well_Cell.PumpingRate);
   end;
+
+//  if Well_Cell.TimeSeriesName = '' then
+//  begin
+//    WriteFloat(Well_Cell.PumpingRate);
+//  end
+//  else
+//  begin
+//    WriteString(' ');
+//    WriteString(Well_Cell.TimeSeriesName);
+//    WriteString(' ');
+//  end;
   WriteIface(Well_Cell.IFace);
   WriteBoundName(Well_Cell);
   if Model.DisvUsed then
@@ -490,7 +515,7 @@ begin
   WriteString(Well_Cell.PumpingRateAnnotation);
   NewLine;
 
-  if Well_Cell.MvrUsed and (MvrWriter <> nil) then
+  if Well_Cell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
   begin
     MvrKey.StressPeriod := FStressPeriod;
     MvrKey.Index := FBoundaryIndex;
@@ -591,8 +616,6 @@ begin
 end;
 
 procedure TModflowWEL_Writer.WriteFile(const AFileName: string);
-var
-  Abbreviation: string;
 begin
   if MvrWriter <> nil then
   begin
@@ -605,13 +628,13 @@ begin
   end;
   if Model.ModelSelection = msModflow2015 then
   begin
-    Abbreviation := 'WEL6';
+    FAbbreviation := 'WEL6';
   end
   else
   begin
-    Abbreviation := StrWEL;
+    FAbbreviation := StrWEL;
   end;
-  if Model.PackageGeneratedExternally(Abbreviation) then
+  if Model.PackageGeneratedExternally(FAbbreviation) then
   begin
     Exit;
   end;
@@ -624,10 +647,138 @@ begin
     Exit;
   end;
   ClearTimeLists(Model);
+  WriteFileInternal;
+//  OpenFile(FNameOfFile);
+//  try
+//    frmProgressMM.AddMessage(StrWritingWELPackage);
+//    frmProgressMM.AddMessage(StrWritingDataSet0);
+//    WriteDataSet0;
+//    Application.ProcessMessages;
+//    if not frmProgressMM.ShouldContinue then
+//    begin
+//      Exit;
+//    end;
+//
+//    if Model.ModelSelection = msModflow2015 then
+//    begin
+//      frmProgressMM.AddMessage(StrWritingOptions);
+//      WriteOptionsMF6(FNameOfFile);
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDimensions);
+//      WriteDimensionsMF6;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      if MAXBOUND = 0 then
+//      begin
+//        frmErrorsAndWarnings.AddWarning(Model, StrNoWellsDefined, StrTheWellPackageIs);
+//        Exit;
+//      end;
+//    end
+//    else
+//    begin
+//      frmProgressMM.AddMessage(StrWritingDataSet1);
+//      WriteDataSet1;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_1) then
+//      begin
+//        frmProgressMM.AddMessage('  Writing OPTIONS block.');
+//        WriteNWT_Options;
+//        Application.ProcessMessages;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSet2);
+//      WriteDataSet2;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      if MXACTW = 0 then
+//      begin
+//        frmErrorsAndWarnings.AddWarning(Model, StrNoWellsDefined, StrTheWellPackageIs);
+//        Exit;
+//      end;
+//    end;
+//
+//    WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrWEL),
+//      FNameOfFile, foInput, Model);
+//
+//    if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_0) then
+//    begin
+//      frmProgressMM.AddMessage('  Writing Data Set 2b.');
+//      WriteDataSet2b;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//    end;
+//
+////    if Model.ModelSelection <> msModflow2015 then
+//    begin
+//      frmProgressMM.AddMessage(StrWritingDataSets3and4);
+//      WriteDataSets3And4;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//    end;
+//
+//    frmProgressMM.AddMessage(StrWritingDataSets5to7);
+//    WriteDataSets5To7;
+//  finally
+//    CloseFile;
+//  end;
+
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
+  end;
+
+  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
+    and (FParamValues.Count > 0) then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TModflowWEL_Writer.WriteFileInternal;
+begin
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingWELPackage);
     frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
     WriteDataSet0;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
@@ -695,8 +846,11 @@ begin
       end;
     end;
 
-    WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrWEL),
-      FNameOfFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrWEL),
+        FNameOfFile, foInput, Model);
+    end;
 
     if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_0) then
     begin
@@ -724,12 +878,7 @@ begin
     WriteDataSets5To7;
   finally
     CloseFile;
-  end;
-
-  if Model.ModelSelection = msModflow2015 then
-  begin
-    WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
-  end;
+  end
 end;
 
 procedure TModflowWEL_Writer.WriteListOptions(InputFileName: string);

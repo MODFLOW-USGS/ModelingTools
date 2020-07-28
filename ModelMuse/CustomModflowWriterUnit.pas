@@ -6,9 +6,12 @@ unit CustomModflowWriterUnit;
 
 interface
 
-uses Windows, Types, LayerStructureUnit, ModflowTimeUnit,
+uses Vcl.Forms, System.SysUtils, PestPropertiesUnit,
+  Windows, Types,
+  LayerStructureUnit,
+  ModflowTimeUnit,
   FluxObservationUnit,
-  SysUtils, Classes, Contnrs, Forms, RbwParser, AbstractGridUnit,
+  Classes, Contnrs, RbwParser, AbstractGridUnit,
   SubscriptionUnit, GoPhastTypes, DataSetUnit, PhastModelUnit, ModflowCellUnit,
   ModflowOutputControlUnit, ScreenObjectUnit, ModflowBoundaryUnit,
   ModflowPackageSelectionUnit, ModflowTransientListParameterUnit,
@@ -92,6 +95,8 @@ type
     // @name returns the extension (including the initial period) for the
     // MODFLOW input file to be exported.
     class function Extension: string; virtual; abstract;
+    procedure WriteTemplateFormula(ParameterName: string;
+      MultiplierValue: double);
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -202,6 +207,7 @@ type
     procedure WriteEndPeriod;
     procedure WriteBeginGridData;
     procedure WriteEndGridData;
+    procedure WriteTemplateHeader;
   public
     // @name converts AFileName to use the correct extension for the file.
 //    class function FileName(const AFileName: string): string;
@@ -605,6 +611,7 @@ type
     // @seealso(ParameterCount)
     procedure CountParametersAndParameterCells(var ParamCount,
       ParamCellCount: integer);
+    procedure WriteBoundaryArrayParams;
     property NameOfFile: string read FNameOfFile;
     //    procedure WriteBeginPeriod(TimeIndex: integer);
   public
@@ -1075,6 +1082,8 @@ resourcestring
   ',%1:d,%2:d) is invalid because the %3:s, %4:s, and %5:s data sets all hav' +
   'e values of zero at that cell.';
   Str0sMultipliedByParam = '%0:s (multiplied by %1:s = %2:g)';
+  StrPestFormulaFormat = ' %0:s                   %1:s             %2:s%1:s ' +
+  '* %3:g%0:s ';
 
 var
 //  NameFile: TStringList;
@@ -8538,10 +8547,56 @@ begin
   end;
 end;
 
+procedure TCustomFileWriter.WriteTemplateFormula(ParameterName: string;
+MultiplierValue: double);
+var
+  TemplateCharacter: string;
+  ExtendedTemplateCharacter: string;
+begin
+  TemplateCharacter := Model.PestProperties.TemplateCharacter;
+  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+  WriteString
+    (Format(StrPestFormulaFormat,
+    [ExtendedTemplateCharacter, TemplateCharacter, ParameterName,
+    MultiplierValue]));
+end;
 
+procedure TCustomModflowWriter.WriteTemplateHeader;
+begin
+  if WritingTemplate then
+  begin
+    WriteString('ptf ');
+    WriteString(Model.PestProperties.TemplateCharacter);
+    NewLine;
+    WriteString('etf ');
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    NewLine;
+  end;
+end;
 
-
-
+procedure TCustomParameterTransientWriter.WriteBoundaryArrayParams;
+var
+  ParamIndex: integer;
+  Param: TModflowTransientListParameter;
+begin
+  if WritingTemplate then
+  begin
+    Exit;
+  end;
+  for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+  begin
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+    Param := Model.ModflowTransientParameters[ParamIndex];
+    if Param.ParameterType = ParameterType then
+    begin
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value);
+    end;
+  end;
+end;
 
 
 //procedure TCustomPackageWriter.WriteNoNewtown;

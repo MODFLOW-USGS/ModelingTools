@@ -15,6 +15,7 @@ Type
     NRCHOP: integer;
     FRchPackage: TRchPackageSelection;
     FTimeIndex: Integer;
+    FAbbreviation: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
@@ -24,6 +25,7 @@ Type
     procedure WriteOptions(InputFileName: string);
     procedure WriteDimensions;
     procedure WriteCellsMF6(RchRateList: TValueCellList);
+    procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
     function Prefix: string; override;
@@ -422,8 +424,6 @@ end;
 //end;
 
 procedure TModflowRCH_Writer.WriteFile(const AFileName: string);
-var
-  Abbreviation: string;
 begin
 //  OutputDebugString('SAMPLING ON');
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrRechargeHasNotBee);
@@ -440,17 +440,17 @@ begin
 
   if Model.ModelSelection = msModflow2015 then
   begin
-    Abbreviation := 'RCH6';
+    FAbbreviation := 'RCH6';
   end
   else
   begin
-    Abbreviation := StrRCH;
+    FAbbreviation := StrRCH;
   end;
 
   FRchPackage.MultiplierArrayNames.Clear;
   FRchPackage.ZoneArrayNames.Clear;
   FNameOfFile := FileName(AFileName);
-  WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrRCH),
+  WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrRCH),
     FNameOfFile, foInput, Model);
   Evaluate;
   Application.ProcessMessages;
@@ -459,10 +459,88 @@ begin
     Exit;
   end;
   ClearTimeLists(Model);
-  OpenFile(FileName(AFileName));
+
+  WriteFileInternal;
+//  OpenFile(FileName(AFileName));
+//  try
+//    frmProgressMM.AddMessage(StrWritingRCHPackage);
+//    frmProgressMM.AddMessage(StrWritingDataSet0);
+//    WriteDataSet0;
+//    Application.ProcessMessages;
+//    if not frmProgressMM.ShouldContinue then
+//    begin
+//      Exit;
+//    end;
+//
+//    if Model.ModelSelection <> msModflow2015 then
+//    begin
+//      frmProgressMM.AddMessage(StrWritingDataSet1);
+//      WriteDataSet1;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSet2);
+//      WriteDataSet2;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSets3and4);
+//      WriteDataSets3And4;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//    end
+//    else
+//    begin
+//      WriteOptions(FNameOfFile);
+//      WriteDimensions;
+//    end;
+//
+//    frmProgressMM.AddMessage(StrWritingDataSets5to8);
+//    WriteDataSets5To8;
+//  finally
+//    CloseFile;
+////    Clear;
+//  end;
+
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
+  end;
+
+  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
+    and (FParamValues.Count > 0) then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+  //  OutputDebugString('SAMPLING OFF');
+end;
+
+procedure TModflowRCH_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingRCHPackage);
     frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
     WriteDataSet0;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
@@ -500,7 +578,10 @@ begin
     begin
       WriteOptions(FNameOfFile);
       WriteDimensions;
+      WriteBoundaryArrayParams;
+
     end;
+
 
     frmProgressMM.AddMessage(StrWritingDataSets5to8);
     WriteDataSets5To8;
@@ -508,13 +589,6 @@ begin
     CloseFile;
 //    Clear;
   end;
-
-  if Model.ModelSelection = msModflow2015 then
-  begin
-    WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
-  end;
-
-  //  OutputDebugString('SAMPLING OFF');
 end;
 
 procedure TModflowRCH_Writer.WriteOptions(InputFileName: string);
@@ -600,6 +674,8 @@ var
   IDomain: TDataArray;
   UsedLocations: T2DSparseBooleanArray;
   Layer: Integer;
+  ParameterName: string;
+  MultiplierValue: double;
 begin
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
 //  Assert(DepthSurfaceCellList.Count = RchRateList.Count);
@@ -623,16 +699,38 @@ begin
           WriteInteger(RchCell.Row+1);
         end;
         WriteInteger(RchCell.Column+1);
-        if RchCell.TimeSeriesName = '' then
+
+        if Model.PestUsed and (Model.ModelSelection = msModflow2015)
+          and WritingTemplate
+          and ( RchCell.RechargeParameterName <> '') then
         begin
-          WriteFloat(RchCell.RechargeRate);
+          ParameterName := RchCell.RechargeParameterName;
+          if RchCell.RechargeParameterValue = 0 then
+          begin
+            MultiplierValue := 0.0;
+          end
+          else
+          begin
+            MultiplierValue := RchCell.RechargeRate / RchCell.RechargeParameterValue;
+          end;
+          WriteTemplateFormula(ParameterName, MultiplierValue);
         end
         else
         begin
-          WriteString(' ');
-          WriteString(RchCell.TimeSeriesName);
-          WriteString(' ');
+          WriteFloat(RchCell.RechargeRate);
         end;
+
+
+//        if RchCell.TimeSeriesName = '' then
+//        begin
+//          WriteFloat(RchCell.RechargeRate);
+//        end
+//        else
+//        begin
+//          WriteString(' ');
+//          WriteString(RchCell.TimeSeriesName);
+//          WriteString(' ');
+//        end;
 
         WriteIface(RchCell.IFace);
 

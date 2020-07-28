@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Revision History</text></para>
     </header>
-    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.3 June 5, 2020]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.3 July 28, 2020]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -20,6 +20,9 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Custom color schemes can now be used when plotting MODPATH data.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing an existing model that uses the BCF package, specific storage is calculated from the confined storage coefficient and hydraulic conductivity is calculated from transmissivity.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now warns the user if any specified head cells are cells for which Kx, Ky, and Kz are all zero.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now prints the number of active cells in a MODFLOW model as a comment either in the Basic package input file for pre-MODFLOW6 models or in the DIS or DISV files in MODFLOW 6 models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added new function: HighestActiveLayer. It returns the highest layer at a particular location that is active.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In 3D SUTRA models, there is a new data set named Active_Node. Setting that data set to False at any node makes the node inactive.</text></para>
               </td>
             </tr>
           </table></para>
@@ -29,7 +32,9 @@
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The NEWTON and UNDER_RELAXATION options in MODFLOW 6 can now be specified in the MODFLOW Packages and Programs dialog box as well as the MODFLOW Options dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Modified export of the MODFLOW-2005 Lake package input to allow for periods in which no lakes are active.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Modified export of the MODFLOW-2005 Lake package input to allow for periods in which no lakes are active.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">With MODFLOW 6 observations, a prefix is added before each observation name to ensure that all the observation names are unique.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse no longer produces times series files for parameters. Instead, parameter values are incorporated into the values in the package input file.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The ActiveOnLayer function was changed for MODFLOW 6 models to return True in the IDOMAIN data set is greater than 0.</text></para>
               </td>
             </tr>
           </table></para>
@@ -79,7 +84,27 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing Shapefiles that contained measured values, values less than -1E38 are treated as no-data values.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an assertion failure &#160;if identical starting and ending times were specified for the RCH package.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in reading binary MT3D model results that could cause a bug report to be generated.</text></para>
-                <para styleclass="Normal"></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in inserting a new composite zone for Zone Budget in the &quot;Model|MODFLOW Packages and Programs&quot; dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting MT3D model input files, ModelMuse will now check whether any .ucn files that will be created by the model already exist. If they do exist, ModelMuse will delete them.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when manually specifying the SUTRA mesh.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause the MAW observations to be written incorrectly.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">It is now possible to inactivate a STR boundary by deleting all the times at which the boundary is defined.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of grid data to Shapefile with DISV grids. Formerly, the cells boundaries could be exported in counterclockwise direction instead of clockwise direction.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed drawing active area outline to avoid access violations.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing the times of the MODFLOW Stress periods will now result in the times of MNW2 wells being updated to the same times.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In MODFLOW 6 models, the CHD ending head can no longer be specified without using a parameter.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When converting to a MODFLOW 6 model, CHD boundaries that don&apos;t use parametes are converted to CHD boundaries that use a parameter.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When attempting to read an invalid .nod or .ele SUTRA output file, ModelMuse will now generate an error message for the user instead of issuing &#160;a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When attempting to read an invalid MODPATH output file, ModelMuse will now generate an error message for the user instead of issuing &#160;a bug report.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause objects to fail to intersect all the correct cells in MODFLOW DISV models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an assertion failure if recharge or evapotranspiration was used in some of the stress periods but not in others.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">With MODFLOW 6 models in which the &quot;Top Active Cell&quot; option in the Recharge and Evapotransipiration packages is selected, ModelMuse will automatically specify the layer as the top active layer at a particular location.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in export of the MODFLOW-2005 Lake package input file that could prevent data set 9 from being written for some stress periods after the first stress period.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when displaying the Object Properties dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Corrected spelling of CUPBGO in the Object Properties dialog box the the SUTRA Generalized Flow Boundary</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed allowing multiple &quot;Used&quot; formulas to be edited at once for SUTRA boundaries.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed &quot;Navigation|Go To&quot; dialog box to work more easily with SUTRA 2D models.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause assertion failures when exporting boundary conditions in SUTRA.</text></para>
               </td>
             </tr>
           </table></para>

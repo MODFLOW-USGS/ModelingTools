@@ -92,6 +92,8 @@ type
 
   TMawWellScreenColumns = (mwscScreenTop, mwscScreenBottom, mwscSkinK, mwscSkinRadius);
 
+  TMf6PestObsColumns = (mpocName, mpocType, mpocTime, mpocValue, mpocWeight);
+
   TCsvAttribute = class(TObject)
   private
     FFileName: string;
@@ -1063,6 +1065,9 @@ const
   StrShapeMinZ = 'ShapeMinZ';
   StrShapeMaxZ = 'ShapeMaxZ';
 //  StrFootprintWithdrawal = 'Withdrawal';
+
+var
+  PestObsTypes: TStringList;
 
 {$R *.dfm}
 
@@ -3046,6 +3051,17 @@ var
   GwFlowObs: TGwFlowObs;
   ObsItem: TGwFlowOb;
   GeneralObs: TObGenerals;
+  RowIndex: Integer;
+  AName: string;
+  TypeIndex: Integer;
+  PestObsType: string;
+  CalibrationObservations: TMf6CalibrationObservations;
+  CalibObs: TMf6CalibrationObs;
+  MyGuid: TGUID;
+  ObsTime: double;
+  ObsValue: double;
+  ObsWeight: double;
+  ShouldIgnore: Boolean;
 begin
   if FHeadObsNames = nil then
   begin
@@ -3132,6 +3148,56 @@ begin
   end;
 
   AScreenObject.Modflow6Obs.General := GeneralObs;
+
+  CalibrationObservations := AScreenObject.Modflow6Obs.CalibrationObservations;
+  if frmGoPhast.PhastModel.PestUsed then
+  begin
+    for RowIndex := 1 to seBoundaryTimeCount.AsInteger do
+    begin
+      AName := GetStringValueFromText(rdgBoundaryConditions.Cells[Ord(mpocName), RowIndex]);
+      if AName = '' then
+      begin
+        Continue;
+      end;
+      TypeIndex := PestObsTypes.IndexOf(rdgBoundaryConditions.Cells[Ord(mpocType), RowIndex]);
+      if TypeIndex < 0 then
+      begin
+        PestObsType := GetStringValueFromText(rdgBoundaryConditions.Cells[Ord(mpocType), RowIndex]);
+        TypeIndex := PestObsTypes.IndexOf(PestObsType);
+      end;
+      if TypeIndex < 0 then
+      begin
+        Continue;
+      end;
+      ObsTime := GetRealValueFromText(rdgBoundaryConditions.Cells[Ord(mpocTime), RowIndex], ShouldIgnore);
+      if ShouldIgnore then
+      begin
+        Continue;
+      end;
+      ObsValue := GetRealValueFromText(rdgBoundaryConditions.Cells[Ord(mpocValue), RowIndex], ShouldIgnore);
+      if ShouldIgnore then
+      begin
+        Continue;
+      end;
+      ObsWeight := GetRealValueFromText(rdgBoundaryConditions.Cells[Ord(mpocWeight), RowIndex], ShouldIgnore);
+      if ShouldIgnore then
+      begin
+        Continue;
+      end;
+
+      CalibObs := CalibrationObservations.Add;
+      CalibObs.ObSeries := osGeneral;
+      CalibObs.ObGeneral := TObGeneral(TypeIndex);
+      if CreateGUID(MyGuid) = 0 then
+      begin
+        CalibObs.GUID := GUIDToString(MyGuid);
+      end;
+      CalibObs.Time := ObsTime;
+      CalibObs.ObservedValue := ObsValue;
+      CalibObs.Weight := ObsWeight;
+    end;
+  end;
+//  TMf6PestObsColumns = (mpocName, mpocType, mpocTime, mpocValue, mpocWeight);
 
 //  AScreenObject.Modflow6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(morChdFlow)];
 //  AScreenObject.Modflow6Obs.DrnFlowObs := chklstBoundaryFlow.Checked[Ord(morDrnFlow)];
@@ -4439,11 +4505,36 @@ begin
 end;
 
 procedure TfrmImportShapefile.InitializeBoundaryControlsForModflow6Obs;
+var
+  TypePickList: TStrings;
 begin
   plBoundary.ActivePage := jvspModflow6Obs;
   comboModflow6ObsName.Items := FStringFieldNames;
-  rdgBoundaryConditions.Enabled := False;
-  rdgBoundaryConditions.Visible := False;
+  if frmGoPhast.PhastModel.PestUsed then
+  begin
+    rdgBoundaryConditions.ColCount := 5;
+    AssignColFeatureProperties;
+    rdgBoundaryConditions.Cells[Ord(mpocName), 0] := 'Observation name';
+    rdgBoundaryConditions.Cells[Ord(mpocType), 0] := 'Observation type';
+    rdgBoundaryConditions.Cells[Ord(mpocTime), 0] := 'Observation time';
+    rdgBoundaryConditions.Cells[Ord(mpocValue), 0] := 'Observed value';
+    rdgBoundaryConditions.Cells[Ord(mpocWeight), 0] := 'Observation weight';
+    //  TMf6PestObsColumns = (mpocName, mpocType, mpocTime, mpocValue, mpocWeight);
+
+    rdgBoundaryConditions.Columns[Ord(mpocName)].PickList := FStringFieldNames;
+    TypePickList := rdgBoundaryConditions.Columns[Ord(mpocType)].PickList;
+    TypePickList.Clear;
+    TypePickList.AddStrings(PestObsTypes);
+    TypePickList.AddStrings(FStringFieldNames);
+    rdgBoundaryConditions.Columns[Ord(mpocTime)].PickList := FRealFieldNames;
+    rdgBoundaryConditions.Columns[Ord(mpocValue)].PickList := FRealFieldNames;
+    rdgBoundaryConditions.Columns[Ord(mpocWeight)].PickList := FRealFieldNames;
+  end
+  else
+  begin
+    rdgBoundaryConditions.Enabled := False;
+    rdgBoundaryConditions.Visible := False;
+  end;
 //  comboMf6ObsElevation.Items := FRealFieldGlobalsAndDataSetsNames;
 //  comboMf6ObsLayer.Items := FIntegerFieldNames
 end;
@@ -7944,7 +8035,7 @@ begin
         AddModflowPackageToImportChoices(Packages.HobPackage);
         AddModflowPackageToImportChoices(Packages.LakPackage);
         AddModflowPackageToImportChoices(Packages.Mnw2Package);
-        AddModflowPackageToImportChoices(Packages.Mf6ObservationUtility);
+//        AddModflowPackageToImportChoices(Packages.Mf6ObservationUtility);
         AddModflowPackageToImportChoices(Packages.RchPackage);
         AddModflowPackageToImportChoices(Packages.ResPackage);
         AddModflowPackageToImportChoices(Packages.RivPackage);
@@ -11715,5 +11806,23 @@ procedure TCsvAttribute.SetPosition(const Value: Integer);
 begin
   FPosition := Value;
 end;
+
+initialization
+  PestObsTypes := TStringList.Create;
+  // These values must be in the same order as TObGeneral
+  PestObsTypes.Add('Head');
+  PestObsTypes.Add('Drawdown');
+  PestObsTypes.Add('CHD');
+  PestObsTypes.Add('Drain');
+  PestObsTypes.Add('Well');
+  PestObsTypes.Add('GHB');
+  PestObsTypes.Add('Riv');
+  PestObsTypes.Add('Rch');
+  PestObsTypes.Add('EVT');
+  PestObsTypes.CaseSensitive := False;
+
+finalization
+  PestObsTypes.Free;
+
 
 end.

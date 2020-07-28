@@ -9395,11 +9395,16 @@ resourcestring
   StrModelMonitorDefaultPath = 'ModelMonitor.exe';
   strModflowOwhmDefaultPath = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe';
   StrMFOwhmDefaultPath64 = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe';
+
+  // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
 {$IFDEF WIN64}
-  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows64\gmsh.exe';
+//  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows64\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.6.0-Windows64\gmsh.exe';
 {$ELSE}
-  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows32\gmsh.exe';
+//  StrDefaultGmshPath = 'C:\gmsh-4.5.3-Windows32\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.6.0-Windows32\gmsh.exe';
 {$ENDIF}
+
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0\bin\WellFootprint.exe';
   StrDefaultModflow6Path = 'C:\WRDAPP\mf6.1.1\bin\mf6.exe';

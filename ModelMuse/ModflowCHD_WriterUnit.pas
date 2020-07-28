@@ -13,10 +13,13 @@ type
     NPCHD: integer;
     MXL: integer;
 //    FFileName: string;
+    FShouldWriteFile: Boolean;
+    FAbbreviation: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
     procedure WriteDataSets5To7;
+    procedure WriteFileInternal;
   protected
     function ObservationPackage: TModflowPackageSelection; override;
     function CellType: TValueCellType; override;
@@ -191,6 +194,8 @@ procedure TModflowCHD_Writer.WriteCell(Cell: TValueCell;
 var
   CHD_Cell: TCHD_Cell;
   LocalLayer: integer;
+  ParameterName: string;
+  MultiplierValue: double;
 begin
   CHD_Cell := Cell as TCHD_Cell;
   LocalLayer := Model.
@@ -202,16 +207,36 @@ begin
   end;
   WriteInteger(CHD_Cell.Column+1);
 
-  if CHD_Cell.TimeSeriesName = '' then
+  if Model.PestUsed and (Model.ModelSelection = msModflow2015)
+    and WritingTemplate
+    and ( CHD_Cell.HeadParameterName <> '') then
   begin
-    WriteFloat(CHD_Cell.StartingHead);
+    ParameterName := CHD_Cell.HeadParameterName;
+    if CHD_Cell.HeadParameterValue = 0 then
+    begin
+      MultiplierValue := 0.0;
+    end
+    else
+    begin
+      MultiplierValue := CHD_Cell.StartingHead / CHD_Cell.HeadParameterValue;
+    end;
+    WriteTemplateFormula(ParameterName, MultiplierValue);
   end
   else
   begin
-    WriteString(' ');
-    WriteString(CHD_Cell.TimeSeriesName);
-    WriteString(' ');
+    WriteFloat(CHD_Cell.StartingHead);
   end;
+
+//  if CHD_Cell.TimeSeriesName = '' then
+//  begin
+//    WriteFloat(CHD_Cell.StartingHead);
+//  end
+//  else
+//  begin
+//    WriteString(' ');
+//    WriteString(CHD_Cell.TimeSeriesName);
+//    WriteString(' ');
+//  end;
 
 
 //  WriteFloat(CHD_Cell.StartingHead);
@@ -290,9 +315,7 @@ end;
 procedure TModflowCHD_Writer.WriteFile(const AFileName: string);
 var
 //  NameOfFile: string;
-  ShouldWriteFile: Boolean;
   ShouldWriteObservationFile: Boolean;
-  Abbreviation: string;
 begin
   if not Package.IsSelected then
   begin
@@ -300,29 +323,29 @@ begin
   end;
   if Model.ModelSelection = msModflow2015 then
   begin
-    Abbreviation := 'CHD6';
+    FAbbreviation := 'CHD6';
   end
   else
   begin
-    Abbreviation := StrCHD;
+    FAbbreviation := StrCHD;
   end;
-  ShouldWriteFile := not Model.PackageGeneratedExternally(Abbreviation);
+  FShouldWriteFile := not Model.PackageGeneratedExternally(FAbbreviation);
   ShouldWriteObservationFile := ObservationPackage.IsSelected
     and not Model.PackageGeneratedExternally(StrCHOB);
 
-  if not ShouldWriteFile and not ShouldWriteObservationFile then
+  if not FShouldWriteFile and not ShouldWriteObservationFile then
   begin
     Exit;
   end;
 
   FNameOfFile := FileName(AFileName);
 //  FFileName := NameOfFile;
-  if ShouldWriteFile then
+  if FShouldWriteFile then
   begin
-    WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrCHD),
+    WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrCHD),
       NameOfFile, foInput, Model);
   end;
-  if ShouldWriteFile or ShouldWriteObservationFile then
+  if FShouldWriteFile or ShouldWriteObservationFile then
   begin
     Evaluate;
     Application.ProcessMessages;
@@ -332,15 +355,106 @@ begin
     end;
     ClearTimeLists(Model);
   end;
-  if not ShouldWriteFile then
+  if not FShouldWriteFile then
   begin
     Exit;
   end;
   FNameOfFile := FileName(AFileName);
+  WriteFileInternal;
+//  OpenFile(FNameOfFile);
+//  try
+//    frmProgressMM.AddMessage(StrWritingCHDPackage);
+//    frmProgressMM.AddMessage(StrWritingDataSet0);
+//    WriteDataSet0;
+//    Application.ProcessMessages;
+//    if not frmProgressMM.ShouldContinue then
+//    begin
+//      Exit;
+//    end;
+//
+//    if Model.ModelSelection = msModflow2015 then
+//    begin
+//      frmProgressMM.AddMessage(StrWritingOptions);
+//      WriteOptionsMF6(FNameOfFile);
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDimensions);
+//      WriteDimensionsMF6;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//    end
+//    else
+//    begin
+//      frmProgressMM.AddMessage(StrWritingDataSet1);
+//      WriteDataSet1;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSet2);
+//      WriteDataSet2;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//    end;
+//
+////    if Model.ModelSelection <> msModflow2015 then
+//    begin
+//      frmProgressMM.AddMessage(StrWritingDataSets3and4);
+//      WriteDataSets3And4;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//    end;
+//
+//    frmProgressMM.AddMessage(StrWritingDataSets5to7);
+//    WriteDataSets5To7;
+//  finally
+//    CloseFile;
+//  end;
+
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    WriteModflow6FlowObs(NameOfFile, FEvaluationType);
+  end;
+
+  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
+    and (FParamValues.Count > 0) then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TModflowCHD_Writer.WriteFileInternal;
+begin
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingCHDPackage);
     frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
     WriteDataSet0;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
@@ -402,10 +516,6 @@ begin
     CloseFile;
   end;
 
-  if Model.ModelSelection = msModflow2015 then
-  begin
-    WriteModflow6FlowObs(NameOfFile, FEvaluationType);
-  end;
 end;
 
 procedure TModflowCHD_Writer.WriteFluxObservationFile(const AFileName: string;

@@ -309,12 +309,10 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-  TemplateCharacter: string;
-  ExtendedTemplateCharacter: string;
 begin
 //  TemplateCharacter := nil;
   Inc(FBoundaryIndex);
-  
+
   Drn_Cell := Cell as TDrn_Cell;
   LocalLayer := Model.
     DataSetLayerToModflowLayer(Drn_Cell.Layer);
@@ -339,11 +337,7 @@ begin
     begin
       MultiplierValue := Drn_Cell.Conductance / Drn_Cell.ConductanceParameterValue;
     end;
-    TemplateCharacter := Model.PestProperties.TemplateCharacter;
-    ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-    WriteString(Format(' %0:s                   %1:s             %2:s%1:s * %3:g%0:s ',
-      [ExtendedTemplateCharacter, TemplateCharacter, ParameterName,
-      MultiplierValue]));
+    WriteTemplateFormula(ParameterName, MultiplierValue);
   end
   else
   begin
@@ -393,7 +387,7 @@ begin
     MvrKey.SourceKey.ScreenObject := Drn_Cell.ScreenObject;
     TModflowMvrWriter(MvrWriter).AddMvrSource(MvrKey);
   end;
-    
+
 end;
 
 procedure TModflowDRN_Writer.WriteDataSet1;
@@ -528,87 +522,6 @@ begin
     begin
       Exit;
     end;
-//    OpenFile(FNameOfFile);
-//    try
-//      frmProgressMM.AddMessage(StrWritingDRNPackage);
-//      frmProgressMM.AddMessage(StrWritingDataSet0);
-//      WriteDataSet0;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      if Model.ModelSelection = msModflow2015 then
-//      begin
-//        frmProgressMM.AddMessage(StrWritingOptions);
-//        WriteOptionsMF6(FNameOfFile);
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        frmProgressMM.AddMessage(StrWritingDimensions);
-//        WriteDimensionsMF6;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        if MAXBOUND = 0 then
-//        begin
-//          frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
-//          Exit;
-//        end;
-//      end
-//      else
-//      begin
-//        frmProgressMM.AddMessage(StrWritingDataSet1);
-//        WriteDataSet1;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        frmProgressMM.AddMessage(StrWritingDataSet2);
-//        WriteDataSet2;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        if MXACTD = 0 then
-//        begin
-//          frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
-//          Exit;
-//        end;
-//      end;
-//
-//      if ShouldWriteFile then
-//      begin
-//        WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrDRN),
-//          NameOfFile, foInput, Model);
-//      end;
-//
-////      if Model.ModelSelection <> msModflow2015 then
-//      begin
-//        frmProgressMM.AddMessage(StrWritingDataSets3and4);
-//        WriteDataSets3And4;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSets5to7);
-//      WriteDataSets5To7;
-//    finally
-//      CloseFile;
-//    end;
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -640,15 +553,7 @@ begin
     frmProgressMM.AddMessage(StrWritingDRNPackage);
     frmProgressMM.AddMessage(StrWritingDataSet0);
 
-    if WritingTemplate then
-    begin
-      WriteString('ptf ');
-      WriteString(Model.PestProperties.TemplateCharacter);
-      NewLine;
-      WriteString('etf ');
-      WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-      NewLine;
-    end;
+    WriteTemplateHeader;
 
     WriteDataSet0;
     Application.ProcessMessages;
@@ -677,7 +582,8 @@ begin
 
       if MAXBOUND = 0 then
       begin
-        frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
+        frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined,
+          StrTheDrainPackageIs);
         Exit;
       end;
     end
@@ -701,7 +607,8 @@ begin
 
       if MXACTD = 0 then
       begin
-        frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined, StrTheDrainPackageIs);
+        frmErrorsAndWarnings.AddWarning(Model, StrNoDrainsDefined,
+          StrTheDrainPackageIs);
         Exit;
       end;
     end;
@@ -750,6 +657,19 @@ begin
 //      Model.DrainObservations, Purpose);
   end;
 end;
+
+//procedure TModflowDRN_Writer.WriteTemplateHeader;
+//begin
+//  if WritingTemplate then
+//  begin
+//    WriteString('ptf ');
+//    WriteString(Model.PestProperties.TemplateCharacter);
+//    NewLine;
+//    WriteString('etf ');
+//    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+//    NewLine;
+//  end;
+//end;
 
 procedure TModflowDRN_Writer.WriteListOptions(InputFileName: string);
 //var
