@@ -579,7 +579,6 @@ begin
       WriteOptions(FNameOfFile);
       WriteDimensions;
       WriteBoundaryArrayParams;
-
     end;
 
 

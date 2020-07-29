@@ -3186,6 +3186,7 @@ begin
       end;
 
       CalibObs := CalibrationObservations.Add;
+      CalibObs.Name := AName;
       CalibObs.ObSeries := osGeneral;
       CalibObs.ObGeneral := TObGeneral(TypeIndex);
       if CreateGUID(MyGuid) = 0 then
@@ -4507,6 +4508,7 @@ end;
 procedure TfrmImportShapefile.InitializeBoundaryControlsForModflow6Obs;
 var
   TypePickList: TStrings;
+  Index: Integer;
 begin
   plBoundary.ActivePage := jvspModflow6Obs;
   comboModflow6ObsName.Items := FStringFieldNames;
@@ -4529,6 +4531,12 @@ begin
     rdgBoundaryConditions.Columns[Ord(mpocTime)].PickList := FRealFieldNames;
     rdgBoundaryConditions.Columns[Ord(mpocValue)].PickList := FRealFieldNames;
     rdgBoundaryConditions.Columns[Ord(mpocWeight)].PickList := FRealFieldNames;
+
+    for Index := 0 to rdgBoundaryConditions.ColCount - 1 do
+    begin
+      rdgBoundaryConditions.Columns[Index].ComboUsed := True;
+    end;
+
   end
   else
   begin

@@ -3177,6 +3177,10 @@ begin
         Continue;
       end;
       ValueIndex := ContVals.IndexOfClosest(AContourLine.ContourLevel);
+      if ValueIndex < 0 then
+      begin
+        Continue;
+      end;
       AColor := ContourColors[ValueIndex];
       LineThickness := LineThicknesses[ValueIndex];
       SetLength(Points, AContourLine.Count);

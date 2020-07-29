@@ -33,6 +33,7 @@ Type
     procedure CheckRateFraction(NewArray: TDataArray; SegmentIndex: Integer);
     procedure WriteOptions(InputFileName: string);
     procedure WriteDimensions;
+    procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
     function Prefix: string; override;
@@ -668,47 +669,49 @@ begin
       Exit;
     end;
     ClearTimeLists(Model);
-    OpenFile(FileName(AFileName));
-    try
-      frmProgressMM.AddMessage(StrWritingETSPackage);
-      frmProgressMM.AddMessage(StrWritingDataSet0);
-      WriteDataSet0;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
 
-      if Model.ModelSelection <> msModflow2015 then
-      begin
-        frmProgressMM.AddMessage(StrWritingDataSet1);
-        WriteDataSet1;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-
-        frmProgressMM.AddMessage(StrWritingDataSets2and3);
-        WriteDataSets2And3;
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
-
-      end
-      else
-      begin
-        WriteOptions(FNameOfFile);
-        WriteDimensions;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingDataSets4to11);
-      WriteDataSets4To11;
-    finally
-      CloseFile;
-    end;
+    WriteFileInternal;
+//    OpenFile(FileName(AFileName));
+//    try
+//      frmProgressMM.AddMessage(StrWritingETSPackage);
+//      frmProgressMM.AddMessage(StrWritingDataSet0);
+//      WriteDataSet0;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      if Model.ModelSelection <> msModflow2015 then
+//      begin
+//        frmProgressMM.AddMessage(StrWritingDataSet1);
+//        WriteDataSet1;
+//        Application.ProcessMessages;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//
+//        frmProgressMM.AddMessage(StrWritingDataSets2and3);
+//        WriteDataSets2And3;
+//        Application.ProcessMessages;
+//        if not frmProgressMM.ShouldContinue then
+//        begin
+//          Exit;
+//        end;
+//
+//      end
+//      else
+//      begin
+//        WriteOptions(FNameOfFile);
+//        WriteDimensions;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSets4to11);
+//      WriteDataSets4To11;
+//    finally
+//      CloseFile;
+//    end;
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -716,6 +719,69 @@ begin
   if Model.ModelSelection = msModflow2015 then
   begin
     WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
+  end;
+
+  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
+    and (FParamValues.Count > 0) then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+end;
+
+procedure TModflowETS_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingETSPackage);
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    if Model.ModelSelection <> msModflow2015 then
+    begin
+      frmProgressMM.AddMessage(StrWritingDataSet1);
+      WriteDataSet1;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      frmProgressMM.AddMessage(StrWritingDataSets2and3);
+      WriteDataSets2And3;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+    end
+    else
+    begin
+      WriteOptions(FNameOfFile);
+      WriteDimensions;
+      WriteBoundaryArrayParams;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets4to11);
+    WriteDataSets4To11;
+  finally
+    CloseFile;
   end;
 end;
 
@@ -773,6 +839,8 @@ var
   IDomain: TDataArray;
   UsedLocations: T2DSparseBooleanArray;
   Layer: Integer;
+  ParameterName: string;
+  MultiplierValue: double;
 begin
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   UsedLocations := T2DSparseBooleanArray.Create(SPASmall, SPASmall);
@@ -800,16 +868,37 @@ begin
         end;
         WriteInteger(EvtCell.Column+1);
         WriteFloat(SurfDepthCell.EvapotranspirationSurface);
-        if EvtCell.TimeSeriesName = '' then
+
+        if Model.PestUsed and (Model.ModelSelection = msModflow2015)
+          and WritingTemplate
+          and ( EvtCell.ETParameterName <> '') then
         begin
-          WriteFloat(EvtCell.EvapotranspirationRate);
+          ParameterName := EvtCell.ETParameterName;
+          if EvtCell.ETParameterValue = 0 then
+          begin
+            MultiplierValue := 0.0;
+          end
+          else
+          begin
+            MultiplierValue := EvtCell.EvapotranspirationRate / EvtCell.ETParameterValue;
+          end;
+          WriteTemplateFormula(ParameterName, MultiplierValue);
         end
         else
         begin
-          WriteString(' ');
-          WriteString(EvtCell.TimeSeriesName);
-          WriteString(' ');
+          WriteFloat(EvtCell.EvapotranspirationRate);
         end;
+
+//        if EvtCell.TimeSeriesName = '' then
+//        begin
+//          WriteFloat(EvtCell.EvapotranspirationRate);
+//        end
+//        else
+//        begin
+//          WriteString(' ');
+//          WriteString(EvtCell.TimeSeriesName);
+//          WriteString(' ');
+//        end;
   //      WriteFloat(EvtCell.EvapotranspirationRate);
         WriteFloat(SurfDepthCell.EvapotranspirationDepth);
 
