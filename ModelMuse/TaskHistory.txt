@@ -453,7 +453,7 @@ object TTaskHistory
       Display = False
     end
     item
-      Name = 'Pest parameter substition'
+      Name = 'Pest parameter substitution'
       Display = True
     end>
   History = <
@@ -25793,7 +25793,7 @@ object TTaskHistory
     item
       Date = 44022.000000000000000000
       Categories.Strings = (
-        'Pest parameter substition'
+        'Pest parameter substitution'
         'PEST'
         'Testing'
         'Documentation'
@@ -25809,7 +25809,7 @@ object TTaskHistory
       Date = 44025.000000000000000000
       Categories.Strings = (
         'Documentation'
-        'Pest parameter substition'
+        'Pest parameter substitution'
         'PEST')
     end
     item
@@ -25867,7 +25867,7 @@ object TTaskHistory
     item
       Date = 44034.000000000000000000
       Categories.Strings = (
-        'Pest parameter substition'
+        'Pest parameter substitution'
         'Documentation')
     end
     item
@@ -25876,7 +25876,7 @@ object TTaskHistory
     item
       Date = 44036.000000000000000000
       Categories.Strings = (
-        'Pest parameter substition'
+        'Pest parameter substitution'
         'PEST'
         'SUTRA Model')
     end
@@ -25894,7 +25894,7 @@ object TTaskHistory
     item
       Date = 44040.000000000000000000
       Categories.Strings = (
-        'Pest parameter substition'
+        'Pest parameter substitution'
         'PEST'
         'Installer'
         'Testing'
@@ -25905,8 +25905,21 @@ object TTaskHistory
       Date = 44041.000000000000000000
       Categories.Strings = (
         'Bug fix'
-        'Pest parameter substition'
+        'Pest parameter substitution'
         'PEST'
         'Import')
+    end
+    item
+      Date = 44042.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Error checking')
+    end
+    item
+      Date = 44043.000000000000000000
+      Categories.Strings = (
+        'PEST Observations'
+        'PEST'
+        'Documentation')
     end>
 end

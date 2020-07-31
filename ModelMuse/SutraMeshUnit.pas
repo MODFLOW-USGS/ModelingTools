@@ -603,6 +603,7 @@ Type
     function GetZ: FastGEO.TFloat;
     function GetBottom: Double;
     function GetTop: Double;
+    function GetBoundaryNode: Boolean;
   protected
     function GetActiveElementCount: integer;
     function GetActiveElement(Index: Integer): IElement;
@@ -630,6 +631,7 @@ Type
     function ReferenceLength: double;
     function NodeLocation2D: TPoint2D;
     function NodeNumber2D: Integer;
+    property BoundaryNode: Boolean read GetBoundaryNode;
   published
     property Z: FastGEO.TFloat read GetZ write SetZ;
     property Node2D_Number: integer read GetNode2D_Number write SetNode2D_Number;
@@ -4846,6 +4848,23 @@ end;
 function TSutraNode3D.GetBottom: Double;
 begin
   result := FBottom;
+end;
+
+function TSutraNode3D.GetBoundaryNode: Boolean;
+var
+  ElementIndex: Integer;
+  AnElement: TSutraElement3D;
+begin
+  result := False;
+  for ElementIndex := 0 to FElements.Count - 1 do
+  begin
+    AnElement := FElements[ElementIndex];
+    if not AnElement.Active then
+    begin
+      result := True;
+      Break;
+    end;
+  end;
 end;
 
 function TSutraNode3D.GetLocation: TPoint2D;

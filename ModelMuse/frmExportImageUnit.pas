@@ -480,7 +480,8 @@ begin
                 begin
                   Continue;
                 end;
-                DataArray.Contours.SpecifyContours := True;
+                DataArray.Contours.SpecifyContours :=
+                  PriorDataArray.Contours.SpecifyContours;
                 Legend.Assign(frmGoPhast.PhastModel.ContourLegend);
               end;
               case DataArray.Orientation of
@@ -557,7 +558,8 @@ begin
                 begin
                   Continue;
                 end;
-                DataArray.Contours.SpecifyContours := True;
+                DataArray.Contours.SpecifyContours :=
+                  PriorDataArray.Contours.SpecifyContours;
                 DataArray.ContourInterval.Value := PriorDataArray.ContourInterval.Value;
                 Legend.Assign(frmGoPhast.PhastModel.ContourLegend);
               end;

@@ -6,7 +6,6 @@ inherited frmExportImage: TfrmExportImage
   ClientWidth = 721
   ShowHint = True
   OnClose = FormClose
-  ExplicitTop = -120
   ExplicitWidth = 737
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -52,7 +51,6 @@ inherited frmExportImage: TfrmExportImage
         Collapsed = True
         TabOrder = 0
         OnExpand = cpAnimationExpand
-        ExplicitTop = 60
         ExpandedHeight = 386
         object pnlAnimation: TPanel
           Left = 0
@@ -258,7 +256,6 @@ inherited frmExportImage: TfrmExportImage
         Collapsed = True
         TabOrder = 1
         OnExpand = cpTextExpand
-        ExplicitTop = 30
         ExpandedHeight = 386
         object pnlText: TPanel
           Left = 0
@@ -267,9 +264,6 @@ inherited frmExportImage: TfrmExportImage
           Height = 0
           Align = alClient
           TabOrder = 0
-          ExplicitLeft = -3
-          ExplicitTop = -3
-          ExplicitHeight = 360
           object lblTitle: TLabel
             Left = 11
             Top = 2

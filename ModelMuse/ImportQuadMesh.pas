@@ -23,6 +23,9 @@ resourcestring
   'uadrilateral mesh. Use "File|Export|Export Mesh" in Argus ONE to export t' +
   'he mesh in a standard format.';
   StrThereWasAnErrorI = 'There was an error in importing the mesh.';
+  StrThereWasAnErrorIInvalidMesh = 'There was an error importing the mesh. ModelMuse ca' +
+  'n import meshes from Gmsh, Geompack, or Argus ONE. For meshes in other fo' +
+  'rmats, consult with the ModelMuse developer.';
 
 type
   TUndoImportMesh = class(TUndoChangeMesh)
@@ -720,6 +723,8 @@ begin
       try
         Splitter.Delimiter := ' ';
         ALine := FileReader.ReadLine;
+
+        try
         if ALine = '$MeshFormat' then
         begin
           ImportFromGMsh(FileReader, Splitter, Mesh2D, GmshExag);
@@ -736,6 +741,15 @@ begin
             ImportArgusOneMesh(FileReader, Splitter, Mesh2D, ALine);
           end;
         end;
+        except on E: EAssertionFailed do
+          begin
+            Beep;
+            MessageDlg(StrThereWasAnErrorIInvalidMesh, mtError, [mbOK], 0);
+            Exit;
+          end;
+
+        end;
+
 
       finally
         Splitter.Free;

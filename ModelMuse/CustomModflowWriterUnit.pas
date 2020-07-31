@@ -1084,6 +1084,13 @@ resourcestring
   Str0sMultipliedByParam = '%0:s (multiplied by %1:s = %2:g)';
   StrPestFormulaFormat = ' %0:s                   %1:s             %2:s%1:s ' +
   '* %3:g%0:s ';
+  StrNoAlternativeSolve = 'No alternative solver specified';
+  StrInTheMODFLOWName = 'In the MODFLOW Name file dialog box, the option to ' +
+  'specify an alternative solver was selected but none was specified.';
+  StrNoAlternativeFlow = 'No alternative flow package specified';
+  StrInTheMODFLOWNameFlow = 'In the MODFLOW Name file dialog box, the option' +
+  ' to specify an alternative flow package was selected but none was specifi' +
+  'ed.';
 
 var
 //  NameFile: TStringList;
@@ -7058,9 +7065,15 @@ function TCustomSolverWriter.SolverFileGeneratedExternally: boolean;
 var
   Index: Integer;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoAlternativeSolve);
   if Model.AlternateSolver then
   begin
     result := True;
+    if Model.ModflowNameFileLines.Count = 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrNoAlternativeSolve,
+        StrInTheMODFLOWName)
+    end;
   end
   else
   begin
@@ -7134,9 +7147,15 @@ function TCustomFlowPackageWriter.FlowPackageFileGeneratedExternally: boolean;
 var
   Index: Integer;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoAlternativeFlow);
   if Model.AlternateFlowPackage then
   begin
     result := True;
+    if Model.ModflowNameFileLines.Count = 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrNoAlternativeFlow,
+        StrInTheMODFLOWNameFlow)
+    end;
   end
   else
   begin

@@ -4,9 +4,9 @@ inherited frmModflowNameFile: TfrmModflowNameFile
   Caption = 'MODFLOW Name File'
   ClientHeight = 346
   ClientWidth = 520
-  ExplicitWidth = 538
-  ExplicitHeight = 391
-  PixelsPerInch = 120
+  ExplicitWidth = 536
+  ExplicitHeight = 385
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlMain: TPanel
     Left = 0

@@ -9226,9 +9226,17 @@ const
   //                node makes the node inactive.
   //    '4.2.0.32' Bug fix: Fixed bug that could cause assertion failures when
   //                exporting boundary conditions in SUTRA.
+  //    '4.2.0.33' Bug fix: Fixed a bug that could cause the UZF input file to
+  //                be created incorrectly.
+  //    '4.2.0.34' Bug fix: Fixed bug in animating contours.
+  //               Enhancement: added SUTRA_MeshEdgeNode function.
+
+  //               Bug fix: If the user attempts to import a mesh that is not
+  //                in the correct format, ModelMuse now displays an appropriate
+  //                error message instead of generating a bug report.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.32';
+  IModelVersion = '4.2.0.34';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

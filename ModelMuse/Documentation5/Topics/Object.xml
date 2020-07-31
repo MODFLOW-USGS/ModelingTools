@@ -34,7 +34,6 @@
       <li><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVertexZ" styleclass="Normal" translate="true">ObjectVertexZ</link></li>
       <li><link displaytype="text" defaultstyle="true" type="topiclink" href="SelectedCount" styleclass="Normal" translate="true">SelectedCount</link></li>
       <li><link displaytype="text" defaultstyle="true" type="topiclink" href="VertexInterpolate" styleclass="Normal" translate="true">VertexInterpolate</link></li>
-      <li></li>
     </list>
   </body>
 </topic>

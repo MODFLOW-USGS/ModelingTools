@@ -207,6 +207,11 @@ resourcestring
   StrTheHeadOrDrawdownCalib = 'The head or drawdown calibration observation ' +
   'defined by %s is invalid because it involves more than one cell. Head or ' +
   'drawdown observations for calibration must be defined by point objects.';
+  StrMultilayerHeadOrD = 'Multilayer head or drawdown calibration observatio' +
+  'n';
+  StrTheHeadOrDrawdownML = 'The head or drawdown calibration observation def' +
+  'ined by %s will be treated as a multilayer observation because it involve' +
+  's more than one cell but is defined by a point object.,'#13;
 
 
 { TModflow6Obs_Writer }
@@ -355,6 +360,22 @@ var
   NameIndex: Integer;
   StartTime: Double;
   Prefix: string;
+  MultiLayerHeadObs: Boolean;
+  FoundFirst: Boolean;
+  ErrorAdded: Boolean;
+  Kx: TDataArray;
+  TransmissivityFactors: array of double;
+  DisvCell3D: TModflowDisVCell;
+  CellTop: Double;
+  CellBottom: Double;
+  MultiLayerFormula: TStringBuilder;
+  MultiLayerFormulaList: TObjectList<TStringBuilder>;
+//  OuterMultiLayerFormulaList: TObjectList<TObjectList<TStringBuilder>>;
+  MLObsName: string;
+  TransIndex: Integer;
+//  Splitter: TStringList;
+  MultiIndex: Integer;
+//  SplitterIndex: Integer;
   function GetLocation(ACell: TCellLocation): TPoint2D;
   begin
     if Model.DisvUsed then
@@ -368,6 +389,7 @@ var
   end;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidHeadOrDrawCalib);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMultilayerHeadOrD);
   if Model.PestUsed then
   begin
     // These two properties need to be specified outside of TModflow6Obs_Writer;
@@ -385,187 +407,245 @@ begin
     Assert(Mesh <> nil);
   end;
 
+  Kx := Model.DataArrayManager.GetDataSetByName(rsKx);
+
   StartTime := Model.ModflowStressPeriods.First.StartTime;
   OtherObsDefined := False;
-  for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-  begin
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-    AScreenObject := Model.ScreenObjects[ObjectIndex];
-    if AScreenObject.Deleted then
-    begin
-      Continue;
-    end;
-    if not AScreenObject.UsedModels.UsesModel(Model) then
-    begin
-      Continue;
-    end;
-    Obs := AScreenObject.Modflow6Obs;
-    if (Obs = nil) or not Obs.Used then
-    begin
-      Continue;
-    end;
-    if (Obs.MawObs <> []) or (Obs.SfrObs <> [])
-      or (Obs.LakObs <> []) or (Obs.UzfObs <> [])
-      or (Obs.CSubObs.CSubObsSet <> []) then
-    begin
-      OtherObsDefined := True;
-    end;
+//  Splitter := TStringList.Create;
+  MultiLayerFormulaList:= TObjectList<TStringBuilder>.Create;
+  try
 
-    if (Obs.General * [ogHead, ogDrawdown] <> [])
-      or (Obs.GroundwaterFlowObs and (Obs.GwFlowObsChoices <> [])) then
+    for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
     begin
-      CellList := TCellAssignmentList.Create;
-      try
-        AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-        FHorizontalCells.Clear;
-        for CellIndex := 0 to CellList.Count - 1 do
-        begin
-          ACell := CellList[CellIndex];
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      AScreenObject := Model.ScreenObjects[ObjectIndex];
+      if AScreenObject.Deleted then
+      begin
+        Continue;
+      end;
+      if not AScreenObject.UsedModels.UsesModel(Model) then
+      begin
+        Continue;
+      end;
+      Obs := AScreenObject.Modflow6Obs;
+      if (Obs = nil) or not Obs.Used then
+      begin
+        Continue;
+      end;
+      if (Obs.MawObs <> []) or (Obs.SfrObs <> [])
+        or (Obs.LakObs <> []) or (Obs.UzfObs <> [])
+        or (Obs.CSubObs.CSubObsSet <> []) then
+      begin
+        OtherObsDefined := True;
+      end;
 
-          if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
+
+      if (Obs.General * [ogHead, ogDrawdown] <> [])
+        or (Obs.GroundwaterFlowObs and (Obs.GwFlowObsChoices <> [])) then
+      begin
+        MultiLayerHeadObs := False;
+        MultiLayerFormulaList.Clear;
+        CellList := TCellAssignmentList.Create;
+        try
+          AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+          SetLength(TransmissivityFactors, CellList.Count);
+          for CellIndex := 0 to CellList.Count - 1 do
           begin
-            if Model.PestUsed and (CellList.Count <> 1) and (CellIndex = 0) and
-              (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])  then
+            TransmissivityFactors[CellIndex] := 0;
+            ACell := CellList[CellIndex];
+            if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
             begin
-              frmErrorsAndWarnings.AddError(Model, StrInvalidHeadOrDrawCalib,
-                Format(StrTheHeadOrDrawdownCalib,
-                [AScreenObject.Name]), AScreenObject)
+              if Model.DisvUsed then
+              begin
+                DisvCell3D := Model.DisvGrid.Cells[ACell.Layer, ACell.Column];
+                CellTop := DisvCell3D.Top;
+                CellBottom := DisvCell3D.Bottom;
+              end
+              else
+              begin
+                CellTop := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer];
+                CellBottom := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer+1];
+              end;
+              if AScreenObject.ElevationCount = ecTwo then
+              begin
+                CellTop := Min(CellTop, AScreenObject.TopElevation);
+                CellBottom := Max(CellBottom, AScreenObject.BottomElevation);
+              end;
+              TransmissivityFactors[CellIndex] := Max(CellTop - CellBottom, 0) 
+                * Kx.RealData[ACell.Layer, ACell.Row, ACell.Column];
             end;
-            if Model.PestUsed and (CellList.Count = 1) and
-              (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])  then
+          end;
+
+          
+          FHorizontalCells.Clear;
+          FoundFirst := False;
+          ErrorAdded := False;
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+
+            if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
             begin
-              // find neighbors
-              NeighborCells := TCellLocationList.Create;
-              try
-                if Model.DisvUsed then
+              if Model.PestUsed and (CellList.Count <> 1)  
+                and FoundFirst and not ErrorAdded
+                and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
+                then
+              begin
+                if (AScreenObject.Count <> 1) then
                 begin
-                  ACell := CellList[0];
-                  NeighborLocation.Row := 0;
-                  DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
-                  GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
-                  for NeighborIndex := 0 to Length(ObsCells) - 1 do
-                  begin
-                    CellDisv2D := ObsCells[NeighborIndex];
-                    NeighborLocation.Column := CellDisv2D.ElementNumber;
-                    NeighborLocation.Layer := ACell.Layer;
-                    NeighborCells.Add(NeighborLocation);
-                  end;
+                  frmErrorsAndWarnings.AddError(Model, StrInvalidHeadOrDrawCalib,
+                    Format(StrTheHeadOrDrawdownCalib,
+                    [AScreenObject.Name]), AScreenObject);
+                  ErrorAdded := True;
                 end
                 else
                 begin
-                  ObservationPoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(
-                    AScreenObject.Points[0]);
-                  ACell := CellList[0];
-
-                  Width := Grid.RowWidth[ACell.Row];
-                  Center := Grid.RowCenter(ACell.Row);
-                  ObservationRowOffset := -(ObservationPoint.y - Center)/Width;
-
-                  Width := Grid.ColumnWidth[ACell.Column];
-                  Center := Grid.ColumnCenter(ACell.Column);
-                  ObservationColumnOffset := (ObservationPoint.x - Center)/Width;
-
-                  NeighborCells.Add(ACell.Cell);
-
-                  NeighborLocation.Layer := ACell.Layer;
-                  if Sign(ObservationColumnOffset) = 0 then
+                  frmErrorsAndWarnings.AddWarning(Model, StrMultilayerHeadOrD,
+                    Format(StrTheHeadOrDrawdownML,
+                    [AScreenObject.Name]), AScreenObject);
+                  ErrorAdded := True;
+                  MultiLayerHeadObs := True;
+                end;
+              end;
+              FoundFirst := True;
+              if Model.PestUsed 
+                and ((CellList.Count = 1) or (AScreenObject.Count = 1))
+                and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])  
+                then
+              begin
+                // find neighbors
+                NeighborCells := TCellLocationList.Create;
+                try
+                  if Model.DisvUsed then
                   begin
-                    if Sign(ObservationRowOffset) <> 0 then
+                    ACell := CellList[0];
+                    NeighborLocation.Row := 0;
+                    DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
+                    GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
+                    for NeighborIndex := 0 to Length(ObsCells) - 1 do
                     begin
-                      NeighborLocation.Column := ACell.Column;
-                      NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
-                      if (NeighborLocation.Row >= 0)
-                        and (NeighborLocation.Row < Grid.RowCount)
+                      CellDisv2D := ObsCells[NeighborIndex];
+                      NeighborLocation.Column := CellDisv2D.ElementNumber;
+                      NeighborLocation.Layer := ACell.Layer;
+                      NeighborCells.Add(NeighborLocation);
+                    end;
+                  end
+                  else
+                  begin
+                    ObservationPoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(
+                      AScreenObject.Points[0]);
+                    ACell := CellList[0];
+
+                    Width := Grid.RowWidth[ACell.Row];
+                    Center := Grid.RowCenter(ACell.Row);
+                    ObservationRowOffset := -(ObservationPoint.y - Center)/Width;
+
+                    Width := Grid.ColumnWidth[ACell.Column];
+                    Center := Grid.ColumnCenter(ACell.Column);
+                    ObservationColumnOffset := (ObservationPoint.x - Center)/Width;
+
+                    NeighborCells.Add(ACell.Cell);
+
+                    NeighborLocation.Layer := ACell.Layer;
+                    if Sign(ObservationColumnOffset) = 0 then
+                    begin
+                      if Sign(ObservationRowOffset) <> 0 then
+                      begin
+                        NeighborLocation.Column := ACell.Column;
+                        NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
+                        if (NeighborLocation.Row >= 0)
+                          and (NeighborLocation.Row < Grid.RowCount)
+                          And ActiveDataArray.BooleanData[
+                            NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                          then
+                        begin
+                          NeighborCells.Add(NeighborLocation)
+                        end;
+                      end;
+                    end
+                    else if Sign(ObservationRowOffset) = 0 then
+                    begin
+                      NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
+                      NeighborLocation.Row := ACell.Row;
+                      if (NeighborLocation.Column >= 0)
+                        and (NeighborLocation.Column < Grid.ColumnCount)
                         And ActiveDataArray.BooleanData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
                       end;
-                    end;
-                  end
-                  else if Sign(ObservationRowOffset) = 0 then
-                  begin
-                    NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
-                    NeighborLocation.Row := ACell.Row;
-                    if (NeighborLocation.Column >= 0)
-                      and (NeighborLocation.Column < Grid.ColumnCount)
-                      And ActiveDataArray.BooleanData[
-                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
-                      then
+                    end
+                    else if Sign(ObservationRowOffset) = Sign(ObservationColumnOffset) then
                     begin
-                      NeighborCells.Add(NeighborLocation)
-                    end;
-                  end
-                  else if Sign(ObservationRowOffset) = Sign(ObservationColumnOffset) then
-                  begin
-                    // column direction first
-                    NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
-                    NeighborLocation.Row := ACell.Row;
-                    if (NeighborLocation.Column >= 0)
-                      and (NeighborLocation.Column < Grid.ColumnCount)
-                      and ActiveDataArray.BooleanData[
-                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
-                      then
+                      // column direction first
+                      NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
+                      NeighborLocation.Row := ACell.Row;
+                      if (NeighborLocation.Column >= 0)
+                        and (NeighborLocation.Column < Grid.ColumnCount)
+                        and ActiveDataArray.BooleanData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        then
+                      begin
+                        NeighborCells.Add(NeighborLocation)
+                      end;
+                      NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
+                      if (NeighborLocation.Row >= 0)
+                        and (NeighborLocation.Row < Grid.RowCount)
+                        and (NeighborLocation.Column >= 0)
+                        and (NeighborLocation.Column < Grid.ColumnCount)
+                        and ActiveDataArray.BooleanData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        then
+                      begin
+                        NeighborCells.Add(NeighborLocation)
+                      end;
+                      NeighborLocation.Column := ACell.Column;
+                      if (NeighborLocation.Row >= 0)
+                        and (NeighborLocation.Row < Grid.RowCount)
+                        and ActiveDataArray.BooleanData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        then
+                      begin
+                        NeighborCells.Add(NeighborLocation)
+                      end;
+                    end
+                    else
                     begin
-                      NeighborCells.Add(NeighborLocation)
-                    end;
-                    NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
-                    if (NeighborLocation.Row >= 0)
-                      and (NeighborLocation.Row < Grid.RowCount)
-                      and (NeighborLocation.Column >= 0)
-                      and (NeighborLocation.Column < Grid.ColumnCount)
-                      and ActiveDataArray.BooleanData[
-                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
-                      then
-                    begin
-                      NeighborCells.Add(NeighborLocation)
-                    end;
-                    NeighborLocation.Column := ACell.Column;
-                    if (NeighborLocation.Row >= 0)
-                      and (NeighborLocation.Row < Grid.RowCount)
-                      and ActiveDataArray.BooleanData[
-                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
-                      then
-                    begin
-                      NeighborCells.Add(NeighborLocation)
-                    end;
-                  end
-                  else
-                  begin
-                    // row direction first
-                    NeighborLocation.Column := ACell.Column;
-                    NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);;
-                    if (NeighborLocation.Row >= 0)
-                      and (NeighborLocation.Row < Grid.RowCount)
-                      and ActiveDataArray.BooleanData[
-                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
-                      then
-                    begin
-                      NeighborCells.Add(NeighborLocation)
-                    end;
-                    NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
-                    if (NeighborLocation.Column >= 0)
-                      and (NeighborLocation.Column < Grid.ColumnCount)
-                      and (NeighborLocation.Row >= 0)
-                      and (NeighborLocation.Row < Grid.RowCount)
-                      and ActiveDataArray.BooleanData[
-                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
-                      then
-                    begin
-                      NeighborCells.Add(NeighborLocation)
-                    end;
-                    NeighborLocation.Row := ACell.Row;
-                    if (NeighborLocation.Column >= 0)
-                      and (NeighborLocation.Column < Grid.ColumnCount)
-                      and ActiveDataArray.BooleanData[
-                        NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
-                      then
-                    begin
-                      NeighborCells.Add(NeighborLocation)
+                      // row direction first
+                      NeighborLocation.Column := ACell.Column;
+                      NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);;
+                      if (NeighborLocation.Row >= 0)
+                        and (NeighborLocation.Row < Grid.RowCount)
+                        and ActiveDataArray.BooleanData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        then
+                      begin
+                        NeighborCells.Add(NeighborLocation)
+                      end;
+                      NeighborLocation.Column := ACell.Column + Sign(ObservationColumnOffset);
+                      if (NeighborLocation.Column >= 0)
+                        and (NeighborLocation.Column < Grid.ColumnCount)
+                        and (NeighborLocation.Row >= 0)
+                        and (NeighborLocation.Row < Grid.RowCount)
+                        and ActiveDataArray.BooleanData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        then
+                      begin
+                        NeighborCells.Add(NeighborLocation)
+                      end;
+                      NeighborLocation.Row := ACell.Row;
+                      if (NeighborLocation.Column >= 0)
+                        and (NeighborLocation.Column < Grid.ColumnCount)
+                        and ActiveDataArray.BooleanData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        then
+                      begin
+                        NeighborCells.Add(NeighborLocation)
+                      end;
                     end;
                   end;
                   for ObservationIndex := 0 to Obs.CalibrationObservations.Count - 1 do
@@ -637,7 +717,49 @@ begin
                         Prefix := 'ddn_';
                       end;
 
-                      CalculatedObsLines.Add(Format('  OBSNAME %s PRINT', [Observation.Name]));
+                      if CellList.Count > 1 then
+                      begin
+                        if CellIndex = 0 then
+                        begin
+                          MultiLayerFormula := TStringBuilder.Create;
+                          MultiLayerFormulaList.Add(MultiLayerFormula);
+                          MultiLayerFormula.Append(Format('  OBSNAME %s PRINT', [Observation.Name]));
+                          MultiLayerFormula.Append(sLineBreak);
+                          MultiLayerFormula.Append('  FORMULA ');
+                          MultiLayerFormula.Append('(')
+                        end
+                        else
+                        begin
+                          MultiLayerFormula := MultiLayerFormulaList[ObservationIndex];
+                        end;
+                        MLObsName := Format('%s_ML%d', [Observation.Name, CellIndex+1]);
+                        CalculatedObsLines.Add('  OBSNAME ' + MLObsName);
+                        if CellIndex > 0 then
+                        begin
+                          MultiLayerFormula.Append(' + ');
+                        end;
+                        MultiLayerFormula.Append(MLObsName);
+                        MultiLayerFormula.Append('*');
+                        MultiLayerFormula.Append(TransmissivityFactors[CellIndex]);
+                        if CellIndex = CellList.Count - 1 then
+                        begin
+                          MultiLayerFormula.Append(')/(');
+                          for TransIndex := 0 to Length(TransmissivityFactors) - 1 do
+                          begin
+                            if TransIndex > 0 then
+                            begin
+                              MultiLayerFormula.Append(' + ');
+                            end;
+                            MultiLayerFormula.Append(TransmissivityFactors[TransIndex]);
+                          end;
+                          MultiLayerFormula.Append(')')
+                        end;
+                          
+                      end
+                      else
+                      begin
+                        CalculatedObsLines.Add(Format('  OBSNAME %s PRINT', [Observation.Name]));
+                      end;
                       InterpolateFormula := TStringBuilder.Create;
                       try
                         InterpolateFormula.Append('  INTERPOLATE ');
@@ -658,84 +780,101 @@ begin
                       end;
                     end;
                   end;
+                finally
+                  NeighborCells.Free;
                 end;
-              finally
-                NeighborCells.Free;
-              end;
-            end
-            else if (Obs.General * [ogHead, ogDrawdown] <> []) then
-            begin
-              HeadDrawdown.FCell := ACell.Cell;
-              HeadDrawdown.FName := Obs.Name;
-              if CellList.Count > 1 then
+              end
+              else if (Obs.General * [ogHead, ogDrawdown] <> []) then
               begin
-                HeadDrawdown.FName := HeadDrawdown.FName
-                  + WriteCellName(ACell.Cell);
+                HeadDrawdown.FCell := ACell.Cell;
+                HeadDrawdown.FName := Obs.Name;
+                if CellList.Count > 1 then
+                begin
+                  HeadDrawdown.FName := HeadDrawdown.FName
+                    + WriteCellName(ACell.Cell);
+                end;
+                if ogHead in Obs.General then
+                begin
+                  FHeadObs.Add(HeadDrawdown);
+                end;
+                if ogDrawdown in Obs.General then
+                begin
+                  FDrawdownObs.Add(HeadDrawdown);
+                end;
               end;
-              if ogHead in Obs.General then
+              if Obs.GroundwaterFlowObs then
               begin
-                FHeadObs.Add(HeadDrawdown);
+                HandleFlowObs(AScreenObject, Obs, ACell);
               end;
-              if ogDrawdown in Obs.General then
-              begin
-                FDrawdownObs.Add(HeadDrawdown);
-              end;
-            end;
-            if Obs.GroundwaterFlowObs then
-            begin
-              HandleFlowObs(AScreenObject, Obs, ACell);
             end;
           end;
-        end;
-        if FHorizontalCells.Count > 1 then
-        begin
-          for OuterHorizCellIndex := 0 to FHorizontalCells.Count - 2 do
-          begin
-            OuterCell := FHorizontalCells[OuterHorizCellIndex];
-            if Grid <> nil then
-            begin
-              OuterMf6Cell := nil;
-            end
-            else
-            begin
-              OuterMf6Cell := Mesh.Mesh2dI.Elements[OuterCell.Column] as TModflowIrregularCell2D;
-            end;
 
-            for InnerHorizCellIndex := OuterHorizCellIndex+1 to FHorizontalCells.Count - 1 do
+          for MultiIndex := 0 to MultiLayerFormulaList.Count - 1 do
+          begin
+            MultiLayerFormula := MultiLayerFormulaList[MultiIndex];
+//            Splitter.DelimitedText := MultiLayerFormula.ToString;
+//            for SplitterIndex := 0 to Splitter.Count - 1 do
+//            begin
+//              CalculatedObsLines.Add(Splitter[SplitterIndex]);
+//            end;
+            CalculatedObsLines.Add(MultiLayerFormula.ToString);
+            CalculatedObsLines.Add('')
+          end;
+
+          
+          if FHorizontalCells.Count > 1 then
+          begin
+            for OuterHorizCellIndex := 0 to FHorizontalCells.Count - 2 do
             begin
-              InnerCell := FHorizontalCells[InnerHorizCellIndex];
-              IsNeighbor := False;
+              OuterCell := FHorizontalCells[OuterHorizCellIndex];
               if Grid <> nil then
               begin
-                IsNeighbor := (OuterCell.Layer = InnerCell.Layer)
-                  and (((OuterCell.Row = InnerCell.Row)
-                    and (Abs(OuterCell.Column - InnerCell.Column) = 1))
-                  or ((OuterCell.Column = InnerCell.Column)
-                    and (Abs(OuterCell.Row - InnerCell.Row) = 1)))
+                OuterMf6Cell := nil;
               end
               else
               begin
-                if OuterCell.Layer = InnerCell.Layer then
-                begin
-                  InnerMf6Cell := Mesh.Mesh2dI.Elements[InnerCell.Column]
-                    as TModflowIrregularCell2D;
-                  IsNeighbor := OuterMf6Cell.IsNeighbor(InnerMf6Cell);
-                end;
+                OuterMf6Cell := Mesh.Mesh2dI.Elements[OuterCell.Column] as TModflowIrregularCell2D;
               end;
-              if IsNeighbor then
+
+              for InnerHorizCellIndex := OuterHorizCellIndex+1 to FHorizontalCells.Count - 1 do
               begin
-                FlowObs.FCell := OuterCell.Cell;
-                FlowObs.FOtherCell := InnerCell.Cell;
-                FlowObs.FName := Obs.Name;
-                FFlowObs.Add(FlowObs);
+                InnerCell := FHorizontalCells[InnerHorizCellIndex];
+                IsNeighbor := False;
+                if Grid <> nil then
+                begin
+                  IsNeighbor := (OuterCell.Layer = InnerCell.Layer)
+                    and (((OuterCell.Row = InnerCell.Row)
+                      and (Abs(OuterCell.Column - InnerCell.Column) = 1))
+                    or ((OuterCell.Column = InnerCell.Column)
+                      and (Abs(OuterCell.Row - InnerCell.Row) = 1)))
+                end
+                else
+                begin
+                  if OuterCell.Layer = InnerCell.Layer then
+                  begin
+                    InnerMf6Cell := Mesh.Mesh2dI.Elements[InnerCell.Column]
+                      as TModflowIrregularCell2D;
+                    IsNeighbor := OuterMf6Cell.IsNeighbor(InnerMf6Cell);
+                  end;
+                end;
+                if IsNeighbor then
+                begin
+                  FlowObs.FCell := OuterCell.Cell;
+                  FlowObs.FOtherCell := InnerCell.Cell;
+                  FlowObs.FName := Obs.Name;
+                  FFlowObs.Add(FlowObs);
+                end;
               end;
             end;
           end;
+        finally
+          CellList.Free;
         end;
-      finally
-        CellList.Free;
       end;
     end;
+  finally
+    MultiLayerFormulaList.Free;
+//    Splitter.Free;
   end;
 
   if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0)

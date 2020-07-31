@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4129</config-value>
+      <config-value name="autohelpstart">4131</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1500,12 +1500,14 @@ document.write('</frameset>');
       <helpcontext-number href="Summary" value="3250"/>
       <helpcontext-number href="Surface_Water_Flags" value="3799"/>
       <helpcontext-number href="Surface_Water_Flags#IALLOTSW" value="3819"/>
+      <helpcontext-number href="SUTRA" value="4130"/>
       <helpcontext-number href="SUTRA_Boundary_Condition_Panes" value="3749"/>
       <helpcontext-number href="SUTRA_Cross_Section_Dialog_Box" value="3695"/>
       <helpcontext-number href="SUTRA_Examples" value="3770"/>
       <helpcontext-number href="SUTRA_Features_Tab" value="3696"/>
       <helpcontext-number href="SUTRA_Layer_Groups_Dialog_Box" value="3677"/>
       <helpcontext-number href="SUTRA_Layer_Groups_Dialog_Box#MinimumThickness" value="3778"/>
+      <helpcontext-number href="SUTRA_MeshEdgeNode" value="4131"/>
       <helpcontext-number href="SUTRA_Models" value="3675"/>
       <helpcontext-number href="SUTRA_Options_Dialog_Box" value="3676"/>
       <helpcontext-number href="SUTRA_Output_Control_Dialog_Bo" value="3679"/>

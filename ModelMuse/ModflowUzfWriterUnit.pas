@@ -94,6 +94,10 @@ resourcestring
   StrTheOptionIsOnly = 'The %s option is only supported in MODFLOW-NWT versio' +
   'n 1.1 or later and MODFLOW-2005 1.12 or later.';
   StrRow0dColumn1 = 'Row %0:d; Column %1:d';
+  StrErrorInUZFOptions = 'Error in UZF options';
+  StrInTheUZFPackageT = 'In the UZF package the option to hydraulic conducti' +
+  'vity from the flow package can only be used if there are convertible laye' +
+  'rs.';
 
 { TModflowUzfWriter }
 
@@ -485,7 +489,7 @@ begin
             NewLine;
           end;
 
-          if (IUZFOPT = 1) and UzfPackage.SpecifySurfaceK then
+          if {(IUZFOPT = 1) and} UzfPackage.SpecifySurfaceK then
           begin
             WriteString('  SPECIFYSURFK');
             NewLine;
@@ -544,6 +548,9 @@ var
   NTRAIL2: integer;
   NSETS2: integer;
   SURFDEP: double;
+  LAYTYP: TOneDIntegerArray;
+  LayerIndex: Integer;
+  ShowWarning: Boolean;
 begin
   NUZTOP := 0;
   case Model.ModflowPackages.UzfPackage.LayerOption of
@@ -625,6 +632,26 @@ begin
   end;
   WriteString(' NUZGAG SURFDEP');
   NewLine;
+
+  if Abs(IUZFOPT) > 2 then
+  begin
+    ShowWarning := True;
+    LAYTYP := Model.Laytyp;
+    for LayerIndex := 0 to Length(LAYTYP) - 1 do
+    begin
+      if LAYTYP[LayerIndex] > 0 then
+       begin
+         ShowWarning := False;
+         break;
+       end;
+    end;
+    if ShowWarning then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrErrorInUZFOptions,
+        StrInTheUZFPackageT);
+    end;
+  end;
+
 end;
 
 procedure TModflowUzfWriter.WriteDataSet2;
@@ -848,6 +875,7 @@ var
   GageStart: integer;
   IUZFBND: TDataArray;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorInUZFOptions);
   if not Package.IsSelected then
   begin
     Exit

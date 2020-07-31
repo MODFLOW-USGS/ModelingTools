@@ -161,6 +161,7 @@ const
   StrHorizontalSubdivision = 'Horizontal_Subdivision';
   StrVerticalSubdivision = 'Vertical_Subdivision';
   StrSelectedCount = 'SelectedCount';
+  StrSUTRA_MeshEdgeNode = 'SUTRA_MeshEdgeNode';
   ObjectCurrentSegmentAngle = 'ObjectCurrentSegmentAngle';
   ObjectDegrees = 'ObjectCurrentSegmentAngleDegrees';
   ObjectDegreesLimited = 'ObjectCurrentSegmentAngleLimitedDegrees';
@@ -367,6 +368,7 @@ var
   VerticalSubdivision_Function: TFunctionRecord;
 
   SelectedCount_Function: TFunctionRecord;
+  SutraMeshEdgeNodeFunction: TFunctionRecord;
 
 //  DipDirectionRadiansFunction: TFunctionRecord;
 
@@ -596,6 +598,8 @@ begin
   AddItem(HorizontalSubdivision_Function, True);
   AddItem(VerticalSubdivision_Function, True);
   AddItem(SelectedCount_Function, True);
+  AddItem(SutraMeshEdgeNodeFunction, True);
+
 //  AddItem(DipDirectionRadiansFunction, True);
 end;
 
@@ -1513,6 +1517,32 @@ begin
   while result < -90 do
   begin
     result := result +180;
+  end;
+end;
+
+function _SutraMeshEdgeNode(Values: array of pointer): Boolean;
+var
+  SutraMesh3D: TSutraMesh3D;
+  Node3D: TSutraNode3D;
+begin
+  result := False;
+  if not (GlobalCurrentModel.ModelSelection in SutraSelection) then
+  begin
+    Exit;
+  end;
+  if GlobalEvaluatedAt <> eaNodes then
+  begin
+    Exit;
+  end;
+  SutraMesh3D := (GlobalCurrentModel as TCustomModel).SutraMesh;
+  if SutraMesh3D.MeshType <> mt3D then
+  begin
+    Exit;
+  end;
+  Node3D := SutraMesh3D.NodeArray[GlobalLayer-1, GlobalColumn-1];
+  if Node3D.Active then
+  begin
+    result := Node3D.BoundaryNode;
   end;
 end;
 
@@ -7386,6 +7416,7 @@ resourcestring
   StrMODFLOW = 'MODFLOW|';
   StrModflowLgr = 'MODFLOW-LGR|';
   StrObjectVertexValue = 'Object_VertexValue|';
+  StrSutra = 'SUTRA|';
 
 { TLayerSlope }
 
@@ -8224,6 +8255,15 @@ initialization
   SelectedCount_Function.Name := StrSelectedCount;
   SelectedCount_Function.Prototype := StrObject + StrSelectedCount;
   SelectedCount_Function.Hidden := False;
+
+  SutraMeshEdgeNodeFunction.ResultType := rdtBoolean;
+  SutraMeshEdgeNodeFunction.BFunctionAddr := _SutraMeshEdgeNode;
+  SetLength(SutraMeshEdgeNodeFunction.InputDataTypes, 0);
+  SutraMeshEdgeNodeFunction.OptionalArguments := 0;
+  SutraMeshEdgeNodeFunction.CanConvertToConstant := False;
+  SutraMeshEdgeNodeFunction.Name := StrSUTRA_MeshEdgeNode;
+  SutraMeshEdgeNodeFunction.Prototype := StrSutra + StrSUTRA_MeshEdgeNode;
+  SutraMeshEdgeNodeFunction.Hidden := False;
 
   NodeInterpolate := TFunctionClass.Create;
   NodeInterpolate.InputDataCount := 3;

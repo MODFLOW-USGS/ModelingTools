@@ -87,6 +87,8 @@ uses
 
 resourcestring
   StrChangeMODFLOWName = 'change MODFLOW name file';
+  StrNoFlowOrSolverPa = 'No flow or solver packages have been specified in t' +
+  'he Name File lines. Do you want to fix this before continuing?';
 
 {$R *.dfm}
 
@@ -101,6 +103,15 @@ end;
 procedure TfrmModflowNameFile.btnOKClick(Sender: TObject);
 begin
   inherited;
+  if (cbFlowPackage.Checked or cbSolvers.Checked)
+    and (memoLines.Lines.Count = 0) then
+  begin
+    if (MessageDlg(StrNoFlowOrSolverPa, mtError, [mbYes, mbNo], 0) = mrYes) then
+    begin
+      ModalResult := mrNone;
+      Exit;
+    end;
+  end;
   SetData;
 end;
 
