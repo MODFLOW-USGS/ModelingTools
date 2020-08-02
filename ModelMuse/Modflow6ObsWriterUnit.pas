@@ -212,6 +212,12 @@ resourcestring
   StrTheHeadOrDrawdownML = 'The head or drawdown calibration observation def' +
   'ined by %s will be treated as a multilayer observation because it involve' +
   's more than one cell but is defined by a point object.,'#13;
+  StrHeadObservationObj = 'Head Observation object intersects multiple layer' +
+  's';
+  StrTheObjectNamed0 = 'The object named $0:s intersects multiple layers but' +
+  ' only a single head observation will be defined for it because it is not ' +
+  'marked as a multi-layer head observation. It will be treated as an observ' +
+  'ation in layer %1:d.';
 
 
 { TModflow6Obs_Writer }
@@ -375,6 +381,11 @@ var
   TransIndex: Integer;
 //  Splitter: TStringList;
   MultiIndex: Integer;
+  MaxIndex: Integer;
+  MaxThick: double;
+  IntersectCellThickness: Double;
+  CellListStart: Integer;
+  CellListEnd: Integer;
 //  SplitterIndex: Integer;
   function GetLocation(ACell: TCellLocation): TPoint2D;
   begin
@@ -452,6 +463,8 @@ begin
         try
           AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
           SetLength(TransmissivityFactors, CellList.Count);
+          MaxIndex := -1;
+          MaxThick := -1.0;
           for CellIndex := 0 to CellList.Count - 1 do
           begin
             TransmissivityFactors[CellIndex] := 0;
@@ -474,16 +487,47 @@ begin
                 CellTop := Min(CellTop, AScreenObject.TopElevation);
                 CellBottom := Max(CellBottom, AScreenObject.BottomElevation);
               end;
-              TransmissivityFactors[CellIndex] := Max(CellTop - CellBottom, 0) 
-                * Kx.RealData[ACell.Layer, ACell.Row, ACell.Column];
+              IntersectCellThickness := Max(CellTop - CellBottom, 0);
+              if Obs.CalibrationObservations.MultiLayer then
+              begin
+                TransmissivityFactors[CellIndex] := IntersectCellThickness 
+                  * Kx.RealData[ACell.Layer, ACell.Row, ACell.Column];
+              end
+              else
+              begin
+                if IntersectCellThickness > MaxThick then
+                begin
+                  MaxThick := IntersectCellThickness;
+                  MaxIndex := CellIndex;
+                end;
+              end;
             end;
+          end;
+          
+          if (CellList.Count > 1) and not Obs.CalibrationObservations.MultiLayer then
+          begin
+            ACell := CellList[MaxIndex];
+            frmErrorsAndWarnings.AddWarning(Model, StrHeadObservationObj,
+              Format(StrTheObjectNamed0,
+              [AScreenObject.Name, ACell.Layer]), AScreenObject);
+          end;
+          
+          if (CellList.Count = 1) or Obs.CalibrationObservations.MultiLayer then
+          begin
+            CellListStart := 0;
+            CellListEnd := CellList.Count - 1; 
+          end
+          else
+          begin
+            CellListStart := MaxIndex; 
+            CellListEnd := MaxIndex; 
           end;
 
           
           FHorizontalCells.Clear;
           FoundFirst := False;
           ErrorAdded := False;
-          for CellIndex := 0 to CellList.Count - 1 do
+          for CellIndex := CellListStart to CellListEnd do
           begin
             ACell := CellList[CellIndex];
 
@@ -501,7 +545,7 @@ begin
                     [AScreenObject.Name]), AScreenObject);
                   ErrorAdded := True;
                 end
-                else
+                else if not Obs.CalibrationObservations.MultiLayer then
                 begin
                   frmErrorsAndWarnings.AddWarning(Model, StrMultilayerHeadOrD,
                     Format(StrTheHeadOrDrawdownML,
@@ -717,7 +761,7 @@ begin
                         Prefix := 'ddn_';
                       end;
 
-                      if CellList.Count > 1 then
+                      if (CellList.Count > 1) and Obs.CalibrationObservations.MultiLayer then
                       begin
                         if CellIndex = 0 then
                         begin

@@ -1,4 +1,5 @@
 inherited framePestObsMf6: TframePestObsMf6
+  OnResize = FrameResize
   inherited grpDirectObs: TGroupBox
     inherited frameObservations: TframeGrid
       inherited Grid: TRbwDataGrid4
@@ -231,6 +232,14 @@ inherited framePestObsMf6: TframePestObsMf6
           64
           64)
       end
+    end
+    object cbMultilayer: TCheckBox
+      Left = 144
+      Top = 207
+      Width = 97
+      Height = 17
+      Caption = 'Multilayer'
+      TabOrder = 1
     end
   end
 end

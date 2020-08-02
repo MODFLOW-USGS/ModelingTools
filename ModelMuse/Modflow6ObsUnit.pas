@@ -87,6 +87,7 @@ type
 
   TMf6CalibrationObservations = class(TCustomComparisonCollection)
   private
+    FMultiLayer: Boolean;
     function GetLakObs: TLakObs;
     function GetMawObs: TMawObs;
     function GetObGenerals: TObGenerals;
@@ -95,6 +96,7 @@ type
     function GetUzfObs: TUzfObs;
     function GetCalibItem(Index: Integer): TMf6CalibrationObs;
     procedure SetCalibItem(Index: Integer; const Value: TMf6CalibrationObs);
+    procedure SetMultiLayer(const Value: Boolean);
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent;
       ScreenObject: TObject);
@@ -110,6 +112,8 @@ type
       AnObsType: TMawOb): Boolean;
     function IndexOfTimeAndType(ATime: double; ObGeneralType: TObGeneral): integer;
     function Add: TMf6CalibrationObs;
+  published 
+    property MultiLayer: Boolean read FMultiLayer write SetMultiLayer;
   end;
 
   TModflow6Obs = class(TGoPhastPersistent)
@@ -1384,6 +1388,15 @@ procedure TMf6CalibrationObservations.SetCalibItem(Index: Integer;
   const Value: TMf6CalibrationObs);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TMf6CalibrationObservations.SetMultiLayer(const Value: Boolean);
+begin
+  if FMultiLayer <> Value then
+  begin
+    FMultiLayer := Value;
+    InvalidateModel;
+  end;
 end;
 
 function TMf6CalibrationObservations.UsesMawConnectionNumber(

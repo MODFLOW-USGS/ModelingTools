@@ -12,10 +12,12 @@ type
     pm6ObjectWeightFormula, pm6Value, pm6Weight, pm6MawConnectionNumber, pm6Comment);
 
   TframePestObsMf6 = class(TframePestObs)
+    cbMultilayer: TCheckBox;
     procedure frameObservationsGridSelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
     procedure frameObservationsGridBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
+    procedure FrameResize(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -238,6 +240,12 @@ begin
   end;
 end;
 
+procedure TframePestObsMf6.FrameResize(Sender: TObject);
+begin
+  inherited;
+  cbMultilayer.Parent := frameObservations.Panel
+end;
+
 procedure TframePestObsMf6.GetDirectObs(
   Observations: TCustomComparisonCollection);
 var
@@ -258,6 +266,7 @@ begin
     frameObservations.Grid.IntegerValue[Ord(pm6MawConnectionNumber), ItemIndex + 1] := Obs.MawConnectionNumber;
     frameObservations.Grid.Cells[Ord(pm6Comment), ItemIndex + 1] := Obs.Comment;
   end;
+  cbMultilayer.Checked := (Observations as TMf6CalibrationObservations).MultiLayer;
 end;
 
 procedure TframePestObsMf6.SetDirectObs(
@@ -378,6 +387,7 @@ begin
     end;
   end;
   Observations.Count := ObsCount;
+  (Observations as TMf6CalibrationObservations).MultiLayer := cbMultilayer.Checked;
 end;
 
 procedure TframePestObsMf6.SetObsColumnCaptions;
