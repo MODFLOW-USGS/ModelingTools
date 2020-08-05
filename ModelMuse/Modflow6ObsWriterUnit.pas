@@ -83,7 +83,7 @@ type
   private
     FObsType: string;
     FOutputExtension: string;
-    FObsList: TBoundaryFlowObservationLocationList;
+    FGeneralObsList: TBoundaryFlowObservationLocationList;
     FToMvrObsList: TBoundaryFlowObservationLocationList;
     FObGeneral: TObGeneral;
     procedure WriteFlowObs(ObsType: string;
@@ -214,7 +214,7 @@ resourcestring
   's more than one cell but is defined by a point object.,'#13;
   StrHeadObservationObj = 'Head Observation object intersects multiple layer' +
   's';
-  StrTheObjectNamed0 = 'The object named $0:s intersects multiple layers but' +
+  StrTheObjectNamed0 = 'The object named %0:s intersects multiple layers but' +
   ' only a single head observation will be defined for it because it is not ' +
   'marked as a multi-layer head observation. It will be treated as an observ' +
   'ation in layer %1:d.';
@@ -410,7 +410,7 @@ begin
   end;
 
   ObsIndex := 1;
-  ActiveDataArray := Model.DataArrayManager.GetDatasetByName(rsActive);
+  ActiveDataArray := Model.DataArrayManager.GetDatasetByName(K_IDOMAIN);
   Grid := Model.Grid;
   if Grid = nil then
   begin
@@ -465,54 +465,59 @@ begin
           SetLength(TransmissivityFactors, CellList.Count);
           MaxIndex := -1;
           MaxThick := -1.0;
-          for CellIndex := 0 to CellList.Count - 1 do
+          if Model.PestUsed then
           begin
-            TransmissivityFactors[CellIndex] := 0;
-            ACell := CellList[CellIndex];
-            if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
+            for CellIndex := 0 to CellList.Count - 1 do
             begin
-              if Model.DisvUsed then
+              TransmissivityFactors[CellIndex] := 0;
+              ACell := CellList[CellIndex];
+              if ActiveDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
               begin
-                DisvCell3D := Model.DisvGrid.Cells[ACell.Layer, ACell.Column];
-                CellTop := DisvCell3D.Top;
-                CellBottom := DisvCell3D.Bottom;
-              end
-              else
-              begin
-                CellTop := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer];
-                CellBottom := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer+1];
-              end;
-              if AScreenObject.ElevationCount = ecTwo then
-              begin
-                CellTop := Min(CellTop, AScreenObject.TopElevation);
-                CellBottom := Max(CellBottom, AScreenObject.BottomElevation);
-              end;
-              IntersectCellThickness := Max(CellTop - CellBottom, 0);
-              if Obs.CalibrationObservations.MultiLayer then
-              begin
-                TransmissivityFactors[CellIndex] := IntersectCellThickness 
-                  * Kx.RealData[ACell.Layer, ACell.Row, ACell.Column];
-              end
-              else
-              begin
-                if IntersectCellThickness > MaxThick then
+                if Model.DisvUsed then
                 begin
-                  MaxThick := IntersectCellThickness;
-                  MaxIndex := CellIndex;
+                  DisvCell3D := Model.DisvGrid.Cells[ACell.Layer, ACell.Column];
+                  CellTop := DisvCell3D.Top;
+                  CellBottom := DisvCell3D.Bottom;
+                end
+                else
+                begin
+                  CellTop := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer];
+                  CellBottom := Model.Grid.CellElevation[ACell.Column, ACell.Row, ACell.Layer+1];
+                end;
+                if AScreenObject.ElevationCount = ecTwo then
+                begin
+                  CellTop := Min(CellTop, AScreenObject.TopElevation);
+                  CellBottom := Max(CellBottom, AScreenObject.BottomElevation);
+                end;
+                IntersectCellThickness := Max(CellTop - CellBottom, 0);
+                if Obs.CalibrationObservations.MultiLayer then
+                begin
+                  TransmissivityFactors[CellIndex] := IntersectCellThickness
+                    * Kx.RealData[ACell.Layer, ACell.Row, ACell.Column];
+                end
+                else
+                begin
+                  if IntersectCellThickness > MaxThick then
+                  begin
+                    MaxThick := IntersectCellThickness;
+                    MaxIndex := CellIndex;
+                  end;
                 end;
               end;
             end;
           end;
-          
-          if (CellList.Count > 1) and not Obs.CalibrationObservations.MultiLayer then
+
+          if Model.PestUsed and (CellList.Count > 1)
+            and not Obs.CalibrationObservations.MultiLayer then
           begin
             ACell := CellList[MaxIndex];
             frmErrorsAndWarnings.AddWarning(Model, StrHeadObservationObj,
               Format(StrTheObjectNamed0,
-              [AScreenObject.Name, ACell.Layer]), AScreenObject);
+              [AScreenObject.Name, ACell.Layer+1]), AScreenObject);
           end;
-          
-          if (CellList.Count = 1) or Obs.CalibrationObservations.MultiLayer then
+
+          if not Model.PestUsed or (CellList.Count = 1)
+            or Obs.CalibrationObservations.MultiLayer then
           begin
             CellListStart := 0;
             CellListEnd := CellList.Count - 1; 
@@ -531,7 +536,7 @@ begin
           begin
             ACell := CellList[CellIndex];
 
-            if ActiveDataArray.BooleanData[ACell.Layer, ACell.Row, ACell.Column] then
+            if ActiveDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
             begin
               if Model.PestUsed and (CellList.Count <> 1)  
                 and FoundFirst and not ErrorAdded
@@ -565,7 +570,7 @@ begin
                 try
                   if Model.DisvUsed then
                   begin
-                    ACell := CellList[0];
+                    ACell := CellList[CellIndex];
                     NeighborLocation.Row := 0;
                     DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
                     GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
@@ -574,14 +579,17 @@ begin
                       CellDisv2D := ObsCells[NeighborIndex];
                       NeighborLocation.Column := CellDisv2D.ElementNumber;
                       NeighborLocation.Layer := ACell.Layer;
-                      NeighborCells.Add(NeighborLocation);
+                      if ActiveDataArray.IntegerData[NeighborLocation.Layer, 0, NeighborLocation.Column] > 0 then
+                      begin
+                        NeighborCells.Add(NeighborLocation);
+                      end;
                     end;
                   end
                   else
                   begin
                     ObservationPoint := Grid.RotateFromRealWorldCoordinatesToGridCoordinates(
                       AScreenObject.Points[0]);
-                    ACell := CellList[0];
+                    ACell := CellList[CellIndex];
 
                     Width := Grid.RowWidth[ACell.Row];
                     Center := Grid.RowCenter(ACell.Row);
@@ -602,8 +610,9 @@ begin
                         NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
                         if (NeighborLocation.Row >= 0)
                           and (NeighborLocation.Row < Grid.RowCount)
-                          And ActiveDataArray.BooleanData[
+                          and (ActiveDataArray.IntegerData[
                             NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                            > 0)
                           then
                         begin
                           NeighborCells.Add(NeighborLocation)
@@ -616,8 +625,9 @@ begin
                       NeighborLocation.Row := ACell.Row;
                       if (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        And ActiveDataArray.BooleanData[
+                        and (ActiveDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                          > 0)
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
@@ -630,8 +640,8 @@ begin
                       NeighborLocation.Row := ACell.Row;
                       if (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        and ActiveDataArray.BooleanData[
-                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        and (ActiveDataArray.IntegerData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
@@ -641,8 +651,8 @@ begin
                         and (NeighborLocation.Row < Grid.RowCount)
                         and (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        and ActiveDataArray.BooleanData[
-                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        and (ActiveDataArray.IntegerData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
@@ -650,8 +660,8 @@ begin
                       NeighborLocation.Column := ACell.Column;
                       if (NeighborLocation.Row >= 0)
                         and (NeighborLocation.Row < Grid.RowCount)
-                        and ActiveDataArray.BooleanData[
-                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        and (ActiveDataArray.IntegerData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
@@ -664,8 +674,8 @@ begin
                       NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);;
                       if (NeighborLocation.Row >= 0)
                         and (NeighborLocation.Row < Grid.RowCount)
-                        and ActiveDataArray.BooleanData[
-                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        and (ActiveDataArray.IntegerData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
@@ -675,8 +685,8 @@ begin
                         and (NeighborLocation.Column < Grid.ColumnCount)
                         and (NeighborLocation.Row >= 0)
                         and (NeighborLocation.Row < Grid.RowCount)
-                        and ActiveDataArray.BooleanData[
-                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        and (ActiveDataArray.IntegerData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]> 0)
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
@@ -684,8 +694,8 @@ begin
                       NeighborLocation.Row := ACell.Row;
                       if (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        and ActiveDataArray.BooleanData[
-                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
+                        and (ActiveDataArray.IntegerData[
+                          NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
                         NeighborCells.Add(NeighborLocation)
@@ -967,7 +977,7 @@ var
   StoredElementNumbers: TPointerArray;
   OtherElementNumber: Integer;
 begin
-  ActiveDataArray := Model.DataArrayManager.GetDatasetByName(rsActive);
+  ActiveDataArray := Model.DataArrayManager.GetDatasetByName(K_IDOMAIN);
   Grid := Model.Grid;
   if Grid = nil then
   begin
@@ -1029,7 +1039,7 @@ begin
           and (OtherCol < Grid.ColumnCount)
           and (OtherRow < Grid.RowCount) then
         begin
-          if ActiveDataArray.BooleanData[ACell.Layer, OtherRow, OtherCol] then
+          if ActiveDataArray.IntegerData[ACell.Layer, OtherRow, OtherCol] > 0 then
           begin
             FlowObs.FCell := ACell.Cell;
             FlowObs.FOtherCell.Layer := ACell.Layer;
@@ -1073,7 +1083,7 @@ begin
           end;
           if OtherElementIndex >= 0 then
           begin
-            if ActiveDataArray.BooleanData[ACell.Layer, 0, OtherElementIndex] then
+            if ActiveDataArray.IntegerData[ACell.Layer, 0, OtherElementIndex] > 0 then
             begin
               FlowObs.FCell := ACell.Cell;
               FlowObs.FOtherCell.Layer := ACell.Layer;
@@ -1100,8 +1110,8 @@ begin
       OtherCell := ACell.Cell;
       Dec(OtherCell.Column);
       if (OtherCell.Column > 0)
-        and ActiveDataArray.BooleanData[OtherCell.Layer, OtherCell.Row,
-        OtherCell.Column] then
+        and (ActiveDataArray.IntegerData[OtherCell.Layer, OtherCell.Row,
+        OtherCell.Column] > 0) then
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
@@ -1111,8 +1121,8 @@ begin
       OtherCell := ACell.Cell;
       Inc(OtherCell.Column);
       if (OtherCell.Column < Grid.ColumnCount)
-        and ActiveDataArray.BooleanData[OtherCell.Layer, OtherCell.Row,
-        OtherCell.Column] then
+        and (ActiveDataArray.IntegerData[OtherCell.Layer, OtherCell.Row,
+        OtherCell.Column] > 0) then
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
@@ -1123,8 +1133,8 @@ begin
       OtherCell := ACell.Cell;
       Dec(OtherCell.Row);
       if (OtherCell.Row > 0)
-        and ActiveDataArray.BooleanData[OtherCell.Layer, OtherCell.Row,
-        OtherCell.Column] then
+        and (ActiveDataArray.IntegerData[OtherCell.Layer, OtherCell.Row,
+        OtherCell.Column] > 0) then
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
@@ -1134,8 +1144,8 @@ begin
       OtherCell := ACell.Cell;
       Inc(OtherCell.Row);
       if (OtherCell.Row < Grid.RowCount)
-        and ActiveDataArray.BooleanData[OtherCell.Layer, OtherCell.Row,
-        OtherCell.Column] then
+        and (ActiveDataArray.IntegerData[OtherCell.Layer, OtherCell.Row,
+        OtherCell.Column] > 0) then
       begin
         FlowObs.FCell := ACell.Cell;
         FlowObs.FOtherCell := OtherCell;
@@ -1165,8 +1175,8 @@ begin
           FlowObs.FOtherCell.Column := OtherElementNumber;
           FlowObs.FName := Obs.Name;
           FlowObs.FName := Format('f_%0:s_%1:d', [Obs.Name, NodeIndex+1]);
-          if ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
-            FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
+          if ActiveDataArray.IntegerData[FlowObs.FOtherCell.Layer,
+            FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] > 0 then
           begin
             FFlowObs.Add(FlowObs);
           end;
@@ -1183,8 +1193,8 @@ begin
     Dec(FlowObs.FOtherCell.Layer);
     FlowObs.FName := Format('fa_%s', [Obs.Name]);
     if (FlowObs.FOtherCell.Layer >= 0)
-      and ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
-      FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
+      and (ActiveDataArray.IntegerData[FlowObs.FOtherCell.Layer,
+      FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] > 0) then
     begin
       FFlowObs.Add(FlowObs);
     end;
@@ -1196,8 +1206,8 @@ begin
     Inc(FlowObs.FOtherCell.Layer);
     FlowObs.FName := Format('fb_%s', [Obs.Name]);
     if (FlowObs.FOtherCell.Layer < Model.LayerCount)
-      and ActiveDataArray.BooleanData[FlowObs.FOtherCell.Layer,
-      FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] then
+      and (ActiveDataArray.IntegerData[FlowObs.FOtherCell.Layer,
+      FlowObs.FOtherCell.Row, FlowObs.FOtherCell.Column] > 0) then
     begin
       FFlowObs.Add(FlowObs);
     end;
@@ -1794,7 +1804,7 @@ begin
   FObGeneral := ObGeneral;
   FObsType := ObsType;
   FOutputExtension := OutputExtension;
-  FObsList := ObsList;
+  FGeneralObsList := ObsList;
   FToMvrObsList := ToMvrObsList;
 end;
 
@@ -1823,14 +1833,14 @@ begin
   FNameOfFile := AFileName;
 
   frmProgressMM.AddMessage(StrWritingFlowObserva);
-  Assert((FObsList.Count > 0) or (FToMvrObsList.Count > 0));
+  Assert((FGeneralObsList.Count > 0) or (FToMvrObsList.Count > 0));
   Model.AddModelInputFile(FNameOfFile);
 
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
     WriteOptions;
-    WriteFlowObs(FObsType, FObsList, FToMvrObsList);
+    WriteFlowObs(FObsType, FGeneralObsList, FToMvrObsList);
   finally
     CloseFile;
   end;

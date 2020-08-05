@@ -100,6 +100,7 @@ type
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent;
       ScreenObject: TObject);
+    procedure Assign(Source: TPersistent); override;
     property ObGenerals: TObGenerals read GetObGenerals;
     property MawObs: TMawObs read GetMawObs;
     property SfrObs: TSfrObs read GetSfrObs;
@@ -1255,6 +1256,15 @@ end;
 function TMf6CalibrationObservations.Add: TMf6CalibrationObs;
 begin
   result := inherited Add as TMf6CalibrationObs;
+end;
+
+procedure TMf6CalibrationObservations.Assign(Source: TPersistent);
+begin
+  if Source is TMf6CalibrationObservations then
+  begin
+    MultiLayer := TMf6CalibrationObservations(Source).MultiLayer;
+  end;
+  inherited;
 end;
 
 constructor TMf6CalibrationObservations.Create(

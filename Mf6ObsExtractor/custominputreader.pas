@@ -1258,9 +1258,9 @@ begin
   Location3 := Locations[2];
   SetLength(Corners, 4);
   Corners[0] := Location1.APoint;
-  Corners[2] := Location2.APoint;
-  Corners[3] := Location3.APoint;
-  Corners[4] := Location1.APoint;
+  Corners[1] := Location2.APoint;
+  Corners[2] := Location3.APoint;
+  Corners[3] := Location1.APoint;
   Triangle := TSimplePolygon.Create(Corners);
   try
     if Triangle.PointInside(NewLocation.APoint) then

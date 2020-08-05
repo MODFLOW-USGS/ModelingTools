@@ -131,6 +131,10 @@ implementation
 uses
   ModelMuseUtilities;
 
+const
+  ValidFirstChar = ['A'..'Z', 'a'..'z', '_'];
+  ValidChar = ValidFirstChar + ['0'..'9'];
+
 function PrefixedObsName(Prefix: string; ObjectIndex: Integer; Obs: TCustomObservationItem): string;
 var
   MaxPrefixLength: Integer;
@@ -220,8 +224,34 @@ begin
 end;
 
 procedure TCustomObservationItem.SetName(const Value: string);
+var
+  NewName: string;
+  CharIndex: Integer;
 begin
-  SetStringProperty(FName, Value);
+  NewName := Value;
+  if NewName = '' then
+  begin
+    NewName := '_';
+  end
+  else
+  begin
+    if not (NewName[1] in ValidChar) then
+    begin
+      NewName[1] := '_'
+    end
+    else if not (NewName[1] in ValidFirstChar) then
+    begin
+      NewName := '_' + NewName;
+    end;
+    for CharIndex := 2 to Length(NewName) do
+    begin
+      if not (NewName[CharIndex] in ValidChar) then
+      begin
+        NewName[CharIndex] := '_';
+      end;
+    end;
+  end;
+  SetStringProperty(FName, NewName);
 end;
 
 procedure TCustomObservationItem.SetObservedValue(const Value: double);

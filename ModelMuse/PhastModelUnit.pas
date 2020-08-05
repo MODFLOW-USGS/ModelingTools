@@ -9230,13 +9230,12 @@ const
   //                be created incorrectly.
   //    '4.2.0.34' Bug fix: Fixed bug in animating contours.
   //               Enhancement: added SUTRA_MeshEdgeNode function.
-
-  //               Bug fix: If the user attempts to import a mesh that is not
+  //    '4.2.0.35' Bug fix: If the user attempts to import a mesh that is not
   //                in the correct format, ModelMuse now displays an appropriate
   //                error message instead of generating a bug report.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.34';
+  IModelVersion = '4.2.0.35';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

@@ -816,7 +816,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         TabOrder = 0
         object splitterBoundary: TSplitter
           Left = 1
-          Top = 262
+          Top = 251
           Width = 761
           Height = 5
           Cursor = crVSplit
@@ -876,7 +876,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Left = 1
           Top = 42
           Width = 761
-          Height = 220
+          Height = 209
           Align = alClient
           ColCount = 4
           Enabled = False
@@ -999,9 +999,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         end
         object plBoundary: TJvPageList
           Left = 1
-          Top = 267
+          Top = 256
           Width = 761
-          Height = 254
+          Height = 265
           ActivePage = jvspModflow6Obs
           PropagateEnable = False
           Align = alBottom
@@ -1009,15 +1009,17 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspNone'
+            ExplicitHeight = 254
           end
           object jvspPhastSpecifiedHead: TJvStandardPage
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspPhastSpecifiedHead'
+            ExplicitHeight = 254
             object lblSolutionType: TLabel
               Left = 16
               Top = 6
@@ -1044,8 +1046,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspPhastLeaky'
+            ExplicitHeight = 254
             object lblLeakyHydraulicConductivity: TLabel
               Left = 8
               Top = 12
@@ -1081,8 +1084,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspPhastRiver'
+            ExplicitHeight = 254
             object lblRiverDescripton: TLabel
               Left = 8
               Top = 16
@@ -1164,15 +1168,17 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspPhastWell'
+            ExplicitHeight = 254
             object pnlPhastWell: TPanel
               Left = 0
               Top = 0
               Width = 369
-              Height = 254
+              Height = 265
               Align = alLeft
               TabOrder = 0
+              ExplicitHeight = 254
               object lblWellDescription: TLabel
                 Left = 3
                 Top = 9
@@ -1276,7 +1282,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               Left = 369
               Top = 0
               Width = 392
-              Height = 254
+              Height = 265
               Align = alClient
               ColCount = 3
               DefaultColWidth = 20
@@ -1374,6 +1380,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   AutoAdjustColWidths = True
                 end>
               WordWrapRowCaptions = False
+              ExplicitHeight = 254
               ColWidths = (
                 20
                 26
@@ -1387,8 +1394,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspConductanceInterp'
+            ExplicitHeight = 254
             object lblConductanceInterpretation: TLabel
               Left = 5
               Top = 6
@@ -1414,22 +1422,24 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowSFR'
+            ExplicitHeight = 254
             object pcSFR: TPageControl
               Left = 0
               Top = 0
               Width = 761
-              Height = 254
+              Height = 265
               ActivePage = tabSfrBasic
               Align = alClient
               TabOrder = 0
+              ExplicitHeight = 254
               object tabSfrBasic: TTabSheet
                 Caption = 'Basic'
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 object lblSfrSegmentNumber: TLabel
                   Left = 13
                   Top = 9
@@ -1522,7 +1532,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 object lblSaturatedVolumetricWater: TLabel
                   Left = 3
                   Top = 6
@@ -1586,8 +1596,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowLAK'
+            ExplicitHeight = 254
             object LblLakeID: TLabel
               Left = 13
               Top = 9
@@ -1649,8 +1660,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowDRT'
+            ExplicitHeight = 254
             object lblConductanceInterpretationDRT: TLabel
               Left = 5
               Top = 6
@@ -1870,8 +1882,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowHFB'
+            ExplicitHeight = 254
             object lblHydraulicConductivity: TLabel
               Left = 8
               Top = 14
@@ -1924,8 +1937,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowHOB'
+            ExplicitHeight = 254
             object lblHeadObservationNames: TLabel
               Left = 13
               Top = 9
@@ -2003,16 +2017,18 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowMNW2'
+            ExplicitHeight = 254
             object pcMnw2: TPageControl
               Left = 0
               Top = 0
               Width = 761
-              Height = 254
+              Height = 265
               ActivePage = tabBasic
               Align = alClient
               TabOrder = 0
+              ExplicitHeight = 254
               object tabBasic: TTabSheet
                 HelpType = htKeyword
                 HelpKeyword = 'MNW2_Basic_Tab'
@@ -2020,7 +2036,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 object lblWellId: TLabel
                   Left = 3
                   Top = 6
@@ -2192,7 +2208,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 object lblWellRadius: TLabel
                   Left = 3
                   Top = 6
@@ -2300,7 +2316,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 object lblReferenceHead: TLabel
                   Left = 8
                   Top = 6
@@ -2364,8 +2380,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowSTR'
+            ExplicitHeight = 254
             object lblConductanceInterpSTR: TLabel
               Left = 12
               Top = 52
@@ -2420,8 +2437,9 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspFootprintWell'
+            ExplicitHeight = 254
             object lblFootprintWell: TLabel
               Left = 13
               Top = 9
@@ -2441,7 +2459,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
+            ExplicitHeight = 254
             object lblCfpDiameter: TLabel
               Left = 8
               Top = 14
@@ -2584,22 +2603,24 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowSFR_MF6'
+            ExplicitHeight = 254
             object pgcSfrMf6: TPageControl
               Left = 0
               Top = 0
               Width = 761
-              Height = 254
+              Height = 265
               ActivePage = tabSfrMf6Properties
               Align = alClient
               TabOrder = 0
+              ExplicitHeight = 254
               object tabSfrMf6Properties: TTabSheet
                 Caption = 'Properties'
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 object lblSegNum: TLabel
                   Left = 3
                   Top = 16
@@ -2711,18 +2732,18 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 inline frameDownstreamSegmentsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
                   Width = 753
-                  Height = 221
+                  Height = 232
                   Align = alClient
                   TabOrder = 0
                   ExplicitWidth = 753
                   ExplicitHeight = 221
                   inherited Panel: TPanel
-                    Top = 180
+                    Top = 191
                     Width = 753
                     ExplicitTop = 180
                     ExplicitWidth = 753
@@ -2759,7 +2780,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   end
                   inherited Grid: TRbwDataGrid4
                     Width = 753
-                    Height = 180
+                    Height = 191
                     Columns = <
                       item
                         AutoAdjustRowHeights = True
@@ -2802,18 +2823,18 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 inline frameDiversionsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
                   Width = 753
-                  Height = 221
+                  Height = 232
                   Align = alClient
                   TabOrder = 0
                   ExplicitWidth = 753
                   ExplicitHeight = 221
                   inherited Panel: TPanel
-                    Top = 180
+                    Top = 191
                     Width = 753
                     ExplicitTop = 180
                     ExplicitWidth = 753
@@ -2851,7 +2872,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   end
                   inherited Grid: TRbwDataGrid4
                     Width = 753
-                    Height = 180
+                    Height = 191
                     ColCount = 2
                     Columns = <
                       item
@@ -2924,22 +2945,24 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             Caption = 'jvspModflowMAW'
+            ExplicitHeight = 254
             object pgcModflowMAW: TPageControl
               Left = 0
               Top = 0
               Width = 761
-              Height = 254
+              Height = 265
               ActivePage = tabMawBasic
               Align = alClient
               TabOrder = 0
+              ExplicitHeight = 254
               object tabMawBasic: TTabSheet
                 Caption = 'Basic'
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 object lblMawRadius: TLabel
                   Left = 15
                   Top = 14
@@ -3009,18 +3032,18 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 ExplicitLeft = 0
                 ExplicitTop = 0
                 ExplicitWidth = 0
-                ExplicitHeight = 0
+                ExplicitHeight = 221
                 inline frameMawWellScreens: TframeGrid
                   Left = 0
                   Top = 0
                   Width = 753
-                  Height = 221
+                  Height = 232
                   Align = alClient
                   TabOrder = 0
                   ExplicitWidth = 753
                   ExplicitHeight = 221
                   inherited Panel: TPanel
-                    Top = 180
+                    Top = 191
                     Width = 753
                     ExplicitTop = 180
                     ExplicitWidth = 753
@@ -3057,7 +3080,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   end
                   inherited Grid: TRbwDataGrid4
                     Width = 753
-                    Height = 180
+                    Height = 191
                     ColCount = 4
                     Columns = <
                       item
@@ -3166,7 +3189,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Left = 0
             Top = 0
             Width = 761
-            Height = 254
+            Height = 265
             object lblTypesOfFlowObservation: TLabel
               Left = 13
               Top = 117
@@ -3183,10 +3206,17 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             end
             object lblBoundaryFlowObservations: TLabel
               Left = 367
-              Top = 68
+              Top = 67
               Width = 190
               Height = 18
               Caption = 'Boundary flow observations'
+            end
+            object lblMultilayer: TLabel
+              Left = 226
+              Top = 239
+              Width = 65
+              Height = 18
+              Caption = 'Multilayer'
             end
             object cbHeadObservation: TCheckBox
               Left = 13
@@ -3249,6 +3279,16 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 'RIV flows'
                 'WEL flows')
               TabOrder = 5
+            end
+            object comboMultilayer: TComboBox
+              Left = 13
+              Top = 238
+              Width = 207
+              Height = 26
+              TabOrder = 6
+              Items.Strings = (
+                'False'
+                'True')
             end
           end
         end

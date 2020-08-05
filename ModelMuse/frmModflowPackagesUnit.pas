@@ -319,6 +319,7 @@ type
     procedure framePackageSfrMF6rcSelectionControllerEnabledChange(
       Sender: TObject);
     procedure framePkgSMSrcSelectionControllerEnabledChange(Sender: TObject);
+    procedure btnCancelClick(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -964,6 +965,13 @@ begin
   end;
 end;
 
+procedure TfrmModflowPackages.btnCancelClick(Sender: TObject);
+begin
+  Handle;
+  inherited;
+
+end;
+
 procedure TfrmModflowPackages.btnOKClick(Sender: TObject);
 var
   NeedToDefineFluxObservations: Boolean;
@@ -972,7 +980,11 @@ var
   SwtPackage: TSwtPackageSelection;
   FarmProcess: TFarmProcess;
 begin
+  // calling Handle here MIGHT keep the form from being unresponsive when it is
+  // left open for a long time.
+  Handle;
   inherited;
+
   if DuplicateParameterNames then
   begin
     ModalResult := mrNone;
@@ -1691,6 +1703,7 @@ end;
 procedure TfrmModflowPackages.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
+  Handle;
   inherited;
   IsLoaded := False;
 end;

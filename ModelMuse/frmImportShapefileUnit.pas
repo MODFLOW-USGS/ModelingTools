@@ -520,6 +520,8 @@ type
     comboNameAttribute: TComboBox;
     lblNameAttribute: TLabel;
     cbLockObject: TCheckBox;
+    comboMultilayer: TComboBox;
+    lblMultilayer: TLabel;
     // @name edits the formula in @link(edImportCriterion).
     procedure btnImportCriterionClick(Sender: TObject);
     // @name sets all the checkboxes to checked
@@ -3197,6 +3199,7 @@ begin
       CalibObs.ObservedValue := ObsValue;
       CalibObs.Weight := ObsWeight;
     end;
+    CalibrationObservations.MultiLayer := GetBooleanValueFromText(comboMultilayer.Text);
   end;
 //  TMf6PestObsColumns = (mpocName, mpocType, mpocTime, mpocValue, mpocWeight);
 
@@ -4543,6 +4546,9 @@ begin
     rdgBoundaryConditions.Enabled := False;
     rdgBoundaryConditions.Visible := False;
   end;
+
+  comboMultilayer.Items.Assign(FBooleanFieldNames)
+
 //  comboMf6ObsElevation.Items := FRealFieldGlobalsAndDataSetsNames;
 //  comboMf6ObsLayer.Items := FIntegerFieldNames
 end;

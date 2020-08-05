@@ -18,8 +18,11 @@ type
     procedure frameObservationsGridBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
     procedure FrameResize(Sender: TObject);
+    procedure frameObservationsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
   private
     { Private declarations }
+    procedure EnableMultiLayer;
   protected
     procedure SetObsColumnCaptions; override;
     procedure GetDirectObs(Observations: TCustomComparisonCollection); override;
@@ -47,6 +50,36 @@ resourcestring
 {$R *.dfm}
 
 { TframePestObsMf6 }
+
+procedure TframePestObsMf6.EnableMultiLayer;
+var
+  RowIndex: Integer;
+  ObSeries: TObSeries;
+  ShouldEnable: Boolean;
+  ObTypeName: string;
+  ObGen: TObGeneral;
+begin
+  ShouldEnable := False;
+  for RowIndex := 0 to frameObservations.seNumber.AsInteger do
+  begin
+    if TryGetObsSeries(frameObservations.Grid.Cells[Ord(mp6ObsSeries),RowIndex], ObSeries) then
+    begin
+      if ObSeries = osGeneral then
+      begin
+        ObTypeName := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
+        if TryGetGenOb(ObTypeName, ObGen) then
+        begin
+          if ObGen in [ogHead, ogDrawdown] then
+          begin
+            ShouldEnable := True;
+            break;
+          end;
+        end;
+      end;
+    end;
+  end;
+  cbMultilayer.Enabled := ShouldEnable;
+end;
 
 procedure TframePestObsMf6.frameObservationsGridBeforeDrawCell(Sender: TObject;
   ACol, ARow: Integer);
@@ -240,10 +273,18 @@ begin
   end;
 end;
 
+procedure TframePestObsMf6.frameObservationsGridSetEditText(Sender: TObject;
+  ACol, ARow: Integer; const Value: string);
+begin
+  inherited;
+  EnableMultiLayer;
+end;
+
 procedure TframePestObsMf6.FrameResize(Sender: TObject);
 begin
   inherited;
-  cbMultilayer.Parent := frameObservations.Panel
+  cbMultilayer.Parent := frameObservations.Panel;
+  cbMultilayer.Top := frameObservations.lbNumber.Top;
 end;
 
 procedure TframePestObsMf6.GetDirectObs(
@@ -267,6 +308,7 @@ begin
     frameObservations.Grid.Cells[Ord(pm6Comment), ItemIndex + 1] := Obs.Comment;
   end;
   cbMultilayer.Checked := (Observations as TMf6CalibrationObservations).MultiLayer;
+  EnableMultiLayer;
 end;
 
 procedure TframePestObsMf6.SetDirectObs(
