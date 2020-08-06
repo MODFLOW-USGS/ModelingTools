@@ -2302,6 +2302,9 @@ resourcestring
   'og box, you can also try unchecking the "Save data set values" check box.';
   StrDoYouWantToConveChd = 'Do you want to convert the CHD boundaries in MOD' +
   'FLOW-2005 to the CHD boundaries in MODFLOW 6?';
+  StrSomethingWentWrong = 'Something went wrong while trying to save your fi' +
+  'le. The error message was "%0:s". Try saving the file as a .bin or .mmZli' +
+  'b instead of a %1:s file.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -5721,10 +5724,19 @@ begin
           begin
             try
               MemStream.WriteComponent(PhastModel);
-            except on EOutOfMemory do
+            except
+              on EOutOfMemory do
               begin
                 Beep;
-                MessageDlg(Format(StrYouRanOutOfMemor, ['.gpt']), mtError, [mbOK], 0);
+                MessageDlg(Format(StrYouRanOutOfMemor, ['.gpt']),
+                  mtError, [mbOK], 0);
+                Exit;
+              end;
+              on E: EStreamError do
+              begin
+                Beep;
+                MessageDlg(Format(StrSomethingWentWrong, [E.message, '.gpt']),
+                  mtError, [mbOK], 0);
                 Exit;
               end;
             end;
@@ -5754,10 +5766,18 @@ begin
           begin
             try
               MemStream.WriteComponent(PhastModel);
-            except on EOutOfMemory do
+            except
+              on EOutOfMemory do
               begin
                 Beep;
                 MessageDlg(Format(StrYouRanOutOfMemor, ['.xml']), mtError, [mbOK], 0);
+                Exit;
+              end;
+              on E: EStreamError do
+              begin
+                Beep;
+                MessageDlg(Format(StrSomethingWentWrong, [E.message, '.xml']),
+                  mtError, [mbOK], 0);
                 Exit;
               end;
             end;

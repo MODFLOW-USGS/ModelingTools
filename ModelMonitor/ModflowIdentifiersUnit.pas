@@ -529,6 +529,7 @@ begin
 //  BoundaryIdentifiers.Add('The observation utility is active for');
   BoundaryIdentifiers.Add('RIV NO.');
   BoundaryIdentifiers.Add('GHB NO.');
+  BoundaryIdentifiers.Add('UZF CELLS');
 //  BoundaryIdentifiers.Add('UPDATING STORAGE VALUES');
 //  BoundaryIdentifiers.Add('RIV   -- RIV PACKAGE');
   BoundaryIdentifiers.Add('RCH NO.');

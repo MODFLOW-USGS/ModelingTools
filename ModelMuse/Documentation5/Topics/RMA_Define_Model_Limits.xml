@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RMA: Define Model Limits</title>
   <body>
     <header>
@@ -11,7 +11,7 @@
     <para styleclass="Image"><image src="RmaDomainOutline.bmp" scale="100.00%" styleclass="Image"><title translate="true">See caption</title></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 100. </text><text styleclass="Image Caption" translate="true">Domain outline for the Rocky Mountain Arsenal.</text></para>
     <para styleclass="Figure Referrer"><text styleclass="Figure Referrer" translate="true">When the object is complete, the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Figure Referrer" translate="true"> dialog box will appear (fig. 101). In it name the object &quot;Domain Outline&quot; and check the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Use to set grid cell size</text><text styleclass="Figure Referrer" translate="true"> check box. Then set the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Grid cell size</text><text styleclass="Figure Referrer" translate="true"> to 100. If desired, the user can check the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">Color object line</text><text styleclass="Figure Referrer" translate="true"> check box and choose a color for the line used to draw the object. Then click the </text><text styleclass="Figure Referrer" style="font-weight:bold;" translate="true">OK</text><text styleclass="Figure Referrer" translate="true"> button.</text></para>
-    <para styleclass="Image"><image src="RmaDomainOutlineProperties1.ipp" scale="75.00%" styleclass="Image"><title translate="true">See caption</title></image></para>
+    <para styleclass="Image"><image src="RmaDomainOutlineProperties1.bmp" scale="60.00%" width="707" height="528" styleclass="Image"><title translate="true">See caption</title></image></para>
     <para styleclass="Image Caption"><text styleclass="Image Number" translate="true">Figure 101. </text><text styleclass="Image Caption" style="font-weight:bold;" translate="true">Object Properties</text><text styleclass="Image Caption" translate="true"> dialog box.</text></para>
   </body>
 </topic>

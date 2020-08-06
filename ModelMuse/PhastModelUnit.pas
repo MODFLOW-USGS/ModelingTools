@@ -9234,6 +9234,10 @@ const
   //                in the correct format, ModelMuse now displays an appropriate
   //                error message instead of generating a bug report.
 
+  //               Bug fix: When creating a new MODFLOW model, the user
+  //                specified length and time units were not applied if the user
+  //                clicked the "No Grid" button.
+
   // version number of ModelMuse.
   IModelVersion = '4.2.0.35';
   StrPvalExt = '.pval';

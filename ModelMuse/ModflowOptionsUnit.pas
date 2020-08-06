@@ -139,8 +139,8 @@ uses
   frmErrorsAndWarningsUnit, System.Math;
 
 const
-  DefaultHNoFlow: real = -2e20;
-  DefaultHDry: real = -1e20;
+  DefaultHNoFlow: real = -1e20;
+  DefaultHDry: real = -2e20;
 
 resourcestring
   SfrError = 'SFR Error';

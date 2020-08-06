@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: Newton Formulation</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example uses the Newton formulation of the groundwater flow equation. To activate it, select &quot;Model|MODFLOW Options&quot;, go to the &quot;Wetting&quot; tab, and check the check box for the Newton formulation. Then click OK to close the dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This example uses the Newton formulation of the groundwater-flow equation. To activate it, select &quot;Model|MODFLOW Options,&quot; go to the &quot;Wetting&quot; tab, and check the check box for </text><text styleclass="Strong" translate="true">Use Newton formulation</text><text styleclass="Normal" translate="true">. Then click OK to close the dialog box.</text></para>
     <para styleclass="Normal"><image src="CSubExampleNewton.png" scale="60.00%" width="327" height="325" styleclass="Image Caption"><title translate="true">Newton formulation</title></image></para>
   </body>
 </topic>

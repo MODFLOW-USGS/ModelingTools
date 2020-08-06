@@ -9,11 +9,11 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">InterpolatedVertexValue</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Strong" translate="true">InterpolatedVertexValue</text><text styleclass="Normal" translate="true">(Key) interpolates along the length of an object between nodes that have vertex values associated with &quot;Key&quot;. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">InterpolatedVertexValue</text><text styleclass="Normal" translate="true">(Key) interpolates along the length of an object between nodes that have vertex values associated with &quot;Key.&quot; </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Vertex Values are assigned using the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Vertex_Values_Dialog_Box" styleclass="Strong" translate="true">Vertex Values</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">A typical use of </text><text styleclass="Strong" translate="true">InterpolatedVertexValue</text><text styleclass="Normal" translate="true"> would be to assign river or drain elevations by interpolating between the elevations at several points where the elevation had been measured. The figure below illustrates this. The grid is colored with the drain elevation. The formula for the drain elevation was set to </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">InterpolatedVertexValue(&quot;Elevation&quot;)</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each of the three selected points (white diamond symbols) in the illustration had a vertex value associated with it using the Key &quot;Elevation&quot;. From upper left to lower right the values were 10, 3, and 1.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each of the three selected points (white diamond symbols) in the illustration had a vertex value associated with it using the Key &quot;Elevation.&quot; From upper left to lower right the values were 10, 3, and 1.</text></para>
     <para></para>
     <para styleclass="Normal"><image src="VertexInterpolateExample.bmp" scale="100.00%" styleclass="Image Caption"></image></para>
     <para styleclass="Normal"><text styleclass="Image Caption" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="VertexInterpolate" styleclass="Image Caption" translate="true">VertexInterpolate</link></para>

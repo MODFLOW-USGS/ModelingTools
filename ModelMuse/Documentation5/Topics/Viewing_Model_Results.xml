@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Viewing Model Results</title>
   <body>
     <header>
@@ -33,6 +33,6 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">In addition to heads, ModelMuse can also import drawdown and flow terms so that the user can plot them. To import them, the user merely needs to select the appropriate file to import. For time-series plots, a separate program, GW_Chart (Winston, 2000), can be used (http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html).</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In addition to heads, ModelMuse can also import drawdown and flow terms so that the user can plot them. To import them, the user merely needs to select the appropriate file to import. For time-series plots, a separate program, GW_Chart (Winston, 2000), can be used (</text><link displaytype="text" defaultstyle="true" type="weblink" href="http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html" target="_blank" styleclass="Normal" translate="true">http://water.usgs.gov/nrp/gwsoftware/GW_Chart/GW_Chart.html</link><text styleclass="Normal" translate="true">).</text></para>
   </body>
 </topic>

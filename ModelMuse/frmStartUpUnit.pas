@@ -1354,6 +1354,8 @@ begin
   if frmGoPhast.ModelSelection in ModflowSelection then
   begin
     SetUpModflowLayers(0, 0, ModelHeight);
+    frmGoPhast.PhastModel.ModflowOptions.LengthUnit := comboLengthUnit.ItemIndex;
+    frmGoPhast.PhastModel.ModflowOptions.TimeUnit := comboTimeUnit.ItemIndex;
   end;
   frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
   frmGoPhast.SynchronizeViews(vdTop);

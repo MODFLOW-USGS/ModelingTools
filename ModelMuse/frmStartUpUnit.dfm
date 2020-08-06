@@ -111,10 +111,6 @@ inherited frmStartUp: TfrmStartUp
     object tabGeoRef: TTabSheet
       Caption = 'tabGeoRef'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object grpGeoRef: TGroupBox
         Left = 0
         Top = 0
@@ -232,8 +228,6 @@ inherited frmStartUp: TfrmStartUp
       HelpKeyword = 'Initial_Grid_Dialog_Box'
       Caption = 'tabInitialGrid'
       ImageIndex = 1
-      ExplicitWidth = 296
-      ExplicitHeight = 121
       object gbInitialGrid: TGroupBox
         Left = 0
         Top = 0
@@ -242,8 +236,6 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
-        ExplicitWidth = 296
-        ExplicitHeight = 121
         object lblZDist: TLabel
           Left = 520
           Top = 110
@@ -424,10 +416,6 @@ inherited frmStartUp: TfrmStartUp
       HelpKeyword = 'Initial_Grid_Dialog_Box'
       Caption = 'tabInitialModflowGrid'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object gbInitialGridModflow: TGroupBox
         Left = 0
         Top = 41
@@ -660,10 +648,6 @@ inherited frmStartUp: TfrmStartUp
     object tabInitialSutraMesh: TTabSheet
       Caption = 'tabInitialSutraMesh'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         743
         326)
@@ -969,10 +953,6 @@ inherited frmStartUp: TfrmStartUp
       HelpKeyword = 'Initial_Grid_Dialog_Box_for_Fo'
       Caption = 'tabInitialGridFootprint'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object gbFootprint: TGroupBox
         Left = 0
         Top = 0

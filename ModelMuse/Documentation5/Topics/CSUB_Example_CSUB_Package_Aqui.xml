@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CSUB Example: CSUB Package Aquifer Properties</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The CSUB package defines some data sets that apply to all active cells in the model and other that only apply to individual interbed cells. In this example, the following properties in the CSUB package will apply to all cells.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The CSUB package defines some data sets that apply to all active cells in the model and others that only apply to individual interbed cells. In this example, the following properties in the CSUB package will apply to all cells.</text></para>
     <para styleclass="Normal"><table styleclass="Default" rowcount="5" colcount="5" style="cell-padding:2px; cell-spacing:2px; border-width:1px; border-spacing:2px; cell-border-width:1px; border-color:#000000; border-style:solid;">
       <tr style="vertical-align:top">
         <td>

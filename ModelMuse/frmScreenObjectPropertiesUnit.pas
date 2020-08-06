@@ -24274,8 +24274,8 @@ begin
       begin
         for ColIndex := 3 to Frame.rdgModflowBoundary.ColCount - 1 do
         begin
-          if Odd(ColIndex) and
-            (Frame.rdgModflowBoundary.Cells[ColIndex,RowIndex] = '') then
+          if Odd(ColIndex) {and
+            (Frame.rdgModflowBoundary.Cells[ColIndex,RowIndex] = '')} then
           begin
             Frame.rdgModflowBoundary.Cells[ColIndex,RowIndex] :=
               Frame.rdgModflowBoundary.Cells[ColIndex-1,RowIndex];

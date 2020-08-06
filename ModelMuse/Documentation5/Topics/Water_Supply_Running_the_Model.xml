@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Water Supply: Executing the Model</title>
   <body>
     <header>
       <para style="margin-bottom:10px; line-height:2.0;"><text styleclass="Heading1" translate="true">Water Supply: Executing the Model</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">To execute the model select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Export|MODFLOW Input Files</text><text styleclass="Normal" translate="true">. If ModelMuse doesn&apos;t know where to find MODFLOW, it will prompt your for its location. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To execute the model select </text><text styleclass="Normal" style="font-weight:bold;" translate="true">File|Export|MODFLOW Input Files</text><text styleclass="Normal" translate="true">. If ModelMuse doesn&apos;t know where to find MODFLOW, it will prompt you for its location. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">You may get an error message about some of the river cells being outside the grid. If so, you can ignore the problem for this model.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">After ModelMuse exports the MODFLOW input files </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Appendix_1_ModelMonitor" styleclass="Normal" style="font-weight:bold;" translate="true">ModelMonitor</link><text styleclass="Normal" translate="true"> will start running MODFLOW. The percent discrepancy in the water budget is displayed on the </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Results</text><text styleclass="Normal" translate="true"> tab of </text><text styleclass="Normal" style="font-weight:bold;" translate="true">ModelMonitor</text><text styleclass="Normal" translate="true">. If the percent discrepancy is greater than 1% in any time step, this is cause for concern. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">When ModelMonitor is closed, the listing file will open in Notepad. Near the end of the listing file, MODFLOW will list the simulated values at the three observation wells. Compare those values to the observed values. If desired, it is possible to copy those values into the Observations spreadsheet and graph them together with the observed values to check their similarity.</text></para>
