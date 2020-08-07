@@ -131,6 +131,7 @@ type
     // TCustomMF_BoundColl.SetBoundaryStartAndEndTime)
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
+    function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
     property AssignmentLocation: TAssignmentLocation read FAssignmentLocation
       write FAssignmentLocation;
@@ -839,6 +840,11 @@ begin
   SetLength((Boundaries[ItemIndex, AModel] as TSfrUnsatSegmentStorage).
     FSrfUnsatSegmentArray, BoundaryCount);
   inherited;
+end;
+
+function TSfrUnsatSegmentCollection.ShouldDeleteItemsWithZeroDuration: Boolean;
+begin
+  result := False;
 end;
 
 { TSfrUnsatSegment_Cell }

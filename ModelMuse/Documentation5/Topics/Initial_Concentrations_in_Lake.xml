@@ -7,6 +7,6 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Initial Concentrations in Lakes in GWT Model</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In the model, both of the lakes have initial concentrations of zero. To specify the initial concentrations, edit the two objects that define lakes in the Object Properties dialog box and assign the initial lake concentration in the Lake Transport package. It would also be possible to specify solute added to the lake via precipitation or runoff on the </text><text styleclass="Strong" translate="true">Precipitation concentration</text><text styleclass="Normal" translate="true"> and </text><text styleclass="Strong" translate="true">Runoff concentration</text><text styleclass="Normal" translate="true"> tabs but those are not needed in this model.</text></para>
-    <para styleclass="Normal"><image src="GWT_LakeConcentration.png" scale="60.00%" width="707" height="528" styleclass="Image Caption"><title translate="true">Object Properties dialog box showling how to specify the lake initial concentration</title></image></para>
+    <para styleclass="Normal"><image src="GWT_LakeConcentration.png" scale="50.00%" width="589" height="440" styleclass="Image Caption"><title translate="true">Object Properties dialog box showling how to specify the lake initial concentration</title></image></para>
   </body>
 </topic>

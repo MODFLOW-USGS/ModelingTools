@@ -41059,7 +41059,11 @@ begin
 
   if FModflowSfrBoundary <> nil then
   begin
-    FModflowSfrBoundary.Values.ReplaceATime(OldTime, NewTime);
+  // FModflowSfrBoundary.Values only ever has one item and its duration
+  // doesn't need to be altered because its starting and ending times shouldn't
+  // be used.
+//    FModflowSfrBoundary.Values.ReplaceATime(OldTime, NewTime);
+
     FModflowSfrBoundary.ChannelValues.ReplaceATime(OldTime, NewTime);
     FModflowSfrBoundary.UpstreamSegmentValues.ReplaceATime(OldTime, NewTime);
     FModflowSfrBoundary.DownstreamSegmentValues.ReplaceATime(OldTime, NewTime);
@@ -41069,7 +41073,7 @@ begin
     FModflowSfrBoundary.SegmentFlows.ReplaceATime(OldTime, NewTime);
     FModflowSfrBoundary.EquationValues.ReplaceATime(OldTime, NewTime);
     FModflowSfrBoundary.ParamIcalc.ReplaceATime(OldTime, NewTime);
-    FModflowSfrBoundary.EquationValues.ReplaceATime(OldTime, NewTime);
+//    FModflowSfrBoundary.EquationValues.ReplaceATime(OldTime, NewTime);
   end;
 
   if FModflowStrBoundary <> nil then
@@ -41639,7 +41643,7 @@ begin
 
   if FModflowSfrBoundary <> nil then
   begin
-    Result := FModflowSfrBoundary.Values.UsesATime(ATime);
+    Result := FModflowSfrBoundary.ParamIcalc.UsesATime(ATime);
     if Result then
     begin
       Exit;

@@ -815,6 +815,7 @@ procedure TSfrBoundary.UpdateTimes(Times: TRealList;
 begin
   // it isn't clear whether or not inherited should be called.
   inherited;
+
   AddBoundaryTimes(ParamIcalc, Times, StartTestTime, EndTestTime,
     StartRangeExtended, EndRangeExtended);
 //  AddBoundaryTimes(ChannelValues, Times, StartTestTime, EndTestTime,

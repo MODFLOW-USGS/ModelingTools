@@ -19,6 +19,6 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">9000</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">9131</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Select Model|MODFLOW Output Control and select MT3D. Choose to print and save data at specified times. Set the frequency of saving mass balance to 10. Enter the output times into the table. (You can use copy and paste the times into the table. The number of rows will be automatically increased to accommodate the data you paste into it.)</text></para>
-    <para styleclass="Normal"><image src="GWT_OutputControl.png" scale="60.00%" width="545" height="560" styleclass="Image Caption"><title translate="true">Specifying MT3D-USGS output times in the MODFLOW Output Control Dialog Box</title></image><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><image src="GWT_OutputControl.png" scale="50.00%" width="454" height="467" styleclass="Image Caption"><title translate="true">Specifying MT3D-USGS output times in the MODFLOW Output Control Dialog Box</title></image><text styleclass="Normal" translate="true">.</text></para>
   </body>
 </topic>

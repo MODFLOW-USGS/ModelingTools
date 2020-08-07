@@ -9237,6 +9237,11 @@ const
   //               Bug fix: When creating a new MODFLOW model, the user
   //                specified length and time units were not applied if the user
   //                clicked the "No Grid" button.
+  //               Bug fix: Fixed a bug that could cause an invalid warning to
+  //                be issued about transient SFR items with a duration of zero.
+  //               Bug fix: Changing a time in the MODFLOW Time dialog box now
+  //                causes corresponding times defined for SFR package to be
+  //                updated.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.35';
