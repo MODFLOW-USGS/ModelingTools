@@ -36,6 +36,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">With MODFLOW 6 observations, a prefix is added before each observation name to ensure that all the observation names are unique.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse no longer produces times series files for parameters. Instead, parameter values are incorporated into the values in the package input file.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The ActiveOnLayer function was changed for MODFLOW 6 models to return True in the IDOMAIN data set is greater than 0.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">When exporting a MODFLOW-OWHM model containing parameters, the user is given the opportunity to turn off printing cell lists.</text></para>
               </td>
             </tr>
           </table></para>

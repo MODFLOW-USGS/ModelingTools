@@ -9241,6 +9241,9 @@ const
   //               Bug fix: Changing a time in the MODFLOW Time dialog box now
   //                causes corresponding times defined for SFR package to be
   //                updated.
+  //               Change: When exporting a MODFLOW-OWHM model containing
+  //                parameters, the user is given the opportunity to turn off
+  //                printing cell lists.
 
   // version number of ModelMuse.
   IModelVersion = '4.2.0.36';
