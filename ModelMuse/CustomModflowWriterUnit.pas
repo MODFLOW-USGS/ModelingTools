@@ -3459,6 +3459,15 @@ var
 //  ACell: TCellAssignment;
   FlowObs: TBoundaryFlowObservationLocation;
   Mf6Obs: TModflow6Obs;
+  ObsCells: array of array of array of Boolean;
+  BoundaryCells: array of array of array of Boolean;
+  Mf6ObsArray: array of array of array of TModflow6Obs;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
 begin
   frmErrorsAndWarnings.BeginUpdate;
   try
@@ -3475,6 +3484,23 @@ begin
     if not frmProgressMM.ShouldContinue then
     begin
       Exit;
+    end;
+
+    SetLength(ObsCells, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+    SetLength(BoundaryCells, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+    SetLength(Mf6ObsArray, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          ObsCells[LayerIndex, RowIndex, ColIndex] := False;
+          BoundaryCells[LayerIndex, RowIndex, ColIndex] := False;
+          Mf6ObsArray[LayerIndex, RowIndex, ColIndex] := nil;
+        end;
+      end;
     end;
 
     for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
@@ -3503,6 +3529,20 @@ begin
         end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS,
           [ScreenObject.Name]));
+
+        CellList:= TCellAssignmentList.Create;
+        try
+          ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList,
+            alAll, Model);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            BoundaryCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+          end;
+        finally
+          CellList.Free;
+        end;
+
         Boundary.GetCellValues(FValues, FParamValues, Model);
 
         if Mf6ObservationsUsed then
@@ -3562,6 +3602,26 @@ begin
 //            end;
           end;
         end;
+      end
+      else if IsMf6Observation(ScreenObject) then
+      begin
+        CellList:= TCellAssignmentList.Create;
+        try
+          ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList,
+            alAll, Model);
+          for CellIndex := 0 to CellList.Count - 1 do
+          begin
+            ACell := CellList[CellIndex];
+            ObsCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+            if ScreenObject.Modflow6Obs <> nil then
+            begin
+              Mf6ObsArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObject.Modflow6Obs;
+            end;
+          end;
+        finally
+          CellList.Free;
+        end;
+
       end;
     end;
     for ParamIndex := 0 to FParamValues.Count - 1 do
@@ -3580,6 +3640,35 @@ begin
         List.Add(TValueCellList.Create(CellType))
       end;
     end;
+
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to Model.RowCount - 1 do
+      begin
+        for ColIndex := 0 to Model.ColumnCount - 1 do
+        begin
+          if ObsCells[LayerIndex, RowIndex, ColIndex]
+            and BoundaryCells[LayerIndex, RowIndex, ColIndex] then
+          begin
+            FlowObs.FCell.Layer := LayerIndex;
+            FlowObs.FCell.Row := RowIndex;
+            FlowObs.FCell.Column := ColIndex;
+            FlowObs.FMf6Obs := Mf6ObsArray[LayerIndex,
+              RowIndex, ColIndex];
+            if FlowObs.FMf6Obs <> nil then
+            begin
+              FlowObs.FName := FlowObs.FMf6Obs.Name;
+            end;
+            FlowObs.FName := Format('%0:s_%1:d_%2:d_%3:d', [FlowObs.FName, LayerIndex+1, RowIndex+1,ColIndex+1]);
+            FlowObs.FBoundName := '';
+            FlowObsLocations.Add(FlowObs);
+
+          end;
+        end;
+      end;
+    end;
+
+
     if not BoundariesPresent then
     begin
       ShowNoBoundaryError(NoDefinedErrorRoot);

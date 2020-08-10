@@ -25973,6 +25973,9 @@ object TTaskHistory
       Date = 44053.000000000000000000
       Categories.Strings = (
         'Installer'
-        'Bug fix')
+        'Bug fix'
+        'PEST Observations'
+        'PEST'
+        'MF6 Observation Utility')
     end>
 end
