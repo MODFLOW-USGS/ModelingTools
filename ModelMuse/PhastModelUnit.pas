@@ -9233,8 +9233,7 @@ const
   //    '4.2.0.35' Bug fix: If the user attempts to import a mesh that is not
   //                in the correct format, ModelMuse now displays an appropriate
   //                error message instead of generating a bug report.
-
-  //               Bug fix: When creating a new MODFLOW model, the user
+  //    '4.2.0.36' Bug fix: When creating a new MODFLOW model, the user
   //                specified length and time units were not applied if the user
   //                clicked the "No Grid" button.
   //               Bug fix: Fixed a bug that could cause an invalid warning to
@@ -9244,7 +9243,7 @@ const
   //                updated.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.35';
+  IModelVersion = '4.2.0.36';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
