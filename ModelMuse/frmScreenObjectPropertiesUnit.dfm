@@ -2435,7 +2435,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspCHD
+        ActivePage = jvspMf6Obs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -12432,9 +12432,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitWidth = 581
               ExplicitHeight = 405
               inherited tabBasic: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited lblTypesOfFlowObservation: TLabel
                   Width = 183
@@ -12457,9 +12455,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabMAW: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstMAW: TCheckListBox
                   Height = 270
@@ -12468,9 +12464,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabSFR: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstSFR: TCheckListBox
                   Height = 278
@@ -12479,9 +12473,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabLAK: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited chklstLAK: TCheckListBox
                   Height = 366
@@ -12490,9 +12482,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabUZF: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited lblDepthFraction: TLabel
                   Width = 430
@@ -12505,9 +12495,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabCSUB: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
-                ExplicitWidth = 482
                 ExplicitHeight = 414
                 inherited splCSub: TSplitter
                   Top = 309
@@ -12534,7 +12522,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabCalibration: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 371

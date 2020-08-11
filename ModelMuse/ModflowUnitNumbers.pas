@@ -305,6 +305,7 @@ const
   Mt3dFl6Bhd = 26;
   Mt3dDisGrb = 27;
   Mt3dCtsOut = 28;
+  Mt3d_ISSGOUT = 32;
 
 
 const

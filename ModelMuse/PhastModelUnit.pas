@@ -9244,9 +9244,14 @@ const
   //               Change: When exporting a MODFLOW-OWHM model containing
   //                parameters, the user is given the opportunity to turn off
   //                printing cell lists.
+  //    '4.2.0.37' Enhancement: In MT3DMS models, ISSGOUT is now
+  //                specified if the MNW1 package is active. In MT3D-USGS
+  //                models, ISSGOUT is now specified if the MNW1 or MNW2
+  //                packages are active. The output file will have the extension
+  //                .mt_mnw_out.
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.36';
+  IModelVersion = '4.2.0.37';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

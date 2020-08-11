@@ -54,6 +54,7 @@ type
     function ObsFactors: TFluxObservationGroups; override;
   public
     procedure WriteFile(const AFileName: string);
+    // Write flow observation package input for MF2005 etc. but not MF 6
     procedure WriteFluxObservationFile(const AFileName: string;
       Purpose: TObservationPurpose);
   end;

@@ -68,8 +68,6 @@ type
 
   TBoundaryFlowObservationLocationList = TList<TBoundaryFlowObservationLocation>;
 
-
-
   TCustomFileWriter = class(TObject)
   strict private
     // name is the file that is created by @classname.
@@ -407,6 +405,8 @@ type
     FDirectObsLines: TStrings;
     FFileNameLines: TStrings;
     FCalculatedObsLines: TStrings;
+    FMf6ObsArray: TScreenObjectsList3DArray;
+    FScreenObjectLists: TObjectScreenObjectLists;
     function GetOwnsValueContents: Boolean;
     procedure SetOwnsValueContents(const Value: Boolean);
   protected
@@ -485,7 +485,8 @@ type
     class function ObservationOutputExtension: string; virtual;
     // @name returns the name of the Observation input file.
     function ObservationFileName(AFileName: string): string;
-    procedure WriteModflow6FlowObs(FileName: string; EvaluationType: TEvaluationType);
+    procedure WriteModflow6FlowObs(FileName: string;
+      EvaluationType: TEvaluationType);
     function ObsType: string; virtual;
     procedure WriteMF6ObsOption(InputFileName: string);
     procedure WriteBoundName(ACell: TValueCell);
@@ -3405,6 +3406,8 @@ end;
 constructor TCustomTransientWriter.Create(Model: TCustomModel; EvaluationType: TEvaluationType);
 begin
   inherited;
+  FMf6ObsArray := nil;
+  FScreenObjectLists := TObjectScreenObjectLists.Create;
   FValues := TObjectList.Create;
   if Mf6ObservationsUsed then
   begin
@@ -3426,6 +3429,7 @@ begin
 //  FObsLocationCheck.Free;
   FFlowObsLocations.Free;
   FValues.Free;
+  FScreenObjectLists.Free;
   inherited;
 end;
 
@@ -3454,20 +3458,17 @@ var
   Boundary: TModflowBoundary;
   NoAssignmentErrorRoot: string;
   NoDefinedErrorRoot: string;
-//  CellList: TCellAssignmentList;
-//  CellIndex: Integer;
-//  ACell: TCellAssignment;
   FlowObs: TBoundaryFlowObservationLocation;
   Mf6Obs: TModflow6Obs;
   ObsCells: array of array of array of Boolean;
   BoundaryCells: array of array of array of Boolean;
-  Mf6ObsArray: array of array of array of TModflow6Obs;
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
   CellList: TCellAssignmentList;
   CellIndex: Integer;
   ACell: TCellAssignment;
+  ScreenObjectList: TScreenObjectList;
 begin
   frmErrorsAndWarnings.BeginUpdate;
   try
@@ -3488,7 +3489,7 @@ begin
 
     SetLength(ObsCells, Model.LayerCount, Model.RowCount, Model.ColumnCount);
     SetLength(BoundaryCells, Model.LayerCount, Model.RowCount, Model.ColumnCount);
-    SetLength(Mf6ObsArray, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+    SetLength(FMf6ObsArray, Model.LayerCount, Model.RowCount, Model.ColumnCount);
 
     for LayerIndex := 0 to Model.LayerCount - 1 do
     begin
@@ -3498,7 +3499,7 @@ begin
         begin
           ObsCells[LayerIndex, RowIndex, ColIndex] := False;
           BoundaryCells[LayerIndex, RowIndex, ColIndex] := False;
-          Mf6ObsArray[LayerIndex, RowIndex, ColIndex] := nil;
+          FMf6ObsArray[LayerIndex, RowIndex, ColIndex] := nil;
         end;
       end;
     end;
@@ -3574,9 +3575,9 @@ begin
             FlowObs.FMf6Obs := Mf6Obs;
             FlowObs.FBoundName := ScreenObject.Name;
             FlowObsLocations.Add(FlowObs);
-          end
-          else
-          begin
+//          end
+//          else
+//          begin
 //            CellList:= TCellAssignmentList.Create;
 //            try
 //              ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList,
@@ -3591,7 +3592,7 @@ begin
 //                  FlowObs.FName := ObsLocationCheck[ACell.Cell.Layer,
 //                    ACell.Cell.Row, ACell.Cell.Column];
 //                  FlowObs.FBoundName := '';
-//                  FlowObs.FMf6Obs := Mf6ObsArray[ACell.Cell.Layer,
+//                  FlowObs.FMf6Obs := FMf6ObsArray[ACell.Cell.Layer,
 //                  ACell.Cell.Row, ACell.Cell.Column];
 //                  FlowObsLocations.Add(FlowObs);
 //                end;
@@ -3615,13 +3616,21 @@ begin
             ObsCells[ACell.Layer, ACell.Row, ACell.Column] := True;
             if ScreenObject.Modflow6Obs <> nil then
             begin
-              Mf6ObsArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObject.Modflow6Obs;
+              if FMf6ObsArray[ACell.Layer, ACell.Row, ACell.Column] = nil then
+              begin
+                ScreenObjectList := TScreenObjectList.Create;
+                FMf6ObsArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObjectList;
+              end
+              else
+              begin
+                ScreenObjectList := FMf6ObsArray[ACell.Layer, ACell.Row, ACell.Column];
+              end;
+              ScreenObjectList.Add(ScreenObject);
             end;
           end;
         finally
           CellList.Free;
         end;
-
       end;
     end;
     for ParamIndex := 0 to FParamValues.Count - 1 do
@@ -3653,21 +3662,27 @@ begin
             FlowObs.FCell.Layer := LayerIndex;
             FlowObs.FCell.Row := RowIndex;
             FlowObs.FCell.Column := ColIndex;
-            FlowObs.FMf6Obs := Mf6ObsArray[LayerIndex,
+            ScreenObjectList := FMf6ObsArray[LayerIndex,
               RowIndex, ColIndex];
+            FScreenObjectLists.Add(ScreenObjectList);
+            FlowObs.FMf6Obs := ScreenObjectList[0].Modflow6Obs;
             if FlowObs.FMf6Obs <> nil then
             begin
               FlowObs.FName := FlowObs.FMf6Obs.Name;
             end;
-            FlowObs.FName := Format('%0:s_%1:d_%2:d_%3:d', [FlowObs.FName, LayerIndex+1, RowIndex+1,ColIndex+1]);
+            FlowObs.FName := Format('%0:s_%1:d_%2:d_%3:d',
+              [FlowObs.FName, LayerIndex+1, RowIndex+1,ColIndex+1]);
             FlowObs.FBoundName := '';
             FlowObsLocations.Add(FlowObs);
-
+          end
+          else
+          begin
+            FMf6ObsArray[LayerIndex, RowIndex, ColIndex].Free;
+            FMf6ObsArray[LayerIndex, RowIndex, ColIndex] := nil;
           end;
         end;
       end;
     end;
-
 
     if not BoundariesPresent then
     begin
@@ -4310,6 +4325,7 @@ begin
       FlowObsWriter.DirectObsLines := DirectObsLines;
       FlowObsWriter.CalculatedObsLines := CalculatedObsLines;
       FlowObsWriter.FileNameLines := FileNameLines;
+      FlowObsWriter.ScreenObjectsList3DArray := FMf6ObsArray;
       FlowObsWriter.WriteFile(FileName);
     finally
       FlowObsWriter.Free;
@@ -5774,6 +5790,7 @@ begin
 //    FParamValues.Objects[Index].Free;
 //  end;
   FParamValues.Free;
+//  ScreenObjectLists.Free;
 
   inherited;
 end;
@@ -6328,8 +6345,6 @@ begin
                 [ObsGroup.ObservationName, ObserveIndex+1, CalibObs.ObsNameTimeString]);
             end;
           end;
-
-
 //          break;
         end;
       end;
@@ -6354,7 +6369,8 @@ begin
       for ObsIndex := 0 to Obs.Count - 1 do
       begin
         ObsGroup := Obs[ObsIndex];
-        ObserveIndex := ObsGroup.ObservationFactors.IndexOfScreenObject(AScreenObject);
+        ObserveIndex := ObsGroup.ObservationFactors.IndexOfScreenObject(
+          AScreenObject);
         result := (ObserveIndex >= 0);
         if result then
         begin
@@ -6376,7 +6392,6 @@ begin
       end;
     end;
   end;
-
 end;
 
 procedure TFluxObsWriter.WriteObservationDataSet4(ObservationGroup: TFluxObservationGroup;

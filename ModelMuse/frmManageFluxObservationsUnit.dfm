@@ -164,12 +164,16 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           Top = 65
           Width = 653
           Height = 252
-          ActivePage = tabObservationsTimes
+          ActivePage = tabObjects
           Align = alClient
           TabOrder = 1
           object tabObservationsTimes: TTabSheet
             Caption = 'Observation times and values'
             OnResize = tabObservationsTimesResize
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -763,10 +767,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           object tabObjects: TTabSheet
             Caption = 'Objects'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)

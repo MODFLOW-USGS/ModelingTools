@@ -86,9 +86,12 @@ type
     FGeneralObsList: TBoundaryFlowObservationLocationList;
     FToMvrObsList: TBoundaryFlowObservationLocationList;
     FObGeneral: TObGeneral;
+    FScreenObjectsList3DArray: TScreenObjectsList3DArray;
     procedure WriteFlowObs(ObsType: string;
       List, ToMvrList: TBoundaryFlowObservationLocationList);
     procedure WriteSumFormulas;
+    procedure SetScreenObjectsList3DArray(
+      const Value: TScreenObjectsList3DArray);
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType;
@@ -97,6 +100,7 @@ type
       OutputExtension: string; ObGeneral: TObGeneral); reintroduce;
     // @name destroys the current instance of @classname.
     procedure WriteFile(const AFileName: string);
+    property ScreenObjectsList3DArray: TScreenObjectsList3DArray read FScreenObjectsList3DArray write SetScreenObjectsList3DArray;
   end;
 
   TMawObsWriter = class(TCustomMf6ObservationWriter)
@@ -1560,6 +1564,9 @@ var
   CalibObs: TMf6CalibrationObs;
   StartTime: Double;
   Prefix: string;
+  OBSNAME: string;
+  CellName: string;
+  CellNames: TStringList;
 begin
   case FObGeneral of
     ogCHD: Prefix := 'chd_';
@@ -1576,131 +1583,150 @@ begin
   StartTime := Model.ModflowStressPeriods.First.StartTime;
   if (List.count > 0) or (ToMvrList.count > 0) then
   begin
-    ObsPackage := Package as TMf6ObservationUtility;
-    WriteString('BEGIN CONTINUOUS FILEOUT ');
-    OutputFormat := '';
-    case ObsPackage.OutputFormat of
-      ofText:
-        begin
-          OutputExtension := FOutputExtension + '_' + ObsType + '.csv';
-          OutputFormat := 'TEXT';
-        end;
-      ofBinary:
-        begin
-          OutputExtension := FOutputExtension + '_' + ObsType + '.bin';
-          OutputFormat := 'BINARY';
-        end;
-      else
-        Assert(False);
-    end;
-    OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
-    Model.AddModelOutputFile(OutputFileName);
-    if Model.PestUsed then
-    begin
-      Assert(FileNameLines <> nil);
-      FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
-        [ExtractFileName(OutputFileName), OutputFormat]));
-    end;
-    OutputFileName := ExtractFileName(OutputFileName);
-    WriteString(OutputFileName);
-    if ObsPackage.OutputFormat = ofBinary then
-    begin
-      WriteString(' BINARY');
-    end;
-    NewLine;
-
-    for ObsIndex := 0 to List.Count - 1 do
-    begin
-      FlowObs := List[ObsIndex];
-      obsnam := Prefix + FlowObs.FName;
-      if obsnam = Prefix then
-      begin
-        obsnam := Format(Prefix + 'FlowObs%d', [ObsIndex+1]);
+    CellNames := TStringList.Create;
+    try
+      CellNames.Sorted := True;
+      ObsPackage := Package as TMf6ObservationUtility;
+      WriteString('BEGIN CONTINUOUS FILEOUT ');
+      OutputFormat := '';
+      case ObsPackage.OutputFormat of
+        ofText:
+          begin
+            OutputExtension := FOutputExtension + '_' + ObsType + '.csv';
+            OutputFormat := 'TEXT';
+          end;
+        ofBinary:
+          begin
+            OutputExtension := FOutputExtension + '_' + ObsType + '.bin';
+            OutputFormat := 'BINARY';
+          end;
+        else
+          Assert(False);
       end;
-      Assert(Length(obsnam) <= MaxBoundNameLength);
-      WriteString('  ''');
-      WriteString(obsnam);
-      WriteString(''' ');
-      WriteString(ObsType);
-      if FlowObs.FBoundName = '' then
+      OutputFileName := ChangeFileExt(FNameOfFile, OutputExtension);
+      Model.AddModelOutputFile(OutputFileName);
+      if Model.PestUsed then
       begin
-        WriteCell(FlowObs.FCell);
-      end
-      else
+        Assert(FileNameLines <> nil);
+        FileNameLines.Add(Format('FILENAME "%0:s" %1:s',
+          [ExtractFileName(OutputFileName), OutputFormat]));
+      end;
+      OutputFileName := ExtractFileName(OutputFileName);
+      WriteString(OutputFileName);
+      if ObsPackage.OutputFormat = ofBinary then
       begin
-        WriteString(' ');
-        WriteString(FlowObs.FBoundName);
+        WriteString(' BINARY');
       end;
       NewLine;
 
-      if FObGeneral in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
+      for ObsIndex := 0 to List.Count - 1 do
       begin
-        DirectObsLines.Add(Format('  ID %s', [obsnam]));
-        for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
+        FlowObs := List[ObsIndex];
+        obsnam := Prefix + FlowObs.FName;
+        if obsnam = Prefix then
         begin
-          CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
-          if (CalibObs.ObSeries = osGeneral)
-            and (CalibObs.ObGeneral = FObGeneral) then
+          obsnam := Format(Prefix + 'FlowObs%d', [ObsIndex+1]);
+        end;
+        Assert(Length(obsnam) <= MaxBoundNameLength);
+        WriteString('  ''');
+        WriteString(obsnam);
+        WriteString(''' ');
+        WriteString(ObsType);
+        if FlowObs.FBoundName = '' then
+        begin
+          CellName := WriteCellName(FlowObs.FCell);
+          if CellNames.IndexOf(CellName) < 0 then
           begin
-            if CalibObs.Weight > 0 then
+            CellNames.Add(CellName);
+            WriteCell(FlowObs.FCell);
+          end;
+        end
+        else
+        begin
+          WriteString(' ');
+          WriteString(FlowObs.FBoundName);
+        end;
+        NewLine;
+
+        if FObGeneral in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
+        begin
+          DirectObsLines.Add(Format('  ID %s', [obsnam]));
+          for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
+          begin
+            CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
+            if (CalibObs.ObSeries = osGeneral)
+              and (CalibObs.ObGeneral = FObGeneral) then
+            begin
+              OBSNAME := CalibObs.Name;
+              if not (FObGeneral in [ogHead, ogDrawdown])
+                and (FlowObs.FBoundName = '') then
+              begin
+                OBSNAME := Format('%0:s_%1:d_%2:d_%3:d', [OBSNAME,
+                FlowObs.FCell.Layer+1, FlowObs.FCell.Row+1,
+                FlowObs.FCell.Column+1]);
+              end;
+              if CalibObs.Weight > 0 then
+              begin
+                DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
+                  [OBSNAME, CalibObs.Time - StartTime]));
+              end
+              else
+              begin
+                DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
+                  [OBSNAME, CalibObs.Time - StartTime]));
+              end;
+            end;
+          end;
+          DirectObsLines.Add('');
+        end;
+      end;
+
+      for ObsIndex := 0 to ToMvrList.Count - 1 do
+      begin
+        FlowObs := ToMvrList[ObsIndex];
+        obsnam := FlowObs.FName;
+        Assert(Length(obsnam) <= MaxBoundNameLength);
+        WriteString('  ''');
+        WriteString(obsnam);
+        WriteString(''' ');
+        WriteString('to-mvr');
+        if FlowObs.FBoundName = '' then
+        begin
+          WriteCell(FlowObs.FCell);
+        end
+        else
+        begin
+          WriteString(' ');
+          WriteString(FlowObs.FBoundName);
+        end;
+        NewLine;
+
+        if ogMvr in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
+        begin
+          DirectObsLines.Add(Format('  ID %s', [obsnam]));
+          for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
+          begin
+            CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
+            if (CalibObs.ObSeries = osGeneral)
+              and (CalibObs.ObGeneral = ogMvr) then
             begin
               DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                 [CalibObs.Name, CalibObs.Time - StartTime]));
-            end
-            else
-            begin
-              DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
-                [CalibObs.Name, CalibObs.Time - StartTime]));
             end;
           end;
+          DirectObsLines.Add('');
         end;
-        DirectObsLines.Add('');
-      end;
-    end;
 
-    for ObsIndex := 0 to ToMvrList.Count - 1 do
-    begin
-      FlowObs := ToMvrList[ObsIndex];
-      obsnam := FlowObs.FName;
-      Assert(Length(obsnam) <= MaxBoundNameLength);
-      WriteString('  ''');
-      WriteString(obsnam);
-      WriteString(''' ');
-      WriteString('to-mvr');
-      if FlowObs.FBoundName = '' then
-      begin
-        WriteCell(FlowObs.FCell);
-      end
-      else
-      begin
-        WriteString(' ');
-        WriteString(FlowObs.FBoundName);
       end;
+
+      WriteString('END CONTINUOUS');
+      NewLine;
       NewLine;
 
-      if ogMvr in FlowObs.FMf6Obs.CalibrationObservations.ObGenerals then
-      begin
-        DirectObsLines.Add(Format('  ID %s', [obsnam]));
-        for CalibObIndex := 0 to FlowObs.FMf6Obs.CalibrationObservations.Count - 1 do
-        begin
-          CalibObs := FlowObs.FMf6Obs.CalibrationObservations[CalibObIndex];
-          if (CalibObs.ObSeries = osGeneral)
-            and (CalibObs.ObGeneral = ogMvr) then
-          begin
-            DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
-              [CalibObs.Name, CalibObs.Time - StartTime]));
-          end;
-        end;
-        DirectObsLines.Add('');
-      end;
-
+      WriteSumFormulas;
+    finally
+      CellNames.Free;
     end;
-
-    WriteString('END CONTINUOUS');
-    NewLine;
-    NewLine;
-
-    WriteSumFormulas;
   end
 end;
 
@@ -1715,7 +1741,136 @@ var
   OBSNAM: string;
   FormulaBuilder: TStringBuilder;
   ObsNameIndex: Integer;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  CalibObs: TMf6CalibrationObservations;
+  CalibIndex: Integer;
+  ACalibObs: TMf6CalibrationObs;
+  CellList: TCellAssignmentList;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
+  ScreenObjects: TScreenObjectList;
+  OtherScreenObject: TScreenObject;
+  DirectObsName: string;
+  Prefix: string;
+  FoundFirst: Boolean;
 begin
+  case FObGeneral of
+    ogCHD: Prefix := 'chd_';
+    ogDrain: Prefix := 'drn_';
+    ogWell: Prefix := 'wel_';
+    ogGHB: Prefix := 'ghb_';
+    ogRiv: Prefix := 'riv_';
+    ogRch: Prefix := 'rch_';
+    ogEVT: Prefix := 'evt_';
+    ogMvr: Prefix := 'mvr_';
+    else
+      Assert(False);
+  end;
+  if Length(ScreenObjectsList3DArray) > 0 then
+  begin
+    FormulaBuilder := TStringBuilder.Create;
+    try
+      for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+      begin
+        AScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+        if AScreenObject.Deleted then
+        begin
+          Continue;
+        end;
+
+        if (AScreenObject.Modflow6Obs = nil)
+          or not AScreenObject.Modflow6Obs.Used
+          or not (FObGeneral in AScreenObject.Modflow6Obs.CalibrationObservations.ObGenerals) then
+        begin
+          Continue;
+        end;
+
+        case FObGeneral of
+          ogCHD:
+            if (AScreenObject.ModflowChdBoundary <> nil)
+              and AScreenObject.ModflowChdBoundary.Used then
+            begin
+              Continue;
+            end;
+          ogDrain:
+            if (AScreenObject.ModflowDrnBoundary <> nil)
+              and AScreenObject.ModflowDrnBoundary.Used then
+            begin
+              Continue;
+            end;
+    //      ogWell: ;
+          ogGHB:
+            if (AScreenObject.ModflowWellBoundary <> nil)
+              and AScreenObject.ModflowWellBoundary.Used then
+            begin
+              Continue;
+            end;
+          ogRiv:
+            if (AScreenObject.ModflowRivBoundary <> nil)
+              and AScreenObject.ModflowRivBoundary.Used then
+            begin
+              Continue;
+            end;
+    //      ogRch: ;
+    //      ogEVT: ;
+          else
+            begin
+              Exit;
+            end;
+        end;
+
+        CalibObs := AScreenObject.Modflow6Obs.CalibrationObservations;
+
+        for CalibIndex := 0 to CalibObs.Count - 1 do
+        begin
+          ACalibObs := CalibObs[CalibIndex];
+          if (ACalibObs.ObSeries = osGeneral)
+            and (ACalibObs.ObGeneral = FObGeneral) then
+          begin
+            CellList := TCellAssignmentList.Create;
+            try
+              AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+
+              FormulaBuilder.Clear;
+              FormulaBuilder.Append('  FORMULA ');
+              FoundFirst := False;
+              for CellIndex := 0 to CellList.Count - 1 do
+              begin
+                ACell := CellList[CellIndex];
+                ScreenObjects := ScreenObjectsList3DArray[
+                  ACell.Layer, ACell.Row, ACell.Column];
+                if ScreenObjects <> nil then
+                begin
+                  if FoundFirst then
+                  begin
+                    FormulaBuilder.Append(' + ');
+                  end;
+                  OtherScreenObject := ScreenObjects[0];
+                  DirectObsName := Format('%0:s_%1:d_%2:d_%3:d',
+                    [ACalibObs.Name,
+                    ACell.Layer+1, ACell.Row+1, ACell.Column+1]);
+                  FormulaBuilder.Append(DirectObsName);
+                  FoundFirst := True;
+                end;
+              end;
+
+              OBSNAM := ACalibObs.Name;
+              CalculatedObsLines.Add(Format('  OBSNAME %s PRINT', [OBSNAM]));
+              CalculatedObsLines.Add(FormulaBuilder.ToString);
+              CalculatedObsLines.Add('');
+            finally
+              CellList.Free;
+            end;
+          end;
+        end;
+      end;
+    finally
+      FormulaBuilder.Free;
+    end;
+  end;
+
+
   Observations := nil;
   case FObGeneral of
     ogCHD:
@@ -1818,6 +1973,12 @@ class function TCustomListObsWriter.Extension: string;
 begin
   Result := '';
   Assert(False);
+end;
+
+procedure TModflow6FlowObsWriter.SetScreenObjectsList3DArray(
+  const Value: TScreenObjectsList3DArray);
+begin
+  FScreenObjectsList3DArray := Value;
 end;
 
 procedure TModflow6FlowObsWriter.WriteFile(const AFileName: string);

@@ -20,6 +20,7 @@ type
     // @name is a TObjectList.
     FRechConValues: TList;
     FSeepConcValues: TList;
+    FNameOfFile: string;
     procedure WriteBoundaryArrays(const FormatString: string;
       BoundaryID: integer; List: TValueCellList);
     procedure WriteDataSet1;
@@ -722,9 +723,39 @@ end;
 procedure TMt3dmsSsmWriter.WriteDataSet2;
 var
   ISSGOUT: Integer;
+  Mt3dBasic: TMt3dBasic;
+  NameOfFile: string;
 begin
   // MNW wells are not current supported so ISSGOUT is set to zero.
   ISSGOUT := 0;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Mt3dBasic := Model.ModflowPackages.Mt3dBasic;
+    if Mt3dBasic.Mt3dVersion = mvUSGS then
+    begin
+      if Model.ModflowPackages.Mnw2Package.IsSelected
+        or Model.ModflowPackages.Mnw1Package.IsSelected then
+      begin
+        ISSGOUT := Mt3d_ISSGOUT
+      end;
+    end
+    else
+    begin
+      Assert(Mt3dBasic.Mt3dVersion = mvMS);
+      if Model.ModflowPackages.Mnw1Package.IsSelected then
+      begin
+        ISSGOUT := Mt3d_ISSGOUT
+      end;
+    end;
+  end;
+
+  if ISSGOUT <> 0 then
+  begin
+    NameOfFile := ChangeFileExt(FNameOfFile, '.mt_mnw_out');
+    WriteToMt3dMsNameFile(strData, ISSGOUT,
+      NameOfFile, foOutput, Model);
+  end;
+
   WriteI10Integer(MXSS, 'SSM package, MXSS');
   WriteI10Integer(ISSGOUT, 'SSM package, ISSGOUT');
   WriteString(' # Data Set 2: MXSS ISSGOUT');
@@ -1355,8 +1386,6 @@ begin
 end;
 
 procedure TMt3dmsSsmWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrUnspecifiedSSMData);
 
@@ -1383,11 +1412,11 @@ begin
       StrTheSinkSourceMi);
   end;
 
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
   WriteToMt3dMsNameFile(StrSSM, Mt3dSSM,
-    NameOfFile, foInput, Model);
-//  WriteToNameFile(StrUZF, Model.UnitNumbers.UnitNumber(StrUZF), NameOfFile, foInput);
-  OpenFile(NameOfFile);
+    FNameOfFile, foInput, Model);
+//  WriteToNameFile(StrUZF, Model.UnitNumbers.UnitNumber(StrUZF), FNameOfFile, foInput);
+  OpenFile(FNameOfFile);
   try
 
     frmProgressMM.AddMessage(StrWritingDataSet1);

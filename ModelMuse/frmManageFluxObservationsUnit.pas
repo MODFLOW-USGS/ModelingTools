@@ -274,7 +274,8 @@ implementation
 uses
   JvBoxProcs, frmGoPhastUnit, Math, GIS_Functions,
   GoPhastTypes, DataSetUnit, frmFormulaUnit, frmErrorsAndWarningsUnit,
-  PhastModelUnit, Mt3dmsChemSpeciesUnit, UndoItemsScreenObjects, frmGoToUnit;
+  PhastModelUnit, Mt3dmsChemSpeciesUnit, UndoItemsScreenObjects, frmGoToUnit,
+  Modflow6ObsUnit;
 
 resourcestring
   StrName = 'Name';
@@ -2510,7 +2511,10 @@ var
   Mt3dColumn: TRbwColumn4;
   ChemItem: TChemSpeciesItem;
   SpeciesIndex: Integer;
+  ModelSelection: TModelSelection;
+//  CalibrationObservations: TMf6CalibrationObservations;
 begin
+  ModelSelection := frmGoPhast.ModelSelection;
   Mt3dColumn := rdgConcFluxObsTimes.Columns[Ord(fmcSpecies)];
   Mt3dColumn.PickList.Clear;
   for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
@@ -2544,24 +2548,49 @@ begin
     begin
       FChdScreenObjects.Add(ScreenObject);
       FHeadMassFluxObservations.Add(ScreenObject);
+    end
+    else if (ModelSelection = msModflow2015)
+      and (ScreenObject.Modflow6Obs <> nil)
+      and (ogCHD in ScreenObject.Modflow6Obs.General) then
+    begin
+      FChdScreenObjects.Add(ScreenObject);
     end;
+
     if (ScreenObject.ModflowDrnBoundary <> nil)
       and ScreenObject.ModflowDrnBoundary.Used then
     begin
       FDrnScreenObjects.Add(ScreenObject);
       FDrnMassFluxObservations.Add(ScreenObject);
+    end
+    else if (ModelSelection = msModflow2015)
+      and (ScreenObject.Modflow6Obs <> nil)
+      and (ogDrain in ScreenObject.Modflow6Obs.General) then
+    begin
+      FDrnScreenObjects.Add(ScreenObject);
     end;
     if (ScreenObject.ModflowGhbBoundary <> nil)
       and ScreenObject.ModflowGhbBoundary.Used then
     begin
       FGhbScreenObjects.Add(ScreenObject);
       FGhbMassFluxObservations.Add(ScreenObject);
+    end
+    else if (ModelSelection = msModflow2015)
+      and (ScreenObject.Modflow6Obs <> nil)
+      and (ogGHB in ScreenObject.Modflow6Obs.General) then
+    begin
+      FGhbScreenObjects.Add(ScreenObject);
     end;
     if (ScreenObject.ModflowRivBoundary <> nil)
       and ScreenObject.ModflowRivBoundary.Used then
     begin
       FRivScreenObjects.Add(ScreenObject);
       FRivMassFluxObservations.Add(ScreenObject);
+    end
+    else if (ModelSelection = msModflow2015)
+      and (ScreenObject.Modflow6Obs <> nil)
+      and (ogRiv in ScreenObject.Modflow6Obs.General) then
+    begin
+      FRivScreenObjects.Add(ScreenObject);
     end;
     if (ScreenObject.ModflowStrBoundary <> nil)
       and ScreenObject.ModflowStrBoundary.Used then

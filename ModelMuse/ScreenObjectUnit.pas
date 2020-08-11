@@ -4178,6 +4178,10 @@ SectionStarts.}
     function IndexOf(AScreenObject: TScreenObject): Integer;
   end;
 
+  TObjectScreenObjectLists = TObjectList<TScreenObjectList>;
+  TScreenObjectsList3DArray = array of array of array of TScreenObjectList;
+
+
   // @abstract(@name provides functionality used in storing multiple values
   // associated with a single screen object (a @Link(TMultiValueScreenObject));
   // It is used as an ancestor of @link(TRealDataListItem)

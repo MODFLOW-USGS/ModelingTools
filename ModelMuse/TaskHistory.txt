@@ -270,7 +270,7 @@ object TTaskHistory
     end
     item
       Name = 'MT3DMS'
-      Display = False
+      Display = True
     end
     item
       Name = 'SUTRA Model'
@@ -25977,5 +25977,13 @@ object TTaskHistory
         'PEST Observations'
         'PEST'
         'MF6 Observation Utility')
+    end
+    item
+      Date = 44054.000000000000000000
+      Categories.Strings = (
+        'PEST Observations'
+        'PEST'
+        'MF6 Observation Utility'
+        'MT3DMS')
     end>
 end

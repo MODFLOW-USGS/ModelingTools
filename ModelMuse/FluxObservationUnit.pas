@@ -317,7 +317,8 @@ type
 implementation
 
 uses
-  PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, frmGoPhastUnit;
+  PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, frmGoPhastUnit,
+  Modflow6ObsUnit, ModflowTimeUnit;
 
 resourcestring
   StrInvalidObservation = 'Invalid observation time in the %0:s observation: '
@@ -326,6 +327,8 @@ resourcestring
   StrInvalidObjectsIncl = 'Invalid objects included in the %0:s observation' +
   ' "%1:s."';
   StrThe0sPackageIs = 'The %0:s  package is not used in %1:s.';
+  Str0gIsNotBetween = '%0:g is not between the starting and ending times of ' +
+  'the model in %1:s in the %2:s package';
 
 { TObservationGroup }
 
@@ -353,6 +356,11 @@ var
   PackageID: string;
   ErrorMessage: string;
   ErrorRoot: string;
+  OK_ObsType: Boolean;
+  ModelSelection: TModelSelection;
+  StressPeriods: TModflowStressPeriods;
+  StartTime: Double;
+  EndTime: Double;
   function TimeUsedInBoundary(Time: double; Boundary:TModflowParamBoundary): boolean;
   var
     Item: TCustomModflowBoundaryItem;
@@ -379,35 +387,68 @@ var
     end;
   end;
 begin
+  ModelSelection := frmGoPhast.ModelSelection;
+  StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
+  if StressPeriods.Count = 0 then
+  begin
+    Exit;
+  end;
+  StartTime := StressPeriods.First.StartTime;
+  EndTime := StressPeriods.Last.EndTime;
   for ObjectIndex := 0 to ObservationFactors.Count - 1 do
   begin
     ScreenObject :=
       ObservationFactors[ObjectIndex].ScreenObject as TScreenObject;
     Boundary := nil;
+    OK_ObsType := False;
     case FluxObsType of
       fotHead:
         begin
           Boundary := ScreenObject.ModflowChdBoundary;
           BoundaryPackageID := 'CHD';
           PackageID := 'CHOB';
+          if (ModelSelection= msModflow2015)
+            and (ScreenObject.Modflow6Obs <> nil)
+            and (ogCHD in ScreenObject.Modflow6Obs.General) then
+          begin
+            OK_ObsType := True;
+          end;
         end;
       fotRiver:
         begin
           Boundary := ScreenObject.ModflowRivBoundary;
           BoundaryPackageID := 'RIV';
           PackageID := 'RVOB';
+          if (ModelSelection= msModflow2015)
+            and (ScreenObject.Modflow6Obs <> nil)
+            and (ogRiv in ScreenObject.Modflow6Obs.General) then
+          begin
+            OK_ObsType := True;
+          end;
         end;
       fotDrain:
         begin
           Boundary := ScreenObject.ModflowDrnBoundary;
           BoundaryPackageID := 'DRN';
           PackageID := 'DROB';
+          if (ModelSelection= msModflow2015)
+            and (ScreenObject.Modflow6Obs <> nil)
+            and (ogDrain in ScreenObject.Modflow6Obs.General) then
+          begin
+            OK_ObsType := True;
+          end;
         end;
       fotGHB:
         begin
           Boundary := ScreenObject.ModflowGhbBoundary;
           BoundaryPackageID := 'GHB';
           PackageID := 'GBOB';
+          if (ModelSelection= msModflow2015)
+            and (ScreenObject.Modflow6Obs <> nil)
+            and (ogGHB in ScreenObject.Modflow6Obs.General) then
+          begin
+            OK_ObsType := True;
+          end;
         end;
       fotSTR:
         begin
@@ -417,19 +458,34 @@ begin
         end;
       else Assert(False);
     end;
-    if (Boundary <> nil) and Boundary.Used then
+    if ((Boundary <> nil) and Boundary.Used) or OK_ObsType then
     begin
       for TimeIndex := 0 to ObservationTimes.Count - 1 do
       begin
         Time := ObservationTimes[TimeIndex].Time;
-        if not TimeUsedInBoundary(Time, Boundary) then
+        if Boundary = nil then
         begin
-          ErrorRoot := Format(StrInvalidObservation,
-            [PackageID, ObservationName]);
-          ErrorMessage := Format(Str0gIsNotUsedIn,
-            [Time, ScreenObject.Name, BoundaryPackageID]);
-          ErrorRoots.Add(ErrorRoot);
-          ErrorMessages.AddObject(ErrorMessage, ScreenObject);
+          if (Time < StartTime) or (Time > EndTime) then
+          begin
+            ErrorRoot := Format(StrInvalidObservation,
+              [PackageID, ObservationName]);
+            ErrorMessage := Format(Str0gIsNotBetween,
+              [Time, ScreenObject.Name, BoundaryPackageID]);
+            ErrorRoots.Add(ErrorRoot);
+            ErrorMessages.AddObject(ErrorMessage, ScreenObject);
+          end;
+        end
+        else
+        begin
+          if not TimeUsedInBoundary(Time, Boundary) then
+          begin
+            ErrorRoot := Format(StrInvalidObservation,
+              [PackageID, ObservationName]);
+            ErrorMessage := Format(Str0gIsNotUsedIn,
+              [Time, ScreenObject.Name, BoundaryPackageID]);
+            ErrorRoots.Add(ErrorRoot);
+            ErrorMessages.AddObject(ErrorMessage, ScreenObject);
+          end;
         end;
       end;
     end

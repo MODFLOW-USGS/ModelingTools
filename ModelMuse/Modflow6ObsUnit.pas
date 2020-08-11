@@ -132,6 +132,7 @@ type
     FCSubDelayCells: TIntegerCollection;
     FCalibrationObservations: TMf6CalibrationObservations;
     FGeneral: TObGenerals;
+    FScreenObject: TObject;
     procedure SetDrawdownObs(const Value: Boolean);
     procedure SetGroundwaterFlowObs(const Value: Boolean);
     procedure SetGwFlowObsChoices(const Value: TGwFlowObs);
@@ -178,7 +179,6 @@ type
     function GetSfrObs: TSfrObs;
     function GetUzfObs: TUzfObs;
   public
-
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
@@ -323,6 +323,9 @@ end;
 
 Procedure FillObGenSeriesNames(AList: TStrings);
 begin
+//  AList.Clear;
+//  AList.Add(ObGenNames[Ord(ogHead)]);
+//  AList.Add(ObGenNames[Ord(ogDrawdown)]);
   AList.Assign(ObGenNames);
 end;
 
@@ -394,9 +397,11 @@ begin
 
 end;
 
-constructor TModflow6Obs.Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
+constructor TModflow6Obs.Create(InvalidateModelEvent: TNotifyEvent;
+  ScreenObject: TObject);
 begin
   inherited Create(InvalidateModelEvent);
+  FScreenObject := ScreenObject;
   FGwFlowObsChoices := [gfoNearestNeighbor];
   FStoredUzfObsDepthFraction := TRealStorage.Create;
   FStoredUzfObsDepthFraction.OnChange := OnInvalidateModel;

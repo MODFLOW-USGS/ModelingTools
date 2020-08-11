@@ -356,7 +356,7 @@ begin
         case ObSeries of
           osGeneral:
             begin
-              RowOK := TryGetGenOb(ObTypeName, ObGen)
+              RowOK := TryGetGenOb(ObTypeName, ObGen);
             end;
           osMaw:
             begin
@@ -372,19 +372,19 @@ begin
             end;
           osSfr:
             begin
-              RowOK := TryGetSfrOb(ObTypeName, ObSfr)
+              RowOK := TryGetSfrOb(ObTypeName, ObSfr);
             end;
           osLak:
             begin
-              RowOK := TryGetLakOb(ObTypeName, ObLake)
+              RowOK := TryGetLakOb(ObTypeName, ObLake);
             end;
           osUzf:
             begin
-              RowOK := TryGetUzfOb(ObTypeName, ObUzf)
+              RowOK := TryGetUzfOb(ObTypeName, ObUzf);
             end;
           osCSub:
             begin
-              RowOK := TryGetCSubOb(ObTypeName, ObCSub)
+              RowOK := TryGetCSubOb(ObTypeName, ObCSub);
             end;
         end;
       end;
