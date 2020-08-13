@@ -554,7 +554,7 @@ procedure TFarmCostsItem.SetGWcost1(const Value: string);
 begin
   if FFormulaObjects[GWcost1_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, GWcost1_Position, FFormulaObjects[GWcost1_Position]);
+    UpdateFormulaBlocks(Value, GWcost1_Position, FFormulaObjects[GWcost1_Position]);
   end;
 end;
 
@@ -562,7 +562,7 @@ procedure TFarmCostsItem.SetGWcost2(const Value: string);
 begin
   if FFormulaObjects[GWcost2_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, GWcost2_Position, FFormulaObjects[GWcost2_Position]);
+    UpdateFormulaBlocks(Value, GWcost2_Position, FFormulaObjects[GWcost2_Position]);
   end;
 end;
 
@@ -570,7 +570,7 @@ procedure TFarmCostsItem.SetGWcost3(const Value: string);
 begin
   if FFormulaObjects[GWcost3_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, GWcost3_Position, FFormulaObjects[GWcost3_Position]);
+    UpdateFormulaBlocks(Value, GWcost3_Position, FFormulaObjects[GWcost3_Position]);
   end;
 end;
 
@@ -578,7 +578,7 @@ procedure TFarmCostsItem.SetGWcost4(const Value: string);
 begin
   if FFormulaObjects[GWcost4_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, GWcost4_Position, FFormulaObjects[GWcost4_Position]);
+    UpdateFormulaBlocks(Value, GWcost4_Position, FFormulaObjects[GWcost4_Position]);
   end;
 end;
 
@@ -586,7 +586,7 @@ procedure TFarmCostsItem.SetSWcost1(const Value: string);
 begin
   if FFormulaObjects[SWcost1_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, SWcost1_Position, FFormulaObjects[SWcost1_Position]);
+    UpdateFormulaBlocks(Value, SWcost1_Position, FFormulaObjects[SWcost1_Position]);
   end;
 end;
 
@@ -594,7 +594,7 @@ procedure TFarmCostsItem.SetSWcost2(const Value: string);
 begin
   if FFormulaObjects[SWcost2_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, SWcost2_Position, FFormulaObjects[SWcost2_Position]);
+    UpdateFormulaBlocks(Value, SWcost2_Position, FFormulaObjects[SWcost2_Position]);
   end;
 end;
 
@@ -602,7 +602,7 @@ procedure TFarmCostsItem.SetSWcost3(const Value: string);
 begin
   if FFormulaObjects[SWcost3_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, SWcost3_Position, FFormulaObjects[SWcost3_Position]);
+    UpdateFormulaBlocks(Value, SWcost3_Position, FFormulaObjects[SWcost3_Position]);
   end;
 end;
 
@@ -610,7 +610,7 @@ procedure TFarmCostsItem.SetSWcost4(const Value: string);
 begin
   if FFormulaObjects[SWcost4_Position].Formula <> Value then
   begin
-    UpdateFormula(Value, SWcost4_Position, FFormulaObjects[SWcost4_Position]);
+    UpdateFormulaBlocks(Value, SWcost4_Position, FFormulaObjects[SWcost4_Position]);
   end;
 end;
 
@@ -824,7 +824,7 @@ procedure TNonRoutedDeliveryParameterItem.SetRank(const Value: string);
 begin
   if FFormulaObjects[RankPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, RankPosition, FFormulaObjects[RankPosition]);
+    UpdateFormulaBlocks(Value, RankPosition, FFormulaObjects[RankPosition]);
   end;
 end;
 
@@ -836,7 +836,7 @@ begin
   end;
   if FFormulaObjects[VirtualFarmPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, VirtualFarmPosition, FFormulaObjects[VirtualFarmPosition]);
+    UpdateFormulaBlocks(Value, VirtualFarmPosition, FFormulaObjects[VirtualFarmPosition]);
   end;
 end;
 
@@ -844,7 +844,7 @@ procedure TNonRoutedDeliveryParameterItem.SetVolume(const Value: string);
 begin
   if FFormulaObjects[VolumePostion].Formula <> Value then
   begin
-    UpdateFormula(Value, VolumePostion, FFormulaObjects[VolumePostion]);
+    UpdateFormulaBlocks(Value, VolumePostion, FFormulaObjects[VolumePostion]);
   end;
 end;
 
@@ -990,7 +990,7 @@ procedure TCropEfficiencyItem.SetEfficiency(const Value: string);
 begin
   if FFormulaObjects[EfficiencyPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, EfficiencyPosition, FFormulaObjects[EfficiencyPosition]);
+    UpdateFormulaBlocks(Value, EfficiencyPosition, FFormulaObjects[EfficiencyPosition]);
   end;
 end;
 
@@ -1374,7 +1374,7 @@ procedure TWaterRightsItem.SetWaterRights(const Value: string);
 begin
   if FFormulaObjects[WaterRightsPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, WaterRightsPosition, FFormulaObjects[WaterRightsPosition]);
+    UpdateFormulaBlocks(Value, WaterRightsPosition, FFormulaObjects[WaterRightsPosition]);
   end;
 end;
 

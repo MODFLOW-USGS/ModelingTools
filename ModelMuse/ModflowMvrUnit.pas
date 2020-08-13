@@ -404,7 +404,7 @@ var
   Dummy: integer;
 begin
   Dummy := 0;
-  UpdateFormula(Value, Dummy, FValue);
+  UpdateFormulaBlocks(Value, Dummy, FValue);
 end;
 
 { TMvrItem }

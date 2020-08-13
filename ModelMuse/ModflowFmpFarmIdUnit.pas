@@ -295,7 +295,7 @@ end;
 
 procedure TFmpFarmIDItem.SetFarmID(const Value: string);
 begin
-  UpdateFormula(Value, FarmIDPosition, FFarmID);
+  UpdateFormulaBlocks(Value, FarmIDPosition, FFarmID);
 end;
 
 { TFmpFarmIDCollection }

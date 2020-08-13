@@ -886,7 +886,7 @@ end;
 
 procedure TCtsExternalFlowsItem.SetInflow(const Value: string);
 begin
-  UpdateFormula(Value, InflowPosition, FInflowFormula);
+  UpdateFormulaBlocks(Value, InflowPosition, FInflowFormula);
 end;
 
 procedure TCtsExternalFlowsItem.SetInflowConcentrations(const Value: TStringConcCollection);
@@ -896,7 +896,7 @@ end;
 
 procedure TCtsExternalFlowsItem.SetOutflow(const Value: string);
 begin
-  UpdateFormula(Value, OutflowPosition, FOutflowFormula);
+  UpdateFormulaBlocks(Value, OutflowPosition, FOutflowFormula);
 end;
 
 { TCtsObjectCollection }

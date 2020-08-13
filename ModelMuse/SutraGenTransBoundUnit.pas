@@ -367,22 +367,22 @@ end;
 
 procedure TSutraGenTransportItem.SetHigherFlowUFormula(const Value: string);
 begin
-  UpdateFormula(Value, HigherFlowUPosition, FHigherFlowUFormula);
+  UpdateFormulaNodes(Value, HigherFlowUPosition, FHigherFlowUFormula);
 end;
 
 procedure TSutraGenTransportItem.SetHigherUFormula(const Value: string);
 begin
-  UpdateFormula(Value, HigherUPosition, FHigherUFormula);
+  UpdateFormulaNodes(Value, HigherUPosition, FHigherUFormula);
 end;
 
 procedure TSutraGenTransportItem.SetLowerFlowUFormula(const Value: string);
 begin
-  UpdateFormula(Value, LowerFlowUPosition, FLowerFlowUFormula);
+  UpdateFormulaNodes(Value, LowerFlowUPosition, FLowerFlowUFormula);
 end;
 
 procedure TSutraGenTransportItem.SetLowerUFormula(const Value: string);
 begin
-  UpdateFormula(Value, LowerUPosition, FLowerUFormula);
+  UpdateFormulaNodes(Value, LowerUPosition, FLowerUFormula);
 end;
 
 procedure TSutraGenTransportItem.SetUsed(const Value: Boolean);
@@ -404,7 +404,7 @@ end;
 
 procedure TSutraGenTransportItem.SetUsedFormula(const Value: string);
 begin
-  UpdateFormula(Value, UsedFormulaPosition, FUsedFormulaObject);
+  UpdateFormulaNodes(Value, UsedFormulaPosition, FUsedFormulaObject);
 end;
 
 { TSutraGeneralTransportCollection }

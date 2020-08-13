@@ -213,7 +213,7 @@ procedure TSoilItem.SetACoeff(const Value: string);
 begin
   if FFormulaObjects[ACoeffPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, ACoeffPosition, FFormulaObjects[ACoeffPosition]);
+    UpdateFormulaBlocks(Value, ACoeffPosition, FFormulaObjects[ACoeffPosition]);
   end;
 end;
 
@@ -221,7 +221,7 @@ procedure TSoilItem.SetBCoeff(const Value: string);
 begin
   if FFormulaObjects[BCoeffPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, BCoeffPosition, FFormulaObjects[BCoeffPosition]);
+    UpdateFormulaBlocks(Value, BCoeffPosition, FFormulaObjects[BCoeffPosition]);
   end;
 end;
 
@@ -248,7 +248,7 @@ procedure TSoilItem.SetCapillaryFringe(const Value: string);
 begin
   if FFormulaObjects[CapillaryFringePosition].Formula <> Value then
   begin
-    UpdateFormula(Value, CapillaryFringePosition, FFormulaObjects[CapillaryFringePosition]);
+    UpdateFormulaBlocks(Value, CapillaryFringePosition, FFormulaObjects[CapillaryFringePosition]);
   end;
 end;
 
@@ -256,7 +256,7 @@ procedure TSoilItem.SetCCoeff(const Value: string);
 begin
   if FFormulaObjects[CCoeffPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, CCoeffPosition, FFormulaObjects[CCoeffPosition]);
+    UpdateFormulaBlocks(Value, CCoeffPosition, FFormulaObjects[CCoeffPosition]);
   end;
 end;
 
@@ -264,7 +264,7 @@ procedure TSoilItem.SetDCoeff(const Value: string);
 begin
   if FFormulaObjects[DCoeffPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, DCoeffPosition, FFormulaObjects[DCoeffPosition]);
+    UpdateFormulaBlocks(Value, DCoeffPosition, FFormulaObjects[DCoeffPosition]);
   end;
 end;
 
@@ -272,7 +272,7 @@ procedure TSoilItem.SetECoeff(const Value: string);
 begin
   if FFormulaObjects[ECoeffPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, ECoeffPosition, FFormulaObjects[ECoeffPosition]);
+    UpdateFormulaBlocks(Value, ECoeffPosition, FFormulaObjects[ECoeffPosition]);
   end;
 end;
 

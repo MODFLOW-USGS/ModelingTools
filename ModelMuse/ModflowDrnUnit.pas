@@ -393,12 +393,12 @@ end;
 
 procedure TDrnItem.SetElevation(const Value: string);
 begin
-  UpdateFormula(Value, ElevationPosition, FElevation);
+  UpdateFormulaBlocks(Value, ElevationPosition, FElevation);
 end;
 
 procedure TDrnItem.SetConductance(const Value: string);
 begin
-  UpdateFormula(Value, ConductancePosition, FConductance);
+  UpdateFormulaBlocks(Value, ConductancePosition, FConductance);
 end;
 
 { TDrnCollection }

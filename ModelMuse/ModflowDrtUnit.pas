@@ -448,7 +448,7 @@ end;
 
 procedure TDrtItem.SetReturnFraction(const Value: string);
 begin
-  UpdateFormula(Value, ReturnPosition, FReturnFraction);
+  UpdateFormulaBlocks(Value, ReturnPosition, FReturnFraction);
 end;
 
 { TDrtCollection }

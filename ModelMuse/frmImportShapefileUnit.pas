@@ -28,7 +28,7 @@ uses System.UITypes, Windows,
   frameLocationMethodUnit, JvToolEdit, ModflowTransientListParameterUnit,
   OrderedCollectionUnit, Mt3dmsChemUnit, Mt3dmsChemSpeciesUnit, GoPhastTypes,
   frameGridUnit, System.Generics.Collections, GrayTabs, frmDuplicateNamesUnit,
-  Vcl.CheckLst;
+  Vcl.CheckLst, System.StrUtils;
 
 type
   TSfrColumns = (scStartTime, scEndTime, scIcalc,
@@ -3157,10 +3157,10 @@ begin
     for RowIndex := 1 to seBoundaryTimeCount.AsInteger do
     begin
       AName := GetStringValueFromText(rdgBoundaryConditions.Cells[Ord(mpocName), RowIndex]);
-      if AName = '' then
-      begin
-        Continue;
-      end;
+//      if AName = '' then
+//      begin
+//        Continue;
+//      end;
       TypeIndex := PestObsTypes.IndexOf(rdgBoundaryConditions.Cells[Ord(mpocType), RowIndex]);
       if TypeIndex < 0 then
       begin
@@ -3171,6 +3171,13 @@ begin
       begin
         Continue;
       end;
+
+      if AName = '' then
+      begin
+        AName := ReplaceStr(PestObsType, ' ', '_');
+        AName := Format('%0:s_%1:d_%2:d', [AName, FShapeIndex+1, RowIndex]);
+      end;
+
       ObsTime := GetRealValueFromText(rdgBoundaryConditions.Cells[Ord(mpocTime), RowIndex], ShouldIgnore);
       if ShouldIgnore then
       begin

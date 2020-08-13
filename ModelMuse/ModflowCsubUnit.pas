@@ -1114,7 +1114,7 @@ end;
 
 procedure TCSubItem.SetStressOffset(const Value: string);
 begin
-  UpdateFormula(Value, StressOffsetPosition, FStressOffset);
+  UpdateFormulaBlocks(Value, StressOffsetPosition, FStressOffset);
 end;
 
 { TCSubCollection }

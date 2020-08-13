@@ -584,7 +584,7 @@ end;
 
 procedure TLktInitConcItem.SetInitConc(const Value: string);
 begin
-  UpdateFormula(Value, InitConcPosition, FInitConc);
+  UpdateFormulaBlocks(Value, InitConcPosition, FInitConc);
 end;
 
 { TLktInitConcCollection }

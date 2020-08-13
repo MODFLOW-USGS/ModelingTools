@@ -761,7 +761,7 @@ end;
 
 procedure TCustomSutraAssociatedBoundaryItem.SetPQFormula(const Value: string);
 begin
-  UpdateFormula(Value, PQFormulaPosition, FPQFormulaObject);
+  UpdateFormulaNodes(Value, PQFormulaPosition, FPQFormulaObject);
 end;
 
 { TSutraFluidBoundaryItem }
@@ -975,7 +975,7 @@ end;
 
 procedure TCustomSutraBoundaryItem.SetUFormula(const Value: string);
 begin
-  UpdateFormula(Value, UFormulaPosition, FUFormulaObject);
+  UpdateFormulaNodes(Value, UFormulaPosition, FUFormulaObject);
 end;
 
 procedure TCustomSutraBoundaryItem.SetUsed(const Value: Boolean);
@@ -998,7 +998,7 @@ end;
 
 procedure TCustomSutraBoundaryItem.SetUsedFormula(const Value: string);
 begin
-  UpdateFormula(Value, UsedFormulaPosition, FUsedFormulaObject);
+  UpdateFormulaNodes(Value, UsedFormulaPosition, FUsedFormulaObject);
 end;
 
 { TCustomAssociatedSutraBoundaryCollection }

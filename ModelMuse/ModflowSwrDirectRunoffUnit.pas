@@ -367,12 +367,12 @@ end;
 
 procedure TSwrDirectRunoffItem.SetReach(const Value: string);
 begin
-  UpdateFormula(Value, ReachPosition, FReach);
+  UpdateFormulaBlocks(Value, ReachPosition, FReach);
 end;
 
 procedure TSwrDirectRunoffItem.SetRunoff(const Value: string);
 begin
-  UpdateFormula(Value, RunoffPosition, FRunoff);
+  UpdateFormulaBlocks(Value, RunoffPosition, FRunoff);
 end;
 
 { TDirectRunoffListLink }

@@ -185,7 +185,9 @@ type
       TDataSetOrientation): TFormulaObject;
   public
     property Observer[Index: Integer]: TObserver read GetObserver;
-    procedure UpdateFormula(Value: string; Position: integer;
+    procedure UpdateFormulaBlocks(Value: string; Position: integer;
+      var FormulaObject: TFormulaObject);
+    procedure UpdateFormulaNodes(Value: string; Position: integer;
       var FormulaObject: TFormulaObject);
     property OnRemoveSubscription: TChangeSubscription
       read FOnRemoveSubscription write FOnRemoveSubscription;
@@ -1358,7 +1360,7 @@ begin
   end;
 end;
 
-procedure TFormulaOrderedItem.UpdateFormula(Value: string; Position: integer;
+procedure TFormulaOrderedItem.UpdateFormulaBlocks(Value: string; Position: integer;
   var FormulaObject: TFormulaObject);
 var
   ParentModel: TPhastModel;
@@ -1459,6 +1461,34 @@ begin
   finally
     NewUses.Free;
     OldUses.Free;
+  end;
+end;
+
+procedure TFormulaOrderedItem.UpdateFormulaNodes(Value: string;
+  Position: integer; var FormulaObject: TFormulaObject);
+var
+  ParentModel: TPhastModel;
+  Compiler: TRbwParser;
+  LocalObserver: TObserver;
+begin
+  if FormulaObject.Formula <> Value then
+  begin
+    ParentModel := Model as TPhastModel;
+    if ParentModel <> nil then
+    begin
+      Compiler := ParentModel.rpThreeDFormulaCompilerNodes;
+      LocalObserver := Observer[Position];
+      UpdateFormulaDependencies(FormulaObject.Formula, Value, LocalObserver,
+        Compiler);
+    end;
+    InvalidateModel;
+    if not(csDestroying in frmGoPhast.PhastModel.ComponentState) and
+      not frmGoPhast.PhastModel.Clearing then
+    begin
+      frmGoPhast.PhastModel.FormulaManager.ChangeFormula(FormulaObject, Value,
+        frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes,
+        OnRemoveSubscription, OnRestoreSubscription, self);
+    end;
   end;
 end;
 

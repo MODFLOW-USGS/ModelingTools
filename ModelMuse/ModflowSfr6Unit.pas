@@ -1044,7 +1044,7 @@ begin
   While Value < FDiversionFormulas.Count do
   begin
     FormulaObj := FDiversionFormulas[FDiversionFormulas.Count-1];
-    UpdateFormula('0', DiversionStartPosition +FDiversionFormulas.Count-1, FormulaObj);
+    UpdateFormulaBlocks('0', DiversionStartPosition +FDiversionFormulas.Count-1, FormulaObj);
     FDiversionFormulas[FDiversionFormulas.Count-1] := FormulaObj;
     frmGoPhast.PhastModel.FormulaManager.Remove(FormulaObj,
       GlobalRemoveModflowBoundaryItemSubscription,
@@ -1058,7 +1058,7 @@ var
   FormulaObject: TFormulaObject;
 begin
   FormulaObject := FDiversionFormulas[Index];
-  UpdateFormula(Value, DiversionStartPosition+Index, FormulaObject);
+  UpdateFormulaBlocks(Value, DiversionStartPosition+Index, FormulaObject);
   FDiversionFormulas[Index] := FormulaObject;
 end;
 
@@ -1075,7 +1075,7 @@ var
 begin
   if FEvaporation.Formula <> Value then
   begin
-    UpdateFormula(Value, EvaporationPosition, FEvaporation);
+    UpdateFormulaBlocks(Value, EvaporationPosition, FEvaporation);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1098,7 +1098,7 @@ var
 begin
   if FInflow.Formula <> Value then
   begin
-    UpdateFormula(Value, InflowPosition, FInflow);
+    UpdateFormulaBlocks(Value, InflowPosition, FInflow);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1116,7 +1116,7 @@ end;
 
 procedure TSfrMf6Item.SetRainfall(const Value: string);
 begin
-  UpdateFormula(Value, RainfallPosition, FRainfall);
+  UpdateFormulaBlocks(Value, RainfallPosition, FRainfall);
 end;
 
 procedure TSfrMf6Item.SetRoughness(const Value: string);
@@ -1126,7 +1126,7 @@ var
 begin
   if FRoughness.Formula <> Value then
   begin
-    UpdateFormula(Value, RoughnessPosition, FRoughness);
+    UpdateFormulaBlocks(Value, RoughnessPosition, FRoughness);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1149,7 +1149,7 @@ var
 begin
   if FRunoff.Formula <> Value then
   begin
-    UpdateFormula(Value, RunoffPosition, FRunoff);
+    UpdateFormulaBlocks(Value, RunoffPosition, FRunoff);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1172,7 +1172,7 @@ var
 begin
   if FStage.Formula <> Value then
   begin
-    UpdateFormula(Value, StagePosition, FStage);
+    UpdateFormulaBlocks(Value, StagePosition, FStage);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1224,7 +1224,7 @@ var
 begin
   if FUpstreamFraction.Formula <> Value then
   begin
-    UpdateFormula(Value, UpstreamFractionPosition, FUpstreamFraction);
+    UpdateFormulaBlocks(Value, UpstreamFractionPosition, FUpstreamFraction);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)

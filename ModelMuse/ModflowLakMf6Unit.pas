@@ -659,27 +659,27 @@ end;
 
 procedure TLakeTimeItem.SetEvaporation(const Value: string);
 begin
-  UpdateFormula(Value, KEvaporationPosition, FEvaporation);
+  UpdateFormulaBlocks(Value, KEvaporationPosition, FEvaporation);
 end;
 
 procedure TLakeTimeItem.SetInflow(const Value: string);
 begin
-  UpdateFormula(Value, KInflowPosition, FInflow);
+  UpdateFormulaBlocks(Value, KInflowPosition, FInflow);
 end;
 
 procedure TLakeTimeItem.SetRainfall(const Value: string);
 begin
-  UpdateFormula(Value, KRainfallPosition, FRainfall);
+  UpdateFormulaBlocks(Value, KRainfallPosition, FRainfall);
 end;
 
 procedure TLakeTimeItem.SetRunoff(const Value: string);
 begin
-  UpdateFormula(Value, KRunoffPosition, FRunoff);
+  UpdateFormulaBlocks(Value, KRunoffPosition, FRunoff);
 end;
 
 procedure TLakeTimeItem.SetStage(const Value: string);
 begin
-  UpdateFormula(Value, KStagePosition, FStage);
+  UpdateFormulaBlocks(Value, KStagePosition, FStage);
 end;
 
 procedure TLakeTimeItem.SetStatus(const Value: TLakeStatus);
@@ -689,7 +689,7 @@ end;
 
 procedure TLakeTimeItem.SetWithdrawal(const Value: string);
 begin
-  UpdateFormula(Value, KWithdrawalPosition, FWithdrawal);
+  UpdateFormulaBlocks(Value, KWithdrawalPosition, FWithdrawal);
 end;
 
 { TLakeOutletTimeItem }
@@ -876,27 +876,27 @@ end;
 
 procedure TLakeOutletTimeItem.SetInvert(const Value: string);
 begin
-  UpdateFormula(Value, KInvertPosition, FInvert);
+  UpdateFormulaBlocks(Value, KInvertPosition, FInvert);
 end;
 
 procedure TLakeOutletTimeItem.SetRate(const Value: string);
 begin
-  UpdateFormula(Value, KRatePosition, FRate);
+  UpdateFormulaBlocks(Value, KRatePosition, FRate);
 end;
 
 procedure TLakeOutletTimeItem.SetRoughness(const Value: string);
 begin
-  UpdateFormula(Value, KRoughnessPosition, FRoughness);
+  UpdateFormulaBlocks(Value, KRoughnessPosition, FRoughness);
 end;
 
 procedure TLakeOutletTimeItem.SetSlope(const Value: string);
 begin
-  UpdateFormula(Value, KSlopePosition, FSlope);
+  UpdateFormulaBlocks(Value, KSlopePosition, FSlope);
 end;
 
 procedure TLakeOutletTimeItem.SetWidth(const Value: string);
 begin
-  UpdateFormula(Value, KWidthPosition, FWidth);
+  UpdateFormulaBlocks(Value, KWidthPosition, FWidth);
 end;
 
 { TLakeOutlet }
@@ -1797,22 +1797,22 @@ end;
 
 procedure TLakeTableItemMf6.SetExchangeArea(const Value: string);
 begin
-  UpdateFormula(Value, ExchangeAreaEvapPosition, FExchangeArea);
+  UpdateFormulaBlocks(Value, ExchangeAreaEvapPosition, FExchangeArea);
 end;
 
 procedure TLakeTableItemMf6.SetStage(const Value: string);
 begin
-  UpdateFormula(Value, StagePosition, FStage);
+  UpdateFormulaBlocks(Value, StagePosition, FStage);
 end;
 
 procedure TLakeTableItemMf6.SetSurfaceArea(const Value: string);
 begin
-  UpdateFormula(Value, SurfaceAreaPosition, FSurfaceArea);
+  UpdateFormulaBlocks(Value, SurfaceAreaPosition, FSurfaceArea);
 end;
 
 procedure TLakeTableItemMf6.SetVolume(const Value: string);
 begin
-  UpdateFormula(Value, VolumePosition, FVolume);
+  UpdateFormulaBlocks(Value, VolumePosition, FVolume);
 end;
 
 procedure TLakeTableItemMf6.StopTalkingToAnyone;

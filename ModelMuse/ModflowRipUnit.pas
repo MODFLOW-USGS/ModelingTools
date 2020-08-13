@@ -438,7 +438,7 @@ begin
   for Index := 0 to FCoverages.Count - 1 do
   begin
     AFormulaObject := FCoverages[Index];
-    UpdateFormula(FCoverageFormulas[Index], Index+1, AFormulaObject);
+    UpdateFormulaBlocks(FCoverageFormulas[Index], Index+1, AFormulaObject);
     FCoverages[Index] := AFormulaObject;
   end;
 end;
@@ -652,7 +652,7 @@ begin
     else
       begin
         FormulaObject := FCoverages[Index-1];
-        UpdateFormula(Value, Index-1, FormulaObject);
+        UpdateFormulaBlocks(Value, Index-1, FormulaObject);
         FCoverages[Index-1] := FormulaObject;
       end;
   end;
@@ -688,7 +688,7 @@ end;
 
 procedure TRipItem.SetLandElevation(const Value: string);
 begin
-  UpdateFormula(Value, LandElevationPosition, FLandElevation);
+  UpdateFormulaBlocks(Value, LandElevationPosition, FLandElevation);
 end;
 
 { TRipTimeListLink }

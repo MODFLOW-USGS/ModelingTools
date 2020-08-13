@@ -531,17 +531,17 @@ end;
 
 procedure TFmpWellItem.SetFarmID(const Value: string);
 begin
-  UpdateFormula(Value, FmpWellFarmIDPosition, FFarmID);
+  UpdateFormulaBlocks(Value, FmpWellFarmIDPosition, FFarmID);
 end;
 
 procedure TFmpWellItem.SetMaxPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, FmpWellMaxPumpingRatePosition, FMaxPumpingRate);
+  UpdateFormulaBlocks(Value, FmpWellMaxPumpingRatePosition, FMaxPumpingRate);
 end;
 
 procedure TFmpWellItem.SetPumpOnlyIfCropRequiresWater(const Value: string);
 begin
-  UpdateFormula(Value, FmpWellPumpOnlyIfCropRequiresWaterPosition,
+  UpdateFormulaBlocks(Value, FmpWellPumpOnlyIfCropRequiresWaterPosition,
     FPumpOnlyIfCropRequiresWater);
 end;
 

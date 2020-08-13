@@ -352,7 +352,7 @@ end;
 
 procedure TCfpRchFractionItem.SetCfpRechargeFraction(const Value: string);
 begin
-  UpdateFormula(Value, RechPosition, FCfpRechargeFraction);
+  UpdateFormulaBlocks(Value, RechPosition, FCfpRechargeFraction);
 end;
 
 { TCfpRchFractionTimeListLink }

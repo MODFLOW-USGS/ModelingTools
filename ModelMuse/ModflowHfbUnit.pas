@@ -764,12 +764,12 @@ end;
 
 procedure THfbItem.SetHydraulicConductivity(const Value: string);
 begin
-  UpdateFormula(Value, HydraulicConductivityPosition, FHydraulicConductivityFormula);
+  UpdateFormulaBlocks(Value, HydraulicConductivityPosition, FHydraulicConductivityFormula);
 end;
 
 procedure THfbItem.SetThickness(const Value: string);
 begin
-  UpdateFormula(Value, ThicknessPosition, FThicknessFormula);
+  UpdateFormulaBlocks(Value, ThicknessPosition, FThicknessFormula);
 end;
 
 { THfbRecord }

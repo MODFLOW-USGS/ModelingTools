@@ -475,7 +475,7 @@ procedure TSfrChannelItem.SetBankRoughness(const Value: string);
 begin
   if FBankRoughness.Formula <> Value then
   begin
-    UpdateFormula(Value, BankRoughnessPosition, FBankRoughness);
+    UpdateFormulaBlocks(Value, BankRoughnessPosition, FBankRoughness);
     InvalidateBankRoughnessData(nil);
   end;
 end;
@@ -509,7 +509,7 @@ procedure TSfrChannelItem.SetChannelRoughness(const Value: string);
 begin
   if FChannelRoughness.Formula <> Value then
   begin
-    UpdateFormula(Value, ChannelRoughnessPosition, FChannelRoughness);
+    UpdateFormulaBlocks(Value, ChannelRoughnessPosition, FChannelRoughness);
     InvalidateChannelRoughnessData(nil);
   end;
 end;

@@ -144,7 +144,7 @@ procedure TClimateItem.SetETref(const Value: string);
 begin
   if FFormulaObjects[ETrefPostion].Formula <> Value then
   begin
-    UpdateFormula(Value, ETrefPostion, FFormulaObjects[ETrefPostion]);
+    UpdateFormulaBlocks(Value, ETrefPostion, FFormulaObjects[ETrefPostion]);
   end;
 end;
 
@@ -152,7 +152,7 @@ procedure TClimateItem.SetMaxT(const Value: string);
 begin
   if FFormulaObjects[MaxTPostion].Formula <> Value then
   begin
-    UpdateFormula(Value, MaxTPostion, FFormulaObjects[MaxTPostion]);
+    UpdateFormulaBlocks(Value, MaxTPostion, FFormulaObjects[MaxTPostion]);
   end;
 end;
 
@@ -160,7 +160,7 @@ procedure TClimateItem.SetMinT(const Value: string);
 begin
   if FFormulaObjects[MinTPostion].Formula <> Value then
   begin
-    UpdateFormula(Value, MinTPostion, FFormulaObjects[MinTPostion]);
+    UpdateFormulaBlocks(Value, MinTPostion, FFormulaObjects[MinTPostion]);
   end;
 end;
 
@@ -168,7 +168,7 @@ procedure TClimateItem.SetPrecip(const Value: string);
 begin
   if FFormulaObjects[PrecipPostion].Formula <> Value then
   begin
-    UpdateFormula(Value, PrecipPostion, FFormulaObjects[PrecipPostion]);
+    UpdateFormulaBlocks(Value, PrecipPostion, FFormulaObjects[PrecipPostion]);
   end;
 end;
 

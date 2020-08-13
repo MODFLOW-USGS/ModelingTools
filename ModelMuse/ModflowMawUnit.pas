@@ -949,22 +949,22 @@ end;
 
 procedure TMawWellScreenItem.SetScreenBottom(const Value: string);
 begin
-  UpdateFormula(Value, ScreenBottomPosition, FScreenBottom);
+  UpdateFormulaBlocks(Value, ScreenBottomPosition, FScreenBottom);
 end;
 
 procedure TMawWellScreenItem.SetScreenTop(const Value: string);
 begin
-  UpdateFormula(Value, ScreenTopPosition, FScreenTop);
+  UpdateFormulaBlocks(Value, ScreenTopPosition, FScreenTop);
 end;
 
 procedure TMawWellScreenItem.SetSkinK(const Value: string);
 begin
-  UpdateFormula(Value, SkinKPosition, FSkinK);
+  UpdateFormulaBlocks(Value, SkinKPosition, FSkinK);
 end;
 
 procedure TMawWellScreenItem.SetSkinRadius(const Value: string);
 begin
-  UpdateFormula(Value, SkinRadiusPosition, FSkinRadius);
+  UpdateFormulaBlocks(Value, SkinRadiusPosition, FSkinRadius);
 end;
 
 { TMawWellScreenCollection }
@@ -2365,17 +2365,17 @@ end;
 
 procedure TMawItem.SetFlowingWellConductance(const Value: string);
 begin
-  UpdateFormula(Value, FlowingWellConductancePosition, FFlowingWellConductance);
+  UpdateFormulaBlocks(Value, FlowingWellConductancePosition, FFlowingWellConductance);
 end;
 
 procedure TMawItem.SetFlowingWellElevation(const Value: string);
 begin
-  UpdateFormula(Value, FlowingWellElevationPosition, FFlowingWellElevation);
+  UpdateFormulaBlocks(Value, FlowingWellElevationPosition, FFlowingWellElevation);
 end;
 
 procedure TMawItem.SetHeadLimit(const Value: string);
 begin
-  UpdateFormula(Value, HeadLimitPosition, FHeadLimit);
+  UpdateFormulaBlocks(Value, HeadLimitPosition, FHeadLimit);
 end;
 
 procedure TMawItem.SetHeadLimitChoice(const Value: Boolean);
@@ -2390,22 +2390,22 @@ end;
 
 procedure TMawItem.SetMaxRate(const Value: string);
 begin
-  UpdateFormula(Value, MaxRatePosition, FMaxRate);
+  UpdateFormulaBlocks(Value, MaxRatePosition, FMaxRate);
 end;
 
 procedure TMawItem.SetMinRate(const Value: string);
 begin
-  UpdateFormula(Value, MinRatePosition, FMinRate);
+  UpdateFormulaBlocks(Value, MinRatePosition, FMinRate);
 end;
 
 procedure TMawItem.SetPumpElevation(const Value: string);
 begin
-  UpdateFormula(Value, PumpElevationPosition, FPumpElevation);
+  UpdateFormulaBlocks(Value, PumpElevationPosition, FPumpElevation);
 end;
 
 procedure TMawItem.SetRate(const Value: string);
 begin
-  UpdateFormula(Value, RatePosition, FRate);
+  UpdateFormulaBlocks(Value, RatePosition, FRate);
 end;
 
 procedure TMawItem.SetRateLimitation(const Value: TRateLimitation);
@@ -2419,12 +2419,12 @@ end;
 
 procedure TMawItem.SetScalingLength(const Value: string);
 begin
-  UpdateFormula(Value, ScalingLengthPosition, FScalingLength);
+  UpdateFormulaBlocks(Value, ScalingLengthPosition, FScalingLength);
 end;
 
 procedure TMawItem.SetWellHead(const Value: string);
 begin
-  UpdateFormula(Value, WellHeadPosition, FWellHead);
+  UpdateFormulaBlocks(Value, WellHeadPosition, FWellHead);
 end;
 
 { TMawTimeListLink }

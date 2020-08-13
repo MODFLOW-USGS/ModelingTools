@@ -256,7 +256,7 @@ var
 begin
   if FPrecipitation.Formula <> Value then
   begin
-    UpdateFormula(Value, PrecipitationPosition, FPrecipitation);
+    UpdateFormulaBlocks(Value, PrecipitationPosition, FPrecipitation);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -279,7 +279,7 @@ var
 begin
   if FRunnoff.Formula <> Value then
   begin
-    UpdateFormula(Value, RunnoffPosition, FRunnoff);
+    UpdateFormulaBlocks(Value, RunnoffPosition, FRunnoff);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -319,7 +319,7 @@ var
 begin
   if FEvapotranspiration.Formula <> Value then
   begin
-    UpdateFormula(Value, EvapotranspirationPosition, FEvapotranspiration);
+    UpdateFormulaBlocks(Value, EvapotranspirationPosition, FEvapotranspiration);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -342,7 +342,7 @@ var
 begin
   if FFlow.Formula <> Value then
   begin
-    UpdateFormula(Value, FlowPosition, FFlow);
+    UpdateFormulaBlocks(Value, FlowPosition, FFlow);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)

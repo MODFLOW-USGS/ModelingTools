@@ -690,7 +690,7 @@ end;
 
 procedure TLakItem.SetEvaporation(const Value: string);
 begin
-  UpdateFormula(Value, EvaporationPosition, FEvaporation);
+  UpdateFormulaBlocks(Value, EvaporationPosition, FEvaporation);
 end;
 
 procedure TLakItem.SetMaximumStage(const Value: string);
@@ -708,27 +708,27 @@ begin
 //    FWithdrawal: TFormulaObject;
 //    FOverlandRunoff: TFormulaObject;
 //    FEvaporation: TFormulaObject;
-  UpdateFormula(Value, MaximumStagePosition, FMaximumStage);
+  UpdateFormulaBlocks(Value, MaximumStagePosition, FMaximumStage);
 end;
 
 procedure TLakItem.SetMinimumStage(const Value: string);
 begin
-  UpdateFormula(Value, MinimumStagePosition, FMinimumStage);
+  UpdateFormulaBlocks(Value, MinimumStagePosition, FMinimumStage);
 end;
 
 procedure TLakItem.SetOverlandRunoff(const Value: string);
 begin
-  UpdateFormula(Value, OverlandRunoffPosition, FOverlandRunoff);
+  UpdateFormulaBlocks(Value, OverlandRunoffPosition, FOverlandRunoff);
 end;
 
 procedure TLakItem.SetPrecipitation(const Value: string);
 begin
-  UpdateFormula(Value, PrecipitationPosition, FPrecipitation);
+  UpdateFormulaBlocks(Value, PrecipitationPosition, FPrecipitation);
 end;
 
 procedure TLakItem.SetWithdrawal(const Value: string);
 begin
-  UpdateFormula(Value, WithdrawalPosition, FWithdrawal);
+  UpdateFormulaBlocks(Value, WithdrawalPosition, FWithdrawal);
 end;
 
 function TLakItem.SSMN: double;

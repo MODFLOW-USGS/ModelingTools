@@ -299,7 +299,7 @@ end;
 
 procedure TFmpCropIDItem.SetCropID(const Value: string);
 begin
-  UpdateFormula(Value, CropIDPosition, FCropID);
+  UpdateFormulaBlocks(Value, CropIDPosition, FCropID);
 end;
 
 { TFmpCropIDCollection }

@@ -276,12 +276,12 @@ end;
 
 procedure TResItem.SetEndHead(const Value: string);
 begin
-  UpdateFormula(Value, EndPosition, FEndHead);
+  UpdateFormulaBlocks(Value, EndPosition, FEndHead);
 end;
 
 procedure TResItem.SetStartHead(const Value: string);
 begin
-  UpdateFormula(Value, StartPosition, FStartHead);
+  UpdateFormulaBlocks(Value, StartPosition, FStartHead);
 end;
 
 { TResCollection }

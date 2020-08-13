@@ -306,7 +306,7 @@ end;
 
 procedure TFmpPrecipItem.SetPrecipRate(const Value: string);
 begin
-  UpdateFormula(Value, PrecipPosition, FPrecipRate);
+  UpdateFormulaBlocks(Value, PrecipPosition, FPrecipRate);
 end;
 
 { TFmpPrecipCollection }

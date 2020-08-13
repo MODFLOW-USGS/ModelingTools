@@ -379,12 +379,12 @@ end;
 
 procedure TChdItem.SetEndHead(const Value: string);
 begin
-  UpdateFormula(Value, EndHeadPosition, FEndHead);
+  UpdateFormulaBlocks(Value, EndHeadPosition, FEndHead);
 end;
 
 procedure TChdItem.SetStartHead(const Value: string);
 begin
-  UpdateFormula(Value, StartHeadPosition, FStartHead);
+  UpdateFormulaBlocks(Value, StartHeadPosition, FStartHead);
 end;
 
 { TChdParamItem }

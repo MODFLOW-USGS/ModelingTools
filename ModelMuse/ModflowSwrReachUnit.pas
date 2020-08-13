@@ -502,12 +502,12 @@ end;
 
 procedure TSwrTransientReachItem.SetStage(const Value: string);
 begin
-  UpdateFormula(Value, StagePosition, FStageOffset);
+  UpdateFormulaBlocks(Value, StagePosition, FStageOffset);
 end;
 
 procedure TSwrTransientReachItem.SetVerticalOffset(const Value: string);
 begin
-  UpdateFormula(Value, VerticalOffsetPosition, FVerticalOffset);
+  UpdateFormulaBlocks(Value, VerticalOffsetPosition, FVerticalOffset);
 end;
 
 { TSwrReachListLink }

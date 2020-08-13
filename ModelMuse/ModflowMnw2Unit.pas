@@ -959,18 +959,18 @@ end;
 
 procedure TMnw2TimeItem.SetHeadCapacityMultiplier(const Value: string);
 begin
-  UpdateFormula(Value, HeadCapacityMultiplierPosition, FHeadCapacityMultiplier);
+  UpdateFormulaBlocks(Value, HeadCapacityMultiplierPosition, FHeadCapacityMultiplier);
 end;
 
 procedure TMnw2TimeItem.SetInactivationPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, InactivationPumpingRatePosition,
+  UpdateFormulaBlocks(Value, InactivationPumpingRatePosition,
     FInactivationPumpingRate);
 end;
 
 procedure TMnw2TimeItem.SetLimitingWaterLevel(const Value: string);
 begin
-  UpdateFormula(Value, LimitingWaterLevelPosition, FLimitingWaterLevel);
+  UpdateFormulaBlocks(Value, LimitingWaterLevelPosition, FLimitingWaterLevel);
 end;
 
 procedure TMnw2TimeItem.SetLimitMethod(const Value: TMnwLimitMethod);
@@ -984,12 +984,12 @@ end;
 
 procedure TMnw2TimeItem.SetPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, PumpingRatePosition, FPumpingRate);
+  UpdateFormulaBlocks(Value, PumpingRatePosition, FPumpingRate);
 end;
 
 procedure TMnw2TimeItem.SetReactivationPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, ReactivationPumpingRatePosition,
+  UpdateFormulaBlocks(Value, ReactivationPumpingRatePosition,
     FReactivationPumpingRate);
 end;
 
@@ -2563,7 +2563,7 @@ end;
 
 procedure TMnw2SpatialItem.SetB(const Value: string);
 begin
-  UpdateFormula(Value, BPosition, FB);
+  UpdateFormulaBlocks(Value, BPosition, FB);
 end;
 
 procedure TMnw2SpatialItem.SetBoundaryFormula(Index: integer;
@@ -2592,37 +2592,37 @@ end;
 
 procedure TMnw2SpatialItem.SetC(const Value: string);
 begin
-  UpdateFormula(Value, CPosition, FC);
+  UpdateFormulaBlocks(Value, CPosition, FC);
 end;
 
 procedure TMnw2SpatialItem.SetCellToWellConductance(const Value: string);
 begin
-  UpdateFormula(Value, CellToWellConductancePosition, FCellToWellConductance);
+  UpdateFormulaBlocks(Value, CellToWellConductancePosition, FCellToWellConductance);
 end;
 
 procedure TMnw2SpatialItem.SetP(const Value: string);
 begin
-  UpdateFormula(Value, PPosition, FP);
+  UpdateFormulaBlocks(Value, PPosition, FP);
 end;
 
 procedure TMnw2SpatialItem.SetPartialPenetration(const Value: string);
 begin
-  UpdateFormula(Value, PartialPenetrationPosition, FPartialPenetration);
+  UpdateFormulaBlocks(Value, PartialPenetrationPosition, FPartialPenetration);
 end;
 
 procedure TMnw2SpatialItem.SetSkinK(const Value: string);
 begin
-  UpdateFormula(Value, SkinKPosition, FSkinK);
+  UpdateFormulaBlocks(Value, SkinKPosition, FSkinK);
 end;
 
 procedure TMnw2SpatialItem.SetSkinRadius(const Value: string);
 begin
-  UpdateFormula(Value, SkinRadiusPosition, FSkinRadius);
+  UpdateFormulaBlocks(Value, SkinRadiusPosition, FSkinRadius);
 end;
 
 procedure TMnw2SpatialItem.SetWellRadius(const Value: string);
 begin
-  UpdateFormula(Value, WellRadiusPosition, FWellRadius);
+  UpdateFormulaBlocks(Value, WellRadiusPosition, FWellRadius);
 end;
 
 { TMnw2Record }
@@ -3511,7 +3511,7 @@ end;
 
 procedure TVerticalScreen.SetB(const Value: string);
 begin
-  UpdateFormula(Value, BPosition, FB);
+  UpdateFormulaBlocks(Value, BPosition, FB);
 end;
 
 procedure TVerticalScreen.SetBoundaryFormula(Index: integer;
@@ -3538,32 +3538,32 @@ end;
 
 procedure TVerticalScreen.SetC(const Value: string);
 begin
-  UpdateFormula(Value, CPosition, FC);
+  UpdateFormulaBlocks(Value, CPosition, FC);
 end;
 
 procedure TVerticalScreen.SetCellToWellConductance(const Value: string);
 begin
-  UpdateFormula(Value, CellToWellConductancePosition, FCellToWellConductance);
+  UpdateFormulaBlocks(Value, CellToWellConductancePosition, FCellToWellConductance);
 end;
 
 procedure TVerticalScreen.SetP(const Value: string);
 begin
-  UpdateFormula(Value, PPosition, FP);
+  UpdateFormulaBlocks(Value, PPosition, FP);
 end;
 
 procedure TVerticalScreen.SetSkinK(const Value: string);
 begin
-  UpdateFormula(Value, SkinKPosition, FSkinK);
+  UpdateFormulaBlocks(Value, SkinKPosition, FSkinK);
 end;
 
 procedure TVerticalScreen.SetSkinRadius(const Value: string);
 begin
-  UpdateFormula(Value, SkinRadiusPosition, FSkinRadius);
+  UpdateFormulaBlocks(Value, SkinRadiusPosition, FSkinRadius);
 end;
 
 procedure TVerticalScreen.SetWellRadius(const Value: string);
 begin
-  UpdateFormula(Value, WellRadiusPosition, FWellRadius);
+  UpdateFormulaBlocks(Value, WellRadiusPosition, FWellRadius);
 end;
 
 procedure TVerticalScreen.SetZBottom(const Value: double);

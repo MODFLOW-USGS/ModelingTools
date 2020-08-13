@@ -450,12 +450,12 @@ end;
 
 procedure TRipPlantGroup.SetSatExtinctionEvap(const Value: string);
 begin
-  UpdateFormula(Value, SatExtinctionEvapPosition, FSatExtinctionEvap);
+  UpdateFormulaBlocks(Value, SatExtinctionEvapPosition, FSatExtinctionEvap);
 end;
 
 procedure TRipPlantGroup.SetActiveRootDepth(const Value: string);
 begin
-  UpdateFormula(Value, ActiveRootDepthPosition, FActiveRootDepth);
+  UpdateFormulaBlocks(Value, ActiveRootDepthPosition, FActiveRootDepth);
 end;
 
 procedure TRipPlantGroup.SetETSegments(const Value: TRipETSegments);
@@ -465,7 +465,7 @@ end;
 
 procedure TRipPlantGroup.SetSaturatedExtinctionDepth(const Value: string);
 begin
-  UpdateFormula(Value, ExtinctDepthPosition, FSaturatedExtinctionDepth);
+  UpdateFormulaBlocks(Value, ExtinctDepthPosition, FSaturatedExtinctionDepth);
 end;
 
 procedure TRipPlantGroup.StopTalkingToAnyone;
@@ -485,7 +485,7 @@ end;
 
 procedure TRipPlantGroup.SetMaxET(const Value: string);
 begin
-  UpdateFormula(Value, MaxETPosition, FMaxET);
+  UpdateFormulaBlocks(Value, MaxETPosition, FMaxET);
 end;
 
 procedure TRipPlantGroup.SetName(const Value: string);

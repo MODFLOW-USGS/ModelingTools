@@ -417,7 +417,7 @@ var
 begin
   if FHydraulicConductivity.Formula <> Value then
   begin
-    UpdateFormula(Value, HydraulicConductivityPosition, FHydraulicConductivity);
+    UpdateFormulaBlocks(Value, HydraulicConductivityPosition, FHydraulicConductivity);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -454,7 +454,7 @@ var
 begin
   if FStreambedElevation.Formula <> Value then
   begin
-    UpdateFormula(Value, StreambedElevationPosition, FStreambedElevation);
+    UpdateFormulaBlocks(Value, StreambedElevationPosition, FStreambedElevation);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -491,7 +491,7 @@ var
 begin
   if FStreamBedThickness.Formula <> Value then
   begin
-    UpdateFormula(Value, StreamBedThicknessPosition, FStreamBedThickness);
+    UpdateFormulaBlocks(Value, StreamBedThicknessPosition, FStreamBedThickness);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -528,7 +528,7 @@ var
 begin
   if FStreamDepth.Formula <> Value then
   begin
-    UpdateFormula(Value, StreamDepthPosition, FStreamDepth);
+    UpdateFormulaBlocks(Value, StreamDepthPosition, FStreamDepth);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -565,7 +565,7 @@ var
 begin
   if FStreamWidth.Formula <> Value then
   begin
-    UpdateFormula(Value, StreamWidthPosition, FStreamWidth);
+    UpdateFormulaBlocks(Value, StreamWidthPosition, FStreamWidth);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)

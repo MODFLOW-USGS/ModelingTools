@@ -446,7 +446,7 @@ end;
 
 procedure TRchItem.SetRechargeRate(const Value: string);
 begin
-  UpdateFormula(Value, RechPosition, FRechargeRate);
+  UpdateFormulaBlocks(Value, RechPosition, FRechargeRate);
 end;
 
 { TRchCollection }
@@ -1323,7 +1323,7 @@ end;
 
 procedure TRchLayerItem.SetRechargeLayer(const Value: string);
 begin
-  UpdateFormula(Value, LayerPosition, FRechargeLayer);
+  UpdateFormulaBlocks(Value, LayerPosition, FRechargeLayer);
 end;
 
 { TRchLayerCollection }

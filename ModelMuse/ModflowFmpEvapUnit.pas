@@ -300,7 +300,7 @@ end;
 
 procedure TFmpRefEvapItem.SetRefEvapRate(const Value: string);
 begin
-  UpdateFormula(Value, RefEvapPosition, FRefEvapRate);
+  UpdateFormulaBlocks(Value, RefEvapPosition, FRefEvapRate);
 end;
 
 { TFmpRefEvapCollection }

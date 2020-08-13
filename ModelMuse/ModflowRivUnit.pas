@@ -434,17 +434,17 @@ end;
 
 procedure TRivItem.SetRiverBottom(const Value: string);
 begin
-  UpdateFormula(Value, BottomPosition, FRiverBottom);
+  UpdateFormulaBlocks(Value, BottomPosition, FRiverBottom);
 end;
 
 procedure TRivItem.SetRiverStage(const Value: string);
 begin
-  UpdateFormula(Value, StagePosition, FRiverStage);
+  UpdateFormulaBlocks(Value, StagePosition, FRiverStage);
 end;
 
 procedure TRivItem.SetConductance(const Value: string);
 begin
-  UpdateFormula(Value, ConductancePosition, FConductance);
+  UpdateFormulaBlocks(Value, ConductancePosition, FConductance);
 end;
 
 { TRivCollection }

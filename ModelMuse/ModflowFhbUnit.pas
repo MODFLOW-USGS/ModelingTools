@@ -357,7 +357,7 @@ end;
 
 procedure TFhbItem.SetBoundaryValue(const Value: string);
 begin
-  UpdateFormula(Value, BoundaryValuePosition, FBoundaryValue);
+  UpdateFormulaBlocks(Value, BoundaryValuePosition, FBoundaryValue);
 end;
 
 { TFhbTimeListLink }

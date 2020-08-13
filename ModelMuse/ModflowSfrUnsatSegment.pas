@@ -372,7 +372,7 @@ var
 begin
   if FBrooksCoreyExponent.Formula <> Value then
   begin
-    UpdateFormula(Value, BrooksCoreyExponentPosition, FBrooksCoreyExponent);
+    UpdateFormulaBlocks(Value, BrooksCoreyExponentPosition, FBrooksCoreyExponent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -406,7 +406,7 @@ var
 begin
   if FSaturatedWaterContent.Formula <> Value then
   begin
-    UpdateFormula(Value, SaturatedWaterContentPosition, FSaturatedWaterContent);
+    UpdateFormulaBlocks(Value, SaturatedWaterContentPosition, FSaturatedWaterContent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil) and not PhastModel.Clearing
       and not (csDestroying in PhastModel.ComponentState)
@@ -439,7 +439,7 @@ var
 begin
   if FInitialWaterContent.Formula <> Value then
   begin
-    UpdateFormula(Value, InitialWaterContentPosition, FInitialWaterContent);
+    UpdateFormulaBlocks(Value, InitialWaterContentPosition, FInitialWaterContent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -473,7 +473,7 @@ var
 begin
   if FVerticalSaturatedK.Formula <> Value then
   begin
-    UpdateFormula(Value, VerticalSaturatedKPosition, FVerticalSaturatedK);
+    UpdateFormulaBlocks(Value, VerticalSaturatedKPosition, FVerticalSaturatedK);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)

@@ -766,7 +766,7 @@ end;
 
 procedure TUzfMf6Item.SetAirEntryPotential(const Value: string);
 begin
-  UpdateFormula(Value, UzfMf6AirEntryPotentialPosition, FAirEntryPotential);
+  UpdateFormulaBlocks(Value, UzfMf6AirEntryPotentialPosition, FAirEntryPotential);
 end;
 
 procedure TUzfMf6Item.SetBoundaryFormula(Index: integer; const Value: string);
@@ -792,32 +792,32 @@ end;
 
 procedure TUzfMf6Item.SetExtinctionDepth(const Value: string);
 begin
-  UpdateFormula(Value, UzfMf6ExtinctionDepthPosition, FUzfExtinctDepth);
+  UpdateFormulaBlocks(Value, UzfMf6ExtinctionDepthPosition, FUzfExtinctDepth);
 end;
 
 procedure TUzfMf6Item.SetExtinctionWaterContent(const Value: string);
 begin
-  UpdateFormula(Value, UzfMf6ExtinctionWaterContentPosition, FExtinctionWaterContent);
+  UpdateFormulaBlocks(Value, UzfMf6ExtinctionWaterContentPosition, FExtinctionWaterContent);
 end;
 
 procedure TUzfMf6Item.SetInfiltration(const Value: string);
 begin
-  UpdateFormula(Value, UzfMf6InfiltrationPosition, FInfiltration);
+  UpdateFormulaBlocks(Value, UzfMf6InfiltrationPosition, FInfiltration);
 end;
 
 procedure TUzfMf6Item.SetPotentialET(const Value: string);
 begin
-  UpdateFormula(Value, UzfMf6PotentialETPosition, FPotentialET);
+  UpdateFormulaBlocks(Value, UzfMf6PotentialETPosition, FPotentialET);
 end;
 
 procedure TUzfMf6Item.SetRootActivity(const Value: string);
 begin
-  UpdateFormula(Value, UzfMf6RootActivityPosition, FRootActivity);
+  UpdateFormulaBlocks(Value, UzfMf6RootActivityPosition, FRootActivity);
 end;
 
 procedure TUzfMf6Item.SetRootPotential(const Value: string);
 begin
-  UpdateFormula(Value, UzfMf6RootPotentialPosition, FRootPotential);
+  UpdateFormulaBlocks(Value, UzfMf6RootPotentialPosition, FRootPotential);
 end;
 
 { TUzfMf6Collection }

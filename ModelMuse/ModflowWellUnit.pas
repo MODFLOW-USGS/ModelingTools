@@ -354,7 +354,7 @@ end;
 
 procedure TWellItem.SetPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, PumpingRatePosition, FPumpingRate);
+  UpdateFormulaBlocks(Value, PumpingRatePosition, FPumpingRate);
 end;
 
 { TWellCollection }

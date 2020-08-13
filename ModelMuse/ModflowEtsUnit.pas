@@ -1107,12 +1107,12 @@ end;
 
 procedure TEtsSurfDepthItem.SetEvapotranspirationDepth(const Value: string);
 begin
-  UpdateFormula(Value, DepthPosition, FEvapotranspirationDepth);
+  UpdateFormulaBlocks(Value, DepthPosition, FEvapotranspirationDepth);
 end;
 
 procedure TEtsSurfDepthItem.SetEvapotranspirationSurface(const Value: string);
 begin
-  UpdateFormula(Value, SurfacePosition, FEvapotranspirationSurface);
+  UpdateFormulaBlocks(Value, SurfacePosition, FEvapotranspirationSurface);
 end;
 
 { TEtsSurfDepthCollection }
@@ -1939,7 +1939,7 @@ var
   Dummy: Integer;
 begin
   Dummy := 0;
-  UpdateFormula(Value, Dummy, FValue);
+  UpdateFormulaBlocks(Value, Dummy, FValue);
 end;
 
 function TStringValueItem.StringCollection: TStringCollection;

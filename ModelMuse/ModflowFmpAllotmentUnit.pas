@@ -90,7 +90,7 @@ procedure TAllotmentItem.SetAllotment(const Value: string);
 begin
   if FFormulaObjects[AllotmentPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, AllotmentPosition, FFormulaObjects[AllotmentPosition]);
+    UpdateFormulaBlocks(Value, AllotmentPosition, FFormulaObjects[AllotmentPosition]);
   end;
 end;
 

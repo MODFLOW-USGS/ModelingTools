@@ -684,17 +684,17 @@ end;
 
 procedure TSfrTableRowItem.SetDepth(const Value: string);
 begin
-  UpdateFormula(Value, DepthPosition, FDepth);
+  UpdateFormulaBlocks(Value, DepthPosition, FDepth);
 end;
 
 procedure TSfrTableRowItem.SetFlow(const Value: string);
 begin
-  UpdateFormula(Value, FlowPosition, FFlow);
+  UpdateFormulaBlocks(Value, FlowPosition, FFlow);
 end;
 
 procedure TSfrTableRowItem.SetWidth(const Value: string);
 begin
-  UpdateFormula(Value, WidthPosition, FWidth);
+  UpdateFormulaBlocks(Value, WidthPosition, FWidth);
 end;
 
 function TSfrTableRowItem.SfrTable: TSfrTable;

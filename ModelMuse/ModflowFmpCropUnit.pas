@@ -582,7 +582,7 @@ procedure TRootingDepthItem.SetRootingDepth(const Value: string);
 begin
   if FFormulaObjects[RootingDepthPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, RootingDepthPosition, FFormulaObjects[RootingDepthPosition]);
+    UpdateFormulaBlocks(Value, RootingDepthPosition, FFormulaObjects[RootingDepthPosition]);
 //    PhastModel := Model as TPhastModel;
 //    if (PhastModel <> nil)
 //      and not (csDestroying in PhastModel.ComponentState)
@@ -766,7 +766,7 @@ procedure TEvapFractionsItem.SetIrrigFraction(const Value: string);
 begin
   if FFormulaObjects[IrrigFractionPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, IrrigFractionPosition, FFormulaObjects[IrrigFractionPosition]);
+    UpdateFormulaBlocks(Value, IrrigFractionPosition, FFormulaObjects[IrrigFractionPosition]);
   end;
 end;
 
@@ -774,7 +774,7 @@ procedure TEvapFractionsItem.SetPrecipFraction(const Value: string);
 begin
   if FFormulaObjects[PrecipFractionPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, PrecipFractionPosition, FFormulaObjects[PrecipFractionPosition]);
+    UpdateFormulaBlocks(Value, PrecipFractionPosition, FFormulaObjects[PrecipFractionPosition]);
   end;
 end;
 
@@ -782,7 +782,7 @@ procedure TEvapFractionsItem.SetTranspirationFraction(const Value: string);
 begin
   if FFormulaObjects[TranspirationFractionPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, TranspirationFractionPosition, FFormulaObjects[TranspirationFractionPosition]);
+    UpdateFormulaBlocks(Value, TranspirationFractionPosition, FFormulaObjects[TranspirationFractionPosition]);
   end;
 end;
 
@@ -985,7 +985,7 @@ procedure TLossesItem.SetIrrigationLosses(const Value: string);
 begin
   if FFormulaObjects[IrrigationLossesPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, IrrigationLossesPosition, FFormulaObjects[IrrigationLossesPosition]);
+    UpdateFormulaBlocks(Value, IrrigationLossesPosition, FFormulaObjects[IrrigationLossesPosition]);
   end;
 end;
 
@@ -993,7 +993,7 @@ procedure TLossesItem.SetPrecipitationLosses(const Value: string);
 begin
   if FFormulaObjects[PrecipitationLossesPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, PrecipitationLossesPosition, FFormulaObjects[PrecipitationLossesPosition]);
+    UpdateFormulaBlocks(Value, PrecipitationLossesPosition, FFormulaObjects[PrecipitationLossesPosition]);
   end;
 end;
 
@@ -1186,7 +1186,7 @@ procedure TCropFunctionItem.SetIntercept(const Value: string);
 begin
   if FFormulaObjects[InterceptPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, InterceptPosition, FFormulaObjects[InterceptPosition]);
+    UpdateFormulaBlocks(Value, InterceptPosition, FFormulaObjects[InterceptPosition]);
   end;
 end;
 
@@ -1194,7 +1194,7 @@ procedure TCropFunctionItem.SetPrice(const Value: string);
 begin
   if FFormulaObjects[PricePosition].Formula <> Value then
   begin
-    UpdateFormula(Value, PricePosition, FFormulaObjects[PricePosition]);
+    UpdateFormulaBlocks(Value, PricePosition, FFormulaObjects[PricePosition]);
   end;
 end;
 
@@ -1202,7 +1202,7 @@ procedure TCropFunctionItem.SetSlope(const Value: string);
 begin
   if FFormulaObjects[SlopePosition].Formula <> Value then
   begin
-    UpdateFormula(Value, SlopePosition, FFormulaObjects[SlopePosition]);
+    UpdateFormulaBlocks(Value, SlopePosition, FFormulaObjects[SlopePosition]);
   end;
 end;
 
@@ -1419,7 +1419,7 @@ procedure TCropWaterUseItem.SetCropValue(const Value: string);
 begin
   if FFormulaObjects[CropValuePosition].Formula <> Value then
   begin
-    UpdateFormula(Value, CropValuePosition, FFormulaObjects[CropValuePosition]);
+    UpdateFormulaBlocks(Value, CropValuePosition, FFormulaObjects[CropValuePosition]);
   end;
 end;
 
@@ -1427,7 +1427,7 @@ procedure TCropWaterUseItem.SetIrrigated(const Value: string);
 begin
   if FFormulaObjects[WaterUseIrrigatedPosition].Formula <> Value then
   begin
-    UpdateFormula(Value, WaterUseIrrigatedPosition, FFormulaObjects[WaterUseIrrigatedPosition]);
+    UpdateFormulaBlocks(Value, WaterUseIrrigatedPosition, FFormulaObjects[WaterUseIrrigatedPosition]);
   end;
 end;
 
@@ -2010,7 +2010,7 @@ procedure TCropItem.SetBaseTemperature(const Value: string);
 begin
   if FBaseTemperature.Formula <> Value then
   begin
-    UpdateFormula(Value, BaseTemperaturePosition, FBaseTemperature);
+    UpdateFormulaBlocks(Value, BaseTemperaturePosition, FBaseTemperature);
   end;
 end;
 
@@ -2018,7 +2018,7 @@ procedure TCropItem.SetBeginningRootDepth(const Value: string);
 begin
   if FBeginningRootDepth.Formula <> Value then
   begin
-    UpdateFormula(Value, BeginningRootDepthPosition, FBeginningRootDepth);
+    UpdateFormulaBlocks(Value, BeginningRootDepthPosition, FBeginningRootDepth);
   end;
 end;
 
@@ -2066,7 +2066,7 @@ procedure TCropItem.SetCoefficient0(const Value: string);
 begin
   if FCoefficient0.Formula <> Value then
   begin
-    UpdateFormula(Value, Coefficient0Position, FCoefficient0);
+    UpdateFormulaBlocks(Value, Coefficient0Position, FCoefficient0);
   end;
 end;
 
@@ -2074,7 +2074,7 @@ procedure TCropItem.SetCoefficient1(const Value: string);
 begin
   if FCoefficient1.Formula <> Value then
   begin
-    UpdateFormula(Value, Coefficient1Position, FCoefficient1);
+    UpdateFormulaBlocks(Value, Coefficient1Position, FCoefficient1);
   end;
 end;
 
@@ -2082,7 +2082,7 @@ procedure TCropItem.SetCoefficient2(const Value: string);
 begin
   if FCoefficient2.Formula <> Value then
   begin
-    UpdateFormula(Value, Coefficient2Position, FCoefficient2);
+    UpdateFormulaBlocks(Value, Coefficient2Position, FCoefficient2);
   end;
 end;
 
@@ -2090,7 +2090,7 @@ procedure TCropItem.SetCoefficient3(const Value: string);
 begin
   if FCoefficient3.Formula <> Value then
   begin
-    UpdateFormula(Value, Coefficient3Position, FCoefficient3);
+    UpdateFormulaBlocks(Value, Coefficient3Position, FCoefficient3);
   end;
 end;
 
@@ -2176,7 +2176,7 @@ procedure TCropItem.SetFallow(const Value: string);
 begin
   if FFallow.Formula <> Value then
   begin
-    UpdateFormula(Value, FAllowPosition, FFallow);
+    UpdateFormulaBlocks(Value, FAllowPosition, FFallow);
   end;
 end;
 
@@ -2208,7 +2208,7 @@ procedure TCropItem.SetIrrigated(const Value: string);
 begin
   if FIrrigated.Formula <> Value then
   begin
-    UpdateFormula(Value, IrrigatedPosition, FIrrigated);
+    UpdateFormulaBlocks(Value, IrrigatedPosition, FIrrigated);
   end;
 end;
 
@@ -2221,7 +2221,7 @@ procedure TCropItem.SetMaximumCutoffTemperature(const Value: string);
 begin
   if FMaximumCutoffTemperature.Formula <> Value then
   begin
-    UpdateFormula(Value, MaximumCutoffTemperaturePosition, FMaximumCutoffTemperature);
+    UpdateFormulaBlocks(Value, MaximumCutoffTemperaturePosition, FMaximumCutoffTemperature);
   end;
 end;
 
@@ -2229,7 +2229,7 @@ procedure TCropItem.SetMaximumRootDepth(const Value: string);
 begin
   if FMaximumRootDepth.Formula <> Value then
   begin
-    UpdateFormula(Value, MaximumRootDepthPosition, FMaximumRootDepth);
+    UpdateFormulaBlocks(Value, MaximumRootDepthPosition, FMaximumRootDepth);
   end;
 end;
 
@@ -2237,7 +2237,7 @@ procedure TCropItem.SetMinimumCutoffTemperature(const Value: string);
 begin
   if FMinimumCutoffTemperature.Formula <> Value then
   begin
-    UpdateFormula(Value, MinimumCutoffTemperaturePosition, FMinimumCutoffTemperature);
+    UpdateFormulaBlocks(Value, MinimumCutoffTemperaturePosition, FMinimumCutoffTemperature);
   end;
 end;
 
@@ -2245,7 +2245,7 @@ procedure TCropItem.SetPSI1(const Value: string);
 begin
   if FPSI1.Formula <> Value then
   begin
-    UpdateFormula(Value, PSI1Position, FPSI1);
+    UpdateFormulaBlocks(Value, PSI1Position, FPSI1);
   end;
 end;
 
@@ -2253,7 +2253,7 @@ procedure TCropItem.SetPSI2(const Value: string);
 begin
   if FPSI2.Formula <> Value then
   begin
-    UpdateFormula(Value, PSI2Position, FPSI2);
+    UpdateFormulaBlocks(Value, PSI2Position, FPSI2);
   end;
 end;
 
@@ -2261,7 +2261,7 @@ procedure TCropItem.SetPSI3(const Value: string);
 begin
   if FPSI3.Formula <> Value then
   begin
-    UpdateFormula(Value, PSI3Position, FPSI3);
+    UpdateFormulaBlocks(Value, PSI3Position, FPSI3);
   end;
 end;
 
@@ -2269,7 +2269,7 @@ procedure TCropItem.SetPSI4(const Value: string);
 begin
   if FPSI4.Formula <> Value then
   begin
-    UpdateFormula(Value, PSI4Position, FPSI4);
+    UpdateFormulaBlocks(Value, PSI4Position, FPSI4);
   end;
 end;
 
@@ -2277,7 +2277,7 @@ procedure TCropItem.SetRootGrowthCoefficient(const Value: string);
 begin
   if FRootGrowthCoefficient.Formula <> Value then
   begin
-    UpdateFormula(Value, RootGrowthCoefficientPosition, FRootGrowthCoefficient);
+    UpdateFormulaBlocks(Value, RootGrowthCoefficientPosition, FRootGrowthCoefficient);
   end;
 end;
 

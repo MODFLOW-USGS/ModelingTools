@@ -254,7 +254,7 @@ var
 begin
   if FDepthExponent.Formula <> Value then
   begin
-    UpdateFormula(Value, DepthExponentPosition, FDepthExponent);
+    UpdateFormulaBlocks(Value, DepthExponentPosition, FDepthExponent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -277,7 +277,7 @@ var
 begin
   if FWidthCoefficient.Formula <> Value then
   begin
-    UpdateFormula(Value, WidthCoefficientPosition, FWidthCoefficient);
+    UpdateFormulaBlocks(Value, WidthCoefficientPosition, FWidthCoefficient);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -300,7 +300,7 @@ var
 begin
   if FWidthExponent.Formula <> Value then
   begin
-    UpdateFormula(Value, WidthExponentPosition, FWidthExponent);
+    UpdateFormulaBlocks(Value, WidthExponentPosition, FWidthExponent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -339,7 +339,7 @@ var
 begin
   if FDepthCoefficient.Formula <> Value then
   begin
-    UpdateFormula(Value, DepthCoefficientPosition, FDepthCoefficient);
+    UpdateFormulaBlocks(Value, DepthCoefficientPosition, FDepthCoefficient);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)

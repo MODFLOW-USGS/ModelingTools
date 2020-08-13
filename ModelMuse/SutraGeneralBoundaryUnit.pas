@@ -465,7 +465,7 @@ end;
 
 procedure TSutraGeneralFlowItem.SetUsedFormula(const Value: string);
 begin
-  UpdateFormula(Value, UsedFormulaPosition, FUsedFormulaObject);
+  UpdateFormulaNodes(Value, UsedFormulaPosition, FUsedFormulaObject);
 end;
 
 procedure TSutraGeneralFlowItem.SetBoundaryFormula(Index: integer;
@@ -503,17 +503,17 @@ end;
 
 procedure TSutraGeneralFlowItem.SetHigherFlowRateFormula(const Value: string);
 begin
-  UpdateFormula(Value, HigherFlowRatePosition, FHigherFlowRateFormula);
+  UpdateFormulaNodes(Value, HigherFlowRatePosition, FHigherFlowRateFormula);
 end;
 
 procedure TSutraGeneralFlowItem.SetHigherPressureFormula(const Value: string);
 begin
-  UpdateFormula(Value, HigherPressurePosition, FHigherPressureFormula);
+  UpdateFormulaNodes(Value, HigherPressurePosition, FHigherPressureFormula);
 end;
 
 procedure TSutraGeneralFlowItem.SetLowerFlowRateFormula(const Value: string);
 begin
-  UpdateFormula(Value, LowerFlowRatePosition, FLowerFlowRateFormula);
+  UpdateFormulaNodes(Value, LowerFlowRatePosition, FLowerFlowRateFormula);
 end;
 
 procedure TSutraGeneralFlowItem.SetLowerLimitType(const Value: TSutraLimitType);
@@ -527,17 +527,17 @@ end;
 
 procedure TSutraGeneralFlowItem.SetLowerPressureFormula(const Value: string);
 begin
-  UpdateFormula(Value, LowerPressurePosition, FLowerPressureFormula);
+  UpdateFormulaNodes(Value, LowerPressurePosition, FLowerPressureFormula);
 end;
 
 procedure TSutraGeneralFlowItem.SetUInFormula(const Value: string);
 begin
-  UpdateFormula(Value, UInPosition, FUInFormula);
+  UpdateFormulaNodes(Value, UInPosition, FUInFormula);
 end;
 
 procedure TSutraGeneralFlowItem.SetUoutFormula(const Value: string);
 begin
-  UpdateFormula(Value, UoutPosition, FUoutFormula);
+  UpdateFormulaNodes(Value, UoutPosition, FUoutFormula);
 end;
 
 procedure TSutraGeneralFlowItem.SetUpperLimitType(const Value: TSutraLimitType);

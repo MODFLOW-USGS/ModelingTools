@@ -758,7 +758,7 @@ end;
 
 procedure TMnw1Item.SetConductance(const Value: string);
 begin
-  UpdateFormula(Value, ConductancePosition, FConductance);
+  UpdateFormulaBlocks(Value, ConductancePosition, FConductance);
 end;
 
 procedure TMnw1Item.SetConductanceMethod(const Value: TMnw1ConductanceMethod);
@@ -768,27 +768,27 @@ end;
 
 procedure TMnw1Item.SetDesiredPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, DesiredPumpingRatePosition, FDesiredPumpingRate);
+  UpdateFormulaBlocks(Value, DesiredPumpingRatePosition, FDesiredPumpingRate);
 end;
 
 procedure TMnw1Item.SetLimitingWaterLevel(const Value: string);
 begin
-  UpdateFormula(Value, LimitingWaterLevelPosition, FLimitingWaterLevel);
+  UpdateFormulaBlocks(Value, LimitingWaterLevelPosition, FLimitingWaterLevel);
 end;
 
 procedure TMnw1Item.SetMaximumPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, ReactivationPumpingRatePosition, FMaximumPumpingRate);
+  UpdateFormulaBlocks(Value, ReactivationPumpingRatePosition, FMaximumPumpingRate);
 end;
 
 procedure TMnw1Item.SetMinimumPumpingRate(const Value: string);
 begin
-  UpdateFormula(Value, MinimumPumpingRatePosition, FMinimumPumpingRate);
+  UpdateFormulaBlocks(Value, MinimumPumpingRatePosition, FMinimumPumpingRate);
 end;
 
 procedure TMnw1Item.SetNonLinearLossCoefficient(const Value: string);
 begin
-  UpdateFormula(Value, NonLinearLossCoefficientPosition, FNonLinearLossCoefficient);
+  UpdateFormulaBlocks(Value, NonLinearLossCoefficientPosition, FNonLinearLossCoefficient);
 end;
 
 procedure TMnw1Item.SetPumpingLimitType(const Value: TMnw1PumpingLimitType);
@@ -798,12 +798,12 @@ end;
 
 procedure TMnw1Item.SetReferenceElevation(const Value: string);
 begin
-  UpdateFormula(Value, ReferenceElevationPosition, FReferenceElevation);
+  UpdateFormulaBlocks(Value, ReferenceElevationPosition, FReferenceElevation);
 end;
 
 procedure TMnw1Item.SetSkinFactor(const Value: string);
 begin
-  UpdateFormula(Value, SkinFactorPosition, FSkinFactor);
+  UpdateFormulaBlocks(Value, SkinFactorPosition, FSkinFactor);
 end;
 
 procedure TMnw1Item.SetWaterLevelLimitType(
@@ -814,17 +814,17 @@ end;
 
 procedure TMnw1Item.SetWaterQuality(const Value: string);
 begin
-  UpdateFormula(Value, WaterQualityPosition, FWaterQuality);
+  UpdateFormulaBlocks(Value, WaterQualityPosition, FWaterQuality);
 end;
 
 procedure TMnw1Item.SetWaterQualityGroup(const Value: string);
 begin
-  UpdateFormula(Value, WaterQualityGroupPosition, FWaterQualityGroup);
+  UpdateFormulaBlocks(Value, WaterQualityGroupPosition, FWaterQualityGroup);
 end;
 
 procedure TMnw1Item.SetWellRadius(const Value: string);
 begin
-  UpdateFormula(Value, WellRadiusPosition, FWellRadius);
+  UpdateFormulaBlocks(Value, WellRadiusPosition, FWellRadius);
 end;
 
 { TMnw1CellRecord }

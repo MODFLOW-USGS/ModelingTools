@@ -394,12 +394,12 @@ end;
 
 procedure TGhbItem.SetBoundaryHead(const Value: string);
 begin
-  UpdateFormula(Value, HeadPosition, FBoundaryHead);
+  UpdateFormulaBlocks(Value, HeadPosition, FBoundaryHead);
 end;
 
 procedure TGhbItem.SetConductance(const Value: string);
 begin
-  UpdateFormula(Value, ConductancePosition, FConductance);
+  UpdateFormulaBlocks(Value, ConductancePosition, FConductance);
 end;
 
 { TGhbCollection }

@@ -880,7 +880,7 @@ end;
 
 procedure TUzfExtinctDepthItem.SetUzfExtinctDepth(const Value: string);
 begin
-  UpdateFormula(Value, UzfExtinctDepthPosition, FUzfExtinctDepth);
+  UpdateFormulaBlocks(Value, UzfExtinctDepthPosition, FUzfExtinctDepth);
 end;
 
 { TUzfWaterContentItem }
@@ -970,7 +970,7 @@ end;
 
 procedure TUzfWaterContentItem.SetUzfWaterContent(const Value: string);
 begin
-  UpdateFormula(Value, UzfWaterContentPosition, FUzfWaterContent);
+  UpdateFormulaBlocks(Value, UzfWaterContentPosition, FUzfWaterContent);
 end;
 
 { TUzfExtinctionDepthCollection }

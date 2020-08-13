@@ -602,7 +602,7 @@ end;
 
 procedure TEvtItem.SetEvapotranspirationRate(const Value: string);
 begin
-  UpdateFormula(Value, RatePosition, FEvapotranspirationRate);
+  UpdateFormulaBlocks(Value, RatePosition, FEvapotranspirationRate);
 end;
 
 { TEvtCollection }
@@ -1362,7 +1362,7 @@ end;
 
 procedure TEvtLayerItem.SetEvapotranspirationLayer(const Value: string);
 begin
-  UpdateFormula(Value, LayerPosition, FEvapotranspirationLayer);
+  UpdateFormulaBlocks(Value, LayerPosition, FEvapotranspirationLayer);
 end;
 
 { TEvtLayerCollection }
@@ -1719,12 +1719,12 @@ end;
 
 procedure TEvtSurfDepthItem.SetEvapotranspirationDepth(const Value: string);
 begin
-  UpdateFormula(Value, DepthPosition, FEvapotranspirationDepth);
+  UpdateFormulaBlocks(Value, DepthPosition, FEvapotranspirationDepth);
 end;
 
 procedure TEvtSurfDepthItem.SetEvapotranspirationSurface(const Value: string);
 begin
-  UpdateFormula(Value, SurfacePosition, FEvapotranspirationSurface);
+  UpdateFormulaBlocks(Value, SurfacePosition, FEvapotranspirationSurface);
 end;
 
 { TEvtSurfDepthCollection }

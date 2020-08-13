@@ -755,12 +755,12 @@ end;
 
 procedure TStrItem.SetBedBottom(const Value: string);
 begin
-  UpdateFormula(Value, StreamBedBottomPosition, FBedBottom);
+  UpdateFormulaBlocks(Value, StreamBedBottomPosition, FBedBottom);
 end;
 
 procedure TStrItem.SetBedTop(const Value: string);
 begin
-  UpdateFormula(Value, StreamBedTopPosition, FBedTop);
+  UpdateFormulaBlocks(Value, StreamBedTopPosition, FBedTop);
 end;
 
 procedure TStrItem.SetBoundaryFormula(Index: integer; const Value: string);
@@ -788,7 +788,7 @@ end;
 
 procedure TStrItem.SetConductance(const Value: string);
 begin
-  UpdateFormula(Value, StreamConductancePosition, FConductance);
+  UpdateFormulaBlocks(Value, StreamConductancePosition, FConductance);
 end;
 
 procedure TStrItem.SetDiversionSegment(const Value: integer);
@@ -810,7 +810,7 @@ end;
 
 procedure TStrItem.SetFlow(const Value: string);
 begin
-  UpdateFormula(Value, StreamFlowPosition, FFlow);
+  UpdateFormulaBlocks(Value, StreamFlowPosition, FFlow);
 end;
 
 procedure TStrItem.SetOutflowSegment(const Value: integer);
@@ -832,22 +832,22 @@ end;
 
 procedure TStrItem.SetRoughness(const Value: string);
 begin
-  UpdateFormula(Value, StreamRoughnessPosition, FRoughness);
+  UpdateFormulaBlocks(Value, StreamRoughnessPosition, FRoughness);
 end;
 
 procedure TStrItem.SetSlope(const Value: string);
 begin
-  UpdateFormula(Value, StreamSlopePosition, FSlope);
+  UpdateFormulaBlocks(Value, StreamSlopePosition, FSlope);
 end;
 
 procedure TStrItem.SetStage(const Value: string);
 begin
-  UpdateFormula(Value, StreamStagePosition, FStage);
+  UpdateFormulaBlocks(Value, StreamStagePosition, FStage);
 end;
 
 procedure TStrItem.SetWidth(const Value: string);
 begin
-  UpdateFormula(Value, StreamWidthPosition, FWidth);
+  UpdateFormulaBlocks(Value, StreamWidthPosition, FWidth);
 end;
 
 { TStrTimeListLink }

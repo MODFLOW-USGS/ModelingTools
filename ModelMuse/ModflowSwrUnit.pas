@@ -404,7 +404,7 @@ end;
 
 procedure TCustomSwrBoundaryItem.SetSwrValue(const Value: string);
 begin
-  UpdateFormula(Value, SwrValuePosition, FSwrValue);
+  UpdateFormulaBlocks(Value, SwrValuePosition, FSwrValue);
 end;
 
 { TCustomSwrListCollection }
