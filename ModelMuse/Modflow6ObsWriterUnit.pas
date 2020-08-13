@@ -222,6 +222,13 @@ resourcestring
   ' only a single head observation will be defined for it because it is not ' +
   'marked as a multi-layer head observation. It will be treated as an observ' +
   'ation in layer %1:d.';
+  StrTheObjectNamedS = 'The object named %s doesn''t intersect any active ce' +
+  'lls.';
+  StrTheFollowingHeadO = 'The following head observation objects intersect n' +
+  'o active layers';
+  StrInvalidObjectZFor = 'Invalid object Z formulas';
+  StrTheHigherZFormula = 'The higher Z formula for %s is less than the lower' +
+  ' Z formula';
 
 
 { TModflow6Obs_Writer }
@@ -404,7 +411,11 @@ var
   end;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidHeadOrDrawCalib);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidObjectZFor);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMultilayerHeadOrD);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrHeadObservationObj);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingHeadO);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   if Model.PestUsed then
   begin
     // These two properties need to be specified outside of TModflow6Obs_Writer;
@@ -492,6 +503,13 @@ begin
                 begin
                   CellTop := Min(CellTop, AScreenObject.TopElevation);
                   CellBottom := Max(CellBottom, AScreenObject.BottomElevation);
+                  if AScreenObject.TopElevation <= AScreenObject.BottomElevation then
+                  begin
+                    frmErrorsAndWarnings.AddError(Model, StrInvalidObjectZFor,
+                      Format(StrTheHigherZFormula,
+                      [AScreenObject.Name]), AScreenObject);
+
+                  end;
                 end;
                 IntersectCellThickness := Max(CellTop - CellBottom, 0);
                 if Obs.CalibrationObservations.MultiLayer then
@@ -512,12 +530,22 @@ begin
           end;
 
           if Model.PestUsed and (CellList.Count > 1)
-            and not Obs.CalibrationObservations.MultiLayer then
+            and not Obs.CalibrationObservations.MultiLayer
+            then
           begin
-            ACell := CellList[MaxIndex];
-            frmErrorsAndWarnings.AddWarning(Model, StrHeadObservationObj,
-              Format(StrTheObjectNamed0,
-              [AScreenObject.Name, ACell.Layer+1]), AScreenObject);
+            if MaxIndex < 0 then
+            begin
+              frmErrorsAndWarnings.AddWarning(Model, StrTheFollowingHeadO,
+                Format(StrTheObjectNamedS,
+                [AScreenObject.Name]), AScreenObject);
+            end
+            else
+            begin
+              ACell := CellList[MaxIndex];
+              frmErrorsAndWarnings.AddWarning(Model, StrHeadObservationObj,
+                Format(StrTheObjectNamed0,
+                [AScreenObject.Name, ACell.Layer+1]), AScreenObject);
+            end;
           end;
 
           if not Model.PestUsed or (CellList.Count = 1)
@@ -532,7 +560,10 @@ begin
             CellListEnd := MaxIndex; 
           end;
 
-          
+          if CellListStart < 0 then
+          begin
+            Continue;
+          end;
           FHorizontalCells.Clear;
           FoundFirst := False;
           ErrorAdded := False;

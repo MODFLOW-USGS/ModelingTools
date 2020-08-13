@@ -9249,9 +9249,16 @@ const
   //                models, ISSGOUT is now specified if the MNW1 or MNW2
   //                packages are active. The output file will have the extension
   //                .mt_mnw_out.
+  //    '4.2.0.38' no real change.
+
+  //               Bug fix: Fixed a bug that could cause some formulas to fail
+  //                if a data set is renamed.
+                    
+
+
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.37';
+  IModelVersion = '4.2.0.38';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

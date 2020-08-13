@@ -3306,6 +3306,9 @@ begin
         AnExpression := FExpressions.Objects[ExpressionIndex] as TExpression;
         NewExpressions.AddObject(AnExpression.Decompile, AnExpression)
       end;
+      NewExpressions.Duplicates := dupAccept;
+      NewExpressions.CaseSensitive := True;
+      NewExpressions.Sorted := True;
       FExpressions.Free;
       FExpressions := NewExpressions;
     except

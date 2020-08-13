@@ -2281,6 +2281,8 @@ begin
       end;
     end;
 
+    frmGoPhast.PhastModel.FormulaManager.ResetFormulas;
+
     // update the properties of the data sets.
     SetLength(ShouldInvalidateDataArray, DataSetProperties.Count);
     for Index := 0 to DataSetProperties.Count - 1 do
@@ -2652,6 +2654,7 @@ begin
         if (ChildDataArray <> nil) and not (dcName in ChildDataArray.Lock) then
         begin
           ChildDataArray.Name := Name;
+          ChildDataArray.DisplayName := Name;
           ChildDataArray.UpdateWithoutNotification(Orientation, EvaluatedAt,
             DataType, FNeedToInvalidate);
         end;
@@ -2664,6 +2667,7 @@ begin
   if not (dcName in FDataSet.Lock) then
   begin
     FDataSet.Name := Name;
+    FDataSet.DisplayName := Name;
     FDataSet.UpdateWithoutNotification(Orientation, EvaluatedAt,
       DataType, FNeedToInvalidate);
   end;
