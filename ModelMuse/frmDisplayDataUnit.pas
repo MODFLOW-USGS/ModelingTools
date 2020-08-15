@@ -104,7 +104,7 @@ resourcestring
   StrHeadObservationRes = 'Head Observation Results';
   StrStreamLinks = 'SFR Stream Links';
   StrStreamStrLinks = 'STR Stream Links';
-  StrVectors = 'Vectors (SUTRA models)';
+  StrVectors = 'Vectors (SUTRA and MODFLOW 6 models)';
   StrCrossSections = 'Cross Sections';
   StrSWRReachConnection = 'SWR Reach Connections';
   StrSWRObservations = 'SWR Observations';
@@ -281,11 +281,13 @@ var
   HeadObsSelected: Boolean;
   SutraSelected: Boolean;
   SwrSelected: Boolean;
+  Modflow6Selected: Boolean;
 begin
   Handle;
   tvpglstMain.Handle;
   LocalModel := frmGoPhast.PhastModel;
   ModflowSelected := LocalModel.ModelSelection in ModflowSelection;
+  Modflow6Selected := LocalModel.ModelSelection = msModflow2015;
   ModpathSelected := ModflowSelected and LocalModel.MODPATHIsSelected;
   SfrSelected := ModflowSelected and LocalModel.SfrIsSelected;
   SfrMf6Selected := ModflowSelected and LocalModel.Sfr6IsSelected;
@@ -324,30 +326,33 @@ begin
   tvpglstMain.Items[Ord(ppSwrReachConnections)].Enabled := SwrSelected;
   tvpglstMain.Items[Ord(ppSwrObsDisplay)].Enabled := SwrSelected;
 
-  tvpglstMain.Items[Ord(ppVectors)].Enabled := SutraSelected;
+  tvpglstMain.Items[Ord(ppVectors)].Enabled := SutraSelected or Modflow6Selected;
   tvpglstMain.Items[Ord(ppCrossSection)].Enabled := ModflowSelected or SutraSelected;
 
   if frmGoPhast.ModelSelection in ModflowSelection then
   begin
     frameStrStreamLink.GetData(stSTR);
-  if LocalModel.ModelSelection = msModflow2015 then
-  begin
-    frameSfrStreamLink.GetData(stSFR_Mf6);
-  end
-  else
-  begin
-    frameSfrStreamLink.GetData(stSFR);
-  end;
+    if LocalModel.ModelSelection = msModflow2015 then
+    begin
+      frameSfrStreamLink.GetData(stSFR_Mf6);
+    end
+    else
+    begin
+      frameSfrStreamLink.GetData(stSFR);
+    end;
     frameHeadObservationResults.GetData;
     frameModpathDisplay.GetData;
     frameModpathTimeSeriesDisplay.GetData;
     frameModpathEndpointDisplay1.GetData;
     frameDrawCrossSection.GetData;
     frameSwrReachConnections.GetData;
-  end
-  else if frmGoPhast.ModelSelection in SutraSelection then
+  end;
+  if frmGoPhast.ModelSelection in SutraSelection + [msModflow2015] then
   begin
     frameVectors.GetData;
+  end;
+  if frmGoPhast.ModelSelection in SutraSelection then
+  begin
     frameDrawCrossSection.GetData;
   end;
   frameColorGrid.GetData;

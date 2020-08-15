@@ -314,7 +314,7 @@ uses Math, frmGoPhastUnit, RbwParser,
   frmGridValueUnit, shlobj, activex, AnsiStrings, frmDisplayDataUnit,
   Mt3dmsChemSpeciesUnit, frmExportImageUnit, IOUtils, 
   SwrReachObjectUnit, frmProgressUnit, Generics.Collections,
-  frmBudgetPrecisionQueryUnit, ModflowBoundaryDisplayUnit;
+  frmBudgetPrecisionQueryUnit, ModflowBoundaryDisplayUnit, VectorDisplayUnit;
 
 resourcestring
   StrHead = 'Head';
@@ -2566,6 +2566,8 @@ var
   AltLayerNumbers: TIntegerList;
   AltLayerDataSets: TList;
   Alt3DArray: T3DTModflowArray;
+  Vectors: TVectorCollection;
+  VectorItem: TVectorItem;
 begin
   inherited;
   ILAY := 0;
@@ -2644,6 +2646,7 @@ begin
           try
 
             AModel := rdgModels.Objects[Ord(mcModelName), RowIndex] as TCustomModel;
+            Vectors := AModel.VelocityVectors;
             if AModel.DisvUsed then
             begin
               FGrid := nil;
@@ -2926,7 +2929,7 @@ begin
                       end;
                       if clData.Checked[CheckIndex] and not EndReached then
                       begin
-                        if Description = 'Data-spdis' then
+                        if Lowercase(Description) = 'data-spdis' then
                         begin
                           AuxLayerNumbersList.Clear;
                           AuxLayerDataSetsList.Clear;
@@ -2944,8 +2947,13 @@ begin
                         begin
                           ILAY := AModel.ModflowLayerToDataSetLayer(LayerIndex+1)+1;
 
-                          if Description = 'Data-spdis' then
+                          if Lowercase(Description) = 'data-spdis' then
                           begin
+//                            if Length(AuxArray) > 0 then
+//                            begin
+//                              VectorItem := Vectors.Add;
+//                            end;
+
                             for AuxIndex := 0 to Length(AuxArray) - 1 do
                             begin
                               AuxLayerNumbers := AuxLayerNumbersList[AuxIndex];
@@ -2956,6 +2964,23 @@ begin
                               CreateOrRetrieveLayerDataSet(AuxDescription, ILAY,
                                 LayerData, OldComment,
                                 FileNames, AModel, TDataArray);
+
+//                              if Pos('qx_', LayerData.Name) > 0 then
+//                              begin
+//                                VectorItem.Description := ReplaceText(LayerData.Name, 'qx_', '');
+//                                VectorItem.Vectors.XVelocityName := LayerData.Name;
+//                              end
+//                              else if Pos('qy_', LayerData.Name) > 0 then
+//                              begin
+//                                VectorItem.Description := ReplaceText(LayerData.Name, 'qy_', '');
+//                                VectorItem.Vectors.YVelocityName := LayerData.Name;
+//                              end
+//                              else if Pos('qz_', LayerData.Name) > 0 then
+//                              begin
+//                                VectorItem.Description := ReplaceText(LayerData.Name, 'qz_', '');
+//                                VectorItem.Vectors.ZVelocityName := LayerData.Name;
+//                              end;
+
                               CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                               Assign3DValues(ScreenObject, LayerData,
                                 AuxArray[AuxIndex].Values, LayerIndex, ILAY-1,
@@ -3080,8 +3105,12 @@ begin
                         end;
                         Inc(Count);
                         ParentArray := nil;
-                        if Description = 'Data-spdis' then
+                        if Lowercase(Description) = 'data-spdis' then
                         begin
+                          if Length(AuxArray) > 0 then
+                          begin
+                            VectorItem := Vectors.Add;
+                          end;
                           for AuxIndex := 0 to Length(AuxArray) - 1 do
                           begin
                             AuxLayerNumbers := AuxLayerNumbersList[AuxIndex];
@@ -3092,11 +3121,30 @@ begin
                             CreateOrRetrieve3DDataSet(AuxDescription, NTRANS, KPER, KSTP, TOTIM,
                               AuxLayerNumbers, AuxLayerDataSets, New3DArray, OldComment, True,
                               NewDataSets, FileNames, AModel);
+
+                            if Pos('qx_', New3DArray.Name) > 0 then
+                            begin
+                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qx_', '');
+                              VectorItem.Vectors.XVelocityName := New3DArray.Name;
+                            end
+                            else if Pos('qy_', New3DArray.Name) > 0 then
+                            begin
+                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qy_', '');
+                              VectorItem.Vectors.YVelocityName := New3DArray.Name;
+                            end
+                            else if Pos('qz_', New3DArray.Name) > 0 then
+                            begin
+                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qz_', '');
+                              VectorItem.Vectors.ZVelocityName := New3DArray.Name;
+                            end;
+
                             UpdateOldComments(OldComments, New3DArray, OldComment);
                             DataSetNames.AddObject(New3DArray.Name, New3DArray);
-                            ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(New3DArray.Name);
+                            ParentArray := frmGoPhast.PhastModel.DataArrayManager.
+                              GetDataSetByName(New3DArray.Name);
 
-                            AssignLimits(AuxMinValues, AuxMaxValues, New3DArray, ValuesToIgnore);
+                            AssignLimits(AuxMinValues, AuxMaxValues, New3DArray,
+                              ValuesToIgnore);
                           end;
                         end
                         else

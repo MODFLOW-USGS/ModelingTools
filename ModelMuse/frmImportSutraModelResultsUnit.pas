@@ -1390,6 +1390,10 @@ begin
           AssignCommonProperties;
           DataSet := DataSets[2];
           VItem.Vectors.ZVelocityName := DataSet.Name;
+        end
+        else
+        begin
+          VItem.Vectors.ZVelocityName := '';
         end;
       end;
     else

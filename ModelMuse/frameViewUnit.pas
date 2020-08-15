@@ -1581,12 +1581,15 @@ begin
         DrawCrossSection;
       end;
 
-      if frmGoPhast.ModelSelection in SutraSelection then
+      if frmGoPhast.ModelSelection in SutraSelection + [msModflow2015] then
       begin
         DrawVectors;
-        DrawCrossSection;
       end;
 
+      if frmGoPhast.ModelSelection in SutraSelection then
+      begin
+        DrawCrossSection;
+      end;
     except
       on EInvalidGraphicOperation do
       begin
@@ -2229,7 +2232,9 @@ var
 begin
   LocalModel := frmGoPhast.PhastModel;
   LocalModel.MaxVectors.PlotVectors2D(ViewDirection, FBitmap32);
-  if (LocalModel.SutraMesh <> nil) and (LocalModel.SutraMesh.MeshType = mt3D) then
+  if (LocalModel.ModelSelection in SutraSelection)
+    and (LocalModel.SutraMesh <> nil)
+    and (LocalModel.SutraMesh.MeshType = mt3D) then
   begin
     LocalModel.MidVectors.PlotVectors2D(ViewDirection, FBitmap32);
     LocalModel.MinVectors.PlotVectors2D(ViewDirection, FBitmap32);

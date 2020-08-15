@@ -560,7 +560,6 @@ type
     procedure CrossSectionMoved(Sender: TObject);
     procedure DrawFront(const BitMap: TPersistent);
     procedure GetCellsOnCrossSection(CellList: TMFIrregularCell2D_List);
-    procedure GetElementsIntfOnCrossSection(ElementList: TIElement2DList);
     procedure GetNodesIntfOnCrossSection(NodeList: TINode2DList);
     function GetElevationsNeedUpdating: boolean;
     procedure SetElevationsNeedUpdating(const Value: boolean);
@@ -732,6 +731,7 @@ type
     function CellThickness(const Layer, Row, Col: integer): double;
     property DrawCellNumbers: Boolean read FDrawCellNumbers write SetDrawCellNumbers;
     Property NumberFont: TFont read FNumberFont write SetNumberFont;
+    procedure GetElementsIntfOnCrossSection(ElementList: TIElement2DList);
   published
     procedure Loaded;
     property TwoDGrid: TModflowIrregularGrid2D read FTwoDGrid write SetTwoDGrid;

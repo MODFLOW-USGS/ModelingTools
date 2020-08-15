@@ -5,7 +5,6 @@ inherited frmDisplayData: TfrmDisplayData
   ClientHeight = 542
   ClientWidth = 784
   OnResize = FormResize
-  ExplicitLeft = -59
   ExplicitWidth = 800
   ExplicitHeight = 581
   PixelsPerInch = 96
@@ -23,7 +22,7 @@ inherited frmDisplayData: TfrmDisplayData
     Top = 0
     Width = 578
     Height = 501
-    ActivePage = jvspModpathTimeSeries
+    ActivePage = jvspVectors
     PropagateEnable = False
     Align = alClient
     OnChange = pglstMainChange
@@ -50,8 +49,10 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitWidth = 578
           ExplicitHeight = 501
           inherited tabBasic: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitHeight = 453
+            ExplicitWidth = 570
+            ExplicitHeight = 468
             DesignSize = (
               570
               468)
@@ -100,7 +101,7 @@ inherited frmDisplayData: TfrmDisplayData
             inherited fedModpathFile: TJvFilenameEdit
               Width = 553
               Height = 26
-              ExplicitWidth = 440
+              ExplicitWidth = 553
               ExplicitHeight = 26
             end
             inherited comboColorScheme: TComboBox
@@ -116,6 +117,7 @@ inherited frmDisplayData: TfrmDisplayData
             inherited seCycles: TJvSpinEdit
               Left = 458
               Height = 26
+              ExplicitLeft = 458
               ExplicitHeight = 26
             end
             inherited comboModelSelection: TComboBox
@@ -134,12 +136,13 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabOptions: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 570
-            ExplicitHeight = 468
+            ExplicitWidth = 457
+            ExplicitHeight = 453
             DesignSize = (
-              570
-              468)
+              457
+              453)
             inherited rgShow2D: TRadioGroup
               Width = 550
               Items.Strings = (
@@ -538,7 +541,8 @@ inherited frmDisplayData: TfrmDisplayData
           inherited tabBasic: TTabSheet
             ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitHeight = 454
+            ExplicitWidth = 570
+            ExplicitHeight = 468
             DesignSize = (
               570
               468)
@@ -595,7 +599,7 @@ inherited frmDisplayData: TfrmDisplayData
               Width = 548
               Height = 26
               ExplicitTop = 32
-              ExplicitWidth = 435
+              ExplicitWidth = 548
               ExplicitHeight = 26
             end
             inherited comboTimeToPlot: TComboBox
@@ -619,7 +623,7 @@ inherited frmDisplayData: TfrmDisplayData
             inherited seCycles: TJvSpinEdit
               Left = 353
               Height = 26
-              ExplicitLeft = 240
+              ExplicitLeft = 353
               ExplicitHeight = 26
             end
             inherited comboModelSelection: TComboBox
@@ -628,7 +632,6 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited setimeSeriesSize: TJvSpinEdit
               Height = 26
-              ExplicitLeft = 237
               ExplicitHeight = 26
             end
             inherited btnColorSchemes: TButton
@@ -643,12 +646,13 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabOptions: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 570
-            ExplicitHeight = 468
+            ExplicitWidth = 457
+            ExplicitHeight = 454
             DesignSize = (
-              570
-              468)
+              457
+              454)
             inherited rgShow2D: TRadioGroup
               Width = 551
               ExplicitWidth = 551
@@ -698,6 +702,7 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitWidth = 578
           ExplicitHeight = 501
           inherited tabBasic: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 570
             ExplicitHeight = 468
@@ -798,7 +803,9 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabOptions: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
+            ExplicitWidth = 468
             ExplicitHeight = 465
             DesignSize = (
               468
@@ -835,7 +842,9 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabLegend: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
+            ExplicitWidth = 468
             ExplicitHeight = 465
             inherited imLegend: TImage
               Height = 465
@@ -908,6 +917,7 @@ inherited frmDisplayData: TfrmDisplayData
           Width = 578
           ExplicitWidth = 578
           inherited tabSelection: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 570
             ExplicitHeight = 468
@@ -1061,6 +1071,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabFilters: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitHeight = 468
             inherited lblLowerLimit: TLabel
@@ -1140,6 +1151,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabLegend: TTabSheet
+            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitHeight = 468
             inherited imLegend: TImage

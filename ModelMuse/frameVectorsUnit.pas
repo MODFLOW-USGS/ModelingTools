@@ -51,7 +51,8 @@ implementation
 
 {$R *.dfm}
 
-uses frmGoPhastUnit, SutraMeshUnit, SutraOptionsUnit, PhastModelUnit;
+uses frmGoPhastUnit, SutraMeshUnit, SutraOptionsUnit, PhastModelUnit,
+  GoPhastTypes;
 
 resourcestring
   StrNone = 'none';
@@ -135,16 +136,19 @@ var
 begin
   comboVectorSource.Clear;
   comboVectorSource.Items.Add(StrNone);
-  if frmGoPhast.PhastModel.SutraOptions.TransportChoice = tcSoluteHead then
+  if frmGoPhast.ModelSelection in SutraSelection then
   begin
-    comboVectorSource.Items.Add(StrHydraulicConductivi);
-  end
-  else
-  begin
-    comboVectorSource.Items.Add(StrPermeability);
+    if frmGoPhast.PhastModel.SutraOptions.TransportChoice = tcSoluteHead then
+    begin
+      comboVectorSource.Items.Add(StrHydraulicConductivi);
+    end
+    else
+    begin
+      comboVectorSource.Items.Add(StrPermeability);
+    end;
+    comboVectorSource.Items.Add(StrLongitudinalDispers);
+    comboVectorSource.Items.Add(StrTransverseDispersiv);
   end;
-  comboVectorSource.Items.Add(StrLongitudinalDispers);
-  comboVectorSource.Items.Add(StrTransverseDispersiv);
   FFirstVectorItem := comboVectorSource.Items.Count;
 
   VelocityVectors := frmGoPhast.PhastModel.VelocityVectors;

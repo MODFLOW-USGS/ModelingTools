@@ -2199,6 +2199,7 @@ that affects the model output should also have a comment. }
     FSutraFluxObs: TSutraFluxObs;
     FModflow6GlobalObservationComparisons: TGlobalObservationComparisons;
     FPestProperties: TPestProperties;
+    FVelocityVectors: TVectorCollection;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -2420,7 +2421,10 @@ that affects the model output should also have a comment. }
     procedure SetModflow6GlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
     procedure SetPestProperties(const Value: TPestProperties);
-//    procedure OnNodeActiveDataSetChanged(Sender: TObject);
+    procedure SetVelocityVectors(const Value: TVectorCollection);
+    function GetExaggeration: double;
+    procedure SetExaggeration(Value: double);
+    //    procedure OnNodeActiveDataSetChanged(Sender: TObject);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3271,6 +3275,10 @@ that affects the model output should also have a comment. }
     property FileNameLines: TStringList read FFileNameLines;
     property PestProperties: TPestProperties read FPestProperties
       write SetPestProperties;
+    // @name is the vertical exaggeration of the front, side, and 3D views
+    // of the model in GoPhast.
+    // @name is used in PHAST, MODFLOW, and SUTRA models.
+    property Exaggeration: double read GetExaggeration write SetExaggeration;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3473,7 +3481,9 @@ that affects the model output should also have a comment. }
       stored False
     {$ENDIF}
       ;
-{Any new members added to TCustomModel should be cleared in InternalClear.}
+    property VelocityVectors: TVectorCollection read FVelocityVectors
+      write SetVelocityVectors;
+    { Any new members added to TCustomModel should be cleared in InternalClear.}
 
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
   end;
@@ -3704,8 +3714,6 @@ that affects the model output should also have a comment. }
     FMaxVectors: TPredefinedVectors;
     FMinVectors: TPredefinedVectors;
     FMidVectors: TPredefinedVectors;
-    FVelocityVectors: TVectorCollection;
-
     FFmpCrops: TCropCollection;
     FFmpSoils: TSoilCollection;
     FFmpClimate: TClimateCollection;
@@ -3721,8 +3729,8 @@ that affects the model output should also have a comment. }
     FUseGsflowFormat: Boolean;
     FCtsSystems: TCtsSystemCollection;
     // See @link(Exaggeration).
-    function GetExaggeration: double;
-//     See @link(OwnsScreenObjects).
+
+    //     See @link(OwnsScreenObjects).
     function GetOwnsScreenObjects: boolean;
 //     See @link(ObjectList).
     function GetScreenObjectCollection: TScreenObjectCollection;
@@ -3739,7 +3747,7 @@ that affects the model output should also have a comment. }
     // See @link(Diffusivity).
     procedure SetDiffusivity(const Value: double);
     // See @link(Exaggeration).
-    procedure SetExaggeration(Value: double);
+
     // See @link(FlowOnly).
     procedure SetFlowOnly(const Value: boolean);
     // See @link(FrontHeight).
@@ -3896,8 +3904,6 @@ that affects the model output should also have a comment. }
     procedure SetMaxVectors(const Value: TPredefinedVectors);
     procedure SetMidVectors(const Value: TPredefinedVectors);
     procedure SetMinVectors(const Value: TPredefinedVectors);
-    procedure SetVelocityVectors(const Value: TVectorCollection);
-
     procedure SetFmpCrops(const Value: TCropCollection); override;
     procedure SetFmpSoils(const Value: TSoilCollection); override;
     procedure SetFmpClimate(const Value: TClimateCollection); override;
@@ -4627,8 +4633,8 @@ that affects the model output should also have a comment. }
       SetBitmaps;
     // @name is the vertical exaggeration of the front, side, and 3D views
     // of the model in GoPhast.
-    // @name is used in both PHAST and MODFLOW models.
-    property Exaggeration: double read GetExaggeration write SetExaggeration;
+    // @name is used in PHAST, MODFLOW, and SUTRA models.
+    property Exaggeration;
     property RipPlantGroups: TRipPlantGroups read FRipPlantGroups
       write SetRipPlantGroups;
     // @name is used to read or write @link(TScreenObject)s to or from files.
@@ -4694,8 +4700,8 @@ that affects the model output should also have a comment. }
     property SutraSettings: TSutraSettings read FSutraSettings write SetSutraSettings;
     property MaxVectors: TPredefinedVectors read FMaxVectors write SetMaxVectors;
     property MidVectors: TPredefinedVectors read FMidVectors write SetMidVectors;
-    property MinVectors: TPredefinedVectors read FMinVectors write SetMinVectors;
-    property VelocityVectors: TVectorCollection read FVelocityVectors write SetVelocityVectors;
+    property MinVectors: TPredefinedVectors read FMinVectors
+      write SetMinVectors;
     property FmpCrops: TCropCollection read GetFmpCrops write SetFmpCrops;
     property FmpSoils: TSoilCollection read GetFmpSoils write SetFmpSoils;
     property FmpClimate: TClimateCollection read GetFmpClimate write SetFmpClimate;
@@ -8732,7 +8738,7 @@ const
   //                Shapefiles slower than it needed to be.
   //   '3.10.0.59' Change: The SelectionCount function was changed to avoid
   //                counting the same cells more thatn once.
-  //               Change: Functions related to Vertex Values are now classified 
+  //               Change: Functions related to Vertex Values are now classified
   //                under "Object_VertxValue".
   //               Change: In the "Import Points" dialog box, data sets that
   //                are used to define the vertical elevation of the grid or
@@ -9143,7 +9149,7 @@ const
   //               Bug fix: When importing Shapefiles that contained measured
   //                values, values less than -1E38 are treated as no-data
   //                values.
-  //               Bug fix: Fixed bug that could cause an assertion failure 
+  //               Bug fix: Fixed bug that could cause an assertion failure
   //                if identical starting and ending times were specified for
   //                the RCH package.
   //               Bug fix: Fixed bug in reading binary MT3D model results
@@ -9253,7 +9259,7 @@ const
 
   //               Bug fix: Fixed a bug that could cause some formulas to fail
   //                if a data set is renamed.
-                    
+
 
 
 
@@ -9888,7 +9894,7 @@ const
   StrMeshElementSize = 'Mesh Element Size';
 
 function DefaultModflowOwhmPath: string;
-begin  
+begin
   if IsWOW64 then
   begin
     result := StrMFOwhmDefaultPath64;
@@ -10707,7 +10713,6 @@ begin
   FMaxVectors := TPredefinedVectors.Create(self);
   FMidVectors := TPredefinedVectors.Create(self);
   FMinVectors := TPredefinedVectors.Create(self);
-  FVelocityVectors := TVectorCollection.Create(self);
 
   FMaxVectors.VectorDirection := pvdMax;
   FMaxVectors.Color := clRed;
@@ -11155,7 +11160,6 @@ begin
     FCtsSystems.Free;
     FGeoRef.Free;
     FRipPlantGroups.Free;
-    FVelocityVectors.Free;
     FMaxVectors.Free;
     FMidVectors.Free;
     FMinVectors.Free;
@@ -12045,7 +12049,6 @@ begin
   MaxVectors.InitializeVariables;
   MidVectors.InitializeVariables;
   MinVectors.InitializeVariables;
-  VelocityVectors.Clear;
 
   FArchiveName := '';
   Invalidate(self);
@@ -13159,62 +13162,6 @@ begin
   end;
 end;
 
-function TPhastModel.GetExaggeration: double;
-begin
-  result := 1;
-  if (ModelSelection in SutraSelection) and (SutraMesh <> nil)
-    and (SutraMesh.MeshType = mtProfile) then
-  begin
-    if frmGoPhast.frameTopView <> nil then
-    begin
-      result := frmGoPhast.frameTopView.ZoomBox.Exaggeration;
-    end
-  end
-  else
-  begin
-    if frmGoPhast.frameFrontView <> nil then
-    begin
-      result := frmGoPhast.frameFrontView.ZoomBox.Exaggeration;
-    end
-    else if frmGoPhast.frameSideView <> nil then
-    begin
-      result := frmGoPhast.frameSideView.ZoomBox.Exaggeration;
-    end;
-  end;
-end;
-
-procedure TPhastModel.SetExaggeration(Value: double);
-begin
-  if Value <= 0 then
-  begin
-    Value := 1;
-  end;
-  if Exaggeration <> Value then
-  begin
-    if (ModelSelection in SutraSelection) and (SutraMesh <> nil)
-      and (SutraMesh.MeshType = mtProfile) then
-    begin
-      if frmGoPhast.frameTopView <> nil then
-      begin
-        frmGoPhast.frameTopView.ZoomBox.Exaggeration := Value;
-      end;
-    end
-    else
-    begin
-      if frmGoPhast.frameFrontView <> nil then
-      begin
-        frmGoPhast.frameFrontView.ZoomBox.Exaggeration := Value;
-      end;
-      if frmGoPhast.frameSideView <> nil then
-      begin
-        frmGoPhast.frameSideView.ZoomBox.Exaggeration := Value;
-      end;
-      frmGoPhast.PhastGrid.GridChanged;
-      frmGoPhast.ModflowGrid.GridChanged;
-    end;
-  end;
-end;
-
 function TPhastModel.GetFarms: TFarmCollection;
 begin
   result := FFarms;
@@ -13400,11 +13347,6 @@ end;
 function TPhastModel.GetVersion: string;
 begin
   result := IModelVersion;
-end;
-
-procedure TPhastModel.SetVelocityVectors(const Value: TVectorCollection);
-begin
-  FVelocityVectors.Assign(Value);
 end;
 
 procedure TPhastModel.SetVersion(const Value: string);
@@ -16416,7 +16358,7 @@ begin
       SpecifiedHeadArray.TalksTo(ModPathZoneArray);
     end;
   end;
-  
+
   if SftUsed(nil) then
   begin
     for Index := 1 to NumberOfMt3dChemComponents do
@@ -16435,7 +16377,7 @@ begin
       end;
     end;
   end;
-  
+
   if self is TPhastModel then
   begin
     PhastModel := TPhastModel(self);
@@ -20564,7 +20506,7 @@ procedure TPhastModel.UpdateModelMateZetaObservation(
   ModelMuseSwiObs: TSwiObsItem; Project: TProject;
   Operation: TModelMateOperation);
 const
-  PlotSymbolZeta = 10;  
+  PlotSymbolZeta = 10;
 var
   ObsIndex: Integer;
   ValAttribute: TDependentAttribute;
@@ -22398,7 +22340,7 @@ begin
     for StructureIndex := 0 to SwrStructures.Count - 1 do
     begin
       AStructure := SwrStructures[StructureIndex];
-      if (AStructure.Reach >= 1) 
+      if (AStructure.Reach >= 1)
         and (AStructure.Reach <= SwrReachConnectionsPlot.ReachList.Count) then
       begin
         AReach := SwrReachConnectionsPlot.ReachList[AStructure.Reach-1];
@@ -22615,7 +22557,7 @@ begin
           begin
             for OtherIndex := 0 to StreamToPlot.OutflowSegments.Count -1 do
             begin
-		    
+
               DownstreamObject := nil;
               if StreamToPlot.OutflowSegments[OtherIndex] > 0 then
               begin
@@ -28254,6 +28196,8 @@ begin
   FSutraGlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
   FModflow6GlobalObservationComparisons := TGlobalObservationComparisons.Create(Invalidate);
 
+  FVelocityVectors := TVectorCollection.Create(self);
+
   FPestProperties := TPestProperties.Create(Invalidate);
 end;
 
@@ -28681,6 +28625,7 @@ end;
 destructor TCustomModel.Destroy;
 begin
   FPestProperties.Free;
+  FVelocityVectors.Free;
 
   FModflow6GlobalObservationComparisons.Free;
   FSutraGlobalObservationComparisons.Free;
@@ -29928,6 +29873,9 @@ begin
   CtsSystems.Clear;
   ModflowGlobalObservationComparisons.Clear;
   SutraGlobalObservationComparisons.Clear;
+
+  VelocityVectors.Clear;
+
 end;
 
 procedure TCustomModel.GenerateIrregularMesh(var ErrorMessage: string);
@@ -30936,7 +30884,7 @@ begin
   end
   else if DisvUsed then
   begin
-    DataArray.UpdateDimensions(DisvGrid.Layers.Count, 1, DisvGrid.TwoDGrid.ElementCount); 
+    DataArray.UpdateDimensions(DisvGrid.Layers.Count, 1, DisvGrid.TwoDGrid.ElementCount);
   end
 //  else if (FModelSelection in SutraSelection) and (Mesh <> nil) and (self is TPhastModel) then
 //  begin
@@ -32538,7 +32486,7 @@ begin
       HandleDataArray(FZetaDataDefinition);
     end;
   end;
-  
+
   if FCustomModel.SftUsed(nil) then
   begin
     for Index := 1 to FCustomModel.NumberOfMt3dChemComponents do
@@ -32555,7 +32503,7 @@ begin
       Lock := FSftInitConc.Lock;
       AngleType := FSftInitConc.AngleType;
       HandleDataArray(FSftInitConc);
-      
+
       DataSetName := FSftDispersion.Name + IntToStr(Index);
       DisplayName := FSftDispersion.DisplayName + IntToStr(Index);
       Orientation := FSftDispersion.Orientation;
@@ -32568,7 +32516,7 @@ begin
       Lock := FSftDispersion.Lock;
       AngleType := FSftDispersion.AngleType;
       HandleDataArray(FSftDispersion);
-      
+
     end;
   end;
 
@@ -32731,7 +32679,7 @@ begin
   FSftInitConc.AssociatedDataSets := StrSTRPackageDataSet;
   FSftInitConc.Visible := True;
   NoCheck(FSftInitConc);
-  
+
   FSftDispersion.DataSetType := TModflowBoundaryDisplayDataArray;
   FSftDispersion.Orientation := dso3D;
   FSftDispersion.DataType := rdtDouble;
@@ -40580,14 +40528,14 @@ begin
           begin
             Exit;
           end;
-        
+
           ObsScriptWriter := TGlobalComparisonScriptWriter.Create(Self, etExport);
           try
             ObsScriptWriter.WriteFile(FileName);
           finally
             ObsScriptWriter.Free;
           end;
-        
+
 
           FinalizePvalAndTemplate(FileName);
 
@@ -45044,7 +44992,7 @@ end;
 function TCustomModel.GetGrid: TCustomModelGrid;
 begin
   if ModelSelection in SutraSelection then
-  begin 
+  begin
     result := nil;
   end
   else
@@ -45428,7 +45376,7 @@ begin
   begin
     Exit;
   end;
-  if (FModel.Mesh3D <> nil)  
+  if (FModel.Mesh3D <> nil)
     and ((FModel.Mesh3D.LayerCount = 0)
     or (FModel.Mesh3D.Mesh2DI.ElementCount = 0))
     then
@@ -45521,15 +45469,70 @@ begin
   end;
 end;
 
+procedure TCustomModel.SetVelocityVectors(const Value: TVectorCollection);
+begin
+  FVelocityVectors.Assign(Value);
+end;
+
+function TCustomModel.GetExaggeration: double;
+begin
+  result := 1;
+  if (ModelSelection in SutraSelection) and (SutraMesh <> nil) and
+    (SutraMesh.MeshType = mtProfile) then
+  begin
+    if frmGoPhast.frameTopView <> nil then
+    begin
+      result := frmGoPhast.frameTopView.ZoomBox.Exaggeration;
+    end
+  end
+  else
+  begin
+    if frmGoPhast.frameFrontView <> nil then
+    begin
+      result := frmGoPhast.frameFrontView.ZoomBox.Exaggeration;
+    end
+    else if frmGoPhast.frameSideView <> nil then
+    begin
+      result := frmGoPhast.frameSideView.ZoomBox.Exaggeration;
+    end;
+  end;
+end;
+
+procedure TCustomModel.SetExaggeration(Value: double);
+begin
+  if Value <= 0 then
+  begin
+    Value := 1;
+  end;
+  if Exaggeration <> Value then
+  begin
+    if (ModelSelection in SutraSelection) and (SutraMesh <> nil) and
+      (SutraMesh.MeshType = mtProfile) then
+    begin
+      if frmGoPhast.frameTopView <> nil then
+      begin
+        frmGoPhast.frameTopView.ZoomBox.Exaggeration := Value;
+      end;
+    end
+    else
+    begin
+      if frmGoPhast.frameFrontView <> nil then
+      begin
+        frmGoPhast.frameFrontView.ZoomBox.Exaggeration := Value;
+      end;
+      if frmGoPhast.frameSideView <> nil then
+      begin
+        frmGoPhast.frameSideView.ZoomBox.Exaggeration := Value;
+      end;
+      frmGoPhast.PhastGrid.GridChanged;
+      frmGoPhast.ModflowGrid.GridChanged;
+    end;
+  end;
+end;
+
 initialization
 
   RegisterClass(TPhastModel);
   RegisterClass(TChildModel);
 
 end.
-
-
-
-
-
-

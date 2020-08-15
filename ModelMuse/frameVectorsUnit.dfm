@@ -9,71 +9,71 @@ object frameVectors: TframeVectors
   object lblScale: TLabel
     Left = 3
     Top = 64
-    Width = 107
-    Height = 16
+    Width = 89
+    Height = 13
     Caption = 'Scaling factor (2D)'
   end
   object lblMaxColor: TLabel
     Left = 3
     Top = 197
-    Width = 87
-    Height = 16
+    Width = 70
+    Height = 13
     Caption = 'Maximum color'
   end
   object lblMidColor: TLabel
     Left = 3
     Top = 249
-    Width = 69
-    Height = 16
+    Width = 56
+    Height = 13
     Caption = 'Middle color'
   end
   object lblMinColor: TLabel
     Left = 3
     Top = 301
-    Width = 84
-    Height = 16
+    Width = 66
+    Height = 13
     Caption = 'Minimum color'
   end
   object lblVelocityColor: TLabel
     Left = 3
     Top = 355
-    Width = 76
-    Height = 16
+    Width = 63
+    Height = 13
     Caption = 'Velocity color'
   end
   object lblVectorSource: TLabel
     Left = 3
     Top = 8
-    Width = 79
-    Height = 16
+    Width = 66
+    Height = 13
     Caption = 'Vector source'
   end
   object lblScale3D: TLabel
     Left = 3
     Top = 110
-    Width = 107
-    Height = 16
+    Width = 89
+    Height = 13
     Caption = 'Scaling factor (3D)'
   end
   object lblMinSpacing2D: TLabel
     Left = 154
     Top = 64
-    Width = 203
-    Height = 16
+    Width = 167
+    Height = 13
     Caption = 'Minimum vector spacing 2D (pixels)'
   end
   object lblMinHorizontalSpacing3D: TLabel
     Left = 154
     Top = 110
-    Width = 178
-    Height = 16
+    Width = 145
+    Height = 13
     Caption = 'Minimum horizontal spacing 3D'
   end
   object lblMinVerticalSpacing3D: TLabel
     Left = 154
     Top = 157
-    Width = 163
-    Height = 16
+    Width = 133
+    Height = 13
     Caption = 'Minimum vertical spacing 3D'
   end
   object rdeScale: TRbwDataEntry
@@ -94,7 +94,7 @@ object frameVectors: TframeVectors
     Left = 3
     Top = 27
     Width = 302
-    Height = 24
+    Height = 21
     Style = csDropDownList
     TabOrder = 0
     OnChange = comboVectorSourceChange
@@ -152,8 +152,8 @@ object frameVectors: TframeVectors
   object udVectors: TJvUpDown
     Left = 305
     Top = 27
-    Width = 20
-    Height = 24
+    Width = 16
+    Height = 21
     Associate = comboVectorSource
     TabOrder = 1
     OnChangingEx = udVectorsChangingEx
@@ -162,7 +162,7 @@ object frameVectors: TframeVectors
     Left = 154
     Top = 83
     Width = 121
-    Height = 24
+    Height = 21
     MaxValue = 2147483647.000000000000000000
     Enabled = False
     TabOrder = 3
