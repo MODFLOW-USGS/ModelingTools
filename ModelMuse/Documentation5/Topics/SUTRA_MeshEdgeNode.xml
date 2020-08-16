@@ -6,6 +6,6 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUTRA_MeshEdgeNode</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Strong" translate="true">SUTRA_MeshEdgeNode</text><text styleclass="Normal" translate="true"> returns True if an active node in a 3D SUTRA model forms one of the nodes in at least on inactive element.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">SUTRA_MeshEdgeNode</text><text styleclass="Normal" translate="true"> returns True if an active node in a 3D SUTRA model forms one of the nodes in at least one inactive element.</text></para>
   </body>
 </topic>

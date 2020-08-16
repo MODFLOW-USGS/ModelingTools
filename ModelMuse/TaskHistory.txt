@@ -26009,5 +26009,10 @@ object TTaskHistory
         'Graphics'
         'Testing'
         'Refactoring')
+    end
+    item
+      Date = 44059.000000000000000000
+      Categories.Strings = (
+        'Installer')
     end>
 end

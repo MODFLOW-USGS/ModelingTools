@@ -63,9 +63,9 @@ installers. Execution of the installer will install ModelMuse in a
 directory chosen by the user. If no previous version of ModelMuse 
 is installed, the default installation directory will be
 C:\Program Files\USGS\ModelMuse4 or
-C:\Program Files (x86)\USGS\ModelMuse4. If a previous version of ModelMuse 
-is installed, the default installation directory will be the directory for 
-the previous version of ModelMuse.
+C:\Program Files (x86)\USGS\ModelMuse4. If ModelMuse version 4.0 or later
+is already installed, the default installation directory will be the 
+directory for the previous version of ModelMuse.
 The installer will associate files with the extensions .gpt, 
 .gpb, and .mmZlib with ModelMuse.  The following directory structure will 
 be created in the installation directory:
@@ -99,6 +99,11 @@ Windows operating systems.  Consult your operating system help for more
 details.  Searching the operating system help for "To associate a file 
 name extension with a file type" may give the required information.
 
+The help file for ModelMuse, ModelMuse.chm, may be blocked if ModelMuse is
+installed by extracting from the zip file instead of using the installer.
+To unblock it, copy ModelMuse.chm to a flash drive and then back onto your 
+computer.
+
 C. EXECUTING THE SOFTWARE
 
 There are several ways to execute the software.
@@ -113,17 +118,17 @@ D. EXAMPLES
 Several example models are included in the "ModelMuse Examples\examples" 
 folder under Public Documents. Many of the ones for PHAST reproduce sample 
 models distributed with PHAST or described in the ModelMuse help. Most of 
-the ones for MODFLOW are described in the ModelMuse help.  Data files used 
-in the examples described in the ModelMuse documentation or help are in the 
-"ModelMuse Examples\data" folder.
+the ones for MODFLOW and SUTRA are described in the ModelMuse help.  Data 
+files used in the examples described in the ModelMuse documentation or help 
+are in the "ModelMuse Examples\data" folder.
 
 E. COMPILING
 
 The 32 and 64-bit version of ModelMuse and ModelMonitor are compiled with 
-Delphi 10.3.3 from Embarcadero.
+Delphi 10.4.2 from Embarcadero.
 http://www.embarcadero.com/ 
 The 32-bit version can also be compiled using the free community edition
-of Delphi from Embarcadero.
+of Delphi 10.3 from Embarcadero.
 https://www.embarcadero.com/products/delphi/starter
 
 The help system for ModelMuse is compiled with Help and Manual version 5
@@ -132,12 +137,12 @@ from EC Software. http://www.helpandmanual.com/
 MF2005_Importer is compiled with the Intel Fortran compiler.
 
 ModelMuse uses a number of custom components that must be installed 
-in Delphi 10.3.3 before compiling ModelMuse.  Some are included  
+in Delphi 10.4.2 before compiling ModelMuse.  Some are included  
 with the ModelMuse source code.  Additional required files or components are 
 listed below.  In some cases, the files must be altered before they 
 can be used with ModelMuse.  The required changes are listed below.
 
-General instructions for installing packages in Delphi 10.3.3 and the
+General instructions for installing packages in Delphi 10.4.2 and the
 Delphi Community Edition.
 1. If the component can be installed with the "Tools|GetIt Package Manager", 
 do so.
@@ -272,7 +277,7 @@ http://www.jam-software.com/virtual-treeview/
 https://github.com/Virtual-TreeView/Virtual-TreeView-XE2
 It can also be installed via the Delphi Get It package manager.
 
-MadExcept version 4 or later must be installed.  It can be obtained from 
+MadExcept version 5 or later must be installed.  It can be obtained from 
 http://www.madshi.net/
 
 TurboPower Abbrevia
