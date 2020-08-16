@@ -943,7 +943,7 @@ var
   LayerGroupIndex: integer;
   LayerCount: integer;
 begin
-  { TODO -cMODFLOW 6 : This may need to change for MF2015 }
+  { TODO -cMODFLOW 6 : This may need to change for MF 6 }
   Assert(LayerID >= 0);
   LayerCount := 0;
   result := False;

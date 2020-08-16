@@ -1,0 +1,6 @@
+Open RenameTest2.gpt.
+Color the mesh with the SutraFluid Flux associated concentration.
+Rename the Conc data set to Concen.
+Rename the Concen data set to Concentration.
+Check that the value of the SutraFluid Flux associated concentration at the node is set to 1.
+Close RenameTest2.gpt.

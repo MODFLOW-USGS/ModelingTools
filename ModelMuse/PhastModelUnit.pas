@@ -2424,6 +2424,9 @@ that affects the model output should also have a comment. }
     procedure SetVelocityVectors(const Value: TVectorCollection);
     function GetExaggeration: double;
     procedure SetExaggeration(Value: double);
+    function GetElementLocation(Layer, Row,
+      Column: Integer): TDualLocation;
+    function GetActiveElement(Layer, Row, Column: Integer): Boolean;
     //    procedure OnNodeActiveDataSetChanged(Sender: TObject);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
@@ -3279,6 +3282,10 @@ that affects the model output should also have a comment. }
     // of the model in GoPhast.
     // @name is used in PHAST, MODFLOW, and SUTRA models.
     property Exaggeration: double read GetExaggeration write SetExaggeration;
+    property ElementLocation[Layer, Row, Column: Integer]: TDualLocation
+      read GetElementLocation;
+    property ActiveElement[Layer, Row, Column: Integer]: Boolean
+      read GetActiveElement;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -9256,15 +9263,15 @@ const
   //                packages are active. The output file will have the extension
   //                .mt_mnw_out.
   //    '4.2.0.38' no real change.
-
-  //               Bug fix: Fixed a bug that could cause some formulas to fail
+  //    '4.3.0.0'  Bug fix: Fixed a bug that could cause some formulas to fail
   //                if a data set is renamed.
-
+  //               Enhancement: ModelMuse can now display specific discharge
+  //                vectors for MODFLOW 6 models.
 
 
 
   // version number of ModelMuse.
-  IModelVersion = '4.2.0.38';
+  IModelVersion = '4.3.0.0';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -30906,6 +30913,99 @@ begin
   else
   begin
     DataArray.UpdateDimensions(-1, -1, -1);
+  end;
+end;
+
+function TCustomModel.GetElementLocation(Layer, Row,
+  Column: Integer): TDualLocation;
+var
+  APoint: TPoint2D;
+  DisvCell: TModflowDisVCell;
+  IDomain: TDataArray;
+  AnElement: TSutraElement3D;
+  ActiveDataArray: TDataArray;
+begin
+  result.RotatedLocation.x := 0;
+  result.RotatedLocation.y := 0;
+  result.RotatedLocation.z := 0;
+  if ModelSelection in SutraSelection then
+  begin
+    APoint := SutraMesh.Mesh2D.Elements[Column].Center;
+    result.RotatedLocation.x := APoint.x;
+    result.RotatedLocation.y := APoint.y;
+    if SutraMesh.MeshType = mt3D then
+    begin
+      AnElement := SutraMesh.ElementArray[Layer,Column];
+      result.RotatedLocation.z := AnElement.CenterElevation;
+    end
+    else
+    begin
+      result.RotatedLocation.z := 0;
+    end;
+    result.UnRotatedLocation := result.RotatedLocation;
+  end
+  else if ModelSelection in ModflowSelection then
+  begin
+    if DisvUsed then
+    begin
+      APoint := DisvGrid.TwoDGrid.Cells[Column].Location;
+      result.RotatedLocation.x := APoint.x;
+      result.RotatedLocation.y := APoint.y;
+      DisvCell := DisvGrid.Cells[Layer, Column];
+      result.RotatedLocation.Z := DisvCell.CenterElevation;
+      result.UnRotatedLocation := result.RotatedLocation;
+    end
+    else
+    begin
+      result.RotatedLocation := Grid.RotatedThreeDElementCenter
+        (Column,Row,Layer);
+      result.UnRotatedLocation := Grid.ThreeDElementCenter
+        (Column,Row,Layer);
+    end;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+function TCustomModel.GetActiveElement(Layer, Row, Column: Integer): Boolean;
+var
+  APoint: TPoint2D;
+  DisvCell: TModflowDisVCell;
+  IDomain: TDataArray;
+  AnElement: TSutraElement3D;
+  ActiveDataArray: TDataArray;
+begin
+  result := False;
+  if ModelSelection in SutraSelection then
+  begin
+    if SutraMesh.MeshType = mt3D then
+    begin
+      AnElement := SutraMesh.ElementArray[Layer,Column];
+      result := AnElement.Active;
+    end
+    else
+    begin
+      result := True;
+    end;
+  end
+  else if ModelSelection in ModflowSelection then
+  begin
+    if ModelSelection = msModflow2015 then
+    begin
+      IDomain := DataArrayManager.GetDataSetByName(K_IDOMAIN);
+      result := IDomain.IntegerData[Layer, Row, Column] > 0;
+    end
+    else
+    begin
+      ActiveDataArray := DataArrayManager.GetDataSetByName(rsActive);
+      result := IDomain.BooleanData[Layer, Row, Column];
+    end;
+  end
+  else
+  begin
+    Assert(False);
   end;
 end;
 

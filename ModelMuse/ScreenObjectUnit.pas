@@ -31246,12 +31246,8 @@ end;
 
 function TScreenObject.StoreModflowCSub: Boolean;
 begin
-{$IFDEF CSUB}
   result := (FModflowBoundaries <> nil)
     and (ModflowCSub <> nil) and ModflowCSub.Used;
-{$ELSE}
-  result := False;
-{$ENDIF}
 end;
 
 function TScreenObject.StoreModflowDrnBoundary: Boolean;

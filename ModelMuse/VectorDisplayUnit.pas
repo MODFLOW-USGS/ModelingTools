@@ -370,7 +370,8 @@ begin
   result := FStoredScale3D.Value;
 end;
 
-function TCustomVectors.GetVector(const Layer, Row, Column: integer; ScaleType: TScaleType): TLine3D;
+function TCustomVectors.GetVector(const Layer, Row, Column: integer;
+  ScaleType: TScaleType): TLine3D;
 var
   Factor: Extended;
   LocalScale: double;
@@ -427,9 +428,9 @@ begin
   begin
     frmGoPhast.TopScreenObjectsChanged := True;
     frmGoPhast.FrontScreenObjectsChanged := True;
+    frmGoPhast.SideScreenObjectsChanged := True;
     FNeedToRecordVectors := True;
     frmGoPhast.frame3DView.glWidModelView.Invalidate;
-//    frmGoPhast.InvalidateImage32AllViews;
   end;
 end;
 
@@ -444,36 +445,30 @@ procedure TCustomVectors.PlotVectors2D(ViewDirection: TViewDirection;
 const
   LineThickness: single = 2;
 var
-  Mesh: TSutraMesh3D;
   LayerIndex: Integer;
   ColIndex: Integer;
-  AnElement: TSutraElement3D;
   AVector: TLine3D;
   Points: array of TPoint;
   ZoomBox: TQRbwZoomBox2;
   AColor: TColor32;
-  ElementList: TSutraElement2D_List;
   Element2D_Index: Integer;
-  Element2D: TSutraElement2D;
   StartPoint: TPoint2D;
-  Element3D: TSutraElement3D;
   SegmentAngle: Extended;
   APoint: TPoint2D;
   Angle: Extended;
-  X1: TFloat;
-  Y1: TFloat;
-  X2: TFloat;
-  Y2: TFloat;
+  X1: FastGEO.TFloat;
+  Y1: FastGEO.TFloat;
+  X2: FastGEO.TFloat;
+  Y2: FastGEO.TFloat;
   Magnitude: Double;
   SpacingTree: TRbwQuadTree;
   LocalModel: TCustomModel;
-  DisvMesh: TModflowDisvGrid;
-  Grid: TCustomModelGrid;
-  AnElementI: IElement3D;
   ElementListI: TIElement2DList;
   Element2DI: IElement2D;
   RowIndex: Integer;
-  IDOMAIN: TDataArray;
+  LoopMax: Integer;
+  Grid: TCustomModelGrid;
+  GridAngle: Double;
   function ShouldPlotVector: boolean;
   var
     X: double;
@@ -526,433 +521,250 @@ begin
         Exit;
       end;
     end;
+    LocalModel := FModel as TCustomModel;
     SetLength(Points, 3);
     ZoomBox := GetZoomBox(ViewDirection);
     FMagnification := ZoomBox.Magnification;
     AColor := Color32(Color);
+    if LocalModel.ModelSelection in SutraSelection then
+    begin
+      if LocalModel.SutraMesh.MeshType in [mt2D, mtProfile] then
+      begin
+        if ViewDirection <> vdTop then
+        begin
+          Exit;
+        end;
+      end;
+    end
+    else if FModel.ModelSelection <> msModflow2015 then
+    begin
+      Exit;
+    end;
+
     SpacingTree := TRbwQuadTree.Create(nil);
     try
-      if FModel.ModelSelection in SutraSelection then
-      begin
-        Mesh := (FModel as TPhastModel).SutraMesh;
-        case Mesh.MeshType of
-          mt2D, mtProfile:
+      case ViewDirection of
+        vdTop:
+          begin
+            if (LocalModel.ModelSelection = msModflow2015)
+              and not LocalModel.DisvUsed then
             begin
-              if ViewDirection <> vdTop then
-              begin
-                Exit;
-              end;
-              for ColIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
-              begin
-                AVector := Vectors[0, 0, ColIndex, st2D];
+              GridAngle := LocalModel.Grid.GridAngle;
+            end
+            else
+            begin
+              GridAngle := 0;
+            end;
+            LayerIndex := LocalModel.SelectedLayer;
+            if LayerIndex >= LocalModel.LayerCount then
+            begin
+              LayerIndex := LocalModel.LayerCount - 1;
+            end;
 
-                X1 := AVector[1].x;
-                Points[0].X := ZoomBox.XCoord(X1);
-                Y1 := AVector[1].y;
-                Points[0].Y := ZoomBox.YCoord(Y1);
+            for RowIndex := 0 to LocalModel.RowCount - 1 do
+            begin
+              for ColIndex := 0 to LocalModel.ColumnCount - 1 do
+              begin
+                if LocalModel.ActiveElement[LayerIndex, RowIndex, ColIndex] then
+                begin
+                  AVector := Vectors[LayerIndex, RowIndex, ColIndex, st2D];
+                  X1 := AVector[1].x;
+                  Y1 := AVector[1].y;
+                  if GridAngle <> 0 then
+                  begin
+                    LocalModel.Grid.
+                      RotateFromGridCoordinatesToRealWorldCoordinates(X1, Y1);
+                  end;
+                  Points[0].X := ZoomBox.XCoord(X1);
+                  Points[0].Y := ZoomBox.YCoord(Y1);
+
+                  if not ShouldPlotVector then
+                  begin
+                    Continue;
+                  end;
+
+                  X2 := AVector[2].x;
+                  Y2 := AVector[2].y;
+                  if GridAngle <> 0 then
+                  begin
+                    LocalModel.Grid.
+                      RotateFromGridCoordinatesToRealWorldCoordinates(X2, Y2);
+                  end;
+
+                  Points[1].X := ZoomBox.XCoord((X1+X2)/2);
+                  Points[1].Y := ZoomBox.YCoord((Y1+Y2)/2);
+                  DrawBigPolyline32(BitMap, clBlack32, LineThickness,
+                    Points, True, False, 0, 2);
+
+                  Points[2].X := ZoomBox.XCoord(X2);
+                  Points[2].Y := ZoomBox.YCoord(Y2);
+                  DrawBigPolyline32(BitMap, AColor, LineThickness,
+                    Points, True, False, 1, 2);
+                end;
+              end;
+            end;
+          end;
+        vdFront:
+          begin
+            StartPoint := EquatePoint(0.0, 0.0);
+
+            ElementListI := nil;
+            try
+              if LocalModel.ModelSelection in SutraSelection then
+              begin
+                SegmentAngle := LocalModel.SutraMesh.CrossSection.Angle;
+                ElementListI := TIElement2DList.Create;
+                LocalModel.SutraMesh.GetElementsIntfOnCrossSection(ElementListI);
+                LoopMax := ElementListI.Count;
+                RowIndex := 0;
+              end
+              else if LocalModel.DisvUsed then
+              begin
+                SegmentAngle := LocalModel.DisvGrid.CrossSection.Angle;
+                ElementListI := TIElement2DList.Create;
+                LocalModel.DisvGrid.GetElementsIntfOnCrossSection(ElementListI);
+                LoopMax := ElementListI.Count;
+                RowIndex := 0;
+              end
+              else
+              begin
+                SegmentAngle := 0;
+                LoopMax := LocalModel.Grid.ColumnCount;
+                RowIndex := LocalModel.Grid.SelectedRow;
+                if RowIndex >= LocalModel.Grid.RowCount then
+                begin
+                  RowIndex := LocalModel.Grid.RowCount -1;
+                end;
+              end;
+
+              for Element2D_Index := 0 to LoopMax - 1 do
+              begin
+                if (LocalModel.ModelSelection in SutraSelection)
+                  or LocalModel.DisvUsed then
+                begin
+                  Element2DI := ElementListI[Element2D_Index];
+                  ColIndex := Element2DI.ElementNumber;
+                end
+                else
+                begin
+                  ColIndex := Element2D_Index;
+                end;
+                for LayerIndex := 0 to LocalModel.LayerCount - 1 do
+                begin
+                  if not LocalModel.ActiveElement[LayerIndex, RowIndex, ColIndex] then
+                  begin
+                    Continue;
+                  end;
+                  AVector := Vectors[LayerIndex, RowIndex, ColIndex, st2D];
+
+                  APoint := EquatePoint(AVector[1].x, AVector[1].y);
+                  Angle := ArcTan2(APoint.y - StartPoint.y,
+                    APoint.x - StartPoint.x) - SegmentAngle;
+                  X1 := Distance(StartPoint, APoint)*Cos(Angle)
+                    + StartPoint.x;
+                  Y1 := AVector[1].Z;
+                  Points[0].X := ZoomBox.XCoord(X1);
+                  Points[0].Y := ZoomBox.YCoord(Y1);
+
+                  if not ShouldPlotVector then
+                  begin
+                    Continue;
+                  end;
+
+                  APoint := EquatePoint(AVector[2].x, AVector[2].y);
+                  Angle := ArcTan2(APoint.y - StartPoint.y,
+                    APoint.x - StartPoint.x) - SegmentAngle;
+                  X2 := Distance(StartPoint, APoint)*Cos(Angle)
+                    + StartPoint.x;
+
+                  Y2 := AVector[2].Z;
+                  if FVectorMethod = vcMagnitude then
+                  begin
+                    Magnitude := Distance(AVector[1], AVector[2]);
+                    Y2 := (AVector[2].Z - AVector[1].Z)
+                      *ZoomBox.Exaggeration + AVector[1].Z;
+                    Angle := ArcTan2(Y2-Y1, X2-X1);
+                    X2 := X1 + Cos(Angle)*Magnitude;
+                    Y2 := Y1 + Sin(Angle)*Magnitude/ZoomBox.Exaggeration;
+                  end;
+
+                  Points[2].X := ZoomBox.XCoord(X2);
+                  Points[2].Y := ZoomBox.YCoord(Y2);
+
+                  Points[1].X := ZoomBox.XCoord((X1 + X2)/2);
+                  Points[1].Y := ZoomBox.YCoord((Y1 + Y2)/2);
+
+                  DrawBigPolyline32(BitMap, clBlack32, LineThickness,
+                    Points, True, False, 0, 2);
+                  DrawBigPolyline32(BitMap, AColor, LineThickness,
+                    Points, True, False, 1, 2);
+                end;
+              end;
+            finally
+              ElementListI.Free;
+            end;
+          end;
+        vdSide:
+          begin
+            Assert((LocalModel.ModelSelection = msModflow2015)
+              and not LocalModel.DisvUsed);
+            Grid := LocalModel.Grid;
+            StartPoint := EquatePoint(0.0, 0.0);
+
+            LoopMax := LocalModel.Grid.RowCount;
+            ColIndex := LocalModel.Grid.SelectedColumn;
+            if ColIndex >= LocalModel.Grid.ColumnCount then
+            begin
+              ColIndex := LocalModel.Grid.ColumnCount -1;
+            end;
+
+            for RowIndex := 0 to LoopMax - 1 do
+            begin
+              for LayerIndex := 0 to LocalModel.LayerCount - 1 do
+              begin
+                if not LocalModel.ActiveElement[LayerIndex, RowIndex, ColIndex] then
+                begin
+                  Continue;
+                end;
+                AVector := Vectors[LayerIndex, RowIndex, ColIndex, st2D];
+
+                X1 := AVector[1].y;
+                Y1 := AVector[1].Z;
+
+                Points[0] := Convert2D_SidePoint(ZoomBox, EquatePoint(X1, Y1));
 
                 if not ShouldPlotVector then
                 begin
                   Continue;
                 end;
 
-                X2 := AVector[2].x;
-                Y2 := AVector[2].y;
-
+                X2 := AVector[2].y;
+                Y2 := AVector[2].Z;
                 if FVectorMethod = vcMagnitude then
                 begin
                   Magnitude := Distance(AVector[1], AVector[2]);
-                  if Mesh.MeshType = mtProfile then
-                  begin
-                    Y2 := (AVector[2].Y - AVector[1].Y)
-                      *ZoomBox.Exaggeration + AVector[1].Y;
-                  end;
+                  Y2 := (AVector[2].Z - AVector[1].Z)
+                    *ZoomBox.Exaggeration + AVector[1].Z;
                   Angle := ArcTan2(Y2-Y1, X2-X1);
                   X2 := X1 + Cos(Angle)*Magnitude;
-                  if Mesh.MeshType = mtProfile then
-                  begin
-                    Y2 := Y1 + Sin(Angle)*Magnitude/ZoomBox.Exaggeration;
-                  end
-                  else
-                  begin
-                    Y2 := Y1 + Sin(Angle)*Magnitude;
-                  end;
+                  Y2 := Y1 + Sin(Angle)*Magnitude/ZoomBox.Exaggeration;
                 end;
 
-                Points[1].X := ZoomBox.XCoord((X1+X2)/2);
-                Points[1].Y := ZoomBox.YCoord((Y1+Y2)/2);
+                Points[2] := Convert2D_SidePoint(ZoomBox,
+                  EquatePoint(X2, Y2));
+
+                Points[1] := Convert2D_SidePoint(ZoomBox,
+                  EquatePoint((X1 + X2)/2, (Y1 + Y2)/2));
+
                 DrawBigPolyline32(BitMap, clBlack32, LineThickness,
                   Points, True, False, 0, 2);
-
-                Points[2].X := ZoomBox.XCoord(X2);
-                Points[2].Y := ZoomBox.YCoord(Y2);
                 DrawBigPolyline32(BitMap, AColor, LineThickness,
                   Points, True, False, 1, 2);
-              end
-            end;
-          mt3D:
-            begin
-              case ViewDirection of
-                vdTop:
-                  begin
-                    LayerIndex := Mesh.SelectedLayer;
-                    if LayerIndex >= Mesh.LayerCount then
-                    begin
-                      LayerIndex := Mesh.LayerCount - 1;
-                    end;
-                    for ColIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
-                    begin
-                      AnElement := Mesh.ElementArray[LayerIndex, ColIndex];
-                      if AnElement.Active then
-                      begin
-                        AVector := Vectors[LayerIndex, 0, ColIndex, st2D];
-                        X1 := AVector[1].x;
-                        Points[0].X := ZoomBox.XCoord(X1);
-                        Y1 := AVector[1].y;
-                        Points[0].Y := ZoomBox.YCoord(Y1);
-
-                        if not ShouldPlotVector then
-                        begin
-                          Continue;
-                        end;
-
-                        X2 := AVector[2].x;
-                        Y2 := AVector[2].y;
-
-                        Points[1].X := ZoomBox.XCoord((X1+X2)/2);
-                        Points[1].Y := ZoomBox.YCoord((Y1+Y2)/2);
-                        DrawBigPolyline32(BitMap, clBlack32, LineThickness,
-                          Points, True, False, 0, 2);
-
-                        Points[2].X := ZoomBox.XCoord(X2);
-                        Points[2].Y := ZoomBox.YCoord(Y2);
-                        DrawBigPolyline32(BitMap, AColor, LineThickness,
-                          Points, True, False, 1, 2);
-                      end;
-                    end;
-                  end;
-                vdFront:
-                  begin
-                    StartPoint := EquatePoint(0.0, 0.0);
-                    SegmentAngle := Mesh.CrossSection.Angle;
-                    ElementList := TSutraElement2D_List.Create;
-                    try
-                      Mesh.GetElementsOnCrossSection(ElementList);
-                      for Element2D_Index := 0 to ElementList.Count - 1 do
-                      begin
-                        Element2D := ElementList[Element2D_Index];
-                        for LayerIndex := 0 to Mesh.LayerCount - 1 do
-                        begin
-                          Element3D := Mesh.ElementArray[LayerIndex,
-                            Element2D.ElementNumber];
-                          if not Element3D.Active then
-                          begin
-                            Continue;
-                          end;
-                          AVector := Vectors[LayerIndex, 0, Element2D.ElementNumber, st2D];
-
-                          APoint := EquatePoint(AVector[1].x, AVector[1].y);
-                          Angle := ArcTan2(APoint.y - StartPoint.y,
-                            APoint.x - StartPoint.x) - SegmentAngle;
-                          X1 := Distance(StartPoint, APoint)*Cos(Angle)
-                            + StartPoint.x;
-                          Y1 := AVector[1].Z;
-                          Points[0].X := ZoomBox.XCoord(X1);
-                          Points[0].Y := ZoomBox.YCoord(Y1);
-
-                          if not ShouldPlotVector then
-                          begin
-                            Continue;
-                          end;
-
-                          APoint := EquatePoint(AVector[2].x, AVector[2].y);
-                          Angle := ArcTan2(APoint.y - StartPoint.y,
-                            APoint.x - StartPoint.x) - SegmentAngle;
-                          X2 := Distance(StartPoint, APoint)*Cos(Angle)
-                            + StartPoint.x;
-  //                        Y2 := (AVector[2].Z - AVector[1].Z)
-  //                          /ZoomBox.Exaggeration + AVector[1].Z;
-  //
-  //                        if FVectorMethod = vcMagnitude then
-  //                        begin
-  //                          Angle := ArcTan2(Y2-Y1, X2-X1);
-  //                          Magnitude := Distance(AVector[1], AVector[2]);
-  //                          X2 := X1 + Cos(Angle)*Magnitude;
-  //                          Y2 := Y1 + Sin(Angle)*Magnitude;
-  //                        end;
-                          Y2 := AVector[2].Z;
-                          if FVectorMethod = vcMagnitude then
-                          begin
-                            Magnitude := Distance(AVector[1], AVector[2]);
-                            Y2 := (AVector[2].Z - AVector[1].Z)
-                              *ZoomBox.Exaggeration + AVector[1].Z;
-                            Angle := ArcTan2(Y2-Y1, X2-X1);
-                            X2 := X1 + Cos(Angle)*Magnitude;
-                            Y2 := Y1 + Sin(Angle)*Magnitude/ZoomBox.Exaggeration;
-                          end;
-
-
-
-                          Points[2].X := ZoomBox.XCoord(X2);
-                          Points[2].Y := ZoomBox.YCoord(Y2);
-
-                          Points[1].X := ZoomBox.XCoord((X1 + X2)/2);
-                          Points[1].Y := ZoomBox.YCoord((Y1 + Y2)/2);
-
-                          DrawBigPolyline32(BitMap, clBlack32, LineThickness,
-                            Points, True, False, 0, 2);
-                          DrawBigPolyline32(BitMap, AColor, LineThickness,
-                            Points, True, False, 1, 2);
-                        end;
-                      end;
-                    finally
-                      ElementList.Free;
-                    end;
-
-                  end;
-                vdSide: ;
-                else Assert(False);
               end;
             end;
-          else
-            Assert(False);
-        end;
-      end
-      else if FModel.ModelSelection = msModflow2015 then
-      begin
-        LocalModel := FModel as TCustomModel;
-        if LocalModel.DisvUsed then
-        begin
-          DisvMesh := LocalModel.DisvGrid;
-          case ViewDirection of
-            vdTop:
-              begin
-                LayerIndex := DisvMesh.SelectedLayer;
-                if LayerIndex >= DisvMesh.LayerCount then
-                begin
-                  LayerIndex := DisvMesh.LayerCount - 1;
-                end;
-                for ColIndex := 0 to DisvMesh.TwoDGrid.Cells.Count - 1 do
-                begin
-                  AnElementI := DisvMesh.ElementArrayI[LayerIndex, ColIndex];
-                  if AnElementI.Active then
-                  begin
-                    AVector := Vectors[LayerIndex, 0, ColIndex, st2D];
-                    X1 := AVector[1].x;
-                    Points[0].X := ZoomBox.XCoord(X1);
-                    Y1 := AVector[1].y;
-                    Points[0].Y := ZoomBox.YCoord(Y1);
 
-                    if not ShouldPlotVector then
-                    begin
-                      Continue;
-                    end;
-
-                    X2 := AVector[2].x;
-                    Y2 := AVector[2].y;
-
-                    Points[1].X := ZoomBox.XCoord((X1+X2)/2);
-                    Points[1].Y := ZoomBox.YCoord((Y1+Y2)/2);
-                    DrawBigPolyline32(BitMap, clBlack32, LineThickness,
-                      Points, True, False, 0, 2);
-
-                    Points[2].X := ZoomBox.XCoord(X2);
-                    Points[2].Y := ZoomBox.YCoord(Y2);
-                    DrawBigPolyline32(BitMap, AColor, LineThickness,
-                      Points, True, False, 1, 2);
-                  end;
-                end;
-              end;
-            vdFront:
-              begin
-                StartPoint := EquatePoint(0.0, 0.0);
-                SegmentAngle := DisvMesh.CrossSection.Angle;
-                ElementListI := TIElement2DList.Create;
-                try
-                  DisvMesh.GetElementsIntfOnCrossSection(ElementListI);
-                  for Element2D_Index := 0 to ElementListI.Count - 1 do
-                  begin
-                    Element2DI := ElementListI[Element2D_Index];
-                    for LayerIndex := 0 to DisvMesh.LayerCount - 1 do
-                    begin
-                      AnElementI := DisvMesh.ElementArrayI[LayerIndex,
-                        Element2DI.ElementNumber];
-                      if not AnElementI.Active then
-                      begin
-                        Continue;
-                      end;
-                      AVector := Vectors[LayerIndex, 0, Element2DI.ElementNumber, st2D];
-
-                      APoint := EquatePoint(AVector[1].x, AVector[1].y);
-                      Angle := ArcTan2(APoint.y - StartPoint.y,
-                        APoint.x - StartPoint.x) - SegmentAngle;
-                      X1 := Distance(StartPoint, APoint)*Cos(Angle)
-                        + StartPoint.x;
-                      Y1 := AVector[1].Z;
-                      Points[0].X := ZoomBox.XCoord(X1);
-                      Points[0].Y := ZoomBox.YCoord(Y1);
-
-                      if not ShouldPlotVector then
-                      begin
-                        Continue;
-                      end;
-
-                      APoint := EquatePoint(AVector[2].x, AVector[2].y);
-                      Angle := ArcTan2(APoint.y - StartPoint.y,
-                        APoint.x - StartPoint.x) - SegmentAngle;
-                      X2 := Distance(StartPoint, APoint)*Cos(Angle)
-                        + StartPoint.x;
-                      Y2 := AVector[2].Z;
-                      if FVectorMethod = vcMagnitude then
-                      begin
-                        Magnitude := Distance(AVector[1], AVector[2]);
-                        Y2 := (AVector[2].Z - AVector[1].Z)
-                          *ZoomBox.Exaggeration + AVector[1].Z;
-                        Angle := ArcTan2(Y2-Y1, X2-X1);
-                        X2 := X1 + Cos(Angle)*Magnitude;
-                        Y2 := Y1 + Sin(Angle)*Magnitude/ZoomBox.Exaggeration;
-                      end;
-
-
-
-                      Points[2].X := ZoomBox.XCoord(X2);
-                      Points[2].Y := ZoomBox.YCoord(Y2);
-
-                      Points[1].X := ZoomBox.XCoord((X1 + X2)/2);
-                      Points[1].Y := ZoomBox.YCoord((Y1 + Y2)/2);
-
-                      DrawBigPolyline32(BitMap, clBlack32, LineThickness,
-                        Points, True, False, 0, 2);
-                      DrawBigPolyline32(BitMap, AColor, LineThickness,
-                        Points, True, False, 1, 2);
-                    end;
-                  end;
-                finally
-                  ElementListI.Free;
-                end;
-
-              end;
-            vdSide: ;
-            else Assert(False);
-          end
-        end
-        else
-        begin
-          IDOMAIN := LocalModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-          IDOMAIN.Initialize;
-          Grid := LocalModel.Grid;
-          case ViewDirection of
-            vdTop:
-              begin
-                LayerIndex := Grid.SelectedLayer;
-                if LayerIndex >= Grid.LayerCount then
-                begin
-                  LayerIndex := Grid.LayerCount - 1;
-                end;
-                for RowIndex := 0 to Grid.RowCount - 1 do
-                begin
-                  for ColIndex := 0 to Grid.ColumnCount - 1 do
-                  begin
-                    if IDOMAIN.IntegerData[LayerIndex, RowIndex, ColIndex] > 0 then
-                    begin
-
-                      AVector := Vectors[LayerIndex, 0, ColIndex, st2D];
-                      X1 := AVector[1].x;
-                      Points[0].X := ZoomBox.XCoord(X1);
-                      Y1 := AVector[1].y;
-                      Points[0].Y := ZoomBox.YCoord(Y1);
-
-                      if not ShouldPlotVector then
-                      begin
-                        Continue;
-                      end;
-
-                      X2 := AVector[2].x;
-                      Y2 := AVector[2].y;
-
-                      Points[1].X := ZoomBox.XCoord((X1+X2)/2);
-                      Points[1].Y := ZoomBox.YCoord((Y1+Y2)/2);
-                      DrawBigPolyline32(BitMap, clBlack32, LineThickness,
-                        Points, True, False, 0, 2);
-
-                      Points[2].X := ZoomBox.XCoord(X2);
-                      Points[2].Y := ZoomBox.YCoord(Y2);
-                      DrawBigPolyline32(BitMap, AColor, LineThickness,
-                        Points, True, False, 1, 2);
-                    end;
-                  end;
-                end;
-              end;
-            vdFront:
-              begin
-                SegmentAngle := 0;
-                StartPoint := EquatePoint(0.0, 0.0);
-                RowIndex := Grid.SelectedRow;
-                if RowIndex >= Grid.RowCount then
-                begin
-                  RowIndex := Grid.RowCount - 1;
-                end;
-                for LayerIndex := 0 to Grid.LayerCount - 1 do
-                begin
-                  for ColIndex := 0 to Grid.ColumnCount - 1 do
-                  begin
-                    if IDOMAIN.IntegerData[LayerIndex, RowIndex, ColIndex] > 0 then
-                    begin
-                      AVector := Vectors[LayerIndex, RowIndex, ColIndex, st2D];
-
-                      APoint := EquatePoint(AVector[1].x, AVector[1].y);
-                      Angle := ArcTan2(APoint.y - StartPoint.y,
-                        APoint.x - StartPoint.x) - SegmentAngle;
-                      X1 := Distance(StartPoint, APoint)*Cos(Angle)
-                        + StartPoint.x;
-                      Y1 := AVector[1].Z;
-                      Points[0].X := ZoomBox.XCoord(X1);
-                      Points[0].Y := ZoomBox.YCoord(Y1);
-
-                      if not ShouldPlotVector then
-                      begin
-                        Continue;
-                      end;
-
-                      APoint := EquatePoint(AVector[2].x, AVector[2].y);
-                      Angle := ArcTan2(APoint.y - StartPoint.y,
-                        APoint.x - StartPoint.x) - SegmentAngle;
-                      X2 := Distance(StartPoint, APoint)*Cos(Angle)
-                        + StartPoint.x;
-                      Y2 := AVector[2].Z;
-                      if FVectorMethod = vcMagnitude then
-                      begin
-                        Magnitude := Distance(AVector[1], AVector[2]);
-                        Y2 := (AVector[2].Z - AVector[1].Z)
-                          *ZoomBox.Exaggeration + AVector[1].Z;
-                        Angle := ArcTan2(Y2-Y1, X2-X1);
-                        X2 := X1 + Cos(Angle)*Magnitude;
-                        Y2 := Y1 + Sin(Angle)*Magnitude/ZoomBox.Exaggeration;
-                      end;
-
-                      Points[2].X := ZoomBox.XCoord(X2);
-                      Points[2].Y := ZoomBox.YCoord(Y2);
-
-                      Points[1].X := ZoomBox.XCoord((X1 + X2)/2);
-                      Points[1].Y := ZoomBox.YCoord((Y1 + Y2)/2);
-
-                      DrawBigPolyline32(BitMap, clBlack32, LineThickness,
-                        Points, True, False, 0, 2);
-                      DrawBigPolyline32(BitMap, AColor, LineThickness,
-                        Points, True, False, 1, 2);
-                    end;
-                  end;
-                end;
-              end;
-            vdSide:
-              begin
-              end;
           end;
-        end;
-      end
-      else
-      begin
-        Assert(False);
+        else Assert(False);
       end;
     finally
       SpacingTree.Free;
@@ -1017,10 +829,8 @@ end;
 procedure TCustomVectors.RecordVectors3D;
 var
   LocalModel: TCustomModel;
-  Mesh: TSutraMesh3D;
   ColIndex: Integer;
   LayerIndex: Integer;
-  AnElement: TSutraElement3D;
   AVector: TLine3D;
   X1, Y1, Z1: single;
   X2, Y2, Z2: single;
@@ -1033,9 +843,7 @@ var
   Angle: Extended;
   StartPointHorizontal: TPoint2D;
   EndPointHorizontal: TPoint2D;
-  DisvMesh: TModflowDisvGrid;
-  Grid: TCustomModelGrid;
-  AnCell3D: TModflowDisVCell;
+  RowIndex: Integer;
   function ShouldPlotVector: boolean;
   var
     X1Dble: double;
@@ -1103,27 +911,24 @@ begin
   LocalModel := Model as TCustomModel;
   SpacingTree := TRbwOctTree.Create(nil);
   try
-    if LocalModel.ModelSelection in SutraSelection then
-    begin
-      Mesh := LocalModel.SutraMesh;
-      Assert(Mesh.MeshType = mt3D);
-      glNewList(FVectorGLIndex, GL_COMPILE);
+    glNewList(FVectorGLIndex, GL_COMPILE);
+    try
+      glLineWidth(ThinLine);
+
+      glBegin(GL_LINES);
       try
-        glLineWidth(ThinLine);
-
-
-        glBegin(GL_LINES);
-        try
-          for ColIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
+        for ColIndex := 0 to LocalModel.ColumnCount - 1 do
+        begin
+          for RowIndex := 0 to LocalModel.RowCount - 1 do
           begin
-            for LayerIndex := 0 to Mesh.LayerCount - 1 do
+            for LayerIndex := 0 to LocalModel.LayerCount - 1 do
             begin
-              AnElement := Mesh.ElementArray[LayerIndex, ColIndex];
-              if not AnElement.Active then
+              if not LocalModel.ActiveElement[
+                LayerIndex, RowIndex, ColIndex] then
               begin
                 Continue;
               end;
-              AVector := Vectors[LayerIndex, 0, ColIndex, st3D];
+              AVector := Vectors[LayerIndex, RowIndex, ColIndex, st3D];
 
               X1 := AVector[1].x;
               Y1 := AVector[1].y;
@@ -1158,7 +963,6 @@ begin
                 Y2 := EndPointHorizontal.y;
               end;
 
-
               glColor3f(0.0, 0.0, 0.0);
               glVertex3f(X1, Y1, Z1);
               glVertex3f((X1+X2)/2, (Y1+Y2)/2, (Z1+Z2)/2);
@@ -1166,96 +970,15 @@ begin
               glVertex3f((X1+X2)/2, (Y1+Y2)/2, (Z1+Z2)/2);
               glVertex3f(X2, Y2, Z2);
 
-
             end;
           end;
-        finally
-          glEnd;
         end;
       finally
-        glEndList;
+        glEnd;
       end;
-
+    finally
+      glEndList;
     end
-    else if LocalModel.ModelSelection = msModflow2015 then
-    begin
-      if LocalModel.DisvUsed then
-      begin
-        DisvMesh := LocalModel.DisvGrid;
-        glNewList(FVectorGLIndex, GL_COMPILE);
-        try
-          glLineWidth(ThinLine);
-
-
-          glBegin(GL_LINES);
-          try
-            for ColIndex := 0 to DisvMesh.TwoDGrid.Cells.Count - 1 do
-            begin
-              for LayerIndex := 0 to DisvMesh.LayerCount - 1 do
-              begin
-                AnCell3D := DisvMesh.Cells[LayerIndex, ColIndex];
-                if not AnCell3D.Active then
-                begin
-                  Continue;
-                end;
-                AVector := Vectors[LayerIndex, 0, ColIndex, st3D];
-
-                X1 := AVector[1].x;
-                Y1 := AVector[1].y;
-                Z1 := AVector[1].z;
-
-                if not ShouldPlotVector then
-                begin
-                  Continue;
-                end;
-
-                X2 := AVector[2].x;
-                Y2 := AVector[2].y;
-                Z2 := AVector[2].z;
-
-                if FVectorMethod = vcMagnitude then
-                begin
-                  TotalDistance := Distance(AVector[1], AVector[2]);
-                  Z2 := (Z2 - AVector[1].Z)
-                    *LocalModel.Exaggeration + AVector[1].Z;
-                  StartPointHorizontal := EquatePoint(AVector[1].x, AVector[1].y);
-                  EndPointHorizontal := EquatePoint(AVector[2].x, AVector[2].y);
-                  HorizontalDistance := Distance(StartPointHorizontal,
-                    EndPointHorizontal);
-                  Angle := ArcTan2(Z2-Z1, HorizontalDistance);
-                  if HorizontalDistance <> 0 then
-                  begin
-                    EndPointHorizontal := ProjectPoint(StartPointHorizontal,
-                      EndPointHorizontal, Cos(Angle)*TotalDistance);
-                  end;
-                  Z2 := Z1 + Sin(Angle)*TotalDistance/LocalModel.Exaggeration;
-                  X2 := EndPointHorizontal.x;
-                  Y2 := EndPointHorizontal.y;
-                end;
-
-
-                glColor3f(0.0, 0.0, 0.0);
-                glVertex3f(X1, Y1, Z1);
-                glVertex3f((X1+X2)/2, (Y1+Y2)/2, (Z1+Z2)/2);
-                glColor3ub(Red, Green, Blue);
-                glVertex3f((X1+X2)/2, (Y1+Y2)/2, (Z1+Z2)/2);
-                glVertex3f(X2, Y2, Z2);
-
-
-              end;
-            end;
-          finally
-            glEnd;
-          end;
-        finally
-          glEndList;
-        end
-      end
-      else
-      begin
-        Grid := LocalModel.Grid;
-      end;
-    end;
   finally
     FNeedToRecordVectors := False;
     SpacingTree.Free;
@@ -1346,6 +1069,7 @@ begin
   begin
     frmGoPhast.TopScreenObjectsChanged := True;
     frmGoPhast.FrontScreenObjectsChanged := True;
+    frmGoPhast.SideScreenObjectsChanged := True;
     frmGoPhast.frame3DView.glWidModelView.Invalidate;
   end;
 end;
@@ -1398,81 +1122,26 @@ end;
 
 procedure TCustomVectors.UpdateVectors;
 var
-  Mesh: TSutraMesh3D;
   ColIndex: Integer;
-  APoint: TPoint2D;
   LayerIndex: Integer;
-  AnElement: TSutraElement3D;
   LocalModel: TCustomModel;
-  DisvMesh: TModflowDisvGrid;
-  Grid: TCustomModelGrid;
-  DisvCell: TModflowDisVCell;
   RowIndex: Integer;
 begin
-
-  if FModel.ModelSelection  in SutraSelection then
-  begin
-    Mesh := (FModel as TPhastModel).SutraMesh;
-    // For the time being, at least, all vectors are defined on elements.
-    SetLength(FOrigins, Mesh.LayerCount, 1, Mesh.Mesh2D.Elements.Count);
-    SetLength(FValues, Mesh.LayerCount, 1, Mesh.Mesh2D.Elements.Count);
-    for ColIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
-    begin
-      APoint := Mesh.Mesh2D.Elements[ColIndex].Center;
-      case Mesh.MeshType of
-        mt2D, mtProfile:
-          begin
-            FOrigins[0,0,ColIndex].X := APoint.X;
-            FOrigins[0,0,ColIndex].Y := APoint.Y;
-            FOrigins[0,0,ColIndex].Z := 0;
-          end;
-        mt3D:
-          begin
-            for LayerIndex := 0 to Mesh.LayerCount - 1 do
-            begin
-              AnElement := Mesh.ElementArray[LayerIndex, ColIndex];
-              FOrigins[LayerIndex,0,ColIndex].X := APoint.X;
-              FOrigins[LayerIndex,0,ColIndex].Y := APoint.Y;
-              FOrigins[LayerIndex,0,ColIndex].Z := AnElement.CenterElevation;
-            end;
-          end;
-        else
-          Assert(False);
-      end;
-    end;
-  end
-  else if FModel.ModelSelection = msModflow2015 then
+  if FModel.ModelSelection  in SutraSelection + [msModflow2015] then
   begin
     LocalModel := FModel as TCustomModel;
-    SetLength(FOrigins, LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
-    SetLength(FValues, LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
-    if LocalModel.DisvUsed then
+    SetLength(FOrigins, LocalModel.LayerCount,
+      LocalModel.RowCount, LocalModel.ColumnCount);
+    SetLength(FValues, LocalModel.LayerCount,
+      LocalModel.RowCount, LocalModel.ColumnCount);
+    for LayerIndex := 0 to LocalModel.LayerCount - 1 do
     begin
-      DisvMesh := LocalModel.DisvGrid;
-      for ColIndex := 0 to DisvMesh.TwoDGrid.Cells.Count - 1 do
+      for RowIndex := 0 to LocalModel.RowCount - 1 do
       begin
-        APoint := DisvMesh.TwoDGrid.Cells[ColIndex].Location;
-        for LayerIndex := 0 to DisvMesh.LayerCount - 1 do
+        for ColIndex := 0 to LocalModel.ColumnCount - 1 do
         begin
-          DisvCell := DisvMesh.Cells[LayerIndex, ColIndex];
-          FOrigins[LayerIndex,0,ColIndex].X := APoint.X;
-          FOrigins[LayerIndex,0,ColIndex].Y := APoint.Y;
-          FOrigins[LayerIndex,0,ColIndex].Z := DisvCell.CenterElevation;
-        end;
-      end
-    end
-    else
-    begin
-      Grid := LocalModel.Grid;
-      for LayerIndex := 0 to Grid.LayerCount - 1 do
-      begin
-        for RowIndex := 0 to Grid.RowCount - 1 do
-        begin
-          for ColIndex := 0 to Grid.ColumnCount - 1 do
-          begin
-            FOrigins[LayerIndex,RowIndex,ColIndex] :=
-              Grid.ThreeDElementCenter(ColIndex, RowIndex, LayerIndex);
-          end;
+          FOrigins[LayerIndex,RowIndex,ColIndex] :=
+            LocalModel.ElementLocation[LayerIndex, RowIndex, ColIndex].UnRotatedLocation;
         end;
       end;
     end;
@@ -1538,25 +1207,11 @@ var
   X: double;
   Y: double;
   Z: double;
-  AnElement: TSutraElement3D;
   TestLength: double;
   MinPositive: double;
   TestDistance: double;
   Factor: double;
   RowIndex: Integer;
-  IDomain: TDataArray;
-  function IsActive(Layer, Row, Col: Integer): Boolean;
-  begin
-    if LocalModel.ModelSelection = msModflow2015 then
-    begin
-      result := IDomain.IntegerData[Layer, Row, Col] > 0;
-    end
-    else
-    begin
-      AnElement := Mesh.ElementArray[Layer,Col];
-      result := AnElement.Active;
-    end;
-  end;
 begin
   LocalModel := FModel as TPhastModel;
   GetDataSets(XDataArray, YDataArray, ZDataArray);
@@ -1602,16 +1257,6 @@ begin
 
   MaxLength := 0;
 
-  if LocalModel.ModelSelection = msModflow2015 then
-  begin
-    IDomain := LocalModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-    IDomain.Initialize;
-  end
-  else
-  begin
-    IDomain := nil;
-  end;
-
   MinPositive := 0;
   if LogScaled then
   begin
@@ -1621,7 +1266,7 @@ begin
       begin
         for LayerIndex := 0 to LocalModel.LayerCount - 1 do
         begin
-          if IsActive(LayerIndex, RowIndex, ColIndex) then
+          if LocalModel.ActiveElement[LayerIndex, RowIndex, ColIndex] then
           begin
             X := XDataArray.RealData[LayerIndex,RowIndex,ColIndex];
             Y := YDataArray.RealData[LayerIndex,RowIndex,ColIndex];
@@ -1657,50 +1302,46 @@ begin
     begin
       for LayerIndex := 0 to LocalModel.LayerCount - 1 do
       begin
-        if IsActive(LayerIndex, RowIndex, ColIndex) then
+        if LocalModel.ActiveElement[LayerIndex, RowIndex, ColIndex] then
         begin
           X := XDataArray.RealData[LayerIndex,RowIndex,ColIndex];
-          FValues[LayerIndex,RowIndex,ColIndex].x := X;
           Y := YDataArray.RealData[LayerIndex,RowIndex,ColIndex];
-          FValues[LayerIndex,RowIndex,ColIndex].y := Y;
         end
         else
         begin
-          FValues[LayerIndex,RowIndex,ColIndex].x := 0;
-          FValues[LayerIndex,RowIndex,ColIndex].y := 0;
+          X := 0;
+          Y := 0;
         end;
+        FValues[LayerIndex,RowIndex,ColIndex].x := X;
+        FValues[LayerIndex,RowIndex,ColIndex].y := Y;
 
         if ZDataArray <> nil then
         begin
-//          AnElement := Mesh.ElementArray[LayerIndex,ColIndex];
-//          if AnElement.Active then
-//          begin
-            if IsActive(LayerIndex, RowIndex, ColIndex) then
-            begin
-              Z := ZDataArray.RealData[LayerIndex,RowIndex,ColIndex];
-              FValues[LayerIndex,RowIndex,ColIndex].z := Z;
-            end
-            else
-            begin
-              FValues[LayerIndex,RowIndex,ColIndex].z := 0;
-            end;
+          if LocalModel.ActiveElement[LayerIndex, RowIndex, ColIndex] then
+          begin
+            Z := ZDataArray.RealData[LayerIndex,RowIndex,ColIndex];
+          end
+          else
+          begin
+            Z := 0;
+          end;
+          FValues[LayerIndex,RowIndex,ColIndex].z := Z;
+          TestLength := Sqrt(Sqr(X) + Sqr(Y) + Sqr(Z));
+          if LogScaled and (TestLength > 0) then
+          begin
+            Factor := Ln(TestLength/MinPositive)/(TestLength/MinPositive);
+            X := X * Factor;
+            Y := Y * Factor;
+            Z := Z * Factor;
             TestLength := Sqrt(Sqr(X) + Sqr(Y) + Sqr(Z));
-            if LogScaled and (TestLength > 0) then
-            begin
-              Factor := Ln(TestLength/MinPositive)/(TestLength/MinPositive);
-              X := X * Factor;
-              Y := Y * Factor;
-              Z := Z * Factor;
-              TestLength := Sqrt(Sqr(X) + Sqr(Y) + Sqr(Z));
-              FValues[LayerIndex,RowIndex,ColIndex].x := X;
-              FValues[LayerIndex,RowIndex,ColIndex].y := Y;
-              FValues[LayerIndex,RowIndex,ColIndex].z := Z;
-            end;
-            if TestLength > MaxLength then
-            begin
-              MaxLength := TestLength;
-            end;
-//          end;
+            FValues[LayerIndex,RowIndex,ColIndex].x := X;
+            FValues[LayerIndex,RowIndex,ColIndex].y := Y;
+            FValues[LayerIndex,RowIndex,ColIndex].z := Z;
+          end;
+          if TestLength > MaxLength then
+          begin
+            MaxLength := TestLength;
+          end;
         end
         else
         begin
@@ -1743,11 +1384,9 @@ end;
 
 procedure TVelocityVectors.GetDataSets(out XDataArray, YDataArray, ZDataArray: TDataArray);
 var
-//  Mesh: TSutraMesh3D;
   LocalModel: TPhastModel;
 begin
   LocalModel := FModel as TPhastModel;
-//  Mesh := LocalModel.SutraMesh;
   if XVelocityName = '' then
   begin
     XDataArray := nil;
@@ -2175,14 +1814,7 @@ begin
       end;
     end;
   end;
-//  if MaxLength <> 0 then
-//  begin
-//    FDefaultScale := DefaultMaxVectorLength/MaxLength;
-//  end
-//  else
-//  begin
-//    FDefaultScale := 1;
-//  end;
+
   FDataSetObserver.UpToDate := True;
 end;
 

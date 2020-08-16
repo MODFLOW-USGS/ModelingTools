@@ -199,17 +199,9 @@ type
     property LakObs: TLakObs read GetLakObs write SetLakObs;
     property SfrObsLocation: TSfrObsLocation read FSfrObsLocation write SetSfrObsLocation;
     property UzfObs: TUzfObs read GetUzfObs write SetUzfObs;
-    property CSubObs: TCSubObs read GetCSubObs write SetCSubObs
-  {$IFNDEF CSUB}
-    stored False
-  {$ENDIF}
-    ;
+    property CSubObs: TCSubObs read GetCSubObs write SetCSubObs;
     property CSubDelayCells: TIntegerCollection read FCSubDelayCells
-      write SetCSubDelayCells
-  {$IFNDEF CSUB}
-    stored False
-  {$ENDIF}
-    ;
+      write SetCSubDelayCells;
     property StoredUzfObsDepthFraction: TRealStorage
       read FStoredUzfObsDepthFraction write SetStoredUzfObsDepthFraction;
     property CalibrationObservations: TMf6CalibrationObservations

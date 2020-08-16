@@ -150,11 +150,12 @@ object frameVectors: TframeVectors
     ChangeDisabledColor = True
   end
   object udVectors: TJvUpDown
-    Left = 305
+    Left = 311
     Top = 27
     Width = 16
     Height = 21
     Associate = comboVectorSource
+    Min = -1
     TabOrder = 1
     OnChangingEx = udVectorsChangingEx
   end

@@ -462,6 +462,7 @@ resourcestring
   StrCSUBInterbedCompac = 'CSUB Interbed Compaction';
   StrCSUBCoarseCompacti = 'CSUB Coarse Compaction';
   StrCSUBZDisplacement = 'CSUB Z Displacement';
+  StrImportedOnS = ' imported on %s';
 
 {$R *.dfm}
 
@@ -2949,11 +2950,6 @@ begin
 
                           if Lowercase(Description) = 'data-spdis' then
                           begin
-//                            if Length(AuxArray) > 0 then
-//                            begin
-//                              VectorItem := Vectors.Add;
-//                            end;
-
                             for AuxIndex := 0 to Length(AuxArray) - 1 do
                             begin
                               AuxLayerNumbers := AuxLayerNumbersList[AuxIndex];
@@ -2964,23 +2960,6 @@ begin
                               CreateOrRetrieveLayerDataSet(AuxDescription, ILAY,
                                 LayerData, OldComment,
                                 FileNames, AModel, TDataArray);
-
-//                              if Pos('qx_', LayerData.Name) > 0 then
-//                              begin
-//                                VectorItem.Description := ReplaceText(LayerData.Name, 'qx_', '');
-//                                VectorItem.Vectors.XVelocityName := LayerData.Name;
-//                              end
-//                              else if Pos('qy_', LayerData.Name) > 0 then
-//                              begin
-//                                VectorItem.Description := ReplaceText(LayerData.Name, 'qy_', '');
-//                                VectorItem.Vectors.YVelocityName := LayerData.Name;
-//                              end
-//                              else if Pos('qz_', LayerData.Name) > 0 then
-//                              begin
-//                                VectorItem.Description := ReplaceText(LayerData.Name, 'qz_', '');
-//                                VectorItem.Vectors.ZVelocityName := LayerData.Name;
-//                              end;
-
                               CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                               Assign3DValues(ScreenObject, LayerData,
                                 AuxArray[AuxIndex].Values, LayerIndex, ILAY-1,
@@ -3100,8 +3079,6 @@ begin
                               NewCreateScreenObjects.Add(UndoCreateObject);
                             end;
                           end;
-    //                      NewCreateScreenObjects.Add(
-    //                        TUndoCreateScreenObject.Create(ScreenObject))
                         end;
                         Inc(Count);
                         ParentArray := nil;
@@ -3124,17 +3101,21 @@ begin
 
                             if Pos('qx_', New3DArray.Name) > 0 then
                             begin
-                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qx_', '');
+                              VectorItem.Description :=
+                                ReplaceText(New3DArray.Name, 'qx_', '')
+                                + Format(StrImportedOnS, [DateToStr(Now)]);
                               VectorItem.Vectors.XVelocityName := New3DArray.Name;
                             end
                             else if Pos('qy_', New3DArray.Name) > 0 then
                             begin
-                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qy_', '');
+                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qy_', '')
+                                + Format(StrImportedOnS, [DateToStr(Now)]);
                               VectorItem.Vectors.YVelocityName := New3DArray.Name;
                             end
                             else if Pos('qz_', New3DArray.Name) > 0 then
                             begin
-                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qz_', '');
+                              VectorItem.Description := ReplaceText(New3DArray.Name, 'qz_', '')
+                                + Format(StrImportedOnS, [DateToStr(Now)]);
                               VectorItem.Vectors.ZVelocityName := New3DArray.Name;
                             end;
 

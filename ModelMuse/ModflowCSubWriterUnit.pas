@@ -69,6 +69,11 @@ uses
   frmProgressUnit, frmErrorsAndWarningsUnit,
   Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit;
 
+resourcestring
+  StrNoTransientCSUBDa = 'No Transient CSUB data defined';
+  StrNoTransientDataIs = 'No transient data is defined for the CSUB package.' +
+  ' The CSUB package does not require transient data.';
+
 
 { TCSubWriter }
 
@@ -536,7 +541,7 @@ begin
 
       if MAXBOUND = 0 then
       begin
-        frmErrorsAndWarnings.AddWarning(Model,  'No Transient CSUB data defined', 'No transient data is defined for the CSUB package. The CSUB package does not require transient data.');
+        frmErrorsAndWarnings.AddWarning(Model,  StrNoTransientCSUBDa, StrNoTransientDataIs);
       end;
     end;
 

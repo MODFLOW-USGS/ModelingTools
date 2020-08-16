@@ -3,7 +3,7 @@
         <ProjectGuid>{DBACE99F-0221-4660-936F-15A30233FA90}</ProjectGuid>
         <MainSource>ModelMuse.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
@@ -70,7 +70,7 @@
         <VerInfo_MajorVer>4</VerInfo_MajorVer>
         <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileVersion=4.2.0.37;ProductVersion=4.2.0.37</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=4.3.0.0;ProductVersion=4.3.0.0</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Manifest_File>None</Manifest_File>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
@@ -80,7 +80,7 @@
         <DCC_UsePackage>vcl;rtl;vclx;vclactnband;xmlrtl;VclSmp;vclimg;svnui;svn;bdertl;TeeUI;TeeDB;Tee;vcldb;dbrtl;vcldbx;vcltouch;dsnap;dsnapcon;vclib;ibxpress;adortl;IndyCore;IndySystem;IndyProtocols;inet;intrawebdb_110_150;Intraweb_110_150;vclie;inetdb;webdsnap;websnap;inetdbbde;inetdbxpress;soaprtl;vclribbon;DbxCommonDriver;DBXInterBaseDriver;DBXMySQLDriver;dbexpress;dbxcds;DbxClientDriver;AzureCloud;MostRecentFilesXE;QuadTreePkgXE;RbwControllerPackageXE;RbwDataGridPkgXE;DynamicCursorXEPkg;RbwEditPkgXE;RbwParserPkgXE;RbwRulerPkgXE;XBasePkgXE;VirtualTreesR;GR32_DSGN_RSXE1;GR32_RSXE1;ZoomBox2PkgXE;ButtonEditPkgXE;ModelCubeXEPkg;VGlWidgetXEPkg;AdeXEPkg;GLScene_RunTime;addbtn95_DXEpkg;RbwRadioGroupPkgXE;datagridPkgXE;GsMemoPropXE;GsMemoXE;SynEdit_RXE;madBasic_;madDisAsm_;madExcept_;JclVcl;Jcl;JvCore;JvSystem;JvStdCtrls;JvAppFrm;JvBands;JvDB;JvDlgs;JvBDE;JvControls;JvCmp;JvCrypt;JvCustom;JvDocking;JvDotNetCtrls;JvGlobus;JvHMI;JvJans;JvManagedThreads;JvMM;JvNet;JvPageComps;JvPascalInterpreter;JclDeveloperTools;JvPluginSystem;JvPrintPreview;JvRuntimeDesign;JvTimeFramework;JvWizards;JvXPCtrls;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_UnitSearchPath>$(BDS)\lib\Debug;$(BDS)\Lib\Debug\Indy10;C:\ModelingTools\ModelMuse\JediMath;C:\ModelingTools\ModelMuse\FastCode;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_RangeChecking>true</DCC_RangeChecking>
-        <DCC_Define>LogMemoryLeakDetailToFile;AutoPatchRTL;madExcept;LGR;UseFastGeo;$(DCC_Define)</DCC_Define>
+        <DCC_Define>LogMemoryLeakDetailToFile;AutoPatchRTL;madExcept;UseFastGeo;ApprovedSoftware;$(DCC_Define)</DCC_Define>
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <DCC_K>false</DCC_K>
         <DCC_N>true</DCC_N>
@@ -90,9 +90,8 @@
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
         <DCC_E>false</DCC_E>
         <SanitizedProjectName>ModelMuse</SanitizedProjectName>
-        <VerInfo_MinorVer>2</VerInfo_MinorVer>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
-        <VerInfo_Build>37</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -106,7 +105,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
-        <DCC_Define>RELEASE;GMSH;Mt3dUSGS;CSUB;$(DCC_Define)</DCC_Define>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
         <DCC_DebugInformation>0</DCC_DebugInformation>
         <BRCC_Defines>MF2015;$(BRCC_Defines)</BRCC_Defines>
@@ -132,7 +131,7 @@
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <DCC_Define>DEBUG;FMP;EditFeature;FootPrint;MF2015;SWIObs;RIP;SUTRA30;Mt3dUSGS;PEST;CSUB;$(DCC_Define)</DCC_Define>
+        <DCC_Define>DEBUG;SWIObs;PEST;CSUB;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">

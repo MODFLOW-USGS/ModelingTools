@@ -81,6 +81,11 @@ type
     SMin, SMax: string;
   end;
 
+  TDualLocation = record
+    RotatedLocation: TPoint3D;
+    UnRotatedLocation: TPoint3D;
+  end;
+
 
   // @name is used to indicate which view of the model the cursor
   // is over.

@@ -266,11 +266,7 @@ type
       write SetUzfMf6Package;
     property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
     property CSubPackage: TCSubPackageSelection read FCsubPackage
-      write SetCsubPackage
-    {$IFNDEF CSUB}
-      stored False
-    {$ENDIF}
-      ;
+      write SetCsubPackage;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.

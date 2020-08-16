@@ -837,7 +837,9 @@ side views of the model.}
     { @name is the inverse of
       @link(RotateFromGridCoordinatesToRealWorldCoordinates).}
     function RotateFromRealWorldCoordinatesToGridCoordinates
-      (const APoint: TPoint2D): TPoint2D;
+      (const APoint: TPoint2D): TPoint2D; overload;
+    procedure RotateFromRealWorldCoordinatesToGridCoordinates
+      (var X, Y: TFloat); overload;
     {@name returns the position of the center of a row}
     function RowCenter(const Row: integer): real;
     { @name defines either the boundary between one row and its
@@ -3049,6 +3051,18 @@ begin
 end;
 
 procedure TCustomModelGrid.RotateFromGridCoordinatesToRealWorldCoordinates(
+  var X, Y: TFloat);
+var
+  APoint: TPoint2D;
+begin
+  APoint.x := X;
+  APoint.y := Y;
+  APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+  X := APoint.x;
+  Y := APoint.y;
+end;
+
+procedure TCustomModelGrid.RotateFromRealWorldCoordinatesToGridCoordinates(
   var X, Y: TFloat);
 var
   APoint: TPoint2D;

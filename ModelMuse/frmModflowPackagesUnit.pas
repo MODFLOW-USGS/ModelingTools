@@ -2156,14 +2156,7 @@ begin
     AddChildNode(BC_SpecifiedFlux, StrSpecifiedFlux, PriorNode);
     AddChildNode(BC_HeadDependentFlux, StrHeaddependentFlux, PriorNode);
     AddNode(StrSolver, StrSolver, PriorNode);
-  {$IFDEF CSUB}
     AddNode(StrSubSidence, StrSubSidence, PriorNode);
-  {$ELSE}
-    if frmGoPhast.ModelSelection <> msModflow2015 then
-    begin
-      AddNode(StrSubSidence, StrSubSidence, PriorNode);
-    end;
-  {$ENDIF}
     AddNode(StrObservations, StrObservations, PriorNode);
     if frmGoPhast.ModelSelection <> msModflow2015 then
     begin
@@ -3791,12 +3784,8 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-  {$IFDEF CSUB}
     Packages.CsubPackage.Frame := framePackageCsub;
     FPackageList.Add(Packages.CsubPackage);
-  {$ELSE}
-    framePackageCsub.NilNode;
-  {$ENDIF}
   end
   else
   begin
@@ -4167,11 +4156,6 @@ begin
     if CSub <> nil then
     begin
       CSub.Loaded;
-//      for InterbedIndex := 0 to CSub.CSubPackageData.Count - 1 do
-//      begin
-//        CSubPkgData := CSub.CSubPackageData[InterbedIndex];
-//        CSubPkgData.Interbed := Interbeds.GetInterbedByName(CSubPkgData.StoredInterbedSystemName);
-//      end;
     end;
   end;
 end;

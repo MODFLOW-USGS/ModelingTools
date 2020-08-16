@@ -225,6 +225,7 @@ begin
     end;
     comboVectorSource.ItemIndex := NewItemIndex;
   end;
+  udVectors.Position := comboVectorSource.ItemIndex;
   comboVectorSourceChange(nil);
 end;
 
@@ -238,7 +239,14 @@ var
   VItem: TVectorItem;
 begin
   LocalModel := frmGoPhast.PhastModel;
-  Is3D := LocalModel.SutraMesh.MeshType = mt3D;
+  if LocalModel.ModelSelection in SutraSelection then
+  begin
+    Is3D := LocalModel.SutraMesh.MeshType = mt3D;
+  end
+  else
+  begin
+    Is3D := True;
+  end;
   SourceText := comboVectorSource.Text;
 
   PredefinedVisible := (comboVectorSource.ItemIndex > 0) and
@@ -358,7 +366,7 @@ begin
         Inc(NewIndex);
       end;
   end;
-  if (NewIndex > 0) and (NewIndex < comboVectorSource.Items.Count) then
+  if (NewIndex >= 0) and (NewIndex < comboVectorSource.Items.Count) then
   begin
     comboVectorSource.ItemIndex := NewIndex;
     SetData;

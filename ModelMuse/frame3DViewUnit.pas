@@ -272,6 +272,9 @@ begin
     frmGoPhast.PhastModel.DrawScreenObjects3D;
     glPopMatrix;
   end;
+
+  DrawVectors(FZScale * FZoomFactor);
+
   glPopMatrix;
 end;
 

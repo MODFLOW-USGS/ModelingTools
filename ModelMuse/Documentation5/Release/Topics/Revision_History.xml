@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Revision History</text></para>
     </header>
-    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.3 Aug. 10, 2020]]></caption></toggle></para>
+    <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading2_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="true" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading2_atoc_"><caption translate="true"><![CDATA[Version 4.3 Aug. 16, 2020]]></caption></toggle></para>
     <para styleclass="Heading2_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -24,6 +24,8 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added new function: HighestActiveLayer. It returns the highest layer at a particular location that is active.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In 3D SUTRA models, there is a new data set named Active_Node. Setting that data set to False at any node makes the node inactive.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added SUTRA_MeshEdgeNode function.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">In MT3DMS models, ISSGOUT is now specified if the MNW1 package is active. In MT3D-USGS models, ISSGOUT is now specified if the MNW1 or MNW2 packages are active. The output file will have the extension .mt_mnw_out.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now display specific discharge vectors for MODFLOW 6 models.</text></para>
               </td>
             </tr>
           </table></para>
@@ -113,6 +115,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When creating a new MODFLOW model, the user specified length and time units were not applied if the user clicked the &quot;No Grid&quot; button.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an invalid warning to be issued about transient SFR items with a duration of zero.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing a time in the MODFLOW Time dialog box now causes corresponding times defined for SFR package to be updated.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause some formulas to fail if a data set is renamed.</text></para>
               </td>
             </tr>
           </table></para>
