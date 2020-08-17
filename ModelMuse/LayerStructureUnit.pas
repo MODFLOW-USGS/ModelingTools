@@ -1271,6 +1271,7 @@ begin
   begin
     Name := LayerGroups[Index].DataArrayName;
     DataSet := PhastModel.DataArrayManager.GetDataSetByName(Name);
+    Assert(DataSet <> nil);
     if Index = 0 then
     begin
       DataSet.AssociatedDataSets := 'MODFLOW DIS: Top';

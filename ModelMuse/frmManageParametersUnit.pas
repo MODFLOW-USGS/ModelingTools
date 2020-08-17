@@ -93,6 +93,8 @@ resourcestring
   StrValue = 'Value';
   StrMultiplierArray = 'Multiplier Array';
   StrZoneArray = 'Zone Array';
+  StrThereAreTwoOrMo = 'There are two (or more) parameters named %s. Duplica' +
+  'te parameter names are not allowed.';
 
 {$R *.dfm}
 type
@@ -356,8 +358,30 @@ begin
 end;
 
 procedure TfrmManageParameters.btnOKClick(Sender: TObject);
+var
+  Names: TStringList;
+  Index: Integer;
 begin
   inherited;
+  Names := TStringList.Create;
+  try
+    Names.Assign(rdgParameters.Cols[Ord(pcName)]);
+    Names.Delete(0);
+    Names.Sort;
+    for Index := 1 to Names.Count - 1 do
+    begin
+      if UpperCase(Names[Index]) = UpperCase(Names[Index-1]) then
+      begin
+        Beep;
+        MessageDlg(Format(StrThereAreTwoOrMo,[Names[Index]]),
+          mtError, [mbOK], 0);
+        ModalResult := mrNone;
+        Exit;
+      end;
+    end;
+  finally
+    Names.Free;
+  end;
   SetData;
 end;
 

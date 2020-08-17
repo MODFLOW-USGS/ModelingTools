@@ -5421,6 +5421,8 @@ resourcestring
   StrThereWasAProblemCircRef = 'There was a problem using %0:s. The error me' +
   'ssage was "%1:s". The number of elevation formulas has been changed to ze' +
   'ro in an attempt to avoid this problem.';
+  StrThereIsAnErrorInUsed = 'There is an error in a formula in %0:s. The for' +
+  'mula should result in either "True" or "False". The formula is for "%1:s.';
 
 const
   SquareSize = 3;
@@ -43800,6 +43802,9 @@ begin
       UsedExpression := Compiler.CurrentExpression;
       if UsedExpression.ResultType <> rdtBoolean then
       begin
+        NameToDisplay := TSutraDataObject(OtherData).AlternateName;
+        MessageDlg(Format(StrThereIsAnErrorInUsed,
+          [FScreenObject.Name, NameToDisplay]), mtError, [mbOK], 0);
         raise EInvalidDataType.Create  (StrInvalidDataType, UsedExpression.Decompile);
       end;
 

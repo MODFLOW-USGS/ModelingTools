@@ -40,6 +40,7 @@
 23c. Activate DOI
 24. Transfer ModelMuseInternetUpdate.txt to web.
 25. Send out email to OGW.
+25a. Update IPDS.
 26. Turn on check for resource leaks in MadExcept.
 27. Be sure the preliminary software version of disclaimer is used. See DisclaimerTextUnit.pas.
 

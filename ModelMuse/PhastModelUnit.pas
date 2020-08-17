@@ -9268,6 +9268,11 @@ const
   //               Enhancement: ModelMuse can now display specific discharge
   //                vectors for MODFLOW 6 models.
 
+  //               Bug fix: If not MODFLOW stress periods are defined when the
+  //                user attempts to generate the MODFLOW input files, one will
+  //                now be created automatically.
+  //               Bug fix: It is no longer possible to define two parameters
+  //                with the same name in the Manage Parameters dialog box.
 
 
   // version number of ModelMuse.
@@ -9886,6 +9891,9 @@ resourcestring
   'tion file. Once you have done that, select "Model|MODFLOW Program Locatio' +
   'ns" and enter the location of MODFLOW in the dialog box.';
   StrNodeActive = KNodeActive;
+  StrNoStressPeriodsWe = 'No stress periods were defined';
+  StrStressPeriodAdded = 'No stress periods were defined in the MODFLOW Time' +
+  ' dialog box. One has been added automatically.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -37497,6 +37505,20 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrMultiplierWarning);
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrCropAddedTimes);
   frmErrorsAndWarnings.RemoveErrorGroup(self, StrInvalidStressPerio);
+  frmErrorsAndWarnings.RemoveWarningGroup(self, StrNoStressPeriodsWe);
+
+  if ModflowStressPeriods.Count = 0 then
+  begin
+    frmErrorsAndWarnings.AddWarning(self, StrNoStressPeriodsWe,
+      StrStressPeriodAdded);
+    StressPeriod := ModflowStressPeriods.Add as TModflowStressPeriod;
+    StressPeriod.StartTime := -1;
+    StressPeriod.EndTime := 0;
+    StressPeriod.StressPeriodType := sptSteadyState;
+    StressPeriod.MaxLengthOfFirstTimeStep := 1;
+    StressPeriod.DrawDownReference := True;
+    StressPeriod.TimeStepMultiplier := 1;
+  end;
 
 
   ModflowFullStressPeriods.Clear;

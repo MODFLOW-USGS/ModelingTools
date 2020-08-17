@@ -5,8 +5,8 @@ inherited frmManageParameters: TfrmManageParameters
   ClientHeight = 279
   ClientWidth = 468
   ExplicitWidth = 484
-  ExplicitHeight = 317
-  PixelsPerInch = 120
+  ExplicitHeight = 318
+  PixelsPerInch = 96
   TextHeight = 18
   object rdgParameters: TRbwDataGrid4
     Left = 0
