@@ -235,17 +235,17 @@ begin
   end
   else
   begin
-    if not (NewName[1] in ValidChar) then
+    if not CharInSet(NewName[1], ValidChar) then
     begin
       NewName[1] := '_'
     end
-    else if not (NewName[1] in ValidFirstChar) then
+    else if not CharInSet(NewName[1], ValidFirstChar) then
     begin
       NewName := '_' + NewName;
     end;
     for CharIndex := 2 to Length(NewName) do
     begin
-      if not (NewName[CharIndex] in ValidChar) then
+      if not CharInSet(NewName[CharIndex], ValidChar) then
       begin
         NewName[CharIndex] := '_';
       end;

@@ -34,6 +34,7 @@ type
     FIFace: TIface;
     FScreenObject: TObject;
     FBoundaryIndex: integer;
+    FMf6ObsName: string;
     procedure SetScreenObject(const Value: TObject);
   protected
     function GetColumn: integer; virtual; abstract;
@@ -70,7 +71,7 @@ type
     procedure Restore(Decomp: TDecompressionStream;
       Annotations: TStringList); virtual;
     function GetSection: integer; virtual; abstract;
-    procedure RecordStrings(Strings: TStringList); virtual; abstract;
+    procedure RecordStrings(Strings: TStringList); virtual;
   public
     Constructor Create; virtual;
     // @name is used for MODFLOW 6 PEST observations.
@@ -123,6 +124,7 @@ type
       DataIndex: integer): boolean;
     function AreBooleanValuesIdentical(AnotherCell: TValueCell;
       DataIndex: integer): boolean;
+    property Mf6ObsName: string read FMf6ObsName write FMf6ObsName;
   end;
 
   TValueCellType = class of TValueCell;
@@ -157,6 +159,7 @@ type
     procedure Clear; override;
     function Last: TValueCell;
     function First: TValueCell;
+    procedure InvalidateCache;
   end;
 
 procedure WriteCompInt(Stream: TStream; Value: integer);
@@ -439,6 +442,13 @@ begin
   result := inherited Items[Index] as TValueCell;
 end;
 
+procedure TValueCellList.InvalidateCache;
+begin
+  CheckRestore;
+  FCached := False;
+  ClearFileNames;
+end;
+
 function TValueCellList.Last: TValueCell;
 begin
   CheckRestore;
@@ -556,11 +566,13 @@ begin
   begin
     WriteCompString(Comp, TScreenObject(ScreenObject).Name);
   end;
+  WriteCompString(Comp, Mf6ObsName);
 end;
 
 constructor TValueCell.Create;
 begin
-
+  FMf6ObsName := '';
+  inherited;
 end;
 
 function TValueCell.GetBooleanAnnotation(Index: integer;
@@ -582,6 +594,11 @@ begin
   result := False;
 end;
 
+procedure TValueCell.RecordStrings(Strings: TStringList);
+begin
+  Strings.Add(Mf6ObsName);
+end;
+
 procedure TValueCell.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
 var
@@ -600,6 +617,7 @@ begin
       GetScreenObjectByName(ScreenObjectName);
     Assert(ScreenObject <> nil);
   end;
+  Mf6ObsName := ReadCompStringSimple(Decomp);
 end;
 
 procedure TValueCell.SetScreenObject(const Value: TObject);

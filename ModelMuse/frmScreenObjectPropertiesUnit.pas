@@ -11462,14 +11462,18 @@ begin
   case FScreenObject.ViewDirection of
     vdTop:
       begin
+        dgVerticies.Cells[Ord(vcX), 0] := StrX;
+        dgVerticies.Cells[Ord(vcY), 0] := StrY;
       end;
     vdFront:
       begin
-        dgVerticies.Cells[Ord(vcY), 0] := 'Z';
+        dgVerticies.Cells[Ord(vcX), 0] := StrX;
+        dgVerticies.Cells[Ord(vcY), 0] := StrZ;
       end;
     vdSide:
       begin
-        dgVerticies.Cells[Ord(vcX), 0] := 'Z';
+        dgVerticies.Cells[Ord(vcX), 0] := StrZ;
+        dgVerticies.Cells[Ord(vcY), 0] := StrY;
       end;
   else
     Assert(False);

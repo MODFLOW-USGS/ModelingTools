@@ -31008,7 +31008,7 @@ begin
     else
     begin
       ActiveDataArray := DataArrayManager.GetDataSetByName(rsActive);
-      result := IDomain.BooleanData[Layer, Row, Column];
+      result := ActiveDataArray.BooleanData[Layer, Row, Column];
     end;
   end
   else

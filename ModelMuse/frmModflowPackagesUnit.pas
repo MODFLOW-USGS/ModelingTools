@@ -3656,25 +3656,25 @@ begin
   else
   begin
 //    frameModpath.NilNode;
-    {$IFDEF PEST}
-    Packages.ChobPackage.Frame := framePkgCHOB;
-    FPackageList.Add(Packages.ChobPackage);
-
-    Packages.DrobPackage.Frame := framePkgDROB;
-    FPackageList.Add(Packages.DrobPackage);
-
-    Packages.GbobPackage.Frame := framePkgGBOB;
-    FPackageList.Add(Packages.GbobPackage);
-
-    Packages.RvobPackage.Frame := framePkgRVOB;
-    FPackageList.Add(Packages.RvobPackage);
-
-    {$ELSE}
+//    {$IFDEF PEST}
+//    Packages.ChobPackage.Frame := framePkgCHOB;
+//    FPackageList.Add(Packages.ChobPackage);
+//
+//    Packages.DrobPackage.Frame := framePkgDROB;
+//    FPackageList.Add(Packages.DrobPackage);
+//
+//    Packages.GbobPackage.Frame := framePkgGBOB;
+//    FPackageList.Add(Packages.GbobPackage);
+//
+//    Packages.RvobPackage.Frame := framePkgRVOB;
+//    FPackageList.Add(Packages.RvobPackage);
+//
+//    {$ELSE}
     framePkgCHOB.NilNode;
     framePkgDROB.NilNode;
     framePkgGBOB.NilNode;
     framePkgRVOB.NilNode;
-    {$ENDIF}
+//    {$ENDIF}
     framePkgSTOB.NilNode;
     framePkgHOB.NilNode;
   end;
