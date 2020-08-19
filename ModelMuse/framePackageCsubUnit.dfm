@@ -7,32 +7,37 @@ inherited framePackageCsub: TframePackageCsub
     589
     514)
   inherited memoComments: TMemo
+    Top = 58
     Width = 558
+    Height = 85
+    ExplicitTop = 58
     ExplicitWidth = 558
+    ExplicitHeight = 85
   end
   object pcCsub: TPageControl [3]
     Left = 0
-    Top = 157
+    Top = 145
     Width = 589
-    Height = 357
+    Height = 369
     ActivePage = tabOptions
     Align = alBottom
     TabOrder = 1
     object tabInterbeds: TTabSheet
       Caption = 'Interbeds'
       ImageIndex = 2
+      ExplicitHeight = 329
       inline frameInterbeds: TframeGrid
         Left = 0
         Top = 0
         Width = 581
-        Height = 329
+        Height = 341
         Align = alClient
         Enabled = False
         TabOrder = 0
         ExplicitWidth = 581
         ExplicitHeight = 329
         inherited Panel: TPanel
-          Top = 288
+          Top = 300
           Width = 581
           ExplicitTop = 288
           ExplicitWidth = 581
@@ -59,7 +64,7 @@ inherited framePackageCsub: TframePackageCsub
         end
         inherited Grid: TRbwDataGrid4
           Width = 581
-          Height = 288
+          Height = 300
           ColCount = 2
           Columns = <
             item
@@ -118,6 +123,7 @@ inherited framePackageCsub: TframePackageCsub
     end
     object tabOptions: TTabSheet
       Caption = 'Options'
+      ExplicitHeight = 329
       object lblGamma: TLabel
         Left = 155
         Top = 6
@@ -309,15 +315,24 @@ inherited framePackageCsub: TframePackageCsub
             Text = 'Use recompression index'
           end>
       end
+      object cbPackageConvergence: TCheckBox
+        Left = 3
+        Top = 324
+        Width = 455
+        Height = 17
+        Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
+        TabOrder = 11
+      end
     end
     object tabOutputTypes: TTabSheet
       Caption = 'Output types'
       ImageIndex = 1
+      ExplicitHeight = 329
       object chklstOutput: TCheckListBox
         Left = 0
         Top = 0
         Width = 581
-        Height = 329
+        Height = 341
         Align = alClient
         Enabled = False
         ItemHeight = 13
@@ -331,6 +346,7 @@ inherited framePackageCsub: TframePackageCsub
           'Elastic coarse-grained compaction (binary)'
           'Z displacement (binary)')
         TabOrder = 0
+        ExplicitHeight = 329
       end
     end
   end

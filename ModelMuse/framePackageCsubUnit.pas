@@ -33,6 +33,7 @@ type
     lblseNDelayCells: TLabel;
     comboCompressionMethod: TJvImageComboBox;
     lblCompressionMethod: TLabel;
+    cbPackageConvergence: TCheckBox;
     procedure cbHeadBasedClick(Sender: TObject);
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
   private
@@ -95,6 +96,7 @@ begin
   cbSpecifyInitialPreconsolidationStress.Checked := CSubPackage.SpecifyInitialPreconsolidationStress;
   cbSpecifyInitialDelayHead.Checked := CSubPackage.SpecifyInitialDelayHead;
   cbEffectiveStressLag.Checked := CSubPackage.EffectiveStressLag;
+  cbPackageConvergence.Checked := CSubPackage.WriteConvergenceData;
 
   for CsubOutputType := coInterbedStrain to coZDisplacement do
   begin
@@ -163,6 +165,7 @@ begin
   CSubPackage.SpecifyInitialPreconsolidationStress := cbSpecifyInitialPreconsolidationStress.Checked;
   CSubPackage.SpecifyInitialDelayHead := cbSpecifyInitialDelayHead.Checked;
   CSubPackage.EffectiveStressLag := cbEffectiveStressLag.Checked;
+  CSubPackage.WriteConvergenceData := cbPackageConvergence.Checked;
 
   OutputTypes := [];
   for CsubOutputType := coInterbedStrain to coZDisplacement do

@@ -35,6 +35,7 @@ type
     comboMemoryPrint: TJvImageComboBox;
     cbNewton: TCheckBox;
     cbUnderRelaxation: TCheckBox;
+    cbCsvInnerOutput: TCheckBox;
     procedure rdgNonlinearOptionsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgNonlinearOptionsSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -188,6 +189,7 @@ begin
     comboComplexity.ItemIndex := Ord(SmsPackage.Complexity);
     cbContinue.Checked := SmsPackage.ContinueModel;
     cbCsvOutput.Checked := Boolean(Ord(SmsPackage.CsvOutput));
+    cbCsvInnerOutput.Checked := Boolean(Ord(SmsPackage.CsvInnerOutput));
     comboUsePTC.ItemIndex := Ord(SmsPackage.UsePTC);
     seMaxErrors.AsInteger := SmsPackage.MaxErrors;
     cbCheckInput.Checked := SmsPackage.CheckInput = ciCheckAll;
@@ -967,6 +969,7 @@ begin
   SmsPackage.Complexity := TSmsComplexityOption(comboComplexity.ItemIndex);
   SmsPackage.ContinueModel := cbContinue.Checked;
   SmsPackage.CsvOutput := TSmsSolutionPrint(Ord(cbCsvOutput.Checked));
+  SmsPackage.CsvInnerOutput := TSmsSolutionPrint(Ord(cbCsvInnerOutput.Checked));
   SmsPackage.UsePTC := TUsePTC(comboUsePTC.ItemIndex);
   SmsPackage.MaxErrors := seMaxErrors.AsInteger;
   SmsPackage.CheckInput := TCheckInput(not cbCheckInput.Checked);

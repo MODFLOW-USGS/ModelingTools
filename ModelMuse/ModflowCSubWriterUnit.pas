@@ -835,6 +835,17 @@ begin
     NewLine;
   end;
 
+  if FCSubPackage.WriteConvergenceData then
+  begin
+    WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
+    CsvFile := ChangeFileExt(FNameOfFile, '.CsubConvergence.CSV');
+    Model.AddModelOutputFile(CsvFile);
+    CsvFile := ExtractFileName(CsvFile);
+    WriteString(CsvFile);
+    NewLine;
+  end;
+
+
   if FObservations.Count > 0 then
   begin
     WriteString('    OBS6 FILEIN ');

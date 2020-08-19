@@ -990,6 +990,8 @@ uses Contnrs, ScreenObjectUnit, frmGoPhastUnit, frmDataSetsUnits,
 resourcestring
   StrSetByPHASTstyleI = 'Set by PHAST-style interpolation';
   StrMixtureFormulaFor = 'Mixture formula for: %s';
+  StrTheMixtureFormula = 'The mixture formula for %0:s returns a value of th' +
+  'e wrong type. The formula is %1:s.';
 
 { T3DSparseInterpolationDirectionArray }
 
@@ -2115,7 +2117,9 @@ begin
         ResultTypeOK := Expression.ResultType in [rdtInteger, rdtDouble];
         if not ResultTypeOK then
         begin
-          raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+//          Beep;
+//          MessageDlg(Format(StrTheMixtureFormula, [Name, Expression.Decompile]), mtError, [mbOK], 0);
+          raise EInvalidDataType.Create(Format(StrTheMixtureFormula, [Name, Expression.Decompile]), Expression.Decompile);
         end;
       end
       else

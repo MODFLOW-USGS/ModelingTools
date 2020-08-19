@@ -5423,6 +5423,8 @@ resourcestring
   'ro in an attempt to avoid this problem.';
   StrThereIsAnErrorInUsed = 'There is an error in a formula in %0:s. The for' +
   'mula should result in either "True" or "False". The formula is for "%1:s.';
+  StrTheFormula0sIn = 'The formula %0:s in object %1:s gives a result of the' +
+  ' wrong type.';
 
 const
   SquareSize = 3;
@@ -23799,7 +23801,8 @@ begin
     and (DataSet.Datatype = rdtDouble));
   if not ResultTypeOK then
   begin
-    raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+    raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+      [Expression.Decompile, FScreenObject.Name]), Expression.Decompile);
   end;
 end;
 
@@ -25936,7 +25939,9 @@ begin
         rdtDouble));
       if not ResultTypeOK then
       begin
-        raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+        raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+          [Expression.Decompile, FScreenObject.Name]), Expression.Decompile);
+//        raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
       end;
     end;
   end
@@ -28464,7 +28469,9 @@ begin
       and (TypeToCheck = rdtDouble));
     if not ResultTypeOK then
     begin
-      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+    raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+      [Expression.Decompile, FScreenObject.Name]), Expression.Decompile);
+//      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
     end;
   end;
 end;
@@ -30742,7 +30749,9 @@ procedure TScreenObject.InitializeExpression(out Compiler: TRbwParser;
       and (DataSet.Datatype = rdtDouble));
     if not ResultTypeOK then
     begin
-      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+      raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+        [Expression.Decompile, Name]), Expression.Decompile);
+  //      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
     end;
   end;
 var
@@ -31671,7 +31680,9 @@ begin
   ResultTypeOK := Expression.ResultType in [rdtInteger, rdtDouble];
   if not ResultTypeOK then
   begin
-    raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+    raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+      [Expression.Decompile, Name]), Expression.Decompile);
+//    raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
   end;
 end;
 
@@ -31801,7 +31812,9 @@ begin
   ResultTypeOK := Expression.ResultType in [rdtInteger, rdtDouble];
   if not ResultTypeOK then
   begin
-    raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+    raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+      [Expression.Decompile, Name]), Expression.Decompile);
+//    raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
   end;
 
   Annotation := Format(StrAssignedBy0sUsi, [Name, Expression.DeCompile]);
@@ -43803,9 +43816,10 @@ begin
       if UsedExpression.ResultType <> rdtBoolean then
       begin
         NameToDisplay := TSutraDataObject(OtherData).AlternateName;
-        MessageDlg(Format(StrThereIsAnErrorInUsed,
-          [FScreenObject.Name, NameToDisplay]), mtError, [mbOK], 0);
-        raise EInvalidDataType.Create  (StrInvalidDataType, UsedExpression.Decompile);
+//        MessageDlg(Format(StrThereIsAnErrorInUsed,
+//          [FScreenObject.Name, NameToDisplay]), mtError, [mbOK], 0);
+        raise EInvalidDataType.Create  (Format(StrThereIsAnErrorInUsed,
+          [FScreenObject.Name, NameToDisplay]), UsedExpression.Decompile);
       end;
 
       VariablesForUsedExpression := TStringList.Create;
@@ -44961,7 +44975,9 @@ begin
       and (TypeToCheck = rdtDouble));
     if not ResultTypeOK then
     begin
-      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+      raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+        [Expression.Decompile, FScreenObject.Name]), Expression.Decompile);
+//      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
     end;
 
   end;
@@ -45677,7 +45693,9 @@ begin
       and (TypeToCheck = rdtDouble));
     if not ResultTypeOK then
     begin
-      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
+      raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+        [Expression.Decompile, FScreenObject.Name]), Expression.Decompile);
+//      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
     end;
   end;
 end;

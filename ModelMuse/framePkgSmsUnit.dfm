@@ -1,11 +1,11 @@
 inherited framePkgSms: TframePkgSms
   Width = 495
-  Height = 493
+  Height = 517
   ExplicitWidth = 495
-  ExplicitHeight = 493
+  ExplicitHeight = 517
   DesignSize = (
     495
-    493)
+    517)
   inherited lblComments: TLabel
     Enabled = True
   end
@@ -18,18 +18,15 @@ inherited framePkgSms: TframePkgSms
     Left = 0
     Top = 157
     Width = 495
-    Height = 336
+    Height = 360
     ActivePage = tabBasic
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
-    ExplicitHeight = 324
+    ExplicitHeight = 336
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 296
+      ExplicitLeft = 8
       object lblPrintOption: TLabel
         Left = 16
         Top = 4
@@ -53,7 +50,7 @@ inherited framePkgSms: TframePkgSms
       end
       object lblUsePTC: TLabel
         Left = 16
-        Top = 100
+        Top = 124
         Width = 398
         Height = 13
         Caption = 
@@ -62,7 +59,7 @@ inherited framePkgSms: TframePkgSms
       end
       object lblMaxErrors: TLabel
         Left = 16
-        Top = 151
+        Top = 175
         Width = 353
         Height = 13
         Caption = 
@@ -71,7 +68,7 @@ inherited framePkgSms: TframePkgSms
       end
       object lblMemoryPrint: TLabel
         Left = 16
-        Top = 220
+        Top = 244
         Width = 263
         Height = 13
         Caption = 'Print contents of memory ([MEMORY_PRINT_OPTION) '
@@ -149,7 +146,7 @@ inherited framePkgSms: TframePkgSms
         Top = 79
         Width = 464
         Height = 17
-        Caption = 'Write solver convergence values to CSV file'
+        Caption = 'Write outer solver convergence values to CSV file'
         TabOrder = 3
       end
       object seSolutionGroupMaxIter: TJvSpinEdit
@@ -164,7 +161,7 @@ inherited framePkgSms: TframePkgSms
       end
       object comboUsePTC: TJvImageComboBox
         Left = 16
-        Top = 119
+        Top = 143
         Width = 297
         Height = 23
         Style = csOwnerDrawVariable
@@ -194,7 +191,7 @@ inherited framePkgSms: TframePkgSms
       end
       object seMaxErrors: TJvSpinEdit
         Left = 16
-        Top = 170
+        Top = 194
         Width = 121
         Height = 21
         MaxValue = 2147483647.000000000000000000
@@ -204,7 +201,7 @@ inherited framePkgSms: TframePkgSms
       end
       object cbCheckInput: TCheckBox
         Left = 16
-        Top = 197
+        Top = 221
         Width = 321
         Height = 17
         Caption = 'Check model input (Inverse of NOCHECK)'
@@ -212,7 +209,7 @@ inherited framePkgSms: TframePkgSms
       end
       object comboMemoryPrint: TJvImageComboBox
         Left = 16
-        Top = 244
+        Top = 268
         Width = 121
         Height = 23
         Style = csOwnerDrawVariable
@@ -242,7 +239,7 @@ inherited framePkgSms: TframePkgSms
       end
       object cbNewton: TCheckBox
         Left = 16
-        Top = 273
+        Top = 297
         Width = 382
         Height = 17
         Caption = 'Use Newton formulation (MODFLOW-6)'
@@ -251,26 +248,30 @@ inherited framePkgSms: TframePkgSms
       end
       object cbUnderRelaxation: TCheckBox
         Left = 16
-        Top = 296
+        Top = 320
         Width = 406
         Height = 17
         Caption = 'Use Under_Relaxation option (MODFLOW-6)'
         Enabled = False
         TabOrder = 10
       end
+      object cbCsvInnerOutput: TCheckBox
+        Left = 16
+        Top = 102
+        Width = 464
+        Height = 17
+        Caption = 'Write inner solver convergence values to CSV file'
+        TabOrder = 11
+      end
     end
     object tabNonLinear: TTabSheet
       Caption = 'Nonlinear'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 296
       object rdgNonlinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 487
-        Height = 308
+        Height = 332
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -360,7 +361,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 296
         ColWidths = (
           84
           64
@@ -370,15 +370,11 @@ inherited framePkgSms: TframePkgSms
     object tabLinear: TTabSheet
       Caption = 'Linear'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 296
       object rdgLinearOptions: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 487
-        Height = 308
+        Height = 332
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -468,7 +464,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 296
         ColWidths = (
           84
           64

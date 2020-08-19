@@ -1,4 +1,4 @@
-# OBS: Observation Utility file created on 6/18/2020 by ModelMuse version 4.2.0.19.
+# OBS: Observation Utility file created on 8/18/2020 by ModelMuse version 4.3.0.0.
 BEGIN OPTIONS
     DIGITS      5
     PRINT_INPUT
@@ -7,4 +7,3 @@ END OPTIONS
 BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.ob_rch_out_rch.csv
   'rch_RCH' rch RCH
 END CONTINUOUS
-

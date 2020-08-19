@@ -1043,6 +1043,7 @@ Type
     FStoredOuterRClose: TRealStorage;
     FNewtonMF6: Boolean;
     FUnderRelaxationMF6: Boolean;
+    FCsvInnerOutput: TSmsSolutionPrint;
     procedure SetBacktrackingNumber(const Value: Integer);
     procedure SetComplexity(const Value: TSmsComplexityOption);
     procedure SetInnerMaxIterations(const Value: integer);
@@ -1111,6 +1112,7 @@ Type
     function GetUnderRelaxationMF6: Boolean;
     procedure SetNewtonMF6(const Value: Boolean);
     procedure SetUnderRelaxationMF6(const Value: Boolean);
+    procedure SetCsvInnerOutput(const Value: TSmsSolutionPrint);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -1161,8 +1163,10 @@ Type
     // COMPLEXITY
     property Complexity: TSmsComplexityOption read FComplexity
       write SetComplexity;
-    // CSV OUTPUT
+    // CSV_OUTER_OUTPUT
     property CsvOutput: TSmsSolutionPrint read FCsvOutput write SetCsvOutput;
+    // CSV_INNER_OUTPUT
+    property CsvInnerOutput: TSmsSolutionPrint read FCsvInnerOutput write SetCsvInnerOutput;
     // combines Inverse of NO_PTC and no ptc option
     property UsePTC: TUsePTC read FUsePTC write SetUsePTC;
     // maximum number of error messages in MF6. MAXERRORS in mfsim.nam options
@@ -1176,7 +1180,7 @@ Type
 
     // NONLINEAR block
 
-    // OUTER_HCLOSE
+    // OUTER_DVCLOSE formerly OUTER_HCLOSE
     // Default for SIMPLE = 1E-3
     // Default for MODERATE = 1E-2
     // Default for COMPLEX = 0.1
@@ -1273,7 +1277,7 @@ Type
     // Default for COMPLEX = 500
     property InnerMaxIterations: integer read FInnerMaxIterations
       write SetInnerMaxIterations;
-    // INNER_HCLOSE
+    // INNER_DVCLOSE formerly INNER_HCLOSE
     // typically 1 order of magnitude less than StoredOuterHclose
     // Default for SIMPLE = 0.60135-153.
     // Default for MODERATE = 0.60135-153.
@@ -3206,6 +3210,8 @@ Type
     inelastic specific storage (SSV) coefficients must be specified.}
   TCompressionMethod = (coElasticSpecificStorage, coRecompression);
 
+
+
   // Skeletal Storage, Compaction, and Subsidence (CSUB) Package
   TCSubPackageSelection = class(TModflowPackageSelection)
   private
@@ -3223,6 +3229,7 @@ Type
     FOutputTypes: TCsubOutputTypes;
     FInterbeds: TCSubInterbeds;
     FStressOffset: TModflowBoundaryDisplayTimeList;
+    FWriteConvergenceData: Boolean;
     procedure SetHeadBased(const Value: Boolean);
     procedure SetInterbedThicknessMethod(const Value: TInterbedThicknessMethod);
     procedure SetNumberOfDelayCells(const Value: Integer);
@@ -3243,6 +3250,7 @@ Type
     procedure InitializeStressOffsetDisplay(Sender: TObject);
     procedure GetStressOffsetUseList(Sender: TObject;
       NewUseList: TStringList);
+    procedure SetWriteConvergenceData(const Value: Boolean);
 //    procedure SetInterbedNames(const Value: TStrings);
   public
     procedure Assign(Source: TPersistent); override;
@@ -3345,6 +3353,9 @@ Type
       write SetOutputTypes Stored True;
     // cdelay
     property Interbeds: TCSubInterbeds read FInterbeds write SetInterbeds;
+    // PACKAGE_CONVERGENCE
+    property WriteConvergenceData: Boolean read FWriteConvergenceData
+      write SetWriteConvergenceData Stored True;
   end;
 
   TSwtPrintItem = class(TCustomPrintItem)
@@ -18182,6 +18193,7 @@ begin
     SolutionGroupMaxIteration := SourceSms.SolutionGroupMaxIteration;
     ContinueModel := SourceSms.ContinueModel;
     CsvOutput := SourceSms.CsvOutput;
+    CsvInnerOutput := SourceSms.CsvInnerOutput;
     UsePTC := SourceSms.UsePTC;
     MaxErrors := SourceSms.MaxErrors;
     CheckInput := SourceSms.CheckInput;
@@ -18394,6 +18406,7 @@ begin
   SolutionGroupMaxIteration := 1;
   ContinueModel := False;
   FCsvOutput := sspAll;
+  FCsvInnerOutput := sspAll;
   FUsePTC := upUse;
   FMaxErrors := -1;
   FCheckInput := ciCheckAll;
@@ -18451,6 +18464,16 @@ begin
   if FContinueModel <> Value then
   begin
     FContinueModel := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TSmsPackageSelection.SetCsvInnerOutput(
+  const Value: TSmsSolutionPrint);
+begin
+  if FCsvInnerOutput <> Value then
+  begin
+    FCsvInnerOutput := Value;
     InvalidateModel;
   end;
 end;
@@ -21082,6 +21105,7 @@ begin
   FSpecifyInitialPreconsolidationStress := False;
   FSpecifyInitialDelayHead := False;
   FOutputTypes := [];
+  FWriteConvergenceData := True;
 
 end;
 
@@ -21171,6 +21195,11 @@ procedure TCSubPackageSelection.SetUpdateMaterialProperties(
   const Value: Boolean);
 begin
   SetBooleanProperty(FUpdateMaterialProperties, Value);
+end;
+
+procedure TCSubPackageSelection.SetWriteConvergenceData(const Value: Boolean);
+begin
+  SetBooleanProperty(FWriteConvergenceData, Value);
 end;
 
 procedure TCSubPackageSelection.SetCompressionMethod(const Value: TCompressionMethod);

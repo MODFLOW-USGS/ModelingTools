@@ -135,7 +135,7 @@ end;
 
 procedure TImsWriter.WriteInnerHClose;
 begin
-  WriteString('  INNER_HCLOSE');
+  WriteString('  INNER_DVCLOSE');
   if soInnerHclose in FImsPackage.SmsOverrides then
   begin
     WriteFloat(FImsPackage.InnerHclose);
@@ -257,7 +257,7 @@ begin
   WriteString('BEGIN NONLINEAR');
   NewLine;
 
-  WriteString('  OUTER_HCLOSE ');
+  WriteString('  OUTER_DVCLOSE ');
   if soOuterHclose in FImsPackage.SmsOverrides then
   begin
     WriteFloat(FImsPackage.OuterHclose);
@@ -434,8 +434,18 @@ begin
 
   if FImsPackage.CsvOutput <> sspNone then
   begin
-    WriteString('  CSV_OUTPUT FILEOUT ');
-    CsvFile := ChangeFileExt(FNameOfFile, '.Solution.CSV');
+    WriteString('  CSV_OUTER_OUTPUT FILEOUT ');
+    CsvFile := ChangeFileExt(FNameOfFile, '.OuterSolution.CSV');
+    Model.AddModelOutputFile(CsvFile);
+    CsvFile := ExtractFileName(CsvFile);
+    WriteString(CsvFile);
+    NewLine;
+  end;
+
+  if FImsPackage.CsvOutput <> sspNone then
+  begin
+    WriteString('  CSV_INNER_OUTPUT FILEOUT ');
+    CsvFile := ChangeFileExt(FNameOfFile, '.InnerSolution.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);

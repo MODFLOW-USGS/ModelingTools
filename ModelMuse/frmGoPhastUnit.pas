@@ -6100,18 +6100,18 @@ begin
   begin
     if PhastModel.ModelSelection = msModflow2015 then
     begin
-      {$IFDEF PEST}
-        miManageFluxObservations.Enabled :=
-          (PhastModel.ChobIsSelected
-          or PhastModel.DrobIsSelected
-          or PhastModel.GbobIsSelected
-          or PhastModel.RvobIsSelected
-//          or PhastModel.StobIsSelected
-          or PhastModel.TobIsSelected);
-      {$ELSE}
+//      {$IFDEF PEST}
+//        miManageFluxObservations.Enabled :=
+//          (PhastModel.ChobIsSelected
+//          or PhastModel.DrobIsSelected
+//          or PhastModel.GbobIsSelected
+//          or PhastModel.RvobIsSelected
+////          or PhastModel.StobIsSelected
+//          or PhastModel.TobIsSelected);
+//      {$ELSE}
         miManageFluxObservations.Enabled :=
           PhastModel.TobIsSelected;
-      {$ENDIF}
+//      {$ENDIF}
     end
     else
     begin
