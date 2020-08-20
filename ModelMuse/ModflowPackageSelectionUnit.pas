@@ -435,8 +435,10 @@ Type
       write SetXt3dOnRightHandSide;
     property SaveSpecificDischarge: Boolean read FSaveSpecificDischarge
       write SetSaveSpecificDischarge;
-    property UseHorizontalAnisotropy: Boolean read FUseHorizontalAnisotropy write SetUseHorizontalAnisotropy;
-    property UseVerticalAnisotropy: Boolean read FUseVerticalAnisotropy write SetUseVerticalAnisotropy;
+    property UseHorizontalAnisotropy: Boolean read FUseHorizontalAnisotropy
+      write SetUseHorizontalAnisotropy;
+    property UseVerticalAnisotropy: Boolean read FUseVerticalAnisotropy
+      write SetUseVerticalAnisotropy;
   end;
 
   TStorageChoice = (scSpecificStorage, scStorageCoefficient);
@@ -1593,6 +1595,7 @@ Type
     FPrintStage: Boolean;
     FSaveBudget: Boolean;
     FPrintFlows: Boolean;
+    FWriteConvergenceData: Boolean;
     function GetSurfDepDepth: Double;
     procedure SetPrintFlows(const Value: Boolean);
     procedure SetPrintStage(const Value: Boolean);
@@ -1600,6 +1603,7 @@ Type
     procedure SetSaveStage(const Value: Boolean);
     procedure SetStoredSurfDepDepth(const Value: TRealStorage);
     procedure SetSurfDepDepth(const Value: Double);
+    procedure SetWriteConvergenceData(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
@@ -1608,15 +1612,23 @@ Type
     procedure Assign(Source: TPersistent); override;
   published
     // [PRINT_STAGE]
-    property PrintStage: Boolean read FPrintStage write SetPrintStage stored True;
+    property PrintStage: Boolean read FPrintStage write SetPrintStage
+      stored True;
     // only used for backwards compatibility
-    property PrintFlows: Boolean read FPrintFlows write SetPrintFlows stored False;
+    property PrintFlows: Boolean read FPrintFlows write SetPrintFlows
+      stored False;
     // [STAGE FILEOUT <stagefile>]
-    property SaveStage: Boolean read FSaveStage write SetSaveStage stored True;
+    property SaveStage: Boolean read FSaveStage write SetSaveStage
+      stored True;
     // [BUDGET FILEOUT <budgetfile>]
-    property SaveBudget: Boolean read FSaveBudget write SetSaveBudget stored True;
+    property SaveBudget: Boolean read FSaveBudget write SetSaveBudget
+      stored True;
     // [SURFDEP <surfdep>]
-    property StoredSurfDepDepth: TRealStorage read FStoredSurfDepDepth write SetStoredSurfDepDepth;
+    property StoredSurfDepDepth: TRealStorage read FStoredSurfDepDepth
+      write SetStoredSurfDepDepth;
+    // PACKAGE_CONVERGENCE
+    property WriteConvergenceData: Boolean read FWriteConvergenceData
+      write SetWriteConvergenceData Stored True;
   end;
 
 
@@ -2069,6 +2081,7 @@ Type
     FStreamStatus: TModflowBoundaryDisplayTimeList;
     FReachNumber: TModflowBoundaryDisplayTimeList;
     FPrintFlows: Boolean;
+    FWriteConvergenceData: Boolean;
     procedure SetMaxIteration(const Value: Integer);
     procedure SetStoredMaxDepthChange(const Value: TRealStorage);
     procedure SetSaveBudgetFile(const Value: Boolean);
@@ -2097,6 +2110,7 @@ Type
     procedure GetEmptyUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure SetPrintFlows(const Value: Boolean);
+    procedure SetWriteConvergenceData(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -2134,6 +2148,9 @@ Type
     // PRINT_STAGE
     property PrintFlows: Boolean read FPrintFlows write SetPrintFlows;
 //    property NewtonFormulation;
+    // PACKAGE_CONVERGENCE
+    property WriteConvergenceData: Boolean read FWriteConvergenceData
+      write SetWriteConvergenceData Stored True;
   end;
 
   TSftSolverPrintChoice = (sftNone, sftSummary, sftDetailed);
@@ -2384,6 +2401,7 @@ Type
     FMfUzfMf6Infiltration: TModflowBoundaryDisplayTimeList;
     FMfUzfMf6ExtinctionDepth: TModflowBoundaryDisplayTimeList;
     FMfUzfMf6PotentialEt: TModflowBoundaryDisplayTimeList;
+    FWriteConvergenceData: Boolean;
     procedure SetGroundwaterET(const Value: TUzfGwEtChoice);
     procedure SetSimulateGroundwaterSeepage(const Value: Boolean);
     procedure SetUnsatET(const Value: TUzfUnsatEtChoice);
@@ -2411,6 +2429,7 @@ Type
     function ModflowUzfMf6EtSimulated(Sender: TObject): boolean;
     function ModflowUzfMf6WaterContentUsed(Sender: TObject): boolean;
     function ModflowUzfMf6CapillaryPressureUsed(Sender: TObject): boolean;
+    procedure SetWriteConvergenceData(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -2454,6 +2473,9 @@ Type
       write SetNumberOfTrailingWaves default 7;
     property NumberOfWaveSets: Integer read FNumberOfWaveSets
       write SetNumberOfWaveSets default 40;
+    // PACKAGE_CONVERGENCE
+    property WriteConvergenceData: Boolean read FWriteConvergenceData
+      write SetWriteConvergenceData Stored True;
   end;
 
   THobPackageSelection = class(TModflowPackageSelection)
@@ -19226,6 +19248,7 @@ begin
     MaxIteration := SourceSfr.MaxIteration;
     SaveStageFile := SourceSfr.SaveStageFile;
     SaveBudgetFile := SourceSfr.SaveBudgetFile;
+    WriteConvergenceData := SourceSfr.WriteConvergenceData;
   end;
   inherited;
 end;
@@ -19469,6 +19492,7 @@ begin
 //  FNewtonFormulation := nfOn;
   FPrintStage := True;
   FPrintFlows := True;
+  FWriteConvergenceData := True;
 end;
 
 procedure TSfrModflow6PackageSelection.SetMaxDepthChange(const Value: double);
@@ -19505,6 +19529,12 @@ procedure TSfrModflow6PackageSelection.SetStoredMaxDepthChange(
   const Value: TRealStorage);
 begin
   FStoredMaxDepthChange.Assign(Value);
+end;
+
+procedure TSfrModflow6PackageSelection.SetWriteConvergenceData(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FWriteConvergenceData, Value);
 end;
 
 { TMawPackage }
@@ -19920,6 +19950,7 @@ begin
     SaveStage := LakeSource.SaveStage;
     SaveBudget := LakeSource.SaveBudget;
     SurfDepDepth := LakeSource.SurfDepDepth;
+    WriteConvergenceData := LakeSource.WriteConvergenceData;
   end;
 end;
 
@@ -19950,6 +19981,7 @@ begin
   SaveStage := False;
   SaveBudget := False;
   SurfDepDepth := 0.2;
+  FWriteConvergenceData := True;
 end;
 
 procedure TLakeMf6PackageSelection.SetPrintFlows(const Value: Boolean);
@@ -19981,6 +20013,12 @@ end;
 procedure TLakeMf6PackageSelection.SetSurfDepDepth(const Value: Double);
 begin
   FStoredSurfDepDepth.Value := Value;
+end;
+
+procedure TLakeMf6PackageSelection.SetWriteConvergenceData(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FWriteConvergenceData, Value);
 end;
 
 { TMvrPackage }
@@ -20102,6 +20140,7 @@ begin
     SaveBudgetFile := Uzf6Source.SaveBudgetFile;
     NumberOfTrailingWaves := Uzf6Source.NumberOfTrailingWaves;
     NumberOfWaveSets := Uzf6Source.NumberOfWaveSets;
+    WriteConvergenceData := Uzf6Source.WriteConvergenceData;
   end
   else if Source is TUzfPackageSelection then
   begin
@@ -20357,6 +20396,7 @@ begin
   FSaveBudgetFile := True;
   FNumberOfTrailingWaves := 7;
   FNumberOfWaveSets := 40;
+  FWriteConvergenceData := True;
 end;
 
 function TUzfMf6PackageSelection.ModflowUzfMf6CapillaryPressureUsed(
@@ -20415,6 +20455,11 @@ begin
     FUnsatET := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TUzfMf6PackageSelection.SetWriteConvergenceData(const Value: Boolean);
+begin
+  SetBooleanProperty(FWriteConvergenceData, Value);
 end;
 
 { TMt3dLktPackage }
@@ -20990,6 +21035,7 @@ begin
     EffectiveStressLag := CSubSource.EffectiveStressLag;
     OutputTypes := CSubSource.OutputTypes;
     Interbeds := CSubSource.Interbeds;
+    WriteConvergenceData := CSubSource.WriteConvergenceData;
 
     if RenameDataSets and (FModel <> nil) then
     begin

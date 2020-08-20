@@ -1666,7 +1666,7 @@ begin
   if Value <> FActiveDataSet then
   begin
     FActiveDataSet := Value;
-	Clear;
+	  Clear;
   end;
 end;
 
@@ -2710,8 +2710,12 @@ begin
   SetLength(FTriangulationData.X, N);
   SetLength(FTriangulationData.Y, N);
   SetLength(FTriangulationData.Values, N);
-  SetLength(IADJ, 6*N-9);
   SetLength(IEND, N);
+  if N <= 1 then
+  begin
+    Exit;
+  end;
+  SetLength(IADJ, 6*N-9);
 
   case ViewDirection of
     vdTop:
@@ -2854,8 +2858,16 @@ begin
         case DataSet.EvaluatedAt of
           eaBlocks:
             begin
-              Active[ColIndex, RowIndex, LayerIndex] :=
-                AnActiveDataSet.BooleanData[LayerIndex, RowIndex, ColIndex];
+              if AnActiveDataSet.DataType = rdtBoolean then
+              begin
+                Active[ColIndex, RowIndex, LayerIndex] :=
+                  AnActiveDataSet.BooleanData[LayerIndex, RowIndex, ColIndex];
+              end
+              else
+              begin
+                Active[ColIndex, RowIndex, LayerIndex] :=
+                  AnActiveDataSet.IntegerData[LayerIndex, RowIndex, ColIndex] > 0;
+              end;
             end;
           eaNodes:
             begin
@@ -3010,6 +3022,11 @@ var
   MeshOutline: TOutline;
   AValue: Double;
 begin
+  if Length(FTriangulationData.X) <= 1 then
+  begin
+    Exit;
+  end;
+
   Assert(Assigned(Mesh));
 //  Assert(Assigned(FMeshOutline));
   Assert(Assigned(FTriangulationData));

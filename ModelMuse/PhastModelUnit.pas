@@ -9267,16 +9267,26 @@ const
   //                if a data set is renamed.
   //               Enhancement: ModelMuse can now display specific discharge
   //                vectors for MODFLOW 6 models.
-
-  //               Bug fix: If not MODFLOW stress periods are defined when the
+  //    '4.3.0.1'  Bug fix: If not MODFLOW stress periods are defined when the
   //                user attempts to generate the MODFLOW input files, one will
   //                now be created automatically.
   //               Bug fix: It is no longer possible to define two parameters
   //                with the same name in the Manage Parameters dialog box.
+  //               Bug fix: Fixed bug that could cause an access violation when
+  //                drawing contours with a MODFLOW DISV model.
+  //               Bug fix: In some cases where a circular reference error would
+  //                have resulted in a bug report, a message to the user will be
+  //                displayed instead.
+  //               Bug fix: Fixed bug in importing specific storage from the BCF
+  //                package when importing an existing MODFLOW-2005 or
+  //                MODFLOW-NWT model.
+  //    '4.3.0.2'  Bug fix: Fixed a bug that could cause a range-check error
+  //                when drawing contours if the cross section does not
+  //                intersect the mesh.
 
 
   // version number of ModelMuse.
-  IModelVersion = '4.3.0.0';
+  IModelVersion = '4.3.0.2';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

@@ -24297,7 +24297,7 @@ begin
             end
             else
             begin
-              ConfinedStorage := FTran[LayerIndex, RowIndex, ColIndex];
+              ConfinedStorage := FConfinedStorage[LayerIndex, RowIndex, ColIndex];
             end;
 
             if DisImporter.IsConstLayerThickness[Layer] then
@@ -24313,7 +24313,8 @@ begin
             FSpecificStorage[LayerIndex, RowIndex, ColIndex] :=
               ConfinedStorage/LayerThickness;
           end;
-        end      end;
+        end
+      end;
     end;
   end;
 end;

@@ -13017,13 +13017,14 @@ begin
   ReadIniFile;
 
   WebIniFileName := InternetIniFileName(Handle, Application.ExeName);
+  if not FileExists(WebIniFileName) then
+  begin
+    ReadIniFile
+  end;
   Assert(FileExists(WebIniFileName));
   WebIniFile:= TMemInifile.Create(WebIniFileName);
   TCheckInternetThread.Create(PhastModel.Version, WebIniFile,
     miShowVideoTips.Checked);
-
-
-
 end;
 
 function TfrmGoPhast.CheckModel: boolean;

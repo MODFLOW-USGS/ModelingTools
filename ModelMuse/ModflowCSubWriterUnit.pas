@@ -661,6 +661,7 @@ procedure TCSubWriter.WriteOptions;
 var
   OutputFileName: string;
   NameOfFile: string;
+  CsvFile: string;
 begin
   WriteBeginOptions;
 
@@ -838,7 +839,7 @@ begin
   if FCSubPackage.WriteConvergenceData then
   begin
     WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
-    CsvFile := ChangeFileExt(FNameOfFile, '.CsubConvergence.CSV');
+    CsvFile := ChangeFileExt(FFileName, '.CsubConvergence.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);

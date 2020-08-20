@@ -2846,7 +2846,7 @@ begin
         TopContourer.DataSet := TopContourDataSet;
         LocalModel := Model as TCustomModel;
         TopContourer.ActiveDataSet :=
-          LocalModel.DataArrayManager.GetDataSetByName(rsActive);
+          LocalModel.DataArrayManager.GetDataSetByName(K_IDomain);
         TopContourer.BitMap := BitMap;
         TopContourer.ViewDirection := vdTop;
         TopContourer.Mesh := Self.FMesh;
@@ -6636,7 +6636,7 @@ begin
         Contourer.DataSet := ThreeDContourDataSet;
         LocalModel := Model as TCustomModel;
         Contourer.ActiveDataSet :=
-          LocalModel.DataArrayManager.GetDataSetByName(rsActive);
+          LocalModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
         Contourer.BitMap := BitMap;
         Contourer.ViewDirection := vdTop;
         Contourer.Mesh := Self;
@@ -8311,6 +8311,10 @@ begin
         end;
       else
         Assert(False);
+    end;
+    if UnionPolygon = nil then
+    begin
+      Exit;
     end;
     for PolyIndex := 0 to UnionPolygon.NumberOfContours - 1 do
     begin

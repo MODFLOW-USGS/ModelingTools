@@ -5401,7 +5401,9 @@ uses Math, UndoItemsScreenObjects, BigCanvasMethods,
 resourcestring
   StrInvalidVertex0 = 'Invalid vertex (#%0:d) in "%1:s". %2:s';
   StrErrorInObjectS = 'Error in object %s. There is a circular reference in '
-  + 'a formula defining the third dimension of the object.';
+  + 'a formula defining the third dimension of the object. This is usually '
+  + 'caused by an object both defining and using the layer boundaries. It may '
+  + 'be defining the layer boundaries indirectly.';
   StrInvalidDataType = 'Invalid data type.';
   StrElevationFormula = '(X, Y, or Z coordinate formula)';
   StrLowerXYOrZCo = '(Lower X, Y, or Z coordinate formula)';
@@ -19242,7 +19244,8 @@ begin
     begin
       if FSegments.FGettingSegments then
       begin
-        raise ECircularRefScreenObjectError.Create(Format(StrErrorInObjectS, [Name]));
+        raise ECircularRefScreenObjectError.Create(Format(
+          StrErrorInObjectS, [Name]));
       end;
       FSegments.FGettingSegments := True;
       try

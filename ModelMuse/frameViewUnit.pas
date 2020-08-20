@@ -2478,31 +2478,66 @@ procedure TframeView.DrawSelectedAndOldScreenObjects(const BitMap:
 var
   AScreenObject: TScreenObject;
   Index: Integer;
+  ErrorMessages: TStringList;
 begin
   // Nothing here should take long to draw.
-  for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
-  begin
-    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];
-    AScreenObject.DrawSelected(BitMap, ViewDirection);
+
+  ErrorMessages := TStringList.Create;
+  try
+    for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+    begin
+      AScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];
+      try
+        AScreenObject.DrawSelected(BitMap, ViewDirection);
+      except on E: ECircularRefScreenObjectError do
+        ErrorMessages.Add(E.message);
+      end;
+    end;
+    PaintOldScreenObjects(BitMap);
+    if ErrorMessages.Count > 0 then
+    begin
+      Beep;
+      MessageDlg(ErrorMessages.Text, mtError, [mbOK], 0);
+    end;
+  finally
+    ErrorMessages.Free;
   end;
-  PaintOldScreenObjects(BitMap);
 end;
 
 procedure TframeView.PaintOldScreenObjects(const BitMap: TBitmap32);
 var
   Index: Integer;
   AScreenObject: TScreenObject;
+  ErrorMessages: TStringList;
 begin
   // @name draws the current @link(TScreenObject) and previous
   // @link(TScreenObject) to the @link(ZoomBox.Image32) bitmap
-  for Index := 0 to FPreviousScreenObjects.Count - 1 do
-  begin
-    AScreenObject := FPreviousScreenObjects[Index];
-    AScreenObject.Draw(BitMap, ViewDirection);
-  end;
-  if (BitMap <> nil) and (CurrentScreenObject <> nil) then
-  begin
-    CurrentScreenObject.Draw(BitMap, ViewDirection);
+  ErrorMessages := TStringList.Create;
+  try
+    for Index := 0 to FPreviousScreenObjects.Count - 1 do
+    begin
+      AScreenObject := FPreviousScreenObjects[Index];
+      try
+        AScreenObject.Draw(BitMap, ViewDirection);
+      except on E: ECircularRefScreenObjectError do
+        ErrorMessages.Add(E.message);
+      end;
+    end;
+    if (BitMap <> nil) and (CurrentScreenObject <> nil) then
+    begin
+      try
+        CurrentScreenObject.Draw(BitMap, ViewDirection);
+      except on E: ECircularRefScreenObjectError do
+        ErrorMessages.Add(E.message);
+      end;
+    end;
+    if ErrorMessages.Count > 0 then
+    begin
+      Beep;
+      MessageDlg(ErrorMessages.Text, mtError, [mbOK], 0);
+    end;
+  finally
+    ErrorMessages.Free;
   end;
 end;
 
