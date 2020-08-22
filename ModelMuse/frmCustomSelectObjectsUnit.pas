@@ -91,7 +91,39 @@ type
     FExapandedNodes: TStringList;
     FRefinementList: TList;
     FvstObsMf6Node: PVirtualNode;
-    FObs6List: TList;
+//    FObs6List: TList;
+
+    FvstHeadObsMf6Node: PVirtualNode;
+    FHeadObs6List: TList;
+    FvstDrawDownObsMf6Node: PVirtualNode;
+    FDrawDownObs6List: TList;
+    FvstChdObsMf6Node: PVirtualNode;
+    FChdObs6List: TList;
+    FvstDrnObsMf6Node: PVirtualNode;
+    FDrnObs6List: TList;
+    FvstEvtObsMf6Node: PVirtualNode;
+    FEvtObs6List: TList;
+    FvstGhbObsMf6Node: PVirtualNode;
+    FGhbObs6List: TList;
+    FvstRchObsMf6Node: PVirtualNode;
+    FRchObs6List: TList;
+    FvstRivObsMf6Node: PVirtualNode;
+    FRivObs6List: TList;
+    FvstWelObsMf6Node: PVirtualNode;
+    FWelObs6List: TList;
+    FvstToMvrObsMf6Node: PVirtualNode;
+    FToMvrObs6List: TList;
+    FvstLakObsMf6Node: PVirtualNode;
+    FLakObs6List: TList;
+    FvstMawObsMf6Node: PVirtualNode;
+    FMawObs6List: TList;
+    FvstSfrObsMf6Node: PVirtualNode;
+    FSfrObs6List: TList;
+    FvstUzfObsMf6Node: PVirtualNode;
+    FUzfObs6List: TList;
+    FvstCsubObsMf6Node: PVirtualNode;
+    FCsubObs6List: TList;
+
     function NodeString(ANode: PVirtualNode): string;
     { Private declarations }
 
@@ -388,7 +420,7 @@ uses StrUtils, ModflowPackagesUnit, ModflowPackageSelectionUnit,
   ModflowHfbUnit, ModflowSfrUnit, ModflowEvtUnit, ModflowGageUnit, DataSetUnit,
   ModpathParticleUnit, ModflowUzfUnit, ModflowHobUnit, ModflowRchUnit,
   ModflowEtsUnit, ModflowBoundaryUnit, ClassificationUnit, ModflowDrtUnit,
-  SutraOptionsUnit;
+  SutraOptionsUnit, Modflow6ObsUnit;
 
 resourcestring
   StrSUTRAFeatures = 'SUTRA Features';
@@ -893,9 +925,83 @@ begin
     begin
       Data.Caption := 'SWT: Water-Table Subsidence Observations';
       Node.CheckType := ctTriStateCheckBox;
-    end;
-
-
+    end
+    else if Node = FvstHeadObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: Head Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstDrawDownObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: Drawdown Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstChdObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: CHD Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstDrnObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: DRN Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstEvtObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: EVT Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstGhbObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: GHB Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstRchObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: RCH Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstRivObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: RIV Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstWelObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: WEL Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstToMvrObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: To MVR Flow Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstLakObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: LAK Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstMawObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: MAW Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstSfrObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: SFR Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstUzfObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: UZF Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstCsubObsMf6Node then
+    begin
+      Data.Caption := 'OBS6: CSUB Observations';
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    ;
 
 
     If (ParentNode = nil) then
@@ -1485,7 +1591,66 @@ begin
     if (AScreenObject.Modflow6Obs <> nil)
       and AScreenObject.Modflow6Obs.Used then
     begin
-      InitializeData(FvstObsMf6Node);
+      if ogHead in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstHeadObsMf6Node);
+      end;
+      if ogDrawdown in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstDrawDownObsMf6Node);
+      end;
+      if ogCHD in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstChdObsMf6Node);
+      end;
+      if ogDrain in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstDrnObsMf6Node);
+      end;
+      if ogWell in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstWelObsMf6Node);
+      end;
+      if ogGHB in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstGhbObsMf6Node);
+      end;
+      if ogRiv in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstRivObsMf6Node);
+      end;
+      if ogRch in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstRchObsMf6Node);
+      end;
+      if ogEVT in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstEvtObsMf6Node);
+      end;
+      if ogMvr in AScreenObject.Modflow6Obs.General then
+      begin
+        InitializeData(FvstToMvrObsMf6Node);
+      end;
+      if AScreenObject.Modflow6Obs.LakObs <> [] then
+      begin
+        InitializeData(FvstLakObsMf6Node);
+      end;
+      if AScreenObject.Modflow6Obs.MawObs <> [] then
+      begin
+        InitializeData(FvstMawObsMf6Node);
+      end;
+      if AScreenObject.Modflow6Obs.SfrObs <> [] then
+      begin
+        InitializeData(FvstSfrObsMf6Node);
+      end;
+      if AScreenObject.Modflow6Obs.UzfObs <> [] then
+      begin
+        InitializeData(FvstUzfObsMf6Node);
+      end;
+      if AScreenObject.Modflow6Obs.CSubObs.CSubObsSet <> [] then
+      begin
+        InitializeData(FvstCsubObsMf6Node);
+      end;
     end;
 
     if (AScreenObject.ModflowHfbBoundary <> nil)
@@ -1741,7 +1906,6 @@ begin
   vstCheckDeleteNode(FvstModflowFarmRefEvapNode);
   vstCheckDeleteNode(FvstModflowFarmCropIDNode);
   vstCheckDeleteNode(FvstModflowCfpRechargeNode);
-  vstCheckDeleteNode(FvstObsMf6Node);
   vstCheckDeleteNode(FvstMt3dSft);
   vstCheckDeleteNode(FvstMt3dLkt);
   vstCheckDeleteNode(FvstMt3dmsSsm);
@@ -1769,6 +1933,24 @@ begin
   vstCheckDeleteNode(FvstChildModelNode);
   vstCheckDeleteNode(FvstSutraFeaturesNode);
   vstCheckDeleteNode(FvstFootprintFeaturesNode);
+
+  vstCheckDeleteNode(FvstHeadObsMf6Node);
+  vstCheckDeleteNode(FvstDrawDownObsMf6Node);
+  vstCheckDeleteNode(FvstChdObsMf6Node);
+  vstCheckDeleteNode(FvstDrnObsMf6Node);
+  vstCheckDeleteNode(FvstEvtObsMf6Node);
+  vstCheckDeleteNode(FvstGhbObsMf6Node);
+  vstCheckDeleteNode(FvstRchObsMf6Node);
+  vstCheckDeleteNode(FvstRivObsMf6Node);
+  vstCheckDeleteNode(FvstWelObsMf6Node);
+  vstCheckDeleteNode(FvstToMvrObsMf6Node);
+  vstCheckDeleteNode(FvstLakObsMf6Node);
+  vstCheckDeleteNode(FvstMawObsMf6Node);
+  vstCheckDeleteNode(FvstSfrObsMf6Node);
+  vstCheckDeleteNode(FvstUzfObsMf6Node);
+  vstCheckDeleteNode(FvstCsubObsMf6Node);
+
+  vstCheckDeleteNode(FvstObsMf6Node);
 
   ParentNodes := TList.Create;
   try
@@ -1970,10 +2152,21 @@ begin
   end;
   InitializeNodeData(FvstModflowBoundaryConditionsRoot, nil);
 
+  if FvstObsMf6Node = nil then
+  begin
+    FvstObsMf6Node := vstObjects.InsertNode(
+      FvstModflowBoundaryConditionsRoot, amInsertAfter);
+    vstObjects.ReinitNode(FvstObsMf6Node, False);
+  end;
+  InitializeNodeData(FvstObsMf6Node, nil);
+
+//  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
+
+
   if FvstModpathRoot = nil then
   begin
     FvstModpathRoot := vstObjects.InsertNode(
-      FvstModflowBoundaryConditionsRoot, amInsertAfter);
+      FvstObsMf6Node, amInsertAfter);
     vstObjects.ReinitNode(FvstModpathRoot, False);
   end;
   InitializeNodeData(FvstModpathRoot, FModpathList);
@@ -2052,6 +2245,31 @@ begin
   end;
   InitializeNodeData(FvstWellNode, FWellList);
 
+  // add children of FvstObsMf6Node
+  if FvstHeadObsMf6Node = nil then
+  begin
+    FvstHeadObsMf6Node := vstObjects.InsertNode(
+      FvstObsMf6Node, amAddChildFirst);
+    vstObjects.ReinitNode(FvstHeadObsMf6Node, False);
+  end;
+  InitializeNodeData(FvstHeadObsMf6Node, FHeadObs6List);
+  PriorNode := FvstHeadObsMf6Node;
+
+  InitializeMF_BoundaryNode(FvstDrawDownObsMf6Node, PriorNode, FDrawDownObs6List);
+  InitializeMF_BoundaryNode(FvstChdObsMf6Node, PriorNode, FChdObs6List);
+  InitializeMF_BoundaryNode(FvstDrnObsMf6Node, PriorNode, FDrnObs6List);
+  InitializeMF_BoundaryNode(FvstEvtObsMf6Node, PriorNode, FEvtObs6List);
+  InitializeMF_BoundaryNode(FvstGhbObsMf6Node, PriorNode, FGhbObs6List);
+  InitializeMF_BoundaryNode(FvstRchObsMf6Node, PriorNode, FRchObs6List);
+  InitializeMF_BoundaryNode(FvstRivObsMf6Node, PriorNode, FRivObs6List);
+  InitializeMF_BoundaryNode(FvstWelObsMf6Node, PriorNode, FWelObs6List);
+  InitializeMF_BoundaryNode(FvstToMvrObsMf6Node, PriorNode, FToMvrObs6List);
+  InitializeMF_BoundaryNode(FvstLakObsMf6Node, PriorNode, FLakObs6List);
+  InitializeMF_BoundaryNode(FvstMawObsMf6Node, PriorNode, FMawObs6List);
+  InitializeMF_BoundaryNode(FvstSfrObsMf6Node, PriorNode, FSfrObs6List);
+  InitializeMF_BoundaryNode(FvstUzfObsMf6Node, PriorNode, FUzfObs6List);
+  InitializeMF_BoundaryNode(FvstCsubObsMf6Node, PriorNode, FCsubObs6List);
+
   // add children of FvstModflowBoundaryConditionsRoot
   if FvstModflowChdNode = nil then
   begin
@@ -2081,7 +2299,7 @@ begin
   InitializeMF_BoundaryNode(FvstModflowMnw1Node, PriorNode, FMnw1List);
   InitializeMF_BoundaryNode(FvstModflowMnw2Node, PriorNode, FMnw2List);
   InitializeMF_BoundaryNode(FvstModflowMvrNode, PriorNode, FMvrList);
-  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
+//  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
   InitializeMF_BoundaryNode(FvstModflowRchNode, PriorNode, FRchList);
   InitializeMF_BoundaryNode(FvstModflowResNode, PriorNode, FResList);
   InitializeMF_BoundaryNode(FvstModflowRipNode, PriorNode, FRipList);
@@ -2303,7 +2521,7 @@ begin
   FFarmRefEvtList.Free;
   FFarmCropIDList.Free;
   FCfpRechargeList.Free;
-  FObs6List.Free;
+//  FObs6List.Free;
   FSsmList.Free;
   FLktList.Free;
   FSftList.Free;
@@ -2330,6 +2548,21 @@ begin
 
   FFootprintList.Free;
 
+  FHeadObs6List.Free;
+  FDrawDownObs6List.Free;
+  FChdObs6List.Free;
+  FDrnObs6List.Free;
+  FEvtObs6List.Free;
+  FGhbObs6List.Free;
+  FRchObs6List.Free;
+  FRivObs6List.Free;
+  FWelObs6List.Free;
+  FToMvrObs6List.Free;
+  FLakObs6List.Free;
+  FMawObs6List.Free;
+  FSfrObs6List.Free;
+  FUzfObs6List.Free;
+  FCsubObs6List.Free;
   inherited;
 end;
 
@@ -2392,7 +2625,7 @@ begin
   FFarmRefEvtList := TList.Create;
   FFarmCropIDList := TList.Create;
   FCfpRechargeList := TList.Create;
-  FObs6List := TList.Create;
+//  FObs6List := TList.Create;
   FHobList := TList.Create;
   FSwiObsList := TList.Create;
   FHfbList := TList.Create;
@@ -2421,6 +2654,23 @@ begin
 
   FFootprintList := TList.Create;
   FExapandedNodes := TStringList.Create;
+
+  FHeadObs6List := TList.Create;
+  FDrawDownObs6List := TList.Create;
+  FChdObs6List := TList.Create;
+  FDrnObs6List := TList.Create;
+  FEvtObs6List := TList.Create;
+  FGhbObs6List := TList.Create;
+  FRchObs6List := TList.Create;
+  FRivObs6List := TList.Create;
+  FWelObs6List := TList.Create;
+  FToMvrObs6List := TList.Create;
+  FLakObs6List := TList.Create;
+  FMawObs6List := TList.Create;
+  FSfrObs6List := TList.Create;
+  FUzfObs6List := TList.Create;
+  FCsubObs6List  := TList.Create;
+
 
   FCanEdit := True;
 
@@ -2524,7 +2774,28 @@ begin
   FvstChildModelNode := nil;
   FvstSutraFeaturesNode := nil;
   FvstFootprintFeaturesNode := nil;
+
+  FvstHeadObsMf6Node := nil;
+  FvstDrawDownObsMf6Node := nil;
+  FvstChdObsMf6Node := nil;
+  FvstDrnObsMf6Node := nil;
+  FvstEvtObsMf6Node := nil;
+  FvstGhbObsMf6Node := nil;
+  FvstRchObsMf6Node := nil;
+  FvstRivObsMf6Node := nil;
+  FvstWelObsMf6Node := nil;
+  FvstToMvrObsMf6Node := nil;
+  FvstLakObsMf6Node := nil;
+  FvstMawObsMf6Node := nil;
+  FvstSfrObsMf6Node := nil;
+  FvstUzfObsMf6Node := nil;
+  FvstSfrObsMf6Node := nil;
+  FvstUzfObsMf6Node := nil;
+  FvstUzfObsMf6Node := nil;
+  FvstCsubObsMf6Node := nil;
+
   FvstObsMf6Node := nil;
+
 end;
 
 function TfrmCustomSelectObjects.NodeString(ANode: PVirtualNode): string;
@@ -2711,7 +2982,7 @@ begin
   FFarmRefEvtList.Sort(ScreenObjectCompare);
   FFarmCropIDList.Sort(ScreenObjectCompare);
   FCfpRechargeList.Sort(ScreenObjectCompare);
-  FObs6List.Sort(ScreenObjectCompare);
+//  FObs6List.Sort(ScreenObjectCompare);
   FModpathList.Sort(ScreenObjectCompare);
   FChildModelList.Sort(ScreenObjectCompare);
 
@@ -2727,6 +2998,24 @@ begin
   FSutraStateObsList.Sort(ScreenObjectCompare);
 
   FFootprintList.Sort(ScreenObjectCompare);
+
+  FHeadObs6List.Sort(ScreenObjectCompare);
+  FDrawDownObs6List.Sort(ScreenObjectCompare);
+  FChdObs6List.Sort(ScreenObjectCompare);
+  FDrnObs6List.Sort(ScreenObjectCompare);
+  FEvtObs6List.Sort(ScreenObjectCompare);
+  FGhbObs6List.Sort(ScreenObjectCompare);
+  FRchObs6List.Sort(ScreenObjectCompare);
+  FRivObs6List.Sort(ScreenObjectCompare);
+  FWelObs6List.Sort(ScreenObjectCompare);
+  FToMvrObs6List.Sort(ScreenObjectCompare);
+  FLakObs6List.Sort(ScreenObjectCompare);
+  FMawObs6List.Sort(ScreenObjectCompare);
+  FSfrObs6List.Sort(ScreenObjectCompare);
+  FUzfObs6List.Sort(ScreenObjectCompare);
+  FCsubObs6List.Sort(ScreenObjectCompare);
+
+
 
   for Index := 0 to FDataSetLists.Count - 1 do
   begin
@@ -2960,6 +3249,7 @@ begin
     or (Node = FvstModflowBoundaryConditionsRoot)
     or (Node = FvstSutraFeaturesNode)
     or (Node = FvstFootprintFeaturesNode)
+    or (Node = FvstObsMf6Node)
     then
   begin
     if Sender.CheckState[Node] <> csMixedNormal then
@@ -3128,6 +3418,7 @@ begin
         or (vstNode = FvstModflowBoundaryConditionsRoot)
         or (vstNode = FvstSutraFeaturesNode)
         or (vstNode = FvstFootprintFeaturesNode)
+        or (vstNode = FvstObsMf6Node)
         then
       begin
         // Convert vstObjects.ChildCount[Node] from Cardinal to integer to

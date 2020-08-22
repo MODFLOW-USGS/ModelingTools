@@ -398,6 +398,7 @@ var
   CellListStart: Integer;
   CellListEnd: Integer;
 //  SplitterIndex: Integer;
+//  FirstCell: Boolean;
   function GetLocation(ACell: TCellLocation): TPoint2D;
   begin
     if Model.DisvUsed then
@@ -480,6 +481,8 @@ begin
           SetLength(TransmissivityFactors, CellList.Count);
           MaxIndex := -1;
           MaxThick := -1.0;
+          CellListStart := -1;
+          CellListEnd := -1;
           if Model.PestUsed then
           begin
             for CellIndex := 0 to CellList.Count - 1 do
@@ -488,6 +491,11 @@ begin
               ACell := CellList[CellIndex];
               if ActiveDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
               begin
+                CellListEnd := CellIndex;
+                if CellListStart < 0 then
+                begin
+                  CellListStart := CellIndex;
+                end;
                 if Model.DisvUsed then
                 begin
                   DisvCell3D := Model.DisvGrid.Cells[ACell.Layer, ACell.Column];
@@ -549,15 +557,15 @@ begin
           end;
 
           if not Model.PestUsed or (CellList.Count = 1)
-            or Obs.CalibrationObservations.MultiLayer then
+            {or Obs.CalibrationObservations.MultiLayer} then
           begin
             CellListStart := 0;
-            CellListEnd := CellList.Count - 1; 
+            CellListEnd := CellList.Count - 1;
           end
           else
           begin
-            CellListStart := MaxIndex; 
-            CellListEnd := MaxIndex; 
+//            CellListStart := MaxIndex;
+//            CellListEnd := MaxIndex;
           end;
 
           if CellListStart < 0 then
@@ -567,6 +575,7 @@ begin
           FHorizontalCells.Clear;
           FoundFirst := False;
           ErrorAdded := False;
+//          FirstCell := True;
           for CellIndex := CellListStart to CellListEnd do
           begin
             ACell := CellList[CellIndex];
@@ -808,14 +817,14 @@ begin
 
                       if (CellList.Count > 1) and Obs.CalibrationObservations.MultiLayer then
                       begin
-                        if CellIndex = 0 then
+                        if CellIndex = CellListStart then
                         begin
                           MultiLayerFormula := TStringBuilder.Create;
                           MultiLayerFormulaList.Add(MultiLayerFormula);
                           MultiLayerFormula.Append(Format('  OBSNAME %s PRINT', [Observation.Name]));
                           MultiLayerFormula.Append(sLineBreak);
                           MultiLayerFormula.Append('  FORMULA ');
-                          MultiLayerFormula.Append('(')
+                          MultiLayerFormula.Append('(');
                         end
                         else
                         begin
@@ -823,14 +832,18 @@ begin
                         end;
                         MLObsName := Format('%s_ML%d', [Observation.Name, CellIndex+1]);
                         CalculatedObsLines.Add('  OBSNAME ' + MLObsName);
-                        if CellIndex > 0 then
+                        if CellIndex > CellListStart then
                         begin
                           MultiLayerFormula.Append(' + ');
                         end;
+//                        if ObservationIndex = Obs.CalibrationObservations.Count - 1 then
+//                        begin
+//                          FirstCell := False;
+//                        end;
                         MultiLayerFormula.Append(MLObsName);
                         MultiLayerFormula.Append('*');
                         MultiLayerFormula.Append(TransmissivityFactors[CellIndex]);
-                        if CellIndex = CellList.Count - 1 then
+                        if CellIndex = CellListEnd then
                         begin
                           MultiLayerFormula.Append(')/(');
                           for TransIndex := 0 to Length(TransmissivityFactors) - 1 do
@@ -1596,7 +1609,7 @@ var
   StartTime: Double;
   Prefix: string;
   OBSNAME: string;
-  CellName: string;
+//  CellName: string;
   CellNames: TStringList;
 begin
   case FObGeneral of

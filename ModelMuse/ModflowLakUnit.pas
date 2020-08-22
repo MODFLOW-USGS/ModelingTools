@@ -341,6 +341,7 @@ type
     property TrueLakeID: integer read FTrueLakeID write FTrueLakeID;
     procedure DeleteSubLake(Index: integer);
     property OutType: integer read GetOutType;
+    procedure ReplaceGUID;
   published
     property InitialStage: double read FInitialStage write SetInitialStage;
     property CenterLake: integer read FCenterLake write SetCenterLake;
@@ -1459,6 +1460,11 @@ end;
 function TLakBoundary.GetSubLakeCount: integer;
 begin
   result := FSubLakes.Count;
+end;
+
+procedure TLakBoundary.ReplaceGUID;
+begin
+  Observations.ReplaceGUID;
 end;
 
 procedure TLakBoundary.SetCenterLake(const Value: integer);

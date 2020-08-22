@@ -187,6 +187,7 @@ type
     // If @name is changed, @link(GetUsed) should be changed too.
     procedure Clear;
     // If @name is changed, @link(Clear) should be changed too.
+    procedure ReplaceGUID;
   published
     property Name: string read FName write SetName;
     property GroundwaterFlowObs: Boolean read FGroundwaterFlowObs
@@ -506,6 +507,11 @@ end;
 function TModflow6Obs.GetWelFlowObs: Boolean;
 begin
   result := ogWell in General;
+end;
+
+procedure TModflow6Obs.ReplaceGUID;
+begin
+  CalibrationObservations.ReplaceGUID;
 end;
 
 procedure TModflow6Obs.SetCalibrationObservations(

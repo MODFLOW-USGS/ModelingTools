@@ -1591,6 +1591,7 @@ view. }
     // and a @link(TModflowBoundary)
     procedure RemoveModelLink(AModel: TBaseModel);
     procedure Loaded;
+    procedure ReplaceGUID;
   end;
 
   TUsedWithModelItem = class(TPhastCollectionItem)
@@ -3812,6 +3813,7 @@ view. }
     procedure ConvertStr;
     procedure ClearModflowBoundaries;
     procedure SimplifyStraightEdges(AngleEpsilon, DistanceEpsilon: double);
+    procedure ReplaceGUID;
   published
     // @name is deprecated.
     property ChildModelDiscretization: integer read FChildModelDiscretization
@@ -18193,6 +18195,14 @@ begin
   if FModflowBoundaries <> nil then
   begin
     FModflowBoundaries.ReplaceATime(OldTime, NewTime);
+  end;
+end;
+
+procedure TScreenObject.ReplaceGUID;
+begin
+  if ModflowBoundaries <> nil then
+  begin
+    ModflowBoundaries.ReplaceGUID;
   end;
 end;
 
@@ -41271,6 +41281,34 @@ begin
   end;
 
   Invalidate;
+end;
+
+procedure TModflowBoundaries.ReplaceGUID;
+begin
+  if ModflowSfrBoundary <> nil then
+  begin
+    ModflowSfrBoundary.ReplaceGUID;
+  end;
+  if ModflowMnw2Boundary <> nil then
+  begin
+    ModflowMnw2Boundary.ReplaceGUID;
+  end;
+  if ModflowLakBoundary <> nil then
+  begin
+    ModflowLakBoundary.ReplaceGUID;
+  end;
+  if ModflowSubObservations <> nil then
+  begin
+    ModflowSubObservations.ReplaceGUID;
+  end;
+  if ModflowSwtObservations <> nil then
+  begin
+    ModflowSwtObservations.ReplaceGUID;
+  end;
+  if Modflow6Obs <> nil then
+  begin
+    Modflow6Obs.ReplaceGUID;
+  end;
 end;
 
 procedure TModflowBoundaries.StopTalkingToAnyone;

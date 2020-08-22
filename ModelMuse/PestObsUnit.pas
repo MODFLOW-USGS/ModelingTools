@@ -37,6 +37,9 @@ type
     // observations.
     property GUID: string read FGUID write FGUID;
     property ExportedName: string read FExportedName write FExportedName;
+    // When pasting objects from the clipboard, replace the GUID so that there
+    // are no duplicates.
+    procedure ReplaceGUID;
   published
     property Name: string read FName write SetName;
     property ObservedValue: double read GetObservedValue write SetObservedValue Stored False;
@@ -101,6 +104,7 @@ type
     property Items[Index: Integer]: TObsCompareItem read GetItem
       write SetItem; default;
     function Add: TObsCompareItem;
+    procedure ReplaceGUID;
    end;
 
   TCustomComparisonCollection = class(TScreenObjectOwnerCollection)
@@ -118,6 +122,7 @@ type
       write SetItem; default;
     function Add: TCustomTimeObservationItem;
     procedure Clear;
+    procedure ReplaceGUID;
   published
     property Comparisons: TObsComparisons read FComparisons write SetComparisons;
   end;
@@ -216,6 +221,16 @@ end;
 function TCustomObservationItem.ObservationType: string;
 begin
   result := ClassName;
+end;
+
+procedure TCustomObservationItem.ReplaceGUID;
+var
+  MyGuid: TGUID;
+begin
+  if CreateGUID(MyGuid) = 0 then
+  begin
+    FGUID := GUIDToString(MyGuid);
+  end;
 end;
 
 procedure TCustomObservationItem.SetComment(const Value: string);
@@ -387,6 +402,16 @@ begin
   result := inherited Items[Index] as TObsCompareItem
 end;
 
+procedure TObsComparisons.ReplaceGUID;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    Items[Index].ReplaceGUID;
+  end;
+end;
+
 procedure TObsComparisons.SetItem(Index: Integer; const Value: TObsCompareItem);
 begin
   inherited Items[Index] := Value;
@@ -440,6 +465,17 @@ function TCustomComparisonCollection.GetItem(
   Index: Integer): TCustomTimeObservationItem;
 begin
   result := inherited Items[Index] as TCustomTimeObservationItem;
+end;
+
+procedure TCustomComparisonCollection.ReplaceGUID;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    Items[Index].ReplaceGUID;
+  end;
+  Comparisons.ReplaceGUID;
 end;
 
 procedure TCustomComparisonCollection.SetComparisons(

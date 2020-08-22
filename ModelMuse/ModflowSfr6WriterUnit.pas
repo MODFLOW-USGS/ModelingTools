@@ -1615,6 +1615,7 @@ var
   stagefile: string;
   budgetfile: string;
   NameOfFile: string;
+  CsvFile: string;
 begin
   WriteBeginOptions;
 
@@ -1656,6 +1657,16 @@ begin
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);
+    NewLine;
+  end;
+
+  if SfrMf6Package.WriteConvergenceData then
+  begin
+    WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
+    CsvFile := ChangeFileExt(FNameOfFile, '.SfrConvergence.CSV');
+    Model.AddModelOutputFile(CsvFile);
+    CsvFile := ExtractFileName(CsvFile);
+    WriteString(CsvFile);
     NewLine;
   end;
 

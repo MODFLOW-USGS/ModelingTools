@@ -23,10 +23,8 @@ inherited framePkgSms: TframePkgSms
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
-    ExplicitHeight = 336
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 8
       object lblPrintOption: TLabel
         Left = 16
         Top = 4
@@ -250,7 +248,7 @@ inherited framePkgSms: TframePkgSms
         Left = 16
         Top = 320
         Width = 406
-        Height = 17
+        Height = 18
         Caption = 'Use Under_Relaxation option (MODFLOW-6)'
         Enabled = False
         TabOrder = 10

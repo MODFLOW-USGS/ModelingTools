@@ -25522,6 +25522,7 @@ begin
             Item := Objects.ScreenObjects.Items[Index] as TScreenObjectItem;
             ScreenObj := TScreenObjectCrack(Item.ScreenObject);
             ScreenObj.Loaded;
+            ScreenObj.ReplaceGUID;
           end;
           UpdateDrainReturnObjects;
         finally

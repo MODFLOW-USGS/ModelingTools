@@ -1,11 +1,11 @@
 inherited framePackageSfrMF6: TframePackageSfrMF6
   Width = 427
-  Height = 377
+  Height = 393
   ExplicitWidth = 427
-  ExplicitHeight = 377
+  ExplicitHeight = 393
   DesignSize = (
     427
-    377)
+    393)
   object lblMaxIterations: TLabel [2]
     Left = 167
     Top = 277
@@ -86,6 +86,14 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
     Caption = 'Print flows (PRINT_FLOWS)'
     Enabled = False
     TabOrder = 6
+  end
+  object cbPackageConvergence: TCheckBox [11]
+    Left = 16
+    Top = 359
+    Width = 455
+    Height = 18
+    Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
+    TabOrder = 7
   end
   inherited rcSelectionController: TRbwController
     ControlList = <

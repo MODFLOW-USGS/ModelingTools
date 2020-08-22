@@ -846,7 +846,6 @@ begin
     NewLine;
   end;
 
-
   if FObservations.Count > 0 then
   begin
     WriteString('    OBS6 FILEIN ');

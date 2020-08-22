@@ -9,37 +9,37 @@ inherited framePackageCsub: TframePackageCsub
   inherited memoComments: TMemo
     Top = 58
     Width = 558
-    Height = 85
+    Height = 63
     ExplicitTop = 58
     ExplicitWidth = 558
-    ExplicitHeight = 85
+    ExplicitHeight = 63
   end
   object pcCsub: TPageControl [3]
     Left = 0
-    Top = 145
+    Top = 127
     Width = 589
-    Height = 369
+    Height = 387
     ActivePage = tabOptions
     Align = alBottom
     TabOrder = 1
     object tabInterbeds: TTabSheet
       Caption = 'Interbeds'
       ImageIndex = 2
-      ExplicitHeight = 329
+      ExplicitHeight = 341
       inline frameInterbeds: TframeGrid
         Left = 0
         Top = 0
         Width = 581
-        Height = 341
+        Height = 359
         Align = alClient
         Enabled = False
         TabOrder = 0
         ExplicitWidth = 581
-        ExplicitHeight = 329
+        ExplicitHeight = 341
         inherited Panel: TPanel
-          Top = 300
+          Top = 318
           Width = 581
-          ExplicitTop = 288
+          ExplicitTop = 300
           ExplicitWidth = 581
           inherited lbNumber: TLabel
             Width = 135
@@ -64,7 +64,7 @@ inherited framePackageCsub: TframePackageCsub
         end
         inherited Grid: TRbwDataGrid4
           Width = 581
-          Height = 300
+          Height = 318
           ColCount = 2
           Columns = <
             item
@@ -117,13 +117,13 @@ inherited framePackageCsub: TframePackageCsub
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 581
-          ExplicitHeight = 288
+          ExplicitHeight = 300
         end
       end
     end
     object tabOptions: TTabSheet
       Caption = 'Options'
-      ExplicitHeight = 329
+      ExplicitLeft = 8
       object lblGamma: TLabel
         Left = 155
         Top = 6
@@ -142,7 +142,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 106
         Top = 210
         Width = 304
-        Height = 13
+        Height = 18
         Caption = 'Method for specifying thickness of interbeds (CELL_FRACTION)'
         WordWrap = True
       end
@@ -157,7 +157,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 227
         Top = 146
         Width = 231
-        Height = 13
+        Height = 18
         Caption = 'Compression method (COMPRESSION_INDICES)'
       end
       object rdeGamma: TRbwDataEntry
@@ -192,7 +192,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 62
         Width = 353
-        Height = 17
+        Height = 18
         Caption = 'Use head-based formulation (HEAD_BASED)'
         Enabled = False
         TabOrder = 2
@@ -202,7 +202,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 85
         Width = 567
-        Height = 17
+        Height = 18
         Caption = 'Specify preconsolidation heads (INITIAL_PRECONSOLIDATION_HEAD)'
         Enabled = False
         TabOrder = 3
@@ -222,7 +222,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 184
         Width = 542
-        Height = 17
+        Height = 18
         Caption = 'Update material properties (UPDATE_MATERIAL_PROPERTIES)'
         Enabled = False
         TabOrder = 5
@@ -258,7 +258,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 301
         Width = 558
-        Height = 17
+        Height = 18
         Caption = 
           'Use effective stress from previous time step (EFFECTIVE_STRESS_L' +
           'AG)'
@@ -269,7 +269,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 281
         Width = 567
-        Height = 14
+        Height = 18
         Caption = 
           'Specify absolute initial delay bed head (SPECIFIED_INITIAL_DELAY' +
           '_HEAD)'
@@ -278,9 +278,9 @@ inherited framePackageCsub: TframePackageCsub
       end
       object cbSpecifyInitialPreconsolidationStress: TCheckBox
         Left = 3
-        Top = 242
+        Top = 240
         Width = 567
-        Height = 33
+        Height = 36
         Caption = 
           'Specify initial preconsolidation stress (SPECIFIED_INITIAL_PRECO' +
           'NSOLIDATION_STRESS)'
@@ -319,7 +319,7 @@ inherited framePackageCsub: TframePackageCsub
         Left = 3
         Top = 324
         Width = 455
-        Height = 17
+        Height = 18
         Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
         TabOrder = 11
       end
@@ -327,12 +327,12 @@ inherited framePackageCsub: TframePackageCsub
     object tabOutputTypes: TTabSheet
       Caption = 'Output types'
       ImageIndex = 1
-      ExplicitHeight = 329
+      ExplicitHeight = 341
       object chklstOutput: TCheckListBox
         Left = 0
         Top = 0
         Width = 581
-        Height = 341
+        Height = 359
         Align = alClient
         Enabled = False
         ItemHeight = 13
@@ -346,7 +346,7 @@ inherited framePackageCsub: TframePackageCsub
           'Elastic coarse-grained compaction (binary)'
           'Z displacement (binary)')
         TabOrder = 0
-        ExplicitHeight = 329
+        ExplicitHeight = 341
       end
     end
   end

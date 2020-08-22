@@ -215,6 +215,7 @@ type
     procedure Clear; override;
     property OutTypes: TByteSet read GetOutTypes;
     procedure FixCollections;
+    procedure ReplaceGUID;
   published
     // @name was mispelled. It is now @link(SegmentNumber).
     property SegementNumber: integer read FSegmentNumber
@@ -894,6 +895,11 @@ begin
   begin
     (ParentModel as TPhastModel).InvalidateMfSfrSegmentReachAndIcalc(self);
   end;
+end;
+
+procedure TSfrBoundary.ReplaceGUID;
+begin
+  Observations.ReplaceGUID;
 end;
 
 function TSfrBoundary.Used: boolean;

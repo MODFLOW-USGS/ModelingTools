@@ -563,6 +563,7 @@ type
     function TargetCellLocation(AModel: TBaseModel): TCellLocation;
     procedure Clear; override;
     function DataTypeUsed(DataIndex: integer): boolean;
+    procedure ReplaceGUID;
   published
     property TimeValues: TMnw2TimeCollection read FTimeValues
       write SetTimeValues;
@@ -2073,6 +2074,11 @@ begin
   inherited;
   // need to finish this
   Assert(False);
+end;
+
+procedure TMnw2Boundary.ReplaceGUID;
+begin
+  Observations.ReplaceGUID;
 end;
 
 procedure TMnw2Boundary.SetAdjustPumping(const Value: boolean);

@@ -17,6 +17,7 @@ type
     rdeNumberOfTrailingWaves: TRbwDataEntry;
     lblNumberOfWaveSets: TLabel;
     rdeNumberOfWaveSets: TRbwDataEntry;
+    cbPackageConvergence: TCheckBox;
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
     procedure rgEvapotranspirationClick(Sender: TObject);
   private
@@ -47,6 +48,7 @@ begin
   cbSaveBudget.Checked := UzfPackage.SaveBudgetFile;
   rdeNumberOfTrailingWaves.IntegerValue := UzfPackage.NumberOfTrailingWaves;
   rdeNumberOfWaveSets.IntegerValue := UzfPackage.NumberOfWaveSets;
+  cbPackageConvergence.Checked := UzfPackage.WriteConvergenceData;
 end;
 
 procedure TframePackageUzfMf6.rcSelectionControllerEnabledChange(
@@ -74,6 +76,7 @@ begin
   UzfPackage.SaveBudgetFile := cbSaveBudget.Checked;
   UzfPackage.NumberOfTrailingWaves := rdeNumberOfTrailingWaves.IntegerValue;
   UzfPackage.NumberOfWaveSets := rdeNumberOfWaveSets.IntegerValue;
+  UzfPackage.WriteConvergenceData := cbPackageConvergence.Checked;
 end;
 
 procedure TframePackageUzfMf6.Enable_rgUnsatEt;

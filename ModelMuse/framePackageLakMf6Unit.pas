@@ -14,6 +14,7 @@ type
     cbSaveStage: TCheckBox;
     rdeSurfaceDepressionDepth: TRbwDataEntry;
     lblSurfaceDepressionDepth: TLabel;
+    cbPackageConvergence: TCheckBox;
   private
     { Private declarations }
   public
@@ -44,6 +45,7 @@ begin
   cbSaveStage.Checked := LakMf6.SaveStage;
   cbSaveBudget.Checked := LakMf6.SaveBudget;
   rdeSurfaceDepressionDepth.RealValue := LakMf6.SurfDepDepth;
+  cbPackageConvergence.Checked := LakMf6.WriteConvergenceData;
 end;
 
 procedure TframePackageLakMf6.SetData(Package: TModflowPackageSelection);
@@ -57,6 +59,7 @@ begin
   LakMf6.SaveStage := cbSaveStage.Checked;
   LakMf6.SaveBudget := cbSaveBudget.Checked;
   LakMf6.SurfDepDepth := rdeSurfaceDepressionDepth.RealValue;
+  LakMf6.WriteConvergenceData := cbPackageConvergence.Checked;
 end;
 
 end.

@@ -18,6 +18,7 @@ type
     lblMaxDepthChange: TLabel;
     cbPrintStage: TCheckBox;
     cbPrintFlows: TCheckBox;
+    cbPackageConvergence: TCheckBox;
   private
     { Private declarations }
   public
@@ -47,6 +48,7 @@ begin
   cbSaveBudget.Checked := SfrMf6.SaveBudgetFile;
   seMaxIterations.AsInteger := SfrMf6.MaxIteration;
   rdeMaxDepthChange.RealValue := SfrMf6.MaxDepthChange;
+  cbPackageConvergence.Checked := SfrMf6.WriteConvergenceData;
 end;
 
 procedure TframePackageSfrMF6.SetData(Package: TModflowPackageSelection);
@@ -61,6 +63,7 @@ begin
   SfrMf6.SaveBudgetFile := cbSaveBudget.Checked;
   SfrMf6.MaxIteration := seMaxIterations.AsInteger;
   SfrMf6.MaxDepthChange := rdeMaxDepthChange.RealValue;
+  SfrMf6.WriteConvergenceData := cbPackageConvergence.Checked;
 end;
 
 end.

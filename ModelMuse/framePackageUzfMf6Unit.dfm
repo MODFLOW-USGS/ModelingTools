@@ -1,14 +1,14 @@
 inherited framePackageUzfMf6: TframePackageUzfMf6
   Width = 595
-  Height = 502
+  Height = 526
   ExplicitWidth = 595
-  ExplicitHeight = 502
+  ExplicitHeight = 526
   DesignSize = (
     595
-    502)
+    526)
   object lblNumberOfTrailingWaves: TLabel [2]
     Left = 16
-    Top = 157
+    Top = 143
     Width = 185
     Height = 13
     Caption = 'Number of trailing waves (ntrailwaves)'
@@ -16,7 +16,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object lblNumberOfWaveSets: TLabel [3]
     Left = 16
-    Top = 204
+    Top = 190
     Width = 165
     Height = 13
     Caption = 'Number of wave sets (nwavesets)'
@@ -24,11 +24,13 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   inherited memoComments: TMemo
     Width = 564
+    Height = 75
     ExplicitWidth = 564
+    ExplicitHeight = 75
   end
   object rgEvapotranspiration: TRadioGroup [5]
     Left = 16
-    Top = 251
+    Top = 237
     Width = 564
     Height = 172
     Caption = 'Evapotranspiration (ET)'
@@ -48,7 +50,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object rgUnsatEt: TRadioGroup [6]
     Left = 16
-    Top = 429
+    Top = 415
     Width = 564
     Height = 66
     Caption = 'Unsaturated ET method'
@@ -60,7 +62,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbSeepage: TCheckBox [7]
     Left = 323
-    Top = 157
+    Top = 143
     Width = 257
     Height = 36
     Caption = 'Simulate groundwater seepage (SIMULATE_GWSEEP)'
@@ -70,7 +72,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object cbSaveBudget: TCheckBox [8]
     Left = 323
-    Top = 199
+    Top = 185
     Width = 257
     Height = 46
     Caption = 'Save binary UZF budget file (.uzf_budget)'
@@ -80,7 +82,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object rdeNumberOfTrailingWaves: TRbwDataEntry [9]
     Left = 16
-    Top = 176
+    Top = 162
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -95,7 +97,7 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
   end
   object rdeNumberOfWaveSets: TRbwDataEntry [10]
     Left = 16
-    Top = 223
+    Top = 209
     Width = 145
     Height = 22
     Color = clBtnFace
@@ -107,6 +109,14 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
     Min = 1.000000000000000000
     CheckMin = True
     ChangeDisabledColor = True
+  end
+  object cbPackageConvergence: TCheckBox [11]
+    Left = 16
+    Top = 487
+    Width = 455
+    Height = 18
+    Caption = 'Write package convergence (PACKAGE_CONVERGENCE)'
+    TabOrder = 7
   end
   inherited rcSelectionController: TRbwController
     ControlList = <

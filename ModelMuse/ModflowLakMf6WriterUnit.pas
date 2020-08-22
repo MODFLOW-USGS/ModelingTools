@@ -1377,6 +1377,7 @@ var
   time_conversion: double;
   length_conversion: double;
   NameOfFile: string;
+  CsvFile: string;
   procedure WriteSingleQuoteMF6;
   begin
     WriteString('''');
@@ -1416,6 +1417,16 @@ begin
     BudgetFileName := ExtractFileName(BudgetFileName);
     WriteString('  BUDGET FILEOUT ');
     WriteString(BudgetFileName);
+    NewLine;
+  end;
+
+  if FLakMf6Package.WriteConvergenceData then
+  begin
+    WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
+    CsvFile := ChangeFileExt(FFileName, '.LakConvergence.CSV');
+    Model.AddModelOutputFile(CsvFile);
+    CsvFile := ExtractFileName(CsvFile);
+    WriteString(CsvFile);
     NewLine;
   end;
 
