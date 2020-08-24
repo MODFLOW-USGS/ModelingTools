@@ -9283,10 +9283,11 @@ const
   //    '4.3.0.2'  Bug fix: Fixed a bug that could cause a range-check error
   //                when drawing contours if the cross section does not
   //                intersect the mesh.
-
+  //    '4.3.0.3'  Bug fix: Fixed a bug that could cause a bug report to be
+  //                generated when opening an existing model.
 
   // version number of ModelMuse.
-  IModelVersion = '4.3.0.2';
+  IModelVersion = '4.3.0.3';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

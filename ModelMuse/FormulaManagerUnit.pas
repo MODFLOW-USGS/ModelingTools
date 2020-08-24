@@ -93,7 +93,7 @@ uses
   frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModflowBoundaryUnit, 
   ModflowEtsUnit, ModflowSfrTable, SubscriptionUnit, GIS_Functions,
   PhastModelUnit, Math, ModflowHfbUnit, Mt3dmsChemUnit,
-  ModflowRipPlantGroupsUnit;
+  ModflowRipPlantGroupsUnit, ModflowMvrUnit, Modflow6ObsUnit;
 
 { TFormulaObject }
 
@@ -242,6 +242,14 @@ begin
                 else if RestoreEvent = Addr(GlobalRestoreFormulaObjectSubscription) then
                 begin
                   GlobalRestoreFormulaObjectSubscription(self, Subject, UsedVariables[VariableIndex])
+                end
+                else if RestoreEvent = Addr(MvrStringValueRestoreSubscription) then
+                begin
+                  MvrStringValueRestoreSubscription(self, Subject, UsedVariables[VariableIndex])
+                end
+                else if RestoreEvent = Addr(GlobalRestoreMf6CalibrationObsSubscription) then
+                begin
+                  GlobalRestoreMf6CalibrationObsSubscription(self, Subject, UsedVariables[VariableIndex])
                 end
                 else
                 begin
@@ -414,6 +422,14 @@ begin
                     begin
                       GlobalRemoveFormulaObjectSubscription(self, Subject, OldSubscriptions[VariableIndex]);
                     end
+                    else if PRemoveEvent = Addr(MvrStringValueRemoveSubscription) then
+                    begin
+                      MvrStringValueRemoveSubscription(self, Subject, OldSubscriptions[VariableIndex]);
+                    end
+                    else if PRemoveEvent = Addr(GlobalRemoveMf6CalibrationObsSubscription) then
+                    begin
+                      GlobalRemoveMf6CalibrationObsSubscription(self, Subject, OldSubscriptions[VariableIndex])
+                    end
                     else
                     begin
                       Assert(False);
@@ -518,6 +534,14 @@ begin
               else if RestoreEvent = Addr(GlobalRestoreFormulaObjectSubscription) then
               begin
                 GlobalRestoreFormulaObjectSubscription(self, Subject, FNewSubscriptions[VariableIndex]);
+              end
+              else if RestoreEvent = Addr(MvrStringValueRestoreSubscription) then
+              begin
+                MvrStringValueRestoreSubscription(self, Subject, FNewSubscriptions[VariableIndex]);
+              end
+              else if RestoreEvent = Addr(GlobalRestoreMf6CalibrationObsSubscription) then
+              begin
+                GlobalRestoreMf6CalibrationObsSubscription(self, Subject, FNewSubscriptions[VariableIndex])
               end
               else
               begin

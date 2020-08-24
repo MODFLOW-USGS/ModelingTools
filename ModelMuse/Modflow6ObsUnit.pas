@@ -244,6 +244,11 @@ Procedure FillObGenSeriesNames(AList: TStrings);
 function TryGetObsSeries(const SeriesName: string; var ObSeries: TObSeries): Boolean;
 function ObsSeriesToString(const ObSeries: TObSeries): string;
 
+procedure GlobalRemoveMf6CalibrationObsSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+procedure GlobalRestoreMf6CalibrationObsSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+
 implementation
 
 uses
