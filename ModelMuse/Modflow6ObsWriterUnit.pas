@@ -3744,22 +3744,24 @@ begin
                 end
                 else
                 begin
-                  for DelayBedIndex := 0 to Length(AnObs.FDelayCellNumbers) - 1 do
-                  begin
-                    idcellno := AnObs.FDelayCellNumbers[DelayBedIndex];
-                    for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
-                    begin
-                      icsubno := AnObs.FInterbedNumbers[IBIndex];
-                      obsname := Format('%0:s_%1:d_%2:d', [Root, icsubno, idcellno]);
-                      WriteString('  ''');
-                      WriteString(obsname);
-                      WriteString(''' ');
-                      WriteString(ObservationType);
-                      WriteInteger(icsubno);
-                      NewLine;
-                      CalibObsNames.Add(obsname);
-                    end;
-                  end;
+//                    for DelayBedIndex := 0 to Length(AnObs.FDelayCellNumbers) - 1 do
+//                    begin
+//                      idcellno := AnObs.FDelayCellNumbers[DelayBedIndex];
+                      for IBIndex := 0 to Length(AnObs.FInterbedNumbers) - 1 do
+                      begin
+                        icsubno := AnObs.FInterbedNumbers[IBIndex];
+//                        obsname := Format('%0:s_%1:d_%2:d', [Root, icsubno, idcellno]);
+                        obsname := Format('%0:s_%1:d_1', [Root, icsubno]);
+                        WriteString('  ''');
+                        WriteString(obsname);
+                        WriteString(''' ');
+                        WriteString(ObservationType);
+                        WriteInteger(icsubno);
+                        NewLine;
+                        CalibObsNames.Add(obsname);
+                      end;
+//                    end;
+//                  end;
                   WritePestObsFormulas;
                 end;
               end;

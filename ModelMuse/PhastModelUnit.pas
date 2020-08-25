@@ -9285,9 +9285,13 @@ const
   //                intersect the mesh.
   //    '4.3.0.3'  Bug fix: Fixed a bug that could cause a bug report to be
   //                generated when opening an existing model.
+  //    '4.3.0.4'  Bug fix: Fixed defining CSUB observations for
+  //                csub, inelastic-csub, elastic-csub, sk, ske,
+  //                interbed-compaction, inelastic-compaction,
+  //                elastic-compaction, and thickness observation types.
 
   // version number of ModelMuse.
-  IModelVersion = '4.3.0.3';
+  IModelVersion = '4.3.0.4';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
