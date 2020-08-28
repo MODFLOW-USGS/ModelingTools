@@ -5863,7 +5863,8 @@ end;
 
 function TCustomTransientWriter.ObservationFileName(AFileName: string): string;
 begin
-  result := ChangeFileExt(AFileName, ObservationExtension);
+  result := ChangeFileExt(AFileName, '');
+  result := ChangeFileExt(result, ObservationExtension);
 end;
 
 class function TCustomTransientWriter.ObservationOutputExtension: string;

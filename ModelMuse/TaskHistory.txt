@@ -26070,5 +26070,28 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Model Viewer SUTRA 4')
+    end
+    item
+      Date = 44069.000000000000000000
+      Categories.Strings = (
+        'Model Viewer SUTRA 4')
+    end
+    item
+      Date = 44070.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Design and Planning'
+        'PEST Observations'
+        'MF6 Observation Utility'
+        'PEST')
+    end
+    item
+      Date = 44071.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'PEST Observations'
+        'PEST'
+        'MF6 Observation Utility'
+        'Pest parameter substitution')
     end>
 end

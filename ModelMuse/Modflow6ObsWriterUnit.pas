@@ -55,6 +55,7 @@ type
     procedure HandleFlowObs(AScreenObject: TScreenObject; Obs: TModflow6Obs;
       ACell: TCellAssignment);
     procedure WriteFileOut;
+    procedure WritePestFile;
   protected
     FHeadObs: THeadDrawdownObservationLocationList;
     FDrawdownObs: THeadDrawdownObservationLocationList;
@@ -341,7 +342,7 @@ var
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;
   Obs: TModflow6Obs;
-  ActiveDataArray: TDataArray;
+  IdomainDataArray: TDataArray;
   Grid: TCustomModelGrid;
   Mesh: IMesh3D;
   CellList: TCellAssignmentList;
@@ -426,7 +427,7 @@ begin
   end;
 
   ObsIndex := 1;
-  ActiveDataArray := Model.DataArrayManager.GetDatasetByName(K_IDOMAIN);
+  IdomainDataArray := Model.DataArrayManager.GetDatasetByName(K_IDOMAIN);
   Grid := Model.Grid;
   if Grid = nil then
   begin
@@ -489,7 +490,7 @@ begin
             begin
               TransmissivityFactors[CellIndex] := 0;
               ACell := CellList[CellIndex];
-              if ActiveDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+              if IdomainDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
               begin
                 CellListEnd := CellIndex;
                 if CellListStart < 0 then
@@ -562,10 +563,10 @@ begin
             CellListStart := 0;
             CellListEnd := CellList.Count - 1;
           end
-          else
+          else if not Obs.CalibrationObservations.MultiLayer then
           begin
-//            CellListStart := MaxIndex;
-//            CellListEnd := MaxIndex;
+            CellListStart := MaxIndex;
+            CellListEnd := MaxIndex;
           end;
 
           if CellListStart < 0 then
@@ -580,7 +581,7 @@ begin
           begin
             ACell := CellList[CellIndex];
 
-            if ActiveDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+            if IdomainDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
             begin
               if Model.PestUsed and (CellList.Count <> 1)  
                 and FoundFirst and not ErrorAdded
@@ -623,7 +624,7 @@ begin
                       CellDisv2D := ObsCells[NeighborIndex];
                       NeighborLocation.Column := CellDisv2D.ElementNumber;
                       NeighborLocation.Layer := ACell.Layer;
-                      if ActiveDataArray.IntegerData[NeighborLocation.Layer, 0, NeighborLocation.Column] > 0 then
+                      if IdomainDataArray.IntegerData[NeighborLocation.Layer, 0, NeighborLocation.Column] > 0 then
                       begin
                         NeighborCells.Add(NeighborLocation);
                       end;
@@ -654,7 +655,7 @@ begin
                         NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);
                         if (NeighborLocation.Row >= 0)
                           and (NeighborLocation.Row < Grid.RowCount)
-                          and (ActiveDataArray.IntegerData[
+                          and (IdomainDataArray.IntegerData[
                             NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
                             > 0)
                           then
@@ -669,7 +670,7 @@ begin
                       NeighborLocation.Row := ACell.Row;
                       if (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        and (ActiveDataArray.IntegerData[
+                        and (IdomainDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]
                           > 0)
                         then
@@ -684,7 +685,7 @@ begin
                       NeighborLocation.Row := ACell.Row;
                       if (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        and (ActiveDataArray.IntegerData[
+                        and (IdomainDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
@@ -695,7 +696,7 @@ begin
                         and (NeighborLocation.Row < Grid.RowCount)
                         and (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        and (ActiveDataArray.IntegerData[
+                        and (IdomainDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
@@ -704,7 +705,7 @@ begin
                       NeighborLocation.Column := ACell.Column;
                       if (NeighborLocation.Row >= 0)
                         and (NeighborLocation.Row < Grid.RowCount)
-                        and (ActiveDataArray.IntegerData[
+                        and (IdomainDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
@@ -718,7 +719,7 @@ begin
                       NeighborLocation.Row := ACell.Row + Sign(ObservationRowOffset);;
                       if (NeighborLocation.Row >= 0)
                         and (NeighborLocation.Row < Grid.RowCount)
-                        and (ActiveDataArray.IntegerData[
+                        and (IdomainDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
@@ -729,7 +730,7 @@ begin
                         and (NeighborLocation.Column < Grid.ColumnCount)
                         and (NeighborLocation.Row >= 0)
                         and (NeighborLocation.Row < Grid.RowCount)
-                        and (ActiveDataArray.IntegerData[
+                        and (IdomainDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column]> 0)
                         then
                       begin
@@ -738,7 +739,7 @@ begin
                       NeighborLocation.Row := ACell.Row;
                       if (NeighborLocation.Column >= 0)
                         and (NeighborLocation.Column < Grid.ColumnCount)
-                        and (ActiveDataArray.IntegerData[
+                        and (IdomainDataArray.IntegerData[
                           NeighborLocation.Layer, NeighborLocation.Row, NeighborLocation.Column] > 0)
                         then
                       begin
@@ -817,6 +818,7 @@ begin
 
                       if (CellList.Count > 1) and Obs.CalibrationObservations.MultiLayer then
                       begin
+
                         if CellIndex = CellListStart then
                         begin
                           MultiLayerFormula := TStringBuilder.Create;
@@ -831,6 +833,8 @@ begin
                           MultiLayerFormula := MultiLayerFormulaList[ObservationIndex];
                         end;
                         MLObsName := Format('%s_ML%d', [Observation.Name, CellIndex+1]);
+
+                        CalculatedObsLines.Add(Format('# Defined by %s',[AScreenObject.Name]));
                         CalculatedObsLines.Add('  OBSNAME ' + MLObsName);
                         if CellIndex > CellListStart then
                         begin
@@ -860,6 +864,7 @@ begin
                       end
                       else
                       begin
+                        CalculatedObsLines.Add(Format('# Defined by %s',[AScreenObject.Name]));
                         CalculatedObsLines.Add(Format('  OBSNAME %s PRINT', [Observation.Name]));
                       end;
                       InterpolateFormula := TStringBuilder.Create;
@@ -1262,7 +1267,7 @@ begin
   end;
 end;
 
-procedure TModflow6Obs_Writer.WriteFile(const AFileName: string);
+procedure TModflow6Obs_Writer.WritePestFile;
 {$IFDEF PEST}
 var
   ObjectIndex: Integer;
@@ -1276,41 +1281,6 @@ var
   AnotherDisvCell: TModflowIrregularCell2D;
 {$ENDIF}
 begin
-  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
-  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrErrorInDefiningHe);
-  if not Package.IsSelected then
-  begin
-    Exit
-  end;
-  if Model.ModelSelection <> msModflow2015 then
-  begin
-    Exit;
-  end;
-  if Model.PackageGeneratedExternally(StrOBS6) then
-  begin
-    Exit;
-  end;
-
-  frmProgressMM.AddMessage(StrEvaluatingHeadDra);
-  Evaluate;
-  if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0) then
-  begin
-    Exit;
-  end;
-
-  FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrOBS6, -1, FNameOfFile, foInput, Model);
-  OpenFile(FNameOfFile);
-  try
-    frmProgressMM.AddMessage(StrWritingOBS6InputF);
-    WriteDataSet0;
-    WriteOptions;
-    WriteFileOut;
-
-  finally
-    CloseFile;
-  end;
-
 {$IFDEF PEST}
   if not Model.PestUsed then
   begin
@@ -1383,6 +1353,132 @@ begin
     CloseFile;
   end;
 {$ENDIF}
+
+end;
+
+procedure TModflow6Obs_Writer.WriteFile(const AFileName: string);
+//{$IFDEF PEST}
+//var
+//  ObjectIndex: Integer;
+//  AScreenObject: TScreenObject;
+//  Obs: TModflow6Obs;
+//  CellList: TCellAssignmentList;
+//  ACell: TCellAssignment;
+//  DisvCell: TModflowIrregularCell2D;
+//  ObsCells: TObsWeights;
+//  index: Integer;
+//  AnotherDisvCell: TModflowIrregularCell2D;
+//{$ENDIF}
+begin
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrErrorInDefiningHe);
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  if Model.PackageGeneratedExternally(StrOBS6) then
+  begin
+    Exit;
+  end;
+
+  frmProgressMM.AddMessage(StrEvaluatingHeadDra);
+  Evaluate;
+  if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0) then
+  begin
+    Exit;
+  end;
+
+  FNameOfFile := FileName(AFileName);
+  WriteToNameFile(StrOBS6, -1, FNameOfFile, foInput, Model);
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingOBS6InputF);
+    WriteDataSet0;
+    WriteOptions;
+    WriteFileOut;
+
+  finally
+    CloseFile;
+  end;
+
+  WritePestFile;
+
+//{$IFDEF PEST}
+//  if not Model.PestUsed then
+//  begin
+//    Exit;
+//  end;
+//
+//  FNameOfFile := ChangeFileExt(FNameOfFile, '.pestobs');
+//  OpenFile(FNameOfFile);
+//  try
+//    for ObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+//    begin
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//      AScreenObject := Model.ScreenObjects[ObjectIndex];
+//      if AScreenObject.Deleted then
+//      begin
+//        Continue;
+//      end;
+//      if not AScreenObject.UsedModels.UsesModel(Model) then
+//      begin
+//        Continue;
+//      end;
+//      Obs := AScreenObject.Modflow6Obs;
+//
+//      if Obs <> nil then
+//      begin
+//        if ogHead in Obs.General then
+//        begin
+//          CellList := TCellAssignmentList.Create;
+//          try
+//            AScreenObject.GetCellsToAssign('', nil, nil, CellList, alAll, Model);
+//            if Model.DisvUsed then
+//            begin
+//              if CellList.Count > 0 then
+//              begin
+//                ACell := CellList[0];
+//                DisvCell := Model.DisvGrid.TwoDGrid.Cells[ACell.Column];
+//                GetObsWeights(DisvCell, AScreenObject.Points[0], ObsCells, 1e-10);
+//                WriteString(AScreenObject.Name);
+//                WriteInteger(DisvCell.DisplayNumber);
+//                WriteFloat(AScreenObject.Points[0].x);
+//                WriteFloat(AScreenObject.Points[0].y);
+//                NewLine;
+//                for index := 0 to Length(ObsCells) - 1 do
+//                begin
+//                  AnotherDisvCell := ObsCells[index];
+//                  WriteInteger(AnotherDisvCell.DisplayNumber);
+//                  WriteFloat(AnotherDisvCell.Location.x);
+//                  WriteFloat(AnotherDisvCell.Location.y);
+//                  NewLine;
+//                end;
+//                NewLine;
+//              end
+//              else
+//              begin
+//                frmErrorsAndWarnings.AddWarning(Model, StrErrorInDefiningHe,
+//                  Format(StrSDoesNotDefineA, [AScreenObject.Name]), AScreenObject);
+//              end;
+//            end;
+//          finally
+//            CellList.Free;
+//          end;
+//        end;
+//      end;
+//
+//    end;
+//  finally
+//    CloseFile;
+//  end;
+//{$ENDIF}
 end;
 
 procedure TModflow6Obs_Writer.WriteFileOut;

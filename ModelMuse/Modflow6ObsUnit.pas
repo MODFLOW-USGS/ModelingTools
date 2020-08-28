@@ -178,6 +178,7 @@ type
     function GetLakObs: TLakObs;
     function GetSfrObs: TSfrObs;
     function GetUzfObs: TUzfObs;
+    function GetName: string;
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent; ScreenObject: TObject);
     destructor Destroy; override;
@@ -189,7 +190,7 @@ type
     // If @name is changed, @link(Clear) should be changed too.
     procedure ReplaceGUID;
   published
-    property Name: string read FName write SetName;
+    property Name: string read GetName write SetName;
     property GroundwaterFlowObs: Boolean read FGroundwaterFlowObs
       write SetGroundwaterFlowObs;
     property GwFlowObsChoices: TGwFlowObs read FGwFlowObsChoices
@@ -468,6 +469,18 @@ end;
 function TModflow6Obs.GetMawObs: TMawObs;
 begin
   result := FMawObs + CalibrationObservations.MawObs;
+end;
+
+function TModflow6Obs.GetName: string;
+begin
+  if FName <> '' then
+  begin
+    if FName[1] in ['0'..'9'] then
+    begin
+      FName := '_' + FName
+    end;
+  end;
+  result := FName;
 end;
 
 function TModflow6Obs.GetRchFlowObs: Boolean;

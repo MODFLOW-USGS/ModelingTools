@@ -9289,9 +9289,15 @@ const
   //                csub, inelastic-csub, elastic-csub, sk, ske,
   //                interbed-compaction, inelastic-compaction,
   //                elastic-compaction, and thickness observation types.
+  //    '4.3.0.5'  Beta bug fix: Fixed export of head calibration observation.
+  //    '4.3.0.6'  Beta bug fix: Fixed export of template files.
+  //               Beta bug fix: Fixed export of boundname for flow observations
+  
+  //               Bug fix: Fixed import of the MODFLOW-2005 lake package in
+  //                models with only one layer.
 
   // version number of ModelMuse.
-  IModelVersion = '4.3.0.4';
+  IModelVersion = '4.3.0.6';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -30945,9 +30951,9 @@ function TCustomModel.GetElementLocation(Layer, Row,
 var
   APoint: TPoint2D;
   DisvCell: TModflowDisVCell;
-  IDomain: TDataArray;
+//  IDomain: TDataArray;
   AnElement: TSutraElement3D;
-  ActiveDataArray: TDataArray;
+//  ActiveDataArray: TDataArray;
 begin
   result.RotatedLocation.x := 0;
   result.RotatedLocation.y := 0;
@@ -30995,8 +31001,8 @@ end;
 
 function TCustomModel.GetActiveElement(Layer, Row, Column: Integer): Boolean;
 var
-  APoint: TPoint2D;
-  DisvCell: TModflowDisVCell;
+//  APoint: TPoint2D;
+//  DisvCell: TModflowDisVCell;
   IDomain: TDataArray;
   AnElement: TSutraElement3D;
   ActiveDataArray: TDataArray;

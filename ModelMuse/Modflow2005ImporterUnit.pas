@@ -17241,7 +17241,14 @@ begin
         end;
       end;
       Values.Delimiter := ',';
-      Formula := 'CaseR(Layer, ' + Values.DelimitedText + ')';
+      if FModel.Grid.LayerCount = 1 then
+      begin
+        Formula := Values.DelimitedText;
+      end
+      else
+      begin
+        Formula := 'CaseR(Layer, ' + Values.DelimitedText + ')';
+      end;
     finally
       Values.Free;
     end;

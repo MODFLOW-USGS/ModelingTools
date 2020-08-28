@@ -12,7 +12,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitLeft = -90
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -22,7 +21,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabNodes
+    ActivePage = tabModflowBoundaryConditions
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -12535,7 +12534,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabCalibration: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 371
