@@ -9293,11 +9293,13 @@ const
   //    '4.3.0.6'  Beta bug fix: Fixed export of template files.
   //               Beta bug fix: Fixed export of boundname for flow observations
   
-  //               Bug fix: Fixed import of the MODFLOW-2005 lake package in
+  //    '4.3.0.7'  Bug fix: Fixed import of the MODFLOW-2005 lake package in
   //                models with only one layer.
+  //               Bug fix: Fixed the ^ operator so that it will accept two
+  //                real-number arguements.
 
   // version number of ModelMuse.
-  IModelVersion = '4.3.0.6';
+  IModelVersion = '4.3.0.7';
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];

@@ -4523,7 +4523,7 @@ begin
 
   ArgumentDef := TOperatorArgumentDefinition.Create;
   OpDef.ArgumentDefinitions.Add(ArgumentDef);
-  ArgumentDef.FirstArgumentType := rdtInteger;
+  ArgumentDef.FirstArgumentType := rdtDouble;
   ArgumentDef.SecondArgumentType := rdtDouble;
   ArgumentDef.CreationMethod := cmCreate;
   ArgumentDef.OperatorClass := TOperator;
@@ -4533,6 +4533,14 @@ begin
   OpDef.ArgumentDefinitions.Add(ArgumentDef);
   ArgumentDef.FirstArgumentType := rdtInteger;
   ArgumentDef.SecondArgumentType := rdtDouble;
+  ArgumentDef.CreationMethod := cmCreate;
+  ArgumentDef.OperatorClass := TOperator;
+  ArgumentDef.FunctionClass := PowerOperator;
+
+  ArgumentDef := TOperatorArgumentDefinition.Create;
+  OpDef.ArgumentDefinitions.Add(ArgumentDef);
+  ArgumentDef.FirstArgumentType := rdtDouble;
+  ArgumentDef.SecondArgumentType := rdtInteger;
   ArgumentDef.CreationMethod := cmCreate;
   ArgumentDef.OperatorClass := TOperator;
   ArgumentDef.FunctionClass := PowerOperator;

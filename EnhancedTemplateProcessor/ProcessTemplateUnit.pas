@@ -96,6 +96,7 @@ resourcestring
   StrNoParameterNamed = 'No parameter named %s was defined in the PVAL file.';
   StrDuplicateDelimiters = 'Both the parameter delimiter and formula delimit' +
   'er are set to "%s". The two must be different from each other.';
+  StrConversionProblem = 'There was an error converting "%0:s" to a real number in the lined %1:s';
 
 procedure ProcessTemplate;
 var
@@ -350,10 +351,10 @@ begin
           raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
             [TemplateParameterName, OriginalLine]));
         end
-        else if not TryStrToFloat(ReplacementString, AValue) then
+        else if not TryStrToFloat(Trim(ReplacementString), AValue) then
         begin
-          raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
-            [TemplateParameterName, OriginalLine]));
+          raise EConvertError.Create(Format(StrConversionProblem,
+            [ReplacementString, OriginalLine]));
         end;
         ALine := Copy(ALine, 1, Pred(StartPosition)) + ReplacementString
           + Copy(ALine, Succ(EndPos), MaxInt);
@@ -397,10 +398,10 @@ begin
       raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
         [TemplateParameterName, OriginalLine]));
     end
-    else if not TryStrToFloat(ReplacementString, AValue) then
+    else if not TryStrToFloat(Trim(ReplacementString), AValue) then
     begin
-      raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
-        [TemplateParameterName, OriginalLine]));
+      raise EConvertError.Create(Format(StrConversionProblem,
+        [ReplacementString, OriginalLine]));
     end;
     ALine := Copy(ALine, 1, Pred(StartPosition)) + ReplacementString
       + Copy(ALine, Succ(EndPos), MaxInt);

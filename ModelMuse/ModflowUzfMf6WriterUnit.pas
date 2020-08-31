@@ -807,9 +807,11 @@ begin
           WriteFloat(eps);
 
           ScreenObject := FUzfObjectArray[LayerIndex, RowIndex, ColumnIndex];
-          WriteString(' ');
-          WriteString(ScreenObject.Name);
-
+          if ScreenObject <> nil then
+          begin
+            WriteString(' ');
+            WriteString(ScreenObject.Name);
+          end;
           NewLine;
         end;
       end;
