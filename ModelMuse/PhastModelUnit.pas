@@ -5152,4154 +5152,13 @@ const
 
   StrModelName = 'ModelMuse';
 
-  // '0.5.0.0' is release candidate 1.
-  // '0.6.0.0' is release candidate 2.
-  // '1.0.0.0' is initial release version.
-  // '1.0.1.0' fixed bug that caused access violations if a formula was
-  //    invalid such as '1 2'.
-  //    Fixed bug that caused access violations if all the vertices in a
-  //    contour were deleted when it was first created.
-  //    Changed the hint in the Working area depending on the selected tool.
-  // '1.0.2.0' Fixed bug that caused access violations if the user changed
-  //    an object so that it no longer affected a data set and then tried
-  //    to edit the object again.
-  //    Fixed bug that would cause access violations if a new model was started
-  //    while frmShowHideObjects was visible.
-  //    Fixed bug that allowed the undo and redo menu items and buttons to
-  //    remain enabled when starting a new model.
-  // '1'0.3.0' Fixed the "ObjectIntersectArea" and "ObjectIntersectLength"
-  //    functions.
-  // '1'0.4.0' Fixed bug that caused access violations if the user edited
-  //    the data sets that an object affected and then tried to undo
-  //    those changes.
-  //    Fixed bug in reading character fields from Shapefiles.
-  // '1.0.5.0' Fixed bug that caused object intersections to be evaluated
-  //    incorrectly if the object was evaluated at nodes.  Fixed bug that
-  //    could cause access violations when deleting objects.
-  //    Updated memory manager.
-  // '1.0.6.0' Fixed bug that caused access violations when closing GoPhast
-  //    if a dataset had been deleted and then restored. Fixed bug that caused
-  //    certain formulas to be 'decompiled' incorrectly.
-  // '1.0.7.0' Fixed bug that caused access violations when editing objects
-  //    that specified boundary conditions via PHAST-style interpolation.
-  // '1.0.8.0' Fixed "ObjectIntersectArea" function.
-  //    Fixed bug in interpolation.
-  // '1.0.9.0' Fixed bug that prevented adding new wells.
-  // '1.0.10.0' Final beta version of ModelMuse.
-  // '2.0.0.0' First release of ModelMuse: Added support for MODFLOW-2005
-  //    and MODPATH.
-  // '2.0.0.1' Fixed problem with backwards particle tracking in MODPATH.
-  //    Automatically updates formulas when the names of data sets and
-  //    global variables are changed.
-  // '2.0.0.2' Fixed bug in exporting "Factor" in flow observations.
-  // '2.0.0.3' Fixed bug that allowed a global variable to have the
-  //    same name as a TDataArray.
-  //    Added ability to specify additions to the batch files that run
-  //    MODFLOW or PHAST.
-  // '2.0.0.4' Fixed bug exporting LAYWET. Added export of HUF package.
-  // '2.0.0.5' Fixed bug (introduced in 2.0.0.1) in freeing TScreenObject.
-  // '2.0.0.6' Added support for a new way of selecting objects for editing.
-  //    Added support for importing calculated heads for HUF units.
-  // '2.0.0.7' Fixed bug importing multiplier and zone arrays when "none" or
-  //    'all" are not in upper case letters.
-  //    Added support for importing flow files from HUF.
-  //  '2.0.0.8' Fixed bug: when pasting an TScreenObject from the clipboard,
-  //    imported values were not pasted too.
-  //    Fixed bug in Nearest Point interpolation method.
-  //    Fixed bugs in importing DRN, DRT, and UZF packages.
-  //    In Show/Hide Objects dialog box, the selected objects are displayed in
-  //    a bold font.
-  //    New Data Set Values dialog box.
-  //    Improved speed of Nearest Point method when point objects are used.
-  //    Imported flow observations
-  //  '2.0.0.9' Fixed bug importing elevations formulas when importing
-  //    Shapefiles.
-  //  '2.0.0.10' Fixed bug importing gridded data with rotated grid.
-  //    Improved speed of some interpolation methods. Modified the Rearrange
-  //    Objects dialog box to allow it to show only the visible or only the
-  //    selected objects.
-  //  '2.0.0.11' worked on speeding up importing Shapefiles.
-  //  '2.0.0.12' Fixed bugs in managing subscriptions.
-  //  '2.0.0.13' Reduced memory usage.
-  //  '2.0.0.14' Fixed bug importing Shapefile.
-  //    Improved display of frmShowHideObjects.
-  //  '2.0.0.15' Fixed bug reading existing files.
-  //  '2.0.0.16' Fixed bug determining stress periods.
-  //  '2.0.0.17' Added capability to export objects as Shapefiles.
-  //    Added the ability to delete images that have been imported.
-  //    Deleting all the points in an object in the
-  //    Object Properties dialog box now results in the object being deleted.
-  //    When exporting boundary conditions, there is now a warning
-  //    if no cells are defined.
-  //    Grid Values dialog box updated to show grid cell dimensions.
-  //    Transient data after the end of the
-  //    last defined stress period is now ignored.
-  //  '2.0.0.18' Fixed problems with exporting Shapefiles.
-  //    Observations outside the defined model times are no longer exported.
-  //  '2.0.0.19' Improved export of objects to Shapefiles.
-  //    Holding down the Shift key when releasing the mouse while creating
-  //    objects of moving nodes of objects now causes the new or moved vertex
-  //    to "snap" to the location of a nearby node of another object if it
-  //    is within 3 pixels of the cursor location.
-  //  '2.0.0.20' Fixed bug in contouring data.
-  //    Fixed bug in selecting CHD package
-  //    (couldn't specify comments for the CHD package even if it was selected.)
-  //  '2.0.0.21' Added shortcut for displaying the Show/Hide objects dialog
-  //    box.
-  //    Fixed bug in reducing the number of items for a MODFLOW boundary
-  //    condition.
-  //  '2.0.0.22' Better names for objects when importing model results.
-  //  '2.0.0.23' When snapping to points is activated, the cursor changes
-  //    when it is in the vicinity of a point on a different ob
-  //  '2.0.0.24' Changed the way MODFLOW wells are exported so that if an
-  //    object has multiple sections in the same cell,
-  //    the exported pumping rate is the sum of the pumping rate for each
-  //    section.
-  //  '2.0.0.25' Fixed bug coloring the grid with parameters
-  //    after modifying the grid.
-  //    Fixed bugs in export of MODPATH files.
-  //  '2.0.0.26' Fixed bug importing points; a blank file name
-  //    is no longer added to the files to archive.
-  //  '2.1.0.0' Fixed bug importing EVT, ETS, and RCH packages
-  //    when parameters were used.
-  //    Added Save and Clear buttons to Errors and Warnings dialog box.
-  //    Fixed bug in export of WETDRY in HUF.
-  //    Fixed bug in export of FACTOR in imported flow observations.
-  //  '2.1.1.0' Fixed bug importing WETDRY in LPF.
-  //    Fixed bug setting elevations of objects when importing
-  //    EVT and ETS packages.
-  //    Fixed bug importing SFR.
-  //    Fixed bug importing DIS.
-  //  '2.1.1.1' Fixed bug in which models that used parameters but not zones
-  //    were not imported correctly.
-  //  '2.1.1.2' Changed the way that CHD, DRN, DRT, GHB, and WEL are exported.
-  //    Now each section of an object will represent a different boundary cell
-  //    if two or more sections are in the same cell.
-  //    Fixed bug in TframeSfrParamInstances that prevented some valid
-  //    parameter instance names from being accepted.
-  //    Fixed bug in TframeSfrParamInstances that prevented the Delete
-  //    and insert buttons from being visible.
-  //  '2.1.1.3' Improved handling of pasting vertex data in the
-  //    Object Properties form.
-  //    Fixed bug that sometimes prevented data set comments from being
-  //    edited properly.
-  //    Added support for new options in MODFLOW-2005 version 1.7.
-  //      Added support for Gage type 4 for Lakes in the Gage package.
-  //      Added support for Gage type 8 for SFR streams in the Gage package.
-  //      Added support for SURFDEPTH in Lake package.
-  //    New functionality in the MODFLOW Name File dialog box.  If the input
-  //    for a package is listed in the Name File dialog box, the input file
-  //    for that package will not be generated by ModelMuse.  See the help
-  //    for the MODFLOW Name File dialog box for full details.
-  //  '2.1.1.4' Fixed saving data for HUF package. This bug was not present in
-  //    version '2.1.1.0'.
-  //    Reduced memory usage.
-  //  '2.1.1.5' Fixed bug that caused non parameter data to appear in the
-  //    Object Properties dialog box for objects that did not have
-  //    non-parameter data.  The bug occurred if a previous object which
-  //    did have non-parameter data was edited first.
-  //    Fixed bug that caused ModelMuse to hang if there was an error
-  //    in a data set formula.
-  //  '2.1.1.6' Added support for MNW2 and MNWI packages.
-  //    Added new filters for coloring and contouring "Active only" and
-  //    "Values to Ignore".
-  //    Added import of ITT when importing head observations from Shapefiles.
-  //    Fixed bug importing UZF gages.
-  //    Fixed bug in setting head observation names.  Spaces and quotes are removed.
-  //  '2.1.1.7' Worked on reading pathlines from MODPATH.
-  //    Fixed bug that caused COFF to be exported incorrectly if an observation
-  //    was exactly on a column boundary.
-  //    Fixed bug in which the display of head observations was not changed
-  //    when a TScreenObject was moved.
-  //    Fixed bug that caused head observations imported from an existing
-  //    MODFLOW model to be imported with the elevation from the wrong cell if
-  //    ROFF = -0.5 or COFF = 0.5.
-  //    Fixed bug that could cause access violations when contouring 2D data
-  //    sets if the selected layer (or row or column) was not the first layer
-  //    (or row or column).
-  //    Added import of parameter names when importing RCH from a Shapefile.
-  //  '2.1.1.8' Added import of parameter names when importing CHD, DRN, DRT,
-  //    ETS, EVT, GHB, RIV, or WEL from a Shapefile.
-  //    Fixed bug exporting flow observations when the formula for Factor
-  //    is complex.
-  //  '2.1.1.9' Added support for displaying pathlines from MODPATH.
-  //  '2.1.1.10' Fixed bug that caused too much memory to be used when
-  //    exporting ETS package.
-  //  '2.1.1.11' Fixed bug that caused problems editing ETS data for
-  //    objects.
-  //    Added support for displaying endpoints from MODPATH.
-  //  '2.2.0.0' Added support for displaying time-series data from MODPATH.
-  //    Added support for multiple vertical screens in MNW2.
-  //    Multiplier and Zone arrays for transient data are tested to see if
-  //    they are identical to a previous Multiplier or Zone array
-  //    for transient data. If so, the previous array is reused.  This
-  //    saves memory in MODFLOW.
-  //    Fixed bug exporting gridded data to Shapefile.  Duplicate fieldnames
-  //    are no longer created.
-  //    Fixed access violation bug in closing TfrmImportGriddedData.
-  //    When importing points, empty lines
-  //    and lines starting with "#" are skipped.
-  //    Ruler settings are now saved with the file.
-  //    Changed "Select Objects of Editing" dialog box to
-  //    "Select Objects of Editing or Deletion" dialog box
-  //    along with a change in functionality to allow objects to be
-  //    deleted with this dialog box.
-  //  '2.2.1.0' Fixed bug that prevented RunPhast.bat from executing
-  //    correctly when it was executed by ModelMuse.
-  //  '2.2.1.1' When importing model results, heads and drawdowns equal to
-  //      HDRY and HNOFLO are not used in assigning the minimum and maximum
-  //      values for the array.
-  //    In Data Set Values dialog box, the layers are now in a list on the left.
-  //    Fixed bug that caused the HFB and UZF packages to become
-  //      deselected whenever the selected flow package was switched.
-  //    Fixed bug that caused the number of wetting iterations could be saved
-  //      as zero incorrectly if it should have been a 1.
-  //      However, MODFLOW would change it back to 1 so it would not affect
-  //      model computations.
-  //    Added support for BCF package.
-  //    When the HUF package is selected, optional data sets will be created
-  //      that display hydraulic properties that result from applying the
-  //      HUF parameters to the model.
-  //    Added support of importing the MNWI package from an existing model.
-  //    Fixed bug exporting HUF files in which storage parameters were exported
-  //      in steady-state models.
-  //  '2.2.1.2' Fixed bug in LPF and HUF package export in which there could
-  //      be no space between a multiplier array name and a zone array name.
-  //    Fixed bug in HUF package in which zone and multiplier arrays were not
-  //      written.
-  //    Fixed bugs that could cause access violation when opening a new model
-  //      after having edited objects in the currently opened model.
-  //  '2.2.1.3' Fixed bug that kept the videos from being played automatically.
-  //    Added a check of the fractional depth and fractional rates in the ETS
-  //      package.
-  //    Fixed bug that caused an error when certain functions were used to
-  //      assign values to data sets.
-  //    Improved speed.
-  //    Fixed bug that caused errors creating temporary files if more than
-  //      one model was being run at one time.
-  //    Fixed bug getting temp file names.
-  //  '2.2.1.4' Added warning when an input file specified in the
-  //      MODFLOW Name File dialog box does not exist.
-  //    Files specified in the MODFLOW Name File dialog box are now
-  //      included in the archive.
-  //    Fixed export of Shapefiles.
-  //  '2.2.1.5' The mouse wheel can now be used to zoom in or out in the
-  //      top, front, or side views of the model.
-  //    Fixed bug importing ModelMate file.
-  //    Added support for the SUB package.
-  //    Fixed bug deleting the last Layer group in a model.
-  //    Added support for importing binary files generated by the SUB package.
-  //    Added support for importing the SUB package
-  //      from existing MODFLOW models.
-  //    Fixed bug in getting the formula from the Formula Editor.
-  //  '2.2.1.6' Fixed bug importing models that contain the HUF package when a
-  //      zone array was not used with a parameter.
-  //    Fixed bug that allowed invalid formulas to be set for
-  //      the Z elevation formulas for an object.
-  //    Fixed bug with access violations when checking the internet.
-  //    Disabled MODPATH export for PHAST models.
-  //  '2.2.1.7' Assigned default names to new systems of delay and no-delay beds.
-  //    Fixed bug in evaluating formulas that contain "ActiveOnLayer" for
-  //      Z-coordinates
-  //  '2.2.1.8' When updating ModelMate files, if an observation
-  //      or prediction group has no associated observations or predictions,
-  //      and the user has elected to delete unused observations or predictions,
-  //      the unused observation or prediction groups are deleted too.
-  //    When importing model results and updating existing data for the results
-  //      duplicate copies of HDRY and HNOFLO are no longer added to the
-  //      values to skip.
-  //    Improved error messages for functions that retrieve imported data.
-  //    Fixed bug getting names of new temporary files.
-  //    Fixed bugs in exporting ModelMate files.
-  //  '2.2.1.9' Added info on associated model input data sets for SUB package.
-  //    Added support for importing Surfer Grid files.
-  //  '2.2.1.10' Attempted to fix problem with access violations when
-  //      accessing the file menu.
-  //  '2.2.1.11' Added support for Surfer ASCII grid files.
-  //  '2.2.1.12' Fixed bug with not conserving memory properly in EVT.
-  //  '2.2.1.13' Worked on conserving memory.
-  //  '2.2.1.14' Worked on conserving memory. Fixed bug that caused
-  //      access violations when undoing the setting of a boundary condition.
-  //  '2.3.0.0' Fixed bug that could cause layer elevations to be set
-  //      incorrectly after changing the layer structure.
-  //    Fixed bug that could cause access violation when deleting a data set.
-  //  '2.3.0.1' Bug fix: Corrected name of the
-  //      "Select Objects for Editing or Deletion."
-  //    Enhancement: Added warning messages in export of the
-  //      MODPATH input files if the required MODFLOW input or
-  //      output files are missing.
-  //    Bug fix: when deleting data sets, check that all data set formulas
-  //      are still OK.
-  //    Bug fix: the text on the status panel is no longer truncated
-  //      when it is over 110 characters in length.
-  //    Bug fix: fixed access violation when closing with the Color Grid
-  //      or Contour data dialog boxes open.
-  //    Bug fix: fixed import of rate data in the UZF package when some
-  //      rates are reused and others are not reused.
-  //    Change: Boundary condition times prior to the beginning of the first
-  //      defined boundary condition are now ignored.
-  //  '2.3.0.2' Enhancement: Added support for sampling DEM files.
-  //    Bug fix: Fixed access violations that occurred when closing
-  //      ModelMuse after deleting a data set.
-  //    Change: When importing character attributes of Shapefiles,
-  //      blank characters at the beginning or end will be removed.
-  //    Bug fix: The row width is now displayed correctly on the Grid Values
-  //      dialog box.
-  //    Bug fix: When the first time defined in the MODFLOW Time dialog box
-  //      is after the first time defined in an object, values were not
-  //      assigned properly. (Bug introduced in version 2.3.0.1.)
-  //  '2.3.0.3' Change: added pumping rate comment for wells. This can
-  //      be helpful when using PEST.
-  //  '2.3.0.4' Bug fix: If attempting to draw a bitmap results in an
-  //       out-of-resources error, drawing the bitmap will be skipped.
-  //     Change: menu item caption switches between "Show 2-D Grid"
-  //       and "Hide 2-D Grid" depending on whether or not the grid lines
-  //       are visible.
-  //     Bug fix: Various controls on the Color Grid and
-  //       Contour Grid dialog boxes now changes position appropriately
-  //       if the dialog box is changed in size.
-  //     Bug fix: The beginning and ending times for MODPATH can now be
-  //       set to non-integer values.
-  //     Bug fix: The name of a multiplier array would not be exported
-  //       correctly if it was used in one of the HUF package input files
-  //       but that input file was not being created by ModelMuse.
-  //  '2.3.0.5' Change: if a bitmap can not be displayed, it will be hidden
-  //       and then must be shown again manually after decreasing the
-  //       magnification.
-  //     Bug fix: fixed "List index out of bounds" error when deleting
-  //       a data set.
-  //     Bug fix: If every cell has gone dry, there is no longer an
-  //       "List index out of bounds" error when attempting to import
-  //       the model results.
-  //     Enhancement: It is now possible to paste multiple data set names in
-  //       the table on the Data tab of the Import Shapefile dialog box.
-  //  '2.3.0.6' Bug fix: The labels for the various Z-coordinate formulas
-  //       in the Import Shapefile dialog box are now enabled when appropriate.
-  //  '2.3.0.7' - '2.3.0.9' Bug fix: Fixed bug that prevented
-  //       the Packages and Programs dialog box from being displayed
-  //       on some computers.
-  //     Bug fix: Fixed bug that caused an Assertion error when
-  //       attempting to show the "Select Objects By Name" dialog box
-  //       in a model that had no objects.
-  //  '2.3.0.10' Enhancement: The Grid Value dialog box has been changed to
-  //       display the name of the selected object and to show its 3'rd
-  //       dimension coordinates for those cells intersected or enclosed
-  //       by the object.
-  //  '2.3.0.11' Enhancement: Improved speed of importing data.
-  //  '2.3.0.12' Bug fix: Saving the ModelMuse file with a new file name now
-  //       results in the default name for the model input files being
-  //       changed as well.
-  //     Bug fix: When importing Shapefiles, if the feature that is being
-  //       imported must be imported as separate objects, the Import Shapefile
-  //       dialog box no longer allows them to be combined.
-  //     Bug fix: When flow observations were used the GHB, DRN, RIV, and CHD
-  //       packages were not always exported correctly.
-  //   '2.3.0.13' - '2.3.0.17' Reduced disk usage.
-  //   '2.3.0.18' Enhancement: Improved speed.
-  //   '2.3.0.19' Bug fix: fixed bug introduced in '2.3.0.18'.
-  //   '2.3.0.20' Bug fix: Fixed display of the recharge, EVT, and ETS layers
-  //       when no parameters were defined.
-  //     Bug fix: The SFR package input could be generated incorrectly if an
-  //       object that was supposed to define a stream segment did not
-  //       intersect the grid.
-  //   '2.3.0.21' Bug fix: Fixed display of RCH, EVT, and ETS rates when
-  //       parameters are first defined.
-  //     Bug fix: Fixed when certain controls related to MODPATH become
-  //       enabled.
-  //     Bug fix: There no longer is an access violation if you attempt to
-  //       create a new model while in the midst of creating a new object.
-  //     Bug fix: Fixed calculation of HUF_Kx.
-  //     Bug fix: Fixed export of Reference time in the MODPATH response file.
-  //   '2.3.0.22' Enhancement: When the MODFLOW Hydrogeologic Units dialog box
-  //       is closed, it now checks that at least one parameter
-  //       has been associated with each hydrogeologic unit and that
-  //       each parameter is associated with at least one hydrogeologic unit.
-  //     Enhancement: The thickness of HUF units is now constrained to be
-  //       greater than or equal to zero.
-  //     Bug fix: Access violations no longer occur when creating a new
-  //       object after having closed a previous model and starting
-  //       a new model.
-  //     Bug fix: fixed export of BeginPeriod and BeginStep.  They must both
-  //       be set to 1 if any stress period in the model is a steady-state
-  //       stress period.
-  //   '2.3.0.23' Bug fix: Fixed Assertion error in evaluation of MNW2 input.
-  //     Enhancement: Added error message if a MODPATH particle start time was
-  //       invalid.
-  //     Bug fix: Fixed import of the RES package from existing models.
-  //     Enhancement: Added Epsilon when specifying data values to skip.
-  //     Bug fix: Fixed display of UZF transient data sets.
-  //     Bug fix: Fixed deletion of vertices in an object when all but one
-  //       vertices are deleted.
-  //     Bug fix: Fixed default file names for the MODFLOW name file
-  //       and for the default output files when the file name has a space
-  //       in it.
-  //     Bug fix: Fixed display of MODPATH particle release times.
-  //     Bug fix: Fixed assignment of color to MODPATH pathlines.
-  //     Bug fix: Fixed crash when entering multiple times for flow
-  //       observations.
-  //     Change: Statistic and Stat-Flag are no longer visible for head
-  //       observations unless ModelMate interface has been activated.
-  //     Bug fix: When attempting to import an incomplete Shapefile,
-  //       ModelMuse now exits the procedure properly.
-  //     Enhancement: When importing head observations, if the ModelMate
-  //       interface is active, Statistic and StatFlag are imported too.
-  //   '2.3.0.24' Bug fix.  Entering a real number for the recharge layer
-  //       no longer causes ModelMuse to hang. Instead an error message is
-  //       displayed.
-  //   '2.3.0.25' Bug fix: If wetting is active but there are no
-  //       convertible layers a warning is displayed.
-  //     Bug fix: If wetting is active but there are no
-  //       convertible layers data set 7 is no longer created in the LPF
-  //       package and data set 4 is no longer created in the HUF package.
-  //     Bug fix: When the ET Surface and the ET Depth are undefined
-  //       in the EVT or ETS packages, an error message is displayed instead of
-  //       the export failing.
-  //     Bug fix: Editing an object containing SFR data no longer results in
-  //       an access violation if the SFR package is not selected.
-  //     Bug fix: Editing an object that defines data for the SFR, MNW2, HOB
-  //       or HFB packages no longer results in deletion of data for those
-  //       packages when those packages are not selected.
-  //     Bug fix: In the Object Properties dialog box, clicking the
-  //       "Edit F()..." button on the Data Sets tab would cause
-  //       an Assertion error when no data set was selected.  The button
-  //       is now disabled when no data set is selected.
-  //   '2.3.0.26' Bug fix: When performing coordinate conversions on Shapefiles,
-  //       you can no longer select a UTM zone until you have chosen to
-  //       perform the conversion.
-  //     Enhancement: In the Show or Hide Objects dialog box, any collapsed
-  //       branch that contains a selected object is shown with a bold font.
-  //     Bug fix: Fixed access violations when opening a model when a model is
-  //       already open.
-  //     Enhancement: If additional vertices are added to an object that
-  //       defines head observations, an error message is displayed when
-  //       attempting to export the HOB input file or plot HOB data on the
-  //       grid.
-  //     Bug fix: If the flow package corresponding to a flow observation
-  //       is not selected in the object properties dialog box, attempting
-  //       to select the flow observation will no longer cause toggling
-  //       of the selected node.
-  //     Bug fix: After selecting the item with with to color the grid in
-  //       the Color Grid dialog box, you can click directly on the Apply
-  //       button without clicking elsewhere first.
-  //     Enhancement: When defining a new global variable, default values for
-  //       the type and value are displayed in the Global Variables dialog box.
-  //     Enhancement: Bitmaps that were hidden because the magnification was
-  //       too high, are now displayed again automatically when the
-  //       magnification is sufficiently reduced.
-  //     Enhancement: Added new function for use in formulas - PositionInList.
-  //     Enhancement: Objects now have a comment field that can be used to
-  //       document what the object does.
-  //     Enhancement: The Grid Spacing dialog box now allows negative numbers
-  //       for the default spacing for columns, rows, and layers.  In MODFLOW
-  //       models, the default spacing for rows is set to -100 instead of 100.
-  //     Enhancement: When tips are turned off, ModelMuse will tell you when it
-  //       detects new videos on the ModelMuse web site.
-  //     Bug Fix: Editing an object that defines an SFR stream with unsaturated
-  //       properties defined no longer causes an assertion failure if the
-  //       object is edited again.
-  //     Bug fix: Importing a model no longer causes an access violation
-  //       when the previous model had objects that defined an SFR stream
-  //       with unsaturated properties.
-  //   '2.4.0.0' No additional changes.
-  //   '2.4.0.1' Enhancement: It is now possible to copy and paste multiple
-  //       cells in the parameter grids in the Packages and Programs dialog box.
-  //     Enhancement: The helpfile has increased functionality.
-  //     Enhancement: Support for ZONEBUDGET added.
-  //   '2.4.0.2' Bug fix: The number of observations in the Flow observations
-  //       packages was calculated incorrectly when both observation and
-  //       predictions were used.
-  //   '2.4.0.3' Bug fix: FractionOfObjectLength was calculated incorrectly
-  //       if an object had more than one section.
-  //     Enhancement: Added new function InterpolatedVertexValues that allows
-  //       numeric values associated with individual vertices to be interpolated
-  //       along the length of the object.
-  //   '2.4.0.4' Bug fix: ObjectLength was calculated incorrectly if an
-  //       object had more than one section.
-  //     Bug fix: ObjectVertexDistance was calculated incorrectly if an
-  //       object had more than one section.
-  //     Enhancement: Antialiasing used to improve appearance.
-  //     Bug fix: Importing a MODFLOW-2005 model failed if LAYVKA in the
-  //       LPF package was anything besides a zero or one.
-  //     Bug fix: If there VKA is less than or equal to zero
-  //       but there is only one layer, ModelMuse no longer reports
-  //       and error while exporting the LPF package.
-  //     Bug fix: Unchecking the MODPATH initial particle placement checkbox
-  //       didn't work.
-  //     Bug fix: Editing more than one object at a time
-  //       could result in an assertion failure.
-  //     Enhancement: When coloring grid only on the active areas, inactive
-  //       areas are shaded.
-  //     Enhancement: Additional options for displaying grid lines have been
-  //       added. It is now possible to show just the outline of the active
-  //       area or just the grid lines inside the active area.
-  //   '2.4.0.5' Bug fix; Sample DEM imported data at the wrong
-  //       locations if the grid angle was not zero.
-  //   '2.4.0.6' Enhancement: Legends have been added to the Color Grid and
-  //       Contour Data dialog boxes.
-  //     Enhancement: Added three new functions ColumnCenter, RowCenter,
-  //       and LayerCenter.  See help for details.
-  //   '2.4.0.7' Bug fix: When deleting time-varying data from objects
-  //       for the RCH, EVT, or ETS packages, sometimes not all the data
-  //       would be deleted properly.
-  //     Bug fix: In the LPF package, LAYTYP was not set to a negative
-  //       value properly when the THICKSTRT option was used.
-  //   '2.4.0.8' No change
-  //   '2.4.0.9' Fixed bug editing LPF parameters that could cause an
-  //       assertion failure.
-  //   '2.4.0.10' Enhancement: The Export Image dialog box has been added.
-  //       It allows the user to export an image of the top, front, or
-  //       side view of the model as an Enhanced Windows Metafile.
-  //     Enhancement: When a formula results in a value that is infinite or
-  //       not a number, the maximum double-precision real number is
-  //       substituted for it.
-  //   '2.4.0.11' Bug fix for Export Image dialog box.
-  //   '2.4.0.12' Bug fix: Under certain circumstances extra LPF parameters
-  //       would be added incorrectly.
-  //   '2.4.0.13' Bug fix: Attempting to open a model containing a UZF gage
-  //       caused an access violation.
-  //   '2.4.0.14' Bug fix: Transient UZF data were not displayed properly.
-  //       This was not a bug in the released version.
-  //     Bug fix: If the user edited something in the MODFLOW Packages
-  //       and Programs dialog box that caused the grid to be recolored,
-  //       the MODFLOW Packages and Programs dialog box might not close
-  //       properly. This was not a bug in the released version.
-  //   '2.4.0.15' Bug fix: closing the model while the Color Grid or
-  //       Contour Data dialog boxes were visible could result in an
-  //       access violation.
-  //       This was not a bug in the released version.
-  //   '2.4.0.16' Change: Changed default options for ZONEBUDGET.
-  //   '2.4.0.17' Bug fix: ModelMuse could not always read the budget file
-  //       if there was only one column in the model.
-  //   '2.4.0.18' Enhancement: Enabled MadExcept.
-  //   '2.4.0.19' Second attempt at enabling MadExcept.
-  //   '2.4.0.20' Bug fix: If a parameter or layer group was renamed, formulas
-  //       that used data sets related to those parameters were not updated
-  //       properly.
-  //   '2.4.0.21' Bug fix: Using the up-down controls on the Color Grid or
-  //       Contour Data dialog boxes would cause selected data set
-  //       to change when clicking on another control until the
-  //       dialog box was closed.
-  //     Bug fix: When importing MODFLOW models that contained the lake package
-  //       the Lake_ID data set was not being set properly.
-  //     Bug fix: Fixed bug that caused access violations when closing a model.
-  //     Enhancement: Improved speed of opening Object Properties dialog box.
-  //   '2.4.0.22' Bug fix: Failure to define unsaturated flow properties
-  //       in the SFR package when they are required now results
-  //       in an error message instead of an assertion failure.
-  //     Bug fix: Added support for contour legends with
-  //       boolean and string data.
-  //   '2.4.0.23' - '2.4.0.24' Bug fix: Attempted to work around problem
-  //       that causes range check errors when closing ModelMuse
-  //       on some machines.
-  //   '2.4.0.25' Change: Data set values are now saved to file
-  //       with the data set if the data set values are up to date.
-  //       This improves the speed of opening some large models.
-  //   '2.4.0.26' Bug fix: Fixed bug that could cause an access violation
-  //       when showing the MODFLOW Packages and Programs dialog
-  //       box if one of the packages in the dialog box had been deactivated
-  //       and then the cancel button was pressed.
-  //     Bug fix: Fixed bug that could cause extra parameters to be added
-  //       when a parameter value was edited.
-  //     Enhancement: When selecting a MODPATH output file, the most likely
-  //       name of the output file is selected automatically.
-  //   '2.5.0.0' No additional changes.
-  //   '2.5.0.1'  Change: The "Object|Edit|Merge Objects" command now operates when
-  //       very small differences exist between the endpoints of the objects
-  //       being merged. Previously, the match had to be exact.
-  //     Enhancement: In the Object Properties dialog box, if you paste
-  //       a group of vertices, the table will expand to accommodate the
-  //       new vertices.
-  //   '2.5.0.2' Bug fix: Editing an object in a new model after having
-  //       previously closed a previous model without restarting ModelMuse
-  //       caused an Assertion failure.
-  //     Bug fix: Eliminated an assertion failure that occurred under certain
-  //       circumstances when attempting to draw an object.
-  //   '2.5.0.3' Bug fix: Eliminated Range Check Error that sometimes
-  //       occurred when a menu item was selected.
-  //   '2.5.0.4' Bug fix: Fixed bugs in deleting all print/save choices in the
-  //       Subsidence package.
-  //     Bug fix: Fixed layout of Subsidence package controls in
-  //       MODFLOW Packages and Programs dialog box.
-  //     Bug fix: The Formula Editor was displaying the ActiveOnLayer function
-  //       in cases where it wouldn't work.
-  //     Bug fix: The ActiveOnLayer function sometimes returned
-  //       an incorrect value.
-  //   '2.5.0.5' Bug fix: When closing a model, a stack overflow could occur
-  //       under unusual circumstances.
-  //   '2.5.0.6' Bug fix: If "Boundary Conditions, Observations,
-  //       and Other Features" was selected in the "Color Grid" dialog box,
-  //       an access violation could occur.
-  //     Bug fix: Fixed problem that sometimes prevented the discretization
-  //       from begin specified.
-  //     Enhancement: Added support for SWT package.
-  //     Bug fix: Export of format codes in SUB package was incorrect.
-  //     Bug fix: Format codes in SUB package imported incorrectly.
-  //     Enhancement: Added support for HYDMOD package.
-  //     Bug fix: When more than one object was being edited in the
-  //       Object Properties dialog box, switching to the SFR|Network tab and
-  //       clicking the button under OUTSET and IUPSEG would cause an
-  //       Assertion failure. Now it gives a more meaningful error message.
-  //   '2.5.0.7' Bug fix: Changing the discretization when the grid was
-  //        colored with transient data caused an access violation.
-  //   '2.5.0.8' Bug fix: Attempting to export the MODPATH input files before
-  //       MODPATH has been activated now results in a warning message instead
-  //       of an assertion failure.
-  //     Bug fix: It is now possible to select the "Edit vertex values" button
-  //       when the "Select vertices" button is pressed.
-  //     Bug fix: When exporting the BCF package, sometimes an attempt was made
-  //       to export data set 8 when it shouldn't have been exported.
-  //   '2.5.0.9' Bug fix: If a HUF SYTP parameter was defined, attempting to
-  //       open the MODFLOW packages and programs dialog box would result in an
-  //       assertion failure.
-  //     Enhancement: The Manage Parameters dialog box has been added.
-  //     Enhancement: The Global Variables are now alphabetized.
-  //     Enhancement: Initial heads can now be read from a binary head file
-  //       generated by another MODFLOW model.
-  //   '2.5.0.10' Bug fix: Fixed sorting of global variables
-  //     (bug was not in released version.)
-  //   '2.5.0.11' Enhancement: The selection cube now responds
-  //       to the mouse wheel.
-  //     Change: When importing model results, the formulas used for the
-  //       3D data sets have been changed to keep the formulas valid if
-  //       the number of layers is increased.
-  //     Bug fix: Attempting to contour a data set that is uniform no longer
-  //       results in a range-check error.
-  //     Bug fix: When attempting to export the MODFLOW input files, if a file
-  //       can't be created because it is in use, an error message will be
-  //       displayed.
-  //   '2.5.0.12' Enhancement: The Manage Head Observations dialog box has
-  //       been added.
-  //     Change: If an invalid formula is encountered when exporting the MODFLOW
-  //       input files the Formula Errors dialog box is not displayed until the
-  //       export is complete.
-  //   '2.5.0.13' Change: Items in "Search for Objects" dialog box
-  //       are now listed in a tree component.
-  //     Bug fix: When parameters are used in the RCH, EVT, and ETS packages,
-  //       the print codes for the parameters are set correctly.
-  //   '2.5.0.14' Enhancement: When saving a ModelMate file, the user can
-  //       choose to have the ModelMate file opened with ModelMate.
-  //     Bug fix: fixed problem that could make it opening the Object
-  //       Properties dialog box slow.
-  //     Bug fix: Attempting to open a Shapefile that is already open
-  //       now generates an error message but not a bug report.
-  //     Enhancement: A warning is now issued if an observation name is not
-  //       valid when used in UCODE.
-  //     Change: ModelMate program locations are now saved to an ini file.
-  //     Bug fix: In MODFLOW models, if a data set is evaluated at nodes,
-  //       the user can no longer attempt to color the grid with the data set
-  //       values or contour the data set values.
-  //     Bug fix: MODFLOW models in which the same cells are defined as
-  //       constant head cells through both the BAS and CHD packages are
-  //       now imported correctly.
-  //   '2.5.0.15' Enhancement: ModelMate interaction improved.
-  //   '2.5.0.16' Enhancement: When the nonparameter data in the CHD, DRN, DRT,
-  //       EVT, ETS, GHB, RCH, RIV, or WEL packages for one stress period
-  //       repeat the data from a previous stress period, the package instructs
-  //       MODFLOW to reuse the data from the previous stress period rather
-  //       than exporting another copy of the same data.
-  //   '2.5.0.17' Enhancement: Reduced memory usage when opening files.
-  //     Enhancement: Attempting to read an invalid DEM now results in an
-  //       error message instead of generating a bug report.
-  //   '2.6.0.0' No further changes.
-  //   '2.6.0.1' Enhancement: When coloring the grid causes a data set to be
-  //       recalculated, there will be form displaying the steps involved
-  //       in calculating the values.
-  //     Bug fix: Postprocessing for Geostatic Stress and changes in Geostatic
-  //       stress has been fixed.
-  //     Bug fix: Opening an object in the Object Properties dialog box no
-  //       longer causes causes transient data to be recalculated.
-  //     Enhancement: Channel cross sections in the SFR package can now be
-  //       imported from Shapefiles.
-  //   '2.6.0.2' Enhancement: When importing SFR data from Shapefiles, formulas
-  //       can now be used for SLOPE, STRTOP, STRTHICK, STRHC1, THTS, THTI,
-  //       EPS, and UHC.
-  //     Enhancement: Improved error handling when importing an image.
-  //     Bug fix: Attempting to write a locked file or attempting to open a
-  //       file that doesn't exist now results in an error message instead of
-  //       a bug report.
-  //     Bug fix: Exporting locations of MODPATH and ZONEBUDGET sometimes
-  //       were not enclosed in quotes when quotes were required.
-  //     Enhancement: Reduced flicker when drawing new objects. This may also
-  //       have fixed a intermittent bug that caused access violations when
-  //       coloring the grid.
-  //     Bug fix: Fixed coloring the grid when integer values were being used
-  //       to color the grid and limits were used to filter what cells
-  //       would be colored.
-  //   '2.6.0.3' -----
-  //   '2.6.0.4' Bug fix: VertexInterpolate didn't work properly
-  //       if the grid was rotated.
-  //   '2.6.0.5' Enhancement: Images can now be exported as .bmp files as
-  //       well as .emf files.
-  //     Bug fix: Pasting objects didn't work properly if the object
-  //       had associated vertex values.
-  //     Bug fix: Sometimes changing the number of Z formulas
-  //       could lead to an assertion failure.
-  //     Enhancement: Improved speed of opening the Global Variables
-  //       dialog box.
-  //     Bug fix: Opening the Object Properties dialog box would sometimes
-  //       cause an access violation if another model had been opened
-  //       previously.
-  //     Enhancement: In the Select Objects by Name dialog box, the objects
-  //       are sorted alphabetically.
-  //     Bug fix: In the Select Objects by Name dialog box, the objects are
-  //       now placed on the correct tab instead of always being put on the
-  //       tab for the top view if the model.
-  //   '2.6.0.6' Enhancement: In the Color Grid and Contour Data dialog boxes,
-  //       when the user changes the data set used to color or contour the grid,
-  //       the same limits as in the data set that is currently displayed
-  //       can be used with a newly selected data set.
-  //   '2.6.0.7' Bug fix: in the SFR package, NSTRAIL, ISUZN, and NSFRSETS
-  //       were written when ISFROPT > 0 instead of when ISFROPT > 1.
-  //   '2.6.0.8' Bug fix: Deleting the last vertex of an object
-  //       no longer causes an error.
-  //     Bug fix: When the grid was colored with horizontal flow barriers,
-  //       changing an object that defines a horizontal flow barrier
-  //       now causes the displayed barriers to be updated correctly.
-  //     Editing multiple objects in a new model no longer causes an error.
-  //     Bug fix: Inactive cells are no longer included in head observations.
-  //   '2.6.0.9' Bug fix: on the Import Image dialog box, it is no longer
-  //       possible to set the number of rows in the table to less than 1.
-  //     Bug fix: Previously, the MODPATH zone was incorrectly limited to
-  //       values greater than or equal to zero even for specified head cells.
-  //   '2.6.0.10' Bug fix: Attempting to import model head or drawdown results
-  //       from a file in which the number of layers is greater than the number
-  //       of simulated layers now results in an error message instead of
-  //       generating an error report.
-  //   '2.6.0.11' Enhancement: The macros "%SP", "%TS", and "%ET" can now be
-  //       used in text on the Export Image dialog box.  They will be replaced
-  //       by the stress period number, time step number, and elapsed time
-  //       respectively if those data are in the comment for the data set.
-  //     Change: The elapsed time is now included in the data set comment
-  //       when importing MODFLOW results.
-  //   '2.6.0.12' Bug fix: MODPATH results were not cleared when opening
-  //       a new model.
-  //   '2.6.0.13' Bug fix: Fixed macros in Import Image dialog box so that
-  //       they work with the title too. (Bug not in released version.)
-  //   '2.6.0.14' Enhancement: Contours can now be exported to a Shapefile.
-  //     Change: All the commands for exporting Shapefiles have been moved to
-  //       a submenu.
-  //     Enhancement: Pathlines can now be exported to a Shapefile.
-  //     Enhancement: Endpoints can now be exported to a Shapefile.
-  //     Bug fix: Previously, the display of MODPATH times series points was
-  //       incorrect when there was more than one release time.
-  //     Enhancement: TimeSeries can now be exported to a Shapefile.
-  //   '2.6.0.15' Bug fix: when opening a new model, bitmaps from the previous
-  //       model are now removed.
-  //     Enhancement: ModelMuse now can create a series of bitmaps that
-  //       can be used to create a video.
-  //   '2.6.0.16' Enhancement: ModelMuse now will warn the user if a CHD, DRN,
-  //       DRT, GHB, RIV, SFR, or WEL cell is in an inactive cell.
-  //   '2.6.0.17' Enhancement: When coloring the grid with transient data,
-  //       only the data for the time being used to color the grid is evaluated.
-  //     Bug fix: Sometimes moving an object did not cause the data sets
-  //       that depend on it to be updated.
-  //     Bug fix: When importing a shape file, the interpretation algorithm
-  //       is now set correctly.
-  //     Bug fix: When exporting .emf files, sometimes the image size was
-  //       set to an incorrect value.
-  //   '2.7.0.0' Change: Updated memory manager to latest version.
-  //   '2.7.0.1' Bug fix: In the Set Widths of Columns, Rows, and Layers,
-  //       dialog box, it is no longer possible to specify an invalid
-  //       column, row, or layer.
-  //     Bug fix: when exporting a PHAST model multiple times, the name of the
-  //       file wasn't set appropriately.
-  //     Bug fix: When exporting a MODFLOW model after previously having
-  //       exported a different MODFLOW model, the default name for the model
-  //       is now set correctly rather than being the same name used previously.
-  //     Bug fix: Fixed access violations when importing model results
-  //       into a model and contouring those results.
-  //     Bug fix: When computing the size of the MODPATH composite budget file,
-  //       file sizes larger than 2 GB can now be computed without causing an
-  //       error.
-  //   '2.7.0.2' Enhancement: Data set values can now be exported to a
-  //       comma-separated value file along with X, Y, Z coordinates.
-  //   '2.7.0.3' Bug fix: Renaming a data set and then attempting to use that
-  //       data set in the formula for another data set no longer causes an
-  //       error.
-  //   '2.7.0.4' Bug fix: when exporting .emf images, the dimensions of the
-  //       image were set incorrectly.
-  //   '2.7.0.5' Enhancement: When data set values can are exported to a
-  //       comma-separated value file, column, row, and layer numbers are
-  //       exported too.
-  //   '2.7.0.6' Bug fix: When a data set is first created, it was treated
-  //       as being a real number data set in the Formula Editor even if its
-  //       type had been changed.
-  //     Bug fix: Pasting data into several of the tables could sometimes cause
-  //       errors if the data that was being pasted was larger than the table
-  //       could hold.
-  //     Bug fix: The ActiveOnLayer function can now only be applied in a
-  //       context where it will be evaluated on blocks.
-  //     Enhancement: When importing heads, the water table is imported too.
-  //   '2.7.0.7' Enhancement: When exporting MODPATH input files, ModelMuse
-  //        now warns the user if not all time steps have been exported.
-  //     Enhancement: When a new version of ModelMuse is available,
-  //        the dialog box that informs the user of the new version has a
-  //        button that the user can click to go to the ModelMuse web site.
-  //     Enhancement: The "About" dialog box has a
-  //        button that the user can click to go to the ModelMuse web site.
-  //     Bug fix: Eliminated a range check error that could sometimes occur
-  //        if user moved the mouse while importing model results.
-  //     Enhancement: If the user specifies a head observation with a blank
-  //        observation name, an error message is generated during export of
-  //        the head observations file.
-  //     Enhancement: The Grid Value dialog box now allows the user to see
-  //       the value of any data set instead of just the one that is being
-  //       used to color the grid or whose values have been contoured.
-  //   '2.7.0.8' Bug fix: When importing model results, the legend on the
-  //       Color Grid or Contour Data dialog box is updated.
-  //     Bug fix: When exporting an image of the side view of the model,
-  //        the horizontal scale now shows the correct values.
-  //   '2.7.0.9' Bug fix: fixed bug that could cause an access violation when
-  //       deleting parameter in the Manage Parameters dialog box.
-  //     Bug fix: If the model runs out of memory when attempting to create
-  //       a new model, an error message is displayed to the user instead of
-  //       sending a bug report.
-  //     Bug fix: In the Start-up dialog box, if the user specifies a layer
-  //       group but does not give it a name, it is skipped instead of causing
-  //       and assertion failure.
-  //     Bug fix: Fixed access violation in Export Object as Shapefile dialog
-  //       that could occur when unchecking a check box.
-  //   '2.7.0.10' Bug fix: Interpolated Vertex Value gave incorrect results
-  //       if the grid was rotated.
-  //   '2.7.0.11' Bug fix: The main window no longer goes behind the windows
-  //       of other programs when coloring the grid.
-  //     Enhancement: The Grid Value dialog box displays the vertex number
-  //       and section of the selected object. at the cursor location.
-  //     Bug fix: ModelMuse now displays an error message when exporting or
-  //       displaying the UZF data if some data has not been defined.
-  //   '2.7.0.12' Enhancement: The function Get_HufSytp has been added.
-  //       It evaluates SYTP parameters in HUF.
-  //   '2.7.0.13' Enhancement: The location of the grid in
-  //       real world coordinates is written as a comment in the
-  //       discretization file.
-  //     Bug fix: Fixed reading shape files from which some shapes have been
-  //       deleted.
-  //     Bug fix: Fixed position of Insert and Delete buttons for the table
-  //       of times for the SFR package in the Object Properties dialog box.
-  //     Bug fix: Clicking the Insert buttons on the Object Properties dialog
-  //       box or the MODFLOW Time dialog box could result in errors if no
-  //       row in the related grid was selected.
-  //     Enhancement: Reduced memory usage while reading ModelMuse file.
-  //     Bug fix: Fixed evaluation of the GetHufSytp function.
-  //   '2.7.0.14' Bug fix: fixed evaluation of GetHufKx when KDEP parameters
-  //       are used.
-  //     Bug fix: fixed importing models that use SYTP parameters in the HUF
-  //       package.
-  //     Bug fix: fixed evaluation of GetHuf_Interlayer_Kz when KDEP parameters
-  //       are used.
-  //     Bug fix: If an object has too many vertices, the Object Properties
-  //       dialog box now does not display them because attempting to display
-  //       them caused an access violation.
-  //     Enhancement: When importing data, less memory may be used in some
-  //       cases.
-  //   '2.7.0.15' Bug fix: Fixed editing the head observation purpose.
-  //     Enhancement: Added Natural Neighbor interpolation.
-  //   '2.7.0.16' Bug fix: Fixed export of PHAST specified flux
-  //     associated solution on the X face.
-  //   '2.7.0.17' Bug fix: A problem with duplicate parameter instance names
-  //       in MODFLOW models has been fixed.
-  //   '2.8.0.0' no additional changes.
-
-  //   '2.8.0.1' Bug fix: It is no longer possible to show the Manage Head
-  //       Observations dialog box before any head observations have been
-  //       defined. Doing so could cause access violations.
-  //     Bug fix: Under certain circumstances, the "Add point sections",
-  //       "Add polyline sections", or "Add polygon sections" buttons could
-  //       be pressed when there is no selected object causing an
-  //       assertion failure. The buttons now become disabled under those
-  //       conditions.
-  //     Enhancement: Grid data can now be exported to 3D Shapefiles.
-  //   '2.8.0.2' Enhancement: In the Search for Objects dialog box, the
-  //       tree remains open after changing which checkboxes are
-  //       checked.
-  //     Bug fix: Attempting to import an empty or invalid results file
-  //       now generates an error message for the user instead of a bug report.
-  //   '2.8.0.3' Enhancement: Improved warning messages when a specified
-  //       time for a boundary condition is outside of the range of times
-  //       defined for the stress periods.
-  //     Bug fix: Removed incorrect warning message generated when the SFR
-  //       package was used and the starting time was greater than zero.
-  //     Bug fix: Fixed assignment of custom layer discretization in
-  //       Layer Groups dialog box.
-  //     Bug fix: Deleting a layer group and then undoing the deletion no
-  //       longer causes an assertion failure.
-  //     Bug fix: Fixed a problem in which operating ModelMuse on a computer
-  //       for which the language settings specify the decimal point
-  //       to be something other than a period caused conversion errors.
-  //   '2.8.0.4' Change: When creating polygon objects or adding
-  //       polygon sections to existing objects, clicking on the first
-  //       point of the polygon will close the polygon instead of continuing it.
-  //     Enhancement: Improved speed of "Select Object by Name" dialog box.
-  //     Bug fix: the "Set Widths of Columns, Rows, and Layers" dialog box now
-  //       shows the selected columns, rows, and layers when it is displayed.
-  //     Bug fix: It is no longer possible to attempt to color or contour
-  //       the grid before the grid is defined.
-  //     Bug fix: When sampling a DEM, only one DEM at a time could be selected.
-  //     Enhancement: Added option to import ASCII raster file.
-  //   '2.8.0.5' Bug fix: Fixed reversal of imported ASCII raster files.
-  //     (bug is not in released version.)
-  //   '2.8.0.6' Enhancement: added additional error checking in MNW2 package.
-  //     Bug fix: Fixed the importing of world files in "Import Bitmap"
-  //       dialog box. Previously, attempting to import some world files
-  //       would fail because of extra spaces before the beginning of a number.
-  //   '2.8.0.7' Change: When exporting Shapefiles attribute names with
-  //       an ending trailing underscore have the underscore removed.
-  //     Bug fix: When exporting Shapefiles of contours or MODPATH data,
-  //       the bounding boxes of each shape are now set correctly.
-  //   '2.8.0.8' Bug fix: Exporting contour Shapefiles when the specify contour
-  //        option is checked and contour values are copied from another
-  //        data set no longer causes an error.
-  //      Bug fix: Previewing or exporting a series of images containing
-  //        contours no longer causes an error when the range of values
-  //        varies among the images.
-  //   '2.8.0.9' Bug fix: Attempting so save a model archive on a disk with
-  //        insufficient space now generates an error message instead of a
-  //        bug report.
-  //      Enhancement: There is a new way to display the Vertex Values dialog
-  //        box. If no objects are selected on the view of the model
-  //        with which the user is working, the user can double-click on a
-  //        vertex of any object to display the Vertex Values dialog box.
-  //      Enhancement: When importing model results, the default choice for
-  //        how the imported results should be displayed now depends on the
-  //        user's past choices on how the results should be displayed.
-  //      Enhancement: There is now a button on the tool bar for importing
-  //        model results.
-  //      Enhancement: Vertex values can now be edited in the Object Properties
-  //        dialog box.
-  //      Bug fix: Previously, it you contoured a data set, closed the file,
-  //        opened another one without closing ModelMuse and attempted to
-  //        contour a data set, an access violation would occur. That access
-  //        violation has been eliminated.
-  //      Bug fix: When importing existing MODFLOW models, ModelMuse will now
-  //        check that in all the inactive cells, the top of the layer is above
-  //        the bottom of the layer. The elevations will be fixed in
-  //        any inactive cells that do not meet this criterion.
-  //   '2.8.0.10' Bug fix: ModelMuse can no longer enter an infinite loop when
-  //        generating parameter instance names.
-  //   '2.8.0.11' Bug fix: Eliminated an integer overflow error that could
-  //        occur when exporting the RCH, EVT, or EVT packages.
-  //   '2.8.0.12' Bug fix: Creating a new integer, Boolean, or text data set no
-  //        longer fails.
-  //      Enhancement: The user can now choose whether or not to save data set
-  //        values when those values are up-to-date.
-  //      Change: When data sets are deleted, the user is now prompted
-  //        to delete unused objects.
-  //      Change: The column, row and layer displayed in on the Grid Value
-  //        dialog box is now the column row, and layer of the cell under the
-  //        cursor even if a 2D data set is used to color the grid or
-  //        is being contoured.
-  //      Bug fix: In the SFR package, a warning about SFR segments circling
-  //        back on themselves was sometimes generated when it should not have
-  //        been generated and the segments involved would not be included in
-  //        in the SFR package input file.
-  //    '2.8.0.13' Enhancement: The speed of exporting the input files has
-  //        increased
-  //      Bug fix: Deleting all the vertices of the last section of an object
-  //        when that section was a polygon caused an error.
-  //      Bug fix: Making a background image too big now causes it to be
-  //        hidden rather than generating an error message.
-  //      Change: When defining CHD boundaries, an object with multiple
-  //        sections will not define separate boundaries for each section.
-  //    '2.8.0.14' Enhancement: In the SFR package, a warning is generated
-  //        if the stream segment numbers are in strict numerical order but a
-  //        segment with a higher number provides flow to one with a lower
-  //        segment number.
-  //      Enhancement: The Grid Value dialog box now displays information
-  //        about the closest MODPATH pathline if it is within 1 cell or
-  //        five pixels of the cursor.
-  //    '2.8.0.15' Bug fix: Attempting to export a model without first
-  //        defining a grid now results in an error message instead of
-  //        generating a bug report.
-  //      Bug fix: invalid formulas for river conductance and other, similar
-  //        data no longer causes an access violation.
-  //    '2.8.0.16' Bug fix: Fixed bug that prevented data for SFR data for a
-  //        time period from being deleted.
-  //    '2.8.0.17' It is now possible for the recharge from several sources to
-  //        be added together.
-  //    '2.8.0.18' reduced memory usage when recharge from several sources is
-  //        added together.
-  //    '2.8.0.19' It is now possible for the infiltration in the UZF package
-  //        from several sources to be added together.
-  //    '2.8.0.20' Bug fix: In some models, the SFR package could not be
-  //        exported correctly.
-  //      Bug fix: In some models, the Lake_ID numbers were not set incorrectly.
-  //    '2.8.0.21' Bug fix: the selected layer wasn't being restored properly
-  //        when opening a model (not in released version).
-  //      Bug fix: Changing a data set orientation could cause error messages
-  //        to be incorrectly generated for other data sets.
-  //    '2.8.0.22' Bug fix: Fixed error messages for stream segments that
-  //        are out of order.  (Bug was not in released version.)
-  //    '2.8.0.23' ---
-  //    '2.8.0.24' Bug fix: Object used to define the return location in the
-  //        DRT package are now displayed in the Show or Hide Objects
-  //        dialog box under an appropriate heading.
-  //      Bug fix: If you undo and then redo the creation of parameters,
-  //        objects that use those parameters will no longer lose them.
-  //      Change: It is now possible to select multiple cells in all tables.
-  //    '2.8.0.25' Enhancement: When importing Shapefiles, the numbers of any
-  //        shapes with multiple parts will be displayed.
-  //    '2.8.0.26' ModelMonitor has been updated to work with LGR.
-  //    '2.8.0.27' Enhancement: The export image dialog box now has a "Copy
-  //        image" button that copies the image to the clipboard.
-  //      Enhancement: The Data Set Values dialog box now shows 2D Front and
-  //        2D Side data sets in a single table instead of one table for each
-  //        layer.
-  //      Bug fix: The Object Properties dialog box no longer shows times
-  //        related to time-varying layers in the RCH, EVT, and ETS packages
-  //        unless time-varying layers have been selected in the corresponding
-  //        package.
-  //    '2.8.0.28' Bug fix: Multiplier and zone array names are now
-  //        no longer than 10 characters in length.
-  //      Enhancement: Improved speed of importing model results.
-  //    '2.8.0.29' Bug fix: Fixed reading heads. Bug not in released version.
-  //    '2.8.0.30' Bug fix: Fixed bug that caused access violations when
-  //        editing packages with the HFB package selected. Bug not
-  //        in released version.
-  //    '2.8.0.31' Bug fix: Fixed LGR related bug that could cause, wells,
-  //        drains, etc to be exported incorrectly (not in released version).
-  //    '2.8.0.32' Bug fix: Fixed bug in editing the objects that control
-  //        the horizontal placement of LGR Grids.
-  //    '2.8.0.33' Bug fix: Fixed bug that would cause range check errors or
-  //        access violations when animating contours.
-  //      Enhancement: When deleting vertices of an object with imported data,
-  //        the corresponding imported data will be deleted too.
-  //      Enhancement: New command "Object|Edit|Edit|Invert Selected Vertices"
-  //        to invert the selected nodes.
-  //      Enhancement: New command "Object|Edit|Split Selected Objects"
-  //        to convert each part of an object to a separate object.
-  //      Enhancement: New command "Object|Edit|Make Selected Vertices
-  //        a Separate Object" converts the selected vertices of an object to
-  //        a new object while deleting them from the existing object.
-  //      Enhancement: New command "Object|Edit|Split Object at Selected
-  //        Vertices" to convert split an object into two separate objects.
-  //        The objects will be split at the location(s) of any selected
-  //        vertices with both objects sharing the selected vertices.
-  //      Bug fix: Adding recharge, evapotranspiration, or ETS parameters
-  //        formerly could lead to access violations later on.
-  //      Enhancement: added support for running a single model with BFH data
-  //        with MODFLOW-LGR.
-  //      Bug fix: Fixed an assertion failure in specifying
-  //        zero flow observations.
-  //      Bug fix: When reversing the order of vertices in an object, the
-  //        order of any imported data is reversed too.
-  //    '2.8.0.34' Bug fix: new commands for editing objects were never
-  //        enabled. (not in released version).
-  //    '2.8.0.35' Enhancement: In the Import Gridded Data dialog box, data
-  //        for a single grid row may not be spread over several lines when
-  //        pasting data into the grid for arrays.
-  //    '2.8.0.36' Enhancement: Three new functions added:
-  //        ObjectCurrentSegmentAngle, ObjectCurrentSegmentAngleDegrees, and
-  //        ObjectCurrentSegmentAngleLimitedDegrees. See help for
-  //        descriptions.
-  //    '2.9.0.0' Enhancement: Added support for MODFLOW-LGR.
-  //      Change: When importing head observations from a Shapefile, a default
-  //        value for the observation name is used if the user has not
-  //        assigned a name.
-  //      Enhancement: Improved responsiveness in the Manage Flow Observations
-  //        dialog box.
-  //      Enhancement: Decreased time required to display the
-  //        MODFLOW Time dialog box.
-  //      Bug fix: Fixed bug that could cause access violations when displaying
-  //        the Object Properties dialog box.
-  //      Bug fix: Fixed a bug that caused the multiplier and zone array names
-  //        for the LPF package to change each time the model was exported.
-  //      Bug fix: Fixed bug that could cause range check errors when coloring
-  //        the grid with the RCH, EVT, or ETS packages.
-  //    '2.9.0.1' Bug fix: Fixed bug in which a change in a vertex value of
-  //        an object failed to cause the data sets dependant on that value
-  //        to be updated.
-  //      Bug fix: It is no longer possible to create an object with no
-  //        vertices by starting creating an object and then deleting all the
-  //        vertices by pressing the ESC key.
-  //      Bug fix: It is no longer possible to generate an assertion failure by
-  //        attempting to import a results file by typing the name of a file
-  //        with an extension not recognized by ModelMuse.
-  //      Bug fix: The STORAGECOEFFICIENT option in the LPF package can now
-  //        be edited and stored properly.
-  //      Bug fix: Fixed a bug in which the selected column, row, or layer
-  //        was not always displayed properly by the ModelCube.
-  //      Bug fix: Attempting to import gridded data before defining the grid
-  //        now results in an error message instead of generating a bug report.
-  //      Bug fix: When editing Flow observations, some observations
-  //        were not saved.
-  //    '2.9.1.0' Bug fix: Entering an unreasonable value for the grid origin
-  //        when creating a new model no longer causes an access violation.
-  //      Bug fix: Sampling a DEM is now possible when the language setting on
-  //        the computer specify a comma as the decimal separator.
-  //      Bug fix: If a ModelMuse file can not be saved to the disk, a warning
-  //        message is displayed rather than generating a bug report.
-  //      Bug fix: If there are no valid stress periods defined, in the
-  //        MODFLOW Time dialog box, the dialog box does not save the stress
-  //        periods.
-  //      Bug fix: It is no longer possible to edit the cell in the table
-  //        of the start-up dialog box for MODFLOW by tabbing to the cell.
-  //      Bug fix: The variables in the LPF package are now initialized
-  //        properly in a new model.
-  //      Bug fix: Importing values from ModelMate now works properly when
-  //        a decimal separator other than a period is used.
-  //      Bug fix: When exporting an or updating ModelMate files where the
-  //        user has not previously specified a the ModelMate location,
-  //        the file is still correctly opened by ModelMate.
-  //      Bug fix: Fixed a bug that could cause access violations when
-  //        ModelMuse was closing.
-  //      Bug fix: Fixed bug that would cause access violations when closing
-  //        the Object Properties dialog box.
-  //      Bug fix: Incorrect error messages are no longer generated when
-  //        coloring the grid with the Head observations.
-  //    '2.9.1.1' Fixed bug that could cause the incorrect text to be replaced
-  //         in the formula editor when editing a formula.
-  //      Bug fix: If the selected object is hidden, the dotted box that
-  //         sometimes surrounds the selected object is also hidden.
-  //      Enhancement: Added support for MODFLOW-NWT.
-  //      Change: when importing Surfer grid files, the "files of type" is
-  //        set to the value at which it was set the previous time a Surfer
-  //        grid file was imported since the program was started.
-  //    '2.9.1.2' Bug fix: "Objects|Hide All Objects" didn't work if only
-  //        one object was visible.
-  //    '2.9.1.3' ---
-  //    '2.9.1.4' Change: The reference stress period for head and flow
-  //        observations will now be exported as the stress period containing
-  //        the observation instead of the first stress period.
-  //      Change: ModelMuse is now compiled with Delphi XE instead of
-  //        Delphi 2006. Small changes in the model input changes may occur
-  //        due to the change in compiler.
-  //      Enhancement: When exporting the MODFLOW input files, the user also
-  //        has an opportunity to export the MODPATH or ZONEBUDGET input files
-  //        too.
-  //      Enhancement: It is now possible to import CHD, DRN, GHB, RIV, and WEL
-  //        MODFLOW boundaries from the Import Points dialog box.
-  //    '2.9.1.5' Enhancement: In the Object Properties dialog box, times
-  //        for MODFLOW boundary conditions are automatically filled in when
-  //        a previous time is selected.
-  //      Bug fix: When importing an existing MODFLOW model, Vertical anisotropy
-  //        in the LPF package was not imported correctly if vertical anisotropy
-  //        was used in all layers.
-  //    '2.9.1.6' Bug fix: The ObjectCurrentSegmentAngle,
-  //        ObjectCurrentSegmentAngleDegrees, and
-  //        ObjectCurrentSegmentAngleLimitedDegrees functions did not return
-  //        values that were relative to the grid.
-  //      Bug fix: Fixed a problem with setting an HFB parameter name
-  //        that caused access violations when closing the MODFLOW Packages
-  //        and Programs dialog box.
-  //    '2.9.1.7' Enhancement: ModelMuse can now import and display the
-  //        head observation output.
-  //    '2.9.1.8' ----
-  //    '2.9.1.9' Bug fix: In the GMG solver, the maximum number of iterations
-  //        could not be edited.
-  //    '2.9.1.10' Bug fix: Fixed export of head observations with LGR child
-  //        models.
-  //      Bug fix: In some cases, ModelMuse files in which the HFB package
-  //        was used could not be read.
-  //      Bug fix: Renaming a global variable that is used in the formula
-  //        for the HFB package will now cause the formula to be updated.
-  //      Bug fix: Fixed reading binary result files. (Bug not in released
-  //        version of ModelMuse.)
-  //    '2.9.1.11' Bug fix. When opening a browser, ModelMuse no longer
-  //        attempts to delete files that don't exist.
-  //    '2.9.1.12' ----
-  //    '2.9.1.13' ----
-  //    '2.9.1.14' Enhancement: It is now possible to import CHD, DRN, GHB,
-  //        RIV, and WEL MODFLOW boundaries as well as head observations
-  //        from the Import Points dialog box.
-  //    '2.9.1.15' ----
-  //    '2.9.1.16' Fixed naming of objects when importing head observations
-  //        from the Import Points dialog box. (Bug not in released
-  //        version of ModelMuse.)
-  //    '2.9.1.17' ----
-  //    '2.10.0.0' No additional changes.
-  //    '2.10.0.1' Bug fix: Importing a feature that allows for a MODFLOW
-  //        parameter from a Shapefile no longer causes a range check error
-  //        if no parameter is being imported.
-  //    '2.10.1.0' Change: When a message about a new version is displayed,
-  //        the version numbers of the new version as well as the version
-  //        that is being used are both displayed.
-  //    '2.10.2.0' Bug fix: Undoing certain operations no longer results
-  //        in a range check error.
-  //      Enhancement: Attempting to import a formatted head file that
-  //        contains "NaN" no longer results in a bug report.
-  //    '2.10.2.1' Bug fix: SYTP parameters in the HUF package are now written
-  //        to the PVAL and UCODE template files.
-  //    '2.10.2.2' Bug fix: If the HFB package was selected, using the
-  //        MODFLOW Packages and Programs dialog box no longer causes access
-  //        violations.
-  //      Bug fix: When the HFB package was selected, exporting a model that
-  //        uses zone arrays no longer causes an Assertion failure.
-  //    ''2.10.2.3' Bug fix: Fixed a problem in which deleting vertices of an
-  //        object that included imported text data, more of the text data was
-  //        deleted than should have been deleted.
-  //      Bug fix: Fixed bugs that could cause access violations when
-  //        ModelMuse was closed.
-  //      Bug fix: Reading World Files on computers where the decimal separator
-  //        is set to a value other than '.' now works correctly.
-  //      Bug fix: When importing points, it is no longer possible to
-  //        attempt to define an invalid object name.
-  //    '2.10.3.0' No further changes.
-  //    '2.10.3.1' Bug fix: Fixed bug that could cause a
-  //        "List index out of bounds" error when exporting Shapefiles.
-  //    '2.10.3.2' Bug fix: fixed bug that could ModelMuse to hang when
-  //        starting a new model.
-  //      Bug fix: When reading MODPATH pathline files, negative values of time
-  //        were not handled properly.
-  //      Bug fix: Attempting to export a model in which the reservoir package
-  //        is selected but no reservoirs have been defined now results in
-  //        an error message instead of a bug report.
-  //    '2.10.3.3' Enhancement: Error or warning messages are now issued when
-  //        a boundary condition package has been activated but no boundaries
-  //        for it have been defined.
-  //      Change: When closing a model, the prompt asking the user if they
-  //        wish to save the model now includes the file name if the file name
-  //        has been specified.
-  //      Enhancement: ModelMuse now warns the user if duplicate SFR
-  //        parameter instances are being used.
-  //      Bug fix: Fixed export of TBEGIN in MODPATH main file.
-  //      Enhancement: In LGR models, Streams in the SFR package are now linked
-  //        between grids.
-  //    '2.10.3.4' Bug fix: Fixed bug with selecting and drawing objects when
-  //        zoomed in a great deal.
-  //    '2.10.3.5' Bug fix: In LGR models, the selected column, row, and layer
-  //        are now read correctly when opening a ModelMuse file.
-  //      Bug fix: Fixed bug that could cause an access violation if the number
-  //        of columns or rows was set to zero.
-  //    '2.10.3.6' Bug fix: In PHAST models, switching an object between being
-  //        evaluated at nodes and elements no longer causes a bug report to
-  //        be generated.
-  //    '2.10.3.7' Change: The most recent version of PHAST no longer supports
-  //        specifying an initial water table. However, you can still use
-  //        the initial water table option in ModelMuse. ModelMuse will use
-  //        the data in the Initial_Water_Table data set to specify the
-  //        initial head in a vertical column of nodes.
-  //      Enhancement: The Grid Value dialog box can now display data about
-  //        the nearest visible MODPATH end point.
-  //      Bug fix: When attempting to import model results, trying to import
-  //        from a file that is being used by another program now results in an
-  //        error message to the user instead of a bug report.
-  //    '2.11.0.0' Enhancement: Added support for GOFAIL option in MODFLOW-NWT.
-  //    '2.11.0.1' Enhancement: When importing an existing MODFLOW model,
-  //        .mfn is now recognized as a valid extension for a MODFLOW name file.
-  //      Bug fix: Previously some erroneous error or warning messages were
-  //        generated for data set values in inactive cells.
-  //      Bug fix: When a background image was replaced with a new one, the
-  //        name of the image stored in ModelMuse is now updated.
-  //      Enhancement: It is now possible to import multiple ASCII raster files
-  //        at one time.
-  //    '2.11.0.2' Enhancement: Added a measurement function that allows the
-  //        user to measure distances easily.
-  //      Enhancement: Contours are now labeled.
-  //      Change: "GOFAIL" option in MODFLOW-NWT has been renamed "CONTINUE".
-  //    '2.11.0.3' Bug fix: In the Object Properties dialog box,
-  //        a "no parameter" checkbox has been added to the beginning of the
-  //        list of parameters for MODFLOW features that allow multiple
-  //        parameters to be used with a single object. The "no parameter"
-  //        check box can be unchecked to turn off the definition of a boundary
-  //        that does not use parameters.
-  //      Bug fix: When a data set defines the multiplier or zone array of a
-  //        MODFLOW parameter, it now is possible to delete the data set if
-  //        the associated parameter is deleted.
-  //      Enhancement: The positions of objects can now be locked so that they
-  //        can't be moved accidentally.
-  //      Change: The multiplier and zone arrays used by the RCH, EVT, and ETS
-  //        packages are now exported to separate files that are accessed
-  //        using the OPEN/CLOSE option. This allows the zone and multiplier
-  //        arrays in other packages to be changed without the need to
-  //        export the RCH, EVT, and ETS packages. The files are stored in
-  //        a subdirectory named "arrays."
-  //      Bug fix: When importing the UZF package from an existing MODFLOW
-  //        model, NUZTOP is now imported correctly.
-  //      Change: The following dialog boxes have been deleted and their
-  //        functionality has been moved to the new Data Visualization
-  //        dialog box: Color Grid, Contour Data, MODPATH Pathline Display,
-  //        MODPATH Endpoint Display, MODPATH Time Series Display, and
-  //        Head Observation Results.
-  //      Enhancement: In the Data Visualization dialog box, it is now possible
-  //        to display linkages between streams in the stream package.
-  //      Bug fix: When editing objects that define SFR streams, the controls
-  //        for editing multiple cells in tables are now positioned properly.
-  //      Bug fix: Fixed a bug that caused access violations when the system
-  //        color was changed.
-  //    '2.11.0.4' Bug fix. Exporting a grid data to a shape file for data sets
-  //        whose names are longer than 10 characters now works properly.
-  //    '2.11.0.5' Change: The zone and multiplier arrays files for
-  //        RCH, EVT, and ETS are stored in a subdirectory named "arrays."
-  //    '2.12.0.0' Change: In the NWT solver, the default value for flux
-  //        tolerance has been increased from 0.006 to 0.06
-  //      Bug fix: Deleting data sets and then opening another ModelMuse project
-  //        no longer results in an assertion failure.
-  //      Bug fix: Fixed a problem with invalid cast errors in PHAST models
-  //        when creating or editing objects.
-  //      Enhancement: In the Manage Head Observations dialog box, the user
-  //        can now select multiple rows and then click the "Highlight selected
-  //        objects" button to select all the objects that define objects
-  //        on the selected rows.
-  //      Enhancement: In the Head Observation Results pane of the
-  //        Data Visualization dialog box, the data can be sorted by clicking
-  //        on the column headers
-  //      Enhancement: In the Head Observation Results pane of the
-  //        Data Visualization dialog box, the objects that define the
-  //        observations in the selected row of the results table can be
-  //        selected by clicking the "Highlight selected objects" button.
-  //      Bug fix: Attempting to read an invalid ModelMate file now generates
-  //        a warning message instead of a bug report.
-  //      Bug fix: Attempting to open a ModelMuse file with a length of zero
-  //        now results in an error message to the user rather than a bug
-  //        report.
-  //      Bug fix: In the PHAST Print Frequency dialog box, it is no longer
-  //        possible to delete all the columns in the table.
-  //    '2.12.0.1' Enhancement: ModelMuse now checks the file date for MODFLOW
-  //        and related models and warns the user if a more recent version has
-  //        been released.
-  //      Bug fix: ModelMuse again responds to the mouse wheel.
-  //    '2.12.0.2' Bug fix: ModelMuse now only allows a ModelMuse file to be
-  //        saved if it has one of the correct extensions.
-  //      Bug fix: Access violations that sometimes occurred when changing
-  //        the names of layer groups have been fixed.
-  //      Bug fix: In the MODFLOW Program Locations dialog box, "ModelMuse.exe"
-  //        is no longer accepted as a valid name for any of the programs.
-  //      Bug fix: Undo/Redo capability added for changes to the output control.
-  //      Bug fix: ModelMuse can now import the gage package correctly when
-  //        a lake gage has an OUTTYPE of 4 or a stream gage has an OUTTYPE
-  //        of 8.
-  //      Bug fix: ModelMuse now updates user-entered real numbers to the
-  //        proper format when the the user changes the language settings.
-  //      Bug fix: (bug not in released version) In MODFLOW-NWT models,
-  //        switching to use the NWT or UPW packages no longer causes a stack
-  //        overflow.
-  //      Bug fix: Fixed in bug in which attempting to delete a row from a
-  //        table in which no row was selected caused an exception.
-  //      Bug fix: Fixed bug in which SFR data was corrupted if ICALC was not
-  //        specified.
-  //    '2.12.0.3' Enhancement: Reduced memory usage when importing MODFLOW
-  //        models that use the UZF package.
-  //      Enhancement: When importing MODFLOW features from Shapefiles,
-  //        most features can be imported into a single, multi-part object.
-  //      Bug fix: Fixed bug importing the MNWI package from an existing
-  //        MODFLOW-2005 model.
-  //      Bug fix: Fixed bug that could sometimes prevent the Object Properties
-  //        dialog box from being displayed when attempting to edit
-  //        multiple objects.
-  //      Bug fix: In the MODFLOW Time dialog box, attempting to use the
-  //        Time Step Length Calculator without first specifying the Stress
-  //        period length and multiplier now generates a warning message to the
-  //        user instead of a bug report.
-  //      Change: When running MODFLOW from ModelMuse, the lines in the batch
-  //        file to display the listing file now occurs immediately after
-  //        MODFLOW has finished instead of after the lines to run MODPATH
-  //        and Zonebudget.
-  //    '2.12.0.4' Bug fix: When the user has customized the regional settings
-  //        to use a decimal separator that is different from the usual one,
-  //        this no longer causes an error when converting text to
-  //        floating point values.
-  //    '2.12.0.5' Enhancement: The user can now specify the precision with
-  //        which contour labels are written.
-  //    '2.12.0.6' Bug fix: The menus and buttons are now disabled while
-  //        opening a file.
-  //      Bug fix: Fixed bug importing model results.
-  //        (bug not in released version.)
-  //    '2.12.0.7' Bug fix: When a message box is displayed, the mouse will
-  //        move to the default button if the user has specified that option
-  //        in the Windows Control Panel.
-  //    '2.12.0.8' Bug fix: When importing Shapefiles, failing to specify
-  //        an attribute name or value no longer results in a range check error.
-  //    '2.12.0.9' Failing to completely specify information streams in the
-  //        SFR package now results in an error message instead of a bug report.
-  //      Bug fix: Fixed bug in setting data for SFR when multiple objects
-  //        are being edited at once.
-  //    '2.12.0.10' Enhancement: added support for MT3DMS.
-  //      Bug fix: Fixed bugs relating to display of data in MODFLOW-LGR models.
-  //    '2.12.0.11' Bug fix: Fixed another bug relating to display of data in
-  //        MODFLOW-LGR models.
-  //    '2.12.0.12' Bug fix: Fixed another bug relating to display of data in
-  //        MODFLOW-LGR models.
-  //      Change: Added option to write SFR package input in the format used
-  //        by GSFLOW.
-  //    '2.12.0.13' Bug fix: fixed export of SFR in MODFLOW-NWT or for GSFLOW.
-  //    '2.12.0.14' Enhancement: Added help for MT3DMS.
-  //    '2.12.0.15' Fixed bugs in generation of MT3DMS files.
-    //      Bug not in released version.
-  //    '2.12.0.16' Fixed MT3DMS bugs.  Bugs not in released version.
-  //    '2.12.0.17' Bug fix: Fixed bug with setting multiple flux observation
-  //        values at once not working.
-  //      Bug fix: Fixed bug in storing imported values when splitting objects.
-  //    '2.12.0.18' Enhancement: Added new macro for exporting images; %TrS
-  //        will be replaced by the transport step.
-  //    '2.12.0.19' Bug fix: When reading an exporting a file from the command
-  //        line, the "arrays" directory will be created as a subdirectory
-  //        of the directory containing the file even if the full file path
-  //        is not specified.
-  //    '2.12.0.20' Bug fix: attempting to animate a series of data sets in
-  //        the Export Image dialog box without first displaying the
-  //        Display Data dialog box no longer causes access violations.
-  //    '2.12.0.21' Bug fix:  Fixed bug with reading .ini file when multiple
-  //        copies of ModelMuse are running.
-  //    '2.12.0.22' Bug fix: When more than one instance of ModelMuse was
-  //        running, sometimes one copy would not detect that another copy
-  //        was running and would try to delete it's temporary files. That
-  //        should no longer happen.
-  //    '2.12.0.23' Bug fix: (second attempt) When more than one instance of
-  //        ModelMuse was running, sometimes one copy would interfere with the
-  //        other's temporary files.
-  //      Bug fix: fixed export of OC file when the defaults are selected.
-  //    '2.12.0.24' Bug fix: (third attempt) When more than one instance of
-  //        ModelMuse was running, sometimes one copy would interfere with the
-  //        other's temporary files.
-  //    '2.12.0.25' Enhancement: The "Run model" button now has a drop down
-  //        menu next to it which can be used to run MODPATH, ZONEBUDGET or
-  //        MT3DMS.
-  //      Enhancement: It is now possible to import parameter values from a
-  //        MODFLOW PVAL file. This can be done either from the
-  //        Manage Parameters dialog box or from the command line. To import
-  //        a PVAL file from the command line, add -p "Filename" to the
-  //        command line where Filename
-  //        is the full path of the PVAL file. If the path contains any spaces,
-  //        Filename should be enclosed in double quotes.
-  //      Enhancement: It is now possible to import global variables from a
-  //        text file. This can be done either from the
-  //        Global Variables dialog box or from the command line. To import
-  //        a global variables file from the command line, add -g "Filename"
-  //        to the command line where Filename
-  //        is the full path of the global variables file. If the path contains
-  //        any spaces, Filename should be enclosed in double quotes.
-  //        Each line of the global variables files must be either empty,
-  //        start with the # character to identify the line as a comment or
-  //        list the name and value of an existing global variable.
-  //        On a line defining a new value for a global variable, the name
-  //        of the global variable must be at the beginning of the line
-  //        must be first followed by one or more spaces followed by the value.
-  //        A period must be used as the decimal separator. For boolean
-  //        global variables, the value must be either "True" or "False"
-  //        (without the quotes). For text variables, the value may optionally
-  //        be enclosed in quotes.  A global variables may also be saved from
-  //        the Global Variables dialog box.
-  //    '2.12.0.26' Bug fix: Contour lines are now drawn at the correct
-  //        positions on the front and side views when the grid is rotated.
-  //      Bug fix: (fourth attempt) When more than one instance of
-  //        ModelMuse was running, sometimes one copy would interfere with the
-  //        other's temporary files.
-  //      Bug fix: Fixed a bug in which the Data Sets dialog box sometimes
-  //        did not prevent the user from setting up a formula that caused
-  //        a data set to depend on itself.
-  //    '2.12.0.27' Bug fix: Fixed bug that could cause an assertion failure
-  //        when coloring the grid with transient data such as the recharge
-  //        rate.
-  //      Bug fix (not in released version); global variable and .pval files
-  //        weren't being imported correctly.
-  //    '2.12.0.28' Fixed bug in exporting MT3DMS BTN data set A6 when there
-  //        are more than 40 layers.
-  //    '2.13.0.0' No additional changes.
-  //    '2.13.0.1' Bug fix: Fixed a bug that would cause interpolation to fail
-  //        if an object did not intersect the grid.
-  //    '2.13.0.2' Enhancement: added support for running MODPATH with
-  //        a child model in MODFLOW-LGR.
-  //    '2.13.0.3' Enhancement: added support for visualizing MODPATH output
-  //        with a child model in MODFLOW-LGR.
-  //    '2.13.0.4' Bug fix: Fixed labeling of contours when contouring
-  //        data sets whose data type is Text.
-  //      Bug fix: fixed labels for TRPT and TRPV in MT3DMS.
-  //      Bug fix: fixed export of SSM package when no source or sink
-  //        concentrations have been defined.
-  //    '2.13.0.5' Bug fix: Fixed bug that would cause an error if the user
-  //        attempted to display data set values before generating the grid.
-  //       Bug fix: Fixed a bug that would cause an error if the user attempted
-  //         to give an aquifer a name that started with a number or a name
-  //         that was too similar to the name of another aquifer.
-  //    '2.13.0.6' Change: In the hydmod package, The name of each observation
-  //         has a unique number added to the end of the label.
-  //    '2.13.0.7' Bug fix: fixed bug that prevented the LPF options
-  //         STORAGECOEFFICIENT and CONSTANTCV from being used simultaneously.
-  //       Enhancement: Added support for the new STOPERROR option in the
-  //         MODFLOW Basic package.
-  //       Enhancement: Added support for the new NOPARCHECK option in the
-  //         MODFLOW LPF package.
-  //       Enhancement: Added support for the PCGN solver.
-  //       Change: Changed SFR package to use new SFR format for MODFLOW-2000.
-  //       Enhancement: Added IFACE to SFR input.
-  //       Bug fix: fixed a bug that would cause range-check errors in certain
-  //         MODFLOW-LGR models.
-  //    '2.13.0.8' Bug fix: Fixed bug that would sometimes cause invalid SFR
-  //         input files to be created when unsaturated flow was simulated
-  //         beneath streams.
-  //       Enhancement: When importing ASCII raster files into a MODFLOW-LGR
-  //         model, it is now possible to specify the grid to use
-  //         for the imported data.
-  //       Bug fix: fixed bug that would sometimes cause the assigning data
-  //         set values to fail in a MODFLOW-LGR model.
-  //    '2.13.0.9' Change: Reduced memory usage.
-  //       Bug fix: Checking elevations in MODFLOW-LGR child models no longer
-  //         results in a range check error.
-  //       Bug fix: Fixed problem with reading invalid files.
-  //    '2.13.0.10' Bug fix: Previously, attempting to display the
-  //         "Show or Hide Objects" dialog box would sometimes cause an error.
-  //       Bug fix: In MODFLOW-LGR models, the legend displayed when
-  //         coloring or contouring would not reflect more extreme values
-  //         displayed in a child grid.
-  //       Enhancement: You can now export grid data to a Shapefile for
-  //         MODFLOW-LGR child grids.
-  //    '2.13.0.11' Bug fix: Fixed export of IFMTCN, IFMTNP, IFMTRF,
-  //         and IFMTDP in the MT3DMS basic transport package.
-  //       Enhancement: You can now use the command line option -mte to export
-  //         just the MT3DMS input files.
-  //    '2.13.0.12' Bug fix: when importing a Shapefile to a multipart object,
-  //         formulas for the Z-coordinate can now be imported properly.
-  //    '2.14.0.0' No additional changes.
-  //    '2.14.0.1' Enhancement: Added the ability to export
-  //         .png and .jpg images.
-  //       Bug fix: Importing model results for MODFLOW-LGR model and
-  //         contouring them no longer causes a range-check error.
-  //    '2.14.0.2' Bug fix: Fixed bug that caused access violations when
-  //         importing results from a MODFLOW-LGR child model but not the
-  //         MODFLOW-LGR parent model.
-  //       Bug fix: Fixed bug in which the Kz data set was not created when
-  //         a MODFLOW model was first created.
-  //       Bug fix: Fixed bug that sometimes caused invalid elevation formulas
-  //         in objects created by importing Shapefiles.
-  //    '2.14.1.0' Change: Date for the current version of MODFLOW-2005
-  //         changed to the date for MODFLOW-2005 version 1.9.01.
-  //    '2.14.1.1' Bug fix: In order to prevent range check errors, it is no
-  //         longer possible to display the Manage Flux Observations dialog box
-  //         when MT3D has been selected unless at least one chemical species
-  //         has been defined.
-  //       Enhancement: The "Data Sets" dialog box can now remain open
-  //         while the user works with other parts of ModelMuse. However, it
-  //         can not remain open when the Object Properties dialog box is open
-  //         so if the user attempts to open the Object Properties dialog box,
-  //         The Edit Data Sets dialog box will automatically close.
-  //       Bug fix: Specifying values of Stress period length,
-  //         time step multiplier, and initial time step size that would cause
-  //         the number of time steps to exceed the limits of a 32-bit signed
-  //         integer causes an error message to the user rather than a bug
-  //         report.
-  //       Bug fix: In the object properties dialog box, clicking the button
-  //         for the formula editor when editing the formula for the Factor
-  //         in an MT3DMS Flux observation, no longer causes an
-  //         Assertion failure.
-  //       Bug fix: In the MODFLOW Packages and Programs dialog box, changing
-  //         the number of parameters in the UPW package no longer causes an
-  //         Assertion failure.
-  //       Enhancement: Tab ordering has been improved.
-  //    '2.14.1.2' Bug fix: Importing models containing the UZF package
-  //         in which ET is not simulated, now works properly.
-  //       Enhancement: X, Y, and Z axes are now drawn in the 3D view.
-  //       Bug fix: Fixed bug that caused empty .bfh_head and .bfh_flux files
-  //         to be created in MODFLOW-LGR models when one-way coupling is used.
-  //       Bug fix: Merely selecting a data set in the Data Visualization
-  //         dialog box no longer causes the data set values to be calculated.
-  //         The user must now click "Apply" to cause the data set values to be
-  //         calculated.
-  //       Bug fix: Fixed bug importing the Subsidence package
-  //         from existing models.
-  //    '2.14.1.3' no real change.
-  //    '2.14.1.4' Enhancement: Added support for importing the concentration
-  //         in MT3DMS associated with a sink or source package.
-  //       Change: In MODFLOW models using the BCF package, the
-  //         "Vertical_Conductance" data set is renamed "Vertical_Leakance".
-  //       Enhancement: Reduced the time required to open the Edit Data Sets
-  //         dialog box in models with large numbers of data sets.
-  //    '2.15.0.0' Bug fix: Fixed bug in importing Shapefiles that could
-  //         allow an object to have one or more Z-formulas when setting
-  //         the value of a layer definition data set.
-  //       Enhancement: Added partial support for Unicode. Complete support
-  //         is not possible because the groundwater models do not currently
-  //         support Unicode.
-  //       Change: The extension for MT3DMS configuration file changed from
-  //         ._cnf to .cnf to facilitate viewing the output in Model Viewer.
-  //    '2.15.0.1' Bug fix: Importing a Global Variables file was from the
-  //         command line now works properly.
-  //    '2.15.0.2' Bug fix: fixed a bug that would sometimes cause contouring
-  //         to fail.
-  //       Bug fix: Certain shapefiles that were previously rejected by
-  //         ModelMuse as self-intersecting are now accepted.
-  //       Enhancement: When importing images .pgw files are now accepted as
-  //         a valid world file type.
-  //       Bug fix: Fixed bug in which observation names were allowed
-  //         to include the '/' character even though that character would
-  //         not be processed by MODFLOW correctly.
-  //     '2.15.0.3' Bug fix: Fixed a bug in which attempting to import gridded
-  //         data using an invalid layer caused an error. Invalid layers can no
-  //         longer be specified.
-  //       Enhancement: MT3DMS simulations can now have fewer stress periods
-  //         than the corresponding MODFLOW model.
-  //     '2.15.0.4' Bug fix: Fixed bug that caused incorrect stress periods to
-  //         be exported if the stress periods were changed and the SFR package
-  //         was in used.
-  //       Bug fix: Fixed a bug that could cause interpolation to fail.
-  //     '2.16.0.0' Enhancement: Added 64-bit version for 64-bit operating
-  //         systems.  TIFF and PCX files are not supported in the 64-bit
-  //         version.
-  //       Change: The red background for missing files in the Files to Archive"
-  //         dialog box has been changed to a red font.
-  //       Change: The light blue background for a parenthesis and it's
-  //         match in the formula editor has been changed to a light blue font.
-  //     '2.16.1.0' Bug fix: Fixed bug that caused importing model results to
-  //         fail.
-  //     '2.16.1.1' Bug fix: When exporting ModelMate files, ModelMuse now
-  //         specifies the correct version of MODFLOW to use.
-  //       Bug fix: The "Function Help" button on the Formula editor works again.
-  //     '2.16.1.2' no real change. Converted some text to make it easier to
-  //         translate.
-  //     '2.16.1.3' Bug fix: Fixed export and import of head change
-  //         observations to ModelMate.
-  //     '2.16.1.4' no change.
-  //     '2.16.1.5' Bug fix: Fixed bug in export of gages for the Lake package.
-  //       Bug fix: Fixed bug in export of Shapefiles in which the last
-  //         character of the last field was not written to the file.
-  //       Bug fix: Fixed export of unit numbers for lake gages.
-  //     '2.16.1.6' (Changed version of GLScene used to 5991.)
-  //     '2.16.1.7' no real change.
-  //     '2.16.1.8' Bug fix: Renaming parameters for the HUF package now
-  //         causes any formulas based on data arrays for those parameters
-  //         to be updated.
-  //       Enhancement: Added support for MODPATH version 6.
-  //       Change: Head observations that are at the end of a steady-state
-  //         stress period now have their reference stress period set to that
-  //         stress period rather than the beginning of the following
-  //         stress period.
-  //     '2.16.1.9' Change: Updated link for model archiving policy.
-  //       Bug fix: Fixed display of file names in the Files to Archive
-  //         dialog box.
-  //       Bug fix: The name file for MODFLOW models is now included in
-  //         archives.
-  //       Bug fix: Fixed import of binary Surfer grid files.
-  //     '2.16.1.10' Enhancement: Added support for exporting data set values
-  //         for display in Model Viewer.
-  //     '2.16.1.11' Bug fix: Fixed coloring the grid for certain PHAST data
-  //         sets.
-  //     '2.16.1.12' Bug fix: Fixed display of layer numbers on the status bar
-  //         for the front and side views. {Bug not in released version.}
-  //       Bug fix: fixed bug in export of MODPATH version 6 input
-  //         (Bug not in released version.)
-  //     '2.16.1.13' Bug fix: Fixed how the "Child Models" dialog box for
-  //         MODFLOW-LGR models responds to the user entering an invalid number
-  //         for NCPP.
-  //       Bug fix: Fixed bug that could cause some MODFLOW budget files to
-  //         be incorrectly identified as invalid.
-  //     '2.16.1.14' Bug fix: Fixed detecting the version number of MODPATH
-  //         used to create a pathline file. (Bug not in released version.)
-  //       Bug fix: Fixed display of endpoints, pathlines and time series data
-  //         from MODPATH on the front and side views when the grid is rotated.
-  //     '2.16.1.15' Bug fix: Fixed bug that caused too much memory to be used
-  //         when exporting the SSM package in MT3DMS.
-  //     '2.16.1.16' Bug fix: Fixed bug that caused exporting the SSM file in
-  //         MT3DMS to take more time than it should have.
-  //     '2.16.1.17' Enhancement: The Selection Cube for the top view of the
-  //         model draws the grid outline only for simulated layers.
-  //       Bug fix: Fixed bug that could cause an error in the export of the
-  //         MT3DMS TOB package if duplicate times were specified.
-  //     '2.17.0.0' No further changes.
-  //     '2.17.1.0'  Bug fix: Fixed bug in which objects were not drawn as
-  //         selected after clicking the OK button in the Object Properties
-  //         dialog box.
-  //       Bug fix: The tree control in the Show Or Hide Objects dialog box
-  //         no longer collapses all its nodes just because there has been a
-  //         change in which object is selected.
-  //       Bug fix: The display of the data for the RCH, EVT and ETS packages
-  //         has been fixed.
-  //     '2.17.1.1' Enhancement: Added support for PHIRAMP in the
-  //         Well package of MODFLOW-NWT.
-  //       Bug fix: Fixed export of starting locations file for MODPATH version
-  //         6 when no starting locations have been defined for some objects.
-  //       Bug fix: Fixed export of MODPATH with MODFLOW-LGR child models
-  //         when the MODPATH options differ between the parent and child
-  //         models.
-  //     '2.17.1.2' Bug fix: Fixed problem with editing objects in
-  //        translated version of ModelMuse.
-  //     '2.17.1.3' No real change.
-  //     '2.17.1.4' Bug fix: Attempting to read a head observation file in
-  //         which some of the numbers are invalid now results in an error
-  //         message to the user instead of a bug report.
-  //       Enhancement: When exporting objects as Shapefiles, you can now export
-  //         the formulas for many but not all MODFLOW Features.
-  //     '2.17.1.5' Bug fix: In the MODFLOW Layers dialog box, deleting
-  //         sublayers graphically now works correctly.
-  //       Bug fix: Fixed bug in importing the MNW2 package from existing
-  //         models.
-  //     '2.17.1.6' Bug fix: If a pathline just has a single point, it is now
-  //         drawn as a single point instead of being skipped.
-  //       Bug fix: In the grid value dialog box, data for MODPATH pathlines
-  //         and endpoints are now displayed for child models in MODFLOW-LGR
-  //         models.
-  //       Bug fix: When exporting images with MODFLOW-LGR models, MODPATH
-  //         pathlines and other data can now be displayed for child models.
-  //       Bug fix: Streamlinks of MODFLOW-LGR child models are now displayed.
-  //       Bug fix: Fixed export of locations of pval and jtf file names to
-  //         ModelMate when the model files are in a different directory from
-  //         the ModelMuse file. (More changes in version 2.17.1.7.)
-  //       Enhancement: Added support for exporting head observations to
-  //         Shapefiles. (This is an extension of the enhancement in version
-  //         2.17.1.4.)
-  //     '2.17.1.7' Bug fix: Fixed export of ModelMate files when the model
-  //         files are in a different directory from the ModelMuse file.
-  //     '2.17.1.8' Enhancement: The Grid Value dialog box was modified to
-  //         allow multiple tabs to be displayed simultaneously.
-  //     '2.17.1.9' Bug fix: In the MODFLOW Layers dialog box, setting custom
-  //         sub discretizations for layer groups now works properly.
-  //     '2.17.1.10' Bug fix: Added support for IUNITRAMP in data set 2B of the
-  //         well package of MODFLOW-NWT. (Bug not in released version.)
-  //     '2.17.1.11' Bug fix: Fixed bug in exporting Shapefiles. Each record
-  //         for the shapefile in the .dbf file now includes a space for
-  //         indicating whether a record is deleted or not.
-  //     '2.17.1.12' Bug fix: Fixed bug in exporting the TOB file for MT3DMS
-  //         when no concentration observations are defined.
-  //     '2.17.1.13' Bug fix: Fixed updating of the initial NWT values.
-  //         (Bug not in released version.)
-  //       Bug fix: Fixed bug that caused ModelMuse to crash when it
-  //         first starts on some systems. (Bug in GLScene fixed by updating
-  //         GLScene to the latest version from SVN.)
-  //       Bug fix: Fixed bug displaying 3D view on Windows 8.
-  //     '2.17.1.14' Enhancement: Added new function for use in Formulas:
-  //         Closest. See the ModelMuse help for details.
-  //       Enhancement: Added the ability to import binary grid files created
-  //         by T-PROGS.
-  //     '2.17.1.15' Bug fix: Fixed bug that caused ModelMuse to crash when
-  //         changing the number of rows, columns or layers in the grid.
-  //     '2.17.1.16' Bug fix: Fixed bug in adding new data sets when child
-  //         models from a MODFLOW-LGR model have been created but the
-  //         model is no longer a MODFLOW-LGR model.
-  //       Enhancement: Changes to the file format of the MNW2 package in
-  //         MODFLOW-NWT are now supported.
-  //     '2.18.0.0' Bug fix: Fixed bug that would cause divide-by-zero errors
-  //         when calculating Interlayer Kz in the HUF package if some of the
-  //         data was not properly defined.
-  //     '2.18.0.1' Bug fix: Fixed bug that caused ModelMuse to hang on
-  //         some computers when using the search function in the ModelMuse
-  //         help.
-  //       Bug fix: Fixed bug that allowed an attempt to be made to export the
-  //         PHAST input file even if the grid was not yet defined.
-  //       Bug fix: Fixed bug that sometimes incorrectly prevented the user
-  //         from importing the shapes in a Shapefile as a single multipart
-  //         object.
-  //     '2.18.0.2' Bug fix: Fixed bug in export of RCH package when parameters
-  //         are used but the layer is not time-varying.
-  //     '2.18.0.3' Change: the user can now cut and paste data from the
-  //         Imported Data tab of the Object Properties dialog box.
-  //     '2.18.0.4' Bug fix: Fixed a bug that would cause an error opening a
-  //         ModelMuse file if an object used in the definition of a flux
-  //         observation had been deleted.
-  //     '2.18.1.0' Bug fix: Fixed bug that allowed MT3DMS to have zero stress
-  //         periods defined.
-  //     '2.18.1.1' Bug fix: Attempting to import a file as a Surfer Grid file
-  //         when it really is not one now results in an error message to the
-  //         user instead of a bug report.
-  //       Change: ModelMuse will no longer use the XSECTION option in the
-  //         Basic package if MODPATH is active because MODPATH version 6
-  //         does not support the XSECTION option.
-  //       Bug fix: If the user attempts to import a TProgs file before
-  //         creating a grid, an error message is displayed to the user instead
-  //         of generating a bug report.
-  //       Bug fix: The following functions all had bugs which have been
-  //         corrected: ObjectCurrentVertexX, ObjectCurrentVertexY,
-  //         ObjectCurrentVertexZ, ObjectCurrentSegmentAngle,
-  //         ObjectCurrentSegmentAngleDegrees,
-  //         ObjectCurrentSegmentAngleLimitedDegrees,
-  //         ObjectCurrentSegmentLength
-  //       Bug fix: Fixed bug in checking parameters in the SFR package that
-  //         could cause ModelMuse to crash or to incorrect error messages.
-  //     '2.18.1.2' Bug fix: Fixed bug that could cause math errors when
-  //         coloring data sets by the logarithm of their values.
-  //       Failed Bug fix: Fixed bug that could cause extra stress periods of
-  //         negligible length to be generated when exporting from the 64-bit
-  //         version of ModelMuse.
-  //     '2.18.1.3' Bug fix: Fixed evaluating objects on rotated cross sections
-  //         in SUTRA. Bug not in released version.
-  //     '2.18.1.4' Made changes for SUTRA.
-  //     '2.18.1.5' Failed Bug fix: Fixed bug that could cause extra stress
-  //         periods of negligible length to be generated when exporting from
-  //         the 64-bit version of ModelMuse.
-  //     '2.18.1.6' Change: When importing Shapefiles, if the number of
-  //         Z-Formulas is set to 1 or 2, any new data sets that are created
-  //         will be 3D data sets.
-  //       Bug fix: Fixed bug that could cause extra stress periods of
-  //         negligible length to be generated when exporting from the 64-bit
-  //         version of ModelMuse.
-  //     '2.18.1.7' Bug fix: Fixed sampling of DEM data.
-  //     '2.18.1.8' No real change.
-  //     '2.18.1.9' Bug fix: When saving ModelMuse projects to text files
-  //         such as .gpt or .xml files, real numbers that were close to but
-  //         not equal to zero were saved as zero.
-  //       Bug fix: If the user enters an invalid formula for the Z coordinates
-  //         of an object, ModelMuse will now display an error message to the
-  //         user instead of generating a bug report.
-  //       Bug fix: Editing objects that defined streams in the SFR package
-  //         when SFR parameters are defined works properly now.
-  //     2.18.1.10' Bug fix: If ModelMuse is unable to save an ini file, it
-  //         displays a warning message to the user instead of generating a
-  //         bug report.
-  //       Bug fix: Attempting to merge point objects no longer results in
-  //         a bug report. However, point objects can not be merged.
-  //       Bug fix: Fixed a bug that sometimes caused an error when ModelMuse
-  //         was shutting down.
-  //    '2.18.1.11' Bug fix: Fixed bug that prevented layer elevations from
-  //         being updated correctly.
-  //    '2.18.1.12' Bug fix: Fixed bug that caused an error if two components
-  //         in MT3DMS were given the same name. Now if the user attempts to
-  //         assign the same name to more than one component in MT3DMS,
-  //         only the first one is accepted. The others are deleted.
-  //    '2.18.1.13' Enhancement: Added new contouring method based on
-  //         the Association for Computing Machinery (ACM) algorithm 651.
-  //       Enhancement: Added the ability for the user to add a custom
-  //         coloring scheme for coloring the grid or for contour lines.
-  //       Enhancement: Added support for the NOPRINT option in observation
-  //         files.
-  //    '2.18.1.14' Change: When drawing contour lines, a white background is
-  //         now drawn behind the contour labels.
-  //    '2.19.0.0' No additional changes.
-  //    '2.19.0.1' Bug fix: Attempting to import a .dxf file that is locked
-  //         by another program will result in an error message to the user
-  //         instead of generating a bug report.
-  //       Bug fix: Fixed bug that caused problems on computers in which the
-  //         decimal symbol is not a period when closing the "MODFLOW
-  //         Packages and Programs" dialog box.
-  //       Bug fix: When reading an empty endpoint file, ModelMuse now displays
-  //         a warning message to the user instead of generating a bug report.
-  //    '2.19.0.2' Bug fix: When an object is defining multiple values at the
-  //         same cell or element, holes in the object no longer define such
-  //         values. An example would be an object that defines wells in MODFLOW
-  //         with an object that contains multiple sections and in which some
-  //         of those sections define holes.
-  //       Change: A new checkbox has been added to the "Object Properties"
-  //         dialog box labeled "Duplicates <cells/elements> allowed. It is
-  //         checked by default. Under some conditions, a single object can
-  //         allow multiple values to be assigned at a single cell.
-  //         For example, in MODFLOW models, an object might define two or
-  //         more wells at a single cell by having two separate point sections
-  //         that are in the same cell. This ability can be turned off by
-  //         unchecking this check box.
-  //    '2.19.0.3' Bug fix: Fixed bug that could cause ModelMuse to hang when
-  //         importing an existing MODFLOW-2005 model.
-  //    '2.19.0.4' Bug fix: Fixed bug introduced in '2.19.0.2'. Not in released
-  //         version.
-  //    '2.19.0.5' Bug fix: Fixed bug in limiting display of MODPATH end points
-  //         with tracking time.
-  //       Change: On some computers, bugs are encountered related to
-  //         the 3D view. The 3D view is hidden on such computers to allow the
-  //         program to continue running.
-  //    '2.19.0.6' Bug fix: Fixed bug that would cause access violations when
-  //         generating the input file for the UZF package if a flow package
-  //         other than the LPF or UPW was used.
-  //    '2.19.1.0' No additional changes.
-  //    '2.19.1.1' Bug fix: Changes to the "Print input cell lists" option
-  //         in the MODFLOW Output Control dialog box were not saved.
-  //    '2.19.1.2' Bug fix: Fixed handling of the RCH, EVT, and ETS package
-  //         in cases where parameters are defined but no parameters are used
-  //         for one or more stress periods.
-  //       Bug fix: Fixed handling of attempts to read DEMs that are in the
-  //         wrong format.
-  //       Bug fix: fixed bug in importing head and drawdown results from
-  //         profile models.
-  //    '2.19.1.3' Enhancement: The "Show or Hide Objects" dialog box now
-  //         displays the cell or element size that an object specifies.
-  //       Bug fix: A bug report is no longer generated if when attempting
-  //         to finish adding a new closed section to an object the final
-  //         edge of the new section crosses one of the earlier edges of the
-  //         same section of the object. Instead an error message is displayed
-  //         to the user.
-  //       Bug fix: Attempting to import an empty results file for MODFLOW
-  //         should no longer generate an I/O error.
-  //       Enhancement: The menu item Data|Delete Model Results has been added.
-  //         It deletes all the data sets and objects for the model results.
-  //       Bug fix: ModelMuse now displays an error message in the
-  //         Formula Errors dialog box when a data set formula is invalid
-  //         in some cases where it would previously generate a bug report.
-  //    '2.19.1.4' Bug fix: Fixed creating child models in which global
-  //         variables are used in some data sets.
-  //    '2.19.1.5' Same bug fix as in '2.19.1.4' -- Correct this time.
-  //    '2.19.1.6' Bug fix: Fixed bug with Natural Neighbor Interpolation that
-  //         could cause ModelMuse to enter an infinite loop.
-  //       Bug fix: Fixed a bug that caused inconsistencies in data set values
-  //         between parent and child models if the values were assigned by
-  //         interpolation. Previously, data points outside the grid might
-  //         not be assigned the correct values.
-  //    '2.19.1.7' Enhancement: When contouring data, the user can now specify
-  //         the contour interval easily.
-  //       Bug fix: When specifying contour values, the user no longer has to
-  //         specify the values in the correct order.
-  //    '2.19.1.8' Enhancement: Sorting of observation names in the
-  //         Data Visualization dialog box has been improved.
-  //       Enhancement: There is now a button for copying the observations
-  //         in the Data Visualization dialog box to the clipboard.
-  //    '2.19.1.9' Bug fix: Fixed bugs that resulted in invalid file names when
-  //         MT3DMS component names contained non-alphanumeric characters.
-  //    '2.19.1.10' Bug fix: If after importing data, the imported data becomes
-  //         corrupted, it is now possible to save the file although the
-  //         imported data will not be saved.
-  //    '2.19.1.11' Enhancement: The default value for the grid cell size shown
-  //         in the object properties dialog box is now set to a reasonable
-  //         value based on the dimensions of the model area.
-  //       Bug fix: Fixed bug in the "Delete Model Results" command
-  //         that invalidated formulas incorrectly. Not in released version.
-  //    '2.19.1.12' Bug fix: Fixed bug in displaying the Show/Hide Objects
-  //         dialog box when drain return objects were not defined properly.
-  //    '2.19.1.13' Change: Changing the name of a "Model Results" data set
-  //         will now cause it to be listed under "User Defined" data sets.
-  //       Enhancement: Added ArcTan function.
-  //       Bug fix: When saving the settings for an image, specified contour
-  //         intervals are now saved properly.
-  //       Bug fix: Selecting "Data|Delete Models Results" for a model that
-  //         contains no model results no longer results in an error.
-  //       Bug fix: Displaying pathline or time series files from MODPATH with
-  //         very large coordinate values no longer causes ModelMuse to crash.
-  //         (The large coordinate values may indicate that the particle is
-  //         trapped in a dry cell.)
-  //       Bug fix: When creating contours with the ACM 626 contouring
-  //         method, contouring values of head in models in which some cells
-  //         have gone dry no longer causes and error.
-  //    '2.19.1.14' Bug fix: ModelMuse no longer displays an error message
-  //         about no parameters being used in a stress period unless recharge
-  //         parameters have been defined.
-  //       Enhancement: Added ability to use concentrations from a previous run
-  //         as initial concentrations for new run in MT3DMS.
-  //    '2.19.1.15' Bug fix: If an object has no vertices, ModelMuse no longer
-  //         attempts to use it in interpolation.
-  //    '2.19.1.16' Bug fix: Under rare circumstances, ModelMuse would
-  //         sometimes generate a bug report when a model was first opened
-  //         due to a variable not yet having been updated.
-  //       Bug fix: Fixed a bug sometimes encountered when a user attempts
-  //         to import an invalid DEM.
-  //       Bug fix: When a model contains non-simulated layers, the layer
-  //         numbers in multilayer head observations are now assigned correctly.
-  //       Enhancement: It is now possible to export MNW2 data for objects
-  //         to Shapefiles.
-  //    '2.19.1.17' Bug fix: Fixed editing of lake bathymetry file.
-  //    '2.19.1.18' Bug fix: fixed bug that caused access violations when
-  //         opening the MODFLOW Packages and Programs dialog box.
-  //       Enhancement: ModelMuse can now import MODFLOW-NWT models.
-  //    '2.19.1.19' Bug fix: Fixed bug importing Horizontal Flow Barrier
-  //         package from existing models that could result in the extra
-  //         flow barriers being included in the model.
-  //    '2.19.1.20' Enhancement: ModelMuse now compares drain elevation,
-  //         river stage and GHB head to the cell bottom elevation and
-  //         generates a warning or error message if the cell bottom elevation
-  //         is higher than the boundary value.
-  //    '2.19.1.21' Enhancement: Added support for STR and STOB packages.
-  //       Bug fix: Fixed bug that caused errors when editing the grid so that
-  //         it had only one grid line.
-  //    '2.19.1.22' Bug fix: Fixed bug in displaying Data Visualization
-  //         dialog box.
-  //    '2.19.1.23' Change: In the HYDMOD package, ModelMuse no longer
-  //         generates repeated data if two SFR reaches are in the same cell.
-  //       Enhancement: when exporting objects to shapefiles that contain
-  //         data for the MNW2 package, the time-varying data can now be
-  //         exported.
-  //    '2.19.1.24' Enhancement: Improved handling of errors in importing
-  //         DXF files.
-  //       Enhancement: MODFLOW Program Locations dialog box redesigned to
-  //         show only the programs used in the model.
-  //       Bug fix: fixed bug that caused an error when undoing a change
-  //         in the MODFLOW Packages and Programs dialog box when horizontal
-  //         flow barriers had already been defined.
-  //    '2.19.1.25' Enhancement: Added support for MODFLOW-LGR version 2.
-  //    '2.19.1.26' Bug fix: Fixed bug that caused errors when editing
-  //         objects that define SFR boundaries.
-  //    '2.19.1.27' Change: When importing existing models, the elevations
-  //         used to assign boundary conditions cells to layers are now
-  //         set to a value close to the top of the layer instead of the
-  //         center of the layer to facilitate converting the model to
-  //         a MODFLOW-LGR model.
-  //       Change: When importing existing models, objects used to define
-  //         boundaries in the CHD, RIV, DRN, DRT, and GHB packages now consist
-  //         of polygon sections rather than point sections to facilitate
-  //         converting the model to a MODFLOW-LGR2 model.
-  //       Bug fix: Fixed a bug that could cause access violation when coloring
-  //         the grid or exporting MODFLOW input files.
-  //       Enhancement: Speed up export of model input
-  //       Bug fix: Fixed bug that could cause errors when displaying values
-  //         for the Drain, GHB, or River boundaries if the corresponding
-  //         observation package is used.
-  //       Bug fix: Fixed bug that could cause circular reference errors when
-  //         interpolating data.
-  //       Bug fix: fixed bug in Natural Neighbor interpolation method that
-  //         could cause divide by zero errors.
-  //    '2.19.1.28' Change: Objects are now only allowed to assign data set
-  //         properties by interpolation if they have zero elevation formulas.
-  //    '2.19.1.29' Bug fix: Fixed import of multiplier and zone array names
-  //         when the name listed in a cluster is longer than 10 characters.
-  //    '2.19.1.30' Bug fix: Fixed bug that caused data for the SFR package to
-  //         be lost if multiple objects were edited and some of them were
-  //         defining streams in the SFR package and others were polygon
-  //         objects.
-  //    '2.19.1.31' Change: the Object Properties dialog box to uses fewer
-  //         Windows resources.
-  //    '2.19.1.32' Bug fix: Improved drawing of pathlines from MODPATH
-  //         version 6. Pathline segments are now drawn if segments that end at
-  //         the edge of either the previous or next column, row, or layer so
-  //         long as the segment crosses the current column, row, or layer.
-  //         This change also applies to MODPATH version 5 with respect to
-  //         layers but not rows or columns.
-  //    '2.19.1.33' Enhancement: Added support for the FHB package.
-  //       Bug fix: Divide by zero errors should now result in an error
-  //         message instead of a bug report.
-  //       Bug fix: Fixed importing MNW2 package from existing models when the
-  //         model contains non-simulated layers.
-  //       Bug fix: Fixed export of UZF package input when output to the
-  //         listing file is specified.
-  //    '2.19.1.34' Bug fix: Fixed export of MNW2 package in models with
-  //         non-simulated layers.
-  //    '2.19.1.35' Bug fix: Fixed bug that could cause exporting the SFR
-  //         package input file to fail.
-  //       Bug fix: Fixed bug that could make it impossible to open the
-  //         Object Properties dialog box with large models.
-  //       Bug fix: Fixed bug that could make it impossible to open objects
-  //         that define streams in the SFR package in the Object Properties
-  //         dialog box.
-  //    '2.19.1.36' Change: ModelMuse now will only generate up to 1000
-  //         error or warning messages of any one type.
-  //    '2.19.1.37' Enhancement: When importing a Surfer Grid file, the
-  //         imported data points can be filtered to reduce the number of
-  //         points imported.
-  //       Bug fix: Fixed backwards compatibility issue with SUTRA
-  //         (not in released version)
-  //    '2.19.1.38' Bug fix: Fixed display of legend for contour lines
-  //         when the contour colors are not specified directly.
-  //    '2.19.1.39' No Change.
-  //    '3.0.0.0' Bug fix: Fixed bug in interpolating.
-  //       Enhancement: Added support for SUTRA.
-  //    '3.0.0.1' Bug fix: Fixed using .ucn files to specify the initial
-  //         concentration in MT3DMS.
-  //    '3.0.0.2' Change: If the Application Directory on a computer is blocked,
-  //         ModelMuse will attempt to use the directory in which the program
-  //         is installed instead.
-  //    '3.0.0.3' no real change.
-  //    '3.0.0.4' Fixed reading certain real numbers when opening a file on
-  //         a computer in which the decimal separator is not a period.
-  //    '3.0.0.5' Fixed Checkbox bug in TRbwDataGrid4. Not in released version.
-  //    '3.0.0.6' No released changes.
-  //    '3.0.0.7' Enhancement: If the initial step size for MT3DMS is larger
-  //         than the maximum step size, the backgrounds of the cells in the
-  //         table on the MODFLOW Times dialog box are colored in red.
-  //       Bug fix: Fixed bug in display of assigned layer in the RCH, EVT,
-  //         and ETS packages.
-  //    '3.0.0.8' No released changes.
-  //    '3.0.0.9' Enhancement: The length of a MODPATH pathline is
-  //         now displayed in the Grid or Mesh Value dialog box.
-  //    '3.0.0.10' Bug fix: Fixed linkage to help system for the
-  //         SUTRA Fluid Sources pane of the Object Properties dialog box.
-  //       Bug fix: Fixed resizing panels on the Export Image dialog box.
-  //       Bug fix: The Manage Parameters dialog box now enforces the
-  //         10 character limit on parameter names instead of generating a
-  //         bug report if the number of characters in a parameter name is
-  //         greater than 10 characters.
-  //       Enhancement: ModelMuse can now paste contours from Argus ONE as
-  //         objects in ModelMuse. Only the geometry is transferred; contour
-  //         values are not transferred.
-  //    '3.0.0.11' Enhancement: ModelMuse can now use and online version of
-  //         the help.
-  //    '3.0.0.12' Bug fix: Fixed bug that could cause assertion failures
-  //         when interpolating.
-  //    '3.0.0.13' Bug fix: Fixed bug that resulting in X_Prime and Y_Prime
-  //         being exported to Shapefiles and CSV files instead of X and Y.
-  //    '3.0.0.14' bug not in released version. Bug fix: Fixed bug in labeling
-  //         headers when exporting CSV files.
-  //    '3.0.0.15' Bug fix: fixed bug that could cause an access violation when
-  //         opening one of the recently opened files listed in the File menu.
-  //    '3.0.0.16' Change: The starting unit number for GAGE, MNWI, and UZF
-  //         output files has been changed from 205 to 20205 to avoid potential
-  //         conflicts with the COC package.
-  //    '3.0.0.17' Enhancement: Added support for MODFLOW CFP.
-  //    '3.0.0.18' Bug fix: not in released version. Fixed pasting Argus ONE
-  //         contours into ModelMuse when not all the contours on a layer
-  //         were copied to the clipboard.
-  //    '3.0.0.19' Bug fix: Fixed bug that would cause and access violation if
-  //         The Mesh Information dialog box was displayed for a 3D SUTRA
-  //         mesh before any layer groups had been defined.
-  //    '3.0.0.20' Enhancement: The display of head observation residuals can
-  //         now be limited by layer.
-  //       Enhancement: The Head observation can now be exported to Shapefiles.
-  //    '3.1.0.0' Bug fix: Specifying a file of the wrong type on the command
-  //         line when starting ModelMuse no longer leads to the generation
-  //         of a bug report.
-  //    '3.1.1.0' Bug fix: Fixed bug that could cause an access violation when
-  //         opening the Object Properties dialog box.
-  //       Bug fix: Fixed using objects on the front or side views to define
-  //         pipes in MODFLOW-CFP.
-  //    '3.1.1.1' Bug fix: In the Manage Head Observations dialog box, the
-  //         Statistic was set incorrectly.
-  //       Bug fix: Fixed bug in import of 1 layer model that used parameters
-  //         in the LPF package.
-  //       Bug fix: Fixed bug in displaying the MODFLOW Packages and Programs
-  //         dialog box.
-  //       Bug fix: Fixed bug in displaying the Object Properties dialog box.
-  //       Bug fix: fixed bug that would cause access violations when
-  //         contouring data.
-  //       Change: Whenever a new version of ModelMuse is used, it will attempt
-  //         to also use the newest version of ModelMonitor.
-  //    '3.2.0.0' Enhancement: Added support for SWI2 package.
-  //    '3.2.0.1' Bug fix: In MODFLOW-LGR and MODFLOW-LGR2 models, the display
-  //         of data set values for child models when those values should be
-  //         set using parameters has been fixed.
-  //    '3.2.1.0' No additional changes.
-  //    '3.2.1.1' Bug fix: fixed bug in determining tributaries in the STR
-  //         package.
-  //       Bug fix: Fixed display of transient data when the specified time
-  //         is the first time in a stress period.
-  //       Bug fix: fixed bug that could cause ModelMuse to enter an infinite
-  //         loop when using the ACM 626 method to draw contour lines.
-  //       Bug fix: ModelMuse can now handle a data set that has an invalid
-  //         formula when first opening the model.
-  //       Bug fix: Fixed bug importing MODFLOW models containing specified
-  //         heads defined by both the CHD package and negative IBOUND values.
-  //    '3.2.1.2' Bug fix: Fixed bugs related to editing and exporting CFP
-  //         information.
-  //       Bug fix: Fixed bug the could cause and access violation when
-  //         switching to a SUTRA model.
-  //    '3.2.1.3' Bug fix: Fixed generation of time schedules in SUTRA when
-  //         one or more of the times is larger than the largest possible
-  //         single precision number.
-  //       Bug fix: Fixed export of time information for MT3DMS.
-  //       Bug fix: Fixed export of MODFLOW flow observation factors when the
-  //         formula for the factor uses the layer, row, or column number.
-  //       Enhancement: When displaying data or head observation results,
-  //         the root mean square residual is displayed in the
-  //         Data Visualization dialog box.
-  //       Enhancement: In the Show and Hide Objects, dialog box, the head
-  //         observation group name is displayed with head observations.
-  //     '3.2.1.4' Bug fix: Fixed display of Data Visualization dialog box.
-  //         (not in released version.)
-  //     '3.2.1.5' Change: The formula used for 3D data sets when importing
-  //         model results has been changed;
-  //     '3.2.1.6' Bug fix: Entering an invalid maximum or minimum value to
-  //         display in the Data Visualization dialog box no longer results
-  //         in a bug report.
-  //       Bug fix: Fixed importing model results with MODFLOW-LGR
-  //         and MODFLOW-LGR2 models.
-  //       Bug fix: If a formula for the pumping rate in a MODFLOW well results
-  //         in a math error such as a division by zero error, An error
-  //         message is displayed in the Errors and Warnings dialog box
-  //         instead of generating a bug report.
-  //     '3.2.1.7' Bug fix: ModelMuse now saves the location of MODFLOW-LGR2.
-  //     '3.2.1.8' Bug fix: Fixed bug related to editing data for
-  //         conduit recharge.
-  //     '3.2.1.9' Change: In MODFLOW-LGR and MODFLOW-LGR2 models, child
-  //         models are now only displayed on the front and side views if the
-  //         selected row or column of the parent model intersects the child
-  //         model.
-  //       Enhancement: When importing model results from MODFLOW-LGR2 models,
-  //         ModelMuse now does a better job of selecting default names for
-  //         the model result files for the child models.
-  //     '3.2.1.10' Bug fix: Fixed the process of deleting and undoing the
-  //         deletion of child models in MODFLOW-LGR and MODFLOW-LGR2.
-  //     '3.2.1.11' Bug fix: Fixed reading Shapefiles with 32-bit version of
-  //         ModelMuse. (Not broken in 64-bit version.)
-  //     '3.2.1.12' Bug fix: In the Global Variables dialog box, clicking
-  //         where there isn't a cell, no longer causes an error.
-  //       Bug fix: Fixed drawing fishnet mesh elements in SUTRA models.
-  //       Bug fix: Fixed drawing objects in 2D SUTRA models.
-  //     '3.2.1.13' Enhancement: VertexValue function added.
-  //       Bug fix: Fixed export of FHB package input file when only flows
-  //         or only heads were specified in the package.
-  //       Bug fix: Fixed specification of FHB flow and head values to allow
-  //         formulas to be used for the flows or heads.
-  //     '3.2.1.14' Bug fix: Fixed import of models in which routing to
-  //         steams or lakes is defined in the UZF package but the lake and SFR
-  //         packages are not active.
-  //       Enhancement: added a method for importing multiple gridded data
-  //         files at one time.
-  //       Bug fix: fixed a bug that incorrectly prevented the deletion of
-  //         selected points from complicated polygon objects.
-  //     '3.2.1.15' Enhancement: Added the capability to import quadrilateral
-  //         meshes generated by Argus ONE for use in SUTRA.
-  //     '3.2.1.16' Bug fix: (not in released version) Fixed enabling import
-  //         of SUTRA mesh.
-  //     '3.2.1.17' Bug fix: Fixed import of MODFLOW models containing the
-  //         SFR input files that use external flow files.
-  //     '3.2.1.18' Bug fix: Fixed visualization of boundary conditions in
-  //         SUTRA models.
-  //     '3.2.1.19' Enhancement: Added ability to display labels with objects.
-  //       Enhancement: Added a plot of simulated versus observed values for
-  //         head observation results.
-  //     '3.2.1.20' Bug fix: in some cases creating a contour plot of SUTRA
-  //         data caused ModelMuse to crash.
-  //       Enhancement: Creating contour plots of SUTRA data is faster.
-  //     '3.2.1.21' Bug fix: Fixed display of vectors in SUTRA.
-  //       Bug fix: Fixed generation of error message is an invalid formula
-  //         is used with SUTRA boundary conditions.
-  //     '3.2.1.22' Bug fix: Cross sections no longer plot heads equal to HDRY
-  //         in MODFLOW models.
-  //     '3.2.1.23' No real change.
-  //     '3.2.1.24' Bug fix: not in released version. Fixed plotting
-  //         cross sections for 2D data sets.
-  //     '3.2.1.25' Bug fix: Fixed vertical exaggeration in top view when
-  //         switching from a SUTRA profile model to any other sort of model.
-  //       Bug fix: Fixed range check error when editing SUTRA boundary
-  //         conditions.
-  //     '3.2.1.26' Bug fix: Fixed bug that could cause an assertion failure
-  //         when assigning values to a data set.
-  //     '3.2.1.27' Bug fix: Attempting to export a Shapefile when the
-  //         database file is in use, now results in an error message to the
-  //         user instead of a bug report.
-  //     '3.2.1.28' Bug fix: Fixed bug that could cause a range check error
-  //         in SUTRA models with large numbers of nodes.
-  //     '3.2.1.29' Enhancement: Improved speed of displaying object properties
-  //         for SUTRA models in the Object Properties dialog box.
-  //     '3.2.1.30' Change: ModelMuse no longer checks for certain
-  //         discrepancies in the SFR package input files when importing
-  //         existing models. The change allows such models to be imported
-  //         for the purpose of visualizing them. However, it will not be
-  //         possible to run such models from ModelMuse until the discrepancies
-  //         are resolved.
-  //     '3.2.1.31' Enhancement: Added support for importing model results data
-  //         from .bcof, .bcos, .bcop, or .bcou SUTRA output files into
-  //         ModelMuse.
-  //     '3.2.1.32' Enhancement: Added support for the Surface Water Routing
-  //         process (SWR).
-  //     '3.2.1.33' Minor bug fixes not in released version.
-  //     '3.2.1.34' Bug fix: not in released version. Fixed import
-  //         from .bcof, .bcos, .bcop, or .bcou SUTRA output files
-  //         when more than one time step was selected.
-  //     '3.2.1.35' Bug fix: Attempting to import a locked Shapefile now
-  //         results in an error message to the user rather than a bug report.
-  //     '3.2.1.36' Bug fix: When importing existing models, cell top and
-  //         bottom elevations are now imported correctly.
-  //     '3.2.1.37' Enhancement: When importing model results for a MODFLOW
-  //         model, it is now possible to select all the data of a certain
-  //         type or a certain time step by checking a single check box.
-  //     '3.2.1.38' Enhancement: When importing existing MODFLOW models that
-  //         have invalid tributary numbers in the STR package, ModelMuse
-  //         now generates a warning message to the user instead of a bug
-  //         report.
-  //     '3.2.1.39' Bug fix: Importing stream observations from existing models
-  //         now works correctly when the same segment is part of more than
-  //         one observation.
-  //     '3.2.1.40' Enhancement: If there is an error importing and existing
-  //         MODFLOW model, the error message dialog box will show the console
-  //         lines generated by MODFLOW importing program as an aid to
-  //         diagnosing the problem.
-  //       Bug fix: Fixed editing of SFR channel data when a cross section
-  //         was not required.
-  //     '3.2.1.41' Bug fix: Fixed bug in importing existing models with
-  //         multilayer head observations.
-  //       Bug fix: Fixed bug that could cause ModelMuse to crash because of
-  //         a stack overflow.
-  //     '3.2.1.42' Enhancement: Improved checking of layer heights in MODFLOW
-  //         models.
-  //       Bug fix: Fixed a bug that could cause a stack overflow when closing
-  //         ModelMuse.
-  //       Bug fix: Sometimes it is impossible to save a very large model as
-  //         a ModelMuse text file (.gpt). Now, if an error occurs in
-  //         converting the file from the binary to the text format, the user
-  //         is prompted to save the file as a binary file.
-  //       Bug fix: Output files from MODPATH version 5 are now archived.
-  //     '3.3.0.0' Enhancement: The Global variables dialog box has been
-  //         converted to a non-modal dialog box.
-  //     '3.3.0.1' Bug fix: It is now possible to paste data from the clipboard
-  //         into a table in the "Import Gridded Data" dialog box when the
-  //         data set into which the data is imported is a boolean data set.
-  //       Bug fix: A corrupted name for MODFLOW or another model no longer
-  //          prevents the MODFLOW Program Locations dialog  box from being
-  //          opened.
-  //     '3.3.0.2' Bug fix: (Not in released version). Fixed bug in setting
-  //         formulas for objects that define SFR streams and MNW2 wells.
-  //     '3.3.0.3' Bug fix: When the user imports a mesh, the mesh may have
-  //         errors in it such as nodes that are not part of any element or
-  //         elements whose nodes are in a clockwise rather than
-  //         counterclockwise orientation. ModelMuse now fixes such errors.
-  //       Bug fix: ModelMuse now displays an error message instead of
-  //         generating a bug report when attempting to import a raster
-  //         file before generating a grid or mesh.
-  //     '3.3.0.4' Bug fix: Fixed bug that could cause the SUTRA mesh to be
-  //         corrupted if it was renumbered.
-  //       Bug fix: Fixed bug that could cause an access violation when
-  //         clicking on the graph of head observation results.
-  //     '3.3.0.5' Bug fix: fixed bug that could cause an assertion failure
-  //         when editing an object with corrupted or missing imported values.
-  //     '3.3.0.6' Bug fix: Fixed bug when attempting to import a model from a
-  //         directory in which the user does not have write privileges.
-  //     '3.3.0.7' Bug fix: Fixed bug that would cause an access violation in
-  //         the Global Variables dialog box if it wasn't closed after
-  //         clicking the Apply button.
-  //     '3.3.0.8' Bug fix: Fixed bug that could cause and assertion failure
-  //         in models with a stress period with a length of zero.
-  //       Bug fix: During grid generation, if the number of cells is too large,
-  //         an error message will be displayed and grid generation will be
-  //         canceled.
-  //       Enhancement: During grid generation, if the number of cells in
-  //         the new grid will be larger than 1,000,000, a warning message
-  //         will be displayed and the user will be give an opportunity to
-  //         cancel grid generation.
-  //     '3.3.0.9' Enhancement: The user can now specify the spacing between
-  //         contours labels.
-  //       Enhancement: The user can now control the spacing of contour labels.
-  //       Enhancement: In the Export Image dialog box, the font used for the
-  //         scale can be changed.
-  //       Bug fix: In the Export Image dialog box, contour labels are now
-  //         drawn over the entire image.
-  //     '3.3.0.10' Enhancement: Added support for generating meshes for SUTRA
-  //         using Gmsh.
-  //     '3.3.0.11' Bug fix: Fixed bug importing the the reach length in the
-  //         SFR package in models in which some reaches in segments with
-  //         multiple reaches were on a different layer from other reaches.
-  //       Bug fix: Fixed a bug that could cause access violations when
-  //         exporting the SFR input file.
-  //       Bug fix: Fixed a bug that could cause data set values to be
-  //         calculated incorrectly  or a variety of other errors due to
-  //         mishandling of temporary files.
-  //       Enhancement: ModelMuse now warns about linkages between SFR
-  //         segments that are separated by more than one row or column.
-  //       Bug fix: Fixed bug that could cause program locations to incorrectly
-  //         revert to their default values.
-  //    '3.4.0.0' Enhancement: ModelMuse will now warn the user if no values
-  //         are assigned for some types of data that vary with time.
-  //       Bug fix: Fixed bugs that could cause access violation in the
-  //         Object Properties dialog box when editing streams in the SFR
-  //         package in MODFLOW.
-  //      Enhancement: Support for the MNW1 package added.
-  //      Bug fix: If values are entered in the time step length calculator
-  //        that result in a math error, the time step length is now set to
-  //        zero and an error message is displayed instead of a bug report
-  //        being generated.
-  //    '3.4.0.1' Change: Internally, the export of the RES package was changed
-  //        to improve the time required to export it in models with multiple
-  //        stress periods.
-  //    '3.4.0.2' Bug fix: Sometimes it was impossible to edit objects that
-  //        defined SFR stream boundaries because of extra information included
-  //        in the stream boundaries.
-  //      Bug fix: Selecting "File|New|MODFLOW Model" after importing an
-  //        existing model no longer causes an access violation.
-  //    '3.4.0.3' Bug fix: Fixed bug that would occasionally  cause access
-  //        violations when contouring data.
-  //    '3.4.0.4' Bug fix: ModelMuse can now handle SUTRA models with more
-  //        than 1,000,000 nodes.
-  //      Enhancement: ModelMuse can now import MODFLOW models in which
-  //        the U2DREL subroutine reads a value of NAN. The NAN is converted
-  //        to zero.
-  //      Enhancement: ModelMuse can now export a 2D SUTRA mesh for use in
-  //        other programs. To export the mesh, select
-  //        "File|Export|SUTRA 2D Mesh."
-  //      Enhancement: When importing a mesh from Gmsh that contains triangular
-  //        elements, the locations of the triangular elements is reported in
-  //        the Errors and Warnings dialog box.
-  //    '3.4.0.5' Bug fix: Fixed bug that could sometimes cause an access
-  //        violation when drawing the grid.
-  //    '3.4.0.6' Bug fix: ModelMuse can not run MODFLOW properly when the
-  //        model file name or directory contains non-ASCII characters.
-  //      Enhancement: ModelMuse will prompt you to save your file once each
-  //        hour.
-  //      Enhancement: When the user edits the times in the MODFLOW Time
-  //        dialog box, the times defined by MODFLOW boundary conditions
-  //        will be modified to match those times.
-  //      Bug fix: Fixed import of existing models that use the SFR package
-  //        with parameters and external flow files.
-  //      Bug fix: Fixed import of MNW1 input file when a unix-style path
-  //        name is specified for an output file.
-  //      Bug fix: Fixed import of SWR input files with structure observations
-  //        or when certain transient data are reused.
-  //      Bug fix: Fixed bug in exporting
-  //        Shapefiles that could cause exported Shapefiles to have duplicate
-  //        attribute names.
-  //      Bug fix: Fixed bug in contouring or coloring the grid with a text
-  //        data set in a SUTRA model.
-  //      Bug fix: Fixed bug in generating contours with SUTRA.
-  //      Bug fix: Fixed bug in exporting mesh data Shapefiles with SUTRA
-  //        that would prevent attribute values from being assigned.
-  //    '3.4.0.7' Enhancement: When a data set value is assigned using the
-  //        "Nearest" or "Nearest Point" interpolation methods, the
-  //        explanation of the data set value will identify the object that
-  //        is used to assign the value.
-  //      Bug fix: Fixed bug in generating finite element mesh.
-  //    '3.4.0.8' Bug fix: Fixed bug importing the STR package when invalid
-  //        stream tributaries are assigned.
-  //      Enhancement: If ModelMuse runs out of memory when trying to save
-  //        a .gpt or .xml file, the user will be instructed to save the file
-  //        as a .mmZlib or .bin file.
-  //      Enhancement: When evaluating data for the Stream (STR) package,
-  //        ModelMuse will now issue a warning if adjacent reaches in a segment
-  //        are separated by more than one cell or if the last reach in a
-  //        tributary segment is separated by more than one cell from the
-  //        first reach in the segment into which it flows.
-  //    '3.4.0.9' Bug fix: Fixed bug that would cause access violations when
-  //        deleting nodes from SUTRA meshes.
-  //    '3.4.0.10' Bug fix: Fixed bug importing the STR package when the
-  //        locations of the streams changed between stress periods.
-  //    '3.4.0.11' Bug fix: Fixed bug with manually drawing new SUTRA elements.
-  //    '3.4.0.12' Bug fix: Fixed bug that would cause an error if the mouse
-  //        wheel is used
-  //      Bug fix: In SUTRA models, times for boundary conditions or
-  //        observations that are after the final time are no longer included
-  //        in the TIME_STEPS time schedule.
-  //      Bug fix: Fixed bug that would occasionally cause access violations
-  //        when drawing the selected row and column with the
-  //        "Select Column, Row, or Layer" tool selected.
-  //    '3.4.0.13' Enhancement: In the "Show or Hide Objects" dialog box,
-  //        a "Go to" menu item has been added to the popup menu. Selecting
-  //        will move the view to the object.
-  //      Bug fix: Fixed export to ModelMate when STR parameters are defined.
-  //    '3.4.0.14' Enhancement: Improved error checking in SFR and STR packages.
-  //      Enhancement: ModelMuse can now import many MODFLOW-2000 models.
-  //        However, MODFLOW-2000 models that use the Observation process
-  //        generally can not be imported until all the files for the
-  //        Observation process are commented-out in the name file.
-  //      Bug fix: Multinode wells in the MNW2 package were not placed in the
-  //        correct cell if the LOSSTYPE was set to None.
-  //    '3.4.0.15' Bug fix: Fixed import of MODFLOW models using the SFR
-  //        package when the option to simulate unsaturated flow beneath a
-  //        stream is selected.
-  //    '3.4.0.16' Bug fix: Fixed export of SWR input files when tab files are
-  //        not used.
-  //    '3.4.0.17' Bug fix: Fixed bug that would sometimes cause data set
-  //        values not to be updated when they needed to be.
-  //    '3.5.0.0' Enhancement: Support for the Farm Process in MODFLOW-OWHM
-  //        added.
-  //    '3.5.1.0' Bug fix: Support for the Farm Process in MODFLOW-OWHM
-  //        activated.
-  //      Enhancement: LSTLVL option in MODFLOW-OWHM added.
-  //      Enhancement: PROPPRINT option in MODFLOW-OWHM added.
-  //      Enhancement: Support for Internal Coordinate System" option
-  //        in MODFLOW-OWHM added.
-  //      Bug fix: Fixed access violation that occurred when coloring the
-  //        initial water table data set in PHAST.
-  //      Bug fix: Fixed access violation that occurred with SUTRA models when
-  //        changing the selected layer with the keyboard.
-  //    '3.5.1.1' Bug fix: In steady-state PHAST models, the minimum and
-  //        maximum step sizes can now be less than 1.
-  //      Bug fix: When exporting 3D grid data to a Shapefile, data for the
-  //        last layer was saved as the data for the first layer and no other
-  //        data was saved. This has been fixed.
-  //    '3.5.1.2' Bug fix: Renaming a child model caused an access violation
-  //        if the child model used MT3DMS.
-  //    '3.5.1.3' Bug fix: Use LMG7 instead of LMG6 for the link to MT3DMS in
-  //        MODFLOW-LGR version 2.
-  //    '3.5.1.4' Bug fix: Fixed a bug setting the layer in a model in which
-  //        a child model has been defined but the model selection is no longer
-  //       one that includes child models.
-  //    '3.5.1.5' Enhancement: When exporting the MODPATH data sets, and error
-  //        message will be displayed if a reference is before the beginning
-  //        of the model or after the end.
-  //      Enhancement: In the Errors and Warnings dialog box, a context menu
-  //        has been added allowing the user to select, edit or go to
-  //        objects related to an error or warning message.
-  //      Enhancement: In the Manage Flow Observations dialog box, a context
-  //        menu has been added allowing the user to select, edit or go to
-  //        objects related to a particular observation.
-  //    '3.5.1.6' Bug fix: Fixed bug related to attempts to access directories
-  //        that don't exist.
-  //      Bug fix: ModelMuse no longer prompts the user to save the
-  //        file once an hour because it was causing ModelMuse to hang.
-  //    '3.5.1.7' Bug fix: When importing the LPF or UPW package input,
-  //        parameters that use multiple clusters for the same layer are now
-  //        imported correctly.
-  //      Enhancement: In the two Stream links panes of the Data Visualization
-  //        dialog box, a new control "Square size" has been added. It controls
-  //        the sizes of squares used to represent links between segments when
-  //        the two ends of the link are both in the same cell.
-  //      Bug fix: When importing Shapefiles of MODFLOW boundary conditions,
-  //        there is no longer an access violation if there are solutes defined
-  //        in Mt3DMS but the Source and Sink Mixing package has not been
-  //        activated.
-  //    '3.5.1.8' Bug fix: Attempting to read a MODPATH pathline file that
-  //        lacks a proper heading line now results in an error message instead
-  //        of causing ModelMuse to hang.
-  //      Bug fix: Fixed bug that would cause an assertion failure when
-  //        generating a finite element mesh in SUTRA.
-  //      Bug fix: Fixed bug that would cause an access violation error in
-  //        SUTRA models when attempting to edit multiple objects when captions
-  //        should be visible for the objects.
-  //      Change: When importing Cell-by-cell flow files, ModelMuse will ask
-  //        the modeller what the precision is used in the files is if it can't
-  //        determine that by itself.
-  //    '3.5.1.9' Bug fix: Fixed bug that would allow the user to define a
-  //        lake with a Lake ID of zero.
-  //   '3.5.1.10' Bug fix: Fixed bug that caused an error when withdrawing
-  //        water from a well.
-  //   '3.6.0.0' Bug fix: Attempting to use an empty .ucn file to assign
-  //        initial concentration will now result in an error message instead
-  //        of a bug report.
-  //      Bug fix: When importing an existing model, the import of diversions
-  //        in the STR package has been fixed.
-  //      Bug fix: Attempting to edit farms in MODFLOW-OWHM before defining
-  //        at least one crop is no longer allowed.
-  //   '3.6.0.1' Bug fix: Prevent objects from setting layer data sets in
-  //        MODFLOW models if they are 3D objects.
-  //      Bug fix: Fixed import of t-progs integer data.
-  //   '3.6.0.2' Bug fix: Because Infiltration and evapotranspiration in the
-  //        UZF package can only be defined on the top view of sthe model, the
-  //        Object Properties dialog box will no longer present UZF as an
-  //        option for objects on the front or side view of the model.
-  //      Change: The labeling of flow the the object properties dialog box
-  //        for the FHB package has been improved.
-  //      Bug fix: In the Object Properties dialog box, the images for MODPATH
-  //        are hidden if the Microsoft OpenGL driver is used. This avoids
-  //        causing an exception which will crash ModelMuse.
-  //      Bug fix: Fixed warning messages when importing an existing MODFLOW
-  //         model using parameters and instances in the SFR package.
-  //   '3.6.0.3' Bug fix: Fixed a bug that could sometimes cause a stack
-  //        overflow.
-  //      Bug fix: Fixed bug that would cause an access violation if the
-  //        Stream package was activated but no streams had been defined.
-  //      Bug fix: When attempting to open ModelMuse file fails, a more
-  //        appropriate error message is displayed to the user.
-  //      Bug fix: Fixed bug that could cause divide by zero errors when
-  //        using the Fishnet Mesh method to generate a mesh in SUTRA.
-  //      Bug fix: The starting locations of MODPATH particles were reversed
-  //        from front to back.
-  //      Enhancement: Enhanced error checking in the Stream (STR) package.
-  //      Enhancement: Improved import of MODFLOW-2000 and SEAWAT models.
-  //      Bug fix: Fixed labeling of MXACTW IWELCB in comments in the WEL
-  //        package.
-  //      Bug fix: Fixed bug in specifying the location of head observations
-  //        when the object defining the observation extends over multiple
-  //        layers and includes inactive cells.
-  //      Enhancement: When importing the STR package, stream connections from
-  //        segments with higher segment numbers to segments with lower
-  //        segment numbers are imported.
-  //   '3.6.0.4' Enhancement: Added additional error checking for the GHB, RIV,
-  //        DRN, DRT, STR, SFR, LPF, UPW, BCF and HUF packages.
-  //      Bug fix: Fixed bug that could cause ModelMuse to crash when drawing
-  //        contour lines using the ACM 626 method.
-  //   '3.6.0.5' Bug fix: Fixed bug in editing the times in MODFLOW models if
-  //        initial time step size is specified.
-  //      Bug fix: (bug not in released version.) Fixed access violation when
-  //        checking GHB, RIV, DRN, and DRT packages that use parameters.
-  //   '3.6.0.6' Bug fix: Improved work-around to prevent the Microsoft OpenGl
-  //        driver from causing the 64-bit version of ModelMuse to crash.
-  //   '3.6.0.7' Enhancement: In the Export Image dialog box, it is now possible
-  //        to copy the the current settings to the clipboard and paste them
-  //        from the clipboard into the dialog box. This allow the settings
-  //        to be transfered from one model to another.
-  //      Bug fix: Fixed bug that would cause a a bug report to be generated
-  //        when changing the number of Z formulas to use with an object and
-  //        one of the new Z formulas was invalid.
-  //   '3.6.0.8' Enhancement. Attempting to read an empty results file will
-  //        result in an error message rather than a bug report.
-  //      Bug fix: Fixed bug that could cause a range check error if no grid
-  //        had been created and the mouse was moved or the front or side
-  //        view of the model.
-  //   '3.6.0.9' Bug fix: ModelMuse can now read the zeta surface if only
-  //        one zeta surface has been calculated.
-  //   '3.6.0.10' Updated VirtualStringTree and MadExcept.
-  //   '3.6.0.11' Bug fix: Fixed export of ModelMate file when the ModelMate
-  //        file of the model is in a different directory from the ModelMuse
-  //        file.
-  //   '3.6.0.12' Bug fix: Fixed appearance of the Import Ascii Raster File
-  //        dialog box.
-  //      Bug fix: Fixed import of pump location in the MNW2 package.
-  //   '3.6.0.13' Enhancement: Added ability to visualize Transport observations
-  //        in MT3DMS.
-  //   '3.6.0.14' Bug fix: Duplicate segment numbers in the SFR package will
-  //        now result in an error message to the user instead of a bug report.
-  //   '3.6.1.0' Bug fix: Fixed renumbering the SUTRA mesh when using the Gmsh
-  //        to create the mesh with 3D models.
-  //   '3.6.1.1' Bug fix: When checking whether an updated version of ModelMuse
-  //        exists, ModelMuse now clears the related cache entry before
-  //        attempting to read the file from the internet.
-  //      Enhancement: ModelMuse will now issue an error message if a flow
-  //        observation is defined but no flow boundary conditions are part
-  //        of the flow observation.
-  //      Bug fix: Fixed bug in drawing contours in data sets with very
-  //        large values.
-  //   '3.6.1.2' Bug fix: Fixed a bug that could cause access violations when
-  //        drawing selected rows or columns in the front or side views.
-  //   '3.6.1.3' Bug fix: Fixed a bug that could cause values to be assigned
-  //        to the wrong cells in MODFLOW models with polygon objects that
-  //        set values of assigned cells and that use formulas to set the
-  //        bottom or top elevations to a value that is different from the
-  //        elevations of the bottom of a layer group or the top of the model.
-  //      Enhancement: Added the ability to import mesh data for SUTRA from
-  //        a list of values associated with node or element numbers.
-  //      Enhancement: In the "Specify Mesh" dialog box, it is now possible
-  //        to drag the rows for the elements into new positions to change
-  //        the element order.
-  //   '3.6.1.4' Enhancement: In the Manage Head Observations dialog box, it is
-  //        now possible to copy multiple cells from a spread sheet and paste
-  //        into the table of observations.
-  //   '3.6.1.5' Bug fix: Fixed bug in checking certain boundary conditions when
-  //        parameters are defined.
-  //   '3.6.1.6' Enhancement: Added a dialog box to convert values from
-  //        one time unit to another.
-  //      Bug fix: It is no longer possible to name a data set the same name
-  //        as one of the functions supported by ModelMuse.
-  //   '3.6.1.7' Bug fix: Fixed bug that could cause incorrect values to be
-  //        assigned with the ObjectIntersectLength function on the edge of a
-  //        SUTRA mesh.
-  //   '3.6.1.8' Bug fix: Fixed bug that could cause intersections between
-  //        objects and the cell around a node to not be recognized if the
-  //        object was perfectly vertical or horizontal.
-  //      Enhancement: The Edit Feature Formula dialog box can now be used to
-  //        assign a new formula to the selected property of a model feature
-  //        in multiple objects.
-  //   '3.6.1.9' Enhancement: Added method for plotting well "footprint".
-  //   '3.6.1.10' Enhancement: Additional error checking in several MODFLOW
-  //        packages.
-  //      Enhancement: New interpolation method "Point Average" added. The
-  //        new interpolator returns the mean of all the points in a cell
-  //        or element. If no points are in the cell or element, it returns
-  //        zero.
-  //   '3.6.1.11' Enhancement: It is now possible to label object vertices.
-  //   '3.6.1.12' Bug fix: Fixed import of Recharge package when multiple
-  //        clusters are used with a parameter.
-  //   '3.6.1.13' Bug fix: Fixed bug in Natural Neighbor interpolator when
-  //        a data point is at a location just slightly different
-  //        from the location where a value is required.
-  //   '3.6.1.14'
-  //   '3.6.1.15'
-  //   '3.6.1.16' Bug fix: Fixed bug in enabling the export of MODPATH
-  //        results to Shapefiles.
-  //   '3.6.1.17' Bug fix: Fixed selecting column, row, or layer with
-  //        Model Cube.
-  //      Bug fix: Fixed bug that caused an error if the user attempted to
-  //        activate an MNW1 well without defining any pumping periods.
-  //      Bug fix: Fixed a bug in which undoing the deletion of a parameter
-  //        did not work correctly.
-  //    '3.6.1.18' Bug fix: Fixed reading formatted head and drawdown files
-  //        that contain values less than or equal to 1e-100 or greater than
-  //        or equal to 1e100;
-  //      Enhancement: When exporting Shapefiles of pathlines or endpoints,
-  //        the particle number is now one of the fields exported.
-  //    '3.6.1.19' Bug fix: Fixed export of SWR channels when a single object
-  //        enters a cell twice.
-  //    '3.6.1.20' Bug fix: not in released version. Fixed export of pathline
-  //        particle index
-  //    '3.6.1.21' Bug fix: Fixed access violation if the user attempted to
-  //        paste more rows of data into the "Imported Data" tab of the Object
-  //        properties dialog box than there were rows in the table.
-  //      Bug fix: Fixed bug that prevented a child model from being run
-  //        independently from the parent model in MODFLOW-LGR2
-  //        and MODFLOW-OWHM.
-  //    '3.6.1.22' Failed Bug fix: Fixed bug that could cause and assertion
-  //        failure when interpolating data set values with an anisotropy
-  //        not equal to 1.
-  //      Enhancement: When exporting data to CSV files, exporting the location
-  //        and cell, node, or element is now optional.
-  //    '3.6.1.23' Bug fix: Fixed export of SWR when a reach geometry is unused.
-  //    '3.6.1.24' Bug fix: when edit the SUTRA mesh in the Specify Mesh dialog
-  //        box, nodes that are not used are now deleted.
-  //      Bug fix: Fixed bug that could cause and assertion failure
-  //        when interpolating data set values with an anisotropy not equal
-  //        to 1.
-  //    '3.6.1.25' Bug fix: Fixed a bug in the export of data sets to
-  //        Shapefiles that would cause an access violation.
-  //    '3.6.1.26' Bug fix: Fixed bug that caused the SSM file to be written
-  //        incorrectly in models using the MNW1 or MNW2 packages.
-  //      Bug fix: Fixed bug in ModelMonitor that caused access violations
-  //        when used with SWR.
-  //      Bug fix: Fixed bug that caused the explanations for some data assigned
-  //        for the SWR package to be incomplete.
-  //    '3.6.2.0' No additional changes.
-  //    '3.6.2.1' Bug fix: Zonebudget composite zone names are no longer allowed
-  //        to be more than 10 characters long.
-  //      Bug fix: Fixed bug that could cause incorrect drain, river, DRT,
-  //        or GHB boundaries to be exported for MODFLOW-NWT if observations
-  //        were used with them.
-  //    '3.6.2.2' Bug fix: Fixed export of MT3DMS SSM data set 7 for MNW2 wells
-  //        with vertical screens defined.
-  //    '3.6.2.3' Bug fix: Fixed import of FHB package when only a single time
-  //        is defined.
-  //      Bug fix: fixed ability to use global variable in formulas with
-  //        child models in MODFLOW-LGR models.
-  //      Enhancement: Added two new functions related to MODFLOW_LGR:
-  //        Horizontal_Subdivision and Vertical_Subdivision. The return
-  //        values of NCPP and NCPPL respectively for the child models
-  //        and 1 for parent models.
-  //    '3.6.2.4' Enhancement: When exporting an image, all elements of the
-  //        image except background images can now be exported as vector
-  //        graphics by selecting "Pure Vector Graphics (*.emf)" as the
-  //        image type when saving the image. Such images do not support
-  //        partial transparency, line thicknesses different from 1, and dashed
-  //        lines so the resulting images will typically not be identical
-  //        with what would be seen in ModelMuse.
-  //    '3.6.2.5' Enhancement: In the LPF and UPW packages, a warning is issued
-  //        for most properties if a zero value is encountered in an
-  //        active cell.
-  //      Bug fix: Fixed an bug in drawing the 3D view that could cause a
-  //        divide by zero error.
-  //      Enhancement: ModelMuse now issues an error message if an SWR structure
-  //        is defined between reaches that are not connected.
-  //    '3.6.2.6' Bug fix: Fixed deletion of SWR structures.
-  //      Bug fix: Fixed evaluation of objects in MODFLOW and PHAST models that
-  //        have two elevation formulas and assign cell values of both enclosed
-  //        and intersected cells.
-  //    '3.6.2.7' Enhancement: The Grid and Mesh Values dialog box now can
-  //        display data regarding the SWR reaches and structures at the
-  //        cursor location.
-  //      Enhancement: When importing SWR model results, the data sets
-  //        now display the average of all the reach values in the cell.
-  //        The individual values for reaches are displayed in the
-  //        explanation in the Grid and Mesh Values dialog box.
-  //    '3.6.2.8' Bug fix: Fixed bug that could cause access violations when
-  //        the Grid or Mesh Value dialog box was being used with an LGR model.
-  //      Enhancement: Added SelectedCount function. It returns the number
-  //        of cells, nodes, or elements intersected or enclosed by an
-  //        object.
-  //      Bug fix: Incorrect manual SWR reach numbering now results in an
-  //        error message displayed to the user instead of a bug report.
-  //    '3.6.2.9' Enhancement: A new method (Overlapping reaches) for defining
-  //        links between SWR reaches has been added. With this method, the
-  //        user selects another object. Links will be created between reaches
-  //        defined by the other object that are in the same cell as reaches
-  //        defined by the current object.
-  //    '3.6.2.10' Bug fix: Using SWR data sets that do not have a value
-  //        defined for every cell in the formula for another data set no
-  //        longer causes an assertion failure. For locations where no value
-  //        is defined, the value used will be the formula if the formula
-  //        is a number or zero if the formula is not a number.
-  //    '3.6.2.11' Enhancement: ModelMuse can now import existing MODFLOW models
-  //        in which the grid origin is in the lower left corner instead of
-  //        the upper left corner.
-  //    '3.6.2.12' Bug fix: Fixed bug that could cause access violations when
-  //        opening a ModelMuse file while another file is already open.
-  //      Bug fix: When the Formula editor is displayed from the Import
-  //        Shapefile dialog box, the data sets are now classified instead
-  //        of listed alphabetically.
-  //      Enhancement: You can now use the middle mouse button to pan the
-  //        model view while in the middle of doing something else.
-  //      Bug fix: Fixed bug that caused duplicate time steps to be included
-  //        in SUTRA time schedules.
-  //    '3.6.2.13' Change: Stack size increased from 1048576 to 8388608.
-  //    '3.6.2.14' Bug fix: Fixed writing SUTRA transient data when nothing
-  //        has changed between two times.
-  //    '3.6.2.15' Bug fix: Fixed a bug in which a math error occurred when
-  //        attempting to display an object.
-  //    '3.6.2.16' Bug fix: (not in released version). Fixed bug in calculation
-  //        of SWR connections between overlapped reaches.
-  //    '3.6.2.17' Bug fix: Fixed bug that could cause the
-  //        ObjectIntersectLength function to return the wrong value if called
-  //        more than once in the same formula.
-  //    '3.6.2.18' Bug fix: Fixed bug that could cause an access violation when
-  //        editing an object in which gages were defined.
-  //    '3.6.2.19' Bug fix: Fixed bug that did not specify the initial values
-  //        of the boundary condition variables correctly in the main input
-  //        file when time varying boundaries were used.
-  //    '3.6.2.20' Enhancement: A new command line option has been added:
-  //        "-il <filename>" will cause ModelMuse import the last data set
-  //        in filename. This option will only work with MODFLOW models.
-  //        The data in filename must be consistent with the discretization
-  //        in the MODFLOW model.
-  //    '3.6.2.21' Enhancement: A new command line option has been added:
-  //        "-ia <filename>" will cause ModelMuse import all the data sets
-  //        in filename. This option will only work with MODFLOW models.
-  //        The data in filename must be consistent with the discretization
-  //        in the MODFLOW model.
-  //    '3.6.3.0' Bug fix: Fixed bug that could cause importing data from
-  //        cell-by-cell flow files to take a long time.
-  //    '3.6.3.1' Enhancement: Added options to import gridded data to a child
-  //        grid in the "File|Import|Gridded Data" and the
-  //        "File|Import|Gridded Data Files"
-  //        dialog boxes.
-  //    '3.6.3.2' Bug fix: Attempting to import a Surfer grid file in a model
-  //        that lacks a grid no longer causes an access violation.
-  //      Bug fix: Fixed bug that could cause floating point overflows when
-  //        changing the layer type in a MODFLOW-LGR model.
-  //      Bug fix: Fixed bug that could cause a circular reference
-  //        error when editing the grid.
-  //    '3.6.3.3' Bug fix: Fixed bug that could cause an access violation
-  //        when displaying the MODFLOW Packages and Programs dialog box.
-  //      Enhancement: It is now possible to hide everything except the legend
-  //        on the Data Visualization dialog box and then resize the dialog
-  //        box to a smaller size.
-  //      Enhancement: Objects now have a "Minimum cell fraction" property.
-  //        Objects with a total length greater than zero that assign properties
-  //        of intersected cells will only do so if the length of intersection
-  //        is greater than the specified fraction of the cell or element size.
-  //      Bug fix: Fixed bug in evaluation of SpecifiedHeadOnLayer function
-  //        when no specified head package is active.
-  //    '3.6.3.4' Bug fix: Fixed bug that caused an error if an invalid formula
-  //        was used in a SUTRA boundary condition.
-  //      Enhancement: When importing MODFLOW model results, the user can now
-  //        specify the name of the group containing the data sets and can
-  //        specify a prefix for the data sets names. If this option is used,
-  //        the "Delete Model Results" command will not affect the newly
-  //        imported data sets.
-  //      Bug fix: Fixed classification of data set created by importing a
-  //        Surfer grid file.
-  //    '3.6.3.5' Bug fix: Fixed bug that caused access violations if FHB
-  //        times were specified that were after the last time in the model.
-  //      Enhancement: It is now possible to change the order of the imported
-  //        images in the Show or Hide Images dialog box by dragging the image
-  //        to a new position in the list.
-  //    '3.6.3.6' Enhancement: Added error checking for SWR tab files that are
-  //        missing a file name.
-  //      Change: Real numbers and integers in printed by ModelMuse in MODFLOW
-  //        and SUTRA input files now have consistent spacing.
-  //      Enhancement: Additional error checking for SFR segments that are on
-  //        multiple layers in the same row and column or that are in
-  //        confined layers when unsaturated flow beneath streams is simulated.
-  //    '3.6.3.7' Enhancement: In the MODFLOW Packages and Programs dialog box,
-  //        expanding one of the nodes in the tree-view control automatically
-  //        causes the first selected package or program under that node to be
-  //        the selected node in the tree-view control.
-  //      Change: (not in released version) In footprint code, the user can
-  //        specify a minimum depth-rate index.
-  //    '3.6.3.8' Bug fix: Fixed bug that caused an assertion failure when
-  //        attempting to generate a fishnet mesh using a triangular
-  //        fishnet-mesh quadrilaateral.
-  //    '3.6.3.9' Bug fix: Fixed bug that caused access violations when editing
-  //        SUTRA boundary conditions.
-  //    '3.6.3.10' Bug fix: Fixed bug that would cause importing a MODFLOW
-  //        model to fail if a multiplier array calculated as a function of
-  //        other mulitplier arrays resulted in a divide-by-zero or other error
-  //        when calculating a multiplier array value.
-  //    '3.6.3.11' Bug fix: Fixed bug that could cause and access violation
-  //        when starting a new model after already having had another model
-  //        open already.
-  //      Bug fix: If an error occurs when importing multiple gridded data
-  //        files because of invalid data in one of the files, an error message
-  //        is displayed instead of a bug report being generated.
-  //      Bug fix: ModelMuse now prevents the user from assigning the same
-  //        name to two or more layer groups when creating a new MODFLOW model.
-  //      Bug fix: ModelMuse now prevents the user from assigning the same name
-  //        to two or more Hydrogeologic units.
-  //      Bug fix: In the SFR package, NUMTIM, WEIGHT, and FLWTOL can now
-  //        be edited.
-  //    '3.6.3.12' Enhancement: ModelMuse now issues an error message if the
-  //        lowest elevation in a SFR 8-point cross section is not zero.
-  //      Change: The Trunc and Round functions were changed so that if the
-  //        real number passed to the function is outside the range
-  //        -(2^31-1) to +(2^31-1), the result returned will be whichever of
-  //        those numbers is closest.
-  //      Bug fix: Fixed link to help for the MNW2 package.
-  //      Enhancement: In the Sink and Source Mixing package of MT3DMS, the
-  //        full recharge and ET concentration arrays are only printed if
-  //        they have non-zero values.
-  //      Bug fix: In the Head observations pane of the Data Visualization
-  //        dialog box, double-clicking on on a point no longer causes some
-  //        values in the grid from being hidden.
-  //    '3.6.3.13' Bug fix: ModelMuse no longer generates a warning message
-  //        in the STR package for stages below the bottom of the stream if
-  //        the stage is calculated.
-  //      Bug fix: The ElevationToModelLayer function now works in child models.
-  //      Enhancement: Opening the Object Properties dialog box with objects
-  //        that define SFR boundaries with numerous stress periods is no longer
-  //        so slow.
-  //    '3.6.3.14' Enhancement: ModelMuse now create a a batch file named
-  //        "RunModel.bat" that is suitable for use with automated parameter
-  //        estimation programs.
-  //    '3.6.3.15' Bug fix: Fixed bug in opening files in which some objects
-  //        have line segments that intersect.
-  //      Bug fix: Fixed display of error messages regarding undefined
-  //        parameters.
-  //      Bug fix: Fixed bug that could cause access violations when moving
-  //        dragging with the mouse over the 3D view under certain rare
-  //        circumstances.
-  //    '3.6.3.16' Enhancement: ModelMuse can now import CFP pipes from
-  //        Shapefiles.
-  //      Enhancement: ModelMuse now warns if the ET depth is less than zero
-  //        in the EVT or ETS packages.
-  //    '3.6.3.17' Enhancement: ModelMuse can now export objects that define
-  //        SFR boundaries to Shapefiles.
-  //      Enhancement: When importing Shapefiles, ModelMuse can now import
-  //        Z and measured values for each Shape if they are included in the
-  //        Shapefile. The values will be imported as Vertex Values.
-  //      Enhancement: The following new functions have been added:
-  //        LowestVertexValue, HighestVertexValue, MeanVertexValue,
-  //        MedianVertexValue, FirstVertexValue, and LastVertexValue.
-  //        See the ModelMuse help for descriptions of these new functions.
-  //        They are typically used when there is vertex value at every
-  //        vertex of an object and every cell intersected by an object
-  //        contains at least one vertex.
-  //    '3.6.3.18' Bug fix: The filters for limiting the display of head
-  //        observation results by time were reversed.
-  //      Bug fix: In the MODFLOW STR package, a single object now defines
-  //        more than a single reach in a cell if it intersects the cell
-  //        more than once.
-  //      Bug fix: In the MODFLOW Layer Groups dialog box, pasting layer
-  //        boundaries now works correctly.
-  //    '3.6.3.19' Bug fix: Fixed bug that would cause values of some boundary
-  //        conditions to be evaluated incorrectly.
-  //    '3.6.3.20' Bug fix: Fixed bug that prevented a model from being opened
-  //        when a global variable and data set have the same name. In such
-  //        cases, the global variable is deleted.
-  //      Bug fix: If the default name of a data set for a hydrogeologic unit
-  //        conflicts with a preexisting global variable name, the name for the
-  //        data set will be modified to avoid the conflict.
-  //    '3.6.3.21' Enhancement: When changing stream linkages in
-  //        the SFR or STR packages, ModelMuse can now renumber any duplicate
-  //        stream numbers.
-  //    '3.6.3.22' Bug fix: Fixed a resource leak.
-  //    '3.6.3.23' Enhancement: In the "Manage Flow Observations" dialog box,
-  //        a new tab has been added in which the user can edit multiple
-  //        observation group names. A list of names can be pasted into the
-  //        table on this tab to change the observation group names.
-  //    '3.6.3.24' Bug fix: When updating a ModelMate file with more than
-  //        ten or more observation times for the same observation group, some
-  //        of the observation names were not passed to ModelMate correctly.
-  //      Enhancement: Linking SFR and STR streams with the Link Streams
-  //        dialog box was made faster.
-  //      Bug fix: Attempting to export a shape file of contours will now
-  //        generate a warning message if the user attempts to export contours
-  //        for a data set that is uniform.
-  //      Bug fix: Duplicate Lake ID numbers now results in a error message
-  //        for the user instead of a bug report.
-  //      Bug fix: Fixed a bug that could cause an access violation when editing
-  //        objects.
-  //      Bug fix: ModelMuse can now read MODPATH endpoint files in which some
-  //        endpoint lavels contain spaces.
-  //    '3.6.3.25' Bug fix: Deleting a MODFLOW stress period no longer causes
-  //        the times of MODFLOW boundary conditions to change.
-  //      Bug fix: Fixed a bug that prevented some files created by a beta
-  //        version of ModelMuse from being opened by more recent versions.
-  //    '3.6.3.26' Enhancement: the PEST Grid Specification File is now
-  //        automatically created when exporting MODFLOW models. the file has
-  //        the extension ".gsf".
-  //    '3.6.3.27' Bug fix: Fixed bug in the export of the SSM file in MT3DMS
-  //        when the ETS package is used.
-  //    '3.6.3.28' Bug fix: Fixed bug that could cause an access violation in
-  //        SUTRA models if the left, right, up, or down arrow keys on the
-  //        keyboard were used.
-  //      Enhancement: When saving the input files for MODFLOW model, the
-  //        project description is included in the Save dialog box. The
-  //        project description will be saved as comments in the Basic
-  //        package input file.
-  //      Enhancement: The log of tracking time can now be used to color
-  //        MODPATH endpoints.
-  //      Bug fix: It is no longer possible to delete all the Layer Groups
-  //        in a MODFLOW model.
-  //      Bug fix: Zooming in while a background bitmap is present no longer
-  //        causes a range check error.
-  //    '3.6.3.29' Enhancement: The log of tracking time can now be used to
-  //        color MODPATH pathlines.
-  //      Enhancement: Added support for the RIP package in MODFLOW-OWHM.
-  //    '3.6.3.30' Enhancement: Added support for writing the Summary budget
-  //        to a separate file.
-  //    '3.6.3.31' Bug fix: Fixed a bug that could cause a bug report to be
-  //        generated if the user tries to import a background image that is
-  //        too large.
-  //      Bug fix: Fixed a bug that could cause an access violation if the user
-  //        deleted a parameter and then attempted to edit an object that used
-  //        that parameter.
-  //      Bug fix: When adding new layer groups in MODFLOW models, each layer
-  //        group automatically gets a name different from any other existing
-  //        layer group.
-  //    '3.7.0.0' Bug fix: Fixed a bug that prevented the user from defining
-  //        ETS boundaries properly on the first attempt.
-  //      Bug fix: Fixed a bug that caused access violations when exporting the
-  //        ETS package input file if the ETS boundaries were not defined
-  //        properly.
-  //    '3.7.0.1' Bug fix: Fixed a bug in the generation of an error message
-  //        in the MODFLOW CFP process when the node elevation is too high
-  //        or to low.
-  //    '3.7.0.2' Bug fix: Fixed another bug that caused access violations when
-  //        exporting the ETS package input file if the ETS boundaries were not
-  //        defined properly.
-  //    '3.7.0.3' Bug fix: Fixed a bug that made it impossible to delete a flow
-  //        observation.
-  //    '3.7.0.4' Bug fix: Fixed a bug that could cause an access violation in
-  //        the Import Points dialog box when a boundary condition was first
-  //        selected and then unselected.
-  //    '3.7.0.5' Bug fix: If an attempt is made to save an archive from the
-  //        files to Archive dialog box and an unsupported archive type is
-  //        selected, an error message will be displayed instead of a bug report
-  //        being generated.
-  //      Bug fix: Fixed bug that could cause access violations when opening
-  //        the object properties dialog box.
-  //    '3.7.1.0' Bug fix: Fixed  display of some controls after resizing the
-  //        "Select Results to Import" dialog box.
-  //      Bug fix: Fixed hints for adding, inserting, and deleting
-  //        plant groups in the Riparian ET Plant Groups dialog box.
-  //      Bug fix: Fixed access violation when drawing contours after importing
-  //        model results.
-  //    '3.7.1.1' Bug fix: Fixed export of FMP package when formulas give
-  //        results of the wrong type. Now a warning of an invalid formula will
-  //        be displayed.
-  //      Bug fix: Fixed export of FMP package when some required time varying
-  //        data is undefined. Now ModelMuse issues an error message to the
-  //        user instead of generating a bug report.
-  //      Bug fix: Fixed bug that prevented the user from specifying data set
-  //        15 in the FMP process when it was needed.
-  //    '3.7.1.2' Bug fix: Fixed bugs that could cause invalid meshes to be
-  //        created with the fishnet mesh algorithm if one or more fishnet
-  //        elements was invalid.
-  //      Bug fix: Fixed how ModelMuse handles certain invalid formulas.
-  //      Enhancement: When importing objects, a comment is included in each
-  //        object with the date the object was created and (if applicable)
-  //        the file from which it was imported.
-  //      Bug fix: Failing to specify an elevation for a model layer in the
-  //        Start Up dialog box for MODFLOW will no longer cause an error.
-  //      Change: When importing gridded data for 3D data sets, the Z-coordinate
-  //        of the data points is now determined by a formula related to the
-  //        grid structure.
-  //      Bug fix: Fixed bug that could cause an access violation in the
-  //        Import Gridded Data dialog box in PHAST models.
-  //    '3.7.1.3' Bug fix: Fixed bug that could cause an assertion failure
-  //        when exporting the FHB package input.
-  //      Bug fix: Fixed bug that prevented valid FMP input files from being
-  //        created if no Farm wells were defined.
-  //    '3.7.1.4' Enhancement: The Import Points dialog box was modified to
-  //        allow the user to specify column and row instead of X and Y when
-  //        importing data for models with grids on the top view of the model.
-  //    '3.7.1.5' Enhancement: Added legend for MODPATH Endpoint colors.
-  //      Enhancement: In tables containing checkboxes, it is now possible
-  //        to check a check box by typing or pasting a value into the cell
-  //        containing the check box. Typing "True", "T", "Yes", or "Y" will
-  //        cause the check box to be checked. Any other text will cause it to
-  //        be unchecked. Case is not important in the text that is typed.
-  //    '3.7.1.6' Bug fix: (not in released version). Fixed bug that made it
-  //        impossible to import model results.
-  //    '3.7.1.7' Bug fix: Fixed export of SWI input files with MODFLOW-OWHM.
-  //    '3.7.1.8' Bug fix: Fixed import of SWR package.
-  //      Bug fix: Fixed import of UZF package when SWR package is also used.
-  //    '3.7.1.9' Bug fix: Fixed export of SWR ISTRORCH in data set 13b.
-  //    '3.7.1.10' Bug fix: Fixed bug in deleting Custom color scheme.
-  //      Enhancement: ModelMuse now exports a usgs.model.reference file
-  //        each time the model input files are exported. When starting a new
-  //        model, the user is now prompted to specify the information for
-  //        the usgs.model.reference file that ModelMuse can not determine
-  //        automatically. The information can also be edited by selecting
-  //        "Model|Edit Geo Reference".
-  //      Enhancement: ModelMuse now exports an .axml file each time the model
-  //        input files are exported. The files lists the input and output files
-  //        for the model in XML format. These files can be used to help archive
-  //        a model.
-  //      Enhancement: When creating an archive, ModelMuse now saves it in
-  //        in a form that meets more of the USGS model archiving requirements.
-  //      Bug fix: Fixed bug that prevented users from deactivating the
-  //        UZF boundary in an object except by deleting the object.
-  //    '3.7.1.11' Bug fix: Fixed bug in export of Data set 16 in the
-  //        Farm Process.
-  //    '3.7.1.12' Bug fix: Fixed bug that prevented the export of the SWR input
-  //        file in MODFLOW-OWHM.
-  //    '3.7.1.13' Bug fix: Fixed bug in which data set 2 of the SWR package
-  //        took up more space than was allowed.
-  //    '3.7.1.14' Bug fix: Fixed bug in display of the data sets in the
-  //        Edit Data Sets dialog box and other dialog boxes if the model had
-  //        been switched from a SUTRA 3D model to a MODFLOW model.
-  //    '3.7.1.15' Bug fix: Fixed bug so that models with incomplete transient
-  //        data will display an error message to the user identifying the
-  //        problem instead of generating a bug report.
-  //      Bug fix: In the "Files to Archive" dialog box, file names referring
-  //        to drives that do not exist or are not open no longer cause errors.
-  //    '3.7.1.16' Enhancement: Added the ability to export an outline of the
-  //        grid or mesh to a Shapefile. When exporting a grid, the user
-  //        has the option to export the outline of the entire grid, just
-  //        the active cells in the grid or both the active and inactive cells.
-  //      Change: The "SWR_Reach_Number" data set has been changed from a 3D
-  //        data set to a 2D data set. This allows it to be used in a formula
-  //        for the reach number in SWR direct runoff. A suitable formula
-  //        might be "Round(SWR_Reach_Number)". However, the data set
-  //        displays the average reach number for all the reaches at a
-  //        particular row and column. Thus if there is more than one reach in
-  //        a cell, the reach number in the data set might not be appropriate.
-  //    '3.7.1.17' Enhancement: Added function "ObjectBasisFunction" which can
-  //        return a value interpolated from the values at the corners of an
-  //        object section that is triangular or quadrilateral in shape.
-  //    '3.8.0.0' Enhancement: When importing Shapefiles, the minimum and
-  //        maximum X, Y, and Z coordinates of the object can be used in the
-  //        formula that determines whether or not an object is imported.
-  //      Enhancement: When exporting the CHD package, ModelMuse now checks
-  //        whether the specified heads are below the bottom of the layer.
-  //    '3.8.0.1' Enhancement: In the Display Data dialog box, the SFR links
-  //        and STR links now have an option to display invalid links.
-  //      Bug fix: Fixed deletion of global variables that were added in some
-  //        previous versions of ModelMuse.
-  //    '3.8.0.2' Bug fix: Fixed bug in display of MODPATH time series.
-  //    '3.8.0.3' Bug fix: Fixed bug in archiving models so that the batch
-  //        files would work correctly in the archive.
-  //      Bug fix: Fixed evaluation of the DischargeRouting data set (IRUNBND
-  //        in the UZF package) when the SFR streams are not in strict
-  //        numerical order.
-  //      Enhancement: Added support for new options in MODFLOW-NWT
-  //        version 1.1.
-  //      Bug fix: Fixed and access violation when opening a model after having
-  //        previously a MODFLOW-LGR model.
-  //    '3.8.0.4' Bug fix: Fixed a bug that caused an access violation when
-  //        deleting all the global variables.
-  //      Bug fix: Fixed check of MT3DMS file name size. The size checked was
-  //        5 when it should have been 50.
-  //    '3.8.1.0' No additional changes.
-  //    '3.8.1.1' Bug fix: Fixed bug in limiting display of pathlines to the
-  //        current column, row, or layer when other criteria are also used
-  //        to limit the display.
-  //      Bug fix: Fixed bug in saving model archive list when the ModelMuse
-  //        file has not already been saved.
-  //      Enhancement: Added support for SWR  version 1.04 in MODFLOW-NWT
-  //        version 1.1.1.
-  //      Bug fix: Fixed saving the the names of model input and output files
-  //        to be archived when the names are relative file names.
-  //      Change: In the CHD, DRN, DRT, ETS, EVT, GHB, RCH, RIV,
-  //        and WEL packages, parameter instances will only be defined for
-  //        parameters that have different values in different stress periods.
-  //      Bug fix: Fixed bug in updating display of SUTRA boundary conditions
-  //        when coloring the grid.
-  //      Change: When exporting the model outline as a shapefile, there is
-  //        now a single character attribute named "Area" which will contain
-  //        "Active" for the outline of the active area, "Inactive" for the
-  //        outline of the inactive area or "Grid Outline" for the outline
-  //        of the model grid.
-  //      Enhancement: Improved display of imported images at high
-  //        magnifications.
-  //    '3.8.1.2' Bug fix (not in released version) Fixed bug in
-  //        improved display of imported images.
-  //    '3.8.1.3' Bug fix: fixed bug that prevented some old model files from
-  //        being opened.
-  //    '3.8.1.4' Enhancement: Improved the quality of contours in SUTRA
-  //        profile models by taking into account the vertical exaggeration.
-  //    '3.8.1.5' Bug fix: Fixed paths assigned to .bcs files in SUTRA.FIL file.
-  //    '3.8.1.6' Bug fix: Fixed specification of NORDER in the NWT package.
-  //        Previously, specifying NORDER = 2 would result in a corrupt file.
-  //    '3.8.1.7' Bug fix: Fixed a bug that could cause the option to export
-  //        MODPATH endpoints to Shapefiles to be disabled incorrectly.
-  //    '3.8.1.8' Enhancement: added new dialog box that can display the
-  //        file extensions for the input and output model files and the
-  //        type of file associated with each extension.
-  //      Enhancement: Support for SUTRA 3.0 added.
-  //    '3.8.1.9' Enhancement: Added support for displaying vertex values in
-  //        vertex labels.
-  //      Enhancement: The items in the Show or Hide Objecte dialog box that are
-  //        expanded, remain expanded after editing objects.
-  //      Bug fix: Checking or unchecking as checkbox in
-  //        the "Select Objects for Editing or Deletion" now will now cause
-  //        all the related checkboxes to change state appropriately.
-  //      Enhancement: The Edit Feature Formula dialog box can now be used with
-  //        SUTRA features.
-  //    '3.8.1.10' Bug fix: Fixed bug that could cause out for range errors if
-  //        an error or warning messge is too big to fully display in the
-  //        Errors and Warnings dialog box.
-  //    '3.8.1.11' Bug fix: Fixed bug in export of the MT3D Transport
-  //        Observations Package (TOB) that could cause invalid TOB input files
-  //        to be created if observations of different species at the same
-  //        time were specified.
-  //    '3.8.1.12' Bug fix: Fixed bug that could cause access violations if a
-  //        MT3D component was deleted and a new component was later added.
-  //      Enhancement: Support was added for the modified SUB package in
-  //        MODFLOW-OWHM.
-  //    '3.8.1.13' Bug fix: Fixed bug that caused an assertion failure if a
-  //        Layer group was given the same name as an existing layer group.
-  //      Enhancement: Added support for importing SUTRA restart files.
-  //    '3.8.1.14' Bug fix: (Not in released version.) Fixed import of SUTRA
-  //        restart file.
-  //    '3.8.1.15' Bug fix: In MODFLOW-LGR models that use the MNW1 package,
-  //        the WEL1, BYNODE, and QSUM will be given names different from the
-  //        names used in the parent model.
-  //      Bug fix: Fixed bug that could cause access violations when editing
-  //        SUTRA Fishnet Meshes.
-  //    '3.8.1.16' Bug fix: When importing certain invalid Shapefiles,
-  //        ModelMuse will now generate an error mesage to the user instead of
-  //        a bug report.
-  //    '3.8.1.17' Bug fix: If duplicate times are specified in a MODFLOW
-  //        feature, ModelMuse will now display an error message to the user
-  //        when attempting to evaluate the feature instead of generating a
-  //        bug report.
-  //    '3.8.1.18' Bug fix: Fixed bug that caused an assertion failure when
-  //        exporting the BCF package if the limited convertible option was
-  //        used for a layer or when importing an existing model with that
-  //        same option.
-  //      Enhancement: In models with grids such as MODFLOW, if the grid
-  //        cell or element size is set by an object on the top view of the
-  //        model and the default formula for the Active data set is "True",
-  //        the active data set will be set to false outside any such objects.
-  //      Enhancement: When importing Shapefiles, Surfergrid files, or
-  //        ASCII Raster files, there is now an option to convert the units of
-  //        the X and Y coordinates.
-  //    '3.8.1.19' Bug fix: not in released version. Fixed assignment of
-  //        Active data set.
-  //    '3.8.1.20' Bug fix: not in released version. Fixed bug in display of
-  //        Withdrawals in Footprint model.
-  //    '3.8.1.21' Bug fix: Rmoved spurious warnings about SFR reach bottom
-  //        elevations for models in which reach elevations are specified
-  //        at the beginning and ending of a segment.
-  //    '3.8.1.22' Bug fix: Fixed bug that caused an infinite loop in updating
-  //        the grid elevations in MODFLOW-LGR child models.
-  //    '3.8.1.23' Bug fix: Fixed bug in export of SFR in LGR version 1 that
-  //        could cause an assertion failure.
-  //    '3.8.1.24' Bug fix: Fixed another bug in export of SFR in LGR version 1
-  //        that could cause an assertion failure.
-  //    '3.8.1.25' Bug fix: Fixed bug in export of SFR in LGR version 2
-  //        that could cause incorrect values for the values at the upstream
-  //        and downstream ends of segments that cross the subgrid boundary.
-  //    '3.8.1.26' Enhancement: When animating a display in the Export Image
-  //        dialog box, ModelMuse will give priority the data sets being
-  //        animated when applying macros to text.
-  //      Enhancement: When importing MODFLOW-2000 model, parameter
-  //        values from the Sensitivity file are imported.
-  //      Bug fix: Exporting a shapefile of contours in a MODFLOW-LGR child
-  //        model now works.
-  //      Bug fix: Changing the contour interval for contours in a MODFLOW-LGR
-  //        model now applies to both parent and child models.
-  //    '3.8.1.27' Bug fix: It is now possible to run MODPATH or ZONEBUDGET in
-  //        either child or parent model with MODFLOW-LGR.
-  //    '3.8.1.28' Bug fix: Fixed bug that could cause access violations when
-  //        setting up an animation in the Export Image dialog box.
-  //      Bug fix: Fixed export of parent model or child model in MODFLOW-LGR
-  //        model when either just the parent or just the child is to be run.
-  //    '3.8.1.29' Bug fix: Fixed export of usgs.model.reference file in
-  //        MODFLOW-LGR when only the parent model is run.
-  //    '3.8.1.30' Change: Made ajustments to support input file format changes
-  //        in MODFLOW-2005 version 1.12.
-  //      Bug fix: Fixed bug that allowed 3D objects to set the values of
-  //        data sets that define the grid elevations.
-  //    '3.8.1.31' (Bug fix: not in released version) Fixed a bug that caused
-  //        stack overflow when fixing an existing model.
-  //    '3.8.1.32' Bug fix: Fixed bug that could cause incorrect values to
-  //        be printed for certain SFR variables when LGR is used and the
-  //        formula should apply different values in the parent and child
-  //        models.
-  //    '3.8.1.33' Enhancement: when exporting a model outline to a
-  //        Shapefile, the outlines of child models in LGR models can be
-  //        exported.
-  //      Bug fix: In the Object Properties dialog box, if an attempt is made
-  //        to specify an invalid vertex value, the value is left unchanged.
-  //      Bug fix: Fixed a bug in deleting and then adding an Mt3DMS components
-  //        that could cause an access violation.
-  //      Bug fix: Fixed bug that could cause an assertion failure if the
-  //        starting time defined in FHB was before the first time in the model.
-  //      Change: Added export of a 7th value in record 3 of the MT3D-USGS
-  //        Basic package.
-  //    '3.8.1.34' Bug fix: Fixed bug that caused a math error when contouring
-  //        if the user choose to log transform the data and specified an
-  //        upper or lower limit less than or equal to zero.
-  //    '3.8.1.35' Bug fix: Set the "Range" property of all scrollbars to 0.
-  //        This has no effect when compiled with Delphi XE2 but it cause
-  //        problems with the form size in Delphi 10.1 Berlin.
-  //      Enhancement: The user can now specify the size at which MODPATH
-  //        endpoints and time series points are drawn in 2D views.
-  //      Bug fix: Fixed bug that could cause an error when attempting to
-  //        get values for data sets for data sets evaluated at nodes in
-  //        MODFLOW models.
-  //      Bug fix: In the MODFLOW Lake package, values of THETA and SSCNCR
-  //        that were equal to 0 were not saved when saving a ModelMuse file.
-  //    '3.8.1.36' Enhancement: When exporting grid data to Shapefiles, it is
-  //        now possible to filter the data that is exported.
-  //      Bug fix: Fixed bug in specifying the starting date in the Georeference
-  //        dialog box in countireis where the convention for specifying dates
-  //        is something other than Month/Day/Year.
-  //      Bug fix: Fixed bug in exporting FMP input where evaporation fraction
-  //        has not been specified.
-  //    '3.8.1.37' Bug fix:  Specifying a formula in an object that gives the
-  //        wrong data type for the data set now result in an error message in
-  //        the Formula Errors dislog box instead of generating a bug report.
-  //    '3.8.1.38' Bug fix: Fixed bug in Export of Shapefiles caused an error
-  //        when exporting head observations to a Shapefile.
-  //      Bug fix: Fixed bug that could cause an assertion failure when opening
-  //        a model that uses the Subsidence package.
-  //    '3.8.1.39' Bug fix: Fixed bug that would cause an incorrect unit number
-  //        to be assigned when direct runoff is used in the SWR package.
-  //    '3.9.0.0' No additional changes.
-  //    '3.9.0.1' Bug fix: When opening a ModelMuse file in which the EVT, ETS,
-  //        or RCH data in objects were defined using parameters, the data
-  //        would not always be read.
-  //    '3.9.0.2' Change: If the FirstVertexValue, HighestVertexValue,
-  //        LastVertexValue, LowestVertxValue, MeanVertexValue,
-  //        and MedianVertexValue functions is used and a cell to
-  //        which it applies has no vertex values, a warning message will only
-  //        be displayed if the optional default value has not been supplied.
-  //      Bug fix: Fixed drawing of background bitmaps.
-  //    '3.9.0.3' Change: In the Errors and Warnings dialog box, right-clicking
-  //        a group of errors or warnings will now allow the user to select all
-  //        the objects related to that group even if the error message for
-  //        some of the objects have not been displayed.
-  //      Bug fix: Fixed bug that could cause an infinite loop if the segments
-  //        in the STR package could not be put in the correct order and
-  //        parameters were used.
-  //      Bug fix: Fixed a bug in the export of structure information in data
-  //        set 13a of the SWR package that would result in MODFLOW halting with
-  //        an error message.
-  //    '3.9.0.4' Change: When importing objects from shape files, functions
-  //        related to objects can now be used to define object elevations.
-  //    '3.9.0.5' Bug fix: In the MODFLOW Layer Groups dialog box, attempting
-  //        to enter a value of 0 for the growth rate on the Discretization
-  //        tab no longer results in a math error.
-  //      Bug fix: Fixed a bug that could cause a conversion error in the
-  //        SUTRA Options dialog box in computers that do not use a period as
-  //        the decimal separator.
-  //      Bug fix: Fixed bug in "FractionOfObjectLength" function that caused
-  //        it to give incorrect values in models with grids in which the grid
-  //        angle was not zero.
-  //      Bug fix: fixed bug that could cause incorrect values to be assigned
-  //        by objects if the first or last vertex of an object was only a
-  //        short distance from the edge of a cell.
-  //    '3.9.0.6' bug fix: (not in released version). Fixed a bug that caused
-  //        problems with interpolation.
-  //    '3.9.0.7' Bug fix: Fixed bug that could cause a divide by zero error
-  //        when plotting MODPATH pathlines.
-  //      Bug fix: Fixed export of Zonebudget data for MODFLOW-LGR child models.
-  //      Bug fix: Fixed bug that could cause imported images to be drawn at
-  //        the incorrect locations.
-  //    '3.9.0.8' bug fix: Fixed bug that would cause an error when specifying
-  //        farm diversions in MODFLOW-OWHM if incomplete information was
-  //        entered.
-  //      Bug fix: Fixed bug that caused an error if exporting data set 33 of
-  //        the farm process without defining the precipitation.
-  //      Bug fix: Fixed a bug that could prevent ModelMuse from launching a
-  //        web browser.
-  //    '3.9.0.9' Enhancement: It is now possible to specify that the starting
-  //        locations of MODPATH particles are at the exact location of a point
-  //        object with a single Z formula.
-  //   '3.9.0.10' Enhancement: The user can now specify the thickness of lines
-  //        used to draw cross sections in the "Data|Display Data" dialog box.
-  //      Bug fix: Fixed bug that caused errors when attempting to read
-  //        shapefiles containing null shapes.
-  //   '3.9.0.11' Bug fix: Opening a ModelMuse file that has lines to be added
-  //        to the MODFLOW name file in the parent model no longer results in
-  //        those same lines being added to the child model.
-  //      Bug fix: In MODFLOW-LGR version 1 models in which child models have
-  //        one layer, boundary conditions in that layer will stay in that
-  //        layer.
-  //   '3.9.0.12' Change: When ModelMuse starts and creates a new model,
-  //        it will be maximized if it was maximized the last time it was
-  //        closed.
-  //      Enhancement: When importing an Ascii raster a warning will be
-  //        issued if some cells have no data points in them.
-  //      Enhancement: In the Object Properties dialog box, you can now copy
-  //        imported data to the clipboard.
-  //      Change: When importing Shapefiles, the default choice will be to join
-  //        the shapes into a single object if they can be joined.
-  //      Enhancement: When importing Shapefiles, it is now possible to cancel
-  //        the import process.
-  //      Bug fix: When importing head observations from a shapefile, ModelMuse
-  //        will now ensure that each head observation has a unique name.
-  //      Enhancement: When importing an existing MODFLOW model, the user now
-  //        has the option of importing just a subarea of the model and using
-  //        the stored heads or flows from the original model as boundary
-  //        conditions on the edge of the imported model area.
-  //   '3.9.0.13' Enhancement: It is now possible to export the grid lines from
-  //        the "File|Export|Shapefile|Model Outline or Grid Lines..." dialog
-  //        box.
-  //   '3.9.0.14' Bug fix: Fixed bug that could cause an error when setting
-  //        the names of the chemical components used in MT3D.
-  //   '3.9.0.15' Enhancement: When importing DXF files, they now can be
-  //        imported as a single object.
-  //   '3.9.0.16' Bug fix: Fixed bug that caused a bug report to be generated
-  //        if certain files that should have been present were absent. Instead
-  //        an error report is generated explaining how the user can fix the
-  //        problem.
-  //      Enhancement: When importing Shapefiles, "Comma-separated value" (.csv)
-  //        files can be used to include additional data which are treated
-  //        as Shapefile attributes.
-  //   '3.9.0.17' Bug fix: (not in released version). Fixed export of grid
-  //        lines to shape file.
-  //   '3.9.0.18' Bug fix: (not in released version). Fixed export of grid
-  //        lines to shape file.
-  //   '3.9.0.19' Enhancement: ModelMuse now warns the user if the starting or
-  //        ending stage in the RES package are too low.
-  //      Bug fix: Fixed bug that caused objects that defined FHB boundaries
-  //        to have extra times added when opening some existing models.
-  //   '3.9.0.20' Enhancement: When exporting images, the user can now specify
-  //        the caption for the color legend and contour legend.
-  //      Bug fix: Fixed bug in export of Data sets 7-10 in MT3D-USGS if no
-  //        associated concentration have been defined.
-  //      Bug fix: When exporting MT3DMS files, spaces are replaced with
-  //        underscore characters in input and output files.
-  //   '3.9.0.21' Enhancement: ModelMuse can not run models on network drives.
-  //   '3.9.0.22' No real change.
-  //   '3.9.0.23' Bug fix: Importing models using the HYDMOD package in which
-  //        the number of observation locatins exceeds the user specified
-  //        number no longer causes an error.
-  //      Enhancement: The Show or Hide Objects dialog box now allows the user
-  //        to show or select objects whose names contain a specified search
-  //        term.
-  //   '3.9.0.24' Enhancement: The user can now use buttons to check or uncheck
-  //        a group of items in the "Select Objects for Editing or Deletion"
-  //        dialog box.
-  //      Enhancement: Added warnings about models that have too many stress
-  //        periods or time steps to use with formatted head or drawdown output
-  //        files.
-  //      Bug fix: When writing the input for the reaction package in MT3D-USGS,
-  //        a default value of zero is now written for IREACTION.
-  //   '3.9.0.25' No real change
-  //   '3.9.0.26' Bug fix: Fixed bug that could cause an assertion failure when
-  //        exporting contours to a Shapefile.
-  //   '3.9.0.27' Bug fix: Fixed bug that could cause an assertion failure
-  //        when attempting to import a MODFLOW binary head file that was
-  //        created by a model with fewer layers than the current MODFLOW
-  //        model.
-  //   '3.9.0.28' Bug fix: Fixed bug in export of SWR input data sets 5 and 6.
-  //   '3.9.0.29' Bug fix: Fixed a bug that could cause an access violation
-  //        when the user changed the symbol used as the decimal character.
-  //      Enhancement: Added support for WellFootprint program.
-  //      Enhancement: In the DRN, DRT, GHB, RIV, and WEL packages, if no
-  //        boundary cells are defined in the package, the package is not
-  //        included in the model.
-  //      Bug fix: Fixed renaming model results data sets prior to closing
-  //        the model.
-  //      Enhancement: When importing Shapefile attributes as new data sets
-  //        with names that match existing data sets, the user is given options
-  //        about how to treat those attributes.
-  //      Bug fix: "Restart Model" button in ModelMonitor now works.
-  //   '3.9.0.30' Bug fix: If the PVAL file is listed in the MODFLOW Name File
-  //        dialog box, it will no longer be generated by ModelMuse.
-  //   '3.9.0.31' Bug fix: Modified export of SWR input file so that the
-  //        data values in data set 13 did not exceed 200 characters.
-  //   '3.10.0.0' Enhancement: Vertex value names are now sorted in a better
-  //        way then before.
-  //   '3.10.0.1' Bug fix: Fixed deletion of MODPATH release times in the
-  //        Object Properties dialog box.
-  //      Bug fix: If a MODPATH 5 pathline, time-series or endpoint file
-  //        contains invalid data such as "-NaN", ModelMuse stops reading the
-  //        file and displays an error message instead of generating a bug
-  //        report.
-  //   '3.10.0.2' Bug fix: Fixed bug that caused a range check error if the
-  //        Reservoir package is activated but no reservoirs have been defined.
-  //      Bug fix: Fixed bug that would cause an error when undoing the import
-  //        of a shape file.
-  //   '3.10.0.3' Bug fix: Fixed bug in which times were not updated correctly
-  //        in objects defining EVT, ETS, RCH, or UZF boundaries.
-  //   '3.10.0.4' Enhancement: When importing head observations from Shapefiles,
-  //        missing time or head values will be skipped.
-  //      Bug fix: Fixed a bug that would cause a bug report to be generated
-  //        under certain circumstances if the user specified an invalid
-  //        formula. Now an error message is displayed instead.
-  //   '3.10.0.5' Bug fix: Fixed bug that could cause parameter instance names
-  //        to be omitted in some input files.
-  //   '3.10.0.6' Bug fix: Fixed a bug that could cause assertion failures when
-  //        exporting SUTRA time schedules.
-  //   '3.10.0.7' Bug fix: Fixed a bug that would cause access violations if
-  //        the number of segments in the ETS package was reduced.
-  //      Bug fix: Fixed LastVertexValue function to give correct result.
-  //      bug fix: When starting a new model, clicking the "No Grid" button
-  //        now allows the georeference information to be included in the model.
-  //   '3.10.0.8' Bug fix: Fixed bug that caused an assertion failure when
-  //        attempting to create a new HFB parameter.
-  //   '3.10.0.9' Bug fix: Fixed bug that caused the Well package input file
-  //        to be invalid if WEL parameters were defined in a MODFLOW-NWT model.
-  //   '3.10.0.10' Bug fix: Fixed a bug that caused MODFLOW to receive invalid
-  //                elevation values for drain, river, or GHB cells when flow
-  //                observations were defined but the boundaries were not
-  //                defined for the entire simulation period.
-  //   '3.10.0.11' No released changes.
-  //   '3.10.0.12' Enhancement: Added ability to import net recharge and net
-  //                discharge files saved by the UZF package.
-  //   '3.10.0.13' Bug fix: Fixed creating Kz data set when starting up a new
-  //                model without a grid.
-  //               Enhancement: Cross section plots of 2D and 3d data sets are
-  //                now enabled with SUTRA models.
-  //   '3.10.0.14' Bug fix: When writing the input for the STR package in
-  //                MODFLOW-LGR models, ModelMuse now writes them using
-  //                the fixed format required by MODFLOW-LGR rather than the
-  //                free format used by MODFLOW-2005.
-  //               Bug fix: When writing the MODFLOW-LGR LGR file, if no objects
-  //                define the position of the child grid but a child grid
-  //                does exist, the LGR file now specifies the location of the
-  //                LGR grid within the parent grid correctly.
-  //   '3.10.0.15' ----------
-  //   '3.10.0.16' Bug fix: Fixed exporting contours to shapefiles when the
-  //                the "Data|Display Data" window has not yet been displayed.
-  //               Bug fix: not in released version Fixed updating dimensions
-  //                of multiplier zone data sets in DISV grids.
-  //               Bug fix: not in released version. Fixed export of Point
-  //                Shapefiles with DISV grids.
-  //   '3.10.0.17' Enhancement: •	By default, when importing well footprint
-  //                results, Values of 0 and 1 for Footprint code and 0 for
-  //                distributed withdrawals will not be used for coloring
-  //                the grid.
-  //               Bug fix: Warning message about MODFLOW-NWT version 1.0.9
-  //                has been fixed.
-  //   '3.10.0.18' Bug fix: Fixed bug that could allow semi routed deliveries
-  //                and return flow to be included in the Farm Process input
-  //                after disabling the SFR and SWR packages.
-  //   '3.10.0.19' Bug fix: Fixed bug that could cause an access violation when
-  //                displaying data in the "Data|Data Set Values" dialog box.
-  //               Bug fix: Fixed bug that could cause an access violation
-  //                when attempting to manually define a legend.
-  //               Bug fix: The tables on the Print/Save tabs of the SUB and
-  //                SWT packages in the MODFLOW Packages and Programs dialog
-  //                box are now fully visible.
-  //   '3.10.0.20' Enhancement: Added support for running MODPATH 7.
-  //               Bug fix: Fixed bug that could cause the FHB package to cause
-  //                an error if large time values are used.
-  //   '3.10.0.21' Bug fix: When plotting contour lines of a data set using
-  //                the log-transform option, data set values less than or
-  //                equal to zero will no longer cause an error unless all the
-  //                values in the data set are less than or equal to zero.
-  //               Enhancement: Contour data sets in models that don't use
-  //                regular grids can no longer allow contour lines that extend
-  //                beyond the spatial limits of the data even when the outline
-  //                of the active area of the model is concave.
-  //               Bug fix: Fixed bug that could cause errors when importing
-  //                model results from the .cbc file in models with
-  //                non-simulated layers.
-  //   '3.10.0.22' Bug fix: Fixed bug that caused access violations in
-  //                the Object Properties dialog box if ModelMuse was inactive
-  //                for a long time.
-  //   '3.10.0.23' Enhancement: It is now possible to export STR to
-  //                Shapefiles.
-  //               Bug fix: Fixed bug that could cause a range check error when
-  //                interpolating using the Inverse Distance Squared method.
-  //   '3.10.0.24' Enhancement: In MODFLOW-OWHM, the option to prorate
-  //                semirouted deliveries over multiple streams has been
-  //                implemented.
-  //   '3.10.0.25' Bug fix: When creating an archive file for MT3D, the
-  //                directory for the .ftl file was specified incorrectly.
-  //               Bug fix: Fixed import of flow or head boundaries when
-  //                importing a subarea model.
-  //   '3.10.0.26' Bug fix: Fixed bug that prevented users from entering some
-  //                real-number values
-  //   '3.10.0.27' Bug fix: Fixed bug that prevented writing dBASE files larger
-  //                than 2 gigabytes.
-  //               Enhancement: When exporting Shapefiles, there is now a
-  //                warning if the size of the dBASE file will exceed two
-  //                gigabytes.
-  //   '3.10.0.28' Fixed a bug that prevented GSFLOW from using discretization
-  //                files created by ModelMuse.
-  //   '3.10.0.29' Enhancement: The new command "Grid|Rotate Grid Around Grid
-  //                Origin" allows the user to specify a grid angle and have
-  //                the grid rotate to that angle with the center of rotation
-  //                set to the grid origin. For MODFLOW models, the grid origin
-  //                is the upper left corner. For PHAST models the grid origin
-  //                is the lower left corner.
-  //               Enhancement: The new command "Grid|Move Grid" allows the
-  //                user to move the grid origin to a new position.
-  //   '3.10.0.30' Bug fix: Fixed bug in display of prorate option in
-  //                the return flow from farms in MODFLOW-OWHM.
-  //               Bug fix: Fixed bug that could cause an assertion failure
-  //                when exporting the input for the FHB package.
-  //   '3.10.0.31' Bug fix: Fixed bug in importing sub-area models from
-  //                MODFLOW that would cause boundary conditions to be imported
-  //                with incorrect values.
-  //               Bug fix: Fixed bug that could cause an error when displaying
-  //                the Georef dialog box or when exporting Georef data.
-  //   '3.10.0.32' Bug fix: Fixed bug that incorrectly checked the farm, crop
-  //                and soil IDs in MODFLOW-OWHM.
-  //               bug fix: Fixed bug that could cause the FHB file to be
-  //                created incorrectly.
-  //   '3.10.0.33' Bug fix: Fixed bug that could cause an access violation when
-  //                pasting data into the "Manage Head Observations" dialog box.
-  //               Bug fix: Fixed bug that could cause an assertion failure
-  //                when exporting data sets evaluated at nodes to a Shapefile
-  //                from a MODFLOW model.
-  //   '3.10.0.34' Bug fix: Fixed bug that could cause an error when attemping
-  //                to import data from a Shapefile in which one of the
-  //                attributes had the same name as a global variable.
-  //   '3.10.0.35' bug fix: not in releasaed version, Fixed bug that could
-  //                cause the FHB file to be created incorrectly and to delete
-  //                FHB data.
-  //   '3.10.0.36' bug fix: Fixed bug that could cause dependent data sets to
-  //                fail to be updated properly when global variables are
-  //                changed.
-  //               Bug fix: Fixed bug that could cause the UZF package input
-  //                file to specify its options incorrectly.
-  //   '3.10.0.37' Bug fix: In the Grid and Mesh Values dialog box, values for
-  //                pathlines and endpoints for the currently selected column,
-  //                row, or layer are now displayed correctly.
-  //   '3.10.0.38' Bug fix: fixed bug that could cause contours to be exported
-  //                to be exported incorrectly to Shapefiles.
-  //               Change: ModelMuse now works with GMSH version 4.
-  //   '3.10.0.39' Bug fix: Fixed bug that prevented PRODF1 and PRODS1 from
-  //                being set to negative values in SUTRA models.
-  //   '3.10.0.40' Change: If the UZF_Layer data set has an invalid value,
-  //                ModelMuse now identifies the cells that have invalid values.
-  //               Bug fix: Fixed bug in export of data set 4b in the UZF
-  //                package.
-  //               Bug fix: When writing arrays, real number values between
-  //                -2^-37 and +2-37 will be written as 0.0 to prevent
-  //                underflow errors in MODFLOW when reading single precision
-  //                arrays.
-  //               Bug fix; When saving .gpt files, memory usage is reduced
-  //                which can prevent out of memory errors for some large
-  //                files.
-  //   '3.10.0.41' Enhancement: It is now possible to export the formula for
-  //                the concentration specified for the MT3DMS SSM in an
-  //                object to a Shapefile.
-  //   '3.10.0.42' Bug fix; Fixed a bug that could cause an access violation
-  //                when attempting to import a shapefile with a
-  //                self-intersecting shape.
-  //               Bug fix: Fixed a bug that could cause a stack overlfow when
-  //                ModelMuse is closed.
-  //   '3.10.0.43' Enhancement: Added a warning to use a iterative solver in
-  //                SUTRA models with over 1000 nodes.
-  //               Bug fix: If an attempt is made to use an undefined STR
-  //                parameter, an error message will be generated instead of
-  //                sending a bug report.
-  //               Bug fix: Fixed a bug that prevented Vertex valeus from being
-  //                used to set elevation formulas.
-  //   '3.10.0.44' Bug fix: If the user attempts to create a MODFLOW model with
-  //                a number of cells larger than the largest 32-bit signed
-  //                integer, an error message will be displayed instead of
-  //                generating a bug report.
-  //   '3.10.0.45' No real change.
-  //   '3.10.0.46' Bug fix: Fixed bug with creating invalid mesh with Fishnet
-  //                Mesh.
-  //   '3.10.0.47' Bug fix: Not in released version. Fixed use of parameters
-  //                in MODFLOW 6.
-  //   '3.10.0.48' Bug fix: If an object whose number of Z formualas is not
-  //                equal to zero sets the elevations of the grid or mesh, it's
-  //                number of Z formulas is automatically reset to zero.
-  //               Bug fix: If the number of values of a data set cached in
-  //                a file is too large, the data set will be recalculated when
-  //                next accessed
-  //               Bug fix: Deleting an HFB parameter now changes any existing
-  //                HFB boundaries to no longer use the deleted parameter.
-  //   '3.10.0.49' Enhancement: When importing Shapefiles, the imported objects
-  //                will have their positions locked by default.
-  //               Enhancement: When importing Shapefiles, it is now possible
-  //                to use a text attribute to assign the names of the
-  //                imported object.
-  //               Bug fix: If the distance between all the points in a section
-  //                of an object is small enough so that all the vertices map
-  //                to the same pixel, the object or section of an object will
-  //                be displayed as if it were a point object.
-  //               Bug fix: Not in released version. Drawing selected objects
-  //                that have vertex values is fixed.
-  //   '3.10.0.50' Bug fix: "Snap to vertex" now works as described in the
-  //                ModelMuse help. Previously, it would snap to the same
-  //                pixel as the one containing the target vertex but not
-  //                necessarily to the exact same location.
-  //   '3.10.0.51' Enhancement: When using an MT3D starting concentration file,
-  //                the user can now select to use just the first data set in
-  //                the file regardless of which time step it represents.
-  //   '3.10.0.52' Bug fix: Fixed export of data set 2 in the SWT package so
-  //                that more layer numbers can be printed without exceeding
-  //                the maximum line length of 200.
-  //   '3.10.0.53' Enhancement: (not in released version). ModelMuse now warns
-  //                the user if all the cells in the model are either inactive
-  //                or pass-through cells.
-  //   '3.10.0.54' ---
-  //   '3.10.0.55' Change: When automatically generating a legend when
-  //                coloring or contouring the grid with a real-number data set
-  //                and the user has specified the limits to be colored. Those
-  //                same limits are applied when generating the legend.
-  //   '3.10.0.56' Bug fix: Fixed bug in importing Shapefiles in which the
-  //                conductance interpretation was specified on a per shape
-  //                basis using a text attribute of the shape.
-  //               Bug fix: Fixed bug in numbering SFR segments when the UZF
-  //                package is used and excess infiltration is redirected to
-  //                SFR segments.
-  //   '3.10.0.57' Bug fix: Fixed bug that could cause access violations if the
-  //                FHB package was being used.
-  //   '3.10.0.58' Change: ModelMuse updated to work with Gmsh version 4.3
-  //               Bug fix: Fixed a bug that would make the import of
-  //                Shapefiles slower than it needed to be.
-  //   '3.10.0.59' Change: The SelectionCount function was changed to avoid
-  //                counting the same cells more thatn once.
-  //               Change: Functions related to Vertex Values are now classified
-  //                under "Object_VertxValue".
-  //               Change: In the "Import Points" dialog box, data sets that
-  //                are used to define the vertical elevation of the grid or
-  //                mesh are now only allowed to be specified by objects that
-  //                have zero Z-formulas.
-  //  '3.10.0.60'  Bug fix: Fixed bug that could cause objects to be drawn
-  //                incorrectly.
-  //               Bug fix: Fixed bug that could cause assertion failures
-  //                when drawing vectors in SUTRA models.
-  //               Bug fix: Fixed bug that could cause access violations
-  //                when changing between boundary condition times with
-  //                PHAST models.
-  //               Enhancement: When importing groundwater flows frim the left,
-  //                front, and bottom of a cell, the same data is used to also
-  //                import data fort the right, back and top of the cell.
-  //   '3.10.0.61' Bug fix: The Flow-Transport-link file is no longer included
-  //                in the MODFLOW name file.
-  //   '3.10.0.62' Bug fix: (not in released version) Fixed minor bugs related
-  //                to MODFLOW 6
-  //   '3.10.0.63' Bug fix: Fixed a bug that could cause access violation
-  //                while closing ModelMuse.
-  //   '3.10.0.64' Bug fix: Fixed a bug that could cause an access violation
-  //                when exporting the FHB package.
-  //   '3.10.0.65' Bug fix: Fixed a bug that cause an access violation
-  //                when exporting SUTRA node data to a Shapefile.
-  //   '3.10.0.66' Change: The appearance of the tool tip used for measuring
-  //                lines has changed.
-  //               Bug fix: Fixed bug that could cause formulas to be evaluated
-  //                incorrectly if the formulas involved both 2D and 3D data
-  //                sets.
-  //   '4.0.0.0'   Bug fix: Modified export of the FMP package input files so
-  //                that many lines are written more compactly in order to
-  //                make it less likely that MODFLOW-OWHM will truncate a line
-  //                prematurely.
-  //               Bug fix: Fixed import of HYDMOD from existing models when
-  //                SFR is selected.
-  //               Enhancement: Added support for MODFLOW 6 and MODPATH 7.
-  //   '4.0.0.1'   Bug fix: Fixed bug that could cause division by zero errors
-  //                when drawing the top, front, or side views.
-  //               Bug fix: Fixed bug that could cause errors in determining
-  //                which cells were inside objects with multiple parts.
-  //               Bug fix: Fixed bug that could cause access violations when
-  //                deactivating SFR in objects.
-  //               Enhancement: In SUTRA boundary conditions, "Used" can now
-  //                be set using a formula.
-  //   '4.0.0.2'   Bug Fix: fixed bug that could cause access violations when
-  //                exporting the SFR package input in MODFLOW 6.
-  //               bug fix: Fixed bug that could cause the wrong identifier
-  //                to be displayed for an invalid formula in a model feature.
-  //   '4.0.0.3'   bug fix: Fixed a bug that could cause divide by zero errors
-  //                when drawing the top, front or side views.
-  //               bug fix: Fixed a bug that could cause an assertion failure
-  //                when generating the input for the SFR package.
-  //               bug fix: Fixed bug that could cause an error when attempting
-  //                to create a fishnet mesh.
-  //   '4.0.0.4'   Bug fix: Fixed bug that could cause an access violation when
-  //                the "ObjectIntersectArea" function is evaluated.
-  //   '4.0.0.5'   Change: If the user has not specified the location of one
-  //                of the modeling programs and the program is not found at
-  //                the default location, ModelMuse will strip "C:\" off the
-  //                beginning of the default location and append that to the
-  //                name of the subdirectory where ModelMuse is located and
-  //                will check to see if the program is located there. This
-  //                makes it simpler to bundle ModelMuse with the models using
-  //                WineBottler to run it on the Mac.
-  //   '4.0.0.6'   Bug fix: Fixed bug that prevented the user from specifying
-  //                the MVR package information.
-  //   '4.0.0.7'   Enhancement: In the SFR package for MODFLOW 6, there is now
-  //                a check that the sum of the upstream fractions of the
-  //                downstream reaches of a reach add up to 1.
-  //               Bug fix: MODFLOW 6 files can now be exported from the command
-  //                line using command-line parameters.
-  //   '4.0.0.8'   Bug fix: Fixed bug that could cause a range check error when
-  //                Creating a DISV grid in MODFLOW 6.
-  //   '4.0.0.9'   Bug fix: Fixed bug in reading SFR6 data from file.
-  //               Bug fix: Fixed bug in writing idiv in MODFLOW 6 SFR6
-  //                input file.
-  //               Bug fix: not in released version. Fixed getting vertex
-  //                values.
-  //   '4.0.0.10'  bug fix: Fixed bug in which mxiter in the MODFLOW 6
-  //                Simulation Name File was not exported correctly.
-  //   '4.0.0.11'  Bug fix: Fixed bug in identifying MVR sources when
-  //                the UZF package is used.
-  //   '4.0.0.12'  Bug fix: Fixed bug that could cause an access violation
-  //                when editing and SFR stream in MODFLOW 6.
-  //               Bug fix: The data sets for Angle1, Angle2, and Angle3 were
-  //                only created and used if the XT3D option was selected
-  //                instead of whenever the NPF package was selected.
-  //    '4.0.0.13' Enhancement: ModelMuse now warns if the bottom of the
-  //                stream bed in an SFR reach in MODFLOW 6 is below the bottom
-  //                of the cell.
-  //               Bug fix: Fixed bug that could cause an error if a lake outlet
-  //                was a source for the MVR package in MODFLOW 6.
-  //               bug fix: Fixed bug in specifying lake outlets that could
-  //                cause them not to be saved properly.
-  //               Bug fix: The MODPATH_Zone data set was sometimes improperly
-  //                marked as required with MODPATH 7 when in reality it wasn't
-  //                used.
-  //               Enhancement: Support for SUTRA 3.0 added.
-  //               Bug fix: Fixed bug that could cause an error if the user
-  //                tried to rename a data set.
-  //               Bug fix: Fixed a bug that could cause a bug report to be
-  //                generated if the mouse wheel was moved over the NPF options
-  //                grid in the MODFLOW Packages and Programs dialog box.
-  //               Bug fix: Fixed a bug that could cause an error if the number
-  //                of time steps in a stress period was greater than or equal
-  //                to 100,000.
-  //               Bug fix: Fixed bug that could cause an error if multiple
-  //                copies of ModelMuse are being run from the command line at
-  //                the same time.
-  //               Bug fix: Fixed a bug that could case an error if the last
-  //                time defined for a stream in a MODFLOW 6 model was earlier
-  //                than the last time in the model.
-  //               Bug fix: Transient data for the MVR package was not displayed
-  //                properly in the Object Properties dialog bos if the number
-  //                of times was not equal to 1.
-  //    '4.0.0.14' Bug fix: Fixed coloring pathlines with the Z coordinate when
-  //                DISV is used.
-  //    '4.0.0.15' Bug fix: Fixed bug that could cause an error when assigning
-  //                values to a data set using interpolation.
-  //    '4.0.0.16' bug fix: Fixed export of Step Schedules in SUTRA. Previously,
-  //                the exported time steps were smaller than then should have
-  //                been by one time step.
-  //               bug fix: Fixed bug that could cause an error when deleting
-  //                a custom color scheme.
-  //               Enhancement. MT3D can now be used with child models in
-  //                MODFLOW-LGR.
-  //    '4.0.0.17' Bug fix: Fixed a bug that could cause an access violation
-  //                importing a MODFLOW model containing the MNW2 package.
-  //    '4.0.0.18' Bug fix: Fixed the conversion of diversions from the
-  //                the MODFLOW-2005 version of SFR and STR to the MODFLOW 6
-  //                version of SFR.
-  //               Bug fix: Fixed bug in export of the MODPATH input files
-  //                for models with DISV grids.
-  //    '4.0.0.19' Bug fix: Fixed bug that could cause an access violation
-  //                when coloring the grid.
-  //    '4.0.0.20' Bug fix: Fixed bug that could cause EVT and RCH cells to
-  //                be defined in the wrong layers in MODFLOW 6 models.
-  //               Enhancement: ModelMuse now warns about grid columns and
-  //                rows that vary in size in MODFLOW 6 models that use
-  //                MODPATH.
-  //               Change: The UZF input file has been changed so that
-  //                infiltration and unsaturated zone ET are always saved to
-  //                the cell-by-cell budget file.
-  //    '4.0.0.21' Bug fix; Fixed bug that could cause some cells that are
-  //                intersected by an object to not be recognized as being
-  //                intersected by that object.
-  //               Bug fix: Fixed bug that could cause an access violation
-  //                when converting a structured grid to a DISV grid.
-  //    '4.1.0.0'  No additional changes.
-  //    '4.1.0.1'  Enhancement: The user can now specify that BCTime has
-  //                been programmed in SUTRA.
-  //               Bug fix: Fixed bug that could cause an error if a data set
-  //                type is changed after some data has been assigned.
-  //    '4.1.0.2'  Bug fix: Fixed a bug that could cause an integer overflow
-  //                when attempting to import an ascii raster that contains
-  //                a larger number of points.
-  //    '4.1.0.3'  Bug fix: Fixed a bug that could cause a range check error
-  //                when undoing or redoing the addition of new vertices to
-  //                the object.
-  //               Bug fix: Fixed a bug that could cause the BTN package input
-  //                to include an incorrect option with MT3D-USGS.
-  //               Bug fix: Fixed a bug that could cause an access violation
-  //                if the user attempts to open a ModelMuse file while the
-  //                Edit Data Sets dialog box is open.
-  //               Bug fix: Fixed a bug that could cause an access violation
-  //                in the "Show Grid or Mesh Values" dialog box when the
-  //                selected objecte is changled.
-  //               Bug fix: Fixed a bug that could cause MXSS to be calculated
-  //                incorrectly in the MT3D SSM package when the MNW2 package
-  //                is used.
-  //    '4.1.0.4'  Bug fix: Fixed bug that could cause ModelMuse to fail to
-  //                create the MVR file correctly when the UZF package was used
-  //                as a source.
-  //    '4.1.0.5'  Change: If ModelMuse attempts to copy an image to the
-  //                clipboard and fails because the clipboard is locked. it
-  //                will now try three times before giving up.
-  //    '4.1.0.6'  Bug Fix: Fixed bug that could cause access violations when
-  //                exporting MODFLOW boundary conditions.
-  //    '4.1.0.7'  Bug fix: Fixed bugs in archiving MODFLOW 6 and
-  //                MODPATH 7 files.
-  //               Bug fix: If HDRY and HNOFLO are set to zero, those values
-  //                are saved to the file when a ModelMuse file is saved.
-  //    '4.1.0.8'  Enhancement: Time-series file interpolation methods in
-  //                MODFLOW 6 are now supported.
-  //               Change: The description of SIGMAS in SUTRA has been changed
-  //                in the SUTRA Options dialog box.
-  //               Change: When writing time-series files for MODFLOW 6, lines
-  //                are now kept less than 2000 characters wide.
-  //               Bug fix: Fixed a bug that could cause an error when
-  //                converting an existing model to MODFLOW 6.
-  //    '4.1.0.9'  Bug fix: Fixed a bug that could prevent SFR boundaries from
-  //                being accepted as MVR sources.
-  //    '4.1.0.10' Change: The menu items used to select the type of model
-  //                have been moved out of "Model" and into "Model Selection".
-  //               Enhancement: Support for the SFT, LKT, UZT and CTS packages
-  //                in MT3D-USGS has been added.
-  //               Bug fix: Fixed writing the status of the first MAW well in
-  //                a stress period.
-  //               Enhancement: A "Paste Data" button was added to the "Import
-  //                Gridded Data dialog box.
-  //               Bug fix: The MT3D_Active data setcorresponding to MT3D input
-  //                data set ICBUND set is no longer set to False if the
-  //                Active data set is set to false.
-  //    '4.1.0.11' Bug fix: Fixed saving Lake outlet width in MODFLOW 6.
-  //    '4.1.0.12' Bug fix: Fixed specifying recharge and evapotranspiration
-  //                layer with MODFLOW 6 models when the top layer option is
-  //                selected.
-  //    '4.1.0.13' Bug fix: Fixed bug that could cause and assertion failure
-  //                while generating the input for the Reservoir package.
-  //    '4.1.0.14' Bug fix: Fixed bug that could cause an error when displaying
-  //                the Data Visualization dialog box.
-  //    '4.1.0.15' Enhancement: The "File|Import Gridded Data Files" command
-  //                now works with DISV MODFLOW 6 models and SUTRA models.
-  //    '4.1.0.16' Enhancement: The operators "^" and "**" have been added.
-  //                Both allow one number to be raised to the power of another
-  //                number.
-  //               Bug fix: Fixed a bug that could cause an access violation
-  //                in the "Data|Display Data Set Values" dialog box.
-  //               Bug fix: Fixed a bug that could cause an access violation
-  //                when exporting the CHD input file.
-  //               Bug fix: Fixed a bug that could cause ModelMuse to enter
-  //                and infinite loop when evaluating a data set using an
-  //                object on the front view of the model.
-  //    '4.1.0.17' Enhancement: Added support for NOCHECK, MEMORY_PRINT_OPTION,
-  //                and MAXERRORS in mfsim.nam options.
-  //               Enhancement: Added support for INFLOW, in the MODFLOW 6 Lake
-  //                package.
-  //               Enhancement: Added support for NO_PTC, in the MODFLOW 6 IMS
-  //                package.
-  //               Enhancement: Added support for K22OVERK and K33OVERK
-  //                in the the MODFLOW 6 NPF package.
-  //    '4.1.0.18' Bug fix: Fixed bug that prevented MNW1 wells from being
-  //                edited correctly.
-  //               Bug fix: Not in released version. Fixed evaluataion of Ky
-  //                in non MF6 models.
-  //               Bug fix: fixed bug that prevented well screens in MAW wells
-  //                from being edited correctly.
-  //               Enhancement: Added additional error checking for MAW wells.
-  //    '4.1.0.19' Enhancement: ModelMuse can now convert the UZF package for
-  //                MODFLOW-2005 to the UZF package for MODFLOW 6.
-  //    '4.1.0.20' Bug fix: ModelMuse now allows the user to specify a return
-  //                location in DRT as a Farm in the Farm process or a SWR
-  //                reach with MODFLOW-OWHM models.
-  //    '4.1.0.21' Bug fix: Fixed a bug that prevented some DXF files from
-  //                being imported correctly.
-  //    '4.1.0.22' Enhancement: Improved display of actions during export of
-  //                MAW package.
-  //    '4.1.0.23' Enhancement: The Edit Feature Formula dialog box can now be
-  //                used with the MAW package.
-  //    '4.1.0.24' Bug fix: ModelMuse now assigns IFACE values for recharge
-  //                and evapotranspiration in MODFLOW 6.
-  //               Bug fix: Fixed assignment of UZF6 package data.
-  //    '4.1.0.25' Enhancement: If no data has been assigned to a data set,
-  //                the legend tab in the Data Visualization dialog box will
-  //                be empty.
-  //               Bug fix: Fixed import of Surfer Grid files into a
-  //                DISV MODFLOW 6 model.
-  //    '4.1.0.26' Bug fix: Fixed a bug that could cause the Point Average
-  //                Interpolation method to fail if a point was at the edge
-  //                of two cells.
-  //    '4.1.0.27' Bug fix: Fixed option to select all the data from a single
-  //                time step whem importing results.
-  //               Bug fix: Added OUTER_RCLOSEBND to variables in that can be
-  //                edited in the IMS solver.
-  //               Bug fix: If the values of INNER_HCLOSE, INNER_MAXIMUM,
-  //                INNER_MAXIMUM,LINEAR_ACCELERATION, OUTER_HCLOSE,
-  //                OUTER_MAXIMUM, and BACKTRACKING_NUMBER are not overriden,
-  //                the values that are written to the IMS input file are the
-  //                values suggested in the MODFLOW 6 input instructions based
-  //                on the complexity of the problem.
-  //               Bug fix: Fixed a bug in importing Shapefiles in which
-  //                two or more Shapefile Attributes have the same name.
-  //    '4.1.0.28' Bug fix: Fixed bug in export of MAW. FLOWING_WELL now
-  //                exported correctly.
-  //               Bug fix: ModelMuse will now generate an error message
-  //                instead of sending a bug report if no valid times have
-  //                been defined in the HFB package in MODFLOW 6.
-  //    '4.1.0.29' Bug fix: Fixed export of grid lines for the active area
-  //                to a Shapefile.
-  //               Bug fix: Fixed display of active cells in MODFLOW 6 to
-  //                IDOMAIN > 0.
-  //               Bug fix: Fixed specifying overirdes of nonlinear variables
-  //                in IMS package in MODFLOW Packages and Programs dialog box.
-  //    '4.1.0.30' Bug fix: Fixed bugs in specifying backtracking_tolerance
-  //                and outer_rclosebnd in the IMS package.
-  //    '4.1.0.31' Bug fix: Fixed bug in the "Show Grid or Mesh Values" dialog
-  //                box that could cause an access violation.
-  //    '4.1.0.32' Bug fix: when converting to a MODFLOW 6 model, the Storage
-  //                package is now automatically activated if the model is
-  //                transient.
-  //               Bug fix: Fixed bug that could cause an error when exporting
-  //                the UZF input file.
-  //    '4.2.0.0'  Bug fix: When converting MNW2 wells to MAW wells, the SKIN
-  //                option in MNW2 is now converted to the CUMULATIVE option
-  //                in MAW instead of the SKIN option in MAW.
-  //               Bug fix: Fixed a bug that could cause issues with evaluating
-  //                formulas that involve only integers.
-  //    '4.2.0.1'  Bug fix: Fixed a bug that caused an assertion failure if
-  //                MODFLOW 6 SFR streams were not assigned for every stress
-  //                period.
-  //               Bug fix: Fixed position of buttons for no-delay beds in the
-  //                MODFLOW Layers dialog box.
-  //               Bug fix: Fixed position of buttons for the SF6, MAW,
-  //                and MT3D SSM packages in the Object Properties dialog box.
-  //               Bug fix: Fixed a bug that could cause a bug report to create
-  //                when attempting to export an object to a Shapefile.
-  //    '4.2.0.2'  Bug fix: When importing a Shapefile, ModelMuse gives the
-  //                option to convert from decimal degrees to UTM coordinates.
-  //                However, this may result in an invalid operation if the
-  //                actual coordinates are not in decimal degrees. ModelMuse
-  //                now displays an error message rather than sending a bug
-  //                report in such cases.
-  //    '4.2.0.3'  Enhancement: Added support for CSUB package in MODFLOW 6.
-  //               Bug fix: Fixed bug that could cause an assertion failure if
-  //                an object that defined a MAW well was in a cell that was
-  //                inactive in the top layer.
-  //    '4.2.0.4'  Bug fix: Fixed display of pump capacity table in the MNW2
-  //                package.
-  //               Enhancement: Added "Object|Edit|Anonymize Selected Point
-  //                Objects command.
-  //    '4.2.0.5'  Bug fix: Fixed bug that could cause a range check error
-  //                when using the UZF package in MODFLOW 6.
-  //               Bug fix: If ModelMuse encounters and error when trying to
-  //                back up an initialization file, it no longer generates a
-  //                bug report.
-  //               Bug fix: Fixed bug that could cause range check errors when
-  //                editing MNW2 wells.
-  //               Bug fix: Fixed bug importing an existing MODFLOW model.
-  //               Bug fix: Fixed editing of stream gages.
-  //               Bug Fix: Fixed bug in opening ModelMuse file for
-  //                WellFootprint models.
-  //    '4.2.0.6'  Bug Fix: Fixed bug in saving ModelMuse file for
-  //                WellFootprint models.
-  //               Bug fix: Fixed bug that allowed the user to import
-  //                Shapefiles that directly set the withdrawal rate in
-  //                WellFootprint models.
-  //               Bug fix: Fixed bug that allowed the user to import
-  //                points that directly set the withdrawal rate in
-  //                WellFootprint models.
-  //               Bug fix: Fixed bug that could cause the model selection
-  //                to be set to the wrong value when creating a new model.
-  //               Bug fix: Fixed bug that could cause ModelMuse to have an
-  //                Input/Output error when importing a model.
-  //               Bug fix: Fixed bug that could cause importing points to
-  //                fail if the values being imported had extra spaces before
-  //                or after any value.
-  //    '4.2.0.7'  Enhancement: ModelMuse now uses less memory when importing
-  //                existing models.
-  //               Bug fix: If the user attempts to plot a MODPATH, pathline,
-  //                end-point, or time-series file that contains invalid layer
-  //                numbers, ModelMuse will display an error message instead of
-  //                generating a bug report.
-  //    '4.2.0.8'  Bug fix: Fixed a bug that could make it impossible to open
-  //                a ModelMuse file.
-  //               Enhancement:Custom color schemes can now be used when
-  //                plotting MODPATH data.
-  //    '4.2.0.9'  No real change.
-  //    '4.2.0.10' Bug fix: Fixed using binary head file for initial heads in
-  //                MODFLOW 6.
-  //               Enhancement: When importing an existing model that uses the
-  //                BCF package, specific storage is calculated from
-  //                the confined storage coefficient and hydraulic conductivity
-  //                is calculated from transmissivity.
-  //               Bug fix: When converting to MODFLOW 6 from earlier versions
-  //                of MODFLOW the user can now convert the FHB package to the
-  //                CHD and WEL packages.
-  //               Bug fix: When converting to MODFLOW 6 from a model in which
-  //                the NWt package is selected, the Newton option in
-  //                MODFLOW 6 is now selected automatically.
-  //               Bug fix: Fixed using binary head file in MODFLOW 6 for
-  //                starting heads.
-  //    '4.2.0.11' Bug fix: Fixed export of "NO_PTC" option in MODFLOW 6.
-  //               Change: The NEWTON and UNDER_RELAXATION options in MODFLOW 6
-  //                can now be specified in the MODFLOW Packages and Programs
-  //                dialog box as well as the MODFLOW Options dialog box.
-  //    '4.2.0.12' Bug fix: Fixed bug that caused an error if the user attempted
-  //                to rename a layer group with an invalid name.
-  //               Bug fix: Fixed bug that could cause an error when drawing
-  //                contours.
-  //    '4.2.0.13' Bug fix: Fixed bug that could cause an assertion failure
-  //                when drawing contours using the ACM 626 method.
-  //    '4.2.0.14' Bug fix: Fixed but that cause a conversion error if the
-  //                user failed to specify the properties of a lake outlet
-  //                correctly.
-  //    '4.2.0.15' Change: Modified export of the MODFLOW-2005 Lake package
-  //                input to allow for periods in which no lakes are active.
-  //               Bug fix: Fixed a bug that could cause an access violation
-  //                when updating the legend for the colors displayed in
-  //                the Data Visualization dialog box.
-  //               Bug fix: Fixed a bug that could cause an access violation
-  //                in the Global Variables dialog box.
-  //    '4.2.0.16' Change: Modified export of the MODFLOW-2005 Lake package
-  //                input to allow for periods in which no lakes are active.
-  //    '4.2.0.17' Bug fix: Fixed bug that resulted in a bug report being
-  //                generated if ModelMuse attempted to import SUTRA results
-  //                containing "NaN".
-  //               Bug fix: Fixed export of SUTRA data sets 21A and 21B when
-  //                they are inactive initially.
-  //               Bug fix: Fixed a bug that caused issues with opening files
-  //                that contained very large or very small real number values.
-  //    '4.2.0.18' Bug fix: Fixed a bug that could cause an assertion failure
-  //                when exporting SUTRA models.
-  //               Enhancement: ModelMuse now warns the user if any specified
-  //                head cells are cells for which Kx, Ky, and Kz are all zero.
-  //               Bug fix: Fixed a bug in inserting or deleting well screens
-  //                in the MNW2 package.
-  //               Bug fix: When importing Shapefiles that contained measured
-  //                values, values less than -1E38 are treated as no-data
-  //                values.
-  //               Bug fix: Fixed bug that could cause an assertion failure
-  //                if identical starting and ending times were specified for
-  //                the RCH package.
-  //               Bug fix: Fixed bug in reading binary MT3D model results
-  //                that could cause a bug report to be generated.
-  //               Bug fix: Fixed bug in inserting a new composite zone for
-  //                Zone Budget in the "Model|MODFLOW Packages and Programs"
-  //                dialog box.
-  //               Enhancement: ModelMuse now prints the number of active cells
-  //                in a MODFLOW model as a comment either in the Basic package
-  //                input file for pre-MODFLOW6 models or in the DIS or DISV
-  //                files in MODFLOW 6 models.
-  //    '4.2.0.19' Bug fix: When exporting MT3D model input files, ModelMuse
-  //                will now check whether any .ucn files that will be created
-  //                by the model already exist. If they do exist, ModelMuse
-  //                will delete them.
-  //    '4.2.0.20' Bug fix: Fixed bug that could cause an access violation when
-  //                manually specifying the SUTRA mesh.
-  //               Bug fix: Fixed a bug that could cause the MAW observations
-  //                to be written incorrectly.
-  //               Change: With MODFLOW 6 observations, a prefix is added before
-  //                each observation name to ensure that all the observation
-  //                names are unique.
-  //               Bug fix: It is now possible to inactivate a STR boundary by
-  //                deleting all the times at which the boundary is defined.
-  //               Bug fix: Fixed export of grid data to Shapefile with DISV
-  //                grids. Formerly, the cells boundaries could be exported in
-  //                counterclockwise direction instead of clockwise direction.
-  //               Bug fix: Fixed drawing active area outline to avoid access
-  //                violations.
-  //    '4.2.0.21' Bug fix: Changing the times of the MODFLOW Stress periods
-  //                will now result in the times of MNW2 wells being updated to
-  //                the same times.
-  //    '4.2.0.22' Bug fix: In MODFLOW 6 models, the CHD ending head can no
-  //                longer be specified without using a parameter.
-  //               Bug fix: When converting to a MODFLOW 6 model, CHD boundaries
-  //                that don't use parametes are converted to CHD boundaries
-  //                that use a parameter.
-  //    '4.2.0.23' Bug fix: When attempting to read an invalid .nod or .ele
-  //                SUTRA output file, ModelMuse will now generate an error
-  //                message for the user instead of issuing  a bug report.
-  //    '4.2.0.24' Bug fix: When attempting to read an invalid
-  //                MODPATH output file, ModelMuse will now generate an error
-  //                message for the user instead of issuing  a bug report.
-  //               Bug fix: Fixed bug that could cause objects to fail to
-  //                intersect all the correct cells in MODFLOW DISV models.
-  //    '4.2.0.25' Change: ModelMuse no longer produces times series files for
-  //                parameters in the DRN and RCH packages.
-  //    '4.2.0.26' Change: ModelMuse no longer produces times series files for
-  //                parameters. Instead, parameter values are incorporated
-  //                into the values in the package input file.
-  //               Bug fix: Fixed a bug that could cause an assertion failure
-  //                if recharge or evapotranspiration was used in
-  //                some of the stress periods but not in others.
-  //    '4.2.0.27' Bug fix: With MODFLOW 6 models in which the "Top Active Cell"
-  //                option in the Recharge and Evapotransipiration packages
-  //                is selected, ModelMuse will automatically specify the
-  //                layer as the top active layer at a particular location.
-  //    '4.2.0.28' Enhancement: Added new function: HighestActiveLayer. It
-  //                returns the highest layer at a particular location that is
-  //                active.
-  //               Change: The ActiveOnLayer function was changed for MODFLOW 6
-  //                models to return True in the IDOMAIN data set is greater
-  //                than 0.
-  //               Bug fix: Fixed bug in export of the MODFLOW-2005 Lake package
-  //                input file that could prevent data set 9 from being written
-  //                for some stress periods after the first stress period.
-  //    '4.2.0.29' Bug fix: Fixed a bug that could cause an access violation
-  //                when displaying the Object Properties dialog box.
-  //               Bug fix: Corrected spelling of CUPBGO in the Object
-  //                Properties dialog box the the SUTRA Generalized Flow
-  //                Boundary
-  //               Bug fix: Fixed allowing multiple "Used" formulas to be
-  //                edited at once for SUTRA boundaries.
-  //               Bug fix: Fixed "Navigation|Go To" dialog box to work more
-  //                easily with SUTRA 2D models.
-  //               Enhancement: Not in released version. PEST Beta 1.
-  //    '4.2.0.30' No real change
-  //    '4.2.0.31' Enhancement: In 3D SUTRA models, there is a new data set
-  //                named Active_Node. Setting that data set to False at any
-  //                node makes the node inactive.
-  //    '4.2.0.32' Bug fix: Fixed bug that could cause assertion failures when
-  //                exporting boundary conditions in SUTRA.
-  //    '4.2.0.33' Bug fix: Fixed a bug that could cause the UZF input file to
-  //                be created incorrectly.
-  //    '4.2.0.34' Bug fix: Fixed bug in animating contours.
-  //               Enhancement: added SUTRA_MeshEdgeNode function.
-  //    '4.2.0.35' Bug fix: If the user attempts to import a mesh that is not
-  //                in the correct format, ModelMuse now displays an appropriate
-  //                error message instead of generating a bug report.
-  //    '4.2.0.36' Bug fix: When creating a new MODFLOW model, the user
-  //                specified length and time units were not applied if the user
-  //                clicked the "No Grid" button.
-  //               Bug fix: Fixed a bug that could cause an invalid warning to
-  //                be issued about transient SFR items with a duration of zero.
-  //               Bug fix: Changing a time in the MODFLOW Time dialog box now
-  //                causes corresponding times defined for SFR package to be
-  //                updated.
-  //               Change: When exporting a MODFLOW-OWHM model containing
-  //                parameters, the user is given the opportunity to turn off
-  //                printing cell lists.
-  //    '4.2.0.37' Enhancement: In MT3DMS models, ISSGOUT is now
-  //                specified if the MNW1 package is active. In MT3D-USGS
-  //                models, ISSGOUT is now specified if the MNW1 or MNW2
-  //                packages are active. The output file will have the extension
-  //                .mt_mnw_out.
-  //    '4.2.0.38' no real change.
-  //    '4.3.0.0'  Bug fix: Fixed a bug that could cause some formulas to fail
-  //                if a data set is renamed.
-  //               Enhancement: ModelMuse can now display specific discharge
-  //                vectors for MODFLOW 6 models.
-  //    '4.3.0.1'  Bug fix: If not MODFLOW stress periods are defined when the
-  //                user attempts to generate the MODFLOW input files, one will
-  //                now be created automatically.
-  //               Bug fix: It is no longer possible to define two parameters
-  //                with the same name in the Manage Parameters dialog box.
-  //               Bug fix: Fixed bug that could cause an access violation when
-  //                drawing contours with a MODFLOW DISV model.
-  //               Bug fix: In some cases where a circular reference error would
-  //                have resulted in a bug report, a message to the user will be
-  //                displayed instead.
-  //               Bug fix: Fixed bug in importing specific storage from the BCF
-  //                package when importing an existing MODFLOW-2005 or
-  //                MODFLOW-NWT model.
-  //    '4.3.0.2'  Bug fix: Fixed a bug that could cause a range-check error
-  //                when drawing contours if the cross section does not
-  //                intersect the mesh.
-  //    '4.3.0.3'  Bug fix: Fixed a bug that could cause a bug report to be
-  //                generated when opening an existing model.
-  //    '4.3.0.4'  Bug fix: Fixed defining CSUB observations for
-  //                csub, inelastic-csub, elastic-csub, sk, ske,
-  //                interbed-compaction, inelastic-compaction,
-  //                elastic-compaction, and thickness observation types.
-  //    '4.3.0.5'  Beta bug fix: Fixed export of head calibration observation.
-  //    '4.3.0.6'  Beta bug fix: Fixed export of template files.
-  //               Beta bug fix: Fixed export of boundname for flow observations
-  
-  //    '4.3.0.7'  Bug fix: Fixed import of the MODFLOW-2005 lake package in
-  //                models with only one layer.
-  //               Bug fix: Fixed the ^ operator so that it will accept two
-  //                real-number arguements.
 
   // version number of ModelMuse.
-  IModelVersion = '4.3.0.7';
+//  IModelVersion = '4.3.0.7';
+
+  function IModelVersion: string;
+
+  const
   StrPvalExt = '.pval';
   StrJtf = '.jtf';
   StandardLock : TDataLock = [dcName, dcType, dcOrientation, dcEvaluatedAt];
@@ -9930,6 +5789,4171 @@ const
 const
   UcodeDelimiter = '@';
   StrMeshElementSize = 'Mesh Element Size';
+
+// '0.5.0.0' is release candidate 1.
+// '0.6.0.0' is release candidate 2.
+// '1.0.0.0' is initial release version.
+// '1.0.1.0' fixed bug that caused access violations if a formula was
+//    invalid such as '1 2'.
+//    Fixed bug that caused access violations if all the vertices in a
+//    contour were deleted when it was first created.
+//    Changed the hint in the Working area depending on the selected tool.
+// '1.0.2.0' Fixed bug that caused access violations if the user changed
+//    an object so that it no longer affected a data set and then tried
+//    to edit the object again.
+//    Fixed bug that would cause access violations if a new model was started
+//    while frmShowHideObjects was visible.
+//    Fixed bug that allowed the undo and redo menu items and buttons to
+//    remain enabled when starting a new model.
+// '1'0.3.0' Fixed the "ObjectIntersectArea" and "ObjectIntersectLength"
+//    functions.
+// '1'0.4.0' Fixed bug that caused access violations if the user edited
+//    the data sets that an object affected and then tried to undo
+//    those changes.
+//    Fixed bug in reading character fields from Shapefiles.
+// '1.0.5.0' Fixed bug that caused object intersections to be evaluated
+//    incorrectly if the object was evaluated at nodes.  Fixed bug that
+//    could cause access violations when deleting objects.
+//    Updated memory manager.
+// '1.0.6.0' Fixed bug that caused access violations when closing GoPhast
+//    if a dataset had been deleted and then restored. Fixed bug that caused
+//    certain formulas to be 'decompiled' incorrectly.
+// '1.0.7.0' Fixed bug that caused access violations when editing objects
+//    that specified boundary conditions via PHAST-style interpolation.
+// '1.0.8.0' Fixed "ObjectIntersectArea" function.
+//    Fixed bug in interpolation.
+// '1.0.9.0' Fixed bug that prevented adding new wells.
+// '1.0.10.0' Final beta version of ModelMuse.
+// '2.0.0.0' First release of ModelMuse: Added support for MODFLOW-2005
+//    and MODPATH.
+// '2.0.0.1' Fixed problem with backwards particle tracking in MODPATH.
+//    Automatically updates formulas when the names of data sets and
+//    global variables are changed.
+// '2.0.0.2' Fixed bug in exporting "Factor" in flow observations.
+// '2.0.0.3' Fixed bug that allowed a global variable to have the
+//    same name as a TDataArray.
+//    Added ability to specify additions to the batch files that run
+//    MODFLOW or PHAST.
+// '2.0.0.4' Fixed bug exporting LAYWET. Added export of HUF package.
+// '2.0.0.5' Fixed bug (introduced in 2.0.0.1) in freeing TScreenObject.
+// '2.0.0.6' Added support for a new way of selecting objects for editing.
+//    Added support for importing calculated heads for HUF units.
+// '2.0.0.7' Fixed bug importing multiplier and zone arrays when "none" or
+//    'all" are not in upper case letters.
+//    Added support for importing flow files from HUF.
+//  '2.0.0.8' Fixed bug: when pasting an TScreenObject from the clipboard,
+//    imported values were not pasted too.
+//    Fixed bug in Nearest Point interpolation method.
+//    Fixed bugs in importing DRN, DRT, and UZF packages.
+//    In Show/Hide Objects dialog box, the selected objects are displayed in
+//    a bold font.
+//    New Data Set Values dialog box.
+//    Improved speed of Nearest Point method when point objects are used.
+//    Imported flow observations
+//  '2.0.0.9' Fixed bug importing elevations formulas when importing
+//    Shapefiles.
+//  '2.0.0.10' Fixed bug importing gridded data with rotated grid.
+//    Improved speed of some interpolation methods. Modified the Rearrange
+//    Objects dialog box to allow it to show only the visible or only the
+//    selected objects.
+//  '2.0.0.11' worked on speeding up importing Shapefiles.
+//  '2.0.0.12' Fixed bugs in managing subscriptions.
+//  '2.0.0.13' Reduced memory usage.
+//  '2.0.0.14' Fixed bug importing Shapefile.
+//    Improved display of frmShowHideObjects.
+//  '2.0.0.15' Fixed bug reading existing files.
+//  '2.0.0.16' Fixed bug determining stress periods.
+//  '2.0.0.17' Added capability to export objects as Shapefiles.
+//    Added the ability to delete images that have been imported.
+//    Deleting all the points in an object in the
+//    Object Properties dialog box now results in the object being deleted.
+//    When exporting boundary conditions, there is now a warning
+//    if no cells are defined.
+//    Grid Values dialog box updated to show grid cell dimensions.
+//    Transient data after the end of the
+//    last defined stress period is now ignored.
+//  '2.0.0.18' Fixed problems with exporting Shapefiles.
+//    Observations outside the defined model times are no longer exported.
+//  '2.0.0.19' Improved export of objects to Shapefiles.
+//    Holding down the Shift key when releasing the mouse while creating
+//    objects of moving nodes of objects now causes the new or moved vertex
+//    to "snap" to the location of a nearby node of another object if it
+//    is within 3 pixels of the cursor location.
+//  '2.0.0.20' Fixed bug in contouring data.
+//    Fixed bug in selecting CHD package
+//    (couldn't specify comments for the CHD package even if it was selected.)
+//  '2.0.0.21' Added shortcut for displaying the Show/Hide objects dialog
+//    box.
+//    Fixed bug in reducing the number of items for a MODFLOW boundary
+//    condition.
+//  '2.0.0.22' Better names for objects when importing model results.
+//  '2.0.0.23' When snapping to points is activated, the cursor changes
+//    when it is in the vicinity of a point on a different ob
+//  '2.0.0.24' Changed the way MODFLOW wells are exported so that if an
+//    object has multiple sections in the same cell,
+//    the exported pumping rate is the sum of the pumping rate for each
+//    section.
+//  '2.0.0.25' Fixed bug coloring the grid with parameters
+//    after modifying the grid.
+//    Fixed bugs in export of MODPATH files.
+//  '2.0.0.26' Fixed bug importing points; a blank file name
+//    is no longer added to the files to archive.
+//  '2.1.0.0' Fixed bug importing EVT, ETS, and RCH packages
+//    when parameters were used.
+//    Added Save and Clear buttons to Errors and Warnings dialog box.
+//    Fixed bug in export of WETDRY in HUF.
+//    Fixed bug in export of FACTOR in imported flow observations.
+//  '2.1.1.0' Fixed bug importing WETDRY in LPF.
+//    Fixed bug setting elevations of objects when importing
+//    EVT and ETS packages.
+//    Fixed bug importing SFR.
+//    Fixed bug importing DIS.
+//  '2.1.1.1' Fixed bug in which models that used parameters but not zones
+//    were not imported correctly.
+//  '2.1.1.2' Changed the way that CHD, DRN, DRT, GHB, and WEL are exported.
+//    Now each section of an object will represent a different boundary cell
+//    if two or more sections are in the same cell.
+//    Fixed bug in TframeSfrParamInstances that prevented some valid
+//    parameter instance names from being accepted.
+//    Fixed bug in TframeSfrParamInstances that prevented the Delete
+//    and insert buttons from being visible.
+//  '2.1.1.3' Improved handling of pasting vertex data in the
+//    Object Properties form.
+//    Fixed bug that sometimes prevented data set comments from being
+//    edited properly.
+//    Added support for new options in MODFLOW-2005 version 1.7.
+//      Added support for Gage type 4 for Lakes in the Gage package.
+//      Added support for Gage type 8 for SFR streams in the Gage package.
+//      Added support for SURFDEPTH in Lake package.
+//    New functionality in the MODFLOW Name File dialog box.  If the input
+//    for a package is listed in the Name File dialog box, the input file
+//    for that package will not be generated by ModelMuse.  See the help
+//    for the MODFLOW Name File dialog box for full details.
+//  '2.1.1.4' Fixed saving data for HUF package. This bug was not present in
+//    version '2.1.1.0'.
+//    Reduced memory usage.
+//  '2.1.1.5' Fixed bug that caused non parameter data to appear in the
+//    Object Properties dialog box for objects that did not have
+//    non-parameter data.  The bug occurred if a previous object which
+//    did have non-parameter data was edited first.
+//    Fixed bug that caused ModelMuse to hang if there was an error
+//    in a data set formula.
+//  '2.1.1.6' Added support for MNW2 and MNWI packages.
+//    Added new filters for coloring and contouring "Active only" and
+//    "Values to Ignore".
+//    Added import of ITT when importing head observations from Shapefiles.
+//    Fixed bug importing UZF gages.
+//    Fixed bug in setting head observation names.  Spaces and quotes are removed.
+//  '2.1.1.7' Worked on reading pathlines from MODPATH.
+//    Fixed bug that caused COFF to be exported incorrectly if an observation
+//    was exactly on a column boundary.
+//    Fixed bug in which the display of head observations was not changed
+//    when a TScreenObject was moved.
+//    Fixed bug that caused head observations imported from an existing
+//    MODFLOW model to be imported with the elevation from the wrong cell if
+//    ROFF = -0.5 or COFF = 0.5.
+//    Fixed bug that could cause access violations when contouring 2D data
+//    sets if the selected layer (or row or column) was not the first layer
+//    (or row or column).
+//    Added import of parameter names when importing RCH from a Shapefile.
+//  '2.1.1.8' Added import of parameter names when importing CHD, DRN, DRT,
+//    ETS, EVT, GHB, RIV, or WEL from a Shapefile.
+//    Fixed bug exporting flow observations when the formula for Factor
+//    is complex.
+//  '2.1.1.9' Added support for displaying pathlines from MODPATH.
+//  '2.1.1.10' Fixed bug that caused too much memory to be used when
+//    exporting ETS package.
+//  '2.1.1.11' Fixed bug that caused problems editing ETS data for
+//    objects.
+//    Added support for displaying endpoints from MODPATH.
+//  '2.2.0.0' Added support for displaying time-series data from MODPATH.
+//    Added support for multiple vertical screens in MNW2.
+//    Multiplier and Zone arrays for transient data are tested to see if
+//    they are identical to a previous Multiplier or Zone array
+//    for transient data. If so, the previous array is reused.  This
+//    saves memory in MODFLOW.
+//    Fixed bug exporting gridded data to Shapefile.  Duplicate fieldnames
+//    are no longer created.
+//    Fixed access violation bug in closing TfrmImportGriddedData.
+//    When importing points, empty lines
+//    and lines starting with "#" are skipped.
+//    Ruler settings are now saved with the file.
+//    Changed "Select Objects of Editing" dialog box to
+//    "Select Objects of Editing or Deletion" dialog box
+//    along with a change in functionality to allow objects to be
+//    deleted with this dialog box.
+//  '2.2.1.0' Fixed bug that prevented RunPhast.bat from executing
+//    correctly when it was executed by ModelMuse.
+//  '2.2.1.1' When importing model results, heads and drawdowns equal to
+//      HDRY and HNOFLO are not used in assigning the minimum and maximum
+//      values for the array.
+//    In Data Set Values dialog box, the layers are now in a list on the left.
+//    Fixed bug that caused the HFB and UZF packages to become
+//      deselected whenever the selected flow package was switched.
+//    Fixed bug that caused the number of wetting iterations could be saved
+//      as zero incorrectly if it should have been a 1.
+//      However, MODFLOW would change it back to 1 so it would not affect
+//      model computations.
+//    Added support for BCF package.
+//    When the HUF package is selected, optional data sets will be created
+//      that display hydraulic properties that result from applying the
+//      HUF parameters to the model.
+//    Added support of importing the MNWI package from an existing model.
+//    Fixed bug exporting HUF files in which storage parameters were exported
+//      in steady-state models.
+//  '2.2.1.2' Fixed bug in LPF and HUF package export in which there could
+//      be no space between a multiplier array name and a zone array name.
+//    Fixed bug in HUF package in which zone and multiplier arrays were not
+//      written.
+//    Fixed bugs that could cause access violation when opening a new model
+//      after having edited objects in the currently opened model.
+//  '2.2.1.3' Fixed bug that kept the videos from being played automatically.
+//    Added a check of the fractional depth and fractional rates in the ETS
+//      package.
+//    Fixed bug that caused an error when certain functions were used to
+//      assign values to data sets.
+//    Improved speed.
+//    Fixed bug that caused errors creating temporary files if more than
+//      one model was being run at one time.
+//    Fixed bug getting temp file names.
+//  '2.2.1.4' Added warning when an input file specified in the
+//      MODFLOW Name File dialog box does not exist.
+//    Files specified in the MODFLOW Name File dialog box are now
+//      included in the archive.
+//    Fixed export of Shapefiles.
+//  '2.2.1.5' The mouse wheel can now be used to zoom in or out in the
+//      top, front, or side views of the model.
+//    Fixed bug importing ModelMate file.
+//    Added support for the SUB package.
+//    Fixed bug deleting the last Layer group in a model.
+//    Added support for importing binary files generated by the SUB package.
+//    Added support for importing the SUB package
+//      from existing MODFLOW models.
+//    Fixed bug in getting the formula from the Formula Editor.
+//  '2.2.1.6' Fixed bug importing models that contain the HUF package when a
+//      zone array was not used with a parameter.
+//    Fixed bug that allowed invalid formulas to be set for
+//      the Z elevation formulas for an object.
+//    Fixed bug with access violations when checking the internet.
+//    Disabled MODPATH export for PHAST models.
+//  '2.2.1.7' Assigned default names to new systems of delay and no-delay beds.
+//    Fixed bug in evaluating formulas that contain "ActiveOnLayer" for
+//      Z-coordinates
+//  '2.2.1.8' When updating ModelMate files, if an observation
+//      or prediction group has no associated observations or predictions,
+//      and the user has elected to delete unused observations or predictions,
+//      the unused observation or prediction groups are deleted too.
+//    When importing model results and updating existing data for the results
+//      duplicate copies of HDRY and HNOFLO are no longer added to the
+//      values to skip.
+//    Improved error messages for functions that retrieve imported data.
+//    Fixed bug getting names of new temporary files.
+//    Fixed bugs in exporting ModelMate files.
+//  '2.2.1.9' Added info on associated model input data sets for SUB package.
+//    Added support for importing Surfer Grid files.
+//  '2.2.1.10' Attempted to fix problem with access violations when
+//      accessing the file menu.
+//  '2.2.1.11' Added support for Surfer ASCII grid files.
+//  '2.2.1.12' Fixed bug with not conserving memory properly in EVT.
+//  '2.2.1.13' Worked on conserving memory.
+//  '2.2.1.14' Worked on conserving memory. Fixed bug that caused
+//      access violations when undoing the setting of a boundary condition.
+//  '2.3.0.0' Fixed bug that could cause layer elevations to be set
+//      incorrectly after changing the layer structure.
+//    Fixed bug that could cause access violation when deleting a data set.
+//  '2.3.0.1' Bug fix: Corrected name of the
+//      "Select Objects for Editing or Deletion."
+//    Enhancement: Added warning messages in export of the
+//      MODPATH input files if the required MODFLOW input or
+//      output files are missing.
+//    Bug fix: when deleting data sets, check that all data set formulas
+//      are still OK.
+//    Bug fix: the text on the status panel is no longer truncated
+//      when it is over 110 characters in length.
+//    Bug fix: fixed access violation when closing with the Color Grid
+//      or Contour data dialog boxes open.
+//    Bug fix: fixed import of rate data in the UZF package when some
+//      rates are reused and others are not reused.
+//    Change: Boundary condition times prior to the beginning of the first
+//      defined boundary condition are now ignored.
+//  '2.3.0.2' Enhancement: Added support for sampling DEM files.
+//    Bug fix: Fixed access violations that occurred when closing
+//      ModelMuse after deleting a data set.
+//    Change: When importing character attributes of Shapefiles,
+//      blank characters at the beginning or end will be removed.
+//    Bug fix: The row width is now displayed correctly on the Grid Values
+//      dialog box.
+//    Bug fix: When the first time defined in the MODFLOW Time dialog box
+//      is after the first time defined in an object, values were not
+//      assigned properly. (Bug introduced in version 2.3.0.1.)
+//  '2.3.0.3' Change: added pumping rate comment for wells. This can
+//      be helpful when using PEST.
+//  '2.3.0.4' Bug fix: If attempting to draw a bitmap results in an
+//       out-of-resources error, drawing the bitmap will be skipped.
+//     Change: menu item caption switches between "Show 2-D Grid"
+//       and "Hide 2-D Grid" depending on whether or not the grid lines
+//       are visible.
+//     Bug fix: Various controls on the Color Grid and
+//       Contour Grid dialog boxes now changes position appropriately
+//       if the dialog box is changed in size.
+//     Bug fix: The beginning and ending times for MODPATH can now be
+//       set to non-integer values.
+//     Bug fix: The name of a multiplier array would not be exported
+//       correctly if it was used in one of the HUF package input files
+//       but that input file was not being created by ModelMuse.
+//  '2.3.0.5' Change: if a bitmap can not be displayed, it will be hidden
+//       and then must be shown again manually after decreasing the
+//       magnification.
+//     Bug fix: fixed "List index out of bounds" error when deleting
+//       a data set.
+//     Bug fix: If every cell has gone dry, there is no longer an
+//       "List index out of bounds" error when attempting to import
+//       the model results.
+//     Enhancement: It is now possible to paste multiple data set names in
+//       the table on the Data tab of the Import Shapefile dialog box.
+//  '2.3.0.6' Bug fix: The labels for the various Z-coordinate formulas
+//       in the Import Shapefile dialog box are now enabled when appropriate.
+//  '2.3.0.7' - '2.3.0.9' Bug fix: Fixed bug that prevented
+//       the Packages and Programs dialog box from being displayed
+//       on some computers.
+//     Bug fix: Fixed bug that caused an Assertion error when
+//       attempting to show the "Select Objects By Name" dialog box
+//       in a model that had no objects.
+//  '2.3.0.10' Enhancement: The Grid Value dialog box has been changed to
+//       display the name of the selected object and to show its 3'rd
+//       dimension coordinates for those cells intersected or enclosed
+//       by the object.
+//  '2.3.0.11' Enhancement: Improved speed of importing data.
+//  '2.3.0.12' Bug fix: Saving the ModelMuse file with a new file name now
+//       results in the default name for the model input files being
+//       changed as well.
+//     Bug fix: When importing Shapefiles, if the feature that is being
+//       imported must be imported as separate objects, the Import Shapefile
+//       dialog box no longer allows them to be combined.
+//     Bug fix: When flow observations were used the GHB, DRN, RIV, and CHD
+//       packages were not always exported correctly.
+//   '2.3.0.13' - '2.3.0.17' Reduced disk usage.
+//   '2.3.0.18' Enhancement: Improved speed.
+//   '2.3.0.19' Bug fix: fixed bug introduced in '2.3.0.18'.
+//   '2.3.0.20' Bug fix: Fixed display of the recharge, EVT, and ETS layers
+//       when no parameters were defined.
+//     Bug fix: The SFR package input could be generated incorrectly if an
+//       object that was supposed to define a stream segment did not
+//       intersect the grid.
+//   '2.3.0.21' Bug fix: Fixed display of RCH, EVT, and ETS rates when
+//       parameters are first defined.
+//     Bug fix: Fixed when certain controls related to MODPATH become
+//       enabled.
+//     Bug fix: There no longer is an access violation if you attempt to
+//       create a new model while in the midst of creating a new object.
+//     Bug fix: Fixed calculation of HUF_Kx.
+//     Bug fix: Fixed export of Reference time in the MODPATH response file.
+//   '2.3.0.22' Enhancement: When the MODFLOW Hydrogeologic Units dialog box
+//       is closed, it now checks that at least one parameter
+//       has been associated with each hydrogeologic unit and that
+//       each parameter is associated with at least one hydrogeologic unit.
+//     Enhancement: The thickness of HUF units is now constrained to be
+//       greater than or equal to zero.
+//     Bug fix: Access violations no longer occur when creating a new
+//       object after having closed a previous model and starting
+//       a new model.
+//     Bug fix: fixed export of BeginPeriod and BeginStep.  They must both
+//       be set to 1 if any stress period in the model is a steady-state
+//       stress period.
+//   '2.3.0.23' Bug fix: Fixed Assertion error in evaluation of MNW2 input.
+//     Enhancement: Added error message if a MODPATH particle start time was
+//       invalid.
+//     Bug fix: Fixed import of the RES package from existing models.
+//     Enhancement: Added Epsilon when specifying data values to skip.
+//     Bug fix: Fixed display of UZF transient data sets.
+//     Bug fix: Fixed deletion of vertices in an object when all but one
+//       vertices are deleted.
+//     Bug fix: Fixed default file names for the MODFLOW name file
+//       and for the default output files when the file name has a space
+//       in it.
+//     Bug fix: Fixed display of MODPATH particle release times.
+//     Bug fix: Fixed assignment of color to MODPATH pathlines.
+//     Bug fix: Fixed crash when entering multiple times for flow
+//       observations.
+//     Change: Statistic and Stat-Flag are no longer visible for head
+//       observations unless ModelMate interface has been activated.
+//     Bug fix: When attempting to import an incomplete Shapefile,
+//       ModelMuse now exits the procedure properly.
+//     Enhancement: When importing head observations, if the ModelMate
+//       interface is active, Statistic and StatFlag are imported too.
+//   '2.3.0.24' Bug fix.  Entering a real number for the recharge layer
+//       no longer causes ModelMuse to hang. Instead an error message is
+//       displayed.
+//   '2.3.0.25' Bug fix: If wetting is active but there are no
+//       convertible layers a warning is displayed.
+//     Bug fix: If wetting is active but there are no
+//       convertible layers data set 7 is no longer created in the LPF
+//       package and data set 4 is no longer created in the HUF package.
+//     Bug fix: When the ET Surface and the ET Depth are undefined
+//       in the EVT or ETS packages, an error message is displayed instead of
+//       the export failing.
+//     Bug fix: Editing an object containing SFR data no longer results in
+//       an access violation if the SFR package is not selected.
+//     Bug fix: Editing an object that defines data for the SFR, MNW2, HOB
+//       or HFB packages no longer results in deletion of data for those
+//       packages when those packages are not selected.
+//     Bug fix: In the Object Properties dialog box, clicking the
+//       "Edit F()..." button on the Data Sets tab would cause
+//       an Assertion error when no data set was selected.  The button
+//       is now disabled when no data set is selected.
+//   '2.3.0.26' Bug fix: When performing coordinate conversions on Shapefiles,
+//       you can no longer select a UTM zone until you have chosen to
+//       perform the conversion.
+//     Enhancement: In the Show or Hide Objects dialog box, any collapsed
+//       branch that contains a selected object is shown with a bold font.
+//     Bug fix: Fixed access violations when opening a model when a model is
+//       already open.
+//     Enhancement: If additional vertices are added to an object that
+//       defines head observations, an error message is displayed when
+//       attempting to export the HOB input file or plot HOB data on the
+//       grid.
+//     Bug fix: If the flow package corresponding to a flow observation
+//       is not selected in the object properties dialog box, attempting
+//       to select the flow observation will no longer cause toggling
+//       of the selected node.
+//     Bug fix: After selecting the item with with to color the grid in
+//       the Color Grid dialog box, you can click directly on the Apply
+//       button without clicking elsewhere first.
+//     Enhancement: When defining a new global variable, default values for
+//       the type and value are displayed in the Global Variables dialog box.
+//     Enhancement: Bitmaps that were hidden because the magnification was
+//       too high, are now displayed again automatically when the
+//       magnification is sufficiently reduced.
+//     Enhancement: Added new function for use in formulas - PositionInList.
+//     Enhancement: Objects now have a comment field that can be used to
+//       document what the object does.
+//     Enhancement: The Grid Spacing dialog box now allows negative numbers
+//       for the default spacing for columns, rows, and layers.  In MODFLOW
+//       models, the default spacing for rows is set to -100 instead of 100.
+//     Enhancement: When tips are turned off, ModelMuse will tell you when it
+//       detects new videos on the ModelMuse web site.
+//     Bug Fix: Editing an object that defines an SFR stream with unsaturated
+//       properties defined no longer causes an assertion failure if the
+//       object is edited again.
+//     Bug fix: Importing a model no longer causes an access violation
+//       when the previous model had objects that defined an SFR stream
+//       with unsaturated properties.
+//   '2.4.0.0' No additional changes.
+//   '2.4.0.1' Enhancement: It is now possible to copy and paste multiple
+//       cells in the parameter grids in the Packages and Programs dialog box.
+//     Enhancement: The helpfile has increased functionality.
+//     Enhancement: Support for ZONEBUDGET added.
+//   '2.4.0.2' Bug fix: The number of observations in the Flow observations
+//       packages was calculated incorrectly when both observation and
+//       predictions were used.
+//   '2.4.0.3' Bug fix: FractionOfObjectLength was calculated incorrectly
+//       if an object had more than one section.
+//     Enhancement: Added new function InterpolatedVertexValues that allows
+//       numeric values associated with individual vertices to be interpolated
+//       along the length of the object.
+//   '2.4.0.4' Bug fix: ObjectLength was calculated incorrectly if an
+//       object had more than one section.
+//     Bug fix: ObjectVertexDistance was calculated incorrectly if an
+//       object had more than one section.
+//     Enhancement: Antialiasing used to improve appearance.
+//     Bug fix: Importing a MODFLOW-2005 model failed if LAYVKA in the
+//       LPF package was anything besides a zero or one.
+//     Bug fix: If there VKA is less than or equal to zero
+//       but there is only one layer, ModelMuse no longer reports
+//       and error while exporting the LPF package.
+//     Bug fix: Unchecking the MODPATH initial particle placement checkbox
+//       didn't work.
+//     Bug fix: Editing more than one object at a time
+//       could result in an assertion failure.
+//     Enhancement: When coloring grid only on the active areas, inactive
+//       areas are shaded.
+//     Enhancement: Additional options for displaying grid lines have been
+//       added. It is now possible to show just the outline of the active
+//       area or just the grid lines inside the active area.
+//   '2.4.0.5' Bug fix; Sample DEM imported data at the wrong
+//       locations if the grid angle was not zero.
+//   '2.4.0.6' Enhancement: Legends have been added to the Color Grid and
+//       Contour Data dialog boxes.
+//     Enhancement: Added three new functions ColumnCenter, RowCenter,
+//       and LayerCenter.  See help for details.
+//   '2.4.0.7' Bug fix: When deleting time-varying data from objects
+//       for the RCH, EVT, or ETS packages, sometimes not all the data
+//       would be deleted properly.
+//     Bug fix: In the LPF package, LAYTYP was not set to a negative
+//       value properly when the THICKSTRT option was used.
+//   '2.4.0.8' No change
+//   '2.4.0.9' Fixed bug editing LPF parameters that could cause an
+//       assertion failure.
+//   '2.4.0.10' Enhancement: The Export Image dialog box has been added.
+//       It allows the user to export an image of the top, front, or
+//       side view of the model as an Enhanced Windows Metafile.
+//     Enhancement: When a formula results in a value that is infinite or
+//       not a number, the maximum double-precision real number is
+//       substituted for it.
+//   '2.4.0.11' Bug fix for Export Image dialog box.
+//   '2.4.0.12' Bug fix: Under certain circumstances extra LPF parameters
+//       would be added incorrectly.
+//   '2.4.0.13' Bug fix: Attempting to open a model containing a UZF gage
+//       caused an access violation.
+//   '2.4.0.14' Bug fix: Transient UZF data were not displayed properly.
+//       This was not a bug in the released version.
+//     Bug fix: If the user edited something in the MODFLOW Packages
+//       and Programs dialog box that caused the grid to be recolored,
+//       the MODFLOW Packages and Programs dialog box might not close
+//       properly. This was not a bug in the released version.
+//   '2.4.0.15' Bug fix: closing the model while the Color Grid or
+//       Contour Data dialog boxes were visible could result in an
+//       access violation.
+//       This was not a bug in the released version.
+//   '2.4.0.16' Change: Changed default options for ZONEBUDGET.
+//   '2.4.0.17' Bug fix: ModelMuse could not always read the budget file
+//       if there was only one column in the model.
+//   '2.4.0.18' Enhancement: Enabled MadExcept.
+//   '2.4.0.19' Second attempt at enabling MadExcept.
+//   '2.4.0.20' Bug fix: If a parameter or layer group was renamed, formulas
+//       that used data sets related to those parameters were not updated
+//       properly.
+//   '2.4.0.21' Bug fix: Using the up-down controls on the Color Grid or
+//       Contour Data dialog boxes would cause selected data set
+//       to change when clicking on another control until the
+//       dialog box was closed.
+//     Bug fix: When importing MODFLOW models that contained the lake package
+//       the Lake_ID data set was not being set properly.
+//     Bug fix: Fixed bug that caused access violations when closing a model.
+//     Enhancement: Improved speed of opening Object Properties dialog box.
+//   '2.4.0.22' Bug fix: Failure to define unsaturated flow properties
+//       in the SFR package when they are required now results
+//       in an error message instead of an assertion failure.
+//     Bug fix: Added support for contour legends with
+//       boolean and string data.
+//   '2.4.0.23' - '2.4.0.24' Bug fix: Attempted to work around problem
+//       that causes range check errors when closing ModelMuse
+//       on some machines.
+//   '2.4.0.25' Change: Data set values are now saved to file
+//       with the data set if the data set values are up to date.
+//       This improves the speed of opening some large models.
+//   '2.4.0.26' Bug fix: Fixed bug that could cause an access violation
+//       when showing the MODFLOW Packages and Programs dialog
+//       box if one of the packages in the dialog box had been deactivated
+//       and then the cancel button was pressed.
+//     Bug fix: Fixed bug that could cause extra parameters to be added
+//       when a parameter value was edited.
+//     Enhancement: When selecting a MODPATH output file, the most likely
+//       name of the output file is selected automatically.
+//   '2.5.0.0' No additional changes.
+//   '2.5.0.1'  Change: The "Object|Edit|Merge Objects" command now operates when
+//       very small differences exist between the endpoints of the objects
+//       being merged. Previously, the match had to be exact.
+//     Enhancement: In the Object Properties dialog box, if you paste
+//       a group of vertices, the table will expand to accommodate the
+//       new vertices.
+//   '2.5.0.2' Bug fix: Editing an object in a new model after having
+//       previously closed a previous model without restarting ModelMuse
+//       caused an Assertion failure.
+//     Bug fix: Eliminated an assertion failure that occurred under certain
+//       circumstances when attempting to draw an object.
+//   '2.5.0.3' Bug fix: Eliminated Range Check Error that sometimes
+//       occurred when a menu item was selected.
+//   '2.5.0.4' Bug fix: Fixed bugs in deleting all print/save choices in the
+//       Subsidence package.
+//     Bug fix: Fixed layout of Subsidence package controls in
+//       MODFLOW Packages and Programs dialog box.
+//     Bug fix: The Formula Editor was displaying the ActiveOnLayer function
+//       in cases where it wouldn't work.
+//     Bug fix: The ActiveOnLayer function sometimes returned
+//       an incorrect value.
+//   '2.5.0.5' Bug fix: When closing a model, a stack overflow could occur
+//       under unusual circumstances.
+//   '2.5.0.6' Bug fix: If "Boundary Conditions, Observations,
+//       and Other Features" was selected in the "Color Grid" dialog box,
+//       an access violation could occur.
+//     Bug fix: Fixed problem that sometimes prevented the discretization
+//       from begin specified.
+//     Enhancement: Added support for SWT package.
+//     Bug fix: Export of format codes in SUB package was incorrect.
+//     Bug fix: Format codes in SUB package imported incorrectly.
+//     Enhancement: Added support for HYDMOD package.
+//     Bug fix: When more than one object was being edited in the
+//       Object Properties dialog box, switching to the SFR|Network tab and
+//       clicking the button under OUTSET and IUPSEG would cause an
+//       Assertion failure. Now it gives a more meaningful error message.
+//   '2.5.0.7' Bug fix: Changing the discretization when the grid was
+//        colored with transient data caused an access violation.
+//   '2.5.0.8' Bug fix: Attempting to export the MODPATH input files before
+//       MODPATH has been activated now results in a warning message instead
+//       of an assertion failure.
+//     Bug fix: It is now possible to select the "Edit vertex values" button
+//       when the "Select vertices" button is pressed.
+//     Bug fix: When exporting the BCF package, sometimes an attempt was made
+//       to export data set 8 when it shouldn't have been exported.
+//   '2.5.0.9' Bug fix: If a HUF SYTP parameter was defined, attempting to
+//       open the MODFLOW packages and programs dialog box would result in an
+//       assertion failure.
+//     Enhancement: The Manage Parameters dialog box has been added.
+//     Enhancement: The Global Variables are now alphabetized.
+//     Enhancement: Initial heads can now be read from a binary head file
+//       generated by another MODFLOW model.
+//   '2.5.0.10' Bug fix: Fixed sorting of global variables
+//     (bug was not in released version.)
+//   '2.5.0.11' Enhancement: The selection cube now responds
+//       to the mouse wheel.
+//     Change: When importing model results, the formulas used for the
+//       3D data sets have been changed to keep the formulas valid if
+//       the number of layers is increased.
+//     Bug fix: Attempting to contour a data set that is uniform no longer
+//       results in a range-check error.
+//     Bug fix: When attempting to export the MODFLOW input files, if a file
+//       can't be created because it is in use, an error message will be
+//       displayed.
+//   '2.5.0.12' Enhancement: The Manage Head Observations dialog box has
+//       been added.
+//     Change: If an invalid formula is encountered when exporting the MODFLOW
+//       input files the Formula Errors dialog box is not displayed until the
+//       export is complete.
+//   '2.5.0.13' Change: Items in "Search for Objects" dialog box
+//       are now listed in a tree component.
+//     Bug fix: When parameters are used in the RCH, EVT, and ETS packages,
+//       the print codes for the parameters are set correctly.
+//   '2.5.0.14' Enhancement: When saving a ModelMate file, the user can
+//       choose to have the ModelMate file opened with ModelMate.
+//     Bug fix: fixed problem that could make it opening the Object
+//       Properties dialog box slow.
+//     Bug fix: Attempting to open a Shapefile that is already open
+//       now generates an error message but not a bug report.
+//     Enhancement: A warning is now issued if an observation name is not
+//       valid when used in UCODE.
+//     Change: ModelMate program locations are now saved to an ini file.
+//     Bug fix: In MODFLOW models, if a data set is evaluated at nodes,
+//       the user can no longer attempt to color the grid with the data set
+//       values or contour the data set values.
+//     Bug fix: MODFLOW models in which the same cells are defined as
+//       constant head cells through both the BAS and CHD packages are
+//       now imported correctly.
+//   '2.5.0.15' Enhancement: ModelMate interaction improved.
+//   '2.5.0.16' Enhancement: When the nonparameter data in the CHD, DRN, DRT,
+//       EVT, ETS, GHB, RCH, RIV, or WEL packages for one stress period
+//       repeat the data from a previous stress period, the package instructs
+//       MODFLOW to reuse the data from the previous stress period rather
+//       than exporting another copy of the same data.
+//   '2.5.0.17' Enhancement: Reduced memory usage when opening files.
+//     Enhancement: Attempting to read an invalid DEM now results in an
+//       error message instead of generating a bug report.
+//   '2.6.0.0' No further changes.
+//   '2.6.0.1' Enhancement: When coloring the grid causes a data set to be
+//       recalculated, there will be form displaying the steps involved
+//       in calculating the values.
+//     Bug fix: Postprocessing for Geostatic Stress and changes in Geostatic
+//       stress has been fixed.
+//     Bug fix: Opening an object in the Object Properties dialog box no
+//       longer causes causes transient data to be recalculated.
+//     Enhancement: Channel cross sections in the SFR package can now be
+//       imported from Shapefiles.
+//   '2.6.0.2' Enhancement: When importing SFR data from Shapefiles, formulas
+//       can now be used for SLOPE, STRTOP, STRTHICK, STRHC1, THTS, THTI,
+//       EPS, and UHC.
+//     Enhancement: Improved error handling when importing an image.
+//     Bug fix: Attempting to write a locked file or attempting to open a
+//       file that doesn't exist now results in an error message instead of
+//       a bug report.
+//     Bug fix: Exporting locations of MODPATH and ZONEBUDGET sometimes
+//       were not enclosed in quotes when quotes were required.
+//     Enhancement: Reduced flicker when drawing new objects. This may also
+//       have fixed a intermittent bug that caused access violations when
+//       coloring the grid.
+//     Bug fix: Fixed coloring the grid when integer values were being used
+//       to color the grid and limits were used to filter what cells
+//       would be colored.
+//   '2.6.0.3' -----
+//   '2.6.0.4' Bug fix: VertexInterpolate didn't work properly
+//       if the grid was rotated.
+//   '2.6.0.5' Enhancement: Images can now be exported as .bmp files as
+//       well as .emf files.
+//     Bug fix: Pasting objects didn't work properly if the object
+//       had associated vertex values.
+//     Bug fix: Sometimes changing the number of Z formulas
+//       could lead to an assertion failure.
+//     Enhancement: Improved speed of opening the Global Variables
+//       dialog box.
+//     Bug fix: Opening the Object Properties dialog box would sometimes
+//       cause an access violation if another model had been opened
+//       previously.
+//     Enhancement: In the Select Objects by Name dialog box, the objects
+//       are sorted alphabetically.
+//     Bug fix: In the Select Objects by Name dialog box, the objects are
+//       now placed on the correct tab instead of always being put on the
+//       tab for the top view if the model.
+//   '2.6.0.6' Enhancement: In the Color Grid and Contour Data dialog boxes,
+//       when the user changes the data set used to color or contour the grid,
+//       the same limits as in the data set that is currently displayed
+//       can be used with a newly selected data set.
+//   '2.6.0.7' Bug fix: in the SFR package, NSTRAIL, ISUZN, and NSFRSETS
+//       were written when ISFROPT > 0 instead of when ISFROPT > 1.
+//   '2.6.0.8' Bug fix: Deleting the last vertex of an object
+//       no longer causes an error.
+//     Bug fix: When the grid was colored with horizontal flow barriers,
+//       changing an object that defines a horizontal flow barrier
+//       now causes the displayed barriers to be updated correctly.
+//     Editing multiple objects in a new model no longer causes an error.
+//     Bug fix: Inactive cells are no longer included in head observations.
+//   '2.6.0.9' Bug fix: on the Import Image dialog box, it is no longer
+//       possible to set the number of rows in the table to less than 1.
+//     Bug fix: Previously, the MODPATH zone was incorrectly limited to
+//       values greater than or equal to zero even for specified head cells.
+//   '2.6.0.10' Bug fix: Attempting to import model head or drawdown results
+//       from a file in which the number of layers is greater than the number
+//       of simulated layers now results in an error message instead of
+//       generating an error report.
+//   '2.6.0.11' Enhancement: The macros "%SP", "%TS", and "%ET" can now be
+//       used in text on the Export Image dialog box.  They will be replaced
+//       by the stress period number, time step number, and elapsed time
+//       respectively if those data are in the comment for the data set.
+//     Change: The elapsed time is now included in the data set comment
+//       when importing MODFLOW results.
+//   '2.6.0.12' Bug fix: MODPATH results were not cleared when opening
+//       a new model.
+//   '2.6.0.13' Bug fix: Fixed macros in Import Image dialog box so that
+//       they work with the title too. (Bug not in released version.)
+//   '2.6.0.14' Enhancement: Contours can now be exported to a Shapefile.
+//     Change: All the commands for exporting Shapefiles have been moved to
+//       a submenu.
+//     Enhancement: Pathlines can now be exported to a Shapefile.
+//     Enhancement: Endpoints can now be exported to a Shapefile.
+//     Bug fix: Previously, the display of MODPATH times series points was
+//       incorrect when there was more than one release time.
+//     Enhancement: TimeSeries can now be exported to a Shapefile.
+//   '2.6.0.15' Bug fix: when opening a new model, bitmaps from the previous
+//       model are now removed.
+//     Enhancement: ModelMuse now can create a series of bitmaps that
+//       can be used to create a video.
+//   '2.6.0.16' Enhancement: ModelMuse now will warn the user if a CHD, DRN,
+//       DRT, GHB, RIV, SFR, or WEL cell is in an inactive cell.
+//   '2.6.0.17' Enhancement: When coloring the grid with transient data,
+//       only the data for the time being used to color the grid is evaluated.
+//     Bug fix: Sometimes moving an object did not cause the data sets
+//       that depend on it to be updated.
+//     Bug fix: When importing a shape file, the interpretation algorithm
+//       is now set correctly.
+//     Bug fix: When exporting .emf files, sometimes the image size was
+//       set to an incorrect value.
+//   '2.7.0.0' Change: Updated memory manager to latest version.
+//   '2.7.0.1' Bug fix: In the Set Widths of Columns, Rows, and Layers,
+//       dialog box, it is no longer possible to specify an invalid
+//       column, row, or layer.
+//     Bug fix: when exporting a PHAST model multiple times, the name of the
+//       file wasn't set appropriately.
+//     Bug fix: When exporting a MODFLOW model after previously having
+//       exported a different MODFLOW model, the default name for the model
+//       is now set correctly rather than being the same name used previously.
+//     Bug fix: Fixed access violations when importing model results
+//       into a model and contouring those results.
+//     Bug fix: When computing the size of the MODPATH composite budget file,
+//       file sizes larger than 2 GB can now be computed without causing an
+//       error.
+//   '2.7.0.2' Enhancement: Data set values can now be exported to a
+//       comma-separated value file along with X, Y, Z coordinates.
+//   '2.7.0.3' Bug fix: Renaming a data set and then attempting to use that
+//       data set in the formula for another data set no longer causes an
+//       error.
+//   '2.7.0.4' Bug fix: when exporting .emf images, the dimensions of the
+//       image were set incorrectly.
+//   '2.7.0.5' Enhancement: When data set values can are exported to a
+//       comma-separated value file, column, row, and layer numbers are
+//       exported too.
+//   '2.7.0.6' Bug fix: When a data set is first created, it was treated
+//       as being a real number data set in the Formula Editor even if its
+//       type had been changed.
+//     Bug fix: Pasting data into several of the tables could sometimes cause
+//       errors if the data that was being pasted was larger than the table
+//       could hold.
+//     Bug fix: The ActiveOnLayer function can now only be applied in a
+//       context where it will be evaluated on blocks.
+//     Enhancement: When importing heads, the water table is imported too.
+//   '2.7.0.7' Enhancement: When exporting MODPATH input files, ModelMuse
+//        now warns the user if not all time steps have been exported.
+//     Enhancement: When a new version of ModelMuse is available,
+//        the dialog box that informs the user of the new version has a
+//        button that the user can click to go to the ModelMuse web site.
+//     Enhancement: The "About" dialog box has a
+//        button that the user can click to go to the ModelMuse web site.
+//     Bug fix: Eliminated a range check error that could sometimes occur
+//        if user moved the mouse while importing model results.
+//     Enhancement: If the user specifies a head observation with a blank
+//        observation name, an error message is generated during export of
+//        the head observations file.
+//     Enhancement: The Grid Value dialog box now allows the user to see
+//       the value of any data set instead of just the one that is being
+//       used to color the grid or whose values have been contoured.
+//   '2.7.0.8' Bug fix: When importing model results, the legend on the
+//       Color Grid or Contour Data dialog box is updated.
+//     Bug fix: When exporting an image of the side view of the model,
+//        the horizontal scale now shows the correct values.
+//   '2.7.0.9' Bug fix: fixed bug that could cause an access violation when
+//       deleting parameter in the Manage Parameters dialog box.
+//     Bug fix: If the model runs out of memory when attempting to create
+//       a new model, an error message is displayed to the user instead of
+//       sending a bug report.
+//     Bug fix: In the Start-up dialog box, if the user specifies a layer
+//       group but does not give it a name, it is skipped instead of causing
+//       and assertion failure.
+//     Bug fix: Fixed access violation in Export Object as Shapefile dialog
+//       that could occur when unchecking a check box.
+//   '2.7.0.10' Bug fix: Interpolated Vertex Value gave incorrect results
+//       if the grid was rotated.
+//   '2.7.0.11' Bug fix: The main window no longer goes behind the windows
+//       of other programs when coloring the grid.
+//     Enhancement: The Grid Value dialog box displays the vertex number
+//       and section of the selected object. at the cursor location.
+//     Bug fix: ModelMuse now displays an error message when exporting or
+//       displaying the UZF data if some data has not been defined.
+//   '2.7.0.12' Enhancement: The function Get_HufSytp has been added.
+//       It evaluates SYTP parameters in HUF.
+//   '2.7.0.13' Enhancement: The location of the grid in
+//       real world coordinates is written as a comment in the
+//       discretization file.
+//     Bug fix: Fixed reading shape files from which some shapes have been
+//       deleted.
+//     Bug fix: Fixed position of Insert and Delete buttons for the table
+//       of times for the SFR package in the Object Properties dialog box.
+//     Bug fix: Clicking the Insert buttons on the Object Properties dialog
+//       box or the MODFLOW Time dialog box could result in errors if no
+//       row in the related grid was selected.
+//     Enhancement: Reduced memory usage while reading ModelMuse file.
+//     Bug fix: Fixed evaluation of the GetHufSytp function.
+//   '2.7.0.14' Bug fix: fixed evaluation of GetHufKx when KDEP parameters
+//       are used.
+//     Bug fix: fixed importing models that use SYTP parameters in the HUF
+//       package.
+//     Bug fix: fixed evaluation of GetHuf_Interlayer_Kz when KDEP parameters
+//       are used.
+//     Bug fix: If an object has too many vertices, the Object Properties
+//       dialog box now does not display them because attempting to display
+//       them caused an access violation.
+//     Enhancement: When importing data, less memory may be used in some
+//       cases.
+//   '2.7.0.15' Bug fix: Fixed editing the head observation purpose.
+//     Enhancement: Added Natural Neighbor interpolation.
+//   '2.7.0.16' Bug fix: Fixed export of PHAST specified flux
+//     associated solution on the X face.
+//   '2.7.0.17' Bug fix: A problem with duplicate parameter instance names
+//       in MODFLOW models has been fixed.
+//   '2.8.0.0' no additional changes.
+
+//   '2.8.0.1' Bug fix: It is no longer possible to show the Manage Head
+//       Observations dialog box before any head observations have been
+//       defined. Doing so could cause access violations.
+//     Bug fix: Under certain circumstances, the "Add point sections",
+//       "Add polyline sections", or "Add polygon sections" buttons could
+//       be pressed when there is no selected object causing an
+//       assertion failure. The buttons now become disabled under those
+//       conditions.
+//     Enhancement: Grid data can now be exported to 3D Shapefiles.
+//   '2.8.0.2' Enhancement: In the Search for Objects dialog box, the
+//       tree remains open after changing which checkboxes are
+//       checked.
+//     Bug fix: Attempting to import an empty or invalid results file
+//       now generates an error message for the user instead of a bug report.
+//   '2.8.0.3' Enhancement: Improved warning messages when a specified
+//       time for a boundary condition is outside of the range of times
+//       defined for the stress periods.
+//     Bug fix: Removed incorrect warning message generated when the SFR
+//       package was used and the starting time was greater than zero.
+//     Bug fix: Fixed assignment of custom layer discretization in
+//       Layer Groups dialog box.
+//     Bug fix: Deleting a layer group and then undoing the deletion no
+//       longer causes an assertion failure.
+//     Bug fix: Fixed a problem in which operating ModelMuse on a computer
+//       for which the language settings specify the decimal point
+//       to be something other than a period caused conversion errors.
+//   '2.8.0.4' Change: When creating polygon objects or adding
+//       polygon sections to existing objects, clicking on the first
+//       point of the polygon will close the polygon instead of continuing it.
+//     Enhancement: Improved speed of "Select Object by Name" dialog box.
+//     Bug fix: the "Set Widths of Columns, Rows, and Layers" dialog box now
+//       shows the selected columns, rows, and layers when it is displayed.
+//     Bug fix: It is no longer possible to attempt to color or contour
+//       the grid before the grid is defined.
+//     Bug fix: When sampling a DEM, only one DEM at a time could be selected.
+//     Enhancement: Added option to import ASCII raster file.
+//   '2.8.0.5' Bug fix: Fixed reversal of imported ASCII raster files.
+//     (bug is not in released version.)
+//   '2.8.0.6' Enhancement: added additional error checking in MNW2 package.
+//     Bug fix: Fixed the importing of world files in "Import Bitmap"
+//       dialog box. Previously, attempting to import some world files
+//       would fail because of extra spaces before the beginning of a number.
+//   '2.8.0.7' Change: When exporting Shapefiles attribute names with
+//       an ending trailing underscore have the underscore removed.
+//     Bug fix: When exporting Shapefiles of contours or MODPATH data,
+//       the bounding boxes of each shape are now set correctly.
+//   '2.8.0.8' Bug fix: Exporting contour Shapefiles when the specify contour
+//        option is checked and contour values are copied from another
+//        data set no longer causes an error.
+//      Bug fix: Previewing or exporting a series of images containing
+//        contours no longer causes an error when the range of values
+//        varies among the images.
+//   '2.8.0.9' Bug fix: Attempting so save a model archive on a disk with
+//        insufficient space now generates an error message instead of a
+//        bug report.
+//      Enhancement: There is a new way to display the Vertex Values dialog
+//        box. If no objects are selected on the view of the model
+//        with which the user is working, the user can double-click on a
+//        vertex of any object to display the Vertex Values dialog box.
+//      Enhancement: When importing model results, the default choice for
+//        how the imported results should be displayed now depends on the
+//        user's past choices on how the results should be displayed.
+//      Enhancement: There is now a button on the tool bar for importing
+//        model results.
+//      Enhancement: Vertex values can now be edited in the Object Properties
+//        dialog box.
+//      Bug fix: Previously, it you contoured a data set, closed the file,
+//        opened another one without closing ModelMuse and attempted to
+//        contour a data set, an access violation would occur. That access
+//        violation has been eliminated.
+//      Bug fix: When importing existing MODFLOW models, ModelMuse will now
+//        check that in all the inactive cells, the top of the layer is above
+//        the bottom of the layer. The elevations will be fixed in
+//        any inactive cells that do not meet this criterion.
+//   '2.8.0.10' Bug fix: ModelMuse can no longer enter an infinite loop when
+//        generating parameter instance names.
+//   '2.8.0.11' Bug fix: Eliminated an integer overflow error that could
+//        occur when exporting the RCH, EVT, or EVT packages.
+//   '2.8.0.12' Bug fix: Creating a new integer, Boolean, or text data set no
+//        longer fails.
+//      Enhancement: The user can now choose whether or not to save data set
+//        values when those values are up-to-date.
+//      Change: When data sets are deleted, the user is now prompted
+//        to delete unused objects.
+//      Change: The column, row and layer displayed in on the Grid Value
+//        dialog box is now the column row, and layer of the cell under the
+//        cursor even if a 2D data set is used to color the grid or
+//        is being contoured.
+//      Bug fix: In the SFR package, a warning about SFR segments circling
+//        back on themselves was sometimes generated when it should not have
+//        been generated and the segments involved would not be included in
+//        in the SFR package input file.
+//    '2.8.0.13' Enhancement: The speed of exporting the input files has
+//        increased
+//      Bug fix: Deleting all the vertices of the last section of an object
+//        when that section was a polygon caused an error.
+//      Bug fix: Making a background image too big now causes it to be
+//        hidden rather than generating an error message.
+//      Change: When defining CHD boundaries, an object with multiple
+//        sections will not define separate boundaries for each section.
+//    '2.8.0.14' Enhancement: In the SFR package, a warning is generated
+//        if the stream segment numbers are in strict numerical order but a
+//        segment with a higher number provides flow to one with a lower
+//        segment number.
+//      Enhancement: The Grid Value dialog box now displays information
+//        about the closest MODPATH pathline if it is within 1 cell or
+//        five pixels of the cursor.
+//    '2.8.0.15' Bug fix: Attempting to export a model without first
+//        defining a grid now results in an error message instead of
+//        generating a bug report.
+//      Bug fix: invalid formulas for river conductance and other, similar
+//        data no longer causes an access violation.
+//    '2.8.0.16' Bug fix: Fixed bug that prevented data for SFR data for a
+//        time period from being deleted.
+//    '2.8.0.17' It is now possible for the recharge from several sources to
+//        be added together.
+//    '2.8.0.18' reduced memory usage when recharge from several sources is
+//        added together.
+//    '2.8.0.19' It is now possible for the infiltration in the UZF package
+//        from several sources to be added together.
+//    '2.8.0.20' Bug fix: In some models, the SFR package could not be
+//        exported correctly.
+//      Bug fix: In some models, the Lake_ID numbers were not set incorrectly.
+//    '2.8.0.21' Bug fix: the selected layer wasn't being restored properly
+//        when opening a model (not in released version).
+//      Bug fix: Changing a data set orientation could cause error messages
+//        to be incorrectly generated for other data sets.
+//    '2.8.0.22' Bug fix: Fixed error messages for stream segments that
+//        are out of order.  (Bug was not in released version.)
+//    '2.8.0.23' ---
+//    '2.8.0.24' Bug fix: Object used to define the return location in the
+//        DRT package are now displayed in the Show or Hide Objects
+//        dialog box under an appropriate heading.
+//      Bug fix: If you undo and then redo the creation of parameters,
+//        objects that use those parameters will no longer lose them.
+//      Change: It is now possible to select multiple cells in all tables.
+//    '2.8.0.25' Enhancement: When importing Shapefiles, the numbers of any
+//        shapes with multiple parts will be displayed.
+//    '2.8.0.26' ModelMonitor has been updated to work with LGR.
+//    '2.8.0.27' Enhancement: The export image dialog box now has a "Copy
+//        image" button that copies the image to the clipboard.
+//      Enhancement: The Data Set Values dialog box now shows 2D Front and
+//        2D Side data sets in a single table instead of one table for each
+//        layer.
+//      Bug fix: The Object Properties dialog box no longer shows times
+//        related to time-varying layers in the RCH, EVT, and ETS packages
+//        unless time-varying layers have been selected in the corresponding
+//        package.
+//    '2.8.0.28' Bug fix: Multiplier and zone array names are now
+//        no longer than 10 characters in length.
+//      Enhancement: Improved speed of importing model results.
+//    '2.8.0.29' Bug fix: Fixed reading heads. Bug not in released version.
+//    '2.8.0.30' Bug fix: Fixed bug that caused access violations when
+//        editing packages with the HFB package selected. Bug not
+//        in released version.
+//    '2.8.0.31' Bug fix: Fixed LGR related bug that could cause, wells,
+//        drains, etc to be exported incorrectly (not in released version).
+//    '2.8.0.32' Bug fix: Fixed bug in editing the objects that control
+//        the horizontal placement of LGR Grids.
+//    '2.8.0.33' Bug fix: Fixed bug that would cause range check errors or
+//        access violations when animating contours.
+//      Enhancement: When deleting vertices of an object with imported data,
+//        the corresponding imported data will be deleted too.
+//      Enhancement: New command "Object|Edit|Edit|Invert Selected Vertices"
+//        to invert the selected nodes.
+//      Enhancement: New command "Object|Edit|Split Selected Objects"
+//        to convert each part of an object to a separate object.
+//      Enhancement: New command "Object|Edit|Make Selected Vertices
+//        a Separate Object" converts the selected vertices of an object to
+//        a new object while deleting them from the existing object.
+//      Enhancement: New command "Object|Edit|Split Object at Selected
+//        Vertices" to convert split an object into two separate objects.
+//        The objects will be split at the location(s) of any selected
+//        vertices with both objects sharing the selected vertices.
+//      Bug fix: Adding recharge, evapotranspiration, or ETS parameters
+//        formerly could lead to access violations later on.
+//      Enhancement: added support for running a single model with BFH data
+//        with MODFLOW-LGR.
+//      Bug fix: Fixed an assertion failure in specifying
+//        zero flow observations.
+//      Bug fix: When reversing the order of vertices in an object, the
+//        order of any imported data is reversed too.
+//    '2.8.0.34' Bug fix: new commands for editing objects were never
+//        enabled. (not in released version).
+//    '2.8.0.35' Enhancement: In the Import Gridded Data dialog box, data
+//        for a single grid row may not be spread over several lines when
+//        pasting data into the grid for arrays.
+//    '2.8.0.36' Enhancement: Three new functions added:
+//        ObjectCurrentSegmentAngle, ObjectCurrentSegmentAngleDegrees, and
+//        ObjectCurrentSegmentAngleLimitedDegrees. See help for
+//        descriptions.
+//    '2.9.0.0' Enhancement: Added support for MODFLOW-LGR.
+//      Change: When importing head observations from a Shapefile, a default
+//        value for the observation name is used if the user has not
+//        assigned a name.
+//      Enhancement: Improved responsiveness in the Manage Flow Observations
+//        dialog box.
+//      Enhancement: Decreased time required to display the
+//        MODFLOW Time dialog box.
+//      Bug fix: Fixed bug that could cause access violations when displaying
+//        the Object Properties dialog box.
+//      Bug fix: Fixed a bug that caused the multiplier and zone array names
+//        for the LPF package to change each time the model was exported.
+//      Bug fix: Fixed bug that could cause range check errors when coloring
+//        the grid with the RCH, EVT, or ETS packages.
+//    '2.9.0.1' Bug fix: Fixed bug in which a change in a vertex value of
+//        an object failed to cause the data sets dependant on that value
+//        to be updated.
+//      Bug fix: It is no longer possible to create an object with no
+//        vertices by starting creating an object and then deleting all the
+//        vertices by pressing the ESC key.
+//      Bug fix: It is no longer possible to generate an assertion failure by
+//        attempting to import a results file by typing the name of a file
+//        with an extension not recognized by ModelMuse.
+//      Bug fix: The STORAGECOEFFICIENT option in the LPF package can now
+//        be edited and stored properly.
+//      Bug fix: Fixed a bug in which the selected column, row, or layer
+//        was not always displayed properly by the ModelCube.
+//      Bug fix: Attempting to import gridded data before defining the grid
+//        now results in an error message instead of generating a bug report.
+//      Bug fix: When editing Flow observations, some observations
+//        were not saved.
+//    '2.9.1.0' Bug fix: Entering an unreasonable value for the grid origin
+//        when creating a new model no longer causes an access violation.
+//      Bug fix: Sampling a DEM is now possible when the language setting on
+//        the computer specify a comma as the decimal separator.
+//      Bug fix: If a ModelMuse file can not be saved to the disk, a warning
+//        message is displayed rather than generating a bug report.
+//      Bug fix: If there are no valid stress periods defined, in the
+//        MODFLOW Time dialog box, the dialog box does not save the stress
+//        periods.
+//      Bug fix: It is no longer possible to edit the cell in the table
+//        of the start-up dialog box for MODFLOW by tabbing to the cell.
+//      Bug fix: The variables in the LPF package are now initialized
+//        properly in a new model.
+//      Bug fix: Importing values from ModelMate now works properly when
+//        a decimal separator other than a period is used.
+//      Bug fix: When exporting an or updating ModelMate files where the
+//        user has not previously specified a the ModelMate location,
+//        the file is still correctly opened by ModelMate.
+//      Bug fix: Fixed a bug that could cause access violations when
+//        ModelMuse was closing.
+//      Bug fix: Fixed bug that would cause access violations when closing
+//        the Object Properties dialog box.
+//      Bug fix: Incorrect error messages are no longer generated when
+//        coloring the grid with the Head observations.
+//    '2.9.1.1' Fixed bug that could cause the incorrect text to be replaced
+//         in the formula editor when editing a formula.
+//      Bug fix: If the selected object is hidden, the dotted box that
+//         sometimes surrounds the selected object is also hidden.
+//      Enhancement: Added support for MODFLOW-NWT.
+//      Change: when importing Surfer grid files, the "files of type" is
+//        set to the value at which it was set the previous time a Surfer
+//        grid file was imported since the program was started.
+//    '2.9.1.2' Bug fix: "Objects|Hide All Objects" didn't work if only
+//        one object was visible.
+//    '2.9.1.3' ---
+//    '2.9.1.4' Change: The reference stress period for head and flow
+//        observations will now be exported as the stress period containing
+//        the observation instead of the first stress period.
+//      Change: ModelMuse is now compiled with Delphi XE instead of
+//        Delphi 2006. Small changes in the model input changes may occur
+//        due to the change in compiler.
+//      Enhancement: When exporting the MODFLOW input files, the user also
+//        has an opportunity to export the MODPATH or ZONEBUDGET input files
+//        too.
+//      Enhancement: It is now possible to import CHD, DRN, GHB, RIV, and WEL
+//        MODFLOW boundaries from the Import Points dialog box.
+//    '2.9.1.5' Enhancement: In the Object Properties dialog box, times
+//        for MODFLOW boundary conditions are automatically filled in when
+//        a previous time is selected.
+//      Bug fix: When importing an existing MODFLOW model, Vertical anisotropy
+//        in the LPF package was not imported correctly if vertical anisotropy
+//        was used in all layers.
+//    '2.9.1.6' Bug fix: The ObjectCurrentSegmentAngle,
+//        ObjectCurrentSegmentAngleDegrees, and
+//        ObjectCurrentSegmentAngleLimitedDegrees functions did not return
+//        values that were relative to the grid.
+//      Bug fix: Fixed a problem with setting an HFB parameter name
+//        that caused access violations when closing the MODFLOW Packages
+//        and Programs dialog box.
+//    '2.9.1.7' Enhancement: ModelMuse can now import and display the
+//        head observation output.
+//    '2.9.1.8' ----
+//    '2.9.1.9' Bug fix: In the GMG solver, the maximum number of iterations
+//        could not be edited.
+//    '2.9.1.10' Bug fix: Fixed export of head observations with LGR child
+//        models.
+//      Bug fix: In some cases, ModelMuse files in which the HFB package
+//        was used could not be read.
+//      Bug fix: Renaming a global variable that is used in the formula
+//        for the HFB package will now cause the formula to be updated.
+//      Bug fix: Fixed reading binary result files. (Bug not in released
+//        version of ModelMuse.)
+//    '2.9.1.11' Bug fix. When opening a browser, ModelMuse no longer
+//        attempts to delete files that don't exist.
+//    '2.9.1.12' ----
+//    '2.9.1.13' ----
+//    '2.9.1.14' Enhancement: It is now possible to import CHD, DRN, GHB,
+//        RIV, and WEL MODFLOW boundaries as well as head observations
+//        from the Import Points dialog box.
+//    '2.9.1.15' ----
+//    '2.9.1.16' Fixed naming of objects when importing head observations
+//        from the Import Points dialog box. (Bug not in released
+//        version of ModelMuse.)
+//    '2.9.1.17' ----
+//    '2.10.0.0' No additional changes.
+//    '2.10.0.1' Bug fix: Importing a feature that allows for a MODFLOW
+//        parameter from a Shapefile no longer causes a range check error
+//        if no parameter is being imported.
+//    '2.10.1.0' Change: When a message about a new version is displayed,
+//        the version numbers of the new version as well as the version
+//        that is being used are both displayed.
+//    '2.10.2.0' Bug fix: Undoing certain operations no longer results
+//        in a range check error.
+//      Enhancement: Attempting to import a formatted head file that
+//        contains "NaN" no longer results in a bug report.
+//    '2.10.2.1' Bug fix: SYTP parameters in the HUF package are now written
+//        to the PVAL and UCODE template files.
+//    '2.10.2.2' Bug fix: If the HFB package was selected, using the
+//        MODFLOW Packages and Programs dialog box no longer causes access
+//        violations.
+//      Bug fix: When the HFB package was selected, exporting a model that
+//        uses zone arrays no longer causes an Assertion failure.
+//    ''2.10.2.3' Bug fix: Fixed a problem in which deleting vertices of an
+//        object that included imported text data, more of the text data was
+//        deleted than should have been deleted.
+//      Bug fix: Fixed bugs that could cause access violations when
+//        ModelMuse was closed.
+//      Bug fix: Reading World Files on computers where the decimal separator
+//        is set to a value other than '.' now works correctly.
+//      Bug fix: When importing points, it is no longer possible to
+//        attempt to define an invalid object name.
+//    '2.10.3.0' No further changes.
+//    '2.10.3.1' Bug fix: Fixed bug that could cause a
+//        "List index out of bounds" error when exporting Shapefiles.
+//    '2.10.3.2' Bug fix: fixed bug that could ModelMuse to hang when
+//        starting a new model.
+//      Bug fix: When reading MODPATH pathline files, negative values of time
+//        were not handled properly.
+//      Bug fix: Attempting to export a model in which the reservoir package
+//        is selected but no reservoirs have been defined now results in
+//        an error message instead of a bug report.
+//    '2.10.3.3' Enhancement: Error or warning messages are now issued when
+//        a boundary condition package has been activated but no boundaries
+//        for it have been defined.
+//      Change: When closing a model, the prompt asking the user if they
+//        wish to save the model now includes the file name if the file name
+//        has been specified.
+//      Enhancement: ModelMuse now warns the user if duplicate SFR
+//        parameter instances are being used.
+//      Bug fix: Fixed export of TBEGIN in MODPATH main file.
+//      Enhancement: In LGR models, Streams in the SFR package are now linked
+//        between grids.
+//    '2.10.3.4' Bug fix: Fixed bug with selecting and drawing objects when
+//        zoomed in a great deal.
+//    '2.10.3.5' Bug fix: In LGR models, the selected column, row, and layer
+//        are now read correctly when opening a ModelMuse file.
+//      Bug fix: Fixed bug that could cause an access violation if the number
+//        of columns or rows was set to zero.
+//    '2.10.3.6' Bug fix: In PHAST models, switching an object between being
+//        evaluated at nodes and elements no longer causes a bug report to
+//        be generated.
+//    '2.10.3.7' Change: The most recent version of PHAST no longer supports
+//        specifying an initial water table. However, you can still use
+//        the initial water table option in ModelMuse. ModelMuse will use
+//        the data in the Initial_Water_Table data set to specify the
+//        initial head in a vertical column of nodes.
+//      Enhancement: The Grid Value dialog box can now display data about
+//        the nearest visible MODPATH end point.
+//      Bug fix: When attempting to import model results, trying to import
+//        from a file that is being used by another program now results in an
+//        error message to the user instead of a bug report.
+//    '2.11.0.0' Enhancement: Added support for GOFAIL option in MODFLOW-NWT.
+//    '2.11.0.1' Enhancement: When importing an existing MODFLOW model,
+//        .mfn is now recognized as a valid extension for a MODFLOW name file.
+//      Bug fix: Previously some erroneous error or warning messages were
+//        generated for data set values in inactive cells.
+//      Bug fix: When a background image was replaced with a new one, the
+//        name of the image stored in ModelMuse is now updated.
+//      Enhancement: It is now possible to import multiple ASCII raster files
+//        at one time.
+//    '2.11.0.2' Enhancement: Added a measurement function that allows the
+//        user to measure distances easily.
+//      Enhancement: Contours are now labeled.
+//      Change: "GOFAIL" option in MODFLOW-NWT has been renamed "CONTINUE".
+//    '2.11.0.3' Bug fix: In the Object Properties dialog box,
+//        a "no parameter" checkbox has been added to the beginning of the
+//        list of parameters for MODFLOW features that allow multiple
+//        parameters to be used with a single object. The "no parameter"
+//        check box can be unchecked to turn off the definition of a boundary
+//        that does not use parameters.
+//      Bug fix: When a data set defines the multiplier or zone array of a
+//        MODFLOW parameter, it now is possible to delete the data set if
+//        the associated parameter is deleted.
+//      Enhancement: The positions of objects can now be locked so that they
+//        can't be moved accidentally.
+//      Change: The multiplier and zone arrays used by the RCH, EVT, and ETS
+//        packages are now exported to separate files that are accessed
+//        using the OPEN/CLOSE option. This allows the zone and multiplier
+//        arrays in other packages to be changed without the need to
+//        export the RCH, EVT, and ETS packages. The files are stored in
+//        a subdirectory named "arrays."
+//      Bug fix: When importing the UZF package from an existing MODFLOW
+//        model, NUZTOP is now imported correctly.
+//      Change: The following dialog boxes have been deleted and their
+//        functionality has been moved to the new Data Visualization
+//        dialog box: Color Grid, Contour Data, MODPATH Pathline Display,
+//        MODPATH Endpoint Display, MODPATH Time Series Display, and
+//        Head Observation Results.
+//      Enhancement: In the Data Visualization dialog box, it is now possible
+//        to display linkages between streams in the stream package.
+//      Bug fix: When editing objects that define SFR streams, the controls
+//        for editing multiple cells in tables are now positioned properly.
+//      Bug fix: Fixed a bug that caused access violations when the system
+//        color was changed.
+//    '2.11.0.4' Bug fix. Exporting a grid data to a shape file for data sets
+//        whose names are longer than 10 characters now works properly.
+//    '2.11.0.5' Change: The zone and multiplier arrays files for
+//        RCH, EVT, and ETS are stored in a subdirectory named "arrays."
+//    '2.12.0.0' Change: In the NWT solver, the default value for flux
+//        tolerance has been increased from 0.006 to 0.06
+//      Bug fix: Deleting data sets and then opening another ModelMuse project
+//        no longer results in an assertion failure.
+//      Bug fix: Fixed a problem with invalid cast errors in PHAST models
+//        when creating or editing objects.
+//      Enhancement: In the Manage Head Observations dialog box, the user
+//        can now select multiple rows and then click the "Highlight selected
+//        objects" button to select all the objects that define objects
+//        on the selected rows.
+//      Enhancement: In the Head Observation Results pane of the
+//        Data Visualization dialog box, the data can be sorted by clicking
+//        on the column headers
+//      Enhancement: In the Head Observation Results pane of the
+//        Data Visualization dialog box, the objects that define the
+//        observations in the selected row of the results table can be
+//        selected by clicking the "Highlight selected objects" button.
+//      Bug fix: Attempting to read an invalid ModelMate file now generates
+//        a warning message instead of a bug report.
+//      Bug fix: Attempting to open a ModelMuse file with a length of zero
+//        now results in an error message to the user rather than a bug
+//        report.
+//      Bug fix: In the PHAST Print Frequency dialog box, it is no longer
+//        possible to delete all the columns in the table.
+//    '2.12.0.1' Enhancement: ModelMuse now checks the file date for MODFLOW
+//        and related models and warns the user if a more recent version has
+//        been released.
+//      Bug fix: ModelMuse again responds to the mouse wheel.
+//    '2.12.0.2' Bug fix: ModelMuse now only allows a ModelMuse file to be
+//        saved if it has one of the correct extensions.
+//      Bug fix: Access violations that sometimes occurred when changing
+//        the names of layer groups have been fixed.
+//      Bug fix: In the MODFLOW Program Locations dialog box, "ModelMuse.exe"
+//        is no longer accepted as a valid name for any of the programs.
+//      Bug fix: Undo/Redo capability added for changes to the output control.
+//      Bug fix: ModelMuse can now import the gage package correctly when
+//        a lake gage has an OUTTYPE of 4 or a stream gage has an OUTTYPE
+//        of 8.
+//      Bug fix: ModelMuse now updates user-entered real numbers to the
+//        proper format when the the user changes the language settings.
+//      Bug fix: (bug not in released version) In MODFLOW-NWT models,
+//        switching to use the NWT or UPW packages no longer causes a stack
+//        overflow.
+//      Bug fix: Fixed in bug in which attempting to delete a row from a
+//        table in which no row was selected caused an exception.
+//      Bug fix: Fixed bug in which SFR data was corrupted if ICALC was not
+//        specified.
+//    '2.12.0.3' Enhancement: Reduced memory usage when importing MODFLOW
+//        models that use the UZF package.
+//      Enhancement: When importing MODFLOW features from Shapefiles,
+//        most features can be imported into a single, multi-part object.
+//      Bug fix: Fixed bug importing the MNWI package from an existing
+//        MODFLOW-2005 model.
+//      Bug fix: Fixed bug that could sometimes prevent the Object Properties
+//        dialog box from being displayed when attempting to edit
+//        multiple objects.
+//      Bug fix: In the MODFLOW Time dialog box, attempting to use the
+//        Time Step Length Calculator without first specifying the Stress
+//        period length and multiplier now generates a warning message to the
+//        user instead of a bug report.
+//      Change: When running MODFLOW from ModelMuse, the lines in the batch
+//        file to display the listing file now occurs immediately after
+//        MODFLOW has finished instead of after the lines to run MODPATH
+//        and Zonebudget.
+//    '2.12.0.4' Bug fix: When the user has customized the regional settings
+//        to use a decimal separator that is different from the usual one,
+//        this no longer causes an error when converting text to
+//        floating point values.
+//    '2.12.0.5' Enhancement: The user can now specify the precision with
+//        which contour labels are written.
+//    '2.12.0.6' Bug fix: The menus and buttons are now disabled while
+//        opening a file.
+//      Bug fix: Fixed bug importing model results.
+//        (bug not in released version.)
+//    '2.12.0.7' Bug fix: When a message box is displayed, the mouse will
+//        move to the default button if the user has specified that option
+//        in the Windows Control Panel.
+//    '2.12.0.8' Bug fix: When importing Shapefiles, failing to specify
+//        an attribute name or value no longer results in a range check error.
+//    '2.12.0.9' Failing to completely specify information streams in the
+//        SFR package now results in an error message instead of a bug report.
+//      Bug fix: Fixed bug in setting data for SFR when multiple objects
+//        are being edited at once.
+//    '2.12.0.10' Enhancement: added support for MT3DMS.
+//      Bug fix: Fixed bugs relating to display of data in MODFLOW-LGR models.
+//    '2.12.0.11' Bug fix: Fixed another bug relating to display of data in
+//        MODFLOW-LGR models.
+//    '2.12.0.12' Bug fix: Fixed another bug relating to display of data in
+//        MODFLOW-LGR models.
+//      Change: Added option to write SFR package input in the format used
+//        by GSFLOW.
+//    '2.12.0.13' Bug fix: fixed export of SFR in MODFLOW-NWT or for GSFLOW.
+//    '2.12.0.14' Enhancement: Added help for MT3DMS.
+//    '2.12.0.15' Fixed bugs in generation of MT3DMS files.
+  //      Bug not in released version.
+//    '2.12.0.16' Fixed MT3DMS bugs.  Bugs not in released version.
+//    '2.12.0.17' Bug fix: Fixed bug with setting multiple flux observation
+//        values at once not working.
+//      Bug fix: Fixed bug in storing imported values when splitting objects.
+//    '2.12.0.18' Enhancement: Added new macro for exporting images; %TrS
+//        will be replaced by the transport step.
+//    '2.12.0.19' Bug fix: When reading an exporting a file from the command
+//        line, the "arrays" directory will be created as a subdirectory
+//        of the directory containing the file even if the full file path
+//        is not specified.
+//    '2.12.0.20' Bug fix: attempting to animate a series of data sets in
+//        the Export Image dialog box without first displaying the
+//        Display Data dialog box no longer causes access violations.
+//    '2.12.0.21' Bug fix:  Fixed bug with reading .ini file when multiple
+//        copies of ModelMuse are running.
+//    '2.12.0.22' Bug fix: When more than one instance of ModelMuse was
+//        running, sometimes one copy would not detect that another copy
+//        was running and would try to delete it's temporary files. That
+//        should no longer happen.
+//    '2.12.0.23' Bug fix: (second attempt) When more than one instance of
+//        ModelMuse was running, sometimes one copy would interfere with the
+//        other's temporary files.
+//      Bug fix: fixed export of OC file when the defaults are selected.
+//    '2.12.0.24' Bug fix: (third attempt) When more than one instance of
+//        ModelMuse was running, sometimes one copy would interfere with the
+//        other's temporary files.
+//    '2.12.0.25' Enhancement: The "Run model" button now has a drop down
+//        menu next to it which can be used to run MODPATH, ZONEBUDGET or
+//        MT3DMS.
+//      Enhancement: It is now possible to import parameter values from a
+//        MODFLOW PVAL file. This can be done either from the
+//        Manage Parameters dialog box or from the command line. To import
+//        a PVAL file from the command line, add -p "Filename" to the
+//        command line where Filename
+//        is the full path of the PVAL file. If the path contains any spaces,
+//        Filename should be enclosed in double quotes.
+//      Enhancement: It is now possible to import global variables from a
+//        text file. This can be done either from the
+//        Global Variables dialog box or from the command line. To import
+//        a global variables file from the command line, add -g "Filename"
+//        to the command line where Filename
+//        is the full path of the global variables file. If the path contains
+//        any spaces, Filename should be enclosed in double quotes.
+//        Each line of the global variables files must be either empty,
+//        start with the # character to identify the line as a comment or
+//        list the name and value of an existing global variable.
+//        On a line defining a new value for a global variable, the name
+//        of the global variable must be at the beginning of the line
+//        must be first followed by one or more spaces followed by the value.
+//        A period must be used as the decimal separator. For boolean
+//        global variables, the value must be either "True" or "False"
+//        (without the quotes). For text variables, the value may optionally
+//        be enclosed in quotes.  A global variables may also be saved from
+//        the Global Variables dialog box.
+//    '2.12.0.26' Bug fix: Contour lines are now drawn at the correct
+//        positions on the front and side views when the grid is rotated.
+//      Bug fix: (fourth attempt) When more than one instance of
+//        ModelMuse was running, sometimes one copy would interfere with the
+//        other's temporary files.
+//      Bug fix: Fixed a bug in which the Data Sets dialog box sometimes
+//        did not prevent the user from setting up a formula that caused
+//        a data set to depend on itself.
+//    '2.12.0.27' Bug fix: Fixed bug that could cause an assertion failure
+//        when coloring the grid with transient data such as the recharge
+//        rate.
+//      Bug fix (not in released version); global variable and .pval files
+//        weren't being imported correctly.
+//    '2.12.0.28' Fixed bug in exporting MT3DMS BTN data set A6 when there
+//        are more than 40 layers.
+//    '2.13.0.0' No additional changes.
+//    '2.13.0.1' Bug fix: Fixed a bug that would cause interpolation to fail
+//        if an object did not intersect the grid.
+//    '2.13.0.2' Enhancement: added support for running MODPATH with
+//        a child model in MODFLOW-LGR.
+//    '2.13.0.3' Enhancement: added support for visualizing MODPATH output
+//        with a child model in MODFLOW-LGR.
+//    '2.13.0.4' Bug fix: Fixed labeling of contours when contouring
+//        data sets whose data type is Text.
+//      Bug fix: fixed labels for TRPT and TRPV in MT3DMS.
+//      Bug fix: fixed export of SSM package when no source or sink
+//        concentrations have been defined.
+//    '2.13.0.5' Bug fix: Fixed bug that would cause an error if the user
+//        attempted to display data set values before generating the grid.
+//       Bug fix: Fixed a bug that would cause an error if the user attempted
+//         to give an aquifer a name that started with a number or a name
+//         that was too similar to the name of another aquifer.
+//    '2.13.0.6' Change: In the hydmod package, The name of each observation
+//         has a unique number added to the end of the label.
+//    '2.13.0.7' Bug fix: fixed bug that prevented the LPF options
+//         STORAGECOEFFICIENT and CONSTANTCV from being used simultaneously.
+//       Enhancement: Added support for the new STOPERROR option in the
+//         MODFLOW Basic package.
+//       Enhancement: Added support for the new NOPARCHECK option in the
+//         MODFLOW LPF package.
+//       Enhancement: Added support for the PCGN solver.
+//       Change: Changed SFR package to use new SFR format for MODFLOW-2000.
+//       Enhancement: Added IFACE to SFR input.
+//       Bug fix: fixed a bug that would cause range-check errors in certain
+//         MODFLOW-LGR models.
+//    '2.13.0.8' Bug fix: Fixed bug that would sometimes cause invalid SFR
+//         input files to be created when unsaturated flow was simulated
+//         beneath streams.
+//       Enhancement: When importing ASCII raster files into a MODFLOW-LGR
+//         model, it is now possible to specify the grid to use
+//         for the imported data.
+//       Bug fix: fixed bug that would sometimes cause the assigning data
+//         set values to fail in a MODFLOW-LGR model.
+//    '2.13.0.9' Change: Reduced memory usage.
+//       Bug fix: Checking elevations in MODFLOW-LGR child models no longer
+//         results in a range check error.
+//       Bug fix: Fixed problem with reading invalid files.
+//    '2.13.0.10' Bug fix: Previously, attempting to display the
+//         "Show or Hide Objects" dialog box would sometimes cause an error.
+//       Bug fix: In MODFLOW-LGR models, the legend displayed when
+//         coloring or contouring would not reflect more extreme values
+//         displayed in a child grid.
+//       Enhancement: You can now export grid data to a Shapefile for
+//         MODFLOW-LGR child grids.
+//    '2.13.0.11' Bug fix: Fixed export of IFMTCN, IFMTNP, IFMTRF,
+//         and IFMTDP in the MT3DMS basic transport package.
+//       Enhancement: You can now use the command line option -mte to export
+//         just the MT3DMS input files.
+//    '2.13.0.12' Bug fix: when importing a Shapefile to a multipart object,
+//         formulas for the Z-coordinate can now be imported properly.
+//    '2.14.0.0' No additional changes.
+//    '2.14.0.1' Enhancement: Added the ability to export
+//         .png and .jpg images.
+//       Bug fix: Importing model results for MODFLOW-LGR model and
+//         contouring them no longer causes a range-check error.
+//    '2.14.0.2' Bug fix: Fixed bug that caused access violations when
+//         importing results from a MODFLOW-LGR child model but not the
+//         MODFLOW-LGR parent model.
+//       Bug fix: Fixed bug in which the Kz data set was not created when
+//         a MODFLOW model was first created.
+//       Bug fix: Fixed bug that sometimes caused invalid elevation formulas
+//         in objects created by importing Shapefiles.
+//    '2.14.1.0' Change: Date for the current version of MODFLOW-2005
+//         changed to the date for MODFLOW-2005 version 1.9.01.
+//    '2.14.1.1' Bug fix: In order to prevent range check errors, it is no
+//         longer possible to display the Manage Flux Observations dialog box
+//         when MT3D has been selected unless at least one chemical species
+//         has been defined.
+//       Enhancement: The "Data Sets" dialog box can now remain open
+//         while the user works with other parts of ModelMuse. However, it
+//         can not remain open when the Object Properties dialog box is open
+//         so if the user attempts to open the Object Properties dialog box,
+//         The Edit Data Sets dialog box will automatically close.
+//       Bug fix: Specifying values of Stress period length,
+//         time step multiplier, and initial time step size that would cause
+//         the number of time steps to exceed the limits of a 32-bit signed
+//         integer causes an error message to the user rather than a bug
+//         report.
+//       Bug fix: In the object properties dialog box, clicking the button
+//         for the formula editor when editing the formula for the Factor
+//         in an MT3DMS Flux observation, no longer causes an
+//         Assertion failure.
+//       Bug fix: In the MODFLOW Packages and Programs dialog box, changing
+//         the number of parameters in the UPW package no longer causes an
+//         Assertion failure.
+//       Enhancement: Tab ordering has been improved.
+//    '2.14.1.2' Bug fix: Importing models containing the UZF package
+//         in which ET is not simulated, now works properly.
+//       Enhancement: X, Y, and Z axes are now drawn in the 3D view.
+//       Bug fix: Fixed bug that caused empty .bfh_head and .bfh_flux files
+//         to be created in MODFLOW-LGR models when one-way coupling is used.
+//       Bug fix: Merely selecting a data set in the Data Visualization
+//         dialog box no longer causes the data set values to be calculated.
+//         The user must now click "Apply" to cause the data set values to be
+//         calculated.
+//       Bug fix: Fixed bug importing the Subsidence package
+//         from existing models.
+//    '2.14.1.3' no real change.
+//    '2.14.1.4' Enhancement: Added support for importing the concentration
+//         in MT3DMS associated with a sink or source package.
+//       Change: In MODFLOW models using the BCF package, the
+//         "Vertical_Conductance" data set is renamed "Vertical_Leakance".
+//       Enhancement: Reduced the time required to open the Edit Data Sets
+//         dialog box in models with large numbers of data sets.
+//    '2.15.0.0' Bug fix: Fixed bug in importing Shapefiles that could
+//         allow an object to have one or more Z-formulas when setting
+//         the value of a layer definition data set.
+//       Enhancement: Added partial support for Unicode. Complete support
+//         is not possible because the groundwater models do not currently
+//         support Unicode.
+//       Change: The extension for MT3DMS configuration file changed from
+//         ._cnf to .cnf to facilitate viewing the output in Model Viewer.
+//    '2.15.0.1' Bug fix: Importing a Global Variables file was from the
+//         command line now works properly.
+//    '2.15.0.2' Bug fix: fixed a bug that would sometimes cause contouring
+//         to fail.
+//       Bug fix: Certain shapefiles that were previously rejected by
+//         ModelMuse as self-intersecting are now accepted.
+//       Enhancement: When importing images .pgw files are now accepted as
+//         a valid world file type.
+//       Bug fix: Fixed bug in which observation names were allowed
+//         to include the '/' character even though that character would
+//         not be processed by MODFLOW correctly.
+//     '2.15.0.3' Bug fix: Fixed a bug in which attempting to import gridded
+//         data using an invalid layer caused an error. Invalid layers can no
+//         longer be specified.
+//       Enhancement: MT3DMS simulations can now have fewer stress periods
+//         than the corresponding MODFLOW model.
+//     '2.15.0.4' Bug fix: Fixed bug that caused incorrect stress periods to
+//         be exported if the stress periods were changed and the SFR package
+//         was in used.
+//       Bug fix: Fixed a bug that could cause interpolation to fail.
+//     '2.16.0.0' Enhancement: Added 64-bit version for 64-bit operating
+//         systems.  TIFF and PCX files are not supported in the 64-bit
+//         version.
+//       Change: The red background for missing files in the Files to Archive"
+//         dialog box has been changed to a red font.
+//       Change: The light blue background for a parenthesis and it's
+//         match in the formula editor has been changed to a light blue font.
+//     '2.16.1.0' Bug fix: Fixed bug that caused importing model results to
+//         fail.
+//     '2.16.1.1' Bug fix: When exporting ModelMate files, ModelMuse now
+//         specifies the correct version of MODFLOW to use.
+//       Bug fix: The "Function Help" button on the Formula editor works again.
+//     '2.16.1.2' no real change. Converted some text to make it easier to
+//         translate.
+//     '2.16.1.3' Bug fix: Fixed export and import of head change
+//         observations to ModelMate.
+//     '2.16.1.4' no change.
+//     '2.16.1.5' Bug fix: Fixed bug in export of gages for the Lake package.
+//       Bug fix: Fixed bug in export of Shapefiles in which the last
+//         character of the last field was not written to the file.
+//       Bug fix: Fixed export of unit numbers for lake gages.
+//     '2.16.1.6' (Changed version of GLScene used to 5991.)
+//     '2.16.1.7' no real change.
+//     '2.16.1.8' Bug fix: Renaming parameters for the HUF package now
+//         causes any formulas based on data arrays for those parameters
+//         to be updated.
+//       Enhancement: Added support for MODPATH version 6.
+//       Change: Head observations that are at the end of a steady-state
+//         stress period now have their reference stress period set to that
+//         stress period rather than the beginning of the following
+//         stress period.
+//     '2.16.1.9' Change: Updated link for model archiving policy.
+//       Bug fix: Fixed display of file names in the Files to Archive
+//         dialog box.
+//       Bug fix: The name file for MODFLOW models is now included in
+//         archives.
+//       Bug fix: Fixed import of binary Surfer grid files.
+//     '2.16.1.10' Enhancement: Added support for exporting data set values
+//         for display in Model Viewer.
+//     '2.16.1.11' Bug fix: Fixed coloring the grid for certain PHAST data
+//         sets.
+//     '2.16.1.12' Bug fix: Fixed display of layer numbers on the status bar
+//         for the front and side views. {Bug not in released version.}
+//       Bug fix: fixed bug in export of MODPATH version 6 input
+//         (Bug not in released version.)
+//     '2.16.1.13' Bug fix: Fixed how the "Child Models" dialog box for
+//         MODFLOW-LGR models responds to the user entering an invalid number
+//         for NCPP.
+//       Bug fix: Fixed bug that could cause some MODFLOW budget files to
+//         be incorrectly identified as invalid.
+//     '2.16.1.14' Bug fix: Fixed detecting the version number of MODPATH
+//         used to create a pathline file. (Bug not in released version.)
+//       Bug fix: Fixed display of endpoints, pathlines and time series data
+//         from MODPATH on the front and side views when the grid is rotated.
+//     '2.16.1.15' Bug fix: Fixed bug that caused too much memory to be used
+//         when exporting the SSM package in MT3DMS.
+//     '2.16.1.16' Bug fix: Fixed bug that caused exporting the SSM file in
+//         MT3DMS to take more time than it should have.
+//     '2.16.1.17' Enhancement: The Selection Cube for the top view of the
+//         model draws the grid outline only for simulated layers.
+//       Bug fix: Fixed bug that could cause an error in the export of the
+//         MT3DMS TOB package if duplicate times were specified.
+//     '2.17.0.0' No further changes.
+//     '2.17.1.0'  Bug fix: Fixed bug in which objects were not drawn as
+//         selected after clicking the OK button in the Object Properties
+//         dialog box.
+//       Bug fix: The tree control in the Show Or Hide Objects dialog box
+//         no longer collapses all its nodes just because there has been a
+//         change in which object is selected.
+//       Bug fix: The display of the data for the RCH, EVT and ETS packages
+//         has been fixed.
+//     '2.17.1.1' Enhancement: Added support for PHIRAMP in the
+//         Well package of MODFLOW-NWT.
+//       Bug fix: Fixed export of starting locations file for MODPATH version
+//         6 when no starting locations have been defined for some objects.
+//       Bug fix: Fixed export of MODPATH with MODFLOW-LGR child models
+//         when the MODPATH options differ between the parent and child
+//         models.
+//     '2.17.1.2' Bug fix: Fixed problem with editing objects in
+//        translated version of ModelMuse.
+//     '2.17.1.3' No real change.
+//     '2.17.1.4' Bug fix: Attempting to read a head observation file in
+//         which some of the numbers are invalid now results in an error
+//         message to the user instead of a bug report.
+//       Enhancement: When exporting objects as Shapefiles, you can now export
+//         the formulas for many but not all MODFLOW Features.
+//     '2.17.1.5' Bug fix: In the MODFLOW Layers dialog box, deleting
+//         sublayers graphically now works correctly.
+//       Bug fix: Fixed bug in importing the MNW2 package from existing
+//         models.
+//     '2.17.1.6' Bug fix: If a pathline just has a single point, it is now
+//         drawn as a single point instead of being skipped.
+//       Bug fix: In the grid value dialog box, data for MODPATH pathlines
+//         and endpoints are now displayed for child models in MODFLOW-LGR
+//         models.
+//       Bug fix: When exporting images with MODFLOW-LGR models, MODPATH
+//         pathlines and other data can now be displayed for child models.
+//       Bug fix: Streamlinks of MODFLOW-LGR child models are now displayed.
+//       Bug fix: Fixed export of locations of pval and jtf file names to
+//         ModelMate when the model files are in a different directory from
+//         the ModelMuse file. (More changes in version 2.17.1.7.)
+//       Enhancement: Added support for exporting head observations to
+//         Shapefiles. (This is an extension of the enhancement in version
+//         2.17.1.4.)
+//     '2.17.1.7' Bug fix: Fixed export of ModelMate files when the model
+//         files are in a different directory from the ModelMuse file.
+//     '2.17.1.8' Enhancement: The Grid Value dialog box was modified to
+//         allow multiple tabs to be displayed simultaneously.
+//     '2.17.1.9' Bug fix: In the MODFLOW Layers dialog box, setting custom
+//         sub discretizations for layer groups now works properly.
+//     '2.17.1.10' Bug fix: Added support for IUNITRAMP in data set 2B of the
+//         well package of MODFLOW-NWT. (Bug not in released version.)
+//     '2.17.1.11' Bug fix: Fixed bug in exporting Shapefiles. Each record
+//         for the shapefile in the .dbf file now includes a space for
+//         indicating whether a record is deleted or not.
+//     '2.17.1.12' Bug fix: Fixed bug in exporting the TOB file for MT3DMS
+//         when no concentration observations are defined.
+//     '2.17.1.13' Bug fix: Fixed updating of the initial NWT values.
+//         (Bug not in released version.)
+//       Bug fix: Fixed bug that caused ModelMuse to crash when it
+//         first starts on some systems. (Bug in GLScene fixed by updating
+//         GLScene to the latest version from SVN.)
+//       Bug fix: Fixed bug displaying 3D view on Windows 8.
+//     '2.17.1.14' Enhancement: Added new function for use in Formulas:
+//         Closest. See the ModelMuse help for details.
+//       Enhancement: Added the ability to import binary grid files created
+//         by T-PROGS.
+//     '2.17.1.15' Bug fix: Fixed bug that caused ModelMuse to crash when
+//         changing the number of rows, columns or layers in the grid.
+//     '2.17.1.16' Bug fix: Fixed bug in adding new data sets when child
+//         models from a MODFLOW-LGR model have been created but the
+//         model is no longer a MODFLOW-LGR model.
+//       Enhancement: Changes to the file format of the MNW2 package in
+//         MODFLOW-NWT are now supported.
+//     '2.18.0.0' Bug fix: Fixed bug that would cause divide-by-zero errors
+//         when calculating Interlayer Kz in the HUF package if some of the
+//         data was not properly defined.
+//     '2.18.0.1' Bug fix: Fixed bug that caused ModelMuse to hang on
+//         some computers when using the search function in the ModelMuse
+//         help.
+//       Bug fix: Fixed bug that allowed an attempt to be made to export the
+//         PHAST input file even if the grid was not yet defined.
+//       Bug fix: Fixed bug that sometimes incorrectly prevented the user
+//         from importing the shapes in a Shapefile as a single multipart
+//         object.
+//     '2.18.0.2' Bug fix: Fixed bug in export of RCH package when parameters
+//         are used but the layer is not time-varying.
+//     '2.18.0.3' Change: the user can now cut and paste data from the
+//         Imported Data tab of the Object Properties dialog box.
+//     '2.18.0.4' Bug fix: Fixed a bug that would cause an error opening a
+//         ModelMuse file if an object used in the definition of a flux
+//         observation had been deleted.
+//     '2.18.1.0' Bug fix: Fixed bug that allowed MT3DMS to have zero stress
+//         periods defined.
+//     '2.18.1.1' Bug fix: Attempting to import a file as a Surfer Grid file
+//         when it really is not one now results in an error message to the
+//         user instead of a bug report.
+//       Change: ModelMuse will no longer use the XSECTION option in the
+//         Basic package if MODPATH is active because MODPATH version 6
+//         does not support the XSECTION option.
+//       Bug fix: If the user attempts to import a TProgs file before
+//         creating a grid, an error message is displayed to the user instead
+//         of generating a bug report.
+//       Bug fix: The following functions all had bugs which have been
+//         corrected: ObjectCurrentVertexX, ObjectCurrentVertexY,
+//         ObjectCurrentVertexZ, ObjectCurrentSegmentAngle,
+//         ObjectCurrentSegmentAngleDegrees,
+//         ObjectCurrentSegmentAngleLimitedDegrees,
+//         ObjectCurrentSegmentLength
+//       Bug fix: Fixed bug in checking parameters in the SFR package that
+//         could cause ModelMuse to crash or to incorrect error messages.
+//     '2.18.1.2' Bug fix: Fixed bug that could cause math errors when
+//         coloring data sets by the logarithm of their values.
+//       Failed Bug fix: Fixed bug that could cause extra stress periods of
+//         negligible length to be generated when exporting from the 64-bit
+//         version of ModelMuse.
+//     '2.18.1.3' Bug fix: Fixed evaluating objects on rotated cross sections
+//         in SUTRA. Bug not in released version.
+//     '2.18.1.4' Made changes for SUTRA.
+//     '2.18.1.5' Failed Bug fix: Fixed bug that could cause extra stress
+//         periods of negligible length to be generated when exporting from
+//         the 64-bit version of ModelMuse.
+//     '2.18.1.6' Change: When importing Shapefiles, if the number of
+//         Z-Formulas is set to 1 or 2, any new data sets that are created
+//         will be 3D data sets.
+//       Bug fix: Fixed bug that could cause extra stress periods of
+//         negligible length to be generated when exporting from the 64-bit
+//         version of ModelMuse.
+//     '2.18.1.7' Bug fix: Fixed sampling of DEM data.
+//     '2.18.1.8' No real change.
+//     '2.18.1.9' Bug fix: When saving ModelMuse projects to text files
+//         such as .gpt or .xml files, real numbers that were close to but
+//         not equal to zero were saved as zero.
+//       Bug fix: If the user enters an invalid formula for the Z coordinates
+//         of an object, ModelMuse will now display an error message to the
+//         user instead of generating a bug report.
+//       Bug fix: Editing objects that defined streams in the SFR package
+//         when SFR parameters are defined works properly now.
+//     2.18.1.10' Bug fix: If ModelMuse is unable to save an ini file, it
+//         displays a warning message to the user instead of generating a
+//         bug report.
+//       Bug fix: Attempting to merge point objects no longer results in
+//         a bug report. However, point objects can not be merged.
+//       Bug fix: Fixed a bug that sometimes caused an error when ModelMuse
+//         was shutting down.
+//    '2.18.1.11' Bug fix: Fixed bug that prevented layer elevations from
+//         being updated correctly.
+//    '2.18.1.12' Bug fix: Fixed bug that caused an error if two components
+//         in MT3DMS were given the same name. Now if the user attempts to
+//         assign the same name to more than one component in MT3DMS,
+//         only the first one is accepted. The others are deleted.
+//    '2.18.1.13' Enhancement: Added new contouring method based on
+//         the Association for Computing Machinery (ACM) algorithm 651.
+//       Enhancement: Added the ability for the user to add a custom
+//         coloring scheme for coloring the grid or for contour lines.
+//       Enhancement: Added support for the NOPRINT option in observation
+//         files.
+//    '2.18.1.14' Change: When drawing contour lines, a white background is
+//         now drawn behind the contour labels.
+//    '2.19.0.0' No additional changes.
+//    '2.19.0.1' Bug fix: Attempting to import a .dxf file that is locked
+//         by another program will result in an error message to the user
+//         instead of generating a bug report.
+//       Bug fix: Fixed bug that caused problems on computers in which the
+//         decimal symbol is not a period when closing the "MODFLOW
+//         Packages and Programs" dialog box.
+//       Bug fix: When reading an empty endpoint file, ModelMuse now displays
+//         a warning message to the user instead of generating a bug report.
+//    '2.19.0.2' Bug fix: When an object is defining multiple values at the
+//         same cell or element, holes in the object no longer define such
+//         values. An example would be an object that defines wells in MODFLOW
+//         with an object that contains multiple sections and in which some
+//         of those sections define holes.
+//       Change: A new checkbox has been added to the "Object Properties"
+//         dialog box labeled "Duplicates <cells/elements> allowed. It is
+//         checked by default. Under some conditions, a single object can
+//         allow multiple values to be assigned at a single cell.
+//         For example, in MODFLOW models, an object might define two or
+//         more wells at a single cell by having two separate point sections
+//         that are in the same cell. This ability can be turned off by
+//         unchecking this check box.
+//    '2.19.0.3' Bug fix: Fixed bug that could cause ModelMuse to hang when
+//         importing an existing MODFLOW-2005 model.
+//    '2.19.0.4' Bug fix: Fixed bug introduced in '2.19.0.2'. Not in released
+//         version.
+//    '2.19.0.5' Bug fix: Fixed bug in limiting display of MODPATH end points
+//         with tracking time.
+//       Change: On some computers, bugs are encountered related to
+//         the 3D view. The 3D view is hidden on such computers to allow the
+//         program to continue running.
+//    '2.19.0.6' Bug fix: Fixed bug that would cause access violations when
+//         generating the input file for the UZF package if a flow package
+//         other than the LPF or UPW was used.
+//    '2.19.1.0' No additional changes.
+//    '2.19.1.1' Bug fix: Changes to the "Print input cell lists" option
+//         in the MODFLOW Output Control dialog box were not saved.
+//    '2.19.1.2' Bug fix: Fixed handling of the RCH, EVT, and ETS package
+//         in cases where parameters are defined but no parameters are used
+//         for one or more stress periods.
+//       Bug fix: Fixed handling of attempts to read DEMs that are in the
+//         wrong format.
+//       Bug fix: fixed bug in importing head and drawdown results from
+//         profile models.
+//    '2.19.1.3' Enhancement: The "Show or Hide Objects" dialog box now
+//         displays the cell or element size that an object specifies.
+//       Bug fix: A bug report is no longer generated if when attempting
+//         to finish adding a new closed section to an object the final
+//         edge of the new section crosses one of the earlier edges of the
+//         same section of the object. Instead an error message is displayed
+//         to the user.
+//       Bug fix: Attempting to import an empty results file for MODFLOW
+//         should no longer generate an I/O error.
+//       Enhancement: The menu item Data|Delete Model Results has been added.
+//         It deletes all the data sets and objects for the model results.
+//       Bug fix: ModelMuse now displays an error message in the
+//         Formula Errors dialog box when a data set formula is invalid
+//         in some cases where it would previously generate a bug report.
+//    '2.19.1.4' Bug fix: Fixed creating child models in which global
+//         variables are used in some data sets.
+//    '2.19.1.5' Same bug fix as in '2.19.1.4' -- Correct this time.
+//    '2.19.1.6' Bug fix: Fixed bug with Natural Neighbor Interpolation that
+//         could cause ModelMuse to enter an infinite loop.
+//       Bug fix: Fixed a bug that caused inconsistencies in data set values
+//         between parent and child models if the values were assigned by
+//         interpolation. Previously, data points outside the grid might
+//         not be assigned the correct values.
+//    '2.19.1.7' Enhancement: When contouring data, the user can now specify
+//         the contour interval easily.
+//       Bug fix: When specifying contour values, the user no longer has to
+//         specify the values in the correct order.
+//    '2.19.1.8' Enhancement: Sorting of observation names in the
+//         Data Visualization dialog box has been improved.
+//       Enhancement: There is now a button for copying the observations
+//         in the Data Visualization dialog box to the clipboard.
+//    '2.19.1.9' Bug fix: Fixed bugs that resulted in invalid file names when
+//         MT3DMS component names contained non-alphanumeric characters.
+//    '2.19.1.10' Bug fix: If after importing data, the imported data becomes
+//         corrupted, it is now possible to save the file although the
+//         imported data will not be saved.
+//    '2.19.1.11' Enhancement: The default value for the grid cell size shown
+//         in the object properties dialog box is now set to a reasonable
+//         value based on the dimensions of the model area.
+//       Bug fix: Fixed bug in the "Delete Model Results" command
+//         that invalidated formulas incorrectly. Not in released version.
+//    '2.19.1.12' Bug fix: Fixed bug in displaying the Show/Hide Objects
+//         dialog box when drain return objects were not defined properly.
+//    '2.19.1.13' Change: Changing the name of a "Model Results" data set
+//         will now cause it to be listed under "User Defined" data sets.
+//       Enhancement: Added ArcTan function.
+//       Bug fix: When saving the settings for an image, specified contour
+//         intervals are now saved properly.
+//       Bug fix: Selecting "Data|Delete Models Results" for a model that
+//         contains no model results no longer results in an error.
+//       Bug fix: Displaying pathline or time series files from MODPATH with
+//         very large coordinate values no longer causes ModelMuse to crash.
+//         (The large coordinate values may indicate that the particle is
+//         trapped in a dry cell.)
+//       Bug fix: When creating contours with the ACM 626 contouring
+//         method, contouring values of head in models in which some cells
+//         have gone dry no longer causes and error.
+//    '2.19.1.14' Bug fix: ModelMuse no longer displays an error message
+//         about no parameters being used in a stress period unless recharge
+//         parameters have been defined.
+//       Enhancement: Added ability to use concentrations from a previous run
+//         as initial concentrations for new run in MT3DMS.
+//    '2.19.1.15' Bug fix: If an object has no vertices, ModelMuse no longer
+//         attempts to use it in interpolation.
+//    '2.19.1.16' Bug fix: Under rare circumstances, ModelMuse would
+//         sometimes generate a bug report when a model was first opened
+//         due to a variable not yet having been updated.
+//       Bug fix: Fixed a bug sometimes encountered when a user attempts
+//         to import an invalid DEM.
+//       Bug fix: When a model contains non-simulated layers, the layer
+//         numbers in multilayer head observations are now assigned correctly.
+//       Enhancement: It is now possible to export MNW2 data for objects
+//         to Shapefiles.
+//    '2.19.1.17' Bug fix: Fixed editing of lake bathymetry file.
+//    '2.19.1.18' Bug fix: fixed bug that caused access violations when
+//         opening the MODFLOW Packages and Programs dialog box.
+//       Enhancement: ModelMuse can now import MODFLOW-NWT models.
+//    '2.19.1.19' Bug fix: Fixed bug importing Horizontal Flow Barrier
+//         package from existing models that could result in the extra
+//         flow barriers being included in the model.
+//    '2.19.1.20' Enhancement: ModelMuse now compares drain elevation,
+//         river stage and GHB head to the cell bottom elevation and
+//         generates a warning or error message if the cell bottom elevation
+//         is higher than the boundary value.
+//    '2.19.1.21' Enhancement: Added support for STR and STOB packages.
+//       Bug fix: Fixed bug that caused errors when editing the grid so that
+//         it had only one grid line.
+//    '2.19.1.22' Bug fix: Fixed bug in displaying Data Visualization
+//         dialog box.
+//    '2.19.1.23' Change: In the HYDMOD package, ModelMuse no longer
+//         generates repeated data if two SFR reaches are in the same cell.
+//       Enhancement: when exporting objects to shapefiles that contain
+//         data for the MNW2 package, the time-varying data can now be
+//         exported.
+//    '2.19.1.24' Enhancement: Improved handling of errors in importing
+//         DXF files.
+//       Enhancement: MODFLOW Program Locations dialog box redesigned to
+//         show only the programs used in the model.
+//       Bug fix: fixed bug that caused an error when undoing a change
+//         in the MODFLOW Packages and Programs dialog box when horizontal
+//         flow barriers had already been defined.
+//    '2.19.1.25' Enhancement: Added support for MODFLOW-LGR version 2.
+//    '2.19.1.26' Bug fix: Fixed bug that caused errors when editing
+//         objects that define SFR boundaries.
+//    '2.19.1.27' Change: When importing existing models, the elevations
+//         used to assign boundary conditions cells to layers are now
+//         set to a value close to the top of the layer instead of the
+//         center of the layer to facilitate converting the model to
+//         a MODFLOW-LGR model.
+//       Change: When importing existing models, objects used to define
+//         boundaries in the CHD, RIV, DRN, DRT, and GHB packages now consist
+//         of polygon sections rather than point sections to facilitate
+//         converting the model to a MODFLOW-LGR2 model.
+//       Bug fix: Fixed a bug that could cause access violation when coloring
+//         the grid or exporting MODFLOW input files.
+//       Enhancement: Speed up export of model input
+//       Bug fix: Fixed bug that could cause errors when displaying values
+//         for the Drain, GHB, or River boundaries if the corresponding
+//         observation package is used.
+//       Bug fix: Fixed bug that could cause circular reference errors when
+//         interpolating data.
+//       Bug fix: fixed bug in Natural Neighbor interpolation method that
+//         could cause divide by zero errors.
+//    '2.19.1.28' Change: Objects are now only allowed to assign data set
+//         properties by interpolation if they have zero elevation formulas.
+//    '2.19.1.29' Bug fix: Fixed import of multiplier and zone array names
+//         when the name listed in a cluster is longer than 10 characters.
+//    '2.19.1.30' Bug fix: Fixed bug that caused data for the SFR package to
+//         be lost if multiple objects were edited and some of them were
+//         defining streams in the SFR package and others were polygon
+//         objects.
+//    '2.19.1.31' Change: the Object Properties dialog box to uses fewer
+//         Windows resources.
+//    '2.19.1.32' Bug fix: Improved drawing of pathlines from MODPATH
+//         version 6. Pathline segments are now drawn if segments that end at
+//         the edge of either the previous or next column, row, or layer so
+//         long as the segment crosses the current column, row, or layer.
+//         This change also applies to MODPATH version 5 with respect to
+//         layers but not rows or columns.
+//    '2.19.1.33' Enhancement: Added support for the FHB package.
+//       Bug fix: Divide by zero errors should now result in an error
+//         message instead of a bug report.
+//       Bug fix: Fixed importing MNW2 package from existing models when the
+//         model contains non-simulated layers.
+//       Bug fix: Fixed export of UZF package input when output to the
+//         listing file is specified.
+//    '2.19.1.34' Bug fix: Fixed export of MNW2 package in models with
+//         non-simulated layers.
+//    '2.19.1.35' Bug fix: Fixed bug that could cause exporting the SFR
+//         package input file to fail.
+//       Bug fix: Fixed bug that could make it impossible to open the
+//         Object Properties dialog box with large models.
+//       Bug fix: Fixed bug that could make it impossible to open objects
+//         that define streams in the SFR package in the Object Properties
+//         dialog box.
+//    '2.19.1.36' Change: ModelMuse now will only generate up to 1000
+//         error or warning messages of any one type.
+//    '2.19.1.37' Enhancement: When importing a Surfer Grid file, the
+//         imported data points can be filtered to reduce the number of
+//         points imported.
+//       Bug fix: Fixed backwards compatibility issue with SUTRA
+//         (not in released version)
+//    '2.19.1.38' Bug fix: Fixed display of legend for contour lines
+//         when the contour colors are not specified directly.
+//    '2.19.1.39' No Change.
+//    '3.0.0.0' Bug fix: Fixed bug in interpolating.
+//       Enhancement: Added support for SUTRA.
+//    '3.0.0.1' Bug fix: Fixed using .ucn files to specify the initial
+//         concentration in MT3DMS.
+//    '3.0.0.2' Change: If the Application Directory on a computer is blocked,
+//         ModelMuse will attempt to use the directory in which the program
+//         is installed instead.
+//    '3.0.0.3' no real change.
+//    '3.0.0.4' Fixed reading certain real numbers when opening a file on
+//         a computer in which the decimal separator is not a period.
+//    '3.0.0.5' Fixed Checkbox bug in TRbwDataGrid4. Not in released version.
+//    '3.0.0.6' No released changes.
+//    '3.0.0.7' Enhancement: If the initial step size for MT3DMS is larger
+//         than the maximum step size, the backgrounds of the cells in the
+//         table on the MODFLOW Times dialog box are colored in red.
+//       Bug fix: Fixed bug in display of assigned layer in the RCH, EVT,
+//         and ETS packages.
+//    '3.0.0.8' No released changes.
+//    '3.0.0.9' Enhancement: The length of a MODPATH pathline is
+//         now displayed in the Grid or Mesh Value dialog box.
+//    '3.0.0.10' Bug fix: Fixed linkage to help system for the
+//         SUTRA Fluid Sources pane of the Object Properties dialog box.
+//       Bug fix: Fixed resizing panels on the Export Image dialog box.
+//       Bug fix: The Manage Parameters dialog box now enforces the
+//         10 character limit on parameter names instead of generating a
+//         bug report if the number of characters in a parameter name is
+//         greater than 10 characters.
+//       Enhancement: ModelMuse can now paste contours from Argus ONE as
+//         objects in ModelMuse. Only the geometry is transferred; contour
+//         values are not transferred.
+//    '3.0.0.11' Enhancement: ModelMuse can now use and online version of
+//         the help.
+//    '3.0.0.12' Bug fix: Fixed bug that could cause assertion failures
+//         when interpolating.
+//    '3.0.0.13' Bug fix: Fixed bug that resulting in X_Prime and Y_Prime
+//         being exported to Shapefiles and CSV files instead of X and Y.
+//    '3.0.0.14' bug not in released version. Bug fix: Fixed bug in labeling
+//         headers when exporting CSV files.
+//    '3.0.0.15' Bug fix: fixed bug that could cause an access violation when
+//         opening one of the recently opened files listed in the File menu.
+//    '3.0.0.16' Change: The starting unit number for GAGE, MNWI, and UZF
+//         output files has been changed from 205 to 20205 to avoid potential
+//         conflicts with the COC package.
+//    '3.0.0.17' Enhancement: Added support for MODFLOW CFP.
+//    '3.0.0.18' Bug fix: not in released version. Fixed pasting Argus ONE
+//         contours into ModelMuse when not all the contours on a layer
+//         were copied to the clipboard.
+//    '3.0.0.19' Bug fix: Fixed bug that would cause and access violation if
+//         The Mesh Information dialog box was displayed for a 3D SUTRA
+//         mesh before any layer groups had been defined.
+//    '3.0.0.20' Enhancement: The display of head observation residuals can
+//         now be limited by layer.
+//       Enhancement: The Head observation can now be exported to Shapefiles.
+//    '3.1.0.0' Bug fix: Specifying a file of the wrong type on the command
+//         line when starting ModelMuse no longer leads to the generation
+//         of a bug report.
+//    '3.1.1.0' Bug fix: Fixed bug that could cause an access violation when
+//         opening the Object Properties dialog box.
+//       Bug fix: Fixed using objects on the front or side views to define
+//         pipes in MODFLOW-CFP.
+//    '3.1.1.1' Bug fix: In the Manage Head Observations dialog box, the
+//         Statistic was set incorrectly.
+//       Bug fix: Fixed bug in import of 1 layer model that used parameters
+//         in the LPF package.
+//       Bug fix: Fixed bug in displaying the MODFLOW Packages and Programs
+//         dialog box.
+//       Bug fix: Fixed bug in displaying the Object Properties dialog box.
+//       Bug fix: fixed bug that would cause access violations when
+//         contouring data.
+//       Change: Whenever a new version of ModelMuse is used, it will attempt
+//         to also use the newest version of ModelMonitor.
+//    '3.2.0.0' Enhancement: Added support for SWI2 package.
+//    '3.2.0.1' Bug fix: In MODFLOW-LGR and MODFLOW-LGR2 models, the display
+//         of data set values for child models when those values should be
+//         set using parameters has been fixed.
+//    '3.2.1.0' No additional changes.
+//    '3.2.1.1' Bug fix: fixed bug in determining tributaries in the STR
+//         package.
+//       Bug fix: Fixed display of transient data when the specified time
+//         is the first time in a stress period.
+//       Bug fix: fixed bug that could cause ModelMuse to enter an infinite
+//         loop when using the ACM 626 method to draw contour lines.
+//       Bug fix: ModelMuse can now handle a data set that has an invalid
+//         formula when first opening the model.
+//       Bug fix: Fixed bug importing MODFLOW models containing specified
+//         heads defined by both the CHD package and negative IBOUND values.
+//    '3.2.1.2' Bug fix: Fixed bugs related to editing and exporting CFP
+//         information.
+//       Bug fix: Fixed bug the could cause and access violation when
+//         switching to a SUTRA model.
+//    '3.2.1.3' Bug fix: Fixed generation of time schedules in SUTRA when
+//         one or more of the times is larger than the largest possible
+//         single precision number.
+//       Bug fix: Fixed export of time information for MT3DMS.
+//       Bug fix: Fixed export of MODFLOW flow observation factors when the
+//         formula for the factor uses the layer, row, or column number.
+//       Enhancement: When displaying data or head observation results,
+//         the root mean square residual is displayed in the
+//         Data Visualization dialog box.
+//       Enhancement: In the Show and Hide Objects, dialog box, the head
+//         observation group name is displayed with head observations.
+//     '3.2.1.4' Bug fix: Fixed display of Data Visualization dialog box.
+//         (not in released version.)
+//     '3.2.1.5' Change: The formula used for 3D data sets when importing
+//         model results has been changed;
+//     '3.2.1.6' Bug fix: Entering an invalid maximum or minimum value to
+//         display in the Data Visualization dialog box no longer results
+//         in a bug report.
+//       Bug fix: Fixed importing model results with MODFLOW-LGR
+//         and MODFLOW-LGR2 models.
+//       Bug fix: If a formula for the pumping rate in a MODFLOW well results
+//         in a math error such as a division by zero error, An error
+//         message is displayed in the Errors and Warnings dialog box
+//         instead of generating a bug report.
+//     '3.2.1.7' Bug fix: ModelMuse now saves the location of MODFLOW-LGR2.
+//     '3.2.1.8' Bug fix: Fixed bug related to editing data for
+//         conduit recharge.
+//     '3.2.1.9' Change: In MODFLOW-LGR and MODFLOW-LGR2 models, child
+//         models are now only displayed on the front and side views if the
+//         selected row or column of the parent model intersects the child
+//         model.
+//       Enhancement: When importing model results from MODFLOW-LGR2 models,
+//         ModelMuse now does a better job of selecting default names for
+//         the model result files for the child models.
+//     '3.2.1.10' Bug fix: Fixed the process of deleting and undoing the
+//         deletion of child models in MODFLOW-LGR and MODFLOW-LGR2.
+//     '3.2.1.11' Bug fix: Fixed reading Shapefiles with 32-bit version of
+//         ModelMuse. (Not broken in 64-bit version.)
+//     '3.2.1.12' Bug fix: In the Global Variables dialog box, clicking
+//         where there isn't a cell, no longer causes an error.
+//       Bug fix: Fixed drawing fishnet mesh elements in SUTRA models.
+//       Bug fix: Fixed drawing objects in 2D SUTRA models.
+//     '3.2.1.13' Enhancement: VertexValue function added.
+//       Bug fix: Fixed export of FHB package input file when only flows
+//         or only heads were specified in the package.
+//       Bug fix: Fixed specification of FHB flow and head values to allow
+//         formulas to be used for the flows or heads.
+//     '3.2.1.14' Bug fix: Fixed import of models in which routing to
+//         steams or lakes is defined in the UZF package but the lake and SFR
+//         packages are not active.
+//       Enhancement: added a method for importing multiple gridded data
+//         files at one time.
+//       Bug fix: fixed a bug that incorrectly prevented the deletion of
+//         selected points from complicated polygon objects.
+//     '3.2.1.15' Enhancement: Added the capability to import quadrilateral
+//         meshes generated by Argus ONE for use in SUTRA.
+//     '3.2.1.16' Bug fix: (not in released version) Fixed enabling import
+//         of SUTRA mesh.
+//     '3.2.1.17' Bug fix: Fixed import of MODFLOW models containing the
+//         SFR input files that use external flow files.
+//     '3.2.1.18' Bug fix: Fixed visualization of boundary conditions in
+//         SUTRA models.
+//     '3.2.1.19' Enhancement: Added ability to display labels with objects.
+//       Enhancement: Added a plot of simulated versus observed values for
+//         head observation results.
+//     '3.2.1.20' Bug fix: in some cases creating a contour plot of SUTRA
+//         data caused ModelMuse to crash.
+//       Enhancement: Creating contour plots of SUTRA data is faster.
+//     '3.2.1.21' Bug fix: Fixed display of vectors in SUTRA.
+//       Bug fix: Fixed generation of error message is an invalid formula
+//         is used with SUTRA boundary conditions.
+//     '3.2.1.22' Bug fix: Cross sections no longer plot heads equal to HDRY
+//         in MODFLOW models.
+//     '3.2.1.23' No real change.
+//     '3.2.1.24' Bug fix: not in released version. Fixed plotting
+//         cross sections for 2D data sets.
+//     '3.2.1.25' Bug fix: Fixed vertical exaggeration in top view when
+//         switching from a SUTRA profile model to any other sort of model.
+//       Bug fix: Fixed range check error when editing SUTRA boundary
+//         conditions.
+//     '3.2.1.26' Bug fix: Fixed bug that could cause an assertion failure
+//         when assigning values to a data set.
+//     '3.2.1.27' Bug fix: Attempting to export a Shapefile when the
+//         database file is in use, now results in an error message to the
+//         user instead of a bug report.
+//     '3.2.1.28' Bug fix: Fixed bug that could cause a range check error
+//         in SUTRA models with large numbers of nodes.
+//     '3.2.1.29' Enhancement: Improved speed of displaying object properties
+//         for SUTRA models in the Object Properties dialog box.
+//     '3.2.1.30' Change: ModelMuse no longer checks for certain
+//         discrepancies in the SFR package input files when importing
+//         existing models. The change allows such models to be imported
+//         for the purpose of visualizing them. However, it will not be
+//         possible to run such models from ModelMuse until the discrepancies
+//         are resolved.
+//     '3.2.1.31' Enhancement: Added support for importing model results data
+//         from .bcof, .bcos, .bcop, or .bcou SUTRA output files into
+//         ModelMuse.
+//     '3.2.1.32' Enhancement: Added support for the Surface Water Routing
+//         process (SWR).
+//     '3.2.1.33' Minor bug fixes not in released version.
+//     '3.2.1.34' Bug fix: not in released version. Fixed import
+//         from .bcof, .bcos, .bcop, or .bcou SUTRA output files
+//         when more than one time step was selected.
+//     '3.2.1.35' Bug fix: Attempting to import a locked Shapefile now
+//         results in an error message to the user rather than a bug report.
+//     '3.2.1.36' Bug fix: When importing existing models, cell top and
+//         bottom elevations are now imported correctly.
+//     '3.2.1.37' Enhancement: When importing model results for a MODFLOW
+//         model, it is now possible to select all the data of a certain
+//         type or a certain time step by checking a single check box.
+//     '3.2.1.38' Enhancement: When importing existing MODFLOW models that
+//         have invalid tributary numbers in the STR package, ModelMuse
+//         now generates a warning message to the user instead of a bug
+//         report.
+//     '3.2.1.39' Bug fix: Importing stream observations from existing models
+//         now works correctly when the same segment is part of more than
+//         one observation.
+//     '3.2.1.40' Enhancement: If there is an error importing and existing
+//         MODFLOW model, the error message dialog box will show the console
+//         lines generated by MODFLOW importing program as an aid to
+//         diagnosing the problem.
+//       Bug fix: Fixed editing of SFR channel data when a cross section
+//         was not required.
+//     '3.2.1.41' Bug fix: Fixed bug in importing existing models with
+//         multilayer head observations.
+//       Bug fix: Fixed bug that could cause ModelMuse to crash because of
+//         a stack overflow.
+//     '3.2.1.42' Enhancement: Improved checking of layer heights in MODFLOW
+//         models.
+//       Bug fix: Fixed a bug that could cause a stack overflow when closing
+//         ModelMuse.
+//       Bug fix: Sometimes it is impossible to save a very large model as
+//         a ModelMuse text file (.gpt). Now, if an error occurs in
+//         converting the file from the binary to the text format, the user
+//         is prompted to save the file as a binary file.
+//       Bug fix: Output files from MODPATH version 5 are now archived.
+//     '3.3.0.0' Enhancement: The Global variables dialog box has been
+//         converted to a non-modal dialog box.
+//     '3.3.0.1' Bug fix: It is now possible to paste data from the clipboard
+//         into a table in the "Import Gridded Data" dialog box when the
+//         data set into which the data is imported is a boolean data set.
+//       Bug fix: A corrupted name for MODFLOW or another model no longer
+//          prevents the MODFLOW Program Locations dialog  box from being
+//          opened.
+//     '3.3.0.2' Bug fix: (Not in released version). Fixed bug in setting
+//         formulas for objects that define SFR streams and MNW2 wells.
+//     '3.3.0.3' Bug fix: When the user imports a mesh, the mesh may have
+//         errors in it such as nodes that are not part of any element or
+//         elements whose nodes are in a clockwise rather than
+//         counterclockwise orientation. ModelMuse now fixes such errors.
+//       Bug fix: ModelMuse now displays an error message instead of
+//         generating a bug report when attempting to import a raster
+//         file before generating a grid or mesh.
+//     '3.3.0.4' Bug fix: Fixed bug that could cause the SUTRA mesh to be
+//         corrupted if it was renumbered.
+//       Bug fix: Fixed bug that could cause an access violation when
+//         clicking on the graph of head observation results.
+//     '3.3.0.5' Bug fix: fixed bug that could cause an assertion failure
+//         when editing an object with corrupted or missing imported values.
+//     '3.3.0.6' Bug fix: Fixed bug when attempting to import a model from a
+//         directory in which the user does not have write privileges.
+//     '3.3.0.7' Bug fix: Fixed bug that would cause an access violation in
+//         the Global Variables dialog box if it wasn't closed after
+//         clicking the Apply button.
+//     '3.3.0.8' Bug fix: Fixed bug that could cause and assertion failure
+//         in models with a stress period with a length of zero.
+//       Bug fix: During grid generation, if the number of cells is too large,
+//         an error message will be displayed and grid generation will be
+//         canceled.
+//       Enhancement: During grid generation, if the number of cells in
+//         the new grid will be larger than 1,000,000, a warning message
+//         will be displayed and the user will be give an opportunity to
+//         cancel grid generation.
+//     '3.3.0.9' Enhancement: The user can now specify the spacing between
+//         contours labels.
+//       Enhancement: The user can now control the spacing of contour labels.
+//       Enhancement: In the Export Image dialog box, the font used for the
+//         scale can be changed.
+//       Bug fix: In the Export Image dialog box, contour labels are now
+//         drawn over the entire image.
+//     '3.3.0.10' Enhancement: Added support for generating meshes for SUTRA
+//         using Gmsh.
+//     '3.3.0.11' Bug fix: Fixed bug importing the the reach length in the
+//         SFR package in models in which some reaches in segments with
+//         multiple reaches were on a different layer from other reaches.
+//       Bug fix: Fixed a bug that could cause access violations when
+//         exporting the SFR input file.
+//       Bug fix: Fixed a bug that could cause data set values to be
+//         calculated incorrectly  or a variety of other errors due to
+//         mishandling of temporary files.
+//       Enhancement: ModelMuse now warns about linkages between SFR
+//         segments that are separated by more than one row or column.
+//       Bug fix: Fixed bug that could cause program locations to incorrectly
+//         revert to their default values.
+//    '3.4.0.0' Enhancement: ModelMuse will now warn the user if no values
+//         are assigned for some types of data that vary with time.
+//       Bug fix: Fixed bugs that could cause access violation in the
+//         Object Properties dialog box when editing streams in the SFR
+//         package in MODFLOW.
+//      Enhancement: Support for the MNW1 package added.
+//      Bug fix: If values are entered in the time step length calculator
+//        that result in a math error, the time step length is now set to
+//        zero and an error message is displayed instead of a bug report
+//        being generated.
+//    '3.4.0.1' Change: Internally, the export of the RES package was changed
+//        to improve the time required to export it in models with multiple
+//        stress periods.
+//    '3.4.0.2' Bug fix: Sometimes it was impossible to edit objects that
+//        defined SFR stream boundaries because of extra information included
+//        in the stream boundaries.
+//      Bug fix: Selecting "File|New|MODFLOW Model" after importing an
+//        existing model no longer causes an access violation.
+//    '3.4.0.3' Bug fix: Fixed bug that would occasionally  cause access
+//        violations when contouring data.
+//    '3.4.0.4' Bug fix: ModelMuse can now handle SUTRA models with more
+//        than 1,000,000 nodes.
+//      Enhancement: ModelMuse can now import MODFLOW models in which
+//        the U2DREL subroutine reads a value of NAN. The NAN is converted
+//        to zero.
+//      Enhancement: ModelMuse can now export a 2D SUTRA mesh for use in
+//        other programs. To export the mesh, select
+//        "File|Export|SUTRA 2D Mesh."
+//      Enhancement: When importing a mesh from Gmsh that contains triangular
+//        elements, the locations of the triangular elements is reported in
+//        the Errors and Warnings dialog box.
+//    '3.4.0.5' Bug fix: Fixed bug that could sometimes cause an access
+//        violation when drawing the grid.
+//    '3.4.0.6' Bug fix: ModelMuse can not run MODFLOW properly when the
+//        model file name or directory contains non-ASCII characters.
+//      Enhancement: ModelMuse will prompt you to save your file once each
+//        hour.
+//      Enhancement: When the user edits the times in the MODFLOW Time
+//        dialog box, the times defined by MODFLOW boundary conditions
+//        will be modified to match those times.
+//      Bug fix: Fixed import of existing models that use the SFR package
+//        with parameters and external flow files.
+//      Bug fix: Fixed import of MNW1 input file when a unix-style path
+//        name is specified for an output file.
+//      Bug fix: Fixed import of SWR input files with structure observations
+//        or when certain transient data are reused.
+//      Bug fix: Fixed bug in exporting
+//        Shapefiles that could cause exported Shapefiles to have duplicate
+//        attribute names.
+//      Bug fix: Fixed bug in contouring or coloring the grid with a text
+//        data set in a SUTRA model.
+//      Bug fix: Fixed bug in generating contours with SUTRA.
+//      Bug fix: Fixed bug in exporting mesh data Shapefiles with SUTRA
+//        that would prevent attribute values from being assigned.
+//    '3.4.0.7' Enhancement: When a data set value is assigned using the
+//        "Nearest" or "Nearest Point" interpolation methods, the
+//        explanation of the data set value will identify the object that
+//        is used to assign the value.
+//      Bug fix: Fixed bug in generating finite element mesh.
+//    '3.4.0.8' Bug fix: Fixed bug importing the STR package when invalid
+//        stream tributaries are assigned.
+//      Enhancement: If ModelMuse runs out of memory when trying to save
+//        a .gpt or .xml file, the user will be instructed to save the file
+//        as a .mmZlib or .bin file.
+//      Enhancement: When evaluating data for the Stream (STR) package,
+//        ModelMuse will now issue a warning if adjacent reaches in a segment
+//        are separated by more than one cell or if the last reach in a
+//        tributary segment is separated by more than one cell from the
+//        first reach in the segment into which it flows.
+//    '3.4.0.9' Bug fix: Fixed bug that would cause access violations when
+//        deleting nodes from SUTRA meshes.
+//    '3.4.0.10' Bug fix: Fixed bug importing the STR package when the
+//        locations of the streams changed between stress periods.
+//    '3.4.0.11' Bug fix: Fixed bug with manually drawing new SUTRA elements.
+//    '3.4.0.12' Bug fix: Fixed bug that would cause an error if the mouse
+//        wheel is used
+//      Bug fix: In SUTRA models, times for boundary conditions or
+//        observations that are after the final time are no longer included
+//        in the TIME_STEPS time schedule.
+//      Bug fix: Fixed bug that would occasionally cause access violations
+//        when drawing the selected row and column with the
+//        "Select Column, Row, or Layer" tool selected.
+//    '3.4.0.13' Enhancement: In the "Show or Hide Objects" dialog box,
+//        a "Go to" menu item has been added to the popup menu. Selecting
+//        will move the view to the object.
+//      Bug fix: Fixed export to ModelMate when STR parameters are defined.
+//    '3.4.0.14' Enhancement: Improved error checking in SFR and STR packages.
+//      Enhancement: ModelMuse can now import many MODFLOW-2000 models.
+//        However, MODFLOW-2000 models that use the Observation process
+//        generally can not be imported until all the files for the
+//        Observation process are commented-out in the name file.
+//      Bug fix: Multinode wells in the MNW2 package were not placed in the
+//        correct cell if the LOSSTYPE was set to None.
+//    '3.4.0.15' Bug fix: Fixed import of MODFLOW models using the SFR
+//        package when the option to simulate unsaturated flow beneath a
+//        stream is selected.
+//    '3.4.0.16' Bug fix: Fixed export of SWR input files when tab files are
+//        not used.
+//    '3.4.0.17' Bug fix: Fixed bug that would sometimes cause data set
+//        values not to be updated when they needed to be.
+//    '3.5.0.0' Enhancement: Support for the Farm Process in MODFLOW-OWHM
+//        added.
+//    '3.5.1.0' Bug fix: Support for the Farm Process in MODFLOW-OWHM
+//        activated.
+//      Enhancement: LSTLVL option in MODFLOW-OWHM added.
+//      Enhancement: PROPPRINT option in MODFLOW-OWHM added.
+//      Enhancement: Support for Internal Coordinate System" option
+//        in MODFLOW-OWHM added.
+//      Bug fix: Fixed access violation that occurred when coloring the
+//        initial water table data set in PHAST.
+//      Bug fix: Fixed access violation that occurred with SUTRA models when
+//        changing the selected layer with the keyboard.
+//    '3.5.1.1' Bug fix: In steady-state PHAST models, the minimum and
+//        maximum step sizes can now be less than 1.
+//      Bug fix: When exporting 3D grid data to a Shapefile, data for the
+//        last layer was saved as the data for the first layer and no other
+//        data was saved. This has been fixed.
+//    '3.5.1.2' Bug fix: Renaming a child model caused an access violation
+//        if the child model used MT3DMS.
+//    '3.5.1.3' Bug fix: Use LMG7 instead of LMG6 for the link to MT3DMS in
+//        MODFLOW-LGR version 2.
+//    '3.5.1.4' Bug fix: Fixed a bug setting the layer in a model in which
+//        a child model has been defined but the model selection is no longer
+//       one that includes child models.
+//    '3.5.1.5' Enhancement: When exporting the MODPATH data sets, and error
+//        message will be displayed if a reference is before the beginning
+//        of the model or after the end.
+//      Enhancement: In the Errors and Warnings dialog box, a context menu
+//        has been added allowing the user to select, edit or go to
+//        objects related to an error or warning message.
+//      Enhancement: In the Manage Flow Observations dialog box, a context
+//        menu has been added allowing the user to select, edit or go to
+//        objects related to a particular observation.
+//    '3.5.1.6' Bug fix: Fixed bug related to attempts to access directories
+//        that don't exist.
+//      Bug fix: ModelMuse no longer prompts the user to save the
+//        file once an hour because it was causing ModelMuse to hang.
+//    '3.5.1.7' Bug fix: When importing the LPF or UPW package input,
+//        parameters that use multiple clusters for the same layer are now
+//        imported correctly.
+//      Enhancement: In the two Stream links panes of the Data Visualization
+//        dialog box, a new control "Square size" has been added. It controls
+//        the sizes of squares used to represent links between segments when
+//        the two ends of the link are both in the same cell.
+//      Bug fix: When importing Shapefiles of MODFLOW boundary conditions,
+//        there is no longer an access violation if there are solutes defined
+//        in Mt3DMS but the Source and Sink Mixing package has not been
+//        activated.
+//    '3.5.1.8' Bug fix: Attempting to read a MODPATH pathline file that
+//        lacks a proper heading line now results in an error message instead
+//        of causing ModelMuse to hang.
+//      Bug fix: Fixed bug that would cause an assertion failure when
+//        generating a finite element mesh in SUTRA.
+//      Bug fix: Fixed bug that would cause an access violation error in
+//        SUTRA models when attempting to edit multiple objects when captions
+//        should be visible for the objects.
+//      Change: When importing Cell-by-cell flow files, ModelMuse will ask
+//        the modeller what the precision is used in the files is if it can't
+//        determine that by itself.
+//    '3.5.1.9' Bug fix: Fixed bug that would allow the user to define a
+//        lake with a Lake ID of zero.
+//   '3.5.1.10' Bug fix: Fixed bug that caused an error when withdrawing
+//        water from a well.
+//   '3.6.0.0' Bug fix: Attempting to use an empty .ucn file to assign
+//        initial concentration will now result in an error message instead
+//        of a bug report.
+//      Bug fix: When importing an existing model, the import of diversions
+//        in the STR package has been fixed.
+//      Bug fix: Attempting to edit farms in MODFLOW-OWHM before defining
+//        at least one crop is no longer allowed.
+//   '3.6.0.1' Bug fix: Prevent objects from setting layer data sets in
+//        MODFLOW models if they are 3D objects.
+//      Bug fix: Fixed import of t-progs integer data.
+//   '3.6.0.2' Bug fix: Because Infiltration and evapotranspiration in the
+//        UZF package can only be defined on the top view of sthe model, the
+//        Object Properties dialog box will no longer present UZF as an
+//        option for objects on the front or side view of the model.
+//      Change: The labeling of flow the the object properties dialog box
+//        for the FHB package has been improved.
+//      Bug fix: In the Object Properties dialog box, the images for MODPATH
+//        are hidden if the Microsoft OpenGL driver is used. This avoids
+//        causing an exception which will crash ModelMuse.
+//      Bug fix: Fixed warning messages when importing an existing MODFLOW
+//         model using parameters and instances in the SFR package.
+//   '3.6.0.3' Bug fix: Fixed a bug that could sometimes cause a stack
+//        overflow.
+//      Bug fix: Fixed bug that would cause an access violation if the
+//        Stream package was activated but no streams had been defined.
+//      Bug fix: When attempting to open ModelMuse file fails, a more
+//        appropriate error message is displayed to the user.
+//      Bug fix: Fixed bug that could cause divide by zero errors when
+//        using the Fishnet Mesh method to generate a mesh in SUTRA.
+//      Bug fix: The starting locations of MODPATH particles were reversed
+//        from front to back.
+//      Enhancement: Enhanced error checking in the Stream (STR) package.
+//      Enhancement: Improved import of MODFLOW-2000 and SEAWAT models.
+//      Bug fix: Fixed labeling of MXACTW IWELCB in comments in the WEL
+//        package.
+//      Bug fix: Fixed bug in specifying the location of head observations
+//        when the object defining the observation extends over multiple
+//        layers and includes inactive cells.
+//      Enhancement: When importing the STR package, stream connections from
+//        segments with higher segment numbers to segments with lower
+//        segment numbers are imported.
+//   '3.6.0.4' Enhancement: Added additional error checking for the GHB, RIV,
+//        DRN, DRT, STR, SFR, LPF, UPW, BCF and HUF packages.
+//      Bug fix: Fixed bug that could cause ModelMuse to crash when drawing
+//        contour lines using the ACM 626 method.
+//   '3.6.0.5' Bug fix: Fixed bug in editing the times in MODFLOW models if
+//        initial time step size is specified.
+//      Bug fix: (bug not in released version.) Fixed access violation when
+//        checking GHB, RIV, DRN, and DRT packages that use parameters.
+//   '3.6.0.6' Bug fix: Improved work-around to prevent the Microsoft OpenGl
+//        driver from causing the 64-bit version of ModelMuse to crash.
+//   '3.6.0.7' Enhancement: In the Export Image dialog box, it is now possible
+//        to copy the the current settings to the clipboard and paste them
+//        from the clipboard into the dialog box. This allow the settings
+//        to be transfered from one model to another.
+//      Bug fix: Fixed bug that would cause a a bug report to be generated
+//        when changing the number of Z formulas to use with an object and
+//        one of the new Z formulas was invalid.
+//   '3.6.0.8' Enhancement. Attempting to read an empty results file will
+//        result in an error message rather than a bug report.
+//      Bug fix: Fixed bug that could cause a range check error if no grid
+//        had been created and the mouse was moved or the front or side
+//        view of the model.
+//   '3.6.0.9' Bug fix: ModelMuse can now read the zeta surface if only
+//        one zeta surface has been calculated.
+//   '3.6.0.10' Updated VirtualStringTree and MadExcept.
+//   '3.6.0.11' Bug fix: Fixed export of ModelMate file when the ModelMate
+//        file of the model is in a different directory from the ModelMuse
+//        file.
+//   '3.6.0.12' Bug fix: Fixed appearance of the Import Ascii Raster File
+//        dialog box.
+//      Bug fix: Fixed import of pump location in the MNW2 package.
+//   '3.6.0.13' Enhancement: Added ability to visualize Transport observations
+//        in MT3DMS.
+//   '3.6.0.14' Bug fix: Duplicate segment numbers in the SFR package will
+//        now result in an error message to the user instead of a bug report.
+//   '3.6.1.0' Bug fix: Fixed renumbering the SUTRA mesh when using the Gmsh
+//        to create the mesh with 3D models.
+//   '3.6.1.1' Bug fix: When checking whether an updated version of ModelMuse
+//        exists, ModelMuse now clears the related cache entry before
+//        attempting to read the file from the internet.
+//      Enhancement: ModelMuse will now issue an error message if a flow
+//        observation is defined but no flow boundary conditions are part
+//        of the flow observation.
+//      Bug fix: Fixed bug in drawing contours in data sets with very
+//        large values.
+//   '3.6.1.2' Bug fix: Fixed a bug that could cause access violations when
+//        drawing selected rows or columns in the front or side views.
+//   '3.6.1.3' Bug fix: Fixed a bug that could cause values to be assigned
+//        to the wrong cells in MODFLOW models with polygon objects that
+//        set values of assigned cells and that use formulas to set the
+//        bottom or top elevations to a value that is different from the
+//        elevations of the bottom of a layer group or the top of the model.
+//      Enhancement: Added the ability to import mesh data for SUTRA from
+//        a list of values associated with node or element numbers.
+//      Enhancement: In the "Specify Mesh" dialog box, it is now possible
+//        to drag the rows for the elements into new positions to change
+//        the element order.
+//   '3.6.1.4' Enhancement: In the Manage Head Observations dialog box, it is
+//        now possible to copy multiple cells from a spread sheet and paste
+//        into the table of observations.
+//   '3.6.1.5' Bug fix: Fixed bug in checking certain boundary conditions when
+//        parameters are defined.
+//   '3.6.1.6' Enhancement: Added a dialog box to convert values from
+//        one time unit to another.
+//      Bug fix: It is no longer possible to name a data set the same name
+//        as one of the functions supported by ModelMuse.
+//   '3.6.1.7' Bug fix: Fixed bug that could cause incorrect values to be
+//        assigned with the ObjectIntersectLength function on the edge of a
+//        SUTRA mesh.
+//   '3.6.1.8' Bug fix: Fixed bug that could cause intersections between
+//        objects and the cell around a node to not be recognized if the
+//        object was perfectly vertical or horizontal.
+//      Enhancement: The Edit Feature Formula dialog box can now be used to
+//        assign a new formula to the selected property of a model feature
+//        in multiple objects.
+//   '3.6.1.9' Enhancement: Added method for plotting well "footprint".
+//   '3.6.1.10' Enhancement: Additional error checking in several MODFLOW
+//        packages.
+//      Enhancement: New interpolation method "Point Average" added. The
+//        new interpolator returns the mean of all the points in a cell
+//        or element. If no points are in the cell or element, it returns
+//        zero.
+//   '3.6.1.11' Enhancement: It is now possible to label object vertices.
+//   '3.6.1.12' Bug fix: Fixed import of Recharge package when multiple
+//        clusters are used with a parameter.
+//   '3.6.1.13' Bug fix: Fixed bug in Natural Neighbor interpolator when
+//        a data point is at a location just slightly different
+//        from the location where a value is required.
+//   '3.6.1.14'
+//   '3.6.1.15'
+//   '3.6.1.16' Bug fix: Fixed bug in enabling the export of MODPATH
+//        results to Shapefiles.
+//   '3.6.1.17' Bug fix: Fixed selecting column, row, or layer with
+//        Model Cube.
+//      Bug fix: Fixed bug that caused an error if the user attempted to
+//        activate an MNW1 well without defining any pumping periods.
+//      Bug fix: Fixed a bug in which undoing the deletion of a parameter
+//        did not work correctly.
+//    '3.6.1.18' Bug fix: Fixed reading formatted head and drawdown files
+//        that contain values less than or equal to 1e-100 or greater than
+//        or equal to 1e100;
+//      Enhancement: When exporting Shapefiles of pathlines or endpoints,
+//        the particle number is now one of the fields exported.
+//    '3.6.1.19' Bug fix: Fixed export of SWR channels when a single object
+//        enters a cell twice.
+//    '3.6.1.20' Bug fix: not in released version. Fixed export of pathline
+//        particle index
+//    '3.6.1.21' Bug fix: Fixed access violation if the user attempted to
+//        paste more rows of data into the "Imported Data" tab of the Object
+//        properties dialog box than there were rows in the table.
+//      Bug fix: Fixed bug that prevented a child model from being run
+//        independently from the parent model in MODFLOW-LGR2
+//        and MODFLOW-OWHM.
+//    '3.6.1.22' Failed Bug fix: Fixed bug that could cause and assertion
+//        failure when interpolating data set values with an anisotropy
+//        not equal to 1.
+//      Enhancement: When exporting data to CSV files, exporting the location
+//        and cell, node, or element is now optional.
+//    '3.6.1.23' Bug fix: Fixed export of SWR when a reach geometry is unused.
+//    '3.6.1.24' Bug fix: when edit the SUTRA mesh in the Specify Mesh dialog
+//        box, nodes that are not used are now deleted.
+//      Bug fix: Fixed bug that could cause and assertion failure
+//        when interpolating data set values with an anisotropy not equal
+//        to 1.
+//    '3.6.1.25' Bug fix: Fixed a bug in the export of data sets to
+//        Shapefiles that would cause an access violation.
+//    '3.6.1.26' Bug fix: Fixed bug that caused the SSM file to be written
+//        incorrectly in models using the MNW1 or MNW2 packages.
+//      Bug fix: Fixed bug in ModelMonitor that caused access violations
+//        when used with SWR.
+//      Bug fix: Fixed bug that caused the explanations for some data assigned
+//        for the SWR package to be incomplete.
+//    '3.6.2.0' No additional changes.
+//    '3.6.2.1' Bug fix: Zonebudget composite zone names are no longer allowed
+//        to be more than 10 characters long.
+//      Bug fix: Fixed bug that could cause incorrect drain, river, DRT,
+//        or GHB boundaries to be exported for MODFLOW-NWT if observations
+//        were used with them.
+//    '3.6.2.2' Bug fix: Fixed export of MT3DMS SSM data set 7 for MNW2 wells
+//        with vertical screens defined.
+//    '3.6.2.3' Bug fix: Fixed import of FHB package when only a single time
+//        is defined.
+//      Bug fix: fixed ability to use global variable in formulas with
+//        child models in MODFLOW-LGR models.
+//      Enhancement: Added two new functions related to MODFLOW_LGR:
+//        Horizontal_Subdivision and Vertical_Subdivision. The return
+//        values of NCPP and NCPPL respectively for the child models
+//        and 1 for parent models.
+//    '3.6.2.4' Enhancement: When exporting an image, all elements of the
+//        image except background images can now be exported as vector
+//        graphics by selecting "Pure Vector Graphics (*.emf)" as the
+//        image type when saving the image. Such images do not support
+//        partial transparency, line thicknesses different from 1, and dashed
+//        lines so the resulting images will typically not be identical
+//        with what would be seen in ModelMuse.
+//    '3.6.2.5' Enhancement: In the LPF and UPW packages, a warning is issued
+//        for most properties if a zero value is encountered in an
+//        active cell.
+//      Bug fix: Fixed an bug in drawing the 3D view that could cause a
+//        divide by zero error.
+//      Enhancement: ModelMuse now issues an error message if an SWR structure
+//        is defined between reaches that are not connected.
+//    '3.6.2.6' Bug fix: Fixed deletion of SWR structures.
+//      Bug fix: Fixed evaluation of objects in MODFLOW and PHAST models that
+//        have two elevation formulas and assign cell values of both enclosed
+//        and intersected cells.
+//    '3.6.2.7' Enhancement: The Grid and Mesh Values dialog box now can
+//        display data regarding the SWR reaches and structures at the
+//        cursor location.
+//      Enhancement: When importing SWR model results, the data sets
+//        now display the average of all the reach values in the cell.
+//        The individual values for reaches are displayed in the
+//        explanation in the Grid and Mesh Values dialog box.
+//    '3.6.2.8' Bug fix: Fixed bug that could cause access violations when
+//        the Grid or Mesh Value dialog box was being used with an LGR model.
+//      Enhancement: Added SelectedCount function. It returns the number
+//        of cells, nodes, or elements intersected or enclosed by an
+//        object.
+//      Bug fix: Incorrect manual SWR reach numbering now results in an
+//        error message displayed to the user instead of a bug report.
+//    '3.6.2.9' Enhancement: A new method (Overlapping reaches) for defining
+//        links between SWR reaches has been added. With this method, the
+//        user selects another object. Links will be created between reaches
+//        defined by the other object that are in the same cell as reaches
+//        defined by the current object.
+//    '3.6.2.10' Bug fix: Using SWR data sets that do not have a value
+//        defined for every cell in the formula for another data set no
+//        longer causes an assertion failure. For locations where no value
+//        is defined, the value used will be the formula if the formula
+//        is a number or zero if the formula is not a number.
+//    '3.6.2.11' Enhancement: ModelMuse can now import existing MODFLOW models
+//        in which the grid origin is in the lower left corner instead of
+//        the upper left corner.
+//    '3.6.2.12' Bug fix: Fixed bug that could cause access violations when
+//        opening a ModelMuse file while another file is already open.
+//      Bug fix: When the Formula editor is displayed from the Import
+//        Shapefile dialog box, the data sets are now classified instead
+//        of listed alphabetically.
+//      Enhancement: You can now use the middle mouse button to pan the
+//        model view while in the middle of doing something else.
+//      Bug fix: Fixed bug that caused duplicate time steps to be included
+//        in SUTRA time schedules.
+//    '3.6.2.13' Change: Stack size increased from 1048576 to 8388608.
+//    '3.6.2.14' Bug fix: Fixed writing SUTRA transient data when nothing
+//        has changed between two times.
+//    '3.6.2.15' Bug fix: Fixed a bug in which a math error occurred when
+//        attempting to display an object.
+//    '3.6.2.16' Bug fix: (not in released version). Fixed bug in calculation
+//        of SWR connections between overlapped reaches.
+//    '3.6.2.17' Bug fix: Fixed bug that could cause the
+//        ObjectIntersectLength function to return the wrong value if called
+//        more than once in the same formula.
+//    '3.6.2.18' Bug fix: Fixed bug that could cause an access violation when
+//        editing an object in which gages were defined.
+//    '3.6.2.19' Bug fix: Fixed bug that did not specify the initial values
+//        of the boundary condition variables correctly in the main input
+//        file when time varying boundaries were used.
+//    '3.6.2.20' Enhancement: A new command line option has been added:
+//        "-il <filename>" will cause ModelMuse import the last data set
+//        in filename. This option will only work with MODFLOW models.
+//        The data in filename must be consistent with the discretization
+//        in the MODFLOW model.
+//    '3.6.2.21' Enhancement: A new command line option has been added:
+//        "-ia <filename>" will cause ModelMuse import all the data sets
+//        in filename. This option will only work with MODFLOW models.
+//        The data in filename must be consistent with the discretization
+//        in the MODFLOW model.
+//    '3.6.3.0' Bug fix: Fixed bug that could cause importing data from
+//        cell-by-cell flow files to take a long time.
+//    '3.6.3.1' Enhancement: Added options to import gridded data to a child
+//        grid in the "File|Import|Gridded Data" and the
+//        "File|Import|Gridded Data Files"
+//        dialog boxes.
+//    '3.6.3.2' Bug fix: Attempting to import a Surfer grid file in a model
+//        that lacks a grid no longer causes an access violation.
+//      Bug fix: Fixed bug that could cause floating point overflows when
+//        changing the layer type in a MODFLOW-LGR model.
+//      Bug fix: Fixed bug that could cause a circular reference
+//        error when editing the grid.
+//    '3.6.3.3' Bug fix: Fixed bug that could cause an access violation
+//        when displaying the MODFLOW Packages and Programs dialog box.
+//      Enhancement: It is now possible to hide everything except the legend
+//        on the Data Visualization dialog box and then resize the dialog
+//        box to a smaller size.
+//      Enhancement: Objects now have a "Minimum cell fraction" property.
+//        Objects with a total length greater than zero that assign properties
+//        of intersected cells will only do so if the length of intersection
+//        is greater than the specified fraction of the cell or element size.
+//      Bug fix: Fixed bug in evaluation of SpecifiedHeadOnLayer function
+//        when no specified head package is active.
+//    '3.6.3.4' Bug fix: Fixed bug that caused an error if an invalid formula
+//        was used in a SUTRA boundary condition.
+//      Enhancement: When importing MODFLOW model results, the user can now
+//        specify the name of the group containing the data sets and can
+//        specify a prefix for the data sets names. If this option is used,
+//        the "Delete Model Results" command will not affect the newly
+//        imported data sets.
+//      Bug fix: Fixed classification of data set created by importing a
+//        Surfer grid file.
+//    '3.6.3.5' Bug fix: Fixed bug that caused access violations if FHB
+//        times were specified that were after the last time in the model.
+//      Enhancement: It is now possible to change the order of the imported
+//        images in the Show or Hide Images dialog box by dragging the image
+//        to a new position in the list.
+//    '3.6.3.6' Enhancement: Added error checking for SWR tab files that are
+//        missing a file name.
+//      Change: Real numbers and integers in printed by ModelMuse in MODFLOW
+//        and SUTRA input files now have consistent spacing.
+//      Enhancement: Additional error checking for SFR segments that are on
+//        multiple layers in the same row and column or that are in
+//        confined layers when unsaturated flow beneath streams is simulated.
+//    '3.6.3.7' Enhancement: In the MODFLOW Packages and Programs dialog box,
+//        expanding one of the nodes in the tree-view control automatically
+//        causes the first selected package or program under that node to be
+//        the selected node in the tree-view control.
+//      Change: (not in released version) In footprint code, the user can
+//        specify a minimum depth-rate index.
+//    '3.6.3.8' Bug fix: Fixed bug that caused an assertion failure when
+//        attempting to generate a fishnet mesh using a triangular
+//        fishnet-mesh quadrilaateral.
+//    '3.6.3.9' Bug fix: Fixed bug that caused access violations when editing
+//        SUTRA boundary conditions.
+//    '3.6.3.10' Bug fix: Fixed bug that would cause importing a MODFLOW
+//        model to fail if a multiplier array calculated as a function of
+//        other mulitplier arrays resulted in a divide-by-zero or other error
+//        when calculating a multiplier array value.
+//    '3.6.3.11' Bug fix: Fixed bug that could cause and access violation
+//        when starting a new model after already having had another model
+//        open already.
+//      Bug fix: If an error occurs when importing multiple gridded data
+//        files because of invalid data in one of the files, an error message
+//        is displayed instead of a bug report being generated.
+//      Bug fix: ModelMuse now prevents the user from assigning the same
+//        name to two or more layer groups when creating a new MODFLOW model.
+//      Bug fix: ModelMuse now prevents the user from assigning the same name
+//        to two or more Hydrogeologic units.
+//      Bug fix: In the SFR package, NUMTIM, WEIGHT, and FLWTOL can now
+//        be edited.
+//    '3.6.3.12' Enhancement: ModelMuse now issues an error message if the
+//        lowest elevation in a SFR 8-point cross section is not zero.
+//      Change: The Trunc and Round functions were changed so that if the
+//        real number passed to the function is outside the range
+//        -(2^31-1) to +(2^31-1), the result returned will be whichever of
+//        those numbers is closest.
+//      Bug fix: Fixed link to help for the MNW2 package.
+//      Enhancement: In the Sink and Source Mixing package of MT3DMS, the
+//        full recharge and ET concentration arrays are only printed if
+//        they have non-zero values.
+//      Bug fix: In the Head observations pane of the Data Visualization
+//        dialog box, double-clicking on on a point no longer causes some
+//        values in the grid from being hidden.
+//    '3.6.3.13' Bug fix: ModelMuse no longer generates a warning message
+//        in the STR package for stages below the bottom of the stream if
+//        the stage is calculated.
+//      Bug fix: The ElevationToModelLayer function now works in child models.
+//      Enhancement: Opening the Object Properties dialog box with objects
+//        that define SFR boundaries with numerous stress periods is no longer
+//        so slow.
+//    '3.6.3.14' Enhancement: ModelMuse now create a a batch file named
+//        "RunModel.bat" that is suitable for use with automated parameter
+//        estimation programs.
+//    '3.6.3.15' Bug fix: Fixed bug in opening files in which some objects
+//        have line segments that intersect.
+//      Bug fix: Fixed display of error messages regarding undefined
+//        parameters.
+//      Bug fix: Fixed bug that could cause access violations when moving
+//        dragging with the mouse over the 3D view under certain rare
+//        circumstances.
+//    '3.6.3.16' Enhancement: ModelMuse can now import CFP pipes from
+//        Shapefiles.
+//      Enhancement: ModelMuse now warns if the ET depth is less than zero
+//        in the EVT or ETS packages.
+//    '3.6.3.17' Enhancement: ModelMuse can now export objects that define
+//        SFR boundaries to Shapefiles.
+//      Enhancement: When importing Shapefiles, ModelMuse can now import
+//        Z and measured values for each Shape if they are included in the
+//        Shapefile. The values will be imported as Vertex Values.
+//      Enhancement: The following new functions have been added:
+//        LowestVertexValue, HighestVertexValue, MeanVertexValue,
+//        MedianVertexValue, FirstVertexValue, and LastVertexValue.
+//        See the ModelMuse help for descriptions of these new functions.
+//        They are typically used when there is vertex value at every
+//        vertex of an object and every cell intersected by an object
+//        contains at least one vertex.
+//    '3.6.3.18' Bug fix: The filters for limiting the display of head
+//        observation results by time were reversed.
+//      Bug fix: In the MODFLOW STR package, a single object now defines
+//        more than a single reach in a cell if it intersects the cell
+//        more than once.
+//      Bug fix: In the MODFLOW Layer Groups dialog box, pasting layer
+//        boundaries now works correctly.
+//    '3.6.3.19' Bug fix: Fixed bug that would cause values of some boundary
+//        conditions to be evaluated incorrectly.
+//    '3.6.3.20' Bug fix: Fixed bug that prevented a model from being opened
+//        when a global variable and data set have the same name. In such
+//        cases, the global variable is deleted.
+//      Bug fix: If the default name of a data set for a hydrogeologic unit
+//        conflicts with a preexisting global variable name, the name for the
+//        data set will be modified to avoid the conflict.
+//    '3.6.3.21' Enhancement: When changing stream linkages in
+//        the SFR or STR packages, ModelMuse can now renumber any duplicate
+//        stream numbers.
+//    '3.6.3.22' Bug fix: Fixed a resource leak.
+//    '3.6.3.23' Enhancement: In the "Manage Flow Observations" dialog box,
+//        a new tab has been added in which the user can edit multiple
+//        observation group names. A list of names can be pasted into the
+//        table on this tab to change the observation group names.
+//    '3.6.3.24' Bug fix: When updating a ModelMate file with more than
+//        ten or more observation times for the same observation group, some
+//        of the observation names were not passed to ModelMate correctly.
+//      Enhancement: Linking SFR and STR streams with the Link Streams
+//        dialog box was made faster.
+//      Bug fix: Attempting to export a shape file of contours will now
+//        generate a warning message if the user attempts to export contours
+//        for a data set that is uniform.
+//      Bug fix: Duplicate Lake ID numbers now results in a error message
+//        for the user instead of a bug report.
+//      Bug fix: Fixed a bug that could cause an access violation when editing
+//        objects.
+//      Bug fix: ModelMuse can now read MODPATH endpoint files in which some
+//        endpoint lavels contain spaces.
+//    '3.6.3.25' Bug fix: Deleting a MODFLOW stress period no longer causes
+//        the times of MODFLOW boundary conditions to change.
+//      Bug fix: Fixed a bug that prevented some files created by a beta
+//        version of ModelMuse from being opened by more recent versions.
+//    '3.6.3.26' Enhancement: the PEST Grid Specification File is now
+//        automatically created when exporting MODFLOW models. the file has
+//        the extension ".gsf".
+//    '3.6.3.27' Bug fix: Fixed bug in the export of the SSM file in MT3DMS
+//        when the ETS package is used.
+//    '3.6.3.28' Bug fix: Fixed bug that could cause an access violation in
+//        SUTRA models if the left, right, up, or down arrow keys on the
+//        keyboard were used.
+//      Enhancement: When saving the input files for MODFLOW model, the
+//        project description is included in the Save dialog box. The
+//        project description will be saved as comments in the Basic
+//        package input file.
+//      Enhancement: The log of tracking time can now be used to color
+//        MODPATH endpoints.
+//      Bug fix: It is no longer possible to delete all the Layer Groups
+//        in a MODFLOW model.
+//      Bug fix: Zooming in while a background bitmap is present no longer
+//        causes a range check error.
+//    '3.6.3.29' Enhancement: The log of tracking time can now be used to
+//        color MODPATH pathlines.
+//      Enhancement: Added support for the RIP package in MODFLOW-OWHM.
+//    '3.6.3.30' Enhancement: Added support for writing the Summary budget
+//        to a separate file.
+//    '3.6.3.31' Bug fix: Fixed a bug that could cause a bug report to be
+//        generated if the user tries to import a background image that is
+//        too large.
+//      Bug fix: Fixed a bug that could cause an access violation if the user
+//        deleted a parameter and then attempted to edit an object that used
+//        that parameter.
+//      Bug fix: When adding new layer groups in MODFLOW models, each layer
+//        group automatically gets a name different from any other existing
+//        layer group.
+//    '3.7.0.0' Bug fix: Fixed a bug that prevented the user from defining
+//        ETS boundaries properly on the first attempt.
+//      Bug fix: Fixed a bug that caused access violations when exporting the
+//        ETS package input file if the ETS boundaries were not defined
+//        properly.
+//    '3.7.0.1' Bug fix: Fixed a bug in the generation of an error message
+//        in the MODFLOW CFP process when the node elevation is too high
+//        or to low.
+//    '3.7.0.2' Bug fix: Fixed another bug that caused access violations when
+//        exporting the ETS package input file if the ETS boundaries were not
+//        defined properly.
+//    '3.7.0.3' Bug fix: Fixed a bug that made it impossible to delete a flow
+//        observation.
+//    '3.7.0.4' Bug fix: Fixed a bug that could cause an access violation in
+//        the Import Points dialog box when a boundary condition was first
+//        selected and then unselected.
+//    '3.7.0.5' Bug fix: If an attempt is made to save an archive from the
+//        files to Archive dialog box and an unsupported archive type is
+//        selected, an error message will be displayed instead of a bug report
+//        being generated.
+//      Bug fix: Fixed bug that could cause access violations when opening
+//        the object properties dialog box.
+//    '3.7.1.0' Bug fix: Fixed  display of some controls after resizing the
+//        "Select Results to Import" dialog box.
+//      Bug fix: Fixed hints for adding, inserting, and deleting
+//        plant groups in the Riparian ET Plant Groups dialog box.
+//      Bug fix: Fixed access violation when drawing contours after importing
+//        model results.
+//    '3.7.1.1' Bug fix: Fixed export of FMP package when formulas give
+//        results of the wrong type. Now a warning of an invalid formula will
+//        be displayed.
+//      Bug fix: Fixed export of FMP package when some required time varying
+//        data is undefined. Now ModelMuse issues an error message to the
+//        user instead of generating a bug report.
+//      Bug fix: Fixed bug that prevented the user from specifying data set
+//        15 in the FMP process when it was needed.
+//    '3.7.1.2' Bug fix: Fixed bugs that could cause invalid meshes to be
+//        created with the fishnet mesh algorithm if one or more fishnet
+//        elements was invalid.
+//      Bug fix: Fixed how ModelMuse handles certain invalid formulas.
+//      Enhancement: When importing objects, a comment is included in each
+//        object with the date the object was created and (if applicable)
+//        the file from which it was imported.
+//      Bug fix: Failing to specify an elevation for a model layer in the
+//        Start Up dialog box for MODFLOW will no longer cause an error.
+//      Change: When importing gridded data for 3D data sets, the Z-coordinate
+//        of the data points is now determined by a formula related to the
+//        grid structure.
+//      Bug fix: Fixed bug that could cause an access violation in the
+//        Import Gridded Data dialog box in PHAST models.
+//    '3.7.1.3' Bug fix: Fixed bug that could cause an assertion failure
+//        when exporting the FHB package input.
+//      Bug fix: Fixed bug that prevented valid FMP input files from being
+//        created if no Farm wells were defined.
+//    '3.7.1.4' Enhancement: The Import Points dialog box was modified to
+//        allow the user to specify column and row instead of X and Y when
+//        importing data for models with grids on the top view of the model.
+//    '3.7.1.5' Enhancement: Added legend for MODPATH Endpoint colors.
+//      Enhancement: In tables containing checkboxes, it is now possible
+//        to check a check box by typing or pasting a value into the cell
+//        containing the check box. Typing "True", "T", "Yes", or "Y" will
+//        cause the check box to be checked. Any other text will cause it to
+//        be unchecked. Case is not important in the text that is typed.
+//    '3.7.1.6' Bug fix: (not in released version). Fixed bug that made it
+//        impossible to import model results.
+//    '3.7.1.7' Bug fix: Fixed export of SWI input files with MODFLOW-OWHM.
+//    '3.7.1.8' Bug fix: Fixed import of SWR package.
+//      Bug fix: Fixed import of UZF package when SWR package is also used.
+//    '3.7.1.9' Bug fix: Fixed export of SWR ISTRORCH in data set 13b.
+//    '3.7.1.10' Bug fix: Fixed bug in deleting Custom color scheme.
+//      Enhancement: ModelMuse now exports a usgs.model.reference file
+//        each time the model input files are exported. When starting a new
+//        model, the user is now prompted to specify the information for
+//        the usgs.model.reference file that ModelMuse can not determine
+//        automatically. The information can also be edited by selecting
+//        "Model|Edit Geo Reference".
+//      Enhancement: ModelMuse now exports an .axml file each time the model
+//        input files are exported. The files lists the input and output files
+//        for the model in XML format. These files can be used to help archive
+//        a model.
+//      Enhancement: When creating an archive, ModelMuse now saves it in
+//        in a form that meets more of the USGS model archiving requirements.
+//      Bug fix: Fixed bug that prevented users from deactivating the
+//        UZF boundary in an object except by deleting the object.
+//    '3.7.1.11' Bug fix: Fixed bug in export of Data set 16 in the
+//        Farm Process.
+//    '3.7.1.12' Bug fix: Fixed bug that prevented the export of the SWR input
+//        file in MODFLOW-OWHM.
+//    '3.7.1.13' Bug fix: Fixed bug in which data set 2 of the SWR package
+//        took up more space than was allowed.
+//    '3.7.1.14' Bug fix: Fixed bug in display of the data sets in the
+//        Edit Data Sets dialog box and other dialog boxes if the model had
+//        been switched from a SUTRA 3D model to a MODFLOW model.
+//    '3.7.1.15' Bug fix: Fixed bug so that models with incomplete transient
+//        data will display an error message to the user identifying the
+//        problem instead of generating a bug report.
+//      Bug fix: In the "Files to Archive" dialog box, file names referring
+//        to drives that do not exist or are not open no longer cause errors.
+//    '3.7.1.16' Enhancement: Added the ability to export an outline of the
+//        grid or mesh to a Shapefile. When exporting a grid, the user
+//        has the option to export the outline of the entire grid, just
+//        the active cells in the grid or both the active and inactive cells.
+//      Change: The "SWR_Reach_Number" data set has been changed from a 3D
+//        data set to a 2D data set. This allows it to be used in a formula
+//        for the reach number in SWR direct runoff. A suitable formula
+//        might be "Round(SWR_Reach_Number)". However, the data set
+//        displays the average reach number for all the reaches at a
+//        particular row and column. Thus if there is more than one reach in
+//        a cell, the reach number in the data set might not be appropriate.
+//    '3.7.1.17' Enhancement: Added function "ObjectBasisFunction" which can
+//        return a value interpolated from the values at the corners of an
+//        object section that is triangular or quadrilateral in shape.
+//    '3.8.0.0' Enhancement: When importing Shapefiles, the minimum and
+//        maximum X, Y, and Z coordinates of the object can be used in the
+//        formula that determines whether or not an object is imported.
+//      Enhancement: When exporting the CHD package, ModelMuse now checks
+//        whether the specified heads are below the bottom of the layer.
+//    '3.8.0.1' Enhancement: In the Display Data dialog box, the SFR links
+//        and STR links now have an option to display invalid links.
+//      Bug fix: Fixed deletion of global variables that were added in some
+//        previous versions of ModelMuse.
+//    '3.8.0.2' Bug fix: Fixed bug in display of MODPATH time series.
+//    '3.8.0.3' Bug fix: Fixed bug in archiving models so that the batch
+//        files would work correctly in the archive.
+//      Bug fix: Fixed evaluation of the DischargeRouting data set (IRUNBND
+//        in the UZF package) when the SFR streams are not in strict
+//        numerical order.
+//      Enhancement: Added support for new options in MODFLOW-NWT
+//        version 1.1.
+//      Bug fix: Fixed and access violation when opening a model after having
+//        previously a MODFLOW-LGR model.
+//    '3.8.0.4' Bug fix: Fixed a bug that caused an access violation when
+//        deleting all the global variables.
+//      Bug fix: Fixed check of MT3DMS file name size. The size checked was
+//        5 when it should have been 50.
+//    '3.8.1.0' No additional changes.
+//    '3.8.1.1' Bug fix: Fixed bug in limiting display of pathlines to the
+//        current column, row, or layer when other criteria are also used
+//        to limit the display.
+//      Bug fix: Fixed bug in saving model archive list when the ModelMuse
+//        file has not already been saved.
+//      Enhancement: Added support for SWR  version 1.04 in MODFLOW-NWT
+//        version 1.1.1.
+//      Bug fix: Fixed saving the the names of model input and output files
+//        to be archived when the names are relative file names.
+//      Change: In the CHD, DRN, DRT, ETS, EVT, GHB, RCH, RIV,
+//        and WEL packages, parameter instances will only be defined for
+//        parameters that have different values in different stress periods.
+//      Bug fix: Fixed bug in updating display of SUTRA boundary conditions
+//        when coloring the grid.
+//      Change: When exporting the model outline as a shapefile, there is
+//        now a single character attribute named "Area" which will contain
+//        "Active" for the outline of the active area, "Inactive" for the
+//        outline of the inactive area or "Grid Outline" for the outline
+//        of the model grid.
+//      Enhancement: Improved display of imported images at high
+//        magnifications.
+//    '3.8.1.2' Bug fix (not in released version) Fixed bug in
+//        improved display of imported images.
+//    '3.8.1.3' Bug fix: fixed bug that prevented some old model files from
+//        being opened.
+//    '3.8.1.4' Enhancement: Improved the quality of contours in SUTRA
+//        profile models by taking into account the vertical exaggeration.
+//    '3.8.1.5' Bug fix: Fixed paths assigned to .bcs files in SUTRA.FIL file.
+//    '3.8.1.6' Bug fix: Fixed specification of NORDER in the NWT package.
+//        Previously, specifying NORDER = 2 would result in a corrupt file.
+//    '3.8.1.7' Bug fix: Fixed a bug that could cause the option to export
+//        MODPATH endpoints to Shapefiles to be disabled incorrectly.
+//    '3.8.1.8' Enhancement: added new dialog box that can display the
+//        file extensions for the input and output model files and the
+//        type of file associated with each extension.
+//      Enhancement: Support for SUTRA 3.0 added.
+//    '3.8.1.9' Enhancement: Added support for displaying vertex values in
+//        vertex labels.
+//      Enhancement: The items in the Show or Hide Objecte dialog box that are
+//        expanded, remain expanded after editing objects.
+//      Bug fix: Checking or unchecking as checkbox in
+//        the "Select Objects for Editing or Deletion" now will now cause
+//        all the related checkboxes to change state appropriately.
+//      Enhancement: The Edit Feature Formula dialog box can now be used with
+//        SUTRA features.
+//    '3.8.1.10' Bug fix: Fixed bug that could cause out for range errors if
+//        an error or warning messge is too big to fully display in the
+//        Errors and Warnings dialog box.
+//    '3.8.1.11' Bug fix: Fixed bug in export of the MT3D Transport
+//        Observations Package (TOB) that could cause invalid TOB input files
+//        to be created if observations of different species at the same
+//        time were specified.
+//    '3.8.1.12' Bug fix: Fixed bug that could cause access violations if a
+//        MT3D component was deleted and a new component was later added.
+//      Enhancement: Support was added for the modified SUB package in
+//        MODFLOW-OWHM.
+//    '3.8.1.13' Bug fix: Fixed bug that caused an assertion failure if a
+//        Layer group was given the same name as an existing layer group.
+//      Enhancement: Added support for importing SUTRA restart files.
+//    '3.8.1.14' Bug fix: (Not in released version.) Fixed import of SUTRA
+//        restart file.
+//    '3.8.1.15' Bug fix: In MODFLOW-LGR models that use the MNW1 package,
+//        the WEL1, BYNODE, and QSUM will be given names different from the
+//        names used in the parent model.
+//      Bug fix: Fixed bug that could cause access violations when editing
+//        SUTRA Fishnet Meshes.
+//    '3.8.1.16' Bug fix: When importing certain invalid Shapefiles,
+//        ModelMuse will now generate an error mesage to the user instead of
+//        a bug report.
+//    '3.8.1.17' Bug fix: If duplicate times are specified in a MODFLOW
+//        feature, ModelMuse will now display an error message to the user
+//        when attempting to evaluate the feature instead of generating a
+//        bug report.
+//    '3.8.1.18' Bug fix: Fixed bug that caused an assertion failure when
+//        exporting the BCF package if the limited convertible option was
+//        used for a layer or when importing an existing model with that
+//        same option.
+//      Enhancement: In models with grids such as MODFLOW, if the grid
+//        cell or element size is set by an object on the top view of the
+//        model and the default formula for the Active data set is "True",
+//        the active data set will be set to false outside any such objects.
+//      Enhancement: When importing Shapefiles, Surfergrid files, or
+//        ASCII Raster files, there is now an option to convert the units of
+//        the X and Y coordinates.
+//    '3.8.1.19' Bug fix: not in released version. Fixed assignment of
+//        Active data set.
+//    '3.8.1.20' Bug fix: not in released version. Fixed bug in display of
+//        Withdrawals in Footprint model.
+//    '3.8.1.21' Bug fix: Rmoved spurious warnings about SFR reach bottom
+//        elevations for models in which reach elevations are specified
+//        at the beginning and ending of a segment.
+//    '3.8.1.22' Bug fix: Fixed bug that caused an infinite loop in updating
+//        the grid elevations in MODFLOW-LGR child models.
+//    '3.8.1.23' Bug fix: Fixed bug in export of SFR in LGR version 1 that
+//        could cause an assertion failure.
+//    '3.8.1.24' Bug fix: Fixed another bug in export of SFR in LGR version 1
+//        that could cause an assertion failure.
+//    '3.8.1.25' Bug fix: Fixed bug in export of SFR in LGR version 2
+//        that could cause incorrect values for the values at the upstream
+//        and downstream ends of segments that cross the subgrid boundary.
+//    '3.8.1.26' Enhancement: When animating a display in the Export Image
+//        dialog box, ModelMuse will give priority the data sets being
+//        animated when applying macros to text.
+//      Enhancement: When importing MODFLOW-2000 model, parameter
+//        values from the Sensitivity file are imported.
+//      Bug fix: Exporting a shapefile of contours in a MODFLOW-LGR child
+//        model now works.
+//      Bug fix: Changing the contour interval for contours in a MODFLOW-LGR
+//        model now applies to both parent and child models.
+//    '3.8.1.27' Bug fix: It is now possible to run MODPATH or ZONEBUDGET in
+//        either child or parent model with MODFLOW-LGR.
+//    '3.8.1.28' Bug fix: Fixed bug that could cause access violations when
+//        setting up an animation in the Export Image dialog box.
+//      Bug fix: Fixed export of parent model or child model in MODFLOW-LGR
+//        model when either just the parent or just the child is to be run.
+//    '3.8.1.29' Bug fix: Fixed export of usgs.model.reference file in
+//        MODFLOW-LGR when only the parent model is run.
+//    '3.8.1.30' Change: Made ajustments to support input file format changes
+//        in MODFLOW-2005 version 1.12.
+//      Bug fix: Fixed bug that allowed 3D objects to set the values of
+//        data sets that define the grid elevations.
+//    '3.8.1.31' (Bug fix: not in released version) Fixed a bug that caused
+//        stack overflow when fixing an existing model.
+//    '3.8.1.32' Bug fix: Fixed bug that could cause incorrect values to
+//        be printed for certain SFR variables when LGR is used and the
+//        formula should apply different values in the parent and child
+//        models.
+//    '3.8.1.33' Enhancement: when exporting a model outline to a
+//        Shapefile, the outlines of child models in LGR models can be
+//        exported.
+//      Bug fix: In the Object Properties dialog box, if an attempt is made
+//        to specify an invalid vertex value, the value is left unchanged.
+//      Bug fix: Fixed a bug in deleting and then adding an Mt3DMS components
+//        that could cause an access violation.
+//      Bug fix: Fixed bug that could cause an assertion failure if the
+//        starting time defined in FHB was before the first time in the model.
+//      Change: Added export of a 7th value in record 3 of the MT3D-USGS
+//        Basic package.
+//    '3.8.1.34' Bug fix: Fixed bug that caused a math error when contouring
+//        if the user choose to log transform the data and specified an
+//        upper or lower limit less than or equal to zero.
+//    '3.8.1.35' Bug fix: Set the "Range" property of all scrollbars to 0.
+//        This has no effect when compiled with Delphi XE2 but it cause
+//        problems with the form size in Delphi 10.1 Berlin.
+//      Enhancement: The user can now specify the size at which MODPATH
+//        endpoints and time series points are drawn in 2D views.
+//      Bug fix: Fixed bug that could cause an error when attempting to
+//        get values for data sets for data sets evaluated at nodes in
+//        MODFLOW models.
+//      Bug fix: In the MODFLOW Lake package, values of THETA and SSCNCR
+//        that were equal to 0 were not saved when saving a ModelMuse file.
+//    '3.8.1.36' Enhancement: When exporting grid data to Shapefiles, it is
+//        now possible to filter the data that is exported.
+//      Bug fix: Fixed bug in specifying the starting date in the Georeference
+//        dialog box in countireis where the convention for specifying dates
+//        is something other than Month/Day/Year.
+//      Bug fix: Fixed bug in exporting FMP input where evaporation fraction
+//        has not been specified.
+//    '3.8.1.37' Bug fix:  Specifying a formula in an object that gives the
+//        wrong data type for the data set now result in an error message in
+//        the Formula Errors dislog box instead of generating a bug report.
+//    '3.8.1.38' Bug fix: Fixed bug in Export of Shapefiles caused an error
+//        when exporting head observations to a Shapefile.
+//      Bug fix: Fixed bug that could cause an assertion failure when opening
+//        a model that uses the Subsidence package.
+//    '3.8.1.39' Bug fix: Fixed bug that would cause an incorrect unit number
+//        to be assigned when direct runoff is used in the SWR package.
+//    '3.9.0.0' No additional changes.
+//    '3.9.0.1' Bug fix: When opening a ModelMuse file in which the EVT, ETS,
+//        or RCH data in objects were defined using parameters, the data
+//        would not always be read.
+//    '3.9.0.2' Change: If the FirstVertexValue, HighestVertexValue,
+//        LastVertexValue, LowestVertxValue, MeanVertexValue,
+//        and MedianVertexValue functions is used and a cell to
+//        which it applies has no vertex values, a warning message will only
+//        be displayed if the optional default value has not been supplied.
+//      Bug fix: Fixed drawing of background bitmaps.
+//    '3.9.0.3' Change: In the Errors and Warnings dialog box, right-clicking
+//        a group of errors or warnings will now allow the user to select all
+//        the objects related to that group even if the error message for
+//        some of the objects have not been displayed.
+//      Bug fix: Fixed bug that could cause an infinite loop if the segments
+//        in the STR package could not be put in the correct order and
+//        parameters were used.
+//      Bug fix: Fixed a bug in the export of structure information in data
+//        set 13a of the SWR package that would result in MODFLOW halting with
+//        an error message.
+//    '3.9.0.4' Change: When importing objects from shape files, functions
+//        related to objects can now be used to define object elevations.
+//    '3.9.0.5' Bug fix: In the MODFLOW Layer Groups dialog box, attempting
+//        to enter a value of 0 for the growth rate on the Discretization
+//        tab no longer results in a math error.
+//      Bug fix: Fixed a bug that could cause a conversion error in the
+//        SUTRA Options dialog box in computers that do not use a period as
+//        the decimal separator.
+//      Bug fix: Fixed bug in "FractionOfObjectLength" function that caused
+//        it to give incorrect values in models with grids in which the grid
+//        angle was not zero.
+//      Bug fix: fixed bug that could cause incorrect values to be assigned
+//        by objects if the first or last vertex of an object was only a
+//        short distance from the edge of a cell.
+//    '3.9.0.6' bug fix: (not in released version). Fixed a bug that caused
+//        problems with interpolation.
+//    '3.9.0.7' Bug fix: Fixed bug that could cause a divide by zero error
+//        when plotting MODPATH pathlines.
+//      Bug fix: Fixed export of Zonebudget data for MODFLOW-LGR child models.
+//      Bug fix: Fixed bug that could cause imported images to be drawn at
+//        the incorrect locations.
+//    '3.9.0.8' bug fix: Fixed bug that would cause an error when specifying
+//        farm diversions in MODFLOW-OWHM if incomplete information was
+//        entered.
+//      Bug fix: Fixed bug that caused an error if exporting data set 33 of
+//        the farm process without defining the precipitation.
+//      Bug fix: Fixed a bug that could prevent ModelMuse from launching a
+//        web browser.
+//    '3.9.0.9' Enhancement: It is now possible to specify that the starting
+//        locations of MODPATH particles are at the exact location of a point
+//        object with a single Z formula.
+//   '3.9.0.10' Enhancement: The user can now specify the thickness of lines
+//        used to draw cross sections in the "Data|Display Data" dialog box.
+//      Bug fix: Fixed bug that caused errors when attempting to read
+//        shapefiles containing null shapes.
+//   '3.9.0.11' Bug fix: Opening a ModelMuse file that has lines to be added
+//        to the MODFLOW name file in the parent model no longer results in
+//        those same lines being added to the child model.
+//      Bug fix: In MODFLOW-LGR version 1 models in which child models have
+//        one layer, boundary conditions in that layer will stay in that
+//        layer.
+//   '3.9.0.12' Change: When ModelMuse starts and creates a new model,
+//        it will be maximized if it was maximized the last time it was
+//        closed.
+//      Enhancement: When importing an Ascii raster a warning will be
+//        issued if some cells have no data points in them.
+//      Enhancement: In the Object Properties dialog box, you can now copy
+//        imported data to the clipboard.
+//      Change: When importing Shapefiles, the default choice will be to join
+//        the shapes into a single object if they can be joined.
+//      Enhancement: When importing Shapefiles, it is now possible to cancel
+//        the import process.
+//      Bug fix: When importing head observations from a shapefile, ModelMuse
+//        will now ensure that each head observation has a unique name.
+//      Enhancement: When importing an existing MODFLOW model, the user now
+//        has the option of importing just a subarea of the model and using
+//        the stored heads or flows from the original model as boundary
+//        conditions on the edge of the imported model area.
+//   '3.9.0.13' Enhancement: It is now possible to export the grid lines from
+//        the "File|Export|Shapefile|Model Outline or Grid Lines..." dialog
+//        box.
+//   '3.9.0.14' Bug fix: Fixed bug that could cause an error when setting
+//        the names of the chemical components used in MT3D.
+//   '3.9.0.15' Enhancement: When importing DXF files, they now can be
+//        imported as a single object.
+//   '3.9.0.16' Bug fix: Fixed bug that caused a bug report to be generated
+//        if certain files that should have been present were absent. Instead
+//        an error report is generated explaining how the user can fix the
+//        problem.
+//      Enhancement: When importing Shapefiles, "Comma-separated value" (.csv)
+//        files can be used to include additional data which are treated
+//        as Shapefile attributes.
+//   '3.9.0.17' Bug fix: (not in released version). Fixed export of grid
+//        lines to shape file.
+//   '3.9.0.18' Bug fix: (not in released version). Fixed export of grid
+//        lines to shape file.
+//   '3.9.0.19' Enhancement: ModelMuse now warns the user if the starting or
+//        ending stage in the RES package are too low.
+//      Bug fix: Fixed bug that caused objects that defined FHB boundaries
+//        to have extra times added when opening some existing models.
+//   '3.9.0.20' Enhancement: When exporting images, the user can now specify
+//        the caption for the color legend and contour legend.
+//      Bug fix: Fixed bug in export of Data sets 7-10 in MT3D-USGS if no
+//        associated concentration have been defined.
+//      Bug fix: When exporting MT3DMS files, spaces are replaced with
+//        underscore characters in input and output files.
+//   '3.9.0.21' Enhancement: ModelMuse can not run models on network drives.
+//   '3.9.0.22' No real change.
+//   '3.9.0.23' Bug fix: Importing models using the HYDMOD package in which
+//        the number of observation locatins exceeds the user specified
+//        number no longer causes an error.
+//      Enhancement: The Show or Hide Objects dialog box now allows the user
+//        to show or select objects whose names contain a specified search
+//        term.
+//   '3.9.0.24' Enhancement: The user can now use buttons to check or uncheck
+//        a group of items in the "Select Objects for Editing or Deletion"
+//        dialog box.
+//      Enhancement: Added warnings about models that have too many stress
+//        periods or time steps to use with formatted head or drawdown output
+//        files.
+//      Bug fix: When writing the input for the reaction package in MT3D-USGS,
+//        a default value of zero is now written for IREACTION.
+//   '3.9.0.25' No real change
+//   '3.9.0.26' Bug fix: Fixed bug that could cause an assertion failure when
+//        exporting contours to a Shapefile.
+//   '3.9.0.27' Bug fix: Fixed bug that could cause an assertion failure
+//        when attempting to import a MODFLOW binary head file that was
+//        created by a model with fewer layers than the current MODFLOW
+//        model.
+//   '3.9.0.28' Bug fix: Fixed bug in export of SWR input data sets 5 and 6.
+//   '3.9.0.29' Bug fix: Fixed a bug that could cause an access violation
+//        when the user changed the symbol used as the decimal character.
+//      Enhancement: Added support for WellFootprint program.
+//      Enhancement: In the DRN, DRT, GHB, RIV, and WEL packages, if no
+//        boundary cells are defined in the package, the package is not
+//        included in the model.
+//      Bug fix: Fixed renaming model results data sets prior to closing
+//        the model.
+//      Enhancement: When importing Shapefile attributes as new data sets
+//        with names that match existing data sets, the user is given options
+//        about how to treat those attributes.
+//      Bug fix: "Restart Model" button in ModelMonitor now works.
+//   '3.9.0.30' Bug fix: If the PVAL file is listed in the MODFLOW Name File
+//        dialog box, it will no longer be generated by ModelMuse.
+//   '3.9.0.31' Bug fix: Modified export of SWR input file so that the
+//        data values in data set 13 did not exceed 200 characters.
+//   '3.10.0.0' Enhancement: Vertex value names are now sorted in a better
+//        way then before.
+//   '3.10.0.1' Bug fix: Fixed deletion of MODPATH release times in the
+//        Object Properties dialog box.
+//      Bug fix: If a MODPATH 5 pathline, time-series or endpoint file
+//        contains invalid data such as "-NaN", ModelMuse stops reading the
+//        file and displays an error message instead of generating a bug
+//        report.
+//   '3.10.0.2' Bug fix: Fixed bug that caused a range check error if the
+//        Reservoir package is activated but no reservoirs have been defined.
+//      Bug fix: Fixed bug that would cause an error when undoing the import
+//        of a shape file.
+//   '3.10.0.3' Bug fix: Fixed bug in which times were not updated correctly
+//        in objects defining EVT, ETS, RCH, or UZF boundaries.
+//   '3.10.0.4' Enhancement: When importing head observations from Shapefiles,
+//        missing time or head values will be skipped.
+//      Bug fix: Fixed a bug that would cause a bug report to be generated
+//        under certain circumstances if the user specified an invalid
+//        formula. Now an error message is displayed instead.
+//   '3.10.0.5' Bug fix: Fixed bug that could cause parameter instance names
+//        to be omitted in some input files.
+//   '3.10.0.6' Bug fix: Fixed a bug that could cause assertion failures when
+//        exporting SUTRA time schedules.
+//   '3.10.0.7' Bug fix: Fixed a bug that would cause access violations if
+//        the number of segments in the ETS package was reduced.
+//      Bug fix: Fixed LastVertexValue function to give correct result.
+//      bug fix: When starting a new model, clicking the "No Grid" button
+//        now allows the georeference information to be included in the model.
+//   '3.10.0.8' Bug fix: Fixed bug that caused an assertion failure when
+//        attempting to create a new HFB parameter.
+//   '3.10.0.9' Bug fix: Fixed bug that caused the Well package input file
+//        to be invalid if WEL parameters were defined in a MODFLOW-NWT model.
+//   '3.10.0.10' Bug fix: Fixed a bug that caused MODFLOW to receive invalid
+//                elevation values for drain, river, or GHB cells when flow
+//                observations were defined but the boundaries were not
+//                defined for the entire simulation period.
+//   '3.10.0.11' No released changes.
+//   '3.10.0.12' Enhancement: Added ability to import net recharge and net
+//                discharge files saved by the UZF package.
+//   '3.10.0.13' Bug fix: Fixed creating Kz data set when starting up a new
+//                model without a grid.
+//               Enhancement: Cross section plots of 2D and 3d data sets are
+//                now enabled with SUTRA models.
+//   '3.10.0.14' Bug fix: When writing the input for the STR package in
+//                MODFLOW-LGR models, ModelMuse now writes them using
+//                the fixed format required by MODFLOW-LGR rather than the
+//                free format used by MODFLOW-2005.
+//               Bug fix: When writing the MODFLOW-LGR LGR file, if no objects
+//                define the position of the child grid but a child grid
+//                does exist, the LGR file now specifies the location of the
+//                LGR grid within the parent grid correctly.
+//   '3.10.0.15' ----------
+//   '3.10.0.16' Bug fix: Fixed exporting contours to shapefiles when the
+//                the "Data|Display Data" window has not yet been displayed.
+//               Bug fix: not in released version Fixed updating dimensions
+//                of multiplier zone data sets in DISV grids.
+//               Bug fix: not in released version. Fixed export of Point
+//                Shapefiles with DISV grids.
+//   '3.10.0.17' Enhancement: •	By default, when importing well footprint
+//                results, Values of 0 and 1 for Footprint code and 0 for
+//                distributed withdrawals will not be used for coloring
+//                the grid.
+//               Bug fix: Warning message about MODFLOW-NWT version 1.0.9
+//                has been fixed.
+//   '3.10.0.18' Bug fix: Fixed bug that could allow semi routed deliveries
+//                and return flow to be included in the Farm Process input
+//                after disabling the SFR and SWR packages.
+//   '3.10.0.19' Bug fix: Fixed bug that could cause an access violation when
+//                displaying data in the "Data|Data Set Values" dialog box.
+//               Bug fix: Fixed bug that could cause an access violation
+//                when attempting to manually define a legend.
+//               Bug fix: The tables on the Print/Save tabs of the SUB and
+//                SWT packages in the MODFLOW Packages and Programs dialog
+//                box are now fully visible.
+//   '3.10.0.20' Enhancement: Added support for running MODPATH 7.
+//               Bug fix: Fixed bug that could cause the FHB package to cause
+//                an error if large time values are used.
+//   '3.10.0.21' Bug fix: When plotting contour lines of a data set using
+//                the log-transform option, data set values less than or
+//                equal to zero will no longer cause an error unless all the
+//                values in the data set are less than or equal to zero.
+//               Enhancement: Contour data sets in models that don't use
+//                regular grids can no longer allow contour lines that extend
+//                beyond the spatial limits of the data even when the outline
+//                of the active area of the model is concave.
+//               Bug fix: Fixed bug that could cause errors when importing
+//                model results from the .cbc file in models with
+//                non-simulated layers.
+//   '3.10.0.22' Bug fix: Fixed bug that caused access violations in
+//                the Object Properties dialog box if ModelMuse was inactive
+//                for a long time.
+//   '3.10.0.23' Enhancement: It is now possible to export STR to
+//                Shapefiles.
+//               Bug fix: Fixed bug that could cause a range check error when
+//                interpolating using the Inverse Distance Squared method.
+//   '3.10.0.24' Enhancement: In MODFLOW-OWHM, the option to prorate
+//                semirouted deliveries over multiple streams has been
+//                implemented.
+//   '3.10.0.25' Bug fix: When creating an archive file for MT3D, the
+//                directory for the .ftl file was specified incorrectly.
+//               Bug fix: Fixed import of flow or head boundaries when
+//                importing a subarea model.
+//   '3.10.0.26' Bug fix: Fixed bug that prevented users from entering some
+//                real-number values
+//   '3.10.0.27' Bug fix: Fixed bug that prevented writing dBASE files larger
+//                than 2 gigabytes.
+//               Enhancement: When exporting Shapefiles, there is now a
+//                warning if the size of the dBASE file will exceed two
+//                gigabytes.
+//   '3.10.0.28' Fixed a bug that prevented GSFLOW from using discretization
+//                files created by ModelMuse.
+//   '3.10.0.29' Enhancement: The new command "Grid|Rotate Grid Around Grid
+//                Origin" allows the user to specify a grid angle and have
+//                the grid rotate to that angle with the center of rotation
+//                set to the grid origin. For MODFLOW models, the grid origin
+//                is the upper left corner. For PHAST models the grid origin
+//                is the lower left corner.
+//               Enhancement: The new command "Grid|Move Grid" allows the
+//                user to move the grid origin to a new position.
+//   '3.10.0.30' Bug fix: Fixed bug in display of prorate option in
+//                the return flow from farms in MODFLOW-OWHM.
+//               Bug fix: Fixed bug that could cause an assertion failure
+//                when exporting the input for the FHB package.
+//   '3.10.0.31' Bug fix: Fixed bug in importing sub-area models from
+//                MODFLOW that would cause boundary conditions to be imported
+//                with incorrect values.
+//               Bug fix: Fixed bug that could cause an error when displaying
+//                the Georef dialog box or when exporting Georef data.
+//   '3.10.0.32' Bug fix: Fixed bug that incorrectly checked the farm, crop
+//                and soil IDs in MODFLOW-OWHM.
+//               bug fix: Fixed bug that could cause the FHB file to be
+//                created incorrectly.
+//   '3.10.0.33' Bug fix: Fixed bug that could cause an access violation when
+//                pasting data into the "Manage Head Observations" dialog box.
+//               Bug fix: Fixed bug that could cause an assertion failure
+//                when exporting data sets evaluated at nodes to a Shapefile
+//                from a MODFLOW model.
+//   '3.10.0.34' Bug fix: Fixed bug that could cause an error when attemping
+//                to import data from a Shapefile in which one of the
+//                attributes had the same name as a global variable.
+//   '3.10.0.35' bug fix: not in releasaed version, Fixed bug that could
+//                cause the FHB file to be created incorrectly and to delete
+//                FHB data.
+//   '3.10.0.36' bug fix: Fixed bug that could cause dependent data sets to
+//                fail to be updated properly when global variables are
+//                changed.
+//               Bug fix: Fixed bug that could cause the UZF package input
+//                file to specify its options incorrectly.
+//   '3.10.0.37' Bug fix: In the Grid and Mesh Values dialog box, values for
+//                pathlines and endpoints for the currently selected column,
+//                row, or layer are now displayed correctly.
+//   '3.10.0.38' Bug fix: fixed bug that could cause contours to be exported
+//                to be exported incorrectly to Shapefiles.
+//               Change: ModelMuse now works with GMSH version 4.
+//   '3.10.0.39' Bug fix: Fixed bug that prevented PRODF1 and PRODS1 from
+//                being set to negative values in SUTRA models.
+//   '3.10.0.40' Change: If the UZF_Layer data set has an invalid value,
+//                ModelMuse now identifies the cells that have invalid values.
+//               Bug fix: Fixed bug in export of data set 4b in the UZF
+//                package.
+//               Bug fix: When writing arrays, real number values between
+//                -2^-37 and +2-37 will be written as 0.0 to prevent
+//                underflow errors in MODFLOW when reading single precision
+//                arrays.
+//               Bug fix; When saving .gpt files, memory usage is reduced
+//                which can prevent out of memory errors for some large
+//                files.
+//   '3.10.0.41' Enhancement: It is now possible to export the formula for
+//                the concentration specified for the MT3DMS SSM in an
+//                object to a Shapefile.
+//   '3.10.0.42' Bug fix; Fixed a bug that could cause an access violation
+//                when attempting to import a shapefile with a
+//                self-intersecting shape.
+//               Bug fix: Fixed a bug that could cause a stack overlfow when
+//                ModelMuse is closed.
+//   '3.10.0.43' Enhancement: Added a warning to use a iterative solver in
+//                SUTRA models with over 1000 nodes.
+//               Bug fix: If an attempt is made to use an undefined STR
+//                parameter, an error message will be generated instead of
+//                sending a bug report.
+//               Bug fix: Fixed a bug that prevented Vertex valeus from being
+//                used to set elevation formulas.
+//   '3.10.0.44' Bug fix: If the user attempts to create a MODFLOW model with
+//                a number of cells larger than the largest 32-bit signed
+//                integer, an error message will be displayed instead of
+//                generating a bug report.
+//   '3.10.0.45' No real change.
+//   '3.10.0.46' Bug fix: Fixed bug with creating invalid mesh with Fishnet
+//                Mesh.
+//   '3.10.0.47' Bug fix: Not in released version. Fixed use of parameters
+//                in MODFLOW 6.
+//   '3.10.0.48' Bug fix: If an object whose number of Z formualas is not
+//                equal to zero sets the elevations of the grid or mesh, it's
+//                number of Z formulas is automatically reset to zero.
+//               Bug fix: If the number of values of a data set cached in
+//                a file is too large, the data set will be recalculated when
+//                next accessed
+//               Bug fix: Deleting an HFB parameter now changes any existing
+//                HFB boundaries to no longer use the deleted parameter.
+//   '3.10.0.49' Enhancement: When importing Shapefiles, the imported objects
+//                will have their positions locked by default.
+//               Enhancement: When importing Shapefiles, it is now possible
+//                to use a text attribute to assign the names of the
+//                imported object.
+//               Bug fix: If the distance between all the points in a section
+//                of an object is small enough so that all the vertices map
+//                to the same pixel, the object or section of an object will
+//                be displayed as if it were a point object.
+//               Bug fix: Not in released version. Drawing selected objects
+//                that have vertex values is fixed.
+//   '3.10.0.50' Bug fix: "Snap to vertex" now works as described in the
+//                ModelMuse help. Previously, it would snap to the same
+//                pixel as the one containing the target vertex but not
+//                necessarily to the exact same location.
+//   '3.10.0.51' Enhancement: When using an MT3D starting concentration file,
+//                the user can now select to use just the first data set in
+//                the file regardless of which time step it represents.
+//   '3.10.0.52' Bug fix: Fixed export of data set 2 in the SWT package so
+//                that more layer numbers can be printed without exceeding
+//                the maximum line length of 200.
+//   '3.10.0.53' Enhancement: (not in released version). ModelMuse now warns
+//                the user if all the cells in the model are either inactive
+//                or pass-through cells.
+//   '3.10.0.54' ---
+//   '3.10.0.55' Change: When automatically generating a legend when
+//                coloring or contouring the grid with a real-number data set
+//                and the user has specified the limits to be colored. Those
+//                same limits are applied when generating the legend.
+//   '3.10.0.56' Bug fix: Fixed bug in importing Shapefiles in which the
+//                conductance interpretation was specified on a per shape
+//                basis using a text attribute of the shape.
+//               Bug fix: Fixed bug in numbering SFR segments when the UZF
+//                package is used and excess infiltration is redirected to
+//                SFR segments.
+//   '3.10.0.57' Bug fix: Fixed bug that could cause access violations if the
+//                FHB package was being used.
+//   '3.10.0.58' Change: ModelMuse updated to work with Gmsh version 4.3
+//               Bug fix: Fixed a bug that would make the import of
+//                Shapefiles slower than it needed to be.
+//   '3.10.0.59' Change: The SelectionCount function was changed to avoid
+//                counting the same cells more thatn once.
+//               Change: Functions related to Vertex Values are now classified
+//                under "Object_VertxValue".
+//               Change: In the "Import Points" dialog box, data sets that
+//                are used to define the vertical elevation of the grid or
+//                mesh are now only allowed to be specified by objects that
+//                have zero Z-formulas.
+//  '3.10.0.60'  Bug fix: Fixed bug that could cause objects to be drawn
+//                incorrectly.
+//               Bug fix: Fixed bug that could cause assertion failures
+//                when drawing vectors in SUTRA models.
+//               Bug fix: Fixed bug that could cause access violations
+//                when changing between boundary condition times with
+//                PHAST models.
+//               Enhancement: When importing groundwater flows frim the left,
+//                front, and bottom of a cell, the same data is used to also
+//                import data fort the right, back and top of the cell.
+//   '3.10.0.61' Bug fix: The Flow-Transport-link file is no longer included
+//                in the MODFLOW name file.
+//   '3.10.0.62' Bug fix: (not in released version) Fixed minor bugs related
+//                to MODFLOW 6
+//   '3.10.0.63' Bug fix: Fixed a bug that could cause access violation
+//                while closing ModelMuse.
+//   '3.10.0.64' Bug fix: Fixed a bug that could cause an access violation
+//                when exporting the FHB package.
+//   '3.10.0.65' Bug fix: Fixed a bug that cause an access violation
+//                when exporting SUTRA node data to a Shapefile.
+//   '3.10.0.66' Change: The appearance of the tool tip used for measuring
+//                lines has changed.
+//               Bug fix: Fixed bug that could cause formulas to be evaluated
+//                incorrectly if the formulas involved both 2D and 3D data
+//                sets.
+//   '4.0.0.0'   Bug fix: Modified export of the FMP package input files so
+//                that many lines are written more compactly in order to
+//                make it less likely that MODFLOW-OWHM will truncate a line
+//                prematurely.
+//               Bug fix: Fixed import of HYDMOD from existing models when
+//                SFR is selected.
+//               Enhancement: Added support for MODFLOW 6 and MODPATH 7.
+//   '4.0.0.1'   Bug fix: Fixed bug that could cause division by zero errors
+//                when drawing the top, front, or side views.
+//               Bug fix: Fixed bug that could cause errors in determining
+//                which cells were inside objects with multiple parts.
+//               Bug fix: Fixed bug that could cause access violations when
+//                deactivating SFR in objects.
+//               Enhancement: In SUTRA boundary conditions, "Used" can now
+//                be set using a formula.
+//   '4.0.0.2'   Bug Fix: fixed bug that could cause access violations when
+//                exporting the SFR package input in MODFLOW 6.
+//               bug fix: Fixed bug that could cause the wrong identifier
+//                to be displayed for an invalid formula in a model feature.
+//   '4.0.0.3'   bug fix: Fixed a bug that could cause divide by zero errors
+//                when drawing the top, front or side views.
+//               bug fix: Fixed a bug that could cause an assertion failure
+//                when generating the input for the SFR package.
+//               bug fix: Fixed bug that could cause an error when attempting
+//                to create a fishnet mesh.
+//   '4.0.0.4'   Bug fix: Fixed bug that could cause an access violation when
+//                the "ObjectIntersectArea" function is evaluated.
+//   '4.0.0.5'   Change: If the user has not specified the location of one
+//                of the modeling programs and the program is not found at
+//                the default location, ModelMuse will strip "C:\" off the
+//                beginning of the default location and append that to the
+//                name of the subdirectory where ModelMuse is located and
+//                will check to see if the program is located there. This
+//                makes it simpler to bundle ModelMuse with the models using
+//                WineBottler to run it on the Mac.
+//   '4.0.0.6'   Bug fix: Fixed bug that prevented the user from specifying
+//                the MVR package information.
+//   '4.0.0.7'   Enhancement: In the SFR package for MODFLOW 6, there is now
+//                a check that the sum of the upstream fractions of the
+//                downstream reaches of a reach add up to 1.
+//               Bug fix: MODFLOW 6 files can now be exported from the command
+//                line using command-line parameters.
+//   '4.0.0.8'   Bug fix: Fixed bug that could cause a range check error when
+//                Creating a DISV grid in MODFLOW 6.
+//   '4.0.0.9'   Bug fix: Fixed bug in reading SFR6 data from file.
+//               Bug fix: Fixed bug in writing idiv in MODFLOW 6 SFR6
+//                input file.
+//               Bug fix: not in released version. Fixed getting vertex
+//                values.
+//   '4.0.0.10'  bug fix: Fixed bug in which mxiter in the MODFLOW 6
+//                Simulation Name File was not exported correctly.
+//   '4.0.0.11'  Bug fix: Fixed bug in identifying MVR sources when
+//                the UZF package is used.
+//   '4.0.0.12'  Bug fix: Fixed bug that could cause an access violation
+//                when editing and SFR stream in MODFLOW 6.
+//               Bug fix: The data sets for Angle1, Angle2, and Angle3 were
+//                only created and used if the XT3D option was selected
+//                instead of whenever the NPF package was selected.
+//    '4.0.0.13' Enhancement: ModelMuse now warns if the bottom of the
+//                stream bed in an SFR reach in MODFLOW 6 is below the bottom
+//                of the cell.
+//               Bug fix: Fixed bug that could cause an error if a lake outlet
+//                was a source for the MVR package in MODFLOW 6.
+//               bug fix: Fixed bug in specifying lake outlets that could
+//                cause them not to be saved properly.
+//               Bug fix: The MODPATH_Zone data set was sometimes improperly
+//                marked as required with MODPATH 7 when in reality it wasn't
+//                used.
+//               Enhancement: Support for SUTRA 3.0 added.
+//               Bug fix: Fixed bug that could cause an error if the user
+//                tried to rename a data set.
+//               Bug fix: Fixed a bug that could cause a bug report to be
+//                generated if the mouse wheel was moved over the NPF options
+//                grid in the MODFLOW Packages and Programs dialog box.
+//               Bug fix: Fixed a bug that could cause an error if the number
+//                of time steps in a stress period was greater than or equal
+//                to 100,000.
+//               Bug fix: Fixed bug that could cause an error if multiple
+//                copies of ModelMuse are being run from the command line at
+//                the same time.
+//               Bug fix: Fixed a bug that could case an error if the last
+//                time defined for a stream in a MODFLOW 6 model was earlier
+//                than the last time in the model.
+//               Bug fix: Transient data for the MVR package was not displayed
+//                properly in the Object Properties dialog bos if the number
+//                of times was not equal to 1.
+//    '4.0.0.14' Bug fix: Fixed coloring pathlines with the Z coordinate when
+//                DISV is used.
+//    '4.0.0.15' Bug fix: Fixed bug that could cause an error when assigning
+//                values to a data set using interpolation.
+//    '4.0.0.16' bug fix: Fixed export of Step Schedules in SUTRA. Previously,
+//                the exported time steps were smaller than then should have
+//                been by one time step.
+//               bug fix: Fixed bug that could cause an error when deleting
+//                a custom color scheme.
+//               Enhancement. MT3D can now be used with child models in
+//                MODFLOW-LGR.
+//    '4.0.0.17' Bug fix: Fixed a bug that could cause an access violation
+//                importing a MODFLOW model containing the MNW2 package.
+//    '4.0.0.18' Bug fix: Fixed the conversion of diversions from the
+//                the MODFLOW-2005 version of SFR and STR to the MODFLOW 6
+//                version of SFR.
+//               Bug fix: Fixed bug in export of the MODPATH input files
+//                for models with DISV grids.
+//    '4.0.0.19' Bug fix: Fixed bug that could cause an access violation
+//                when coloring the grid.
+//    '4.0.0.20' Bug fix: Fixed bug that could cause EVT and RCH cells to
+//                be defined in the wrong layers in MODFLOW 6 models.
+//               Enhancement: ModelMuse now warns about grid columns and
+//                rows that vary in size in MODFLOW 6 models that use
+//                MODPATH.
+//               Change: The UZF input file has been changed so that
+//                infiltration and unsaturated zone ET are always saved to
+//                the cell-by-cell budget file.
+//    '4.0.0.21' Bug fix; Fixed bug that could cause some cells that are
+//                intersected by an object to not be recognized as being
+//                intersected by that object.
+//               Bug fix: Fixed bug that could cause an access violation
+//                when converting a structured grid to a DISV grid.
+//    '4.1.0.0'  No additional changes.
+//    '4.1.0.1'  Enhancement: The user can now specify that BCTime has
+//                been programmed in SUTRA.
+//               Bug fix: Fixed bug that could cause an error if a data set
+//                type is changed after some data has been assigned.
+//    '4.1.0.2'  Bug fix: Fixed a bug that could cause an integer overflow
+//                when attempting to import an ascii raster that contains
+//                a larger number of points.
+//    '4.1.0.3'  Bug fix: Fixed a bug that could cause a range check error
+//                when undoing or redoing the addition of new vertices to
+//                the object.
+//               Bug fix: Fixed a bug that could cause the BTN package input
+//                to include an incorrect option with MT3D-USGS.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                if the user attempts to open a ModelMuse file while the
+//                Edit Data Sets dialog box is open.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                in the "Show Grid or Mesh Values" dialog box when the
+//                selected objecte is changled.
+//               Bug fix: Fixed a bug that could cause MXSS to be calculated
+//                incorrectly in the MT3D SSM package when the MNW2 package
+//                is used.
+//    '4.1.0.4'  Bug fix: Fixed bug that could cause ModelMuse to fail to
+//                create the MVR file correctly when the UZF package was used
+//                as a source.
+//    '4.1.0.5'  Change: If ModelMuse attempts to copy an image to the
+//                clipboard and fails because the clipboard is locked. it
+//                will now try three times before giving up.
+//    '4.1.0.6'  Bug Fix: Fixed bug that could cause access violations when
+//                exporting MODFLOW boundary conditions.
+//    '4.1.0.7'  Bug fix: Fixed bugs in archiving MODFLOW 6 and
+//                MODPATH 7 files.
+//               Bug fix: If HDRY and HNOFLO are set to zero, those values
+//                are saved to the file when a ModelMuse file is saved.
+//    '4.1.0.8'  Enhancement: Time-series file interpolation methods in
+//                MODFLOW 6 are now supported.
+//               Change: The description of SIGMAS in SUTRA has been changed
+//                in the SUTRA Options dialog box.
+//               Change: When writing time-series files for MODFLOW 6, lines
+//                are now kept less than 2000 characters wide.
+//               Bug fix: Fixed a bug that could cause an error when
+//                converting an existing model to MODFLOW 6.
+//    '4.1.0.9'  Bug fix: Fixed a bug that could prevent SFR boundaries from
+//                being accepted as MVR sources.
+//    '4.1.0.10' Change: The menu items used to select the type of model
+//                have been moved out of "Model" and into "Model Selection".
+//               Enhancement: Support for the SFT, LKT, UZT and CTS packages
+//                in MT3D-USGS has been added.
+//               Bug fix: Fixed writing the status of the first MAW well in
+//                a stress period.
+//               Enhancement: A "Paste Data" button was added to the "Import
+//                Gridded Data dialog box.
+//               Bug fix: The MT3D_Active data setcorresponding to MT3D input
+//                data set ICBUND set is no longer set to False if the
+//                Active data set is set to false.
+//    '4.1.0.11' Bug fix: Fixed saving Lake outlet width in MODFLOW 6.
+//    '4.1.0.12' Bug fix: Fixed specifying recharge and evapotranspiration
+//                layer with MODFLOW 6 models when the top layer option is
+//                selected.
+//    '4.1.0.13' Bug fix: Fixed bug that could cause and assertion failure
+//                while generating the input for the Reservoir package.
+//    '4.1.0.14' Bug fix: Fixed bug that could cause an error when displaying
+//                the Data Visualization dialog box.
+//    '4.1.0.15' Enhancement: The "File|Import Gridded Data Files" command
+//                now works with DISV MODFLOW 6 models and SUTRA models.
+//    '4.1.0.16' Enhancement: The operators "^" and "**" have been added.
+//                Both allow one number to be raised to the power of another
+//                number.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                in the "Data|Display Data Set Values" dialog box.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                when exporting the CHD input file.
+//               Bug fix: Fixed a bug that could cause ModelMuse to enter
+//                and infinite loop when evaluating a data set using an
+//                object on the front view of the model.
+//    '4.1.0.17' Enhancement: Added support for NOCHECK, MEMORY_PRINT_OPTION,
+//                and MAXERRORS in mfsim.nam options.
+//               Enhancement: Added support for INFLOW, in the MODFLOW 6 Lake
+//                package.
+//               Enhancement: Added support for NO_PTC, in the MODFLOW 6 IMS
+//                package.
+//               Enhancement: Added support for K22OVERK and K33OVERK
+//                in the the MODFLOW 6 NPF package.
+//    '4.1.0.18' Bug fix: Fixed bug that prevented MNW1 wells from being
+//                edited correctly.
+//               Bug fix: Not in released version. Fixed evaluataion of Ky
+//                in non MF6 models.
+//               Bug fix: fixed bug that prevented well screens in MAW wells
+//                from being edited correctly.
+//               Enhancement: Added additional error checking for MAW wells.
+//    '4.1.0.19' Enhancement: ModelMuse can now convert the UZF package for
+//                MODFLOW-2005 to the UZF package for MODFLOW 6.
+//    '4.1.0.20' Bug fix: ModelMuse now allows the user to specify a return
+//                location in DRT as a Farm in the Farm process or a SWR
+//                reach with MODFLOW-OWHM models.
+//    '4.1.0.21' Bug fix: Fixed a bug that prevented some DXF files from
+//                being imported correctly.
+//    '4.1.0.22' Enhancement: Improved display of actions during export of
+//                MAW package.
+//    '4.1.0.23' Enhancement: The Edit Feature Formula dialog box can now be
+//                used with the MAW package.
+//    '4.1.0.24' Bug fix: ModelMuse now assigns IFACE values for recharge
+//                and evapotranspiration in MODFLOW 6.
+//               Bug fix: Fixed assignment of UZF6 package data.
+//    '4.1.0.25' Enhancement: If no data has been assigned to a data set,
+//                the legend tab in the Data Visualization dialog box will
+//                be empty.
+//               Bug fix: Fixed import of Surfer Grid files into a
+//                DISV MODFLOW 6 model.
+//    '4.1.0.26' Bug fix: Fixed a bug that could cause the Point Average
+//                Interpolation method to fail if a point was at the edge
+//                of two cells.
+//    '4.1.0.27' Bug fix: Fixed option to select all the data from a single
+//                time step whem importing results.
+//               Bug fix: Added OUTER_RCLOSEBND to variables in that can be
+//                edited in the IMS solver.
+//               Bug fix: If the values of INNER_HCLOSE, INNER_MAXIMUM,
+//                INNER_MAXIMUM,LINEAR_ACCELERATION, OUTER_HCLOSE,
+//                OUTER_MAXIMUM, and BACKTRACKING_NUMBER are not overriden,
+//                the values that are written to the IMS input file are the
+//                values suggested in the MODFLOW 6 input instructions based
+//                on the complexity of the problem.
+//               Bug fix: Fixed a bug in importing Shapefiles in which
+//                two or more Shapefile Attributes have the same name.
+//    '4.1.0.28' Bug fix: Fixed bug in export of MAW. FLOWING_WELL now
+//                exported correctly.
+//               Bug fix: ModelMuse will now generate an error message
+//                instead of sending a bug report if no valid times have
+//                been defined in the HFB package in MODFLOW 6.
+//    '4.1.0.29' Bug fix: Fixed export of grid lines for the active area
+//                to a Shapefile.
+//               Bug fix: Fixed display of active cells in MODFLOW 6 to
+//                IDOMAIN > 0.
+//               Bug fix: Fixed specifying overirdes of nonlinear variables
+//                in IMS package in MODFLOW Packages and Programs dialog box.
+//    '4.1.0.30' Bug fix: Fixed bugs in specifying backtracking_tolerance
+//                and outer_rclosebnd in the IMS package.
+//    '4.1.0.31' Bug fix: Fixed bug in the "Show Grid or Mesh Values" dialog
+//                box that could cause an access violation.
+//    '4.1.0.32' Bug fix: when converting to a MODFLOW 6 model, the Storage
+//                package is now automatically activated if the model is
+//                transient.
+//               Bug fix: Fixed bug that could cause an error when exporting
+//                the UZF input file.
+//    '4.2.0.0'  Bug fix: When converting MNW2 wells to MAW wells, the SKIN
+//                option in MNW2 is now converted to the CUMULATIVE option
+//                in MAW instead of the SKIN option in MAW.
+//               Bug fix: Fixed a bug that could cause issues with evaluating
+//                formulas that involve only integers.
+//    '4.2.0.1'  Bug fix: Fixed a bug that caused an assertion failure if
+//                MODFLOW 6 SFR streams were not assigned for every stress
+//                period.
+//               Bug fix: Fixed position of buttons for no-delay beds in the
+//                MODFLOW Layers dialog box.
+//               Bug fix: Fixed position of buttons for the SF6, MAW,
+//                and MT3D SSM packages in the Object Properties dialog box.
+//               Bug fix: Fixed a bug that could cause a bug report to create
+//                when attempting to export an object to a Shapefile.
+//    '4.2.0.2'  Bug fix: When importing a Shapefile, ModelMuse gives the
+//                option to convert from decimal degrees to UTM coordinates.
+//                However, this may result in an invalid operation if the
+//                actual coordinates are not in decimal degrees. ModelMuse
+//                now displays an error message rather than sending a bug
+//                report in such cases.
+//    '4.2.0.3'  Enhancement: Added support for CSUB package in MODFLOW 6.
+//               Bug fix: Fixed bug that could cause an assertion failure if
+//                an object that defined a MAW well was in a cell that was
+//                inactive in the top layer.
+//    '4.2.0.4'  Bug fix: Fixed display of pump capacity table in the MNW2
+//                package.
+//               Enhancement: Added "Object|Edit|Anonymize Selected Point
+//                Objects command.
+//    '4.2.0.5'  Bug fix: Fixed bug that could cause a range check error
+//                when using the UZF package in MODFLOW 6.
+//               Bug fix: If ModelMuse encounters and error when trying to
+//                back up an initialization file, it no longer generates a
+//                bug report.
+//               Bug fix: Fixed bug that could cause range check errors when
+//                editing MNW2 wells.
+//               Bug fix: Fixed bug importing an existing MODFLOW model.
+//               Bug fix: Fixed editing of stream gages.
+//               Bug Fix: Fixed bug in opening ModelMuse file for
+//                WellFootprint models.
+//    '4.2.0.6'  Bug Fix: Fixed bug in saving ModelMuse file for
+//                WellFootprint models.
+//               Bug fix: Fixed bug that allowed the user to import
+//                Shapefiles that directly set the withdrawal rate in
+//                WellFootprint models.
+//               Bug fix: Fixed bug that allowed the user to import
+//                points that directly set the withdrawal rate in
+//                WellFootprint models.
+//               Bug fix: Fixed bug that could cause the model selection
+//                to be set to the wrong value when creating a new model.
+//               Bug fix: Fixed bug that could cause ModelMuse to have an
+//                Input/Output error when importing a model.
+//               Bug fix: Fixed bug that could cause importing points to
+//                fail if the values being imported had extra spaces before
+//                or after any value.
+//    '4.2.0.7'  Enhancement: ModelMuse now uses less memory when importing
+//                existing models.
+//               Bug fix: If the user attempts to plot a MODPATH, pathline,
+//                end-point, or time-series file that contains invalid layer
+//                numbers, ModelMuse will display an error message instead of
+//                generating a bug report.
+//    '4.2.0.8'  Bug fix: Fixed a bug that could make it impossible to open
+//                a ModelMuse file.
+//               Enhancement:Custom color schemes can now be used when
+//                plotting MODPATH data.
+//    '4.2.0.9'  No real change.
+//    '4.2.0.10' Bug fix: Fixed using binary head file for initial heads in
+//                MODFLOW 6.
+//               Enhancement: When importing an existing model that uses the
+//                BCF package, specific storage is calculated from
+//                the confined storage coefficient and hydraulic conductivity
+//                is calculated from transmissivity.
+//               Bug fix: When converting to MODFLOW 6 from earlier versions
+//                of MODFLOW the user can now convert the FHB package to the
+//                CHD and WEL packages.
+//               Bug fix: When converting to MODFLOW 6 from a model in which
+//                the NWt package is selected, the Newton option in
+//                MODFLOW 6 is now selected automatically.
+//               Bug fix: Fixed using binary head file in MODFLOW 6 for
+//                starting heads.
+//    '4.2.0.11' Bug fix: Fixed export of "NO_PTC" option in MODFLOW 6.
+//               Change: The NEWTON and UNDER_RELAXATION options in MODFLOW 6
+//                can now be specified in the MODFLOW Packages and Programs
+//                dialog box as well as the MODFLOW Options dialog box.
+//    '4.2.0.12' Bug fix: Fixed bug that caused an error if the user attempted
+//                to rename a layer group with an invalid name.
+//               Bug fix: Fixed bug that could cause an error when drawing
+//                contours.
+//    '4.2.0.13' Bug fix: Fixed bug that could cause an assertion failure
+//                when drawing contours using the ACM 626 method.
+//    '4.2.0.14' Bug fix: Fixed but that cause a conversion error if the
+//                user failed to specify the properties of a lake outlet
+//                correctly.
+//    '4.2.0.15' Change: Modified export of the MODFLOW-2005 Lake package
+//                input to allow for periods in which no lakes are active.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                when updating the legend for the colors displayed in
+//                the Data Visualization dialog box.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                in the Global Variables dialog box.
+//    '4.2.0.16' Change: Modified export of the MODFLOW-2005 Lake package
+//                input to allow for periods in which no lakes are active.
+//    '4.2.0.17' Bug fix: Fixed bug that resulted in a bug report being
+//                generated if ModelMuse attempted to import SUTRA results
+//                containing "NaN".
+//               Bug fix: Fixed export of SUTRA data sets 21A and 21B when
+//                they are inactive initially.
+//               Bug fix: Fixed a bug that caused issues with opening files
+//                that contained very large or very small real number values.
+//    '4.2.0.18' Bug fix: Fixed a bug that could cause an assertion failure
+//                when exporting SUTRA models.
+//               Enhancement: ModelMuse now warns the user if any specified
+//                head cells are cells for which Kx, Ky, and Kz are all zero.
+//               Bug fix: Fixed a bug in inserting or deleting well screens
+//                in the MNW2 package.
+//               Bug fix: When importing Shapefiles that contained measured
+//                values, values less than -1E38 are treated as no-data
+//                values.
+//               Bug fix: Fixed bug that could cause an assertion failure
+//                if identical starting and ending times were specified for
+//                the RCH package.
+//               Bug fix: Fixed bug in reading binary MT3D model results
+//                that could cause a bug report to be generated.
+//               Bug fix: Fixed bug in inserting a new composite zone for
+//                Zone Budget in the "Model|MODFLOW Packages and Programs"
+//                dialog box.
+//               Enhancement: ModelMuse now prints the number of active cells
+//                in a MODFLOW model as a comment either in the Basic package
+//                input file for pre-MODFLOW6 models or in the DIS or DISV
+//                files in MODFLOW 6 models.
+//    '4.2.0.19' Bug fix: When exporting MT3D model input files, ModelMuse
+//                will now check whether any .ucn files that will be created
+//                by the model already exist. If they do exist, ModelMuse
+//                will delete them.
+//    '4.2.0.20' Bug fix: Fixed bug that could cause an access violation when
+//                manually specifying the SUTRA mesh.
+//               Bug fix: Fixed a bug that could cause the MAW observations
+//                to be written incorrectly.
+//               Change: With MODFLOW 6 observations, a prefix is added before
+//                each observation name to ensure that all the observation
+//                names are unique.
+//               Bug fix: It is now possible to inactivate a STR boundary by
+//                deleting all the times at which the boundary is defined.
+//               Bug fix: Fixed export of grid data to Shapefile with DISV
+//                grids. Formerly, the cells boundaries could be exported in
+//                counterclockwise direction instead of clockwise direction.
+//               Bug fix: Fixed drawing active area outline to avoid access
+//                violations.
+//    '4.2.0.21' Bug fix: Changing the times of the MODFLOW Stress periods
+//                will now result in the times of MNW2 wells being updated to
+//                the same times.
+//    '4.2.0.22' Bug fix: In MODFLOW 6 models, the CHD ending head can no
+//                longer be specified without using a parameter.
+//               Bug fix: When converting to a MODFLOW 6 model, CHD boundaries
+//                that don't use parametes are converted to CHD boundaries
+//                that use a parameter.
+//    '4.2.0.23' Bug fix: When attempting to read an invalid .nod or .ele
+//                SUTRA output file, ModelMuse will now generate an error
+//                message for the user instead of issuing  a bug report.
+//    '4.2.0.24' Bug fix: When attempting to read an invalid
+//                MODPATH output file, ModelMuse will now generate an error
+//                message for the user instead of issuing  a bug report.
+//               Bug fix: Fixed bug that could cause objects to fail to
+//                intersect all the correct cells in MODFLOW DISV models.
+//    '4.2.0.25' Change: ModelMuse no longer produces times series files for
+//                parameters in the DRN and RCH packages.
+//    '4.2.0.26' Change: ModelMuse no longer produces times series files for
+//                parameters. Instead, parameter values are incorporated
+//                into the values in the package input file.
+//               Bug fix: Fixed a bug that could cause an assertion failure
+//                if recharge or evapotranspiration was used in
+//                some of the stress periods but not in others.
+//    '4.2.0.27' Bug fix: With MODFLOW 6 models in which the "Top Active Cell"
+//                option in the Recharge and Evapotransipiration packages
+//                is selected, ModelMuse will automatically specify the
+//                layer as the top active layer at a particular location.
+//    '4.2.0.28' Enhancement: Added new function: HighestActiveLayer. It
+//                returns the highest layer at a particular location that is
+//                active.
+//               Change: The ActiveOnLayer function was changed for MODFLOW 6
+//                models to return True in the IDOMAIN data set is greater
+//                than 0.
+//               Bug fix: Fixed bug in export of the MODFLOW-2005 Lake package
+//                input file that could prevent data set 9 from being written
+//                for some stress periods after the first stress period.
+//    '4.2.0.29' Bug fix: Fixed a bug that could cause an access violation
+//                when displaying the Object Properties dialog box.
+//               Bug fix: Corrected spelling of CUPBGO in the Object
+//                Properties dialog box the the SUTRA Generalized Flow
+//                Boundary
+//               Bug fix: Fixed allowing multiple "Used" formulas to be
+//                edited at once for SUTRA boundaries.
+//               Bug fix: Fixed "Navigation|Go To" dialog box to work more
+//                easily with SUTRA 2D models.
+//               Enhancement: Not in released version. PEST Beta 1.
+//    '4.2.0.30' No real change
+//    '4.2.0.31' Enhancement: In 3D SUTRA models, there is a new data set
+//                named Active_Node. Setting that data set to False at any
+//                node makes the node inactive.
+//    '4.2.0.32' Bug fix: Fixed bug that could cause assertion failures when
+//                exporting boundary conditions in SUTRA.
+//    '4.2.0.33' Bug fix: Fixed a bug that could cause the UZF input file to
+//                be created incorrectly.
+//    '4.2.0.34' Bug fix: Fixed bug in animating contours.
+//               Enhancement: added SUTRA_MeshEdgeNode function.
+//    '4.2.0.35' Bug fix: If the user attempts to import a mesh that is not
+//                in the correct format, ModelMuse now displays an appropriate
+//                error message instead of generating a bug report.
+//    '4.2.0.36' Bug fix: When creating a new MODFLOW model, the user
+//                specified length and time units were not applied if the user
+//                clicked the "No Grid" button.
+//               Bug fix: Fixed a bug that could cause an invalid warning to
+//                be issued about transient SFR items with a duration of zero.
+//               Bug fix: Changing a time in the MODFLOW Time dialog box now
+//                causes corresponding times defined for SFR package to be
+//                updated.
+//               Change: When exporting a MODFLOW-OWHM model containing
+//                parameters, the user is given the opportunity to turn off
+//                printing cell lists.
+//    '4.2.0.37' Enhancement: In MT3DMS models, ISSGOUT is now
+//                specified if the MNW1 package is active. In MT3D-USGS
+//                models, ISSGOUT is now specified if the MNW1 or MNW2
+//                packages are active. The output file will have the extension
+//                .mt_mnw_out.
+//    '4.2.0.38' no real change.
+//    '4.3.0.0'  Bug fix: Fixed a bug that could cause some formulas to fail
+//                if a data set is renamed.
+//               Enhancement: ModelMuse can now display specific discharge
+//                vectors for MODFLOW 6 models.
+//    '4.3.0.1'  Bug fix: If not MODFLOW stress periods are defined when the
+//                user attempts to generate the MODFLOW input files, one will
+//                now be created automatically.
+//               Bug fix: It is no longer possible to define two parameters
+//                with the same name in the Manage Parameters dialog box.
+//               Bug fix: Fixed bug that could cause an access violation when
+//                drawing contours with a MODFLOW DISV model.
+//               Bug fix: In some cases where a circular reference error would
+//                have resulted in a bug report, a message to the user will be
+//                displayed instead.
+//               Bug fix: Fixed bug in importing specific storage from the BCF
+//                package when importing an existing MODFLOW-2005 or
+//                MODFLOW-NWT model.
+//    '4.3.0.2'  Bug fix: Fixed a bug that could cause a range-check error
+//                when drawing contours if the cross section does not
+//                intersect the mesh.
+//    '4.3.0.3'  Bug fix: Fixed a bug that could cause a bug report to be
+//                generated when opening an existing model.
+//    '4.3.0.4'  Bug fix: Fixed defining CSUB observations for
+//                csub, inelastic-csub, elastic-csub, sk, ske,
+//                interbed-compaction, inelastic-compaction,
+//                elastic-compaction, and thickness observation types.
+//    '4.3.0.5'  Beta bug fix: Fixed export of head calibration observation.
+//    '4.3.0.6'  Beta bug fix: Fixed export of template files.
+//               Beta bug fix: Fixed export of boundname for flow observations
+//    '4.3.0.7'  Bug fix: Fixed import of the MODFLOW-2005 lake package in
+//                models with only one layer.
+//               Bug fix: Fixed the ^ operator so that it will accept two
+//                real-number arguements.
+//    '4.3.0.8' Bug fix: Fixed bug in the Manage Head Observations dialog
+//                box when the user clicked the Highlight Selected Object
+//                button without first selecting any objects in the table.
+//               Bug fix: ModelMuse now creates UCN file in MT3D-USGS for the
+//                sorbed phase when the sorbtion choice is linear.
+//    '4.3.0.9   Beta bug fix: Fixed export of head observations when no
+//                calibration observations are defined.
+
+//               Bug fix: ModelMuse now longer generates a bug report if the
+//                user specifies more than one contour value for a boolean
+//                data set.
+
+const
+  // version number of ModelMuse.
+  IIModelVersion = '4.3.0.9';
+
+function IModelVersion: string;
+begin
+  result := IIModelVersion
+end;
 
 function DefaultModflowOwhmPath: string;
 begin

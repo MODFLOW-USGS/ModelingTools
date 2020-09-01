@@ -1,0 +1,2 @@
+Here is how it is supposed to work.
+If you use a polygon to define time-series of head values and you do not define any calibration observations for that polygon, ModelMuse should write the input for MODFLOW so that a time series of values for every cell enclosed and/or intersected by the object will be written by MODFLOW. However, if you want to define head calibration observations, you must use a point object because the head at the observation point will be interpolated from the values at the surrounding cells.

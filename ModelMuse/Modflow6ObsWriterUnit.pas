@@ -484,7 +484,9 @@ begin
           MaxThick := -1.0;
           CellListStart := -1;
           CellListEnd := -1;
-          if Model.PestUsed then
+          if Model.PestUsed
+            and (Obs.General * [ogHead, ogDrawdown] <> [])
+            and (Obs.CalibrationObservations. Count > 0) then
           begin
             for CellIndex := 0 to CellList.Count - 1 do
             begin
@@ -540,6 +542,7 @@ begin
 
           if Model.PestUsed and (CellList.Count > 1)
             and not Obs.CalibrationObservations.MultiLayer
+            and (Obs.CalibrationObservations. Count > 0)
             then
           begin
             if MaxIndex < 0 then
@@ -558,15 +561,21 @@ begin
           end;
 
           if not Model.PestUsed or (CellList.Count = 1)
+            or (Obs.CalibrationObservations.Count = 0)
             {or Obs.CalibrationObservations.MultiLayer} then
           begin
             CellListStart := 0;
             CellListEnd := CellList.Count - 1;
           end
-          else if not Obs.CalibrationObservations.MultiLayer then
+          else if (not Obs.CalibrationObservations.MultiLayer)
+            and (Obs.CalibrationObservations. Count > 0) then
           begin
             CellListStart := MaxIndex;
             CellListEnd := MaxIndex;
+          end
+          else
+          begin
+            Assert(False);
           end;
 
           if CellListStart < 0 then
@@ -586,6 +595,7 @@ begin
               if Model.PestUsed and (CellList.Count <> 1)  
                 and FoundFirst and not ErrorAdded
                 and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
+                and (Obs.CalibrationObservations. Count > 0)
                 then
               begin
                 if (AScreenObject.Count <> 1) then

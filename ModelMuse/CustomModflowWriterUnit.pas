@@ -154,6 +154,7 @@ type
       const DataArray: TDataArray);
   protected
     FArrayWritingFormat: TArrayWritingFormat;
+    FInputFileName: string;
 
     // @name generates a comment line for a MODFLOW input file indentifying
     // the package.
@@ -230,6 +231,13 @@ type
     // @name creates and instance of @classname.
     // @param(Model is the @link(TCustomModel) to be exported.)
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    {
+    @name returns whether or not PEST parameters are used with DataArray in the
+    layer designated by LayerIndex.
+    If the result is @True, @link(WriteArray) will handle the data set
+    differently
+    }
+    function DataArrayUsesPestParameters(const DataArray: TDataArray; const LayerIndex: integer): Boolean;
     { @name writes one layer of DataArray to the output file.
       @param(DataArray is the TDataArray to be written.)
       @param(LayerIndex is the layer in DataArray to be written.)
@@ -727,6 +735,14 @@ type
   public
     function WriteFile(const AFileName, ArrayType: string;
       ADataArray: TDataArray): string;
+  end;
+
+  TLayerArrayWriter = class(TCustomModflowWriter)
+  protected
+    class function Extension: string; override;
+  public
+    function WriteFile(const AFileName: string;
+      ADataArray: TDataArray; ALayer: Integer): string;
   end;
 
 
@@ -2315,6 +2331,17 @@ begin
   end;
 end;
 
+function TCustomModflowWriter.DataArrayUsesPestParameters(
+  const DataArray: TDataArray; const LayerIndex: integer): Boolean;
+begin
+  {$IFDEF DEBUG}
+  Assert(Model <> nil);
+  result := Model.PestUsed and (DataArray.DataType = rdtDouble);
+  {$ELSE}
+  result := False;
+  {$ENDIF}
+end;
+
 class function TCustomFileWriter.FileName(const AFileName: string): string;
 begin
   result := ChangeFileExt(AFileName, Extension);
@@ -2435,6 +2462,9 @@ var
   UnassignedAnnotation: Boolean;
   RowIndex: integer;
   ColIndex: integer;
+  LayerArrayWriter: TLayerArrayWriter;
+  ArrayFileName: string;
+  ArraysPos: Integer;
 begin
   Assert(DataArray <> nil);
   if Comment <> '' then
@@ -2451,64 +2481,113 @@ begin
     frmProgressMM.AddMessage(StrWritingArray);
   end;
 
-  Uniform := CheckArrayUniform(LayerIndex, DataArray);
-
-  if Uniform then
+  if DataArrayUsesPestParameters(DataArray, LayerIndex) then
   begin
-    case DataArray.DataType of
-      rdtDouble:
-        begin
-          RealValue := DataArray.RealData[LayerIndex, 0, 0];
-          WriteConstantU2DREL(Comment, RealValue, matStructured, MF6_Arrayname);
-        end;
-      rdtInteger:
-        begin
-          IntValue := DataArray.IntegerData[LayerIndex, 0, 0];
-          WriteConstantU2DINT(Comment, IntValue, matStructured, MF6_Arrayname);
-        end;
-      rdtBoolean:
-        begin
-          BoolValue := DataArray.BooleanData[LayerIndex, 0, 0];
-          IntValue := Ord(BoolValue);
-          WriteConstantU2DINT(Comment, IntValue, matStructured, MF6_Arrayname);
-        end;
-      else Assert(False);
+    LayerArrayWriter := TLayerArrayWriter.Create(Model, FEvaluationType);
+    try
+      Assert(FInputFileName <> '');
+      ArrayFileName := LayerArrayWriter.WriteFile(FInputFileName, DataArray, LayerIndex);
+    finally
+      LayerArrayWriter.Free;
     end;
-    UnassignedAnnotation := True;
-    for RowIndex := 0 to DataArray.RowCount - 1 do
+    Model.AddModelInputFile(ArrayFileName);
+    ArraysPos := Pos(StrArrays, ArrayFileName);
+    if ArraysPos > 0 then
     begin
-      if not UnassignedAnnotation then
-      begin
-        break;
-      end;
-      for ColIndex := 0 to DataArray.ColumnCount - 1 do
-      begin
-        if DataArray.Annotation[LayerIndex, RowIndex, ColIndex]
-          <> NoValueAssignedAnnotation then
-        begin
-          UnassignedAnnotation := False;
-          Break;
-        end;
-      end;
+      ArrayFileName := Copy(ArrayFileName, ArraysPos, MAXINT);
     end;
-    if UnassignedAnnotation then
+
+    if (Model.ModelSelection = msModflow2015) and (MF6_ArrayName <> '') then
     begin
-      if DataArray.Name <> '' then
+      WriteString('  ');
+      WriteString(MF6_ArrayName);
+//      if ArrayType = matStructured then
       begin
-        frmErrorsAndWarnings.AddWarning(Model, StrNoValuesAssignedT,
-          DataArray.Name);
-      end
-      else
-      begin
-        frmErrorsAndWarnings.AddWarning(Model, StrNoValuesAssignedT,
-          Comment);
+        WriteString(' LAYERED');
       end;
+      WriteString(' IPRN');
+      WriteInteger(IPRN_Real);
+      NewLine;
     end;
+
+    WriteString('  OPEN/CLOSE ');
+    WriteString(ArrayFileName);
+    if Model.ModelSelection <> msModflow2015 then
+    begin
+      WriteString(' 1.0 (Free) ');
+      WriteInteger(IPRN_Real)
+    end;
+//    if DataArray.DataType = rdtDouble then
+//    begin
+//      WriteInteger(IPRN_Real)
+//    end
+//    else
+//    begin
+//      WriteInteger(IPRN_Integer)
+//    end;
+    NewLine;
   end
   else
   begin
-    WriteHeader(DataArray, Comment, MF6_Arrayname);
-    WriteArrayValues(LayerIndex, DataArray);
+    Uniform := CheckArrayUniform(LayerIndex, DataArray);
+
+    if Uniform then
+    begin
+      case DataArray.DataType of
+        rdtDouble:
+          begin
+            RealValue := DataArray.RealData[LayerIndex, 0, 0];
+            WriteConstantU2DREL(Comment, RealValue, matStructured, MF6_Arrayname);
+          end;
+        rdtInteger:
+          begin
+            IntValue := DataArray.IntegerData[LayerIndex, 0, 0];
+            WriteConstantU2DINT(Comment, IntValue, matStructured, MF6_Arrayname);
+          end;
+        rdtBoolean:
+          begin
+            BoolValue := DataArray.BooleanData[LayerIndex, 0, 0];
+            IntValue := Ord(BoolValue);
+            WriteConstantU2DINT(Comment, IntValue, matStructured, MF6_Arrayname);
+          end;
+        else Assert(False);
+      end;
+      UnassignedAnnotation := True;
+      for RowIndex := 0 to DataArray.RowCount - 1 do
+      begin
+        if not UnassignedAnnotation then
+        begin
+          break;
+        end;
+        for ColIndex := 0 to DataArray.ColumnCount - 1 do
+        begin
+          if DataArray.Annotation[LayerIndex, RowIndex, ColIndex]
+            <> NoValueAssignedAnnotation then
+          begin
+            UnassignedAnnotation := False;
+            Break;
+          end;
+        end;
+      end;
+      if UnassignedAnnotation then
+      begin
+        if DataArray.Name <> '' then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, StrNoValuesAssignedT,
+            DataArray.Name);
+        end
+        else
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, StrNoValuesAssignedT,
+            Comment);
+        end;
+      end;
+    end
+    else
+    begin
+      WriteHeader(DataArray, Comment, MF6_Arrayname);
+      WriteArrayValues(LayerIndex, DataArray);
+    end;
   end;
   if CacheArray then
   begin
@@ -5810,6 +5889,7 @@ begin
     begin
       Model.AdjustDataArray(ExportArray);
     end;
+    ExportArray.Name := MF6_ArrayName;
     WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False);
   finally
     if FreeArray then
@@ -8802,6 +8882,42 @@ end;
 //    NewLine;
 //  end;
 //end;
+{ TLayerArrayWriter }
+
+class function TLayerArrayWriter.Extension: string;
+begin
+  result := '';
+end;
+
+function TLayerArrayWriter.WriteFile(const AFileName: string;
+  ADataArray: TDataArray; ALayer: Integer): string;
+var
+  ArrayName: string;
+  OutputFileName: string;
+  OutputDirectory: string;
+begin
+  ArrayName := ADataArray.Name;
+  Assert(ArrayName <> '');
+  OutputFileName := AFileName + '.' + Trim(ArrayName) + '_' + IntToStr(ALayer+1);
+
+  result := ExtractFileName(OutputFileName);
+  OutputDirectory := ExtractFileDir(OutputFileName);
+  OutputDirectory := IncludeTrailingPathDelimiter(OutputDirectory) + StrArrays;
+  if not DirectoryExists(OutputDirectory) then
+  begin
+    CreateDir(OutputDirectory);
+  end;
+  result := IncludeTrailingPathDelimiter(OutputDirectory) + result;
+
+  OpenFile(result);
+  try
+    WriteArrayValues(ALayer, ADataArray);
+  finally
+    CloseFile;
+  end;
+  ADataArray.CacheData;
+end;
+
 initialization
   LimitValue := Power(2,-37);
   NegLimitValue := -LimitValue;

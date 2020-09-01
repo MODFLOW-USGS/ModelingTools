@@ -320,6 +320,7 @@ begin
     Exit;
   end;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   if Model.ModelSelection = msModflow2015 then
   begin
     WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model);

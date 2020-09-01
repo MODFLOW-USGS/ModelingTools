@@ -220,6 +220,7 @@ begin
   try
     CheckSpecifiedHeadsConnected;
     NameOfFile := FileName(AFileName);
+    FInputFileName := NameOfFile;
     WriteToNameFile(StrNPF, -1, NameOfFile, foInput, Model);
     OpenFile(NameOfFile);
     try

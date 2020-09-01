@@ -450,6 +450,7 @@ begin
   FRchPackage.MultiplierArrayNames.Clear;
   FRchPackage.ZoneArrayNames.Clear;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrRCH),
     FNameOfFile, foInput, Model);
   Evaluate;

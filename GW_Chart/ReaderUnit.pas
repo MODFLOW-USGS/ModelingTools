@@ -198,7 +198,8 @@ type
     Function TimeStepLength(const StressPeriod, TimeStep: integer): double;
     function GetLineStorage(const Name: string): TLineStoredProperties;
     procedure StoreLineSeriesValues;
-    procedure ReadModflowOrSeawatFile(const BudgetStartLine: string);
+    procedure ReadModflowOrSeawatFile(const BudgetStartLine: string;
+      const AltBudgetStartLine: string = '');
     procedure Series1ClickPointer(Sender: TCustomSeries; ValueIndex, X,
       Y: Integer);
     procedure IncrementStyle(var MyStyle: TSeriesPointerStyle);
@@ -2859,9 +2860,10 @@ begin
 end;
 
 procedure TfrmZoneBdgtReader.ReadModflowOrSeawatFile(
-  const BudgetStartLine: string);
+  const BudgetStartLine: string; const AltBudgetStartLine: string = '');
 var
   SearchTerm: string;
+  BudgetSearchTerm: string;
   LineIndex: integer;
   CurrentLine: string;
   TimeStepString, StressPeriodString: string;
@@ -2932,6 +2934,7 @@ begin
           or (Pos(MawMf6BudTerm, S) > 0)
           or (Pos(UzfMf6BudTerm, S) > 0)
           or (Pos(SwrBudTerm, S) > 0)
+          or ((AltBudgetStartLine <> '') and (Pos(AltBudgetStartLine, S) > 0))
           then
         begin
           ShouldStoreFile := True;
@@ -2989,14 +2992,22 @@ begin
 
 
   SearchTerm := BudgetStartLine;
-  LineIndex := GetNextLine(SearchTerm, LineIndex);
+  BudgetSearchTerm := BudgetStartLine;
+  LineIndex := GetNextLine(BudgetSearchTerm, LineIndex);
+  if (LineIndex < 0) and (AltBudgetStartLine <> '') then
+  begin
+    BudgetSearchTerm := AltBudgetStartLine;
+    LineIndex := 0;
+    LineIndex := GetNextLine(BudgetSearchTerm, LineIndex);
+  end;
+
   while LineIndex > -1 do
   begin
     CurrentLine := ZBLStringList.Strings[LineIndex];
     if Pos('Please check the', CurrentLine) > 0 then
     begin
       Inc(LineIndex);
-      SearchTerm := BudgetStartLine;
+      SearchTerm := BudgetSearchTerm;
       LineIndex := GetNextLine(SearchTerm, LineIndex);
       Continue;
     end;
@@ -3197,7 +3208,7 @@ begin
       LineIndex := StopLine;
     end;
 
-    SearchTerm := BudgetStartLine;
+    SearchTerm := BudgetSearchTerm;
     LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
   end;
 
@@ -3732,7 +3743,10 @@ end;
 
 procedure TfrmZoneBdgtReader.ReadModflow6File;
 begin
-  ReadModflowOrSeawatFile('VOLUME BUDGET FOR ENTIRE MODEL');
+  // With MODFLOW 6 version 1.1, VOLUME BUDGET
+  // was replaced by VOLUMETRIC BUDGET.
+  ReadModflowOrSeawatFile('VOLUMETRIC BUDGET FOR ENTIRE MODEL',
+    'VOLUME BUDGET FOR ENTIRE MODEL');
 end;
 
 procedure TfrmZoneBdgtReader.ReadGSFLOW;

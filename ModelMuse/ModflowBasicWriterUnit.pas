@@ -677,6 +677,7 @@ begin
     end;
 
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
     frmProgressMM.AddMessage(StrCheckingModelConne);
     CheckConnectivity;
 

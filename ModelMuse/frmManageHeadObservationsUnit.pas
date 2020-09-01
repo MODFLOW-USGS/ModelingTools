@@ -131,6 +131,8 @@ resourcestring
   StrTheManageHeadObse = 'The Manage Head Observations dialog box can not be' +
   ' displayed until some head observations have been defined in one or more ' +
   'objects.';
+  StrYouMustSelectOne = 'You must select one or more objects in the table in' +
+  ' order to highlight them.';
 
 {$R *.dfm}
 
@@ -265,6 +267,14 @@ var
   ColIndex: Integer;
 begin
   inherited;
+  if rdgObservations.SelectedRow <= 0 then
+  begin
+    Beep;
+    MessageDlg(StrYouMustSelectOne, mtInformation, [mbOK], 0);
+    Exit;
+  end;
+  
+  
   Undo := TUndoChangeSelection.Create;
 
   frmGoPhast.ResetSelectedScreenObjects;

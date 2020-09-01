@@ -54,6 +54,7 @@ begin
   end;
 
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   WriteToNameFile(FTYPE, -1, NameOfFile, foInput, Model);
   OpenFile(NameOfFile);
   try

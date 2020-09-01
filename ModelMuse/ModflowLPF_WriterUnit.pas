@@ -460,6 +460,7 @@ begin
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheNOPARCHECKOptLPF);
 
     NameOfFile := FileName(AFileName);
+    FInputFileName := NameOfFile;
     WriteToNameFile(StrLPF, Model.UnitNumbers.UnitNumber(StrLPF),
       NameOfFile, foInput, Model);
     OpenFile(NameOfFile);

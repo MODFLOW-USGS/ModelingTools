@@ -726,7 +726,9 @@ begin
                       end
                       else if Contours.Count <> 0 then
                       begin
-                        Assert(False);
+                        // The user must have specified values.
+                        Exit;
+//                        Assert(False);
                       end;
                     end;
                     rdtString:

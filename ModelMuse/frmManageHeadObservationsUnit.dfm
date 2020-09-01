@@ -6,7 +6,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
   ClientWidth = 738
   OnResize = FormResize
   ExplicitWidth = 754
-  ExplicitHeight = 394
+  ExplicitHeight = 395
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -74,10 +74,6 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
     TabOrder = 0
     object tabObservations: TTabSheet
       Caption = 'Observations'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgObservations: TRbwDataGrid4
         Left = 0
         Top = 41
@@ -419,10 +415,6 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
     object tabFilters: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgRowFilter: TRbwRowDataGrid
         Left = 0
         Top = 0

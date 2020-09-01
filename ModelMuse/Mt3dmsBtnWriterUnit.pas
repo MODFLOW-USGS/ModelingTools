@@ -726,7 +726,7 @@ begin
 
   Mt3dmsChemReact := Model.ModflowPackages.Mt3dmsChemReact;
   SecondUcnFileCreated := Mt3dmsChemReact.IsSelected
-    and (Mt3dmsChemReact.SorptionChoice > scLinear);
+    and (Mt3dmsChemReact.SorptionChoice >= scLinear);
 
   BaseName := ExtractFileName(FNameOfFile);
   BaseName := ChangeFileExt(BaseName, '');

@@ -61,6 +61,7 @@ begin
     end;
 
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
     FTYPE := 'IC6';
     if Model.PackageGeneratedExternally(FTYPE) then
     begin
