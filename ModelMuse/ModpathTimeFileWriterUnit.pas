@@ -54,6 +54,7 @@ var
 begin
   NameOfFile := FileName(AFileName);
   Model.AddModpathInputFile(NameOfFile);
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     WriteDataSet1;

@@ -827,6 +827,7 @@ begin
     Exit;
   end;
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage('Writing FHB Package input.');

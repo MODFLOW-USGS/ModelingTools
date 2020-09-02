@@ -639,6 +639,7 @@ begin
     Exit;
   end;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
 
   Evaluate;
   Application.ProcessMessages;

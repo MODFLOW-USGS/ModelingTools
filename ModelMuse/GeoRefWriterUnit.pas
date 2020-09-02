@@ -92,6 +92,7 @@ begin
   end;
 
   FGeoRef := Model.GeoRef;
+//  FInputFileName := FFileName;
   OpenFile(FFileName);
   try
     WriteString('xul');

@@ -66,6 +66,8 @@ Type
     FDisplayName: string;
     FAngleType: TAngleType;
     FClassification: string;
+    FPestParametersUsed: Boolean;
+//    FParameterLayersUsed: string;
     procedure SetTwoDInterpolator(const Value: TCustom2DInterpolater);
     procedure SetInterpValues(const Value: TPhastInterpolationValues);
     procedure SetNewUses(const Value: TStringList);
@@ -98,6 +100,9 @@ Type
     function ClassificationName: string; override;
     function FullClassification: string; override;
     property AssociatedDataSets: string read GetAssociatedDataSets;
+    property PestParametersUsed: Boolean read FPestParametersUsed write FPestParametersUsed;
+//    property ParameterLayersUsed: string read FParameterLayersUsed
+//      write FParameterLayersUsed;
   end;
 
 {
@@ -200,6 +205,8 @@ Type
     reComment: TRichEdit;
     // @name displays the units with which the selected data set is measured.
     comboUnits: TComboBox;
+    tabParameters: TTabSheet;
+    cbParametersUsed: TCheckBox;
     // @name adds a new @link(TDataArray) at the end of @link(tvDataSets).
     procedure btnAddClick(Sender: TObject);
     // @name closes the @classname without making any changes to the
@@ -270,6 +277,7 @@ Type
     procedure comboUnitsChange(Sender: TObject);
     procedure tvDataSetsChanging(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
+    procedure cbParametersUsedClick(Sender: TObject);
   private
     { @name is the @link(TCustom2DInterpolater) of the currently
       selected @link(TDataArray).
@@ -398,6 +406,7 @@ Type
     procedure InitializeOK_Variables(var OK_Var: TOK_Variables; EvaluatedAt: TEvaluatedAt);
     procedure FillCompilerList(CompilerList: TList);
     procedure ClearVariables;
+//    procedure EnableParameterLayes;
     { Private declarations }
   protected
     // @name is the TDataArrayEdit that is currently being edited.
@@ -1155,6 +1164,7 @@ begin
           DataSet.Orientation := ArrayEdit.Orientation;
           DataSet.EvaluatedAt := ArrayEdit.EvaluatedAt;
           DataSet.Datatype := ArrayEdit.Datatype;
+//          DataSet.ParametersUsed := ArrayEdit.ParametersUsed;
         end;
 
         // set the data set properties except for the formula.
@@ -1178,6 +1188,10 @@ begin
 
           DataStorage.Comment := ArrayEdit.Comment;
           DataStorage.Classification := ArrayEdit.Classification;
+
+          DataStorage.PestParametersUsed := ArrayEdit.PestParametersUsed;
+//          DataStorage.ParameterLayersUsed := ArrayEdit.ParameterLayersUsed;
+
           if (DataStorage.Name <> DataSet.Name)
             and (Pos(StrModelResults, DataSet.Classification) > 0) then
           begin
@@ -1224,6 +1238,16 @@ begin
   SetData;
   SelectedEdit := nil;
   GetData;
+end;
+
+procedure TfrmDataSets.cbParametersUsedClick(Sender: TObject);
+begin
+  inherited;
+  if FLoading or (SelectedEdit = nil) then
+  begin
+    Exit;
+  end;
+  SelectedEdit.PestParametersUsed := cbParametersUsed.Checked;
 end;
 
 procedure TfrmDataSets.comboEvaluatedAtChange(Sender: TObject);
@@ -2159,6 +2183,10 @@ begin
   FLoading := False;
 end;
 
+//procedure TfrmDataSets.EnableParameterLayes;
+//begin
+//end;
+
 procedure TfrmDataSets.ClearVariables;
 var
   CompilerList: TList;
@@ -2708,6 +2736,7 @@ var
   SelectionIndex: Cardinal;
   Temp: TDataArrayEdit;
   DataSet: TDataArray;
+//  ShowParametersTab: Boolean;
 begin
   inherited;
   reCommentExit(nil);
@@ -2722,6 +2751,7 @@ begin
     end;
   end;
   SelectedEdit := NewSelectedEdit;
+
   if tvDataSets.SelectionCount > 1 then
   begin
     for SelectionIndex := tvDataSets.SelectionCount - 1 downto 0 do
@@ -2758,6 +2788,20 @@ procedure TfrmDataSets.SetSelectedEdit(const Value: TDataArrayEdit);
 var
   NewInterpolatorName: string;
 begin
+
+//  ShowParametersTab := False;
+//  if (SelectedEdit <> nil) and frmGoPhast.PhastModel.PestUsed then
+//  begin
+//    DataSet := SelectedEdit.DataArray;
+//    if (DataSet <> nil) and (DataSet.DataType = rdtDouble)
+//      and (Pos(StrRequiredPart, DataSet.FullClassification) > 0) then
+//    begin
+//      ShowParametersTab := True;
+//    end;
+//  end;
+//  tabParameters.TabVisible := ShowParametersTab;
+
+
   if (FSelectedEdit <> Value) or (Value = nil) then
   begin
     reDefaultFormulaExit(nil);
@@ -2779,9 +2823,12 @@ begin
       reDefaultFormula.Enabled := False;
       framePhastInterpolation.Enabled := False;
       reComment.Enabled := False;
+      tabParameters.TabVisible := False;
     end
     else
     begin
+      cbParametersUsed.Checked := FSelectedEdit.PestParametersUsed;
+
       reComment.Text := FSelectedEdit.Comment;
       reComment.Enabled := True;
 
@@ -2866,6 +2913,10 @@ begin
           frmGoPhast.PhastModel.ModelSelection = msPhast;
       end;
       memoAssociatedDataSets.Lines.Add(FSelectedEdit.AssociatedDataSets);
+
+      tabParameters.TabVisible := (FSelectedEdit.DataType = rdtDouble)
+        and (FSelectedEdit.DataArray <> nil)
+        and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0);
     end;
     btnEditFormula.Enabled := reDefaultFormula.Enabled;
   end;
@@ -3405,6 +3456,7 @@ begin
     TwoDInterpolator := FDataArray.TwoDInterpolator;
     Comment := FDataArray.Comment;
     Classification := FDataArray.Classification;
+    PestParametersUsed := FDataArray.PestParametersUsed;
     if ADataArray is TCustomPhastDataSet then
     begin
       FInterpValues := TPhastInterpolationValues.Create;
@@ -3424,7 +3476,6 @@ begin
       DataSet.Observed := False;
     end;
 
-
     FDataArray.ObserverList.NotifyOnChange(FDataArray, ckResetObserved);
     FDataArray.ObserverList.NotifyOnChange(FDataArray, ckCheckDependance);
     for Index := 0 to DataArrayManager.DataSetCount - 1 do
@@ -3435,11 +3486,6 @@ begin
         if DataSet.Observed then
         begin
           FNewUses.Add(DataSet.Name);
-//          for InnerIndex := 0 to DataArrayManager.DataSetCount - 1 do
-//          begin
-//            DataSet := DataArrayManager.DataSets[InnerIndex];
-//            DataSet.Observed := False;
-//          end;
         end;
       end;
     end;

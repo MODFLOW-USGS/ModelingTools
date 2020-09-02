@@ -357,6 +357,7 @@ begin
       Exit;
     end;
     NameOfFile := FileName(AFileName);
+    FInputFileName := NameOfFile;
     Evaluate;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then

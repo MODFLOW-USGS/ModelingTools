@@ -294,6 +294,7 @@ var
   PhastModel: TPhastModel;
   ChildIndex: Integer;
 begin
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
@@ -371,6 +372,7 @@ begin
   FParentOutputDirectory := '..\..\output\' + FParentOutputDirectory + '\';
 
   FNameOfFile := FNameOfFile + ArchiveExt;
+  FInputFileName := FNameOfFile;
   WriteFileInternal;
   Model.AddModelInputFile(FNameOfFile);
 end;

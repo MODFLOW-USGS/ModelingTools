@@ -431,6 +431,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrDuplicateMNW1Outpu);
 
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrMNW1, Model.UnitNumbers.UnitNumber(StrMNW1),
     FNameOfFile, foInput, Model);
   Evaluate;

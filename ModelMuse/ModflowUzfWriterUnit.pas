@@ -905,6 +905,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, Format(StrWhenTheUZFPackage, [IUZFBND.DisplayName]));
 
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrUZF, Model.UnitNumbers.UnitNumber(StrUZF), FNameOfFile, foInput, Model);
   WriteGagesToNameFile(AFileName, GageStart);
   OpenFile(FNameOfFile);

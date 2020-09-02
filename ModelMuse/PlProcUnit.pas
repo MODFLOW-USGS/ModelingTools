@@ -227,6 +227,7 @@ var
 begin
   FileName := ChangeFileExt(FileName, Extension);
 
+//  FInputFileName := FileName;
   OpenFile(FileName);
   try
     WriteString('        ID           X               Y           Value');
@@ -255,6 +256,7 @@ var
   APoint: TPoint2D;
 begin
   FileName := ChangeFileExt(FileName, Extension);
+//  FInputFileName := FileName;
   OpenFile(FileName);
   try
     WriteString('        ID           X               Y');

@@ -119,6 +119,7 @@ begin
   end;
 
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   WriteToNameFile('GMG', Model.UnitNumbers.UnitNumber(StrGMG), NameOfFile, foInput, Model);
   OpenFile(NameOfFile);
   try

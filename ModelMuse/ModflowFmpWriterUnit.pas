@@ -3310,6 +3310,7 @@ begin
     end;
   end;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrFMP, Model.UnitNumbers.UnitNumber(StrFMP),
     FNameOfFile, foInput, Model);
 

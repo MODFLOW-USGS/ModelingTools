@@ -5168,6 +5168,7 @@ begin
     Exit;
   end;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrSFR), FNameOfFile, foInput, Model);
 //  Evaluate;
   Application.ProcessMessages;
@@ -7031,6 +7032,7 @@ var
 begin
   FFileName := FileName(AFileName) + IntToStr(FSegNum);
   StartTime := Model.ModflowFullStressPeriods[0].StartTime;
+  FInputFileName := FFileName;
   OpenFile(FFileName);
   try
     for index := 0 to FExternalFlow.FlowFileData.Count - 1 do

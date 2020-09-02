@@ -262,6 +262,7 @@ begin
     FNameOfFile := FileName(AFileName);
     WriteToNameFile(StrLVDA, Model.UnitNumbers.UnitNumber(StrLVDA),
       FNameOfFile, foInput, Model);
+    FInputFileName := FNameOfFile;
     OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingLVDAPackage);

@@ -133,15 +133,11 @@ inherited frmDataSets: TfrmDataSets
     Top = 0
     Width = 320
     Height = 395
-    ActivePage = tabBasic
+    ActivePage = tabParameters
     Align = alRight
     TabOrder = 1
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         312
         361)
@@ -373,7 +369,6 @@ inherited frmDataSets: TfrmDataSets
     object tabPHAST: TTabSheet
       Caption = 'PHAST-Interpolation'
       ImageIndex = 1
-      ExplicitHeight = 99
       inline framePhastInterpolation: TframePhastInterpolation
         Left = -2
         Top = 3
@@ -527,13 +522,23 @@ inherited frmDataSets: TfrmDataSets
         end
       end
     end
+    object tabParameters: TTabSheet
+      Caption = 'Parameters'
+      ImageIndex = 3
+      TabVisible = False
+      object cbParametersUsed: TCheckBox
+        Left = 16
+        Top = 17
+        Width = 209
+        Height = 17
+        Caption = 'Parameters used'
+        TabOrder = 0
+        OnClick = cbParametersUsedClick
+      end
+    end
     object tabComment: TTabSheet
       Caption = 'Comment'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter2: TSplitter
         Left = 0
         Top = 169
@@ -555,10 +560,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 69
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Comment'
+          ExplicitWidth = 69
         end
         object reComment: TRichEdit
           AlignWithMargins = True
@@ -587,10 +593,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 164
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
+          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

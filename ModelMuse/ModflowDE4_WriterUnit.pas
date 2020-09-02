@@ -80,6 +80,7 @@ begin
   end;
 
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   WriteToNameFile('DE4', Model.UnitNumbers.UnitNumber(StrDE4), NameOfFile, foInput, Model);
   OpenFile(NameOfFile);
   try

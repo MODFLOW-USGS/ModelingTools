@@ -299,6 +299,7 @@ var
   ComputeLocations: Boolean;
   Index: Integer;
 begin
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     // interactive input

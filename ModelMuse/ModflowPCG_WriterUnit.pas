@@ -111,8 +111,10 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUnusuallyLowDampin);
 
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   WriteToNameFile('PCG', Model.UnitNumbers.UnitNumber(StrPCG),
     NameOfFile, foInput, Model);
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingPCGPackage);

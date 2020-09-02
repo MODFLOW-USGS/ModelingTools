@@ -647,6 +647,8 @@ begin
         Cell.IFace := (ScreenObject as TScreenObject).IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
+        Cell.Values.HeadParameterName := BoundaryValues.HeadParameterName;
+        Cell.Values.HeadParameterValue := BoundaryValues.HeadParameterValue;
         Cell.Values.TimeSeriesName := BoundaryValues.TimeSeriesName;
         Cell.Values.Cell := BoundaryValues.Cell;
         Cell.Values.StartingHead :=

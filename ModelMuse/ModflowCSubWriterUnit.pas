@@ -507,6 +507,7 @@ begin
   end;
 
 //  ClearTimeLists(Model);
+  FInputFileName := FFileName;
   OpenFile(FFileName);
   try
     WriteToNameFile(Abbreviation, 0,

@@ -662,6 +662,7 @@ begin
     Exit;
   end;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrMNW2, Model.UnitNumbers.UnitNumber(StrMNW2),
     FNameOfFile, foInput, Model);
   Evaluate;

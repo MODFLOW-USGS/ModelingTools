@@ -31,8 +31,8 @@ type
     FBoundaries: TSutraFileList;
     FFileRoot: string;
     FArchive: Boolean;
-    procedure InternalWriteFile(SutraFileName: string);
   protected
+    procedure InternalWriteFile(SutraFileName: string);
     class function Extension: string; override;
   public
     Constructor Create(AModel: TCustomModel; FileRoot: string); reintroduce;
@@ -151,6 +151,7 @@ var
 begin
   ModelName := ExtractFileName(FFileRoot);
   ModelName := ChangeFileExt(ModelName, '');
+//  FInputFileName := SutraFileName;
   OpenFile(SutraFileName);
   try
     for FileType := Low(TSutraFileType) to High(TSutraFileType) do

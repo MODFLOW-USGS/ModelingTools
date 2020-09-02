@@ -415,6 +415,7 @@ begin
   FEvtPackage.MultiplierArrayNames.Clear;
   FEvtPackage.ZoneArrayNames.Clear;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrEVT, Model.UnitNumbers.UnitNumber(StrEVT),
     FNameOfFile, foInput, Model);
   Evaluate;

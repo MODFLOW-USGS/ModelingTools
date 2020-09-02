@@ -959,6 +959,7 @@ begin
     WriteToMt3dMsNameFile(StrBTN, Mt3dBtn,
       FNameOfFile, foInput, Model);
 
+    FInputFileName := FNameOfFile;
     OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingMT3DMSBTNP);

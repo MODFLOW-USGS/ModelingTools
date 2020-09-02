@@ -594,6 +594,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model);
   frmErrorsAndWarnings.BeginUpdate;
   try

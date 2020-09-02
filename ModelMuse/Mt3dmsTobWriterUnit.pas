@@ -258,6 +258,7 @@ begin
     FillFluxObsList;
     EvaluateConcentrationObs(Purpose);
 
+    FInputFileName := FNameOfFile;
     OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingTOBPackage);

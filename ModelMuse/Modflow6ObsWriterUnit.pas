@@ -572,10 +572,6 @@ begin
           begin
             CellListStart := MaxIndex;
             CellListEnd := MaxIndex;
-          end
-          else
-          begin
-            Assert(False);
           end;
 
           if CellListStart < 0 then
@@ -1404,6 +1400,7 @@ begin
 
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrOBS6, -1, FNameOfFile, foInput, Model);
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingOBS6InputF);
@@ -2147,6 +2144,7 @@ begin
   Assert((FGeneralObsList.Count > 0) or (FToMvrObsList.Count > 0));
   Model.AddModelInputFile(FNameOfFile);
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
@@ -2195,6 +2193,7 @@ begin
   Assert(FMawObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
@@ -2486,6 +2485,7 @@ begin
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
@@ -2846,6 +2846,7 @@ begin
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
@@ -3121,6 +3122,7 @@ begin
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;
@@ -3462,6 +3464,7 @@ begin
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;

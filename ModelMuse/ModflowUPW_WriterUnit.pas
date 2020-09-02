@@ -139,6 +139,7 @@ begin
     NameOfFile := FileName(AFileName);
     WriteToNameFile(StrUPW, Model.UnitNumbers.UnitNumber(StrUPW),
       NameOfFile, foInput, Model);
+    FInputFileName := NameOfFile;
     OpenFile(NameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingUPWPackage);

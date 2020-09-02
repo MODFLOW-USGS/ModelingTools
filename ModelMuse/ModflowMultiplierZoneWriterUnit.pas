@@ -282,6 +282,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(FileType, FileUnit, FNameOfFile, foInput, Model);
   OpenFile(FileName(AFileName));
   try

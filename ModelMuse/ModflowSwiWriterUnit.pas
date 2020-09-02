@@ -730,6 +730,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrSWI, Model.UnitNumbers.UnitNumber(StrSWI),
     FNameOfFile, foInput, Model);
   OpenFile(FNameOfFile);

@@ -482,6 +482,7 @@ begin
     end;
 //    NameOfFile := FileName(AFileName);
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
 
     if FShouldWriteFile or ShouldWriteObservationFile then
     begin

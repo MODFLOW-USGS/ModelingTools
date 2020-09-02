@@ -618,6 +618,8 @@ type
     FComment: string;
     FAngleType: TAngleType;
     FClassification: string;
+    FPestParametersUsed: Boolean;
+//    FParameterLayersUsed: string;
     // See @link(PhastInterpolationValues).
     procedure SetPhastInterpolationValues(
       const Value: TPhastInterpolationValues);
@@ -670,6 +672,9 @@ type
       read FPhastInterpolationValues write SetPhastInterpolationValues;
     property Comment: string read FComment write FComment;
     property Classification: string read FClassification write FClassification;
+    property PestParametersUsed: Boolean read FPestParametersUsed write FPestParametersUsed;
+//    property ParameterLayersUsed: string read FParameterLayersUsed
+//      write FParameterLayersUsed;
   end;
 
   // @name is used to add, delete, and change the properties of
@@ -2583,6 +2588,7 @@ begin
   Formula := DataSet.Formula;
   Comment := DataSet.Comment;
   Classification := DataSet.Classification;
+  PestParametersUsed := DataSet.PestParametersUsed;
   if DataSet is TCustomPhastDataSet then
   begin
     PhastInterpolationValues.Assign(DataSet);
@@ -2708,6 +2714,7 @@ begin
           ChildDataArray.TwoDInterpolator := TwoDInterpolator;
           ChildDataArray.Comment := Comment;
           ChildDataArray.Classification := Classification;
+          ChildDataArray.PestParametersUsed := PestParametersUsed;
         end;
       end;
     end;
@@ -2720,6 +2727,7 @@ begin
     or (FDataSet.Units <> Units)
     or (FDataSet.AngleType <> AngleType)
     or (FDataSet.Classification <> Classification)
+    or (FDataSet.PestParametersUsed <> PestParametersUsed)
     then
   begin
     ShouldInvalidate := True;
@@ -2748,6 +2756,7 @@ begin
   FDataSet.TwoDInterpolator := TwoDInterpolator;
   FDataSet.Comment := Comment;
   FDataSet.Classification := Classification;
+  FDataSet.PestParametersUsed := PestParametersUsed;
   FNeedToInvalidate := False;
 end;
 
@@ -2771,7 +2780,8 @@ begin
     or (Orientation <> FDataSet.Orientation)
     or (Units <> FDataSet.Units)
     or (AngleType <> FDataSet.AngleType)
-    or (Comment <> FDataSet.Comment);
+    or (Comment <> FDataSet.Comment)
+    or (PestParametersUsed <> FDataSet.PestParametersUsed);
 //    or (Visible <> FDataSet.Visible);
   if not result then
   begin

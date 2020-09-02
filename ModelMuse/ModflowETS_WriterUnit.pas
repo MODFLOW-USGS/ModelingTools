@@ -649,6 +649,7 @@ begin
     FEtsPackage.MultiplierArrayNames.Clear;
     FEtsPackage.ZoneArrayNames.Clear;
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
 
     if Model.ModelSelection = msModflow2015 then
     begin
@@ -662,6 +663,7 @@ begin
 
     WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrETS),
       FNameOfFile, foInput, Model);
+    FInputFileName := FNameOfFile;
     Evaluate;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then

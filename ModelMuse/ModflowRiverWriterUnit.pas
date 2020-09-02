@@ -543,6 +543,7 @@ begin
       Exit;
     end;
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
 //    FFileName := NameOfFile;
     if FShouldWriteFile or ShouldWriteObservationFile then
     begin

@@ -410,6 +410,7 @@ begin
   Evaluate;
 
   FFileName := FileName(AFileName);
+  FInputFileName := FFileName;
   WriteToNameFile('LAK6', 0, FFileName, foInput, Model);
 
   WriteLakeTables;

@@ -348,6 +348,7 @@ begin
 
   FExportType := etInstructions;
   FFileName := ChangeFileExt(AFileName, '.soe_i');
+//  FInputFileName := FFileName;
   OpenFile(FFileName);
   try
     WriteOptions;

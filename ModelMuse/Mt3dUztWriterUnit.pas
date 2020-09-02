@@ -356,6 +356,7 @@ begin
 
   Evaluate;
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
 

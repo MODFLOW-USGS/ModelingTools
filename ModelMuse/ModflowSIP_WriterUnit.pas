@@ -77,6 +77,7 @@ begin
     Exit;
   end;
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   WriteToNameFile('SIP', Model.UnitNumbers.UnitNumber(StrSIP), NameOfFile, foInput, Model);
   OpenFile(NameOfFile);
   try

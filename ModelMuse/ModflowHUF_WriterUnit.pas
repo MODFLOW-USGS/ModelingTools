@@ -833,6 +833,7 @@ begin
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrHUF2, Model.UnitNumbers.UnitNumber(StrHUF2),
     FNameOfFile, foInput, Model);
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     CheckSytpParameters;

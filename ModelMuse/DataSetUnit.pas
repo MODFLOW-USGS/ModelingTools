@@ -469,7 +469,7 @@ type
     FOnInitialize: TNotifyEvent;
     FOnShouldUseOnInitialize: TCheckUsageEvent;
     FRefreshingOldUseList: boolean;
-//    FWaitingOnInterpolator: Boolean;
+    FPestParametersUsed: Boolean;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -549,6 +549,9 @@ type
     procedure SetContourInterval(const Value: TRealStorage);
     procedure OnValueChanged(Sender: TObject);
     procedure SetOnShouldUseOnInitialize(const Value: TCheckUsageEvent);
+//    procedure SetParameterLayersUsed(const Value: string);
+    procedure SetPestParametersUsed(const Value: Boolean);
+    procedure CreatePestParmNameDataSet;
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -678,6 +681,9 @@ type
     procedure UpdateNotifiers; virtual;
     function IsSparseArray: boolean; virtual;
     function ShouldUseOnInitialize: Boolean;
+//    procedure SetName(const Value: TComponentName); override;
+    // LayerIndex should be between 0 and @link(LayerCount) -1
+//    function IsLayerUsedWithParameters(const ALayer: Integer): Boolean;
   public
     property UnicodeSaved: Boolean read FUnicodeSaved write SetUnicodeSaved;
     procedure UpdateWithoutNotification(NewOrientation: TDataSetOrientation;
@@ -694,7 +700,7 @@ type
       LayerMax, RowMax, ColMax: integer); virtual;
     // @name updates @link(MinValue) and @link(MaxValue).
     procedure UpdateMinMaxValues;
-    // @name does nothing is the Source is a @classname.
+    // @name does nothing if the Source is a @classname.
     // otherwise, it raises an exception.
     procedure Assign(Source: TPersistent); override;
     // @name stores the data in @classname in a temporary file.
@@ -944,7 +950,21 @@ type
     // when editing a @link(TScreenObject).
     property Visible: boolean read FVisible write SetVisible stored False;
     property AngleType: TAngleType read FAngleType write SetAngleType;
-    property ContourInterval: TRealStorage read FContourInterval write SetContourInterval;
+    property ContourInterval: TRealStorage read FContourInterval
+      write SetContourInterval;
+    property PestParametersUsed: Boolean read FPestParametersUsed
+      write SetPestParametersUsed
+      {$IFNDEF PEST}
+      stored False
+      {$ENDIF}
+      ;
+    // @name should be 'All' or a comma separated list of layer numbers or layer
+    // number ranges.
+    // Examples
+    //   All
+    //   1, 2, 4..7
+//    property ParameterLayersUsed: string read FParameterLayersUsed
+//      write SetParameterLayersUsed;
   end;
 
 
@@ -1683,6 +1703,7 @@ resourcestring
   '.';
   StrTheDefaultFormula = 'The default formula for %0:s returns a value of th' +
   'e wrong type. The formula is %1:s.';
+  StrSParameterNames = '%s_Parameter_Names';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -3205,6 +3226,85 @@ begin
   UpToDate := False;
 end;
 
+//function TDataArray.IsLayerUsedWithParameters(const ALayer: Integer): Boolean;
+//var
+//  Splitter: TStringList;
+//  UsedLayers: array of Boolean;
+//  LineIndex: Integer;
+//  ALine: string;
+//  LayerNumber: Integer;
+//  LayerIndex: Integer;
+//  String1: string;
+//  RangePosition: Integer;
+////  LayerIndex: Integer;
+//  String2: string;
+//  StartLayer: Integer;
+//  EndLayer: Integer;
+//begin
+//  if (ALayer < 0) or (ALayer >= LayerCount) then
+//  begin
+//    result := False;
+//    Exit;
+//  end;
+//
+//  if ParametersUsed then
+//  begin
+//    if CompareText(ParameterLayersUsed, 'All') = 0 then
+//    begin
+//      result := True;
+//    end
+//    else
+//    begin
+//      SetLength(UsedLayers, LayerCount);
+//      for LayerIndex := 0 to LayerCount - 1 do
+//      begin
+//        UsedLayers[LayerIndex] := False;
+//      end;
+//      Splitter := TStringList.Create;
+//      try
+//        Splitter.CommaText := ParameterLayersUsed;
+//        for LineIndex := 0 to Splitter.Count - 1 do
+//        begin
+//          ALine := Splitter[LineIndex];
+//          if TryStrToInt(ALine, LayerNumber) then
+//          begin
+//            UsedLayers[LayerNumber-1] := True;
+//          end
+//          else
+//          begin
+//            RangePosition := Pos('..', ALine);
+//            if RangePosition >= 2 then
+//            begin
+//              String1 := Trim(Copy(ALine, 1, RangePosition-1));
+//              String2 := Trim(Copy(ALine, RangePosition + 2, MAXINT));
+//              if TryStrToInt(String1, StartLayer)
+//                and TryStrToInt(String2, EndLayer)
+//                and (StartLayer <= LayerCount) then
+//              begin
+//                Dec(StartLayer);
+//                Dec(EndLayer);
+//                StartLayer := Math.Max(0, StartLayer);
+//                EndLayer := Math.Min(EndLayer, LayerCount-1);
+//                for LayerIndex := StartLayer to EndLayer do
+//                begin
+//                  UsedLayers[LayerIndex] := True;
+//                end;
+//              end;
+//            end;
+//          end;
+//        end;
+//      finally
+//        Splitter.Free;
+//      end;
+//      result := UsedLayers[ALayer];
+//    end;
+//  end
+//  else
+//  begin
+//    result := False;
+//  end;
+//end;
+
 function TDataArray.IsSparseArray: boolean;
 begin
   result := false;
@@ -3444,6 +3544,16 @@ end;
 procedure TDataArray.SetParameterFormula(const Value: string);
 begin
   ChangeAFormula(Value, FParameterFormula, FUseListUpToDate, GetUseList)
+end;
+
+procedure TDataArray.SetPestParametersUsed(const Value: Boolean);
+begin
+  if FPestParametersUsed <> Value then
+  begin
+    FPestParametersUsed := Value;
+    frmGoPhast.InvalidateModel;
+    CreatePestParmNameDataSet;
+  end;
 end;
 
 procedure TDataArray.SetParameterUsed(const Value: boolean);
@@ -3858,6 +3968,37 @@ begin
   FReadDataFromFile := False;
   FContourInterval := TRealStorage.Create;
   FContourInterval.OnChange := OnValueChanged;
+end;
+
+procedure TDataArray.CreatePestParmNameDataSet;
+var
+  ParamDataSetName: string;
+  LocalModel: TCustomModel;
+  NameDataArray: TDataArray;
+begin
+  if PestParametersUsed then
+  begin
+    ParamDataSetName := Format(StrSParameterNames, [Name]);
+    LocalModel := FModel as TCustomModel;
+    NameDataArray := LocalModel.DataArrayManager.
+      GetDataSetByName(ParamDataSetName);
+    if NameDataArray = nil then
+    begin
+      NameDataArray := LocalModel.DataArrayManager.CreateNewDataArray(
+        TDataArray, ParamDataSetName, '""',
+        ParamDataSetName,
+        Lock, rdtString, EvaluatedAt,
+        Orientation, Classification);
+      NameDataArray.OnDataSetUsed := LocalModel.ParamNamesDataSetUsed;
+      NameDataArray.Lock := Lock;
+      NameDataArray.CheckMax := False;
+      NameDataArray.CheckMin := False;
+      NameDataArray.DisplayName := ParamDataSetName;
+      NameDataArray.Visible := True;
+      NameDataArray.OnInitialize := nil;
+      NameDataArray.OnShouldUseOnInitialize := nil;
+    end;
+  end;
 end;
 
 procedure TDataArray.OnValueChanged(Sender: TObject);
@@ -4300,6 +4441,9 @@ var
   LocalModel :  TCustomModel;
   MustAdd: boolean;
   NameChanged: Boolean;
+  OldParamDataSetName: string;
+  NewParamDataSetName: string;
+  ParamDataSet: TDataArray;
 begin
   NameChanged := Name <> Value;
   LocalModel := FModel as TCustomModel;
@@ -4311,6 +4455,18 @@ begin
   end;
   if NameChanged then
   begin
+    if PestParametersUsed then
+    begin
+      OldParamDataSetName := Format(StrSParameterNames, [Name]);
+      NewParamDataSetName := Format(StrSParameterNames, [Value]);
+      ParamDataSet := LocalModel.DataArrayManager.
+        GetDataSetByName(OldParamDataSetName);
+      if ParamDataSet <> nil then
+      begin
+        ParamDataSet.Name := NewParamDataSetName;
+      end;
+    end;
+
     if LocalModel.DataArrayManager.GetDataSetByName(Name) <> nil then
     begin
       LocalModel.DataArrayManager.RemoveDataSetFromLookUpList(self);

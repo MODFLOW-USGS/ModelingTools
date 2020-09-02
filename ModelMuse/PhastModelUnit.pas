@@ -2577,6 +2577,7 @@ that affects the model output should also have a comment. }
     function GetContourLabelSpacing: Integer; virtual; abstract;
     procedure SetContourLabelSpacing(const Value: Integer);virtual; abstract;
   public
+    function ParamNamesDataSetUsed(Sender: TObject): boolean; virtual;
     function InterpSwiObsDefined: Boolean;
     function SwiObsUsed(Sender: TObject): boolean;
     property FmpCrops: TCropCollection read GetFmpCrops write SetFmpCrops;
@@ -31126,6 +31127,31 @@ end;
 //begin
 //
 //end;
+
+function TCustomModel.ParamNamesDataSetUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  NamesPos: Integer;
+  BaseArrayName: string;
+  BaseArray: TDataArray;
+begin
+// _Parameter_Names
+  Assert(Sender <> nil);
+  DataArray := Sender as TDataArray;
+  NamesPos := Pos('_Parameter_Names', DataArray.Name);
+  Assert(NamesPos > 0);
+  BaseArrayName := Copy(DataArray.Name, 1, NamesPos-1);
+  BaseArray := DataArrayManager.GetDataSetByName(BaseArrayName);
+  if BaseArray <> nil then
+  begin
+    result := BaseArray.PestParametersUsed
+      and BaseArray.OnDataSetUsed(BaseArray);
+  end
+  else
+  begin
+    result := False
+  end;
+end;
 
 function TCustomModel.ParserCount: integer;
 begin

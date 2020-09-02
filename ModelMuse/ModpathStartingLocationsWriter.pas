@@ -148,6 +148,7 @@ begin
 
     NameOfFile := FileName(AFileName);
     Model.AddModpathInputFile(NameOfFile);
+    FInputFileName := NameOfFile;
     OpenFile(NameOfFile);
     try
       AssignParticleLocationsToElements;
@@ -300,6 +301,7 @@ begin
   FEndTime := StressPeriods[StressPeriods.Count-1].EndTime;
   NameOfFile := FileName(AFileName);
   Model.AddModpathInputFile(NameOfFile);
+    FINPUTFILENAME := NAMEOFFILE;
   OpenFile(NameOfFile);
   try
     FModflowGrid := Model.Grid;

@@ -88,6 +88,7 @@ begin
   // write to MT3DMS or MT3D-USGS name file.
   WriteToMt3dMsNameFile(StrGCG, Mt3dGcg, NameOfFile, foInput, Model);
 
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMT3DMSGcgP);

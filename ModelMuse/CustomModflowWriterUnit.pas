@@ -4634,22 +4634,22 @@ var
   CellIndex: Integer;
   Cell: TValueCell;
   ShouldWrite: Boolean;
-  ActiveDS: TDataArray;
+  IDomainDataArray: TDataArray;
 begin
   if Model.ModelSelection = msModflow2015 then
   begin
-	  ActiveDS := Model.DataArrayManager.GetDataSetByName(rsActive);
+	  IDomainDataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   end
   else
   begin
-    ActiveDS := nil;
+    IDomainDataArray := nil;
   end;
   for CellIndex := 0 to List.Count - 1 do
   begin
     Cell := List[CellIndex] as TValueCell;
     ShouldWrite := (Model.ModelSelection <> msModflow2015)
-      or ActiveDS.BooleanData[Cell.Layer,
-      Cell.Row, Cell.Column];
+      or (IDomainDataArray.IntegerData[Cell.Layer,
+      Cell.Row, Cell.Column] > 0);
     if ShouldWrite then
     begin
       WriteCell(Cell, DataSetIdentifier, VariableIdentifiers);
@@ -7582,6 +7582,7 @@ begin
     CreateDir(OutputDirectory);
   end;
   result := IncludeTrailingPathDelimiter(OutputDirectory) + result;
+  FInputFileName := result;
 
   OpenFile(result);
   try
@@ -8194,6 +8195,7 @@ begin
     Exit;
   end;
   FileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName)) + 'mfsim.nam';
+  FInputFileName := FileName;
   OpenFile(FileName);
   try
     WriteOptions;
@@ -8908,6 +8910,7 @@ begin
     CreateDir(OutputDirectory);
   end;
   result := IncludeTrailingPathDelimiter(OutputDirectory) + result;
+  FInputFileName := result;
 
   OpenFile(result);
   try

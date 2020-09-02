@@ -446,6 +446,8 @@ begin
       FOutFileName := ChangeFileExt(NameOfFile, StrHobout);
       WriteToNameFile(StrDATA, IUHOBSV, FOutFileName, foOutput, Model);
     end;
+    FInputFileName := NameOfFile;
+    FInputFileName := FInputFileName;
     OpenFile(NameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingDataSet0);

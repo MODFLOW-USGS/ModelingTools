@@ -3168,6 +3168,7 @@ begin
 
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrSWR, Model.UnitNumbers.UnitNumber(StrSWR), FNameOfFile, foInput, Model);
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteDataSet0;

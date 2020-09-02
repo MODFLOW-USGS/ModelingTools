@@ -229,6 +229,7 @@ begin
   FFileName := FileName(AFileName);
   WriteToNameFile(Abbreviation, -1, FFileName, foInput, Model);
 
+  FInputFileName := FFileName;
   OpenFile(FFileName);
   try
     frmProgressMM.AddMessage(StrWritingGNCPackage);

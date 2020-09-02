@@ -92,7 +92,7 @@ resourcestring
   'wed by a single character.';
   StrUnmatchedDelimiter = 'There is an unmatched %0:s delimiter in "%1:s".';
   StrNotEnoughSpace = 'There was not enough space to replace %0:s with the p' +
-  'arameter value in "%1:s.';
+  'arameter value in "%1:s. The available space starts at position %2:d and ends at position %3:d.';
   StrNoParameterNamed = 'No parameter named %s was defined in the PVAL file.';
   StrDuplicateDelimiters = 'Both the parameter delimiter and formula delimit' +
   'er are set to "%s". The two must be different from each other.';
@@ -349,7 +349,7 @@ begin
         if Length(ReplacementString) > AvailableLength then
         begin
           raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
-            [TemplateParameterName, OriginalLine]));
+            [TemplateParameterName, OriginalLine, StartPosition, EndPos]));
         end
         else if not TryStrToFloat(Trim(ReplacementString), AValue) then
         begin
@@ -396,7 +396,7 @@ begin
     if Length(ReplacementString) > AvailableLength then
     begin
       raise ENotEnoughPrecision.Create(Format(StrNotEnoughSpace,
-        [TemplateParameterName, OriginalLine]));
+        [TemplateParameterName, OriginalLine, StartPosition, StartFormula]));
     end
     else if not TryStrToFloat(Trim(ReplacementString), AValue) then
     begin

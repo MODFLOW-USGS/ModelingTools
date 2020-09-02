@@ -2006,6 +2006,7 @@ begin
     Exit;
   end;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrSTR, Model.UnitNumbers.UnitNumber(StrSTR), FNameOfFile, foInput, Model);
 //  Evaluate;
   Application.ProcessMessages;

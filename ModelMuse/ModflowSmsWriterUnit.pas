@@ -64,6 +64,7 @@ begin
   end;
   FNameOfFile := FileName(AFileName);
   // write to simulation name file
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage('Writing IMS Package input');

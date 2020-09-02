@@ -26,7 +26,13 @@ type
 
 procedure TEnhancedTemplateProcessor.DoRun;
 begin
-  ProcessTemplate;
+  try
+    ProcessTemplate;
+  except on E:Exception do
+    begin
+      WriteLn(E.Message);
+    end;
+  end;
 
   // stop program loop
   Terminate;

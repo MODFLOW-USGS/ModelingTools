@@ -398,6 +398,7 @@ begin
   FHasLakes := True;
 
   NameOfFile := FileName(AFileName);
+//  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     WriteDataSet1;

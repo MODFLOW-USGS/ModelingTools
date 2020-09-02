@@ -631,6 +631,7 @@ begin
   begin
     Exit;
   end;
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingHYDMODPacka);

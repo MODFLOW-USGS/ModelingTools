@@ -142,6 +142,7 @@ begin
 
     NameOfFile := FileName(AFileName);
     Model.AddModpathInputFile(NameOfFile);
+    FInputFileName := NameOfFile; 
     OpenFile(NameOfFile);
     try
       WriteDataSet1;
@@ -737,6 +738,7 @@ begin
   Evaluate;
   NameOfFile := FileName(AFileName);
   Model.AddModpathInputFile(NameOfFile);
+  FInputFileName := NameOfFile; 
   OpenFile(NameOfFile);
   try
     WriteDataSet0;

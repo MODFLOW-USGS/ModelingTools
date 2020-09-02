@@ -304,6 +304,7 @@ begin
 
 
       FileName := ChangeFileExt(FileName, '.ics');
+//      FInputFileName := FileName;
       OpenFile(FileName);
       try
         WriteDataSet0;

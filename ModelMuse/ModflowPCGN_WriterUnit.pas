@@ -150,6 +150,7 @@ begin
   FNameOfFile := FileName(AFileName);
   WriteToNameFile('PCGN', Model.UnitNumbers.UnitNumber(StrPCGN),
     FNameOfFile, foInput, Model);
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingPCGNPackage);

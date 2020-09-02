@@ -259,6 +259,7 @@ begin
   NameOfFile := FileName(AFileName);
   WriteToNameFile(StrBCF, Model.UnitNumbers.UnitNumber(StrBCF),
     NameOfFile, foInput, Model);
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingBCFPackage);

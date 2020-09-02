@@ -288,6 +288,7 @@ begin
   FModel := Model;
   FEmbeddedExport := EmbeddedExport;
   FFileName := FileName;
+//  FInputFileName := FFileName;
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, CbfFileExistsError);
@@ -368,6 +369,7 @@ begin
   FModel := Model;
   FEmbeddedExport := EmbeddedExport;
   FFileName := FileName;
+//  FInputFileName := FFileName;
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, CbfFileExistsError);

@@ -530,6 +530,7 @@ begin
 
     NameOfFile := FileName(AFileName);
     FNameOfFile := NameOfFile;
+    FInputFileName := FNameOfFile;
     WriteToNameFile(StrRip, Model.UnitNumbers.UnitNumber(StrRip),
       NameOfFile, foInput, Model);
     ClearTimeLists(Model);

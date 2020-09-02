@@ -992,6 +992,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrOverlappingLayers);
   FTYPE := 'DISV6';
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   Assert( Model.ModelSelection = msModflow2015);
   WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model);
   OpenFile(FNameOfFile);

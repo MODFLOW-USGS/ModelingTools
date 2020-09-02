@@ -2007,6 +2007,7 @@ begin
     FGeneralTransportNodes := GeneralTransportNodes;
     FNOBS := NOBS;
 
+//    FInputFileName := FFileName;
     OpenFile(FFileName);
     try
       WriteDataSet0;

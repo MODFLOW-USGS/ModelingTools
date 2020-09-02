@@ -500,6 +500,7 @@ begin
     end;
 
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
 //    FNameOfFile := NameOfFile;
 
     if FShouldWriteFile or ShouldWriteObservationFile then

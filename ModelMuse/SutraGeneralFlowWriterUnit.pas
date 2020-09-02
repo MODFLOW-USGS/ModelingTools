@@ -820,8 +820,9 @@ begin
     FileRoot := ChangeFileExt(AFileName, '');
     FNameOfFile := FileRoot + LakeExtension
       + FlowTypeExtension + Extension;
+//    FInputFileName := FNameOfFile;
     OpenFile(FNameOfFile);
-    try
+    try 
       if BcsFileNames <> nil then
       begin
         if (BcsFileNames.LakeInteraction <> lbiUseDefaults)

@@ -479,6 +479,8 @@ begin
 
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrUZF6, 0, FNameOfFile, foInput, Model);
+
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingDataSet0);

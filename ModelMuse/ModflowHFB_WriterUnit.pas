@@ -98,6 +98,7 @@ type
   private
     NPHFB: integer;
     FParameterScreenObjectList: TStringList;
+    FNameOfFile: string;
     procedure Evaluate;
     procedure EvaluateModflow6;
     {@name fills @link(FParameterScreenObjectList) with the names
@@ -122,6 +123,7 @@ type
     procedure WriteStressPeriodsMF6;
     procedure WriteAStressPeriod(StressPeriodIndex: Integer);
     procedure RemoveAllButOneStressPeriods;
+    procedure WriteFileInternal;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -1335,37 +1337,15 @@ begin
   WriteEndDimensions;
 end;
 
-procedure TModflowHfb_Writer.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+procedure TModflowHfb_Writer.WriteFileInternal;
 begin
-  if not Package.IsSelected then
-  begin
-    Exit
-  end;
-  if Model.PackageGeneratedExternally(StrHFB) then
-  begin
-    Exit;
-  end;
-  NameOfFile := FileName(AFileName);
-  WriteToNameFile(StrHFB, Model.UnitNumbers.UnitNumber(StrHFB), NameOfFile, foInput, Model);
-  if Model.ModelSelection = msModflow2015 then
-  begin
-    EvaluateModflow6;
-  end
-  else
-  begin
-    Evaluate;
-  end;
-  Application.ProcessMessages;
-  if not frmProgressMM.ShouldContinue then
-  begin
-    Exit;
-  end;
-  OpenFile(FileName(AFileName));
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingHFB6Package);
     frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
     WriteDataSet0;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
@@ -1436,6 +1416,137 @@ begin
   finally
     CloseFile;
   end;
+end;
+
+procedure TModflowHfb_Writer.WriteFile(const AFileName: string);
+var
+  NameOfFile: string;
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if Model.PackageGeneratedExternally(StrHFB) then
+  begin
+    Exit;
+  end;
+  NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
+  WriteToNameFile(StrHFB, Model.UnitNumbers.UnitNumber(StrHFB), NameOfFile, foInput, Model);
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    EvaluateModflow6;
+  end
+  else
+  begin
+    Evaluate;
+  end;
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+
+  FNameOfFile := FileName(AFileName);
+  WriteFileInternal;
+  FInputFileName := FNameOfFile;
+
+  Application.ProcessMessages;
+  if not frmProgressMM.ShouldContinue then
+  begin
+    Exit;
+  end;
+
+  // The first item in  FParameterScreenObjectList is for non-parameters
+  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
+    and (FParameterScreenObjectList.Count > 1) then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+
+
+//  OpenFile(FNameOfFile);
+//  try
+//    frmProgressMM.AddMessage(StrWritingHFB6Package);
+//    frmProgressMM.AddMessage(StrWritingDataSet0);
+//    WriteDataSet0;
+//    Application.ProcessMessages;
+//    if not frmProgressMM.ShouldContinue then
+//    begin
+//      Exit;
+//    end;
+//
+//    if Model.ModelSelection = msModflow2015 then
+//    begin
+//      WriteOptionsMF6;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      WriteDimensionsMF6;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      WriteStressPeriodsMF6;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//    end
+//    else
+//    begin
+//      frmProgressMM.AddMessage(StrWritingDataSet1);
+//      WriteDataSet1;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSets2and3);
+//      WriteDataSets2and3;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSet4);
+//      WriteDataSet4;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSet5);
+//      WriteDataSet5;
+//      Application.ProcessMessages;
+//      if not frmProgressMM.ShouldContinue then
+//      begin
+//        Exit;
+//      end;
+//
+//      frmProgressMM.AddMessage(StrWritingDataSet6);
+//      WriteDataSet6;
+//    end;
+//  finally
+//    CloseFile;
+//  end;
 end;
 
 procedure TModflowHfb_Writer.WriteOptionsMF6;
@@ -1724,7 +1835,14 @@ begin
   end
   else
   begin
-    Writer.WriteFloat(HydraulicConductivity/Thickness);
+//    if Writer.WritingTemplate and (Parameter <> nil) then
+//    begin
+//      Writer.WriteTemplateFormula(Parameter.ParameterName, HydraulicConductivity/Thickness);
+//    end
+//    else
+//    begin
+      Writer.WriteFloat(HydraulicConductivity/Thickness);
+//    end;
   end;
   if (Thickness <= 0) or (HydraulicConductivity <= 0) then
   begin
@@ -1947,7 +2065,23 @@ begin
     end
     else
     begin
-      Writer.WriteFloat(HydraulicConductivity/Thickness);
+      if Writer.WritingTemplate and (FParameter <> nil) then
+      begin
+        if FParameter.Value = 0 then
+        begin
+          Writer.WriteFloat(0);
+        end
+        else
+        begin
+          Writer.WriteTemplateFormula(FParameter.ParameterName,
+            HydraulicConductivity/Thickness/FParameter.Value);
+        end;
+      end
+      else
+      begin
+        Writer.WriteFloat(HydraulicConductivity/Thickness);
+      end;
+//      Writer.WriteFloat(HydraulicConductivity/Thickness);
     end;
     if (Thickness <= 0) or (HydraulicConductivity <= 0) then
     begin

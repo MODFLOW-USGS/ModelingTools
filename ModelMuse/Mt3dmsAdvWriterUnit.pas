@@ -172,6 +172,7 @@ begin
   WriteToMt3dMsNameFile(StrADV, Mt3dAdv,
     NameOfFile, foInput, Model);
 
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMT3DMSADVP);

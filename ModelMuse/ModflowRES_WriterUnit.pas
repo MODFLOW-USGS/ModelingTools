@@ -612,6 +612,7 @@ begin
     Exit;
   end;
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   WriteToNameFile(StrRES, Model.UnitNumbers.UnitNumber(StrRES), NameOfFile, foInput, Model);
   Evaluate;
   if NRES = 0 then
@@ -624,6 +625,7 @@ begin
     Exit;
   end;
   ClearTimeLists(Model);
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
 //    WriteDataSet0;

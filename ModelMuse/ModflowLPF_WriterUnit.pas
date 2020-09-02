@@ -463,6 +463,7 @@ begin
     FInputFileName := NameOfFile;
     WriteToNameFile(StrLPF, Model.UnitNumbers.UnitNumber(StrLPF),
       NameOfFile, foInput, Model);
+    FInputFileName := NameOfFile;
     OpenFile(NameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingLPFPackage);

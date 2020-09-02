@@ -275,6 +275,7 @@ begin
   NameOfFile := FileName(AFileName);
   Model.AddZoneBudgetInputFile(NameOfFile);
 
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingZONEBUDGETZ);
@@ -477,6 +478,7 @@ begin
   FNameOfFile := FileName(AFileName);
 
   frmProgressMM.AddMessage(StrWritingZONEBUDGETR);
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteResponse1(False);
@@ -734,6 +736,7 @@ begin
   FNameOfFile := FileName(AFileName);
 
   frmProgressMM.AddMessage(StrWritingZONEBUDGETR);
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteBeginZonebudget;

@@ -339,6 +339,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
 //  FFileName := NameOfFile;
   if FShouldWriteFile then
   begin
@@ -360,6 +361,7 @@ begin
     Exit;
   end;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteFileInternal;
 //  OpenFile(FNameOfFile);
 //  try

@@ -85,6 +85,7 @@ begin
   end;
   }
 
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     if Model.ModelSelection = msModflowLGR2 then

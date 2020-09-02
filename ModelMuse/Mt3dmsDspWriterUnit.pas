@@ -156,6 +156,7 @@ begin
 //    NameOfFile, foInput);
 
   // PackageGeneratedExternally needs to be updated for MT3DMS
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMT3DMSDSPP);

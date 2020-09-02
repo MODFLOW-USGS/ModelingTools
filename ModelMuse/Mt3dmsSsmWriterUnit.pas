@@ -1416,6 +1416,7 @@ begin
   WriteToMt3dMsNameFile(StrSSM, Mt3dSSM,
     FNameOfFile, foInput, Model);
 //  WriteToNameFile(StrUZF, Model.UnitNumbers.UnitNumber(StrUZF), FNameOfFile, foInput);
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
 

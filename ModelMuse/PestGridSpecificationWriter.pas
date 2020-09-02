@@ -83,6 +83,7 @@ var
 begin
   Assert(Model.ModelSelection <> msModflow2015);
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     WriteDataSet1;

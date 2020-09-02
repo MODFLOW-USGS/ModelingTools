@@ -1245,6 +1245,7 @@ begin
 
   if ShouldWriteFile then
   begin
+    FInputFileName := NameOfFile;
     OpenFile(NameOfFile);
     try
       WriteDataSet0;

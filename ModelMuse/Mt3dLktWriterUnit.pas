@@ -353,6 +353,7 @@ begin
   WriteToMt3dMsNameFile(StrLKT, mt3dLKT,
     FNameOfFile, foInput, Model);
 
+  FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMT3DUSGSLK);

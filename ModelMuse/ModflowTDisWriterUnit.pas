@@ -71,6 +71,7 @@ begin
     Exit;
   end;
   NameOfFile := FileName(AFileName);
+  FInputFileName := NameOfFile;
   Model.SimNameWriter.TDisFileName := NameOfFile;
   Model.AddModelInputFile(NameOfFile);
 //  WriteToNameFile(FTYPE, -1, NameOfFile, foInput);

@@ -1193,6 +1193,7 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoWatertableSubsi);
 
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
     WriteToNameFile(StrSWT, Model.UnitNumbers.UnitNumber(StrSWT),
       FNameOfFile, foInput, Model);
 

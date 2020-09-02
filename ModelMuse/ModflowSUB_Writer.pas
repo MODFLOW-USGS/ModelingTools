@@ -1757,6 +1757,7 @@ begin
     end;
 
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
     WriteToNameFile(StrSUB, Model.UnitNumbers.UnitNumber(StrSUB),
       FNameOfFile, foInput, Model);
     Evaluate;

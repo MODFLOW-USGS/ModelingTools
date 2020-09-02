@@ -713,6 +713,7 @@ begin
   end;
   FPackage := Package as TLakePackageSelection;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile(StrLAK, Model.UnitNumbers.UnitNumber(StrLAK), FNameOfFile, foInput, Model);
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
@@ -963,6 +964,7 @@ begin
       (FScreenObject as TScreenObject).Name, FScreenObject);
   end;
   FFileName := FileName(AFileName) + IntToStr(FLakeID);
+  FInputFileName := FFileName;
   OpenFile(FFileName);
   try
     for index := 0 to LakeTable.Count - 1 do

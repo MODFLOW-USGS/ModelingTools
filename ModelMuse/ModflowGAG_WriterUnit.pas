@@ -272,6 +272,7 @@ begin
 
   FSfrWriter := SfrWriter;
   FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   Evaluate(Gages);
   if Gages.Count > 0 then
   begin

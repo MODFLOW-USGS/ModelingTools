@@ -710,6 +710,7 @@ begin
 
     Evaluate;
 
+    FInputFileName := FNameOfFile;
     OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingSFTPackage);

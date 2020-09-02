@@ -703,6 +703,7 @@ begin
     FileRoot := ChangeFileExt(AFileName, '');
     FNameOfFile := FileRoot + LakeExtension
       + TransportTypeExtension + Extension;
+//    FInputFileName := FNameOfFile;
     OpenFile(FNameOfFile);
     try
       if BcsFileNames <> nil then

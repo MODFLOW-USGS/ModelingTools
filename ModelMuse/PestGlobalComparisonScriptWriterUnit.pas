@@ -76,6 +76,7 @@ begin
       FObsItemDictionary.Add(ObsItem.GUID, ObsItem);
     end;
 
+//    FInputFileName := ScriptFileName;
     OpenFile(ScriptFileName);
     try
 

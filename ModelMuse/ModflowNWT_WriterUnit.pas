@@ -231,6 +231,7 @@ begin
   NameOfFile := FileName(AFileName);
   WriteToNameFile('NWT', Model.UnitNumbers.UnitNumber(StrNWT),
     NameOfFile, foInput, Model);
+  FInputFileName := NameOfFile;
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingNWTPackage);
