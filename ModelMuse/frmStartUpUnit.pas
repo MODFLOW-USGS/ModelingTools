@@ -179,7 +179,7 @@ type
     // Set the vertical exaggeration.
     procedure SetExaggeration;
     function SetUpModflowGrid : Boolean;
-    procedure InitializeView(ModelXWidth, ModelYWidth, ModelHeight: Real);
+//    procedure InitializeView(ModelXWidth, ModelYWidth, ModelHeight: Real);
     procedure SetUpModflowLayers(ColCount, RowCount: Integer;
       out ModelHeight: Real);
     procedure SetUpSutraModel;
@@ -744,9 +744,9 @@ var
   OriginDistance: double;
   ColWidth, RowWidth: double;
   ColCount, RowCount: integer;
-  ModelYWidth: Real;
-  ModelXWidth: Real;
-  ModelHeight: Real;
+//  ModelYWidth: Real;
+//  ModelXWidth: Real;
+//  ModelHeight: Real;
 begin
   // get some initial data.
   result := False;
@@ -798,14 +798,16 @@ begin
   frmGoPhast.FootPrintGrid.RowPositions := Dimension;
 //  frmGoPhast.PhastModel.ClearNameChangeWarnings;
 
-  ModelXWidth := ColCount * ColWidth;
-  ModelYWidth := RowCount * RowWidth;
+//  ModelXWidth := ColCount * ColWidth;
+//  ModelYWidth := RowCount * RowWidth;
 
   // Set the selected layer.
   frmGoPhast.FootPrintGrid.SelectedLayer := 0;
   frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
-  ModelHeight := 1;
-  InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
+//  ModelHeight := 1;
+  SetExaggeration;
+  frmGoPhast.RestoreDefault2DView1Click(nil);
+//  InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
   result := True;
 end;
 
@@ -847,8 +849,8 @@ var
   OriginDistance: double;
   ColWidth, RowWidth: double;
   ColCount, RowCount: integer;
-  ModelYWidth: Real;
-  ModelXWidth: Real;
+//  ModelYWidth: Real;
+//  ModelXWidth: Real;
   ModelHeight: Real;
   LayerCount: Integer;
   CellCount: Integer;
@@ -925,22 +927,24 @@ begin
   end;
 //  frmGoPhast.PhastModel.ClearNameChangeWarnings;
 
-  ModelXWidth := ColCount * ColWidth;
-  ModelYWidth := RowCount * RowWidth;
+//  ModelXWidth := ColCount * ColWidth;
+//  ModelYWidth := RowCount * RowWidth;
 
   // Set the selected layer.
   frmGoPhast.ModflowGrid.SelectedLayer := 0;
   frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
-  InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
+  SetExaggeration;
+  frmGoPhast.RestoreDefault2DView1Click(nil);
+//  InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
   result := True;
 end;
 
-procedure TfrmStartUp.InitializeView(ModelXWidth, ModelYWidth, ModelHeight: Real);
-begin
-  SetExaggeration;
-
-  frmGoPhast.InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
-end;
+//procedure TfrmStartUp.InitializeView(ModelXWidth, ModelYWidth, ModelHeight: Real);
+//begin
+//  SetExaggeration;
+//
+//  frmGoPhast.InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
+//end;
 
 procedure TfrmStartUp.Loaded;
 begin
@@ -1104,9 +1108,9 @@ var
   OriginDistance: double;
   ColWidth, RowWidth, LayerHeight: double;
   ColCount, RowCount, LayerCount: integer;
-  ModelXWidth: Real;
-  ModelYWidth: Real;
-  ModelHeight: Real;
+//  ModelXWidth: Real;
+//  ModelYWidth: Real;
+//  ModelHeight: Real;
 begin
   result := False;
   // get some initial data.
@@ -1172,11 +1176,13 @@ begin
   // Set the selected layer.
   frmGoPhast.PhastGrid.SelectedLayer := LayerCount - 1;
 
-  ModelXWidth := ColCount * ColWidth;
-  ModelYWidth := RowCount * RowWidth;
-  ModelHeight := LayerCount * LayerHeight;
+//  ModelXWidth := ColCount * ColWidth;
+//  ModelYWidth := RowCount * RowWidth;
+//  ModelHeight := LayerCount * LayerHeight;
 
-  InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
+//  InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
+  SetExaggeration;
+  frmGoPhast.RestoreDefault2DView1Click(nil);
   frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
 
   result := True;

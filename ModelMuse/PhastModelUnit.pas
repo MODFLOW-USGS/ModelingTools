@@ -3277,8 +3277,6 @@ that affects the model output should also have a comment. }
     property DirectObservationLines: TStringList read FDirectObservationLines;
     property DerivedObservationLines: TStringList read FDerivedObservationLines;
     property FileNameLines: TStringList read FFileNameLines;
-    property PestProperties: TPestProperties read FPestProperties
-      write SetPestProperties;
     // @name is the vertical exaggeration of the front, side, and 3D views
     // of the model in GoPhast.
     // @name is used in PHAST, MODFLOW, and SUTRA models.
@@ -3491,6 +3489,13 @@ that affects the model output should also have a comment. }
       ;
     property VelocityVectors: TVectorCollection read FVelocityVectors
       write SetVelocityVectors;
+
+    property PestProperties: TPestProperties read FPestProperties
+      write SetPestProperties
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+    ;
     { Any new members added to TCustomModel should be cleared in InternalClear.}
 
 //    property GeoRefFileName: string read FGeoRefFileName write SetGeoRefFileName;
@@ -12862,19 +12867,34 @@ end;
 function TCustomModel.DiscretizationLimits(
   ViewDirection: TViewDirection): TGridLimit;
 begin
+  result.Minx := 0;
+  result.MaxX := 0;
+  result.MinY := 0;
+  result.MaxY := 0;
+  result.MinZ := 0;
+  result.MaxZ := 0;
   if ModelSelection in SutraSelection then
   begin
-    result := SutraMesh.MeshLimits(ViewDirection, SutraMesh.CrossSection.Angle);
+    if SutraMesh <> nil then
+    begin
+      result := SutraMesh.MeshLimits(ViewDirection, SutraMesh.CrossSection.Angle);
+    end;
   end
   else
   begin
     if DisvUsed then
     begin
-      result := DisvGrid.MeshLimits(ViewDirection, DisvGrid.CrossSection.Angle);
+      if DisvGrid <> nil then
+      begin
+        result := DisvGrid.MeshLimits(ViewDirection, DisvGrid.CrossSection.Angle);
+      end;
     end
     else
     begin
-      result := Grid.GridLimits(ViewDirection);
+      if Grid <> nil then
+      begin
+        result := Grid.GridLimits(ViewDirection);
+      end;
     end;
   end;
 end;
@@ -44953,8 +44973,8 @@ end;
 
 function TCustomModel.GetPestUsed: Boolean;
 begin
-{$IFDEF PESt}
-  result := True;
+{$IFDEF PEST}
+  result := PestProperties.PestUsed;
 {$ELSE}
   result := False;
 {$ENDIF}

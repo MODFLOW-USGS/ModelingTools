@@ -13,6 +13,7 @@ inherited frmPointValues: TfrmPointValues
     Height = 42
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 190
     object btnHelp: TBitBtn
       Left = 97
       Top = 6

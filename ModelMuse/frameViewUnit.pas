@@ -581,7 +581,8 @@ uses GR32_Polygons, frmGoPhastUnit, CursorsFoiledAgain, Math, RbwParser,
   frmRulerOptionsUnit, PhastModelUnit, frmGridValueUnit, EdgeDisplayUnit,
   CustomModflowWriterUnit, frmProgressUnit, SutraMeshUnit, frmDisplayDataUnit,
   frmCustomGoPhastUnit, VectorDisplayUnit, Generics.Collections,
-  DrawMeshTypesUnit, MeshRenumberingTypes, ModelMuseUtilities;
+  DrawMeshTypesUnit, MeshRenumberingTypes, ModelMuseUtilities,
+  PestPropertiesUnit;
 
 resourcestring
   StrTheSImageCanNo = 'The %s  image can not be shown at this magnification.' +
@@ -1413,6 +1414,7 @@ var
 //  Mesh: TSutraMesh3D;
   Grid: TCustomModelGrid;
   Mesh: IDrawMesh;
+  PestProperties: TPestProperties;
 begin
   FPaintingNeeded := True;
     // @name is the main routine for drawing the
@@ -1425,13 +1427,12 @@ begin
   try
     if ViewDirection = vdSide then
     begin
-
       if frmGoPhast.DisvUsed or (frmGoPhast.ModelSelection in SutraSelection) then
       begin
         Exit;
       end;
-
     end;
+
     Mesh := frmGoPhast.PhastModel.DrawMesh;
     if (Mesh <> nil) and not Mesh.CanDraw then
     begin
@@ -1523,6 +1524,12 @@ begin
       if (Mesh <> nil) then
       begin
         Mesh.Draw(FBitMap32, ViewDirection);
+      end;
+
+      if ViewDirection = vdTop then
+      begin
+        PestProperties := frmGoPhast.PhastModel.PestProperties;
+        PestProperties.DrawPilotPoints(FBitMap32);
       end;
 
       // Do not call Application.ProcessMessages.

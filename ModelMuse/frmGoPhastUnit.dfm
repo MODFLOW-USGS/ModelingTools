@@ -2238,6 +2238,10 @@ inherited frmGoPhast: TfrmGoPhast
         Action = acEditObservationComparisons
         GroupIndex = 1
       end
+      object miPESTProperties: TMenuItem
+        Action = acPEST
+        GroupIndex = 1
+      end
     end
     object ModelSelection1: TMenuItem
       Caption = 'Model Selection'
@@ -3569,6 +3573,11 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'Model'
       Caption = 'Manage SUTRA Boundary Observations'
       OnExecute = acEditSutraFluxObsExecute
+    end
+    object acPEST: TAction
+      Category = 'Model'
+      Caption = '&PEST Properties'
+      OnExecute = acPESTExecute
     end
   end
   object ilDisabledImageList: TImageList

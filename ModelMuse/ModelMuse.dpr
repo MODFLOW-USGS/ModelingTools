@@ -710,7 +710,8 @@ uses
   frmManageSutraBoundaryObservationsUnit in 'frmManageSutraBoundaryObservationsUnit.pas' {frmManageSutraBoundaryObservations},
   framePestObsMf6Unit in 'framePestObsMf6Unit.pas' {framePestObsMf6: TFrame},
   PestObsExtractorInputWriterUnit in 'PestObsExtractorInputWriterUnit.pas',
-  PestPropertiesUnit in 'PestPropertiesUnit.pas';
+  PestPropertiesUnit in 'PestPropertiesUnit.pas',
+  frmPestUnit in 'frmPestUnit.pas' {frmPEST};
 
 {$R *.res}
 
@@ -727,6 +728,7 @@ begin
   Application.CreateForm(TfrmFormula, frmFormula);
   //  Application.CreateForm(TfrmSelectedObjects, frmSelectedObjects);
   Application.CreateForm(TfrmColors, frmColors);
+//  Application.CreateForm(TfrmPEST, frmPEST);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

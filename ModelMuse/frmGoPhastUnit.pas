@@ -511,6 +511,8 @@ type
     miAnonymizeObjects: TMenuItem;
     acEditSutraFluxObs: TAction;
     miEditSutraFluxObs: TMenuItem;
+    acPEST: TAction;
+    miPESTProperties: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -696,6 +698,7 @@ type
     procedure acEditObservationComparisonsExecute(Sender: TObject);
     procedure acAnonymizeObjectsExecute(Sender: TObject);
     procedure acEditSutraFluxObsExecute(Sender: TObject);
+    procedure acPESTExecute(Sender: TObject);
   private
     FCreateArchive: Boolean;
     CreateArchiveSet: boolean;
@@ -2068,7 +2071,7 @@ uses
   ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
-  SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit;
+  SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -3252,6 +3255,7 @@ begin
   inherited;
   {$IFNDEF PEST}
   acEditObservationComparisons.Visible := False;
+  acPEST.Visible := False;
   {$ENDIF}
   
   tbarEditScreenObjects.Width := 227;
@@ -10373,10 +10377,11 @@ procedure TfrmGoPhast.InitializeView(ModelXWidth, ModelYWidth,
 var
   LocalGrid: TCustomModelGrid;
 //  Mesh: TSutraMesh3D;
-  MeshLimits: TGridLimit;
+  DisLimits: TGridLimit;
   X: Double;
   Mesh: IMesh3D;
   DrawMesh: IDrawMesh;
+//  DisLimits: TGridLimit;
 begin
   // Set the magnification so that the grid will fill most of the screen.
   frameTopView.ZoomBox.Magnification := 0.9 *
@@ -10402,10 +10407,19 @@ begin
     if (Grid.ColumnCount > 0) and (Grid.RowCount > 0)
       and (Grid.LayerCount > 0) then
     begin
-      MoveToTopCell(Grid, (Grid.ColumnCount - 1) div 2,
-        (Grid.RowCount - 1) div 2);
-      MoveToFrontCell(Grid, (Grid.ColumnCount - 1) div 2,
-        (Grid.LayerCount - 1) div 2);
+      DisLimits := PhastModel.DiscretizationLimits(vdFront);
+      X := (DisLimits.MinX + DisLimits.MaxX)/2;
+      SetFrontPosition(X, (DisLimits.MinZ + DisLimits.MaxZ)/2);
+
+
+      DisLimits := PhastModel.DiscretizationLimits(vdTop);
+      X := (DisLimits.MinX + DisLimits.MaxX)/2;
+      SetTopPosition(X, (DisLimits.MinY + DisLimits.MaxY)/2);
+
+//      MoveToTopCell(Grid, (Grid.ColumnCount - 1) div 2,
+//        (Grid.RowCount - 1) div 2);
+//      MoveToFrontCell(Grid, (Grid.ColumnCount - 1) div 2,
+//        (Grid.LayerCount - 1) div 2);
     end;
   end
   else
@@ -10414,13 +10428,13 @@ begin
     DrawMesh := PhastModel.DrawMesh;
     if Mesh.Is3DMesh then
     begin
-      MeshLimits := Mesh.MeshLimits(vdFront, DrawMesh.CrossSection.Angle);
-      X := (MeshLimits.MinX + MeshLimits.MaxX)/2;
-      SetFrontPosition(X, (MeshLimits.MinZ + MeshLimits.MaxZ)/2);
+      DisLimits := PhastModel.DiscretizationLimits(vdFront);
+      X := (DisLimits.MinX + DisLimits.MaxX)/2;
+      SetFrontPosition(X, (DisLimits.MinZ + DisLimits.MaxZ)/2);
     end;
-    MeshLimits := Mesh.MeshLimits(vdTop, 0);
-    X := (MeshLimits.MinX + MeshLimits.MaxX)/2;
-    SetTopPosition(X, (MeshLimits.MinY + MeshLimits.MaxY)/2);
+    DisLimits := PhastModel.DiscretizationLimits(vdTop);
+    X := (DisLimits.MinX + DisLimits.MaxX)/2;
+    SetTopPosition(X, (DisLimits.MinY + DisLimits.MaxY)/2);
   end;
 
   SynchronizeViews(vdTop);
@@ -10606,18 +10620,24 @@ var
   MeshLimits: TGridLimit;
   DrawMesh: IDrawMesh;
   Mesh: IMesh3D;
+  DisLimits: TGridLimit;
 begin
   inherited;
+
+  DisLimits := PhastModel.DiscretizationLimits(vdTop);
+  ModelXWidth := DisLimits.MaxX - DisLimits.MinX;
+  ModelYWidth := DisLimits.MaxY - DisLimits.MinY;
+
   LocalGrid := Grid;
   if LocalGrid <> nil then
   begin
     if (LocalGrid.ColumnCount >= 1) and (LocalGrid.RowCount >= 1)
       and (LocalGrid.LayerCount >= 1) then
     begin
-      ModelXWidth := Abs(LocalGrid.ColumnPosition[0]
-        - LocalGrid.ColumnPosition[LocalGrid.ColumnCount]);
-      ModelYWidth := Abs(LocalGrid.RowPosition[0]
-        - LocalGrid.RowPosition[LocalGrid.RowCount]);
+//      ModelXWidth := Abs(LocalGrid.ColumnPosition[0]
+//        - LocalGrid.ColumnPosition[LocalGrid.ColumnCount]);
+//      ModelYWidth := Abs(LocalGrid.RowPosition[0]
+//        - LocalGrid.RowPosition[LocalGrid.RowCount]);
       ModelHeight := Abs(LocalGrid.HighestElevation - LocalGrid.LowestElevation);
       InitializeView(ModelXWidth, ModelYWidth, ModelHeight);
     end;
@@ -10630,9 +10650,9 @@ begin
       DrawMesh := PhastModel.DrawMesh;
       if Mesh.Mesh2DI.NodeCount > 0 then
       begin
-        MeshLimits := Mesh.MeshLimits(vdTop, 0);
-        ModelXWidth := MeshLimits.MaxX - MeshLimits.MinX;
-        ModelYWidth := MeshLimits.MaxY - MeshLimits.MinY;
+//        MeshLimits := Mesh.MeshLimits(vdTop, 0);
+//        ModelXWidth := MeshLimits.MaxX - MeshLimits.MinX;
+//        ModelYWidth := MeshLimits.MaxY - MeshLimits.MinY;
         MeshLimits := Mesh.MeshLimits(vdFront, DrawMesh.CrossSection.Angle);
         ModelHeight := MeshLimits.MaxZ - MeshLimits.MinZ;
         if Mesh is TSutraMesh3D then
@@ -11653,6 +11673,13 @@ begin
       Undo.Free;
     end;
   end;
+end;
+
+procedure TfrmGoPhast.acPESTExecute(Sender: TObject);
+begin
+  inherited;
+//    frmPest.ShowModal;
+  ShowAForm(TfrmPest);
 end;
 
 procedure TfrmGoPhast.acPhastActiveExecute(Sender: TObject);
