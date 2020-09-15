@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, CustomModflowWriterUnit, PhastModelUnit, SutraTimeScheduleUnit, RealListUnit,
-  Generics.Collections, SysUtils, GoPhastTypes, Classes, ScreenObjectUnit;
+  Generics.Collections, SysUtils, GoPhastTypes, Classes, ScreenObjectUnit,
+  Vcl.Dialogs;
 
 type
   TTimeValues = class(TObject)
@@ -94,6 +95,9 @@ resourcestring
     ' than once. ';
   StrTheFollowingObject = 'The following objects define observation times th' +
   'at are different from those in the selected time schedule.';
+  StrSomethingWentWrong = 'Something went wrong while attempting to write th' +
+  'e SUTRA time schedule named "%s." Please contact the ModelMuse developer ' +
+  'about this error.';
 
 function SameValues(List1, List2: TRealList): Boolean;
 var
@@ -872,7 +876,6 @@ begin
     end;
   end;
 
-
   NSLIST := Times.Count;
 
   WriteString(SCHTYP);
@@ -887,7 +890,11 @@ begin
       // Reduce precision to single precision.
       ATime1 := Times[TimeIndex];
       ATime2 := FAllTimes[ISLIST];
-      Assert(ATime1 = ATime2);
+      if ATime1 <> ATime2 then
+      begin
+        Beep;
+        MessageDlg(Format(StrSomethingWentWrong, [SCHNAM]), mtError, [mbOK], 0);
+      end;
     end;
     Inc(ISLIST);
     WriteInteger(ISLIST);

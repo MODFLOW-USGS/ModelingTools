@@ -40,6 +40,7 @@ type
     property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
     property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
+//    procedure WritePestTemplateLine(AFileName: string);
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -588,7 +589,7 @@ begin
 
             if IdomainDataArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
             begin
-              if Model.PestUsed and (CellList.Count <> 1)  
+              if Model.PestUsed and (CellList.Count <> 1)
                 and FoundFirst and not ErrorAdded
                 and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
                 and (Obs.CalibrationObservations. Count > 0)
@@ -611,9 +612,9 @@ begin
                 end;
               end;
               FoundFirst := True;
-              if Model.PestUsed 
+              if Model.PestUsed
                 and ((CellList.Count = 1) or (AScreenObject.Count = 1))
-                and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])  
+                and (Obs.CalibrationObservations.ObGenerals * [ogHead, ogDrawdown] <> [])
                 then
               begin
                 // find neighbors
@@ -866,7 +867,7 @@ begin
                           end;
                           MultiLayerFormula.Append(')')
                         end;
-                          
+
                       end
                       else
                       begin
@@ -934,7 +935,7 @@ begin
             CalculatedObsLines.Add('')
           end;
 
-          
+
           if FHorizontalCells.Count > 1 then
           begin
             for OuterHorizCellIndex := 0 to FHorizontalCells.Count - 2 do
@@ -1400,6 +1401,9 @@ begin
 
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrOBS6, -1, FNameOfFile, foInput, Model);
+
+//  WritePestTemplateLine;
+
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
@@ -2143,6 +2147,7 @@ begin
   frmProgressMM.AddMessage(StrWritingFlowObserva);
   Assert((FGeneralObsList.Count > 0) or (FToMvrObsList.Count > 0));
   Model.AddModelInputFile(FNameOfFile);
+//  WritePestTemplateLine;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
@@ -2192,6 +2197,8 @@ begin
   frmProgressMM.AddMessage(StrWritingMAWObservat);
   Assert(FMawObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
+
+//  WritePestTemplateLine;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
@@ -2484,6 +2491,8 @@ begin
   frmProgressMM.AddMessage(StrWritingSFRObservat);
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
+
+//  WritePestTemplateLine;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
@@ -2846,6 +2855,8 @@ begin
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
 
+//  WritePestTemplateLine;
+
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
   try
@@ -3121,6 +3132,8 @@ begin
   frmProgressMM.AddMessage(StrWritingUZFObservat);
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
+
+//  WritePestTemplateLine;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
@@ -3463,6 +3476,8 @@ begin
   frmProgressMM.AddMessage(StrWritingUZFObservat);
   Assert(FObsList.Count > 0);
   Model.AddModelInputFile(FNameOfFile);
+
+//  WritePestTemplateLine;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
@@ -4024,5 +4039,12 @@ begin
     FormulaBuilder.Free;
   end;
 end;
+
+//procedure TCustomMf6ObservationWriter.WritePestTemplateLine;
+//begin
+//  Model.PestTemplateLines.Add('EnhancedTemplateProcessor.exe '
+//    + ExtractFileName((AFileName: string)) +
+//    ' ' + ChangeFileExt((AFileName: string)(FNameOfFile), '.pval'));
+//end;
 
 end.

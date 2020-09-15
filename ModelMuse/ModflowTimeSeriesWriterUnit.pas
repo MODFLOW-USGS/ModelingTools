@@ -191,6 +191,7 @@ begin
   if ShouldWriteTemplate then
   begin
     FileName := FileName + '.tpl';
+    WritePestTemplateLine(FileName);
     FWritingTemplate := True;
 
     OpenFile(FileName);

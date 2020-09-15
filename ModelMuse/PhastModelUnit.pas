@@ -2006,6 +2006,9 @@ that affects the model output should also have a comment. }
     FDerivedObservationLines: TStringList;
     FFileNameLines: TStringList;
     FUpdatingMeshElevations: Boolean;
+    // @name consists of lines that will be added to RunModel.Bat before the
+    // model executable line
+    FPestTemplateLines: TStringList;
 //    FMeshFileName: string;
 
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
@@ -3285,6 +3288,10 @@ that affects the model output should also have a comment. }
       read GetElementLocation;
     property ActiveElement[Layer, Row, Column: Integer]: Boolean
       read GetActiveElement;
+    // @name consists of lines that will be added to RunModel.Bat before the
+    // model executable line
+    property PestTemplateLines: TStringList read FPestTemplateLines;
+
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -5782,6 +5789,7 @@ resourcestring
   StrNoStressPeriodsWe = 'No stress periods were defined';
   StrStressPeriodAdded = 'No stress periods were defined in the MODFLOW Time' +
   ' dialog box. One has been added automatically.';
+  StrPtf = '.ptf';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -9947,14 +9955,21 @@ const
 //                sorbed phase when the sorbtion choice is linear.
 //    '4.3.0.9   Beta bug fix: Fixed export of head observations when no
 //                calibration observations are defined.
-
-//               Bug fix: ModelMuse now longer generates a bug report if the
+//   '4.3.0.10'  Bug fix: ModelMuse now longer generates a bug report if the
 //                user specifies more than one contour value for a boolean
 //                data set.
+//               Bug fix: When writing real number array values, real numbers
+//                close to zero will be written as zero if they require more
+//                precision than is provided by a single precision real number.
+//   '4.3.0.11'  Bug fix: Fixed bug that could cause an assertion failure when
+//                accessing vertex values.
+//   '4.3.0.12'  Bug fix: Fixed bug that could cause access violations when
+//                evaluating the RCH or ETS packages after disabling MODFLOW 6
+//                observations.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.9';
+  IIModelVersion = '4.3.0.12';
 
 function IModelVersion: string;
 begin
@@ -27931,6 +27946,8 @@ end;
 constructor TCustomModel.Create(AnOwner: TComponent);
 begin
   inherited;
+  FPestTemplateLines := TStringList.Create;
+
   FBinaryFiles := TStringList.Create;
   FBinaryFiles.Duplicates := dupIgnore;
   FBinaryFiles.Sorted := True;
@@ -28815,6 +28832,8 @@ begin
   FExternalFiles.Free;
   FSwiObsExtractorInputFiles.Free;
   FSwiObsExtractorOutputFiles.Free;
+
+  FPestTemplateLines.Free;
 
   inherited;
 end;
@@ -31638,6 +31657,14 @@ begin
 
     AddModelInputFile(PValFileName);
     AddModelInputFile(TemplateFileName);
+
+    if PestUsed then
+    begin
+      TemplateFileName := ChangeFileExt(FileName, StrPtf);
+      FTemplate[0] := 'ptf ' + PestProperties.TemplateCharacter;
+      FTemplate.SaveToFile(TemplateFileName);
+      AddModelInputFile(TemplateFileName);
+    end;
   end;
 end;
 
@@ -38942,6 +38969,7 @@ var
   ChildModel: TChildModel;
   ChildFileName: string;
 begin
+  PestTemplateLines.Clear;
   ClearMnw1FileNames;
   if frmProgressMM = nil then
   begin
@@ -39189,6 +39217,7 @@ var
   ListFileName: string;
   ListFileNames: TStringList;
 begin
+  PestTemplateLines.Clear;
   if ExtractFileName(ModflowLocation) = 'MF2005_Importer.exe' then
   begin
     Beep;
@@ -41221,6 +41250,7 @@ var
   FileDir: string;
   LgrUsed: Boolean;
 begin
+  PestTemplateLines.Clear;
   if frmProgressMM = nil then
   begin
     frmProgressMM := TfrmProgressMM.Create(nil);

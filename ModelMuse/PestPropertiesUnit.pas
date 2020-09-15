@@ -158,7 +158,7 @@ begin
   FShowPilotPoints := False;
   PilotPointSpacing := 0;
   FTemplateCharacter := '@';
-  FExtendedTemplateCharacter := '#';
+  FExtendedTemplateCharacter := '%';
 end;
 
 procedure TPestProperties.SetExtendedTemplateCharacter(const Value: Char);

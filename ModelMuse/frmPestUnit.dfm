@@ -13,14 +13,13 @@ inherited frmPEST: TfrmPEST
     Indent = 19
     TabOrder = 0
     Items.Links = {00000000}
-    ExplicitLeft = -6
   end
   object pgMain: TJvPageList
     Left = 121
     Top = 0
     Width = 303
     Height = 184
-    ActivePage = jvspPilotPoints
+    ActivePage = jvspBasic
     PropagateEnable = False
     Align = alClient
     object jvspBasic: TJvStandardPage
@@ -42,9 +41,9 @@ inherited frmPEST: TfrmPEST
         Top = 64
         Width = 121
         Height = 26
-        EditLabel.Width = 247
+        EditLabel.Width = 230
         EditLabel.Height = 18
-        EditLabel.Caption = 'Template character: @, #, $, %, or ?'
+        EditLabel.Caption = 'Template character: @, $, %, or ?'
         MaxLength = 1
         TabOrder = 1
         OnChange = MarkerChange
@@ -54,9 +53,9 @@ inherited frmPEST: TfrmPEST
         Top = 120
         Width = 121
         Height = 26
-        EditLabel.Width = 225
+        EditLabel.Width = 208
         EditLabel.Height = 18
-        EditLabel.Caption = 'Formula marker: @, #, $, %, or ?'
+        EditLabel.Caption = 'Formula marker: @, $, %, or ?'
         MaxLength = 1
         TabOrder = 2
         OnChange = MarkerChange

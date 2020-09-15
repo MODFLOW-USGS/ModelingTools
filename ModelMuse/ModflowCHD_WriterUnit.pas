@@ -439,6 +439,7 @@ begin
     frmErrorsAndWarnings.BeginUpdate;
     try
       FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
       WritingTemplate := True;
       WriteFileInternal;
 

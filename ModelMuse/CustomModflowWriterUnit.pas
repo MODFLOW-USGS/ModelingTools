@@ -95,6 +95,7 @@ type
     class function Extension: string; virtual; abstract;
     procedure WriteTemplateFormula(ParameterName: string;
       MultiplierValue: double);
+    procedure WritePestTemplateLine(AFileName: string);
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -983,7 +984,7 @@ type
 
 // name writes a batch-file used to run MODFLOW.
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
-  FileName: string; ListFiles: TStringList; OpenListFile: boolean;
+  const FileName: string; ListFiles: TStringList; OpenListFile: boolean;
   Before, After: TStrings; ExportModpath, ExportZoneBudget: boolean;
   Model: TCustomModel): string;
 
@@ -1259,7 +1260,7 @@ begin
 end;
 
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
-  FileName: string; ListFiles: TStringList; OpenListFile: boolean;
+  const FileName: string; ListFiles: TStringList; OpenListFile: boolean;
   Before, After: TStrings; ExportModpath, ExportZoneBudget: boolean;
   Model: TCustomModel): string;
 var
@@ -1332,6 +1333,7 @@ begin
     Model.AddBinaryFile(ModflowLocation);
 
     ParamEstBatchFile := TStringList.Create;
+    ParamEstBatchFile.AddStrings(Model.PestTemplateLines);
     BatchFile := TStringList.Create;
     ArchiveBatchFile := TStringList.Create;
     try
@@ -1516,6 +1518,18 @@ begin
             BatchFile.Add(ALine);
             ParamEstBatchFile.Add(ALine);
           end;
+        end;
+      end;
+
+      if Model.PestUsed then
+      begin
+        if Model.ModelSelection = msModflow2015 then
+        begin
+          ParamEstBatchFile.Add('Mf6ObsExtractor.exe ' + ChangeFileExt(ExtractFileName(FileName), '.Mf6ExtractValues'));
+        end
+        else
+        begin
+
         end;
       end;
 
@@ -2037,6 +2051,8 @@ begin
       case DataArray.DataType of
         rdtDouble:
           begin
+            // For very small numbers, limit values to the range of
+            // single precision values.
             AValue := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
             if (NegLimitValue < AValue) and (AValue < LimitValue) then
             begin
@@ -2294,6 +2310,16 @@ begin
     sltPressure: WriteString(' "P"');
     else Assert(False);
   end;
+end;
+
+procedure TCustomFileWriter.WritePestTemplateLine(AFileName: string);
+var
+  PValFileName: string;
+begin
+  PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
+  PValFileName := ChangeFileExt(PValFileName, '.pval');
+  Model.PestTemplateLines.Add('EnhancedTemplateProcessor.exe '
+    + ExtractFileName(AFileName) + ' ' + PValFileName);
 end;
 
 procedure TCustomFileWriter.WriteExitSpec(ExitSpec: TSutraExitSpecificationMethod);
@@ -3715,7 +3741,7 @@ begin
           end;
         end;
       end
-      else if IsMf6Observation(ScreenObject) then
+      else if Mf6ObservationsUsed and IsMf6Observation(ScreenObject) then
       begin
 
         Mf6Obs := ScreenObject.Modflow6Obs;
@@ -5884,12 +5910,12 @@ begin
       HandleMissingArrayData;
     end;
 
-    ExportArray.UpToDate := True;
     if AdjustForLGR then
     begin
       Model.AdjustDataArray(ExportArray);
     end;
     ExportArray.Name := MF6_ArrayName;
+    ExportArray.UpToDate := True;
     WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False);
   finally
     if FreeArray then
@@ -8922,7 +8948,7 @@ begin
 end;
 
 initialization
-  LimitValue := Power(2,-37);
+  LimitValue := 1.18e-38;
   NegLimitValue := -LimitValue;
 
 

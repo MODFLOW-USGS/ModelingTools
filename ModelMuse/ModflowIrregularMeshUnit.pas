@@ -834,6 +834,11 @@ var
   SideIndex: Integer;
   SegLength: TFloat;
 begin
+  if Length(Polygon) = 0 then
+  begin
+    result := False;
+    Exit;
+  end;
 //  Result := False;
   Pos := 0;
   CSegment := Segment;
@@ -4327,6 +4332,11 @@ begin
   else
   begin
     FMesh.GetActiveOutlineTop(-1, Outline);
+    if Length(Outline) = 0 then
+    begin
+      result := nil;
+      Exit;
+    end;
     result := Outline[0];
     if Length(Outline) > 1 then
     begin

@@ -42915,7 +42915,9 @@ begin
       Item := Items[Index] as TPointValuesItem;
       Assert(Item.Position >= 0);
       Assert(Item.Position < Length(FItemArray));
-      Assert(FItemArray[Item.Position] = nil);
+      // FItemArray[Item.Position] should be nil but due to a bug it might not
+      // be nil.
+//      Assert(FItemArray[Item.Position] = nil);
       FItemArray[Item.Position] := Item;
     end;
   end;

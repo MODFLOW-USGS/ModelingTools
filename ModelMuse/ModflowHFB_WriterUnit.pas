@@ -124,6 +124,7 @@ type
     procedure WriteAStressPeriod(StressPeriodIndex: Integer);
     procedure RemoveAllButOneStressPeriods;
     procedure WriteFileInternal;
+    procedure WritePvalMf6;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -1369,7 +1370,12 @@ begin
         Exit;
       end;
 
-      WriteStressPeriodsMF6;
+      if not WritingTemplate then
+      begin
+        WritePvalMf6;
+      end;
+
+        WriteStressPeriodsMF6;
       Application.ProcessMessages;
       if not frmProgressMM.ShouldContinue then
       begin
@@ -1464,6 +1470,7 @@ begin
     frmErrorsAndWarnings.BeginUpdate;
     try
       FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
       WritingTemplate := True;
       WriteFileInternal;
 
@@ -1557,6 +1564,20 @@ begin
   finally
     WriteEndOptions;
   end;
+end;
+
+procedure TModflowHfb_Writer.WritePvalMf6;
+var
+  ParmIndex: Integer;
+  ScreenObjectList: TParamList;
+begin
+  for ParmIndex := 1 to FParameterScreenObjectList.Count - 1 do
+  begin
+    ScreenObjectList := FParameterScreenObjectList.Objects[ParmIndex] as TParamList;
+    Model.WritePValAndTemplate(ScreenObjectList.Parameter.ParameterName,
+      ScreenObjectList.Parameter.Value);
+  end;
+
 end;
 
 procedure TModflowHfb_Writer.WriteStressPeriodsMF6;

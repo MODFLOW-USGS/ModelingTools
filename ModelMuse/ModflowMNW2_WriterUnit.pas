@@ -885,7 +885,9 @@ var
   WellIndex: Integer;
 
   OutputFileName: string;
+  {$IFDEF PEST}
   ObsFileLink: TObsFileLink;
+  {$ENDIF}
 begin
   AFileName := ExtractFileName(AFileName);
   AFileName := ChangeFileExt(AFileName, '');

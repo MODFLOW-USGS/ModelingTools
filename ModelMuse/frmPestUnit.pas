@@ -80,7 +80,7 @@ begin
   if Ed.Text <> '' then
   begin
     AChar := Ed.Text[1];
-    OK :=  CharInSet(AChar, ['@', '#', '$', '%', '?'])
+    OK :=  CharInSet(AChar, ['@', '$', '%', '?'])
       and (edTemplateCharacter.Text <> edFormulaMarker.Text);
   end;
   if OK then

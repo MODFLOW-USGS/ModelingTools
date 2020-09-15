@@ -140,7 +140,6 @@ function TModflowRCH_Writer.IsMf6Observation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-//    and AScreenObject.Modflow6Obs.Used
     and (ogRch in AScreenObject.Modflow6Obs.General);
 end;
 
@@ -523,6 +522,7 @@ begin
     frmErrorsAndWarnings.BeginUpdate;
     try
       FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
       WritingTemplate := True;
       WriteFileInternal;
 

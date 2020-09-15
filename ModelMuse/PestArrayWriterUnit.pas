@@ -38,7 +38,6 @@ procedure TPestDataArrayWriter.WriteParamTypeArrays(
   ParameterTypes: TParameterTypes; FileName: string);
 const
   CoordListName = 'cl1';
-  TemplateChar = '@';
 var
   ParamList: TList<TModflowSteadyParameter>;
   ParamTypeIndex: Integer;
@@ -73,6 +72,7 @@ var
   ScalarFileName: string;
   ScalarLine: string;
   ScalarFileTemplate: TStringList;
+  TemplateChar: Char;
   function ReplacementString(AParmName: string): string;
   begin
     Result := TemplateChar + AParmName;
@@ -90,6 +90,7 @@ var
     Script.Add('  file=''' + CListFileName + ''')');
   end;
 begin
+  TemplateChar := Model.PestProperties.TemplateCharacter;
   Directory := ExtractFileDir(FileName);
   Assert(TDirectory.Exists(Directory));
   ArrayDir := IncludeTrailingPathDelimiter(Directory) + StrArrays;
