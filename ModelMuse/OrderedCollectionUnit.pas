@@ -104,7 +104,7 @@ type
     ptCHD, ptGHB, ptQ,
     ptRIV, ptDRN, ptDRT, ptSFR, ptHFB,
     ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY,
-    ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX);
+    ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX, ptPEST);
   //
 
   // @name is used to indicate groups of related MODFLOW parameters.
@@ -378,6 +378,7 @@ begin
     ptHUF_LVDA: result := 'LVDA' ;
     ptSTR: result := 'STR' ;
     ptQMAX: result := 'QMAX' ;
+    ptPEST: result := 'PEST' ;
     else Assert(False);
   end;
 end;
@@ -849,6 +850,7 @@ begin
     ptHUF_LVDA: ;
     ptSTR: ;
     ptQMAX: ;
+    ptPEST: ;
     else Assert(False);
   end;
 end;
@@ -1167,6 +1169,7 @@ begin
               end;
             end;
           end;
+        ptPEST: ;
         else Assert(False);
       end;
     end;

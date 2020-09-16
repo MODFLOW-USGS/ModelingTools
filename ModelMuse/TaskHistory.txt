@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = True
+      Display = False
     end
     item
       Name = 'core code'
@@ -258,7 +258,7 @@ object TTaskHistory
     end
     item
       Name = 'List File Analyzer'
-      Display = True
+      Display = False
     end
     item
       Name = 'Mesh Generation'
@@ -270,11 +270,11 @@ object TTaskHistory
     end
     item
       Name = 'MT3DMS'
-      Display = True
+      Display = False
     end
     item
       Name = 'SUTRA Model'
-      Display = True
+      Display = False
     end
     item
       Name = '64 bit'
@@ -338,7 +338,7 @@ object TTaskHistory
     end
     item
       Name = 'MF-2015'
-      Display = True
+      Display = False
     end
     item
       Name = 'NPF'
@@ -426,7 +426,7 @@ object TTaskHistory
     end
     item
       Name = 'GW_Chart'
-      Display = True
+      Display = False
     end
     item
       Name = 'Head obs for MF6'
@@ -438,7 +438,7 @@ object TTaskHistory
     end
     item
       Name = 'CSUB'
-      Display = True
+      Display = False
     end
     item
       Name = 'GwMounding'
@@ -26171,5 +26171,12 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'PEST')
+    end
+    item
+      Date = 44090.000000000000000000
+      Categories.Strings = (
+        'Pest parameter substitution'
+        'PEST'
+        'Bug fix')
     end>
 end

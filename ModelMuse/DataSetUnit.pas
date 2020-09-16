@@ -954,7 +954,9 @@ type
       write SetContourInterval;
     property PestParametersUsed: Boolean read FPestParametersUsed
       write SetPestParametersUsed
-      {$IFNDEF PEST}
+      {$IFDEF PEST}
+      stored True
+      {$ELSE}
       stored False
       {$ENDIF}
       ;

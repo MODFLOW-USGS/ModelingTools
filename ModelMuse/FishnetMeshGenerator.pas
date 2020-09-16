@@ -1181,6 +1181,11 @@ var
   AnOrientation: Integer;
   Opposite: boolean;
 begin
+  if Element = nil then
+  begin
+    Exit;
+  end;
+
   MarkedElements := False;
   if not FUpdating then
   begin
@@ -1291,6 +1296,10 @@ var
   AnOrientation: Integer;
   Opposite: boolean;
 begin
+  if Element = nil then
+  begin
+    Exit;
+  end;
   MarkedElements := False;
   if not FUpdating then
   begin

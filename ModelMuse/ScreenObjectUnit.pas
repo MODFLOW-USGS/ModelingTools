@@ -19133,7 +19133,7 @@ function TScreenObject.GetMfBoundary(
 begin
   result := nil;
   case ParamType of
-    ptUndefined..ptLPF_VKCB: Assert(False);
+    ptUndefined..ptLPF_VKCB, ptPEST: Assert(False);
     ptCHD: result := ModflowChdBoundary;
     ptGHB: result := ModflowGhbBoundary;
     ptQ: result := ModflowWellBoundary;

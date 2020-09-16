@@ -26,6 +26,7 @@ type
     // @seealso(ZoneArrayName)
     FZoneArrayNames: TStringList;
     FNamesToRemove: TStringList;
+    FUsePilotPoints: Boolean;
     // See @link(MultiplierName).
     procedure SetMultiplierName(const Value: string);
     // See @link(UseMultiplier).
@@ -54,6 +55,7 @@ type
     procedure UpdateHfbParameterNames(const Value: string);
     procedure UpdateFormulas(const OldName, NewName: string);
     procedure UnlockDataSets;
+    procedure SetUsePilotPoints(const Value: Boolean);
   protected
     // Besides setting the name of the parameter, @name also updates the
     // names of the @link(TDataArray)s used to define multiplier and zone
@@ -90,6 +92,13 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name lists the zone array names exported to MODFLOW.
     function ZoneArrayName(ModflowLayer: integer; AModel: TBaseModel): string;
+    property UsePilotPoints: Boolean read FUsePilotPoints write SetUsePilotPoints
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
   end;
 
   // @name is a collection of @link(TModflowSteadyParameter)s.
@@ -162,6 +171,7 @@ begin
     ZoneName := SourceParameter.ZoneName;
     UseMultiplier := SourceParameter.UseMultiplier;
     UseZone := SourceParameter.UseZone;
+    UsePilotPoints := SourceParameter.UsePilotPoints;
   end;
 end;
 
@@ -486,6 +496,15 @@ begin
     InvalidateModel;
   end;
   UpdateMultiplierName(FParameterName);
+end;
+
+procedure TModflowSteadyParameter.SetUsePilotPoints(const Value: Boolean);
+begin
+  if FUsePilotPoints <> Value then
+  begin
+    FUsePilotPoints := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TModflowSteadyParameter.SetUseZone(const Value: boolean);

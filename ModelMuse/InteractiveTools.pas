@@ -8260,6 +8260,7 @@ end;
 constructor TFishnetMeshGenerationTool.Create(AOwner: TComponent);
 begin
   inherited;
+  FSelectedElement := nil;
   FFishnetGenerator := nil;
   FNodes := TRbwQuadTree.Create(self);
 
@@ -8671,6 +8672,7 @@ var
   InsideElement: TFishnetMeshElement;
   AnotherNode: TFishnetMeshNode;
   NodeIndex: Integer;
+  LastElement: TFishnetMeshElement;
 begin
   inherited;
   if Button <> mbLeft then
@@ -8722,6 +8724,13 @@ begin
       and  (Abs(Y-LocalY) <= SelectionWidth) then
     begin
       ANode := Data[0];
+      LastElement := FFishnetGenerator.Elements[FFishnetGenerator.Elements.Count-1];
+      if ((FSelectedElement = nil) or (FSelectedElement = LastElement))
+        and (LastElement.Nodes.IndexOf(ANode) >= 0) then
+      begin
+        Beep;
+        Exit;
+      end;
     end;
   end;
   InsideElement := nil;

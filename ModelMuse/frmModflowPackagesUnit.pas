@@ -2891,13 +2891,14 @@ begin
     ptHUF_LVDA: Root := 'LVDA_Par';
     ptSTR: Root := 'STR_Par';
     ptQMAX: Root := 'QMAX_Par';
+    ptPEST: Root := 'PEST_Par';
     else Assert(False);
   end;
   UpRoot := UpperCase(Root);
   MaxCount := 0;
   case CurrentParameterType of
     ptUndefined: Assert(False);
-    ptLPF_HK..ptLPF_VKCB, ptHFB, ptHUF_SYTP, ptHUF_LVDA:
+    ptLPF_HK..ptLPF_VKCB, ptHFB, ptHUF_SYTP, ptHUF_LVDA, ptPEST:
       begin
         for Index := 0 to FSteadyParameters.Count - 1 do
         begin
@@ -3275,7 +3276,7 @@ begin
     case Param.ParameterType of
       ptLPF_HK, ptLPF_HANI, ptLPF_VK,
         ptLPF_VANI, ptLPF_SS, ptLPF_SY, ptLPF_VKCB, ptHUF_SYTP, ptHUF_LVDA,
-        ptSTR, ptQMAX: ;  // do nothing
+        ptSTR, ptQMAX, ptPEST: ;  // do nothing
       ptHFB: ActiveFrame := frameHFBParameterDefinition;
       else Assert(False);
     end;

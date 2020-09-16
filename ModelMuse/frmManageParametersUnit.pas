@@ -11,7 +11,8 @@ uses System.UITypes, System.Types,
   ModflowPackageSelectionUnit;
 
 type
-  TParamColumn = (pcName, pcPackage, pcType, pcValue, pcMult, pcZone);
+  TParamColumn = (pcName, pcPackage, pcType, pcValue, pcMult, pcZone,
+    pcPilotPoints);
 
   TfrmManageParameters = class(TfrmCustomGoPhast)
     rdgParameters: TRbwDataGrid4;
@@ -80,7 +81,7 @@ implementation
 uses
   Contnrs, frmGoPhastUnit, PhastModelUnit, ModflowDiscretizationWriterUnit,
   ScreenObjectUnit, frmShowHideObjectsUnit, ModflowPackagesUnit, ReadPvalUnit,
-  IntListUnit;
+  IntListUnit, GoPhastTypes;
 
 resourcestring
   StrErrorReadingPvalF = 'Error reading Pval file. Check that it is a valid ' +
@@ -95,10 +96,11 @@ resourcestring
   StrZoneArray = 'Zone Array';
   StrThereAreTwoOrMo = 'There are two (or more) parameters named %s. Duplica' +
   'te parameter names are not allowed.';
+  StrPilotPoints = 'Pilot Points';
 
 {$R *.dfm}
 type
-  TParamClassType = (pctUnknown, pctSteady, pctTransient, pctHUF);
+  TParamClassType = (pctUnknown, pctSteady, pctTransient, pctHUF, pctPEST);
 
   TParamRecord = record
     Package: string;
@@ -138,7 +140,8 @@ const
      (Package: 'HUF'; PType: 'KDEP'; PClass: pctHUF),
      (Package: 'HUF'; PType: 'LVDA'; PClass: pctSteady),
      (Package: 'STR'; PType: 'STR'; PClass: pctTransient),
-     (Package: 'FMP'; PType: 'QMAX'; PClass: pctTransient)
+     (Package: 'FMP'; PType: 'QMAX'; PClass: pctTransient),
+     (Package: 'Many'; PType: 'PEST'; PClass: pctPEST)
      );
 
 Type
@@ -225,6 +228,39 @@ begin
   end;
 end;
 
+function ComparePilotPoints(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+  PS1, PS2: TModflowSteadyParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  if P1 is TModflowSteadyParameter then
+  begin
+    if P2 is TModflowSteadyParameter then
+    begin
+      PS1 := TModflowSteadyParameter(P1);
+      PS2 := TModflowSteadyParameter(P2);
+      result := Sign(Ord(PS1.UsePilotPoints) - Ord(PS2.UsePilotPoints));
+    end
+    else
+    begin
+      result := 1;
+    end;
+  end
+  else
+  begin
+    if P2 is TModflowSteadyParameter then
+    begin
+      result := -1;
+    end
+    else
+    begin
+      result := 0;
+    end;
+  end;
+end;
+
 function CompareZone(Item1, Item2: Pointer): Integer;
 var
   P1, P2: TModflowParameter;
@@ -274,6 +310,7 @@ begin
       pcValue: result := CompareValues(Item1, Item2);
       pcMult: result := CompareMult(Item1, Item2);
       pcZone: result := CompareZone(Item1, Item2);
+      pcPilotPoints: result := ComparePilotPoints(Item1, Item2);
       else Assert(False);
     end;
     if result <> 0 then
@@ -408,6 +445,7 @@ begin
     rdgParameters.Cells[Ord(pcValue), 0] := StrValue;
     rdgParameters.Cells[Ord(pcMult), 0] := StrMultiplierArray;
     rdgParameters.Cells[Ord(pcZone), 0] := StrZoneArray;
+    rdgParameters.Cells[Ord(pcPilotPoints), 0] := StrPilotPoints;
   finally
     rdgParameters.EndUpdate;
   end;
@@ -502,19 +540,21 @@ end;
 function TfrmManageParameters.ParamValid(ParamType: TParameterType): boolean;
 var
   TransientModel: Boolean;
+  Modflow6Selected: Boolean;
 begin
   result := False;
   TransientModel := frmGoPhast.PhastModel.ModflowStressPeriods.TransientModel;
+  Modflow6Selected := frmGoPhast.ModelSelection = msModflow2015;
 
   case ParamType of
     ptUndefined: result := False;
-    ptLPF_HK: result := frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected;
-    ptLPF_HANI: result := frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected;
-    ptLPF_VK: result := frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected;
-    ptLPF_VANI: result := frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected;
-    ptLPF_SS: result := (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected) and TransientModel;
-    ptLPF_SY: result := (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected) and TransientModel;
-    ptLPF_VKCB: result := frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected;
+    ptLPF_HK: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
+    ptLPF_HANI: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
+    ptLPF_VK: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
+    ptLPF_VANI: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
+    ptLPF_SS: result := not Modflow6Selected and ((frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected) and TransientModel);
+    ptLPF_SY: result := not Modflow6Selected and ((frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected) and TransientModel);
+    ptLPF_VKCB: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
     ptRCH: result := frmGoPhast.PhastModel.RchIsSelected;
     ptEVT: result := frmGoPhast.PhastModel.EvtIsSelected;
     ptETS: result := frmGoPhast.PhastModel.EtsIsSelected;
@@ -537,6 +577,7 @@ begin
     ptHUF_LVDA: result := frmGoPhast.PhastModel.HufIsSelected;
     ptSTR: result := frmGoPhast.PhastModel.StrIsSelected;
     ptQMAX: result := frmGoPhast.PhastModel.FarmProcessIsSelected;
+    ptPEST: result := frmGoPhast.PhastModel.PestUsed;
     else Assert(False);
   end;
 end;
@@ -556,6 +597,7 @@ begin
         AParam := FSteadyParameters.Add as TModflowParameter;
         rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := True;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := True;
+        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
         rdgParameters.SpecialFormat[Ord(pcMult), ARow] := rcf4Boolean;
         rdgParameters.SpecialFormat[Ord(pcZone), ARow] := rcf4Boolean;
       end;
@@ -564,13 +606,23 @@ begin
         AParam := FTransientListParameters.Add as TModflowParameter;
         rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := False;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := False;
+        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
       end;
     pctHUF:
       begin
         AParam := FHufParameters.Add as TModflowParameter;
         rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := False;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := False;
+        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
       end;
+    pctPEST:
+      begin
+        AParam := FSteadyParameters.Add as TModflowParameter;
+        rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := False;
+        rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := False;
+        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := True;
+        rdgParameters.SpecialFormat[Ord(pcPilotPoints), ARow] := rcf4Boolean;
+      end
   else
     Assert(False);
   end;
@@ -732,7 +784,7 @@ begin
       if AModflowParam is TModflowSteadyParameter then
       begin
         SteadyParam := TModflowSteadyParameter(AModflowParam);
-        if SteadyParam.ParameterType <> ptHFB then
+        if not (SteadyParam.ParameterType in [ptHFB, ptPest]) then
         begin
           rdgParameters.UseSpecialFormat[Ord(pcMult), ParamIndex + 1] := True;
           rdgParameters.UseSpecialFormat[Ord(pcZone), ParamIndex + 1] := True;
@@ -750,11 +802,24 @@ begin
           rdgParameters.UseSpecialFormat[Ord(pcMult), ParamIndex + 1] := False;
           rdgParameters.UseSpecialFormat[Ord(pcZone), ParamIndex + 1] := False;
         end;
+        if SteadyParam.ParameterType = ptPest then
+        begin
+          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := True;
+          rdgParameters.SpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] :=
+            rcf4Boolean;
+          rdgParameters.Checked[Ord(pcPilotPoints), ParamIndex + 1] :=
+            SteadyParam.UsePilotPoints;
+        end
+        else
+        begin
+          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := False;
+        end;
       end
       else
       begin
         rdgParameters.UseSpecialFormat[Ord(pcMult), ParamIndex + 1] := False;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ParamIndex + 1] := False;
+        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := False;
       end;
     end;
   finally
@@ -847,7 +912,7 @@ begin
     case TParamColumn(ACol) of
       pcName, pcType, pcValue: ; // do nothing
       pcPackage: CanSelect := False;
-      pcMult, pcZone: CanSelect := rdgParameters.UseSpecialFormat[ACol, ARow];
+      pcMult, pcZone, pcPilotPoints: CanSelect := rdgParameters.UseSpecialFormat[ACol, ARow];
       else Assert(False);
     end;
   end;
@@ -920,7 +985,7 @@ begin
               Ord(pcValue), ARow], 0);
           end;
         end;
-      pcMult, pcZone: ; // do nothing
+      pcMult, pcZone, pcPilotPoints: ; // do nothing
       else
         Assert(False);
     end;
@@ -954,7 +1019,11 @@ begin
           pcZone:
             begin
               SteadyParam.UseZone := rdgParameters.Checked[Ord(pcZone), ARow];
-            end
+            end;
+          pcPilotPoints:
+            begin
+              SteadyParam.UsePilotPoints := rdgParameters.Checked[Ord(pcPilotPoints), ARow];
+            end;
           else Assert(False);
         end;
       end;
@@ -982,6 +1051,7 @@ begin
       end;
       rdgParameters.UseSpecialFormat[Ord(pcMult), RowIndex] := False;
       rdgParameters.UseSpecialFormat[Ord(pcZone), RowIndex] := False;
+      rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), RowIndex] := False;
     end;
   end
   else if seNumberOfParameters.AsInteger < rdgParameters.RowCount -1 then

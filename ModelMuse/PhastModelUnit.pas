@@ -9967,6 +9967,9 @@ const
 //                evaluating the RCH or ETS packages after disabling MODFLOW 6
 //                observations.
 
+//               Bug fix: When drawing a fishnet mesh, it is no longer possible
+//                to add the same node to a fishnet mesh element twice.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.12';
@@ -20285,7 +20288,7 @@ procedure TPhastModel.UpdateModelMateParameter(ParameterList: TStringList;
   ModelMuseParam: TModflowParameter; Project: TProject;
   Operation: TModelMateOperation);
 const
-  GroupNames : array[Low(TParameterType)..High(TParameterType)] of string
+  GroupNames : array[Low(TParameterType)..ptQMAX] of string
     = ('Undefined', 'HK', 'HANI', 'VK',
     'VANI', 'SS', 'SY', 'VKCB', 'RCH', 'EVT', 'ETS',
     'CHD', 'GHB', 'Q',
@@ -20428,6 +20431,10 @@ begin
           Exit;
         end;
       end;
+    ptPEST:
+      begin
+        Exit;
+      end
     else Assert(False);
   end;
 
