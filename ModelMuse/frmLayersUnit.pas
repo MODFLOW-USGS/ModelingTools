@@ -69,6 +69,7 @@ type
     rdgConduitLayers: TRbwDataGrid4;
     pnl1: TPanel;
     rdeConduitLayers: TRbwDataEntry;
+    lblModflow6Info: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);

@@ -711,7 +711,8 @@ uses
   framePestObsMf6Unit in 'framePestObsMf6Unit.pas' {framePestObsMf6: TFrame},
   PestObsExtractorInputWriterUnit in 'PestObsExtractorInputWriterUnit.pas',
   PestPropertiesUnit in 'PestPropertiesUnit.pas',
-  frmPestUnit in 'frmPestUnit.pas' {frmPEST};
+  frmPestUnit in 'frmPestUnit.pas' {frmPEST},
+  PestControlFileWriterUnit in 'PestControlFileWriterUnit.pas';
 
 {$R *.res}
 
