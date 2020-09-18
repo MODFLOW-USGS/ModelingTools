@@ -6,15 +6,22 @@ uses
   System.Classes, GoPhastTypes, GR32;
 
 type
-  TPestRestart = (prRestart, prNoRestart);
+  TPestRestart = (prNoRestart, prRestart);
   TPestMode = (pmEstimation, pmPrediction, pmRegularisation, pmPareto);
-  TLambdaForgive = (lfForgive, lfNoForgive);
-  TDerivedForgive = (dfForgive, dNoForgive);
+  TLambdaForgive = (lfNoForgive, lfForgive);
+  TDerivedForgive = (dNoForgive, dfForgive);
   TUpgradeParamVectorBending = (upvbNoBending, upvbBending);
-  TAutomaticUserIntervation = (auiInactive, auiActive);
+  TAutomaticUserIntervation = (auiInactive, auiActive, auiNoneFrozen);
   TSensitivityReuse = (srNoReuse, srReuse);
   TMakeFinalRun = (mfrNoRun, mfrRun);
   TWriteMatrix = (wmDontWrite, wmWrite);
+  TSaveResolution = (srDontSave, srSave);
+  TSaveJacobian = (sjDontSave, sjSave);
+  TSaveJacobianIteration = (sjiDontSave, sjiSave);
+  TVerboseRecord = (vrNonVerbose, vrVerbose);
+  TSaveInterimResiduals = (sirDontSave, sirSave);
+  TSaveParamIteration = (spiDontSave, spiSave);
+  TSaveParamRun = (sprDontSave, sprSave);
 
   TPestControlData = class(TGoPhastPersistent)
   private
@@ -53,6 +60,13 @@ type
     FWriteCovariance: TWriteMatrix;
     FWriteCorrelations: TWriteMatrix;
     FWriteEigenVectors: TWriteMatrix;
+    FSaveResolution: TSaveResolution;
+    FSaveJacobian: TSaveJacobian;
+    FSaveJacobianIteration: TSaveJacobianIteration;
+    FVerboseRecord: TVerboseRecord;
+    FSaveInterimResiduals: TSaveInterimResiduals;
+    FSaveParamIteration: TSaveParamIteration;
+    FSaveParamRun: TSaveParamRun;
     procedure SetPestMode(const Value: TPestMode);
     procedure SetPestRestart(const Value: TPestRestart);
     procedure SetMaxCompressionDimension(const Value: Integer);
@@ -118,6 +132,13 @@ type
     procedure SetWriteCovariance(const Value: TWriteMatrix);
     procedure SetWriteCorrelations(const Value: TWriteMatrix);
     procedure SetWriteEigenVectors(const Value: TWriteMatrix);
+    procedure SetSaveResolution(const Value: TSaveResolution);
+    procedure SetSaveJacobian(const Value: TSaveJacobian);
+    procedure SetSaveJacobianIteration(const Value: TSaveJacobianIteration);
+    procedure SetVerboseRecord(const Value: TVerboseRecord);
+    procedure SetSaveInterimResiduals(const Value: TSaveInterimResiduals);
+    procedure SetSaveParamIteration(const Value: TSaveParamIteration);
+    procedure SetSaveParamRun(const Value: TSaveParamRun);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     procedure Assign(Source: TPersistent); override;
@@ -126,7 +147,7 @@ type
     // DERZEROLIM
     // minimum value = 0
     property ZeroLimit: double read GetZeroLimit write SetZeroLimit;
-    // RLAMBDA1
+    // RLAMBDA1 >= 0
     // must be positive
     property InitalLambda: double read GetInitalLambda
       write SetInitalLambda;
@@ -138,62 +159,64 @@ type
     // should be > 0 and < 1.
     property PhiRatioSufficient: double read GetPhiRatioSufficient
       write SetPhiRatioSufficient;
-    // PHIREDLAM
+    // PHIREDLAM  0 to 1
     property PhiReductionLambda: double read GetPhiReductionLambda
       write SetPhiReductionLambda;
-    // RELPARMAX
+    // RELPARMAX > 0
     property RelativeMaxParamChange: double read GetRelativeMaxParamChange
       write SetRelativeMaxParamChange;
-    // FACPARMAX
+    // FACPARMAX > 1
     property FactorMaxParamChange: double read GetFactorMaxParamChange
       write SetFactorMaxParamChange;
     // FACORIG
-    // must be > 0
+    // must be 0 to 1
     property FactorOriginal: double read GetFactorOriginal
       write SetFactorOriginal;
-    // PHIREDSWH
+    // PHIREDSWH  0 to 1
     property SwitchCriterion: double read GetSwitchCriterion
       write SetSwitchCriterion;
-    // SPLITSWH
+    // SPLITSWH >= 0
     property SplitSlopeCriterion: double read GetSplitSlopeCriterion
       write SetSplitSlopeCriterion;
-    // PHIREDSTP
+    // PHIREDSTP > 0
     property SlowConvergenceCriterion: double read GetSlowConvergenceCriterion
       write SetSlowConvergenceCriterion;
-    // RELPARSTP
+    // RELPARSTP > 0
     property ParameterChangeConvergenceCriterion: double
       read GetParameterChangeConvergenceCriterion
       write SetParameterChangeConvergenceCriterion;
-    // PHISTOPTHRESH
+    // PHISTOPTHRESH >= 0
     property ObjectiveCriterion: double read GetObjectiveCriterion
       write SetObjectiveCriterion;
     // PHIABANDON
     property PhiAbandon: double read GetPhiAbandon write SetPhiAbandon;
   published
+    // RSTFLE
     property PestRestart: TPestRestart read FPestRestart write SetPestRestart;
+    // PESTMODE
     property PestMode: TPestMode read FPestMode write SetPestMode;
-    //MAXCOMPRDIM (Minimum value = 1.
+    //MAXCOMPRDIM must be >= 0
     property MaxCompressionDimension: Integer read FMaxCompressionDimension
       write SetMaxCompressionDimension;
     // DERZEROLIM
     property StoredZeroLimit: TRealStorage read FStoredZeroLimit
       write SetStoredZeroLimit;
-    // RLAMBDA1
+    // RLAMBDA1 must be >= 0
     property StoredInitalLambda: TRealStorage read FStoredInitalLambda
       write SetStoredInitalLambda;
-    // RLAMFAC
+    // RLAMFAC must not be zero but can be positive or negative
     property StoredLambdaAdjustmentFactor: TRealStorage
       read FStoredLambdaAdjustmentFactor write SetStoredLambdaAdjustmentFactor;
-    // PHIRATSUF
+    // PHIRATSUF 0 to 1
     property StoredPhiRatioSufficient: TRealStorage
       read FStoredPhiRatioSufficient write SetStoredPhiRatioSufficient;
-    // PHIREDLAM
+    // PHIREDLAM 0 to 1
     property StoredPhiReductionLambda: TRealStorage
       read FStoredPhiReductionLambda write SetStoredPhiReductionLambda;
-    // NUMLAM
+    // NUMLAM 1 or more (negative allowed with BEOPEST)
     property NumberOfLambdas: Integer read FNumberOfLambdas
       write SetNumberOfLambdas;
-    // JACUPDATE
+    // JACUPDATE  >= 0
     property JacobianUpdate: Integer read FJacobianUpdate
       write SetJacobianUpdate;
     // LAMFORGIVE
@@ -202,27 +225,27 @@ type
     // DERFORGIVE
     property DerivedForgive: TDerivedForgive read FDerivedForgive
       write SetDerivedForgive;
-    // RELPARMAX
+    // RELPARMAX > 0
     property StoredRelativeMaxParamChange: TRealStorage
       read FStoredRelativeMaxParamChange write SetStoredRelativeMaxParamChange;
-    // FACPARMAX
+    // FACPARMAX  > 1
     property StoredFactorMaxParamChange: TRealStorage
       read FStoredFactorMaxParamChange write SetStoredFactorMaxParamChange;
-    // FACORIG
+    // FACORIG  0 to 1
     property StoredFactorOriginal: TRealStorage
       read FStoredFactorOriginal write SetStoredFactorOriginal;
-    // IBOUNDSTICK
+    // IBOUNDSTICK  >= 0
     property BoundStick: Integer read FBoundStick write SetBoundStick;
     // UPVECBEND
     property UpgradeParamVectorBending: TUpgradeParamVectorBending
       read FUpgradeParamVectorBending write SetUpgradeParamVectorBending;
-    // PHIREDSWH
+    // PHIREDSWH 0 to 1
     property StoredSwitchCriterion: TRealStorage read FStoredSwitchCriterion
       write SetStoredSwitchCriterion;
-    // NOPTSWITCH
+    // NOPTSWITCH 1 or more
     property OptSwitchCount: Integer read FOptSwitchCount
       write SetOptSwitchCount;
-    // SPLITSWH
+    // SPLITSWH  >= 0
     property StoredSplitSlopeCriterion: TRealStorage
       read FStoredSplitSlopeCriterion write SetStoredSplitSlopeCriterion;
     // DOAUI
@@ -234,34 +257,34 @@ type
     // BOUNDSCALE
     property Boundscaling: Boolean read FBoundscaling write SetBoundscaling
       stored True;
-    // NOPTMAX
+    // NOPTMAX >= -2
     property MaxIterations: Integer read FMaxIterations write SetMaxIterations;
-    // PHIREDSTP
+    // PHIREDSTP > 0
     property StoredSlowConvergenceCriterion: TRealStorage
       read FStoredSlowConvergenceCriterion
       write SetStoredSlowConvergenceCriterion;
-    // NPHISTP
+    // NPHISTP  > 0
     property SlowConvergenceCountCriterion: integer
       read FSlowConvergenceCountCriterion
       write SetSlowConvergenceCountCriterion;
-    // NPHINORED
+    // NPHINORED  > 0
     property ConvergenceCountCriterion: Integer read FConvergenceCountCriterion
       write SetConvergenceCountCriterion;
-    // RELPARSTP
+    // RELPARSTP > 0
     property StoredParameterChangeConvergenceCriterion: TRealStorage
       read FStoredParameterChangeConvergenceCriterion
       write SetStoredParameterChangeConvergenceCriterion;
-    // NRELPAR
+    // NRELPAR  > 0
     property ParameterChangeConvergenceCount: Integer
       read FParameterChangeConvergenceCount
       write SetParameterChangeConvergenceCount;
-    // PHISTOPTHRESH
+    // PHISTOPTHRESH  >= 0
     property StoredObjectiveCriterion: TRealStorage
       read FStoredObjectiveCriterion write SetStoredObjectiveCriterion;
     // LASTRUN
     property MakeFinalRun: TMakeFinalRun read FMakeFinalRun
       write SetMakeFinalRun;
-    // PHIABANDON
+    // PHIABANDON  positive number
     property StoredPhiAbandon: TRealStorage read FStoredPhiAbandon
       write SetStoredPhiAbandon;
     // ICOV
@@ -273,6 +296,31 @@ type
     // IEIG
     property WriteEigenVectors: TWriteMatrix read FWriteEigenVectors
       write SetWriteEigenVectors;
+    // IRES
+    property SaveResolution: TSaveResolution read FSaveResolution
+      write SetSaveResolution;
+    // JCOSAVE
+    property SaveJacobian: TSaveJacobian read FSaveJacobian
+      write SetSaveJacobian;
+    // JCOSAVEITN
+    property SaveJacobianIteration: TSaveJacobianIteration
+      read FSaveJacobianIteration write SetSaveJacobianIteration;
+    // VERBOSEREC
+    property VerboseRecord: TVerboseRecord read FVerboseRecord
+      write SetVerboseRecord;
+    // RESSAVEITN
+    property SaveInterimResiduals: TSaveInterimResiduals
+      read FSaveInterimResiduals write SetSaveInterimResiduals;
+    // PARSAVEITN
+    property SaveParamIteration: TSaveParamIteration read FSaveParamIteration
+      write SetSaveParamIteration;
+    // PARSAVERUN
+    property SaveParamRun: TSaveParamRun read FSaveParamRun
+      write SetSaveParamRun;
+{
+  TSaveParamIteration = (spiDontSave, spiSave);
+  TSaveParamRun = (sprDontSave, sprSave);
+}
   end;
 
 
@@ -517,6 +565,13 @@ begin
     WriteCovariance := PcdSource.WriteCovariance;
     WriteCorrelations := PcdSource.WriteCorrelations;
     WriteEigenVectors := PcdSource.WriteEigenVectors;
+    SaveResolution := PcdSource.SaveResolution;
+    SaveJacobian := PcdSource.SaveJacobian;
+    SaveJacobianIteration := PcdSource.SaveJacobianIteration;
+    VerboseRecord := PcdSource.VerboseRecord;
+    SaveInterimResiduals := PcdSource.SaveInterimResiduals;
+    SaveParamIteration := PcdSource.SaveParamIteration;
+    SaveParamRun := PcdSource.SaveParamRun;
   end
   else
   begin
@@ -685,6 +740,13 @@ begin
   FWriteCovariance := wmWrite;
   FWriteCorrelations := wmWrite;
   FWriteEigenVectors := wmWrite;
+  FSaveResolution := srDontSave;
+  FSaveJacobian := sjSave;
+  FSaveJacobianIteration := sjiDontSave;
+  FVerboseRecord := vrVerbose;
+  FSaveInterimResiduals := sirSave;
+  FSaveParamIteration := spiSave;
+  FSaveParamRun := sprDontSave;
 end;
 
 procedure TPestControlData.SetAutomaticUserIntervation(
@@ -855,6 +917,63 @@ begin
   StoredRelativeMaxParamChange.Value := Value;
 end;
 
+procedure TPestControlData.SetSaveInterimResiduals(
+  const Value: TSaveInterimResiduals);
+begin
+  if FSaveInterimResiduals <> Value then
+  begin
+    FSaveInterimResiduals := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPestControlData.SetSaveJacobian(const Value: TSaveJacobian);
+begin
+  if FSaveJacobian <> Value then
+  begin
+    FSaveJacobian := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPestControlData.SetSaveJacobianIteration(
+  const Value: TSaveJacobianIteration);
+begin
+  if FSaveJacobianIteration <> Value then
+  begin
+    FSaveJacobianIteration := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPestControlData.SetSaveParamIteration(
+  const Value: TSaveParamIteration);
+begin
+  if FSaveParamIteration <> Value then
+  begin
+    FSaveParamIteration := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPestControlData.SetSaveParamRun(const Value: TSaveParamRun);
+begin
+  if FSaveParamRun <> Value then
+  begin
+    FSaveParamRun := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPestControlData.SetSaveResolution(const Value: TSaveResolution);
+begin
+  if FSaveResolution <> Value then
+  begin
+    FSaveResolution := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TPestControlData.SetSensitivityReuse(const Value: TSensitivityReuse);
 begin
   if FSensitivityReuse <> Value then
@@ -953,6 +1072,15 @@ begin
   if FUpgradeParamVectorBending <> Value then
   begin
     FUpgradeParamVectorBending := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPestControlData.SetVerboseRecord(const Value: TVerboseRecord);
+begin
+  if FVerboseRecord <> Value then
+  begin
+    FVerboseRecord := Value;
     InvalidateModel;
   end;
 end;

@@ -76,13 +76,13 @@ begin
   // second line 4.2.3
   PestControlData := Model.PestProperties.PestControlData;
   case PestControlData.PestRestart of
-    prRestart:
-      begin
-        WriteString('restart ');
-      end;
     prNoRestart:
       begin
         WriteString('norestart ');
+      end;
+    prRestart:
+      begin
+        WriteString('restart ');
       end;
     else
       Assert(False);
@@ -215,11 +215,13 @@ begin
   WriteFloat(PestControlData.FactorMaxParamChange);
   //FACORIG
   WriteFloat(PestControlData.FactorOriginal);
+  // IBOUNDSTICK
+  WriteInteger(Ord(PestControlData.BoundStick));
   // UPVECBEND
   WriteInteger(Ord(PestControlData.UpgradeParamVectorBending));
   // ABSPARMAX is not currently supported by ModelMuse.
 
-  WriteString(' # RELPARMAX, FACPARMAX, FACORIG, UPVECBEND');
+  WriteString(' # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND');
   NewLine;
   {$ENDREGION}
 
@@ -240,6 +242,10 @@ begin
     auiActive:
       begin
         WriteString(' aui');
+      end;
+    auiNoneFrozen:
+      begin
+        WriteString(' auid');
       end;
     else
       Assert(False);
@@ -303,8 +309,88 @@ begin
   WriteInteger(Ord(PestControlData.WriteCorrelations));
   // IEIG
   WriteInteger(Ord(PestControlData.WriteEigenVectors));
+  // IRES
+  WriteInteger(Ord(PestControlData.SaveResolution));
+  // JCOSAVE
+  case PestControlData.SaveJacobian of
+    sjDontSave:
+      begin
+        WriteString(' nojcosave');
+      end;
+    sjSave:
+      begin
+        WriteString(' jcosave');
+      end;
+    else
+      Assert(False);
+  end;
+  // JCOSAVEITN
+  case PestControlData.SaveJacobianIteration of
+    sjiDontSave:
+      begin
+        WriteString(' nojcosaveitn');
+      end;
+    sjiSave:
+      begin
+        WriteString(' jcosaveitn');
+      end;
+    else
+      Assert(False);
+  end;
+  // VERBOSEREC
+  case PestControlData.VerboseRecord of
+    vrNonVerbose:
+      begin
+        WriteString(' noverboserec');
+      end;
+    vrVerbose:
+      begin
+        WriteString(' verboserec');
+      end;
+    else
+      Assert(False);
+  end;
+  // RESSAVEITN
+  case PestControlData.SaveInterimResiduals of
+    sirDontSave:
+      begin
+        WriteString(' noreisaveitn');
+      end;
+    sirSave:
+      begin
+        WriteString(' reisaveitn');
+      end;
+    else
+      Assert(False);
+  end;
+  // PARSAVEITN
+  case PestControlData.SaveParamIteration of
+    spiDontSave:
+      begin
+        WriteString(' noparsaveitn');
+      end;
+    spiSave:
+      begin
+        WriteString(' parsaveitn');
+      end;
+    else
+      Assert(False);
+  end;
+  // PARSAVERUN
+  case PestControlData.SaveParamRun of
+    sprDontSave:
+      begin
+        WriteString(' noparsaverun');
+      end;
+    sprSave:
+      begin
+        WriteString(' parsaverun');
+      end;
+    else
+      Assert(False);
+  end;
 
-  WriteString(' # ICOV, ICOR, IEIG');
+  WriteString(' # ICOV, ICOR, IEIG, IRES, JCOSAVE, JCOSAVEITN, VERBOSEREC, RESSAVEITN, PARSAVEITN, PARSAVERUN');
   NewLine;
 
   {$ENDREGION}

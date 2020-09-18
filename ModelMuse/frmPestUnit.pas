@@ -29,7 +29,6 @@ type
     pgMain: TJvPageList;
     jvspBasic: TJvStandardPage;
     cbPEST: TCheckBox;
-    jvspPilotPoints: TJvStandardPage;
     rdePilotPointSpacing: TRbwDataEntry;
     lblPilotPointSpacing: TLabel;
     cbShowPilotPoints: TCheckBox;
@@ -37,8 +36,44 @@ type
     btnHelp: TBitBtn;
     btnOK: TBitBtn;
     btnCancel: TBitBtn;
-    edTemplateCharacter: TLabeledEdit;
-    edFormulaMarker: TLabeledEdit;
+    comboTemplateCharacter: TComboBox;
+    lblTemplateCharacter: TLabel;
+    comboFormulaMarker: TComboBox;
+    lblFormulaMarker: TLabel;
+    jvspControlDataMode: TJvStandardPage;
+    cbSaveRestart: TCheckBox;
+    lblPestMode: TLabel;
+    comboPestMode: TComboBox;
+    jvspDimensions: TJvStandardPage;
+    rdeMaxCompDim: TRbwDataEntry;
+    lblMaxCompDim: TLabel;
+    rdeZeroLimit: TRbwDataEntry;
+    lblZeroLimit: TLabel;
+    jvspInversionControls: TJvStandardPage;
+    rdeInitialLambda: TRbwDataEntry;
+    lblInitialLambda: TLabel;
+    rdeLambdaAdj: TRbwDataEntry;
+    comboLambdaAdj: TLabel;
+    rdeIterationClosure: TRbwDataEntry;
+    lblIterationClosure: TLabel;
+    rdeLambdaTermination: TRbwDataEntry;
+    lblLambdaTermination: TLabel;
+    rdeMaxLambdas: TRbwDataEntry;
+    lblMaxLambdas: TLabel;
+    rdeJacobianUpdate: TRbwDataEntry;
+    lblJacobianUpdate: TLabel;
+    cbLamForgive: TCheckBox;
+    cbDerForgive: TCheckBox;
+    jvspParameterAdjustmentControls: TJvStandardPage;
+    rdeMaxRelParamChange: TRbwDataEntry;
+    lblMaxRelParamChange: TLabel;
+    rdeMaxFacParamChange: TRbwDataEntry;
+    lblMaxFacParamChange: TLabel;
+    rdeFactorOriginal: TRbwDataEntry;
+    lblFactorOriginal: TLabel;
+    rdeBoundStick: TRbwDataEntry;
+    lblBoundStick: TLabel;
+    cbParameterBending: TCheckBox;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -69,29 +104,19 @@ uses
 //end;
 
 procedure TfrmPEST.MarkerChange(Sender: TObject);
-var
-  Ed: TLabeledEdit;
-  AChar: Char;
-  OK: Boolean;
 begin
   inherited;
-  OK := False;
-  Ed := Sender as TLabeledEdit;
-  if Ed.Text <> '' then
+  if comboTemplateCharacter.Text = comboFormulaMarker.Text then
   begin
-    AChar := Ed.Text[1];
-    OK :=  CharInSet(AChar, ['@', '$', '%', '?'])
-      and (edTemplateCharacter.Text <> edFormulaMarker.Text);
-  end;
-  if OK then
-  begin
-    Ed.Brush.Color := clWindow;
+    comboTemplateCharacter.Color := clRed;
+    comboFormulaMarker.Color := clRed;
+    Beep;
   end
   else
   begin
-    Ed.Brush.Color := clRed;
+    comboTemplateCharacter.Color := clWindow;
+    comboFormulaMarker.Color := clWindow;
   end;
-  Ed.Invalidate;
 end;
 
 procedure TfrmPEST.btnOKClick(Sender: TObject);
@@ -104,15 +129,32 @@ end;
 procedure TfrmPEST.FormCreate(Sender: TObject);
 var
   NewNode: TJvPageIndexNode;
+  ControlDataNode: TJvPageIndexNode;
 begin
   inherited;
   NewNode := tvPEST.Items.AddChild(
     nil, 'Basic') as TJvPageIndexNode;
   NewNode.PageIndex := jvspBasic.PageIndex;
 
+  ControlDataNode := tvPEST.Items.AddChild(
+    nil, 'Control Data') as TJvPageIndexNode;
+  ControlDataNode.PageIndex := -1;
+
   NewNode := tvPEST.Items.AddChild(
-    nil, 'Pilot Points') as TJvPageIndexNode;
-  NewNode.PageIndex := jvspPilotPoints.PageIndex;
+    ControlDataNode, 'Mode') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspControlDataMode.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    ControlDataNode, 'Dimensions') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspDimensions.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    ControlDataNode, 'Inversion Controls') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspInversionControls.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    ControlDataNode, 'Parameter Adjustment Controls') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspParameterAdjustmentControls.PageIndex;
 
   pgMain.ActivePageIndex := 0;
 
@@ -122,35 +164,125 @@ end;
 procedure TfrmPEST.GetData;
 var
   PestProperties: TPestProperties;
+  PestControlData: TPestControlData;
 begin
   PestProperties := frmGoPhast.PhastModel.PestProperties;
 
   cbPEST.Checked := PestProperties.PestUsed;
-  edTemplateCharacter.Text := PestProperties.TemplateCharacter;
-  edFormulaMarker.Text := PestProperties.ExtendedTemplateCharacter;
+  comboTemplateCharacter.ItemIndex :=
+    comboTemplateCharacter.Items.IndexOf(PestProperties.TemplateCharacter);
+
+  comboFormulaMarker.ItemIndex :=
+    comboFormulaMarker.Items.IndexOf(PestProperties.ExtendedTemplateCharacter);
   cbShowPilotPoints.Checked := PestProperties.ShowPilotPoints;
   rdePilotPointSpacing.RealValue := PestProperties.PilotPointSpacing;
+
+  PestControlData := PestProperties.PestControlData;
+  cbSaveRestart.Checked := Boolean(PestControlData.PestRestart);
+  comboPestMode.ItemIndex := Ord(PestControlData.PestMode);
+
+  rdeMaxCompDim.IntegerValue := PestControlData.MaxCompressionDimension;
+  rdeZeroLimit.RealValue  := PestControlData.ZeroLimit;
+
+  rdeInitialLambda.RealValue  := PestControlData.InitalLambda;
+  rdeLambdaAdj.RealValue  := PestControlData.LambdaAdjustmentFactor;
+  rdeIterationClosure.RealValue  := PestControlData.PhiRatioSufficient;
+  rdeLambdaTermination.RealValue  := PestControlData.PhiReductionLambda;
+  rdeMaxLambdas.IntegerValue := PestControlData.NumberOfLambdas;
+  rdeJacobianUpdate.IntegerValue := PestControlData.JacobianUpdate;
+  cbLamForgive.Checked := Boolean(PestControlData.LambdaForgive);
+  cbDerForgive.Checked := Boolean(PestControlData.DerivedForgive);
+
+  rdeMaxRelParamChange.RealValue  := PestControlData.RelativeMaxParamChange;
+  rdeMaxFacParamChange.RealValue  := PestControlData.FactorMaxParamChange;
+  rdeFactorOriginal.RealValue  := PestControlData.FactorOriginal;
+  rdeBoundStick.IntegerValue  := PestControlData.BoundStick;
+  cbParameterBending.Checked := Boolean(PestControlData.UpgradeParamVectorBending);
 end;
 
 procedure TfrmPEST.SetData;
 var
   PestProperties: TPestProperties;
   InvalidateModelEvent: TNotifyEvent;
+  PestControlData: TPestControlData;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(InvalidateModelEvent);
   try
     PestProperties.PestUsed := cbPEST.Checked;
-    if edTemplateCharacter.Text <> '' then
+    if comboTemplateCharacter.Text <> '' then
     begin
-      PestProperties.TemplateCharacter := edTemplateCharacter.Text[1];
+      PestProperties.TemplateCharacter := comboTemplateCharacter.Text[1];
     end;
-    if edFormulaMarker.Text <> '' then
+    if comboFormulaMarker.Text <> '' then
     begin
-      PestProperties.ExtendedTemplateCharacter := edFormulaMarker.Text[1];
+      PestProperties.ExtendedTemplateCharacter := comboFormulaMarker.Text[1];
     end;
     PestProperties.ShowPilotPoints := cbShowPilotPoints.Checked;
     PestProperties.PilotPointSpacing := rdePilotPointSpacing.RealValue;
+
+    PestControlData := PestProperties.PestControlData;
+    PestControlData.PestRestart := TPestRestart(cbSaveRestart.Checked);
+    PestControlData.PestMode := TPestMode(comboPestMode.ItemIndex);
+
+    if rdeMaxCompDim.Text <> '' then
+    begin
+      PestControlData.MaxCompressionDimension := rdeMaxCompDim.IntegerValue;
+    end;
+    if rdeZeroLimit.Text <> '' then
+    begin
+      PestControlData.ZeroLimit := rdeZeroLimit.RealValue;
+    end;
+
+
+    if rdeInitialLambda.Text <> '' then
+    begin
+      PestControlData.InitalLambda := rdeInitialLambda.RealValue;
+    end;
+    if rdeLambdaAdj.Text <> '' then
+    begin
+      PestControlData.LambdaAdjustmentFactor := rdeLambdaAdj.RealValue;
+    end;
+    if rdeIterationClosure.Text <> '' then
+    begin
+      PestControlData.PhiRatioSufficient := rdeIterationClosure.RealValue;
+    end;
+    if rdeLambdaTermination.Text <> '' then
+    begin
+      PestControlData.PhiReductionLambda := rdeLambdaTermination.RealValue;
+    end;
+    if rdeMaxLambdas.Text <> '' then
+    begin
+      PestControlData.NumberOfLambdas := rdeMaxLambdas.IntegerValue;
+    end;
+    if rdeJacobianUpdate.Text <> '' then
+    begin
+      PestControlData.JacobianUpdate := rdeJacobianUpdate.IntegerValue;
+    end;
+   PestControlData.LambdaForgive := TLambdaForgive(cbLamForgive.Checked);
+   PestControlData.DerivedForgive := TDerivedForgive(cbDerForgive.Checked);
+
+
+    if rdeMaxRelParamChange.Text <> '' then
+    begin
+      PestControlData.RelativeMaxParamChange :=  rdeMaxRelParamChange.RealValue;
+    end;
+    if rdeMaxFacParamChange.Text <> '' then
+    begin
+      PestControlData.FactorMaxParamChange :=  rdeMaxFacParamChange.RealValue;
+    end;
+    if rdeFactorOriginal.Text <> '' then
+    begin
+      PestControlData.FactorOriginal :=  rdeFactorOriginal.RealValue;
+    end;
+    if rdeBoundStick.Text <> '' then
+    begin
+      PestControlData.BoundStick :=  rdeBoundStick.IntegerValue;
+    end;
+   PestControlData.UpgradeParamVectorBending :=
+     TUpgradeParamVectorBending(cbLamForgive.Checked);
+
+
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties));
   finally
