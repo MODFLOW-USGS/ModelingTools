@@ -1,8 +1,8 @@
 inherited frmPEST: TfrmPEST
   Caption = 'PEST'
   ClientHeight = 273
-  ClientWidth = 637
-  ExplicitWidth = 653
+  ClientWidth = 623
+  ExplicitWidth = 639
   ExplicitHeight = 312
   PixelsPerInch = 96
   TextHeight = 18
@@ -18,25 +18,23 @@ inherited frmPEST: TfrmPEST
     Indent = 19
     TabOrder = 0
     Items.Links = {00000000}
-    ExplicitTop = -6
   end
   object pgMain: TJvPageList
     Left = 121
     Top = 0
-    Width = 516
+    Width = 502
     Height = 231
-    ActivePage = jvspParameterAdjustmentControls
+    ActivePage = jvspInversionControls2
     PropagateEnable = False
     Align = alClient
-    ExplicitWidth = 303
-    ExplicitHeight = 184
+    ExplicitWidth = 516
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 516
+      Width = 502
       Height = 231
       Caption = 'jvspBasic'
-      ExplicitLeft = 6
+      ExplicitWidth = 516
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -128,11 +126,10 @@ inherited frmPEST: TfrmPEST
     object jvspControlDataMode: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 516
+      Width = 502
       Height = 231
       Caption = 'jvspControlDataMode'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 516
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -165,12 +162,10 @@ inherited frmPEST: TfrmPEST
     object jvspDimensions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 516
+      Width = 502
       Height = 231
       Caption = 'jvspDimensions'
-      ExplicitLeft = 6
-      ExplicitWidth = 496
-      ExplicitHeight = 184
+      ExplicitWidth = 516
       object lblMaxCompDim: TLabel
         Left = 85
         Top = 6
@@ -213,12 +208,10 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 516
+      Width = 502
       Height = 231
       Caption = 'jvspInversionControls'
-      ExplicitLeft = 6
-      ExplicitWidth = 496
-      ExplicitHeight = 307
+      ExplicitWidth = 516
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -355,9 +348,10 @@ inherited frmPEST: TfrmPEST
     object jvspParameterAdjustmentControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 516
+      Width = 502
       Height = 231
       ExplicitLeft = 6
+      ExplicitWidth = 516
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -443,16 +437,65 @@ inherited frmPEST: TfrmPEST
         TabOrder = 4
       end
     end
+    object jvspInversionControls2: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 502
+      Height = 231
+      Caption = 'jvspInversionControls2'
+      ExplicitLeft = 6
+      ExplicitWidth = 536
+      object lblSwitchCriterion: TLabel
+        Left = 93
+        Top = 6
+        Width = 401
+        Height = 18
+        Caption = 'Criterion for using higher-order derivatives (PHIREDSWH)'
+      end
+      object lblSwitchCount: TLabel
+        Left = 93
+        Top = 31
+        Width = 332
+        Height = 42
+        Caption = 
+          'Number of iterations before using higher-order derivatives (NOPT' +
+          'SWITCH)'
+        WordWrap = True
+      end
+      object rdeSwitchCriterion: TRbwDataEntry
+        Left = 6
+        Top = 3
+        Width = 81
+        Height = 22
+        TabOrder = 0
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdeSwitchCount: TRbwDataEntry
+        Left = 6
+        Top = 30
+        Width = 81
+        Height = 22
+        TabOrder = 1
+        Text = '1'
+        DataType = dtInteger
+        Max = 1.000000000000000000
+        Min = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+    end
   end
   object pnlBottom: TPanel
     Left = 0
     Top = 231
-    Width = 637
+    Width = 623
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 184
-    ExplicitWidth = 424
+    ExplicitWidth = 637
     object btnHelp: TBitBtn
       Left = 350
       Top = 6

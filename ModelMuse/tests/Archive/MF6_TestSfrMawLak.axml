@@ -46,6 +46,8 @@
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.dis.grb</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.drob_out_drn.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.gbob_out_ghb.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.InnerSolution.CSV</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.LakConvergence.CSV</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lk_bud</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lk_stg</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.lst</FileName>
@@ -66,6 +68,7 @@
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_gw_out_head.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_rch_out_rch.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.ob_wel_out_wel.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.OuterSolution.CSV</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.rvob_out_riv.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_budget</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_downstream-flow_ob.csv</FileName>
@@ -77,7 +80,7 @@
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_runoff_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_stage_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_upstream-flow_ob.csv</FileName>
-    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.Solution.CSV</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.SfrConvergence.CSV</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.stage</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">mfsim.lst</FileName>
   </output>

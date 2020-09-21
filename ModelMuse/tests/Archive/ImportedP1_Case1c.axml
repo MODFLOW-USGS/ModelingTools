@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="ImportedP1_Case1c" FileType="bin">
-    <FileName Model_Name="ImportedP1_Case1c" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
-    <FileName Model_Name="ImportedP1_Case1c" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="ImportedP1_Case1c" FileType="bin">..\..\..\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportedP1_Case1c" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
   </bin>
   <ancillary Model_Name="ImportedP1_Case1c" FileType="ancillary">
     <FileName Model_Name="ImportedP1_Case1c" FileType="ancillary">ImportedP1_Case1c.gpt</FileName>
@@ -44,5 +44,6 @@
     <FileName Model_Name="ImportedP1_Case1c" FileType="Mt3dms Output">ImportedP1_Case1c_Comp1._mas</FileName>
     <FileName Model_Name="ImportedP1_Case1c" FileType="Mt3dms Output">ImportedP1_Case1c_Comp1.mto</FileName>
     <FileName Model_Name="ImportedP1_Case1c" FileType="Mt3dms Output">ImportedP1_Case1c_Comp1.ucn</FileName>
+    <FileName Model_Name="ImportedP1_Case1c" FileType="Mt3dms Output">ImportedP1_Case1c_Comp1_S.ucn</FileName>
   </Mt3dms_Output_Files>
 </Model_Archive_List>

@@ -22,8 +22,9 @@
     <FileName Model_Name="ExitEdgeTest" FileType="Model Output">ExitEdgeTest.bhd</FileName>
     <FileName Model_Name="ExitEdgeTest" FileType="Model Output">ExitEdgeTest.cbc</FileName>
     <FileName Model_Name="ExitEdgeTest" FileType="Model Output">ExitEdgeTest.dis.grb</FileName>
+    <FileName Model_Name="ExitEdgeTest" FileType="Model Output">ExitEdgeTest.InnerSolution.CSV</FileName>
     <FileName Model_Name="ExitEdgeTest" FileType="Model Output">ExitEdgeTest.lst</FileName>
-    <FileName Model_Name="ExitEdgeTest" FileType="Model Output">ExitEdgeTest.Solution.CSV</FileName>
+    <FileName Model_Name="ExitEdgeTest" FileType="Model Output">ExitEdgeTest.OuterSolution.CSV</FileName>
     <FileName Model_Name="ExitEdgeTest" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

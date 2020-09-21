@@ -33,7 +33,8 @@
     <FileName Model_Name="ParamMf6Test" FileType="Model Output">ParamMf6Test.bhd</FileName>
     <FileName Model_Name="ParamMf6Test" FileType="Model Output">ParamMf6Test.cbc</FileName>
     <FileName Model_Name="ParamMf6Test" FileType="Model Output">ParamMf6Test.dis.grb</FileName>
+    <FileName Model_Name="ParamMf6Test" FileType="Model Output">ParamMf6Test.InnerSolution.CSV</FileName>
     <FileName Model_Name="ParamMf6Test" FileType="Model Output">ParamMf6Test.lst</FileName>
-    <FileName Model_Name="ParamMf6Test" FileType="Model Output">ParamMf6Test.Solution.CSV</FileName>
+    <FileName Model_Name="ParamMf6Test" FileType="Model Output">ParamMf6Test.OuterSolution.CSV</FileName>
   </output>
 </Model_Archive_List>

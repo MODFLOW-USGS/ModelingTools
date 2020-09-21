@@ -27,9 +27,11 @@
     <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.bhd</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.cbc</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.dis.grb</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.InnerSolution.CSV</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.lst</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.OuterSolution.CSV</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.sfr_budget</FileName>
-    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.Solution.CSV</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.SfrConvergence.CSV</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="Model Output">Sf6Mf6.stage</FileName>
   </output>
   <Zonebudget_Input_Files Model_Name="Sf6Mf6" FileType="Zonebudget Input">

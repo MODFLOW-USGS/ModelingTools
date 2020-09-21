@@ -24,8 +24,9 @@
     <FileName Model_Name="HighestActiveModflow" FileType="Model Output">HighestActiveModflow.bhd</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Output">HighestActiveModflow.cbc</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Output">HighestActiveModflow.dis.grb</FileName>
+    <FileName Model_Name="HighestActiveModflow" FileType="Model Output">HighestActiveModflow.InnerSolution.CSV</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Output">HighestActiveModflow.lst</FileName>
-    <FileName Model_Name="HighestActiveModflow" FileType="Model Output">HighestActiveModflow.Solution.CSV</FileName>
+    <FileName Model_Name="HighestActiveModflow" FileType="Model Output">HighestActiveModflow.OuterSolution.CSV</FileName>
     <FileName Model_Name="HighestActiveModflow" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

@@ -1,9 +1,10 @@
-# Name File for MT3DMS created on 10/11/2018 by ModelMuse
+# Name File for MT3DMS created on 9/19/2020 by ModelMuse
 LIST 16 ..\..\output\output.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c.mls
 FTL 10 ..\..\output\output.ImportedP1_Case1c\ImportedP1_Case1c.ftl
 DATA 17 ..\..\output\output.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c.cnf
 BTN 1 ..\..\model\model.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c.btn
 DATA(BINARY) 201 ..\..\output\output.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c_Comp1.ucn
+DATA(BINARY) 301 ..\..\output\output.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c_Comp1_S.ucn
 DATA 601 ..\..\output\output.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c_Comp1._mas
 DATA 401 ..\..\output\output.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c_Comp1.mto
 ADV 2 ..\..\model\model.ImportedP1_Case1c_MT3DMS\ImportedP1_Case1c.adv

@@ -23,8 +23,9 @@
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.bhd</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.cbc</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.dis.grb</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.InnerSolution.CSV</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.lst</FileName>
-    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.Solution.CSV</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">Mf6RechargeOptionTest.OuterSolution.CSV</FileName>
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

@@ -74,6 +74,11 @@ type
     rdeBoundStick: TRbwDataEntry;
     lblBoundStick: TLabel;
     cbParameterBending: TCheckBox;
+    jvspInversionControls2: TJvStandardPage;
+    rdeSwitchCriterion: TRbwDataEntry;
+    lblSwitchCriterion: TLabel;
+    rdeSwitchCount: TRbwDataEntry;
+    lblSwitchCount: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -149,12 +154,16 @@ begin
   NewNode.PageIndex := jvspDimensions.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Inversion Controls') as TJvPageIndexNode;
+    ControlDataNode, 'Inversion Controls 1') as TJvPageIndexNode;
   NewNode.PageIndex := jvspInversionControls.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
     ControlDataNode, 'Parameter Adjustment Controls') as TJvPageIndexNode;
   NewNode.PageIndex := jvspParameterAdjustmentControls.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    ControlDataNode, 'Inversion Controls 2') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspInversionControls2.PageIndex;
 
   pgMain.ActivePageIndex := 0;
 

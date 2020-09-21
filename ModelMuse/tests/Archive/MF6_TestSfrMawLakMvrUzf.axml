@@ -51,6 +51,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.from-mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.gbob_out_ghb.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.infiltration_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.InnerSolution.CSV</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lak_conductance_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lak_constant_flow_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lak_evaporation_ob.csv</FileName>
@@ -70,6 +71,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lak_volume_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lak_wetted-area_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lak_withdrawal_ob.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.LakConvergence.CSV</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lk_bud</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lk_stg</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.lst</FileName>
@@ -91,6 +93,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.ob_gw_out_head.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.ob_rch_out_rch.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.ob_wel_out_wel.csv</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.OuterSolution.CSV</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.rej-inf_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.rej-inf-to-mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.rvob_out_riv.csv</FileName>
@@ -108,7 +111,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_stage_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_to_mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_upstream-flow_ob.csv</FileName>
-    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.Solution.CSV</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.SfrConvergence.CSV</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.stage</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.storage_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.uzet_ob.csv</FileName>
