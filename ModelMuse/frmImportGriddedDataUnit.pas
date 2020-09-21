@@ -2176,7 +2176,7 @@ begin
     Exit;
   end;
 
-  Grid := nil;
+//  Grid := nil;
   if jvplCellGrid.ActivePage = jvspCellList then
   begin
     Grid := rdgList;

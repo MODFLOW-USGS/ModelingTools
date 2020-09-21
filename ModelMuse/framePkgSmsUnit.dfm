@@ -240,7 +240,7 @@ inherited framePkgSms: TframePkgSms
         Top = 297
         Width = 382
         Height = 17
-        Caption = 'Use Newton formulation (MODFLOW-6)'
+        Caption = 'Use Newton formulation'
         TabOrder = 9
         OnClick = cbNewtonClick
       end
@@ -249,7 +249,7 @@ inherited framePkgSms: TframePkgSms
         Top = 320
         Width = 406
         Height = 18
-        Caption = 'Use Under_Relaxation option (MODFLOW-6)'
+        Caption = 'Use Under_Relaxation option'
         Enabled = False
         TabOrder = 10
       end

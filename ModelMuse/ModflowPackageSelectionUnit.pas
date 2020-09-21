@@ -988,7 +988,7 @@ Type
     srmMinimumDegreeOrdering);
   // soLinearSolver, soXmdLinearAcceleration, and soRedBlackOrder are for
   // backwards compatibility
-  TSmsOverride = (soOuterHclose, soOuterRClose, soOuterMaxIt, soUnderRelax, soUnderRelaxTheta,
+  TSmsOverride = (soOuterHclose, soOuterMaxIt, soUnderRelax, soUnderRelaxTheta,
     soUnderRelaxKappa, soUnderRelaxGamma, soUnderRelaxMomentum,
     soBacktrackingNumber, soBacktrackingTolerance,
     soBacktrackingReductionFactor, soBacktrackingResidualLimit,
@@ -999,7 +999,7 @@ Type
     soRelaxationFactor, soNumberOfOrthoganalizations,
     soScalingMethod, soReorderingMethod,
     // The following are for backwards compatibility
-    soLinearSolver, soXmdLinearAcceleration, soRedBlackOrder);
+    soLinearSolver, soXmdLinearAcceleration, soRedBlackOrder, soOuterRClose);
   TSmsOverrides = set of TSmsOverride;
   TCheckInput = (ciCheckAll, ciDontCheck);
   TMemoryPrint = (mpNone, mpSummary, mpAll);
@@ -1191,9 +1191,10 @@ Type
     {
     OUTER_RCLOSEBND
     Default = 0.1
+    OUTER_RCLOSEBND was deprecated in MF6 1.1.
     }
     property StoredOuterRClose: TRealStorage read FStoredOuterRClose
-      write SetStoredOuterRClose;
+      write SetStoredOuterRClose stored False;
 
     // OUTER_MAXIMUM
     // Default for SIMPLE = 25

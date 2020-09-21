@@ -274,12 +274,13 @@ begin
   end;
   NewLine;
 
-  if soOuterRClose in FImsPackage.SmsOverrides then
-  begin
-    WriteString('  OUTER_RCLOSEBND ');
-    WriteFloat(FImsPackage.OuterRClose);
-    NewLine;
-  end;
+  // OUTER_RCLOSEBND is deprecated
+//  if soOuterRClose in FImsPackage.SmsOverrides then
+//  begin
+//    WriteString('  OUTER_RCLOSEBND ');
+//    WriteFloat(FImsPackage.OuterRClose);
+//    NewLine;
+//  end;
 
   WriteString('  OUTER_MAXIMUM ');
   if soOuterMaxIt in FImsPackage.SmsOverrides then

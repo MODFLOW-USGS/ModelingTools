@@ -112,7 +112,14 @@ begin
   FBcsFileNames := nil;
   TimeOptions := (Model as TPhastModel).SutraTimeOptions;
   TimeOptions.CalculateAllTimes;
-  FTime1 := TimeOptions.AllTimes[1];
+  if TimeOptions.AllTimes.Count > 1 then
+  begin
+    FTime1 := TimeOptions.AllTimes[1];
+  end
+  else
+  begin
+    FTime1 := TimeOptions.AllTimes[0];
+  end;
   FBoundaryType := BoundaryType;
   FPQTimeLists := TObjectList<TSutraTimeList>.Create;
   FUTimeLists := TObjectList<TSutraTimeList>.Create;

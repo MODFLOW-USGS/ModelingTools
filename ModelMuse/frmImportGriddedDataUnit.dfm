@@ -9,7 +9,6 @@ inherited frmImportGriddedData: TfrmImportGriddedData
   KeyPreview = True
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitTop = -133
   ExplicitWidth = 452
   ExplicitHeight = 487
   PixelsPerInch = 96
@@ -143,7 +142,6 @@ inherited frmImportGriddedData: TfrmImportGriddedData
           end>
         OnEndUpdate = rdgListEndUpdate
         WordWrapRowCaptions = False
-        ExplicitTop = 2
       end
       object pnlListControls: TPanel
         Left = 0
@@ -173,7 +171,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
               Value = 33.333333333333330000
             end
             item
-              Value = 33.333333333333330000
+              Value = 33.333333333333340000
             end>
           ControlCollection = <
             item
@@ -200,7 +198,7 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             135
             32)
           object sbAddRow: TSpeedButton
-            Left = 10
+            Left = 11
             Top = 5
             Width = 23
             Height = 22
@@ -218,11 +216,10 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             ParentShowHint = False
             ShowHint = True
             OnClick = sbAddRowClick
-            ExplicitLeft = 11
             ExplicitTop = 6
           end
           object sbInsertRow: TSpeedButton
-            Left = 54
+            Left = 56
             Top = 5
             Width = 23
             Height = 22
@@ -240,10 +237,11 @@ inherited frmImportGriddedData: TfrmImportGriddedData
             ParentShowHint = False
             ShowHint = True
             OnClick = sbInsertRowClick
+            ExplicitLeft = 54
             ExplicitTop = 6
           end
           object sbDeleteRow: TSpeedButton
-            Left = 100
+            Left = 101
             Top = 5
             Width = 23
             Height = 22
@@ -461,14 +459,27 @@ inherited frmImportGriddedData: TfrmImportGriddedData
       Tree.Width = 304
       Tree.Height = 201
       Tree.Align = alClient
+      Tree.Colors.BorderColor = 15987699
+      Tree.Colors.DisabledColor = clGray
+      Tree.Colors.DropMarkColor = 15385233
+      Tree.Colors.DropTargetColor = 15385233
+      Tree.Colors.DropTargetBorderColor = 15385233
+      Tree.Colors.FocusedSelectionColor = 15385233
+      Tree.Colors.FocusedSelectionBorderColor = 15385233
+      Tree.Colors.GridLineColor = 15987699
+      Tree.Colors.HeaderHotColor = clBlack
+      Tree.Colors.HotColor = clBlack
+      Tree.Colors.SelectionRectangleBlendColor = 15385233
+      Tree.Colors.SelectionRectangleBorderColor = 15385233
+      Tree.Colors.SelectionTextColor = clBlack
+      Tree.Colors.TreeLineColor = 9471874
+      Tree.Colors.UnfocusedColor = clGray
+      Tree.Colors.UnfocusedSelectionColor = 13421772
+      Tree.Colors.UnfocusedSelectionBorderColor = 13421772
+      Tree.DefaultNodeHeight = 20
       Tree.Header.AutoSizeIndex = 0
       Tree.Header.DefaultHeight = 17
-      Tree.Header.Font.Charset = DEFAULT_CHARSET
-      Tree.Header.Font.Color = clWindowText
-      Tree.Header.Font.Height = -11
-      Tree.Header.Font.Name = 'Tahoma'
-      Tree.Header.Font.Style = []
-      Tree.Header.Height = 17
+      Tree.Header.Height = 18
       Tree.Header.MainColumn = -1
       Tree.TabOrder = 0
       Tree.TreeOptions.SelectionOptions = [toFullRowSelect]

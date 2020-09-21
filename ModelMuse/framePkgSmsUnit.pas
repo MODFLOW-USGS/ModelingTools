@@ -219,8 +219,8 @@ begin
 
     rdgNonlinearOptions.RealValue[Ord(scValue), Ord(soOuterHclose)+1] :=
       SmsPackage.OuterHclose;
-    rdgNonlinearOptions.RealValue[Ord(scValue), Ord(soOuterRClose)+1] :=
-      SmsPackage.OuterRClose;
+//    rdgNonlinearOptions.RealValue[Ord(scValue), Ord(soOuterRClose)+1] :=
+//      SmsPackage.OuterRClose;
     rdgNonlinearOptions.IntegerValue[Ord(scValue), Ord(soOuterMaxIt)+1] :=
       SmsPackage.MaxOuterIterations;
     rdgNonlinearOptions.Cells[Ord(scValue), Ord(soUnderRelax)+1] :=
@@ -1003,7 +1003,7 @@ begin
   SmsPackage.SmsOverrides := NewOverRides;
 
   SmsPackage.OuterHclose := rdgNonlinearOptions.RealValueDefault[Ord(scValue), Ord(soOuterHclose)+1, SmsPackage.OuterHclose];
-  SmsPackage.OuterRClose := rdgNonlinearOptions.RealValueDefault[Ord(scValue), Ord(soOuterRClose)+1, SmsPackage.OuterRClose];
+//  SmsPackage.OuterRClose := rdgNonlinearOptions.RealValueDefault[Ord(scValue), Ord(soOuterRClose)+1, SmsPackage.OuterRClose];
   SmsPackage.MaxOuterIterations := rdgNonlinearOptions.IntegerValue[Ord(scValue), Ord(soOuterMaxIt)+1];
   SmsPackage.UnderRelaxation := TSmsUnderRelaxation(FUnderRelaxPickList.IndexOf(rdgNonlinearOptions.Cells[Ord(scValue), Ord(soUnderRelax)+1]));
 

@@ -245,6 +245,8 @@ resourcestring
   StrThereWasAnErrorI = 'There was an error in the data you specified: "%s".';
   StrObjectNameOptiona = 'Object name (optional)';
   Str0s1d = '%0:s_%1:d';
+  StrInvalidDataInRowEMessage = 'Invalid data in row %0:d. The error message' +
+  ' was "%1:s".';
 
 procedure TfrmImportPoints.seRowsChange(Sender: TObject);
 begin
@@ -975,13 +977,20 @@ begin
       if cbImportAsSingleObject.Checked then
       begin
         Beep;
-        MessageDlg(Format(StrInvalidDataInRow, [RowIndex]), mtError, [mbOK], 0);
+        MessageDlg(Format(StrInvalidDataInRow, [RowIndex+1]), mtError, [mbOK], 0);
         InvalidRow := True;
       end
       else
       begin
         InvalidRow := True;
       end;
+      Exit;
+    end;
+    on E: ERbwParserError do
+    begin
+      MessageDlg(Format(StrInvalidDataInRowEMessage, [RowIndex+1, E.Message]),
+        mtError, [mbOK], 0);
+      InvalidRow := True;
       Exit;
     end;
   end;

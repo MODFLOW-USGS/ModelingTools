@@ -79,6 +79,13 @@ type
     lblSwitchCriterion: TLabel;
     rdeSwitchCount: TRbwDataEntry;
     lblSwitchCount: TLabel;
+    rdeSplitSlopeCriterion: TRbwDataEntry;
+    lblSplitSlopeCriterion: TLabel;
+    comboAutomaticUserIntervation: TComboBox;
+    lblAutomaticUserIntervation: TLabel;
+    cbSensitivityReuse: TCheckBox;
+    cbBoundsScaling: TCheckBox;
+    jvspIterationControls: TJvStandardPage;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -165,6 +172,10 @@ begin
     ControlDataNode, 'Inversion Controls 2') as TJvPageIndexNode;
   NewNode.PageIndex := jvspInversionControls2.PageIndex;
 
+  NewNode := tvPEST.Items.AddChild(
+    ControlDataNode, 'Iteration Controls') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspIterationControls.PageIndex;
+
   pgMain.ActivePageIndex := 0;
 
   GetData
@@ -207,6 +218,13 @@ begin
   rdeFactorOriginal.RealValue  := PestControlData.FactorOriginal;
   rdeBoundStick.IntegerValue  := PestControlData.BoundStick;
   cbParameterBending.Checked := Boolean(PestControlData.UpgradeParamVectorBending);
+
+  rdeSwitchCriterion.RealValue := PestControlData.SwitchCriterion;
+  rdeSwitchCount.IntegerValue := PestControlData.OptSwitchCount;
+  rdeSwitchCriterion.RealValue := PestControlData.SplitSlopeCriterion;
+  comboAutomaticUserIntervation.ItemIndex := Ord(PestControlData.AutomaticUserIntervation);
+  cbSensitivityReuse.Checked := Boolean(PestControlData.SensitivityReuse);
+  cbBoundsScaling.Checked := Boolean(PestControlData.Boundscaling);
 end;
 
 procedure TfrmPEST.SetData;
@@ -291,6 +309,21 @@ begin
    PestControlData.UpgradeParamVectorBending :=
      TUpgradeParamVectorBending(cbLamForgive.Checked);
 
+    if rdeSwitchCriterion.Text <> '' then
+    begin
+      PestControlData.SwitchCriterion := rdeSwitchCriterion.RealValue;
+    end;
+    if rdeSwitchCount.Text <> '' then
+    begin
+      PestControlData.OptSwitchCount := rdeSwitchCount.IntegerValue;
+    end;
+    if rdeSwitchCriterion.Text <> '' then
+    begin
+      PestControlData.SplitSlopeCriterion := rdeSwitchCriterion.RealValue;
+    end;
+    PestControlData.AutomaticUserIntervation := TAutomaticUserIntervation(comboAutomaticUserIntervation.ItemIndex);
+    PestControlData.SensitivityReuse := TSensitivityReuse(cbSensitivityReuse.Checked);
+    PestControlData.Boundscaling := TBoundsScaling(cbBoundsScaling.Checked);
 
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties));

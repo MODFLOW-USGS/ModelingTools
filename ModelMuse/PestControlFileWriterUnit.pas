@@ -239,11 +239,11 @@ begin
       begin
         WriteString(' noaui');
       end;
-    auiActive:
+    auiActiveLeastSensitiveFirst:
       begin
         WriteString(' aui');
       end;
-    auiNoneFrozen:
+    auiMostSensitiveFirst:
       begin
         WriteString(' auid');
       end;
@@ -264,16 +264,16 @@ begin
       Assert(False);
   end;
   // BOUNDSCALE
-  if PestControlData. Boundscaling then
+  if PestControlData.Boundscaling = bsBoundsScaling then
   begin
     WriteString(' boundscale');
+  end
+  else
+  begin
+    WriteString(' noboundscale');
   end;
 
-  WriteString(' # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE');
-  if PestControlData.Boundscaling then
-  begin
-    WriteString(', BOUNDSCALE');
-  end;
+  WriteString(' # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE');
   NewLine;
   {$ENDREGION}
 

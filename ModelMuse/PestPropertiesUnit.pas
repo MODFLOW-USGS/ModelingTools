@@ -11,8 +11,10 @@ type
   TLambdaForgive = (lfNoForgive, lfForgive);
   TDerivedForgive = (dNoForgive, dfForgive);
   TUpgradeParamVectorBending = (upvbNoBending, upvbBending);
-  TAutomaticUserIntervation = (auiInactive, auiActive, auiNoneFrozen);
+  TAutomaticUserIntervation = (auiInactive, auiActiveLeastSensitiveFirst,
+    auiMostSensitiveFirst);
   TSensitivityReuse = (srNoReuse, srReuse);
+  TBoundsScaling = (bsNoBoundsScaling, bsBoundsScaling);
   TMakeFinalRun = (mfrNoRun, mfrRun);
   TWriteMatrix = (wmDontWrite, wmWrite);
   TSaveResolution = (srDontSave, srSave);
@@ -47,7 +49,7 @@ type
     FStoredSplitSlopeCriterion: TRealStorage;
     FAutomaticUserIntervation: TAutomaticUserIntervation;
     FSensitivityReuse: TSensitivityReuse;
-    FBoundscaling: Boolean;
+    FBoundscaling: TBoundsScaling;
     FMaxIterations: Integer;
     FStoredSlowConvergenceCriterion: TRealStorage;
     FSlowConvergenceCountCriterion: integer;
@@ -111,7 +113,7 @@ type
     procedure SetAutomaticUserIntervation(
       const Value: TAutomaticUserIntervation);
     procedure SetSensitivityReuse(const Value: TSensitivityReuse);
-    procedure SetBoundscaling(const Value: Boolean);
+    procedure SetBoundscaling(const Value: TBoundsScaling);
     procedure SetMaxIterations(const Value: Integer);
     function GetSlowConvergenceCriterion: double;
     procedure SetSlowConvergenceCriterion(const Value: double);
@@ -255,7 +257,7 @@ type
     property SensitivityReuse: TSensitivityReuse read FSensitivityReuse
       write SetSensitivityReuse;
     // BOUNDSCALE
-    property Boundscaling: Boolean read FBoundscaling write SetBoundscaling
+    property Boundscaling: TBoundsScaling read FBoundscaling write SetBoundscaling
       stored True;
     // NOPTMAX >= -2
     property MaxIterations: Integer read FMaxIterations write SetMaxIterations;
@@ -727,7 +729,7 @@ begin
   SplitSlopeCriterion := 0;
   FAutomaticUserIntervation := auiInactive;
   FSensitivityReuse := srNoReuse;
-  FBoundscaling := True;
+  FBoundscaling := bsBoundsScaling;
   FMaxIterations := 50;
   SlowConvergenceCriterion := 0.005;
   FSlowConvergenceCountCriterion := 4;
@@ -759,9 +761,13 @@ begin
   end;
 end;
 
-procedure TPestControlData.SetBoundscaling(const Value: Boolean);
+procedure TPestControlData.SetBoundscaling(const Value: TBoundsScaling);
 begin
-  SetBooleanProperty(FBoundscaling, Value);
+  if FBoundscaling <> Value then
+  begin
+    FBoundscaling := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPestControlData.SetBoundStick(const Value: Integer);
