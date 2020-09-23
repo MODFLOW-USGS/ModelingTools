@@ -177,6 +177,7 @@ type
   private
     FSelectedItem: Integer;
     procedure SetSelectedItem(const Value: Integer);
+    function StoreSelected: boolean;
   public
     constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -189,7 +190,7 @@ type
     function Add: TVectorItem;
   published
     property SelectedItem: Integer read FSelectedItem write SetSelectedItem
-      stored True;
+      stored StoreSelected;
   end;
 
 implementation
@@ -2042,6 +2043,13 @@ begin
       (Items[FSelectedItem] as TVectorItem).Vectors.Visible := True;
     end;
   end;
+end;
+
+function TVectorCollection.StoreSelected: boolean;
+begin
+  // Save the selected velocity vector in the display settings
+  // but not for the model in general.
+  result := FModel = nil;
 end;
 
 end.

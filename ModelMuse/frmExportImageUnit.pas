@@ -464,11 +464,11 @@ begin
                     Grid.TopDataSet := DataArray;
                     Grid.FrontDataSet := DataArray;
                     Grid.SideDataSet := DataArray;
+                    frmGoPhast.PhastModel.ThreeDDataSet := DataArray;
                   end;
                 else
                   Assert(False);
               end;
-              frmGoPhast.PhastModel.ThreeDDataSet := DataArray;
             end;
           1:
             begin
@@ -502,11 +502,11 @@ begin
                     Grid.TopContourDataSet := DataArray;
                     Grid.FrontContourDataSet := DataArray;
                     Grid.SideContourDataSet := DataArray;
+                    Grid.ThreeDContourDataSet := DataArray;
                   end;
                 else
                   Assert(False);
               end;
-              Grid.ThreeDContourDataSet := DataArray;
             end;
           else
             Assert(False);
@@ -531,7 +531,7 @@ begin
                   end;
                 dsoFront:
                   begin
-                    Mesh.ThreeDDataSet := DataArray;
+//                    Mesh.ThreeDDataSet := DataArray;
                   end;
                 dsoSide:
                   begin
@@ -541,12 +541,12 @@ begin
                   begin
                     Mesh.TopDataSet := DataArray;
                     Mesh.ThreeDDataSet := DataArray;
+                    frmGoPhast.PhastModel.ThreeDDataSet := DataArray;
 //                    Mesh.SideDataSet := DataArray;
                   end;
                 else
                   Assert(False);
               end;
-              frmGoPhast.PhastModel.ThreeDDataSet := DataArray;
             end;
           1:
             begin
@@ -1290,7 +1290,7 @@ begin
         end;
       end;
 
-      if LocalModel.ModelSelection in SutraSelection then
+      if LocalModel.ModelSelection in (SutraSelection + [msModflow2015]) then
       begin
         LocalModel.MaxVectors.PlotVectors2D(ViewDirection, FModelImage);
         LocalModel.MidVectors.PlotVectors2D(ViewDirection, FModelImage);
@@ -2584,7 +2584,6 @@ begin
       DataArray.Initialize;
       PhastModel.ColorLegend.Assign(ColorDisplaySettings.Legend);
       DataArray.Limits := ColorDisplaySettings.Limits;
-      PhastModel.ThreeDDataSet := DataArray;
       PhastModel.ThreeDTimeList := nil;
       case DataArray.Orientation of
         dsoTop:
@@ -2610,6 +2609,7 @@ begin
             PhastModel.TopDataSet := DataArray;
             PhastModel.FrontDataSet := DataArray;
             PhastModel.SideDataSet := DataArray;
+            PhastModel.ThreeDDataSet := DataArray;
           end;
       else
         Assert(False);

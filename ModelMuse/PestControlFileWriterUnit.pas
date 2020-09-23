@@ -292,7 +292,14 @@ begin
   // NRELPAR
   WriteInteger(PestControlData.ParameterChangeConvergenceCount);
   // PHISTOPTHRESH
-  WriteFloat(PestControlData.ObjectiveCriterion);
+  if PestControlData.PestMode in [pmPrediction, pmPareto] then
+  begin
+    WriteFloat(0);
+  end
+  else
+  begin
+    WriteFloat(PestControlData.ObjectiveCriterion);
+  end;
   // LASTRUN
   WriteInteger(Ord(PestControlData.MakeFinalRun));
   // PHIABANDON

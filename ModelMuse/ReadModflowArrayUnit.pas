@@ -1283,6 +1283,7 @@ var
   AValue: TModflowFloat;
   GridSize: Int64;
   ValueSize: Int64;
+  NCOL64, NROW64: Int64;
 begin
   AFile.Read(NTRANS, SizeOf(NTRANS));
   AFile.Read(KSTP, SizeOf(KSTP));
@@ -1308,7 +1309,9 @@ begin
   end
   else
   begin
-    GridSize := NROW*NCOL;
+    NCOL64 := NCOL;
+    NROW64 := NROW;
+    GridSize := NROW64*NCOL64;
     ValueSize := SizeOf(TModflowFloat);
     AFile.Position := AFile.Position + ValueSize*GridSize;
     if AFile.Position > AFile.Size then

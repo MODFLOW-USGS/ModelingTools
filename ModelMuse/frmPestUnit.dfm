@@ -1,16 +1,16 @@
 inherited frmPEST: TfrmPEST
   Caption = 'PEST'
-  ClientHeight = 273
+  ClientHeight = 329
   ClientWidth = 623
   ExplicitWidth = 639
-  ExplicitHeight = 312
+  ExplicitHeight = 368
   PixelsPerInch = 96
   TextHeight = 18
   object tvPEST: TJvPageListTreeView
     Left = 0
     Top = 0
     Width = 121
-    Height = 231
+    Height = 287
     ShowButtons = True
     PageDefault = 0
     PageList = pgMain
@@ -18,21 +18,24 @@ inherited frmPEST: TfrmPEST
     Indent = 19
     TabOrder = 0
     Items.Links = {00000000}
+    ExplicitHeight = 231
   end
   object pgMain: TJvPageList
     Left = 121
     Top = 0
     Width = 502
-    Height = 231
-    ActivePage = jvspInversionControls2
+    Height = 287
+    ActivePage = jvspOutputOptions
     PropagateEnable = False
     Align = alClient
+    ExplicitHeight = 231
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
       Width = 502
-      Height = 231
+      Height = 287
       Caption = 'jvspBasic'
+      ExplicitHeight = 231
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -125,8 +128,9 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 502
-      Height = 231
+      Height = 287
       Caption = 'jvspControlDataMode'
+      ExplicitHeight = 231
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -160,8 +164,9 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 502
-      Height = 231
+      Height = 287
       Caption = 'jvspDimensions'
+      ExplicitHeight = 231
       object lblMaxCompDim: TLabel
         Left = 85
         Top = 6
@@ -205,8 +210,9 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 502
-      Height = 231
+      Height = 287
       Caption = 'jvspInversionControls'
+      ExplicitHeight = 231
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -344,7 +350,8 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 502
-      Height = 231
+      Height = 287
+      ExplicitHeight = 231
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -434,8 +441,9 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 502
-      Height = 231
+      Height = 287
       Caption = 'jvspInversionControls2'
+      ExplicitHeight = 231
       object lblSwitchCriterion: TLabel
         Left = 93
         Top = 6
@@ -463,7 +471,7 @@ inherited frmPEST: TfrmPEST
       object lblAutomaticUserIntervation: TLabel
         Left = 8
         Top = 96
-        Width = 393
+        Width = 242
         Height = 18
         Caption = 'Automatic user intervation (DOAUI)'
       end
@@ -537,19 +545,184 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 502
-      Height = 231
+      Height = 287
       Caption = 'jvspIterationControls'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitLeft = 6
+      ExplicitTop = -6
+      ExplicitHeight = 265
+      object lblMaxIterations: TLabel
+        Left = 93
+        Top = 6
+        Width = 294
+        Height = 18
+        Caption = 'Maximun number of Iterations (NOPTMAX)'
+      end
+      object lblPhiReductionCriterion: TLabel
+        Left = 93
+        Top = 34
+        Width = 362
+        Height = 18
+        Caption = 'Small Phi reduction stopping criterion (PHIREDSTP)'
+      end
+      object lblPhiReductionCount: TLabel
+        Left = 93
+        Top = 62
+        Width = 316
+        Height = 18
+        Caption = 'Small Phi reduction iteration count (NPHISTP)'
+      end
+      object lblNoReductionCount: TLabel
+        Left = 93
+        Top = 90
+        Width = 350
+        Height = 18
+        Caption = 'No Phi reduction stopping critierion (NPHINORED)'
+      end
+      object lblSmallParameterReduction: TLabel
+        Left = 93
+        Top = 118
+        Width = 361
+        Height = 18
+        Caption = 'Parameter change stopping criterion (RELPARSTP)'
+      end
+      object lblrdeSmallParameterReductionCount: TLabel
+        Left = 93
+        Top = 146
+        Width = 318
+        Height = 18
+        Caption = 'Parameter change iteration count (NRELPAR)'
+      end
+      object lblPhiStoppingThreshold: TLabel
+        Left = 93
+        Top = 170
+        Width = 293
+        Height = 18
+        Caption = 'Phi stopping criterion (PHISTOPTHRESH)'
+      end
+      object lblAbandon: TLabel
+        Left = 93
+        Top = 242
+        Width = 310
+        Height = 18
+        Caption = 'Large Phi stopping criterion (PHIABANDON)'
+      end
+      object rdeMaxIterations: TRbwDataEntry
+        Left = 6
+        Top = 3
+        Width = 81
+        Height = 22
+        TabOrder = 0
+        Text = '0'
+        DataType = dtInteger
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdePhiReductionCriterion: TRbwDataEntry
+        Left = 6
+        Top = 31
+        Width = 81
+        Height = 22
+        TabOrder = 1
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdePhiReductionCount: TRbwDataEntry
+        Left = 6
+        Top = 58
+        Width = 81
+        Height = 22
+        TabOrder = 2
+        Text = '0'
+        DataType = dtInteger
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdeNoReductionCount: TRbwDataEntry
+        Left = 6
+        Top = 86
+        Width = 81
+        Height = 22
+        TabOrder = 3
+        Text = '0'
+        DataType = dtInteger
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdeSmallParameterReduction: TRbwDataEntry
+        Left = 6
+        Top = 114
+        Width = 81
+        Height = 22
+        TabOrder = 4
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdeSmallParameterReductionCount: TRbwDataEntry
+        Left = 6
+        Top = 142
+        Width = 81
+        Height = 22
+        TabOrder = 5
+        Text = '0'
+        DataType = dtInteger
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdePhiStoppingThreshold: TRbwDataEntry
+        Left = 6
+        Top = 172
+        Width = 81
+        Height = 22
+        TabOrder = 6
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object cbLastRun: TCheckBox
+        Left = 6
+        Top = 200
+        Width = 457
+        Height = 33
+        Caption = 
+          'After optimisation is complete, run model one more time with opt' +
+          'imized parameter values (LASTRUN)'
+        TabOrder = 7
+        WordWrap = True
+      end
+      object rdeAbandon: TRbwDataEntry
+        Left = 6
+        Top = 239
+        Width = 81
+        Height = 22
+        TabOrder = 8
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+    end
+    object jvspOutputOptions: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 502
+      Height = 287
+      Caption = 'jvspOutputOptions'
+      ExplicitLeft = 6
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 231
+    Top = 287
     Width = 623
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 231
     object btnHelp: TBitBtn
       Left = 350
       Top = 6

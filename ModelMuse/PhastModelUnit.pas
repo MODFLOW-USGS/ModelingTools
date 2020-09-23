@@ -9966,13 +9966,20 @@ const
 //   '4.3.0.12'  Bug fix: Fixed bug that could cause access violations when
 //                evaluating the RCH or ETS packages after disabling MODFLOW 6
 //                observations.
-
-//               Bug fix: When drawing a fishnet mesh, it is no longer possible
+//   '4.3.0.13'  Bug fix: When drawing a fishnet mesh, it is no longer possible
 //                to add the same node to a fishnet mesh element twice.
+//               Bug fix: Fixed bug that could cause range check error if
+//                exporting an image of a 2D data set and restoring the image
+//                settings from the saved settings.
+//               Bug fix: Fixed a bug so that in MODLFOW 6 lakes the lake bottom
+//                elevation is never too low and the lake top elevation is never
+//                too high in horizontal lake connections.
+//               Bug fix: ModelMuse can now display vectors for MODFLOW 6 models
+//                in the Export Image dialog box.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.12';
+  IIModelVersion = '4.3.0.13';
 
 function IModelVersion: string;
 begin

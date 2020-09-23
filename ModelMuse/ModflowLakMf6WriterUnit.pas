@@ -196,8 +196,8 @@ resourcestring
   StrInTheLakeDefined = 'In the lake defined by the object %0:s, no outlet l' +
   'ake is defined for outlet %1:d. Flow through this outlet will either exit ' +
   'the model or it can be transferred to another boundary via the MVR package.';
-  StrLakeTopIsAboveTh = 'Lake top is above the top of the model in a horizontal' +
-  'ly connected lake cell';
+//  StrLakeTopIsAboveTh = 'Lake top is above the top of the model in a horizontal' +
+//  'ly connected lake cell';
   StrTheLakeDefinedByGrid = 'The lake defined by %0:s has a higher top eleva' +
   'tion than the top of the model at Row %1:d, Column %2:d';
   StrTheLakeDefinedByDisv = 'The lake defined by %0:s has a higher top eleva' +
@@ -223,6 +223,8 @@ resourcestring
   StrLakeWithdrawalAt = 'Lake Withdrawal at %0:g';
   StrLakeStartingStage = 'Lake Starting Stage';
   StrLakeInflowAt0g = 'Lake Inflow at %0:g';
+  StrSAndThenRaised = '%s  and then raised to the cell bottom';
+  StrSAndThenLowered = '%s  and then lowered to the cell top';
 
 { TModflowLAKMf6Writer }
 
@@ -255,7 +257,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidLakeOutflow);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectNoCells);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
-  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeTopIsAboveTh);
+//  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeTopIsAboveTh);
 
   IdentifyLakesAndLakeCells;
   SetLakeCellProperties;
@@ -587,6 +589,11 @@ var
   NonHorizConnWidth: string;
   ACell: TLakeCell;
   CellTop: Real;
+  ALakeCell: TLakeCell;
+  LakeBottom: Double;
+  CellBottom: Double;
+  CellAnnotation: string;
+  LakeTop: Double;
 begin
   Grid := Model.Grid;
   Disv := Model.DisvGrid;
@@ -608,47 +615,79 @@ begin
         BottomElevation := LakeBoundary.BottomElevation;
         ScreenObject.AssignValuesWithCellList(BottomElevation, Model, CellList,
           Results, Annotation, StrLakeBottomElevatio);
+        CellAnnotation := Format(StrSAndThenRaised, [Annotation]);
         Assert(ALake.FLakeCellList.Count = Results.Count);
         for CellIndex := 0 to ALake.FLakeCellList.Count - 1 do
         begin
-          ALake.FLakeCellList[CellIndex].BotElev := Results[CellIndex];
-          ALake.FLakeCellList[CellIndex].BotElevAnnotation := Annotation;
+          LakeBottom := Results[CellIndex];
+          ALakeCell := ALake.FLakeCellList[CellIndex];
+          CellBottom := Model.DiscretiztionElevation[ALakeCell.Cell.Column,
+            ALakeCell.Cell.Row, ALakeCell.Cell.Layer +1];
+          if (CellBottom > LakeBottom)
+            and (ALake.FLakeCellList[CellIndex].LakeType = ltHoriz) then
+          begin
+            ALake.FLakeCellList[CellIndex].BotElev := CellBottom;
+            ALake.FLakeCellList[CellIndex].BotElevAnnotation := CellAnnotation;
+          end
+          else
+          begin
+            ALake.FLakeCellList[CellIndex].BotElev := LakeBottom;
+            ALake.FLakeCellList[CellIndex].BotElevAnnotation := Annotation;
+          end;
         end;
 
         TopElevation := LakeBoundary.TopElevation;
         ScreenObject.AssignValuesWithCellList(TopElevation, Model, CellList,
           Results, Annotation, StrLakeTopElevation);
+        CellAnnotation := Format(StrSAndThenLowered, [Annotation]);
         Assert(ALake.FLakeCellList.Count = Results.Count);
         for CellIndex := 0 to ALake.FLakeCellList.Count - 1 do
         begin
-          ALake.FLakeCellList[CellIndex].TopElev := Results[CellIndex];
-          ALake.FLakeCellList[CellIndex].TopElevAnnotation := Annotation;
+          LakeTop := Results[CellIndex];
+          ALakeCell := ALake.FLakeCellList[CellIndex];
+          CellTop := Model.DiscretiztionElevation[ALakeCell.Cell.Column,
+            ALakeCell.Cell.Row, ALakeCell.Cell.Layer];
 
-          if ALake.FLakeCellList[CellIndex].LakeType = ltHoriz then
+          if (CellTop < LakeTop)
+            and (ALake.FLakeCellList[CellIndex].LakeType = ltHoriz) then
           begin
-            ACell := ALake.FLakeCellList[CellIndex];
-            if Grid <> nil then
-            begin
-              CellTop := Grid.CellElevation[ACell.Cell.Column, ACell.Cell.Row, 0]
-            end
-            else
-            begin
-              CellTop := Disv.LayerPosition(0, ACell.Cell.Column);
-            end;
-            if CellTop < ALake.FLakeCellList[CellIndex].TopElev then
-            begin
-              if Grid <> nil then
-              begin
-                frmErrorsAndWarnings.AddError(Model, StrLakeTopIsAboveTh,
-                  Format(StrTheLakeDefinedByGrid, [ScreenObject.Name, ACell.Cell.Row+1, ACell.Cell.Column+1]), ScreenObject);
-              end
-              else
-              begin
-                frmErrorsAndWarnings.AddError(Model, StrLakeTopIsAboveTh,
-                  Format(StrTheLakeDefinedByDisv, [ScreenObject.Name, ACell.Cell.Column+1]), ScreenObject);
-              end;
-            end;
+            ALake.FLakeCellList[CellIndex].TopElev := CellTop;
+            ALake.FLakeCellList[CellIndex].TopElevAnnotation := CellAnnotation;
+          end
+          else
+          begin
+            ALake.FLakeCellList[CellIndex].TopElev := LakeTop;
+            ALake.FLakeCellList[CellIndex].TopElevAnnotation := Annotation;
           end;
+
+//          ALake.FLakeCellList[CellIndex].TopElev := Results[CellIndex];
+//          ALake.FLakeCellList[CellIndex].TopElevAnnotation := Annotation;
+
+//          if ALake.FLakeCellList[CellIndex].LakeType = ltHoriz then
+//          begin
+//            ACell := ALake.FLakeCellList[CellIndex];
+//            if Grid <> nil then
+//            begin
+//              CellTop := Grid.CellElevation[ACell.Cell.Column, ACell.Cell.Row, 0]
+//            end
+//            else
+//            begin
+//              CellTop := Disv.LayerPosition(0, ACell.Cell.Column);
+//            end;
+//            if CellTop < ALake.FLakeCellList[CellIndex].TopElev then
+//            begin
+//              if Grid <> nil then
+//              begin
+//                frmErrorsAndWarnings.AddError(Model, StrLakeTopIsAboveTh,
+//                  Format(StrTheLakeDefinedByGrid, [ScreenObject.Name, ACell.Cell.Row+1, ACell.Cell.Column+1]), ScreenObject);
+//              end
+//              else
+//              begin
+//                frmErrorsAndWarnings.AddError(Model, StrLakeTopIsAboveTh,
+//                  Format(StrTheLakeDefinedByDisv, [ScreenObject.Name, ACell.Cell.Column+1]), ScreenObject);
+//              end;
+//            end;
+//          end;
         end;
 
         BedK := LakeBoundary.BedK;

@@ -6,6 +6,7 @@ inherited frmExportImage: TfrmExportImage
   ClientWidth = 721
   ShowHint = True
   OnClose = FormClose
+  ExplicitTop = -170
   ExplicitWidth = 737
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -589,7 +590,7 @@ inherited frmExportImage: TfrmExportImage
       OnClick = btnSaveSettingsClick
     end
     object comboSavedSettings: TComboBox
-      Left = 7
+      Left = 8
       Top = 32
       Width = 195
       Height = 26

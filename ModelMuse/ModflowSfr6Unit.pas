@@ -1403,7 +1403,7 @@ begin
             if Index = CellList.Count - 1 then
             begin
               RequiredLength := BoundaryFunctionIndex - DiversionStartPosition + 1;
-              if Length(Diversions) < RequiredLength then
+              if Length(Diversions) <> RequiredLength then
               begin
                 SetLength(Diversions, RequiredLength);
                 SetLength(DiversionAnnotations, RequiredLength);

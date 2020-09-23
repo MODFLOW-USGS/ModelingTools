@@ -86,6 +86,24 @@ type
     cbSensitivityReuse: TCheckBox;
     cbBoundsScaling: TCheckBox;
     jvspIterationControls: TJvStandardPage;
+    rdeMaxIterations: TRbwDataEntry;
+    lblMaxIterations: TLabel;
+    rdePhiReductionCriterion: TRbwDataEntry;
+    lblPhiReductionCriterion: TLabel;
+    rdePhiReductionCount: TRbwDataEntry;
+    lblPhiReductionCount: TLabel;
+    rdeNoReductionCount: TRbwDataEntry;
+    lblNoReductionCount: TLabel;
+    rdeSmallParameterReduction: TRbwDataEntry;
+    rdeSmallParameterReductionCount: TRbwDataEntry;
+    lblSmallParameterReduction: TLabel;
+    lblrdeSmallParameterReductionCount: TLabel;
+    rdePhiStoppingThreshold: TRbwDataEntry;
+    lblPhiStoppingThreshold: TLabel;
+    cbLastRun: TCheckBox;
+    rdeAbandon: TRbwDataEntry;
+    lblAbandon: TLabel;
+    jvspOutputOptions: TJvStandardPage;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -176,6 +194,10 @@ begin
     ControlDataNode, 'Iteration Controls') as TJvPageIndexNode;
   NewNode.PageIndex := jvspIterationControls.PageIndex;
 
+  NewNode := tvPEST.Items.AddChild(
+    ControlDataNode, 'Output') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspOutputOptions.PageIndex;
+
   pgMain.ActivePageIndex := 0;
 
   GetData
@@ -225,6 +247,16 @@ begin
   comboAutomaticUserIntervation.ItemIndex := Ord(PestControlData.AutomaticUserIntervation);
   cbSensitivityReuse.Checked := Boolean(PestControlData.SensitivityReuse);
   cbBoundsScaling.Checked := Boolean(PestControlData.Boundscaling);
+
+  rdeMaxIterations.IntegerValue := PestControlData.MaxIterations;
+  rdePhiReductionCriterion.RealValue := PestControlData.SlowConvergenceCriterion;
+  rdePhiReductionCount.IntegerValue := PestControlData.SlowConvergenceCountCriterion;
+  rdeNoReductionCount.IntegerValue := PestControlData.ConvergenceCountCriterion;
+  rdeSmallParameterReduction.RealValue := PestControlData.ParameterChangeConvergenceCriterion;
+  rdeSmallParameterReductionCount.IntegerValue := PestControlData.ParameterChangeConvergenceCount;
+  rdePhiStoppingThreshold.RealValue := PestControlData.ObjectiveCriterion;
+  cbLastRun.Checked := Boolean(PestControlData.MakeFinalRun);
+  rdeAbandon.RealValue := PestControlData.PhiAbandon;
 end;
 
 procedure TfrmPEST.SetData;
@@ -325,6 +357,39 @@ begin
     PestControlData.SensitivityReuse := TSensitivityReuse(cbSensitivityReuse.Checked);
     PestControlData.Boundscaling := TBoundsScaling(cbBoundsScaling.Checked);
 
+    if rdeMaxIterations.Text <> '' then
+    begin
+      PestControlData.MaxIterations := rdeMaxIterations.IntegerValue;
+    end;
+    if rdePhiReductionCriterion.Text <> '' then
+    begin
+      PestControlData.SlowConvergenceCriterion := rdePhiReductionCriterion.RealValue;
+    end;
+    if rdePhiReductionCount.Text <> '' then
+    begin
+      PestControlData.SlowConvergenceCountCriterion := rdePhiReductionCount.IntegerValue;
+    end;
+    if rdeNoReductionCount.Text <> '' then
+    begin
+      PestControlData.ConvergenceCountCriterion := rdeNoReductionCount.IntegerValue;
+    end;
+    if rdeSmallParameterReduction.Text <> '' then
+    begin
+      PestControlData.ParameterChangeConvergenceCriterion := rdeSmallParameterReduction.RealValue;
+    end;
+    if rdeSmallParameterReductionCount.Text <> '' then
+    begin
+      PestControlData.ParameterChangeConvergenceCount := rdeSmallParameterReductionCount.IntegerValue;
+    end;
+    if rdePhiStoppingThreshold.Text <> '' then
+    begin
+      PestControlData.ObjectiveCriterion := rdePhiStoppingThreshold.RealValue;
+    end;
+    PestControlData.MakeFinalRun := TMakeFinalRun(cbLastRun.Checked);
+    if rdeAbandon.Text <> '' then
+    begin
+      PestControlData.PhiAbandon := rdeAbandon.RealValue;
+    end;
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties));
   finally
