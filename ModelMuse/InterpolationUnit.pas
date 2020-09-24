@@ -3234,7 +3234,8 @@ begin
     for ScreenObjectIndex := ListOfScreenObjects.Count - 1 downto 0 do
     begin
       AScreenObject := ListOfScreenObjects[ScreenObjectIndex];
-      if ScreenObjectIndex = 0 then
+
+      if ScreenObjectIndex = ListOfScreenObjects.Count - 1 then
       begin
         MaxX := AScreenObject.MaxX;
         MaxY := AScreenObject.MaxY;

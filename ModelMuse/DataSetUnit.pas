@@ -552,6 +552,7 @@ type
 //    procedure SetParameterLayersUsed(const Value: string);
     procedure SetPestParametersUsed(const Value: Boolean);
     procedure CreatePestParmNameDataSet;
+    function GetParamDataSetName: string;
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -880,6 +881,7 @@ type
     property OnShouldUseOnInitialize: TCheckUsageEvent
       read FOnShouldUseOnInitialize write SetOnShouldUseOnInitialize;
     procedure AssignValuesWithScreenObjects;
+    property ParamDataSetName: string read GetParamDataSetName;
   published
     // @name indicates the hierarchical position of this instance of
     // @classname when it is required by the model.
@@ -3974,28 +3976,29 @@ end;
 
 procedure TDataArray.CreatePestParmNameDataSet;
 var
-  ParamDataSetName: string;
+  DataSetName: string;
   LocalModel: TCustomModel;
   NameDataArray: TDataArray;
 begin
   if PestParametersUsed then
   begin
-    ParamDataSetName := Format(StrSParameterNames, [Name]);
+    DataSetName := ParamDataSetName;
+//    GetParamDataSetName(DataSetName);
     LocalModel := FModel as TCustomModel;
     NameDataArray := LocalModel.DataArrayManager.
-      GetDataSetByName(ParamDataSetName);
+      GetDataSetByName(DataSetName);
     if NameDataArray = nil then
     begin
       NameDataArray := LocalModel.DataArrayManager.CreateNewDataArray(
-        TDataArray, ParamDataSetName, '""',
-        ParamDataSetName,
+        TDataArray, DataSetName, '""',
+        DataSetName,
         Lock, rdtString, EvaluatedAt,
         Orientation, Classification);
       NameDataArray.OnDataSetUsed := LocalModel.ParamNamesDataSetUsed;
       NameDataArray.Lock := Lock;
       NameDataArray.CheckMax := False;
       NameDataArray.CheckMin := False;
-      NameDataArray.DisplayName := ParamDataSetName;
+      NameDataArray.DisplayName := DataSetName;
       NameDataArray.Visible := True;
       NameDataArray.OnInitialize := nil;
       NameDataArray.OnShouldUseOnInitialize := nil;
@@ -8026,6 +8029,11 @@ begin
       end;
     end;
   end;
+end;
+
+function TDataArray.GetParamDataSetName: string;
+begin
+  result := Format(StrSParameterNames, [Name]);
 end;
 
 procedure TDataArray.CacheData;

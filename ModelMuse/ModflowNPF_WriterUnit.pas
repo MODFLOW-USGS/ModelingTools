@@ -18,6 +18,7 @@ type
     procedure WriteAngle1;
     procedure WriteAngle2;
     procedure WriteAngle3;
+    procedure WritePestZones(DataArray: TDataArray);
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -30,7 +31,7 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit, GoPhastTypes,
   ModflowOptionsUnit, ModflowOutputControlUnit, PhastModelUnit,
-  System.SysUtils;
+  System.SysUtils, PlProcUnit;
 
 resourcestring
   StrWritingNPFPackage = 'Writing NPF Package input.';
@@ -310,6 +311,27 @@ begin
   end;
 end;
 
+procedure TNpfWriter.WritePestZones(DataArray: TDataArray);
+var
+  ParamDataArray: TDataArray;
+  ParamListFileName: string;
+  PestZoneWriter: TParameterZoneWriter;
+begin
+  if (Model.PestUsed) and DataArray.PestParametersUsed then
+  begin
+    ParamDataArray := Model.DataArrayManager.GetDataSetByName(
+      DataArray.ParamDataSetName);
+    Assert(ParamDataArray <> nil);
+    ParamListFileName := ChangeFileExt(FInputFileName, '.' + DataArray.Name);
+    PestZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+    try
+      PestZoneWriter.WriteFile(ParamListFileName, ParamDataArray);
+    finally
+      PestZoneWriter.Free;
+    end;
+  end;
+end;
+
 procedure TNpfWriter.WriteHANI;
 var
   DataArray: TDataArray;
@@ -333,6 +355,9 @@ begin
   frmProgressMM.AddMessage('  Writing K');
   DataArray := Model.DataArrayManager.GetDataSetByName(rsKx);
   WriteMf6_DataSet(DataArray, 'K');
+
+  WritePestZones(DataArray);
+
 end;
 
 procedure TNpfWriter.WriteIcelltype;

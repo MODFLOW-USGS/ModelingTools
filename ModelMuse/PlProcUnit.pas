@@ -8,7 +8,8 @@ interface
 
 uses
   ModflowIrregularMeshUnit, CustomModflowWriterUnit, System.SysUtils, FastGEO,
-  AbstractGridUnit, GoPhastTypes, MeshRenumberingTypes;
+  AbstractGridUnit, GoPhastTypes, MeshRenumberingTypes, System.Classes,
+  DataSetUnit;
 
 type
   // @name is used to write a file that can be read by read_mf_usg_grid_specs().
@@ -27,6 +28,8 @@ type
   TInterpolationDataWriter = class(TCustomFileWriter)
   public
     class function Extension: string; override;
+    // X and Y values are data point locations.
+    // Z values are the data to be interpolated.
     procedure WriteFile(Points: TPoint3DArray; var FileName: string);
   end;
 
@@ -40,7 +43,17 @@ type
       var FileName: string); overload;
   end;
 
+  TParameterZoneWriter = class(TCustomFileWriter)
+  protected
+    class function Extension: string; override;
+  public
+    procedure WriteFile(var AFileName: string; DataArray: TDataArray);
+  end;
+
 implementation
+
+uses
+  ModflowParameterUnit, OrderedCollectionUnit;
 
 { TUsgGridSpecWrite }
 
@@ -425,6 +438,72 @@ begin
       Assert(False);
   end;
   WriteFile(Points, FileName);
+end;
+
+{ TParameterZoneWriter }
+
+class function TParameterZoneWriter.Extension: string;
+begin
+  Result := '.PstZone';
+end;
+
+procedure TParameterZoneWriter.WriteFile(var AFileName: string;
+  DataArray: TDataArray);
+var
+  PNames: TStringList;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ID: Integer;
+  LayerIndex: Integer;
+  AName: string;
+begin
+  PNames := TStringList.Create;
+  try
+    for PIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+    begin
+      AParam := Model.ModflowSteadyParameters[PIndex];
+      if AParam.ParameterType = ptPEST then
+      begin
+        PNames.Add(LowerCase(AParam.ParameterName));
+      end;
+    end;
+    PNames.Sorted := True;
+
+    AFileName := AFileName + Extension;
+    OpenFile(AFileName);
+    try
+      ID := 1;
+      for RowIndex := 0 to DataArray.RowCount - 1 do
+      begin
+        for ColIndex := 0 to DataArray.ColumnCount - 1 do
+        begin
+          WriteInteger(ID);
+
+          for LayerIndex := 0 to DataArray.LayerCount - 1 do
+          begin
+            AName := LowerCase(DataArray.StringData[LayerIndex,RowIndex,ColIndex]);
+            if (AName = '') then
+            begin
+              WriteInteger(0);
+            end
+            else
+            begin
+              WriteInteger(PNames.IndexOf(AName)+1);
+            end;
+          end;
+
+          Inc(ID);
+          NewLine;
+        end;
+      end;
+    finally
+      CloseFile;
+    end;
+  finally
+    PNames.Free;
+  end;
 end;
 
 end.

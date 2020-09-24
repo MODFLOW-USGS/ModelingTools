@@ -2859,6 +2859,7 @@ var
   Line: string;
   Extension: string;
 begin
+  Assert(CurrentNameFileWriter <> nil);
   case FileOption of
     foInput, foInputAlreadyExists:
       begin
@@ -2886,7 +2887,6 @@ begin
   begin
     Line := Line + ' ' + Option;
   end;
-  Assert(CurrentNameFileWriter <> nil);
   CurrentNameFileWriter.NameFile.Add(Line);
 end;
 
