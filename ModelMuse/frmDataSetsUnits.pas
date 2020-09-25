@@ -2916,7 +2916,8 @@ begin
 
       tabParameters.TabVisible := (FSelectedEdit.DataType = rdtDouble)
         and (FSelectedEdit.DataArray <> nil)
-        and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0);
+        and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0)
+        and not (dcFormula in FSelectedEdit.DataArray.Lock);
     end;
     btnEditFormula.Enabled := reDefaultFormula.Enabled;
   end;

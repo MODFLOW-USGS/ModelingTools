@@ -56,11 +56,14 @@ type
     procedure UpdateFormulas(const OldName, NewName: string);
     procedure UnlockDataSets;
     procedure SetUsePilotPoints(const Value: Boolean);
+    procedure InvalidatePestDataArrays(CheckAll: Boolean = False);
   protected
     // Besides setting the name of the parameter, @name also updates the
     // names of the @link(TDataArray)s used to define multiplier and zone
     // arrays.
     procedure SetParameterName(const Value: string);override;
+    procedure SetValue(AValue : double); override;
+    procedure SetParameterType(const Value: TParameterType); override;
   public
     procedure ClearArrayNames;
     // @name copies the source @link(TModflowSteadyParameter)
@@ -225,6 +228,27 @@ begin
   end;
 
   inherited;
+end;
+
+procedure TModflowSteadyParameter.InvalidatePestDataArrays(CheckAll: Boolean = False);
+var
+  LocalModel: TCustomModel;
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  if (Model <> nil) and ((ParameterType = ptPEST) or CheckAll) then
+  begin
+    LocalModel := Model as TCustomModel;
+    for DataArrayIndex := 0 to LocalModel.DataArrayManager.DataSetCount - 1 do
+    begin
+      ADataArray := LocalModel.DataArrayManager[DataArrayIndex];
+      if ADataArray.PestParametersUsed
+        and (ADataArray.UsedPestParameters.IndexOf(ParameterName) >= 0) then
+      begin
+        ADataArray.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 function TModflowSteadyParameter.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -480,12 +504,26 @@ begin
   Assert(Length(NewName) <= 10);
   if FParameterName <> NewName then
   begin
+    InvalidatePestDataArrays;
     UpdateMultiplierName(NewName);
     UpdateZoneName(NewName);
     UpdateHfbParameterNames(NewName);
     InvalidateModel;
     FParameterName := NewName;
   end;
+end;
+
+procedure TModflowSteadyParameter.SetParameterType(const Value: TParameterType);
+begin
+  if (ParameterType <> Value) then
+  begin
+    if ptPEST in [ParameterType, Value] then
+    begin
+      InvalidatePestDataArrays(True);
+    end;
+  end;
+  inherited;
+
 end;
 
 procedure TModflowSteadyParameter.SetUseMultiplier(const Value: boolean);
@@ -515,6 +553,16 @@ begin
     InvalidateModel;
   end;
   UpdateZoneName(FParameterName);
+end;
+
+procedure TModflowSteadyParameter.SetValue(AValue: double);
+begin
+  if AValue <> Value then
+  begin
+    InvalidatePestDataArrays;
+  end;
+  inherited;
+
 end;
 
 procedure TModflowSteadyParameter.CreateNewDataSetVariables(

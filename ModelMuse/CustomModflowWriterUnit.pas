@@ -96,6 +96,7 @@ type
     procedure WriteTemplateFormula(ParameterName: string;
       MultiplierValue: double);
     procedure WritePestTemplateLine(AFileName: string);
+    procedure WritePestZones(DataArray: TDataArray; InputFileName: string);
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -1057,7 +1058,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   ModpathResponseFileWriterUnit, ModflowPackagesUnit, Math,
   System.Generics.Defaults, ArchiveNodeInterface, ModflowOptionsUnit,
   Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
-  ModflowTimeSeriesUnit, ModflowMvrWriterUnit;
+  ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit;
 
 resourcestring
   StrTheFollowingParame = 'The following %s parameters are being skipped ' +
@@ -8945,6 +8946,22 @@ begin
     CloseFile;
   end;
   ADataArray.CacheData;
+end;
+
+procedure TCustomFileWriter.WritePestZones(DataArray: TDataArray;
+  InputFileName: string);
+var
+  PestZoneWriter: TParameterZoneWriter;
+begin
+  if (Model.PestUsed) and DataArray.PestParametersUsed then
+  begin
+    PestZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+    try
+      PestZoneWriter.WriteFile(InputFileName, DataArray);
+    finally
+      PestZoneWriter.Free;
+    end;
+  end;
 end;
 
 initialization

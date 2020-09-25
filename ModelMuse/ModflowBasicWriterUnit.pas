@@ -10,8 +10,8 @@ type
     XSECTION: boolean;
     FNameOfFile: string;
     procedure CheckStartingHeads;
-    procedure WriteStartingHeads;
     procedure WriteDataSet(const DataSetName: string; DataArray: TDataArray);
+    procedure WriteStartingHeads;
   end;
 
   TModflowBasicWriter = class(TCustomBasicWriter)
@@ -576,7 +576,12 @@ begin
   if Model.ModflowOptions.InitialHeadFileName = '' then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsModflow_Initial_Head);
+    Assert(DataArray <> nil);
     WriteDataSet(DataSetName, DataArray);
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      WritePestZones(DataArray, FInputFileName);
+    end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
     Model.DataArrayManager.CacheDataArrays;
   end

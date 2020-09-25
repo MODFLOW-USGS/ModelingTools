@@ -18,7 +18,6 @@ type
     procedure WriteAngle1;
     procedure WriteAngle2;
     procedure WriteAngle3;
-    procedure WritePestZones(DataArray: TDataArray);
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -52,36 +51,30 @@ procedure TNpfWriter.WriteAngle1;
 var
   DataArray: TDataArray;
 begin
-//  if FNpfPackage.UseXT3D then
-//  begin
-    frmProgressMM.AddMessage('  Writing XT3D angle1');
-    DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle1);
-    WriteMf6_DataSet(DataArray, 'angle1');
-//  end;
+  frmProgressMM.AddMessage('  Writing XT3D angle1');
+  DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle1);
+  WriteMf6_DataSet(DataArray, 'angle1');
+  WritePestZones(DataArray, FInputFileName);
 end;
 
 procedure TNpfWriter.WriteAngle2;
 var
   DataArray: TDataArray;
 begin
-//  if FNpfPackage.UseXT3D then
-//  begin
-    frmProgressMM.AddMessage('  Writing XT3D angle2');
-    DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle2);
-    WriteMf6_DataSet(DataArray, 'angle2');
-//  end;
+  frmProgressMM.AddMessage('  Writing XT3D angle2');
+  DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle2);
+  WriteMf6_DataSet(DataArray, 'angle2');
+  WritePestZones(DataArray, FInputFileName);
 end;
 
 procedure TNpfWriter.WriteAngle3;
 var
   DataArray: TDataArray;
 begin
-//  if FNpfPackage.UseXT3D then
-//  begin
-    frmProgressMM.AddMessage('  Writing XT3D angle3');
-    DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle3);
-    WriteMf6_DataSet(DataArray, 'angle3');
-//  end;
+  frmProgressMM.AddMessage('  Writing XT3D angle3');
+  DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle3);
+  WriteMf6_DataSet(DataArray, 'angle3');
+  WritePestZones(DataArray, FInputFileName);
 end;
 
 procedure TNpfWriter.WriteDataSet1;
@@ -311,27 +304,6 @@ begin
   end;
 end;
 
-procedure TNpfWriter.WritePestZones(DataArray: TDataArray);
-var
-  ParamDataArray: TDataArray;
-  ParamListFileName: string;
-  PestZoneWriter: TParameterZoneWriter;
-begin
-  if (Model.PestUsed) and DataArray.PestParametersUsed then
-  begin
-    ParamDataArray := Model.DataArrayManager.GetDataSetByName(
-      DataArray.ParamDataSetName);
-    Assert(ParamDataArray <> nil);
-    ParamListFileName := ChangeFileExt(FInputFileName, '.' + DataArray.Name);
-    PestZoneWriter := TParameterZoneWriter.Create(Model, etExport);
-    try
-      PestZoneWriter.WriteFile(ParamListFileName, ParamDataArray);
-    finally
-      PestZoneWriter.Free;
-    end;
-  end;
-end;
-
 procedure TNpfWriter.WriteHANI;
 var
   DataArray: TDataArray;
@@ -346,6 +318,7 @@ begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsKy);
   end;
   WriteMf6_DataSet(DataArray, 'K22');
+  WritePestZones(DataArray, FInputFileName);
 end;
 
 procedure TNpfWriter.WriteHK;
@@ -355,9 +328,7 @@ begin
   frmProgressMM.AddMessage('  Writing K');
   DataArray := Model.DataArrayManager.GetDataSetByName(rsKx);
   WriteMf6_DataSet(DataArray, 'K');
-
-  WritePestZones(DataArray);
-
+  WritePestZones(DataArray, FInputFileName);
 end;
 
 procedure TNpfWriter.WriteIcelltype;
@@ -383,6 +354,7 @@ begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsKz);
   end;
   WriteMf6_DataSet(DataArray, 'K33');
+  WritePestZones(DataArray, FInputFileName);
 end;
 
 procedure TNpfWriter.WriteWETDRY;
@@ -394,6 +366,7 @@ begin
     frmProgressMM.AddMessage('  Writing WETDRY');
     DataArray := Model.DataArrayManager.GetDataSetByName(rsWetDry);
     WriteMf6_DataSet(DataArray, 'WETDRY');
+    WritePestZones(DataArray, FInputFileName);
   end;
 end;
 

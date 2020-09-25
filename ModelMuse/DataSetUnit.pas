@@ -11,7 +11,8 @@ unit DataSetUnit;
 
 interface
 
-uses System.UITypes, Windows, Math, ZLib, GR32, TempFiles, IntListUnit, RealListUnit, SysUtils,
+uses System.UITypes, Windows, Math, ZLib, GR32, TempFiles, IntListUnit,
+  RealListUnit, SysUtils,
   Classes, Forms, RbwParser, GoPhastTypes, SubscriptionUnit,
   SparseDataSets, ObserverIntfU, FormulaManagerUnit, Dialogs,
   Generics.Collections, Generics.Defaults, SparseArrayUnit, QuadTreeClass,
@@ -470,6 +471,7 @@ type
     FOnShouldUseOnInitialize: TCheckUsageEvent;
     FRefreshingOldUseList: boolean;
     FPestParametersUsed: Boolean;
+    FUsedPestParameters: TStrings;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -553,6 +555,8 @@ type
     procedure SetPestParametersUsed(const Value: Boolean);
     procedure CreatePestParmNameDataSet;
     function GetParamDataSetName: string;
+    procedure ApplyPestParameter;
+    procedure SetUsedPestParameters(const Value: TStrings);
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -959,6 +963,12 @@ type
       {$IFDEF PEST}
       stored True
       {$ELSE}
+      stored False
+      {$ENDIF}
+      ;
+    property UsedPestParameters: TStrings read FUsedPestParameters
+      write SetUsedPestParameters
+      {$IFNDEF PEST}
       stored False
       {$ENDIF}
       ;
@@ -1635,7 +1645,8 @@ implementation
 uses Contnrs, frmGoPhastUnit, frmConvertChoiceUnit, GIS_Functions,
   ScreenObjectUnit, frmFormulaErrorsUnit, InterpolationUnit,
   PhastModelUnit, AbstractGridUnit, frmErrorsAndWarningsUnit, frmProgressUnit,
-  GlobalVariablesUnit, frmDisplayDataUnit, SutraMeshUnit, PhastDataSets;
+  GlobalVariablesUnit, frmDisplayDataUnit, SutraMeshUnit, PhastDataSets,
+  ModflowParameterUnit, OrderedCollectionUnit;
 
 resourcestring
   StrUnassigned = 'Unassigned';
@@ -1708,6 +1719,7 @@ resourcestring
   StrTheDefaultFormula = 'The default formula for %0:s returns a value of th' +
   'e wrong type. The formula is %1:s.';
   StrSParameterNames = '%s_Parameter_Names';
+  StrSMultipliedByAP = '%s multiplied by a parameter value';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -1913,6 +1925,7 @@ begin
     end;
   end;
 
+  FUsedPestParameters.Free;
   FContourInterval.Free;
   FLimits.Free;
   FContourLimits.Free;
@@ -2199,6 +2212,7 @@ var
   PriorInterpAnnString: string;
   DisLimits: TGridLimit;
   ErrorMessage: string;
+  NameDataArray: TDataArray;
   procedure GetLimits;
   begin
     if LocalModel.ModelSelection in SutraSelection then
@@ -2439,6 +2453,13 @@ begin
       else
       begin
         RestoreArraySize;
+      end;
+
+      if PestParametersUsed then
+      begin
+        NameDataArray := LocalModel.DataArrayManager.
+          GetDataSetByName(ParamDataSetName);
+        NameDataArray.Initialize;
       end;
 
       GetLimits;
@@ -3793,6 +3814,11 @@ begin
   end;  
 end;
 
+procedure TDataArray.SetUsedPestParameters(const Value: TStrings);
+begin
+  FUsedPestParameters.Assign(Value);
+end;
+
 procedure TDataArray.UpdateDimensions(NumberOfLayers, NumberOfRows,
   NumberOfColumns: integer; ForceResize: boolean = False);
 begin
@@ -3972,6 +3998,9 @@ begin
   FReadDataFromFile := False;
   FContourInterval := TRealStorage.Create;
   FContourInterval.OnChange := OnValueChanged;
+  FUsedPestParameters := TStringList.Create;
+  TStringList(FUsedPestParameters).Duplicates := dupIgnore;
+  TStringList(FUsedPestParameters).Sorted := True;
 end;
 
 procedure TDataArray.CreatePestParmNameDataSet;
@@ -3980,13 +4009,12 @@ var
   LocalModel: TCustomModel;
   NameDataArray: TDataArray;
 begin
+  DataSetName := ParamDataSetName;
+  LocalModel := FModel as TCustomModel;
+  NameDataArray := LocalModel.DataArrayManager.
+    GetDataSetByName(DataSetName);
   if PestParametersUsed then
   begin
-    DataSetName := ParamDataSetName;
-//    GetParamDataSetName(DataSetName);
-    LocalModel := FModel as TCustomModel;
-    NameDataArray := LocalModel.DataArrayManager.
-      GetDataSetByName(DataSetName);
     if NameDataArray = nil then
     begin
       NameDataArray := LocalModel.DataArrayManager.CreateNewDataArray(
@@ -4002,6 +4030,14 @@ begin
       NameDataArray.Visible := True;
       NameDataArray.OnInitialize := nil;
       NameDataArray.OnShouldUseOnInitialize := nil;
+    end;
+    NameDataArray.TalksTo(self);
+  end
+  else
+  begin
+    if NameDataArray <> nil then
+    begin
+      NameDataArray.StopsTalkingTo(self);
     end;
   end;
 end;
@@ -5796,6 +5832,101 @@ begin
   end;
 end;
 
+procedure TDataArray.ApplyPestParameter;
+var
+  PestParameters: TStringList;
+  Annotations: TStringList;
+  ModifiedAnnotations: TStringList;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ParamDataArray: TDataArray;
+  AnnotationIndex: Integer;
+  PIndex: Integer;
+  LocalModel: TCustomModel;
+  AParam: TModflowSteadyParameter;
+  AIndex: Integer;
+  AParamName: string;
+begin
+  UpToDate := True;
+  UsedPestParameters.Clear;
+  LocalModel := Model as TCustomModel;
+  PestParameters := TStringList.Create;
+  Annotations := TStringList.Create;
+  ModifiedAnnotations := TStringList.Create;
+  try
+    for PIndex := 0 to LocalModel.ModflowSteadyParameters.Count - 1 do
+    begin
+      AParam := LocalModel.ModflowSteadyParameters[PIndex];
+      if AParam.ParameterType = ptPEST then
+      begin
+        PestParameters.AddObject(LowerCase(AParam.ParameterName), AParam);
+      end;
+    end;
+    PestParameters.Sorted := True;
+    Annotations.Sorted := True;
+    Annotations.Duplicates := dupIgnore;
+
+    for LayerIndex := 0 to LayerCount - 1 do
+    begin
+      for RowIndex := 0 to RowCount - 1 do
+      begin
+        for ColIndex := 0 to ColumnCount - 1 do
+        begin
+          if IsValue[LayerIndex, RowIndex, ColIndex]  then
+          begin
+            Annotations.Add(Annotation[LayerIndex, RowIndex, ColIndex]);
+          end;
+        end;
+      end;
+    end;
+
+    for AnnotationIndex := 0 to Annotations.Count - 1 do
+    begin
+      ModifiedAnnotations.Add(Format(StrSMultipliedByAP,
+        [Annotations[AnnotationIndex]]));
+    end;
+
+    ParamDataArray := LocalModel.DataArrayManager.GetDataSetByName
+      (ParamDataSetName);
+    Assert(ParamDataArray <> nil);
+    ParamDataArray.Initialize;
+
+    for LayerIndex := 0 to LayerCount - 1 do
+    begin
+      for RowIndex := 0 to RowCount - 1 do
+      begin
+        for ColIndex := 0 to ColumnCount - 1 do
+        begin
+          if IsValue[LayerIndex, RowIndex, ColIndex]  then
+          begin
+            AParamName := LowerCase(ParamDataArray.StringData[
+              LayerIndex,RowIndex,ColIndex]);
+            PIndex := PestParameters.IndexOf(AParamName);
+            if PIndex >= 0 then
+            begin
+              AParam := PestParameters.Objects[PIndex] as TModflowSteadyParameter;
+              UsedPestParameters.Add(AParam.ParameterName);
+              RealData[LayerIndex, RowIndex, ColIndex] := AParam.Value *
+                RealData[LayerIndex, RowIndex, ColIndex];
+              AIndex := Annotations.IndexOf(Annotation[LayerIndex, RowIndex, ColIndex]);
+              Assert(AIndex >= 0);
+              Annotation[LayerIndex, RowIndex, ColIndex] :=
+                ModifiedAnnotations[AIndex];
+//               :=
+            end;
+          end;
+        end;
+      end;
+    end;
+
+  finally
+    PestParameters.Free;
+    Annotations.Free;
+    ModifiedAnnotations.Free;
+  end;
+end;
+
 procedure TDataArray.PostInitialize;
 begin
   if Assigned(OnPostInitialize) then
@@ -5803,6 +5934,11 @@ begin
     UpToDate := True;
     OnPostInitialize(self);
   end;
+  if PestParametersUsed then
+  begin
+    ApplyPestParameter;
+  end;
+
 end;
 
 { TCustom2DInterpolater }

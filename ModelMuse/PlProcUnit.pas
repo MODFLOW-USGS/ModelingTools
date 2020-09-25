@@ -458,40 +458,76 @@ var
   ID: Integer;
   LayerIndex: Integer;
   AName: string;
+  ParamDataArray: TDataArray;
+  ParamListFileName: string;
+  ScriptFileName: string;
+  GrbFileName: string;
+  UsedParamList: TStringList;
+  ParameterIndex: Integer;
+  ModelInputFileName: string;
 begin
+  ParamDataArray := Model.DataArrayManager.GetDataSetByName
+    (DataArray.ParamDataSetName);
+  Assert(ParamDataArray <> nil);
+  ParamDataArray.Initialize;
+  ParamListFileName := ChangeFileExt(AFileName, '.' + DataArray.Name) + Extension;;
   PNames := TStringList.Create;
+  UsedParamList := TStringList.Create;
   try
+    UsedParamList.Duplicates := dupIgnore;
+    UsedParamList.Sorted := True;
     for PIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
     begin
       AParam := Model.ModflowSteadyParameters[PIndex];
       if AParam.ParameterType = ptPEST then
       begin
-        PNames.Add(LowerCase(AParam.ParameterName));
+        PNames.AddObject(LowerCase(AParam.ParameterName), AParam);
       end;
     end;
     PNames.Sorted := True;
 
-    AFileName := AFileName + Extension;
-    OpenFile(AFileName);
+//    AFileName := AFileName + Extension;
+    OpenFile(ParamListFileName);
     try
       ID := 1;
-      for RowIndex := 0 to DataArray.RowCount - 1 do
+      for RowIndex := 0 to ParamDataArray.RowCount - 1 do
       begin
-        for ColIndex := 0 to DataArray.ColumnCount - 1 do
+        for ColIndex := 0 to ParamDataArray.ColumnCount - 1 do
         begin
           WriteInteger(ID);
 
-          for LayerIndex := 0 to DataArray.LayerCount - 1 do
+          for LayerIndex := 0 to ParamDataArray.LayerCount - 1 do
           begin
-            AName := LowerCase(DataArray.StringData[LayerIndex,RowIndex,ColIndex]);
+            AName := LowerCase(ParamDataArray.StringData[LayerIndex,RowIndex,ColIndex]);
             if (AName = '') then
             begin
-              WriteInteger(0);
+              PIndex := -1
             end
             else
             begin
-              WriteInteger(PNames.IndexOf(AName)+1);
+              PIndex := PNames.IndexOf(AName);
             end;
+
+            if PIndex >= 0 then
+            begin
+              AParam := PNames.Objects[PIndex] as TModflowSteadyParameter;
+              UsedParamList.AddObject(AParam.ParameterName, AParam);
+              if AParam.Value <> 0 then
+              begin
+                WriteFloat(DataArray.RealData[LayerIndex,RowIndex,ColIndex]
+                  / AParam.Value);
+              end
+              else
+              begin
+                WriteFloat(DataArray.RealData[LayerIndex,RowIndex,ColIndex]);
+              end;
+            end
+            else
+            begin
+              WriteFloat(DataArray.RealData[LayerIndex,RowIndex,ColIndex]);
+            end;
+
+            WriteInteger(PIndex+1);
           end;
 
           Inc(ID);
@@ -501,8 +537,118 @@ begin
     finally
       CloseFile;
     end;
+
+    Model.DataArrayManager.AddDataSetToCache(DataArray);
+    Model.DataArrayManager.AddDataSetToCache(ParamDataArray);
+
+    ScriptFileName := ChangeFileExt(ParamListFileName, '.tpl');
+    OpenFile(ScriptFileName);
+    try
+      WriteString('ptf ');
+      WriteString(Model.PestProperties.TemplateCharacter);
+      NewLine;
+      WriteString('#Script for PLPROC');
+      NewLine;
+      NewLine;
+      //
+      WriteString('#Read MODFLOW 6 grid information file');
+      NewLine;
+      GrbFileName := ChangeFileExt(AFileName, '');
+      if Model.DisvUsed then
+      begin
+        GrbFileName := ChangeFileExt(GrbFileName, '.disv.grb');
+      end
+      else
+      begin
+        GrbFileName := ChangeFileExt(GrbFileName, '.dis.grb');
+      end;
+      GrbFileName := ExtractFileName(GrbFileName);
+
+      WriteString(Format('cl_mf6 = read_mf6_grid_specs(file=''%s'', &',
+        [GrbFileName]));
+      NewLine;
+      WriteString('    dimensions=2, &');
+      NewLine;
+      for LayerIndex := 0 to Model.LayerCount - 1 do
+      begin
+        WriteString(Format('    slist_layer_idomain=id%0:d; layer=%0:d, &', [LayerIndex+1]));
+        NewLine;
+      end;
+      for LayerIndex := 0 to Model.LayerCount - 1 do
+      begin
+        WriteString(Format('    plist_layer_bottom =bot%0:d; layer=%0:d, &', [LayerIndex+1]));
+        NewLine;
+      end;
+      WriteString('    plist_top = top)');
+      NewLine;
+      NewLine;
+
+      WriteString('#Read data to modify');
+      NewLine;
+      WriteString('read_list_file(reference_clist=''cl_mf6'',skiplines=0, &');
+      NewLine;
+      ColIndex := 2;
+      for LayerIndex := 0 to DataArray.LayerCount - 1 do
+      begin
+        WriteString(Format('  plist=p_Value%0:d;column=%1:d, &', [LayerIndex+1, ColIndex]));
+        Inc(ColIndex);
+        NewLine;
+
+        WriteString(Format('  slist=s_PIndex%0:d;column=%1:d, &', [LayerIndex+1, ColIndex]));
+        Inc(ColIndex);
+        NewLine;
+      end;
+      WriteString(Format('  file=''%s'')', [ParamListFileName]));
+      NewLine;
+      NewLine;
+
+      WriteString('#Read parameter values');
+      NewLine;
+      for ParameterIndex := 0 to UsedParamList.Count - 1 do
+      begin
+        AParam := UsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
+        WriteString(Format('%0:s = %1:s                        %0:s%1:s', [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
+        NewLine;
+      end;
+      NewLine;
+
+      WriteString('#Modfify data values');
+      NewLine;
+      for LayerIndex := 0 to DataArray.LayerCount - 1 do
+      begin
+        for ParameterIndex := 0 to UsedParamList.Count - 1 do
+        begin
+          AParam := UsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
+          PIndex := PNames.IndexOf(AParam.ParameterName) +1;
+          WriteString(Format('p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+            [LayerIndex+1, PIndex, AParam.ParameterName]));
+          NewLine
+        end;
+      end;
+      NewLine;
+
+      WriteString('#Write new data values');
+      NewLine;
+      for LayerIndex := 0 to DataArray.LayerCount - 1 do
+      begin
+        ModelInputFileName := AFileName + '.' + Trim(DataArray.Name)
+          + '_' + IntToStr(LayerIndex+1);
+        ModelInputFileName := 'arrays' + PathDelim + ExtractFileName(ModelInputFileName);
+
+        WriteString('write_column_data_file(header=''no'', &');
+        NewLine;
+        WriteString(Format('  file=''%s'';delim="space", &', [ModelInputFileName]));
+        NewLine;
+        WriteString(Format('  plist=p_Value%0:d)', [LayerIndex+1]));
+        NewLine;
+      end;
+
+    finally
+      CloseFile;
+    end;
   finally
     PNames.Free;
+    UsedParamList.Free;
   end;
 end;
 

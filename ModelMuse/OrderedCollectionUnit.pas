@@ -317,7 +317,7 @@ type
     // See @link(ParameterName).
     procedure SetParameterName(const Value: string); virtual; abstract;
     // See @link(Value).
-    procedure SetValue(Value : double); virtual;
+    procedure SetValue(AValue : double); virtual;
   public
     procedure NotifyParamChange(const Value: TParameterType);
     // @name copies @link(ParameterName), @link(ParameterType), @link(Value)
@@ -1179,16 +1179,15 @@ begin
   end;
 end;
 
-procedure TModflowParameter.SetValue(Value : double);
+procedure TModflowParameter.SetValue(AValue : double);
 var
   PhastModel: TPhastModel;
   ScreenObject: TScreenObject;
   ScreenObjectIndex: Integer;
-
 begin
-  if FValue <> Value then
+  if FValue <> AValue then
   begin
-    FValue := Value;
+    FValue := AValue;
     if Model <> nil then
     begin
       if ParameterType in [ptHUF_HK, ptHUF_KDEP]  then

@@ -50,11 +50,9 @@ type
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
     class function Extension: string; override;
-    procedure WriteAndCheckCells({const VariableIdentifiers: string;
-      const DataSetIdentifier: string;} List: TValueCellList;
+    procedure WriteAndCheckCells(List: TValueCellList;
       TimeIndex: integer);
-    procedure WriteCell(Cell: TValueCell{;
-      const DataSetIdentifier, VariableIdentifiers: string}); //virtual; abstract;
+    procedure WriteCell(Cell: TValueCell); 
     class function ObservationExtension: string; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -218,8 +216,6 @@ var
 begin
   MfObs := AScreenObject.Modflow6Obs;
   Result := (MfObs <> nil) and MfObs.Used and (MfObs.CSubObs.CSubObsSet <> []);
-//  result := (Model.ModelSelection = msModflow2015)
-//    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
 end;
 
 class function TCSubWriter.ObservationExtension: string;
@@ -347,23 +343,15 @@ var
   ShouldWrite: Boolean;
   ActiveDS: TDataArray;
 begin
-//  if Model.ModelSelection = msModflow2015 then
-//  begin
-	  ActiveDS := Model.DataArrayManager.GetDataSetByName(rsActive);
-//  end
-//  else
-//  begin
-//    ActiveDS := nil;
-//  end;
+ ActiveDS := Model.DataArrayManager.GetDataSetByName(rsActive);
   for CellIndex := 0 to List.Count - 1 do
   begin
     Cell := List[CellIndex] as TValueCell;
-    ShouldWrite := {(Model.ModelSelection <> msModflow2015)
-      or} ActiveDS.BooleanData[Cell.Layer,
+    ShouldWrite := ActiveDS.BooleanData[Cell.Layer,
       Cell.Row, Cell.Column];
     if ShouldWrite then
     begin
-      WriteCell(Cell{, DataSetIdentifier, VariableIdentifiers});
+      WriteCell(Cell);
     end;
     CheckCell(Cell, Package.PackageIdentifier);
     Application.ProcessMessages;
@@ -381,7 +369,6 @@ const
 var
   CSubCell: TCSubCell;
   LocalLayer: integer;
-//  MvrKey: TMvrRegisterKey;
 begin
   Inc(FBoundaryIndex);
 
@@ -394,17 +381,7 @@ begin
     WriteInteger(CSubCell.Row+1);
   end;
   WriteInteger(CSubCell.Column+1);
-//  if CSubCell.TimeSeriesName = '' then
-//  begin
-    WriteFloat(CSubCell.StressOffset);
-//  end
-//  else
-//  begin
-//    WriteString(' ');
-//    WriteString(CSubCell.TimeSeriesName);
-//    WriteString(' ');
-//  end;
-//  WriteIface(CSubCell.IFace);
+  WriteFloat(CSubCell.StressOffset);
   WriteBoundName(CSubCell);
   if Model.DisvUsed then
   begin
@@ -641,19 +618,27 @@ begin
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(KInitialElasticSpec);
   end;
+  Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'CG_SKE_CR');
+  WritePestZones(DataArray, FInputFileName);
 
   frmProgressMM.AddMessage('  Writing CG_THETA');
   DataArray := Model.DataArrayManager.GetDataSetByName(KInitialCoarsePoros);
+  Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'CG_THETA');
+  WritePestZones(DataArray, FInputFileName);
 
   frmProgressMM.AddMessage('  Writing SGM');
   DataArray := Model.DataArrayManager.GetDataSetByName(KMoistSpecificGravi);
+  Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'SGM');
+  WritePestZones(DataArray, FInputFileName);
 
   frmProgressMM.AddMessage('  Writing SGS');
   DataArray := Model.DataArrayManager.GetDataSetByName(KSaturatedSpecificG);
+  Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'SGS');
+  WritePestZones(DataArray, FInputFileName);
 
   WriteEndGridData;
 end;
