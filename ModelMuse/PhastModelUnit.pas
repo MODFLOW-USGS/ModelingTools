@@ -2430,6 +2430,7 @@ that affects the model output should also have a comment. }
     function GetElementLocation(Layer, Row,
       Column: Integer): TDualLocation;
     function GetActiveElement(Layer, Row, Column: Integer): Boolean;
+    function GetDiscretization: TCustomDiscretization;
     //    procedure OnNodeActiveDataSetChanged(Sender: TObject);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
@@ -3291,7 +3292,7 @@ that affects the model output should also have a comment. }
     // @name consists of lines that will be added to RunModel.Bat before the
     // model executable line
     property PestTemplateLines: TStringList read FPestTemplateLines;
-
+    property Discretization: TCustomDiscretization read GetDiscretization;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -9976,10 +9977,13 @@ const
 //                too high in horizontal lake connections.
 //               Bug fix: ModelMuse can now display vectors for MODFLOW 6 models
 //                in the Export Image dialog box.
+//   '4.3.0.14'  Bug fix: Fixed bug that would cause an error when importing
+//                data in the Import Points dialog box if the decimal separator
+//                was not a period.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.13';
+  IIModelVersion = '4.3.0.14';
 
 function IModelVersion: string;
 begin
@@ -38618,6 +38622,37 @@ begin
     ADataSet.SetSubComponent(True);
   end;
   result := FDataSetCollection;
+end;
+
+function TCustomModel.GetDiscretization: TCustomDiscretization;
+begin
+  result := nil;
+  case ModelSelection of
+    msUndefined:
+      begin
+        Assert(False);
+      end;
+    msPhast, msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
+      msModflowFmp, msModflowCfp, msFootPrint:
+      begin
+        result := Grid;
+      end;
+    msSutra22, msSutra30:
+      begin
+        result := SutraMesh;
+      end;
+    msModflow2015:
+      begin
+        if DisvUsed then
+        begin
+          result := DisvGrid;
+        end
+        else
+        begin
+          result := Grid;
+        end;
+      end;
+  end;
 end;
 
 function TCustomModel.GetDiscretiztionElevation(Column, Row, Layer: Integer): Double;

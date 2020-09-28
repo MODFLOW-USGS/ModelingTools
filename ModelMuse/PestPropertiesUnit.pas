@@ -3,7 +3,7 @@ unit PestPropertiesUnit;
 interface
 
 uses
-  System.Classes, GoPhastTypes, GR32;
+  System.Classes, GoPhastTypes, GR32, FastGEO;
 
 type
   TPestRestart = (prNoRestart, prRestart);
@@ -334,6 +334,10 @@ type
     FShowPilotPoints: Boolean;
     FStoredPilotPointSpacing: TRealStorage;
     FPestControlData: TPestControlData;
+    FPilotPointRowCount: Integer;
+    FPilotPointColumnCount: Integer;
+    FLeftX: double;
+    FTopY: double;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -342,6 +346,8 @@ type
     procedure SetShowPilotPoints(const Value: Boolean);
     procedure SetStoredPilotPointSpacing(const Value: TRealStorage);
     procedure SetPestControlData(const Value: TPestControlData);
+    function GetPilotPoint(Index: Integer): TPoint2D;
+    function GetPilotPointCount: Integer;
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     procedure Assign(Source: TPersistent); override;
@@ -351,6 +357,8 @@ type
       write SetPilotPointSpacing;
     procedure DrawPilotPoints(BitMap32: TBitmap32);
     function ShouldDrawPilotPoints: Boolean;
+    property PilotPointCount: Integer read GetPilotPointCount;
+    property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
   Published
     property PestUsed: Boolean read FPestUsed write SetPestUsed Stored True;
     property TemplateCharacter: Char read FTemplateCharacter
@@ -412,58 +420,104 @@ end;
 procedure TPestProperties.DrawPilotPoints(BitMap32: TBitmap32);
 var
   ZoomBox: TQRbwZoomBox2;
-  DisLimits: TGridLimit;
-  RowCount: Int64;
-  ColumnCount: Int64;
-  RowIndex: Integer;
-  LeftX: double;
-  TopY: double;
-  Y: Double;
+//  DisLimits: TGridLimit;
+//  RowCount: Int64;
+//  ColumnCount: Int64;
+//  RowIndex: Integer;
+//  Y: Double;
   YInt: Integer;
-  X: Double;
+//  X: Double;
   LineSegment: GoPhastTypes.TPointArray;
-  ColIndex: Integer;
+//  ColIndex: Integer;
   XInt: Integer;
+  PilotPointIndex: Integer;
+  APilotPoint: TPoint2D;
 begin
   if ShouldDrawPilotPoints then
   begin
     SetLength(LineSegment, 2);
     ZoomBox := frmGoPhast.frameTopView.ZoomBox;
-    DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
-    RowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 1;
-    ColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 1;
-    LeftX := (DisLimits.MaxX + DisLimits.MinX)/2 - ColumnCount/2*PilotPointSpacing;
-    TopY := (DisLimits.MaxY + DisLimits.MinY)/2 + RowCount/2*PilotPointSpacing;
-    for RowIndex := 0 to RowCount do
+    for PilotPointIndex := 0 to PilotPointCount - 1 do
     begin
-      Y := TopY - RowIndex*PilotPointSpacing;
-      YInt := ZoomBox.YCoord(Y);
-      for ColIndex := 0 to ColumnCount do
-      begin
-        X := LeftX + ColIndex*PilotPointSpacing;
-        XInt := ZoomBox.XCoord(X);
+      APilotPoint := PilotPoints[PilotPointIndex];
+      YInt := ZoomBox.YCoord(APilotPoint.y);
+      XInt := ZoomBox.XCoord(APilotPoint.x);
 
-        LineSegment[0].x := XInt;
-        LineSegment[1].x := XInt;
-        LineSegment[0].y := YInt-2;
-        LineSegment[1].y := YInt+3;
-        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
-          True, False, 0, 2);
+      LineSegment[0].x := XInt;
+      LineSegment[1].x := XInt;
+      LineSegment[0].y := YInt-2;
+      LineSegment[1].y := YInt+3;
+      DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+        True, False, 0, 2);
 
-        LineSegment[0].x := XInt-2;
-        LineSegment[1].x := XInt+3;
-        LineSegment[0].y := YInt;
-        LineSegment[1].y := YInt;
-        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
-          True, False, 0, 2);
-      end;
+      LineSegment[0].x := XInt-2;
+      LineSegment[1].x := XInt+3;
+      LineSegment[0].y := YInt;
+      LineSegment[1].y := YInt;
+      DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+        True, False, 0, 2);
+
     end;
+//    DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
+//    FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 1;
+//    FPilotPointColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 1;
+//    FLeftX := (DisLimits.MaxX + DisLimits.MinX)/2 - FPilotPointColumnCount/2*PilotPointSpacing;
+//    FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 + FPilotPointRowCount/2*PilotPointSpacing;
+//    for RowIndex := 0 to FPilotPointRowCount do
+//    begin
+//      Y := FTopY - RowIndex*PilotPointSpacing;
+//      YInt := ZoomBox.YCoord(Y);
+//      for ColIndex := 0 to FPilotPointColumnCount do
+//      begin
+//        X := FLeftX + ColIndex*PilotPointSpacing;
+//        XInt := ZoomBox.XCoord(X);
+//
+//        LineSegment[0].x := XInt;
+//        LineSegment[1].x := XInt;
+//        LineSegment[0].y := YInt-2;
+//        LineSegment[1].y := YInt+3;
+//        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+//          True, False, 0, 2);
+//
+//        LineSegment[0].x := XInt-2;
+//        LineSegment[1].x := XInt+3;
+//        LineSegment[0].y := YInt;
+//        LineSegment[1].y := YInt;
+//        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+//          True, False, 0, 2);
+//      end;
+//    end;
   end;
 end;
 
 function TPestProperties.ShouldDrawPilotPoints: Boolean;
 begin
   result := PestUsed and ShowPilotPoints and (PilotPointSpacing > 0);
+end;
+
+function TPestProperties.GetPilotPoint(Index: Integer): TPoint2D;
+var
+  RowIndex: Integer;
+  ColIndex: Integer;
+begin
+  RowIndex := Index div FPilotPointColumnCount;
+  ColIndex := Index  - RowIndex*FPilotPointColumnCount;
+  result.Y := FTopY - RowIndex*PilotPointSpacing;
+  result.X := FLeftX + ColIndex*PilotPointSpacing;
+end;
+
+function TPestProperties.GetPilotPointCount: Integer;
+var
+  DisLimits: TGridLimit;
+begin
+  DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
+  FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 2;
+  FPilotPointColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 2;
+  result := FPilotPointRowCount * FPilotPointColumnCount;
+  FLeftX := (DisLimits.MaxX + DisLimits.MinX)/2 -
+    (FPilotPointColumnCount-1)/2*PilotPointSpacing;
+  FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 +
+    (FPilotPointRowCount-1)/2*PilotPointSpacing;
 end;
 
 function TPestProperties.GetPilotPointSpacing: double;

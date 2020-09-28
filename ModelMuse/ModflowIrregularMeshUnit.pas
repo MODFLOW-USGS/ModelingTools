@@ -361,6 +361,8 @@ type
     function GetActiveElementI2D(Index: integer): IElement2D;
     function TopContainingCellOrElement(APoint: TPoint2D;
       const EvaluatedAt: TEvaluatedAt): T2DTopCell;
+    function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+      Row: integer): TPoint2D; override;
   public
     procedure Assign(Source: TPersistent); override;
     procedure Clear;
@@ -625,6 +627,8 @@ type
     function IsFishnetMesh: Boolean;
     function TopOutline(Layer: integer): TOutline;
     function FrontOutline: TOutline;
+    function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+      Row: integer): TPoint2D; override;
   public
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
@@ -3038,6 +3042,13 @@ begin
 
 
 
+end;
+
+function TModflowIrregularGrid2D.GetItemTopLocation(const EvalAt: TEvaluatedAt;
+  const Column, Row: integer): TPoint2D;
+begin
+  Assert(EvalAt = eaBlocks);
+  result := Cells[Column].Location;
 end;
 
 function TModflowIrregularGrid2D.GetMinWidth(CellIndex: Integer): double;
@@ -6135,6 +6146,12 @@ begin
     CreateIntevalTree(FElementIntervalTree);
   end;
   result := FElementIntervalTree;
+end;
+
+function TModflowDisvGrid.GetItemTopLocation(const EvalAt: TEvaluatedAt;
+  const Column, Row: integer): TPoint2D;
+begin
+  result := TwoDGrid.ItemTopLocation[EvalAt, Column, Row];
 end;
 
 function TModflowDisvGrid.GetLayerCount: Integer;

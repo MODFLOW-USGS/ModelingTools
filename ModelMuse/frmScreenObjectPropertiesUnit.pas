@@ -17851,6 +17851,7 @@ begin
       end;
     end;
 
+    frameMT3DMS_SSM.ClearDeletedCells;
   finally
     TimeList.Free;
   end;

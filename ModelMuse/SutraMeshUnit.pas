@@ -521,6 +521,8 @@ Type
     function GetActiveElement(Index: integer): IElement;
     function GetActiveNodeI2D(Index: integer): INode2D;
     function GetActiveElementI2D(Index: integer): IElement2D;
+    function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+      Row: integer): TPoint2D; override;
   public
     procedure Assign(Source: TPersistent); override;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
@@ -968,6 +970,8 @@ Type
     function IsFishnetMesh: Boolean;
     function TopOutline(Layer: integer): TOutline;
     function FrontOutline: TOutline;
+    function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+      Row: integer): TPoint2D; override;
   public
     procedure UpdateNodeArray;
     procedure AssignNodeElevations;
@@ -4213,6 +4217,23 @@ begin
   end;
 end;
 
+function TSutraMesh2D.GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+  Row: integer): TPoint2D;
+begin
+  case EvalAt of
+    eaBlocks:
+      begin
+        result := Elements[Column].Center;
+      end;
+    eaNodes:
+      begin
+        result := Nodes[Column].Location;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 procedure TSutraMesh2D.GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
   StringValues: TStringList; out MinMaxInitialized: Boolean);
 var
@@ -6822,6 +6843,12 @@ begin
       end;
     else Assert(False);
   end;
+end;
+
+function TSutraMesh3D.GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+  Row: integer): TPoint2D;
+begin
+  result := Mesh2D. ItemTopLocation[EvalAt, Column, Row];
 end;
 
 procedure TSutraMesh3D.DrawFront(const BitMap: TPersistent);

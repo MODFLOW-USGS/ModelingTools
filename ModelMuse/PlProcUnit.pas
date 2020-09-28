@@ -9,9 +9,12 @@ interface
 uses
   ModflowIrregularMeshUnit, CustomModflowWriterUnit, System.SysUtils, FastGEO,
   AbstractGridUnit, GoPhastTypes, MeshRenumberingTypes, System.Classes,
-  DataSetUnit;
+  DataSetUnit, QuadTreeClass, System.Generics.Collections;
 
 type
+   TQuadTreeObjectList = TObjectList<TRbwQuadTree>;
+   TQuadTreeObjectList2D = TObjectList<TQuadTreeObjectList>;
+
   // @name is used to write a file that can be read by read_mf_usg_grid_specs().
   TUsgGridSpecWrite = class(TCustomFileWriter)
   private
@@ -44,6 +47,21 @@ type
   end;
 
   TParameterZoneWriter = class(TCustomFileWriter)
+  private
+    // contains values to be modified by PEST.
+    FParamValuesFileName: string;
+    FUsedParamList: TStringList;
+    FPNames: TStringList;
+    FDataArray: TDataArray;
+    FParamDataArray: TDataArray;
+    FQuadTrees: TQuadTreeObjectList2D;
+    // Then numbers in @name correspond to the positions of parameters in
+    // @link(FUsedParamList).
+    // @name is set in @link(WriteValuesFile).
+    FZoneNumbers: array of array of array of Integer;
+    FValues: array of array of array of double;
+    procedure WriteTemplateFile(const AFileName: string);
+    procedure WriteValuesFile(const AFileName: string);
   protected
     class function Extension: string; override;
   public
@@ -444,211 +462,291 @@ end;
 
 class function TParameterZoneWriter.Extension: string;
 begin
-  Result := '.PstZone';
+  Result := '.PstValues';
 end;
 
 procedure TParameterZoneWriter.WriteFile(var AFileName: string;
   DataArray: TDataArray);
 var
-  PNames: TStringList;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
-  RowIndex: Integer;
-  ColIndex: Integer;
-  ID: Integer;
   LayerIndex: Integer;
-  AName: string;
-  ParamDataArray: TDataArray;
-  ParamListFileName: string;
-  ScriptFileName: string;
-  GrbFileName: string;
-  UsedParamList: TStringList;
-  ParameterIndex: Integer;
-  ModelInputFileName: string;
+  AQuadList: TQuadTreeObjectList;
+  AQuadTree: TRbwQuadTree;
+  DisLimits: TGridLimit;
+  ColIndex: Integer;
+  RowIndex: Integer;
+  APoint: TPoint2D;
 begin
-  ParamDataArray := Model.DataArrayManager.GetDataSetByName
-    (DataArray.ParamDataSetName);
-  Assert(ParamDataArray <> nil);
-  ParamDataArray.Initialize;
-  ParamListFileName := ChangeFileExt(AFileName, '.' + DataArray.Name) + Extension;;
-  PNames := TStringList.Create;
-  UsedParamList := TStringList.Create;
+  FDataArray := DataArray;
+  FParamDataArray := Model.DataArrayManager.GetDataSetByName
+    (FDataArray.ParamDataSetName);
+  Assert(FParamDataArray <> nil);
+  FParamDataArray.Initialize;
+  FPNames := TStringList.Create;
+  FUsedParamList := TStringList.Create;
+  FQuadTrees := TQuadTreeObjectList2D.Create;
   try
-    UsedParamList.Duplicates := dupIgnore;
-    UsedParamList.Sorted := True;
+    FUsedParamList.Duplicates := dupIgnore;
+    FUsedParamList.Sorted := True;
     for PIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
     begin
       AParam := Model.ModflowSteadyParameters[PIndex];
       if AParam.ParameterType = ptPEST then
       begin
-        PNames.AddObject(LowerCase(AParam.ParameterName), AParam);
+        FPNames.AddObject(LowerCase(AParam.ParameterName), AParam);
       end;
     end;
-    PNames.Sorted := True;
+    FPNames.Sorted := True;
 
-//    AFileName := AFileName + Extension;
-    OpenFile(ParamListFileName);
-    try
-      ID := 1;
-      for RowIndex := 0 to ParamDataArray.RowCount - 1 do
+    WriteValuesFile(AFileName);
+
+    DisLimits := Model.DiscretizationLimits(vdTop);
+    for PIndex := 0 to FUsedParamList.Count - 1 do
+    begin
+      AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+      if AParam.UsePilotPoints then
       begin
-        for ColIndex := 0 to ParamDataArray.ColumnCount - 1 do
+        AQuadList := TQuadTreeObjectList.Create;
+        FQuadTrees.Add(AQuadList);
+        for LayerIndex := 0 to FDataArray.LayerCount - 1 do
         begin
-          WriteInteger(ID);
-
-          for LayerIndex := 0 to ParamDataArray.LayerCount - 1 do
+          AQuadTree := TRbwQuadTree.Create(nil);
+          AQuadList.Add(AQuadTree);
+          AQuadTree.XMin := DisLimits.MinX;
+          AQuadTree.XMax := DisLimits.MaxX;
+          AQuadTree.YMin := DisLimits.MinY;
+          AQuadTree.YMax := DisLimits.MaxY;
+          for RowIndex := 0 to FDataArray.RowCount - 1 do
           begin
-            AName := LowerCase(ParamDataArray.StringData[LayerIndex,RowIndex,ColIndex]);
-            if (AName = '') then
+            for ColIndex := 0 to FDataArray.ColumnCount - 1 do
             begin
-              PIndex := -1
-            end
-            else
-            begin
-              PIndex := PNames.IndexOf(AName);
-            end;
-
-            if PIndex >= 0 then
-            begin
-              AParam := PNames.Objects[PIndex] as TModflowSteadyParameter;
-              UsedParamList.AddObject(AParam.ParameterName, AParam);
-              if AParam.Value <> 0 then
+              if FZoneNumbers[LayerIndex, RowIndex, ColIndex] = PIndex then
               begin
-                WriteFloat(DataArray.RealData[LayerIndex,RowIndex,ColIndex]
-                  / AParam.Value);
-              end
-              else
-              begin
-                WriteFloat(DataArray.RealData[LayerIndex,RowIndex,ColIndex]);
+                APoint := Model.Discretization.ItemTopLocation[FDataArray.EvaluatedAt,
+                  ColIndex, RowIndex];
+                AQuadTree.AddPoint(APoint.y, APoint.y,
+                  Addr(FValues[LayerIndex, RowIndex, ColIndex]));
               end;
-            end
-            else
-            begin
-              WriteFloat(DataArray.RealData[LayerIndex,RowIndex,ColIndex]);
             end;
-
-            WriteInteger(PIndex+1);
           end;
-
-          Inc(ID);
-          NewLine;
         end;
-      end;
-    finally
-      CloseFile;
-    end;
-
-    Model.DataArrayManager.AddDataSetToCache(DataArray);
-    Model.DataArrayManager.AddDataSetToCache(ParamDataArray);
-
-    ScriptFileName := ChangeFileExt(ParamListFileName, '.tpl');
-    OpenFile(ScriptFileName);
-    try
-      WriteString('ptf ');
-      WriteString(Model.PestProperties.TemplateCharacter);
-      NewLine;
-      WriteString('#Script for PLPROC');
-      NewLine;
-      NewLine;
-      //
-      WriteString('#Read MODFLOW 6 grid information file');
-      NewLine;
-      GrbFileName := ChangeFileExt(AFileName, '');
-      if Model.DisvUsed then
-      begin
-        GrbFileName := ChangeFileExt(GrbFileName, '.disv.grb');
       end
       else
       begin
-        GrbFileName := ChangeFileExt(GrbFileName, '.dis.grb');
+        FQuadTrees.Add(nil);
       end;
-      GrbFileName := ExtractFileName(GrbFileName);
+    end;
 
-      WriteString(Format('cl_mf6 = read_mf6_grid_specs(file=''%s'', &',
-        [GrbFileName]));
-      NewLine;
-      WriteString('    dimensions=2, &');
-      NewLine;
-      for LayerIndex := 0 to Model.LayerCount - 1 do
-      begin
-        WriteString(Format('    slist_layer_idomain=id%0:d; layer=%0:d, &', [LayerIndex+1]));
-        NewLine;
-      end;
-      for LayerIndex := 0 to Model.LayerCount - 1 do
-      begin
-        WriteString(Format('    plist_layer_bottom =bot%0:d; layer=%0:d, &', [LayerIndex+1]));
-        NewLine;
-      end;
-      WriteString('    plist_top = top)');
-      NewLine;
-      NewLine;
+    WriteTemplateFile(AFileName);
 
-      WriteString('#Read data to modify');
-      NewLine;
-      WriteString('read_list_file(reference_clist=''cl_mf6'',skiplines=0, &');
-      NewLine;
-      ColIndex := 2;
-      for LayerIndex := 0 to DataArray.LayerCount - 1 do
-      begin
-        WriteString(Format('  plist=p_Value%0:d;column=%1:d, &', [LayerIndex+1, ColIndex]));
-        Inc(ColIndex);
-        NewLine;
+    Model.DataArrayManager.AddDataSetToCache(FDataArray);
+    Model.DataArrayManager.AddDataSetToCache(FParamDataArray);
+  finally
+    FQuadTrees.Free;
+    FPNames.Free;
+    FUsedParamList.Free;
+  end;
+end;
 
-        WriteString(Format('  slist=s_PIndex%0:d;column=%1:d, &', [LayerIndex+1, ColIndex]));
-        Inc(ColIndex);
-        NewLine;
-      end;
-      WriteString(Format('  file=''%s'')', [ParamListFileName]));
-      NewLine;
-      NewLine;
+procedure TParameterZoneWriter.WriteValuesFile(const AFileName: string);
+var
+  ID: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  LayerIndex: Integer;
+  AName: string;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+begin
+  SetLength(FZoneNumbers, FDataArray.LayerCount, FDataArray.RowCount,
+    FDataArray.ColumnCount);
+  SetLength(FValues, FDataArray.LayerCount, FDataArray.RowCount,
+    FDataArray.ColumnCount);
 
-      WriteString('#Read parameter values');
-      NewLine;
-      for ParameterIndex := 0 to UsedParamList.Count - 1 do
+  // Write values to be modified by PEST.
+  FParamValuesFileName := ChangeFileExt(AFileName, '.' + FDataArray.Name)
+    + Extension;
+  OpenFile(FParamValuesFileName);
+  try
+    ID := 1;
+    for RowIndex := 0 to FParamDataArray.RowCount - 1 do
+    begin
+      for ColIndex := 0 to FParamDataArray.ColumnCount - 1 do
       begin
-        AParam := UsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
-        WriteString(Format('%0:s = %1:s                        %0:s%1:s', [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
-        NewLine;
-      end;
-      NewLine;
-
-      WriteString('#Modfify data values');
-      NewLine;
-      for LayerIndex := 0 to DataArray.LayerCount - 1 do
-      begin
-        for ParameterIndex := 0 to UsedParamList.Count - 1 do
+        WriteInteger(ID);
+        for LayerIndex := 0 to FParamDataArray.LayerCount - 1 do
         begin
-          AParam := UsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
-          PIndex := PNames.IndexOf(AParam.ParameterName) +1;
-          WriteString(Format('p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-            [LayerIndex+1, PIndex, AParam.ParameterName]));
-          NewLine
+          AName := LowerCase(FParamDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
+          if (AName = '') then
+          begin
+            PIndex := -1;
+          end
+          else
+          begin
+            PIndex := FPNames.IndexOf(AName);
+          end;
+          if PIndex >= 0 then
+          begin
+            AParam := FPNames.Objects[PIndex] as TModflowSteadyParameter;
+            FUsedParamList.AddObject(AParam.ParameterName, AParam);
+            if AParam.Value <> 0 then
+            begin
+              FValues[LayerIndex, RowIndex, ColIndex] :=
+                FDataArray.RealData[LayerIndex, RowIndex, ColIndex] / AParam.Value;
+            end
+            else
+            begin
+              FValues[LayerIndex, RowIndex, ColIndex] :=
+                FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            end;
+          end
+          else
+          begin
+            FValues[LayerIndex, RowIndex, ColIndex] :=
+              FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+          end;
+          WriteInteger(PIndex + 1);
+          WriteFloat(FValues[LayerIndex, RowIndex, ColIndex]);
+          FZoneNumbers[LayerIndex, RowIndex, ColIndex] := PIndex;
         end;
-      end;
-      NewLine;
-
-      WriteString('#Write new data values');
-      NewLine;
-      for LayerIndex := 0 to DataArray.LayerCount - 1 do
-      begin
-        ModelInputFileName := AFileName + '.' + Trim(DataArray.Name)
-          + '_' + IntToStr(LayerIndex+1);
-        ModelInputFileName := 'arrays' + PathDelim + ExtractFileName(ModelInputFileName);
-
-        WriteString('write_column_data_file(header=''no'', &');
-        NewLine;
-        WriteString(Format('  file=''%s'';delim="space", &', [ModelInputFileName]));
-        NewLine;
-        WriteString(Format('  plist=p_Value%0:d)', [LayerIndex+1]));
+        Inc(ID);
         NewLine;
       end;
-
-    finally
-      CloseFile;
     end;
   finally
-    PNames.Free;
-    UsedParamList.Free;
+    CloseFile;
+  end;
+end;
+
+procedure TParameterZoneWriter.WriteTemplateFile(const AFileName: string);
+var
+  ScriptFileName: string;
+  GrbFileName: string;
+  ParameterIndex: Integer;
+  ModelInputFileName: string;
+  LayerIndex: Integer;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  ColIndex: Integer;
+  PilotPointsUsed: Boolean;
+begin
+  PilotPointsUsed := False;
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
+    PilotPointsUsed := AParam.UsePilotPoints;
+    if PilotPointsUsed then
+    begin
+      break;
+    end;
+  end;
+
+  ScriptFileName := ChangeFileExt(FParamValuesFileName, '.tpl');
+  OpenFile(ScriptFileName);
+  try
+    WriteString('ptf ');
+    WriteString(Model.PestProperties.TemplateCharacter);
+    NewLine;
+    WriteString('#Script for PLPROC');
+    NewLine;
+    NewLine;
+    if PilotPointsUsed then
+    begin
+      WriteString('#Read pilot point data');
+    end;
+
+    WriteString('#Read MODFLOW 6 grid information file');
+    NewLine;
+    GrbFileName := ChangeFileExt(AFileName, '');
+    if Model.DisvUsed then
+    begin
+      GrbFileName := ChangeFileExt(GrbFileName, '.disv.grb');
+    end
+    else
+    begin
+      GrbFileName := ChangeFileExt(GrbFileName, '.dis.grb');
+    end;
+    GrbFileName := ExtractFileName(GrbFileName);
+    WriteString(Format('cl_mf6 = read_mf6_grid_specs(file=''%s'', &',
+      [GrbFileName]));
+    NewLine;
+    WriteString('    dimensions=2, &');
+    NewLine;
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+      WriteString(Format('    slist_layer_idomain=id%0:d; layer=%0:d, &',
+        [LayerIndex + 1]));
+      NewLine;
+    end;
+    for LayerIndex := 0 to Model.LayerCount - 1 do
+    begin
+      WriteString(Format('    plist_layer_bottom =bot%0:d; layer=%0:d, &',
+        [LayerIndex + 1]));
+      NewLine;
+    end;
+    WriteString('    plist_top = top)');
+    NewLine;
+    NewLine;
+    WriteString('#Read data to modify');
+    NewLine;
+    WriteString('read_list_file(reference_clist=''cl_mf6'',skiplines=0, &');
+    NewLine;
+    ColIndex := 2;
+    for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+    begin
+      WriteString(Format('  plist=p_Value%0:d;column=%1:d, &',
+        [LayerIndex + 1, ColIndex]));
+      Inc(ColIndex);
+      NewLine;
+      WriteString(Format('  slist=s_PIndex%0:d;column=%1:d, &',
+        [LayerIndex + 1, ColIndex]));
+      Inc(ColIndex);
+      NewLine;
+    end;
+    WriteString(Format('  file=''%s'')', [FParamValuesFileName]));
+    NewLine;
+    NewLine;
+    WriteString('#Read parameter values');
+    NewLine;
+    for ParameterIndex := 0 to FUsedParamList.Count - 1 do
+    begin
+      AParam := FUsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
+      WriteString(Format('%0:s = %1:s                        %0:s%1:s',
+        [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
+      NewLine;
+    end;
+    NewLine;
+    WriteString('# Modfify data values');
+    NewLine;
+    for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+    begin
+      for ParameterIndex := 0 to FUsedParamList.Count - 1 do
+      begin
+        AParam := FUsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
+        PIndex := FPNames.IndexOf(AParam.ParameterName) + 1;
+        WriteString(Format('p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+          [LayerIndex + 1, PIndex, AParam.ParameterName]));
+        NewLine;
+      end;
+    end;
+    NewLine;
+    WriteString('#Write new data values');
+    NewLine;
+    for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+    begin
+      ModelInputFileName := AFileName + '.' + Trim(FDataArray.Name) + '_'
+        + IntToStr(LayerIndex + 1);
+      ModelInputFileName := 'arrays' + PathDelim + ExtractFileName(ModelInputFileName);
+      WriteString('write_column_data_file(header=''no'', &');
+      NewLine;
+      WriteString(Format('  file=''%s'';delim="space", &', [ModelInputFileName]));
+      NewLine;
+      WriteString(Format('  plist=p_Value%0:d)', [LayerIndex + 1]));
+      NewLine;
+    end;
+  finally
+    CloseFile;
   end;
 end;
 

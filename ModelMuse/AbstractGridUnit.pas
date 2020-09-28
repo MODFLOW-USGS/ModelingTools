@@ -83,6 +83,8 @@ type
       var MinMaxInitialized: boolean; var MinMax: TMinMax;
       StringValues: TStringList); virtual; abstract;
     procedure InvalidateContours;
+    function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+      Row: integer): TPoint2D; virtual; abstract;
   public
     // notify the views that the need to redraw;
     procedure ViewsChanged;
@@ -100,6 +102,8 @@ type
     destructor Destroy; override;
     procedure ApplyLimitToMinMax(DataSet: TDataArray; var MinMax: TMinMax;
       Limits: TColoringLimits);
+    property ItemTopLocation[const EvalAt: TEvaluatedAt; const Column,
+      Row: integer]: TPoint2D read GetItemTopLocation;
   end;
   { TODO : ThreeDDataSet, TPhastModel.ThreeDTimeList, and
 TPhastModel.ThreeDDisplayTime are all related.  Maybe they should be
@@ -611,6 +615,8 @@ side views of the model.}
     //
     function GetChildDataArray(const Value: TDataArray;
       ChildModel: TBaseModel): TDataArray;
+    function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+      Row: integer): TPoint2D; override;
   public
     function OkLocation(const DataSet: TDataArray;
       const Layer, Row, Col: integer): boolean; override;
@@ -5560,6 +5566,23 @@ begin
   StringValues := nil;
   SetMinMax(DataSet, MinMaxInitialized, MinMax, StringValues,
     LayerCount, RowCount, ColCount);
+end;
+
+function TCustomModelGrid.GetItemTopLocation(const EvalAt: TEvaluatedAt;
+  const Column, Row: integer): TPoint2D;
+begin
+  case EvalAt of
+    eaBlocks:
+      begin
+        result := TwoDElementCenter(Column, Row);
+      end;
+    eaNodes:
+      begin
+        result := TwoDElementCorner(Column, Row);
+      end;
+    else
+      Assert(False);
+  end;
 end;
 
 procedure TCustomModelGrid.GetBooleanMinMax(DataSet: TDataArray;

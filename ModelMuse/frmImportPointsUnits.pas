@@ -885,7 +885,9 @@ begin
             end
             else
             begin
-              AScreenObject.DataSetFormulas[Position] := dgData.Cells[ColIndex, RowIndex];
+              // don't assign dgData.Cells[ColIndex, RowIndex] directly
+              // because the decimal separator might not be a period.
+              AScreenObject.DataSetFormulas[Position] := FloatToStr(ARealValue);
             end;
           end;
         rdtInteger:
