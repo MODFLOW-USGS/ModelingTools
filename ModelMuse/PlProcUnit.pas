@@ -60,8 +60,11 @@ type
     // @name is set in @link(WriteValuesFile).
     FZoneNumbers: array of array of array of Integer;
     FValues: array of array of array of double;
+    FPilotPointsUsed: Boolean;
+    FPilotPointFileName: string;
     procedure WriteTemplateFile(const AFileName: string);
     procedure WriteValuesFile(const AFileName: string);
+    procedure WritePilotPointsFile(const AFileName: string);
   protected
     class function Extension: string; override;
   public
@@ -72,6 +75,9 @@ implementation
 
 uses
   ModflowParameterUnit, OrderedCollectionUnit;
+
+type
+  PDouble = ^Double;
 
 { TUsgGridSpecWrite }
 
@@ -500,44 +506,7 @@ begin
     FPNames.Sorted := True;
 
     WriteValuesFile(AFileName);
-
-    DisLimits := Model.DiscretizationLimits(vdTop);
-    for PIndex := 0 to FUsedParamList.Count - 1 do
-    begin
-      AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
-      if AParam.UsePilotPoints then
-      begin
-        AQuadList := TQuadTreeObjectList.Create;
-        FQuadTrees.Add(AQuadList);
-        for LayerIndex := 0 to FDataArray.LayerCount - 1 do
-        begin
-          AQuadTree := TRbwQuadTree.Create(nil);
-          AQuadList.Add(AQuadTree);
-          AQuadTree.XMin := DisLimits.MinX;
-          AQuadTree.XMax := DisLimits.MaxX;
-          AQuadTree.YMin := DisLimits.MinY;
-          AQuadTree.YMax := DisLimits.MaxY;
-          for RowIndex := 0 to FDataArray.RowCount - 1 do
-          begin
-            for ColIndex := 0 to FDataArray.ColumnCount - 1 do
-            begin
-              if FZoneNumbers[LayerIndex, RowIndex, ColIndex] = PIndex then
-              begin
-                APoint := Model.Discretization.ItemTopLocation[FDataArray.EvaluatedAt,
-                  ColIndex, RowIndex];
-                AQuadTree.AddPoint(APoint.y, APoint.y,
-                  Addr(FValues[LayerIndex, RowIndex, ColIndex]));
-              end;
-            end;
-          end;
-        end;
-      end
-      else
-      begin
-        FQuadTrees.Add(nil);
-      end;
-    end;
-
+    WritePilotPointsFile(AFileName);
     WriteTemplateFile(AFileName);
 
     Model.DataArrayManager.AddDataSetToCache(FDataArray);
@@ -546,6 +515,98 @@ begin
     FQuadTrees.Free;
     FPNames.Free;
     FUsedParamList.Free;
+  end;
+end;
+
+procedure TParameterZoneWriter.WritePilotPointsFile(const AFileName: string);
+var
+  DisLimits: TGridLimit;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  AQuadList: TQuadTreeObjectList;
+  LayerIndex: Integer;
+  AQuadTree: TRbwQuadTree;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  APoint: TPoint2D;
+  PilotPointIndex: Integer;
+  DPtr: PDouble;
+begin
+  DisLimits := Model.DiscretizationLimits(vdTop);
+  FPilotPointsUsed := False;
+  FQuadTrees.Capacity := FUsedParamList.Count;
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+    if AParam.UsePilotPoints then
+    begin
+      FPilotPointsUsed := True;
+      AQuadList := TQuadTreeObjectList.Create;
+      AQuadList.Capacity := FDataArray.LayerCount;
+      FQuadTrees.Add(AQuadList);
+      for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+      begin
+        AQuadTree := TRbwQuadTree.Create(nil);
+        AQuadList.Add(AQuadTree);
+        AQuadTree.XMin := DisLimits.MinX;
+        AQuadTree.XMax := DisLimits.MaxX;
+        AQuadTree.YMin := DisLimits.MinY;
+        AQuadTree.YMax := DisLimits.MaxY;
+        for RowIndex := 0 to FDataArray.RowCount - 1 do
+        begin
+          for ColIndex := 0 to FDataArray.ColumnCount - 1 do
+          begin
+            if FZoneNumbers[LayerIndex, RowIndex, ColIndex] = PIndex then
+            begin
+              APoint := Model.Discretization.ItemTopLocation[
+                FDataArray.EvaluatedAt, ColIndex, RowIndex];
+              AQuadTree.AddPoint(APoint.y, APoint.y,
+                Addr(FValues[LayerIndex, RowIndex, ColIndex]));
+            end;
+          end;
+        end;
+      end;
+    end
+    else
+    begin
+      FQuadTrees.Add(nil);
+    end;
+  end;
+
+  if FPilotPointsUsed then
+  begin
+    // Write pilot point data
+    FPilotPointFileName := ChangeFileExt(AFileName, '.pp');
+    OpenFile(FPilotPointFileName);
+    try
+      for PilotPointIndex := 0 to Model.PestProperties.PilotPointCount - 1 do
+      begin
+        APoint := Model.PestProperties.PilotPoints[PilotPointIndex];
+        WriteInteger(PilotPointIndex+1);
+        WriteFloat(APoint.x);
+        WriteFloat(APoint.y);
+        for PIndex := 0 to FUsedParamList.Count - 1 do
+        begin
+          AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+          if AParam.UsePilotPoints then
+          begin
+            AQuadList := FQuadTrees[PIndex];
+            for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+            begin
+              AQuadTree := AQuadList[LayerIndex];
+              if AQuadTree.Count > 0 then
+              begin
+                DPtr := AQuadTree.NearestPointsFirstData(APoint.x, APoint.y);
+                WriteFloat(DPtr^);
+              end;
+            end;
+          end;
+        end;
+        NewLine;
+      end;
+    finally
+      CloseFile;
+    end;
   end;
 end;
 
@@ -577,7 +638,8 @@ begin
         WriteInteger(ID);
         for LayerIndex := 0 to FParamDataArray.LayerCount - 1 do
         begin
-          AName := LowerCase(FParamDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
+          AName := LowerCase(FParamDataArray.StringData[
+            LayerIndex, RowIndex, ColIndex]);
           if (AName = '') then
           begin
             PIndex := -1;
@@ -630,18 +692,10 @@ var
   AParam: TModflowSteadyParameter;
   ColIndex: Integer;
   PilotPointsUsed: Boolean;
+  AQuadList: TQuadTreeObjectList;
+  AQuadTree: TRbwQuadTree;
+  PListName: string;
 begin
-  PilotPointsUsed := False;
-  for PIndex := 0 to FUsedParamList.Count - 1 do
-  begin
-    AParam := FUsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
-    PilotPointsUsed := AParam.UsePilotPoints;
-    if PilotPointsUsed then
-    begin
-      break;
-    end;
-  end;
-
   ScriptFileName := ChangeFileExt(FParamValuesFileName, '.tpl');
   OpenFile(ScriptFileName);
   try
@@ -651,9 +705,38 @@ begin
     WriteString('#Script for PLPROC');
     NewLine;
     NewLine;
-    if PilotPointsUsed then
+    if FPilotPointsUsed then
     begin
       WriteString('#Read pilot point data');
+      NewLine;
+
+      WriteString('PilotPoints = read_list_file(skiplines=0,dimensions=2, &');
+      NewLine;
+      ColIndex := 4;
+      for PIndex := 0 to FUsedParamList.Count - 1 do
+      begin
+        AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+        if AParam.UsePilotPoints then
+        begin
+          AQuadList := FQuadTrees[PIndex];
+          for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+          begin
+            AQuadTree := AQuadList[LayerIndex];
+            if AQuadTree.Count > 0 then
+            begin
+              PListName := Format('%0:s_%1:d',
+                [AParam.ParameterName, LayerIndex+1]);
+              WriteString(Format('  plist=''%0:s'';column=%1:d, &',
+                [PListName, ColIndex]));
+              Inc(ColIndex);
+              NewLine;
+            end;
+          end;
+        end;
+      end;
+      WriteString(Format('  id_type=''indexed'',file=''%s'')',
+        [FPilotPointFileName]));
+      NewLine;
     end;
 
     WriteString('#Read MODFLOW 6 grid information file');
@@ -711,7 +794,8 @@ begin
     NewLine;
     for ParameterIndex := 0 to FUsedParamList.Count - 1 do
     begin
-      AParam := FUsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
+      AParam := FUsedParamList.Objects[ParameterIndex]
+        as TModflowSteadyParameter;
       WriteString(Format('%0:s = %1:s                        %0:s%1:s',
         [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
       NewLine;
@@ -723,9 +807,11 @@ begin
     begin
       for ParameterIndex := 0 to FUsedParamList.Count - 1 do
       begin
-        AParam := FUsedParamList.Objects[ParameterIndex] as TModflowSteadyParameter;
+        AParam := FUsedParamList.Objects[ParameterIndex]
+          as TModflowSteadyParameter;
         PIndex := FPNames.IndexOf(AParam.ParameterName) + 1;
-        WriteString(Format('p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+        WriteString(Format(
+          'p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
           [LayerIndex + 1, PIndex, AParam.ParameterName]));
         NewLine;
       end;
@@ -737,10 +823,12 @@ begin
     begin
       ModelInputFileName := AFileName + '.' + Trim(FDataArray.Name) + '_'
         + IntToStr(LayerIndex + 1);
-      ModelInputFileName := 'arrays' + PathDelim + ExtractFileName(ModelInputFileName);
+      ModelInputFileName := 'arrays' + PathDelim
+        + ExtractFileName(ModelInputFileName);
       WriteString('write_column_data_file(header=''no'', &');
       NewLine;
-      WriteString(Format('  file=''%s'';delim="space", &', [ModelInputFileName]));
+      WriteString(Format('  file=''%s'';delim="space", &',
+        [ModelInputFileName]));
       NewLine;
       WriteString(Format('  plist=p_Value%0:d)', [LayerIndex + 1]));
       NewLine;
