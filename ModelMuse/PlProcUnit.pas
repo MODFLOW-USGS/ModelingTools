@@ -576,7 +576,7 @@ begin
   if FPilotPointsUsed then
   begin
     // Write pilot point data
-    FPilotPointFileName := ChangeFileExt(AFileName, '.pp');
+    FPilotPointFileName := ChangeFileExt(AFileName, FDataArray.Name) + '.ppoints';
     OpenFile(FPilotPointFileName);
     try
       for PilotPointIndex := 0 to Model.PestProperties.PilotPointCount - 1 do
@@ -699,7 +699,7 @@ begin
   ScriptFileName := ChangeFileExt(FParamValuesFileName, '.tpl');
   OpenFile(ScriptFileName);
   try
-    WriteString('ptf ');
+    WriteString('#ptf ');
     WriteString(Model.PestProperties.TemplateCharacter);
     NewLine;
     WriteString('#Script for PLPROC');
@@ -735,7 +735,8 @@ begin
         end;
       end;
       WriteString(Format('  id_type=''indexed'',file=''%s'')',
-        [FPilotPointFileName]));
+        [ExtractFileName(FPilotPointFileName)]));
+      NewLine;
       NewLine;
     end;
 
@@ -778,16 +779,16 @@ begin
     ColIndex := 2;
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
-      WriteString(Format('  plist=p_Value%0:d;column=%1:d, &',
-        [LayerIndex + 1, ColIndex]));
-      Inc(ColIndex);
-      NewLine;
       WriteString(Format('  slist=s_PIndex%0:d;column=%1:d, &',
         [LayerIndex + 1, ColIndex]));
       Inc(ColIndex);
       NewLine;
+      WriteString(Format('  plist=p_Value%0:d;column=%1:d, &',
+        [LayerIndex + 1, ColIndex]));
+      Inc(ColIndex);
+      NewLine;
     end;
-    WriteString(Format('  file=''%s'')', [FParamValuesFileName]));
+    WriteString(Format('  file=''%s'')', [ExtractFileName(FParamValuesFileName)]));
     NewLine;
     NewLine;
     WriteString('#Read parameter values');
@@ -796,8 +797,11 @@ begin
     begin
       AParam := FUsedParamList.Objects[ParameterIndex]
         as TModflowSteadyParameter;
-      WriteString(Format('%0:s = %1:s                        %0:s%1:s',
+      WriteString(Format('#%0:s = %1:s                        %0:s%1:s',
         [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
+      NewLine;
+      WriteString(Format('%0:s = %1:g',
+        [AParam.ParameterName, AParam.Value]));
       NewLine;
     end;
     NewLine;
