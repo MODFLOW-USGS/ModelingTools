@@ -336,12 +336,12 @@ end;
 
 procedure TframeDrawCrossSection.SetData;
 var
-  DataArrayList: TDataArrayList;
+  DataArrayList: TDataArrayObjectList;
   index: Integer;
   DataArrayManager: TDataArrayManager;
   ADataArray: TDataArray;
 begin
-  DataArrayList := TDataArrayList.Create;
+  DataArrayList := TDataArrayObjectList.Create;
   try
     DataArrayList.OwnsObjects := False;
     DataArrayList.Capacity := lstSelectedDataSets.Items.Count;

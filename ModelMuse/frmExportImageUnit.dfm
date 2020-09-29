@@ -6,7 +6,6 @@ inherited frmExportImage: TfrmExportImage
   ClientWidth = 721
   ShowHint = True
   OnClose = FormClose
-  ExplicitTop = -170
   ExplicitWidth = 737
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -395,6 +394,7 @@ inherited frmExportImage: TfrmExportImage
         Caption = '&View'
         TabOrder = 2
         OnExpand = cpViewExpand
+        ExplicitWidth = 185
         object Panel3: TPanel
           Left = 0
           Top = 0

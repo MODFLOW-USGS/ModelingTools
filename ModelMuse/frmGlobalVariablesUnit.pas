@@ -681,7 +681,15 @@ begin
       finally
         FormatSettings.DecimalSeparator := AChar;
       end;
-      GloVar.SaveToFile(dlgSaveGlobalVariables.FileName);
+      try
+        GloVar.SaveToFile(dlgSaveGlobalVariables.FileName);
+      except on E: EFCreateError do
+        begin
+          Beep;
+          MessageDlg(E.message, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
     finally
       GloVar.Free;
     end;

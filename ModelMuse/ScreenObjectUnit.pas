@@ -1778,7 +1778,7 @@ view. }
     // See @link(DataSetFormulas).
     FDataSetFormulas: TList;
     // See @link(DataSets).
-    FDataSets: TList<TDataArray>;
+    FDataSets: TDataArrayList;
     {
      @name holds a list of @link(SubscriptionUnit.TObserver)s
      related to @link(DataSetUnit.TDataArray)s set by this @classname.
@@ -11061,7 +11061,7 @@ begin
   FCellSize := 1;
   if FDataSets = nil then
   begin
-    FDataSets := TList<TDataArray>.Create;
+    FDataSets := TDataArrayList.Create;
   end;
   if FDataSetFormulas = nil then
   begin

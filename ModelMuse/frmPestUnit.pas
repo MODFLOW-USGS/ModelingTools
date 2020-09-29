@@ -442,11 +442,16 @@ var
 begin
   ShouldUpdateView := frmGoPhast.PhastModel.PestProperties.ShouldDrawPilotPoints
     <> PestProperties.ShouldDrawPilotPoints;
+  if PestProperties.ShouldDrawPilotPoints
+    and (PestProperties.PilotPointSpacing
+      <> frmGoPhast.PhastModel.PestProperties.PilotPointSpacing) then
+  begin
+    ShouldUpdateView := True;
+  end;
   frmGoPhast.PhastModel.PestProperties := PestProperties;
   if ShouldUpdateView then
   begin
     frmGoPhast.SynchronizeViews(vdTop);
-//    frmGoPhast.PhastModel.Bitmaps.InvalidateView(vdTop);
   end;
 end;
 

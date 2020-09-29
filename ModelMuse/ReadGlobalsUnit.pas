@@ -3,7 +3,7 @@ unit ReadGlobalsUnit;
 interface
 
 uses
-  Generics.Collections, IOUtils, Types;
+  Generics.Collections, IOUtils, Types, Vcl.Dialogs;
 
 type
   TGlobalItem = class(TObject)
@@ -35,7 +35,15 @@ begin
   result := False;
   if (TFile.Exists(FileName)) then
   begin
-    Lines := TFile.ReadAllLines(FileName);
+    try
+      Lines := TFile.ReadAllLines(FileName);
+    except on E: EInOutError do
+      begin
+        Beep;
+        MessageDlg(E.message, mtError, [mbOK], 0);
+        Exit;
+      end;
+    end;
     if Length(Lines) > 0 then
     begin
       result := True;

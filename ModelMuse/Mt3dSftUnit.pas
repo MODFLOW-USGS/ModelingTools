@@ -875,7 +875,7 @@ var
   LocalModel: TCustomModel;
   AnotherDataSet: TDataArray;
   Variables: TList<TCustomValue>;
-  DataSets: TList<TDataArray>;
+  DataSets: TDataArrayList;
   GlobalVariable: TGlobalVariable;
   ExpressionIndex: Integer;
   InitConcExpressionAnnotations: TStringList;
@@ -944,7 +944,7 @@ begin
   DispExpressionAnnotations := TStringList.Create;
   UsedVariables := TStringList.Create;
   Variables := TList<TCustomValue>.Create;
-  DataSets := TList<TDataArray>.Create;
+  DataSets := TDataArrayList.Create;
   try
     UsedVariables.Sorted := True;
     UsedVariables.Duplicates := dupIgnore;

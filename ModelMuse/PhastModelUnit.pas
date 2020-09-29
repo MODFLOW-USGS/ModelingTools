@@ -1924,13 +1924,13 @@ that affects the model output should also have a comment. }
   TCrossSection = class(TObserver)
   private
     FLayersToUse: TList<integer>;
-    FDataArrays: TDataArrayList;
+    FDataArrays: TDataArrayObjectList;
     FAllLayers: boolean;
     FModel: TCustomModel;
     FColors: TList<TColor>;
     FLineThickness: Integer;
     procedure SetAllLayers(const Value: boolean);
-    procedure SetDataArrays(const Value: TDataArrayList);
+    procedure SetDataArrays(const Value: TDataArrayObjectList);
     procedure SetLayersToUse(const Value: TList<integer>);
     procedure DataArrayChanged (Sender: TObject; const Item: TDataArray;
       Action: TCollectionNotification);
@@ -1947,7 +1947,7 @@ that affects the model output should also have a comment. }
     procedure Clear;
     property AllLayers: boolean read FAllLayers write SetAllLayers;
     property LayersToUse: TList<integer> read FLayersToUse write SetLayersToUse;
-    property DataArrays: TDataArrayList read FDataArrays write SetDataArrays;
+    property DataArrays: TDataArrayObjectList read FDataArrays write SetDataArrays;
     property Colors: TList<TColor> read FColors write SetColors;
     procedure Draw(ABitMap: TPersistent; ViewDirection: TViewDirection);
     procedure RemoveDataArray(ADataArray: TDataArray);
@@ -2010,6 +2010,7 @@ that affects the model output should also have a comment. }
     // model executable line
     FPestTemplateLines: TStringList;
 //    FMeshFileName: string;
+    FPilotPointDataArrays: TDataArrayList;
 
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
     procedure SetSomeSegmentsUpToDate(const Value: boolean); virtual; abstract;
@@ -3293,6 +3294,7 @@ that affects the model output should also have a comment. }
     // model executable line
     property PestTemplateLines: TStringList read FPestTemplateLines;
     property Discretization: TCustomDiscretization read GetDiscretization;
+    property PilotPointDataArrays: TDataArrayList read FPilotPointDataArrays;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -4564,7 +4566,7 @@ that affects the model output should also have a comment. }
     procedure ClearSwiObsFiles;
     procedure AddModelProgramsToList(FileNames: TStringList);
     procedure ClearBinaryFiles; override;
-    procedure GetLayerDataArrays(DataSetList: TList<TDataArray>);
+    procedure GetLayerDataArrays(DataSetList: TDataArrayList);
     property FixingModel: boolean read FFixingModel;
     function UzfSeepageUsed: boolean; override;
     procedure InvalidateContours; override;
@@ -9981,6 +9983,11 @@ const
 //                data in the Import Points dialog box if the decimal separator
 //                was not a period.
 
+//               Bug fix: When attempting to read or save a global variables
+//                file, ModelMuse will now show an error message to the user
+//                instead of issueing a bug report if there is an error reading
+//                the file.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.14';
@@ -14920,7 +14927,7 @@ begin
   end;
 end;
 
-procedure TPhastModel.GetLayerDataArrays(DataSetList: TList<TDataArray>);
+procedure TPhastModel.GetLayerDataArrays(DataSetList: TDataArrayList);
 var
   SutraLayer: TSutraLayerGroup;
   LayerIndex: Integer;
@@ -19556,13 +19563,13 @@ end;
 
 procedure TPhastModel.FixSpecifyingGridByThreeDObjects;
 var
-  DataSetList: TList<TDataArray>;
+  DataSetList: TDataArrayList;
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;
   DataArrayIndex: integer;
 begin
   FFixingModel := True;
-  DataSetList := TList<TDataArray>.Create;
+  DataSetList := TDataArrayList.Create;
   try
     GetLayerDataArrays(DataSetList);
     if DataSetList.Count = 0 then
@@ -28318,6 +28325,7 @@ begin
   FVelocityVectors := TVectorCollection.Create(self);
 
   FPestProperties := TPestProperties.Create(Invalidate);
+  FPilotPointDataArrays := TDataArrayList.Create;
 end;
 
 procedure TCustomModel.UpdateSutraTimeListNames;
@@ -28743,6 +28751,7 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+  FPilotPointDataArrays.Free;
   FPestProperties.Free;
   FVelocityVectors.Free;
 
@@ -45349,7 +45358,7 @@ begin
   FLayersToUse := TList<integer>.Create;
   FLayersToUse.OnNotify := LayerChanged;
 
-  FDataArrays := TDataArrayList.Create;
+  FDataArrays := TDataArrayObjectList.Create;
   FDataArrays.OwnsObjects := False;
   FDataArrays.OnNotify := DataArrayChanged;
 
@@ -45743,7 +45752,7 @@ begin
   FColors.AddRange(Value.ToArray);
 end;
 
-procedure TCrossSection.SetDataArrays(const Value: TDataArrayList);
+procedure TCrossSection.SetDataArrays(const Value: TDataArrayObjectList);
 begin
   FDataArrays.Clear;
   FDataArrays.AddRange(Value.ToArray);

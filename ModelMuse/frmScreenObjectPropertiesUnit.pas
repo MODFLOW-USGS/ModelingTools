@@ -2149,7 +2149,7 @@ type
     procedure CreateSutraStateObsNode(AScreenObject: TScreenObject);
     procedure GetVertexLabels(ScreenObjects: TList);
     procedure RemoveLayerDataArraysFrom3DObject(AScreenObject: TScreenObject;
-      DataSetList: TList<TDataArray>);
+      DataSetList: TDataArrayList);
     procedure CreateSfr6Node(AScreenObject: TScreenObject);
     procedure CreateMt3d_UztRechNode;
     procedure GetMt3d_UztRechBoundary(ScreenObjectList: TList);
@@ -5066,7 +5066,7 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.RemoveLayerDataArraysFrom3DObject(
-  AScreenObject: TScreenObject; DataSetList: TList<TDataArray>);
+  AScreenObject: TScreenObject; DataSetList: TDataArrayList);
 var
   DataArrayIndex: Integer;
 begin
@@ -5082,7 +5082,7 @@ end;
 procedure TfrmScreenObjectProperties.SetData;
 var
   List: TList;
-  DataArrayList: TList<TDataArray>;
+  DataArrayList: TDataArrayList;
 begin
   // set the data for a single screen object when it is first created.
   // See SetMultipleScreenObjectData if there is more than one screen object.
@@ -5112,7 +5112,7 @@ begin
   FScreenObject.Assign(FNewProperties.Items[0].ScreenObject);
   FScreenObject.Comment := memoComments.Text;
 
-  DataArrayList := TList<TDataArray>.Create;
+  DataArrayList := TDataArrayList.Create;
   try
     frmGoPhast.PhastModel.GetLayerDataArrays(DataArrayList);
     RemoveLayerDataArraysFrom3DObject(FScreenObject, DataArrayList);
@@ -9930,10 +9930,10 @@ var
   Edit: TScreenObjectDataEdit;
   Boundary: TLakBoundary;
   AScreenObject: TScreenObject;
-  DataArrayList: TList<TDataArray>;
+  DataArrayList: TDataArrayList;
   QuadRefinement: Integer;
 begin
-  DataArrayList := TList<TDataArray>.Create;
+  DataArrayList := TDataArrayList.Create;
   try
     frmGoPhast.PhastModel.GetLayerDataArrays(DataArrayList);
     Assert(FNewProperties <> nil);

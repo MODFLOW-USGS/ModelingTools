@@ -981,8 +981,8 @@ type
 //      write SetParameterLayersUsed;
   end;
 
-
-  TDataArrayList = TObjectList<TDataArray>;
+  TDataArrayList = TList<TDataArray>;
+  TDataArrayObjectList = TObjectList<TDataArray>;
 
   TTempDataArrayStorage = class(TObject)
   private
@@ -994,14 +994,14 @@ type
     function GetDataArray(Model: TBaseModel; Index: integer): TDataArray;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    function GetDataArrayList(Model: TBaseModel): TDataArrayList;
+    function GetDataArrayList(Model: TBaseModel): TDataArrayObjectList;
     procedure SetOwnsDataArrays(const Value: boolean);
   public
     constructor Create;
     destructor Destroy; override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    property DataArrayList[Model: TBaseModel]: TDataArrayList read GetDataArrayList;
+    property DataArrayList[Model: TBaseModel]: TDataArrayObjectList read GetDataArrayList;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     property DataArray[Model: TBaseModel; Index: integer]: TDataArray read GetDataArray;
@@ -8843,7 +8843,7 @@ begin
   result := DataArrayList[Model][Index];
 end;
 
-function TTempDataArrayStorage.GetDataArrayList(Model: TBaseModel): TDataArrayList;
+function TTempDataArrayStorage.GetDataArrayList(Model: TBaseModel): TDataArrayObjectList;
 var
   Index: Integer;
 begin
@@ -8852,7 +8852,7 @@ begin
   if Index < 0 then
   begin
     Index := FModelList.Add(Model);
-    FDataArrayList.Add(TDataArrayList.Create);
+    FDataArrayList.Add(TDataArrayObjectList.Create);
   end;
   result := FDataArrayList[Index];
   result.OwnsObjects := OwnsDataArrays;
@@ -8861,7 +8861,7 @@ end;
 procedure TTempDataArrayStorage.SetOwnsDataArrays(const Value: boolean);
 var
   Index: Integer;
-  List: TDataArrayList;
+  List: TDataArrayObjectList;
 begin
   FOwnsDataArrays := Value;
   for Index := 0 to FDataArrayList.Count - 1 do

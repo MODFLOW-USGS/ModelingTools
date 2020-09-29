@@ -10,7 +10,7 @@ uses
 type
   TPestDataArrayWriter = class(TCustomFileWriter)
   private
-    FDataSetList: TList<TDataArray>;
+    FDataSetList: TDataArrayList;
     function ListName(DataArray: TDataArray; Layer: Integer): string;
     procedure WriteCoordinateList(FileName: string;
       EvalAt: TEvaluatedAt; out CListName, CListFileName: string);
@@ -56,8 +56,8 @@ var
   PListFileNames: TStringList;
   LayerIndex: Integer;
   DataName: string;
-  ZoneDataSets: TList<TDataArray>;
-  MultiplierDataSets: TList<TDataArray>;
+  ZoneDataSets: TDataArrayList;
+  MultiplierDataSets: TDataArrayList;
   LayerCount: Integer;
   Equation: string;
   PIndex: Integer;
@@ -108,11 +108,11 @@ begin
   Equations := TStringList.Create;
   SListFileNames := TStringList.Create;
   PListFileNames := TStringList.Create;
-  ZoneDataSets := TList<TDataArray>.Create;
-  MultiplierDataSets := TList<TDataArray>.Create;
+  ZoneDataSets := TDataArrayList.Create;
+  MultiplierDataSets := TDataArrayList.Create;
   ParamList := TList<TModflowSteadyParameter>.Create;
   ExportDataSets := TStringList.Create;
-  FDataSetList := TList<TDataArray>.Create;
+  FDataSetList := TDataArrayList.Create;
   try
     ScalarFileTemplate.Add('ptf '+ TemplateChar);
     LayerCount := 0;

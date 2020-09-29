@@ -18,7 +18,6 @@ inherited frmPEST: TfrmPEST
     Indent = 19
     TabOrder = 0
     Items.Links = {00000000}
-    ExplicitHeight = 231
   end
   object pgMain: TJvPageList
     Left = 121
@@ -28,7 +27,6 @@ inherited frmPEST: TfrmPEST
     ActivePage = jvspOutputOptions
     PropagateEnable = False
     Align = alClient
-    ExplicitHeight = 231
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
@@ -712,7 +710,6 @@ inherited frmPEST: TfrmPEST
       Width = 502
       Height = 287
       Caption = 'jvspOutputOptions'
-      ExplicitLeft = 6
     end
   end
   object pnlBottom: TPanel
@@ -722,7 +719,6 @@ inherited frmPEST: TfrmPEST
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 231
     object btnHelp: TBitBtn
       Left = 350
       Top = 6

@@ -62,6 +62,7 @@ type
     FValues: array of array of array of double;
     FPilotPointsUsed: Boolean;
     FPilotPointFileName: string;
+    FKrigingFactorsFile: string;
     procedure WriteTemplateFile(const AFileName: string);
     procedure WriteValuesFile(const AFileName: string);
     procedure WritePilotPointsFile(const AFileName: string);
@@ -476,13 +477,6 @@ procedure TParameterZoneWriter.WriteFile(var AFileName: string;
 var
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
-  LayerIndex: Integer;
-  AQuadList: TQuadTreeObjectList;
-  AQuadTree: TRbwQuadTree;
-  DisLimits: TGridLimit;
-  ColIndex: Integer;
-  RowIndex: Integer;
-  APoint: TPoint2D;
 begin
   FDataArray := DataArray;
   FParamDataArray := Model.DataArrayManager.GetDataSetByName
@@ -560,7 +554,7 @@ begin
             begin
               APoint := Model.Discretization.ItemTopLocation[
                 FDataArray.EvaluatedAt, ColIndex, RowIndex];
-              AQuadTree.AddPoint(APoint.y, APoint.y,
+              AQuadTree.AddPoint(APoint.x, APoint.y,
                 Addr(FValues[LayerIndex, RowIndex, ColIndex]));
             end;
           end;
@@ -691,10 +685,12 @@ var
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
   ColIndex: Integer;
-  PilotPointsUsed: Boolean;
+//  PilotPointsUsed: Boolean;
   AQuadList: TQuadTreeObjectList;
   AQuadTree: TRbwQuadTree;
   PListName: string;
+  QuadList: TQuadTreeObjectList;
+  QuadTree: TRbwQuadTree;
 begin
   ScriptFileName := ChangeFileExt(FParamValuesFileName, '.tpl');
   OpenFile(ScriptFileName);
@@ -709,7 +705,7 @@ begin
     begin
       WriteString('#Read pilot point data');
       NewLine;
-
+      {$REGION 'Pilot Points'}
       WriteString('PilotPoints = read_list_file(skiplines=0,dimensions=2, &');
       NewLine;
       ColIndex := 4;
@@ -738,10 +734,12 @@ begin
         [ExtractFileName(FPilotPointFileName)]));
       NewLine;
       NewLine;
+      {$ENDREGION}
     end;
 
     WriteString('#Read MODFLOW 6 grid information file');
     NewLine;
+    {$REGION 'Grid'}
     GrbFileName := ChangeFileExt(AFileName, '');
     if Model.DisvUsed then
     begin
@@ -772,8 +770,30 @@ begin
     WriteString('    plist_top = top)');
     NewLine;
     NewLine;
+    {$ENDREGION}
+
+    if FPilotPointsUsed then
+    begin
+      WriteString('#Save Kriging factors');
+      NewLine;
+    {$REGION 'Save Kriging factors'}
+      WriteString('calc_kriging_factors_auto_2d( &');
+      NewLine;
+      WriteString('  target_clist=cl_mf6, &');
+      NewLine;
+      WriteString('  source_clist=PilotPoints, &');
+      NewLine;
+      FKrigingFactorsFile := ChangeFileExt(AFileName, '.Factors');
+      WriteString(Format('  file=%s;format=formatted)',
+        [ExtractFileName(FKrigingFactorsFile)]));
+      NewLine;
+      NewLine;
+    {$ENDREGION}
+    end;
+
     WriteString('#Read data to modify');
     NewLine;
+    {$REGION 'Data set values'}
     WriteString('read_list_file(reference_clist=''cl_mf6'',skiplines=0, &');
     NewLine;
     ColIndex := 2;
@@ -791,8 +811,11 @@ begin
     WriteString(Format('  file=''%s'')', [ExtractFileName(FParamValuesFileName)]));
     NewLine;
     NewLine;
+    {$ENDREGION}
+
     WriteString('#Read parameter values');
     NewLine;
+    {$REGION 'Parameter values'}
     for ParameterIndex := 0 to FUsedParamList.Count - 1 do
     begin
       AParam := FUsedParamList.Objects[ParameterIndex]
@@ -805,8 +828,14 @@ begin
       NewLine;
     end;
     NewLine;
+    {$ENDREGION}
+
     WriteString('# Modfify data values');
     NewLine;
+    {$REGION 'Modify data values'}
+    WriteString('temp=new_plist(reference_clist=cl_mf6,value=0.0)');
+    NewLine;
+
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
       for ParameterIndex := 0 to FUsedParamList.Count - 1 do
@@ -814,15 +843,38 @@ begin
         AParam := FUsedParamList.Objects[ParameterIndex]
           as TModflowSteadyParameter;
         PIndex := FPNames.IndexOf(AParam.ParameterName) + 1;
-        WriteString(Format(
-          'p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-          [LayerIndex + 1, PIndex, AParam.ParameterName]));
-        NewLine;
+        if AParam.UsePilotPoints then
+        begin
+          QuadList := FQuadTrees[ParameterIndex];
+          QuadTree := QuadList[LayerIndex];
+          if QuadTree.Count > 0 then
+          begin
+            PListName := Format('%0:s_%1:d',
+              [AParam.ParameterName, LayerIndex+1]);
+            WriteString(Format('temp=%0:s.krige_using_file(file=''%1:s'';form=''formatted'',transform=''none'')',
+              [PListName, ExtractFileName(FKrigingFactorsFile)]));
+            NewLine;
+            WriteString(Format(
+              'p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp * %2:s',
+              [LayerIndex + 1, PIndex, AParam.ParameterName]));
+            NewLine;
+          end;
+        end
+        else
+        begin
+          WriteString(Format(
+            'p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+            [LayerIndex + 1, PIndex, AParam.ParameterName]));
+          NewLine;
+        end;
       end;
     end;
     NewLine;
+    {$ENDREGION}
+
     WriteString('#Write new data values');
     NewLine;
+    {$REGION 'Write new data values'}
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
       ModelInputFileName := AFileName + '.' + Trim(FDataArray.Name) + '_'
@@ -836,6 +888,7 @@ begin
       NewLine;
       WriteString(Format('  plist=p_Value%0:d)', [LayerIndex + 1]));
       NewLine;
+      {$ENDREGION}
     end;
   finally
     CloseFile;

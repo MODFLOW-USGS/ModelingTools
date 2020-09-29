@@ -2262,7 +2262,7 @@ end;
 procedure TfrmExportImage.ApplyCrossSectionSettings(AModel: TCustomModel;
   ASetting: TDisplaySettingsItem);
 var
-  DataArrayList: TDataArrayList;
+  DataArrayList: TDataArrayObjectList;
   DataArrayIndex: Integer;
   ADataArray: TDataArray;
   LayersToUse: TList<Integer>;
@@ -2270,7 +2270,7 @@ var
   Colors: TList<TColor>;
 //  ACrossSectItem: TDataArrayColor;
 begin
-  DataArrayList := TDataArrayList.Create;
+  DataArrayList := TDataArrayObjectList.Create;
   Colors := TList<TColor>.Create;
   try
     DataArrayList.OwnsObjects := False;

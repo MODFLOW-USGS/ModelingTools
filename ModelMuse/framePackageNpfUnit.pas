@@ -9,9 +9,9 @@ uses
   ModflowPackageSelectionUnit;
 
 type
-  TNprOptions = (noUseXT3D, noXt3dOnRightHandSide, noThickStrt, noVaryingVerticalConductance, noDewatered,
+  TNprOptions = (noHorizontalAnis, noVerticalAnis, noUseXT3D, noXt3dOnRightHandSide, noThickStrt, noVaryingVerticalConductance, noDewatered,
     noPerched, {noNewton, noDampening,} 
-    noSaveSpecificDischarge, noHorizontalAnis, noVerticalAnis);
+    noSaveSpecificDischarge);
 
   TframePackageNpf = class(TframePackage)
     rdgOptions: TRbwDataGrid4;
