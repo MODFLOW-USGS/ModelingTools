@@ -2071,7 +2071,8 @@ uses
   ArchiveNodeInterface, DrawMeshTypesUnit, frmGridPositionUnit,
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
-  SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit;
+  SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
+  PlProcUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -9365,6 +9366,8 @@ var
   GenTransportInteractionBcsNames: TGenTransportInteractionStringList;
   GenLakeTransInteractionType: TGeneralizedTransportInteractionType;
   SutraPestObsWriterWriter: TSutraPestObsWriterWriter;
+  SutraNodDisWriter: TSutraNodDisWriter;
+  SutraEleDisWriter: TSutraEleDisWriter;
 //  BcopgFileName: string;
 //  BcopgFileNames: TStringList;
 //  BcougFileNames: TStringList;
@@ -9411,6 +9414,21 @@ begin
       end;
     end;
   end;
+
+  SutraNodDisWriter := TSutraNodDisWriter.Create(PhastModel, etExport);
+  try
+    SutraNodDisWriter.WriteFile(FileName);
+  finally
+    SutraNodDisWriter.Free;
+  end;
+
+  SutraEleDisWriter := TSutraEleDisWriter.Create(PhastModel, etExport);
+  try
+    SutraEleDisWriter.WriteFile(FileName);
+  finally
+    SutraEleDisWriter.Free;
+  end;
+
 
   if frmProgressMM = nil then
   begin

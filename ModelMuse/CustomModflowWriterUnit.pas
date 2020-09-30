@@ -2543,15 +2543,22 @@ begin
     begin
       WriteString(' 1.0 (Free) ');
       WriteInteger(IPRN_Real)
+    end
+    else
+    begin
+      if Model.ModflowOutputControl.PrintInputArrays then
+      begin
+        WriteString(' IPRN');
+        if DataArray.DataType = rdtDouble then
+        begin
+          WriteInteger(IPRN_Real)
+        end
+        else
+        begin
+          WriteInteger(IPRN_Integer)
+        end;
+      end;
     end;
-//    if DataArray.DataType = rdtDouble then
-//    begin
-//      WriteInteger(IPRN_Real)
-//    end
-//    else
-//    begin
-//      WriteInteger(IPRN_Integer)
-//    end;
     NewLine;
   end
   else

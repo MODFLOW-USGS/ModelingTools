@@ -46,6 +46,8 @@ type
       var FileName: string); overload;
   end;
 
+  TScriptChoice =(scWriteScript, scWriteTemplate);
+
   TParameterZoneWriter = class(TCustomFileWriter)
   private
     // contains values to be modified by PEST.
@@ -63,19 +65,48 @@ type
     FPilotPointsUsed: Boolean;
     FPilotPointFileName: string;
     FKrigingFactorsFile: string;
-    procedure WriteTemplateFile(const AFileName: string);
+    procedure WriteTemplateFile(const AFileName: string;
+      ScriptChoice: TScriptChoice);
     procedure WriteValuesFile(const AFileName: string);
     procedure WritePilotPointsFile(const AFileName: string);
+    procedure AddParametersToPVAL;
+    procedure ReadPilotPoints;
+    procedure ReadDiscretization(const AFileName: string);
+    procedure SaveKrigingFactors(const AFileName: string);
+    procedure WriteKrigingFactorsScript(const AFileName: string);
   protected
     class function Extension: string; override;
   public
     procedure WriteFile(var AFileName: string; DataArray: TDataArray);
   end;
 
+  // Write a 2D CLIST file of SUTRA nodes for PEST
+  TSutraNodDisWriter  = class(TCustomFileWriter)
+  private
+    FInputFileName: string;
+  protected
+    class function Extension: string; override;
+  public
+    procedure WriteFile(const AFileName: string);
+  end;
+
+  // Write a 2D CLIST file of SUTRA elements for PEST
+  TSutraEleDisWriter  = class(TCustomFileWriter)
+  private
+    FInputFileName: string;
+  protected
+    class function Extension: string; override;
+  public
+    procedure WriteFile(const AFileName: string);
+  end;
+
 implementation
 
 uses
-  ModflowParameterUnit, OrderedCollectionUnit;
+  ModflowParameterUnit, OrderedCollectionUnit, SutraMeshUnit;
+
+const
+  KDisName = 'cl_Discretization';
 
 type
   PDouble = ^Double;
@@ -501,7 +532,13 @@ begin
 
     WriteValuesFile(AFileName);
     WritePilotPointsFile(AFileName);
-    WriteTemplateFile(AFileName);
+    if FPilotPointsUsed then
+    begin
+      WriteKrigingFactorsScript(AFileName);
+    end;
+    WriteTemplateFile(AFileName, scWriteScript);
+    WriteTemplateFile(AFileName, scWriteTemplate);
+    AddParametersToPVAL;
 
     Model.DataArrayManager.AddDataSetToCache(FDataArray);
     Model.DataArrayManager.AddDataSetToCache(FParamDataArray);
@@ -509,6 +546,177 @@ begin
     FQuadTrees.Free;
     FPNames.Free;
     FUsedParamList.Free;
+  end;
+end;
+
+procedure TParameterZoneWriter.WriteKrigingFactorsScript(
+  const AFileName: string);
+var
+  ScriptFileName: string;
+begin
+  ScriptFileName := ChangeFileExt(FParamValuesFileName, '.krig_factors_script');
+  OpenFile(ScriptFileName);
+  try
+    WriteString('#Script for PLPROC for saving kriging factors');
+    NewLine;
+    NewLine;
+    ReadPilotPoints;
+    ReadDiscretization(AFileName);
+    SaveKrigingFactors(AFileName);
+  finally
+    CloseFile
+  end;
+end;
+
+procedure TParameterZoneWriter.SaveKrigingFactors(const AFileName: string);
+begin
+  WriteString('#Save Kriging factors');
+  NewLine;
+  WriteString('calc_kriging_factors_auto_2d( &');
+  NewLine;
+  WriteString(Format('  target_clist=%s, &', [KDisName]));
+  NewLine;
+  WriteString('  source_clist=PilotPoints, &');
+  NewLine;
+  FKrigingFactorsFile := ChangeFileExt(AFileName, '.' + FDataArray.Name)
+     + '.Factors';
+  WriteString(Format('  file=%s;format=formatted)',
+    [ExtractFileName(FKrigingFactorsFile)]));
+  NewLine;
+  NewLine;
+end;
+
+procedure TParameterZoneWriter.ReadDiscretization(const AFileName: string);
+var
+  GrbFileName: string;
+  LayerIndex: Integer;
+begin
+  case Model.ModelSelection of
+    msUndefined,msPhast, msFootPrint: 
+      begin
+        Assert(False);  
+      end;
+    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp: 
+      begin
+        WriteString('#Read MODFLOW-2005 grid information file');
+        NewLine;
+        GrbFileName := ChangeFileExt(AFileName, '');
+        GrbFileName := ChangeFileExt(GrbFileName, '.gsf');
+        WriteString(Format('%0:s = read_mf_grid_specs(file="%1:s")',
+          [KDisName, GrbFileName]));
+      end;
+    msSutra22, msSutra30:
+      begin
+        GrbFileName := ChangeFileExt(AFileName, '');
+        case FDataArray.EvaluatedAt of
+          eaBlocks:
+            begin
+              GrbFileName := ChangeFileExt(AFileName, TSutraEleDisWriter.Extension);
+            end;
+          eaNodes:
+            begin
+              GrbFileName := ChangeFileExt(AFileName, TSutraNodDisWriter.Extension);
+            end;
+        end;
+        WriteString(Format('%s = read_list_file(skiplines=1,dimensions=2, &',
+          [KDisName]));
+        NewLine;
+        WriteString(Format('  id_type=''indexed'',file=''%s'')', [GrbFileName]));
+        NewLine;
+      end;
+    msModflow2015:  
+      begin
+        WriteString('#Read MODFLOW 6 grid information file');
+        NewLine;
+        // Remove second extension.
+        GrbFileName := ChangeFileExt(AFileName, '');
+        // Change first extension
+        if Model.DisvUsed then
+        begin
+          GrbFileName := ChangeFileExt(GrbFileName, '.disv.grb');
+        end
+        else
+        begin
+          GrbFileName := ChangeFileExt(GrbFileName, '.dis.grb');
+        end;
+        GrbFileName := ExtractFileName(GrbFileName);
+        WriteString(Format('%0:s = read_mf6_grid_specs(file=''%1:s'', &',
+          [KDisName, GrbFileName]));
+        NewLine;
+        WriteString('  dimensions=2, &');
+        NewLine;
+        for LayerIndex := 0 to Model.LayerCount - 1 do
+        begin
+          WriteString(Format('  slist_layer_idomain=id%0:d; layer=%0:d, &',
+            [LayerIndex + 1]));
+          NewLine;
+        end;
+        for LayerIndex := 0 to Model.LayerCount - 1 do
+        begin
+          WriteString(Format('  plist_layer_bottom =bot%0:d; layer=%0:d, &',
+            [LayerIndex + 1]));
+          NewLine;
+        end;
+        WriteString('  plist_top = top)');
+        NewLine;
+        NewLine;
+      end;
+    else
+      Assert(False);  
+  end;
+end;
+
+procedure TParameterZoneWriter.ReadPilotPoints;
+var
+  ColIndex: Integer;
+  AQuadList: TQuadTreeObjectList;
+  AQuadTree: TRbwQuadTree;
+  PIndex: Integer;
+  LayerIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  PListName: string;
+begin
+  WriteString('#Read pilot point data');
+  NewLine;
+  WriteString('PilotPoints = read_list_file(skiplines=1,dimensions=2, &');
+  NewLine;
+  ColIndex := 4;
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+    if AParam.UsePilotPoints then
+    begin
+      AQuadList := FQuadTrees[PIndex];
+      for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+      begin
+        AQuadTree := AQuadList[LayerIndex];
+        if AQuadTree.Count > 0 then
+        begin
+          PListName := Format('%0:s_%1:d',
+            [AParam.ParameterName, LayerIndex + 1]);
+          WriteString(Format('  plist=''%0:s'';column=%1:d, &',
+            [PListName, ColIndex]));
+          Inc(ColIndex);
+          NewLine;
+        end;
+      end;
+    end;
+  end;
+  WriteString(Format('  id_type=''indexed'',file=''%s'')',
+    [ExtractFileName(FPilotPointFileName)]));
+  NewLine;
+  NewLine;
+end;
+
+procedure TParameterZoneWriter.AddParametersToPVAL;
+var
+  ParamIndex: Integer;
+  AParam: TModflowSteadyParameter;
+begin
+  for ParamIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[ParamIndex] as TModflowSteadyParameter;
+    Model.WritePValAndTemplate(AParam.ParameterName, AParam.Value);
   end;
 end;
 
@@ -525,6 +733,7 @@ var
   APoint: TPoint2D;
   PilotPointIndex: Integer;
   DPtr: PDouble;
+  PListName: string;
 begin
   DisLimits := Model.DiscretizationLimits(vdTop);
   FPilotPointsUsed := False;
@@ -573,6 +782,27 @@ begin
     FPilotPointFileName := ChangeFileExt(AFileName, FDataArray.Name) + '.ppoints';
     OpenFile(FPilotPointFileName);
     try
+      WriteString('Index X Y ');
+      for PIndex := 0 to FUsedParamList.Count - 1 do
+      begin
+        AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+        if AParam.UsePilotPoints then
+        begin
+          AQuadList := FQuadTrees[PIndex];
+          for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+          begin
+            AQuadTree := AQuadList[LayerIndex];
+            if AQuadTree.Count > 0 then
+            begin
+              PListName := Format('%0:s_%1:d',
+                [AParam.ParameterName, LayerIndex+1]);
+              WriteString(PListName + ' ');
+            end;
+          end;
+        end;
+      end;
+      NewLine;
+
       for PilotPointIndex := 0 to Model.PestProperties.PilotPointCount - 1 do
       begin
         APoint := Model.PestProperties.PilotPoints[PilotPointIndex];
@@ -613,6 +843,8 @@ var
   AName: string;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
+  SListName: string;
+  PListName: string;
 begin
   SetLength(FZoneNumbers, FDataArray.LayerCount, FDataArray.RowCount,
     FDataArray.ColumnCount);
@@ -624,6 +856,17 @@ begin
     + Extension;
   OpenFile(FParamValuesFileName);
   try
+    WriteString(' Index');
+    for LayerIndex := 0 to FDataArray.LayerCount - 1 do
+    begin
+      SListName := Format('s_PIndex%0:d', [LayerIndex + 1]);
+      WriteString(' ' + SListName);
+
+      PListName := Format('p_Value%0:d', [LayerIndex + 1]);
+      WriteString(' ' + PListName);
+    end;
+    NewLine;
+
     ID := 1;
     for RowIndex := 0 to FParamDataArray.RowCount - 1 do
     begin
@@ -675,136 +918,64 @@ begin
   end;
 end;
 
-procedure TParameterZoneWriter.WriteTemplateFile(const AFileName: string);
+procedure TParameterZoneWriter.WriteTemplateFile(const AFileName: string;
+  ScriptChoice: TScriptChoice);
 var
   ScriptFileName: string;
-  GrbFileName: string;
   ParameterIndex: Integer;
   ModelInputFileName: string;
   LayerIndex: Integer;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
   ColIndex: Integer;
-//  PilotPointsUsed: Boolean;
-  AQuadList: TQuadTreeObjectList;
-  AQuadTree: TRbwQuadTree;
   PListName: string;
   QuadList: TQuadTreeObjectList;
   QuadTree: TRbwQuadTree;
+  SListName: string;
 begin
-  ScriptFileName := ChangeFileExt(FParamValuesFileName, '.tpl');
+  ScriptFileName := ChangeFileExt(FParamValuesFileName, '.script');
+  if ScriptChoice = scWriteTemplate then
+  begin
+    ScriptFileName := ScriptFileName + '.tpl';
+  end;
   OpenFile(ScriptFileName);
+
   try
-    WriteString('#ptf ');
+    if ScriptChoice = scWriteScript then
+    begin
+      WriteString('#');
+    end;
+    WriteString('ptf ');
     WriteString(Model.PestProperties.TemplateCharacter);
     NewLine;
     WriteString('#Script for PLPROC');
     NewLine;
     NewLine;
+    
     if FPilotPointsUsed then
     begin
-      WriteString('#Read pilot point data');
-      NewLine;
-      {$REGION 'Pilot Points'}
-      WriteString('PilotPoints = read_list_file(skiplines=0,dimensions=2, &');
-      NewLine;
-      ColIndex := 4;
-      for PIndex := 0 to FUsedParamList.Count - 1 do
-      begin
-        AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
-        if AParam.UsePilotPoints then
-        begin
-          AQuadList := FQuadTrees[PIndex];
-          for LayerIndex := 0 to FDataArray.LayerCount - 1 do
-          begin
-            AQuadTree := AQuadList[LayerIndex];
-            if AQuadTree.Count > 0 then
-            begin
-              PListName := Format('%0:s_%1:d',
-                [AParam.ParameterName, LayerIndex+1]);
-              WriteString(Format('  plist=''%0:s'';column=%1:d, &',
-                [PListName, ColIndex]));
-              Inc(ColIndex);
-              NewLine;
-            end;
-          end;
-        end;
-      end;
-      WriteString(Format('  id_type=''indexed'',file=''%s'')',
-        [ExtractFileName(FPilotPointFileName)]));
-      NewLine;
-      NewLine;
-      {$ENDREGION}
+      ReadPilotPoints;
     end;
 
-    WriteString('#Read MODFLOW 6 grid information file');
-    NewLine;
-    {$REGION 'Grid'}
-    GrbFileName := ChangeFileExt(AFileName, '');
-    if Model.DisvUsed then
-    begin
-      GrbFileName := ChangeFileExt(GrbFileName, '.disv.grb');
-    end
-    else
-    begin
-      GrbFileName := ChangeFileExt(GrbFileName, '.dis.grb');
-    end;
-    GrbFileName := ExtractFileName(GrbFileName);
-    WriteString(Format('cl_mf6 = read_mf6_grid_specs(file=''%s'', &',
-      [GrbFileName]));
-    NewLine;
-    WriteString('    dimensions=2, &');
-    NewLine;
-    for LayerIndex := 0 to Model.LayerCount - 1 do
-    begin
-      WriteString(Format('    slist_layer_idomain=id%0:d; layer=%0:d, &',
-        [LayerIndex + 1]));
-      NewLine;
-    end;
-    for LayerIndex := 0 to Model.LayerCount - 1 do
-    begin
-      WriteString(Format('    plist_layer_bottom =bot%0:d; layer=%0:d, &',
-        [LayerIndex + 1]));
-      NewLine;
-    end;
-    WriteString('    plist_top = top)');
-    NewLine;
-    NewLine;
-    {$ENDREGION}
-
-    if FPilotPointsUsed then
-    begin
-      WriteString('#Save Kriging factors');
-      NewLine;
-    {$REGION 'Save Kriging factors'}
-      WriteString('calc_kriging_factors_auto_2d( &');
-      NewLine;
-      WriteString('  target_clist=cl_mf6, &');
-      NewLine;
-      WriteString('  source_clist=PilotPoints, &');
-      NewLine;
-      FKrigingFactorsFile := ChangeFileExt(AFileName, '.Factors');
-      WriteString(Format('  file=%s;format=formatted)',
-        [ExtractFileName(FKrigingFactorsFile)]));
-      NewLine;
-      NewLine;
-    {$ENDREGION}
-    end;
+    ReadDiscretization(AFileName);
 
     WriteString('#Read data to modify');
     NewLine;
     {$REGION 'Data set values'}
-    WriteString('read_list_file(reference_clist=''cl_mf6'',skiplines=0, &');
+    WriteString(Format('read_list_file(reference_clist=''%s'',skiplines=1, &',
+      [KDisName]));
     NewLine;
     ColIndex := 2;
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
-      WriteString(Format('  slist=s_PIndex%0:d;column=%1:d, &',
-        [LayerIndex + 1, ColIndex]));
+      SListName := Format('s_PIndex%0:d', [LayerIndex + 1]);
+      WriteString(Format('  slist=%0:s;column=%1:d, &',
+        [SListName, ColIndex]));
       Inc(ColIndex);
       NewLine;
-      WriteString(Format('  plist=p_Value%0:d;column=%1:d, &',
-        [LayerIndex + 1, ColIndex]));
+      PListName := Format('p_Value%0:d', [LayerIndex + 1]);
+      WriteString(Format('  plist=%0:s;column=%1:d, &',
+        [PListName, ColIndex]));
       Inc(ColIndex);
       NewLine;
     end;
@@ -820,9 +991,17 @@ begin
     begin
       AParam := FUsedParamList.Objects[ParameterIndex]
         as TModflowSteadyParameter;
-      WriteString(Format('#%0:s = %1:s                        %0:s%1:s',
+      if ScriptChoice = scWriteScript then
+      begin
+        WriteString('#');
+      end;
+      WriteString(Format('%0:s = %1:s                        %0:s%1:s',
         [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
       NewLine;
+      if ScriptChoice = scWriteTemplate then
+      begin
+        WriteString('#');
+      end;
       WriteString(Format('%0:s = %1:g',
         [AParam.ParameterName, AParam.Value]));
       NewLine;
@@ -833,37 +1012,58 @@ begin
     WriteString('# Modfify data values');
     NewLine;
     {$REGION 'Modify data values'}
-    WriteString('temp=new_plist(reference_clist=cl_mf6,value=0.0)');
+    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
+      [KDisName]));
     NewLine;
 
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
+      WriteString('# Setting values for layer');
+      WriteInteger(LayerIndex + 1);
+      NewLine;
       for ParameterIndex := 0 to FUsedParamList.Count - 1 do
       begin
         AParam := FUsedParamList.Objects[ParameterIndex]
           as TModflowSteadyParameter;
         PIndex := FPNames.IndexOf(AParam.ParameterName) + 1;
+        WriteString('  # Setting values for parameter ');
+        WriteString(AParam.ParameterName);
+        NewLine;
         if AParam.UsePilotPoints then
         begin
+          WriteString('    # Substituting interpolated values');
+          NewLine;
           QuadList := FQuadTrees[ParameterIndex];
           QuadTree := QuadList[LayerIndex];
           if QuadTree.Count > 0 then
           begin
             PListName := Format('%0:s_%1:d',
               [AParam.ParameterName, LayerIndex+1]);
-            WriteString(Format('temp=%0:s.krige_using_file(file=''%1:s'';form=''formatted'',transform=''none'')',
-              [PListName, ExtractFileName(FKrigingFactorsFile)]));
+            WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
-              'p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp * %2:s',
+              '    temp=%0:s.krige_using_file(file=''%1:s'';form=''formatted'',transform=''none'')',
+              [PListName, ExtractFileName(FKrigingFactorsFile)]));
+            NewLine;
+            WriteString('    # Write interpolated values in zones');
+            NewLine;
+            WriteString(Format(
+              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp * %2:s',
               [LayerIndex + 1, PIndex, AParam.ParameterName]));
+            NewLine;
+          end
+          else
+          begin
+            WriteString('    # no interpolated values defined for this layer and parameter');
             NewLine;
           end;
         end
         else
         begin
+          WriteString('    # Substituting parameter values in zones');
+          NewLine;
           WriteString(Format(
-            'p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
+            '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
             [LayerIndex + 1, PIndex, AParam.ParameterName]));
           NewLine;
         end;
@@ -890,6 +1090,75 @@ begin
       NewLine;
       {$ENDREGION}
     end;
+  finally
+    CloseFile;
+  end;
+end;
+
+{ TSutraNodDisWriter }
+
+class function TSutraNodDisWriter.Extension: string;
+begin
+  result := '.c_nod';
+end;
+
+procedure TSutraNodDisWriter.WriteFile(const AFileName: string);
+var
+  NodeIndex: Integer;
+  SutraMesh2D: TSutraMesh2D;
+  ANode: TSutraNode2D;
+begin
+  FInputFileName := FileName(AFileName);
+  OpenFile(FInputFileName);
+  try
+    SutraMesh2D := Model.SutraMesh.Mesh2D;
+    WriteString(' Index Node_Number X Y');
+    NewLine;
+    for NodeIndex := 0 to SutraMesh2D.Nodes.Count - 1 do
+    begin
+      ANode := SutraMesh2D.Nodes[NodeIndex];
+      WriteInteger(NodeIndex + 1);
+      WriteInteger(ANode.Number);
+      WriteFloat(ANode.Location.x);
+      WriteFloat(ANode.Location.y);
+      NewLine;
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
+{ TSutraEleDisWriter }
+
+class function TSutraEleDisWriter.Extension: string;
+begin
+  result := '.c_ele';
+end;
+
+procedure TSutraEleDisWriter.WriteFile(const AFileName: string);
+var
+  SutraMesh2D: TSutraMesh2D;
+  ElementIndex: Integer;
+  AnElement: TSutraElement2D;
+  Location: TPoint2D;
+begin
+  FInputFileName := FileName(AFileName);
+  OpenFile(FInputFileName);
+  try
+    SutraMesh2D := Model.SutraMesh.Mesh2D;
+    WriteString(' Index Element_Number X Y');
+    NewLine;
+    for ElementIndex := 0 to SutraMesh2D.Elements.Count - 1 do
+    begin
+      AnElement := SutraMesh2D.Elements[ElementIndex];
+      WriteInteger(ElementIndex + 1);
+      WriteInteger(AnElement.ElementNumber);
+      Location := AnElement.Center;
+      WriteFloat(Location.x);
+      WriteFloat(Location.y);
+      NewLine;
+    end;
+
   finally
     CloseFile;
   end;

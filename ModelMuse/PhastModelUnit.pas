@@ -31688,7 +31688,9 @@ begin
     if PestUsed then
     begin
       TemplateFileName := ChangeFileExt(FileName, StrPtf);
-      FTemplate[0] := 'ptf ' + PestProperties.TemplateCharacter;
+      // hard coded to used UcodeDelimiter instead of PestProperties.TemplateCharacter.
+//      FTemplate[0] := 'ptf ' + PestProperties.TemplateCharacter;
+      FTemplate[0] := 'ptf ' + UcodeDelimiter;
       FTemplate.SaveToFile(TemplateFileName);
       AddModelInputFile(TemplateFileName);
     end;
@@ -38522,10 +38524,16 @@ end;
 
 procedure TCustomModel.WritePValAndTemplate(const ParameterName: string;
       const Value: double);
+var
+  NewLine: string;
 begin
-  FPValFile.Add(ParameterName + ' ' + FortranFloatToStr(Value));
-  FTemplate.Add(ParameterName + ' ' + UcodeDelimiter + ParameterName
-    + '                  ' + UcodeDelimiter);
+  NewLine := ParameterName + ' ' + FortranFloatToStr(Value);
+  if FPValFile.IndexOf(NewLine) < 0 then
+  begin
+    FPValFile.Add(NewLine);
+    FTemplate.Add(ParameterName + ' ' + UcodeDelimiter + ParameterName
+      + '                  ' + UcodeDelimiter);
+  end;
 end;
 
 //function TCustomModel.Xt3DUsed(Sender: TObject): boolean;
