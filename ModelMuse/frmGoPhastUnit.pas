@@ -9326,7 +9326,8 @@ begin
   end;
 end;
 
-procedure TfrmGoPhast.ExportSutra(ShouldRunSutra: Boolean; const FileName: string);
+procedure TfrmGoPhast.ExportSutra(ShouldRunSutra: Boolean;
+  const FileName: string);
 var
   IcsWriter: TSutraInitialConditionsWriter;
   FluidSourceNodes: IBoundaryNodes;
@@ -9414,6 +9415,8 @@ begin
       end;
     end;
   end;
+
+  PhastModel.ClearPval;
 
   SutraNodDisWriter := TSutraNodDisWriter.Create(PhastModel, etExport);
   try
@@ -9758,6 +9761,8 @@ begin
         begin
           frmErrorsAndWarnings.Show;
         end;
+
+        PhastModel.FinalizePvalAndTemplate(FileName);
       finally
         Observations.Free;
         Schedules.Free;

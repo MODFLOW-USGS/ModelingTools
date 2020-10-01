@@ -354,17 +354,6 @@ begin
         DataArray := DataArrayManager.CreateNewDataArray(TDataArray, LayerName,
           Formula, LayerDisplayName, StandardLock, DataType, eaBlocks, dsoTop, StrHUF);
         LocalModel.UpdateDataArrayDimensions(DataArray);
-//        if frmGoPhast.Grid = nil then
-//        begin
-//          DataArray.UpdateDimensions(0,0,0);
-//        end
-//        else
-//        begin
-//          DataArray.UpdateDimensions(frmGoPhast.Grid.LayerCount,
-//            frmGoPhast.Grid.RowCount, frmGoPhast.Grid.ColumnCount);
-//        end;
-
-//        DataArray.OnNameChange := LocalModel.DataArrayNameChange;
 
         DataArray.OnDataSetUsed := LocalModel.HufDataArrayUsed;
         HufUnits.AddOwnedDataArray(DataArray);
@@ -374,7 +363,7 @@ begin
         DataArray.DisplayName := LayerDisplayName;
         DataArray.UpdateWithName(LayerName);
         DataArray.Lock := StandardLock;
-//        DataArray.OnNameChange := LocalModel.DataArrayNameChange;
+
         DataArray.OnDataSetUsed := LocalModel.HufDataArrayUsed;
       end;
     end

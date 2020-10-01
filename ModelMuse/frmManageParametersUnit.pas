@@ -851,6 +851,14 @@ begin
       finally
         Names.Free;
       end;
+    end
+    else
+    begin
+      if rdgParameters.Cells[Ord(pcName), ARow] = '' then
+      begin
+        rdgParameters.Canvas.Brush.Color := clBtnFace;
+        Exit;
+      end;
     end;
     if TParamColumn(ACol) in [pcPackage, pcType] then
     begin
@@ -910,9 +918,16 @@ begin
   if (ARow > 0) and (ACol >= 0) and (ACol < rdgParameters.ColCount) then
   begin
     case TParamColumn(ACol) of
-      pcName, pcType, pcValue: ; // do nothing
+      pcName: ; // do nothing
+      pcType, pcValue:
+        begin
+          CanSelect := rdgParameters.Cells[Ord(pcName), ARow] <> '';
+        end;
       pcPackage: CanSelect := False;
-      pcMult, pcZone, pcPilotPoints: CanSelect := rdgParameters.UseSpecialFormat[ACol, ARow];
+      pcMult, pcZone, pcPilotPoints:
+        begin
+          CanSelect := rdgParameters.UseSpecialFormat[ACol, ARow];
+        end;
       else Assert(False);
     end;
   end;

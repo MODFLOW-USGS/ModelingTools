@@ -2111,7 +2111,6 @@ that affects the model output should also have a comment. }
     procedure UpdateHfb(Sender: TObject);
     // See @link(DataSetList).
     function GetDataSetCollection: TDataSetCollection;
-    procedure FinalizePvalAndTemplate(FileName: string);
     procedure FinalizeDischargeRouting(Sender: TObject);
     procedure GetParameterUsedAndParameterFormulaForLPF(
       out ParameterUsed: Boolean; out ParameterFormula: string;
@@ -2582,6 +2581,8 @@ that affects the model output should also have a comment. }
     function GetContourLabelSpacing: Integer; virtual; abstract;
     procedure SetContourLabelSpacing(const Value: Integer);virtual; abstract;
   public
+    procedure ClearPval;
+    procedure FinalizePvalAndTemplate(FileName: string);
     function ParamNamesDataSetUsed(Sender: TObject): boolean; virtual;
     function InterpSwiObsDefined: Boolean;
     function SwiObsUsed(Sender: TObject): boolean;
@@ -11512,7 +11513,10 @@ var
   DataArray: TDataArray;
   DataArrayNames: TStringList;
 begin
-  if not ModflowPackages.HufPackage.IsSelected then
+  if (not (ModelSelection in ModflowSelection))
+    or (ModelSelection = msModflow2015)
+    or (not ModflowPackages.HufPackage.IsSelected)
+    then
   begin
     result := False;
     Exit;
@@ -31237,6 +31241,11 @@ begin
   end;
 end;
 
+procedure TCustomModel.ClearPval;
+begin
+  FPValFile.Clear;
+end;
+
 procedure TCustomModel.ClearViewedItems;
 begin
   FrontTimeList := nil;
@@ -36019,9 +36028,14 @@ begin
 end;
 
 function TCustomModel.AquiferPropertiesUsed(Sender: TObject): boolean;
+var
+  HufUsed: Boolean;
 begin
-  result := ModflowOrPhastUsed(Sender) and ((ModelSelection = msPhast)
-    or not ModflowPackages.HufPackage.IsSelected);
+  HufUsed := ModflowPackages.HufPackage.IsSelected
+    and (ModelSelection in ModflowSelection)
+    and (ModelSelection <> msModflow2015);
+  result := ModflowOrPhastUsed(Sender)
+    and ((ModelSelection = msPhast) or not HufUsed);
 end;
 
 procedure TCustomModel.Assign(Source: TPersistent);
