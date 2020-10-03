@@ -149,6 +149,7 @@ var
   AValue: double;
   LocalModel: TPhastModel;
   CanDraw: Boolean;
+  Position: Integer;
 //  UsedFunction: string;
 //  UsedExpression: TExpression;
 begin
@@ -167,11 +168,21 @@ begin
     for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
     begin
       AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.Deleted then
+      begin
+        Continue;
+      end;
       FootprintWell := AScreenObject.FootprintWell;
       if not AScreenObject.Deleted
         and (FootprintWell <> nil) and FootprintWell.Used
         and (AScreenObject.Count = AScreenObject.SectionCount) then
       begin
+        if AScreenObject.IndexOfDataSet(BoundaryWithdrawal) < 0 then
+        begin
+          Position := AScreenObject.AddDataSet(BoundaryWithdrawal);
+          AScreenObject.DataSetFormulas[Position] := FootprintWell.Withdrawal;
+        end;
+
         UsedVariables.Clear;
         CellList.Clear;
         AScreenObject.GetCellsToAssign({LocalModel.Grid,}

@@ -2335,6 +2335,7 @@ var
   Mf6Date: TDateTime;
   Mt3dUsgsDate: TDateTime;
   ZoneBudMf6Date: TDateTime;
+  FootprintDate: TDateTime;
 
 const
 //  MfNwtDate = 40933; //40907;//40819;
@@ -10086,13 +10087,15 @@ end;
 
 function TfrmGoPhast.FootprintUpToDate: boolean;
 var
-  FootprintDate: TDateTime;
+//  FootprintDate: TDateTime;
 begin
   result := True;
-  FootprintDate := EncodeDate(2017,12,21);
+//  FootprintDate := EncodeDate(2018,3,27);
   if FileExists(PhastModel.ProgramLocations.FootprintLocation) then
   begin
-    result := TFile.GetLastWriteTime(PhastModel.ProgramLocations.FootprintLocation) >= FootprintDate;
+    result :=
+      TFile.GetLastWriteTime(PhastModel.ProgramLocations.FootprintLocation)
+       >= FootprintDate;
   end;
 
 end;
@@ -14568,6 +14571,7 @@ initialization
   Mf6Date := EncodeDate(2020, 6, 11);
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
+  FootprintDate := EncodeDate(2018,3,27);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

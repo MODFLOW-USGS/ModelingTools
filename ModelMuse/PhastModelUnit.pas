@@ -5353,7 +5353,7 @@ resourcestring
 {$ENDIF}
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
-  StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0\bin\WellFootprint.exe';
+  StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
   StrDefaultModflow6Path = 'C:\WRDAPP\mf6.1.1\bin\mf6.exe';
 
   StrProgramLocations = 'Program Locations';
@@ -9993,10 +9993,12 @@ const
 //               Bug fix: When importing UZF data from shapefiles in models in
 //                which the UZT package is active, UZT will also be imported
 //                too.
+//   '4.3.0.16'  Bug fix: Fixed bug that could cause WellFootprint models to
+//                fail when exporting withdrawals.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.15';
+  IIModelVersion = '4.3.0.16';
 
 function IModelVersion: string;
 begin
@@ -19635,7 +19637,9 @@ var
   Sfr6Boundary: TSfrMf6Boundary;
   Sfr6DiversionCount: Integer;
   SfrMf6Item: TSfrMf6Item;
-//  Withdrawals: TDataArray;
+  FootprintWell: TFootprintWell;
+  Withdrawals: TDataArray;
+  Position: Integer;
 begin
   RenameOldVerticalLeakance;
   FixSpecifyingGridByThreeDObjects;
@@ -19873,10 +19877,12 @@ begin
 //      ChildModel.CreateVariables(SwrReachDataArray);
 //    end;
   end;
+
   if FileVersionEqualOrEarlier('3.7.1.16') then
   begin
     RemoveNonAncillaryFiles;
   end;
+
   if FileVersionEqualOrEarlier('3.8.0.0') then
   begin
     if ChildModels.Count > 0 then
@@ -19928,6 +19934,7 @@ begin
       end;
     end;
   end;
+
   if FileVersionEqualOrEarlier('3.8.0.2') then
   begin
     DischargeRoutingArray := FDataArrayManager.GetDataSetByName(
@@ -19937,6 +19944,7 @@ begin
       DischargeRoutingArray.Invalidate;
     end;
   end;
+
   if FileVersionEqualOrEarlier('3.8.1.5') then
   begin
     // prior to version 3.8.1.6, nomOriginal had not been defined and
@@ -19957,6 +19965,7 @@ begin
       end;
     end;
   end;
+
   if FileVersionEqualOrEarlier('3.8.1.33') then
   begin
     if ModflowPackages.Mt3dBasic.IsSelected then
@@ -20011,6 +20020,26 @@ begin
 //      Withdrawals.Invalidate;
 //    end;
 //  end;
+
+  Withdrawals := FDataArrayManager.GetDataSetByName(KWithdrawals);
+  if Withdrawals <> nil then
+  begin
+    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+    begin
+      AScreenObject := ScreenObjects[ScreenObjectIndex];
+      FootprintWell := AScreenObject.FootprintWell;
+      if (FootprintWell <> nil) and FootprintWell.Used
+        and (AScreenObject.Count = AScreenObject.SectionCount) then
+      begin
+        if AScreenObject.IndexOfDataSet(Withdrawals) < 0 then
+        begin
+          Position := AScreenObject.AddDataSet(Withdrawals);
+          AScreenObject.DataSetFormulas[Position] := FootprintWell.Withdrawal;
+        end;
+      end;
+    end;
+  end;
+
 end;
 
 procedure TPhastModel.RemoveNonAncillaryFiles;
