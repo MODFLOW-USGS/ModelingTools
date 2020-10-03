@@ -4194,6 +4194,10 @@ var
     ListIndex: integer;
   begin
     Arguments.Clear;
+    if (Index + 1 < Count) and (Strings[Index + 1][1] <> '(') then
+    begin
+      Exit;
+    end;
     for ArgumentIndex := Index + 1 to Stop do
     begin
       LastArgument := ArgumentIndex;

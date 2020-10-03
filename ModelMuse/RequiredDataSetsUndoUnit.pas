@@ -342,6 +342,11 @@ begin
   end;
   UpdatedRequiredDataSets;
   UpdateCellTypeMf6;
+
+  if (PhastModel.ModelSelection in ModflowSelection) and (PhastModel.Grid <> nil) then
+  begin
+    PhastModel.ModflowGrid.UpdateCellElevations;
+  end;
 end;
 
 procedure TUndoModelSelectionChange.Undo;
@@ -371,6 +376,11 @@ begin
   Packages.SmsPackage.IsSelected := FSmsSelected;
 
   UpdatedRequiredDataSets;
+  if (frmGoPhast.PhastModel.ModelSelection in ModflowSelection)
+    and (frmGoPhast.PhastModel.Grid <> nil) then
+  begin
+    frmGoPhast.PhastModel.ModflowGrid.UpdateCellElevations;
+  end;
 end;
 
 procedure TUndoModelSelectionChange.UpdateCellTypeMf6;

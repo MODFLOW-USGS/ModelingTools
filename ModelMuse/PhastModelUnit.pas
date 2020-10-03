@@ -9983,15 +9983,20 @@ const
 //   '4.3.0.14'  Bug fix: Fixed bug that would cause an error when importing
 //                data in the Import Points dialog box if the decimal separator
 //                was not a period.
-
-//               Bug fix: When attempting to read or save a global variables
+//   '4.3.0.15'  Bug fix: When attempting to read or save a global variables
 //                file, ModelMuse will now show an error message to the user
 //                instead of issueing a bug report if there is an error reading
 //                the file.
+//               Bug fix: Fixed a bug that could cause ModelMuse to encounter
+//                an error when evaluating the IDOMAIN data set in MODFLOW 6
+//                models.
+//               Bug fix: When importing UZF data from shapefiles in models in
+//                which the UZT package is active, UZT will also be imported
+//                too.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.14';
+  IIModelVersion = '4.3.0.15';
 
 function IModelVersion: string;
 begin

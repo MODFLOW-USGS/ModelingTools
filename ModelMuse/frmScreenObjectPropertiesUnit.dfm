@@ -2405,10 +2405,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       HelpKeyword = 'MODFLOW_Features_Tab'
       Caption = 'MODFLOW Features'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splttrModflowFeature: TJvNetscapeSplitter
         Left = 185
         Top = 0
@@ -9109,8 +9105,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           HelpType = htKeyword
           HelpKeyword = 'SSM_Sink__Source_Mixing_Packa2'
           Caption = 'jvspMT3DMS_SSM'
-          ExplicitWidth = 101
-          ExplicitHeight = 122
           inline frameMT3DMS_SSM: TframeScreenObjectSsm
             Left = 0
             Top = 0
@@ -9119,8 +9113,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitWidth = 101
-            ExplicitHeight = 122
+            ExplicitWidth = 581
+            ExplicitHeight = 476
             inherited pnlBottom: TPanel
               Top = 430
               Width = 581
@@ -9148,7 +9142,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlTop: TPanel
               Width = 581
-              ExplicitLeft = -4
               ExplicitWidth = 581
               inherited pnlCaption: TPanel
                 Width = 579
@@ -9164,11 +9157,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pnlGrid: TPanel
               Width = 581
               Height = 354
-              ExplicitWidth = 101
-              ExplicitHeight = 0
+              ExplicitWidth = 581
+              ExplicitHeight = 354
               inherited pnlEditGrid: TPanel
                 Width = 579
-                ExplicitWidth = 99
+                ExplicitWidth = 579
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -9182,6 +9175,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnSetEditText = frameMT3DMSdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameMT3DMSdgModflowBoundaryEndUpdate
+                ExplicitLeft = 1
                 ExplicitWidth = 579
                 ExplicitHeight = 302
                 ColWidths = (
@@ -14145,10 +14139,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       HelpKeyword = 'SUTRA_Features_Tab'
       Caption = 'SUTRA Features'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object splttrSutraFeatures: TJvNetscapeSplitter
         Left = 161
         Top = 0
@@ -14170,8 +14160,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
-        ExplicitWidth = 125
-        ExplicitHeight = 122
         object jvspSutraObservations: TJvStandardPage
           Left = 0
           Top = 0

@@ -12957,7 +12957,7 @@ begin
       frmGoPhast.PhastModel.ModflowPackages.Mt3dUnsatTransport.PackageIdentifier)
       as TJvPageIndexNode;
     Node.PageIndex := jvspMT3D_UZT_Unsat.PageIndex;
-    frameMt3d_UZT_Sat.pnlCaption.Caption := Node.Text;
+    frameMt3d_UZT_Unsat.pnlCaption.Caption := Node.Text;
     Node.ImageIndex := 1;
     FMt3d_UZT_Unsat_Node := Node;
   end;

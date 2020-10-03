@@ -823,7 +823,8 @@ uses Math, Contnrs , frmGoPhastUnit, frmProgressUnit,
   LayerStructureUnit, ModflowStrUnit, FootprintBoundary, ModflowCfpPipeUnit,
   System.IOUtils, SutraMeshUnit, SubscriptionUnit, FootPrintUtilities,
   ModflowSfr6Unit, ModflowMawUnit, Modflow6ObsUnit, frameScreenObjectSfr6Unit,
-  ModflowBoundaryDisplayUnit;
+  ModflowBoundaryDisplayUnit, Mt3dUztRchUnit, Mt3dUztSatEtUnit,
+  Mt3dUztUnsatEtUnit;
 
 resourcestring
   StrParameterName = 'Parameter name';
@@ -862,8 +863,8 @@ resourcestring
   StrHFBThickness = 'HFB_Thickness';
   StrInfiltrationRate = 'Infiltration rate';
   StrEvapoTranspiration = 'Evapo- transpiration demand';
-  StrETExctinctionDepth = 'ET exctinction depth';
-  StrETExctinctionWater = 'ET exctinction water content';
+  StrETExtinctionDepth = 'ET extinction depth';
+  StrETExtinctionWater = 'ET extinction water content';
   StrMinimumStage = 'Minimum stage';
   StrMaximumStage = 'Maximum stage';
   StrPrecipitation = 'Precipitation';
@@ -1003,6 +1004,9 @@ resourcestring
   StrFlux = 'Flux';
   StrPumpingRange = 'Pumping Range;';
   StrConcentrationS = 'Concentration: %s';
+  StrRechConcentrationS = 'Recharge Concentration: %s';
+  StrSatETConcentrationS = 'Sat ET Concentration: %s';
+  StrUnSatETConcentrationS = 'Unsat ET Concentration: %s';
   StrConcentrationsd = 'Concentration_%s%d';
   StrYouMustChangeThe = 'You must change the number of Z-formulas to zero if' +
   ' you want the imported shapes to affect the layer definition data sets.';
@@ -1058,6 +1062,9 @@ resourcestring
   'name as another attribute. It will be skipped.';
   StrTheAttribute0sI = 'The attribute #%0:d (%1:s) in file "%2:s" is a duplicate and' +
   ' will be skipped.';
+  StrUZTRechConcd = 'UZT_RechConc_%0:d_%1:d';
+  StrUZTSatEtConcd = 'UZT_SatEtConc_%0:d_%1:d';
+  StrUZTUnSatEtConcd = 'UZT_UnSatEtConc_%0:d_%1:d';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -2879,9 +2886,42 @@ var
   ItemName: string;
   ValueItem: TValueArrayItem;
   Dummy: Boolean;
+  StartingConcIndex: Integer;
+  UztRchBoundary: TMt3dUztRchConcBoundary;
+  UztRchItem: TMt3dUztRchConcItem;
+  UztSatEtBoundary: TMt3dUztSatEtConcBoundary;
+  UztUnsatETBoundary: TMt3dUztUnsatEtConcBoundary;
+  UztSatEtItem: TMt3dUztSatEtConcItem;
+  UztUnsatItem: TMt3dUztUnsatEtConcItem;
+  ColIndex: Integer;
+  ConcIndex: Integer;
 begin
   AScreenObject.CreateUzfBoundary;
   Boundary := AScreenObject.ModflowUzfBoundary;
+
+  if frmGoPhast.PhastModel.Mt3d_UztIsSelected then
+  begin
+    AScreenObject.CreateMt3dUzfRchConcBoundary;
+    UztRchBoundary := AScreenObject.Mt3dUzfRechConc;
+  end
+  else
+  begin
+    UztRchBoundary := nil;
+  end;
+
+  if frmGoPhast.PhastModel.Mt3d_UztEtIsSelected then
+  begin
+    AScreenObject.CreateMt3dUztSatEtConcBoundary;
+    AScreenObject.CreateMt3dUztUnsatEtConcBoundary;
+    UztSatEtBoundary := AScreenObject.Mt3dUztSatEtConcBoundary;
+    UztUnsatETBoundary := AScreenObject.Mt3dUztUnsatEtConcBoundary;
+  end
+  else
+  begin
+    UztSatEtBoundary := nil;
+    UztUnsatETBoundary := nil;
+  end;
+
   Count := 0;
   for Index := 0 to seBoundaryTimeCount.AsInteger - 1 do
   begin
@@ -2891,6 +2931,18 @@ begin
       and (rdgBoundaryConditions.Cells[Ord(ucEvapRate), Index + 1] <> '')
       and (rdgBoundaryConditions.Cells[Ord(ucExtinctDepth), Index + 1] <> '')
       and (rdgBoundaryConditions.Cells[Ord(ucEndTime), Index + 1] <> '');
+    if UseRow and frmGoPhast.PhastModel.Mt3d_UztIsSelected then
+    begin
+      StartingConcIndex := Ord(ucExtinctWaterContent) +1;
+      for ColIndex := StartingConcIndex to rdgBoundaryConditions.ColCount - 1 do
+      begin
+        UseRow := rdgBoundaryConditions.Cells[ColIndex, Index + 1] <> '';
+        if not UseRow then
+        begin
+          break;
+        end;
+      end;
+    end;
     if UseRow then
     begin
       StartTime := GetRealValueFromText(
@@ -2908,6 +2960,7 @@ begin
       end;
       Item.StartTime := StartTime;
       Item.EndTime := EndTime;
+
       if FCombinedObjects then
       begin
         AValue := GetRealValueFromText(rdgBoundaryConditions.
@@ -3038,6 +3091,136 @@ begin
         WaterContentItem.UzfWaterContent := GetRealFormulaFromText(
           rdgBoundaryConditions.Cells[Ord(ucExtinctWaterContent), Index + 1]);
       end;
+
+      StartingConcIndex := Ord(ucExtinctWaterContent) +1;
+      if UztRchBoundary <> nil then
+      begin
+        if Count < UztRchBoundary.Values.Count then
+        begin
+          UztRchItem := UztRchBoundary.Values[Count] as TMt3dUztRchConcItem;
+        end
+        else
+        begin
+          UztRchItem := UztRchBoundary.Values.Add as TMt3dUztRchConcItem;
+        end;
+        UztRchItem.StartTime := StartTime;
+        UztRchItem.EndTime := EndTime;
+
+        for ConcIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+        begin
+          if FCombinedObjects then
+          begin
+            AValue := GetRealValueFromText(rdgBoundaryConditions.
+              Cells[StartingConcIndex + ConcIndex, Index + 1], Dummy);
+            ItemName := Format(StrUZTRechConcd, [ConcIndex,Index]);
+            ValueItem := AScreenObject.ImportedValues.ValueItemByName(
+              ItemName);
+            if ValueItem = nil then
+            begin
+              ValueItem := AScreenObject.
+                ImportedValues.Add as TValueArrayItem;
+              ValueItem.Name := ItemName;
+              ValueItem.Values.DataType := rdtDouble;
+              ValueItem.Values.Count := 0;
+              UztRchItem.Mt3dmsConcRate[ConcIndex] := rsObjectImportedValuesR
+                + '("' + ItemName + '")';
+            end;
+            ValueItem.Values.Add(AValue);
+          end
+          else
+          begin
+            UztRchItem.Mt3dmsConcRate[ConcIndex] := GetRealFormulaFromText(
+              rdgBoundaryConditions.Cells[StartingConcIndex + ConcIndex, Index + 1]);
+          end;
+        end;
+      end;
+
+      if UztSatEtBoundary <> nil then
+      begin
+        if Count < UztSatEtBoundary.Values.Count then
+        begin
+          UztSatEtItem := UztSatEtBoundary.Values[Count] as TMt3dUztSatEtConcItem;
+        end
+        else
+        begin
+          UztSatEtItem := UztSatEtBoundary.Values.Add as TMt3dUztSatEtConcItem;
+        end;
+        UztSatEtItem.StartTime := StartTime;
+        UztSatEtItem.EndTime := EndTime;
+
+        Inc(StartingConcIndex, frmGoPhast.PhastModel.MobileComponents.Count);
+        for ConcIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+        begin
+          if FCombinedObjects then
+          begin
+            AValue := GetRealValueFromText(rdgBoundaryConditions.
+              Cells[StartingConcIndex + ConcIndex, Index + 1], Dummy);
+            ItemName := Format(StrUZTSatEtConcd, [ConcIndex, Index]);
+            ValueItem := AScreenObject.ImportedValues.ValueItemByName(
+              ItemName);
+            if ValueItem = nil then
+            begin
+              ValueItem := AScreenObject.
+                ImportedValues.Add as TValueArrayItem;
+              ValueItem.Name := ItemName;
+              ValueItem.Values.DataType := rdtDouble;
+              ValueItem.Values.Count := 0;
+              UztSatEtItem.Mt3dmsConcRate[ConcIndex] := rsObjectImportedValuesR
+                + '("' + ItemName + '")';
+            end;
+            ValueItem.Values.Add(AValue);
+          end
+          else
+          begin
+            UztSatEtItem.Mt3dmsConcRate[ConcIndex] := GetRealFormulaFromText(
+              rdgBoundaryConditions.Cells[StartingConcIndex + ConcIndex, Index + 1]);
+          end;
+        end;
+      end;
+
+      if UztUnsatETBoundary <> nil then
+      begin
+        if Count < UztUnsatETBoundary.Values.Count then
+        begin
+          UztUnsatItem := UztUnsatETBoundary.Values[Count] as TMt3dUztUnsatEtConcItem;
+        end
+        else
+        begin
+          UztUnsatItem := UztUnsatETBoundary.Values.Add as TMt3dUztUnsatEtConcItem;
+        end;
+        UztUnsatItem.StartTime := StartTime;
+        UztUnsatItem.EndTime := EndTime;
+
+        Inc(StartingConcIndex, frmGoPhast.PhastModel.MobileComponents.Count);
+        for ConcIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+        begin
+          if FCombinedObjects then
+          begin
+            AValue := GetRealValueFromText(rdgBoundaryConditions.
+              Cells[StartingConcIndex + ConcIndex, Index + 1], Dummy);
+            ItemName := Format(StrUZTUnSatEtConcd, [ConcIndex, Index]);
+            ValueItem := AScreenObject.ImportedValues.ValueItemByName(
+              ItemName);
+            if ValueItem = nil then
+            begin
+              ValueItem := AScreenObject.
+                ImportedValues.Add as TValueArrayItem;
+              ValueItem.Name := ItemName;
+              ValueItem.Values.DataType := rdtDouble;
+              ValueItem.Values.Count := 0;
+              UztUnsatItem.Mt3dmsConcRate[ConcIndex] := rsObjectImportedValuesR
+                + '("' + ItemName + '")';
+            end;
+            ValueItem.Values.Add(AValue);
+          end
+          else
+          begin
+            UztUnsatItem.Mt3dmsConcRate[ConcIndex] := GetRealFormulaFromText(
+              rdgBoundaryConditions.Cells[StartingConcIndex + ConcIndex, Index + 1]);
+          end;
+        end;
+      end;
+
     end;
   end;
 end;
@@ -4564,39 +4747,117 @@ end;
 procedure TfrmImportShapefile.InitializeBoundaryControlsForUZF;
 var
   Index: Integer;
+  StartingConcIndex: Integer;
+  ConcIndex: Integer;
+  AComp: TMobileChemSpeciesItem;
 begin
-  FCombinedObjects := comboJoinObjects.ItemIndex = 1;
-  plBoundary.ActivePage := jvspNone;
-  rdgBoundaryConditions.Enabled := True;
-  rdgBoundaryConditions.ColCount := 6;
-  AssignColFeatureProperties;
-  for Index := Ord(ucStartTime) to Ord(ucEndTime) do
-  begin
-    rdgBoundaryConditions.Columns[Index].ComboUsed := not FCombinedObjects;
-    if FCombinedObjects then
+  rdgBoundaryConditions.BeginUpdate;
+  try
+    FCombinedObjects := comboJoinObjects.ItemIndex = 1;
+    plBoundary.ActivePage := jvspNone;
+    rdgBoundaryConditions.Enabled := True;
+
+    if frmGoPhast.PhastModel.Mt3d_UztIsSelected then
     begin
-      rdgBoundaryConditions.Columns[Index].Format := rcf4Integer;
+      if frmGoPhast.PhastModel.Mt3d_UztEtIsSelected then
+      begin
+        rdgBoundaryConditions.ColCount := 6
+          + frmGoPhast.PhastModel.MobileComponents.Count * 3;
+      end
+      else
+      begin
+        rdgBoundaryConditions.ColCount := 6
+          + frmGoPhast.PhastModel.MobileComponents.Count;
+      end;
     end
     else
     begin
-      rdgBoundaryConditions.Columns[Index].Format := rcf4String;
+      rdgBoundaryConditions.ColCount := 6;
     end;
-    rdgBoundaryConditions.Columns[Index].PickList := FRealFieldNames;
+    AssignColFeatureProperties;
+    for Index := Ord(ucStartTime) to Ord(ucEndTime) do
+    begin
+      rdgBoundaryConditions.Columns[Index].ComboUsed := not FCombinedObjects;
+      if FCombinedObjects then
+      begin
+        rdgBoundaryConditions.Columns[Index].Format := rcf4Integer;
+      end
+      else
+      begin
+        rdgBoundaryConditions.Columns[Index].Format := rcf4String;
+      end;
+      rdgBoundaryConditions.Columns[Index].PickList := FRealFieldNames;
+    end;
+    for Index := Ord(ucInfiltration) to Ord(ucExtinctWaterContent) do
+    begin
+      rdgBoundaryConditions.Columns[Index].ComboUsed := True;
+      rdgBoundaryConditions.Columns[Index].Format := rcf4String;
+      rdgBoundaryConditions.Columns[Index].PickList :=
+        FRealFieldGlobalsAndDataSetsNames;
+    end;
+
+    if frmGoPhast.PhastModel.Mt3d_UztIsSelected then
+    begin
+      StartingConcIndex := Ord(ucExtinctWaterContent) +1;
+      for ConcIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].ComboUsed
+          := True;
+        rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].Format
+          := rcf4String;
+        rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].PickList
+          := FRealFieldGlobalsAndDataSetsNames;
+        rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].
+          WordWrapCaptions := True;
+        AComp := frmGoPhast.PhastModel.MobileComponents[ConcIndex];
+        rdgBoundaryConditions.Cells[StartingConcIndex + ConcIndex, 0]
+          := Format(StrRechConcentrationS, [AComp.Name]);
+      end;
+      if frmGoPhast.PhastModel.Mt3d_UztEtIsSelected then
+      begin
+        Inc(StartingConcIndex, frmGoPhast.PhastModel.MobileComponents.Count);
+        for ConcIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+        begin
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].ComboUsed
+            := True;
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].Format
+            := rcf4String;
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].PickList
+            := FRealFieldGlobalsAndDataSetsNames;
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].
+            WordWrapCaptions := True;
+          AComp := frmGoPhast.PhastModel.MobileComponents[ConcIndex];
+          rdgBoundaryConditions.Cells[StartingConcIndex + ConcIndex, 0]
+            := Format(StrSatETConcentrationS, [AComp.Name]);
+        end;
+        Inc(StartingConcIndex, frmGoPhast.PhastModel.MobileComponents.Count);
+        for ConcIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+        begin
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].ComboUsed
+            := True;
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].Format
+            := rcf4String;
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].PickList
+            := FRealFieldGlobalsAndDataSetsNames;
+          rdgBoundaryConditions.Columns[StartingConcIndex + ConcIndex].
+            WordWrapCaptions := True;
+          AComp := frmGoPhast.PhastModel.MobileComponents[ConcIndex];
+          rdgBoundaryConditions.Cells[StartingConcIndex + ConcIndex, 0]
+            := Format(StrUnSatETConcentrationS, [AComp.Name]);
+        end;
+      end;
+    end;
+
+    rdgBoundaryConditions.Cells[Ord(ucStartTime), 0] := StrStartingTime;
+    rdgBoundaryConditions.Cells[Ord(ucEndTime), 0] := StrEndingTime;
+    rdgBoundaryConditions.Cells[Ord(ucInfiltration), 0] := StrInfiltrationRate;
+    rdgBoundaryConditions.Cells[Ord(ucEvapRate), 0] := StrEvapoTranspiration;
+    rdgBoundaryConditions.Cells[Ord(ucExtinctDepth), 0] := StrETExtinctionDepth;
+    rdgBoundaryConditions.Cells[Ord(ucExtinctWaterContent), 0] :=
+      StrETExtinctionWater;
+  finally
+    rdgBoundaryConditions.EndUpdate;
   end;
-  for Index := Ord(ucInfiltration) to Ord(ucExtinctWaterContent) do
-  begin
-    rdgBoundaryConditions.Columns[Index].ComboUsed := True;
-    rdgBoundaryConditions.Columns[Index].Format := rcf4String;
-    rdgBoundaryConditions.Columns[Index].PickList :=
-      FRealFieldGlobalsAndDataSetsNames;
-  end;
-  rdgBoundaryConditions.Cells[Ord(ucStartTime), 0] := StrStartingTime;
-  rdgBoundaryConditions.Cells[Ord(ucEndTime), 0] := StrEndingTime;
-  rdgBoundaryConditions.Cells[Ord(ucInfiltration), 0] := StrInfiltrationRate;
-  rdgBoundaryConditions.Cells[Ord(ucEvapRate), 0] := StrEvapoTranspiration;
-  rdgBoundaryConditions.Cells[Ord(ucExtinctDepth), 0] := StrETExctinctionDepth;
-  rdgBoundaryConditions.Cells[Ord(ucExtinctWaterContent), 0] :=
-    StrETExctinctionWater;
 end;
 
 procedure TfrmImportShapefile.InitializeBoundaryControlsForCFP_Pipe;

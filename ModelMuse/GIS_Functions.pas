@@ -11,6 +11,11 @@ interface
 uses Windows, SysUtils, Classes, RbwParser, ScreenObjectUnit, GoPhastTypes;
 
 type
+  TLayerHeight = class(TExpression)
+  protected
+    function GetVariablesUsed: TStringList; override;
+  end;
+
   TActiveOnLayer = class(TExpression)
   protected
     function GetVariablesUsed: TStringList; override;
@@ -246,7 +251,7 @@ resourcestring
   ' following objects';
 
 
-var  
+var
   SpecialImplementors: TList;
 
 type
@@ -299,7 +304,7 @@ var
   LayerFunction: TFunctionRecord;
   ColumnWidthFunction: TFunctionRecord;
   RowWidthFunction: TFunctionRecord;
-  LayerHeightFunction: TFunctionRecord;
+//  LayerHeightFunction: TFunctionRecord;
   BlockAreaTopFunction: TFunctionRecord;
   BlockAreaFrontFunction: TFunctionRecord;
   BlockAreaSideFunction: TFunctionRecord;
@@ -377,6 +382,9 @@ var
 
   ActiveOnLayer: TFunctionClass;
   ActiveOnLayerSpecialImplementor: TSpecialImplementor;
+
+  LayerHeight: TFunctionClass;
+  LayerHeightSpecialImplementor: TSpecialImplementor;
 
 {  // these functions don't seem to help improve results with XT3D
   SlopeDirectionRadians: TFunctionClass;
@@ -534,7 +542,7 @@ begin
   AddItem(LayerFunction, True);
   AddItem(ColumnWidthFunction, True);
   AddItem(RowWidthFunction, True);
-  AddItem(LayerHeightFunction, True);
+//  AddItem(LayerHeightFunction, True);
   AddItem(BlockAreaTopFunction, True);
   AddItem(BlockAreaFrontFunction, True);
   AddItem(BlockAreaSideFunction, True);
@@ -3956,19 +3964,19 @@ end;
 procedure ExtractColRowLayer(var Lay, Row, Col: Integer;
   Values: array of Pointer);
 begin
-  if Values[2] <> nil then
+  if (Length(Values) > 2) and (Values[2] <> nil) then
   begin
     Col := PInteger(Values[0])^ - 1;
     Row := PInteger(Values[1])^ - 1;
     Lay := PInteger(Values[2])^ - 1;
   end
-  else if Values[1] <> nil then
+  else if (Length(Values) > 1) and (Values[1] <> nil) then
   begin
     Col := PInteger(Values[0])^ - 1;
     Lay := PInteger(Values[1])^ - 1;
     Row := GlobalRow - 1;
   end
-  else if Values[0] <> nil then
+  else if (Length(Values) > 0) and (Values[0] <> nil) then
   begin
     Lay := PInteger(Values[0])^ - 1;
     Col := GlobalColumn - 1;
@@ -7517,6 +7525,45 @@ begin
   end;
 end;
 
+{ TLayerHeight }
+
+function TLayerHeight.GetVariablesUsed: TStringList;
+var
+  ModflowLayerStructure: TLayerStructure;
+  LayerIndex: Integer;
+  ModflowLayerGroup: TLayerGroup;
+  SutraLayerStructure: TSutraLayerStructure;
+  LayerGroup: TSutraLayerGroup;
+begin
+  result := inherited GetVariablesUsed;
+  if (frmGoPhast.ModelSelection in ModflowSelection) then
+  begin
+    if (frmGoPhast.PhastModel <> nil)
+      and (frmGoPhast.PhastModel.LayerStructure <> nil) then
+    begin
+      ModflowLayerStructure := frmGoPhast.PhastModel.LayerStructure;
+      for LayerIndex := 0 to ModflowLayerStructure.Count - 1 do
+      begin
+        ModflowLayerGroup := ModflowLayerStructure[LayerIndex];
+        result.Add(ModflowLayerGroup.DataArrayName);
+      end;
+    end;
+  end
+  else if (frmGoPhast.ModelSelection in SutraSelection) then
+  begin
+    if (frmGoPhast.PhastModel <> nil)
+      and (frmGoPhast.PhastModel.SutraLayerStructure <> nil) then
+    begin
+      SutraLayerStructure := frmGoPhast.PhastModel.SutraLayerStructure;
+      for LayerIndex := 0 to SutraLayerStructure.Count - 1 do
+      begin
+        LayerGroup := SutraLayerStructure[LayerIndex];
+        result.Add(LayerGroup.DataArrayName)
+      end;
+    end;
+  end;
+end;
+
 initialization
   SpecialImplementors := TList.Create;
 
@@ -7620,16 +7667,16 @@ initialization
   RowWidthFunction.Name := 'RowWidth';
   RowWidthFunction.Prototype := StrGridOrMesh+'RowWidth({Row})';
 
-  LayerHeightFunction.ResultType := rdtDouble;
-  LayerHeightFunction.RFunctionAddr := _LayerHeight;
-  SetLength(LayerHeightFunction.InputDataTypes, 3);
-  LayerHeightFunction.InputDataTypes[0] := rdtInteger;
-  LayerHeightFunction.InputDataTypes[1] := rdtInteger;
-  LayerHeightFunction.InputDataTypes[2] := rdtInteger;
-  LayerHeightFunction.OptionalArguments := 3;
-  LayerHeightFunction.CanConvertToConstant := False;
-  LayerHeightFunction.Name := StrLayerHeight;
-  LayerHeightFunction.Prototype := StrGridOrMesh+''+StrLayerHeight+'({{Col, Row,} Layer})';
+//  LayerHeightFunction.ResultType := rdtDouble;
+//  LayerHeightFunction.RFunctionAddr := _LayerHeight;
+//  SetLength(LayerHeightFunction.InputDataTypes, 3);
+//  LayerHeightFunction.InputDataTypes[0] := rdtInteger;
+//  LayerHeightFunction.InputDataTypes[1] := rdtInteger;
+//  LayerHeightFunction.InputDataTypes[2] := rdtInteger;
+//  LayerHeightFunction.OptionalArguments := 3;
+//  LayerHeightFunction.CanConvertToConstant := False;
+//  LayerHeightFunction.Name := StrLayerHeight;
+//  LayerHeightFunction.Prototype := StrGridOrMesh+''+StrLayerHeight+'({{Col, Row,} Layer})';
 
   BlockAreaTopFunction.ResultType := rdtDouble;
   BlockAreaTopFunction.RFunctionAddr := _BlockAreaTop;
@@ -8296,6 +8343,39 @@ initialization
   ActiveOnLayerSpecialImplementor.Implementor := TActiveOnLayer;
   SpecialImplementors.Add(ActiveOnLayerSpecialImplementor);
 
+
+  LayerHeight := TFunctionClass.Create;
+  LayerHeight.InputDataCount := 3;
+  LayerHeight.OptionalArguments := 3;
+  LayerHeight.RFunctionAddr := _LayerHeight;
+  LayerHeight.Name := StrLayerHeight;
+  LayerHeight.Prototype := StrGridOrMesh+''+StrLayerHeight+'({{Col, Row,} Layer})';;
+  LayerHeight.InputDataTypes[0] := rdtInteger;
+  LayerHeight.InputDataTypes[1] := rdtInteger;
+  LayerHeight.InputDataTypes[2] := rdtInteger;
+  LayerHeight.AllowConversionToConstant := False;
+
+  LayerHeightSpecialImplementor := TSpecialImplementor.Create;
+  LayerHeightSpecialImplementor.FunctionClass := LayerHeight;
+  LayerHeightSpecialImplementor.Implementor := TLayerHeight;
+  SpecialImplementors.Add(LayerHeightSpecialImplementor);
+
+
+
+//  LayerHeight: TFunctionClass;
+//  LayerHeightSpecialImplementor: TSpecialImplementor;
+//
+//  LayerHeightFunction.ResultType := rdtDouble;
+//  LayerHeightFunction.RFunctionAddr := _LayerHeight;
+//  SetLength(LayerHeightFunction.InputDataTypes, 3);
+//  LayerHeightFunction.InputDataTypes[0] := rdtInteger;
+//  LayerHeightFunction.InputDataTypes[1] := rdtInteger;
+//  LayerHeightFunction.InputDataTypes[2] := rdtInteger;
+//  LayerHeightFunction.OptionalArguments := 3;
+//  LayerHeightFunction.CanConvertToConstant := False;
+//  LayerHeightFunction.Name := StrLayerHeight;
+//  LayerHeightFunction.Prototype := StrGridOrMesh+''+StrLayerHeight+'({{Col, Row,} Layer})';
+
   {
   // these functions don't seem to help improve results with XT3D
 
@@ -8536,6 +8616,8 @@ finalization
   ActiveOnLayer.Free;
   ActiveOnLayerSpecialImplementor.Free;
 
+  LayerHeight.Free;
+  LayerHeightSpecialImplementor.Free;
   {
   // these functions don't seem to help improve results with XT3D
   SlopeDirectionRadians.Free;
