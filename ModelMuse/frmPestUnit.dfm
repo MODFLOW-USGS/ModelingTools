@@ -1,15 +1,22 @@
 inherited frmPEST: TfrmPEST
   Caption = 'PEST'
   ClientHeight = 329
-  ClientWidth = 623
-  ExplicitWidth = 639
+  ClientWidth = 710
+  ExplicitWidth = 726
   ExplicitHeight = 368
   PixelsPerInch = 96
   TextHeight = 18
+  object splMain: TSplitter
+    Left = 193
+    Top = 0
+    Width = 5
+    Height = 287
+    ExplicitLeft = 121
+  end
   object tvPEST: TJvPageListTreeView
     Left = 0
     Top = 0
-    Width = 121
+    Width = 193
     Height = 287
     ShowButtons = True
     PageDefault = 0
@@ -18,22 +25,26 @@ inherited frmPEST: TfrmPEST
     Indent = 19
     TabOrder = 0
     Items.Links = {00000000}
+    ExplicitLeft = -1
+    ExplicitTop = -6
   end
   object pgMain: TJvPageList
-    Left = 121
+    Left = 198
     Top = 0
-    Width = 502
+    Width = 512
     Height = 287
-    ActivePage = jvspOutputOptions
+    ActivePage = jvspLqsr
     PropagateEnable = False
     Align = alClient
+    ExplicitLeft = 121
+    ExplicitWidth = 502
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
       Caption = 'jvspBasic'
-      ExplicitHeight = 231
+      ExplicitWidth = 502
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -125,10 +136,10 @@ inherited frmPEST: TfrmPEST
     object jvspControlDataMode: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
       Caption = 'jvspControlDataMode'
-      ExplicitHeight = 231
+      ExplicitWidth = 502
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -161,10 +172,10 @@ inherited frmPEST: TfrmPEST
     object jvspDimensions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
       Caption = 'jvspDimensions'
-      ExplicitHeight = 231
+      ExplicitWidth = 502
       object lblMaxCompDim: TLabel
         Left = 85
         Top = 6
@@ -207,10 +218,10 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
       Caption = 'jvspInversionControls'
-      ExplicitHeight = 231
+      ExplicitWidth = 502
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -347,9 +358,9 @@ inherited frmPEST: TfrmPEST
     object jvspParameterAdjustmentControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
-      ExplicitHeight = 231
+      ExplicitWidth = 502
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -438,10 +449,10 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls2: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
       Caption = 'jvspInversionControls2'
-      ExplicitHeight = 231
+      ExplicitWidth = 502
       object lblSwitchCriterion: TLabel
         Left = 93
         Top = 6
@@ -542,12 +553,10 @@ inherited frmPEST: TfrmPEST
     object jvspIterationControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
       Caption = 'jvspIterationControls'
-      ExplicitLeft = 6
-      ExplicitTop = -6
-      ExplicitHeight = 265
+      ExplicitWidth = 502
       object lblMaxIterations: TLabel
         Left = 93
         Top = 6
@@ -707,18 +716,293 @@ inherited frmPEST: TfrmPEST
     object jvspOutputOptions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 502
+      Width = 512
       Height = 287
       Caption = 'jvspOutputOptions'
+      ExplicitLeft = 1
+      ExplicitWidth = 508
+      object cbWriteCov: TCheckBox
+        Left = 6
+        Top = 3
+        Width = 395
+        Height = 17
+        Caption = 'Write posterior covariance matrix (ICOV)'
+        TabOrder = 0
+      end
+      object cbWriteCorrCoef: TCheckBox
+        Left = 6
+        Top = 24
+        Width = 345
+        Height = 17
+        Caption = 'Write correlation coeficients matrix (ICOR)'
+        TabOrder = 1
+      end
+      object cbWriteEigenvectors: TCheckBox
+        Left = 6
+        Top = 47
+        Width = 329
+        Height = 17
+        Caption = 'Write eigenvectors and eigenvalues (IEIG)'
+        TabOrder = 2
+      end
+      object cbWriteResolution: TCheckBox
+        Left = 6
+        Top = 70
+        Width = 304
+        Height = 17
+        Caption = 'Write resolution data file (IRES)'
+        TabOrder = 3
+      end
+      object cbWriteJacobian: TCheckBox
+        Left = 6
+        Top = 93
+        Width = 329
+        Height = 17
+        Caption = 'Write Jacobian matrix file (JCOSAVE)'
+        TabOrder = 4
+      end
+      object cbWriteJacobianEveryIteration: TCheckBox
+        Left = 6
+        Top = 116
+        Width = 475
+        Height = 17
+        Caption = 'Write a Jacobian matrix file after every iteration (JCOSAVEITN)'
+        TabOrder = 5
+      end
+      object cbWriteVerboseRunRecord: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 403
+        Height = 17
+        Caption = 'Write verbose run record (VERBOSEREC)'
+        TabOrder = 6
+      end
+      object cbWriteIntermResidualForEveryIteration: TCheckBox
+        Left = 6
+        Top = 162
+        Width = 475
+        Height = 39
+        Caption = 
+          'Write a separate interm residuals file for every iteration (REIS' +
+          'AVEITN)'
+        TabOrder = 7
+        WordWrap = True
+      end
+      object cbSaveParamValuesIteration: TCheckBox
+        Left = 6
+        Top = 201
+        Width = 473
+        Height = 17
+        Caption = 'Save a parameter values file after each iteration (PARSAVEITN)'
+        TabOrder = 8
+      end
+      object cbSaveParamValuesModelRun: TCheckBox
+        Left = 6
+        Top = 224
+        Width = 493
+        Height = 17
+        Caption = 'Save a parameter values file after each model run (PARSAVERUN)'
+        TabOrder = 9
+      end
+    end
+    object jvspSingularValueDecomp: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 512
+      Height = 287
+      Caption = 'jvspSingularValueDecomp'
+      ExplicitWidth = 497
+      object lblSvdMode: TLabel
+        Left = 6
+        Top = 8
+        Width = 347
+        Height = 18
+        Caption = 'Singular value decomposition model (SVDMODE)'
+      end
+      object lblMaxSingularValues: TLabel
+        Left = 159
+        Top = 71
+        Width = 321
+        Height = 34
+        Caption = 'Maximum number of singular values before truncation (MAXSING)'
+        WordWrap = True
+      end
+      object lblEigenThreshold: TLabel
+        Left = 159
+        Top = 123
+        Width = 307
+        Height = 36
+        Caption = 'Eigenvalue ratio for singular value truncation (EIGTHRESH)'
+        WordWrap = True
+      end
+      object lblEigenWrite: TLabel
+        Left = 6
+        Top = 162
+        Width = 216
+        Height = 18
+        Caption = 'SVD output option (EIGWRITE)'
+      end
+      object comboSvdMode: TComboBox
+        Left = 6
+        Top = 32
+        Width = 145
+        Height = 26
+        Style = csDropDownList
+        TabOrder = 0
+        OnChange = comboSvdModeChange
+        Items.Strings = (
+          'Deactivate (0)'
+          'Normal (1)'
+          'Damped (2)')
+      end
+      object rdeMaxSingularValues: TRbwDataEntry
+        Left = 6
+        Top = 83
+        Width = 145
+        Height = 22
+        TabOrder = 1
+        Text = '0'
+        DataType = dtInteger
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeEigenThreshold: TRbwDataEntry
+        Left = 6
+        Top = 120
+        Width = 145
+        Height = 22
+        TabOrder = 2
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object comboEigenWrite: TComboBox
+        Left = 6
+        Top = 186
+        Width = 299
+        Height = 26
+        Style = csDropDownList
+        TabOrder = 3
+        Items.Strings = (
+          'singular values (1)'
+          'singular values and eigenvectors (2)')
+      end
+    end
+    object jvspLqsr: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 512
+      Height = 287
+      Caption = 'jvspLqsr'
+      ExplicitLeft = 1
+      object lblMatrixTolerance: TLabel
+        Left = 157
+        Top = 29
+        Width = 316
+        Height = 18
+        Caption = 'Matrix tolerance (LSQR_ATOL)'
+      end
+      object lblRightHandSideTolerance: TLabel
+        Left = 157
+        Top = 57
+        Width = 324
+        Height = 18
+        Caption = 'Right hand side tolerance (LSQR_BTOL)'
+      end
+      object lblConditionNumberLimit: TLabel
+        Left = 157
+        Top = 82
+        Width = 345
+        Height = 18
+        Caption = 'Upper limit on condition number (LSQR_CONLIM)'
+      end
+      object lblMaxLqsrIterations: TLabel
+        Left = 157
+        Top = 106
+        Width = 322
+        Height = 36
+        Caption = 
+          'Maximum number of iterations (LSQR_ITNLIM)'#13#10'(Use zero to set aut' +
+          'omatically)'
+      end
+      object cbUseLqsr: TCheckBox
+        Left = 6
+        Top = 3
+        Width = 299
+        Height = 17
+        Caption = 'Use LQSR (LSQRMODE)'
+        TabOrder = 0
+        OnClick = cbUseLqsrClick
+      end
+      object rdeMatrixTolerance: TRbwDataEntry
+        Left = 6
+        Top = 26
+        Width = 145
+        Height = 22
+        TabOrder = 1
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeRightHandSideTolerance: TRbwDataEntry
+        Left = 6
+        Top = 53
+        Width = 145
+        Height = 22
+        TabOrder = 2
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeConditionNumberLimit: TRbwDataEntry
+        Left = 6
+        Top = 81
+        Width = 145
+        Height = 22
+        TabOrder = 3
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeMaxLqsrIterations: TRbwDataEntry
+        Left = 6
+        Top = 113
+        Width = 145
+        Height = 22
+        TabOrder = 4
+        Text = '0'
+        DataType = dtInteger
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object cbWriteLsqrOutput: TCheckBox
+        Left = 6
+        Top = 148
+        Width = 353
+        Height = 17
+        Caption = 'Write LSQR output (LSQRWRITE)'
+        TabOrder = 5
+      end
     end
   end
   object pnlBottom: TPanel
     Left = 0
     Top = 287
-    Width = 623
+    Width = 710
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitWidth = 623
     object btnHelp: TBitBtn
       Left = 350
       Top = 6

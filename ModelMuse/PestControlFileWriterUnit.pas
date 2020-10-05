@@ -12,6 +12,11 @@ type
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
     procedure WriteControlSection;
+    procedure WriteSensitivityReuse;
+    procedure WriteSingularValueDecomposition;
+    procedure WriteLsqr;
+    procedure WriteAutomaticUserIntervention;
+    procedure WriteSVD_Assist;
     // NPAR
     function NumberOfParameters: Integer;
     // NOBS
@@ -65,16 +70,21 @@ begin
 
 end;
 
+procedure TPestControlFileWriter.WriteAutomaticUserIntervention;
+begin
+// The Automatic User Intervention is not currently supported.
+end;
+
 procedure TPestControlFileWriter.WriteControlSection;
 var
   PestControlData: TPestControlData;
 begin
+  PestControlData := Model.PestProperties.PestControlData;
   // First line 4.2.2.
   WriteSectionHeader('control data');
 
   {$REGION 'second line 4.2.3'}
   // second line 4.2.3
-  PestControlData := Model.PestProperties.PestControlData;
   case PestControlData.PestRestart of
     prNoRestart:
       begin
@@ -416,6 +426,14 @@ begin
   try
     WriteFirstLine;
     WriteControlSection;
+    // The Sensitivity Reuse Section is not currently supported.
+    WriteSensitivityReuse;
+    WriteSingularValueDecomposition;
+    WriteLsqr;
+    // The Automatic User Intervention Section is not currently supported.
+    WriteAutomaticUserIntervention;
+    // Writing the SVD Assist Section is not currently supported.
+    WriteSVD_Assist;
   finally
     CloseFile;
   end;
@@ -427,11 +445,74 @@ begin
   NewLine;
 end;
 
+procedure TPestControlFileWriter.WriteLsqr;
+var
+  LsqrProperties: TLsqrProperties;
+begin
+  LsqrProperties := Model.PestProperties.LsqrProperties;
+  WriteSectionHeader('lsqr');
+
+  WriteInteger(Ord(LsqrProperties.Mode));
+  WriteString(' # LSQRMODE');
+  NewLine;
+
+  WriteFloat(LsqrProperties.MatrixTolerance);
+  WriteFloat(LsqrProperties.RightHandSideTolerance);
+  WriteFloat(LsqrProperties.ConditionNumberLimit);
+  if LsqrProperties.MaxIteration <> 0 then
+  begin
+    WriteInteger(LsqrProperties.MaxIteration);
+  end
+  else
+  begin
+    WriteInteger(NumberOfParameters * 4);
+  end;
+  WriteString(' # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM');
+  NewLine;
+
+  WriteInteger(Ord(LsqrProperties.LsqrWrite));
+  WriteString(' # LSQRWRITE');
+  NewLine;
+  NewLine;
+end;
+
 procedure TPestControlFileWriter.WriteSectionHeader(const SectionID: String);
 begin
   WriteString('* ');
   WriteString(SectionID);
   NewLine;
+end;
+
+procedure TPestControlFileWriter.WriteSensitivityReuse;
+begin
+// The sensitivity reuse section is not currently supported.
+end;
+
+procedure TPestControlFileWriter.WriteSingularValueDecomposition;
+var
+  SvdProperties: TSingularValueDecompositionProperties;
+begin
+  SvdProperties := Model.PestProperties.SvdProperties;
+  WriteSectionHeader('singular value decomposition');
+
+  WriteInteger(Ord(SvdProperties.Mode));
+  WriteString(' # SVDMODE');
+  NewLine;
+
+  WriteInteger(SvdProperties.MaxSingularValues);
+  WriteFloat(SvdProperties.EigenThreshold);
+  WriteString(' # MAXSING, EIGTHRESH');
+  NewLine;
+
+  WriteInteger(Ord(SvdProperties.EigenWrite));
+  WriteString(' # EIGWRITE');
+  NewLine;
+  NewLine;
+end;
+
+procedure TPestControlFileWriter.WriteSVD_Assist;
+begin
+// Writing the SVD Assist section is not currently supported.
 end;
 
 end.

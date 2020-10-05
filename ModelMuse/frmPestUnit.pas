@@ -104,9 +104,42 @@ type
     rdeAbandon: TRbwDataEntry;
     lblAbandon: TLabel;
     jvspOutputOptions: TJvStandardPage;
+    jvspSingularValueDecomp: TJvStandardPage;
+    cbWriteCov: TCheckBox;
+    cbWriteCorrCoef: TCheckBox;
+    cbWriteEigenvectors: TCheckBox;
+    cbWriteResolution: TCheckBox;
+    cbWriteJacobian: TCheckBox;
+    cbWriteJacobianEveryIteration: TCheckBox;
+    cbWriteVerboseRunRecord: TCheckBox;
+    cbWriteIntermResidualForEveryIteration: TCheckBox;
+    cbSaveParamValuesIteration: TCheckBox;
+    cbSaveParamValuesModelRun: TCheckBox;
+    splMain: TSplitter;
+    comboSvdMode: TComboBox;
+    lblSvdMode: TLabel;
+    rdeMaxSingularValues: TRbwDataEntry;
+    lblMaxSingularValues: TLabel;
+    rdeEigenThreshold: TRbwDataEntry;
+    lblEigenThreshold: TLabel;
+    comboEigenWrite: TComboBox;
+    lblEigenWrite: TLabel;
+    jvspLqsr: TJvStandardPage;
+    cbUseLqsr: TCheckBox;
+    rdeMatrixTolerance: TRbwDataEntry;
+    lblMatrixTolerance: TLabel;
+    rdeRightHandSideTolerance: TRbwDataEntry;
+    lblRightHandSideTolerance: TLabel;
+    rdeConditionNumberLimit: TRbwDataEntry;
+    lblConditionNumberLimit: TLabel;
+    rdeMaxLqsrIterations: TRbwDataEntry;
+    lblMaxLqsrIterations: TLabel;
+    cbWriteLsqrOutput: TCheckBox;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
+    procedure cbUseLqsrClick(Sender: TObject);
+    procedure comboSvdModeChange(Sender: TObject);
   private
     procedure GetData;
     procedure SetData;
@@ -156,6 +189,24 @@ begin
 
 end;
 
+procedure TfrmPEST.cbUseLqsrClick(Sender: TObject);
+begin
+  inherited;
+  if cbUseLqsr.Checked then
+  begin
+    comboSvdMode.ItemIndex := 0;
+  end;
+end;
+
+procedure TfrmPEST.comboSvdModeChange(Sender: TObject);
+begin
+  inherited;
+  if comboSvdMode.ItemIndex > 0 then
+  begin
+    cbUseLqsr.Checked := False;
+  end;
+end;
+
 procedure TfrmPEST.FormCreate(Sender: TObject);
 var
   NewNode: TJvPageIndexNode;
@@ -198,6 +249,15 @@ begin
     ControlDataNode, 'Output') as TJvPageIndexNode;
   NewNode.PageIndex := jvspOutputOptions.PageIndex;
 
+  NewNode := tvPEST.Items.AddChild(
+    nil, 'Singular Value Decomposition') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspSingularValueDecomp.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    nil, 'LQSR') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspLqsr.PageIndex;
+
+
   pgMain.ActivePageIndex := 0;
 
   GetData
@@ -207,6 +267,8 @@ procedure TfrmPEST.GetData;
 var
   PestProperties: TPestProperties;
   PestControlData: TPestControlData;
+  SvdProperties: TSingularValueDecompositionProperties;
+  LsqrProperties: TLsqrProperties;
 begin
   PestProperties := frmGoPhast.PhastModel.PestProperties;
 
@@ -257,6 +319,31 @@ begin
   rdePhiStoppingThreshold.RealValue := PestControlData.ObjectiveCriterion;
   cbLastRun.Checked := Boolean(PestControlData.MakeFinalRun);
   rdeAbandon.RealValue := PestControlData.PhiAbandon;
+
+  cbWriteCov.Checked := Boolean(PestControlData.WriteCovariance);
+  cbWriteCorrCoef.Checked := Boolean(PestControlData.WriteCorrelations);
+  cbWriteEigenvectors.Checked := Boolean(PestControlData.WriteEigenVectors);
+  cbWriteResolution.Checked := Boolean(PestControlData.SaveResolution);
+  cbWriteJacobian.Checked := Boolean(PestControlData.SaveJacobian);
+  cbWriteJacobianEveryIteration.Checked := Boolean(PestControlData.SaveJacobianIteration);
+  cbWriteVerboseRunRecord.Checked := Boolean(PestControlData.VerboseRecord);
+  cbWriteIntermResidualForEveryIteration.Checked := Boolean(PestControlData.SaveInterimResiduals);
+  cbSaveParamValuesIteration.Checked := Boolean(PestControlData.SaveParamIteration);
+  cbSaveParamValuesModelRun.Checked := Boolean(PestControlData.SaveParamRun);
+
+  SvdProperties := PestProperties.SvdProperties;
+  comboSvdMode.ItemIndex := Ord(SvdProperties.Mode);
+  rdeMaxSingularValues.IntegerValue := SvdProperties.MaxSingularValues;
+  rdeEigenThreshold.RealValue := SvdProperties.EigenThreshold;
+  comboEigenWrite.ItemIndex := Ord(SvdProperties.EigenWrite);
+
+  LsqrProperties := PestProperties.LsqrProperties;
+  cbUseLqsr.Checked := Boolean(LsqrProperties.Mode);
+  rdeMatrixTolerance.RealValue := LsqrProperties.MatrixTolerance;
+  rdeRightHandSideTolerance.RealValue := LsqrProperties.RightHandSideTolerance;
+  rdeConditionNumberLimit.RealValue := LsqrProperties.ConditionNumberLimit;
+  rdeMaxLqsrIterations.IntegerValue := LsqrProperties.MaxIteration;
+  cbWriteLsqrOutput.Checked := Boolean(LsqrProperties.LsqrWrite);
 end;
 
 procedure TfrmPEST.SetData;
@@ -264,6 +351,8 @@ var
   PestProperties: TPestProperties;
   InvalidateModelEvent: TNotifyEvent;
   PestControlData: TPestControlData;
+  SvdProperties: TSingularValueDecompositionProperties;
+  LsqrProperties: TLsqrProperties;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(InvalidateModelEvent);
@@ -390,6 +479,54 @@ begin
     begin
       PestControlData.PhiAbandon := rdeAbandon.RealValue;
     end;
+
+    PestControlData.WriteCovariance := TWriteMatrix(cbWriteCov.Checked);
+    PestControlData.WriteCorrelations := TWriteMatrix(cbWriteCorrCoef.Checked);
+    PestControlData.WriteEigenVectors := TWriteMatrix(cbWriteEigenvectors.Checked);
+    PestControlData.SaveResolution := TSaveResolution(cbWriteResolution.Checked);
+    PestControlData.SaveJacobian := TSaveJacobian(cbWriteJacobian.Checked);
+    PestControlData.SaveJacobianIteration :=
+      TSaveJacobianIteration(cbWriteJacobianEveryIteration.Checked);
+    PestControlData.VerboseRecord := TVerboseRecord(cbWriteVerboseRunRecord.Checked);
+    PestControlData.SaveInterimResiduals :=
+      TSaveInterimResiduals(cbWriteIntermResidualForEveryIteration.Checked);
+    PestControlData.SaveParamIteration :=
+      TSaveParamIteration(cbSaveParamValuesIteration.Checked);
+    PestControlData.SaveParamRun :=
+      TSaveParamRun(cbSaveParamValuesModelRun.Checked);
+
+
+    SvdProperties := PestProperties.SvdProperties;
+    SvdProperties.Mode := TSvdMode(comboSvdMode.ItemIndex);
+    if rdeMaxSingularValues.Text <> '' then
+    begin
+      SvdProperties.MaxSingularValues := rdeMaxSingularValues.IntegerValue;
+    end;
+    if rdeEigenThreshold.Text <> '' then
+    begin
+      SvdProperties.EigenThreshold := rdeEigenThreshold.RealValue;
+    end;
+    SvdProperties.EigenWrite := TEigenWrite(comboEigenWrite.ItemIndex);
+
+    LsqrProperties := PestProperties.LsqrProperties;
+    LsqrProperties.Mode := TLsqrMode(cbUseLqsr.Checked);
+    if rdeMatrixTolerance.Text <> '' then
+    begin
+      LsqrProperties.MatrixTolerance := rdeMatrixTolerance.RealValue;
+    end;
+    if rdeRightHandSideTolerance.Text <> '' then
+    begin
+      LsqrProperties.RightHandSideTolerance := rdeRightHandSideTolerance.RealValue;
+    end;
+    if rdeConditionNumberLimit.Text <> '' then
+    begin
+      LsqrProperties.ConditionNumberLimit := rdeConditionNumberLimit.RealValue;
+    end;
+    if rdeMaxLqsrIterations.Text <> '' then
+    begin
+      LsqrProperties.MaxIteration := rdeMaxLqsrIterations.IntegerValue;
+    end;
+    LsqrProperties.LsqrWrite := TLsqrWrite(cbWriteLsqrOutput.Checked);
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties));
   finally

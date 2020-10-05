@@ -325,6 +325,88 @@ type
 }
   end;
 
+  TSvdMode = (smNone, smNormal, smDamped);
+  TEigenWrite = (ewReduced, ewFull);
+
+  TSingularValueDecompositionProperties = class(TGoPhastPersistent)
+  private
+    FMode: TSvdMode;
+    FStoredEigenThreshold: TRealStorage;
+    FEigenWrite: TEigenWrite;
+    FMaxSingularValues: Integer;
+    function GetEigenThreshold: Double;
+    procedure SetEigenThreshold(const Value: Double);
+    procedure SetEigenWrite(const Value: TEigenWrite);
+    procedure SetMaxSingularValues(const Value: Integer);
+    procedure SetMode(const Value: TSvdMode);
+    procedure SetStoredEigenThreshold(const Value: TRealStorage);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    procedure Assign(Source: TPersistent); override;
+    Destructor Destroy; override;
+    procedure InitializeVariables;
+    property EigenThreshold: Double read GetEigenThreshold
+      write SetEigenThreshold;
+  published
+    // SVDMODE
+    property Mode: TSvdMode read FMode write SetMode;
+    // MAXSING
+    property MaxSingularValues: Integer read FMaxSingularValues write SetMaxSingularValues;
+    // EIGTHRESH
+    property StoredEigenThreshold: TRealStorage read FStoredEigenThreshold write SetStoredEigenThreshold;
+    // EIGWRITE
+    property EigenWrite: TEigenWrite read FEigenWrite write SetEigenWrite;
+  end;
+
+  TLsqrMode = (lmDeactivate, lmActivate);
+  TLsqrWrite = (lwDontWrite, lwWrite);
+
+  TLsqrProperties = class(TGoPhastPersistent)
+  private
+    FMode: TLsqrMode;
+    FStoredRightHandSideTolerance: TRealStorage;
+    FLsqrWrite: TLsqrWrite;
+    FStoredConditionNumberLimit: TRealStorage;
+    FStoredMatrixTolerance: TRealStorage;
+    FMaxIteration: Integer;
+    function GetConditionNumberLimit: double;
+    function GetMatrixTolerance: double;
+    function GetRightHandSideTolerance: double;
+    procedure SetConditionNumberLimit(const Value: double);
+    procedure SetLsqrWrite(const Value: TLsqrWrite);
+    procedure SetMatrixTolerance(const Value: double);
+    procedure SetMaxIteration(const Value: Integer);
+    procedure SetMode(const Value: TLsqrMode);
+    procedure SetRightHandSideTolerance(const Value: double);
+    procedure SetStoredConditionNumberLimit(const Value: TRealStorage);
+    procedure SetStoredMatrixTolerance(const Value: TRealStorage);
+    procedure SetStoredRightHandSideTolerance(const Value: TRealStorage);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    procedure Assign(Source: TPersistent); override;
+    Destructor Destroy; override;
+    procedure InitializeVariables;
+    property MatrixTolerance: double read GetMatrixTolerance
+      write SetMatrixTolerance;
+    property RightHandSideTolerance: double read GetRightHandSideTolerance
+      write SetRightHandSideTolerance;
+    property ConditionNumberLimit: double read GetConditionNumberLimit
+      write SetConditionNumberLimit;
+  published
+    // LSQRMODE
+    property Mode: TLsqrMode read FMode write SetMode;
+    // LSQR_ATOL
+    property StoredMatrixTolerance: TRealStorage read FStoredMatrixTolerance write SetStoredMatrixTolerance;
+    // LSQR_BTOL
+    property StoredRightHandSideTolerance: TRealStorage read FStoredRightHandSideTolerance write SetStoredRightHandSideTolerance;
+    // LSQR_CONLIM
+    property StoredConditionNumberLimit: TRealStorage read FStoredConditionNumberLimit write SetStoredConditionNumberLimit;
+    // LSQR_ITNLIM
+    // if set as zero, use 4 times the number of adjustable parameters.
+    property MaxIteration: Integer read FMaxIteration write SetMaxIteration;
+    // LSQRWRITE
+    property LsqrWrite: TLsqrWrite read FLsqrWrite write SetLsqrWrite;
+  end;
 
   TPestProperties = class(TGoPhastPersistent)
   private
@@ -338,6 +420,8 @@ type
     FPilotPointColumnCount: Integer;
     FLeftX: double;
     FTopY: double;
+    FSvdProperties: TSingularValueDecompositionProperties;
+    FLsqrProperties: TLsqrProperties;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -348,6 +432,9 @@ type
     procedure SetPestControlData(const Value: TPestControlData);
     function GetPilotPoint(Index: Integer): TPoint2D;
     function GetPilotPointCount: Integer;
+    procedure SetSvdProperties(
+      const Value: TSingularValueDecompositionProperties);
+    procedure SetLsqrProperties(const Value: TLsqrProperties);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     procedure Assign(Source: TPersistent); override;
@@ -371,6 +458,9 @@ type
       read FStoredPilotPointSpacing write SetStoredPilotPointSpacing;
     property PestControlData: TPestControlData read FPestControlData
       write SetPestControlData;
+    property SvdProperties: TSingularValueDecompositionProperties
+      read FSvdProperties write SetSvdProperties;
+    property LsqrProperties: TLsqrProperties read FLsqrProperties write SetLsqrProperties;
   end;
 
 implementation
@@ -394,6 +484,8 @@ begin
     ExtendedTemplateCharacter := PestSource.ExtendedTemplateCharacter;
 
     PestControlData := PestSource.PestControlData;
+    SvdProperties := PestSource.SvdProperties;
+    LsqrProperties := PestSource.LsqrProperties;
   end
   else
   begin
@@ -406,12 +498,17 @@ begin
   inherited;
   FStoredPilotPointSpacing := TRealStorage.Create;
   FPestControlData := TPestControlData.Create(InvalidateModelEvent);
+  FSvdProperties :=
+    TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
+  FLsqrProperties := TLsqrProperties.Create(InvalidateModelEvent);
   InitializeVariables;
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
 end;
 
 destructor TPestProperties.Destroy;
 begin
+  FLsqrProperties.Free;
+  FSvdProperties.Free;
   FPestControlData.Free;
   FStoredPilotPointSpacing.Free;
   inherited;
@@ -538,12 +635,19 @@ begin
   FTemplateCharacter := '@';
   FExtendedTemplateCharacter := '%';
 
-  FPestControlData.InitializeVariables
+  FPestControlData.InitializeVariables;
+  FSvdProperties.InitializeVariables;
+  FLsqrProperties.InitializeVariables;
 end;
 
 procedure TPestProperties.SetExtendedTemplateCharacter(const Value: Char);
 begin
   SetCharacterProperty(FExtendedTemplateCharacter, Value);
+end;
+
+procedure TPestProperties.SetLsqrProperties(const Value: TLsqrProperties);
+begin
+  FLsqrProperties.Assign(Value);
 end;
 
 procedure TPestProperties.SetPestControlData(const Value: TPestControlData);
@@ -569,6 +673,12 @@ end;
 procedure TPestProperties.SetStoredPilotPointSpacing(const Value: TRealStorage);
 begin
   FStoredPilotPointSpacing.Assign(Value);
+end;
+
+procedure TPestProperties.SetSvdProperties(
+  const Value: TSingularValueDecompositionProperties);
+begin
+  FSvdProperties.Assign(Value);
 end;
 
 procedure TPestProperties.SetTemplateCharacter(const Value: Char);
@@ -1175,6 +1285,228 @@ end;
 procedure TPestControlData.SetZeroLimit(const Value: double);
 begin
   StoredZeroLimit.Value := Value;
+end;
+
+{ TSingularValueDecompositionProperties }
+
+procedure TSingularValueDecompositionProperties.Assign(Source: TPersistent);
+var
+  SvdSource: TSingularValueDecompositionProperties;
+begin
+  if Source is TSingularValueDecompositionProperties then
+  begin
+    SvdSource := TSingularValueDecompositionProperties(Source);
+    EigenThreshold := SvdSource.EigenThreshold;
+    Mode := SvdSource.Mode;
+    MaxSingularValues := SvdSource.MaxSingularValues;
+    EigenWrite := SvdSource.EigenWrite;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TSingularValueDecompositionProperties.Create(
+  InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited;
+  FStoredEigenThreshold := TRealStorage.Create;
+  FStoredEigenThreshold.OnChange := InvalidateModelEvent;
+  InitializeVariables;
+end;
+
+destructor TSingularValueDecompositionProperties.Destroy;
+begin
+  FStoredEigenThreshold.Free;
+  inherited;
+end;
+
+function TSingularValueDecompositionProperties.GetEigenThreshold: Double;
+begin
+  result := StoredEigenThreshold.Value;
+end;
+
+procedure TSingularValueDecompositionProperties.InitializeVariables;
+begin
+  FMode := smNormal;
+  FMaxSingularValues := 1000;
+  EigenThreshold := 5E-7;
+  FEigenWrite := ewReduced;
+end;
+
+procedure TSingularValueDecompositionProperties.SetEigenThreshold(
+  const Value: Double);
+begin
+  StoredEigenThreshold.Value := Value;
+end;
+
+procedure TSingularValueDecompositionProperties.SetEigenWrite(
+  const Value: TEigenWrite);
+begin
+  if FEigenWrite <> Value then
+  begin
+    FEigenWrite := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TSingularValueDecompositionProperties.SetMaxSingularValues(
+  const Value: Integer);
+begin
+  SetIntegerProperty(FMaxSingularValues, Value);
+end;
+
+procedure TSingularValueDecompositionProperties.SetMode(const Value: TSvdMode);
+begin
+  if FMode <> Value then
+  begin
+    FMode := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TSingularValueDecompositionProperties.SetStoredEigenThreshold(
+  const Value: TRealStorage);
+begin
+  FStoredEigenThreshold.Assign(Value);
+end;
+
+{ TLsqrProperties }
+
+procedure TLsqrProperties.Assign(Source: TPersistent);
+var
+  LsqrSource: TLsqrProperties;
+begin
+  if Source is TLsqrProperties then
+  begin
+    LsqrSource := TLsqrProperties(Source);
+    Mode := LsqrSource.Mode;
+    MatrixTolerance := LsqrSource.MatrixTolerance;
+    RightHandSideTolerance := LsqrSource.RightHandSideTolerance;
+    ConditionNumberLimit := LsqrSource.ConditionNumberLimit;
+    MaxIteration := LsqrSource.MaxIteration;
+    LsqrWrite := LsqrSource.LsqrWrite;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TLsqrProperties.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited;
+  FStoredMatrixTolerance := TRealStorage.Create;
+  FStoredRightHandSideTolerance := TRealStorage.Create;
+  FStoredConditionNumberLimit := TRealStorage.Create;
+  FStoredMatrixTolerance.OnChange := InvalidateModelEvent;
+  FStoredRightHandSideTolerance.OnChange := InvalidateModelEvent;
+  FStoredConditionNumberLimit.OnChange := InvalidateModelEvent;
+  InitializeVariables;
+end;
+
+destructor TLsqrProperties.Destroy;
+begin
+  FStoredConditionNumberLimit.Free;
+  FStoredRightHandSideTolerance.Free;
+  FStoredMatrixTolerance.Free;
+  inherited;
+end;
+
+function TLsqrProperties.GetConditionNumberLimit: double;
+begin
+  result := StoredConditionNumberLimit.Value;
+end;
+
+function TLsqrProperties.GetMatrixTolerance: double;
+begin
+  result := StoredMatrixTolerance.Value;
+end;
+
+function TLsqrProperties.GetRightHandSideTolerance: double;
+begin
+  result := StoredRightHandSideTolerance.Value;
+end;
+
+procedure TLsqrProperties.InitializeVariables;
+begin
+  FMode := lmDeactivate;
+  MatrixTolerance := 1E-4;
+  RightHandSideTolerance := 1E-4;
+  ConditionNumberLimit := 1000;
+  MaxIteration := 0;
+  LsqrWrite := lwWrite;
+{
+    // LSQRMODE
+    property Mode: TLsqrMode read FMode write SetMode;
+    // LSQR_ATOL
+    property StoredMatrixTolerance: TRealStorage read FStoredMatrixTolerance write SetStoredMatrixTolerance;
+    // LSQR_BTOL
+    property StoredRightHandSideTolerance: TRealStorage read FStoredRightHandSideTolerance write SetStoredRightHandSideTolerance;
+    // LSQR_CONLIM
+    property StoredConditionNumberLimit: TRealStorage read FStoredConditionNumberLimit write SetStoredConditionNumberLimit;
+    // LSQR_ITNLIM
+    property MaxIteration: Integer read FMaxIteration write SetMaxIteration;
+    // LSQRWRITE
+    property LsqrWrite: TLsqrWrite read FLsqrWrite write SetLsqrWrite;
+}
+end;
+
+procedure TLsqrProperties.SetConditionNumberLimit(const Value: double);
+begin
+  StoredConditionNumberLimit.Value := Value;
+end;
+
+procedure TLsqrProperties.SetLsqrWrite(const Value: TLsqrWrite);
+begin
+  if FLsqrWrite <> Value then
+  begin
+    FLsqrWrite := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TLsqrProperties.SetMatrixTolerance(const Value: double);
+begin
+  StoredMatrixTolerance.Value := Value;
+end;
+
+procedure TLsqrProperties.SetMaxIteration(const Value: Integer);
+begin
+  SetIntegerProperty(FMaxIteration, Value);
+
+end;
+
+procedure TLsqrProperties.SetMode(const Value: TLsqrMode);
+begin
+  if FMode <> Value then
+  begin
+    FMode := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TLsqrProperties.SetRightHandSideTolerance(const Value: double);
+begin
+  StoredRightHandSideTolerance.Value := Value;
+end;
+
+procedure TLsqrProperties.SetStoredConditionNumberLimit(
+  const Value: TRealStorage);
+begin
+  FStoredConditionNumberLimit.Assign(Value);
+end;
+
+procedure TLsqrProperties.SetStoredMatrixTolerance(const Value: TRealStorage);
+begin
+  FStoredMatrixTolerance.Assign(Value);
+end;
+
+procedure TLsqrProperties.SetStoredRightHandSideTolerance(
+  const Value: TRealStorage);
+begin
+  FStoredRightHandSideTolerance.Assign(Value);
 end;
 
 end.

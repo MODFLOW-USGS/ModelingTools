@@ -4485,6 +4485,8 @@ begin
   EnableModelMate;
   EnableCTS;
 
+  acPEST.Enabled := ModelSelection in (ModflowSelection + SutraSelection);
+
 end;
 
 procedure TfrmGoPhast.miMF_HydrogeologicUnitsClick(Sender: TObject);
@@ -10086,11 +10088,8 @@ begin
 end;
 
 function TfrmGoPhast.FootprintUpToDate: boolean;
-var
-//  FootprintDate: TDateTime;
 begin
   result := True;
-//  FootprintDate := EncodeDate(2018,3,27);
   if FileExists(PhastModel.ProgramLocations.FootprintLocation) then
   begin
     result :=

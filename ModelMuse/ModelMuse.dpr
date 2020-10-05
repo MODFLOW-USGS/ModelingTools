@@ -712,7 +712,8 @@ uses
   PestObsExtractorInputWriterUnit in 'PestObsExtractorInputWriterUnit.pas',
   PestPropertiesUnit in 'PestPropertiesUnit.pas',
   frmPestUnit in 'frmPestUnit.pas' {frmPEST},
-  PestControlFileWriterUnit in 'PestControlFileWriterUnit.pas';
+  PestControlFileWriterUnit in 'PestControlFileWriterUnit.pas',
+  PestParamGroupsUnit in 'PestParamGroupsUnit.pas';
 
 {$R *.res}
 
