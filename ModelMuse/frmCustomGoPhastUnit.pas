@@ -122,6 +122,7 @@ type
     procedure CustomizeControls;
     procedure FillComboBoxWithModels(ACombo: TComboBox);
     function CanDisplayDataSet(DataArray: TDataArray): boolean;
+    procedure Show;
     { Public declarations }
   end;
 
@@ -925,6 +926,15 @@ begin
 //    Icon := Application.Icon;
     AComponent := self;
     UpdateSubComponents(AComponent);
+  end;
+end;
+
+procedure TfrmCustomGoPhast.Show;
+begin
+  inherited;
+  if WindowState = wsMinimized then
+  begin
+    WindowState := wsNormal
   end;
 end;
 

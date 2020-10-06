@@ -7,12 +7,17 @@ uses System.UITypes, System.Types,
   Dialogs, frmCustomGoPhastUnit, Grids, StdCtrls, RbwDataGrid4, Math,
   ModflowParameterUnit, OrderedCollectionUnit,
   ModflowTransientListParameterUnit, HufDefinition, Buttons, Mask, JvExMask,
-  JvSpin, ExtCtrls, RequiredDataSetsUndoUnit, UndoItemsScreenObjects, 
-  ModflowPackageSelectionUnit;
+  JvSpin, ExtCtrls, RequiredDataSetsUndoUnit, UndoItemsScreenObjects,
+  ModflowPackageSelectionUnit, frameGridUnit, JvExExtCtrls, JvNetscapeSplitter;
 
 type
   TParamColumn = (pcName, pcPackage, pcType, pcValue, pcMult, pcZone,
-    pcPilotPoints);
+    pcPilotPoints, pcPestTransform, pcChangeLimitation, pcLowerBound,
+    pcUpperBound, pcParamGroup, pcScaled, pcOffset, pcTiedParameter);
+
+  TParamGroupColumn = (pgcName, pgcIncType, pgcIncrement, pgcMinIncrement,
+    pgcForceCentral, pgcParamIncrementMultiplier, pgcDM3, pgcDM5,
+    pgcUseSplitSlope, pgcSplitThreshold, pgcSplitDifference, pgcSplitAction);
 
   TfrmManageParameters = class(TfrmCustomGoPhast)
     rdgParameters: TRbwDataGrid4;
@@ -25,6 +30,11 @@ type
     btnHelp: TBitBtn;
     btnImportPval: TButton;
     dlgOpenPval: TOpenDialog;
+    grpParameters: TGroupBox;
+    pnlParameters: TPanel;
+    grpParameterGroups: TGroupBox;
+    frameParameterGroups: TframeGrid;
+    spltrParameters: TJvNetscapeSplitter;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure rdgParametersSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -40,6 +50,10 @@ type
     procedure rdgParametersSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure btnImportPvalClick(Sender: TObject);
+    procedure frameParameterGroupsGridSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
+    procedure frameParameterGroupsGridBeforeDrawCell(Sender: TObject; ACol,
+      ARow: Integer);
   private
     FSteadyParameters: TModflowSteadyParameters;
     FHufParameters: THufModflowParameters;
@@ -56,6 +70,7 @@ type
       var AParam: TModflowParameter; ARow: Integer);
     procedure CreateOrUpdateParameter(ARow: Integer);
     procedure DeleteAParam(ARow: Integer);
+    procedure UpdateListOfUntiedParamNames;
     { Private declarations }
   public
     { Public declarations }
@@ -81,7 +96,7 @@ implementation
 uses
   Contnrs, frmGoPhastUnit, PhastModelUnit, ModflowDiscretizationWriterUnit,
   ScreenObjectUnit, frmShowHideObjectsUnit, ModflowPackagesUnit, ReadPvalUnit,
-  IntListUnit, GoPhastTypes;
+  IntListUnit, GoPhastTypes, PestPropertiesUnit, PestParamGroupsUnit;
 
 resourcestring
   StrErrorReadingPvalF = 'Error reading Pval file. Check that it is a valid ' +
@@ -446,9 +461,41 @@ begin
     rdgParameters.Cells[Ord(pcMult), 0] := StrMultiplierArray;
     rdgParameters.Cells[Ord(pcZone), 0] := StrZoneArray;
     rdgParameters.Cells[Ord(pcPilotPoints), 0] := StrPilotPoints;
+
+    rdgParameters.Cells[Ord(pcPestTransform), 0] := 'Transform (PARTRANS)';
+    rdgParameters.Cells[Ord(pcChangeLimitation), 0] := 'Change Limitation (PARCHGLIM)';
+    rdgParameters.Cells[Ord(pcLowerBound), 0] := 'Lower Bound (PARLBND)';
+    rdgParameters.Cells[Ord(pcUpperBound), 0] := 'Upper Bound (PARUBND)';
+    rdgParameters.Cells[Ord(pcParamGroup), 0] := 'Parameter Group (PARGP)';
+    rdgParameters.Cells[Ord(pcScaled), 0] := 'SCALE';
+    rdgParameters.Cells[Ord(pcOffset), 0] := 'OFFSET';
+    rdgParameters.Cells[Ord(pcTiedParameter), 0] := 'Tied Parameter (PARTIED)';
   finally
     rdgParameters.EndUpdate;
   end;
+
+  frameParameterGroups.Grid.BeginUpdate;
+  try
+    frameParameterGroups.Grid.Cells[Ord(pgcName), 0] := 'Group Name (PARGPNME)';
+    frameParameterGroups.Grid.Cells[Ord(pgcIncType), 0] := 'Increment Type (INCTYP)';
+    frameParameterGroups.Grid.Cells[Ord(pgcIncrement), 0] := 'Parameter Increment (DERINC)';
+    frameParameterGroups.Grid.Cells[Ord(pgcMinIncrement), 0] := 'Min Parameter Increment (DERINCLB)';
+    frameParameterGroups.Grid.Cells[Ord(pgcForceCentral), 0] := 'Derivative Method (FORCEN)';
+    frameParameterGroups.Grid.Cells[Ord(pgcParamIncrementMultiplier), 0] := 'Derivative Increment Multiplier (DERINCMUL)';
+    frameParameterGroups.Grid.Cells[Ord(pgcDM3), 0] := '3-Point Derivative Method (DERMTHD)';
+    frameParameterGroups.Grid.Cells[Ord(pgcDM5), 0] := '5-Point Derivative Method (DERMTHD)';
+    frameParameterGroups.Grid.Cells[Ord(pgcUseSplitSlope), 0] := 'Use Split Slope Analysis (SPLITTHRESH,)';
+    frameParameterGroups.Grid.Cells[Ord(pgcSplitThreshold), 0] := 'Split Slope Threshold (SPLITTHRESH)';
+    frameParameterGroups.Grid.Cells[Ord(pgcSplitDifference), 0] := 'Maximum Relative Slope Difference (SPLITRELDIFF)';
+    frameParameterGroups.Grid.Cells[Ord(pgcSplitAction), 0] := 'SPLITACTION';
+  finally
+    frameParameterGroups.Grid.EndUpdate;
+  end;
+  {
+  TParamGroupColumn = (pgcName, pgcIncType, pgcIncrement, pgcMinIncrement,
+    pgcForceCentral, pgcParamIncrementMultiplier, pgcDM3, pgcDM5,
+    pgcUseSplitSlope, pgcSplitThreshold, pgcSplitDifference, pgcSplitAction);
+  }
 
   PackageList := TStringList.Create;
   try
@@ -500,6 +547,62 @@ begin
   FParamList.Free;
 end;
 
+procedure TfrmManageParameters.frameParameterGroupsGridBeforeDrawCell(
+  Sender: TObject; ACol, ARow: Integer);
+var
+  CanSelect: Boolean;
+begin
+  inherited;
+  CanSelect := True;
+  frameParameterGroupsGridSelectCell(frameParameterGroups.Grid,
+    ACol, ARow, CanSelect);
+  if not CanSelect then
+  begin
+    frameParameterGroups.Grid.Canvas.Brush.Color := clbtnFace;
+  end;
+end;
+
+procedure TfrmManageParameters.frameParameterGroupsGridSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+var
+  Col: TParamGroupColumn;
+begin
+  inherited;
+  if (ACol >= 0) and (ARow >= frameParameterGroups.Grid.FixedRows) then
+  begin
+    Col := TParamGroupColumn(ACol);
+    case Col of
+      pgcName: ;
+
+      pgcIncType, pgcIncrement, pgcMinIncrement,
+        pgcForceCentral, pgcParamIncrementMultiplier,
+        pgcUseSplitSlope:
+        begin
+          CanSelect := (frameParameterGroups.Grid.Cells[Ord(pgcName), ARow] <> '');
+        end;
+      pgcDM3:
+        begin
+          CanSelect := (frameParameterGroups.Grid.Cells[Ord(pgcName), ARow] <> '')
+            and (frameParameterGroups.Grid.ItemIndex[Ord(pgcForceCentral), ARow]
+            in [Ord(fcAlways3), Ord(fcSwitch)])
+        end;
+      pgcDM5:
+        begin
+          CanSelect := (frameParameterGroups.Grid.Cells[Ord(pgcName), ARow] <> '')
+            and (frameParameterGroups.Grid.ItemIndex[Ord(pgcForceCentral), ARow]
+            in [Ord(fcAlways5), Ord(fcSwitch5)])
+        end;
+      pgcSplitThreshold, pgcSplitDifference, pgcSplitAction:
+        begin
+          CanSelect := (frameParameterGroups.Grid.Cells[Ord(pgcName), ARow] <> '')
+            and frameParameterGroups.Grid.Checked[Ord(pgcUseSplitSlope), ARow];
+        end;
+      else
+        Assert(False);
+    end;
+  end;
+end;
+
 procedure TfrmManageParameters.GetData;
 var
   Index: Integer;
@@ -508,6 +611,14 @@ var
 begin
   FParamList := TList.Create;
   PhastModel := frmGoPhast.PhastModel;
+
+  if not PhastModel.PestUsed then
+  begin
+    rdgParameters.ColCount := Succ(Ord(pcZone));
+    grpParameterGroups.Visible := False;
+    spltrParameters.Visible := False;
+  end;
+
   FSteadyParameters.Assign(PhastModel.ModflowSteadyParameters);
   FHufParameters.Assign(PhastModel.HufParameters);
   FTransientListParameters.Assign(PhastModel.ModflowTransientParameters);
@@ -585,7 +696,9 @@ end;
 procedure TfrmManageParameters.CreateParameter(ParamIndex: TParameterType; ARow: Integer);
 var
   AParam: TModflowParameter;
+  PhastModel: TPhastModel;
 begin
+  PhastModel := frmGoPhast.PhastModel;
   AParam := nil;
   case ParamRecords[ParamIndex].PClass of
     pctUnknown:
@@ -597,7 +710,10 @@ begin
         AParam := FSteadyParameters.Add as TModflowParameter;
         rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := True;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := True;
-        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
+        if PhastModel.PestUsed then
+        begin
+          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
+        end;
         rdgParameters.SpecialFormat[Ord(pcMult), ARow] := rcf4Boolean;
         rdgParameters.SpecialFormat[Ord(pcZone), ARow] := rcf4Boolean;
       end;
@@ -606,22 +722,31 @@ begin
         AParam := FTransientListParameters.Add as TModflowParameter;
         rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := False;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := False;
-        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
+        if PhastModel.PestUsed then
+        begin
+          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
+        end;
       end;
     pctHUF:
       begin
         AParam := FHufParameters.Add as TModflowParameter;
         rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := False;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := False;
-        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
+        if PhastModel.PestUsed then
+        begin
+          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := False;
+        end;
       end;
     pctPEST:
       begin
         AParam := FSteadyParameters.Add as TModflowParameter;
         rdgParameters.UseSpecialFormat[Ord(pcMult), ARow] := False;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ARow] := False;
-        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := True;
-        rdgParameters.SpecialFormat[Ord(pcPilotPoints), ARow] := rcf4Boolean;
+        if PhastModel.PestUsed then
+        begin
+          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ARow] := True;
+          rdgParameters.SpecialFormat[Ord(pcPilotPoints), ARow] := rcf4Boolean;
+        end;
       end
   else
     Assert(False);
@@ -758,12 +883,43 @@ begin
 
 end;
 
+procedure TfrmManageParameters.UpdateListOfUntiedParamNames;
+var
+  RowIndex: Integer;
+  AParam: TModflowParameter;
+  APickList: TStringList;
+begin
+  if not frmGoPhast.PhastModel.PestUsed then
+  begin
+    Exit
+  end;
+  APickList := TStringList.Create;
+  try
+    for RowIndex := 1 to rdgParameters.RowCount - 1 do
+    begin
+      if rdgParameters.Objects[Ord(pcName), RowIndex] <> nil then
+      begin
+        AParam := rdgParameters.Objects[Ord(pcName), RowIndex] as TModflowParameter;
+        if (AParam.ParameterName <> '') and (AParam.Transform <> ptTied) then
+        begin
+          APickList.AddObject(AParam.ParameterName, AParam);
+        end;
+      end;
+    end;
+    rdgParameters.Columns[Ord(pcTiedParameter)].PickList := APickList;
+  finally
+    APickList.Free;
+  end;
+end;
+
 procedure TfrmManageParameters.UpdateParameterTable;
 var
   SteadyParam: TModflowSteadyParameter;
   AModflowParam: TModflowParameter;
   ParamIndex: Integer;
+  PhastModel: TPhastModel;
 begin
+  PhastModel := frmGoPhast.PhastModel;
   FParamList.Sort(CompareParameters);
   rdgParameters.BeginUpdate;
   try
@@ -802,26 +958,53 @@ begin
           rdgParameters.UseSpecialFormat[Ord(pcMult), ParamIndex + 1] := False;
           rdgParameters.UseSpecialFormat[Ord(pcZone), ParamIndex + 1] := False;
         end;
-        if SteadyParam.ParameterType = ptPest then
+        if PhastModel.PestUsed then
         begin
-          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := True;
-          rdgParameters.SpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] :=
-            rcf4Boolean;
-          rdgParameters.Checked[Ord(pcPilotPoints), ParamIndex + 1] :=
-            SteadyParam.UsePilotPoints;
-        end
-        else
-        begin
-          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := False;
+          if (SteadyParam.ParameterType = ptPest) then
+          begin
+            rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := True;
+            rdgParameters.SpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] :=
+              rcf4Boolean;
+            rdgParameters.Checked[Ord(pcPilotPoints), ParamIndex + 1] :=
+              SteadyParam.UsePilotPoints;
+          end
+          else
+          begin
+            rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := False;
+          end;
         end;
       end
       else
       begin
         rdgParameters.UseSpecialFormat[Ord(pcMult), ParamIndex + 1] := False;
         rdgParameters.UseSpecialFormat[Ord(pcZone), ParamIndex + 1] := False;
-        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := False;
+        if PhastModel.PestUsed then
+        begin
+          rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), ParamIndex + 1] := False;
+        end;
+      end;
+      if PhastModel.PestUsed then
+      begin
+        rdgParameters.ItemIndex[Ord(pcPestTransform), ParamIndex + 1] :=
+          Ord(AModflowParam.Transform);
+        rdgParameters.ItemIndex[Ord(pcChangeLimitation), ParamIndex + 1] :=
+          Ord(AModflowParam.ChangeLimitation);
+        rdgParameters.RealValue[Ord(pcLowerBound), ParamIndex + 1] :=
+          AModflowParam.LowerBound;
+        rdgParameters.RealValue[Ord(pcUpperBound), ParamIndex + 1] :=
+          AModflowParam.UpperBound;
+        rdgParameters.Cells[Ord(pcParamGroup), ParamIndex + 1] :=
+          AModflowParam.ParameterGroup;
+        rdgParameters.RealValue[Ord(pcScaled), ParamIndex + 1] :=
+          AModflowParam.Scale;
+        rdgParameters.RealValue[Ord(pcOffset), ParamIndex + 1] :=
+          AModflowParam.Offset;
+        rdgParameters.Cells[Ord(pcTiedParameter), ParamIndex + 1] :=
+          AModflowParam.TiedParameterName;
       end;
     end;
+
+    UpdateListOfUntiedParamNames;
   finally
     rdgParameters.EndUpdate;
   end;
@@ -879,6 +1062,12 @@ begin
         rdgParameters.Canvas.Brush.Color := clRed;
       end;
     end;
+    if (TParamColumn(ACol) = pcTiedParameter)
+      and (rdgParameters.ItemIndex[Ord(pcPestTransform), ARow] = Ord(ptTied))
+      and  (rdgParameters.ItemIndex[Ord(pcTiedParameter), ARow] < 0) then
+    begin
+      rdgParameters.Canvas.Brush.Color := clRed;
+    end;
   end;
 end;
 
@@ -919,7 +1108,8 @@ begin
   begin
     case TParamColumn(ACol) of
       pcName: ; // do nothing
-      pcType, pcValue:
+      pcType, pcValue, pcPestTransform, pcChangeLimitation, pcLowerBound,
+        pcUpperBound, pcParamGroup, pcScaled, pcOffset:
         begin
           CanSelect := rdgParameters.Cells[Ord(pcName), ARow] <> '';
         end;
@@ -928,6 +1118,11 @@ begin
         begin
           CanSelect := rdgParameters.UseSpecialFormat[ACol, ARow];
         end;
+      pcTiedParameter:
+        begin
+          CanSelect := (rdgParameters.Cells[Ord(pcName), ARow] <> '')
+            and (rdgParameters.ItemIndex[Ord(pcPestTransform), ARow] = Ord(ptTied));
+        end
       else Assert(False);
     end;
   end;
@@ -941,12 +1136,20 @@ var
   AParam: TModflowParameter;
   NewPackage: string;
   NewName: string;
+  ItemIndex: Integer;
+  PriorName: string;
+  RowIndex: Integer;
+  PickList: TStrings;
+  ATiedName: string;
+  RowParam: TModflowParameter;
 begin
   inherited;
   if FDeletingParam then
     Exit;
+  seNumberOfParameters.AsInteger := rdgParameters.RowCount -1;
   if (ARow > 0) and (ACol >= 0) and (ACol < rdgParameters.ColCount) then
   begin
+    PriorName := '';
     PCol := TParamColumn(ACol);
     case PCol of
       pcName:
@@ -956,6 +1159,7 @@ begin
           begin
             AParam := rdgParameters.Objects[Ord(pcName), ARow]
               as TModflowParameter;
+            PriorName := AParam.ParameterName;
             NewName := string(AnsiString(rdgParameters.Cells[Ord(pcName), ARow]));
             if AParam.ParameterType = ptSFR then
             begin
@@ -1001,8 +1205,132 @@ begin
           end;
         end;
       pcMult, pcZone, pcPilotPoints: ; // do nothing
+      pcPestTransform:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            ItemIndex := rdgParameters.ItemIndex[Ord(pcPestTransform), ARow];
+            if ItemIndex >= 0 then
+            begin
+              AParam.Transform := TPestTransform(ItemIndex);
+            end;
+          end;
+        end;
+      pcChangeLimitation:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            ItemIndex := rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow];
+            if ItemIndex >= 0 then
+            begin
+              AParam.ChangeLimitation := TPestChangeLimitation(ItemIndex);
+            end;
+          end;
+        end;
+      pcLowerBound:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            AParam.LowerBound := StrToFloatDef(rdgParameters.Cells[
+              Ord(pcLowerBound), ARow], 0);
+          end;
+        end;
+      pcUpperBound:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            AParam.UpperBound := StrToFloatDef(rdgParameters.Cells[
+              Ord(pcUpperBound), ARow], 0);
+          end;
+        end;
+      pcParamGroup:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            AParam.ParameterGroup := rdgParameters.Cells[
+              Ord(pcParamGroup), ARow]
+          end;
+        end;
+      pcScaled:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            AParam.Scale := StrToFloatDef(rdgParameters.Cells[
+              Ord(pcScaled), ARow], 1);
+          end;
+        end;
+      pcOffset:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            AParam.Offset := StrToFloatDef(rdgParameters.Cells[
+              Ord(pcOffset), ARow], 1);
+          end;
+        end;
+      pcTiedParameter:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            AParam.TiedParameterName := rdgParameters.Cells[
+              Ord(pcTiedParameter), ARow]
+          end;
+        end;
       else
         Assert(False);
+    end;
+    if (PCol in [pcName, pcPestTransform])
+      and frmGoPhast.PhastModel.PestUsed then
+    begin
+      UpdateListOfUntiedParamNames;
+      if PriorName <> '' then
+      begin
+        AParam := rdgParameters.Objects[Ord(pcName), ARow]
+          as TModflowParameter;
+      end
+      else
+      begin
+        AParam := nil;
+      end;
+      PickList := rdgParameters.Columns[Ord(pcTiedParameter)].PickList;
+      for RowIndex := 1 to rdgParameters.RowCount - 1 do
+      begin
+        ATiedName := rdgParameters.Cells[Ord(pcTiedParameter), RowIndex];
+        RowParam := rdgParameters.Objects[Ord(pcName), RowIndex]
+          as TModflowParameter;
+        if (ATiedName <> '') and (ATiedName = PriorName) and (AParam <> nil) then
+        begin
+          ATiedName := AParam.ParameterName;
+          rdgParameters.Cells[Ord(pcTiedParameter), RowIndex] := ATiedName;
+          if RowParam <> nil then
+          begin
+            RowParam.TiedParameterName := ATiedName;
+          end;
+        end;
+        if PickList.IndexOf(ATiedName) < 0 then
+        begin
+          rdgParameters.Cells[Ord(pcTiedParameter), RowIndex] := '';
+          if (RowParam <> nil) then
+          begin
+            RowParam.TiedParameterName := '';
+          end;
+        end;
+      end;
     end;
   end;
 end;
@@ -1052,8 +1380,10 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   NewRowCount: Integer;
+  PhastModel: TPhastModel;
 begin
   inherited;
+  PhastModel := frmGoPhast.PhastModel;
   if seNumberOfParameters.AsInteger > rdgParameters.RowCount -1 then
   begin
     FirstNewRow := rdgParameters.RowCount;
@@ -1066,7 +1396,10 @@ begin
       end;
       rdgParameters.UseSpecialFormat[Ord(pcMult), RowIndex] := False;
       rdgParameters.UseSpecialFormat[Ord(pcZone), RowIndex] := False;
-      rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), RowIndex] := False;
+      if PhastModel.PestUsed then
+      begin
+        rdgParameters.UseSpecialFormat[Ord(pcPilotPoints), RowIndex] := False;
+      end;
     end;
   end
   else if seNumberOfParameters.AsInteger < rdgParameters.RowCount -1 then

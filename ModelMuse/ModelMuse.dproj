@@ -1401,10 +1401,6 @@
             <Form>frameScreenObjectMAW</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="frameGridUnit.pas">
-            <Form>frameGrid</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="DisclaimerTextUnit.pas"/>
         <DCCReference Include="framePackageMawUnit.pas">
             <Form>framePackageMaw</Form>
@@ -1581,6 +1577,11 @@
         </DCCReference>
         <DCCReference Include="PestControlFileWriterUnit.pas"/>
         <DCCReference Include="PestParamGroupsUnit.pas"/>
+        <DCCReference Include="frameGridUnit.pas">
+            <Form>frameGrid</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

@@ -7797,7 +7797,7 @@ begin
   begin
     frmGridValue := TfrmGridValue.Create(self);
   end;
-  frmGridValue.Show
+  frmGridValue.Show;
 end;
 
 procedure TfrmGoPhast.acShowOrHideRulersExecute(Sender: TObject);

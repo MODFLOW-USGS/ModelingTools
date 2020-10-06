@@ -297,6 +297,9 @@ type
     property NewDataSets: TList read FNewDataSets write FNewDataSets;
   end;
 
+  TPestTransform = (ptNone, ptLog, ptFixed, ptTied);
+  TPestChangeLimitation = (pclRelative, pclFactor, pclAbsolute);
+
   // @name represents a MODFLOW parameter
   TModflowParameter = class abstract (TOrderedItem)
   private
@@ -304,11 +307,35 @@ type
     FParameterType: TParameterType;
     // See @link(Value).
     FValue: double;
+    FTransform: TPestTransform;
+    FStoredOffset: TRealStorage;
+    FStoredScale: TRealStorage;
+    FChangeLimitation: TPestChangeLimitation;
+    FStoredLowerBound: TRealStorage;
+    FTiedParameterName: string;
+    FParameterGroup: string;
+    FStoredUpperBound: TRealStorage;
     procedure NotifyHufKx;
     procedure NotifyHufKy;
     procedure NotifyHufKz;
     procedure NotifyHufSS;
     procedure NotifyHufSy;
+    function GetLowerBound: double;
+    function GetUpperBound: double;
+    procedure SetChangeLimitation(const Value: TPestChangeLimitation);
+    procedure SetLowerBound(const Value: double);
+    procedure SetParameterGroup(const Value: string);
+    procedure SetStoredLowerBound(const Value: TRealStorage);
+    procedure SetStoredOffset(const Value: TRealStorage);
+    procedure SetStoredScale(const Value: TRealStorage);
+    procedure SetStoredUpperBound(const Value: TRealStorage);
+    procedure SetTiedParameterName(const Value: string);
+    procedure SetTransform(const Value: TPestTransform);
+    procedure SetUpperBound(const Value: double);
+    function GetOffset: double;
+    function GetScale: double;
+    procedure SetOffset(const Value: double);
+    procedure SetScale(const Value: double);
   protected
     // See @link(ParameterName).
     FParameterName: string;
@@ -319,6 +346,7 @@ type
     // See @link(Value).
     procedure SetValue(AValue : double); virtual;
   public
+    constructor Create(Collection: TCollection); override;
     procedure NotifyParamChange(const Value: TParameterType);
     // @name copies @link(ParameterName), @link(ParameterType), @link(Value)
     // and @link(FForeignId) from source.  (@link(FForeignId) gets assigned the
@@ -332,16 +360,44 @@ type
     // All @link(TScreenObject)s that use @classname will have it removed from
     // them.
     Destructor Destroy; override;
+    // PARLBND in PEST
+    property LowerBound: double read GetLowerBound write SetLowerBound;
+    // PARUBND in PEST
+    property UpperBound: double read GetUpperBound write SetUpperBound;
+    // SCALE in PEST
+    property Scale: double read GetScale write SetScale;
+    // OFFSET in PEST
+    property Offset: double read GetOffset write SetOffset;
   published
     // @name is the name of the parameter.  All parameter names must be unique
     // but ensuring that they are unique is left up to the GUI rather than
     // being validated by @classname.
+    // In UCODE and PEST, parameter names can be up to 12 characters in length.
+    // PARNME in PEST
     property ParameterName: string read FParameterName write SetParameterName;
     // @name indicates what type of parameter this is.
     property ParameterType: TParameterType read FParameterType
       write SetParameterType;
     // @name is the value assigned to the parameter.
+    // PARVAL1 in PEST
     property Value: double read FValue write SetValue;
+    // PARTRANS in PEST
+    property Transform: TPestTransform read FTransform write SetTransform;
+    // PARCHGLIM in PEST
+    property ChangeLimitation: TPestChangeLimitation read FChangeLimitation write SetChangeLimitation;
+    // PARLBND in PEST
+    property StoredLowerBound: TRealStorage read FStoredLowerBound write SetStoredLowerBound;
+    // PARUBND in PEST
+    property StoredUpperBound: TRealStorage read FStoredUpperBound write SetStoredUpperBound;
+    // PARGP in PEST
+    property ParameterGroup: string read FParameterGroup write SetParameterGroup;
+    // SCALE in PEST
+    property StoredScale: TRealStorage read FStoredScale write SetStoredScale;
+    // OFFSET in PEST
+    property StoredOffset: TRealStorage read FStoredOffset write SetStoredOffset;
+    // DERCOM in PEST is not currently supported.
+    // PARTIED in PEST
+    property TiedParameterName: string read FTiedParameterName write SetTiedParameterName;
   end;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
@@ -729,6 +785,15 @@ begin
     ParameterType := SourceParameter.ParameterType;
     Value := SourceParameter.Value;
     FForeignId := SourceParameter.ID;
+
+    LowerBound := SourceParameter.LowerBound;
+    UpperBound := SourceParameter.UpperBound;
+    Scale := SourceParameter.Scale;
+    Offset := SourceParameter.Offset;
+    Transform := SourceParameter.Transform;
+    ChangeLimitation := SourceParameter.ChangeLimitation;
+    ParameterGroup := SourceParameter.ParameterGroup;
+    TiedParameterName := SourceParameter.TiedParameterName;
   end;
   inherited;
 end;
@@ -754,6 +819,20 @@ begin
   end;
 end;
 
+constructor TModflowParameter.Create(Collection: TCollection);
+begin
+  inherited;
+  FStoredOffset := TRealStorage.Create;
+  FStoredOffset.OnChange := OnInvalidateModelEvent;
+  FStoredScale := TRealStorage.Create;
+  FStoredScale.OnChange := OnInvalidateModelEvent;
+  FStoredLowerBound := TRealStorage.Create;
+  FStoredLowerBound.OnChange := OnInvalidateModelEvent;
+  FStoredUpperBound := TRealStorage.Create;
+  FStoredUpperBound.OnChange := OnInvalidateModelEvent;
+  Scale := 1;
+end;
+
 destructor TModflowParameter.Destroy;
 var
   Model: TPhastModel;
@@ -777,7 +856,31 @@ begin
       end;
     end;
   end;
+  FStoredUpperBound.Free;
+  FStoredLowerBound.Free;
+  FStoredScale.Free;
+  FStoredOffset.Free;
   inherited;
+end;
+
+function TModflowParameter.GetLowerBound: double;
+begin
+  result := StoredLowerBound.Value;
+end;
+
+function TModflowParameter.GetOffset: double;
+begin
+  result := StoredOffset.Value;
+end;
+
+function TModflowParameter.GetScale: double;
+begin
+  result := StoredScale.Value;
+end;
+
+function TModflowParameter.GetUpperBound: double;
+begin
+  result := StoredUpperBound.Value;
 end;
 
 procedure TModflowParameter.NotifyHufSy;
@@ -912,7 +1015,41 @@ begin
   result :=
     (ParameterName = AnotherParameter.ParameterName) and
     (ParameterType = AnotherParameter.ParameterType) and
-    (Value = AnotherParameter.Value);
+    (Value = AnotherParameter.Value) and
+    (LowerBound = AnotherParameter.LowerBound) and
+    (UpperBound = AnotherParameter.UpperBound) and
+    (Scale = AnotherParameter.Scale) and
+    (Offset = AnotherParameter.Offset) and
+    (Transform = AnotherParameter.Transform) and
+    (ChangeLimitation = AnotherParameter.ChangeLimitation) and
+    (ParameterGroup = AnotherParameter.ParameterGroup) and
+    (TiedParameterName = AnotherParameter.TiedParameterName);
+end;
+
+procedure TModflowParameter.SetChangeLimitation(
+  const Value: TPestChangeLimitation);
+begin
+  if FChangeLimitation <> Value then
+  begin
+    FChangeLimitation := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TModflowParameter.SetLowerBound(const Value: double);
+begin
+  StoredLowerBound.Value := Value;
+end;
+
+procedure TModflowParameter.SetOffset(const Value: double);
+begin
+  StoredOffset.Value := Value;
+end;
+
+procedure TModflowParameter.SetParameterGroup(const Value: string);
+begin
+  SetCaseSensitiveStringProperty(FParameterGroup, Value);
+//  FParameterGroup := Value;
 end;
 
 procedure TModflowParameter.SetParameterType(const Value: TParameterType);
@@ -1177,6 +1314,50 @@ begin
     FParameterType := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowParameter.SetScale(const Value: double);
+begin
+  StoredScale.Value := Value;
+end;
+
+procedure TModflowParameter.SetStoredLowerBound(const Value: TRealStorage);
+begin
+  FStoredLowerBound.Assign(Value);
+end;
+
+procedure TModflowParameter.SetStoredOffset(const Value: TRealStorage);
+begin
+  FStoredOffset.Assign(Value);
+end;
+
+procedure TModflowParameter.SetStoredScale(const Value: TRealStorage);
+begin
+  FStoredScale.Assign(Value);
+end;
+
+procedure TModflowParameter.SetStoredUpperBound(const Value: TRealStorage);
+begin
+  FStoredUpperBound.Assign(Value);
+end;
+
+procedure TModflowParameter.SetTiedParameterName(const Value: string);
+begin
+  SetCaseSensitiveStringProperty(FTiedParameterName, Value);
+end;
+
+procedure TModflowParameter.SetTransform(const Value: TPestTransform);
+begin
+  if FTransform <> Value then
+  begin
+    FTransform := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TModflowParameter.SetUpperBound(const Value: double);
+begin
+  StoredUpperBound.Value := Value;
 end;
 
 procedure TModflowParameter.SetValue(AValue : double);
