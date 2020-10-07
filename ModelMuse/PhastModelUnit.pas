@@ -9996,6 +9996,9 @@ const
 //   '4.3.0.16'  Bug fix: Fixed bug that could cause WellFootprint models to
 //                fail when exporting withdrawals.
 
+//               Bug fix: Fixed bug that could cause a range check error when
+//                deleting an item in the SWR Range Geometry dialog box.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.16';

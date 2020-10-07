@@ -4,9 +4,9 @@ inherited frmSwrReachGeometry: TfrmSwrReachGeometry
   Caption = 'SWR Reach Geometry'
   ClientHeight = 555
   ClientWidth = 782
-  ExplicitWidth = 800
-  ExplicitHeight = 600
-  PixelsPerInch = 120
+  ExplicitWidth = 798
+  ExplicitHeight = 594
+  PixelsPerInch = 96
   TextHeight = 18
   object splttrMain: TJvNetscapeSplitter
     Left = 0

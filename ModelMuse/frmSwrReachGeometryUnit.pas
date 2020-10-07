@@ -639,7 +639,7 @@ procedure TfrmSwrReachGeometry.frameGeometryGridRowMoved(Sender: TObject;
   FromIndex, ToIndex: Integer);
 begin
   inherited;
-  FReachGeometry[FromIndex-1].Index := ToIndex-1;
+//  FReachGeometry[FromIndex-1].Index := ToIndex-1;
   RenumberGeomGridRows;
   DisplayCurrentRow;
 end;
