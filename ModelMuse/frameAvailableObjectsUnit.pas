@@ -28,6 +28,7 @@ type
     procedure SetButtons;
     { Private declarations }
   public
+    procedure GetSelectedItems(ListBox: TJvListBox; SelectedItems: TStringList);
     { Public declarations }
   end;
 
@@ -86,6 +87,27 @@ begin
 
   lbSrcObjects.Height := Height - lbSrcObjects.Top - Margin;
   lbDstObjects.Height := lbSrcObjects.Height;
+end;
+
+procedure TframeAvailableObjects.GetSelectedItems(ListBox: TJvListBox;
+  SelectedItems: TStringList);
+var
+  Index: Integer;
+begin
+  SelectedItems.Clear;
+  Index := BoxGetFirstSelection(ListBox);
+  if Index <> LB_ERR then
+  begin
+    SelectedItems.Capacity := ListBox.Items.Count;
+    for Index := 0 to ListBox.Items.Count -1 do
+    begin
+      if ListBox.Selected[Index] then
+      begin
+        SelectedItems.AddObject(ListBox.Items[Index],
+          ListBox.Items.Objects[Index]);
+      end;
+    end;
+  end;
 end;
 
 procedure TframeAvailableObjects.lbDstObjectsClick(Sender: TObject);

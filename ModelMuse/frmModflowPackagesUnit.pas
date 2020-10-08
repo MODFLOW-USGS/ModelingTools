@@ -49,7 +49,8 @@ uses System.UITypes,
   framePackageSfrMF6Unit, System.ImageList, framePackageMawUnit,
   framePackageGNC_Unit, framePackageMf6ObsUnit, framePackageLakMf6Unit,
   framePackageMvrUnit, framePackageUzfMf6Unit, frameMt3dLktPkgUnit,
-  frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit;
+  frameMt3dSftUnit, frameMt3dCtsPkgUnit, framePackageCsubUnit,
+  PestParamGroupsUnit;
 
 type
 
@@ -430,6 +431,7 @@ type
       var NewTransientParameters: TModflowTransientListParameters;
       var SfrParameterInstances: TSfrParamInstances;
       var NewHufModflowParameters: THufModflowParameters;
+      var NewParamGroups: TPestParamGroups;
       var NewPackages: TTempPackageCollection);
     Destructor Destroy; override;
     procedure DoCommand; override;
@@ -3036,14 +3038,16 @@ end;
 procedure TfrmModflowPackages.SetData;
 var
   Undo: TUndoChangeLgrPackageSelection;
+  ParamGroups: TPestParamGroups;
 begin
   SetSfrParamInstances;
 
   CurrentPackages := nil;
+  ParamGroups := nil;
 
   Undo := TUndoChangeLgrPackageSelection.Create(FSteadyParameters,
     FTransientListParameters, FSfrParameterInstances, FHufParameters,
-    FNewPackages);
+    ParamGroups, FNewPackages);
   framePkgMt3dBasic.SetMt3dmsChemSpecies(
     frmGoPhast.PhastModel.MobileComponents,
     frmGoPhast.PhastModel.ImmobileComponents);
@@ -3864,6 +3868,7 @@ constructor TUndoChangeLgrPackageSelection.Create(
   var NewTransientParameters: TModflowTransientListParameters;
   var SfrParameterInstances: TSfrParamInstances;
   var NewHufModflowParameters: THufModflowParameters;
+  var NewParamGroups: TPestParamGroups;
   var NewPackages: TTempPackageCollection);
 var
   Index: Integer;
@@ -3873,7 +3878,7 @@ var
   ChildModel: TChildModel;
 begin
   inherited Create(NewSteadyParameters, NewTransientParameters,
-    NewHufModflowParameters, SfrParameterInstances);
+    NewHufModflowParameters, SfrParameterInstances, NewParamGroups);
 
   FOldMt3dTimes := TMt3dmsTimeCollection.Create(nil);
   FOldMt3dTimes.Assign(frmGoPhast.PhastModel.Mt3dmsTimes);

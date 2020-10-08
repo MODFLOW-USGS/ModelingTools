@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectTabbedUnit, Vcl.Grids,
   RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask, JvExMask,
-  JvSpin, Vcl.ExtCtrls, Vcl.ComCtrls, UndoItemsScreenObjects;
+  JvSpin, Vcl.ExtCtrls, Vcl.ComCtrls, UndoItemsScreenObjects, System.UITypes;
 
 type
   TInterbedColumns = (icName, icUsed, icInitialOffset, icThickness,
@@ -38,6 +38,7 @@ type
   private
 //    FPackageDataCleared: Boolean;
     FTimeDataCleared: Boolean;
+    FInterbedsDefined: Boolean;
     procedure InitializeControls;
     procedure LayoutMultiRowEditControlsPkgProp;
     { Private declarations }
@@ -75,6 +76,8 @@ resourcestring
   StrInitialCompression = 'Initial Inelastic Compression Index (ssv_cc)';
   StrInitialElasticComp = 'Initial Elastic Recompression Index (sse_cr)';
   StrInitialDelayHead = 'Initial Delay Head (h0)';
+  StrNoInterbedsHaveBe = 'No interbeds have been defined for the CSUB packag' +
+  'e in the MODFLOW Packages and Programs dialog box.';
 
 {$R *.dfm}
 
@@ -241,10 +244,17 @@ var
   RowIndex: Integer;
   CSubPackage: TCSubPackageSelection;
 begin
+  FInterbedsDefined := True;
   pcMain.ActivePageIndex := 0;
   rdgSubGroups.FixedCols := 1;
   CSubPackage := frmGoPhast.PhastModel.ModflowPackages.CSubPackage;
   Interbeds := CSubPackage.Interbeds;
+  if Interbeds.Count = 0 then
+  begin
+    FInterbedsDefined := False;
+    Beep;
+    MessageDlg(StrNoInterbedsHaveBe, mtWarning, [mbOK], 0);
+  end;
   ClearGrid(rdgSubGroups);
   rdgSubGroups.BeginUpdate;
   try
@@ -429,6 +439,11 @@ var
   Interbed: TCSubInterbed;
 begin
   inherited;
+  if not FInterbedsDefined then
+  begin
+    CanSelect := False;
+    Exit;
+  end;
   if (ARow >= 1) and (ACol >= Ord(icInitialOffset)) then
   begin
     CanSelect := rdgSubGroups.CheckState[Ord(icUsed), ARow] <> cbUnchecked;
@@ -436,7 +451,7 @@ begin
       and (TInterbedColumns(ACol) in [icEquivInterbedNumber, icDelayKv, icInitialDelayHeadOffset]) then
     begin
       Interbed := rdgSubGroups.Objects[Ord(icName), ARow] as TCSubInterbed;
-      CanSelect := Interbed.InterbedType = itDelay;
+      CanSelect := (Interbed <> nil) and (Interbed.InterbedType = itDelay);
     end;
 //
   end;

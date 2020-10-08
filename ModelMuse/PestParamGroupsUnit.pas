@@ -95,8 +95,14 @@ type
   end;
 
   TPestParamGroups = class(TPhastCollection)
+  private
+    function GetParamGroup(Index: Integer): TPestParamGroup;
+    procedure SetParamGroup(Index: Integer; const Value: TPestParamGroup);
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent);
+    function Add: TPestParamGroup;
+    property Items[Index: Integer]: TPestParamGroup read GetParamGroup
+      write SetParamGroup; default;
   end;
 
 implementation
@@ -295,9 +301,25 @@ end;
 
 { TPestParamGroups }
 
+function TPestParamGroups.Add: TPestParamGroup;
+begin
+  result := inherited Add as TPestParamGroup;
+end;
+
 constructor TPestParamGroups.Create(InvalidateModelEvent: TNotifyEvent);
 begin
   inherited Create(TPestParamGroup, InvalidateModelEvent);
+end;
+
+function TPestParamGroups.GetParamGroup(Index: Integer): TPestParamGroup;
+begin
+  result := inherited Items[Index] as TPestParamGroup;
+end;
+
+procedure TPestParamGroups.SetParamGroup(Index: Integer;
+  const Value: TPestParamGroup);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

@@ -5,7 +5,7 @@ interface
 uses Classes, GoPhastTypes, UndoItems, PhastModelUnit, frmShowHideObjectsUnit,
   ModflowParameterUnit, HufDefinition, ModflowTransientListParameterUnit,
   UndoItemsScreenObjects, ModflowPackageSelectionUnit,
-  System.Generics.Collections, ModflowOutputControlUnit;
+  System.Generics.Collections, ModflowOutputControlUnit, PestParamGroupsUnit;
 
 type
   TCustomCreateRequiredDataSetsUndo = class(TCustomUndo)
@@ -44,6 +44,8 @@ type
     FNewHufModflowParameters: THufModflowParameters;
     FNewSfrParamInstances: TSfrParamInstances;
     FOldSfrParamInstances: TSfrParamInstances;
+    FOldParamGroups: TPestParamGroups;
+    FNewParamGroups: TPestParamGroups;
     FOldModflowBoundaries: TList;
     FScreenObjects: TList;
   protected
@@ -52,7 +54,8 @@ type
     Constructor Create(var NewSteadyParameters: TModflowSteadyParameters;
       var NewTransientParameters: TModflowTransientListParameters;
       var NewHufModflowParameters: THufModflowParameters;
-      var NewSfrParamInstances: TSfrParamInstances);
+      var NewSfrParamInstances: TSfrParamInstances;
+      var NewParamGroups: TPestParamGroups);
     Destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
@@ -448,11 +451,13 @@ constructor TCustomUndoChangeParameters.Create(
   var NewSteadyParameters: TModflowSteadyParameters;
   var NewTransientParameters: TModflowTransientListParameters;
   var NewHufModflowParameters: THufModflowParameters;
-  var NewSfrParamInstances: TSfrParamInstances);
+  var NewSfrParamInstances: TSfrParamInstances;
+  var NewParamGroups: TPestParamGroups);
 var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
   OldBoundary: TModflowBoundaries;
+  InvalidateModelEvent: TNotifyEvent;
 begin
   inherited Create;
   FOldModflowBoundaries := TObjectList.Create;
@@ -482,6 +487,9 @@ begin
   FNewSfrParamInstances := NewSfrParamInstances;
   NewSfrParamInstances := nil;
 
+  FNewParamGroups := NewParamGroups;
+  NewParamGroups := nil;
+
   FOldSteadyParameters:= TModflowSteadyParameters.Create(nil);
   FOldSteadyParameters.Assign(frmGoPhast.PhastModel.ModflowSteadyParameters);
   FOldTransientParameters:= TModflowTransientListParameters.Create(nil);
@@ -491,6 +499,10 @@ begin
   FOldSfrParamInstances := TSfrParamInstances.Create(nil);
   FOldSfrParamInstances.Assign(frmGoPhast.PhastModel.ModflowPackages.
     SfrPackage.ParameterInstances);
+
+  InvalidateModelEvent := nil;
+  FOldParamGroups := TPestParamGroups.Create(InvalidateModelEvent);
+  FOldParamGroups.Assign(frmGoPhast.PhastModel.ParamGroups);
 
 //  FExistingScreenObjects := TScreenObjectEditCollection.Create;
 //  FExistingScreenObjects.OwnScreenObject := False;
@@ -505,6 +517,9 @@ end;
 
 destructor TCustomUndoChangeParameters.Destroy;
 begin
+  FOldParamGroups.Free;
+  FNewParamGroups.Free;
+
   FOldHufModflowParameters.Free;
   FNewHufModflowParameters.Free;
   FNewSteadyParameters.Free;
@@ -533,6 +548,12 @@ begin
   frmGoPhast.PhastModel.HufParameters := FNewHufModflowParameters;
   frmGoPhast.PhastModel.ModflowPackages.SfrPackage.ParameterInstances :=
     FNewSfrParamInstances;
+
+  if FNewParamGroups <> nil then
+  begin
+    frmGoPhast.PhastModel.ParamGroups := FNewParamGroups
+  end;
+
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
@@ -558,6 +579,7 @@ begin
   frmGoPhast.PhastModel.HufParameters := FOldHufModflowParameters;
   frmGoPhast.PhastModel.ModflowPackages.SfrPackage.ParameterInstances :=
     FOldSfrParamInstances;
+  frmGoPhast.PhastModel.ParamGroups := FOldParamGroups;
   for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
   begin
     ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;

@@ -20,7 +20,7 @@ object frameAvailableObjects: TframeAvailableObjects
     Caption = 'Used objects'
   end
   object lbSrcObjects: TJvListBox
-    Left = 8
+    Left = 3
     Top = 23
     Width = 164
     Height = 160

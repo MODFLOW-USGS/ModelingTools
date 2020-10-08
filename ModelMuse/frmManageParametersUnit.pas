@@ -8,7 +8,8 @@ uses System.UITypes, System.Types,
   ModflowParameterUnit, OrderedCollectionUnit,
   ModflowTransientListParameterUnit, HufDefinition, Buttons, Mask, JvExMask,
   JvSpin, ExtCtrls, RequiredDataSetsUndoUnit, UndoItemsScreenObjects,
-  ModflowPackageSelectionUnit, frameGridUnit, JvExExtCtrls, JvNetscapeSplitter;
+  ModflowPackageSelectionUnit, frameGridUnit, JvExExtCtrls, JvNetscapeSplitter,
+  PestParamGroupsUnit, Vcl.ComCtrls, frameAvailableObjectsUnit, JvListBox;
 
 type
   TParamColumn = (pcName, pcPackage, pcType, pcValue, pcMult, pcZone,
@@ -30,11 +31,16 @@ type
     btnHelp: TBitBtn;
     btnImportPval: TButton;
     dlgOpenPval: TOpenDialog;
-    grpParameters: TGroupBox;
     pnlParameters: TPanel;
-    grpParameterGroups: TGroupBox;
     frameParameterGroups: TframeGrid;
-    spltrParameters: TJvNetscapeSplitter;
+    pcParameters: TPageControl;
+    tabParameters: TTabSheet;
+    tabParameterGroups: TTabSheet;
+    tabGroupAssignments: TTabSheet;
+    frameAvailableObjects: TframeAvailableObjects;
+    pnlGroupAssignments: TPanel;
+    comboParamGroups: TComboBox;
+    lblParameterGroup: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure rdgParametersSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -54,6 +60,15 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure frameParameterGroupsGridBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
+    procedure frameParameterGroupssbDeleteClick(Sender: TObject);
+    procedure frameParameterGroupsseNumberChange(Sender: TObject);
+    procedure frameParameterGroupsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure comboParamGroupsChange(Sender: TObject);
+    procedure frameAvailableObjectsbtnIncAllObjectsClick(Sender: TObject);
+    procedure frameAvailableObjectsbtnIncObjectsClick(Sender: TObject);
+    procedure frameAvailableObjectsbtnExclObjectsClick(Sender: TObject);
+    procedure frameAvailableObjectsbtnExclAllObjectsClick(Sender: TObject);
   private
     FSteadyParameters: TModflowSteadyParameters;
     FHufParameters: THufModflowParameters;
@@ -61,6 +76,9 @@ type
     FSfrParamInstances: TSfrParamInstances;
     FParamList: TList;
     FDeletingParam: Boolean;
+    FParamGroups: TPestParamGroups;
+    FAvailableParams: TStringList;
+    FUsedParams: TStringList;
     procedure GetData;
     procedure SetData;
     procedure UpdateParameterTable;
@@ -71,6 +89,11 @@ type
     procedure CreateOrUpdateParameter(ARow: Integer);
     procedure DeleteAParam(ARow: Integer);
     procedure UpdateListOfUntiedParamNames;
+    procedure CreateOrUpdateParamGroup(ARow: Integer);
+    procedure CreateParamGroup(ARow: Integer);
+    procedure UpdateParamNameGroupList;
+    procedure AssignSelectedGroup(SelectedItems: TStrings);
+    procedure RemoveGroupAssignment(SelectedItems: TStrings);
     { Private declarations }
   public
     { Public declarations }
@@ -85,7 +108,8 @@ Type
     Constructor Create(var NewSteadyParameters: TModflowSteadyParameters;
       var NewTransientParameters: TModflowTransientListParameters;
       var NewHufModflowParameters: THufModflowParameters;
-      var NewSfrParamInstances: TSfrParamInstances);
+      var NewSfrParamInstances: TSfrParamInstances;
+      var NewParamGroups: TPestParamGroups);
     Destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
@@ -96,7 +120,7 @@ implementation
 uses
   Contnrs, frmGoPhastUnit, PhastModelUnit, ModflowDiscretizationWriterUnit,
   ScreenObjectUnit, frmShowHideObjectsUnit, ModflowPackagesUnit, ReadPvalUnit,
-  IntListUnit, GoPhastTypes, PestPropertiesUnit, PestParamGroupsUnit;
+  IntListUnit, GoPhastTypes, PestPropertiesUnit;
 
 resourcestring
   StrErrorReadingPvalF = 'Error reading Pval file. Check that it is a valid ' +
@@ -112,6 +136,26 @@ resourcestring
   StrThereAreTwoOrMo = 'There are two (or more) parameters named %s. Duplica' +
   'te parameter names are not allowed.';
   StrPilotPoints = 'Pilot Points';
+  StrGroupNamePARGPNME = 'Group Name (PARGPNME)';
+  StrIncrementTypeINCT = 'Increment Type (INCTYP)';
+  StrParameterIncrement = 'Parameter Increment (DERINC)';
+  StrMinParameterIncrem = 'Min Parameter Increment (DERINCLB)';
+  StrDerivativeMethodF = 'Derivative Method (FORCEN)';
+  StrDerivativeIncrement = 'Derivative Increment Multiplier (DERINCMUL)';
+  Str3PointDerivativeM = '3-Point Derivative Method (DERMTHD)';
+  Str5PointDerivativeM = '5-Point Derivative Method (DERMTHD)';
+  StrUseSplitSlopeAnal = 'Use Split Slope Analysis (SPLITTHRESH)';
+  StrSplitSlopeThreshol = 'Split Slope Threshold (SPLITTHRESH)';
+  StrMaximumRelativeSlo = 'Maximum Relative Slope Difference (SPLITRELDIFF)';
+  StrSPLITACTION = 'SPLITACTION';
+  StrTransformPARTRANS = 'Transform (PARTRANS)';
+  StrChangeLimitationP = 'Change Limitation (PARCHGLIM)';
+  StrLowerBoundPARLBND = 'Lower Bound (PARLBND)';
+  StrUpperBoundPARUBND = 'Upper Bound (PARUBND)';
+  StrParameterGroupPAR = 'Parameter Group (PARGP)';
+  StrSCALE = 'SCALE';
+  StrOFFSET = 'OFFSET';
+  StrTiedParameterPART = 'Tied Parameter (PARTIED)';
 
 {$R *.dfm}
 type
@@ -437,6 +481,48 @@ begin
   SetData;
 end;
 
+procedure TfrmManageParameters.comboParamGroupsChange(Sender: TObject);
+var
+  RowIndex: Integer;
+  PGroup: TPestParamGroup;
+  AParam: TModflowParameter;
+  ParamGroup: TPestParamGroup;
+begin
+  inherited;
+  FUsedParams.Clear;
+  FAvailableParams.Clear;
+  if comboParamGroups.ItemIndex < 0 then
+  begin
+    frameAvailableObjects.lbSrcObjects.Items.Clear;
+    frameAvailableObjects.lbDstObjects.Items.Clear;
+    Exit;
+  end;
+  PGroup := comboParamGroups.Items.Objects[comboParamGroups.ItemIndex]
+    as TPestParamGroup;
+  for RowIndex := 1 to rdgParameters.RowCount - 1 do
+  begin
+    if rdgParameters.Objects[Ord(pcName), RowIndex] <> nil then
+    begin
+      AParam := rdgParameters.Objects[Ord(pcName), RowIndex]
+        as TModflowParameter;
+      ParamGroup := rdgParameters.Objects[Ord(pcParamGroup), RowIndex]
+        as TPestParamGroup;
+
+      if ParamGroup = PGroup then
+      begin
+        FUsedParams.AddObject(AParam.ParameterName, AParam);
+      end
+      else
+      begin
+        FAvailableParams.AddObject(AParam.ParameterName, AParam);
+      end;
+    end;
+  end;
+
+  frameAvailableObjects.lbSrcObjects.Items.Assign(FAvailableParams);
+  frameAvailableObjects.lbDstObjects.Items.Assign(FUsedParams);
+end;
+
 procedure TfrmManageParameters.btnDeleteClick(Sender: TObject);
 begin
   inherited;
@@ -449,8 +535,11 @@ var
   PackageList: TStringList;
   Index: TParameterType;
   ParamTypeList: TStringList;
+  InvalidateModelEvent: TNotifyEvent;
 begin
   inherited;
+  FAvailableParams := TStringList.Create;
+  FUsedParams := TStringList.Create;
 
   rdgParameters.BeginUpdate;
   try
@@ -462,32 +551,32 @@ begin
     rdgParameters.Cells[Ord(pcZone), 0] := StrZoneArray;
     rdgParameters.Cells[Ord(pcPilotPoints), 0] := StrPilotPoints;
 
-    rdgParameters.Cells[Ord(pcPestTransform), 0] := 'Transform (PARTRANS)';
-    rdgParameters.Cells[Ord(pcChangeLimitation), 0] := 'Change Limitation (PARCHGLIM)';
-    rdgParameters.Cells[Ord(pcLowerBound), 0] := 'Lower Bound (PARLBND)';
-    rdgParameters.Cells[Ord(pcUpperBound), 0] := 'Upper Bound (PARUBND)';
-    rdgParameters.Cells[Ord(pcParamGroup), 0] := 'Parameter Group (PARGP)';
-    rdgParameters.Cells[Ord(pcScaled), 0] := 'SCALE';
-    rdgParameters.Cells[Ord(pcOffset), 0] := 'OFFSET';
-    rdgParameters.Cells[Ord(pcTiedParameter), 0] := 'Tied Parameter (PARTIED)';
+    rdgParameters.Cells[Ord(pcPestTransform), 0] := StrTransformPARTRANS;
+    rdgParameters.Cells[Ord(pcChangeLimitation), 0] := StrChangeLimitationP;
+    rdgParameters.Cells[Ord(pcLowerBound), 0] := StrLowerBoundPARLBND;
+    rdgParameters.Cells[Ord(pcUpperBound), 0] := StrUpperBoundPARUBND;
+    rdgParameters.Cells[Ord(pcParamGroup), 0] := StrParameterGroupPAR;
+    rdgParameters.Cells[Ord(pcScaled), 0] := StrSCALE;
+    rdgParameters.Cells[Ord(pcOffset), 0] := StrOFFSET;
+    rdgParameters.Cells[Ord(pcTiedParameter), 0] := StrTiedParameterPART;
   finally
     rdgParameters.EndUpdate;
   end;
 
   frameParameterGroups.Grid.BeginUpdate;
   try
-    frameParameterGroups.Grid.Cells[Ord(pgcName), 0] := 'Group Name (PARGPNME)';
-    frameParameterGroups.Grid.Cells[Ord(pgcIncType), 0] := 'Increment Type (INCTYP)';
-    frameParameterGroups.Grid.Cells[Ord(pgcIncrement), 0] := 'Parameter Increment (DERINC)';
-    frameParameterGroups.Grid.Cells[Ord(pgcMinIncrement), 0] := 'Min Parameter Increment (DERINCLB)';
-    frameParameterGroups.Grid.Cells[Ord(pgcForceCentral), 0] := 'Derivative Method (FORCEN)';
-    frameParameterGroups.Grid.Cells[Ord(pgcParamIncrementMultiplier), 0] := 'Derivative Increment Multiplier (DERINCMUL)';
-    frameParameterGroups.Grid.Cells[Ord(pgcDM3), 0] := '3-Point Derivative Method (DERMTHD)';
-    frameParameterGroups.Grid.Cells[Ord(pgcDM5), 0] := '5-Point Derivative Method (DERMTHD)';
-    frameParameterGroups.Grid.Cells[Ord(pgcUseSplitSlope), 0] := 'Use Split Slope Analysis (SPLITTHRESH,)';
-    frameParameterGroups.Grid.Cells[Ord(pgcSplitThreshold), 0] := 'Split Slope Threshold (SPLITTHRESH)';
-    frameParameterGroups.Grid.Cells[Ord(pgcSplitDifference), 0] := 'Maximum Relative Slope Difference (SPLITRELDIFF)';
-    frameParameterGroups.Grid.Cells[Ord(pgcSplitAction), 0] := 'SPLITACTION';
+    frameParameterGroups.Grid.Cells[Ord(pgcName), 0] := StrGroupNamePARGPNME;
+    frameParameterGroups.Grid.Cells[Ord(pgcIncType), 0] := StrIncrementTypeINCT;
+    frameParameterGroups.Grid.Cells[Ord(pgcIncrement), 0] := StrParameterIncrement;
+    frameParameterGroups.Grid.Cells[Ord(pgcMinIncrement), 0] := StrMinParameterIncrem;
+    frameParameterGroups.Grid.Cells[Ord(pgcForceCentral), 0] := StrDerivativeMethodF;
+    frameParameterGroups.Grid.Cells[Ord(pgcParamIncrementMultiplier), 0] := StrDerivativeIncrement;
+    frameParameterGroups.Grid.Cells[Ord(pgcDM3), 0] := Str3PointDerivativeM;
+    frameParameterGroups.Grid.Cells[Ord(pgcDM5), 0] := Str5PointDerivativeM;
+    frameParameterGroups.Grid.Cells[Ord(pgcUseSplitSlope), 0] := StrUseSplitSlopeAnal;
+    frameParameterGroups.Grid.Cells[Ord(pgcSplitThreshold), 0] := StrSplitSlopeThreshol;
+    frameParameterGroups.Grid.Cells[Ord(pgcSplitDifference), 0] := StrMaximumRelativeSlo;
+    frameParameterGroups.Grid.Cells[Ord(pgcSplitAction), 0] := StrSPLITACTION;
   finally
     frameParameterGroups.Grid.EndUpdate;
   end;
@@ -534,17 +623,76 @@ begin
   FTransientListParameters := TModflowTransientListParameters.Create(nil);
   FSfrParamInstances := TSfrParamInstances.Create(nil);
 
+  InvalidateModelEvent := nil;
+  FParamGroups := TPestParamGroups.Create(InvalidateModelEvent);
+
   GetData;
 end;
 
 procedure TfrmManageParameters.FormDestroy(Sender: TObject);
 begin
   inherited;
+  FParamGroups.Free;
   FSfrParamInstances.Free;
   FTransientListParameters.Free;
   FHufParameters.Free;
   FSteadyParameters.Free;
   FParamList.Free;
+  FUsedParams.Free;
+  FAvailableParams.Free;
+end;
+
+procedure TfrmManageParameters.frameAvailableObjectsbtnExclAllObjectsClick(
+  Sender: TObject);
+begin
+  inherited;
+  RemoveGroupAssignment(frameAvailableObjects.lbDstObjects.Items);
+  frameAvailableObjects.btnExclAllObjectsClick(Sender);
+
+end;
+
+procedure TfrmManageParameters.frameAvailableObjectsbtnExclObjectsClick(
+  Sender: TObject);
+var
+  SelectedItems: TStringList;
+begin
+  inherited;
+  SelectedItems := TStringList.Create;
+  try
+    frameAvailableObjects.GetSelectedItems(
+      frameAvailableObjects.lbDstObjects, SelectedItems);
+    RemoveGroupAssignment(SelectedItems);
+  finally
+    SelectedItems.Free;
+  end;
+  frameAvailableObjects.btnExclObjectsClick(Sender);
+
+end;
+
+procedure TfrmManageParameters.frameAvailableObjectsbtnIncAllObjectsClick(
+  Sender: TObject);
+begin
+  inherited;
+  AssignSelectedGroup(frameAvailableObjects.lbSrcObjects.Items);
+  frameAvailableObjects.btnIncAllObjectsClick(Sender);
+end;
+
+procedure TfrmManageParameters.frameAvailableObjectsbtnIncObjectsClick(
+  Sender: TObject);
+var
+  SelectedItems: TStringList;
+begin
+  inherited;
+  SelectedItems := TStringList.Create;
+  try
+    frameAvailableObjects.GetSelectedItems(
+      frameAvailableObjects.lbSrcObjects, SelectedItems);
+    AssignSelectedGroup(SelectedItems);
+  finally
+    SelectedItems.Free;
+  end;
+  frameAvailableObjects.btnIncObjectsClick(Sender);
+
 end;
 
 procedure TfrmManageParameters.frameParameterGroupsGridBeforeDrawCell(
@@ -603,20 +751,181 @@ begin
   end;
 end;
 
+procedure TfrmManageParameters.frameParameterGroupsGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+var
+  PGroupCol: TParamGroupColumn;
+  Grid: TRbwDataGrid4;
+  PGroup: TPestParamGroup;
+  ItemIndex: Integer;
+begin
+  inherited;
+  if (ARow >= 1) and (ACol >= 0) then
+  begin
+    Grid := frameParameterGroups.Grid;
+    PGroupCol := TParamGroupColumn(ACol);
+    CreateOrUpdateParamGroup(ARow);
+    PGroup := Grid.Objects[0,ARow] as TPestParamGroup;
+    if PGroup = nil then
+    begin
+      Exit;
+    end;
+    case PGroupCol of
+      pgcName:
+        begin
+          PGroup.ParamGroupName := Grid.Cells[ACol, ARow];
+          UpdateParamNameGroupList;
+        end;
+      pgcIncType:
+        begin
+          ItemIndex := Grid.ItemIndex[ACol, ARow];
+          if ItemIndex >= 0 then
+          begin
+            PGroup.IncrementType := TIncrementType(ItemIndex);
+          end;
+        end;
+      pgcIncrement:
+        begin
+          if Grid.Cells[ACol, ARow] <> '' then
+          begin
+            PGroup.ParamIncrement := Grid.RealValue[ACol, ARow];
+          end;
+        end;
+      pgcMinIncrement:
+        begin
+          if Grid.Cells[ACol, ARow] <> '' then
+          begin
+            PGroup.MinParamIncrement := Grid.RealValue[ACol, ARow];
+          end;
+        end;
+      pgcForceCentral:
+        begin
+          ItemIndex := Grid.ItemIndex[ACol, ARow];
+          if ItemIndex >= 0 then
+          begin
+            PGroup.ForceCentral := TForceCentral(ItemIndex);
+          end;
+        end;
+      pgcParamIncrementMultiplier:
+        begin
+          if Grid.Cells[ACol, ARow] <> '' then
+          begin
+            PGroup.ParamIncrementMultiplier := Grid.RealValue[ACol, ARow];
+          end;
+        end;
+      pgcDM3:
+        begin
+          ItemIndex := Grid.ItemIndex[ACol, ARow];
+          if ItemIndex >= 0 then
+          begin
+            PGroup.DM3 := TDerivativeMethod3(ItemIndex);
+          end;
+        end;
+      pgcDM5:
+        begin
+          ItemIndex := Grid.ItemIndex[ACol, ARow];
+          if ItemIndex >= 0 then
+          begin
+            PGroup.DM5 := TDerivativeMethod5(ItemIndex);
+          end;
+        end;
+      pgcUseSplitSlope:
+        begin
+          PGroup.UseSplitSlopeAnalysis := Grid.Checked[ACol, ARow];
+        end;
+      pgcSplitThreshold:
+        begin
+          if Grid.Cells[ACol, ARow] <> '' then
+          begin
+            PGroup.SplitThreshold := Grid.RealValue[ACol, ARow];
+          end;
+        end;
+      pgcSplitDifference:
+        begin
+          if Grid.Cells[ACol, ARow] <> '' then
+          begin
+            PGroup.RelSlopeDif := Grid.RealValue[ACol, ARow];
+          end;
+        end;
+      pgcSplitAction:
+        begin
+          ItemIndex := Grid.ItemIndex[ACol, ARow];
+          if ItemIndex >= 0 then
+          begin
+            PGroup.SplitAction := TSplitAction(ItemIndex);
+          end;
+        end;
+    end;
+{
+  TParamGroupColumn = (pgcName, pgcIncType, pgcIncrement, pgcMinIncrement,
+    pgcForceCentral, pgcParamIncrementMultiplier, pgcDM3, pgcDM5,
+    pgcUseSplitSlope, pgcSplitThreshold, pgcSplitDifference, pgcSplitAction);
+}
+  end;
+end;
+
+procedure TfrmManageParameters.frameParameterGroupssbDeleteClick(
+  Sender: TObject);
+var
+  Grid: TRbwDataGrid4;
+begin
+  inherited;
+  Grid := frameParameterGroups.Grid;
+  if Grid.SelectedRow >= Grid.FixedRows  then
+  begin
+    Grid.Objects[0, Grid.SelectedRow].Free;
+    Grid.Objects[0, Grid.SelectedRow] := nil;
+  end;
+  frameParameterGroups.sbDeleteClick(Sender);
+end;
+
+procedure TfrmManageParameters.frameParameterGroupsseNumberChange(
+  Sender: TObject);
+var
+  Grid: TRbwDataGrid4;
+  NewCount: Integer;
+  OldCount: Integer;
+  RowIndex: Integer;
+begin
+  inherited;
+  Grid := frameParameterGroups.Grid;
+  NewCount := frameParameterGroups.seNumber.AsInteger;
+  OldCount := Grid.RowCount-1;
+  for RowIndex := OldCount downto NewCount+1 do
+  begin
+    Grid.Objects[0, RowIndex].Free;
+    Grid.Objects[0, RowIndex] := nil;
+  end;
+
+  frameParameterGroups.seNumberChange(Sender);
+
+  for RowIndex := OldCount+1 to Grid.RowCount -1 do
+  begin
+    Grid.Objects[0, RowIndex] := nil;
+  end;
+
+  UpdateParamNameGroupList;
+end;
+
 procedure TfrmManageParameters.GetData;
 var
   Index: Integer;
   PhastModel: TPhastModel;
   AParam: TModflowParameter;
+  ItemIndex: Integer;
+  AnItem: TPestParamGroup;
+  Grid: TRbwDataGrid4;
 begin
+  frameAvailableObjects.FrameResize(nil);
+
   FParamList := TList.Create;
   PhastModel := frmGoPhast.PhastModel;
 
   if not PhastModel.PestUsed then
   begin
     rdgParameters.ColCount := Succ(Ord(pcZone));
-    grpParameterGroups.Visible := False;
-    spltrParameters.Visible := False;
+    tabParameterGroups.TabVisible := False;
+    tabGroupAssignments.TabVisible := False;
   end;
 
   FSteadyParameters.Assign(PhastModel.ModflowSteadyParameters);
@@ -624,6 +933,29 @@ begin
   FTransientListParameters.Assign(PhastModel.ModflowTransientParameters);
   FSfrParamInstances.Assign(PhastModel.ModflowPackages.
     SfrPackage.ParameterInstances);
+  FParamGroups.Assign(PhastModel.ParamGroups);
+
+  Grid := frameParameterGroups.Grid;
+  frameParameterGroups.seNumber.AsInteger := FParamGroups.Count;
+  for ItemIndex := 0 to FParamGroups.Count - 1 do
+  begin
+    AnItem := FParamGroups[ItemIndex];
+    Grid.Objects[0, ItemIndex+1] := AnItem;
+    Grid.Cells[Ord(pgcName), ItemIndex+1] := AnItem.ParamGroupName;
+    Grid.ItemIndex[Ord(pgcIncType), ItemIndex+1] := Ord(AnItem.IncrementType);
+    Grid.RealValue[Ord(pgcIncrement), ItemIndex+1] := AnItem.ParamIncrement;
+    Grid.RealValue[Ord(pgcMinIncrement), ItemIndex+1] := AnItem.MinParamIncrement;
+    Grid.ItemIndex[Ord(pgcForceCentral), ItemIndex+1] := Ord(AnItem.ForceCentral);
+    Grid.RealValue[Ord(pgcParamIncrementMultiplier), ItemIndex+1] := AnItem.ParamIncrementMultiplier;
+    Grid.ItemIndex[Ord(pgcDM3), ItemIndex+1] := Ord(AnItem.DM3);
+    Grid.ItemIndex[Ord(pgcDM5), ItemIndex+1] := Ord(AnItem.DM5);
+    Grid.Checked[Ord(pgcDM5), ItemIndex+1] := AnItem.UseSplitSlopeAnalysis;
+    Grid.RealValue[Ord(pgcSplitThreshold), ItemIndex+1] := AnItem.SplitThreshold;
+    Grid.RealValue[Ord(pgcSplitDifference), ItemIndex+1] := AnItem.RelSlopeDif;
+    Grid.ItemIndex[Ord(pgcSplitAction), ItemIndex+1] := Ord(AnItem.SplitAction);
+  end;
+
+  UpdateParamNameGroupList;
 
   FParamList.Capacity := FSteadyParameters.Count
     + FTransientListParameters.Count
@@ -762,6 +1094,17 @@ begin
   AParam.Value := StrToFloatDef(rdgParameters.Cells[Ord(pcValue), ARow], 0);
 end;
 
+procedure TfrmManageParameters.CreateParamGroup(ARow: Integer);
+var
+  AParamGroup: TPestParamGroup;
+begin
+  if frameParameterGroups.Grid.Cells[0, ARow] <> '' then
+  begin
+    AParamGroup := FParamGroups.Add;
+    frameParameterGroups.Grid.Objects[0, ARow] := AParamGroup;
+  end;
+end;
+
 procedure TfrmManageParameters.UpdateParameter(ParamIndex: TParameterType;
   var AParam: TModflowParameter; ARow: Integer);
 begin
@@ -852,6 +1195,27 @@ begin
   end;
 end;
 
+procedure TfrmManageParameters.CreateOrUpdateParamGroup(ARow: Integer);
+var
+  Grid: TRbwDataGrid4;
+  AParamGroup: TPestParamGroup;
+begin
+  Grid := frameParameterGroups.Grid;
+  if Grid.Objects[Ord(pcName), ARow] <> nil then
+  begin
+    AParamGroup := Grid.Objects[Ord(pcName), ARow] as TPestParamGroup;
+//    UpdateParameter(ParamIndex, AParamGroup, ARow);
+  end
+  else
+  begin
+    AParamGroup := nil;
+  end;
+  if AParamGroup = nil then
+  begin
+    CreateParamGroup(ARow);
+  end;
+end;
+
 procedure TfrmManageParameters.DeleteAParam(ARow: Integer);
 var
   AParam: TModflowParameter;
@@ -918,6 +1282,7 @@ var
   AModflowParam: TModflowParameter;
   ParamIndex: Integer;
   PhastModel: TPhastModel;
+  PGroupItemIndex: Integer;
 begin
   PhastModel := frmGoPhast.PhastModel;
   FParamList.Sort(CompareParameters);
@@ -995,6 +1360,12 @@ begin
           AModflowParam.UpperBound;
         rdgParameters.Cells[Ord(pcParamGroup), ParamIndex + 1] :=
           AModflowParam.ParameterGroup;
+        PGroupItemIndex := rdgParameters.ItemIndex[Ord(pcParamGroup), ParamIndex + 1];
+        if PGroupItemIndex >= 0 then
+        begin
+          rdgParameters.Objects[Ord(pcParamGroup), ParamIndex + 1] :=
+            rdgParameters.Columns[Ord(pcParamGroup)].Picklist.Objects[PGroupItemIndex];
+        end;
         rdgParameters.RealValue[Ord(pcScaled), ParamIndex + 1] :=
           AModflowParam.Scale;
         rdgParameters.RealValue[Ord(pcOffset), ParamIndex + 1] :=
@@ -1007,6 +1378,101 @@ begin
     UpdateListOfUntiedParamNames;
   finally
     rdgParameters.EndUpdate;
+  end;
+end;
+
+procedure TfrmManageParameters.UpdateParamNameGroupList;
+var
+  NewPickList: TStringList;
+  PGroup: TPestParamGroup;
+  ItemIndex: Integer;
+  AnObject: TObject;
+  RowIndex: Integer;
+begin
+  if FParamGroups = nil then
+  begin
+    Exit;
+  end;
+
+  NewPickList := TStringList.Create;
+  try
+    for ItemIndex := 0 to FParamGroups.Count - 1 do
+    begin
+      PGroup := FParamGroups[ItemIndex];
+      NewPickList.AddObject(PGroup.ParamGroupName, PGroup);
+    end;
+    NewPickList.Sorted := True;
+
+    rdgParameters.Columns[Ord(pcParamGroup)].PickList := NewPickList;
+    comboParamGroups.Items := NewPickList;
+    frameAvailableObjects.lbSrcObjects.Items.Clear;
+    frameAvailableObjects.lbDstObjects.Items.Clear;
+
+    for RowIndex := 1 to rdgParameters.RowCount - 1 do
+    begin
+      AnObject := rdgParameters.Objects[Ord(pcParamGroup), RowIndex];
+      ItemIndex := NewPickList.IndexOfObject(AnObject);
+      if ItemIndex >= 0 then
+      begin
+        rdgParameters.Cells[Ord(pcParamGroup), RowIndex] :=
+          (AnObject as TPestParamGroup).ParamGroupName;
+      end
+      else
+      begin
+        rdgParameters.Objects[Ord(pcParamGroup), RowIndex] := nil;
+        rdgParameters.Cells[Ord(pcParamGroup), RowIndex] := '';
+      end;
+    end;
+  finally
+    NewPickList.Free;
+  end;
+end;
+
+procedure TfrmManageParameters.AssignSelectedGroup(SelectedItems: TStrings);
+var
+  PGroup: TPestParamGroup;
+  Params: TStrings;
+  ParamIndex: Integer;
+  AParam: TModflowParameter;
+  RowIndex: Integer;
+begin
+  if SelectedItems.Count > 0 then
+  begin
+    PGroup := comboParamGroups.Items.Objects[comboParamGroups.ItemIndex] as TPestParamGroup;
+    Params := rdgParameters.Cols[Ord(pcName)];
+    for ParamIndex := 0 to SelectedItems.Count - 1 do
+    begin
+      AParam := SelectedItems.Objects[ParamIndex] as TModflowParameter;
+      RowIndex := Params.IndexOfObject(AParam);
+      if RowIndex >= 1 then
+      begin
+        rdgParameters.Objects[Ord(pcParamGroup), RowIndex] := PGroup;
+        rdgParameters.Cells[Ord(pcParamGroup), RowIndex] := PGroup.ParamGroupName;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmManageParameters.RemoveGroupAssignment(SelectedItems: TStrings);
+var
+  Params: TStrings;
+  ParamIndex: Integer;
+  AParam: TModflowParameter;
+  RowIndex: Integer;
+begin
+  if SelectedItems.Count > 0 then
+  begin
+    Params := rdgParameters.Cols[Ord(pcName)];
+    for ParamIndex := 0 to SelectedItems.Count - 1 do
+    begin
+      AParam := SelectedItems.Objects[ParamIndex] as TModflowParameter;
+      RowIndex := Params.IndexOfObject(AParam);
+      if RowIndex >= 1 then
+      begin
+        rdgParameters.Objects[Ord(pcParamGroup), RowIndex] := nil;
+        rdgParameters.Cells[Ord(pcParamGroup), RowIndex] := '';
+      end;
+    end;
   end;
 end;
 
@@ -1068,6 +1534,11 @@ begin
     begin
       rdgParameters.Canvas.Brush.Color := clRed;
     end;
+    if (TParamColumn(ACol) = pcParamGroup)
+      and (rdgParameters.ItemIndex[Ord(pcParamGroup), ARow] < 0) then
+    begin
+      rdgParameters.Canvas.Brush.Color := clRed;
+    end;
   end;
 end;
 
@@ -1108,10 +1579,14 @@ begin
   begin
     case TParamColumn(ACol) of
       pcName: ; // do nothing
-      pcType, pcValue, pcPestTransform, pcChangeLimitation, pcLowerBound,
-        pcUpperBound, pcParamGroup, pcScaled, pcOffset:
+      pcType:
         begin
           CanSelect := rdgParameters.Cells[Ord(pcName), ARow] <> '';
+        end;
+      pcValue, pcPestTransform, pcChangeLimitation, pcLowerBound,
+        pcUpperBound, pcParamGroup, pcScaled, pcOffset:
+        begin
+          CanSelect := rdgParameters.Objects[Ord(pcName), ARow] <> nil
         end;
       pcPackage: CanSelect := False;
       pcMult, pcZone, pcPilotPoints:
@@ -1258,7 +1733,15 @@ begin
             AParam := rdgParameters.Objects[Ord(pcName), ARow]
               as TModflowParameter;
             AParam.ParameterGroup := rdgParameters.Cells[
-              Ord(pcParamGroup), ARow]
+              Ord(pcParamGroup), ARow];
+            ItemIndex := rdgParameters.ItemIndex[
+              Ord(pcParamGroup), ARow];
+            if ItemIndex >= 0 then
+            begin
+              rdgParameters.Objects[Ord(pcParamGroup), ARow]
+                := rdgParameters.Columns[Ord(pcParamGroup)].
+                PickList.Objects[ItemIndex];
+            end;
           end;
         end;
       pcScaled:
@@ -1424,7 +1907,7 @@ var
   Undo: TUndoChangeParameters;
 begin
   Undo := TUndoChangeParameters.Create(FSteadyParameters,
-    FTransientListParameters, FHufParameters, FSfrParamInstances);
+    FTransientListParameters, FHufParameters, FSfrParamInstances, FParamGroups);
   frmGoPhast.UndoStack.Submit(Undo);
 end;
 
@@ -1434,7 +1917,8 @@ constructor TUndoChangeParameters.Create(
   var NewSteadyParameters: TModflowSteadyParameters;
   var NewTransientParameters: TModflowTransientListParameters;
   var NewHufModflowParameters: THufModflowParameters;
-  var NewSfrParamInstances: TSfrParamInstances);
+  var NewSfrParamInstances: TSfrParamInstances;
+  var NewParamGroups: TPestParamGroups);
 var
   ScreenObjectIndex: Integer;
   Item: TScreenObjectEditItem;

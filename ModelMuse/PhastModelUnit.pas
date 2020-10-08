@@ -41,7 +41,7 @@ uses System.UITypes,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
-  PestPropertiesUnit;
+  PestPropertiesUnit, PestParamGroupsUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -2467,6 +2467,8 @@ that affects the model output should also have a comment. }
     procedure DetermineKyFromAnisotropy(Sender: TObject);
     procedure DetermineKzFromAnisotropy(Sender: TObject);
     function Mt3d_LktIsSelected(Sender: TObject): Boolean; virtual;
+    function GetParamGroups: TPestParamGroups; virtual; abstract;
+    procedure SetParamGroups(const Value: TPestParamGroups); virtual; abstract;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3296,6 +3298,12 @@ that affects the model output should also have a comment. }
     property PestTemplateLines: TStringList read FPestTemplateLines;
     property Discretization: TCustomDiscretization read GetDiscretization;
     property PilotPointDataArrays: TDataArrayList read FPilotPointDataArrays;
+    property ParamGroups: TPestParamGroups read GetParamGroups
+      write SetParamGroups
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+    ;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3752,6 +3760,7 @@ that affects the model output should also have a comment. }
     FFixingModel: boolean;
     FUseGsflowFormat: Boolean;
     FCtsSystems: TCtsSystemCollection;
+    FParamGroups: TPestParamGroups;
     // See @link(Exaggeration).
 
     //     See @link(OwnsScreenObjects).
@@ -4058,6 +4067,8 @@ that affects the model output should also have a comment. }
     function SftUsed(Sender: TObject): boolean; override;
     procedure SetCtsSystems(const Value: TCtsSystemCollection); override;
     function GetCtsSystems: TCtsSystemCollection; override;
+    function GetParamGroups: TPestParamGroups; override;
+    procedure SetParamGroups(const Value: TPestParamGroups); override;
   public
     procedure RefreshGlobalVariables(CompilerList: TList);
     procedure CreateGlobalVariables;
@@ -4738,6 +4749,7 @@ that affects the model output should also have a comment. }
     property FootprintProperties;
     property GeoRef;
     property UseGsflowFormat;
+    property ParamGroups;
   end;
 
   TChildDiscretization = class(TOrderedItem)
@@ -4972,6 +4984,8 @@ that affects the model output should also have a comment. }
     procedure SetUseGsflowFormat(const Value: boolean); override;
     procedure SetCtsSystems(const Value: TCtsSystemCollection); override;
     function GetCtsSystems: TCtsSystemCollection; override;
+    function GetParamGroups: TPestParamGroups; override;
+    procedure SetParamGroups(const Value: TPestParamGroups); override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -9998,6 +10012,10 @@ const
 
 //               Bug fix: Fixed bug that could cause a range check error when
 //                deleting an item in the SWR Range Geometry dialog box.
+//               Bug fix: If the user attempts to edit CSUB data for an object
+//                without first defining any interbeds, ModelMuse will display
+//                a warning message for the user instead of generationg a bug
+//                report.
 
 const
   // version number of ModelMuse.
@@ -10614,6 +10632,7 @@ begin
     RipPlantGroups := SourceModel.RipPlantGroups;
     GeoRef := SourceModel.GeoRef;
     CtsSystems := SourceModel.CtsSystems;
+    ParamGroups := SourceModel.ParamGroups;
   end;
   inherited;
 
@@ -10851,6 +10870,7 @@ begin
   FGeoRef := TGeoref.Create(self);
 
   FCtsSystems := TCtsSystemCollection.Create(self);
+  FParamGroups := TPestParamGroups.Create(Invalidate);
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -11272,6 +11292,7 @@ begin
       FClearing := False;
     end;
 
+    FParamGroups.Free;
     FCtsSystems.Free;
     FGeoRef.Free;
     FRipPlantGroups.Free;
@@ -11460,6 +11481,11 @@ procedure TCustomModel.FinalizeLakeId(Sender: TObject);
 begin
   FinalizeActive(Sender);
   FinalizeWetDry(Sender);
+end;
+
+function TPhastModel.GetParamGroups: TPestParamGroups;
+begin
+  result := FParamGroups;
 end;
 
 function TPhastModel.GetProgramLocations: TProgramLocations;
@@ -14113,6 +14139,11 @@ begin
     FFreeSurface := Value;
     Invalidate(self);
   end;
+end;
+
+procedure TPhastModel.SetParamGroups(const Value: TPestParamGroups);
+begin
+  FParamGroups.Assign(Value);
 end;
 
 procedure TPhastModel.SetPrintFrequency(const Value: TPrintFrequencyCollection);
@@ -30042,6 +30073,7 @@ begin
   FreeAndNil(FEndPoints);
   FreeAndNil(FHeadObsResults);
   CtsSystems.Clear;
+  ParamGroups.Clear;
   ModflowGlobalObservationComparisons.Clear;
   SutraGlobalObservationComparisons.Clear;
 
@@ -31229,11 +31261,6 @@ begin
     Assert(False);
   end;
 end;
-
-//function TCustomModel.GetCtsSystems: TCtsSystemCollection;
-//begin
-//
-//end;
 
 function TCustomModel.ParamNamesDataSetUsed(Sender: TObject): boolean;
 var
@@ -43189,6 +43216,18 @@ begin
   result := ParentModel.GetObservationPurpose;
 end;
 
+function TChildModel.GetParamGroups: TPestParamGroups;
+begin
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.ParamGroups;
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
 function TChildModel.GetParentModel: TCustomModel;
 begin
   result := FParentModel
@@ -43720,6 +43759,11 @@ end;
 procedure TChildModel.SetObservationPurpose(const Value: TObservationPurpose);
 begin
   ParentModel.SetObservationPurpose(Value);
+end;
+
+procedure TChildModel.SetParamGroups(const Value: TPestParamGroups);
+begin
+
 end;
 
 procedure TChildModel.SetProgramLocations(const Value: TProgramLocations);
