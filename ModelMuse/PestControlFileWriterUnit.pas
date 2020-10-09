@@ -17,6 +17,8 @@ type
     procedure WriteLsqr;
     procedure WriteAutomaticUserIntervention;
     procedure WriteSVD_Assist;
+    procedure WriteParameterGroups;
+    procedure WriteParameters;
     // NPAR
     function NumberOfParameters: Integer;
     // NOBS
@@ -36,9 +38,12 @@ type
 implementation
 
 uses
-  PestPropertiesUnit;
+  PestPropertiesUnit, ModflowParameterUnit, GoPhastTypes, OrderedCollectionUnit,
+  PestParamGroupsUnit;
 
 { TPestControlFileWriter }
+
+const Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST];
 
 class function TPestControlFileWriter.Extension: string;
 begin
@@ -47,7 +52,7 @@ end;
 
 function TPestControlFileWriter.NumberOfObservationGroups: Integer;
 begin
-
+  result := Model.PestProperties.ObservationGroups.Count;
 end;
 
 function TPestControlFileWriter.NumberOfObservations: integer;
@@ -57,12 +62,53 @@ end;
 
 function TPestControlFileWriter.NumberOfParameterGroups: Integer;
 begin
-
+  result := Model.ParamGroups.Count;
 end;
 
 function TPestControlFileWriter.NumberOfParameters: Integer;
+var
+  ParamIndex: Integer;
+  AParam: TModflowParameter;
+  UsedTypes: TParameterTypes;
 begin
+  result := 0;
 
+  UsedTypes := [];
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    UsedTypes := Mf15ParamType
+  end
+  else
+  begin
+    Assert(False);
+  end;
+
+  for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+  begin
+    AParam := Model.ModflowSteadyParameters[ParamIndex];
+    if AParam.ParameterType in UsedTypes then
+    begin
+      Inc(result);
+    end;
+  end;
+
+  for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+  begin
+    AParam := Model.ModflowTransientParameters[ParamIndex];
+    if AParam.ParameterType in UsedTypes then
+    begin
+      Inc(result);
+    end;
+  end;
+
+  for ParamIndex := 0 to Model.HufParameters.Count - 1 do
+  begin
+    AParam := Model.HufParameters[ParamIndex];
+    if AParam.ParameterType in UsedTypes then
+    begin
+      Inc(result);
+    end;
+  end;
 end;
 
 function TPestControlFileWriter.NumberOfPriorInformation: Integer;
@@ -434,6 +480,8 @@ begin
     WriteAutomaticUserIntervention;
     // Writing the SVD Assist Section is not currently supported.
     WriteSVD_Assist;
+    WriteParameterGroups;
+    WriteParameters;
   finally
     CloseFile;
   end;
@@ -476,6 +524,271 @@ begin
   NewLine;
 end;
 
+procedure TPestControlFileWriter.WriteParameterGroups;
+var
+  GroupIndex: Integer;
+  AGroup: TPestParamGroup;
+begin
+  WriteSectionHeader('parameter groups');
+  for GroupIndex := 0 to Model.ParamGroups.Count - 1 do
+  begin
+    AGroup := Model.ParamGroups[GroupIndex];
+
+   // PARGPNME
+    WriteString(AGroup.ParamGroupName);
+
+    // INCTYP
+    case AGroup.IncrementType of
+      icRelative:
+        begin
+          WriteString(' relative');
+        end;
+      icAbsolute:
+        begin
+          WriteString(' absolute');
+        end;
+      icRelativeToMax:
+        begin
+          WriteString(' rel_to_max');
+        end;
+      else Assert(False);
+    end;
+
+    // DERINC
+    WriteFloat(AGroup.ParamIncrement);
+
+    // DERINCLB
+    WriteFloat(AGroup.MinParamIncrement);
+
+    // FORCEN
+    case AGroup.ForceCentral of
+      fcAlways2:
+        begin
+          WriteString(' always_2');
+        end;
+      fcAlways3:
+        begin
+          WriteString(' always_3');
+        end;
+      fcAlways5:
+        begin
+          WriteString(' always_5');
+        end;
+      fcSwitch:
+        begin
+          WriteString(' switch');
+        end;
+      fcSwitch5:
+        begin
+          WriteString(' switch_5');
+        end;
+      else Assert(False);
+    end;
+
+    // DERINCMUL
+    WriteFloat(AGroup.ParamIncrementMultiplier);
+
+    // DERMTHD
+    case AGroup.ForceCentral of
+      fcAlways2, fcAlways3, fcSwitch:
+        begin
+          case AGroup.DM3 of
+            dm3Parabolic:
+              begin
+                WriteString(' parabolic');
+              end;
+            dm3BestFit:
+              begin
+                WriteString(' best_fit');
+              end;
+            dm3OutsidePoints:
+              begin
+                WriteString(' outside_pts');
+              end;
+            else Assert(False);
+          end;
+        end;
+      fcAlways5, fcSwitch5:
+        begin
+          case AGroup.DM5 of
+            dm5MinimumVariance:
+              begin
+                WriteString(' minvar');
+              end;
+            dm5MaxPrecision:
+              begin
+                WriteString(' maxprec');
+              end;
+            else Assert(False);
+          end;
+        end;
+      else
+        Assert(False);
+    end;
+
+    if AGroup.UseSplitSlopeAnalysis then
+    begin
+      // SPLITTHRESH
+      WriteFloat(AGroup.SplitThreshold);
+
+      // SPLITRELDIFF
+      WriteFloat(AGroup.RelSlopeDif);
+
+      // SPLITACTION
+      case AGroup.SplitAction of
+        saSmaller:
+          begin
+            WriteString(' smaller');
+          end;
+        saZero:
+          begin
+            WriteString(' zero');
+          end;
+        saPrevious:
+          begin
+            WriteString(' previous');
+          end;
+        else Assert(False);
+      end;
+    end;
+    NewLine;
+  end;
+  NewLine;
+end;
+
+procedure TPestControlFileWriter.WriteParameters;
+var
+  UsedTypes: TParameterTypes;
+  ParamIndex: Integer;
+  AParam: TModflowParameter;
+  procedure WriteParameter(AParam: TModflowParameter);
+  begin
+    //PARNME
+    WriteString(AParam.ParameterName);
+
+    //PARTRANS
+    case AParam.Transform of
+      ptNoTransform:
+        begin
+          WriteString(' none');
+        end;
+      ptLog:
+        begin
+          WriteString(' log');
+        end;
+      ptFixed:
+        begin
+          WriteString(' fixed');
+        end;
+      ptTied:
+        begin
+          WriteString(' tied');
+        end;
+      else Assert(False);
+    end;
+
+    //PARCHGLIM
+    case AParam.ChangeLimitation of
+      pclRelative:
+        begin
+          WriteString(' relative');
+        end;
+      pclFactor:
+        begin
+          WriteString(' factor');
+        end;
+      pclAbsolute:
+        begin
+          WriteString(' absolute(N)');
+        end;
+      else
+        Assert(False);
+    end;
+
+    //PARVAL1
+    WriteFloat(AParam.Value);
+
+    //PARLBND
+    WriteFloat(AParam.LowerBound);
+
+    //PARUBND
+    WriteFloat(AParam.UpperBound);
+
+    //PARGP
+    if AParam.ParameterGroup = '' then
+    begin
+      WriteString(' none');
+    end
+    else
+    begin
+      WriteString(' ' + AParam.ParameterGroup);
+    end;
+
+    //SCALE
+    WriteFloat(AParam.Scale);
+
+    //OFFSET
+    WriteFloat(AParam.Offset);
+
+    //DERCOM
+    WriteInteger(1);
+
+    NewLine;
+  end;
+  procedure WriteTiedParameter(AParam: TModflowParameter);
+  begin
+    if AParam.Transform = ptTied then
+    begin
+      // PARNME
+      WriteString(AParam.ParameterName);
+
+      // PARTIED
+      WriteString(' ' + AParam.TiedParameterName);
+      NewLine;
+    end;
+  end;
+begin
+  UsedTypes := [];
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    UsedTypes := Mf15ParamType
+  end
+  else
+  begin
+    Assert(False);
+  end;
+
+  WriteSectionHeader('parameter data');
+
+  for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+  begin
+    AParam := Model.ModflowSteadyParameters[ParamIndex];
+    if AParam.ParameterType in UsedTypes then
+    begin
+      WriteParameter(AParam);
+    end;
+  end;
+
+  for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+  begin
+    AParam := Model.ModflowTransientParameters[ParamIndex];
+    if AParam.ParameterType in UsedTypes then
+    begin
+      WriteParameter(AParam);
+    end;
+  end;
+
+  for ParamIndex := 0 to Model.HufParameters.Count - 1 do
+  begin
+    AParam := Model.HufParameters[ParamIndex];
+    if AParam.ParameterType in UsedTypes then
+    begin
+      WriteParameter(AParam);
+    end;
+  end;
+
+end;
+
 procedure TPestControlFileWriter.WriteSectionHeader(const SectionID: String);
 begin
   WriteString('* ');
@@ -485,7 +798,7 @@ end;
 
 procedure TPestControlFileWriter.WriteSensitivityReuse;
 begin
-// The sensitivity reuse section is not currently supported.
+// The sensitivity reuse secation is not currently supported.
 end;
 
 procedure TPestControlFileWriter.WriteSingularValueDecomposition;

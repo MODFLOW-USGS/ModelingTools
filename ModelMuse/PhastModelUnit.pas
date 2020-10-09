@@ -10016,6 +10016,9 @@ const
 //                without first defining any interbeds, ModelMuse will display
 //                a warning message for the user instead of generationg a bug
 //                report.
+//               Bug fix: Fixed a bug that prevented the functions for 
+//                identifying the highest active layer from working with DISV
+//                MODFLOW 6 models.
 
 const
   // version number of ModelMuse.

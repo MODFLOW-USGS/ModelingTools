@@ -37,10 +37,15 @@ type
     tabParameters: TTabSheet;
     tabParameterGroups: TTabSheet;
     tabGroupAssignments: TTabSheet;
-    frameAvailableObjects: TframeAvailableObjects;
+    frameParamGroupAssignments: TframeAvailableObjects;
     pnlGroupAssignments: TPanel;
     comboParamGroups: TComboBox;
     lblParameterGroup: TLabel;
+    tabTiedParameters: TTabSheet;
+    pnlTiedParam: TPanel;
+    comboParentParameters: TComboBox;
+    lblParentParameter: TLabel;
+    frameTiedParameters: TframeAvailableObjects;
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure rdgParametersSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -69,6 +74,11 @@ type
     procedure frameAvailableObjectsbtnIncObjectsClick(Sender: TObject);
     procedure frameAvailableObjectsbtnExclObjectsClick(Sender: TObject);
     procedure frameAvailableObjectsbtnExclAllObjectsClick(Sender: TObject);
+    procedure comboParentParametersChange(Sender: TObject);
+    procedure frameTiedParametersbtnIncObjectsClick(Sender: TObject);
+    procedure frameTiedParametersbtnIncAllObjectsClick(Sender: TObject);
+    procedure frameTiedParametersbtnExclObjectsClick(Sender: TObject);
+    procedure frameTiedParametersbtnExclAllObjectsClick(Sender: TObject);
   private
     FSteadyParameters: TModflowSteadyParameters;
     FHufParameters: THufModflowParameters;
@@ -94,6 +104,8 @@ type
     procedure UpdateParamNameGroupList;
     procedure AssignSelectedGroup(SelectedItems: TStrings);
     procedure RemoveGroupAssignment(SelectedItems: TStrings);
+    procedure AssignParentItems(SelectedItems: TStrings);
+    procedure UnAssignParentItems(SelectedItems: TStrings);
     { Private declarations }
   public
     { Public declarations }
@@ -202,6 +214,8 @@ const
      (Package: 'FMP'; PType: 'QMAX'; PClass: pctTransient),
      (Package: 'Many'; PType: 'PEST'; PClass: pctPEST)
      );
+
+  ParamGroupColumn = Ord(pgcIncType);
 
 Type
   TCompareMethod = class(TObject)
@@ -370,7 +384,8 @@ begin
       pcMult: result := CompareMult(Item1, Item2);
       pcZone: result := CompareZone(Item1, Item2);
       pcPilotPoints: result := ComparePilotPoints(Item1, Item2);
-      else Assert(False);
+      else
+        Exit;
     end;
     if result <> 0 then
     begin
@@ -493,8 +508,8 @@ begin
   FAvailableParams.Clear;
   if comboParamGroups.ItemIndex < 0 then
   begin
-    frameAvailableObjects.lbSrcObjects.Items.Clear;
-    frameAvailableObjects.lbDstObjects.Items.Clear;
+    frameParamGroupAssignments.lbSrcObjects.Items.Clear;
+    frameParamGroupAssignments.lbDstObjects.Items.Clear;
     Exit;
   end;
   PGroup := comboParamGroups.Items.Objects[comboParamGroups.ItemIndex]
@@ -519,15 +534,93 @@ begin
     end;
   end;
 
-  frameAvailableObjects.lbSrcObjects.Items.Assign(FAvailableParams);
-  frameAvailableObjects.lbDstObjects.Items.Assign(FUsedParams);
+  frameParamGroupAssignments.lbSrcObjects.Items.Assign(FAvailableParams);
+  frameParamGroupAssignments.lbDstObjects.Items.Assign(FUsedParams);
+end;
+
+procedure TfrmManageParameters.comboParentParametersChange(Sender: TObject);
+var
+  ParentParam: TModflowParameter;
+  AvailableParameters: TStringList;
+  TiedParameters: TStringList;
+  ParamIndex: Integer;
+  AParam: TModflowParameter;
+  UsedParents: TStringList;
+  TempList: TStringList;
+  ItemIndex: Integer;
+begin
+  inherited;
+  if comboParentParameters.ItemIndex < 0 then
+  begin
+    Exit;
+  end;
+
+  ParentParam := comboParentParameters.Items.
+    Objects[comboParentParameters.ItemIndex] as TModflowParameter;
+
+  AvailableParameters := TStringList.Create;
+  TiedParameters := TStringList.Create;
+  UsedParents := TStringList.Create;
+  try
+    TempList := TStringList.Create;
+    try
+      TempList.Assign(rdgParameters.Cols[Ord(pcTiedParameter)]);
+      TempList.Delete(0);
+      for ItemIndex := TempList.Count - 1 downto 0 do
+      begin
+        if TempList[ItemIndex] = '' then
+        begin
+          TempList.Delete(ItemIndex)
+        end;
+      end;
+
+      UsedParents.Sorted := True;
+      UsedParents.Duplicates := dupIgnore;
+      UsedParents.AddStrings(TempList);
+    finally
+      TempList.Free;
+    end;
+
+    for ParamIndex := 0 to FParamList.Count - 1 do
+    begin
+      AParam := FParamList[ParamIndex];
+      if AParam = ParentParam then
+      begin
+        Continue;
+      end;
+      if UsedParents.IndexOf(AParam.ParameterName) >= 0 then
+      begin
+        Continue;
+      end;
+
+      if (AParam.Transform = ptTied)
+        and (AParam.TiedParameterName = ParentParam.ParameterName) then
+      begin
+        TiedParameters.AddObject(AParam.ParameterName, AParam);
+      end
+      else
+      begin
+        AvailableParameters.AddObject(AParam.ParameterName, AParam);
+      end;
+    end;
+
+    frameTiedParameters.lbSrcObjects.Items := AvailableParameters;
+    frameTiedParameters.lbDstObjects.Items := TiedParameters;
+  finally
+    AvailableParameters.Free;
+    TiedParameters.Free;
+    UsedParents.Free;
+  end;
 end;
 
 procedure TfrmManageParameters.btnDeleteClick(Sender: TObject);
 begin
   inherited;
-  DeleteAParam(rdgParameters.SelectedRow);
-  seNumberOfParameters.AsInteger := seNumberOfParameters.AsInteger -1;
+  if rdgParameters.SelectedRow >= 1 then
+  begin
+    DeleteAParam(rdgParameters.SelectedRow);
+    seNumberOfParameters.AsInteger := seNumberOfParameters.AsInteger -1;
+  end;
 end;
 
 procedure TfrmManageParameters.FormCreate(Sender: TObject);
@@ -646,8 +739,8 @@ procedure TfrmManageParameters.frameAvailableObjectsbtnExclAllObjectsClick(
   Sender: TObject);
 begin
   inherited;
-  RemoveGroupAssignment(frameAvailableObjects.lbDstObjects.Items);
-  frameAvailableObjects.btnExclAllObjectsClick(Sender);
+  RemoveGroupAssignment(frameParamGroupAssignments.lbDstObjects.Items);
+  frameParamGroupAssignments.btnExclAllObjectsClick(Sender);
 
 end;
 
@@ -659,13 +752,13 @@ begin
   inherited;
   SelectedItems := TStringList.Create;
   try
-    frameAvailableObjects.GetSelectedItems(
-      frameAvailableObjects.lbDstObjects, SelectedItems);
+    frameParamGroupAssignments.GetSelectedItems(
+      frameParamGroupAssignments.lbDstObjects, SelectedItems);
     RemoveGroupAssignment(SelectedItems);
   finally
     SelectedItems.Free;
   end;
-  frameAvailableObjects.btnExclObjectsClick(Sender);
+  frameParamGroupAssignments.btnExclObjectsClick(Sender);
 
 end;
 
@@ -673,8 +766,8 @@ procedure TfrmManageParameters.frameAvailableObjectsbtnIncAllObjectsClick(
   Sender: TObject);
 begin
   inherited;
-  AssignSelectedGroup(frameAvailableObjects.lbSrcObjects.Items);
-  frameAvailableObjects.btnIncAllObjectsClick(Sender);
+  AssignSelectedGroup(frameParamGroupAssignments.lbSrcObjects.Items);
+  frameParamGroupAssignments.btnIncAllObjectsClick(Sender);
 end;
 
 procedure TfrmManageParameters.frameAvailableObjectsbtnIncObjectsClick(
@@ -685,13 +778,13 @@ begin
   inherited;
   SelectedItems := TStringList.Create;
   try
-    frameAvailableObjects.GetSelectedItems(
-      frameAvailableObjects.lbSrcObjects, SelectedItems);
+    frameParamGroupAssignments.GetSelectedItems(
+      frameParamGroupAssignments.lbSrcObjects, SelectedItems);
     AssignSelectedGroup(SelectedItems);
   finally
     SelectedItems.Free;
   end;
-  frameAvailableObjects.btnIncObjectsClick(Sender);
+  frameParamGroupAssignments.btnIncObjectsClick(Sender);
 
 end;
 
@@ -699,9 +792,25 @@ procedure TfrmManageParameters.frameParameterGroupsGridBeforeDrawCell(
   Sender: TObject; ACol, ARow: Integer);
 var
   CanSelect: Boolean;
+  Names: TStringList;
 begin
   inherited;
   CanSelect := True;
+
+  if (ARow > 0) and (ACol = Ord(pgcName)) then
+  begin
+    Names := TStringList.Create;
+    try
+      Names.Assign(frameParameterGroups.Grid.Cols[Ord(pgcName)]);
+      if Names.IndexOf(frameParameterGroups.Grid.Cells[ACol, ARow]) <> ARow then
+      begin
+        frameParameterGroups.Grid.Canvas.Brush.Color := clRed;
+      end;
+    finally
+      Names.Free;
+    end;
+  end;
+
   frameParameterGroupsGridSelectCell(frameParameterGroups.Grid,
     ACol, ARow, CanSelect);
   if not CanSelect then
@@ -765,7 +874,7 @@ begin
     Grid := frameParameterGroups.Grid;
     PGroupCol := TParamGroupColumn(ACol);
     CreateOrUpdateParamGroup(ARow);
-    PGroup := Grid.Objects[0,ARow] as TPestParamGroup;
+    PGroup := Grid.Objects[ParamGroupColumn,ARow] as TPestParamGroup;
     if PGroup = nil then
     begin
       Exit;
@@ -873,8 +982,8 @@ begin
   Grid := frameParameterGroups.Grid;
   if Grid.SelectedRow >= Grid.FixedRows  then
   begin
-    Grid.Objects[0, Grid.SelectedRow].Free;
-    Grid.Objects[0, Grid.SelectedRow] := nil;
+    Grid.Objects[ParamGroupColumn, Grid.SelectedRow].Free;
+    Grid.Objects[ParamGroupColumn, Grid.SelectedRow] := nil;
   end;
   frameParameterGroups.sbDeleteClick(Sender);
 end;
@@ -893,18 +1002,71 @@ begin
   OldCount := Grid.RowCount-1;
   for RowIndex := OldCount downto NewCount+1 do
   begin
-    Grid.Objects[0, RowIndex].Free;
-    Grid.Objects[0, RowIndex] := nil;
+    Grid.Objects[ParamGroupColumn, RowIndex].Free;
+    Grid.Objects[ParamGroupColumn, RowIndex] := nil;
   end;
 
   frameParameterGroups.seNumberChange(Sender);
 
   for RowIndex := OldCount+1 to Grid.RowCount -1 do
   begin
-    Grid.Objects[0, RowIndex] := nil;
+    Grid.Objects[ParamGroupColumn, RowIndex] := nil;
   end;
 
   UpdateParamNameGroupList;
+end;
+
+procedure TfrmManageParameters.frameTiedParametersbtnExclAllObjectsClick(
+  Sender: TObject);
+begin
+  inherited;
+  UnAssignParentItems(frameTiedParameters.lbDstObjects.Items);
+  frameTiedParameters.btnExclAllObjectsClick(Sender);
+end;
+
+procedure TfrmManageParameters.frameTiedParametersbtnExclObjectsClick(
+  Sender: TObject);
+var
+  SelectedItems: TStringList;
+begin
+  inherited;
+  SelectedItems := TStringList.Create;
+  try
+    frameTiedParameters.GetSelectedItems(
+      frameTiedParameters.lbDstObjects, SelectedItems);
+    UnAssignParentItems(SelectedItems);
+  finally
+    SelectedItems.Free;
+  end;
+  frameTiedParameters.btnExclObjectsClick(Sender);
+
+end;
+
+procedure TfrmManageParameters.frameTiedParametersbtnIncAllObjectsClick(
+  Sender: TObject);
+begin
+  inherited;
+  AssignParentItems(frameTiedParameters.lbSrcObjects.Items);
+  frameTiedParameters.btnIncAllObjectsClick(Sender);
+end;
+
+procedure TfrmManageParameters.frameTiedParametersbtnIncObjectsClick(
+  Sender: TObject);
+var
+//  ParentParam: TModflowParameter;
+  SelectedItems: TStringList;
+begin
+  inherited;
+  SelectedItems := TStringList.Create;
+  try
+    frameTiedParameters.GetSelectedItems(
+      frameTiedParameters.lbSrcObjects, SelectedItems);
+    AssignParentItems(SelectedItems);
+  finally
+    SelectedItems.Free;
+  end;
+  frameTiedParameters.btnIncObjectsClick(Sender);
+
 end;
 
 procedure TfrmManageParameters.GetData;
@@ -916,7 +1078,9 @@ var
   AnItem: TPestParamGroup;
   Grid: TRbwDataGrid4;
 begin
-  frameAvailableObjects.FrameResize(nil);
+  pcParameters.ActivePageIndex := 0;
+  frameParamGroupAssignments.FrameResize(nil);
+  frameTiedParameters.FrameResize(nil);
 
   FParamList := TList.Create;
   PhastModel := frmGoPhast.PhastModel;
@@ -940,7 +1104,7 @@ begin
   for ItemIndex := 0 to FParamGroups.Count - 1 do
   begin
     AnItem := FParamGroups[ItemIndex];
-    Grid.Objects[0, ItemIndex+1] := AnItem;
+    Grid.Objects[ParamGroupColumn, ItemIndex+1] := AnItem;
     Grid.Cells[Ord(pgcName), ItemIndex+1] := AnItem.ParamGroupName;
     Grid.ItemIndex[Ord(pgcIncType), ItemIndex+1] := Ord(AnItem.IncrementType);
     Grid.RealValue[Ord(pgcIncrement), ItemIndex+1] := AnItem.ParamIncrement;
@@ -1098,10 +1262,10 @@ procedure TfrmManageParameters.CreateParamGroup(ARow: Integer);
 var
   AParamGroup: TPestParamGroup;
 begin
-  if frameParameterGroups.Grid.Cells[0, ARow] <> '' then
+  if frameParameterGroups.Grid.Cells[ParamGroupColumn, ARow] <> '' then
   begin
     AParamGroup := FParamGroups.Add;
-    frameParameterGroups.Grid.Objects[0, ARow] := AParamGroup;
+    frameParameterGroups.Grid.Objects[ParamGroupColumn, ARow] := AParamGroup;
   end;
 end;
 
@@ -1247,6 +1411,35 @@ begin
 
 end;
 
+procedure TfrmManageParameters.UnAssignParentItems(SelectedItems: TStrings);
+var
+  RowIndex: Integer;
+  AParam: TModflowParameter;
+  ParentParam: TModflowParameter;
+begin
+  if comboParentParameters.ItemIndex < 0 then
+  begin
+    Exit;
+  end;
+  ParentParam := comboParentParameters.Items.
+    Objects[comboParentParameters.ItemIndex] as TModflowParameter;
+
+  for RowIndex := 1 to rdgParameters.RowCount - 1 do
+  begin
+    AParam := rdgParameters.Objects[Ord(pcName), RowIndex] as TModflowParameter;
+    if (AParam <> nil) and (SelectedItems.IndexOfObject(AParam) >= 0) then
+    begin
+      rdgParameters.Cells[Ord(pcTiedParameter), RowIndex] := '';
+      rdgParameters.Objects[Ord(pcTiedParameter), RowIndex] := nil;
+      AParam.TiedParameterName := ''
+    end;
+  end;
+
+  UpdateListOfUntiedParamNames;
+  comboParentParameters.ItemIndex :=
+    comboParentParameters.Items.IndexOfObject(ParentParam)
+end;
+
 procedure TfrmManageParameters.UpdateListOfUntiedParamNames;
 var
   RowIndex: Integer;
@@ -1264,12 +1457,15 @@ begin
       if rdgParameters.Objects[Ord(pcName), RowIndex] <> nil then
       begin
         AParam := rdgParameters.Objects[Ord(pcName), RowIndex] as TModflowParameter;
-        if (AParam.ParameterName <> '') and (AParam.Transform <> ptTied) then
+        if (AParam.ParameterName <> '')
+          and not (AParam.Transform in [ptFixed, ptTied]) then
         begin
           APickList.AddObject(AParam.ParameterName, AParam);
         end;
       end;
     end;
+    APickList.Sorted := True;
+    comboParentParameters.Items.Assign(APickList);
     rdgParameters.Columns[Ord(pcTiedParameter)].PickList := APickList;
   finally
     APickList.Free;
@@ -1403,10 +1599,9 @@ begin
     end;
     NewPickList.Sorted := True;
 
-    rdgParameters.Columns[Ord(pcParamGroup)].PickList := NewPickList;
     comboParamGroups.Items := NewPickList;
-    frameAvailableObjects.lbSrcObjects.Items.Clear;
-    frameAvailableObjects.lbDstObjects.Items.Clear;
+    frameParamGroupAssignments.lbSrcObjects.Items.Clear;
+    frameParamGroupAssignments.lbDstObjects.Items.Clear;
 
     for RowIndex := 1 to rdgParameters.RowCount - 1 do
     begin
@@ -1423,9 +1618,55 @@ begin
         rdgParameters.Cells[Ord(pcParamGroup), RowIndex] := '';
       end;
     end;
+    rdgParameters.Columns[Ord(pcParamGroup)].PickList.Clear;
+    rdgParameters.Columns[Ord(pcParamGroup)].PickList.Add('none');
+    rdgParameters.Columns[Ord(pcParamGroup)].PickList.AddStrings(NewPickList);
   finally
     NewPickList.Free;
   end;
+end;
+
+procedure TfrmManageParameters.AssignParentItems(SelectedItems: TStrings);
+var
+  RowIndex: Integer;
+  AParam: TModflowParameter;
+  ParentParam: TModflowParameter;
+begin
+  if comboParentParameters.ItemIndex < 0 then
+  begin
+    Exit;
+  end;
+
+  ParentParam := comboParentParameters.Items.
+    Objects[comboParentParameters.ItemIndex] as TModflowParameter;
+  if ParentParam.Transform in [ptFixed, ptTied] then
+  begin
+    ParentParam.Transform := ptNoTransform;
+    RowIndex := rdgParameters.Cols[Ord(pcName)].IndexOfObject(ParentParam);
+    if RowIndex >= 1 then
+    begin
+      rdgParameters.ItemIndex[Ord(pcPestTransform), RowIndex] := Ord(ptNoTransform);
+    end;
+  end;
+
+  for RowIndex := 1 to rdgParameters.RowCount - 1 do
+  begin
+    AParam := rdgParameters.Objects[Ord(pcName), RowIndex] as TModflowParameter;
+    if (AParam <> nil) and (SelectedItems.IndexOfObject(AParam) >= 0) then
+    begin
+      rdgParameters.Cells[Ord(pcTiedParameter), RowIndex] := ParentParam.ParameterName;
+      rdgParameters.Objects[Ord(pcTiedParameter), RowIndex] := ParentParam;
+      rdgParameters.ItemIndex[Ord(pcPestTransform), RowIndex] := Ord(ptTied);
+
+      AParam.TiedParameterName := ParentParam.ParameterName;
+      AParam.Transform := ptTied;
+    end;
+  end;
+
+  UpdateListOfUntiedParamNames;
+  comboParentParameters.ItemIndex :=
+    comboParentParameters.Items.IndexOfObject(ParentParam)
+
 end;
 
 procedure TfrmManageParameters.AssignSelectedGroup(SelectedItems: TStrings);
@@ -1635,7 +1876,8 @@ begin
             AParam := rdgParameters.Objects[Ord(pcName), ARow]
               as TModflowParameter;
             PriorName := AParam.ParameterName;
-            NewName := string(AnsiString(rdgParameters.Cells[Ord(pcName), ARow]));
+            NewName := Trim(string(AnsiString(
+              rdgParameters.Cells[Ord(pcName), ARow])));
             if AParam.ParameterType = ptSFR then
             begin
               FSfrParamInstances.UpdateParamName(AParam.ParameterName, NewName);
@@ -1777,7 +2019,7 @@ begin
       else
         Assert(False);
     end;
-    if (PCol in [pcName, pcPestTransform])
+    if (PCol in [pcName, pcType, pcPestTransform])
       and frmGoPhast.PhastModel.PestUsed then
     begin
       UpdateListOfUntiedParamNames;

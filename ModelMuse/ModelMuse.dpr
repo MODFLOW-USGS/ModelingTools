@@ -713,7 +713,8 @@ uses
   PestPropertiesUnit in 'PestPropertiesUnit.pas',
   frmPestUnit in 'frmPestUnit.pas' {frmPEST},
   PestControlFileWriterUnit in 'PestControlFileWriterUnit.pas',
-  PestParamGroupsUnit in 'PestParamGroupsUnit.pas';
+  PestParamGroupsUnit in 'PestParamGroupsUnit.pas',
+  PestObsGroupUnit in 'PestObsGroupUnit.pas';
 
 {$R *.res}
 

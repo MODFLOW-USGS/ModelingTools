@@ -5271,7 +5271,8 @@ var
 //  Mesh: TSutraMesh3D;
 begin
   result := False;
-  if TCustomModel(GlobalCurrentModel).Grid <> nil then
+  if (TCustomModel(GlobalCurrentModel).Grid <> nil)
+    or TCustomModel(GlobalCurrentModel).DisvUsed then
   begin
     if GlobalCurrentModel.ModelSelection = msModflow2015 then
     begin

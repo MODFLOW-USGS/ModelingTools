@@ -3,7 +3,7 @@ unit PestPropertiesUnit;
 interface
 
 uses
-  System.Classes, GoPhastTypes, GR32, FastGEO;
+  System.Classes, GoPhastTypes, GR32, FastGEO, PestObsGroupUnit;
 
 type
   TPestRestart = (prNoRestart, prRestart);
@@ -422,6 +422,7 @@ type
     FTopY: double;
     FSvdProperties: TSingularValueDecompositionProperties;
     FLsqrProperties: TLsqrProperties;
+    FObservatioGroups: TPestObservationGroups;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -435,6 +436,7 @@ type
     procedure SetSvdProperties(
       const Value: TSingularValueDecompositionProperties);
     procedure SetLsqrProperties(const Value: TLsqrProperties);
+    procedure SetObservatioGroups(const Value: TPestObservationGroups);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     procedure Assign(Source: TPersistent); override;
@@ -460,7 +462,10 @@ type
       write SetPestControlData;
     property SvdProperties: TSingularValueDecompositionProperties
       read FSvdProperties write SetSvdProperties;
-    property LsqrProperties: TLsqrProperties read FLsqrProperties write SetLsqrProperties;
+    property LsqrProperties: TLsqrProperties read FLsqrProperties
+      write SetLsqrProperties;
+    property ObservationGroups: TPestObservationGroups read FObservatioGroups
+      write SetObservatioGroups;
   end;
 
 implementation
@@ -486,6 +491,7 @@ begin
     PestControlData := PestSource.PestControlData;
     SvdProperties := PestSource.SvdProperties;
     LsqrProperties := PestSource.LsqrProperties;
+    ObservationGroups := PestSource.ObservationGroups;
   end
   else
   begin
@@ -501,12 +507,14 @@ begin
   FSvdProperties :=
     TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
   FLsqrProperties := TLsqrProperties.Create(InvalidateModelEvent);
+  FObservatioGroups := TPestObservationGroups.Create(InvalidateModelEvent);
   InitializeVariables;
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
 end;
 
 destructor TPestProperties.Destroy;
 begin
+  FObservatioGroups.Free;
   FLsqrProperties.Free;
   FSvdProperties.Free;
   FPestControlData.Free;
@@ -638,6 +646,8 @@ begin
   FPestControlData.InitializeVariables;
   FSvdProperties.InitializeVariables;
   FLsqrProperties.InitializeVariables;
+
+  FObservatioGroups.Clear;
 end;
 
 procedure TPestProperties.SetExtendedTemplateCharacter(const Value: Char);
@@ -648,6 +658,12 @@ end;
 procedure TPestProperties.SetLsqrProperties(const Value: TLsqrProperties);
 begin
   FLsqrProperties.Assign(Value);
+end;
+
+procedure TPestProperties.SetObservatioGroups(
+  const Value: TPestObservationGroups);
+begin
+  FObservatioGroups.Assign(Value);
 end;
 
 procedure TPestProperties.SetPestControlData(const Value: TPestControlData);

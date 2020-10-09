@@ -297,7 +297,7 @@ type
     property NewDataSets: TList read FNewDataSets write FNewDataSets;
   end;
 
-  TPestTransform = (ptNone, ptLog, ptFixed, ptTied);
+  TPestTransform = (ptNoTransform, ptLog, ptFixed, ptTied);
   TPestChangeLimitation = (pclRelative, pclFactor, pclAbsolute);
 
   // @name represents a MODFLOW parameter

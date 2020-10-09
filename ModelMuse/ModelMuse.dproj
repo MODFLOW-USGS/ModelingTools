@@ -8,7 +8,7 @@
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.1</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -1519,6 +1519,11 @@
         <DCCReference Include="frmContaminantTreatmentSystemsUnit.pas">
             <Form>frmContaminantTreatmentSystems</Form>
         </DCCReference>
+        <DCCReference Include="frameAvailableObjectsUnit.pas">
+            <Form>frameAvailableObjects</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <DCCReference Include="frmEditSelectedWellsUnit.pas">
             <Form>frmEditSelectedWells</Form>
         </DCCReference>
@@ -1578,11 +1583,7 @@
         </DCCReference>
         <DCCReference Include="PestControlFileWriterUnit.pas"/>
         <DCCReference Include="PestParamGroupsUnit.pas"/>
-        <DCCReference Include="frameAvailableObjectsUnit.pas">
-            <Form>frameAvailableObjects</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
+        <DCCReference Include="PestObsGroupUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
