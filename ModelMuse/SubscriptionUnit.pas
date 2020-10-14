@@ -328,7 +328,10 @@ begin
       FSubscribers.Remove(Observer);
       // is the following OK?
       // The following may be needed when adding or removing a new HUF multiplier or zone array.
-      Observer.UpToDate := False;
+      if Observer <> nil then
+      begin
+        Observer.UpToDate := False;
+      end;
     end;
   except on E: Exception do
     begin

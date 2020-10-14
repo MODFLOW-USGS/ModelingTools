@@ -3031,6 +3031,11 @@ begin
                   end;
                 end;
 
+              end
+              else if Index <= 1 then
+
+              begin
+                raise ERbwParserError.Create('A formula can not begin with ",".');
               end;
 
               Tokens.Add(copy(ALine, LastPosition + 1, Index - LastPosition -

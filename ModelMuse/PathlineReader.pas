@@ -1248,6 +1248,8 @@ resourcestring
   'something wrong with how you have set up MODPATH in your model.';
   StrThereWasAnErrorW = 'There was an error when reading the file. The error' +
   ' message was "%s"';
+  StrErrorReadingTheFo = 'Error reading  line %0:d from what is supposed to ' +
+  'be a MODPATH 7 pathline file. This line was "%:ss". ';
 
 const
   StrSTARTLAY: AnsiString = 'START_LAY';
@@ -8153,7 +8155,7 @@ begin
             MessageDlg(Format(StrErrorPrematureTer, [LineIndex]), mtError, [mbOK], 0);
           end;
           Splitter.DelimitedText := ALine;
-          Assert(Splitter.Count = 11);
+          Assert(Splitter.Count = 11, Format(StrErrorReadingTheFo, [LineIndex,ALine]));
 
           CellNumber := StrToInt(Splitter[0]);
           XPrime := FortranStrToFloat(Splitter[1]);

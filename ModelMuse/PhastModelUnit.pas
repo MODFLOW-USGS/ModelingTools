@@ -10009,8 +10009,7 @@ const
 //                too.
 //   '4.3.0.16'  Bug fix: Fixed bug that could cause WellFootprint models to
 //                fail when exporting withdrawals.
-
-//               Bug fix: Fixed bug that could cause a range check error when
+//   '4.3.0.17'  Bug fix: Fixed bug that could cause a range check error when
 //                deleting an item in the SWR Range Geometry dialog box.
 //               Bug fix: If the user attempts to edit CSUB data for an object
 //                without first defining any interbeds, ModelMuse will display
@@ -10020,9 +10019,14 @@ const
 //                identifying the highest active layer from working with DISV
 //                MODFLOW 6 models.
 
+//               Bug fix: Fixed a bug that could cause access violations if a
+//                formula started with a comma.
+//               Bug fix: Fixed a bug that could cause access violations when
+//                shutting down ModelMuse.
+
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.16';
+  IIModelVersion = '4.3.0.17';
 
 function IModelVersion: string;
 begin
