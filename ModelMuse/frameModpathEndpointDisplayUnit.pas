@@ -890,7 +890,7 @@ var
 begin
   if FGettingData or (frmGoPhast.PhastModel = nil)
     or (csDestroying in frmGoPhast.PhastModel.ComponentState)
-    or frmGoPhast.PhastModel.Clearing then
+    or frmGoPhast.PhastModel.Clearing or (FLegend = nil)  then
   begin
     Exit;
   end;
