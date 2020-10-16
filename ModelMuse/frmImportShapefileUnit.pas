@@ -51,6 +51,9 @@ type
   TLakeColumns = (lcStartTime, lcEndTime, lcMinStage, lcMaxStage, lcPrecip,
     lcEvap, lcRunoff, lcWithdrawl, lcConcentration);
 
+  TLakeMf6Columns = (l6cStartTim, l6cEndTime, l6cStatus, l6cStage, l6cRainfall,
+    l6cEvaporation, l6cRunoff, l6cInflow, l6cWithdrawal);
+
   TUzfColumns = (ucStartTime, ucEndTime, ucInfiltration, ucEvapRate,
     ucExtinctDepth, ucExtinctWaterContent);
 
@@ -522,6 +525,25 @@ type
     cbLockObject: TCheckBox;
     comboMultilayer: TComboBox;
     lblMultilayer: TLabel;
+    jvspLakMf6: TJvStandardPage;
+    comboLakeMf6Embeded: TComboBox;
+    lblLakeMf6Embeded: TLabel;
+    lblStartingStage: TLabel;
+    lblBottomElev: TLabel;
+    lblTopElev: TLabel;
+    lblLakebedK: TLabel;
+    lblLakebedThickness: TLabel;
+    lblConnLength: TLabel;
+    comboStartingStage: TComboBox;
+    comboBottomElev: TComboBox;
+    comboTopElev: TComboBox;
+    comboLakebedK: TComboBox;
+    comboLakebedThickness: TComboBox;
+    comboConnLength: TComboBox;
+    lblHorizontal: TLabel;
+    comboHorizontal: TComboBox;
+    comboVertical: TComboBox;
+    lblVertical: TLabel;
     // @name edits the formula in @link(edImportCriterion).
     procedure btnImportCriterionClick(Sender: TObject);
     // @name sets all the checkboxes to checked
@@ -782,6 +804,8 @@ type
     procedure AssignRealValueAttributesToControls;
     Procedure HowTreatDuplicateNames;
     procedure AssignFormulaInterpretationText(combo: TComboBox);
+    procedure InitializeBoundaryControlsForLAKMf6;
+    procedure ImportModflowLakMf6Package(AScreenObject: TScreenObject);
     { Private declarations }
   public
     // @name returns @true if the Shapefile is selected.
@@ -824,7 +848,7 @@ uses Math, Contnrs , frmGoPhastUnit, frmProgressUnit,
   System.IOUtils, SutraMeshUnit, SubscriptionUnit, FootPrintUtilities,
   ModflowSfr6Unit, ModflowMawUnit, Modflow6ObsUnit, frameScreenObjectSfr6Unit,
   ModflowBoundaryDisplayUnit, Mt3dUztRchUnit, Mt3dUztSatEtUnit,
-  Mt3dUztUnsatEtUnit;
+  Mt3dUztUnsatEtUnit, ModflowLakMf6Unit;
 
 resourcestring
   StrParameterName = 'Parameter name';
@@ -1895,9 +1919,17 @@ begin
   comboLiftQMax.Items := FRealFieldNames;
   comboWellTolerance.Items := FRealFieldNames;
 
-  // LAK
+  // LAK MF2005
   comboInitialStage.Items := FRealFieldNames;
   comboSill.Items := FRealFieldNames;
+
+  // LAK MF6
+  comboStartingStage.Items := FRealFieldNames;
+  comboBottomElev.Items := FRealFieldNames;
+  comboTopElev.Items := FRealFieldNames;
+  comboLakebedK.Items := FRealFieldNames;
+  comboLakebedThickness.Items := FRealFieldNames;
+  comboConnLength.Items := FRealFieldNames;
 
   // DRT
   rdeDrtX.Items := FRealFieldNames;
@@ -3481,6 +3513,97 @@ begin
   Boundary.AdjustmentMethod := TAdjustmentMethod(rgAngleAdjustment.ItemIndex);
 end;
 
+procedure TfrmImportShapefile.ImportModflowLakMf6Package(
+  AScreenObject: TScreenObject);
+var
+  Boundary: TLakeMf6;
+  Connections: TLakeConnectionTypes;
+  Index: Integer;
+  UseRow: Boolean;
+  StartTime: double;
+  EndTime: double;
+  Item: TLakeTimeItem;
+  ItemIndex: Integer;
+  AValue: string;
+  Dummy: Boolean;
+begin
+  AScreenObject.CreateLakMf6Boundary;
+  Boundary := AScreenObject.ModflowLak6;
+
+  Boundary.Embedded := GetBooleanValueFromText(comboLakeMf6Embeded.Text);
+  Connections := [];
+  if GetBooleanValueFromText(comboHorizontal.Text) then
+  begin
+    Connections := Connections + [lctHorizontal];
+  end;
+  if GetBooleanValueFromText(comboVertical.Text) then
+  begin
+    Connections := Connections + [lctVertical];
+  end;
+  Boundary.LakeConnections := Connections;
+  Boundary.BottomElevation := GetRealFormulaFromText(comboBottomElev.Text);
+  Boundary.TopElevation := GetRealFormulaFromText(comboTopElev.Text);
+  Boundary.BedK := GetRealFormulaFromText(comboLakebedK.Text);
+  Boundary.BedThickness := GetRealFormulaFromText(comboLakebedThickness.Text);
+  Boundary.StartingStage := GetRealFormulaFromText(comboStartingStage.Text);
+  Boundary.ConnectionLength := GetRealFormulaFromText(comboConnLength.Text);
+
+  for Index := 0 to seBoundaryTimeCount.AsInteger - 1 do
+  begin
+    UseRow := (rdgBoundaryConditions.Cells[0, Index + 1] <> '')
+      and (rdgBoundaryConditions.Cells[1, Index + 1] <> '');
+    if UseRow then
+    begin
+      StartTime := GetRealValueFromText(
+        rdgBoundaryConditions.Cells[Ord(l6cStartTim), Index + 1], Dummy);
+      EndTime := GetRealValueFromText(
+        rdgBoundaryConditions.Cells[Ord(l6cEndTime), Index + 1], Dummy);
+
+      Item := Boundary.Values.Add as TLakeTimeItem;
+      Item.StartTime := StartTime;
+      Item.EndTime := EndTime;
+
+      ItemIndex := rdgBoundaryConditions.ItemIndex[Ord(l6cStatus), Index + 1];
+      if ItemIndex >= 0 then
+      begin
+        Item.Status := TLakeStatus(ItemIndex);
+      end;
+//  TLakeMf6Columns = (l6cStartTim, l6cEndTime, l6cStatus, l6cStage, l6cRainfall,
+//    l6cEvaporation, l6cRunoff, l6cInflow, l6cWithdrawal);
+
+
+      AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+        Ord(l6cStage), Index + 1]);
+      Item.Stage := AValue;
+
+      AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+        Ord(l6cRainfall), Index + 1]);
+      Item.Rainfall := AValue;
+
+      AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+        Ord(l6cEvaporation), Index + 1]);
+      Item.Evaporation := AValue;
+
+      AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+        Ord(l6cRunoff), Index + 1]);
+      Item.Runoff := AValue;
+
+      AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+        Ord(l6cInflow), Index + 1]);
+      Item.Inflow := AValue;
+
+      AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
+        Ord(l6cWithdrawal), Index + 1]);
+      Item.Withdrawal := AValue;
+
+//      ConcItem := CreateConcItem(ConcBoundary, Index, Item);
+//      ImportConcItemForSeparateShapes(Index, ConcItem,
+//        StartingConcIndex);
+
+    end;
+  end
+end;
+
 procedure TfrmImportShapefile.ImportModflowLakPackage(
   AScreenObject: TScreenObject);
 var
@@ -4895,10 +5018,77 @@ begin
   comboHfbThickness.Items := FRealFieldAndGlobalVariablesNames;
 end;
 
+procedure TfrmImportShapefile.InitializeBoundaryControlsForLAKMf6;
+var
+  Index: Integer;
+begin
+  plBoundary.ActivePage := jvspLakMf6;
+
+  comboLakeMf6Embeded.Items := FBooleanFieldNames;
+  comboHorizontal.Items := FBooleanFieldNames;
+  comboVertical.Items := FBooleanFieldNames;
+
+  AssignRealFieldNamesToControls;
+
+  rdgBoundaryConditions.Enabled := True;
+  rdgBoundaryConditions.ColCount := Ord(l6cWithdrawal) + 1;
+//    + AssociatedConcColumns;
+  AssignColFeatureProperties;
+
+  rdgBoundaryConditions.Cells[Ord(l6cStartTim), 0] := StrStartingTime;
+  rdgBoundaryConditions.Columns[Ord(l6cStartTim)].ComboUsed := True;
+  rdgBoundaryConditions.Columns[Ord(l6cStartTim)].Format := rcf4String;
+  rdgBoundaryConditions.Columns[Ord(l6cStartTim)].PickList.Clear;
+  frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes(
+    rdgBoundaryConditions, Ord(l6cStartTim));
+  rdgBoundaryConditions.Columns[Ord(l6cStartTim)].
+    PickList.AddStrings(FRealFieldAndGlobalVariablesNames);
+
+  rdgBoundaryConditions.Cells[Ord(l6cEndTime), 0] := StrEndingTime;
+  rdgBoundaryConditions.Columns[Ord(l6cEndTime)].ComboUsed := True;
+  rdgBoundaryConditions.Columns[Ord(l6cEndTime)].Format := rcf4String;
+  rdgBoundaryConditions.Columns[Ord(l6cEndTime)].PickList.Clear;
+  frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithEndTimes(
+    rdgBoundaryConditions, Ord(l6cEndTime));
+  rdgBoundaryConditions.Columns[Ord(l6cEndTime)].
+    PickList.AddStrings(FRealFieldAndGlobalVariablesNames);
+
+  {
+  TLakeMf6Columns = (l6cStartTim, l6cEndTime, l6cStatus, l6cStage, l6cRainfall,
+    l6cEvaporation, l6cRunoff, l6cInflow, l6cWithdrawal);
+  }
+
+  rdgBoundaryConditions.Cells[Ord(l6cStatus), 0] := 'Status';
+  rdgBoundaryConditions.Cells[Ord(l6cStage), 0] := 'Stage';
+  rdgBoundaryConditions.Cells[Ord(l6cRainfall), 0] := 'Rainfall';
+  rdgBoundaryConditions.Cells[Ord(l6cEvaporation), 0] := StrEvaporation;
+  rdgBoundaryConditions.Cells[Ord(l6cRunoff), 0] := 'Runoff';
+  rdgBoundaryConditions.Cells[Ord(l6cInflow), 0] := 'Inflow';
+  rdgBoundaryConditions.Cells[Ord(l6cWithdrawal), 0] := StrWithdrawal;
+
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].ComboUsed := True;
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].Format := rcf4String;
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Clear;
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add('Active');
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add('Inactive');
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add('Constant');
+//  rdgBoundaryConditions.Columns[l6cStatus].LimitToList := True;
+
+  for Index := Ord(l6cStage) to Ord(l6cWithdrawal) do
+  begin
+//    rdgBoundaryConditions.Columns[Index].WordWrapCaptions := True;
+    rdgBoundaryConditions.Columns[Index].ComboUsed := True;
+    rdgBoundaryConditions.Columns[Index].Format := rcf4String;
+    rdgBoundaryConditions.Columns[Index].PickList :=
+      FRealFieldAndGlobalVariablesNames;
+  end;
+
+end;
+
 procedure TfrmImportShapefile.InitializeBoundaryControlsForLAK;
 var
-  TimeIndex: Integer;
-  StressPeriod: TModflowStressPeriod;
+//  TimeIndex: Integer;
+//  StressPeriod: TModflowStressPeriod;
   Index: Integer;
 begin
   plBoundary.ActivePage := jvspModflowLAK;
@@ -4918,12 +5108,15 @@ begin
   rdgBoundaryConditions.Columns[Ord(lcStartTime)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(lcStartTime)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(lcStartTime)].PickList.Clear;
-  for TimeIndex := 0 to frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
-  begin
-    StressPeriod := frmGoPhast.PhastModel.ModflowStressPeriods.Items[TimeIndex];
-    rdgBoundaryConditions.Columns[Ord(lcStartTime)].
-      PickList.Add(FloatToStr(StressPeriod.StartTime));
-  end;
+  frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes(
+    rdgBoundaryConditions, Ord(lcStartTime));
+
+//  for TimeIndex := 0 to frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
+//  begin
+//    StressPeriod := frmGoPhast.PhastModel.ModflowStressPeriods.Items[TimeIndex];
+//    rdgBoundaryConditions.Columns[Ord(lcStartTime)].
+//      PickList.Add(FloatToStr(StressPeriod.StartTime));
+//  end;
   rdgBoundaryConditions.Columns[Ord(lcStartTime)].
     PickList.AddStrings(FRealFieldNames);
 
@@ -4932,12 +5125,14 @@ begin
   rdgBoundaryConditions.Columns[Ord(lcEndTime)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(lcEndTime)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(lcEndTime)].PickList.Clear;
-  for TimeIndex := 0 to frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
-  begin
-    StressPeriod := frmGoPhast.PhastModel.ModflowStressPeriods.Items[TimeIndex];
-    rdgBoundaryConditions.Columns[Ord(lcEndTime)].
-      PickList.Add(FloatToStr(StressPeriod.EndTime));
-  end;
+  frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithEndTimes(
+    rdgBoundaryConditions, Ord(lcEndTime));
+//  for TimeIndex := 0 to frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
+//  begin
+//    StressPeriod := frmGoPhast.PhastModel.ModflowStressPeriods.Items[TimeIndex];
+//    rdgBoundaryConditions.Columns[Ord(lcEndTime)].
+//      PickList.Add(FloatToStr(StressPeriod.EndTime));
+//  end;
   rdgBoundaryConditions.Columns[Ord(lcEndTime)].
     PickList.AddStrings(FRealFieldNames);
 
@@ -8346,6 +8541,7 @@ begin
         AddModflowPackageToImportChoices(Packages.EtsPackage);
         AddModflowPackageToImportChoices(Packages.GhbBoundary);
         AddModflowPackageToImportChoices(Packages.Mf6ObservationUtility);
+        AddModflowPackageToImportChoices(Packages.LakMf6Package);
 //        AddModflowPackageToImportChoices(Packages.HfbPackage);
         AddModflowPackageToImportChoices(Packages.RchPackage);
         AddModflowPackageToImportChoices(Packages.RivPackage);
@@ -11128,6 +11324,7 @@ begin
             or (APackage is TMultinodeWellSelection)
             or (APackage is TLakePackageSelection)
             or (APackage is THobPackageSelection)
+            or (APackage is TLakeMf6PackageSelection)
             then
           begin
             comboJoinObjects.ItemIndex := 0;
@@ -11209,6 +11406,10 @@ begin
           else if APackage = Packages.LakPackage then
           begin
             InitializeBoundaryControlsForLAK;
+          end
+          else if APackage = Packages.LakMf6Package then
+          begin
+            InitializeBoundaryControlsForLAKMf6;
           end
           else if APackage = Packages.HfbPackage then
           begin
@@ -11740,6 +11941,10 @@ begin
           else if Package = Packages.LakPackage then
           begin
             ImportModflowLakPackage(AScreenObject);
+          end
+          else if Package = Packages.LakMf6Package then
+          begin
+            ImportModflowLakMf6Package(AScreenObject);
           end
           else if Package = Packages.HfbPackage then
           begin

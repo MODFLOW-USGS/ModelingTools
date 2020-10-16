@@ -26345,6 +26345,8 @@ object TTaskHistory
     item
       Date = 44120.000000000000000000
       Categories.Strings = (
-        'GW_Chart')
+        'GW_Chart'
+        'Import'
+        'Dialog boxes')
     end>
 end

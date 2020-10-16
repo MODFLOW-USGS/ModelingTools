@@ -7,6 +7,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   Caption = 'Import Shapefile'
   ClientHeight = 596
   ClientWidth = 771
+  ExplicitTop = -300
   ExplicitWidth = 787
   ExplicitHeight = 635
   PixelsPerInch = 96
@@ -85,9 +86,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Top = 0
     Width = 771
     Height = 555
-    ActivePage = tabFeatures
+    ActivePage = tabOptions
     Align = alClient
     TabOrder = 0
+    ExplicitTop = -4
     object tabOptions: TTabSheet
       Caption = 'Options 1'
       ImageIndex = 3
@@ -499,10 +501,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     object tabCsv: TTabSheet
       Caption = 'CSV (Optional)'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameCSV: TframeGrid
         Left = 0
         Top = 0
@@ -990,7 +988,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Top = 256
           Width = 761
           Height = 265
-          ActivePage = jvspModflow6Obs
+          ActivePage = jvspLakMf6
           PropagateEnable = False
           Align = alBottom
           object jvspNone: TJvStandardPage
@@ -999,7 +997,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Width = 761
             Height = 265
             Caption = 'jvspNone'
-            ExplicitHeight = 254
           end
           object jvspPhastSpecifiedHead: TJvStandardPage
             Left = 0
@@ -1363,7 +1360,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   AutoAdjustColWidths = True
                 end>
               WordWrapRowCaptions = False
-              ExplicitHeight = 254
               ColWidths = (
                 20
                 26
@@ -1688,9 +1684,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabDrtNone: TTabSheet
                 Caption = 'tabDrtNone'
                 TabVisible = False
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
               end
               object tabDrtLocation: TTabSheet
                 Caption = 'tabDrtLocation'
@@ -2668,10 +2661,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabSfrMf6DownstreamSegments: TTabSheet
                 Caption = 'Downstream segments'
                 ImageIndex = 1
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 221
                 inline frameDownstreamSegmentsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
@@ -2680,11 +2669,11 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   Align = alClient
                   TabOrder = 0
                   ExplicitWidth = 753
-                  ExplicitHeight = 221
+                  ExplicitHeight = 232
                   inherited Panel: TPanel
                     Top = 191
                     Width = 753
-                    ExplicitTop = 180
+                    ExplicitTop = 191
                     ExplicitWidth = 753
                     inherited lbNumber: TLabel
                       Width = 233
@@ -2747,7 +2736,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                         AutoAdjustColWidths = True
                       end>
                     ExplicitWidth = 753
-                    ExplicitHeight = 180
+                    ExplicitHeight = 191
                     ColWidths = (
                       127)
                     RowHeights = (
@@ -2759,10 +2748,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabDiversions: TTabSheet
                 Caption = 'Diversions'
                 ImageIndex = 2
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 221
                 inline frameDiversionsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
@@ -2771,11 +2756,11 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   Align = alClient
                   TabOrder = 0
                   ExplicitWidth = 753
-                  ExplicitHeight = 221
+                  ExplicitHeight = 232
                   inherited Panel: TPanel
                     Top = 191
                     Width = 753
-                    ExplicitTop = 180
+                    ExplicitTop = 191
                     ExplicitWidth = 753
                     inherited lbNumber: TLabel
                       Width = 147
@@ -2868,7 +2853,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                         AutoAdjustColWidths = True
                       end>
                     ExplicitWidth = 753
-                    ExplicitHeight = 180
+                    ExplicitHeight = 191
                     ColWidths = (
                       64
                       90)
@@ -2962,10 +2947,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabMawWellScreens: TTabSheet
                 Caption = 'Well screens'
                 ImageIndex = 1
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 221
                 inline frameMawWellScreens: TframeGrid
                   Left = 0
                   Top = 0
@@ -2974,11 +2955,11 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                   Align = alClient
                   TabOrder = 0
                   ExplicitWidth = 753
-                  ExplicitHeight = 221
+                  ExplicitHeight = 232
                   inherited Panel: TPanel
                     Top = 191
                     Width = 753
-                    ExplicitTop = 180
+                    ExplicitTop = 191
                     ExplicitWidth = 753
                     inherited lbNumber: TLabel
                       Width = 161
@@ -3109,7 +3090,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                         AutoAdjustColWidths = True
                       end>
                     ExplicitWidth = 753
-                    ExplicitHeight = 180
+                    ExplicitHeight = 191
                     RowHeights = (
                       24
                       24)
@@ -3222,6 +3203,140 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               Items.Strings = (
                 'False'
                 'True')
+            end
+          end
+          object jvspLakMf6: TJvStandardPage
+            Left = 0
+            Top = 0
+            Width = 761
+            Height = 265
+            Caption = 'jvspLakMf6'
+            ExplicitTop = -1
+            object lblLakeMf6Embeded: TLabel
+              Left = 156
+              Top = 9
+              Width = 105
+              Height = 18
+              Caption = 'Single-cell lake'
+            end
+            object lblStartingStage: TLabel
+              Left = 156
+              Top = 41
+              Width = 132
+              Height = 18
+              Caption = 'Starting stage (strt)'
+            end
+            object lblBottomElev: TLabel
+              Left = 156
+              Top = 73
+              Width = 167
+              Height = 18
+              Caption = 'Bottom elevation (belev)'
+            end
+            object lblTopElev: TLabel
+              Left = 156
+              Top = 105
+              Width = 137
+              Height = 18
+              Caption = 'Top elevation (telev)'
+            end
+            object lblLakebedK: TLabel
+              Left = 156
+              Top = 137
+              Width = 147
+              Height = 18
+              Caption = 'Lakebed K (bedleak)'
+            end
+            object lblLakebedThickness: TLabel
+              Left = 156
+              Top = 169
+              Width = 201
+              Height = 18
+              Caption = 'Lakebed thickness (bedleak)'
+            end
+            object lblConnLength: TLabel
+              Left = 156
+              Top = 201
+              Width = 191
+              Height = 18
+              Caption = 'Connection length (connlen)'
+            end
+            object lblHorizontal: TLabel
+              Left = 535
+              Top = 9
+              Width = 148
+              Height = 18
+              Caption = 'Horizontal connection'
+            end
+            object lblVertical: TLabel
+              Left = 535
+              Top = 41
+              Width = 131
+              Height = 18
+              Caption = 'Vertical connection'
+            end
+            object comboLakeMf6Embeded: TComboBox
+              Left = 5
+              Top = 6
+              Width = 145
+              Height = 26
+              TabOrder = 0
+            end
+            object comboStartingStage: TComboBox
+              Left = 5
+              Top = 38
+              Width = 145
+              Height = 26
+              TabOrder = 1
+            end
+            object comboBottomElev: TComboBox
+              Left = 5
+              Top = 70
+              Width = 145
+              Height = 26
+              TabOrder = 2
+            end
+            object comboTopElev: TComboBox
+              Left = 5
+              Top = 102
+              Width = 145
+              Height = 26
+              TabOrder = 3
+            end
+            object comboLakebedK: TComboBox
+              Left = 5
+              Top = 134
+              Width = 145
+              Height = 26
+              TabOrder = 4
+            end
+            object comboLakebedThickness: TComboBox
+              Left = 5
+              Top = 166
+              Width = 145
+              Height = 26
+              TabOrder = 5
+            end
+            object comboConnLength: TComboBox
+              Left = 5
+              Top = 198
+              Width = 145
+              Height = 26
+              TabOrder = 6
+            end
+            object comboHorizontal: TComboBox
+              Left = 384
+              Top = 6
+              Width = 145
+              Height = 26
+              TabOrder = 7
+            end
+            object comboVertical: TComboBox
+              Left = 384
+              Top = 38
+              Width = 145
+              Height = 26
+              TabOrder = 8
             end
           end
         end

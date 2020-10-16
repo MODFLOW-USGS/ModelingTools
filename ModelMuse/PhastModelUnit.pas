@@ -10015,18 +10015,19 @@ const
 //                without first defining any interbeds, ModelMuse will display
 //                a warning message for the user instead of generationg a bug
 //                report.
-//               Bug fix: Fixed a bug that prevented the functions for 
+//               Bug fix: Fixed a bug that prevented the functions for
 //                identifying the highest active layer from working with DISV
 //                MODFLOW 6 models.
-
-//               Bug fix: Fixed a bug that could cause access violations if a
+//    '4.3.0.18' Bug fix: Fixed a bug that could cause access violations if a
 //                formula started with a comma.
 //               Bug fix: Fixed a bug that could cause access violations when
 //                shutting down ModelMuse.
+//               Enhancement: Added support for importing Lake for the MODFLOW 6
+//                Lake package from Shapefiles.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.17';
+  IIModelVersion = '4.3.0.18';
 
 function IModelVersion: string;
 begin
@@ -26137,6 +26138,10 @@ begin
   else if APackage = frmGoPhast.PhastModel.ModflowPackages.Mf6ObservationUtility then
   begin
     result := Mf6ObsIsSelected;
+  end
+  else if APackage = frmGoPhast.PhastModel.ModflowPackages.LakMf6Package then
+  begin
+    result := LakMf6IsSelected;
   end
   else
   begin
