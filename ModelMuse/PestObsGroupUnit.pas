@@ -14,7 +14,7 @@ type
     FStoredGroupTarget: TRealStorage;
     function GetRelativCorrelationFileName: string;
     procedure SetAbsoluteCorrelationFileName(const Value: string);
-    procedure SetObsGroupName(const Value: string);
+    procedure SetObsGroupName(Value: string);
     procedure SetRelativCorrelationFileName(const Value: string);
     procedure SetStoredGroupTarget(const Value: TRealStorage);
     procedure SetUseGroupTarget(const Value: Boolean);
@@ -24,15 +24,21 @@ type
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    // COVFLE]
     property AbsoluteCorrelationFileName: string
       read FAbsoluteCorrelationFileName write SetAbsoluteCorrelationFileName;
+    // GTARG
     property GroupTarget: Double read GetGroupTarget write SetGroupTarget;
   published
+    // OBGNME
     property ObsGroupName: string read FObsGroupName write SetObsGroupName;
+    // GTARG
     property UseGroupTarget: Boolean read FUseGroupTarget
       write SetUseGroupTarget;
+    // GTARG
     property StoredGroupTarget: TRealStorage read FStoredGroupTarget
       write SetStoredGroupTarget;
+    // COVFLE]
     property RelativCorrelationFileName: string
       read GetRelativCorrelationFileName write SetRelativCorrelationFileName;
   end;
@@ -48,10 +54,34 @@ type
       write SetParamGroup; default;
   end;
 
+  function ValidObsGroupName(Value: string): string;
+
 implementation
 
 uses
   frmGoPhastUnit;
+
+function ValidObsGroupName(Value: string): string;
+const
+  MaxLength = 12;
+  ValidCharacters = ['A'..'Z', 'a'..'z', '0'..'9',
+    '_', '.', ':', '!', '@', '#',  '$', '%', '^', '&', '*', '(', ')', '-', '+',
+    '=', '?', '/', '<', '>'];
+var
+  AChar: Char;
+  CharIndex: Integer;
+begin
+  result := Copy(Value, 1, MaxLength);
+  for CharIndex := 1 to Length(result) do
+  begin
+    AChar := result[CharIndex];
+    if not CharInSet(AChar, ValidCharacters) then
+    begin
+      AChar := '_';
+      result[CharIndex] := AChar;
+    end;
+  end;
+end;
 
 { TPestObservationGroup }
 
@@ -93,8 +123,15 @@ end;
 
 function TPestObservationGroup.GetRelativCorrelationFileName: string;
 begin
-  result := ExtractRelativePath(frmGoPhast.PhastModel.ModelFileName,
-    AbsoluteCorrelationFileName);
+  if AbsoluteCorrelationFileName <> '' then
+  begin
+    result := ExtractRelativePath(frmGoPhast.PhastModel.ModelFileName,
+      AbsoluteCorrelationFileName);
+  end
+  else
+  begin
+    result := ''
+  end;
 end;
 
 procedure TPestObservationGroup.SetAbsoluteCorrelationFileName(
@@ -108,15 +145,22 @@ begin
   FStoredGroupTarget.Value := Value;
 end;
 
-procedure TPestObservationGroup.SetObsGroupName(const Value: string);
+procedure TPestObservationGroup.SetObsGroupName(Value: string);
 begin
-  SetStringProperty(FObsGroupName, Value);
+  SetStringProperty(FObsGroupName, ValidObsGroupName(Value));
 end;
 
 procedure TPestObservationGroup.SetRelativCorrelationFileName(
   const Value: string);
 begin
-  AbsoluteCorrelationFileName := ExpandFileName(Value)
+  if Value <> '' then
+  begin
+    AbsoluteCorrelationFileName := ExpandFileName(Value)
+  end
+  else
+  begin
+    AbsoluteCorrelationFileName := '';
+  end;
 end;
 
 procedure TPestObservationGroup.SetStoredGroupTarget(const Value: TRealStorage);

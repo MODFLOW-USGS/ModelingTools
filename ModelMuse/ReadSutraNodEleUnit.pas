@@ -98,6 +98,7 @@ uses
 resourcestring
   StrUnableToReadHeade = 'Unable to read header of "%s". Check that the file' +
   ' is for this model.';
+  StrInvalidSUTRAOutput = 'Invalid SUTRA output file.';
 
 { TCustomSutraOutputReader }
 
@@ -209,7 +210,7 @@ begin
     Exit;
   end;
   FSplitter.DelimitedText := FReader.ReadLine;
-  Assert(FSplitter[StepStringPos] = 'STEP');
+  Assert(FSplitter[StepStringPos] = 'STEP', StrInvalidSUTRAOutput);
   FCurrentTimeStep := StrToInt(FSplitter[StepNumPos]);
   for LineIndex := 0 to SkipLines2 - 1 do
   begin

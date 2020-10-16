@@ -11,6 +11,8 @@ type
   TBudget = class;
   TBudgetItem = class;
 
+  TStringArray = array of string;
+
   TLineStoredProperties = class(TObject)
   private
     FSeriesPointerStyle: TSeriesPointerStyle;
@@ -199,7 +201,7 @@ type
     function GetLineStorage(const Name: string): TLineStoredProperties;
     procedure StoreLineSeriesValues;
     procedure ReadModflowOrSeawatFile(const BudgetStartLine: string;
-      const AltBudgetStartLine: string = '');
+      const AltBudgetStartLines: TStringArray = nil);
     procedure Series1ClickPointer(Sender: TCustomSeries; ValueIndex, X,
       Y: Integer);
     procedure IncrementStyle(var MyStyle: TSeriesPointerStyle);
@@ -212,6 +214,7 @@ type
       var LineIndex: Integer; const TimeUnitsString: string;
       HasSeparateStorageTerm: Boolean);
     procedure ReadModflow6File;
+    function GetMF6TimeUnit: string;
     { Private declarations }
   public
     FFileName: string;
@@ -2860,7 +2863,7 @@ begin
 end;
 
 procedure TfrmZoneBdgtReader.ReadModflowOrSeawatFile(
-  const BudgetStartLine: string; const AltBudgetStartLine: string = '');
+  const BudgetStartLine: string; const AltBudgetStartLines: TStringArray = nil);
 var
   SearchTerm: string;
   BudgetSearchTerm: string;
@@ -2895,6 +2898,7 @@ var
   ZoneLine: string;
   AZone: integer;
   PriorLineIndex: Integer;
+  AltIndex: Integer;
 const
   UnsatBudTerm = 'UNSATURATED ZONE PACKAGE VOLUMETRIC BUDGET FOR  TIME STEP';
   StreamUnsatBudTerm = 'VOLUMETRIC BUDGET FOR UNSATURATED ZONE BENEATH STREAMS AT END OF TIME STEP';
@@ -2908,6 +2912,7 @@ const
   MawMf6BudTerm = 'MAW-NT_WELL BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
   UzfMf6BudTerm = 'UZF-1 BUDGET FOR ENTIRE MODEL AT END OF TIME STEP';
   SwrBudTerm = 'VOLUMETRIC SURFACE WATER BUDGET FOR ENTIRE MODEL';
+  ISTBudTerm = 'MASS BUDGET FOR IST AT END OF TIME STEP';   
 begin
   TempList:= TStringList.Create;
   try
@@ -2934,11 +2939,21 @@ begin
           or (Pos(MawMf6BudTerm, S) > 0)
           or (Pos(UzfMf6BudTerm, S) > 0)
           or (Pos(SwrBudTerm, S) > 0)
-          or ((AltBudgetStartLine <> '') and (Pos(AltBudgetStartLine, S) > 0))
+          or (Pos(ISTBudTerm, S) > 0)
+//          or ((AltBudgetStartLine <> '') and (Pos(AltBudgetStartLine, S) > 0))
           then
         begin
           ShouldStoreFile := True;
         end;
+        for AltIndex := 0 to Length(AltBudgetStartLines) -1 do
+        begin
+          if Pos(AltBudgetStartLines[AltIndex], S) > 0 then
+          begin
+            ShouldStoreFile := True;
+          end;
+
+        end;
+
   //      if Pos(StreamStartSearchTerm, S) > 0 then
   //      begin
   //        ShouldStoreStreamFile := True;
@@ -2977,12 +2992,16 @@ begin
   if LineIndex < 0 then
   begin
     LineIndex := 0;
-    TimeUnitsString := '';
-    frmModflowModelUnits.ShowModal;
-    if frmModflowModelUnits.rgTimeUnits.ItemIndex >= 1 then
+    TimeUnitsString := GetMF6TimeUnit;
+    if TimeUnitsString = '' then
     begin
-      TimeUnitsString := frmModflowModelUnits.rgTimeUnits.Items[frmModflowModelUnits.rgTimeUnits.ItemIndex];
-    end;
+      TimeUnitsString := '';
+      frmModflowModelUnits.ShowModal;
+      if frmModflowModelUnits.rgTimeUnits.ItemIndex >= 1 then
+      begin
+        TimeUnitsString := frmModflowModelUnits.rgTimeUnits.Items[frmModflowModelUnits.rgTimeUnits.ItemIndex];
+      end;
+    end;      
   end
   else
   begin
@@ -2994,12 +3013,26 @@ begin
   SearchTerm := BudgetStartLine;
   BudgetSearchTerm := BudgetStartLine;
   LineIndex := GetNextLine(BudgetSearchTerm, LineIndex);
-  if (LineIndex < 0) and (AltBudgetStartLine <> '') then
+  if (LineIndex < 0) and (AltBudgetStartLines <> nil) then
   begin
-    BudgetSearchTerm := AltBudgetStartLine;
-    LineIndex := 0;
-    LineIndex := GetNextLine(BudgetSearchTerm, LineIndex);
+    for AltIndex := 0 to Length(AltBudgetStartLines) -1 do
+    begin
+      BudgetSearchTerm := AltBudgetStartLines[AltIndex];
+      LineIndex := 0;
+      LineIndex := GetNextLine(BudgetSearchTerm, LineIndex);
+      if LineIndex >= 0 then
+      begin
+        Break;
+      end;
+    end;
   end;
+
+//  if (LineIndex < 0) and (AltBudgetStartLine <> '') then
+//  begin
+//    BudgetSearchTerm := AltBudgetStartLine;
+//    LineIndex := 0;
+//    LineIndex := GetNextLine(BudgetSearchTerm, LineIndex);
+//  end;
 
   while LineIndex > -1 do
   begin
@@ -3378,6 +3411,11 @@ begin
   ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
     SwrBudTerm, 'SWR Cumulative Budget', 'SWR Budget Rates', True);
 
+  LineIndex := 0;
+  SearchTerm := ISTBudTerm;
+  LineIndex := GetNextLine(SearchTerm, LineIndex);
+  ReadUzfBudget(TimeUnitsString, LineIndex, SearchTerm,
+    ISTBudTerm, 'IST Cumulative Budget', 'IST Budget Rates', True);
 
   ZoneIndex := 1;
   repeat
@@ -3742,11 +3780,16 @@ begin
 end;
 
 procedure TfrmZoneBdgtReader.ReadModflow6File;
+var
+  AltLines: TStringArray;
 begin
   // With MODFLOW 6 version 1.1, VOLUME BUDGET
   // was replaced by VOLUMETRIC BUDGET.
+  SetLength(AltLines, 2);
+  AltLines[0] := 'VOLUME BUDGET FOR ENTIRE MODEL';
+  AltLines[1] := 'MASS BUDGET FOR ENTIRE MODEL';
   ReadModflowOrSeawatFile('VOLUMETRIC BUDGET FOR ENTIRE MODEL',
-    'VOLUME BUDGET FOR ENTIRE MODEL');
+    AltLines);
 end;
 
 procedure TfrmZoneBdgtReader.ReadGSFLOW;
@@ -4018,6 +4061,40 @@ begin
 //    begin
 //      ZBLStringList.LoadFromFile(OpenDialog1.FileName);
 //    end;
+  end;
+end;
+
+function TfrmZoneBdgtReader.GetMF6TimeUnit: string;
+var
+  AFileName: string;
+  Lines: TStringList;
+  LineIndex: Integer;
+  ALine: String;
+  LinePosition: Integer;
+const
+  TimeString = 'SIMULATION TIME UNIT IS ';
+begin
+  result := '';
+  AFileName := ExtractFileDir(OpenDialog1.FileName);
+  AFileName := IncludeTrailingPathDelimiter(AFileName) + 'mfsim.lst';
+  if FileExists(AFileName) then
+  begin
+    Lines := TStringList.Create;
+    try
+      Lines.LoadFromFile(AFileName);
+      for LineIndex := 0 to Lines.Count -1 do
+      begin
+        ALine := Lines[LineIndex];
+        LinePosition := Pos(TimeString, ALine);
+        if LinePosition > 0 then
+        begin
+          Result := Copy(ALine, LinePosition + Length(TimeString), MaxInt);
+          Exit;
+        end;
+      end;
+    finally
+      Lines.Free;
+    end;
   end;
 end;
 
@@ -6241,6 +6318,7 @@ var
   InMinusOut: string;
   Discrepancy: string;
 begin
+  LineIndex := 0;
   SearchTerm := 'VOLUME BUDGET FOR';
   LineIndex := GetNextLine(SearchTerm, LineIndex);
   while LineIndex > -1 do

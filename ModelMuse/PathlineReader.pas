@@ -1250,6 +1250,7 @@ resourcestring
   ' message was "%s"';
   StrErrorReadingTheFo = 'Error reading  line %0:d from what is supposed to ' +
   'be a MODPATH 7 pathline file. This line was "%:ss". ';
+  StrProgrammingErrorN = 'Programming error: no MODPATH file type selected.';
 
 const
   StrSTARTLAY: AnsiString = 'START_LAY';
@@ -1864,7 +1865,7 @@ begin
           MessageDlg(StrThisDoesNotAppear, mtError, [mbOK], 0);
         end
       else
-        Assert(False);
+        Assert(False, StrProgrammingErrorN);
     end;
   except
     on E: EInvalidLayer do
@@ -1882,6 +1883,15 @@ begin
       FLinesV7.Clear;
       Beep;
       MessageDlg(Format(StrThereWasAnErrorR, ['pathline', E.Message]), mtError, [mbOK], 0);
+    end;
+    on E: EAssertionFailed do
+    begin
+      FLinesV5.Clear;
+      FLinesV6.Clear;
+      FLinesV7.Clear;
+      Beep;
+      MessageDlg(Format(StrThereWasAnErrorR, ['pathline', E.Message]), mtError, [mbOK], 0);
+      raise;
     end;
   end;
 end;

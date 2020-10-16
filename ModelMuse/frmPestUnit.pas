@@ -6,9 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
   JvPageList, JvExControls, Vcl.ComCtrls, JvExComCtrls, JvPageListTreeView,
-  ArgusDataEntry, PestPropertiesUnit, Vcl.Buttons, Vcl.ExtCtrls, UndoItems;
+  ArgusDataEntry, PestPropertiesUnit, Vcl.Buttons, Vcl.ExtCtrls, UndoItems,
+  frameGridUnit, frameAvailableObjectsUnit, PestObsUnit;
 
 type
+  TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
+
   TUndoPestOptions = class(TCustomUndo)
   private
     FOldPestProperties: TPestProperties;
@@ -26,7 +29,7 @@ type
 
   TfrmPEST = class(TfrmCustomGoPhast)
     tvPEST: TJvPageListTreeView;
-    pgMain: TJvPageList;
+    plMain: TJvPageList;
     jvspBasic: TJvStandardPage;
     cbPEST: TCheckBox;
     rdePilotPointSpacing: TRbwDataEntry;
@@ -135,14 +138,32 @@ type
     rdeMaxLqsrIterations: TRbwDataEntry;
     lblMaxLqsrIterations: TLabel;
     cbWriteLsqrOutput: TCheckBox;
+    jvspObservationGroups: TJvStandardPage;
+    frameObservationGroups: TframeGrid;
+    dlgOpenCovarianceMatrixFile: TOpenDialog;
+    jvspObsGroupAssignments: TJvStandardPage;
+    frameObsGroupAssignments: TframeAvailableObjects;
+    pnlObservations: TPanel;
+    comboObsGroup: TComboBox;
+    lblObsGroup: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure cbUseLqsrClick(Sender: TObject);
     procedure comboSvdModeChange(Sender: TObject);
+    procedure frameObservationGroupsGridSelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
+    procedure frameObservationGroupsGridButtonClick(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure FormDestroy(Sender: TObject);
+    procedure plMainChange(Sender: TObject);
+    procedure comboObsGroupChange(Sender: TObject);
   private
+    FObsList: TObservationList;
+    FNewObsList: TObservationObjectList;
     procedure GetData;
     procedure SetData;
+    procedure FixObsGroupNames;
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -156,7 +177,13 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes;
+  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, PestObsGroupUnit;
+
+resourcestring
+  StrObservationGroupNa = 'Observation Group Name (OBGNME)';
+  StrUseGroupTargetGT = 'Use Group Target (GTARG)';
+  StrGroupTargetGTARG = 'Group Target (GTARG)';
+  StrCovarianceMatrixFi = 'Covariance Matrix File Name (optional) (COVFLE)';
 
 {$R *.dfm}
 
@@ -182,6 +209,29 @@ begin
   end;
 end;
 
+procedure TfrmPEST.plMainChange(Sender: TObject);
+var
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+begin
+  inherited;
+  if plMain.ActivePage = jvspObservationGroups then
+  begin
+    FixObsGroupNames;
+    comboObsGroup.Items.Clear;
+    comboObsGroup.Items.Capacity := frameObservationGroups.seNumber.AsInteger;
+    Grid := frameObservationGroups.Grid;
+    for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
+    begin
+      if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
+      begin
+        comboObsGroup.Items.AddObject(Grid.Cells[Ord(pogcName), RowIndex],
+          Grid.Objects[Ord(pogcName), RowIndex]);
+      end;
+    end;
+  end;
+end;
+
 procedure TfrmPEST.btnOKClick(Sender: TObject);
 begin
   inherited;
@@ -198,6 +248,36 @@ begin
   end;
 end;
 
+procedure TfrmPEST.comboObsGroupChange(Sender: TObject);
+var
+  AName: string;
+  ObsIndex: Integer;
+  AnObs: TCustomObservationItem;
+begin
+  inherited;
+  if comboObsGroup.ItemIndex >= 0 then
+  begin
+    AName := comboObsGroup.Text;
+    frameObsGroupAssignments.lbSrcObjects.Items.BeginUpdate;
+    frameObsGroupAssignments.lbDstObjects.Items.BeginUpdate;
+    try
+      frameObsGroupAssignments.lbSrcObjects.Items.Clear;
+      frameObsGroupAssignments.lbDstObjects.Items.Clear;
+      for ObsIndex := 0 to FNewObsList.Count - 1 do
+      begin
+        AnObs := FNewObsList[ObsIndex];
+        if AnObs.ObservationGroup = AName then
+        begin
+
+        end;
+      end;
+    finally
+      frameObsGroupAssignments.lbDstObjects.Items.EndUpdate;
+      frameObsGroupAssignments.lbSrcObjects.Items.EndUpdate;
+    end;
+  end;
+end;
+
 procedure TfrmPEST.comboSvdModeChange(Sender: TObject);
 begin
   inherited;
@@ -211,8 +291,12 @@ procedure TfrmPEST.FormCreate(Sender: TObject);
 var
   NewNode: TJvPageIndexNode;
   ControlDataNode: TJvPageIndexNode;
+  ObservationNode: TJvPageIndexNode;
 begin
   inherited;
+  FObsList := TObservationList.Create;
+  FNewObsList := TObservationObjectList.Create;
+
   NewNode := tvPEST.Items.AddChild(
     nil, 'Basic') as TJvPageIndexNode;
   NewNode.PageIndex := jvspBasic.PageIndex;
@@ -257,10 +341,47 @@ begin
     nil, 'LQSR') as TJvPageIndexNode;
   NewNode.PageIndex := jvspLqsr.PageIndex;
 
+  ObservationNode := tvPEST.Items.AddChild(
+    nil, 'Observations') as TJvPageIndexNode;
+  ControlDataNode.PageIndex := -1;
 
-  pgMain.ActivePageIndex := 0;
+  NewNode := tvPEST.Items.AddChild(
+    ObservationNode, 'Observation Groups') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspObservationGroups.PageIndex;
+
+  plMain.ActivePageIndex := 0;
 
   GetData
+end;
+
+procedure TfrmPEST.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  FObsList.Free;
+  FNewObsList.Free;
+end;
+
+procedure TfrmPEST.frameObservationGroupsGridButtonClick(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  inherited;
+  dlgOpenCovarianceMatrixFile.FileName :=
+    frameObservationGroups.Grid.Cells[ACol, ARow];
+  if dlgOpenCovarianceMatrixFile.Execute then
+  begin
+    frameObservationGroups.Grid.Cells[ACol, ARow] :=
+      dlgOpenCovarianceMatrixFile.FileName;
+  end;
+end;
+
+procedure TfrmPEST.frameObservationGroupsGridSelectCell(Sender: TObject; ACol,
+  ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  if (ARow > 0) and (ACol = Ord(pogcTarget)) then
+  begin
+    CanSelect := frameObservationGroups.Grid.Checked[Ord(pogcUseTarget), ARow];
+  end;
 end;
 
 procedure TfrmPEST.GetData;
@@ -269,7 +390,16 @@ var
   PestControlData: TPestControlData;
   SvdProperties: TSingularValueDecompositionProperties;
   LsqrProperties: TLsqrProperties;
+  Grid: TRbwDataGrid4;
+  ObsGroups: TPestObservationGroups;
+  ItemIndex: Integer;
+  ObsGroup: TPestObservationGroup;
+  index: Integer;
+  AnObs: TCustomObservationItem;
+  ATempObs: TCustomObservationItem;
 begin
+  frameObsGroupAssignments.FrameResize(nil);
+
   PestProperties := frmGoPhast.PhastModel.PestProperties;
 
   cbPEST.Checked := PestProperties.PestUsed;
@@ -344,6 +474,44 @@ begin
   rdeConditionNumberLimit.RealValue := LsqrProperties.ConditionNumberLimit;
   rdeMaxLqsrIterations.IntegerValue := LsqrProperties.MaxIteration;
   cbWriteLsqrOutput.Checked := Boolean(LsqrProperties.LsqrWrite);
+
+  Grid := frameObservationGroups.Grid;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[Ord(pogcName), 0] := StrObservationGroupNa;
+    Grid.Cells[Ord(pogcUseTarget), 0] := StrUseGroupTargetGT;
+    Grid.Cells[Ord(pogcTarget), 0] := StrGroupTargetGTARG;
+    Grid.Cells[Ord(pogcFileName), 0] := StrCovarianceMatrixFi;
+
+    ObsGroups := PestProperties.ObservationGroups;
+    frameObservationGroups.seNumber.AsInteger := ObsGroups.Count;
+    for ItemIndex := 0 to ObsGroups.Count - 1 do
+    begin
+      ObsGroup := ObsGroups[ItemIndex];
+      Grid.Objects[Ord(pogcName), ItemIndex+1] := ObsGroup;
+      Grid.Cells[Ord(pogcName), ItemIndex+1] := ObsGroup.ObsGroupName;
+      Grid.Checked[Ord(pogcUseTarget), ItemIndex+1] := ObsGroup.UseGroupTarget;
+      Grid.RealValue[Ord(pogcTarget), ItemIndex+1] :=
+        ObsGroup.GroupTarget;
+      Grid.Cells[Ord(pogcFileName), ItemIndex+1] :=
+        ObsGroup.AbsoluteCorrelationFileName;
+    end;
+
+    frmGoPhast.PhastModel.FillObsItemList(FObsList);
+    FNewObsList.Capacity := FObsList.Count;
+    for index := 0 to FObsList.Count - 1 do
+    begin
+      AnObs := FObsList[index];
+      ATempObs := TCustomObservationItem.Create(nil);
+      FNewObsList.Add(ATempObs);
+      ATempObs.Assign(AnObs);
+    end;
+
+  finally
+    Grid.EndUpdate;
+  end;
+
+
 end;
 
 procedure TfrmPEST.SetData;
@@ -353,6 +521,10 @@ var
   PestControlData: TPestControlData;
   SvdProperties: TSingularValueDecompositionProperties;
   LsqrProperties: TLsqrProperties;
+  RowIndex: Integer;
+  Grid: TRbwDataGrid4;
+  ObsGroups: TPestObservationGroups;
+  AnObsGroup: TPestObservationGroup;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(InvalidateModelEvent);
@@ -528,11 +700,47 @@ begin
     end;
     LsqrProperties.LsqrWrite := TLsqrWrite(cbWriteLsqrOutput.Checked);
 
+    ObsGroups := PestProperties.ObservationGroups;
+    Grid := frameObservationGroups.Grid;
+    for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
+    begin
+      if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
+      begin
+        AnObsGroup := ObsGroups.Add;
+        AnObsGroup.ObsGroupName := Grid.Cells[Ord(pogcName), RowIndex];
+        AnObsGroup.UseGroupTarget := Grid.Checked[Ord(pogcUseTarget), RowIndex];
+        AnObsGroup.GroupTarget := Grid.RealValueDefault[Ord(pogcTarget), RowIndex, 0];
+        AnObsGroup.AbsoluteCorrelationFileName := Grid.Cells[Ord(pogcFileName), RowIndex];
+      end;
+    end;
+
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties));
   finally
     PestProperties.Free
   end;
 
+end;
+
+procedure TfrmPEST.FixObsGroupNames;
+var
+  Grid: TRbwDataGrid4;
+  RowIndex: Integer;
+  ValidName: string;
+begin
+  Grid := frameObservationGroups.Grid;
+  for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
+  begin
+    if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
+    begin
+      ValidName := ValidObsGroupName(Grid.Cells[Ord(pogcName), RowIndex]);
+      //        comboObsGroup.Items.AddObject(ValidName,
+      //          Grid.Objects[Ord(pogcName), RowIndex]);
+      if ValidName <> Grid.Cells[Ord(pogcName), RowIndex] then
+      begin
+        Grid.Cells[Ord(pogcName), RowIndex] := ValidName;
+      end;
+    end;
+  end;
 end;
 
 { TUndoPestOptions }

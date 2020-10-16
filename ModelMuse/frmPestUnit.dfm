@@ -2,6 +2,7 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST'
   ClientHeight = 329
   ClientWidth = 710
+  ExplicitTop = -61
   ExplicitWidth = 726
   ExplicitHeight = 368
   PixelsPerInch = 96
@@ -20,31 +21,27 @@ inherited frmPEST: TfrmPEST
     Height = 287
     ShowButtons = True
     PageDefault = 0
-    PageList = pgMain
+    PageList = plMain
     Align = alLeft
     Indent = 19
     TabOrder = 0
     Items.Links = {00000000}
-    ExplicitLeft = -1
-    ExplicitTop = -6
   end
-  object pgMain: TJvPageList
+  object plMain: TJvPageList
     Left = 198
     Top = 0
     Width = 512
     Height = 287
-    ActivePage = jvspLqsr
+    ActivePage = jvspObsGroupAssignments
     PropagateEnable = False
     Align = alClient
-    ExplicitLeft = 121
-    ExplicitWidth = 502
+    OnChange = plMainChange
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
       Width = 512
       Height = 287
       Caption = 'jvspBasic'
-      ExplicitWidth = 502
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -139,7 +136,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspControlDataMode'
-      ExplicitWidth = 502
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -175,7 +171,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspDimensions'
-      ExplicitWidth = 502
       object lblMaxCompDim: TLabel
         Left = 85
         Top = 6
@@ -221,7 +216,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspInversionControls'
-      ExplicitWidth = 502
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -360,7 +354,6 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 512
       Height = 287
-      ExplicitWidth = 502
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -452,7 +445,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspInversionControls2'
-      ExplicitWidth = 502
       object lblSwitchCriterion: TLabel
         Left = 93
         Top = 6
@@ -556,7 +548,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspIterationControls'
-      ExplicitWidth = 502
       object lblMaxIterations: TLabel
         Left = 93
         Top = 6
@@ -719,8 +710,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspOutputOptions'
-      ExplicitLeft = 1
-      ExplicitWidth = 508
       object cbWriteCov: TCheckBox
         Left = 6
         Top = 3
@@ -811,7 +800,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspSingularValueDecomp'
-      ExplicitWidth = 497
       object lblSvdMode: TLabel
         Left = 6
         Top = 8
@@ -822,8 +810,8 @@ inherited frmPEST: TfrmPEST
       object lblMaxSingularValues: TLabel
         Left = 159
         Top = 71
-        Width = 321
-        Height = 34
+        Width = 299
+        Height = 36
         Caption = 'Maximum number of singular values before truncation (MAXSING)'
         WordWrap = True
       end
@@ -897,18 +885,17 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspLqsr'
-      ExplicitLeft = 1
       object lblMatrixTolerance: TLabel
         Left = 157
         Top = 29
-        Width = 316
+        Width = 216
         Height = 18
         Caption = 'Matrix tolerance (LSQR_ATOL)'
       end
       object lblRightHandSideTolerance: TLabel
         Left = 157
         Top = 57
-        Width = 324
+        Width = 283
         Height = 18
         Caption = 'Right hand side tolerance (LSQR_BTOL)'
       end
@@ -994,6 +981,224 @@ inherited frmPEST: TfrmPEST
         TabOrder = 5
       end
     end
+    object jvspObservationGroups: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 512
+      Height = 287
+      Caption = 'jvspObservationGroups'
+      ExplicitLeft = 1
+      inline frameObservationGroups: TframeGrid
+        Left = 0
+        Top = 0
+        Width = 512
+        Height = 287
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 40
+        ExplicitTop = 32
+        inherited Panel: TPanel
+          Top = 246
+          Width = 512
+          DesignSize = (
+            512
+            41)
+          inherited lbNumber: TLabel
+            Width = 209
+            Height = 18
+            Caption = 'Number of observation groups'
+            ExplicitWidth = 209
+            ExplicitHeight = 18
+          end
+          inherited sbAdd: TSpeedButton
+            Left = 419
+            ExplicitLeft = 419
+          end
+          inherited sbInsert: TSpeedButton
+            Left = 448
+            ExplicitLeft = 448
+          end
+          inherited sbDelete: TSpeedButton
+            Left = 477
+            ExplicitLeft = 477
+          end
+          inherited seNumber: TJvSpinEdit
+            Height = 26
+            ExplicitHeight = 26
+          end
+        end
+        inherited Grid: TRbwDataGrid4
+          Width = 512
+          Height = 246
+          ColCount = 4
+          OnSelectCell = frameObservationGroupsGridSelectCell
+          OnButtonClick = frameObservationGroupsGridButtonClick
+          Columns = <
+            item
+              AutoAdjustRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 12
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4Boolean
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = False
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4Real
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              ButtonCaption = '...'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = True
+              ButtonWidth = 20
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end>
+          ExplicitLeft = 1
+          ExplicitWidth = 512
+          ExplicitHeight = 246
+        end
+      end
+    end
+    object jvspObsGroupAssignments: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 512
+      Height = 287
+      Caption = 'jvspObsGroupAssignments'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameObsGroupAssignments: TframeAvailableObjects
+        Left = 0
+        Top = 41
+        Width = 512
+        Height = 246
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 1
+        ExplicitTop = 41
+        ExplicitWidth = 512
+        ExplicitHeight = 246
+        inherited lblSrcObjects: TLabel
+          Width = 118
+          Height = 18
+          ExplicitWidth = 118
+          ExplicitHeight = 18
+        end
+        inherited lblDstObjects: TLabel
+          Width = 91
+          Height = 18
+          ExplicitWidth = 91
+          ExplicitHeight = 18
+        end
+        inherited lbSrcObjects: TJvListBox
+          ItemHeight = 18
+        end
+        inherited lbDstObjects: TJvListBox
+          Top = 27
+          ItemHeight = 18
+          ExplicitTop = 27
+        end
+      end
+      object pnlObservations: TPanel
+        Left = 0
+        Top = 0
+        Width = 512
+        Height = 41
+        Align = alTop
+        TabOrder = 1
+        ExplicitLeft = 1
+        ExplicitTop = -2
+        object lblObsGroup: TLabel
+          Left = 157
+          Top = 12
+          Width = 131
+          Height = 18
+          Caption = 'Observation Group'
+        end
+        object comboObsGroup: TComboBox
+          Left = 6
+          Top = 9
+          Width = 145
+          Height = 26
+          Style = csDropDownList
+          TabOrder = 0
+          OnChange = comboObsGroupChange
+        end
+      end
+    end
   end
   object pnlBottom: TPanel
     Left = 0
@@ -1002,9 +1207,8 @@ inherited frmPEST: TfrmPEST
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitWidth = 623
     object btnHelp: TBitBtn
-      Left = 350
+      Left = 446
       Top = 6
       Width = 83
       Height = 33
@@ -1013,7 +1217,7 @@ inherited frmPEST: TfrmPEST
       TabOrder = 0
     end
     object btnOK: TBitBtn
-      Left = 439
+      Left = 535
       Top = 6
       Width = 83
       Height = 33
@@ -1023,7 +1227,7 @@ inherited frmPEST: TfrmPEST
       OnClick = btnOKClick
     end
     object btnCancel: TBitBtn
-      Left = 528
+      Left = 624
       Top = 6
       Width = 83
       Height = 33
@@ -1031,5 +1235,9 @@ inherited frmPEST: TfrmPEST
       NumGlyphs = 2
       TabOrder = 2
     end
+  end
+  object dlgOpenCovarianceMatrixFile: TOpenDialog
+    Left = 398
+    Top = 104
   end
 end

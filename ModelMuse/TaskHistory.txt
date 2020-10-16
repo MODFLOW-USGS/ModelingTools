@@ -426,7 +426,7 @@ object TTaskHistory
     end
     item
       Name = 'GW_Chart'
-      Display = False
+      Display = True
     end
     item
       Name = 'Head obs for MF6'
@@ -26334,5 +26334,17 @@ object TTaskHistory
         'Components'
         'core code'
         'Bug fix')
+    end
+    item
+      Date = 44119.000000000000000000
+      Categories.Strings = (
+        'PEST'
+        'PEST Observations'
+        'Dialog boxes')
+    end
+    item
+      Date = 44120.000000000000000000
+      Categories.Strings = (
+        'GW_Chart')
     end>
 end

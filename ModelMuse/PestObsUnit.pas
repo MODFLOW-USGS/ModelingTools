@@ -16,6 +16,8 @@ type
     FExportedName: string;
     FStoredWeight: TRealStorage;
     FStoredObservedValue: TRealStorage;
+    FObservationGroup: string;
+    FTempObsGroupObject: TObject;
     procedure SetComment(const Value: string);
     procedure SetName(const Value: string);
     procedure SetObservedValue(const Value: double);
@@ -25,6 +27,8 @@ type
     procedure SetStoredWeight(const Value: TRealStorage);
     function GetObservedValue: double;
     function GetWeight: Double;
+    procedure SetObservationGroup(const Value: string);
+    procedure SetTempObsGroupObject(const Value: TObject);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -40,6 +44,7 @@ type
     // When pasting objects from the clipboard, replace the GUID so that there
     // are no duplicates.
     procedure ReplaceGUID;
+    property TempObsGroupObject: TObject read FTempObsGroupObject write SetTempObsGroupObject;
   published
     property Name: string read FName write SetName;
     property ObservedValue: double read GetObservedValue write SetObservedValue Stored False;
@@ -49,9 +54,11 @@ type
     property StoredWeight: TRealStorage read FStoredWeight
       write SetStoredWeight;
     property Comment: string read FComment write SetComment;
+    property ObservationGroup: string read FObservationGroup write SetObservationGroup;
   end;
 
   TObservationList = TList<TCustomObservationItem>;
+  TObservationObjectList = TObjectList<TCustomObservationItem>;
 
   {
   FStoredWeight := TRealStorage.Create;
@@ -166,6 +173,7 @@ begin
     Weight := ObsSource.Weight;
     Comment := ObsSource.Comment;
     GUID := ObsSource.GUID;
+    ObservationGroup := ObsSource.ObservationGroup;
   end
   else
   begin
@@ -269,6 +277,11 @@ begin
   SetStringProperty(FName, NewName);
 end;
 
+procedure TCustomObservationItem.SetObservationGroup(const Value: string);
+begin
+  SetStringProperty(FObservationGroup, Value);
+end;
+
 procedure TCustomObservationItem.SetObservedValue(const Value: double);
 begin
   StoredObservedValue.Value := Value;
@@ -283,6 +296,11 @@ end;
 procedure TCustomObservationItem.SetStoredWeight(const Value: TRealStorage);
 begin
   FStoredWeight.Assign(Value);
+end;
+
+procedure TCustomObservationItem.SetTempObsGroupObject(const Value: TObject);
+begin
+  FTempObsGroupObject := Value;
 end;
 
 procedure TCustomObservationItem.SetWeight(const Value: Double);
