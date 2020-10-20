@@ -2,7 +2,6 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST'
   ClientHeight = 329
   ClientWidth = 710
-  ExplicitTop = -61
   ExplicitWidth = 726
   ExplicitHeight = 368
   PixelsPerInch = 96
@@ -997,9 +996,13 @@ inherited frmPEST: TfrmPEST
         TabOrder = 0
         ExplicitLeft = 40
         ExplicitTop = 32
+        ExplicitWidth = 512
+        ExplicitHeight = 287
         inherited Panel: TPanel
           Top = 246
           Width = 512
+          ExplicitTop = 246
+          ExplicitWidth = 512
           DesignSize = (
             512
             41)
@@ -1138,8 +1141,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspObsGroupAssignments'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameObsGroupAssignments: TframeAvailableObjects
         Left = 0
         Top = 41
@@ -1147,7 +1148,6 @@ inherited frmPEST: TfrmPEST
         Height = 246
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 1
         ExplicitTop = 41
         ExplicitWidth = 512
         ExplicitHeight = 246
@@ -1179,8 +1179,6 @@ inherited frmPEST: TfrmPEST
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitLeft = 1
-        ExplicitTop = -2
         object lblObsGroup: TLabel
           Left = 157
           Top = 12

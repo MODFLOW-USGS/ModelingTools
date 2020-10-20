@@ -155,7 +155,7 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure frameObservationGroupsGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
-    procedure FormDestroy(Sender: TObject);
+    procedure FormDestroy(Sender: TObject); override;
     procedure plMainChange(Sender: TObject);
     procedure comboObsGroupChange(Sender: TObject);
   private

@@ -4564,14 +4564,26 @@ function TCustomInteractiveTool.FindNodeInSelectedScreenObjects(const X,
 var
   PointIndex: integer;
   APoint: TPoint;
+  DeltaX: Int64;
+  DeltaY: Int64;
+  X64: Int64;
+  Y64: Int64;
+  PointX: Int64;
+  PointY: Int64;
 begin
   result := -1;
   Assert(AScreenObject.Selected);
+  X64 := X;
+  Y64 := Y;
   for PointIndex := 0 to AScreenObject.Count - 1 do
   begin
     APoint := AScreenObject.CanvasCoordinates[PointIndex];
-    if (Abs(X - APoint.X) < SelectionWidth)
-      and (Abs(Y - APoint.Y) < SelectionWidth) then
+    PointX := APoint.X;
+    PointY := APoint.Y;
+    DeltaX := Abs(X64 - PointX); 
+    DeltaY := Abs(Y64 - PointY); 
+    if (DeltaX < SelectionWidth)
+      and (DeltaY < SelectionWidth) then
     begin
       result := PointIndex;
       Exit;

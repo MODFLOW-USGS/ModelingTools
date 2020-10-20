@@ -392,6 +392,9 @@ type
     // @name is the distance in the Y direction that the
     // @link(TScreenObject)s will be moved.
     FY: double;
+    FSelectedNode: Integer;
+    FSelectedNodeNewLocation: TPoint2D;
+    FSelectedNodeOldLocation: TPoint2D;
     // @name moves @link(TScreenObject)s by the amount XOffset, YOffset.
     procedure Move(const XOffset, YOffset: double;
       const Undoing: boolean);
@@ -409,7 +412,8 @@ type
     // selected @link(TScreenObject) should be moved.)
     // @param(ADirection is the @link(TViewDirection) of the
     // @link(TScreenObject)s that should be moved.)
-    constructor Create(const X, Y: double; const ADirection: TViewDirection);
+    constructor Create(const X, Y: double; const ADirection: TViewDirection;
+      SelectedNode: integer; SelectedNodeNewLocation: TPoint2D);
     // @name moves the selected
     // @link(TScreenObject)s or the selected points in the
     // selected @link(TScreenObject).
@@ -1729,12 +1733,15 @@ end;
 { TUndoMoveScreenObject }
 
 constructor TUndoMoveScreenObject.Create(const X, Y: double;
-  const ADirection: TViewDirection);
+  const ADirection: TViewDirection; SelectedNode: integer;
+  SelectedNodeNewLocation: TPoint2D);
 begin
   inherited Create;
   FDirection := ADirection;
   FX := X;
   FY := Y;
+  FSelectedNode := SelectedNode;
+  FSelectedNodeNewLocation := SelectedNodeNewLocation;
 end;
 
 function TUndoMoveScreenObject.Description: string;
@@ -1801,9 +1808,24 @@ begin
       begin
         if MoveAll or AScreenObject.SelectedVertices[PointIndex] then
         begin
-          APoint := AScreenObject.Points[PointIndex];
-          APoint.X := APoint.X + XOffset;
-          APoint.Y := APoint.Y + YOffset;
+          if PointIndex = FSelectedNode then
+          begin
+            if Undoing then
+            begin
+              APoint := FSelectedNodeOldLocation;
+            end
+            else
+            begin
+              APoint := FSelectedNodeNewLocation;
+              FSelectedNodeOldLocation := AScreenObject.Points[PointIndex];
+            end;
+          end
+          else
+          begin
+            APoint := AScreenObject.Points[PointIndex];
+            APoint.X := APoint.X + XOffset;
+            APoint.Y := APoint.Y + YOffset;
+          end;
           Points[PointIndex] := APoint;
         end
         else

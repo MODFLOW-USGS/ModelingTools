@@ -10024,10 +10024,17 @@ const
 //                shutting down ModelMuse.
 //               Enhancement: Added support for importing Lake for the MODFLOW 6
 //                Lake package from Shapefiles.
+//    '4.3.0.19' Bug fix: When moving vertices of an object to the location of
+//                a vertex in another object, there could be a slight error in
+//                the location to which the vertex was moved. This has been
+//                corrected.
+//    '4.3.0.20' Bug fix; Not in released version.  Error displaying the Manage
+//                parameters dialog box.
+
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.18';
+  IIModelVersion = '4.3.0.20';
 
 function IModelVersion: string;
 begin

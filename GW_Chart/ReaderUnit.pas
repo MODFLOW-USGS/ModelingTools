@@ -240,6 +240,7 @@ type
     Discrepancy: string;
     StoredMass: string;
     Decay: string;
+    Activity: String;
     constructor Create;
     destructor Destroy; override;
     function GetStressPeriod: integer;
@@ -2166,41 +2167,95 @@ const
     'SOLUTE MASS BAL. ACTIVITY [ A = ((S+) - (S-) + (P+) - (P-) + (F+) - (F-))/2 ]';
   S16 = 'ABSOLUTE SOLUTE MASS BALANCE ERROR [ S - P - F ]';
   S17 = 'RELATIVE SOLUTE MASS BALANCE ERROR [ 100*(S - P - F)/A ]';
+  S18 = 'RATE OF CHANGE IN GW SOLUTE DUE TO CONCENTRATION CHANGE';
+  S19 = 'RATE OF CHANGE IN GW SOLUTE DUE TO CHANGE IN MASS OF FLUID';
+  S20 = 'TOTAL RATE OF CHANGE OF GW SOLUTE [ S+, S-, S ]';
+  S21 = 'FIRST-ORDER PRODUCTION/DECAY OF GW SOLUTE';
+  S22 = 'ZERO-ORDER PRODUCTION/DECAY OF GW SOLUTE';
+  S23 = 'TOTAL RATE OF PRODUCTION/DECAY OF GW SOLUTE & ADSORBATE [ P+, P-, P ]';
+  S24 = 'GAIN/LOSS OF GW SOLUTE THROUGH FLUID SOURCES AND SINKS';
+  S25 = 'GAIN/LOSS OF GW SOLUTE THROUGH INFLOWS/OUTFLOWS AT SPECIFIED P NODES';
+  S26 = 'GAIN/LOSS OF GW SOLUTE THROUGH INFLOWS/OUTFLOWS AT GEN.-FLOW NODES';
+  S27 = 'GAIN/LOSS OF GW SOLUTE THROUGH SOLUTE SOURCES AND SINKS';
+  S28 = 'GAIN/LOSS OF GW SOLUTE AT SPECIFIED CONCENTRATION NODES';
+  S29 = 'GAIN/LOSS OF GW SOLUTE AT GEN.-TRANSPORT NODES';
+  S30 = 'TOTAL RATE OF GAIN/LOSS OF GW SOLUTE';
+  S31 = 'GW SOL. MASS BAL. ACTIVITY [ A = ((S+) - (S-) + (P+) - (P-) + (F+) - (F-))/2 ]';
+  S32 = 'ABSOLUTE GW SOLUTE MASS BALANCE ERROR [ S - P - F ]';
+  S33 = 'RELATIVE GW SOLUTE MASS BALANCE ERROR [ 100*(S - P - F)/A ]';
 
   F1 =  'RATE OF CHANGE IN TOTAL STORED FLUID DUE TO PRESSURE CHANGE';
+  F1Alt = 'RATE OF CHANGE IN TOTAL STORED GROUNDWATER DUE TO PRESSURE CHANGE';
   F2a = 'RATE OF CHANGE IN TOTAL STORED FLUID DUE TO CONCENTRATION CHANGE';
+  F2aAlt = 'RATE OF CHANGE IN TOTAL STORED GROUNDWATER DUE TO CONCENTRATION CHANGE';
   F2b = 'RATE OF CHANGE IN TOTAL STORED FLUID DUE TO  TEMPERATURE  CHANGE';
+  F2bAlt = 'RATE OF CHANGE IN TOTAL STORED GROUNDWATER DUE TO TEMPERATURE CHANGE';
   F3 = 'TOTAL RATE OF CHANGE IN STORED FLUID [ S+, S-, S ]';
+  F3Alt = 'TOTAL RATE OF CHANGE IN STORED GROUNDWATER [ S+, S-, S ]';
   F4 = 'GAIN/LOSS OF FLUID THROUGH FLUID SOURCES AND SINKS';
+  F4Alt = 'GAIN/LOSS OF GROUNDWATER THROUGH FLUID SOURCES AND SINKS';
   F5 = 'GAIN/LOSS OF FLUID THROUGH INFLOWS/OUTFLOWS AT SPECIFIED P NODES';
+  F5Alt = 'GAIN/LOSS OF GROUNDWATER THROUGH INFLOWS/OUTFLOWS AT SPECIFIED P NODES';
   F6 = 'TOTAL RATE OF GAIN/LOSS OF FLUID THROUGH FLOWS [ F+, F-, F ]';
+  F6Alt = 'TOTAL RATE OF GAIN/LOSS OF GROUNDWATER THROUGH FLOWS [ F+, F-, F ]';
   F7 = 'FLUID MASS BALANCE ACTIVITY [ A = ((S+) - (S-) + (F+) - (F-))/2 ]';
+  F7Alt = 'GROUNDWATER MASS BALANCE ACTIVITY [ A = ((S+) - (S-) + (F+) - (F-))/2 ]';
   F8 = 'ABSOLUTE FLUID MASS BALANCE ERROR [ S - F ]';
+  F8Alt = 'ABSOLUTE GROUNDWATER MASS BALANCE ERROR [ S - F ]';
   F9 = 'RELATIVE FLUID MASS BALANCE ERROR [ 100*(S - F)/A ]';
+  F9Alt = 'RELATIVE GROUNDWATER MASS BALANCE ERROR [ 100*(S - F)/A ]';
 
   F10 = 'GAIN/LOSS OF FLUID THROUGH INFLOWS/OUTFLOWS AT GEN.-FLOW NODES';
+  F10Alt = 'GAIN/LOSS OF GROUNDWATER THROUGH INFLOWS/OUTFLOWS AT GEN.-FLOW NODES';
   F11 = 'GAIN/LOSS OF FLUID THROUGH INFLOWS/OUTFLOWS AT LAKE NODES';
+  F11Alt = 'GAIN/LOSS OF GROUNDWATER THROUGH INFLOWS/OUTFLOWS AT LAKE NODES';
 
   E1 = 'RATE OF CHANGE OF ENERGY IN FLUID DUE TO TEMPERATURE CHANGE';
+  E1Alt = 'RATE OF CHANGE OF ENERGY IN GW DUE TO TEMPERATURE CHANGE';
   E2 = 'RATE OF CHANGE OF ENERGY IN SOLID GRAINS';
   E3 = 'RATE OF CHANGE OF ENERGY DUE TO CHANGE IN MASS OF FLUID';
+  E3Alt = 'RATE OF CHANGE OF ENERGY IN GW & SOLID GRAINS DUE TO CHANGE';
   E4 = 'TOTAL RATE OF CHANGE OF ENERGY [ S+, S-, S ]';
+  E4Alt = 'TOTAL RATE OF CHANGE OF ENERGY IN GW & SOLID GRAINS [ S+, S-, S ]';
   E5 = 'ZERO-ORDER PRODUCTION/DECAY OF ENERGY IN FLUID';
+  E5Alt = 'ZERO-ORDER PRODUCTION/DECAY OF ENERGY IN GW';
   E6 = 'ZERO-ORDER PRODUCTION/DECAY OF ENERGY IN SOLID GRAINS';
   E7 = 'TOTAL RATE OF PRODUCTION/DECAY OF ENERGY [ P+, P-, P ]';
+  E7Alt = 'TOTAL RATE OF PROD./DECAY OF ENERGY IN GW & SOLID GRAINS [ P+, P-, P ]';
   E8 = 'GAIN/LOSS OF ENERGY THROUGH FLUID SOURCES AND SINKS';
+  E8Alt = 'GAIN/LOSS OF ENERGY IN GW THROUGH FLUID SOURCES AND SINKS';
   E9 = 'GAIN/LOSS OF ENERGY THROUGH INFLOWS/OUTFLOWS AT SPECIFIED P NODES';
+  E9Alt = 'GAIN/LOSS OF ENERGY IN GW THROUGH INFLOWS/OUTFLOWS AT SPEC. P NODES';
   E10 = 'GAIN/LOSS OF ENERGY THROUGH ENERGY SOURCES AND SINKS';
+  E10Alt = 'GAIN/LOSS OF ENERGY IN GW THROUGH ENERGY SOURCES AND SINKS';
   E11 = 'GAIN/LOSS OF ENERGY AT SPECIFIED TEMPERATURE NODES';
+  E11Alt = 'GAIN/LOSS OF ENERGY IN GW AT SPECIFIED TEMPERATURE NODES';
   E12 = 'TOTAL RATE OF GAIN/LOSS OF ENERGY';
+  E12Alt = 'TOTAL RATE OF GAIN/LOSS OF ENERGY IN GW';
   E13 =
     'ENERGY BALANCE ACTIVITY [ A = ((S+) - (S-) + (P+) - (P-) + (F+) - (F-))/2 ]';
+  E13Alt =
+    'GW ENERGY BALANCE ACTIVITY [ A = ((S+) - (S-) + (P+) - (P-) + (F+) - (F-))/2 ]';
   E14 = 'ABSOLUTE ENERGY BALANCE ERROR [ S - P - F ]';
+  E14Alt = 'ABSOLUTE GW ENERGY BALANCE ERROR [ S - P - F ]';
   E15 = 'RELATIVE ENERGY BALANCE ERROR [ 100*(S - P - F)/A ]';
+  E15Alt = 'RELATIVE GW ENERGY BALANCE ERROR [ 100*(S - P - F)/A ]';
 
   E16 = 'GAIN/LOSS OF ENERGY THROUGH INFLOWS/OUTFLOWS AT GEN.-FLOW NODES';
+  E16Alt= 'GAIN/LOSS OF ENERGY IN GW THROUGH INFLOWS/OUTFLOWS AT GEN.-FLOW NODES';
   E17 = 'GAIN/LOSS OF ENERGY THROUGH INFLOWS/OUTFLOWS AT LAKE NODES';
+//  E17Alt = 'GAIN/LOSS OF ENERGY THROUGH INFLOWS/OUTFLOWS AT LAKE NODES';
   E18 = 'GAIN/LOSS OF ENERGY AT GEN.-TRANSPORT NODES';
+  E18Alt = 'GAIN/LOSS OF ENERGY IN GW AT GEN.-TRANSPORT NODES';
+
+  E19_1 = 'RATE OF CHANGE OF ENERGY IN LAKES';
+  E19 = 'GAIN/LOSS OF ENERGY IN LAKES THROUGH FLUID SOURCES AND SINKS';
+  E20 = 'GAIN/LOSS OF ENERGY IN LAKES THROUGH INFLOWS/OUTFLOWS AT SPEC. P NODES';
+  E21 = 'GAIN/LOSS OF ENERGY IN LAKES THROUGH INFLOWS/OUTFL. AT GEN.-FLOW NODES';
+  E22 = 'GAIN/LOSS OF ENERGY IN LAKES THROUGH ENERGY SOURCES AND SINKS';
+  E23 = 'GAIN/LOSS OF ENERGY IN LAKES AT SPECIFIED TEMPERATURE NODES';
+  E24 = 'GAIN/LOSS OF ENERGY IN LAKES AT GEN.-TRANSPORT NODES';
+  E25 = 'TOTAL RATE OF GAIN/LOSS OF ENERGY IN LAKES';
 var
   SearchTerm: string;
   LineIndex, PrevIndex: integer;
@@ -2213,6 +2268,7 @@ var
   ReplacementIndex: Integer;
   FTerms, STerms, ETerms: TStringList;
   SearchTermIndex: integer;
+  PriorLineIndex: Integer;
 begin
   ReplacementsNames := TStringList.Create;
   FTerms := TStringList.Create;
@@ -2221,45 +2277,89 @@ begin
   try
     begin
       FTerms.Add(F1);
+      FTerms.Add(F1Alt);
       FTerms.Add(F2a);
+      FTerms.Add(F2aAlt);
       FTerms.Add(F2b);
+      FTerms.Add(F2bAlt);
       FTerms.Add(F3);
+      FTerms.Add(F3Alt);
       FTerms.Add(F4);
+      FTerms.Add(F4Alt);
       FTerms.Add(F5);
+      FTerms.Add(F5Alt);
       FTerms.Add(F10);
+      FTerms.Add(F10Alt);
       FTerms.Add(F11);
+      FTerms.Add(F11Alt);
       FTerms.Add(F6);
+      FTerms.Add(F6Alt);
 
       STerms.Add(S1);
+      STerms.Add(S18);
       STerms.Add(S2);
       STerms.Add(S3);
+      STerms.Add(S19);
       STerms.Add(S4);
+      STerms.Add(S20);
       STerms.Add(S5);
+      STerms.Add(S21);
       STerms.Add(S6);
       STerms.Add(S7);
+      STerms.Add(S22);
       STerms.Add(S8);
       STerms.Add(S9);
+      STerms.Add(S23);
       STerms.Add(S10);
+      STerms.Add(S24);
       STerms.Add(S11);
+      STerms.Add(S25);
       STerms.Add(S12);
+      STerms.Add(S26);
+      STerms.Add(S27);
       STerms.Add(S13);
+      STerms.Add(S28);
       STerms.Add(S14);
+      STerms.Add(S29);
+      STerms.Add(S30);
 
       ETerms.Add(E1);
+      ETerms.Add(E1Alt);
       ETerms.Add(E2);
       ETerms.Add(E3);
+      ETerms.Add(E3Alt);
       ETerms.Add(E4);
+      ETerms.Add(E4Alt);
       ETerms.Add(E5);
+      ETerms.Add(E5Alt);
       ETerms.Add(E6);
       ETerms.Add(E7);
+      ETerms.Add(E7Alt);
       ETerms.Add(E8);
+      ETerms.Add(E8Alt);
       ETerms.Add(E9);
+      ETerms.Add(E9Alt);
       ETerms.Add(E16);
+      ETerms.Add(E16Alt);
       ETerms.Add(E17);
+//      ETerms.Add(E17Alt);
       ETerms.Add(E10);
+      ETerms.Add(E10Alt);
       ETerms.Add(E11);
+      ETerms.Add(E11Alt);
       ETerms.Add(E18);
+      ETerms.Add(E18Alt);
       ETerms.Add(E12);
+      ETerms.Add(E12Alt);
+
+      ETerms.Add(E19_1);
+      ETerms.Add(E19);
+      ETerms.Add(E20);
+      ETerms.Add(E21);
+      ETerms.Add(E22);
+      ETerms.Add(E23);
+      ETerms.Add(E24);
+      ETerms.Add(E25);
 
       // Solute budget
       ReplacementsNames.Add(S1);
@@ -2313,56 +2413,138 @@ begin
       ReplacementsNames.Add(S17);
       ReplacementsNames.Add('Relative Solute Mass Balance Error');
 
+      ReplacementsNames.Add(S18);
+      ReplacementsNames.Add('Rate of Change in Gw Solute Due to Concentration Change');
+
+      ReplacementsNames.Add(S19);
+      ReplacementsNames.Add('Rate of Change in Gw Solute Due to Change in Mass of Fluid');
+
+      ReplacementsNames.Add(S20);
+      ReplacementsNames.Add('Total Rate of Change of Gw Solute');
+
+      ReplacementsNames.Add(S21);
+      ReplacementsNames.Add('First-Order Production/Decay of Gw Solute');
+
+      ReplacementsNames.Add(S22);
+      ReplacementsNames.Add('Zero-Order Production/Decay of Gw Solute');
+
+      ReplacementsNames.Add(S23);
+      ReplacementsNames.Add('Total Rate of Production/Decay of Gw Solute & Adsorbate');
+
+      ReplacementsNames.Add(S24);
+      ReplacementsNames.Add('Gain/Loss of Gw Solute Through Fluid Sources And Sinks');
+
+      ReplacementsNames.Add(S25);
+      ReplacementsNames.Add('Gain/Loss of Gw Solute Through Inflows/Outflows At Specified P Nodes');
+
+      ReplacementsNames.Add(S26);
+      ReplacementsNames.Add('Gain/Loss of Gw Solute Through Inflows/Outflows At Gen.-Flow Nodes');
+
+      ReplacementsNames.Add(S27);
+      ReplacementsNames.Add('Gain/Loss of Gw Solute Through Solute Sources And Sinks');
+
+      ReplacementsNames.Add(S28);
+      ReplacementsNames.Add('Gain/Loss of Gw Solute At Specified Concentration Nodes');
+
+      ReplacementsNames.Add(S29);
+      ReplacementsNames.Add('Gain/Loss of Gw Solute At Gen.-Transport Nodes');
+
+      ReplacementsNames.Add(S30);
+      ReplacementsNames.Add('Total Rate of Gain/Loss of Gw Solute');
+
       // Fluid Budget
 
       ReplacementsNames.Add(F1);
       ReplacementsNames.Add('Rate of Change in Total Stored Fluid due to Pressure Change');
 
+      ReplacementsNames.Add(F1Alt);
+      ReplacementsNames.Add('Rate of Change in Total Stored Groundwater due to Pressure Change');
+
       ReplacementsNames.Add(F2a);
       ReplacementsNames.Add('Rate of Change in Total Stored Fluid due to Concentration Change');
+
+      ReplacementsNames.Add(F2aAlt);
+      ReplacementsNames.Add('Rate of Change in Total Stored Groundwater due to Concentration Change');
 
       ReplacementsNames.Add(F2b);
       ReplacementsNames.Add('Rate of Change in Total Stored Fluid due to Temperature Change');
 
+      ReplacementsNames.Add(F2bAlt);
+      ReplacementsNames.Add('Rate of Change in Total Stored Groundwater due to Temperature Change');
+
       ReplacementsNames.Add(F3);
       ReplacementsNames.Add('Total Rate of Change in Stored Fluid');
+
+      ReplacementsNames.Add(F3Alt);
+      ReplacementsNames.Add('Total Rate of Change in Stored Groundwater');
 
       ReplacementsNames.Add(F4);
       ReplacementsNames.Add('Gain/Loss of Fluid through Fluid Sources and Sinks');
 
+      ReplacementsNames.Add(F4Alt);
+      ReplacementsNames.Add('Gain/Loss of Groundwater through Fluid Sources and Sinks');
+
       ReplacementsNames.Add(F5);
       ReplacementsNames.Add('Gain/Loss of Fluid through Inflows/Outflows at Specified P Nodes');
+
+      ReplacementsNames.Add(F5Alt);
+      ReplacementsNames.Add('Gain/Loss of Groundwater through Inflows/Outflows at Specified P Nodes');
 
       ReplacementsNames.Add(F6);
       ReplacementsNames.Add('Total Rate of Gain/Loss of Fluid through Flows');
 
+      ReplacementsNames.Add(F6Alt);
+      ReplacementsNames.Add('Total Rate of Gain/Loss of Groundwater through Flows');
+
       ReplacementsNames.Add(F7);
       ReplacementsNames.Add('Fluid Mass Balance Activity');
+
+      ReplacementsNames.Add(F7Alt);
+      ReplacementsNames.Add('Groundwater Mass Balance Activity');
 
       ReplacementsNames.Add(F8);
       ReplacementsNames.Add('Absolute Fluid Mass Balance Error');
 
+      ReplacementsNames.Add(F8Alt);
+      ReplacementsNames.Add('Absolute Groundwater Mass Balance Error');
+
       ReplacementsNames.Add(F10);
-      ReplacementsNames.Add(F10);
+      ReplacementsNames.Add('Gain/Loss of Fluid Through Inflows/Outflows at Gen.-Flow Nodes');
+      ReplacementsNames.Add(F10Alt);
+      ReplacementsNames.Add('Gain/Loss of Groundwater Through Inflows/Outflows at Gen.-Flow Nodes');
       ReplacementsNames.Add(F11);
-      ReplacementsNames.Add(F11);
+      ReplacementsNames.Add('Gain/Loss of Fluid Through Inflows/Outflows at Lake Nodes');
+      ReplacementsNames.Add(F11Alt);
+      ReplacementsNames.Add('Gain/Loss of Groundwater Through Inflows/Outflows at Lake Nodes');
 
       // Energy Budget
 
       ReplacementsNames.Add(E1);
       ReplacementsNames.Add('Rate of Change of Energy in Fluid due to Temperature');
 
+      ReplacementsNames.Add(E1Alt);
+      ReplacementsNames.Add('Rate of Change of Energy in GW due to Temperature');
+
       ReplacementsNames.Add(E2);
       ReplacementsNames.Add('Rate of Change of Energy in Solid Grains');
 
       ReplacementsNames.Add(E3);
-      ReplacementsNames.Add('Rate of Change of Energy due to Change in Mass Of Fluid');
+      ReplacementsNames.Add('Rate of Change of Energy due to Change in Mass of Fluid');
+
+      ReplacementsNames.Add(E3Alt);
+      ReplacementsNames.Add('Rate of Change of Energy in GW due to Change in Mass of Fluid');
 
       ReplacementsNames.Add(E4);
       ReplacementsNames.Add('Total Rate of Change of Energy');
 
+      ReplacementsNames.Add(E4Alt);
+      ReplacementsNames.Add('Total Rate of Change of Energy in GW & Solid Grains');
+
       ReplacementsNames.Add(E5);
       ReplacementsNames.Add('Zero-Order Production/Decay of Energy in Fluid');
+
+      ReplacementsNames.Add(E5Alt);
+      ReplacementsNames.Add('Zero-Order Production/Decay of Energy in GW');
 
       ReplacementsNames.Add(E6);
       ReplacementsNames.Add('Zero-Order Production/Decay of Energy in Solid Grains');
@@ -2370,34 +2552,89 @@ begin
       ReplacementsNames.Add(E7);
       ReplacementsNames.Add('Total Rate of Production/Decay of Energy');
 
+      ReplacementsNames.Add(E7Alt);
+      ReplacementsNames.Add('Total Rate of Production/Decay of Energy in GW & Solid Grains');
+
       ReplacementsNames.Add(E8);
       ReplacementsNames.Add('Gain/Loss of Energy through Fluid Sources and Sinks');
+
+      ReplacementsNames.Add(E8Alt);
+      ReplacementsNames.Add('Gain/Loss of Energy in GW through Fluid Sources and Sinks');
 
       ReplacementsNames.Add(E9);
       ReplacementsNames.Add('Gain/Loss of Energy through Inflows/Outflows at Specified P Nodes');
 
+      ReplacementsNames.Add(E9Alt);
+      ReplacementsNames.Add('Gain/Loss of Energy in GW through Inflows/Outflows at Specified P Nodes');
+
       ReplacementsNames.Add(E10);
       ReplacementsNames.Add('Gain/Loss of Energy through Energy Sources and Sinks');
+
+      ReplacementsNames.Add(E10Alt);
+      ReplacementsNames.Add('Gain/Loss of Energy in GW through Energy Sources and Sinks');
 
       ReplacementsNames.Add(E11);
       ReplacementsNames.Add('Gain/Loss of Energy at Specified Temperature Nodes');
 
+      ReplacementsNames.Add(E11Alt);
+      ReplacementsNames.Add('Gain/Loss of Energy in GW at Specified Temperature Nodes');
+
       ReplacementsNames.Add(E12);
       ReplacementsNames.Add('Total Rate of Gain/Loss of Energy through Flows and Sources/Sinks');
+
+      ReplacementsNames.Add(E12Alt);
+      ReplacementsNames.Add('Total Rate of Gain/Loss of Energy in GW through Flows and Sources/Sinks');
 
       ReplacementsNames.Add(E13);
       ReplacementsNames.Add('Energy Balance Activity');
 
+      ReplacementsNames.Add(E13Alt);
+      ReplacementsNames.Add('GW Energy Balance Activity');
+
       ReplacementsNames.Add(E14);
       ReplacementsNames.Add('Absolute Energy Balance Error');
 
-      ReplacementsNames.Add(E16);
-      ReplacementsNames.Add(E16);
-      ReplacementsNames.Add(E17);
-      ReplacementsNames.Add(E17);
-      ReplacementsNames.Add(E18);
-      ReplacementsNames.Add(E18);
+      ReplacementsNames.Add(E14Alt);
+      ReplacementsNames.Add('Absolute GW Energy Balance Error');
 
+      ReplacementsNames.Add(E16);
+      ReplacementsNames.Add('Gain/Loss of Energy Through Inflows/Outflows at Gen.-Flow Nodes');
+
+      ReplacementsNames.Add(E16alt);
+      ReplacementsNames.Add('Gain/Loss of Energy In Gw Through Inflows/Outflows at Gen.-Flow Nodes');
+
+      ReplacementsNames.Add(E17);
+      ReplacementsNames.Add('Gain/Loss of Energy Through Inflows/Outflows at Lake Nodes');
+
+      ReplacementsNames.Add(E18);
+      ReplacementsNames.Add('Gain/Loss of Energy at Gen.-Transport Nodes');
+
+      ReplacementsNames.Add(E18alt);
+      ReplacementsNames.Add('Gain/Loss of Energy In Gw at Gen.-Transport Nodes');
+
+      ReplacementsNames.Add(E19_1);
+      ReplacementsNames.Add('Rate of Change of Energy in Lakes');
+
+      ReplacementsNames.Add(E19);
+      ReplacementsNames.Add('Gain/Loss of Energy In Lakes Through Fluid Sources and Sinks');
+
+      ReplacementsNames.Add(E20);
+      ReplacementsNames.Add('Gain/Loss of Energy In Lakes Through Inflows/Outflows at Spec. P Nodes');
+
+      ReplacementsNames.Add(E21);
+      ReplacementsNames.Add('Gain/Loss of Energy In Lakes Through Inflows/Outfl. at Gen.-Flow Nodes');
+
+      ReplacementsNames.Add(E22);
+      ReplacementsNames.Add('Gain/Loss of Energy In Lakes Through Energy Sources and Sinks');
+
+      ReplacementsNames.Add(E23);
+      ReplacementsNames.Add('Gain/Loss of Energy In Lakes at Specified Temperature Nodes');
+
+      ReplacementsNames.Add(E24);
+      ReplacementsNames.Add('Gain/Loss of Energy In Lakes at Gen.-Transport Nodes');
+
+      ReplacementsNames.Add(E25);
+      ReplacementsNames.Add('Total Rate of Gain/Loss of Energy In Lakes');
 
       LineIndex := 0;
       SearchTerm := 'S O L U T E   B U D G E T';
@@ -2422,50 +2659,133 @@ begin
           begin
             BudgetItem := ReplacementsNames[ReplacementIndex + 1];
           end;
+          PriorLineIndex := LineIndex;
           LineIndex := GetNextLine(SearchTerm, LineIndex);
-          CurrentLine := ZBLStringList.Strings[LineIndex];
-          CurrentLine := GetStringBetween(CurrentLine, SearchTerm, '');
-          Rate := GetStringBetween(CurrentLine, '', ' ');
+          if LineIndex >= 0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            CurrentLine := GetStringBetween(CurrentLine, SearchTerm, '');
+            Rate := GetStringBetween(CurrentLine, '', ' ');
 
-          ABudgetItem := TBudgetItem.Create;
-          ABudgetItem.Name := BudgetItem;
-          ABudgetItem.value := Rate;
-          ABudget.InList.Add(ABudgetItem);
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetItem;
+            ABudgetItem.value := Rate;
+            ABudget.InList.Add(ABudgetItem);
 
-          CurrentLine := GetStringBetween(CurrentLine, Rate, '');
-          Rate := GetStringBetween(CurrentLine, '', ' ');
-          ABudgetItem := TBudgetItem.Create;
-          ABudgetItem.Name := BudgetItem;
-          ABudgetItem.value := Rate;
-          ABudget.OutList.Add(ABudgetItem);
+            CurrentLine := GetStringBetween(CurrentLine, Rate, '');
+            Rate := GetStringBetween(CurrentLine, '', ' ');
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetItem;
+            ABudgetItem.value := Rate;
+            ABudget.OutList.Add(ABudgetItem);
 
-          Rate := GetStringBetween(CurrentLine, Rate, '');
-          ABudgetItem := TBudgetItem.Create;
-          ABudgetItem.Name := BudgetItem;
-          ABudgetItem.value := Rate;
-          ABudget.NetList.Add(ABudgetItem);
+            Rate := GetStringBetween(CurrentLine, Rate, '');
+            ABudgetItem := TBudgetItem.Create;
+            ABudgetItem.Name := BudgetItem;
+            ABudgetItem.value := Rate;
+            ABudget.NetList.Add(ABudgetItem);
+          end
+          else
+          begin
+            LineIndex := PriorLineIndex;
+          end;
         end;
 
-        SearchTerm := S16;
+        SearchTerm := S31;
+        PriorLineIndex := LineIndex;
         LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
-        CurrentLine := ZBLStringList.Strings[LineIndex];
-        Rate := GetStringBetween(CurrentLine, SearchTerm, '');
-        ABudget.InMinusOut := Rate;
-
-        SearchTerm := S17;
-        LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
-        CurrentLine := ZBLStringList.Strings[LineIndex];
-        Rate := GetStringBetween(CurrentLine, SearchTerm, '');
-        if Pos('UNDEFINED', Rate) > 0 then
+        if LineIndex >= 0 then
         begin
-          Rate := '0';
+          CurrentLine := ZBLStringList.Strings[LineIndex];
+          Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+          ABudget.Activity := Rate;
         end
         else
         begin
-          Rate := GetStringBetween(Rate, '', '(PERCENT)');
+          LineIndex := PriorLineIndex;
+          SearchTerm := S15;
+          PriorLineIndex := LineIndex;
+          LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+          if LineIndex >= 0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+            ABudget.Activity := Rate;
+          end
+          else
+          begin
+            LineIndex := PriorLineIndex;
+          end;
         end;
 
-        ABudget.Discrepancy := Rate;
+        SearchTerm := S16;
+        PriorLineIndex := LineIndex;
+        LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+        if LineIndex >= 0 then
+        begin
+          CurrentLine := ZBLStringList.Strings[LineIndex];
+          Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+          ABudget.InMinusOut := Rate;
+        end
+        else
+        begin
+          LineIndex := PriorLineIndex;
+          SearchTerm := S31;
+          LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+          if LineIndex >= 0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+            ABudget.InMinusOut := Rate;
+          end
+          else
+          begin
+            LineIndex := PriorLineIndex;
+          end;
+        end;
+
+        SearchTerm := S17;
+        PriorLineIndex := LineIndex;
+        LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+        if LineIndex >= 0 then
+        begin
+          CurrentLine := ZBLStringList.Strings[LineIndex];
+          Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+          if Pos('UNDEFINED', Rate) > 0 then
+          begin
+            Rate := '0';
+          end
+          else
+          begin
+            Rate := GetStringBetween(Rate, '', '(PERCENT)');
+          end;
+          ABudget.Discrepancy := Rate;
+        end
+        else
+        begin
+          LineIndex := PriorLineIndex;
+          SearchTerm := S32;
+          LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+          if LineIndex >= 0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+            if Pos('UNDEFINED', Rate) > 0 then
+            begin
+              Rate := '0';
+            end
+            else
+            begin
+              Rate := GetStringBetween(Rate, '', '(PERCENT)');
+            end;
+            ABudget.Discrepancy := Rate;
+          end
+          else
+          begin
+            LineIndex := PriorLineIndex;
+          end;
+        end;
+
 
         SearchTerm := 'S O L U T E   B U D G E T';
         LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
@@ -2525,25 +2845,73 @@ begin
         end;
 
         SearchTerm := F8;
+        PrevIndex := LineIndex;
         LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
-        CurrentLine := ZBLStringList.Strings[LineIndex];
-        Rate := GetStringBetween(CurrentLine, SearchTerm, '');
-        ABudget.InMinusOut := Rate;
-
-        SearchTerm := F9;
-        LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
-        CurrentLine := ZBLStringList.Strings[LineIndex];
-        Rate := GetStringBetween(CurrentLine, SearchTerm, '');
-        if Pos('UNDEFINED', Rate) > 0 then
+        if LineIndex >= 0 then
         begin
-          Rate := '0';
+          CurrentLine := ZBLStringList.Strings[LineIndex];
+          Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+          ABudget.InMinusOut := Rate;
         end
         else
         begin
-          Rate := GetStringBetween(Rate, '', '(PERCENT)');
+          LineIndex := PrevIndex;
+          SearchTerm := F8Alt;
+//          PrevIndex := LineIndex;
+          LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+          if LineIndex >= 0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+            ABudget.InMinusOut := Rate;
+          end
+          else
+          begin
+            LineIndex := PrevIndex;
+          end;
         end;
 
-        ABudget.Discrepancy := Rate;
+        SearchTerm := F9;
+        PrevIndex := LineIndex;
+        LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+        if LineIndex >= 0 then
+        begin
+          CurrentLine := ZBLStringList.Strings[LineIndex];
+          Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+          if Pos('UNDEFINED', Rate) > 0 then
+          begin
+            Rate := '0';
+          end
+          else
+          begin
+            Rate := GetStringBetween(Rate, '', '(PERCENT)');
+          end;
+          ABudget.Discrepancy := Rate;
+        end
+        else
+        begin
+          LineIndex := PrevIndex;
+          SearchTerm := F9Alt;
+          LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+          if LineIndex >= 0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+            if Pos('UNDEFINED', Rate) > 0 then
+            begin
+              Rate := '0';
+            end
+            else
+            begin
+              Rate := GetStringBetween(Rate, '', '(PERCENT)');
+            end;
+            ABudget.Discrepancy := Rate;
+          end
+          else
+          begin
+            LineIndex := PrevIndex;
+          end;
+        end;
 
         SearchTerm := 'F L U I D   M A S S   B U D G E T';
         LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
@@ -2603,25 +2971,72 @@ begin
         end;
 
         SearchTerm := E14;
+        PrevIndex := LineIndex;
         LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
-        CurrentLine := ZBLStringList.Strings[LineIndex];
-        Rate := GetStringBetween(CurrentLine, SearchTerm, '');
-        ABudget.InMinusOut := Rate;
-
-        SearchTerm := E15;
-        LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
-        CurrentLine := ZBLStringList.Strings[LineIndex];
-        Rate := GetStringBetween(CurrentLine, SearchTerm, '');
-        if Pos('UNDEFINED', Rate) > 0 then
+        if LineIndex > 0 then
         begin
-          Rate := '0';
+          CurrentLine := ZBLStringList.Strings[LineIndex];
+          Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+          ABudget.InMinusOut := Rate;
         end
         else
         begin
-          Rate := GetStringBetween(Rate, '', '(PERCENT)');
+          LineIndex := PrevIndex;
+          SearchTerm := E14Alt;
+          LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+          if LineIndex > 0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+            ABudget.InMinusOut := Rate;
+          end
+          else
+          begin
+            LineIndex := PrevIndex;
+          end;
         end;
 
-        ABudget.Discrepancy := Rate;
+        SearchTerm := E15;
+        PrevIndex := LineIndex;
+        LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+        if LineIndex >=0 then
+        begin
+          CurrentLine := ZBLStringList.Strings[LineIndex];
+          Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+          if Pos('UNDEFINED', Rate) > 0 then
+          begin
+            Rate := '0';
+          end
+          else
+          begin
+            Rate := GetStringBetween(Rate, '', '(PERCENT)');
+          end;
+          ABudget.Discrepancy := Rate;
+        end
+        else
+        begin
+          LineIndex := PrevIndex;
+          SearchTerm := E15Alt;
+          LineIndex := GetNextLine(SearchTerm, LineIndex + 1);
+          if LineIndex >=0 then
+          begin
+            CurrentLine := ZBLStringList.Strings[LineIndex];
+            Rate := GetStringBetween(CurrentLine, SearchTerm, '');
+            if Pos('UNDEFINED', Rate) > 0 then
+            begin
+              Rate := '0';
+            end
+            else
+            begin
+              Rate := GetStringBetween(Rate, '', '(PERCENT)');
+            end;
+            ABudget.Discrepancy := Rate;
+          end
+          else
+          begin
+            LineIndex := PrevIndex;
+          end;
+        end;
 
         SearchTerm := 'E N E R G Y   B U D G E T';
         LineIndex := GetNextLine(SearchTerm, LineIndex + 1);

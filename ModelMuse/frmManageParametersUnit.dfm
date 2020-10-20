@@ -68,15 +68,11 @@ inherited frmManageParameters: TfrmManageParameters
     Top = 0
     Width = 784
     Height = 517
-    ActivePage = tabParameterGroups
+    ActivePage = tabParameters
     Align = alClient
     TabOrder = 1
     object tabParameters: TTabSheet
       Caption = 'Parameters'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlParameters: TPanel
         Left = 0
         Top = 443
@@ -529,10 +525,6 @@ inherited frmManageParameters: TfrmManageParameters
     object tabParameterGroups: TTabSheet
       Caption = 'ParameterGroups'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameParameterGroups: TframeGrid
         Left = 0
         Top = 0
@@ -886,8 +878,6 @@ inherited frmManageParameters: TfrmManageParameters
     object tabGroupAssignments: TTabSheet
       Caption = 'Group Assignments'
       ImageIndex = 2
-      ExplicitWidth = 296
-      ExplicitHeight = 124
       inline frameParamGroupAssignments: TframeAvailableObjects
         Left = 0
         Top = 41
@@ -896,8 +886,8 @@ inherited frmManageParameters: TfrmManageParameters
         Align = alClient
         TabOrder = 0
         ExplicitTop = 41
-        ExplicitWidth = 296
-        ExplicitHeight = 83
+        ExplicitWidth = 776
+        ExplicitHeight = 443
         inherited lblSrcObjects: TLabel
           Width = 148
           Height = 18
@@ -967,8 +957,6 @@ inherited frmManageParameters: TfrmManageParameters
     object tabTiedParameters: TTabSheet
       Caption = 'Tied Parameters'
       ImageIndex = 3
-      ExplicitWidth = 296
-      ExplicitHeight = 124
       object pnlTiedParam: TPanel
         Left = 0
         Top = 0
@@ -1001,8 +989,8 @@ inherited frmManageParameters: TfrmManageParameters
         Align = alClient
         TabOrder = 1
         ExplicitTop = 41
-        ExplicitWidth = 296
-        ExplicitHeight = 83
+        ExplicitWidth = 776
+        ExplicitHeight = 443
         inherited lblSrcObjects: TLabel
           Left = 3
           Top = 3

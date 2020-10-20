@@ -872,7 +872,8 @@ Consider creating descendants that each only handle one view of the model. }
     // when moving the selected @link(TScreenObject)s.
     FStartY: integer;
     // @name moves a @link(TScreenObject) based on X and Y.
-    procedure MoveScreenObjects(const X, Y: integer; Shift: TShiftState);
+    procedure MoveScreenObjects(const X, Y: integer; Shift: TShiftState;
+      SelectedNode: integer);
     // @name draws a rectangle outline the area that will be used to
     // select @link(TScreenObject)s when draging with the mouse.
     procedure DrawSelectionRectangle32(BitMap: TBitmap32);
@@ -907,6 +908,8 @@ Consider creating descendants that each only handle one view of the model. }
     // @name is set to true if one or more vertices on the selected
     // @link(TScreenObject) is selected.
     FPointIsSelected: boolean;
+    FSelectedNode: Integer;
+    FSelectedNodeLocation: TPoint2D;
     // @name shows how the selected @link(TScreenObject) would look if the
     // mouse was released at its current position.
     procedure ShowMovedPoints(const BitMap: TBitmap32);
@@ -5242,7 +5245,7 @@ begin
       begin
         Assert(FCurrentScreenObject <> nil);
         StorePointsOfOtherObjects(FCurrentScreenObject);
-        MoveScreenObjects(X, Y, Shift);
+        MoveScreenObjects(X, Y, Shift, FSelectedNode);
       end
       else
       begin
@@ -5440,16 +5443,21 @@ function TSelectPointTool.FindSelectedScreenObject(const X, Y: integer):
 var
   Index: integer;
   AScreenObject: TScreenObject;
+  SelectedNode: Integer;
 begin
   result := nil;
+  FSelectedNode := -1;
   for Index := frmGoPhast.PhastModel.ScreenObjectCount - 1 downto 0 do
   begin
     AScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];
     if AScreenObject.Selected and (AScreenObject.ViewDirection = ViewDirection)
       then
     begin
-      if FindNodeInSelectedScreenObjects(X, Y, AScreenObject) >= 0 then
+      SelectedNode := FindNodeInSelectedScreenObjects(X, Y, AScreenObject);
+      if SelectedNode >= 0 then
       begin
+        FSelectedNode := SelectedNode;
+        FSelectedNodeLocation := AScreenObject.Points[FSelectedNode];
         result := AScreenObject;
         Exit;
       end;
@@ -5796,7 +5804,7 @@ begin
       if FMovingScreenObjects then
       begin
         // If you are moving screen objects, move them.
-        MoveScreenObjects(X, Y, Shift);
+        MoveScreenObjects(X, Y, Shift, -1);
       end
       else
       begin
@@ -5973,11 +5981,12 @@ begin
 end;
 
 procedure TCustomSelectScreenObjectTool.MoveScreenObjects(const X, Y: integer;
-  Shift: TShiftState);
+  Shift: TShiftState; SelectedNode: integer);
 var
   XOffset, YOffset: real;
   UndoMoveScreenObject: TUndoMoveScreenObject;
   APoint: TPoint2D;
+//  SelectedNodeNewLocation: TPoint2D;
 begin
   // Move the screen objects a distance specified by where the mouse was clicked
   // down and where it was clicked up.
@@ -5999,7 +6008,7 @@ begin
   begin
     // if the cursor has moved, move the selected screen objects.
     UndoMoveScreenObject := TUndoMoveScreenObject.Create(XOffset, YOffset,
-      ViewDirection);
+      ViewDirection, SelectedNode, APoint);
     frmGoPhast.UndoStack.Submit(UndoMoveScreenObject);
     UndoMoveScreenObject.SetPostSelection;
     FStartX := X;

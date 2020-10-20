@@ -1088,8 +1088,13 @@ begin
   if not PhastModel.PestUsed then
   begin
     rdgParameters.ColCount := Succ(Ord(pcZone));
+  {$IFNDEF PEST}
     tabParameterGroups.TabVisible := False;
     tabGroupAssignments.TabVisible := False;
+    tabTiedParameters.TabVisible := False;
+    tabParameters.TabVisible := False;
+    pcParameters.ActivePage := tabParameters;
+  {$ENDIF}
   end;
 
   FSteadyParameters.Assign(PhastModel.ModflowSteadyParameters);
@@ -1585,6 +1590,9 @@ var
   AnObject: TObject;
   RowIndex: Integer;
 begin
+{$IFNDEF PEST}
+  Exit;
+{$ENDIF}
   if FParamGroups = nil then
   begin
     Exit;
