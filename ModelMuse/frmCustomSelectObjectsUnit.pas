@@ -375,7 +375,8 @@ type
     // single @link(TScreenObject) so TVirtualStringTree's check
     // propogation method can't completely handle this situation.
     procedure UpdateChildCheck(Node: PVirtualNode);
-    procedure HandleCheckChange(Node: PVirtualNode; Sender: TBaseVirtualTree); virtual;
+    procedure HandleCheckChange(Node: PVirtualNode;
+      Sender: TBaseVirtualTree); virtual;
     // @name creates all the nodes in @link(vstObjects)
     procedure GetData;
     function CanSelect(ScreenObject: TScreenObject): boolean; virtual;
@@ -1848,181 +1849,186 @@ var
     end;
   end;
 begin
-  UpdateChildCount(FvstAllObjectsNode);
-  vstCheckDeleteNode(FvstOtherObjectsNode);
-  vstCheckDeleteNode(FvstLeakyNode);
-  vstCheckDeleteNode(FvstRiverNode);
-  vstCheckDeleteNode(FvstSpecifiedFluxNode);
-  vstCheckDeleteNode(FvstSpecifiedHeadNode);
-  vstCheckDeleteNode(FvstWellNode);
-  vstCheckDeleteNode(FvstPhastBoundaryConditionsRoot);
-
-  vstCheckDeleteNode(FvstModflowGhbNode);
-  vstCheckDeleteNode(FvstModflowFhbHeadNode);
-  vstCheckDeleteNode(FvstModflowFhbFlowNode);
-  vstCheckDeleteNode(FvstModflowMf6LakNode);
-  vstCheckDeleteNode(FvstModflowLakNode);
-  vstCheckDeleteNode(FvstModflowMnw1Node);
-  vstCheckDeleteNode(FvstModflowMnw2Node);
-  vstCheckDeleteNode(FvstModflowMawNode);
-  vstCheckDeleteNode(FvstModflowChdNode);
-  vstCheckDeleteNode(FvstModflowWellNode);
-  vstCheckDeleteNode(FvstModflowRivNode);
-  vstCheckDeleteNode(FvstModflowDrnNode);
-  vstCheckDeleteNode(FvstModflowDrtNode);
-  vstCheckDeleteNode(FvstModflowDrtReturnLocation);
-  vstCheckDeleteNode(FvstModflowRchNode);
-  vstCheckDeleteNode(FvstModflowResNode);
-  vstCheckDeleteNode(FvstModflowRipNode);
-  vstCheckDeleteNode(FvstModflowEvtNode);
-  vstCheckDeleteNode(FvstModflowEtsNode);
-  vstCheckDeleteNode(FvstModflowHydmodNode);
-  vstCheckDeleteNode(FvstModflowSwiObsNode);
-  vstCheckDeleteNode(FvstModflowSfrNode);
-  vstCheckDeleteNode(FvstModflowSfrMF6Node);
-  vstCheckDeleteNode(FvstModflowStrNode);
-  vstCheckDeleteNode(FvstModflowGagNode);
-  vstCheckDeleteNode(FvstModflowUzfNode);
-  vstCheckDeleteNode(FvstModflowUzfMf6Node);
-  vstCheckDeleteNode(FvstModflowHobNode);
-  vstCheckDeleteNode(FvstModflowHfbNode);
-  vstCheckDeleteNode(FvstModflowMvrNode);
-  vstCheckDeleteNode(FvstModflowCSubNode);
-  vstCheckDeleteNode(FvstModflowSubObsNode);
-  vstCheckDeleteNode(FvstModflowSwtObsNode);
-
-
-
-  vstCheckDeleteNode(FvstModflowSwrReachNode);
-  vstCheckDeleteNode(FvstModflowSwrRainNode);
-  vstCheckDeleteNode(FvstModflowSwrEvapNode);
-  vstCheckDeleteNode(FvstModflowSwrInflowNode);
-  vstCheckDeleteNode(FvstModflowSwrStageNode);
-  vstCheckDeleteNode(FvstModflowSwrDirectRunoffNode);
-
-  vstCheckDeleteNode(FvstModflowFarmNode);
-  vstCheckDeleteNode(FvstModflowFarmWellNode);
-  vstCheckDeleteNode(FvstModflowFarmPrecipNode);
-  vstCheckDeleteNode(FvstModflowFarmRefEvapNode);
-  vstCheckDeleteNode(FvstModflowFarmCropIDNode);
-  vstCheckDeleteNode(FvstModflowCfpRechargeNode);
-  vstCheckDeleteNode(FvstMt3dSft);
-  vstCheckDeleteNode(FvstMt3dLkt);
-  vstCheckDeleteNode(FvstMt3dmsSsm);
-  vstCheckDeleteNode(FvstMt3dmsTob);
-  vstCheckDeleteNode(FvstMt3dUztRech);
-  vstCheckDeleteNode(FvstMt3dUztSat);
-  vstCheckDeleteNode(FvstMt3dUztUnsat);
-  vstCheckDeleteNode(FvstMt3dSeepage);
-
-  vstCheckDeleteNode(FvstSutraObsNode);
-  vstCheckDeleteNode(FvstSutraSpecPressureNode);
-  vstCheckDeleteNode(FvstSutraSpecUNode);
-  vstCheckDeleteNode(FvstSutraFluidFluxNode);
-  vstCheckDeleteNode(FvstSutraUFluxNode);
-
-  vstCheckDeleteNode(FvstSutraLakeNode);
-  vstCheckDeleteNode(FvstSutraGeneralizedFlowNode);
-  vstCheckDeleteNode(FvstSutraGeneralizedTransportNode);
-  vstCheckDeleteNode(FvstSutraStateObsNode);
-
-  vstCheckDeleteNode(FvstFootprintWellNode);
-
-  vstCheckDeleteNode(FvstModflowBoundaryConditionsRoot);
-  vstCheckDeleteNode(FvstModpathRoot);
-  vstCheckDeleteNode(FvstChildModelNode);
-  vstCheckDeleteNode(FvstSutraFeaturesNode);
-  vstCheckDeleteNode(FvstFootprintFeaturesNode);
-
-  vstCheckDeleteNode(FvstHeadObsMf6Node);
-  vstCheckDeleteNode(FvstDrawDownObsMf6Node);
-  vstCheckDeleteNode(FvstChdObsMf6Node);
-  vstCheckDeleteNode(FvstDrnObsMf6Node);
-  vstCheckDeleteNode(FvstEvtObsMf6Node);
-  vstCheckDeleteNode(FvstGhbObsMf6Node);
-  vstCheckDeleteNode(FvstRchObsMf6Node);
-  vstCheckDeleteNode(FvstRivObsMf6Node);
-  vstCheckDeleteNode(FvstWelObsMf6Node);
-  vstCheckDeleteNode(FvstToMvrObsMf6Node);
-  vstCheckDeleteNode(FvstLakObsMf6Node);
-  vstCheckDeleteNode(FvstMawObsMf6Node);
-  vstCheckDeleteNode(FvstSfrObsMf6Node);
-  vstCheckDeleteNode(FvstUzfObsMf6Node);
-  vstCheckDeleteNode(FvstCsubObsMf6Node);
-
-  vstCheckDeleteNode(FvstObsMf6Node);
-
-  ParentNodes := TList.Create;
+  vstObjects.BeginUpdate;
   try
-    for DataSetIndex := DataSetList.Count -1 downto 0 do
-    begin
-      vstDataSetNode := PVirtualNode(DataSetList.Objects[DataSetIndex]);
-      ParentNode := vstObjects.NodeParent[vstDataSetNode];
-      UpdateChildCount(vstDataSetNode);
-      if vstObjects.ChildCount[vstDataSetNode] = 0 then
-      begin
-        if ParentNodes.IndexOf(ParentNode) < 0 then
-        begin
-          ParentNodes.Add(ParentNode);
-        end;
-        vstObjects.DeleteNode(vstDataSetNode);
-        DataSetList.Delete(DataSetIndex);
-      end;
-    end;
+    UpdateChildCount(FvstAllObjectsNode);
+    vstCheckDeleteNode(FvstOtherObjectsNode);
+    vstCheckDeleteNode(FvstLeakyNode);
+    vstCheckDeleteNode(FvstRiverNode);
+    vstCheckDeleteNode(FvstSpecifiedFluxNode);
+    vstCheckDeleteNode(FvstSpecifiedHeadNode);
+    vstCheckDeleteNode(FvstWellNode);
+    vstCheckDeleteNode(FvstPhastBoundaryConditionsRoot);
 
-    NodeDeleted := True;
-    while NodeDeleted do
-    begin
-      NodeDeleted := False;
-      for NodeIndex := ParentNodes.Count - 1 downto 0 do
+    vstCheckDeleteNode(FvstModflowGhbNode);
+    vstCheckDeleteNode(FvstModflowFhbHeadNode);
+    vstCheckDeleteNode(FvstModflowFhbFlowNode);
+    vstCheckDeleteNode(FvstModflowMf6LakNode);
+    vstCheckDeleteNode(FvstModflowLakNode);
+    vstCheckDeleteNode(FvstModflowMnw1Node);
+    vstCheckDeleteNode(FvstModflowMnw2Node);
+    vstCheckDeleteNode(FvstModflowMawNode);
+    vstCheckDeleteNode(FvstModflowChdNode);
+    vstCheckDeleteNode(FvstModflowWellNode);
+    vstCheckDeleteNode(FvstModflowRivNode);
+    vstCheckDeleteNode(FvstModflowDrnNode);
+    vstCheckDeleteNode(FvstModflowDrtNode);
+    vstCheckDeleteNode(FvstModflowDrtReturnLocation);
+    vstCheckDeleteNode(FvstModflowRchNode);
+    vstCheckDeleteNode(FvstModflowResNode);
+    vstCheckDeleteNode(FvstModflowRipNode);
+    vstCheckDeleteNode(FvstModflowEvtNode);
+    vstCheckDeleteNode(FvstModflowEtsNode);
+    vstCheckDeleteNode(FvstModflowHydmodNode);
+    vstCheckDeleteNode(FvstModflowSwiObsNode);
+    vstCheckDeleteNode(FvstModflowSfrNode);
+    vstCheckDeleteNode(FvstModflowSfrMF6Node);
+    vstCheckDeleteNode(FvstModflowStrNode);
+    vstCheckDeleteNode(FvstModflowGagNode);
+    vstCheckDeleteNode(FvstModflowUzfNode);
+    vstCheckDeleteNode(FvstModflowUzfMf6Node);
+    vstCheckDeleteNode(FvstModflowHobNode);
+    vstCheckDeleteNode(FvstModflowHfbNode);
+    vstCheckDeleteNode(FvstModflowMvrNode);
+    vstCheckDeleteNode(FvstModflowCSubNode);
+    vstCheckDeleteNode(FvstModflowSubObsNode);
+    vstCheckDeleteNode(FvstModflowSwtObsNode);
+
+
+
+    vstCheckDeleteNode(FvstModflowSwrReachNode);
+    vstCheckDeleteNode(FvstModflowSwrRainNode);
+    vstCheckDeleteNode(FvstModflowSwrEvapNode);
+    vstCheckDeleteNode(FvstModflowSwrInflowNode);
+    vstCheckDeleteNode(FvstModflowSwrStageNode);
+    vstCheckDeleteNode(FvstModflowSwrDirectRunoffNode);
+
+    vstCheckDeleteNode(FvstModflowFarmNode);
+    vstCheckDeleteNode(FvstModflowFarmWellNode);
+    vstCheckDeleteNode(FvstModflowFarmPrecipNode);
+    vstCheckDeleteNode(FvstModflowFarmRefEvapNode);
+    vstCheckDeleteNode(FvstModflowFarmCropIDNode);
+    vstCheckDeleteNode(FvstModflowCfpRechargeNode);
+    vstCheckDeleteNode(FvstMt3dSft);
+    vstCheckDeleteNode(FvstMt3dLkt);
+    vstCheckDeleteNode(FvstMt3dmsSsm);
+    vstCheckDeleteNode(FvstMt3dmsTob);
+    vstCheckDeleteNode(FvstMt3dUztRech);
+    vstCheckDeleteNode(FvstMt3dUztSat);
+    vstCheckDeleteNode(FvstMt3dUztUnsat);
+    vstCheckDeleteNode(FvstMt3dSeepage);
+
+    vstCheckDeleteNode(FvstSutraObsNode);
+    vstCheckDeleteNode(FvstSutraSpecPressureNode);
+    vstCheckDeleteNode(FvstSutraSpecUNode);
+    vstCheckDeleteNode(FvstSutraFluidFluxNode);
+    vstCheckDeleteNode(FvstSutraUFluxNode);
+
+    vstCheckDeleteNode(FvstSutraLakeNode);
+    vstCheckDeleteNode(FvstSutraGeneralizedFlowNode);
+    vstCheckDeleteNode(FvstSutraGeneralizedTransportNode);
+    vstCheckDeleteNode(FvstSutraStateObsNode);
+
+    vstCheckDeleteNode(FvstFootprintWellNode);
+
+    vstCheckDeleteNode(FvstModflowBoundaryConditionsRoot);
+    vstCheckDeleteNode(FvstModpathRoot);
+    vstCheckDeleteNode(FvstChildModelNode);
+    vstCheckDeleteNode(FvstSutraFeaturesNode);
+    vstCheckDeleteNode(FvstFootprintFeaturesNode);
+
+    vstCheckDeleteNode(FvstHeadObsMf6Node);
+    vstCheckDeleteNode(FvstDrawDownObsMf6Node);
+    vstCheckDeleteNode(FvstChdObsMf6Node);
+    vstCheckDeleteNode(FvstDrnObsMf6Node);
+    vstCheckDeleteNode(FvstEvtObsMf6Node);
+    vstCheckDeleteNode(FvstGhbObsMf6Node);
+    vstCheckDeleteNode(FvstRchObsMf6Node);
+    vstCheckDeleteNode(FvstRivObsMf6Node);
+    vstCheckDeleteNode(FvstWelObsMf6Node);
+    vstCheckDeleteNode(FvstToMvrObsMf6Node);
+    vstCheckDeleteNode(FvstLakObsMf6Node);
+    vstCheckDeleteNode(FvstMawObsMf6Node);
+    vstCheckDeleteNode(FvstSfrObsMf6Node);
+    vstCheckDeleteNode(FvstUzfObsMf6Node);
+    vstCheckDeleteNode(FvstCsubObsMf6Node);
+
+    vstCheckDeleteNode(FvstObsMf6Node);
+
+    ParentNodes := TList.Create;
+    try
+      for DataSetIndex := DataSetList.Count -1 downto 0 do
       begin
-        Node := ParentNodes[NodeIndex];
-        if vstObjects.ChildCount[Node] = 0 then
+        vstDataSetNode := PVirtualNode(DataSetList.Objects[DataSetIndex]);
+        ParentNode := vstObjects.NodeParent[vstDataSetNode];
+        UpdateChildCount(vstDataSetNode);
+        if vstObjects.ChildCount[vstDataSetNode] = 0 then
         begin
-          ParentNode := vstObjects.NodeParent[Node];
-          NodeDeleted := True;
-          vstObjects.DeleteNode(Node);
-          if (ParentNode <> FvstDataSetRootNode)
-            and (ParentNodes.IndexOf(ParentNode) < 0) then
+          if ParentNodes.IndexOf(ParentNode) < 0 then
           begin
             ParentNodes.Add(ParentNode);
           end;
-          ParentNodes.Delete(NodeIndex);
+          vstObjects.DeleteNode(vstDataSetNode);
+          DataSetList.Delete(DataSetIndex);
         end;
       end;
-    end;
-  finally
-    ParentNodes.Free;
-  end;
 
-  NodeList := TList.Create;
-  try
-    ChildCount := vstObjects.ChildCount[FvstDataSetRootNode];
-    for NodeIndex := 0 to ChildCount - 1 do
-    begin
-      if NodeIndex = 0 then
+      NodeDeleted := True;
+      while NodeDeleted do
       begin
-        GroupNode := vstObjects.GetFirstChild(FvstDataSetRootNode)
-      end
-      else
-      begin
-        GroupNode := vstObjects.GetNextSibling(GroupNode);
+        NodeDeleted := False;
+        for NodeIndex := ParentNodes.Count - 1 downto 0 do
+        begin
+          Node := ParentNodes[NodeIndex];
+          if vstObjects.ChildCount[Node] = 0 then
+          begin
+            ParentNode := vstObjects.NodeParent[Node];
+            NodeDeleted := True;
+            vstObjects.DeleteNode(Node);
+            if (ParentNode <> FvstDataSetRootNode)
+              and (ParentNodes.IndexOf(ParentNode) < 0) then
+            begin
+              ParentNodes.Add(ParentNode);
+            end;
+            ParentNodes.Delete(NodeIndex);
+          end;
+        end;
       end;
-      NodeList.Add(GroupNode)
+    finally
+      ParentNodes.Free;
     end;
 
-    for NodeIndex := 0 to NodeList.Count - 1 do
-    begin
-      GroupNode := NodeList[NodeIndex];
-      vstCheckDeleteNode(GroupNode);
+    NodeList := TList.Create;
+    try
+      ChildCount := vstObjects.ChildCount[FvstDataSetRootNode];
+      for NodeIndex := 0 to ChildCount - 1 do
+      begin
+        if NodeIndex = 0 then
+        begin
+          GroupNode := vstObjects.GetFirstChild(FvstDataSetRootNode)
+        end
+        else
+        begin
+          GroupNode := vstObjects.GetNextSibling(GroupNode);
+        end;
+        NodeList.Add(GroupNode)
+      end;
+
+      for NodeIndex := 0 to NodeList.Count - 1 do
+      begin
+        GroupNode := NodeList[NodeIndex];
+        vstCheckDeleteNode(GroupNode);
+      end;
+    finally
+      NodeList.Free;
     end;
+
+    vstCheckDeleteNode(FvstDataSetRootNode);
+    vstCheckDeleteNode(FvstRefinementNode);
+    vstCheckDeleteNode(FvstSizeNode);
   finally
-    NodeList.Free;
+    vstObjects.EndUpdate;
   end;
-
-  vstCheckDeleteNode(FvstDataSetRootNode);
-  vstCheckDeleteNode(FvstRefinementNode);
-  vstCheckDeleteNode(FvstSizeNode);
 end;
 
 procedure TfrmCustomSelectObjects.CreateBaseNodes(DataSetList: TStringList);
@@ -2107,356 +2113,361 @@ var
     PriorNode := BC_Node;
   end;
 begin
-  if FvstAllObjectsNode = nil then
-  begin
-    FvstAllObjectsNode := vstObjects.InsertNode(
-      vstObjects.RootNode, amAddChildFirst);
-    vstObjects.ReinitNode(FvstAllObjectsNode, False);
-  end;
-  InitializeNodeData(FvstAllObjectsNode, FAllObjectsList);
-
-  if FvstSizeNode = nil then
-  begin
-    FvstSizeNode := vstObjects.InsertNode(FvstAllObjectsNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstSizeNode, False);
-  end;
-  InitializeNodeData(FvstSizeNode, FSizeList);
-
-  if FvstRefinementNode = nil then
-  begin
-    FvstRefinementNode := vstObjects.InsertNode(FvstSizeNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstRefinementNode, False);
-  end;
-  InitializeNodeData(FvstRefinementNode, FRefinementList);
-
-  if FvstDataSetRootNode = nil then
-  begin
-    FvstDataSetRootNode := vstObjects.InsertNode(FvstRefinementNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstDataSetRootNode, False);
-  end;
-  InitializeNodeData(FvstDataSetRootNode, nil);
-
-  if FvstPhastBoundaryConditionsRoot = nil then
-  begin
-    FvstPhastBoundaryConditionsRoot := vstObjects.InsertNode(
-      FvstDataSetRootNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstPhastBoundaryConditionsRoot, False);
-  end;
-  InitializeNodeData(FvstPhastBoundaryConditionsRoot, nil);
-
-  if FvstModflowBoundaryConditionsRoot = nil then
-  begin
-    FvstModflowBoundaryConditionsRoot := vstObjects.InsertNode(
-      FvstPhastBoundaryConditionsRoot, amInsertAfter);
-    vstObjects.ReinitNode(FvstModflowBoundaryConditionsRoot, False);
-  end;
-  InitializeNodeData(FvstModflowBoundaryConditionsRoot, nil);
-
-  if FvstObsMf6Node = nil then
-  begin
-    FvstObsMf6Node := vstObjects.InsertNode(
-      FvstModflowBoundaryConditionsRoot, amInsertAfter);
-    vstObjects.ReinitNode(FvstObsMf6Node, False);
-  end;
-  InitializeNodeData(FvstObsMf6Node, nil);
-
-//  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
-
-
-  if FvstModpathRoot = nil then
-  begin
-    FvstModpathRoot := vstObjects.InsertNode(
-      FvstObsMf6Node, amInsertAfter);
-    vstObjects.ReinitNode(FvstModpathRoot, False);
-  end;
-  InitializeNodeData(FvstModpathRoot, FModpathList);
-
-  if FvstChildModelNode = nil then
-  begin
-    FvstChildModelNode := vstObjects.InsertNode(
-      FvstModpathRoot, amInsertAfter);
-    vstObjects.ReinitNode(FvstChildModelNode, False);
-  end;
-  InitializeNodeData(FvstChildModelNode, FChildModelList);
-
-  if FvstSutraFeaturesNode = nil then
-  begin
-    FvstSutraFeaturesNode := vstObjects.InsertNode(
-      FvstChildModelNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstSutraFeaturesNode, False);
-  end;
-  InitializeNodeData(FvstSutraFeaturesNode, nil);
-
-  if FvstFootprintFeaturesNode = nil then
-  begin
-    FvstFootprintFeaturesNode := vstObjects.InsertNode(
-      FvstChildModelNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstFootprintFeaturesNode, False);
-  end;
-  InitializeNodeData(FvstFootprintFeaturesNode, nil);
-
-
-
-  if FvstOtherObjectsNode = nil then
-  begin
-    FvstOtherObjectsNode := vstObjects.InsertNode(
-      FvstChildModelNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstOtherObjectsNode, False);
-  end;
-  InitializeNodeData(FvstOtherObjectsNode, FOtherObjectsList);
-
-  // create children of FvstPhastBoundaryConditionsRoot
-  if FvstSpecifiedHeadNode = nil then
-  begin
-    FvstSpecifiedHeadNode := vstObjects.InsertNode(
-      FvstPhastBoundaryConditionsRoot, amAddChildFirst);
-    vstObjects.ReinitNode(FvstSpecifiedHeadNode, False);
-  end;
-  InitializeNodeData(FvstSpecifiedHeadNode, FSpecifiedHeadList);
-
-  if FvstSpecifiedFluxNode = nil then
-  begin
-    FvstSpecifiedFluxNode := vstObjects.InsertNode(
-      FvstSpecifiedHeadNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstSpecifiedFluxNode, False);
-  end;
-  InitializeNodeData(FvstSpecifiedFluxNode, FSpecifiedFluxList);
-
-  if FvstLeakyNode = nil then
-  begin
-    FvstLeakyNode := vstObjects.InsertNode(
-      FvstSpecifiedFluxNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstLeakyNode, False);
-  end;
-  InitializeNodeData(FvstLeakyNode, FLeakyList);
-
-  if FvstRiverNode = nil then
-  begin
-    FvstRiverNode := vstObjects.InsertNode(
-      FvstLeakyNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstRiverNode, False);
-  end;
-  InitializeNodeData(FvstRiverNode, FRiverList);
-
-  if FvstWellNode = nil then
-  begin
-    FvstWellNode := vstObjects.InsertNode(FvstRiverNode, amInsertAfter);
-    vstObjects.ReinitNode(FvstWellNode, False);
-  end;
-  InitializeNodeData(FvstWellNode, FWellList);
-
-  // add children of FvstObsMf6Node
-  if FvstHeadObsMf6Node = nil then
-  begin
-    FvstHeadObsMf6Node := vstObjects.InsertNode(
-      FvstObsMf6Node, amAddChildFirst);
-    vstObjects.ReinitNode(FvstHeadObsMf6Node, False);
-  end;
-  InitializeNodeData(FvstHeadObsMf6Node, FHeadObs6List);
-  PriorNode := FvstHeadObsMf6Node;
-
-  InitializeMF_BoundaryNode(FvstDrawDownObsMf6Node, PriorNode, FDrawDownObs6List);
-  InitializeMF_BoundaryNode(FvstChdObsMf6Node, PriorNode, FChdObs6List);
-  InitializeMF_BoundaryNode(FvstDrnObsMf6Node, PriorNode, FDrnObs6List);
-  InitializeMF_BoundaryNode(FvstEvtObsMf6Node, PriorNode, FEvtObs6List);
-  InitializeMF_BoundaryNode(FvstGhbObsMf6Node, PriorNode, FGhbObs6List);
-  InitializeMF_BoundaryNode(FvstRchObsMf6Node, PriorNode, FRchObs6List);
-  InitializeMF_BoundaryNode(FvstRivObsMf6Node, PriorNode, FRivObs6List);
-  InitializeMF_BoundaryNode(FvstWelObsMf6Node, PriorNode, FWelObs6List);
-  InitializeMF_BoundaryNode(FvstToMvrObsMf6Node, PriorNode, FToMvrObs6List);
-  InitializeMF_BoundaryNode(FvstLakObsMf6Node, PriorNode, FLakObs6List);
-  InitializeMF_BoundaryNode(FvstMawObsMf6Node, PriorNode, FMawObs6List);
-  InitializeMF_BoundaryNode(FvstSfrObsMf6Node, PriorNode, FSfrObs6List);
-  InitializeMF_BoundaryNode(FvstUzfObsMf6Node, PriorNode, FUzfObs6List);
-  InitializeMF_BoundaryNode(FvstCsubObsMf6Node, PriorNode, FCsubObs6List);
-
-  // add children of FvstModflowBoundaryConditionsRoot
-  if FvstModflowChdNode = nil then
-  begin
-    FvstModflowChdNode := vstObjects.InsertNode(
-      FvstModflowBoundaryConditionsRoot, amAddChildFirst);
-    vstObjects.ReinitNode(FvstModflowChdNode, False);
-  end;
-  InitializeNodeData(FvstModflowChdNode, FChdList);
-  PriorNode := FvstModflowChdNode;
-
-
-  InitializeMF_BoundaryNode(FvstModflowCSubNode, PriorNode, FCSubList);
-  InitializeMF_BoundaryNode(FvstModflowDrnNode, PriorNode, FDrnList);
-  InitializeMF_BoundaryNode(FvstModflowDrtNode, PriorNode, FDrtList);
-  InitializeMF_BoundaryNode(FvstModflowDrtReturnLocation, PriorNode, FDrtReturnList);
-  InitializeMF_BoundaryNode(FvstModflowEtsNode, PriorNode, FEtsList);
-  InitializeMF_BoundaryNode(FvstModflowEvtNode, PriorNode, FEvtList);
-  InitializeMF_BoundaryNode(FvstModflowGhbNode, PriorNode, FGhbList);
-  InitializeMF_BoundaryNode(FvstModflowFhbHeadNode, PriorNode, FFhbHeadList);
-  InitializeMF_BoundaryNode(FvstModflowFhbFlowNode, PriorNode, FFhbFlowList);
-  InitializeMF_BoundaryNode(FvstModflowHfbNode, PriorNode, FHfbList);
-  InitializeMF_BoundaryNode(FvstModflowHydmodNode, PriorNode, FHydmodList);
-  InitializeMF_BoundaryNode(FvstModflowLakNode, PriorNode, FLakList);
-  InitializeMF_BoundaryNode(FvstModflowMf6LakNode, PriorNode, FLakMf6List);
-
-  InitializeMF_BoundaryNode(FvstModflowMawNode, PriorNode, FMawList);
-  InitializeMF_BoundaryNode(FvstModflowMnw1Node, PriorNode, FMnw1List);
-  InitializeMF_BoundaryNode(FvstModflowMnw2Node, PriorNode, FMnw2List);
-  InitializeMF_BoundaryNode(FvstModflowMvrNode, PriorNode, FMvrList);
-//  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
-  InitializeMF_BoundaryNode(FvstModflowRchNode, PriorNode, FRchList);
-  InitializeMF_BoundaryNode(FvstModflowResNode, PriorNode, FResList);
-  InitializeMF_BoundaryNode(FvstModflowRipNode, PriorNode, FRipList);
-  InitializeMF_BoundaryNode(FvstModflowRivNode, PriorNode, FRivList);
-  InitializeMF_BoundaryNode(FvstModflowSfrNode, PriorNode, FSfrList);
-  InitializeMF_BoundaryNode(FvstModflowSfrMF6Node, PriorNode, FSfrMf6List);
-  InitializeMF_BoundaryNode(FvstModflowStrNode, PriorNode, FStrList);
-
-  InitializeMF_BoundaryNode(FvstModflowSubObsNode, PriorNode, FModflowSubObsList);
-  InitializeMF_BoundaryNode(FvstModflowSwtObsNode, PriorNode, FModflowSwtObsList);
-
-  InitializeMF_BoundaryNode(FvstModflowGagNode, PriorNode, FSfrGagList);
-  InitializeMF_BoundaryNode(FvstModflowUzfNode, PriorNode, FUzfList);
-  InitializeMF_BoundaryNode(FvstModflowUzfMf6Node, PriorNode, FUzfMf6List);
-
-
-  InitializeMF_BoundaryNode(FvstModflowWellNode, PriorNode, FMfWellList);
-  InitializeMF_BoundaryNode(FvstModflowHobNode, PriorNode, FHobList);
-  InitializeMF_BoundaryNode(FvstModflowSwiObsNode, PriorNode, FSwiObsList);
-
-
-  InitializeMF_BoundaryNode(FvstModflowSwrReachNode, PriorNode, FSwrReachList);
-  InitializeMF_BoundaryNode(FvstModflowSwrRainNode, PriorNode, FSwrRainList);
-  InitializeMF_BoundaryNode(FvstModflowSwrEvapNode, PriorNode, FSwrEvapList);
-  InitializeMF_BoundaryNode(FvstModflowSwrInflowNode, PriorNode, FSwrInflowList);
-  InitializeMF_BoundaryNode(FvstModflowSwrStageNode, PriorNode, FSwrStageList);
-  InitializeMF_BoundaryNode(FvstModflowSwrDirectRunoffNode, PriorNode, FSwrDirectRunoffList);
-
-  InitializeMF_BoundaryNode(FvstModflowFarmNode, PriorNode, FFarmList);
-  InitializeMF_BoundaryNode(FvstModflowFarmWellNode, PriorNode, FFarmWellList);
-  InitializeMF_BoundaryNode(FvstModflowFarmPrecipNode, PriorNode, FFarmPrecipList);
-  InitializeMF_BoundaryNode(FvstModflowFarmRefEvapNode, PriorNode, FFarmRefEvtList);
-  InitializeMF_BoundaryNode(FvstModflowFarmCropIDNode, PriorNode, FFarmCropIDList);
-  InitializeMF_BoundaryNode(FvstModflowCfpRechargeNode, PriorNode, FCfpRechargeList);
-
-
-  InitializeMF_BoundaryNode(FvstMt3dLkt, PriorNode, FLktList);
-  InitializeMF_BoundaryNode(FvstMt3dSft, PriorNode, FSftList);
-  InitializeMF_BoundaryNode(FvstMt3dmsSsm, PriorNode, FSsmList);
-  InitializeMF_BoundaryNode(FvstMt3dmsTob, PriorNode, FTobList);
-  InitializeMF_BoundaryNode(FvstMt3dUztRech, PriorNode, FUztRechList);
-  InitializeMF_BoundaryNode(FvstMt3dUztSat, PriorNode, FUztSatList);
-  InitializeMF_BoundaryNode(FvstMt3dUztUnsat, PriorNode, FUztUnsatList);
-  InitializeMF_BoundaryNode(FvstMt3dSeepage, PriorNode, FUztSeepageList);
-
-  // Add children of FvstSutraFeaturesNode
-  if FvstSutraObsNode = nil then
-  begin
-    FvstSutraObsNode := vstObjects.InsertNode(
-      FvstSutraFeaturesNode, amAddChildFirst);
-    vstObjects.ReinitNode(FvstSutraObsNode, False);
-  end;
-  InitializeNodeData(FvstSutraObsNode, FSutraObsList);
-  PriorNode := FvstSutraObsNode;
-
-  InitializeMF_BoundaryNode(FvstSutraSpecPressureNode, PriorNode, FSutraSpecPressureList);
-  InitializeMF_BoundaryNode(FvstSutraSpecUNode, PriorNode, FSutraSpecUList);
-  InitializeMF_BoundaryNode(FvstSutraFluidFluxNode, PriorNode, FSutraFluidFluxList);
-  InitializeMF_BoundaryNode(FvstSutraUFluxNode, PriorNode, FSutraUFluxList);
-  InitializeMF_BoundaryNode(FvstSutraLakeNode, PriorNode, FSutraLakeList);
-  InitializeMF_BoundaryNode(FvstSutraGeneralizedFlowNode, PriorNode, FSutraGeneralizedFlowList);
-  InitializeMF_BoundaryNode(FvstSutraGeneralizedTransportNode, PriorNode, FSutraGeneralizedTransportList);
-  InitializeMF_BoundaryNode(FvstSutraStateObsNode, PriorNode, FSutraStateObsList);
-
-
-  // Add children of FvstFootprintFeaturesNode
-  if FvstFootprintWellNode = nil then
-  begin
-    FvstFootprintWellNode := vstObjects.InsertNode(
-      FvstFootprintFeaturesNode, amAddChildFirst);
-    vstObjects.ReinitNode(FvstFootprintWellNode, False);
-  end;
-  InitializeNodeData(FvstFootprintWellNode, FFootprintList);
-  PriorNode := FvstFootprintWellNode;
-
-  FDataSetLists.Clear;
-
-  vstObjects.ChildCount[FvstDataSetRootNode] := 0;
-  DataSetClassifications := TStringList.Create;
+  vstObjects.BeginUpdate;
   try
-    DataSetClassifications.AddObject('Data Sets', TObject(FvstDataSetRootNode));
+    if FvstAllObjectsNode = nil then
+    begin
+      FvstAllObjectsNode := vstObjects.InsertNode(
+        vstObjects.RootNode, amAddChildFirst);
+      vstObjects.ReinitNode(FvstAllObjectsNode, False);
+    end;
+    InitializeNodeData(FvstAllObjectsNode, FAllObjectsList);
 
-    ClassificationObjectOwnerList := TObjectList.Create;
+    if FvstSizeNode = nil then
+    begin
+      FvstSizeNode := vstObjects.InsertNode(FvstAllObjectsNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstSizeNode, False);
+    end;
+    InitializeNodeData(FvstSizeNode, FSizeList);
+
+    if FvstRefinementNode = nil then
+    begin
+      FvstRefinementNode := vstObjects.InsertNode(FvstSizeNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstRefinementNode, False);
+    end;
+    InitializeNodeData(FvstRefinementNode, FRefinementList);
+
+    if FvstDataSetRootNode = nil then
+    begin
+      FvstDataSetRootNode := vstObjects.InsertNode(FvstRefinementNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstDataSetRootNode, False);
+    end;
+    InitializeNodeData(FvstDataSetRootNode, nil);
+
+    if FvstPhastBoundaryConditionsRoot = nil then
+    begin
+      FvstPhastBoundaryConditionsRoot := vstObjects.InsertNode(
+        FvstDataSetRootNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstPhastBoundaryConditionsRoot, False);
+    end;
+    InitializeNodeData(FvstPhastBoundaryConditionsRoot, nil);
+
+    if FvstModflowBoundaryConditionsRoot = nil then
+    begin
+      FvstModflowBoundaryConditionsRoot := vstObjects.InsertNode(
+        FvstPhastBoundaryConditionsRoot, amInsertAfter);
+      vstObjects.ReinitNode(FvstModflowBoundaryConditionsRoot, False);
+    end;
+    InitializeNodeData(FvstModflowBoundaryConditionsRoot, nil);
+
+    if FvstObsMf6Node = nil then
+    begin
+      FvstObsMf6Node := vstObjects.InsertNode(
+        FvstModflowBoundaryConditionsRoot, amInsertAfter);
+      vstObjects.ReinitNode(FvstObsMf6Node, False);
+    end;
+    InitializeNodeData(FvstObsMf6Node, nil);
+
+  //  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
+
+
+    if FvstModpathRoot = nil then
+    begin
+      FvstModpathRoot := vstObjects.InsertNode(
+        FvstObsMf6Node, amInsertAfter);
+      vstObjects.ReinitNode(FvstModpathRoot, False);
+    end;
+    InitializeNodeData(FvstModpathRoot, FModpathList);
+
+    if FvstChildModelNode = nil then
+    begin
+      FvstChildModelNode := vstObjects.InsertNode(
+        FvstModpathRoot, amInsertAfter);
+      vstObjects.ReinitNode(FvstChildModelNode, False);
+    end;
+    InitializeNodeData(FvstChildModelNode, FChildModelList);
+
+    if FvstSutraFeaturesNode = nil then
+    begin
+      FvstSutraFeaturesNode := vstObjects.InsertNode(
+        FvstChildModelNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstSutraFeaturesNode, False);
+    end;
+    InitializeNodeData(FvstSutraFeaturesNode, nil);
+
+    if FvstFootprintFeaturesNode = nil then
+    begin
+      FvstFootprintFeaturesNode := vstObjects.InsertNode(
+        FvstChildModelNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstFootprintFeaturesNode, False);
+    end;
+    InitializeNodeData(FvstFootprintFeaturesNode, nil);
+
+
+
+    if FvstOtherObjectsNode = nil then
+    begin
+      FvstOtherObjectsNode := vstObjects.InsertNode(
+        FvstChildModelNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstOtherObjectsNode, False);
+    end;
+    InitializeNodeData(FvstOtherObjectsNode, FOtherObjectsList);
+
+    // create children of FvstPhastBoundaryConditionsRoot
+    if FvstSpecifiedHeadNode = nil then
+    begin
+      FvstSpecifiedHeadNode := vstObjects.InsertNode(
+        FvstPhastBoundaryConditionsRoot, amAddChildFirst);
+      vstObjects.ReinitNode(FvstSpecifiedHeadNode, False);
+    end;
+    InitializeNodeData(FvstSpecifiedHeadNode, FSpecifiedHeadList);
+
+    if FvstSpecifiedFluxNode = nil then
+    begin
+      FvstSpecifiedFluxNode := vstObjects.InsertNode(
+        FvstSpecifiedHeadNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstSpecifiedFluxNode, False);
+    end;
+    InitializeNodeData(FvstSpecifiedFluxNode, FSpecifiedFluxList);
+
+    if FvstLeakyNode = nil then
+    begin
+      FvstLeakyNode := vstObjects.InsertNode(
+        FvstSpecifiedFluxNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstLeakyNode, False);
+    end;
+    InitializeNodeData(FvstLeakyNode, FLeakyList);
+
+    if FvstRiverNode = nil then
+    begin
+      FvstRiverNode := vstObjects.InsertNode(
+        FvstLeakyNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstRiverNode, False);
+    end;
+    InitializeNodeData(FvstRiverNode, FRiverList);
+
+    if FvstWellNode = nil then
+    begin
+      FvstWellNode := vstObjects.InsertNode(FvstRiverNode, amInsertAfter);
+      vstObjects.ReinitNode(FvstWellNode, False);
+    end;
+    InitializeNodeData(FvstWellNode, FWellList);
+
+    // add children of FvstObsMf6Node
+    if FvstHeadObsMf6Node = nil then
+    begin
+      FvstHeadObsMf6Node := vstObjects.InsertNode(
+        FvstObsMf6Node, amAddChildFirst);
+      vstObjects.ReinitNode(FvstHeadObsMf6Node, False);
+    end;
+    InitializeNodeData(FvstHeadObsMf6Node, FHeadObs6List);
+    PriorNode := FvstHeadObsMf6Node;
+
+    InitializeMF_BoundaryNode(FvstDrawDownObsMf6Node, PriorNode, FDrawDownObs6List);
+    InitializeMF_BoundaryNode(FvstChdObsMf6Node, PriorNode, FChdObs6List);
+    InitializeMF_BoundaryNode(FvstDrnObsMf6Node, PriorNode, FDrnObs6List);
+    InitializeMF_BoundaryNode(FvstEvtObsMf6Node, PriorNode, FEvtObs6List);
+    InitializeMF_BoundaryNode(FvstGhbObsMf6Node, PriorNode, FGhbObs6List);
+    InitializeMF_BoundaryNode(FvstRchObsMf6Node, PriorNode, FRchObs6List);
+    InitializeMF_BoundaryNode(FvstRivObsMf6Node, PriorNode, FRivObs6List);
+    InitializeMF_BoundaryNode(FvstWelObsMf6Node, PriorNode, FWelObs6List);
+    InitializeMF_BoundaryNode(FvstToMvrObsMf6Node, PriorNode, FToMvrObs6List);
+    InitializeMF_BoundaryNode(FvstLakObsMf6Node, PriorNode, FLakObs6List);
+    InitializeMF_BoundaryNode(FvstMawObsMf6Node, PriorNode, FMawObs6List);
+    InitializeMF_BoundaryNode(FvstSfrObsMf6Node, PriorNode, FSfrObs6List);
+    InitializeMF_BoundaryNode(FvstUzfObsMf6Node, PriorNode, FUzfObs6List);
+    InitializeMF_BoundaryNode(FvstCsubObsMf6Node, PriorNode, FCsubObs6List);
+
+    // add children of FvstModflowBoundaryConditionsRoot
+    if FvstModflowChdNode = nil then
+    begin
+      FvstModflowChdNode := vstObjects.InsertNode(
+        FvstModflowBoundaryConditionsRoot, amAddChildFirst);
+      vstObjects.ReinitNode(FvstModflowChdNode, False);
+    end;
+    InitializeNodeData(FvstModflowChdNode, FChdList);
+    PriorNode := FvstModflowChdNode;
+
+
+    InitializeMF_BoundaryNode(FvstModflowCSubNode, PriorNode, FCSubList);
+    InitializeMF_BoundaryNode(FvstModflowDrnNode, PriorNode, FDrnList);
+    InitializeMF_BoundaryNode(FvstModflowDrtNode, PriorNode, FDrtList);
+    InitializeMF_BoundaryNode(FvstModflowDrtReturnLocation, PriorNode, FDrtReturnList);
+    InitializeMF_BoundaryNode(FvstModflowEtsNode, PriorNode, FEtsList);
+    InitializeMF_BoundaryNode(FvstModflowEvtNode, PriorNode, FEvtList);
+    InitializeMF_BoundaryNode(FvstModflowGhbNode, PriorNode, FGhbList);
+    InitializeMF_BoundaryNode(FvstModflowFhbHeadNode, PriorNode, FFhbHeadList);
+    InitializeMF_BoundaryNode(FvstModflowFhbFlowNode, PriorNode, FFhbFlowList);
+    InitializeMF_BoundaryNode(FvstModflowHfbNode, PriorNode, FHfbList);
+    InitializeMF_BoundaryNode(FvstModflowHydmodNode, PriorNode, FHydmodList);
+    InitializeMF_BoundaryNode(FvstModflowLakNode, PriorNode, FLakList);
+    InitializeMF_BoundaryNode(FvstModflowMf6LakNode, PriorNode, FLakMf6List);
+
+    InitializeMF_BoundaryNode(FvstModflowMawNode, PriorNode, FMawList);
+    InitializeMF_BoundaryNode(FvstModflowMnw1Node, PriorNode, FMnw1List);
+    InitializeMF_BoundaryNode(FvstModflowMnw2Node, PriorNode, FMnw2List);
+    InitializeMF_BoundaryNode(FvstModflowMvrNode, PriorNode, FMvrList);
+  //  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
+    InitializeMF_BoundaryNode(FvstModflowRchNode, PriorNode, FRchList);
+    InitializeMF_BoundaryNode(FvstModflowResNode, PriorNode, FResList);
+    InitializeMF_BoundaryNode(FvstModflowRipNode, PriorNode, FRipList);
+    InitializeMF_BoundaryNode(FvstModflowRivNode, PriorNode, FRivList);
+    InitializeMF_BoundaryNode(FvstModflowSfrNode, PriorNode, FSfrList);
+    InitializeMF_BoundaryNode(FvstModflowSfrMF6Node, PriorNode, FSfrMf6List);
+    InitializeMF_BoundaryNode(FvstModflowStrNode, PriorNode, FStrList);
+
+    InitializeMF_BoundaryNode(FvstModflowSubObsNode, PriorNode, FModflowSubObsList);
+    InitializeMF_BoundaryNode(FvstModflowSwtObsNode, PriorNode, FModflowSwtObsList);
+
+    InitializeMF_BoundaryNode(FvstModflowGagNode, PriorNode, FSfrGagList);
+    InitializeMF_BoundaryNode(FvstModflowUzfNode, PriorNode, FUzfList);
+    InitializeMF_BoundaryNode(FvstModflowUzfMf6Node, PriorNode, FUzfMf6List);
+
+
+    InitializeMF_BoundaryNode(FvstModflowWellNode, PriorNode, FMfWellList);
+    InitializeMF_BoundaryNode(FvstModflowHobNode, PriorNode, FHobList);
+    InitializeMF_BoundaryNode(FvstModflowSwiObsNode, PriorNode, FSwiObsList);
+
+
+    InitializeMF_BoundaryNode(FvstModflowSwrReachNode, PriorNode, FSwrReachList);
+    InitializeMF_BoundaryNode(FvstModflowSwrRainNode, PriorNode, FSwrRainList);
+    InitializeMF_BoundaryNode(FvstModflowSwrEvapNode, PriorNode, FSwrEvapList);
+    InitializeMF_BoundaryNode(FvstModflowSwrInflowNode, PriorNode, FSwrInflowList);
+    InitializeMF_BoundaryNode(FvstModflowSwrStageNode, PriorNode, FSwrStageList);
+    InitializeMF_BoundaryNode(FvstModflowSwrDirectRunoffNode, PriorNode, FSwrDirectRunoffList);
+
+    InitializeMF_BoundaryNode(FvstModflowFarmNode, PriorNode, FFarmList);
+    InitializeMF_BoundaryNode(FvstModflowFarmWellNode, PriorNode, FFarmWellList);
+    InitializeMF_BoundaryNode(FvstModflowFarmPrecipNode, PriorNode, FFarmPrecipList);
+    InitializeMF_BoundaryNode(FvstModflowFarmRefEvapNode, PriorNode, FFarmRefEvtList);
+    InitializeMF_BoundaryNode(FvstModflowFarmCropIDNode, PriorNode, FFarmCropIDList);
+    InitializeMF_BoundaryNode(FvstModflowCfpRechargeNode, PriorNode, FCfpRechargeList);
+
+
+    InitializeMF_BoundaryNode(FvstMt3dLkt, PriorNode, FLktList);
+    InitializeMF_BoundaryNode(FvstMt3dSft, PriorNode, FSftList);
+    InitializeMF_BoundaryNode(FvstMt3dmsSsm, PriorNode, FSsmList);
+    InitializeMF_BoundaryNode(FvstMt3dmsTob, PriorNode, FTobList);
+    InitializeMF_BoundaryNode(FvstMt3dUztRech, PriorNode, FUztRechList);
+    InitializeMF_BoundaryNode(FvstMt3dUztSat, PriorNode, FUztSatList);
+    InitializeMF_BoundaryNode(FvstMt3dUztUnsat, PriorNode, FUztUnsatList);
+    InitializeMF_BoundaryNode(FvstMt3dSeepage, PriorNode, FUztSeepageList);
+
+    // Add children of FvstSutraFeaturesNode
+    if FvstSutraObsNode = nil then
+    begin
+      FvstSutraObsNode := vstObjects.InsertNode(
+        FvstSutraFeaturesNode, amAddChildFirst);
+      vstObjects.ReinitNode(FvstSutraObsNode, False);
+    end;
+    InitializeNodeData(FvstSutraObsNode, FSutraObsList);
+    PriorNode := FvstSutraObsNode;
+
+    InitializeMF_BoundaryNode(FvstSutraSpecPressureNode, PriorNode, FSutraSpecPressureList);
+    InitializeMF_BoundaryNode(FvstSutraSpecUNode, PriorNode, FSutraSpecUList);
+    InitializeMF_BoundaryNode(FvstSutraFluidFluxNode, PriorNode, FSutraFluidFluxList);
+    InitializeMF_BoundaryNode(FvstSutraUFluxNode, PriorNode, FSutraUFluxList);
+    InitializeMF_BoundaryNode(FvstSutraLakeNode, PriorNode, FSutraLakeList);
+    InitializeMF_BoundaryNode(FvstSutraGeneralizedFlowNode, PriorNode, FSutraGeneralizedFlowList);
+    InitializeMF_BoundaryNode(FvstSutraGeneralizedTransportNode, PriorNode, FSutraGeneralizedTransportList);
+    InitializeMF_BoundaryNode(FvstSutraStateObsNode, PriorNode, FSutraStateObsList);
+
+
+    // Add children of FvstFootprintFeaturesNode
+    if FvstFootprintWellNode = nil then
+    begin
+      FvstFootprintWellNode := vstObjects.InsertNode(
+        FvstFootprintFeaturesNode, amAddChildFirst);
+      vstObjects.ReinitNode(FvstFootprintWellNode, False);
+    end;
+    InitializeNodeData(FvstFootprintWellNode, FFootprintList);
+    PriorNode := FvstFootprintWellNode;
+
+    FDataSetLists.Clear;
+
+    vstObjects.ChildCount[FvstDataSetRootNode] := 0;
+    DataSetClassifications := TStringList.Create;
     try
-  // Create lists used for sorting the nodes.
-      HufDataArrays := TClassificationList.Create;
-      ClassificationObjects:= TClassificationList.Create;
-      LayerGroupList := TClassificationList.Create;
-      SutraLayerGroupList := TClassificationList.Create;
+      DataSetClassifications.AddObject('Data Sets', TObject(FvstDataSetRootNode));
+
+      ClassificationObjectOwnerList := TObjectList.Create;
       try
-        FillDataSetLists(HufDataArrays,
-          LayerGroupList, SutraLayerGroupList,
-          ClassificationObjects,
-          ClassificationObjectOwnerList);
-
-        SortedClassifiedDataSets := TStringList.Create;
+    // Create lists used for sorting the nodes.
+        HufDataArrays := TClassificationList.Create;
+        ClassificationObjects:= TClassificationList.Create;
+        LayerGroupList := TClassificationList.Create;
+        SutraLayerGroupList := TClassificationList.Create;
         try
-          ClassifyListedObjects(SortedClassifiedDataSets, ClassificationObjects,
-            [LayerGroupList, SutraLayerGroupList, HufDataArrays]);
+          FillDataSetLists(HufDataArrays,
+            LayerGroupList, SutraLayerGroupList,
+            ClassificationObjects,
+            ClassificationObjectOwnerList);
 
-          for DataSetIndex := 0 to SortedClassifiedDataSets.Count - 1 do
-          begin
-            Classification := SortedClassifiedDataSets[DataSetIndex];
-            ClassificationObject := SortedClassifiedDataSets.Objects[DataSetIndex] as TDataSetClassification;
-            if ClassificationObject <> nil then
+          SortedClassifiedDataSets := TStringList.Create;
+          try
+            ClassifyListedObjects(SortedClassifiedDataSets, ClassificationObjects,
+              [LayerGroupList, SutraLayerGroupList, HufDataArrays]);
+
+            for DataSetIndex := 0 to SortedClassifiedDataSets.Count - 1 do
             begin
-
-              DataSet := ClassificationObject.DataArray;
-              Classification := DataSet.FullClassification;
-              ParentNode := FvstDataSetRootNode;
-              Assert(Classification <> '');
-              SeparatorPosition := Pos('|', Classification);
-              while SeparatorPosition > 0 do
+              Classification := SortedClassifiedDataSets[DataSetIndex];
+              ClassificationObject := SortedClassifiedDataSets.Objects[DataSetIndex] as TDataSetClassification;
+              if ClassificationObject <> nil then
               begin
-                ALevelDescription := Copy(Classification, 1, Pred(SeparatorPosition));
 
+                DataSet := ClassificationObject.DataArray;
+                Classification := DataSet.FullClassification;
+                ParentNode := FvstDataSetRootNode;
+                Assert(Classification <> '');
+                SeparatorPosition := Pos('|', Classification);
+                while SeparatorPosition > 0 do
+                begin
+                  ALevelDescription := Copy(Classification, 1, Pred(SeparatorPosition));
+
+                  FindOrCreateClassificationNode;
+
+                  SeparatorPosition := PosEx('|', Classification,
+                    Succ(SeparatorPosition));
+                end;
+                ALevelDescription := Classification;
                 FindOrCreateClassificationNode;
 
-                SeparatorPosition := PosEx('|', Classification,
-                  Succ(SeparatorPosition));
+                vstObjects.ChildCount[DataSetGroupNode] :=
+                  vstObjects.ChildCount[DataSetGroupNode] + 1;
+
+                vstDataSetNode := vstObjects.GetLastChild(DataSetGroupNode);
+
+                Data := vstObjects.GetNodeData(vstDataSetNode);
+                Data.Caption := DataSet.Name;
+
+                ListOfObjects := TList.Create;
+                FDataSetLists.Add(ListOfObjects);
+
+                InitializeNodeData(vstDataSetNode, ListOfObjects);
+
+                Data.IsDataSetNode := True;
+                Data.Classification := Classification + '|' + DataSet.Name;
+
+                DataSetList.AddObject(Data.Classification, TObject(vstDataSetNode));
               end;
-              ALevelDescription := Classification;
-              FindOrCreateClassificationNode;
-
-              vstObjects.ChildCount[DataSetGroupNode] :=
-                vstObjects.ChildCount[DataSetGroupNode] + 1;
-
-              vstDataSetNode := vstObjects.GetLastChild(DataSetGroupNode);
-
-              Data := vstObjects.GetNodeData(vstDataSetNode);
-              Data.Caption := DataSet.Name;
-
-              ListOfObjects := TList.Create;
-              FDataSetLists.Add(ListOfObjects);
-
-              InitializeNodeData(vstDataSetNode, ListOfObjects);
-
-              Data.IsDataSetNode := True;
-              Data.Classification := Classification + '|' + DataSet.Name;
-
-              DataSetList.AddObject(Data.Classification, TObject(vstDataSetNode));
             end;
+          finally
+            SortedClassifiedDataSets.Free;
           end;
         finally
-          SortedClassifiedDataSets.Free;
+          SutraLayerGroupList.Free;
+          LayerGroupList.Free;
+          ClassificationObjects.Free;
+          HufDataArrays.Free;
         end;
       finally
-        SutraLayerGroupList.Free;
-        LayerGroupList.Free;
-        ClassificationObjects.Free;
-        HufDataArrays.Free;
+        ClassificationObjectOwnerList.Free;
       end;
     finally
-      ClassificationObjectOwnerList.Free;
+      DataSetClassifications.Free;
     end;
   finally
-    DataSetClassifications.Free;
+    vstObjects.EndUpdate;
   end;
 end;
 
@@ -2818,15 +2829,20 @@ procedure TfrmCustomSelectObjects.RecordExpandedNodes;
 var
   ANode: PVirtualNode;
 begin
-  FExapandedNodes.Clear;
-  ANode := vstObjects.GetFirst;
-  while ANode <> nil do
-  begin
-    if vstObjects.Expanded[ANode] then
+  vstObjects.BeginUpdate;
+  try
+    FExapandedNodes.Clear;
+    ANode := vstObjects.GetFirst;
+    while ANode <> nil do
     begin
-      FExapandedNodes.Add(NodeString(ANode));
+      if vstObjects.Expanded[ANode] then
+      begin
+        FExapandedNodes.Add(NodeString(ANode));
+      end;
+      ANode := vstObjects.GetNext(ANode)
     end;
-    ANode := vstObjects.GetNext(ANode)
+  finally
+    vstObjects.EndUpdate;
   end;
 end;
 
@@ -2834,15 +2850,20 @@ procedure TfrmCustomSelectObjects.RestoreExpandedNodes;
 var
   ANode: PVirtualNode;
 begin
-  ANode := vstObjects.GetFirst;
-  while ANode <> nil do
-  begin
-    if FExapandedNodes.IndexOf(NodeString(ANode)) >= 0 then
+  vstObjects.BeginUpdate;
+  try
+    ANode := vstObjects.GetFirst;
+    while ANode <> nil do
     begin
-      FExapandedNodes.Add(NodeString(ANode));
-      vstObjects.Expanded[ANode] := True;
+      if FExapandedNodes.IndexOf(NodeString(ANode)) >= 0 then
+      begin
+        FExapandedNodes.Add(NodeString(ANode));
+        vstObjects.Expanded[ANode] := True;
+      end;
+      ANode := vstObjects.GetNext(ANode)
     end;
-    ANode := vstObjects.GetNext(ANode)
+  finally
+    vstObjects.EndUpdate;
   end;
 end;
 
@@ -2871,45 +2892,50 @@ var
   Index: integer;
   AScreenObject: TScreenObject;
 begin
-  ChildNode := Sender.GetFirstChild(Node);
-  while ChildNode <> nil do
-  begin
-    ChildData := Sender.GetNodeData(ChildNode);
-    if (ChildData <> nil) and (ChildData.ScreenObjects <> nil) then
+  vstObjects.BeginUpdate;
+  try
+    ChildNode := Sender.GetFirstChild(Node);
+    while ChildNode <> nil do
     begin
-      case Sender.CheckState[Node] of
-        csUncheckedNormal:
-          begin
-            for Index := 0 to ChildData.ScreenObjects.Count - 1 do
+      ChildData := Sender.GetNodeData(ChildNode);
+      if (ChildData <> nil) and (ChildData.ScreenObjects <> nil) then
+      begin
+        case Sender.CheckState[Node] of
+          csUncheckedNormal:
             begin
-              AScreenObject := ChildData.ScreenObjects[Index];
-              HandleUnChecked(AScreenObject);
+              for Index := 0 to ChildData.ScreenObjects.Count - 1 do
+              begin
+                AScreenObject := ChildData.ScreenObjects[Index];
+                HandleUnChecked(AScreenObject);
+              end;
             end;
-          end;
-        csCheckedNormal:
-          begin
-            for Index := 0 to ChildData.ScreenObjects.Count - 1 do
+          csCheckedNormal:
             begin
-              AScreenObject := ChildData.ScreenObjects[Index];
-              HandleChecked(AScreenObject);
+              for Index := 0 to ChildData.ScreenObjects.Count - 1 do
+              begin
+                AScreenObject := ChildData.ScreenObjects[Index];
+                HandleChecked(AScreenObject);
+              end;
             end;
-          end;
-        csMixedNormal:
-          begin
-            // do nothing.
-          end;
-        else
-          begin
-            Assert(False);
-          end;
+          csMixedNormal:
+            begin
+              // do nothing.
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+      end
+      else
+      begin
+        Sender.CheckState[ChildNode] := Sender.CheckState[Node];
+        HandleChildren(Sender, ChildNode);
       end;
-    end
-    else
-    begin
-      Sender.CheckState[ChildNode] := Sender.CheckState[Node];
-      HandleChildren(Sender, ChildNode);
+      ChildNode := Sender.GetNextSibling(ChildNode);
     end;
-    ChildNode := Sender.GetNextSibling(ChildNode);
+  finally
+    vstObjects.EndUpdate;
   end;
 end;
 
@@ -3038,82 +3064,87 @@ begin
   begin
     Exit;
   end;
-  Data := vstObjects.GetNodeData(Node);
-  ChildNode := nil;
-  // Convert vstObjects.ChildCount[Node] from Cardinal to integer to
-  // prevent Interger overflow when  vstObjects.ChildCount[Node] = 0.
-  ChildCount := vstObjects.ChildCount[Node];
-  for Index := 0 to ChildCount - 1 do
-  begin
-    if Index = 0 then
+  vstObjects.BeginUpdate;
+  try
+    Data := vstObjects.GetNodeData(Node);
+    ChildNode := nil;
+    // Convert vstObjects.ChildCount[Node] from Cardinal to integer to
+    // prevent Interger overflow when  vstObjects.ChildCount[Node] = 0.
+    ChildCount := vstObjects.ChildCount[Node];
+    for Index := 0 to ChildCount - 1 do
     begin
-      ChildNode := vstObjects.GetFirstChild(Node);
-    end
-    else
-    begin
-      ChildNode := vstObjects.GetNextSibling(ChildNode);
-    end;
-    if vstObjects.ChildCount[ChildNode] > 0 then
-    begin
-      SetRootNodeStates(ChildNode);
-    end;
-    ChildData := vstObjects.GetNodeData(ChildNode);
-    if ChildData.ScreenObjects <> nil then
-    begin
-      UpdateChildCheck(ChildNode);
-      StateChanged := False;
-      for ScreenObjectIndex := 0 to ChildData.ScreenObjects.Count - 1 do
+      if Index = 0 then
       begin
-        ScreenObject := ChildData.ScreenObjects[ScreenObjectIndex];
-        if ScreenObjectIndex = 0 then
+        ChildNode := vstObjects.GetFirstChild(Node);
+      end
+      else
+      begin
+        ChildNode := vstObjects.GetNextSibling(ChildNode);
+      end;
+      if vstObjects.ChildCount[ChildNode] > 0 then
+      begin
+        SetRootNodeStates(ChildNode);
+      end;
+      ChildData := vstObjects.GetNodeData(ChildNode);
+      if ChildData.ScreenObjects <> nil then
+      begin
+        UpdateChildCheck(ChildNode);
+        StateChanged := False;
+        for ScreenObjectIndex := 0 to ChildData.ScreenObjects.Count - 1 do
         begin
-          SetFirstNodeCheckState(ChildData, ScreenObject);
-        end
-        else
+          ScreenObject := ChildData.ScreenObjects[ScreenObjectIndex];
+          if ScreenObjectIndex = 0 then
+          begin
+            SetFirstNodeCheckState(ChildData, ScreenObject);
+          end
+          else
+          begin
+  //          StateChanged := False;
+            SetSubsequentNodesCheckState(StateChanged, ScreenObject, ChildData);
+  //          if StateChanged then
+  //          begin
+  //            break;
+  //          end;
+          end;
+        end;
+      end;
+      if Index = 0 then
+      begin
+        Data.GroupState := ChildData.GroupState;
+      end
+      else
+      begin
+        if Data.GroupState <> ChildData.GroupState then
         begin
-//          StateChanged := False;
-          SetSubsequentNodesCheckState(StateChanged, ScreenObject, ChildData);
-//          if StateChanged then
-//          begin
-//            break;
-//          end;
+          Data.GroupState := vgs3State;
+  //        break;
         end;
       end;
     end;
-    if Index = 0 then
-    begin
-      Data.GroupState := ChildData.GroupState;
-    end
-    else
-    begin
-      if Data.GroupState <> ChildData.GroupState then
-      begin
-        Data.GroupState := vgs3State;
-//        break;
-      end;
+    case Data.GroupState of
+      vgsUndefined:
+        begin
+          // do nothing
+        end;
+      vgsUnChecked:
+        begin
+          vstObjects.CheckState[Node] := csUncheckedNormal;
+        end;
+      vgsChecked:
+        begin
+          vstObjects.CheckState[Node] := csCheckedNormal;
+        end;
+      vgs3State:
+        begin
+          vstObjects.CheckState[Node] := csMixedNormal;
+        end;
+      else
+        begin
+          Assert(False);
+        end;
     end;
-  end;
-  case Data.GroupState of
-    vgsUndefined:
-      begin
-        // do nothing
-      end;
-    vgsUnChecked:
-      begin
-        vstObjects.CheckState[Node] := csUncheckedNormal;
-      end;
-    vgsChecked:
-      begin
-        vstObjects.CheckState[Node] := csCheckedNormal;
-      end;
-    vgs3State:
-      begin
-        vstObjects.CheckState[Node] := csMixedNormal;
-      end;
-    else
-      begin
-        Assert(False);
-      end;
+  finally
+    vstObjects.EndUpdate;
   end;
 end;
 
@@ -3234,7 +3265,8 @@ begin
   end;
 end;
 
-procedure TfrmCustomSelectObjects.HandleCheckChange(Node: PVirtualNode; Sender: TBaseVirtualTree);
+procedure TfrmCustomSelectObjects.HandleCheckChange(Node: PVirtualNode;
+  Sender: TBaseVirtualTree);
 var
   ChildIndex: Integer;
   Data: PMyRec;
@@ -3244,122 +3276,127 @@ var
   ChildNode: PVirtualNode;
   ChildCount: Integer;
 begin
-  if (Node = FvstDataSetRootNode)
-    or (Node = FvstPhastBoundaryConditionsRoot)
-    or (Node = FvstModflowBoundaryConditionsRoot)
-    or (Node = FvstSutraFeaturesNode)
-    or (Node = FvstFootprintFeaturesNode)
-    or (Node = FvstObsMf6Node)
-    then
-  begin
-    if Sender.CheckState[Node] <> csMixedNormal then
+  vstObjects.BeginUpdate;
+  try
+    if (Node = FvstDataSetRootNode)
+      or (Node = FvstPhastBoundaryConditionsRoot)
+      or (Node = FvstModflowBoundaryConditionsRoot)
+      or (Node = FvstSutraFeaturesNode)
+      or (Node = FvstFootprintFeaturesNode)
+      or (Node = FvstObsMf6Node)
+      then
     begin
-      ChildNode := nil;
-      // Convert vstObjects.ChildCount[Node] from Cardinal to integer to
-      // prevent Interger overflow when  vstObjects.ChildCount[Node] = 0.
-      ChildCount := Sender.ChildCount[Node];
-      for ChildIndex := 0 to ChildCount - 1 do
+      if Sender.CheckState[Node] <> csMixedNormal then
       begin
-        if ChildIndex = 0 then
+        ChildNode := nil;
+        // Convert vstObjects.ChildCount[Node] from Cardinal to integer to
+        // prevent Interger overflow when  vstObjects.ChildCount[Node] = 0.
+        ChildCount := Sender.ChildCount[Node];
+        for ChildIndex := 0 to ChildCount - 1 do
         begin
-          ChildNode := Sender.GetFirstChild(Node);
-        end
-        else
-        begin
-          ChildNode := Sender.GetNextSibling(ChildNode);
-        end;
-        Data := Sender.GetNodeData(ChildNode);
-        if Data.ScreenObjects <> nil then
-        begin
-          case Sender.CheckState[Node] of
-            csUncheckedNormal:
-              begin
-                for Index := 0 to Data.ScreenObjects.Count - 1 do
-                begin
-                  AScreenObject := Data.ScreenObjects[Index];
-                  HandleUnchecked(AScreenObject);
-                end;
-              end;
-            csCheckedNormal:
-              begin
-                for Index := 0 to Data.ScreenObjects.Count - 1 do
-                begin
-                  AScreenObject := Data.ScreenObjects[Index];
-                  HandleChecked(AScreenObject);
-                end;
-              end;
-            csMixedNormal:
-              begin
-              end;
+          if ChildIndex = 0 then
+          begin
+            ChildNode := Sender.GetFirstChild(Node);
+          end
           else
-            // do nothing.
-            begin
-              Assert(False);
-            end;
-          end;
-        end
-        else
-        begin
-          HandleChildren(Sender, ChildNode);
-        end;
-      end;
-    end;
-  end
-  else
-  begin
-    Data := Sender.GetNodeData(Node);
-    if (Data <> nil) and (Data.ScreenObjects <> nil) then
-    begin
-      case Sender.CheckState[Node] of
-        csUncheckedNormal:
           begin
-            for Index := 0 to Data.ScreenObjects.Count - 1 do
-            begin
-              AScreenObject := Data.ScreenObjects[Index];
-              HandleUnchecked(AScreenObject);
-            end;
+            ChildNode := Sender.GetNextSibling(ChildNode);
           end;
-        csCheckedNormal:
+          Data := Sender.GetNodeData(ChildNode);
+          if Data.ScreenObjects <> nil then
           begin
-            for Index := 0 to Data.ScreenObjects.Count - 1 do
-            begin
-              AScreenObject := Data.ScreenObjects[Index];
-              HandleChecked(AScreenObject);
+            case Sender.CheckState[Node] of
+              csUncheckedNormal:
+                begin
+                  for Index := 0 to Data.ScreenObjects.Count - 1 do
+                  begin
+                    AScreenObject := Data.ScreenObjects[Index];
+                    HandleUnchecked(AScreenObject);
+                  end;
+                end;
+              csCheckedNormal:
+                begin
+                  for Index := 0 to Data.ScreenObjects.Count - 1 do
+                  begin
+                    AScreenObject := Data.ScreenObjects[Index];
+                    HandleChecked(AScreenObject);
+                  end;
+                end;
+              csMixedNormal:
+                begin
+                end;
+            else
+              // do nothing.
+              begin
+                Assert(False);
+              end;
             end;
-          end;
-        csMixedNormal:
+          end
+          else
           begin
+            HandleChildren(Sender, ChildNode);
           end;
-      else
-        // do nothing.
-        begin
-          Assert(False);
         end;
       end;
     end
     else
     begin
-      HandleChildren(Sender, Node);
-      ParentData := Sender.GetNodeData(Sender.NodeParent[Node]);
-      if (ParentData <> nil) and (ParentData.ScreenObjects <> nil) then
+      Data := Sender.GetNodeData(Node);
+      if (Data <> nil) and (Data.ScreenObjects <> nil) then
       begin
-        AScreenObject := ParentData.ScreenObjects[Node.Index];
         case Sender.CheckState[Node] of
           csUncheckedNormal:
             begin
-              HandleUnchecked(AScreenObject);
+              for Index := 0 to Data.ScreenObjects.Count - 1 do
+              begin
+                AScreenObject := Data.ScreenObjects[Index];
+                HandleUnchecked(AScreenObject);
+              end;
             end;
           csCheckedNormal:
             begin
-              HandleChecked(AScreenObject);
+              for Index := 0 to Data.ScreenObjects.Count - 1 do
+              begin
+                AScreenObject := Data.ScreenObjects[Index];
+                HandleChecked(AScreenObject);
+              end;
+            end;
+          csMixedNormal:
+            begin
             end;
         else
+          // do nothing.
           begin
             Assert(False);
           end;
         end;
+      end
+      else
+      begin
+        HandleChildren(Sender, Node);
+        ParentData := Sender.GetNodeData(Sender.NodeParent[Node]);
+        if (ParentData <> nil) and (ParentData.ScreenObjects <> nil) then
+        begin
+          AScreenObject := ParentData.ScreenObjects[Node.Index];
+          case Sender.CheckState[Node] of
+            csUncheckedNormal:
+              begin
+                HandleUnchecked(AScreenObject);
+              end;
+            csCheckedNormal:
+              begin
+                HandleChecked(AScreenObject);
+              end;
+          else
+            begin
+              Assert(False);
+            end;
+          end;
+        end;
       end;
     end;
+  finally
+    vstObjects.EndUpdate;
   end;
 end;
 
@@ -3531,27 +3568,37 @@ end;
 
 procedure TfrmCustomSelectObjects.SetCheckStates;
 begin
-  UpdateChildCheck(FvstAllObjectsNode);
-  UpdateChildCheck(FvstOtherObjectsNode);
-  SetRootNodeStates(FvstPhastBoundaryConditionsRoot);
-  SetRootNodeStates(FvstModflowBoundaryConditionsRoot);
-  SetRootNodeStates(FvstSutraFeaturesNode);
-  SetRootNodeStates(FvstFootprintFeaturesNode);
-  UpdateChildCheck(FvstModpathRoot);
-  SetRootNodeStates(FvstDataSetRootNode);
-  UpdateChildCheck(FvstChildModelNode);
-  UpdateChildCheck(FvstSizeNode);
-  UpdateChildCheck(FvstRefinementNode);
-  SetRootNodeStates(FvstObsMf6Node);
+  vstObjects.BeginUpdate;
+  try
+    UpdateChildCheck(FvstAllObjectsNode);
+    UpdateChildCheck(FvstOtherObjectsNode);
+    SetRootNodeStates(FvstPhastBoundaryConditionsRoot);
+    SetRootNodeStates(FvstModflowBoundaryConditionsRoot);
+    SetRootNodeStates(FvstSutraFeaturesNode);
+    SetRootNodeStates(FvstFootprintFeaturesNode);
+    UpdateChildCheck(FvstModpathRoot);
+    SetRootNodeStates(FvstDataSetRootNode);
+    UpdateChildCheck(FvstChildModelNode);
+    UpdateChildCheck(FvstSizeNode);
+    UpdateChildCheck(FvstRefinementNode);
+    SetRootNodeStates(FvstObsMf6Node);
+  finally
+    vstObjects.EndUpdate;
+  end;
 end;
 
 procedure TfrmCustomSelectObjects.GetData;
 begin
-  RecordExpandedNodes;
-  vstObjects.Clear;
-  NilBaseNodes;
-  UpdateScreenObjects;
-  RestoreExpandedNodes;
+  vstObjects.BeginUpdate;
+  try
+    RecordExpandedNodes;
+    vstObjects.Clear;
+    NilBaseNodes;
+    UpdateScreenObjects;
+    RestoreExpandedNodes;
+  finally
+    vstObjects.EndUpdate;
+  end;
 end;
 
 initialization

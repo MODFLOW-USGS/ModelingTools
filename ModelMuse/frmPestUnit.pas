@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
   JvPageList, JvExControls, Vcl.ComCtrls, JvExComCtrls, JvPageListTreeView,
   ArgusDataEntry, PestPropertiesUnit, Vcl.Buttons, Vcl.ExtCtrls, UndoItems,
-  frameGridUnit, frameAvailableObjectsUnit, PestObsUnit;
+  frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
+  PestObsGroupUnit, System.Generics.Collections;
 
 type
   TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
@@ -142,10 +143,7 @@ type
     frameObservationGroups: TframeGrid;
     dlgOpenCovarianceMatrixFile: TOpenDialog;
     jvspObsGroupAssignments: TJvStandardPage;
-    frameObsGroupAssignments: TframeAvailableObjects;
-    pnlObservations: TPanel;
-    comboObsGroup: TComboBox;
-    lblObsGroup: TLabel;
+    frameParentObsGroups: TframeParentChild;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -157,10 +155,20 @@ type
       ARow: Integer);
     procedure FormDestroy(Sender: TObject); override;
     procedure plMainChange(Sender: TObject);
-    procedure comboObsGroupChange(Sender: TObject);
+    procedure frameObservationGroupssbDeleteClick(Sender: TObject);
+    procedure frameObservationGroupssbInsertClick(Sender: TObject);
+    procedure frameObservationGroupsseNumberChange(Sender: TObject);
+    procedure frameObservationGroupsGridSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+//    procedure comboObsGroupChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
+    FLocalObsGroups: TPestObservationGroups;
+    InvalidateModelEvent: TNotifyEvent;
+    FGroupDictionary: TDictionary<TPestObservationGroup, TTreeNode>;
+    FGroupNameDictionary: TDictionary<string, TPestObservationGroup>;
+    FEmptyNode: TTreeNode;
     procedure GetData;
     procedure SetData;
     procedure FixObsGroupNames;
@@ -174,10 +182,12 @@ type
 var
   frmPEST: TfrmPEST;
 
+const StrNone = '(none)';
+
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, PestObsGroupUnit;
+  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
@@ -186,12 +196,6 @@ resourcestring
   StrCovarianceMatrixFi = 'Covariance Matrix File Name (optional) (COVFLE)';
 
 {$R *.dfm}
-
-//procedure TfrmPEST.btnOK1Click(Sender: TObject);
-//begin
-//  inherited;
-//  SetData;
-//end;
 
 procedure TfrmPEST.MarkerChange(Sender: TObject);
 begin
@@ -218,15 +222,15 @@ begin
   if plMain.ActivePage = jvspObservationGroups then
   begin
     FixObsGroupNames;
-    comboObsGroup.Items.Clear;
-    comboObsGroup.Items.Capacity := frameObservationGroups.seNumber.AsInteger;
+//    comboObsGroup.Items.Clear;
+//    comboObsGroup.Items.Capacity := frameObservationGroups.seNumber.AsInteger;
     Grid := frameObservationGroups.Grid;
     for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
     begin
       if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
       begin
-        comboObsGroup.Items.AddObject(Grid.Cells[Ord(pogcName), RowIndex],
-          Grid.Objects[Ord(pogcName), RowIndex]);
+//        comboObsGroup.Items.AddObject(Grid.Cells[Ord(pogcName), RowIndex],
+//          Grid.Objects[Ord(pogcName), RowIndex]);
       end;
     end;
   end;
@@ -248,35 +252,35 @@ begin
   end;
 end;
 
-procedure TfrmPEST.comboObsGroupChange(Sender: TObject);
-var
-  AName: string;
-  ObsIndex: Integer;
-  AnObs: TCustomObservationItem;
-begin
-  inherited;
-  if comboObsGroup.ItemIndex >= 0 then
-  begin
-    AName := comboObsGroup.Text;
-    frameObsGroupAssignments.lbSrcObjects.Items.BeginUpdate;
-    frameObsGroupAssignments.lbDstObjects.Items.BeginUpdate;
-    try
-      frameObsGroupAssignments.lbSrcObjects.Items.Clear;
-      frameObsGroupAssignments.lbDstObjects.Items.Clear;
-      for ObsIndex := 0 to FNewObsList.Count - 1 do
-      begin
-        AnObs := FNewObsList[ObsIndex];
-        if AnObs.ObservationGroup = AName then
-        begin
-
-        end;
-      end;
-    finally
-      frameObsGroupAssignments.lbDstObjects.Items.EndUpdate;
-      frameObsGroupAssignments.lbSrcObjects.Items.EndUpdate;
-    end;
-  end;
-end;
+//procedure TfrmPEST.comboObsGroupChange(Sender: TObject);
+//var
+//  AName: string;
+//  ObsIndex: Integer;
+//  AnObs: TCustomObservationItem;
+//begin
+//  inherited;
+//  if comboObsGroup.ItemIndex >= 0 then
+//  begin
+//    AName := comboObsGroup.Text;
+//    frameObsGroupAssignments.lbSrcObjects.Items.BeginUpdate;
+//    frameObsGroupAssignments.lbDstObjects.Items.BeginUpdate;
+//    try
+//      frameObsGroupAssignments.lbSrcObjects.Items.Clear;
+//      frameObsGroupAssignments.lbDstObjects.Items.Clear;
+//      for ObsIndex := 0 to FNewObsList.Count - 1 do
+//      begin
+//        AnObs := FNewObsList[ObsIndex];
+//        if AnObs.ObservationGroup = AName then
+//        begin
+//
+//        end;
+//      end;
+//    finally
+//      frameObsGroupAssignments.lbDstObjects.Items.EndUpdate;
+//      frameObsGroupAssignments.lbSrcObjects.Items.EndUpdate;
+//    end;
+//  end;
+//end;
 
 procedure TfrmPEST.comboSvdModeChange(Sender: TObject);
 begin
@@ -296,6 +300,10 @@ begin
   inherited;
   FObsList := TObservationList.Create;
   FNewObsList := TObservationObjectList.Create;
+  InvalidateModelEvent := nil;
+  FLocalObsGroups := TPestObservationGroups.Create(InvalidateModelEvent);
+  FGroupDictionary := TDictionary<TPestObservationGroup, TTreeNode>.Create;
+  FGroupNameDictionary := TDictionary<string, TPestObservationGroup>.Create;
 
   NewNode := tvPEST.Items.AddChild(
     nil, 'Basic') as TJvPageIndexNode;
@@ -349,6 +357,10 @@ begin
     ObservationNode, 'Observation Groups') as TJvPageIndexNode;
   NewNode.PageIndex := jvspObservationGroups.PageIndex;
 
+  NewNode := tvPEST.Items.AddChild(
+    ObservationNode, 'Observation Group Assignments') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspObsGroupAssignments.PageIndex;
+
   plMain.ActivePageIndex := 0;
 
   GetData
@@ -357,6 +369,9 @@ end;
 procedure TfrmPEST.FormDestroy(Sender: TObject);
 begin
   inherited;
+  FGroupNameDictionary.Free;
+  FGroupDictionary.Free;
+  FLocalObsGroups.Free;
   FObsList.Free;
   FNewObsList.Free;
 end;
@@ -384,6 +399,93 @@ begin
   end;
 end;
 
+procedure TfrmPEST.frameObservationGroupsGridSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+var
+  Grid: TRbwDataGrid4;
+  Group: TPestObservationGroup;
+begin
+  inherited;
+  Grid := frameObservationGroups.Grid;
+  if (ARow >= Grid.FixedRows) and (ACol = Ord(pogcName)) then
+  begin
+    Group := Grid.Objects[ACol, ARow] as TPestObservationGroup;
+    if Group <> nil then
+    begin
+      Group.ObsGroupName := ValidObsGroupName(Value);
+    end;
+  end;
+end;
+
+procedure TfrmPEST.frameObservationGroupssbDeleteClick(Sender: TObject);
+var
+  Grid: TRbwDataGrid4;
+begin
+  inherited;
+  Grid := frameObservationGroups.Grid;
+  if Grid.SelectedRow >= Grid.FixedRows  then
+  begin
+    Grid.Objects[Ord(pogcName), Grid.SelectedRow].Free;
+    Grid.Objects[Ord(pogcName), Grid.SelectedRow] := nil;
+  end;
+
+  frameObservationGroups.sbDeleteClick(Sender);
+
+end;
+
+procedure TfrmPEST.frameObservationGroupssbInsertClick(Sender: TObject);
+var
+  NewGroup: TPestObservationGroup;
+  Grid: TRbwDataGrid4;
+begin
+  inherited;
+  Grid := frameObservationGroups.Grid;
+  NewGroup := nil;
+  if Grid.SelectedRow >= Grid.FixedRows then
+  begin
+    NewGroup := FLocalObsGroups.Add;
+  end;
+  frameObservationGroups.sbInsertClick(Sender);
+  if NewGroup <> nil then
+  begin
+    Grid.Objects[Ord(pogcName), Grid.SelectedRow] := NewGroup;
+    NewGroup.Index := Grid.SelectedRow -1;
+  end;
+
+end;
+
+procedure TfrmPEST.frameObservationGroupsseNumberChange(Sender: TObject);
+var
+  Grid: TRbwDataGrid4;
+  NewGroup: TPestObservationGroup;
+  Names: TStrings;
+  OldGroup: TCollectionItem;
+  index: Integer;
+begin
+  inherited;
+  Grid := frameObservationGroups.Grid;
+  Names := Grid.Cols[Ord(pogcName)];
+  frameObservationGroups.seNumberChange(Sender);
+  while frameObservationGroups.seNumber.AsInteger > FLocalObsGroups.Count do
+  begin
+    NewGroup := FLocalObsGroups.Add;
+    Grid.Objects[Ord(pogcName), FLocalObsGroups.Count] := NewGroup;
+    NewGroup.ObsGroupName := ValidObsGroupName(
+      Grid.Cells[Ord(pogcName), FLocalObsGroups.Count]);
+  end;
+  while frameObservationGroups.seNumber.AsInteger < FLocalObsGroups.Count do
+  begin
+    OldGroup := FLocalObsGroups.Last;
+    index := Names.IndexOfObject(OldGroup);
+    OldGroup.Free;
+    if index >= 1 then
+    begin
+      Grid.Objects[Ord(pogcName),index] := nil;
+    end;
+  end;
+
+end;
+
 procedure TfrmPEST.GetData;
 var
   PestProperties: TPestProperties;
@@ -397,8 +499,13 @@ var
   index: Integer;
   AnObs: TCustomObservationItem;
   ATempObs: TCustomObservationItem;
+  Tree: TJvTreeView;
+  NewNode: TTreeNode;
+  GroupIndex: Integer;
+  TreeNode: TTreeNode;
+//  InvalidateModelEvent: TNotifyEvent;
 begin
-  frameObsGroupAssignments.FrameResize(nil);
+//  frameObsGroupAssignments.FrameResize(nil);
 
   PestProperties := frmGoPhast.PhastModel.PestProperties;
 
@@ -475,6 +582,7 @@ begin
   rdeMaxLqsrIterations.IntegerValue := LsqrProperties.MaxIteration;
   cbWriteLsqrOutput.Checked := Boolean(LsqrProperties.LsqrWrite);
 
+  ObsGroups := nil;
   Grid := frameObservationGroups.Grid;
   Grid.BeginUpdate;
   try
@@ -484,10 +592,11 @@ begin
     Grid.Cells[Ord(pogcFileName), 0] := StrCovarianceMatrixFi;
 
     ObsGroups := PestProperties.ObservationGroups;
-    frameObservationGroups.seNumber.AsInteger := ObsGroups.Count;
-    for ItemIndex := 0 to ObsGroups.Count - 1 do
+    FLocalObsGroups.Assign(ObsGroups);
+    frameObservationGroups.seNumber.AsInteger := FLocalObsGroups.Count;
+    for ItemIndex := 0 to FLocalObsGroups.Count - 1 do
     begin
-      ObsGroup := ObsGroups[ItemIndex];
+      ObsGroup := FLocalObsGroups[ItemIndex];
       Grid.Objects[Ord(pogcName), ItemIndex+1] := ObsGroup;
       Grid.Cells[Ord(pogcName), ItemIndex+1] := ObsGroup.ObsGroupName;
       Grid.Checked[Ord(pogcUseTarget), ItemIndex+1] := ObsGroup.UseGroupTarget;
@@ -497,20 +606,54 @@ begin
         ObsGroup.AbsoluteCorrelationFileName;
     end;
 
-    frmGoPhast.PhastModel.FillObsItemList(FObsList);
-    FNewObsList.Capacity := FObsList.Count;
-    for index := 0 to FObsList.Count - 1 do
-    begin
-      AnObs := FObsList[index];
-      ATempObs := TCustomObservationItem.Create(nil);
-      FNewObsList.Add(ATempObs);
-      ATempObs.Assign(AnObs);
-    end;
-
   finally
     Grid.EndUpdate;
+    if ObsGroups <> nil then
+    begin
+      frameObservationGroups.seNumber.AsInteger := ObsGroups.Count;
+    end;
   end;
 
+  FGroupDictionary.Clear;
+  FGroupNameDictionary.Clear;
+  Tree := frameParentObsGroups.tvTree;
+  Tree.Items.Clear;
+  FEmptyNode := Tree.Items.AddChild(nil, StrNone);
+  for GroupIndex := 0 to FLocalObsGroups.Count - 1 do
+  begin
+    ObsGroup := FLocalObsGroups[GroupIndex];
+    NewNode := Tree.Items.AddChild(nil, ObsGroup.ObsGroupName);
+    NewNode.Data := ObsGroup;
+    FGroupDictionary.Add(ObsGroup, NewNode);
+    FGroupNameDictionary.Add(ObsGroup.ObsGroupName, ObsGroup);
+  end;
+
+
+  frmGoPhast.PhastModel.FillObsItemList(FObsList);
+  FNewObsList.Capacity := FObsList.Count;
+  for index := 0 to FObsList.Count - 1 do
+  begin
+    AnObs := FObsList[index];
+    ATempObs := TCustomObservationItem.Create(nil);
+    FNewObsList.Add(ATempObs);
+    ATempObs.Assign(AnObs);
+    if FGroupNameDictionary.TryGetValue(ATempObs.ObservationGroup, ObsGroup) then
+    begin
+      if FGroupDictionary.TryGetValue(ObsGroup, TreeNode) then
+      begin
+        NewNode := Tree.Items.AddChild(TreeNode, ATempObs.Name);
+      end
+      else
+      begin
+        NewNode := Tree.Items.AddChild(FEmptyNode, ATempObs.Name);
+      end;
+    end
+    else
+    begin
+      NewNode := Tree.Items.AddChild(FEmptyNode, ATempObs.Name);
+    end;
+    NewNode.Data := ATempObs;
+  end;
 
 end;
 
@@ -733,8 +876,6 @@ begin
     if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
     begin
       ValidName := ValidObsGroupName(Grid.Cells[Ord(pogcName), RowIndex]);
-      //        comboObsGroup.Items.AddObject(ValidName,
-      //          Grid.Objects[Ord(pogcName), RowIndex]);
       if ValidName <> Grid.Cells[Ord(pogcName), RowIndex] then
       begin
         Grid.Cells[Ord(pogcName), RowIndex] := ValidName;

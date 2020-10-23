@@ -714,7 +714,8 @@ uses
   frmPestUnit in 'frmPestUnit.pas' {frmPEST},
   PestControlFileWriterUnit in 'PestControlFileWriterUnit.pas',
   PestParamGroupsUnit in 'PestParamGroupsUnit.pas',
-  PestObsGroupUnit in 'PestObsGroupUnit.pas';
+  PestObsGroupUnit in 'PestObsGroupUnit.pas',
+  frameParentChildUnit in 'frameParentChildUnit.pas' {frameParentChild: TFrame};
 
 {$R *.res}
 

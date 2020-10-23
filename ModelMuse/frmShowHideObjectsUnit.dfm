@@ -95,6 +95,7 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     OnPaintText = vstObjectsPaintText
     OnGetImageIndexEx = vstObjectsGetImageIndexEx
     OnMouseDown = vstObjectsMouseDown
+    ExplicitTop = -5
     ExplicitHeight = 256
   end
   object pmSelectEdit: TPopupMenu

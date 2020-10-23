@@ -986,7 +986,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspObservationGroups'
-      ExplicitLeft = 1
       inline frameObservationGroups: TframeGrid
         Left = 0
         Top = 0
@@ -994,8 +993,6 @@ inherited frmPEST: TfrmPEST
         Height = 287
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 40
-        ExplicitTop = 32
         ExplicitWidth = 512
         ExplicitHeight = 287
         inherited Panel: TPanel
@@ -1019,14 +1016,17 @@ inherited frmPEST: TfrmPEST
           end
           inherited sbInsert: TSpeedButton
             Left = 448
+            OnClick = frameObservationGroupssbInsertClick
             ExplicitLeft = 448
           end
           inherited sbDelete: TSpeedButton
             Left = 477
+            OnClick = frameObservationGroupssbDeleteClick
             ExplicitLeft = 477
           end
           inherited seNumber: TJvSpinEdit
             Height = 26
+            OnChange = frameObservationGroupsseNumberChange
             ExplicitHeight = 26
           end
         end
@@ -1035,6 +1035,7 @@ inherited frmPEST: TfrmPEST
           Height = 246
           ColCount = 4
           OnSelectCell = frameObservationGroupsGridSelectCell
+          OnSetEditText = frameObservationGroupsGridSetEditText
           OnButtonClick = frameObservationGroupsGridButtonClick
           Columns = <
             item
@@ -1129,7 +1130,6 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 1
           ExplicitWidth = 512
           ExplicitHeight = 246
         end
@@ -1141,59 +1141,23 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspObsGroupAssignments'
-      inline frameObsGroupAssignments: TframeAvailableObjects
-        Left = 0
-        Top = 41
-        Width = 512
-        Height = 246
-        Align = alClient
-        TabOrder = 0
-        ExplicitTop = 41
-        ExplicitWidth = 512
-        ExplicitHeight = 246
-        inherited lblSrcObjects: TLabel
-          Width = 118
-          Height = 18
-          ExplicitWidth = 118
-          ExplicitHeight = 18
-        end
-        inherited lblDstObjects: TLabel
-          Width = 91
-          Height = 18
-          ExplicitWidth = 91
-          ExplicitHeight = 18
-        end
-        inherited lbSrcObjects: TJvListBox
-          ItemHeight = 18
-        end
-        inherited lbDstObjects: TJvListBox
-          Top = 27
-          ItemHeight = 18
-          ExplicitTop = 27
-        end
-      end
-      object pnlObservations: TPanel
+      inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
         Width = 512
-        Height = 41
-        Align = alTop
-        TabOrder = 1
-        object lblObsGroup: TLabel
-          Left = 157
-          Top = 12
-          Width = 131
-          Height = 18
-          Caption = 'Observation Group'
-        end
-        object comboObsGroup: TComboBox
-          Left = 6
-          Top = 9
-          Width = 145
-          Height = 26
-          Style = csDropDownList
-          TabOrder = 0
-          OnChange = comboObsGroupChange
+        Height = 287
+        Align = alClient
+        TabOrder = 0
+        ExplicitWidth = 512
+        ExplicitHeight = 287
+        inherited tvTree: TJvTreeView
+          Width = 512
+          Height = 287
+          ItemHeight = 20
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 512
+          ExplicitHeight = 287
         end
       end
     end

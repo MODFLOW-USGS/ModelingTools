@@ -71,7 +71,7 @@ end;
 
 procedure TframeGrid.sbInsertClick(Sender: TObject);
 begin
-  if Grid.SelectedRow >= Grid.FixedRows  then
+  if Grid.SelectedRow >= Grid.FixedRows then
   begin
     Grid.InsertRow(Grid.SelectedRow);
     ClearSelectedRow;

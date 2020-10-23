@@ -1301,7 +1301,14 @@ end;
 
 function TPhastCollectionItem.GetOnInvalidateModel: TNotifyEvent;
 begin
-  Result := (Collection as TPhastCollection).OnInvalidateModel;
+  if Collection <> nil then
+  begin
+    Result := (Collection as TPhastCollection).OnInvalidateModel;
+  end
+  else
+  begin
+    Result := nil;
+  end;
 end;
 
 procedure TPhastCollectionItem.InvalidateModel;
