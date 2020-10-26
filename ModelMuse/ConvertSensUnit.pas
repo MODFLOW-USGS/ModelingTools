@@ -12,6 +12,9 @@ procedure ConvertSens(const SensFileName: string; out PvalFile: string);
 
 implementation
 
+uses
+  PhastModelUnit;
+
 type
   TSensDataSet = (sds1, sds2, sds3);
 
@@ -58,7 +61,7 @@ begin
     end;
     Assert(Line2Position > 0);
     SensFile.Delete(Line2Position);
-    NewName := ChangeFileExt(SensFileName, '.pval');
+    NewName := ChangeFileExt(SensFileName, StrPvalExt);
     PvalFile := NewName;
     Index := 1;
     while TFile.Exists(PvalFile) do

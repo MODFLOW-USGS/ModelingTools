@@ -31,7 +31,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 512
     Height = 287
-    ActivePage = jvspObsGroupAssignments
+    ActivePage = jvspObservationGroups
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1130,6 +1130,7 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitLeft = 1
           ExplicitWidth = 512
           ExplicitHeight = 246
         end

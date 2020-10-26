@@ -29,6 +29,7 @@ type
     function GetWeight: Double;
     procedure SetObservationGroup(const Value: string);
     procedure SetTempObsGroupObject(const Value: TObject);
+    function GetPrint: Boolean;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -44,10 +45,13 @@ type
     // When pasting objects from the clipboard, replace the GUID so that there
     // are no duplicates.
     procedure ReplaceGUID;
-    property TempObsGroupObject: TObject read FTempObsGroupObject write SetTempObsGroupObject;
+    property TempObsGroupObject: TObject read FTempObsGroupObject
+      write SetTempObsGroupObject;
+    property Print: Boolean read GetPrint;
   published
     property Name: string read FName write SetName;
-    property ObservedValue: double read GetObservedValue write SetObservedValue Stored False;
+    property ObservedValue: double read GetObservedValue
+      write SetObservedValue Stored False;
     property Weight: Double read GetWeight write SetWeight Stored False;
     property StoredObservedValue: TRealStorage read FStoredObservedValue
       write SetStoredObservedValue;
@@ -210,6 +214,11 @@ end;
 function TCustomObservationItem.GetObservedValue: double;
 begin
   result := StoredObservedValue.Value;
+end;
+
+function TCustomObservationItem.GetPrint: Boolean;
+begin
+  Result := Weight > 0;
 end;
 
 function TCustomObservationItem.GetScreenObject: TObject;

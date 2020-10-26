@@ -3,12 +3,14 @@ unit PestControlFileWriterUnit;
 interface
 
 uses
-  CustomModflowWriterUnit;
+  CustomModflowWriterUnit, System.SysUtils, PestObsUnit, GoPhastTypes,
+  PhastModelUnit;
 
 type
   TPestControlFileWriter = class(TCustomFileWriter)
   private
     FNameOfFile: string;
+    FUsedObservations: TObservationList;
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
     procedure WriteControlSection;
@@ -19,6 +21,15 @@ type
     procedure WriteSVD_Assist;
     procedure WriteParameterGroups;
     procedure WriteParameters;
+    procedure WriteObservationGroups;
+    procedure WriteObservations;
+    procedure WriteDerivatives;
+    procedure WriteCommandLine;
+    procedure WriteModelInputOutput;
+    procedure WritePriorInformation;
+    procedure WritePredictiveAnalysis;
+    procedure WriteRegularisation;
+    procedure WritePareto;
     // NPAR
     function NumberOfParameters: Integer;
     // NOBS
@@ -32,18 +43,50 @@ type
   protected
     class function Extension: string; override;
   public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
   end;
 
 implementation
 
 uses
-  PestPropertiesUnit, ModflowParameterUnit, GoPhastTypes, OrderedCollectionUnit,
-  PestParamGroupsUnit;
+  PestPropertiesUnit, ModflowParameterUnit, OrderedCollectionUnit,
+  PestParamGroupsUnit, PestObsGroupUnit, frmGoPhastUnit,
+  PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit;
+
+resourcestring
+  StrNoParametersHaveB = 'No parameters have been defined';
+  StrNoPestParameters = 'No parameters have been defined for use with PEST.';
+  StrNoParameterGroups = 'No parameter groups defined';
+  StrNoPESTParameterGr = 'No PEST parameter groups have been defined. Define them in "Model|Manage Parameters".';
+  StrNoObservationsDefi = 'No observations defined';
+  StrNoObservationsHave = 'No observations have been defined for PEST.';
+  StrNoObservationGroup = 'No observation groups defined';
+  StrNoPESTObservation = 'No PEST observation groups have been defined. "Define them in "Model|Pest Properties".';
+  StrParameterGroupName = 'Parameter group name not assigned';
+  StrTheParameterSH = 'The parameter "%s" has not been assigned to a paramet' +
+  'er group ';
+  StrObservationGroupNo = 'Observation group not assigned';
+  StrNoObservationGroupAssigned = 'No observation group has been assigned to %s.';
 
 { TPestControlFileWriter }
 
-const Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST];
+const Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST, ptCHD,
+  ptGHB, ptQ, ptRIV, ptDRN];
+
+constructor TPestControlFileWriter.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  FUsedObservations := TObservationList.Create;
+end;
+
+destructor TPestControlFileWriter.Destroy;
+begin
+  FUsedObservations.Free;
+  inherited;
+end;
 
 class function TPestControlFileWriter.Extension: string;
 begin
@@ -53,16 +96,50 @@ end;
 function TPestControlFileWriter.NumberOfObservationGroups: Integer;
 begin
   result := Model.PestProperties.ObservationGroups.Count;
+  if result = 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrNoObservationGroup,
+      StrNoPESTObservation);
+  end;
 end;
 
 function TPestControlFileWriter.NumberOfObservations: integer;
+var
+  TempList: TObservationList;
+  ObsIndex: Integer;
+  AnObs: TCustomObservationItem;
 begin
-
+  TempList := TObservationList.Create;
+  try
+    frmGoPhast.PhastModel.FillObsItemList(TempList, True);
+    FUsedObservations.Capacity := TempList.Count;
+    for ObsIndex := 0 to TempList.Count - 1 do
+    begin
+      AnObs := TempList[ObsIndex];
+      if AnObs.Print then
+      begin
+        FUsedObservations.Add(AnObs);
+      end;
+    end;
+    result := FUsedObservations.Count;
+    if result = 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrNoObservationsDefi,
+        StrNoObservationsHave);
+    end;
+  finally
+    TempList.Free;
+  end;
 end;
 
 function TPestControlFileWriter.NumberOfParameterGroups: Integer;
 begin
   result := Model.ParamGroups.Count;
+  if result = 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrNoParameterGroups,
+      StrNoPESTParameterGr);
+  end;
 end;
 
 function TPestControlFileWriter.NumberOfParameters: Integer;
@@ -109,16 +186,33 @@ begin
       Inc(result);
     end;
   end;
+
+  if result = 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrNoParametersHaveB,
+      StrNoPestParameters)
+  end;
 end;
 
 function TPestControlFileWriter.NumberOfPriorInformation: Integer;
 begin
+  // prior information will be added by the running ADDREG1 or a program in the
+  // Groundwater Utility suite,
+  result := 0;
 
 end;
 
 procedure TPestControlFileWriter.WriteAutomaticUserIntervention;
 begin
 // The Automatic User Intervention is not currently supported.
+end;
+
+procedure TPestControlFileWriter.WriteCommandLine;
+begin
+  WriteSectionHeader('model command line');
+  WriteString('RunModel.bat');
+  NewLine;
+  NewLine;
 end;
 
 procedure TPestControlFileWriter.WriteControlSection;
@@ -196,6 +290,7 @@ begin
   {$ENDREGION}
 
   {$REGION 'fourth line 4.2.5'}
+  // NTPLFLE NINSFLE PRECIS DPOINT [NUMCOM JACFILE MESSFILE] [OBSREREF]
   // fourth line 4.2.5
   // NTPLFLE
   // The pval file will always be the only file PEST writes.
@@ -460,8 +555,21 @@ begin
   NewLine;
 end;
 
+procedure TPestControlFileWriter.WriteDerivatives;
+begin
+// The Derivatives is not currently supported.
+end;
+
 procedure TPestControlFileWriter.WriteFile(const AFileName: string);
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParametersHaveB);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationGroup);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationsDefi);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParameterGroups);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterGroupName);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupNo);
+
+
   if not Model.PestUsed then
   begin
     Exit;
@@ -482,6 +590,15 @@ begin
     WriteSVD_Assist;
     WriteParameterGroups;
     WriteParameters;
+    WriteObservationGroups;
+    WriteObservations;
+    WriteDerivatives;
+    WriteCommandLine;
+    WriteModelInputOutput;
+    WritePriorInformation;
+    WritePredictiveAnalysis;
+    WriteRegularisation;
+    WritePareto;
   finally
     CloseFile;
   end;
@@ -521,6 +638,89 @@ begin
   WriteInteger(Ord(LsqrProperties.LsqrWrite));
   WriteString(' # LSQRWRITE');
   NewLine;
+  NewLine;
+end;
+
+procedure TPestControlFileWriter.WriteModelInputOutput;
+var
+  TEMPFLE: string;
+  INFLE: string;
+  INSFLE: string;
+  OUTFLE: string;
+begin
+  WriteSectionHeader('model input/output');
+  TEMPFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPtf));
+  INFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPvalExt));
+  WriteString(TEMPFLE);
+  WriteString(' ' + INFLE);
+  NewLine;
+  INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
+  OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
+  WriteString(INSFLE);
+  WriteString(' ' + OUTFLE);
+  NewLine;
+  NewLine;
+end;
+
+procedure TPestControlFileWriter.WriteObservationGroups;
+var
+  ObservationGroups: TPestObservationGroups;
+  ObsGrpIndex: Integer;
+  ObsGroup: TPestObservationGroup;
+  Mode: TPestMode;
+  CorrelationFileName: string;
+begin
+  WriteSectionHeader('observation groups');
+  ObservationGroups := Model.PestProperties.ObservationGroups;
+  Mode := Model.PestProperties.PestControlData.PestMode;
+  for ObsGrpIndex := 0 to ObservationGroups.Count - 1 do
+  begin
+    ObsGroup := ObservationGroups[ObsGrpIndex];
+    WriteString(ObsGroup.ObsGroupName);
+    if Mode = pmRegularisation then
+    begin
+      if ObsGroup.UseGroupTarget then
+      begin
+        WriteFloat(ObsGroup.GroupTarget);
+      end;
+    end;
+    if ObsGroup. AbsoluteCorrelationFileName <> '' then
+    begin
+      CorrelationFileName := ' ' + ExtractRelativePath(FNameOfFile, ObsGroup.AbsoluteCorrelationFileName);
+      WriteString(CorrelationFileName);
+    end;
+    NewLine;
+  end;
+  NewLine;
+end;
+
+procedure TPestControlFileWriter.WriteObservations;
+var
+  ObsIndex: Integer;
+  AnObs: TCustomObservationItem;
+begin
+  WriteSectionHeader('observation data');
+  for ObsIndex := 0 to FUsedObservations.Count - 1 do
+  begin
+    AnObs := FUsedObservations[ObsIndex];
+    if AnObs.ExportedName <> '' then
+    begin
+      WriteString(AnObs.ExportedName);
+    end
+    else
+    begin
+      WriteString(AnObs.Name);
+    end;
+    WriteFloat(AnObs.ObservedValue);
+    WriteFloat(AnObs.Weight);
+    WriteString(' ' + AnObs.ObservationGroup);
+    if AnObs.ObservationGroup = '' then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrObservationGroupNo,
+        Format(StrNoObservationGroupAssigned, [AnObs.Name]));
+    end;
+    NewLine;
+  end;
   NewLine;
 end;
 
@@ -718,6 +918,8 @@ var
     if AParam.ParameterGroup = '' then
     begin
       WriteString(' none');
+      frmErrorsAndWarnings.AddError(Model, StrParameterGroupName,
+        Format(StrTheParameterSH, [AParam.ParameterName]));
     end
     else
     begin
@@ -731,7 +933,8 @@ var
     WriteFloat(AParam.Offset);
 
     //DERCOM
-    WriteInteger(1);
+    // write only in NUMCOM is written in line 4 of the control data section
+//    WriteInteger(1);
 
     NewLine;
   end;
@@ -787,6 +990,28 @@ begin
     end;
   end;
 
+  NewLine;
+end;
+
+procedure TPestControlFileWriter.WritePareto;
+begin
+// The Pareto section is not currently supported.
+end;
+
+procedure TPestControlFileWriter.WritePredictiveAnalysis;
+begin
+// The Predictive Analysis section is not currently supported.
+end;
+
+procedure TPestControlFileWriter.WritePriorInformation;
+begin
+  // prior information will be added by the running ADDREG1 or a program in the
+  // Groundwater Utility suite,
+end;
+
+procedure TPestControlFileWriter.WriteRegularisation;
+begin
+// The Regularisation section is not currently supported.
 end;
 
 procedure TPestControlFileWriter.WriteSectionHeader(const SectionID: String);
@@ -798,7 +1023,7 @@ end;
 
 procedure TPestControlFileWriter.WriteSensitivityReuse;
 begin
-// The sensitivity reuse secation is not currently supported.
+// The sensitivity reuse section is not currently supported.
 end;
 
 procedure TPestControlFileWriter.WriteSingularValueDecomposition;

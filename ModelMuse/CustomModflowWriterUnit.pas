@@ -1058,7 +1058,8 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   ModpathResponseFileWriterUnit, ModflowPackagesUnit, Math,
   System.Generics.Defaults, ArchiveNodeInterface, ModflowOptionsUnit,
   Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
-  ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit;
+  ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit,
+  framePestObsCaptionedUnit, PestObsExtractorInputWriterUnit;
 
 resourcestring
   StrTheFollowingParame = 'The following %s parameters are being skipped ' +
@@ -1284,6 +1285,9 @@ var
   ModelDirectory: string;
   SwiObsExtInputFile: string;
   MfsimName: string;
+  WriteInstructionBatFileName: string;
+  WriteInstuctionsBatchFile: TStringList;
+  InsFileName: string;
 //  Modelname: string;
 //  OutputPrefix: string;
 begin
@@ -1296,6 +1300,8 @@ begin
     SetCurrentDir(result);
     ParamEstBatFileName := IncludeTrailingPathDelimiter(result)
       + StrRunModelBat;
+    WriteInstructionBatFileName := IncludeTrailingPathDelimiter(result)
+      + 'WriteInstructions.Bat';
     result := IncludeTrailingPathDelimiter(result)
       + 'RunModflow.Bat';
 
@@ -1334,10 +1340,11 @@ begin
     Model.AddBinaryFile(ModflowLocation);
 
     ParamEstBatchFile := TStringList.Create;
-    ParamEstBatchFile.AddStrings(Model.PestTemplateLines);
     BatchFile := TStringList.Create;
     ArchiveBatchFile := TStringList.Create;
+    WriteInstuctionsBatchFile := TStringList.Create;
     try
+      ParamEstBatchFile.AddStrings(Model.PestTemplateLines);
       ArchiveBatchFile.Add('if not exist "..\..\output\NUL" mkdir "..\..\output"');
       ModelName := ExtractFileName(ChangeFileExt(FileName, ''));
       ArchiveBatchFile.Add(Format('if not exist "..\..\output\%0:s\NUL" mkdir "..\..\output\%0:s"', ['output.' + ModelName]));
@@ -1398,6 +1405,7 @@ begin
           end;
         end;
       end;
+
       AFileName := '..\..\bin\'+ ExtractFileName(ModflowLocation);
       if (Model.ModelSelection = msModflow2015) then
       begin
@@ -1412,10 +1420,15 @@ begin
       if (Model.ModelSelection <> msModflow2015) then
       begin
         ParamEstBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
+        WriteInstuctionsBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
       end
       else
       begin
         ParamEstBatchFile.Add(AFileName {+ ' /wait'});
+        WriteInstuctionsBatchFile.Add(AFileName {+ ' /wait'});
+        InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
+        WriteInstuctionsBatchFile.Add('Mf6ObsExtractor.exe ' + InsFileName);
+        WriteInstuctionsBatchFile.Add('pause');
       end;
 
       if frmGoPhast.PhastModel.InterpSwiObsDefined then
@@ -1533,6 +1546,17 @@ begin
 
         end;
       end;
+      if Model.PestUsed then
+      begin
+        if (Model.ModelSelection <> msModflow2015) then
+        begin
+        end
+        else
+        begin
+          InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
+          BatchFile.Add('Mf6ObsExtractor.exe ' + InsFileName);
+        end;
+      end;
 
       if NetworkDrive then
       begin
@@ -1545,10 +1569,15 @@ begin
       ParamEstBatchFile.SaveToFile(ParamEstBatFileName);
       ArchiveBatchFile.SaveToFile(result + ArchiveExt);
       Model.AddModelInputFile(result + ArchiveExt);
+      if Model.PestUsed then
+      begin
+        WriteInstuctionsBatchFile.SaveToFile(WriteInstructionBatFileName);
+      end;
     finally
       BatchFile.Free;
       ParamEstBatchFile.Free;
       ArchiveBatchFile.Free;
+      WriteInstuctionsBatchFile.Free;
     end;
   finally
     SetCurrentDir(ADirectory);
@@ -2318,7 +2347,7 @@ var
   PValFileName: string;
 begin
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
-  PValFileName := ChangeFileExt(PValFileName, '.pval');
+  PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
   Model.PestTemplateLines.Add('EnhancedTemplateProcessor.exe '
     + ExtractFileName(AFileName) + ' ' + PValFileName);
 end;

@@ -463,6 +463,8 @@ resourcestring
   StrCSUBCoarseCompacti = 'CSUB Coarse Compaction';
   StrCSUBZDisplacement = 'CSUB Z Displacement';
   StrImportedOnS = ' imported on %s';
+  StrMT3DConcentrations = 'MT3D Concentrations can only be imported if MT3D ' +
+  'is selected.';
 
 {$R *.dfm}
 
@@ -948,6 +950,12 @@ var
 begin
   if FResultFormat = mfMt3dConc then
   begin
+    if not AModel.Mt3dMSUsed(nil) then
+    begin
+      Beep;
+      MessageDlg(StrMT3DConcentrations, mtError, [mbOK], 0);
+      Exit;
+    end;
     ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(StrMT3DMSActive);
   end
   else
@@ -1845,6 +1853,12 @@ var
 begin
   if FResultFormat = mfMt3dConc then
   begin
+    if not AModel.Mt3dMSUsed(nil) then
+    begin
+      Beep;
+      MessageDlg(StrMT3DConcentrations, mtError, [mbOK], 0);
+      Exit;
+    end;
     ActiveDataSet := AModel.DataArrayManager.GetDataSetByName(StrMT3DMSActive);
   end
   else
@@ -4967,6 +4981,13 @@ begin
   else if (SameText(Extension, StrMt3dConcFile)) then
   begin
     FResultFormat := mfMt3dConc;
+    if not frmGoPhast.PhastModel.Mt3dMSUsed(nil) then
+    begin
+      result := False;
+      Beep;
+      MessageDlg(StrMT3DConcentrations, mtError, [mbOK], 0);
+      Exit;
+    end;
   end
   else if (SameText(Extension, StrSwrReachStageA)) then
   begin

@@ -174,7 +174,7 @@ type
     // must be 0 to 1
     property FactorOriginal: double read GetFactorOriginal
       write SetFactorOriginal;
-    // PHIREDSWH  0 to 1
+    // PHIREDSWH  0 to 1, must be > 0
     property SwitchCriterion: double read GetSwitchCriterion
       write SetSwitchCriterion;
     // SPLITSWH >= 0

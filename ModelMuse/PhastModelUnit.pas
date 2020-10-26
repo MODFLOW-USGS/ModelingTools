@@ -2260,7 +2260,6 @@ that affects the model output should also have a comment. }
     procedure ExportSfrPackage(const FileName: string);
     procedure EvaluateSfrPackage;
     procedure ExportUzfPackage(const FileName: string);
-    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
     function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; virtual;
     function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; virtual;
     procedure SetMt3dmsOutputControl(const Value: TMt3dmsOutputControl); virtual; abstract;
@@ -2583,6 +2582,7 @@ that affects the model output should also have a comment. }
     function GetContourLabelSpacing: Integer; virtual; abstract;
     procedure SetContourLabelSpacing(const Value: Integer);virtual; abstract;
   public
+    function Mt3dMSUsed(Sender: TObject): boolean; virtual;
     procedure ClearPval;
     procedure FinalizePvalAndTemplate(FileName: string);
     function ParamNamesDataSetUsed(Sender: TObject): boolean; virtual;
@@ -3279,7 +3279,7 @@ that affects the model output should also have a comment. }
     function NumberOfMt3dChemComponents: integer;
     property Mt3dSpecesName[const Index: Integer]: string read GetMt3dSpecesName;
     function Mt3dIsSelected: Boolean; virtual;
-    procedure FillObsItemList(List: TObservationList);
+    procedure FillObsItemList(List: TObservationList; IncludeComparisons: Boolean = False);
     property PestUsed: Boolean read GetPestUsed;
     property SutraLakesUsed: Boolean read GetSutraLakesUsed;
     property DirectObservationLines: TStringList read FDirectObservationLines;
@@ -4061,7 +4061,6 @@ that affects the model output should also have a comment. }
     function GetContourLegend: TLegend; override;
     function GetUseGsflowFormat: boolean; override;
     procedure SetUseGsflowFormat(const Value: boolean); override;
-    function Mt3dMSUsed(Sender: TObject): boolean; override;
     function Mt3dMSBulkDensityUsed(Sender: TObject): boolean; override;
     function Mt3dMSImmobPorosityUsed(Sender: TObject): boolean; override;
     function SftUsed(Sender: TObject): boolean; override;
@@ -4070,6 +4069,7 @@ that affects the model output should also have a comment. }
     function GetParamGroups: TPestParamGroups; override;
     procedure SetParamGroups(const Value: TPestParamGroups); override;
   public
+    function Mt3dMSUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
     procedure CreateGlobalVariables;
     function LakBathymetryUsed: Boolean;
@@ -5249,6 +5249,7 @@ const
   StrCsubintrbdcmpct = '.csub_intrbd_cmpct';
   StrCsubcrscmpct = '.csub_crs_cmpct';
   StrCsubzdis = '.csub_z_dis';
+  StrPtf = '.ptf';
 
 
   MaxString12 = 12;
@@ -5332,7 +5333,8 @@ uses StrUtils, Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowMvrWriterUnit, ModflowUzfMf6WriterUnit, ModflowHfbUnit,
   Mt3dLktWriterUnit, ModflowSfr6Unit, Mt3dSftWriterUnit, ModflowStrUnit,
   Mt3dCtsWriterUnit, ModflowCSubWriterUnit, PestGlobalComparisonScriptWriterUnit,
-  ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit;
+  ModflowMnw2Unit, PestObsExtractorInputWriterUnit, Modflow6ObsUnit,
+  PestControlFileWriterUnit;
 
 resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
@@ -5807,7 +5809,6 @@ resourcestring
   StrNoStressPeriodsWe = 'No stress periods were defined';
   StrStressPeriodAdded = 'No stress periods were defined in the MODFLOW Time' +
   ' dialog box. One has been added automatically.';
-  StrPtf = '.ptf';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -31548,7 +31549,7 @@ begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
 end;
 
-procedure TCustomModel.FillObsItemList(List: TObservationList);
+procedure TCustomModel.FillObsItemList(List: TObservationList; IncludeComparisons: Boolean = False);
 var
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;
@@ -31563,6 +31564,10 @@ var
   ItemIndex: Integer;
   Item: TCustomObservationItem;
   CalibrationObservations: TMf6CalibrationObservations;
+  ModflowSubObservations: TSubObservations;
+  ModflowSwtObservations: TSwtObservations;
+  ObservationGroup: TCustomSutraFluxObservations;
+  ObsComparisons: TGlobalObservationComparisons;
 begin
   for ObjectIndex := 0 to ScreenObjectCount - 1 do
   begin
@@ -31586,6 +31591,14 @@ begin
             AnObs := CalibrationObservations[ObsIndex];
             List.Add(AnObs);
           end;
+          if IncludeComparisons then
+          begin
+            for ObsIndex := 0 to CalibrationObservations.Comparisons.Count - 1 do
+            begin
+              AnObs := CalibrationObservations.Comparisons[ObsIndex];
+              List.Add(AnObs);
+            end;
+          end;
         end;
       end
       else
@@ -31602,6 +31615,14 @@ begin
               AnObs := Mnw2Observations[ObsIndex];
               List.Add(AnObs);
             end;
+            if IncludeComparisons then
+            begin
+              for ObsIndex := 0 to Mnw2Observations.Comparisons.Count - 1 do
+              begin
+                AnObs := Mnw2Observations.Comparisons[ObsIndex];
+                List.Add(AnObs);
+              end;
+            end;
           end;
         end;
 
@@ -31616,6 +31637,14 @@ begin
             begin
               AnObs := LakObservations[ObsIndex];
               List.Add(AnObs);
+            end;
+            if IncludeComparisons then
+            begin
+              for ObsIndex := 0 to LakObservations.Comparisons.Count - 1 do
+              begin
+                AnObs := LakObservations.Comparisons[ObsIndex];
+                List.Add(AnObs);
+              end;
             end;
           end;
         end;
@@ -31632,6 +31661,14 @@ begin
               AnObs := SfrObservations[ObsIndex];
               List.Add(AnObs);
             end;
+            if IncludeComparisons then
+            begin
+              for ObsIndex := 0 to SfrObservations.Comparisons.Count - 1 do
+              begin
+                AnObs := SfrObservations.Comparisons[ObsIndex];
+                List.Add(AnObs);
+              end;
+            end;
           end;
 
           if (AScreenObject.ModflowStreamGage <> nil)
@@ -31644,6 +31681,14 @@ begin
               AnObs := SfrObservations[ObsIndex];
               List.Add(AnObs);
             end;
+            if IncludeComparisons then
+            begin
+              for ObsIndex := 0 to SfrObservations.Comparisons.Count - 1 do
+              begin
+                AnObs := SfrObservations.Comparisons[ObsIndex];
+                List.Add(AnObs);
+              end;
+            end;
           end;
         end;
 
@@ -31653,10 +31698,19 @@ begin
             and AScreenObject.ModflowSubObservations.Used
             and (AScreenObject.ModflowSubObservations.Count > 0) then
           begin
-            for ObsIndex := 0 to AScreenObject.ModflowSubObservations.Count - 1 do
+            ModflowSubObservations := AScreenObject.ModflowSubObservations;
+            for ObsIndex := 0 to ModflowSubObservations.Count - 1 do
             begin
-              AnObs := AScreenObject.ModflowSubObservations[ObsIndex];
+              AnObs := ModflowSubObservations[ObsIndex];
               List.Add(AnObs);
+            end;
+            if IncludeComparisons then
+            begin
+              for ObsIndex := 0 to ModflowSubObservations.Comparisons.Count - 1 do
+              begin
+                AnObs := ModflowSubObservations.Comparisons[ObsIndex];
+                List.Add(AnObs);
+              end;
             end;
           end;
         end;
@@ -31667,10 +31721,19 @@ begin
             and AScreenObject.ModflowSwtObservations.Used
             and (AScreenObject.ModflowSwtObservations.Count > 0) then
           begin
-            for ObsIndex := 0 to AScreenObject.ModflowSwtObservations.Count - 1 do
+            ModflowSwtObservations := AScreenObject.ModflowSwtObservations;
+            for ObsIndex := 0 to ModflowSwtObservations.Count - 1 do
             begin
-              AnObs := AScreenObject.ModflowSwtObservations[ObsIndex];
+              AnObs := ModflowSwtObservations[ObsIndex];
               List.Add(AnObs);
+            end;
+            if IncludeComparisons then
+            begin
+              for ObsIndex := 0 to ModflowSwtObservations.Comparisons.Count - 1 do
+              begin
+                AnObs := ModflowSwtObservations.Comparisons[ObsIndex];
+                List.Add(AnObs);
+              end;
             end;
           end;
         end;
@@ -31687,6 +31750,14 @@ begin
           AnObs := SutraStateObs[ObsIndex];
           List.Add(AnObs);
         end;
+        if IncludeComparisons then
+        begin
+          for ObsIndex := 0 to SutraStateObs.Comparisons.Count - 1 do
+          begin
+            AnObs := SutraStateObs.Comparisons[ObsIndex];
+            List.Add(AnObs);
+          end;
+        end;
       end;
     end;
 
@@ -31697,23 +31768,66 @@ begin
     for GroupIndex := 0 to SutraFluxObs.SpecPres.Count - 1 do
     begin
       FluxGroup := SutraFluxObs.SpecPres[GroupIndex];
-      for ItemIndex := 0 to FluxGroup.ObservationGroup.Count - 1 do
+      ObservationGroup := FluxGroup.ObservationGroup;
+      for ItemIndex := 0 to ObservationGroup.Count - 1 do
       begin
-        Item := FluxGroup.ObservationGroup[ItemIndex];
+        Item := ObservationGroup[ItemIndex];
         List.Add(Item);
+      end;
+      if IncludeComparisons then
+      begin
+        for ObsIndex := 0 to ObservationGroup.Comparisons.Count - 1 do
+        begin
+          AnObs := ObservationGroup.Comparisons[ObsIndex];
+          List.Add(AnObs);
+        end;
       end;
     end;
     for GroupIndex := 0 to SutraFluxObs.FluidFlow.Count - 1 do
     begin
       FluxGroup := SutraFluxObs.FluidFlow[GroupIndex];
-      for ItemIndex := 0 to FluxGroup.ObservationGroup.Count - 1 do
+      ObservationGroup := FluxGroup.ObservationGroup;
+      for ItemIndex := 0 to ObservationGroup.Count - 1 do
       begin
-        Item := FluxGroup.ObservationGroup[ItemIndex];
+        Item := ObservationGroup[ItemIndex];
         List.Add(Item);
+      end;
+      if IncludeComparisons then
+      begin
+        for ObsIndex := 0 to ObservationGroup.Comparisons.Count - 1 do
+        begin
+          AnObs := ObservationGroup.Comparisons[ObsIndex];
+          List.Add(AnObs);
+        end;
       end;
     end;
   end;
 
+  if IncludeComparisons then
+  begin
+    ObsComparisons := nil;
+    if frmGoPhast.ModelSelection = msModflow2015 then
+    begin
+      ObsComparisons := frmGoPhast.PhastModel.Modflow6GlobalObservationComparisons;
+    end
+    else if frmGoPhast.ModelSelection in ModflowSelection then
+    begin
+      ObsComparisons := frmGoPhast.PhastModel.ModflowGlobalObservationComparisons;
+    end
+    else if frmGoPhast.ModelSelection in SutraSelection then
+    begin
+      ObsComparisons := frmGoPhast.PhastModel.SutraGlobalObservationComparisons;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+    for ObsIndex := 0 to ObsComparisons.Count - 1 do
+    begin
+      AnObs := ObsComparisons[ObsIndex];
+      List.Add(AnObs);
+    end;
+  end;
 
 end;
 
@@ -39755,6 +39869,7 @@ var
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
+  PestControlWriter: TPestControlFileWriter;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);
   // Note: MODFLOW can not read Unicode text files.
@@ -40966,6 +41081,13 @@ begin
         PestObsExtractorInputWriter.WriteFile(FileName)
       finally
         PestObsExtractorInputWriter.Free;
+      end;
+
+      PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
+      try
+        PestControlWriter.WriteFile(FileName)
+      finally
+        PestControlWriter.Free;
       end;
 
     except on E: EInvalidTime do

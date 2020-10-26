@@ -874,7 +874,7 @@ begin
     Grid := frameParameterGroups.Grid;
     PGroupCol := TParamGroupColumn(ACol);
     CreateOrUpdateParamGroup(ARow);
-    PGroup := Grid.Objects[ParamGroupColumn,ARow] as TPestParamGroup;
+    PGroup := Grid.Objects[Ord(pgcName),ARow] as TPestParamGroup;
     if PGroup = nil then
     begin
       Exit;
@@ -1267,10 +1267,10 @@ procedure TfrmManageParameters.CreateParamGroup(ARow: Integer);
 var
   AParamGroup: TPestParamGroup;
 begin
-  if frameParameterGroups.Grid.Cells[ParamGroupColumn, ARow] <> '' then
+//  if frameParameterGroups.Grid.Cells[ParamGroupColumn, ARow] <> '' then
   begin
     AParamGroup := FParamGroups.Add;
-    frameParameterGroups.Grid.Objects[ParamGroupColumn, ARow] := AParamGroup;
+    frameParameterGroups.Grid.Objects[Ord(pgcName), ARow] := AParamGroup;
   end;
 end;
 
@@ -1370,9 +1370,9 @@ var
   AParamGroup: TPestParamGroup;
 begin
   Grid := frameParameterGroups.Grid;
-  if Grid.Objects[Ord(pcName), ARow] <> nil then
+  if Grid.Objects[Ord(pgcName), ARow] <> nil then
   begin
-    AParamGroup := Grid.Objects[Ord(pcName), ARow] as TPestParamGroup;
+    AParamGroup := Grid.Objects[Ord(pgcName), ARow] as TPestParamGroup;
 //    UpdateParameter(ParamIndex, AParamGroup, ARow);
   end
   else

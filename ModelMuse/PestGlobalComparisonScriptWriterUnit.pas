@@ -101,7 +101,10 @@ begin
           WriteString(PriorItem2.ExportedName);
           WriteFloat(GloCompItem.ObservedValue);
           WriteFloat(GloCompItem.Weight);
-          WriteString(' PRINT');
+          if GloCompItem.Print then
+          begin
+            WriteString(' PRINT');
+          end;
           NewLine;
         end
         else

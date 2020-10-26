@@ -1816,7 +1816,7 @@ begin
 //                FlowObs.FCell.Layer+1, FlowObs.FCell.Row+1,
 //                FlowObs.FCell.Column+1]);
 //              end;
-              if CalibObs.Weight > 0 then
+              if CalibObs.Print then
               begin
                 DirectObsLines.Add(Format('  OBSNAME %0:s %1:g PRINT',
                   [OBSNAME, CalibObs.Time - StartTime]));

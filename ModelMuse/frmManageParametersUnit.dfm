@@ -68,7 +68,7 @@ inherited frmManageParameters: TfrmManageParameters
     Top = 0
     Width = 784
     Height = 517
-    ActivePage = tabParameters
+    ActivePage = tabParameterGroups
     Align = alClient
     TabOrder = 1
     object tabParameters: TTabSheet
@@ -870,6 +870,7 @@ inherited frmManageParameters: TfrmManageParameters
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitTop = -8
           ExplicitWidth = 776
           ExplicitHeight = 443
         end

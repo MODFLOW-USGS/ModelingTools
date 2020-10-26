@@ -16,6 +16,12 @@ type
     procedure WriteFile(FileName: string);
   end;
 
+const
+  StrPestIns: string = '.PestIns';
+  StrMf6Values: string = '.Mf6Values';
+  StrMf6WriteIns: string = '.Mf6WriteIns';
+
+
 implementation
 
 uses
@@ -120,7 +126,7 @@ begin
       Lines.Add('BEGIN OPTIONS');
       Lines.Add('  LISTING ' + ExtractFileName(ChangeFileExt(FileName, '.Mf6ObsExtInsLst')));
 //      Lines.Add('  VALUES ' + ChangeFileExt(FileName, '.Mf6Values'));
-      LinePostion := Lines.Add('  INSTRUCTION ' + ExtractFileName(ChangeFileExt(FileName, '.PestIns')));
+      LinePostion := Lines.Add('  INSTRUCTION ' + ExtractFileName(ChangeFileExt(FileName, StrPestIns)));
       Lines.Add('END OPTIONS');
       Lines.Add('');
 
@@ -141,10 +147,10 @@ begin
         Lines.Add('END DERIVED_OBSERVATIONS');
       end;
 
-      FileName := ChangeFileExt(FileName, '.Mf6WriteIns');
+      FileName := ChangeFileExt(FileName, StrMf6WriteIns);
       Lines.SaveToFile(FileName);
 
-      Lines[LinePostion] := '  VALUES ' + ExtractFileName(ChangeFileExt(FileName, '.Mf6Values'));
+      Lines[LinePostion] := '  VALUES ' + ExtractFileName(ChangeFileExt(FileName, StrMf6Values));
       FileName := ExtractFileName(ChangeFileExt(FileName, '.Mf6ExtractValues'));
       Lines.SaveToFile(FileName);
 

@@ -17,11 +17,15 @@ type
   private
     FOldPestProperties: TPestProperties;
     FNewPestProperties: TPestProperties;
+    FOldObsList: TObservationObjectList;
+    FNewObsList: TObservationObjectList;
   protected
     function Description: string; override;
-    procedure UpdateProperties(PestProperties: TPestProperties);
+    procedure UpdateProperties(PestProperties: TPestProperties;
+      ObsList: TObservationList);
   public
-    constructor Create(var NewPestProperties: TPestProperties);
+    constructor Create(var NewPestProperties: TPestProperties;
+      var NewObsList: TObservationObjectList);
     destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
@@ -168,10 +172,12 @@ type
     InvalidateModelEvent: TNotifyEvent;
     FGroupDictionary: TDictionary<TPestObservationGroup, TTreeNode>;
     FGroupNameDictionary: TDictionary<string, TPestObservationGroup>;
-    FEmptyNode: TTreeNode;
+    FNoNameNode: TTreeNode;
     procedure GetData;
     procedure SetData;
     procedure FixObsGroupNames;
+    procedure HandleGroupDeletion(Group: TPestObservationGroup);
+    procedure HandleAddedGroup(ObsGroup: TPestObservationGroup);
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -404,6 +410,8 @@ procedure TfrmPEST.frameObservationGroupsGridSetEditText(Sender: TObject; ACol,
 var
   Grid: TRbwDataGrid4;
   Group: TPestObservationGroup;
+  OtherGroup: TPestObservationGroup;
+  TreeNode: TTreeNode;
 begin
   inherited;
   Grid := frameObservationGroups.Grid;
@@ -412,7 +420,26 @@ begin
     Group := Grid.Objects[ACol, ARow] as TPestObservationGroup;
     if Group <> nil then
     begin
+      if FGroupNameDictionary.TryGetValue(UpperCase(Group.ObsGroupName), OtherGroup) then
+      begin
+        if Group = OtherGroup then
+        begin
+          FGroupNameDictionary.Remove(UpperCase(Group.ObsGroupName));
+        end;
+      end;
       Group.ObsGroupName := ValidObsGroupName(Value);
+      if Group.ObsGroupName <> '' then
+      begin
+        if not FGroupNameDictionary.ContainsKey(UpperCase(Group.ObsGroupName)) then
+        begin
+          FGroupNameDictionary.Add(UpperCase(Group.ObsGroupName), Group)
+        end;
+      end;
+
+      if FGroupDictionary.TryGetValue(Group, TreeNode) then
+      begin
+        TreeNode.Text := Group.ObsGroupName;
+      end;
     end;
   end;
 end;
@@ -420,13 +447,19 @@ end;
 procedure TfrmPEST.frameObservationGroupssbDeleteClick(Sender: TObject);
 var
   Grid: TRbwDataGrid4;
+  Group: TPestObservationGroup;
 begin
   inherited;
   Grid := frameObservationGroups.Grid;
   if Grid.SelectedRow >= Grid.FixedRows  then
   begin
-    Grid.Objects[Ord(pogcName), Grid.SelectedRow].Free;
-    Grid.Objects[Ord(pogcName), Grid.SelectedRow] := nil;
+    if Grid.Objects[Ord(pogcName), Grid.SelectedRow] <> nil then
+    begin
+      Group := Grid.Objects[Ord(pogcName), Grid.SelectedRow] as TPestObservationGroup;
+      HandleGroupDeletion(Group);
+      Group.Free;
+      Grid.Objects[Ord(pogcName), Grid.SelectedRow] := nil;
+    end;
   end;
 
   frameObservationGroups.sbDeleteClick(Sender);
@@ -450,6 +483,7 @@ begin
   begin
     Grid.Objects[Ord(pogcName), Grid.SelectedRow] := NewGroup;
     NewGroup.Index := Grid.SelectedRow -1;
+    HandleAddedGroup(NewGroup);
   end;
 
 end;
@@ -459,7 +493,7 @@ var
   Grid: TRbwDataGrid4;
   NewGroup: TPestObservationGroup;
   Names: TStrings;
-  OldGroup: TCollectionItem;
+  OldGroup: TPestObservationGroup;
   index: Integer;
 begin
   inherited;
@@ -472,11 +506,13 @@ begin
     Grid.Objects[Ord(pogcName), FLocalObsGroups.Count] := NewGroup;
     NewGroup.ObsGroupName := ValidObsGroupName(
       Grid.Cells[Ord(pogcName), FLocalObsGroups.Count]);
+    HandleAddedGroup(NewGroup);
   end;
   while frameObservationGroups.seNumber.AsInteger < FLocalObsGroups.Count do
   begin
-    OldGroup := FLocalObsGroups.Last;
+    OldGroup := FLocalObsGroups.Last as TPestObservationGroup;
     index := Names.IndexOfObject(OldGroup);
+    HandleGroupDeletion(OldGroup);
     OldGroup.Free;
     if index >= 1 then
     begin
@@ -618,18 +654,14 @@ begin
   FGroupNameDictionary.Clear;
   Tree := frameParentObsGroups.tvTree;
   Tree.Items.Clear;
-  FEmptyNode := Tree.Items.AddChild(nil, StrNone);
+  FNoNameNode := Tree.Items.AddChild(nil, StrNone);
   for GroupIndex := 0 to FLocalObsGroups.Count - 1 do
   begin
     ObsGroup := FLocalObsGroups[GroupIndex];
-    NewNode := Tree.Items.AddChild(nil, ObsGroup.ObsGroupName);
-    NewNode.Data := ObsGroup;
-    FGroupDictionary.Add(ObsGroup, NewNode);
-    FGroupNameDictionary.Add(ObsGroup.ObsGroupName, ObsGroup);
+    HandleAddedGroup(ObsGroup);
   end;
 
-
-  frmGoPhast.PhastModel.FillObsItemList(FObsList);
+  frmGoPhast.PhastModel.FillObsItemList(FObsList, True);
   FNewObsList.Capacity := FObsList.Count;
   for index := 0 to FObsList.Count - 1 do
   begin
@@ -637,7 +669,7 @@ begin
     ATempObs := TCustomObservationItem.Create(nil);
     FNewObsList.Add(ATempObs);
     ATempObs.Assign(AnObs);
-    if FGroupNameDictionary.TryGetValue(ATempObs.ObservationGroup, ObsGroup) then
+    if FGroupNameDictionary.TryGetValue(UpperCase(ATempObs.ObservationGroup), ObsGroup) then
     begin
       if FGroupDictionary.TryGetValue(ObsGroup, TreeNode) then
       begin
@@ -645,12 +677,12 @@ begin
       end
       else
       begin
-        NewNode := Tree.Items.AddChild(FEmptyNode, ATempObs.Name);
+        NewNode := Tree.Items.AddChild(FNoNameNode, ATempObs.Name);
       end;
     end
     else
     begin
-      NewNode := Tree.Items.AddChild(FEmptyNode, ATempObs.Name);
+      NewNode := Tree.Items.AddChild(FNoNameNode, ATempObs.Name);
     end;
     NewNode.Data := ATempObs;
   end;
@@ -668,6 +700,10 @@ var
   Grid: TRbwDataGrid4;
   ObsGroups: TPestObservationGroups;
   AnObsGroup: TPestObservationGroup;
+  ANode: TTreeNode;
+  ObsGroup: TPestObservationGroup;
+  ChildNode: TTreeNode;
+  AnObs: TCustomObservationItem;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(InvalidateModelEvent);
@@ -696,7 +732,6 @@ begin
     begin
       PestControlData.ZeroLimit := rdeZeroLimit.RealValue;
     end;
-
 
     if rdeInitialLambda.Text <> '' then
     begin
@@ -857,7 +892,30 @@ begin
       end;
     end;
 
-    frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties));
+    ANode := FNoNameNode;
+    while ANode <> nil do
+    begin
+      ObsGroup := ANode.Data;
+      ChildNode := ANode.getFirstChild;
+      while ChildNode <> nil do
+      begin
+        AnObs := ChildNode.Data;
+        if ObsGroup = nil then
+        begin
+          AnObs.ObservationGroup := '';
+        end
+        else
+        begin
+          AnObs.ObservationGroup := ObsGroup.ObsGroupName;
+        end;
+
+        ChildNode := ChildNode.GetNextSibling;
+      end;
+
+      ANode := ANode.GetNextSibling;
+    end;
+
+    frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties, FNewObsList));
   finally
     PestProperties.Free
   end;
@@ -884,17 +942,82 @@ begin
   end;
 end;
 
+procedure TfrmPEST.HandleGroupDeletion(Group: TPestObservationGroup);
+var
+  OtherGroup: TPestObservationGroup;
+  TreeNode: TTreeNode;
+  ChildNode: TTreeNode;
+begin
+  if FGroupNameDictionary.TryGetValue(
+    UpperCase(Group.ObsGroupName), OtherGroup) then
+  begin
+    if Group = OtherGroup then
+    begin
+      FGroupNameDictionary.Remove(UpperCase(Group.ObsGroupName));
+    end;
+  end;
+  if FGroupDictionary.TryGetValue(Group, TreeNode) then
+  begin
+    ChildNode := TreeNode.getFirstChild;
+    while ChildNode <> nil do
+    begin
+      ChildNode.MoveTo(FNoNameNode, naAddChild);
+      ChildNode := TreeNode.getFirstChild;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.HandleAddedGroup(ObsGroup: TPestObservationGroup);
+var
+  NewNode: TTreeNode;
+begin
+  NewNode := frameParentObsGroups.tvTree.Items.AddChild(nil, ObsGroup.ObsGroupName);
+  NewNode.Data := ObsGroup;
+  FGroupDictionary.Add(ObsGroup, NewNode);
+  if ObsGroup.ObsGroupName <> '' then
+  begin
+    if not FGroupNameDictionary.ContainsKey(UpperCase(ObsGroup.ObsGroupName)) then
+    begin
+      FGroupNameDictionary.Add(UpperCase(ObsGroup.ObsGroupName), ObsGroup);
+    end;
+  end;
+end;
+
 { TUndoPestOptions }
 
-constructor TUndoPestOptions.Create(var NewPestProperties: TPestProperties);
+constructor TUndoPestOptions.Create(var NewPestProperties: TPestProperties;
+  var NewObsList: TObservationObjectList);
 var
   InvalidateModelEvent: TNotifyEvent;
+  TempList: TObservationList;
+  index: Integer;
+  AnObs: TCustomObservationItem;
+  ATempObs: TCustomObservationItem;
 begin
   InvalidateModelEvent := nil;
   FOldPestProperties := TPestProperties.Create(InvalidateModelEvent);
   FOldPestProperties.Assign(frmGoPhast.PhastModel.PestProperties);
   FNewPestProperties := NewPestProperties;
   NewPestProperties := nil;
+
+  TempList := TObservationList.Create;
+  try
+    frmGoPhast.PhastModel.FillObsItemList(TempList, True);
+    FOldObsList  := TObservationObjectList.Create;
+    FOldObsList.Capacity := TempList.Count;
+    for index := 0 to TempList.Count - 1 do
+    begin
+      AnObs := TempList[index];
+      ATempObs := TCustomObservationItem.Create(nil);
+      FOldObsList.Add(ATempObs);
+      ATempObs.Assign(AnObs);
+    end;
+  finally
+    TempList.Free;
+  end;
+
+  FNewObsList := NewObsList;
+  NewObsList := nil;
 end;
 
 function TUndoPestOptions.Description: string;
@@ -904,6 +1027,8 @@ end;
 
 destructor TUndoPestOptions.Destroy;
 begin
+  FOldObsList.Free;
+  FNewObsList.Free;
   FOldPestProperties.Free;
   FNewPestProperties.Free;
   inherited;
@@ -913,18 +1038,23 @@ procedure TUndoPestOptions.DoCommand;
 begin
   inherited;
 //  frmGoPhast.PhastModel.PestProperties := FNewPestProperties;
-  UpdateProperties(FNewPestProperties)
+  UpdateProperties(FNewPestProperties, FNewObsList)
 end;
 
 procedure TUndoPestOptions.Undo;
 begin
   inherited;
-  UpdateProperties(FOldPestProperties)
+  UpdateProperties(FOldPestProperties, FOldObsList)
 end;
 
-procedure TUndoPestOptions.UpdateProperties(PestProperties: TPestProperties);
+procedure TUndoPestOptions.UpdateProperties(PestProperties: TPestProperties;
+  ObsList: TObservationList);
 var
   ShouldUpdateView: Boolean;
+  TempList: TObservationList;
+  AnObs: TCustomObservationItem;
+  NewObs: TCustomObservationItem;
+  ObsIndex: Integer;
 begin
   ShouldUpdateView := frmGoPhast.PhastModel.PestProperties.ShouldDrawPilotPoints
     <> PestProperties.ShouldDrawPilotPoints;
@@ -935,6 +1065,22 @@ begin
     ShouldUpdateView := True;
   end;
   frmGoPhast.PhastModel.PestProperties := PestProperties;
+
+  TempList := TObservationList.Create;
+  try
+    frmGoPhast.PhastModel.FillObsItemList(TempList, True);
+    Assert(TempList.Count = ObsList.Count);
+    for ObsIndex := 0 to TempList.Count - 1 do
+    begin
+      AnObs := TempList[ObsIndex];
+      NewObs := ObsList[ObsIndex];
+      AnObs.Assign(NewObs);
+    end;
+  finally
+    TempList.Free;
+  end;
+
+
   if ShouldUpdateView then
   begin
     frmGoPhast.SynchronizeViews(vdTop);
