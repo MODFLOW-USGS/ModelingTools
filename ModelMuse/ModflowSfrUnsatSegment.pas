@@ -752,6 +752,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrUnsatSegmentTimeListLink;
     Link.FBrooksCoreyExponentData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -774,6 +778,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrUnsatSegmentTimeListLink;
     Link.FInitialWaterContentData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -796,6 +804,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrUnsatSegmentTimeListLink;
     Link.FSaturatedWaterContentData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -818,6 +830,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrUnsatSegmentTimeListLink;
     Link.FVerticalSaturatedKData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do

@@ -1063,6 +1063,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
     Link.FAirEntryPotentialData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1084,6 +1088,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
     Link.FExtinctionDepthData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1106,6 +1114,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
     Link.FExtinctionWaterContentData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1127,6 +1139,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
     Link.FInfiltrationData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1148,6 +1164,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
     Link.FPotentialETData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1169,6 +1189,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
     Link.FRootActivityData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1190,6 +1214,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
     Link.FRootPotentialData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do

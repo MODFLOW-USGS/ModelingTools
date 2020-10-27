@@ -1319,6 +1319,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FStreamBedThicknessData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1340,6 +1344,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FBrooksCoreyExponent.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1361,6 +1369,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FHydraulicConductivityData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1382,6 +1394,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FInitialWaterContent.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1403,6 +1419,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FReachLength.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1424,6 +1444,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FSaturatedWaterContent.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1445,6 +1469,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FStreamBedElevationData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1466,6 +1494,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FStreamSlopeData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1487,6 +1519,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TSfrTimeListLink;
     Link.FVerticalK.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do

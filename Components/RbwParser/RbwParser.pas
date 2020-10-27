@@ -3032,8 +3032,7 @@ begin
                 end;
 
               end
-              else if Index <= 1 then
-
+              else if (Index <= 1) and (LineIndex = 0) then
               begin
                 raise ERbwParserError.Create('A formula can not begin with ",".');
               end;

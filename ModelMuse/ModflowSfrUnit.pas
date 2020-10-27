@@ -846,6 +846,10 @@ var
   Model: TPhastModel;
 begin
   Model := ParentModel as TPhastModel;
+  if Model.Clearing then
+  begin
+    Exit;
+  end;
   Model.InvalidateMfSfrSegmentReachAndIcalc(self);
   Model.InvalidateMfSfrIprior(self);
   Model.InvalidateMfSfrVerticalUnsatK(self);
@@ -891,7 +895,7 @@ procedure TSfrBoundary.InvalidateSegmentNumberArray;
 begin
   if (ScreenObject <> nil)
     and (ScreenObject as TScreenObject).CanInvalidateModel
-    and (ParentModel <> nil) then
+    and (ParentModel <> nil) and not (ParentModel as TPhastModel).Clearing then
   begin
     (ParentModel as TPhastModel).InvalidateMfSfrSegmentReachAndIcalc(self);
   end;

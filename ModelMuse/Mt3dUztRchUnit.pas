@@ -177,6 +177,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMt3dUztRchConcTimeListLink;
     for index := 0 to Link.TimeLists.Count - 1 do
     begin

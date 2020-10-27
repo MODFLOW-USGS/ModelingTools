@@ -1292,6 +1292,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwPartialPenetration.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1310,6 +1314,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwCellToWellConductance.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1328,6 +1336,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwP.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1346,6 +1358,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwC.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1560,6 +1576,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwB.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1578,6 +1598,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwSkinK.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1596,6 +1620,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwSkinRadius.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1614,6 +1642,10 @@ begin
   LocalPhastModel := PhastModel as TPhastModel;
   if LocalPhastModel <> nil then
   begin
+    if LocalPhastModel.Clearing then
+    begin
+      Exit;
+    end;
     LocalPhastModel.ModflowPackages.Mnw2Package.MfMnwWellRadius.Invalidate;
     for ChildIndex := 0 to LocalPhastModel.ChildModels.Count - 1 do
     begin
@@ -1633,6 +1665,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMnw2TimeListLink;
     Link.FBData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1655,6 +1691,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMnw2TimeListLink;
     Link.FCData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1677,6 +1717,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMnw2TimeListLink;
     Link.FCellToWellConductanceData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1721,6 +1765,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMnw2TimeListLink;
     Link.FPData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1743,6 +1791,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMnw2TimeListLink;
     Link.FSkinKData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1765,6 +1817,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMnw2TimeListLink;
     Link.FSkinRadiusData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1807,6 +1863,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TMnw2TimeListLink;
     Link.FWellRadiusData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do

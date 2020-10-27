@@ -545,6 +545,7 @@ begin
 
   PestProperties := frmGoPhast.PhastModel.PestProperties;
 
+  {$REGION 'PEST Basic'}
   cbPEST.Checked := PestProperties.PestUsed;
   comboTemplateCharacter.ItemIndex :=
     comboTemplateCharacter.Items.IndexOf(PestProperties.TemplateCharacter);
@@ -553,14 +554,20 @@ begin
     comboFormulaMarker.Items.IndexOf(PestProperties.ExtendedTemplateCharacter);
   cbShowPilotPoints.Checked := PestProperties.ShowPilotPoints;
   rdePilotPointSpacing.RealValue := PestProperties.PilotPointSpacing;
+  {$ENDREGION}
 
+  {$REGION 'Control Data'}
   PestControlData := PestProperties.PestControlData;
   cbSaveRestart.Checked := Boolean(PestControlData.PestRestart);
   comboPestMode.ItemIndex := Ord(PestControlData.PestMode);
+  {$ENDREGION}
 
+  {$REGION 'Dimensions'}
   rdeMaxCompDim.IntegerValue := PestControlData.MaxCompressionDimension;
   rdeZeroLimit.RealValue  := PestControlData.ZeroLimit;
+  {$ENDREGION}
 
+  {$REGION 'Inversion Controls'}
   rdeInitialLambda.RealValue  := PestControlData.InitalLambda;
   rdeLambdaAdj.RealValue  := PestControlData.LambdaAdjustmentFactor;
   rdeIterationClosure.RealValue  := PestControlData.PhiRatioSufficient;
@@ -569,20 +576,26 @@ begin
   rdeJacobianUpdate.IntegerValue := PestControlData.JacobianUpdate;
   cbLamForgive.Checked := Boolean(PestControlData.LambdaForgive);
   cbDerForgive.Checked := Boolean(PestControlData.DerivedForgive);
+  {$ENDREGION}
 
+  {$REGION 'Parameter Adjustment Controls'}
   rdeMaxRelParamChange.RealValue  := PestControlData.RelativeMaxParamChange;
   rdeMaxFacParamChange.RealValue  := PestControlData.FactorMaxParamChange;
   rdeFactorOriginal.RealValue  := PestControlData.FactorOriginal;
   rdeBoundStick.IntegerValue  := PestControlData.BoundStick;
   cbParameterBending.Checked := Boolean(PestControlData.UpgradeParamVectorBending);
+  {$ENDREGION}
 
+  {$REGION 'Inversion Controls 2'}
   rdeSwitchCriterion.RealValue := PestControlData.SwitchCriterion;
   rdeSwitchCount.IntegerValue := PestControlData.OptSwitchCount;
   rdeSwitchCriterion.RealValue := PestControlData.SplitSlopeCriterion;
   comboAutomaticUserIntervation.ItemIndex := Ord(PestControlData.AutomaticUserIntervation);
   cbSensitivityReuse.Checked := Boolean(PestControlData.SensitivityReuse);
   cbBoundsScaling.Checked := Boolean(PestControlData.Boundscaling);
+  {$ENDREGION}
 
+  {$REGION 'Iteration Controls'}
   rdeMaxIterations.IntegerValue := PestControlData.MaxIterations;
   rdePhiReductionCriterion.RealValue := PestControlData.SlowConvergenceCriterion;
   rdePhiReductionCount.IntegerValue := PestControlData.SlowConvergenceCountCriterion;
@@ -592,7 +605,9 @@ begin
   rdePhiStoppingThreshold.RealValue := PestControlData.ObjectiveCriterion;
   cbLastRun.Checked := Boolean(PestControlData.MakeFinalRun);
   rdeAbandon.RealValue := PestControlData.PhiAbandon;
+  {$ENDREGION}
 
+  {$REGION 'Output Controls'}
   cbWriteCov.Checked := Boolean(PestControlData.WriteCovariance);
   cbWriteCorrCoef.Checked := Boolean(PestControlData.WriteCorrelations);
   cbWriteEigenvectors.Checked := Boolean(PestControlData.WriteEigenVectors);
@@ -603,13 +618,17 @@ begin
   cbWriteIntermResidualForEveryIteration.Checked := Boolean(PestControlData.SaveInterimResiduals);
   cbSaveParamValuesIteration.Checked := Boolean(PestControlData.SaveParamIteration);
   cbSaveParamValuesModelRun.Checked := Boolean(PestControlData.SaveParamRun);
+  {$ENDREGION}
 
+  {$REGION 'Singular Value Decomposition'}
   SvdProperties := PestProperties.SvdProperties;
   comboSvdMode.ItemIndex := Ord(SvdProperties.Mode);
   rdeMaxSingularValues.IntegerValue := SvdProperties.MaxSingularValues;
   rdeEigenThreshold.RealValue := SvdProperties.EigenThreshold;
   comboEigenWrite.ItemIndex := Ord(SvdProperties.EigenWrite);
+  {$ENDREGION}
 
+  {$REGION 'LQSR'}
   LsqrProperties := PestProperties.LsqrProperties;
   cbUseLqsr.Checked := Boolean(LsqrProperties.Mode);
   rdeMatrixTolerance.RealValue := LsqrProperties.MatrixTolerance;
@@ -617,7 +636,9 @@ begin
   rdeConditionNumberLimit.RealValue := LsqrProperties.ConditionNumberLimit;
   rdeMaxLqsrIterations.IntegerValue := LsqrProperties.MaxIteration;
   cbWriteLsqrOutput.Checked := Boolean(LsqrProperties.LsqrWrite);
+  {$ENDREGION}
 
+  {$REGION 'Observation Groups'}
   ObsGroups := nil;
   Grid := frameObservationGroups.Grid;
   Grid.BeginUpdate;
@@ -649,7 +670,9 @@ begin
       frameObservationGroups.seNumber.AsInteger := ObsGroups.Count;
     end;
   end;
+  {$ENDREGION}
 
+  {$REGION 'Observation Group Assignments'}
   FGroupDictionary.Clear;
   FGroupNameDictionary.Clear;
   Tree := frameParentObsGroups.tvTree;
@@ -686,6 +709,7 @@ begin
     end;
     NewNode.Data := ATempObs;
   end;
+  {$ENDREGION}
 
 end;
 
@@ -708,6 +732,8 @@ begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(InvalidateModelEvent);
   try
+
+    {$REGION 'PEST Basics'}
     PestProperties.PestUsed := cbPEST.Checked;
     if comboTemplateCharacter.Text <> '' then
     begin
@@ -719,11 +745,15 @@ begin
     end;
     PestProperties.ShowPilotPoints := cbShowPilotPoints.Checked;
     PestProperties.PilotPointSpacing := rdePilotPointSpacing.RealValue;
+    {$ENDREGION}
 
+    {$REGION 'Control Data'}
     PestControlData := PestProperties.PestControlData;
     PestControlData.PestRestart := TPestRestart(cbSaveRestart.Checked);
     PestControlData.PestMode := TPestMode(comboPestMode.ItemIndex);
+    {$ENDREGION}
 
+    {$REGION 'Dimensions'}
     if rdeMaxCompDim.Text <> '' then
     begin
       PestControlData.MaxCompressionDimension := rdeMaxCompDim.IntegerValue;
@@ -732,7 +762,9 @@ begin
     begin
       PestControlData.ZeroLimit := rdeZeroLimit.RealValue;
     end;
+    {$ENDREGION}
 
+    {$REGION 'Inversion Controls'}
     if rdeInitialLambda.Text <> '' then
     begin
       PestControlData.InitalLambda := rdeInitialLambda.RealValue;
@@ -759,8 +791,9 @@ begin
     end;
    PestControlData.LambdaForgive := TLambdaForgive(cbLamForgive.Checked);
    PestControlData.DerivedForgive := TDerivedForgive(cbDerForgive.Checked);
+   {$ENDREGION}
 
-
+    {$REGION 'Parameter Adjustment Controls'}
     if rdeMaxRelParamChange.Text <> '' then
     begin
       PestControlData.RelativeMaxParamChange :=  rdeMaxRelParamChange.RealValue;
@@ -779,7 +812,9 @@ begin
     end;
    PestControlData.UpgradeParamVectorBending :=
      TUpgradeParamVectorBending(cbLamForgive.Checked);
+   {$ENDREGION}
 
+    {$REGION 'Inversion Controls 2'}
     if rdeSwitchCriterion.Text <> '' then
     begin
       PestControlData.SwitchCriterion := rdeSwitchCriterion.RealValue;
@@ -795,7 +830,9 @@ begin
     PestControlData.AutomaticUserIntervation := TAutomaticUserIntervation(comboAutomaticUserIntervation.ItemIndex);
     PestControlData.SensitivityReuse := TSensitivityReuse(cbSensitivityReuse.Checked);
     PestControlData.Boundscaling := TBoundsScaling(cbBoundsScaling.Checked);
+    {$ENDREGION}
 
+    {$REGION 'Iteration Controls'}
     if rdeMaxIterations.Text <> '' then
     begin
       PestControlData.MaxIterations := rdeMaxIterations.IntegerValue;
@@ -829,7 +866,9 @@ begin
     begin
       PestControlData.PhiAbandon := rdeAbandon.RealValue;
     end;
+    {$ENDREGION}
 
+    {$REGION 'Output Options'}
     PestControlData.WriteCovariance := TWriteMatrix(cbWriteCov.Checked);
     PestControlData.WriteCorrelations := TWriteMatrix(cbWriteCorrCoef.Checked);
     PestControlData.WriteEigenVectors := TWriteMatrix(cbWriteEigenvectors.Checked);
@@ -844,8 +883,9 @@ begin
       TSaveParamIteration(cbSaveParamValuesIteration.Checked);
     PestControlData.SaveParamRun :=
       TSaveParamRun(cbSaveParamValuesModelRun.Checked);
+      {$ENDREGION}
 
-
+    {$REGION 'Singular Value Decomposition'}
     SvdProperties := PestProperties.SvdProperties;
     SvdProperties.Mode := TSvdMode(comboSvdMode.ItemIndex);
     if rdeMaxSingularValues.Text <> '' then
@@ -857,7 +897,9 @@ begin
       SvdProperties.EigenThreshold := rdeEigenThreshold.RealValue;
     end;
     SvdProperties.EigenWrite := TEigenWrite(comboEigenWrite.ItemIndex);
+    {$ENDREGION}
 
+    {$REGION 'LQSR'}
     LsqrProperties := PestProperties.LsqrProperties;
     LsqrProperties.Mode := TLsqrMode(cbUseLqsr.Checked);
     if rdeMatrixTolerance.Text <> '' then
@@ -877,7 +919,9 @@ begin
       LsqrProperties.MaxIteration := rdeMaxLqsrIterations.IntegerValue;
     end;
     LsqrProperties.LsqrWrite := TLsqrWrite(cbWriteLsqrOutput.Checked);
+    {$ENDREGION}
 
+    {$REGION 'Observation Groups'}
     ObsGroups := PestProperties.ObservationGroups;
     Grid := frameObservationGroups.Grid;
     for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
@@ -891,7 +935,9 @@ begin
         AnObsGroup.AbsoluteCorrelationFileName := Grid.Cells[Ord(pogcFileName), RowIndex];
       end;
     end;
+    {$ENDREGION}
 
+    {$REGION 'Observation Group Assignments'}
     ANode := FNoNameNode;
     while ANode <> nil do
     begin
@@ -914,6 +960,7 @@ begin
 
       ANode := ANode.GetNextSibling;
     end;
+    {$ENDREGION}
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties, FNewObsList));
   finally

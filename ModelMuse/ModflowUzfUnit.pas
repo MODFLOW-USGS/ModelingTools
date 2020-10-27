@@ -1085,6 +1085,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfExtinctionDepthTimeListLink;
     Link.FExtinctionDepthData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1221,6 +1225,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TUzfWaterContentTimeListLink;
     Link.FWaterContentData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do

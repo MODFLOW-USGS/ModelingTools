@@ -666,6 +666,10 @@ begin
   if (not (Sender as TObserver).UpToDate) and (Model <> nil) then
   begin
     LocalModel := Model as TCustomModel;
+    if LocalModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(LocalModel) as TSwrReachListLink;
     Link.FStage.Invalidate;
     if LocalModel is TPhastModel then
@@ -692,6 +696,10 @@ begin
   if (not (Sender as TObserver).UpToDate) and (Model <> nil) then
   begin
     LocalModel := Model as TCustomModel;
+    if LocalModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(LocalModel) as TSwrReachListLink;
     Link.FVerticalOffset.Invalidate;
     if LocalModel is TPhastModel then

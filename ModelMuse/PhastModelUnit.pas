@@ -10031,11 +10031,16 @@ const
 //                corrected.
 //    '4.3.0.20' Bug fix; Not in released version.  Error displaying the Manage
 //                parameters dialog box.
+//    '4.3.0.21' Bug fix: Fixed a bug that could cause an access violation if
+//                opening a model the model that is already open had contours
+//                displayed or a data set used to color the grid or mesh.
+//               Bug fix: Fixed a bug that could cause an error when exporting
+//                SUTRA model if not time schedule has been defined.
 
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.20';
+  IIModelVersion = '4.3.0.21';
 
 function IModelVersion: string;
 begin

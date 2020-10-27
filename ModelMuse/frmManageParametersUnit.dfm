@@ -870,7 +870,6 @@ inherited frmManageParameters: TfrmManageParameters
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitTop = -8
           ExplicitWidth = 776
           ExplicitHeight = 443
         end
@@ -879,79 +878,23 @@ inherited frmManageParameters: TfrmManageParameters
     object tabGroupAssignments: TTabSheet
       Caption = 'Group Assignments'
       ImageIndex = 2
-      inline frameParamGroupAssignments: TframeAvailableObjects
-        Left = 0
-        Top = 41
-        Width = 776
-        Height = 443
-        Align = alClient
-        TabOrder = 0
-        ExplicitTop = 41
-        ExplicitWidth = 776
-        ExplicitHeight = 443
-        inherited lblSrcObjects: TLabel
-          Width = 148
-          Height = 18
-          Caption = 'Available parameters'
-          ExplicitWidth = 148
-          ExplicitHeight = 18
-        end
-        inherited lblDstObjects: TLabel
-          Left = 216
-          Width = 121
-          Height = 18
-          Caption = 'Used parameters'
-          ExplicitLeft = 216
-          ExplicitWidth = 121
-          ExplicitHeight = 18
-        end
-        inherited lbSrcObjects: TJvListBox
-          Top = 28
-          ItemHeight = 18
-          ExplicitTop = 28
-        end
-        inherited lbDstObjects: TJvListBox
-          ItemHeight = 18
-        end
-        inherited btnIncObjects: TButton
-          Top = 60
-          OnClick = frameAvailableObjectsbtnIncObjectsClick
-          ExplicitTop = 60
-        end
-        inherited btnIncAllObjects: TButton
-          Top = 92
-          OnClick = frameAvailableObjectsbtnIncAllObjectsClick
-          ExplicitTop = 92
-        end
-        inherited btnExclObjects: TButton
-          OnClick = frameAvailableObjectsbtnExclObjectsClick
-        end
-        inherited btnExclAllObjects: TButton
-          OnClick = frameAvailableObjectsbtnExclAllObjectsClick
-        end
-      end
-      object pnlGroupAssignments: TPanel
+      inline frameParentChild1: TframeParentChild
         Left = 0
         Top = 0
         Width = 776
-        Height = 41
-        Align = alTop
-        TabOrder = 1
-        object lblParameterGroup: TLabel
-          Left = 159
-          Top = 11
-          Width = 121
-          Height = 18
-          Caption = 'Parameter Group'
-        end
-        object comboParamGroups: TComboBox
-          Left = 8
-          Top = 11
-          Width = 145
-          Height = 26
-          Style = csDropDownList
-          TabOrder = 0
-          OnChange = comboParamGroupsChange
+        Height = 484
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 280
+        ExplicitTop = 64
+        inherited tvTree: TJvTreeView
+          Width = 776
+          Height = 484
+          ItemHeight = 20
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 320
+          ExplicitHeight = 240
         end
       end
     end

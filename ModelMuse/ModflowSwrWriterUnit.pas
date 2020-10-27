@@ -904,8 +904,8 @@ var
 //  UsedFunction: string;
 //  UsedExpression: TExpression;
 begin
-  ObsFormula := 'Round(VertexValue("TabFile", 0))';
-  ReachNumberFormula := 'Round(VertexValue("' + KReachString + '", 0))';
+  ObsFormula := 'Round(VertexValue("TabFile", 0.0))';
+  ReachNumberFormula := 'Round(VertexValue("' + KReachString + '", 0.0))';
   NoAssignmentErrorRoot := Format(StrNoBoundaryConditio, [Package.PackageIdentifier]);
 
   Grid := Model.Grid;

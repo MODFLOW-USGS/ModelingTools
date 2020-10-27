@@ -313,6 +313,12 @@ resourcestring
   'DFLOW. It is supported in MODFLOW-NWT 1.1 and later';
   StrTABFILES = 'TABFILES';
   StrLOSSFACTOR = 'LOSSFACTOR';
+  StrInvalidSFROutflow = 'Invalid SFR outflow segment';
+  StrIn1sTheSFRSeg = 'In %0:s, the SFR segment number is the same as the out' +
+  'flow segment number. The outflow segment number should be the number of t' +
+  'he stream or lake into which the segment flows. The outflow segment ' +
+  'should be zero if the segment does not flow into any other segment in the ' +
+  'model.';
 
 resourcestring
   DupErrorCategory = 'Duplicate SFR segment numbers';
@@ -6146,6 +6152,7 @@ var
   SourceSegment: TSegment;
   UpstreamScreenObject: TScreenObject;
   DownstreamScreenObject: TScreenObject;
+  AScreenObject: TScreenObject;
 begin
   SubSeg := nil;
   if SubSegIndex >= 0 then
@@ -6185,6 +6192,12 @@ begin
     // Parent models and last subsegment in child models.
     OUTSEG := FindConvertedSegment(ParamScreenObjectItem.OutflowSegment,
       sdDownstream, OutflowSegement);
+    if OUTSEG = Segment.FNewSegmentNumber then
+    begin
+      AScreenObject := Segment.FScreenObject as TScreenObject;
+      frmErrorsAndWarnings.AddError(Model, StrInvalidSFROutflow,
+        Format(StrIn1sTheSFRSeg, [AScreenObject.Name]), AScreenObject);
+    end;
     if (OUTSEG > 0) and not FIsChildModel then
     begin
       Assert(OutflowSegement <> nil);
@@ -6214,6 +6227,12 @@ begin
       begin
         OUTSEG := FindConvertedSegment(ParamScreenObjectItem.OutflowSegment,
           sdDownstream, OutflowSegement);
+        if OUTSEG = Segment.FNewSegmentNumber then
+        begin
+          AScreenObject := Segment.FScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddError(Model, StrInvalidSFROutflow,
+            Format(StrIn1sTheSFRSeg, [AScreenObject.Name]), AScreenObject);
+        end;
         if (OUTSEG > 0) and not FIsChildModel then
         begin
           Assert(OutflowSegement <> nil);

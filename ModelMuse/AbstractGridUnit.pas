@@ -8996,7 +8996,7 @@ end;
 
 procedure TCustomDiscretization.InvalidateContours;
 begin
-  if Model <> nil then
+  if (Model <> nil) and not (Model as TCustomModel).Clearing then
   begin
     (Model as TCustomModel).InvalidateContours
   end;

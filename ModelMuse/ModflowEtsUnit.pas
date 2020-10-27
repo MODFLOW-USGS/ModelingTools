@@ -1397,6 +1397,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TEtsSurfDepthTimeListLink;
     for Index := 0 to Link.FListOfDepthFractionLists.Count - 1 do
     begin
@@ -1426,6 +1430,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TEtsSurfDepthTimeListLink;
     Link.FEvapotranspirationDepthData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1449,6 +1457,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TEtsSurfDepthTimeListLink;
     for Index := 0 to Link.FListOfEtFractionLists.Count - 1 do
     begin
@@ -1478,6 +1490,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TEtsSurfDepthTimeListLink;
     Link.FEvapotranspirationSurfaceData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do

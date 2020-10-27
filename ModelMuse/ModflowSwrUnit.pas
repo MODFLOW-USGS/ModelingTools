@@ -703,6 +703,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TCustomSwrTimeListLink;
     Link.FSwrData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
@@ -1188,6 +1192,10 @@ begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
+    if (ParentModel as TPhastModel).Clearing then
+    begin
+      Exit;
+    end;
     (ParentModel as TPhastModel).InvalidateMfSwrEvaporation(self);
   end;
 end;
@@ -1280,6 +1288,10 @@ begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
+    if (ParentModel as TPhastModel).Clearing then
+    begin
+      Exit;
+    end;
     (ParentModel as TPhastModel).InvalidateMfSwrLateralInflow(self);
   end;
 end;
@@ -1372,6 +1384,10 @@ begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
+    if (ParentModel as TPhastModel).Clearing then
+    begin
+      Exit;
+    end;
     (ParentModel as TPhastModel).InvalidateMfSwrStage(self);
   end;
 end;

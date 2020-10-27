@@ -574,6 +574,10 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
 
   FNameOfFile := FileName(AFileName);
   OpenFile(FNameOfFile);

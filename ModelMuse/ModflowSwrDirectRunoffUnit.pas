@@ -548,6 +548,10 @@ begin
   if (not (Sender as TObserver).UpToDate) and (Model <> nil) then
   begin
     LocalModel := Model as TCustomModel;
+    if LocalModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(LocalModel) as TSwrDirectRunoffListLink;
     Link.FReachData.Invalidate;
     if LocalModel is TPhastModel then
@@ -576,6 +580,10 @@ begin
     if Model <> nil then
     begin
       LocalModel := Model as TCustomModel;
+    if LocalModel.Clearing then
+    begin
+      Exit;
+    end;
       Link := TimeListLink.GetLink(LocalModel) as TSwrDirectRunoffListLink;
       Link.FRunoffData.Invalidate;
       if LocalModel is TPhastModel then

@@ -398,6 +398,10 @@ begin
   if not (Sender as TObserver).UpToDate then
   begin
     PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
     Link := TimeListLink.GetLink(PhastModel) as TResTimeListLink;
     Link.FEndHeadData.Invalidate;
     for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do

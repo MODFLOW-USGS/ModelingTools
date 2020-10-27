@@ -28,6 +28,11 @@ begin
   TimeValues := ASchedule.TimeValues(SutraTimeOptions.InitialTime,
      SutraTimeOptions.Schedules);
 
+  if Length(TimeValues) = 0 then
+  begin
+    Exit;
+  end;
+
   TimeList := TRealList.Create;
   try
     for TimeIndex := 0 to Length(TimeValues) - 1 do

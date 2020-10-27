@@ -31,7 +31,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 512
     Height = 287
-    ActivePage = jvspObservationGroups
+    ActivePage = jvspLqsr
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -41,6 +41,7 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspBasic'
+      ExplicitLeft = 1
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -135,6 +136,7 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspControlDataMode'
+      ExplicitLeft = 1
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -215,6 +217,7 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspInversionControls'
+      ExplicitLeft = 1
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -353,6 +356,7 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 512
       Height = 287
+      ExplicitLeft = 1
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -547,6 +551,7 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspIterationControls'
+      ExplicitLeft = 1
       object lblMaxIterations: TLabel
         Left = 93
         Top = 6
@@ -799,6 +804,7 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspSingularValueDecomp'
+      ExplicitLeft = 1
       object lblSvdMode: TLabel
         Left = 6
         Top = 8
@@ -884,6 +890,7 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspLqsr'
+      ExplicitLeft = 1
       object lblMatrixTolerance: TLabel
         Left = 157
         Top = 29
@@ -1130,7 +1137,6 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 1
           ExplicitWidth = 512
           ExplicitHeight = 246
         end
@@ -1200,7 +1206,7 @@ inherited frmPEST: TfrmPEST
     end
   end
   object dlgOpenCovarianceMatrixFile: TOpenDialog
-    Left = 398
-    Top = 104
+    Left = 430
+    Top = 72
   end
 end
