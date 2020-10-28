@@ -535,7 +535,7 @@ var
   index: Integer;
   AnObs: TCustomObservationItem;
   ATempObs: TCustomObservationItem;
-  Tree: TJvTreeView;
+  Tree: TTreeView;
   NewNode: TTreeNode;
   GroupIndex: Integer;
   TreeNode: TTreeNode;

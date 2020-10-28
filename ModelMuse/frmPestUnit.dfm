@@ -1157,12 +1157,9 @@ inherited frmPEST: TfrmPEST
         TabOrder = 0
         ExplicitWidth = 512
         ExplicitHeight = 287
-        inherited tvTree: TJvTreeView
+        inherited tvTree: TTreeView
           Width = 512
           Height = 287
-          ItemHeight = 20
-          ExplicitLeft = 0
-          ExplicitTop = 0
           ExplicitWidth = 512
           ExplicitHeight = 287
         end

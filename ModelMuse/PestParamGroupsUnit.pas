@@ -190,7 +190,14 @@ end;
 
 procedure TPestParamGroup.InitializeVariables;
 begin
-
+  ParamIncrement := 0.01;
+  ParamIncrementMultiplier := 1.5;
+  ForceCentral := fcSwitch;
+  DM3 := dm3Parabolic;
+  SplitThreshold := 1E-4;
+  RelSlopeDif := 0.5;
+  SplitThreshold := 1E-4;
+  SplitAction := saSmaller;
 end;
 
 procedure TPestParamGroup.SetDM3(const Value: TDerivativeMethod3);

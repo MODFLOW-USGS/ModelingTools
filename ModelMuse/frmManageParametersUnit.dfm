@@ -68,7 +68,7 @@ inherited frmManageParameters: TfrmManageParameters
     Top = 0
     Width = 784
     Height = 517
-    ActivePage = tabParameterGroups
+    ActivePage = tabParameters
     Align = alClient
     TabOrder = 1
     object tabParameters: TTabSheet
@@ -92,7 +92,7 @@ inherited frmManageParameters: TfrmManageParameters
           Caption = 'Number of parameters'
         end
         object btnDelete: TBitBtn
-          Left = 692
+          Left = 694
           Top = 6
           Width = 82
           Height = 33
@@ -878,103 +878,40 @@ inherited frmManageParameters: TfrmManageParameters
     object tabGroupAssignments: TTabSheet
       Caption = 'Group Assignments'
       ImageIndex = 2
-      inline frameParentChild1: TframeParentChild
+      inline frameParGroupAssignments: TframeParentChild
         Left = 0
         Top = 0
         Width = 776
         Height = 484
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 280
-        ExplicitTop = 64
-        inherited tvTree: TJvTreeView
+        ExplicitWidth = 776
+        ExplicitHeight = 484
+        inherited tvTree: TTreeView
           Width = 776
           Height = 484
-          ItemHeight = 20
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 320
-          ExplicitHeight = 240
+          ExplicitWidth = 776
+          ExplicitHeight = 484
         end
       end
     end
     object tabTiedParameters: TTabSheet
       Caption = 'Tied Parameters'
       ImageIndex = 3
-      object pnlTiedParam: TPanel
+      object tvTiedParameters: TTreeView
         Left = 0
         Top = 0
         Width = 776
-        Height = 41
-        Align = alTop
-        TabOrder = 0
-        object lblParentParameter: TLabel
-          Left = 168
-          Top = 8
-          Width = 124
-          Height = 18
-          Caption = 'Parent Parameter'
-        end
-        object comboParentParameters: TComboBox
-          Left = 6
-          Top = 9
-          Width = 145
-          Height = 26
-          Style = csDropDownList
-          TabOrder = 0
-          OnChange = comboParentParametersChange
-        end
-      end
-      inline frameTiedParameters: TframeAvailableObjects
-        Left = 0
-        Top = 41
-        Width = 776
-        Height = 443
+        Height = 484
         Align = alClient
-        TabOrder = 1
-        ExplicitTop = 41
-        ExplicitWidth = 776
-        ExplicitHeight = 443
-        inherited lblSrcObjects: TLabel
-          Left = 3
-          Top = 3
-          Width = 148
-          Height = 18
-          Caption = 'Available parameters'
-          ExplicitLeft = 3
-          ExplicitTop = 3
-          ExplicitWidth = 148
-          ExplicitHeight = 18
-        end
-        inherited lblDstObjects: TLabel
-          Left = 216
-          Width = 121
-          Height = 18
-          Caption = 'Used parameters'
-          ExplicitLeft = 216
-          ExplicitWidth = 121
-          ExplicitHeight = 18
-        end
-        inherited lbSrcObjects: TJvListBox
-          ItemHeight = 18
-        end
-        inherited lbDstObjects: TJvListBox
-          ItemHeight = 18
-        end
-        inherited btnIncObjects: TButton
-          OnClick = frameTiedParametersbtnIncObjectsClick
-        end
-        inherited btnIncAllObjects: TButton
-          OnClick = frameTiedParametersbtnIncAllObjectsClick
-        end
-        inherited btnExclObjects: TButton
-          Top = 123
-          OnClick = frameTiedParametersbtnExclObjectsClick
-          ExplicitTop = 123
-        end
-        inherited btnExclAllObjects: TButton
-          OnClick = frameTiedParametersbtnExclAllObjectsClick
-        end
+        DragMode = dmAutomatic
+        Indent = 19
+        MultiSelect = True
+        MultiSelectStyle = [msControlSelect, msShiftSelect]
+        ReadOnly = True
+        TabOrder = 0
+        OnDragDrop = tvTiedParametersDragDrop
+        OnDragOver = tvTiedParametersDragOver
       end
     end
   end

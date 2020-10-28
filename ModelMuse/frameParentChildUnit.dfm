@@ -4,7 +4,7 @@ object frameParentChild: TframeParentChild
   Width = 320
   Height = 240
   TabOrder = 0
-  object tvTree: TJvTreeView
+  object tvTree: TTreeView
     Left = 0
     Top = 0
     Width = 320
@@ -18,9 +18,5 @@ object frameParentChild: TframeParentChild
     TabOrder = 0
     OnDragDrop = tvTreeDragDrop
     OnDragOver = tvTreeDragOver
-    ExplicitLeft = 80
-    ExplicitTop = 48
-    ExplicitWidth = 121
-    ExplicitHeight = 97
   end
 end

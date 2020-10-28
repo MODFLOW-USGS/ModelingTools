@@ -8,19 +8,23 @@ uses
   JvExComCtrls, JvComCtrls;
 
 type
+  TOnMoveNodeEvent = procedure (Sender: TObject; Node: TTreeNode) of object;
+
   // @name is used for rearranging parent and child objects.
   // Constraints:
   // Each child must belong to exactly one parent.
   // Children can not also be parents.
   TframeParentChild = class(TFrame)
-    tvTree: TJvTreeView;
+    tvTree: TTreeView;
     procedure tvTreeDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
     procedure tvTreeDragDrop(Sender, Source: TObject; X, Y: Integer);
   private
     FDragging: Boolean;
+    FOnMoveNode: TOnMoveNodeEvent;
     { Private declarations }
   public
+    property OnMoveNode: TOnMoveNodeEvent read FOnMoveNode write FOnMoveNode;
     { Public declarations }
   end;
 
@@ -34,7 +38,7 @@ var
   AttachMode: TNodeAttachMode;
   HT: THitTests;
   index: Integer;
-  MovedItem: TTreeNode;
+  MovedNode: TTreeNode;
   NodeList: TList;
 begin
   if FDragging then
@@ -57,11 +61,11 @@ begin
           try
             for index := 0 to tvTree.SelectionCount - 1 do
             begin
-              MovedItem := tvTree.Selections[index];
+              MovedNode := tvTree.Selections[index];
 
-              if (MovedItem.Parent <> nil) and (MovedItem <> AnItem) then
+              if (MovedNode.Parent <> nil) and (MovedNode <> AnItem) then
               begin
-                NodeList.Add(MovedItem);
+                NodeList.Add(MovedNode);
               end;
             end;
 
@@ -76,14 +80,18 @@ begin
 
             for index := 0 to NodeList.Count - 1 do
             begin
-              MovedItem := NodeList[index];
-              MovedItem.Selected := False;
+              MovedNode := NodeList[index];
+              MovedNode.Selected := False;
             end;
 
             for index := 0 to NodeList.Count - 1 do
             begin
-              MovedItem := NodeList[index];
-              MovedItem.MoveTo(AnItem, AttachMode);
+              MovedNode := NodeList[index];
+              MovedNode.MoveTo(AnItem, AttachMode);
+              if Assigned(OnMoveNode) then
+              begin
+                OnMoveNode(self, MovedNode);
+              end;
             end;
 
             tvTree.Select(NodeList);

@@ -709,6 +709,7 @@ type
     property IntegerValueDefault[const ACol, ARow: integer;
       DefaultValue: integer = 0]: integer read GetIntegerValueDefault;
     Property IsUpdating: boolean read GetIsUpdating;
+    procedure SetEditorUpdateToEnd;
   published
     // When distributing a text to multiple cells (@link(DistributeText),
     // if @name is @true, the procedure will use up multiple
@@ -4523,6 +4524,13 @@ begin
   begin
     OnRowMoving(self, Origin, Destination, result);
   end;
+end;
+
+procedure TCustomRBWDataGrid.SetEditorUpdateToEnd;
+begin
+  (InplaceEditor as TRbwInplaceEdit4).UpdateContents;
+  (InplaceEditor as TRbwInplaceEdit4).SelStart := MaxInt;
+//                ColumnOrRow.MaxLength;
 end;
 
 procedure TCustomRBWDataGrid.SetEditText(ACol, ARow: Longint;

@@ -561,7 +561,10 @@ begin
   if not Started then Exit;
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity;
-  gluPerspective(fov, ClientWidth / ClientHeight, znear, zfar);
+  if ClientHeight <> 0 then
+  begin
+    gluPerspective(fov, ClientWidth / ClientHeight, znear, zfar);
+  end;
 end;
 
 procedure TGLWidget.ScreenProjection;
