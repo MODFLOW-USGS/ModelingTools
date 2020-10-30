@@ -550,9 +550,13 @@ begin
                     end;
                     if not PointsEqual(AScreenObject.Points[PointIndex], APoint) then
                     begin
-                      raise EDifferentPointsError.Create(
-                        Format('Point %0:d in %1:s don''t match.',
-                        [PointIndex, FAsciiRasterFileName]));
+                      AScreenObject.Free;
+                      Beep;
+                      MessageDlg(Format('Point %0:d in %1:s don''t match.',
+                        [PointIndex, FAsciiRasterFileName]), mtError, [mbOK], 0);
+                      Exit;
+//                      raise EDifferentPointsError.Create(
+//                        Format('Point %0:d in %1:s don''t match.', [PointIndex, FAsciiRasterFileName]));
                     end;
                   end;
                   Item.Values.RealValues[PointIndex] := FValues[PointIndex].z;

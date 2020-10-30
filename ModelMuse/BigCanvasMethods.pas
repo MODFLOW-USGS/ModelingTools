@@ -115,7 +115,14 @@ end;
 
 procedure SetTopRange;
 begin
-  TopRange := Max(Screen.Width, Screen.Height) * 3 div 2;
+  if Screen <> nil then
+  begin
+    TopRange := Max(Screen.Width, Screen.Height) * 3 div 2;
+  end
+  else
+  begin
+    TopRange := 1;
+  end;
   Bounds := Rect(BottomRange, BottomRange, TopRange, TopRange);
 end;
 

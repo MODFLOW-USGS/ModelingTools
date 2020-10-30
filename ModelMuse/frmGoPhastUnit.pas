@@ -29,7 +29,7 @@ uses System.UITypes,
   frmExportModpathShapefileUnit, SutraMeshUnit, frmSwrObservationsUnit,
   JvExStdCtrls, JvCombobox, JvListComb, FootprintGridUnit, frmRunFootprintUnit,
   System.ImageList, System.Actions, ModflowIrregularMeshUnit, JvComponentBase,
-  JvBalloonHint;
+  JvBalloonHint, frmRunPestUnit;
 
   { TODO : 
 Consider making CurrentTool a property of TframeView instead of 
@@ -513,6 +513,9 @@ type
     miEditSutraFluxObs: TMenuItem;
     acPEST: TAction;
     miPESTProperties: TMenuItem;
+    acRunPest: TAction;
+    dlgSavePest: TSaveDialog;
+    PESTControlfile1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -699,6 +702,9 @@ type
     procedure acAnonymizeObjectsExecute(Sender: TObject);
     procedure acEditSutraFluxObsExecute(Sender: TObject);
     procedure acPESTExecute(Sender: TObject);
+    procedure acRunPestExecute(Sender: TObject);
+    procedure dlgSavePestShow(Sender: TObject);
+    procedure dlgSavePestClose(Sender: TObject);
   private
     FCreateArchive: Boolean;
     CreateArchiveSet: boolean;
@@ -749,6 +755,8 @@ type
     FNoIniFile: Boolean;
     FRunMt3dModel: TCustomModel;
     FInvalidatingAllViews: Boolean;
+    FRunPestForm: TfrmRunPest;
+    FRunPest: Boolean;
 //    FWriteErrorRaised: Boolean;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
@@ -3258,6 +3266,7 @@ begin
   {$IFNDEF PEST}
   acEditObservationComparisons.Visible := False;
   acPEST.Visible := False;
+  acRunPest.Visible := False;
   {$ENDIF}
   
   tbarEditScreenObjects.Width := 227;
@@ -3310,6 +3319,7 @@ begin
   FRunModelMate := True;
   FRunMt3dms := True;
   FRunFootprint := True;
+  FRunPest := True;
   FSynchronizeCount := 0;
   FCreatingMainForm := True;
   try
@@ -9901,6 +9911,20 @@ begin
   FRunMt3dmsForm.comboMt3dModelSelection.ItemIndex := 0;
 end;
 
+procedure TfrmGoPhast.dlgSavePestClose(Sender: TObject);
+begin
+  inherited;
+  FRunPest := FRunPestForm.cbRun.Checked;
+  FRunPestForm.Free;
+end;
+
+procedure TfrmGoPhast.dlgSavePestShow(Sender: TObject);
+begin
+  inherited;
+  FRunPestForm := TfrmRunPest.createfordialog(dlgSavePest);
+  FRunPestForm.cbRun.Checked := FRunPest;
+end;
+
 procedure TfrmGoPhast.miGeneralClick(Sender: TObject);
 begin
   ShowAForm(TfrmModflowOptions);
@@ -13853,6 +13877,25 @@ begin
       frmErrorsAndWarnings.Show;
     end;
   end;
+end;
+
+procedure TfrmGoPhast.acRunPestExecute(Sender: TObject);
+var
+  FileName: string;
+begin
+  inherited;
+  FileName := '';
+  if (PhastModel.ModelFileName <> '') then
+  begin
+    FileName := ChangeFileExt(PhastModel.ModelFileName,
+      dlgSavePest.DefaultExt);
+  end;
+  dlgSavePest.FileName := PhastModel.FixFileName(FileName);
+  if dlgSavePest.Execute then
+  begin
+    PhastModel.ExportPestInput(dlgSavePest.FileName, FRunPest);
+  end;
+//
 end;
 
 procedure TfrmGoPhast.acRunSutraExecute(Sender: TObject);

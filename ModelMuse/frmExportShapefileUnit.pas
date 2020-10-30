@@ -1659,42 +1659,45 @@ begin
         begin
           TimeValue := RealList[TimeIndex];
           DataSetIndex := TimeList.FirstTimeGreaterThan(TimeValue) - 1;
-          DataArray := TimeList.Items[DataSetIndex];
-          DataSets.Add(DataArray);
-          RootName := AnsiString(UpperCase(TimeList.Name));
-          RootName := AnsiString(StringReplace(string(RootName),
-            ' ', '_', [rfReplaceAll]));
-          if Length(RootName) > 8 - LayerCharacters - TimeCharacters then
+          if DataSetIndex >= 0 then
           begin
-            SetLength(RootName, 8 - LayerCharacters - TimeCharacters);
-          end;
-          TimeRoot := RootName + 'T' + AnsiString(IntToStr(TimeIndex + 1));
-          case DataArray.DataType of
-            rdtDouble:
-              FieldFormat := 'N18,10';
-            rdtInteger:
-              FieldFormat := 'N';
-            rdtBoolean:
-              FieldFormat := 'N';
-            rdtString:
-              FieldFormat := 'C18';
-          end;
-          if LayerCharacters = 0 then
-          begin
-            FieldName := TimeRoot;
-            FieldName := FixShapeFileFieldName(FieldName, Fields);
-            Names.AddObject(string(FieldName), DataArray);
-            Fields.AddObject(string(FieldName + '=' + FieldFormat), DataArray);
-          end
-          else
-          begin
-            for LayerIndex := 1 to LayerLimit do
+            DataArray := TimeList.Items[DataSetIndex];
+            DataSets.Add(DataArray);
+            RootName := AnsiString(UpperCase(TimeList.Name));
+            RootName := AnsiString(StringReplace(string(RootName),
+              ' ', '_', [rfReplaceAll]));
+            if Length(RootName) > 8 - LayerCharacters - TimeCharacters then
             begin
-              FieldName := TimeRoot + 'L' + AnsiString(IntToStr(LayerIndex));
+              SetLength(RootName, 8 - LayerCharacters - TimeCharacters);
+            end;
+            TimeRoot := RootName + 'T' + AnsiString(IntToStr(TimeIndex + 1));
+            case DataArray.DataType of
+              rdtDouble:
+                FieldFormat := 'N18,10';
+              rdtInteger:
+                FieldFormat := 'N';
+              rdtBoolean:
+                FieldFormat := 'N';
+              rdtString:
+                FieldFormat := 'C18';
+            end;
+            if LayerCharacters = 0 then
+            begin
+              FieldName := TimeRoot;
               FieldName := FixShapeFileFieldName(FieldName, Fields);
               Names.AddObject(string(FieldName), DataArray);
-              Fields.AddObject(string(FieldName + '='
-                + FieldFormat), DataArray);
+              Fields.AddObject(string(FieldName + '=' + FieldFormat), DataArray);
+            end
+            else
+            begin
+              for LayerIndex := 1 to LayerLimit do
+              begin
+                FieldName := TimeRoot + 'L' + AnsiString(IntToStr(LayerIndex));
+                FieldName := FixShapeFileFieldName(FieldName, Fields);
+                Names.AddObject(string(FieldName), DataArray);
+                Fields.AddObject(string(FieldName + '='
+                  + FieldFormat), DataArray);
+              end;
             end;
           end;
         end;
@@ -2457,6 +2460,7 @@ begin
       ColumnCount := FLocalMesh.Mesh2DI.NodeCount-1;
     end;
     NameIndexStart := 0;
+    try
     for DataSetIndex := 0 to DataSets.Count - 1 do
     begin
       FShapeDataBase.GotoBOF;
@@ -2481,6 +2485,9 @@ begin
       DataArray := DataSets[DataSetIndex];
       NameIndexStart := NameIndexStart + DataArray.LayerCount;
       DataArray.CacheData;
+    end;
+    except
+      ShowMessage(DataSetIndex.ToString);
     end;
     IndexFileName := ChangeFileExt(FShapeFileName, '.shx');
     FShapeFileWriter.WriteToFile(FShapeFileName, IndexFileName);

@@ -31,7 +31,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 512
     Height = 287
-    ActivePage = jvspLqsr
+    ActivePage = jvspBasic
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -41,7 +41,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspBasic'
-      ExplicitLeft = 1
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -62,6 +61,13 @@ inherited frmPEST: TfrmPEST
         Width = 128
         Height = 18
         Caption = 'Pilot point spacing'
+      end
+      object lblPestDirectory: TLabel
+        Left = 16
+        Top = 168
+        Width = 109
+        Height = 18
+        Caption = 'PEST Directory'
       end
       object cbPEST: TCheckBox
         Left = 16
@@ -136,7 +142,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspControlDataMode'
-      ExplicitLeft = 1
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -217,7 +222,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspInversionControls'
-      ExplicitLeft = 1
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -356,7 +360,6 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 512
       Height = 287
-      ExplicitLeft = 1
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -551,7 +554,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspIterationControls'
-      ExplicitLeft = 1
       object lblMaxIterations: TLabel
         Left = 93
         Top = 6
@@ -804,7 +806,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspSingularValueDecomp'
-      ExplicitLeft = 1
       object lblSvdMode: TLabel
         Left = 6
         Top = 8
@@ -890,7 +891,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspLqsr'
-      ExplicitLeft = 1
       object lblMatrixTolerance: TLabel
         Left = 157
         Top = 29
@@ -1201,6 +1201,15 @@ inherited frmPEST: TfrmPEST
       NumGlyphs = 2
       TabOrder = 2
     end
+  end
+  object diredPest: TJvDirectoryEdit
+    Left = 214
+    Top = 192
+    Width = 305
+    Height = 26
+    TabOrder = 3
+    Text = 'C:\PEST'
+    OnChange = diredPestChange
   end
   object dlgOpenCovarianceMatrixFile: TOpenDialog
     Left = 430

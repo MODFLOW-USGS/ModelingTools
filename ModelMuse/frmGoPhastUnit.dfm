@@ -1273,6 +1273,9 @@ inherited frmGoPhast: TfrmGoPhast
         object miRunFootprint: TMenuItem
           Action = acRunFootprint
         end
+        object PESTControlfile1: TMenuItem
+          Action = acRunPest
+        end
         object miShapefile: TMenuItem
           Caption = '&Shapefile'
           HelpContext = 1550
@@ -3582,6 +3585,12 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'Model'
       Caption = '&PEST Properties'
       OnExecute = acPESTExecute
+    end
+    object acRunPest: TAction
+      Category = 'File'
+      Caption = 'Run PEST'
+      Hint = 'Run PEST|Export PEST control file and run PEST'
+      OnExecute = acRunPestExecute
     end
   end
   object ilDisabledImageList: TImageList
@@ -9698,5 +9707,13 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = bhntMeasureRulerMouseMove
     Left = 384
     Top = 8
+  end
+  object dlgSavePest: TSaveDialog
+    OnClose = dlgSavePestClose
+    OnShow = dlgSavePestShow
+    DefaultExt = '.pst'
+    Filter = 'PEST Control Files (*.pst)|*.pst'
+    Left = 560
+    Top = 120
   end
 end

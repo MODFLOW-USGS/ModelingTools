@@ -848,6 +848,7 @@ type
     FModPathLocationV7: string;
     FZoneBudgetLocationMf6: string;
     FSutra30Location: string;
+    FPestDirectory: string;
     function GetTextEditorLocation: string;
     procedure SetModflowLocation(const Value: string);
     function RemoveQuotes(const Value: string): string;
@@ -872,6 +873,7 @@ type
     procedure SetModPathLocationV7(const Value: string);
     procedure SetZoneBudgetLocationMf6(const Value: string);
     procedure SetSutra30Location(const Value: string);
+    procedure SetPestDirectory(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create;
@@ -925,6 +927,7 @@ type
       write SetModflow6Location stored False;
     property Modflow6Location: string read FModflow6Location
       write SetModflow6Location;
+    property PestDirectory: string read FPestDirectory write SetPestDirectory;
   end;
 
   {
@@ -4583,6 +4586,7 @@ that affects the model output should also have a comment. }
     function UzfSeepageUsed: boolean; override;
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
+    procedure ExportPestInput(FileName: string; RunPest: Boolean);
   published
     // The following properties are obsolete.
 
@@ -5358,6 +5362,7 @@ resourcestring
   StrModelMonitorDefaultPath = 'ModelMonitor.exe';
   strModflowOwhmDefaultPath = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe';
   StrMFOwhmDefaultPath64 = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe';
+  StrPestDefaultDir = 'C:\Pest17\';
 
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
 {$IFDEF WIN64}
@@ -5390,6 +5395,7 @@ resourcestring
   strModflowOWHM = 'MODFLOW-OWHM';
   strModflowCFP = 'MODFLOW-CFP';
   StrModflow6 = 'MODFLOW 6';
+  StrPestDir = 'PEST';
   StrAtLeastOneConvert = 'At least one layer must be convertible.';
   StrAtLeastOneUnconfConvert = 'At least one layer must be unconfined or ful' +
   'ly convertible.';
@@ -10036,12 +10042,14 @@ const
 //                displayed or a data set used to color the grid or mesh.
 //               Bug fix: Fixed a bug that could cause an error when exporting
 //                SUTRA model if not time schedule has been defined.
-
-//               Bug fix: Fixed import of multiple ASCII grid files
+//    '4.3.0.22' Bug fix: Fixed import of multiple ASCII grid files
 //                simultaneously.
+//               Bug fix: Fixed bug in export of Shapefile mesh data from SUTRA
+//                2D models that could cause a  range check error.
+
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.21';
+  IIModelVersion = '4.3.0.22';
 
 function IModelVersion: string;
 begin
@@ -27486,6 +27494,7 @@ begin
     FootprintLocation := SourceLocations.FootprintLocation;
     Modflow6Location := SourceLocations.Modflow6Location;
     Sutra30Location := SourceLocations.Sutra30Location;
+    PestDirectory := SourceLocations.PestDirectory;
   end
   else
   begin
@@ -27516,6 +27525,7 @@ begin
   GMshLocation := StrDefaultGmshPath;
   GeompackLocation := StrDefaultGeompackPath;
   Modflow6Location := StrDefaultModflow6Path;
+  PestDirectory := StrPestDefaultDir;
   ADirectory := GetCurrentDir;
   try
     SetCurrentDir(ExtractFileDir(ParamStr(0)));
@@ -27849,6 +27859,21 @@ begin
     end;
   end;
 
+  PestDirectory := IniFile.ReadString(StrProgramLocations, StrPestDir,
+    StrPestDefaultDir);
+  if (PestDirectory = '') or not DirectoryExists(PestDirectory) then
+  begin
+    if DirectoryExists(StrPestDefaultDir) then
+    begin
+      PestDirectory := StrPestDefaultDir;
+    end
+    else if FileExists(AlternatePath(StrPestDefaultDir)) then
+    begin
+      PestDirectory := AlternatePath(StrPestDefaultDir);
+    end;
+  end;
+
+
   ADirectory := GetCurrentDir;
   try
     SetCurrentDir(ExtractFileDir(ParamStr(0)));
@@ -27986,6 +28011,11 @@ begin
   FMt3dUsgsLocation := RemoveQuotes(Value);
 end;
 
+procedure TProgramLocations.SetPestDirectory(const Value: string);
+begin
+  FPestDirectory := RemoveQuotes(Value);
+end;
+
 procedure TProgramLocations.SetPhastLocation(const Value: string);
 begin
   FPhastLocation := RemoveQuotes(Value);
@@ -28038,6 +28068,7 @@ begin
   IniFile.WriteString(StrProgramLocations, StrGeompack, GeompackLocation);
   IniFile.WriteString(StrProgramLocations, StrFootprint, FootprintLocation);
   IniFile.WriteString(StrProgramLocations, StrModflow6, Modflow6Location);
+  IniFile.WriteString(StrProgramLocations, StrPestDir, PestDirectory);
 end;
 
 { TDataSetClassification }
@@ -28559,7 +28590,14 @@ begin
       DataArrayP1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayP1.DataType := rdtDouble;
       DataArrayP1.Orientation := dso3D;
-      DataArrayP1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayP1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayP1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayP1.AddMethod := vamAveragedDelayed;
       FSutraGenFlowPress1.Add(ThreeDDisplayTime, DataArrayP1);
 
@@ -28567,7 +28605,14 @@ begin
       DataArrayP2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayP2.DataType := rdtDouble;
       DataArrayP2.Orientation := dso3D;
-      DataArrayP2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayP2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayP2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayP2.AddMethod := vamAveragedDelayed;
       FSutraGenFlowPress2.Add(ThreeDDisplayTime, DataArrayP2);
 
@@ -28575,7 +28620,14 @@ begin
       DataArrayFlow1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayFlow1.DataType := rdtDouble;
       DataArrayFlow1.Orientation := dso3D;
-      DataArrayFlow1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayFlow1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayFlow1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayFlow1.AddMethod := vamAveragedDelayed;
       FSutraGenFlowRate1.Add(ThreeDDisplayTime, DataArrayFlow1);
 
@@ -28583,7 +28635,14 @@ begin
       DataArrayFlow2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayFlow2.DataType := rdtDouble;
       DataArrayFlow2.Orientation := dso3D;
-      DataArrayFlow2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayFlow2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayFlow2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayFlow2.AddMethod := vamAveragedDelayed;
       FSutraGenFlowRate2.Add(ThreeDDisplayTime, DataArrayFlow2);
 
@@ -28591,7 +28650,14 @@ begin
       DataArrayU1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayU1.DataType := rdtDouble;
       DataArrayU1.Orientation := dso3D;
-      DataArrayU1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayU1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayU1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayU1.AddMethod := vamAveragedDelayed;
       FSutraGenFlowU1.Add(ThreeDDisplayTime, DataArrayU1);
 
@@ -28599,7 +28665,14 @@ begin
       DataArrayU2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayU2.DataType := rdtDouble;
       DataArrayU2.Orientation := dso3D;
-      DataArrayU2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayU2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayU2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayU2.AddMethod := vamAveragedDelayed;
       FSutraGenFlowU2.Add(ThreeDDisplayTime, DataArrayU2);
 
@@ -28684,7 +28757,14 @@ begin
       DataArrayTranU1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranU1.DataType := rdtDouble;
       DataArrayTranU1.Orientation := dso3D;
-      DataArrayTranU1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayTranU1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayTranU1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayTranU1.AddMethod := vamAveragedDelayed;
       FSutraGenTranU1.Add(ThreeDDisplayTime, DataArrayTranU1);
 
@@ -28692,7 +28772,14 @@ begin
       DataArrayTranU2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranU2.DataType := rdtDouble;
       DataArrayTranU2.Orientation := dso3D;
-      DataArrayTranU2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayTranU2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayTranU2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayTranU2.AddMethod := vamAveragedDelayed;
       FSutraGenTranU2.Add(ThreeDDisplayTime, DataArrayTranU2);
 
@@ -28700,7 +28787,14 @@ begin
       DataArrayTranQU1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranQU1.DataType := rdtDouble;
       DataArrayTranQU1.Orientation := dso3D;
-      DataArrayTranQU1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayTranQU1.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayTranQU1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayTranQU1.AddMethod := vamAveragedDelayed;
       FSutraGenTranQU1.Add(ThreeDDisplayTime, DataArrayTranQU1);
 
@@ -28708,7 +28802,14 @@ begin
       DataArrayTranQU2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranQU2.DataType := rdtDouble;
       DataArrayTranQU2.Orientation := dso3D;
-      DataArrayTranQU2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      if SutraMesh.MeshType = mt3D then
+      begin
+        DataArrayTranQU2.UpdateDimensions(SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end
+      else
+      begin
+        DataArrayTranQU2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      end;
       DataArrayTranQU2.AddMethod := vamAveragedDelayed;
       FSutraGenTranQU2.Add(ThreeDDisplayTime, DataArrayTranQU2);
 
@@ -39381,6 +39482,39 @@ begin
       Beep;
       MessageDlg(E.Message, mtError, [mbOK], 0);
     end;
+  end;
+end;
+
+procedure TPhastModel.ExportPestInput(FileName: string; RunPest: Boolean);
+var
+  PestControlWriter: TPestControlFileWriter;
+  BatchFileName: string;
+  PestName: string;
+  BatchFile: TStringList;
+begin
+  PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
+  try
+    PestControlWriter.WriteFile(FileName)
+  finally
+    PestControlWriter.Free;
+  end;
+
+  BatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+    + 'RunPest.bat';
+  PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+    + 'pest.exe ';
+  BatchFile := TStringList.Create;
+  try
+    BatchFile.Add(PestName + ChangeFileExt(ExtractFileName(FileName), ''));
+    BatchFile.Add('pause');
+    BatchFile.SaveToFile(BatchFileName);
+  finally
+    BatchFile.Free;
+  end;
+
+  if RunPest then
+  begin
+    RunAProgram('"' + BatchFileName + '"');
   end;
 end;
 

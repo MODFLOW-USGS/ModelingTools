@@ -715,7 +715,8 @@ uses
   PestControlFileWriterUnit in 'PestControlFileWriterUnit.pas',
   PestParamGroupsUnit in 'PestParamGroupsUnit.pas',
   PestObsGroupUnit in 'PestObsGroupUnit.pas',
-  frameParentChildUnit in 'frameParentChildUnit.pas' {frameParentChild: TFrame};
+  frameParentChildUnit in 'frameParentChildUnit.pas' {frameParentChild: TFrame},
+  frmRunPestUnit in 'frmRunPestUnit.pas' {frmRunPest};
 
 {$R *.res}
 
@@ -730,6 +731,7 @@ begin
   Application.CreateForm(TfrmScreenObjectProperties, frmScreenObjectProperties);
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
+  Application.CreateForm(TfrmRunPest, frmRunPest);
   //  Application.CreateForm(TfrmSelectedObjects, frmSelectedObjects);
   Application.CreateForm(TfrmColors, frmColors);
 //  Application.CreateForm(TfrmPEST, frmPEST);

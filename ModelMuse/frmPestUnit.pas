@@ -8,7 +8,7 @@ uses
   JvPageList, JvExControls, Vcl.ComCtrls, JvExComCtrls, JvPageListTreeView,
   ArgusDataEntry, PestPropertiesUnit, Vcl.Buttons, Vcl.ExtCtrls, UndoItems,
   frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
-  PestObsGroupUnit, System.Generics.Collections;
+  PestObsGroupUnit, System.Generics.Collections, Vcl.Mask, JvExMask, JvToolEdit;
 
 type
   TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
@@ -19,13 +19,15 @@ type
     FNewPestProperties: TPestProperties;
     FOldObsList: TObservationObjectList;
     FNewObsList: TObservationObjectList;
+    OldPestLocation: string;
+    NewPestLocation: string;
   protected
     function Description: string; override;
     procedure UpdateProperties(PestProperties: TPestProperties;
       ObsList: TObservationList);
   public
     constructor Create(var NewPestProperties: TPestProperties;
-      var NewObsList: TObservationObjectList);
+      var NewObsList: TObservationObjectList; PestDirectory: String);
     destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
@@ -148,6 +150,8 @@ type
     dlgOpenCovarianceMatrixFile: TOpenDialog;
     jvspObsGroupAssignments: TJvStandardPage;
     frameParentObsGroups: TframeParentChild;
+    diredPest: TJvDirectoryEdit;
+    lblPestDirectory: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -164,6 +168,7 @@ type
     procedure frameObservationGroupsseNumberChange(Sender: TObject);
     procedure frameObservationGroupsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
+    procedure diredPestChange(Sender: TObject);
 //    procedure comboObsGroupChange(Sender: TObject);
   private
     FObsList: TObservationList;
@@ -178,6 +183,7 @@ type
     procedure FixObsGroupNames;
     procedure HandleGroupDeletion(Group: TPestObservationGroup);
     procedure HandleAddedGroup(ObsGroup: TPestObservationGroup);
+    procedure CheckPestDirectory;
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -193,7 +199,7 @@ const StrNone = '(none)';
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls;
+  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls, PhastModelUnit;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
@@ -295,6 +301,12 @@ begin
   begin
     cbUseLqsr.Checked := False;
   end;
+end;
+
+procedure TfrmPEST.diredPestChange(Sender: TObject);
+begin
+  inherited;
+  CheckPestDirectory;
 end;
 
 procedure TfrmPEST.FormCreate(Sender: TObject);
@@ -539,9 +551,10 @@ var
   NewNode: TTreeNode;
   GroupIndex: Integer;
   TreeNode: TTreeNode;
+  Locations: TProgramLocations;
 //  InvalidateModelEvent: TNotifyEvent;
 begin
-//  frameObsGroupAssignments.FrameResize(nil);
+  Locations := frmGoPhast.PhastModel.ProgramLocations;
 
   PestProperties := frmGoPhast.PhastModel.PestProperties;
 
@@ -554,6 +567,9 @@ begin
     comboFormulaMarker.Items.IndexOf(PestProperties.ExtendedTemplateCharacter);
   cbShowPilotPoints.Checked := PestProperties.ShowPilotPoints;
   rdePilotPointSpacing.RealValue := PestProperties.PilotPointSpacing;
+
+  diredPest.Text := Locations.PestDirectory;
+  CheckPestDirectory;
   {$ENDREGION}
 
   {$REGION 'Control Data'}
@@ -962,7 +978,8 @@ begin
     end;
     {$ENDREGION}
 
-    frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties, FNewObsList));
+    frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties,
+      FNewObsList, diredPest.Text));
   finally
     PestProperties.Free
   end;
@@ -1030,17 +1047,34 @@ begin
   end;
 end;
 
+procedure TfrmPEST.CheckPestDirectory;
+begin
+  if DirectoryExists(diredPest.Text) then
+  begin
+    diredPest.Color := clWindow;
+  end
+  else
+  begin
+    diredPest.Color := clRed;
+  end;
+end;
+
 { TUndoPestOptions }
 
 constructor TUndoPestOptions.Create(var NewPestProperties: TPestProperties;
-  var NewObsList: TObservationObjectList);
+  var NewObsList: TObservationObjectList; PestDirectory: String);
 var
   InvalidateModelEvent: TNotifyEvent;
   TempList: TObservationList;
   index: Integer;
   AnObs: TCustomObservationItem;
   ATempObs: TCustomObservationItem;
+  Locations: TProgramLocations;
 begin
+  Locations := frmGoPhast.PhastModel.ProgramLocations;
+  OldPestLocation := Locations.PestDirectory;
+  NewPestLocation := PestDirectory;
+
   InvalidateModelEvent := nil;
   FOldPestProperties := TPestProperties.Create(InvalidateModelEvent);
   FOldPestProperties.Assign(frmGoPhast.PhastModel.PestProperties);
@@ -1082,16 +1116,24 @@ begin
 end;
 
 procedure TUndoPestOptions.DoCommand;
+var
+  Locations: TProgramLocations;
 begin
   inherited;
 //  frmGoPhast.PhastModel.PestProperties := FNewPestProperties;
-  UpdateProperties(FNewPestProperties, FNewObsList)
+  UpdateProperties(FNewPestProperties, FNewObsList);
+  Locations := frmGoPhast.PhastModel.ProgramLocations;
+  Locations.PestDirectory := NewPestLocation;
 end;
 
 procedure TUndoPestOptions.Undo;
+var
+  Locations: TProgramLocations;
 begin
   inherited;
-  UpdateProperties(FOldPestProperties, FOldObsList)
+  UpdateProperties(FOldPestProperties, FOldObsList);
+  Locations := frmGoPhast.PhastModel.ProgramLocations;
+  Locations.PestDirectory := OldPestLocation;
 end;
 
 procedure TUndoPestOptions.UpdateProperties(PestProperties: TPestProperties;
