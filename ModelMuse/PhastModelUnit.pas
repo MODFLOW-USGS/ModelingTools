@@ -10037,7 +10037,8 @@ const
 //               Bug fix: Fixed a bug that could cause an error when exporting
 //                SUTRA model if not time schedule has been defined.
 
-
+//               Bug fix: Fixed import of multiple ASCII grid files
+//                simultaneously.
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.21';

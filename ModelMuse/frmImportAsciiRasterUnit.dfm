@@ -29,6 +29,21 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
     Height = 18
     Caption = 'to'
   end
+  object lblWarning: TLabel [4]
+    Left = 8
+    Top = 299
+    Width = 257
+    Height = 57
+    Caption = 'When importing multiple files, all must have the same points. '
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Style = [fsBold]
+    ParentFont = False
+    WordWrap = True
+  end
   inherited comboDataSets: TComboBox
     Top = 37
     Width = 549
@@ -87,9 +102,9 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
     ExplicitLeft = 350
     ExplicitTop = 299
   end
-  object rgFilterMethod: TRadioGroup [13]
+  object rgFilterMethod: TRadioGroup [14]
     Left = 360
-    Top = 84
+    Top = 91
     Width = 272
     Height = 140
     Anchors = [akLeft, akTop, akRight]
@@ -103,7 +118,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
       'None')
     TabOrder = 3
   end
-  object rdgFilesAndDataSets: TRbwDataGrid4 [14]
+  object rdgFilesAndDataSets: TRbwDataGrid4 [15]
     Left = 8
     Top = 8
     Width = 624
@@ -201,12 +216,12 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
     ColWidths = (
       20
       20
-      20)
+      22)
     RowHeights = (
       24
       24)
   end
-  object comboModel: TComboBox [15]
+  object comboModel: TComboBox [16]
     Left = 8
     Top = 187
     Width = 281
@@ -214,7 +229,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
     Style = csDropDownList
     TabOrder = 7
   end
-  object comboFromUnits: TComboBox [16]
+  object comboFromUnits: TComboBox [17]
     Left = 271
     Top = 267
     Width = 145
@@ -231,7 +246,7 @@ inherited frmImportAsciiRaster: TfrmImportAsciiRaster
       'feet'
       'miles')
   end
-  object comboToUnits: TComboBox [17]
+  object comboToUnits: TComboBox [18]
     Left = 441
     Top = 267
     Width = 145

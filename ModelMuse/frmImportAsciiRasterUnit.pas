@@ -26,6 +26,7 @@ type
     comboFromUnits: TComboBox;
     lblTo: TLabel;
     comboToUnits: TComboBox;
+    lblWarning: TLabel;
     procedure btnOKClick(Sender: TObject);
     procedure rdgFilesAndDataSetsButtonClick(Sender: TObject; ACol,
       ARow: Integer);
@@ -330,6 +331,8 @@ var
   ConvertUnits: boolean;
   FromUnits: TSupportedLengthConv;
   ToUnits: TSupportedLengthConv;
+  FileNames: TStrings;
+  ShouldCreateScreenObject: Boolean;
 //  LocalModel: TCustomModel;
   function ConvertPoint(const A3D_Point: TPoint3D): TPoint2D;
   begin
@@ -350,6 +353,8 @@ begin
     ToUnits := slcMeter;
   end;
 
+  FileNames := OpenDialogFile.Files;
+
   LocalModel := comboModel.Items.Objects[comboModel.ItemIndex] as TCustomModel;
   AScreenObject := nil;
   try
@@ -369,65 +374,80 @@ begin
 
         ScreenObjectList := TList.Create;
         try
-          Root := TScreenObject.ValidName(
-            ExtractFileRoot(OpenDialogFile.FileName)+ '_');
-          ExistingObjectCount :=
-            frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
-
-          AScreenObject :=
-            TScreenObject.CreateWithViewDirection(
-            frmGoPhast.PhastModel, vdTop,
-            UndoCreateScreenObject, False);
-          AScreenObject.Comment := 'Imported from ' + OpenDialogFile.FileName +' on ' + DateTimeToStr(Now);
-
-
-          AScreenObject.Name := Root + IntToStr(ExistingObjectCount+1);
-          AScreenObject.SetValuesOfEnclosedCells
-            := False;
-          AScreenObject.SetValuesOfIntersectedCells
-            := cbIntersectedCells.Checked;
-          AScreenObject.SetValuesByInterpolation
-            := cbInterpolation.Checked;
-          AScreenObject.ElevationCount := ecZero;
-          if LocalModel.Grid <> nil then
-          begin
-            case TEvaluatedAt(rgEvaluatedAt.ItemIndex) of
-              eaBlocks:
-                begin
-                  AScreenObject.Capacity := LocalModel.Grid.ColumnCount
-                    * LocalModel.Grid.RowCount;
-                end;
-              eaNodes:
-                begin
-                  AScreenObject.Capacity :=
-                    (LocalModel.Grid.ColumnCount+1)
-                    * (LocalModel.Grid.RowCount + 1);
-                end;
-              else
-                Assert(False);
-            end;
-          end
-          else
-          begin
-            case TEvaluatedAt(rgEvaluatedAt.ItemIndex) of
-              eaBlocks:
-                begin
-                  AScreenObject.Capacity := LocalModel.Mesh3D.Mesh2DI.ElementCount;
-                end;
-              eaNodes:
-                begin
-                  AScreenObject.Capacity := LocalModel.Mesh3D.Mesh2DI.NodeCount;
-                end;
-              else
-                Assert(False);
-            end;
-          end;
-          AScreenObject.EvaluatedAt :=
-            TEvaluatedAt(rgEvaluatedAt.ItemIndex);
-          AScreenObject.Visible := False;
-
           for DataSetIndex := 0 to DataSetCount - 1 do
           begin
+            ShouldCreateScreenObject := (DataSetIndex = 0);
+//              or (rgFilterMethod.ItemIndex = 4);
+            if ShouldCreateScreenObject then
+            begin
+              Root := TScreenObject.ValidName(
+                ExtractFileRoot(FileNames[DataSetIndex])+ '_');
+              ExistingObjectCount :=
+                frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
+
+              AScreenObject :=
+                TScreenObject.CreateWithViewDirection(
+                frmGoPhast.PhastModel, vdTop,
+                UndoCreateScreenObject, False);
+              AScreenObject.Comment := 'Imported from ' + FileNames[DataSetIndex]
+                +' on ' + DateTimeToStr(Now);
+
+
+              AScreenObject.Name := Root + IntToStr(ExistingObjectCount+1);
+              AScreenObject.SetValuesOfEnclosedCells
+                := False;
+              AScreenObject.SetValuesOfIntersectedCells
+                := cbIntersectedCells.Checked;
+              AScreenObject.SetValuesByInterpolation
+                := cbInterpolation.Checked;
+              AScreenObject.ElevationCount := ecZero;
+
+              AScreenObject.EvaluatedAt :=
+                TEvaluatedAt(rgEvaluatedAt.ItemIndex);
+              AScreenObject.Visible := False;
+            end
+            else
+            begin
+              AScreenObject.Comment := AScreenObject.Comment
+                + sLineBreak + 'and ' + FileNames[DataSetIndex];
+            end;
+
+            if ShouldCreateScreenObject then
+            begin
+              if LocalModel.Grid <> nil then
+              begin
+                case TEvaluatedAt(rgEvaluatedAt.ItemIndex) of
+                  eaBlocks:
+                    begin
+                      AScreenObject.Capacity := LocalModel.Grid.ColumnCount
+                        * LocalModel.Grid.RowCount;
+                    end;
+                  eaNodes:
+                    begin
+                      AScreenObject.Capacity :=
+                        (LocalModel.Grid.ColumnCount+1)
+                        * (LocalModel.Grid.RowCount + 1);
+                    end;
+                  else
+                    Assert(False);
+                end;
+              end
+              else
+              begin
+                case TEvaluatedAt(rgEvaluatedAt.ItemIndex) of
+                  eaBlocks:
+                    begin
+                      AScreenObject.Capacity := LocalModel.Mesh3D.Mesh2DI.ElementCount;
+                    end;
+                  eaNodes:
+                    begin
+                      AScreenObject.Capacity := LocalModel.Mesh3D.Mesh2DI.NodeCount;
+                    end;
+                  else
+                    Assert(False);
+                end;
+              end;
+            end;
 
             if rgFilterMethod.ItemIndex = 4 then
             begin
@@ -509,9 +529,9 @@ begin
                 Item.Values.Count := AScreenObject.Capacity;
                 for PointIndex := 0 to Length(FValues) - 1 do
                 begin
-                  Assert(DataSetCount = 1);
+//                  Assert(DataSetCount = 1);
                   APoint := ConvertPoint(FValues[PointIndex]);
-                  if DataSetIndex = 0 then
+                  if ShouldCreateScreenObject then
                   begin
                     if ConvertUnits then
                     begin
@@ -524,9 +544,15 @@ begin
                   end
                   else
                   begin
+                    if ConvertUnits then
+                    begin
+                      APoint := ConvertPoint2D(APoint, FromUnits, ToUnits);
+                    end;
                     if not PointsEqual(AScreenObject.Points[PointIndex], APoint) then
                     begin
-                      raise EDifferentPointsError.Create(StrPointsDontMatch);
+                      raise EDifferentPointsError.Create(
+                        Format('Point %0:d in %1:s don''t match.',
+                        [PointIndex, FAsciiRasterFileName]));
                     end;
                   end;
                   Item.Values.RealValues[PointIndex] := FValues[PointIndex].z;
@@ -653,17 +679,21 @@ begin
               AScreenObject.UsedModels.UsedWithAllModels := False;
             end;
 
-          end;
-          if AScreenObject.Count > 0 then
-          begin
-            ScreenObjectList.Add(AScreenObject);
-          end
-          else
-          begin
-            AScreenObject.Free;
-            AScreenObject := nil;
-            Beep;
-            MessageDlg(StrNoDataPointsWere , mtError, [mbOK], 0);
+            if AScreenObject.Count > 0 then
+            begin
+              if ShouldCreateScreenObject then
+              begin
+                ScreenObjectList.Add(AScreenObject);
+              end;
+            end
+            else
+            begin
+              AScreenObject.Free;
+              AScreenObject := nil;
+              Beep;
+              MessageDlg(StrNoDataPointsWere , mtError, [mbOK], 0);
+              Exit;
+            end;
           end;
 
           Undo := TUndoImportAsciiRasterFile.Create;
