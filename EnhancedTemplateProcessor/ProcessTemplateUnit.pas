@@ -430,6 +430,8 @@ var
   Splitter: TStringList;
   AParameter: TParameter;
   Value: Double;
+  ValueString: String;
+  DPos: Integer;
 begin
   if FPValFile <> nil then
   begin
@@ -467,7 +469,18 @@ begin
           raise EReadParamError.Create(Format(StrInThePVALFile, [ALine]));
         end;
         AParameter.ParameterName := Splitter[0];
-        if TryStrToFloat(Splitter[1], Value) then
+        ValueString := Splitter[1];
+        DPos := Pos('D', ValueString);
+        if DPos >= 1 then
+        begin
+          ValueString[DPos] := 'E';
+        end;
+        DPos := Pos('d', ValueString);
+        if DPos >= 1 then
+        begin
+          ValueString[DPos] := 'e';
+        end;
+        if TryStrToFloat(ValueString, Value) then
         begin
           AParameter.ParameterValue := Value;
           FParameters.Add(UpperCase(AParameter.ParameterName), AParameter);
