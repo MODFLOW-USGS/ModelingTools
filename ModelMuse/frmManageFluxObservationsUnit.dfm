@@ -164,16 +164,12 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           Top = 65
           Width = 653
           Height = 252
-          ActivePage = tabObjects
+          ActivePage = tabObservationsTimes
           Align = alClient
           TabOrder = 1
           object tabObservationsTimes: TTabSheet
             Caption = 'Observation times and values'
             OnResize = tabObservationsTimesResize
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -459,10 +455,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
             Caption = 'Mass flux observation times and values'
             ImageIndex = 2
             TabVisible = False
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             DesignSize = (
               645
               219)
@@ -941,10 +933,6 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
       object tabObservationGroupNames: TTabSheet
         Caption = 'Observation Group Names'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object rdgGroupNames: TRbwDataGrid4
           Left = 0
           Top = 0

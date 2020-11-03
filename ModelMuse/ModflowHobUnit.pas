@@ -50,7 +50,7 @@ type
     FHead: double;
     FStatFlag: TStatFlag;
     FStatistic: double;
-    FObservationGroup: string;
+//    FObservationGroup: string;
     procedure SetHead(const Value: double);
     procedure SetStatFlag(const Value: TStatFlag);
     procedure SetStatistic(const Value: double);
@@ -63,7 +63,7 @@ type
     function GetWeight: Double;
     function GetName: string;
     function GetObservationGroup: string;
-    procedure SetObservationGroup(const Value: string);
+//    procedure SetObservationGroup(const Value: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
@@ -80,8 +80,7 @@ type
     property Head: double read GetHead write SetHead;
     property Statistic: double read FStatistic write SetStatistic;
     property StatFlag: TStatFlag read GetStatFlag write SetStatFlag;
-    property ObservationGroup: string read GetObservationGroup
-      write SetObservationGroup;
+    property ObservationGroup: string read GetObservationGroup;
   end;
 
   TObservationTimeList = class;
@@ -503,8 +502,25 @@ begin
 end;
 
 function THobItem.GetObservationGroup: string;
+var
+  HobCollection: THobCollection;
 begin
-  result := FObservationGroup;
+  if Index > 0 then
+  begin
+    HobCollection := Collection as THobCollection;
+    if HobCollection.FBoundary.FMultiObsMethod = momAllHeads then
+    begin
+      Result := 'Heads';
+    end
+    else
+    begin
+      Result := 'Head_Changes';
+    end;
+  end
+  else
+  begin
+    Result := 'Heads';
+  end;
 end;
 
 function THobItem.GetStatFlag: TStatFlag;
@@ -592,10 +608,10 @@ begin
   end;
 end;
 
-procedure THobItem.SetObservationGroup(const Value: string);
-begin
-  FObservationGroup := Value;
-end;
+//procedure THobItem.SetObservationGroup(const Value: string);
+//begin
+//  FObservationGroup := Value;
+//end;
 
 procedure THobItem.SetHead(const Value: double);
 begin

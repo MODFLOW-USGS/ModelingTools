@@ -55,7 +55,8 @@ uses
   PestParamGroupsUnit, PestObsGroupUnit, frmGoPhastUnit,
   PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit,
   ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
-  ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit;
+  ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
+  ModflowPackagesUnit;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -96,8 +97,19 @@ begin
 end;
 
 function TPestControlFileWriter.NumberOfObservationGroups: Integer;
+var
+  ModflowPackages: TModflowPackages;
 begin
+  ModflowPackages := nil;
   result := Model.PestProperties.ObservationGroups.Count;
+  if Model.ModelSelection in Modflow2005Selection then
+  begin
+    ModflowPackages := Model.ModflowPackages;
+    if ModflowPackages.HobPackage.IsSelected then
+    begin
+      Inc(result, 2);
+    end;
+  end;
   if result = 0 then
   begin
     frmErrorsAndWarnings.AddError(Model, StrNoObservationGroup,

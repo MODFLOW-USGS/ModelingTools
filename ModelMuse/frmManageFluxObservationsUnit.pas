@@ -1675,6 +1675,7 @@ var
   ObsName: string;
   ParentNode : TTreeNode;
   NodeList: TList;
+  GroupName: string;
 begin
   inherited;
   NodeList := TList.Create;
@@ -1720,25 +1721,31 @@ begin
     NodeList.Free;
   end;
 
+  GroupName := '';
   if ParentNode = FChobNode then
   begin
     ObsName := 'Chob';
+    GroupName := StrCHOBflows;
   end
   else if ParentNode = FGbobNode then
   begin
     ObsName := 'Gbob';
+    GroupName := StrGHBflows;
   end
   else if ParentNode = FDrobNode then
   begin
     ObsName := 'Drob';
+    GroupName := StrDRNflows;
   end
   else if ParentNode = FRvobNode then
   begin
     ObsName := 'Rvob';
+    GroupName := StrRIVflows;
   end
   else if ParentNode = FStobNode then
   begin
     ObsName := 'Stob';
+    GroupName := StrSTRflows;
   end
   else if ParentNode = FHeadMassFluxNode then
   begin
@@ -1807,6 +1814,7 @@ begin
 
   Observations := ParentNode.Data;
   ObservationGroup := Observations.Add as TCustomFluxObservationGroup;
+  ObservationGroup.ObservationGroup := GroupName;
   ObservationGroup.ObservationName := ObsName
     + IntToStr(ParentNode.Count+1);
   ANode := tvFluxObservations.Items.AddChild(ParentNode,

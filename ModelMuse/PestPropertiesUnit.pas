@@ -438,7 +438,7 @@ type
     procedure SetLsqrProperties(const Value: TLsqrProperties);
     procedure SetObservatioGroups(const Value: TPestObservationGroups);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
     Destructor Destroy; override;
     procedure InitializeVariables;
@@ -471,7 +471,7 @@ type
 implementation
 
 uses
-  ZoomBox2, BigCanvasMethods, frmGoPhastUnit;
+  ZoomBox2, BigCanvasMethods, frmGoPhastUnit, PhastModelUnit;
 
 { TPestProperties }
 
@@ -499,15 +499,25 @@ begin
   end;
 end;
 
-constructor TPestProperties.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TPestProperties.Create(Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
 begin
-  inherited;
+  if Model = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := Model.Invalidate;
+  end;
+  inherited Create(InvalidateModelEvent);
   FStoredPilotPointSpacing := TRealStorage.Create;
   FPestControlData := TPestControlData.Create(InvalidateModelEvent);
   FSvdProperties :=
     TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
   FLsqrProperties := TLsqrProperties.Create(InvalidateModelEvent);
-  FObservatioGroups := TPestObservationGroups.Create(InvalidateModelEvent);
+  FObservatioGroups := TPestObservationGroups.Create(Model);
   InitializeVariables;
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
 end;

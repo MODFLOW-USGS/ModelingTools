@@ -24,7 +24,8 @@ unit FluxObservationUnit;
 
 interface
 
-uses SysUtils, Classes, GoPhastTypes, FormulaManagerUnit;
+uses SysUtils, Classes, GoPhastTypes, FormulaManagerUnit, ObsInterfaceUnit,
+  PestObsGroupUnit;
 
 type
   TCustomFluxObservationItem = class(TPhastCollectionItem)
@@ -39,6 +40,9 @@ type
     // See @link(ObservedValue).
     procedure SetObservedValue(const Value: double);
     procedure SetComment(const Value: string);
+ protected
+    function GetTime: double;
+    function GetObservedValue: double;
   public
     // If Source is a @classname, @name copies the published properties
     // of @classname from the source.
@@ -46,21 +50,30 @@ type
     function ObsNameTimeString: string;
   published
     // @name is the time at which the observation was made.
-    property Time: double read FTime write SetTime;
+    property Time: double read GetTime write SetTime;
     // @name is the observed value of flux.  In automated calibration
     // procedures, the observed value is compared with the
     // simulated value to evaluate the quality of the calibration.
-    property ObservedValue: double read FObservedValue write SetObservedValue;
+    property ObservedValue: double read GetObservedValue write SetObservedValue;
     property Comment: string read FComment write SetComment;
   end;
 
   // @name represents a single flux observation
-  TFluxObservation = class(TCustomFluxObservationItem)
+  TFluxObservation = class(TCustomFluxObservationItem, ITimeObservationItem)
   private
     FStatFlag: TStatFlag;
     FStatistic: double;
+//    FObservationGroup: string;
     procedure SetStatFlag(const Value: TStatFlag);
     procedure SetStatistic(const Value: double);
+    function GetObservationGroup: string;
+//    procedure SetObservationGroup(const Value: string);
+  protected
+    function GetName: string;
+    function GetWeight: Double;
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     // If Source is a @classname, @name copies the published properties
     // of @classname from the source.
@@ -68,18 +81,22 @@ type
   published
     property Statistic: double read FStatistic write SetStatistic;
     property StatFlag: TStatFlag read FStatFlag write SetStatFlag;
+    property ObservationGroup: string read GetObservationGroup;
   end;
 
-  TCustomTFluxObservations = class(TPhastCollection)
+  TCustomFluxObservations = class(TPhastCollection)
   public
     // If Source is a @classname, @name copies the contents
     // of @classname from the source.
     procedure Assign(Source: TPersistent); override;
   end;
 
+  TFluxObservationGroup = class;
+
   {@name is a collection of @link(TFluxObservation)s.}
-  TFluxObservations = class(TCustomTFluxObservations)
+  TFluxObservations = class(TCustomFluxObservations)
   private
+    FFluxObsGroup: TFluxObservationGroup;
     // See @link(Items).
     function GetItems(Index: integer): TFluxObservation;
     // See @link(Items).
@@ -87,7 +104,8 @@ type
   public
     // If Source is a @classname, @name copies the contents
     // of @classname from the source.
-    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    constructor Create(InvalidateModelEvent: TNotifyEvent;
+      FluxObsGroup: TFluxObservationGroup);
     // @name provides read and write access to the @link(TFluxObservation)s
     // stored in @classname.
     property Items[Index: integer]: TFluxObservation read GetItems
@@ -191,11 +209,15 @@ type
     // See @link(ObservationFactors).
     FObservationFactors: TObservationFactors;
     FPurpose: TObservationPurpose;
+    FObservationGroup: string;
     // See @link(ObservationName).
     procedure SetObservationName(Value: string);
     // See @link(ObservationFactors).
     procedure SetObservationFactors(const Value: TObservationFactors);
     procedure SetPurpose(const Value: TObservationPurpose);
+  protected
+    procedure SetObservationGroup(const Value: string); virtual;
+    function GetObservationGroup: string; virtual;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -226,6 +248,7 @@ type
     property ObservationFactors: TObservationFactors read FObservationFactors
       write SetObservationFactors;
     property Purpose: TObservationPurpose read FPurpose write SetPurpose;
+    property ObservationGroup: string read GetObservationGroup write SetObservationGroup;
   end;
 
   // @name defines one group of flux observation.  Each group
@@ -234,8 +257,13 @@ type
   private
     // See @link(ObservationTimes).
     FObservationTimes: TFluxObservations;
+    FPestObservationGroup: TPestObservationGroup;
     // See @link(ObservationTimes).
     procedure SetObservationTimes(const Value: TFluxObservations);
+    procedure SetPestObservationGroup(const Value: TPestObservationGroup);
+  protected
+    procedure SetObservationGroup(const Value: string); override;
+    function GetObservationGroup: string; override;
   public
     // if Source is a @classname, name copies the published
     // properties of Source.
@@ -247,6 +275,8 @@ type
     // added to ErrorRoots and ErrorMessages
     procedure CheckObservationTimes(ErrorRoots, ErrorMessages: TStringList);
     function FluxObsType: TFluxObsType;
+    property PestObservationGroup: TPestObservationGroup
+      read FPestObservationGroup write SetPestObservationGroup;
   published
     // @name stores the observation times and observed fluxes at
     // those times.
@@ -318,7 +348,7 @@ implementation
 
 uses
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, frmGoPhastUnit,
-  Modflow6ObsUnit, ModflowTimeUnit;
+  Modflow6ObsUnit, ModflowTimeUnit, PestPropertiesUnit;
 
 resourcestring
   StrInvalidObservation = 'Invalid observation time in the %0:s observation: '
@@ -503,7 +533,7 @@ end;
 constructor TFluxObservationGroup.Create(Collection: TCollection);
 begin
   inherited;
-  FObservationTimes := TFluxObservations.Create(OnInvalidateModel);
+  FObservationTimes := TFluxObservations.Create(OnInvalidateModel, self);
 //    (Collection as TCustomFluxObservationGroups).Model);
 end;
 
@@ -518,10 +548,41 @@ begin
   result := (Collection as TFluxObservationGroups).FluxObservationType;
 end;
 
+function TFluxObservationGroup.GetObservationGroup: string;
+begin
+  if FPestObservationGroup <> nil then
+  begin
+    result := FPestObservationGroup.ObsGroupName;
+  end
+  else
+  begin
+    result := inherited;
+  end;
+end;
+
+procedure TFluxObservationGroup.SetObservationGroup(const Value: string);
+var
+  PestProperties: TPestProperties;
+begin
+  inherited;
+  PestProperties := frmGoPhast.PhastModel.PestProperties;
+  PestObservationGroup := PestProperties.ObservationGroups.GetObsGroupByName(Value);
+end;
+
 procedure TFluxObservationGroup.SetObservationTimes(
   const Value: TFluxObservations);
 begin
   FObservationTimes.Assign(Value);
+end;
+
+procedure TFluxObservationGroup.SetPestObservationGroup(
+  const Value: TPestObservationGroup);
+begin
+  FPestObservationGroup := Value;
+  if FPestObservationGroup <> nil then
+  begin
+    inherited SetObservationGroup(FPestObservationGroup.ObsGroupName);
+  end;
 end;
 
 { TFluxObservation }
@@ -538,6 +599,76 @@ begin
   end;
   inherited;
 end;
+
+function TFluxObservation.GetName: string;
+var
+  FluxCollection: TFluxObservations;
+begin
+  result := '';
+  if Collection is TFluxObservations then
+  begin
+    FluxCollection := TFluxObservations(Collection);
+    result := FluxCollection.FFluxObsGroup.ObservationName
+      + '_' + ObsNameTimeString;
+  end;
+end;
+
+function TFluxObservation.GetObservationGroup: string;
+var
+  FluxCollection: TFluxObservations;
+begin
+  result := '';
+  if Collection is TFluxObservations then
+  begin
+    FluxCollection := TFluxObservations(Collection);
+    result := FluxCollection.FFluxObsGroup.ObservationGroup;
+  end;
+end;
+
+function TFluxObservation.GetWeight: Double;
+begin
+  result := 0;
+  case StatFlag of
+    stVariance:
+      begin
+        result := 1/Statistic;
+      end;
+    stStandardDev:
+      begin
+        result := 1/Sqr(Statistic);
+      end;
+    stCoefVar:
+      begin
+        // Coefficient of variation = mean/standard deviation
+        // SD := ObservedValue/Statistic;
+        //result :=  1/Sqr(ObservedValue/Statistic);
+        result := Sqr(Statistic/ObservedValue);
+      end;
+    stWeight:
+      begin
+        result := Statistic;
+      end;
+    stSquaredWeight:
+      begin
+        result := Sqrt(Statistic);
+      end;
+  end;
+end;
+
+function TFluxObservation.QueryInterface(const IID: TGUID; out Obj): HResult;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
+end;
+
+//procedure TFluxObservation.SetObservationGroup(const Value: string);
+//begin
+//  FObservationGroup := Value;
+//end;
 
 procedure TFluxObservation.SetStatFlag(const Value: TStatFlag);
 begin
@@ -556,6 +687,16 @@ begin
     FStatistic := Value;
   end;
 end;
+function TFluxObservation._AddRef: Integer;
+begin
+  result := -1;
+end;
+
+function TFluxObservation._Release: Integer;
+begin
+  result := -1;
+end;
+
 { TFluxObservations }
 
 function TFluxObservations.Add: TFluxObservation;
@@ -563,19 +704,10 @@ begin
   result := inherited Add as TFluxObservation;
 end;
 
-constructor TFluxObservations.Create(InvalidateModelEvent: TNotifyEvent);
-//var
-//  InvalidateModelEvent: TNotifyEvent;
+constructor TFluxObservations.Create(InvalidateModelEvent: TNotifyEvent;
+  FluxObsGroup: TFluxObservationGroup);
 begin
-//  FModel := Model;
-//  if Model = nil then
-//  begin
-//    InvalidateModelEvent := nil;
-//  end
-//  else
-//  begin
-//    InvalidateModelEvent := Model.Invalidate;
-//  end;
+  FFluxObsGroup := FluxObsGroup;
   inherited Create(TFluxObservation, InvalidateModelEvent);
 end;
 
@@ -888,14 +1020,14 @@ end;
 
 { TCustomTFluxObservations }
 
-procedure TCustomTFluxObservations.Assign(Source: TPersistent);
+procedure TCustomFluxObservations.Assign(Source: TPersistent);
 var
-  SourceCollection: TCustomTFluxObservations;
+  SourceCollection: TCustomFluxObservations;
   Index: integer;
 begin
-  if Source is TCustomTFluxObservations then
+  if Source is TCustomFluxObservations then
   begin
-    SourceCollection := TCustomTFluxObservations(Source);
+    SourceCollection := TCustomFluxObservations(Source);
     if Count = SourceCollection.Count then
     begin
       for Index := 0 to Count - 1 do
@@ -939,6 +1071,7 @@ begin
     ObservationName := SourceItem.ObservationName;
     ObservationFactors := SourceItem.ObservationFactors;
     Purpose := SourceItem.Purpose;
+    ObservationGroup := SourceItem.ObservationGroup;
   end
   else
   begin
@@ -963,6 +1096,11 @@ procedure TCustomFluxObservationGroup.SetObservationFactors
   (const Value: TObservationFactors);
 begin
   FObservationFactors.Assign(Value);
+end;
+
+procedure TCustomFluxObservationGroup.SetObservationGroup(const Value: string);
+begin
+  FObservationGroup := Value;
 end;
 
 procedure TCustomFluxObservationGroup.SetPurpose(const Value
@@ -1009,6 +1147,11 @@ end;
 procedure TCustomFluxObservationGroup.EliminatedDeletedScreenObjects;
 begin
   ObservationFactors.EliminatedDeletedScreenObjects;
+end;
+
+function TCustomFluxObservationGroup.GetObservationGroup: string;
+begin
+  result := FObservationGroup;
 end;
 
 { TCustomFluxObservationGroups }
@@ -1118,6 +1261,16 @@ begin
   begin
     Items[Index].CheckObservationTimes(ErrorRoots, ErrorMessages);
   end;
+end;
+
+function TCustomFluxObservationItem.GetObservedValue: double;
+begin
+  result := FObservedValue
+end;
+
+function TCustomFluxObservationItem.GetTime: double;
+begin
+  result := FTime;
 end;
 
 function TCustomFluxObservationItem.ObsNameTimeString: string;

@@ -12,17 +12,34 @@ type
 
     procedure SetObservedValue(const Value: double);
     procedure SetTime(const Value: double);
-    procedure SetObservationGroup(const Value: string);
 
     property Name: string read GetName;
     property ObservedValue: double read GetObservedValue
       write SetObservedValue;
     property Time: double read GetTime write SetTime;
     property Weight: Double read GetWeight;
-    property ObservationGroup: string read GetObservationGroup
-      write SetObservationGroup;
+    property ObservationGroup: string read GetObservationGroup;
   end;
 
+  IObservationGroup = interface(IUnknown)
+    function GetAbsoluteCorrelationFileName: string;
+    function GetGroupTarget: Double;
+    function GetObsGroupName: string;
+    function GetUseGroupTarget: Boolean;
+
+    procedure SetAbsoluteCorrelationFileName(const Value: string);
+    procedure SetGroupTarget(const Value: Double);
+    procedure SetObsGroupName(Value: string);
+    procedure SetUseGroupTarget(const Value: Boolean);
+
+    property AbsoluteCorrelationFileName: string
+      read GetAbsoluteCorrelationFileName write SetAbsoluteCorrelationFileName;
+    property GroupTarget: Double read GetGroupTarget write SetGroupTarget;
+    property ObsGroupName: string read GetObsGroupName write SetObsGroupName;
+    property UseGroupTarget: Boolean read GetUseGroupTarget
+      write SetUseGroupTarget;
+
+  end;
 
 
 implementation

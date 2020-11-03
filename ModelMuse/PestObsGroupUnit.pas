@@ -3,10 +3,11 @@ unit PestObsGroupUnit;
 interface
 
 uses
-  GoPhastTypes, System.Classes, System.SysUtils;
+  GoPhastTypes, System.Classes, System.SysUtils, ObsInterfaceUnit,
+  OrderedCollectionUnit;
 
 type
-  TPestObservationGroup = class(TPhastCollectionItem)
+  TPestObservationGroup = class(TOrderedItem, IObservationGroup)
   private
     FObsGroupName: string;
     FUseGroupTarget: Boolean;
@@ -20,20 +21,28 @@ type
     procedure SetUseGroupTarget(const Value: Boolean);
     function GetGroupTarget: Double;
     procedure SetGroupTarget(const Value: Double);
+    function GetObsGroupName: string;
+    function GetUseGroupTarget: Boolean;
+    function GetAbsoluteCorrelationFileName: string;
+  protected
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     // COVFLE]
     property AbsoluteCorrelationFileName: string
-      read FAbsoluteCorrelationFileName write SetAbsoluteCorrelationFileName;
+      read GetAbsoluteCorrelationFileName write SetAbsoluteCorrelationFileName;
     // GTARG
     property GroupTarget: Double read GetGroupTarget write SetGroupTarget;
   published
     // OBGNME
-    property ObsGroupName: string read FObsGroupName write SetObsGroupName;
+    property ObsGroupName: string read GetObsGroupName write SetObsGroupName;
     // GTARG
-    property UseGroupTarget: Boolean read FUseGroupTarget
+    property UseGroupTarget: Boolean read GetUseGroupTarget
       write SetUseGroupTarget;
     // GTARG
     property StoredGroupTarget: TRealStorage read FStoredGroupTarget
@@ -43,15 +52,16 @@ type
       read GetRelativCorrelationFileName write SetRelativCorrelationFileName;
   end;
 
-  TPestObservationGroups = class(TPhastCollection)
+  TPestObservationGroups = class(TEnhancedOrderedCollection)
   private
     function GetParamGroup(Index: Integer): TPestObservationGroup;
     procedure SetParamGroup(Index: Integer; const Value: TPestObservationGroup);
   public
-    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    constructor Create(Model: TBaseModel);
     function Add: TPestObservationGroup;
     property Items[Index: Integer]: TPestObservationGroup read GetParamGroup
       write SetParamGroup; default;
+    function GetObsGroupByName(ObsGroupName: string): TPestObservationGroup;
   end;
 
   function ValidObsGroupName(Value: string): string;
@@ -107,18 +117,29 @@ constructor TPestObservationGroup.Create(Collection: TCollection);
 begin
   inherited;
   FStoredGroupTarget := TRealStorage.Create;
-  FStoredGroupTarget.OnChange := OnInvalidateModel;
+  FStoredGroupTarget.OnChange := OnInvalidateModelEvent;
 end;
 
 destructor TPestObservationGroup.Destroy;
 begin
+//  frmGoPhast.PhastModel.NotifyPestObsGroupNameDestroy(self);
   FStoredGroupTarget.Free;
   inherited;
+end;
+
+function TPestObservationGroup.GetAbsoluteCorrelationFileName: string;
+begin
+  result := FAbsoluteCorrelationFileName;
 end;
 
 function TPestObservationGroup.GetGroupTarget: Double;
 begin
   result := FStoredGroupTarget.Value;
+end;
+
+function TPestObservationGroup.GetObsGroupName: string;
+begin
+  result := FObsGroupName;
 end;
 
 function TPestObservationGroup.GetRelativCorrelationFileName: string;
@@ -134,10 +155,43 @@ begin
   end;
 end;
 
+function TPestObservationGroup.GetUseGroupTarget: Boolean;
+begin
+  result := FUseGroupTarget;
+end;
+
+function TPestObservationGroup.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  OtherItem: TPestObservationGroup;
+begin
+  result := AnotherItem is TPestObservationGroup;
+  if result then
+  begin
+    OtherItem := TPestObservationGroup(AnotherItem);
+    result :=
+      (OtherItem.ObsGroupName = ObsGroupName)
+      and (OtherItem.GroupTarget = GroupTarget)
+      and (OtherItem.AbsoluteCorrelationFileName = AbsoluteCorrelationFileName)
+      and (OtherItem.UseGroupTarget = UseGroupTarget)
+  end;
+end;
+
+
+function TPestObservationGroup.QueryInterface(const IID: TGUID;
+  out Obj): HResult;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
+end;
+
 procedure TPestObservationGroup.SetAbsoluteCorrelationFileName(
   const Value: string);
 begin
-  SetStringProperty(FAbsoluteCorrelationFileName, Value);
+  SetCaseSensitiveStringProperty(FAbsoluteCorrelationFileName, Value);
 end;
 
 procedure TPestObservationGroup.SetGroupTarget(const Value: Double);
@@ -147,7 +201,7 @@ end;
 
 procedure TPestObservationGroup.SetObsGroupName(Value: string);
 begin
-  SetStringProperty(FObsGroupName, ValidObsGroupName(Value));
+  SetCaseSensitiveStringProperty(FObsGroupName, ValidObsGroupName(Value));
 end;
 
 procedure TPestObservationGroup.SetRelativCorrelationFileName(
@@ -173,6 +227,16 @@ begin
   SetBooleanProperty(FUseGroupTarget, Value);
 end;
 
+function TPestObservationGroup._AddRef: Integer;
+begin
+  result := -1;
+end;
+
+function TPestObservationGroup._Release: Integer;
+begin
+  result := -1;
+end;
+
 { TPestObservationGroups }
 
 function TPestObservationGroups.Add: TPestObservationGroup;
@@ -180,9 +244,27 @@ begin
   result := inherited Add as TPestObservationGroup
 end;
 
-constructor TPestObservationGroups.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TPestObservationGroups.Create(Model: TBaseModel);
 begin
-  inherited Create(TPestObservationGroup, InvalidateModelEvent);
+  inherited Create(TPestObservationGroup, Model);
+end;
+
+function TPestObservationGroups.GetObsGroupByName(
+  ObsGroupName: string): TPestObservationGroup;
+var
+  Index: Integer;
+  AnItem: TPestObservationGroup;
+begin
+  result := nil;
+  for Index := 0 to Count - 1 do
+  begin
+    AnItem :=Items[Index];
+    if AnItem.ObsGroupName = ObsGroupName then
+    begin
+      result := AnItem;
+      Exit;
+    end;
+  end;
 end;
 
 function TPestObservationGroups.GetParamGroup(

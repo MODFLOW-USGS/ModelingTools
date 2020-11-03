@@ -41,13 +41,18 @@ uses System.UITypes,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
-  PestPropertiesUnit, PestParamGroupsUnit;
+  PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
   OldHorizontal_Transv_Dispersivity = 'Horizontal_Transv_Dispersivity';
   OldVertical_Transv_Dispersivity = 'Vertical_Transv_Dispersivity';
   kHufThickness = '_Thickness';
+  StrSTRflows = 'STR_flows';
+  StrRIVflows = 'RIV_flows';
+  StrDRNflows = 'DRN_flows';
+  StrGHBflows = 'GHB_flows';
+  StrCHOBflows = 'CHOB_flows';
 
 resourcestring
   StrHufThickness = kHufThickness;
@@ -3307,6 +3312,8 @@ that affects the model output should also have a comment. }
       stored False
     {$ENDIF}
     ;
+    procedure SetFlowObsGroupNames; virtual;
+//    procedure NotifyPestObsGroupNameDestroy(Group: TPestObservationGroup); virtual;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -4587,6 +4594,8 @@ that affects the model output should also have a comment. }
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
     procedure ExportPestInput(FileName: string; RunPest: Boolean);
+    procedure SetFlowObsGroupNames; override;
+//    procedure NotifyPestObsGroupNameDestroy(Group: TPestObservationGroup); override;
   published
     // The following properties are obsolete.
 
@@ -18336,6 +18345,7 @@ begin
     end;
   end;
   FSutraMesh.Assign(SutraSettings);
+  SetFlowObsGroupNames
 end;
 
 procedure TPhastModel.InvalidateSegments;
@@ -18610,6 +18620,18 @@ end;
 procedure TPhastModel.SetFootprintProperties(const Value: TFootprintProperties);
 begin
   FootprintProperties.Assign(Value);
+end;
+
+procedure TPhastModel.SetFlowObsGroupNames;
+var
+  ChildIndex: Integer;
+begin
+  inherited;
+  for ChildIndex := 0 to ChildModels.Count - 1 do
+  begin
+    ChildModels[ChildIndex].ChildModel.SetFlowObsGroupNames;
+  end;
+
 end;
 
 procedure TPhastModel.SetDiffusivity(const Value: double);
@@ -26322,6 +26344,18 @@ begin
   end;
 end;
 
+//procedure TPhastModel.NotifyPestObsGroupNameDestroy(
+//  Group: TPestObservationGroup);
+//var
+//  ChildIndex: Integer;
+//begin
+//  inherited;
+//  for ChildIndex := 0 to ChildModels.Count - 1 do
+//  begin
+//    ChildModels[ChildIndex].ChildModel.NotifyPestObsGroupNameDestroy(Group);
+//  end;
+//end;
+
 function TPhastModel.NpfUsed(Sender: TObject): boolean;
 var
   ChildIndex: Integer;
@@ -28453,7 +28487,7 @@ begin
 
   FVelocityVectors := TVectorCollection.Create(self);
 
-  FPestProperties := TPestProperties.Create(Invalidate);
+  FPestProperties := TPestProperties.Create(self);
   FPilotPointDataArrays := TDataArrayList.Create;
 end;
 
@@ -29298,6 +29332,75 @@ end;
 procedure TCustomModel.SetRiverObservations(const Value: TFluxObservationGroups);
 begin
   FRiverObservations.Assign(Value);
+end;
+
+procedure TCustomModel.SetFlowObsGroupNames;
+var
+  ItemIndex: Integer;
+  ObsGroup: TFluxObservationGroup;
+  ObsGroups: TPestObservationGroups;
+  procedure HandleObsGroup(ObsGroup: TFluxObservationGroup; GroupName: string);
+  var
+    ItemPos: Integer;
+  begin
+    if (ObsGroup.PestObservationGroup = nil)
+      and (ObsGroup.ObservationGroup = '') then
+    begin
+      ObsGroup.ObservationGroup := GroupName;
+    end
+    else
+    begin
+      ItemPos := ObsGroups.IndexOf(ObsGroup.PestObservationGroup);
+      if ItemPos < 0 then
+      begin
+        ObsGroup.PestObservationGroup := nil;
+        ObsGroup.ObservationGroup := ObsGroup.ObservationGroup;
+      end
+      else
+      begin
+        ObsGroup.PestObservationGroup := ObsGroups[ItemPos];
+      end;
+    end;
+  end;
+begin
+  ObsGroups := PestProperties.ObservationGroups;
+  if ObsGroups.Count = 0 then
+  begin
+    ObsGroups.Add.ObsGroupName := StrCHOBflows;
+    ObsGroups.Add.ObsGroupName := StrGHBflows;
+    ObsGroups.Add.ObsGroupName := StrDRNflows;
+    ObsGroups.Add.ObsGroupName := StrRIVflows;
+    ObsGroups.Add.ObsGroupName := StrSTRflows;
+  end;
+  for ItemIndex := 0 to HeadFluxObservations.Count - 1 do
+  begin
+    ObsGroup := HeadFluxObservations[ItemIndex];
+    HandleObsGroup(ObsGroup, StrCHOBflows);
+  end;
+
+  for ItemIndex := 0 to DrainObservations.Count - 1 do
+  begin
+    ObsGroup := DrainObservations[ItemIndex];
+    HandleObsGroup(ObsGroup, StrDRNflows);
+  end;
+
+  for ItemIndex := 0 to GhbObservations.Count - 1 do
+  begin
+    ObsGroup := GhbObservations[ItemIndex];
+    HandleObsGroup(ObsGroup, StrGHBflows);
+  end;
+
+  for ItemIndex := 0 to RiverObservations.Count - 1 do
+  begin
+    ObsGroup := RiverObservations[ItemIndex];
+    HandleObsGroup(ObsGroup, StrRIVflows);
+  end;
+
+  for ItemIndex := 0 to StreamObservations.Count - 1 do
+  begin
+    ObsGroup := StreamObservations[ItemIndex];
+    HandleObsGroup(ObsGroup, StrSTRflows);
+  end;
 end;
 
 procedure TCustomModel.SetDisplayColumn(const Value: integer);
@@ -37518,6 +37621,58 @@ function TCustomModel.Mt3d_LktIsSelected(Sender: TObject): Boolean;
 begin
   result := ModflowPackages.Mt3dLkt.IsSelected;
 end;
+
+//procedure TCustomModel.NotifyPestObsGroupNameDestroy(
+//  Group: TPestObservationGroup);
+//var
+//  ItemIndex: Integer;
+//  ObsGroup: TFluxObservationGroup;
+//begin
+//  for ItemIndex := 0 to HeadFluxObservations.Count - 1 do
+//  begin
+//    ObsGroup := HeadFluxObservations[ItemIndex];
+//    if ObsGroup.PestObservationGroup = Group then
+//    begin
+//      ObsGroup.PestObservationGroup := nil;
+//    end;
+//  end;
+//
+//  for ItemIndex := 0 to DrainObservations.Count - 1 do
+//  begin
+//    ObsGroup := DrainObservations[ItemIndex];
+//    if ObsGroup.PestObservationGroup = Group then
+//    begin
+//      ObsGroup.PestObservationGroup := nil;
+//    end;
+//  end;
+//
+//  for ItemIndex := 0 to GhbObservations.Count - 1 do
+//  begin
+//    ObsGroup := GhbObservations[ItemIndex];
+//    if ObsGroup.PestObservationGroup = Group then
+//    begin
+//      ObsGroup.PestObservationGroup := nil;
+//    end;
+//  end;
+//
+//  for ItemIndex := 0 to RiverObservations.Count - 1 do
+//  begin
+//    ObsGroup := RiverObservations[ItemIndex];
+//    if ObsGroup.PestObservationGroup = Group then
+//    begin
+//      ObsGroup.PestObservationGroup := nil;
+//    end;
+//  end;
+//
+//  for ItemIndex := 0 to StreamObservations.Count - 1 do
+//  begin
+//    ObsGroup := StreamObservations[ItemIndex];
+//    if ObsGroup.PestObservationGroup = Group then
+//    begin
+//      ObsGroup.PestObservationGroup := nil;
+//    end;
+//  end;
+//end;
 
 function TCustomModel.NpfUsed(Sender: TObject): boolean;
 begin

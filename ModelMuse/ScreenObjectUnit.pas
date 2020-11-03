@@ -19425,7 +19425,7 @@ end;
 function TScreenObject.SelectEdge(const X, Y: integer): integer;
 var
   Index: integer;
-  X1, X2, Y1, Y2: integer;
+  X1, X2, Y1, Y2: Int64;
   MinX, MaxX, MinY, MaxY: Int64;
   SectionIndex: integer;
   StartIndex: integer;

@@ -319,7 +319,7 @@ begin
   FObsList := TObservationList.Create;
   FNewObsList := TObservationObjectList.Create;
   InvalidateModelEvent := nil;
-  FLocalObsGroups := TPestObservationGroups.Create(InvalidateModelEvent);
+  FLocalObsGroups := TPestObservationGroups.Create(nil);
   FGroupDictionary := TDictionary<TPestObservationGroup, TTreeNode>.Create;
   FGroupNameDictionary := TDictionary<string, TPestObservationGroup>.Create;
 
@@ -746,7 +746,7 @@ var
   AnObs: TCustomObservationItem;
 begin
   InvalidateModelEvent := nil;
-  PestProperties := TPestProperties.Create(InvalidateModelEvent);
+  PestProperties := TPestProperties.Create(nil);
   try
 
     {$REGION 'PEST Basics'}
@@ -942,10 +942,18 @@ begin
     Grid := frameObservationGroups.Grid;
     for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
     begin
-      if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
+      AnObsGroup := Grid.Objects[Ord(pogcName), RowIndex]
+        as TPestObservationGroup;
+      if (AnObsGroup = nil) and (Grid.Cells[Ord(pogcName), RowIndex] <> '') then
       begin
         AnObsGroup := ObsGroups.Add;
-        AnObsGroup.ObsGroupName := Grid.Cells[Ord(pogcName), RowIndex];
+      end;
+      if AnObsGroup <> nil then
+      begin
+        if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
+        begin
+          AnObsGroup.ObsGroupName := Grid.Cells[Ord(pogcName), RowIndex];
+        end;
         AnObsGroup.UseGroupTarget := Grid.Checked[Ord(pogcUseTarget), RowIndex];
         AnObsGroup.GroupTarget := Grid.RealValueDefault[Ord(pogcTarget), RowIndex, 0];
         AnObsGroup.AbsoluteCorrelationFileName := Grid.Cells[Ord(pogcFileName), RowIndex];
@@ -1076,7 +1084,7 @@ begin
   NewPestLocation := PestDirectory;
 
   InvalidateModelEvent := nil;
-  FOldPestProperties := TPestProperties.Create(InvalidateModelEvent);
+  FOldPestProperties := TPestProperties.Create(nil);
   FOldPestProperties.Assign(frmGoPhast.PhastModel.PestProperties);
   FNewPestProperties := NewPestProperties;
   NewPestProperties := nil;
@@ -1124,6 +1132,7 @@ begin
   UpdateProperties(FNewPestProperties, FNewObsList);
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := NewPestLocation;
+  frmGoPhast.PhastModel.SetFlowObsGroupNames;
 end;
 
 procedure TUndoPestOptions.Undo;
@@ -1134,6 +1143,7 @@ begin
   UpdateProperties(FOldPestProperties, FOldObsList);
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := OldPestLocation;
+  frmGoPhast.PhastModel.SetFlowObsGroupNames;
 end;
 
 procedure TUndoPestOptions.UpdateProperties(PestProperties: TPestProperties;

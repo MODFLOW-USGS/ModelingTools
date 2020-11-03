@@ -30,7 +30,7 @@ type
   end;
 
   {@name is a collection of @link(TMt3dmsFluxObservation)s.}
-  TMt3dmsFluxObservations = class(TCustomTFluxObservations)
+  TMt3dmsFluxObservations = class(TCustomFluxObservations)
   private
     // See @link(Items).
     function GetItems(Index: integer): TMt3dmsFluxObservation;
