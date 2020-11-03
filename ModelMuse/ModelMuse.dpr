@@ -716,7 +716,8 @@ uses
   PestParamGroupsUnit in 'PestParamGroupsUnit.pas',
   PestObsGroupUnit in 'PestObsGroupUnit.pas',
   frameParentChildUnit in 'frameParentChildUnit.pas' {frameParentChild: TFrame},
-  frmRunPestUnit in 'frmRunPestUnit.pas' {frmRunPest};
+  frmRunPestUnit in 'frmRunPestUnit.pas' {frmRunPest},
+  ObsInterfaceUnit in 'ObsInterfaceUnit.pas';
 
 {$R *.res}
 

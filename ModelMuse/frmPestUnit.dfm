@@ -135,6 +135,15 @@ inherited frmPEST: TfrmPEST
         CheckMin = True
         ChangeDisabledColor = True
       end
+      object diredPest: TJvDirectoryEdit
+        Left = 16
+        Top = 192
+        Width = 305
+        Height = 26
+        TabOrder = 5
+        Text = 'C:\PEST'
+        OnChange = diredPestChange
+      end
     end
     object jvspControlDataMode: TJvStandardPage
       Left = 0
@@ -1201,15 +1210,6 @@ inherited frmPEST: TfrmPEST
       NumGlyphs = 2
       TabOrder = 2
     end
-  end
-  object diredPest: TJvDirectoryEdit
-    Left = 214
-    Top = 192
-    Width = 305
-    Height = 26
-    TabOrder = 3
-    Text = 'C:\PEST'
-    OnChange = diredPestChange
   end
   object dlgOpenCovarianceMatrixFile: TOpenDialog
     Left = 430

@@ -24,15 +24,16 @@ type
   private
     FTime: double;
     FComment: string;
-    procedure SetTime(const Value: double);
     procedure SetComment(const Value: string);
   protected
+    function GetTime: double;
+    procedure SetTime(const Value: double);
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   published
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent); override;
     // @name indicates the time of this observation.
-    property Time: double read FTime write SetTime;
+    property Time: double read GetTime write SetTime;
     property Comment: string read FComment write SetComment;
   end;
 
@@ -4122,6 +4123,11 @@ begin
     Comment := SourceItem.Comment;
   end;
   inherited;
+end;
+
+function TCustomLocationObservation.GetTime: double;
+begin
+  result := FTime;
 end;
 
 function TCustomLocationObservation.IsSame(AnotherItem: TOrderedItem): boolean;

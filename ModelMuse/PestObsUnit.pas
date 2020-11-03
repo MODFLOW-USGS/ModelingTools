@@ -3,15 +3,14 @@ unit PestObsUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, GoPhastTypes, System.Generics.Collections;
+  System.SysUtils, System.Classes, GoPhastTypes, System.Generics.Collections,
+  ObsInterfaceUnit;
 
 type
   TCustomObservationItem = class(TPhastCollectionItem)
   private
     FName: string;
     FComment: string;
-//    FObservedValue: double;
-//    FWeight: Double;
     FGUID: string;
     FExportedName: string;
     FStoredWeight: TRealStorage;
@@ -30,6 +29,8 @@ type
     procedure SetObservationGroup(const Value: string);
     procedure SetTempObsGroupObject(const Value: TObject);
     function GetPrint: Boolean;
+    function GetName: string;
+    function GetObservationGroup: string;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -49,7 +50,7 @@ type
       write SetTempObsGroupObject;
     property Print: Boolean read GetPrint;
   published
-    property Name: string read FName write SetName;
+    property Name: string read GetName write SetName;
     property ObservedValue: double read GetObservedValue
       write SetObservedValue Stored False;
     property Weight: Double read GetWeight write SetWeight Stored False;
@@ -58,19 +59,14 @@ type
     property StoredWeight: TRealStorage read FStoredWeight
       write SetStoredWeight;
     property Comment: string read FComment write SetComment;
-    property ObservationGroup: string read FObservationGroup write SetObservationGroup;
+    property ObservationGroup: string read GetObservationGroup write SetObservationGroup;
   end;
 
   TObservationList = TList<TCustomObservationItem>;
   TObservationObjectList = TObjectList<TCustomObservationItem>;
 
-  {
-  FStoredWeight := TRealStorage.Create;
-  FStoredWeight.OnChange := OnInvalidateModel;
-  }
-  TCustomTimeObservationItem = class(TCustomObservationItem)
+  TCustomTimeObservationItem = class(TCustomObservationItem, ITimeObservationItem)
   private
-//    FTime: double;
     FStoredTime: TRealStorage;
     procedure SetTime(const Value: double);
     procedure SetStoredTime(const Value: TRealStorage);
@@ -80,6 +76,9 @@ type
     procedure SetObsTypeIndex(Value: Integer); virtual; abstract;
     function GetObsTypeString: string; virtual; abstract;
     procedure SetObsTypeString(const Value: string); virtual; abstract;
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -209,6 +208,16 @@ begin
   FStoredWeight.Free;
   FStoredObservedValue.Free;
   inherited;
+end;
+
+function TCustomObservationItem.GetName: string;
+begin
+  result := FName;
+end;
+
+function TCustomObservationItem.GetObservationGroup: string;
+begin
+  Result := FObservationGroup;
 end;
 
 function TCustomObservationItem.GetObservedValue: double;
@@ -355,6 +364,17 @@ begin
   result := FStoredTime.Value;
 end;
 
+function TCustomTimeObservationItem.QueryInterface(const IID: TGUID;
+  out Obj): HResult;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
+end;
+
 procedure TCustomTimeObservationItem.SetStoredTime(const Value: TRealStorage);
 begin
   FStoredTime.Assign(Value);
@@ -364,6 +384,16 @@ procedure TCustomTimeObservationItem.SetTime(const Value: double);
 begin
   FStoredTime.Value := Value;
 //  SetRealProperty(FTime, Value);
+end;
+
+function TCustomTimeObservationItem._AddRef: Integer;
+begin
+  result := -1;
+end;
+
+function TCustomTimeObservationItem._Release: Integer;
+begin
+  result := -1;
 end;
 
 { TObsCompareItem }

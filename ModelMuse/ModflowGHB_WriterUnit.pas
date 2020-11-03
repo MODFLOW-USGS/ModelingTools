@@ -39,7 +39,6 @@ type
     procedure WriteCell(Cell: TValueCell;
       const DataSetIdentifier, VariableIdentifiers: string); override;
     class function ObservationExtension: string; override;
-    class function ObservationOutputExtension: string; override;
     function ObsNameWarningString: string; override;
     procedure CheckCell(ValueCell: TValueCell; const PackageName: string); override;
     procedure DoBeforeWriteCells; override;
@@ -56,11 +55,12 @@ type
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
       Purpose: TObservationPurpose);
+    class function ObservationOutputExtension: string; override;
   end;
 
 implementation
 
-uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers, 
+uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers,
   frmProgressUnit, Forms, DataSetUnit, FastGEO, ModflowMvrWriterUnit,
   ModflowMvrUnit;
 

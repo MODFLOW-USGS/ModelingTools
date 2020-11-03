@@ -53,7 +53,9 @@ implementation
 uses
   PestPropertiesUnit, ModflowParameterUnit, OrderedCollectionUnit,
   PestParamGroupsUnit, PestObsGroupUnit, frmGoPhastUnit,
-  PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit;
+  PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit,
+  ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
+  ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -218,6 +220,7 @@ end;
 procedure TPestControlFileWriter.WriteControlSection;
 var
   PestControlData: TPestControlData;
+  NINSFLE: Integer;
 begin
   PestControlData := Model.PestProperties.PestControlData;
   // First line 4.2.2.
@@ -296,8 +299,54 @@ begin
   // The pval file will always be the only file PEST writes.
   WriteInteger(1);
   // NINSFLE
+  NINSFLE := 0;
+  case Model.MOdelSelection of
+    msUndefined, msPhast, msFootPrint:
+      Assert(False);
+    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp:
+      begin
+        if Model.ModflowPackages.HobPackage.IsSelected then
+        begin
+          Inc(NINSFLE);
+        end;
+        if Model.ModflowPackages.ChobPackage.IsSelected then
+        begin
+          Inc(NINSFLE);
+        end;
+        if Model.ModflowPackages.DrobPackage.IsSelected then
+        begin
+          Inc(NINSFLE);
+        end;
+        if Model.ModflowPackages.GbobPackage.IsSelected then
+        begin
+          Inc(NINSFLE);
+        end;
+        if Model.ModflowPackages.RvobPackage.IsSelected then
+        begin
+          Inc(NINSFLE);
+        end;
+        if Model.ModflowPackages.StobPackage.IsSelected then
+        begin
+          Inc(NINSFLE);
+        end;
+        if FUsedObservations.Count > 0 then
+        begin
+          Inc(NINSFLE);
+        end;
+      end;
+    msSutra22, msSutra30:
+      begin
+        NINSFLE := 1;
+      end;
+    msModflow2015:
+      begin
+        NINSFLE := 1;
+      end;
+    else
+      Assert(False);
+  end;
   // PEST will always read all the simulated values from one file.
-  WriteInteger(1);
+  WriteInteger(NINSFLE);
   // PRECIS
   // All data will be writen in double precision
   WriteString(' double');
@@ -658,11 +707,78 @@ begin
   WriteString(TEMPFLE);
   WriteString(' ' + INFLE);
   NewLine;
-  INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
-  OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
-  WriteString(INSFLE);
-  WriteString(' ' + OUTFLE);
-  NewLine;
+  if Model.ModelSelection in Modflow2005Selection then
+  begin
+    if Model.ModflowPackages.HobPackage.IsSelected then
+    begin
+      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrHobout));
+      INSFLE := OUTFLE + '.ins';
+      WriteString(INSFLE);
+      WriteString(' ' + OUTFLE);
+      NewLine;
+    end;
+    if Model.ModflowPackages.ChobPackage.IsSelected then
+    begin
+      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+        TModflowCHD_Writer.ObservationOutputExtension));
+      INSFLE := OUTFLE + '.ins';
+      WriteString(INSFLE);
+      WriteString(' ' + OUTFLE);
+      NewLine;
+    end;
+    if Model.ModflowPackages.DrobPackage.IsSelected then
+    begin
+      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+        TModflowDRN_Writer.ObservationOutputExtension));
+      INSFLE := OUTFLE + '.ins';
+      WriteString(INSFLE);
+      WriteString(' ' + OUTFLE);
+      NewLine;
+    end;
+    if Model.ModflowPackages.GbobPackage.IsSelected then
+    begin
+      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+      TModflowGHB_Writer.ObservationOutputExtension));
+      INSFLE := OUTFLE + '.ins';
+      WriteString(INSFLE);
+      WriteString(' ' + OUTFLE);
+      NewLine;
+    end;
+    if Model.ModflowPackages.RvobPackage.IsSelected then
+    begin
+      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+        TModflowRIV_Writer.ObservationOutputExtension));
+      INSFLE := OUTFLE + '.ins';
+      WriteString(INSFLE);
+      WriteString(' ' + OUTFLE);
+      NewLine;
+    end;
+    if Model.ModflowPackages.StobPackage.IsSelected then
+    begin
+      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+        TStrWriter.ObservationOutputExtension));
+      INSFLE := OUTFLE + '.ins';
+      WriteString(INSFLE);
+      WriteString(' ' + OUTFLE);
+      NewLine;
+    end;
+    if FUsedObservations.Count > 0 then
+    begin
+      INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
+      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
+      WriteString(INSFLE);
+      WriteString(' ' + OUTFLE);
+      NewLine;
+    end;
+  end
+  else
+  begin
+    INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
+    OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
+    WriteString(INSFLE);
+    WriteString(' ' + OUTFLE);
+    NewLine;
+  end;
   NewLine;
 end;
 

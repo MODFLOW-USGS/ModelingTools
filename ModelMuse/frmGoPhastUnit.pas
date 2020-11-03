@@ -6153,6 +6153,7 @@ procedure TfrmGoPhast.EnableManageHeadObservations;
 begin
   miManageHeadObservations.Enabled :=
     (PhastModel.ModelSelection in ModflowSelection)
+    and (PhastModel.ModelSelection <> msModflow2015)
     and PhastModel.HobIsSelected
 end;
 

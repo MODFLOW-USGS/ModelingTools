@@ -66,13 +66,13 @@ type
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; override;
     // @name is the file extension used for the observation output file.
-    class function ObservationOutputExtension: string; override;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     // @name destroys the current instance of @classname.
     Destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
+    class function ObservationOutputExtension: string; override;
   end;
 
   TCustomListObsWriter = class(TCustomMf6ObservationWriter)

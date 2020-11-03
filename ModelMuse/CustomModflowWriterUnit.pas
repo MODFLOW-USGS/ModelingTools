@@ -491,8 +491,6 @@ type
     function Mf6ObservationsUsed: Boolean; virtual;
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; virtual;
-    // @name is the file extension used for the observation output file.
-    class function ObservationOutputExtension: string; virtual;
     // @name returns the name of the Observation input file.
     function ObservationFileName(AFileName: string): string;
     procedure WriteModflow6FlowObs(FileName: string;
@@ -509,6 +507,8 @@ type
     property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
     property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
+    // @name is the file extension used for the observation output file.
+    class function ObservationOutputExtension: string; virtual;
   end;
 
   {@name is used as a base class for writing typical boundary condition
@@ -7151,10 +7151,13 @@ end;
 
 constructor TFluxObsWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
+var
+  TemplateCharacter: Char;
 begin
   inherited;
+  TemplateCharacter := Model.PestProperties.TemplateCharacter;
   FPestInstructionFile:= TStringList.Create;
-  FPestInstructionFile.Add('pif @');
+  FPestInstructionFile.Add('pif ' + TemplateCharacter);
 end;
 
 destructor TFluxObsWriter.Destroy;

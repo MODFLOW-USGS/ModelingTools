@@ -3,7 +3,7 @@ unit ModflowHobUnit;
 interface
 
 uses ZLib, SysUtils, Classes, Contnrs, GoPhastTypes, ModflowBoundaryUnit,
-  OrderedCollectionUnit, DataSetUnit, ModflowCellUnit;
+  OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, ObsInterfaceUnit;
 
 type
   THobRecord = record
@@ -45,20 +45,31 @@ type
 
   // @name represents a MODFLOW head observation for one time.
   // @name is stored by @link(THobCollection).
-  THobItem = class(TCustomLocationObservation)
+  THobItem = class(TCustomLocationObservation, ITimeObservationItem)
   private
     FHead: double;
     FStatFlag: TStatFlag;
     FStatistic: double;
+    FObservationGroup: string;
     procedure SetHead(const Value: double);
     procedure SetStatFlag(const Value: TStatFlag);
     procedure SetStatistic(const Value: double);
     function GetStatFlag: TStatFlag;
     function GetHeadChange: Double;
     procedure SetHeadChange(const Value: Double);
+    function GetHead: double;
+    function ITimeObservationItem.GetObservedValue = GetHead;
+    procedure ITimeObservationItem.SetObservedValue = SetHead;
+    function GetWeight: Double;
+    function GetName: string;
+    function GetObservationGroup: string;
+    procedure SetObservationGroup(const Value: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     property HeadChange: Double read GetHeadChange write SetHeadChange;
   published
@@ -66,9 +77,11 @@ type
     procedure Assign(Source: TPersistent); override;
     // @name is the observed head
     // of this head observation.
-    property Head: double read FHead write SetHead;
+    property Head: double read GetHead write SetHead;
     property Statistic: double read FStatistic write SetStatistic;
     property StatFlag: TStatFlag read GetStatFlag write SetStatFlag;
+    property ObservationGroup: string read GetObservationGroup
+      write SetObservationGroup;
   end;
 
   TObservationTimeList = class;
@@ -451,6 +464,11 @@ begin
   inherited;
 end;
 
+function THobItem.GetHead: double;
+begin
+  result := FHead;
+end;
+
 function THobItem.GetHeadChange: Double;
 var
   LocalCollection: THobCollection;
@@ -468,6 +486,27 @@ begin
   end;
 end;
 
+function THobItem.GetName: string;
+var
+  HobCollection: THobCollection;
+begin
+  HobCollection := Collection as THobCollection;
+  Result := HobCollection.FBoundary.ObservationName;
+  if HobCollection.Count > 1 then
+  begin
+    Result := HobCollection.FBoundary.ObservationName + '_' + IntToStr(Index + 1);
+  end;
+  if Length(Result) > 12 then
+  begin
+    Result := HobCollection.FBoundary.ObservationName + IntToStr(Index + 1);
+  end;
+end;
+
+function THobItem.GetObservationGroup: string;
+begin
+  result := FObservationGroup;
+end;
+
 function THobItem.GetStatFlag: TStatFlag;
 var
   LocalCollection: THobCollection;
@@ -478,6 +517,36 @@ begin
     and (result > stStandardDev) then
   begin
     result := stVariance;
+  end;
+end;
+
+function THobItem.GetWeight: Double;
+begin
+  result := 0;
+  case StatFlag of
+    stVariance:
+      begin
+        result := 1/Statistic;
+      end;
+    stStandardDev:
+      begin
+        result := 1/Sqr(Statistic);
+      end;
+    stCoefVar:
+      begin
+        // Coefficient of variation = mean/standard deviation
+        // SD := Head/Statistic;
+        //result :=  1/Sqr(Head/Statistic);
+        result := Sqr(Statistic/Head);
+      end;
+    stWeight:
+      begin
+        result := Statistic;
+      end;
+    stSquaredWeight:
+      begin
+        result := Sqrt(Statistic);
+      end;
   end;
 end;
 
@@ -500,6 +569,16 @@ begin
   end;
 end;
 
+function THobItem.QueryInterface(const IID: TGUID; out Obj): HResult;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    result := 0
+  else
+    result := E_NOINTERFACE;
+end;
+
 procedure THobItem.SetHeadChange(const Value: Double);
 var
   LocalCollection: THobCollection;
@@ -511,6 +590,11 @@ begin
     FirstItem := LocalCollection.Items[0] as THobItem;
     Head := FirstItem.Head + Value;
   end;
+end;
+
+procedure THobItem.SetObservationGroup(const Value: string);
+begin
+  FObservationGroup := Value;
 end;
 
 procedure THobItem.SetHead(const Value: double);
@@ -539,6 +623,16 @@ begin
     InvalidateModel;
   end;
 end;
+function THobItem._AddRef: Integer;
+begin
+  result := -1;
+end;
+
+function THobItem._Release: Integer;
+begin
+  result := -1;
+end;
+
 { THobCollection }
 
 function THobCollection.CountObservationTimes(StartTime,

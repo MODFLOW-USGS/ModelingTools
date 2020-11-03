@@ -74,7 +74,6 @@ type
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
-    class function ObservationOutputExtension: string;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean;
     function ObservationsUsed: Boolean;
     class function ObservationExtension: string;
@@ -87,6 +86,7 @@ type
     property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
     property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
+    class function ObservationOutputExtension: string;
   end;
 
 implementation

@@ -48,8 +48,6 @@ type
     function BoundariesPresent: boolean; override;
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; override;
-    // @name is the file extension used for the observation output file.
-    class function ObservationOutputExtension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
     function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
     function ObsType: string; override;
@@ -60,6 +58,8 @@ type
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     Destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
+    // @name is the file extension used for the observation output file.
+    class function ObservationOutputExtension: string; override;
   end;
 
 

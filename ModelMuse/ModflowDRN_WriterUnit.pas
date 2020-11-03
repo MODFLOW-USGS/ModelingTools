@@ -28,7 +28,6 @@ type
     function CellType: TValueCellType; override;
     class function Extension: string; override;
     class function ObservationExtension: string; override;
-    class function ObservationOutputExtension: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
     function Package: TModflowPackageSelection; override;
@@ -57,6 +56,7 @@ type
     // Write flow observation package input for MF2005 etc. but not MF 6
     procedure WriteFluxObservationFile(const AFileName: string;
       Purpose: TObservationPurpose);
+    class function ObservationOutputExtension: string; override;
   end;
 
 implementation

@@ -587,7 +587,7 @@ var
   LakeDistanceAnnotation: string;
   ConnectionWidthAnnotation: string;
   NonHorizConnWidth: string;
-  ACell: TLakeCell;
+//  ACell: TLakeCell;
   CellTop: Real;
   ALakeCell: TLakeCell;
   LakeBottom: Double;

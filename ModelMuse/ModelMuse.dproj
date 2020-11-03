@@ -1593,6 +1593,7 @@
             <Form>frmRunPest</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="ObsInterfaceUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

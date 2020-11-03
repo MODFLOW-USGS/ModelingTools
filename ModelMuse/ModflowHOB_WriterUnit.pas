@@ -97,11 +97,15 @@ resourcestring
 { TModflowHobWriter }
 
 constructor TModflowHobWriter.Create(Model: TCustomModel; EvaluationType: TEvaluationType);
+var
+  TemplateCharacter: Char;
+
 begin
   inherited;
+  TemplateCharacter := Model.PestProperties.TemplateCharacter;
   FObservations := TList.Create;
   FPestInstructionFile := TStringList.Create;
-  FPestInstructionFile.Add('pif @');
+  FPestInstructionFile.Add('pif ' + TemplateCharacter);
   FPestInstructionFile.Add('l1');
 end;
 

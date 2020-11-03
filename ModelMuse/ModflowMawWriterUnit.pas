@@ -44,7 +44,6 @@ type
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; override;
     // @name is the file extension used for the observation output file.
-    class function ObservationOutputExtension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
 //    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean; override;
     function Mf6ObservationsUsed: Boolean; override;
@@ -54,6 +53,7 @@ type
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateSteadyData;
+    class function ObservationOutputExtension: string; override;
   end;
 
 

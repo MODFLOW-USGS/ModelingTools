@@ -286,6 +286,8 @@ type
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
     msModflowFmp, msModflowCfp, msModflow2015];
+  Modflow2005Selection =  [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
+    msModflowFmp, msModflowCfp];
   SutraSelection = [msSutra22, msSutra30];
   ModelsWithGrid  = [msPhast, msModflow, msModflowLGR, msModflowLGR2,
     msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint, msModflow2015];

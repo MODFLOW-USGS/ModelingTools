@@ -4145,7 +4145,7 @@ end;
 
 procedure TUndoChangeLgrPackageSelection.UpdateInterbedsInObjects;
 var
-  Interbeds: TCSubInterbeds;
+//  Interbeds: TCSubInterbeds;
   LocalModel: TPhastModel;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
@@ -4154,7 +4154,7 @@ var
 //  CSubPkgData: TCSubPackageData;
 begin
   LocalModel := frmGoPhast.PhastModel;
-  Interbeds := LocalModel.ModflowPackages.CSubPackage.Interbeds;
+//  Interbeds := LocalModel.ModflowPackages.CSubPackage.Interbeds;
   for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
   begin
     AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];

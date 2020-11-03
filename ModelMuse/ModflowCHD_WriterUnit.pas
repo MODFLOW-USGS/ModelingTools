@@ -36,7 +36,6 @@ type
     procedure WriteCell(Cell: TValueCell;
       const DataSetIdentifier, VariableIdentifiers: string); override;
     class function ObservationExtension: string; override;
-    class function ObservationOutputExtension: string; override;
     procedure WriteObservationCells(Variables, DataSets: TList;
       var Expression: TExpression; DataSet5: TStringList; AllCells: TList;
       ScreenObject: TScreenObject; ObsFactor: TObservationFactor); override;
@@ -56,6 +55,7 @@ type
     procedure WriteFluxObservationFile(const AFileName: string;
       Purpose: TObservationPurpose);
     procedure ShowNoBoundaryError(const NoDefinedErrorRoot: string); override;
+    class function ObservationOutputExtension: string; override;
   end;
 
 implementation

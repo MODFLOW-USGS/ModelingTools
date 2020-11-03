@@ -114,7 +114,6 @@ type
     function ObservationPackage: TModflowPackageSelection; override;
     function CellType: TValueCellType; override;
     class function ObservationExtension: string; override;
-    class function ObservationOutputExtension: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
     function ParameterType: TParameterType; override;
@@ -139,6 +138,7 @@ type
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure WriteFluxObservationFile(const AFileName: string;
       Purpose: TObservationPurpose);
+    class function ObservationOutputExtension: string; override;
   end;
 
 resourcestring
