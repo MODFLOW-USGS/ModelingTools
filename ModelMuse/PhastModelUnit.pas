@@ -53,6 +53,8 @@ const
   StrDRNflows = 'DRN_flows';
   StrGHBflows = 'GHB_flows';
   StrCHOBflows = 'CHOB_flows';
+  StrHeads = 'Heads';
+  StrHeadChanges = 'Head_Changes';
 
 resourcestring
   StrHufThickness = kHufThickness;
@@ -3312,8 +3314,10 @@ that affects the model output should also have a comment. }
       stored False
     {$ENDIF}
     ;
-    procedure SetFlowObsGroupNames; virtual;
-//    procedure NotifyPestObsGroupNameDestroy(Group: TPestObservationGroup); virtual;
+    procedure SetMf2005ObsGroupNames; virtual;
+    procedure FillFluxObsList(List: TFluxObservationList);
+    procedure FillHobList(List: THobList);
+    procedure UpdateHobGroupNames;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -4594,7 +4598,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
     procedure ExportPestInput(FileName: string; RunPest: Boolean);
-    procedure SetFlowObsGroupNames; override;
+    procedure SetMf2005ObsGroupNames; override;
 //    procedure NotifyPestObsGroupNameDestroy(Group: TPestObservationGroup); override;
   published
     // The following properties are obsolete.
@@ -18345,7 +18349,7 @@ begin
     end;
   end;
   FSutraMesh.Assign(SutraSettings);
-  SetFlowObsGroupNames
+  SetMf2005ObsGroupNames
 end;
 
 procedure TPhastModel.InvalidateSegments;
@@ -18622,14 +18626,14 @@ begin
   FootprintProperties.Assign(Value);
 end;
 
-procedure TPhastModel.SetFlowObsGroupNames;
+procedure TPhastModel.SetMf2005ObsGroupNames;
 var
   ChildIndex: Integer;
 begin
   inherited;
   for ChildIndex := 0 to ChildModels.Count - 1 do
   begin
-    ChildModels[ChildIndex].ChildModel.SetFlowObsGroupNames;
+    ChildModels[ChildIndex].ChildModel.SetMf2005ObsGroupNames;
   end;
 
 end;
@@ -29334,7 +29338,7 @@ begin
   FRiverObservations.Assign(Value);
 end;
 
-procedure TCustomModel.SetFlowObsGroupNames;
+procedure TCustomModel.SetMf2005ObsGroupNames;
 var
   ItemIndex: Integer;
   ObsGroup: TFluxObservationGroup;
@@ -29364,13 +29368,15 @@ var
   end;
 begin
   ObsGroups := PestProperties.ObservationGroups;
-  if ObsGroups.Count = 0 then
+  if (ObsGroups.Count = 0) and (ModelSelection in Modflow2005Selection) then
   begin
     ObsGroups.Add.ObsGroupName := StrCHOBflows;
     ObsGroups.Add.ObsGroupName := StrGHBflows;
     ObsGroups.Add.ObsGroupName := StrDRNflows;
     ObsGroups.Add.ObsGroupName := StrRIVflows;
     ObsGroups.Add.ObsGroupName := StrSTRflows;
+    ObsGroups.Add.ObsGroupName := StrHeads;
+    ObsGroups.Add.ObsGroupName := StrHeadChanges;
   end;
   for ItemIndex := 0 to HeadFluxObservations.Count - 1 do
   begin
@@ -29401,6 +29407,7 @@ begin
     ObsGroup := StreamObservations[ItemIndex];
     HandleObsGroup(ObsGroup, StrSTRflows);
   end;
+  UpdateHobGroupNames;
 end;
 
 procedure TCustomModel.SetDisplayColumn(const Value: integer);
@@ -32051,6 +32058,123 @@ begin
   CompilerList.Add(rpThreeDFormulaCompilerNodes);
   CompilerList.Add(rpTopFormulaCompiler);
   CompilerList.Add(rpTopFormulaCompilerNodes);
+end;
+
+procedure TCustomModel.FillFluxObsList(List: TFluxObservationList);
+var
+  index: Integer;
+begin
+  if not (ModelSelection in Modflow2005Selection) then
+  begin
+    Exit;
+  end;
+  if ModflowPackages.ChobPackage.IsSelected then
+  begin
+    for index := 0 to HeadFluxObservations.Count - 1 do
+    begin
+      List.Add(HeadFluxObservations[index]);
+    end;
+  end;
+
+  if ModflowPackages.DrobPackage.IsSelected then
+  begin
+    for index := 0 to DrainObservations.Count - 1 do
+    begin
+      List.Add(DrainObservations[index]);
+    end;
+  end;
+
+  if ModflowPackages.GbobPackage.IsSelected then
+  begin
+    for index := 0 to GhbObservations.Count - 1 do
+    begin
+      List.Add(GhbObservations[index]);
+    end;
+  end;
+
+  if ModflowPackages.RvobPackage.IsSelected then
+  begin
+    for index := 0 to RiverObservations.Count - 1 do
+    begin
+      List.Add(RiverObservations[index]);
+    end;
+  end;
+
+  if ModflowPackages.StobPackage.IsSelected then
+  begin
+    for index := 0 to StreamObservations.Count - 1 do
+    begin
+      List.Add(StreamObservations[index]);
+    end;
+  end;
+end;
+
+procedure TCustomModel.FillHobList(List: THobList);
+var
+  ScreenObjectIndex: Integer;
+  AScreemObject: TScreenObject;
+  Hob: THobBoundary;
+  ItemIndex: Integer;
+  HobItem: THobItem;
+begin
+  if (ModelSelection in Modflow2005Selection)
+    and ModflowPackages.HobPackage.IsSelected then
+  begin
+    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+    begin
+      AScreemObject := ScreenObjects[ScreenObjectIndex];
+      if AScreemObject.Deleted then
+      begin
+        Continue;
+      end;
+      Hob := AScreemObject.ModflowHeadObservations;
+      if Hob <> nil then
+      begin
+        for ItemIndex := 0 to Hob.Values.Count - 1 do
+        begin
+          HobItem := Hob.Values.Items[ItemIndex] as THobItem;
+          List.Add(HobItem);
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TCustomModel.UpdateHobGroupNames;
+var
+  ScreenObjectIndex: Integer;
+  AScreemObject: TScreenObject;
+  Hob: THobBoundary;
+  HobItem: THobItem;
+  ItemIndex: Integer;
+begin
+  for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+  begin
+    AScreemObject := ScreenObjects[ScreenObjectIndex];
+    if AScreemObject.Deleted then
+    begin
+      Continue;
+    end;
+    Hob := AScreemObject.ModflowHeadObservations;
+    if Hob <> nil then
+    begin
+      for ItemIndex := 0 to Hob.Values.Count - 1 do
+      begin
+        HobItem := Hob.Values.Items[ItemIndex] as THobItem;
+        if HobItem.ObservationGroup = '' then
+        begin
+          if (ItemIndex > 0) and (Hob.MultiObsMethod = momHeadAndDrawdown) then
+          begin
+            HobItem.ObservationGroup := StrHeadChanges;
+          end
+          else
+          begin
+            HobItem.ObservationGroup := StrHeads;
+          end;
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TCustomModel.FinalizePvalAndTemplate(FileName: string);

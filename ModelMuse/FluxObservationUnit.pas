@@ -25,7 +25,7 @@ unit FluxObservationUnit;
 interface
 
 uses SysUtils, Classes, GoPhastTypes, FormulaManagerUnit, ObsInterfaceUnit,
-  PestObsGroupUnit;
+  PestObsGroupUnit, System.Generics.Collections;
 
 type
   TCustomFluxObservationItem = class(TPhastCollectionItem)
@@ -283,6 +283,10 @@ type
     property ObservationTimes: TFluxObservations read FObservationTimes
       write SetObservationTimes;
   end;
+
+  TFluxObservationList = TList<TFluxObservationGroup>;
+  TFluxObservationObjectList = TObjectList<TFluxObservationGroup>;
+
 
   TCustomFluxObservationGroups = class(TPhastCollection)
   strict private
@@ -1082,8 +1086,15 @@ end;
 constructor TCustomFluxObservationGroup.Create(Collection: TCollection);
 begin
   inherited;
-  FObservationFactors:= TObservationFactors.Create(
-    (Collection as TCustomFluxObservationGroups).Model);
+  if Collection = nil then
+  begin
+    FObservationFactors:= TObservationFactors.Create(nil);
+  end
+  else
+  begin
+    FObservationFactors:= TObservationFactors.Create(
+      (Collection as TCustomFluxObservationGroups).Model);
+  end;
 end;
 
 destructor TCustomFluxObservationGroup.Destroy;

@@ -11267,6 +11267,7 @@ begin
           PhastModel.MobileComponents.Loaded;
           PhastModel.ImmobileComponents.Loaded;
           PhastModel.SutraFluxObs.Loaded;
+          PhastModel.UpdateHobGroupNames;
 
           FootprintWithdrawalDataArray := DataArrayManager.GetDataSetByName(KWithdrawals);
           if FootprintWithdrawalDataArray <> nil then

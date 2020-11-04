@@ -3,7 +3,8 @@ unit ModflowHobUnit;
 interface
 
 uses ZLib, SysUtils, Classes, Contnrs, GoPhastTypes, ModflowBoundaryUnit,
-  OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, ObsInterfaceUnit;
+  OrderedCollectionUnit, DataSetUnit, ModflowCellUnit, ObsInterfaceUnit,
+  System.Generics.Collections;
 
 type
   THobRecord = record
@@ -50,6 +51,8 @@ type
     FHead: double;
     FStatFlag: TStatFlag;
     FStatistic: double;
+    FObservationGroup: string;
+    FName: string;
 //    FObservationGroup: string;
     procedure SetHead(const Value: double);
     procedure SetStatFlag(const Value: TStatFlag);
@@ -63,7 +66,8 @@ type
     function GetWeight: Double;
     function GetName: string;
     function GetObservationGroup: string;
-//    procedure SetObservationGroup(const Value: string);
+    procedure SetObservationGroup(const Value: string);
+    procedure SetName(const Value: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
@@ -72,6 +76,7 @@ type
     function _Release: Integer; stdcall;
   public
     property HeadChange: Double read GetHeadChange write SetHeadChange;
+    property Name: string read GetName write SetName;
   published
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent); override;
@@ -80,8 +85,12 @@ type
     property Head: double read GetHead write SetHead;
     property Statistic: double read FStatistic write SetStatistic;
     property StatFlag: TStatFlag read GetStatFlag write SetStatFlag;
-    property ObservationGroup: string read GetObservationGroup;
+    property ObservationGroup: string read GetObservationGroup
+      write SetObservationGroup;
   end;
+
+  THobList = TList<THobItem>;
+  THobObjectList = TObjectList<THobItem>;
 
   TObservationTimeList = class;
 
@@ -190,10 +199,12 @@ type
   private
     FValues: THobCollection;
     FMultiObsMethod: TMultiObsMethod;
+//    FObservationGroup: string;
     procedure SetValues(const Value: THobCollection);
     function GetCellList(Index: integer): TObsCellList;
     procedure SetMultiObsMethod(const Value: TMultiObsMethod);
     function GetCellListCount: integer;
+//    procedure SetObservationGroup(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     // @name creates an instance of @classname.
@@ -218,6 +229,8 @@ type
     // ITT
     property MultiObsMethod: TMultiObsMethod read FMultiObsMethod
       write SetMultiObsMethod default momHeadAndDrawdown;
+//    property ObservationGroup: string read FObservationGroup
+//      write SetObservationGroup;
   end;
 
   // @name is used to store a series of @link(TDataArray)s for head
@@ -380,6 +393,7 @@ begin
     HobSource := THobBoundary(Source);
     Values := HobSource.Values;
     MultiObsMethod := HobSource.MultiObsMethod;
+//    ObservationGroup := HobSource.ObservationGroup
   end;
   inherited;
 end;
@@ -436,6 +450,11 @@ begin
   end;
 end;
 
+//procedure THobBoundary.SetObservationGroup(const Value: string);
+//begin
+//  FObservationGroup := Value;
+//end;
+
 procedure THobBoundary.SetValues(const Value: THobCollection);
 begin
   FValues.Assign(Value);
@@ -459,6 +478,9 @@ begin
     Head := SourceItem.Head;
     Statistic := SourceItem.Statistic;
     StatFlag := SourceItem.StatFlag;
+    ObservationGroup := SourceItem.ObservationGroup;
+    Name := SourceItem.Name;
+//    ObservationGroup := SourceItem.ObservationGroup;
   end;
   inherited;
 end;
@@ -473,7 +495,7 @@ var
   LocalCollection: THobCollection;
   FirstItem: THobItem;
 begin
-  if Index = 0 then
+  if (Index = 0) or (Collection = nil) then
   begin
     result := 0;
   end
@@ -489,38 +511,46 @@ function THobItem.GetName: string;
 var
   HobCollection: THobCollection;
 begin
-  HobCollection := Collection as THobCollection;
-  Result := HobCollection.FBoundary.ObservationName;
-  if HobCollection.Count > 1 then
-  begin
-    Result := HobCollection.FBoundary.ObservationName + '_' + IntToStr(Index + 1);
-  end;
-  if Length(Result) > 12 then
-  begin
-    Result := HobCollection.FBoundary.ObservationName + IntToStr(Index + 1);
-  end;
-end;
-
-function THobItem.GetObservationGroup: string;
-var
-  HobCollection: THobCollection;
-begin
-  if Index > 0 then
+  if Collection <> nil then
   begin
     HobCollection := Collection as THobCollection;
-    if HobCollection.FBoundary.FMultiObsMethod = momAllHeads then
+    Result := HobCollection.FBoundary.ObservationName;
+    if HobCollection.Count > 1 then
     begin
-      Result := 'Heads';
-    end
-    else
+      Result := HobCollection.FBoundary.ObservationName + '_' + IntToStr(Index + 1);
+    end;
+    if Length(Result) > 12 then
     begin
-      Result := 'Head_Changes';
+      Result := HobCollection.FBoundary.ObservationName + IntToStr(Index + 1);
     end;
   end
   else
   begin
-    Result := 'Heads';
+    result := FName;
   end;
+end;
+
+function THobItem.GetObservationGroup: string;
+//var
+//  HobCollection: THobCollection;
+begin
+  result := FObservationGroup;
+//  if Index > 0 then
+//  begin
+//    HobCollection := Collection as THobCollection;
+//    if HobCollection.FBoundary.FMultiObsMethod = momAllHeads then
+//    begin
+//      Result := HobCollection.FBoundary.ObservationGroup;
+//    end
+//    else
+//    begin
+//      Result := HobCollection.FBoundary.ObservationGroup + '_Changes';
+//    end;
+//  end
+//  else
+//  begin
+//    Result := HobCollection.FBoundary.ObservationGroup;
+//  end;
 end;
 
 function THobItem.GetStatFlag: TStatFlag;
@@ -528,11 +558,14 @@ var
   LocalCollection: THobCollection;
 begin
   result := FStatFlag;
-  LocalCollection := Collection as THobCollection;
-  if (LocalCollection.FBoundary.Purpose = ofPredicted)
-    and (result > stStandardDev) then
+  if Collection <> nil then
   begin
-    result := stVariance;
+    LocalCollection := Collection as THobCollection;
+    if (LocalCollection.FBoundary.Purpose = ofPredicted)
+      and (result > stStandardDev) then
+    begin
+      result := stVariance;
+    end;
   end;
 end;
 
@@ -568,7 +601,10 @@ end;
 
 procedure THobItem.InvalidateModel;
 begin
-  (Collection as THobCollection).InvalidateModel;
+  if Collection <> nil then
+  begin
+    (Collection as THobCollection).InvalidateModel;
+  end;
 end;
 
 function THobItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -581,7 +617,8 @@ begin
     Item := THobItem(AnotherItem);
     result := (Item.Head = Head)
       and (Item.Statistic = Statistic)
-      and (Item.StatFlag = StatFlag);
+      and (Item.StatFlag = StatFlag)
+      and (Item.ObservationGroup = ObservationGroup)
   end;
 end;
 
@@ -608,10 +645,15 @@ begin
   end;
 end;
 
-//procedure THobItem.SetObservationGroup(const Value: string);
-//begin
-//  FObservationGroup := Value;
-//end;
+procedure THobItem.SetName(const Value: string);
+begin
+  FName := Value;
+end;
+
+procedure THobItem.SetObservationGroup(const Value: string);
+begin
+  FObservationGroup := Value;
+end;
 
 procedure THobItem.SetHead(const Value: double);
 begin

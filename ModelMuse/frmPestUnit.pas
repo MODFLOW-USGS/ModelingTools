@@ -8,7 +8,8 @@ uses
   JvPageList, JvExControls, Vcl.ComCtrls, JvExComCtrls, JvPageListTreeView,
   ArgusDataEntry, PestPropertiesUnit, Vcl.Buttons, Vcl.ExtCtrls, UndoItems,
   frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
-  PestObsGroupUnit, System.Generics.Collections, Vcl.Mask, JvExMask, JvToolEdit;
+  PestObsGroupUnit, System.Generics.Collections, Vcl.Mask, JvExMask, JvToolEdit,
+  FluxObservationUnit, ModflowHobUnit;
 
 type
   TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
@@ -21,13 +22,21 @@ type
     FNewObsList: TObservationObjectList;
     OldPestLocation: string;
     NewPestLocation: string;
+    FOldFluxObsList: TFluxObservationObjectList;
+    FNewFluxObsList: TFluxObservationObjectList;
+    FOldHobList: THobObjectList;
+    FNewHobList: THobObjectList;
   protected
     function Description: string; override;
     procedure UpdateProperties(PestProperties: TPestProperties;
-      ObsList: TObservationList);
+      ObsList: TObservationObjectList; FluxObsList: TFluxObservationObjectList;
+      HobList: THobObjectList);
   public
     constructor Create(var NewPestProperties: TPestProperties;
-      var NewObsList: TObservationObjectList; PestDirectory: String);
+      var NewObsList: TObservationObjectList;
+      var NewFluxObservationList: TFluxObservationObjectList;
+      var NewHobList: THobObjectList;
+      PestDirectory: String);
     destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
@@ -173,6 +182,10 @@ type
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
+    FFluxObservationList: TFluxObservationList;
+    FNewFluxObservationList: TFluxObservationObjectList;
+    FHobList: THobList;
+    FNewHobList: THobObjectList;
     FLocalObsGroups: TPestObservationGroups;
     InvalidateModelEvent: TNotifyEvent;
     FGroupDictionary: TDictionary<TPestObservationGroup, TTreeNode>;
@@ -318,6 +331,13 @@ begin
   inherited;
   FObsList := TObservationList.Create;
   FNewObsList := TObservationObjectList.Create;
+
+  FFluxObservationList := TFluxObservationList.Create;
+  FNewFluxObservationList := TFluxObservationObjectList.Create;
+
+  FHobList :=  THobList.Create;
+  FNewHobList := THobObjectList.Create;
+
   InvalidateModelEvent := nil;
   FLocalObsGroups := TPestObservationGroups.Create(nil);
   FGroupDictionary := TDictionary<TPestObservationGroup, TTreeNode>.Create;
@@ -390,6 +410,13 @@ begin
   FGroupNameDictionary.Free;
   FGroupDictionary.Free;
   FLocalObsGroups.Free;
+
+  FHobList.Free;
+  FNewHobList.Free;
+
+  FFluxObservationList.Free;
+  FNewFluxObservationList.Free;
+
   FObsList.Free;
   FNewObsList.Free;
 end;
@@ -552,6 +579,10 @@ var
   GroupIndex: Integer;
   TreeNode: TTreeNode;
   Locations: TProgramLocations;
+  FluxObs: TFluxObservationGroup;
+  ATempFluxObs: TFluxObservationGroup;
+  HobItem: THobItem;
+  FNewHobItem: THobItem;
 //  InvalidateModelEvent: TNotifyEvent;
 begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
@@ -725,6 +756,58 @@ begin
     end;
     NewNode.Data := ATempObs;
   end;
+
+  frmGoPhast.PhastModel.FillFluxObsList(FFluxObservationList);
+  FNewFluxObservationList.Capacity := FFluxObservationList.Count;
+  for index := 0 to FFluxObservationList.Count - 1 do
+  begin
+    FluxObs := FFluxObservationList[index];
+    ATempFluxObs := TFluxObservationGroup.Create(nil);
+    FNewFluxObservationList.Add(ATempFluxObs);
+    ATempFluxObs.Assign(FluxObs);
+    if FGroupNameDictionary.TryGetValue(UpperCase(ATempFluxObs.ObservationGroup), ObsGroup) then
+    begin
+      if FGroupDictionary.TryGetValue(ObsGroup, TreeNode) then
+      begin
+        NewNode := Tree.Items.AddChild(TreeNode, ATempFluxObs.ObservationName);
+      end
+      else
+      begin
+        NewNode := Tree.Items.AddChild(FNoNameNode, ATempFluxObs.ObservationName);
+      end;
+    end
+    else
+    begin
+      NewNode := Tree.Items.AddChild(FNoNameNode, ATempFluxObs.ObservationName);
+    end;
+    NewNode.Data := ATempFluxObs;
+  end;
+
+  frmGoPhast.PhastModel.FillHobList(FHobList);
+  FNewHobList.Capacity := FHobList.Count;
+  for index := 0 to FHobList.Count - 1 do
+  begin
+    HobItem := FHobList[index];
+    FNewHobItem := THobItem.Create(nil);
+    FNewHobList.Add(FNewHobItem);
+    FNewHobItem.Assign(HobItem);
+    if FGroupNameDictionary.TryGetValue(UpperCase(FNewHobItem.ObservationGroup), ObsGroup) then
+    begin
+      if FGroupDictionary.TryGetValue(ObsGroup, TreeNode) then
+      begin
+        NewNode := Tree.Items.AddChild(TreeNode, FNewHobItem.Name);
+      end
+      else
+      begin
+        NewNode := Tree.Items.AddChild(FNoNameNode, FNewHobItem.Name);
+      end;
+    end
+    else
+    begin
+      NewNode := Tree.Items.AddChild(FNoNameNode, FNewHobItem.Name);
+    end;
+    NewNode.Data := FNewHobItem;
+  end;
   {$ENDREGION}
 
 end;
@@ -744,6 +827,9 @@ var
   ObsGroup: TPestObservationGroup;
   ChildNode: TTreeNode;
   AnObs: TCustomObservationItem;
+  AnObject: TObject;
+  FluxObs: TFluxObservationGroup;
+  HobItem: THobItem;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(nil);
@@ -940,13 +1026,14 @@ begin
     {$REGION 'Observation Groups'}
     ObsGroups := PestProperties.ObservationGroups;
     Grid := frameObservationGroups.Grid;
+//    ObsIndex := 0;
     for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
     begin
       AnObsGroup := Grid.Objects[Ord(pogcName), RowIndex]
         as TPestObservationGroup;
       if (AnObsGroup = nil) and (Grid.Cells[Ord(pogcName), RowIndex] <> '') then
       begin
-        AnObsGroup := ObsGroups.Add;
+        AnObsGroup := FLocalObsGroups.Add;
       end;
       if AnObsGroup <> nil then
       begin
@@ -957,6 +1044,7 @@ begin
         AnObsGroup.UseGroupTarget := Grid.Checked[Ord(pogcUseTarget), RowIndex];
         AnObsGroup.GroupTarget := Grid.RealValueDefault[Ord(pogcTarget), RowIndex, 0];
         AnObsGroup.AbsoluteCorrelationFileName := Grid.Cells[Ord(pogcFileName), RowIndex];
+        AnObsGroup.Collection := ObsGroups;
       end;
     end;
     {$ENDREGION}
@@ -969,16 +1057,43 @@ begin
       ChildNode := ANode.getFirstChild;
       while ChildNode <> nil do
       begin
-        AnObs := ChildNode.Data;
-        if ObsGroup = nil then
+        AnObject := ChildNode.Data;
+        if AnObject is TCustomObservationItem then
         begin
-          AnObs.ObservationGroup := '';
+          AnObs := TCustomObservationItem(AnObject);
+          if ObsGroup = nil then
+          begin
+            AnObs.ObservationGroup := '';
+          end
+          else
+          begin
+            AnObs.ObservationGroup := ObsGroup.ObsGroupName;
+          end;
+        end
+        else if AnObject is TFluxObservationGroup then
+        begin
+          FluxObs := TFluxObservationGroup(AnObject);
+          if ObsGroup = nil then
+          begin
+            FluxObs.ObservationGroup := '';
+          end
+          else
+          begin
+            FluxObs.ObservationGroup := ObsGroup.ObsGroupName;
+          end;
         end
         else
         begin
-          AnObs.ObservationGroup := ObsGroup.ObsGroupName;
+          HobItem := AnObject as THobItem;
+          if ObsGroup = nil then
+          begin
+            HobItem.ObservationGroup := '';
+          end
+          else
+          begin
+            HobItem.ObservationGroup := ObsGroup.ObsGroupName;
+          end;
         end;
-
         ChildNode := ChildNode.GetNextSibling;
       end;
 
@@ -987,7 +1102,7 @@ begin
     {$ENDREGION}
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties,
-      FNewObsList, diredPest.Text));
+      FNewObsList, FNewFluxObservationList, FNewHobList, diredPest.Text));
   finally
     PestProperties.Free
   end;
@@ -1043,7 +1158,8 @@ procedure TfrmPEST.HandleAddedGroup(ObsGroup: TPestObservationGroup);
 var
   NewNode: TTreeNode;
 begin
-  NewNode := frameParentObsGroups.tvTree.Items.AddChild(nil, ObsGroup.ObsGroupName);
+  NewNode := frameParentObsGroups.tvTree.Items.AddChild(nil,
+    ObsGroup.ObsGroupName);
   NewNode.Data := ObsGroup;
   FGroupDictionary.Add(ObsGroup, NewNode);
   if ObsGroup.ObsGroupName <> '' then
@@ -1070,7 +1186,10 @@ end;
 { TUndoPestOptions }
 
 constructor TUndoPestOptions.Create(var NewPestProperties: TPestProperties;
-  var NewObsList: TObservationObjectList; PestDirectory: String);
+  var NewObsList: TObservationObjectList;
+  var NewFluxObservationList: TFluxObservationObjectList;
+  var NewHobList: THobObjectList;
+  PestDirectory: String);
 var
   InvalidateModelEvent: TNotifyEvent;
   TempList: TObservationList;
@@ -1078,6 +1197,12 @@ var
   AnObs: TCustomObservationItem;
   ATempObs: TCustomObservationItem;
   Locations: TProgramLocations;
+  TempFluxObsList: TFluxObservationList;
+  FluxObsIndex: Integer;
+  FluxObs: TFluxObservationGroup;
+  TempHobList: THobList;
+  HobIndex: Integer;
+  HobItem: THobItem;
 begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   OldPestLocation := Locations.PestDirectory;
@@ -1091,6 +1216,7 @@ begin
 
   TempList := TObservationList.Create;
   try
+    TempList.Capacity := NewObsList.Count;
     frmGoPhast.PhastModel.FillObsItemList(TempList, True);
     FOldObsList  := TObservationObjectList.Create;
     FOldObsList.Capacity := TempList.Count;
@@ -1107,6 +1233,42 @@ begin
 
   FNewObsList := NewObsList;
   NewObsList := nil;
+
+  TempFluxObsList := TFluxObservationList.Create;
+  try
+    TempFluxObsList.Capacity := NewFluxObservationList.Count;
+    frmGoPhast.PhastModel.FillFluxObsList(TempFluxObsList);
+    FOldFluxObsList := TFluxObservationObjectList.Create;
+    for FluxObsIndex := 0 to TempFluxObsList.Count - 1 do
+    begin
+      FluxObs := TFluxObservationGroup.Create(nil);
+      FOldFluxObsList.Add(FluxObs);
+      FluxObs.Assign(TempFluxObsList[FluxObsIndex]);
+    end;
+  finally
+    TempFluxObsList.Free;
+  end;
+
+  FNewFluxObsList := NewFluxObservationList;
+  NewFluxObservationList := nil;
+
+  TempHobList := THobList.Create;
+  try
+    TempHobList.Capacity := NewHobList.Count;
+    frmGoPhast.PhastModel.FillHobList(TempHobList);
+    FOldHobList := THobObjectList.Create;
+    for HobIndex := 0 to TempHobList.Count - 1 do
+    begin
+      HobItem := THobItem.Create(nil);
+      FOldHobList.Add(HobItem);
+      HobItem.Assign(TempHobList[HobIndex]);
+    end;
+  finally
+    TempHobList.Free;
+  end;
+
+  FNewHobList := NewHobList;
+  NewHobList := nil;
 end;
 
 function TUndoPestOptions.Description: string;
@@ -1116,10 +1278,14 @@ end;
 
 destructor TUndoPestOptions.Destroy;
 begin
+  FNewFluxObsList.Free;
+  FOldFluxObsList.Free;
   FOldObsList.Free;
   FNewObsList.Free;
   FOldPestProperties.Free;
   FNewPestProperties.Free;
+  FOldHobList.Free;
+  FNewHobList.Free;
   inherited;
 end;
 
@@ -1129,10 +1295,10 @@ var
 begin
   inherited;
 //  frmGoPhast.PhastModel.PestProperties := FNewPestProperties;
-  UpdateProperties(FNewPestProperties, FNewObsList);
+  UpdateProperties(FNewPestProperties, FNewObsList, FNewFluxObsList, FNewHobList);
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := NewPestLocation;
-  frmGoPhast.PhastModel.SetFlowObsGroupNames;
+  frmGoPhast.PhastModel.SetMf2005ObsGroupNames;
 end;
 
 procedure TUndoPestOptions.Undo;
@@ -1140,20 +1306,27 @@ var
   Locations: TProgramLocations;
 begin
   inherited;
-  UpdateProperties(FOldPestProperties, FOldObsList);
+  UpdateProperties(FOldPestProperties, FOldObsList, FOldFluxObsList, FOldHobList);
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := OldPestLocation;
-  frmGoPhast.PhastModel.SetFlowObsGroupNames;
+  frmGoPhast.PhastModel.SetMf2005ObsGroupNames;
 end;
 
 procedure TUndoPestOptions.UpdateProperties(PestProperties: TPestProperties;
-  ObsList: TObservationList);
+  ObsList: TObservationObjectList; FluxObsList: TFluxObservationObjectList;
+  HobList: THobObjectList);
 var
   ShouldUpdateView: Boolean;
   TempList: TObservationList;
   AnObs: TCustomObservationItem;
   NewObs: TCustomObservationItem;
   ObsIndex: Integer;
+  TempFluxObsList: TFluxObservationList;
+  FluxObsIndex: Integer;
+  FluxObs: TFluxObservationGroup;
+  TempHobList: THobList;
+  HobIndex: Integer;
+  HobObs: THobItem;
 begin
   ShouldUpdateView := frmGoPhast.PhastModel.PestProperties.ShouldDrawPilotPoints
     <> PestProperties.ShouldDrawPilotPoints;
@@ -1167,6 +1340,7 @@ begin
 
   TempList := TObservationList.Create;
   try
+    TempList.Capacity := ObsList.Count;
     frmGoPhast.PhastModel.FillObsItemList(TempList, True);
     Assert(TempList.Count = ObsList.Count);
     for ObsIndex := 0 to TempList.Count - 1 do
@@ -1177,6 +1351,32 @@ begin
     end;
   finally
     TempList.Free;
+  end;
+
+  TempFluxObsList := TFluxObservationList.Create;
+  try
+    TempFluxObsList.Capacity := FluxObsList.Count;
+    frmGoPhast.PhastModel.FillFluxObsList(TempFluxObsList);
+    for FluxObsIndex := 0 to TempFluxObsList.Count - 1 do
+    begin
+      FluxObs := TempFluxObsList[FluxObsIndex];
+      FluxObs.Assign(FluxObsList[FluxObsIndex]);
+    end;
+  finally
+    TempFluxObsList.Free;
+  end;
+
+  TempHobList := THobList.Create;
+  try
+    TempHobList.Capacity := HobList.Count;
+    frmGoPhast.PhastModel.FillHobList(TempHobList);
+    for HobIndex := 0 to TempHobList.Count - 1 do
+    begin
+      HobObs := TempHobList[HobIndex];
+      HobObs.Assign(HobList[HobIndex]);
+    end;
+  finally
+    TempHobList.Free;
   end;
 
 
