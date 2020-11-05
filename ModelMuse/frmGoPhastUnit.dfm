@@ -1955,6 +1955,9 @@ inherited frmGoPhast: TfrmGoPhast
       object miShowOrHideRulers: TMenuItem
         Action = acShowOrHideRulers
       end
+      object Archivemodelbydefault1: TMenuItem
+        Action = acArchiveModel
+      end
     end
     object miModel: TMenuItem
       Caption = '&Model'
@@ -3591,6 +3594,12 @@ inherited frmGoPhast: TfrmGoPhast
       Caption = 'Run PEST'
       Hint = 'Run PEST|Export PEST control file and run PEST'
       OnExecute = acRunPestExecute
+    end
+    object acArchiveModel: TAction
+      Category = 'Customize'
+      Caption = 'Archive model by default'
+      Checked = True
+      OnExecute = acArchiveModelExecute
     end
   end
   object ilDisabledImageList: TImageList

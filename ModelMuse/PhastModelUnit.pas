@@ -10060,6 +10060,12 @@ const
 //               Bug fix: Fixed bug in export of Shapefile mesh data from SUTRA
 //                2D models that could cause a  range check error.
 
+//               Bug fix: Fixed a bug in the Errors and Warnings dialog box
+//                that could cause an Invalid class typecast error when right
+//                clicking in the dialog box.
+//               Enhancement: The user can now customize ModelMuse to specify
+//                whether or not a model archive will be created.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.22';

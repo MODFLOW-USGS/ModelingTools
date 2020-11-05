@@ -606,7 +606,7 @@ procedure TfrmErrorsAndWarnings.GetSelectedScreenObjects(
   ScreenObjects: TScreenObjectList);
 var
   FirstScreenObject: TScreenObject;
-  AScreenObject: TObject;
+  AnObject: TObject;
   Node: PVirtualNode;
   ParentNode: PVirtualNode;
   Data: PErrorWarningRec;
@@ -622,10 +622,11 @@ begin
       FirstScreenObject := nil;
       for ObjectIndex := 0 to Data.List.ObjectList.Count - 1 do
       begin
-        AScreenObject := Data.List.ObjectList[ObjectIndex];
-        if AScreenObject <> nil then
+        AnObject := Data.List.ObjectList[ObjectIndex];
+        // AnObject might be TErrMessages
+        if (AnObject <> nil) and (AnObject is TScreenObject) then
         begin
-          CurrentScreenObject := AScreenObject as TScreenObject;
+          CurrentScreenObject := TScreenObject(AnObject);
           if FirstScreenObject <> nil then
           begin
             if FirstScreenObject.ViewDirection
@@ -650,10 +651,14 @@ begin
     begin
       ParentNode := vstWarningsAndErrors.NodeParent[Node];
       Data := vstWarningsAndErrors.GetNodeData(ParentNode);
-      CurrentScreenObject := Data.List.Objects[Node.Index] as TScreenObject;
-      if CurrentScreenObject <> nil then
+      AnObject := Data.List.Objects[Node.Index];
+      if AnObject is TScreenObject then
       begin
-        ScreenObjects.Add(CurrentScreenObject);
+        CurrentScreenObject := TScreenObject(AnObject);
+        if CurrentScreenObject <> nil then
+        begin
+          ScreenObjects.Add(CurrentScreenObject);
+        end;
       end;
     end;
   end;

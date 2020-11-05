@@ -56,6 +56,8 @@ type
 
   TVersionCompare = (vcUnknown, vcSame, vcExternalOlder, vcExternalNewer);
 
+  TDefaultCreateArchive = (dcaUnknown, dcaSave, dcaDontSave);
+
   // Modified from http://delphi.about.com/od/vclusing/a/menuitemhints.htm
   TMenuItemHint = class(THintWindow)
   private
@@ -516,6 +518,8 @@ type
     acRunPest: TAction;
     dlgSavePest: TSaveDialog;
     PESTControlfile1: TMenuItem;
+    acArchiveModel: TAction;
+    Archivemodelbydefault1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -705,9 +709,11 @@ type
     procedure acRunPestExecute(Sender: TObject);
     procedure dlgSavePestShow(Sender: TObject);
     procedure dlgSavePestClose(Sender: TObject);
+    procedure acArchiveModelExecute(Sender: TObject);
   private
+    FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
-    CreateArchiveSet: boolean;
+    FCreateArchiveSet: boolean;
     FCreatingMainForm: Boolean;
     miHint : TMenuItemHint;
     FSaveModelForm: TfrmSaveArchive;
@@ -2091,6 +2097,7 @@ const
   StrElementFont = 'Element Font';
   StrHelpFormat = 'Help Format';
   StrMaximized = 'Maximized';
+  StrSaveArchive = 'SaveArchive';
 
 resourcestring
   StrModelMate = 'ModelMate';
@@ -2923,6 +2930,22 @@ begin
     WindowState := wsMaximized;
   end;
 
+  if FIniFile.ValueExists(StrCustomization, StrSaveArchive) then
+  begin
+    CreateArchive := FIniFile.ReadBool(StrCustomization, StrSaveArchive, True);
+    if CreateArchive then
+    begin
+      FDefaultCreateArchive := dcaSave;
+      acArchiveModel.Checked := True;
+    end
+    else
+    begin
+      FDefaultCreateArchive := dcaDontSave;
+      acArchiveModel.Checked := False;
+    end;
+
+  end;
+
   DisplayChoices[dcColor] := FIniFile.ReadInteger(StrDisplayOption, StrColor, 0);
   DisplayChoices[dcContour] := FIniFile.ReadInteger(StrDisplayOption, StrContour, 0);
   DisplayChoices[dcNone] := FIniFile.ReadInteger(StrDisplayOption, StrDisplayNone, 0);
@@ -3061,6 +3084,12 @@ begin
   SaveFont(FIniFile, StrCustomization, StrElementFont, SutraMesh.ElementFont);
   FIniFile.WriteInteger(StrCustomization, StrHelpFormat, Ord(FHelpFormat));
   FIniFile.WriteBool(StrCustomization, StrMaximized, WindowState = wsMaximized);
+
+  if FDefaultCreateArchive <> dcaUnknown then
+  begin
+    FIniFile.WriteBool(StrCustomization, StrSaveArchive,
+      FDefaultCreateArchive = dcaSave);
+  end;
 
   FIniFile.WriteInteger(StrDisplayOption, StrColor, DisplayChoices[dcColor]);
   FIniFile.WriteInteger(StrDisplayOption, StrContour, DisplayChoices[dcContour]);
@@ -3263,6 +3292,7 @@ var
   HelpFileName: string;
 begin
   inherited;
+  FDefaultCreateArchive := dcaUnknown;
   {$IFNDEF PEST}
   acEditObservationComparisons.Visible := False;
   acPEST.Visible := False;
@@ -3352,7 +3382,7 @@ begin
     end;
 
     FCreateArchive := True;
-    CreateArchiveSet := False;
+    FCreateArchiveSet := False;
 //    Application.HelpFile := ChangeFileExt(Application.ExeName, '.chm');
     Caption := StrModelName;
     miHint := TMenuItemHint.Create(self);
@@ -7679,6 +7709,21 @@ begin
   UndoStack.Submit(TUndoAnonymizeScreenObject.Create);
 end;
 
+procedure TfrmGoPhast.acArchiveModelExecute(Sender: TObject);
+begin
+  inherited;
+  CreateArchive := not CreateArchive;
+  if CreateArchive then
+  begin
+    FDefaultCreateArchive := dcaSave;
+  end
+  else
+  begin
+    FDefaultCreateArchive := dcaDontSave;
+  end;
+  acArchiveModel.Checked := CreateArchive;
+end;
+
 procedure TfrmGoPhast.acColorExecute(Sender: TObject);
 begin
   // Change the color for the application.
@@ -10909,7 +10954,7 @@ begin
       end;
 
     end;
-    if not CreateArchiveSet then
+    if not FCreateArchiveSet then
     begin
       CreateArchive := MessageDlg(StrDoYouWantToCreat,
         mtInformation, [mbYes, mbNo], 0) = mrYes;
@@ -11318,7 +11363,7 @@ begin
         FreeAndNil(FFileStream);
         FreeAndNil(frmFileProgress);
         Screen.Cursor := crDefault;
-        CreateArchiveSet := False;
+        FCreateArchiveSet := False;
         FCreateArchive := True;
       end;
       UpdateModelCubeBreaks;
@@ -12180,7 +12225,14 @@ procedure TfrmGoPhast.sdSaveDialogShow(Sender: TObject);
 begin
   inherited;
   FSaveModelForm := TfrmSaveArchive.createfordialog(sdSaveDialog);
-  FSaveModelForm.cbSaveArchive.Checked := CreateArchive;
+  if FDefaultCreateArchive = dcaUnknown then
+  begin
+    FSaveModelForm.cbSaveArchive.Checked := CreateArchive;
+  end
+  else
+  begin
+    FSaveModelForm.cbSaveArchive.Checked := FDefaultCreateArchive = dcaSave;
+  end;
   FSaveModelForm.cbSaveDataSetValues.Checked :=
     PhastModel.SaveDataSetValues = sdsvAlways;
 end;
@@ -14185,7 +14237,7 @@ end;
 procedure TfrmGoPhast.SetCreateArchive(const Value: Boolean);
 begin
   FCreateArchive := Value;
-  CreateArchiveSet := True;
+  FCreateArchiveSet := True;
 end;
 
 procedure TfrmGoPhast.SetCurrentTool(const Value: TCustomInteractiveTool);
