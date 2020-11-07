@@ -2266,10 +2266,10 @@ resourcestring
   'than the version you are using. '#13#10#13#10'You may be using MT3DMS ins' +
   'tead of MT3D-USGS.'#13#10#13#10'Do you want to continue?';
   StrItLooksLikeYouMi = 'It looks like you might be using MODPATH version 7.' +
-  ' ModelMuse does not currently use MODPATH version 7. You can get MODPATH ' +
+  ' You can get MODPATH ' +
   'version 6 from the same web page from which you can get MODPATH version 7.' +
   sLineBreak +
-  '.Do you want to continue?' +
+  'Do you want to continue?' +
   sLineBreak +
   'If you are using MODPATH version 7, you should select "NO" and change the ' +
   'location of MODPATH in the "Model|MODFLOW Packages and Programs" dialog box.';

@@ -40,6 +40,7 @@ type
     function NumberOfPriorInformation: Integer;
     // NOBSGP
     function NumberOfObservationGroups: Integer;
+    function NumberOfTemplateFiles: Integer;
   protected
     class function Extension: string; override;
   public
@@ -56,7 +57,7 @@ uses
   PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit,
   ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
   ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
-  ModflowPackagesUnit;
+  ModflowPackagesUnit, DataSetUnit;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -97,19 +98,8 @@ begin
 end;
 
 function TPestControlFileWriter.NumberOfObservationGroups: Integer;
-var
-  ModflowPackages: TModflowPackages;
 begin
-  ModflowPackages := nil;
   result := Model.PestProperties.ObservationGroups.Count;
-  if Model.ModelSelection in Modflow2005Selection then
-  begin
-    ModflowPackages := Model.ModflowPackages;
-    if ModflowPackages.HobPackage.IsSelected then
-    begin
-      Inc(result, 2);
-    end;
-  end;
   if result = 0 then
   begin
     frmErrorsAndWarnings.AddError(Model, StrNoObservationGroup,
@@ -216,6 +206,23 @@ begin
 
 end;
 
+function TPestControlFileWriter.NumberOfTemplateFiles: Integer;
+var
+  DSIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  // PVAL file;
+  result := 1;
+  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+  begin
+    ADataArray := Model.DataArrayManager[DSIndex];
+    if ADataArray.PestParametersUsed then
+    begin
+      Inc(result);
+    end;
+  end;
+end;
+
 procedure TPestControlFileWriter.WriteAutomaticUserIntervention;
 begin
 // The Automatic User Intervention is not currently supported.
@@ -308,8 +315,7 @@ begin
   // NTPLFLE NINSFLE PRECIS DPOINT [NUMCOM JACFILE MESSFILE] [OBSREREF]
   // fourth line 4.2.5
   // NTPLFLE
-  // The pval file will always be the only file PEST writes.
-  WriteInteger(1);
+  WriteInteger(NumberOfTemplateFiles);
   // NINSFLE
   NINSFLE := 0;
   case Model.MOdelSelection of
@@ -712,6 +718,8 @@ var
   INFLE: string;
   INSFLE: string;
   OUTFLE: string;
+  DSIndex: Integer;
+  ADataArray: TDataArray;
 begin
   WriteSectionHeader('model input/output');
   TEMPFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPtf));
@@ -719,6 +727,21 @@ begin
   WriteString(TEMPFLE);
   WriteString(' ' + INFLE);
   NewLine;
+
+  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+  begin
+    ADataArray := Model.DataArrayManager[DSIndex];
+    if ADataArray.PestParametersUsed then
+    begin
+      INFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+        '.' + ADataArray.Name + '.script' ));
+      TEMPFLE := INFLE + '.tpl';
+      WriteString(TEMPFLE);
+      WriteString(' ' + INFLE);
+      NewLine;
+    end;
+  end;
+
   if Model.ModelSelection in Modflow2005Selection then
   begin
     if Model.ModflowPackages.HobPackage.IsSelected then

@@ -204,6 +204,11 @@ procedure TfrmSutraTimes.frameTimesGridSelectCell(Sender: TObject;
   ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
+  if FSelectedSchedule = nil then
+  begin
+    CanSelect := False;
+    Exit;
+  end;
   if (FSelectedSchedule.Index = 0) and (ARow = 1) then
   begin
     CanSelect := False;

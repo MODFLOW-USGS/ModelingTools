@@ -2345,11 +2345,26 @@ end;
 procedure TCustomFileWriter.WritePestTemplateLine(AFileName: string);
 var
   PValFileName: string;
+  DSIndex: Integer;
+  ADataArray: TDataArray;
+  INFLE: string;
 begin
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
   Model.PestTemplateLines.Add('EnhancedTemplateProcessor.exe '
     + ExtractFileName(AFileName) + ' ' + PValFileName);
+
+  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+  begin
+    ADataArray := Model.DataArrayManager[DSIndex];
+    if ADataArray.PestParametersUsed then
+    begin
+      INFLE := ExtractFileName(ChangeFileExt(PValFileName,
+        '.' + ADataArray.Name + '.script' ));
+      Model.PestTemplateLines.Add('plproc '+ INFLE);
+    end;
+  end;
+
 end;
 
 procedure TCustomFileWriter.WriteExitSpec(ExitSpec: TSutraExitSpecificationMethod);

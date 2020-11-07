@@ -4,8 +4,8 @@ inherited frmSutraTimes: TfrmSutraTimes
   Caption = 'SUTRA Time Controls'
   ClientHeight = 549
   ClientWidth = 697
-  ExplicitWidth = 715
-  ExplicitHeight = 594
+  ExplicitWidth = 713
+  ExplicitHeight = 588
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -70,10 +70,6 @@ inherited frmSutraTimes: TfrmSutraTimes
     TabOrder = 0
     object tabSchedules: TTabSheet
       Caption = 'Schedules'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnl1: TPanel
         Left = 0
         Top = 0
@@ -206,14 +202,24 @@ inherited frmSutraTimes: TfrmSutraTimes
           Height = 434
           Align = alTop
           Anchors = [akLeft, akTop, akRight, akBottom]
-          Colors.UnfocusedSelectionColor = clHighlight
-          Colors.UnfocusedSelectionBorderColor = clHighlight
+          Colors.BorderColor = 15987699
+          Colors.DisabledColor = clGray
+          Colors.DropMarkColor = 15385233
+          Colors.DropTargetColor = 15385233
+          Colors.DropTargetBorderColor = 15385233
+          Colors.FocusedSelectionColor = 15385233
+          Colors.FocusedSelectionBorderColor = 15385233
+          Colors.GridLineColor = 15987699
+          Colors.HeaderHotColor = clBlack
+          Colors.HotColor = clBlack
+          Colors.SelectionRectangleBlendColor = 15385233
+          Colors.SelectionRectangleBorderColor = 15385233
+          Colors.SelectionTextColor = clBlack
+          Colors.TreeLineColor = 9471874
+          Colors.UnfocusedColor = clGray
+          Colors.UnfocusedSelectionColor = 15385233
+          Colors.UnfocusedSelectionBorderColor = 15385233
           Header.AutoSizeIndex = 0
-          Header.Font.Charset = DEFAULT_CHARSET
-          Header.Font.Color = clWindowText
-          Header.Font.Height = -13
-          Header.Font.Name = 'Tahoma'
-          Header.Font.Style = []
           Header.MainColumn = -1
           TabOrder = 0
           TreeOptions.SelectionOptions = [toFullRowSelect]

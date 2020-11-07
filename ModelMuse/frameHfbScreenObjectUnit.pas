@@ -248,6 +248,10 @@ var
   Boundary: THfbBoundary;
   Index: Integer;
 begin
+  if List.Count = 0 then
+  begin
+    Exit;
+  end;
   ListOfScreenObjects := TList.Create;
   try
     Assert(List.Count >= 1);

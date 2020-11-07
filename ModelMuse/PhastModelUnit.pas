@@ -10065,6 +10065,10 @@ const
 //                clicking in the dialog box.
 //               Enhancement: The user can now customize ModelMuse to specify
 //                whether or not a model archive will be created.
+//               Bug fix: Fixed bug that could cause an assertion failure when
+//                working with the Object Properties dialog box.
+//               Bug fix: Fixed a bug that could cause an access violation in
+//                the SUTRA Time Controls dialog box.
 
 const
   // version number of ModelMuse.
