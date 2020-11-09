@@ -7,7 +7,7 @@ uses
   ObsInterfaceUnit;
 
 type
-  TCustomObservationItem = class(TPhastCollectionItem)
+  TCustomObservationItem = class(TPhastCollectionItem, IObservationItem)
   private
     FName: string;
     FComment: string;
@@ -31,6 +31,12 @@ type
     function GetPrint: Boolean;
     function GetName: string;
     function GetObservationGroup: string;
+    function GetGUID: string;
+    procedure SetGUID(const Value: string);
+  protected
+    function QueryInterface(const IID: TGUID; out Obj): HRESULT; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -41,7 +47,7 @@ type
     // @name is a globally unique identifier used to store and extract
     // @classname in a dictionary. This helps with calculating derived
     // observations.
-    property GUID: string read FGUID write FGUID;
+    property GUID: string read GetGUID write SetGUID;
     property ExportedName: string read FExportedName write FExportedName;
     // When pasting objects from the clipboard, replace the GUID so that there
     // are no duplicates.
@@ -59,7 +65,8 @@ type
     property StoredWeight: TRealStorage read FStoredWeight
       write SetStoredWeight;
     property Comment: string read FComment write SetComment;
-    property ObservationGroup: string read GetObservationGroup write SetObservationGroup;
+    property ObservationGroup: string read GetObservationGroup
+      write SetObservationGroup;
   end;
 
   TObservationList = TList<TCustomObservationItem>;
@@ -76,9 +83,9 @@ type
     procedure SetObsTypeIndex(Value: Integer); virtual; abstract;
     function GetObsTypeString: string; virtual; abstract;
     procedure SetObsTypeString(const Value: string); virtual; abstract;
-    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
+//    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+//    function _AddRef: Integer; stdcall;
+//    function _Release: Integer; stdcall;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -210,6 +217,11 @@ begin
   inherited;
 end;
 
+function TCustomObservationItem.GetGUID: string;
+begin
+  result := FGUID
+end;
+
 function TCustomObservationItem.GetName: string;
 begin
   result := FName;
@@ -262,6 +274,11 @@ end;
 procedure TCustomObservationItem.SetComment(const Value: string);
 begin
   SetStringProperty(FComment, Value);
+end;
+
+procedure TCustomObservationItem.SetGUID(const Value: string);
+begin
+  FGUID := Value;
 end;
 
 procedure TCustomObservationItem.SetName(const Value: string);
@@ -331,6 +348,16 @@ begin
   result := 'unknown';
 end;
 
+function TCustomObservationItem._AddRef: Integer;
+begin
+  result := -1;
+end;
+
+function TCustomObservationItem._Release: Integer;
+begin
+  result := -1;
+end;
+
 { TCustomTimeObservationItem }
 
 procedure TCustomTimeObservationItem.Assign(Source: TPersistent);
@@ -364,16 +391,16 @@ begin
   result := FStoredTime.Value;
 end;
 
-function TCustomTimeObservationItem.QueryInterface(const IID: TGUID;
-  out Obj): HResult;
-const
-  E_NOINTERFACE = HRESULT($80004002);
-begin
-  if GetInterface(IID, Obj) then
-    result := 0
-  else
-    result := E_NOINTERFACE;
-end;
+//function TCustomTimeObservationItem.QueryInterface(const IID: TGUID;
+//  out Obj): HResult;
+//const
+//  E_NOINTERFACE = HRESULT($80004002);
+//begin
+//  if GetInterface(IID, Obj) then
+//    result := 0
+//  else
+//    result := E_NOINTERFACE;
+//end;
 
 procedure TCustomTimeObservationItem.SetStoredTime(const Value: TRealStorage);
 begin
@@ -386,15 +413,15 @@ begin
 //  SetRealProperty(FTime, Value);
 end;
 
-function TCustomTimeObservationItem._AddRef: Integer;
-begin
-  result := -1;
-end;
+//function TCustomTimeObservationItem._AddRef: Integer;
+//begin
+//  result := -1;
+//end;
 
-function TCustomTimeObservationItem._Release: Integer;
-begin
-  result := -1;
-end;
+//function TCustomTimeObservationItem._Release: Integer;
+//begin
+//  result := -1;
+//end;
 
 { TObsCompareItem }
 
@@ -545,6 +572,17 @@ procedure TCustomComparisonCollection.SetItem(Index: Integer;
   const Value: TCustomTimeObservationItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+function TCustomObservationItem.QueryInterface(const IID: TGUID;
+  out Obj): HRESULT;
+const
+  E_NOINTERFACE = HRESULT($80004002);
+begin
+  if GetInterface(IID, Obj) then
+    Result := 0
+  else
+    Result := E_NOINTERFACE;
 end;
 
 end.

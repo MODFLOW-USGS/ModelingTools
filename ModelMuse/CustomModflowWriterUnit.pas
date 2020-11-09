@@ -2362,6 +2362,7 @@ begin
       INFLE := ExtractFileName(ChangeFileExt(PValFileName,
         '.' + ADataArray.Name + '.script' ));
       Model.PestTemplateLines.Add('plproc '+ INFLE);
+
     end;
   end;
 
@@ -2405,12 +2406,13 @@ end;
 function TCustomModflowWriter.DataArrayUsesPestParameters(
   const DataArray: TDataArray; const LayerIndex: integer): Boolean;
 begin
-  {$IFDEF DEBUG}
+//  {$IFDEF DEBUG}
   Assert(Model <> nil);
-  result := Model.PestUsed and (DataArray.DataType = rdtDouble);
-  {$ELSE}
-  result := False;
-  {$ENDIF}
+  result := Model.PestUsed and (DataArray.DataType = rdtDouble)
+    and DataArray.PestParametersUsed;
+//  {$ELSE}
+//  result := False;
+//  {$ENDIF}
 end;
 
 class function TCustomFileWriter.FileName(const AFileName: string): string;

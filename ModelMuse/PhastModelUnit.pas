@@ -10069,6 +10069,8 @@ const
 //                working with the Object Properties dialog box.
 //               Bug fix: Fixed a bug that could cause an access violation in
 //                the SUTRA Time Controls dialog box.
+//               Bug fix: Fixed a bug that could cause an access violation in
+//                the Manage Parameters dialog box.
 
 const
   // version number of ModelMuse.

@@ -1327,16 +1327,19 @@ begin
     ATreeNode.Free;
     FTiedParamDictionary.Remove(AParam);
   end;
-  FParameterNameNameDictionary.Remove(UpperCase(AParam.ParameterName));
-  FParamList.Remove(AParam);
-
-  LinkedParamCol := rdgParameters.Cols[Ord(pcTiedParameter)];
-  Row := LinkedParamCol.IndexOf(AParam.ParameterName);
-  while Row >= 1 do
+  if AParam <> nil then
   begin
-    rdgParameters.Cells[Ord(pcTiedParameter), Row] := '';
-    rdgParameters.Objects[Ord(pcTiedParameter), Row] := nil;
+    FParameterNameNameDictionary.Remove(UpperCase(AParam.ParameterName));
+    FParamList.Remove(AParam);
+
+    LinkedParamCol := rdgParameters.Cols[Ord(pcTiedParameter)];
     Row := LinkedParamCol.IndexOf(AParam.ParameterName);
+    while Row >= 1 do
+    begin
+      rdgParameters.Cells[Ord(pcTiedParameter), Row] := '';
+      rdgParameters.Objects[Ord(pcTiedParameter), Row] := nil;
+      Row := LinkedParamCol.IndexOf(AParam.ParameterName);
+    end;
   end;
 
   AParam.Free;

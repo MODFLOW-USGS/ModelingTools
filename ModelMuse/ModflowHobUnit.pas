@@ -53,6 +53,7 @@ type
     FStatistic: double;
     FObservationGroup: string;
     FName: string;
+    FGUID: string;
 //    FObservationGroup: string;
     procedure SetHead(const Value: double);
     procedure SetStatFlag(const Value: TStatFlag);
@@ -68,6 +69,8 @@ type
     function GetObservationGroup: string;
     procedure SetObservationGroup(const Value: string);
     procedure SetName(const Value: string);
+    function GetGUID: string;
+    procedure SetGUID(const Value: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
@@ -87,6 +90,7 @@ type
     property StatFlag: TStatFlag read GetStatFlag write SetStatFlag;
     property ObservationGroup: string read GetObservationGroup
       write SetObservationGroup;
+    property GUID: string read GetGUID write SetGUID;
   end;
 
   THobList = TList<THobItem>;
@@ -485,6 +489,17 @@ begin
   inherited;
 end;
 
+function THobItem.GetGUID: string;
+var
+  MyGuid : TGUID;
+begin
+  if (FGUID = '') and (CreateGUID(MyGuid) = 0) then
+  begin
+    FGUID := GUIDToString(MyGuid);
+  end;
+  result := FGUID;
+end;
+
 function THobItem.GetHead: double;
 begin
   result := FHead;
@@ -653,6 +668,11 @@ end;
 procedure THobItem.SetObservationGroup(const Value: string);
 begin
   FObservationGroup := Value;
+end;
+
+procedure THobItem.SetGUID(const Value: string);
+begin
+  FGUID := Value;
 end;
 
 procedure THobItem.SetHead(const Value: double);

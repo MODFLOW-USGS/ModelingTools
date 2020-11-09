@@ -3,8 +3,16 @@ unit ObsInterfaceUnit;
 interface
 
 type
-  ITimeObservationItem = interface(IUnknown)
+  IObservationItem = interface(IUnknown)
     function GetName: string;
+    function GetGUID: string;
+
+    property Name: string read GetName;
+    property GUID: string read GetGUID;
+  end;
+
+  ITimeObservationItem = interface(IObservationItem)
+//    function GetName: string;
     function GetObservedValue: double;
     function GetTime: double;
     function GetWeight: Double;
@@ -13,7 +21,7 @@ type
     procedure SetObservedValue(const Value: double);
     procedure SetTime(const Value: double);
 
-    property Name: string read GetName;
+//    property Name: string read GetName;
     property ObservedValue: double read GetObservedValue
       write SetObservedValue;
     property Time: double read GetTime write SetTime;

@@ -63,10 +63,13 @@ type
   private
     FStatFlag: TStatFlag;
     FStatistic: double;
+    FGUID: string;
 //    FObservationGroup: string;
     procedure SetStatFlag(const Value: TStatFlag);
     procedure SetStatistic(const Value: double);
     function GetObservationGroup: string;
+    function GetGUID: string;
+    procedure SetGUID(const Value: string);
 //    procedure SetObservationGroup(const Value: string);
   protected
     function GetName: string;
@@ -82,6 +85,7 @@ type
     property Statistic: double read FStatistic write SetStatistic;
     property StatFlag: TStatFlag read FStatFlag write SetStatFlag;
     property ObservationGroup: string read GetObservationGroup;
+    property GUID: string read GetGUID write SetGUID;
   end;
 
   TCustomFluxObservations = class(TPhastCollection)
@@ -604,6 +608,17 @@ begin
   inherited;
 end;
 
+function TFluxObservation.GetGUID: string;
+var
+  MyGuid : TGUID;
+begin
+  if (FGUID = '') and (CreateGUID(MyGuid) = 0) then
+  begin
+    FGUID := GUIDToString(MyGuid);
+  end;
+  result := FGUID;
+end;
+
 function TFluxObservation.GetName: string;
 var
   FluxCollection: TFluxObservations;
@@ -673,6 +688,11 @@ end;
 //begin
 //  FObservationGroup := Value;
 //end;
+
+procedure TFluxObservation.SetGUID(const Value: string);
+begin
+  FGUID := Value;
+end;
 
 procedure TFluxObservation.SetStatFlag(const Value: TStatFlag);
 begin

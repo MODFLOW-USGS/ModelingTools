@@ -232,7 +232,7 @@ begin
   begin
     ObsComparisons := frmGoPhast.PhastModel.Modflow6GlobalObservationComparisons;
   end
-  else if frmGoPhast.ModelSelection in ModflowSelection then
+  else if frmGoPhast.ModelSelection in Modflow2005Selection then
   begin
     ObsComparisons := frmGoPhast.PhastModel.ModflowGlobalObservationComparisons;
   end
