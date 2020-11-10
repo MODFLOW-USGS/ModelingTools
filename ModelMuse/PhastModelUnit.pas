@@ -41,7 +41,7 @@ uses System.UITypes,
   QuadMeshGenerator, GeoRefUnit, SutraBoundaryUnit, Character,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
-  PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit;
+  PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -3290,6 +3290,8 @@ that affects the model output should also have a comment. }
     property Mt3dSpecesName[const Index: Integer]: string read GetMt3dSpecesName;
     function Mt3dIsSelected: Boolean; virtual;
     procedure FillObsItemList(List: TObservationList; IncludeComparisons: Boolean = False);
+    procedure FillObsInterfaceItemList(List: TObservationInterfaceList;
+      IncludeComparisons: Boolean = False);
     property PestUsed: Boolean read GetPestUsed;
     property SutraLakesUsed: Boolean read GetSutraLakesUsed;
     property DirectObservationLines: TStringList read FDirectObservationLines;
@@ -10071,6 +10073,9 @@ const
 //                the SUTRA Time Controls dialog box.
 //               Bug fix: Fixed a bug that could cause an access violation in
 //                the Manage Parameters dialog box.
+//               Bug fix: Fixed a bug with renaming MODFLOW parameters when the
+//                only change was a change in the capitalization of the
+//                parameter name.
 
 const
   // version number of ModelMuse.
@@ -31778,7 +31783,124 @@ begin
   result := ModflowUsed(Sender) and ModflowPackages.FarmProcess.IsSelected;
 end;
 
-procedure TCustomModel.FillObsItemList(List: TObservationList; IncludeComparisons: Boolean = False);
+procedure TCustomModel.FillObsInterfaceItemList(List: TObservationInterfaceList;
+  IncludeComparisons: Boolean = False);
+var
+  ItemIndex: Integer;
+  AnItem: IObservationItem;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  HeadObservations: THobBoundary;
+  FluxIndex: Integer;
+  FluxObsGroup: TFluxObservationGroup;
+  ObsList: TObservationList;
+  ObsIndex: Integer;
+begin
+  ObsList := TObservationList.Create;
+  try
+    FillObsItemList(ObsList);
+    List.Capacity := ObsList.Count;
+    for ItemIndex := 0 to ObsList.Count - 1 do
+    begin
+      AnItem := ObsList[ItemIndex];
+      List.Add(AnItem);
+    end;
+    if ModelSelection in Modflow2005Selection then
+    begin
+      if ModflowPackages.HobPackage.IsSelected then
+      begin
+        for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+        begin
+          AScreenObject := ScreenObjects[ScreenObjectIndex];
+          if AScreenObject.Deleted then
+          begin
+            Continue;
+          end;
+          HeadObservations := AScreenObject.ModflowHeadObservations;
+          if HeadObservations <> nil then
+          begin
+            for ObsIndex := 0 to HeadObservations.Values.Count - 1 do
+            begin
+              AnItem := HeadObservations.Values[ObsIndex];
+              List.Add(AnItem);
+            end;
+          end;
+        end;
+      end;
+
+      if ModflowPackages.ChobPackage.IsSelected then
+      begin
+        for FluxIndex := 0 to HeadFluxObservations.Count - 1 do
+        begin
+          FluxObsGroup := HeadFluxObservations[FluxIndex];
+          for ObsIndex := 0 to FluxObsGroup.ObservationTimes.Count - 1 do
+          begin
+            AnItem := FluxObsGroup.ObservationTimes[ObsIndex];
+            List.Add(AnItem);
+          end;
+        end;
+      end;
+
+      if ModflowPackages.DrobPackage.IsSelected then
+      begin
+        for FluxIndex := 0 to DrainObservations.Count - 1 do
+        begin
+          FluxObsGroup := DrainObservations[FluxIndex];
+          for ObsIndex := 0 to FluxObsGroup.ObservationTimes.Count - 1 do
+          begin
+            AnItem := FluxObsGroup.ObservationTimes[ObsIndex];
+            List.Add(AnItem);
+          end;
+        end;
+      end;
+
+      if ModflowPackages.GbobPackage.IsSelected then
+      begin
+        for FluxIndex := 0 to GhbObservations.Count - 1 do
+        begin
+          FluxObsGroup := GhbObservations[FluxIndex];
+          for ObsIndex := 0 to FluxObsGroup.ObservationTimes.Count - 1 do
+          begin
+            AnItem := FluxObsGroup.ObservationTimes[ObsIndex];
+            List.Add(AnItem);
+          end;
+        end;
+      end;
+
+      if ModflowPackages.RvobPackage.IsSelected then
+      begin
+        for FluxIndex := 0 to RiverObservations.Count - 1 do
+        begin
+          FluxObsGroup := RiverObservations[FluxIndex];
+          for ObsIndex := 0 to FluxObsGroup.ObservationTimes.Count - 1 do
+          begin
+            AnItem := FluxObsGroup.ObservationTimes[ObsIndex];
+            List.Add(AnItem);
+          end;
+        end;
+      end;
+
+      if ModflowPackages.StobPackage.IsSelected then
+      begin
+        for FluxIndex := 0 to StreamObservations.Count - 1 do
+        begin
+          FluxObsGroup := StreamObservations[FluxIndex];
+          for ObsIndex := 0 to FluxObsGroup.ObservationTimes.Count - 1 do
+          begin
+            AnItem := FluxObsGroup.ObservationTimes[ObsIndex];
+            List.Add(AnItem);
+          end;
+        end;
+      end;
+    end;
+  finally
+    ObsList.Free;
+  end;
+end;
+
+
+procedure TCustomModel.FillObsItemList(List: TObservationList;
+  IncludeComparisons: Boolean = False);
 var
   ObjectIndex: Integer;
   AScreenObject: TScreenObject;

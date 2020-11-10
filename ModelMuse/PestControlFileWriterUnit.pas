@@ -4,13 +4,13 @@ interface
 
 uses
   CustomModflowWriterUnit, System.SysUtils, PestObsUnit, GoPhastTypes,
-  PhastModelUnit;
+  PhastModelUnit, ObsInterfaceUnit;
 
 type
   TPestControlFileWriter = class(TCustomFileWriter)
   private
     FNameOfFile: string;
-    FUsedObservations: TObservationList;
+    FUsedObservations: TObservationInterfaceList;
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
     procedure WriteControlSection;
@@ -76,14 +76,22 @@ resourcestring
 
 { TPestControlFileWriter }
 
-const Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST, ptCHD,
+const
+  Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST, ptCHD,
   ptGHB, ptQ, ptRIV, ptDRN];
+
+  Mf2005ParamType: TParameterTypes = [ptLPF_HK, ptLPF_HANI, ptLPF_VK,
+    ptLPF_VANI, ptLPF_SS, ptLPF_SY, ptLPF_VKCB, ptRCH, ptEVT, ptETS,
+    ptCHD, ptGHB, ptQ,
+    ptRIV, ptDRN, ptDRT, ptSFR, ptHFB,
+    ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY,
+    ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX, ptPEST];
 
 constructor TPestControlFileWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
-  FUsedObservations := TObservationList.Create;
+  FUsedObservations := TObservationInterfaceList.Create;
 end;
 
 destructor TPestControlFileWriter.Destroy;
@@ -109,20 +117,29 @@ end;
 
 function TPestControlFileWriter.NumberOfObservations: integer;
 var
-  TempList: TObservationList;
+  TempList: TObservationInterfaceList;
   ObsIndex: Integer;
   AnObs: TCustomObservationItem;
+  IObs: IObservationItem;
 begin
-  TempList := TObservationList.Create;
+  TempList := TObservationInterfaceList.Create;
   try
-    frmGoPhast.PhastModel.FillObsItemList(TempList, True);
+    frmGoPhast.PhastModel.FillObsInterfaceItemList(TempList, True);
     FUsedObservations.Capacity := TempList.Count;
     for ObsIndex := 0 to TempList.Count - 1 do
     begin
-      AnObs := TempList[ObsIndex];
-      if AnObs.Print then
+      IObs := TempList[ObsIndex];
+      if IObs is TCustomObservationItem then
       begin
-        FUsedObservations.Add(AnObs);
+        AnObs := TCustomObservationItem(IObs);
+        if AnObs.Print then
+        begin
+          FUsedObservations.Add(IObs);
+        end;
+      end
+      else
+      begin
+        FUsedObservations.Add(IObs);
       end;
     end;
     result := FUsedObservations.Count;
@@ -157,7 +174,11 @@ begin
   UsedTypes := [];
   if Model.ModelSelection = msModflow2015 then
   begin
-    UsedTypes := Mf15ParamType
+    UsedTypes := Mf15ParamType;
+  end
+  else if Model.ModelSelection in Modflow2005Selection then
+  begin
+    UsedTypes := Mf2005ParamType
   end
   else
   begin
@@ -641,10 +662,10 @@ begin
   begin
     Exit;
   end;
-  if Model.ModelSelection <> msModflow2015 then
-  begin
-    Exit;
-  end;
+//  if Model.ModelSelection <> msModflow2015 then
+//  begin
+//    Exit;
+//  end;
 
   FNameOfFile := FileName(AFileName);
   OpenFile(FNameOfFile);
@@ -852,20 +873,20 @@ end;
 procedure TPestControlFileWriter.WriteObservations;
 var
   ObsIndex: Integer;
-  AnObs: TCustomObservationItem;
+  AnObs: IObservationItem;
 begin
   WriteSectionHeader('observation data');
   for ObsIndex := 0 to FUsedObservations.Count - 1 do
   begin
     AnObs := FUsedObservations[ObsIndex];
-    if AnObs.ExportedName <> '' then
-    begin
-      WriteString(AnObs.ExportedName);
-    end
-    else
-    begin
+//    if AnObs.ExportedName <> '' then
+//    begin
+//      WriteString(AnObs.ExportedName);
+//    end
+//    else
+//    begin
       WriteString(AnObs.Name);
-    end;
+//    end;
     WriteFloat(AnObs.ObservedValue);
     WriteFloat(AnObs.Weight);
     WriteString(' ' + AnObs.ObservationGroup);
@@ -1109,7 +1130,11 @@ begin
   UsedTypes := [];
   if Model.ModelSelection = msModflow2015 then
   begin
-    UsedTypes := Mf15ParamType
+    UsedTypes := Mf15ParamType;
+  end
+  else if Model.ModelSelection in Modflow2005Selection then
+  begin
+    UsedTypes := Mf2005ParamType;
   end
   else
   begin

@@ -578,34 +578,49 @@ begin
   begin
     Exit;
   end;
-  FNamesToRemove.Add(OldName);
   Model := Collection.Model as TPhastModel;
-  for Index := 0 to Model.ParserCount - 1 do
+  if UpperCase(OldName) = UpperCase(NewName) then
   begin
-    Parser := Model.Parsers[Index];
-    VariableIndex := Parser.IndexOfVariable(OldName);
-    if VariableIndex >= 0 then
+    for Index := 0 to Model.ParserCount - 1 do
     begin
-      Variable := Parser.Variables[VariableIndex] as TCustomVariable;
-      case Variable.ResultType of
-        rdtDouble:
-          begin
-            Parser.CreateVariable(NewName, Variable.Classification, 0.0, NewName);
-          end;
-        rdtInteger:
-          begin
-            Parser.CreateVariable(NewName, Variable.Classification, 0, NewName);
-          end;
-        rdtBoolean:
-          begin
-            Parser.CreateVariable(NewName, Variable.Classification, False, NewName);
-          end;
-        rdtString:
-          begin
-            Parser.CreateVariable(NewName, Variable.Classification, '', NewName);
-          end;
+      Parser := Model.Parsers[Index];
+      VariableIndex := Parser.IndexOfVariable(OldName);
+      if VariableIndex >= 0 then
+      begin
+        Parser.RenameVariable(VariableIndex, NewName, NewName);
       end;
-//      Parser.RenameVariable(VariableIndex, NewName);
+    end;
+  end
+  else
+  begin
+    FNamesToRemove.Add(OldName);
+    for Index := 0 to Model.ParserCount - 1 do
+    begin
+      Parser := Model.Parsers[Index];
+      VariableIndex := Parser.IndexOfVariable(OldName);
+      if VariableIndex >= 0 then
+      begin
+        Variable := Parser.Variables[VariableIndex] as TCustomVariable;
+        case Variable.ResultType of
+          rdtDouble:
+            begin
+              Parser.CreateVariable(NewName, Variable.Classification, 0.0, NewName);
+            end;
+          rdtInteger:
+            begin
+              Parser.CreateVariable(NewName, Variable.Classification, 0, NewName);
+            end;
+          rdtBoolean:
+            begin
+              Parser.CreateVariable(NewName, Variable.Classification, False, NewName);
+            end;
+          rdtString:
+            begin
+              Parser.CreateVariable(NewName, Variable.Classification, '', NewName);
+            end;
+        end;
+  //      Parser.RenameVariable(VariableIndex, NewName);
+      end;
     end;
   end;
 end;

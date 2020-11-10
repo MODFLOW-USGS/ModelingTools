@@ -3257,7 +3257,8 @@ begin
   FVariables.Clear;
 end;
 
-procedure TRbwParser.RenameVariable(var Index: integer; NewName: string; NewDisplayName: string);
+procedure TRbwParser.RenameVariable(var Index: integer; NewName: string;
+  NewDisplayName: string);
 var
   AVariable: TCustomValue;
   NewExpressions: TStringList;

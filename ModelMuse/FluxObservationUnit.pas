@@ -43,6 +43,8 @@ type
  protected
     function GetTime: double;
     function GetObservedValue: double;
+    function GetScreenObject: TObject;
+    property ScreenObject: TObject read GetScreenObject;
   public
     // If Source is a @classname, @name copies the published properties
     // of @classname from the source.
@@ -58,8 +60,11 @@ type
     property Comment: string read FComment write SetComment;
   end;
 
+  TFluxObservationGroup = class;
+
   // @name represents a single flux observation
-  TFluxObservation = class(TCustomFluxObservationItem, ITimeObservationItem)
+  TFluxObservation = class(TCustomFluxObservationItem, IObservationItem,
+    ITimeObservationItem)
   private
     FStatFlag: TStatFlag;
     FStatistic: double;
@@ -70,6 +75,7 @@ type
     function GetObservationGroup: string;
     function GetGUID: string;
     procedure SetGUID(const Value: string);
+    function GetFluxGroup: TFluxObservationGroup;
 //    procedure SetObservationGroup(const Value: string);
   protected
     function GetName: string;
@@ -81,6 +87,8 @@ type
     // If Source is a @classname, @name copies the published properties
     // of @classname from the source.
     procedure Assign(Source: TPersistent); override;
+    function ObservationType: string;
+    property FluxGroup: TFluxObservationGroup read GetFluxGroup;
   published
     property Statistic: double read FStatistic write SetStatistic;
     property StatFlag: TStatFlag read FStatFlag write SetStatFlag;
@@ -94,8 +102,6 @@ type
     // of @classname from the source.
     procedure Assign(Source: TPersistent); override;
   end;
-
-  TFluxObservationGroup = class;
 
   {@name is a collection of @link(TFluxObservation)s.}
   TFluxObservations = class(TCustomFluxObservations)
@@ -604,8 +610,19 @@ begin
     SourceItem := TFluxObservation(Source);
     Statistic := SourceItem.Statistic;
     StatFlag := SourceItem.StatFlag;
+    GUID := SourceItem.GUID;
   end;
   inherited;
+end;
+
+function TFluxObservation.GetFluxGroup: TFluxObservationGroup;
+begin
+  if Collection = nil then
+  begin
+    result := nil;
+    Exit;
+  end;
+  result := (Collection as TFluxObservations).FFluxObsGroup;
 end;
 
 function TFluxObservation.GetGUID: string;
@@ -672,6 +689,11 @@ begin
         result := Sqrt(Statistic);
       end;
   end;
+end;
+
+function TFluxObservation.ObservationType: string;
+begin
+  result := 'Flow';
 end;
 
 function TFluxObservation.QueryInterface(const IID: TGUID; out Obj): HResult;
@@ -1297,6 +1319,11 @@ end;
 function TCustomFluxObservationItem.GetObservedValue: double;
 begin
   result := FObservedValue
+end;
+
+function TCustomFluxObservationItem.GetScreenObject: TObject;
+begin
+  result := nil;
 end;
 
 function TCustomFluxObservationItem.GetTime: double;

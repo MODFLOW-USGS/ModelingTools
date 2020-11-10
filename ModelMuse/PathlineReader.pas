@@ -1251,6 +1251,8 @@ resourcestring
   StrErrorReadingTheFo = 'Error reading  line %0:d from what is supposed to ' +
   'be a MODPATH 7 pathline file. This line was "%:ss". ';
   StrProgrammingErrorN = 'Programming error: no MODPATH file type selected.';
+  StrThereIsSomethingW = 'There is something wrong with the PATHLINE file. P' +
+  'lease contact the developer for support.';
 
 const
   StrSTARTLAY: AnsiString = 'START_LAY';
@@ -8100,6 +8102,12 @@ begin
     Splitter.Delimiter := ' ';
     Reset(FTextFile);
     Readln(FTextFile, ALine);
+    if Trim(ALine) <> 'MODPATH_PATHLINE_FILE         7         2' then
+    begin
+      Beep;
+      MessageDlg(StrThereIsSomethingW, mtError, [mbOK], 0);
+      Exit;
+    end;
     Assert(Trim(ALine) = 'MODPATH_PATHLINE_FILE         7         2');
     Inc(LineIndex);
     Readln(FTextFile, TrackDirection, RefTime, XOrigin, YOrigin, AngRot);
@@ -8165,6 +8173,12 @@ begin
             MessageDlg(Format(StrErrorPrematureTer, [LineIndex]), mtError, [mbOK], 0);
           end;
           Splitter.DelimitedText := ALine;
+          if Splitter.Count <> 11 then
+          begin
+            Beep;
+            MessageDlg(StrThereIsSomethingW, mtError, [mbOK], 0);
+            Exit;
+          end;
           Assert(Splitter.Count = 11, Format(StrErrorReadingTheFo, [LineIndex,ALine]));
 
           CellNumber := StrToInt(Splitter[0]);

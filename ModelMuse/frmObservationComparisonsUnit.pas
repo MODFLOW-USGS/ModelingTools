@@ -8,9 +8,16 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ExtCtrls, SsButtonEd, RbwStringTreeCombo,
   System.Generics.Collections, VirtualTrees, frameGridUnit, GoPhastTypes,
-  ObservationComparisonsUnit, UndoItems, PestObsUnit;
+  ObservationComparisonsUnit, UndoItems, PestObsUnit, ObsInterfaceUnit,
+  FluxObservationUnit;
 
 type
+  TRefHolder = class(TObject)
+    Ref: IObservationItem;
+  end;
+
+  TRefHolderObjectList = TObjectList<TRefHolder>;
+
   TfrmObservationComparisons = class(TfrmCustomGoPhast)
     pnlBottom: TPanel;
     btnCancel: TBitBtn;
@@ -41,8 +48,9 @@ type
   private
     { Private declarations }
     FObsDictionary: TDictionary<string, PVirtualNode>;
-    FObsItemDictionary: TDictionary<string, TCustomObservationItem>;
-    FObsItemList: TObservationList;
+    FObsItemDictionary: TDictionary<string, IObservationItem>;
+    FObsItemList: TObservationInterfaceList;
+    FRefHolders: TRefHolderObjectList;
 
     FCol: Integer;
     FRow: Integer;
@@ -98,12 +106,14 @@ type
     ObsTypeName: string;
     ScreenObject: TScreenObject;
     ObsCollection: TCustomSutraFluxObservations;
-    Obs: TCustomObservationItem;
+    FluxGroup: TFluxObservationGroup;
+    Obs: IObservationItem;
     function Caption: string;
     function Key: string; overload;
     class function Key(ObsTypeName: string; ScreenObject: TObject;
       ObsCollection: TCustomSutraFluxObservations;
-      Obs: TCustomObservationItem): string; overload;
+      FluxGroup: TFluxObservationGroup;
+      Obs: IObservationItem): string; overload;
   end;
   PObsTreeItem = ^TObsTreeItem;
 
@@ -120,8 +130,9 @@ procedure TfrmObservationComparisons.FormCreate(Sender: TObject);
 begin
   inherited;
   FObsDictionary := TDictionary<string, PVirtualNode>.Create;
-  FObsItemDictionary := TDictionary<string, TCustomObservationItem>.Create;
-  FObsItemList:= TObservationList.Create;
+  FObsItemDictionary := TDictionary<string, IObservationItem>.Create;
+  FObsItemList:= TObservationInterfaceList.Create;
+  FRefHolders := TRefHolderObjectList.Create;
 
   GetData;
 end;
@@ -131,6 +142,7 @@ begin
   FObsItemList.Free;
   FObsItemDictionary.Free;
   FObsDictionary.Free;
+  FRefHolders.Free;
   inherited;
 end;
 
@@ -156,8 +168,9 @@ procedure TfrmObservationComparisons.frameObsComparisonsGridSelectCell(
 var
   CellRect: TRect;
   ANode: PVirtualNode;
-  ObItem : TCustomObservationItem;
+  ObItem : IObservationItem;
   NodeParent: PVirtualNode;
+  RefHolder: TRefHolder;
 begin
   inherited;
   if frameObsComparisons.Grid.Drawing then
@@ -198,7 +211,8 @@ begin
     end;
     if frameObsComparisons.Grid.Objects[FCol, FRow] <> nil then
     begin
-      ObItem := frameObsComparisons.Grid.Objects[FCol, FRow] as TCustomObservationItem;
+      RefHolder := frameObsComparisons.Grid.Objects[FCol, FRow] as TRefHolder;
+      ObItem := RefHolder.Ref;
       if FObsDictionary.TryGetValue(ObItem.GUID, ANode) then
       begin
         treecomboInPlaceEditor.Tree.Selected[ANode] := True;
@@ -219,8 +233,10 @@ var
   ObsComparisons: TGlobalObservationComparisons;
   ObsItem: TGlobalObsComparisonItem;
   RowIndex: Integer;
-  Item: TCustomObservationItem;
+//  Item: TCustomObservationItem;
   ScreenObject: TObject;
+  Item: IObservationItem;
+  RefHolder: TRefHolder;
 begin
   InitializeItemList;
   InitializeInPlaceEditor;
@@ -262,7 +278,10 @@ begin
       begin
         frameObsComparisons.Grid.Cells[Ord(occObs1), RowIndex] := Item.Name
       end;
-      frameObsComparisons.Grid.Objects[Ord(occObs1), RowIndex] := Item;
+      RefHolder := TRefHolder.Create;
+      FRefHolders.Add(RefHolder);
+      RefHolder.Ref := Item;
+      frameObsComparisons.Grid.Objects[Ord(occObs1), RowIndex] := RefHolder;
     end
     else
     begin
@@ -282,7 +301,10 @@ begin
       begin
         frameObsComparisons.Grid.Cells[Ord(occObs2), RowIndex] := Item.Name
       end;
-      frameObsComparisons.Grid.Objects[Ord(occObs2), RowIndex] := Item;
+      RefHolder := TRefHolder.Create;
+      FRefHolders.Add(RefHolder);
+      RefHolder.Ref := Item;
+      frameObsComparisons.Grid.Objects[Ord(occObs2), RowIndex] := RefHolder;
     end
     else
     begin
@@ -322,7 +344,7 @@ end;
 
 procedure TfrmObservationComparisons.InitializeInPlaceEditor;
 var
-  AnObs: TCustomObservationItem;
+//  AnObs: TCustomObservationItem;
   UsedTypes: TStringList;
   TIndex: Integer;
   ObsTypeName: string;
@@ -335,6 +357,10 @@ var
   ObsNode: PVirtualNode;
   ItemIndex: Integer;
   ObsCollection: TCustomSutraFluxObservations;
+  AnObs: IObservationItem;
+  FluxItem: TCustomFluxObsItem;
+  Mf2005FluxObs: TFluxObservation;
+  FluxGroup: TFluxObservationGroup;
 begin
   treecomboInPlaceEditor.Tree.BeginUpdate;
   UsedTypes := TStringList.Create;
@@ -356,6 +382,7 @@ begin
       ObsTreeItem.ObsTypeName := ObsTypeName;
       ObsTreeItem.ScreenObject := nil;
       ObsTreeItem.ObsCollection := nil;
+      ObsTreeItem.FluxGroup := nil;
       ANode := treecomboInPlaceEditor.Tree.AddChild(nil, ObsTreeItem);
       FObsDictionary.Add(ObsTypeName, ANode);
     end;
@@ -364,18 +391,23 @@ begin
     begin
       AnObs := FObsItemList[ItemIndex];
 
+      ObsTypeName := AnObs.ObservationType;
+      ObsCollection := nil;
+      FluxGroup := nil;
       if AnObs is TCustomFluxObsItem then
       begin
-        ObsCollection := AnObs.Collection as TCustomSutraFluxObservations;
+        FluxItem := TCustomFluxObsItem(AnObs);
+        ObsCollection := FluxItem.Collection as TCustomSutraFluxObservations;
       end
-      else
+      else if AnObs is TFluxObservation then
       begin
-        ObsCollection := nil;
+        Mf2005FluxObs := TFluxObservation(AnObs);
+        FluxGroup := Mf2005FluxObs.FluxGroup;
       end;
 
       ParentNodeKey :=
         TObsTreeItem.Key(AnObs.ObservationType, AnObs.ScreenObject,
-          ObsCollection, nil);
+          ObsCollection, FluxGroup, nil);
       if not FObsDictionary.TryGetValue(ParentNodeKey, ParentNode) then
       begin
         ObsTypeNode := FObsDictionary[AnObs.ObservationType];
@@ -385,12 +417,13 @@ begin
         ObsTreeItem.ObsTypeName := ObsTypeName;
         ObsTreeItem.ScreenObject := AnObs.ScreenObject as TScreenObject;
         ObsTreeItem.ObsCollection := ObsCollection;
+        ObsTreeItem.FluxGroup := FluxGroup;
         ParentNode := treecomboInPlaceEditor.Tree.AddChild(ObsTypeNode, ObsTreeItem);
         FObsDictionary.Add(ParentNodeKey, ParentNode);
       end;
 
       NodeCaption := TObsTreeItem.Key(AnObs.ObservationType, AnObs.ScreenObject,
-        ObsCollection, AnObs);
+        ObsCollection, FluxGroup, AnObs);
 
       if FObsDictionary.TryGetValue(AnObs.GUID, ObsNode) then
       begin
@@ -403,6 +436,7 @@ begin
         ObsTreeItem.ObsTypeName := ObsTypeName;
         ObsTreeItem.ScreenObject := AnObs.ScreenObject as TScreenObject;
         ObsTreeItem.ObsCollection := ObsCollection;
+        ObsTreeItem.FluxGroup := FluxGroup;
         ANode := treecomboInPlaceEditor.Tree.AddChild(ParentNode, ObsTreeItem);
         FObsDictionary.Add(AnObs.GUID, ANode);
       end;
@@ -415,12 +449,12 @@ end;
 
 procedure TfrmObservationComparisons.InitializeItemList;
 begin
-  frmGoPhast.PhastModel.FillObsItemList(FObsItemList);
+  frmGoPhast.PhastModel.FillObsInterfaceItemList(FObsItemList);
 end;
 
 procedure TfrmObservationComparisons.InitializeObsItemDictionary;
 var
-  AnObs: TCustomObservationItem;
+  AnObs: IObservationItem;
   ItemIndex: Integer;
 begin
   for ItemIndex := 0 to FObsItemList.Count - 1 do
@@ -437,9 +471,10 @@ var
   RowOK: Boolean;
   ColumnIndex: Integer;
   ObsComp: TGlobalObsComparisonItem;
-  Item: TCustomObservationItem;
+  Item: IObservationItem;
   InvalidateEvent: TNotifyEvent;
   ExistingComparisons: TGlobalObservationComparisons;
+  RefHolder: TRefHolder;
 begin
   InvalidateEvent := nil;
   ObsComparisons := TGlobalObservationComparisons.Create(InvalidateEvent);
@@ -463,9 +498,11 @@ begin
         ObsComp := ObsComparisons.Add;
 
         ObsComp.Name := frameObsComparisons.Grid.Cells[Ord(occName),RowIndex];
-        Item := frameObsComparisons.Grid.Objects[Ord(occObs1),RowIndex] as TCustomObservationItem;
+        RefHolder := frameObsComparisons.Grid.Objects[Ord(occObs1),RowIndex] as TRefHolder;
+        Item := RefHolder.Ref;
         ObsComp.Guid1 := Item.GUID;
-        Item := frameObsComparisons.Grid.Objects[Ord(occObs2),RowIndex] as TCustomObservationItem;
+        RefHolder := frameObsComparisons.Grid.Objects[Ord(occObs2),RowIndex] as TRefHolder;
+        Item := RefHolder.Ref;
         ObsComp.Guid2 := Item.GUID;
         ObsComp.ObservedValue := frameObsComparisons.Grid.RealValue[Ord(occValue),RowIndex];
         ObsComp.Weight := frameObsComparisons.Grid.RealValue[Ord(occWeight),RowIndex];
@@ -497,6 +534,7 @@ procedure TfrmObservationComparisons.treecomboInPlaceEditorTreeChange(
   Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   MyObject: PObsTreeItem;
+  RefHolder: TRefHolder;
 begin
   MyObject := Sender.GetNodeData(Node);
   if MyObject <> nil then
@@ -508,12 +546,20 @@ begin
         frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
           [MyObject^.ScreenObject.Name, MyObject^.Obs.Name]);
       end
-      else
+      else if MyObject^.ObsCollection <> nil then
       begin
         frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
           [MyObject^.ObsCollection.ObservationName, MyObject^.Obs.Name]);
+      end
+      else
+      begin
+        frameObsComparisons.Grid.Cells[FCol, FRow] := Format('%0:s.%1:s',
+          [MyObject^.FluxGroup.ObservationName, MyObject^.Obs.Name]);
       end;
-      frameObsComparisons.Grid.Objects[FCol, FRow] := MyObject^.Obs;
+      RefHolder := TRefHolder.Create;
+      FRefHolders.Add(RefHolder);
+      RefHolder.Ref := MyObject^.Obs;
+      frameObsComparisons.Grid.Objects[FCol, FRow] := RefHolder;
     end
     else
     begin
@@ -560,7 +606,8 @@ begin
   if ObsTreeItem^.Obs <> nil then
   begin
     Assert((ObsTreeItem^.ScreenObject <> nil)
-      or (ObsTreeItem^.ObsCollection <> nil));
+      or (ObsTreeItem^.ObsCollection <> nil)
+      or (ObsTreeItem^.FluxGroup <> nil));
   end;
 end;
 
@@ -579,6 +626,10 @@ begin
   else if ObsCollection <> nil then
   begin
     Result := ObsCollection.ObservationName;
+  end
+  else if FluxGroup <> nil then
+  begin
+    Result := FluxGroup.ObservationName;
   end
   else
   begin
@@ -601,7 +652,8 @@ end;
 
 class function TObsTreeItem.Key(ObsTypeName: string;
   ScreenObject: TObject; ObsCollection: TCustomSutraFluxObservations;
-  Obs: TCustomObservationItem): string;
+  FluxGroup: TFluxObservationGroup;
+  Obs: IObservationItem): string;
 //var
 //  ObsCollection: TCustomSutraFluxObservations;
 begin
@@ -613,6 +665,10 @@ begin
   if ObsCollection <> nil then
   begin
     result := result + '.' + ObsCollection.ObservationName;
+  end;
+  if FluxGroup <> nil then
+  begin
+    result := result + '.' + FluxGroup.ObservationName;
   end;
   if Obs <> nil then
   begin

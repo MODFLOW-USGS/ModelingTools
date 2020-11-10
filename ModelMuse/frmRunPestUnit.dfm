@@ -19,7 +19,7 @@ object frmRunPest: TfrmRunPest
     Top = 8
     Width = 102
     Height = 17
-    Caption = 'Execute model'
+    Caption = 'Run PEST'
     Checked = True
     State = cbChecked
     TabOrder = 0

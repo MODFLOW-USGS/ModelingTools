@@ -46,7 +46,7 @@ type
 
   // @name represents a MODFLOW head observation for one time.
   // @name is stored by @link(THobCollection).
-  THobItem = class(TCustomLocationObservation, ITimeObservationItem)
+  THobItem = class(TCustomLocationObservation, IObservationItem, ITimeObservationItem)
   private
     FHead: double;
     FStatFlag: TStatFlag;
@@ -62,8 +62,12 @@ type
     function GetHeadChange: Double;
     procedure SetHeadChange(const Value: Double);
     function GetHead: double;
-    function ITimeObservationItem.GetObservedValue = GetHead;
-    procedure ITimeObservationItem.SetObservedValue = SetHead;
+    function GetObservedValue: double;
+    procedure SetObservedValue(const Value: double);
+
+//    procedure IObservationItem.SetObservedValue = SetHead;
+//    function ITimeObservationItem.GetObservedValue = GetHead;
+//    procedure ITimeObservationItem.SetObservedValue = SetHead;
     function GetWeight: Double;
     function GetName: string;
     function GetObservationGroup: string;
@@ -71,15 +75,18 @@ type
     procedure SetName(const Value: string);
     function GetGUID: string;
     procedure SetGUID(const Value: string);
+    function GetScreenObject: TObject;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
+    property ScreenObject: TObject read GetScreenObject;
   public
     property HeadChange: Double read GetHeadChange write SetHeadChange;
     property Name: string read GetName write SetName;
+    function ObservationType: string;
   published
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent); override;
@@ -145,7 +152,7 @@ type
     // @name destroys the current instance of @classname.
     // Do not call @name; call Free instead.
     destructor Destroy; override;
-    property HobItems[Index: integer]: THobItem read GetHobItems;
+    property HobItems[Index: integer]: THobItem read GetHobItems; default;
     // ROFF
     property ObservationRowOffset: double read FObservationRowOffset;
     // COFF
@@ -484,6 +491,7 @@ begin
     StatFlag := SourceItem.StatFlag;
     ObservationGroup := SourceItem.ObservationGroup;
     Name := SourceItem.Name;
+    GUID := SourceItem.GUID;
 //    ObservationGroup := SourceItem.ObservationGroup;
   end;
   inherited;
@@ -568,6 +576,24 @@ begin
 //  end;
 end;
 
+function THobItem.GetObservedValue: double;
+begin
+  result := GetHead;
+end;
+
+function THobItem.GetScreenObject: TObject;
+var
+  HobCollection: THobCollection;
+begin
+  if Collection = nil then
+  begin
+    result := nil;
+    Exit;
+  end;
+  HobCollection := Collection as THobCollection;
+  result := HobCollection.FBoundary.ScreenObject;
+end;
+
 function THobItem.GetStatFlag: TStatFlag;
 var
   LocalCollection: THobCollection;
@@ -634,7 +660,13 @@ begin
       and (Item.Statistic = Statistic)
       and (Item.StatFlag = StatFlag)
       and (Item.ObservationGroup = ObservationGroup)
+      and (Item.GUID = GUID)
   end;
+end;
+
+function THobItem.ObservationType: string;
+begin
+  result := 'HOB';
 end;
 
 function THobItem.QueryInterface(const IID: TGUID; out Obj): HResult;
@@ -668,6 +700,11 @@ end;
 procedure THobItem.SetObservationGroup(const Value: string);
 begin
   FObservationGroup := Value;
+end;
+
+procedure THobItem.SetObservedValue(const Value: double);
+begin
+  SetHead(Value);
 end;
 
 procedure THobItem.SetGUID(const Value: string);

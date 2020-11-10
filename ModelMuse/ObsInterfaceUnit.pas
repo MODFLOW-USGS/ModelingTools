@@ -2,32 +2,50 @@ unit ObsInterfaceUnit;
 
 interface
 
+uses
+  System.Generics.Collections;
+
 type
-  IObservationItem = interface(IUnknown)
+  IObservationItem = interface(IUnknown) ['{4355136D-762F-44C2-AD0B-E29FBC7EC7AD}']
     function GetName: string;
     function GetGUID: string;
+    function GetScreenObject: TObject;
+    function GetObservedValue: double;
+    function GetWeight: Double;
+    function GetObservationGroup: string;
+
+    function ObservationType: string;
+
+    procedure SetObservedValue(const Value: double);
 
     property Name: string read GetName;
     property GUID: string read GetGUID;
+    property ScreenObject: TObject read GetScreenObject;
+    property ObservedValue: double read GetObservedValue
+      write SetObservedValue;
+    property Weight: Double read GetWeight;
+    property ObservationGroup: string read GetObservationGroup;
   end;
 
   ITimeObservationItem = interface(IObservationItem)
 //    function GetName: string;
-    function GetObservedValue: double;
+//    function GetObservedValue: double;
     function GetTime: double;
     function GetWeight: Double;
     function GetObservationGroup: string;
 
-    procedure SetObservedValue(const Value: double);
+//    procedure SetObservedValue(const Value: double);
     procedure SetTime(const Value: double);
 
 //    property Name: string read GetName;
-    property ObservedValue: double read GetObservedValue
-      write SetObservedValue;
+//    property ObservedValue: double read GetObservedValue
+//      write SetObservedValue;
     property Time: double read GetTime write SetTime;
     property Weight: Double read GetWeight;
     property ObservationGroup: string read GetObservationGroup;
   end;
+
+  TObservationInterfaceList = TList<IObservationItem>;
 
   IObservationGroup = interface(IUnknown)
     function GetAbsoluteCorrelationFileName: string;
