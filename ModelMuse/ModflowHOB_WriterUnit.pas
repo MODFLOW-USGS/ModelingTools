@@ -449,6 +449,10 @@ begin
     begin
       FOutFileName := ChangeFileExt(NameOfFile, StrHobout);
       WriteToNameFile(StrDATA, IUHOBSV, FOutFileName, foOutput, Model);
+      if Model.PestUsed then
+      begin
+        Model.FileNameLines.Add('  HOB ' +  ExtractFileName(FOutFileName));
+      end;
     end;
     FInputFileName := NameOfFile;
     FInputFileName := FInputFileName;

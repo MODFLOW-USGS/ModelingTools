@@ -22,7 +22,7 @@ implementation
 
 uses
   PestObsUnit, ObservationComparisonsUnit, ScreenObjectUnit, GoPhastTypes,
-  frmErrorsAndWarningsUnit, ModelMuseUtilities;
+  frmErrorsAndWarningsUnit, ModelMuseUtilities, ObsInterfaceUnit;
 
 { TGlobalComparisonScriptWriter }
 
@@ -37,15 +37,25 @@ var
   ComparisonIndex: Integer;
   GloCompItem: TGlobalObsComparisonItem;
   FObsItemDictionary: TObsItemDictionary;
-  ObsItem: TCustomObservationItem;
-  PriorItem1: TCustomObservationItem;
-  PriorItem2: TCustomObservationItem;
+  ObsItem: IObservationItem;
+  PriorItem1: IObservationItem;
+  PriorItem2: IObservationItem;
   ErrorMessage: string;
-  ObservationList: TObservationList;
+  ObservationList: TObservationInterfaceList;
   ItemIndex: Integer;
-  function GetObName(ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+  function GetObName(ObjectIndex: Integer; Obs: IObservationItem): string;
+  var
+    AnObs: TCustomObservationItem;
   begin
-    Result := PrefixedObsName('Der', ObjectIndex, Obs);
+    if Obs is TCustomObservationItem then
+    begin
+      AnObs := TCustomObservationItem(Obs);
+      Result := PrefixedObsName('Der', ObjectIndex, AnObs);
+    end
+    else
+    begin
+      Result := PrefixedIntName('Der', ObjectIndex, Obs);
+    end;
   end;
 begin
 {$IFNDEF PEST}
@@ -60,10 +70,10 @@ begin
 
   ScriptFileName := FileName(AFileName);
 
-  ObservationList := TObservationList.Create;
+  ObservationList := TObservationInterfaceList.Create;
   FObsItemDictionary := TObsItemDictionary.Create;
   try
-    Model.FillObsItemList(ObservationList);
+    Model.FillObsInterfaceItemList(ObservationList);
 
     if ObservationList.Count = 0 then
     begin
@@ -79,6 +89,10 @@ begin
 //    FInputFileName := ScriptFileName;
     OpenFile(ScriptFileName);
     try
+      if Model.ModelSelection in Modflow2005Selection then
+      begin
+        Model.FileNameLines.Add('  DERIVED ' +  ExtractFileName(ScriptFileName));
+      end;
 
       WriteString('BEGIN DERIVED_OBSERVATIONS');
       NewLine;
@@ -96,9 +110,24 @@ begin
           WriteString('  DIFFERENCE ');
           WriteString(GetObName(ComparisonIndex, GloCompItem));
           WriteString(' ');
-          WriteString(PriorItem1.ExportedName);
+          if PriorItem1 is TCustomObservationItem then
+          begin
+            WriteString(TCustomObservationItem(PriorItem1).ExportedName);
+          end
+          else
+          begin
+            WriteString(PriorItem1.Name);
+          end;
           WriteString(' ');
-          WriteString(PriorItem2.ExportedName);
+          if PriorItem2 is TCustomObservationItem then
+          begin
+            WriteString(TCustomObservationItem(PriorItem2).ExportedName);
+          end
+          else
+          begin
+            WriteString(PriorItem2.Name);
+          end;
+//          WriteString(PriorItem2.ExportedName);
           WriteFloat(GloCompItem.ObservedValue);
           WriteFloat(GloCompItem.Weight);
           if GloCompItem.Print then

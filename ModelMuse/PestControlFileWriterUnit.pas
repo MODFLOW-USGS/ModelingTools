@@ -344,34 +344,35 @@ begin
       Assert(False);
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp:
       begin
-        if Model.ModflowPackages.HobPackage.IsSelected then
-        begin
-          Inc(NINSFLE);
-        end;
-        if Model.ModflowPackages.ChobPackage.IsSelected then
-        begin
-          Inc(NINSFLE);
-        end;
-        if Model.ModflowPackages.DrobPackage.IsSelected then
-        begin
-          Inc(NINSFLE);
-        end;
-        if Model.ModflowPackages.GbobPackage.IsSelected then
-        begin
-          Inc(NINSFLE);
-        end;
-        if Model.ModflowPackages.RvobPackage.IsSelected then
-        begin
-          Inc(NINSFLE);
-        end;
-        if Model.ModflowPackages.StobPackage.IsSelected then
-        begin
-          Inc(NINSFLE);
-        end;
-        if FUsedObservations.Count > 0 then
-        begin
-          Inc(NINSFLE);
-        end;
+//        if Model.ModflowPackages.HobPackage.IsSelected then
+//        begin
+//          Inc(NINSFLE);
+//        end;
+//        if Model.ModflowPackages.ChobPackage.IsSelected then
+//        begin
+//          Inc(NINSFLE);
+//        end;
+//        if Model.ModflowPackages.DrobPackage.IsSelected then
+//        begin
+//          Inc(NINSFLE);
+//        end;
+//        if Model.ModflowPackages.GbobPackage.IsSelected then
+//        begin
+//          Inc(NINSFLE);
+//        end;
+//        if Model.ModflowPackages.RvobPackage.IsSelected then
+//        begin
+//          Inc(NINSFLE);
+//        end;
+//        if Model.ModflowPackages.StobPackage.IsSelected then
+//        begin
+//          Inc(NINSFLE);
+//        end;
+//        if FUsedObservations.Count > 0 then
+//        begin
+//          Inc(NINSFLE);
+//        end;
+        NINSFLE := 1;
       end;
     msSutra22, msSutra30:
       begin
@@ -765,67 +766,72 @@ begin
 
   if Model.ModelSelection in Modflow2005Selection then
   begin
-    if Model.ModflowPackages.HobPackage.IsSelected then
-    begin
-      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrHobout));
-      INSFLE := OUTFLE + '.ins';
-      WriteString(INSFLE);
-      WriteString(' ' + OUTFLE);
-      NewLine;
-    end;
-    if Model.ModflowPackages.ChobPackage.IsSelected then
-    begin
-      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-        TModflowCHD_Writer.ObservationOutputExtension));
-      INSFLE := OUTFLE + '.ins';
-      WriteString(INSFLE);
-      WriteString(' ' + OUTFLE);
-      NewLine;
-    end;
-    if Model.ModflowPackages.DrobPackage.IsSelected then
-    begin
-      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-        TModflowDRN_Writer.ObservationOutputExtension));
-      INSFLE := OUTFLE + '.ins';
-      WriteString(INSFLE);
-      WriteString(' ' + OUTFLE);
-      NewLine;
-    end;
-    if Model.ModflowPackages.GbobPackage.IsSelected then
-    begin
-      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-      TModflowGHB_Writer.ObservationOutputExtension));
-      INSFLE := OUTFLE + '.ins';
-      WriteString(INSFLE);
-      WriteString(' ' + OUTFLE);
-      NewLine;
-    end;
-    if Model.ModflowPackages.RvobPackage.IsSelected then
-    begin
-      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-        TModflowRIV_Writer.ObservationOutputExtension));
-      INSFLE := OUTFLE + '.ins';
-      WriteString(INSFLE);
-      WriteString(' ' + OUTFLE);
-      NewLine;
-    end;
-    if Model.ModflowPackages.StobPackage.IsSelected then
-    begin
-      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-        TStrWriter.ObservationOutputExtension));
-      INSFLE := OUTFLE + '.ins';
-      WriteString(INSFLE);
-      WriteString(' ' + OUTFLE);
-      NewLine;
-    end;
-    if FUsedObservations.Count > 0 then
-    begin
-      INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
-      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
-      WriteString(INSFLE);
-      WriteString(' ' + OUTFLE);
-      NewLine;
-    end;
+    INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
+    OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf2005Values));
+    WriteString(INSFLE);
+    WriteString(' ' + OUTFLE);
+    NewLine;
+//    if Model.ModflowPackages.HobPackage.IsSelected then
+//    begin
+//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrHobout));
+//      INSFLE := OUTFLE + '.ins';
+//      WriteString(INSFLE);
+//      WriteString(' ' + OUTFLE);
+//      NewLine;
+//    end;
+//    if Model.ModflowPackages.ChobPackage.IsSelected then
+//    begin
+//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+//        TModflowCHD_Writer.ObservationOutputExtension));
+//      INSFLE := OUTFLE + '.ins';
+//      WriteString(INSFLE);
+//      WriteString(' ' + OUTFLE);
+//      NewLine;
+//    end;
+//    if Model.ModflowPackages.DrobPackage.IsSelected then
+//    begin
+//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+//        TModflowDRN_Writer.ObservationOutputExtension));
+//      INSFLE := OUTFLE + '.ins';
+//      WriteString(INSFLE);
+//      WriteString(' ' + OUTFLE);
+//      NewLine;
+//    end;
+//    if Model.ModflowPackages.GbobPackage.IsSelected then
+//    begin
+//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+//      TModflowGHB_Writer.ObservationOutputExtension));
+//      INSFLE := OUTFLE + '.ins';
+//      WriteString(INSFLE);
+//      WriteString(' ' + OUTFLE);
+//      NewLine;
+//    end;
+//    if Model.ModflowPackages.RvobPackage.IsSelected then
+//    begin
+//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+//        TModflowRIV_Writer.ObservationOutputExtension));
+//      INSFLE := OUTFLE + '.ins';
+//      WriteString(INSFLE);
+//      WriteString(' ' + OUTFLE);
+//      NewLine;
+//    end;
+//    if Model.ModflowPackages.StobPackage.IsSelected then
+//    begin
+//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+//        TStrWriter.ObservationOutputExtension));
+//      INSFLE := OUTFLE + '.ins';
+//      WriteString(INSFLE);
+//      WriteString(' ' + OUTFLE);
+//      NewLine;
+//    end;
+//    if FUsedObservations.Count > 0 then
+//    begin
+//      INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
+//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
+//      WriteString(INSFLE);
+//      WriteString(' ' + OUTFLE);
+//      NewLine;
+//    end;
   end
   else
   begin
@@ -874,19 +880,28 @@ procedure TPestControlFileWriter.WriteObservations;
 var
   ObsIndex: Integer;
   AnObs: IObservationItem;
+  ObsItem: TCustomObservationItem;
 begin
   WriteSectionHeader('observation data');
   for ObsIndex := 0 to FUsedObservations.Count - 1 do
   begin
     AnObs := FUsedObservations[ObsIndex];
-//    if AnObs.ExportedName <> '' then
-//    begin
-//      WriteString(AnObs.ExportedName);
-//    end
-//    else
-//    begin
+    if AnObs is TCustomObservationItem then
+    begin
+      ObsItem := TCustomObservationItem(AnObs);
+      if ObsItem.ExportedName <> '' then
+      begin
+        WriteString(ObsItem.ExportedName);
+      end
+      else
+      begin
+        WriteString(AnObs.Name);
+      end;
+    end
+    else
+    begin
       WriteString(AnObs.Name);
-//    end;
+    end;
     WriteFloat(AnObs.ObservedValue);
     WriteFloat(AnObs.Weight);
     WriteString(' ' + AnObs.ObservationGroup);

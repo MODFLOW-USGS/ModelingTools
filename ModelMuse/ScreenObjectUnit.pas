@@ -6237,7 +6237,11 @@ end;
 
 function TScreenObject.CanAddDataSet(const DataSet: TDataArray): boolean;
 begin
-  result := True;
+  result := DataSet <> nil;
+  if not result then
+  begin
+    Exit;
+  end;
   if DataSet.Orientation <> dso3D then
   begin
     case ViewDirection of
@@ -6563,7 +6567,10 @@ begin
     begin
       DS_Index := AddDataSet(DataSet);
     end;
-    DataSetFormulas[DS_Index] := AScreenObject.DataSetFormulas[Index];
+    if DS_Index >= 0 then
+    begin
+      DataSetFormulas[DS_Index] := AScreenObject.DataSetFormulas[Index];
+    end;
   end;
 
 
@@ -6762,7 +6769,10 @@ begin
     begin
       DSIndex := AddDataSet(DataArray);
     end;
-    DataSetFormulas[DSIndex] := AScreenObject.DataSetFormulas[DataSetIndex];
+    if DS_Index >= 0 then
+    begin
+      DataSetFormulas[DSIndex] := AScreenObject.DataSetFormulas[DataSetIndex];
+    end;
   end;
 
   for DataSetIndex := BoundaryDataSetCount -1 downto 0 do
@@ -6796,7 +6806,10 @@ begin
     begin
       DS_Index := AddDataSet(BoundarArray);
     end;
-    DataSetFormulas[DS_Index] := 'True';
+    if DS_Index >= 0 then
+    begin
+      DataSetFormulas[DS_Index] := 'True';
+    end;
   end
   else
   begin
@@ -6819,7 +6832,10 @@ begin
     begin
       DS_Index := AddDataSet(BoundarArray);
     end;
-    DataSetFormulas[DS_Index] := 'True';
+    if DS_Index >= 0 then
+    begin
+      DataSetFormulas[DS_Index] := 'True';
+    end;
   end
   else
   begin
@@ -18110,7 +18126,10 @@ begin
     begin
       DS_Index := AddDataSet(BoundarArray);
     end;
-    DataSetFormulas[DS_Index] := IntToStr(ModflowUzfBoundary.GageOption2);
+    if DS_Index >= 0 then
+    begin
+      DataSetFormulas[DS_Index] := IntToStr(ModflowUzfBoundary.GageOption2);
+    end;
   end
   else
   begin
@@ -18141,7 +18160,10 @@ begin
     begin
       DS_Index := AddDataSet(BoundarArray);
     end;
-    DataSetFormulas[DS_Index] := IntToStr(ModflowUzfBoundary.GageOption1);
+    if DS_Index >= 0 then
+    begin
+      DataSetFormulas[DS_Index] := IntToStr(ModflowUzfBoundary.GageOption1);
+    end;
   end
   else
   begin

@@ -534,12 +534,6 @@ begin
     WriteFluxObsFile(AFileName, StrIUCHOBSV, PackageAbbreviation,
       DataSet1Comment, DataSet2Comment, DataSet3Comment,
       Model.HeadFluxObservations, Purpose);
-//  end
-//  else
-//  begin
-//    WriteFluxObsFileMF6(AFileName, StrIUCHOBSV, PackageAbbreviation,
-//      DataSet1Comment, DataSet2Comment, DataSet3Comment,
-//      Model.HeadFluxObservations, Purpose);
   end;
 end;
 

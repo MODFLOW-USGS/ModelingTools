@@ -31798,7 +31798,7 @@ var
 begin
   ObsList := TObservationList.Create;
   try
-    FillObsItemList(ObsList);
+    FillObsItemList(ObsList, IncludeComparisons);
     List.Capacity := ObsList.Count;
     for ItemIndex := 0 to ObsList.Count - 1 do
     begin

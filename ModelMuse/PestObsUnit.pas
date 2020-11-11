@@ -48,7 +48,6 @@ type
     // @classname in a dictionary. This helps with calculating derived
     // observations.
     property GUID: string read GetGUID write SetGUID;
-    property ExportedName: string read FExportedName write FExportedName;
     // When pasting objects from the clipboard, replace the GUID so that there
     // are no duplicates.
     procedure ReplaceGUID;
@@ -67,6 +66,7 @@ type
     property Comment: string read FComment write SetComment;
     property ObservationGroup: string read GetObservationGroup
       write SetObservationGroup;
+    property ExportedName: string read FExportedName write FExportedName;
   end;
 
   TObservationList = TList<TCustomObservationItem>;
@@ -144,9 +144,12 @@ type
     property Comparisons: TObsComparisons read FComparisons write SetComparisons;
   end;
 
-  TObsItemDictionary = TDictionary<string, TCustomObservationItem>;
+  TObsItemDictionary = TDictionary<string, IObservationItem>;
 
-function PrefixedObsName(Prefix: string; ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+function PrefixedObsName(Prefix: string; ObjectIndex: Integer;
+  Obs: TCustomObservationItem): string;
+function PrefixedIntName(Prefix: string; ObjectIndex: Integer;
+  Obs: IObservationItem): string;
 
 implementation
 
@@ -157,7 +160,8 @@ const
   ValidFirstChar = ['A'..'Z', 'a'..'z', '_'];
   ValidChar = ValidFirstChar + ['0'..'9'];
 
-function PrefixedObsName(Prefix: string; ObjectIndex: Integer; Obs: TCustomObservationItem): string;
+function PrefixedObsName(Prefix: string; ObjectIndex: Integer;
+  Obs: TCustomObservationItem): string;
 var
   MaxPrefixLength: Integer;
 begin
@@ -167,6 +171,19 @@ begin
   Result := Format('%0:s_%1:d%2:s', [Prefix, ObjectIndex+1, Obs.Name]);
   Result := PestObsName(Result);
   Obs.ExportedName := Result;
+end;
+
+function PrefixedIntName(Prefix: string; ObjectIndex: Integer;
+  Obs: IObservationItem): string;
+var
+  MaxPrefixLength: Integer;
+begin
+// The maximum allowed length of an observation name in PEST is 20.
+  MaxPrefixLength := 19 - Length((ObjectIndex+1).ToString + Obs.Name);
+  Prefix := Copy(Prefix, 1, MaxPrefixLength);
+  Result := Format('%0:s_%1:d%2:s', [Prefix, ObjectIndex+1, Obs.Name]);
+  Result := PestObsName(Result);
+//  Obs.ExportedName := Result;
 end;
 
 { TCustomObservationItem }

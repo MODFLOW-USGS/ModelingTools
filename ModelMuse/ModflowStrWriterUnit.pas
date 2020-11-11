@@ -2153,6 +2153,11 @@ begin
     OutputName := ObservationOutputFileName(AFileName);
     WriteToNameFile(StrDATA, IUSTOBSV, OutputName, foOutput, Model);
 
+    if Model.PestUsed then
+    begin
+      Model.FileNameLines.Add(Format(' STOB %s',
+        [ExtractFileName(OutputName)]));
+    end;
 
 
     AllSegments := TList<TStrSegment>.Create;

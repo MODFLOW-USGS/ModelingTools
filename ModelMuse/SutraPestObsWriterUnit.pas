@@ -48,7 +48,7 @@ uses
   PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit,
   SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit,
   SutraOptionsUnit, SutraGeneralBoundaryUnit, SutraBoundaryUnit,
-  SutraGenTransBoundUnit, IntListUnit;
+  SutraGenTransBoundUnit, IntListUnit, ObsInterfaceUnit;
 
 resourcestring
   StrTheObservationComp = 'The observation comparison item "%s" could not be' +
@@ -145,8 +145,8 @@ var
   FObsItemDictionary: TObsItemDictionary;
   ObsItem: TCustomObservationItem;
   GloCompItem: TGlobalObsComparisonItem;
-  PriorItem1: TCustomObservationItem;
-  PriorItem2: TCustomObservationItem;
+  PriorItem1: IObservationItem;
+  PriorItem2: IObservationItem;
   ErrorMessage: string;
   GroupIndex: Integer;
   SpecPresGroup: TSutraSpecPressureObservations;
@@ -317,9 +317,9 @@ begin
           WriteString(' PRINT');
           NewLine;
           WriteString('    FORMULA ');
-          WriteString(PriorItem1.ExportedName);
+          WriteString((PriorItem1 as TCustomObservationItem).ExportedName);
           WriteString(' - ');
-          WriteString(PriorItem2.ExportedName);
+          WriteString((PriorItem2 as TCustomObservationItem).ExportedName);
           NewLine;
         end
         else

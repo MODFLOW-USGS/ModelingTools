@@ -1117,6 +1117,8 @@ resourcestring
   StrInTheMODFLOWNameFlow = 'In the MODFLOW Name file dialog box, the option' +
   ' to specify an alternative flow package was selected but none was specifi' +
   'ed.';
+  StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
+  StrObsSeriesExtractore = 'ObsSeriesExtractor.exe';
 
 var
 //  NameFile: TStringList;
@@ -1421,13 +1423,16 @@ begin
       begin
         ParamEstBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
         WriteInstuctionsBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
+        InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
+        WriteInstuctionsBatchFile.Add(StrObsSeriesExtractore + ' ' + InsFileName);
+        WriteInstuctionsBatchFile.Add('pause');
       end
       else
       begin
         ParamEstBatchFile.Add(AFileName {+ ' /wait'});
         WriteInstuctionsBatchFile.Add(AFileName {+ ' /wait'});
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
-        WriteInstuctionsBatchFile.Add('Mf6ObsExtractor.exe ' + InsFileName);
+        WriteInstuctionsBatchFile.Add(StrMf6ObsExtractorexe + ' ' + InsFileName);
         WriteInstuctionsBatchFile.Add('pause');
       end;
 
@@ -1539,22 +1544,24 @@ begin
       begin
         if Model.ModelSelection = msModflow2015 then
         begin
-          ParamEstBatchFile.Add('Mf6ObsExtractor.exe ' + ChangeFileExt(ExtractFileName(FileName), '.Mf6ExtractValues'));
+          ParamEstBatchFile.Add(StrMf6ObsExtractorexe + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf6ExtractValues'));
         end
         else
         begin
-
+          ParamEstBatchFile.Add(StrObsSeriesExtractore + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
         end;
       end;
       if Model.PestUsed then
       begin
         if (Model.ModelSelection <> msModflow2015) then
         begin
+          InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
+          BatchFile.Add(StrObsSeriesExtractore + ' ' + InsFileName);
         end
         else
         begin
           InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
-          BatchFile.Add('Mf6ObsExtractor.exe ' + InsFileName);
+          BatchFile.Add(StrMf6ObsExtractorexe + ' ' + InsFileName);
         end;
       end;
 
@@ -6817,6 +6824,11 @@ begin
     IU_Pkg_OBSV := Model.UnitNumbers.UnitNumber(OutputUnitId);
     OutputName := ObservationOutputFileName(AFileName);
     WriteToNameFile(StrDATA, IU_Pkg_OBSV, OutputName, foOutput, Model);
+    if Model.PestUsed then
+    begin
+      Model.FileNameLines.Add(Format('  %0:s %1:s',
+        [PackageAbbreviation, ExtractFileName(OutputName)]));
+    end;
 
     AllCells := TList.Create;
     ObsFile := TStringList.Create;

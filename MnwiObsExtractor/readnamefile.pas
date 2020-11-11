@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, Generics.Collections, Generics.Defaults, ObExtractorTypes;
 
 type
-  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftSUB, iftSWT, iftSWI, iftDerived);
+  TInputFileType = (iftMNW2, iftLAK, iftSFR, iftSUB, iftSWT, iftSWI,
+    iftHOB, iftFlow, iftDerived);
   //TOutputFileType = (oftList, oftObs);
 
   TInputFileLink = record
@@ -225,6 +226,48 @@ begin
           InputFile.FileName := Splitter[1];
           FInputFileLinks.Add(InputFile);
           FListingFile.Add(Format('SWI Instruction File = "%s"', [InputFile.FileName]));
+        end
+        else if UpperCase(Splitter[0]) = 'HOB' then
+        begin
+          InputFile.FileType := iftHOB;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('HOB output File = "%s"', [InputFile.FileName]));
+        end
+        else if UpperCase(Splitter[0]) = 'CHOB' then
+        begin
+          InputFile.FileType := iftFlow;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('CHOB output File = "%s"', [InputFile.FileName]));
+        end
+        else if UpperCase(Splitter[0]) = 'DROB' then
+        begin
+          InputFile.FileType := iftFlow;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('DROB output File = "%s"', [InputFile.FileName]));
+        end
+        else if UpperCase(Splitter[0]) = 'RVOB' then
+        begin
+          InputFile.FileType := iftFlow;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('RVOB output File = "%s"', [InputFile.FileName]));
+        end
+        else if UpperCase(Splitter[0]) = 'GBOB' then
+        begin
+          InputFile.FileType := iftFlow;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('GBOB output File = "%s"', [InputFile.FileName]));
+        end
+        else if UpperCase(Splitter[0]) = 'STOB' then
+        begin
+          InputFile.FileType := iftFlow;
+          InputFile.FileName := Splitter[1];
+          FInputFileLinks.Add(InputFile);
+          FListingFile.Add(Format('STOB output File = "%s"', [InputFile.FileName]));
         end
         else if UpperCase(Splitter[0]) = 'DERIVED' then
         begin
