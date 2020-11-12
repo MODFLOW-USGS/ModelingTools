@@ -33,6 +33,7 @@ type
     procedure WriteSpecConcIdentifiers;
     procedure WriteGenFlowIdentifiers;
     procedure WriteGenTransportIdentifiers;
+    function CellAssignmentToNodeNumber(ACell: TCellAssignment): Integer;
   protected
     class function Extension: string; override;
   public
@@ -40,6 +41,10 @@ type
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
   end;
+
+const
+  StrSoei = '.soe_i';
+  StrSoeev = '.soe_ev';
 
 implementation
 
@@ -347,7 +352,7 @@ begin
   Evaluate;
 
   FExportType := etInstructions;
-  FFileName := ChangeFileExt(AFileName, '.soe_i');
+  FFileName := ChangeFileExt(AFileName, StrSoei);
 //  FInputFileName := FFileName;
   OpenFile(FFileName);
   try
@@ -360,7 +365,7 @@ begin
   end;
 
   FExportType := etExtractedValues;
-  FFileName := ChangeFileExt(AFileName, '.soe_ev');
+  FFileName := ChangeFileExt(AFileName, StrSoeev);
   OpenFile(FFileName);
   try
     WriteOptions;
@@ -393,7 +398,7 @@ var
   ListIndex: Integer;
   CellIndex: Integer;
   ACell: TCellAssignment;
-  Node3D: TSutraNode3D;
+//  Node3D: TSutraNode3D;
   NodeNumber: Integer;
   ID: string;
   ObsIndex: Integer;
@@ -529,8 +534,7 @@ begin
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];
-          Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-          NodeNumber := Node3D.Number + 1;
+          NodeNumber := CellAssignmentToNodeNumber(ACell);
 //          ID := IntToStr(NodeNumber);
           ID := IntToStr(NodeStart + CellIndex);
 
@@ -606,8 +610,9 @@ begin
             ACell := CellList[CellIndex];
             AFactor := FactorsValues[CellIndex];
 
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
+//            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+//            NodeNumber := Node3D.Number + 1;
 //            ID := IntToStr(NodeNumber);
             ID := IntToStr(CellIndex + NodeStart);
 
@@ -906,8 +911,9 @@ begin
             ACell := CellList[CellIndex];
             AFactor := FactorsValues[CellIndex];
 
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
+//            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+//            NodeNumber := Node3D.Number + 1;
 //            ID := IntToStr(NodeNumber);
             ID := IntToStr(CellIndex + NodeStart);
 
@@ -1161,20 +1167,19 @@ end;
 
 procedure TSutraPestObsWriterWriter.WriteObservationsFileNames;
 var
-  ObjectIndex: Integer;
-  OutputFileNameRoot: string;
-  SutraStateObs: TSutraStateObservations;
+//  ObjectIndex: Integer;
+//  OutputFileNameRoot: string;
+//  SutraStateObs: TSutraStateObservations;
   FileName: string;
 //  FileIndex: Integer;
 begin
-  OutputFileNameRoot := ExtractFileName(ChangeFileExt(FFileName, '')) + '_';
+//  OutputFileNameRoot := ExtractFileName(ChangeFileExt(FFileName, '')) + '_';
   WriteString('BEGIN OBSERVATION_FILES');
   NewLine;
 
-  for ObjectIndex := 0 to FSutraObsObjects.Count - 1 do
+  if FSutraObsObjects.Count > 0 then
   begin
-    SutraStateObs := FSutraObsObjects[ObjectIndex].SutraBoundaries.SutraStateObs;
-    FileName := OutputFileNameRoot + SutraStateObs.ScheduleName + '.obc';
+    FileName := ExtractFileName(ChangeFileExt(FFileName, '')) + '.obc';
     WriteString('  FILENAME ');
     WriteString(FileName);
     WriteString(' OBC');
@@ -1301,7 +1306,7 @@ var
   ListIndex: Integer;
   CellIndex: Integer;
   ACell: TCellAssignment;
-  Node3D: TSutraNode3D;
+//  Node3D: TSutraNode3D;
   NodeNumber: Integer;
   ID: string;
   ObsIndex: Integer;
@@ -1330,8 +1335,7 @@ var
       for CellIndex := 0 to CellList.Count - 1 do
       begin
         ACell := CellList[CellIndex];
-        Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-        NodeNumber := Node3D.Number + 1;
+        NodeNumber := CellAssignmentToNodeNumber(ACell);
         NodeNumbers.AddUnique(NodeNumber);
       end;
     finally
@@ -1408,8 +1412,9 @@ begin
           for CellIndex := 0 to CellList.Count - 1 do
           begin
             ACell := CellList[CellIndex];
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
+//            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+//            NodeNumber := Node3D.Number + 1;
             UsedNodeNumbers.AddUnique(NodeNumber);
           end;
         finally
@@ -1491,8 +1496,9 @@ begin
             ACell := CellList[CellIndex];
             AFactor := FactorsValues[CellIndex];
 
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
+//            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+//            NodeNumber := Node3D.Number + 1;
             Assert(NodeNumberDictionary.TryGetValue(NodeNumber, LineIndex));
             ID := IntToStr(LineIndex);
 
@@ -1562,7 +1568,7 @@ var
   ListIndex: Integer;
   CellIndex: Integer;
   ACell: TCellAssignment;
-  Node3D: TSutraNode3D;
+//  Node3D: TSutraNode3D;
   NodeNumber: Integer;
   ID: string;
   ObsIndex: Integer;
@@ -1593,8 +1599,7 @@ var
       for CellIndex := 0 to CellList.Count - 1 do
       begin
         ACell := CellList[CellIndex];
-        Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-        NodeNumber := Node3D.Number + 1;
+        NodeNumber := CellAssignmentToNodeNumber(ACell);
         NodeNumbers.AddUnique(NodeNumber);
       end;
     finally
@@ -1672,8 +1677,9 @@ begin
           for CellIndex := 0 to CellList.Count - 1 do
           begin
             ACell := CellList[CellIndex];
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
+//            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+//            NodeNumber := Node3D.Number + 1;
             UsedNodeNumbers.AddUnique(NodeNumber);
           end;
         finally
@@ -1775,8 +1781,9 @@ begin
             ACell := CellList[CellIndex];
             AFactor := FactorsValues[CellIndex];
 
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
+//            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+//            NodeNumber := Node3D.Number + 1;
             Assert(NodeNumberDictionary.TryGetValue(NodeNumber, LineIndex));
             ID := IntToStr(LineIndex);
 
@@ -1849,6 +1856,26 @@ begin
   end;
 end;
 
+function TSutraPestObsWriterWriter.CellAssignmentToNodeNumber
+  (ACell: TCellAssignment): Integer;
+var
+  Mesh3D: TSutraMesh3D;
+  Node3D: TSutraNode3D;
+  Node2D: TSutraNode2D;
+begin
+  Mesh3D := Model.SutraMesh;
+  if Mesh3D.MeshType = mt3D then
+  begin
+    Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+    result := Node3D.Number + 1;
+  end
+  else
+  begin
+    Node2D := Mesh3D.Mesh2D.Nodes[ACell.Column];
+    result := Node2D.Number + 1;
+  end;
+end;
+
 procedure TSutraPestObsWriterWriter.WriteSpecPresIdentifiers;
 var
   CellLists: TObjectList<TCellAssignmentList>;
@@ -1870,7 +1897,7 @@ var
   ListIndex: Integer;
   CellIndex: Integer;
   ACell: TCellAssignment;
-  Node3D: TSutraNode3D;
+//  Node3D: TSutraNode3D;
   NodeNumber: Integer;
   ID: string;
   ObsIndex: Integer;
@@ -1904,8 +1931,7 @@ var
       for CellIndex := 0 to CellList.Count - 1 do
       begin
         ACell := CellList[CellIndex];
-        Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-        NodeNumber := Node3D.Number + 1;
+        NodeNumber := CellAssignmentToNodeNumber(ACell);
         NodeNumbers.AddUnique(NodeNumber);
       end;
     finally
@@ -1982,8 +2008,7 @@ begin
           for CellIndex := 0 to CellList.Count - 1 do
           begin
             ACell := CellList[CellIndex];
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
             UsedNodeNumbers.AddUnique(NodeNumber);
           end;
         finally
@@ -2086,8 +2111,9 @@ begin
             ACell := CellList[CellIndex];
             AFactor := FactorsValues[CellIndex];
 
-            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
-            NodeNumber := Node3D.Number + 1;
+            NodeNumber := CellAssignmentToNodeNumber(ACell);
+//            Node3D := Mesh3D.NodeArray[ACell.Layer, ACell.Column];
+//            NodeNumber := Node3D.Number + 1;
             Assert(NodeNumberDictionary.TryGetValue(NodeNumber, LineIndex));
             ID := IntToStr(LineIndex);
 

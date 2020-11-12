@@ -1157,6 +1157,8 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspObsGroupAssignments'
+      ExplicitWidth = 106
+      ExplicitHeight = 159
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1164,8 +1166,8 @@ inherited frmPEST: TfrmPEST
         Height = 287
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 512
-        ExplicitHeight = 287
+        ExplicitWidth = 106
+        ExplicitHeight = 159
         inherited tvTree: TTreeView
           Width = 512
           Height = 287

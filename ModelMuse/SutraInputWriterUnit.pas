@@ -64,6 +64,7 @@ type
     FGeneralTransportNodes: TObjectList<TList<IGeneralTransportNodes>>;
     F_NN: Integer;
     FHasLakes: Boolean;
+    FMainFileStream: TFileStream;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
     procedure WriteDataSet2A;
@@ -97,6 +98,8 @@ type
     procedure WriteDataSet21B;
     procedure WriteDataSet22;
     procedure SetHasLakes(const Value: Boolean);
+    procedure OpenTempFile(const FileName: string);
+    procedure CloseTempFile;
   protected
     class function Extension: string; override;
   public
@@ -144,6 +147,14 @@ resourcestring
 //  'nts. See section 7.2 of the SUTRA documentation.';
 
 { TSutraInputWriter }
+
+procedure TSutraInputWriter.CloseTempFile;
+begin
+  Assert(FMainFileStream <> nil);
+  FreeAndNil(FFileStream);
+  FFileStream := FMainFileStream;
+  FMainFileStream := nil;
+end;
 
 constructor TSutraInputWriter.Create(AModel: TCustomModel);
 begin
@@ -386,10 +397,22 @@ var
   ANode2D: TSutraNode2D;
   NodeData: TNodeData;
   ANode3D: TSutraNode3D;
+  TempFileName: string;
+  PestParametersUsed: Boolean;
+  PorosityParamArray: TDataArray;
 begin
-  WriteCommentLine('Data set 14B');
+  PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
   Porosity.Initialize;
+  PorosityParamArray := nil;
+  if Model.PestUsed and Porosity.PestParametersUsed then
+  begin
+    PestParametersUsed := True;
+    PorosityParamArray := Model.DataArrayManager.GetDataSetByName
+      (Porosity.ParamDataSetName);
+    PorosityParamArray.Initialize;  
+  end;
+
   if FOptions.SaturationChoice = scUnsaturated then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionNodes);
@@ -471,20 +494,33 @@ begin
         end));
     end;
 
-
-
-
-    for NodeIndex := 0 to Nodes.Count - 1 do
+    if PestParametersUsed then
     begin
-      NodeData := Nodes[NodeIndex];
-      Assert(NodeIndex = NodeData.Number);
-      WriteInteger(NodeData.Number + 1);
-      WriteInteger(NodeData.NREG);
-      WriteFloat(NodeData.X);
-      WriteFloat(NodeData.Y);
-      WriteFloat(NodeData.Z);
-      WriteFloat(NodeData.Porosity);
+      TempFileName := ChangeFileExt(FFileName, '.14B');
+      WriteString('@INSERT ');
+      WriteString(ExtractFileName(TempFileName));
       NewLine;
+      OpenTempFile(TempFileName);
+    end;
+    try
+      WriteCommentLine('Data set 14B');
+      for NodeIndex := 0 to Nodes.Count - 1 do
+      begin
+        NodeData := Nodes[NodeIndex];
+        Assert(NodeIndex = NodeData.Number);
+        WriteInteger(NodeData.Number + 1);
+        WriteInteger(NodeData.NREG);
+        WriteFloat(NodeData.X);
+        WriteFloat(NodeData.Y);
+        WriteFloat(NodeData.Z);
+        WriteFloat(NodeData.Porosity);
+        NewLine;
+      end;
+    finally
+      if PestParametersUsed then
+      begin
+        CloseTempFile;
+      end;
     end;
   finally
     Nodes.Free;
@@ -567,8 +603,22 @@ var
   ElData: TElementData;
   LayerIndex: Integer;
   AnElement3D: TSutraElement3D;
+  TempFileName: string;
+  PestParametersUsed: Boolean;
+  MaxPermParamArray: TDataArray;
+  MidPermParamArray: TDataArray;
+  MinPermParamArray: TDataArray;
+  HorizAngleParamArray: TDataArray;
+  RotationAngleParamArray: TDataArray;
+  VerticalAngleParamArray: TDataArray;
+  MaxLongDispParamArray: TDataArray;
+  MidLongDispParamArray: TDataArray;
+  MinLongDispDispParamArray: TDataArray;
+  MaxTransvDispParamArray: TDataArray;
+  MidTransvDispParamArray: TDataArray;
+  MinTransvDispParamArray: TDataArray;
 begin
-  WriteCommentLine('Data set 15B');
+  PestParametersUsed := False;
   if FOptions.SaturationChoice = scUnsaturated then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionElements);
@@ -587,7 +637,16 @@ begin
     else Assert(False);
   end;
   MaxPerm.Initialize;
+  MaxPermParamArray := nil;
+  if Model.PestUsed and MaxPerm.PestParametersUsed then
+  begin                 
+    PestParametersUsed := True;
+    MaxPermParamArray := Model.DataArrayManager.GetDataSetByName
+      (MaxPerm.ParamDataSetName);
+    MaxPermParamArray.Initialize;  
+  end;  
   MidPerm := nil;
+  MidPermParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     case FOptions.TransportChoice of
@@ -598,6 +657,13 @@ begin
       else Assert(False);
     end;
     MidPerm.Initialize;
+    if Model.PestUsed and MidPerm.PestParametersUsed then
+    begin                 
+      PestParametersUsed := True;
+      MidPermParamArray := Model.DataArrayManager.GetDataSetByName
+        (MidPerm.ParamDataSetName);
+      MidPermParamArray.Initialize;  
+    end;  
   end
   else
   begin
@@ -612,14 +678,46 @@ begin
     else Assert(False);
   end;
   MinPerm.Initialize;
+  MinPermParamArray := nil;
+  if Model.PestUsed and MinPerm.PestParametersUsed then
+  begin                 
+    PestParametersUsed := True;
+    MinPermParamArray := Model.DataArrayManager.GetDataSetByName
+      (MinPerm.ParamDataSetName);
+    MinPermParamArray.Initialize;  
+  end;  
   HorizAngle := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
   HorizAngle.Initialize;
+  HorizAngleParamArray := nil;
+  if Model.PestUsed and HorizAngle.PestParametersUsed then
+  begin                
+    PestParametersUsed := True;
+    HorizAngleParamArray := Model.DataArrayManager.GetDataSetByName
+      (HorizAngle.ParamDataSetName);
+    HorizAngleParamArray.Initialize;  
+  end;  
+  RotationAngleParamArray := nil;
+  VerticalAngleParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     VerticalAngle := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);
     VerticalAngle.Initialize;
+    if Model.PestUsed and VerticalAngle.PestParametersUsed then
+    begin                 
+      PestParametersUsed := True;
+      VerticalAngleParamArray := Model.DataArrayManager.GetDataSetByName
+        (VerticalAngle.ParamDataSetName);
+      VerticalAngleParamArray.Initialize;  
+    end;  
     RotationAngle := Model.DataArrayManager.GetDataSetByName(KRotationalAngle);
     RotationAngle.Initialize;
+    if Model.PestUsed and RotationAngle.PestParametersUsed then
+    begin                 
+      PestParametersUsed := True;
+      RotationAngleParamArray := Model.DataArrayManager.GetDataSetByName
+        (RotationAngle.ParamDataSetName);
+      RotationAngleParamArray.Initialize;  
+    end;  
   end
   else
   begin
@@ -629,10 +727,26 @@ begin
 
   MaxLongDisp := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
   MaxLongDisp.Initialize;
+  MaxLongDispParamArray := nil;
+  if Model.PestUsed and MaxLongDisp.PestParametersUsed then
+  begin                 
+    PestParametersUsed := True;
+    MaxLongDispParamArray := Model.DataArrayManager.GetDataSetByName
+      (MaxLongDisp.ParamDataSetName);
+    MaxLongDispParamArray.Initialize;  
+  end;  
+  MidLongDispParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     MidLongDisp := Model.DataArrayManager.GetDataSetByName(KMidLongitudinalDisp);
     MidLongDisp.Initialize;
+    if Model.PestUsed and MidLongDisp.PestParametersUsed then
+    begin                 
+      PestParametersUsed := True;
+      MidLongDispParamArray := Model.DataArrayManager.GetDataSetByName
+        (MidLongDisp.ParamDataSetName);
+      MidLongDispParamArray.Initialize;  
+    end;  
   end
   else
   begin
@@ -640,13 +754,37 @@ begin
   end;
   MinLongDisp := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
   MinLongDisp.Initialize;
+  MinLongDispDispParamArray := nil;
+  if Model.PestUsed and MinLongDisp.PestParametersUsed then
+  begin                 
+    PestParametersUsed := True;
+    MinLongDispDispParamArray := Model.DataArrayManager.GetDataSetByName
+      (MinLongDisp.ParamDataSetName);
+    MinLongDispDispParamArray.Initialize;  
+  end;  
 
   MaxTransvDisp := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
   MaxTransvDisp.Initialize;
+  MaxTransvDispParamArray := nil;
+  if Model.PestUsed and MaxTransvDisp.PestParametersUsed then
+  begin                 
+    PestParametersUsed := True;
+    MaxTransvDispParamArray := Model.DataArrayManager.GetDataSetByName
+      (MaxTransvDisp.ParamDataSetName);
+    MaxTransvDispParamArray.Initialize;  
+  end;  
+  MidTransvDispParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     MidTransvDisp := Model.DataArrayManager.GetDataSetByName(KMidTransverseDisp);
     MidTransvDisp.Initialize;
+    if Model.PestUsed and MidTransvDisp.PestParametersUsed then
+    begin                 
+      PestParametersUsed := True;
+      MidTransvDispParamArray := Model.DataArrayManager.GetDataSetByName
+        (MidTransvDisp.ParamDataSetName);
+      MidTransvDispParamArray.Initialize;  
+    end;  
   end
   else
   begin
@@ -654,6 +792,14 @@ begin
   end;
   MinTransvDisp := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
   MinTransvDisp.Initialize;
+  MinTransvDispParamArray := nil;
+  if Model.PestUsed and MinTransvDisp.PestParametersUsed then
+  begin                 
+    PestParametersUsed := True;
+    MinTransvDispParamArray := Model.DataArrayManager.GetDataSetByName
+      (MinTransvDisp.ParamDataSetName);
+    MinTransvDispParamArray.Initialize;  
+  end;  
 
   ElementList := TElementDataList.Create;
   try
@@ -743,123 +889,138 @@ begin
         result := L.Number - R.Number;
       end));
 
-    for ElementIndex := 0 to ElementList.Count - 1 do
+    if PestParametersUsed then
     begin
-      ElData := ElementList[ElementIndex];
-      Assert(ElData.Number = ElementIndex);
-      WriteInteger(ElData.Number+1);
-      WriteInteger(ElData.LREG);
-      WriteFloat(ElData.PMAX);
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteFloat(ElData.PMID);
-      end;
-      WriteFloat(ElData.PMIN);
-      WriteFloat(ElData.ANGLE1);
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteFloat(ElData.ANGLE2);
-        WriteFloat(ElData.ANGLE3);
-      end;
-      WriteFloat(ElData.ALMAX);
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteFloat(ElData.ALMID);
-      end;
-      WriteFloat(ElData.ALMIN);
-      WriteFloat(ElData.ATMAX);
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteFloat(ElData.ATMID);
-      end;
-      WriteFloat(ElData.ATMIN);
+      TempFileName := ChangeFileExt(FFileName, '.15B');
+      WriteString('@INSERT ');
+      WriteString(ExtractFileName(TempFileName));
       NewLine;
-      case FMesh.MeshType of
-        mt2D, mtProfile:
-          begin
-            if ElData.PMAX < ElData.PMIN then
-            begin
-              case FOptions.TransportChoice of
-                tcSolute, tcEnergy:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxPermMinPerm, IntToStr(ElData.Number+1));
-                  end;
-                tcSoluteHead:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxKMinK, IntToStr(ElData.Number+1));
-                  end;
-                else Assert(False);
-              end;
-            end;
-
-//            if ElData.ALMAX < ElData.ALMIN then
-//            begin
-//
-//            end;
-//
-//            if ElData.ATMAX < ElData.ATMIN then
-//            begin
-//
-//            end;
-          end;
-        mt3D:
-          begin
-            if ElData.PMAX < ElData.PMID then
-            begin
-              case FOptions.TransportChoice of
-                tcSolute, tcEnergy:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxPermMidPerm, IntToStr(ElData.Number+1));
-                  end;
-                tcSoluteHead:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxKMidK, IntToStr(ElData.Number+1));
-                  end;
-                else Assert(False);
-              end;
-            end;
-            if ElData.PMID < ElData.PMIN then
-            begin
-              case FOptions.TransportChoice of
-                tcSolute, tcEnergy:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMidPermMinPerm, IntToStr(ElData.Number+1));
-                  end;
-                tcSoluteHead:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMidKMinK, IntToStr(ElData.Number+1));
-                  end;
-                else Assert(False);
-              end;
-            end;
-
-//            if ElData.ALMAX < ElData.ALMID then
-//            begin
-//
-//            end;
-//            if ElData.ALMID < ElData.ALMIN then
-//            begin
-//
-//            end;
-//
-//            if ElData.ATMAX < ElData.ATMID then
-//            begin
-//
-//            end;
-//            if ElData.ATMID < ElData.ATMIN then
-//            begin
-//
-//            end;
-          end;
-      end;
+      OpenTempFile(TempFileName);
     end;
+    try
+      WriteCommentLine('Data set 15B');
+      for ElementIndex := 0 to ElementList.Count - 1 do
+      begin
+        ElData := ElementList[ElementIndex];
+        Assert(ElData.Number = ElementIndex);
+        WriteInteger(ElData.Number+1);
+        WriteInteger(ElData.LREG);
+        WriteFloat(ElData.PMAX);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.PMID);
+        end;
+        WriteFloat(ElData.PMIN);
+        WriteFloat(ElData.ANGLE1);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.ANGLE2);
+          WriteFloat(ElData.ANGLE3);
+        end;
+        WriteFloat(ElData.ALMAX);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.ALMID);
+        end;
+        WriteFloat(ElData.ALMIN);
+        WriteFloat(ElData.ATMAX);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.ATMID);
+        end;
+        WriteFloat(ElData.ATMIN);
+        NewLine;
+        case FMesh.MeshType of
+          mt2D, mtProfile:
+            begin
+              if ElData.PMAX < ElData.PMIN then
+              begin
+                case FOptions.TransportChoice of
+                  tcSolute, tcEnergy:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxPermMinPerm, IntToStr(ElData.Number+1));
+                    end;
+                  tcSoluteHead:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxKMinK, IntToStr(ElData.Number+1));
+                    end;
+                  else Assert(False);
+                end;
+              end;
 
+  //            if ElData.ALMAX < ElData.ALMIN then
+  //            begin
+  //
+  //            end;
+  //
+  //            if ElData.ATMAX < ElData.ATMIN then
+  //            begin
+  //
+  //            end;
+            end;
+          mt3D:
+            begin
+              if ElData.PMAX < ElData.PMID then
+              begin
+                case FOptions.TransportChoice of
+                  tcSolute, tcEnergy:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxPermMidPerm, IntToStr(ElData.Number+1));
+                    end;
+                  tcSoluteHead:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxKMidK, IntToStr(ElData.Number+1));
+                    end;
+                  else Assert(False);
+                end;
+              end;
+              if ElData.PMID < ElData.PMIN then
+              begin
+                case FOptions.TransportChoice of
+                  tcSolute, tcEnergy:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMidPermMinPerm, IntToStr(ElData.Number+1));
+                    end;
+                  tcSoluteHead:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMidKMinK, IntToStr(ElData.Number+1));
+                    end;
+                  else Assert(False);
+                end;
+              end;
+
+  //            if ElData.ALMAX < ElData.ALMID then
+  //            begin
+  //
+  //            end;
+  //            if ElData.ALMID < ElData.ALMIN then
+  //            begin
+  //
+  //            end;
+  //
+  //            if ElData.ATMAX < ElData.ATMID then
+  //            begin
+  //
+  //            end;
+  //            if ElData.ATMID < ElData.ATMIN then
+  //            begin
+  //
+  //            end;
+            end;
+        end;
+      end;
+    finally
+      if PestParametersUsed then    
+      begin      
+        CloseTempFile;
+      end;        
+    end;
   finally
     ElementList.Free;
   end;
@@ -897,8 +1058,6 @@ begin
     Model.DataArrayManager.AddDataSetToCache(MidTransvDisp);
   end;
   Model.DataArrayManager.AddDataSetToCache(MinTransvDisp);
-
-
 end;
 
 procedure TSutraInputWriter.WriteDataSet17;
@@ -2055,6 +2214,14 @@ end;
 class function TSutraInputWriter.Extension: string;
 begin
   Assert(False);
+end;
+
+procedure TSutraInputWriter.OpenTempFile(const FileName: string);
+begin
+  Assert(FFileStream <> nil);
+  Assert(FMainFileStream = nil);
+  FMainFileStream := FFileStream;
+  FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
 end;
 
 procedure TSutraInputWriter.SetHasLakes(const Value: Boolean);

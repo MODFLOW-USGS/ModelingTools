@@ -10076,6 +10076,10 @@ const
 //               Bug fix: Fixed a bug with renaming MODFLOW parameters when the
 //                only change was a change in the capitalization of the
 //                parameter name.
+//               Bug fix: Fixed a bug that caused an access violation when
+//                pasting data from one model to another.
+//               Bug fix: Fixed setting default exageration with SUTRA 2D
+//                models.
 
 const
   // version number of ModelMuse.

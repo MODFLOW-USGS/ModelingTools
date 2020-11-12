@@ -75,7 +75,7 @@ type
     FParamList: TList;
     FDeletingParam: Boolean;
     FParamGroups: TPestParamGroups;
-    FAvailableParams: TStringList;
+//    FAvailableParams: TStringList;
     FUsedParams: TStringList;
     FNoNameNode: TTreeNode;
     FGroupDictionary: TDictionary<TPestParamGroup, TTreeNode>;
@@ -511,7 +511,7 @@ var
   InvalidateModelEvent: TNotifyEvent;
 begin
   inherited;
-  FAvailableParams := TStringList.Create;
+//  FAvailableParams := TStringList.Create;
   FUsedParams := TStringList.Create;
   FGroupDictionary:= TDictionary<TPestParamGroup, TTreeNode>.Create;    
   FGroupNameDictionary:= TDictionary<string, TPestParamGroup>.Create;
@@ -618,7 +618,7 @@ begin
   FSteadyParameters.Free;
   FParamList.Free;
   FUsedParams.Free;
-  FAvailableParams.Free;
+//  FAvailableParams.Free;
 end;
 
 procedure TfrmManageParameters.frameParameterGroupsGridBeforeDrawCell(
@@ -1001,21 +1001,24 @@ end;
 function TfrmManageParameters.ParamValid(ParamType: TParameterType): boolean;
 var
   TransientModel: Boolean;
-  Modflow6Selected: Boolean;
+  PestOnly: Boolean;
+  LpfUpwUsed: Boolean;
 begin
   result := False;
   TransientModel := frmGoPhast.PhastModel.ModflowStressPeriods.TransientModel;
-  Modflow6Selected := frmGoPhast.ModelSelection = msModflow2015;
+  PestOnly := frmGoPhast.ModelSelection in [msModflow2015] + SutraSelection;
+  LpfUpwUsed := (frmGoPhast.PhastModel.LpfIsSelected
+    or frmGoPhast.PhastModel.UpwIsSelected);
 
   case ParamType of
     ptUndefined: result := False;
-    ptLPF_HK: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
-    ptLPF_HANI: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
-    ptLPF_VK: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
-    ptLPF_VANI: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
-    ptLPF_SS: result := not Modflow6Selected and ((frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected) and TransientModel);
-    ptLPF_SY: result := not Modflow6Selected and ((frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected) and TransientModel);
-    ptLPF_VKCB: result := not Modflow6Selected and (frmGoPhast.PhastModel.LpfIsSelected or frmGoPhast.PhastModel.UpwIsSelected);
+    ptLPF_HK: result := not PestOnly and LpfUpwUsed;
+    ptLPF_HANI: result := not PestOnly and LpfUpwUsed;
+    ptLPF_VK: result := not PestOnly and LpfUpwUsed;
+    ptLPF_VANI: result := not PestOnly and LpfUpwUsed;
+    ptLPF_SS: result := not PestOnly and LpfUpwUsed and TransientModel;
+    ptLPF_SY: result := not PestOnly and LpfUpwUsed and TransientModel;
+    ptLPF_VKCB: result := not PestOnly and LpfUpwUsed;
     ptRCH: result := frmGoPhast.PhastModel.RchIsSelected;
     ptEVT: result := frmGoPhast.PhastModel.EvtIsSelected;
     ptETS: result := frmGoPhast.PhastModel.EtsIsSelected;
@@ -1027,16 +1030,19 @@ begin
     ptDRT: result := frmGoPhast.PhastModel.DrtIsSelected;
     ptSFR: result := frmGoPhast.PhastModel.SfrIsSelected;
     ptHFB: result := frmGoPhast.PhastModel.HfbIsSelected;
-    ptHUF_HK: result := frmGoPhast.PhastModel.HufIsSelected;
-    ptHUF_HANI: result := frmGoPhast.PhastModel.HufIsSelected;
-    ptHUF_VK: result := frmGoPhast.PhastModel.HufIsSelected;
-    ptHUF_VANI: result := frmGoPhast.PhastModel.HufIsSelected;
-    ptHUF_SS: result := frmGoPhast.PhastModel.HufIsSelected and TransientModel;
-    ptHUF_SY: result := frmGoPhast.PhastModel.HufIsSelected and TransientModel;
-    ptHUF_SYTP: result := frmGoPhast.PhastModel.HufIsSelected and TransientModel;
-    ptHUF_KDEP: result := frmGoPhast.PhastModel.HufIsSelected;
-    ptHUF_LVDA: result := frmGoPhast.PhastModel.HufIsSelected;
-    ptSTR: result := frmGoPhast.PhastModel.StrIsSelected;
+    ptHUF_HK: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
+    ptHUF_HANI: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
+    ptHUF_VK: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
+    ptHUF_VANI: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
+    ptHUF_SS: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected
+      and TransientModel;
+    ptHUF_SY: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected
+      and TransientModel;
+    ptHUF_SYTP: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected
+      and TransientModel;
+    ptHUF_KDEP: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
+    ptHUF_LVDA: result := not PestOnly and frmGoPhast.PhastModel.HufIsSelected;
+    ptSTR: result := not PestOnly and frmGoPhast.PhastModel.StrIsSelected;
     ptQMAX: result := frmGoPhast.PhastModel.FarmProcessIsSelected;
     ptPEST: result := frmGoPhast.PhastModel.PestUsed;
     else Assert(False);

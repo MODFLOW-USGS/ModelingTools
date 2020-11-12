@@ -69,7 +69,7 @@ type
   TBoundaryFlowObservationLocationList = TList<TBoundaryFlowObservationLocation>;
 
   TCustomFileWriter = class(TObject)
-  strict private
+  strict protected
     // name is the file that is created by @classname.
     FFileStream: TFileStream;
   private

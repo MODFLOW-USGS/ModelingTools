@@ -6466,7 +6466,7 @@ var
   DataArray: TDataArray;
   DSIndex: Integer;
   AssignModelToBoundary: boolean;
-  DS_Index: Integer;
+//  DS_Index: Integer;
   DataSet: TDataArray;
   BoundarArray: TDataArray;
   AChildModel: TChildModel;
@@ -6562,14 +6562,14 @@ begin
   for Index := 0 to AScreenObject.DataSetCount - 1 do
   begin
     DataSet := AScreenObject.DataSets[Index];
-    DS_Index := IndexOfDataSet(DataSet);
-    if DS_Index < 0 then
+    DSIndex := IndexOfDataSet(DataSet);
+    if DSIndex < 0 then
     begin
-      DS_Index := AddDataSet(DataSet);
+      DSIndex := AddDataSet(DataSet);
     end;
-    if DS_Index >= 0 then
+    if DSIndex >= 0 then
     begin
-      DataSetFormulas[DS_Index] := AScreenObject.DataSetFormulas[Index];
+      DataSetFormulas[DSIndex] := AScreenObject.DataSetFormulas[Index];
     end;
   end;
 
@@ -6769,7 +6769,7 @@ begin
     begin
       DSIndex := AddDataSet(DataArray);
     end;
-    if DS_Index >= 0 then
+    if DSIndex >= 0 then
     begin
       DataSetFormulas[DSIndex] := AScreenObject.DataSetFormulas[DataSetIndex];
     end;
@@ -6801,22 +6801,22 @@ begin
   if ((ModflowChdBoundary <> nil) and ModflowChdBoundary.Used)
     or ((frmGoPhast.ModelSelection <> msModflow2015) and (ModflowFhbHeadBoundary <> nil) and ModflowFhbHeadBoundary.Used) then
   begin
-    DS_Index := IndexOfDataSet(BoundarArray);
-    if DS_Index < 0 then
+    DSIndex := IndexOfDataSet(BoundarArray);
+    if DSIndex < 0 then
     begin
-      DS_Index := AddDataSet(BoundarArray);
+      DSIndex := AddDataSet(BoundarArray);
     end;
-    if DS_Index >= 0 then
+    if DSIndex >= 0 then
     begin
-      DataSetFormulas[DS_Index] := 'True';
+      DataSetFormulas[DSIndex] := 'True';
     end;
   end
   else
   begin
-    DS_Index := IndexOfDataSet(BoundarArray);
-    if DS_Index >= 0 then
+    DSIndex := IndexOfDataSet(BoundarArray);
+    if DSIndex >= 0 then
     begin
-      DeleteDataSet(DS_Index);
+      DeleteDataSet(DSIndex);
     end;
   end;
 
@@ -6827,22 +6827,22 @@ begin
     and not ModflowLak6.Embedded
     and (ModflowLak6.LakeConnections <> [lctHorizontal]) then
   begin
-    DS_Index := IndexOfDataSet(BoundarArray);
-    if DS_Index < 0 then
+    DSIndex := IndexOfDataSet(BoundarArray);
+    if DSIndex < 0 then
     begin
-      DS_Index := AddDataSet(BoundarArray);
+      DSIndex := AddDataSet(BoundarArray);
     end;
-    if DS_Index >= 0 then
+    if DSIndex >= 0 then
     begin
-      DataSetFormulas[DS_Index] := 'True';
+      DataSetFormulas[DSIndex] := 'True';
     end;
   end
   else
   begin
-    DS_Index := IndexOfDataSet(BoundarArray);
-    if DS_Index >= 0 then
+    DSIndex := IndexOfDataSet(BoundarArray);
+    if DSIndex >= 0 then
     begin
-      DeleteDataSet(DS_Index);
+      DeleteDataSet(DSIndex);
     end;
   end;
 

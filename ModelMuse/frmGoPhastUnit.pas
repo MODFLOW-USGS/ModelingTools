@@ -2000,6 +2000,7 @@ type
     property DisvUsed:  Boolean read GetDisvUsed;
     procedure SetMt3dCaption;
     procedure EnableCTS;
+    procedure EnableManageParameters;
 //    property WriteErrorRaised: Boolean read FWriteErrorRaised;
     { Public declarations }
   end;
@@ -4373,8 +4374,7 @@ begin
     PhastModel.ModelSelection in ModflowSelection;
   miProgramLocations.Enabled :=
     PhastModel.ModelSelection in ModflowSelection;
-  miManageParameters.Enabled :=
-    PhastModel.ModelSelection in ModflowSelection;
+  EnableManageParameters;
   miModflowNameFile.Enabled :=
     PhastModel.ModelSelection in ModflowSelection;
   EnableLinkStreams;
@@ -4407,7 +4407,7 @@ begin
     ControlList.Add(miGeneral);
     ControlList.Add(miProgramLocations);
     ControlList.Add(miLinkSFRStreams);
-    ControlList.Add(miManageParameters);
+//    ControlList.Add(miManageParameters);
     ControlList.Add(miManageHeadObservations);
     ControlList.Add(miManageFluxObservations);
     ControlList.Add(miModflowNameFile);
@@ -5925,6 +5925,16 @@ begin
   acEditCTS.Visible := (ModelSelection in ModflowSelection);
   acEditCTS.Enabled :=
     PhastModel.ModflowPackages.Mt3dCts.IsSelected;
+end;
+
+procedure TfrmGoPhast.EnableManageParameters;
+begin
+  miManageParameters.Enabled :=
+    (PhastModel.ModelSelection in Modflow2005Selection)
+    or ((PhastModel.ModelSelection in ([msModflow2015] + SutraSelection))
+      and PhastModel.PestUsed);
+  miManageParameters.Visible :=
+    (PhastModel.ModelSelection in (ModflowSelection + SutraSelection))
 end;
 
 procedure TfrmGoPhast.EnableDeleteImage;
@@ -9428,6 +9438,8 @@ var
   SutraPestObsWriterWriter: TSutraPestObsWriterWriter;
   SutraNodDisWriter: TSutraNodDisWriter;
   SutraEleDisWriter: TSutraEleDisWriter;
+  RunModelBatchFile: TStringList;
+  RunModelBatchFileName: string;
 //  BcopgFileName: string;
 //  BcopgFileNames: TStringList;
 //  BcougFileNames: TStringList;
@@ -9490,7 +9502,6 @@ begin
   finally
     SutraEleDisWriter.Free;
   end;
-
 
   if frmProgressMM = nil then
   begin
@@ -9766,16 +9777,29 @@ begin
 
         SutraFileWriter.WriteFile;
         BatchFileName := ExtractFileDir(FileName);
+        RunModelBatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
+          + 'RunModel.bat';
         BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
           + 'RunSutra.bat';
         BatchFile := TStringList.Create;
+        RunModelBatchFile := TStringList.Create;
         try
           if NetworkDrive then
           begin
             BatchFile.Add('pushd ' + ModelDirectory);
+            RunModelBatchFile.Add('pushd ' + ModelDirectory);
           end;
 
           BatchFile.Add('"' + SutraFileName + '"');
+          RunModelBatchFile.Add('"' + SutraFileName + '"');
+
+          if PhastModel.PestUsed then
+          begin
+            BatchFile.Add('SutraObsExtractor.exe' + ' '
+              + ChangeFileExt(ExtractFileName(FileName), StrSoei));
+            RunModelBatchFile.Add('SutraObsExtractor.exe' + ' '
+              + ChangeFileExt(ExtractFileName(FileName), StrSoeev));
+          end;
 
           AddOpenListFileLine(ChangeFileExt(FileName, '.lst'), True, BatchFile,
             PhastModel.ProgramLocations);
@@ -9783,9 +9807,11 @@ begin
           if NetworkDrive then
           begin
             BatchFile.Add('popd');
+            RunModelBatchFile.Add('popd');
           end;
           BatchFile.Add('pause');
           BatchFile.SaveToFile(BatchFileName);
+          RunModelBatchFile.SaveToFile(RunModelBatchFileName);
 
           BatchFile.Clear;
 
@@ -9799,6 +9825,7 @@ begin
 
         finally
           BatchFile.Free;
+          RunModelBatchFile.Free;
         end;
         PhastModel.AddModelInputFile(BatchFileName + ArchiveExt);
         PhastModel.AddModelInputFile(SutraFileName);
@@ -10755,6 +10782,11 @@ begin
           if TSutraMesh3D(Mesh).MeshType = mtProfile then
           begin
             ModelYWidth := ModelYWidth * PhastModel.Exaggeration;
+            ModelHeight := 0;
+          end;
+          if TSutraMesh3D(Mesh).MeshType = mt2D then
+          begin
+            ModelHeight := 0;
           end;
         end;
         InitializeView(ModelXWidth, ModelYWidth, ModelHeight);

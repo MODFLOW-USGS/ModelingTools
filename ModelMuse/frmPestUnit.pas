@@ -1299,6 +1299,7 @@ begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := NewPestLocation;
   frmGoPhast.PhastModel.SetMf2005ObsGroupNames;
+  frmGoPhast.EnableManageParameters;
 end;
 
 procedure TUndoPestOptions.Undo;
@@ -1310,6 +1311,7 @@ begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := OldPestLocation;
   frmGoPhast.PhastModel.SetMf2005ObsGroupNames;
+  frmGoPhast.EnableManageParameters;
 end;
 
 procedure TUndoPestOptions.UpdateProperties(PestProperties: TPestProperties;

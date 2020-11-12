@@ -525,6 +525,10 @@ inherited frmManageParameters: TfrmManageParameters
     object tabParameterGroups: TTabSheet
       Caption = 'ParameterGroups'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       inline frameParameterGroups: TframeGrid
         Left = 0
         Top = 0
@@ -898,6 +902,10 @@ inherited frmManageParameters: TfrmManageParameters
     object tabTiedParameters: TTabSheet
       Caption = 'Tied Parameters'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object tvTiedParameters: TTreeView
         Left = 0
         Top = 0
