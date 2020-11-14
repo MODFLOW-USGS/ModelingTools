@@ -1108,6 +1108,11 @@ begin
       Exit;
     end;
     AScreenObject := Data.ScreenObjects[Node.Index];
+    if AScreenObject = nil then
+    begin
+      CellText := 'Error';
+      Exit;
+    end;
     CellText := AScreenObject.Name;
     ParentNode := Sender.NodeParent[Node];
     while (ParentNode <> nil) and (Sender.NodeParent[ParentNode]

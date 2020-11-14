@@ -32354,7 +32354,7 @@ begin
       FTemplate.SaveToFile(TemplateFileName);
 //    end;
 
-    if ModelSelection <> msModflow2015 then
+    if ModelSelection in Modflow2005Selection then
     begin
       TCustomModflowWriter.WriteToNameFile('PVAL',
         UnitNumbers.UnitNumber(StrPval), PValFileName, foInput, self);

@@ -5855,6 +5855,7 @@ begin
   Annotations := TStringList.Create;
   ModifiedAnnotations := TStringList.Create;
   try
+    PestParameters.CaseSensitive := False;
     for PIndex := 0 to LocalModel.ModflowSteadyParameters.Count - 1 do
     begin
       AParam := LocalModel.ModflowSteadyParameters[PIndex];

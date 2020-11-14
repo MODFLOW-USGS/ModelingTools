@@ -1417,6 +1417,10 @@ var
   PestProperties: TPestProperties;
 begin
   FPaintingNeeded := True;
+  if not frmGoPhast.CanDraw then
+  begin
+    Exit;
+  end;
     // @name is the main routine for drawing the
     // @link(TfrmGoPhast.Grid) and @link(TScreenObject)s.
     // It will also draw any imported images.

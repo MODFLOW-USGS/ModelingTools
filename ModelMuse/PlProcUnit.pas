@@ -9,7 +9,8 @@ interface
 uses
   ModflowIrregularMeshUnit, CustomModflowWriterUnit, System.SysUtils, FastGEO,
   AbstractGridUnit, GoPhastTypes, MeshRenumberingTypes, System.Classes,
-  DataSetUnit, QuadTreeClass, System.Generics.Collections;
+  DataSetUnit, QuadTreeClass, System.Generics.Collections, SutraMeshUnit,
+  PhastModelUnit, RbwParser;
 
 type
    TQuadTreeObjectList = TObjectList<TRbwQuadTree>;
@@ -100,10 +101,23 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+  TSutraNodeDataWriter = class(TCustomFileWriter)
+  private
+    FFileName: string;
+    FMesh: TSutraMesh3D;
+  protected
+    class function Extension: string; override;
+  public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    procedure WriteFile(var AFileName: string; DataArray: TDataArray); overload;
+    procedure WriteFile(var AFileName: string; DataArrayName: string;
+      DataType: TRbwDataType); overload;
+  end;
+
 implementation
 
 uses
-  ModflowParameterUnit, OrderedCollectionUnit, SutraMeshUnit;
+  ModflowParameterUnit, OrderedCollectionUnit;
 
 const
   KDisName = 'cl_Discretization';
@@ -1112,15 +1126,15 @@ begin
   OpenFile(FInputFileName);
   try
     SutraMesh2D := Model.SutraMesh.Mesh2D;
-    WriteString(' Index Node_Number X Y');
+    WriteString(' Index X Y Node_Number');
     NewLine;
     for NodeIndex := 0 to SutraMesh2D.Nodes.Count - 1 do
     begin
       ANode := SutraMesh2D.Nodes[NodeIndex];
       WriteInteger(NodeIndex + 1);
-      WriteInteger(ANode.Number);
       WriteFloat(ANode.Location.x);
       WriteFloat(ANode.Location.y);
+      WriteInteger(ANode.Number+1);
       NewLine;
     end;
   finally
@@ -1146,21 +1160,230 @@ begin
   OpenFile(FInputFileName);
   try
     SutraMesh2D := Model.SutraMesh.Mesh2D;
-    WriteString(' Index Element_Number X Y');
+    WriteString(' Index X Y Element_Number');
     NewLine;
     for ElementIndex := 0 to SutraMesh2D.Elements.Count - 1 do
     begin
       AnElement := SutraMesh2D.Elements[ElementIndex];
       WriteInteger(ElementIndex + 1);
-      WriteInteger(AnElement.ElementNumber);
       Location := AnElement.Center;
       WriteFloat(Location.x);
       WriteFloat(Location.y);
+      WriteInteger(AnElement.ElementNumber+1);
       NewLine;
     end;
 
   finally
     CloseFile;
+  end;
+end;
+
+{ TSutraNodeDataWriter }
+
+constructor TSutraNodeDataWriter.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  FMesh := AModel.SutraMesh;
+
+end;
+
+class function TSutraNodeDataWriter.Extension: string;
+begin
+  Result := '.PstValues';
+end;
+
+procedure TSutraNodeDataWriter.WriteFile(var AFileName: string;
+  DataArrayName: string; DataType: TRbwDataType);
+var
+  LayerIndex: Integer;
+  NodeIndex: Integer;
+  ANode2D: TSutraNode2D;
+  ANode3D: TSutraNode3D;
+begin
+  FFileName := ChangeFileExt(AFileName, '.' + DataArrayName);
+
+  OpenFile(FFileName);
+  try
+    WriteString('NN2D ');
+    if FMesh.MeshType = mt3D then
+    begin
+      WriteString('NN3D Layer ');
+    end;
+    for LayerIndex := 0 to FMesh.LayerCount - 1 do
+    begin
+      WriteString(Format('%0:s%1:d ', [DataArrayName, LayerIndex+1]));
+      if DataType = rdtDouble then
+      begin
+        WriteString(Format('%0:sParameter%1:d ', [DataArrayName, LayerIndex+1]))
+      end;
+    end;
+    NewLine;
+
+    for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
+    begin
+      ANode2D := FMesh.Mesh2D.Nodes[NodeIndex];
+      WriteInteger(ANode2D.Number+1);
+      for LayerIndex := 0 to FMesh.LayerCount - 1 do
+      begin
+        if FMesh.MeshType = mt3D then
+        begin
+          ANode3D := FMesh.NodeArray[LayerIndex,NodeIndex];
+          WriteInteger(ANode3D.Number + 1);
+          WriteInteger(LayerIndex + 1);
+        end;
+        case DataType of
+          rdtDouble:
+            begin
+              WriteFloat(0);
+            end;
+          rdtInteger:
+            begin
+              WriteInteger(0);
+            end;
+          rdtBoolean:
+            begin
+              Assert(False);
+            end;
+          rdtString:
+            begin
+              Assert(False);
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+        if DataType = rdtDouble then
+        begin
+          WriteInteger(0);
+        end;
+      end;
+      NewLine;
+    end;
+
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TSutraNodeDataWriter.WriteFile(var AFileName: string;
+  DataArray: TDataArray);
+var
+  ParameterNames: TStringList;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  ParamArray: TDataArray;
+  LayerIndex: Integer;
+  NodeIndex: Integer;
+  ANode2D: TSutraNode2D;
+  ANode3D: TSutraNode3D;
+begin
+  ParameterNames := TStringList.Create;
+  try
+    FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);
+
+    if Model.PestUsed then
+    begin
+      for PIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+      begin
+        AParam := Model.ModflowSteadyParameters[PIndex];
+        if AParam.ParameterType = ptPEST then
+        begin
+          ParameterNames.AddObject(LowerCase(AParam.ParameterName), AParam);
+        end;
+      end;
+      ParameterNames.Sorted := True;
+    end;
+
+    if DataArray.PestParametersUsed and (DataArray.DataType = rdtDouble) then
+    begin
+      ParamArray := Model.DataArrayManager.GetDataSetByName
+        (DataArray.ParamDataSetName);
+    end
+    else
+    begin
+      ParamArray := nil;
+    end;
+
+    OpenFile(FFileName);
+    try
+      WriteString('NN2D ');
+      if FMesh.MeshType = mt3D then
+      begin
+        WriteString('NN3D Layer ');
+      end;
+      for LayerIndex := 0 to DataArray.LayerCount - 1 do
+      begin
+        WriteString(Format('%0:s%1:d ', [DataArray.Name, LayerIndex+1]));
+        if DataArray.DataType = rdtDouble then
+        begin
+          WriteString(Format('%0:sParameter%1:d ', [DataArray.Name, LayerIndex+1]))
+        end;
+      end;
+      NewLine;
+
+      for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
+      begin
+        ANode2D := FMesh.Mesh2D.Nodes[NodeIndex];
+        WriteInteger(ANode2D.Number+1);
+        for LayerIndex := 0 to DataArray.LayerCount - 1 do
+        begin
+          if FMesh.MeshType = mt3D then
+          begin
+            ANode3D := FMesh.NodeArray[LayerIndex,NodeIndex];
+            WriteInteger(ANode3D.Number + 1);
+            WriteInteger(LayerIndex + 1);
+          end;
+          case DataArray.DataType of
+            rdtDouble:
+              begin
+                WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]);
+              end;
+            rdtInteger:
+              begin
+                WriteInteger(DataArray.IntegerData[LayerIndex, 0, NodeIndex]);
+              end;
+            rdtBoolean:
+              begin
+                WriteInteger(Ord(DataArray.BooleanData[LayerIndex, 0, NodeIndex]));
+              end;
+            rdtString:
+              begin
+                Assert(False);
+              end;
+            else
+              begin
+                Assert(False);
+              end;
+          end;
+          if ParamArray <> nil then
+          begin
+            PIndex := ParameterNames.IndexOf(LowerCase(
+              ParamArray.StringData[LayerIndex, 0, NodeIndex]));
+          end
+          else
+          begin
+            PIndex := -1;
+          end;
+          if DataArray.DataType = rdtDouble then
+          begin
+            WriteInteger(PIndex+1);
+          end;
+        end;
+        NewLine;
+      end;
+
+    finally
+      CloseFile;
+    end;
+  finally
+    ParameterNames.Free;
+  end;
+  Model.DataArrayManager.AddDataSetToCache(DataArray);
+  if ParamArray <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(ParamArray);
   end;
 end;
 

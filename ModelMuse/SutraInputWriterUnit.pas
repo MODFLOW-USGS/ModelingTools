@@ -117,7 +117,8 @@ type
 implementation
 
 uses
-  DataSetUnit, SutraFileWriterUnit, frmErrorsAndWarningsUnit;
+  DataSetUnit, SutraFileWriterUnit, frmErrorsAndWarningsUnit, PlProcUnit,
+  ModflowParameterUnit, OrderedCollectionUnit, RbwParser;
 
 resourcestring
   StrMaxPermMinPerm = 'Maximum permeability < Minimum permeability';
@@ -399,42 +400,83 @@ var
   ANode3D: TSutraNode3D;
   TempFileName: string;
   PestParametersUsed: Boolean;
-  PorosityParamArray: TDataArray;
+  DataFileWriter: TSutraNodeDataWriter;
 begin
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
   Porosity.Initialize;
-  PorosityParamArray := nil;
-  if Model.PestUsed and Porosity.PestParametersUsed then
+  if Model.PestUsed then
   begin
-    PestParametersUsed := True;
-    PorosityParamArray := Model.DataArrayManager.GetDataSetByName
-      (Porosity.ParamDataSetName);
-    PorosityParamArray.Initialize;  
+    DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+    try
+      DataFileWriter.WriteFile(FFileName, Porosity);
+    finally
+      DataFileWriter.Free;
+    end;
+    if Porosity.PestParametersUsed then
+    begin
+      PestParametersUsed := True;
+    end;
   end;
 
   if FOptions.SaturationChoice = scUnsaturated then
   begin
     UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionNodes);
     UnsatRegion.Initialize;
+    if Model.PestUsed then
+    begin
+      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, UnsatRegion);
+      finally
+        DataFileWriter.Free;
+      end;
+    end;
   end
   else
   begin
     UnsatRegion := nil;
+    if Model.PestUsed then
+    begin
+      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, KUnsatRegionNodes, rdtInteger);
+      finally
+        DataFileWriter.Free;
+      end;
+    end;
   end;
   if FMesh.MeshType in [mt2D, mtProfile] then
   begin
     Thickness := Model.DataArrayManager.GetDataSetByName(KNodalThickness);
     Thickness.Initialize;
+    if Model.PestUsed then
+    begin
+      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, Thickness);
+      finally
+        DataFileWriter.Free;
+      end;
+      if Thickness.PestParametersUsed then
+      begin
+        PestParametersUsed := True;
+      end;
+    end;
   end
   else
   begin
     Thickness := nil;
+//    DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+//    try
+//      DataFileWriter.WriteFile(FFileName, KNodalThickness, rdtDouble);
+//    finally
+//      DataFileWriter.Free;
+//    end;
   end;
 
   Nodes := TNodeDataList.Create;
   try
-
     if FMesh.MeshType in [mt2D, mtProfile] then
     begin
       Nodes.Capacity := FMesh.Mesh2D.Nodes.Count;
