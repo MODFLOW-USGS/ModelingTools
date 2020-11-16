@@ -142,6 +142,7 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
+      ExplicitLeft = 1
       ExplicitHeight = 126
     end
   end

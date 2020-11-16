@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4186
+4198
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4186,3 +4186,15 @@ HighestActiveModflow.gpt
 	Archive\HighestActiveModflow.oc
 	Archive\HighestActiveModflow.tdis
 	Archive\usgs.HighestActiveModflow.reference
+ProfileTest.gpt
+	Archive\ProfileTest.axml
+	Archive\ProfileTest.bas
+	Archive\ProfileTest.chd
+	Archive\ProfileTest.dis
+	Archive\ProfileTest.gsf
+	Archive\ProfileTest.lpf
+	Archive\ProfileTest.nam
+	Archive\ProfileTest.nam.archive
+	Archive\ProfileTest.oc
+	Archive\ProfileTest.pcg
+	Archive\usgs.ProfileTest.reference

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ProfileTest" FileType="bin">
+    <FileName Model_Name="ProfileTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ProfileTest" FileType="ancillary">
+    <FileName Model_Name="ProfileTest" FileType="ancillary">ProfileTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ProfileTest" FileType="Model Input">
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.bas</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.chd</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.dis</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.gsf</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.lpf</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.nam.archive</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.oc</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">ProfileTest.pcg</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Input">usgs.ProfileTest.reference</FileName>
+  </model>
+  <output Model_Name="ProfileTest" FileType="Model Output">
+    <FileName Model_Name="ProfileTest" FileType="Model Output">ProfileTest.bhd</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Output">ProfileTest.cbc</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Output">ProfileTest.fdn</FileName>
+    <FileName Model_Name="ProfileTest" FileType="Model Output">ProfileTest.lst</FileName>
+  </output>
+</Model_Archive_List>

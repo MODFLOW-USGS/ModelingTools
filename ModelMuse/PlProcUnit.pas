@@ -101,7 +101,12 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
-  TSutraNodeDataWriter = class(TCustomFileWriter)
+  TCustomSutraPlprocFileWriter = class(TCustomFileWriter)
+  protected
+    procedure GetParameterNames(ParameterNames: TStringList);
+  end;
+
+  TSutraNodeDataWriter = class(TCustomSutraPlprocFileWriter)
   private
     FFileName: string;
     FMesh: TSutraMesh3D;
@@ -112,6 +117,20 @@ type
     procedure WriteFile(var AFileName: string; DataArray: TDataArray); overload;
     procedure WriteFile(var AFileName: string; DataArrayName: string;
       DataType: TRbwDataType); overload;
+  end;
+
+  TSutraData14BScriptWriter = class(TCustomSutraPlprocFileWriter)
+  private
+    FRoot: string;
+    FFileName: string;
+    FParameterNames: TStringList;
+    procedure WriteAFile(ScriptChoice: TScriptChoice);
+  protected
+    class function Extension: string; override;
+  public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    destructor Destroy; override;
+    procedure WriteFiles(var AFileName: string);
   end;
 
 implementation
@@ -606,11 +625,11 @@ var
   LayerIndex: Integer;
 begin
   case Model.ModelSelection of
-    msUndefined,msPhast, msFootPrint: 
+    msUndefined,msPhast, msFootPrint:
       begin
-        Assert(False);  
+        Assert(False);
       end;
-    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp: 
+    msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp:
       begin
         WriteString('#Read MODFLOW-2005 grid information file');
         NewLine;
@@ -638,7 +657,7 @@ begin
         WriteString(Format('  id_type=''indexed'',file=''%s'')', [GrbFileName]));
         NewLine;
       end;
-    msModflow2015:  
+    msModflow2015:
       begin
         WriteString('#Read MODFLOW 6 grid information file');
         NewLine;
@@ -676,7 +695,7 @@ begin
         NewLine;
       end;
     else
-      Assert(False);  
+      Assert(False);
   end;
 end;
 
@@ -965,7 +984,7 @@ begin
     WriteString('#Script for PLPROC');
     NewLine;
     NewLine;
-    
+
     if FPilotPointsUsed then
     begin
       ReadPilotPoints;
@@ -1121,11 +1140,15 @@ var
   NodeIndex: Integer;
   SutraMesh2D: TSutraMesh2D;
   ANode: TSutraNode2D;
+  LayerIndex: Integer;
+  SutraMesh3D: TSutraMesh3D;
+  ANode3D: TSutraNode3D;
 begin
   FInputFileName := FileName(AFileName);
   OpenFile(FInputFileName);
   try
-    SutraMesh2D := Model.SutraMesh.Mesh2D;
+    SutraMesh3D := Model.SutraMesh;
+    SutraMesh2D := SutraMesh3D.Mesh2D;
     WriteString(' Index X Y Node_Number');
     NewLine;
     for NodeIndex := 0 to SutraMesh2D.Nodes.Count - 1 do
@@ -1135,6 +1158,15 @@ begin
       WriteFloat(ANode.Location.x);
       WriteFloat(ANode.Location.y);
       WriteInteger(ANode.Number+1);
+      if SutraMesh3D.MeshType = mt3D then
+      begin
+        for LayerIndex := 0 to SutraMesh3D.LayerCount do
+        begin
+          ANode3D := SutraMesh3D.NodeArray[LayerIndex,ANode.Number];
+          WriteFloat(ANode3D.Z);
+          WriteInteger(ANode3D.Number+1);
+        end;
+      end;
       NewLine;
     end;
   finally
@@ -1282,19 +1314,7 @@ begin
   ParameterNames := TStringList.Create;
   try
     FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);
-
-    if Model.PestUsed then
-    begin
-      for PIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
-      begin
-        AParam := Model.ModflowSteadyParameters[PIndex];
-        if AParam.ParameterType = ptPEST then
-        begin
-          ParameterNames.AddObject(LowerCase(AParam.ParameterName), AParam);
-        end;
-      end;
-      ParameterNames.Sorted := True;
-    end;
+    GetParameterNames(ParameterNames);
 
     if DataArray.PestParametersUsed and (DataArray.DataType = rdtDouble) then
     begin
@@ -1335,10 +1355,35 @@ begin
             WriteInteger(ANode3D.Number + 1);
             WriteInteger(LayerIndex + 1);
           end;
+          if ParamArray <> nil then
+          begin
+            PIndex := ParameterNames.IndexOf(LowerCase(
+              ParamArray.StringData[LayerIndex, 0, NodeIndex]));
+          end
+          else
+          begin
+            PIndex := -1;
+          end;
+          if PIndex >=0 then
+          begin
+            AParam := ParameterNames.Objects[PIndex] as TModflowSteadyParameter;
+          end
+          else
+          begin
+            AParam := nil;
+          end;
           case DataArray.DataType of
             rdtDouble:
               begin
-                WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]);
+                if (AParam = nil) or (AParam.Value = 0) then
+                begin
+                  WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]);
+                end
+                else
+                begin
+                  WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]
+                    /AParam.Value);
+                end;
               end;
             rdtInteger:
               begin
@@ -1356,15 +1401,6 @@ begin
               begin
                 Assert(False);
               end;
-          end;
-          if ParamArray <> nil then
-          begin
-            PIndex := ParameterNames.IndexOf(LowerCase(
-              ParamArray.StringData[LayerIndex, 0, NodeIndex]));
-          end
-          else
-          begin
-            PIndex := -1;
           end;
           if DataArray.DataType = rdtDouble then
           begin
@@ -1384,6 +1420,281 @@ begin
   if ParamArray <> nil then
   begin
     Model.DataArrayManager.AddDataSetToCache(ParamArray);
+  end;
+end;
+
+{ TSutraData14BScriptWriter }
+
+constructor TSutraData14BScriptWriter.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  Assert(Model.ModelSelection in SutraSelection);
+  FParameterNames := TStringList.Create;
+end;
+
+destructor TSutraData14BScriptWriter.Destroy;
+begin
+  FParameterNames.Free;
+  inherited;
+end;
+
+class function TSutraData14BScriptWriter.Extension: string;
+begin
+  result := '.14B.script';
+end;
+
+procedure TSutraData14BScriptWriter.WriteAFile(ScriptChoice: TScriptChoice);
+var
+  Mesh: TSutraMesh3D;
+  LayerCount: Integer;
+  LayerIndex: Integer;
+  ColIndex: Integer;
+  ParameterIndex: Integer;
+  AParam: TModflowSteadyParameter;
+begin
+  if ScriptChoice = scWriteTemplate then
+  begin
+    FFileName := FFileName + '.tpl';
+  end;
+
+  Mesh := Model.SutraMesh;
+
+  OpenFile(FFileName);
+  try
+    if ScriptChoice = scWriteScript then
+    begin
+      WriteString('# ');
+    end;
+    WriteString('ptf ');
+    WriteString(Model.PestProperties.TemplateCharacter);
+    NewLine;
+    WriteString('#Script for PLPROC');
+    NewLine;
+    NewLine;
+
+    if Mesh.MeshType = mt3D then
+    begin
+      LayerCount := Mesh.LayerCount + 1;
+    end
+    else
+    begin
+      LayerCount := 1;
+    end;
+
+    {$REGION 'Node discretization'}
+    WriteString('#Read SUTRA node information file');
+    NewLine;
+    WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
+    NewLine;
+    WriteString('  plist=p_x;column=2, &');
+    NewLine;
+    WriteString('  plist=p_y;column=3, &');
+    NewLine;
+    if Mesh.MeshType = mt3D then
+    begin
+      ColIndex := 4;
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString(Format('  plist=p_z%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+      end;
+    end;
+    WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+    NewLine;
+    NewLine;
+    {$ENDREGION}
+
+    WriteString('#Read data to modify');
+    NewLine;
+    {$REGION 'Porosity'}
+    WriteString('# Read porosity');
+    NewLine;
+    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+    NewLine;
+    ColIndex := 2;
+    for LayerIndex := 1 to LayerCount do
+    begin
+      WriteString(Format('  plist=p_Porosity%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+
+      WriteString(Format('  slist=s_PorPar%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+    end;
+    WriteString(Format('  file=''%s.Nodal_Porosity'')', [FRoot]));
+    NewLine;
+    NewLine;
+    {$ENDREGION}
+
+    {$REGION 'Thickness'}
+    if Mesh.MeshType <> mt3D then
+    begin
+      WriteString('# Read Thickness');
+      NewLine;
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+      WriteString('  plist=p_Thickness;column=2, &');
+      NewLine;
+      WriteString('  slist=s_Thickness;column=3, &');
+      NewLine;
+      WriteString(Format('  file=''%s.Nodal_Thickness'')', [FRoot]));
+      NewLine;
+      NewLine;
+    end;
+    {$ENDREGION}
+
+    {$REGION 'Unsaturated zone'}
+    WriteString('# Read Unsaturated Zone');
+    NewLine;
+    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+    NewLine;
+    ColIndex := 2;
+    for LayerIndex := 1 to LayerCount do
+    begin
+      WriteString(Format('  slist=s_Unsat_Region%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+    end;
+    WriteString(Format('  file=''%s.Unsat_Region_Nodes'')', [FRoot]));
+    NewLine;
+    NewLine;
+    {$ENDREGION}
+
+    WriteString('#Read parameter values');
+    NewLine;
+    {$REGION 'Parameter values'}
+    for ParameterIndex := 0 to FParameterNames.Count - 1 do
+    begin
+      AParam := FParameterNames.Objects[ParameterIndex]
+        as TModflowSteadyParameter;
+      if ScriptChoice = scWriteScript then
+      begin
+        WriteString('#');
+      end;
+      WriteString(Format('%0:s = %1:s                        %0:s%1:s',
+        [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
+      NewLine;
+      if ScriptChoice = scWriteTemplate then
+      begin
+        WriteString('#');
+      end;
+      WriteString(Format('%0:s = %1:g',
+        [AParam.ParameterName, AParam.Value]));
+      NewLine;
+    end;
+    NewLine;
+    {$ENDREGION}
+
+    {$REGION 'Apply parameters'}
+    WriteString('# applying parameter values');
+    NewLine;
+    for ParameterIndex := 0 to FParameterNames.Count - 1 do
+    begin
+      AParam := FParameterNames.Objects[ParameterIndex]
+        as TModflowSteadyParameter;
+      WriteString(Format('# applying parameter %s', [AParam.ParameterName]));
+      NewLine;
+      if Mesh.MeshType <> mt3D then
+      begin
+        WriteString(Format('p_Thickness(select=(s_Thickness == %1:d)) = p_Thickness * %0:s',
+          [AParam.ParameterName, ParameterIndex+1]));
+        NewLine;
+      end;
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString(Format('p_Porosity%0:d(select=(s_PorPar%0:d == %2:d)) = p_Porosity%0:d * %1:s',
+          [LayerIndex, AParam.ParameterName, ParameterIndex+1]));
+        NewLine;
+      end;
+      NewLine;
+    end;
+    {$ENDREGION}
+
+    WriteString('# Write new data values');
+    NewLine;
+    if Mesh.MeshType = mt3D then
+    begin
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString('write_column_data_file(header = ''no'', &');
+        NewLine;
+        WriteString(Format('  file=''%s.14B_%1:d'';delim="space", &',
+          [FRoot, LayerIndex]));
+        NewLine;
+//        WriteString(Format('  select=(s_Layer%0:d = %0:d), &', [LayerIndex]));
+//        NewLine;
+        WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
+        NewLine;
+        WriteString(Format('  slist=s_Unsat_Region%0:d, &', [LayerIndex]));
+        NewLine;
+        WriteString('  plist=p_x, &');
+        NewLine;
+        WriteString('  plist=p_y, &');
+        NewLine;
+        WriteString(Format('  plist=p_z%0:d, &', [LayerIndex]));
+        NewLine;
+        WriteString(Format('  plist=p_Porosity%0:d)', [LayerIndex]));
+        NewLine;
+      end;
+    end
+    else
+    begin
+      WriteString('write_column_data_file(header = ''no'', &');
+      NewLine;
+      WriteString(Format('  file=''%s.14B'';delim="space", &', [FRoot]));
+      NewLine;
+      WriteString('  clist_spec=''id'', &');
+      NewLine;
+      WriteString('  slist=s_Unsat_Region1, &');
+      NewLine;
+      WriteString('  plist=p_x, &');
+      NewLine;
+      WriteString('  plist=p_y, &');
+      NewLine;
+      WriteString('  plist=p_Thickness, &');
+      NewLine;
+      WriteString('  plist=p_Porosity1)');
+      NewLine;
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TSutraData14BScriptWriter.WriteFiles(var AFileName: string);
+begin
+  FFileName := FileName(AFileName);
+  Model.PestTemplateLines.Add(Format('plproc ''%s''', [FFileName]));
+  FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
+  GetParameterNames(FParameterNames);
+
+  WriteAFile(scWriteScript);
+  WriteAFile(scWriteTemplate);
+end;
+
+procedure TCustomSutraPlprocFileWriter.GetParameterNames(ParameterNames: TStringList);
+var
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+begin
+  if Model.PestUsed then
+  begin
+    for PIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+    begin
+      AParam := Model.ModflowSteadyParameters[PIndex];
+      if AParam.ParameterType = ptPEST then
+      begin
+        ParameterNames.AddObject(LowerCase(AParam.ParameterName), AParam);
+      end;
+    end;
+    ParameterNames.Sorted := True;
   end;
 end;
 

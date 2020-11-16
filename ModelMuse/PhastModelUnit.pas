@@ -10080,6 +10080,8 @@ const
 //                pasting data from one model to another.
 //               Bug fix: Fixed setting default exageration with SUTRA 2D
 //                models.
+//               Bug fix: Fixed a bug in exporting the Basic Package input file
+//                in models that contain nonsimulated layers.
 
 const
   // version number of ModelMuse.

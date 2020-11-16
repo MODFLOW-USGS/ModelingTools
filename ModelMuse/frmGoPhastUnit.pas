@@ -9488,6 +9488,7 @@ begin
   end;
 
   PhastModel.ClearPval;
+  PhastModel.PestTemplateLines.Clear;
 
   SutraNodDisWriter := TSutraNodDisWriter.Create(PhastModel, etExport);
   try
@@ -9778,7 +9779,7 @@ begin
         SutraFileWriter.WriteFile;
         BatchFileName := ExtractFileDir(FileName);
         RunModelBatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
-          + 'RunModel.bat';
+          + StrRunModelBat;
         BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
           + 'RunSutra.bat';
         BatchFile := TStringList.Create;
@@ -9789,6 +9790,9 @@ begin
             BatchFile.Add('pushd ' + ModelDirectory);
             RunModelBatchFile.Add('pushd ' + ModelDirectory);
           end;
+
+          BatchFile.AddStrings(PhastModel.PestTemplateLines);
+          RunModelBatchFile.AddStrings(PhastModel.PestTemplateLines);
 
           BatchFile.Add('"' + SutraFileName + '"');
           RunModelBatchFile.Add('"' + SutraFileName + '"');

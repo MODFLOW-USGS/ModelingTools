@@ -2710,35 +2710,38 @@ begin
   for LayerIndex := 0 to DataArray.LayerCount -1 do
   begin
     NeedNewLine := False;
-    for ColIndex := 0 to DataArray.ColumnCount - 1 do
+    if Model.IsLayerSimulated(LayerIndex) then
     begin
-      case DataArray.DataType of
-        rdtDouble:
-          begin
-            WriteFloat(DataArray.RealData[LayerIndex, 0, ColIndex]);
-          end;
-        rdtInteger:
-          begin
-            WriteInteger(DataArray.IntegerData[LayerIndex, 0, ColIndex]);
-          end;
-        rdtBoolean:
-          begin
-            if DataArray.BooleanData[LayerIndex, 0, ColIndex] then
-            begin
-              WriteInteger(1);
-            end
-            else
-            begin
-              WriteInteger(0);
-            end;
-          end;
-        else Assert(False);
-      end;
-      NeedNewLine := ((ColIndex + 1) mod 10) <> 0;
-      if not NeedNewLine then
+      for ColIndex := 0 to DataArray.ColumnCount - 1 do
       begin
-        NewLine;
-      end
+        case DataArray.DataType of
+          rdtDouble:
+            begin
+              WriteFloat(DataArray.RealData[LayerIndex, 0, ColIndex]);
+            end;
+          rdtInteger:
+            begin
+              WriteInteger(DataArray.IntegerData[LayerIndex, 0, ColIndex]);
+            end;
+          rdtBoolean:
+            begin
+              if DataArray.BooleanData[LayerIndex, 0, ColIndex] then
+              begin
+                WriteInteger(1);
+              end
+              else
+              begin
+                WriteInteger(0);
+              end;
+            end;
+          else Assert(False);
+        end;
+        NeedNewLine := ((ColIndex + 1) mod 10) <> 0;
+        if not NeedNewLine then
+        begin
+          NewLine;
+        end
+      end;
     end;
     if NeedNewLine then
     begin

@@ -401,6 +401,7 @@ var
   TempFileName: string;
   PestParametersUsed: Boolean;
   DataFileWriter: TSutraNodeDataWriter;
+  Sutra14BWriter: TSutraData14BScriptWriter;
 begin
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
@@ -419,33 +420,6 @@ begin
     end;
   end;
 
-  if FOptions.SaturationChoice = scUnsaturated then
-  begin
-    UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionNodes);
-    UnsatRegion.Initialize;
-    if Model.PestUsed then
-    begin
-      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
-      try
-        DataFileWriter.WriteFile(FFileName, UnsatRegion);
-      finally
-        DataFileWriter.Free;
-      end;
-    end;
-  end
-  else
-  begin
-    UnsatRegion := nil;
-    if Model.PestUsed then
-    begin
-      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
-      try
-        DataFileWriter.WriteFile(FFileName, KUnsatRegionNodes, rdtInteger);
-      finally
-        DataFileWriter.Free;
-      end;
-    end;
-  end;
   if FMesh.MeshType in [mt2D, mtProfile] then
   begin
     Thickness := Model.DataArrayManager.GetDataSetByName(KNodalThickness);
@@ -467,12 +441,34 @@ begin
   else
   begin
     Thickness := nil;
-//    DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
-//    try
-//      DataFileWriter.WriteFile(FFileName, KNodalThickness, rdtDouble);
-//    finally
-//      DataFileWriter.Free;
-//    end;
+  end;
+
+  if FOptions.SaturationChoice = scUnsaturated then
+  begin
+    UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionNodes);
+    UnsatRegion.Initialize;
+    if PestParametersUsed then
+    begin
+      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, UnsatRegion);
+      finally
+        DataFileWriter.Free;
+      end;
+    end;
+  end
+  else
+  begin
+    UnsatRegion := nil;
+    if PestParametersUsed then
+    begin
+      DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, KUnsatRegionNodes, rdtInteger);
+      finally
+        DataFileWriter.Free;
+      end;
+    end;
   end;
 
   Nodes := TNodeDataList.Create;
@@ -539,12 +535,34 @@ begin
     if PestParametersUsed then
     begin
       TempFileName := ChangeFileExt(FFileName, '.14B');
-      WriteString('@INSERT ');
+      WriteString('@INSERT 99 ');
       WriteString(ExtractFileName(TempFileName));
       NewLine;
-      OpenTempFile(TempFileName);
-    end;
-    try
+      Sutra14BWriter := TSutraData14BScriptWriter.Create(Model, etExport);
+      try
+        Sutra14BWriter.WriteFiles(FFileName);
+      finally
+        Sutra14BWriter.Free;
+      end;
+      if FMesh.MeshType = mt3D then
+      begin
+        OpenTempFile(TempFileName);
+        try
+          TempFileName := ExtractFileName(TempFileName)+ '_';
+          for LayerIndex := 1 to FMesh.LayerCount do
+          begin
+            WriteString('@INSERT 99 ');
+            WriteString(TempFileName);
+            WriteInteger(LayerIndex);
+            NewLine;
+          end;
+        finally
+          CloseTempFile;
+        end;
+      end;
+    end
+    else
+    begin
       WriteCommentLine('Data set 14B');
       for NodeIndex := 0 to Nodes.Count - 1 do
       begin
@@ -557,11 +575,6 @@ begin
         WriteFloat(NodeData.Z);
         WriteFloat(NodeData.Porosity);
         NewLine;
-      end;
-    finally
-      if PestParametersUsed then
-      begin
-        CloseTempFile;
       end;
     end;
   finally

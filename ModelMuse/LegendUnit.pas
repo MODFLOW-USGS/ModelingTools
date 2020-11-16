@@ -951,7 +951,9 @@ begin
   try
 
     if (LegendType = ltContour) and (Contours <> nil)
-      and Contours.SpecifyContours and not Contours.AutomaticColors then
+      and Contours.SpecifyContours and not Contours.AutomaticColors
+      and (Contours.ContourValues <> nil)
+      and (Contours.ContourColors <> nil) then
     begin
       CustomColorSchemes := TUserDefinedColorSchemeCollection.Create(nil);
       ACustomColorScheme := CustomColorSchemes.Add;
@@ -994,11 +996,7 @@ begin
         ACustomColorScheme := nil;
       end;
     end;
-//      CustomColorSchemes := TUserDefinedColorSchemeItem.Create;
-//      CustomColorSchemes.
-//    end;
 
-  //  Assert(Fractions.Count <= Values.Count);
     for Index := 0 to Min(Fractions.Count, Values.Count) - 1 do
     begin
       if ACustomColorScheme = nil then

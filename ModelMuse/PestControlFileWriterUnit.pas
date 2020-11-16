@@ -252,7 +252,7 @@ end;
 procedure TPestControlFileWriter.WriteCommandLine;
 begin
   WriteSectionHeader('model command line');
-  WriteString('RunModel.bat');
+  WriteString(StrRunModelBat);
   NewLine;
   NewLine;
 end;
