@@ -4030,6 +4030,11 @@ begin
       NameDataArray.Visible := True;
       NameDataArray.OnInitialize := nil;
       NameDataArray.OnShouldUseOnInitialize := nil;
+    end
+    else
+    begin
+      NameDataArray.OnDataSetUsed := LocalModel.ParamNamesDataSetUsed;
+      NameDataArray.Classification := Classification;
     end;
     NameDataArray.TalksTo(self);
   end

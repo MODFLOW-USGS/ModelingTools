@@ -116,7 +116,20 @@ type
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     procedure WriteFile(var AFileName: string; DataArray: TDataArray); overload;
     procedure WriteFile(var AFileName: string; DataArrayName: string;
-      DataType: TRbwDataType; EvaluatedAt: TEvaluatedAt); overload;
+      DataType: TRbwDataType); overload;
+  end;
+
+  TSutraElementDataWriter = class(TCustomSutraPlprocFileWriter)
+  private
+    FFileName: string;
+    FMesh: TSutraMesh3D;
+  protected
+    class function Extension: string; override;
+  public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    procedure WriteFile(var AFileName: string; DataArray: TDataArray); overload;
+    procedure WriteFile(var AFileName: string; DataArrayName: string;
+      DataType: TRbwDataType); overload;
   end;
 
   TSutraData14BScriptWriter = class(TCustomSutraPlprocFileWriter)
@@ -133,10 +146,24 @@ type
     procedure WriteFiles(var AFileName: string);
   end;
 
+  TSutraData15BScriptWriter = class(TCustomSutraPlprocFileWriter)
+  private
+    FRoot: string;
+    FFileName: string;
+    FParameterNames: TStringList;
+    procedure WriteAFile(ScriptChoice: TScriptChoice);
+  protected
+    class function Extension: string; override;
+  public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    destructor Destroy; override;
+    procedure WriteFiles(var AFileName: string);
+  end;
+
 implementation
 
 uses
-  ModflowParameterUnit, OrderedCollectionUnit;
+  ModflowParameterUnit, OrderedCollectionUnit, SutraOptionsUnit;
 
 const
   KDisName = 'cl_Discretization';
@@ -1149,7 +1176,14 @@ begin
   try
     SutraMesh3D := Model.SutraMesh;
     SutraMesh2D := SutraMesh3D.Mesh2D;
-    WriteString(' Index X Y Node_Number');
+    WriteString(' Index X Y Node_Number2D');
+    if SutraMesh3D.MeshType = mt3D then
+    begin
+      for LayerIndex := 0 to SutraMesh3D.LayerCount do
+      begin
+        WriteString(Format('Z_%0:d NodeNumber3D_%0:d', [LayerIndex+1]));
+      end;
+    end;
     NewLine;
     for NodeIndex := 0 to SutraMesh2D.Nodes.Count - 1 do
     begin
@@ -1187,12 +1221,23 @@ var
   ElementIndex: Integer;
   AnElement: TSutraElement2D;
   Location: TPoint2D;
+  AnElement3D: TSutraElement3D;
+  LayerIndex: Integer;
+  SutraMesh3D: TSutraMesh3D;
 begin
   FInputFileName := FileName(AFileName);
   OpenFile(FInputFileName);
   try
-    SutraMesh2D := Model.SutraMesh.Mesh2D;
-    WriteString(' Index X Y Element_Number');
+    SutraMesh3D := Model.SutraMesh;
+    SutraMesh2D := SutraMesh3D.Mesh2D;
+    WriteString(' Index X Y Element_Number2D');
+    if SutraMesh3D.MeshType = mt3D then
+    begin
+      for LayerIndex := 0 to SutraMesh3D.LayerCount-1 do
+      begin
+        WriteString(Format('Z_%0:d ElementNumber3D_%0:d', [LayerIndex+1]));
+      end;
+    end;
     NewLine;
     for ElementIndex := 0 to SutraMesh2D.Elements.Count - 1 do
     begin
@@ -1202,6 +1247,15 @@ begin
       WriteFloat(Location.x);
       WriteFloat(Location.y);
       WriteInteger(AnElement.ElementNumber+1);
+      if SutraMesh3D.MeshType = mt3D then
+      begin
+        for LayerIndex := 0 to SutraMesh3D.LayerCount-1 do
+        begin
+          AnElement3D := SutraMesh3D.ElementArray[LayerIndex, ElementIndex];
+          WriteFloat(AnElement3D.CenterElevation);
+          WriteInteger(AnElement3D.ElementNumber+1);
+        end;
+      end;
       NewLine;
     end;
 
@@ -1226,7 +1280,7 @@ begin
 end;
 
 procedure TSutraNodeDataWriter.WriteFile(var AFileName: string;
-  DataArrayName: string; DataType: TRbwDataType; EvaluatedAt: TEvaluatedAt);
+  DataArrayName: string; DataType: TRbwDataType);
 var
   LayerIndex: Integer;
   NodeIndex: Integer;
@@ -1239,12 +1293,13 @@ begin
   OpenFile(FFileName);
   try
     WriteString('NN2D ');
-    LayerCount := 0;
-    case EvaluatedAt of
-      eaBlocks: LayerCount := FMesh.LayerCount;
-      eaNodes:  LayerCount := FMesh.LayerCount + 1;
-      else Assert(False);
-    end;
+//    LayerCount := 0;
+//    case EvaluatedAt of
+//      eaBlocks: LayerCount := FMesh.LayerCount;
+//      eaNodes:
+        LayerCount := FMesh.LayerCount + 1;
+//      else Assert(False);
+//    end;
     for LayerIndex := 0 to LayerCount - 1 do
     begin
       if FMesh.MeshType = mt3D then
@@ -1726,6 +1781,628 @@ begin
     end;
     ParameterNames.Sorted := True;
   end;
+end;
+
+{ TSutraElementDataWriter }
+
+constructor TSutraElementDataWriter.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  FMesh := AModel.SutraMesh;
+end;
+
+class function TSutraElementDataWriter.Extension: string;
+begin
+  Result := '.PstValues';
+end;
+
+procedure TSutraElementDataWriter.WriteFile(var AFileName: string;
+  DataArray: TDataArray);
+var
+  ParameterNames: TStringList;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  ParamArray: TDataArray;
+  LayerIndex: Integer;
+  ElementIndex: Integer;
+  AnElement2D: TSutraElement2D;
+  AnElement3D: TSutraElement3D;
+begin
+  ParameterNames := TStringList.Create;
+  try
+    FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);
+    GetParameterNames(ParameterNames);
+
+    if DataArray.PestParametersUsed and (DataArray.DataType = rdtDouble) then
+    begin
+      ParamArray := Model.DataArrayManager.GetDataSetByName
+        (DataArray.ParamDataSetName);
+    end
+    else
+    begin
+      ParamArray := nil;
+    end;
+
+    OpenFile(FFileName);
+    try
+      WriteString('EN2D ');
+      for LayerIndex := 0 to DataArray.LayerCount - 1 do
+      begin
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteString(Format('EN3D%0:d Layer%0:d ', [LayerIndex+1]));
+        end;
+        WriteString(Format('%0:s%1:d ', [DataArray.Name, LayerIndex+1]));
+        if DataArray.DataType = rdtDouble then
+        begin
+          WriteString(Format('%0:sParameter%1:d ', [DataArray.Name, LayerIndex+1]))
+        end;
+      end;
+      NewLine;
+
+      for ElementIndex := 0 to FMesh.Mesh2D.Elements.Count - 1 do
+      begin
+        AnElement2D := FMesh.Mesh2D.Elements[ElementIndex];
+        WriteInteger(AnElement2D.ElementNumber+1);
+        for LayerIndex := 0 to DataArray.LayerCount - 1 do
+        begin
+          if FMesh.MeshType = mt3D then
+          begin
+            AnElement3D := FMesh.ElementArray[LayerIndex,ElementIndex];
+            WriteInteger(AnElement3D.ElementNumber + 1);
+            WriteInteger(LayerIndex + 1);
+          end;
+          if ParamArray <> nil then
+          begin
+            PIndex := ParameterNames.IndexOf(LowerCase(
+              ParamArray.StringData[LayerIndex, 0, ElementIndex]));
+          end
+          else
+          begin
+            PIndex := -1;
+          end;
+          if PIndex >=0 then
+          begin
+            AParam := ParameterNames.Objects[PIndex] as TModflowSteadyParameter;
+          end
+          else
+          begin
+            AParam := nil;
+          end;
+          case DataArray.DataType of
+            rdtDouble:
+              begin
+                if (AParam = nil) or (AParam.Value = 0) then
+                begin
+                  WriteFloat(DataArray.RealData[LayerIndex, 0, ElementIndex]);
+                end
+                else
+                begin
+                  WriteFloat(DataArray.RealData[LayerIndex, 0, ElementIndex]
+                    /AParam.Value);
+                end;
+              end;
+            rdtInteger:
+              begin
+                WriteInteger(DataArray.IntegerData[LayerIndex, 0, ElementIndex]);
+              end;
+            rdtBoolean:
+              begin
+                WriteInteger(Ord(DataArray.BooleanData[LayerIndex, 0, ElementIndex]));
+              end;
+            rdtString:
+              begin
+                Assert(False);
+              end;
+            else
+              begin
+                Assert(False);
+              end;
+          end;
+          if DataArray.DataType = rdtDouble then
+          begin
+            WriteInteger(PIndex+1);
+          end;
+        end;
+        NewLine;
+      end;
+
+    finally
+      CloseFile;
+    end;
+  finally
+    ParameterNames.Free;
+  end;
+  Model.DataArrayManager.AddDataSetToCache(DataArray);
+  if ParamArray <> nil then
+  begin
+    Model.DataArrayManager.AddDataSetToCache(ParamArray);
+  end;
+end;
+
+procedure TSutraElementDataWriter.WriteFile(var AFileName: string;
+  DataArrayName: string; DataType: TRbwDataType);
+var
+  LayerIndex: Integer;
+  ElementIndex: Integer;
+  AnElement2D: TSutraElement2D;
+  AElement3D: TSutraElement3D;
+  LayerCount: Integer;
+begin
+  FFileName := ChangeFileExt(AFileName, '.' + DataArrayName);
+
+  OpenFile(FFileName);
+  try
+    WriteString('EN2D ');
+//    LayerCount := 0;
+//    case EvaluatedAt of
+//      eaBlocks:
+    LayerCount := FMesh.LayerCount;
+//      eaNodes:
+//        LayerCount := FMesh.LayerCount + 1;
+//      else Assert(False);
+//    end;
+    for LayerIndex := 0 to LayerCount - 1 do
+    begin
+      if FMesh.MeshType = mt3D then
+      begin
+        WriteString(Format('EN3D Layer%d ', [LayerIndex+1]));
+      end;
+      WriteString(Format('%0:s%1:d ', [DataArrayName, LayerIndex+1]));
+      if DataType = rdtDouble then
+      begin
+        WriteString(Format('%0:sParameter%1:d ', [DataArrayName, LayerIndex+1]))
+      end;
+    end;
+    NewLine;
+
+    for ElementIndex := 0 to FMesh.Mesh2D.Elements.Count - 1 do
+    begin
+      AnElement2D := FMesh.Mesh2D.Elements[ElementIndex];
+      WriteInteger(AnElement2D.ElementNumber+1);
+      for LayerIndex := 0 to LayerCount - 1 do
+      begin
+        if FMesh.MeshType = mt3D then
+        begin
+          AElement3D := FMesh.ElementArray[LayerIndex,ElementIndex];
+          WriteInteger(AElement3D.ElementNumber + 1);
+          WriteInteger(LayerIndex + 1);
+        end;
+        case DataType of
+          rdtDouble:
+            begin
+              WriteFloat(0);
+            end;
+          rdtInteger:
+            begin
+              WriteInteger(0);
+            end;
+          rdtBoolean:
+            begin
+              Assert(False);
+            end;
+          rdtString:
+            begin
+              Assert(False);
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+        if DataType = rdtDouble then
+        begin
+          WriteInteger(0);
+        end;
+      end;
+      NewLine;
+    end;
+
+  finally
+    CloseFile;
+  end;
+end;
+
+{ TSutraData15BScriptWriter }
+
+constructor TSutraData15BScriptWriter.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  Assert(Model.ModelSelection in SutraSelection);
+  FParameterNames := TStringList.Create;
+end;
+
+destructor TSutraData15BScriptWriter.Destroy;
+begin
+  FParameterNames.Free;
+  inherited;
+end;
+
+class function TSutraData15BScriptWriter.Extension: string;
+begin
+  result := '.15B.script';
+end;
+
+procedure TSutraData15BScriptWriter.WriteAFile(ScriptChoice: TScriptChoice);
+var
+  Mesh: TSutraMesh3D;
+  LayerCount: Integer;
+  LayerIndex: Integer;
+  ColIndex: Integer;
+  ParameterIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  FOptions: TSutraOptions;
+  DataArray: TDataArray;
+  UsedDataRoots: TStringList;
+  DataRoot: string;
+  RootIndex: Integer;
+//  DataRoot: string;
+  procedure ReadData(DataArray: TDataArray; const DataRoot: string);
+  var
+    LayerIndex: Integer;
+  begin
+    if DataArray <> nil then
+    begin
+      UsedDataRoots.Add(DataRoot);
+      WriteString(Format('# Read %s', [DataArray.Name]));
+      NewLine;
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+      ColIndex := 1;
+
+//      WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
+//      NewLine;
+      Inc(ColIndex);
+
+      for LayerIndex := 1 to LayerCount do
+      begin
+        if Mesh.MeshType = mt3D then
+        begin
+          Inc(ColIndex);
+
+//          WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+//          NewLine;
+          Inc(ColIndex);
+        end;
+
+        WriteString(Format('  plist=p_%0:s%1:d;column=%2:d, &', [DataRoot, LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &', [DataRoot, LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+      end;
+      WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, DataArray.Name]));
+      NewLine;
+      NewLine;
+    end;
+  end;
+begin
+  if ScriptChoice = scWriteTemplate then
+  begin
+    FFileName := FFileName + '.tpl';
+  end;
+
+  Mesh := Model.SutraMesh;
+  FOptions := Model.SutraOptions;
+
+  UsedDataRoots := TStringList.Create;
+  OpenFile(FFileName);
+  try
+    if ScriptChoice = scWriteScript then
+    begin
+      WriteString('# ');
+    end;
+    WriteString('ptf ');
+    WriteString(Model.PestProperties.TemplateCharacter);
+    NewLine;
+    WriteString('#Script for PLPROC');
+    NewLine;
+    NewLine;
+
+    if Mesh.MeshType = mt3D then
+    begin
+      LayerCount := Mesh.LayerCount;
+    end
+    else
+    begin
+      LayerCount := 1;
+    end;
+
+    {$REGION 'Element discretization'}
+    WriteString('#Read SUTRA element information file');
+    NewLine;
+    WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
+    NewLine;
+    WriteString('  plist=p_x;column=2, &');
+    NewLine;
+    WriteString('  plist=p_y;column=3, &');
+    NewLine;
+    WriteString('  plist=p_EN2D;column=4, &');
+    NewLine;
+    if Mesh.MeshType = mt3D then
+    begin
+      ColIndex := 5;
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString(Format('  plist=p_z%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_EN3D%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+      end;
+    end;
+    WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
+    NewLine;
+    NewLine;
+    {$ENDREGION}
+
+    WriteString('#Read data to modify');
+    NewLine;
+    {$REGION 'Unsaturated zone'}
+    WriteString('# Read Unsaturated Zone');
+    NewLine;
+    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+    NewLine;
+    ColIndex := 2;
+    for LayerIndex := 1 to LayerCount do
+    begin
+      if Mesh.MeshType = mt3D then
+      begin
+        Inc(ColIndex,2);
+      end;
+//      Inc(ColIndex);
+      WriteString(Format('  slist=s_LREG%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+    end;
+    WriteString(Format('  file=''%s.Unsat_Region_Elements'')', [FRoot]));
+    NewLine;
+    NewLine;
+    {$ENDREGION}
+
+    {$REGION 'PMAX'}
+    DataArray := nil;
+    case FOptions.TransportChoice of
+      tcSolute, tcEnergy:
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
+      tcSoluteHead:
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumK);
+      else Assert(False);
+    end;
+//    DataRoot := 'PMAX';
+    ReadData(DataArray,  'PMAX');
+    {$ENDREGION}
+
+    {$REGION 'PMID'}
+    DataArray := nil;
+    if Mesh.MeshType = mt3D then
+    begin
+      case FOptions.TransportChoice of
+        tcSolute, tcEnergy:
+          DataArray := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
+        tcSoluteHead:
+          DataArray := Model.DataArrayManager.GetDataSetByName(KMiddleK);
+        else Assert(False);
+      end;
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    ReadData(DataArray, 'PMID');
+    {$ENDREGION}
+
+    {$REGION 'PMIN'}
+    DataArray := nil;
+    case FOptions.TransportChoice of
+      tcSolute, tcEnergy:
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
+      tcSoluteHead:
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);
+      else Assert(False);
+    end;
+    ReadData(DataArray, 'PMIN');
+    {$ENDREGION}
+
+  {$REGION 'ANGLE1'}
+    DataArray := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
+    ReadData(DataArray, 'ANGLE1');
+  {$ENDREGION}
+
+  {$REGION 'ANGLE2'}
+    if Mesh.MeshType = mt3D then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    ReadData(DataArray, 'ANGLE2');
+  {$ENDREGION}
+
+  {$REGION 'ANGLE3'}
+    if Mesh.MeshType = mt3D then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(KRotationalAngle);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    ReadData(DataArray, 'ANGLE3');
+  {$ENDREGION}
+
+  {$REGION 'ALMAX'}
+    DataArray := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
+    ReadData(DataArray, 'ALMAX');
+  {$ENDREGION}
+
+  {$REGION 'ALMID'}
+    if Mesh.MeshType = mt3D then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMidLongitudinalDisp);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    ReadData(DataArray, 'ALMID');
+  {$ENDREGION}
+
+  {$REGION 'ALMIN'}
+    DataArray := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
+    ReadData(DataArray, 'ALMIN');
+  {$ENDREGION}
+
+  {$REGION 'ATMAX'}
+    DataArray := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
+    ReadData(DataArray, 'ATMAX');
+  {$ENDREGION}
+
+  {$REGION 'ATMID'}
+    if Mesh.MeshType = mt3D then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMidTransverseDisp);
+    end
+    else
+    begin
+      DataArray := nil;
+    end;
+    ReadData(DataArray, 'ATMID');
+  {$ENDREGION}
+
+  {$REGION 'ATMIN'}
+    DataArray := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
+    ReadData(DataArray, 'ATMIN');
+  {$ENDREGION}
+
+
+    WriteString('#Read parameter values');
+    NewLine;
+    {$REGION 'Parameter values'}
+    for ParameterIndex := 0 to FParameterNames.Count - 1 do
+    begin
+      AParam := FParameterNames.Objects[ParameterIndex]
+        as TModflowSteadyParameter;
+      if ScriptChoice = scWriteScript then
+      begin
+        WriteString('#');
+      end;
+      WriteString(Format('%0:s = %1:s                        %0:s%1:s',
+        [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
+      NewLine;
+      if ScriptChoice = scWriteTemplate then
+      begin
+        WriteString('#');
+      end;
+      WriteString(Format('%0:s = %1:g',
+        [AParam.ParameterName, AParam.Value]));
+      NewLine;
+    end;
+    NewLine;
+    {$ENDREGION}
+
+    {$REGION 'Apply parameters'}
+    WriteString('# applying parameter values');
+    NewLine;
+    for ParameterIndex := 0 to FParameterNames.Count - 1 do
+    begin
+      AParam := FParameterNames.Objects[ParameterIndex]
+        as TModflowSteadyParameter;
+      WriteString(Format('# applying parameter %s', [AParam.ParameterName]));
+      NewLine;
+      for RootIndex := 0 to UsedDataRoots.Count-1 do
+      begin
+        DataRoot := UsedDataRoots[RootIndex];
+        for LayerIndex := 1 to LayerCount do
+        begin
+          WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+            [LayerIndex, AParam.ParameterName, ParameterIndex+1, DataRoot]));
+          NewLine;
+        end;
+      end;
+      NewLine;
+    end;
+    {$ENDREGION}
+
+    WriteString('# Write new data values');
+    NewLine;
+    if Mesh.MeshType = mt3D then
+    begin
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString('write_column_data_file(header = ''no'', &');
+        NewLine;
+        WriteString(Format('  file=''%s.15B_%1:d'';delim="space", &',
+          [FRoot, LayerIndex]));
+        NewLine;
+        WriteString(Format('  slist=''s_EN3D%0:d'', &', [LayerIndex]));
+        NewLine;
+        WriteString(Format('  slist=s_LREG%0:d, &', [LayerIndex]));
+        NewLine;
+        for RootIndex := 0 to UsedDataRoots.Count-1 do
+        begin
+          DataRoot := UsedDataRoots[RootIndex];
+          WriteString(Format('  plist=p_%1:s%0:d', [LayerIndex, DataRoot]));
+          if RootIndex = UsedDataRoots.Count-1 then
+          begin
+            WriteString(')');
+          end
+          else
+          begin
+            WriteString(', &');
+          end;
+          NewLine;
+        end;
+      end;
+    end
+    else
+    begin
+      WriteString('write_column_data_file(header = ''no'', &');
+      NewLine;
+      WriteString(Format('  file=''%s.15B'';delim="space", &', [FRoot]));
+      NewLine;
+      WriteString('  clist_spec=''id'', &');
+      NewLine;
+      WriteString('  slist=s_LREG1, &');
+      NewLine;
+        for RootIndex := 0 to UsedDataRoots.Count-1 do
+      begin
+        DataRoot := UsedDataRoots[RootIndex];
+        WriteString(Format('  plist=p_%s1', [DataRoot]));
+        if RootIndex = UsedDataRoots.Count-1 then
+        begin
+          WriteString(')');
+        end
+        else
+        begin
+          WriteString(', &');
+        end;
+        NewLine;
+      end;
+    end;
+  finally
+    CloseFile;
+    UsedDataRoots.Free;
+  end;
+end;
+
+procedure TSutraData15BScriptWriter.WriteFiles(var AFileName: string);
+begin
+  FFileName := FileName(AFileName);
+  Model.PestTemplateLines.Add(Format('plproc ''%s''', [FFileName]));
+  FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
+  GetParameterNames(FParameterNames);
+
+  WriteAFile(scWriteScript);
+  WriteAFile(scWriteTemplate);
 end;
 
 end.

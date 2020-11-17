@@ -605,6 +605,7 @@ inherited frmGoPhast: TfrmGoPhast
       Width = 163
       Height = 28
       ButtonHeight = 23
+      ButtonWidth = 24
       Caption = 'Navigate'
       Constraints.MinWidth = 163
       DragMode = dmAutomatic
@@ -624,7 +625,7 @@ inherited frmGoPhast: TfrmGoPhast
         OnMouseUp = ToolButtonMouseUp
       end
       object tbZoomIn: TToolButton
-        Left = 23
+        Left = 24
         Top = 0
         Action = acZoomIn
         AllowAllUp = True
@@ -635,7 +636,7 @@ inherited frmGoPhast: TfrmGoPhast
         OnMouseUp = ToolButtonMouseUp
       end
       object tbZoomOut: TToolButton
-        Left = 46
+        Left = 48
         Top = 0
         Action = acZoomOut
         AllowAllUp = True
@@ -646,7 +647,7 @@ inherited frmGoPhast: TfrmGoPhast
         OnMouseUp = ToolButtonMouseUp
       end
       object tbPan: TToolButton
-        Left = 69
+        Left = 72
         Top = 0
         Action = acPan
         AllowAllUp = True
@@ -657,19 +658,19 @@ inherited frmGoPhast: TfrmGoPhast
         OnMouseUp = ToolButtonMouseUp
       end
       object tbPositionUndo: TToolButton
-        Left = 92
+        Left = 96
         Top = 0
         Action = acPositionBackward
         OnMouseMove = pnlLowerRightMouseMove
       end
       object tbRestoreDefault2DView: TToolButton
-        Left = 115
+        Left = 120
         Top = 0
         Action = acRestoreDefault2DView
         OnMouseMove = pnlLowerRightMouseMove
       end
       object tbPositionRedo: TToolButton
-        Left = 138
+        Left = 144
         Top = 0
         Action = acPositionForward
         OnMouseMove = pnlLowerRightMouseMove

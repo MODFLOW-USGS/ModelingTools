@@ -464,7 +464,7 @@ begin
     begin
       DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
       try
-        DataFileWriter.WriteFile(FFileName, KUnsatRegionNodes, rdtInteger, eaNodes);
+        DataFileWriter.WriteFile(FFileName, KUnsatRegionNodes, rdtInteger);
       finally
         DataFileWriter.Free;
       end;
@@ -659,29 +659,26 @@ var
   AnElement3D: TSutraElement3D;
   TempFileName: string;
   PestParametersUsed: Boolean;
-  MaxPermParamArray: TDataArray;
-  MidPermParamArray: TDataArray;
-  MinPermParamArray: TDataArray;
-  HorizAngleParamArray: TDataArray;
-  RotationAngleParamArray: TDataArray;
-  VerticalAngleParamArray: TDataArray;
-  MaxLongDispParamArray: TDataArray;
-  MidLongDispParamArray: TDataArray;
-  MinLongDispDispParamArray: TDataArray;
-  MaxTransvDispParamArray: TDataArray;
-  MidTransvDispParamArray: TDataArray;
-  MinTransvDispParamArray: TDataArray;
+  DataFileWriter: TSutraElementDataWriter;
+  Sutra15BWriter: TSutraData15BScriptWriter;
+  procedure ExportDataForPest(DataArray: TDataArray);
+  begin
+    if Model.PestUsed then
+    begin
+      DataFileWriter := TSutraElementDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, DataArray);
+      finally
+        DataFileWriter.Free;
+      end;
+      if DataArray.PestParametersUsed then
+      begin
+        PestParametersUsed := True;
+      end;
+    end;
+  end;
 begin
   PestParametersUsed := False;
-  if FOptions.SaturationChoice = scUnsaturated then
-  begin
-    UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionElements);
-    UnsatRegion.Initialize;
-  end
-  else
-  begin
-    UnsatRegion := nil;
-  end;
   MaxPerm := nil;
   case FOptions.TransportChoice of
     tcSolute, tcEnergy:
@@ -691,16 +688,9 @@ begin
     else Assert(False);
   end;
   MaxPerm.Initialize;
-  MaxPermParamArray := nil;
-  if Model.PestUsed and MaxPerm.PestParametersUsed then
-  begin                 
-    PestParametersUsed := True;
-    MaxPermParamArray := Model.DataArrayManager.GetDataSetByName
-      (MaxPerm.ParamDataSetName);
-    MaxPermParamArray.Initialize;  
-  end;  
+  ExportDataForPest(MaxPerm);
+
   MidPerm := nil;
-  MidPermParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     case FOptions.TransportChoice of
@@ -711,18 +701,13 @@ begin
       else Assert(False);
     end;
     MidPerm.Initialize;
-    if Model.PestUsed and MidPerm.PestParametersUsed then
-    begin                 
-      PestParametersUsed := True;
-      MidPermParamArray := Model.DataArrayManager.GetDataSetByName
-        (MidPerm.ParamDataSetName);
-      MidPermParamArray.Initialize;  
-    end;  
+    ExportDataForPest(MidPerm);
   end
   else
   begin
     MidPerm := nil;
   end;
+
   MinPerm := nil;
   case FOptions.TransportChoice of
     tcSolute, tcEnergy:
@@ -732,46 +717,24 @@ begin
     else Assert(False);
   end;
   MinPerm.Initialize;
-  MinPermParamArray := nil;
-  if Model.PestUsed and MinPerm.PestParametersUsed then
-  begin                 
-    PestParametersUsed := True;
-    MinPermParamArray := Model.DataArrayManager.GetDataSetByName
-      (MinPerm.ParamDataSetName);
-    MinPermParamArray.Initialize;  
-  end;  
+  ExportDataForPest(MinPerm);
+
+
   HorizAngle := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
   HorizAngle.Initialize;
-  HorizAngleParamArray := nil;
-  if Model.PestUsed and HorizAngle.PestParametersUsed then
-  begin                
-    PestParametersUsed := True;
-    HorizAngleParamArray := Model.DataArrayManager.GetDataSetByName
-      (HorizAngle.ParamDataSetName);
-    HorizAngleParamArray.Initialize;  
-  end;  
-  RotationAngleParamArray := nil;
-  VerticalAngleParamArray := nil;
+  ExportDataForPest(HorizAngle);
+
+//  RotationAngleParamArray := nil;
+//  VerticalAngleParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     VerticalAngle := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);
     VerticalAngle.Initialize;
-    if Model.PestUsed and VerticalAngle.PestParametersUsed then
-    begin                 
-      PestParametersUsed := True;
-      VerticalAngleParamArray := Model.DataArrayManager.GetDataSetByName
-        (VerticalAngle.ParamDataSetName);
-      VerticalAngleParamArray.Initialize;  
-    end;  
+    ExportDataForPest(VerticalAngle);
+
     RotationAngle := Model.DataArrayManager.GetDataSetByName(KRotationalAngle);
     RotationAngle.Initialize;
-    if Model.PestUsed and RotationAngle.PestParametersUsed then
-    begin                 
-      PestParametersUsed := True;
-      RotationAngleParamArray := Model.DataArrayManager.GetDataSetByName
-        (RotationAngle.ParamDataSetName);
-      RotationAngleParamArray.Initialize;  
-    end;  
+    ExportDataForPest(RotationAngle);
   end
   else
   begin
@@ -781,79 +744,62 @@ begin
 
   MaxLongDisp := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
   MaxLongDisp.Initialize;
-  MaxLongDispParamArray := nil;
-  if Model.PestUsed and MaxLongDisp.PestParametersUsed then
-  begin                 
-    PestParametersUsed := True;
-    MaxLongDispParamArray := Model.DataArrayManager.GetDataSetByName
-      (MaxLongDisp.ParamDataSetName);
-    MaxLongDispParamArray.Initialize;  
-  end;  
-  MidLongDispParamArray := nil;
+  ExportDataForPest(MaxLongDisp);
+
+//  MidLongDispParamArray := nil;
   if FMesh.MeshType = mt3D then
   begin
     MidLongDisp := Model.DataArrayManager.GetDataSetByName(KMidLongitudinalDisp);
     MidLongDisp.Initialize;
-    if Model.PestUsed and MidLongDisp.PestParametersUsed then
-    begin                 
-      PestParametersUsed := True;
-      MidLongDispParamArray := Model.DataArrayManager.GetDataSetByName
-        (MidLongDisp.ParamDataSetName);
-      MidLongDispParamArray.Initialize;  
-    end;  
+    ExportDataForPest(MidLongDisp);
   end
   else
   begin
     MidLongDisp := nil;
   end;
+
   MinLongDisp := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
   MinLongDisp.Initialize;
-  MinLongDispDispParamArray := nil;
-  if Model.PestUsed and MinLongDisp.PestParametersUsed then
-  begin                 
-    PestParametersUsed := True;
-    MinLongDispDispParamArray := Model.DataArrayManager.GetDataSetByName
-      (MinLongDisp.ParamDataSetName);
-    MinLongDispDispParamArray.Initialize;  
-  end;  
+  ExportDataForPest(MinLongDisp);
 
   MaxTransvDisp := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
   MaxTransvDisp.Initialize;
-  MaxTransvDispParamArray := nil;
-  if Model.PestUsed and MaxTransvDisp.PestParametersUsed then
-  begin                 
-    PestParametersUsed := True;
-    MaxTransvDispParamArray := Model.DataArrayManager.GetDataSetByName
-      (MaxTransvDisp.ParamDataSetName);
-    MaxTransvDispParamArray.Initialize;  
-  end;  
-  MidTransvDispParamArray := nil;
+  ExportDataForPest(MaxTransvDisp);
+
   if FMesh.MeshType = mt3D then
   begin
     MidTransvDisp := Model.DataArrayManager.GetDataSetByName(KMidTransverseDisp);
     MidTransvDisp.Initialize;
-    if Model.PestUsed and MidTransvDisp.PestParametersUsed then
-    begin                 
-      PestParametersUsed := True;
-      MidTransvDispParamArray := Model.DataArrayManager.GetDataSetByName
-        (MidTransvDisp.ParamDataSetName);
-      MidTransvDispParamArray.Initialize;  
-    end;  
+    ExportDataForPest(MidTransvDisp);
   end
   else
   begin
     MidTransvDisp := nil;
   end;
+
   MinTransvDisp := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
   MinTransvDisp.Initialize;
-  MinTransvDispParamArray := nil;
-  if Model.PestUsed and MinTransvDisp.PestParametersUsed then
-  begin                 
-    PestParametersUsed := True;
-    MinTransvDispParamArray := Model.DataArrayManager.GetDataSetByName
-      (MinTransvDisp.ParamDataSetName);
-    MinTransvDispParamArray.Initialize;  
-  end;  
+  ExportDataForPest(MinTransvDisp);
+
+  if FOptions.SaturationChoice = scUnsaturated then
+  begin
+    UnsatRegion := Model.DataArrayManager.GetDataSetByName(KUnsatRegionElements);
+    UnsatRegion.Initialize;
+    ExportDataForPest(UnsatRegion);
+  end
+  else
+  begin
+    UnsatRegion := nil;
+    if PestParametersUsed then
+    begin
+      DataFileWriter := TSutraElementDataWriter.Create(Model, etExport);
+      try
+        DataFileWriter.WriteFile(FFileName, KUnsatRegionElements, rdtInteger);
+      finally
+        DataFileWriter.Free;
+      end;
+    end;
+  end;
 
   ElementList := TElementDataList.Create;
   try
@@ -946,12 +892,33 @@ begin
     if PestParametersUsed then
     begin
       TempFileName := ChangeFileExt(FFileName, '.15B');
-      WriteString('@INSERT ');
+      WriteString('@INSERT 99 ');
       WriteString(ExtractFileName(TempFileName));
       NewLine;
-      OpenTempFile(TempFileName);
-    end;
-    try
+      Sutra15BWriter := TSutraData15BScriptWriter.Create(Model, etExport);
+      try
+        Sutra15BWriter.WriteFiles(FFileName);
+      finally
+        Sutra15BWriter.Free;
+      end;
+      if FMesh.MeshType = mt3D then
+      begin
+        OpenTempFile(TempFileName);
+        try
+          TempFileName := ExtractFileName(TempFileName)+ '_';
+          for LayerIndex := 1 to FMesh.LayerCount do
+          begin
+            WriteString('@INSERT 99 ');
+            WriteString(TempFileName + IntToStr(LayerIndex));
+            NewLine;
+          end;
+        finally
+          CloseTempFile;
+        end;
+      end;
+    end
+    else
+    begin
       WriteCommentLine('Data set 15B');
       for ElementIndex := 0 to ElementList.Count - 1 do
       begin
@@ -1069,11 +1036,6 @@ begin
             end;
         end;
       end;
-    finally
-      if PestParametersUsed then    
-      begin      
-        CloseTempFile;
-      end;        
     end;
   finally
     ElementList.Free;
