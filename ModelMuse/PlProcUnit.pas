@@ -116,7 +116,7 @@ type
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     procedure WriteFile(var AFileName: string; DataArray: TDataArray); overload;
     procedure WriteFile(var AFileName: string; DataArrayName: string;
-      DataType: TRbwDataType); overload;
+      DataType: TRbwDataType; EvaluatedAt: TEvaluatedAt); overload;
   end;
 
   TSutraData14BScriptWriter = class(TCustomSutraPlprocFileWriter)
@@ -1226,24 +1226,31 @@ begin
 end;
 
 procedure TSutraNodeDataWriter.WriteFile(var AFileName: string;
-  DataArrayName: string; DataType: TRbwDataType);
+  DataArrayName: string; DataType: TRbwDataType; EvaluatedAt: TEvaluatedAt);
 var
   LayerIndex: Integer;
   NodeIndex: Integer;
   ANode2D: TSutraNode2D;
   ANode3D: TSutraNode3D;
+  LayerCount: Integer;
 begin
   FFileName := ChangeFileExt(AFileName, '.' + DataArrayName);
 
   OpenFile(FFileName);
   try
     WriteString('NN2D ');
-    if FMesh.MeshType = mt3D then
-    begin
-      WriteString('NN3D Layer ');
+    LayerCount := 0;
+    case EvaluatedAt of
+      eaBlocks: LayerCount := FMesh.LayerCount;
+      eaNodes:  LayerCount := FMesh.LayerCount + 1;
+      else Assert(False);
     end;
-    for LayerIndex := 0 to FMesh.LayerCount - 1 do
+    for LayerIndex := 0 to LayerCount - 1 do
     begin
+      if FMesh.MeshType = mt3D then
+      begin
+        WriteString(Format('NN3D Layer%d ', [LayerIndex+1]));
+      end;
       WriteString(Format('%0:s%1:d ', [DataArrayName, LayerIndex+1]));
       if DataType = rdtDouble then
       begin
@@ -1256,7 +1263,7 @@ begin
     begin
       ANode2D := FMesh.Mesh2D.Nodes[NodeIndex];
       WriteInteger(ANode2D.Number+1);
-      for LayerIndex := 0 to FMesh.LayerCount - 1 do
+      for LayerIndex := 0 to LayerCount - 1 do
       begin
         if FMesh.MeshType = mt3D then
         begin
@@ -1329,12 +1336,12 @@ begin
     OpenFile(FFileName);
     try
       WriteString('NN2D ');
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteString('NN3D Layer ');
-      end;
       for LayerIndex := 0 to DataArray.LayerCount - 1 do
       begin
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteString(Format('NN3D%0:d Layer%0:d ', [LayerIndex+1]));
+        end;
         WriteString(Format('%0:s%1:d ', [DataArray.Name, LayerIndex+1]));
         if DataArray.DataType = rdtDouble then
         begin
@@ -1491,9 +1498,11 @@ begin
     NewLine;
     WriteString('  plist=p_y;column=3, &');
     NewLine;
+    WriteString('  plist=p_NN2D;column=4, &');
+    NewLine;
     if Mesh.MeshType = mt3D then
     begin
-      ColIndex := 4;
+      ColIndex := 5;
       for LayerIndex := 1 to LayerCount do
       begin
         WriteString(Format('  plist=p_z%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
@@ -1517,9 +1526,25 @@ begin
     NewLine;
     WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
     NewLine;
-    ColIndex := 2;
+    ColIndex := 1;
+
+    WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
+    NewLine;
+    Inc(ColIndex);
+
     for LayerIndex := 1 to LayerCount do
     begin
+      if Mesh.MeshType = mt3D then
+      begin
+  //      WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+  //      NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+      end;
+
       WriteString(Format('  plist=p_Porosity%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
@@ -1558,6 +1583,11 @@ begin
     ColIndex := 2;
     for LayerIndex := 1 to LayerCount do
     begin
+      if Mesh.MeshType = mt3D then
+      begin
+        Inc(ColIndex,2);
+      end;
+//      Inc(ColIndex);
       WriteString(Format('  slist=s_Unsat_Region%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);

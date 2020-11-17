@@ -464,7 +464,7 @@ begin
     begin
       DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
       try
-        DataFileWriter.WriteFile(FFileName, KUnsatRegionNodes, rdtInteger);
+        DataFileWriter.WriteFile(FFileName, KUnsatRegionNodes, rdtInteger, eaNodes);
       finally
         DataFileWriter.Free;
       end;
@@ -549,11 +549,10 @@ begin
         OpenTempFile(TempFileName);
         try
           TempFileName := ExtractFileName(TempFileName)+ '_';
-          for LayerIndex := 1 to FMesh.LayerCount do
+          for LayerIndex := 1 to FMesh.LayerCount+1 do
           begin
             WriteString('@INSERT 99 ');
-            WriteString(TempFileName);
-            WriteInteger(LayerIndex);
+            WriteString(TempFileName + IntToStr(LayerIndex));
             NewLine;
           end;
         finally
