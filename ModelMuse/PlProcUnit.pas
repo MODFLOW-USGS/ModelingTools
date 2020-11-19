@@ -738,8 +738,6 @@ var
 begin
   WriteString('#Read pilot point data');
   NewLine;
-  WriteString('PilotPoints = read_list_file(skiplines=1,dimensions=2, &');
-  NewLine;
   ColIndex := 4;
   for PIndex := 0 to FUsedParamList.Count - 1 do
   begin
@@ -749,6 +747,16 @@ begin
       AQuadList := FQuadTrees[PIndex];
       for LayerIndex := 0 to FDataArray.LayerCount - 1 do
       begin
+        if (PIndex = 0) and (LayerIndex = 0) then
+        begin
+          WriteString('PilotPoints = read_list_file(skiplines=1,dimensions=2, &');
+          NewLine;
+        end
+        else
+        begin
+          WriteString('read_list_file(reference_clist=PilotPoints,skiplines=1,dimensions=2, &');
+          NewLine;
+        end;
         AQuadTree := AQuadList[LayerIndex];
         if AQuadTree.Count > 0 then
         begin
@@ -759,12 +767,12 @@ begin
           Inc(ColIndex);
           NewLine;
         end;
+        WriteString(Format('  id_type=''indexed'',file=''%s'')',
+          [ExtractFileName(FPilotPointFileName)]));
+        NewLine;
       end;
     end;
   end;
-  WriteString(Format('  id_type=''indexed'',file=''%s'')',
-    [ExtractFileName(FPilotPointFileName)]));
-  NewLine;
   NewLine;
 end;
 
@@ -1022,12 +1030,12 @@ begin
     WriteString('#Read data to modify');
     NewLine;
     {$REGION 'Data set values'}
-    WriteString(Format('read_list_file(reference_clist=''%s'',skiplines=1, &',
-      [KDisName]));
-    NewLine;
     ColIndex := 2;
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
+      WriteString(Format('read_list_file(reference_clist=''%s'',skiplines=1, &',
+        [KDisName]));
+      NewLine;
       SListName := Format('s_PIndex%0:d', [LayerIndex + 1]);
       WriteString(Format('  slist=%0:s;column=%1:d, &',
         [SListName, ColIndex]));
@@ -1038,9 +1046,9 @@ begin
         [PListName, ColIndex]));
       Inc(ColIndex);
       NewLine;
+      WriteString(Format('  file=''%s'')', [ExtractFileName(FParamValuesFileName)]));
+      NewLine;
     end;
-    WriteString(Format('  file=''%s'')', [ExtractFileName(FParamValuesFileName)]));
-    NewLine;
     NewLine;
     {$ENDREGION}
 
@@ -1181,7 +1189,7 @@ begin
     begin
       for LayerIndex := 0 to SutraMesh3D.LayerCount do
       begin
-        WriteString(Format('Z_%0:d NodeNumber3D_%0:d', [LayerIndex+1]));
+        WriteString(Format('Z_%0:d NodeNumber3D_%0:d Active_%0:d', [LayerIndex+1]));
       end;
     end;
     NewLine;
@@ -1199,6 +1207,14 @@ begin
           ANode3D := SutraMesh3D.NodeArray[LayerIndex,ANode.Number];
           WriteFloat(ANode3D.Z);
           WriteInteger(ANode3D.Number+1);
+          if ANode3D.Active then
+          begin
+            WriteInteger(1);
+          end
+          else
+          begin
+            WriteInteger(0);
+          end;
         end;
       end;
       NewLine;
@@ -1235,7 +1251,7 @@ begin
     begin
       for LayerIndex := 0 to SutraMesh3D.LayerCount-1 do
       begin
-        WriteString(Format('Z_%0:d ElementNumber3D_%0:d', [LayerIndex+1]));
+        WriteString(Format('Z_%0:d ElementNumber3D_%0:d Active_%0:d', [LayerIndex+1]));
       end;
     end;
     NewLine;
@@ -1254,6 +1270,14 @@ begin
           AnElement3D := SutraMesh3D.ElementArray[LayerIndex, ElementIndex];
           WriteFloat(AnElement3D.CenterElevation);
           WriteInteger(AnElement3D.ElementNumber+1);
+          if AnElement3D.Active then
+          begin
+            WriteInteger(1);
+          end
+          else
+          begin
+            WriteInteger(0);
+          end;
         end;
       end;
       NewLine;
@@ -1555,11 +1579,17 @@ begin
     NewLine;
     WriteString('  plist=p_NN2D;column=4, &');
     NewLine;
+    WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+    NewLine;
     if Mesh.MeshType = mt3D then
     begin
       ColIndex := 5;
       for LayerIndex := 1 to LayerCount do
       begin
+        // PLPROC has a limit of 5 s_lists per call of read_list_file.
+        // To avoid reaching that limit, a separate call is used for each layer.
+        WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+        NewLine;
         WriteString(Format('  plist=p_z%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
         NewLine;
         Inc(ColIndex);
@@ -1567,10 +1597,15 @@ begin
         WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
         NewLine;
         Inc(ColIndex);
+
+        WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+        NewLine;
       end;
     end;
-    WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
-    NewLine;
     NewLine;
     {$ENDREGION}
 
@@ -1587,8 +1622,15 @@ begin
     NewLine;
     Inc(ColIndex);
 
+    WriteString(Format('  file=''%s.Nodal_Porosity'')', [FRoot]));
+    NewLine;
+
     for LayerIndex := 1 to LayerCount do
     begin
+      // PLPROC has a limit of 5 s_lists per call of read_list_file.
+      // To avoid reaching that limit, a separate call is used for each layer.
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
       if Mesh.MeshType = mt3D then
       begin
   //      WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
@@ -1607,9 +1649,9 @@ begin
       WriteString(Format('  slist=s_PorPar%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
+      WriteString(Format('  file=''%s.Nodal_Porosity'')', [FRoot]));
+      NewLine;
     end;
-    WriteString(Format('  file=''%s.Nodal_Porosity'')', [FRoot]));
-    NewLine;
     NewLine;
     {$ENDREGION}
 
@@ -1633,11 +1675,14 @@ begin
     {$REGION 'Unsaturated zone'}
     WriteString('# Read Unsaturated Zone');
     NewLine;
-    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-    NewLine;
     ColIndex := 2;
     for LayerIndex := 1 to LayerCount do
     begin
+      // PLPROC has a limit of 5 s_lists per call of read_list_file.
+      // To avoid reaching that limit, a separate call is used for each layer.
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+
       if Mesh.MeshType = mt3D then
       begin
         Inc(ColIndex,2);
@@ -1646,9 +1691,10 @@ begin
       WriteString(Format('  slist=s_Unsat_Region%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
+
+      WriteString(Format('  file=''%s.Unsat_Region_Nodes'')', [FRoot]));
+      NewLine;
     end;
-    WriteString(Format('  file=''%s.Unsat_Region_Nodes'')', [FRoot]));
-    NewLine;
     NewLine;
     {$ENDREGION}
 
@@ -1713,6 +1759,9 @@ begin
         WriteString(Format('  file=''%s.14B_%1:d'';delim="space", &',
           [FRoot, LayerIndex]));
         NewLine;
+        WriteString(Format('  select=(s_Active_%d == 1), &',
+          [LayerIndex]));
+        NewLine;
 //        WriteString(Format('  select=(s_Layer%0:d = %0:d), &', [LayerIndex]));
 //        NewLine;
         WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
@@ -1756,6 +1805,7 @@ end;
 procedure TSutraData14BScriptWriter.WriteFiles(var AFileName: string);
 begin
   FFileName := FileName(AFileName);
+  Model.SutraPestScripts.Add(FFileName);
   Model.PestTemplateLines.Add(Format('plproc ''%s''', [FFileName]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
@@ -2048,8 +2098,6 @@ var
       UsedDataRoots.Add(DataRoot);
       WriteString(Format('# Read %s', [DataArray.Name]));
       NewLine;
-      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-      NewLine;
       ColIndex := 1;
 
 //      WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
@@ -2058,6 +2106,11 @@ var
 
       for LayerIndex := 1 to LayerCount do
       begin
+        // PLPROC has a limit of 5 s_lists per call of read_list_file.
+        // To avoid reaching that limit, a separate call is used for each layer.
+        WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+        NewLine;
+
         if Mesh.MeshType = mt3D then
         begin
           Inc(ColIndex);
@@ -2074,9 +2127,10 @@ var
         WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &', [DataRoot, LayerIndex, ColIndex]));
         NewLine;
         Inc(ColIndex);
+
+        WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, DataArray.Name]));
+        NewLine;
       end;
-      WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, DataArray.Name]));
-      NewLine;
       NewLine;
     end;
   end;
@@ -2135,6 +2189,10 @@ begin
         WriteString(Format('  slist=s_EN3D%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
         NewLine;
         Inc(ColIndex);
+
+        WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
       end;
     end;
     WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
@@ -2147,11 +2205,12 @@ begin
     {$REGION 'Unsaturated zone'}
     WriteString('# Read Unsaturated Zone');
     NewLine;
-    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-    NewLine;
     ColIndex := 2;
     for LayerIndex := 1 to LayerCount do
     begin
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+
       if Mesh.MeshType = mt3D then
       begin
         Inc(ColIndex,2);
@@ -2160,9 +2219,10 @@ begin
       WriteString(Format('  slist=s_LREG%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
+
+      WriteString(Format('  file=''%s.Unsat_Region_Elements'')', [FRoot]));
+      NewLine;
     end;
-    WriteString(Format('  file=''%s.Unsat_Region_Elements'')', [FRoot]));
-    NewLine;
     NewLine;
     {$ENDREGION}
 
@@ -2343,6 +2403,9 @@ begin
         WriteString(Format('  file=''%s.15B_%1:d'';delim="space", &',
           [FRoot, LayerIndex]));
         NewLine;
+        WriteString(Format('  select=(s_Active_%d == 1), &',
+          [LayerIndex]));
+        NewLine;
         WriteString(Format('  slist=''s_EN3D%0:d'', &', [LayerIndex]));
         NewLine;
         WriteString(Format('  slist=s_LREG%0:d, &', [LayerIndex]));
@@ -2397,6 +2460,7 @@ end;
 procedure TSutraData15BScriptWriter.WriteFiles(var AFileName: string);
 begin
   FFileName := FileName(AFileName);
+  Model.SutraPestScripts.Add(FFileName);
   Model.PestTemplateLines.Add(Format('plproc ''%s''', [FFileName]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);

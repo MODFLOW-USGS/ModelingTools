@@ -12441,22 +12441,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                     ExplicitWidth = 571
                     ExplicitHeight = 305
-                    ColWidths = (
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64
-                      64)
                   end
                 end
               end

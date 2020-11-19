@@ -534,7 +534,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           Width = 539
           Height = 128
           Align = alClient
-          ColCount = 15
+          ColCount = 16
           FixedCols = 0
           RowCount = 2
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
@@ -688,6 +688,29 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
               CheckMin = False
               ComboUsed = False
               Format = rcf4Boolean
+              LimitToList = False
+              MaxLength = 0
+              ParentButtonFont = False
+              WordWrapCaptions = True
+              WordWrapCells = False
+              CaseSensitivePicklist = False
+              CheckStyle = csCheck
+              AutoAdjustColWidths = True
+            end
+            item
+              AutoAdjustRowHeights = True
+              ButtonCaption = 'F()'
+              ButtonFont.Charset = DEFAULT_CHARSET
+              ButtonFont.Color = clWindowText
+              ButtonFont.Height = -11
+              ButtonFont.Name = 'Tahoma'
+              ButtonFont.Style = []
+              ButtonUsed = True
+              ButtonWidth = 35
+              CheckMax = False
+              CheckMin = False
+              ComboUsed = False
+              Format = rcf4String
               LimitToList = False
               MaxLength = 0
               ParentButtonFont = False
@@ -909,6 +932,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitTop = 58
           ColWidths = (
             64
             64
@@ -919,6 +943,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             64
             64
             66
+            64
             64
             64
             64

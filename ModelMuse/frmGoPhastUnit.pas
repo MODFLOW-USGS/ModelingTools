@@ -2087,7 +2087,7 @@ uses
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
   SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
-  PlProcUnit;
+  PlProcUnit, PestControlFileWriterUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -9440,9 +9440,8 @@ var
   SutraEleDisWriter: TSutraEleDisWriter;
   RunModelBatchFile: TStringList;
   RunModelBatchFileName: string;
-//  BcopgFileName: string;
-//  BcopgFileNames: TStringList;
-//  BcougFileNames: TStringList;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
 begin
   case ModelSelection of
     msSutra22:
@@ -9489,6 +9488,7 @@ begin
 
   PhastModel.ClearPval;
   PhastModel.PestTemplateLines.Clear;
+  PhastModel.SutraPestScripts.Clear;
 
   SutraNodDisWriter := TSutraNodDisWriter.Create(PhastModel, etExport);
   try
@@ -9850,6 +9850,18 @@ begin
         if frmErrorsAndWarnings.HasMessages then
         begin
           frmErrorsAndWarnings.Show;
+        end;
+
+        if PhastModel.PestUsed then
+        begin
+          for PIndex := 0 to PhastModel.ModflowSteadyParameters.Count - 1 do
+          begin
+            AParam := PhastModel.ModflowSteadyParameters[PIndex];
+            if AParam.ParameterType in SutraParamType then
+            begin
+              PhastModel.WritePValAndTemplate(AParam.ParameterName, AParam.Value);
+            end;
+          end;
         end;
 
         PhastModel.FinalizePvalAndTemplate(FileName);

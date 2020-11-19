@@ -81,9 +81,9 @@ inherited frmGoPhast: TfrmGoPhast
         ExplicitWidth = 520
         inherited rulHorizontal: TRbwRuler
           Width = 471
-          ExplicitLeft = 43
-          ExplicitTop = -6
-          ExplicitWidth = 472
+          ExplicitLeft = 49
+          ExplicitTop = 2
+          ExplicitWidth = 471
         end
       end
       inherited ZoomBox: TQRbwZoomBox2

@@ -442,6 +442,8 @@ resourcestring
   StrDoYouWishToDoYo = 'Do you wish to restore the old formula?';
   StrSMixtureFormula = '%s Mixture Formula';
   StrDefinedByParamet = '%s (defined by parameters)';
+  StrYouMustSelectAMo = 'You must select a model type (MODFLOW, SUTRA, etc.)' +
+  ' before displaying the Data Sets dialog box.';
 
 {$R *.dfm}
 
@@ -484,6 +486,14 @@ end;
 procedure TfrmDataSets.FormCreate(Sender: TObject);
 begin
   inherited;
+  if frmGoPhast.ModelSelection = msUndefined then
+  begin
+    Beep;
+    ModalResult := mrCancel;
+    MessageDlg(StrYouMustSelectAMo, mtError, [mbOK], 0);
+    Exit;
+  end;
+  
   FLoading := True;
   pcDataSets.ActivePageIndex := 0;
   FDefaultConvertChoice := -1;
@@ -2917,6 +2927,7 @@ begin
       tabParameters.TabVisible := (FSelectedEdit.DataType = rdtDouble)
         and (FSelectedEdit.DataArray <> nil)
         and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0)
+        and (Pos(StrLayerDefinition, FSelectedEdit.FullClassification) <= 0)
         and not (dcFormula in FSelectedEdit.DataArray.Lock);
     end;
     btnEditFormula.Enabled := reDefaultFormula.Enabled;

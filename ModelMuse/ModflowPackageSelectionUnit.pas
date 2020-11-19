@@ -2866,6 +2866,7 @@ Type
     FMaximumPumpRate: TModflowBoundaryDisplayTimeList;
     FScalingLength: TModflowBoundaryDisplayTimeList;
     FPumpElevation: TModflowBoundaryDisplayTimeList;
+    FFlowingWellReductionLength: TModflowBoundaryDisplayTimeList;
     procedure SetIncludeWellStorage(const Value: Boolean);
     procedure SetPrintHead(const Value: Boolean);
     procedure SetSaveMnwFlows(const Value: Boolean);
@@ -2895,6 +2896,8 @@ Type
       NewUseList: TStringList);
     procedure GetScalingLengthUseList(Sender: TObject;
       NewUseList: TStringList);
+    procedure GetMfFlowingWellReductionLengthUseList(Sender: TObject;
+      NewUseList: TStringList);
 
 
     procedure GetMawUseList(DataIndex: integer; NewUseList: TStringList;
@@ -2916,6 +2919,8 @@ Type
       FFlowingWellElevation;
     property FlowingWellConductance: TModflowBoundaryDisplayTimeList read
       FFlowingWellConductance;
+    property FlowingWellReductionLength: TModflowBoundaryDisplayTimeList read
+      FFlowingWellReductionLength;
     property Well_Rate: TModflowBoundaryDisplayTimeList read
       FWell_Rate;
     property Well_Head: TModflowBoundaryDisplayTimeList read
@@ -5679,7 +5684,8 @@ resourcestring
   StrMAWFlowingWell = 'MAW Flowing Well';
   StrMAWWellHead = 'MAW Well Head';
   StrMAWWellRate = 'MAW Well Rate';
-  StrMAWWellElevation = 'MAW Well Elevation';
+//  StrMAWWellElevation = 'MAW Flowing Well Elevation';
+  StrMAWWellRedLength = 'MAW Flowing Well Reduction Length';
   StrMAWWellLimit = 'MAW Well Limit';
   StrMAWMinimumPumping = 'MAW Minimum Pumping Rate';
   StrMAWPumpElevation = 'MAW Pump Elevation';
@@ -19631,6 +19637,14 @@ begin
     ScalingLength.OnTimeListUsed := PackageUsed;
     ScalingLength.Name := StrMAWScalingLength;
     AddTimeList(ScalingLength);
+
+    FFlowingWellReductionLength := TModflowBoundaryDisplayTimeList.Create(Model);
+    FlowingWellReductionLength.OnInitialize := InitializeMawDisplay;
+    FlowingWellReductionLength.OnGetUseList := GetMfFlowingWellReductionLengthUseList;
+    FlowingWellReductionLength.OnTimeListUsed := PackageUsed;
+    FlowingWellReductionLength.Name := StrMAWWellRedLength;
+    AddTimeList(FlowingWellReductionLength);
+
   end;
 
   InitializeVariables;
@@ -19638,6 +19652,7 @@ end;
 
 destructor TMawPackage.Destroy;
 begin
+  FFlowingWellReductionLength.Free;
   FPumpElevation.Free;
   FScalingLength.Free;
   FMaximumPumpRate.Free;
@@ -19693,6 +19708,12 @@ procedure TMawPackage.GetMfFlowingWellConductanceUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
   GetMawUseList(FlowingWellConductancePosition, NewUseList, StrMAWFlowingWell);
+end;
+
+procedure TMawPackage.GetMfFlowingWellReductionLengthUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  GetMawUseList(FlowingWellReductionLengthPostion, NewUseList, StrMAWWellRedLength);
 end;
 
 procedure TMawPackage.GetMfWellHeadUseList(Sender: TObject;
@@ -19754,6 +19775,7 @@ var
 begin
   FlowingWellElevation.CreateDataSets;
   FlowingWellConductance.CreateDataSets;
+  FlowingWellReductionLength.CreateDataSets;
   Well_Rate.CreateDataSets;
   Well_Head.CreateDataSets;
   Well_Limit.CreateDataSets;
@@ -19775,6 +19797,8 @@ begin
     List.Add(MaximumPumpRate);
     List.Add(PumpElevation);
     List.Add(ScalingLength);
+    List.Add(FlowingWellReductionLength);
+
     MawWriter.UpdateDisplay(List);
   finally
     MawWriter.Free;
@@ -19782,6 +19806,7 @@ begin
   end;
   FlowingWellElevation.ComputeAverage;
   FlowingWellConductance.ComputeAverage;
+  FlowingWellReductionLength.ComputeAverage;
   Well_Rate.LabelAsSum;
   Well_Head.ComputeAverage;
   Well_Limit.ComputeAverage;

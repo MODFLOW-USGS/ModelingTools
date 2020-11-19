@@ -53,7 +53,8 @@ uses
   PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit,
   SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit,
   SutraOptionsUnit, SutraGeneralBoundaryUnit, SutraBoundaryUnit,
-  SutraGenTransBoundUnit, IntListUnit, ObsInterfaceUnit;
+  SutraGenTransBoundUnit, IntListUnit, ObsInterfaceUnit,
+  PestObsExtractorInputWriterUnit;
 
 resourcestring
   StrTheObservationComp = 'The observation comparison item "%s" could not be' +
@@ -1269,12 +1270,12 @@ begin
     etInstructions:
       begin
         WriteString('  INSTRUCTION ');
-        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeIns.txt')));
+        WriteString(QuoteFileName(ChangeFileExt(FFileName, StrPestIns)));
       end;
     etExtractedValues:
       begin
         WriteString('  VALUES ');
-        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeValues')));
+        WriteString(QuoteFileName(ChangeFileExt(FFileName, StrSutraValues)));
       end;
     else
       Assert(False);

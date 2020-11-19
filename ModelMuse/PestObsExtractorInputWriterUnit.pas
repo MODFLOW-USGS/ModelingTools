@@ -22,6 +22,7 @@ const
   StrMf6WriteIns: string = '.Mf6WriteIns';
   StrMf2005Values: string = '.Mf2005Values';
   StrMf2005WriteIns: string = '.Mf2005WriteIns';
+  StrSutraValues: string = '.SutraValues';
 
 
 implementation

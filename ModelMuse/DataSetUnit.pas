@@ -7622,6 +7622,7 @@ begin
   end
   else if (Name = StrMawWellElevation)
     or (Name = StrMAWWellConductance)
+    or (Name = StrMAWWellRedLength)
     or (Name = StrMAWWellRate)
     or (Name = StrMAWWellHead)
     or (Name = StrMAWWellLimit)

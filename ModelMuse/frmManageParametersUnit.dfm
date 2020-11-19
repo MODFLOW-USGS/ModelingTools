@@ -4,6 +4,7 @@ inherited frmManageParameters: TfrmManageParameters
   Caption = 'Manage Parameters'
   ClientHeight = 561
   ClientWidth = 784
+  ExplicitLeft = -90
   ExplicitWidth = 800
   ExplicitHeight = 600
   PixelsPerInch = 96
@@ -68,7 +69,7 @@ inherited frmManageParameters: TfrmManageParameters
     Top = 0
     Width = 784
     Height = 517
-    ActivePage = tabParameters
+    ActivePage = tabParameterGroups
     Align = alClient
     TabOrder = 1
     object tabParameters: TTabSheet
@@ -525,10 +526,6 @@ inherited frmManageParameters: TfrmManageParameters
     object tabParameterGroups: TTabSheet
       Caption = 'ParameterGroups'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameParameterGroups: TframeGrid
         Left = 0
         Top = 0
@@ -902,10 +899,6 @@ inherited frmManageParameters: TfrmManageParameters
     object tabTiedParameters: TTabSheet
       Caption = 'Tied Parameters'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object tvTiedParameters: TTreeView
         Left = 0
         Top = 0

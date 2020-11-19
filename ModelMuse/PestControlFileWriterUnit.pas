@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, System.SysUtils, PestObsUnit, GoPhastTypes,
-  PhastModelUnit, ObsInterfaceUnit;
+  PhastModelUnit, ObsInterfaceUnit, OrderedCollectionUnit;
 
 type
   TPestControlFileWriter = class(TCustomFileWriter)
@@ -49,10 +49,13 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+const
+  SutraParamType: TParameterTypes = [ptPEST];
+
 implementation
 
 uses
-  PestPropertiesUnit, ModflowParameterUnit, OrderedCollectionUnit,
+  PestPropertiesUnit, ModflowParameterUnit,
   PestParamGroupsUnit, PestObsGroupUnit, frmGoPhastUnit,
   PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit,
   ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
@@ -78,7 +81,7 @@ resourcestring
 
 const
   Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST, ptCHD,
-  ptGHB, ptQ, ptRIV, ptDRN];
+  ptGHB, ptQ, ptRIV, ptDRN, ptPEST];
 
   Mf2005ParamType: TParameterTypes = [ptLPF_HK, ptLPF_HANI, ptLPF_VK,
     ptLPF_VANI, ptLPF_SS, ptLPF_SY, ptLPF_VKCB, ptRCH, ptEVT, ptETS,
@@ -86,6 +89,8 @@ const
     ptRIV, ptDRN, ptDRT, ptSFR, ptHFB,
     ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY,
     ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX, ptPEST];
+
+
 
 constructor TPestControlFileWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
@@ -180,6 +185,10 @@ begin
   begin
     UsedTypes := Mf2005ParamType
   end
+  else if Model.ModelSelection in SutraSelection then
+  begin
+    UsedTypes := SutraParamType
+  end
   else
   begin
     Assert(False);
@@ -234,12 +243,19 @@ var
 begin
   // PVAL file;
   result := 1;
-  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+  if Model.ModelSelection in SutraSelection then
   begin
-    ADataArray := Model.DataArrayManager[DSIndex];
-    if ADataArray.PestParametersUsed then
+    result := result + Model.SutraPestScripts.Count;
+  end
+  else
+  begin
+    for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
     begin
-      Inc(result);
+      ADataArray := Model.DataArrayManager[DSIndex];
+      if ADataArray.PestParametersUsed then
+      begin
+        Inc(result);
+      end;
     end;
   end;
 end;
@@ -742,6 +758,7 @@ var
   OUTFLE: string;
   DSIndex: Integer;
   ADataArray: TDataArray;
+  LineIndex: Integer;
 begin
   WriteSectionHeader('model input/output');
   TEMPFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPtf));
@@ -750,17 +767,31 @@ begin
   WriteString(' ' + INFLE);
   NewLine;
 
-  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+  if Model.ModelSelection in SutraSelection then
   begin
-    ADataArray := Model.DataArrayManager[DSIndex];
-    if ADataArray.PestParametersUsed then
+    for LineIndex := 0 to Model.SutraPestScripts.Count - 1 do
     begin
-      INFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-        '.' + ADataArray.Name + '.script' ));
-      TEMPFLE := INFLE + '.tpl';
+      INFLE := ExtractFileName(Model.SutraPestScripts[LineIndex]);
+      TEMPFLE :=  INFLE + '.tpl';
       WriteString(TEMPFLE);
       WriteString(' ' + INFLE);
       NewLine;
+    end;
+  end
+  else
+  begin
+    for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+    begin
+      ADataArray := Model.DataArrayManager[DSIndex];
+      if ADataArray.PestParametersUsed then
+      begin
+        INFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
+          '.' + ADataArray.Name + '.script' ));
+        TEMPFLE := INFLE + '.tpl';
+        WriteString(TEMPFLE);
+        WriteString(' ' + INFLE);
+        NewLine;
+      end;
     end;
   end;
 
@@ -771,75 +802,26 @@ begin
     WriteString(INSFLE);
     WriteString(' ' + OUTFLE);
     NewLine;
-//    if Model.ModflowPackages.HobPackage.IsSelected then
-//    begin
-//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrHobout));
-//      INSFLE := OUTFLE + '.ins';
-//      WriteString(INSFLE);
-//      WriteString(' ' + OUTFLE);
-//      NewLine;
-//    end;
-//    if Model.ModflowPackages.ChobPackage.IsSelected then
-//    begin
-//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-//        TModflowCHD_Writer.ObservationOutputExtension));
-//      INSFLE := OUTFLE + '.ins';
-//      WriteString(INSFLE);
-//      WriteString(' ' + OUTFLE);
-//      NewLine;
-//    end;
-//    if Model.ModflowPackages.DrobPackage.IsSelected then
-//    begin
-//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-//        TModflowDRN_Writer.ObservationOutputExtension));
-//      INSFLE := OUTFLE + '.ins';
-//      WriteString(INSFLE);
-//      WriteString(' ' + OUTFLE);
-//      NewLine;
-//    end;
-//    if Model.ModflowPackages.GbobPackage.IsSelected then
-//    begin
-//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-//      TModflowGHB_Writer.ObservationOutputExtension));
-//      INSFLE := OUTFLE + '.ins';
-//      WriteString(INSFLE);
-//      WriteString(' ' + OUTFLE);
-//      NewLine;
-//    end;
-//    if Model.ModflowPackages.RvobPackage.IsSelected then
-//    begin
-//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-//        TModflowRIV_Writer.ObservationOutputExtension));
-//      INSFLE := OUTFLE + '.ins';
-//      WriteString(INSFLE);
-//      WriteString(' ' + OUTFLE);
-//      NewLine;
-//    end;
-//    if Model.ModflowPackages.StobPackage.IsSelected then
-//    begin
-//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile,
-//        TStrWriter.ObservationOutputExtension));
-//      INSFLE := OUTFLE + '.ins';
-//      WriteString(INSFLE);
-//      WriteString(' ' + OUTFLE);
-//      NewLine;
-//    end;
-//    if FUsedObservations.Count > 0 then
-//    begin
-//      INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
-//      OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
-//      WriteString(INSFLE);
-//      WriteString(' ' + OUTFLE);
-//      NewLine;
-//    end;
   end
-  else
+  else if Model.ModelSelection = msModflow2015 then
   begin
     INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
     OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
     WriteString(INSFLE);
     WriteString(' ' + OUTFLE);
     NewLine;
+  end
+  else if Model.ModelSelection in SutraSelection then
+  begin
+    INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
+    OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrSutraValues));
+    WriteString(INSFLE);
+    WriteString(' ' + OUTFLE);
+    NewLine;
+  end
+  else
+  begin
+    Assert(False);
   end;
   NewLine;
 end;
@@ -1150,6 +1132,10 @@ begin
   else if Model.ModelSelection in Modflow2005Selection then
   begin
     UsedTypes := Mf2005ParamType;
+  end
+  else if Model.ModelSelection in SutraSelection then
+  begin
+    UsedTypes := SutraParamType
   end
   else
   begin

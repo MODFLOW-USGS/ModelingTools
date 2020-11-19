@@ -407,8 +407,9 @@ const
   StrModflowSfrUpstreamMaxUnsaturatedKz = 'SFR Upstream Max Unsaturated Kz';
   StrModflowSfrDownstreamMaxUnsaturatedKz = 'SFR Downstream Max Unsaturated Kz';
 
-  StrMAWWellElevation = 'MAW Well Elevation';
-  StrMAWWellConductance = 'MAW Well Conductance';
+  StrMAWWellElevation = 'MAW Flowing Well Elevation';
+  StrMAWWellConductance = 'MAW Flowing Well Conductance';
+  StrMAWWellRedLength = 'MAW Flowing Well Reduction Length';
   StrMAWWellRate = 'MAW Well Rate';
   StrMAWWellHead = 'MAW Well Head';
   StrMAWWellLimit = 'MAW Well Limit';
@@ -2512,6 +2513,7 @@ that affects the model output should also have a comment. }
     FTimeSeries: TTimeSeriesReader;
     FEndPoints: TEndPointReader;
     F_SP_Epsilon: double;
+    FSutraPestScripts: TStringList;
   strict private
     FUnitNumbers: TUnitNumbers;
     FHfbWriter: TObject;
@@ -3121,6 +3123,7 @@ that affects the model output should also have a comment. }
 
     procedure InvalidateMawFlowingWellElevation(Sender: TObject);
     procedure InvalidateMawFlowingWellConductance(Sender: TObject);
+    procedure InvalidateMawFlowingWellReductionLength(Sender: TObject);
     procedure InvalidateMawWell_Rate(Sender: TObject);
     procedure InvalidateMawWell_Head(Sender: TObject);
     procedure InvalidateMawWell_Limit(Sender: TObject);
@@ -3527,6 +3530,11 @@ that affects the model output should also have a comment. }
 
     property PestProperties: TPestProperties read FPestProperties
       write SetPestProperties
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+    ;
+    property SutraPestScripts: TStringList read FSutraPestScripts
     {$IFNDEF PEST}
       stored False
     {$ENDIF}
@@ -10061,8 +10069,7 @@ const
 //                simultaneously.
 //               Bug fix: Fixed bug in export of Shapefile mesh data from SUTRA
 //                2D models that could cause a  range check error.
-
-//               Bug fix: Fixed a bug in the Errors and Warnings dialog box
+//    '4.3.0.23' Bug fix: Fixed a bug in the Errors and Warnings dialog box
 //                that could cause an Invalid class typecast error when right
 //                clicking in the dialog box.
 //               Enhancement: The user can now customize ModelMuse to specify
@@ -10082,10 +10089,12 @@ const
 //                models.
 //               Bug fix: Fixed a bug in exporting the Basic Package input file
 //                in models that contain nonsimulated layers.
+//    '4.3.0.24' Bug fix: Fixed export of MAW package when flowing wells were
+//                used.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.22';
+  IIModelVersion = '4.3.0.24';
 
 function IModelVersion: string;
 begin
@@ -23275,6 +23284,11 @@ begin
   ModflowPackages.MawPackage.FlowingWellElevation.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMawFlowingWellReductionLength(Sender: TObject);
+begin
+  ModflowPackages.MawPackage.FlowingWellReductionLength.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMawMaximumPumpRate(Sender: TObject);
 begin
   ModflowPackages.MawPackage.MaximumPumpRate.Invalidate;
@@ -28161,6 +28175,7 @@ end;
 constructor TCustomModel.Create(AnOwner: TComponent);
 begin
   inherited;
+  FSutraPestScripts := TStringList.Create;
   FPestTemplateLines := TStringList.Create;
 
   FBinaryFiles := TStringList.Create;
@@ -29121,6 +29136,7 @@ begin
   FSwiObsExtractorOutputFiles.Free;
 
   FPestTemplateLines.Free;
+  FSutraPestScripts.Free;
 
   inherited;
 end;
@@ -31568,6 +31584,7 @@ end;
 procedure TCustomModel.ClearPval;
 begin
   FPValFile.Clear;
+  FTemplate.Clear;
 end;
 
 procedure TCustomModel.ClearViewedItems;

@@ -89,7 +89,7 @@ type
 
   TMawColumns = (mcStartTime, mcEndTime, mcStatus, mcRate, mcWellHead,
     mcMawFlowingWell,
-    mcMawFlowingWellElevation, mcFlowingWellConductance, mcRateLimitation,
+    mcMawFlowingWellElevation, mcFlowingWellConductance, mcFlowingWellReductionLength,  mcRateLimitation,
     mcMinRate, mcMaxRate, mcPumpElevation, mcScalingLength, mcHeadLimitChoice,
     mcHeadLimit);
 
@@ -2591,6 +2591,8 @@ begin
           rdgBoundaryConditions.Cells[Ord(mcMawFlowingWellElevation),Index+1], False, True);
         MawItem.FlowingWellConductance := GetRealFormulaFromText(
           rdgBoundaryConditions.Cells[Ord(mcFlowingWellConductance),Index+1], False, True);
+        MawItem.FlowingWellReductionLength := GetRealFormulaFromText(
+          rdgBoundaryConditions.Cells[Ord(mcFlowingWellReductionLength),Index+1], False, True);
 
         PickList.Assign(rdgBoundaryConditions.Columns[Ord(mcRateLimitation)].PickList);
         PickList.CaseSensitive := False;
@@ -4656,6 +4658,8 @@ begin
     StrFlowingWellElevati;
   rdgBoundaryConditions.Cells[Ord(mcFlowingWellConductance), 0] :=
     StrFlowingWellConduct;
+  rdgBoundaryConditions.Cells[Ord(mcFlowingWellReductionLength), 0] :=
+    'Flowing Well Reduction Length';
   rdgBoundaryConditions.Cells[Ord(mcMinRate), 0] := StrMinimumFlowRate;
   rdgBoundaryConditions.Cells[Ord(mcMaxRate), 0] := StrMaximumFlowRate;
   rdgBoundaryConditions.Cells[Ord(mcPumpElevation), 0] := StrPumpElevation;
@@ -4663,7 +4667,7 @@ begin
   rdgBoundaryConditions.Cells[Ord(mcHeadLimit), 0] := StrHeadLimit;
 
   for ColIndex in [mcRate, mcWellHead, mcMawFlowingWellElevation,
-    mcFlowingWellConductance, mcMinRate, mcMaxRate, mcPumpElevation,
+    mcFlowingWellConductance, mcFlowingWellReductionLength, mcMinRate, mcMaxRate, mcPumpElevation,
     mcScalingLength, mcHeadLimit] do
   begin
     rdgBoundaryConditions.Columns[Ord(ColIndex)].ComboUsed := True;

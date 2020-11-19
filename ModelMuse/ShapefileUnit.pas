@@ -931,13 +931,16 @@ function FileShapeType(const FileName: string): integer;
 
 implementation
 
-uses Contnrs;
+uses Contnrs, Vcl.Dialogs;
 
 resourcestring
   StrTheShapefileMainF = 'The Shapefile main file and index file headers do ' +
   'not match. The Shapefile may be corrupt.';
   StrThereWasAnErrorA = 'There was an error attemtping to read a Shape Geome' +
   'try file. Please check that the Shapefile is valid.';
+  StrUnableToCreate0 = 'Unable to create %0:s.  The error message was ' +
+  '"%1:s". If %0:s is already open in an' +
+  'other program, try closing it in the other program first.';
 
 // http://community.borland.com/article/0,1410,28964,00.html
 //A gets B's values swapped
@@ -2502,22 +2505,40 @@ begin
     IndexFileHeader.FileLength := ConvertInteger((SizeOf(TShapefileHeader)
       + IndexMemoryStream.Size) div 2);
 
-    MainFileStream := TFileStream.Create(MainFileName,
-      fmCreate or fmShareDenyWrite);
     try
-      MainFileStream.Write(ShapeFileHeader, SizeOf(TShapefileHeader));
-      ShapeMemoryStream.SaveToStream(MainFileStream);
-    finally
-      MainFileStream.Free;
+      MainFileStream := TFileStream.Create(MainFileName,
+        fmCreate or fmShareDenyWrite);
+      try
+        MainFileStream.Write(ShapeFileHeader, SizeOf(TShapefileHeader));
+        ShapeMemoryStream.SaveToStream(MainFileStream);
+      finally
+        MainFileStream.Free;
+      end;
+    except on E: EFCreateError do
+      begin
+        Beep;
+        MessageDlg(Format(StrUnableToCreate0, [MainFileName, E.message]),
+          mtError, [mbOK], 0);
+        Exit;
+      end;
     end;
 
-    IndexFileStream := TFileStream.Create(IndexFileName,
-      fmCreate or fmShareDenyWrite);
     try
-      IndexFileStream.Write(IndexFileHeader, SizeOf(TShapefileHeader));
-      IndexMemoryStream.SaveToStream(IndexFileStream);
-    finally
-      IndexFileStream.Free;
+      IndexFileStream := TFileStream.Create(IndexFileName,
+        fmCreate or fmShareDenyWrite);
+      try
+        IndexFileStream.Write(IndexFileHeader, SizeOf(TShapefileHeader));
+        IndexMemoryStream.SaveToStream(IndexFileStream);
+      finally
+        IndexFileStream.Free;
+      end;
+    except on E: EFCreateError do
+      begin
+        Beep;
+        MessageDlg(Format(StrUnableToCreate0, [IndexFileName, E.message]),
+          mtError, [mbOK], 0);
+        Exit;
+      end;
     end;
     if Assigned(FOnProgress) then
     begin

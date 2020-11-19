@@ -13,7 +13,7 @@ type
   TWellScreenColumn = (wscTop, wscBottom, wscSkinK, wscSkinRadius);
 
   TWellFlow = (wfStartTime, wfEndTime, wfStatus, wfRate, wfSpecifiedHead,
-    wfFlowingWell, wfFlowingWellElev, wfFlowingWellCond,
+    wfFlowingWell, wfFlowingWellElev, wfFlowingWellCond, wfFlowingWellReductionLength,
     wtRateLimitation, wtPumpElev, wtScalingLength,
     wtMinRate, wtMaxRate, wtHeadLimitChoice, wtHeadLimit);
 
@@ -111,23 +111,24 @@ uses
   frmCustomGoPhastUnit;
 
 resourcestring
-  StrStatus = 'Status';
-  StrFlowRate = 'Flow rate';
-  StrSpecifiedHead = 'Specified head';
-  StrFlowingWellFW = 'Flowing well (FW)';
-  StrFWElevation = 'FW elevation';
-  StrFWConductance = 'FW conductance';
-  StrRateLimitation = 'Rate limitation';
-  StrPumpElevation = 'Pump elevation';
-  StrScalingLength = 'Scaling length';
-  StrMinFlowRate = 'Min flow rate';
-  StrMaxFlowRate = 'Max flow rate';
-  StrUseHeadLimit = 'Use head limit';
-  StrLimitingHead = 'Limiting head';
-  StrScreenTop = 'Screen top';
-  StrScreenBottom = 'Screen bottom';
-  StrSkinK = 'Skin K';
-  StrSkinRadius = 'Skin radius';
+  StrStatus = 'Status (status)';
+  StrFlowRate = 'Flow rate (rate)';
+  StrSpecifiedHead = 'Specified head (well_head)';
+  StrFlowingWellFW = 'Flowing well (FW FLOWING_WELL)';
+  StrFWElevation = 'FW elevation (fwelev)';
+  StrFWConductance = 'FW conductance (fwcond)';
+  StrFWRedLength = 'FW reduction length (fwrlen)';
+  StrRateLimitation = 'Rate limitation (SHUT_OFF, RATE_SCALING)';
+  StrPumpElevation = 'Pump elevation (pump_elevation)';
+  StrScalingLength = 'Scaling length (scaling_length)';
+  StrMinFlowRate = 'Min flow rate (minrate)';
+  StrMaxFlowRate = 'Max flow rate (maxrate)';
+  StrUseHeadLimit = 'Use head limit (HEAD_LIMIT)';
+  StrLimitingHead = 'Limiting head (head_limit)';
+  StrScreenTop = 'Screen top (scrn_top)';
+  StrScreenBottom = 'Screen bottom (scrn_bot)';
+  StrSkinK = 'Skin K (hk_skin)';
+  StrSkinRadius = 'Skin radius (radius_skin)';
 
 {$R *.dfm}
 
@@ -266,6 +267,8 @@ begin
                 := MawItem.FlowingWellElevation;
               rdgModflowBoundary.Cells[Ord(wfFlowingWellCond), TimeIndex+1]
                 := MawItem.FlowingWellConductance;
+              rdgModflowBoundary.Cells[Ord(wfFlowingWellReductionLength), TimeIndex+1]
+                := MawItem.FlowingWellReductionLength;
               rdgModflowBoundary.ItemIndex[Ord(wtRateLimitation), TimeIndex+1]
                 := Ord(MawItem.RateLimitation);
               rdgModflowBoundary.Cells[Ord(wtPumpElev), TimeIndex+1]
@@ -345,8 +348,8 @@ begin
       rdgModflowBoundary.RowCount - 1 do
     begin
       for ColIndex in [wfRate, wfSpecifiedHead, wfFlowingWellElev,
-        wfFlowingWellCond, wtPumpElev, wtScalingLength, wtMinRate, wtMaxRate,
-        wtHeadLimit] do
+        wfFlowingWellCond, wfFlowingWellReductionLength, wtPumpElev,
+        wtScalingLength, wtMinRate, wtMaxRate, wtHeadLimit] do
       begin
         if rdgModflowBoundary.IsSelectedCell(Ord(ColIndex), RowIndex) then
         begin
@@ -404,8 +407,8 @@ begin
   for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
   begin
     for ColIndex in [wfRate, wfSpecifiedHead, wfFlowingWellElev,
-      wfFlowingWellCond, wtPumpElev, wtScalingLength, wtMinRate, wtMaxRate,
-      wtHeadLimit] do
+      wfFlowingWellCond, wfFlowingWellReductionLength, wtPumpElev,
+      wtScalingLength, wtMinRate, wtMaxRate, wtHeadLimit] do
     begin
       ShouldEnable := rdgModflowBoundary.IsSelectedCell(Ord(ColIndex),RowIndex);
       if ShouldEnable then
@@ -602,6 +605,7 @@ begin
           MawItem.FlowingWell := TFlowingWell(ItemBool);
           MawItem.FlowingWellElevation := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellElev), TimeIndex+1]);
           MawItem.FlowingWellConductance := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellCond), TimeIndex+1]);
+          MawItem.FlowingWellReductionLength := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellReductionLength), TimeIndex+1]);
           ItemIndex := rdgModflowBoundary.ItemIndex[Ord(wtRateLimitation), TimeIndex+1];
           if ItemIndex >= 0 then
           begin
@@ -678,6 +682,7 @@ begin
     rdgModflowBoundary.Cells[Ord(wfFlowingWell), 0] := StrFlowingWellFW;
     rdgModflowBoundary.Cells[Ord(wfFlowingWellElev), 0] := StrFWElevation;
     rdgModflowBoundary.Cells[Ord(wfFlowingWellCond), 0] := StrFWConductance;
+    rdgModflowBoundary.Cells[Ord(wfFlowingWellReductionLength), 0] := StrFWRedLength;
     rdgModflowBoundary.Cells[Ord(wtRateLimitation), 0] := StrRateLimitation;
     rdgModflowBoundary.Cells[Ord(wtPumpElev), 0] := StrPumpElevation;
     rdgModflowBoundary.Cells[Ord(wtScalingLength), 0] := StrScalingLength;
@@ -844,7 +849,7 @@ begin
         begin
           CanSelect := MawStatus in [mwActive, mwConstantHead];
         end;
-      wfFlowingWellElev, wfFlowingWellCond:
+      wfFlowingWellElev, wfFlowingWellCond, wfFlowingWellReductionLength:
         begin
           CanSelect := FlowingWell
             and (MawStatus in [mwActive, mwConstantHead]);

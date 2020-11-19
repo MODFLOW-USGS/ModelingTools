@@ -7,8 +7,9 @@ uses
   FormulaManagerUnit, GoPhastTypes, RbwParser, SubscriptionUnit;
 
 type
-  TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate, moRateToMvr,
-    moFlowingWellFlowRate, moFlowWellToMvr, moStorageFlowRate, moConstantFlowRate, moConductance,
+  TMawOb = (moHead, moFromMvr, moFlowRate, moFlowRateCells, moPumpRate,
+    moRateToMvr, moFlowingWellFlowRate, moFlowWellToMvr, moStorageFlowRate,
+    moConstantFlowRate, moConductance,
     moConductanceCells, moFlowingWellConductance);
   TMawObs = set of TMawOb;
 
@@ -34,6 +35,7 @@ type
 
     FlowingWellElevation: double;
     FlowingWellConductance: double;
+    FlowingWellReductionLength: Double;
     Rate: double;
     WellHead: double;
     HeadLimit: double;
@@ -44,6 +46,7 @@ type
 
     FlowingWellElevationAnnotation: string;
     FlowingWellConductanceAnnotation: string;
+    FlowingWellReductionLengthAnnotation: string;
     RateAnnotation: string;
     WellHeadAnnotation: string;
     HeadLimitAnnotation: string;
@@ -79,6 +82,7 @@ type
     FMawStatus: TMawStatus;
     FFlowingWellConductance: TFormulaObject;
     FFlowingWellElevation: TFormulaObject;
+    FFlowingWellReductionLength: TFormulaObject;
     FHeadLimit: TFormulaObject;
     FMaxRate: TFormulaObject;
     FMinRate: TFormulaObject;
@@ -90,6 +94,7 @@ type
     FRateLimitation: TRateLimitation;
     function GetFlowingWellConductance: string;
     function GetFlowingWellElevation: string;
+    function GetFlowingWellReductionLength: string;
     function GetHeadLimit: string;
     function GetMaxRate: string;
     function GetMinRate: string;
@@ -100,6 +105,7 @@ type
     procedure SetFlowingWell(const Value: TFlowingWell);
     procedure SetFlowingWellConductance(const Value: string);
     procedure SetFlowingWellElevation(const Value: string);
+    procedure SetFlowingWellReductionLength(const Value: string);
     procedure SetHeadLimit(const Value: string);
     procedure SetMawStatus(const Value: TMawStatus);
     procedure SetMaxRate(const Value: string);
@@ -133,24 +139,41 @@ type
     property Shutoff: Boolean read GetShutoff;
     property RateScaling: Boolean read GetRateScaling;
   published
+    // status
     property MawStatus: TMawStatus read FMawStatus write SetMawStatus;
+    // rate
     property Rate: string read GetRate write SetRate;
+    // well_head
     property WellHead: string read GetWellHead write SetWellHead;
-
+    // FLOWING_WELL
     property FlowingWell: TFlowingWell read FFlowingWell write SetFlowingWell;
-    property FlowingWellElevation: string read GetFlowingWellElevation write SetFlowingWellElevation;
-    property FlowingWellConductance: string read GetFlowingWellConductance write SetFlowingWellConductance;
+    // fwelev
+    property FlowingWellElevation: string read GetFlowingWellElevation
+      write SetFlowingWellElevation;
+    // fwcond
+    property FlowingWellConductance: string read GetFlowingWellConductance
+      write SetFlowingWellConductance;
+    // fwrlen
+    property FlowingWellReductionLength: string read GetFlowingWellReductionLength
+      write SetFlowingWellReductionLength;
 
     // ShutOff and RateScaling can not be used simultaneously.
     // RateLimitation chooses between no-limit, ShutOff, and RateScaling.
-    property RateLimitation: TRateLimitation read FRateLimitation write SetRateLimitation;
+    // SHUT_OFF, RATE_SCALING
+    property RateLimitation: TRateLimitation read FRateLimitation
+      write SetRateLimitation;
+    // minrate
     property MinRate: string read GetMinRate write SetMinRate;
+    // maxrate
     property MaxRate: string read GetMaxRate write SetMaxRate;
 
+    // pump_elevation
     property PumpElevation: string read GetPumpElevation write SetPumpElevation;
+    // scaling_length
     property ScalingLength: string read GetScalingLength write SetScalingLength;
-
+    // HEAD_LIMIT
     property HeadLimitChoice: Boolean read FHeadLimitChoice write SetHeadLimitChoice;
+    // head_limit
     property HeadLimit: string read GetHeadLimit write SetHeadLimit;
   end;
 
@@ -158,6 +181,7 @@ type
   protected
     FFlowingWellElevation: TModflowTimeList;
     FFlowingWellConductance: TModflowTimeList;
+    FFlowingWellReductionLength: TModflowTimeList;
     FRate: TModflowTimeList;
     FWellHead: TModflowTimeList;
     FHeadLimit: TModflowTimeList;
@@ -174,6 +198,7 @@ type
   private
     procedure InvalidateFlowingWellElevationData(Sender: TObject);
     procedure InvalidateFlowingWellConductanceData(Sender: TObject);
+    procedure InvalidateFlowingWellReductionLengthData(Sender: TObject);
     procedure InvalidateRateData(Sender: TObject);
     procedure InvalidateWellHeadData(Sender: TObject);
     procedure InvalidateHeadLimitData(Sender: TObject);
@@ -240,6 +265,8 @@ type
     function GetMawBoundary: TMawBoundary;
     function GetMvrIndex: Integer;
     function GetMvrUsed: Boolean;
+    function GetFlowingWellReductionLength: double;
+    function GetFlowingWellReductionLengthAnnotation: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -266,6 +293,8 @@ type
 
     property FlowingWellElevation: double read GetFlowingWellElevation;
     property FlowingWellConductance: double read GetFlowingWellConductance;
+    property FlowingWellReductionLength: double
+      read GetFlowingWellReductionLength;
     property Rate: double read GetRate;
     property WellHead: double read GetWellHead;
     property HeadLimit: double read GetHeadLimit;
@@ -274,8 +303,12 @@ type
     property PumpElevation: double read GetPumpElevation;
     property ScalingLength: double read GetScalingLength;
 
-    property FlowingWellElevationAnnotation: string read GetFlowingWellElevationAnnotation;
-    property FlowingWellConductanceAnnotation: string read GetFlowingWellConductanceAnnotation;
+    property FlowingWellElevationAnnotation: string
+      read GetFlowingWellElevationAnnotation;
+    property FlowingWellConductanceAnnotation: string
+      read GetFlowingWellConductanceAnnotation;
+    property FlowingWellReductionLengthAnnotation: string
+      read GetFlowingWellReductionLengthAnnotation;
     property RateAnnotation: string read GetRateAnnotation;
     property WellHeadAnnotation: string read GetWellHeadAnnotation;
     property HeadLimitAnnotation: string read GetHeadLimitAnnotation;
@@ -386,9 +419,13 @@ type
     destructor Destroy; override;
     procedure Loaded;
   published
+    // scrn_top
     property ScreenTop: string read GetScreenTop write SetScreenTop;
+    // scrn_bot
     property ScreenBottom: string read GetScreenBottom write SetScreenBottom;
+    // hk_skin
     property SkinK: string read GetSkinK write SetSkinK;
+    // radius_skin
     property SkinRadius: string read GetSkinRadius write SetSkinRadius;
   end;
 
@@ -520,6 +557,7 @@ const
   MaxRatePosition = 6;
   PumpElevationPosition = 7;
   ScalingLengthPosition = 8;
+  FlowingWellReductionLengthPostion = 9;
 
 function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
 function MawObToString(const MawOb: TMawOb): string;
@@ -585,6 +623,7 @@ resourcestring
   StrSkinRadius = 'Skin_Radius';
   StrFlowingWellElevati = 'Flowing_Well_Elevation';
   StrFlowingWellConduct = 'Flowing_Well_Conductance';
+  StrFlowingWellRedLenth = 'Flowing_Well_Reduction_Length';
   StrMultiaquiferWellRa = 'Multiaquifer_Well_Rate';
   StrMultiaquiferWellHe = 'Multiaquifer_Well_Head';
   StrHeadLimit = 'Head_Limit';
@@ -1657,6 +1696,7 @@ begin
   end;
   LocaModel.InvalidateMawFlowingWellElevation(self);
   LocaModel.InvalidateMawFlowingWellConductance(self);
+  LocaModel.InvalidateMawFlowingWellReductionLength(self);
   LocaModel.InvalidateMawWell_Rate(self);
   LocaModel.InvalidateMawWell_Head(self);
   LocaModel.InvalidateMawWell_Limit(self);
@@ -1810,6 +1850,7 @@ begin
 
   WriteCompReal(Comp, FlowingWellElevation);
   WriteCompReal(Comp, FlowingWellConductance);
+  WriteCompReal(Comp, FlowingWellReductionLength);
   WriteCompReal(Comp, Rate);
   WriteCompReal(Comp, WellHead);
   WriteCompReal(Comp, HeadLimit);
@@ -1820,6 +1861,7 @@ begin
 
   WriteCompInt(Comp, Strings.IndexOf(FlowingWellElevationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(FlowingWellConductanceAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(FlowingWellReductionLengthAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(RateAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(WellHeadAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(HeadLimitAnnotation));
@@ -1835,6 +1877,7 @@ procedure TMawTransientRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(FlowingWellElevationAnnotation);
   Strings.Add(FlowingWellConductanceAnnotation);
+  Strings.Add(FlowingWellReductionLengthAnnotation);
   Strings.Add(RateAnnotation);
   Strings.Add(WellHeadAnnotation);
   Strings.Add(HeadLimitAnnotation);
@@ -1859,6 +1902,7 @@ begin
 
   FlowingWellElevation := ReadCompReal(Decomp);
   FlowingWellConductance := ReadCompReal(Decomp);
+  FlowingWellReductionLength := ReadCompReal(Decomp);
   Rate := ReadCompReal(Decomp);
   WellHead := ReadCompReal(Decomp);
   HeadLimit := ReadCompReal(Decomp);
@@ -1869,6 +1913,7 @@ begin
 
   FlowingWellElevationAnnotation := Annotations[ReadCompInt(Decomp)];
   FlowingWellConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
+  FlowingWellReductionLengthAnnotation := Annotations[ReadCompInt(Decomp)];
   RateAnnotation := Annotations[ReadCompInt(Decomp)];
   WellHeadAnnotation := Annotations[ReadCompInt(Decomp)];
   HeadLimitAnnotation := Annotations[ReadCompInt(Decomp)];
@@ -2010,6 +2055,7 @@ begin
     HeadLimitChoice := MawSource.HeadLimitChoice;
     FlowingWellElevation := MawSource.FlowingWellElevation;
     FlowingWellConductance := MawSource.FlowingWellConductance;
+    FlowingWellReductionLength := MawSource.FlowingWellReductionLength;
     Rate := MawSource.Rate;
     WellHead := MawSource.WellHead;
     HeadLimit := MawSource.HeadLimit;
@@ -2097,11 +2143,14 @@ begin
   AnObserver := FObserverList[ScalingLengthPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateScalingLengthData;
 
+  AnObserver := FObserverList[FlowingWellReductionLengthPostion];
+  AnObserver.OnUpToDateSet := ParentCollection.InvalidateFlowingWellReductionLengthData;
+
 end;
 
 function TMawItem.BoundaryFormulaCount: integer;
 begin
-  Result := 9;
+  Result := 10;
 end;
 
 constructor TMawItem.Create(Collection: TCollection);
@@ -2111,6 +2160,7 @@ begin
   FFlowingWell := fwNotFlowing;
   FRateLimitation := rlNone;
   FHeadLimitChoice := False;
+  FlowingWellReductionLength := '1';
 end;
 
 procedure TMawItem.CreateFormulaObjects;
@@ -2125,6 +2175,7 @@ begin
   FRate := CreateFormulaObject(dso3D);
   FScalingLength := CreateFormulaObject(dso3D);
   FWellHead := CreateFormulaObject(dso3D);
+  FFlowingWellReductionLength := CreateFormulaObject(dso3D);
 
 end;
 
@@ -2134,6 +2185,7 @@ begin
   WellHead := '0';
   FlowingWellElevation := '0';
   FlowingWellConductance := '0';
+  FlowingWellReductionLength := '0';
   MinRate := '0';
   MaxRate := '0';
   PumpElevation := '0';
@@ -2164,6 +2216,8 @@ begin
       result := PumpElevation;
     ScalingLengthPosition:
       result := ScalingLength;
+    FlowingWellReductionLengthPostion:
+      result := FlowingWellReductionLength;
     else
       Assert(False);
   end;
@@ -2179,6 +2233,12 @@ function TMawItem.GetFlowingWellElevation: string;
 begin
   Result := FFlowingWellElevation.Formula;
   ResetItemObserver(FlowingWellElevationPosition);
+end;
+
+function TMawItem.GetFlowingWellReductionLength: string;
+begin
+  Result := FFlowingWellReductionLength.Formula;
+  ResetItemObserver(FlowingWellReductionLengthPostion);
 end;
 
 function TMawItem.GetHeadLimit: string;
@@ -2209,6 +2269,10 @@ begin
   else if Sender = FFlowingWellElevation then
   begin
     List.Add(FObserverList[FlowingWellElevationPosition]);
+  end
+  else if Sender = FFlowingWellReductionLength then
+  begin
+    List.Add(FObserverList[FlowingWellReductionLengthPostion]);
   end
   else if Sender = FHeadLimit then
   begin
@@ -2286,6 +2350,7 @@ begin
   begin
     PhastModel.InvalidateMawFlowingWellElevation(self);
     PhastModel.InvalidateMawFlowingWellConductance(self);
+    PhastModel.InvalidateMawFlowingWellReductionLength(self);
     PhastModel.InvalidateMawWell_Rate(self);
     PhastModel.InvalidateMawWell_Head(self);
     PhastModel.InvalidateMawWell_Limit(self);
@@ -2309,6 +2374,7 @@ begin
       and (RateLimitation = SourceItem.RateLimitation)
       and (FlowingWellElevation = SourceItem.FlowingWellElevation)
       and (FlowingWellConductance = SourceItem.FlowingWellConductance)
+      and (FlowingWellReductionLength = SourceItem.FlowingWellReductionLength)
       and (Rate = SourceItem.Rate)
       and (WellHead = SourceItem.WellHead)
       and (HeadLimit = SourceItem.HeadLimit)
@@ -2350,6 +2416,9 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FWellHead,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FFlowingWellReductionLength,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 procedure TMawItem.SetBoundaryFormula(Index: integer; const Value: string);
@@ -2373,6 +2442,8 @@ begin
       PumpElevation := Value;
     ScalingLengthPosition:
       ScalingLength := Value;
+    FlowingWellReductionLengthPostion:
+      FlowingWellReductionLength := Value;
     else
       Assert(False);
   end;
@@ -2391,6 +2462,12 @@ end;
 procedure TMawItem.SetFlowingWellElevation(const Value: string);
 begin
   UpdateFormulaBlocks(Value, FlowingWellElevationPosition, FFlowingWellElevation);
+end;
+
+procedure TMawItem.SetFlowingWellReductionLength(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, FlowingWellReductionLengthPostion,
+    FFlowingWellReductionLength);
 end;
 
 procedure TMawItem.SetHeadLimit(const Value: string);
@@ -2532,6 +2609,16 @@ begin
     FScalingLength.OnInvalidate := (Model as TCustomModel).InvalidateMawScalingLength;
   end;
   AddTimeList(FScalingLength);
+
+  FFlowingWellReductionLength := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FFlowingWellReductionLength.NonParamDescription := StrFlowingWellRedLenth;
+  FFlowingWellReductionLength.ParamDescription := StrFlowingWellRedLenth;
+  if Model <> nil then
+  begin
+    FFlowingWellReductionLength.OnInvalidate := (Model as TCustomModel).InvalidateMawWell_Head;
+  end;
+  AddTimeList(FFlowingWellReductionLength);
+
 end;
 
 destructor TMawTimeListLink.Destroy;
@@ -2545,6 +2632,7 @@ begin
   FMaxRate.Free;
   FPumpElevation.Free;
   FScalingLength.Free;
+  FFlowingWellReductionLength.Free;
 
   inherited;
 end;
@@ -2580,7 +2668,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  Assert(BoundaryFunctionIndex in [FlowingWellElevationPosition..ScalingLengthPosition]);
+  Assert(BoundaryFunctionIndex in [FlowingWellElevationPosition..FlowingWellReductionLengthPostion]);
   Assert(Expression <> nil);
 
   MawStorage := BoundaryStorage as TMawTransientStorage;
@@ -2640,6 +2728,11 @@ begin
             ScalingLength := Expression.DoubleResult;
             ScalingLengthAnnotation := ACell.Annotation;
           end;
+        FlowingWellReductionLengthPostion:
+          begin
+            FlowingWellReductionLength := Expression.DoubleResult;
+            FlowingWellReductionLengthAnnotation := ACell.Annotation;
+          end
         else
           Assert(False);
       end;
@@ -2757,6 +2850,32 @@ begin
   end;
 end;
 
+procedure TMawWellCollection.InvalidateFlowingWellReductionLengthData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TMawTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TMawTimeListLink;
+    Link.FFlowingWellReductionLength.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TMawTimeListLink;
+      Link.FFlowingWellReductionLength.Invalidate;
+    end;
+  end;
+end;
+
 procedure TMawWellCollection.InvalidateHeadLimitData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -2844,6 +2963,7 @@ begin
   begin
     PhastModel.InvalidateMawFlowingWellElevation(self);
     PhastModel.InvalidateMawFlowingWellConductance(self);
+    PhastModel.InvalidateMawFlowingWellReductionLength(self);
     PhastModel.InvalidateMawWell_Rate(self);
     PhastModel.InvalidateMawWell_Head(self);
     PhastModel.InvalidateMawWell_Limit(self);
@@ -3006,6 +3126,16 @@ begin
   result := FValues.FlowingWellElevationAnnotation
 end;
 
+function TMawCell.GetFlowingWellReductionLength: double;
+begin
+  result := FValues.FlowingWellReductionLength;
+end;
+
+function TMawCell.GetFlowingWellReductionLengthAnnotation: string;
+begin
+  result := FValues.FlowingWellReductionLengthAnnotation;
+end;
+
 function TMawCell.GetHeadLimit: double;
 begin
   result := FValues.HeadLimit
@@ -3125,6 +3255,8 @@ begin
       result := PumpElevationAnnotation;
     ScalingLengthPosition:
       result := ScalingLengthAnnotation;
+    FlowingWellReductionLengthPostion:
+      result := FlowingWellReductionLengthAnnotation;
     else
       Assert(False);
   end;
@@ -3152,6 +3284,8 @@ begin
       result := PumpElevation;
     ScalingLengthPosition:
       result := ScalingLength;
+    FlowingWellReductionLengthPostion:
+      result := FlowingWellReductionLength;
     else
       Assert(False);
   end;

@@ -84,6 +84,7 @@ type
     FTiedParamDictionary: TDictionary<TModflowParameter, TTreeNode>;
     FParameterNameNameDictionary: TDictionary<string, TModflowParameter>;
     FDragging: Boolean;
+    FDeletingGroup: Boolean;
     procedure GetData;
     procedure SetData;
     procedure UpdateParameterTable;
@@ -822,12 +823,17 @@ var
   Grid: TRbwDataGrid4;
 begin
   inherited;
-  Grid := frameParameterGroups.Grid;
-  if Grid.SelectedRow >= Grid.FixedRows  then
-  begin
-    RemoveGroup(Grid.SelectedRow);
+  FDeletingGroup := True;
+  try
+    Grid := frameParameterGroups.Grid;
+    if Grid.SelectedRow >= Grid.FixedRows  then
+    begin
+      RemoveGroup(Grid.SelectedRow);
+    end;
+    frameParameterGroups.sbDeleteClick(Sender);
+  finally
+    FDeletingGroup := False;
   end;
-  frameParameterGroups.sbDeleteClick(Sender);
 end;
 
 procedure TfrmManageParameters.frameParameterGroupsseNumberChange(
@@ -1235,7 +1241,11 @@ var
   AParamGroup: TPestParamGroup;
 begin
   Grid := frameParameterGroups.Grid;
-  if Grid.Objects[Ord(pgcName), ARow] <> nil then
+  if (ARow >= Grid.RowCount) or FDeletingGroup then
+  begin
+    Exit;
+  end;
+  if (Grid.Objects[Ord(pgcName), ARow] <> nil) then
   begin
     AParamGroup := Grid.Objects[Ord(pgcName), ARow] as TPestParamGroup;
   end
@@ -1359,7 +1369,7 @@ var
   Grid: TRbwDataGrid4;
 begin
   Grid := frameParameterGroups.Grid;
-  AGroup := Grid.Objects[ParamGroupColumn, ARow] as TPestParamGroup;
+  AGroup := Grid.Objects[Ord(pgcName), ARow] as TPestParamGroup;
   if AGroup = nil then
   begin
     Exit;
@@ -1377,7 +1387,7 @@ begin
     TreeNode.Free;
   end;
   AGroup.Free;
-  Grid.Objects[ParamGroupColumn, ARow] := nil;
+  Grid.Objects[Ord(pgcName), ARow] := nil;
 end;
 
 procedure TfrmManageParameters.UpdateListOfUntiedParamNames;

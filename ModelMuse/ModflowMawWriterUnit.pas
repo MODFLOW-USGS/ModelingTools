@@ -117,6 +117,9 @@ resourcestring
   StrMAWWellScreensInv = 'MAW Well screens invalid';
   StrNoneOfTheWellScr = 'None of the well screens of the MAW boundary define' +
   'd by %0:s intersect any active cells.';
+  StrFlowingWellReducti = 'Flowing well reduction length <= 0';
+  StrIn0sInStressPe = 'In %0:s in stress period %1:d, the flowing well reduc' +
+  'tion length is less than or equal to zero.';
 
 { TModflowMAW_Writer }
 
@@ -205,6 +208,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWSkinRadiusLess);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFormulaErrorInMAW);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellScreensInv);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFlowingWellReducti);
 
   FFlowingWells := False;
 
@@ -247,42 +251,6 @@ begin
         Exit;
       end;
 
-//      if AScreenObject.Count <> 1 then
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrTheFollowingObject,
-//          AScreenObject.Name, AScreenObject);
-//        Continue;
-//      end;
-//      if AScreenObject.ElevationCount <> ecZero then
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrECountZero,
-//          AScreenObject.Name, AScreenObject);
-//        Continue;
-//      end;
-//      if not AScreenObject.SetValuesOfIntersectedCells then
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrBecauseTheFollowin,
-//          AScreenObject.Name, AScreenObject);
-//        Continue;
-//      end;
-//      if Boundary.Values.Count = 0 then
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrNoTransientDataFo,
-//          AScreenObject.Name, AScreenObject);
-//        Continue;
-//      end;
-//      if Boundary.WellScreens.Count = 0 then
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrNoWellScreensInT,
-//          AScreenObject.Name, AScreenObject);
-//        Continue;
-//      end;
-//      if AScreenObject.Segments[Model].Count = 0 then
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrTheFollowingObjectGrid,
-//          AScreenObject.Name, AScreenObject);
-//        Continue;
-//      end;
       MawItem := Boundary.Values[0] as TMawItem;
       if MawItem.StartTime > StartTime then
       begin
@@ -446,8 +414,8 @@ begin
         begin
           WellList := Values[WellIndex];// as TValueCellList;
 //          Boundary := Well.MawBoundary;
-//          UsedIndicies := [];
-          for DataTypeIndex := FlowingWellElevationPosition to ScalingLengthPosition do
+          UsedIndicies := [];
+          for DataTypeIndex := FlowingWellElevationPosition to FlowingWellReductionLengthPostion do
           begin
 //            if Boundary.DataTypeUsed(DataTypeIndex) then
             begin
@@ -1012,6 +980,7 @@ var
   MoverWriter: TModflowMvrWriter;
   MvrReceiver: TMvrReceiver;
   MvrSource: TMvrRegisterKey;
+  AScreenObject: TScreenObject;
 begin
   if MvrWriter <> nil then
   begin
@@ -1084,6 +1053,15 @@ begin
             WriteString(' FLOWING_WELL');
             WriteFloat(ACell.FlowingWellElevation);
             WriteFloat(ACell.FlowingWellConductance);
+            WriteFloat(ACell.FlowingWellReductionLength);
+            if ACell.FlowingWellReductionLength <= 0 then
+            begin
+              AScreenObject := ACell.ScreenObject as TScreenObject;
+              frmErrorsAndWarnings.AddError(Model, StrFlowingWellReducti,
+                Format(StrIn0sInStressPe,
+                [AScreenObject.Name, StressPeriodIndex+1]),
+                AScreenObject);
+            end;
             NewLine;
           end;
       end;
