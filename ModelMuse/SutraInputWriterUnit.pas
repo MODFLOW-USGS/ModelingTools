@@ -64,7 +64,6 @@ type
     FGeneralTransportNodes: TObjectList<TList<IGeneralTransportNodes>>;
     F_NN: Integer;
     FHasLakes: Boolean;
-    FMainFileStream: TFileStream;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
     procedure WriteDataSet2A;
@@ -98,8 +97,6 @@ type
     procedure WriteDataSet21B;
     procedure WriteDataSet22;
     procedure SetHasLakes(const Value: Boolean);
-    procedure OpenTempFile(const FileName: string);
-    procedure CloseTempFile;
   protected
     class function Extension: string; override;
   public
@@ -148,14 +145,6 @@ resourcestring
 //  'nts. See section 7.2 of the SUTRA documentation.';
 
 { TSutraInputWriter }
-
-procedure TSutraInputWriter.CloseTempFile;
-begin
-  Assert(FMainFileStream <> nil);
-  FreeAndNil(FFileStream);
-  FFileStream := FMainFileStream;
-  FMainFileStream := nil;
-end;
 
 constructor TSutraInputWriter.Create(AModel: TCustomModel);
 begin
@@ -2230,14 +2219,6 @@ end;
 class function TSutraInputWriter.Extension: string;
 begin
   Assert(False);
-end;
-
-procedure TSutraInputWriter.OpenTempFile(const FileName: string);
-begin
-  Assert(FFileStream <> nil);
-  Assert(FMainFileStream = nil);
-  FMainFileStream := FFileStream;
-  FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
 end;
 
 procedure TSutraInputWriter.SetHasLakes(const Value: Boolean);

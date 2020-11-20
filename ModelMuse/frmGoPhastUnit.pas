@@ -11071,8 +11071,6 @@ begin
   end;
 end;
 
-
-
 function TfrmGoPhast.OpenAFile(const FileName: string): boolean;
 var
   TempStream: TMemoryStream;
@@ -11514,6 +11512,7 @@ begin
           end;
         end;
       end;
+      EnableManageParameters;
 
     finally
       FReadingFile := False;

@@ -19,6 +19,7 @@ type
     FRestartFile: TStreamReader;
     FOptions: TSutraOptions;
     FLimit: Integer;
+    FFileName: string;
     procedure WriteDataArray(DataArray: TDataArray);
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -35,7 +36,7 @@ implementation
 
 uses
   GoPhastTypes, SutraMeshUnit, Generics.Defaults,
-  SutraFileWriterUnit, IOUtils, Dialogs;
+  SutraFileWriterUnit, IOUtils, Dialogs, PlProcUnit;
 
 resourcestring
   StrTheRestartFileS = 'The restart file "%s" does not exist.';
@@ -67,10 +68,16 @@ var
   Mesh3D: TSutraMesh3D;
   Node3D: TSutraNode3D;
   DataValue: TDataValue;
+  ParamUsed: Boolean;
+  TempFileName: string;
+  ScriptWriter: TSutraInitCondScriptWriter;
+  DataFileWriter: TSutraNodeDataWriter;
+  Mesh: TSutraMesh3D;
 begin
   Assert(DataArray.EvaluatedAt = eaNodes);
+  ParamUsed := Model.PestUsed and DataArray.PestParametersUsed;
   DataArray.Initialize;
-  if DataArray.IsUniform = iuTrue then
+  if (DataArray.IsUniform = iuTrue) and not ParamUsed then
   begin
     WriteString('''UNIFORM''');
     NewLine;
@@ -83,58 +90,97 @@ begin
     NewLine;
     List := TDataValueList.Create;
     try
+      if ParamUsed then
+      begin
+        DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
+        try
+          DataFileWriter.WriteFile(FFileName, DataArray);
+        finally
+          DataFileWriter.Free;
+        end;
 
-      case Model.SutraMesh.MeshType of
-        mt2D, mtProfile:
-          begin
-            Mesh2D := Model.SutraMesh.Mesh2D;
-            for NodeIndex := 0 to Mesh2D.Nodes.Count - 1 do
+
+        TempFileName := ChangeFileExt(FFileName, '.' + DataArray.Name);
+        WriteString('@INSERT 99 ');
+        WriteString(ExtractFileName(TempFileName));
+        NewLine;
+        ScriptWriter := TSutraInitCondScriptWriter.Create(Model, etExport);
+        try
+          ScriptWriter.WriteFiles(FFileName, DataArray.Name);
+        finally
+          ScriptWriter.Free;
+        end;
+        Mesh := Model.SutraMesh;
+        if Mesh.MeshType = mt3D then
+        begin
+          OpenTempFile(TempFileName);
+          try
+            TempFileName := ExtractFileName(TempFileName)+ '_';
+            for LayerIndex := 1 to Mesh.LayerCount+1 do
             begin
-              DataValue := TDataValue.Create;
-              List.Add(DataValue);
-              DataValue.Value := DataArray.RealData[0,0,NodeIndex];
-              DataValue.Number := Mesh2D.Nodes[NodeIndex].Number;
+              WriteString('@INSERT 99 ');
+              WriteString(TempFileName + IntToStr(LayerIndex));
+              NewLine;
             end;
+          finally
+            CloseTempFile;
           end;
-        mt3D:
-          begin
-            Mesh3D := Model.SutraMesh;
-            Mesh2D := Mesh3D.Mesh2D;
-            for LayerIndex := 0 to Mesh3D.LayerCount do
+        end;
+      end
+      else
+      begin
+        case Model.SutraMesh.MeshType of
+          mt2D, mtProfile:
             begin
+              Mesh2D := Model.SutraMesh.Mesh2D;
               for NodeIndex := 0 to Mesh2D.Nodes.Count - 1 do
               begin
-                Node3D := Mesh3D.NodeArray[LayerIndex, NodeIndex];
-                if Node3D.Active then
+                DataValue := TDataValue.Create;
+                List.Add(DataValue);
+                DataValue.Value := DataArray.RealData[0,0,NodeIndex];
+                DataValue.Number := Mesh2D.Nodes[NodeIndex].Number;
+              end;
+            end;
+          mt3D:
+            begin
+              Mesh3D := Model.SutraMesh;
+              Mesh2D := Mesh3D.Mesh2D;
+              for LayerIndex := 0 to Mesh3D.LayerCount do
+              begin
+                for NodeIndex := 0 to Mesh2D.Nodes.Count - 1 do
                 begin
-                  DataValue := TDataValue.Create;
-                  List.Add(DataValue);
-                  DataValue.Value := DataArray.RealData[LayerIndex,0,NodeIndex];
-                  DataValue.Number := Node3D.Number;
+                  Node3D := Mesh3D.NodeArray[LayerIndex, NodeIndex];
+                  if Node3D.Active then
+                  begin
+                    DataValue := TDataValue.Create;
+                    List.Add(DataValue);
+                    DataValue.Value := DataArray.RealData[LayerIndex,0,NodeIndex];
+                    DataValue.Number := Node3D.Number;
+                  end;
                 end;
               end;
             end;
-          end;
-        else
-          Assert(False);
-      end;
-      List.Sort(TComparer<TDataValue>.Construct(
-        function (const L, R: TDataValue): integer
+          else
+            Assert(False);
+        end;
+        List.Sort(TComparer<TDataValue>.Construct(
+          function (const L, R: TDataValue): integer
+          begin
+            result := L.Number - R.Number;
+          end));
+        for index := 0 to List.Count - 1 do
         begin
-          result := L.Number - R.Number;
-        end));
-      for index := 0 to List.Count - 1 do
-      begin
-        DataValue := List[index];
-        WriteFloat(DataValue.Value);
-        if ((index + 1) mod 10) = 0 then
+          DataValue := List[index];
+          WriteFloat(DataValue.Value);
+          if ((index + 1) mod 10) = 0 then
+          begin
+            NewLine;
+          end;
+        end;
+        if (List.Count  mod 10) <> 0 then
         begin
           NewLine;
         end;
-      end;
-      if (List.Count  mod 10) <> 0 then
-      begin
-        NewLine;
       end;
     finally
       List.Free;
@@ -303,15 +349,15 @@ begin
       end;
 
 
-      FileName := ChangeFileExt(FileName, '.ics');
+      FFileName := ChangeFileExt(FileName, '.ics');
 //      FInputFileName := FileName;
-      OpenFile(FileName);
+      OpenFile(FFileName);
       try
         WriteDataSet0;
         WriteDataSet1;
         WriteDataSet2;
         WriteDataSet3;
-        SutraFileWriter.AddFile(sftIcs, FileName);
+        SutraFileWriter.AddFile(sftIcs, FFileName);
       finally
         CloseFile;
       end;

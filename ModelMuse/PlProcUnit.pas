@@ -160,6 +160,21 @@ type
     procedure WriteFiles(var AFileName: string);
   end;
 
+  TSutraInitCondScriptWriter = class(TCustomSutraPlprocFileWriter)
+  private
+    FRoot: string;
+    FFileName: string;
+    FParameterNames: TStringList;
+    FDataArrayName: string;
+    procedure WriteAFile(ScriptChoice: TScriptChoice);
+  protected
+    class function Extension: string; override;
+  public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    destructor Destroy; override;
+    procedure WriteFiles(var AFileName: string; const DataArrayName: string);
+  end;
+
 implementation
 
 uses
@@ -1806,7 +1821,7 @@ procedure TSutraData14BScriptWriter.WriteFiles(var AFileName: string);
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
-  Model.PestTemplateLines.Add(Format('plproc ''%s''', [FFileName]));
+  Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
 
@@ -2461,12 +2476,251 @@ procedure TSutraData15BScriptWriter.WriteFiles(var AFileName: string);
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
-  Model.PestTemplateLines.Add(Format('plproc ''%s''', [FFileName]));
+  Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
 
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
+end;
+
+{ TSutraInitCondScriptWriter }
+
+constructor TSutraInitCondScriptWriter.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  Assert(Model.ModelSelection in SutraSelection);
+  FParameterNames := TStringList.Create;
+end;
+
+destructor TSutraInitCondScriptWriter.Destroy;
+begin
+  FParameterNames.Free;
+  inherited;
+end;
+
+class function TSutraInitCondScriptWriter.Extension: string;
+begin
+  result := '';
+end;
+
+procedure TSutraInitCondScriptWriter.WriteAFile(ScriptChoice: TScriptChoice);
+var
+  Mesh: TSutraMesh3D;
+  LayerCount: Integer;
+  LayerIndex: Integer;
+  ColIndex: Integer;
+  ParameterIndex: Integer;
+  AParam: TModflowSteadyParameter;
+begin
+  if ScriptChoice = scWriteTemplate then
+  begin
+    FFileName := FFileName + '.tpl';
+  end;
+
+  Mesh := Model.SutraMesh;
+
+  OpenFile(FFileName);
+  try
+    if ScriptChoice = scWriteScript then
+    begin
+      WriteString('# ');
+    end;
+    WriteString('ptf ');
+    WriteString(Model.PestProperties.TemplateCharacter);
+    NewLine;
+    WriteString('#Script for PLPROC');
+    NewLine;
+    NewLine;
+
+    if Mesh.MeshType = mt3D then
+    begin
+      LayerCount := Mesh.LayerCount + 1;
+    end
+    else
+    begin
+      LayerCount := 1;
+    end;
+
+    {$REGION 'Node discretization'}
+    WriteString('#Read SUTRA node information file');
+    NewLine;
+    WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
+    NewLine;
+    WriteString('  plist=p_x;column=2, &');
+    NewLine;
+    WriteString('  plist=p_y;column=3, &');
+    NewLine;
+    WriteString('  plist=p_NN2D;column=4, &');
+    NewLine;
+    WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+    NewLine;
+    if Mesh.MeshType = mt3D then
+    begin
+      ColIndex := 5;
+      for LayerIndex := 1 to LayerCount do
+      begin
+        // PLPROC has a limit of 5 s_lists per call of read_list_file.
+        // To avoid reaching that limit, a separate call is used for each layer.
+        WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+        NewLine;
+        WriteString(Format('  plist=p_z%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+
+        WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+        NewLine;
+      end;
+    end;
+    NewLine;
+    {$ENDREGION}
+
+    WriteString('#Read data to modify');
+    NewLine;
+    {$REGION data}
+    WriteString(Format('# Read %s', [FDataArrayName]));
+    NewLine;
+    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+    NewLine;
+    ColIndex := 1;
+
+    WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
+    NewLine;
+    Inc(ColIndex);
+
+    WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, FDataArrayName]));
+    NewLine;
+
+    for LayerIndex := 1 to LayerCount do
+    begin
+      // PLPROC has a limit of 5 s_lists per call of read_list_file.
+      // To avoid reaching that limit, a separate call is used for each layer.
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+      if Mesh.MeshType = mt3D then
+      begin
+        Inc(ColIndex);
+
+        WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+        NewLine;
+        Inc(ColIndex);
+      end;
+
+      WriteString(Format('  plist=p_%2:s%0:d;column=%1:d, &', [LayerIndex, ColIndex, 'Data']));
+      NewLine;
+      Inc(ColIndex);
+
+      WriteString(Format('  slist=s_%2:sPar%0:d;column=%1:d, &', [LayerIndex, ColIndex, 'Data']));
+      NewLine;
+      Inc(ColIndex);
+      WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, FDataArrayName]));
+      NewLine;
+    end;
+    NewLine;
+    {$ENDREGION}
+
+    WriteString('#Read parameter values');
+    NewLine;
+    {$REGION 'Parameter values'}
+    for ParameterIndex := 0 to FParameterNames.Count - 1 do
+    begin
+      AParam := FParameterNames.Objects[ParameterIndex]
+        as TModflowSteadyParameter;
+      if ScriptChoice = scWriteScript then
+      begin
+        WriteString('#');
+      end;
+      WriteString(Format('%0:s = %1:s                        %0:s%1:s',
+        [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
+      NewLine;
+      if ScriptChoice = scWriteTemplate then
+      begin
+        WriteString('#');
+      end;
+      WriteString(Format('%0:s = %1:g',
+        [AParam.ParameterName, AParam.Value]));
+      NewLine;
+    end;
+    NewLine;
+    {$ENDREGION}
+
+    {$REGION 'Apply parameters'}
+    WriteString('# applying parameter values');
+    NewLine;
+    for ParameterIndex := 0 to FParameterNames.Count - 1 do
+    begin
+      AParam := FParameterNames.Objects[ParameterIndex]
+        as TModflowSteadyParameter;
+      WriteString(Format('# applying parameter %s', [AParam.ParameterName]));
+      NewLine;
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+          [LayerIndex, AParam.ParameterName, ParameterIndex+1, 'Data']));
+        NewLine;
+      end;
+      NewLine;
+    end;
+    {$ENDREGION}
+
+    WriteString('# Write new data values');
+    NewLine;
+    if Mesh.MeshType = mt3D then
+    begin
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString('write_column_data_file(header = ''no'', &');
+        NewLine;
+        WriteString(Format('  file=''%s.%2:s_%1:d'';delim="space", &',
+          [FRoot, LayerIndex, FDataArrayName]));
+        NewLine;
+        WriteString(Format('  select=(s_Active_%d == 1), &',
+          [LayerIndex]));
+        NewLine;
+        WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
+        NewLine;
+        WriteString(Format('  plist=p_%1:s%0:d)', [LayerIndex, 'Data']));
+        NewLine;
+      end;
+    end
+    else
+    begin
+      WriteString('write_column_data_file(header = ''no'', &');
+      NewLine;
+      WriteString(Format('  file=''%0:s.%1:s'';delim="space", &', [FRoot, FDataArrayName]));
+      NewLine;
+      WriteString('  clist_spec=''id'', &');
+      NewLine;
+      WriteString(Format('  plist=p_%s1)', ['Data']));
+      NewLine;
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TSutraInitCondScriptWriter.WriteFiles(var AFileName: string;
+  const DataArrayName: string);
+begin
+  FDataArrayName := DataArrayName;
+  FFileName := ChangeFileExt(AFileName, '.' + FDataArrayName + '.script');
+  Model.SutraPestScripts.Add(FFileName);
+  Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
+  FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
+  GetParameterNames(FParameterNames);
+
+  WriteAFile(scWriteScript);
+  WriteAFile(scWriteTemplate);
+
 end;
 
 end.

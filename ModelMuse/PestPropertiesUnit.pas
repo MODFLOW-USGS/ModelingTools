@@ -642,12 +642,7 @@ end;
 
 procedure TPestProperties.InitializeVariables;
 begin
-  {$IFDEF PEST}
-  // When PEST is removed, the default should be FPestUsed := False;
-  FPestUsed := True;
-  {$ELSE}
   FPestUsed := False;
-  {$ENDIF}
   FShowPilotPoints := False;
   PilotPointSpacing := 0;
   FTemplateCharacter := '@';

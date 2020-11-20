@@ -72,6 +72,7 @@ type
   strict protected
     // name is the file that is created by @classname.
     FFileStream: TFileStream;
+    FMainFileStream: TFileStream;
   private
     // See @link(Model).
     FModel: TCustomModel;
@@ -97,6 +98,8 @@ type
       MultiplierValue: double);
     procedure WritePestTemplateLine(AFileName: string);
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string);
+    procedure OpenTempFile(const FileName: string);
+    procedure CloseTempFile;
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -9033,6 +9036,22 @@ begin
       PestZoneWriter.Free;
     end;
   end;
+end;
+
+procedure TCustomFileWriter.OpenTempFile(const FileName: string);
+begin
+  Assert(FFileStream <> nil);
+  Assert(FMainFileStream = nil);
+  FMainFileStream := FFileStream;
+  FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
+end;
+
+procedure TCustomFileWriter.CloseTempFile;
+begin
+  Assert(FMainFileStream <> nil);
+  FreeAndNil(FFileStream);
+  FFileStream := FMainFileStream;
+  FMainFileStream := nil;
 end;
 
 initialization
