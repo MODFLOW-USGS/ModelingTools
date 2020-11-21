@@ -1,7 +1,7 @@
 ObsSeriesExtractor is a program for extracting simulated values from a variety of MODFLOW output files at particular times.
-The following file types are supported. MNWI output files. Gage package output files for individual streams and lakes, and output files for the Subsidence package.
+The following file types are supported. MNWI output files. Gage package output files for individual streams and lakes, and output files for the Subsidence, SFR, SWI, SWT, HOB, CHOB, DROB, RVOB, GBOB, and STOB packages.
 
-The input for ObsSeriesExtractor consists of two types of files. The first is a name file as in MODFLOW. It contains the names of the listings output file, the observations output file and one or more observation definition files. 
+The input for ObsSeriesExtractor consists of two types of files. The first is a name file as in MODFLOW. It contains the names of the listings output file, the observations output file and one or more observation definition files or observation package output files. 
 
 Structure of name file
 
@@ -18,10 +18,16 @@ BEGIN INPUT_FILES
   [SUB <MODFLOW  observation definition file name>]
   [SWT <MODFLOW SWT observation definition file name>]
   [SWI <MODFLOW SWI observation definition file name>]
+  [HOB <MODFLOW HOB output file name>]
+  [CHOB <MODFLOW CHOB output file name>]
+  [DROB <MODFLOW DROB output file name>]
+  [RVOB <MODFLOW RVOB output file name>]
+  [GBOB <MODFLOW GBOB output file name>]
+  [STOB <MODFLOW STOB output file name>]
   [DERIVED <derived observations definition file name>]
 END INPUT_FILES
 
-The input for ObsSeriesExtractor is specified in blocks. Each block starts with the keyword "Begin" followed by the block name. Each block ends with the keyword "End" followed by the block name. The keywords and blocknames are not case sensitive. Any line whose first non-whitespace character is "#" will be treated as a comment. Comments are printed to the listing file. Ultimately ObsSeriesExtractor produces an output file consisting of observation names (within quotes) followed by their simulated values.
+The input observation definition files for ObsSeriesExtractor are specified in blocks. Each block starts with the keyword "Begin" followed by the block name. Each block ends with the keyword "End" followed by the block name. The keywords and blocknames are not case sensitive. Any line whose first non-whitespace character is "#" will be treated as a comment. Comments are printed to the listing file. Ultimately ObsSeriesExtractor produces an output file consisting of observation names (within quotes) followed by their simulated values.
 
 Structure of Blocks
 

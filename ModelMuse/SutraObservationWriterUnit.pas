@@ -501,7 +501,7 @@ begin
           FObsGroups.Add(AnObsGroup);
           AnObsGroup.ObsName := AnsiString(ScreenObject.Name);
           AnObsGroup.ObservationFormat := ofOBC;
-          AnObsGroup.ObsSchedule := AnsiString(ScreenObject.Name);
+          AnObsGroup.ObsSchedule := AnsiString(SutraStateObs.ScheduleName);
           for TimeIndex := 0 to SutraStateObs.Count - 1 do
           begin
             AnObsGroup.TimeValues.Add.Value := SutraStateObs[TimeIndex].Time;

@@ -9442,6 +9442,7 @@ var
   RunModelBatchFileName: string;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
+
 begin
   case ModelSelection of
     msSutra22:
@@ -11401,6 +11402,7 @@ begin
         UpdateDataSetDimensions;
         PhastModel.FixOldModel;
         PhastModel.ModflowPackages.RipPackage.UpdateCoverageTimeLists;
+        ModelSelectionChange(nil);
 
 
         sdSaveDialog.FileName := FileName;

@@ -18,7 +18,7 @@ function ReadPvalFile(const FileName: string; List: TParamList): boolean;
 implementation
 
 uses
-  SysUtils;
+  SysUtils, ModelMuseUtilities;
 
 function ReadPvalFile(const FileName: string; List: TParamList): boolean;
 var
@@ -27,7 +27,7 @@ var
   Index: Integer;
   AName: string;
   Value: string;
-  AValue: double;
+  AValue: Extended;
   Sep: Char;
   Item: TParamItem;
   LineIndex: Integer;
@@ -88,7 +88,7 @@ begin
                 end;
                 AName := Trim(Copy(ALine, 1, SpacePos));
                 Value := Trim(Copy(ALine, SpacePos+1, MaxInt));
-                if TryStrToFloat(Value, AValue) then
+                if TryFortranStrToFloat(Value, AValue) then
                 begin
                   Item := TParamItem.Create;
                   Item.Name := AName;

@@ -56,11 +56,22 @@ var
   FirstItem: IObservationItem;
   SecondItem: IObservationItem;
   ErrorMessage: string;
+  ObsItemList: TObservationInterfaceList;
+  ItemIndex: Integer;
+  ObsItem: IObservationItem;
 begin
+
   frmErrorsAndWarnings.RemoveWarningGroup(FModel, StrUnableToExportObs);
   FDerivedObservationLines := FModel.DerivedObservationLines;
   ObsItemDictionary := TObsItemDictionary.Create;
+  ObsItemList:=  TObservationInterfaceList.Create;
   try
+    FModel.FillObsInterfaceItemList(ObsItemList);
+    for ItemIndex := 0 to ObsItemList.Count - 1 do
+    begin
+      ObsItem := ObsItemList[ItemIndex];
+      ObsItemDictionary.Add(ObsItem.GUID, ObsItem);
+    end;
     for ScreenObjectIndex := 0 to FModel.ScreenObjectCount - 1 do
     begin
       AScreenObject := FModel.ScreenObjects[ScreenObjectIndex];
@@ -69,11 +80,11 @@ begin
       begin
         CalibrationObservations :=
           AScreenObject.Modflow6Obs.CalibrationObservations;
-        for ObsIndex := 0 to CalibrationObservations.Count - 1 do
-        begin
-          Item := CalibrationObservations[ObsIndex];
-          ObsItemDictionary.Add(Item.GUID, Item);
-        end;
+//        for ObsIndex := 0 to CalibrationObservations.Count - 1 do
+//        begin
+//          Item := CalibrationObservations[ObsIndex];
+//          ObsItemDictionary.Add(Item.GUID, Item);
+//        end;
 
         for CompIndex := 0 to CalibrationObservations.Comparisons.Count - 1 do
         begin
@@ -146,6 +157,7 @@ begin
     end;    
   finally
     ObsItemDictionary.Free;
+    ObsItemList.Free;
   end;
 end;
 
