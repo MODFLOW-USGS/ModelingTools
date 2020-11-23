@@ -248,6 +248,8 @@ resourcestring
   StrTheClipboardConten = 'The clipboard contents were not a valid image set' +
   'ting.';
   StrDefaultSettingPrefix = 'Setting_';
+  StrTheSideViewCanNo = 'The side view can not be visualized in this model t' +
+  'ype.';
 
 const
   StrSP = '%SP';
@@ -926,6 +928,13 @@ begin
       end;
     vdSide:
       begin
+        if (frmGoPhast.ModelSelection in SutraSelection)
+          or frmGoPhast.PhastModel.DisvUsed then
+        begin
+          Beep;
+          MessageDlg(StrTheSideViewCanNo, mtWarning, [mbOK], 0);
+          Exit;
+        end;
         seImageHeight.AsInteger := frmGoPhast.frameSideView.ZoomBox.Width;
         seImageWidth.AsInteger := frmGoPhast.frameSideView.ZoomBox.Height;
       end;
@@ -2068,11 +2077,22 @@ var
   CanvasWidth: Integer;
   CanvasHeight: Integer;
   DrawingRect: TRect;
+  ViewDirection: TViewDirection;
 begin
   if not FCanDraw then
   begin
     Exit;
   end;
+  ViewDirection := TViewDirection(comboView.ItemIndex);
+  if (ViewDirection = vdSide) and
+    ((frmGoPhast.ModelSelection in SutraSelection)
+    or frmGoPhast.PhastModel.DisvUsed) then
+  begin
+    Beep;
+    MessageDlg(StrTheSideViewCanNo, mtWarning, [mbOK], 0);
+    Exit;
+  end;
+
   BitMap := TBitMap.Create;
   try
     BitMap.Width := seImageWidth.AsInteger;

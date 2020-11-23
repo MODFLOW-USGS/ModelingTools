@@ -10092,6 +10092,10 @@ const
 //    '4.3.0.24' Bug fix: Fixed export of MAW package when flowing wells were
 //                used.
 
+//               Bug fix: Fixed a bug that could cause an access violation in
+//                the Export Image dialog box if the user attempts to generate
+//                a side view image of a MODFLOW 6 DISV model.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.24';

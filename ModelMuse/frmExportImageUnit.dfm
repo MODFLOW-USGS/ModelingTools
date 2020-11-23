@@ -394,7 +394,6 @@ inherited frmExportImage: TfrmExportImage
         Caption = '&View'
         TabOrder = 2
         OnExpand = cpViewExpand
-        ExplicitWidth = 185
         object Panel3: TPanel
           Left = 0
           Top = 0
@@ -424,8 +423,8 @@ inherited frmExportImage: TfrmExportImage
             Caption = 'Model image &width (pixels)'
           end
           object comboView: TComboBox
-            Left = 4
-            Top = 21
+            Left = 3
+            Top = 24
             Width = 195
             Height = 26
             Style = csDropDownList
