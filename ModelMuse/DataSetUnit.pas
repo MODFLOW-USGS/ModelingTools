@@ -885,6 +885,8 @@ type
     property OnShouldUseOnInitialize: TCheckUsageEvent
       read FOnShouldUseOnInitialize write SetOnShouldUseOnInitialize;
     procedure AssignValuesWithScreenObjects;
+    // The data set named @name will hold the names of parameters that apply
+    // to a @classname
     property ParamDataSetName: string read GetParamDataSetName;
   published
     // @name indicates the hierarchical position of this instance of

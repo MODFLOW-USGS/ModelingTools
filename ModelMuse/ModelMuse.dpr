@@ -717,7 +717,8 @@ uses
   PestObsGroupUnit in 'PestObsGroupUnit.pas',
   frameParentChildUnit in 'frameParentChildUnit.pas' {frameParentChild: TFrame},
   frmRunPestUnit in 'frmRunPestUnit.pas' {frmRunPest},
-  ObsInterfaceUnit in 'ObsInterfaceUnit.pas';
+  ObsInterfaceUnit in 'ObsInterfaceUnit.pas',
+  PestPilotPointFileWriterUnit in 'PestPilotPointFileWriterUnit.pas';
 
 {$R *.res}
 

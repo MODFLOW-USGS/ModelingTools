@@ -1074,7 +1074,10 @@ begin
         NewLine;
       end;
 
-      if ACell.MawStatus in [mwInactive, mwConstantHead] then
+        // Formerly, head was exported for inactive cells.
+        // Was this to compensate for a bug in MODFLOW that has now been fixed?
+//      if ACell.MawStatus in [mwInactive, mwConstantHead] then
+      if ACell.MawStatus = mwConstantHead then
       begin
         WriteInteger(ACell.WellNumber);
         WriteString(' WELL_HEAD');

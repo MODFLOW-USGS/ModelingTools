@@ -2020,7 +2020,15 @@ begin
         CreateParticle;
       end;
     finally
-      CloseFile(FTextFile);
+      try
+        CloseFile(FTextFile);
+      except on E: EInOutError do
+        begin
+          Beep;
+          MessageDlg(Format(StrThereWasAnErrorW, [E.Message]), mtError, [mbOK], 0);
+//          Exit;
+        end;
+      end;
     end;
   end
   else
@@ -7912,7 +7920,15 @@ begin
     end;
   finally
     Splitter.Free;
-    CloseFile(FTextFile);
+    try
+      CloseFile(FTextFile);
+    except on E: EInOutError do
+      begin
+        Beep;
+        MessageDlg(Format(StrThereWasAnErrorW, [E.Message]), mtError, [mbOK], 0);
+//        Exit;
+      end;
+    end;
   end;
 
   UpdateMinMaxTime(LinesV6);
@@ -8099,135 +8115,135 @@ begin
   AssignFile(FTextFile, FFileName);
   try
     try
-    Splitter.Delimiter := ' ';
-    Reset(FTextFile);
-    Readln(FTextFile, ALine);
-    if Trim(ALine) <> 'MODPATH_PATHLINE_FILE         7         2' then
-    begin
-      Beep;
-      MessageDlg(StrThereIsSomethingW, mtError, [mbOK], 0);
-      Exit;
-    end;
-    Assert(Trim(ALine) = 'MODPATH_PATHLINE_FILE         7         2');
-    Inc(LineIndex);
-    Readln(FTextFile, TrackDirection, RefTime, XOrigin, YOrigin, AngRot);
-    Inc(LineIndex);
+      Splitter.Delimiter := ' ';
+      Reset(FTextFile);
+      Readln(FTextFile, ALine);
+      if Trim(ALine) <> 'MODPATH_PATHLINE_FILE         7         2' then
+      begin
+        Beep;
+        MessageDlg(StrThereIsSomethingW, mtError, [mbOK], 0);
+        Exit;
+      end;
+      Assert(Trim(ALine) = 'MODPATH_PATHLINE_FILE         7         2');
+      Inc(LineIndex);
+      Readln(FTextFile, TrackDirection, RefTime, XOrigin, YOrigin, AngRot);
+      Inc(LineIndex);
 
-    if LocalModel.ModelSelection <> msModflow2015 then
-    begin
-      // Even if a grid metadata file is present, the data from it is not
-      // recorded in the pathlinle file.
-      APoint2D := Grid.TwoDElementCorner(0, Grid.RowCount);
-      XOrigin := APoint2D.x;
-      YOrigin := APoint2D.y;
-      AngRot := Grid.GridAngle * 180 / Pi;
-    end;
+      if LocalModel.ModelSelection <> msModflow2015 then
+      begin
+        // Even if a grid metadata file is present, the data from it is not
+        // recorded in the pathlinle file.
+        APoint2D := Grid.TwoDElementCorner(0, Grid.RowCount);
+        XOrigin := APoint2D.x;
+        YOrigin := APoint2D.y;
+        AngRot := Grid.GridAngle * 180 / Pi;
+      end;
 
-    Origin.X := XOrigin;
-    Origin.Y := YOrigin;
+      Origin.X := XOrigin;
+      Origin.Y := YOrigin;
 
-    case TrackDirection of
-      1:
-        begin
-          TrackingDirectionV6 := tdForward;
-        end;
-      2:
-        begin
-          TrackingDirectionV6 := tdBackward;
-        end;
-      else Assert(False);
-    end;
-    ReferenceTimeV6 := RefTime;
+      case TrackDirection of
+        1:
+          begin
+            TrackingDirectionV6 := tdForward;
+          end;
+        2:
+          begin
+            TrackingDirectionV6 := tdBackward;
+          end;
+        else Assert(False);
+      end;
+      ReferenceTimeV6 := RefTime;
 
-    Readln(FTextFile, ALine);
-    Inc(LineIndex);
-    Assert(Trim(ALine) = 'END HEADER');
-
-    ODistance := Sqrt(Sqr(Origin.X) + Sqr(Origin.Y));
-    OAngle := ArcTan2(Origin.x, Origin.y);
-    XOffSet := Sin(AngRot/180*Pi + OAngle)*ODistance;
-    YOffSet := Cos(AngRot/180*Pi + OAngle)*ODistance;
-
-    FirstLine := True;
-    While Not Eof(FTextFile) do
-    begin
       Readln(FTextFile, ALine);
       Inc(LineIndex);
-      if ALine <> '' then
+      Assert(Trim(ALine) = 'END HEADER');
+
+      ODistance := Sqrt(Sqr(Origin.X) + Sqr(Origin.Y));
+      OAngle := ArcTan2(Origin.x, Origin.y);
+      XOffSet := Sin(AngRot/180*Pi + OAngle)*ODistance;
+      YOffSet := Cos(AngRot/180*Pi + OAngle)*ODistance;
+
+      FirstLine := True;
+      While Not Eof(FTextFile) do
       begin
-        Splitter.DelimitedText := ALine;
-        Assert(Splitter.Count = 4);
-
-        SequenceNumber := StrToInt(Splitter[0]);
-        ParticleGroup := StrToInt(Splitter[1]);
-        ParticleIndex := StrToInt(Splitter[2]);
-        ParticleCount := StrToInt(Splitter[3]);
-
-        for PIndex := 0 to ParticleCount - 1 do
+        Readln(FTextFile, ALine);
+        Inc(LineIndex);
+        if ALine <> '' then
         begin
-          Readln(FTextFile, ALine);
-          Inc(LineIndex);
-          if ALine = '' then
-          begin
-            Beep;
-            MessageDlg(Format(StrErrorPrematureTer, [LineIndex]), mtError, [mbOK], 0);
-          end;
           Splitter.DelimitedText := ALine;
-          if Splitter.Count <> 11 then
+          Assert(Splitter.Count = 4);
+
+          SequenceNumber := StrToInt(Splitter[0]);
+          ParticleGroup := StrToInt(Splitter[1]);
+          ParticleIndex := StrToInt(Splitter[2]);
+          ParticleCount := StrToInt(Splitter[3]);
+
+          for PIndex := 0 to ParticleCount - 1 do
           begin
-            Beep;
-            MessageDlg(StrThereIsSomethingW, mtError, [mbOK], 0);
-            Exit;
-          end;
-          Assert(Splitter.Count = 11, Format(StrErrorReadingTheFo, [LineIndex,ALine]));
+            Readln(FTextFile, ALine);
+            Inc(LineIndex);
+            if ALine = '' then
+            begin
+              Beep;
+              MessageDlg(Format(StrErrorPrematureTer, [LineIndex]), mtError, [mbOK], 0);
+            end;
+            Splitter.DelimitedText := ALine;
+            if Splitter.Count <> 11 then
+            begin
+              Beep;
+              MessageDlg(StrThereIsSomethingW, mtError, [mbOK], 0);
+              Exit;
+            end;
+            Assert(Splitter.Count = 11, Format(StrErrorReadingTheFo, [LineIndex,ALine]));
 
-          CellNumber := StrToInt(Splitter[0]);
-          XPrime := FortranStrToFloat(Splitter[1]);
-          YPrime := FortranStrToFloat(Splitter[2]);
-          Z := FortranStrToFloat(Splitter[3]);
-          Time := FortranStrToFloat(Splitter[4]);
-          LocalX := FortranStrToFloat(Splitter[5]);
-          LocalY := FortranStrToFloat(Splitter[6]);
-          LocalZ := FortranStrToFloat(Splitter[7]);
-          Layer := StrToInt(Splitter[8]);
-          StressPeriod := StrToInt(Splitter[9]);
-          TimeStep := StrToInt(Splitter[10]);
-//
-//          ParticleGroup := StrToInt(Splitter[1]);
-//          TimePointIndex := StrToInt(Splitter[2]);
-//          TS := StrToInt(Splitter[3]);
-//          Column := StrToInt(Splitter[10]);
-//          GridIndex := StrToInt(Splitter[11]);
+            CellNumber := StrToInt(Splitter[0]);
+            XPrime := FortranStrToFloat(Splitter[1]);
+            YPrime := FortranStrToFloat(Splitter[2]);
+            Z := FortranStrToFloat(Splitter[3]);
+            Time := FortranStrToFloat(Splitter[4]);
+            LocalX := FortranStrToFloat(Splitter[5]);
+            LocalY := FortranStrToFloat(Splitter[6]);
+            LocalZ := FortranStrToFloat(Splitter[7]);
+            Layer := StrToInt(Splitter[8]);
+            StressPeriod := StrToInt(Splitter[9]);
+            TimeStep := StrToInt(Splitter[10]);
+  //
+  //          ParticleGroup := StrToInt(Splitter[1]);
+  //          TimePointIndex := StrToInt(Splitter[2]);
+  //          TS := StrToInt(Splitter[3]);
+  //          Column := StrToInt(Splitter[10]);
+  //          GridIndex := StrToInt(Splitter[11]);
 
 
-          CreateParticle;
+            CreateParticle;
 
-          if FirstLine then
-          begin
-            MinParticleGroup := ParticleGroup;
-            MaxParticleGroup := ParticleGroup;
-            FirstLine := False;
-          end
-          else
-          begin
-            if ParticleGroup < MinParticleGroup then
+            if FirstLine then
             begin
               MinParticleGroup := ParticleGroup;
-            end;
-            if ParticleGroup > MaxParticleGroup then
-            begin
               MaxParticleGroup := ParticleGroup;
+              FirstLine := False;
+            end
+            else
+            begin
+              if ParticleGroup < MinParticleGroup then
+              begin
+                MinParticleGroup := ParticleGroup;
+              end;
+              if ParticleGroup > MaxParticleGroup then
+              begin
+                MaxParticleGroup := ParticleGroup;
+              end;
             end;
+
           end;
 
+
+
+  //        LineSegmentIndex := StrToInt(Splitter[15]);
+
         end;
-
-
-
-//        LineSegmentIndex := StrToInt(Splitter[15]);
-
       end;
-    end;
     except on E: EInOutError do
       begin
         Beep;
@@ -8237,7 +8253,15 @@ begin
     end;
   finally
     Splitter.Free;
-    CloseFile(FTextFile);
+    try
+      CloseFile(FTextFile);
+    except on E: EInOutError do
+      begin
+        Beep;
+        MessageDlg(Format(StrThereWasAnErrorW, [E.Message]), mtError, [mbOK], 0);
+//        Exit;
+      end;
+    end;
   end;
 
   UpdateMinMaxTime(LinesV7);

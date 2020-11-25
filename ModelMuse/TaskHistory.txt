@@ -402,7 +402,7 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Observation Utility'
-      Display = True
+      Display = False
     end
     item
       Name = 'MVR'
@@ -426,7 +426,7 @@ object TTaskHistory
     end
     item
       Name = 'GW_Chart'
-      Display = True
+      Display = False
     end
     item
       Name = 'Head obs for MF6'
@@ -458,6 +458,10 @@ object TTaskHistory
     end
     item
       Name = 'Model Viewer SUTRA 4'
+      Display = True
+    end
+    item
+      Name = 'PEST Pilot Points'
       Display = True
     end>
   History = <
@@ -26552,5 +26556,12 @@ object TTaskHistory
       Categories.Strings = (
         'Design and Planning'
         'Bug fix')
+    end
+    item
+      Date = 44159.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'PEST Pilot Points'
+        'PEST')
     end>
 end

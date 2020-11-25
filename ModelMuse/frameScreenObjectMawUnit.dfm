@@ -932,7 +932,6 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitTop = 58
           ColWidths = (
             64
             64

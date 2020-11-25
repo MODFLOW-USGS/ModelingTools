@@ -45,8 +45,8 @@ var
   AScreenObject: TScreenObject;
   ObsItemDictionary: TObsItemDictionary;
   CalibrationObservations: TMf6CalibrationObservations;
-  ObsIndex: Integer;
-  Item: TMf6CalibrationObs;
+//  ObsIndex: Integer;
+//  Item: TMf6CalibrationObs;
   CompItem: TObsCompareItem;
   Obs1: TMf6CalibrationObs;
   Obs2: TMf6CalibrationObs;

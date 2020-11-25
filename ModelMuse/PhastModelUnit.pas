@@ -2441,6 +2441,8 @@ that affects the model output should also have a comment. }
       Column: Integer): TDualLocation;
     function GetActiveElement(Layer, Row, Column: Integer): Boolean;
     function GetDiscretization: TCustomDiscretization;
+    function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
+      Row: integer): TPoint2D;
     //    procedure OnNodeActiveDataSetChanged(Sender: TObject);
 //    procedure SetGeoRefFileName(const Value: string);
   protected
@@ -3323,6 +3325,9 @@ that affects the model output should also have a comment. }
     procedure FillFluxObsList(List: TFluxObservationList);
     procedure FillHobList(List: THobList);
     procedure UpdateHobGroupNames;
+    property ItemTopLocation[const EvalAt: TEvaluatedAt; const Column,
+      Row: integer]: TPoint2D read GetItemTopLocation;
+    function PointToCell(EvalAt: TEvaluatedAt; APoint: TPoint2D): T2DTopCell;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -10091,14 +10096,16 @@ const
 //                in models that contain nonsimulated layers.
 //    '4.3.0.24' Bug fix: Fixed export of MAW package when flowing wells were
 //                used.
-
-//               Bug fix: Fixed a bug that could cause an access violation in
+//    '4.3.0.25' Bug fix: Fixed a bug that could cause an access violation in
 //                the Export Image dialog box if the user attempts to generate
 //                a side view image of a MODFLOW 6 DISV model.
+//               Bug fix: Fixed bug in export of MAW package input that could
+//                cause MODFLOW 6 to stop with an error message for inactive
+//                wells.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.24';
+  IIModelVersion = '4.3.0.25';
 
 function IModelVersion: string;
 begin
@@ -36923,6 +36930,50 @@ begin
   end;
 end;
 
+function TCustomModel.PointToCell(EvalAt: TEvaluatedAt;
+  APoint: TPoint2D): T2DTopCell;
+begin
+  case ModelSelection of
+    msUndefined:
+      begin
+        Assert(False);
+      end;
+    msPhast, msModflow, msModflowLGR, msModflowLGR2,
+    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint:
+      begin
+        result := Grid.TopContainingCell(APoint, EvalAt, False);
+      end;
+    msSutra22, msSutra30:
+      begin
+        case EvalAt of
+          eaBlocks:
+            begin
+              result := SutraMesh.Mesh2D.Nodes.TopContainingCell(APoint);
+            end;
+          eaNodes:
+            begin
+              result := SutraMesh.Mesh2D.Elements.TopContainingElement(APoint);
+            end;
+          else
+            Assert(False);
+        end;
+      end;
+    msModflow2015:
+      begin
+        if DisvUsed then
+        begin
+          result := DisvGrid.TopContainingCellOrElement(APoint, EvalAt);
+        end
+        else
+        begin
+          result := Grid.TopContainingCell(APoint, EvalAt, False);
+        end;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 function TCustomModel.PorosityUsed(Sender: TObject): boolean;
 begin
   result := (ModelSelection = msPhast)
@@ -39497,6 +39548,39 @@ function TCustomModel.GetHeadObsResults: THeadObsCollection;
 begin
   CreateHeadObsResults;
   result := FHeadObsResults;
+end;
+
+function TCustomModel.GetItemTopLocation(const EvalAt: TEvaluatedAt;
+  const Column, Row: integer): TPoint2D;
+begin
+  case ModelSelection of
+    msUndefined:
+      begin
+        Assert(False);
+      end;
+    msPhast, msModflow, msModflowLGR, msModflowLGR2,
+    msModflowNWT, msModflowFmp, msModflowCfp, msFootPrint:
+      begin
+        result := Grid.ItemTopLocation[EvalAt, Column, Row];
+      end;
+    msSutra22, msSutra30:
+      begin
+        result := SutraMesh.ItemTopLocation[EvalAt, Column, Row];
+      end;
+    msModflow2015:
+      begin
+        if DisvUsed then
+        begin
+          result := DisvGrid.ItemTopLocation[EvalAt, Column, Row];
+        end
+        else
+        begin
+          result := Grid.ItemTopLocation[EvalAt, Column, Row];
+        end;
+      end;
+    else
+      Assert(False);
+  end;
 end;
 
 function TCustomModel.GetLayerGroupByLayer(const Layer: integer): TLayerGroup;

@@ -843,7 +843,10 @@ begin
         end;
       wfSpecifiedHead:
         begin
-          CanSelect := MawStatus in [mwInactive, mwConstantHead];
+        // Formerly, head was exported for inactive cells.
+        // Was this to compensate for a bug in MODFLOW that has now been fixed?
+//          CanSelect := MawStatus in [mwInactive, mwConstantHead];
+          CanSelect := MawStatus = mwConstantHead;
         end;
       wfFlowingWell:
         begin
