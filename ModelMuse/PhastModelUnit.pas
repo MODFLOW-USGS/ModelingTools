@@ -2915,7 +2915,6 @@ that affects the model output should also have a comment. }
     property LayerStructure: TLayerStructure read GetLayerStructure
       write SetLayerStructure;
 
-
     property ModflowStressPeriods: TModflowStressPeriods
       read GetModflowStressPeriods write SetModflowStressPeriods;
 
@@ -10102,10 +10101,22 @@ const
 //               Bug fix: Fixed bug in export of MAW package input that could
 //                cause MODFLOW 6 to stop with an error message for inactive
 //                wells.
+//    '4.3.0.26' Bug fix: If an SWR Reach boundary did not define data for some
+//                stress periods, ModelMuse now defines inactive reaches for
+//                those stress periods.
+//               Enhancement: In the Rearrange Objects dialog box, it is now
+//                possible to specify the order of objects by entering a new
+//                position in a new third column in the grid.
+
+//               Bug fix: Fixed bug in drawing contours that could cause a
+//                range check error.
+//               Bug fix: If there is an out of memory error when drawing the
+//                3D view, the 3D view will be hidden until ModelMuse is
+//                restarted.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.25';
+  IIModelVersion = '4.3.0.26';
 
 function IModelVersion: string;
 begin

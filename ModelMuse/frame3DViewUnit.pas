@@ -114,7 +114,8 @@ uses frmGoPhastUnit, CursorsFoiledAgain, Math, frmColorsUnit,
   VectorDisplayUnit, DrawMeshTypesUnit;
 
 resourcestring
-  StrErrorInRenderS = 'Error in Render'#13'%s';
+  StrErrorInRenderS = 'The 3D view encountered an error and will be hidden '
+  + 'until you restart ModelMuse. The error message was "%s."';
 
 const
   PanFactor = 0.25;
@@ -706,7 +707,13 @@ begin
 
   errorCode := glGetError;
   if errorCode <> GL_NO_ERROR then
-    raise Exception.Create(Format(StrErrorInRenderS, [gluErrorString(errorCode)]));
+  begin
+    glWidModelView.Visible := False;
+    Beep;
+    MessageDlg(Format(StrErrorInRenderS, [gluErrorString(errorCode)]),
+      mtError, [mbOK], 0);
+//    raise Exception.Create(Format(StrErrorInRenderS, [gluErrorString(errorCode)]));
+  end;
 end;
 
 procedure Tframe3DView.RecordAxes;

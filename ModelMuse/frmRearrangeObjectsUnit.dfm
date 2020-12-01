@@ -3,59 +3,26 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
   Top = 235
   HelpType = htKeyword
   HelpKeyword = 'Rearrange_Objects_Dialog_Box'
-  ActiveControl = sgObjects
   Caption = 'Rearrange Objects'
   ClientHeight = 400
-  ClientWidth = 321
-  ExplicitWidth = 339
-  ExplicitHeight = 445
-  PixelsPerInch = 120
+  ClientWidth = 428
+  ExplicitWidth = 444
+  ExplicitHeight = 439
+  PixelsPerInch = 96
   TextHeight = 18
-  object sgObjects: TStringGrid
-    Left = 0
-    Top = 105
-    Width = 321
-    Height = 196
-    Align = alClient
-    ColCount = 2
-    DefaultColWidth = 20
-    FixedColor = 14803425
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowMoving, goEditing]
-    TabOrder = 1
-    OnDrawCell = sgObjectsDrawCell
-    OnMouseDown = sgObjectsMouseDown
-    OnMouseMove = sgObjectsMouseMove
-    OnMouseUp = sgObjectsMouseUp
-    OnMouseWheelDown = sgObjectsMouseWheelDown
-    OnMouseWheelUp = sgObjectsMouseWheelUp
-    OnSelectCell = sgObjectsSelectCell
-    ExplicitWidth = 311
-    ExplicitHeight = 192
-    ColWidths = (
-      20
-      20)
-    RowHeights = (
-      24
-      24
-      24
-      24
-      24)
-  end
   object pnlBottom: TPanel
     Left = 0
     Top = 301
-    Width = 321
+    Width = 428
     Height = 99
     Align = alBottom
     ParentColor = True
-    TabOrder = 2
-    ExplicitTop = 297
-    ExplicitWidth = 311
+    TabOrder = 1
     DesignSize = (
-      321
+      428
       99)
     object btnCancel: TBitBtn
-      Left = 222
+      Left = 329
       Top = 55
       Width = 91
       Height = 33
@@ -63,10 +30,9 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 212
     end
     object btnOK: TBitBtn
-      Left = 125
+      Left = 232
       Top = 55
       Width = 91
       Height = 33
@@ -75,10 +41,9 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 115
     end
     object btnHelp: TBitBtn
-      Left = 28
+      Left = 135
       Top = 55
       Width = 91
       Height = 33
@@ -87,12 +52,11 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 18
     end
     object rgShow: TRadioGroup
       Left = 8
       Top = 6
-      Width = 305
+      Width = 412
       Height = 43
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Show'
@@ -104,25 +68,23 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
         'Selected')
       TabOrder = 0
       OnClick = rgShowClick
-      ExplicitWidth = 295
     end
   end
   object pnlInstructions: TPanel
     Left = 0
     Top = 0
-    Width = 321
+    Width = 428
     Height = 105
     Align = alTop
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 311
     DesignSize = (
-      321
+      428
       105)
     object lblInstructions: TLabel
       Left = 8
       Top = 0
-      Width = 286
+      Width = 370
       Height = 90
       Anchors = [akLeft, akTop, akRight]
       Caption = 
@@ -131,5 +93,112 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
         're listed from back to front.'
       WordWrap = True
     end
+  end
+  object sgObjects: TRbwDataGrid4
+    Left = 0
+    Top = 105
+    Width = 428
+    Height = 196
+    Align = alClient
+    ColCount = 3
+    DefaultColWidth = 20
+    FixedCols = 1
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor]
+    TabOrder = 2
+    OnDrawCell = sgObjectsDrawCell
+    OnExit = sgObjectsExit
+    OnMouseDown = sgObjectsMouseDown
+    OnMouseMove = sgObjectsMouseMove
+    OnMouseUp = sgObjectsMouseUp
+    OnMouseWheelDown = sgObjectsMouseWheelDown
+    OnMouseWheelUp = sgObjectsMouseWheelUp
+    OnSelectCell = sgObjectsSelectCell
+    ExtendedAutoDistributeText = False
+    AutoMultiEdit = False
+    AutoDistributeText = True
+    AutoIncreaseColCount = False
+    AutoIncreaseRowCount = False
+    SelectedRowOrColumnColor = clAqua
+    UnselectableColor = clBtnFace
+    ColorRangeSelection = False
+    Columns = <
+      item
+        AutoAdjustRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -11
+        ButtonFont.Name = 'Tahoma'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4String
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
+      end
+      item
+        AutoAdjustRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -11
+        ButtonFont.Name = 'Tahoma'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4String
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = False
+      end
+      item
+        AutoAdjustRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -11
+        ButtonFont.Name = 'Tahoma'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = True
+        ComboUsed = False
+        Format = rcf4Integer
+        LimitToList = False
+        Max = 1.000000000000000000
+        MaxLength = 0
+        Min = 1.000000000000000000
+        ParentButtonFont = False
+        WordWrapCaptions = True
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
+      end>
+    WordWrapRowCaptions = False
+    RowHeights = (
+      61
+      24
+      24
+      24
+      24)
   end
 end

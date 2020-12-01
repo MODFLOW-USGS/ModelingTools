@@ -1360,6 +1360,7 @@ procedure TMultipleContourCreator.GetContouringParameters(
 var
   UsedMin: Double;
   UsedMax: Double;
+  ErrorEncountered: Boolean;
 begin
   if DataSet.ContourLimits.LogTransform then
   begin
@@ -1380,25 +1381,35 @@ begin
   begin
     DesiredSpacing := Abs(DataSet.ContourInterval.Value);
   end;
-  SmallestContour := Round(UsedMin / DesiredSpacing) * DesiredSpacing;
-  while (SmallestContour > UsedMin) do
-  begin
-    SmallestContour := SmallestContour - DesiredSpacing;
-  end;
-  while (SmallestContour < UsedMin) do
-  begin
-    SmallestContour := SmallestContour + DesiredSpacing;
-  end;
-  LargestContour := Round(UsedMax / DesiredSpacing) * DesiredSpacing;
-  while (LargestContour < UsedMax) do
-  begin
-    LargestContour := LargestContour + DesiredSpacing;
-  end;
-  while (LargestContour > UsedMax) do
-  begin
-    LargestContour := LargestContour - DesiredSpacing;
-  end;
-  RequiredSize := Round((LargestContour - SmallestContour) / DesiredSpacing) + 1;
+  repeat
+    ErrorEncountered := False;
+    SmallestContour := Round(UsedMin / DesiredSpacing) * DesiredSpacing;
+    while (SmallestContour > UsedMin) do
+    begin
+      SmallestContour := SmallestContour - DesiredSpacing;
+    end;
+    while (SmallestContour < UsedMin) do
+    begin
+      SmallestContour := SmallestContour + DesiredSpacing;
+    end;
+    LargestContour := Round(UsedMax / DesiredSpacing) * DesiredSpacing;
+    while (LargestContour < UsedMax) do
+    begin
+      LargestContour := LargestContour + DesiredSpacing;
+    end;
+    while (LargestContour > UsedMax) do
+    begin
+      LargestContour := LargestContour - DesiredSpacing;
+    end;
+    try
+      RequiredSize := Round((LargestContour - SmallestContour) / DesiredSpacing) + 1;
+    except on ERangeError do
+      begin
+        ErrorEncountered := True;
+        DesiredSpacing := DesiredSpacing *10;
+      end;
+    end;
+  until not ErrorEncountered;
 end;
 
 procedure TMultipleContourCreator.GetSpecifiedMinMax(var MinValue,

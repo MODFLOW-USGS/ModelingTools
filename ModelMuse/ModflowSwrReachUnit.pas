@@ -257,6 +257,7 @@ type
     procedure LinkGroupNumber;
     procedure LinkRoutingType;
     procedure SetObjectObs(const Value: TSwrObsTypes);
+    procedure EnsureRequiredItemsPresent;
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -1131,12 +1132,67 @@ begin
   inherited;
 end;
 
+procedure TSwrReachBoundary.EnsureRequiredItemsPresent;
+var
+  AnItem: TSwrTransientReachItem;
+  ModflowTimes: TModflowStressPeriods;
+  FirstTime: Double;
+  LastTime: Double;
+  NewItem: TSwrTransientReachItem;
+  ItemIndex: Integer;
+  LaterItem: TSwrTransientReachItem;
+  EarlierItem: TSwrTransientReachItem;
+begin
+  ModflowTimes := frmGoPhast.PhastModel.ModflowStressPeriods;
+  FirstTime := ModflowTimes.First.StartTime;
+  LastTime :=ModflowTimes.Last.EndTime;
+  if ReachValues.Count > 0 then
+  begin
+    AnItem := ReachValues[0] as TSwrTransientReachItem;
+    if AnItem.StartTime > FirstTime then
+    begin
+      NewItem := ReachValues.Add;
+      NewItem.Assign(AnItem);
+      NewItem.StartTime := FirstTime;
+      NewItem.EndTime := AnItem.StartTime;
+      NewItem.ReachType := srtInactive;
+      NewItem.Index := 0;
+    end;
+
+    AnItem := ReachValues[ReachValues.Count-1] as TSwrTransientReachItem;
+    if AnItem.EndTime < LastTime then
+    begin
+      NewItem := ReachValues.Add;
+      NewItem.Assign(AnItem);
+      NewItem.StartTime := AnItem.EndTime;
+      NewItem.EndTime := LastTime;
+      NewItem.ReachType := srtInactive;
+    end;
+
+    for ItemIndex := ReachValues.Count - 1 downto 1 do
+    begin
+      LaterItem := ReachValues[ItemIndex] as TSwrTransientReachItem;
+      EarlierItem := ReachValues[ItemIndex-1] as TSwrTransientReachItem;
+      if EarlierItem.EndTime < LaterItem.StartTime then
+      begin
+        NewItem := ReachValues.Add;
+        NewItem.Assign(EarlierItem);
+        NewItem.StartTime := EarlierItem.EndTime;
+        NewItem.EndTime := LaterItem.StartTime;
+        NewItem.ReachType := srtInactive;
+        NewItem.Index := ItemIndex;
+      end;
+    end;
+  end;
+end;
+
 procedure TSwrReachBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel);
 var
   ValueIndex: Integer;
   BoundaryStorage: TSwrReachTransientStorage;
 begin
+  EnsureRequiredItemsPresent;
   EvaluateListBoundaries(AModel);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
