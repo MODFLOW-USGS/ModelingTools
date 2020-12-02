@@ -1293,6 +1293,9 @@ var
   WriteInstructionBatFileName: string;
   WriteInstuctionsBatchFile: TStringList;
   InsFileName: string;
+  DSIndex: Integer;
+  ADataArray: TDataArray;
+  INFLE: string;
 //  Modelname: string;
 //  OutputPrefix: string;
 begin
@@ -1349,7 +1352,19 @@ begin
     ArchiveBatchFile := TStringList.Create;
     WriteInstuctionsBatchFile := TStringList.Create;
     try
+      for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+      begin
+        ADataArray := Model.DataArrayManager[DSIndex];
+        if ADataArray.PestParametersUsed then
+        begin
+          INFLE := ExtractFileName(ChangeFileExt(FileName,
+            '.' + ADataArray.Name + '.script' ));
+          ParamEstBatchFile.Add('plproc '+ INFLE);
+        end;
+      end;
+
       ParamEstBatchFile.AddStrings(Model.PestTemplateLines);
+
       ArchiveBatchFile.Add('if not exist "..\..\output\NUL" mkdir "..\..\output"');
       ModelName := ExtractFileName(ChangeFileExt(FileName, ''));
       ArchiveBatchFile.Add(Format('if not exist "..\..\output\%0:s\NUL" mkdir "..\..\output\%0:s"', ['output.' + ModelName]));
@@ -2355,26 +2370,25 @@ end;
 procedure TCustomFileWriter.WritePestTemplateLine(AFileName: string);
 var
   PValFileName: string;
-  DSIndex: Integer;
-  ADataArray: TDataArray;
-  INFLE: string;
+//  DSIndex: Integer;
+//  ADataArray: TDataArray;
+//  INFLE: string;
 begin
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
   Model.PestTemplateLines.Add('EnhancedTemplateProcessor.exe '
     + ExtractFileName(AFileName) + ' ' + PValFileName);
 
-  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
-  begin
-    ADataArray := Model.DataArrayManager[DSIndex];
-    if ADataArray.PestParametersUsed then
-    begin
-      INFLE := ExtractFileName(ChangeFileExt(PValFileName,
-        '.' + ADataArray.Name + '.script' ));
-      Model.PestTemplateLines.Add('plproc '+ INFLE);
-
-    end;
-  end;
+//  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+//  begin
+//    ADataArray := Model.DataArrayManager[DSIndex];
+//    if ADataArray.PestParametersUsed then
+//    begin
+//      INFLE := ExtractFileName(ChangeFileExt(PValFileName,
+//        '.' + ADataArray.Name + '.script' ));
+//      Model.PestTemplateLines.Add('plproc '+ INFLE);
+//    end;
+//  end;
 
 end;
 

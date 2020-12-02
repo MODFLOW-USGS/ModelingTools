@@ -129,10 +129,15 @@ end;
 
 var
   Application: TSutraObsExtractor;
+  StartTime: TDateTime;
+  ElapsedTime: TDateTime;
 begin
+  StartTime := Now;
   Application:=TSutraObsExtractor.Create(nil);
   Application.Title:='SUTRA Observation Extractor';
   Application.Run;
   Application.Free;
+  ElapsedTime := Now - StartTime;
+  writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.
 

@@ -131,10 +131,15 @@ end;
 
 var
   Application: TMnwiObsExtractor;
+  StartTime: TDateTime;
+  ElapsedTime: TDateTime;
 begin
+  StartTime := Now;
   Application:=TMnwiObsExtractor.Create(nil);
-  Application.Title:='MnwiObsExtractor';
+  Application.Title:='MF2005_ObsExtractor';
   Application.Run;
   Application.Free;
+  ElapsedTime := Now - StartTime;
+  writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.
 

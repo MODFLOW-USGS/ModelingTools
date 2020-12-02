@@ -128,10 +128,15 @@ end;
 
 var
   Application: TMf6ObsExtractor;
+  StartTime: TDateTime;
+  ElapsedTime: TDateTime;
 begin
+  StartTime := Now;
   Application:=TMf6ObsExtractor.Create(nil);
   Application.Title:='MODFLOW 6 Observation Extractor';
   Application.Run;
   Application.Free;
+  ElapsedTime := Now - StartTime;
+  writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.
 

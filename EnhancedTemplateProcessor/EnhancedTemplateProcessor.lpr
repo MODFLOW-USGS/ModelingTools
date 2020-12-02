@@ -51,10 +51,15 @@ end;
 
 var
   Application: TEnhancedTemplateProcessor;
+  StartTime: TDateTime;
+  ElapsedTime: TDateTime;
 begin
+  StartTime := Now;
   Application:=TEnhancedTemplateProcessor.Create(nil);
   Application.Title:='Enhanced Template Processor';
   Application.Run;
   Application.Free;
+  ElapsedTime := Now - StartTime;
+  writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.
 

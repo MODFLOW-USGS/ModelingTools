@@ -178,7 +178,8 @@ type
 implementation
 
 uses
-  ModflowParameterUnit, OrderedCollectionUnit, SutraOptionsUnit;
+  ModflowParameterUnit, OrderedCollectionUnit, SutraOptionsUnit,
+  PestPilotPointFileWriterUnit;
 
 const
   KDisName = 'cl_Discretization';
@@ -817,7 +818,20 @@ var
   PilotPointIndex: Integer;
   DPtr: PDouble;
   PListName: string;
+  PilotPointFiles: TPilotPointFiles;
+  PilotPointWriter: TPilotPointWriter;
 begin
+  // maybe just use TPilotPointWriter here.
+  PilotPointFiles := TPilotPointFiles.Create;
+  PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
+  try
+    PilotPointWriter.WriteFile(AFileName, FDataArray, PilotPointFiles);
+  finally
+    PilotPointFiles.Free;
+    PilotPointWriter.Free;
+  end;
+
+
   DisLimits := Model.DiscretizationLimits(vdTop);
   FPilotPointsUsed := False;
   FQuadTrees.Capacity := FUsedParamList.Count;
