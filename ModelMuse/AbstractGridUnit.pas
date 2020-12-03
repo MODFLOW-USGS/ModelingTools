@@ -942,8 +942,16 @@ side views of the model.}
       speeded up by specifying BelowCol, AboveCol, BelowRow, and AboveRow.
       The T2DTopCell that is returned should never have values outside the
       valid range as long as there are at least one column and row in the
-      grid.}
+      grid. @name will return a cell inside the grid even if the point is
+      outside the grid.}
     function TopContainingCell(APoint: TPoint2D;
+      const EvaluatedAt: TEvaluatedAt;
+      const NeedToRotatePointToGridCoordinates: boolean = True;
+      const BelowCol: integer = -1; const AboveCol: integer = -1;
+      const BelowRow: integer = -1; const AboveRow: integer = -1): T2DTopCell;
+    // @name is like @link(TopContainingCell) except that the cell may be
+    // outside the grid
+    function UnconstrainedTopContainingCell(APoint: TPoint2D;
       const EvaluatedAt: TEvaluatedAt;
       const NeedToRotatePointToGridCoordinates: boolean = True;
       const BelowCol: integer = -1; const AboveCol: integer = -1;
@@ -3769,9 +3777,105 @@ begin
   result.Z := CellElevation[Column, Row, Layer];
 end;
 
+function TCustomModelGrid.UnconstrainedTopContainingCell(APoint: TPoint2D;
+  const EvaluatedAt: TEvaluatedAt;
+  const NeedToRotatePointToGridCoordinates: boolean; const BelowCol, AboveCol,
+  BelowRow, AboveRow: integer): T2DTopCell;
+begin
+  if NeedToRotatePointToGridCoordinates then
+  begin
+    APoint := RotateFromRealWorldCoordinatesToGridCoordinates(APoint);
+  end;
+  result.Col := NearestColumnPosition(APoint.X);
+  result.Row := NearestRowPosition(APoint.Y);
+  case EvaluatedAt of
+    eaBlocks:
+      begin
+        // do nothing
+      end;
+    eaNodes:
+      begin
+        Exit;
+      end;
+  else
+    Assert(False);
+  end;
+
+  if ColumnDirection = cdWestToEast then
+  begin
+    if (result.Col > 0) and (result.Col < ColumnCount)
+      and (ColumnPosition[result.Col] > APoint.X) then
+    begin
+      Dec(result.Col);
+    end;
+    if (result.Col = ColumnCount)
+      and (ColumnPosition[result.Col] < APoint.X) then
+    begin
+      result.Col := -1;
+    end;
+    if  (result.Col > ColumnCount) then
+    begin
+      result.Col := -1;
+    end;
+  end
+  else
+  begin
+    if (result.Col > 0) and (result.Col < ColumnCount)
+      and (ColumnPosition[result.Col] < APoint.X) then
+    begin
+      Dec(result.Col);
+    end;
+    if (result.Col = ColumnCount)
+      and (ColumnPosition[result.Col] > APoint.X) then
+    begin
+      result.Col := -1;
+    end;
+    if (result.Col >= ColumnCount) then
+    begin
+      result.Col := -1;
+    end;
+  end;
+
+  if RowDirection = rdSouthToNorth then
+  begin
+    if (result.Row > 0) and (result.Row < RowCount)
+      and (RowPosition[result.Row] > APoint.Y) then
+    begin
+      Dec(result.Row);
+    end;
+    if (result.Row = RowCount)
+      and (RowPosition[result.Row] < APoint.Y) then
+    begin
+      result.Row := -1
+    end;
+    if (result.Row > RowCount) then
+    begin
+      result.Row := -1
+    end;
+  end
+  else
+  begin
+    if (result.Row > 0) and (result.Row < RowCount)
+      and (RowPosition[result.Row] < APoint.Y) then
+    begin
+      Dec(result.Row);
+    end;
+    if (result.Row = RowCount)
+      and (RowPosition[result.Row] > APoint.Y) then
+    begin
+      result.Row := -1;
+    end;
+    if (result.Row > RowCount) then
+    begin
+      result.Row := -1
+    end;
+  end;
+
+end;
+
 function TCustomModelGrid.UniformColumns(out MaxWidth,
   MinWidth: Double): boolean;
-var 
+var
   ColIndex: Integer;
   AColWidth: double;
 begin

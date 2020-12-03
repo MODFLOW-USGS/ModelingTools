@@ -30,7 +30,7 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit, GoPhastTypes,
   ModflowOptionsUnit, ModflowOutputControlUnit, PhastModelUnit,
-  System.SysUtils, PlProcUnit;
+  System.SysUtils, PlProcUnit, PestParamRoots;
 
 resourcestring
   StrWritingNPFPackage = 'Writing NPF Package input.';
@@ -54,7 +54,7 @@ begin
   frmProgressMM.AddMessage('  Writing XT3D angle1');
   DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle1);
   WriteMf6_DataSet(DataArray, 'angle1');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, NPF_Angle1);
 end;
 
 procedure TNpfWriter.WriteAngle2;
@@ -64,7 +64,7 @@ begin
   frmProgressMM.AddMessage('  Writing XT3D angle2');
   DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle2);
   WriteMf6_DataSet(DataArray, 'angle2');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, NPF_Angle2);
 end;
 
 procedure TNpfWriter.WriteAngle3;
@@ -74,7 +74,7 @@ begin
   frmProgressMM.AddMessage('  Writing XT3D angle3');
   DataArray := Model.DataArrayManager.GetDataSetByName(KXT3DAngle3);
   WriteMf6_DataSet(DataArray, 'angle3');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, NPF_Angle3);
 end;
 
 procedure TNpfWriter.WriteDataSet1;
@@ -318,7 +318,7 @@ begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsKy);
   end;
   WriteMf6_DataSet(DataArray, 'K22');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, NPF_K22);
 end;
 
 procedure TNpfWriter.WriteHK;
@@ -328,7 +328,7 @@ begin
   frmProgressMM.AddMessage('  Writing K');
   DataArray := Model.DataArrayManager.GetDataSetByName(rsKx);
   WriteMf6_DataSet(DataArray, 'K');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, NPF_K);
 end;
 
 procedure TNpfWriter.WriteIcelltype;
@@ -354,7 +354,7 @@ begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsKz);
   end;
   WriteMf6_DataSet(DataArray, 'K33');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, NPF_K33);
 end;
 
 procedure TNpfWriter.WriteWETDRY;
@@ -366,7 +366,7 @@ begin
     frmProgressMM.AddMessage('  Writing WETDRY');
     DataArray := Model.DataArrayManager.GetDataSetByName(rsWetDry);
     WriteMf6_DataSet(DataArray, 'WETDRY');
-    WritePestZones(DataArray, FInputFileName);
+    WritePestZones(DataArray, FInputFileName, NPF_WETDRY);
   end;
 end;
 

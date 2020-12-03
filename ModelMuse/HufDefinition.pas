@@ -931,6 +931,9 @@ begin
     Assert(DataArray <> nil);
     DataArray.CheckMin := True;
     DataArray.Min := 0;
+    DataArray.PestParametersAllowed := False;
+    DataArray := LocalModel.DataArrayManager.GetDataSetByName(FTopArrayName);
+    DataArray.PestParametersAllowed := False;
     HufUsedParameters.RenameLayer(NewHufName);
   end;
 end;

@@ -718,7 +718,8 @@ uses
   frameParentChildUnit in 'frameParentChildUnit.pas' {frameParentChild: TFrame},
   frmRunPestUnit in 'frmRunPestUnit.pas' {frmRunPest},
   ObsInterfaceUnit in 'ObsInterfaceUnit.pas',
-  PestPilotPointFileWriterUnit in 'PestPilotPointFileWriterUnit.pas';
+  PestPilotPointFileWriterUnit in 'PestPilotPointFileWriterUnit.pas',
+  PestParamRoots in 'PestParamRoots.pas';
 
 {$R *.res}
 

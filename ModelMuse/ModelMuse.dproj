@@ -1595,6 +1595,7 @@
         </DCCReference>
         <DCCReference Include="ObsInterfaceUnit.pas"/>
         <DCCReference Include="PestPilotPointFileWriterUnit.pas"/>
+        <DCCReference Include="PestParamRoots.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

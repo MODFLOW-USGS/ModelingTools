@@ -2926,9 +2926,15 @@ begin
 
       tabParameters.TabVisible := (FSelectedEdit.DataType = rdtDouble)
         and (FSelectedEdit.DataArray <> nil)
+        and FSelectedEdit.DataArray.PestParametersAllowed
         and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0)
         and (Pos(StrLayerDefinition, FSelectedEdit.FullClassification) <= 0)
         and not (dcFormula in FSelectedEdit.DataArray.Lock);
+
+      if pcDataSets.ActivePageIndex < 0 then
+      begin
+        pcDataSets.ActivePageIndex := 0;
+      end;
     end;
     btnEditFormula.Enabled := reDefaultFormula.Enabled;
   end;

@@ -14,17 +14,20 @@ type
     FParameter: TModflowSteadyParameter;
     FLayer: Integer;
     FParameterIndex: Integer;
+    FParamFamily: string;
     procedure SetDataArray(const Value: TDataArray);
     procedure SetFileName(const Value: string);
     procedure SetParameter(const Value: TModflowSteadyParameter);
     procedure SetLayer(const Value: Integer);
     procedure SetParameterIndex(const Value: Integer);
+    procedure SetParamFamily(const Value: string);
   public
    property DataArray: TDataArray read FDataArray write SetDataArray;
    property Parameter: TModflowSteadyParameter read FParameter write SetParameter;
    property ParameterIndex: Integer read FParameterIndex write SetParameterIndex;
    property FileName: string read FFileName write SetFileName;
    property Layer: Integer read FLayer write SetLayer;
+   property ParamFamily: string read FParamFamily write SetParamFamily;
   end;
 
   TPilotPointFiles = TObjectList<TPilotPointFileObject>;
@@ -32,11 +35,16 @@ type
   TPilotPointWriter = class(TCustomFileWriter)
   private
     FFileName: string;
+    FTemplateFileStream: TFileStream;
+    procedure OpenTemplateFile(const FileName: string);
+    procedure CloseTemplateFile;
+    procedure SwitchToTemplate;
+    procedure SwitchToMain;
   protected
     class function Extension: string; override;
   public
     procedure WriteFile(AFileName: string; DataArray: TDataArray;
-      PilotPointFiles: TPilotPointFiles);
+      PilotPointFiles: TPilotPointFiles; const DataArrayID: string);
   end;
 
 
@@ -47,13 +55,37 @@ uses
 
 { TPilotPointWriter }
 
+procedure TPilotPointWriter.CloseTemplateFile;
+begin
+  SwitchToMain;
+  FreeAndNil(FTemplateFileStream);
+end;
+
 class function TPilotPointWriter.Extension: string;
 begin
   result := '.pp';
 end;
 
+procedure TPilotPointWriter.OpenTemplateFile(const FileName: string);
+begin
+  Assert(FMainFileStream = nil);
+  Assert(FFileStream <> nil);
+  FMainFileStream := FFileStream;
+  FTemplateFileStream:= TFileStream.Create(FileName + '.tpl', fmCreate or fmShareDenyWrite);
+end;
+
+procedure TPilotPointWriter.SwitchToMain;
+begin
+  FFileStream := FMainFileStream;
+end;
+
+procedure TPilotPointWriter.SwitchToTemplate;
+begin
+  FFileStream := FTemplateFileStream;
+end;
+
 procedure TPilotPointWriter.WriteFile(AFileName: string; DataArray: TDataArray;
-  PilotPointFiles: TPilotPointFiles);
+  PilotPointFiles: TPilotPointFiles; const DataArrayID: string);
 var
   ParamList: TList<TModflowSteadyParameter>;
   ParamIndex: Integer;
@@ -80,11 +112,14 @@ var
   Value: Double;
   FileProperties: TPilotPointFileObject;
 begin
-
   Assert(DataArray <> nil);
   Assert(DataArray.PestParametersUsed);
   PestProperties := Model.PestProperties;
-  FFileName := ChangeFileExt(AFileName, DataArray.Name);// + Extension;
+  if PestProperties.PilotPointCount = 0 then
+  begin
+    Exit;
+  end;
+  FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
   DisLimits := Model.DiscretizationLimits(vdTop);
   ParamList := TList<TModflowSteadyParameter>.Create;
   QuadTreeList := TList<TRbwQuadTree>.Create;
@@ -130,7 +165,8 @@ begin
           begin
             APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,RowIndex, ColIndex];
             Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));     
+//              / AParam.Value;
+            Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
             AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex])); 
           end;
 
@@ -155,9 +191,17 @@ begin
           FileProperties.ParameterIndex := ParamIndex+1;
           FileProperties.FileName := AFileName;
           FileProperties.Layer := LayerIndex;
+          FileProperties.ParamFamily := Format('%0:s_%1:d_%2d_',
+            [DataArrayID, ParamIndex+1, LayerIndex+1]);
 
           OpenFile(AFileName);
+          OpenTemplateFile(AFileName);
           try
+            SwitchToTemplate;
+            WriteString('ptf ');
+            WriteString(PestProperties.TemplateCharacter);
+            NewLine;
+
             ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
               DataArray.ParamDataSetName);
             for PilotPointIndex := 0 to PestProperties.PilotPointCount - 1 do
@@ -166,8 +210,12 @@ begin
               ACell := Model.PointToCell(DataArray.EvaluatedAt, APilotPoint);
               if (ACell.Col >= 0) and (ACell.Row >= 0) then
               begin
+              try
                 ParamName := UpperCase(ParamNameDataArray.StringData[
                   LayerIndex, ACell.Row, ACell.Col]);
+              except
+                Beep;
+              end;
                 if UpperCase(AParam.ParameterName) = ParamName then
                 begin
                   Value := DataArray.RealData[LayerIndex, ACell.Row, ACell.Col]
@@ -186,6 +234,7 @@ begin
                 Value := ValuePointer^;
               end;
 
+              SwitchToMain;
               WriteInteger(PilotPointIndex + 1);
               WriteFloat(APilotPoint.x);
               WriteFloat(APilotPoint.y);
@@ -193,8 +242,20 @@ begin
               WriteFloat(Value);
               NewLine;
 
+              SwitchToTemplate;
+              WriteInteger(PilotPointIndex + 1);
+              WriteFloat(APilotPoint.x);
+              WriteFloat(APilotPoint.y);
+              WriteInteger(ParamIndex + 1);
+              WriteString(' ');
+              WriteString(PestProperties.TemplateCharacter);
+              WriteString('           ');
+              WriteString(Format('%0:s%1:d',[FileProperties.ParamFamily,PilotPointIndex+1]));
+              WriteString(PestProperties.TemplateCharacter);
+              NewLine;
             end;
           finally
+            CloseTemplateFile;
             CloseFile;
           end;
 
@@ -235,6 +296,11 @@ end;
 procedure TPilotPointFileObject.SetParameterIndex(const Value: Integer);
 begin
   FParameterIndex := Value;
+end;
+
+procedure TPilotPointFileObject.SetParamFamily(const Value: string);
+begin
+  FParamFamily := Value;
 end;
 
 end.

@@ -133,7 +133,7 @@ inherited frmDataSets: TfrmDataSets
     Top = 0
     Width = 320
     Height = 395
-    ActivePage = tabParameters
+    ActivePage = tabBasic
     Align = alRight
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -523,15 +523,16 @@ inherited frmDataSets: TfrmDataSets
       end
     end
     object tabParameters: TTabSheet
-      Caption = 'Parameters'
+      Caption = 'Pest Parameters'
       ImageIndex = 3
       TabVisible = False
+      ExplicitLeft = 6
       object cbParametersUsed: TCheckBox
         Left = 16
         Top = 17
-        Width = 209
+        Width = 281
         Height = 17
-        Caption = 'Parameters used'
+        Caption = 'PEST Parameters used'
         TabOrder = 0
         OnClick = cbParametersUsedClick
       end

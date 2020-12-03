@@ -97,7 +97,8 @@ type
     procedure WriteTemplateFormula(ParameterName: string;
       MultiplierValue: double);
     procedure WritePestTemplateLine(AFileName: string);
-    procedure WritePestZones(DataArray: TDataArray; InputFileName: string);
+    procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
+      const DataArrayID: string);
     procedure OpenTempFile(const FileName: string);
     procedure CloseTempFile;
   public
@@ -1122,6 +1123,9 @@ resourcestring
   'ed.';
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
   StrObsSeriesExtractore = 'ObsSeriesExtractor.exe';
+  StrPLPROCNotFound = 'PLPROC not found';
+  StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
+  StrPlprocexe = 'plproc.exe';
 
 var
 //  NameFile: TStringList;
@@ -1266,6 +1270,43 @@ begin
   end;
 end;
 
+var
+  StoredPLPROC_Location: string = '';
+
+function GetPLPROC_Location(const FileName: string; Model: TCustomModel): string;
+begin
+  if (StoredPLPROC_Location <> '')
+    and (StoredPLPROC_Location <> StrPlprocexe) then
+  begin
+    result := StoredPLPROC_Location;
+    Exit;
+  end;
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrPLPROCNotFound);
+  result := IncludeTrailingPathDelimiter
+    (Model.ProgramLocations.PestDirectory) + StrPlprocexe;
+  if not FileExists(result) then
+  begin
+    frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
+      Format(StrPLPROCWasNotFound, [result]));
+    result := IncludeTrailingPathDelimiter(
+      ExtractFileDir(Application.ExeName)) + StrPlprocexe;
+    if not FileExists(result) then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
+        Format(StrPLPROCWasNotFound, [result]));
+      result := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+        + StrPlprocexe;
+      if not FileExists(result) then
+      begin
+        frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
+          Format(StrPLPROCWasNotFound, [result]));
+        result := StrPlprocexe;
+      end;
+    end;
+  end;
+  StoredPLPROC_Location := result;
+end;
+
 function WriteModflowBatchFile(ProgramLocations: TProgramLocations;
   const FileName: string; ListFiles: TStringList; OpenListFile: boolean;
   Before, After: TStrings; ExportModpath, ExportZoneBudget: boolean;
@@ -1296,6 +1337,7 @@ var
   DSIndex: Integer;
   ADataArray: TDataArray;
   INFLE: string;
+  PLPROC_Location: string;
 //  Modelname: string;
 //  OutputPrefix: string;
 begin
@@ -1352,6 +1394,7 @@ begin
     ArchiveBatchFile := TStringList.Create;
     WriteInstuctionsBatchFile := TStringList.Create;
     try
+      GetPLPROC_Location(FileName, Model, PLPROC_Location);
       for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
       begin
         ADataArray := Model.DataArrayManager[DSIndex];
@@ -1359,7 +1402,7 @@ begin
         begin
           INFLE := ExtractFileName(ChangeFileExt(FileName,
             '.' + ADataArray.Name + '.script' ));
-          ParamEstBatchFile.Add('plproc '+ INFLE);
+          ParamEstBatchFile.Add(PLPROC_Location + ' '+ INFLE);
         end;
       end;
 
@@ -2354,6 +2397,10 @@ end;
 
 procedure TCustomFileWriter.CloseFile;
 begin
+  if FFileStream = FMainFileStream then
+  begin
+    FMainFileStream := nil;
+  end;
   FreeAndNil(FFileStream);
 end;
 
@@ -9037,7 +9084,7 @@ begin
 end;
 
 procedure TCustomFileWriter.WritePestZones(DataArray: TDataArray;
-  InputFileName: string);
+  InputFileName: string; const DataArrayID: string);
 var
   PestZoneWriter: TParameterZoneWriter;
 begin
@@ -9045,7 +9092,7 @@ begin
   begin
     PestZoneWriter := TParameterZoneWriter.Create(Model, etExport);
     try
-      PestZoneWriter.WriteFile(InputFileName, DataArray);
+      PestZoneWriter.WriteFile(InputFileName, DataArray, DataArrayID);
     finally
       PestZoneWriter.Free;
     end;

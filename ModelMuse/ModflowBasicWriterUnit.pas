@@ -38,7 +38,8 @@ resourcestring
 implementation
 
 uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
-  RbwParser, GoPhastTypes, ModflowOptionsUnit, Generics.Collections;
+  RbwParser, GoPhastTypes, ModflowOptionsUnit, Generics.Collections,
+  PestParamRoots;
 
 resourcestring
   StrTheFileSDoesNot = 'The file %s does not exist. This file is specified in '
@@ -580,7 +581,7 @@ begin
     WriteDataSet(DataSetName, DataArray);
     if Model.ModelSelection = msModflow2015 then
     begin
-      WritePestZones(DataArray, FInputFileName);
+      WritePestZones(DataArray, FInputFileName, IC_STRT);
     end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
     Model.DataArrayManager.CacheDataArrays;

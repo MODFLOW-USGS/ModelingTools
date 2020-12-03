@@ -65,7 +65,7 @@ implementation
 
 uses
   frmProgressUnit, frmErrorsAndWarningsUnit,
-  Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit;
+  Vcl.Forms, System.Contnrs, Modflow6ObsWriterUnit, PestParamRoots;
 
 resourcestring
   StrNoTransientCSUBDa = 'No Transient CSUB data defined';
@@ -620,25 +620,25 @@ begin
   end;
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'CG_SKE_CR');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, CSUB_CG_SKE_CR);
 
   frmProgressMM.AddMessage('  Writing CG_THETA');
   DataArray := Model.DataArrayManager.GetDataSetByName(KInitialCoarsePoros);
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'CG_THETA');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, CSUB_CG_THETA);
 
   frmProgressMM.AddMessage('  Writing SGM');
   DataArray := Model.DataArrayManager.GetDataSetByName(KMoistSpecificGravi);
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'SGM');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, CCUB_SGM);
 
   frmProgressMM.AddMessage('  Writing SGS');
   DataArray := Model.DataArrayManager.GetDataSetByName(KSaturatedSpecificG);
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'SGS');
-  WritePestZones(DataArray, FInputFileName);
+  WritePestZones(DataArray, FInputFileName, CSUB_SGS);
 
   WriteEndGridData;
 end;

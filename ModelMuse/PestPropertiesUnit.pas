@@ -625,6 +625,11 @@ function TPestProperties.GetPilotPointCount: Integer;
 var
   DisLimits: TGridLimit;
 begin
+  if PilotPointSpacing = 0 then
+  begin
+    result := 0;
+    Exit;
+  end;
   DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
   FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 2;
   FPilotPointColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 2;

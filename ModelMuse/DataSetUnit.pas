@@ -472,6 +472,7 @@ type
     FRefreshingOldUseList: boolean;
     FPestParametersUsed: Boolean;
     FUsedPestParameters: TStrings;
+    FPestParametersAllowed: Boolean;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -551,12 +552,12 @@ type
     procedure SetContourInterval(const Value: TRealStorage);
     procedure OnValueChanged(Sender: TObject);
     procedure SetOnShouldUseOnInitialize(const Value: TCheckUsageEvent);
-//    procedure SetParameterLayersUsed(const Value: string);
     procedure SetPestParametersUsed(const Value: Boolean);
     procedure CreatePestParmNameDataSet;
     function GetParamDataSetName: string;
     procedure ApplyPestParameter;
     procedure SetUsedPestParameters(const Value: TStrings);
+    procedure SetPestParametersAllowed(const Value: Boolean);
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -968,10 +969,19 @@ type
       stored False
       {$ENDIF}
       ;
+
     property UsedPestParameters: TStrings read FUsedPestParameters
       write SetUsedPestParameters
       {$IFNDEF PEST}
       stored False
+      {$ENDIF}
+      ;
+    property PestParametersAllowed: Boolean read FPestParametersAllowed
+      write SetPestParametersAllowed
+      {$IFNDEF PEST}
+      stored False
+      {$ELSE}
+      stored True
       {$ENDIF}
       ;
     // @name should be 'All' or a comma separated list of layer numbers or layer
@@ -3573,6 +3583,11 @@ begin
   ChangeAFormula(Value, FParameterFormula, FUseListUpToDate, GetUseList)
 end;
 
+procedure TDataArray.SetPestParametersAllowed(const Value: Boolean);
+begin
+  FPestParametersAllowed := Value;
+end;
+
 procedure TDataArray.SetPestParametersUsed(const Value: Boolean);
 begin
   if FPestParametersUsed <> Value then
@@ -3968,6 +3983,7 @@ var
   LocalPhastModel : TPhastModel;
   LocalChildModel: TChildModel;
 begin
+  FPestParametersAllowed := True;
   FVisible := True;
   FUseLgrEdgeCells := lctUse;
   Assert(AnOwner <> nil);

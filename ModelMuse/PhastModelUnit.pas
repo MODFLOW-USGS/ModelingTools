@@ -36977,7 +36977,7 @@ begin
         end
         else
         begin
-          result := Grid.TopContainingCell(APoint, EvalAt, False);
+          result := Grid.UnconstrainedTopContainingCell(APoint, EvalAt, True);
         end;
       end;
     else
@@ -40037,7 +40037,26 @@ begin
   BatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
     + 'RunPest.bat';
   PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-    + 'pest.exe ';
+    + 'I64pest.exe ';
+  if not FileExists(Trim(PestName)) then
+  begin
+    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+      + 'pest.exe ';
+  end;
+  if not FileExists(Trim(PestName)) then
+  begin
+    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+      + 'pest_hp.exe ';
+  end;
+
+  if not FileExists(Trim(PestName)) then
+  begin
+    Beep;
+    MessageDlg(Format('PEST was not found in %s',
+      [ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
+//      Exit;
+  end;
+
   BatchFile := TStringList.Create;
   try
     BatchFile.Add(PestName + ChangeFileExt(ExtractFileName(FileName), ''));
