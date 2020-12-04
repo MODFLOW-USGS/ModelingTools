@@ -2509,7 +2509,9 @@ that affects the model output should also have a comment. }
     // See @link(ThreeDTimeList).
     FThreeDTimeList: TCustomTimeList;
     FPValFile: TStringList;
-    FTemplate: TStringList;
+    FPvalTemplate: TStringList;
+    FPestPValFile: TStringList;
+    FPestPvalTemplate: TStringList;
     FGages: TStringList;
     FPathLine: TPathLineReader;
     FTimeSeries: TTimeSeriesReader;
@@ -2821,7 +2823,7 @@ that affects the model output should also have a comment. }
 
     function PackageGeneratedExternally(const PackageName: string): boolean;
     procedure WritePValAndTemplate(const ParameterName: string;
-      const Value: double);
+      const Value: double; ParameterType: TParameterType);
 
     property HfbDisplayer: THfbDisplayer read FHfbDisplayer;
 
@@ -28253,7 +28255,9 @@ begin
 
   FModflowOptions := TModflowOptions.Create(Invalidate);
   FPValFile := TStringList.Create;
-  FTemplate := TStringList.Create;
+  FPvalTemplate := TStringList.Create;
+  FPestPValFile := TStringList.Create;
+  FPestPvalTemplate := TStringList.Create;
   FTimeLists := TList.Create;
   FTransientZoneArrays := TObjectList.Create;
   FTransientMultiplierArrays := TObjectList.Create;
@@ -29138,7 +29142,9 @@ begin
   FHfbWriter.Free;
   FUnitNumbers.Free;
   FPValFile.Free;
-  FTemplate.Free;
+  FPvalTemplate.Free;
+  FPestPValFile.Free;
+  FPestPvalTemplate.Free;
   FModflowOptions.Free;
   FHeadObsResults.Free;
   FGages.Free;
@@ -31606,7 +31612,9 @@ end;
 procedure TCustomModel.ClearPval;
 begin
   FPValFile.Clear;
-  FTemplate.Clear;
+  FPvalTemplate.Clear;
+  FPestPValFile.Clear;
+  FPestPvalTemplate.Clear;
 end;
 
 procedure TCustomModel.ClearViewedItems;
@@ -32363,7 +32371,7 @@ var
   Comment: string;
   FirstLine: string;
 begin
-  if FPValFile.Count > 0 then
+  if (FPValFile.Count > 0) or (FPestPValFile.Count > 0) then
   begin
     if PackageGeneratedExternally('PVAL') then
     begin
@@ -32377,14 +32385,17 @@ begin
     end;
 
     FPValFile.Insert(0, FirstLine);
-    FTemplate.Insert(0, FirstLine);
+    FPvalTemplate.Insert(0, FirstLine);
 
     Comment := '# PVAL file created on ' + DateToStr(Now) + ' by '
       + ProgramName + ' version ' + IModelVersion + '.';
     FPValFile.Insert(0, Comment);
-    FTemplate.Insert(0, Comment);
+    FPvalTemplate.Insert(0, Comment);
 
-    FTemplate.Insert(0, 'jtf ' + UcodeDelimiter);
+    FPValFile.AddStrings(FPestPValFile);
+    FPvalTemplate.AddStrings(FPestPvalTemplate);
+
+    FPvalTemplate.Insert(0, 'jtf ' + UcodeDelimiter);
 
     PValFileName := ChangeFileExt(FileName, StrPvalExt);
     TemplateFileName := ChangeFileExt(FileName, StrJtf);
@@ -32392,7 +32403,7 @@ begin
 //    if not WritingTemplate then
 //    begin
       FPValFile.SaveToFile(PValFileName);
-      FTemplate.SaveToFile(TemplateFileName);
+      FPvalTemplate.SaveToFile(TemplateFileName);
 //    end;
 
     if ModelSelection in Modflow2005Selection then
@@ -32409,8 +32420,8 @@ begin
       TemplateFileName := ChangeFileExt(FileName, StrPtf);
       // hard coded to used UcodeDelimiter instead of PestProperties.TemplateCharacter.
 //      FTemplate[0] := 'ptf ' + PestProperties.TemplateCharacter;
-      FTemplate[0] := 'ptf ' + UcodeDelimiter;
-      FTemplate.SaveToFile(TemplateFileName);
+      FPvalTemplate[0] := 'ptf ' + UcodeDelimiter;
+      FPvalTemplate.SaveToFile(TemplateFileName);
       AddModelInputFile(TemplateFileName);
     end;
   end;
@@ -39343,16 +39354,31 @@ begin
 end;
 
 procedure TCustomModel.WritePValAndTemplate(const ParameterName: string;
-      const Value: double);
+      const Value: double; ParameterType: TParameterType);
 var
   NewLine: string;
+  TemplateLine: string;
 begin
   NewLine := ParameterName + ' ' + FortranFloatToStr(Value);
+  TemplateLine := ParameterName + ' ' + UcodeDelimiter + ParameterName
+      + '                  ' + UcodeDelimiter;
+  if ParameterType = ptPEST then
+  begin
+    NewLine := '#-- ' + NewLine;
+    TemplateLine := '#-- ' + TemplateLine;
+  end;
   if FPValFile.IndexOf(NewLine) < 0 then
   begin
-    FPValFile.Add(NewLine);
-    FTemplate.Add(ParameterName + ' ' + UcodeDelimiter + ParameterName
-      + '                  ' + UcodeDelimiter);
+    if ParameterType = ptPEST then
+    begin
+      FPestPValFile.Add(NewLine);
+      FPestPvalTemplate.Add(TemplateLine);
+    end
+    else
+    begin
+      FPValFile.Add(NewLine);
+      FPvalTemplate.Add(TemplateLine);
+    end;
   end;
 end;
 
@@ -40105,13 +40131,14 @@ begin
   end;
   InitializeSfrWriter(etExport);
   try
-    FPValFile.Clear;
-    FTemplate.Clear;
+    ClearPval;
+//    FPValFile.Clear;
+//    FPvalTemplate.Clear;
     for ChildIndex := 0 to ChildModels.Count - 1 do
     begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       ChildModel.FPValFile.Clear;
-      ChildModel.FTemplate.Clear;
+      ChildModel.FPvalTemplate.Clear;
     end;
 
     Application.ProcessMessages;
@@ -40236,8 +40263,9 @@ begin
       end;
       InitializeSfrWriter(etExport);
       try
-        FPValFile.Clear;
-        FTemplate.Clear;
+        ClearPval;
+//        FPValFile.Clear;
+//        FPvalTemplate.Clear;
 
         Application.ProcessMessages;
         if not frmProgressMM.ShouldContinue then
@@ -42323,8 +42351,9 @@ begin
           end;
         end;
 
-        FPValFile.Clear;
-        FTemplate.Clear;
+//        FPValFile.Clear;
+//        FPvalTemplate.Clear;
+        ClearPval;
         InternalExportModflowModel(NameFile, False);
       finally
         if self is TChildModel then

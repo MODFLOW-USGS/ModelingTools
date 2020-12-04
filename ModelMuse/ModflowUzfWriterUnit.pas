@@ -58,7 +58,7 @@ implementation
 
 uses ModflowUnitNumbers, DataSetUnit, ModflowUzfUnit, frmErrorsAndWarningsUnit,
   frmProgressUnit, ModflowCellUnit, Forms, GoPhastTypes,
-  ModflowOutputControlUnit;
+  ModflowOutputControlUnit, PestParamRoots;
 
 resourcestring
   StrUnspecifiedUZFData = 'Unspecified UZF data';
@@ -748,6 +748,7 @@ begin
   begin
     VKS := Model.DataArrayManager.GetDataSetByName(StrUzfVerticalK);
     WriteArray(VKS, 0, 'Data Set 4: VKS', StrNoValueAssigned, 'VKS');
+    WritePestZones(VKS, FInputFileName, StrVKS);
   end;
 end;
 
@@ -760,6 +761,7 @@ begin
   begin
     SURFK := Model.DataArrayManager.GetDataSetByName(StrUzfSurfaceK);
     WriteArray(SURFK, 0, 'Data Set 4b: SURFK', StrNoValueAssigned, 'SURFK');
+    WritePestZones(SURFK, FInputFileName, StrSURF);
   end;
 end;
 
@@ -769,6 +771,7 @@ var
 begin
   EPS := Model.DataArrayManager.GetDataSetByName(StrUzfBrooksCoreyEpsilon);
   WriteArray(EPS, 0, 'Data Set 5: EPS', StrNoValueAssigned, 'EPS');
+  WritePestZones(EPS, FInputFileName, StrEPS);
 end;
 
 procedure TModflowUzfWriter.WriteDataSet6a;
@@ -785,6 +788,7 @@ begin
   begin
     WriteArray(THTS, 0, 'Data Set 6: THTS', StrNoValueAssigned, 'THTS');
   end;
+  WritePestZones(THTS, FInputFileName, StrTHTS);
 end;
 
 procedure TModflowUzfWriter.WriteDataSet6b;
@@ -797,6 +801,7 @@ begin
   begin
     THTR := Model.DataArrayManager.GetDataSetByName(StrUzfReisidualWaterContent);
     WriteArray(THTR, 0, 'Data Set 6b: THTR', StrNoValueAssigned, 'THTR');
+    WritePestZones(THTR, FInputFileName, StrTHTR);
   end;
 end;
 
@@ -811,6 +816,7 @@ begin
   begin
     THTI := Model.DataArrayManager.GetDataSetByName(StrUzfInitialUnsaturatedWaterContent);
     WriteArray(THTI, 0, 'Data Set 7: THTI', StrNoValueAssigned, 'THTI');
+    WritePestZones(THTI, FInputFileName, StrTHTI);
   end;
 end;
 

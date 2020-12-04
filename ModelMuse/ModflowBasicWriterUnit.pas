@@ -573,16 +573,13 @@ begin
   begin
     WriteBeginGridData;
   end;
-    DataSetName := 'STRT';
+  DataSetName := 'STRT';
   if Model.ModflowOptions.InitialHeadFileName = '' then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsModflow_Initial_Head);
     Assert(DataArray <> nil);
     WriteDataSet(DataSetName, DataArray);
-    if Model.ModelSelection = msModflow2015 then
-    begin
-      WritePestZones(DataArray, FInputFileName, IC_STRT);
-    end;
+    WritePestZones(DataArray, FInputFileName, IC_STRT);
     Model.DataArrayManager.AddDataSetToCache(DataArray);
     Model.DataArrayManager.CacheDataArrays;
   end

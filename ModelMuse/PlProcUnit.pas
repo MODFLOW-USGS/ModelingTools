@@ -838,7 +838,8 @@ begin
   for ParamIndex := 0 to FUsedParamList.Count - 1 do
   begin
     AParam := FUsedParamList.Objects[ParamIndex] as TModflowSteadyParameter;
-    Model.WritePValAndTemplate(AParam.ParameterName, AParam.Value);
+    Model.WritePValAndTemplate(AParam.ParameterName, AParam.Value,
+      AParam.ParameterType);
   end;
 end;
 
@@ -866,7 +867,7 @@ begin
     PilotPointWriter.WriteFile(AFileName, FDataArray, FPilotPointFiles,
       FDataArrayID);
     FPilotPointsUsed := FPilotPointFiles.Count > PriorCount;
-
+    FDataArray.PilotPointsUsed := FPilotPointsUsed
   finally
     PilotPointWriter.Free;
   end;

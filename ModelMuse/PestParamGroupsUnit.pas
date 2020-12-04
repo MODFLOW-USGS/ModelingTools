@@ -151,6 +151,8 @@ begin
   FStoredParamIncrementMultiplier.OnChange := OnInvalidateModel;
   FStoredSplitThreshold.OnChange := OnInvalidateModel;
   FStoredRelSlopeDif.OnChange := OnInvalidateModel;
+
+  InitializeVariables;
 end;
 
 destructor TPestParamGroup.Destroy;

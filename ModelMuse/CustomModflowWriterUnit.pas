@@ -1274,6 +1274,8 @@ var
   StoredPLPROC_Location: string = '';
 
 function GetPLPROC_Location(const FileName: string; Model: TCustomModel): string;
+var
+  TestedLocations: TStringList;
 begin
   if (StoredPLPROC_Location <> '')
     and (StoredPLPROC_Location <> StrPlprocexe) then
@@ -1282,27 +1284,35 @@ begin
     Exit;
   end;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrPLPROCNotFound);
-  result := IncludeTrailingPathDelimiter
-    (Model.ProgramLocations.PestDirectory) + StrPlprocexe;
-  if not FileExists(result) then
-  begin
-    frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
-      Format(StrPLPROCWasNotFound, [result]));
-    result := IncludeTrailingPathDelimiter(
-      ExtractFileDir(Application.ExeName)) + StrPlprocexe;
+  TestedLocations := TStringList.Create;
+  try
+    result := IncludeTrailingPathDelimiter
+      (Model.ProgramLocations.PestDirectory) + StrPlprocexe;
     if not FileExists(result) then
     begin
-      frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
-        Format(StrPLPROCWasNotFound, [result]));
-      result := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
-        + StrPlprocexe;
+      TestedLocations.Add(result);
+//      frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
+//        Format(StrPLPROCWasNotFound, [result]));
+      result := IncludeTrailingPathDelimiter(
+        ExtractFileDir(Application.ExeName)) + StrPlprocexe;
       if not FileExists(result) then
       begin
-        frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
-          Format(StrPLPROCWasNotFound, [result]));
-        result := StrPlprocexe;
+        TestedLocations.Add(result);
+//        frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
+//          Format(StrPLPROCWasNotFound, [result]));
+        result := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+          + StrPlprocexe;
+        if not FileExists(result) then
+        begin
+          TestedLocations.Add(result);
+          frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
+            Format(StrPLPROCWasNotFound, [TestedLocations.DelimitedText]));
+          result := StrPlprocexe;
+        end;
       end;
     end;
+  finally
+    TestedLocations.Free;
   end;
   StoredPLPROC_Location := result;
 end;
@@ -1394,7 +1404,8 @@ begin
     ArchiveBatchFile := TStringList.Create;
     WriteInstuctionsBatchFile := TStringList.Create;
     try
-      GetPLPROC_Location(FileName, Model, PLPROC_Location);
+      PLPROC_Location := GetPLPROC_Location(FileName, Model);
+      PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
       for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
       begin
         ADataArray := Model.DataArrayManager[DSIndex];
@@ -1402,7 +1413,7 @@ begin
         begin
           INFLE := ExtractFileName(ChangeFileExt(FileName,
             '.' + ADataArray.Name + '.script' ));
-          ParamEstBatchFile.Add(PLPROC_Location + ' '+ INFLE);
+          ParamEstBatchFile.Add(PLPROC_Location + INFLE);
         end;
       end;
 
@@ -4717,7 +4728,7 @@ begin
 
       if not WritingTemplate then
       begin
-        Model.WritePValAndTemplate(PARNAM,PARVAL);
+        Model.WritePValAndTemplate(PARNAM,PARVAL, Param.ParameterType);
       end;
 
       // Make sure the maximum length of the name of instance is <= 10.
@@ -5507,7 +5518,7 @@ begin
 
         if not WritingTemplate then
         begin
-          Model.WritePValAndTemplate(PARNAM,PARVAL);
+          Model.WritePValAndTemplate(PARNAM,PARVAL,Param.ParameterType);
         end;
 
         // Make sure the maximum length of the name of instance is <= 10.
@@ -9032,7 +9043,7 @@ begin
     Param := Model.ModflowTransientParameters[ParamIndex];
     if Param.ParameterType = ParameterType then
     begin
-      Model.WritePValAndTemplate(Param.ParameterName, Param.Value);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param.ParameterType);
     end;
   end;
 end;

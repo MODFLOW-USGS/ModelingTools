@@ -51,7 +51,13 @@ type
 implementation
 
 uses
-  QuadTreeClass, FastGEO, PestPropertiesUnit;
+  QuadTreeClass, FastGEO, PestPropertiesUnit, frmErrorsAndWarningsUnit;
+
+resourcestring
+  StrNoPilotPointsDefi = 'No pilot points defined';
+  StrPilotPointsWillNo = 'Pilot points will not be used with %0:s because no' +
+  ' pilot points have been defined in the "Model|Pest Properties" dialog box' +
+  '.';
 
 { TPilotPointWriter }
 
@@ -90,7 +96,7 @@ var
   ParamList: TList<TModflowSteadyParameter>;
   ParamIndex: Integer;
   AParam: TModflowSteadyParameter;
-  QuadTreeList: TList<TRbwQuadTree>;
+  QuadTreeList: TObjectList<TRbwQuadTree>;
   DisLimits: TGridLimit;
   AQuadTree: TRbwQuadTree;
   ParamQuadDictionary: TDictionary<TModflowSteadyParameter, TRbwQuadTree>;
@@ -117,15 +123,18 @@ begin
   PestProperties := Model.PestProperties;
   if PestProperties.PilotPointCount = 0 then
   begin
+    frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
+      Format(StrPilotPointsWillNo, [DataArray.Name]));
     Exit;
   end;
   FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
   DisLimits := Model.DiscretizationLimits(vdTop);
+
   ParamList := TList<TModflowSteadyParameter>.Create;
-  QuadTreeList := TList<TRbwQuadTree>.Create;
+  QuadTreeList := TObjectList<TRbwQuadTree>.Create;
   ParamQuadDictionary := TDictionary<TModflowSteadyParameter, TRbwQuadTree>.Create;
   ParamNameDictionary := TDictionary<string, TModflowSteadyParameter>.Create;
-  try                                                                      
+  try
     for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
     begin
       AParam := Model.ModflowSteadyParameters[ParamIndex];

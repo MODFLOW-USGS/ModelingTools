@@ -207,6 +207,8 @@ begin
       end;
 
       WriteLayerData;
+
+      WritePestScripts;
     finally
       CloseFile;
     end;

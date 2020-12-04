@@ -67,6 +67,7 @@ type
     procedure tvTiedParametersDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
     procedure tvTiedParametersDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure frameParameterGroupssbInsertClick(Sender: TObject);
   private
     FSteadyParameters: TModflowSteadyParameters;
     FHufParameters: THufModflowParameters;
@@ -627,6 +628,7 @@ procedure TfrmManageParameters.frameParameterGroupsGridBeforeDrawCell(
 var
   CanSelect: Boolean;
   Names: TStringList;
+  Value: Double;
 begin
   inherited;
   CanSelect := True;
@@ -642,6 +644,18 @@ begin
       end;
     finally
       Names.Free;
+    end;
+  end;
+
+  if (ARow > 0) and (ACol in [Ord(pgcIncrement),
+    Ord(pgcParamIncrementMultiplier), Ord(pgcSplitDifference)]) then
+  begin
+    if TryStrToFloat(frameParameterGroups.Grid.Cells[ACol, ARow], Value) then
+    begin
+      if Value <= 0 then
+      begin
+        frameParameterGroups.Grid.Canvas.Brush.Color := clRed;
+      end;
     end;
   end;
 
@@ -834,6 +848,14 @@ begin
   finally
     FDeletingGroup := False;
   end;
+end;
+
+procedure TfrmManageParameters.frameParameterGroupssbInsertClick(
+  Sender: TObject);
+begin
+  inherited;
+  frameParameterGroups.sbInsertClick(Sender);
+
 end;
 
 procedure TfrmManageParameters.frameParameterGroupsseNumberChange(

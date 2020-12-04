@@ -4301,7 +4301,7 @@ begin
         NewLine;
 
         Model.WritePValAndTemplate(ParamItem.ParameterName,
-          ParamItem.Value);
+          ParamItem.Value, ParamItem.ParameterType);
 
         // Data set 4a
         for InstanceIndex := 0 to Instances.Count - 1 do

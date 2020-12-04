@@ -177,7 +177,7 @@ begin
       WriteString(' # PARNAM, PARTYP, PARVAL, NCLU');
       NewLine;
 
-      Model.WritePValAndTemplate(PARNAM,PARVAL);
+      Model.WritePValAndTemplate(PARNAM,PARVAL, Param.ParameterType);
 
       // Data set 9
       frmProgressMM.AddMessage(Format(StrWritingDataSet9, [PARNAM]));

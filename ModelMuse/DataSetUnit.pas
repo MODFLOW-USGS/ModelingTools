@@ -473,6 +473,7 @@ type
     FPestParametersUsed: Boolean;
     FUsedPestParameters: TStrings;
     FPestParametersAllowed: Boolean;
+    FPilotPointsUsed: Boolean;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -558,6 +559,7 @@ type
     procedure ApplyPestParameter;
     procedure SetUsedPestParameters(const Value: TStrings);
     procedure SetPestParametersAllowed(const Value: Boolean);
+    procedure SetPilotPointsUsed(const Value: Boolean);
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -889,6 +891,7 @@ type
     // The data set named @name will hold the names of parameters that apply
     // to a @classname
     property ParamDataSetName: string read GetParamDataSetName;
+    property PilotPointsUsed: Boolean read FPilotPointsUsed write SetPilotPointsUsed;
   published
     // @name indicates the hierarchical position of this instance of
     // @classname when it is required by the model.
@@ -3596,6 +3599,11 @@ begin
     frmGoPhast.InvalidateModel;
     CreatePestParmNameDataSet;
   end;
+end;
+
+procedure TDataArray.SetPilotPointsUsed(const Value: Boolean);
+begin
+  FPilotPointsUsed := Value;
 end;
 
 procedure TDataArray.SetParameterUsed(const Value: boolean);

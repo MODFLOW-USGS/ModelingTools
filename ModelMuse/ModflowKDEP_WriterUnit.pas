@@ -27,7 +27,7 @@ implementation
 
 uses PhastModelUnit, OrderedCollectionUnit, ModflowUnitNumbers,
   frmProgressUnit, DataSetUnit, HufDefinition, frmErrorsAndWarningsUnit,
-  ModflowParameterUnit, Forms, GoPhastTypes;
+  ModflowParameterUnit, Forms, GoPhastTypes, PestParamRoots;
 
 resourcestring
   StrWritingKDEPFileIn = 'Writing KDEP file input.';
@@ -83,6 +83,7 @@ begin
     RSArray := Model.DataArrayManager.GetDataSetByName(StrHufReferenceSurface);
     WriteArray(RSArray, 0, ' # Data Set 2: RS', StrNoValueAssigned, 'RS');
     Model.DataArrayManager.CacheDataArrays;
+    WritePestZones(RSArray, FInputFileName, StrRS);
   end;
 end;
 
@@ -150,7 +151,7 @@ begin
       WriteInteger(NCLU);
       WriteString(' # Data set 3: PARNAM PARTYP Parval NCLU');
       NewLine;
-      Model.WritePValAndTemplate(PARNAM,PARVAL);
+      Model.WritePValAndTemplate(PARNAM,PARVAL, Parameter.ParameterType);
 
       for ClusterIndex := 0 to UsedParameters.Count - 1 do
       begin

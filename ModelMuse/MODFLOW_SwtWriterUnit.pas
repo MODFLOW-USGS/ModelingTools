@@ -5,7 +5,7 @@ interface
 uses
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, IntListUnit,
   PhastModelUnit, Classes, ModflowSubsidenceDefUnit, InterpolatedObsCellUnit,
-  System.Generics.Defaults;
+  System.Generics.Defaults, DataSetUnit, System.Generics.Collections;
 
 type
   TModflowSWT_Writer = class(TCustomSubWriter)
@@ -28,6 +28,7 @@ type
     FUsedObsTypes: TStringList;
     FCombinedSubFileName: string;
     FSwtLayerNames: TStringList;
+    FPestDataArrays: TList<TDataArray>;
     procedure EvaluatePestObs;
     procedure RetrieveArrays;
     procedure WriteDataSet1;
@@ -42,6 +43,7 @@ type
     procedure WriteDataSet16;
     procedure WriteDataSet17;
     procedure WriteObsScript;
+    procedure WritePestScripts;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -56,10 +58,10 @@ implementation
 
 uses
   ModflowUnitNumbers, frmProgressUnit, LayerStructureUnit,
-  DataSetUnit, frmErrorsAndWarningsUnit, SysUtils,
+  frmErrorsAndWarningsUnit, SysUtils,
   Forms, GoPhastTypes, ScreenObjectUnit, ModflowTimeUnit, ModflowCellUnit,
   AbstractGridUnit, FastGEO, BasisFunctionUnit,
-  System.Math, PestObsUnit;
+  System.Math, PestObsUnit, PestParamRoots;
 
 resourcestring
   StrNoSWTLayersDefine = 'No SWT layers defined';
@@ -116,10 +118,12 @@ begin
   FUsedObsTypes.Sorted := True;
   FUsedObsTypes.Duplicates := dupIgnore;
   FUsedObsTypes.CaseSensitive := False;
+  FPestDataArrays := TList<TDataArray>.Create;
 end;
 
 destructor TModflowSWT_Writer.Destroy;
 begin
+  FPestDataArrays.Free;
   FSwtLayerNames.Free;
   FUsedObsTypes.Free;
   FObsList.Free;
@@ -1107,6 +1111,10 @@ begin
   WriteArray(DataArray, 0, 'Data Set 4: GL0', StrNoValueAssigned, 'GL0');
   Model.DataArrayManager.AddDataSetToCache(DataArray);
   Model.DataArrayManager.CacheDataArrays;
+  if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+  begin
+    FPestDataArrays.Add(DataArray);
+  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSet5;
@@ -1117,6 +1125,10 @@ begin
   WriteArray(DataArray, 0, 'Data Set 5: SGM', StrNoValueAssigned, 'SGM');
   Model.DataArrayManager.AddDataSetToCache(DataArray);
   Model.DataArrayManager.CacheDataArrays;
+  if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+  begin
+    FPestDataArrays.Add(DataArray);
+  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSet6;
@@ -1127,6 +1139,10 @@ begin
   WriteArray(DataArray, 0, 'Data Set 6: SGS', StrNoValueAssigned, 'SGS');
   Model.DataArrayManager.AddDataSetToCache(DataArray);
   Model.DataArrayManager.CacheDataArrays;
+  if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+  begin
+    FPestDataArrays.Add(DataArray);
+  end;
 end;
 
 procedure TModflowSWT_Writer.WriteDataSets7to13;
@@ -1139,16 +1155,28 @@ begin
     DataArray := FTHICK_List[Index];
     WriteArray(DataArray, 0, 'Data set 7: THICK', StrNoValueAssigned, 'THICK');
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
 
     if FSwtPackage.CompressionSource = csSpecificStorage then
     begin
       DataArray := FSse_List[Index];
       WriteArray(DataArray, 0, 'Data set 8: Sse', StrNoValueAssigned, 'Sse');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
 
       DataArray := FSsv_List[Index];
       WriteArray(DataArray, 0, 'Data set 9: Ssv', StrNoValueAssigned, 'Ssv');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
 
     if FSwtPackage.CompressionSource = csCompressionReComp then
@@ -1156,19 +1184,35 @@ begin
       DataArray := FCr_List[Index];
       WriteArray(DataArray, 0, 'Data set 10: Cr', StrNoValueAssigned, 'Cr');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
 
       DataArray := FCc_List[Index];
       WriteArray(DataArray, 0, 'Data set 11: Cc', StrNoValueAssigned, 'Cc');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
 
     DataArray := FVOID_List[Index];
     WriteArray(DataArray, 0, 'Data set 12: VOID', StrNoValueAssigned, 'VOID');
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
 
     DataArray := FSUB_List[Index];
     WriteArray(DataArray, 0, 'Data set 13: SUB', StrNoValueAssigned, 'SUB');
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
   end;
   Model.DataArrayManager.CacheDataArrays;
 end;
@@ -1312,6 +1356,7 @@ begin
     end;
 
     WriteObsScript;
+    WritePestScripts;
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -1484,6 +1529,18 @@ begin
     finally
       CloseFile;
     end;
+  end;
+end;
+
+procedure TModflowSWT_Writer.WritePestScripts;
+var
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  for DataArrayIndex := 0 to FPestDataArrays.Count - 1 do
+  begin
+    ADataArray := FPestDataArrays[DataArrayIndex];
+    WritePestZones(ADataArray, FInputFileName, Format(StrSWTd, [DataArrayIndex+1]));
   end;
 end;
 

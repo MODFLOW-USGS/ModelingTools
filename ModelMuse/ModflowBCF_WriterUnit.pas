@@ -4,13 +4,14 @@ interface
 
 uses
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, PhastModelUnit,
-  LayerStructureUnit, SysUtils, DataSetUnit;
+  LayerStructureUnit, SysUtils, DataSetUnit, System.Generics.Collections;
 
 type
   TModflowBCF_Writer = class(TCustomFlowPackageWriter)
   private
     FCheckingVCont: Boolean;
     FActiveDataArray: TDataArray;
+    FPestDataArrays: TList<TDataArray>;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSet3;
@@ -21,6 +22,7 @@ type
     procedure WriteDataSet7(LayerIndex: Integer);
     procedure WriteDataSet8(AquiferType: Integer; TransientModel: Boolean; Layer: Integer);
     procedure WriteDataSet9(AquiferType: Integer; Layer: Integer);
+    procedure WritePestScripts;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -32,6 +34,8 @@ type
     // return Kz or conductance in Z direction
     function ZConnection(LayerIndex: Integer): TDataArray; override;
   public
+    Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
+    destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
   end;
 
@@ -39,7 +43,7 @@ implementation
 
 uses
   ModflowUnitNumbers, frmProgressUnit, GoPhastTypes, 
-  Forms, frmErrorsAndWarningsUnit;
+  Forms, frmErrorsAndWarningsUnit, PestParamRoots;
 
 resourcestring
   StrWritingDataForL = '  Writing data for layer %d.';
@@ -54,6 +58,19 @@ resourcestring
   StrNegativeOrZeroSpeSto = 'Negative or zero specific storage';
 
 { TModflowBCF_Writer }
+
+constructor TModflowBCF_Writer.Create(AModel: TCustomModel;
+  EvaluationType: TEvaluationType);
+begin
+  inherited;
+  FPestDataArrays := TList<TDataArray>.Create;
+end;
+
+destructor TModflowBCF_Writer.Destroy;
+begin
+  FPestDataArrays.Free;
+  inherited;
+end;
 
 class function TModflowBCF_Writer.Extension: string;
 begin
@@ -78,6 +95,11 @@ begin
           cvmGradient, 1e6, etWarning);
         CheckArray(DataArray, Layer, StrZeroTrans,
           cvmGreater, 0, etWarning);
+        if DataArray.PestParametersUsed
+          and (FPestDataArrays.IndexOf(DataArray) < 0) then
+        begin
+          FPestDataArrays.Add(DataArray);
+        end;
       end;
     1, 3:
       begin
@@ -89,6 +111,11 @@ begin
           cvmGradient, 1e6, etWarning);
         CheckArray(DataArray, Layer, StrZeroK,
           cvmGreater, 0, etWarning);
+        if DataArray.PestParametersUsed
+          and (FPestDataArrays.IndexOf(DataArray) < 0) then
+        begin
+          FPestDataArrays.Add(DataArray);
+        end;
       end;
   end;
 end;
@@ -178,51 +205,53 @@ begin
   begin
     if Model.IsLayerSimulated(LayerIndex) then
     begin
-        frmProgressMM.AddMessage(Format(StrWritingDataForL,
-          [LayerIndex+1]));
-        Group := Model.GetLayerGroupByLayer(LayerIndex);
+      frmProgressMM.AddMessage(Format(StrWritingDataForL,
+        [LayerIndex+1]));
+      Group := Model.GetLayerGroupByLayer(LayerIndex);
 
-        AquiferType := Group.AquiferType;
-        if (AquiferType = 1) and (LayerIndex > 0) then
-        begin
-          AquiferType := 3;
-        end;
-        WriteDataSet4(LayerIndex, TransientModel, AquiferType);
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
+      AquiferType := Group.AquiferType;
+      if (AquiferType = 1) and (LayerIndex > 0) then
+      begin
+        AquiferType := 3;
+      end;
+      WriteDataSet4(LayerIndex, TransientModel, AquiferType);
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
 
-        WriteDataSet5or6(AquiferType, LayerIndex);
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
+      WriteDataSet5or6(AquiferType, LayerIndex);
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
 
-        WriteDataSet7(LayerIndex);
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
+      WriteDataSet7(LayerIndex);
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
 
-        WriteDataSet8(AquiferType, TransientModel, LayerIndex);
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
+      WriteDataSet8(AquiferType, TransientModel, LayerIndex);
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
 
-        WriteDataSet9(AquiferType, LayerIndex);
-        Application.ProcessMessages;
-        if not frmProgressMM.ShouldContinue then
-        begin
-          Exit;
-        end;
+      WriteDataSet9(AquiferType, LayerIndex);
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
     end;
   end;
+
+
 end;
 
 procedure TModflowBCF_Writer.WriteFile(const AFileName: string);
@@ -285,10 +314,24 @@ begin
     end;
 
     WriteDataSets4to9;
+
+    WritePestScripts;
   finally
     CloseFile;
   end;
 
+end;
+
+procedure TModflowBCF_Writer.WritePestScripts;
+var
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  for DataArrayIndex := 0 to FPestDataArrays.Count - 1 do
+  begin
+    ADataArray := FPestDataArrays[DataArrayIndex];
+    WritePestZones(ADataArray, FInputFileName, Format(StrBCFd, [DataArrayIndex+1]));
+  end;
 end;
 
 function TModflowBCF_Writer.XConnection(LayerIndex: Integer): TDataArray;
@@ -334,6 +377,11 @@ begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsWetDry);
     Assert(DataArray <> nil);
     WriteArray(DataArray, Layer, 'WETDRY', StrNoValueAssigned, 'WETDRY');
+    if DataArray.PestParametersUsed
+      and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
   end;
 end;
 
@@ -349,6 +397,12 @@ begin
     WriteArray(DataArray, Layer, 'Sf2', StrNoValueAssigned, 'Sf2');
     CheckArray(DataArray, Layer, StrNegativeOrZeroSpe,
       cvmGreater, 0, etWarning);
+    if DataArray.PestParametersUsed
+      and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
+
   end;
 end;
 
@@ -369,6 +423,11 @@ begin
         cvmGreater, 0, etWarning);
     finally
       FCheckingVCont := False;
+    end;
+    if DataArray.PestParametersUsed
+      and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
     end;
   end;
 end;
@@ -404,6 +463,10 @@ begin
     WriteArray(DataArray, Layer, 'Sf1', StrNoValueAssigned, 'Sf1');
     CheckArray(DataArray, Layer, ErrorMessage,
       cvmGreater, 0, etWarning);
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
   end;
 end;
 

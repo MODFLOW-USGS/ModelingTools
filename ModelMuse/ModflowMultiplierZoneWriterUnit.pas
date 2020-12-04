@@ -94,7 +94,8 @@ type
 implementation
 
 uses OrderedCollectionUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
-  frmGoPhastUnit, frmErrorsAndWarningsUnit, System.IOUtils;
+  frmGoPhastUnit, frmErrorsAndWarningsUnit, System.IOUtils,
+  PestParamRoots;
 
 resourcestring
   StrWritingSPackageI = 'Writing %s Package input.';
@@ -194,8 +195,11 @@ var
   UnitIndex: Integer;
   UsedParam: THufUsedParameter;
   Description: string;
+//  PlProcWriter: TParameterZoneWriter;
+  MIndex: Integer;
 begin
   LayerCount := Model.ModflowLayerCount;
+  MIndex := 1;
   for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
   begin
     Application.ProcessMessages;
@@ -232,9 +236,12 @@ begin
           end;
           WriteArray(DataArray, ArrayIndex, ArrayType + ' array for '
             + Param.ParameterName + ' in '
-            + Model.ModflowLayerBottomDescription(ArrayIndex), StrNoValueAssigned, ArrayName);
+            + Model.ModflowLayerBottomDescription(ArrayIndex),
+            StrNoValueAssigned, ArrayName);
         end;
       end;
+      WritePestZones(DataArray, FInputFileName, Format('M%d', [MIndex]));
+      Inc(MIndex);
       Model.DataArrayManager.CacheDataArrays;
       DataArray.CacheData;
     end;
@@ -261,6 +268,9 @@ begin
           // Data set 3
           Description := UsedParam.Description;
           WriteArray(DataArray, 0, Description, StrNoValueAssigned, ArrayName);
+          WritePestZones(DataArray, FInputFileName, Format('M%d', [MIndex]));
+          Inc(MIndex);
+
           Model.DataArrayManager.CacheDataArrays;
           DataArray.CacheData;
         end;

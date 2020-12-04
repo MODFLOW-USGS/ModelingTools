@@ -54,7 +54,8 @@ type
 implementation
 
 uses ModflowUnitNumbers, ScreenObjectUnit, frmErrorsAndWarningsUnit,
-  DataSetUnit, frmProgressUnit, Forms, GoPhastTypes, PestObsUnit;
+  DataSetUnit, frmProgressUnit, Forms, GoPhastTypes, PestObsUnit,
+  PestParamRoots;
 
 resourcestring
   DupNameErrorMessage = 'The following Lakes have the same Lake ID.';
@@ -431,6 +432,7 @@ begin
           StrNoValueAssigned, 'BDLKNC');
       end;
     end;
+    WritePestZones(LakeLeakance, FInputFileName, StrBDLK);
   end
   else
   begin

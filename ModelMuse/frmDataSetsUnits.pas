@@ -2929,6 +2929,8 @@ begin
         and FSelectedEdit.DataArray.PestParametersAllowed
         and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0)
         and (Pos(StrLayerDefinition, FSelectedEdit.FullClassification) <= 0)
+        and (FSelectedEdit.DataArray.Name <> rsWetDryThreshold)
+        and (not FSelectedEdit.DataArray.ParameterUsed)
         and not (dcFormula in FSelectedEdit.DataArray.Lock);
 
       if pcDataSets.ActivePageIndex < 0 then

@@ -9860,7 +9860,8 @@ begin
             AParam := PhastModel.ModflowSteadyParameters[PIndex];
             if AParam.ParameterType in SutraParamType then
             begin
-              PhastModel.WritePValAndTemplate(AParam.ParameterName, AParam.Value);
+              PhastModel.WritePValAndTemplate(AParam.ParameterName,
+                AParam.Value, AParam.ParameterType);
             end;
           end;
         end;

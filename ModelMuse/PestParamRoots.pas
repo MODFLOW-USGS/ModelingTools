@@ -28,6 +28,39 @@ const
   STO_SS         = 'SS';
   STO_SY         = 'SY';
 
+  // MODFLOW-2005
+  // Multipliers for array MODFLOW-2005 parameters.
+  StrMd = 'M%d';
+  // BCF package
+  StrBCFd = 'BCF%d';
+  // Farm Process
+  StrGSUR = 'GSUR';
+  //  KDEP
+  StrRS = 'RS';
+  // Lake package
+  StrBDLK = 'BDLK';
+  // LPF package
+  StrLPFd = 'LPF%d';
+  // RES package
+  StrBRES = 'BRES';
+  StrHCre = 'HCre';
+  StrRbth = 'Rbth';
+  // SUB package
+  StrSUBd = 'SUB%d';
+  // SWI package
+  StrSWId = 'SWI%d';
+  // UZF package
+  StrVKS = 'VKS';
+  StrSURF = 'SURF';
+  StrEPS = 'EPS';
+  StrTHTS = 'THTS';
+  StrTHTR = 'THTR';
+  StrTHTI = 'THTI';
+  // SWT package
+  StrSWTd = 'SWT%d';
+
+
+
 implementation
 
 end.

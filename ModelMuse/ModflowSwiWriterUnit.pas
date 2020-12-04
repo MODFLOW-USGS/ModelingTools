@@ -5,7 +5,7 @@ interface
 uses System.UITypes,
   CustomModflowWriterUnit, ModflowPackageSelectionUnit, Classes,
   PhastModelUnit, GoPhastTypes, ModflowSwiObsUnit, System.Generics.Collections,
-  InterpolatedObsCellUnit;
+  InterpolatedObsCellUnit, DataSetUnit;
 
 type
   TInterpolatedID = class(TObject)
@@ -46,6 +46,7 @@ type
     NSRF: integer;
     FObsOutputFileName: string;
     FDataToWrite: TDataToWrite;
+    FPestDataArrays: TList<TDataArray>;
     procedure EvaluateObservations;
     procedure EvaluateInterpolatedObservations;
     procedure WriteDataSet1;
@@ -65,6 +66,7 @@ type
     procedure WriteSwiObsExtBatchFile(const AFileName: string; ArchiveFile: Boolean);
     // For use with general purpose observation extractor
     procedure WritePestScript(const AFileName: string);
+    procedure WritePestScripts;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -78,9 +80,10 @@ type
 implementation
 
 uses
-  ModflowUnitNumbers, SysUtils, frmProgressUnit, DataSetUnit,
+  ModflowUnitNumbers, SysUtils, frmProgressUnit,
   AbstractGridUnit, frmErrorsAndWarningsUnit, ScreenObjectUnit, System.Math,
-  BasisFunctionUnit, FastGEO, InterpolatedObsResourceUnit, ArchiveNodeInterface;
+  BasisFunctionUnit, FastGEO, InterpolatedObsResourceUnit, ArchiveNodeInterface,
+  PestParamRoots;
 
 resourcestring
   StrTheSWIObservations = 'The SWI observations at the following cells have ' +
@@ -105,10 +108,12 @@ begin
   FObservations := TStringList.Create;
   FObservationNames := TStringList.Create;
   FInterpolatedObs := TInterpolatedObsObjectList.Create;
+  FPestDataArrays := TList<TDataArray>.Create;
 end;
 
 destructor TSwiWriter.Destroy;
 begin
+  FPestDataArrays.Free;
   FInterpolatedObs.Free;
   FObservationNames.Free;
   FObservations.Free;
@@ -631,6 +636,10 @@ begin
           'ZETA', LayerIndex = Model.Grid.LayerCount - 1);
       end;
     end;
+    if ADataArray.PestParametersUsed and (FPestDataArrays.IndexOf(ADataArray) < 0) then
+    begin
+      FPestDataArrays.Add(ADataArray);
+    end;
   end;
 end;
 
@@ -652,6 +661,10 @@ begin
         Format(StrSSZLayerD, [Layer]), StrNoValueAssigned, 'SSZ',
         LayerIndex = Model.Grid.LayerCount - 1);
     end;
+  end;
+  if ADataArray.PestParametersUsed and (FPestDataArrays.IndexOf(ADataArray) < 0) then
+  begin
+    FPestDataArrays.Add(ADataArray);
   end;
 end;
 
@@ -772,6 +785,7 @@ begin
   end;
 
   WritePestScript(AFileName);
+  WritePestScripts;
 end;
 
 procedure TSwiWriter.WriteInterpolatedIDs;
@@ -1106,6 +1120,18 @@ begin
     finally
       CloseFile;
     end;
+  end;
+end;
+
+procedure TSwiWriter.WritePestScripts;
+var
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  for DataArrayIndex := 0 to FPestDataArrays.Count - 1 do
+  begin
+    ADataArray := FPestDataArrays[DataArrayIndex];
+    WritePestZones(ADataArray, FInputFileName, Format(StrSWId, [DataArrayIndex+1]));
   end;
 end;
 

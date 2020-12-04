@@ -208,7 +208,7 @@ uses
   frmErrorsAndWarningsUnit, ModflowFmpCropSpatialUnit,
   Generics.Collections, ModflowFmpEvapUnit, ModflowFmpPrecipitationUnit,
   ModflowOutputControlUnit, ModflowFmpFarmIdUnit, frmGoPhastUnit,
-  ModflowMNW2_WriterUnit;
+  ModflowMNW2_WriterUnit, PestParamRoots;
 
 resourcestring
   StrWritingDataSet2a = '  Writing Data Set 2a.';
@@ -4366,6 +4366,9 @@ begin
     FreeAndNil(FOpenCloseFileStream);
     FWriteLocation := wlMain;
   end;
+
+  WritePestZones(DataArray, FInputFileName, StrGSUR);
+
 end;
 
 procedure TModflowFmpWriter.WriteParameterCells(CellList: TValueCellList;

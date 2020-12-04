@@ -1309,7 +1309,7 @@ begin
       NewLine;
 
       Model.WritePValAndTemplate(ParamList.Parameter.ParameterName,
-        ParamList.Parameter.Value);
+        ParamList.Parameter.Value, ParamList.Parameter.ParameterType);
 
       // data set 3
       for BarrierIndex := 0 to ParamList.BarrierCount - 1 do
@@ -1575,7 +1575,7 @@ begin
   begin
     ScreenObjectList := FParameterScreenObjectList.Objects[ParmIndex] as TParamList;
     Model.WritePValAndTemplate(ScreenObjectList.Parameter.ParameterName,
-      ScreenObjectList.Parameter.Value);
+      ScreenObjectList.Parameter.Value, ScreenObjectList.Parameter.ParameterType);
   end;
 
 end;

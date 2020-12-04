@@ -432,6 +432,8 @@ var
   Value: Double;
   ValueString: String;
   DPos: Integer;
+  PestParam: Boolean;
+  MF2005ParamCount: Integer;
 begin
   if FPValFile <> nil then
   begin
@@ -442,6 +444,7 @@ begin
       begin
         Continue;
       end;
+
       if TryStrToInt(Aline, ParameterCount) then
       begin
         FParameters.Capacity := ParameterCount;
@@ -456,13 +459,28 @@ begin
     Splitter := TStringList.Create;
     try
       Splitter.StrictDelimiter := False;
+      MF2005ParamCount := 0;
       while Not FPValFile.EndOfStream do
       begin
+        PestParam := False;
         ALine := Trim(FPValFile.ReadLine);
-        if (Aline = '') or (Aline[1] = '#') then
+        if (Aline = '') then
         begin
           Continue;
         end;
+        if (Aline[1] = '#') then
+        begin
+          if Copy(ALine, 1, 3) = '#--' then
+          begin
+            PestParam := True;
+            ALine := Trim(Copy(ALine, 4, MAXINT));
+          end
+          else
+          begin
+            Continue;
+          end;
+        end;
+
         Splitter.DelimitedText := ALine;
         if Splitter.Count <> 2 then
         begin
@@ -483,11 +501,18 @@ begin
         if TryStrToFloat(ValueString, Value) then
         begin
           AParameter.ParameterValue := Value;
-          FParameters.Add(UpperCase(AParameter.ParameterName), AParameter);
-          if FParameters.Count = ParameterCount then
+          if (MF2005ParamCount < ParameterCount) or PestParam then
           begin
-            break;
+            FParameters.Add(UpperCase(AParameter.ParameterName), AParameter);
           end;
+          if not PestParam then
+          begin
+            Inc(MF2005ParamCount);
+          end;
+          //if FParameters.Count = ParameterCount then
+          //begin
+          //  break;
+          //end;
         end
         else
         begin
@@ -499,10 +524,10 @@ begin
       Splitter.Free;
     end;
 
-    if FParameters.Count <> ParameterCount then
+    if MF2005ParamCount <> ParameterCount then
     begin
       raise EReadParamError.Create(Format(StrErrorReadingPVALF,
-        [FParameters.Count, ParameterCount]));
+        [MF2005ParamCount, ParameterCount]));
     end;
 
   end;

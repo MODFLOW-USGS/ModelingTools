@@ -4,11 +4,12 @@ interface
 
 uses Types, SysUtils, GoPhastTypes, CustomModflowWriterUnit, PhastModelUnit,
   ModflowParameterUnit, OrderedCollectionUnit, ModflowPackageSelectionUnit,
-  LayerStructureUnit;
+  LayerStructureUnit, System.Generics.Collections, DataSetUnit;
 
 type
   TCustomLpfWriter = class(TCustomFlowPackageWriter)
   private
+    FPestDataArrays: TList<TDataArray>;
     procedure CheckParamZones;
   protected
     NPLPF: integer;
@@ -29,8 +30,10 @@ type
     procedure WriteSY(TransientModel: Boolean; Group: TLayerGroup; ArrayIndex,
       MFLayerIndex: Integer);
     procedure WriteVKCB(LayerIndex, MFLayerIndex, ArrayIndex: Integer);
+    procedure WritePestScripts;
   public
     constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
+    destructor Destroy; override;
   end;
 
   TModflowLPF_Writer = class(TCustomLpfWriter)
@@ -64,8 +67,9 @@ resourcestring
 
 implementation
 
-uses ModflowUnitNumbers, ModflowOutputControlUnit, DataSetUnit,
-  frmErrorsAndWarningsUnit, frmProgressUnit, Forms, PestArrayWriterUnit;
+uses ModflowUnitNumbers, ModflowOutputControlUnit,
+  frmErrorsAndWarningsUnit, frmProgressUnit, Forms, PestArrayWriterUnit,
+  PestParamRoots;
 
 resourcestring
   StrVKCBParameterImpro = 'VKCB parameter improperly defined.';
@@ -435,6 +439,18 @@ begin
   end;
 end;
 
+procedure TCustomLpfWriter.WritePestScripts;
+var
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  for DataArrayIndex := 0 to FPestDataArrays.Count - 1 do
+  begin
+    ADataArray := FPestDataArrays[DataArrayIndex];
+    WritePestZones(ADataArray, FInputFileName, Format(StrLPFd, [DataArrayIndex+1]));
+  end;
+end;
+
 procedure TModflowLPF_Writer.WriteFile(const AFileName: string);
 var
   NameOfFile: string;
@@ -539,6 +555,8 @@ begin
       end;
 
       WriteLayerData;
+
+      WritePestScripts;
     finally
       CloseFile;
     end;
@@ -559,6 +577,10 @@ begin
     Assert(DataArray <> nil);
     WriteArray(DataArray, ArrayIndex,
     Format(StrWETDRY0sLayer1, [Group.AquiferName, MFLayerIndex]), StrNoValueAssigned, 'WETDRY');
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
   end;
 end;
 
@@ -594,6 +616,10 @@ begin
         begin
           CheckArray(DataArray, ArrayIndex, Format(StrZeroSValue, [rsKz, ArrayIndex + 1]),
             cvmGreater, 0, etWarning);
+        end;
+        if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+        begin
+          FPestDataArrays.Add(DataArray);
         end;
       end;
     end;
@@ -631,6 +657,10 @@ begin
           Format(StrZeroSValue, [rsSpecificYield, ArrayIndex + 1]),
           cvmGreater, 0, etWarning);
       end;
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
   end;
 end;
@@ -665,6 +695,10 @@ begin
         CheckArray(DataArray, ArrayIndex, Format(StrZeroSValue,
           [rsSpecific_Storage, ArrayIndex + 1]), cvmGreater, 0, etWarning);
       end;
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
   end;
 end;
@@ -691,6 +725,10 @@ begin
     begin
       CheckArray(DataArray, ArrayIndex, Format(StrNegativeOrZeroS,
         [rsVerticalAnisotropy]), cvmGreater, 0, etError);
+    end;
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
     end;
   end;
 end;
@@ -724,6 +762,10 @@ begin
           [rsKz, ArrayIndex + 1]), cvmGreater, 0, etWarning);
       end;
     end;
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
   end;
 end;
 
@@ -752,6 +794,10 @@ begin
     begin
       CheckArray(DataArray, ArrayIndex, Format(StrZeroSValue,
         [rsHorizontalAnisotropy, ArrayIndex + 1]), cvmGreater, 0, etWarning);
+    end;
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
     end;
   end;
 end;
@@ -785,6 +831,10 @@ begin
     end;
     CheckArray(DataArray, ArrayIndex, Format(StrLargeContrastInHy, [ArrayIndex + 1]),
       cvmGradient, 1e6, etWarning);
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
   end;
 end;
 
@@ -797,6 +847,13 @@ begin
   begin
     if Index in AllLpfParameters then FParameterUsed[Index] := False;
   end;
+  FPestDataArrays := TList<TDataArray>.Create;
+end;
+
+destructor TCustomLpfWriter.Destroy;
+begin
+  FPestDataArrays.Free;
+  inherited;
 end;
 
 function TModflowLPF_Writer.Package: TModflowPackageSelection;
@@ -990,7 +1047,7 @@ begin
         WriteString(' # PARNAM, PARTYP, PARVAL, NCLU');
         NewLine;
 
-        Model.WritePValAndTemplate(PARNAM,PARVAL);
+        Model.WritePValAndTemplate(PARNAM,PARVAL, Param.ParameterType);
 
         // Data set 9
         frmProgressMM.AddMessage(Format(StrWritingDataSetParam,

@@ -41,7 +41,7 @@ implementation
 
 uses Math, Contnrs , ModflowUnitNumbers, frmProgressUnit, OrderedCollectionUnit,
   GoPhastTypes, DataSetUnit, frmErrorsAndWarningsUnit, ModflowParameterUnit,
-  Forms;
+  Forms, PestParamRoots;
 
 const
   HufSteadyAndTransientParameters = [ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY];
@@ -521,6 +521,8 @@ begin
           Exit;
         end;
       end;
+      WritePestZones(DataArray, FInputFileName, NPF_WETDRY);
+
     finally
       Model.DataArrayManager.CacheDataArrays;
     end;
@@ -689,7 +691,7 @@ begin
         WriteInteger(NCLU);
         WriteString(' # Data set 10: PARNAM PARTYP Parval NCLU');
         NewLine;
-        Model.WritePValAndTemplate(PARNAM,PARVAL);
+        Model.WritePValAndTemplate(PARNAM,PARVAL, Parameter.ParameterType);
 
         for ClusterIndex := 0 to UsedParameters.Count - 1 do
         begin
@@ -748,14 +750,14 @@ begin
           PARTYP := ' SYTP';
           PARVAL := Param.Value;
           NCLU := 1;
-    
+
           WriteString(PARNAM);
           WriteString(PARTYP);
           WriteFloat(PARVAL);
           WriteInteger(NCLU);
           WriteString(' # Data set 10: PARNAM PARTYP Parval NCLU');
           NewLine;
-          Model.WritePValAndTemplate(PARNAM,PARVAL);
+          Model.WritePValAndTemplate(PARNAM,PARVAL, Param.ParameterType);
 
           HGUNAM := 'SYTP';
 

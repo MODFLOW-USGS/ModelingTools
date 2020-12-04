@@ -5,7 +5,8 @@ interface
 uses
   Classes, CustomModflowWriterUnit, ModflowPackageSelectionUnit, UnitList,
   IntListUnit, PhastModelUnit, SysUtils, ModflowSubsidenceDefUnit,
-  ModflowSwiWriterUnit, InterpolatedObsCellUnit;
+  ModflowSwiWriterUnit, InterpolatedObsCellUnit, System.Generics.Collections,
+  DataSetUnit;
 
 type
   TMaterialZone = record
@@ -97,6 +98,7 @@ type
     FNoDelayNames: TStringList;
     FDelayNames: TStringList;
     FSubObsCollectionList: TSubObsCollectionList;
+    FPestDataArrays: TList<TDataArray>;
     procedure RetrieveArrays;
     procedure EvaluateMaterialZones;
     procedure EvaluatePestObs;
@@ -111,6 +113,7 @@ type
     procedure WriteDataSet15;
     procedure WriteDataSet16;
     procedure WriteObsScript;
+    procedure WritePestScripts;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -124,11 +127,11 @@ type
 implementation
 
 uses
-  Contnrs, LayerStructureUnit, DataSetUnit,
+  Contnrs, LayerStructureUnit,
   GoPhastTypes, RbwParser, ModflowUnitNumbers, frmProgressUnit,
   frmErrorsAndWarningsUnit, Forms, JclMath, ScreenObjectUnit, System.Math,
   ModflowTimeUnit, System.Generics.Defaults, ModflowCellUnit, PestObsUnit,
-  AbstractGridUnit, FastGEO, BasisFunctionUnit;
+  AbstractGridUnit, FastGEO, BasisFunctionUnit, PestParamRoots;
 
 resourcestring
   StrSubsidenceNotSuppo = 'Subsidence not supported with MODFLOW-LGR';
@@ -227,11 +230,13 @@ begin
   FNoDelayNames := TStringList.Create;
   FDelayNames := TStringList.Create;
   FSubObsCollectionList := TSubObsCollectionList.Create;
+  FPestDataArrays := TList<TDataArray>.Create;
   
 end;
 
 destructor TModflowSUB_Writer.Destroy;
 begin
+  FPestDataArrays.Free;
   FSubObsCollectionList.Free;
   FDelayNames.Free;
   FNoDelayNames.Free;
@@ -1450,6 +1455,10 @@ begin
     DataArray := FRNB_List[Index];
     WriteArray(DataArray, 0, 'RNB', StrNoValueAssigned, 'RNB');
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
   end;
   Model.DataArrayManager.CacheDataArrays;
 end;
@@ -1485,10 +1494,18 @@ begin
     begin
       DataArray := FDstart_List[Index];
       WriteArray(DataArray, 0, 'Dstart', StrNoValueAssigned, 'Dstart');
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
       Model.DataArrayManager.AddDataSetToCache(DataArray);
 
       DataArray := FDHC_List[Index];
       WriteArray(DataArray, 0, 'DHC', StrNoValueAssigned, 'DHC');
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
       Model.DataArrayManager.AddDataSetToCache(DataArray);
     end;
 
@@ -1497,6 +1514,10 @@ begin
     begin
       WriteArray(DataArray, 0, 'DCOM', StrNoValueAssigned, 'DCOM');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
 
     DataArray := FDCOM_E_List[Index];
@@ -1504,6 +1525,10 @@ begin
     begin
       WriteArray(DataArray, 0, 'DCOME', StrNoValueAssigned, 'DCOME');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
 
     DataArray := FDCOM_V_List[Index];
@@ -1511,12 +1536,20 @@ begin
     begin
       WriteArray(DataArray, 0, 'DCOMV', StrNoValueAssigned, 'DCOMV');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
 
     DataArray := FDZ_List[Index];
     WriteArray(DataArray, 0, 'DZ', StrNoValueAssigned, 'DZ');
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
-    
+
     DataArray := FNZ_List[Index];
     WriteArray(DataArray, 0, 'NZ', StrNoValueAssigned, 'NZ');
     // This one isn't cached because it is temporary
@@ -1533,30 +1566,57 @@ begin
   begin
     DataArray := FHC_List[Index];
     WriteArray(DataArray, 0, 'HC', StrNoValueAssigned, 'HC');
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+
     DataArray := FSfe_List[Index];
     WriteArray(DataArray, 0, 'Sfe', StrNoValueAssigned, 'Sfe');
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+
     DataArray := FSfv_List[Index];
     WriteArray(DataArray, 0, 'Sfv', StrNoValueAssigned, 'Sfv');
+    if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+    begin
+      FPestDataArrays.Add(DataArray);
+    end;
     Model.DataArrayManager.AddDataSetToCache(DataArray);
+
     DataArray := FCom_List[Index];
     if DataArray <> nil then
     begin
       WriteArray(DataArray, 0, 'Com', StrNoValueAssigned, 'Com');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
     DataArray := FComE_List[Index];
     if DataArray <> nil then
     begin
       WriteArray(DataArray, 0, 'ComE', StrNoValueAssigned, 'ComE');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
     DataArray := FComV_List[Index];
     if DataArray <> nil then
     begin
       WriteArray(DataArray, 0, 'ComV', StrNoValueAssigned, 'ComV');
       Model.DataArrayManager.AddDataSetToCache(DataArray);
+      if DataArray.PestParametersUsed and (FPestDataArrays.IndexOf(DataArray) < 0) then
+      begin
+        FPestDataArrays.Add(DataArray);
+      end;
     end;
   end;
   Model.DataArrayManager.CacheDataArrays;
@@ -1731,6 +1791,18 @@ begin
   end;
 end;
 
+procedure TModflowSUB_Writer.WritePestScripts;
+var
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  for DataArrayIndex := 0 to FPestDataArrays.Count - 1 do
+  begin
+    ADataArray := FPestDataArrays[DataArrayIndex];
+    WritePestZones(ADataArray, FInputFileName, Format(StrSUBd, [DataArrayIndex+1]));
+  end;
+end;
+
 procedure TModflowSUB_Writer.WriteFile(const AFileName: string);
 begin
   FSubPackage := Package as TSubPackageSelection;
@@ -1844,6 +1916,7 @@ begin
         Exit;
       end;
 
+      WritePestScripts;
     finally
       CloseFile;
     end;

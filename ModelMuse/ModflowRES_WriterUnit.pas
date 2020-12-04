@@ -43,7 +43,7 @@ implementation
 
 uses RbwParser, ModflowUnitNumbers, DataSetUnit, PhastModelUnit,
   ModflowTimeUnit, frmProgressUnit, frmFormulaErrorsUnit, Forms, GoPhastTypes,
-  frmErrorsAndWarningsUnit, AbstractGridUnit, SolidGeom;
+  frmErrorsAndWarningsUnit, AbstractGridUnit, SolidGeom, PestParamRoots;
 
 resourcestring
   StrNoReservoirsDefine = 'No reservoirs defined';
@@ -377,6 +377,7 @@ begin
   DataArray := Model.DataArrayManager.GetDataSetByName(rsResBottom);
   Assert(DataArray <> nil);
   WriteArray(DataArray, 0, ' # Data Set 4: BRES', StrNoValueAssigned, 'BRES');
+  WritePestZones(DataArray, FInputFileName, StrBRES);
 end;
 
 procedure TModflowRES_Writer.WriteDataSet5;
@@ -386,6 +387,7 @@ begin
   DataArray := Model.DataArrayManager.GetDataSetByName(rsResKv);
   Assert(DataArray <> nil);
   WriteArray(DataArray, 0, ' # Data Set 5: HCres', StrNoValueAssigned, 'HCres');
+  WritePestZones(DataArray, FInputFileName, StrHCre);
 end;
 
 procedure TModflowRES_Writer.WriteDataSet6;
@@ -395,6 +397,7 @@ begin
   DataArray := Model.DataArrayManager.GetDataSetByName(rsResBedThickness);
   Assert(DataArray <> nil);
   WriteArray(DataArray, 0, ' # Data Set 6: Rbthck', StrNoValueAssigned, 'Rbthck');
+  WritePestZones(DataArray, FInputFileName, StrRbth);
 end;
 
 procedure TModflowRES_Writer.EvaluateStartAndEndHead(ResItem: TResItem; Reservoir: TResBoundary;
