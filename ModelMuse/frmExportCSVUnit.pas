@@ -471,6 +471,10 @@ var
           WriteString(', ');
         end;
         ADataArray := DataArrayList[Index];
+        if not ADataArray.IsValue[LayerIndex, RowIndex, ColumnIndex] then
+        begin
+          Continue;
+        end;
         case ADataArray.DataType of
           rdtDouble:
             begin

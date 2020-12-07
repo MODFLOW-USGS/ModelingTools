@@ -1052,6 +1052,8 @@ const
   StrDATABINARY = 'DATA(BINARY)';
   StrDATA = 'DATA';
   StrArrays = 'arrays';
+  StrKrigfactorsscript = '.krig_factors_script';
+
 
 implementation
 
@@ -1348,6 +1350,8 @@ var
   ADataArray: TDataArray;
   INFLE: string;
   PLPROC_Location: string;
+  DataArrayIndex: Integer;
+  KrigFactorsFileName: string;
 //  Modelname: string;
 //  OutputPrefix: string;
 begin
@@ -1636,6 +1640,23 @@ begin
           BatchFile.Add(StrMf6ObsExtractorexe + ' ' + InsFileName);
         end;
       end;
+    {$IFDEF PEST}
+      if Model.PestUsed then
+      begin
+        PLPROC_Location := GetPLPROC_Location(FileName, Model);
+        PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
+        for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
+        begin
+          ADataArray := Model.DataArrayManager[DSIndex];
+          if ADataArray.PilotPointsUsed then
+          begin
+            KrigFactorsFileName := ExtractFileName(ChangeFileExt(
+              FileName, '.' + ADataArray.Name) + StrKrigfactorsscript);
+            BatchFile.Add(PLPROC_Location + KrigFactorsFileName);
+          end;
+        end;
+      end;
+    {$ENDIF}
 
       if NetworkDrive then
       begin

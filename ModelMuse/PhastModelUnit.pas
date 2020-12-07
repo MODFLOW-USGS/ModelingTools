@@ -10115,6 +10115,10 @@ const
 //               Bug fix: If there is an out of memory error when drawing the
 //                3D view, the 3D view will be hidden until ModelMuse is
 //                restarted.
+//               Bug fix: Fixed a bug pasting objects from the clipboard when
+//                the clipboard can not be accessed.
+//               Bug fix: Fixed a bug that could cause an error when exporting
+//                data to a CSV file.
 
 const
   // version number of ModelMuse.
@@ -26347,7 +26351,15 @@ var
   ClipboardText: string;
   TestText: string;
 begin
-  ClipboardText := ClipBoard.AsText;
+  try
+    ClipboardText := ClipBoard.AsText;
+  except on E: EClipboardException do
+    begin
+      Beep;
+      MessageDlg(E.Message, mtError, [mbOK], 0);
+      Exit;
+    end;
+  end;
   TestText := Copy(ClipboardText, 1, 100);
   if Pos('object TScreenObjectClipboard', TestText) = 1 then
   begin

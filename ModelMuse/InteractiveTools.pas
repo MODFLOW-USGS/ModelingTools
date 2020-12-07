@@ -4091,7 +4091,8 @@ begin
     end
     else
     begin
-      Assert(False);
+      Exit;
+//      Assert(False);
     end;
     CurrentScreenObject.ElevationCount := TElevationCount(frmGoPhast.comboZCount.ItemIndex);
     frmGoPhast.PhastModel.AddScreenObject(CurrentScreenObject);
@@ -4366,7 +4367,8 @@ begin
     end
     else
     begin
-      Assert(False);
+      Exit;
+//      Assert(False);
     end;
     CurrentScreenObject.ElevationCount := TElevationCount(frmGoPhast.comboZCount.ItemIndex);
 
@@ -4616,7 +4618,8 @@ begin
     end
     else
     begin
-      Assert(False);
+      Exit;
+//      Assert(False);
     end;
     CurrentScreenObject.ElevationCount := TElevationCount(
       frmGoPhast.comboZCount.ItemIndex);

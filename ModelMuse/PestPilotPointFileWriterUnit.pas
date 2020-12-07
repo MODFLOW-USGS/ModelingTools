@@ -117,6 +117,10 @@ var
   QuadTreeIndex: Integer;
   Value: Double;
   FileProperties: TPilotPointFileObject;
+  PointToTest: TPoint2D;
+  resultPointer: Pointer;
+  CriticalDistance: Double;
+  PIndex: Integer;
 begin
   Assert(DataArray <> nil);
   Assert(DataArray.PestParametersUsed);
@@ -127,6 +131,7 @@ begin
       Format(StrPilotPointsWillNo, [DataArray.Name]));
     Exit;
   end;
+  CriticalDistance := PestProperties.PilotPointSpacing * Sqrt(2);
   FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
   DisLimits := Model.DiscretizationLimits(vdTop);
 
@@ -174,7 +179,6 @@ begin
           begin
             APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,RowIndex, ColIndex];
             Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
-//              / AParam.Value;
             Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
             AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex])); 
           end;
@@ -213,38 +217,57 @@ begin
 
             ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
               DataArray.ParamDataSetName);
+            PIndex := 1;
             for PilotPointIndex := 0 to PestProperties.PilotPointCount - 1 do
             begin
               APilotPoint := PestProperties.PilotPoints[PilotPointIndex];
               ACell := Model.PointToCell(DataArray.EvaluatedAt, APilotPoint);
               if (ACell.Col >= 0) and (ACell.Row >= 0) then
               begin
-              try
                 ParamName := UpperCase(ParamNameDataArray.StringData[
                   LayerIndex, ACell.Row, ACell.Col]);
-              except
-                Beep;
-              end;
                 if UpperCase(AParam.ParameterName) = ParamName then
                 begin
                   Value := DataArray.RealData[LayerIndex, ACell.Row, ACell.Col]
                 end
                 else
                 begin
-                  ValuePointer := AQuadTree.NearestPointsFirstData(
-                    APilotPoint.x, APilotPoint.y);
-                  Value := ValuePointer^;
+                  PointToTest := APilotPoint;
+                  AQuadTree.FirstNearestPoint(PointToTest.x, PointToTest.y,
+                    resultPointer);
+                  if Distance(PointToTest, APilotPoint) <= CriticalDistance then
+                  begin
+                    ValuePointer := resultPointer;
+                    Value := ValuePointer^;
+                  end
+                  else
+                  begin
+                    // This point is not on the active area for this parameter
+                    // and there is at least one other point that is closer.
+                    Continue;
+                  end;
                 end;
               end
               else
               begin
-                ValuePointer := AQuadTree.NearestPointsFirstData(
-                  APilotPoint.x, APilotPoint.y);
-                Value := ValuePointer^;
+                PointToTest := APilotPoint;
+                AQuadTree.FirstNearestPoint(PointToTest.x, PointToTest.y,
+                  resultPointer);
+                if Distance(PointToTest, APilotPoint) <= CriticalDistance then
+                begin
+                  ValuePointer := resultPointer;
+                  Value := ValuePointer^;
+                end
+                else
+                begin
+                  // This point is not on the active area for this parameter
+                  // and there is at least one other point that is closer.
+                  Continue;
+                end;
               end;
 
               SwitchToMain;
-              WriteInteger(PilotPointIndex + 1);
+              WriteInteger(PIndex);
               WriteFloat(APilotPoint.x);
               WriteFloat(APilotPoint.y);
               WriteInteger(ParamIndex + 1);
@@ -252,16 +275,19 @@ begin
               NewLine;
 
               SwitchToTemplate;
-              WriteInteger(PilotPointIndex + 1);
+              WriteInteger(PIndex);
               WriteFloat(APilotPoint.x);
               WriteFloat(APilotPoint.y);
               WriteInteger(ParamIndex + 1);
               WriteString(' ');
               WriteString(PestProperties.TemplateCharacter);
               WriteString('           ');
-              WriteString(Format('%0:s%1:d',[FileProperties.ParamFamily,PilotPointIndex+1]));
+              WriteString(Format('%0:s%1:d',
+                [FileProperties.ParamFamily,PilotPointIndex+1]));
               WriteString(PestProperties.TemplateCharacter);
               NewLine;
+
+              Inc(PIndex);
             end;
           finally
             CloseTemplateFile;

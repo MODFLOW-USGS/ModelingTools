@@ -648,7 +648,7 @@ procedure TParameterZoneWriter.WriteKrigingFactorsScript(
 var
   ScriptFileName: string;
 begin
-  ScriptFileName := ChangeFileExt(FParamValuesFileName, '.krig_factors_script');
+  ScriptFileName := ChangeFileExt(FParamValuesFileName, StrKrigfactorsscript);
   OpenFile(ScriptFileName);
   try
     WriteString('#Script for PLPROC for saving kriging factors');
@@ -663,20 +663,53 @@ begin
 end;
 
 procedure TParameterZoneWriter.SaveKrigingFactors(const AFileName: string);
+var
+  PIndex: Integer;
+  PPIndex: Integer;
+  FileProperties: TPilotPointFileObject;
+  AParam: TModflowSteadyParameter;
 begin
   WriteString('#Save Kriging factors');
   NewLine;
-  WriteString('calc_kriging_factors_auto_2d( &');
-  NewLine;
-  WriteString(Format('  target_clist=%s, &', [KDisName]));
-  NewLine;
-  WriteString('  source_clist=PilotPoints, &');
-  NewLine;
+
   FKrigingFactorsFile := ChangeFileExt(AFileName, '.' + FDataArray.Name)
-     + '.Factors';
-  WriteString(Format('  file=%s;format=formatted)',
-    [ExtractFileName(FKrigingFactorsFile)]));
-  NewLine;
+    + '.Factors';
+{
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+    if AParam.UsePilotPoints then
+    begin
+      for PPIndex := 0 to FPilotPointFiles.Count - 1 do
+      begin
+        FileProperties := FPilotPointFiles[PPIndex];
+        if FileProperties.Parameter = AParam then
+        begin
+}
+
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+    if AParam.UsePilotPoints then
+    begin
+      for PPIndex := 0 to FPilotPointFiles.Count - 1 do
+      begin
+        FileProperties := FPilotPointFiles[PPIndex];
+        if FileProperties.Parameter = AParam then
+        begin
+          WriteString('calc_kriging_factors_auto_2d( &');
+          NewLine;
+          WriteString(Format('  target_clist=%s, &', [KDisName]));
+          NewLine;
+          WriteString(Format('  source_clist=PilotPoints%d, &', [PPIndex+1]));
+          NewLine;
+          WriteString(Format('  file=%0:s%1:d;format=formatted)',
+            [ExtractFileName(FKrigingFactorsFile), PPIndex+1]));
+          NewLine;
+        end;
+      end;
+    end;
+  end;
   NewLine;
 end;
 
@@ -771,7 +804,7 @@ var
   PListName: string;
   PPIndex: Integer;
   FileProperties: TPilotPointFileObject;
-  FoundFirst: Boolean;
+//  FoundFirst: Boolean;
 begin
   WriteString('#Read pilot point data');
   NewLine;
@@ -781,23 +814,14 @@ begin
     AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
     if AParam.UsePilotPoints then
     begin
-      FoundFirst := False;
+//      FoundFirst := False;
       for PPIndex := 0 to FPilotPointFiles.Count - 1 do
       begin
         FileProperties := FPilotPointFiles[PPIndex];
         if FileProperties.Parameter = AParam then
         begin
-          if not FoundFirst then
-          begin
-            WriteString('PilotPoints = read_list_file(skiplines=0,dimensions=2, &');
-            NewLine;
-            FoundFirst := True;
-          end
-          else
-          begin
-            WriteString('read_list_file(reference_clist=PilotPoints,skiplines=0,dimensions=2, &');
-            NewLine;
-          end;
+          WriteString(Format('PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &', [PPIndex+1]));
+          NewLine;
           PListName := Format('%0:s_%1:d',
             [AParam.ParameterName, FileProperties.Layer + 1]);
           WriteString(Format('  plist=''%0:s'';column=%1:d, &',
@@ -809,22 +833,6 @@ begin
           NewLine;
         end;
       end;
-//      AQuadList := FQuadTrees[PIndex];
-//      for LayerIndex := 0 to FDataArray.LayerCount - 1 do
-//      begin
-//        if AQuadTree.Count > 0 then
-//        begin
-//          PListName := Format('%0:s_%1:d',
-//            [AParam.ParameterName, LayerIndex + 1]);
-//          WriteString(Format('  plist=''%0:s'';column=%1:d, &',
-//            [PListName, ColIndex]));
-//          Inc(ColIndex);
-//          NewLine;
-//        end;
-//        WriteString(Format('  id_type=''indexed'',file=''%s'')',
-//          [ExtractFileName(FPilotPointFileName)]));
-//        NewLine;
-//      end;
     end;
   end;
   NewLine;
@@ -1157,6 +1165,20 @@ begin
       [KDisName]));
     NewLine;
 
+{
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+    if AParam.UsePilotPoints then
+    begin
+      for PPIndex := 0 to FPilotPointFiles.Count - 1 do
+      begin
+        FileProperties := FPilotPointFiles[PPIndex];
+        if FileProperties.Parameter = AParam then
+        begin
+}
+
+
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
       WriteString('# Setting values for layer');
@@ -1176,6 +1198,7 @@ begin
           NewLine;
 
           UsedFileProperties := nil;
+          PIndex := 0;
           for FileIndex := 0 to FPilotPointFiles.Count - 1 do
           begin
             FileProperties := FPilotPointFiles[FileIndex];
@@ -1183,6 +1206,8 @@ begin
               and (FileProperties.Layer = LayerIndex) then
             begin
               UsedFileProperties := FileProperties;
+              PIndex := FileIndex;
+              break;
             end;
           end;
 
@@ -1193,14 +1218,14 @@ begin
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
-              '    temp=%0:s.krige_using_file(file=''%1:s'';form=''formatted'',transform=''none'')',
-              [PListName, ExtractFileName(FKrigingFactorsFile)]));
+              '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'',transform=''none'')',
+              [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1]));
             NewLine;
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp * %2:s',
-              [LayerIndex + 1, PIndex, AParam.ParameterName]));
+              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp', // * %2:s',
+              [LayerIndex + 1, PIndex+1 {, AParam.ParameterName}]));
             NewLine;
           end
           else
@@ -1208,31 +1233,6 @@ begin
             WriteString('    # no interpolated values defined for this layer and parameter');
             NewLine;
           end;
-          
-//          QuadList := FQuadTrees[ParameterIndex];
-//          QuadTree := QuadList[LayerIndex];
-//          if QuadTree.Count > 0 then
-//          begin
-//            PListName := Format('%0:s_%1:d',
-//              [AParam.ParameterName, LayerIndex+1]);
-//            WriteString('    # Get interpolated values');
-//            NewLine;
-//            WriteString(Format(
-//              '    temp=%0:s.krige_using_file(file=''%1:s'';form=''formatted'',transform=''none'')',
-//              [PListName, ExtractFileName(FKrigingFactorsFile)]));
-//            NewLine;
-//            WriteString('    # Write interpolated values in zones');
-//            NewLine;
-//            WriteString(Format(
-//              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp * %2:s',
-//              [LayerIndex + 1, PIndex, AParam.ParameterName]));
-//            NewLine;
-//          end
-//          else
-//          begin
-//            WriteString('    # no interpolated values defined for this layer and parameter');
-//            NewLine;
-//          end;
         end
         else
         begin
@@ -1240,7 +1240,7 @@ begin
           NewLine;
           WriteString(Format(
             '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-            [LayerIndex + 1, PIndex, AParam.ParameterName]));
+            [LayerIndex + 1, PIndex+1, AParam.ParameterName]));
           NewLine;
         end;
       end;

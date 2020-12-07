@@ -7767,11 +7767,6 @@ var
   APoint: TPathLinePointV6;
   Grid: TModflowGrid;
   ADate: TDateTime;
-//  LineIndex: Integer;
-//  Line: TCustomPathLine;
-//  FirstPoint: TPathLinePoint;
-//  LastPoint: TPathLinePoint;
-//  FirstTimeFound: Boolean;
   FTextFile: TextFile;
   TrackDirection: integer;
   RefTime: double;
@@ -7783,9 +7778,6 @@ var
   LocalY: double;
   Splitter: TStringList;
   FirstLine: boolean;
-//  TimeIndex: integer;
-//  FirstPositiveTimeFound: Boolean;
-//  APathlinePoint: TPathLinePoint;
   procedure CreateParticle;
   var
     Point2D: TPoint2D;

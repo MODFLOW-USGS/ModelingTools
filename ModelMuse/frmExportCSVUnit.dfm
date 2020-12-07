@@ -4,9 +4,9 @@ inherited frmExportCSV: TfrmExportCSV
   Caption = 'Export Data as CSV'
   ClientHeight = 452
   ClientWidth = 578
-  ExplicitWidth = 596
-  ExplicitHeight = 497
-  PixelsPerInch = 120
+  ExplicitWidth = 594
+  ExplicitHeight = 491
+  PixelsPerInch = 96
   TextHeight = 18
   object Panel1: TPanel
     Left = 0
@@ -31,12 +31,24 @@ inherited frmExportCSV: TfrmExportCSV
       Width = 570
       Height = 273
       Anchors = [akLeft, akTop, akRight, akBottom]
+      Colors.BorderColor = 15987699
+      Colors.DisabledColor = clGray
+      Colors.DropMarkColor = 15385233
+      Colors.DropTargetColor = 15385233
+      Colors.DropTargetBorderColor = 15385233
+      Colors.FocusedSelectionColor = 15385233
+      Colors.FocusedSelectionBorderColor = 15385233
+      Colors.GridLineColor = 15987699
+      Colors.HeaderHotColor = clBlack
+      Colors.HotColor = clBlack
+      Colors.SelectionRectangleBlendColor = 15385233
+      Colors.SelectionRectangleBorderColor = 15385233
+      Colors.SelectionTextColor = clBlack
+      Colors.TreeLineColor = 9471874
+      Colors.UnfocusedColor = clGray
+      Colors.UnfocusedSelectionColor = 13421772
+      Colors.UnfocusedSelectionBorderColor = 13421772
       Header.AutoSizeIndex = 0
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.MainColumn = -1
       TabOrder = 0
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
@@ -122,7 +134,7 @@ inherited frmExportCSV: TfrmExportCSV
         'Cell, element, or node'
         'Data set values')
       ParentDoubleBuffered = False
-      ScrollWidth = 173
+      ScrollWidth = 170
       TabOrder = 3
     end
   end
