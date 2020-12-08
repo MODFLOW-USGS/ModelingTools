@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, System.SysUtils, PestObsUnit, GoPhastTypes,
-  PhastModelUnit, ObsInterfaceUnit, OrderedCollectionUnit;
+  PhastModelUnit, ObsInterfaceUnit, OrderedCollectionUnit, System.Classes;
 
 type
   TPestControlFileWriter = class(TCustomFileWriter)
@@ -60,7 +60,7 @@ uses
   PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit,
   ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
   ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
-  ModflowPackagesUnit, DataSetUnit;
+  ModflowPackagesUnit, DataSetUnit, PilotPointDataUnit;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -76,6 +76,9 @@ resourcestring
   'er group ';
   StrObservationGroupNo = 'Observation group not assigned';
   StrNoObservationGroupAssigned = 'No observation group has been assigned to %s.';
+  StrParameterUndefined = 'Parameter undefined';
+  StrPilotPointsWereDe = 'Pilot points were defined for %s but no parameter ' +
+  'by that name that uses pilot points has been defined.';
 
 { TPestControlFileWriter }
 
@@ -173,6 +176,8 @@ var
   ParamIndex: Integer;
   AParam: TModflowParameter;
   UsedTypes: TParameterTypes;
+  index: Integer;
+  ASteadyParam: TModflowSteadyParameter;
 begin
   result := 0;
 
@@ -196,8 +201,8 @@ begin
 
   for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
   begin
-    AParam := Model.ModflowSteadyParameters[ParamIndex];
-    if AParam.ParameterType in UsedTypes then
+    ASteadyParam := Model.ModflowSteadyParameters[ParamIndex];
+    if (ASteadyParam.ParameterType in UsedTypes) and not ASteadyParam.UsePilotPoints then
     begin
       Inc(result);
     end;
@@ -219,6 +224,11 @@ begin
     begin
       Inc(result);
     end;
+  end;
+
+  for index := 0 to Model.PilotPointData.Count - 1 do
+  begin
+    result := result + Model.PilotPointData[index].Count;
   end;
 
   if result = 0 then
@@ -673,7 +683,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParameterGroups);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterGroupName);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupNo);
-
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterUndefined);
 
   if not Model.PestUsed then
   begin
@@ -1034,10 +1044,25 @@ var
   UsedTypes: TParameterTypes;
   ParamIndex: Integer;
   AParam: TModflowParameter;
-  procedure WriteParameter(AParam: TModflowParameter);
+  PilotPointParameters: TStringList;
+  index: Integer;
+  PilotPointItem: TStoredPilotParamDataItem;
+  ParameterIndex: Integer;
+  PilotParamName: string;
+  procedure WriteParameter(AParam: TModflowParameter; ParameterName: string = '');
+  var
+    PARNME: string;
   begin
     //PARNME
-    WriteString(AParam.ParameterName);
+    if ParameterName <> '' then
+    begin
+      PARNME := ParameterName;
+    end
+    else
+    begin
+      PARNME := AParam.ParameterName;
+    end;
+    WriteString(PARNME);
 
     //PARTRANS
     case AParam.Transform of
@@ -1144,13 +1169,48 @@ begin
 
   WriteSectionHeader('parameter data');
 
-  for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
-  begin
-    AParam := Model.ModflowSteadyParameters[ParamIndex];
-    if AParam.ParameterType in UsedTypes then
+  PilotPointParameters := TStringList.Create;
+  try
+    for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
     begin
-      WriteParameter(AParam);
+      AParam := Model.ModflowSteadyParameters[ParamIndex];
+      if AParam.ParameterType in UsedTypes then
+      begin
+        if (AParam is TModflowSteadyParameter)
+          and TModflowSteadyParameter(AParam).UsePilotPoints then
+        begin
+          PilotPointParameters.AddObject(AParam.ParameterName, AParam);
+        end
+        else
+        begin
+          WriteParameter(AParam);
+        end;
+      end;
     end;
+    PilotPointParameters.CaseSensitive := False;
+    PilotPointParameters.Sorted := True;
+
+    for index := 0 to Model.PilotPointData.Count - 1 do
+    begin
+      PilotPointItem := Model.PilotPointData[index];
+      ParamIndex := PilotPointParameters.IndexOf(PilotPointItem.BaseParamName);
+      if ParamIndex >= 0 then
+      begin
+        AParam := PilotPointParameters.Objects[ParamIndex] as TModflowParameter;
+        for ParameterIndex := 1 to PilotPointItem.Count do
+        begin
+          PilotParamName := PilotPointItem.ParameterName(ParameterIndex);
+          WriteParameter(AParam, PilotParamName);
+        end;
+      end
+      else
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrParameterUndefined,
+          Format(StrPilotPointsWereDe, [PilotPointItem.BaseParamName]));
+      end;
+    end;
+  finally
+    PilotPointParameters.Free;
   end;
 
   for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do

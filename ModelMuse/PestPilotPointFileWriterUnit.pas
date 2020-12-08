@@ -4,34 +4,10 @@ interface
 
 uses
   System.Classes, System.SysUtils, PhastModelUnit, CustomModflowWriterUnit,
-  DataSetUnit, System.Generics.Collections, ModflowParameterUnit, GoPhastTypes;
+  DataSetUnit, System.Generics.Collections, ModflowParameterUnit, GoPhastTypes,
+  PilotPointDataUnit;
 
 type
-  TPilotPointFileObject = class(TObject)
-  private
-    FFileName: string;
-    FDataArray: TDataArray;
-    FParameter: TModflowSteadyParameter;
-    FLayer: Integer;
-    FParameterIndex: Integer;
-    FParamFamily: string;
-    procedure SetDataArray(const Value: TDataArray);
-    procedure SetFileName(const Value: string);
-    procedure SetParameter(const Value: TModflowSteadyParameter);
-    procedure SetLayer(const Value: Integer);
-    procedure SetParameterIndex(const Value: Integer);
-    procedure SetParamFamily(const Value: string);
-  public
-   property DataArray: TDataArray read FDataArray write SetDataArray;
-   property Parameter: TModflowSteadyParameter read FParameter write SetParameter;
-   property ParameterIndex: Integer read FParameterIndex write SetParameterIndex;
-   property FileName: string read FFileName write SetFileName;
-   property Layer: Integer read FLayer write SetLayer;
-   property ParamFamily: string read FParamFamily write SetParamFamily;
-  end;
-
-  TPilotPointFiles = TObjectList<TPilotPointFileObject>;
-
   TPilotPointWriter = class(TCustomFileWriter)
   private
     FFileName: string;
@@ -46,7 +22,6 @@ type
     procedure WriteFile(AFileName: string; DataArray: TDataArray;
       PilotPointFiles: TPilotPointFiles; const DataArrayID: string);
   end;
-
 
 implementation
 
@@ -159,7 +134,7 @@ begin
     ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
       DataArray.ParamDataSetName);
     SetLength(Values, DataArray.RowCount * DataArray.ColumnCount);
-     
+
     for LayerIndex := 0 to DataArray.LayerCount - 1 do
     begin
       for QuadTreeIndex := 0 to QuadTreeList.Count - 1 do
@@ -180,11 +155,11 @@ begin
             APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,RowIndex, ColIndex];
             Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
             Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
-            AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex])); 
+            AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex]));
           end;
 
           Inc(ValueIndex);
-        end;                                         
+        end;
       end;
 
       for ParamIndex := 0 to ParamList.Count - 1 do
@@ -266,6 +241,8 @@ begin
                 end;
               end;
 
+              FileProperties.Count := PIndex;
+
               SwitchToMain;
               WriteInteger(PIndex);
               WriteFloat(APilotPoint.x);
@@ -282,8 +259,7 @@ begin
               WriteString(' ');
               WriteString(PestProperties.TemplateCharacter);
               WriteString('           ');
-              WriteString(Format('%0:s%1:d',
-                [FileProperties.ParamFamily,PilotPointIndex+1]));
+              WriteString(FileProperties.ParameterName(PIndex));
               WriteString(PestProperties.TemplateCharacter);
               NewLine;
 
@@ -295,47 +271,14 @@ begin
           end;
 
         end;
-      end;                             
+      end;
     end;
-  finally    
+  finally
     ParamList.Free;
     QuadTreeList.Free;
     ParamNameDictionary.Free;
     ParamQuadDictionary.Free;
-  end;      
-end;
-
-{ TPilotPointFileObject }
-
-procedure TPilotPointFileObject.SetDataArray(const Value: TDataArray);
-begin
-  FDataArray := Value;
-end;
-
-procedure TPilotPointFileObject.SetFileName(const Value: string);
-begin
-  FFileName := Value;
-end;
-
-procedure TPilotPointFileObject.SetLayer(const Value: Integer);
-begin
-  FLayer := Value;
-end;
-
-procedure TPilotPointFileObject.SetParameter(
-  const Value: TModflowSteadyParameter);
-begin
-  FParameter := Value;
-end;
-
-procedure TPilotPointFileObject.SetParameterIndex(const Value: Integer);
-begin
-  FParameterIndex := Value;
-end;
-
-procedure TPilotPointFileObject.SetParamFamily(const Value: string);
-begin
-  FParamFamily := Value;
+  end;
 end;
 
 end.

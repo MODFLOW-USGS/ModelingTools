@@ -35,7 +35,7 @@ type
 
   TStructuredCellList = TObjectList<TStructCell>;
 
-  TModflowPrecision = (mpSingle, mpDouble);
+  TModflowPrecision = (mpSingle, mpDouble, mpMf6Double);
 
   EPrecisionReadError = class(Exception);
   EEndOfModflowFileError = class(Exception);
@@ -288,6 +288,7 @@ var
   DESC: TModflowDesc;
   Description : AnsiString;
   TOTIM_Double: TModflowDouble;
+  PerTim_Double: TModflowDouble;
   function ValidDescription: boolean;
   begin
     // If these values are changed, update the
@@ -296,44 +297,60 @@ var
   end;
 begin
   Assert(AFile.Position = 0);
-  AFile.Read(NTRANS, SizeOf(NTRANS));
-  AFile.Read(KSTP, SizeOf(KSTP));
-  AFile.Read(KPER, SizeOf(KPER));
-  AFile.Read(TOTIM, SizeOf(TOTIM));
-  AFile.Read(DESC, SizeOf(DESC));
-  Description := DESC;
-  if ValidDescription then
-  begin
-    result := mpSingle;
-  end
-  else
-  begin
-    result := mpDouble;
-  end;
-  AFile.Position := 0;
-  AFile.Read(NTRANS, SizeOf(NTRANS));
-  AFile.Read(KSTP, SizeOf(KSTP));
-  AFile.Read(KPER, SizeOf(KPER));
-  AFile.Read(TOTIM_Double, SizeOf(TOTIM_Double));
-  AFile.Read(DESC, SizeOf(DESC));
-  Description := DESC;
-  case result of
-    mpSingle:
-      begin
-        if ValidDescription then
+  try
+    AFile.Read(KSTP, SizeOf(KSTP));
+    AFile.Read(KPER, SizeOf(KPER));
+    AFile.Read(PerTim_Double, SizeOf(PerTim_Double));
+    AFile.Read(TOTIM_Double, SizeOf(TOTIM_Double));
+    AFile.Read(DESC, SizeOf(DESC));
+    Description := DESC;
+    if ValidDescription then
+    begin
+      result := mpMf6Double;
+      Exit
+    end;
+
+    Assert(AFile.Position = 0);
+    AFile.Read(NTRANS, SizeOf(NTRANS));
+    AFile.Read(KSTP, SizeOf(KSTP));
+    AFile.Read(KPER, SizeOf(KPER));
+    AFile.Read(TOTIM, SizeOf(TOTIM));
+    AFile.Read(DESC, SizeOf(DESC));
+    Description := DESC;
+    if ValidDescription then
+    begin
+      result := mpSingle;
+    end
+    else
+    begin
+      result := mpDouble;
+    end;
+    AFile.Position := 0;
+    AFile.Read(NTRANS, SizeOf(NTRANS));
+    AFile.Read(KSTP, SizeOf(KSTP));
+    AFile.Read(KPER, SizeOf(KPER));
+    AFile.Read(TOTIM_Double, SizeOf(TOTIM_Double));
+    AFile.Read(DESC, SizeOf(DESC));
+    Description := DESC;
+    case result of
+      mpSingle:
         begin
-          raise EPrecisionReadError.Create(StrUnableToReadFile);
+          if ValidDescription then
+          begin
+            raise EPrecisionReadError.Create(StrUnableToReadFile);
+          end;
         end;
-      end;
-    mpDouble:
-      begin
-        if not ValidDescription then
+      mpDouble:
         begin
-          raise EPrecisionReadError.Create(StrUnableToReadFile);
+          if not ValidDescription then
+          begin
+            raise EPrecisionReadError.Create(StrUnableToReadFile);
+          end;
         end;
-      end;
+    end;
+  finally
+    AFile.Position := 0;
   end;
-  AFile.Position := 0;
 end;
 
 function CheckBudgetPrecision(AFile: TFileStream; out HufFormat: boolean;

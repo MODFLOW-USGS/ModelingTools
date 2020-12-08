@@ -719,7 +719,8 @@ uses
   frmRunPestUnit in 'frmRunPestUnit.pas' {frmRunPest},
   ObsInterfaceUnit in 'ObsInterfaceUnit.pas',
   PestPilotPointFileWriterUnit in 'PestPilotPointFileWriterUnit.pas',
-  PestParamRoots in 'PestParamRoots.pas';
+  PestParamRoots in 'PestParamRoots.pas',
+  PilotPointDataUnit in 'PilotPointDataUnit.pas';
 
 {$R *.res}
 

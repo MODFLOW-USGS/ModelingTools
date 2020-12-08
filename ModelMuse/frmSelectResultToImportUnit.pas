@@ -191,7 +191,7 @@ type
       ILAY: integer;
       out LayerData: TDataArray; out OldComment: string;
       FileNames: string;
-      AModel: TCustomModel; DataArrayType: TDataArrayType;
+      AModel: TCustomModel; DataArrayType: TDataArrayType; Precision: TModflowPrecision;
       DataArrayForm: TDataArrayForm = dafLayer);
     procedure CreateScreenObject(LayerIndex: integer; AModel: TCustomModel;
       out ScreenObject: TScreenObject; FileName: string);
@@ -203,7 +203,8 @@ type
       NTRANS, KPER, KSTP: integer; TOTIM: TModflowDouble;
       LayerNumbers: TIntegerList; LayerDataSets: TList;
       out New3DArray: TDataArray; out OldComment: string; FluxData: boolean;
-      NewDataSets: TList; FileNames: string; AModel: TCustomModel);
+      NewDataSets: TList; FileNames: string; AModel: TCustomModel;
+      Precision: TModflowPrecision);
     procedure CloseFiles;
     procedure Read3DArray(var NLAY: Integer; var EndReached: Boolean;
       var KPER, KSTP: Integer; var TOTIM: TModflowDouble;
@@ -237,7 +238,7 @@ type
       NewCreateScreenObjects: TList;
       WaterTableArray: TModflowDoubleArray;
       const Description: string; ValuesToIgnore: TOneDRealArray;
-      FileNames: string; AModel: TCustomModel);
+      FileNames: string; AModel: TCustomModel; Precision: TModflowPrecision);
     procedure SetDefaultDisplayOption;
     { Private declarations }
     function ReadDataHeadings(AModel: TCustomModel; AFileName: string): boolean;
@@ -247,7 +248,8 @@ type
       ADataArray: TDataArray; OldComment: string);
     procedure AdjustSwiNames(var NewName: string);
     function WriteLabel(var Description: string; AModel: TCustomModel;
-      ILAY, KPER, KSTP, NTRANS, SwrTimeStep: integer; TOTIM: TModflowDouble): string;
+      ILAY, KPER, KSTP, NTRANS, SwrTimeStep: integer; TOTIM: TModflowDouble;
+      Precision: TModflowPrecision): string;
     procedure CreateSwrStageScreenObject(AModel: TCustomModel;
       out ScreenObject: TScreenObject; Root: string; AFileName: string);
     procedure CreateSwrReachGroupFlowScreenObject(AModel: TCustomModel;
@@ -272,13 +274,13 @@ type
       SwrWriter: TModflowSwrWriter);
     function ImportSwrStages(AModel: TCustomModel; AFileName: string;
       ILAY: Integer; FileNames: string; LastItem: Integer;
-      OldComments: TStringList): Boolean;
+      OldComments: TStringList; Precision: TModflowPrecision): Boolean;
     function ImportSwrReachExchange(AModel: TCustomModel; AFileName: string;
       ILAY: Integer; FileNames: string; LastItem: Integer;
-      OldComments: TStringList): boolean;
+      OldComments: TStringList; Precision: TModflowPrecision): boolean;
     procedure ImportSwrReachGroupFlows(AModel: TCustomModel; AFileName: string;
       ILAY: Integer; FileNames: string; LastItem: Integer;
-      OldComments: TStringList);
+      OldComments: TStringList; Precision: TModflowPrecision);
     function GetClassificationGroup: string;
     function GetPrefix: string;
   public
@@ -533,7 +535,7 @@ procedure TfrmSelectResultToImport.CreateOrRetrieveLayerDataSet(
 
   out LayerData: TDataArray; out OldComment: string;
   FileNames: string;
-  AModel: TCustomModel; DataArrayType: TDataArrayType;
+  AModel: TCustomModel; DataArrayType: TDataArrayType; Precision: TModflowPrecision;
   DataArrayForm: TDataArrayForm = dafLayer);
 var
   NewName: string;
@@ -562,7 +564,7 @@ begin
   NewName := GetPrefix + TitleCase(Description);
   NewName := NewName + '_P' + PaddedIntToStr(KPER, FMaxPeriod) +
     '_S' + PaddedIntToStr(KSTP, FMaxStep);
-  if FResultFormat = mfMt3dConc then
+  if (FResultFormat = mfMt3dConc) and (Precision <> mpMf6Double) then
   begin
     NewName := NewName + '_TS' + PaddedIntToStr(NTRANS, FMaxTrans);
   end;
@@ -1194,7 +1196,7 @@ end;
 
 function TfrmSelectResultToImport.ImportSwrStages(AModel: TCustomModel;
   AFileName: string; ILAY: Integer; FileNames: string; LastItem: Integer;
-  OldComments: TStringList): Boolean;
+  OldComments: TStringList; Precision: TModflowPrecision): Boolean;
 var
   SwrStages: TSwrTimeStages;
   SwrItem: TSwrTimeStage;
@@ -1237,7 +1239,7 @@ begin
         SwrTimeStep := SwrItem.SwrTimeStep;
         TOTIM := SwrItem.TotalTime;
         CreateOrRetrieveLayerDataSet(StrSWRStage, ILAY, LayerData, OldComment,
-          FileNames, AModel, TModflowBoundaryDisplayDataArray, dafSwrStage);
+          FileNames, AModel, TModflowBoundaryDisplayDataArray, Precision, dafSwrStage);
         AssignSwrStageValues(ScreenObject, LayerData, SwrItem.Stages, AModel,
           MinMaxAssigned);
         UpdateOldComments(OldComments, LayerData, OldComment);
@@ -1261,7 +1263,7 @@ end;
 
 procedure TfrmSelectResultToImport.ImportSwrReachGroupFlows(AModel: TCustomModel;
   AFileName: string; ILAY: Integer; FileNames: string; LastItem: Integer;
-  OldComments: TStringList);
+  OldComments: TStringList; Precision: TModflowPrecision);
 const
   MaxSwrReachReachGroupFlowsDataTypes = 14;
 var
@@ -1335,7 +1337,7 @@ begin
           end;
 
           CreateOrRetrieveLayerDataSet(Description, ILAY, LayerData, OldComment,
-            FileNames, AModel, TModflowBoundaryDisplayDataArray, dafSwrStage);
+            FileNames, AModel, TModflowBoundaryDisplayDataArray, Precision, dafSwrStage);
 
           AssignSwrWaterBudgetValues(ScreenObject, LayerData,
             ValuesToIgnore, AWaterBudget,
@@ -1365,7 +1367,7 @@ end;
 
 function TfrmSelectResultToImport.ImportSwrReachExchange(AModel: TCustomModel;
   AFileName: string; ILAY: Integer; FileNames: string; LastItem: Integer;
-  OldComments: TStringList): boolean;
+  OldComments: TStringList; Precision: TModflowPrecision): boolean;
 const
   MaxSwrReachExchangeDataTypes = 8;
 var
@@ -1451,7 +1453,7 @@ begin
             Assert(False);
           end;
           CreateOrRetrieveLayerDataSet(Description, ILAY, LayerData, OldComment,
-            FileNames, AModel, TModflowBoundaryDisplayDataArray, dafSwrStage);
+            FileNames, AModel, TModflowBoundaryDisplayDataArray, Precision, dafSwrStage);
           LayerData.Orientation := dso3D;
           LayerData.TwoInterpolatorClass := '';
           AModel.UpdateDataArrayDimensions(LayerData);
@@ -2121,7 +2123,7 @@ end;
 procedure TfrmSelectResultToImport.CreateOrRetrieve3DDataSet(Description: string;
   NTRANS, KPER, KSTP: integer; TOTIM: TModflowDouble; LayerNumbers: TIntegerList;
   LayerDataSets: TList; out New3DArray: TDataArray; out OldComment: string; FluxData: boolean;
-  NewDataSets: TList; FileNames: string; AModel: TCustomModel);
+  NewDataSets: TList; FileNames: string; AModel: TCustomModel; Precision: TModflowPrecision);
 var
   NewName: string;
   NewFormula: string;
@@ -2153,7 +2155,7 @@ begin
   AdjustSwiNames(NewName);
   NewName := NewName + '_P' + PaddedIntToStr(KPER, FMaxPeriod) +
     '_S' + PaddedIntToStr(KSTP, FMaxStep);
-  if FResultFormat = mfMt3dConc then
+  if (FResultFormat = mfMt3dConc) and (Precision <> mpMf6Double) then
   begin
     NewName := NewName + '_TS' + PaddedIntToStr(NTRANS, FMaxTrans);
   end;
@@ -2722,7 +2724,7 @@ begin
             if FResultFormat in [mfSwrStageAscii, mfSwrStageBinary] then
             begin
               if not ImportSwrStages(AModel, AFileName, ILAY, FileNames,
-                LastItem, OldComments) then
+                LastItem, OldComments, Precision) then
               begin
                 Beep;
                 MessageDlg(StrTheNumberOfReache, mtError, [mbOK], 0);
@@ -2733,7 +2735,7 @@ begin
               [mfSwrReachExchangeAscii, mfSwrReachExchangeBinary] then
             begin
               if not ImportSwrReachExchange(AModel, AFileName, ILAY, FileNames,
-                LastItem, OldComments) then
+                LastItem, OldComments, Precision) then
               begin
                 Beep;
                 MessageDlg(StrTheNumberOfReache, mtError, [mbOK], 0);
@@ -2744,7 +2746,7 @@ begin
               [mfSwrReachGroupBudgetAscii, mfSwrReachGroupBudgetBinary] then
             begin
               ImportSwrReachGroupFlows(AModel, AFileName, ILAY, FileNames,
-                LastItem, OldComments);
+                LastItem, OldComments, Precision);
             end
             else
             begin
@@ -2797,7 +2799,7 @@ begin
                                 ILAY, LayerArray, ValuesToIgnore, Description);
                               CreateOrRetrieveLayerDataSet(Description, ILAY,
                                 LayerData, OldComment,
-                                FileNames, AModel, TDataArray);
+                                FileNames, AModel, TDataArray, Precision);
                               CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                               AssignValues(ILAY-1, ScreenObject, LayerData, LayerArray,
                                 ValuesToIgnore, AModel, MinMaxAssigned);
@@ -2817,7 +2819,7 @@ begin
                                 Inc(Count);
                                 CreateOrRetrieve3DDataSet(Description, NTRANS, KPER, KSTP, TOTIM,
                                   LayerNumbers, LayerDataSets, New3DArray, OldComment,
-                                  False, NewDataSets, FileNames, AModel);
+                                  False, NewDataSets, FileNames, AModel, Precision);
                                 UpdateOldComments(OldComments, New3DArray, OldComment);
                                 DataSetNames.AddObject(New3DArray.Name, New3DArray);
                                 ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(New3DArray.Name);
@@ -2836,7 +2838,7 @@ begin
                             AssignWaterTable(OldComments, DataSetNames,
                               NewCreateScreenObjects,
                               WaterTableArray, Description, ValuesToIgnore,
-                              FileNames, AModel);
+                              FileNames, AModel, Precision);
                           end;
                         end
                         else
@@ -2857,7 +2859,7 @@ begin
                             CreateOrRetrieveLayerDataSet(
                               Description+Mt3dComponentName, ILAY,
                               LayerData, OldComment,
-                              FileNames, AModel, TDataArray);
+                              FileNames, AModel, TDataArray, Precision);
                             CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                             AssignValues(ILAY-1, ScreenObject, LayerData, AnArray,
                               ValuesToIgnore, AModel, MinMaxAssigned);
@@ -2877,7 +2879,7 @@ begin
                               CreateOrRetrieve3DDataSet(
                                 Description+Mt3dComponentName, NTRANS, KPER, KSTP, TOTIM,
                                 LayerNumbers, LayerDataSets, New3DArray, OldComment,
-                                False, NewDataSets, FileNames, AModel);
+                                False, NewDataSets, FileNames, AModel, Precision);
                               UpdateOldComments(OldComments, New3DArray, OldComment);
                               DataSetNames.AddObject(New3DArray.Name, New3DArray);
                               ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(New3DArray.Name);
@@ -2897,7 +2899,7 @@ begin
                               AssignWaterTable(OldComments, DataSetNames,
                                 NewCreateScreenObjects,
                                 WaterTableArray, Description, ValuesToIgnore,
-                                FileNames, AModel);
+                                FileNames, AModel, Precision);
                             end;
                           end;
                         end;
@@ -2935,7 +2937,8 @@ begin
                         Read3DArray(NLAY, EndReached, KPER, KSTP, TOTIM, Description,
                           A3DArray, AuxArray, Precision, HufFormat, True, AModel);
                       end;
-                      ALabel := WriteLabel(Description, AModel, ILAY, KPER, KSTP, NTRANS, SwrTimeStep, TOTIM);
+                      ALabel := WriteLabel(Description, AModel, ILAY, KPER,
+                        KSTP, NTRANS, SwrTimeStep, TOTIM, Precision);
                       CheckIndex := clData.Items.IndexOf(ALabel);
                       Assert(CheckIndex >= 0);
                       if CheckIndex > LastItem then
@@ -2973,7 +2976,7 @@ begin
                               AuxDescription := Description + '_' + Trim(AuxArray[AuxIndex].Name);
                               CreateOrRetrieveLayerDataSet(AuxDescription, ILAY,
                                 LayerData, OldComment,
-                                FileNames, AModel, TDataArray);
+                                FileNames, AModel, TDataArray, Precision);
                               CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                               Assign3DValues(ScreenObject, LayerData,
                                 AuxArray[AuxIndex].Values, LayerIndex, ILAY-1,
@@ -2993,7 +2996,7 @@ begin
                           begin
                             CreateOrRetrieveLayerDataSet(Description, ILAY,
                               LayerData, OldComment,
-                              FileNames, AModel, TDataArray);
+                              FileNames, AModel, TDataArray, Precision);
                             CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                             Assign3DValues(ScreenObject, LayerData, A3DArray,
                               LayerIndex, ILAY-1,
@@ -3021,7 +3024,7 @@ begin
                               AltDescription := 'Flow Left Face';
                               CreateOrRetrieveLayerDataSet(AltDescription, ILAY,
                                 LayerData, OldComment,
-                                FileNames, AModel, TDataArray);
+                                FileNames, AModel, TDataArray, Precision);
                               CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                               Assign3DValues(ScreenObject, LayerData, Alt3DArray,
                                 LayerIndex, ILAY-1,
@@ -3049,7 +3052,7 @@ begin
                               AltDescription := 'Flow Back Face';
                               CreateOrRetrieveLayerDataSet(AltDescription, ILAY,
                                 LayerData, OldComment,
-                                FileNames, AModel, TDataArray);
+                                FileNames, AModel, TDataArray, Precision);
                               CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                               Assign3DValues(ScreenObject, LayerData, Alt3DArray,
                                 LayerIndex, ILAY-1,
@@ -3077,7 +3080,7 @@ begin
                               AltDescription := 'Flow Upper Face';
                               CreateOrRetrieveLayerDataSet(AltDescription, ILAY,
                                 LayerData, OldComment,
-                                FileNames, AModel, TDataArray);
+                                FileNames, AModel, TDataArray, Precision);
                               CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
                               Assign3DValues(ScreenObject, LayerData, Alt3DArray,
                                 LayerIndex, ILAY-1,
@@ -3111,7 +3114,7 @@ begin
                             AuxDescription := Description + '_' + Trim(AuxArray[AuxIndex].Name);
                             CreateOrRetrieve3DDataSet(AuxDescription, NTRANS, KPER, KSTP, TOTIM,
                               AuxLayerNumbers, AuxLayerDataSets, New3DArray, OldComment, True,
-                              NewDataSets, FileNames, AModel);
+                              NewDataSets, FileNames, AModel, Precision);
 
                             if Pos('qx_', New3DArray.Name) > 0 then
                             begin
@@ -3146,7 +3149,7 @@ begin
                         begin
                           CreateOrRetrieve3DDataSet(Description, NTRANS, KPER, KSTP, TOTIM,
                             LayerNumbers, LayerDataSets, New3DArray, OldComment, True,
-                            NewDataSets, FileNames, AModel);
+                            NewDataSets, FileNames, AModel, Precision);
                           UpdateOldComments(OldComments, New3DArray, OldComment);
                           DataSetNames.AddObject(New3DArray.Name, New3DArray);
                           ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(New3DArray.Name);
@@ -3158,7 +3161,7 @@ begin
                             AltDescription := 'Flow Left Face';
                             CreateOrRetrieve3DDataSet(AltDescription, NTRANS, KPER, KSTP, TOTIM,
                               AltLayerNumbers, AltLayerDataSets, New3DArray, OldComment, True,
-                              NewDataSets, FileNames, AModel);
+                              NewDataSets, FileNames, AModel, Precision);
                             UpdateOldComments(AltOldComments, New3DArray, OldComment);
                             AltDataSetNames.AddObject(New3DArray.Name, New3DArray);
 //                            ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(New3DArray.Name);
@@ -3170,7 +3173,7 @@ begin
                             AltDescription := 'Flow Back Face';
                             CreateOrRetrieve3DDataSet(AltDescription, NTRANS, KPER, KSTP, TOTIM,
                               AltLayerNumbers, AltLayerDataSets, New3DArray, OldComment, True,
-                              NewDataSets, FileNames, AModel);
+                              NewDataSets, FileNames, AModel, Precision);
                             UpdateOldComments(AltOldComments, New3DArray, OldComment);
                             AltDataSetNames.AddObject(New3DArray.Name, New3DArray);
 //                            ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(New3DArray.Name);
@@ -3182,7 +3185,7 @@ begin
                             AltDescription := 'Flow Upper Face';
                             CreateOrRetrieve3DDataSet(AltDescription, NTRANS, KPER, KSTP, TOTIM,
                               AltLayerNumbers, AltLayerDataSets, New3DArray, OldComment, True,
-                              NewDataSets, FileNames, AModel);
+                              NewDataSets, FileNames, AModel, Precision);
                             UpdateOldComments(AltOldComments, New3DArray, OldComment);
                             AltDataSetNames.AddObject(New3DArray.Name, New3DArray);
 //                            ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(New3DArray.Name);
@@ -3214,7 +3217,7 @@ begin
                         Description := Description + ' ' + HGU.HufName;
                         CreateOrRetrieveLayerDataSet(Description, ILAY,
                           LayerData, OldComment,
-                          FileNames, AModel, TDataArray);
+                          FileNames, AModel, TDataArray, Precision);
                         CreateScreenObject(-1, AModel, ScreenObject, AFileName);
                         AssignValues(-1, ScreenObject, LayerData, AnArray,
                           ValuesToIgnore, AModel, MinMaxAssigned);
@@ -3250,7 +3253,7 @@ begin
                         LayerDescription := Description + ' ' + HGU.HufName;
                         CreateOrRetrieveLayerDataSet(LayerDescription, ILAY,
                           LayerData, OldComment,
-                          FileNames, AModel, TDataArray);
+                          FileNames, AModel, TDataArray, Precision);
                         CreateScreenObject(-1, AModel, ScreenObject, AFileName);
                         Assign3DValues(ScreenObject, LayerData, A3DArray, LayerIndex, ILAY-1,
                           True, ValuesToIgnore, AModel);
@@ -3281,7 +3284,7 @@ begin
                         Inc(Count);
                         CreateOrRetrieveLayerDataSet(Description, ILAY,
                           LayerData, OldComment,
-                          FileNames, AModel, TDataArray, dafSubsidence);
+                          FileNames, AModel, TDataArray, Precision, dafSubsidence);
                         ParentArray := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(LayerData.Name);
                         comboColorGrid.Items.Objects[Count] := ParentArray;
                         CreateScreenObject(ILAY-1, AModel, ScreenObject, AFileName);
@@ -3780,7 +3783,7 @@ end;
 
 function TfrmSelectResultToImport.WriteLabel(var Description: string;
   AModel: TCustomModel; ILAY, KPER, KSTP, NTRANS, SwrTimeStep: integer;
-  TOTIM: TModflowDouble): string;
+  TOTIM: TModflowDouble; Precision: TModflowPrecision): string;
 var
   HGU: THydrogeologicUnit;
   HufName: string;
@@ -3811,7 +3814,7 @@ begin
 
   result := Format(Str0s1sPeriod2,
     [Description, HufName, KPER, KSTP]);
-  if FResultFormat = mfMt3dConc then
+  if (FResultFormat = mfMt3dConc) and (Precision <> mpMf6Double) then
   begin
     result := Format(Str0sTransportStep, [result, NTRANS]);
   end;
@@ -3876,7 +3879,7 @@ var
       TrimmedDescription := 'NET ' + Copy(TrimmedDescription,4, MAXINT);
     end;
     Item := WriteLabel(TrimmedDescription, AModel, ILAY, KPER, KSTP,
-      NTRANS, SWR_TimeStep, TOTIM);
+      NTRANS, SWR_TimeStep, TOTIM, Precision);
     if clData.Items.IndexOf(Item) < 0 then
     begin
       FPeriods.Add(KPER);
@@ -3979,6 +3982,9 @@ begin
                   mpDouble:
                     ReadDoublePrecisionMt3dmsBinaryRealArray(FFileStream, NTRANS,
                       KSTP, KPER, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, False);
+                  mpMf6Double:
+                    ReadDoublePrecisionModflowBinaryRealArray(FFileStream, KSTP,
+                      KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, False);
                   else Assert(False);
                 end;
               except on E: EEndOfModflowFileError do
@@ -4465,7 +4471,7 @@ procedure TfrmSelectResultToImport.AssignWaterTable(
   NewCreateScreenObjects: TList;
   WaterTableArray: TModflowDoubleArray;
   const Description: string; ValuesToIgnore: TOneDRealArray;
-  FileNames: string; AModel: TCustomModel);
+  FileNames: string; AModel: TCustomModel; Precision: TModflowPrecision);
 var
   WaterTableData: TDataArray;
   OldComment: string;
@@ -4478,7 +4484,7 @@ begin
     SwrTimeStep := 0;
     CreateOrRetrieveLayerDataSet(StrWaterTable, -1,
       WaterTableData, OldComment, FileNames,
-      AModel, TDataArray, dafWaterTable);
+      AModel, TDataArray, Precision, dafWaterTable);
     CreateScreenObject(-1, AModel, ScreenObject, FileNames);
     AssignValues(-1, ScreenObject, WaterTableData, WaterTableArray,
       ValuesToIgnore, AModel, MinMaxAssigned);
@@ -4756,6 +4762,10 @@ begin
               mpDouble:
                 ReadDoublePrecisionMt3dmsBinaryRealArray(FFileStream, NTRANS, KSTP,
                   KPER, TOTIM, DESC, NCOL, NROW, ILAY, AnArray,
+                  ShouldReadArray);
+              mpMf6Double:
+                ReadDoublePrecisionModflowBinaryRealArray(FFileStream, KSTP,
+                  KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray,
                   ShouldReadArray);
               else Assert(False);
             end;

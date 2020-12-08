@@ -31,7 +31,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 512
     Height = 287
-    ActivePage = jvspObservationGroups
+    ActivePage = jvspBasic
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -118,9 +118,9 @@ inherited frmPEST: TfrmPEST
       object cbShowPilotPoints: TCheckBox
         Left = 176
         Top = 16
-        Width = 193
+        Width = 305
         Height = 17
-        Caption = 'Show pilot points'
+        Caption = 'Show candidate pilot points'
         TabOrder = 3
       end
       object rdePilotPointSpacing: TRbwDataEntry

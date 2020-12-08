@@ -73,6 +73,8 @@ resourcestring
   StrImportedFromSurfer = 'Imported from Surfer Grid files';
   StrNumberOfColumnsRo = 'Number of Columns/Rows';
   StrDeltaXY = 'Delta X/Y';
+  StrThereWasA0sE = 'There was a "%0:s" error reading the Surfer grid file. ' +
+  'The error message was "%1:s."';
 
 const
   StrGrdZ = '_Grd_Z';
@@ -144,68 +146,78 @@ begin
         Exit;
       end;
     end;
-    case FFileType of
-      sft6:
-        begin
-          ReadSurfer6GrdFile(OpenDialogFile.FileName, FGrd6);
-          rdgLimits.BeginUpdate;
-          try
-            rdgLimits.Cells[1,1] := FloatToStr(FGrd6.Header.Xlo);
-            rdgLimits.Cells[1,2] := FloatToStr(FGrd6.Header.Xhi);
-            rdgLimits.Cells[2,1] := FloatToStr(FGrd6.Header.Ylo);
-            rdgLimits.Cells[2,2] := FloatToStr(FGrd6.Header.Yhi);
-            rdgLimits.Cells[3,1] := FloatToStr(FGrd6.Header.Zlo);
-            rdgLimits.Cells[3,2] := FloatToStr(FGrd6.Header.Zhi);
-            rdgLimits.Cells[1,3] := IntToStr(FGrd6.Header.nx);
-            rdgLimits.Cells[2,3] := IntToStr(FGrd6.Header.ny);
-            rdgLimits.Cells[1,4] := FloatToStr((FGrd6.Header.Xhi - FGrd6.Header.Xlo)/FGrd6.Header.nx);
-            rdgLimits.Cells[2,4] := FloatToStr((FGrd6.Header.Yhi - FGrd6.Header.Ylo)/FGrd6.Header.ny);
-          finally
-            rdgLimits.EndUpdate;
+    try
+      case FFileType of
+        sft6:
+          begin
+            ReadSurfer6GrdFile(OpenDialogFile.FileName, FGrd6);
+            rdgLimits.BeginUpdate;
+            try
+              rdgLimits.Cells[1,1] := FloatToStr(FGrd6.Header.Xlo);
+              rdgLimits.Cells[1,2] := FloatToStr(FGrd6.Header.Xhi);
+              rdgLimits.Cells[2,1] := FloatToStr(FGrd6.Header.Ylo);
+              rdgLimits.Cells[2,2] := FloatToStr(FGrd6.Header.Yhi);
+              rdgLimits.Cells[3,1] := FloatToStr(FGrd6.Header.Zlo);
+              rdgLimits.Cells[3,2] := FloatToStr(FGrd6.Header.Zhi);
+              rdgLimits.Cells[1,3] := IntToStr(FGrd6.Header.nx);
+              rdgLimits.Cells[2,3] := IntToStr(FGrd6.Header.ny);
+              rdgLimits.Cells[1,4] := FloatToStr((FGrd6.Header.Xhi - FGrd6.Header.Xlo)/FGrd6.Header.nx);
+              rdgLimits.Cells[2,4] := FloatToStr((FGrd6.Header.Yhi - FGrd6.Header.Ylo)/FGrd6.Header.ny);
+            finally
+              rdgLimits.EndUpdate;
+            end;
           end;
-        end;
-      sft7:
-        begin
-          FGrd7 := TSurferRaster7File2.Create(OpenDialogFile.FileName);
-//          ReadSurfer7GrdFile(OpenDialogFile.FileName, FGrd7);
-          rdgLimits.BeginUpdate;
-          try
-            rdgLimits.Cells[1,1] := FloatToStr(FGrd7.Header.xLL);
-            rdgLimits.Cells[1,2] := FloatToStr(FGrd7.Header.xLL
-              + FGrd7.Header.xSize * FGrd7.Header.nCol);
-            rdgLimits.Cells[2,1] := FloatToStr(FGrd7.Header.yLL);
-            rdgLimits.Cells[2,2] := FloatToStr(FGrd7.Header.yLL
-              + FGrd7.Header.ySize * FGrd7.Header.nRow);
-            rdgLimits.Cells[3,1] := FloatToStr(FGrd7.Header.zMin);
-            rdgLimits.Cells[3,2] := FloatToStr(FGrd7.Header.zMax);
-            rdgLimits.Cells[1,3] := IntToStr(FGrd7.Header.nCol);
-            rdgLimits.Cells[2,3] := IntToStr(FGrd7.Header.nRow);
-            rdgLimits.Cells[1,4] := FloatToStr(FGrd7.Header.xSize);
-            rdgLimits.Cells[2,4] := FloatToStr(FGrd7.Header.ySize);
-          finally
-            rdgLimits.EndUpdate;
+        sft7:
+          begin
+            FGrd7 := TSurferRaster7File2.Create(OpenDialogFile.FileName);
+  //          ReadSurfer7GrdFile(OpenDialogFile.FileName, FGrd7);
+            rdgLimits.BeginUpdate;
+            try
+              rdgLimits.Cells[1,1] := FloatToStr(FGrd7.Header.xLL);
+              rdgLimits.Cells[1,2] := FloatToStr(FGrd7.Header.xLL
+                + FGrd7.Header.xSize * FGrd7.Header.nCol);
+              rdgLimits.Cells[2,1] := FloatToStr(FGrd7.Header.yLL);
+              rdgLimits.Cells[2,2] := FloatToStr(FGrd7.Header.yLL
+                + FGrd7.Header.ySize * FGrd7.Header.nRow);
+              rdgLimits.Cells[3,1] := FloatToStr(FGrd7.Header.zMin);
+              rdgLimits.Cells[3,2] := FloatToStr(FGrd7.Header.zMax);
+              rdgLimits.Cells[1,3] := IntToStr(FGrd7.Header.nCol);
+              rdgLimits.Cells[2,3] := IntToStr(FGrd7.Header.nRow);
+              rdgLimits.Cells[1,4] := FloatToStr(FGrd7.Header.xSize);
+              rdgLimits.Cells[2,4] := FloatToStr(FGrd7.Header.ySize);
+            finally
+              rdgLimits.EndUpdate;
+            end;
           end;
-        end;
-      sftAscii:
-        begin
-          ReadSurferAsciiFile(OpenDialogFile.FileName, FGrd6);
-          rdgLimits.BeginUpdate;
-          try
-            rdgLimits.Cells[1,1] := FloatToStr(FGrd6.Header.Xlo);
-            rdgLimits.Cells[1,2] := FloatToStr(FGrd6.Header.Xhi);
-            rdgLimits.Cells[2,1] := FloatToStr(FGrd6.Header.Ylo);
-            rdgLimits.Cells[2,2] := FloatToStr(FGrd6.Header.Yhi);
-            rdgLimits.Cells[3,1] := FloatToStr(FGrd6.Header.Zlo);
-            rdgLimits.Cells[3,2] := FloatToStr(FGrd6.Header.Zhi);
-            rdgLimits.Cells[1,3] := IntToStr(FGrd6.Header.nx);
-            rdgLimits.Cells[2,3] := IntToStr(FGrd6.Header.ny);
-            rdgLimits.Cells[1,4] := FloatToStr((FGrd6.Header.Xhi - FGrd6.Header.Xlo)/FGrd6.Header.nx);
-            rdgLimits.Cells[2,4] := FloatToStr((FGrd6.Header.Yhi - FGrd6.Header.Ylo)/FGrd6.Header.ny);
-          finally
-            rdgLimits.EndUpdate;
+        sftAscii:
+          begin
+            ReadSurferAsciiFile(OpenDialogFile.FileName, FGrd6);
+            rdgLimits.BeginUpdate;
+            try
+              rdgLimits.Cells[1,1] := FloatToStr(FGrd6.Header.Xlo);
+              rdgLimits.Cells[1,2] := FloatToStr(FGrd6.Header.Xhi);
+              rdgLimits.Cells[2,1] := FloatToStr(FGrd6.Header.Ylo);
+              rdgLimits.Cells[2,2] := FloatToStr(FGrd6.Header.Yhi);
+              rdgLimits.Cells[3,1] := FloatToStr(FGrd6.Header.Zlo);
+              rdgLimits.Cells[3,2] := FloatToStr(FGrd6.Header.Zhi);
+              rdgLimits.Cells[1,3] := IntToStr(FGrd6.Header.nx);
+              rdgLimits.Cells[2,3] := IntToStr(FGrd6.Header.ny);
+              rdgLimits.Cells[1,4] := FloatToStr((FGrd6.Header.Xhi - FGrd6.Header.Xlo)/FGrd6.Header.nx);
+              rdgLimits.Cells[2,4] := FloatToStr((FGrd6.Header.Yhi - FGrd6.Header.Ylo)/FGrd6.Header.ny);
+            finally
+              rdgLimits.EndUpdate;
+            end;
           end;
-        end;
-      else Assert(False);
+        else Assert(False);
+      end;
+    except on E: Exception do
+      begin
+        result := False;
+        Beep;
+        MessageDlg(Format(StrThereWasA0sE, [E.ClassName, E.message]), mtError,
+          [mbOK], 0);
+        Exit;
+      end;
     end;
     GetDataSets;
     comboDataSets.ItemIndex := 0;
