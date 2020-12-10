@@ -179,7 +179,7 @@ begin
           FileProperties.ParameterIndex := ParamIndex+1;
           FileProperties.FileName := AFileName;
           FileProperties.Layer := LayerIndex;
-          FileProperties.ParamFamily := Format('%0:s_%1:d_%2d_',
+          FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
             [DataArrayID, ParamIndex+1, LayerIndex+1]);
 
           OpenFile(AFileName);

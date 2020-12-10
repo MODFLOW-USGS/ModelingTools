@@ -20440,18 +20440,20 @@ var
   FloatValue: double;
 begin
   inherited;
-  if IsLoaded and (ARow < rdgImportedData.RowCount) then
+  if IsLoaded and (ARow < rdgImportedData.RowCount) and (ARow > 0) then
   begin
     ValueStorage := rdgImportedData.Objects[ACol, 0] as TValueArrayStorage;
     Assert(ValueStorage <> nil);
     case rdgImportedData.Columns[ACol].Format of
       rcf4String:
         begin
+          Assert(ValueStorage.DataType = rdtString);
           ValueStorage.StringValues[ARow-1] :=
             rdgImportedData.Cells[ACol, ARow];
         end;
       rcf4Integer:
         begin
+          Assert(ValueStorage.DataType = rdtInteger);
           if TryStrToInt(rdgImportedData.Cells[ACol, ARow], IntValue) then
           begin
             ValueStorage.IntValues[ARow-1] := IntValue;
@@ -20459,6 +20461,7 @@ begin
         end;
       rcf4Real:
         begin
+          Assert(ValueStorage.DataType = rdtDouble);
           if TryStrToFloat(rdgImportedData.Cells[ACol, ARow], FloatValue) then
           begin
             ValueStorage.RealValues[ARow-1] := FloatValue;
@@ -20466,6 +20469,7 @@ begin
         end;
       rcf4Boolean:
         begin
+          Assert(ValueStorage.DataType = rdtBoolean);
           ValueStorage.BooleanValues[ARow-1] :=
             rdgImportedData.Checked[ACol, ARow];
         end;

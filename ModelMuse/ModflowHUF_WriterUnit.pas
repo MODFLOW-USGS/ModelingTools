@@ -691,7 +691,7 @@ begin
         WriteInteger(NCLU);
         WriteString(' # Data set 10: PARNAM PARTYP Parval NCLU');
         NewLine;
-        Model.WritePValAndTemplate(PARNAM,PARVAL, Parameter.ParameterType);
+        Model.WritePValAndTemplate(PARNAM,PARVAL, Parameter);
 
         for ClusterIndex := 0 to UsedParameters.Count - 1 do
         begin
@@ -757,7 +757,7 @@ begin
           WriteInteger(NCLU);
           WriteString(' # Data set 10: PARNAM PARTYP Parval NCLU');
           NewLine;
-          Model.WritePValAndTemplate(PARNAM,PARVAL, Param.ParameterType);
+          Model.WritePValAndTemplate(PARNAM,PARVAL, Param);
 
           HGUNAM := 'SYTP';
 

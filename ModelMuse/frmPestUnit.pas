@@ -178,6 +178,7 @@ type
     procedure frameObservationGroupsGridSetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
     procedure diredPestChange(Sender: TObject);
+    procedure rdeSwitchCriterionChange(Sender: TObject);
 //    procedure comboObsGroupChange(Sender: TObject);
   private
     FObsList: TObservationList;
@@ -258,6 +259,19 @@ begin
 //          Grid.Objects[Ord(pogcName), RowIndex]);
       end;
     end;
+  end;
+end;
+
+procedure TfrmPEST.rdeSwitchCriterionChange(Sender: TObject);
+begin
+  inherited;
+  if rdeSwitchCriterion.RealValue = 0 then
+  begin
+    rdeSwitchCriterion.Color := clRed;
+  end
+  else
+  begin
+    rdeSwitchCriterion.Color := clWindow;
   end;
 end;
 
@@ -635,8 +649,9 @@ begin
 
   {$REGION 'Inversion Controls 2'}
   rdeSwitchCriterion.RealValue := PestControlData.SwitchCriterion;
+  rdeSwitchCriterionChange(nil);
   rdeSwitchCount.IntegerValue := PestControlData.OptSwitchCount;
-  rdeSwitchCriterion.RealValue := PestControlData.SplitSlopeCriterion;
+  rdeSplitSlopeCriterion.RealValue := PestControlData.SplitSlopeCriterion;
   comboAutomaticUserIntervation.ItemIndex := Ord(PestControlData.AutomaticUserIntervation);
   cbSensitivityReuse.Checked := Boolean(PestControlData.SensitivityReuse);
   cbBoundsScaling.Checked := Boolean(PestControlData.Boundscaling);
@@ -925,9 +940,9 @@ begin
     begin
       PestControlData.OptSwitchCount := rdeSwitchCount.IntegerValue;
     end;
-    if rdeSwitchCriterion.Text <> '' then
+    if rdeSplitSlopeCriterion.Text <> '' then
     begin
-      PestControlData.SplitSlopeCriterion := rdeSwitchCriterion.RealValue;
+      PestControlData.SplitSlopeCriterion := rdeSplitSlopeCriterion.RealValue;
     end;
     PestControlData.AutomaticUserIntervation := TAutomaticUserIntervation(comboAutomaticUserIntervation.ItemIndex);
     PestControlData.SensitivityReuse := TSensitivityReuse(cbSensitivityReuse.Checked);

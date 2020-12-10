@@ -574,7 +574,10 @@ begin
     for GhostNodeIndex := 0 to Length(GhostNodeArray) - 1 do
     begin
       GhostNode := GhostNodeArray[GhostNodeIndex];
-      RowCount := RowCount + GhostNode.CellWeights.Count;
+      if GhostNode <> nil then
+      begin
+        RowCount := RowCount + GhostNode.CellWeights.Count;
+      end;
     end;
     rdgGhostNode.RowCount := RowCount;
 
@@ -593,6 +596,10 @@ begin
       for GhostNodeIndex := 0 to Length(GhostNodeArray) - 1 do
       begin
         GhostNode := GhostNodeArray[GhostNodeIndex];
+        if GhostNode = nil then
+        begin
+          Continue;
+        end;
 		
         rdgGhostNode.Cells[Ord(gcContaining),RowIndex]
           := (GhostNode.ContainingCell.Cell+1).ToString;

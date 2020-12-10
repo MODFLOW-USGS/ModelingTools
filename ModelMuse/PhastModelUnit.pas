@@ -2826,7 +2826,7 @@ that affects the model output should also have a comment. }
 
     function PackageGeneratedExternally(const PackageName: string): boolean;
     procedure WritePValAndTemplate(const ParameterName: string;
-      const Value: double; ParameterType: TParameterType);
+      const Value: double; Parameter: TModflowParameter);
 
     property HfbDisplayer: THfbDisplayer read FHfbDisplayer;
 
@@ -39384,7 +39384,7 @@ begin
 end;
 
 procedure TCustomModel.WritePValAndTemplate(const ParameterName: string;
-      const Value: double; ParameterType: TParameterType);
+      const Value: double; Parameter: TModflowParameter);
 var
   NewLine: string;
   TemplateLine: string;
@@ -39392,19 +39392,22 @@ begin
   NewLine := ParameterName + ' ' + FortranFloatToStr(Value);
   TemplateLine := ParameterName + ' ' + UcodeDelimiter + ParameterName
       + '                  ' + UcodeDelimiter;
-  if ParameterType = ptPEST then
+  if Parameter.ParameterType = ptPEST then
   begin
-    NewLine := '#-- ' + NewLine;
-    TemplateLine := '#-- ' + TemplateLine;
-  end;
-  if FPValFile.IndexOf(NewLine) < 0 then
-  begin
-    if ParameterType = ptPEST then
+    if not (Parameter as TModflowSteadyParameter).UsePilotPoints then
     begin
-      FPestPValFile.Add(NewLine);
-      FPestPvalTemplate.Add(TemplateLine);
-    end
-    else
+      NewLine := '#-- ' + NewLine;
+      TemplateLine := '#-- ' + TemplateLine;
+      if FPestPValFile.IndexOf(NewLine) < 0 then
+      begin
+        FPestPValFile.Add(NewLine);
+        FPestPvalTemplate.Add(TemplateLine);
+      end;
+    end;
+  end
+  else
+  begin
+    if FPValFile.IndexOf(NewLine) < 0 then
     begin
       FPValFile.Add(NewLine);
       FPvalTemplate.Add(TemplateLine);

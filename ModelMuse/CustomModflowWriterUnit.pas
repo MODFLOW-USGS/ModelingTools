@@ -4749,7 +4749,7 @@ begin
 
       if not WritingTemplate then
       begin
-        Model.WritePValAndTemplate(PARNAM,PARVAL, Param.ParameterType);
+        Model.WritePValAndTemplate(PARNAM,PARVAL, Param);
       end;
 
       // Make sure the maximum length of the name of instance is <= 10.
@@ -5539,7 +5539,7 @@ begin
 
         if not WritingTemplate then
         begin
-          Model.WritePValAndTemplate(PARNAM,PARVAL,Param.ParameterType);
+          Model.WritePValAndTemplate(PARNAM,PARVAL,Param);
         end;
 
         // Make sure the maximum length of the name of instance is <= 10.
@@ -9064,7 +9064,7 @@ begin
     Param := Model.ModflowTransientParameters[ParamIndex];
     if Param.ParameterType = ParameterType then
     begin
-      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param.ParameterType);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
     end;
   end;
 end;

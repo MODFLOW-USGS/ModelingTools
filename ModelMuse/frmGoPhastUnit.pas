@@ -9861,7 +9861,7 @@ begin
             if AParam.ParameterType in SutraParamType then
             begin
               PhastModel.WritePValAndTemplate(AParam.ParameterName,
-                AParam.Value, AParam.ParameterType);
+                AParam.Value, AParam);
             end;
           end;
         end;

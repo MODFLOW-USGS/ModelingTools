@@ -825,8 +825,7 @@ begin
   for ParamIndex := 0 to FUsedParamList.Count - 1 do
   begin
     AParam := FUsedParamList.Objects[ParamIndex] as TModflowSteadyParameter;
-    Model.WritePValAndTemplate(AParam.ParameterName, AParam.Value,
-      AParam.ParameterType);
+    Model.WritePValAndTemplate(AParam.ParameterName, AParam.Value, AParam);
   end;
 end;
 
@@ -1075,8 +1074,17 @@ begin
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
-              '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'',transform=''none'')',
+              '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'',',
               [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1]));
+            NewLine;
+            if AParam.Transform = ptLog then
+            begin
+              WriteString('transform=''log'')');
+            end
+            else
+            begin
+              WriteString('transform=''none'')');
+            end;
             NewLine;
             WriteString('    # Write interpolated values in zones');
             NewLine;

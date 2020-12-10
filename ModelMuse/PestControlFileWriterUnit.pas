@@ -268,6 +268,7 @@ begin
       end;
     end;
   end;
+  result := result + Model.PilotPointData.Count
 end;
 
 procedure TPestControlFileWriter.WriteAutomaticUserIntervention;
@@ -769,7 +770,10 @@ var
   DSIndex: Integer;
   ADataArray: TDataArray;
   LineIndex: Integer;
+  PPIndex: Integer;
+  PilotPointItem: TStoredPilotParamDataItem;
 begin
+  // template files
   WriteSectionHeader('model input/output');
   TEMPFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPtf));
   INFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPvalExt));
@@ -804,7 +808,17 @@ begin
       end;
     end;
   end;
+  for PPIndex := 0 to Model.PilotPointData.Count - 1 do
+  begin
+    PilotPointItem := Model.PilotPointData[PPIndex];
+    INFLE := ExtractFileName(PilotPointItem.FileName);
+    TEMPFLE := INFLE + '.tpl';
+    WriteString(TEMPFLE);
+    WriteString(' ' + INFLE);
+    NewLine;
+  end;
 
+  // instruction files.
   if Model.ModelSelection in Modflow2005Selection then
   begin
     INSFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPestIns));
@@ -833,6 +847,7 @@ begin
   begin
     Assert(False);
   end;
+
   NewLine;
 end;
 

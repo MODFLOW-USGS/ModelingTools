@@ -31,7 +31,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 512
     Height = 287
-    ActivePage = jvspBasic
+    ActivePage = jvspInversionControls2
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -498,6 +498,7 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 0
         Text = '0'
+        OnChange = rdeSwitchCriterionChange
         DataType = dtReal
         Max = 1.000000000000000000
         ChangeDisabledColor = True

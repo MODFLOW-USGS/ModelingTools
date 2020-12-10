@@ -41,9 +41,11 @@ type
     FBaseParamName: string;
     FCount: Integer;
     FParamFamily: string;
+    FFileName: string;
     procedure SetBaseParamName(const Value: string);
     procedure SetCount(const Value: Integer);
     procedure SetParamFamily(const Value: string);
+    procedure SetFileName(const Value: string);
   public
     procedure Assign(Source: TPersistent); override;
     procedure AssignPilotPointFileObject(Source: TPilotPointFileObject);
@@ -52,6 +54,7 @@ type
     property ParamFamily: string read FParamFamily write SetParamFamily;
     property Count: Integer read FCount write SetCount;
     property BaseParamName: string read FBaseParamName write SetBaseParamName;
+    property FileName: string read FFileName write SetFileName;
   end;
 
   TStoredPilotParamDataCollection = class(TCollection)
@@ -135,6 +138,8 @@ begin
     ParamFamily := SourceItem.ParamFamily;
     Count := SourceItem.Count;
     BaseParamName := SourceItem.BaseParamName;
+    FileName := SourceItem.FileName;
+
   end
   else
   begin
@@ -148,6 +153,7 @@ begin
   ParamFamily := Source.ParamFamily;
   Count := Source.Count;
   BaseParamName := Source.Parameter.ParameterName;
+  FileName := Source.FileName;
 end;
 
 function TStoredPilotParamDataItem.ParameterName(Index: Integer): string;
@@ -163,6 +169,11 @@ end;
 procedure TStoredPilotParamDataItem.SetCount(const Value: Integer);
 begin
   FCount := Value;
+end;
+
+procedure TStoredPilotParamDataItem.SetFileName(const Value: string);
+begin
+  FFileName := Value;
 end;
 
 procedure TStoredPilotParamDataItem.SetParamFamily(const Value: string);
