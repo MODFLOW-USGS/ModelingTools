@@ -4,6 +4,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   Caption = ' Select Model Results to Import'
   ClientHeight = 462
   ClientWidth = 647
+  ExplicitTop = -217
   ExplicitWidth = 663
   ExplicitHeight = 501
   PixelsPerInch = 96
@@ -330,6 +331,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       'ement (*.SubVdOut)|*.SubVdOut|Critical head for no-delay interbe' +
       'ds (*.SubNdCritHeadOut)|*.SubNdCritHeadOut|Critical head for del' +
       'ay interbeds (*.SubDCritHeadOut)|*.SubDCritHeadOut'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Select Model File'
     OnTypeChange = odSelectFilesTypeChange
     Height = 454

@@ -3,6 +3,7 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   Caption = 'Import Surfer Grid File'
   ClientHeight = 473
   ClientWidth = 594
+  ExplicitTop = -21
   ExplicitWidth = 610
   ExplicitHeight = 512
   PixelsPerInch = 96
@@ -266,6 +267,7 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   end
   inherited OpenDialogFile: TOpenDialog
     Filter = 'Surfer grid file (*.grd, *.dat)|*.grd;*.dat|All files (*.*)|*.*'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Open a Surfer grid file'
     Top = 216
   end

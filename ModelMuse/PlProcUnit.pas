@@ -1074,7 +1074,7 @@ begin
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
-              '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'',',
+              '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
               [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1]));
             NewLine;
             if AParam.Transform = ptLog then
@@ -1090,7 +1090,7 @@ begin
             NewLine;
             WriteString(Format(
               '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp', // * %2:s',
-              [LayerIndex + 1, PIndex+1 {, AParam.ParameterName}]));
+              [LayerIndex + 1, ParameterIndex+1 {, AParam.ParameterName}]));
             NewLine;
           end
           else
@@ -1105,7 +1105,7 @@ begin
           NewLine;
           WriteString(Format(
             '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-            [LayerIndex + 1, PIndex+1, AParam.ParameterName]));
+            [LayerIndex + 1, ParameterIndex+1, AParam.ParameterName]));
           NewLine;
         end;
       end;

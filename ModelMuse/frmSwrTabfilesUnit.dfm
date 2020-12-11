@@ -380,6 +380,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
   object dlgOpen: TOpenDialog
     DefaultExt = '.txt'
     Filter = 'Text files (*.txt)|*.txt|All Files (*.*)|*.*'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 128
     Top = 80
   end

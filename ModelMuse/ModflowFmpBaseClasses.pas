@@ -38,17 +38,17 @@ type
       var StartRangeExtended, EndRangeExtended: boolean);
   end;
 
-  TDefineGlobalObject = class(TObject)
-  private
-    FModel: TBaseModel;
-    FOldName: string;
-    FNewName: string;
-    FComment: string;
-  public
-    constructor Create(Model: TBaseModel; const OldName, NewName, Comment: string);
-    procedure Rename;
-    procedure SetValue(Value: Integer);
-  end;
+//  TDefineGlobalIntegerObject = class(TObject)
+//  private
+//    FModel: TBaseModel;
+//    FOldName: string;
+//    FNewName: string;
+//    FComment: string;
+//  public
+//    constructor Create(Model: TBaseModel; const OldName, NewName, Comment: string);
+//    procedure Rename;
+//    procedure SetValue(Value: Integer);
+//  end;
 
 
 implementation
@@ -235,70 +235,70 @@ begin
   end;
 end;
 
-{ TDefineGlobalObject }
+{ TDefineGlobalIntegerObject }
 
-constructor TDefineGlobalObject.Create(Model: TBaseModel; const OldName,
-  NewName, Comment: string);
-begin
-  FModel := Model;
-  FOldName := OldName;
-  FNewName := NewName;
-  FComment := Comment;
-end;
-
-procedure TDefineGlobalObject.Rename;
-var
-  LocalModel: TPhastModel;
-  NewVariables: TGlobalVariables;
-  Variable: TGlobalVariable;
-  OldNames: TStringList;
-  NewNames: TStringList;
-begin
-  LocalModel := (FModel as TPhastModel);
-
-  NewVariables := TGlobalVariables.Create(nil);
-  try
-    NewVariables.Assign(LocalModel.GlobalVariables);
-
-    Variable := NewVariables.GetVariableByName(FOldName);
-    if Variable <> nil then
-    begin
-
-      OldNames := TStringList.Create;
-      NewNames := TStringList.Create;
-      try
-        OldNames.Add(FOldName);
-        NewNames.Add(FNewName);
-        LocalModel.UpdateFormulas(OldNames, NewNames);
-        Variable.Name := FNewName;
-        LocalModel.GlobalVariables := NewVariables;
-        LocalModel.FormulaManager.RestoreSubscriptions;
-      finally
-        NewNames.Free;
-        OldNames.Free;
-      end;
-    end;
-  finally
-    NewVariables.Free;
-  end;
-end;
-
-procedure TDefineGlobalObject.SetValue(Value: Integer);
-var
-  LocalModel: TPhastModel;
-  Variable: TGlobalVariable;
-begin
-  LocalModel := (FModel as TPhastModel);
-  Variable := LocalModel.GlobalVariables.GetVariableByName(FNewName);
-  if Variable = nil then
-  begin
-    Variable := (LocalModel.GlobalVariables.Add as TGlobalVariableItem).Variable;
-    Variable.Format := rdtInteger;
-    Variable.Name := FNewName;
-  end;
-  Variable.IntegerValue := Value;
-  Variable.Locked := True;
-  Variable.Comment := FComment;
-end;
+//constructor TDefineGlobalIntegerObject.Create(Model: TBaseModel; const OldName,
+//  NewName, Comment: string);
+//begin
+//  FModel := Model;
+//  FOldName := OldName;
+//  FNewName := NewName;
+//  FComment := Comment;
+//end;
+//
+//procedure TDefineGlobalIntegerObject.Rename;
+//var
+//  LocalModel: TPhastModel;
+//  NewVariables: TGlobalVariables;
+//  Variable: TGlobalVariable;
+//  OldNames: TStringList;
+//  NewNames: TStringList;
+//begin
+//  LocalModel := (FModel as TPhastModel);
+//
+//  NewVariables := TGlobalVariables.Create(nil);
+//  try
+//    NewVariables.Assign(LocalModel.GlobalVariables);
+//
+//    Variable := NewVariables.GetVariableByName(FOldName);
+//    if Variable <> nil then
+//    begin
+//
+//      OldNames := TStringList.Create;
+//      NewNames := TStringList.Create;
+//      try
+//        OldNames.Add(FOldName);
+//        NewNames.Add(FNewName);
+//        LocalModel.UpdateFormulas(OldNames, NewNames);
+//        Variable.Name := FNewName;
+//        LocalModel.GlobalVariables := NewVariables;
+//        LocalModel.FormulaManager.RestoreSubscriptions;
+//      finally
+//        NewNames.Free;
+//        OldNames.Free;
+//      end;
+//    end;
+//  finally
+//    NewVariables.Free;
+//  end;
+//end;
+//
+//procedure TDefineGlobalIntegerObject.SetValue(Value: Integer);
+//var
+//  LocalModel: TPhastModel;
+//  Variable: TGlobalVariable;
+//begin
+//  LocalModel := (FModel as TPhastModel);
+//  Variable := LocalModel.GlobalVariables.GetVariableByName(FNewName);
+//  if Variable = nil then
+//  begin
+//    Variable := (LocalModel.GlobalVariables.Add as TGlobalVariableItem).Variable;
+//    Variable.Format := rdtInteger;
+//    Variable.Name := FNewName;
+//  end;
+//  Variable.IntegerValue := Value;
+//  Variable.Locked := True;
+//  Variable.Comment := FComment;
+//end;
 
 end.

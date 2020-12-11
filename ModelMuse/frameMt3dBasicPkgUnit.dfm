@@ -496,6 +496,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
   end
   object dlgOpenSelectFile: TOpenDialog
     Filter = 'Concentration file (*.ucn)|*.ucn|All files (*.*)|*.*'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 368
     Top = 152
   end

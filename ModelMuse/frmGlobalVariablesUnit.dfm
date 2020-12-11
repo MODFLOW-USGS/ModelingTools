@@ -244,6 +244,7 @@ inherited frmGlobalVariables: TfrmGlobalVariables
   object dlgOpenGlobVar: TOpenDialog
     DefaultExt = '.txt'
     Filter = 'Text files (*.txt)|*.txt|All Files|*.*'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 192
     Top = 112
   end

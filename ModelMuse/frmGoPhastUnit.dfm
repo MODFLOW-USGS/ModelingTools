@@ -9687,6 +9687,7 @@ inherited frmGoPhast: TfrmGoPhast
     Filter = 
       'Known mesh types|*.exp;*.msh|Argus ONE quadrilateral mesh (*.exp' +
       ')|*.exp|Gmsh mesh (*.msh)|*.msh|All files (*.*)|*.*'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 424
     Top = 8
   end
@@ -9723,6 +9724,7 @@ inherited frmGoPhast: TfrmGoPhast
     OnShow = dlgSavePestShow
     DefaultExt = '.pst'
     Filter = 'PEST Control Files (*.pst)|*.pst'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
     Left = 560
     Top = 120
   end

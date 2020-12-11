@@ -275,10 +275,6 @@ inherited frmImportPoints: TfrmImportPoints
     object tabData: TTabSheet
       Caption = 'Data'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlDataTabControls: TPanel
         Left = 0
         Top = 390
@@ -412,6 +408,7 @@ inherited frmImportPoints: TfrmImportPoints
   object OpenDialogImportFile: TOpenDialog
     Filter = 'Text files (*.txt)|*.txt|All files (*.*)|*.*'
     FilterIndex = 0
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Open tab-delimited file containing point data'
     Left = 63
     Top = 99

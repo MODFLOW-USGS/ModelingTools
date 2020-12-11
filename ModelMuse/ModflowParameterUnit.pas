@@ -157,7 +157,8 @@ var
 implementation
 
 uses Math, RbwParser, PhastModelUnit, DataSetUnit, 
-  ScreenObjectUnit, ModflowHfbUnit, frmGoPhastUnit;
+  ScreenObjectUnit, ModflowHfbUnit, frmGoPhastUnit,
+  LockedGlobalVariableChangers;
 
 { TModflowSteadyParameter }
 
@@ -499,6 +500,7 @@ end;
 procedure TModflowSteadyParameter.SetParameterName(const Value: string);
 var
   NewName: string;
+  ChangeGlobal: TDefineGlobalStringObject;
 begin
   NewName := CorrectParamName(Value);
   Assert(Length(NewName) <= 10);
@@ -509,6 +511,17 @@ begin
     UpdateZoneName(NewName);
     UpdateHfbParameterNames(NewName);
     InvalidateModel;
+    if ParameterType = ptPEST then
+    begin
+      ChangeGlobal := TDefineGlobalStringObject.Create(Model, FParameterName, NewName,
+        StrParameterType);
+      try
+        ChangeGlobal.Rename;
+        ChangeGlobal.SetValue(NewName);
+      finally
+        ChangeGlobal.Free;
+      end;
+    end;
     FParameterName := NewName;
   end;
 end;

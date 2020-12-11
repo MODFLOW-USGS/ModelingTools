@@ -408,7 +408,7 @@ implementation
 uses ModflowParameterUnit, LayerStructureUnit, PhastModelUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowTransientListParameterUnit,
   ModflowSfrParamIcalcUnit, Generics.Collections,
-  Generics.Defaults, Math, frmGoPhastUnit;
+  Generics.Defaults, Math, frmGoPhastUnit, LockedGlobalVariableChangers;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
 begin
@@ -1063,6 +1063,7 @@ var
   ObjectIndex: Integer;
   ParamIndex: Integer;
   ParamIntem: TSfrParamIcalcItem;
+  ChangeGlobal: TDefineGlobalStringObject;
 begin
   if FParameterType <> Value then
   begin
@@ -1308,6 +1309,18 @@ begin
           end;
         ptPEST: ;
         else Assert(False);
+      end;
+      if (FParameterType = ptPEST) or  (Value = ptPEST) then
+      begin
+        ChangeGlobal := TDefineGlobalStringObject.Create(
+          Model, ParameterName, ParameterName, StrParameterType);
+        try
+          ChangeGlobal.Locked := (Value = ptPEST);
+          ChangeGlobal.SetValue(ParameterName);
+        finally
+          ChangeGlobal.Free;
+        end;
+
       end;
     end;
 

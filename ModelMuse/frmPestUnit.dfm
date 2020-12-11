@@ -1213,6 +1213,7 @@ inherited frmPEST: TfrmPEST
     end
   end
   object dlgOpenCovarianceMatrixFile: TOpenDialog
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 430
     Top = 72
   end

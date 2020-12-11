@@ -118,7 +118,7 @@ object TTaskHistory
     end
     item
       Name = 'Global variables'
-      Display = False
+      Display = True
     end
     item
       Name = 'LAK'
@@ -26641,5 +26641,14 @@ object TTaskHistory
       Categories.Strings = (
         'Pest parameter substitution'
         'PEST')
+    end
+    item
+      Date = 44176.000000000000000000
+      Categories.Strings = (
+        'Global variables'
+        'Pest parameter substitution'
+        'PEST'
+        'Bug fix'
+        'Refactoring')
     end>
 end

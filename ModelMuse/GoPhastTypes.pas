@@ -703,6 +703,7 @@ const
   // @name is the section name in the ini file that holds the
   // names of the most recently opened files.
   MRU_Section = 'MostRecentlyUsed';
+  StrParameterType = 'Parameter Type';
 
 resourcestring
   StrModelTop = kModelTop;

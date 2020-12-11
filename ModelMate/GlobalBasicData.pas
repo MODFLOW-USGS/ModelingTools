@@ -75,6 +75,7 @@ begin
   odModflowGlobal.Title := 'Select MODFLOW-2005 Name File';
   odModflowGlobal.DefaultExt := '.nam';
   odModflowGlobal.Filter := 'MODFLOW Name Files (*.nam)|*.nam|All Files (*.*)|*.*';
+  odModflowGlobal.Options := odModflowGlobal.Options + [ofFileMustExist];
   //
 end;
 

@@ -6,9 +6,9 @@ inherited frmCustomImportSimpleFile: TfrmCustomImportSimpleFile
   Caption = 'frmCustomImportSimpleFile'
   ClientHeight = 269
   ClientWidth = 564
-  ExplicitWidth = 582
-  ExplicitHeight = 314
-  PixelsPerInch = 120
+  ExplicitWidth = 580
+  ExplicitHeight = 308
+  PixelsPerInch = 96
   TextHeight = 18
   object lblDataSet: TLabel
     Left = 8
@@ -114,6 +114,7 @@ inherited frmCustomImportSimpleFile: TfrmCustomImportSimpleFile
   object OpenDialogFile: TOpenDialog
     Filter = 'DXF files (*.dxf)|*.dxf;*.DXF'
     FilterIndex = 0
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Open a DXF file'
     Left = 64
     Top = 88

@@ -96,6 +96,18 @@ var
   resultPointer: Pointer;
   CriticalDistance: Double;
   PIndex: Integer;
+  ActiveDataSet: TDataArray;
+  function IsActive(LayerIndex, RowIndex, ColIndex: Integer): boolean;
+  begin
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      result := ActiveDataSet.IntegerData[LayerIndex, RowIndex, ColIndex] > 0;
+    end
+    else
+    begin
+      result := ActiveDataSet.BooleanData[LayerIndex, RowIndex, ColIndex];
+    end;
+  end;
 begin
   Assert(DataArray <> nil);
   Assert(DataArray.PestParametersUsed);
@@ -135,6 +147,20 @@ begin
       DataArray.ParamDataSetName);
     SetLength(Values, DataArray.RowCount * DataArray.ColumnCount);
 
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      ActiveDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+    end
+    else if Model.ModelSelection in SutraSelection then
+    begin
+      ActiveDataSet := nil;
+    end
+    else
+    begin
+      ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
+    end;
+    Assert(ActiveDataSet <> nil);
+
     for LayerIndex := 0 to DataArray.LayerCount - 1 do
     begin
       for QuadTreeIndex := 0 to QuadTreeList.Count - 1 do
@@ -148,17 +174,20 @@ begin
       begin
         for ColIndex := 0 to DataArray.ColumnCount - 1 do
         begin
-          ParamName := UpperCase(
-            ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
-          if ParamNameDictionary.TryGetValue(ParamName, AParam) then
+          if IsActive(LayerIndex, RowIndex, ColIndex) then
           begin
-            APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,RowIndex, ColIndex];
-            Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
-            AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex]));
-          end;
+            ParamName := UpperCase(
+              ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
+            if ParamNameDictionary.TryGetValue(ParamName, AParam) then
+            begin
+              APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,RowIndex, ColIndex];
+              Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+              Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
+              AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex]));
+            end;
 
-          Inc(ValueIndex);
+            Inc(ValueIndex);
+          end;
         end;
       end;
 

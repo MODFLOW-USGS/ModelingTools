@@ -2,7 +2,6 @@ inherited frmLinkRaster: TfrmLinkRaster
   Caption = 'Links to Rasters'
   ClientWidth = 583
   ExplicitWidth = 599
-  ExplicitHeight = 264
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -178,7 +177,7 @@ inherited frmLinkRaster: TfrmLinkRaster
     Filter = 
       'Surfer Grid files (*.grd)|*.grd|ESRII ASCII Raster files (*.asc)' +
       '|*.asc'
-    Options = [ofEnableSizing]
+    Options = [ofFileMustExist, ofEnableSizing]
     Title = 'Select a raster file'
     Left = 312
     Top = 55

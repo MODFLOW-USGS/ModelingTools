@@ -7,7 +7,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   Caption = 'Import Shapefile'
   ClientHeight = 596
   ClientWidth = 771
-  ExplicitTop = -300
   ExplicitWidth = 787
   ExplicitHeight = 635
   PixelsPerInch = 96
@@ -89,7 +88,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     ActivePage = tabOptions
     Align = alClient
     TabOrder = 0
-    ExplicitTop = -4
     object tabOptions: TTabSheet
       Caption = 'Options 1'
       ImageIndex = 3
@@ -3211,7 +3209,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Width = 761
             Height = 265
             Caption = 'jvspLakMf6'
-            ExplicitTop = -1
             object lblLakeMf6Embeded: TLabel
               Left = 156
               Top = 9
@@ -13404,6 +13401,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   object OpenDialogShape: TOpenDialog
     Filter = 'Shape Files (*.shp)|*.shp'
     FilterIndex = 0
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Open a Shapefile'
     Left = 64
     Top = 104

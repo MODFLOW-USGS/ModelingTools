@@ -113,7 +113,7 @@ inherited frmFilesToArchive: TfrmFilesToArchive
   end
   object odAddFiles: TOpenDialog
     Filter = 'Any File (*.*)|*.*'
-    Options = [ofHideReadOnly, ofAllowMultiSelect, ofEnableSizing]
+    Options = [ofHideReadOnly, ofAllowMultiSelect, ofFileMustExist, ofEnableSizing]
     Left = 88
     Top = 72
   end

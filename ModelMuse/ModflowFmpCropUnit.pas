@@ -482,7 +482,7 @@ implementation
 uses
   ScreenObjectUnit, frmGoPhastUnit, frmErrorsAndWarningsUnit,
   RbwParser, frmFormulaErrorsUnit, PhastModelUnit, ModflowPackageSelectionUnit,
-  GlobalVariablesUnit;
+  GlobalVariablesUnit, LockedGlobalVariableChangers;
 
 //const
 //  RootingDepthPosition = 0;
@@ -2102,7 +2102,7 @@ end;
 
 procedure TCropItem.SetCropName(Value: string);
 var
-  ChangeGlobals: TDefineGlobalObject;
+  ChangeGlobals: TDefineGlobalIntegerObject;
   FarmList: TFarmList;
   FarmIndex: Integer;
   AFarm: TFarm;
@@ -2114,7 +2114,7 @@ begin
   begin
     Value := GenerateNewName(Value, nil, '_');
   end;
-  ChangeGlobals := TDefineGlobalObject.Create(Model, FCropName, Value,
+  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FCropName, Value,
     StrCropVariable);
   try
     if FCropName <> Value then
@@ -2188,11 +2188,11 @@ end;
 
 procedure TCropItem.SetIndex(Value: Integer);
 var
-  ChangeGlobals: TDefineGlobalObject;
+  ChangeGlobals: TDefineGlobalIntegerObject;
 begin
   if {(Index <> Value) and} (Model <> nil) and (FCropName <> '') then
   begin
-    ChangeGlobals := TDefineGlobalObject.Create(Model, FCropName, FCropName,
+    ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FCropName, FCropName,
       StrCropVariable);
     try
       ChangeGlobals.SetValue(Value+1);

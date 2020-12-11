@@ -90,7 +90,7 @@ implementation
 
 uses
   PhastModelUnit, ModflowPackageSelectionUnit, RbwParser, frmFormulaErrorsUnit,
-  GoPhastTypes;
+  GoPhastTypes, LockedGlobalVariableChangers;
 
 resourcestring
   StrSoilVariable = 'Soil Variable';
@@ -278,11 +278,11 @@ end;
 
 procedure TSoilItem.SetIndex(Value: Integer);
 var
-  ChangeGlobals: TDefineGlobalObject;
+  ChangeGlobals: TDefineGlobalIntegerObject;
 begin
   if {(Index <> Value) and} (Model <> nil) and (FSoilName <> '') then
   begin
-    ChangeGlobals := TDefineGlobalObject.Create(Model, FSoilName, FSoilName,
+    ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FSoilName, FSoilName,
       StrSoilVariable);
     try
       ChangeGlobals.SetValue(Value+1);
@@ -296,14 +296,14 @@ end;
 
 procedure TSoilItem.SetSoilName(Value: string);
 var
-  ChangeGlobals: TDefineGlobalObject;
+  ChangeGlobals: TDefineGlobalIntegerObject;
 begin
   if (FSoilName <> Value) and (Model <> nil)
     and not (csReading in Model.ComponentState) then
   begin
     Value := GenerateNewName(Value, nil, '_');
   end;
-  ChangeGlobals := TDefineGlobalObject.Create(Model, FSoilName, Value,
+  ChangeGlobals := TDefineGlobalIntegerObject.Create(Model, FSoilName, Value,
     StrSoilVariable);
   try
     if FSoilName <> Value then

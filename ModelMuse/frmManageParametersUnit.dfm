@@ -4,7 +4,6 @@ inherited frmManageParameters: TfrmManageParameters
   Caption = 'Manage Parameters'
   ClientHeight = 561
   ClientWidth = 784
-  ExplicitTop = -267
   ExplicitWidth = 800
   ExplicitHeight = 600
   PixelsPerInch = 96
@@ -919,6 +918,7 @@ inherited frmManageParameters: TfrmManageParameters
   end
   object dlgOpenPval: TOpenDialog
     Filter = 'Pval files (*.pval)|*.pval|All files|*.*'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 168
     Top = 48
   end

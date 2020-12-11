@@ -7,9 +7,9 @@ inherited frmImportBitmap: TfrmImportBitmap
   Caption = 'Import Image'
   ClientHeight = 549
   ClientWidth = 782
-  ExplicitWidth = 800
-  ExplicitHeight = 594
-  PixelsPerInch = 120
+  ExplicitWidth = 798
+  ExplicitHeight = 588
+  PixelsPerInch = 96
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 369
@@ -25,7 +25,6 @@ inherited frmImportBitmap: TfrmImportBitmap
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 424
     DesignSize = (
       782
       128)
@@ -171,7 +170,7 @@ inherited frmImportBitmap: TfrmImportBitmap
           Value = 33.333333333333340000
         end
         item
-          Value = 33.333333333333340000
+          Value = 33.333333333333310000
         end>
       ControlCollection = <
         item
@@ -198,7 +197,7 @@ inherited frmImportBitmap: TfrmImportBitmap
         135
         32)
       object sbAddRow: TSpeedButton
-        Left = 10
+        Left = 11
         Top = 5
         Width = 23
         Height = 22
@@ -216,11 +215,10 @@ inherited frmImportBitmap: TfrmImportBitmap
         ParentShowHint = False
         ShowHint = True
         OnClick = sbAddRowClick
-        ExplicitLeft = 11
         ExplicitTop = 6
       end
       object sbInsertRow: TSpeedButton
-        Left = 54
+        Left = 56
         Top = 5
         Width = 23
         Height = 22
@@ -238,11 +236,10 @@ inherited frmImportBitmap: TfrmImportBitmap
         ParentShowHint = False
         ShowHint = True
         OnClick = sbInsertRowClick
-        ExplicitLeft = 56
         ExplicitTop = 6
       end
       object sbDeleteRow: TSpeedButton
-        Left = 100
+        Left = 101
         Top = 5
         Width = 23
         Height = 22
@@ -422,7 +419,6 @@ inherited frmImportBitmap: TfrmImportBitmap
       end>
     OnEndUpdate = dgPointsEndUpdate
     WordWrapRowCaptions = False
-    ExplicitHeight = 424
     ColWidths = (
       64
       64
@@ -440,7 +436,6 @@ inherited frmImportBitmap: TfrmImportBitmap
     Height = 421
     Align = alClient
     TabOrder = 1
-    ExplicitHeight = 424
     object ZoomBox: TQRbwZoomBox2
       Left = 0
       Top = 0
@@ -466,10 +461,6 @@ inherited frmImportBitmap: TfrmImportBitmap
       Image32.ScaleMode = smNormal
       Image32.TabOrder = 0
       Image32.OnMouseUp = ZoomBoxImage32MouseUp
-      Image32.ExplicitLeft = 0
-      Image32.ExplicitTop = 0
-      Image32.ExplicitWidth = 575
-      Image32.ExplicitHeight = 427
       ImmediateResize = True
       Magnification = 1.000000000000000000
       VerticalDirection = vdUp
@@ -484,6 +475,7 @@ inherited frmImportBitmap: TfrmImportBitmap
       'f)|*.tif;*.tiff|Enhanced Windows Metafiles (*.emf)|*.emf|Windows' +
       ' Metafiles (*.wmf)|*.wmf'
     FilterIndex = 0
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Title = 'Select a bitmap to import'
     Left = 88
     Top = 80
@@ -492,6 +484,7 @@ inherited frmImportBitmap: TfrmImportBitmap
     Filter = 
       'Raster world file (*.tfw;*.tifw;*.jgw;*.jpgw;*.pgw)|*.tfw;*.tifw' +
       ';*.jgw;*.jpgw;*.pgw|CAD world file (*.wld)|*.wld|All files|*.*'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 136
     Top = 88
   end

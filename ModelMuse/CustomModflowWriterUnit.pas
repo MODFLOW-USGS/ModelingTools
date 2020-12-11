@@ -3199,8 +3199,6 @@ class procedure TCustomModflowWriter.WriteToNameFile(const Ftype: string;
   const UnitNumber: integer; FileName: string; const Option: TFileOption;
   AModel: TCustomModel;
   RelativeFileName: boolean = False);
-//var
-//  Line: string;
 begin
   WriteToNameFile(Ftype, UnitNumber, FileName, Option, osShowAll, AModel,
     RelativeFileName);
