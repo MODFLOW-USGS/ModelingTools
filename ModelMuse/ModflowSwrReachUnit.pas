@@ -474,7 +474,14 @@ begin
     begin
       LocalModel := Model as TCustomModel;
       FGeom := LocalModel.SwrReachGeometry.GetItemByName(Value);
-      FGeometryName := FGeom.Name;
+      if FGeom <> nil then
+      begin
+        FGeometryName := FGeom.Name;
+      end
+      else
+      begin
+        FGeometryName := Value;
+      end;
       LocalModel.InvalidateMfSwrGeometryNumber(Self)
     end
     else

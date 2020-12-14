@@ -64,6 +64,11 @@ var
   OldNames: TStringList;
   NewNames: TStringList;
 begin
+  if FModel = nil then
+  begin
+    Exit
+  end;
+
   LocalModel := (FModel as TPhastModel);
 
   NewVariables := TGlobalVariables.Create(nil);
@@ -116,6 +121,11 @@ function TCustomDefinedGlobalObject.GetVariable: TGlobalVariable;
 var
   LocalModel: TPhastModel;
 begin
+  result := nil;
+  if FModel = nil then
+  begin
+    Exit;
+  end;
   LocalModel := (FModel as TPhastModel);
   result := LocalModel.GlobalVariables.GetVariableByName(FNewName);
   if result = nil then
@@ -140,6 +150,10 @@ procedure TDefineGlobalStringObject.SetValue(Value: string);
 var
   Variable: TGlobalVariable;
 begin
+  if FModel = nil then
+  begin
+    Exit;
+  end;
   Variable := GetVariable;
   Variable.StringValue := Value;
 end;

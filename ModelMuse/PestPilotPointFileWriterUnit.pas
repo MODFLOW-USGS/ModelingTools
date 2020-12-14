@@ -26,7 +26,8 @@ type
 implementation
 
 uses
-  QuadTreeClass, FastGEO, PestPropertiesUnit, frmErrorsAndWarningsUnit;
+  QuadTreeClass, FastGEO, PestPropertiesUnit, frmErrorsAndWarningsUnit,
+  SutraMeshUnit;
 
 resourcestring
   StrNoPilotPointsDefi = 'No pilot points defined';
@@ -98,10 +99,31 @@ var
   PIndex: Integer;
   ActiveDataSet: TDataArray;
   function IsActive(LayerIndex, RowIndex, ColIndex: Integer): boolean;
+  var
+    ANode3D: TSutraNode3D;
+    AnElement3D: TSutraElement3D;
   begin
     if Model.ModelSelection = msModflow2015 then
     begin
       result := ActiveDataSet.IntegerData[LayerIndex, RowIndex, ColIndex] > 0;
+    end
+    else if Model.ModelSelection in SutraSelection then
+    begin
+      if Model.SutraMesh.MeshType <> mt3D then
+      begin
+        result := True;
+      end
+      else if DataArray.EvaluatedAt = eaNodes then
+      begin
+        ANode3D := Model.SutraMesh.NodeArray[LayerIndex, ColIndex];
+        result := ANode3D.Active;
+      end
+      else
+      begin
+        Assert(DataArray.EvaluatedAt = eaBlocks);
+        AnElement3D := Model.SutraMesh.ElementArray[LayerIndex, ColIndex];
+        result := AnElement3D.Active;
+      end;
     end
     else
     begin
@@ -159,7 +181,7 @@ begin
     begin
       ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
     end;
-    Assert(ActiveDataSet <> nil);
+//    Assert(ActiveDataSet <> nil);
 
     for LayerIndex := 0 to DataArray.LayerCount - 1 do
     begin
