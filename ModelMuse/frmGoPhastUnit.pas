@@ -9442,7 +9442,6 @@ var
   RunModelBatchFileName: string;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
-
 begin
   case ModelSelection of
     msSutra22:
@@ -9490,6 +9489,9 @@ begin
   PhastModel.ClearPval;
   PhastModel.PestTemplateLines.Clear;
   PhastModel.SutraPestScripts.Clear;
+  PhastModel.KrigfactorsScriptLines.Clear;
+  PhastModel.PilotPointData.Clear;
+
 
   SutraNodDisWriter := TSutraNodDisWriter.Create(PhastModel, etExport);
   try
@@ -9792,6 +9794,7 @@ begin
             RunModelBatchFile.Add('pushd ' + ModelDirectory);
           end;
 
+          BatchFile.AddStrings(PhastModel.KrigfactorsScriptLines);
           BatchFile.AddStrings(PhastModel.PestTemplateLines);
           RunModelBatchFile.AddStrings(PhastModel.PestTemplateLines);
 
@@ -9867,6 +9870,8 @@ begin
         end;
 
         PhastModel.FinalizePvalAndTemplate(FileName);
+
+        PhastModel.ExportPestInput(FileName, False);
       finally
         Observations.Free;
         Schedules.Free;

@@ -2216,6 +2216,7 @@ that affects the model output should also have a comment. }
     FPestProperties: TPestProperties;
     FVelocityVectors: TVectorCollection;
     FPilotPointData: TStoredPilotParamDataCollection;
+    FKrigfactorsScriptLines: TStringList;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -3317,6 +3318,7 @@ that affects the model output should also have a comment. }
     // @name consists of lines that will be added to RunModel.Bat before the
     // model executable line
     property PestTemplateLines: TStringList read FPestTemplateLines;
+    property KrigfactorsScriptLines: TStringList read FKrigfactorsScriptLines;
     property Discretization: TCustomDiscretization read GetDiscretization;
     property PilotPointDataArrays: TDataArrayList read FPilotPointDataArrays;
     property ParamGroups: TPestParamGroups read GetParamGroups
@@ -3543,6 +3545,8 @@ that affects the model output should also have a comment. }
       stored False
     {$ENDIF}
     ;
+    // Name contains the names of scripts that are to be run before running
+    // SUTRA.
     property SutraPestScripts: TStringList read FSutraPestScripts
     {$IFNDEF PEST}
       stored False
@@ -28232,6 +28236,7 @@ begin
   inherited;
   FSutraPestScripts := TStringList.Create;
   FPestTemplateLines := TStringList.Create;
+  FKrigfactorsScriptLines := TStringList.Create;
 
   FBinaryFiles := TStringList.Create;
   FBinaryFiles.Duplicates := dupIgnore;
@@ -29196,6 +29201,7 @@ begin
   FSwiObsExtractorInputFiles.Free;
   FSwiObsExtractorOutputFiles.Free;
 
+  FKrigfactorsScriptLines.Free;
   FPestTemplateLines.Free;
   FSutraPestScripts.Free;
 
@@ -39951,6 +39957,7 @@ var
   ChildFileName: string;
 begin
   PestTemplateLines.Clear;
+  KrigfactorsScriptLines.Clear;
   ClearMnw1FileNames;
   if frmProgressMM = nil then
   begin
@@ -40088,6 +40095,8 @@ var
   BatchFileName: string;
   PestName: string;
   BatchFile: TStringList;
+  PestCheckName: string;
+  PestCheckBatchFileName: string;
 begin
   PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
   try
@@ -40098,6 +40107,8 @@ begin
 
   BatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
     + 'RunPest.bat';
+  PestCheckBatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+    + 'RunPestChek.bat';
   PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
     + 'I64pest.exe ';
   if not FileExists(Trim(PestName)) then
@@ -40109,6 +40120,14 @@ begin
   begin
     PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
       + 'pest_hp.exe ';
+  end;
+
+  PestCheckName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+    + 'I64pestchek.exe ';
+  if not FileExists(Trim(PestCheckName)) then
+  begin
+    PestCheckName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+      + 'pestchek.exe ';
   end;
 
   if not FileExists(Trim(PestName)) then
@@ -40124,6 +40143,9 @@ begin
     BatchFile.Add(PestName + ChangeFileExt(ExtractFileName(FileName), ''));
     BatchFile.Add('pause');
     BatchFile.SaveToFile(BatchFileName);
+
+    BatchFile[0] := PestCheckName + ChangeFileExt(ExtractFileName(FileName), '');
+    BatchFile.SaveToFile(PestCheckBatchFileName);
   finally
     BatchFile.Free;
   end;
@@ -40251,6 +40273,7 @@ var
   ListFileNames: TStringList;
 begin
   PestTemplateLines.Clear;
+  KrigfactorsScriptLines.Clear;
   if ExtractFileName(ModflowLocation) = 'MF2005_Importer.exe' then
   begin
     Beep;
@@ -40626,7 +40649,7 @@ var
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
-  PestControlWriter: TPestControlFileWriter;
+//  PestControlWriter: TPestControlFileWriter;
 begin
   PilotPointData.Clear;
 
@@ -41842,12 +41865,16 @@ begin
         PestObsExtractorInputWriter.Free;
       end;
 
-      PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
-      try
-        PestControlWriter.WriteFile(FileName)
-      finally
-        PestControlWriter.Free;
+      if self is TPhastModel then
+      begin
+        TPhastModel(self).ExportPestInput(FileName, False);
       end;
+//      PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
+//      try
+//        PestControlWriter.WriteFile(FileName)
+//      finally
+//        PestControlWriter.Free;
+//      end;
 
     except on E: EInvalidTime do
       begin
@@ -42295,6 +42322,7 @@ var
   LgrUsed: Boolean;
 begin
   PestTemplateLines.Clear;
+  KrigfactorsScriptLines.Clear;
   if frmProgressMM = nil then
   begin
     frmProgressMM := TfrmProgressMM.Create(nil);

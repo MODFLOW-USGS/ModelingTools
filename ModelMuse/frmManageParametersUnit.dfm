@@ -68,7 +68,7 @@ inherited frmManageParameters: TfrmManageParameters
     Top = 0
     Width = 784
     Height = 517
-    ActivePage = tabParameterGroups
+    ActivePage = tabParameters
     Align = alClient
     TabOrder = 1
     object tabParameters: TTabSheet

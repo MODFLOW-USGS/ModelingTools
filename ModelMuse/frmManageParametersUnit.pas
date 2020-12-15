@@ -1604,6 +1604,8 @@ var
   Names: TStringList;
   ParamIndex: TParameterType;
   OK_Combination: Boolean;
+  LowerBound: Double;
+  UpperBound: Double;
 begin
   inherited;
   if (ARow > 0) then
@@ -1677,6 +1679,24 @@ begin
         rdgParameters.Canvas.Brush.Color := clRed;
       end;
     end;
+
+    if (TParamColumn(ACol) in [pcChangeLimitation, pcLowerBound, pcUpperBound]) then
+    begin
+      if rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow] = Ord(pclFactor) then
+      begin
+        LowerBound := rdgParameters.RealValueDefault[Ord(pcLowerBound), ARow, 0];
+        UpperBound := rdgParameters.RealValueDefault[Ord(pcUpperBound), ARow, 0];
+        if (LowerBound = 0) or (UpperBound = 0) then
+        begin
+          rdgParameters.Canvas.Brush.Color := clRed;
+        end
+        else if (LowerBound < 0) and (UpperBound > 0) then
+        begin
+          rdgParameters.Canvas.Brush.Color := clRed;
+        end;
+      end;
+    end;
+
 
   end;
 end;

@@ -142,8 +142,8 @@ type
     FParameterNames: TStringList;
     FPorosityPilotPointFiles: TPilotPointFiles;
     FThicknessPilotPointFiles: TPilotPointFiles;
-    FUsedPorosityParameters: TStringList;
-    FUsedThicknessParameters: TStringList;
+//    FUsedPorosityParameters: TStringList;
+//    FUsedThicknessParameters: TStringList;
     FUsedParamList: TStringList;
     FMesh: TSutraMesh3D;
     FPorKrigingFactorsFileRoot: string;
@@ -163,12 +163,30 @@ type
     procedure WriteFiles(var AFileName: string);
   end;
 
+  TDataRecord = class(TObject)
+    DataArray: TDataArray;
+    PilotPointFiles: TPilotPointFiles;
+    ID: string;
+    constructor Create;
+    destructor Destroy; override;
+  end;
+
+  TDataRecordList = TObjectList<TDataRecord>;
+
   TSutraData15BScriptWriter = class(TCustomSutraPlprocFileWriter)
   private
     FRoot: string;
     FFileName: string;
     FParameterNames: TStringList;
+    FDataRecordList: TDataRecordList;
+    FUsedParamList: TStringList;
     procedure WriteAFile(ScriptChoice: TScriptChoice);
+    procedure WritePilotPointFiles;
+    procedure GetUsedParameters;
+    procedure WriteKrigingFactors;
+    procedure ReadPilotPoints;
+    procedure ReadDiscretization;
+    procedure SaveKrigingFactors;
   protected
     class function Extension: string; override;
   public
@@ -1094,11 +1112,11 @@ begin
             NewLine;
             if AParam.Transform = ptLog then
             begin
-              WriteString('transform=''log'')');
+              WriteString('      transform=''log'')');
             end
             else
             begin
-              WriteString('transform=''none'')');
+              WriteString('      transform=''none'')');
             end;
             NewLine;
             WriteString('    # Write interpolated values in zones');
@@ -1508,15 +1526,15 @@ begin
   FPorosityPilotPointFiles := TPilotPointFiles.Create;
   FThicknessPilotPointFiles := TPilotPointFiles.Create;
 //  FParameterNames := TStringList.Create;
-  FUsedPorosityParameters := TStringList.Create;
-  FUsedThicknessParameters := TStringList.Create;
+//  FUsedPorosityParameters := TStringList.Create;
+//  FUsedThicknessParameters := TStringList.Create;
   FUsedParamList := TStringList.Create;
 
-  FUsedPorosityParameters.Duplicates := dupIgnore;
-  FUsedPorosityParameters.Sorted := True;
+//  FUsedPorosityParameters.Duplicates := dupIgnore;
+//  FUsedPorosityParameters.Sorted := True;
 
-  FUsedThicknessParameters.Duplicates := dupIgnore;
-  FUsedThicknessParameters.Sorted := True;
+//  FUsedThicknessParameters.Duplicates := dupIgnore;
+//  FUsedThicknessParameters.Sorted := True;
 
   FUsedParamList.Duplicates := dupIgnore;
   FUsedParamList.Sorted := True;
@@ -1525,8 +1543,8 @@ end;
 destructor TSutraData14BScriptWriter.Destroy;
 begin
   FUsedParamList.Free;
-  FUsedThicknessParameters.Free;
-  FUsedPorosityParameters.Free;
+//  FUsedThicknessParameters.Free;
+//  FUsedPorosityParameters.Free;
 //  FParameterNames.Free;
   FThicknessPilotPointFiles.Free;
   FPorosityPilotPointFiles.Free;
@@ -1575,7 +1593,7 @@ begin
 
         if AParam <> nil then
         begin
-          FUsedPorosityParameters.AddObject(AParam.ParameterName, AParam);
+//          FUsedPorosityParameters.AddObject(AParam.ParameterName, AParam);
           FUsedParamList.AddObject(AParam.ParameterName, AParam);
         end;
       end;
@@ -1608,7 +1626,7 @@ begin
 
           if AParam <> nil then
           begin
-            FUsedThicknessParameters.AddObject(AParam.ParameterName, AParam);
+//            FUsedThicknessParameters.AddObject(AParam.ParameterName, AParam);
             FUsedParamList.AddObject(AParam.ParameterName, AParam);
           end;
         end;
@@ -1633,8 +1651,8 @@ var
       FileProperties := PilotPointFiles[PPIndex];
       if FileProperties.Parameter = AParam then
       begin
-        WriteString(Format('PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &',
-          [PPIndex+1]));
+        WriteString(Format('%0:s_PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &',
+          [DataId, PPIndex+1]));
         NewLine;
         PListName := Format('%0:s_%1:s_%2:d',
           [DataId, AParam.ParameterName, FileProperties.Layer + 1]);
@@ -1670,7 +1688,7 @@ var
   AParam: TModflowSteadyParameter;
   Porosity: TDataArray;
   Thickness: TDataArray;
-  procedure HandleDataArray(DataArray: TDataArray;
+  procedure HandleDataArray(DataID: string; DataArray: TDataArray;
     PilotPointFiles: TPilotPointFiles; FileName: string);
   var
     PIndex: Integer;
@@ -1690,7 +1708,7 @@ var
             NewLine;
             WriteString(Format('  target_clist=%s, &', [KDisName]));
             NewLine;
-            WriteString(Format('  source_clist=PilotPoints%d, &', [PPIndex+1]));
+            WriteString(Format('  source_clist=%0:s_PilotPoints%1:d, &', [DataID, PPIndex+1]));
             NewLine;
             WriteString(Format('  file=%0:s%1:d;format=formatted)',
               [ExtractFileName(FileName), PPIndex+1]));
@@ -1709,7 +1727,7 @@ begin
     Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
     FPorKrigingFactorsFileRoot := FRoot +  '.' + Porosity.Name
     + '.Factors';
-    HandleDataArray(Porosity, FPorosityPilotPointFiles, FPorKrigingFactorsFileRoot);
+    HandleDataArray('POR', Porosity, FPorosityPilotPointFiles, FPorKrigingFactorsFileRoot);
   end;
 
   if FThicknessPilotPointFiles.Count > 0 then
@@ -1717,7 +1735,7 @@ begin
     Thickness := Model.DataArrayManager.GetDataSetByName(KNodalThickness);
     FThicknessKrigingFactorsFileRoot := FRoot +  '.' + Thickness.Name
     + '.Factors';
-    HandleDataArray(Thickness, FThicknessPilotPointFiles, FThicknessKrigingFactorsFileRoot);
+    HandleDataArray('Z', Thickness, FThicknessPilotPointFiles, FThicknessKrigingFactorsFileRoot);
   end;
 
   //  FKrigingFactorsFile := ChangeFileExt(AFileName, '.' + FDataArray.Name)
@@ -1793,6 +1811,8 @@ begin
     {$REGION 'Node discretization'}
     ReadDiscretization;
     {$ENDREGION}
+
+    ReadPilotPoints;
 
     WriteString('# Read data to modify');
     NewLine;
@@ -1890,6 +1910,10 @@ begin
     begin
       AParam := FParameterNames.Objects[ParameterIndex]
         as TModflowSteadyParameter;
+      if AParam.UsePilotPoints then
+      begin
+        Continue;
+      end;
       if ScriptChoice = scWriteScript then
       begin
         WriteString('#');
@@ -1909,6 +1933,11 @@ begin
     {$ENDREGION}
 
     {$REGION 'Apply parameters'}
+
+    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
+      ['cl_Discretization']));
+    NewLine;
+
     WriteString('# applying parameter values');
     NewLine;
     for ParameterIndex := 0 to FParameterNames.Count - 1 do
@@ -1921,7 +1950,7 @@ begin
       begin
         if AParam.UsePilotPoints then
         begin
-          LayerIndex := 1;
+          LayerIndex := 0;
           WriteString('    # Substituting interpolated values');
           NewLine;
 
@@ -1941,8 +1970,8 @@ begin
 
           if UsedFileProperties <> nil then
           begin
-            PListName := Format('%0:s_%1:d',
-              [AParam.ParameterName, LayerIndex+1]);
+            PListName := Format('%0:s_%1:s_%2:d',
+              ['Z',AParam.ParameterName, LayerIndex+1]);
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
@@ -1951,17 +1980,17 @@ begin
             NewLine;
             if AParam.Transform = ptLog then
             begin
-              WriteString('transform=''log'')');
+              WriteString('      transform=''log'')');
             end
             else
             begin
-              WriteString('transform=''none'')');
+              WriteString('      transform=''none'')');
             end;
             NewLine;
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp', // * %2:s',
+              '    p_Thickness(select=(s_Thickness == %1:d)) = temp', // * %2:s',
               [LayerIndex + 1, ParameterIndex+1 {, AParam.ParameterName}]));
             NewLine;
           end
@@ -1980,7 +2009,7 @@ begin
           NewLine;
         end;
       end;
-      for LayerIndex := 1 to LayerCount do
+      for LayerIndex := 0 to LayerCount-1 do
       begin
         if AParam.UsePilotPoints then
         begin
@@ -2003,8 +2032,8 @@ begin
 
           if UsedFileProperties <> nil then
           begin
-            PListName := Format('%0:s_%1:d',
-              [AParam.ParameterName, LayerIndex+1]);
+            PListName := Format('%0:s_%1:s_%2:d',
+              ['POR',AParam.ParameterName, LayerIndex+1]);
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
@@ -2023,7 +2052,7 @@ begin
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp', // * %2:s',
+              '    p_Porosity%0:d(select=(s_PorPar%0:d == %1:d)) = temp', // * %2:s',
               [LayerIndex + 1, ParameterIndex+1 {, AParam.ParameterName}]));
             NewLine;
           end
@@ -2038,7 +2067,7 @@ begin
           WriteString('    # Substituting parameter values in zones');
           NewLine;
           WriteString(Format('p_Porosity%0:d(select=(s_PorPar%0:d == %2:d)) = p_Porosity%0:d * %1:s',
-            [LayerIndex, AParam.ParameterName, ParameterIndex+1]));
+            [LayerIndex+1, AParam.ParameterName, ParameterIndex+1]));
           NewLine;
         end;
       end;
@@ -2048,6 +2077,7 @@ begin
 
     WriteString('# Write new data values');
     NewLine;
+  {$REGION 'Write values'}
     if FMesh.MeshType = mt3D then
     begin
       for LayerIndex := 1 to LayerCount do
@@ -2095,6 +2125,7 @@ begin
       WriteString('  plist=p_Porosity1)');
       NewLine;
     end;
+  {$ENDREGION}
   finally
     CloseFile;
   end;
@@ -2113,6 +2144,10 @@ begin
 
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
+
+  Model.PilotPointData.AddPilotPointFileObjects(FPorosityPilotPointFiles);
+  Model.PilotPointData.AddPilotPointFileObjects(FThicknessPilotPointFiles);
+
 end;
 
 procedure TSutraData14BScriptWriter.ReadDiscretization;
@@ -2121,14 +2156,14 @@ var
   ColIndex: Integer;
   LayerCount: Integer;
 begin
-    if FMesh.MeshType = mt3D then
-    begin
-      LayerCount := FMesh.LayerCount + 1;
-    end
-    else
-    begin
-      LayerCount := 1;
-    end;
+  if FMesh.MeshType = mt3D then
+  begin
+    LayerCount := FMesh.LayerCount + 1;
+  end
+  else
+  begin
+    LayerCount := 1;
+  end;
 
   WriteString('#Read SUTRA node information file');
   NewLine;
@@ -2189,6 +2224,9 @@ begin
       ReadPilotPoints;
       ReadDiscretization;
       SaveKrigingFactors;
+      Model.KrigfactorsScriptLines.Add(Format('plproc ''%s''',
+        [ExtractFileName(ScriptFileName)]));
+
     finally
       CloseFile
     end;
@@ -2475,10 +2513,14 @@ begin
   inherited;
   Assert(Model.ModelSelection in SutraSelection);
   FParameterNames := TStringList.Create;
+  FDataRecordList := TDataRecordList.Create;
+  FUsedParamList := TStringList.Create;
 end;
 
 destructor TSutraData15BScriptWriter.Destroy;
 begin
+  FUsedParamList.Free;
+  FDataRecordList.Free;
   FParameterNames.Free;
   inherited;
 end;
@@ -2486,6 +2528,247 @@ end;
 class function TSutraData15BScriptWriter.Extension: string;
 begin
   result := '.15B.script';
+end;
+
+procedure TSutraData15BScriptWriter.GetUsedParameters;
+  procedure CreateDataRecord(DataArray: TDataArray; const ID: string);
+  var
+    DataRecord: TDataRecord;
+  begin
+    if DataArray <> nil then
+    begin
+      DataRecord := TDataRecord.Create;
+      FDataRecordList.Add(DataRecord);
+      DataRecord.DataArray := DataArray;
+      DataRecord.ID := ID;
+    end;
+  end;
+var
+  DataArray: TDataArray;
+  Options: TSutraOptions;
+  Mesh: TSutraMesh3D;
+  Index: Integer;
+  ParamArray: TDataArray;
+  ElementIndex: Integer;
+  LayerIndex: Integer;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+begin
+  Options := Model.SutraOptions;
+  Mesh := Model.SutraMesh;
+  {$REGION 'PMAX'}
+  DataArray := nil;
+  case Options.TransportChoice of
+    tcSolute, tcEnergy:
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
+    tcSoluteHead:
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumK);
+    else Assert(False);
+  end;
+//    DataRoot := 'PMAX';
+  CreateDataRecord(DataArray,  'PMAX');
+  {$ENDREGION}
+
+  {$REGION 'PMID'}
+  DataArray := nil;
+  if Mesh.MeshType = mt3D then
+  begin
+    case Options.TransportChoice of
+      tcSolute, tcEnergy:
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
+      tcSoluteHead:
+        DataArray := Model.DataArrayManager.GetDataSetByName(KMiddleK);
+      else Assert(False);
+    end;
+  end
+  else
+  begin
+    DataArray := nil;
+  end;
+  CreateDataRecord(DataArray, 'PMID');
+  {$ENDREGION}
+
+  {$REGION 'PMIN'}
+  DataArray := nil;
+  case Options.TransportChoice of
+    tcSolute, tcEnergy:
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
+    tcSoluteHead:
+      DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);
+    else Assert(False);
+  end;
+  CreateDataRecord(DataArray, 'PMIN');
+  {$ENDREGION}
+
+{$REGION 'ANGLE1'}
+  DataArray := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
+  CreateDataRecord(DataArray, 'ANGLE1');
+{$ENDREGION}
+
+{$REGION 'ANGLE2'}
+  if Mesh.MeshType = mt3D then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);
+  end
+  else
+  begin
+    DataArray := nil;
+  end;
+  CreateDataRecord(DataArray, 'ANGLE2');
+{$ENDREGION}
+
+{$REGION 'ANGLE3'}
+  if Mesh.MeshType = mt3D then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KRotationalAngle);
+  end
+  else
+  begin
+    DataArray := nil;
+  end;
+  CreateDataRecord(DataArray, 'ANGLE3');
+{$ENDREGION}
+
+{$REGION 'ALMAX'}
+  DataArray := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
+  CreateDataRecord(DataArray, 'ALMAX');
+{$ENDREGION}
+
+{$REGION 'ALMID'}
+  if Mesh.MeshType = mt3D then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KMidLongitudinalDisp);
+  end
+  else
+  begin
+    DataArray := nil;
+  end;
+  CreateDataRecord(DataArray, 'ALMID');
+{$ENDREGION}
+
+{$REGION 'ALMIN'}
+  DataArray := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
+  CreateDataRecord(DataArray, 'ALMIN');
+{$ENDREGION}
+
+{$REGION 'ATMAX'}
+  DataArray := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
+  CreateDataRecord(DataArray, 'ATMAX');
+{$ENDREGION}
+
+{$REGION 'ATMID'}
+  if Mesh.MeshType = mt3D then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(KMidTransverseDisp);
+  end
+  else
+  begin
+    DataArray := nil;
+  end;
+  CreateDataRecord(DataArray, 'ATMID');
+{$ENDREGION}
+
+{$REGION 'ATMIN'}
+  DataArray := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
+  CreateDataRecord(DataArray, 'ATMIN');
+{$ENDREGION}
+
+  for Index := 0 to FDataRecordList.Count - 1 do
+  begin
+    DataArray := FDataRecordList[Index].DataArray;
+
+    if DataArray.PestParametersUsed then
+    begin
+      ParamArray := Model.DataArrayManager.GetDataSetByName
+        (DataArray.ParamDataSetName);
+
+      for ElementIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
+      begin
+  //      ANode2D := FMesh.Mesh2D.Nodes[ElementIndex];
+        for LayerIndex := 0 to ParamArray.LayerCount - 1 do
+        begin
+          PIndex := FParameterNames.IndexOf(LowerCase(
+            ParamArray.StringData[LayerIndex, 0, ElementIndex]));
+          if PIndex >=0 then
+          begin
+            AParam := FParameterNames.Objects[PIndex] as TModflowSteadyParameter;
+          end
+          else
+          begin
+            AParam := nil;
+          end;
+
+          if AParam <> nil then
+          begin
+  //          FUsedPorosityParameters.AddObject(AParam.ParameterName, AParam);
+            FUsedParamList.AddObject(AParam.ParameterName, AParam);
+          end;
+        end;
+      end;
+    end
+  end;
+
+
+end;
+
+procedure TSutraData15BScriptWriter.ReadDiscretization;
+begin
+
+end;
+
+procedure TSutraData15BScriptWriter.ReadPilotPoints;
+var
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  DataArrayIndex: Integer;
+  ADataRec: TDataRecord;
+  procedure HandlePilotPointList(PilotPointFiles: TPilotPointFiles; const DataId: string);
+  var
+    PPIndex: Integer;
+    FileProperties: TPilotPointFileObject;
+    PListName: string;
+  begin
+    for PPIndex := 0 to PilotPointFiles.Count - 1 do
+    begin
+      FileProperties := PilotPointFiles[PPIndex];
+      if FileProperties.Parameter = AParam then
+      begin
+        WriteString(Format('%0:s_PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &',
+          [DataId, PPIndex+1]));
+        NewLine;
+        PListName := Format('%0:s_%1:s_%2:d',
+          [DataId, AParam.ParameterName, FileProperties.Layer + 1]);
+        WriteString(Format('  plist=''%0:s'';column=%1:d, &',
+          [PListName, 5]));
+//          Inc(ColIndex);
+        NewLine;
+        WriteString(Format('  id_type=''indexed'',file=''%s'')',
+          [ExtractFileName(FileProperties.FileName)]));
+        NewLine;
+      end;
+    end;
+  end;
+begin
+  WriteString('#Read pilot point data');
+  NewLine;
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+    if AParam.UsePilotPoints then
+    begin
+      for DataArrayIndex := 0 to FDataRecordList.Count - 1 do
+      begin
+        ADataRec := FDataRecordList[DataArrayIndex];
+        HandlePilotPointList(ADataRec.PilotPointFiles, ADataRec.ID);
+      end;
+    end;
+  end;
+  NewLine;
+end;
+
+procedure TSutraData15BScriptWriter.SaveKrigingFactors;
+begin
+
 end;
 
 procedure TSutraData15BScriptWriter.WriteAFile(ScriptChoice: TScriptChoice);
@@ -2496,7 +2779,7 @@ var
   ColIndex: Integer;
   ParameterIndex: Integer;
   AParam: TModflowSteadyParameter;
-  FOptions: TSutraOptions;
+  Options: TSutraOptions;
   DataArray: TDataArray;
   UsedDataRoots: TStringList;
   DataRoot: string;
@@ -2554,7 +2837,7 @@ begin
   end;
 
   Mesh := Model.SutraMesh;
-  FOptions := Model.SutraOptions;
+  Options := Model.SutraOptions;
 
   UsedDataRoots := TStringList.Create;
   OpenFile(FFileName);
@@ -2641,7 +2924,7 @@ begin
 
     {$REGION 'PMAX'}
     DataArray := nil;
-    case FOptions.TransportChoice of
+    case Options.TransportChoice of
       tcSolute, tcEnergy:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMaximumPermeability);
       tcSoluteHead:
@@ -2656,7 +2939,7 @@ begin
     DataArray := nil;
     if Mesh.MeshType = mt3D then
     begin
-      case FOptions.TransportChoice of
+      case Options.TransportChoice of
         tcSolute, tcEnergy:
           DataArray := Model.DataArrayManager.GetDataSetByName(KMiddlePermeability);
         tcSoluteHead:
@@ -2673,7 +2956,7 @@ begin
 
     {$REGION 'PMIN'}
     DataArray := nil;
-    case FOptions.TransportChoice of
+    case Options.TransportChoice of
       tcSolute, tcEnergy:
         DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumPermeability);
       tcSoluteHead:
@@ -2764,6 +3047,10 @@ begin
     begin
       AParam := FParameterNames.Objects[ParameterIndex]
         as TModflowSteadyParameter;
+      if AParam.UsePilotPoints then
+      begin
+        Continue;
+      end;
       if ScriptChoice = scWriteScript then
       begin
         WriteString('#');
@@ -2880,6 +3167,62 @@ begin
 
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
+end;
+
+procedure TSutraData15BScriptWriter.WriteKrigingFactors;
+var
+  ScriptFileName: string;
+  index: Integer;
+  PilotPointsUsed: Boolean;
+begin
+  PilotPointsUsed := False;
+  for index := 0 to FDataRecordList.Count - 1 do
+  begin
+    if FDataRecordList[index].PilotPointFiles.Count > 0 then
+    begin
+      PilotPointsUsed := True;
+      break;
+    end;
+  end;
+  if PilotPointsUsed then
+  begin
+    ScriptFileName := ChangeFileExt(FFileName, StrKrigfactorsscript);
+    OpenFile(ScriptFileName);
+    try
+      WriteString('#Script for PLPROC for saving kriging factors');
+      NewLine;
+      NewLine;
+      ReadPilotPoints;
+      ReadDiscretization;
+      SaveKrigingFactors;
+      Model.KrigfactorsScriptLines.Add(Format('plproc ''%s''',
+        [ExtractFileName(ScriptFileName)]));
+    finally
+      CloseFile
+    end;
+  end;
+end;
+
+procedure TSutraData15BScriptWriter.WritePilotPointFiles;
+var
+  Index: Integer;
+  ADataRec: TDataRecord;
+  PilotPointWriter: TPilotPointWriter;
+begin
+  for Index := 0 to FDataRecordList.Count - 1 do
+  begin
+    ADataRec := FDataRecordList[Index];
+    if ADataRec.DataArray.PestParametersUsed then
+    begin
+      PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
+      try
+        PilotPointWriter.WriteFile(FFileName, ADataRec.DataArray,
+          ADataRec.PilotPointFiles, ADataRec.Id);
+      finally
+        PilotPointWriter.Free;
+      end;
+    end;
+  end;
 end;
 
 { TSutraInitCondScriptWriter }
@@ -3119,6 +3462,19 @@ begin
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
 
+end;
+
+{ TDataRecord }
+
+constructor TDataRecord.Create;
+begin
+  PilotPointFiles := TPilotPointFiles.Create;
+end;
+
+destructor TDataRecord.Destroy;
+begin
+  PilotPointFiles.Free;
+  inherited;
 end;
 
 end.
