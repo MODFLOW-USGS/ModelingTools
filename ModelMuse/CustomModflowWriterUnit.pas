@@ -9092,7 +9092,8 @@ var
 begin
   ArrayName := ADataArray.Name;
   Assert(ArrayName <> '');
-  OutputFileName := AFileName + '.' + Trim(ArrayName) + '_' + IntToStr(ALayer+1);
+  OutputFileName := AFileName + '.' + Trim(ArrayName) + '_'
+    + IntToStr(ALayer+1) + '.txt';
 
   result := ExtractFileName(OutputFileName);
   OutputDirectory := ExtractFileDir(OutputFileName);

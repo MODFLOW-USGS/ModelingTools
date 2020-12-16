@@ -763,6 +763,7 @@ type
     FInvalidatingAllViews: Boolean;
     FRunPestForm: TfrmRunPest;
     FRunPest: Boolean;
+    FExporting: Boolean;
 //    FWriteErrorRaised: Boolean;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
@@ -12543,190 +12544,199 @@ var
   ZoneBudgetLocation: string;
 begin
   inherited;
-  if PhastModel.DisvUsed then
+  if FExporting then
   begin
-    DisvGrid := PhastModel.DisvGrid;
-    if (DisvGrid = nil) or (DisvGrid.Layers.Count <= 0)
-      or (DisvGrid.TwoDGrid.Cells.Count = 0) then
-    begin
-      Beep;
-      MessageDlg(StrYouMustDefineTheDisv, mtError, [mbOK], 0);
-      Exit;
-    end;
-  end
-  else
-  begin
-    AGrid := Grid;
-    if (AGrid = nil) or (AGrid.ColumnCount <= 0)
-      or (AGrid.RowCount <= 0) or (AGrid.LayerCount <= 0) then
-    begin
-      Beep;
-      MessageDlg(StrYouMustDefineThe2, mtError, [mbOK], 0);
-      Exit;
-    end;
+    Exit;
   end;
-  InitializeModflowInputDialog;
-  if sdModflowInput.Execute then
-  begin
-    if PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
+  try
+    FExporting := True;
+    if PhastModel.DisvUsed then
     begin
-      if Length(ExtractFileName(sdModflowInput.FileName)) > 50 then
+      DisvGrid := PhastModel.DisvGrid;
+      if (DisvGrid = nil) or (DisvGrid.Layers.Count <= 0)
+        or (DisvGrid.TwoDGrid.Cells.Count = 0) then
       begin
         Beep;
-        MessageDlg(StrSorryMT3DMSRestri, mtError, [mbOK], 0);
+        MessageDlg(StrYouMustDefineTheDisv, mtError, [mbOK], 0);
+        Exit;
+      end;
+    end
+    else
+    begin
+      AGrid := Grid;
+      if (AGrid = nil) or (AGrid.ColumnCount <= 0)
+        or (AGrid.RowCount <= 0) or (AGrid.LayerCount <= 0) then
+      begin
+        Beep;
+        MessageDlg(StrYouMustDefineThe2, mtError, [mbOK], 0);
         Exit;
       end;
     end;
-    if PhastModel.ModflowOptions.Description.Text <> FNewDescription then
+    InitializeModflowInputDialog;
+    if sdModflowInput.Execute then
     begin
-      NewModelOptionsCollection := TModelOptionsCollection.Create(PhastModel);
-      ModelOptions := NewModelOptionsCollection[0];
-      ModelOptions.Description.Text := FNewDescription;
-      UndoStack.Submit(TUndoGeneralOptions.Create(NewModelOptionsCollection,
-        PhastModel.ModflowPackages.Mt3dBasic.MassUnit, PhastModel.UseGsflowFormat));
-    end;
+      if PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
+      begin
+        if Length(ExtractFileName(sdModflowInput.FileName)) > 50 then
+        begin
+          Beep;
+          MessageDlg(StrSorryMT3DMSRestri, mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
+      if PhastModel.ModflowOptions.Description.Text <> FNewDescription then
+      begin
+        NewModelOptionsCollection := TModelOptionsCollection.Create(PhastModel);
+        ModelOptions := NewModelOptionsCollection[0];
+        ModelOptions.Description.Text := FNewDescription;
+        UndoStack.Submit(TUndoGeneralOptions.Create(NewModelOptionsCollection,
+          PhastModel.ModflowPackages.Mt3dBasic.MassUnit, PhastModel.UseGsflowFormat));
+      end;
 
-    if sdModflowInput.FileName <> string(AnsiString(sdModflowInput.FileName)) then
-    begin
-      Beep;
-      MessageDlg(StrSorryTheFileName, mtError, [mbOK], 0);
-      Exit;
-    end;
-    if sdModflowInput.FileName <>
-      PhastModel.FixFileName(sdModflowInput.FileName) then
-    begin
-      Beep;
-      MessageDlg(StrSpaceCharactersAre, mtError, [mbOK], 0);
-      Exit;
-    end;
-    case PhastModel.ObservationPurpose of
-      ofObserved: FObservationFileName := sdModflowInput.FileName;
-      ofPredicted: FPredictionFileName := sdModflowInput.FileName;
-      else Assert(False);
-    end;
-    // erase the list of model input files to be stored in the archive.
-    PhastModel.ClearModelFiles;
-
-    if not FileExists(PhastModel.ModflowLocation) then
-    begin
-      GetProgramLocations(PhastModel);
-      if not FileExists(PhastModel.ModflowLocation) then
+      if sdModflowInput.FileName <> string(AnsiString(sdModflowInput.FileName)) then
       begin
         Beep;
-        case PhastModel.ModelSelection of
-          msModflow: ModflowVersionName := StrMODFLOW;
-          msModflowLGR: ModflowVersionName := StrMODFLOWLGR;
-          msModflowLGR2: ModflowVersionName := StrMODFLOWLGR2;
-          msModflowNWT: ModflowVersionName := StrMODFLOWNWT;
-          msModflowFmp: ModflowVersionName := StrMODFLOWOWHM;
-          msModflowCfp: ModflowVersionName := StrMODFLOWCFP;
-          msModflow2015: ModflowVersionName := StrMODFLOW6;
-          else Assert(False);
+        MessageDlg(StrSorryTheFileName, mtError, [mbOK], 0);
+        Exit;
+      end;
+      if sdModflowInput.FileName <>
+        PhastModel.FixFileName(sdModflowInput.FileName) then
+      begin
+        Beep;
+        MessageDlg(StrSpaceCharactersAre, mtError, [mbOK], 0);
+        Exit;
+      end;
+      case PhastModel.ObservationPurpose of
+        ofObserved: FObservationFileName := sdModflowInput.FileName;
+        ofPredicted: FPredictionFileName := sdModflowInput.FileName;
+        else Assert(False);
+      end;
+      // erase the list of model input files to be stored in the archive.
+      PhastModel.ClearModelFiles;
+
+      if not FileExists(PhastModel.ModflowLocation) then
+      begin
+        GetProgramLocations(PhastModel);
+        if not FileExists(PhastModel.ModflowLocation) then
+        begin
+          Beep;
+          case PhastModel.ModelSelection of
+            msModflow: ModflowVersionName := StrMODFLOW;
+            msModflowLGR: ModflowVersionName := StrMODFLOWLGR;
+            msModflowLGR2: ModflowVersionName := StrMODFLOWLGR2;
+            msModflowNWT: ModflowVersionName := StrMODFLOWNWT;
+            msModflowFmp: ModflowVersionName := StrMODFLOWOWHM;
+            msModflowCfp: ModflowVersionName := StrMODFLOWCFP;
+            msModflow2015: ModflowVersionName := StrMODFLOW6;
+            else Assert(False);
+          end;
+          if MessageDlg(Format(StrSDoesNotExistAt, [ModflowVersionName]),
+            mtWarning, [mbYes, mbNo], 0) <> mrYes then
+          begin
+            Exit;
+          end;
         end;
-        if MessageDlg(Format(StrSDoesNotExistAt, [ModflowVersionName]),
+      end;
+
+      if PhastModel.GncIsSelected and PhastModel.DisvUsed
+        and (PhastModel.ModflowPackages.GncPackage.EquationFormulation = efImplicit)
+        and not ((soLinLinearAcceleration in PhastModel.ModflowPackages.SmsPackage.SmsOverrides)
+        or (PhastModel.ModflowPackages.SmsPackage.LinLinearAcceleration = sllaBiCgStab))
+        then
+      begin
+        if MessageDlg(StrWhenTheGhostNode + sLineBreak + StrDoYouWantToConti,
           mtWarning, [mbYes, mbNo], 0) <> mrYes then
         begin
           Exit;
         end;
       end;
-    end;
 
-    if PhastModel.GncIsSelected and PhastModel.DisvUsed
-      and (PhastModel.ModflowPackages.GncPackage.EquationFormulation = efImplicit)
-      and not ((soLinLinearAcceleration in PhastModel.ModflowPackages.SmsPackage.SmsOverrides) 
-      or (PhastModel.ModflowPackages.SmsPackage.LinLinearAcceleration = sllaBiCgStab))
-      then
-    begin
-      if MessageDlg(StrWhenTheGhostNode + sLineBreak + StrDoYouWantToConti,
-        mtWarning, [mbYes, mbNo], 0) <> mrYes then
+      if not ModflowUpToDate then
       begin
         Exit;
       end;
-    end;
-
-    if not ModflowUpToDate then
-    begin
-      Exit;
-    end;
-    if not TestCompatibleModflowMt3d then
-    begin
-      Exit;
-    end;
-    if PhastModel.MODPATHIsSelected and FRunModpath then
-    begin
-      if not TestModpathLocationOK(PhastModel) or not PhastModel.TestModpathOK(PhastModel)
-        or not ModpathUpToDate(PhastModel) then
+      if not TestCompatibleModflowMt3d then
       begin
         Exit;
       end;
-      MPathLocation := PhastModel.ModPathLocation;
-      if FileExists(MPathLocation) then
+      if PhastModel.MODPATHIsSelected and FRunModpath then
       begin
-        PhastModel.AddBinaryFile(MPathLocation);
+        if not TestModpathLocationOK(PhastModel) or not PhastModel.TestModpathOK(PhastModel)
+          or not ModpathUpToDate(PhastModel) then
+        begin
+          Exit;
+        end;
+        MPathLocation := PhastModel.ModPathLocation;
+        if FileExists(MPathLocation) then
+        begin
+          PhastModel.AddBinaryFile(MPathLocation);
+        end;
+
+      end;
+      if PhastModel.ModflowPackages.ZoneBudget.IsSelected and FRunZoneBudget then
+      begin
+        if not TestZoneBudgetLocationOK(PhastModel) or not ZoneBudgetUpToDate then
+        begin
+          Exit;
+        end;
+        if ModelSelection = msModflow2015 then
+        begin
+          ZoneBudgetLocation := PhastModel.ProgramLocations.ZoneBudgetLocationMf6;
+        end
+        else
+        begin
+          ZoneBudgetLocation := PhastModel.ProgramLocations.ZoneBudgetLocation;
+        end;
+        if FileExists(ZoneBudgetLocation) then
+        begin
+          PhastModel.AddBinaryFile(ZoneBudgetLocation);
+        end;
+      end;
+      if FileExists(PhastModel.ModflowLocation) then
+      begin
+        PhastModel.AddBinaryFile(PhastModel.ModflowLocation);
       end;
 
-    end;
-    if PhastModel.ModflowPackages.ZoneBudget.IsSelected and FRunZoneBudget then
-    begin
-      if not TestZoneBudgetLocationOK(PhastModel) or not ZoneBudgetUpToDate then
-      begin
-        Exit;
-      end;
-      if ModelSelection = msModflow2015 then
-      begin
-        ZoneBudgetLocation := PhastModel.ProgramLocations.ZoneBudgetLocationMf6;
-      end
-      else
-      begin
-        ZoneBudgetLocation := PhastModel.ProgramLocations.ZoneBudgetLocation;
-      end;
-      if FileExists(ZoneBudgetLocation) then
-      begin
-        PhastModel.AddBinaryFile(ZoneBudgetLocation);
-      end;
-    end;
-    if FileExists(PhastModel.ModflowLocation) then
-    begin
-      PhastModel.AddBinaryFile(PhastModel.ModflowLocation);
-    end;
 
+      frmErrorsAndWarnings.Clear;
 
-    frmErrorsAndWarnings.Clear;
-
-    FileName := sdModflowInput.FileName;
-    frmFormulaErrors.sgErrors.BeginUpdate;
-    CanDraw := False;
-    try
-      NilDisplay;
-
-      FileName := PhastModel.FixFileName(FileName);
-
-      NameWriter := TNameFileWriter.Create(PhastModel, FileName, etExport);
-      SimNameWriter := TMf6_SimNameFileWriter.Create(PhastModel);
+      FileName := sdModflowInput.FileName;
+      frmFormulaErrors.sgErrors.BeginUpdate;
+      CanDraw := False;
       try
-        PhastModel.NameFileWriter := NameWriter;
-        PhastModel.SimNameWriter := SimNameWriter;
-        PhastModel.ExportModflowModel(FileName, FRunModflow,
-          PhastModel.MODPATHIsSelected and FRunModpath,
-          PhastModel.MODPATHIsSelected and FCreateNewCompositeBudgetFile,
-          PhastModel.ZoneBudgetIsSelected and FRunZoneBudget, True);
+        NilDisplay;
+
+        FileName := PhastModel.FixFileName(FileName);
+
+        NameWriter := TNameFileWriter.Create(PhastModel, FileName, etExport);
+        SimNameWriter := TMf6_SimNameFileWriter.Create(PhastModel);
+        try
+          PhastModel.NameFileWriter := NameWriter;
+          PhastModel.SimNameWriter := SimNameWriter;
+          PhastModel.ExportModflowModel(FileName, FRunModflow,
+            PhastModel.MODPATHIsSelected and FRunModpath,
+            PhastModel.MODPATHIsSelected and FCreateNewCompositeBudgetFile,
+            PhastModel.ZoneBudgetIsSelected and FRunZoneBudget, True);
+        finally
+          NameWriter.Free;
+          PhastModel.NameFileWriter := nil;
+          SimNameWriter := nil;
+  //        SimNameWriter.Free;
+        end;
+        PhastModel.SaveArchiveList(ChangeFileExt(FileName, '.axml'));
+
       finally
-        NameWriter.Free;
-        PhastModel.NameFileWriter := nil;
-        SimNameWriter := nil;
-//        SimNameWriter.Free;
+        CanDraw := True;
+        frmFormulaErrors.sgErrors.EndUpdate;
       end;
-      PhastModel.SaveArchiveList(ChangeFileExt(FileName, '.axml'));
 
-    finally
-      CanDraw := True;
-      frmFormulaErrors.sgErrors.EndUpdate;
+      if frmErrorsAndWarnings.HasMessages then
+      begin
+        frmErrorsAndWarnings.Show;
+      end;
     end;
-
-    if frmErrorsAndWarnings.HasMessages then
-    begin
-      frmErrorsAndWarnings.Show;
-    end;
+  finally
+    FExporting := False;
   end;
 end;
 
@@ -13606,18 +13616,14 @@ var
   NewModelOptionsCollection: TModelOptionsCollection;
   ModelOptions: TModelOptions;
 begin
-  inherited;
-  AGrid := Grid;
-  if (AGrid = nil) or (AGrid.ColumnCount <= 0)
-    or (AGrid.RowCount <= 0) or (AGrid.LayerCount <= 0) then
+  if FExporting then
   begin
-    Beep;
-    MessageDlg(StrYouMustDefineThe4, mtError, [mbOK], 0);
     Exit;
   end;
-  for Index := 0 to PhastModel.ChildModels.Count - 1 do
-  begin
-    AGrid := PhastModel.ChildModels[Index].ChildModel.Grid;
+  try
+    FExporting := True;
+    inherited;
+    AGrid := Grid;
     if (AGrid = nil) or (AGrid.ColumnCount <= 0)
       or (AGrid.RowCount <= 0) or (AGrid.LayerCount <= 0) then
     begin
@@ -13625,106 +13631,91 @@ begin
       MessageDlg(StrYouMustDefineThe4, mtError, [mbOK], 0);
       Exit;
     end;
-  end;
-  InitializeModflowLgrInputDialog;
-  if sdModflowLgr.Execute then
-  begin
-    if PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
+    for Index := 0 to PhastModel.ChildModels.Count - 1 do
     begin
-      if Length(ExtractFileName(sdModflowLgr.FileName)) > 50 then
+      AGrid := PhastModel.ChildModels[Index].ChildModel.Grid;
+      if (AGrid = nil) or (AGrid.ColumnCount <= 0)
+        or (AGrid.RowCount <= 0) or (AGrid.LayerCount <= 0) then
       begin
         Beep;
-        MessageDlg(StrSorryMT3DMSRestri, mtError, [mbOK], 0);
+        MessageDlg(StrYouMustDefineThe4, mtError, [mbOK], 0);
         Exit;
       end;
     end;
-    if PhastModel.ModflowOptions.Description.Text <> FNewDescription then
+    InitializeModflowLgrInputDialog;
+    if sdModflowLgr.Execute then
     begin
-      NewModelOptionsCollection := TModelOptionsCollection.Create(PhastModel);
-      ModelOptions := NewModelOptionsCollection[0];
-      ModelOptions.Description.Text := FNewDescription;
-      UndoStack.Submit(TUndoGeneralOptions.Create(NewModelOptionsCollection,
-        PhastModel.ModflowPackages.Mt3dBasic.MassUnit, PhastModel.UseGsflowFormat));
-    end;
-
-    if sdModflowLgr.FileName <> string(AnsiString(sdModflowLgr.FileName)) then
-    begin
-      Beep;
-      MessageDlg(StrSorryTheFileName, mtError, [mbOK], 0);
-      Exit;
-    end;
-    if sdModflowLgr.FileName <>
-      PhastModel.FixFileName(sdModflowLgr.FileName) then
-    begin
-      Beep;
-      MessageDlg(StrSpaceCharactersAre, mtError, [mbOK], 0);
-      Exit;
-    end;
-    case PhastModel.ObservationPurpose of
-      ofObserved: FObservationFileName := sdModflowLgr.FileName;
-      ofPredicted: FPredictionFileName := sdModflowLgr.FileName;
-      else Assert(False);
-    end;
-
-    if ModelSelection in [msModflowLGR] then
-    begin
-      if not FileExists(PhastModel.ProgramLocations.ModflowLgrLocation) then
+      if PhastModel.ModflowPackages.Mt3dBasic.IsSelected then
       begin
-        case FRunModelSelection of
-          0, 1:
-            begin
-              UsedModel := PhastModel;
-            end;
-          else
-            begin
-              UsedModel := PhastModel.ChildModels[FRunModelSelection-2].ChildModel;
-            end;
-        end;
-        GetProgramLocations(UsedModel);
-        if not FileExists(PhastModel.ProgramLocations.ModflowLgrLocation) then
+        if Length(ExtractFileName(sdModflowLgr.FileName)) > 50 then
         begin
           Beep;
-          if MessageDlg(StrMODFLOWLGRDoesNot, mtWarning,
-            [mbYes, mbNo], 0) <> mrYes then
-          begin
-            Exit;
-          end;
+          MessageDlg(StrSorryMT3DMSRestri, mtError, [mbOK], 0);
+          Exit;
         end;
       end;
-      if not MfLgrUpToDate then
+      if PhastModel.ModflowOptions.Description.Text <> FNewDescription then
       begin
+        NewModelOptionsCollection := TModelOptionsCollection.Create(PhastModel);
+        ModelOptions := NewModelOptionsCollection[0];
+        ModelOptions.Description.Text := FNewDescription;
+        UndoStack.Submit(TUndoGeneralOptions.Create(NewModelOptionsCollection,
+          PhastModel.ModflowPackages.Mt3dBasic.MassUnit, PhastModel.UseGsflowFormat));
+      end;
+
+      if sdModflowLgr.FileName <> string(AnsiString(sdModflowLgr.FileName)) then
+      begin
+        Beep;
+        MessageDlg(StrSorryTheFileName, mtError, [mbOK], 0);
         Exit;
       end;
-    end
-    else
-    begin
-      Assert(ModelSelection in [msModflowLGR2, msModflowFmp]);
-      ModelFileExists := False;
-      case ModelSelection of
-        msModflowLGR2:
-          begin
-            ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowLgr2Location);
-          end;
-        msModflowFmp:
-          begin
-            ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
-          end;
-        else
-          Assert(False);
-      end;
-      if not ModelFileExists then
+      if sdModflowLgr.FileName <>
+        PhastModel.FixFileName(sdModflowLgr.FileName) then
       begin
-        case FRunModelSelection of
-          0, 1:
+        Beep;
+        MessageDlg(StrSpaceCharactersAre, mtError, [mbOK], 0);
+        Exit;
+      end;
+      case PhastModel.ObservationPurpose of
+        ofObserved: FObservationFileName := sdModflowLgr.FileName;
+        ofPredicted: FPredictionFileName := sdModflowLgr.FileName;
+        else Assert(False);
+      end;
+
+      if ModelSelection in [msModflowLGR] then
+      begin
+        if not FileExists(PhastModel.ProgramLocations.ModflowLgrLocation) then
+        begin
+          case FRunModelSelection of
+            0, 1:
+              begin
+                UsedModel := PhastModel;
+              end;
+            else
+              begin
+                UsedModel := PhastModel.ChildModels[FRunModelSelection-2].ChildModel;
+              end;
+          end;
+          GetProgramLocations(UsedModel);
+          if not FileExists(PhastModel.ProgramLocations.ModflowLgrLocation) then
+          begin
+            Beep;
+            if MessageDlg(StrMODFLOWLGRDoesNot, mtWarning,
+              [mbYes, mbNo], 0) <> mrYes then
             begin
-              UsedModel := PhastModel;
+              Exit;
             end;
-          else
-            begin
-              UsedModel := PhastModel.ChildModels[FRunModelSelection-2].ChildModel;
-            end;
+          end;
         end;
-        GetProgramLocations(UsedModel);
+        if not MfLgrUpToDate then
+        begin
+          Exit;
+        end;
+      end
+      else
+      begin
+        Assert(ModelSelection in [msModflowLGR2, msModflowFmp]);
+        ModelFileExists := False;
         case ModelSelection of
           msModflowLGR2:
             begin
@@ -13739,145 +13730,173 @@ begin
         end;
         if not ModelFileExists then
         begin
-          Beep;
-          if MessageDlg(StrMODFLOWLGRDoesNot, mtWarning,
-            [mbYes, mbNo], 0) <> mrYes then
-          begin
-            Exit;
-          end;
-        end;
-      end;
-      case ModelSelection of
-        msModflowLGR2:
-          begin
-            if not MfLgr2UpToDate then
-            begin
-              Exit;
-            end;
-          end;
-        msModflowFmp:
-          begin
-            if not MfOwhmUpToDate then
-            begin
-              Exit;
-            end;
-          end
-        else
-          Assert(False);
-        end;
-    end;
-    // erase the list of model input files to be stored in the archive.
-    PhastModel.ClearModelFiles;
-    if ModelSelection in [msModflowLGR] then
-    begin
-      if FileExists(PhastModel.ProgramLocations.ModflowLgrLocation) then
-      begin
-        PhastModel.AddModelInputFile(PhastModel.ProgramLocations.ModflowLgrLocation);
-      end;
-    end
-    else
-    begin
-      Assert(ModelSelection in [msModflowLGR2, msModflowFmp]);
-      case ModelSelection of
-        msModflowLGR2:
-          begin
-            ModelFile := PhastModel.ProgramLocations.ModflowLgr2Location;
-          end;
-        msModflowFmp:
-          begin
-            ModelFile := PhastModel.ProgramLocations.ModflowOwhmLocation;
-          end;
-        else
-          Assert(False);
-      end;
-
-      if FileExists(ModelFile) then
-      begin
-        PhastModel.AddModelInputFile(ModelFile);
-      end;
-    end;
-    frmErrorsAndWarnings.Clear;
-
-    FileName := sdModflowLgr.FileName;
-    frmFormulaErrors.sgErrors.BeginUpdate;
-    CanDraw := False;
-    try
-      NilDisplay;
-
-      FileName := PhastModel.FixFileName(FileName);
-
-      Assert(FRunModelSelection >= 0);
-      case FRunModelSelection of
-        0:
-          begin
-            NameWriter := TNameFileWriter.Create(PhastModel, FileName, etExport);
-            try
-              PhastModel.NameFileWriter := NameWriter;
-              for Index := 0 to PhastModel.ChildModels.Count - 1 do
+          case FRunModelSelection of
+            0, 1:
               begin
-                ChildModel := PhastModel.ChildModels[Index].ChildModel;
-                ChildModelNameFile := ChildModel.Child_NameFile_Name(FileName);
-                NameWriter := TNameFileWriter.Create(ChildModel,
-                  ChildModelNameFile, etExport);
-                ChildModel.NameFileWriter := NameWriter;
+                UsedModel := PhastModel;
               end;
-              PhastModel.ExportModflowLgrModel(FileName, FRunModflow,
-                FRunModpath and PhastModel.MODPATHIsSelected,
-                FCreateNewCompositeBudgetFile, FRunZoneBudget
-                and PhastModel.ZoneBudgetIsSelected, True);
-            finally
-              PhastModel.NameFileWriter.Free;
-              PhastModel.NameFileWriter := nil;
-              for Index := 0 to PhastModel.ChildModels.Count - 1 do
+            else
               begin
-                ChildModel := PhastModel.ChildModels[Index].ChildModel;
+                UsedModel := PhastModel.ChildModels[FRunModelSelection-2].ChildModel;
+              end;
+          end;
+          GetProgramLocations(UsedModel);
+          case ModelSelection of
+            msModflowLGR2:
+              begin
+                ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowLgr2Location);
+              end;
+            msModflowFmp:
+              begin
+                ModelFileExists := FileExists(PhastModel.ProgramLocations.ModflowOwhmLocation);
+              end;
+            else
+              Assert(False);
+          end;
+          if not ModelFileExists then
+          begin
+            Beep;
+            if MessageDlg(StrMODFLOWLGRDoesNot, mtWarning,
+              [mbYes, mbNo], 0) <> mrYes then
+            begin
+              Exit;
+            end;
+          end;
+        end;
+        case ModelSelection of
+          msModflowLGR2:
+            begin
+              if not MfLgr2UpToDate then
+              begin
+                Exit;
+              end;
+            end;
+          msModflowFmp:
+            begin
+              if not MfOwhmUpToDate then
+              begin
+                Exit;
+              end;
+            end
+          else
+            Assert(False);
+          end;
+      end;
+      // erase the list of model input files to be stored in the archive.
+      PhastModel.ClearModelFiles;
+      if ModelSelection in [msModflowLGR] then
+      begin
+        if FileExists(PhastModel.ProgramLocations.ModflowLgrLocation) then
+        begin
+          PhastModel.AddModelInputFile(PhastModel.ProgramLocations.ModflowLgrLocation);
+        end;
+      end
+      else
+      begin
+        Assert(ModelSelection in [msModflowLGR2, msModflowFmp]);
+        case ModelSelection of
+          msModflowLGR2:
+            begin
+              ModelFile := PhastModel.ProgramLocations.ModflowLgr2Location;
+            end;
+          msModflowFmp:
+            begin
+              ModelFile := PhastModel.ProgramLocations.ModflowOwhmLocation;
+            end;
+          else
+            Assert(False);
+        end;
+
+        if FileExists(ModelFile) then
+        begin
+          PhastModel.AddModelInputFile(ModelFile);
+        end;
+      end;
+      frmErrorsAndWarnings.Clear;
+
+      FileName := sdModflowLgr.FileName;
+      frmFormulaErrors.sgErrors.BeginUpdate;
+      CanDraw := False;
+      try
+        NilDisplay;
+
+        FileName := PhastModel.FixFileName(FileName);
+
+        Assert(FRunModelSelection >= 0);
+        case FRunModelSelection of
+          0:
+            begin
+              NameWriter := TNameFileWriter.Create(PhastModel, FileName, etExport);
+              try
+                PhastModel.NameFileWriter := NameWriter;
+                for Index := 0 to PhastModel.ChildModels.Count - 1 do
+                begin
+                  ChildModel := PhastModel.ChildModels[Index].ChildModel;
+                  ChildModelNameFile := ChildModel.Child_NameFile_Name(FileName);
+                  NameWriter := TNameFileWriter.Create(ChildModel,
+                    ChildModelNameFile, etExport);
+                  ChildModel.NameFileWriter := NameWriter;
+                end;
+                PhastModel.ExportModflowLgrModel(FileName, FRunModflow,
+                  FRunModpath and PhastModel.MODPATHIsSelected,
+                  FCreateNewCompositeBudgetFile, FRunZoneBudget
+                  and PhastModel.ZoneBudgetIsSelected, True);
+              finally
+                PhastModel.NameFileWriter.Free;
+                PhastModel.NameFileWriter := nil;
+                for Index := 0 to PhastModel.ChildModels.Count - 1 do
+                begin
+                  ChildModel := PhastModel.ChildModels[Index].ChildModel;
+                  ChildModel.NameFileWriter.Free;
+                  ChildModel.NameFileWriter := nil;
+                end;
+              end;
+            end;
+          1:
+            begin
+              NameWriter := TNameFileWriter.Create(PhastModel, FileName, etExport);
+              try
+                PhastModel.NameFileWriter := NameWriter;
+                PhastModel.ExportSeparateLgrModel(FileName, FRunModflow,
+                  FRunModpath and PhastModel.ModflowPackages.ModPath.IsSelected,
+                  FRunZoneBudget
+                  and PhastModel.ModflowPackages.ZoneBudget.IsSelected, True);
+              finally
+                PhastModel.NameFileWriter.Free;
+                PhastModel.NameFileWriter := nil;
+              end;
+            end;
+          else
+            begin
+              ChildModel := PhastModel.ChildModels[FRunModelSelection-2].ChildModel;
+              ChildModelNameFile := ChildModel.Child_NameFile_Name(FileName);
+              NameWriter := TNameFileWriter.Create(ChildModel,
+                ChildModelNameFile, etExport);
+              try
+                ChildModel.NameFileWriter := NameWriter;
+                ChildModel.ExportSeparateLgrModel(FileName, FRunModflow,
+                  FRunModpath and ChildModel.ModflowPackages.ModPath.IsSelected,
+                  FRunZoneBudget
+                  and ChildModel.ModflowPackages.ZoneBudget.IsSelected, True);
+              finally
                 ChildModel.NameFileWriter.Free;
                 ChildModel.NameFileWriter := nil;
               end;
             end;
-          end;
-        1:
-          begin
-            NameWriter := TNameFileWriter.Create(PhastModel, FileName, etExport);
-            try
-              PhastModel.NameFileWriter := NameWriter;
-              PhastModel.ExportSeparateLgrModel(FileName, FRunModflow,
-                FRunModpath and PhastModel.ModflowPackages.ModPath.IsSelected,
-                FRunZoneBudget
-                and PhastModel.ModflowPackages.ZoneBudget.IsSelected, True);
-            finally
-              PhastModel.NameFileWriter.Free;
-              PhastModel.NameFileWriter := nil;
-            end;
-          end;
-        else
-          begin
-            ChildModel := PhastModel.ChildModels[FRunModelSelection-2].ChildModel;
-            ChildModelNameFile := ChildModel.Child_NameFile_Name(FileName);
-            NameWriter := TNameFileWriter.Create(ChildModel,
-              ChildModelNameFile, etExport);
-            try
-              ChildModel.NameFileWriter := NameWriter;
-              ChildModel.ExportSeparateLgrModel(FileName, FRunModflow,
-                FRunModpath and ChildModel.ModflowPackages.ModPath.IsSelected,
-                FRunZoneBudget
-                and ChildModel.ModflowPackages.ZoneBudget.IsSelected, True);
-            finally
-              ChildModel.NameFileWriter.Free;
-              ChildModel.NameFileWriter := nil;
-            end;
-          end;
+        end;
+        PhastModel.SaveArchiveList(ChangeFileExt(FileName, '.axml'));
+      finally
+        CanDraw := True;
+        frmFormulaErrors.sgErrors.EndUpdate;
       end;
-      PhastModel.SaveArchiveList(ChangeFileExt(FileName, '.axml'));
-    finally
-      CanDraw := True;
-      frmFormulaErrors.sgErrors.EndUpdate;
-    end;
 
-    if frmErrorsAndWarnings.HasMessages then
-    begin
-      frmErrorsAndWarnings.Show;
+      if frmErrorsAndWarnings.HasMessages then
+      begin
+        frmErrorsAndWarnings.Show;
+      end;
     end;
+  finally
+    FExporting := False;
   end;
 end;
 

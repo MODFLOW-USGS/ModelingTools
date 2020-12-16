@@ -474,6 +474,7 @@ type
     FUsedPestParameters: TStrings;
     FPestParametersAllowed: Boolean;
     FPilotPointsUsed: Boolean;
+    FSuppressCache: Boolean;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -5879,7 +5880,12 @@ var
   AIndex: Integer;
   AParamName: string;
 begin
-  UpToDate := True;
+  FSuppressCache := True;
+  try
+    UpToDate := True;
+  finally
+    FSuppressCache := False;
+  end;
   UsedPestParameters.Clear;
   LocalModel := Model as TCustomModel;
   PestParameters := TStringList.Create;
@@ -5932,8 +5938,12 @@ begin
         begin
           if IsValue[LayerIndex, RowIndex, ColIndex]  then
           begin
-            AParamName := LowerCase(ParamDataArray.StringData[
-              LayerIndex,RowIndex,ColIndex]);
+            AParamName := Trim(LowerCase(ParamDataArray.StringData[
+              LayerIndex,RowIndex,ColIndex]));
+            if AParamName = '' then
+            begin
+              Continue;
+            end;
             PIndex := PestParameters.IndexOf(AParamName);
             if PIndex >= 0 then
             begin
@@ -8211,6 +8221,10 @@ var
   Compressor: TCompressionStream;
   TempStream: TMemoryStream;
 begin
+  if FSuppressCache then
+  begin
+    Exit;
+  end;
   if UpToDate then
   begin
     if not FCleared then

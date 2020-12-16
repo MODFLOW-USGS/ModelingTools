@@ -11,6 +11,7 @@ type
   private
     FNameOfFile: string;
     FUsedObservations: TObservationInterfaceList;
+    FUsePval: Boolean;
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
     procedure WriteControlSection;
@@ -41,6 +42,7 @@ type
     // NOBSGP
     function NumberOfObservationGroups: Integer;
     function NumberOfTemplateFiles: Integer;
+    procedure GetUsedTypes(var UsedTypes: TParameterTypes);
   protected
     class function Extension: string; override;
   public
@@ -250,9 +252,27 @@ function TPestControlFileWriter.NumberOfTemplateFiles: Integer;
 var
   DSIndex: Integer;
   ADataArray: TDataArray;
+  UsedTypes: TParameterTypes;
+  ParamIndex: Integer;
+  AParam: TModflowSteadyParameter;
 begin
+  result := 0;
+  GetUsedTypes(UsedTypes);
+  for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+  begin
+    AParam := Model.ModflowSteadyParameters[ParamIndex];
+    if AParam.ParameterType in UsedTypes then
+    begin
+      if not (AParam is TModflowSteadyParameter)
+        or not TModflowSteadyParameter(AParam).UsePilotPoints then
+      begin
+        result := 1;
+        break;
+      end;
+    end;
+  end;
+
   // PVAL file;
-  result := 1;
   if Model.ModelSelection in SutraSelection then
   begin
     result := result + Model.SutraPestScripts.Count;
@@ -724,6 +744,27 @@ begin
   end;
 end;
 
+procedure TPestControlFileWriter.GetUsedTypes(var UsedTypes: TParameterTypes);
+begin
+  UsedTypes := [];
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    UsedTypes := Mf15ParamType;
+  end
+  else if Model.ModelSelection in Modflow2005Selection then
+  begin
+    UsedTypes := Mf2005ParamType;
+  end
+  else if Model.ModelSelection in SutraSelection then
+  begin
+    UsedTypes := SutraParamType;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
 procedure TPestControlFileWriter.WriteFirstLine;
 begin
   WriteString('pcf');
@@ -775,11 +816,14 @@ var
 begin
   // template files
   WriteSectionHeader('model input/output');
-  TEMPFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPtf));
-  INFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPvalExt));
-  WriteString(TEMPFLE);
-  WriteString(' ' + INFLE);
-  NewLine;
+  if FUsePval then
+  begin
+    TEMPFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPtf));
+    INFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrPvalExt));
+    WriteString(TEMPFLE);
+    WriteString(' ' + INFLE);
+    NewLine;
+  end;
 
   if Model.ModelSelection in SutraSelection then
   begin
@@ -1064,7 +1108,8 @@ var
   PilotPointItem: TStoredPilotParamDataItem;
   ParameterIndex: Integer;
   PilotParamName: string;
-  procedure WriteParameter(AParam: TModflowParameter; ParameterName: string = '');
+  procedure WriteParameter(AParam: TModflowParameter; ParameterName: string = '';
+    Value: double = 0);
   var
     PARNME: string;
   begin
@@ -1119,7 +1164,14 @@ var
     end;
 
     //PARVAL1
-    WriteFloat(AParam.Value);
+    if ParameterName <> '' then
+    begin
+      WriteFloat(Value);
+    end
+    else
+    begin
+      WriteFloat(AParam.Value);
+    end;
 
     //PARLBND
     WriteFloat(AParam.LowerBound);
@@ -1164,28 +1216,13 @@ var
     end;
   end;
 begin
-  UsedTypes := [];
-  if Model.ModelSelection = msModflow2015 then
-  begin
-    UsedTypes := Mf15ParamType;
-  end
-  else if Model.ModelSelection in Modflow2005Selection then
-  begin
-    UsedTypes := Mf2005ParamType;
-  end
-  else if Model.ModelSelection in SutraSelection then
-  begin
-    UsedTypes := SutraParamType
-  end
-  else
-  begin
-    Assert(False);
-  end;
+  GetUsedTypes(UsedTypes);
 
   WriteSectionHeader('parameter data');
 
   PilotPointParameters := TStringList.Create;
   try
+    FUsePval := False;
     for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
     begin
       AParam := Model.ModflowSteadyParameters[ParamIndex];
@@ -1199,6 +1236,7 @@ begin
         else
         begin
           WriteParameter(AParam);
+          FUsePval := True;
         end;
       end;
     end;
@@ -1215,7 +1253,8 @@ begin
         for ParameterIndex := 1 to PilotPointItem.Count do
         begin
           PilotParamName := PilotPointItem.ParameterName(ParameterIndex);
-          WriteParameter(AParam, PilotParamName);
+          WriteParameter(AParam, PilotParamName,
+            PilotPointItem.Values[ParameterIndex-1].Value);
         end;
       end
       else

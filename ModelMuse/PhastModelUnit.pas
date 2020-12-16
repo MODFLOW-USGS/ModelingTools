@@ -22694,7 +22694,9 @@ begin
             APoint.X := ZoomBox.XCoord(APoint2D.x);
             APoint.Y := ZoomBox.YCoord(APoint2D.y);
             Points[0] := APoint;
-            if AStructure.ConnectedReach >= 1 then
+            if (AStructure.ConnectedReach >= 1)
+              and (AStructure.ConnectedReach
+              <= SwrReachConnectionsPlot.ReachList.Count) then
             begin
               AReach := SwrReachConnectionsPlot.ReachList[AStructure.ConnectedReach-1];
               if AStructure.ConnectedReach = AReach.Reach then
@@ -37009,11 +37011,11 @@ begin
         case EvalAt of
           eaBlocks:
             begin
-              result := SutraMesh.Mesh2D.Nodes.TopContainingCell(APoint);
+              result := SutraMesh.Mesh2D.Elements.TopContainingElement(APoint);
             end;
           eaNodes:
             begin
-              result := SutraMesh.Mesh2D.Elements.TopContainingElement(APoint);
+              result := SutraMesh.Mesh2D.Nodes.TopContainingCell(APoint);
             end;
           else
             Assert(False);
@@ -40492,6 +40494,7 @@ var
   LocalNameWriter: TNameFileWriter;
 begin
   LocalNameWriter := NameFileWriter as TNameFileWriter;
+  Assert(LocalNameWriter <> nil);
   SetCurrentNameFileWriter(LocalNameWriter);
   (LakWriter as TModflowLAK_Writer).WriteFile(FileName, Gages);
   FDataArrayManager.CacheDataArrays;
@@ -40538,6 +40541,7 @@ var
   LocalNameWriter: TNameFileWriter;
 begin
   LocalNameWriter := NameFileWriter as TNameFileWriter;
+  Assert(LocalNameWriter <> nil);
   SetCurrentNameFileWriter(LocalNameWriter);
   Assert(FarmWriter <> nil);
   (FarmWriter as TModflowFmpWriter).WriteFile(FileName);
@@ -40559,6 +40563,7 @@ var
   LocalNameWriter: TNameFileWriter;
 begin
   LocalNameWriter := NameFileWriter as TNameFileWriter;
+  Assert(LocalNameWriter <> nil);
   SetCurrentNameFileWriter(LocalNameWriter);
   (SfrWriter as TModflowSFR_Writer).WriteFile(FileName, Gages);
   FDataArrayManager.CacheDataArrays;
@@ -40649,7 +40654,6 @@ var
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
-//  PestControlWriter: TPestControlFileWriter;
 begin
   PilotPointData.Clear;
 
@@ -40689,6 +40693,7 @@ begin
           Exit;
         end;
         try
+          Assert(LocalNameWriter <> nil);
           SetCurrentNameFileWriter(LocalNameWriter);
           if DisvUsed then
           begin
@@ -41526,6 +41531,7 @@ begin
               end;
             end;
           end;
+          Assert(LocalNameWriter <> nil);
           SetCurrentNameFileWriter(LocalNameWriter);
 
           // SfrWriter requires that LakWriter be completed first
@@ -41675,6 +41681,7 @@ begin
               end;
             end;
           end;
+          Assert(LocalNameWriter <> nil);
           SetCurrentNameFileWriter(LocalNameWriter);
 
           HydModWriter := TModflowHydmodWriter.Create(self, etExport);
@@ -41869,12 +41876,6 @@ begin
       begin
         TPhastModel(self).ExportPestInput(FileName, False);
       end;
-//      PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
-//      try
-//        PestControlWriter.WriteFile(FileName)
-//      finally
-//        PestControlWriter.Free;
-//      end;
 
     except on E: EInvalidTime do
       begin
@@ -42164,6 +42165,7 @@ begin
 
       Assert(Assigned(NameFileWriter));
       LocalNameWriter := NameFileWriter as TMt3dmsNameWriter;
+      Assert(LocalNameWriter <> nil);
       SetCurrentNameFileWriter(LocalNameWriter);
       UpdateCurrentModel(self);
       try
@@ -42381,6 +42383,7 @@ begin
         begin
           HeadFile := ChangeFileExt(NameFile, '.bfh_head');
           FlowFile := ChangeFileExt(NameFile, '.bfh_flux');
+          Assert(ANameFileWriter <> nil);
           SetCurrentNameFileWriter(ANameFileWriter);
           if self is TChildModel then
           begin

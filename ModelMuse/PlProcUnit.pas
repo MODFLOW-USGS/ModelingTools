@@ -187,6 +187,7 @@ type
     procedure ReadPilotPoints;
     procedure ReadDiscretization;
     procedure SaveKrigingFactors;
+    function GetKrigFactorRoot(ADataRec: TDataRecord): string;
   protected
     class function Extension: string; override;
   public
@@ -1128,7 +1129,9 @@ begin
           end
           else
           begin
-            WriteString('    # no interpolated values defined for this layer and parameter');
+            WriteString(Format(
+              '    # no interpolated values defined for parameter %1:s in layer %0:d',
+              [LayerIndex+1, AParam.ParameterName]));
             NewLine;
           end;
         end
@@ -1152,7 +1155,7 @@ begin
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
       ModelInputFileName := AFileName + '.' + Trim(FDataArray.Name) + '_'
-        + IntToStr(LayerIndex + 1);
+        + IntToStr(LayerIndex + 1) + '.txt';
       ModelInputFileName := 'arrays' + PathDelim
         + ExtractFileName(ModelInputFileName);
       WriteString('write_column_data_file(header=''no'', &');
@@ -1593,7 +1596,6 @@ begin
 
         if AParam <> nil then
         begin
-//          FUsedPorosityParameters.AddObject(AParam.ParameterName, AParam);
           FUsedParamList.AddObject(AParam.ParameterName, AParam);
         end;
       end;
@@ -1626,7 +1628,6 @@ begin
 
           if AParam <> nil then
           begin
-//            FUsedThicknessParameters.AddObject(AParam.ParameterName, AParam);
             FUsedParamList.AddObject(AParam.ParameterName, AParam);
           end;
         end;
@@ -1683,7 +1684,6 @@ end;
 
 procedure TSutraData14BScriptWriter.SaveKrigingFactors;
 var
-//  PIndex: Integer;
   FileProperties: TPilotPointFileObject;
   AParam: TModflowSteadyParameter;
   Porosity: TDataArray;
@@ -1738,31 +1738,6 @@ begin
     HandleDataArray('Z', Thickness, FThicknessPilotPointFiles, FThicknessKrigingFactorsFileRoot);
   end;
 
-  //  FKrigingFactorsFile := ChangeFileExt(AFileName, '.' + FDataArray.Name)
-//    + '.Factors';
-//  for PIndex := 0 to FUsedParamList.Count - 1 do
-//  begin
-//    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
-//    if AParam.UsePilotPoints then
-//    begin
-//      for PPIndex := 0 to FPilotPointFiles.Count - 1 do
-//      begin
-//        FileProperties := FPilotPointFiles[PPIndex];
-//        if FileProperties.Parameter = AParam then
-//        begin
-//          WriteString('calc_kriging_factors_auto_2d( &');
-//          NewLine;
-//          WriteString(Format('  target_clist=%s, &', [KDisName]));
-//          NewLine;
-//          WriteString(Format('  source_clist=PilotPoints%d, &', [PPIndex+1]));
-//          NewLine;
-//          WriteString(Format('  file=%0:s%1:d;format=formatted)',
-//            [ExtractFileName(FKrigingFactorsFile), PPIndex+1]));
-//          NewLine;
-//        end;
-//      end;
-//    end;
-//  end;
   NewLine;
 end;
 
@@ -1996,7 +1971,9 @@ begin
           end
           else
           begin
-            WriteString('    # no interpolated values defined for this layer and parameter');
+            WriteString(Format(
+              '    # no interpolated values defined for parameter %1:s in layer %0:d',
+              [LayerIndex+1, AParam.ParameterName]));
             NewLine;
           end;
         end
@@ -2058,7 +2035,9 @@ begin
           end
           else
           begin
-            WriteString('    # no interpolated values defined for this layer and parameter');
+            WriteString(Format(
+              '    # no interpolated values defined for parameter %1:s in layer %0:d',
+              [LayerIndex+1, AParam.ParameterName]));
             NewLine;
           end;
         end
@@ -2515,6 +2494,9 @@ begin
   FParameterNames := TStringList.Create;
   FDataRecordList := TDataRecordList.Create;
   FUsedParamList := TStringList.Create;
+
+  FUsedParamList.Sorted := True;
+  FUsedParamList.Duplicates := dupIgnore;
 end;
 
 destructor TSutraData15BScriptWriter.Destroy;
@@ -2700,7 +2682,6 @@ begin
 
           if AParam <> nil then
           begin
-  //          FUsedPorosityParameters.AddObject(AParam.ParameterName, AParam);
             FUsedParamList.AddObject(AParam.ParameterName, AParam);
           end;
         end;
@@ -2711,10 +2692,10 @@ begin
 
 end;
 
-procedure TSutraData15BScriptWriter.ReadDiscretization;
-begin
-
-end;
+//procedure TSutraData15BScriptWriter.ReadDiscretization;
+//begin
+//
+//end;
 
 procedure TSutraData15BScriptWriter.ReadPilotPoints;
 var
@@ -2767,8 +2748,59 @@ begin
 end;
 
 procedure TSutraData15BScriptWriter.SaveKrigingFactors;
+var
+  FileProperties: TPilotPointFileObject;
+  AParam: TModflowSteadyParameter;
+  Index: Integer;
+  ADataRec: TDataRecord;
+  KrigingFactorsFileRoot: string;
+  procedure HandleDataArray(DataID: string; DataArray: TDataArray;
+    PilotPointFiles: TPilotPointFiles; FileName: string);
+  var
+    PIndex: Integer;
+    PPIndex: Integer;
+  begin
+    for PIndex := 0 to FUsedParamList.Count - 1 do
+    begin
+      AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+      if AParam.UsePilotPoints then
+      begin
+        for PPIndex := 0 to PilotPointFiles.Count - 1 do
+        begin
+          FileProperties := PilotPointFiles[PPIndex];
+          if FileProperties.Parameter = AParam then
+          begin
+            WriteString('calc_kriging_factors_auto_2d( &');
+            NewLine;
+            WriteString(Format('  target_clist=%s, &', [KDisName]));
+            NewLine;
+            WriteString(Format('  source_clist=%0:s_PilotPoints%1:d, &',
+              [DataID, PPIndex+1]));
+            NewLine;
+            WriteString(Format('  file=%0:s%1:d;format=formatted)',
+              [ExtractFileName(FileName), PPIndex+1]));
+            NewLine;
+          end;
+        end;
+      end;
+    end;
+    NewLine;
+  end;
 begin
+  WriteString('#Save Kriging factors');
+  NewLine;
+  for Index := 0 to FDataRecordList.Count - 1 do
+  begin
+    ADataRec := FDataRecordList[Index];
+    if ADataRec.PilotPointFiles.Count > 0 then
+    begin
+      KrigingFactorsFileRoot := GetKrigFactorRoot(ADataRec);
+      HandleDataArray(ADataRec.ID, ADataRec.DataArray, ADataRec.PilotPointFiles,
+        KrigingFactorsFileRoot);
+    end;
+  end;
 
+  NewLine;
 end;
 
 procedure TSutraData15BScriptWriter.WriteAFile(ScriptChoice: TScriptChoice);
@@ -2784,7 +2816,12 @@ var
   UsedDataRoots: TStringList;
   DataRoot: string;
   RootIndex: Integer;
-//  DataRoot: string;
+  PIndex: Integer;
+  FileIndex: Integer;
+  DataRec: TDataRecord;
+  FileProperties: TPilotPointFileObject;
+  UsedFileProperties: TPilotPointFileObject;
+  PListName: string;
   procedure ReadData(DataArray: TDataArray; const DataRoot: string);
   var
     LayerIndex: Integer;
@@ -2816,15 +2853,18 @@ var
           Inc(ColIndex);
         end;
 
-        WriteString(Format('  plist=p_%0:s%1:d;column=%2:d, &', [DataRoot, LayerIndex, ColIndex]));
+        WriteString(Format('  plist=p_%0:s%1:d;column=%2:d, &',
+          [DataRoot, LayerIndex, ColIndex]));
         NewLine;
         Inc(ColIndex);
 
-        WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &', [DataRoot, LayerIndex, ColIndex]));
+        WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &',
+          [DataRoot, LayerIndex, ColIndex]));
         NewLine;
         Inc(ColIndex);
 
-        WriteString(Format('  file=''%0:s.%1:s'')', [FRoot, DataArray.Name]));
+        WriteString(Format('  file=''%0:s.%1:s'')',
+          [FRoot, DataArray.Name]));
         NewLine;
       end;
       NewLine;
@@ -2863,38 +2903,10 @@ begin
     end;
 
     {$REGION 'Element discretization'}
-    WriteString('#Read SUTRA element information file');
-    NewLine;
-    WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
-    NewLine;
-    WriteString('  plist=p_x;column=2, &');
-    NewLine;
-    WriteString('  plist=p_y;column=3, &');
-    NewLine;
-    WriteString('  plist=p_EN2D;column=4, &');
-    NewLine;
-    if Mesh.MeshType = mt3D then
-    begin
-      ColIndex := 5;
-      for LayerIndex := 1 to LayerCount do
-      begin
-        WriteString(Format('  plist=p_z%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-
-        WriteString(Format('  slist=s_EN3D%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-
-        WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-      end;
-    end;
-    WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
-    NewLine;
-    NewLine;
+    ReadDiscretization;
     {$ENDREGION}
+
+    ReadPilotPoints;
 
     WriteString('#Read data to modify');
     NewLine;
@@ -2966,12 +2978,12 @@ begin
     ReadData(DataArray, 'PMIN');
     {$ENDREGION}
 
-  {$REGION 'ANGLE1'}
+    {$REGION 'ANGLE1'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
     ReadData(DataArray, 'ANGLE1');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ANGLE2'}
+    {$REGION 'ANGLE2'}
     if Mesh.MeshType = mt3D then
     begin
       DataArray := Model.DataArrayManager.GetDataSetByName(KVerticalAngle);
@@ -2981,9 +2993,9 @@ begin
       DataArray := nil;
     end;
     ReadData(DataArray, 'ANGLE2');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ANGLE3'}
+    {$REGION 'ANGLE3'}
     if Mesh.MeshType = mt3D then
     begin
       DataArray := Model.DataArrayManager.GetDataSetByName(KRotationalAngle);
@@ -2993,14 +3005,14 @@ begin
       DataArray := nil;
     end;
     ReadData(DataArray, 'ANGLE3');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ALMAX'}
+    {$REGION 'ALMAX'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
     ReadData(DataArray, 'ALMAX');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ALMID'}
+    {$REGION 'ALMID'}
     if Mesh.MeshType = mt3D then
     begin
       DataArray := Model.DataArrayManager.GetDataSetByName(KMidLongitudinalDisp);
@@ -3010,19 +3022,19 @@ begin
       DataArray := nil;
     end;
     ReadData(DataArray, 'ALMID');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ALMIN'}
+    {$REGION 'ALMIN'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
     ReadData(DataArray, 'ALMIN');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ATMAX'}
+    {$REGION 'ATMAX'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
     ReadData(DataArray, 'ATMAX');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ATMID'}
+    {$REGION 'ATMID'}
     if Mesh.MeshType = mt3D then
     begin
       DataArray := Model.DataArrayManager.GetDataSetByName(KMidTransverseDisp);
@@ -3032,13 +3044,12 @@ begin
       DataArray := nil;
     end;
     ReadData(DataArray, 'ATMID');
-  {$ENDREGION}
+    {$ENDREGION}
 
-  {$REGION 'ATMIN'}
+    {$REGION 'ATMIN'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
     ReadData(DataArray, 'ATMIN');
-  {$ENDREGION}
-
+    {$ENDREGION}
 
     WriteString('#Read parameter values');
     NewLine;
@@ -3072,6 +3083,11 @@ begin
     {$REGION 'Apply parameters'}
     WriteString('# applying parameter values');
     NewLine;
+
+    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
+      ['cl_Discretization']));
+    NewLine;
+
     for ParameterIndex := 0 to FParameterNames.Count - 1 do
     begin
       AParam := FParameterNames.Objects[ParameterIndex]
@@ -3081,17 +3097,78 @@ begin
       for RootIndex := 0 to UsedDataRoots.Count-1 do
       begin
         DataRoot := UsedDataRoots[RootIndex];
-        for LayerIndex := 1 to LayerCount do
+        for LayerIndex := 0 to LayerCount - 1 do
         begin
-          WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
-            [LayerIndex, AParam.ParameterName, ParameterIndex+1, DataRoot]));
-          NewLine;
+          if AParam.UsePilotPoints then
+          begin
+            WriteString('    # Substituting interpolated values');
+            NewLine;
+
+            UsedFileProperties := nil;
+            PIndex := 0;
+            DataRec := FDataRecordList[RootIndex];
+            for FileIndex := 0 to DataRec.PilotPointFiles.Count - 1 do
+            begin
+              FileProperties := DataRec.PilotPointFiles[FileIndex];
+              if (FileProperties.Parameter = AParam)
+                and (FileProperties.Layer = LayerIndex) then
+              begin
+                UsedFileProperties := FileProperties;
+                PIndex := FileIndex;
+                break;
+              end;
+            end;
+
+            if UsedFileProperties <> nil then
+            begin
+              PListName := Format('%0:s_%1:s_%2:d',
+                [DataRoot,AParam.ParameterName, LayerIndex+1]);
+              WriteString('    # Get interpolated values');
+              NewLine;
+              WriteString(Format(
+                '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
+                [PListName, ExtractFileName(GetKrigFactorRoot(DataRec)), PIndex+1]));
+              NewLine;
+              if AParam.Transform = ptLog then
+              begin
+                WriteString('      transform=''log'')');
+              end
+              else
+              begin
+                WriteString('      transform=''none'')');
+              end;
+              NewLine;
+              WriteString('    # Write interpolated values in zones');
+              NewLine;
+              WriteString(Format(
+                '    p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = temp', // * %2:s',
+                [LayerIndex + 1, AParam.ParameterName, ParameterIndex+1, DataRoot {, AParam.ParameterName}]));
+              NewLine;
+            end
+            else
+            begin
+            WriteString(Format(
+              '    # no interpolated values defined for parameter %1:s in layer %0:d',
+              [LayerIndex+1, AParam.ParameterName]));
+              NewLine;
+            end;
+
+          end
+          else
+          begin
+            WriteString('    # Substituting parameter values in zones');
+            NewLine;
+            WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+              [LayerIndex+1, AParam.ParameterName, ParameterIndex+1, DataRoot]));
+            NewLine;
+          end;
         end;
       end;
       NewLine;
     end;
     {$ENDREGION}
 
+    {$REGION 'Write values'}
     WriteString('# Write new data values');
     NewLine;
     if Mesh.MeshType = mt3D then
@@ -3151,6 +3228,7 @@ begin
         NewLine;
       end;
     end;
+    {$ENDREGION}
   finally
     CloseFile;
     UsedDataRoots.Free;
@@ -3158,15 +3236,83 @@ begin
 end;
 
 procedure TSutraData15BScriptWriter.WriteFiles(var AFileName: string);
+var
+  Index: Integer;
+  ADataRec: TDataRecord;
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
   Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
+  GetUsedParameters;
+  WritePilotPointFiles;
+  WriteKrigingFactors;
 
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
+
+  for Index := 0 to FDataRecordList.Count - 1 do
+  begin
+    ADataRec := FDataRecordList[Index];
+  Model.PilotPointData.AddPilotPointFileObjects(ADataRec.PilotPointFiles);
+  end;
+end;
+
+function TSutraData15BScriptWriter.GetKrigFactorRoot(ADataRec: TDataRecord): string;
+begin
+  result := FRoot + '.' + ADataRec.DataArray.Name + '.Factors';
+end;
+
+procedure TSutraData15BScriptWriter.ReadDiscretization;
+var
+  Mesh: TSutraMesh3D;
+  LayerCount: Integer;
+  LayerIndex: Integer;
+  ColIndex: Integer;
+begin
+  Mesh := Model.SutraMesh;
+  if Mesh.MeshType = mt3D then
+  begin
+    LayerCount := Mesh.LayerCount;
+  end
+  else
+  begin
+    LayerCount := 1;
+  end;
+
+  WriteString('#Read SUTRA element information file');
+  NewLine;
+  WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
+  NewLine;
+  WriteString('  plist=p_x;column=2, &');
+  NewLine;
+  WriteString('  plist=p_y;column=3, &');
+  NewLine;
+  WriteString('  plist=p_EN2D;column=4, &');
+  NewLine;
+  if Mesh.MeshType = mt3D then
+  begin
+    ColIndex := 5;
+    for LayerIndex := 1 to LayerCount do
+    begin
+      WriteString(Format('  plist=p_z%0:d;column=%1:d, &',
+        [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+      WriteString(Format('  slist=s_EN3D%0:d;column=%1:d, &',
+        [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+      WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &',
+        [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+    end;
+  end;
+  WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
+  NewLine;
+  NewLine;
 end;
 
 procedure TSutraData15BScriptWriter.WriteKrigingFactors;

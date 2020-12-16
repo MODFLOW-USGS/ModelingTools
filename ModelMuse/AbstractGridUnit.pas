@@ -6005,11 +6005,18 @@ begin
                         if DataSet.Limits.LogTransform  then
                         begin
                           Assert(MinMax.RMinPositive > 0);
-                          Assert(RTemp > 0);
-                          LogRTemp := Log10(RTemp);
-                          TopCellColors[ColIndex, RowIndex] :=
-                            GridFracToRainbow((MinMax.LogRMax - LogRTemp)
-                            / (MinMax.LogRMax - MinMax.LogRMin));
+                          if RTemp > 0 then
+                          begin
+                            Assert(RTemp > 0);
+                            LogRTemp := Log10(RTemp);
+                            TopCellColors[ColIndex, RowIndex] :=
+                              GridFracToRainbow((MinMax.LogRMax - LogRTemp)
+                              / (MinMax.LogRMax - MinMax.LogRMin));
+                          end
+                          else
+                          begin
+                            TopCellColors[ColIndex, RowIndex] := clWhite;
+                          end;
                         end
                         else
                         begin
@@ -6215,10 +6222,17 @@ begin
                         if DataSet.Limits.LogTransform  then
                         begin
                           Assert(MinMax.RMinPositive > 0);
-                          Assert(RTemp > 0);
-                          LogRTemp := Log10(RTemp);
-                          FrontCellColors[ColIndex, LayerIndex] :=
-                            GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                          if RTemp > 0 then
+                          begin
+                            Assert(RTemp > 0);
+                            LogRTemp := Log10(RTemp);
+                            FrontCellColors[ColIndex, LayerIndex] :=
+                              GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                          end
+                          else
+                          begin
+                            FrontCellColors[ColIndex, LayerIndex] := clWhite;
+                          end;
                         end
                         else
                         begin
@@ -6422,10 +6436,17 @@ begin
                        if DataSet.Limits.LogTransform  then
                         begin
                           Assert(MinMax.RMinPositive > 0);
-                          Assert(RTemp > 0);
-                          LogRTemp := Log10(RTemp);
-                          SideCellColors[RowIndex, LayerIndex]  :=
-                            GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                          if RTemp > 0 then
+                          begin
+                            Assert(RTemp > 0);
+                            LogRTemp := Log10(RTemp);
+                            SideCellColors[RowIndex, LayerIndex]  :=
+                              GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                          end
+                          else
+                          begin
+                            SideCellColors[RowIndex, LayerIndex] := clWhite;
+                          end;
                         end
                         else
                         begin
@@ -6865,10 +6886,17 @@ begin
                     if DataSet.Limits.LogTransform then
                     begin
                       Assert(MinMax.RMinPositive > 0);
-                      Assert(RTemp > 0);
-                      LogRTemp := Log10(RTemp);
-                      CellColors[LayerIndex, RowIndex, ColIndex] :=
-                        GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                      if RTemp > 0 then
+                      begin
+                        Assert(RTemp > 0);
+                        LogRTemp := Log10(RTemp);
+                        CellColors[LayerIndex, RowIndex, ColIndex] :=
+                          GridFracToRainbow((MinMax.LogRMax - LogRTemp) / (MinMax.LogRMax - MinMax.LogRMin));
+                      end
+                      else
+                      begin
+                        CellColors[LayerIndex, RowIndex, ColIndex] := clWhite;
+                      end;
                     end
                     else
                     begin

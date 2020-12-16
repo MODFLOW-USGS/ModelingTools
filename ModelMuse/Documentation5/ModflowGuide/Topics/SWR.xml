@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SWR - Surface-Water Routing Process</title>
   <body>
     <header>
@@ -28,7 +28,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
         </td>
         <td>
-          <list id="10" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Citation"><text styleclass="Citation" translate="true">Hughes, J.D., Langevin, C.D., Chartier, K.L., and White, J.T., 2012, Documentation of the Surface-Water Routing (SWR1) Process for modeling surface-water flow with the U.S. Geological Survey Modular Ground-Water Model (MODFLOW-2005): U.S. Geological Survey Techniques and Methods, book 6, chap. A40 (Version 1.0), 113 p. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/tm6A40" target="_blank" styleclass="Normal" translate="true">https://pubs.er.usgs.gov/publication/tm6A40</link></li>
             <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="filelink" href="SWR1_AdditionsForNWT_1.01.0.txt" styleclass="Normal" translate="true">SWR1_AdditionsForNWT_1.01.0.txt</link></li>
             <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="filelink" href="SWRProcessInputInstructions_v1.03.pdf" styleclass="Normal" translate="true">SWRProcessInputInstructions_v1.03.pdf</link></li>
@@ -41,10 +41,10 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Related Packages</text></para>
         </td>
         <td>
-          <list id="11" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="6" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="STR" styleclass="Normal" translate="true"> (STR)</link><text styleclass="Normal" translate="true"> package</text></li>
           </list>
-          <list id="12" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="7" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SFR" styleclass="Normal" translate="true">Streamflow-Routing (SFR)</link><text styleclass="Normal" translate="true"> package</text></li>
           </list>
         </td>
@@ -64,7 +64,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Supported in</text></para>
         </td>
         <td>
-          <list id="13" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+          <list id="8" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-NWT</text></li>
             <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-OWHM</text></li>
@@ -824,7 +824,7 @@
                   <tr style="vertical-align:top">
                     <td>
                       <para styleclass="Normal"><text styleclass="Normal" translate="true">COBSTYPE— a string value that specifies the data type the selected observation data item represents.</text></para>
-                      <list id="14" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+                      <list id="9" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
                         <li styleclass="Normal"><text styleclass="Normal" translate="true">COBSTYPE = </text><text styleclass="Keywords" translate="true">STAGE</text><text styleclass="Normal" translate="true">, the observation data item represents reach stage.</text></li>
                         <li styleclass="Normal"><text styleclass="Normal" translate="true">COBSTYPE = </text><text styleclass="Keywords" translate="true">DEPTH</text><text styleclass="Normal" translate="true">, the observation data item represents reach water depth.</text></li>
                         <li styleclass="Normal"><text styleclass="Normal" translate="true">COBSTYPE = </text><text styleclass="Keywords" translate="true">RBOTTOM</text><text styleclass="Normal" translate="true">, the observation data item represents reach bottom elevation.</text></li>
@@ -1630,7 +1630,7 @@
                     </td>
                   </tr>
                 </table></para>
-                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" styleclass="Normal"><caption translate="true"><![CDATA[STRWSMO]]></caption></toggle></para>
+                <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[STRWSMO]]></caption></toggle></para>
                 <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
                   <tr style="vertical-align:top">
                     <td>

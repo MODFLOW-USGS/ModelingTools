@@ -412,6 +412,7 @@ begin
   WriteString(AComment);
   NewLine;
   NameFile := AModel.FixFileName(AFileName);
+  Assert(AModel.NameFileWriter <> nil);
   SetCurrentNameFileWriter(AModel.NameFileWriter as TNameFileWriter);
   if IUPBHSV > 0 then
   begin

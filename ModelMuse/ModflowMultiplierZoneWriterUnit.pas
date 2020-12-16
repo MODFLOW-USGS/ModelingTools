@@ -195,7 +195,6 @@ var
   UnitIndex: Integer;
   UsedParam: THufUsedParameter;
   Description: string;
-//  PlProcWriter: TParameterZoneWriter;
   MIndex: Integer;
 begin
   LayerCount := Model.ModflowLayerCount;

@@ -26561,8 +26561,8 @@ object TTaskHistory
       Date = 44159.000000000000000000
       Categories.Strings = (
         'Bug fix'
-        'PEST Pilot Points'
-        'PEST')
+        'PEST'
+        'PEST Pilot Points')
     end
     item
       Date = 44160.000000000000000000
@@ -26591,27 +26591,31 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Pest parameter substitution'
-        'PEST')
+        'PEST'
+        'PEST Pilot Points')
     end
     item
       Date = 44167.000000000000000000
       Categories.Strings = (
         'PEST'
         'Pest parameter substitution'
-        'Dialog boxes')
+        'Dialog boxes'
+        'PEST Pilot Points')
     end
     item
       Date = 44168.000000000000000000
       Categories.Strings = (
         'PEST'
-        'Pest parameter substitution')
+        'Pest parameter substitution'
+        'PEST Pilot Points')
     end
     item
       Date = 44169.000000000000000000
       Categories.Strings = (
         'Pest parameter substitution'
         'PEST'
-        'core code')
+        'core code'
+        'PEST Pilot Points')
     end
     item
       Date = 44170.000000000000000000
@@ -26624,14 +26628,16 @@ object TTaskHistory
       Categories.Strings = (
         'Documentation'
         'Bug fix'
-        'Pest parameter substitution')
+        'Pest parameter substitution'
+        'PEST Pilot Points')
     end
     item
       Date = 44173.000000000000000000
       Categories.Strings = (
         'Pest parameter substitution'
         'PEST'
-        'Bug fix')
+        'Bug fix'
+        'PEST Pilot Points')
     end
     item
       Date = 44174.000000000000000000
@@ -26640,7 +26646,8 @@ object TTaskHistory
       Date = 44175.000000000000000000
       Categories.Strings = (
         'Pest parameter substitution'
-        'PEST')
+        'PEST'
+        'PEST Pilot Points')
     end
     item
       Date = 44176.000000000000000000
@@ -26649,7 +26656,8 @@ object TTaskHistory
         'Pest parameter substitution'
         'PEST'
         'Bug fix'
-        'Refactoring')
+        'Refactoring'
+        'PEST Pilot Points')
     end
     item
       Date = 44177.000000000000000000
@@ -26662,13 +26670,24 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Pest parameter substitution'
-        'PEST')
+        'PEST'
+        'PEST Pilot Points')
     end
     item
       Date = 44180.000000000000000000
       Categories.Strings = (
         'PEST'
         'Pest parameter substitution'
-        'Dialog boxes')
+        'Dialog boxes'
+        'PEST Pilot Points')
+    end
+    item
+      Date = 44181.000000000000000000
+      Categories.Strings = (
+        'PEST Pilot Points'
+        'Pest parameter substitution'
+        'PEST'
+        'Bug fix'
+        'Documentation')
     end>
 end

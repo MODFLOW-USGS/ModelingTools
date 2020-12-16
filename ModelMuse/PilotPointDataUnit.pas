@@ -4,9 +4,11 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.Generics.Collections, DataSetUnit,
-  OrderedCollectionUnit, ModflowParameterUnit;
+  OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes;
 
 type
+
+
   TPilotPointFileObject = class(TObject)
   private
     FFileName: string;
@@ -16,6 +18,7 @@ type
     FDataArray: TDataArray;
     FParameter: TModflowSteadyParameter;
     FParamFamily: string;
+    FValues: TList<double>;
     procedure SetCount(const Value: Integer);
     procedure SetDataArray(const Value: TDataArray);
     procedure SetFileName(const Value: string);
@@ -23,7 +26,10 @@ type
     procedure SetParameter(const Value: TModflowSteadyParameter);
     procedure SetParameterIndex(const Value: Integer);
     procedure SetParamFamily(const Value: string);
+    function GetValue(Index: Integer): double;
   public
+    Constructor Create;
+    destructor Destroy; override;
     function ParameterName(Index: Integer): string;
     property DataArray: TDataArray read FDataArray write SetDataArray;
     property Parameter: TModflowSteadyParameter read FParameter write SetParameter;
@@ -32,6 +38,8 @@ type
     property Layer: Integer read FLayer write SetLayer;
     property Count: Integer read FCount write SetCount;
     property ParamFamily: string read FParamFamily write SetParamFamily;
+    property Values[Index: Integer]: double read GetValue;
+    procedure AddValue(AValue: double);
   end;
 
   TPilotPointFiles = TObjectList<TPilotPointFileObject>;
@@ -42,11 +50,15 @@ type
     FCount: Integer;
     FParamFamily: string;
     FFileName: string;
+    FValues: TRealCollection;
     procedure SetBaseParamName(const Value: string);
     procedure SetCount(const Value: Integer);
     procedure SetParamFamily(const Value: string);
     procedure SetFileName(const Value: string);
+    procedure SetValues(const Value: TRealCollection);
   public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure AssignPilotPointFileObject(Source: TPilotPointFileObject);
     function ParameterName(Index: Integer): string;
@@ -55,7 +67,9 @@ type
     property Count: Integer read FCount write SetCount;
     property BaseParamName: string read FBaseParamName write SetBaseParamName;
     property FileName: string read FFileName write SetFileName;
+    property Values: TRealCollection read FValues write SetValues;
   end;
+
 
   TStoredPilotParamDataCollection = class(TCollection)
   private
@@ -84,6 +98,27 @@ end;
 
 
 { TPilotPointFileObject }
+
+procedure TPilotPointFileObject.AddValue(AValue: double);
+begin
+  FValues.Add(AValue)
+end;
+
+constructor TPilotPointFileObject.Create;
+begin
+  FValues:= TList<double>.Create;
+end;
+
+destructor TPilotPointFileObject.Destroy;
+begin
+  FValues.Free;
+  inherited;
+end;
+
+function TPilotPointFileObject.GetValue(Index: Integer): double;
+begin
+  result := FValues[Index];
+end;
 
 function TPilotPointFileObject.ParameterName(Index: Integer): string;
 begin
@@ -139,7 +174,7 @@ begin
     Count := SourceItem.Count;
     BaseParamName := SourceItem.BaseParamName;
     FileName := SourceItem.FileName;
-
+    Values := SourceItem.Values;
   end
   else
   begin
@@ -149,11 +184,34 @@ end;
 
 procedure TStoredPilotParamDataItem.AssignPilotPointFileObject(
   Source: TPilotPointFileObject);
+var
+  VIndex: Integer;
 begin
   ParamFamily := Source.ParamFamily;
   Count := Source.Count;
   BaseParamName := Source.Parameter.ParameterName;
   FileName := Source.FileName;
+  FValues.Clear;
+  FValues.Capacity := Source.Count;
+  for VIndex := 0 to Source.Count - 1 do
+  begin
+    FValues.Add.Value := Source.Values[VIndex];
+  end;
+end;
+
+constructor TStoredPilotParamDataItem.Create(Collection: TCollection);
+var
+  Dummy: TNotifyEvent;
+begin
+  inherited;
+  Dummy := nil;
+  FValues := TRealCollection.Create(Dummy);
+end;
+
+destructor TStoredPilotParamDataItem.Destroy;
+begin
+  FValues.Free;
+  inherited;
 end;
 
 function TStoredPilotParamDataItem.ParameterName(Index: Integer): string;
@@ -179,6 +237,11 @@ end;
 procedure TStoredPilotParamDataItem.SetParamFamily(const Value: string);
 begin
   FParamFamily := Value;
+end;
+
+procedure TStoredPilotParamDataItem.SetValues(const Value: TRealCollection);
+begin
+  FValues.Assign(Value);
 end;
 
 { TStoredPilotParamDataCollection }

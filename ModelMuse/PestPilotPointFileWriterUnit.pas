@@ -293,6 +293,7 @@ begin
               end;
 
               FileProperties.Count := PIndex;
+              FileProperties.AddValue(Value);
 
               SwitchToMain;
               WriteInteger(PIndex);
