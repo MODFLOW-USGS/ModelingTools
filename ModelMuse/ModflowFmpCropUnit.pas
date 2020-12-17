@@ -1638,14 +1638,27 @@ var
   AFarm: TFarm;
   CropEffIndex: Integer;
   AFarmEff: TFarmEfficienciesItem;
+  Unlocker: TDefineGlobalIntegerObject;
 begin
   if (Model <> nil) and (CropName <> '')  then
   begin
     LocalModel := Model as TPhastModel;
+
+    if ([csLoading, csDestroying] * Model.ComponentState) = [] then
+    begin
+      Unlocker := TDefineGlobalIntegerObject.Create(Model,
+        FCropName, FCropName, StrCropVariable);
+      try
+        Unlocker.Locked := False;
+      finally
+        Unlocker.Free;
+      end;
+    end;
+
     Position := LocalModel.GlobalVariables.IndexOfVariable(CropName);
     if Position >= 0 then
     begin
-      LocalModel.GlobalVariables.Delete(Position);
+//      LocalModel.GlobalVariables.Delete(Position);
 
       if (not (csDestroying in LocalModel.ComponentState))
         and (not LocalModel.Clearing) then

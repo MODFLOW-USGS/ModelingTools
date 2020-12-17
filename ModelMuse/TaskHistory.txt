@@ -26689,6 +26689,7 @@ object TTaskHistory
         'PEST'
         'Bug fix'
         'Documentation'
-        'Global variables')
+        'Global variables'
+        'Dialog boxes')
     end>
 end

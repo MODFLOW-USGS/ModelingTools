@@ -154,6 +154,7 @@ destructor TObserver.Destroy;
 begin
   StopTalkingToAnyone;
   FSubscribers.Free;
+  FObserver := nil;
   inherited;
 end;
 

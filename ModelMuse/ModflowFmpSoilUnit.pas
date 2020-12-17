@@ -128,15 +128,26 @@ destructor TSoilItem.Destroy;
 var
   LocalModel: TPhastModel;
   Position: integer;
+  Unlocker: TDefineGlobalIntegerObject;
 begin
   if (Model <> nil) and (SoilName <> '')  then
   begin
-    LocalModel := Model as TPhastModel;
-    Position := LocalModel.GlobalVariables.IndexOfVariable(SoilName);
-    if Position >= 0 then
+    if ([csLoading, csDestroying] * Model.ComponentState) = [] then
     begin
-      LocalModel.GlobalVariables.Delete(Position);
+      Unlocker := TDefineGlobalIntegerObject.Create(Model, FSoilName, FSoilName,
+        StrSoilVariable);
+      try
+        Unlocker.Locked := False;
+      finally
+        Unlocker.Free;
+      end;
     end;
+    LocalModel := Model as TPhastModel;
+//    Position := LocalModel.GlobalVariables.IndexOfVariable(SoilName);
+//    if Position >= 0 then
+//    begin
+//      LocalModel.GlobalVariables.Delete(Position);
+//    end;
   end;
   inherited;
 end;

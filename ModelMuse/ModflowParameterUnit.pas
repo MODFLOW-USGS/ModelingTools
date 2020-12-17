@@ -339,7 +339,7 @@ begin
     if ([csLoading, csDestroying] * Model.ComponentState) = [] then
     begin
       Unlocker := TDefineGlobalStringObject.Create(Collection.Model,
-        ParameterName, ParameterName, 'Pest Parameter');
+        ParameterName, ParameterName, StrParameterType);
       try
         Unlocker.Locked := False;
       finally

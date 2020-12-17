@@ -133,11 +133,15 @@ begin
   if result = nil then
   begin
     GlobalVariables := TGlobalVariables.Create(nil);
-    GlobalVariables.Assign(LocalModel.GlobalVariables);
-    AVar := (GlobalVariables.Add as TGlobalVariableItem).Variable;
-    AVar.Format := DataType;
-    AVar.Name := FNewName;
-    LocalModel.GlobalVariables := GlobalVariables;
+    try
+      GlobalVariables.Assign(LocalModel.GlobalVariables);
+      AVar := (GlobalVariables.Add as TGlobalVariableItem).Variable;
+      AVar.Format := DataType;
+      AVar.Name := FNewName;
+      LocalModel.GlobalVariables := GlobalVariables;
+    finally
+      GlobalVariables.Free;
+    end;
     result := LocalModel.GlobalVariables.GetVariableByName(FNewName);
   end;
   result.Locked := FLocked;
