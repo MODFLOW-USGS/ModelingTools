@@ -90,6 +90,7 @@ type
     function GetVariableByName(Const Name: string): TGlobalVariable;
     property Variables[Index: integer]: TGlobalVariable read GetVariable
       write SetVariable; default;
+    procedure Sort; overload;
   end;
 
 implementation
@@ -389,29 +390,9 @@ end;
 { TGlobalVariables }
 
 procedure TGlobalVariables.Assign(Source: TPersistent);
-var
-  List: TStringList;
-  ItemIndex: Integer;
-  Item: TGlobalVariableItem;
 begin
   inherited;
-  List := TStringList.Create;
-  try
-    List.CaseSensitive := False;
-    for ItemIndex := 0 to Count - 1 do
-    begin
-      Item := Items[ItemIndex] as TGlobalVariableItem;
-      List.AddObject(Item.Variable.Name, Item);
-    end;
-    List.Sort;
-    for ItemIndex := 0 to List.Count - 1 do
-    begin
-      Item := List.Objects[ItemIndex] as TGlobalVariableItem;
-      Item.Index := ItemIndex;
-    end;
-  finally
-    List.Free;
-  end;
+  Sort;
 end;
 
 constructor TGlobalVariables.Create(Model: TBaseModel);
@@ -446,6 +427,31 @@ begin
   if Index >= 0 then
   begin
     result := Variables[Index];
+  end;
+end;
+
+procedure TGlobalVariables.Sort;
+var
+  List: TStringList;
+  ItemIndex: Integer;
+  Item: TGlobalVariableItem;
+begin
+  List := TStringList.Create;
+  try
+    List.CaseSensitive := False;
+    for ItemIndex := 0 to Count - 1 do
+    begin
+      Item := Items[ItemIndex] as TGlobalVariableItem;
+      List.AddObject(Item.Variable.Name, Item);
+    end;
+    List.Sort;
+    for ItemIndex := 0 to List.Count - 1 do
+    begin
+      Item := List.Objects[ItemIndex] as TGlobalVariableItem;
+      Item.Index := ItemIndex;
+    end;
+  finally
+    List.Free;
   end;
 end;
 
@@ -492,6 +498,7 @@ procedure TGlobalVariables.SetVariable(Index: integer;
 begin
   (Items[Index] as TGlobalVariableItem).Variable := Value;
 end;
+
 
 { TGlobalVariableItem }
 

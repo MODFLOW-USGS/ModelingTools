@@ -26688,6 +26688,7 @@ object TTaskHistory
         'Pest parameter substitution'
         'PEST'
         'Bug fix'
-        'Documentation')
+        'Documentation'
+        'Global variables')
     end>
 end

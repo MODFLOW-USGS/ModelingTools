@@ -55,6 +55,7 @@ type
     procedure UpdateHfbParameterNames(const Value: string);
     procedure UpdateFormulas(const OldName, NewName: string);
     procedure UnlockDataSets;
+    procedure UnLockGlobalVariables;
     procedure SetUsePilotPoints(const Value: Boolean);
     procedure InvalidatePestDataArrays(CheckAll: Boolean = False);
   protected
@@ -205,6 +206,7 @@ var
   ScreenObject: TScreenObject;
   Index: integer;
 begin
+  UnLockGlobalVariables;
   UnlockDataSets;
   FNamesToRemove.Free;
   FMultiplierArrayNames.Free;
@@ -321,6 +323,27 @@ begin
       if DataArray <> nil then
       begin
         DataArray.Lock := DataArray.Lock - [dcName];
+      end;
+    end;
+  end;
+end;
+
+procedure TModflowSteadyParameter.UnLockGlobalVariables;
+var
+  Model: TPhastModel;
+  Unlocker: TDefineGlobalStringObject;
+begin
+  if (ParameterType = ptPest) and (Collection.Model <> nil) then
+  begin
+    Model := Collection.Model as TPhastModel;
+    if ([csLoading, csDestroying] * Model.ComponentState) = [] then
+    begin
+      Unlocker := TDefineGlobalStringObject.Create(Collection.Model,
+        ParameterName, ParameterName, 'Pest Parameter');
+      try
+        Unlocker.Locked := False;
+      finally
+        Unlocker.Free;
       end;
     end;
   end;

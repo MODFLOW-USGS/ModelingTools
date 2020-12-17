@@ -100,7 +100,7 @@ resourcestring
   StrValue = 'Value';
   StrComment = 'Comment';
   StrNewGlobalVariable = 'NewGlobalVariable';
-  StrYouCanGiveAVaria = 'You can give a variable the same name as a variable' +
+  StrYouCanGiveAVaria = 'You can''t give a variable the same name as a variable' +
   ' that is being deleted. Instead, delete the old variable, click "Apply", ' +
   'and then apply the old name to a new variable.';
   StrUnableToConvertReal = 'Unable to convert %0:s to a real number for variable %1:s';
@@ -266,6 +266,7 @@ procedure TfrmGlobalVariables.seGlobalVariableCountChange(Sender: TObject);
 var
   RowIndex: Integer;
   ColIndex: Integer;
+  NewGlobalVariable: TGlobalVariable;
   OldGlobalVariable: TGlobalVariable;
 begin
   inherited;
@@ -276,16 +277,22 @@ begin
 
   while seGlobalVariableCount.AsInteger < FNewGlobals.Count do
   begin
-    OldGlobalVariable := rdgGlobalVariables.Objects[Ord(gvType),
+    OldGlobalVariable := rdgGlobalVariables.Objects[Ord(gvName),
       FNewGlobals.Count] as TGlobalVariable;
-    if OldGlobalVariable <> nil then
+    if (OldGlobalVariable <> nil) and OldGlobalVariable.Locked then
     begin
-      FDeletedGlobalVariables.Add(OldGlobalVariable.Name);
+      seGlobalVariableCount.AsInteger := FNewGlobals.Count;
+      break;
+    end;
+    NewGlobalVariable := rdgGlobalVariables.Objects[Ord(gvType),
+      FNewGlobals.Count] as TGlobalVariable;
+    if NewGlobalVariable <> nil then
+    begin
+      FDeletedGlobalVariables.Add(NewGlobalVariable.Name);
     end;
     FNewGlobals.Delete(FNewGlobals.Count-1);
     rdgGlobalVariables.Invalidate;
   end;
-
 
   rdgGlobalVariables.BeginUpdate;
   try
@@ -449,6 +456,8 @@ begin
   inherited;
   if (rdgGlobalVariables.Row > 0) then
   begin
+    OldGlobalVariable := rdgGlobalVariables.
+      Objects[Ord(gvType), rdgGlobalVariables.Row] as TGlobalVariable;
     GlobalVariable := rdgGlobalVariables.
       Objects[Ord(gvName), rdgGlobalVariables.Row] as TGlobalVariable;
     if (GlobalVariable <> nil) and (GlobalVariable.Locked) then
@@ -456,8 +465,6 @@ begin
       Exit;
     end;
     FNewGlobals.Delete(rdgGlobalVariables.Row-1);
-    OldGlobalVariable := rdgGlobalVariables.
-      Objects[Ord(gvType), rdgGlobalVariables.Row] as TGlobalVariable;
     if OldGlobalVariable <> nil then
     begin
       FDeletedGlobalVariables.Add(OldGlobalVariable.Name);
@@ -873,6 +880,7 @@ var
 begin
   FDeletedGlobalVariables.Clear;
   FNewGlobals := TGlobalVariables.Create(nil);
+  frmGoPhast.PhastModel.GlobalVariables.Sort;
   FNewGlobals.Assign(frmGoPhast.PhastModel.GlobalVariables);
   rdgGlobalVariables.BeginUpdate;
   try
