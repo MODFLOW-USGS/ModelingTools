@@ -20,7 +20,7 @@ type
     FOptions: TSutraOptions;
     FLimit: Integer;
     FFileName: string;
-    procedure WriteDataArray(DataArray: TDataArray);
+    procedure WriteDataArray(DataArray: TDataArray; ID: string);
     procedure WriteDataSet0;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -58,7 +58,7 @@ begin
   Assert(False);
 end;
 
-procedure TSutraInitialConditionsWriter.WriteDataArray(DataArray: TDataArray);
+procedure TSutraInitialConditionsWriter.WriteDataArray(DataArray: TDataArray; ID: string);
 var
   List: TDataValueList;
   index: Integer;
@@ -90,6 +90,7 @@ begin
     NewLine;
     List := TDataValueList.Create;
     try
+      TempFileName := '';
       if ParamUsed then
       begin
         DataFileWriter := TSutraNodeDataWriter.Create(Model, etExport);
@@ -100,86 +101,97 @@ begin
         end;
 
 
-        TempFileName := ChangeFileExt(FFileName, '.' + DataArray.Name);
+        TempFileName := ChangeFileExt(FFileName, '.' + ID);
         WriteString('@INSERT 99 ');
         WriteString(ExtractFileName(TempFileName));
         NewLine;
         ScriptWriter := TSutraInitCondScriptWriter.Create(Model, etExport);
         try
-          ScriptWriter.WriteFiles(FFileName, DataArray.Name);
+          ScriptWriter.WriteFiles(FFileName, DataArray.Name, ID);
         finally
           ScriptWriter.Free;
         end;
         Mesh := Model.SutraMesh;
-        if Mesh.MeshType = mt3D then
-        begin
-          OpenTempFile(TempFileName);
-          try
-            TempFileName := ExtractFileName(TempFileName)+ '_';
-            for LayerIndex := 1 to Mesh.LayerCount+1 do
-            begin
-              WriteString('@INSERT 99 ');
-              WriteString(TempFileName + IntToStr(LayerIndex));
-              NewLine;
-            end;
-          finally
-            CloseTempFile;
-          end;
-        end;
-      end
-      else
+//        if Mesh.MeshType = mt3D then
+//        begin
+//          OpenTempFile(TempFileName);
+//          try
+//            TempFileName := ExtractFileName(TempFileName)+ '_';
+//            for LayerIndex := 1 to Mesh.LayerCount+1 do
+//            begin
+//              WriteString('@INSERT 99 ');
+//              WriteString(TempFileName + IntToStr(LayerIndex));
+//              NewLine;
+//            end;
+//          finally
+//            CloseTempFile;
+//          end;
+//        end;
+      end;
+
+      if ParamUsed then
       begin
-        case Model.SutraMesh.MeshType of
-          mt2D, mtProfile:
-            begin
-              Mesh2D := Model.SutraMesh.Mesh2D;
-              for NodeIndex := 0 to Mesh2D.Nodes.Count - 1 do
+        OpenTempfile(TempFileName)
+      end;
+      try
+        begin
+          case Model.SutraMesh.MeshType of
+            mt2D, mtProfile:
               begin
-                DataValue := TDataValue.Create;
-                List.Add(DataValue);
-                DataValue.Value := DataArray.RealData[0,0,NodeIndex];
-                DataValue.Number := Mesh2D.Nodes[NodeIndex].Number;
-              end;
-            end;
-          mt3D:
-            begin
-              Mesh3D := Model.SutraMesh;
-              Mesh2D := Mesh3D.Mesh2D;
-              for LayerIndex := 0 to Mesh3D.LayerCount do
-              begin
+                Mesh2D := Model.SutraMesh.Mesh2D;
                 for NodeIndex := 0 to Mesh2D.Nodes.Count - 1 do
                 begin
-                  Node3D := Mesh3D.NodeArray[LayerIndex, NodeIndex];
-                  if Node3D.Active then
+                  DataValue := TDataValue.Create;
+                  List.Add(DataValue);
+                  DataValue.Value := DataArray.RealData[0,0,NodeIndex];
+                  DataValue.Number := Mesh2D.Nodes[NodeIndex].Number;
+                end;
+              end;
+            mt3D:
+              begin
+                Mesh3D := Model.SutraMesh;
+                Mesh2D := Mesh3D.Mesh2D;
+                for LayerIndex := 0 to Mesh3D.LayerCount do
+                begin
+                  for NodeIndex := 0 to Mesh2D.Nodes.Count - 1 do
                   begin
-                    DataValue := TDataValue.Create;
-                    List.Add(DataValue);
-                    DataValue.Value := DataArray.RealData[LayerIndex,0,NodeIndex];
-                    DataValue.Number := Node3D.Number;
+                    Node3D := Mesh3D.NodeArray[LayerIndex, NodeIndex];
+                    if Node3D.Active then
+                    begin
+                      DataValue := TDataValue.Create;
+                      List.Add(DataValue);
+                      DataValue.Value := DataArray.RealData[LayerIndex,0,NodeIndex];
+                      DataValue.Number := Node3D.Number;
+                    end;
                   end;
                 end;
               end;
-            end;
-          else
-            Assert(False);
-        end;
-        List.Sort(TComparer<TDataValue>.Construct(
-          function (const L, R: TDataValue): integer
+            else
+              Assert(False);
+          end;
+          List.Sort(TComparer<TDataValue>.Construct(
+            function (const L, R: TDataValue): integer
+            begin
+              result := L.Number - R.Number;
+            end));
+          for index := 0 to List.Count - 1 do
           begin
-            result := L.Number - R.Number;
-          end));
-        for index := 0 to List.Count - 1 do
-        begin
-          DataValue := List[index];
-          WriteFloat(DataValue.Value);
-          if ((index + 1) mod 10) = 0 then
+            DataValue := List[index];
+            WriteFloat(DataValue.Value);
+            if ((index + 1) mod 10) = 0 then
+            begin
+              NewLine;
+            end;
+          end;
+          if (List.Count  mod 10) <> 0 then
           begin
             NewLine;
           end;
         end;
-        if (List.Count  mod 10) <> 0 then
+      finally
+        if ParamUsed then
         begin
-          NewLine;
+          CloseTempFile;
         end;
       end;
     finally
@@ -248,7 +260,7 @@ begin
         Assert(False);
     end;
 
-    WriteDataArray(InitialPressure);
+    WriteDataArray(InitialPressure, 'PVEC');
 
   end;
 end;
@@ -301,7 +313,7 @@ begin
       else
         Assert(False);
     end;
-    WriteDataArray(InitialU);
+    WriteDataArray(InitialU, 'UVEC');
   end;
 end;
 

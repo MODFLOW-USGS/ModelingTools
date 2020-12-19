@@ -9443,6 +9443,7 @@ var
   RunModelBatchFileName: string;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
+  SutraNod3DDisWriter: TSutraNod3DDisWriter;
 begin
   case ModelSelection of
     msSutra22:
@@ -9499,6 +9500,13 @@ begin
     SutraNodDisWriter.WriteFile(FileName);
   finally
     SutraNodDisWriter.Free;
+  end;
+
+  SutraNod3DDisWriter := TSutraNod3DDisWriter.Create(PhastModel, etExport);
+  try
+    SutraNod3DDisWriter.WriteFile(FileName);
+  finally
+    SutraNod3DDisWriter.Free;
   end;
 
   SutraEleDisWriter := TSutraEleDisWriter.Create(PhastModel, etExport);

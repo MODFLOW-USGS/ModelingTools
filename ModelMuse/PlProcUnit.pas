@@ -94,6 +94,16 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+  // Write a 3D CLIST file of SUTRA nodes for PEST
+  TSutraNod3DDisWriter  = class(TCustomFileWriter)
+  private
+    FInputFileName: string;
+  protected
+    class function Extension: string; override;
+  public
+    procedure WriteFile(const AFileName: string);
+  end;
+
   // Write a 2D CLIST file of SUTRA elements for PEST
   TSutraEleDisWriter  = class(TCustomFileWriter)
   private
@@ -202,13 +212,26 @@ type
     FFileName: string;
     FParameterNames: TStringList;
     FDataArrayName: string;
+    FPilotPointFiles: TPilotPointFiles;
+    FID: string;
+    FDataArray: TDataArray;
+    FMesh: TSutraMesh3D;
+    FUsedParamList: TStringList;
     procedure WriteAFile(ScriptChoice: TScriptChoice);
+    procedure WritePilotPointFiles;
+    procedure GetUsedParameters;
+    procedure WriteKrigingFactors;
+    procedure ReadPilotPoints;
+    procedure SaveKrigingFactors;
+    function GetKrigFactorRoot: string;
+    procedure ReadDiscretization;
+    procedure Read3DDiscretization;
   protected
     class function Extension: string; override;
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
-    procedure WriteFiles(var AFileName: string; const DataArrayName: string);
+    procedure WriteFiles(var AFileName: string; const DataArrayName: string; ID: string);
   end;
 
 implementation
@@ -2155,7 +2178,7 @@ begin
   WriteString('  plist=p_y;column=3, &');
   NewLine;
   // 2D node number
-  WriteString('  plist=p_NN2D;column=4, &');
+  WriteString('  slist=s_NN2D;column=4, &');
   NewLine;
   WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
   NewLine;
@@ -3213,7 +3236,7 @@ begin
       NewLine;
       WriteString('  slist=s_LREG1, &');
       NewLine;
-        for RootIndex := 0 to UsedDataRoots.Count-1 do
+      for RootIndex := 0 to UsedDataRoots.Count-1 do
       begin
         DataRoot := UsedDataRoots[RootIndex];
         WriteString(Format('  plist=p_%s1', [DataRoot]));
@@ -3379,10 +3402,17 @@ begin
   inherited;
   Assert(Model.ModelSelection in SutraSelection);
   FParameterNames := TStringList.Create;
+  FPilotPointFiles := TPilotPointFiles.Create;
+  FUsedParamList := TStringList.Create;
+
+  FUsedParamList.Sorted := True;
+  FUsedParamList.Duplicates := dupIgnore;
 end;
 
 destructor TSutraInitCondScriptWriter.Destroy;
 begin
+  FUsedParamList.Free;
+  FPilotPointFiles.Free;
   FParameterNames.Free;
   inherited;
 end;
@@ -3390,6 +3420,148 @@ end;
 class function TSutraInitCondScriptWriter.Extension: string;
 begin
   result := '';
+end;
+
+function TSutraInitCondScriptWriter.GetKrigFactorRoot: string;
+begin
+  result := FRoot + '.' + FDataArrayName + '.Factors';
+end;
+
+procedure TSutraInitCondScriptWriter.GetUsedParameters;
+var
+  ParamArray: TDataArray;
+  NodeIndex: Integer;
+  LayerIndex: Integer;
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  PName: string;
+begin
+  if FDataArray.PestParametersUsed then
+  begin
+    ParamArray := Model.DataArrayManager.GetDataSetByName
+      (FDataArray.ParamDataSetName);
+
+    for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
+    begin
+      for LayerIndex := 0 to ParamArray.LayerCount - 1 do
+      begin
+        PName := Trim(ParamArray.StringData[LayerIndex, 0, NodeIndex]);
+        if PName <> '' then
+        begin
+          PIndex := FParameterNames.IndexOf(LowerCase(PName));
+          if PIndex >=0 then
+          begin
+            AParam := FParameterNames.Objects[PIndex] as TModflowSteadyParameter;
+          end
+          else
+          begin
+            AParam := nil;
+          end;
+
+          if AParam <> nil then
+          begin
+            FUsedParamList.AddObject(AParam.ParameterName, AParam);
+          end;
+        end;
+      end;
+    end;
+  end
+end;
+
+procedure TSutraInitCondScriptWriter.ReadPilotPoints;
+var
+  PIndex: Integer;
+  AParam: TModflowSteadyParameter;
+  procedure HandlePilotPointList(PilotPointFiles: TPilotPointFiles; const DataId: string);
+  var
+    PPIndex: Integer;
+    FileProperties: TPilotPointFileObject;
+    PListName: string;
+  begin
+    for PPIndex := 0 to PilotPointFiles.Count - 1 do
+    begin
+      FileProperties := PilotPointFiles[PPIndex];
+      if FileProperties.Parameter = AParam then
+      begin
+        WriteString(Format('%0:s_PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &',
+          [DataId, PPIndex+1]));
+        NewLine;
+        PListName := Format('%0:s_%1:s_%2:d',
+          [DataId, AParam.ParameterName, FileProperties.Layer + 1]);
+        WriteString(Format('  plist=''%0:s'';column=%1:d, &',
+          [PListName, 5]));
+//          Inc(ColIndex);
+        NewLine;
+        WriteString(Format('  id_type=''indexed'',file=''%s'')',
+          [ExtractFileName(FileProperties.FileName)]));
+        NewLine;
+      end;
+    end;
+  end;
+begin
+  WriteString('#Read pilot point data');
+  NewLine;
+  for PIndex := 0 to FUsedParamList.Count - 1 do
+  begin
+    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+    if AParam.UsePilotPoints then
+    begin
+      HandlePilotPointList(FPilotPointFiles, FID);
+    end;
+  end;
+  NewLine;
+end;
+
+procedure TSutraInitCondScriptWriter.SaveKrigingFactors;
+var
+  FileProperties: TPilotPointFileObject;
+  AParam: TModflowSteadyParameter;
+//  Index: Integer;
+//  ADataRec: TDataRecord;
+  KrigingFactorsFileRoot: string;
+  procedure HandleDataArray(DataID: string; DataArray: TDataArray;
+    PilotPointFiles: TPilotPointFiles; FileName: string);
+  var
+    PIndex: Integer;
+    PPIndex: Integer;
+  begin
+    for PIndex := 0 to FUsedParamList.Count - 1 do
+    begin
+      AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+      if AParam.UsePilotPoints then
+      begin
+        for PPIndex := 0 to PilotPointFiles.Count - 1 do
+        begin
+          FileProperties := PilotPointFiles[PPIndex];
+          if FileProperties.Parameter = AParam then
+          begin
+            WriteString('calc_kriging_factors_auto_2d( &');
+            NewLine;
+            WriteString(Format('  target_clist=%s, &', [KDisName]));
+            NewLine;
+            WriteString(Format('  source_clist=%0:s_PilotPoints%1:d, &',
+              [DataID, PPIndex+1]));
+            NewLine;
+            WriteString(Format('  file=%0:s%1:d;format=formatted)',
+              [ExtractFileName(FileName), PPIndex+1]));
+            NewLine;
+          end;
+        end;
+      end;
+    end;
+    NewLine;
+  end;
+begin
+  WriteString('#Save Kriging factors');
+  NewLine;
+  if FPilotPointFiles.Count > 0 then
+  begin
+    KrigingFactorsFileRoot := GetKrigFactorRoot;
+    HandleDataArray(FID, FDataArray, FPilotPointFiles,
+      KrigingFactorsFileRoot);
+  end;
+
+  NewLine;
 end;
 
 procedure TSutraInitCondScriptWriter.WriteAFile(ScriptChoice: TScriptChoice);
@@ -3400,6 +3572,11 @@ var
   ColIndex: Integer;
   ParameterIndex: Integer;
   AParam: TModflowSteadyParameter;
+  FileProperties: TPilotPointFileObject;
+  UsedFileProperties: TPilotPointFileObject;
+  FileIndex: Integer;
+  PListName: string;
+  PIndex: Integer;
 begin
   if ScriptChoice = scWriteTemplate then
   begin
@@ -3431,44 +3608,12 @@ begin
     end;
 
     {$REGION 'Node discretization'}
-    WriteString('#Read SUTRA node information file');
-    NewLine;
-    WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
-    NewLine;
-    WriteString('  plist=p_x;column=2, &');
-    NewLine;
-    WriteString('  plist=p_y;column=3, &');
-    NewLine;
-    WriteString('  plist=p_NN2D;column=4, &');
-    NewLine;
-    WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
-    NewLine;
-    if Mesh.MeshType = mt3D then
+    ReadDiscretization;
+
+    if FMesh.MeshType = mt3D then
     begin
-      ColIndex := 5;
-      for LayerIndex := 1 to LayerCount do
-      begin
-        // PLPROC has a limit of 5 s_lists per call of read_list_file.
-        // To avoid reaching that limit, a separate call is used for each layer.
-        WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-        NewLine;
-        WriteString(Format('  plist=p_z%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-
-        WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-
-        WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &',[LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-
-        WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
-        NewLine;
-      end;
+      Read3DDiscretization
     end;
-    NewLine;
     {$ENDREGION}
 
     WriteString('#Read data to modify');
@@ -3480,7 +3625,7 @@ begin
     NewLine;
     ColIndex := 1;
 
-    WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
+    WriteString(Format('  slist=s_NN2D_Data;column=%d, &', [ColIndex]));
     NewLine;
     Inc(ColIndex);
 
@@ -3515,6 +3660,8 @@ begin
     NewLine;
     {$ENDREGION}
 
+    ReadPilotPoints;
+
     WriteString('#Read parameter values');
     NewLine;
     {$REGION 'Parameter values'}
@@ -3522,6 +3669,10 @@ begin
     begin
       AParam := FParameterNames.Objects[ParameterIndex]
         as TModflowSteadyParameter;
+      if AParam.UsePilotPoints then
+      begin
+        Continue;
+      end;
       if ScriptChoice = scWriteScript then
       begin
         WriteString('#');
@@ -3543,6 +3694,18 @@ begin
     {$REGION 'Apply parameters'}
     WriteString('# applying parameter values');
     NewLine;
+
+    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
+      ['cl_Discretization']));
+    NewLine;
+
+    if Mesh.MeshType = mt3D then
+    begin
+      WriteString(Format('temp3D=new_plist(reference_clist=%s,value=0.0)',
+        ['cl_Discretization3D']));
+      NewLine;
+    end;
+
     for ParameterIndex := 0 to FParameterNames.Count - 1 do
     begin
       AParam := FParameterNames.Objects[ParameterIndex]
@@ -3551,42 +3714,129 @@ begin
       NewLine;
       for LayerIndex := 1 to LayerCount do
       begin
-        WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
-          [LayerIndex, AParam.ParameterName, ParameterIndex+1, 'Data']));
-        NewLine;
+        if AParam.UsePilotPoints then
+        begin
+          WriteString('    # Substituting interpolated values');
+          NewLine;
+
+          UsedFileProperties := nil;
+          PIndex := 0;
+//          DataRec := FDataRecordList[RootIndex];
+          for FileIndex := 0 to FPilotPointFiles.Count - 1 do
+          begin
+            FileProperties := FPilotPointFiles[FileIndex];
+            if (FileProperties.Parameter = AParam)
+              and (FileProperties.Layer = LayerIndex) then
+            begin
+              UsedFileProperties := FileProperties;
+              PIndex := FileIndex;
+              break;
+            end;
+          end;
+
+          if UsedFileProperties <> nil then
+          begin
+            PListName := Format('%0:s_%1:s_%2:d',
+              [FID,AParam.ParameterName, LayerIndex+1]);
+            WriteString('    # Get interpolated values');
+            NewLine;
+            WriteString(Format(
+              '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
+              [PListName, ExtractFileName(GetKrigFactorRoot), PIndex+1]));
+            NewLine;
+            if AParam.Transform = ptLog then
+            begin
+              WriteString('      transform=''log'')');
+            end
+            else
+            begin
+              WriteString('      transform=''none'')');
+            end;
+            NewLine;
+            WriteString('    # Write interpolated values in zones');
+            NewLine;
+            WriteString(Format(
+              '    p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = temp', // * %2:s',
+              [LayerIndex + 1, AParam.ParameterName, ParameterIndex+1, FID {, AParam.ParameterName}]));
+            NewLine;
+          end
+          else
+          begin
+          WriteString(Format(
+            '    # no interpolated values defined for parameter %1:s in layer %0:d',
+            [LayerIndex+1, AParam.ParameterName]));
+            NewLine;
+          end;
+
+        end
+        else
+        begin
+          WriteString('    # Substituting parameter values in zones');
+          NewLine;
+          WriteString(Format('p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = p_%3:s%0:d * %1:s',
+            [LayerIndex, AParam.ParameterName, ParameterIndex+1, 'Data']));
+          NewLine;
+        end;
+
       end;
       NewLine;
     end;
     {$ENDREGION}
 
+    if Mesh.MeshType = mt3D then
+    begin
+      WriteString('    # Apply values to 3D mesh');
+      NewLine;
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString(Format('temp3D(select=(s_Layer3D.eq.%0:d)) &', [LayerIndex]));
+        NewLine;
+        WriteString(Format('  =  p_Data%0:d.assign_by_relation(relate=slist;source=s_NN2D;target=s_NN2D_3D)', [LayerIndex]));
+        NewLine;
+      end;
+    end;
+
     WriteString('# Write new data values');
     NewLine;
     if Mesh.MeshType = mt3D then
     begin
-      for LayerIndex := 1 to LayerCount do
-      begin
         WriteString('write_column_data_file(header = ''no'', &');
         NewLine;
-        WriteString(Format('  file=''%s.%2:s_%1:d'';delim="space", &',
-          [FRoot, LayerIndex, FDataArrayName]));
+        WriteString(Format('  file=''%s.%1:s'';delim="space", &',
+          [FRoot, FID]));
         NewLine;
-        WriteString(Format('  select=(s_Active_%d == 1), &',
-          [LayerIndex]));
+        WriteString('  select=(s_Active3D == 1), &');
         NewLine;
-        WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
+//        WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
+//        NewLine;
+        WriteString('  plist=temp3D)');
         NewLine;
-        WriteString(Format('  plist=p_%1:s%0:d)', [LayerIndex, 'Data']));
-        NewLine;
-      end;
+
+
+//      for LayerIndex := 1 to LayerCount do
+//      begin
+//        WriteString('write_column_data_file(header = ''no'', &');
+//        NewLine;
+//        WriteString(Format('  file=''%s.%2:s_%1:d'';delim="space", &',
+//          [FRoot, LayerIndex, FID]));
+//        NewLine;
+//        WriteString(Format('  select=(s_Active_%d == 1), &',
+//          [LayerIndex]));
+//        NewLine;
+////        WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
+////        NewLine;
+//        WriteString(Format('  plist=p_%1:s%0:d)', [LayerIndex, 'Data']));
+//        NewLine;
+//      end;
     end
     else
     begin
       WriteString('write_column_data_file(header = ''no'', &');
       NewLine;
-      WriteString(Format('  file=''%0:s.%1:s'';delim="space", &', [FRoot, FDataArrayName]));
+      WriteString(Format('  file=''%0:s.%1:s'';delim="space", &', [FRoot, FID]));
       NewLine;
-      WriteString('  clist_spec=''id'', &');
-      NewLine;
+//      WriteString('  clist_spec=''id'', &');
+//      NewLine;
       WriteString(Format('  plist=p_%s1)', ['Data']));
       NewLine;
     end;
@@ -3596,18 +3846,180 @@ begin
 end;
 
 procedure TSutraInitCondScriptWriter.WriteFiles(var AFileName: string;
-  const DataArrayName: string);
+  const DataArrayName: string; ID: string);
 begin
+  FID := ID;
   FDataArrayName := DataArrayName;
+  FDataArray := Model.DataArrayManager.GetDataSetByName(FDataArrayName);
+  FMesh := Model.SutraMesh;
   FFileName := ChangeFileExt(AFileName, '.' + FDataArrayName + '.script');
   Model.SutraPestScripts.Add(FFileName);
   Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
+  GetUsedParameters;
+  WritePilotPointFiles;
+  WriteKrigingFactors;
 
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
 
+  Model.PilotPointData.AddPilotPointFileObjects(FPilotPointFiles);
+end;
+
+procedure TSutraInitCondScriptWriter.Read3DDiscretization;
+//var
+//  LayerIndex: Integer;
+//  LayerCount: Integer;
+//  ColIndex: Integer;
+begin
+//  if FMesh.MeshType = mt3D then
+//  begin
+//    LayerCount := FMesh.LayerCount + 1;
+//  end
+//  else
+//  begin
+//    LayerCount := 1;
+//  end;
+
+
+  WriteString('#Read 3D SUTRA node information file');
+  NewLine;
+  WriteString('cl_Discretization3D = read_list_file(skiplines=1,dimensions=3, &');
+  NewLine;
+  WriteString('  plist=p_x3D;column=2, &');
+  NewLine;
+  WriteString('  plist=p_y3D;column=3, &');
+  NewLine;
+  WriteString('  plist=p_z3D;column=4, &');
+  NewLine;
+  WriteString('  slist=s_NN2D_3D;column=5, &');
+  NewLine;
+  WriteString('  slist=s_NN3D;column=6, &');
+  NewLine;
+  WriteString('  slist=s_Active3D;column=7, &');
+  NewLine;
+  WriteString('  slist=s_Layer3D;column=8, &');
+  NewLine;
+  WriteString(Format('  id_type=''indexed'',file=''%s.c_nod3D'')', [FRoot]));
+  NewLine;
+//  if FMesh.MeshType = mt3D then
+//  begin
+//    ColIndex := 5;
+//    for LayerIndex := 1 to LayerCount do
+//    begin
+//      // PLPROC has a limit of 5 s_lists per call of read_list_file.
+//      // To avoid reaching that limit, a separate call is used for each layer.
+//      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+//      NewLine;
+//      WriteString(Format('  plist=p_z%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+//      NewLine;
+//      Inc(ColIndex);
+//      WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+//      NewLine;
+//      Inc(ColIndex);
+//      WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+//      NewLine;
+//      Inc(ColIndex);
+//      WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+//      NewLine;
+//    end;
+//  end;
+  NewLine;
+end;
+
+procedure TSutraInitCondScriptWriter.ReadDiscretization;
+var
+  LayerIndex: Integer;
+  LayerCount: Integer;
+  ColIndex: Integer;
+begin
+  if FMesh.MeshType = mt3D then
+  begin
+    LayerCount := FMesh.LayerCount + 1;
+  end
+  else
+  begin
+    LayerCount := 1;
+  end;
+
+
+  WriteString('#Read SUTRA node information file');
+  NewLine;
+  WriteString('cl_Discretization = read_list_file(skiplines=1,dimensions=2, &');
+  NewLine;
+  WriteString('  plist=p_x;column=2, &');
+  NewLine;
+  WriteString('  plist=p_y;column=3, &');
+  NewLine;
+  WriteString('  slist=s_NN2D;column=4, &');
+  NewLine;
+  WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+  NewLine;
+  if FMesh.MeshType = mt3D then
+  begin
+    ColIndex := 5;
+    for LayerIndex := 1 to LayerCount do
+    begin
+      // PLPROC has a limit of 5 s_lists per call of read_list_file.
+      // To avoid reaching that limit, a separate call is used for each layer.
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
+      WriteString(Format('  plist=p_z%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+      WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+      WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
+      NewLine;
+      Inc(ColIndex);
+      WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
+      NewLine;
+    end;
+  end;
+  NewLine;
+end;
+
+procedure TSutraInitCondScriptWriter.WriteKrigingFactors;
+var
+  ScriptFileName: string;
+  PilotPointsUsed: Boolean;
+begin
+  PilotPointsUsed := FPilotPointFiles.Count > 0;
+  if PilotPointsUsed then
+  begin
+    ScriptFileName := ChangeFileExt(FFileName, StrKrigfactorsscript);
+    OpenFile(ScriptFileName);
+    try
+      WriteString('#Script for PLPROC for saving kriging factors');
+      NewLine;
+      NewLine;
+      ReadPilotPoints;
+      ReadDiscretization;
+      SaveKrigingFactors;
+      Model.KrigfactorsScriptLines.Add(Format('plproc ''%s''',
+        [ExtractFileName(ScriptFileName)]));
+    finally
+      CloseFile
+    end;
+  end;
+end;
+
+procedure TSutraInitCondScriptWriter.WritePilotPointFiles;
+var
+  PilotPointWriter: TPilotPointWriter;
+begin
+  if FDataArray.PestParametersUsed then
+  begin
+    PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
+    try
+      PilotPointWriter.WriteFile(FFileName, FDataArray,
+        FPilotPointFiles, FID);
+    finally
+      PilotPointWriter.Free;
+    end;
+  end;
 end;
 
 { TDataRecord }
@@ -3621,6 +4033,202 @@ destructor TDataRecord.Destroy;
 begin
   PilotPointFiles.Free;
   inherited;
+end;
+
+{ TSutraInitialConditionWriter }
+
+//constructor TSutraInitialConditionWriter.Create(AModel: TCustomModel;
+//  EvaluationType: TEvaluationType);
+//begin
+//  inherited;
+//  FMesh := AModel.SutraMesh;
+//end;
+//
+//class function TSutraInitialConditionWriter.Extension: string;
+//begin
+//  Result := '.PstValues';
+//end;
+//
+//procedure TSutraInitialConditionWriter.WriteFile(var AFileName: string;
+//  DataArray: TDataArray);
+//var
+//  ParameterNames: TStringList;
+//  PIndex: Integer;
+//  AParam: TModflowSteadyParameter;
+//  ParamArray: TDataArray;
+//  LayerIndex: Integer;
+//  NodeIndex: Integer;
+//  ANode2D: TSutraNode2D;
+//  ANode3D: TSutraNode3D;
+//begin
+//  ParameterNames := TStringList.Create;
+//  try
+//    FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);
+//    GetParameterNames(ParameterNames);
+//
+//    if DataArray.PestParametersUsed and (DataArray.DataType = rdtDouble) then
+//    begin
+//      ParamArray := Model.DataArrayManager.GetDataSetByName
+//        (DataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      ParamArray := nil;
+//    end;
+//
+//    OpenFile(FFileName);
+//    try
+//      WriteString('NN2D ');
+//      for LayerIndex := 0 to DataArray.LayerCount - 1 do
+//      begin
+//        if FMesh.MeshType = mt3D then
+//        begin
+//          WriteString(Format('NN3D%0:d Layer%0:d ', [LayerIndex+1]));
+//        end;
+//        WriteString(Format('%0:s%1:d ', [DataArray.Name, LayerIndex+1]));
+//        if DataArray.DataType = rdtDouble then
+//        begin
+//          WriteString(Format('%0:sParameter%1:d ', [DataArray.Name, LayerIndex+1]))
+//        end;
+//      end;
+//      NewLine;
+//
+//      for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
+//      begin
+//        ANode2D := FMesh.Mesh2D.Nodes[NodeIndex];
+//        WriteInteger(ANode2D.Number+1);
+//        for LayerIndex := 0 to DataArray.LayerCount - 1 do
+//        begin
+//          if FMesh.MeshType = mt3D then
+//          begin
+//            ANode3D := FMesh.NodeArray[LayerIndex,NodeIndex];
+//            WriteInteger(ANode3D.Number + 1);
+//            WriteInteger(LayerIndex + 1);
+//          end;
+//          if ParamArray <> nil then
+//          begin
+//            PIndex := ParameterNames.IndexOf(LowerCase(
+//              ParamArray.StringData[LayerIndex, 0, NodeIndex]));
+//          end
+//          else
+//          begin
+//            PIndex := -1;
+//          end;
+//          if PIndex >=0 then
+//          begin
+//            AParam := ParameterNames.Objects[PIndex] as TModflowSteadyParameter;
+//          end
+//          else
+//          begin
+//            AParam := nil;
+//          end;
+//          case DataArray.DataType of
+//            rdtDouble:
+//              begin
+//                if (AParam = nil) or (AParam.Value = 0) then
+//                begin
+//                  WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]);
+//                end
+//                else
+//                begin
+//                  WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]
+//                    /AParam.Value);
+//                end;
+//              end;
+//            rdtInteger:
+//              begin
+//                WriteInteger(DataArray.IntegerData[LayerIndex, 0, NodeIndex]);
+//              end;
+//            rdtBoolean:
+//              begin
+//                WriteInteger(Ord(DataArray.BooleanData[LayerIndex, 0, NodeIndex]));
+//              end;
+//            rdtString:
+//              begin
+//                Assert(False);
+//              end;
+//            else
+//              begin
+//                Assert(False);
+//              end;
+//          end;
+//          if DataArray.DataType = rdtDouble then
+//          begin
+//            WriteInteger(PIndex+1);
+//          end;
+//        end;
+//        NewLine;
+//      end;
+//
+//    finally
+//      CloseFile;
+//    end;
+//  finally
+//    ParameterNames.Free;
+//  end;
+//  Model.DataArrayManager.AddDataSetToCache(DataArray);
+//  if ParamArray <> nil then
+//  begin
+//    Model.DataArrayManager.AddDataSetToCache(ParamArray);
+//  end;
+//end;
+
+{ TSutraNod3DDisWriter }
+
+class function TSutraNod3DDisWriter.Extension: string;
+begin
+  result := '.c_nod3D';
+end;
+
+procedure TSutraNod3DDisWriter.WriteFile(const AFileName: string);
+var
+  NodeIndex: Integer;
+  SutraMesh2D: TSutraMesh2D;
+  ANode: TSutraNode2D;
+  LayerIndex: Integer;
+  SutraMesh3D: TSutraMesh3D;
+  ANode3D: TSutraNode3D;
+  NN: Integer;
+begin
+  FInputFileName := FileName(AFileName);
+  OpenFile(FInputFileName);
+  try
+    SutraMesh3D := Model.SutraMesh;
+    SutraMesh2D := SutraMesh3D.Mesh2D;
+    WriteString(' Index X Y Z Node_Number2D Node_Number3D Active Layer');
+    NN := 1;
+    NewLine;
+    for NodeIndex := 0 to SutraMesh2D.Nodes.Count - 1 do
+    begin
+      ANode := SutraMesh2D.Nodes[NodeIndex];
+      if SutraMesh3D.MeshType = mt3D then
+      begin
+        for LayerIndex := 0 to SutraMesh3D.LayerCount do
+        begin
+          ANode3D := SutraMesh3D.NodeArray[LayerIndex,ANode.Number];
+          WriteInteger(NN);
+          WriteFloat(ANode.Location.x);
+          WriteFloat(ANode.Location.y);
+          WriteFloat(ANode3D.Z);
+          WriteInteger(ANode.Number+1);
+          WriteInteger(ANode3D.Number+1);
+          if ANode3D.Active then
+          begin
+            WriteInteger(1);
+          end
+          else
+          begin
+            WriteInteger(0);
+          end;
+          WriteInteger(LayerIndex+1);
+          NewLine;
+          Inc(NN);
+        end;
+      end;
+    end;
+  finally
+    CloseFile;
+  end;
 end;
 
 end.
