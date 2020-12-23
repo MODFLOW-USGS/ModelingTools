@@ -317,6 +317,7 @@ procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
 resourcestring
   StrEvapotranspirationD_ETS = 'Evapotranspiration depth in the ETS package ' +
   'is less than zero';
+  StrEvaporationDepthFr = 'Evaporation depth or rate fractions not assigned';
 
 implementation
 
@@ -326,6 +327,8 @@ uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit, TempFiles,
 
 resourcestring
   StrFractionalRateS = 'Fractional rate %s';
+  StrInSEvaportionsDe = 'In %s evaporation depth or rate fractions have not been ass' +
+  'igned.';
 
 const
   SurfacePosition = 0;
@@ -1297,6 +1300,7 @@ var
   EvapotranspirationDepthData: TModflowTimeList;
   ListOfEtFractionLists: TList;
   ListOfDepthFractionLists: TList;
+  AScreenObject: TScreenObject;
 begin
   Boundary := BoundaryGroup as TEtsBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -1334,8 +1338,19 @@ begin
       begin
         Item := Items[Index] as TEtsSurfDepthItem;
         BoundaryValues[Index].Time := Item.StartTime;
-        BoundaryValues[Index].Formula := (Item.DepthFractions.
-          Items[SegmentIndex-1] as TStringValueItem).Value;
+        if SegmentIndex > Item.DepthFractions.Count then
+        begin
+          AScreenObject := ScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddError(Model,
+            StrEvaporationDepthFr,
+            Format(StrInSEvaportionsDe, [AScreenObject.Name]), AScreenObject);
+          BoundaryValues[Index].Formula := '';
+        end
+        else
+        begin
+          BoundaryValues[Index].Formula := (Item.DepthFractions.
+            Items[SegmentIndex-1] as TStringValueItem).Value;
+        end;
         if BoundaryValues[Index].Formula = '' then
         begin
           BoundaryValues[Index].Formula := '1';
@@ -1349,8 +1364,19 @@ begin
       begin
         Item := Items[Index] as TEtsSurfDepthItem;
         BoundaryValues[Index].Time := Item.StartTime;
-        BoundaryValues[Index].Formula := (Item.EtFractions.
-          Items[SegmentIndex-1] as TStringValueItem).Value;
+        if SegmentIndex > Item.EtFractions.Count then
+        begin
+          AScreenObject := ScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddError(Model,
+            StrEvaporationDepthFr,
+            Format(StrInSEvaportionsDe, [AScreenObject.Name]), AScreenObject);
+          BoundaryValues[Index].Formula := '';
+        end
+        else
+        begin
+          BoundaryValues[Index].Formula := (Item.EtFractions.
+            Items[SegmentIndex-1] as TStringValueItem).Value;
+        end;
         if BoundaryValues[Index].Formula = '' then
         begin
           BoundaryValues[Index].Formula := '0';

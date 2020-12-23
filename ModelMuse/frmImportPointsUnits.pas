@@ -537,7 +537,7 @@ begin
   Captions := TStringList.Create;
   try
     Captions.AddStrings(dgData.Rows[0]);
-    for Index := 0 to jvclbDataSets.Items.Count -1 do
+    for Index := jvclbDataSets.Items.Count -1 downto 0 do
     begin
       ACaption := jvclbDataSets.Items[Index];
       Position := Captions.IndexOf(ACaption);

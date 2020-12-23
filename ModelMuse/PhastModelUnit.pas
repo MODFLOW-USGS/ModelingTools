@@ -10136,6 +10136,9 @@ const
 
 //               Bug fix: When imporing data from a file,  ModelMuse now
 //                only allows you to specify files that actually exist.
+//               Bug fix: Fixed a bug that could cause an access violation
+//                when exporting the ETS package if EVT depth or rate fractions
+//                have not been assigned.
 
 const
   // version number of ModelMuse.
@@ -30417,7 +30420,10 @@ begin
   FreeAndNil(FTimeSeries);
   FreeAndNil(FEndPoints);
   FreeAndNil(FHeadObsResults);
-  CtsSystems.Clear;
+  if CtsSystems <> nil then
+  begin
+    CtsSystems.Clear;
+  end;
   ParamGroups.Clear;
   ModflowGlobalObservationComparisons.Clear;
   SutraGlobalObservationComparisons.Clear;
@@ -43973,7 +43979,14 @@ end;
 
 function TChildModel.GetCtsSystems: TCtsSystemCollection;
 begin
-  result := ParentModel.CtsSystems;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.CtsSystems;
+  end
+  else
+  begin
+    result := nil;
+  end;
 end;
 
 function TChildModel.GetDisplayName: string;

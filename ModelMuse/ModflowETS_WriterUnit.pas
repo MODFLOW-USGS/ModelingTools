@@ -149,6 +149,7 @@ var
   Boundary: TEtsBoundary;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrEvapotranspirationD_ETS);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrEvaporationDepthFr);
   frmErrorsAndWarnings.BeginUpdate;
   try
     inherited Evaluate;

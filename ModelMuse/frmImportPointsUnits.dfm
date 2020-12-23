@@ -62,7 +62,7 @@ inherited frmImportPoints: TfrmImportPoints
     Top = 0
     Width = 585
     Height = 469
-    ActivePage = tabControls
+    ActivePage = tabData
     Align = alClient
     TabOrder = 0
     object tabControls: TTabSheet

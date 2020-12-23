@@ -131,6 +131,10 @@ type
   TChangeCheckEvent = procedure (Sender: TObject; ACol, ARow: Longint;
     const Value: TCheckBoxState) of object;
 
+  TOnIsCaptionEvent = procedure (Sender: TObject; ACol, ARow: Longint;
+    var Value: Boolean) of object;
+
+
   {@name is the type of @link(TCustomRBWDataGrid.OnBeforeDrawCell
   TCustomRBWDataGrid.OnBeforeDrawCell).
   A @name is called just before a cell specified by ACol and ARow is drawn.
@@ -260,6 +264,7 @@ type
     // See @link(ComboUsed).
     FComboUsed: boolean;
     FCheckStyle: TCheckStyle;
+    FAutoAdjustCaptionRowHeights: boolean;
     // @name checks that the contents of a cell specified by
     // ACol and ARow match the constraints on the cell
     // as specified in @link(Format), @link(CheckMax),
@@ -307,6 +312,7 @@ type
     procedure SetCaseSensitivePicklist(const Value: boolean);
     procedure SetCheckStyle(const Value: TCheckStyle);
     procedure InvalidateCachedWidth(Sender: TObject);
+    procedure SetAutoAdjustCaptionRowHeights(const Value: boolean);
   protected
     // @name checks that all the cells in the @classname have values
     // that are between @link(Max) and @link(Min)
@@ -332,9 +338,14 @@ type
     // @name is the @link(TCustomRbwDataGrid) that owns @classname.
     property  Grid: TCustomRbwDataGrid read GetGrid;
   published
-    // @name specifies whether the height of the row should be adjusted.
+    // @name specifies whether the height of the row should be adjusted for
+    // every cell.
     property AutoAdjustRowHeights: boolean read FAutoAdjustRowHeights write
        SetAutoAdjustRowHeights;
+    // @name specifies whether the height of the row should be adjusted for
+    // caption cells.
+    property AutoAdjustCaptionRowHeights: boolean read FAutoAdjustCaptionRowHeights write
+       SetAutoAdjustCaptionRowHeights;
     // @name is the caption displayed on the button.
     Property ButtonCaption: string read FButtonCaption write SetButtonCaption;
     // @name is the font on the button.
@@ -532,6 +543,7 @@ type
     FDecimalSeparator: Char;
     FAppEvents: TApplicationEvents;
     FUpdateCount: integer;
+    FOnIsCaptionEvent: TOnIsCaptionEvent;
     function CollectionItem(const ACol, ARow: Longint):
       TCustomRowOrColumn; virtual; abstract;
     function GetCellVisible(ACol, ARow: Integer): boolean;
@@ -760,6 +772,8 @@ type
     property OnHorizontalScroll: TNotifyEvent read FOnHScroll write FOnHScroll;
     property OnDistributeTextProgress: TDistributeTextProgressEvent
       read FOnDistributeTextProgress write FOnDistributeTextProgress;
+    property OnIsCaption: TOnIsCaptionEvent read FOnIsCaptionEvent
+      write FOnIsCaptionEvent;
   end;
 
   TRbwDataGrid4 = class(TCustomRBWDataGrid)
@@ -794,6 +808,7 @@ type
       const Value: TCheckBoxState); override;
     function PickListRequiredWidth(const ACol, ARow: integer): integer; override;
     procedure InvalidateCachedWidth; override;
+    function GetCaptionFlags(const ACol, ARow: integer) : UINT; override;
     { Protected declarations }
   public
     procedure AdjustRowHeights(const ARow: integer);override;
@@ -1377,6 +1392,10 @@ end;
 function TRbwDataGrid4.IsCaptionCell(ACol, ARow: integer): boolean;
 begin
   result := (ARow < FixedRows) or (WordWrapRowCaptions and (ACol < FixedCols));
+  if Assigned(OnIsCaption) then
+  begin
+    OnIsCaption(Self, ACol, ARow, result);
+  end;
 end;
 
 procedure TRbwDataGrid4.Loaded;
@@ -1666,6 +1685,15 @@ begin
   end;
 end;
 
+function TRbwDataGrid4.GetCaptionFlags(const ACol, ARow: integer): UINT;
+begin
+  result := inherited GetCaptionFlags(ACol, ARow);
+  if WordWrapRowCaptions and IsCaptionCell(ACol, ARow) then
+  begin
+    result := result or DT_WORDBREAK;
+  end;
+end;
+
 function TRbwDataGrid4.GetCheckStyle(const ACol, ARow: integer): TCheckStyle;
 begin
   result := Columns[ACol].CheckStyle;
@@ -1876,6 +1904,7 @@ procedure TRbwDataGrid4.AdjustRowHeights(const ARow: integer);
 var
   RequiredHeight, TestHeight: integer;
   ColIndex: integer;
+  AColumn: TRbwColumn4;
 begin
   if FUpdateCount > 0 then
   begin
@@ -1889,7 +1918,9 @@ begin
       break;
     end;
 
-    if Columns[ColIndex].AutoAdjustRowHeights then
+    AColumn := Columns[ColIndex];
+    if AColumn.AutoAdjustRowHeights or
+      (AColumn.AutoAdjustCaptionRowHeights and IsCaptionCell(ColIndex, ARow)) then
     begin
       Canvas.Font.Assign(Font);
       TestHeight := RequiredCellHeight(ColIndex, ARow);
@@ -1979,6 +2010,7 @@ begin
       WordWrapCaptions := TCustomRowOrColumn(Source).WordWrapCaptions;
       WordWrapCells := TCustomRowOrColumn(Source).WordWrapCells;
       CheckStyle := TCustomRowOrColumn(Source).CheckStyle;
+      AutoAdjustCaptionRowHeights := TCustomRowOrColumn(Source).AutoAdjustCaptionRowHeights;
     finally
       if Assigned(Collection) then Collection.EndUpdate;
     end;
@@ -3250,6 +3282,10 @@ end;
 function TRbwRowDataGrid.IsCaptionCell(ACol, ARow: integer): boolean;
 begin
   result := ACol < FixedCols;
+  if Assigned(OnIsCaption) then
+  begin
+    OnIsCaption(Self, ACol, ARow, result);
+  end;
 end;
 
 procedure TRbwRowDataGrid.Loaded;
@@ -3601,6 +3637,7 @@ var
   CanSelect : boolean;
   NewCoord : TGridCoord;
   NewSelection : TGridRect;
+  CaptionCell: Boolean;
 begin
   inherited;
   if AutoMultiEdit then
@@ -3616,11 +3653,20 @@ begin
   end;
   fMouseIsDown := True;
   MouseToCell(X, Y, ACol, ARow);
-  if (ACol < FixedCols) or (ARow < FixedRows) then
+  CaptionCell := (ACol < FixedCols) or (ARow < FixedRows);
+  if Assigned(OnIsCaption) then
+  begin
+    OnIsCaption(self, ACol, ARow, CaptionCell);
+  end;
+  if CaptionCell then
   begin
     HideEditor;
   end;
   CanSelect := inherited SelectCell(ACol, ARow);
+  if CaptionCell then
+  begin
+    CanSelect := False;
+  end;
   dgRow := ARow;
   dgColumn := ACol;
   if not CanSelect then
@@ -4137,6 +4183,7 @@ var
   BrushColor : TColor;
   FontColor : TColor;
   CanSelect : boolean;
+  CaptionCell: Boolean;
 begin
   FDrawing := True;
   inherited;
@@ -4144,7 +4191,12 @@ begin
   BrushColor := Canvas.Brush.Color;
   FontColor := Canvas.Font.Color;
   try
-    if (ARow < FixedRows) or (ACol < FixedCols) then
+    CaptionCell := (ARow < FixedRows) or (ACol < FixedCols);
+    if Assigned(OnIsCaption) then
+    begin
+      OnIsCaption(Self, ACol, ARow, CaptionCell);
+    end;
+    if CaptionCell then
     begin
       DrawCaptionCell(ACol, ARow, ARect, AState);
     end
@@ -4465,8 +4517,19 @@ end;
 function TCustomRBWDataGrid.SelectCell(ACol, ARow: Longint): Boolean;
 var
   ColumnOrRow : TCustomRowOrColumn;
+  CaptionCell: Boolean;
 begin
   result := inherited SelectCell(ACol, ARow);
+
+  if result and Assigned(OnIsCaption) then
+  begin
+    CaptionCell := False;
+    OnIsCaption(self, ACol, ARow, CaptionCell);
+    if CaptionCell then
+    begin
+      result := False;
+    end;
+  end;
 
   if result and not fMouseIsDown then
   begin
@@ -4686,6 +4749,25 @@ begin
   TRbwInplaceEdit4(Result).OnGetButtonWidth := GetButtonWidth;
 end;
 
+procedure TCustomRowOrColumn.SetAutoAdjustCaptionRowHeights(
+  const Value: boolean);
+var
+  ARow: Integer;
+begin
+  if FAutoAdjustCaptionRowHeights <> Value then
+  begin
+    FAutoAdjustCaptionRowHeights := Value;
+    if Value and (Grid <> nil) then
+    begin
+      ARow := Grid.Row;
+      if ARow >= 0 then
+      begin
+        Grid.AdjustRowHeights(ARow);
+      end;
+    end;
+  end;
+end;
+
 procedure TCustomRowOrColumn.SetAutoAdjustRowHeights(const Value: boolean);
 var
   ARow: integer;
@@ -4763,10 +4845,12 @@ var
   ARect: TRect;
   TempString: string;
   Index: Integer;
+  AColumnOrRow: TCustomRowOrColumn;
 begin
   result := 2;
   Canvas.Font.Assign(Font);
-  if CollectionItem(ACol, ARow).AutoAdjustRowHeights then
+  AColumnOrRow := CollectionItem(ACol, ARow);
+  if AColumnOrRow.AutoAdjustRowHeights or AColumnOrRow.AutoAdjustCaptionRowHeights then
   begin
 
     if (IsCaptionCell(ACol, ARow)
