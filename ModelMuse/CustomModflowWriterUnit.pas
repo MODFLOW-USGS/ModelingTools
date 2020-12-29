@@ -141,6 +141,8 @@ type
     // @name writes Value to the output with NO leading blank space.
     procedure WriteString(const Value: String); overload;
     procedure WriteString(const Value: AnsiString); overload; virtual;
+    class function PestUtilityProgramPath(UtilityProgramName,
+      AFileName: string): string;
   end;
 
   { @name is an abstract base class used as an ancestor for classes that
@@ -1065,7 +1067,8 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   System.Generics.Defaults, ArchiveNodeInterface, ModflowOptionsUnit,
   Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
   ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit,
-  framePestObsCaptionedUnit, PestObsExtractorInputWriterUnit;
+  framePestObsCaptionedUnit, PestObsExtractorInputWriterUnit,
+  System.AnsiStrings;
 
 resourcestring
   StrTheFollowingParame = 'The following %s parameters are being skipped ' +
@@ -1123,11 +1126,14 @@ resourcestring
   StrInTheMODFLOWNameFlow = 'In the MODFLOW Name file dialog box, the option' +
   ' to specify an alternative flow package was selected but none was specifi' +
   'ed.';
-  StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
-  StrObsSeriesExtractore = 'ObsSeriesExtractor.exe';
   StrPLPROCNotFound = 'PLPROC not found';
   StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
+
+const
+  StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
+  StrObsSeriesExtractore = 'ObsSeriesExtractor.exe';
   StrPlprocexe = 'plproc.exe';
+  StrEnhancedTemplateProc = 'EnhancedTemplateProcessor.exe';
 
 var
 //  NameFile: TStringList;
@@ -1500,7 +1506,8 @@ begin
         ParamEstBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
         WriteInstuctionsBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
-        WriteInstuctionsBatchFile.Add(StrObsSeriesExtractore + ' ' + InsFileName);
+        WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrObsSeriesExtractore, FileName)
+          + ' ' + InsFileName);
         WriteInstuctionsBatchFile.Add('pause');
       end
       else
@@ -1508,7 +1515,9 @@ begin
         ParamEstBatchFile.Add(AFileName {+ ' /wait'});
         WriteInstuctionsBatchFile.Add(AFileName {+ ' /wait'});
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
-        WriteInstuctionsBatchFile.Add(StrMf6ObsExtractorexe + ' ' + InsFileName);
+        WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
+          StrMf6ObsExtractorexe, FileName)
+          + ' ' + InsFileName);
         WriteInstuctionsBatchFile.Add('pause');
       end;
 
@@ -1620,11 +1629,12 @@ begin
       begin
         if Model.ModelSelection = msModflow2015 then
         begin
-          ParamEstBatchFile.Add(StrMf6ObsExtractorexe + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf6ExtractValues'));
+          ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrMf6ObsExtractorexe, FileName)
+            + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf6ExtractValues'));
         end
         else
         begin
-          ParamEstBatchFile.Add(StrObsSeriesExtractore + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
+          ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrObsSeriesExtractore, FileName) + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
         end;
       end;
       if Model.PestUsed then
@@ -1632,12 +1642,13 @@ begin
         if (Model.ModelSelection <> msModflow2015) then
         begin
           InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
-          BatchFile.Add(StrObsSeriesExtractore + ' ' + InsFileName);
+          BatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrObsSeriesExtractore, FileName) + ' ' + InsFileName);
         end
         else
         begin
           InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
-          BatchFile.Add(StrMf6ObsExtractorexe + ' ' + InsFileName);
+          BatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrMf6ObsExtractorexe, FileName)
+            + ' ' + InsFileName);
         end;
       end;
     {$IFDEF PEST}
@@ -2449,25 +2460,11 @@ end;
 procedure TCustomFileWriter.WritePestTemplateLine(AFileName: string);
 var
   PValFileName: string;
-//  DSIndex: Integer;
-//  ADataArray: TDataArray;
-//  INFLE: string;
 begin
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
-  Model.PestTemplateLines.Add('EnhancedTemplateProcessor.exe '
-    + ExtractFileName(AFileName) + ' ' + PValFileName);
-
-//  for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
-//  begin
-//    ADataArray := Model.DataArrayManager[DSIndex];
-//    if ADataArray.PestParametersUsed then
-//    begin
-//      INFLE := ExtractFileName(ChangeFileExt(PValFileName,
-//        '.' + ADataArray.Name + '.script' ));
-//      Model.PestTemplateLines.Add('plproc '+ INFLE);
-//    end;
-//  end;
+  Model.PestTemplateLines.Add(PestUtilityProgramPath(StrEnhancedTemplateProc, AFileName)
+    + ' ' + ExtractFileName(AFileName) + ' ' + PValFileName);
 
 end;
 
@@ -9136,6 +9133,31 @@ begin
   Assert(FMainFileStream = nil);
   FMainFileStream := FFileStream;
   FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
+end;
+
+class function TCustomFileWriter.PestUtilityProgramPath(UtilityProgramName,
+  AFileName: string): string;
+begin
+  result := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName))
+     + UtilityProgramName;
+  if TFile.Exists(result) then
+  begin
+    Exit;
+  end;
+  result := IncludeTrailingPathDelimiter(ExtractFileDir(Application.ExeName))
+     + UtilityProgramName;
+  if TFile.Exists(result) then
+  begin
+    Exit;
+  end;
+  result := IncludeTrailingPathDelimiter
+    (frmGoPhast.PhastModel.ProgramLocations.PestDirectory) + UtilityProgramName;
+  if TFile.Exists(result) then
+  begin
+    Exit;
+  end;
+  result := UtilityProgramName;
+
 end;
 
 procedure TCustomFileWriter.CloseTempFile;

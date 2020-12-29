@@ -4040,11 +4040,4 @@ begin
   end;
 end;
 
-//procedure TCustomMf6ObservationWriter.WritePestTemplateLine;
-//begin
-//  Model.PestTemplateLines.Add('EnhancedTemplateProcessor.exe '
-//    + ExtractFileName((AFileName: string)) +
-//    ' ' + ChangeFileExt((AFileName: string)(FNameOfFile), '.pval'));
-//end;
-
 end.

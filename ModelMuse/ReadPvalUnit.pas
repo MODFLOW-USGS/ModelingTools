@@ -101,6 +101,50 @@ begin
                   Exit;
                 end;
               end;
+
+              for LineIndex := StartLine+Count+1 to Length(Lines) - 1 do
+              begin
+                ALine := Lines[LineIndex];
+                if Trim(ALine) = '' then
+                begin
+                  Continue;
+                end;
+                if Pos('#--', ALine) = 1 then
+                begin
+                  ALine := Trim(Copy(ALine, 4, MAXINT));
+                end
+                else
+                begin
+                  Continue
+                end;
+                SpacePos := Pos(' ', ALine);
+                if SpacePos > 10 then
+                begin
+                  SpacePos := 10;
+                end;
+                if SpacePos = 0 then
+                begin
+                  SpacePos := Pos(#9, ALine);
+                  if SpacePos > 10 then
+                  begin
+                    SpacePos := 10;
+                  end;
+                end;
+                AName := Trim(Copy(ALine, 1, SpacePos));
+                Value := Trim(Copy(ALine, SpacePos+1, MaxInt));
+                if TryFortranStrToFloat(Value, AValue) then
+                begin
+                  Item := TParamItem.Create;
+                  Item.Name := AName;
+                  Item.Value := AValue;
+                  List.Add(Item);
+                end
+                else
+                begin
+                  result := False;
+                  Exit;
+                end;
+              end;
             finally
               FormatSettings.DecimalSeparator := Sep;
             end;

@@ -22,6 +22,7 @@ type
     procedure FormShow(Sender: TObject);
   private
     FGeoRef: TGeoRef;
+    FFormat: TFormatSettings;
     procedure GetData;
     procedure SetData;
     { Private declarations }
@@ -67,8 +68,24 @@ begin
 end;
 
 procedure TfrmGeoRef.FormCreate(Sender: TObject);
+var
+  DTstring: string;
 begin
   inherited;
+  FFormat := TFormatSettings.Create;
+  DTstring := LowerCase(FFormat.ShortDateFormat);
+  if Pos('dd', DTstring) <= 0 then
+  begin
+    DTstring := StringReplace(DTstring, 'd', 'dd', []);
+  end;
+  if Pos('mm', DTstring) <= 0 then
+  begin
+    DTstring := StringReplace(DTstring, 'm', 'mm', []);
+  end;
+  if Pos('yy', DTstring) <= 0 then
+  begin
+    DTstring := StringReplace(DTstring, 'y', 'yyyy', []);
+  end;
 
   rrdgGeoRef.BeginUpdate;
   try
@@ -79,7 +96,7 @@ begin
     rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrRotation)] := 'Grid rotation angle';
     rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrLengthUnit)] := 'Length unit';
     rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrTimeUnit)] := 'Time unit';
-    rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrStartDate)] := 'Start date (mm/dd/yyyy)';
+    rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrStartDate)] := Format('Start date (%s)', [DTstring]);
     rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrStartTime)] := 'Start time (hh:mm:ss)';
     rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrModelType)] := 'Model type';
     rrdgGeoRef.Cells[Ord(grcCaption), Ord(grrProjectionType)] := 'Projection type';
@@ -247,32 +264,8 @@ begin
     else
       Assert(False);
   end;
-//  Splitter := TStringList.Create;
   try
     FGeoRef.StartDate := StrToDate(rrdgGeoRef.Cells[Ord(grcValue), Ord(grrStartDate)]);
-//    Splitter.Delimiter := '/';
-//    Splitter.DelimitedText := ;
-//    if Splitter.Count = 3 then
-//    begin
-//      if TryStrToInt(Splitter[0], Month)
-//        and TryStrToInt(Splitter[1], Day)
-//        and TryStrToInt(Splitter[2], Year) then
-//      begin
-//        FGeoRef.StartDate := EncodeDate(Year, Month, Day)
-//      end;
-//    end;
-//
-//    Splitter.Delimiter := ':';
-//    Splitter.DelimitedText := rrdgGeoRef.Cells[Ord(grcValue), Ord(grrStartTime)];
-//    if Splitter.Count = 3 then
-//    begin
-//      if TryStrToInt(Splitter[0], Hour)
-//        and TryStrToInt(Splitter[1], Minute)
-//        and TryStrToInt(Splitter[2], Second) then
-//      begin
-//        FGeoRef.StartTime := EncodeTime(Hour, Minute, Second, 0)
-//      end;
-//    end;
   except on E: EConvertError do
     begin
       Beep;
@@ -280,7 +273,6 @@ begin
       ModalResult := mrNone;
       Exit;
     end;
-//    Splitter.Free;
   end;
   ProjectionTypeIndex := rrdgGeoRef.ItemIndex[Ord(grcValue), Ord(grrProjectionType)];
   if ProjectionTypeIndex >= 0 then

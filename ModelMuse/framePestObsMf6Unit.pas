@@ -9,7 +9,7 @@ uses
 
 type
   TPestMf6ObsColumns = (pm6Name, mp6ObsSeries, pm6Type, pm6Time,
-    pm6ObjectWeightFormula, pm6Value, pm6Weight, pm6MawConnectionNumber, pm6Comment);
+    {pm6ObjectWeightFormula,} pm6Value, pm6Weight, pm6MawConnectionNumber, pm6Comment);
 
   TframePestObsMf6 = class(TframePestObs)
     cbMultilayer: TCheckBox;
@@ -227,49 +227,49 @@ begin
       end;
     end;
 
-    if ACol = Ord(pm6ObjectWeightFormula) then
-    begin
-      CanSelect := False;
-      if TryGetObsSeries(ObsSeriesName, ObsSeries) then
-      begin
-        ObsTypeName := frameObservations.Grid.Cells[Ord(pm6Type), ARow];
-        case ObsSeries of
-          osGeneral:
-            begin
-              if TryGetGenOb(ObsTypeName, GenOb) then
-              begin
-//                CanSelect := GenOb in [ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
-//                  ogRch, ogEVT, ogMvr];
-              end;
-            end;
-          osMaw:
-            begin
-              if TryGetMawOb(ObsTypeName, MawOb) then
-              begin
-
-              end;
-            end;
-          osSfr:
-            begin
-
-            end;
-          osLak:
-            begin
-
-            end;
-          osUzf:
-            begin
-
-            end;
-          osCSub:
-            begin
-
-            end;
-          else
-            Assert(False);
-        end;
-      end;
-    end;
+//    if ACol = Ord(pm6ObjectWeightFormula) then
+//    begin
+//      CanSelect := False;
+//      if TryGetObsSeries(ObsSeriesName, ObsSeries) then
+//      begin
+//        ObsTypeName := frameObservations.Grid.Cells[Ord(pm6Type), ARow];
+//        case ObsSeries of
+//          osGeneral:
+//            begin
+//              if TryGetGenOb(ObsTypeName, GenOb) then
+//              begin
+////                CanSelect := GenOb in [ogCHD, ogDrain, ogWell, ogGHB, ogRiv,
+////                  ogRch, ogEVT, ogMvr];
+//              end;
+//            end;
+//          osMaw:
+//            begin
+//              if TryGetMawOb(ObsTypeName, MawOb) then
+//              begin
+//
+//              end;
+//            end;
+//          osSfr:
+//            begin
+//
+//            end;
+//          osLak:
+//            begin
+//
+//            end;
+//          osUzf:
+//            begin
+//
+//            end;
+//          osCSub:
+//            begin
+//
+//            end;
+//          else
+//            Assert(False);
+//        end;
+//      end;
+//    end;
   end;
 end;
 
@@ -301,7 +301,7 @@ begin
     frameObservations.Grid.Cells[Ord(mp6ObsSeries), ItemIndex + 1] := ObsSeriesToString(Obs.ObSeries);
     frameObservations.Grid.Cells[Ord(pm6Type), ItemIndex + 1] := Obs.ObsTypeString;
     frameObservations.Grid.RealValue[Ord(pm6Time), ItemIndex + 1] := Obs.Time;
-    frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), ItemIndex + 1] := Obs.WeightFormula;
+//    frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), ItemIndex + 1] := Obs.WeightFormula;
     frameObservations.Grid.RealValue[Ord(pm6Value), ItemIndex + 1] := Obs.ObservedValue;
     frameObservations.Grid.RealValue[Ord(pm6Weight), ItemIndex + 1] := Obs.Weight;
     frameObservations.Grid.IntegerValue[Ord(pm6MawConnectionNumber), ItemIndex + 1] := Obs.MawConnectionNumber;
@@ -336,10 +336,10 @@ begin
     RowOK := True;
     for ColIndex := 0 to Ord(pm6Weight) do
     begin
-      if ColIndex = Ord(pm6ObjectWeightFormula) then
-      begin
-        Continue;
-      end;
+//      if ColIndex = Ord(pm6ObjectWeightFormula) then
+//      begin
+//        Continue;
+//      end;
       if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
       begin
         RowOK := False;
@@ -417,7 +417,7 @@ begin
       Obs.ObSeries := ObSeries;
       Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
       Obs.Time := frameObservations.Grid.RealValue[Ord(pm6Time), RowIndex];
-      Obs.WeightFormula := frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), RowIndex];
+//      Obs.WeightFormula := frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), RowIndex];
       Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(pm6Value), RowIndex];
       Obs.Weight := frameObservations.Grid.RealValue[Ord(pm6Weight), RowIndex];
       if (ObSeries = osMaw)
@@ -440,7 +440,7 @@ begin
     frameObservations.Grid.Cells[Ord(mp6ObsSeries), 0] := StrObservationSeriesType;;
     frameObservations.Grid.Cells[Ord(pm6Type), 0] := StrObservationType;
     frameObservations.Grid.Cells[Ord(pm6Time), 0] := StrObservationTime;
-    frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), 0] := StrObjectWeightFormul;
+//    frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), 0] := StrObjectWeightFormul;
     frameObservations.Grid.Cells[Ord(pm6Value), 0] := StrObservationValue;
     frameObservations.Grid.Cells[Ord(pm6Weight), 0] := StrObservationWeight;
     frameObservations.Grid.Cells[Ord(pm6MawConnectionNumber), 0] := StrMAWConnectionNumbe;

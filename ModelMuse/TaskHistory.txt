@@ -26721,5 +26721,30 @@ object TTaskHistory
         'Design and Planning'
         'Bug fix'
         'Components')
+    end
+    item
+      Date = 44188.000000000000000000
+    end
+    item
+      Date = 44189.000000000000000000
+    end
+    item
+      Date = 44190.000000000000000000
+    end
+    item
+      Date = 44191.000000000000000000
+    end
+    item
+      Date = 44192.000000000000000000
+    end
+    item
+      Date = 44193.000000000000000000
+    end
+    item
+      Date = 44194.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'PEST'
+        'Bug fix')
     end>
 end

@@ -3278,7 +3278,7 @@ begin
   for Index := 0 to FDataRecordList.Count - 1 do
   begin
     ADataRec := FDataRecordList[Index];
-  Model.PilotPointData.AddPilotPointFileObjects(ADataRec.PilotPointFiles);
+    Model.PilotPointData.AddPilotPointFileObjects(ADataRec.PilotPointFiles);
   end;
 end;
 

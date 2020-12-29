@@ -5,7 +5,7 @@ inherited frmGeoRef: TfrmGeoRef
   ClientHeight = 341
   ClientWidth = 298
   ExplicitWidth = 314
-  ExplicitHeight = 379
+  ExplicitHeight = 380
   PixelsPerInch = 96
   TextHeight = 18
   object rrdgGeoRef: TRbwRowDataGrid

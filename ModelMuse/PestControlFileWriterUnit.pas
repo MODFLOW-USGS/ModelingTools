@@ -255,6 +255,7 @@ var
   UsedTypes: TParameterTypes;
   ParamIndex: Integer;
   AParam: TModflowSteadyParameter;
+  AParam2: TModflowParameter;
 begin
   result := 0;
   GetUsedTypes(UsedTypes);
@@ -271,6 +272,27 @@ begin
       end;
     end;
   end;
+
+  for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+  begin
+    AParam2 := Model.ModflowTransientParameters[ParamIndex];
+    if AParam2.ParameterType in UsedTypes then
+    begin
+      result := 1;
+      break;
+    end;
+  end;
+
+  for ParamIndex := 0 to Model.HufParameters.Count - 1 do
+  begin
+    AParam2 := Model.HufParameters[ParamIndex];
+    if AParam2.ParameterType in UsedTypes then
+    begin
+      result := 1;
+      break;
+    end;
+  end;
+
 
   // PVAL file;
   if Model.ModelSelection in SutraSelection then
@@ -1273,6 +1295,7 @@ begin
     if AParam.ParameterType in UsedTypes then
     begin
       WriteParameter(AParam);
+      FUsePval := True;
     end;
   end;
 
@@ -1282,6 +1305,7 @@ begin
     if AParam.ParameterType in UsedTypes then
     begin
       WriteParameter(AParam);
+      FUsePval := True;
     end;
   end;
 

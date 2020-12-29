@@ -60,6 +60,10 @@ resourcestring
 procedure TframeZoneBudget.btnDeleteZoneClick(Sender: TObject);
 begin
   inherited;
+  if rdgCompositeZones.Row <= 0 then
+  begin
+    Exit;
+  end;
   if rdgCompositeZones.RowCount > 2 then
   begin
     rdgCompositeZones.DeleteRow(rdgCompositeZones.Row);

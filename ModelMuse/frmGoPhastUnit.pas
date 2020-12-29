@@ -2330,6 +2330,7 @@ resourcestring
   'models with parameters. Do you want to turn of printing cell lists in the ' +
   'MODFLOW Output Control dialog box?';
   StrPrintingCellLists = 'Printing cell lists has been deactivated.';
+  StrSutraObsExtractorex = 'SutraObsExtractor.exe';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -9812,9 +9813,11 @@ begin
 
           if PhastModel.PestUsed then
           begin
-            BatchFile.Add('SutraObsExtractor.exe' + ' '
+            BatchFile.Add(TCustomFileWriter.
+              PestUtilityProgramPath(StrSutraObsExtractorex, FileName) + ' '
               + ChangeFileExt(ExtractFileName(FileName), StrSoei));
-            RunModelBatchFile.Add('SutraObsExtractor.exe' + ' '
+            RunModelBatchFile.Add(TCustomFileWriter.
+              PestUtilityProgramPath(StrSutraObsExtractorex, FileName) + ' '
               + ChangeFileExt(ExtractFileName(FileName), StrSoeev));
           end;
 

@@ -26,7 +26,7 @@ type
     FMawOb: TMawOb;
     FLakOb: TLakOb;
     FObGeneral: TObGeneral;
-    FWeightFormula: TFormulaObject;
+//    FWeightFormula: TFormulaObject;
     FInterpObsNames: TStringList;
     FMawConnectionNumber: Integer;
     procedure SetCSubOb(const Value: TCSubOb);
@@ -42,10 +42,10 @@ type
     function StoreObGeneral: Boolean;
     function StoreSfrOb: Boolean;
     function StoreUzfOb: Boolean;
-    function GetWeightFormula: string;
-    procedure SetWeightFormula(const Value: string);
-    procedure RemoveFormulaObjects;
-    procedure CreateFormulaObjects;
+//    function GetWeightFormula: string;
+//    procedure SetWeightFormula(const Value: string);
+//    procedure RemoveFormulaObjects;
+//    procedure CreateFormulaObjects;
     function CreateFormulaObject: TFormulaObject;
     procedure UpdateFormula(Value: string; Position: integer;
       var FormulaObject: TFormulaObject);
@@ -78,7 +78,7 @@ type
     // in model calibration.
     //
     // @name might not be used for all observation types.
-    property WeightFormula: string read GetWeightFormula write SetWeightFormula stored False;
+//    property WeightFormula: string read GetWeightFormula write SetWeightFormula stored False;
     property MawConnectionNumber: Integer read FMawConnectionNumber
       write SetMawConnectionNumber;
   end;
@@ -845,7 +845,7 @@ begin
     LakOb := ObsSource.LakOb;
     UzfOb := ObsSource.UzfOb;
     CSubOb := ObsSource.CSubOb;
-    WeightFormula := ObsSource.WeightFormula;
+//    WeightFormula := ObsSource.WeightFormula;
     MawConnectionNumber := ObsSource.MawConnectionNumber;
   end;
   inherited;
@@ -854,7 +854,7 @@ end;
 constructor TMf6CalibrationObs.Create(Collection: TCollection);
 begin
   inherited;
-  CreateFormulaObjects;
+//  CreateFormulaObjects;
   FInterpObsNames := TStringList.Create;
 end;
 
@@ -867,15 +867,15 @@ begin
     GlobalRestoreMf6CalibrationObsSubscription, self);
 end;
 
-procedure TMf6CalibrationObs.CreateFormulaObjects;
-begin
-  FWeightFormula := CreateFormulaObject;
-end;
+//procedure TMf6CalibrationObs.CreateFormulaObjects;
+//begin
+////  FWeightFormula := CreateFormulaObject;
+//end;
 
 destructor TMf6CalibrationObs.Destroy;
 begin
   FInterpObsNames.Free;
-  RemoveFormulaObjects;
+//  RemoveFormulaObjects;
   inherited;
 end;
 
@@ -967,23 +967,23 @@ end;
 //  result := False;
 //end;
 
-function TMf6CalibrationObs.GetWeightFormula: string;
-begin
-  Result := FWeightFormula.Formula;
-//  ResetItemObserver(EndHeadPosition);
-end;
+//function TMf6CalibrationObs.GetWeightFormula: string;
+//begin
+//  Result := FWeightFormula.Formula;
+////  ResetItemObserver(EndHeadPosition);
+//end;
 
 function TMf6CalibrationObs.ObservationType: string;
 begin
   result := 'MODFLOW 6 Observation'
 end;
 
-procedure TMf6CalibrationObs.RemoveFormulaObjects;
-begin
-  frmGoPhast.PhastModel.FormulaManager.Remove(FWeightFormula,
-    GlobalRemoveMf6CalibrationObsSubscription,
-    GlobalRestoreMf6CalibrationObsSubscription, self);
-end;
+//procedure TMf6CalibrationObs.RemoveFormulaObjects;
+//begin
+////  frmGoPhast.PhastModel.FormulaManager.Remove(FWeightFormula,
+////    GlobalRemoveMf6CalibrationObsSubscription,
+////    GlobalRestoreMf6CalibrationObsSubscription, self);
+//end;
 
 procedure TMf6CalibrationObs.SetCSubOb(const Value: TCSubOb);
 begin
@@ -1209,10 +1209,10 @@ begin
   end;
 end;
 
-procedure TMf6CalibrationObs.SetWeightFormula(const Value: string);
-begin
-  UpdateFormula(Value, 0, FWeightFormula);
-end;
+//procedure TMf6CalibrationObs.SetWeightFormula(const Value: string);
+//begin
+//  UpdateFormula(Value, 0, FWeightFormula);
+//end;
 
 function TMf6CalibrationObs.StoreCSubOb: Boolean;
 begin
