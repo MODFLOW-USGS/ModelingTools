@@ -13,7 +13,7 @@ inherited frameSubPestObs: TframeSubPestObs
       end
       inherited Grid: TRbwDataGrid4
         Height = 160
-        ColCount = 7
+        ColCount = 8
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
         Columns = <
           item
@@ -62,6 +62,29 @@ inherited frameSubPestObs: TframeSubPestObs
               'Qnet'
               'QCumu'
               'hwell')
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = True
+            Format = rcf4String
+            LimitToList = True
+            MaxLength = 0
+            ParentButtonFont = False
             WordWrapCaptions = True
             WordWrapCells = False
             CaseSensitivePicklist = False
@@ -187,6 +210,7 @@ inherited frameSubPestObs: TframeSubPestObs
         ColWidths = (
           64
           75
+          64
           64
           64
           64

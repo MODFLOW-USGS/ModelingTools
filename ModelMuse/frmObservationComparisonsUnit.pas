@@ -86,7 +86,7 @@ implementation
 
 uses
   frmGoPhastUnit, ScreenObjectUnit, ModflowMnw2Unit, frmErrorsAndWarningsUnit,
-  ModflowLakUnit, ModflowSfrUnit, SutraPestObsUnit;
+  ModflowLakUnit, ModflowSfrUnit, SutraPestObsUnit, PestObsGroupUnit;
 
 resourcestring
   StrObject0sObse = 'Object: "%0:s"; Observation name: "%1:s".';
@@ -96,11 +96,12 @@ resourcestring
   StrComment = 'Comment';
   StrFirstObservation = 'First Observation';
   StrSecondObservation = 'Second Observation';
+  StrObservationGroup = 'Observation Group';
 
 {$R *.dfm}
 
 type
-  TObsCompColumns = (occName, occObs1, occObs2, occValue, occWeight, occComment);
+  TObsCompColumns = (occName, occGroup, occObs1, occObs2, occValue, occWeight, occComment);
 
   TObsTreeItem = class(TObject)
     ObsTypeName: string;
@@ -266,6 +267,7 @@ begin
     ObsItem := ObsComparisons[ItemIndex];
     RowIndex := ItemIndex+1;
     frameObsComparisons.Grid.Cells[Ord(occName), RowIndex] := ObsItem.Name;
+    frameObsComparisons.Grid.Cells[Ord(occGroup), RowIndex] := ObsItem.ObservationGroup;
     if FObsItemDictionary.TryGetValue(ObsItem.Guid1, Item) then
     begin
       ScreenObject := Item.ScreenObject;
@@ -321,13 +323,26 @@ end;
 procedure TfrmObservationComparisons.InitializeGrid;
 var
   ColIndex: Integer;
+  ObsGroups: TPestObservationGroups;
+  PickList: TStrings;
+  GroupIndex: Integer;
 begin
   ClearGrid(frameObsComparisons.Grid);
   frameObsComparisons.Grid.ColWidths[Ord(occObs1)] := 200;
   frameObsComparisons.Grid.ColWidths[Ord(occObs2)] := 200;
   frameObsComparisons.Grid.BeginUpdate;
   try
+    ObsGroups := frmGoPhast.PhastModel. PestProperties.ObservationGroups;
+    PickList := frameObsComparisons.Grid.Columns[Ord(occGroup)].PickList;
+    PickList.Clear;
+    PickList.Capacity := ObsGroups.Count;
+    for GroupIndex := 0 to ObsGroups.Count - 1 do
+    begin
+      PickList.Add(ObsGroups[GroupIndex].ObsGroupName);
+    end;
+
     frameObsComparisons.Grid.Cells[Ord(occName), 0] := StrObservationName;
+    frameObsComparisons.Grid.Cells[Ord(occGroup), 0] := StrObservationGroup;
     frameObsComparisons.Grid.Cells[Ord(occObs1), 0] := StrFirstObservation;
     frameObsComparisons.Grid.Cells[Ord(occObs2), 0] := StrSecondObservation;
     frameObsComparisons.Grid.Cells[Ord(occValue), 0] := StrObservationValue;
@@ -484,6 +499,10 @@ begin
       RowOK := True;
       for ColumnIndex := 0 to Ord(occWeight) do
       begin
+        if ColumnIndex = Ord(occGroup) then
+        begin
+          Continue;
+        end;
         if frameObsComparisons.Grid.Cells[ColumnIndex,RowIndex] = ''  then
         begin
           RowOK := False;
@@ -498,6 +517,7 @@ begin
         ObsComp := ObsComparisons.Add;
 
         ObsComp.Name := frameObsComparisons.Grid.Cells[Ord(occName),RowIndex];
+        ObsComp.ObservationGroup := frameObsComparisons.Grid.Cells[Ord(occGroup), RowIndex];
         RefHolder := frameObsComparisons.Grid.Objects[Ord(occObs1),RowIndex] as TRefHolder;
         Item := RefHolder.Ref;
         ObsComp.Guid1 := Item.GUID;

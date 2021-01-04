@@ -1598,6 +1598,7 @@
         <DCCReference Include="PestParamRoots.pas"/>
         <DCCReference Include="PilotPointDataUnit.pas"/>
         <DCCReference Include="LockedGlobalVariableChangers.pas"/>
+        <DCCReference Include="SutraImportUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

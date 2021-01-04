@@ -520,6 +520,9 @@ type
     PESTControlfile1: TMenuItem;
     acArchiveModel: TAction;
     Archivemodelbydefault1: TMenuItem;
+    acImportSutra14B: TAction;
+    ImportSUTRADataSet14B1: TMenuItem;
+    odSutra14B: TOpenDialog;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -710,6 +713,7 @@ type
     procedure dlgSavePestShow(Sender: TObject);
     procedure dlgSavePestClose(Sender: TObject);
     procedure acArchiveModelExecute(Sender: TObject);
+    procedure acImportSutra14BExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2088,7 +2092,7 @@ uses
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
   SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
-  PlProcUnit, PestControlFileWriterUnit;
+  PlProcUnit, PestControlFileWriterUnit, SutraImportUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -2338,6 +2342,7 @@ resourcestring
 
 const
   DividerWidth = 2;
+  StrPred = '_pred';
 
 var
   // @name represents the date of the current version of
@@ -4309,6 +4314,7 @@ begin
   tlbMesh.Visible := PhastModel.ModelSelection  in SutraSelection;
   tlb3dViewMesh.Visible := (PhastModel.ModelSelection  in SutraSelection) or DisVUsed;
   acImportSutraMesh.Enabled := PhastModel.ModelSelection  in SutraSelection;
+  acImportSutra14B.Enabled := PhastModel.ModelSelection  in SutraSelection;
 
   tbarShowGrid.Left := Width - tbarShowGrid.Width- ToolbarExtraWidth;
   if tbarEditGrid.Visible then
@@ -11620,7 +11626,7 @@ begin
   if (result = '') and (PhastModel.ModelFileName <> '') then
   begin
     result := ChangeFileExt(PhastModel.ModelFileName,
-      '_pred' + SD.DefaultExt);
+      StrPred + SD.DefaultExt);
   end;
   result := PhastModel.FixFileName(result);
 end;
@@ -13189,6 +13195,21 @@ begin
   end;
 end;
 
+procedure TfrmGoPhast.acImportSutra14BExecute(Sender: TObject);
+begin
+  inherited;
+
+  if (PhastModel.ModelFileName <> '') then
+  begin
+    odSutra14B.FileName := ChangeFileExt(
+      PhastModel.ModelFileName, odSutra14B.DefaultExt);
+  end;
+  if odSutra14B.Execute then
+  begin
+    ImportDataSet14B(odSutra14B.FileName);
+  end;
+end;
+
 procedure TfrmGoPhast.acImportSutraMeshExecute(Sender: TObject);
 begin
   inherited;
@@ -14026,9 +14047,18 @@ begin
   FileName := '';
   if (PhastModel.ModelFileName <> '') then
   begin
-    FileName := ChangeFileExt(PhastModel.ModelFileName,
-      dlgSavePest.DefaultExt);
+    if PhastModel.ObservationPurpose = ofPredicted then
+    begin
+      FileName := ChangeFileExt(PhastModel.ModelFileName + StrPred,
+        dlgSavePest.DefaultExt);
+    end
+    else
+    begin
+      FileName := ChangeFileExt(PhastModel.ModelFileName,
+        dlgSavePest.DefaultExt);
+    end;
   end;
+
   dlgSavePest.FileName := PhastModel.FixFileName(FileName);
   if dlgSavePest.Execute then
   begin

@@ -721,7 +721,8 @@ uses
   PestPilotPointFileWriterUnit in 'PestPilotPointFileWriterUnit.pas',
   PestParamRoots in 'PestParamRoots.pas',
   PilotPointDataUnit in 'PilotPointDataUnit.pas',
-  LockedGlobalVariableChangers in 'LockedGlobalVariableChangers.pas';
+  LockedGlobalVariableChangers in 'LockedGlobalVariableChangers.pas',
+  SutraImportUnit in 'SutraImportUnit.pas';
 
 {$R *.res}
 

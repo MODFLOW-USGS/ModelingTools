@@ -26746,5 +26746,28 @@ object TTaskHistory
         'Documentation'
         'PEST'
         'Bug fix')
+    end
+    item
+      Date = 44195.000000000000000000
+    end
+    item
+      Date = 44196.000000000000000000
+    end
+    item
+      Date = 44197.000000000000000000
+    end
+    item
+      Date = 44198.000000000000000000
+    end
+    item
+      Date = 44199.000000000000000000
+    end
+    item
+      Date = 44200.000000000000000000
+      Categories.Strings = (
+        'Dialog boxes'
+        'Import'
+        'PEST'
+        'PEST Observations')
     end>
 end

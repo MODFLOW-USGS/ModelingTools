@@ -42,16 +42,10 @@ type
     function StoreObGeneral: Boolean;
     function StoreSfrOb: Boolean;
     function StoreUzfOb: Boolean;
-//    function GetWeightFormula: string;
-//    procedure SetWeightFormula(const Value: string);
-//    procedure RemoveFormulaObjects;
-//    procedure CreateFormulaObjects;
     function CreateFormulaObject: TFormulaObject;
     procedure UpdateFormula(Value: string; Position: integer;
       var FormulaObject: TFormulaObject);
     procedure SetMawConnectionNumber(const Value: Integer);
-//    function GetUsed: Boolean;
-//    procedure SetUsed(const Value: Boolean);
   protected
     function GetObsTypeIndex: Integer; override;
     procedure SetObsTypeIndex(Value: Integer); override;
@@ -72,13 +66,6 @@ type
     property LakOb: TLakOb read FLakOb write SetLakOb stored StoreLakOb;
     property UzfOb: TUzfOb read FUzfOb write SetUzfOb stored StoreUzfOb;
     property CSubOb: TCSubOb read FCSubOb write SetCSubOb stored StoreCSubOb;
-    // @name is used to specify how individual cell values should
-    // be weighted when computing the an observation made up of values from
-    // multiple cells. It is unrelated to the weight of the entire observation
-    // in model calibration.
-    //
-    // @name might not be used for all observation types.
-//    property WeightFormula: string read GetWeightFormula write SetWeightFormula stored False;
     property MawConnectionNumber: Integer read FMawConnectionNumber
       write SetMawConnectionNumber;
   end;

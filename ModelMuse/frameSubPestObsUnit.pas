@@ -8,7 +8,7 @@ uses
   Vcl.StdCtrls, Vcl.ExtCtrls, PestObsUnit;
 
 type
-  TSubObsColumns = (socName, socType, socTime, socValue, socWeight,
+  TSubObsColumns = (socName, socType, socGroup, socTime, socValue, socWeight,
     socInterbedSystem, socComment);
 
   TframeSubPestObs = class(TframePestObs)
@@ -25,6 +25,7 @@ type
     procedure SetObsColumnCaptions; override;
     procedure GetDirectObs(Observations: TCustomComparisonCollection); override;
     procedure SetDirectObs(Observations: TCustomComparisonCollection); override;
+    procedure GetObservationGroups; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -37,7 +38,8 @@ type
 implementation
 
 uses
-  LayerStructureUnit, frmGoPhastUnit, ModflowSubsidenceDefUnit;
+  LayerStructureUnit, frmGoPhastUnit, ModflowSubsidenceDefUnit,
+  PestObsGroupUnit;
 
 resourcestring
   StrInterbedSystem = 'Interbed System';
@@ -114,6 +116,7 @@ begin
     frameObservations.Grid.Cells[Ord(socName), ItemIndex + 1] := Obs.Name;
     frameObservations.Grid.Objects[Ord(socName), ItemIndex + 1] := Obs;
     frameObservations.Grid.Cells[Ord(socType), ItemIndex + 1] := Obs.ObsTypeString;
+    frameObservations.Grid.Cells[Ord(socGroup), ItemIndex + 1] := Obs.ObservationGroup;
     frameObservations.Grid.RealValue[Ord(socTime), ItemIndex + 1] := Obs.Time;
     frameObservations.Grid.RealValue[Ord(socValue), ItemIndex + 1] := Obs.ObservedValue;
     frameObservations.Grid.RealValue[Ord(socWeight), ItemIndex + 1] := Obs.Weight;
@@ -158,6 +161,30 @@ begin
   end;
 end;
 
+procedure TframeSubPestObs.GetObservationGroups;
+var
+  ObsGroups: TPestObservationGroups;
+  PickList: TStrings;
+  GroupIndex: Integer;
+begin
+  ObsGroups := frmGoPhast.PhastModel. PestProperties.ObservationGroups;
+  PickList := frameObservations.Grid.Columns[Ord(pocGroup)].PickList;
+  PickList.Clear;
+  PickList.Capacity := ObsGroups.Count;
+  for GroupIndex := 0 to ObsGroups.Count - 1 do
+  begin
+    PickList.Add(ObsGroups[GroupIndex].ObsGroupName);
+  end;
+
+  PickList := frameObsComparisons.Grid.Columns[Ord(poccGroup)].PickList;
+  PickList.Clear;
+  PickList.Capacity := ObsGroups.Count;
+  for GroupIndex := 0 to ObsGroups.Count - 1 do
+  begin
+    PickList.Add(ObsGroups[GroupIndex].ObsGroupName);
+  end;
+end;
+
 procedure TframeSubPestObs.SetDirectObs(
   Observations: TCustomComparisonCollection);
 var
@@ -175,6 +202,10 @@ begin
     RowOK := True;
     for ColIndex := 0 to Ord(socWeight) do
     begin
+      if ColIndex = Ord(socGroup) then
+      begin
+        Continue;
+      end;
       if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
       begin
         RowOK := False;
@@ -217,6 +248,7 @@ begin
         end;
       end;
       Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(socType), RowIndex];
+      Obs.ObservationGroup := frameObservations.Grid.Cells[Ord(socGroup), RowIndex];
       Obs.Time := frameObservations.Grid.RealValue[Ord(socTime), RowIndex];
       Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(socValue), RowIndex];
       Obs.Weight := frameObservations.Grid.RealValue[Ord(socWeight), RowIndex];
@@ -239,6 +271,7 @@ begin
   try
     frameObservations.Grid.Cells[Ord(socName), 0] := StrObservationName;
     frameObservations.Grid.Cells[Ord(socType), 0] := StrObservationType;
+    frameObservations.Grid.Cells[Ord(socGroup), 0] := StrObservationGroup;
     frameObservations.Grid.Cells[Ord(socTime), 0] := StrObservationTime;
     frameObservations.Grid.Cells[Ord(socValue), 0] := StrObservationValue;
     frameObservations.Grid.Cells[Ord(socWeight), 0] := StrObservationWeight;

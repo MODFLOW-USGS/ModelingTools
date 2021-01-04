@@ -148,7 +148,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     inherited Grid: TRbwDataGrid4
       Width = 760
       Height = 150
-      ColCount = 6
+      ColCount = 7
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
       OnExit = frameObsComparisonsGridExit
       OnSelectCell = frameObsComparisonsGridSelectCell
@@ -169,6 +169,29 @@ inherited frmObservationComparisons: TfrmObservationComparisons
           ComboUsed = False
           Format = rcf4String
           LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
+          WordWrapCaptions = True
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+          AutoAdjustColWidths = True
+        end
+        item
+          AutoAdjustRowHeights = True
+          ButtonCaption = '...'
+          ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -11
+          ButtonFont.Name = 'Tahoma'
+          ButtonFont.Style = []
+          ButtonUsed = False
+          ButtonWidth = 20
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = True
+          Format = rcf4String
+          LimitToList = True
           MaxLength = 0
           ParentButtonFont = False
           WordWrapCaptions = True

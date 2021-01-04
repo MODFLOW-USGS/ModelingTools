@@ -8,7 +8,7 @@ uses
   Vcl.StdCtrls, Vcl.ExtCtrls, PestObsUnit;
 
 type
-  TPestMf6ObsColumns = (pm6Name, mp6ObsSeries, pm6Type, pm6Time,
+  TPestMf6ObsColumns = (pm6Name, mp6ObsSeries, pm6Type, pm6Group, pm6Time,
     {pm6ObjectWeightFormula,} pm6Value, pm6Weight, pm6MawConnectionNumber, pm6Comment);
 
   TframePestObsMf6 = class(TframePestObs)
@@ -27,6 +27,7 @@ type
     procedure SetObsColumnCaptions; override;
     procedure GetDirectObs(Observations: TCustomComparisonCollection); override;
     procedure SetDirectObs(Observations: TCustomComparisonCollection); override;
+    procedure GetObservationGroups; override;
   public
     procedure SpecifyObservationTypes(ObsTypes: TStrings);
     procedure SpecifyGroupTypes(ObsTypes: TStrings);
@@ -40,7 +41,7 @@ implementation
 
 uses
   Modflow6ObsUnit, ModflowMawUnit, ModflowSfr6Unit, ModflowLakMf6Unit,
-  ModflowUzfMf6Unit, ModflowCsubUnit;
+  ModflowUzfMf6Unit, ModflowCsubUnit, PestObsGroupUnit, frmGoPhastUnit;
 
 resourcestring
   StrObservationSeriesType = 'Observation Series Type';
@@ -171,8 +172,8 @@ var
   PickList: TStrings;
   MawObsTypeName: string;
   MawOb: TMawOb;
-  ObsTypeName: string;
-  GenOb: TObGeneral;
+//  ObsTypeName: string;
+//  GenOb: TObGeneral;
 //  MawOb: TMawOb;
 begin
   inherited;
@@ -300,6 +301,7 @@ begin
     frameObservations.Grid.Objects[Ord(pm6Name), ItemIndex + 1] := Obs;
     frameObservations.Grid.Cells[Ord(mp6ObsSeries), ItemIndex + 1] := ObsSeriesToString(Obs.ObSeries);
     frameObservations.Grid.Cells[Ord(pm6Type), ItemIndex + 1] := Obs.ObsTypeString;
+    frameObservations.Grid.Cells[Ord(pm6Group), ItemIndex + 1] := Obs.ObservationGroup;
     frameObservations.Grid.RealValue[Ord(pm6Time), ItemIndex + 1] := Obs.Time;
 //    frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), ItemIndex + 1] := Obs.WeightFormula;
     frameObservations.Grid.RealValue[Ord(pm6Value), ItemIndex + 1] := Obs.ObservedValue;
@@ -309,6 +311,30 @@ begin
   end;
   cbMultilayer.Checked := (Observations as TMf6CalibrationObservations).MultiLayer;
   EnableMultiLayer;
+end;
+
+procedure TframePestObsMf6.GetObservationGroups;
+var
+  ObsGroups: TPestObservationGroups;
+  PickList: TStrings;
+  GroupIndex: Integer;
+begin
+  ObsGroups := frmGoPhast.PhastModel. PestProperties.ObservationGroups;
+  PickList := frameObservations.Grid.Columns[Ord(pm6Group)].PickList;
+  PickList.Clear;
+  PickList.Capacity := ObsGroups.Count;
+  for GroupIndex := 0 to ObsGroups.Count - 1 do
+  begin
+    PickList.Add(ObsGroups[GroupIndex].ObsGroupName);
+  end;
+
+  PickList := frameObsComparisons.Grid.Columns[Ord(poccGroup)].PickList;
+  PickList.Clear;
+  PickList.Capacity := ObsGroups.Count;
+  for GroupIndex := 0 to ObsGroups.Count - 1 do
+  begin
+    PickList.Add(ObsGroups[GroupIndex].ObsGroupName);
+  end;
 end;
 
 procedure TframePestObsMf6.SetDirectObs(
@@ -336,10 +362,10 @@ begin
     RowOK := True;
     for ColIndex := 0 to Ord(pm6Weight) do
     begin
-//      if ColIndex = Ord(pm6ObjectWeightFormula) then
-//      begin
-//        Continue;
-//      end;
+      if ColIndex = Ord(pm6Group) then
+      begin
+        Continue;
+      end;
       if frameObservations.Grid.Cells[ColIndex,RowIndex] = '' then
       begin
         RowOK := False;
@@ -416,8 +442,8 @@ begin
       Assert(TryGetObsSeries(frameObservations.Grid.Cells[Ord(mp6ObsSeries),RowIndex], ObSeries));
       Obs.ObSeries := ObSeries;
       Obs.ObsTypeString := frameObservations.Grid.Cells[Ord(pm6Type), RowIndex];
+      Obs.ObservationGroup := frameObservations.Grid.Cells[Ord(pm6Group), RowIndex];
       Obs.Time := frameObservations.Grid.RealValue[Ord(pm6Time), RowIndex];
-//      Obs.WeightFormula := frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), RowIndex];
       Obs.ObservedValue := frameObservations.Grid.RealValue[Ord(pm6Value), RowIndex];
       Obs.Weight := frameObservations.Grid.RealValue[Ord(pm6Weight), RowIndex];
       if (ObSeries = osMaw)
@@ -439,8 +465,8 @@ begin
     frameObservations.Grid.Cells[Ord(pm6Name), 0] := StrObservationName;
     frameObservations.Grid.Cells[Ord(mp6ObsSeries), 0] := StrObservationSeriesType;;
     frameObservations.Grid.Cells[Ord(pm6Type), 0] := StrObservationType;
+    frameObservations.Grid.Cells[Ord(pm6Group), 0] := StrObservationGroup;
     frameObservations.Grid.Cells[Ord(pm6Time), 0] := StrObservationTime;
-//    frameObservations.Grid.Cells[Ord(pm6ObjectWeightFormula), 0] := StrObjectWeightFormul;
     frameObservations.Grid.Cells[Ord(pm6Value), 0] := StrObservationValue;
     frameObservations.Grid.Cells[Ord(pm6Weight), 0] := StrObservationWeight;
     frameObservations.Grid.Cells[Ord(pm6MawConnectionNumber), 0] := StrMAWConnectionNumbe;

@@ -1230,6 +1230,9 @@ inherited frmGoPhast: TfrmGoPhast
         object miImportSutraMesh: TMenuItem
           Action = acImportSutraMesh
         end
+        object ImportSUTRADataSet14B1: TMenuItem
+          Action = acImportSutra14B
+        end
       end
       object miLinkedRasters: TMenuItem
         Caption = 'Linked Rasters'
@@ -3601,6 +3604,11 @@ inherited frmGoPhast: TfrmGoPhast
       Caption = 'Archive model by default'
       Checked = True
       OnExecute = acArchiveModelExecute
+    end
+    object acImportSutra14B: TAction
+      Category = 'File'
+      Caption = 'SUTRA Data Set 14B'
+      OnExecute = acImportSutra14BExecute
     end
   end
   object ilDisabledImageList: TImageList
@@ -9727,5 +9735,12 @@ inherited frmGoPhast: TfrmGoPhast
     Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
     Left = 560
     Top = 120
+  end
+  object odSutra14B: TOpenDialog
+    DefaultExt = '.14B'
+    Filter = 'SUTRA Data Set 14B (*.14B)|*.14B|All files (*.*)|*.*'
+    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Left = 600
+    Top = 128
   end
 end
