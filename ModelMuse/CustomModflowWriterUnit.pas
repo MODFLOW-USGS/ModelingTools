@@ -1506,7 +1506,8 @@ begin
         ParamEstBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
         WriteInstuctionsBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
-        WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrObsSeriesExtractore, FileName)
+        WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
+          StrObsSeriesExtractore, FileName)
           + ' ' + InsFileName);
         WriteInstuctionsBatchFile.Add('pause');
       end
@@ -1629,12 +1630,15 @@ begin
       begin
         if Model.ModelSelection = msModflow2015 then
         begin
-          ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrMf6ObsExtractorexe, FileName)
+          ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
+            StrMf6ObsExtractorexe, FileName)
             + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf6ExtractValues'));
         end
         else
         begin
-          ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrObsSeriesExtractore, FileName) + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
+          ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
+            StrObsSeriesExtractore, FileName) + ' '
+            + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
         end;
       end;
       if Model.PestUsed then
@@ -1642,12 +1646,14 @@ begin
         if (Model.ModelSelection <> msModflow2015) then
         begin
           InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
-          BatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrObsSeriesExtractore, FileName) + ' ' + InsFileName);
+          BatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
+            StrObsSeriesExtractore, FileName) + ' ' + InsFileName);
         end
         else
         begin
           InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
-          BatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(StrMf6ObsExtractorexe, FileName)
+          BatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
+            StrMf6ObsExtractorexe, FileName)
             + ' ' + InsFileName);
         end;
       end;
@@ -2463,7 +2469,8 @@ var
 begin
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
-  Model.PestTemplateLines.Add(PestUtilityProgramPath(StrEnhancedTemplateProc, AFileName)
+  Model.PestTemplateLines.Add(PestUtilityProgramPath(
+    StrEnhancedTemplateProc, AFileName)
     + ' ' + ExtractFileName(AFileName) + ' ' + PValFileName);
 
 end;
@@ -9140,24 +9147,27 @@ class function TCustomFileWriter.PestUtilityProgramPath(UtilityProgramName,
 begin
   result := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName))
      + UtilityProgramName;
-  if TFile.Exists(result) then
-  begin
-    Exit;
+  try
+    if TFile.Exists(result) then
+    begin
+      Exit;
+    end;
+    result := IncludeTrailingPathDelimiter(ExtractFileDir(Application.ExeName))
+       + UtilityProgramName;
+    if TFile.Exists(result) then
+    begin
+      Exit;
+    end;
+    result := IncludeTrailingPathDelimiter
+      (frmGoPhast.PhastModel.ProgramLocations.PestDirectory) + UtilityProgramName;
+    if TFile.Exists(result) then
+    begin
+      Exit;
+    end;
+    result := UtilityProgramName;
+  finally
+    result := '"' + result + '"';
   end;
-  result := IncludeTrailingPathDelimiter(ExtractFileDir(Application.ExeName))
-     + UtilityProgramName;
-  if TFile.Exists(result) then
-  begin
-    Exit;
-  end;
-  result := IncludeTrailingPathDelimiter
-    (frmGoPhast.PhastModel.ProgramLocations.PestDirectory) + UtilityProgramName;
-  if TFile.Exists(result) then
-  begin
-    Exit;
-  end;
-  result := UtilityProgramName;
-
 end;
 
 procedure TCustomFileWriter.CloseTempFile;

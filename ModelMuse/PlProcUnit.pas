@@ -1821,8 +1821,8 @@ begin
     NewLine;
     ColIndex := 1;
 
-    WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
-    NewLine;
+//    WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
+//    NewLine;
     Inc(ColIndex);
 
     WriteString(Format('  file=''%s.Nodal_Porosity'')', [FRoot]));

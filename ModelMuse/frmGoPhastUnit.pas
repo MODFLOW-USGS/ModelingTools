@@ -523,6 +523,9 @@ type
     acImportSutra14B: TAction;
     ImportSUTRADataSet14B1: TMenuItem;
     odSutra14B: TOpenDialog;
+    acImportSutra15B: TAction;
+    odSutra15B: TOpenDialog;
+    SUTRADataSet15B1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -714,6 +717,7 @@ type
     procedure dlgSavePestClose(Sender: TObject);
     procedure acArchiveModelExecute(Sender: TObject);
     procedure acImportSutra14BExecute(Sender: TObject);
+    procedure acImportSutra15BExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -4315,6 +4319,7 @@ begin
   tlb3dViewMesh.Visible := (PhastModel.ModelSelection  in SutraSelection) or DisVUsed;
   acImportSutraMesh.Enabled := PhastModel.ModelSelection  in SutraSelection;
   acImportSutra14B.Enabled := PhastModel.ModelSelection  in SutraSelection;
+  acImportSutra15B.Enabled := PhastModel.ModelSelection  in SutraSelection;
 
   tbarShowGrid.Left := Width - tbarShowGrid.Width- ToolbarExtraWidth;
   if tbarEditGrid.Visible then
@@ -13207,6 +13212,20 @@ begin
   if odSutra14B.Execute then
   begin
     ImportDataSet14B(odSutra14B.FileName);
+  end;
+end;
+
+procedure TfrmGoPhast.acImportSutra15BExecute(Sender: TObject);
+begin
+  inherited;
+  if (PhastModel.ModelFileName <> '') then
+  begin
+    odSutra15B.FileName := ChangeFileExt(
+      PhastModel.ModelFileName, odSutra15B.DefaultExt);
+  end;
+  if odSutra15B.Execute then
+  begin
+    ImportDataSet15B(odSutra15B.FileName);
   end;
 end;
 

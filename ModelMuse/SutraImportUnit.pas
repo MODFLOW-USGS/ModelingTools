@@ -7,13 +7,9 @@ uses
   Vcl.Forms, Winapi.Windows, System.UITypes, System.Classes,
   frmImportShapefileUnit, System.SysUtils, Vcl.Dialogs;
 
-type
-  TImportSutra14B = class(TUndoImportShapefile)
-  protected
-    function Description: string; override;
-  end;
-
 procedure ImportDataSet14B(const FileName: string);
+
+procedure ImportDataSet15B(const FileName: string);
 
 implementation
 
@@ -24,6 +20,25 @@ uses
 
 resourcestring
   StrObject = 'Object ';
+
+Type
+  TNELocation = record
+    Number: integer;
+    Location: TPoint2D;
+    Z: double;
+  end;
+
+  TNELocationArray = array of TNELocation;
+
+  TImportSutra14B = class(TUndoImportShapefile)
+  protected
+    function Description: string; override;
+  end;
+
+  TImportSutra15B = class(TUndoImportShapefile)
+  protected
+    function Description: string; override;
+  end;
 
 procedure MakeNewDataSet(NewDataSets: TList; Suffix, Classification: string;
    FileName: string; EvaluatedAt: TEvaluatedAt; out DataArray: TDataArray);
@@ -39,7 +54,10 @@ begin
 
   DataArray := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(TDataArray,
     NewDataSetName, '0.', NewDataSetName, [], rdtDouble,
-    EvaluatedAt, dsoTop, Classification);
+    EvaluatedAt, dso3D, Classification);
+
+  DataArray.Comment := Format('Imported from "%0:s" on %1:s.',
+    [FileName, DateTimeToStr(Now)]);
 
   DataArray.OnDataSetUsed := frmGoPhast.PhastModel.ModelResultsRequired;
   DataArray.Units := '';
@@ -64,12 +82,11 @@ end;
 
 procedure ImportDataSet14B(const FileName: string);
 var
-  TextStream: TStreamReader;
   ALine: string;
   Splitter: TStringList;
   LocalModel: TPhastModel;
-  X: double;
-  Y: double;
+//  X: double;
+//  Y: double;
   Z: double;
   Por: double;
   Undo: TImportSutra14B;
@@ -85,11 +102,97 @@ var
   Position: integer;
   NewDataSets: TList;
   PointCount: Integer;
+  Locations: TNELocationArray;
+  NodeIndex: Integer;
+  Node2D: TSutraNode2D;
+  NodeLocation: TNELocation;
+  LayerIndex: Integer;
+  Node3D: TSutraNode3D;
+  NodeNumber: Integer;
+  procedure HandleFileStream(FileName: string);
+  var
+    TextStream: TStreamReader;
+  begin
+    TextStream := TFile.OpenText(FileName);
+    try
+      while not TextStream.EndOfStream do
+      begin
+        ALine := TextStream.ReadLine;
+        if (ALine = '') or (ALine[1] = '#') then
+        begin
+          Continue;
+        end;
+        Splitter.DelimitedText := ALine;
+        Assert(Splitter.Count >= 3);
+        if UpperCase(Splitter[0]) = '@INSERT' then
+        begin
+          TDirectory.SetCurrentDirectory(ExtractFilePath(FileName));
+          HandleFileStream(ExpandFileName(Splitter[2]));
+        end
+        else
+        begin
+          Assert(Splitter.Count >= 6);
+          NodeNumber := StrToInt(Splitter[0]);
+  //              X := FortranStrToFloat(Splitter[2]);
+  //              Y := FortranStrToFloat(Splitter[3]);
+          Z := FortranStrToFloat(Splitter[4]);
+          Por := FortranStrToFloat(Splitter[5]);
+          Inc(PointCount);
+
+          AScreenObject.AddPoint(Locations[NodeNumber-1].Location, True);
+          ThicknessValues.Add(Z);
+          PorosityValueArrayItem.Values.Add(Por);
+
+
+          frmProgressMM.ProgressLabelCaption :=
+            Format('%0:d out of %1:d.', [PointCount, AScreenObject.Capacity]);
+          frmProgressMM.StepIt;
+          Application.ProcessMessages;
+        end;
+      end;
+    finally
+      TextStream.Free;
+    end
+  end;
 begin
   Assert(TFile.Exists(FileName));
   LocalModel := frmGoPhast.PhastModel;
   Assert(LocalModel.ModelSelection in SutraSelection);
   Mesh := LocalModel.SutraMesh;
+
+  if Mesh.MeshType = mt3D then
+  begin
+    SetLength(Locations, Mesh.Mesh2D.Nodes.Count
+      * (Mesh.LayerCount + 1));
+    for NodeIndex := 0 to Mesh.Mesh2D.Nodes.Count - 1 do
+    begin
+      Node2D := Mesh.Mesh2D.Nodes[NodeIndex];
+      for LayerIndex := 0 to Mesh.LayerCount do
+      begin
+        Node3D := Mesh.NodeArray[LayerIndex,NodeIndex];
+        if Node3D.DisplayNumber > 0 then
+        begin
+          NodeLocation.Number := Node3D.DisplayNumber;
+          NodeLocation.Location := Node2D.Location;
+          NodeLocation.Z := Node3D.Z;
+          Locations[Node3D.DisplayNumber-1] := NodeLocation;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    SetLength(Locations, Mesh.Mesh2D.Nodes.Count);
+    NodeLocation.Z := 0;
+    for NodeIndex := 0 to Mesh.Mesh2D.Nodes.Count - 1 do
+    begin
+      Node2D := Mesh.Mesh2D.Nodes[NodeIndex];
+      NodeLocation.Number := Node2D.DisplayNumber;
+      NodeLocation.Location := Node2D.Location;
+      Locations[NodeIndex] := NodeLocation;
+    end;
+  end;
+
 
   frmGoPhast.PhastModel.BeginScreenObjectUpdate;
   frmGoPhast.CanDraw := False;
@@ -102,6 +205,7 @@ begin
       NewDataSets := TList.Create;
       try
         ScreenObjectList.Add(AScreenObject);
+        AScreenObject.Visible := False;
         AScreenObject.SetValuesOfIntersectedCells := True;
         AScreenObject.EvaluatedAt := eaNodes;
         if Mesh.MeshType = mt3D then
@@ -153,45 +257,19 @@ begin
             ThicknessValues := AScreenObject.ImportedSectionElevations;
           end;
 
+          frmProgressMM.Caption := '';
+          frmProgressMM.Prefix := StrObject;
+          frmProgressMM.PopupParent := frmGoPhast;
+          frmProgressMM.Show;
+          frmProgressMM.pbProgress.Max := AScreenObject.Capacity;
+          frmProgressMM.pbProgress.Position := 0;
+          frmProgressMM.ProgressLabelCaption :=
+            Format('0 out of %d.', [AScreenObject.Capacity]);
+          PointCount := 0;
           Splitter := TStringList.Create;
-          TextStream := TFile.OpenText(FileName);
           try
-            frmProgressMM.Caption := '';
-            frmProgressMM.Prefix := StrObject;
-            frmProgressMM.PopupParent := frmGoPhast;
-            frmProgressMM.Show;
-            frmProgressMM.pbProgress.Max := AScreenObject.Capacity;
-            frmProgressMM.pbProgress.Position := 0;
-            frmProgressMM.ProgressLabelCaption :=
-              Format('0 out of %d.', [AScreenObject.Capacity]);
-            PointCount := 0;
-            while not TextStream.EndOfStream do
-            begin
-              ALine := TextStream.ReadLine;
-              if (ALine = '') or (ALine[1] = '#') then
-              begin
-                Continue;
-              end;
-              Splitter.DelimitedText := ALine;
-              Assert(Splitter.Count >= 6);
-              X := FortranStrToFloat(Splitter[2]);
-              Y := FortranStrToFloat(Splitter[3]);
-              Z := FortranStrToFloat(Splitter[4]);
-              Por := FortranStrToFloat(Splitter[5]);
-              Inc(PointCount);
-
-              AScreenObject.AddPoint(EquatePoint(X,Y), True);
-              ThicknessValues.Add(Z);
-              PorosityValueArrayItem.Values.Add(Por);
-
-
-              frmProgressMM.ProgressLabelCaption :=
-                Format('%0:d out of %1:d.', [PointCount, AScreenObject.Capacity]);
-              frmProgressMM.StepIt;
-              Application.ProcessMessages;
-            end;
+            HandleFileStream(FileName);
           finally
-            TextStream.Free;
             Splitter.Free;
           end;
         except
@@ -226,11 +304,357 @@ begin
   end;
 end;
 
+procedure ImportDataSet15B(const FileName: string);
+var
+//  TextStream: TStreamReader;
+  ALine: string;
+  Splitter: TStringList;
+  LocalModel: TPhastModel;
+  Undo: TImportSutra15B;
+  Undo2: TCustomUndo;
+  Mesh: TSutraMesh3D;
+  ElevationValues: TValueArrayStorage;
+  AScreenObject: TScreenObject;
+  ScreenObjectList: TList;
+  Position: integer;
+  NewDataSets: TList;
+  PointCount: Integer;
+  Locations: TNELocationArray;
+  ElementLocation: TNELocation;
+  LayerIndex: Integer;
+  NodeNumber: Integer;
+  ElementIndex: Integer;
+  Element2D: TSutraElement2D;
+  Element3D: TSutraElement3D;
+  PMAX: TDataArray;
+  PMID: TDataArray;
+  PmaxValueArrayItem: TValueArrayItem;
+  PmidValueArrayItem: TValueArrayItem;
+  PMIN: TDataArray;
+  PminValueArrayItem: TValueArrayItem;
+  Angle1: TDataArray;
+  Angle1ValueArrayItem: TValueArrayItem;
+  Angle2: TDataArray;
+  Angle2ValueArrayItem: TValueArrayItem;
+  Angle3: TDataArray;
+  Angle3ValueArrayItem: TValueArrayItem;
+  ALMAX: TDataArray;
+  AlmaxValueArrayItem: TValueArrayItem;
+  ALMID: TDataArray;
+  AlmidValueArrayItem: TValueArrayItem;
+  ATMAX: TDataArray;
+  AtmaxValueArrayItem: TValueArrayItem;
+  ATMID: TDataArray;
+  AtmidValueArrayItem: TValueArrayItem;
+  ATMIN: TDataArray;
+  AtminValueArrayItem: TValueArrayItem;
+  AValue: double;
+  ALMIN: TDataArray;
+  AlminValueArrayItem: TValueArrayItem;
+  procedure GetDataSet(const Suffix: string; var DataSet: TDataArray;
+    var ValueArrayItem: TValueArrayItem);
+  begin
+    MakeNewDataSet(NewDataSets, Suffix,
+      strDefaultClassification + '|' + 'imported from SUTRA Data Set 15B file',
+      FileName, eaBlocks, DataSet);
+
+    Position := AScreenObject.AddDataSet(DataSet);
+    ValueArrayItem := AScreenObject.ImportedValues.Add;
+    ValueArrayItem.Name :=  DataSet.Name;
+    ValueArrayItem.Values.DataType := rdtDouble;
+    AScreenObject.DataSetFormulas[Position]
+      := rsObjectImportedValuesR + '("' + ValueArrayItem.Name + '")';
+  end;
+  procedure HandleTextStream(FileName: string);
+  var
+    ATextStream: TStreamReader;
+//    NewFileName: string;
+  begin
+    ATextStream := TFile.OpenText(FileName);
+    try
+      while not ATextStream.EndOfStream do
+      begin
+        ALine := ATextStream.ReadLine;
+        if (ALine = '') or (ALine[1] = '#') then
+        begin
+          Continue;
+        end;
+        Splitter.DelimitedText := Trim(ALine);
+        Assert(Splitter.Count >= 3);
+        if UpperCase(Splitter[0]) = '@INSERT' then
+        begin
+          TDirectory.SetCurrentDirectory(ExtractFilePath(FileName));
+          HandleTextStream(ExpandFileName(Splitter[2]));
+        end
+        else
+        begin
+          Assert(Splitter.Count >= 9);
+          NodeNumber := StrToInt(Splitter[0]);
+          AScreenObject.AddPoint(Locations[NodeNumber-1].Location, True);
+
+          if Mesh.MeshType = mt3D then
+          begin
+            ElevationValues.Add(Locations[NodeNumber-1].Z);
+
+            Assert(Splitter.Count >= 14);
+            AValue := FortranStrToFloat(Splitter[2]);
+            PmaxValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[3]);
+            PmidValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[4]);
+            PminValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[5]);
+            Angle1ValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[6]);
+            Angle2ValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[7]);
+            Angle3ValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[8]);
+            AlmaxValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[9]);
+            AlmidValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[10]);
+            AlminValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[11]);
+            AtmaxValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[12]);
+            AtmidValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[13]);
+            AtminValueArrayItem.Values.Add(AValue);
+          end
+          else
+          begin
+            AValue := FortranStrToFloat(Splitter[2]);
+            PmaxValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[3]);
+            PminValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[4]);
+            Angle1ValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[5]);
+            AlmaxValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[6]);
+            AlminValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[7]);
+            AtmaxValueArrayItem.Values.Add(AValue);
+
+            AValue := FortranStrToFloat(Splitter[8]);
+            AtminValueArrayItem.Values.Add(AValue);
+          end;
+
+          frmProgressMM.ProgressLabelCaption :=
+            Format('%0:d out of %1:d.', [PointCount, AScreenObject.Capacity]);
+          frmProgressMM.StepIt;
+          Application.ProcessMessages;
+        end;
+      end
+    finally
+      ATextStream.Free;
+    end;
+  end;
+begin
+  Assert(TFile.Exists(FileName));
+  LocalModel := frmGoPhast.PhastModel;
+  Assert(LocalModel.ModelSelection in SutraSelection);
+  Mesh := LocalModel.SutraMesh;
+
+  if Mesh.MeshType = mt3D then
+  begin
+    SetLength(Locations, Mesh.Mesh2D.Elements.Count
+      * (Mesh.LayerCount));
+    for ElementIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
+    begin
+      Element2D := Mesh.Mesh2D.Elements[ElementIndex];
+      for LayerIndex := 0 to Mesh.LayerCount-1 do
+      begin
+        Element3D := Mesh.ElementArray[LayerIndex,ElementIndex];
+        if Element3D.DisplayNumber > 0 then
+        begin
+          ElementLocation.Number := Element3D.DisplayNumber;
+          ElementLocation.Location := Element2D.Center;
+          ElementLocation.Z := Element3D.CenterElevation;
+          Locations[Element3D.DisplayNumber-1] := ElementLocation;
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    SetLength(Locations, Mesh.Mesh2D.Elements.Count);
+    ElementLocation.Z := 0;
+    for ElementIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
+    begin
+      Element2D := Mesh.Mesh2D.Elements[ElementIndex];
+      ElementLocation.Number := Element2D.DisplayNumber;
+      ElementLocation.Location := Element2D.Center;
+      Locations[ElementIndex] := ElementLocation;
+    end;
+  end;
+
+  frmGoPhast.PhastModel.BeginScreenObjectUpdate;
+  frmGoPhast.CanDraw := False;
+  try
+    ScreenObjectList := TList.Create;
+    try
+      ScreenObjectList.Capacity := 1;
+      AScreenObject := TScreenObject.CreateWithViewDirection(
+        LocalModel, vdTop, Undo2, False);
+      NewDataSets := TList.Create;
+      try
+        ScreenObjectList.Add(AScreenObject);
+        AScreenObject.Visible := False;
+        AScreenObject.SetValuesOfIntersectedCells := True;
+        AScreenObject.EvaluatedAt := eaBlocks;
+        if Mesh.MeshType = mt3D then
+        begin
+          AScreenObject.ElevationCount := ecOne;
+          AScreenObject.Capacity := Mesh.Mesh2D.Elements.Count
+            * (Mesh.LayerCount);
+          AScreenObject.ElevationFormula :=
+            rsObjectImportedValuesR
+            + '("' + StrImportedElevations + '")';
+        end
+        else
+        begin
+          AScreenObject.ElevationCount := ecZero;
+          AScreenObject.Capacity := Mesh.Mesh2D.Elements.Count;
+        end;
+
+        try
+          if Mesh.MeshType = mt3D then
+          begin
+            ElevationValues := AScreenObject.ImportedSectionElevations;
+          end
+          else
+          begin
+            ElevationValues := nil;
+          end;
+
+          GetDataSet('_Imported_PMAX', PMAX, PmaxValueArrayItem);
+
+          if Mesh.MeshType = mt3D then
+          begin
+            GetDataSet('_Imported_PMID', PMID, PmidValueArrayItem);
+          end
+          else
+          begin
+            PMID := nil;
+          end;
+
+          GetDataSet('_Imported_PMIN', PMIN, PminValueArrayItem);
+
+          GetDataSet('_Imported_Angle1', Angle1, Angle1ValueArrayItem);
+          if Mesh.MeshType = mt3D then
+          begin
+            GetDataSet('_Imported_Angle2', Angle2, Angle2ValueArrayItem);
+            GetDataSet('_Imported_Angle3', Angle3, Angle3ValueArrayItem);
+          end
+          else
+          begin
+            Angle2 := nil;
+            Angle3 := nil;
+          end;
+
+          GetDataSet('_Imported_ALMAX', ALMAX, AlmaxValueArrayItem);
+
+          if Mesh.MeshType = mt3D then
+          begin
+            GetDataSet('_Imported_ALMID', ALMID, AlmidValueArrayItem);
+          end
+          else
+          begin
+            ALMID := nil;
+          end;
+
+          GetDataSet('_Imported_ALMIN', ALMIN, AlminValueArrayItem);
+
+          GetDataSet('_Imported_ATMAX', ATMAX, AtmaxValueArrayItem);
+
+          if Mesh.MeshType = mt3D then
+          begin
+            GetDataSet('_Imported_ATMID', ATMID, AtmidValueArrayItem);
+          end
+          else
+          begin
+            ATMID := nil;
+          end;
+
+          GetDataSet('_Imported_ATMIN', ATMIN, AtminValueArrayItem);
+
+          frmProgressMM.Caption := '';
+          frmProgressMM.Prefix := StrObject;
+          frmProgressMM.PopupParent := frmGoPhast;
+          frmProgressMM.Show;
+          frmProgressMM.pbProgress.Max := AScreenObject.Capacity;
+          frmProgressMM.pbProgress.Position := 0;
+          frmProgressMM.ProgressLabelCaption :=
+            Format('0 out of %d.', [AScreenObject.Capacity]);
+          PointCount := 0;
+          Splitter := TStringList.Create;
+          try
+            HandleTextStream(FileName);
+          finally
+            Splitter.Free;
+          end;
+        except
+          AScreenObject.Free;
+          raise
+        end;
+
+        Undo := TImportSutra15B.Create;
+        try
+          frmGoPhast.PhastModel.AddFileToArchive(FileName);
+          Undo.StoreNewScreenObjects(ScreenObjectList);
+          Undo.StoreNewDataSets(NewDataSets);
+          frmGoPhast.UndoStack.Submit(Undo);
+        except
+          Undo.Free;
+          raise;
+        end;
+      finally
+        NewDataSets.Free;
+      end;
+    finally
+      frmProgressMM.Hide;
+      ScreenObjectList.Free;
+      frmGoPhast.CanDraw := True;
+      frmGoPhast.PhastModel.EndScreenObjectUpdate;
+    end;
+  except on E: Exception do
+    begin
+      Beep;
+      MessageDlg(E.message, mtError, [mbOK], 0);
+    end;
+  end;
+end;
+
 { TImportSutra14B }
 
 function TImportSutra14B.Description: string;
 begin
   result := 'import SUTRA data set 14B generated by PEST';
+end;
+
+{ TImportSutra15B }
+
+function TImportSutra15B.Description: string;
+begin
+  result := 'import SUTRA data set 15B generated by PEST';
 end;
 
 end.

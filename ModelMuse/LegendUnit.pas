@@ -555,7 +555,7 @@ begin
                   begin
                     GetIntegerLimits(MinInteger, MaxInteger, DataArray, MinMaxInitialized);
 
-                    if MaxInteger = MinInteger then
+                    if (MaxInteger = MinInteger) or not MinMaxInitialized then
                     begin
                       Values.Clear;
                       if not MinMaxInitialized then
@@ -566,6 +566,7 @@ begin
                     else
                     begin
                       Range := MaxInteger-MinInteger;
+                      Assert(Range >= 0);
                       IntegerIntervals := Min(Range,IntervalCount);
                       Values.Count := Min(Range,IntervalCount)+1;
                       for Index := 0 to Values.Count -1 do

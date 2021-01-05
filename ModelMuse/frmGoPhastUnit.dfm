@@ -326,6 +326,7 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
+    ExplicitTop = -6
     object tbarEdit: TToolBar
       Left = 152
       Top = 34
@@ -1232,6 +1233,9 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object ImportSUTRADataSet14B1: TMenuItem
           Action = acImportSutra14B
+        end
+        object SUTRADataSet15B1: TMenuItem
+          Action = acImportSutra15B
         end
       end
       object miLinkedRasters: TMenuItem
@@ -3609,6 +3613,11 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'File'
       Caption = 'SUTRA Data Set 14B'
       OnExecute = acImportSutra14BExecute
+    end
+    object acImportSutra15B: TAction
+      Category = 'File'
+      Caption = 'SUTRA Data Set 15B'
+      OnExecute = acImportSutra15BExecute
     end
   end
   object ilDisabledImageList: TImageList
@@ -9742,5 +9751,12 @@ inherited frmGoPhast: TfrmGoPhast
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 600
     Top = 128
+  end
+  object odSutra15B: TOpenDialog
+    DefaultExt = '.14B'
+    Filter = 'SUTRA Data Set 15B (*.15B)|*.15B|All files (*.*)|*.*'
+    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Left = 640
+    Top = 120
   end
 end
