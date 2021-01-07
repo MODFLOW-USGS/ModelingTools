@@ -31,7 +31,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 512
     Height = 287
-    ActivePage = jvspInversionControls2
+    ActivePage = jvspPilotPoints
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -41,6 +41,7 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspBasic'
+      ExplicitLeft = 1
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -54,13 +55,6 @@ inherited frmPEST: TfrmPEST
         Width = 110
         Height = 18
         Caption = 'Formula marker'
-      end
-      object lblPilotPointSpacing: TLabel
-        Left = 176
-        Top = 39
-        Width = 128
-        Height = 18
-        Caption = 'Pilot point spacing'
       end
       object lblPestDirectory: TLabel
         Left = 16
@@ -115,32 +109,12 @@ inherited frmPEST: TfrmPEST
           ';'
           '?')
       end
-      object cbShowPilotPoints: TCheckBox
-        Left = 176
-        Top = 16
-        Width = 305
-        Height = 17
-        Caption = 'Show candidate pilot points'
-        TabOrder = 3
-      end
-      object rdePilotPointSpacing: TRbwDataEntry
-        Left = 176
-        Top = 63
-        Width = 145
-        Height = 22
-        TabOrder = 4
-        Text = '0'
-        DataType = dtReal
-        Max = 1.000000000000000000
-        CheckMin = True
-        ChangeDisabledColor = True
-      end
       object diredPest: TJvDirectoryEdit
         Left = 16
         Top = 192
         Width = 305
         Height = 26
-        TabOrder = 5
+        TabOrder = 3
         Text = 'C:\PEST'
         OnChange = diredPestChange
       end
@@ -1172,6 +1146,137 @@ inherited frmPEST: TfrmPEST
           Height = 287
           ExplicitWidth = 512
           ExplicitHeight = 287
+        end
+      end
+    end
+    object jvspPilotPoints: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 512
+      Height = 287
+      Caption = 'jvspPilotPoints'
+      ExplicitLeft = 1
+      object lblPilotPointSpacing: TLabel
+        Left = 6
+        Top = 39
+        Width = 128
+        Height = 18
+        Caption = 'Pilot point spacing'
+      end
+      object rdePilotPointSpacing: TRbwDataEntry
+        Left = 6
+        Top = 63
+        Width = 145
+        Height = 22
+        TabOrder = 0
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object cbShowPilotPoints: TCheckBox
+        Left = 6
+        Top = 16
+        Width = 305
+        Height = 17
+        Caption = 'Show candidate pilot points'
+        TabOrder = 1
+      end
+      object gbIndividualPilotPoints: TGroupBox
+        Left = 8
+        Top = 112
+        Width = 489
+        Height = 169
+        Caption = 'Individually specified pilot points'
+        TabOrder = 2
+        inline framePilotPoints: TframeGrid
+          Left = 2
+          Top = 20
+          Width = 485
+          Height = 147
+          Align = alClient
+          TabOrder = 0
+          ExplicitLeft = 40
+          ExplicitTop = 32
+          inherited Panel: TPanel
+            Top = 106
+            Width = 485
+            inherited lbNumber: TLabel
+              Width = 55
+              Height = 18
+              ExplicitWidth = 55
+              ExplicitHeight = 18
+            end
+            inherited sbAdd: TSpeedButton
+              Left = 252
+            end
+            inherited sbInsert: TSpeedButton
+              Left = 298
+            end
+            inherited sbDelete: TSpeedButton
+              Left = 345
+            end
+            inherited seNumber: TJvSpinEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+          end
+          inherited Grid: TRbwDataGrid4
+            Width = 485
+            Height = 106
+            ColCount = 2
+            Columns = <
+              item
+                AutoAdjustRowHeights = False
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end
+              item
+                AutoAdjustRowHeights = False
+                ButtonCaption = '...'
+                ButtonFont.Charset = DEFAULT_CHARSET
+                ButtonFont.Color = clWindowText
+                ButtonFont.Height = -11
+                ButtonFont.Name = 'Tahoma'
+                ButtonFont.Style = []
+                ButtonUsed = False
+                ButtonWidth = 20
+                CheckMax = False
+                CheckMin = False
+                ComboUsed = False
+                Format = rcf4Real
+                LimitToList = False
+                MaxLength = 0
+                ParentButtonFont = False
+                WordWrapCaptions = True
+                WordWrapCells = False
+                CaseSensitivePicklist = False
+                CheckStyle = csCheck
+                AutoAdjustColWidths = True
+              end>
+            ExplicitLeft = -4
+            ExplicitWidth = 485
+            ExplicitHeight = 106
+          end
         end
       end
     end

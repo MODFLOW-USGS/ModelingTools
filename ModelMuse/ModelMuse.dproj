@@ -1599,6 +1599,7 @@
         <DCCReference Include="PilotPointDataUnit.pas"/>
         <DCCReference Include="LockedGlobalVariableChangers.pas"/>
         <DCCReference Include="SutraImportUnit.pas"/>
+        <DCCReference Include="PointCollectionUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

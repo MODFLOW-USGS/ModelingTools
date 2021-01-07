@@ -134,13 +134,13 @@ begin
   Assert(DataArray <> nil);
   Assert(DataArray.PestParametersUsed);
   PestProperties := Model.PestProperties;
-  if PestProperties.PilotPointCount = 0 then
+  if Model.PilotPointCount = 0 then
   begin
     frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
       Format(StrPilotPointsWillNo, [DataArray.Name]));
     Exit;
   end;
-  CriticalDistance := PestProperties.PilotPointSpacing * Sqrt(2);
+  CriticalDistance := Model.PilotPointSpacing * Sqrt(2);
   FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
   DisLimits := Model.DiscretizationLimits(vdTop);
 
@@ -244,9 +244,9 @@ begin
             ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
               DataArray.ParamDataSetName);
             PIndex := 1;
-            for PilotPointIndex := 0 to PestProperties.PilotPointCount - 1 do
+            for PilotPointIndex := 0 to Model.PilotPointCount - 1 do
             begin
-              APilotPoint := PestProperties.PilotPoints[PilotPointIndex];
+              APilotPoint := Model.PilotPoints[PilotPointIndex];
               ACell := Model.PointToCell(DataArray.EvaluatedAt, APilotPoint);
               if (ACell.Col >= 0) and (ACell.Row >= 0) then
               begin

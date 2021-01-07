@@ -1230,7 +1230,7 @@ inherited frmGoPhast: TfrmGoPhast
         object miImportSutraMesh: TMenuItem
           Action = acImportSutraMesh
         end
-        object miImportSUTRADataSet14B: TMenuItem
+        object miImportSutraFiles: TMenuItem
           Action = acImportSutraFiles
         end
       end

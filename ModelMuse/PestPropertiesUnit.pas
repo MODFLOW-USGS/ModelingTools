@@ -3,7 +3,8 @@ unit PestPropertiesUnit;
 interface
 
 uses
-  System.Classes, GoPhastTypes, GR32, FastGEO, PestObsGroupUnit;
+  System.Classes, GoPhastTypes, GR32, FastGEO, PestObsGroupUnit,
+  PointCollectionUnit;
 
 type
   TPestRestart = (prNoRestart, prRestart);
@@ -423,6 +424,7 @@ type
     FSvdProperties: TSingularValueDecompositionProperties;
     FLsqrProperties: TLsqrProperties;
     FObservatioGroups: TPestObservationGroups;
+    FSpecifiedPilotPoints: TSimplePointCollection;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -437,6 +439,7 @@ type
       const Value: TSingularValueDecompositionProperties);
     procedure SetLsqrProperties(const Value: TLsqrProperties);
     procedure SetObservatioGroups(const Value: TPestObservationGroups);
+    procedure SetSpecifiedPilotPoints(const Value: TSimplePointCollection);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -466,6 +469,8 @@ type
       write SetLsqrProperties;
     property ObservationGroups: TPestObservationGroups read FObservatioGroups
       write SetObservatioGroups;
+    property SpecifiedPilotPoints: TSimplePointCollection
+      read FSpecifiedPilotPoints write SetSpecifiedPilotPoints;
   end;
 
 implementation
@@ -487,11 +492,11 @@ begin
     PilotPointSpacing := PestSource.PilotPointSpacing;
     TemplateCharacter := PestSource.TemplateCharacter;
     ExtendedTemplateCharacter := PestSource.ExtendedTemplateCharacter;
-
     PestControlData := PestSource.PestControlData;
     SvdProperties := PestSource.SvdProperties;
     LsqrProperties := PestSource.LsqrProperties;
     ObservationGroups := PestSource.ObservationGroups;
+    SpecifiedPilotPoints := PestSource.SpecifiedPilotPoints;
   end
   else
   begin
@@ -518,12 +523,14 @@ begin
     TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
   FLsqrProperties := TLsqrProperties.Create(InvalidateModelEvent);
   FObservatioGroups := TPestObservationGroups.Create(Model);
-  InitializeVariables;
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
+  FSpecifiedPilotPoints := TSimplePointCollection.Create;
+  InitializeVariables;
 end;
 
 destructor TPestProperties.Destroy;
 begin
+  FSpecifiedPilotPoints.Free;
   FObservatioGroups.Free;
   FLsqrProperties.Free;
   FSvdProperties.Free;
@@ -535,15 +542,8 @@ end;
 procedure TPestProperties.DrawPilotPoints(BitMap32: TBitmap32);
 var
   ZoomBox: TQRbwZoomBox2;
-//  DisLimits: TGridLimit;
-//  RowCount: Int64;
-//  ColumnCount: Int64;
-//  RowIndex: Integer;
-//  Y: Double;
   YInt: Integer;
-//  X: Double;
   LineSegment: GoPhastTypes.TPointArray;
-//  ColIndex: Integer;
   XInt: Integer;
   PilotPointIndex: Integer;
   APilotPoint: TPoint2D;
@@ -573,35 +573,6 @@ begin
         True, False, 0, 2);
 
     end;
-//    DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
-//    FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 1;
-//    FPilotPointColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 1;
-//    FLeftX := (DisLimits.MaxX + DisLimits.MinX)/2 - FPilotPointColumnCount/2*PilotPointSpacing;
-//    FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 + FPilotPointRowCount/2*PilotPointSpacing;
-//    for RowIndex := 0 to FPilotPointRowCount do
-//    begin
-//      Y := FTopY - RowIndex*PilotPointSpacing;
-//      YInt := ZoomBox.YCoord(Y);
-//      for ColIndex := 0 to FPilotPointColumnCount do
-//      begin
-//        X := FLeftX + ColIndex*PilotPointSpacing;
-//        XInt := ZoomBox.XCoord(X);
-//
-//        LineSegment[0].x := XInt;
-//        LineSegment[1].x := XInt;
-//        LineSegment[0].y := YInt-2;
-//        LineSegment[1].y := YInt+3;
-//        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
-//          True, False, 0, 2);
-//
-//        LineSegment[0].x := XInt-2;
-//        LineSegment[1].x := XInt+3;
-//        LineSegment[0].y := YInt;
-//        LineSegment[1].y := YInt;
-//        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
-//          True, False, 0, 2);
-//      end;
-//    end;
   end;
 end;
 
@@ -614,11 +585,20 @@ function TPestProperties.GetPilotPoint(Index: Integer): TPoint2D;
 var
   RowIndex: Integer;
   ColIndex: Integer;
+  ArrayCount: Integer;
 begin
-  RowIndex := Index div FPilotPointColumnCount;
-  ColIndex := Index  - RowIndex*FPilotPointColumnCount;
-  result.Y := FTopY - RowIndex*PilotPointSpacing;
-  result.X := FLeftX + ColIndex*PilotPointSpacing;
+  ArrayCount := FPilotPointColumnCount * FPilotPointRowCount;
+  if Index < ArrayCount then
+  begin
+    RowIndex := Index div FPilotPointColumnCount;
+    ColIndex := Index  - RowIndex*FPilotPointColumnCount;
+    result.Y := FTopY - RowIndex*PilotPointSpacing;
+    result.X := FLeftX + ColIndex*PilotPointSpacing;
+  end
+  else
+  begin
+    result := (SpecifiedPilotPoints.Items[Index-ArrayCount] as TPointItem).Point2D;
+  end;
 end;
 
 function TPestProperties.GetPilotPointCount: Integer;
@@ -638,6 +618,7 @@ begin
     (FPilotPointColumnCount-1)/2*PilotPointSpacing;
   FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 +
     (FPilotPointRowCount-1)/2*PilotPointSpacing;
+  result := result + SpecifiedPilotPoints.Count;
 end;
 
 function TPestProperties.GetPilotPointSpacing: double;
@@ -658,6 +639,7 @@ begin
   FLsqrProperties.InitializeVariables;
 
   FObservatioGroups.Clear;
+  SpecifiedPilotPoints.Clear;
 end;
 
 procedure TPestProperties.SetExtendedTemplateCharacter(const Value: Char);
@@ -694,6 +676,12 @@ end;
 procedure TPestProperties.SetShowPilotPoints(const Value: Boolean);
 begin
   FShowPilotPoints := Value;
+end;
+
+procedure TPestProperties.SetSpecifiedPilotPoints(
+  const Value: TSimplePointCollection);
+begin
+  FSpecifiedPilotPoints.Assign(Value);
 end;
 
 procedure TPestProperties.SetStoredPilotPointSpacing(const Value: TRealStorage);

@@ -12,6 +12,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
+  ExplicitTop = -111
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -21,7 +22,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabModflowBoundaryConditions
+    ActivePage = tabProperties
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -30,6 +31,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       HelpType = htKeyword
       HelpKeyword = 'Properties_Tab'
       Caption = 'Properties'
+      ExplicitTop = 32
       DesignSize = (
         776
         476)
@@ -37,11 +39,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Left = 457
         Top = 215
         Width = 25
-        Height = 25
+        Height = 21
       end
       object shpLineColor: TShape
         Left = 457
-        Top = 194
+        Top = 196
         Width = 25
         Height = 3
       end
@@ -79,7 +81,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       end
       object lblGridCellSize: TLabel
         Left = 8
-        Top = 147
+        Top = 141
         Width = 126
         Height = 19
         Caption = 'Grid element size'
@@ -101,26 +103,26 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Caption = 'Quadtree refinement'
       end
       object btnLineColor: TButton
-        Left = 225
-        Top = 180
+        Left = 226
+        Top = 189
         Width = 225
-        Height = 30
+        Height = 23
         Caption = 'Set object line color'
         TabOrder = 8
         OnClick = btnColorClick
       end
       object btnFillColor: TButton
-        Left = 225
-        Top = 212
+        Left = 226
+        Top = 216
         Width = 225
-        Height = 30
+        Height = 23
         Caption = 'Set object fill color'
         TabOrder = 10
         OnClick = btnColorClick
       end
       object cbIntersectedCells: TCheckBox
         Left = 8
-        Top = 273
+        Top = 279
         Width = 282
         Height = 24
         AllowGrayed = True
@@ -140,9 +142,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       end
       object cbFillColor: TCheckBox
         Left = 8
-        Top = 212
+        Top = 216
         Width = 209
-        Height = 31
+        Height = 23
         AllowGrayed = True
         Caption = 'Color object interior'
         TabOrder = 9
@@ -150,9 +152,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       end
       object cbLineColor: TCheckBox
         Left = 8
-        Top = 180
+        Top = 191
         Width = 209
-        Height = 31
+        Height = 19
         AllowGrayed = True
         Caption = 'Color object line'
         TabOrder = 7
@@ -238,7 +240,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       end
       object rdeGridCellSize: TRbwDataEntry
         Left = 210
-        Top = 144
+        Top = 138
         Width = 137
         Height = 30
         Cursor = crIBeam
@@ -269,9 +271,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       end
       object cbSetGridCellSize: TCheckBox
         Left = 8
-        Top = 121
+        Top = 115
         Width = 281
         Height = 17
+        AllowGrayed = True
         Caption = 'Use to set grid element size'
         TabOrder = 5
         OnClick = cbSetGridCellSizeClick
@@ -5504,15 +5507,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 155
                 inherited framePestObsLak: TframePestObs
                   Width = 573
                   Height = 155
-                  ExplicitLeft = 0
-                  ExplicitTop = 0
                   ExplicitWidth = 573
                   ExplicitHeight = 155
                   inherited splObservations: TSplitter
@@ -7274,7 +7274,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 442
@@ -8777,6 +8776,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               OnChange = frameMNW2pcMnw2Change
               ExplicitWidth = 581
               inherited tabBasic: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
                 inherited comboLossType: TJvImageComboBox
                   ItemIndex = -1
                 end
@@ -8831,6 +8834,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabDischargeAdjustment: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
                 inherited rdgLiftTable: TRbwDataGrid4
                   ColWidths = (
                     64
@@ -8841,6 +8848,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabPumpingRate: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
                 inherited rdgTimeTable: TRbwDataGrid4
                   Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
@@ -8850,11 +8861,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabWellScreens: TTabSheet
-                inherited Panel3: TPanel
-                  Width = 573
-                end
+                ExplicitLeft = 4
+                ExplicitTop = 29
+                ExplicitWidth = 601
+                ExplicitHeight = 421
                 inherited rdgVerticalScreens: TRbwDataGrid4
-                  Width = 573
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
                   ColWidths = (
                     64
@@ -8870,15 +8881,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     24
                     24)
                 end
-                inherited Panel4: TPanel
-                  Width = 573
-                  inherited Label2: TLabel
-                    Width = 567
-                  end
-                end
               end
               inherited tabObservations: TTabSheet
+                ExplicitLeft = 4
+                ExplicitTop = 29
                 ExplicitWidth = 573
+                ExplicitHeight = 421
                 inherited framePestObsMnw2: TframePestObs
                   Width = 573
                   ExplicitWidth = 573
@@ -12498,7 +12506,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabCalibration: TTabSheet
-                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 371
@@ -16029,8 +16036,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 280
   end
   object rparserThreeDFormulaElements: TRbwParser
-    Left = 424
-    Top = 232
+    Left = 432
+    Top = 160
   end
   object rparserTopFormulaNodes: TRbwParser
     Left = 264
@@ -16045,8 +16052,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 280
   end
   object rparserThreeDFormulaNodes: TRbwParser
-    Left = 264
-    Top = 232
+    Left = 376
+    Top = 152
   end
   object ilCheckImages: TImageList
     Left = 648

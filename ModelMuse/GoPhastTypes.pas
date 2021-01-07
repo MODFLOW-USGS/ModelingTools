@@ -86,7 +86,6 @@ type
     UnRotatedLocation: TPoint3D;
   end;
 
-
   // @name is used to indicate which view of the model the cursor
   // is over.
   TCursorGrid = (cgNone, cgTop, cgFront, cgSide);
@@ -431,10 +430,7 @@ type
     // period starting with 1.
     Index: Integer;
     StressPeriod: Integer;
-
   end;
-
-
 
   // @abstract(@name invalidates the model when it is changed.)
   TPhastCollection = class(TCollection)
@@ -646,7 +642,6 @@ type
   published
     property ModelSelection: TModelSelection read GetModelSelection
       write SetModelSelection;
-
   end;
 
   TLayerSort = class(TObject)

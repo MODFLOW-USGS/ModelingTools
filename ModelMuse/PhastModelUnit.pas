@@ -2213,7 +2213,6 @@ that affects the model output should also have a comment. }
     FSutraGlobalObservationComparisons: TGlobalObservationComparisons;
     FSutraFluxObs: TSutraFluxObs;
     FModflow6GlobalObservationComparisons: TGlobalObservationComparisons;
-    FPestProperties: TPestProperties;
     FVelocityVectors: TVectorCollection;
     FPilotPointData: TStoredPilotParamDataCollection;
     FKrigfactorsScriptLines: TStringList;
@@ -2435,9 +2434,10 @@ that affects the model output should also have a comment. }
     function GetSutraLakesUsed: Boolean;
     procedure SetModflow6GlobalObservationComparisons(
       const Value: TGlobalObservationComparisons);
-    procedure SetPestProperties(const Value: TPestProperties);
     procedure SetVelocityVectors(const Value: TVectorCollection);
+    // See @link(Exaggeration).
     function GetExaggeration: double;
+    // See @link(Exaggeration).
     procedure SetExaggeration(Value: double);
     function GetElementLocation(Layer, Row,
       Column: Integer): TDualLocation;
@@ -2446,8 +2446,9 @@ that affects the model output should also have a comment. }
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D;
     procedure SetPilotPointData(const Value: TStoredPilotParamDataCollection);
-    //    procedure OnNodeActiveDataSetChanged(Sender: TObject);
-//    procedure SetGeoRefFileName(const Value: string);
+    function GetPilotPointCount: integer;
+    function GetPilotPoint(Index: Integer): TPoint2D;
+    function GetPilotPointSpacing: double;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -2484,6 +2485,8 @@ that affects the model output should also have a comment. }
     function Mt3d_LktIsSelected(Sender: TObject): Boolean; virtual;
     function GetParamGroups: TPestParamGroups; virtual; abstract;
     procedure SetParamGroups(const Value: TPestParamGroups); virtual; abstract;
+    function GetPestProperties: TPestProperties; virtual; abstract;
+    procedure SetPestProperties(const Value: TPestProperties); virtual; abstract;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3333,6 +3336,15 @@ that affects the model output should also have a comment. }
     property ItemTopLocation[const EvalAt: TEvaluatedAt; const Column,
       Row: integer]: TPoint2D read GetItemTopLocation;
     function PointToCell(EvalAt: TEvaluatedAt; APoint: TPoint2D): T2DTopCell;
+    property PestProperties: TPestProperties read GetPestProperties
+      write SetPestProperties
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+      ;
+    property PilotPointCount: integer read GetPilotPointCount;
+    property PilotPointSpacing: double read GetPilotPointSpacing;
+    property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3538,12 +3550,6 @@ that affects the model output should also have a comment. }
     property VelocityVectors: TVectorCollection read FVelocityVectors
       write SetVelocityVectors;
 
-    property PestProperties: TPestProperties read FPestProperties
-      write SetPestProperties
-    {$IFNDEF PEST}
-      stored False
-    {$ENDIF}
-    ;
     // Name contains the names of scripts that are to be run before running
     // SUTRA.
     property SutraPestScripts: TStringList read FSutraPestScripts
@@ -3803,8 +3809,7 @@ that affects the model output should also have a comment. }
     FUseGsflowFormat: Boolean;
     FCtsSystems: TCtsSystemCollection;
     FParamGroups: TPestParamGroups;
-    // See @link(Exaggeration).
-
+    FPestProperties: TPestProperties;
     //     See @link(OwnsScreenObjects).
     function GetOwnsScreenObjects: boolean;
 //     See @link(ObjectList).
@@ -4000,6 +4005,8 @@ that affects the model output should also have a comment. }
     procedure SetRipPlantGroups(const Value: TRipPlantGroups);
     procedure RemoveNonAncillaryFiles;
     procedure FixSpecifyingGridByThreeDObjects;
+//    function GetPilotPoint(Index: Integer): TPoint2D;
+//    function GetPilotPointSpacing: double;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); override;
     procedure SetSideDataSet(const Value: TDataArray); override;
@@ -4110,6 +4117,8 @@ that affects the model output should also have a comment. }
     function GetCtsSystems: TCtsSystemCollection; override;
     function GetParamGroups: TPestParamGroups; override;
     procedure SetParamGroups(const Value: TPestParamGroups); override;
+    function GetPestProperties: TPestProperties; override;
+    procedure SetPestProperties(const Value: TPestProperties); override;
   public
     function Mt3dMSUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
@@ -4627,7 +4636,10 @@ that affects the model output should also have a comment. }
     function Mt3dIsSelected: Boolean; override;
     procedure ExportPestInput(FileName: string; RunPest: Boolean);
     procedure SetMf2005ObsGroupNames; override;
-//    procedure NotifyPestObsGroupNameDestroy(Group: TPestObservationGroup); override;
+//    property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
+    procedure DrawPilotPoints(BitMap32: TBitmap32);
+    function ShouldDrawPilotPoints: Boolean;
+//    property PilotPointSpacing: double read GetPilotPointSpacing;
   published
     // The following properties are obsolete.
 
@@ -4795,6 +4807,7 @@ that affects the model output should also have a comment. }
     property GeoRef;
     property UseGsflowFormat;
     property ParamGroups;
+    property PestProperties;
   end;
 
   TChildDiscretization = class(TOrderedItem)
@@ -5031,6 +5044,8 @@ that affects the model output should also have a comment. }
     function GetCtsSystems: TCtsSystemCollection; override;
     function GetParamGroups: TPestParamGroups; override;
     procedure SetParamGroups(const Value: TPestParamGroups); override;
+    function GetPestProperties: TPestProperties; override;
+    procedure SetPestProperties(const Value: TPestProperties); override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -10996,6 +11011,7 @@ begin
 
   FCtsSystems := TCtsSystemCollection.Create(self);
   FParamGroups := TPestParamGroups.Create(Invalidate);
+  FPestProperties := TPestProperties.Create(self);
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -11417,6 +11433,7 @@ begin
       FClearing := False;
     end;
 
+    FPestProperties.Free;
     FParamGroups.Free;
     FCtsSystems.Free;
     FGeoRef.Free;
@@ -11611,6 +11628,21 @@ end;
 function TPhastModel.GetParamGroups: TPestParamGroups;
 begin
   result := FParamGroups;
+end;
+
+function TPhastModel.GetPestProperties: TPestProperties;
+begin
+  result := FPestProperties;
+end;
+
+function TCustomModel.GetPilotPoint(Index: Integer): TPoint2D;
+begin
+  result := PestProperties.PilotPoints[Index];
+end;
+
+function TCustomModel.GetPilotPointSpacing: double;
+begin
+  result := PestProperties.PilotPointSpacing;
 end;
 
 function TPhastModel.GetProgramLocations: TProgramLocations;
@@ -14275,6 +14307,11 @@ end;
 procedure TPhastModel.SetParamGroups(const Value: TPestParamGroups);
 begin
   FParamGroups.Assign(Value);
+end;
+
+procedure TPhastModel.SetPestProperties(const Value: TPestProperties);
+begin
+  FPestProperties.Assign(Value);
 end;
 
 procedure TPhastModel.SetPrintFrequency(const Value: TPrintFrequencyCollection);
@@ -21935,6 +21972,11 @@ begin
   end;
 end;
 
+function TPhastModel.ShouldDrawPilotPoints: Boolean;
+begin
+  result := PestProperties.ShouldDrawPilotPoints;
+end;
+
 function TPhastModel.StrIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -22352,6 +22394,11 @@ begin
     ChildModel := ChildModels[ChildIndex].ChildModel;
     ChildModel.DrawHeadObservations(BitMap, ZoomBox);
   end;
+end;
+
+procedure TPhastModel.DrawPilotPoints(BitMap32: TBitmap32);
+begin
+  PestProperties.DrawPilotPoints(BitMap32);
 end;
 
 procedure TPhastModel.DrawScreenObjects3D;
@@ -28598,7 +28645,6 @@ begin
 
   FVelocityVectors := TVectorCollection.Create(self);
 
-  FPestProperties := TPestProperties.Create(self);
   FPilotPointDataArrays := TDataArrayList.Create;
   FPilotPointData := TStoredPilotParamDataCollection.Create;
 end;
@@ -29098,7 +29144,6 @@ destructor TCustomModel.Destroy;
 begin
   FPilotPointData.Free;
   FPilotPointDataArrays.Free;
-  FPestProperties.Free;
   FVelocityVectors.Free;
 
   FModflow6GlobalObservationComparisons.Free;
@@ -44180,6 +44225,11 @@ begin
   result := FParentModel
 end;
 
+function TChildModel.GetPestProperties: TPestProperties;
+begin
+  result := ParentModel.PestProperties;
+end;
+
 function TChildModel.GetProgramLocations: TProgramLocations;
 begin
   result := ParentModel.GetProgramLocations;
@@ -44711,6 +44761,11 @@ end;
 procedure TChildModel.SetParamGroups(const Value: TPestParamGroups);
 begin
 
+end;
+
+procedure TChildModel.SetPestProperties(const Value: TPestProperties);
+begin
+  ParentModel.PestProperties := Value;
 end;
 
 procedure TChildModel.SetProgramLocations(const Value: TProgramLocations);
@@ -46095,11 +46150,6 @@ begin
   FPathLine.Assign(Value);
 end;
 
-procedure TCustomModel.SetPestProperties(const Value: TPestProperties);
-begin
-  FPestProperties.Assign(Value);
-end;
-
 function TCustomModel.GetPathLine: TPathLineReader;
 begin
   if (FPathLine = nil) then
@@ -46882,6 +46932,11 @@ begin
       frmGoPhast.ModflowGrid.GridChanged;
     end;
   end;
+end;
+
+function TCustomModel.GetPilotPointCount: integer;
+begin
+  result := PestProperties.PilotPointCount;
 end;
 
 initialization

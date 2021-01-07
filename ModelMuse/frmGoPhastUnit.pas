@@ -521,7 +521,7 @@ type
     acArchiveModel: TAction;
     Archivemodelbydefault1: TMenuItem;
     acImportSutraFiles: TAction;
-    miImportSUTRADataSet14B: TMenuItem;
+    miImportSutraFiles: TMenuItem;
     odSutraFiles: TOpenDialog;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);

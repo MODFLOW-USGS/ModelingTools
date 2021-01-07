@@ -722,7 +722,8 @@ uses
   PestParamRoots in 'PestParamRoots.pas',
   PilotPointDataUnit in 'PilotPointDataUnit.pas',
   LockedGlobalVariableChangers in 'LockedGlobalVariableChangers.pas',
-  SutraImportUnit in 'SutraImportUnit.pas';
+  SutraImportUnit in 'SutraImportUnit.pas',
+  PointCollectionUnit in 'PointCollectionUnit.pas';
 
 {$R *.res}
 

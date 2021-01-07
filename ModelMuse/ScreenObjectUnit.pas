@@ -47,7 +47,7 @@ uses
   Mt3dUztUnsatEtUnit, Mt3dUzfSeepageUnit, ModflowSfr6Unit, ModflowMawUnit,
   MeshRenumberingTypes, Modflow6ObsUnit, ModflowLakMf6Unit, ModflowMvrUnit,
   ModflowUzfMf6Unit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
-  ModflowSubsidenceDefUnit;
+  ModflowSubsidenceDefUnit, PointCollectionUnit;
 
 type
   //
@@ -1942,6 +1942,7 @@ view. }
     FFootprintWell: TFootprintWell;
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
+//    FVerticesArePilotPoints: Boolean;
 //    FSubObservations: TSubObservations;
 //    FModflow6Obs: TModflow6Obs;
     procedure CreateLastSubPolygon;
@@ -2772,6 +2773,7 @@ view. }
     function GetModflowSwtObservations: TSwtObservations;
     function StoreModflowSubObservations: Boolean;
     function StoreModflowSwtObservations: Boolean;
+//    procedure SetVerticesArePilotPoints(const Value: Boolean);
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
     procedure DeleteExtraSections;
@@ -4086,10 +4088,6 @@ view. }
       write SetModflowSubObservations stored StoreModflowSubObservations;
     property ModflowSwtObservations: TSwtObservations read GetModflowSwtObservations
       write SetModflowSwtObservations stored StoreModflowSwtObservations;
-
-//    property Mt3dUzfSeepageConcBoundary: TMt3dUzSsmSinkConcBoundary
-//      read GetMt3dUzSsmSinkConcBoundary write SetMt3dUzSsmSinkConcBoundary
-//      stored False;
     { TODO :
 Consider making SectionStarts private and only exposing SectionStart,
 SectionEnd etc. DefineProperties could be used to store and retrieve
@@ -4157,7 +4155,8 @@ SectionStarts.}
     // Zero equals no refinement.
     property QuadtreeRefinementLevel: Integer read FQuadtreeRefinementLevel
       write SetQuadtreeRefinementLevel;
-
+//    property VerticesArePilotPoints: Boolean read FVerticesArePilotPoints
+//      write SetVerticesArePilotPoints;
   end;
 
   // @name does not own its @link(TScreenObject)s.
@@ -4383,37 +4382,41 @@ SectionStarts.}
   TSelectedNodeCollection = TSelectedVertexCollection;
 
   {@abstract(@name is used to store a TPoint2D.)}
-  TPointItem = class(TCollectionItem)
-  private
-    // See @link(X).
-    FX: double;
-    // See @link(Y).
-    FY: double;
-  published
-    // @name is the X coordinate of the point.
-    property X: double read FX write FX;
-    // @name is the Y coordinate of the point.
-    property Y: double read FY write FY;
-  end;
+//  TPointItem = class(TCollectionItem)
+//  private
+//    // See @link(X).
+//    FX: double;
+//    // See @link(Y).
+//    FY: double;
+//    function GetPoint2D: TPoint2D;
+//    procedure SetPoint2D(const Value: TPoint2D);
+//  public
+//    property Point2D: TPoint2D read GetPoint2D write SetPoint2D;
+//  published
+//    // @name is the X coordinate of the point.
+//    property X: double read FX write FX;
+//    // @name is the Y coordinate of the point.
+//    property Y: double read FY write FY;
+//  end;
 
   {@abstract(@name is used to store a series of TPoint2Ds.)}
-  TPointCollection = class(TCollection)
-  private
-    FTempFileName: string;
-    FCaching: Boolean;
-    procedure StoreData(Stream: TStream);
-    procedure ReadData(DecompressionStream: TDecompressionStream); virtual;
-    function GetCount: Integer;
-  protected
-    procedure Cache;
-    procedure Restore;
-  public
-    property Count: Integer read GetCount;
-    // @name creates an instance of @classname.
-    // See @link(TPointItem).
-    constructor Create;
-    procedure EndUpdate; override;
-  end;
+//  TPointCollection = class(TCollection)
+//  private
+//    FTempFileName: string;
+//    FCaching: Boolean;
+//    procedure StoreData(Stream: TStream);
+//    procedure ReadData(DecompressionStream: TDecompressionStream); virtual;
+//    function GetCount: Integer;
+//  protected
+//    procedure Cache;
+//    procedure Restore;
+//  public
+//    property Count: Integer read GetCount;
+//    // @name creates an instance of @classname.
+//    // See @link(TPointItem).
+//    constructor Create;
+//    procedure EndUpdate; override;
+//  end;
 
   {@abstract(@name is used in reading a @link(TScreenObject)
     from or writing it to a stream.)
@@ -6517,6 +6520,7 @@ begin
   ColorLine := AScreenObject.ColorLine;
   FillScreenObject := AScreenObject.FillScreenObject;
   QuadtreeRefinementLevel := AScreenObject.QuadtreeRefinementLevel;
+  VerticesArePilotPoints := AScreenObject.VerticesArePilotPoints;
 
   AScreenObject.ImportedSectionElevations.RestoreData;
   ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
@@ -22370,124 +22374,124 @@ end;
 
 { TPointCollection }
 
-procedure TPointCollection.Cache;
-var
-  MemStream: TMemoryStream;
-  Compressor: TZCompressionStream;
-  TempStream: TMemoryStream;
-begin
-  if FCaching then
-  begin
-    Exit;
-  end;
-  FCaching := True;
-  try
-    if FTempFileName = '' then
-    begin
-      FTempFileName := TempFileName;
-    end;
-    MemStream := TMemoryStream.Create;
-    try
-      Compressor := TCompressionStream.Create(ZLib.clDefault, MemStream);
-      TempStream := TMemoryStream.Create;
-      try
-        MemStream.Position := 0;
-        StoreData(TempStream);
-        TempStream.SaveToStream(Compressor);
-      finally
-        Compressor.Free;
-        TempStream.Free;
-      end;
-      MemStream.Position := 0;
-      ZipAFile(FTempFileName, MemStream);
-    finally
-      MemStream.Free;
-    end;
-    Clear;
-  finally
-    FCaching := False;
-  end;
-end;
+//procedure TPointCollection.Cache;
+//var
+//  MemStream: TMemoryStream;
+//  Compressor: TZCompressionStream;
+//  TempStream: TMemoryStream;
+//begin
+//  if FCaching then
+//  begin
+//    Exit;
+//  end;
+//  FCaching := True;
+//  try
+//    if FTempFileName = '' then
+//    begin
+//      FTempFileName := TempFileName;
+//    end;
+//    MemStream := TMemoryStream.Create;
+//    try
+//      Compressor := TCompressionStream.Create(ZLib.clDefault, MemStream);
+//      TempStream := TMemoryStream.Create;
+//      try
+//        MemStream.Position := 0;
+//        StoreData(TempStream);
+//        TempStream.SaveToStream(Compressor);
+//      finally
+//        Compressor.Free;
+//        TempStream.Free;
+//      end;
+//      MemStream.Position := 0;
+//      ZipAFile(FTempFileName, MemStream);
+//    finally
+//      MemStream.Free;
+//    end;
+//    Clear;
+//  finally
+//    FCaching := False;
+//  end;
+//end;
 
-constructor TPointCollection.Create;
-begin
-  inherited Create(TPointItem);
-end;
+//constructor TPointCollection.Create;
+//begin
+//  inherited Create(TPointItem);
+//end;
 
-procedure TPointCollection.EndUpdate;
-begin
-  inherited;
-  Cache;
-end;
+//procedure TPointCollection.EndUpdate;
+//begin
+//  inherited;
+//  Cache;
+//end;
 
-function TPointCollection.GetCount: Integer;
-begin
-  if FTempFileName <> '' then
-  begin
-    Restore;
-  end;
-  result := inherited Count;
-end;
+//function TPointCollection.GetCount: Integer;
+//begin
+//  if FTempFileName <> '' then
+//  begin
+//    Restore;
+//  end;
+//  result := inherited Count;
+//end;
 
-procedure TPointCollection.ReadData(DecompressionStream: TDecompressionStream);
-var
-  LocalCount: Integer;
-  index: Integer;
-  Item: TPointItem;
-  Value: double;
-begin
-  Clear;
-  DecompressionStream.Read(LocalCount, SizeOf(LocalCount));
-  Capacity := LocalCount;
-  BeginUpdate;
-  try
-    for index := 0 to LocalCount - 1 do
-    begin
-      Item := Add as TPointItem;
-      DecompressionStream.Read(Value, SizeOf(Value));
-      Item.X := Value;
-      DecompressionStream.Read(Value, SizeOf(Value));
-      Item.Y := Value;
-    end;
-  finally
-    inherited EndUpdate;
-  end;
-end;
+//procedure TPointCollection.ReadData(DecompressionStream: TDecompressionStream);
+//var
+//  LocalCount: Integer;
+//  index: Integer;
+//  Item: TPointItem;
+//  Value: double;
+//begin
+//  Clear;
+//  DecompressionStream.Read(LocalCount, SizeOf(LocalCount));
+//  Capacity := LocalCount;
+//  BeginUpdate;
+//  try
+//    for index := 0 to LocalCount - 1 do
+//    begin
+//      Item := Add as TPointItem;
+//      DecompressionStream.Read(Value, SizeOf(Value));
+//      Item.X := Value;
+//      DecompressionStream.Read(Value, SizeOf(Value));
+//      Item.Y := Value;
+//    end;
+//  finally
+//    inherited EndUpdate;
+//  end;
+//end;
 
-procedure TPointCollection.Restore;
-var
-  MemStream: TMemoryStream;
-  DecompressionStream: TZDecompressionStream;
-begin
-  MemStream := TMemoryStream.Create;
-  try
-    ExtractAFile(FTempFileName, MemStream);
-    DecompressionStream := TDecompressionStream.Create(MemStream);
-    try
-      ReadData(DecompressionStream);
-    finally
-      DecompressionStream.Free;
-    end;
-  finally
-    MemStream.Free;
-  end;
-end;
+//procedure TPointCollection.Restore;
+//var
+//  MemStream: TMemoryStream;
+//  DecompressionStream: TZDecompressionStream;
+//begin
+//  MemStream := TMemoryStream.Create;
+//  try
+//    ExtractAFile(FTempFileName, MemStream);
+//    DecompressionStream := TDecompressionStream.Create(MemStream);
+//    try
+//      ReadData(DecompressionStream);
+//    finally
+//      DecompressionStream.Free;
+//    end;
+//  finally
+//    MemStream.Free;
+//  end;
+//end;
 
-procedure TPointCollection.StoreData(Stream: TStream);
-var
-  LocalCount: Integer;
-  index: Integer;
-  Item: TPointItem;
-begin
-  LocalCount := inherited Count;
-  Stream.Write(LocalCount, SizeOf(LocalCount));
-  for Index := 0 to inherited Count - 1 do
-  begin
-    Item := Items[Index] as TPointItem;
-    Stream.Write(Item.X, SizeOf(Item.X));
-    Stream.Write(Item.Y, SizeOf(Item.Y));
-  end;
-end;
+//procedure TPointCollection.StoreData(Stream: TStream);
+//var
+//  LocalCount: Integer;
+//  index: Integer;
+//  Item: TPointItem;
+//begin
+//  LocalCount := inherited Count;
+//  Stream.Write(LocalCount, SizeOf(LocalCount));
+//  for Index := 0 to inherited Count - 1 do
+//  begin
+//    Item := Items[Index] as TPointItem;
+//    Stream.Write(Item.X, SizeOf(Item.X));
+//    Stream.Write(Item.Y, SizeOf(Item.Y));
+//  end;
+//end;
 
 { TCellElementSegmentList }
 
@@ -33467,6 +33471,15 @@ begin
     StoredValues.Assign(Value);
   end;
 end;
+
+//procedure TScreenObject.SetVerticesArePilotPoints(const Value: Boolean);
+//begin
+//  if FVerticesArePilotPoints <> Value then
+//  begin
+//    FVerticesArePilotPoints := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TScreenObject.EliminateHoleCells(CellList: TCellAssignmentList);
 const
@@ -45764,6 +45777,19 @@ begin
     end;
   end;
 end;
+
+{ TPointItem }
+
+//function TPointItem.GetPoint2D: TPoint2D;
+//begin
+//  result := EquatePoint(X, Y);
+//end;
+//
+//procedure TPointItem.SetPoint2D(const Value: TPoint2D);
+//begin
+//  X := Value.x;
+//  Y := Value.y;
+//end;
 
 initialization
   RegisterClass(TScreenObject);

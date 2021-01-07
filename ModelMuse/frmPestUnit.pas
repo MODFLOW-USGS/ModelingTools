@@ -13,6 +13,7 @@ uses
 
 type
   TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
+  TPilotPointColumns = (ppcX, ppcY);
 
   TUndoPestOptions = class(TCustomUndo)
   private
@@ -48,9 +49,6 @@ type
     plMain: TJvPageList;
     jvspBasic: TJvStandardPage;
     cbPEST: TCheckBox;
-    rdePilotPointSpacing: TRbwDataEntry;
-    lblPilotPointSpacing: TLabel;
-    cbShowPilotPoints: TCheckBox;
     pnlBottom: TPanel;
     btnHelp: TBitBtn;
     btnOK: TBitBtn;
@@ -161,6 +159,12 @@ type
     frameParentObsGroups: TframeParentChild;
     diredPest: TJvDirectoryEdit;
     lblPestDirectory: TLabel;
+    jvspPilotPoints: TJvStandardPage;
+    rdePilotPointSpacing: TRbwDataEntry;
+    lblPilotPointSpacing: TLabel;
+    cbShowPilotPoints: TCheckBox;
+    gbIndividualPilotPoints: TGroupBox;
+    framePilotPoints: TframeGrid;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -213,7 +217,8 @@ const StrNone = '(none)';
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls, PhastModelUnit;
+  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls, PhastModelUnit,
+  PointCollectionUnit;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
@@ -361,6 +366,10 @@ begin
     nil, 'Basic') as TJvPageIndexNode;
   NewNode.PageIndex := jvspBasic.PageIndex;
 
+  NewNode := tvPEST.Items.AddChild(
+    nil, 'Pilot Points') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPilotPoints.PageIndex;
+
   ControlDataNode := tvPEST.Items.AddChild(
     nil, 'Control Data') as TJvPageIndexNode;
   ControlDataNode.PageIndex := -1;
@@ -415,7 +424,10 @@ begin
 
   plMain.ActivePageIndex := 0;
 
-  GetData
+  framePilotPoints.Grid.Cells[Ord(ppcX), 0] := 'X';
+  framePilotPoints.Grid.Cells[Ord(ppcY), 0] := 'Y';
+
+  GetData;
 end;
 
 procedure TfrmPEST.FormDestroy(Sender: TObject);
@@ -597,6 +609,7 @@ var
   ATempFluxObs: TFluxObservationGroup;
   HobItem: THobItem;
   FNewHobItem: THobItem;
+  PointItem: TPointItem;
 //  InvalidateModelEvent: TNotifyEvent;
 begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
@@ -610,12 +623,31 @@ begin
 
   comboFormulaMarker.ItemIndex :=
     comboFormulaMarker.Items.IndexOf(PestProperties.ExtendedTemplateCharacter);
-  cbShowPilotPoints.Checked := PestProperties.ShowPilotPoints;
-  rdePilotPointSpacing.RealValue := PestProperties.PilotPointSpacing;
 
   diredPest.Text := Locations.PestDirectory;
   CheckPestDirectory;
   {$ENDREGION}
+
+  {$REGION 'Pilot Points'}
+  cbShowPilotPoints.Checked := PestProperties.ShowPilotPoints;
+  rdePilotPointSpacing.RealValue := PestProperties.PilotPointSpacing;
+  ClearGrid(framePilotPoints.Grid);
+  framePilotPoints.seNumber.AsInteger := PestProperties.SpecifiedPilotPoints.Count;
+  framePilotPoints.Grid.BeginUpdate;
+  try
+    for ItemIndex := 0 to PestProperties.SpecifiedPilotPoints.Count - 1 do
+    begin
+      PointItem := PestProperties.SpecifiedPilotPoints.Items[ItemIndex] as TPointItem;
+      framePilotPoints.Grid.RealValue[Ord(ppcX), ItemIndex+1] := PointItem.X;
+      framePilotPoints.Grid.RealValue[Ord(ppcy), ItemIndex+1] := PointItem.Y;
+    end;
+  finally
+    framePilotPoints.Grid.EndUpdate;
+  end;
+  framePilotPoints.seNumber.AsInteger := PestProperties.SpecifiedPilotPoints.Count;
+
+  {$ENDREGION}
+
 
   {$REGION 'Control Data'}
   PestControlData := PestProperties.PestControlData;
@@ -845,6 +877,8 @@ var
   AnObject: TObject;
   FluxObs: TFluxObservationGroup;
   HobItem: THobItem;
+  PointItem: TPointItem;
+  ItemIndex: Integer;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(nil);
@@ -860,9 +894,27 @@ begin
     begin
       PestProperties.ExtendedTemplateCharacter := comboFormulaMarker.Text[1];
     end;
+    {$ENDREGION}
+
+    {$REGION 'Pilot Points'}
     PestProperties.ShowPilotPoints := cbShowPilotPoints.Checked;
     PestProperties.PilotPointSpacing := rdePilotPointSpacing.RealValue;
+
+    PestProperties.SpecifiedPilotPoints.Capacity :=
+      framePilotPoints.seNumber.AsInteger;
+    Grid := framePilotPoints.Grid;
+    for ItemIndex := 0 to framePilotPoints.seNumber.AsInteger - 1 do
+    begin
+      if (Grid.Cells[Ord(ppcX), ItemIndex+1] <> '')
+        and (Grid.Cells[Ord(ppcY), ItemIndex+1] <> '') then
+      begin
+        PointItem := PestProperties.SpecifiedPilotPoints.Add as TPointItem;
+        PointItem.X := Grid.RealValue[Ord(ppcX), ItemIndex+1];
+        PointItem.Y := Grid.RealValue[Ord(ppcY), ItemIndex+1];
+      end;
+    end;
     {$ENDREGION}
+
 
     {$REGION 'Control Data'}
     PestControlData := PestProperties.PestControlData;

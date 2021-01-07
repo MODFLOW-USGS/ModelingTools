@@ -1414,7 +1414,7 @@ var
 //  Mesh: TSutraMesh3D;
   Grid: TCustomModelGrid;
   Mesh: IDrawMesh;
-  PestProperties: TPestProperties;
+//  PestProperties: TPestProperties;
 begin
   FPaintingNeeded := True;
   if not frmGoPhast.CanDraw then
@@ -1532,8 +1532,7 @@ begin
 
       if ViewDirection = vdTop then
       begin
-        PestProperties := frmGoPhast.PhastModel.PestProperties;
-        PestProperties.DrawPilotPoints(FBitMap32);
+        frmGoPhast.PhastModel.DrawPilotPoints(FBitMap32);
       end;
 
       // Do not call Application.ProcessMessages.

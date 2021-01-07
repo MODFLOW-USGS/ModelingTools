@@ -2194,6 +2194,7 @@ type
     procedure CreateUzMf6fNode(AScreenObject: TScreenObject);
     procedure UzfMf6Changed(Sender: TObject);
     procedure GetUzMf6Boundary(const ScreenObjectList: TList);
+//    procedure GetPilotPointsForAdditionalObject(AScreenObject: TScreenObject);
 
     // @name is set to @true when the @classname has stored values of the
     // @link(TScreenObject)s being edited.
@@ -2484,10 +2485,12 @@ resourcestring
   StrNumberOfYFormulas = 'Number of Y formulas';
   StrNumberOfXFormulas = 'Number of X formulas';
   StrObjEditing = 'The object or objects you are editing will not '
-        + 'affect the values of any data set because neither enclosed nor '
+        + 'affect the values of any data set because:' + sLineBreak
+        + '(1) neither enclosed nor '
         + 'intersected elements or nodes will have their values set by the '
-        + 'object or objects and element and node values will not be set by '
-        + 'interpolation.  '
+        + 'object or objects and element, and' + sLineBreak
+        + '(2) node values will not be set by '
+        + 'interpolation.'
         + sLineBreak + sLineBreak
         + 'Is this really what you want?';
   StrYouAreAttemptingT = 'You are attempting to specify the value of a data ' +
@@ -4088,6 +4091,8 @@ begin
   cbDuplicatesAllowed.Checked := FScreenObject.DuplicatesAllowed;
   cbDuplicatesAllowed.AllowGrayed := False;
 
+//  cbPilotPoints.Checked := FScreenObject.VerticesArePilotPoints;
+//  cbPilotPoints.AllowGrayed := False;
 
   // Set AllowGrayed.
   MultipleScreenObjects := False;
@@ -4355,7 +4360,9 @@ begin
     begin
       if (cbEnclosedCells.State = cbUnchecked)
         and (cbIntersectedCells.State = cbUnchecked)
-        and (cbInterpolation.State = cbUnchecked) then
+        and (cbInterpolation.State = cbUnchecked)
+//        and (cbPilotPoints.State = cbUnchecked)
+        then
       begin
         ShowError := DataSetsSpecified;
       end;
@@ -5256,9 +5263,9 @@ var
   Item: TScreenObjectEditItem;
 begin
   inherited;
-  DisableAllowGrayed(cbDuplicatesAllowed);
   if IsLoaded then
   begin
+    DisableAllowGrayed(cbDuplicatesAllowed);
     for Index := 0 to FNewProperties.Count - 1 do
     begin
       Item := FNewProperties[Index];
@@ -5878,6 +5885,7 @@ begin
         GetAssignmentMethodForAdditionalObject(AScreenObject);
         GetIFaceForAdditionalObject(AScreenObject);
         GetDuplicatesAllowedForAdditionalObject(AScreenObject);
+//        GetPilotPointsForAdditionalObject(AScreenObject);
 
         GetPhastBoundaryConditionsForAdditionalObjects(AScreenObject, TempType);
       end;
@@ -10977,6 +10985,18 @@ begin
     result := DataArray.DisplayFormula;
   end;
 end;
+
+//procedure TfrmScreenObjectProperties.GetPilotPointsForAdditionalObject
+//  (AScreenObject: TScreenObject);
+//begin
+//  if cbPilotPoints.Checked <> AScreenObject.VerticesArePilotPoints then
+//  begin
+//    cbPilotPoints.AllowGrayed := True;
+//    cbPilotPoints.State := cbGrayed;
+//    cbEnclosedCellsClick(nil);
+//  end;
+//end;
+
 
 procedure TfrmScreenObjectProperties.GetDuplicatesAllowedForAdditionalObject
   (AScreenObject: TScreenObject);

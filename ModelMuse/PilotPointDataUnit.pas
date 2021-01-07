@@ -7,8 +7,6 @@ uses
   OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes;
 
 type
-
-
   TPilotPointFileObject = class(TObject)
   private
     FFileName: string;

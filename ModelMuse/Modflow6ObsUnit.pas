@@ -42,9 +42,9 @@ type
     function StoreObGeneral: Boolean;
     function StoreSfrOb: Boolean;
     function StoreUzfOb: Boolean;
-    function CreateFormulaObject: TFormulaObject;
-    procedure UpdateFormula(Value: string; Position: integer;
-      var FormulaObject: TFormulaObject);
+//    function CreateFormulaObject: TFormulaObject;
+//    procedure UpdateFormula(Value: string; Position: integer;
+//      var FormulaObject: TFormulaObject);
     procedure SetMawConnectionNumber(const Value: Integer);
   protected
     function GetObsTypeIndex: Integer; override;
@@ -845,14 +845,14 @@ begin
   FInterpObsNames := TStringList.Create;
 end;
 
-function TMf6CalibrationObs.CreateFormulaObject: TFormulaObject;
-begin
-  result := frmGoPhast.PhastModel.FormulaManager.Add;
-  result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
-  result.AddSubscriptionEvents(
-    GlobalRemoveMf6CalibrationObsSubscription,
-    GlobalRestoreMf6CalibrationObsSubscription, self);
-end;
+//function TMf6CalibrationObs.CreateFormulaObject: TFormulaObject;
+//begin
+//  result := frmGoPhast.PhastModel.FormulaManager.Add;
+//  result.Parser := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
+//  result.AddSubscriptionEvents(
+//    GlobalRemoveMf6CalibrationObsSubscription,
+//    GlobalRestoreMf6CalibrationObsSubscription, self);
+//end;
 
 //procedure TMf6CalibrationObs.CreateFormulaObjects;
 //begin
@@ -1231,33 +1231,33 @@ begin
   result := ObSeries = osUzf;
 end;
 
-procedure TMf6CalibrationObs.UpdateFormula(Value: string; Position: integer;
-  var FormulaObject: TFormulaObject);
-//var
-//  ParentModel: TPhastModel;
-//  Compiler: TRbwParser;
-//  LocalObserver: TObserver;
-begin
-  if FormulaObject.Formula <> Value then
-  begin
-//    ParentModel := Model as TPhastModel;
-//    if ParentModel <> nil then
+//procedure TMf6CalibrationObs.UpdateFormula(Value: string; Position: integer;
+//  var FormulaObject: TFormulaObject);
+////var
+////  ParentModel: TPhastModel;
+////  Compiler: TRbwParser;
+////  LocalObserver: TObserver;
+//begin
+//  if FormulaObject.Formula <> Value then
+//  begin
+////    ParentModel := Model as TPhastModel;
+////    if ParentModel <> nil then
+////    begin
+////      Compiler := ParentModel.rpThreeDFormulaCompiler;
+////      LocalObserver := Observer[Position];
+////      UpdateFormulaDependencies(FormulaObject.Formula, Value, LocalObserver,
+////        Compiler);
+////    end;
+//    InvalidateModel;
+//    if not(csDestroying in frmGoPhast.PhastModel.ComponentState) and
+//      not frmGoPhast.PhastModel.Clearing then
 //    begin
-//      Compiler := ParentModel.rpThreeDFormulaCompiler;
-//      LocalObserver := Observer[Position];
-//      UpdateFormulaDependencies(FormulaObject.Formula, Value, LocalObserver,
-//        Compiler);
+//      frmGoPhast.PhastModel.FormulaManager.ChangeFormula(FormulaObject, Value,
+//        frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+//        GlobalRemoveMf6CalibrationObsSubscription, GlobalRestoreMf6CalibrationObsSubscription, self);
 //    end;
-    InvalidateModel;
-    if not(csDestroying in frmGoPhast.PhastModel.ComponentState) and
-      not frmGoPhast.PhastModel.Clearing then
-    begin
-      frmGoPhast.PhastModel.FormulaManager.ChangeFormula(FormulaObject, Value,
-        frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
-        GlobalRemoveMf6CalibrationObsSubscription, GlobalRestoreMf6CalibrationObsSubscription, self);
-    end;
-  end;
-end;
+//  end;
+//end;
 
 { TMf6CalibrationObservations }
 

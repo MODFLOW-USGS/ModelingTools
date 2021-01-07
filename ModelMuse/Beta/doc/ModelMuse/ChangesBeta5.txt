@@ -1,0 +1,2 @@
+Observation group can be selected when defining observations instead of only in the Pest Properties dialog box.
+Added support for importing PEST results for SUTRA models

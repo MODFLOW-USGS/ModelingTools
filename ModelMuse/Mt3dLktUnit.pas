@@ -21,7 +21,7 @@ type
 
   TMt3dLktConcCollection = class(TCustomMt3dmsArrayConcCollection)
   private
-    procedure InvalidateLktConc(Sender: TObject);
+//    procedure InvalidateLktConc(Sender: TObject);
   protected
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
@@ -187,32 +187,32 @@ begin
   result := TMt3dLktConcTimeListLink;
 end;
 
-procedure TMt3dLktConcCollection.InvalidateLktConc(Sender: TObject);
-var
-  PhastModel: TPhastModel;
-  Link: TMt3dLktConcTimeListLink;
-  ChildIndex: Integer;
-  ChildModel: TChildModel;
-//  ScreenTopDataArray: TDataArray;
-begin
-  if not (Sender as TObserver).UpToDate then
-  begin
-    PhastModel := frmGoPhast.PhastModel;
-    if PhastModel.Clearing then
-    begin
-      Exit;
-    end;
-    Link := TimeListLink.GetLink(PhastModel) as TMt3dLktConcTimeListLink;
-//    Link.FInitCondData.Invalidate;
-    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
-    begin
-      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
-      Link := TimeListLink.GetLink(ChildModel) as TMt3dLktConcTimeListLink;
-//      Link.FInitCondData.Invalidate;
-    end;
-
-  end;
-end;
+//procedure TMt3dLktConcCollection.InvalidateLktConc(Sender: TObject);
+//var
+//  PhastModel: TPhastModel;
+//  Link: TMt3dLktConcTimeListLink;
+//  ChildIndex: Integer;
+//  ChildModel: TChildModel;
+////  ScreenTopDataArray: TDataArray;
+//begin
+//  if not (Sender as TObserver).UpToDate then
+//  begin
+//    PhastModel := frmGoPhast.PhastModel;
+//    if PhastModel.Clearing then
+//    begin
+//      Exit;
+//    end;
+//    Link := TimeListLink.GetLink(PhastModel) as TMt3dLktConcTimeListLink;
+////    Link.FInitCondData.Invalidate;
+//    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+//    begin
+//      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+//      Link := TimeListLink.GetLink(ChildModel) as TMt3dLktConcTimeListLink;
+////      Link.FInitCondData.Invalidate;
+//    end;
+//
+//  end;
+//end;
 
 class function TMt3dLktConcCollection.ItemClass: TBoundaryItemClass;
 begin
