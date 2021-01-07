@@ -152,8 +152,6 @@ type
     FParameterNames: TStringList;
     FPorosityPilotPointFiles: TPilotPointFiles;
     FThicknessPilotPointFiles: TPilotPointFiles;
-//    FUsedPorosityParameters: TStringList;
-//    FUsedThicknessParameters: TStringList;
     FUsedParamList: TStringList;
     FMesh: TSutraMesh3D;
     FPorKrigingFactorsFileRoot: string;
@@ -430,7 +428,6 @@ var
 begin
   FileName := ChangeFileExt(FileName, Extension);
 
-//  FInputFileName := FileName;
   OpenFile(FileName);
   try
     WriteString('        ID           X               Y           Value');
@@ -459,7 +456,6 @@ var
   APoint: TPoint2D;
 begin
   FileName := ChangeFileExt(FileName, Extension);
-//  FInputFileName := FileName;
   OpenFile(FileName);
   try
     WriteString('        ID           X               Y');
@@ -998,8 +994,6 @@ var
   AParam: TModflowSteadyParameter;
   ColIndex: Integer;
   PListName: string;
-//  QuadList: TQuadTreeObjectList;
-//  QuadTree: TRbwQuadTree;
   SListName: string;
   FileIndex: Integer;
   FileProperties: TPilotPointFileObject;
@@ -1100,7 +1094,6 @@ begin
       begin
         AParam := FUsedParamList.Objects[ParameterIndex]
           as TModflowSteadyParameter;
-//        PIndex := FPNames.IndexOf(AParam.ParameterName) + 1;
 
         WriteString('  # Setting values for parameter ');
         WriteString(AParam.ParameterName);
@@ -1146,8 +1139,8 @@ begin
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp', // * %2:s',
-              [LayerIndex + 1, ParameterIndex+1 {, AParam.ParameterName}]));
+              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp',
+              [LayerIndex + 1, ParameterIndex+1]));
             NewLine;
           end
           else
@@ -1349,13 +1342,7 @@ begin
   OpenFile(FFileName);
   try
     WriteString('NN2D ');
-//    LayerCount := 0;
-//    case EvaluatedAt of
-//      eaBlocks: LayerCount := FMesh.LayerCount;
-//      eaNodes:
-        LayerCount := FMesh.LayerCount + 1;
-//      else Assert(False);
-//    end;
+    LayerCount := FMesh.LayerCount + 1;
     for LayerIndex := 0 to LayerCount - 1 do
     begin
       if FMesh.MeshType = mt3D then
@@ -1551,17 +1538,7 @@ begin
   FParameterNames := TStringList.Create;
   FPorosityPilotPointFiles := TPilotPointFiles.Create;
   FThicknessPilotPointFiles := TPilotPointFiles.Create;
-//  FParameterNames := TStringList.Create;
-//  FUsedPorosityParameters := TStringList.Create;
-//  FUsedThicknessParameters := TStringList.Create;
   FUsedParamList := TStringList.Create;
-
-//  FUsedPorosityParameters.Duplicates := dupIgnore;
-//  FUsedPorosityParameters.Sorted := True;
-
-//  FUsedThicknessParameters.Duplicates := dupIgnore;
-//  FUsedThicknessParameters.Sorted := True;
-
   FUsedParamList.Duplicates := dupIgnore;
   FUsedParamList.Sorted := True;
 end;
@@ -1569,9 +1546,6 @@ end;
 destructor TSutraData14BScriptWriter.Destroy;
 begin
   FUsedParamList.Free;
-//  FUsedThicknessParameters.Free;
-//  FUsedPorosityParameters.Free;
-//  FParameterNames.Free;
   FThicknessPilotPointFiles.Free;
   FPorosityPilotPointFiles.Free;
   FParameterNames.Free;
@@ -1603,7 +1577,6 @@ begin
 
     for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
     begin
-//      ANode2D := FMesh.Mesh2D.Nodes[NodeIndex];
       for LayerIndex := 0 to ParamArray.LayerCount - 1 do
       begin
         PIndex := FParameterNames.IndexOf(LowerCase(
@@ -1635,7 +1608,6 @@ begin
 
       for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
       begin
-//        ANode2D := FMesh.Mesh2D.Nodes[NodeIndex];
         for LayerIndex := 0 to ParamArray.LayerCount - 1 do
         begin
           PIndex := FParameterNames.IndexOf(LowerCase(
@@ -1821,8 +1793,6 @@ begin
     NewLine;
     ColIndex := 1;
 
-//    WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
-//    NewLine;
     Inc(ColIndex);
 
     WriteString(Format('  file=''%s.Nodal_Porosity'')', [FRoot]));
@@ -1988,8 +1958,8 @@ begin
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Thickness(select=(s_Thickness == %1:d)) = temp', // * %2:s',
-              [LayerIndex + 1, ParameterIndex+1 {, AParam.ParameterName}]));
+              '    p_Thickness(select=(s_Thickness == %1:d)) = temp',
+              [LayerIndex + 1, ParameterIndex+1]));
             NewLine;
           end
           else
@@ -2052,8 +2022,8 @@ begin
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Porosity%0:d(select=(s_PorPar%0:d == %1:d)) = temp', // * %2:s',
-              [LayerIndex + 1, ParameterIndex+1 {, AParam.ParameterName}]));
+              '    p_Porosity%0:d(select=(s_PorPar%0:d == %1:d)) = temp',
+              [LayerIndex + 1, ParameterIndex+1]));
             NewLine;
           end
           else
@@ -2092,8 +2062,6 @@ begin
         WriteString(Format('  select=(s_Active_%d == 1), &',
           [LayerIndex]));
         NewLine;
-//        WriteString(Format('  select=(s_Layer%0:d = %0:d), &', [LayerIndex]));
-//        NewLine;
         WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
         NewLine;
         WriteString(Format('  slist=s_Unsat_Region%0:d, &', [LayerIndex]));
@@ -2256,12 +2224,15 @@ begin
   if Model.SutraMesh.MeshType in [mt2D, mtProfile] then
   begin
     Thickness := Model.DataArrayManager.GetDataSetByName(KNodalThickness);
-    PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
-    try
-      PilotPointWriter.WriteFile(FFileName, Thickness, FThicknessPilotPointFiles,
-        'Z');
-    finally
-      PilotPointWriter.Free;
+    if Thickness.PestParametersUsed then
+    begin
+      PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
+      try
+        PilotPointWriter.WriteFile(FFileName, Thickness, FThicknessPilotPointFiles,
+          'Z');
+      finally
+        PilotPointWriter.Free;
+      end;
     end;
   end;
 end;
@@ -2438,14 +2409,7 @@ begin
   OpenFile(FFileName);
   try
     WriteString('EN2D ');
-//    LayerCount := 0;
-//    case EvaluatedAt of
-//      eaBlocks:
     LayerCount := FMesh.LayerCount;
-//      eaNodes:
-//        LayerCount := FMesh.LayerCount + 1;
-//      else Assert(False);
-//    end;
     for LayerIndex := 0 to LayerCount - 1 do
     begin
       if FMesh.MeshType = mt3D then
@@ -2689,7 +2653,6 @@ begin
 
       for ElementIndex := 0 to Mesh.Mesh2D.Elements.Count - 1 do
       begin
-  //      ANode2D := FMesh.Mesh2D.Nodes[ElementIndex];
         for LayerIndex := 0 to ParamArray.LayerCount - 1 do
         begin
           PIndex := FParameterNames.IndexOf(LowerCase(
@@ -2715,11 +2678,6 @@ begin
 
 end;
 
-//procedure TSutraData15BScriptWriter.ReadDiscretization;
-//begin
-//
-//end;
-
 procedure TSutraData15BScriptWriter.ReadPilotPoints;
 var
   PIndex: Integer;
@@ -2744,7 +2702,6 @@ var
           [DataId, AParam.ParameterName, FileProperties.Layer + 1]);
         WriteString(Format('  plist=''%0:s'';column=%1:d, &',
           [PListName, 5]));
-//          Inc(ColIndex);
         NewLine;
         WriteString(Format('  id_type=''indexed'',file=''%s'')',
           [ExtractFileName(FileProperties.FileName)]));
@@ -2946,7 +2903,7 @@ begin
       begin
         Inc(ColIndex,2);
       end;
-//      Inc(ColIndex);
+
       WriteString(Format('  slist=s_LREG%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
@@ -3164,8 +3121,8 @@ begin
               WriteString('    # Write interpolated values in zones');
               NewLine;
               WriteString(Format(
-                '    p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = temp', // * %2:s',
-                [LayerIndex + 1, AParam.ParameterName, ParameterIndex+1, DataRoot {, AParam.ParameterName}]));
+                '    p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = temp',
+                [LayerIndex + 1, AParam.ParameterName, ParameterIndex+1, DataRoot]));
               NewLine;
             end
             else
@@ -3516,8 +3473,6 @@ procedure TSutraInitCondScriptWriter.SaveKrigingFactors;
 var
   FileProperties: TPilotPointFileObject;
   AParam: TModflowSteadyParameter;
-//  Index: Integer;
-//  ADataRec: TDataRecord;
   KrigingFactorsFileRoot: string;
   procedure HandleDataArray(DataID: string; DataArray: TDataArray;
     PilotPointFiles: TPilotPointFiles; FileName: string);
@@ -3721,12 +3676,12 @@ begin
 
           UsedFileProperties := nil;
           PIndex := 0;
-//          DataRec := FDataRecordList[RootIndex];
+
           for FileIndex := 0 to FPilotPointFiles.Count - 1 do
           begin
             FileProperties := FPilotPointFiles[FileIndex];
             if (FileProperties.Parameter = AParam)
-              and (FileProperties.Layer = LayerIndex) then
+              and (FileProperties.Layer = LayerIndex-1) then
             begin
               UsedFileProperties := FileProperties;
               PIndex := FileIndex;
@@ -3737,7 +3692,7 @@ begin
           if UsedFileProperties <> nil then
           begin
             PListName := Format('%0:s_%1:s_%2:d',
-              [FID,AParam.ParameterName, LayerIndex+1]);
+              [FID,AParam.ParameterName, LayerIndex]);
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
@@ -3756,15 +3711,15 @@ begin
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = temp', // * %2:s',
-              [LayerIndex + 1, AParam.ParameterName, ParameterIndex+1, FID {, AParam.ParameterName}]));
+              '    p_Data%0:d(select=(s_DataPar%0:d == %2:d)) = temp',
+              [LayerIndex, AParam.ParameterName, ParameterIndex+1, FID]));
             NewLine;
           end
           else
           begin
-          WriteString(Format(
-            '    # no interpolated values defined for parameter %1:s in layer %0:d',
-            [LayerIndex+1, AParam.ParameterName]));
+            WriteString(Format(
+              '    # no interpolated values defined for parameter %1:s in layer %0:d',
+              [LayerIndex, AParam.ParameterName]));
             NewLine;
           end;
 
@@ -3807,27 +3762,8 @@ begin
         NewLine;
         WriteString('  select=(s_Active3D == 1), &');
         NewLine;
-//        WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
-//        NewLine;
         WriteString('  plist=temp3D)');
         NewLine;
-
-
-//      for LayerIndex := 1 to LayerCount do
-//      begin
-//        WriteString('write_column_data_file(header = ''no'', &');
-//        NewLine;
-//        WriteString(Format('  file=''%s.%2:s_%1:d'';delim="space", &',
-//          [FRoot, LayerIndex, FID]));
-//        NewLine;
-//        WriteString(Format('  select=(s_Active_%d == 1), &',
-//          [LayerIndex]));
-//        NewLine;
-////        WriteString(Format('  slist=''s_NN3D%0:d'', &', [LayerIndex]));
-////        NewLine;
-//        WriteString(Format('  plist=p_%1:s%0:d)', [LayerIndex, 'Data']));
-//        NewLine;
-//      end;
     end
     else
     begin
@@ -3835,8 +3771,6 @@ begin
       NewLine;
       WriteString(Format('  file=''%0:s.%1:s'';delim="space", &', [FRoot, FID]));
       NewLine;
-//      WriteString('  clist_spec=''id'', &');
-//      NewLine;
       WriteString(Format('  plist=p_%s1)', ['Data']));
       NewLine;
     end;
@@ -3868,21 +3802,7 @@ begin
 end;
 
 procedure TSutraInitCondScriptWriter.Read3DDiscretization;
-//var
-//  LayerIndex: Integer;
-//  LayerCount: Integer;
-//  ColIndex: Integer;
 begin
-//  if FMesh.MeshType = mt3D then
-//  begin
-//    LayerCount := FMesh.LayerCount + 1;
-//  end
-//  else
-//  begin
-//    LayerCount := 1;
-//  end;
-
-
   WriteString('#Read 3D SUTRA node information file');
   NewLine;
   WriteString('cl_Discretization3D = read_list_file(skiplines=1,dimensions=3, &');
@@ -3903,28 +3823,6 @@ begin
   NewLine;
   WriteString(Format('  id_type=''indexed'',file=''%s.c_nod3D'')', [FRoot]));
   NewLine;
-//  if FMesh.MeshType = mt3D then
-//  begin
-//    ColIndex := 5;
-//    for LayerIndex := 1 to LayerCount do
-//    begin
-//      // PLPROC has a limit of 5 s_lists per call of read_list_file.
-//      // To avoid reaching that limit, a separate call is used for each layer.
-//      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-//      NewLine;
-//      WriteString(Format('  plist=p_z%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
-//      NewLine;
-//      Inc(ColIndex);
-//      WriteString(Format('  slist=s_NN3D%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
-//      NewLine;
-//      Inc(ColIndex);
-//      WriteString(Format('  slist=s_Active_%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
-//      NewLine;
-//      Inc(ColIndex);
-//      WriteString(Format('  id_type=''indexed'',file=''%s.c_nod'')', [FRoot]));
-//      NewLine;
-//    end;
-//  end;
   NewLine;
 end;
 
@@ -3942,7 +3840,6 @@ begin
   begin
     LayerCount := 1;
   end;
-
 
   WriteString('#Read SUTRA node information file');
   NewLine;
@@ -4034,144 +3931,6 @@ begin
   PilotPointFiles.Free;
   inherited;
 end;
-
-{ TSutraInitialConditionWriter }
-
-//constructor TSutraInitialConditionWriter.Create(AModel: TCustomModel;
-//  EvaluationType: TEvaluationType);
-//begin
-//  inherited;
-//  FMesh := AModel.SutraMesh;
-//end;
-//
-//class function TSutraInitialConditionWriter.Extension: string;
-//begin
-//  Result := '.PstValues';
-//end;
-//
-//procedure TSutraInitialConditionWriter.WriteFile(var AFileName: string;
-//  DataArray: TDataArray);
-//var
-//  ParameterNames: TStringList;
-//  PIndex: Integer;
-//  AParam: TModflowSteadyParameter;
-//  ParamArray: TDataArray;
-//  LayerIndex: Integer;
-//  NodeIndex: Integer;
-//  ANode2D: TSutraNode2D;
-//  ANode3D: TSutraNode3D;
-//begin
-//  ParameterNames := TStringList.Create;
-//  try
-//    FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);
-//    GetParameterNames(ParameterNames);
-//
-//    if DataArray.PestParametersUsed and (DataArray.DataType = rdtDouble) then
-//    begin
-//      ParamArray := Model.DataArrayManager.GetDataSetByName
-//        (DataArray.ParamDataSetName);
-//    end
-//    else
-//    begin
-//      ParamArray := nil;
-//    end;
-//
-//    OpenFile(FFileName);
-//    try
-//      WriteString('NN2D ');
-//      for LayerIndex := 0 to DataArray.LayerCount - 1 do
-//      begin
-//        if FMesh.MeshType = mt3D then
-//        begin
-//          WriteString(Format('NN3D%0:d Layer%0:d ', [LayerIndex+1]));
-//        end;
-//        WriteString(Format('%0:s%1:d ', [DataArray.Name, LayerIndex+1]));
-//        if DataArray.DataType = rdtDouble then
-//        begin
-//          WriteString(Format('%0:sParameter%1:d ', [DataArray.Name, LayerIndex+1]))
-//        end;
-//      end;
-//      NewLine;
-//
-//      for NodeIndex := 0 to FMesh.Mesh2D.Nodes.Count - 1 do
-//      begin
-//        ANode2D := FMesh.Mesh2D.Nodes[NodeIndex];
-//        WriteInteger(ANode2D.Number+1);
-//        for LayerIndex := 0 to DataArray.LayerCount - 1 do
-//        begin
-//          if FMesh.MeshType = mt3D then
-//          begin
-//            ANode3D := FMesh.NodeArray[LayerIndex,NodeIndex];
-//            WriteInteger(ANode3D.Number + 1);
-//            WriteInteger(LayerIndex + 1);
-//          end;
-//          if ParamArray <> nil then
-//          begin
-//            PIndex := ParameterNames.IndexOf(LowerCase(
-//              ParamArray.StringData[LayerIndex, 0, NodeIndex]));
-//          end
-//          else
-//          begin
-//            PIndex := -1;
-//          end;
-//          if PIndex >=0 then
-//          begin
-//            AParam := ParameterNames.Objects[PIndex] as TModflowSteadyParameter;
-//          end
-//          else
-//          begin
-//            AParam := nil;
-//          end;
-//          case DataArray.DataType of
-//            rdtDouble:
-//              begin
-//                if (AParam = nil) or (AParam.Value = 0) then
-//                begin
-//                  WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]);
-//                end
-//                else
-//                begin
-//                  WriteFloat(DataArray.RealData[LayerIndex, 0, NodeIndex]
-//                    /AParam.Value);
-//                end;
-//              end;
-//            rdtInteger:
-//              begin
-//                WriteInteger(DataArray.IntegerData[LayerIndex, 0, NodeIndex]);
-//              end;
-//            rdtBoolean:
-//              begin
-//                WriteInteger(Ord(DataArray.BooleanData[LayerIndex, 0, NodeIndex]));
-//              end;
-//            rdtString:
-//              begin
-//                Assert(False);
-//              end;
-//            else
-//              begin
-//                Assert(False);
-//              end;
-//          end;
-//          if DataArray.DataType = rdtDouble then
-//          begin
-//            WriteInteger(PIndex+1);
-//          end;
-//        end;
-//        NewLine;
-//      end;
-//
-//    finally
-//      CloseFile;
-//    end;
-//  finally
-//    ParameterNames.Free;
-//  end;
-//  Model.DataArrayManager.AddDataSetToCache(DataArray);
-//  if ParamArray <> nil then
-//  begin
-//    Model.DataArrayManager.AddDataSetToCache(ParamArray);
-//  end;
-//end;
 
 { TSutraNod3DDisWriter }
 

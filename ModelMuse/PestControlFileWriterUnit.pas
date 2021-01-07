@@ -4,7 +4,8 @@ interface
 
 uses
   CustomModflowWriterUnit, System.SysUtils, PestObsUnit, GoPhastTypes,
-  PhastModelUnit, ObsInterfaceUnit, OrderedCollectionUnit, System.Classes;
+  PhastModelUnit, ObsInterfaceUnit, OrderedCollectionUnit, System.Classes,
+  RealListUnit;
 
 type
   TPestControlFileWriter = class(TCustomFileWriter)
@@ -12,6 +13,7 @@ type
     FNameOfFile: string;
     FUsedObservations: TObservationInterfaceList;
     FUsePval: Boolean;
+    F_AbsParMax: TRealList;
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
     procedure WriteControlSection;
@@ -102,10 +104,13 @@ constructor TPestControlFileWriter.Create(AModel: TCustomModel;
 begin
   inherited;
   FUsedObservations := TObservationInterfaceList.Create;
+  F_AbsParMax:= TRealList.Create;
+  F_AbsParMax.Sorted := True;
 end;
 
 destructor TPestControlFileWriter.Destroy;
 begin
+  F_AbsParMax.Free;
   FUsedObservations.Free;
   inherited;
 end;
@@ -330,6 +335,10 @@ procedure TPestControlFileWriter.WriteControlSection;
 var
   PestControlData: TPestControlData;
   NINSFLE: Integer;
+  ParIndex: Integer;
+  UsedTypes: TParameterTypes;
+  ParamIndex: Integer;
+  AParam: TModflowParameter;
 begin
   PestControlData := Model.PestProperties.PestControlData;
   // First line 4.2.2.
@@ -522,6 +531,45 @@ begin
   WriteFloat(PestControlData.RelativeMaxParamChange);
   //FACPARMAX
   WriteFloat(PestControlData.FactorMaxParamChange);
+  // ABSPARMAX(N)
+  GetUsedTypes(UsedTypes);
+
+  for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+  begin
+    AParam := Model.ModflowSteadyParameters[ParamIndex];
+    if (AParam.ParameterType in UsedTypes) and
+      (AParam.ChangeLimitation = pclAbsolute) then
+    begin
+      F_AbsParMax.AddUnique(AParam.AbsoluteN);
+    end;
+  end;
+
+  for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+  begin
+    AParam := Model.ModflowTransientParameters[ParamIndex];
+    if (AParam.ParameterType in UsedTypes) and
+      (AParam.ChangeLimitation = pclAbsolute) then
+    begin
+      F_AbsParMax.AddUnique(AParam.AbsoluteN);
+    end;
+  end;
+
+  for ParamIndex := 0 to Model.HufParameters.Count - 1 do
+  begin
+    AParam := Model.HufParameters[ParamIndex];
+    if (AParam.ParameterType in UsedTypes) and
+      (AParam.ChangeLimitation = pclAbsolute) then
+    begin
+      F_AbsParMax.AddUnique(AParam.AbsoluteN);
+    end;
+  end;
+
+  for ParamIndex := 0 to F_AbsParMax.Count - 1 do
+  begin
+    WriteString(Format(' absparmax(%0:d)=%1:g',
+      [ParamIndex + 1,F_AbsParMax[ParamIndex]]));
+  end;
+
   //FACORIG
   WriteFloat(PestControlData.FactorOriginal);
   // IBOUNDSTICK
@@ -1134,6 +1182,7 @@ var
     Value: double = 0);
   var
     PARNME: string;
+    N: Integer;
   begin
     //PARNME
     if ParameterName <> '' then
@@ -1179,7 +1228,9 @@ var
         end;
       pclAbsolute:
         begin
-          WriteString(' absolute(N)');
+          N := F_AbsParMax.IndexOf(AParam.AbsoluteN) + 1;
+          Assert(N >= 1);
+          WriteString(Format(' absolute(%d)', [N]));
         end;
       else
         Assert(False);

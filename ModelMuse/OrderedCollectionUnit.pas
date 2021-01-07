@@ -315,6 +315,7 @@ type
     FTiedParameterName: string;
     FParameterGroup: string;
     FStoredUpperBound: TRealStorage;
+    FStoredAbsoluteN: TRealStorage;
     procedure NotifyHufKx;
     procedure NotifyHufKy;
     procedure NotifyHufKz;
@@ -336,6 +337,9 @@ type
     function GetScale: double;
     procedure SetOffset(const Value: double);
     procedure SetScale(const Value: double);
+    procedure SetStoredAbsoluteN(const Value: TRealStorage);
+    function GetAbsoluteN: double;
+    procedure SetAbsoluteN(const Value: double);
   protected
     // See @link(ParameterName).
     FParameterName: string;
@@ -368,6 +372,8 @@ type
     property Scale: double read GetScale write SetScale;
     // OFFSET in PEST
     property Offset: double read GetOffset write SetOffset;
+    // Absolute(N) and ABSPARMAX(N) in PEST
+    property AbsoluteN: double read GetAbsoluteN write SetAbsoluteN;
   published
     // @name is the name of the parameter.  All parameter names must be unique
     // but ensuring that they are unique is left up to the GUI rather than
@@ -397,7 +403,11 @@ type
     property StoredOffset: TRealStorage read FStoredOffset write SetStoredOffset;
     // DERCOM in PEST is not currently supported.
     // PARTIED in PEST
-    property TiedParameterName: string read FTiedParameterName write SetTiedParameterName;
+    property TiedParameterName: string read FTiedParameterName
+      write SetTiedParameterName;
+    // Absolute(N) and ABSPARMAX(N) in PEST
+    property StoredAbsoluteN: TRealStorage read FStoredAbsoluteN
+      write SetStoredAbsoluteN;
   end;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
@@ -794,6 +804,7 @@ begin
     ChangeLimitation := SourceParameter.ChangeLimitation;
     ParameterGroup := SourceParameter.ParameterGroup;
     TiedParameterName := SourceParameter.TiedParameterName;
+    AbsoluteN := SourceParameter.AbsoluteN;
   end;
   inherited;
 end;
@@ -830,6 +841,8 @@ begin
   FStoredLowerBound.OnChange := OnInvalidateModelEvent;
   FStoredUpperBound := TRealStorage.Create;
   FStoredUpperBound.OnChange := OnInvalidateModelEvent;
+  FStoredAbsoluteN := TRealStorage.Create;
+  FStoredAbsoluteN.OnChange := OnInvalidateModelEvent;
   Scale := 1;
 end;
 
@@ -856,11 +869,17 @@ begin
       end;
     end;
   end;
+  FStoredAbsoluteN.Free;
   FStoredUpperBound.Free;
   FStoredLowerBound.Free;
   FStoredScale.Free;
   FStoredOffset.Free;
   inherited;
+end;
+
+function TModflowParameter.GetAbsoluteN: double;
+begin
+  result := StoredAbsoluteN.Value;
 end;
 
 function TModflowParameter.GetLowerBound: double;
@@ -1023,7 +1042,13 @@ begin
     (Transform = AnotherParameter.Transform) and
     (ChangeLimitation = AnotherParameter.ChangeLimitation) and
     (ParameterGroup = AnotherParameter.ParameterGroup) and
-    (TiedParameterName = AnotherParameter.TiedParameterName);
+    (TiedParameterName = AnotherParameter.TiedParameterName) and
+    (AbsoluteN = AnotherParameter.AbsoluteN);
+end;
+
+procedure TModflowParameter.SetAbsoluteN(const Value: double);
+begin
+  StoredAbsoluteN.Value := Value;
 end;
 
 procedure TModflowParameter.SetChangeLimitation(
@@ -1332,6 +1357,11 @@ end;
 procedure TModflowParameter.SetScale(const Value: double);
 begin
   StoredScale.Value := Value;
+end;
+
+procedure TModflowParameter.SetStoredAbsoluteN(const Value: TRealStorage);
+begin
+  FStoredAbsoluteN.Assign(Value);
 end;
 
 procedure TModflowParameter.SetStoredLowerBound(const Value: TRealStorage);

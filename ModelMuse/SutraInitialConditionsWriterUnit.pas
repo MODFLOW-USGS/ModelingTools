@@ -112,21 +112,6 @@ begin
           ScriptWriter.Free;
         end;
         Mesh := Model.SutraMesh;
-//        if Mesh.MeshType = mt3D then
-//        begin
-//          OpenTempFile(TempFileName);
-//          try
-//            TempFileName := ExtractFileName(TempFileName)+ '_';
-//            for LayerIndex := 1 to Mesh.LayerCount+1 do
-//            begin
-//              WriteString('@INSERT 99 ');
-//              WriteString(TempFileName + IntToStr(LayerIndex));
-//              NewLine;
-//            end;
-//          finally
-//            CloseTempFile;
-//          end;
-//        end;
       end;
 
       if ParamUsed then
@@ -362,7 +347,6 @@ begin
 
 
       FFileName := ChangeFileExt(FileName, '.ics');
-//      FInputFileName := FileName;
       OpenFile(FFileName);
       try
         WriteDataSet0;

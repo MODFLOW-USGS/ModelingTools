@@ -68,7 +68,7 @@ inherited frmManageParameters: TfrmManageParameters
     Top = 0
     Width = 784
     Height = 517
-    ActivePage = tabParameterGroups
+    ActivePage = tabParameters
     Align = alClient
     TabOrder = 1
     object tabParameters: TTabSheet
@@ -146,7 +146,7 @@ inherited frmManageParameters: TfrmManageParameters
         Width = 776
         Height = 443
         Align = alClient
-        ColCount = 15
+        ColCount = 16
         FixedCols = 0
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
@@ -485,6 +485,29 @@ inherited frmManageParameters: TfrmManageParameters
             ButtonWidth = 20
             CheckMax = False
             CheckMin = False
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = True
             ComboUsed = False
             Format = rcf4Real
             LimitToList = False

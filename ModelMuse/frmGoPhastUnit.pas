@@ -520,12 +520,9 @@ type
     PESTControlfile1: TMenuItem;
     acArchiveModel: TAction;
     Archivemodelbydefault1: TMenuItem;
-    acImportSutra14B: TAction;
-    ImportSUTRADataSet14B1: TMenuItem;
-    odSutra14B: TOpenDialog;
-    acImportSutra15B: TAction;
-    odSutra15B: TOpenDialog;
-    SUTRADataSet15B1: TMenuItem;
+    acImportSutraFiles: TAction;
+    miImportSUTRADataSet14B: TMenuItem;
+    odSutraFiles: TOpenDialog;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -716,8 +713,8 @@ type
     procedure dlgSavePestShow(Sender: TObject);
     procedure dlgSavePestClose(Sender: TObject);
     procedure acArchiveModelExecute(Sender: TObject);
-    procedure acImportSutra14BExecute(Sender: TObject);
-    procedure acImportSutra15BExecute(Sender: TObject);
+    procedure acImportSutraFilesExecute(Sender: TObject);
+    procedure odSutraFilesTypeChange(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2339,6 +2336,7 @@ resourcestring
   'MODFLOW Output Control dialog box?';
   StrPrintingCellLists = 'Printing cell lists has been deactivated.';
   StrSutraObsExtractorex = 'SutraObsExtractor.exe';
+  StrSWasNotARecog = '"%s" was not a recognized file type.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -4316,10 +4314,9 @@ begin
 //  acImportGriddedDataFiles.Enabled :=
 //    not (PhastModel.ModelSelection  in SutraSelection);
   tlbMesh.Visible := PhastModel.ModelSelection  in SutraSelection;
-  tlb3dViewMesh.Visible := (PhastModel.ModelSelection  in SutraSelection) or DisVUsed;
-  acImportSutraMesh.Enabled := PhastModel.ModelSelection  in SutraSelection;
-  acImportSutra14B.Enabled := PhastModel.ModelSelection  in SutraSelection;
-  acImportSutra15B.Enabled := PhastModel.ModelSelection  in SutraSelection;
+  tlb3dViewMesh.Visible := (PhastModel.ModelSelection in SutraSelection) or DisVUsed;
+  acImportSutraMesh.Enabled := PhastModel.ModelSelection in SutraSelection;
+  acImportSutraFiles.Enabled := PhastModel.ModelSelection in SutraSelection;
 
   tbarShowGrid.Left := Width - tbarShowGrid.Width- ToolbarExtraWidth;
   if tbarEditGrid.Visible then
@@ -6134,6 +6131,41 @@ begin
   if frmDisplayData <> nil then
   begin
     frmDisplayData.NilDisplay;
+  end;
+end;
+
+procedure TfrmGoPhast.odSutraFilesTypeChange(Sender: TObject);
+var
+  NewFileName: string;
+begin
+  inherited;
+  if odSutraFiles.FileName <> '' then
+  begin
+    NewFileName := '';
+    case odSutraFiles.FilterIndex of
+      1,2:
+        begin
+          NewFileName := ChangeFileExt(odSutraFiles.FileName, '.14B');
+        end;
+      3:
+        begin
+          NewFileName := ChangeFileExt(odSutraFiles.FileName, '.15B');
+        end;
+      4:
+        begin
+          NewFileName := ChangeFileExt(odSutraFiles.FileName, '.PVEC');
+        end;
+      5:
+        begin
+          NewFileName := ChangeFileExt(odSutraFiles.FileName, '.UVEC');
+        end;
+    end;
+    if NewFileName <> '' then
+    begin
+      odSutraFiles.FileName := NewFileName;
+      UpdateDialogBoxFileName(odSutraFiles, NewFileName);
+    end;
+
   end;
 end;
 
@@ -13200,32 +13232,70 @@ begin
   end;
 end;
 
-procedure TfrmGoPhast.acImportSutra14BExecute(Sender: TObject);
+procedure TfrmGoPhast.acImportSutraFilesExecute(Sender: TObject);
+var
+  Extension: string;
+  DefaultFileName: string;
 begin
   inherited;
 
   if (PhastModel.ModelFileName <> '') then
   begin
-    odSutra14B.FileName := ChangeFileExt(
-      PhastModel.ModelFileName, odSutra14B.DefaultExt);
+    DefaultFileName := ChangeFileExt(PhastModel.ModelFileName, '.14B');
+    if TFile.Exists(DefaultFileName) then
+    begin
+      odSutraFiles.FileName := DefaultFileName;
+    end
+    else
+    begin
+      DefaultFileName := ChangeFileExt(PhastModel.ModelFileName, '.15B');
+      if TFile.Exists(DefaultFileName) then
+      begin
+        odSutraFiles.FileName := DefaultFileName;
+      end
+      else
+      begin
+        DefaultFileName := ChangeFileExt(PhastModel.ModelFileName, '.PVEC');
+        if TFile.Exists(DefaultFileName) then
+        begin
+          odSutraFiles.FileName := DefaultFileName;
+        end
+        else
+        begin
+          DefaultFileName := ChangeFileExt(PhastModel.ModelFileName, '.UVEC');
+          if TFile.Exists(DefaultFileName) then
+          begin
+            odSutraFiles.FileName := DefaultFileName;
+          end
+          else
+          begin
+            odSutraFiles.FileName := ChangeFileExt(PhastModel.ModelFileName,
+              odSutraFiles.DefaultExt);
+          end;
+        end;
+      end;
+    end;
   end;
-  if odSutra14B.Execute then
+  if odSutraFiles.Execute then
   begin
-    ImportDataSet14B(odSutra14B.FileName);
-  end;
-end;
-
-procedure TfrmGoPhast.acImportSutra15BExecute(Sender: TObject);
-begin
-  inherited;
-  if (PhastModel.ModelFileName <> '') then
-  begin
-    odSutra15B.FileName := ChangeFileExt(
-      PhastModel.ModelFileName, odSutra15B.DefaultExt);
-  end;
-  if odSutra15B.Execute then
-  begin
-    ImportDataSet15B(odSutra15B.FileName);
+    Extension := UpperCase(ExtractFileExt(odSutraFiles.FileName));
+    if Extension = '.14B' then
+    begin
+      ImportDataSet14B(odSutraFiles.FileName);
+    end
+    else if Extension = '.15B' then
+    begin
+      ImportDataSet15B(odSutraFiles.FileName);
+    end
+    else if (Extension = '.PVEC') or (Extension = '.UVEC') then
+    begin
+      ImportInitConditions(odSutraFiles.FileName);
+    end
+    else
+    begin
+      Beep;
+      MessageDlg(Format(StrSWasNotARecog, [odSutraFiles.FileName]), mtWarning, [mbOK], 0);
+    end;
   end;
 end;
 

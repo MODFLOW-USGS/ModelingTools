@@ -326,7 +326,6 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitTop = -6
     object tbarEdit: TToolBar
       Left = 152
       Top = 34
@@ -1231,11 +1230,8 @@ inherited frmGoPhast: TfrmGoPhast
         object miImportSutraMesh: TMenuItem
           Action = acImportSutraMesh
         end
-        object ImportSUTRADataSet14B1: TMenuItem
-          Action = acImportSutra14B
-        end
-        object SUTRADataSet15B1: TMenuItem
-          Action = acImportSutra15B
+        object miImportSUTRADataSet14B: TMenuItem
+          Action = acImportSutraFiles
         end
       end
       object miLinkedRasters: TMenuItem
@@ -3609,15 +3605,10 @@ inherited frmGoPhast: TfrmGoPhast
       Checked = True
       OnExecute = acArchiveModelExecute
     end
-    object acImportSutra14B: TAction
+    object acImportSutraFiles: TAction
       Category = 'File'
-      Caption = 'SUTRA Data Set 14B'
-      OnExecute = acImportSutra14BExecute
-    end
-    object acImportSutra15B: TAction
-      Category = 'File'
-      Caption = 'SUTRA Data Set 15B'
-      OnExecute = acImportSutra15BExecute
+      Caption = 'SUTRA Files'
+      OnExecute = acImportSutraFilesExecute
     end
   end
   object ilDisabledImageList: TImageList
@@ -9745,18 +9736,17 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 560
     Top = 120
   end
-  object odSutra14B: TOpenDialog
+  object odSutraFiles: TOpenDialog
     DefaultExt = '.14B'
-    Filter = 'SUTRA Data Set 14B (*.14B)|*.14B|All files (*.*)|*.*'
+    Filter = 
+      'SUTRA Files (*.14B, *.14B, *.PVEC;*.UVEC)|*.14B;*.15B;*.PVEC;*.U' +
+      'VEC|SUTRA Data Set 14B (*.14B)|*.14B|SUTRA Data Set 15B (*.15B)|' +
+      '*.15B|SUTRA Inital Pressure file (*.PVEC)|*.PVEC|SUTRA Inital U ' +
+      'file (*.UVEC)|*.UVEC'
+    InitialDir = '(Directory)'
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    OnTypeChange = odSutraFilesTypeChange
     Left = 600
     Top = 128
-  end
-  object odSutra15B: TOpenDialog
-    DefaultExt = '.14B'
-    Filter = 'SUTRA Data Set 15B (*.15B)|*.15B|All files (*.*)|*.*'
-    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
-    Left = 640
-    Top = 120
   end
 end

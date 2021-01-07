@@ -15,7 +15,7 @@ uses System.UITypes, System.Types,
 type
   TParamColumn = (pcName, pcPackage, pcType, pcValue, pcMult, pcZone,
     pcPilotPoints, pcPestTransform, pcChangeLimitation, pcLowerBound,
-    pcUpperBound, pcParamGroup, pcScaled, pcOffset, pcTiedParameter);
+    pcUpperBound, pcParamGroup, pcScaled, pcOffset, pcAbsolute, pcTiedParameter);
 
   TParamGroupColumn = (pgcName, pgcIncType, pgcIncrement, pgcMinIncrement,
     pgcForceCentral, pgcParamIncrementMultiplier, pgcDM3, pgcDM5,
@@ -167,6 +167,7 @@ resourcestring
   StrOFFSET = 'OFFSET';
   StrTiedParameterPART = 'Tied Parameter (PARTIED)';
   StrNone = '(none)';
+  StrABSPARMAXN = 'ABSPARMAX(N)';
 
 {$R *.dfm}
 type
@@ -539,6 +540,7 @@ begin
     rdgParameters.Cells[Ord(pcParamGroup), 0] := StrParameterGroupPAR;
     rdgParameters.Cells[Ord(pcScaled), 0] := StrSCALE;
     rdgParameters.Cells[Ord(pcOffset), 0] := StrOFFSET;
+    rdgParameters.Cells[Ord(pcAbsolute), 0] := StrABSPARMAXN;
     rdgParameters.Cells[Ord(pcTiedParameter), 0] := StrTiedParameterPART;
   finally
     rdgParameters.EndUpdate;
@@ -1535,6 +1537,8 @@ begin
           AModflowParam.Scale;
         rdgParameters.RealValue[Ord(pcOffset), ParamIndex + 1] :=
           AModflowParam.Offset;
+        rdgParameters.RealValue[Ord(pcAbsolute), ParamIndex + 1] :=
+          AModflowParam.AbsoluteN;
         rdgParameters.Cells[Ord(pcTiedParameter), ParamIndex + 1] :=
           AModflowParam.TiedParameterName;
       end;
@@ -1699,7 +1703,14 @@ begin
       end;
     end;
 
-
+    if TParamColumn(ACol) = pcChangeLimitation then
+    begin
+      if (rdgParameters.ItemIndex[Ord(pcPestTransform), ARow] = Ord(ptLog)) and
+        (rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow] <> Ord(pclFactor)) then
+      begin
+          rdgParameters.Canvas.Brush.Color := clRed;
+      end;
+    end;
   end;
 end;
 
@@ -1754,6 +1765,11 @@ begin
         begin
           CanSelect := rdgParameters.UseSpecialFormat[ACol, ARow];
         end;
+     pcAbsolute:
+       begin
+         CanSelect := rdgParameters.ItemIndex[Ord(pcChangeLimitation), ARow]
+           = Ord(pclAbsolute);
+       end;
       pcTiedParameter:
         begin
           CanSelect := (rdgParameters.Cells[Ord(pcName), ARow] <> '')
@@ -1936,6 +1952,16 @@ begin
               as TModflowParameter;
             AParam.Offset := StrToFloatDef(rdgParameters.Cells[
               Ord(pcOffset), ARow], 1);
+          end;
+        end;
+      pcAbsolute:
+        begin
+          if rdgParameters.Objects[Ord(pcName), ARow] <> nil then
+          begin
+            AParam := rdgParameters.Objects[Ord(pcName), ARow]
+              as TModflowParameter;
+            AParam.AbsoluteN := StrToFloatDef(rdgParameters.Cells[
+              Ord(pcAbsolute), ARow], 1);
           end;
         end;
       pcTiedParameter:
