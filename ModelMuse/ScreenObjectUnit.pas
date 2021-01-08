@@ -5345,6 +5345,8 @@ procedure GetLayerFromZ(Z: Double; var CellLocation: TCellLocation;
 procedure SelectAScreenObject(ScreenObject: TScreenObject);
 procedure SelectMultipleScreenObjects(ScreenObjects: TScreenObjectList);
 procedure HideMultipleScreenObjects(ScreenObjects: TScreenObjectList);
+procedure DeselectAScreenObject(ScreenObject: TScreenObject);
+procedure AddAScreenObjectToSelection(ScreenObject: TScreenObject);
 
 function FindIntersectionPoints(Poly1, Poly2: TSubPolygon;
   var Intersections: TIntersectionArray; 
@@ -6520,7 +6522,7 @@ begin
   ColorLine := AScreenObject.ColorLine;
   FillScreenObject := AScreenObject.FillScreenObject;
   QuadtreeRefinementLevel := AScreenObject.QuadtreeRefinementLevel;
-  VerticesArePilotPoints := AScreenObject.VerticesArePilotPoints;
+//  VerticesArePilotPoints := AScreenObject.VerticesArePilotPoints;
 
   AScreenObject.ImportedSectionElevations.RestoreData;
   ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
@@ -42407,6 +42409,55 @@ begin
     UndoChangeSelection.Free;
   end;
 end;
+
+procedure DeselectAScreenObject(ScreenObject: TScreenObject);
+var
+  UndoChangeSelection: TUndoChangeSelection;
+begin
+  UndoChangeSelection := TUndoChangeSelection.Create;
+  ScreenObject.Selected := False;
+  UndoChangeSelection.SetPostSelection;
+  if UndoChangeSelection.SelectionChanged then
+  begin
+    frmGoPhast.UndoStack.Submit(UndoChangeSelection);
+  end
+  else
+  begin
+    UndoChangeSelection.Free;
+  end;
+end;
+
+procedure AddAScreenObjectToSelection(ScreenObject: TScreenObject);
+var
+  AScreenObject: TScreenObject;
+  Index: Integer;
+  UndoChangeSelection: TUndoChangeSelection;
+begin
+  if ScreenObject.Selected then
+  begin
+    Exit;
+  end;
+  UndoChangeSelection := TUndoChangeSelection.Create;
+  for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+  begin
+    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];
+    if AScreenObject.ViewDirection <> ScreenObject.ViewDirection then
+    begin
+      AScreenObject.Selected := False;
+    end;
+  end;
+  ScreenObject.Selected := True;
+  UndoChangeSelection.SetPostSelection;
+  if UndoChangeSelection.SelectionChanged then
+  begin
+    frmGoPhast.UndoStack.Submit(UndoChangeSelection);
+  end
+  else
+  begin
+    UndoChangeSelection.Free;
+  end;
+end;
+
 
 procedure SelectMultipleScreenObjects(ScreenObjects: TScreenObjectList);
 var

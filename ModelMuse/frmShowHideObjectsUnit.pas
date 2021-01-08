@@ -36,6 +36,9 @@ type
     rgOrientation: TRadioGroup;
     edSearchTerm: TEdit;
     btnShowOrSelect: TButton;
+    miDeselect: TMenuItem;
+    miAddToSelection: TMenuItem;
+    btnEditAllSelected: TButton;
     // @name calls Release and sets frmShowHideObjects to nil.
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     // @name is the event handler for the OnCreate event of @classname.
@@ -67,6 +70,9 @@ type
       var Ghosted: Boolean; var ImageIndex: VirtualTrees.TImageIndex;
       var ImageList: TCustomImageList);
     procedure FormDestroy(Sender: TObject); override;
+    procedure miDeselectClick(Sender: TObject);
+    procedure miAddToSelectionClick(Sender: TObject);
+    procedure btnEditAllSelectedClick(Sender: TObject);
   private
     FUndoShowHide: TUndoShowHideScreenObject;
     FCount: integer;
@@ -109,6 +115,12 @@ resourcestring
 {$R *.dfm}
 
 { TfrmShowHideObjects }
+
+procedure TfrmShowHideObjects.btnEditAllSelectedClick(Sender: TObject);
+begin
+  inherited;
+  frmGoPhast.EditScreenObjects;
+end;
 
 procedure TfrmShowHideObjects.btnShowOrSelectClick(Sender: TObject);
 var
@@ -360,6 +372,8 @@ begin
   miSelect.Enabled := (Data <> nil) and (Data.ScreenObjects <> nil);
   miEdit.Enabled := miSelect.Enabled;
   miGoto.Enabled := miSelect.Enabled;
+  miDeselect.Enabled := miSelect.Enabled;
+  miAddToSelection.Enabled := miSelect.Enabled;
 end;
 
 procedure TfrmShowHideObjects.HandleChecked(AScreenObject: TScreenObject);
@@ -628,6 +642,30 @@ begin
   result := ScreenObject.Visible;
 end;
 
+procedure TfrmShowHideObjects.miAddToSelectionClick(Sender: TObject);
+var
+  ScreenObject: TScreenObject;
+begin
+  inherited;
+  ScreenObject := GetSelectedScreenObject;
+  if ScreenObject <> nil then
+  begin
+    AddAScreenObjectToSelection(ScreenObject);
+  end;
+end;
+
+procedure TfrmShowHideObjects.miDeselectClick(Sender: TObject);
+var
+  ScreenObject: TScreenObject;
+begin
+  inherited;
+  ScreenObject := GetSelectedScreenObject;
+  if ScreenObject <> nil then
+  begin
+    DeselectAScreenObject(ScreenObject);
+  end;
+end;
+
 procedure TfrmShowHideObjects.miEditClick(Sender: TObject);
 var
   ScreenObject: TScreenObject;
@@ -678,6 +716,9 @@ begin
   inherited;
   miSelect.Enabled := Value;
   miEdit.Enabled := Value;
+  miGoto.Enabled := Value;
+  miDeselect.Enabled := Value;
+  miAddToSelection.Enabled := Value;
 end;
 
 initialization

@@ -10152,14 +10152,18 @@ const
 //               Bug fix: Fixed a bug that could cause an access violation
 //                when exporting the ETS package if EVT depth or rate fractions
 //                have not been assigned.
-
 //    '4.3.0.29' Bug fix: In the Geo Reference dialog box, the model start date
 //                now displays the format for dates used in the computer in which
 //                which the starting date is being edited.
+//    '4.3.0.30' Bug fix: Fixed a bug that caused panning the model or resizing
+//                the main form to be unneccesarily slow.
+
+//               Enhancement: Added a "Deselect" option to the popup menu in
+//                the Show or Hide Objects dialog box.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.29';
+  IIModelVersion = '4.3.0.30';
 
 function IModelVersion: string;
 begin

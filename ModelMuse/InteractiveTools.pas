@@ -1487,6 +1487,7 @@ begin
   ZoomBox.Panning := True;
   Cursor := crHandGrab;
   Screen.Cursor := crHandGrab;
+  frmGoPhast.CanDraw := False;
 end;
 
 procedure TPanTool.MouseUp(Sender: TObject; Button: TMouseButton;
@@ -1496,6 +1497,7 @@ begin
   // Stop panning and change the cursor to indicate that panning has
   // stopped.
   inherited;
+  frmGoPhast.CanDraw := True;
   if Button <> mbLeft then
   begin
     Exit;

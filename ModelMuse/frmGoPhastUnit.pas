@@ -2008,6 +2008,8 @@ type
     procedure EnableCTS;
     procedure EnableManageParameters;
 //    property WriteErrorRaised: Boolean read FWriteErrorRaised;
+    procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
+    procedure WMExitSizeMove(var Message: TMessage); message WM_EXITSIZEMOVE;
     { Public declarations }
   end;
 
@@ -3019,6 +3021,16 @@ begin
   begin
     frmErrorsAndWarnings.WindowState := wsNormal
   end;
+end;
+
+procedure TfrmGoPhast.WMEnterSizeMove(var Message: TMessage);
+begin
+  CanDraw := False;
+end;
+
+procedure TfrmGoPhast.WMExitSizeMove(var Message: TMessage);
+begin
+  CanDraw := True;
 end;
 
 procedure TfrmGoPhast.WMMenuSelect(var Msg: TWMMenuSelect);

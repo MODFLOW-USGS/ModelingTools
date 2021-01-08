@@ -98,8 +98,8 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 469
         Image32.ExplicitHeight = 132
-        ExplicitLeft = 49
-        ExplicitTop = 54
+        ExplicitLeft = 53
+        ExplicitTop = 58
         ExplicitWidth = 471
         ExplicitHeight = 134
       end
@@ -168,7 +168,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitWidth = 178
         Image32.ExplicitHeight = 132
         ExplicitLeft = 0
-        ExplicitTop = 54
         ExplicitWidth = 180
         ExplicitHeight = 134
       end
@@ -260,7 +259,6 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 469
         Image32.ExplicitHeight = 77
-        ExplicitLeft = 49
         ExplicitTop = 0
         ExplicitWidth = 471
         ExplicitHeight = 79

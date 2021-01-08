@@ -84,6 +84,16 @@ inherited frmShowHideObjects: TfrmShowHideObjects
         OnClick = btnShowOrSelectClick
       end
     end
+    object btnEditAllSelected: TButton
+      Left = 322
+      Top = 6
+      Width = 89
+      Height = 58
+      Caption = 'Edit selected objects'
+      TabOrder = 3
+      WordWrap = True
+      OnClick = btnEditAllSelectedClick
+    end
   end
   inherited vstObjects: TVirtualStringTree
     Height = 256
@@ -95,7 +105,6 @@ inherited frmShowHideObjects: TfrmShowHideObjects
     OnPaintText = vstObjectsPaintText
     OnGetImageIndexEx = vstObjectsGetImageIndexEx
     OnMouseDown = vstObjectsMouseDown
-    ExplicitTop = -5
     ExplicitHeight = 256
   end
   object pmSelectEdit: TPopupMenu
@@ -106,6 +115,16 @@ inherited frmShowHideObjects: TfrmShowHideObjects
       Enabled = False
       Hint = 'Select an object'
       OnClick = miSelectClick
+    end
+    object miAddToSelection: TMenuItem
+      Caption = 'Add to selection'
+      Enabled = False
+      OnClick = miAddToSelectionClick
+    end
+    object miDeselect: TMenuItem
+      Caption = 'Deselect'
+      Enabled = False
+      OnClick = miDeselectClick
     end
     object miEdit: TMenuItem
       Caption = 'Edit'
