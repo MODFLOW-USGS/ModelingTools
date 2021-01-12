@@ -41,7 +41,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspBasic'
-      ExplicitLeft = 1
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -1132,8 +1131,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspObsGroupAssignments'
-      ExplicitWidth = 106
-      ExplicitHeight = 159
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1141,8 +1138,8 @@ inherited frmPEST: TfrmPEST
         Height = 287
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 106
-        ExplicitHeight = 159
+        ExplicitWidth = 512
+        ExplicitHeight = 287
         inherited tvTree: TTreeView
           Width = 512
           Height = 287
@@ -1208,9 +1205,10 @@ inherited frmPEST: TfrmPEST
             ExplicitTop = 106
             ExplicitWidth = 485
             inherited lbNumber: TLabel
-              Width = 55
+              Width = 151
               Height = 18
-              ExplicitWidth = 55
+              Caption = 'Number of pilot points'
+              ExplicitWidth = 151
               ExplicitHeight = 18
             end
             inherited sbAdd: TSpeedButton
@@ -1286,6 +1284,24 @@ inherited frmPEST: TfrmPEST
           end
         end
       end
+      object btnImportShape: TButton
+        Left = 288
+        Top = 16
+        Width = 177
+        Height = 25
+        Caption = 'Import from Shapefile'
+        TabOrder = 3
+        OnClick = btnImportShapeClick
+      end
+      object btnImportText: TButton
+        Left = 288
+        Top = 47
+        Width = 177
+        Height = 25
+        Caption = 'Import from text file'
+        TabOrder = 4
+        OnClick = btnImportTextClick
+      end
     end
   end
   object pnlBottom: TPanel
@@ -1328,5 +1344,13 @@ inherited frmPEST: TfrmPEST
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 430
     Top = 72
+  end
+  object dlgOpenPilotPoints: TOpenDialog
+    Filter = 
+      'Shapefile (*.shp)|*.shp|Text files (*.txt,*.csv)|*.csv;*.txt|Tex' +
+      't file (*.txt)|*.txt|CSV file (*.csv)|*.csv'
+    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
+    Left = 438
+    Top = 16
   end
 end

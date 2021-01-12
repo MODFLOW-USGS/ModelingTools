@@ -8,8 +8,9 @@ uses
   JvPageList, JvExControls, Vcl.ComCtrls, JvExComCtrls, JvPageListTreeView,
   ArgusDataEntry, PestPropertiesUnit, Vcl.Buttons, Vcl.ExtCtrls, UndoItems,
   frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
-  PestObsGroupUnit, System.Generics.Collections, Vcl.Mask, JvExMask, JvToolEdit,
-  FluxObservationUnit, ModflowHobUnit;
+  PestObsGroupUnit, Vcl.Mask, JvExMask, JvToolEdit,
+  FluxObservationUnit, ModflowHobUnit, System.UITypes,
+  System.Generics.Collections;
 
 type
   TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
@@ -165,6 +166,9 @@ type
     cbShowPilotPoints: TCheckBox;
     gbIndividualPilotPoints: TGroupBox;
     framePilotPoints: TframeGrid;
+    btnImportShape: TButton;
+    btnImportText: TButton;
+    dlgOpenPilotPoints: TOpenDialog;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -183,6 +187,8 @@ type
       ARow: Integer; const Value: string);
     procedure diredPestChange(Sender: TObject);
     procedure rdeSwitchCriterionChange(Sender: TObject);
+    procedure btnImportShapeClick(Sender: TObject);
+    procedure btnImportTextClick(Sender: TObject);
 //    procedure comboObsGroupChange(Sender: TObject);
   private
     FObsList: TObservationList;
@@ -202,6 +208,7 @@ type
     procedure HandleGroupDeletion(Group: TPestObservationGroup);
     procedure HandleAddedGroup(ObsGroup: TPestObservationGroup);
     procedure CheckPestDirectory;
+    procedure ImportPilotPoints(const FileName: string);
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -218,13 +225,17 @@ implementation
 
 uses
   frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls, PhastModelUnit,
-  PointCollectionUnit;
+  PointCollectionUnit, QuadTreeClass, ShapefileUnit, System.IOUtils, FastGEO,
+  ModelMuseUtilities;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
   StrUseGroupTargetGT = 'Use Group Target (GTARG)';
   StrGroupTargetGTARG = 'Group Target (GTARG)';
   StrCovarianceMatrixFi = 'Covariance Matrix File Name (optional) (COVFLE)';
+  StrTheShapeHeaderFil = 'The shape header file "%s" could not be found.';
+  StrLine0d1sM = 'Line %0:d ("%1:s") must contain at least two values separa' +
+  'ted by a comma or space character.';
 
 {$R *.dfm}
 
@@ -277,6 +288,26 @@ begin
   else
   begin
     rdeSwitchCriterion.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.btnImportShapeClick(Sender: TObject);
+begin
+  inherited;
+  dlgOpenPilotPoints.FilterIndex := 1;
+  if dlgOpenPilotPoints.Execute then
+  begin
+    ImportPilotPoints(dlgOpenPilotPoints.FileName);
+  end;
+end;
+
+procedure TfrmPEST.btnImportTextClick(Sender: TObject);
+begin
+  inherited;
+  dlgOpenPilotPoints.FilterIndex := 2;
+  if dlgOpenPilotPoints.Execute then
+  begin
+    ImportPilotPoints(dlgOpenPilotPoints.FileName);
   end;
 end;
 
@@ -1218,6 +1249,161 @@ begin
       ChildNode.MoveTo(FNoNameNode, naAddChild);
       ChildNode := TreeNode.getFirstChild;
     end;
+  end;
+end;
+
+procedure TfrmPEST.ImportPilotPoints(const FileName: string);
+var
+  Extension: string;
+  DisLimits: TGridLimit;
+  PointsQuadTree: TRbwQuadTree;
+  ShapeHeaderFile: string;
+  ShapeIndex: Integer;
+  AShape: TShapeObject;
+  ShapeFileReader: TShapefileGeometryReader;
+  APoint: TShapePoint;
+  APoint2D: TPoint2D;
+  PointList: TList<TPoint2D>;
+  Splitter: TStringList;
+  PointIndex: Integer;
+  TextReader: TStreamReader;
+  ALine: string;
+  LineIndex: Integer;
+  Value: Extended;
+  FirstRow: Int64;
+  procedure HandleAPoint(APoint2D: TPoint2D);
+  var
+    DupPoint: TPoint2D;
+    APointer: Pointer;
+  begin
+    if PointList.Count = 0 then
+    begin
+      PointList.Add(APoint2D);
+      PointsQuadTree.AddPoint(APoint2D.x, APoint2D.y, nil);
+    end
+    else
+    begin
+      DupPoint := APoint2D;
+      PointsQuadTree.FirstNearestPoint(DupPoint.x, DupPoint.y, APointer);
+      if (DupPoint.x <> APoint2D.x) or (DupPoint.y <> APoint2D.y) then
+      begin
+        PointList.Add(APoint2D);
+        PointsQuadTree.AddPoint(APoint2D.x, APoint2D.y, nil);
+      end;
+    end;
+  end;
+begin
+  Assert(TFile.Exists(FileName));
+  Extension := LowerCase(ExtractFileExt(FileName));
+  PointsQuadTree := TRbwQuadTree.Create(nil);
+  PointList := TList<TPoint2D>.Create;
+  try
+    DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
+    PointsQuadTree.XMax := DisLimits.MaxX;
+    PointsQuadTree.XMin := DisLimits.MinX;
+    PointsQuadTree.YMax := DisLimits.MaxY;
+    PointsQuadTree.YMin := DisLimits.MinY;
+    if Extension = '.shp' then
+    begin
+      ShapeFileReader := TShapefileGeometryReader.Create;
+      try
+        ShapeHeaderFile := ChangeFileExt(FileName, '.shx');
+        if not TFile.Exists(ShapeHeaderFile) then
+        begin
+          Beep;
+          MessageDlg(Format(StrTheShapeHeaderFil, [ShapeHeaderFile]), mtError,
+            [mbOK], 0);
+          Exit;
+        end;
+        ShapeFileReader.ReadFromFile(FileName, ShapeHeaderFile);
+        for ShapeIndex := 0 to ShapeFileReader.Count - 1 do
+        begin
+          AShape := ShapeFileReader[ShapeIndex];
+          for PointIndex := 0 to AShape.FNumPoints - 1 do
+          begin
+            APoint := AShape.FPoints[PointIndex];
+            APoint2D.x := APoint.X;
+            APoint2D.y := APoint.Y;
+            HandleAPoint(APoint2D);
+          end;
+        end;
+      finally
+        ShapeFileReader.Free;
+      end;
+    end
+    else  if (Extension = '.csv') or (Extension = '.txt') then
+    begin
+      Splitter := TStringList.Create;
+      TextReader := TFile.OpenText(FileName);
+      try
+        LineIndex := 0;
+        repeat
+          ALine := TextReader.ReadLine;
+          Inc(LineIndex);
+          if (ALine = '') or (ALine[1] = '#') then
+          begin
+            Continue;
+          end;
+          Splitter.DelimitedText := ALine;
+          if Splitter.Count >= 2 then
+          begin
+            if TryFortranStrToFloat(Splitter[0], Value) then
+            begin
+              APoint2D.x := Value;
+            end
+            else
+            begin;
+              Beep;
+              MessageDlg(Format(
+                'The %0:s value "%1:s" in line %2:d can not be converted to a real number.'
+                , ['first', Splitter[0], LineIndex]), mtError, [mbOK], 0);
+              Exit;
+            end;
+
+            if TryFortranStrToFloat(Splitter[1], Value) then
+            begin
+              APoint2D.y := Value;
+            end
+            else
+            begin;
+              Beep;
+              MessageDlg(Format(
+                'The %0:s value "%1:s" in line %2:d can not be converted to a real number.'
+                , ['second', Splitter[1], LineIndex]), mtError, [mbOK], 0);
+              Exit;
+            end;
+            HandleAPoint(APoint2D);
+          end
+          else
+          begin
+            Beep;
+            MessageDlg(Format(StrLine0d1sM, [LineIndex, ALine]), mtError,
+              [mbOK], 0);
+            Exit;
+          end;
+        until (TextReader.EndOfStream);
+      finally
+        Splitter.Free;
+        TextReader.Free;
+      end;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+
+    FirstRow := framePilotPoints.seNumber.AsInteger + 1;
+    framePilotPoints.seNumber.AsInteger := framePilotPoints.seNumber.AsInteger
+      + PointList.Count;
+    for PointIndex := 0 to PointList.Count - 1 do
+    begin
+      APoint2D := PointList[PointIndex];
+      framePilotPoints.Grid.RealValue[Ord(ppcX), FirstRow + PointIndex] := APoint2D.x;
+      framePilotPoints.Grid.RealValue[Ord(ppcy), FirstRow + PointIndex] := APoint2D.y;
+    end;
+  finally
+    PointsQuadTree.Free;
+    PointList.Free;
   end;
 end;
 

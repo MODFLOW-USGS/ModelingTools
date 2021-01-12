@@ -1713,8 +1713,8 @@ type
     // @name adjusts SecondToolBar.Left so that is just to the right of
     // FirstToolBar.  It is assumed that FirstToolBar and SecondToolBar
     // are on the same row.
-    procedure AdjustToolbarPositions(FirstToolBar,
-      SecondToolBar: TToolBar);
+//    procedure AdjustToolbarPositions(FirstToolBar,
+//      SecondToolBar: TToolBar);
     // If @link(frmProgressMM), @link(frmSelectedObjects), or @link(frmColors)
     // are visible, @name brings them to the front.
     // @name is the Application.OnActivate event handler.
@@ -3280,11 +3280,11 @@ begin
   end;
 end;
 
-procedure TfrmGoPhast.AdjustToolbarPositions(FirstToolBar,
-  SecondToolBar: TToolBar);
-begin
-  SecondToolBar.Left := FirstToolBar.Left + FirstToolBar.Width + 13;
-end;
+//procedure TfrmGoPhast.AdjustToolbarPositions(FirstToolBar,
+//  SecondToolBar: TToolBar);
+//begin
+//  SecondToolBar.Left := FirstToolBar.Left + FirstToolBar.Width + 13;
+//end;
 
 procedure TfrmGoPhast.AllowDrawing(Sender: TObject);
 begin

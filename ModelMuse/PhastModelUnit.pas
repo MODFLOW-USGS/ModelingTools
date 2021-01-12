@@ -10157,8 +10157,7 @@ const
 //                which the starting date is being edited.
 //    '4.3.0.30' Bug fix: Fixed a bug that caused panning the model or resizing
 //                the main form to be unneccesarily slow.
-
-//               Enhancement: Added a "Deselect" option to the popup menu in
+//    '4.3.0.31' Enhancement: Added a "Deselect" option to the popup menu in
 //                the Show or Hide Objects dialog box.
 //               Bug fix: Fixed bug that would cause a bug report to be
 //                generated if the Used item of a SUTRA boundary condition did
@@ -10167,7 +10166,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.30';
+  IIModelVersion = '4.3.0.31';
 
 function IModelVersion: string;
 begin
