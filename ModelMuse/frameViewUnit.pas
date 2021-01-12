@@ -249,6 +249,7 @@ type
     // See @link(ViewDirection).
     FViewDirection: TViewDirection;
     FModelChanged: boolean;
+    FPilotPointsChanged: Boolean;
     // @name is used to redraw the horizontal scale.
     // @param(NewX NewX indicates how far the image in @link(ZoomBox)
     // has moved in the X direction in pixels.)
@@ -428,6 +429,8 @@ type
     property NeedToRecalculateCellColors: boolean
       read GetNeedToRecalculateCellColors
       write SetNeedToRecalculateCellColors;
+    property PilotPointsChanged: Boolean read FPilotPointsChanged
+      write FPilotPointsChanged;
     // @name is used in @link(PaintOldScreenObjects) to draw
     // @link(TScreenObject)s with relatively little flickering.
     property PreviousScreenObjects: TList read FPreviousScreenObjects;
@@ -1421,6 +1424,7 @@ begin
   begin
     Exit;
   end;
+  PilotPointsChanged := False;
     // @name is the main routine for drawing the
     // @link(TfrmGoPhast.Grid) and @link(TScreenObject)s.
     // It will also draw any imported images.
@@ -1647,7 +1651,8 @@ begin
   if FDrawing or not frmGoPhast.CanDraw then
     Exit;
   FDrawing := True;
-  ShouldUpdate := ScreenObjectsHaveChanged or NeedToRecalculateCellColors;
+  ShouldUpdate := ScreenObjectsHaveChanged or NeedToRecalculateCellColors
+    or PilotPointsChanged;
   ScreenObjectsHaveChanged := False;
   try
     if (FBitMap32 <> nil) then

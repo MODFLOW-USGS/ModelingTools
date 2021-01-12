@@ -10160,6 +10160,10 @@ const
 
 //               Enhancement: Added a "Deselect" option to the popup menu in
 //                the Show or Hide Objects dialog box.
+//               Bug fix: Fixed bug that would cause a bug report to be
+//                generated if the Used item of a SUTRA boundary condition did
+//                not evaluate to true or false. Now an error message is
+//                displayed.
 
 const
   // version number of ModelMuse.

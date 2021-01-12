@@ -16,7 +16,7 @@ uses Classes, Contnrs, Controls, Forms, RbwParser, Undo, GoPhastTypes, AbstractG
   DataSetUnit, PhastDataSets, FluxObservationUnit, FormulaManagerUnit,
   DisplaySettingsUnit, Mt3dmsFluxObservationsUnit, FastGEO, SutraMeshUnit,
   IntListUnit, Graphics, MeshRenumberingTypes, DrawMeshTypesUnit,
-  ModflowIrregularMeshUnit;
+  ModflowIrregularMeshUnit, PointCollectionUnit;
 
 type
   {@abstract(@name is an abstract base class used as an ancestor
@@ -943,6 +943,28 @@ type
     function Description: string; override;
   public
     procedure DoCommand; override;
+  end;
+
+  TCustomUndoChangePilotPoints = class(TCustomUndo)
+  private
+    FNewPilotPoints: TSimplePointCollection;
+    FOldPilotPoints: TSimplePointCollection;
+    procedure UpdatePilotPoints(PilotPoints: TSimplePointCollection);
+  public
+    constructor Create(var NewPilotPoints: TSimplePointCollection);
+    destructor Destroy; override;
+    procedure DoCommand; override;
+    procedure Undo; override;
+  end;
+
+  TUndoAddPilotPoint = class(TCustomUndoChangePilotPoints)
+  protected
+    function Description: string; override;
+  end;
+
+  TUndoDeletePilotPoint = class(TCustomUndoChangePilotPoints)
+  protected
+    function Description: string; override;
   end;
 
 implementation
@@ -3858,6 +3880,66 @@ begin
   end;
   frmGoPhast.PhastModel.InvalidateScreenObjects;
   frmGoPhast.Grid.GridChanged;
+end;
+
+{ TCustomUndoChangePilotPoints }
+
+constructor TCustomUndoChangePilotPoints.Create(
+  var NewPilotPoints: TSimplePointCollection);
+begin
+  FNewPilotPoints := NewPilotPoints;
+  NewPilotPoints := nil;
+  FOldPilotPoints := TSimplePointCollection.Create;
+  FOldPilotPoints.Assign(frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints);
+end;
+
+destructor TCustomUndoChangePilotPoints.Destroy;
+begin
+  FOldPilotPoints.Free;
+  FNewPilotPoints.Free;
+  inherited;
+end;
+
+procedure TCustomUndoChangePilotPoints.DoCommand;
+begin
+  inherited;
+  UpdatePilotPoints(FNewPilotPoints);
+end;
+
+procedure TCustomUndoChangePilotPoints.Undo;
+begin
+  inherited;
+  UpdatePilotPoints(FOldPilotPoints);
+end;
+
+procedure TCustomUndoChangePilotPoints.UpdatePilotPoints(
+  PilotPoints: TSimplePointCollection);
+begin
+  frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints.Assign(PilotPoints);
+  frmGoPhast.frameTopView.PilotPointsChanged := True;
+  frmGoPhast.frameTopView.ZoomBox.InvalidateImage32;
+  frmGoPhast.EnablePilotPointItems;
+end;
+
+{ TUndoAddPilotPoint }
+
+function TUndoAddPilotPoint.Description: string;
+begin
+  result := 'add pilot point';
+end;
+
+{ TUndoDeletePilotPoint }
+
+function TUndoDeletePilotPoint.Description: string;
+begin
+  if FOldPilotPoints.Count - FNewPilotPoints.Count > 1 then
+  begin
+    result := 'delete pilot points';
+  end
+  else
+  begin
+    result := 'delete pilot point';
+  end;
 end;
 
 end.

@@ -95,6 +95,7 @@ type
     procedure AssignPoints(const Value: TPointArray);
     // @name is the number of locations in @link(Points)
     // that is used by this @classname.
+    procedure Clear;
     property Count: integer read FCount write FCount;
     // @name creates a new instance of @classname.
     // If capacity is set greater than 0, @link(Points) is allocated
@@ -410,6 +411,11 @@ begin
   FUpdateBounds := False;
 end;
 
+procedure TLine.Clear;
+begin
+  FCount := 0;
+end;
+
 procedure TLine.CopyPoints(const Value: TPointArray);
 begin
   FCanAdjustBounds := False;
@@ -601,6 +607,10 @@ end;
 
 procedure TSimpleLine.AddPoint(const APoint: TPoint2D);
 begin
+  if Length(FPoints) = 0 then
+  begin
+    SetLength(FPoints, 4);
+  end;
   if Length(FPoints) <= Count then
   begin
     SetLength(FPoints, Count * 2 + 1);

@@ -26,8 +26,13 @@ type
   end;
 
   TSimplePointCollection = class(TCollection)
+  private
+    function GetPoint(Index: Integer): TPointItem;
+    procedure SetPoint(Index: Integer; const Value: TPointItem);
   public
     constructor Create;
+    function Add: TPointItem;
+    property Items[Index: Integer]: TPointItem read GetPoint write SetPoint; default;
   end;
 
   {@abstract(@name is used to store a series of TPoint2Ds.)}
@@ -207,9 +212,25 @@ end;
 
 { TSimplePointCollection }
 
+function TSimplePointCollection.Add: TPointItem;
+begin
+  result := inherited Add as TPointItem;
+end;
+
 constructor TSimplePointCollection.Create;
 begin
   inherited Create(TPointItem);
+end;
+
+function TSimplePointCollection.GetPoint(Index: Integer): TPointItem;
+begin
+  result := inherited Items[Index] as TPointItem
+end;
+
+procedure TSimplePointCollection.SetPoint(Index: Integer;
+  const Value: TPointItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

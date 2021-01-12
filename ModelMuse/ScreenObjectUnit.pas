@@ -5434,6 +5434,8 @@ resourcestring
   'mula should result in either "True" or "False". The formula is for "%1:s.';
   StrTheFormula0sIn = 'The formula %0:s in object %1:s gives a result of the' +
   ' wrong type.';
+  StrTheFormulaForUse = 'The formula for "Used" must result in a Boolean val' +
+  'ue.';
 
 const
   SquareSize = 3;
@@ -43936,7 +43938,7 @@ begin
         begin
           NameToDisplay := TSutraDataObject(OtherData).AlternateName;
           frmFormulaErrors.AddFormulaError(FScreenObject.Name,
-            NameToDisplay, UsedFunction, StrInvalidFormula);
+            'Used', UsedFunction, StrInvalidFormula);
           UsedFunction := 'True';
           Compiler.Compile(UsedFunction);
         end;
@@ -43947,8 +43949,14 @@ begin
         NameToDisplay := TSutraDataObject(OtherData).AlternateName;
 //        MessageDlg(Format(StrThereIsAnErrorInUsed,
 //          [FScreenObject.Name, NameToDisplay]), mtError, [mbOK], 0);
-        raise EInvalidDataType.Create  (Format(StrThereIsAnErrorInUsed,
-          [FScreenObject.Name, NameToDisplay]), UsedExpression.Decompile);
+//        raise EInvalidDataType.Create  (Format(StrThereIsAnErrorInUsed,
+//          [FScreenObject.Name, NameToDisplay]), UsedExpression.Decompile);
+        frmFormulaErrors.AddFormulaError(FScreenObject.Name, 'Used',
+          UsedExpression.Decompile,
+          StrTheFormulaForUse);
+        UsedFunction := 'True';
+        Compiler.Compile(UsedFunction);
+        UsedExpression := Compiler.CurrentExpression;
       end;
 
       VariablesForUsedExpression := TStringList.Create;

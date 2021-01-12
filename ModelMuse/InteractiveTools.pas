@@ -1154,7 +1154,36 @@ Consider creating descendants that each only handle one view of the model. }
     // @name deletes the last node created. It is called when the user
     // clicks the Escape key on the keyboard while this @classname is active.
     procedure DeleteLastNode;
+  end;
 
+  TAddPilotPoint = class(TCustomInteractiveTool)
+  public
+    procedure Activate; override;
+    procedure MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer); override;
+  end;
+
+  TDeletePilotPoint = class(TCustomInteractiveTool)
+  private
+    FX: Integer;
+    FY: Integer;
+    // @name is used to select pilot points by enclosing them
+    // in a polygon.
+    // @name is the @link(TLine) used to select the @link(TPointItem)s
+    //  by enclosing them in a polygon.
+    FSelectLine: TLine;
+  protected
+    procedure CreateLayers; override;
+    procedure DrawOnBitMap32(Sender: TObject; Buffer: TBitmap32); override;
+  public
+    procedure Activate; override;
+    procedure MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer); override;
+    // @name adds points to @link(FSelectLine)
+    procedure MouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Integer); override;
+    procedure MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer); override;
   end;
 
 procedure CalculateCenterPoint(out FCenterPoint: TPoint2D);
@@ -1212,6 +1241,8 @@ procedure SetNewCrossSectionAngle(NewAngle:
     MoveSutraNodesTool: TMoveSutraNodesTool;
     FishnetTool: TFishnetMeshGenerationTool;
     DrawElementTool: TDrawElementTool;
+    AddPilotPointTool: TAddPilotPoint;
+    DeletePilotPointTool: TDeletePilotPoint;
 
 {$ENDREGION}
 
@@ -1229,7 +1260,7 @@ uses Math, CursorsFoiledAgain, GR32_Polygons, frmGoPhastUnit, frmSubdivideUnit,
   frmSetSpacingUnit, frmScreenObjectPropertiesUnit, BigCanvasMethods,
   LayerStructureUnit, DataSetUnit, Contnrs, frmPointValuesUnit,
   Dialogs, frmFishnetElementPropertiesUnit, MeshRenumbering, GR32_Backends,
-  frmNodeLocationUnit, MeshRenumberingTypes;
+  frmNodeLocationUnit, MeshRenumberingTypes, PointCollectionUnit;
 
 resourcestring
   StrClickAndDragToZo = 'Click and drag to zoom in';
@@ -9286,9 +9317,222 @@ begin
   result := MeshAvailable or DisvGridAvailable;
 end;
 
-initialization
+{ TAddPilotPoint }
 
-ZoomTool := TZoomTool.Create(nil);
+procedure TAddPilotPoint.Activate;
+begin
+  inherited;
+  Cursor := crAddPilotPoint;
+end;
+
+procedure TAddPilotPoint.MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  APoint: TPoint2D;
+  AZoomBox: TQRbwZoomBox2;
+  NewPoints: TSimplePointCollection;
+begin
+  inherited;
+  if Button <> mbLeft then
+  begin
+    Exit;
+  end;
+  AZoomBox := ZoomBox;
+  if AZoomBox <> frmGoPhast.frameTopView.ZoomBox then
+  begin
+    Exit;
+  end;
+  APoint.X := AZoomBox.X(X);
+  APoint.Y := AZoomBox.Y(Y);
+
+  NewPoints := TSimplePointCollection.Create;
+  try
+    NewPoints.Assign(frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints);
+    NewPoints.Add.Point2D := APoint;;
+    frmGoPhast.UndoStack.Submit(TUndoAddPilotPoint.Create(NewPoints));
+  finally
+    NewPoints.Free;
+  end;
+
+  AZoomBox.InvalidateImage32;
+end;
+
+{ TDeletePilotPoint }
+
+procedure TDeletePilotPoint.Activate;
+begin
+  inherited;
+  Cursor := crDeletePilotPoint;
+  CreateLayers;
+end;
+
+procedure TDeletePilotPoint.CreateLayers;
+  function CreateLayer(ZoomBox: TQRbwZoomBox2): TPositionedLayer;
+  begin
+    result := ZoomBox.Image32.Layers.Add(TPositionedLayer) as
+      TPositionedLayer;
+    result.OnPaint := DrawOnBitMap32;
+  end;
+begin
+  if FTopLayer = nil then
+  begin
+    FTopLayer := CreateLayer(frmGoPhast.frameTopView.ZoomBox);
+  end;
+end;
+
+procedure TDeletePilotPoint.DrawOnBitMap32(Sender: TObject; Buffer: TBitmap32);
+begin
+  inherited;
+  if FButton = mbMiddle then
+  begin
+    Exit;
+  end;
+  if frmGoPhast.CurrentTool <> self then Exit;
+  if FSelectLine <> nil then
+  begin
+    Buffer.BeginUpdate;
+    try
+      FSelectLine.Draw(Buffer);
+    finally
+      Buffer.EndUpdate
+    end;
+  end;
+end;
+
+procedure TDeletePilotPoint.MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  inherited;
+  FX := X;
+  FY := Y;
+
+  if Button <> mbLeft then
+  begin
+    Exit;
+  end;
+  FSelectLine.Free;
+  FSelectLine := TLine.Create(2);
+  FSelectLine.AddPoint(Point(X, Y));
+  ZoomBox.InvalidateImage32;
+
+end;
+
+procedure TDeletePilotPoint.MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+var
+  APoint: TPoint;
+begin
+  if not (ssMiddle in Shift) then
+  begin
+    if (FSelectLine <> nil) then
+    begin
+      // set the correct cursor
+//      Cursor := crArrow;
+      // If the cursor has moved far enough, add another point to the
+      // lasso.
+      FSelectLine.Clear;
+      APoint := Point(FX,FY);
+      FSelectLine.AddPoint(APoint);
+      FSelectLine.AddPoint(Point(APoint.X, Y));
+      FSelectLine.AddPoint(Point(X, Y));
+      FSelectLine.AddPoint(Point(X, APoint.Y));
+      FSelectLine.AddPoint(APoint);
+
+      ZoomBox.InvalidateImage32;
+    end;
+  end;
+end;
+
+procedure TDeletePilotPoint.MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  AZoomBox: TQRbwZoomBox2;
+  NewPoints: TSimplePointCollection;
+  index: Integer;
+  QuadTree: TRbwQuadTree;
+  PointItem: TPointItem;
+  DisLimits: TGridLimit;
+  Block: T2DBlock;
+  Points: TQuadPointInRegionArray;
+  PointIndex: Integer;
+  ItemIndex: Integer;
+  XDouble: double;
+  YDouble: double;
+  DataPointer: Pointer;
+begin
+  inherited;
+  if Button <> mbLeft then
+  begin
+    Exit;
+  end;
+  FreeAndNil(FSelectLine);
+  AZoomBox := ZoomBox;
+  if AZoomBox <> frmGoPhast.frameTopView.ZoomBox then
+  begin
+    Exit;
+  end;
+
+  NewPoints := TSimplePointCollection.Create;
+  QuadTree := TRbwQuadTree.Create(nil);
+  try
+    DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
+    QuadTree.XMax := AZoomBox.XCoord(DisLimits.MaxX);
+    QuadTree.XMin := AZoomBox.XCoord(DisLimits.MinX);
+    QuadTree.YMax := AZoomBox.YCoord(DisLimits.MaxY);
+    QuadTree.YMin := AZoomBox.YCoord(DisLimits.MinY);
+
+    NewPoints.Assign(frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints);
+    for index := 0 to NewPoints.Count - 1 do
+    begin
+      PointItem := NewPoints[index];
+      QuadTree.AddPoint(PointItem.Point2D.x,PointItem.Point2D.y, PointItem);
+    end;
+
+    if (Abs(X - FX) > 3) or (Abs(Y - FY) > 3) then
+    begin
+      Block.XMax := Max(AZoomBox.X(X), AZoomBox.X(FX));
+      Block.XMin := Min(AZoomBox.X(X), AZoomBox.X(FX));
+      Block.YMax := Max(AZoomBox.Y(Y), AZoomBox.Y(FY));
+      Block.YMin := Min(AZoomBox.Y(Y), AZoomBox.Y(FY));
+      QuadTree.FindPointsInBlock(Block, Points);
+      if Length(Points) = 0 then
+      begin
+        Exit;
+      end;
+      for PointIndex := 0 to Length(Points) - 1 do
+      begin
+        for ItemIndex := 0 to Length(Points[PointIndex].Data) - 1 do
+        begin
+          PointItem := Points[PointIndex].Data[ItemIndex];
+          PointItem.Free;
+        end;
+      end;
+    end
+    else
+    begin
+      XDouble := AZoomBox.X(X);
+      YDouble := AZoomBox.Y(Y);
+      QuadTree.FirstNearestPoint(XDouble, YDouble, DataPointer);
+      if (Abs(X-AZoomBox.XCoord(XDouble)) > 3)
+        or (Abs(Y-AZoomBox.YCoord(YDouble)) > 3) then
+      begin
+        Exit;
+      end;
+      PointItem := DataPointer;
+      PointItem.Free;
+    end;
+
+    frmGoPhast.UndoStack.Submit(TUndoDeletePilotPoint.Create(NewPoints));
+  finally
+    QuadTree.Free;
+    NewPoints.Free;
+    AZoomBox.InvalidateImage32;
+  end;
+
+end;
+
+initialization
+  ZoomTool := TZoomTool.Create(nil);
   ZoomInTool := TZoomInTool.Create(nil);
   ZoomOutTool := TZoomOutTool.Create(nil);
   PanTool := TPanTool.Create(nil);
@@ -9318,6 +9562,8 @@ ZoomTool := TZoomTool.Create(nil);
   MoveSutraNodesTool := TMoveSutraNodesTool.Create(nil);
   FishnetTool := TFishnetMeshGenerationTool.Create(nil);
   DrawElementTool := TDrawElementTool.Create(nil);
+  AddPilotPointTool := TAddPilotPoint.Create(nil);
+  DeletePilotPointTool := TDeletePilotPoint.Create(nil);
 
 finalization
   ZoomTool.Free;
@@ -9349,4 +9595,6 @@ finalization
   MoveSutraNodesTool.Free;
   FishnetTool.Free;
   DrawElementTool.Free;
+  AddPilotPointTool.Free;
+  DeletePilotPointTool.Free;
 end.

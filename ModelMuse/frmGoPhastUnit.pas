@@ -523,6 +523,13 @@ type
     acImportSutraFiles: TAction;
     miImportSutraFiles: TMenuItem;
     odSutraFiles: TOpenDialog;
+    tbarPilotPoints: TToolBar;
+    tbAddPilotPoint: TToolButton;
+    tbDeletePilotPoint: TToolButton;
+    acAddPilotPoint: TAction;
+    acDeletePilotPoint: TAction;
+    AddPilotPoint1: TMenuItem;
+    DeletePilotPoint1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -715,6 +722,8 @@ type
     procedure acArchiveModelExecute(Sender: TObject);
     procedure acImportSutraFilesExecute(Sender: TObject);
     procedure odSutraFilesTypeChange(Sender: TObject);
+    procedure acAddPilotPointExecute(Sender: TObject);
+    procedure acDeletePilotPointExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -805,6 +814,7 @@ type
     procedure EnableGridItems;
     procedure HaveUsersDefineSutraLayers;
     procedure HaveUsersDefineModflowLayers;
+    procedure SetToolbarPositions;
   published
     // @name is the TAction for @link(miAddVerticalGridLine)
     // and @link(tbAddVerticalBoundary).
@@ -1823,6 +1833,7 @@ type
     procedure SetFrontDiscretizationChanged(const Value: boolean);
     procedure SetSideDiscretizationChanged(const Value: boolean);
     procedure EnableModelMate;
+    procedure ArrangeToolBarRow(ToolBars: array of TToolBar; ToolBarTop: Integer);
 //    procedure NoClick(Sender: TObject);
 //    procedure OnSaveFormClose(Sender: TObject; var Action: TCloseAction);
 //    procedure YesClick(Sender: TObject);
@@ -2010,6 +2021,7 @@ type
 //    property WriteErrorRaised: Boolean read FWriteErrorRaised;
     procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
     procedure WMExitSizeMove(var Message: TMessage); message WM_EXITSIZEMOVE;
+    procedure EnablePilotPointItems;
     { Public declarations }
   end;
 
@@ -3033,6 +3045,14 @@ begin
   CanDraw := True;
 end;
 
+procedure TfrmGoPhast.SetToolbarPositions;
+begin
+  ArrangeToolBarRow([tbarFile, tbarEdit, tbarEditScreenObjects, tbarView], 0);
+  ArrangeToolBarRow([tbarEditGrid, tbarEditDisv, tlbMesh,
+    tbarCreateScreenObject, tlb3dViewMesh, tbarView3D, tbarShowGrid,
+    tbarPilotPoints], 34);
+end;
+
 procedure TfrmGoPhast.WMMenuSelect(var Msg: TWMMenuSelect);
 var
   menuItem : TMenuItem;
@@ -3301,6 +3321,34 @@ begin
   end;
 end;
 
+procedure TfrmGoPhast.ArrangeToolBarRow(ToolBars: array of TToolBar; ToolBarTop: Integer);
+var
+  TTop: Integer;
+  TLeft: Integer;
+  Index: Integer;
+begin
+  TTop := ToolBarTop;
+  for Index := Length(ToolBars) - 1 downto 0 do
+  begin
+    if ToolBars[Index].Visible then
+    begin
+      ToolBars[Index].Top := TTop;
+      ToolBars[Index].Left := Width - ToolBars[Index].Width;
+      TTop := TTop + ToolBars[Index].Height;
+    end;
+  end;
+  TLeft := 11;
+  for Index := 0 to Length(ToolBars) - 1 do
+  begin
+    if ToolBars[Index].Visible then
+    begin
+      ToolBars[Index].Left := TLeft;
+      TLeft := ToolBars[Index].Left + ToolBars[Index].Width;
+      ToolBars[Index].Top := ToolBarTop;
+    end;
+  end;
+end;
+
 procedure TfrmGoPhast.FormCreate(Sender: TObject);
 var
   AFont: TFont;
@@ -3327,16 +3375,24 @@ begin
   tbarView3D.Width := 141;
   tbarEdit.Width := 145;
   tbarEditDisv.Width := tbarEditDisv.Constraints.MinWidth;
+  tbarPilotPoints.Top := 34;
+  tbarPilotPoints.Left := Width - tbarPilotPoints.Width-13;
 
-  tbarEdit.Left := tbarFile.Width;
-  tbarEdit.Top := 0;
-  tbarEditScreenObjects.Left := tbarEdit.Left + tbarEdit.Width;
-  tbarEditScreenObjects.Top := 0;
-  tbarView.Left := tbarEditScreenObjects.Left + tbarEditScreenObjects.Width;
-  tbarView.Top := 0;
-  tbarCreateScreenObject.Left := tbarEditGrid.Width;
-  tbarShowGrid.Left := Width - tbarShowGrid.Width;
-  tbarView3D.Left := tbarCreateScreenObject.Left + tbarCreateScreenObject.Width;
+  SetToolbarPositions;
+
+//  tbarEdit.Left := tbarFile.Width;
+//  tbarEdit.Top := 0;
+//  tbarEditScreenObjects.Left := tbarEdit.Left + tbarEdit.Width;
+//  tbarEditScreenObjects.Top := 0;
+//  tbarView.Left := tbarEditScreenObjects.Left + tbarEditScreenObjects.Width;
+//  tbarView.Top := 0;
+//  tbarEditGrid.Top := tbarFile.Height;
+//  tbarCreateScreenObject.Left := tbarEditGrid.Width;
+//  tbarCreateScreenObject.Top := tbarEditGrid.Top;
+//  tbarShowGrid.Left := Width - tbarShowGrid.Width;
+//  tbarShowGrid.Top := tbarShowGrid.Top;
+//  tbarView3D.Left := tbarCreateScreenObject.Left + tbarCreateScreenObject.Width;
+//  tbarPilotPoints.Left := tbarView3D.Left + tbarView3D.Width;
 //  tbarShowGrid.Left := tbarView3D.Left + tbarView3D.Width;
 
   frmErrorsAndWarnings.DelayShowing := True;
@@ -3430,9 +3486,9 @@ begin
   //  Assert(PatchedVCLX = 3.9);
 
     // Adjust the toolbar postions so their isn't blank space between them.
-    AdjustToolbarPositions(tbarFile, tbarEdit);
-    AdjustToolbarPositions(tbarEdit, tbarEditScreenObjects);
-    AdjustToolbarPositions(tbarEditScreenObjects, tbarView);
+//    AdjustToolbarPositions(tbarFile, tbarEdit);
+//    AdjustToolbarPositions(tbarEdit, tbarEditScreenObjects);
+//    AdjustToolbarPositions(tbarEditScreenObjects, tbarView);
 
     Application.OnActivate := BringFormsToFront;
 
@@ -4330,30 +4386,33 @@ begin
   acImportSutraMesh.Enabled := PhastModel.ModelSelection in SutraSelection;
   acImportSutraFiles.Enabled := PhastModel.ModelSelection in SutraSelection;
 
-  tbarShowGrid.Left := Width - tbarShowGrid.Width- ToolbarExtraWidth;
-  if tbarEditGrid.Visible then
-  begin
-    tbarEditGrid.Left := MinimumToolbarLeft;
-    tbarCreateScreenObject.Left := tbarEditGrid.Left + tbarEditGrid.Width
-      + ToolbarExtraWidth;
-    tbarView3D.Left := tbarCreateScreenObject.Left
-      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
-    tbarView3D.Top := tbarCreateScreenObject.Top;
-    tbarShowGrid.Left := tbarView3D.Left + tbarView3D.Width;
-    tbarShowGrid.Top := tbarView3D.Top;
+  SetToolbarPositions;
 
-  end
-  else
-  begin
-    tlbMesh.Left := MinimumToolbarLeft;
-    tbarCreateScreenObject.Left := tlbMesh.Left + tlbMesh.Width
-      + ToolbarExtraWidth;
-    tlb3dViewMesh.Left := tbarCreateScreenObject.Left
-      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
-    tlb3dViewMesh.Top := tbarCreateScreenObject.Top;
-    tlbMesh.Top := tbarCreateScreenObject.Top;
-    tbarShowGrid.Left := tlb3dViewMesh.Left + tlb3dViewMesh.Width;
-  end;
+
+//  tbarShowGrid.Left := Width - tbarShowGrid.Width- ToolbarExtraWidth;
+//  if tbarEditGrid.Visible then
+//  begin
+//    tbarEditGrid.Left := MinimumToolbarLeft;
+//    tbarCreateScreenObject.Left := tbarEditGrid.Left + tbarEditGrid.Width
+//      + ToolbarExtraWidth;
+//    tbarView3D.Left := tbarCreateScreenObject.Left
+//      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
+//    tbarView3D.Top := tbarCreateScreenObject.Top;
+//    tbarShowGrid.Left := tbarView3D.Left + tbarView3D.Width;
+//    tbarShowGrid.Top := tbarView3D.Top;
+//
+//  end
+//  else
+//  begin
+//    tlbMesh.Left := MinimumToolbarLeft;
+//    tbarCreateScreenObject.Left := tlbMesh.Left + tlbMesh.Width
+//      + ToolbarExtraWidth;
+//    tlb3dViewMesh.Left := tbarCreateScreenObject.Left
+//      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
+//    tlb3dViewMesh.Top := tbarCreateScreenObject.Top;
+//    tlbMesh.Top := tbarCreateScreenObject.Top;
+//    tbarShowGrid.Left := tlb3dViewMesh.Left + tlb3dViewMesh.Width;
+//  end;
 
   acExportModpath.Enabled :=
     PhastModel.ModelSelection in ModflowSelection;
@@ -4767,6 +4826,33 @@ begin
   end;
   CurrentTool := DeleteGridBoundaryTool;
   SelectDefaultButton;
+end;
+
+procedure TfrmGoPhast.acDeletePilotPointExecute(Sender: TObject);
+begin
+  inherited;
+  SetActionChecked(Sender);
+
+  if not (Sender is TToolButton) then
+  begin
+    tbDeletePilotPoint.OnMouseDown(tbDeletePilotPoint, mbLeft, [ssLeft], 0, 0);
+  end;
+
+  if tbDeletePilotPoint.Down then
+  begin
+    // Make sure all buttons except the current one are up.
+    SetButtonsUp(tbDeletePilotPoint);
+    // Set the cursors.
+    SetZB_Cursors(crDeletePilotPoint);
+    // don't draw a rectangle around the selected screen objects.
+    CurrentTool := DeletePilotPointTool;
+  end
+  else
+  begin
+    CurrentTool := nil;
+  end;
+  SelectDefaultButton;
+
 end;
 
 procedure TfrmGoPhast.DrawSubdivideCursor(const AnImage: TBitmap;
@@ -5260,6 +5346,8 @@ begin
   AList.Add(tbMoveNodes);
   AList.Add(btnFishnet);
   AList.Add(tbDrawElement);
+  AList.Add(tbAddPilotPoint);
+  AList.Add(tbDeletePilotPoint);
 end;
 
 procedure TfrmGoPhast.SetButtonsUp(const CurrentButton: TObject);
@@ -6269,6 +6357,14 @@ end;
 procedure TfrmGoPhast.EnableMt3dmsMenuItems;
 begin
   acRunMt3dms.Enabled := PhastModel.Mt3dIsSelected;
+end;
+
+procedure TfrmGoPhast.EnablePilotPointItems;
+begin
+  acAddPilotPoint.Enabled := PhastModel.PestUsed
+    and PhastModel.PestProperties.ShowPilotPoints;
+  acDeletePilotPoint.Enabled := acAddPilotPoint.Enabled
+    and (PhastModel.PestProperties.SpecifiedPilotPoints.Count > 0)
 end;
 
 procedure TfrmGoPhast.EnableSwrObs;
@@ -7712,6 +7808,32 @@ begin
   begin
     CurrentTool := nil;
     tbAddLinesToObjects.Down := False;
+  end;
+  SelectDefaultButton;
+end;
+
+procedure TfrmGoPhast.acAddPilotPointExecute(Sender: TObject);
+begin
+  inherited;
+  SetActionChecked(Sender);
+
+  if not (Sender is TToolButton) then
+  begin
+    tbAddPilotPoint.OnMouseDown(tbAddPilotPoint, mbLeft, [ssLeft], 0, 0);
+  end;
+
+  if tbAddPilotPoint.Down then
+  begin
+    // Make sure all buttons except the current one are up.
+    SetButtonsUp(tbAddPilotPoint);
+    // Set the cursors.
+    SetZB_Cursors(crAddPilotPoint);
+    // don't draw a rectangle around the selected screen objects.
+    CurrentTool := AddPilotPointTool;
+  end
+  else
+  begin
+    CurrentTool := nil;
   end;
   SelectDefaultButton;
 end;
@@ -10828,7 +10950,6 @@ procedure TfrmGoPhast.RestoreDefault2DView1Click(Sender: TObject);
 var
   ModelXWidth, ModelYWidth, ModelHeight: double;
   LocalGrid: TCustomModelGrid;
-//  Mesh: TSutraMesh3D;
   MeshLimits: TGridLimit;
   DrawMesh: IDrawMesh;
   Mesh: IMesh3D;
@@ -11232,8 +11353,6 @@ begin
       FreeAndNil(frmCustomizeMesh);
       FreeAndNil(frmGlobalVariables);
 
-
-
       tbSelectClick(tbSelect);
 
       frmFileProgress := TfrmProgressMM.Create(nil);
@@ -11531,6 +11650,7 @@ begin
       EnableHufMenuItems;
       EnableMt3dmsMenuItems;
       EnableMeshRenumbering;
+      EnablePilotPointItems;
       if ModelSelection in SutraSelection then
       begin
         if SutraMesh <> nil then

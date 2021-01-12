@@ -547,9 +547,11 @@ var
   XInt: Integer;
   PilotPointIndex: Integer;
   APilotPoint: TPoint2D;
+  ArrayCount: Integer;
 begin
   if ShouldDrawPilotPoints then
   begin
+    ArrayCount := FPilotPointRowCount * FPilotPointColumnCount;
     SetLength(LineSegment, 2);
     ZoomBox := frmGoPhast.frameTopView.ZoomBox;
     for PilotPointIndex := 0 to PilotPointCount - 1 do
@@ -558,19 +560,38 @@ begin
       YInt := ZoomBox.YCoord(APilotPoint.y);
       XInt := ZoomBox.XCoord(APilotPoint.x);
 
-      LineSegment[0].x := XInt;
-      LineSegment[1].x := XInt;
-      LineSegment[0].y := YInt-2;
-      LineSegment[1].y := YInt+3;
-      DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
-        True, False, 0, 2);
+      if PilotPointIndex < ArrayCount then
+      begin
+        LineSegment[0].x := XInt;
+        LineSegment[1].x := XInt;
+        LineSegment[0].y := YInt-2;
+        LineSegment[1].y := YInt+3;
+        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+          True, False, 0, 2);
 
-      LineSegment[0].x := XInt-2;
-      LineSegment[1].x := XInt+3;
-      LineSegment[0].y := YInt;
-      LineSegment[1].y := YInt;
-      DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
-        True, False, 0, 2);
+        LineSegment[0].x := XInt-2;
+        LineSegment[1].x := XInt+3;
+        LineSegment[0].y := YInt;
+        LineSegment[1].y := YInt;
+        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+          True, False, 0, 2);
+      end
+      else
+      begin
+        LineSegment[0].x := XInt-2;
+        LineSegment[1].x := XInt+3;
+        LineSegment[0].y := YInt-2;
+        LineSegment[1].y := YInt+3;
+        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+          True, False, 0, 2);
+
+        LineSegment[0].x := XInt+2;
+        LineSegment[1].x := XInt-3;
+        LineSegment[0].y := YInt-2;
+        LineSegment[1].y := YInt+3;
+        DrawBigPolyline32(BitMap32, clBlack32, 1, LineSegment,
+          True, False, 0, 2);
+      end;
 
     end;
   end;
@@ -578,7 +599,7 @@ end;
 
 function TPestProperties.ShouldDrawPilotPoints: Boolean;
 begin
-  result := PestUsed and ShowPilotPoints and (PilotPointSpacing > 0);
+  result := PestUsed and ShowPilotPoints and (PilotPointCount > 0);
 end;
 
 function TPestProperties.GetPilotPoint(Index: Integer): TPoint2D;
@@ -608,16 +629,18 @@ begin
   if PilotPointSpacing = 0 then
   begin
     result := 0;
-    Exit;
+  end
+  else
+  begin
+    DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
+    FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 2;
+    FPilotPointColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 2;
+    result := FPilotPointRowCount * FPilotPointColumnCount;
+    FLeftX := (DisLimits.MaxX + DisLimits.MinX)/2 -
+      (FPilotPointColumnCount-1)/2*PilotPointSpacing;
+    FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 +
+      (FPilotPointRowCount-1)/2*PilotPointSpacing;
   end;
-  DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
-  FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 2;
-  FPilotPointColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 2;
-  result := FPilotPointRowCount * FPilotPointColumnCount;
-  FLeftX := (DisLimits.MaxX + DisLimits.MinX)/2 -
-    (FPilotPointColumnCount-1)/2*PilotPointSpacing;
-  FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 +
-    (FPilotPointRowCount-1)/2*PilotPointSpacing;
   result := result + SpecifiedPilotPoints.Count;
 end;
 

@@ -1132,6 +1132,8 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspObsGroupAssignments'
+      ExplicitWidth = 106
+      ExplicitHeight = 159
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1139,8 +1141,8 @@ inherited frmPEST: TfrmPEST
         Height = 287
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 512
-        ExplicitHeight = 287
+        ExplicitWidth = 106
+        ExplicitHeight = 159
         inherited tvTree: TTreeView
           Width = 512
           Height = 287
@@ -1155,7 +1157,6 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspPilotPoints'
-      ExplicitLeft = 1
       object lblPilotPointSpacing: TLabel
         Left = 6
         Top = 39
@@ -1197,11 +1198,15 @@ inherited frmPEST: TfrmPEST
           Height = 147
           Align = alClient
           TabOrder = 0
-          ExplicitLeft = 40
-          ExplicitTop = 32
+          ExplicitLeft = 2
+          ExplicitTop = 20
+          ExplicitWidth = 485
+          ExplicitHeight = 147
           inherited Panel: TPanel
             Top = 106
             Width = 485
+            ExplicitTop = 106
+            ExplicitWidth = 485
             inherited lbNumber: TLabel
               Width = 55
               Height = 18
@@ -1210,12 +1215,15 @@ inherited frmPEST: TfrmPEST
             end
             inherited sbAdd: TSpeedButton
               Left = 252
+              ExplicitLeft = 252
             end
             inherited sbInsert: TSpeedButton
               Left = 298
+              ExplicitLeft = 298
             end
             inherited sbDelete: TSpeedButton
               Left = 345
+              ExplicitLeft = 345
             end
             inherited seNumber: TJvSpinEdit
               Height = 26
@@ -1273,7 +1281,6 @@ inherited frmPEST: TfrmPEST
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            ExplicitLeft = -4
             ExplicitWidth = 485
             ExplicitHeight = 106
           end

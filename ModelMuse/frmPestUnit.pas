@@ -1448,6 +1448,7 @@ begin
     TempHobList.Free;
   end;
 
+  frmGoPhast.EnablePilotPointItems;
 
   if ShouldUpdateView then
   begin

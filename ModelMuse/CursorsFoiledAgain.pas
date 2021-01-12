@@ -116,6 +116,8 @@ const
   crMoveCrossSection = 40;
   crFishnet = 50;
   crMoveNode = 51;
+  crAddPilotPoint = 52;
+  crDeletePilotPoint = 53 ;
 
   // cursor numbers 41-46 are defined dynamically in frmGoPhast.
 
@@ -133,85 +135,6 @@ uses Forms, Graphics;
 var
   LastCursor: integer = 0;
   MyCursors: array of integer;
-
-(*procedure CreateMaskedCursor(const BitmapName, MaskName: string;
-  const CursorNumber, HotPointX, HotPointY: integer);
-var
-  QBitmap, QMask: QBitmapH;
-  QCursor: QCursorH;
-  bmCursor, bmMask: TBitmap;
-  Index: integer;
-begin
-  // ReferenceS:
-  // p. 588 of
-  // Teixeira, Steve and  Pacheco, Xavier. 2002. Borland®
-  // Delphi TM 6 Developer's Guide. Sams Publishing,
-  // 201 West 103rd St., Indianapolis, Indiana, 46290 USA,  1169 p.
-  //
-  // P. 442 of
-  // Shemitz, Jon, 2002. Kylix: The Prefessional Developer's Guide
-  // and Reference. Apress, 901 Grayson Street, Suite 204,
-  // Berkeley, CA 94710, 943 p.
-
-  // Make sure the cursor number is not duplicated.
-  for Index := 0 to LastCursor - 1 do
-  begin
-    Assert(MyCursors[Index] <> CursorNumber);
-  end;
-  // store the cursor number in MyCursors for use in DestroyCursors.
-  Inc(LastCursor);
-  SetLength(MyCursors, LastCursor);
-  MyCursors[LastCursor - 1] := CursorNumber;
-
-  {
-  from http://doc.trolltech.com/3.0/qcursor.html#QCursor-3
-
-  The cursor bitmap (B) and mask (M) bits are combined like this:
-
-      B=1 and M=1 gives black.
-      B=0 and M=1 gives white.
-      B=0 and M=0 gives transparent.
-      B=1 and M=0 gives an undefined result.
-  }
-
-  // Now create the cursor.
-
-  // First create two bitmaps.
-  // The first represents the cursor;
-  // the second represents the mask.
-  bmCursor := TBitmap.Create;
-  bmMask := TBitmap.Create;
-  try
-    // load the appropriate contents into the two bitmaps.
-    bmCursor.LoadFromResourceName(HInstance, BitmapName);
-    bmMask.LoadFromResourceName(HInstance, MaskName);
-
-    // Create two QBitmapH.
-    // The first represents the cursor;
-    // the second represents the mask.
-    QBitmap := QBitmap_create;
-    QMask := QBitmap_create;
-    try
-      // load the appropriate contents into the two QBitmapHs.
-      QBitmap_from_QPixmap(QBitmap, bmCursor.Handle);
-      QBitmap_from_QPixmap(QMask, bmMask.Handle);
-      // make a cursor.
-      QCursor := QCursor_create(QBitmap, QMask, HotPointX, HotPointY);
-    finally
-      // clean up.
-      QBitmap_destroy(QBitmap);
-      QBitmap_destroy(QMask);
-    end;
-  finally
-    // clean up.
-    bmCursor.Free;
-    bmMask.Free;
-  end;
-
-  // store the cursor in Screen.Cursors.
-  Screen.Cursors[CursorNumber] := QCursor;
-end;
-*)
 
 Procedure LoadACursor(const CursorName: string; CursorNumber: integer);
 var
@@ -283,58 +206,8 @@ initialization
   LoadACursor('CRMOVECROSSSECTION', crMoveCrossSection);
   LoadACursor('CRFISHNET', crFishnet);
   LoadACursor('CRMOVENODE', crMoveNode);
-
-
-
-{
-  CreateMaskedCursor('CRHANDFLAT', 'MASKHANDFLAT', crHandFlat, 14, 11);
-  CreateMaskedCursor('CRZOOMIN', 'MASKZOOMIN', crZoomIn, 11, 11);
-  CreateMaskedCursor('CRZOOMOUT', 'MASKZOOMOUT', crZoomOut, 11, 11);
-  CreateMaskedCursor('CRZOOM', 'MASKZOOM', crZoom, 11, 11);
-  CreateMaskedCursor('CRZOOMNODOT', 'MASKZOOM', crZoomNoDot, 11, 11);
-  CreateMaskedCursor('CRDELETE', 'MASKDELETE', crDelete, 15, 15);
-  CreateMaskedCursor('CRHORIZONTALLINE', 'MASKHORIZONTALLINE',
-    crHorizontal, 16, 16);
-  CreateMaskedCursor('CRVERTICALLINE', 'MASKVERTICALLINE', crVertical, 16, 16);
-  CreateMaskedCursor('CRMOVECOLUMN', 'MASKMOVECOLUMN', crMoveColumn, 16, 16);
-  CreateMaskedCursor('CRMOVEROW', 'MASKMOVEROW', crMoveRow, 16, 16);
-  CreateMaskedCursor('CRSUBDIVIDE', 'MASKSUBDIVIDE', crSubdivide, 16, 16);
-  CreateMaskedCursor('CRSELECTPOINT', 'MASKSELECTPOINT', crSelectPoint, 7, 7);
-  CreateMaskedCursor('CRHANDGRAB', 'MASKHANDGRAB', crHandGrab, 16, 11);
-  CreateMaskedCursor('CRINSERTPOINT', 'MASKINSERTPOINT', crInsertPoint, 15, 15);
-  CreateMaskedCursor('CRDELETESEGMENT', 'MASKDELETESEGMENT',
-    crDeleteSegment, 21, 21);
-  CreateMaskedCursor('CRDISABLEDINSERTPOINT', 'MASKINSERTPOINT',
-    crDisabledInsertPoint, 15, 15);
-  CreateMaskedCursor('CRDISABLEDDELETESEGMENT', 'MASKDELETESEGMENT',
-    crDisabledDeleteSegment, 21, 21);
-  CreateMaskedCursor('CRSETWIDTH', 'MASKSETWIDTH', crSetWidth, 16, 16);
-  CreateMaskedCursor('CRROTATE', 'MASKROTATE', crRotate, 16, 16);
-  CreateMaskedCursor('CRPOINTARROW', 'MASKPOINTARROW', crPointArrow, 2, 2);
-  CreateMaskedCursor('CRLINEARROW', 'MASKLINEARROW', crLineArrow, 2, 2);
-  CreateMaskedCursor('CRPOLYGONARROW', 'MASKPOLYGONARROW',
-    crPolygonArrow, 2, 2);
-  CreateMaskedCursor('CRSTRAIGHTLINEARROW', 'MASKSTRAIGHTLINEARROW',
-    crStraightLineArrow, 2, 2);
-  CreateMaskedCursor('CRRECTANGLEARROW', 'MASKRECTANGLEARROW',
-    crRectangleArrow, 2, 2);
-  CreateMaskedCursor('CR3DPOINTARROW', 'MASK3DPOINTARROW',
-    cr3dPointArrow, 2, 2);
-  CreateMaskedCursor('CR3DLINEARROW', 'MASK3DLINEARROW', cr3dLineArrow, 2, 2);
-  CreateMaskedCursor('CR3DSHEETARROW', 'MASK3DSHEETARROW',
-    cr3dSheetArrow, 2, 2);
-  CreateMaskedCursor('CR3DSOLIDARROW', 'MASK3DSOLIDARROW',
-    cr3dSolidArrow, 2, 2);
-  CreateMaskedCursor('CR3DSTRAIGHTLINEARROW', 'MASK3DSTRAIGHTLINEARROW',
-    cr3dStraightLineArrow, 2, 2);
-  CreateMaskedCursor('CR3DCUBEARROW', 'MASK3DCUBEARROW', crCubeArrow, 2, 2);
-  CreateMaskedCursor('CRDOMAINLINE', 'MASKDOMAINLINE', crDomainLine, 2, 2);
-  CreateMaskedCursor('CRDOMAINPOLYGON', 'MASKDOMAINPOLYGON',
-    crDomainPolygon, 2, 2);
-//  CreateMaskedCursor('CRZOOMBYY', 'MASKZOOMBYY',
-//    crZoomByY, 15, 15);
-  CreateMaskedCursor('3DZOOM', '3DZOOMMASK',
-    crZoomByY, 15, 32);  }
+  LoadACursor('CRNEWPILOTPOINT', crAddPilotPoint);
+  LoadACursor('CRDELETEPILOTPOINT', crDeletePilotPoint);
 
 //finalization
 //  DestroyCursors;

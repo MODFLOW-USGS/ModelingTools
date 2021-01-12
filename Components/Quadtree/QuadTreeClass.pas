@@ -1546,6 +1546,8 @@ var
   //  dx, dy : double;
   APoint: TQPoint;
 begin
+  Assert(Block.XMax >= Block.XMin);
+  Assert(Block.YMax >= Block.YMin);
   if FChildren[North, West] = nil then
   begin
     if (Block.XMin <= FXmin) and (Block.XMax >= FXmax)
