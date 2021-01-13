@@ -169,6 +169,7 @@ type
     btnImportShape: TButton;
     btnImportText: TButton;
     dlgOpenPilotPoints: TOpenDialog;
+    btnBetweenObservations: TButton;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -189,6 +190,7 @@ type
     procedure rdeSwitchCriterionChange(Sender: TObject);
     procedure btnImportShapeClick(Sender: TObject);
     procedure btnImportTextClick(Sender: TObject);
+    procedure btnBetweenObservationsClick(Sender: TObject);
 //    procedure comboObsGroupChange(Sender: TObject);
   private
     FObsList: TObservationList;
@@ -226,7 +228,8 @@ implementation
 uses
   frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls, PhastModelUnit,
   PointCollectionUnit, QuadTreeClass, ShapefileUnit, System.IOUtils, FastGEO,
-  ModelMuseUtilities;
+  ModelMuseUtilities, ScreenObjectUnit, TriCP_Routines, TriPackRoutines,
+  SutraPestObsUnit;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
@@ -288,6 +291,154 @@ begin
   else
   begin
     rdeSwitchCriterion.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.btnBetweenObservationsClick(Sender: TObject);
+var
+  ScreenObjectIndex: Integer;
+  PhastModel: TPhastModel;
+  AScreenObject: TScreenObject;
+  UsePoint: Boolean;
+  QuadTree: TRbwQuadTree;
+  DisLimits: TGridLimit;
+  PointList: TList<TPoint2D>;
+  XD: TRealArray;
+  YD: TRealArray;
+  NT: longint; 
+  NL: longint;
+  IPT: TIntArray; 
+  IPL: TIntArray;
+  ResultPointList: TList<TPoint2D>;
+  APoint2D: TPoint2D;
+  DupPoint: TPoint2D;
+  PointIndex: Integer;
+  APoint2D_1: TPoint2D;
+  APoint2D_2: TPoint2D;
+  SutraStateObs: TSutraStateObservations;
+  APointer: Pointer;
+  LineIndex: Integer;
+begin
+  inherited;
+  //
+  PhastModel := frmGoPhast.PhastModel;
+  PointList := TList<TPoint2D>.Create;
+  ResultPointList := TList<TPoint2D>.Create;
+  QuadTree := TRbwQuadTree.Create(nil);
+  try
+    DisLimits := PhastModel.DiscretizationLimits(vdTop);
+    QuadTree.XMax := DisLimits.MaxX;
+    QuadTree.XMin := DisLimits.MinX;
+    QuadTree.YMax := DisLimits.MaxY;
+    QuadTree.YMin := DisLimits.MinY;
+    for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
+    begin
+      AScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
+      if AScreenObject.Deleted or (AScreenObject.Count > 1)
+        or (AScreenObject.Modflow6Obs = nil)
+        or not AScreenObject.Modflow6Obs.Used then
+      begin
+        Continue;
+      end;
+
+      UsePoint := False;
+      if (PhastModel.ModelSelection in ModflowSelection) then
+      begin
+        if PhastModel.ModelSelection = msModflow2015 then
+        begin
+          UsePoint := AScreenObject.Modflow6Obs.CalibrationObservations.Count > 0;
+        end
+        else
+        begin
+          if PhastModel.ModflowPackages.Mnw2Package.IsSelected then
+          begin
+            if (AScreenObject.ModflowMnw2Boundary <> nil)
+              and AScreenObject.ModflowMnw2Boundary.Used
+              and (AScreenObject.ModflowMnw2Boundary.Observations.Count > 0) then
+            begin
+              UsePoint := True;
+            end;
+          end;
+
+          if PhastModel.ModflowPackages.HobPackage.IsSelected then
+          begin
+            if (AScreenObject.ModflowHeadObservations <> nil)
+              and AScreenObject.ModflowHeadObservations.Used then
+            begin
+              UsePoint := True;
+            end;
+          end;
+        end;
+      end;
+      if (PhastModel.ModelSelection in SutraSelection) then
+      begin
+        SutraStateObs := AScreenObject.SutraBoundaries.SutraStateObs;
+        if SutraStateObs.Used and (SutraStateObs.Count > 0) then
+        begin
+          UsePoint := True;
+        end;
+      end;
+
+      if UsePoint then
+      begin
+        APoint2D := AScreenObject.Points[0];
+        if PointList.Count = 0 then
+        begin
+          PointList.Add(APoint2D);
+          QuadTree.AddPoint(APoint2D.x, APoint2D.y, nil);
+        end
+        else
+        begin
+          DupPoint := APoint2D;
+          QuadTree.FirstNearestPoint(DupPoint.x, DupPoint.y, APointer);
+          if (DupPoint.x <> APoint2D.x) or (DupPoint.y <> APoint2D.y) then
+          begin
+            PointList.Add(APoint2D);
+            QuadTree.AddPoint(APoint2D.x, APoint2D.y, nil);
+          end;
+        end;
+      end;
+    end;
+    
+    if PointList.Count = 0 then
+    begin
+      Beep;
+      MessageDlg('No observation points defined.', mtError, [mbOK], 0);
+    end;
+
+    if PointList.Count < 4 then
+    begin
+
+    end
+    else
+    begin
+      SetLength(XD, PointList.Count);
+      SetLength(YD, PointList.Count);
+      for PointIndex := 0 to PointList.Count -1 do
+      begin
+        APoint2D := PointList[PointIndex];
+        XD[PointIndex] := APoint2D.x;
+        YD[PointIndex] := APoint2D.y;
+      end;
+      SetLength(IPT, 6*PointList.Count-15);
+      SetLength(IPL, 6*PointList.Count);
+      IDTANG_Pascal(PointList.Count, XD,YD, NT, NL, IPT, IPL);
+
+      for LineIndex := 0 to NL - 1 do
+      begin
+        PointIndex := IPL[LineIndex*3];
+        APoint2D_1 := PointList[PointIndex];
+        PointIndex := IPL[LineIndex*3+1];
+        APoint2D_2 := PointList[PointIndex];
+        APoint2D.x := (APoint2D_1.x + APoint2D_2.x) / 2;
+        APoint2D.y := (APoint2D_1.y + APoint2D_2.y) / 2;
+        ResultPointList.Add(APoint2D);
+      end;
+    end;
+  finally
+    PointList.Free;
+    ResultPointList.Free;
+    QuadTree.Free;
   end;
 end;
 

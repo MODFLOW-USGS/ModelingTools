@@ -425,6 +425,7 @@ type
     FLsqrProperties: TLsqrProperties;
     FObservatioGroups: TPestObservationGroups;
     FSpecifiedPilotPoints: TSimplePointCollection;
+    FBetweenObservationsPilotPoints: TSimplePointCollection;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -440,6 +441,8 @@ type
     procedure SetLsqrProperties(const Value: TLsqrProperties);
     procedure SetObservatioGroups(const Value: TPestObservationGroups);
     procedure SetSpecifiedPilotPoints(const Value: TSimplePointCollection);
+    procedure SetBetweenObservationsPilotPoints(
+      const Value: TSimplePointCollection);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -471,6 +474,7 @@ type
       write SetObservatioGroups;
     property SpecifiedPilotPoints: TSimplePointCollection
       read FSpecifiedPilotPoints write SetSpecifiedPilotPoints;
+    property BetweenObservationsPilotPoints: TSimplePointCollection read FBetweenObservationsPilotPoints write SetBetweenObservationsPilotPoints;
   end;
 
 implementation
@@ -497,6 +501,7 @@ begin
     LsqrProperties := PestSource.LsqrProperties;
     ObservationGroups := PestSource.ObservationGroups;
     SpecifiedPilotPoints := PestSource.SpecifiedPilotPoints;
+    BetweenObservationsPilotPoints := PestSource.BetweenObservationsPilotPoints;
   end
   else
   begin
@@ -525,11 +530,13 @@ begin
   FObservatioGroups := TPestObservationGroups.Create(Model);
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
   FSpecifiedPilotPoints := TSimplePointCollection.Create;
+  FBetweenObservationsPilotPoints := TSimplePointCollection.Create;
   InitializeVariables;
 end;
 
 destructor TPestProperties.Destroy;
 begin
+  FBetweenObservationsPilotPoints.Free;
   FSpecifiedPilotPoints.Free;
   FObservatioGroups.Free;
   FLsqrProperties.Free;
@@ -663,6 +670,12 @@ begin
 
   FObservatioGroups.Clear;
   SpecifiedPilotPoints.Clear;
+end;
+
+procedure TPestProperties.SetBetweenObservationsPilotPoints(
+  const Value: TSimplePointCollection);
+begin
+  FBetweenObservationsPilotPoints.Assign(Value);
 end;
 
 procedure TPestProperties.SetExtendedTemplateCharacter(const Value: Char);

@@ -1131,6 +1131,8 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 287
       Caption = 'jvspObsGroupAssignments'
+      ExplicitWidth = 106
+      ExplicitHeight = 159
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1138,8 +1140,8 @@ inherited frmPEST: TfrmPEST
         Height = 287
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 512
-        ExplicitHeight = 287
+        ExplicitWidth = 106
+        ExplicitHeight = 159
         inherited tvTree: TTreeView
           Width = 512
           Height = 287
@@ -1182,28 +1184,28 @@ inherited frmPEST: TfrmPEST
         TabOrder = 1
       end
       object gbIndividualPilotPoints: TGroupBox
-        Left = 8
+        Left = 6
         Top = 112
-        Width = 489
+        Width = 491
         Height = 169
         Caption = 'Individually specified pilot points'
         TabOrder = 2
         inline framePilotPoints: TframeGrid
           Left = 2
           Top = 20
-          Width = 485
+          Width = 487
           Height = 147
           Align = alClient
           TabOrder = 0
           ExplicitLeft = 2
           ExplicitTop = 20
-          ExplicitWidth = 485
+          ExplicitWidth = 487
           ExplicitHeight = 147
           inherited Panel: TPanel
             Top = 106
-            Width = 485
+            Width = 487
             ExplicitTop = 106
-            ExplicitWidth = 485
+            ExplicitWidth = 487
             inherited lbNumber: TLabel
               Width = 151
               Height = 18
@@ -1212,15 +1214,15 @@ inherited frmPEST: TfrmPEST
               ExplicitHeight = 18
             end
             inherited sbAdd: TSpeedButton
-              Left = 252
+              Left = 253
               ExplicitLeft = 252
             end
             inherited sbInsert: TSpeedButton
-              Left = 298
+              Left = 299
               ExplicitLeft = 298
             end
             inherited sbDelete: TSpeedButton
-              Left = 345
+              Left = 346
               ExplicitLeft = 345
             end
             inherited seNumber: TJvSpinEdit
@@ -1229,7 +1231,7 @@ inherited frmPEST: TfrmPEST
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 485
+            Width = 487
             Height = 106
             ColCount = 2
             Columns = <
@@ -1279,7 +1281,7 @@ inherited frmPEST: TfrmPEST
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            ExplicitWidth = 485
+            ExplicitWidth = 487
             ExplicitHeight = 106
           end
         end
@@ -1301,6 +1303,15 @@ inherited frmPEST: TfrmPEST
         Caption = 'Import from text file'
         TabOrder = 4
         OnClick = btnImportTextClick
+      end
+      object btnBetweenObservations: TButton
+        Left = 288
+        Top = 101
+        Width = 177
+        Height = 25
+        Caption = 'Between observations'
+        TabOrder = 5
+        OnClick = btnBetweenObservationsClick
       end
     end
   end

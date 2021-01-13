@@ -72,7 +72,7 @@ end;
 procedure TMeshTriangulator.TriangulateNodes(var IADJ, IEND: TIntArray);
 var
   NIndex: Integer;
-  Node: ITriangulatable;
+  INode: ITriangulatable;
   TTriangulatablesList: TTriangulateList;
   IsActive: Boolean;
 begin
@@ -83,11 +83,11 @@ begin
   try  
     for NIndex := 0 to Mesh.NodeCount - 1 do
     begin
-      Node := Mesh.NodesI2D[NIndex] as ITriangulatable;
-      OnIsItemActive(Self, Node, IsActive);
+      INode := Mesh.NodesI2D[NIndex] as ITriangulatable;
+      OnIsItemActive(Self, INode, IsActive);
       if IsActive then
       begin
-        Node.TriangNumber := TTriangulatablesList.Add(Node) + 1;
+        INode.TriangNumber := TTriangulatablesList.Add(INode) + 1;
       end;
     end;
     TriangulateItems(TTriangulatablesList, IADJ, IEND);

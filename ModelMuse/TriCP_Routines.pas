@@ -130,6 +130,8 @@ Type
 procedure TRICP_Pascal (const XD,YD,ZD, C: TRealArray; var WK: TRealArray;
   const ND, NCP, NC, MODE: longint;
   var NT: longint; var IPT, IPL: TIntArray);
+
+
 {
 @preformatted(
  THE IDTANG SUBROUTINE PERFORMS TRIANGULATION.  IT DIVIDES THE X-Y
@@ -171,8 +173,6 @@ procedure TRICP_Pascal (const XD,YD,ZD, C: TRealArray; var WK: TRealArray;
            INTERNALLY AS A WORK AREA,
      WK  = ARRAY OF DIMENSION NDP USED INTERNALLY AS A
            WORK AREA.
-)           
-
 }
 procedure  IDTANG_Pascal(const NDP: longint; const XD,YD: TRealArray;
   var NT, NL: longint; var IPT, IPL: TIntArray);
