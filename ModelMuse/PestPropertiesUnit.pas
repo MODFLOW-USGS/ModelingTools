@@ -426,6 +426,7 @@ type
     FObservatioGroups: TPestObservationGroups;
     FSpecifiedPilotPoints: TSimplePointCollection;
     FBetweenObservationsPilotPoints: TSimplePointCollection;
+    FUseBetweenObservationsPilotPoints: Boolean;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -443,6 +444,7 @@ type
     procedure SetSpecifiedPilotPoints(const Value: TSimplePointCollection);
     procedure SetBetweenObservationsPilotPoints(
       const Value: TSimplePointCollection);
+    procedure SetUseBetweenObservationsPilotPoints(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -474,7 +476,11 @@ type
       write SetObservatioGroups;
     property SpecifiedPilotPoints: TSimplePointCollection
       read FSpecifiedPilotPoints write SetSpecifiedPilotPoints;
-    property BetweenObservationsPilotPoints: TSimplePointCollection read FBetweenObservationsPilotPoints write SetBetweenObservationsPilotPoints;
+    property BetweenObservationsPilotPoints: TSimplePointCollection
+      read FBetweenObservationsPilotPoints write SetBetweenObservationsPilotPoints;
+    property UseBetweenObservationsPilotPoints: Boolean
+      read FUseBetweenObservationsPilotPoints
+      write SetUseBetweenObservationsPilotPoints stored True;
   end;
 
 implementation
@@ -502,6 +508,7 @@ begin
     ObservationGroups := PestSource.ObservationGroups;
     SpecifiedPilotPoints := PestSource.SpecifiedPilotPoints;
     BetweenObservationsPilotPoints := PestSource.BetweenObservationsPilotPoints;
+    UseBetweenObservationsPilotPoints  := PestSource.UseBetweenObservationsPilotPoints;
   end
   else
   begin
@@ -614,8 +621,10 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   ArrayCount: Integer;
+  SpecifiedCount: Integer;
 begin
   ArrayCount := FPilotPointColumnCount * FPilotPointRowCount;
+  SpecifiedCount := ArrayCount + SpecifiedPilotPoints.Count;
   if Index < ArrayCount then
   begin
     RowIndex := Index div FPilotPointColumnCount;
@@ -623,10 +632,20 @@ begin
     result.Y := FTopY - RowIndex*PilotPointSpacing;
     result.X := FLeftX + ColIndex*PilotPointSpacing;
   end
-  else
+  else if Index < SpecifiedCount  then
   begin
     result := (SpecifiedPilotPoints.Items[Index-ArrayCount] as TPointItem).Point2D;
+  end
+  else if UseBetweenObservationsPilotPoints then
+  begin
+    result := (BetweenObservationsPilotPoints.
+      Items[Index-SpecifiedCount] as TPointItem).Point2D;
+  end
+  else
+  begin
+    Assert(False);
   end;
+
 end;
 
 function TPestProperties.GetPilotPointCount: Integer;
@@ -649,6 +668,10 @@ begin
       (FPilotPointRowCount-1)/2*PilotPointSpacing;
   end;
   result := result + SpecifiedPilotPoints.Count;
+  if UseBetweenObservationsPilotPoints then
+  begin
+    result := result + BetweenObservationsPilotPoints.Count;
+  end;
 end;
 
 function TPestProperties.GetPilotPointSpacing: double;
@@ -663,6 +686,7 @@ begin
   PilotPointSpacing := 0;
   FTemplateCharacter := '@';
   FExtendedTemplateCharacter := '%';
+  FUseBetweenObservationsPilotPoints := True;
 
   FPestControlData.InitializeVariables;
   FSvdProperties.InitializeVariables;
@@ -670,6 +694,7 @@ begin
 
   FObservatioGroups.Clear;
   SpecifiedPilotPoints.Clear;
+  BetweenObservationsPilotPoints.Clear;
 end;
 
 procedure TPestProperties.SetBetweenObservationsPilotPoints(
@@ -734,6 +759,12 @@ end;
 procedure TPestProperties.SetTemplateCharacter(const Value: Char);
 begin
   SetCharacterProperty(FTemplateCharacter, Value);
+end;
+
+procedure TPestProperties.SetUseBetweenObservationsPilotPoints(
+  const Value: Boolean);
+begin
+  FUseBetweenObservationsPilotPoints := Value;
 end;
 
 { TPestControlData }

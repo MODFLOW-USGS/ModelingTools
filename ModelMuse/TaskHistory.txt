@@ -258,7 +258,7 @@ object TTaskHistory
     end
     item
       Name = 'List File Analyzer'
-      Display = False
+      Display = True
     end
     item
       Name = 'Mesh Generation'
@@ -26821,5 +26821,15 @@ object TTaskHistory
       Categories.Strings = (
         'PEST Pilot Points'
         'PEST')
+    end
+    item
+      Date = 44210.000000000000000000
+    end
+    item
+      Date = 44211.000000000000000000
+      Categories.Strings = (
+        'PEST Pilot Points'
+        'PEST'
+        'List File Analyzer')
     end>
 end

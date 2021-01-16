@@ -1,23 +1,24 @@
 inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
-  ClientHeight = 329
+  ClientHeight = 461
   ClientWidth = 710
   ExplicitWidth = 726
-  ExplicitHeight = 368
+  ExplicitHeight = 500
   PixelsPerInch = 96
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
     Top = 0
     Width = 5
-    Height = 287
+    Height = 419
     ExplicitLeft = 121
+    ExplicitHeight = 287
   end
   object tvPEST: TJvPageListTreeView
     Left = 0
     Top = 0
     Width = 193
-    Height = 287
+    Height = 419
     ShowButtons = True
     PageDefault = 0
     PageList = plMain
@@ -30,7 +31,7 @@ inherited frmPEST: TfrmPEST
     Left = 198
     Top = 0
     Width = 512
-    Height = 287
+    Height = 419
     ActivePage = jvspPilotPoints
     PropagateEnable = False
     Align = alClient
@@ -39,7 +40,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspBasic'
       object lblTemplateCharacter: TLabel
         Left = 16
@@ -122,7 +123,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspControlDataMode'
       object lblPestMode: TLabel
         Left = 23
@@ -157,7 +158,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspDimensions'
       object lblMaxCompDim: TLabel
         Left = 85
@@ -202,7 +203,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspInversionControls'
       object lblInitialLambda: TLabel
         Left = 95
@@ -341,7 +342,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -431,7 +432,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspInversionControls2'
       object lblSwitchCriterion: TLabel
         Left = 93
@@ -535,7 +536,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspIterationControls'
       object lblMaxIterations: TLabel
         Left = 93
@@ -697,7 +698,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspOutputOptions'
       object cbWriteCov: TCheckBox
         Left = 6
@@ -787,7 +788,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspSingularValueDecomp'
       object lblSvdMode: TLabel
         Left = 6
@@ -872,7 +873,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspLqsr'
       object lblMatrixTolerance: TLabel
         Left = 157
@@ -974,21 +975,21 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspObservationGroups'
       inline frameObservationGroups: TframeGrid
         Left = 0
         Top = 0
         Width = 512
-        Height = 287
+        Height = 419
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 512
-        ExplicitHeight = 287
+        ExplicitHeight = 419
         inherited Panel: TPanel
-          Top = 246
+          Top = 378
           Width = 512
-          ExplicitTop = 246
+          ExplicitTop = 378
           ExplicitWidth = 512
           DesignSize = (
             512
@@ -1022,7 +1023,7 @@ inherited frmPEST: TfrmPEST
         end
         inherited Grid: TRbwDataGrid4
           Width = 512
-          Height = 246
+          Height = 378
           ColCount = 4
           OnSelectCell = frameObservationGroupsGridSelectCell
           OnSetEditText = frameObservationGroupsGridSetEditText
@@ -1121,7 +1122,7 @@ inherited frmPEST: TfrmPEST
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 512
-          ExplicitHeight = 246
+          ExplicitHeight = 378
         end
       end
     end
@@ -1129,24 +1130,22 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspObsGroupAssignments'
-      ExplicitWidth = 106
-      ExplicitHeight = 159
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
         Width = 512
-        Height = 287
+        Height = 419
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 106
-        ExplicitHeight = 159
+        ExplicitWidth = 512
+        ExplicitHeight = 419
         inherited tvTree: TTreeView
           Width = 512
-          Height = 287
+          Height = 419
           ExplicitWidth = 512
-          ExplicitHeight = 287
+          ExplicitHeight = 419
         end
       end
     end
@@ -1154,7 +1153,7 @@ inherited frmPEST: TfrmPEST
       Left = 0
       Top = 0
       Width = 512
-      Height = 287
+      Height = 419
       Caption = 'jvspPilotPoints'
       object lblPilotPointSpacing: TLabel
         Left = 6
@@ -1183,57 +1182,177 @@ inherited frmPEST: TfrmPEST
         Caption = 'Show candidate pilot points'
         TabOrder = 1
       end
-      object gbIndividualPilotPoints: TGroupBox
-        Left = 6
-        Top = 112
-        Width = 491
-        Height = 169
-        Caption = 'Individually specified pilot points'
+      object Panel2: TPanel
+        Left = 0
+        Top = 132
+        Width = 512
+        Height = 287
+        Align = alBottom
         TabOrder = 2
-        inline framePilotPoints: TframeGrid
-          Left = 2
-          Top = 20
-          Width = 487
-          Height = 147
-          Align = alClient
+        object Splitter1: TSplitter
+          Left = 242
+          Top = 1
+          Height = 285
+          ExplicitLeft = 312
+          ExplicitTop = 120
+          ExplicitHeight = 100
+        end
+        object gbIndividualPilotPoints: TGroupBox
+          Left = 1
+          Top = 1
+          Width = 241
+          Height = 285
+          Align = alLeft
+          Caption = 'Individually specified pilot points'
           TabOrder = 0
-          ExplicitLeft = 2
-          ExplicitTop = 20
-          ExplicitWidth = 487
-          ExplicitHeight = 147
-          inherited Panel: TPanel
-            Top = 106
-            Width = 487
-            ExplicitTop = 106
-            ExplicitWidth = 487
-            inherited lbNumber: TLabel
-              Width = 151
-              Height = 18
-              Caption = 'Number of pilot points'
-              ExplicitWidth = 151
-              ExplicitHeight = 18
+          inline framePilotPoints: TframeGrid
+            Left = 2
+            Top = 89
+            Width = 237
+            Height = 194
+            Align = alClient
+            TabOrder = 0
+            ExplicitLeft = 2
+            ExplicitTop = 89
+            ExplicitWidth = 237
+            ExplicitHeight = 194
+            inherited Panel: TPanel
+              Top = 153
+              Width = 237
+              ExplicitTop = 153
+              ExplicitWidth = 237
+              inherited lbNumber: TLabel
+                Width = 151
+                Height = 18
+                Caption = 'Number of pilot points'
+                ExplicitWidth = 151
+                ExplicitHeight = 18
+              end
+              inherited sbAdd: TSpeedButton
+                Left = 117
+                ExplicitLeft = 252
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 140
+                ExplicitLeft = 298
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 163
+                ExplicitLeft = 345
+              end
+              inherited seNumber: TJvSpinEdit
+                Height = 26
+                ExplicitHeight = 26
+              end
             end
-            inherited sbAdd: TSpeedButton
-              Left = 253
-              ExplicitLeft = 252
-            end
-            inherited sbInsert: TSpeedButton
-              Left = 299
-              ExplicitLeft = 298
-            end
-            inherited sbDelete: TSpeedButton
-              Left = 346
-              ExplicitLeft = 345
-            end
-            inherited seNumber: TJvSpinEdit
-              Height = 26
-              ExplicitHeight = 26
+            inherited Grid: TRbwDataGrid4
+              Width = 237
+              Height = 153
+              ColCount = 2
+              Columns = <
+                item
+                  AutoAdjustRowHeights = False
+                  ButtonCaption = '...'
+                  ButtonFont.Charset = DEFAULT_CHARSET
+                  ButtonFont.Color = clWindowText
+                  ButtonFont.Height = -11
+                  ButtonFont.Name = 'Tahoma'
+                  ButtonFont.Style = []
+                  ButtonUsed = False
+                  ButtonWidth = 20
+                  CheckMax = False
+                  CheckMin = False
+                  ComboUsed = False
+                  Format = rcf4Real
+                  LimitToList = False
+                  MaxLength = 0
+                  ParentButtonFont = False
+                  WordWrapCaptions = True
+                  WordWrapCells = False
+                  CaseSensitivePicklist = False
+                  CheckStyle = csCheck
+                  AutoAdjustColWidths = True
+                end
+                item
+                  AutoAdjustRowHeights = False
+                  ButtonCaption = '...'
+                  ButtonFont.Charset = DEFAULT_CHARSET
+                  ButtonFont.Color = clWindowText
+                  ButtonFont.Height = -11
+                  ButtonFont.Name = 'Tahoma'
+                  ButtonFont.Style = []
+                  ButtonUsed = False
+                  ButtonWidth = 20
+                  CheckMax = False
+                  CheckMin = False
+                  ComboUsed = False
+                  Format = rcf4Real
+                  LimitToList = False
+                  MaxLength = 0
+                  ParentButtonFont = False
+                  WordWrapCaptions = True
+                  WordWrapCells = False
+                  CaseSensitivePicklist = False
+                  CheckStyle = csCheck
+                  AutoAdjustColWidths = True
+                end>
+              ExplicitWidth = 237
+              ExplicitHeight = 153
             end
           end
-          inherited Grid: TRbwDataGrid4
-            Width = 487
-            Height = 106
+          object Panel1: TPanel
+            Left = 2
+            Top = 20
+            Width = 237
+            Height = 69
+            Align = alTop
+            TabOrder = 1
+            object btnImportShape: TButton
+              Left = 8
+              Top = 8
+              Width = 177
+              Height = 25
+              Caption = 'Import from Shapefile'
+              TabOrder = 0
+              OnClick = btnImportShapeClick
+            end
+            object btnImportText: TButton
+              Left = 8
+              Top = 39
+              Width = 177
+              Height = 25
+              Caption = 'Import from text file'
+              TabOrder = 1
+              OnClick = btnImportTextClick
+            end
+          end
+        end
+        object gbBetweenPointObs: TGroupBox
+          Left = 245
+          Top = 1
+          Width = 266
+          Height = 285
+          Align = alClient
+          Caption = 'Between point observations'
+          TabOrder = 1
+          object rdgBetweenObs: TRbwDataGrid4
+            Left = 2
+            Top = 113
+            Width = 262
+            Height = 170
+            Align = alClient
             ColCount = 2
+            FixedCols = 0
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goAlwaysShowEditor]
+            TabOrder = 0
+            ExtendedAutoDistributeText = False
+            AutoMultiEdit = False
+            AutoDistributeText = False
+            AutoIncreaseColCount = False
+            AutoIncreaseRowCount = False
+            SelectedRowOrColumnColor = clAqua
+            UnselectableColor = clBtnFace
+            ColorRangeSelection = False
             Columns = <
               item
                 AutoAdjustRowHeights = False
@@ -1252,7 +1371,7 @@ inherited frmPEST: TfrmPEST
                 LimitToList = False
                 MaxLength = 0
                 ParentButtonFont = False
-                WordWrapCaptions = True
+                WordWrapCaptions = False
                 WordWrapCells = False
                 CaseSensitivePicklist = False
                 CheckStyle = csCheck
@@ -1275,49 +1394,51 @@ inherited frmPEST: TfrmPEST
                 LimitToList = False
                 MaxLength = 0
                 ParentButtonFont = False
-                WordWrapCaptions = True
+                WordWrapCaptions = False
                 WordWrapCells = False
                 CaseSensitivePicklist = False
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            ExplicitWidth = 487
-            ExplicitHeight = 106
+            WordWrapRowCaptions = False
+            ColWidths = (
+              64
+              64)
+          end
+          object Panel3: TPanel
+            Left = 2
+            Top = 20
+            Width = 262
+            Height = 93
+            Align = alTop
+            TabOrder = 1
+            object cbUseBetweenObs: TCheckBox
+              Left = 4
+              Top = 8
+              Width = 221
+              Height = 33
+              Caption = 'Use pilot points '#13#10'between observations'
+              TabOrder = 0
+              WordWrap = True
+            end
+            object btnBetweenObservations: TButton
+              Left = 4
+              Top = 45
+              Width = 253
+              Height = 42
+              Caption = 'Generate pilot points'#13#10'between point observations'
+              TabOrder = 1
+              WordWrap = True
+              OnClick = btnBetweenObservationsClick
+            end
           end
         end
-      end
-      object btnImportShape: TButton
-        Left = 288
-        Top = 16
-        Width = 177
-        Height = 25
-        Caption = 'Import from Shapefile'
-        TabOrder = 3
-        OnClick = btnImportShapeClick
-      end
-      object btnImportText: TButton
-        Left = 288
-        Top = 47
-        Width = 177
-        Height = 25
-        Caption = 'Import from text file'
-        TabOrder = 4
-        OnClick = btnImportTextClick
-      end
-      object btnBetweenObservations: TButton
-        Left = 288
-        Top = 101
-        Width = 177
-        Height = 25
-        Caption = 'Between observations'
-        TabOrder = 5
-        OnClick = btnBetweenObservationsClick
       end
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 287
+    Top = 419
     Width = 710
     Height = 42
     Align = alBottom

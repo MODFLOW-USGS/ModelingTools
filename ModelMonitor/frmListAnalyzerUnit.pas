@@ -112,6 +112,7 @@ type
     PriorStressPeriod: string;
     FModflow6: Boolean;
     FReopeningAllowed: Boolean;
+    FPromptReopen: Boolean;
     procedure ListFileProgress(Sender: TObject; PerMil: integer);
     function DisplayObservations: boolean;
     function DisplayArray: Boolean;
@@ -348,6 +349,7 @@ begin
   {$IFDEF ShowTimes}
   StartTime := Now;
   {$ENDIF}
+  FPromptReopen := True;
   FReopeningAllowed := True;
   tabTable.TabVisible := False;
   tabLines.TabVisible := False;
@@ -2986,7 +2988,7 @@ procedure TfrmMain.AppEvnt1Idle(Sender: TObject; var Done: Boolean);
 var
   AFileDate: TDateTime;
 begin
-  if FIdling then
+  if FIdling or not FPromptReopen then
   begin
     Exit;
   end;
@@ -3003,6 +3005,10 @@ begin
             mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
           begin
             OpenAFile(FListFile.FileName);
+          end
+          else
+          begin
+            FPromptReopen := False;
           end;
         end;
         FFileDate := AFileDate;

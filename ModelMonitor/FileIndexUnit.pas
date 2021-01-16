@@ -534,7 +534,11 @@ begin
           LineBreakPos := FindLastLineBreak(AString);
           if NextLine = '' then
           begin
-            if (AString[1] = #13) and (StartPosition <> 0) then
+            if AString = '' then
+            begin
+              CurrentLine := ''
+            end
+            else if (AString[1] = #13) and (StartPosition <> 0) then
             begin
               CurrentLine := Copy(AString,3,LineBreakPos-1);
             end

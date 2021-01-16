@@ -3282,7 +3282,7 @@ begin
     end;
   end;
   NT:=TriangleIndex+1;
-  NL:=NL0;
+  NL:=NL0+1;
 end;
 
 procedure TRICP_Pascal (const XD,YD,ZD, C: TRealArray; var WK: TRealArray;

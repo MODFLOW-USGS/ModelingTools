@@ -10,7 +10,7 @@ uses
   frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
   PestObsGroupUnit, Vcl.Mask, JvExMask, JvToolEdit,
   FluxObservationUnit, ModflowHobUnit, System.UITypes,
-  System.Generics.Collections;
+  System.Generics.Collections, Vcl.Grids, RbwDataGrid4;
 
 type
   TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
@@ -170,6 +170,13 @@ type
     btnImportText: TButton;
     dlgOpenPilotPoints: TOpenDialog;
     btnBetweenObservations: TButton;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    gbBetweenPointObs: TGroupBox;
+    Splitter1: TSplitter;
+    rdgBetweenObs: TRbwDataGrid4;
+    Panel3: TPanel;
+    cbUseBetweenObs: TCheckBox;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -226,7 +233,7 @@ const StrNone = '(none)';
 implementation
 
 uses
-  frmGoPhastUnit, GoPhastTypes, RbwDataGrid4, JvComCtrls, PhastModelUnit,
+  frmGoPhastUnit, GoPhastTypes, JvComCtrls, PhastModelUnit,
   PointCollectionUnit, QuadTreeClass, ShapefileUnit, System.IOUtils, FastGEO,
   ModelMuseUtilities, ScreenObjectUnit, TriCP_Routines, TriPackRoutines,
   SutraPestObsUnit;
@@ -309,7 +316,7 @@ var
   NL: longint;
   IPT: TIntArray; 
   IPL: TIntArray;
-  ResultPointList: TList<TPoint2D>;
+//  ResultPointList: TList<TPoint2D>;
   APoint2D: TPoint2D;
   DupPoint: TPoint2D;
   PointIndex: Integer;
@@ -323,7 +330,7 @@ begin
   //
   PhastModel := frmGoPhast.PhastModel;
   PointList := TList<TPoint2D>.Create;
-  ResultPointList := TList<TPoint2D>.Create;
+//  ResultPointList := TList<TPoint2D>.Create;
   QuadTree := TRbwQuadTree.Create(nil);
   try
     DisLimits := PhastModel.DiscretizationLimits(vdTop);
@@ -408,7 +415,7 @@ begin
 
     if PointList.Count < 4 then
     begin
-
+      Assert(False);
     end
     else
     begin
@@ -424,20 +431,27 @@ begin
       SetLength(IPL, 6*PointList.Count);
       IDTANG_Pascal(PointList.Count, XD,YD, NT, NL, IPT, IPL);
 
-      for LineIndex := 0 to NL - 1 do
-      begin
-        PointIndex := IPL[LineIndex*3];
-        APoint2D_1 := PointList[PointIndex];
-        PointIndex := IPL[LineIndex*3+1];
-        APoint2D_2 := PointList[PointIndex];
-        APoint2D.x := (APoint2D_1.x + APoint2D_2.x) / 2;
-        APoint2D.y := (APoint2D_1.y + APoint2D_2.y) / 2;
-        ResultPointList.Add(APoint2D);
+      rdgBetweenObs.BeginUpdate;
+      try
+        rdgBetweenObs.RowCount := NL+1;
+        for LineIndex := 0 to NL - 1 do
+        begin
+          PointIndex := IPL[LineIndex*3];
+          APoint2D_1 := PointList[PointIndex];
+          PointIndex := IPL[LineIndex*3+1];
+          APoint2D_2 := PointList[PointIndex];
+          rdgBetweenObs.RealValue [Ord(ppcX), LineIndex +1] :=
+            (APoint2D_1.x + APoint2D_2.x) / 2;
+          rdgBetweenObs.RealValue [Ord(ppcY), LineIndex +1] :=
+            (APoint2D_1.y + APoint2D_2.y) / 2;
+        end;
+      finally
+        rdgBetweenObs.EndUpdate;
       end;
     end;
   finally
     PointList.Free;
-    ResultPointList.Free;
+//    ResultPointList.Free;
     QuadTree.Free;
   end;
 end;
@@ -608,6 +622,9 @@ begin
 
   framePilotPoints.Grid.Cells[Ord(ppcX), 0] := 'X';
   framePilotPoints.Grid.Cells[Ord(ppcY), 0] := 'Y';
+
+  rdgBetweenObs.Cells[Ord(ppcX), 0] := 'X';
+  rdgBetweenObs.Cells[Ord(ppcY), 0] := 'Y';
 
   GetData;
 end;
@@ -828,6 +845,20 @@ begin
   end;
   framePilotPoints.seNumber.AsInteger := PestProperties.SpecifiedPilotPoints.Count;
 
+  cbUseBetweenObs.Checked := PestProperties.UseBetweenObservationsPilotPoints;
+  rdgBetweenObs.BeginUpdate;
+  try
+    rdgBetweenObs.RowCount :=
+      PestProperties.BetweenObservationsPilotPoints.Count + 1;
+    for ItemIndex := 0 to PestProperties.BetweenObservationsPilotPoints.Count - 1 do
+    begin
+      PointItem := PestProperties.BetweenObservationsPilotPoints.Items[ItemIndex] as TPointItem;
+      rdgBetweenObs.RealValue[Ord(ppcX), ItemIndex+1] := PointItem.X;
+      rdgBetweenObs.RealValue[Ord(ppcy), ItemIndex+1] := PointItem.Y;
+    end;
+  finally
+    rdgBetweenObs.EndUpdate;
+  end;
   {$ENDREGION}
 
 
@@ -1095,6 +1126,22 @@ begin
         PointItem.Y := Grid.RealValue[Ord(ppcY), ItemIndex+1];
       end;
     end;
+
+    PestProperties.UseBetweenObservationsPilotPoints := cbUseBetweenObs.Checked;
+    rdgBetweenObs.BeginUpdate;
+    PestProperties.BetweenObservationsPilotPoints.Capacity :=
+      rdgBetweenObs.RowCount-1;
+    for ItemIndex := 1 to rdgBetweenObs.RowCount - 1 do
+    begin
+      if (rdgBetweenObs.Cells[Ord(ppcX), ItemIndex] <> '')
+        and (rdgBetweenObs.Cells[Ord(ppcY), ItemIndex] <> '') then
+      begin
+        PointItem := PestProperties.BetweenObservationsPilotPoints.Add as TPointItem;
+        PointItem.X := rdgBetweenObs.RealValue[Ord(ppcX), ItemIndex];
+        PointItem.Y := rdgBetweenObs.RealValue[Ord(ppcY), ItemIndex];
+      end;
+    end;
+
     {$ENDREGION}
 
 
