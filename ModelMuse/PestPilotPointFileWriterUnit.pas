@@ -140,7 +140,7 @@ begin
       Format(StrPilotPointsWillNo, [DataArray.Name]));
     Exit;
   end;
-  CriticalDistance := Model.PilotPointSpacing * Sqrt(2);
+  CriticalDistance := Model.PilotPointBuffer;
   FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
   DisLimits := Model.DiscretizationLimits(vdTop);
 

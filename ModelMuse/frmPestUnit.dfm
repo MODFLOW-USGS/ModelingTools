@@ -1155,61 +1155,35 @@ inherited frmPEST: TfrmPEST
       Width = 512
       Height = 419
       Caption = 'jvspPilotPoints'
-      object lblPilotPointSpacing: TLabel
-        Left = 6
-        Top = 39
-        Width = 128
-        Height = 18
-        Caption = 'Pilot point spacing'
-      end
-      object rdePilotPointSpacing: TRbwDataEntry
-        Left = 6
-        Top = 63
-        Width = 145
-        Height = 22
-        TabOrder = 0
-        Text = '0'
-        DataType = dtReal
-        Max = 1.000000000000000000
-        CheckMin = True
-        ChangeDisabledColor = True
-      end
-      object cbShowPilotPoints: TCheckBox
-        Left = 6
-        Top = 16
-        Width = 305
-        Height = 17
-        Caption = 'Show candidate pilot points'
-        TabOrder = 1
-      end
       object Panel2: TPanel
         Left = 0
-        Top = 132
+        Top = 124
         Width = 512
-        Height = 287
-        Align = alBottom
-        TabOrder = 2
+        Height = 295
+        Align = alClient
+        TabOrder = 0
+        ExplicitTop = 132
+        ExplicitHeight = 287
         object Splitter1: TSplitter
           Left = 242
           Top = 1
-          Height = 285
-          ExplicitLeft = 312
-          ExplicitTop = 120
-          ExplicitHeight = 100
+          Width = 5
+          Height = 293
         end
         object gbIndividualPilotPoints: TGroupBox
           Left = 1
           Top = 1
           Width = 241
-          Height = 285
+          Height = 293
           Align = alLeft
           Caption = 'Individually specified pilot points'
           TabOrder = 0
+          ExplicitHeight = 285
           inline framePilotPoints: TframeGrid
             Left = 2
             Top = 89
             Width = 237
-            Height = 194
+            Height = 202
             Align = alClient
             TabOrder = 0
             ExplicitLeft = 2
@@ -1217,7 +1191,7 @@ inherited frmPEST: TfrmPEST
             ExplicitWidth = 237
             ExplicitHeight = 194
             inherited Panel: TPanel
-              Top = 153
+              Top = 161
               Width = 237
               ExplicitTop = 153
               ExplicitWidth = 237
@@ -1247,7 +1221,7 @@ inherited frmPEST: TfrmPEST
             end
             inherited Grid: TRbwDataGrid4
               Width = 237
-              Height = 153
+              Height = 161
               ColCount = 2
               Columns = <
                 item
@@ -1328,18 +1302,21 @@ inherited frmPEST: TfrmPEST
           end
         end
         object gbBetweenPointObs: TGroupBox
-          Left = 245
+          Left = 247
           Top = 1
-          Width = 266
-          Height = 285
+          Width = 264
+          Height = 293
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
+          ExplicitLeft = 245
+          ExplicitWidth = 266
+          ExplicitHeight = 285
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 113
-            Width = 262
-            Height = 170
+            Width = 260
+            Height = 178
             Align = alClient
             ColCount = 2
             FixedCols = 0
@@ -1401,6 +1378,8 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 262
+            ExplicitHeight = 170
             ColWidths = (
               64
               64)
@@ -1408,13 +1387,14 @@ inherited frmPEST: TfrmPEST
           object Panel3: TPanel
             Left = 2
             Top = 20
-            Width = 262
+            Width = 260
             Height = 93
             Align = alTop
             TabOrder = 1
+            ExplicitWidth = 262
             object cbUseBetweenObs: TCheckBox
               Left = 4
-              Top = 8
+              Top = 6
               Width = 221
               Height = 33
               Caption = 'Use pilot points '#13#10'between observations'
@@ -1432,6 +1412,93 @@ inherited frmPEST: TfrmPEST
               OnClick = btnBetweenObservationsClick
             end
           end
+        end
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 0
+        Width = 512
+        Height = 124
+        Align = alTop
+        TabOrder = 1
+        ExplicitLeft = 1
+        ExplicitTop = -5
+        object lblPilotPointBuffer: TLabel
+          Left = 6
+          Top = 39
+          Width = 112
+          Height = 18
+          Caption = 'Pilot point buffer'
+        end
+        object cbShowPilotPoints: TCheckBox
+          Left = 6
+          Top = 16
+          Width = 227
+          Height = 17
+          Caption = 'Show candidate pilot points'
+          TabOrder = 0
+        end
+        object gbArray: TGroupBox
+          Left = 248
+          Top = 1
+          Width = 263
+          Height = 122
+          Align = alRight
+          Caption = 'Regularly spaced pilot points'
+          TabOrder = 1
+          ExplicitTop = -3
+          object lblArrayPattern: TLabel
+            Left = 16
+            Top = 11
+            Width = 50
+            Height = 18
+            Caption = 'Pattern'
+          end
+          object lblPilotPointSpacing: TLabel
+            Left = 14
+            Top = 63
+            Width = 128
+            Height = 18
+            Caption = 'Pilot point spacing'
+          end
+          object comboArrayPattern: TComboBox
+            Left = 16
+            Top = 35
+            Width = 145
+            Height = 26
+            Style = csDropDownList
+            ItemIndex = 0
+            TabOrder = 0
+            Text = 'none'
+            Items.Strings = (
+              'none'
+              'Rectangular'
+              'Triangular')
+          end
+          object rdePilotPointSpacing: TRbwDataEntry
+            Left = 14
+            Top = 87
+            Width = 145
+            Height = 22
+            TabOrder = 1
+            Text = '0'
+            DataType = dtReal
+            Max = 1.000000000000000000
+            CheckMin = True
+            ChangeDisabledColor = True
+          end
+        end
+        object rdePilotPointBuffer: TRbwDataEntry
+          Left = 6
+          Top = 63
+          Width = 145
+          Height = 22
+          TabOrder = 2
+          Text = '0'
+          DataType = dtReal
+          Max = 1.000000000000000000
+          CheckMin = True
+          ChangeDisabledColor = True
         end
       end
     end

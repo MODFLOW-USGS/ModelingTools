@@ -177,6 +177,12 @@ type
     rdgBetweenObs: TRbwDataGrid4;
     Panel3: TPanel;
     cbUseBetweenObs: TCheckBox;
+    Panel4: TPanel;
+    gbArray: TGroupBox;
+    comboArrayPattern: TComboBox;
+    lblArrayPattern: TLabel;
+    lblPilotPointBuffer: TLabel;
+    rdePilotPointBuffer: TRbwDataEntry;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -829,6 +835,8 @@ begin
 
   {$REGION 'Pilot Points'}
   cbShowPilotPoints.Checked := PestProperties.ShowPilotPoints;
+  rdePilotPointBuffer.RealValue := PestProperties.PilotPointBuffer;
+  comboArrayPattern.ItemIndex := Ord(PestProperties.ArrayPilotPointSelection);
   rdePilotPointSpacing.RealValue := PestProperties.PilotPointSpacing;
   ClearGrid(framePilotPoints.Grid);
   framePilotPoints.seNumber.AsInteger := PestProperties.SpecifiedPilotPoints.Count;
@@ -1111,6 +1119,9 @@ begin
 
     {$REGION 'Pilot Points'}
     PestProperties.ShowPilotPoints := cbShowPilotPoints.Checked;
+    PestProperties.PilotPointBuffer := rdePilotPointBuffer.RealValue;
+    PestProperties.ArrayPilotPointSelection :=
+      TArrayPilotPointSelection(comboArrayPattern.ItemIndex);
     PestProperties.PilotPointSpacing := rdePilotPointSpacing.RealValue;
 
     PestProperties.SpecifiedPilotPoints.Capacity :=
@@ -1783,11 +1794,34 @@ var
 begin
   ShouldUpdateView := frmGoPhast.PhastModel.PestProperties.ShouldDrawPilotPoints
     <> PestProperties.ShouldDrawPilotPoints;
-  if PestProperties.ShouldDrawPilotPoints
-    and (PestProperties.PilotPointSpacing
-      <> frmGoPhast.PhastModel.PestProperties.PilotPointSpacing) then
+  if PestProperties.ShouldDrawPilotPoints then
   begin
-    ShouldUpdateView := True;
+    if PestProperties.PilotPointSpacing
+      <> frmGoPhast.PhastModel.PestProperties.PilotPointSpacing then
+    begin
+      ShouldUpdateView := True;
+    end;
+    if PestProperties.ArrayPilotPointSelection
+      <> frmGoPhast.PhastModel.PestProperties.ArrayPilotPointSelection then
+    begin
+      ShouldUpdateView := True;
+    end;
+    if PestProperties.UseBetweenObservationsPilotPoints
+      <> frmGoPhast.PhastModel.PestProperties.UseBetweenObservationsPilotPoints then
+    begin
+      ShouldUpdateView := True;
+    end;
+    if not ShouldUpdateView then
+    begin
+      ShouldUpdateView := not PestProperties.SpecifiedPilotPoints.IsSame(
+        frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints)
+    end;
+    if not ShouldUpdateView and PestProperties.UseBetweenObservationsPilotPoints then
+    begin
+      ShouldUpdateView := not PestProperties.BetweenObservationsPilotPoints.IsSame(
+        frmGoPhast.PhastModel.PestProperties.BetweenObservationsPilotPoints)
+    end;
+
   end;
   frmGoPhast.PhastModel.PestProperties := PestProperties;
 

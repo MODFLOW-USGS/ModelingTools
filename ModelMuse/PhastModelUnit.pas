@@ -2448,7 +2448,7 @@ that affects the model output should also have a comment. }
     procedure SetPilotPointData(const Value: TStoredPilotParamDataCollection);
     function GetPilotPointCount: integer;
     function GetPilotPoint(Index: Integer): TPoint2D;
-    function GetPilotPointSpacing: double;
+    function GetPilotPointBuffer: double;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3343,7 +3343,7 @@ that affects the model output should also have a comment. }
     {$ENDIF}
       ;
     property PilotPointCount: integer read GetPilotPointCount;
-    property PilotPointSpacing: double read GetPilotPointSpacing;
+    property PilotPointBuffer: double read GetPilotPointBuffer;
     property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
   published
     // @name defines the grid used with PHAST.
@@ -11647,9 +11647,9 @@ begin
   result := PestProperties.PilotPoints[Index];
 end;
 
-function TCustomModel.GetPilotPointSpacing: double;
+function TCustomModel.GetPilotPointBuffer: double;
 begin
-  result := PestProperties.PilotPointSpacing;
+  result := PestProperties.PilotPointBuffer;
 end;
 
 function TPhastModel.GetProgramLocations: TProgramLocations;
@@ -20260,6 +20260,13 @@ begin
         end;
       end;
     end;
+  end;
+
+  if FileVersionEqualOrEarlier('4.3.0.31')
+    and (PestProperties.PilotPointSpacing > 0) then
+  begin
+    PestProperties.ArrayPilotPointSelection := appsRectangular;
+    PestProperties.PilotPointBuffer := PestProperties.PilotPointSpacing * Sqrt(2);
   end;
 
 end;

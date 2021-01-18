@@ -409,6 +409,8 @@ type
     property LsqrWrite: TLsqrWrite read FLsqrWrite write SetLsqrWrite;
   end;
 
+  TArrayPilotPointSelection = (appsNone, appsRectangular, appsTriangular);
+
   TPestProperties = class(TGoPhastPersistent)
   private
     FTemplateCharacter: Char;
@@ -427,6 +429,9 @@ type
     FSpecifiedPilotPoints: TSimplePointCollection;
     FBetweenObservationsPilotPoints: TSimplePointCollection;
     FUseBetweenObservationsPilotPoints: Boolean;
+    FArrayPilotPointSelection: TArrayPilotPointSelection;
+    FTriangulaRowSpacing: Double;
+    FStoredPilotPointBuffer: TRealStorage;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -445,6 +450,11 @@ type
     procedure SetBetweenObservationsPilotPoints(
       const Value: TSimplePointCollection);
     procedure SetUseBetweenObservationsPilotPoints(const Value: Boolean);
+    procedure SetArrayPilotPointSelection(
+      const Value: TArrayPilotPointSelection);
+    procedure SetStoredPilotPointBuffer(const Value: TRealStorage);
+    function GetPilotPointBuffer: double;
+    procedure SetPilotPointBuffer(const Value: double);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -452,6 +462,8 @@ type
     procedure InitializeVariables;
     property PilotPointSpacing: double read GetPilotPointSpacing
       write SetPilotPointSpacing;
+    property PilotPointBuffer: double read GetPilotPointBuffer
+      write SetPilotPointBuffer;
     procedure DrawPilotPoints(BitMap32: TBitmap32);
     function ShouldDrawPilotPoints: Boolean;
     property PilotPointCount: Integer read GetPilotPointCount;
@@ -481,12 +493,19 @@ type
     property UseBetweenObservationsPilotPoints: Boolean
       read FUseBetweenObservationsPilotPoints
       write SetUseBetweenObservationsPilotPoints stored True;
+    property ArrayPilotPointSelection: TArrayPilotPointSelection
+      read FArrayPilotPointSelection write SetArrayPilotPointSelection;
+    property StoredPilotPointBuffer: TRealStorage read FStoredPilotPointBuffer
+      write SetStoredPilotPointBuffer;
   end;
 
 implementation
 
 uses
-  ZoomBox2, BigCanvasMethods, frmGoPhastUnit, PhastModelUnit;
+  ZoomBox2, BigCanvasMethods, frmGoPhastUnit, PhastModelUnit, System.Math;
+  
+var  
+  TriangleRowHeightFactor: double;
 
 { TPestProperties }
 
@@ -500,6 +519,7 @@ begin
     PestUsed := PestSource.PestUsed;
     ShowPilotPoints := PestSource.ShowPilotPoints;
     PilotPointSpacing := PestSource.PilotPointSpacing;
+    PilotPointBuffer := PestSource.PilotPointBuffer;
     TemplateCharacter := PestSource.TemplateCharacter;
     ExtendedTemplateCharacter := PestSource.ExtendedTemplateCharacter;
     PestControlData := PestSource.PestControlData;
@@ -509,6 +529,7 @@ begin
     SpecifiedPilotPoints := PestSource.SpecifiedPilotPoints;
     BetweenObservationsPilotPoints := PestSource.BetweenObservationsPilotPoints;
     UseBetweenObservationsPilotPoints  := PestSource.UseBetweenObservationsPilotPoints;
+    ArrayPilotPointSelection := PestSource.ArrayPilotPointSelection;
   end
   else
   begin
@@ -530,12 +551,14 @@ begin
   end;
   inherited Create(InvalidateModelEvent);
   FStoredPilotPointSpacing := TRealStorage.Create;
+  FStoredPilotPointBuffer := TRealStorage.Create;
   FPestControlData := TPestControlData.Create(InvalidateModelEvent);
   FSvdProperties :=
     TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
   FLsqrProperties := TLsqrProperties.Create(InvalidateModelEvent);
   FObservatioGroups := TPestObservationGroups.Create(Model);
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
+  FStoredPilotPointBuffer.OnChange := InvalidateModelEvent;
   FSpecifiedPilotPoints := TSimplePointCollection.Create;
   FBetweenObservationsPilotPoints := TSimplePointCollection.Create;
   InitializeVariables;
@@ -549,6 +572,7 @@ begin
   FLsqrProperties.Free;
   FSvdProperties.Free;
   FPestControlData.Free;
+  FStoredPilotPointBuffer.Free;
   FStoredPilotPointSpacing.Free;
   inherited;
 end;
@@ -622,15 +646,62 @@ var
   ColIndex: Integer;
   ArrayCount: Integer;
   SpecifiedCount: Integer;
+  ShortRowCount: Integer;
+  LongRowCount: Integer;
+  ShortIndex: Integer;
 begin
-  ArrayCount := FPilotPointColumnCount * FPilotPointRowCount;
+  ArrayCount := 0;
+  LongRowCount := 0;
+//  ShortRowCount := 0;
+  case ArrayPilotPointSelection of
+    appsNone:
+      begin
+        ArrayCount := 0;
+      end;
+    appsRectangular:
+      begin
+        ArrayCount := FPilotPointColumnCount * FPilotPointRowCount;
+      end;
+    appsTriangular:
+      begin
+        ShortRowCount := FPilotPointRowCount div 2;
+        LongRowCount := FPilotPointRowCount - ShortRowCount;
+        ArrayCount := (ShortRowCount * (FPilotPointColumnCount - 1))
+          + (LongRowCount * FPilotPointColumnCount);
+      end;
+  else 
+    Assert(False);
+  end;
+  
   SpecifiedCount := ArrayCount + SpecifiedPilotPoints.Count;
   if Index < ArrayCount then
   begin
-    RowIndex := Index div FPilotPointColumnCount;
-    ColIndex := Index  - RowIndex*FPilotPointColumnCount;
-    result.Y := FTopY - RowIndex*PilotPointSpacing;
-    result.X := FLeftX + ColIndex*PilotPointSpacing;
+    if ArrayPilotPointSelection = appsRectangular then
+    begin
+      RowIndex := Index div FPilotPointColumnCount;
+      ColIndex := Index  - RowIndex*FPilotPointColumnCount;
+      result.Y := FTopY - RowIndex*PilotPointSpacing;
+      result.X := FLeftX + ColIndex*PilotPointSpacing;
+    end
+    else
+    begin
+      Assert(ArrayPilotPointSelection = appsTriangular);
+      if Index < LongRowCount * FPilotPointColumnCount then
+      begin
+        RowIndex := Index div FPilotPointColumnCount;
+        ColIndex := Index  - RowIndex*FPilotPointColumnCount;
+        result.Y := FTopY - RowIndex*2*FTriangulaRowSpacing;
+        result.X := FLeftX + ColIndex*PilotPointSpacing;
+      end
+      else
+      begin
+        ShortIndex := Index - LongRowCount * FPilotPointColumnCount;
+        RowIndex := ShortIndex div (FPilotPointColumnCount-1);
+        ColIndex := ShortIndex - RowIndex*(FPilotPointColumnCount-1);
+        result.Y := FTopY - (RowIndex*2 + 1) *FTriangulaRowSpacing;
+        result.X := FLeftX + (ColIndex + 0.5)*PilotPointSpacing;
+      end;
+    end;
   end
   else if Index < SpecifiedCount  then
   begin
@@ -648,24 +719,44 @@ begin
 
 end;
 
+function TPestProperties.GetPilotPointBuffer: double;
+begin
+  result := FStoredPilotPointBuffer.Value;
+end;
+
 function TPestProperties.GetPilotPointCount: Integer;
 var
   DisLimits: TGridLimit;
+  ShortRowCount: Integer;
 begin
-  if PilotPointSpacing = 0 then
+  if (PilotPointSpacing = 0) or (ArrayPilotPointSelection = appsNone) then
   begin
     result := 0;
   end
   else
   begin
     DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
-    FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 2;
     FPilotPointColumnCount := Trunc((DisLimits.MaxX - DisLimits.MinX)/PilotPointSpacing) + 2;
-    result := FPilotPointRowCount * FPilotPointColumnCount;
+    if ArrayPilotPointSelection = appsRectangular then
+    begin
+      FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/PilotPointSpacing) + 2;
+      result := FPilotPointRowCount * FPilotPointColumnCount;
+      FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 +
+        (FPilotPointRowCount-1)/2*PilotPointSpacing;
+    end
+    else
+    begin
+      Assert(ArrayPilotPointSelection = appsTriangular);
+      FTriangulaRowSpacing := PilotPointSpacing * TriangleRowHeightFactor;
+      FPilotPointRowCount := Trunc((DisLimits.MaxY - DisLimits.MinY)/FTriangulaRowSpacing) + 2;
+      ShortRowCount := FPilotPointRowCount div 2;
+      result := (ShortRowCount * (FPilotPointColumnCount - 1))
+        + ((FPilotPointRowCount - ShortRowCount) * FPilotPointColumnCount);
+      FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 +
+        (FPilotPointRowCount-1)/2*FTriangulaRowSpacing;
+    end;
     FLeftX := (DisLimits.MaxX + DisLimits.MinX)/2 -
       (FPilotPointColumnCount-1)/2*PilotPointSpacing;
-    FTopY := (DisLimits.MaxY + DisLimits.MinY)/2 +
-      (FPilotPointRowCount-1)/2*PilotPointSpacing;
   end;
   result := result + SpecifiedPilotPoints.Count;
   if UseBetweenObservationsPilotPoints then
@@ -687,6 +778,8 @@ begin
   FTemplateCharacter := '@';
   FExtendedTemplateCharacter := '%';
   FUseBetweenObservationsPilotPoints := True;
+  FArrayPilotPointSelection := appsNone;
+  PilotPointBuffer := 0;
 
   FPestControlData.InitializeVariables;
   FSvdProperties.InitializeVariables;
@@ -695,6 +788,16 @@ begin
   FObservatioGroups.Clear;
   SpecifiedPilotPoints.Clear;
   BetweenObservationsPilotPoints.Clear;
+end;
+
+procedure TPestProperties.SetArrayPilotPointSelection(
+  const Value: TArrayPilotPointSelection);
+begin
+  if FArrayPilotPointSelection <> Value then
+  begin
+    FArrayPilotPointSelection := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPestProperties.SetBetweenObservationsPilotPoints(
@@ -729,6 +832,11 @@ begin
   SetBooleanProperty(FPestUsed, Value);
 end;
 
+procedure TPestProperties.SetPilotPointBuffer(const Value: double);
+begin
+  FStoredPilotPointBuffer.Value := Value;
+end;
+
 procedure TPestProperties.SetPilotPointSpacing(const Value: double);
 begin
   FStoredPilotPointSpacing.Value := Value;
@@ -736,13 +844,18 @@ end;
 
 procedure TPestProperties.SetShowPilotPoints(const Value: Boolean);
 begin
-  FShowPilotPoints := Value;
+  SetBooleanProperty(FShowPilotPoints, Value);
 end;
 
 procedure TPestProperties.SetSpecifiedPilotPoints(
   const Value: TSimplePointCollection);
 begin
   FSpecifiedPilotPoints.Assign(Value);
+end;
+
+procedure TPestProperties.SetStoredPilotPointBuffer(const Value: TRealStorage);
+begin
+  FStoredPilotPointBuffer.Assign(Value);
 end;
 
 procedure TPestProperties.SetStoredPilotPointSpacing(const Value: TRealStorage);
@@ -764,7 +877,7 @@ end;
 procedure TPestProperties.SetUseBetweenObservationsPilotPoints(
   const Value: Boolean);
 begin
-  FUseBetweenObservationsPilotPoints := Value;
+  SetBooleanProperty(FUseBetweenObservationsPilotPoints, Value)
 end;
 
 { TPestControlData }
@@ -1589,5 +1702,8 @@ procedure TLsqrProperties.SetStoredRightHandSideTolerance(
 begin
   FStoredRightHandSideTolerance.Assign(Value);
 end;
+
+initialization
+  TriangleRowHeightFactor := Sin(ArcCos(0.5));
 
 end.

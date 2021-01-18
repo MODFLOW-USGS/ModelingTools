@@ -33,6 +33,7 @@ type
     constructor Create;
     function Add: TPointItem;
     property Items[Index: Integer]: TPointItem read GetPoint write SetPoint; default;
+    function IsSame(OtherCollection: TSimplePointCollection): Boolean;
   end;
 
   {@abstract(@name is used to store a series of TPoint2Ds.)}
@@ -225,6 +226,29 @@ end;
 function TSimplePointCollection.GetPoint(Index: Integer): TPointItem;
 begin
   result := inherited Items[Index] as TPointItem
+end;
+
+function TSimplePointCollection.IsSame(
+  OtherCollection: TSimplePointCollection): Boolean;
+var
+  ItemIndex: Integer;
+  APoint: TPoint2D;
+  OtherPoint: TPoint2D;
+begin
+  result := Count = OtherCollection.Count;
+  if result then
+  begin
+    for ItemIndex := 0 to Count - 1 do
+    begin
+      APoint := Items[ItemIndex].Point2D;
+      OtherPoint := OtherCollection[ItemIndex].Point2D;
+      result := (APoint.x = OtherPoint.x) and (APoint.y = OtherPoint.y);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
 end;
 
 procedure TSimplePointCollection.SetPoint(Index: Integer;
