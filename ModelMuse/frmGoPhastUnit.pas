@@ -9981,6 +9981,8 @@ begin
             RunModelBatchFile.Add('pushd ' + ModelDirectory);
           end;
 
+          PhastModel.AddFilestToDeleteToBatchFile(RunModelBatchFile, RunModelBatchFileName);
+
           BatchFile.AddStrings(PhastModel.KrigfactorsScriptLines);
           BatchFile.AddStrings(PhastModel.PestTemplateLines);
           RunModelBatchFile.AddStrings(PhastModel.PestTemplateLines);

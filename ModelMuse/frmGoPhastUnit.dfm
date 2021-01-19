@@ -17,7 +17,6 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   OnResize = FormResize
-  ExplicitTop = -190
   ExplicitWidth = 775
   ExplicitHeight = 614
   PixelsPerInch = 96

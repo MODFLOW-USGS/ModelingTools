@@ -640,18 +640,6 @@ begin
     begin
       Exit
     end;
-    FEtsPackage := Package as TEtsPackageSelection;
-    if Model.PackageGeneratedExternally(StrETS) then
-    begin
-      Exit;
-    end;
-
-
-    FEtsPackage.MultiplierArrayNames.Clear;
-    FEtsPackage.ZoneArrayNames.Clear;
-    FNameOfFile := FileName(AFileName);
-    FInputFileName := FNameOfFile;
-
     if Model.ModelSelection = msModflow2015 then
     begin
       Abbreviation := 'EVT6';
@@ -660,6 +648,18 @@ begin
     begin
       Abbreviation := StrETS;
     end;
+    if Model.PackageGeneratedExternally(Abbreviation) then
+    begin
+      Exit;
+    end;
+
+    FEtsPackage := Package as TEtsPackageSelection;
+
+    FEtsPackage.MultiplierArrayNames.Clear;
+    FEtsPackage.ZoneArrayNames.Clear;
+    FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
+
 
 
     WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrETS),

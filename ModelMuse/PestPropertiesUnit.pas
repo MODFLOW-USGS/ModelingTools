@@ -732,6 +732,8 @@ begin
   if (PilotPointSpacing = 0) or (ArrayPilotPointSelection = appsNone) then
   begin
     result := 0;
+    FPilotPointColumnCount := 0;
+    FPilotPointRowCount := 0;
   end
   else
   begin

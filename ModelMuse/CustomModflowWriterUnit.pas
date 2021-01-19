@@ -1055,7 +1055,7 @@ const
   StrDATA = 'DATA';
   StrArrays = 'arrays';
   StrKrigfactorsscript = '.krig_factors_script';
-
+  StrIfExist0sDel = 'if exist "%0:s" del "%0:s"';
 
 implementation
 
@@ -1358,8 +1358,6 @@ var
   PLPROC_Location: string;
   DataArrayIndex: Integer;
   KrigFactorsFileName: string;
-//  Modelname: string;
-//  OutputPrefix: string;
 begin
 
   ADirectory:= GetCurrentDir;
@@ -1414,6 +1412,8 @@ begin
     ArchiveBatchFile := TStringList.Create;
     WriteInstuctionsBatchFile := TStringList.Create;
     try
+      Model.AddFilestToDeleteToBatchFile(ParamEstBatchFile, ParamEstBatFileName);
+
       PLPROC_Location := GetPLPROC_Location(FileName, Model);
       PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
       for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
@@ -2467,7 +2467,9 @@ procedure TCustomFileWriter.WritePestTemplateLine(AFileName: string);
 var
   PValFileName: string;
 begin
+  // strip off .tpl extension to get input file name.
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
+  Model.FilesToDelete.Add(PValFileName);
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
   Model.PestTemplateLines.Add(PestUtilityProgramPath(
     StrEnhancedTemplateProc, AFileName)
@@ -9116,6 +9118,7 @@ begin
     CloseFile;
   end;
   ADataArray.CacheData;
+  Model.FilesToDelete.Add(result);
 end;
 
 procedure TCustomFileWriter.WritePestZones(DataArray: TDataArray;

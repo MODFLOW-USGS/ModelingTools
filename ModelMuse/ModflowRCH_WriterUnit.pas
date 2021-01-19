@@ -431,11 +431,6 @@ begin
   begin
     Exit
   end;
-  FRchPackage := Package as TRchPackageSelection;
-  if Model.PackageGeneratedExternally(StrRCH) then
-  begin
-    Exit;
-  end;
 
   if Model.ModelSelection = msModflow2015 then
   begin
@@ -446,6 +441,12 @@ begin
     FAbbreviation := StrRCH;
   end;
 
+  if Model.PackageGeneratedExternally(FAbbreviation) then
+  begin
+    Exit;
+  end;
+
+  FRchPackage := Package as TRchPackageSelection;
   FRchPackage.MultiplierArrayNames.Clear;
   FRchPackage.ZoneArrayNames.Clear;
   FNameOfFile := FileName(AFileName);

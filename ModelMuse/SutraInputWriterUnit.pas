@@ -526,6 +526,10 @@ begin
       TempFileName := ChangeFileExt(FFileName, '.14B');
       WriteString('@INSERT 99 ');
       WriteString(ExtractFileName(TempFileName));
+      if FMesh.MeshType <> mt3D then
+      begin
+        Model.FilesToDelete.Add(TempFileName);
+      end;
       NewLine;
       Sutra14BWriter := TSutraData14BScriptWriter.Create(Model, etExport);
       try
@@ -542,6 +546,7 @@ begin
           begin
             WriteString('@INSERT 99 ');
             WriteString(TempFileName + IntToStr(LayerIndex));
+            Model.FilesToDelete.Add(TempFileName + IntToStr(LayerIndex));
             NewLine;
           end;
         finally
@@ -883,6 +888,10 @@ begin
       TempFileName := ChangeFileExt(FFileName, '.15B');
       WriteString('@INSERT 99 ');
       WriteString(ExtractFileName(TempFileName));
+      if FMesh.MeshType <> mt3D then
+      begin
+        Model.FilesToDelete.Add(TempFileName);
+      end;
       NewLine;
       Sutra15BWriter := TSutraData15BScriptWriter.Create(Model, etExport);
       try
@@ -899,6 +908,7 @@ begin
           begin
             WriteString('@INSERT 99 ');
             WriteString(TempFileName + IntToStr(LayerIndex));
+            Model.FilesToDelete.Add(TempFileName + IntToStr(LayerIndex));
             NewLine;
           end;
         finally

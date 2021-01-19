@@ -2487,6 +2487,7 @@ that affects the model output should also have a comment. }
     procedure SetParamGroups(const Value: TPestParamGroups); virtual; abstract;
     function GetPestProperties: TPestProperties; virtual; abstract;
     procedure SetPestProperties(const Value: TPestProperties); virtual; abstract;
+    function GetFilesToDelete: TStrings; virtual; abstract;
   var
     LakWriter: TObject;
     SfrWriter: TObject;
@@ -3345,6 +3346,11 @@ that affects the model output should also have a comment. }
     property PilotPointCount: integer read GetPilotPointCount;
     property PilotPointBuffer: double read GetPilotPointBuffer;
     property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
+    // @name  is filled with the names of files to delete in the RunModel.bat
+    // file used by PEST.
+    property FilesToDelete: TStrings read GetFilesToDelete;
+    procedure AddFilestToDeleteToBatchFile(BatchFile: TStrings;
+      const BatchFileName: string);
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3810,6 +3816,7 @@ that affects the model output should also have a comment. }
     FCtsSystems: TCtsSystemCollection;
     FParamGroups: TPestParamGroups;
     FPestProperties: TPestProperties;
+    FFilesToDelete: TStringList;
     //     See @link(OwnsScreenObjects).
     function GetOwnsScreenObjects: boolean;
 //     See @link(ObjectList).
@@ -4119,6 +4126,7 @@ that affects the model output should also have a comment. }
     procedure SetParamGroups(const Value: TPestParamGroups); override;
     function GetPestProperties: TPestProperties; override;
     procedure SetPestProperties(const Value: TPestProperties); override;
+    function GetFilesToDelete: TStrings; override;
   public
     function Mt3dMSUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
@@ -5046,6 +5054,7 @@ that affects the model output should also have a comment. }
     procedure SetParamGroups(const Value: TPestParamGroups); override;
     function GetPestProperties: TPestProperties; override;
     procedure SetPestProperties(const Value: TPestProperties); override;
+    function GetFilesToDelete: TStrings; override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -10163,10 +10172,17 @@ const
 //                generated if the Used item of a SUTRA boundary condition did
 //                not evaluate to true or false. Now an error message is
 //                displayed.
+//    '4.3.0.32' Bug fix: In MODFLOW 6 models, including lines for the RCH or
+//                EVT packages in the MODFLOW Name File dialog box will now
+//                prevent ModelMuse from exporting the input files for those
+//                packages.
+//    '4.3.0.33' Bug fix: Fixed bug in coloring the grid with a data set in
+//                a MODFLOW-LGR model that could cause a circular reference
+//                error.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.31';
+  IIModelVersion = '4.3.0.33';
 
 function IModelVersion: string;
 begin
@@ -11019,6 +11035,9 @@ begin
   FCtsSystems := TCtsSystemCollection.Create(self);
   FParamGroups := TPestParamGroups.Create(Invalidate);
   FPestProperties := TPestProperties.Create(self);
+  FFilesToDelete := TStringList.Create;
+  FFilesToDelete.Sorted := True;
+  FFilesToDelete.Duplicates := dupIgnore;
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -11440,6 +11459,7 @@ begin
       FClearing := False;
     end;
 
+    FFilesToDelete.Free;
     FPestProperties.Free;
     FParamGroups.Free;
     FCtsSystems.Free;
@@ -13494,6 +13514,11 @@ end;
 function TPhastModel.GetFarms: TFarmCollection;
 begin
   result := FFarms;
+end;
+
+function TPhastModel.GetFilesToDelete: TStrings;
+begin
+  result := FFilesToDelete;
 end;
 
 function TPhastModel.GetFmpAllotment: TAllotmentCollection;
@@ -30386,6 +30411,33 @@ begin
   TestAddModelModelFile(AFileName, FExternalFiles);
 end;
 
+procedure TCustomModel.AddFilestToDeleteToBatchFile(BatchFile: TStrings;
+  const BatchFileName: string);
+var
+  FileIndex: Integer;
+  FileToDelete: string;
+begin
+  if PestUsed then
+  begin
+    for FileIndex := 0 to FilesToDelete.Count - 1 do
+    begin
+      FileToDelete := FilesToDelete[FileIndex];
+      FileToDelete := ExtractRelativePath(BatchFileName, FileToDelete);
+      BatchFile.Add(Format(StrIfExist0sDel, [FileToDelete]));
+    end;
+    for FileIndex := 0 to ModelOutputFiles.Count - 1 do
+    begin
+      FileToDelete := ModelOutputFiles[FileIndex];
+      if ExtractFileExt(FileToDelete) = '.grb' then
+      begin
+        Continue;
+      end;
+      FileToDelete := ExtractRelativePath(BatchFileName, FileToDelete);
+      BatchFile.Add(Format(StrIfExist0sDel, [FileToDelete]));
+    end;
+  end;
+end;
+
 procedure TCustomModel.AddFileToArchive(const FileName: string);
 begin
   if FilesToArchive.IndexOf(FileName) < 0 then
@@ -31723,6 +31775,7 @@ begin
   FPvalTemplate.Clear;
   FPestPValFile.Clear;
   FPestPvalTemplate.Clear;
+  FilesToDelete.Clear;
 end;
 
 procedure TCustomModel.ClearViewedItems;
@@ -40723,7 +40776,7 @@ var
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
 begin
   PilotPointData.Clear;
-
+  
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);
   // Note: MODFLOW can not read Unicode text files.
 
@@ -44058,6 +44111,11 @@ end;
 function TChildModel.GetFarms: TFarmCollection;
 begin
   result := ParentModel.GetFarms;
+end;
+
+function TChildModel.GetFilesToDelete: TStrings;
+begin
+  result := ParentModel.FilesToDelete;
 end;
 
 function TChildModel.GetFmpAllotment: TAllotmentCollection;

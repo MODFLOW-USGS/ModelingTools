@@ -3828,7 +3828,7 @@ begin
     end;
   end;
   
-  if Updated and (frmDisplayData <> nil) then
+  if Updated and (frmDisplayData <> nil) and (Stack = nil) then
   begin
     if (LocalModel.ThreeDDataSet = self) or (LocalModel.TopDataSet = self)
 	  or (LocalModel.FrontDataSet = self) or (LocalModel.SideDataSet = self)

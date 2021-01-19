@@ -1057,7 +1057,7 @@ begin
     begin
       AParam := FUsedParamList.Objects[ParameterIndex]
         as TModflowSteadyParameter;
-      if not AParam.UsePilotPoints then
+//      if not AParam.UsePilotPoints then
       begin
         if ScriptChoice = scWriteScript then
         begin
@@ -1098,17 +1098,17 @@ begin
         WriteString('  # Setting values for parameter ');
         WriteString(AParam.ParameterName);
         NewLine;
+        UsedFileProperties := nil;
         if AParam.UsePilotPoints then
         begin
           WriteString('    # Substituting interpolated values');
           NewLine;
 
-          UsedFileProperties := nil;
           PIndex := 0;
           for FileIndex := 0 to FPilotPointFiles.Count - 1 do
           begin
             FileProperties := FPilotPointFiles[FileIndex];
-            if (FileProperties.Parameter = AParam) 
+            if (FileProperties.Parameter = AParam)
               and (FileProperties.Layer = LayerIndex) then
             begin
               UsedFileProperties := FileProperties;
@@ -1150,8 +1150,8 @@ begin
               [LayerIndex+1, AParam.ParameterName]));
             NewLine;
           end;
-        end
-        else
+        end;
+        if UsedFileProperties = nil then
         begin
           WriteString('    # Substituting parameter values in zones');
           NewLine;

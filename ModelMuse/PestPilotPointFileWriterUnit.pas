@@ -27,7 +27,7 @@ implementation
 
 uses
   QuadTreeClass, FastGEO, PestPropertiesUnit, frmErrorsAndWarningsUnit,
-  SutraMeshUnit;
+  SutraMeshUnit, System.IOUtils;
 
 resourcestring
   StrNoPilotPointsDefi = 'No pilot points defined';
@@ -224,7 +224,6 @@ begin
             [FFileName,AParam.ParameterName,LayerIndex+1,Extension]);
 
           FileProperties := TPilotPointFileObject.Create;
-          PilotPointFiles.Add(FileProperties);
           FileProperties.DataArray := DataArray;
           FileProperties.Parameter := AParam;
           FileProperties.ParameterIndex := ParamIndex+1;
@@ -233,6 +232,7 @@ begin
           FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
             [DataArrayID, ParamIndex+1, LayerIndex+1]);
 
+          PIndex := 1;
           OpenFile(AFileName);
           OpenTemplateFile(AFileName);
           try
@@ -243,7 +243,6 @@ begin
 
             ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
               DataArray.ParamDataSetName);
-            PIndex := 1;
             for PilotPointIndex := 0 to Model.PilotPointCount - 1 do
             begin
               APilotPoint := Model.PilotPoints[PilotPointIndex];
@@ -320,6 +319,18 @@ begin
           finally
             CloseTemplateFile;
             CloseFile;
+
+            if PIndex = 1 then
+            begin
+              TFile.Delete(AFileName);
+              TFile.Delete(AFileName + '.tpl');
+              FileProperties.Free;
+              // no pilot points.
+            end
+            else
+            begin
+              PilotPointFiles.Add(FileProperties);
+            end;
           end;
 
         end;

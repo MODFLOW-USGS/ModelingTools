@@ -72,7 +72,7 @@ var
   TempFileName: string;
   ScriptWriter: TSutraInitCondScriptWriter;
   DataFileWriter: TSutraNodeDataWriter;
-  Mesh: TSutraMesh3D;
+//  Mesh: TSutraMesh3D;
 begin
   Assert(DataArray.EvaluatedAt = eaNodes);
   ParamUsed := Model.PestUsed and DataArray.PestParametersUsed;
@@ -104,6 +104,7 @@ begin
         TempFileName := ChangeFileExt(FFileName, '.' + ID);
         WriteString('@INSERT 99 ');
         WriteString(ExtractFileName(TempFileName));
+        Model.FilesToDelete.Add(TempFileName);
         NewLine;
         ScriptWriter := TSutraInitCondScriptWriter.Create(Model, etExport);
         try
@@ -111,7 +112,7 @@ begin
         finally
           ScriptWriter.Free;
         end;
-        Mesh := Model.SutraMesh;
+//        Mesh := Model.SutraMesh;
       end;
 
       if ParamUsed then

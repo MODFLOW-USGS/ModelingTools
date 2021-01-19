@@ -335,7 +335,7 @@ procedure TPestControlFileWriter.WriteControlSection;
 var
   PestControlData: TPestControlData;
   NINSFLE: Integer;
-  ParIndex: Integer;
+//  ParIndex: Integer;
   UsedTypes: TParameterTypes;
   ParamIndex: Integer;
   AParam: TModflowParameter;
@@ -939,6 +939,7 @@ begin
     OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf2005Values));
     WriteString(INSFLE);
     WriteString(' ' + OUTFLE);
+    Model.FilesToDelete.Add(OUTFLE);
     NewLine;
   end
   else if Model.ModelSelection = msModflow2015 then
@@ -947,6 +948,7 @@ begin
     OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrMf6Values));
     WriteString(INSFLE);
     WriteString(' ' + OUTFLE);
+    Model.FilesToDelete.Add(OUTFLE);
     NewLine;
   end
   else if Model.ModelSelection in SutraSelection then
@@ -955,6 +957,7 @@ begin
     OUTFLE := ExtractFileName(ChangeFileExt(FNameOfFile, StrSutraValues));
     WriteString(INSFLE);
     WriteString(' ' + OUTFLE);
+    Model.FilesToDelete.Add(OUTFLE);
     NewLine;
   end
   else
