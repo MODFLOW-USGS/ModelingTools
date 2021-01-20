@@ -951,7 +951,7 @@ type
     FOldPilotPoints: TSimplePointCollection;
     procedure UpdatePilotPoints(PilotPoints: TSimplePointCollection);
   public
-    constructor Create(var NewPilotPoints: TSimplePointCollection);
+    constructor Create(NewPilotPoints: TSimplePointCollection);
     destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
@@ -963,8 +963,18 @@ type
   end;
 
   TUndoDeletePilotPoint = class(TCustomUndoChangePilotPoints)
+  private
+    FNewBetweenObservationsPilotPoints: TSimplePointCollection;
+    FOldBetweenObservationsPilotPoints: TSimplePointCollection;
+    procedure UpdatePilotPoints(PilotPoints,
+      BetweenObservationsPilotPoints: TSimplePointCollection);
   protected
     function Description: string; override;
+  public
+    constructor Create(NewPilotPoints, BetweenObservationsPilotPoints: TSimplePointCollection);
+    destructor Destroy; override;
+    procedure DoCommand; override;
+    procedure Undo; override;
   end;
 
 implementation
@@ -3885,10 +3895,10 @@ end;
 { TCustomUndoChangePilotPoints }
 
 constructor TCustomUndoChangePilotPoints.Create(
-  var NewPilotPoints: TSimplePointCollection);
+  NewPilotPoints: TSimplePointCollection);
 begin
-  FNewPilotPoints := NewPilotPoints;
-  NewPilotPoints := nil;
+  FNewPilotPoints := TSimplePointCollection.Create;;
+  FNewPilotPoints.Assign(NewPilotPoints);
   FOldPilotPoints := TSimplePointCollection.Create;
   FOldPilotPoints.Assign(frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints);
 end;
@@ -3930,6 +3940,16 @@ end;
 
 { TUndoDeletePilotPoint }
 
+constructor TUndoDeletePilotPoint.Create(NewPilotPoints,
+  BetweenObservationsPilotPoints: TSimplePointCollection);
+begin
+  inherited Create(NewPilotPoints);
+  FNewBetweenObservationsPilotPoints := TSimplePointCollection.Create;
+  FNewBetweenObservationsPilotPoints.Assign(BetweenObservationsPilotPoints);
+  FOldBetweenObservationsPilotPoints := TSimplePointCollection.Create;
+  FOldBetweenObservationsPilotPoints.Assign(frmGoPhast.PhastModel.PestProperties.BetweenObservationsPilotPoints);
+end;
+
 function TUndoDeletePilotPoint.Description: string;
 begin
   if FOldPilotPoints.Count - FNewPilotPoints.Count > 1 then
@@ -3940,6 +3960,32 @@ begin
   begin
     result := 'delete pilot point';
   end;
+end;
+
+destructor TUndoDeletePilotPoint.Destroy;
+begin
+  FNewBetweenObservationsPilotPoints.Free;
+  FOldBetweenObservationsPilotPoints.Free;
+  inherited;
+end;
+
+procedure TUndoDeletePilotPoint.DoCommand;
+begin
+  UpdatePilotPoints(FNewPilotPoints, FNewBetweenObservationsPilotPoints);
+end;
+
+procedure TUndoDeletePilotPoint.Undo;
+begin
+  inherited;
+  UpdatePilotPoints(FOldPilotPoints, FOldBetweenObservationsPilotPoints);
+end;
+
+procedure TUndoDeletePilotPoint.UpdatePilotPoints(PilotPoints,
+  BetweenObservationsPilotPoints: TSimplePointCollection);
+begin
+  frmGoPhast.PhastModel.PestProperties.BetweenObservationsPilotPoints.Assign(
+    BetweenObservationsPilotPoints);
+  inherited UpdatePilotPoints(PilotPoints);
 end;
 
 end.

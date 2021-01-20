@@ -25,7 +25,7 @@ uses
   AbstractGridUnit, frameViewUnit, SelectUnit, ScreenObjectUnit, UndoItems,
   UndoItemsScreenObjects, QuadTreeClass, SutraMeshUnit, FishnetMeshGenerator,
   ArgusDataEntry, Generics.Collections, ZoomBox2, DrawMeshTypesUnit,
-  JvBalloonHint;
+  JvBalloonHint, PointCollectionUnit;
 
 const
   // @name is the color (silver) used to draw selected cells or elements.
@@ -1156,17 +1156,30 @@ Consider creating descendants that each only handle one view of the model. }
     procedure DeleteLastNode;
   end;
 
-  TAddPilotPoint = class(TCustomInteractiveTool)
+  TCustomModifyPilotPointTool = class(TCustomInteractiveTool)
+  private
+    FNewPoints: TSimplePointCollection;
+    FQuadTree: TRbwQuadTree;
+  protected
+    procedure FillQuadTree; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Activate; override;
+  end;
+
+  TAddPilotPoint = class(TCustomModifyPilotPointTool)
   public
     procedure Activate; override;
     procedure MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer); override;
   end;
 
-  TDeletePilotPoint = class(TCustomInteractiveTool)
+  TDeletePilotPoint = class(TCustomModifyPilotPointTool)
   private
     FX: Integer;
     FY: Integer;
+    FNewBetweeenObsPoints: TSimplePointCollection;
     // @name is used to select pilot points by enclosing them
     // in a polygon.
     // @name is the @link(TLine) used to select the @link(TPointItem)s
@@ -1175,7 +1188,10 @@ Consider creating descendants that each only handle one view of the model. }
   protected
     procedure CreateLayers; override;
     procedure DrawOnBitMap32(Sender: TObject; Buffer: TBitmap32); override;
+    procedure FillQuadTree; override;
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     procedure Activate; override;
     procedure MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer); override;
@@ -1260,7 +1276,7 @@ uses Math, CursorsFoiledAgain, GR32_Polygons, frmGoPhastUnit, frmSubdivideUnit,
   frmSetSpacingUnit, frmScreenObjectPropertiesUnit, BigCanvasMethods,
   LayerStructureUnit, DataSetUnit, Contnrs, frmPointValuesUnit,
   Dialogs, frmFishnetElementPropertiesUnit, MeshRenumbering, GR32_Backends,
-  frmNodeLocationUnit, MeshRenumberingTypes, PointCollectionUnit;
+  frmNodeLocationUnit, MeshRenumberingTypes;
 
 resourcestring
   StrClickAndDragToZo = 'Click and drag to zoom in';
@@ -9323,6 +9339,7 @@ procedure TAddPilotPoint.Activate;
 begin
   inherited;
   Cursor := crAddPilotPoint;
+//  FillQuadTree;
 end;
 
 procedure TAddPilotPoint.MouseUp(Sender: TObject; Button: TMouseButton;
@@ -9331,6 +9348,7 @@ var
   APoint: TPoint2D;
   AZoomBox: TQRbwZoomBox2;
   NewPoints: TSimplePointCollection;
+  LastPoint: TPointItem;
 begin
   inherited;
   if Button <> mbLeft then
@@ -9345,14 +9363,22 @@ begin
   APoint.X := AZoomBox.X(X);
   APoint.Y := AZoomBox.Y(Y);
 
-  NewPoints := TSimplePointCollection.Create;
-  try
-    NewPoints.Assign(frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints);
-    NewPoints.Add.Point2D := APoint;;
-    frmGoPhast.UndoStack.Submit(TUndoAddPilotPoint.Create(NewPoints));
-  finally
-    NewPoints.Free;
+  if FNewPoints.Count > 0 then
+  begin
+    LastPoint := FNewPoints.Last;
+    if (LastPoint.Point2D.x = APoint.x) and (LastPoint.Point2D.y = APoint.y) then
+    begin
+      Exit;
+    end;
+    LastPoint := FQuadTree.NearestPointsFirstData(APoint.x, APoint.y);
+    if (LastPoint.Point2D.x = APoint.x) and (LastPoint.Point2D.y = APoint.y) then
+    begin
+      Exit;
+    end;
   end;
+
+  NewPoints.Add.Point2D := APoint;
+  frmGoPhast.UndoStack.Submit(TUndoAddPilotPoint.Create(NewPoints));
 
   AZoomBox.InvalidateImage32;
 end;
@@ -9364,6 +9390,13 @@ begin
   inherited;
   Cursor := crDeletePilotPoint;
   CreateLayers;
+//  FillQuadTree;
+end;
+
+constructor TDeletePilotPoint.Create(AOwner: TComponent);
+begin
+  inherited;
+  FNewBetweeenObsPoints := TSimplePointCollection.Create;
 end;
 
 procedure TDeletePilotPoint.CreateLayers;
@@ -9378,6 +9411,12 @@ begin
   begin
     FTopLayer := CreateLayer(frmGoPhast.frameTopView.ZoomBox);
   end;
+end;
+
+destructor TDeletePilotPoint.Destroy;
+begin
+  FNewBetweeenObsPoints.Free;
+  inherited;
 end;
 
 procedure TDeletePilotPoint.DrawOnBitMap32(Sender: TObject; Buffer: TBitmap32);
@@ -9396,6 +9435,21 @@ begin
     finally
       Buffer.EndUpdate
     end;
+  end;
+end;
+
+procedure TDeletePilotPoint.FillQuadTree;
+var
+  index: Integer;
+  PointItem: TPointItem;
+begin
+  inherited;
+  FNewBetweeenObsPoints.Assign(
+    frmGoPhast.PhastModel.PestProperties.BetweenObservationsPilotPoints);
+  for index := 0 to FNewBetweeenObsPoints.Count - 1 do
+  begin
+    PointItem := FNewBetweeenObsPoints[index];
+    FQuadTree.AddPoint(PointItem.Point2D.x, PointItem.Point2D.y, PointItem);
   end;
 end;
 
@@ -9447,11 +9501,9 @@ procedure TDeletePilotPoint.MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   AZoomBox: TQRbwZoomBox2;
-  NewPoints: TSimplePointCollection;
-  index: Integer;
-  QuadTree: TRbwQuadTree;
+//  NewPoints: TSimplePointCollection;
+//  QuadTree: TRbwQuadTree;
   PointItem: TPointItem;
-  DisLimits: TGridLimit;
   Block: T2DBlock;
   Points: TQuadPointInRegionArray;
   PointIndex: Integer;
@@ -9472,63 +9524,99 @@ begin
     Exit;
   end;
 
-  NewPoints := TSimplePointCollection.Create;
-  QuadTree := TRbwQuadTree.Create(nil);
-  try
-    DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
-    QuadTree.XMax := AZoomBox.XCoord(DisLimits.MaxX);
-    QuadTree.XMin := AZoomBox.XCoord(DisLimits.MinX);
-    QuadTree.YMax := AZoomBox.YCoord(DisLimits.MaxY);
-    QuadTree.YMin := AZoomBox.YCoord(DisLimits.MinY);
+//  FNewPoints := TSimplePointCollection.Create;
+//  FQuadTree := TRbwQuadTree.Create(nil);
+//  try
+//    FillQuadTree;
 
-    NewPoints.Assign(frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints);
-    for index := 0 to NewPoints.Count - 1 do
+  if (Abs(X - FX) > 3) or (Abs(Y - FY) > 3) then
+  begin
+    Block.XMax := Max(AZoomBox.X(X), AZoomBox.X(FX));
+    Block.XMin := Min(AZoomBox.X(X), AZoomBox.X(FX));
+    Block.YMax := Max(AZoomBox.Y(Y), AZoomBox.Y(FY));
+    Block.YMin := Min(AZoomBox.Y(Y), AZoomBox.Y(FY));
+    FQuadTree.FindPointsInBlock(Block, Points);
+    if Length(Points) = 0 then
     begin
-      PointItem := NewPoints[index];
-      QuadTree.AddPoint(PointItem.Point2D.x,PointItem.Point2D.y, PointItem);
+      Exit;
     end;
-
-    if (Abs(X - FX) > 3) or (Abs(Y - FY) > 3) then
+    for PointIndex := 0 to Length(Points) - 1 do
     begin
-      Block.XMax := Max(AZoomBox.X(X), AZoomBox.X(FX));
-      Block.XMin := Min(AZoomBox.X(X), AZoomBox.X(FX));
-      Block.YMax := Max(AZoomBox.Y(Y), AZoomBox.Y(FY));
-      Block.YMin := Min(AZoomBox.Y(Y), AZoomBox.Y(FY));
-      QuadTree.FindPointsInBlock(Block, Points);
-      if Length(Points) = 0 then
+      for ItemIndex := 0 to Length(Points[PointIndex].Data) - 1 do
       begin
-        Exit;
+        PointItem := Points[PointIndex].Data[ItemIndex];
+        FQuadTree.RemovePoint(PointItem.Point2D.X, PointItem.Point2D.Y, PointItem);
+        PointItem.Free;
       end;
-      for PointIndex := 0 to Length(Points) - 1 do
-      begin
-        for ItemIndex := 0 to Length(Points[PointIndex].Data) - 1 do
-        begin
-          PointItem := Points[PointIndex].Data[ItemIndex];
-          PointItem.Free;
-        end;
-      end;
-    end
-    else
-    begin
-      XDouble := AZoomBox.X(X);
-      YDouble := AZoomBox.Y(Y);
-      QuadTree.FirstNearestPoint(XDouble, YDouble, DataPointer);
-      if (Abs(X-AZoomBox.XCoord(XDouble)) > 3)
-        or (Abs(Y-AZoomBox.YCoord(YDouble)) > 3) then
-      begin
-        Exit;
-      end;
-      PointItem := DataPointer;
-      PointItem.Free;
     end;
-
-    frmGoPhast.UndoStack.Submit(TUndoDeletePilotPoint.Create(NewPoints));
-  finally
-    QuadTree.Free;
-    NewPoints.Free;
-    AZoomBox.InvalidateImage32;
+  end
+  else
+  begin
+    XDouble := AZoomBox.X(X);
+    YDouble := AZoomBox.Y(Y);
+    FQuadTree.FirstNearestPoint(XDouble, YDouble, DataPointer);
+    if (Abs(X-AZoomBox.XCoord(XDouble)) > 3)
+      or (Abs(Y-AZoomBox.YCoord(YDouble)) > 3) then
+    begin
+      Exit;
+    end;
+    PointItem := DataPointer;
+    FQuadTree.RemovePoint(PointItem.Point2D.X, PointItem.Point2D.Y, PointItem);
+    PointItem.Free;
   end;
 
+  frmGoPhast.UndoStack.Submit(
+    TUndoDeletePilotPoint.Create(FNewPoints, FNewBetweeenObsPoints));
+
+
+    //    FQuadTree.Free;
+//    FNewPoints.Free;
+    AZoomBox.InvalidateImage32;
+end;
+
+{ TCustomModifyPilotPointTool }
+
+procedure TCustomModifyPilotPointTool.Activate;
+begin
+  inherited;
+  FillQuadTree;
+end;
+
+constructor TCustomModifyPilotPointTool.Create(AOwner: TComponent);
+begin
+  inherited;
+  FNewPoints := TSimplePointCollection.Create;
+//  FNewBetweenObsPoints := TSimplePointCollection.Create;
+  FQuadTree := TRbwQuadTree.Create(nil);
+end;
+
+destructor TCustomModifyPilotPointTool.Destroy;
+begin
+  FQuadTree.Free;
+  FNewPoints.Free;
+  inherited;
+end;
+
+procedure TCustomModifyPilotPointTool.FillQuadTree;
+var
+  DisLimits: TGridLimit;
+  index: Integer;
+  AZoomBox: TQRbwZoomBox2;
+  PointItem: TPointItem;
+begin
+  AZoomBox := ZoomBox;
+  DisLimits := frmGoPhast.PhastModel.DiscretizationLimits(vdTop);
+  FQuadTree.Clear;
+  FQuadTree.XMax := AZoomBox.XCoord(DisLimits.MaxX);
+  FQuadTree.XMin := AZoomBox.XCoord(DisLimits.MinX);
+  FQuadTree.YMax := AZoomBox.YCoord(DisLimits.MaxY);
+  FQuadTree.YMin := AZoomBox.YCoord(DisLimits.MinY);
+  FNewPoints.Assign(frmGoPhast.PhastModel.PestProperties.SpecifiedPilotPoints);
+  for index := 0 to FNewPoints.Count - 1 do
+  begin
+    PointItem := FNewPoints[index];
+    FQuadTree.AddPoint(PointItem.Point2D.x, PointItem.Point2D.y, PointItem);
+  end;
 end;
 
 initialization

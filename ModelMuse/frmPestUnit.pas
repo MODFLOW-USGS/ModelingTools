@@ -316,6 +316,7 @@ var
   QuadTree: TRbwQuadTree;
   DisLimits: TGridLimit;
   PointList: TList<TPoint2D>;
+  ResultPointList: TList<TPoint2D>;
   XD: TRealArray;
   YD: TRealArray;
   NT: longint; 
@@ -326,17 +327,42 @@ var
   APoint2D: TPoint2D;
   DupPoint: TPoint2D;
   PointIndex: Integer;
-  APoint2D_1: TPoint2D;
-  APoint2D_2: TPoint2D;
+//  APoint2D_1: TPoint2D;
+//  APoint2D_2: TPoint2D;
   SutraStateObs: TSutraStateObservations;
   APointer: Pointer;
-  LineIndex: Integer;
+//  LineIndex: Integer;
+  TriangleIndex: Integer;
+  APoint1: TPoint2D;
+  APoint2: TPoint2D;
+  APoint3: TPoint2D;
+  procedure GetMidPoint(P1, P2: TPoint2D);
+  begin
+    APoint2D.x := (P1.x + P2.x)/2;
+    APoint2D.y := (P1.y + P2.y)/2;
+    if ResultPointList.Count > 0 then
+    begin
+      DupPoint := APoint2D;
+      QuadTree.FirstNearestPoint(DupPoint.x, DupPoint.y, APointer);
+      if (DupPoint.x <> APoint2D.x) or (DupPoint.y <> APoint2D.y) then
+      begin
+        ResultPointList.Add(APoint2D);
+        QuadTree.AddPoint(APoint2D.x, APoint2D.y, nil);
+      end;
+    end
+    else
+    begin
+      ResultPointList.Add(APoint2D);
+      QuadTree.AddPoint(APoint2D.x, APoint2D.y, nil);
+    end;
+  end;
+
 begin
   inherited;
   //
   PhastModel := frmGoPhast.PhastModel;
   PointList := TList<TPoint2D>.Create;
-//  ResultPointList := TList<TPoint2D>.Create;
+  ResultPointList := TList<TPoint2D>.Create;
   QuadTree := TRbwQuadTree.Create(nil);
   try
     DisLimits := PhastModel.DiscretizationLimits(vdTop);
@@ -347,9 +373,7 @@ begin
     for ScreenObjectIndex := 0 to PhastModel.ScreenObjectCount - 1 do
     begin
       AScreenObject := PhastModel.ScreenObjects[ScreenObjectIndex];
-      if AScreenObject.Deleted or (AScreenObject.Count > 1)
-        or (AScreenObject.Modflow6Obs = nil)
-        or not AScreenObject.Modflow6Obs.Used then
+      if AScreenObject.Deleted or (AScreenObject.Count > 1) then
       begin
         Continue;
       end;
@@ -359,6 +383,11 @@ begin
       begin
         if PhastModel.ModelSelection = msModflow2015 then
         begin
+          if (AScreenObject.Modflow6Obs = nil)
+            or not AScreenObject.Modflow6Obs.Used then
+          begin
+            Continue;
+          end;
           UsePoint := AScreenObject.Modflow6Obs.CalibrationObservations.Count > 0;
         end
         else
@@ -425,6 +454,7 @@ begin
     end
     else
     begin
+      QuadTree.Clear;
       SetLength(XD, PointList.Count);
       SetLength(YD, PointList.Count);
       for PointIndex := 0 to PointList.Count -1 do
@@ -437,19 +467,25 @@ begin
       SetLength(IPL, 6*PointList.Count);
       IDTANG_Pascal(PointList.Count, XD,YD, NT, NL, IPT, IPL);
 
+      for TriangleIndex := 0 to NT - 1 do
+      begin
+        APoint1 := PointList[IPT[TriangleIndex*3]];
+        APoint2 := PointList[IPT[TriangleIndex*3+1]];
+        APoint3 := PointList[IPT[TriangleIndex*3+2]];
+        GetMidPoint(APoint1, APoint2);
+        GetMidPoint(APoint1, APoint3);
+        GetMidPoint(APoint2, APoint3);
+      end;
+
       rdgBetweenObs.BeginUpdate;
       try
-        rdgBetweenObs.RowCount := NL+1;
-        for LineIndex := 0 to NL - 1 do
+        rdgBetweenObs.RowCount := ResultPointList.count+1;
+        rdgBetweenObs.FixedRows := 1;
+        for PointIndex := 0 to ResultPointList.count - 1 do
         begin
-          PointIndex := IPL[LineIndex*3];
-          APoint2D_1 := PointList[PointIndex];
-          PointIndex := IPL[LineIndex*3+1];
-          APoint2D_2 := PointList[PointIndex];
-          rdgBetweenObs.RealValue [Ord(ppcX), LineIndex +1] :=
-            (APoint2D_1.x + APoint2D_2.x) / 2;
-          rdgBetweenObs.RealValue [Ord(ppcY), LineIndex +1] :=
-            (APoint2D_1.y + APoint2D_2.y) / 2;
+          APoint2D := ResultPointList[PointIndex];
+          rdgBetweenObs.RealValue [Ord(ppcX), PointIndex +1] := APoint2D.x;
+          rdgBetweenObs.RealValue [Ord(ppcY), PointIndex +1] := APoint2D.y;
         end;
       finally
         rdgBetweenObs.EndUpdate;
@@ -457,7 +493,7 @@ begin
     end;
   finally
     PointList.Free;
-//    ResultPointList.Free;
+    ResultPointList.Free;
     QuadTree.Free;
   end;
 end;

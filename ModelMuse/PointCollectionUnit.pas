@@ -34,6 +34,7 @@ type
     function Add: TPointItem;
     property Items[Index: Integer]: TPointItem read GetPoint write SetPoint; default;
     function IsSame(OtherCollection: TSimplePointCollection): Boolean;
+    function Last: TPointItem;
   end;
 
   {@abstract(@name is used to store a series of TPoint2Ds.)}
@@ -249,6 +250,11 @@ begin
       end;
     end;
   end;
+end;
+
+function TSimplePointCollection.Last: TPointItem;
+begin
+  result := Items[Count-1];
 end;
 
 procedure TSimplePointCollection.SetPoint(Index: Integer;

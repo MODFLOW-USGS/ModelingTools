@@ -1162,8 +1162,6 @@ inherited frmPEST: TfrmPEST
         Height = 295
         Align = alClient
         TabOrder = 0
-        ExplicitTop = 132
-        ExplicitHeight = 287
         object Splitter1: TSplitter
           Left = 242
           Top = 1
@@ -1178,7 +1176,6 @@ inherited frmPEST: TfrmPEST
           Align = alLeft
           Caption = 'Individually specified pilot points'
           TabOrder = 0
-          ExplicitHeight = 285
           inline framePilotPoints: TframeGrid
             Left = 2
             Top = 89
@@ -1189,11 +1186,11 @@ inherited frmPEST: TfrmPEST
             ExplicitLeft = 2
             ExplicitTop = 89
             ExplicitWidth = 237
-            ExplicitHeight = 194
+            ExplicitHeight = 202
             inherited Panel: TPanel
               Top = 161
               Width = 237
-              ExplicitTop = 153
+              ExplicitTop = 161
               ExplicitWidth = 237
               inherited lbNumber: TLabel
                 Width = 151
@@ -1271,7 +1268,7 @@ inherited frmPEST: TfrmPEST
                   AutoAdjustColWidths = True
                 end>
               ExplicitWidth = 237
-              ExplicitHeight = 153
+              ExplicitHeight = 161
             end
           end
           object Panel1: TPanel
@@ -1309,9 +1306,6 @@ inherited frmPEST: TfrmPEST
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
-          ExplicitLeft = 245
-          ExplicitWidth = 266
-          ExplicitHeight = 285
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 113
@@ -1378,8 +1372,6 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
-            ExplicitWidth = 262
-            ExplicitHeight = 170
             ColWidths = (
               64
               64)
@@ -1391,7 +1383,6 @@ inherited frmPEST: TfrmPEST
             Height = 93
             Align = alTop
             TabOrder = 1
-            ExplicitWidth = 262
             object cbUseBetweenObs: TCheckBox
               Left = 4
               Top = 6
@@ -1421,8 +1412,6 @@ inherited frmPEST: TfrmPEST
         Height = 124
         Align = alTop
         TabOrder = 1
-        ExplicitLeft = 1
-        ExplicitTop = -5
         object lblPilotPointBuffer: TLabel
           Left = 6
           Top = 39
@@ -1446,7 +1435,6 @@ inherited frmPEST: TfrmPEST
           Align = alRight
           Caption = 'Regularly spaced pilot points'
           TabOrder = 1
-          ExplicitTop = -3
           object lblArrayPattern: TLabel
             Left = 16
             Top = 11

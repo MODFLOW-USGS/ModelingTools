@@ -6364,7 +6364,9 @@ begin
   acAddPilotPoint.Enabled := PhastModel.PestUsed
     and PhastModel.PestProperties.ShowPilotPoints;
   acDeletePilotPoint.Enabled := acAddPilotPoint.Enabled
-    and (PhastModel.PestProperties.SpecifiedPilotPoints.Count > 0)
+    and
+    ((PhastModel.PestProperties.SpecifiedPilotPoints.Count > 0)
+    or (PhastModel.PestProperties.BetweenObservationsPilotPoints.Count > 0));
 end;
 
 procedure TfrmGoPhast.EnableSwrObs;
