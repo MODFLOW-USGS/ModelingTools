@@ -176,6 +176,7 @@ type
     procedure Clear;
     // If @name is changed, @link(Clear) should be changed too.
     procedure ReplaceGUID;
+    property ScreenObject: TObject read FScreenObject;
   published
     property Name: string read GetName write SetName;
     property GroundwaterFlowObs: Boolean read FGroundwaterFlowObs

@@ -14,8 +14,6 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
     TabOrder = 0
     object tabBasic: TTabSheet
       Caption = 'Basic'
-      ExplicitLeft = 36
-      ExplicitTop = 28
       DesignSize = (
         457
         459)
@@ -228,6 +226,10 @@ object frameModpathTimeSeriesDisplay: TframeModpathTimeSeriesDisplay
     object tabOptions: TTabSheet
       Caption = 'Options'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         457
         459)

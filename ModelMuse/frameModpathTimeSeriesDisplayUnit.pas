@@ -375,7 +375,8 @@ begin
   LocalTimeSeries := TTimeSeriesReader.Create(frmGoPhast.PhastModel);
   FTimeSeriesList.Add(LocalTimeSeries);
   LocalTimeSeries.Assign(TimeSeries);
-  comboModelSelection.Items.AddObject(frmGoPhast.PhastModel.DisplayName, frmGoPhast.PhastModel);
+  comboModelSelection.Items.AddObject(frmGoPhast.PhastModel.DisplayName,
+    frmGoPhast.PhastModel);
   if frmGoPhast.PhastModel.LgrUsed then
   begin
     comboModelSelection.Visible := True;
@@ -555,6 +556,10 @@ var
   Undo: TUndoImportTimeSeries;
   LocalModel: TCustomModel;
 begin
+  if comboModelSelection.ItemIndex < 0 then
+  begin
+    Exit;
+  end;
   ImportedNewFile := False;
   LocalModel := comboModelSelection.Items.Objects[comboModelSelection.ItemIndex] as TCustomModel;
 

@@ -231,6 +231,10 @@ resourcestring
   StrInvalidObjectZFor = 'Invalid object Z formulas';
   StrTheHigherZFormula = 'The higher Z formula for %s is less than the lower' +
   ' Z formula';
+  StrObservationNameToo = 'Observation name too long';
+  StrTheMaximumLengthO = 'The maximum length of an observation is %0:d. The ' +
+  'observation named %1:1s in %2:s woud be exported as "%3:s" which is longe' +
+  'r than the maximum length. It will be truncated to %4:s.';
 
 
 { TModflow6Obs_Writer }
@@ -1718,6 +1722,7 @@ var
   OBSNAME: string;
 //  CellName: string;
   CellNames: TStringList;
+  ErrorObject: TScreenObject;
 begin
   case FObGeneral of
     ogCHD: Prefix := 'chd_';
@@ -1777,6 +1782,15 @@ begin
         if obsnam = Prefix then
         begin
           obsnam := Format(Prefix + 'FlowObs%d', [ObsIndex+1]);
+        end;
+        if Length(obsnam) > MaxBoundNameLength then
+        begin
+          ErrorObject := FlowObs.FMf6Obs.ScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddWarning(Model, StrObservationNameToo,
+            Format(StrTheMaximumLengthO, [MaxBoundNameLength, FlowObs.FName,
+            ErrorObject.Name, obsnam, Copy(obsnam, 1, MaxBoundNameLength)]),
+            ErrorObject);
+          obsnam := Copy(obsnam, 1, MaxBoundNameLength);
         end;
         Assert(Length(obsnam) <= MaxBoundNameLength);
         WriteString('  ''');
@@ -2143,6 +2157,7 @@ begin
     Exit;
   end;
   FNameOfFile := AFileName;
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrObservationNameToo);
 
   frmProgressMM.AddMessage(StrWritingFlowObserva);
   Assert((FGeneralObsList.Count > 0) or (FToMvrObsList.Count > 0));

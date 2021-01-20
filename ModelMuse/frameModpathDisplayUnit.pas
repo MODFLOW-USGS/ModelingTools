@@ -549,6 +549,11 @@ var
 begin
   inherited;
 
+  if comboModelSelection.ItemIndex < 0 then
+  begin
+    Exit;
+  end;
+
   Grid := frmGoPhast.ModflowGrid;
   if (Grid.ColumnCount <= 0)
     or (Grid.RowCount <= 0)

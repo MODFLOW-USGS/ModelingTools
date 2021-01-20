@@ -727,6 +727,10 @@ var
   LocalModel: TCustomModel;
 begin
   inherited;
+  if comboModelSelection.ItemIndex < 0 then
+  begin
+    Exit;
+  end;
   FLegend.ValueSourceInterface := nil;
   LocalModel := comboModelSelection.Items.Objects[
     comboModelSelection.ItemIndex] as TCustomModel;
