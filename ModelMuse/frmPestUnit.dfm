@@ -2,6 +2,7 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 461
   ClientWidth = 710
+  ExplicitTop = -100
   ExplicitWidth = 726
   ExplicitHeight = 500
   PixelsPerInch = 96
@@ -1157,22 +1158,23 @@ inherited frmPEST: TfrmPEST
       Caption = 'jvspPilotPoints'
       object Panel2: TPanel
         Left = 0
-        Top = 124
+        Top = 140
         Width = 512
-        Height = 295
+        Height = 279
         Align = alClient
         TabOrder = 0
         object Splitter1: TSplitter
           Left = 242
           Top = 1
           Width = 5
-          Height = 293
+          Height = 277
+          ExplicitHeight = 293
         end
         object gbIndividualPilotPoints: TGroupBox
           Left = 1
           Top = 1
           Width = 241
-          Height = 293
+          Height = 277
           Align = alLeft
           Caption = 'Individually specified pilot points'
           TabOrder = 0
@@ -1180,45 +1182,55 @@ inherited frmPEST: TfrmPEST
             Left = 2
             Top = 89
             Width = 237
-            Height = 202
+            Height = 186
             Align = alClient
             TabOrder = 0
             ExplicitLeft = 2
             ExplicitTop = 89
             ExplicitWidth = 237
-            ExplicitHeight = 202
+            ExplicitHeight = 186
             inherited Panel: TPanel
-              Top = 161
+              Top = 120
               Width = 237
-              ExplicitTop = 161
+              Height = 66
+              ExplicitTop = 120
               ExplicitWidth = 237
+              ExplicitHeight = 66
               inherited lbNumber: TLabel
+                Left = 82
+                Top = 33
                 Width = 151
                 Height = 18
                 Caption = 'Number of pilot points'
+                ExplicitLeft = 82
+                ExplicitTop = 33
                 ExplicitWidth = 151
                 ExplicitHeight = 18
               end
               inherited sbAdd: TSpeedButton
                 Left = 117
-                ExplicitLeft = 252
+                ExplicitLeft = 117
               end
               inherited sbInsert: TSpeedButton
                 Left = 140
-                ExplicitLeft = 298
+                ExplicitLeft = 140
               end
               inherited sbDelete: TSpeedButton
                 Left = 163
-                ExplicitLeft = 345
+                ExplicitLeft = 163
               end
               inherited seNumber: TJvSpinEdit
+                Left = 11
+                Top = 30
                 Height = 26
+                ExplicitLeft = 11
+                ExplicitTop = 30
                 ExplicitHeight = 26
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 237
-              Height = 161
+              Height = 120
               ColCount = 2
               Columns = <
                 item
@@ -1268,7 +1280,7 @@ inherited frmPEST: TfrmPEST
                   AutoAdjustColWidths = True
                 end>
               ExplicitWidth = 237
-              ExplicitHeight = 161
+              ExplicitHeight = 145
             end
           end
           object Panel1: TPanel
@@ -1302,15 +1314,15 @@ inherited frmPEST: TfrmPEST
           Left = 247
           Top = 1
           Width = 264
-          Height = 293
+          Height = 277
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
-            Top = 113
+            Top = 169
             Width = 260
-            Height = 178
+            Height = 106
             Align = alClient
             ColCount = 2
             FixedCols = 0
@@ -1380,9 +1392,16 @@ inherited frmPEST: TfrmPEST
             Left = 2
             Top = 20
             Width = 260
-            Height = 93
+            Height = 149
             Align = alTop
             TabOrder = 1
+            object lblMinSeparation: TLabel
+              Left = 4
+              Top = 45
+              Width = 141
+              Height = 18
+              Caption = 'Minimum separation'
+            end
             object cbUseBetweenObs: TCheckBox
               Left = 4
               Top = 6
@@ -1394,13 +1413,25 @@ inherited frmPEST: TfrmPEST
             end
             object btnBetweenObservations: TButton
               Left = 4
-              Top = 45
-              Width = 253
+              Top = 97
+              Width = 248
               Height = 42
               Caption = 'Generate pilot points'#13#10'between point observations'
               TabOrder = 1
               WordWrap = True
               OnClick = btnBetweenObservationsClick
+            end
+            object rdeMinSeparation: TRbwDataEntry
+              Left = 4
+              Top = 69
+              Width = 109
+              Height = 22
+              TabOrder = 2
+              Text = '0'
+              DataType = dtReal
+              Max = 1.000000000000000000
+              CheckMin = True
+              ChangeDisabledColor = True
             end
           end
         end
@@ -1409,7 +1440,7 @@ inherited frmPEST: TfrmPEST
         Left = 0
         Top = 0
         Width = 512
-        Height = 124
+        Height = 140
         Align = alTop
         TabOrder = 1
         object lblPilotPointBuffer: TLabel
@@ -1431,41 +1462,39 @@ inherited frmPEST: TfrmPEST
           Left = 248
           Top = 1
           Width = 263
-          Height = 122
+          Height = 138
           Align = alRight
           Caption = 'Regularly spaced pilot points'
           TabOrder = 1
           object lblArrayPattern: TLabel
             Left = 16
-            Top = 11
+            Top = 27
             Width = 50
             Height = 18
             Caption = 'Pattern'
           end
           object lblPilotPointSpacing: TLabel
             Left = 14
-            Top = 63
+            Top = 79
             Width = 128
             Height = 18
             Caption = 'Pilot point spacing'
           end
           object comboArrayPattern: TComboBox
             Left = 16
-            Top = 35
+            Top = 51
             Width = 145
             Height = 26
             Style = csDropDownList
-            ItemIndex = 0
             TabOrder = 0
-            Text = 'none'
             Items.Strings = (
               'none'
-              'Rectangular'
+              'Square'
               'Triangular')
           end
           object rdePilotPointSpacing: TRbwDataEntry
             Left = 14
-            Top = 87
+            Top = 103
             Width = 145
             Height = 22
             TabOrder = 1

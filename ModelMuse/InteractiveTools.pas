@@ -9347,7 +9347,7 @@ procedure TAddPilotPoint.MouseUp(Sender: TObject; Button: TMouseButton;
 var
   APoint: TPoint2D;
   AZoomBox: TQRbwZoomBox2;
-  NewPoints: TSimplePointCollection;
+//  NewPoints: TSimplePointCollection;
   LastPoint: TPointItem;
 begin
   inherited;
@@ -9377,8 +9377,10 @@ begin
     end;
   end;
 
-  NewPoints.Add.Point2D := APoint;
-  frmGoPhast.UndoStack.Submit(TUndoAddPilotPoint.Create(NewPoints));
+  LastPoint := FNewPoints.Add;
+  LastPoint.Point2D := APoint;
+  FQuadTree.AddPoint(LastPoint.Point2D.x, LastPoint.Point2D.y, LastPoint);
+  frmGoPhast.UndoStack.Submit(TUndoAddPilotPoint.Create(FNewPoints));
 
   AZoomBox.InvalidateImage32;
 end;

@@ -960,6 +960,8 @@ type
   TUndoAddPilotPoint = class(TCustomUndoChangePilotPoints)
   protected
     function Description: string; override;
+    procedure Undo; override;
+    procedure Redo; override;
   end;
 
   TUndoDeletePilotPoint = class(TCustomUndoChangePilotPoints)
@@ -975,6 +977,7 @@ type
     destructor Destroy; override;
     procedure DoCommand; override;
     procedure Undo; override;
+    procedure Redo; override;
   end;
 
 implementation
@@ -3938,6 +3941,20 @@ begin
   result := 'add pilot point';
 end;
 
+procedure TUndoAddPilotPoint.Redo;
+begin
+  inherited;
+  AddPilotPointTool.Activate;
+//  DeletePilotPointTool.Activate;
+end;
+
+procedure TUndoAddPilotPoint.Undo;
+begin
+  inherited;
+  AddPilotPointTool.Activate;
+//  DeletePilotPointTool.Activate;
+end;
+
 { TUndoDeletePilotPoint }
 
 constructor TUndoDeletePilotPoint.Create(NewPilotPoints,
@@ -3974,10 +3991,17 @@ begin
   UpdatePilotPoints(FNewPilotPoints, FNewBetweenObservationsPilotPoints);
 end;
 
+procedure TUndoDeletePilotPoint.Redo;
+begin
+  inherited;
+  DeletePilotPointTool.Activate;
+end;
+
 procedure TUndoDeletePilotPoint.Undo;
 begin
   inherited;
   UpdatePilotPoints(FOldPilotPoints, FOldBetweenObservationsPilotPoints);
+  DeletePilotPointTool.Activate;
 end;
 
 procedure TUndoDeletePilotPoint.UpdatePilotPoints(PilotPoints,

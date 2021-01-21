@@ -25,7 +25,7 @@ type
     procedure SetObsColumnCaptions; override;
     procedure GetDirectObs(Observations: TCustomComparisonCollection); override;
     procedure SetDirectObs(Observations: TCustomComparisonCollection); override;
-    procedure GetObservationGroups; virtual;
+    procedure GetObservationGroups; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;

@@ -10179,10 +10179,14 @@ const
 //    '4.3.0.33' Bug fix: Fixed bug in coloring the grid with a data set in
 //                a MODFLOW-LGR model that could cause a circular reference
 //                error.
+//    '4.3.0.34' Bug fix: Fixed bug that could cause MODFLOW 6 observation
+//                files to be misnamed if the model file name had a period
+//                within the base as well as one separating the base from the
+//                extension.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.33';
+  IIModelVersion = '4.3.0.34';
 
 function IModelVersion: string;
 begin

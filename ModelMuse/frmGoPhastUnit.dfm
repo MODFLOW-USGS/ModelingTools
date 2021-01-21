@@ -322,7 +322,6 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitTop = -6
     object tbarEdit: TToolBar
       Left = 152
       Top = 34
@@ -597,9 +596,9 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView: TToolBar
-      Left = 135
+      Left = 100
       Top = 98
-      Width = 163
+      Width = 170
       Height = 28
       ButtonHeight = 23
       ButtonWidth = 24
@@ -1145,7 +1144,7 @@ inherited frmGoPhast: TfrmGoPhast
   object mmMainMenu: TMainMenu
     Images = ilImageList
     Left = 96
-    Top = 96
+    Top = 16
     object miFile: TMenuItem
       AutoHotkeys = maAutomatic
       Caption = '&File'
@@ -2410,8 +2409,8 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object alActionList: TActionList
     Images = ilImageList
-    Left = 128
-    Top = 96
+    Left = 112
+    Top = 40
     object acCut: TAction
       Category = 'Edit'
       Caption = '&Cut'
@@ -3645,13 +3644,17 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'Edit'
       Caption = 'Add Pilot Point'
       Enabled = False
+      Hint = 'Add pilot point|Click on the top view to add a pilot point'
       ImageIndex = 97
       OnExecute = acAddPilotPointExecute
     end
     object acDeletePilotPoint: TAction
       Category = 'Edit'
-      Caption = 'Delete Pilot Point'
+      Caption = 'Delete Pilot Point(s)'
       Enabled = False
+      Hint = 
+        'delete pilot point(s)|Click or click and drag to delete pilot po' +
+        'ints.'
       ImageIndex = 98
       OnExecute = acDeletePilotPointExecute
     end

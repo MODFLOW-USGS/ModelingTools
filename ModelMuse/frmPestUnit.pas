@@ -183,6 +183,8 @@ type
     lblArrayPattern: TLabel;
     lblPilotPointBuffer: TLabel;
     rdePilotPointBuffer: TRbwDataEntry;
+    rdeMinSeparation: TRbwDataEntry;
+    lblMinSeparation: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -252,6 +254,27 @@ resourcestring
   StrTheShapeHeaderFil = 'The shape header file "%s" could not be found.';
   StrLine0d1sM = 'Line %0:d ("%1:s") must contain at least two values separa' +
   'ted by a comma or space character.';
+
+type
+  TCheckedPointItem = class(TPointItem)
+  private
+    FChecked: Boolean;
+  public
+    FoundPoints: TQuadPointInRegionArray;
+    constructor Create(Collection: TCollection); override;
+    property Checked: Boolean read FChecked write FChecked;
+  end;
+
+  TCheckedPoints = class(TCollection)
+  private
+    function GetPoint(Index: Integer): TCheckedPointItem;
+    procedure SetPoint(Index: Integer; const Value: TCheckedPointItem);
+  public
+    constructor Create;
+    function Add: TCheckedPointItem;
+    property Items[Index: Integer]: TCheckedPointItem read GetPoint
+      write SetPoint; default;
+  end;
 
 {$R *.dfm}
 
@@ -327,15 +350,27 @@ var
   APoint2D: TPoint2D;
   DupPoint: TPoint2D;
   PointIndex: Integer;
-//  APoint2D_1: TPoint2D;
-//  APoint2D_2: TPoint2D;
   SutraStateObs: TSutraStateObservations;
   APointer: Pointer;
-//  LineIndex: Integer;
   TriangleIndex: Integer;
   APoint1: TPoint2D;
   APoint2: TPoint2D;
   APoint3: TPoint2D;
+  FinalItems: array of TCheckedPointItem;
+  CheckedPoints: TCheckedPoints;
+  ACheckedPoint: TCheckedPointItem;
+  SearchRadius: Double;
+//  FoundPoints: TQuadPointInRegionArray;
+  MaxCount: Integer;
+//  InnerPointItem: Integer;
+  RegionIndex: Integer;
+  ARegion: TQuadPointInRegion;
+  CheckPoint: TCheckedPointItem;
+  AnotherCheckItem: TCheckedPointItem;
+  TestItem: TCheckedPointItem;
+  RowIndex: Integer;
+  MaxItem: TCheckedPointItem;
+  TestCount: Integer;
   procedure GetMidPoint(P1, P2: TPoint2D);
   begin
     APoint2D.x := (P1.x + P2.x)/2;
@@ -356,7 +391,6 @@ var
       QuadTree.AddPoint(APoint2D.x, APoint2D.y, nil);
     end;
   end;
-
 begin
   inherited;
   //
@@ -477,18 +511,105 @@ begin
         GetMidPoint(APoint2, APoint3);
       end;
 
-      rdgBetweenObs.BeginUpdate;
-      try
-        rdgBetweenObs.RowCount := ResultPointList.count+1;
-        rdgBetweenObs.FixedRows := 1;
-        for PointIndex := 0 to ResultPointList.count - 1 do
-        begin
-          APoint2D := ResultPointList[PointIndex];
-          rdgBetweenObs.RealValue [Ord(ppcX), PointIndex +1] := APoint2D.x;
-          rdgBetweenObs.RealValue [Ord(ppcY), PointIndex +1] := APoint2D.y;
+      SearchRadius := rdeMinSeparation.RealValue;
+      if SearchRadius = 0 then
+      begin
+        rdgBetweenObs.BeginUpdate;
+        try
+          rdgBetweenObs.RowCount := ResultPointList.Count+1;
+          rdgBetweenObs.FixedRows := 1;
+          for PointIndex := 0 to ResultPointList.count - 1 do
+          begin
+            APoint2D := ResultPointList[PointIndex];
+            rdgBetweenObs.RealValue [Ord(ppcX), PointIndex +1] := APoint2D.x;
+            rdgBetweenObs.RealValue [Ord(ppcY), PointIndex +1] := APoint2D.y;
+          end;
+        finally
+          rdgBetweenObs.EndUpdate;
         end;
-      finally
-        rdgBetweenObs.EndUpdate;
+      end
+      else
+      begin
+        QuadTree.Clear;
+        SetLength(FinalItems, ResultPointList.Count);
+        CheckedPoints := TCheckedPoints.Create;
+        try
+          for PointIndex := 0 to ResultPointList.Count - 1 do
+          begin
+            ACheckedPoint := CheckedPoints.Add;
+            ACheckedPoint.Point2D := ResultPointList[PointIndex];
+            FinalItems[PointIndex] := ACheckedPoint;
+            QuadTree.AddPoint(ACheckedPoint.Point2D.x, ACheckedPoint.Point2D.y,
+              ACheckedPoint);
+          end;
+
+          for PointIndex := 0 to ResultPointList.Count - 1 do
+          begin
+            CheckPoint := FinalItems[PointIndex];
+            if (CheckPoint = nil) or CheckPoint.Checked then
+            begin
+              Continue;
+            end;
+            QuadTree.FindPointsInCircle(CheckPoint.Point2D.x,
+              CheckPoint.Point2D.y, SearchRadius, CheckPoint.FoundPoints);
+            MaxCount := Length(CheckPoint.FoundPoints);
+            if MaxCount > 1 then
+            begin
+              MaxItem := CheckPoint;
+              for RegionIndex := 0 to Length(CheckPoint.FoundPoints) - 1 do
+              begin
+                ARegion := CheckPoint.FoundPoints[RegionIndex];
+                Assert(Length(ARegion.Data) = 1);
+                AnotherCheckItem := ARegion.Data[0];
+                QuadTree.FindPointsInCircle(AnotherCheckItem.Point2D.x,
+                  AnotherCheckItem.Point2D.y, SearchRadius,
+                  AnotherCheckItem.FoundPoints);
+                TestCount := Length(AnotherCheckItem.FoundPoints);
+                if TestCount > MaxCount then
+                begin
+                  MaxCount := TestCount;
+                  MaxItem := AnotherCheckItem;
+                end;
+              end;
+
+              MaxItem.Checked := True;
+              for RegionIndex := 0 to MaxCount - 1 do
+              begin
+                ARegion := MaxItem.FoundPoints[RegionIndex];
+                TestItem := ARegion.Data[0];
+                QuadTree.RemovePoint(TestItem.Point2D.x, TestItem.Point2D.y,
+                  TestItem);
+                if TestItem <> MaxItem then
+                begin
+                  FinalItems[TestItem.Index] := nil;
+                end;
+              end;
+            end;
+          end;
+
+          rdgBetweenObs.BeginUpdate;
+          try
+            RowIndex := 1;
+            rdgBetweenObs.RowCount := Length(FinalItems)+1;
+            rdgBetweenObs.FixedRows := 1;
+            for PointIndex := 0 to Length(FinalItems) - 1 do
+            begin
+              CheckPoint := FinalItems[PointIndex];
+              if CheckPoint <> nil then
+              begin
+                rdgBetweenObs.RealValue [Ord(ppcX), RowIndex] := CheckPoint.Point2D.x;
+                rdgBetweenObs.RealValue [Ord(ppcY), RowIndex] := CheckPoint.Point2D.y;
+                Inc(RowIndex);
+              end;
+            end;
+            rdgBetweenObs.RowCount := RowIndex;
+          finally
+            rdgBetweenObs.EndUpdate;
+          end;
+
+        finally
+          CheckedPoints.Free;
+        end;
       end;
     end;
   finally
@@ -1908,6 +2029,39 @@ begin
   begin
     frmGoPhast.SynchronizeViews(vdTop);
   end;
+end;
+
+{ TCheckedPointItem }
+
+constructor TCheckedPointItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FoundPoints := nil;
+  FChecked := False;
+end;
+
+
+{ TCheckedPoints }
+
+function TCheckedPoints.Add: TCheckedPointItem;
+begin
+  result := inherited Add as TCheckedPointItem;
+end;
+
+constructor TCheckedPoints.Create;
+begin
+  inherited Create(TCheckedPointItem);
+end;
+
+function TCheckedPoints.GetPoint(Index: Integer): TCheckedPointItem;
+begin
+  result := inherited Items[index] as TCheckedPointItem;
+end;
+
+procedure TCheckedPoints.SetPoint(Index: Integer;
+  const Value: TCheckedPointItem);
+begin
+  inherited Items[index] := Value;
 end;
 
 end.

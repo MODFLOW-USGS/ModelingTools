@@ -432,6 +432,7 @@ type
     FArrayPilotPointSelection: TArrayPilotPointSelection;
     FTriangulaRowSpacing: Double;
     FStoredPilotPointBuffer: TRealStorage;
+    FStoredMinimumSeparation: TRealStorage;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -455,6 +456,9 @@ type
     procedure SetStoredPilotPointBuffer(const Value: TRealStorage);
     function GetPilotPointBuffer: double;
     procedure SetPilotPointBuffer(const Value: double);
+    procedure SetStoredMinimumSeparation(const Value: TRealStorage);
+    function GetMinimumSeparation: Double;
+    procedure SetMinimumSeparation(const Value: Double);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -468,6 +472,8 @@ type
     function ShouldDrawPilotPoints: Boolean;
     property PilotPointCount: Integer read GetPilotPointCount;
     property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
+    property MinimumSeparation: Double read GetMinimumSeparation
+      write SetMinimumSeparation;
   Published
     property PestUsed: Boolean read FPestUsed write SetPestUsed Stored True;
     property TemplateCharacter: Char read FTemplateCharacter
@@ -497,6 +503,7 @@ type
       read FArrayPilotPointSelection write SetArrayPilotPointSelection;
     property StoredPilotPointBuffer: TRealStorage read FStoredPilotPointBuffer
       write SetStoredPilotPointBuffer;
+    Property StoredMinimumSeparation: TRealStorage read FStoredMinimumSeparation write SetStoredMinimumSeparation;
   end;
 
 implementation
@@ -530,6 +537,7 @@ begin
     BetweenObservationsPilotPoints := PestSource.BetweenObservationsPilotPoints;
     UseBetweenObservationsPilotPoints  := PestSource.UseBetweenObservationsPilotPoints;
     ArrayPilotPointSelection := PestSource.ArrayPilotPointSelection;
+    MinimumSeparation := PestSource.MinimumSeparation;
   end
   else
   begin
@@ -552,6 +560,7 @@ begin
   inherited Create(InvalidateModelEvent);
   FStoredPilotPointSpacing := TRealStorage.Create;
   FStoredPilotPointBuffer := TRealStorage.Create;
+  FStoredMinimumSeparation := TRealStorage.Create;
   FPestControlData := TPestControlData.Create(InvalidateModelEvent);
   FSvdProperties :=
     TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
@@ -559,6 +568,7 @@ begin
   FObservatioGroups := TPestObservationGroups.Create(Model);
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
   FStoredPilotPointBuffer.OnChange := InvalidateModelEvent;
+  FStoredMinimumSeparation.OnChange := InvalidateModelEvent;
   FSpecifiedPilotPoints := TSimplePointCollection.Create;
   FBetweenObservationsPilotPoints := TSimplePointCollection.Create;
   InitializeVariables;
@@ -574,6 +584,7 @@ begin
   FPestControlData.Free;
   FStoredPilotPointBuffer.Free;
   FStoredPilotPointSpacing.Free;
+  FStoredMinimumSeparation.Free;
   inherited;
 end;
 
@@ -638,6 +649,11 @@ end;
 function TPestProperties.ShouldDrawPilotPoints: Boolean;
 begin
   result := PestUsed and ShowPilotPoints and (PilotPointCount > 0);
+end;
+
+function TPestProperties.GetMinimumSeparation: Double;
+begin
+  result := StoredMinimumSeparation.Value;
 end;
 
 function TPestProperties.GetPilotPoint(Index: Integer): TPoint2D;
@@ -818,6 +834,11 @@ begin
   FLsqrProperties.Assign(Value);
 end;
 
+procedure TPestProperties.SetMinimumSeparation(const Value: Double);
+begin
+  StoredMinimumSeparation.Value := Value;
+end;
+
 procedure TPestProperties.SetObservatioGroups(
   const Value: TPestObservationGroups);
 begin
@@ -853,6 +874,11 @@ procedure TPestProperties.SetSpecifiedPilotPoints(
   const Value: TSimplePointCollection);
 begin
   FSpecifiedPilotPoints.Assign(Value);
+end;
+
+procedure TPestProperties.SetStoredMinimumSeparation(const Value: TRealStorage);
+begin
+  FStoredMinimumSeparation.Assign(Value);
 end;
 
 procedure TPestProperties.SetStoredPilotPointBuffer(const Value: TRealStorage);

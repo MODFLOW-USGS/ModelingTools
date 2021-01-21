@@ -1356,7 +1356,7 @@ var
   ADataArray: TDataArray;
   INFLE: string;
   PLPROC_Location: string;
-  DataArrayIndex: Integer;
+//  DataArrayIndex: Integer;
   KrigFactorsFileName: string;
 begin
 
@@ -6133,8 +6133,11 @@ end;
 
 function TCustomTransientWriter.ObservationFileName(AFileName: string): string;
 begin
-  result := ChangeFileExt(AFileName, '');
-  result := ChangeFileExt(result, ObservationExtension);
+  if WritingTemplate then
+  begin
+    AFileName := ChangeFileExt(AFileName, '');
+  end;
+  result := ChangeFileExt(AFileName, ObservationExtension);
 end;
 
 class function TCustomTransientWriter.ObservationOutputExtension: string;
