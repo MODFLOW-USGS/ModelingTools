@@ -26,7 +26,7 @@ object frameGrid: TframeGrid
       Top = 6
       Width = 23
       Height = 22
-      Hint = 'Add layer group|Add a layer group below the bottom layer group.'
+      Hint = 'Add row|Add a row after the last row'
       Anchors = []
       Glyph.Data = {
         F6000000424DF600000000000000760000002800000010000000100000000100
@@ -68,7 +68,7 @@ object frameGrid: TframeGrid
       Top = 6
       Width = 23
       Height = 22
-      Hint = 'Delete layer group|Delete the selected layer group.'
+      Hint = 'Delete row|Delete the selected row.'
       Anchors = []
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100

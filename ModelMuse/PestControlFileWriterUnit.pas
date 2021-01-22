@@ -209,7 +209,7 @@ begin
   for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
   begin
     ASteadyParam := Model.ModflowSteadyParameters[ParamIndex];
-    if (ASteadyParam.ParameterType in UsedTypes) and not ASteadyParam.UsePilotPoints then
+    if (ASteadyParam.ParameterType in UsedTypes){ and not ASteadyParam.UsePilotPoints} then
     begin
       Inc(result);
     end;
@@ -780,10 +780,6 @@ begin
   begin
     Exit;
   end;
-//  if Model.ModelSelection <> msModflow2015 then
-//  begin
-//    Exit;
-//  end;
 
   FNameOfFile := FileName(AFileName);
   OpenFile(FNameOfFile);
@@ -1308,8 +1304,8 @@ begin
           and TModflowSteadyParameter(AParam).UsePilotPoints then
         begin
           PilotPointParameters.AddObject(AParam.ParameterName, AParam);
-        end
-        else
+        end;
+//        else
         begin
           WriteParameter(AParam);
           FUsePval := True;

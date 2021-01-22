@@ -1007,13 +1007,12 @@ begin
   OpenFile(ScriptFileName);
 
   try
-    if ScriptChoice = scWriteScript then
+    if ScriptChoice = scWriteTemplate then
     begin
-      WriteString('#');
+      WriteString('ptf ');
+      WriteString(Model.PestProperties.TemplateCharacter);
+      NewLine;
     end;
-    WriteString('ptf ');
-    WriteString(Model.PestProperties.TemplateCharacter);
-    NewLine;
     WriteString('#Script for PLPROC');
     NewLine;
     NewLine;
@@ -1057,23 +1056,38 @@ begin
     begin
       AParam := FUsedParamList.Objects[ParameterIndex]
         as TModflowSteadyParameter;
-//      if not AParam.UsePilotPoints then
+
+//      if ScriptChoice = scWriteScript then
+//      begin
+//        WriteString('#');
+//      end;
+      if ScriptChoice = scWriteTemplate then
       begin
-        if ScriptChoice = scWriteScript then
-        begin
-          WriteString('#');
-        end;
         WriteString(Format('%0:s = %1:s                        %0:s%1:s',
           [AParam.ParameterName, Model.PestProperties.TemplateCharacter]));
         NewLine;
-        if ScriptChoice = scWriteTemplate then
-        begin
-          WriteString('#');
-        end;
+      end;
+//      if ScriptChoice = scWriteTemplate then
+//      begin
+//        WriteString('#');
+//      end;
+      if ScriptChoice = scWriteScript then
+      begin
         WriteString(Format('%0:s = %1:g',
           [AParam.ParameterName, AParam.Value]));
         NewLine;
       end;
+      if AParam.UsePilotPoints then
+      begin
+        WriteString(Format('# Pilot points are used with %s.',
+          [AParam.ParameterName]));
+      end
+      else
+      begin
+        WriteString(Format('# Pilot points are not used with %s.',
+          [AParam.ParameterName]));
+      end;
+      NewLine;
     end;
     NewLine;
     {$ENDREGION}

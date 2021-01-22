@@ -87,6 +87,7 @@ type
     miInvertSelectedVertices: TMenuItem;
     miLockSelectedObjects: TMenuItem;
     miUnlockSelectedObjects: TMenuItem;
+    miUnselectAll: TMenuItem;
     // @name allows the user to move selected objects back one
     // in the list of objects so that they move behind one other object.
     procedure BackOneClick(Sender: TObject);
@@ -177,6 +178,7 @@ type
     procedure miInvertSelectedVerticesClick(Sender: TObject);
     procedure miLockSelectedObjectsClick(Sender: TObject);
     procedure miUnlockSelectedObjectsClick(Sender: TObject);
+    procedure miUnselectAllClick(Sender: TObject);
   private
     MouseStartX: integer;
     MouseStartY: integer;
@@ -363,6 +365,7 @@ type
       ElCol, ElLayer: integer);
     procedure DrawVectors;
     procedure DrawCrossSection;
+    procedure UnSelectAll;
     { Private declarations }
   protected
     // @name is used to indicate that a change has been made to the grid
@@ -2402,6 +2405,11 @@ begin
   FinishScreenObjects;
 end;
 
+procedure TframeView.miUnselectAllClick(Sender: TObject);
+begin
+  UnSelectAll;
+end;
+
 procedure TframeView.UpdateSelectRectangle;
 var
   Index: Integer;
@@ -2641,12 +2649,14 @@ begin
   ForwardOne.Enabled := False;
   miHide.Enabled := False;
   notSelectedFound := False;
+  miUnselectAll.Enabled := False;
   for Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
   begin
     AScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];
     if AScreenObject.Selected then
     begin
       miHide.Enabled := True;
+      miUnselectAll.Enabled := True;
       if notSelectedFound then
       begin
         ToBack.Enabled := True;
@@ -3562,6 +3572,35 @@ begin
     frmGridValue.UpdateValue(GlobalLayer, GlobalRow, GlobalColumn,
       NameToDisplay, ValueToDisplay, Explanation, Location, ViewDirection,
       DataSet.EvaluatedAt);
+  end;
+end;
+
+procedure TframeView.UnSelectAll;
+var
+  ScreenObject: TScreenObject;
+  ScreenObjectIndex: Integer;
+  Undo: TUndoChangeSelection;
+  Model: TPhastModel;
+begin
+  Model := frmGoPhast.PhastModel;
+  Undo := TUndoChangeSelection.Create;
+  for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Selected
+      and (ScreenObject.ViewDirection = ViewDirection) then
+    begin
+      ScreenObject.Selected := False;
+    end;
+  end;
+  Undo.SetPostSelection;
+  if Undo.SelectionChanged then
+  begin
+    frmGoPhast.UndoStack.Submit(Undo);
+  end
+  else
+  begin
+    Undo.Free;
   end;
 end;
 

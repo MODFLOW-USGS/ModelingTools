@@ -2,7 +2,7 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 461
   ClientWidth = 710
-  ExplicitTop = -100
+  ExplicitTop = -76
   ExplicitWidth = 726
   ExplicitHeight = 500
   PixelsPerInch = 96
@@ -1209,14 +1209,19 @@ inherited frmPEST: TfrmPEST
               end
               inherited sbAdd: TSpeedButton
                 Left = 117
+                Hint = 'Add a pilot point|Add a pilot point after the last pilot point'
                 ExplicitLeft = 117
               end
               inherited sbInsert: TSpeedButton
                 Left = 140
+                Hint = 
+                  'Insert a pilot point|Insert a pilot point before the selected pi' +
+                  'lot point'
                 ExplicitLeft = 140
               end
               inherited sbDelete: TSpeedButton
                 Left = 163
+                Hint = 'Delete pilot point|Delete the selected pilot point'
                 ExplicitLeft = 163
               end
               inherited seNumber: TJvSpinEdit
@@ -1280,7 +1285,7 @@ inherited frmPEST: TfrmPEST
                   AutoAdjustColWidths = True
                 end>
               ExplicitWidth = 237
-              ExplicitHeight = 145
+              ExplicitHeight = 120
             end
           end
           object Panel1: TPanel

@@ -114,7 +114,7 @@ object frameView: TframeView
     Exaggeration = 1.000000000000000000
     HorizontalDirection = hdRight
     Image32.Left = 0
-    Image32.Top = 167
+    Image32.Top = 0
     Image32.Width = 467
     Image32.Height = 208
     Image32.Anchors = [akLeft, akBottom]
@@ -130,7 +130,6 @@ object frameView: TframeView
     Image32.OnMouseDown = ZoomBoxImage32MouseDown
     Image32.OnMouseMove = ZoomBoxImage32MouseMove
     Image32.OnMouseUp = ZoomBoxImage32MouseUp
-    Image32.ExplicitTop = 0
     ImmediateResize = True
     Magnification = 1.000000000000000000
     VerticalDirection = vdUp
@@ -187,6 +186,10 @@ object frameView: TframeView
       Caption = 'Select All'
       Hint = 'Select all visible objects'
       OnClick = miSelectAllClick
+    end
+    object miUnselectAll: TMenuItem
+      Caption = 'Unselect All'
+      OnClick = miUnselectAllClick
     end
     object miMergeObjects: TMenuItem
       Caption = '&Merge Objects'

@@ -6040,8 +6040,8 @@ end;
 procedure TfrmGoPhast.EnableManageParameters;
 begin
   miManageParameters.Enabled :=
-    (PhastModel.ModelSelection in Modflow2005Selection)
-    or ((PhastModel.ModelSelection in ([msModflow2015] + SutraSelection))
+    (PhastModel.ModelSelection in ModflowSelection)
+    or ((PhastModel.ModelSelection in SutraSelection)
       and PhastModel.PestUsed);
   miManageParameters.Visible :=
     (PhastModel.ModelSelection in (ModflowSelection + SutraSelection))

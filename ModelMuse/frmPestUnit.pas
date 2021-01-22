@@ -393,6 +393,7 @@ var
   end;
 begin
   inherited;
+  cbUseBetweenObs.Checked := True;
   //
   PhastModel := frmGoPhast.PhastModel;
   PointList := TList<TPoint2D>.Create;
