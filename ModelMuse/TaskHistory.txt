@@ -26873,5 +26873,16 @@ object TTaskHistory
         'PEST Pilot Points'
         'PEST'
         'Dialog boxes')
+    end
+    item
+      Date = 44219.000000000000000000
+    end
+    item
+      Date = 44220.000000000000000000
+    end
+    item
+      Date = 44221.000000000000000000
+      Categories.Strings = (
+        'Bug fix')
     end>
 end

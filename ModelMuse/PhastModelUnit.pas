@@ -10183,10 +10183,12 @@ const
 //                files to be misnamed if the model file name had a period
 //                within the base as well as one separating the base from the
 //                extension.
+//    '4.3.0.35' Bug fix: Fixed a bug that could cause an access violation when
+//                closing a MODFLOW LGR model.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.34';
+  IIModelVersion = '4.3.0.35';
 
 function IModelVersion: string;
 begin
@@ -30541,7 +30543,10 @@ begin
   begin
     CtsSystems.Clear;
   end;
-  ParamGroups.Clear;
+  if ParamGroups <> nil then
+  begin
+    ParamGroups.Clear;
+  end;
   ModflowGlobalObservationComparisons.Clear;
   SutraGlobalObservationComparisons.Clear;
 
