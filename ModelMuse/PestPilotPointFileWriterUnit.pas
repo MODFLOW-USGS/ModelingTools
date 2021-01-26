@@ -202,7 +202,7 @@ begin
               ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
             if ParamNameDictionary.TryGetValue(ParamName, AParam) then
             begin
-              APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,RowIndex, ColIndex];
+              APoint := Model.ItemTopLocation[DataArray.EvaluatedAt,ColIndex, RowIndex];
               Values[ValueIndex] := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
               Assert(ParamQuadDictionary.TryGetValue(AParam, AQuadTree));
               AQuadTree.AddPoint(APoint.x, APoint.y, Addr(Values[ValueIndex]));
