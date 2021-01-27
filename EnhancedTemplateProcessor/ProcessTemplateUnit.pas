@@ -41,7 +41,9 @@ type
   ENotEnoughPrecision = class(ETemplateError);
   EBadParamName = class(ETemplateError);
   ECompileError = class(ETemplateError);
-  EReadArrayError = class(ETemplateError);
+  ESubstituteArrayError = class(ETemplateError);
+
+  EReadArrayError = class(EEnhanceTemplateError);
 
   { TParameterProcessor }
 
@@ -65,6 +67,7 @@ type
     FParser: TRbwParser;
     FParameterDelimiter: Char;
     FFormulaDelimiter: Char;
+    FArrayDelimiter: Char;
     FArrayDictionary: TArrayDictionary;
     procedure WriteUsage;
     procedure WriteParameters;
@@ -131,9 +134,26 @@ resourcestring
     +' from the file "1:s".';
   rsThereAreNotE = 'There are not enough numbers for the array "%0:s" being '
     +'read from the file "1:s".';
+  rsInvalidArray = 'Invalid array name "%0:s" in the line "%1:s" read from "%2'
+    +':s".';
+  rsTheCharacter = 'The character preceding the "[" character in "%0:s" is not'
+    +' a valid character for an array name.';
+  rsAnArrayNamed = 'An array named "%s" has not been read.';
+  rsUnmatchedAnd = 'Unmatched "[" and "]" in %s';
+  rsThereMustBeT = 'There must be three indices separated by commas and/or '
+    +'spaces withing the brackets for %0:s in the line "%1:s".';
+  rsInvalidLayer = 'Invalid layer index for "%0:s" in "%1:s".';
+  rsInvalidRowIn = 'Invalid row index for "%0:s" in "%1:s".';
+  rsInvalidColum = 'Invalid column index for "%0:s" in "%1:s".';
+  rsTheFirstLine = 'The first line of an array file must be a single character'
+    +' that is used to surround arrays.';
+  rsTooLittleSpa = 'Too little space between the array delimiter and the array'
+    +' name in %s';
+  rsUnmatchedArr = 'Unmatched array delimiters in "%0:s".';
+  rsMissingArray = 'missing array between array delimiters in "%0:s".';
 
 const
-  ValidArrayNameCharacters = ('A'..'Z', 'a'..'z', '0'..'9', '_');
+  ValidArrayNameCharacters = ['A'..'Z', 'a'..'z', '0'..'9', '_'];
 
 procedure ProcessTemplate;
 var
@@ -237,6 +257,8 @@ begin
   FParameters := TParameterDictionary.Create;
   FArrayDictionary := TArrayDictionary.Create;
   FormatSettings.DecimalSeparator := '.';
+
+  FArrayDelimiter := ' ';
 end;
 
 destructor TParameterProcessor.Destroy;
@@ -342,6 +364,7 @@ begin
     GetFileNames;
     OpenFiles;
     ReadPValFile;
+    ReadArrayFiles;
     ReadAndProcessTemplateLines;
   finally
     CloseFiles;
@@ -382,21 +405,160 @@ var
   procedure SubstituteArrayValues(var ALine: string);
   var
     OpenBracePosition: Integer;
-    CloseBracePosition: Integer;
+    CloseBracePosition, StartIndex, CharIndex: Integer;
+    ArrayName: String;
+    ArrayRecord: TNamedArray;
+    Splitter: TStringList;
+    LayerIndex, RowIndex, ColIndex: Longint;
+    LineStart, LineEnd: string;
+    ArrayStart: Integer;
+    ArrayEnd, AvailableSpace: Integer;
+    ReplacementString: string;
   begin
-    OpenBracePosition := Pos('[', ALine);
-    While (OpenBracePostion > 0 do
+    ArrayStart := Pos(FArrayDelimiter, ALine);
+    if ArrayStart < 0 then
     begin
-      CloseBracePosition := Pos(']', ALine);
+      Exit;
+    end;
+    ArrayEnd := PosEx(FArrayDelimiter, ALine, Succ(ArrayStart));
+    if ArrayEnd <= 0 then
+    begin
+      raise ESubstituteArrayError.Create(Format(rsUnmatchedArr,
+            [OriginalLine]));
+    end;
 
 
+    OpenBracePosition := PosEx('[', ALine, ArrayStart);
+    if (OpenBracePosition <= 0) or (OpenBracePosition > ArrayEnd) then
+    begin
+      raise ESubstituteArrayError.Create(Format(rsMissingArray,
+            [OriginalLine]));
+    end;
 
-      OpenBracePosition := Pos('[', ALine);
+    Splitter := TStringList.Create;
+    try
+      While ArrayStart > 0 do
+      begin
+        ArrayEnd := PosEx(FArrayDelimiter, ALine, Succ(ArrayStart));
+        if ArrayEnd <= 0 then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsUnmatchedArr,
+                [OriginalLine]));
+        end;
+
+        OpenBracePosition := PosEx('[', ALine, ArrayStart);
+        if (OpenBracePosition <= 0) or (OpenBracePosition > ArrayEnd) then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsMissingArray,
+                [OriginalLine]));
+        end;
+
+        CloseBracePosition := PosEx(']', ALine, OpenBracePosition);
+        if (CloseBracePosition < OpenBracePosition)
+          or (CloseBracePosition > ArrayEnd) then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsUnmatchedAnd,
+            [OriginalLine]));
+        end;
+        StartIndex := Succ(ArrayStart);
+        for CharIndex := Pred(OpenBracePosition) downto Succ(ArrayStart) do
+        begin
+          if not (ALine[CharIndex] in ValidArrayNameCharacters) then
+          begin
+            StartIndex := CharIndex +1;
+            break;
+          end;
+        end;
+        ArrayName := Copy(ALine, StartIndex, OpenBracePosition-StartIndex);
+        if ArrayName = '' then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsTheCharacter,
+            [OriginalLine]));
+        end;
+        if not FArrayDictionary.TryGetValue(UpperCase(ArrayName), ArrayRecord) then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsAnArrayNamed, [ArrayName]));
+        end;
+
+        Splitter.DelimitedText := Copy(ALine, OpenBracePosition+1, CloseBracePosition-OpenBracePosition-1);
+        if Splitter.Count <> 3 then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsThereMustBeT,
+            [ArrayName, ALine]));
+        end;
+
+        if not TryStrToInt(Splitter[0], LayerIndex) then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsInvalidLayer,
+            [ArrayName, ALine]));
+        end
+        else
+        begin
+          Dec(LayerIndex);
+          if (LayerIndex < 0) or (LayerIndex >= Length(ArrayRecord.Values)) then
+          begin
+            raise ESubstituteArrayError.Create(Format(rsInvalidLayer,
+              [ArrayName, ALine]));
+          end;
+        end;
+
+        if not TryStrToInt(Splitter[1], RowIndex) then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsInvalidRowIn,
+            [ArrayName, ALine]));
+        end
+        else
+        begin
+          Dec(RowIndex);
+          if (RowIndex < 0) or (RowIndex >= Length(ArrayRecord.Values[0])) then
+          begin
+            raise ESubstituteArrayError.Create(Format(rsInvalidRowIn,
+              [ArrayName, ALine]));
+          end;
+        end;
+
+        if not TryStrToInt(Splitter[2], ColIndex) then
+        begin
+          raise ESubstituteArrayError.Create(Format(rsInvalidColum,
+            [ArrayName, ALine]));
+        end
+        else
+        begin
+          Dec(ColIndex);
+          if (ColIndex < 0) or (ColIndex >= Length(ArrayRecord.Values[0,0])) then
+          begin
+            raise ESubstituteArrayError.Create(Format(rsInvalidColum,
+              [ArrayName, ALine]));
+          end;
+        end;
+        LineStart := Copy(ALine, 1, ArrayStart-1);
+        AvailableSpace := StartIndex - ArrayStart -1;
+        if AvailableSpace < 1 then
+        begin
+            raise ESubstituteArrayError.Create(Format(rsTooLittleSpa, [
+              OriginalLine]));
+        end;
+        ReplacementString := MaxPrecisionFloatToStr(ArrayRecord.Values[
+          LayerIndex,RowIndex,ColIndex], AvailableSpace);
+        ReplacementString := PadLeft(ReplacementString, AvailableSpace);
+        LineEnd := Copy(ALine, ArrayEnd+1, MaxInt);
+        ALine := LineStart + ReplacementString + LineEnd;
+
+        //OpenBracePosition := Pos('[', ALine);
+        ArrayStart := PosEx(FArrayDelimiter, ALine, Succ(ArrayStart));
+      end;
+
+    finally
+      Splitter.Free;
     end;
   end;
 
 begin
   OriginalLine := ALine;
+  if FArrayDelimiter <> ' ' then
+  begin
+    SubstituteArrayValues(ALine);
+  end;
   if FParameterDelimiter <> ' ' then
   begin
     StartPosition := Pos (FParameterDelimiter, ALine);
@@ -495,6 +657,12 @@ var
 begin
   if FArrayNameReader <> nil then
   begin
+    ALine := FArrayNameReader.ReadLine;
+    if Length(ALine) <> 1 then
+    begin
+      raise EReadArrayError.Create(rsTheFirstLine);
+    end;
+    FArrayDelimiter := ALine[1];
     while not FArrayNameReader.EndOfStream do
     begin
       ALine := FArrayNameReader.ReadLine;
@@ -506,9 +674,10 @@ end;
 procedure TParameterProcessor.ProcessArrayLine(ALine: string);
 var
   OpenBracePosition: Integer;
-  CloseBracePosition, LayerIndex, RowIndex, ColIndex, NumberIndex: Integer;
+  CloseBracePosition, LayerIndex, RowIndex, ColIndex, NumberIndex,
+    CharIndex: Integer;
   ArrayName: string;
-  FileName: string;
+  FileName, DataLine: string;
   Splitter: TStringList;
   LayerCount, RowCount, ColumnCount: Longint;
   NamedArray: TNamedArray;
@@ -545,11 +714,19 @@ begin
     raise EReadArrayError.Create(Format(rsWhileAttempt2,
       [FArrayNamesFile, ALine]));
   end;
-  ArrayName := Trim(Copy(ALine, OpenBracePosition -1));
+  ArrayName := Trim(Copy(ALine, 1, OpenBracePosition -1));
   if ArrayName = '' then
   begin
     raise EReadArrayError.Create(Format(rsWhileReading ,
       [FArrayNamesFile, ALine]));
+  end;
+  for CharIndex := 1 to Length(ArrayName) do
+  begin
+    if not (ArrayName[CharIndex] in ValidArrayNameCharacters) then
+    begin
+      raise EReadArrayError.Create(Format(rsInvalidArray,
+      [ArrayName, ALine, FArrayNamesFile]));
+    end;
   end;
   if FArrayDictionary.ContainsKey(UpperCase(ArrayName)) then
   begin
@@ -562,6 +739,7 @@ begin
     raise EReadArrayError.Create(Format(rsWhileReading2,
       [FArrayNamesFile, ALine]));
   end;
+  FileName := ExpandFileName(FileName);
   if not FileExists(FileName) then
   begin
     raise EReadArrayError.Create(Format(rsWhileReading3,
@@ -605,27 +783,29 @@ begin
       ColIndex := 0;
       while not ArrayFile.EndOfStream do
       begin
-        Splitter.DelimitedText := ArrayFile.ReadLine;
+        DataLine := ArrayFile.ReadLine;
+        Splitter.CommaText := DataLine;
         for NumberIndex := 0 to Pred(Splitter.Count) do
         begin
           if not TryStrToFloat(Splitter[NumberIndex], ANumber) then
           begin
-            if LayerIndex >= LayerCount then
+            raise EReadArrayError.Create(Format('Unable to convert "%0:s" to a number in "%1:s".', [Splitter[NumberIndex], FileName]));
+          end;
+          if LayerIndex >= LayerCount then
+          begin
+            raise EReadArrayError.Create(Format(rsThereAreTooM,
+              [ArrayName, FileName]));
+          end;
+          NamedArray.Values[LayerIndex, RowIndex, ColIndex] := ANumber;
+          Inc(ColIndex);
+          if ColIndex = ColumnCount then
+          begin
+            ColIndex := 0;
+            Inc(RowIndex);
+            if RowIndex = RowCount then
             begin
-              raise EReadArrayError.Create(Format(rsThereAreTooM,
-                [ArrayName, FileName]));
-            end;
-            NamedArray.Values[LayerIndex, RowIndex, ColIndex] := ANumber;
-            Inc(ColIndex);
-            if ColIndex = ColumnCount then
-            begin
-              ColIndex := 0;
-              Inc(RowIndex);
-              if RowIndex = RowCount then
-              begin
-                RowIndex := 0;
-                Inc(LayerIndex);
-              end;
+              RowIndex := 0;
+              Inc(LayerIndex);
             end;
           end;
         end;
