@@ -132,6 +132,9 @@ resourcestring
   rsThereAreNotE = 'There are not enough numbers for the array "%0:s" being '
     +'read from the file "1:s".';
 
+const
+  ValidArrayNameCharacters = ('A'..'Z', 'a'..'z', '0'..'9', '_');
+
 procedure ProcessTemplate;
 var
   Processor: TParameterProcessor;
@@ -377,8 +380,19 @@ var
     end;
   end;
   procedure SubstituteArrayValues(var ALine: string);
+  var
+    OpenBracePosition: Integer;
+    CloseBracePosition: Integer;
   begin
+    OpenBracePosition := Pos('[', ALine);
+    While (OpenBracePostion > 0 do
+    begin
+      CloseBracePosition := Pos(']', ALine);
 
+
+
+      OpenBracePosition := Pos('[', ALine);
+    end;
   end;
 
 begin

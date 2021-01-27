@@ -10188,10 +10188,12 @@ const
 //    '4.3.0.36' Bug fix: Fixed a bug in the "File|Import|Grid Data Files"
 //                dialog box in which the "Open files" button did not work
 //                unless more than one file was selected.
+//    '4.3.0.37' Bug fix: Fixed bug in exporting the UZF input in MODFLOW 6 that
+//                caused the convergence history file to be misnamed.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.36';
+  IIModelVersion = '4.3.0.37';
 
 function IModelVersion: string;
 begin
