@@ -565,7 +565,7 @@ begin
   if FUzfPackage.WriteConvergenceData then
   begin
     WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
-    CsvFile := ChangeFileExt(FNameOfFile, '.SfrConvergence.CSV');
+    CsvFile := ChangeFileExt(FNameOfFile, '.UzfConvergence.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);

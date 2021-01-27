@@ -71,7 +71,15 @@ begin
   dlgOpenFiles.Options := dlgOpenFiles.Options + [ofAllowMultiSelect];
   if dlgOpenFiles.Execute then
   begin
-    frameGridFiles.Grid.DistributeText(0, 1, dlgOpenFiles.Files.Text);
+    if dlgOpenFiles.Files.Count > 1 then
+    begin
+      frameGridFiles.Grid.DistributeText(0, 1, dlgOpenFiles.Files.Text);
+    end
+    else
+    begin
+      frameGridFiles.Grid.Cells[0, 1] := dlgOpenFiles.FileName;
+    end;
+
   end;
 end;
 
