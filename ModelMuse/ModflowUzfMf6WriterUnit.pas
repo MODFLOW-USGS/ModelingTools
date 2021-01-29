@@ -878,6 +878,12 @@ begin
   try
     for StressPeriodIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
     begin
+      frmProgressMM.AddMessage(Format('    Writing UZF stress period %d', [StressPeriodIndex+1]));
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
       ListOfUzfCellLists.Clear;
       // In each stress period create lists of cells for each screen object
       // and add their numbers to TMvrReceiverValues.UzfCells

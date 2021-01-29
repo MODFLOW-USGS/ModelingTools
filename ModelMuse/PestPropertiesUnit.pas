@@ -416,7 +416,7 @@ type
   // See PEST manual chapter 9.
   TPestRegularization = class(TGoPhastPersistent)
   private
-    FStoredFrachPhiM: TRealStorage;
+    FStoredFracPhiM: TRealStorage;
     FStoredWeightFactorMaximum: TRealStorage;
     FMemSave: TMemSave;
     FLinearRegression: TLinRegression;
@@ -440,7 +440,7 @@ type
     procedure SetRegularizationOption(const Value: Integer);
     procedure SetStoredRegularizationSingularValueThreshhold(
       const Value: TRealStorage);
-    procedure SetStoredFrachPhiM(const Value: TRealStorage);
+    procedure SetStoredFracPhiM(const Value: TRealStorage);
     procedure SetStoredPhiMAccept(const Value: TRealStorage);
     procedure SetStoredPhiMLim(const Value: TRealStorage);
     procedure SetStoredRegWeightRatio(const Value: TRealStorage);
@@ -449,7 +449,7 @@ type
     procedure SetStoredWFFac(const Value: TRealStorage);
     procedure SetStoredWFInit(const Value: TRealStorage);
     procedure SetStoredWeightFactorTolerance(const Value: TRealStorage);
-    function GetFrachPhiM: double;
+    function GetFracPhiM: double;
     function GetPhiMAccept: double;
     function GetPhiMLim: double;
     function GetRegularizationSingularValueThreshhold: double;
@@ -459,7 +459,7 @@ type
     function GetWeightFactorTolerance: double;
     function GetWFFac: double;
     function GetWFInit: double;
-    procedure SetFrachPhiM(const Value: double);
+    procedure SetFracPhiM(const Value: double);
     procedure SetPhiMAccept(const Value: double);
     procedure SetPhiMLim(const Value: double);
     procedure SetRegularizationSingularValueThreshhold(const Value: double);
@@ -487,7 +487,7 @@ type
     // set target measurement objective function at this fraction
     // of current measurement objective function
     // zero or greater, but less than one
-    property FrachPhiM: double read GetFrachPhiM write SetFrachPhiM;
+    property FracPhiM: double read GetFracPhiM write SetFracPhiM;
     // WFINIT Initial regularization weight factor.
     // If you have no idea of what the weight factor should be,
     // simply set it to 1.0.
@@ -537,7 +537,7 @@ type
     // set target measurement objective function at this fraction
     // of current measurement objective function
     // zero or greater, but less than one
-    property StoredFrachPhiM: TRealStorage read FStoredFrachPhiM write SetStoredFrachPhiM;
+    property StoredFracPhiM: TRealStorage read FStoredFracPhiM write SetStoredFracPhiM;
     // MEMSAVE “memsave” or “nomemsave”.  MEMSAVE is optional.
     // The optional MEMSAVE variable can be used to implement memory
     // conservation features that may assist PEST in very highly
@@ -1961,7 +1961,7 @@ begin
     PReg := TPestRegularization(Source);
     PhiMLim := PReg.PhiMLim;
     PhiMAccept := PReg.PhiMAccept;
-    FrachPhiM := PReg.FrachPhiM;
+    FracPhiM := PReg.FracPhiM;
     WFInit := PReg.WFInit;
     WeightFactorMinimum := PReg.WeightFactorMinimum;
     WeightFactorMaximum := PReg.WeightFactorMaximum;
@@ -1984,7 +1984,7 @@ end;
 
 constructor TPestRegularization.Create(InvalidateModelEvent: TNotifyEvent);
 begin
-  FStoredFrachPhiM := TRealStorage.Create;
+  FStoredFracPhiM := TRealStorage.Create;
   FStoredWeightFactorMaximum := TRealStorage.Create;
   FStoredPhiMAccept := TRealStorage.Create;
   FStoredRegularizationSingularValueThreshhold := TRealStorage.Create;
@@ -1995,7 +1995,7 @@ begin
   FStoredWeightFactorTolerance := TRealStorage.Create;
   FStoredPhiMLim := TRealStorage.Create;
   
-  FStoredFrachPhiM.OnChange := InvalidateModelEvent;
+  FStoredFracPhiM.OnChange := InvalidateModelEvent;
   FStoredWeightFactorMaximum.OnChange := InvalidateModelEvent;
   FStoredPhiMAccept.OnChange := InvalidateModelEvent;
   FStoredRegularizationSingularValueThreshhold.OnChange := InvalidateModelEvent;
@@ -2011,7 +2011,7 @@ end;
 
 destructor TPestRegularization.Destroy;
 begin
-  FStoredFrachPhiM.Free;
+  FStoredFracPhiM.Free;
   FStoredWeightFactorMaximum.Free;
   FStoredPhiMAccept.Free;
   FStoredRegularizationSingularValueThreshhold.Free;
@@ -2025,9 +2025,9 @@ begin
   inherited;
 end;
 
-function TPestRegularization.GetFrachPhiM: double;
+function TPestRegularization.GetFracPhiM: double;
 begin
-  result := StoredFrachPhiM.Value;
+  result := StoredFracPhiM.Value;
 end;
 
 function TPestRegularization.GetPhiMAccept: double;
@@ -2080,7 +2080,7 @@ begin
   PhiMLim := 1E-10;
   PhiMAccept := 1.05E-10;
   AutoPhiMAccept := True;
-  FrachPhiM := 0.1;
+  FracPhiM := 0.1;
   MemSave := msNoMemSave;
   WFInit := 1.0;
   WeightFactorMinimum := 1E-10;
@@ -2100,9 +2100,9 @@ begin
   SetBooleanProperty(FAutoPhiMAccept, Value)
 end;
 
-procedure TPestRegularization.SetFrachPhiM(const Value: double);
+procedure TPestRegularization.SetFracPhiM(const Value: double);
 begin
-  StoredFrachPhiM.Value := Value;
+  StoredFracPhiM.Value := Value;
 end;
 
 procedure TPestRegularization.SetLinearRegression(const Value: TLinRegression);
@@ -2169,9 +2169,9 @@ begin
   FStoredRegularizationSingularValueThreshhold.Assign(Value);
 end;
 
-procedure TPestRegularization.SetStoredFrachPhiM(const Value: TRealStorage);
+procedure TPestRegularization.SetStoredFracPhiM(const Value: TRealStorage);
 begin
-  FStoredFrachPhiM.Assign(Value);
+  FStoredFracPhiM.Assign(Value);
 end;
 
 procedure TPestRegularization.SetStoredPhiMAccept(const Value: TRealStorage);

@@ -5880,6 +5880,7 @@ resourcestring
   StrNoStressPeriodsWe = 'No stress periods were defined';
   StrStressPeriodAdded = 'No stress periods were defined in the MODFLOW Time' +
   ' dialog box. One has been added automatically.';
+  StrS = '"%s" ';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -40246,33 +40247,36 @@ begin
   PestCheckBatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
     + 'RunPestChek.bat';
   PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-    + 'I64pest.exe ';
+    + 'I64pest.exe';
   if not FileExists(Trim(PestName)) then
   begin
     PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-      + 'pest.exe ';
+      + 'pest.exe';
   end;
   if not FileExists(Trim(PestName)) then
   begin
     PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-      + 'pest_hp.exe ';
+      + 'pest_hp.exe';
   end;
 
   PestCheckName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-    + 'I64pestchek.exe ';
+    + 'I64pestchek.exe';
   if not FileExists(Trim(PestCheckName)) then
   begin
     PestCheckName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-      + 'pestchek.exe ';
+      + 'pestchek.exe';
   end;
 
-  if not FileExists(Trim(PestName)) then
+  if not FileExists(PestName) then
   begin
     Beep;
     MessageDlg(Format('PEST was not found in %s',
       [ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
 //      Exit;
   end;
+
+  PestName := Format(StrS, [PestName]);
+  PestCheckName := Format(StrS, [PestCheckName]);
 
   BatchFile := TStringList.Create;
   try

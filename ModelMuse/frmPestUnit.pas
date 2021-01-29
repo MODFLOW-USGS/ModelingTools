@@ -10,7 +10,7 @@ uses
   frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
   PestObsGroupUnit, Vcl.Mask, JvExMask, JvToolEdit,
   FluxObservationUnit, ModflowHobUnit, System.UITypes,
-  System.Generics.Collections, Vcl.Grids, RbwDataGrid4;
+  System.Generics.Collections, Vcl.Grids, RbwDataGrid4, JvSpin;
 
 type
   TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
@@ -200,6 +200,25 @@ type
     lblWFMIN: TLabel;
     rdeWFMAX: TRbwDataEntry;
     LBLWFMAX: TLabel;
+    rdeWFFAC: TRbwDataEntry;
+    lblWFFAC: TLabel;
+    rdeWFTOL: TRbwDataEntry;
+    lblWFTOL: TLabel;
+    cbLINREG: TCheckBox;
+    cbREGCONTINUE: TCheckBox;
+    jvspRegularizationOption: TJvStandardPage;
+    rgRegOption: TRadioGroup;
+    rgGroupWeightMethod: TRadioGroup;
+    rgIndividualAdjustmentMethod: TRadioGroup;
+    cbRegApplyGroupWeight: TCheckBox;
+    rdeIREGADJ: TRbwDataEntry;
+    lblIREGADJ: TLabel;
+    seNOPTREGADJ: TJvSpinEdit;
+    lblNOPTREGADJ: TLabel;
+    rdeREGWEIGHTRAT: TRbwDataEntry;
+    lblREGWEIGHTRAT: TLabel;
+    rdeREGSINGTHRESH: TRbwDataEntry;
+    lblREGSINGTHRESH: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -228,7 +247,12 @@ type
     procedure rdeWFINITChange(Sender: TObject);
     procedure rdeWFMINChange(Sender: TObject);
     procedure rdeWFMAXChange(Sender: TObject);
-//    procedure comboObsGroupChange(Sender: TObject);
+    procedure rdeWFFACChange(Sender: TObject);
+    procedure rdeWFTOLChange(Sender: TObject);
+    procedure UpdateIREGADJ_FromControls(Sender: TObject);
+    procedure rdeIREGADJChange(Sender: TObject);
+    procedure rdeREGWEIGHTRATChange(Sender: TObject);
+    procedure rdeREGSINGTHRESHChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -251,6 +275,9 @@ type
     procedure AutoSetPhimAccept;
     procedure SetrdePhimAcceptColor;
     procedure SetWfMaxVisibility;
+    function GetIREGADJ: Integer;
+    procedure SetIREGADJ(const Value: Integer);
+    property IREGADJ: Integer read GetIREGADJ write SetIREGADJ;
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -348,6 +375,22 @@ begin
   SetWfMaxVisibility;
 end;
 
+procedure TfrmPEST.rdeWFFACChange(Sender: TObject);
+var
+  Value: Double;
+begin
+  inherited;
+  Value := rdeWFFAC.RealValue;
+  if Value = 1 then
+  begin
+    rdeWFFAC.Color := clRed;
+  end
+  else
+  begin
+    rdeWFFAC.Color := clWindow;
+  end;
+end;
+
 procedure TfrmPEST.rdeWFINITChange(Sender: TObject);
 var
   Value: Double;
@@ -381,6 +424,22 @@ begin
   SetWfMaxVisibility;
 end;
 
+procedure TfrmPEST.rdeWFTOLChange(Sender: TObject);
+var
+  Value: Double;
+begin
+  inherited;
+  Value := rdeWFTOL.RealValue;
+  if Value = 0 then
+  begin
+    rdeWFTOL.Color := clRed;
+  end
+  else
+  begin
+    rdeWFTOL.Color := clWindow;
+  end;
+end;
+
 procedure TfrmPEST.rdeFRACPHIMChange(Sender: TObject);
 var
   Value: Double;
@@ -394,6 +453,15 @@ begin
   else
   begin
     rdeFRACPHIM.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdeIREGADJChange(Sender: TObject);
+begin
+  inherited;
+  if rdeIREGADJ.Text <> '' then
+  begin
+    IREGADJ := rdeIREGADJ.IntegerValue;  
   end;
 end;
 
@@ -419,6 +487,35 @@ begin
   end;
   AutoSetPhimAccept;
   SetrdePhimAcceptColor;
+end;
+
+procedure TfrmPEST.rdeREGSINGTHRESHChange(Sender: TObject);
+var
+  Value: Double;
+begin
+  inherited;
+  Value := rdeREGSINGTHRESH.RealValue;
+  if (Value = 0) or (Value = 1) then
+  begin
+    rdeREGSINGTHRESH.Color := clRed;
+  end
+  else
+  begin
+    rdeREGSINGTHRESH.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdeREGWEIGHTRATChange(Sender: TObject);
+begin
+  inherited;
+  if Abs(rdeREGWEIGHTRAT.RealValue) <= 1 then
+  begin
+    rdeREGWEIGHTRAT.Color := clRed;
+  end
+  else
+  begin
+    rdeREGWEIGHTRAT.Color := clWindow;
+  end;
 end;
 
 procedure TfrmPEST.rdeSwitchCriterionChange(Sender: TObject);
@@ -748,7 +845,6 @@ procedure TfrmPEST.btnOKClick(Sender: TObject);
 begin
   inherited;
   SetData;
-
 end;
 
 procedure TfrmPEST.cbAutomaticallySetPHIMACCEPTClick(Sender: TObject);
@@ -817,6 +913,7 @@ var
   NewNode: TJvPageIndexNode;
   ControlDataNode: TJvPageIndexNode;
   ObservationNode: TJvPageIndexNode;
+  RegularizationNode: TJvPageIndexNode;
 begin
   inherited;
   FObsList := TObservationList.Create;
@@ -883,7 +980,7 @@ begin
 
   ObservationNode := tvPEST.Items.AddChild(
     nil, 'Observations') as TJvPageIndexNode;
-  ControlDataNode.PageIndex := -1;
+  ObservationNode.PageIndex := -1;
 
   NewNode := tvPEST.Items.AddChild(
     ObservationNode, 'Observation Groups') as TJvPageIndexNode;
@@ -892,6 +989,18 @@ begin
   NewNode := tvPEST.Items.AddChild(
     ObservationNode, 'Observation Group Assignments') as TJvPageIndexNode;
   NewNode.PageIndex := jvspObsGroupAssignments.PageIndex;
+
+  RegularizationNode := tvPEST.Items.AddChild(
+    nil, 'Regularization') as TJvPageIndexNode;
+  RegularizationNode.PageIndex := -1;
+
+  NewNode := tvPEST.Items.AddChild(
+    RegularizationNode, 'Regularization Controls') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspRegularisation.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    RegularizationNode, 'Regularization Option') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspRegularizationOption.PageIndex;
 
   plMain.ActivePageIndex := 0;
 
@@ -1084,6 +1193,7 @@ var
   HobItem: THobItem;
   FNewHobItem: THobItem;
   PointItem: TPointItem;
+  Regularization: TPestRegularization;
 //  InvalidateModelEvent: TNotifyEvent;
 begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
@@ -1347,6 +1457,77 @@ begin
   end;
   {$ENDREGION}
 
+  {$REGION 'Regularization'}
+    Regularization := PestProperties.Regularization;
+    rdePhimLim.RealValue := Regularization.PhiMLim;
+    cbAutomaticallySetPHIMACCEPT.Checked := Regularization.AutoPhiMAccept;
+    rdePhimAccept.RealValue := Regularization.PhiMAccept;
+    rdeFRACPHIM.RealValue := Regularization.FracPhiM;
+    cbMemSave.Checked := Boolean(Ord(Regularization.MemSave));
+    rdeWFINIT.RealValue := Regularization.WFINIT;
+    rdeWFMIN.RealValue := Regularization.WeightFactorMinimum;
+    rdeWFMAX.RealValue := Regularization.WeightFactorMaximum;
+    rdeWFFAC.RealValue := Regularization.WFFAC;
+    rdeWFTOL.RealValue := Regularization.WeightFactorTolerance;
+    cbLINREG.Checked := Boolean(Ord(Regularization.LinearRegression));
+    cbREGCONTINUE.Checked := Boolean(Ord(Regularization.RegContinue));
+    IREGADJ := Regularization.RegularizationOption;
+    seNOPTREGADJ.AsInteger := Regularization.OptimizationInterval;
+    rdeREGWEIGHTRAT.RealValue := Regularization.RegWeightRatio;
+    rdeREGSINGTHRESH.RealValue := Regularization.RegularizationSingularValueThreshhold;
+  {$ENDREGION}  
+
+  
+end;
+
+function TfrmPEST.GetIREGADJ: Integer;
+begin
+  result := 0;
+  case rgRegOption.ItemIndex of
+    0:
+      begin
+        result := 0;
+      end;
+    1:
+      begin
+        case rgGroupWeightMethod.ItemIndex of
+          0:
+            begin
+              if cbRegApplyGroupWeight.Checked then
+              begin
+                result := 3;
+              end
+              else
+              begin
+                result := 1;
+              end;
+            end;
+          1:
+            begin
+              result := 2;
+            end;
+          else
+            Assert(False);
+        end;
+      end;
+    2:
+      begin
+        case rgIndividualAdjustmentMethod.ItemIndex of
+          0:
+            begin
+              result := 4;
+            end;
+          2:
+            begin
+              result := 5;
+            end;
+          else
+            Assert(False);
+        end;
+      end;
+    else
+      Assert(False);
+  end;
 end;
 
 procedure TfrmPEST.SetData;
@@ -1369,6 +1550,7 @@ var
   HobItem: THobItem;
   PointItem: TPointItem;
   ItemIndex: Integer;
+  Regularization: TPestRegularization;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(nil);
@@ -1677,12 +1859,93 @@ begin
     end;
     {$ENDREGION}
 
+    {$REGION 'Regularization'}
+      Regularization := PestProperties.Regularization;
+      Regularization.PhiMLim := rdePhimLim.RealValue;
+      Regularization.AutoPhiMAccept := cbAutomaticallySetPHIMACCEPT.Checked;
+      Regularization.PhiMAccept := rdePhimAccept.RealValue;
+      Regularization.FracPhiM := rdeFRACPHIM.RealValue;
+      Regularization.MemSave := TMemSave(cbMemSave.Checked);
+      Regularization.WFINIT := rdeWFINIT.RealValue;
+      Regularization.WeightFactorMinimum := rdeWFMIN.RealValue;
+      Regularization.WeightFactorMaximum := rdeWFMAX.RealValue;
+      Regularization.WFFAC := rdeWFFAC.RealValue;
+      Regularization.WeightFactorTolerance := rdeWFTOL.RealValue;
+      Regularization.LinearRegression := TLinRegression(cbLINREG.Checked);
+      Regularization.RegContinue := TRegContinue(cbREGCONTINUE.Checked);
+      Regularization.RegularizationOption := IREGADJ;
+      Regularization.OptimizationInterval := seNOPTREGADJ.AsInteger;
+      Regularization.RegWeightRatio := rdeREGWEIGHTRAT.RealValue;
+      Regularization.RegularizationSingularValueThreshhold := rdeREGSINGTHRESH.RealValue;
+    {$ENDREGION}
+
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties,
       FNewObsList, FNewFluxObservationList, FNewHobList, diredPest.Text));
   finally
     PestProperties.Free
   end;
 
+end;
+
+procedure TfrmPEST.SetIREGADJ(const Value: Integer);
+begin
+  if (csLoading in ComponentState) then
+  begin
+    Exit;
+  end;
+  rgGroupWeightMethod.Enabled := False;
+  cbRegApplyGroupWeight.Enabled := False;
+  rgIndividualAdjustmentMethod.Enabled := False;
+  seNOPTREGADJ.Enabled := False;
+  rdeREGWEIGHTRAT.Enabled := False;
+  rdeREGSINGTHRESH.Enabled := False;
+  case Value of
+    0:
+      begin
+        rgRegOption.ItemIndex := 0;
+      end;
+    1:
+      begin
+        rgRegOption.ItemIndex := 1;
+        rgGroupWeightMethod.Enabled := True;
+        rgGroupWeightMethod.ItemIndex := 0;
+        cbRegApplyGroupWeight.Enabled := True;
+        cbRegApplyGroupWeight.Checked := False;
+      end;
+    2:
+      begin
+        rgRegOption.ItemIndex := 1;
+        rgGroupWeightMethod.Enabled := True;
+        rgGroupWeightMethod.ItemIndex := 1;
+      end;
+    3:
+      begin
+        rgRegOption.ItemIndex := 1;
+        rgGroupWeightMethod.Enabled := True;
+        rgGroupWeightMethod.ItemIndex := 0;
+        cbRegApplyGroupWeight.Enabled := True;
+        cbRegApplyGroupWeight.Checked := True;
+      end;
+    4:
+      begin
+        rgRegOption.ItemIndex := 2;
+        rgIndividualAdjustmentMethod.Enabled := True;
+        rgIndividualAdjustmentMethod.ItemIndex := 0;
+        seNOPTREGADJ.Enabled := True;
+        rdeREGWEIGHTRAT.Enabled := True;
+      end;
+    5:
+      begin
+        rgRegOption.ItemIndex := 2;
+        rgIndividualAdjustmentMethod.ItemIndex := 1;
+        rgIndividualAdjustmentMethod.Enabled := True;
+        seNOPTREGADJ.Enabled := True;
+        rdeREGWEIGHTRAT.Enabled := True;
+        rdeREGSINGTHRESH.Enabled := True;
+      end;
+    else
+      Assert(False);
+  end;
 end;
 
 procedure TfrmPEST.FixObsGroupNames;
@@ -1887,6 +2150,10 @@ end;
 
 procedure TfrmPEST.AutoSetPhimAccept;
 begin
+  if (csLoading in ComponentState) then
+  begin
+    Exit;
+  end;
   if cbAutomaticallySetPHIMACCEPT.Checked then
   begin
     rdePhimAccept.RealValue := rdePhimLim.RealValue * 1.05;
@@ -1898,6 +2165,10 @@ var
   PHIMLIM: Double;
   PHIMACCEPT: Double;
 begin
+  if (csLoading in ComponentState) then
+  begin
+    Exit;
+  end;
   PHIMLIM := rdePhimLim.RealValue;
   PHIMACCEPT := rdePhimAccept.RealValue;
   if PHIMACCEPT <= PHIMLIM then
@@ -1915,6 +2186,10 @@ var
   WFMIN: Double;
   WFMAX: Double;
 begin
+  if (csLoading in ComponentState) then
+  begin
+    Exit;
+  end;
   WFMIN := rdeWFMIN.RealValue;
   WFMAX := rdeWFMAX.RealValue;
   if WFMAX <= WFMIN then
@@ -1925,6 +2200,11 @@ begin
   begin
     rdeWFMAX.Color := clWindow;
   end;
+end;
+
+procedure TfrmPEST.UpdateIREGADJ_FromControls(Sender: TObject);
+begin
+  rdeIREGADJ.IntegerValue := IREGADJ;
 end;
 
 procedure TfrmPEST.HandleAddedGroup(ObsGroup: TPestObservationGroup);

@@ -1,16 +1,16 @@
 inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
-  ClientHeight = 461
-  ClientWidth = 723
-  ExplicitWidth = 739
-  ExplicitHeight = 500
+  ClientHeight = 485
+  ClientWidth = 752
+  ExplicitWidth = 768
+  ExplicitHeight = 524
   PixelsPerInch = 96
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
     Top = 0
     Width = 5
-    Height = 419
+    Height = 443
     ExplicitLeft = 121
     ExplicitHeight = 287
   end
@@ -18,7 +18,7 @@ inherited frmPEST: TfrmPEST
     Left = 0
     Top = 0
     Width = 193
-    Height = 419
+    Height = 443
     ShowButtons = True
     PageDefault = 0
     PageList = plMain
@@ -30,20 +30,18 @@ inherited frmPEST: TfrmPEST
   object plMain: TJvPageList
     Left = 198
     Top = 0
-    Width = 525
-    Height = 419
+    Width = 554
+    Height = 443
     ActivePage = jvspRegularisation
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
-    ExplicitWidth = 512
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspBasic'
-      ExplicitWidth = 512
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -124,10 +122,9 @@ inherited frmPEST: TfrmPEST
     object jvspControlDataMode: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspControlDataMode'
-      ExplicitWidth = 512
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -160,10 +157,9 @@ inherited frmPEST: TfrmPEST
     object jvspDimensions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspDimensions'
-      ExplicitWidth = 512
       object lblMaxCompDim: TLabel
         Left = 85
         Top = 6
@@ -206,10 +202,9 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspInversionControls'
-      ExplicitWidth = 512
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -346,9 +341,8 @@ inherited frmPEST: TfrmPEST
     object jvspParameterAdjustmentControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
-      ExplicitWidth = 512
+      Width = 554
+      Height = 443
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -437,10 +431,9 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls2: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspInversionControls2'
-      ExplicitWidth = 512
       object lblSwitchCriterion: TLabel
         Left = 93
         Top = 6
@@ -542,10 +535,9 @@ inherited frmPEST: TfrmPEST
     object jvspIterationControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspIterationControls'
-      ExplicitWidth = 512
       object lblMaxIterations: TLabel
         Left = 93
         Top = 6
@@ -705,10 +697,9 @@ inherited frmPEST: TfrmPEST
     object jvspOutputOptions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspOutputOptions'
-      ExplicitWidth = 512
       object cbWriteCov: TCheckBox
         Left = 6
         Top = 3
@@ -796,10 +787,9 @@ inherited frmPEST: TfrmPEST
     object jvspSingularValueDecomp: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspSingularValueDecomp'
-      ExplicitWidth = 512
       object lblSvdMode: TLabel
         Left = 6
         Top = 8
@@ -882,10 +872,9 @@ inherited frmPEST: TfrmPEST
     object jvspLqsr: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspLqsr'
-      ExplicitWidth = 512
       object lblMatrixTolerance: TLabel
         Left = 157
         Top = 29
@@ -985,26 +974,25 @@ inherited frmPEST: TfrmPEST
     object jvspObservationGroups: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspObservationGroups'
-      ExplicitWidth = 512
       inline frameObservationGroups: TframeGrid
         Left = 0
         Top = 0
-        Width = 525
-        Height = 419
+        Width = 554
+        Height = 443
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 512
-        ExplicitHeight = 419
+        ExplicitWidth = 554
+        ExplicitHeight = 443
         inherited Panel: TPanel
-          Top = 378
-          Width = 525
-          ExplicitTop = 378
-          ExplicitWidth = 512
+          Top = 402
+          Width = 554
+          ExplicitTop = 402
+          ExplicitWidth = 554
           DesignSize = (
-            525
+            554
             41)
           inherited lbNumber: TLabel
             Width = 209
@@ -1014,16 +1002,16 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 430
+            Left = 454
             ExplicitLeft = 419
           end
           inherited sbInsert: TSpeedButton
-            Left = 460
+            Left = 486
             OnClick = frameObservationGroupssbInsertClick
             ExplicitLeft = 448
           end
           inherited sbDelete: TSpeedButton
-            Left = 489
+            Left = 517
             OnClick = frameObservationGroupssbDeleteClick
             ExplicitLeft = 477
           end
@@ -1034,8 +1022,8 @@ inherited frmPEST: TfrmPEST
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 525
-          Height = 378
+          Width = 554
+          Height = 402
           ColCount = 4
           OnSelectCell = frameObservationGroupsGridSelectCell
           OnSetEditText = frameObservationGroupsGridSetEditText
@@ -1137,62 +1125,59 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 512
-          ExplicitHeight = 378
+          ExplicitWidth = 554
+          ExplicitHeight = 402
         end
       end
     end
     object jvspObsGroupAssignments: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspObsGroupAssignments'
-      ExplicitWidth = 512
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
-        Width = 525
-        Height = 419
+        Width = 554
+        Height = 443
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 512
-        ExplicitHeight = 419
+        ExplicitWidth = 554
+        ExplicitHeight = 443
         inherited tvTree: TTreeView
-          Width = 525
-          Height = 419
-          ExplicitWidth = 512
-          ExplicitHeight = 419
+          Width = 554
+          Height = 443
+          ExplicitWidth = 554
+          ExplicitHeight = 443
         end
       end
     end
     object jvspPilotPoints: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
+      Width = 554
+      Height = 443
       Caption = 'jvspPilotPoints'
-      ExplicitWidth = 512
       object Panel2: TPanel
         Left = 0
         Top = 140
-        Width = 525
-        Height = 279
+        Width = 554
+        Height = 303
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 512
         object Splitter1: TSplitter
           Left = 242
           Top = 1
           Width = 5
-          Height = 277
+          Height = 301
           ExplicitHeight = 293
         end
         object gbIndividualPilotPoints: TGroupBox
           Left = 1
           Top = 1
           Width = 241
-          Height = 277
+          Height = 301
           Align = alLeft
           Caption = 'Individually specified pilot points'
           TabOrder = 0
@@ -1200,18 +1185,18 @@ inherited frmPEST: TfrmPEST
             Left = 2
             Top = 89
             Width = 237
-            Height = 186
+            Height = 210
             Align = alClient
             TabOrder = 0
             ExplicitLeft = 2
             ExplicitTop = 89
             ExplicitWidth = 237
-            ExplicitHeight = 186
+            ExplicitHeight = 210
             inherited Panel: TPanel
-              Top = 120
+              Top = 144
               Width = 237
               Height = 66
-              ExplicitTop = 120
+              ExplicitTop = 144
               ExplicitWidth = 237
               ExplicitHeight = 66
               inherited lbNumber: TLabel
@@ -1253,7 +1238,7 @@ inherited frmPEST: TfrmPEST
             end
             inherited Grid: TRbwDataGrid4
               Width = 237
-              Height = 120
+              Height = 144
               ColCount = 2
               Columns = <
                 item
@@ -1305,7 +1290,7 @@ inherited frmPEST: TfrmPEST
                   AutoAdjustColWidths = True
                 end>
               ExplicitWidth = 237
-              ExplicitHeight = 120
+              ExplicitHeight = 144
             end
           end
           object Panel1: TPanel
@@ -1338,17 +1323,16 @@ inherited frmPEST: TfrmPEST
         object gbBetweenPointObs: TGroupBox
           Left = 247
           Top = 1
-          Width = 277
-          Height = 277
+          Width = 306
+          Height = 301
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
-          ExplicitWidth = 264
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 169
-            Width = 273
-            Height = 106
+            Width = 302
+            Height = 130
             Align = alClient
             ColCount = 2
             FixedCols = 0
@@ -1412,7 +1396,6 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
-            ExplicitWidth = 260
             ColWidths = (
               64
               64)
@@ -1420,11 +1403,10 @@ inherited frmPEST: TfrmPEST
           object Panel3: TPanel
             Left = 2
             Top = 20
-            Width = 273
+            Width = 302
             Height = 149
             Align = alTop
             TabOrder = 1
-            ExplicitWidth = 260
             object lblMinSeparation: TLabel
               Left = 4
               Top = 45
@@ -1469,11 +1451,10 @@ inherited frmPEST: TfrmPEST
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 525
+        Width = 554
         Height = 140
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 512
         object lblPilotPointBuffer: TLabel
           Left = 6
           Top = 39
@@ -1490,14 +1471,13 @@ inherited frmPEST: TfrmPEST
           TabOrder = 0
         end
         object gbArray: TGroupBox
-          Left = 261
+          Left = 290
           Top = 1
           Width = 263
           Height = 138
           Align = alRight
           Caption = 'Regularly spaced pilot points'
           TabOrder = 1
-          ExplicitLeft = 248
           object lblArrayPattern: TLabel
             Left = 16
             Top = 27
@@ -1554,10 +1534,8 @@ inherited frmPEST: TfrmPEST
     object jvspRegularisation: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 525
-      Height = 419
-      Caption = 'jvspRegularisation'
-      ExplicitLeft = 1
+      Width = 554
+      Height = 443
       object lblPhimLim: TLabel
         Left = 95
         Top = 19
@@ -1599,6 +1577,20 @@ inherited frmPEST: TfrmPEST
         Width = 331
         Height = 18
         Caption = 'Maximum regularisation weight factor (WFMAX)'
+      end
+      object lblWFFAC: TLabel
+        Left = 95
+        Top = 229
+        Width = 291
+        Height = 18
+        Caption = 'Weight Factor adjustment factor (WFFAC)'
+      end
+      object lblWFTOL: TLabel
+        Left = 95
+        Top = 256
+        Width = 433
+        Height = 18
+        Caption = 'Convergence criterion for regularization weight factor (WFTOL)'
       end
       object rdePhimLim: TRbwDataEntry
         Left = 6
@@ -1684,7 +1676,7 @@ inherited frmPEST: TfrmPEST
         ChangeDisabledColor = True
       end
       object rdeWFMAX: TRbwDataEntry
-        Left = 3
+        Left = 6
         Top = 199
         Width = 83
         Height = 21
@@ -1696,16 +1688,191 @@ inherited frmPEST: TfrmPEST
         CheckMin = True
         ChangeDisabledColor = True
       end
+      object rdeWFFAC: TRbwDataEntry
+        Left = 6
+        Top = 226
+        Width = 83
+        Height = 21
+        TabOrder = 8
+        Text = '1'
+        OnChange = rdeWFFACChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        Min = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeWFTOL: TRbwDataEntry
+        Left = 6
+        Top = 253
+        Width = 83
+        Height = 21
+        TabOrder = 9
+        Text = '0'
+        OnChange = rdeWFTOLChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object cbLINREG: TCheckBox
+        Left = 6
+        Top = 280
+        Width = 441
+        Height = 17
+        Caption = 'All regularization constraints are linear (LINREG)'
+        TabOrder = 10
+      end
+      object cbREGCONTINUE: TCheckBox
+        Left = 6
+        Top = 303
+        Width = 491
+        Height = 17
+        Caption = 'Continue regularization after reaching PHIMLIM (REGCONTINUE)'
+        TabOrder = 11
+      end
+    end
+    object jvspRegularizationOption: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 554
+      Height = 443
+      Caption = 'jvspRegularizationOption'
+      object lblIREGADJ: TLabel
+        Left = 103
+        Top = 299
+        Width = 68
+        Height = 18
+        Caption = 'IREGADJ'
+      end
+      object lblNOPTREGADJ: TLabel
+        Left = 103
+        Top = 331
+        Width = 444
+        Height = 18
+        Caption = 'Re-calculation of regularization weights interval (NOPTREGADJ)'
+      end
+      object lblREGWEIGHTRAT: TLabel
+        Left = 103
+        Top = 363
+        Width = 271
+        Height = 36
+        Caption = 
+          'Regularization weight ratio, logarithmic if negative (REGWEIGHTR' +
+          'AT)'
+        WordWrap = True
+      end
+      object lblREGSINGTHRESH: TLabel
+        Left = 103
+        Top = 410
+        Width = 315
+        Height = 18
+        Caption = 'Regularization threshold (REGSINGTHRESH)'
+      end
+      object rgRegOption: TRadioGroup
+        Left = 8
+        Top = 3
+        Width = 515
+        Height = 105
+        Caption = 'Regularization weight adjustment option (IREGADJ)'
+        ItemIndex = 0
+        Items.Strings = (
+          'No inter-regularization-group weights adjustment takes place (0)'
+          'Regularization is on a group by group basis (1,2,3)'
+          'Regularization on an item by item basis. (4, 5)')
+        TabOrder = 0
+      end
+      object rgGroupWeightMethod: TRadioGroup
+        Left = 8
+        Top = 114
+        Width = 515
+        Height = 71
+        Caption = 'Group weight adjustment method (IREGADJ)'
+        ItemIndex = 0
+        Items.Strings = (
+          'Equalize sensitivities (1,3)'
+          'Equalize weights (2)')
+        TabOrder = 1
+      end
+      object rgIndividualAdjustmentMethod: TRadioGroup
+        Left = 8
+        Top = 215
+        Width = 515
+        Height = 74
+        Caption = 'Individual adjustment method (IREGADJ)'
+        ItemIndex = 0
+        Items.Strings = (
+          'Weights calculated automatically (4)'
+          'Items categorized into null space or solution space (5)')
+        TabOrder = 2
+      end
+      object cbRegApplyGroupWeight: TCheckBox
+        Left = 8
+        Top = 192
+        Width = 393
+        Height = 17
+        Caption = 'Also apply user specified group weight (3) (IREGADJ)'
+        TabOrder = 3
+      end
+      object rdeIREGADJ: TRbwDataEntry
+        Left = 8
+        Top = 296
+        Width = 89
+        Height = 22
+        TabOrder = 4
+        Text = '0'
+        OnChange = rdeIREGADJChange
+        DataType = dtInteger
+        Max = 5.000000000000000000
+        CheckMax = True
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object seNOPTREGADJ: TJvSpinEdit
+        Left = 8
+        Top = 328
+        Width = 89
+        Height = 26
+        MaxValue = 2147483647.000000000000000000
+        MinValue = 1.000000000000000000
+        Value = 1.000000000000000000
+        TabOrder = 5
+      end
+      object rdeREGWEIGHTRAT: TRbwDataEntry
+        Left = 8
+        Top = 371
+        Width = 89
+        Height = 22
+        TabOrder = 6
+        Text = '0'
+        OnChange = rdeREGWEIGHTRATChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object rdeREGSINGTHRESH: TRbwDataEntry
+        Left = 6
+        Top = 407
+        Width = 91
+        Height = 22
+        TabOrder = 7
+        Text = '0'
+        OnChange = rdeREGSINGTHRESHChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMax = True
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 419
-    Width = 723
+    Top = 443
+    Width = 752
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitWidth = 710
     object btnHelp: TBitBtn
       Left = 446
       Top = 6

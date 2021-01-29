@@ -697,6 +697,12 @@ begin
   end;
   for StressPeriodIndex := 0 to FSourceLists.Count - 1 do
   begin
+    frmProgressMM.AddMessage(Format('    Writing MVR stress period %d', [StressPeriodIndex+1]));
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
     SourceList := FSourceLists[StressPeriodIndex];
     if SourceList.Count > 0 then
     begin

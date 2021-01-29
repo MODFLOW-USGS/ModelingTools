@@ -1379,8 +1379,69 @@ begin
 end;
 
 procedure TPestControlFileWriter.WriteRegularisation;
+var
+  Regularization: TPestRegularization;
 begin
-// The Regularisation section is not currently supported.
+  Regularization := Model.PestProperties.Regularization;
+  WriteSectionHeader('regularisation');
+  WriteFloat(Regularization.PhiMLim);
+  WriteFloat(Regularization.PhiMAccept);
+  WriteFloat(Regularization.FracPhiM);
+  if Regularization.MemSave = msNoMemSave then
+  begin
+    WriteString(' nomemsave');
+  end
+  else
+  begin
+    WriteString(' memsave');
+  end;
+  WriteString(' # PHIMLIM PHIMACCEPT FRACPHIM MEMSAVE');
+  NewLine;
+
+  WriteFloat(Regularization.WFInit);
+  WriteFloat(Regularization.WeightFactorMinimum);
+  WriteFloat(Regularization.WeightFactorMaximum);
+  if Regularization.LinearRegression = lfNoLinReg then
+  begin
+    WriteString(' nonlinreg');
+  end
+  else
+  begin
+    WriteString(' linreg');
+  end;
+  if Regularization.RegContinue = rcNoContinue then
+  begin
+    WriteString(' nocontinue');
+  end
+  else
+  begin
+    WriteString(' continue');
+  end;
+  WriteString(' # WFINIT WFMIN WFMAX LINREG REGCONTINUE');
+  NewLine;
+  
+  WriteFloat(Regularization.WFFac);
+  WriteFloat(Regularization.WeightFactorTolerance);
+  WriteInteger(Regularization.RegularizationOption);
+  if Regularization.RegularizationOption in [4,5] then
+  begin
+    WriteInteger(Regularization.OptimizationInterval);
+    WriteFloat(Regularization.RegWeightRatio);
+  end;
+  if Regularization.RegularizationOption  = 5 then
+  begin
+    WriteFloat(Regularization.RegularizationSingularValueThreshhold);
+  end;
+  WriteString(' # WFFAC WFTOL IREGADJ');
+  if Regularization.RegularizationOption in [4,5] then
+  begin
+    WriteString(' NOPTREGADJ REGWEIGHTRAT');
+  end;
+  if Regularization.RegularizationOption  = 5 then
+  begin
+    WriteString(' REGSINGTHRESH');
+  end;
+  NewLine;
 end;
 
 procedure TPestControlFileWriter.WriteSectionHeader(const SectionID: String);
