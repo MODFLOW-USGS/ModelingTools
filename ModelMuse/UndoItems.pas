@@ -960,6 +960,7 @@ type
   TUndoAddPilotPoint = class(TCustomUndoChangePilotPoints)
   protected
     function Description: string; override;
+  public
     procedure Undo; override;
     procedure Redo; override;
   end;

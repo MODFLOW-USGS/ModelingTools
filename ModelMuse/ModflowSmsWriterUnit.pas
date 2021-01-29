@@ -8,6 +8,7 @@ type
   TImsWriter = class(TCustomSolverWriter)
   private
     FNameOfFile: string;
+    FDVClose: Double;
     procedure WriteInnerMaximum;
     procedure WriteInnerHClose;
     procedure WritePreconditionerLevels;
@@ -29,7 +30,13 @@ type
 
 implementation
 
-uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit;
+uses ModflowUnitNumbers, PhastModelUnit, frmProgressUnit, frmErrorsAndWarningsUnit;
+
+resourcestring
+  StrIMSSolverProblem = 'IMS solver problem: INNER_DVCLOSE >= OUTER_DVCLOSE';
+  StrINNERDVCLOSEIsTyp = 'INNER_DVCLOSE is typically and order of magnitude ' +
+  'less than OUTER_DVCLOSE. In this model INNER_DVCLOSE is %0:g and OUTER_DV' +
+  'CLOSE is %1:g.';
 
 { TSmsWriter }
 
@@ -62,6 +69,7 @@ begin
   begin
     Exit;
   end;
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrIMSSolverProblem);
   FNameOfFile := FileName(AFileName);
   // write to simulation name file
   FInputFileName := FNameOfFile;
@@ -135,21 +143,30 @@ begin
 end;
 
 procedure TImsWriter.WriteInnerHClose;
+var
+  InnerDvClose: Double;
 begin
   WriteString('  INNER_DVCLOSE');
   if soInnerHclose in FImsPackage.SmsOverrides then
   begin
+    InnerDvClose := FImsPackage.InnerHclose;
     WriteFloat(FImsPackage.InnerHclose);
   end
   else
   begin
     case FImsPackage.Complexity of
-      scoSimple: WriteFloat(0.001);
-      scoModerate: WriteFloat(0.01); 
-      scoComplex: WriteFloat(0.1);
+      scoSimple: InnerDvClose := 0.0001;
+      scoModerate: InnerDvClose := 0.001;
+      scoComplex: InnerDvClose := 0.01;
       else Assert(False);
     end;
   end;
+  WriteFloat(InnerDvClose);
+  if InnerDvClose >= FDVClose then
+  begin
+    frmErrorsAndWarnings.AddWarning(Model, StrIMSSolverProblem,
+	    Format(StrINNERDVCLOSEIsTyp, [InnerDvClose, FDVClose]));
+ end;
   NewLine;
 end;
 
@@ -261,17 +278,19 @@ begin
   WriteString('  OUTER_DVCLOSE ');
   if soOuterHclose in FImsPackage.SmsOverrides then
   begin
-    WriteFloat(FImsPackage.OuterHclose);
+    FDVClose := FImsPackage.OuterHclose;
+//    WriteFloat(FImsPackage.OuterHclose);
   end
   else
   begin
     case FImsPackage.Complexity of
-      scoSimple: WriteFloat(0.001);
-      scoModerate: WriteFloat(0.01); 
-      scoComplex: WriteFloat(0.1);
+      scoSimple: FDVClose :=  0.001;
+      scoModerate: FDVClose := 0.01; 
+      scoComplex: FDVClose := 0.1;
       else Assert(False);
     end;
   end;
+  WriteFloat(FDVClose);
   NewLine;
 
   // OUTER_RCLOSEBND is deprecated

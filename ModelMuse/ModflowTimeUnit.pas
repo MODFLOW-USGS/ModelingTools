@@ -528,6 +528,12 @@ var
   StressPeriod: TModflowStressPeriod;
 begin
   result := -1;
+  StressPeriod := Last;
+  if ATime >= StressPeriod.EndTime then
+  begin
+    result := Count-1;
+    Exit;
+  end;
   for Index := 0 to Count - 1 do
   begin
     StressPeriod := Items[Index];

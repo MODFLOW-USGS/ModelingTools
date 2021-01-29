@@ -185,6 +185,21 @@ type
     rdePilotPointBuffer: TRbwDataEntry;
     rdeMinSeparation: TRbwDataEntry;
     lblMinSeparation: TLabel;
+    jvspRegularisation: TJvStandardPage;
+    rdePhimLim: TRbwDataEntry;
+    lblPhimLim: TLabel;
+    rdePhimAccept: TRbwDataEntry;
+    lblPhimAccept: TLabel;
+    cbAutomaticallySetPHIMACCEPT: TCheckBox;
+    lblFRACPHIM: TLabel;
+    rdeFRACPHIM: TRbwDataEntry;
+    cbMemSave: TCheckBox;
+    rdeWFINIT: TRbwDataEntry;
+    lblWFINIT: TLabel;
+    rdeWFMIN: TRbwDataEntry;
+    lblWFMIN: TLabel;
+    rdeWFMAX: TRbwDataEntry;
+    LBLWFMAX: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -206,6 +221,13 @@ type
     procedure btnImportShapeClick(Sender: TObject);
     procedure btnImportTextClick(Sender: TObject);
     procedure btnBetweenObservationsClick(Sender: TObject);
+    procedure rdePhimLimChange(Sender: TObject);
+    procedure rdePhimAcceptChange(Sender: TObject);
+    procedure cbAutomaticallySetPHIMACCEPTClick(Sender: TObject);
+    procedure rdeFRACPHIMChange(Sender: TObject);
+    procedure rdeWFINITChange(Sender: TObject);
+    procedure rdeWFMINChange(Sender: TObject);
+    procedure rdeWFMAXChange(Sender: TObject);
 //    procedure comboObsGroupChange(Sender: TObject);
   private
     FObsList: TObservationList;
@@ -226,6 +248,9 @@ type
     procedure HandleAddedGroup(ObsGroup: TPestObservationGroup);
     procedure CheckPestDirectory;
     procedure ImportPilotPoints(const FileName: string);
+    procedure AutoSetPhimAccept;
+    procedure SetrdePhimAcceptColor;
+    procedure SetWfMaxVisibility;
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -315,6 +340,85 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TfrmPEST.rdeWFMAXChange(Sender: TObject);
+begin
+  inherited;
+  SetWfMaxVisibility;
+end;
+
+procedure TfrmPEST.rdeWFINITChange(Sender: TObject);
+var
+  Value: Double;
+begin
+  inherited;
+  Value := rdeWFINIT.RealValue;
+  if Value = 0 then
+  begin
+    rdeWFINIT.Color := clRed;
+  end
+  else
+  begin
+    rdeWFINIT.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdeWFMINChange(Sender: TObject);
+var
+  Value: Double;
+begin
+  inherited;
+  Value := rdeWFMIN.RealValue;
+  if Value = 0 then
+  begin
+    rdeWFMIN.Color := clRed;
+  end
+  else
+  begin
+    rdeWFMIN.Color := clWindow;
+  end;
+  SetWfMaxVisibility;
+end;
+
+procedure TfrmPEST.rdeFRACPHIMChange(Sender: TObject);
+var
+  Value: Double;
+begin
+  inherited;
+  Value := rdeFRACPHIM.RealValue;
+  if (Value = 0) or (Value = 1) then
+  begin
+    rdeFRACPHIM.Color := clRed;
+  end
+  else
+  begin
+    rdeFRACPHIM.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdePhimAcceptChange(Sender: TObject);
+begin
+  inherited;
+  SetrdePhimAcceptColor;
+end;
+
+procedure TfrmPEST.rdePhimLimChange(Sender: TObject);
+var
+  Value: Double;
+begin
+  inherited;
+  Value := rdePhimLim.RealValue;
+  if Value = 0 then
+  begin
+    rdePhimLim.Color := clRed;
+  end
+  else
+  begin
+    rdePhimLim.Color := clWindow;
+  end;
+  AutoSetPhimAccept;
+  SetrdePhimAcceptColor;
 end;
 
 procedure TfrmPEST.rdeSwitchCriterionChange(Sender: TObject);
@@ -645,6 +749,13 @@ begin
   inherited;
   SetData;
 
+end;
+
+procedure TfrmPEST.cbAutomaticallySetPHIMACCEPTClick(Sender: TObject);
+begin
+  inherited;
+  AutoSetPhimAccept;
+  rdePhimAccept.Enabled := not cbAutomaticallySetPHIMACCEPT.Checked;
 end;
 
 procedure TfrmPEST.cbUseLqsrClick(Sender: TObject);
@@ -1771,6 +1882,48 @@ begin
   finally
     PointsQuadTree.Free;
     PointList.Free;
+  end;
+end;
+
+procedure TfrmPEST.AutoSetPhimAccept;
+begin
+  if cbAutomaticallySetPHIMACCEPT.Checked then
+  begin
+    rdePhimAccept.RealValue := rdePhimLim.RealValue * 1.05;
+  end;
+end;
+
+procedure TfrmPEST.SetrdePhimAcceptColor;
+var
+  PHIMLIM: Double;
+  PHIMACCEPT: Double;
+begin
+  PHIMLIM := rdePhimLim.RealValue;
+  PHIMACCEPT := rdePhimAccept.RealValue;
+  if PHIMACCEPT <= PHIMLIM then
+  begin
+    rdePhimAccept.Color := clRed;
+  end
+  else
+  begin
+    rdePhimAccept.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.SetWfMaxVisibility;
+var
+  WFMIN: Double;
+  WFMAX: Double;
+begin
+  WFMIN := rdeWFMIN.RealValue;
+  WFMAX := rdeWFMAX.RealValue;
+  if WFMAX <= WFMIN then
+  begin
+    rdeWFMAX.Color := clRed;
+  end
+  else
+  begin
+    rdeWFMAX.Color := clWindow;
   end;
 end;
 

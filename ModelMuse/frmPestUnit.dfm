@@ -1,9 +1,8 @@
 inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 461
-  ClientWidth = 710
-  ExplicitTop = -76
-  ExplicitWidth = 726
+  ClientWidth = 723
+  ExplicitWidth = 739
   ExplicitHeight = 500
   PixelsPerInch = 96
   TextHeight = 18
@@ -31,18 +30,20 @@ inherited frmPEST: TfrmPEST
   object plMain: TJvPageList
     Left = 198
     Top = 0
-    Width = 512
+    Width = 525
     Height = 419
-    ActivePage = jvspPilotPoints
+    ActivePage = jvspRegularisation
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
+    ExplicitWidth = 512
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspBasic'
+      ExplicitWidth = 512
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -123,9 +124,10 @@ inherited frmPEST: TfrmPEST
     object jvspControlDataMode: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspControlDataMode'
+      ExplicitWidth = 512
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -158,9 +160,10 @@ inherited frmPEST: TfrmPEST
     object jvspDimensions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspDimensions'
+      ExplicitWidth = 512
       object lblMaxCompDim: TLabel
         Left = 85
         Top = 6
@@ -203,9 +206,10 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspInversionControls'
+      ExplicitWidth = 512
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -342,8 +346,9 @@ inherited frmPEST: TfrmPEST
     object jvspParameterAdjustmentControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
+      ExplicitWidth = 512
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -432,9 +437,10 @@ inherited frmPEST: TfrmPEST
     object jvspInversionControls2: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspInversionControls2'
+      ExplicitWidth = 512
       object lblSwitchCriterion: TLabel
         Left = 93
         Top = 6
@@ -536,9 +542,10 @@ inherited frmPEST: TfrmPEST
     object jvspIterationControls: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspIterationControls'
+      ExplicitWidth = 512
       object lblMaxIterations: TLabel
         Left = 93
         Top = 6
@@ -698,9 +705,10 @@ inherited frmPEST: TfrmPEST
     object jvspOutputOptions: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspOutputOptions'
+      ExplicitWidth = 512
       object cbWriteCov: TCheckBox
         Left = 6
         Top = 3
@@ -788,9 +796,10 @@ inherited frmPEST: TfrmPEST
     object jvspSingularValueDecomp: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspSingularValueDecomp'
+      ExplicitWidth = 512
       object lblSvdMode: TLabel
         Left = 6
         Top = 8
@@ -873,9 +882,10 @@ inherited frmPEST: TfrmPEST
     object jvspLqsr: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspLqsr'
+      ExplicitWidth = 512
       object lblMatrixTolerance: TLabel
         Left = 157
         Top = 29
@@ -975,13 +985,14 @@ inherited frmPEST: TfrmPEST
     object jvspObservationGroups: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspObservationGroups'
+      ExplicitWidth = 512
       inline frameObservationGroups: TframeGrid
         Left = 0
         Top = 0
-        Width = 512
+        Width = 525
         Height = 419
         Align = alClient
         TabOrder = 0
@@ -989,11 +1000,11 @@ inherited frmPEST: TfrmPEST
         ExplicitHeight = 419
         inherited Panel: TPanel
           Top = 378
-          Width = 512
+          Width = 525
           ExplicitTop = 378
           ExplicitWidth = 512
           DesignSize = (
-            512
+            525
             41)
           inherited lbNumber: TLabel
             Width = 209
@@ -1003,16 +1014,16 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 419
+            Left = 430
             ExplicitLeft = 419
           end
           inherited sbInsert: TSpeedButton
-            Left = 448
+            Left = 460
             OnClick = frameObservationGroupssbInsertClick
             ExplicitLeft = 448
           end
           inherited sbDelete: TSpeedButton
-            Left = 477
+            Left = 489
             OnClick = frameObservationGroupssbDeleteClick
             ExplicitLeft = 477
           end
@@ -1023,7 +1034,7 @@ inherited frmPEST: TfrmPEST
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 512
+          Width = 525
           Height = 378
           ColCount = 4
           OnSelectCell = frameObservationGroupsGridSelectCell
@@ -1032,6 +1043,7 @@ inherited frmPEST: TfrmPEST
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1055,6 +1067,7 @@ inherited frmPEST: TfrmPEST
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1078,6 +1091,7 @@ inherited frmPEST: TfrmPEST
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1101,6 +1115,7 @@ inherited frmPEST: TfrmPEST
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1130,20 +1145,21 @@ inherited frmPEST: TfrmPEST
     object jvspObsGroupAssignments: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspObsGroupAssignments'
+      ExplicitWidth = 512
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
-        Width = 512
+        Width = 525
         Height = 419
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 512
         ExplicitHeight = 419
         inherited tvTree: TTreeView
-          Width = 512
+          Width = 525
           Height = 419
           ExplicitWidth = 512
           ExplicitHeight = 419
@@ -1153,16 +1169,18 @@ inherited frmPEST: TfrmPEST
     object jvspPilotPoints: TJvStandardPage
       Left = 0
       Top = 0
-      Width = 512
+      Width = 525
       Height = 419
       Caption = 'jvspPilotPoints'
+      ExplicitWidth = 512
       object Panel2: TPanel
         Left = 0
         Top = 140
-        Width = 512
+        Width = 525
         Height = 279
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 512
         object Splitter1: TSplitter
           Left = 242
           Top = 1
@@ -1240,6 +1258,7 @@ inherited frmPEST: TfrmPEST
               Columns = <
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -1263,6 +1282,7 @@ inherited frmPEST: TfrmPEST
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -1318,15 +1338,16 @@ inherited frmPEST: TfrmPEST
         object gbBetweenPointObs: TGroupBox
           Left = 247
           Top = 1
-          Width = 264
+          Width = 277
           Height = 277
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
+          ExplicitWidth = 264
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 169
-            Width = 260
+            Width = 273
             Height = 106
             Align = alClient
             ColCount = 2
@@ -1344,6 +1365,7 @@ inherited frmPEST: TfrmPEST
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1367,6 +1389,7 @@ inherited frmPEST: TfrmPEST
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1389,6 +1412,7 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
+            ExplicitWidth = 260
             ColWidths = (
               64
               64)
@@ -1396,10 +1420,11 @@ inherited frmPEST: TfrmPEST
           object Panel3: TPanel
             Left = 2
             Top = 20
-            Width = 260
+            Width = 273
             Height = 149
             Align = alTop
             TabOrder = 1
+            ExplicitWidth = 260
             object lblMinSeparation: TLabel
               Left = 4
               Top = 45
@@ -1444,10 +1469,11 @@ inherited frmPEST: TfrmPEST
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 512
+        Width = 525
         Height = 140
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 512
         object lblPilotPointBuffer: TLabel
           Left = 6
           Top = 39
@@ -1464,13 +1490,14 @@ inherited frmPEST: TfrmPEST
           TabOrder = 0
         end
         object gbArray: TGroupBox
-          Left = 248
+          Left = 261
           Top = 1
           Width = 263
           Height = 138
           Align = alRight
           Caption = 'Regularly spaced pilot points'
           TabOrder = 1
+          ExplicitLeft = 248
           object lblArrayPattern: TLabel
             Left = 16
             Top = 27
@@ -1524,14 +1551,161 @@ inherited frmPEST: TfrmPEST
         end
       end
     end
+    object jvspRegularisation: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 525
+      Height = 419
+      Caption = 'jvspRegularisation'
+      ExplicitLeft = 1
+      object lblPhimLim: TLabel
+        Left = 95
+        Top = 19
+        Width = 342
+        Height = 18
+        Caption = 'Target measurement objective function (PHIMLIM)'
+      end
+      object lblPhimAccept: TLabel
+        Left = 95
+        Top = 70
+        Width = 419
+        Height = 18
+        Caption = 'Acceptable measurement objective function (PHIMACCEPT)'
+      end
+      object lblFRACPHIM: TLabel
+        Left = 95
+        Top = 98
+        Width = 306
+        Height = 18
+        Caption = 'Fraction for updating PHIMLIM (FRACPHIM)'
+      end
+      object lblWFINIT: TLabel
+        Left = 95
+        Top = 148
+        Width = 290
+        Height = 18
+        Caption = 'Initial regularisation weight factor (WFINIT)'
+      end
+      object lblWFMIN: TLabel
+        Left = 95
+        Top = 175
+        Width = 319
+        Height = 18
+        Caption = 'Minimum regularisation weight factor (WFMIN)'
+      end
+      object LBLWFMAX: TLabel
+        Left = 95
+        Top = 202
+        Width = 331
+        Height = 18
+        Caption = 'Maximum regularisation weight factor (WFMAX)'
+      end
+      object rdePhimLim: TRbwDataEntry
+        Left = 6
+        Top = 16
+        Width = 83
+        Height = 22
+        TabOrder = 0
+        Text = '0'
+        OnChange = rdePhimLimChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdePhimAccept: TRbwDataEntry
+        Left = 6
+        Top = 67
+        Width = 83
+        Height = 22
+        TabOrder = 1
+        Text = '0'
+        OnChange = rdePhimAcceptChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object cbAutomaticallySetPHIMACCEPT: TCheckBox
+        Left = 6
+        Top = 44
+        Width = 339
+        Height = 17
+        Caption = 'Automatically Set PHIMACCEPT'
+        TabOrder = 2
+        OnClick = cbAutomaticallySetPHIMACCEPTClick
+      end
+      object rdeFRACPHIM: TRbwDataEntry
+        Left = 6
+        Top = 95
+        Width = 83
+        Height = 22
+        TabOrder = 3
+        Text = '0'
+        OnChange = rdeFRACPHIMChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMax = True
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object cbMemSave: TCheckBox
+        Left = 6
+        Top = 122
+        Width = 403
+        Height = 17
+        Caption = 'Save memory at the expense of speed (MEMSAVE)'
+        TabOrder = 4
+      end
+      object rdeWFINIT: TRbwDataEntry
+        Left = 6
+        Top = 145
+        Width = 83
+        Height = 21
+        TabOrder = 5
+        Text = '0'
+        OnChange = rdeWFINITChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeWFMIN: TRbwDataEntry
+        Left = 6
+        Top = 172
+        Width = 83
+        Height = 21
+        TabOrder = 6
+        Text = '0'
+        OnChange = rdeWFMINChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeWFMAX: TRbwDataEntry
+        Left = 3
+        Top = 199
+        Width = 83
+        Height = 21
+        TabOrder = 7
+        Text = '0'
+        OnChange = rdeWFMAXChange
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+    end
   end
   object pnlBottom: TPanel
     Left = 0
     Top = 419
-    Width = 710
+    Width = 723
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitWidth = 710
     object btnHelp: TBitBtn
       Left = 446
       Top = 6
@@ -1563,15 +1737,15 @@ inherited frmPEST: TfrmPEST
   end
   object dlgOpenCovarianceMatrixFile: TOpenDialog
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
-    Left = 430
-    Top = 72
+    Left = 62
+    Top = 128
   end
   object dlgOpenPilotPoints: TOpenDialog
     Filter = 
       'Shapefile (*.shp)|*.shp|Text files (*.txt,*.csv)|*.csv;*.txt|Tex' +
       't file (*.txt)|*.txt|CSV file (*.csv)|*.csv'
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
-    Left = 438
-    Top = 16
+    Left = 38
+    Top = 64
   end
 end

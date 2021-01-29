@@ -409,6 +409,211 @@ type
     property LsqrWrite: TLsqrWrite read FLsqrWrite write SetLsqrWrite;
   end;
 
+  TMemSave = (msNoMemSave, msMemSave);
+  TLinRegression = (lfNoLinReg, lfLinReg);
+  TRegContinue = (rcNoContinue, rcContinue);
+
+  // See PEST manual chapter 9.
+  TPestRegularization = class(TGoPhastPersistent)
+  private
+    FStoredFrachPhiM: TRealStorage;
+    FStoredWeightFactorMaximum: TRealStorage;
+    FMemSave: TMemSave;
+    FLinearRegression: TLinRegression;
+    FAutoPhiMAccept: Boolean;
+    FStoredPhiMAccept: TRealStorage;
+    FStoredRegularizationSingularValueThreshhold: TRealStorage;
+    FStoredWeightFactorMinimum: TRealStorage;
+    FRegContinue: TRegContinue;
+    FStoredWFFac: TRealStorage;
+    FOptimizationInterval: Integer;
+    FStoredRegWeightRatio: TRealStorage;
+    FStoredWFInit: TRealStorage;
+    FRegularizationOption: Integer;
+    FStoredWeightFactorTolerance: TRealStorage;
+    FStoredPhiMLim: TRealStorage;
+    procedure SetAutoPhiMAccept(const Value: Boolean);
+    procedure SetLinearRegression(const Value: TLinRegression);
+    procedure SetMemSave(const Value: TMemSave);
+    procedure SetOptimizationInterval(const Value: Integer);
+    procedure SetRegContinue(const Value: TRegContinue);
+    procedure SetRegularizationOption(const Value: Integer);
+    procedure SetStoredRegularizationSingularValueThreshhold(
+      const Value: TRealStorage);
+    procedure SetStoredFrachPhiM(const Value: TRealStorage);
+    procedure SetStoredPhiMAccept(const Value: TRealStorage);
+    procedure SetStoredPhiMLim(const Value: TRealStorage);
+    procedure SetStoredRegWeightRatio(const Value: TRealStorage);
+    procedure SetStoredWeightFactorMaximum(const Value: TRealStorage);
+    procedure SetStoredWeightFactorMinimum(const Value: TRealStorage);
+    procedure SetStoredWFFac(const Value: TRealStorage);
+    procedure SetStoredWFInit(const Value: TRealStorage);
+    procedure SetStoredWeightFactorTolerance(const Value: TRealStorage);
+    function GetFrachPhiM: double;
+    function GetPhiMAccept: double;
+    function GetPhiMLim: double;
+    function GetRegularizationSingularValueThreshhold: double;
+    function GetRegWeightRatio: double;
+    function GetWeightFactorMaximum: double;
+    function GetWeightFactorMinimum: double;
+    function GetWeightFactorTolerance: double;
+    function GetWFFac: double;
+    function GetWFInit: double;
+    procedure SetFrachPhiM(const Value: double);
+    procedure SetPhiMAccept(const Value: double);
+    procedure SetPhiMLim(const Value: double);
+    procedure SetRegularizationSingularValueThreshhold(const Value: double);
+    procedure SetRegWeightRatio(const Value: double);
+    procedure SetWeightFactorMaximum(const Value: double);
+    procedure SetWeightFactorMinimum(const Value: double);
+    procedure SetWeightFactorTolerance(const Value: double);
+    procedure SetWFFac(const Value: double);
+    procedure SetWFInit(const Value: double);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    procedure Assign(Source: TPersistent); override;
+    Destructor Destroy; override;
+    procedure InitializeVariables;
+    // PHIMLIM, Initial value 1E-10
+    // target measurement objective function
+    // greater than zero
+    property PhiMLim: double read GetPhiMLim write SetPhiMLim;
+    // PHIMACCEPT, Should be 5 to 10% greater than PHIMLIM
+    // acceptable measurement objective function
+    // greater than PHIMLIM
+    property PhiMAccept: double read GetPhiMAccept write SetPhiMAccept;
+    // FRACPHIM, Initial value 0.1.
+    // FRACPHIM is optional
+    // set target measurement objective function at this fraction
+    // of current measurement objective function
+    // zero or greater, but less than one
+    property FrachPhiM: double read GetFrachPhiM write SetFrachPhiM;
+    // WFINIT Initial regularization weight factor.
+    // If you have no idea of what the weight factor should be,
+    // simply set it to 1.0.
+    // greater than zero
+    property WFInit: double read GetWFInit write SetWFInit;
+    // WFMIN, minimum regularization weight factor.
+    // Normally settings of 1E-10 is suitable
+    // greater than zero
+    property WeightFactorMinimum: double read GetWeightFactorMinimum write SetWeightFactorMinimum;
+    // WFMAX
+    // Normally settings of 1E10 is suitable
+    // maximum regularization weight factor
+    // greater than WFMAX
+    property WeightFactorMaximum: double read GetWeightFactorMaximum write SetWeightFactorMaximum;
+    // WFFAC Weight Factor adjustment factor. Initiall value 1.3
+    // must be greater than 1.
+    // regularization weight factor adjustment factor
+    // greater than one
+    property WFFac: double read GetWFFac write SetWFFac;
+    // WFTOL Weight Factor tolerance Normally between 1E-3 and 1E-2 but can be
+    // greater than 1E-2.
+    // convergence criterion for regularization weight factor
+    // greater than zero
+    property WeightFactorTolerance: double read GetWeightFactorTolerance write SetWeightFactorTolerance;
+    // REGWEIGHTRAT required if IREGADJ = 4
+    // the ratio of highest to lowest regularization weight; spread is logarithmic with null space projection if set negative
+    // absolute value of one or greater
+    property RegWeightRatio: double read GetRegWeightRatio write SetRegWeightRatio;
+    // REGSINGTHRESH required if IREGADJ = 5
+    // singular value of JtQJ (as factor of highest singular value) at which use of higher regularization weights commences if IREGADJ is set to 5
+    // less than one and greater than zero
+    property RegularizationSingularValueThreshhold: double read GetRegularizationSingularValueThreshhold write SetRegularizationSingularValueThreshhold;
+  published
+    // PHIMLIM, Initial value 1E-10
+    // target measurement objective function
+    // greater than zero
+    property StoredPhiMLim: TRealStorage read FStoredPhiMLim write SetStoredPhiMLim;
+    // PHIMACCEPT, Should be 5 to 10% greater than PHIMLIM
+    // acceptable measurement objective function
+    // greater than PHIMLIM
+    property StoredPhiMAccept: TRealStorage read FStoredPhiMAccept write SetStoredPhiMAccept;
+    // If @name is try, PHIMACCEPT will be automatically set to be
+    // 5% greater than PHIMLIM.
+    property AutoPhiMAccept: Boolean read FAutoPhiMAccept write SetAutoPhiMAccept;
+    // FRACPHIM, Initial value 0.1.
+    // FRACPHIM is optional
+    // set target measurement objective function at this fraction
+    // of current measurement objective function
+    // zero or greater, but less than one
+    property StoredFrachPhiM: TRealStorage read FStoredFrachPhiM write SetStoredFrachPhiM;
+    // MEMSAVE “memsave” or “nomemsave”.  MEMSAVE is optional.
+    // The optional MEMSAVE variable can be used to implement memory
+    // conservation features that may assist PEST in very highly
+    // parameterized cases.
+    // activate conservation of memory at cost of execution speed and quantity of model output
+    property MemSave: TMemSave read FMemSave write SetMemSave;
+    // WFINIT Initial regularization weight factor.
+    // If you have no idea of what the weight factor should be,
+    // simply set it to 1.0.
+    // greater than zero
+    property StoredWFInit: TRealStorage read FStoredWFInit write SetStoredWFInit;
+    // WFMIN, minimum regularization weight factor.
+    // Normally settings of 1E-10 is suitable
+    // greater than zero
+    property StoredWeightFactorMinimum: TRealStorage
+      read FStoredWeightFactorMinimum write SetStoredWeightFactorMinimum;
+    // WFMAX
+    // Normally settings of 1E10 is suitable
+    // maximum regularization weight factor
+    // greater than WFMAX
+    property StoredWeightFactorMaximum: TRealStorage read FStoredWeightFactorMaximum write SetStoredWeightFactorMaximum;
+    // WFFAC Weight Factor adjustment factor. Initiall value 1.3
+    // must be greater than 1.
+    // regularization weight factor adjustment factor
+    // greater than one
+    property StoredWFFac: TRealStorage read FStoredWFFac write SetStoredWFFac;
+    // WFTOL Weight Factor tolerance Normally between 1E-3 and 1E-2 but can be
+    // greater than 1E-2.
+    // convergence criterion for regularization weight factor
+    // greater than zero
+    property StoredWeightFactorTolerance: TRealStorage read FStoredWeightFactorTolerance write SetStoredWeightFactorTolerance;
+    // LINREG should be supplied as either “linreg” or “nonlinreg”.
+    // InitialValue: nonlinreg
+    // LINREG is optional.
+    // If a value for LINREG is not supplied in a PEST control file, the
+    // default value of “nonlinreg” is employed, unless all regularization
+    // constraints are supplied as prior information, in which case the
+    // default value of “linreg” is used.
+    // informs PEST that all regularization constraints are linear
+    property LinearRegression: TLinRegression read FLinearRegression write SetLinearRegression;
+    // REGCONTINUE, Values = “continue” or “nocontinue”.
+    // REGCONTINUE is optional. If absent nocontinue is assumed.
+    // instructs PEST to continue minimising regularization objective function even if measurement objective function less than PHIMLIM
+    property RegContinue: TRegContinue read FRegContinue write SetRegContinue;
+    // IREGADJ. Optional
+    // If absent, 0 is assumed.
+    // Normally set to 1.
+    // Values can be 1, 2, 3, 4, 5.
+    // 0 no inter-regularization-group weights adjustment takes place.
+    // 1,2,3 regularization is on a group by group basis.
+    // 4, 5 regularization on an item by item basis.
+    // 1 regularization is done so that sensitivities of
+    // regularizaion groups are the same
+    // 2 regularization is done so that weights of groups are the same.
+    // 3 Like 1 but then multiply by a user specified group weight.
+    // 4 weights calculated automatically
+    // 5 items are diveded into two groups based on how informative the items
+    //   and and each group is given a user supplied weight.
+    property RegularizationOption: Integer read FRegularizationOption write SetRegularizationOption;
+    // NOPTREGADJ required if IREGADJ = 4
+    // NOPTREGADJ the optimization interval at which regularization weights
+    // are re-calculated
+    // Must be 1 or greater.
+    // the optimization iteration interval for re-calculation of regularization weights if IREGADJ is 4 or 5
+    property OptimizationInterval: Integer read FOptimizationInterval write SetOptimizationInterval;
+    // REGWEIGHTRAT required if IREGADJ = 4
+    // the ratio of highest to lowest regularization weight; spread is logarithmic with null space projection if set negative
+    // absolute value of one or greater
+    property StoredRegWeightRatio: TRealStorage read FStoredRegWeightRatio write SetStoredRegWeightRatio;
+    // REGSINGTHRESH required if IREGADJ = 5
+    // singular value of JtQJ (as factor of highest singular value) at which use of higher regularization weights commences if IREGADJ is set to 5
+    // less than one and greater than zero
+    property StoredRegularizationSingularValueThreshhold: TRealStorage
+      read FStoredRegularizationSingularValueThreshhold write SetStoredRegularizationSingularValueThreshhold;
+  end;
+
   TArrayPilotPointSelection = (appsNone, appsRectangular, appsTriangular);
 
   TPestProperties = class(TGoPhastPersistent)
@@ -433,6 +638,7 @@ type
     FTriangulaRowSpacing: Double;
     FStoredPilotPointBuffer: TRealStorage;
     FStoredMinimumSeparation: TRealStorage;
+    FRegularization: TPestRegularization;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -459,6 +665,7 @@ type
     procedure SetStoredMinimumSeparation(const Value: TRealStorage);
     function GetMinimumSeparation: Double;
     procedure SetMinimumSeparation(const Value: Double);
+    procedure SetRegularization(const Value: TPestRegularization);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -503,7 +710,10 @@ type
       read FArrayPilotPointSelection write SetArrayPilotPointSelection;
     property StoredPilotPointBuffer: TRealStorage read FStoredPilotPointBuffer
       write SetStoredPilotPointBuffer;
-    Property StoredMinimumSeparation: TRealStorage read FStoredMinimumSeparation write SetStoredMinimumSeparation;
+    Property StoredMinimumSeparation: TRealStorage read FStoredMinimumSeparation
+      write SetStoredMinimumSeparation;
+    property Regularization: TPestRegularization read FRegularization
+      write SetRegularization;
   end;
 
 implementation
@@ -538,6 +748,7 @@ begin
     UseBetweenObservationsPilotPoints  := PestSource.UseBetweenObservationsPilotPoints;
     ArrayPilotPointSelection := PestSource.ArrayPilotPointSelection;
     MinimumSeparation := PestSource.MinimumSeparation;
+    Regularization := PestSource.Regularization;
   end
   else
   begin
@@ -571,11 +782,13 @@ begin
   FStoredMinimumSeparation.OnChange := InvalidateModelEvent;
   FSpecifiedPilotPoints := TSimplePointCollection.Create;
   FBetweenObservationsPilotPoints := TSimplePointCollection.Create;
+  FRegularization := TPestRegularization.Create(InvalidateModelEvent);
   InitializeVariables;
 end;
 
 destructor TPestProperties.Destroy;
 begin
+  FRegularization.Free;
   FBetweenObservationsPilotPoints.Free;
   FSpecifiedPilotPoints.Free;
   FObservatioGroups.Free;
@@ -802,6 +1015,7 @@ begin
   FPestControlData.InitializeVariables;
   FSvdProperties.InitializeVariables;
   FLsqrProperties.InitializeVariables;
+  Regularization.InitializeVariables;
 
   FObservatioGroups.Clear;
   SpecifiedPilotPoints.Clear;
@@ -863,6 +1077,11 @@ end;
 procedure TPestProperties.SetPilotPointSpacing(const Value: double);
 begin
   FStoredPilotPointSpacing.Value := Value;
+end;
+
+procedure TPestProperties.SetRegularization(const Value: TPestRegularization);
+begin
+  FRegularization.Assign(Value);
 end;
 
 procedure TPestProperties.SetShowPilotPoints(const Value: Boolean);
@@ -1729,6 +1948,299 @@ procedure TLsqrProperties.SetStoredRightHandSideTolerance(
   const Value: TRealStorage);
 begin
   FStoredRightHandSideTolerance.Assign(Value);
+end;
+
+{ TPestRegularization }
+
+procedure TPestRegularization.Assign(Source: TPersistent);
+var
+  PReg: TPestRegularization;
+begin
+  if Source is TPestRegularization then
+  begin
+    PReg := TPestRegularization(Source);
+    PhiMLim := PReg.PhiMLim;
+    PhiMAccept := PReg.PhiMAccept;
+    FrachPhiM := PReg.FrachPhiM;
+    WFInit := PReg.WFInit;
+    WeightFactorMinimum := PReg.WeightFactorMinimum;
+    WeightFactorMaximum := PReg.WeightFactorMaximum;
+    WFFac := PReg.WFFac;
+    WeightFactorTolerance := PReg.WeightFactorTolerance;
+    RegWeightRatio := PReg.RegWeightRatio;
+    RegularizationSingularValueThreshhold := PReg.RegularizationSingularValueThreshhold;
+    AutoPhiMAccept := PReg.AutoPhiMAccept;
+    MemSave := PReg.MemSave;
+    LinearRegression := PReg.LinearRegression;
+    RegContinue := PReg.RegContinue;
+    RegularizationOption := PReg.RegularizationOption;
+    OptimizationInterval := PReg.OptimizationInterval;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TPestRegularization.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  FStoredFrachPhiM := TRealStorage.Create;
+  FStoredWeightFactorMaximum := TRealStorage.Create;
+  FStoredPhiMAccept := TRealStorage.Create;
+  FStoredRegularizationSingularValueThreshhold := TRealStorage.Create;
+  FStoredWeightFactorMinimum := TRealStorage.Create;
+  FStoredWFFac := TRealStorage.Create;
+  FStoredRegWeightRatio := TRealStorage.Create;
+  FStoredWFInit := TRealStorage.Create;
+  FStoredWeightFactorTolerance := TRealStorage.Create;
+  FStoredPhiMLim := TRealStorage.Create;
+  
+  FStoredFrachPhiM.OnChange := InvalidateModelEvent;
+  FStoredWeightFactorMaximum.OnChange := InvalidateModelEvent;
+  FStoredPhiMAccept.OnChange := InvalidateModelEvent;
+  FStoredRegularizationSingularValueThreshhold.OnChange := InvalidateModelEvent;
+  FStoredWeightFactorMinimum.OnChange := InvalidateModelEvent;
+  FStoredWFFac.OnChange := InvalidateModelEvent;
+  FStoredRegWeightRatio.OnChange := InvalidateModelEvent;
+  FStoredWFInit.OnChange := InvalidateModelEvent;
+  FStoredWeightFactorTolerance.OnChange := InvalidateModelEvent;
+  FStoredPhiMLim.OnChange := InvalidateModelEvent;
+  
+  InitializeVariables;
+end;
+
+destructor TPestRegularization.Destroy;
+begin
+  FStoredFrachPhiM.Free;
+  FStoredWeightFactorMaximum.Free;
+  FStoredPhiMAccept.Free;
+  FStoredRegularizationSingularValueThreshhold.Free;
+  FStoredWeightFactorMinimum.Free;
+  FStoredWFFac.Free;
+  FStoredRegWeightRatio.Free;
+  FStoredWFInit.Free;
+  FStoredWeightFactorTolerance.Free;
+  FStoredPhiMLim.Free;
+
+  inherited;
+end;
+
+function TPestRegularization.GetFrachPhiM: double;
+begin
+  result := StoredFrachPhiM.Value;
+end;
+
+function TPestRegularization.GetPhiMAccept: double;
+begin
+  result := StoredPhiMAccept.Value;
+end;
+
+function TPestRegularization.GetPhiMLim: double;
+begin
+  result := StoredPhiMLim.Value;
+end;
+
+function TPestRegularization.GetRegularizationSingularValueThreshhold: double;
+begin
+  result := StoredRegularizationSingularValueThreshhold.Value
+end;
+
+function TPestRegularization.GetRegWeightRatio: double;
+begin
+  result := StoredRegWeightRatio.Value;
+end;
+
+function TPestRegularization.GetWeightFactorMaximum: double;
+begin
+  result := StoredWeightFactorMaximum.Value;
+end;
+
+function TPestRegularization.GetWeightFactorMinimum: double;
+begin
+  result := StoredWeightFactorMinimum.Value;
+end;
+
+function TPestRegularization.GetWeightFactorTolerance: double;
+begin
+  result := StoredWeightFactorTolerance.Value;
+end;
+
+function TPestRegularization.GetWFFac: double;
+begin
+  result := StoredWFFac.Value;
+end;
+
+function TPestRegularization.GetWFInit: double;
+begin
+  result := StoredWFInit.Value
+end;
+
+procedure TPestRegularization.InitializeVariables;
+begin
+  PhiMLim := 1E-10;
+  PhiMAccept := 1.05E-10;
+  AutoPhiMAccept := True;
+  FrachPhiM := 0.1;
+  MemSave := msNoMemSave;
+  WFInit := 1.0;
+  WeightFactorMinimum := 1E-10;
+  WeightFactorMaximum := 1E10;
+  WFFac := 1.3;
+  WeightFactorTolerance := 3E-3;
+  LinearRegression := lfNoLinReg;
+  RegContinue := rcNoContinue;
+  RegularizationOption := 1;
+  OptimizationInterval := 1;
+  RegWeightRatio := 50;
+  RegularizationSingularValueThreshhold := 0.5;
+end;
+
+procedure TPestRegularization.SetAutoPhiMAccept(const Value: Boolean);
+begin
+  SetBooleanProperty(FAutoPhiMAccept, Value)
+end;
+
+procedure TPestRegularization.SetFrachPhiM(const Value: double);
+begin
+  StoredFrachPhiM.Value := Value;
+end;
+
+procedure TPestRegularization.SetLinearRegression(const Value: TLinRegression);
+begin
+  if FLinearRegression <> Value then
+  begin
+    InvalidateModel;
+    FLinearRegression := Value;
+  end;
+end;
+
+procedure TPestRegularization.SetMemSave(const Value: TMemSave);
+begin
+  if FMemSave <> Value then
+  begin
+    InvalidateModel;
+    FMemSave := Value;
+  end;
+end;
+
+procedure TPestRegularization.SetOptimizationInterval(const Value: Integer);
+begin
+  SetIntegerProperty(FOptimizationInterval, Value)
+end;
+
+procedure TPestRegularization.SetPhiMAccept(const Value: double);
+begin
+  StoredPhiMAccept.Value := Value;
+end;
+
+procedure TPestRegularization.SetPhiMLim(const Value: double);
+begin
+  StoredPhiMLim.Value := Value;
+end;
+
+procedure TPestRegularization.SetRegContinue(const Value: TRegContinue);
+begin
+  if FRegContinue <> Value then
+  begin
+    InvalidateModel;
+    FRegContinue := Value;
+  end;
+end;
+
+procedure TPestRegularization.SetRegularizationOption(const Value: Integer);
+begin
+  SetIntegerProperty(FRegularizationOption, Value)
+end;
+
+procedure TPestRegularization.SetRegularizationSingularValueThreshhold(
+  const Value: double);
+begin
+  StoredRegularizationSingularValueThreshhold.Value := Value;
+end;
+
+procedure TPestRegularization.SetRegWeightRatio(const Value: double);
+begin
+  StoredRegWeightRatio.Value := Value;
+end;
+
+procedure TPestRegularization.SetStoredRegularizationSingularValueThreshhold(
+  const Value: TRealStorage);
+begin
+  FStoredRegularizationSingularValueThreshhold.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredFrachPhiM(const Value: TRealStorage);
+begin
+  FStoredFrachPhiM.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredPhiMAccept(const Value: TRealStorage);
+begin
+  FStoredPhiMAccept.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredPhiMLim(const Value: TRealStorage);
+begin
+  FStoredPhiMLim.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredRegWeightRatio(
+  const Value: TRealStorage);
+begin
+  FStoredRegWeightRatio.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredWeightFactorMaximum(
+  const Value: TRealStorage);
+begin
+  FStoredWeightFactorMaximum.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredWeightFactorMinimum(
+  const Value: TRealStorage);
+begin
+  FStoredWeightFactorMinimum.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredWFFac(const Value: TRealStorage);
+begin
+  FStoredWFFac.Assign(Value);
+end;
+
+procedure TPestRegularization.SetStoredWFInit(const Value: TRealStorage);
+begin
+  FStoredWFInit.Assign(Value);
+end;
+
+procedure TPestRegularization.SetWeightFactorMaximum(const Value: double);
+begin
+  StoredWeightFactorMaximum.Value := Value;
+end;
+
+procedure TPestRegularization.SetWeightFactorMinimum(const Value: double);
+begin
+  StoredWeightFactorMinimum.Value := Value;
+end;
+
+procedure TPestRegularization.SetWeightFactorTolerance(const Value: double);
+begin
+  StoredWeightFactorTolerance.Value := Value;
+end;
+
+procedure TPestRegularization.SetWFFac(const Value: double);
+begin
+  StoredWFFac.Value := Value;
+end;
+
+procedure TPestRegularization.SetWFInit(const Value: double);
+begin
+  StoredWFInit.Value := Value;
+end;
+
+procedure TPestRegularization.SetStoredWeightFactorTolerance(
+  const Value: TRealStorage);
+begin
+  FStoredWeightFactorTolerance.Assign(Value);
 end;
 
 initialization

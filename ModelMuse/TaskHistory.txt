@@ -463,6 +463,10 @@ object TTaskHistory
     item
       Name = 'PEST Pilot Points'
       Display = True
+    end
+    item
+      Name = 'PEST Regularization'
+      Display = True
     end>
   History = <
     item
@@ -26900,5 +26904,13 @@ object TTaskHistory
       Date = 44223.000000000000000000
       Categories.Strings = (
         'Bug fix')
+    end
+    item
+      Date = 44224.000000000000000000
+      Categories.Strings = (
+        'PEST Regularization'
+        'PEST'
+        'Bug fix'
+        'Error checking')
     end>
 end
