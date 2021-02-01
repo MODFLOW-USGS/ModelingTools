@@ -49,11 +49,15 @@ type
     FParamFamily: string;
     FFileName: string;
     FValues: TRealCollection;
+    FLayer: Integer;
+    FDataArrayName: string;
     procedure SetBaseParamName(const Value: string);
     procedure SetCount(const Value: Integer);
     procedure SetParamFamily(const Value: string);
     procedure SetFileName(const Value: string);
     procedure SetValues(const Value: TRealCollection);
+    procedure SetLayer(const Value: Integer);
+    procedure SetDataArrayName(const Value: string);
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -66,6 +70,8 @@ type
     property BaseParamName: string read FBaseParamName write SetBaseParamName;
     property FileName: string read FFileName write SetFileName;
     property Values: TRealCollection read FValues write SetValues;
+    property Layer: Integer read FLayer write SetLayer;
+    Property DataArrayName: string read FDataArrayName write SetDataArrayName;
   end;
 
 
@@ -173,6 +179,8 @@ begin
     BaseParamName := SourceItem.BaseParamName;
     FileName := SourceItem.FileName;
     Values := SourceItem.Values;
+    Layer := SourceItem.Layer;
+    DataArrayName := SourceItem.DataArrayName;
   end
   else
   begin
@@ -195,6 +203,8 @@ begin
   begin
     FValues.Add.Value := Source.Values[VIndex];
   end;
+  Layer := Source.Layer;
+  DataArrayName := Source.DataArray.Name;
 end;
 
 constructor TStoredPilotParamDataItem.Create(Collection: TCollection);
@@ -227,9 +237,19 @@ begin
   FCount := Value;
 end;
 
+procedure TStoredPilotParamDataItem.SetDataArrayname(const Value: string);
+begin
+  FDataArrayName := Value;
+end;
+
 procedure TStoredPilotParamDataItem.SetFileName(const Value: string);
 begin
   FFileName := Value;
+end;
+
+procedure TStoredPilotParamDataItem.SetLayer(const Value: Integer);
+begin
+  FLayer := Value;
 end;
 
 procedure TStoredPilotParamDataItem.SetParamFamily(const Value: string);

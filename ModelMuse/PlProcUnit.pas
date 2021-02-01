@@ -859,7 +859,7 @@ begin
             [PListName, 5]));
 //          Inc(ColIndex);
           NewLine;
-          WriteString(Format('  id_type=''indexed'',file=''%s'')',
+          WriteString(Format('  id_type=''character'',file=''%s'')',
             [ExtractFileName(FileProperties.FileName)]));
           NewLine;
         end;

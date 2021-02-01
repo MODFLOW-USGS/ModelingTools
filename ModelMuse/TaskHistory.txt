@@ -26918,5 +26918,19 @@ object TTaskHistory
       Categories.Strings = (
         'PEST Regularization'
         'PEST')
+    end
+    item
+      Date = 44226.000000000000000000
+    end
+    item
+      Date = 44227.000000000000000000
+    end
+    item
+      Date = 44228.000000000000000000
+      Categories.Strings = (
+        'Design and Planning'
+        'PEST Regularization'
+        'PEST'
+        'Error checking')
     end>
 end

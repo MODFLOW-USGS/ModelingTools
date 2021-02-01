@@ -2086,7 +2086,7 @@ begin
   WeightFactorMinimum := 1E-10;
   WeightFactorMaximum := 1E10;
   WFFac := 1.3;
-  WeightFactorTolerance := 3E-3;
+  WeightFactorTolerance := 1e-2;
   LinearRegression := lfNoLinReg;
   RegContinue := rcNoContinue;
   RegularizationOption := 1;

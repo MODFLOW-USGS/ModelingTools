@@ -225,6 +225,9 @@ resourcestring
   StrLakeInflowAt0g = 'Lake Inflow at %0:g';
   StrSAndThenRaised = '%s  and then raised to the cell bottom';
   StrSAndThenLowered = '%s  and then lowered to the cell top';
+  StrLakeEtError = 'Lake evaporation rate less than zero.';
+  StrTheLakeEvaporation = 'The lake evaporation rate at time = %0:g defined ' +
+  'by the object %1:s is less than zero.';
 
 { TModflowLAKMf6Writer }
 
@@ -257,6 +260,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidLakeOutflow);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectNoCells);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeEtError);
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeTopIsAboveTh);
 
   IdentifyLakesAndLakeCells;
@@ -1044,6 +1048,13 @@ begin
         Format(StrLakeEvaporationAt,
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
+        
+      if LakeSetting.Evaporation < 0 then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrLakeEtError,
+          Format(StrTheLakeEvaporation,
+          [LakeItem.StartTime, ALake.FScreenObject]), ALake.FScreenObject)
+      end;
 
       LakeSetting.Runoff := EvaluateFormula(LakeItem.Runoff,
         Format(StrLakeRunoffAt0g,

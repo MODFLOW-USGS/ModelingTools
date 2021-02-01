@@ -229,8 +229,10 @@ begin
           FileProperties.ParameterIndex := ParamIndex+1;
           FileProperties.FileName := AFileName;
           FileProperties.Layer := LayerIndex;
-          FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
-            [DataArrayID, ParamIndex+1, LayerIndex+1]);
+          FileProperties.ParamFamily := Format('Fam%d_',
+            [PilotPointFiles.Count+1]);
+//          FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
+//            [DataArrayID, ParamIndex+1, LayerIndex+1]);
 
           PIndex := 1;
           OpenFile(AFileName);
@@ -295,7 +297,8 @@ begin
               FileProperties.AddValue(Value);
 
               SwitchToMain;
-              WriteInteger(PIndex);
+              WriteString(Format('%0:s%1:d', [FileProperties.ParamFamily, PIndex]));
+//              WriteInteger(PIndex);
               WriteFloat(APilotPoint.x);
               WriteFloat(APilotPoint.y);
               WriteInteger(ParamIndex + 1);
@@ -303,7 +306,8 @@ begin
               NewLine;
 
               SwitchToTemplate;
-              WriteInteger(PIndex);
+              WriteString(Format('%0:s%1:d', [FileProperties.ParamFamily, PIndex]));
+//              WriteInteger(PIndex);
               WriteFloat(APilotPoint.x);
               WriteFloat(APilotPoint.y);
               WriteInteger(ParamIndex + 1);

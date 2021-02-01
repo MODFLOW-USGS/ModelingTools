@@ -1273,6 +1273,20 @@ var
     // write only in NUMCOM is written in line 4 of the control data section
 //    WriteInteger(1);
 
+
+    if (PilotParamName <> '') and (ParameterIndex = 1) then
+    begin
+      WriteString(' # Parameters in the ');
+      WriteString(PilotPointItem.ParamFamily);
+      WriteString(' family are pilot point parameters related to ');
+      WriteString(AParam.ParameterName);
+      WriteString(' in layer ');
+      WriteInteger(PilotPointItem.Layer+1);
+      WriteString(' in data set ');
+      WriteString(PilotPointItem.DataArrayName);
+    end;
+
+
     NewLine;
   end;
   procedure WriteTiedParameter(AParam: TModflowParameter);
@@ -1382,6 +1396,11 @@ procedure TPestControlFileWriter.WriteRegularisation;
 var
   Regularization: TPestRegularization;
 begin
+  if Model.PestProperties.PestControlData.PestMode <> pmRegularisation then
+  begin
+    Exit;
+  end;
+  
   Regularization := Model.PestProperties.Regularization;
   WriteSectionHeader('regularisation');
   WriteFloat(Regularization.PhiMLim);
@@ -1395,7 +1414,8 @@ begin
   begin
     WriteString(' memsave');
   end;
-  WriteString(' # PHIMLIM PHIMACCEPT FRACPHIM MEMSAVE');
+  // GENREG doesn't like comments in the regularizaiton section here.
+//  WriteString(' # PHIMLIM PHIMACCEPT FRACPHIM MEMSAVE');
   NewLine;
 
   WriteFloat(Regularization.WFInit);
