@@ -13,6 +13,7 @@ type
     FUseGroupTarget: Boolean;
     FAbsoluteCorrelationFileName: string;
     FStoredGroupTarget: TRealStorage;
+    FIsRegularizationGroup: Boolean;
     function GetRelativCorrelationFileName: string;
     procedure SetAbsoluteCorrelationFileName(const Value: string);
     procedure SetObsGroupName(Value: string);
@@ -24,6 +25,7 @@ type
     function GetObsGroupName: string;
     function GetUseGroupTarget: Boolean;
     function GetAbsoluteCorrelationFileName: string;
+    procedure SetIsRegularizationGroup(const Value: Boolean);
   protected
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
@@ -50,6 +52,8 @@ type
     // COVFLE]
     property RelativCorrelationFileName: string
       read GetRelativCorrelationFileName write SetRelativCorrelationFileName;
+    property IsRegularizationGroup: Boolean read FIsRegularizationGroup
+      write SetIsRegularizationGroup;
   end;
 
   TPestObservationGroups = class(TEnhancedOrderedCollection)
@@ -106,6 +110,7 @@ begin
     UseGroupTarget := SourceGroup.UseGroupTarget;
     GroupTarget := SourceGroup.GroupTarget;
     AbsoluteCorrelationFileName := SourceGroup.AbsoluteCorrelationFileName;
+    IsRegularizationGroup := SourceGroup.IsRegularizationGroup;
   end
   else
   begin
@@ -173,6 +178,7 @@ begin
       and (OtherItem.GroupTarget = GroupTarget)
       and (OtherItem.AbsoluteCorrelationFileName = AbsoluteCorrelationFileName)
       and (OtherItem.UseGroupTarget = UseGroupTarget)
+      and (OtherItem.IsRegularizationGroup = IsRegularizationGroup)
   end;
 end;
 
@@ -197,6 +203,11 @@ end;
 procedure TPestObservationGroup.SetGroupTarget(const Value: Double);
 begin
   FStoredGroupTarget.Value := Value;
+end;
+
+procedure TPestObservationGroup.SetIsRegularizationGroup(const Value: Boolean);
+begin
+  SetBooleanProperty(FIsRegularizationGroup, Value);
 end;
 
 procedure TPestObservationGroup.SetObsGroupName(Value: string);

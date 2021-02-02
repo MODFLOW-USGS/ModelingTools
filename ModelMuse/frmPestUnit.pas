@@ -10,11 +10,15 @@ uses
   frameGridUnit, frameAvailableObjectsUnit, PestObsUnit, frameParentChildUnit,
   PestObsGroupUnit, Vcl.Mask, JvExMask, JvToolEdit,
   FluxObservationUnit, ModflowHobUnit, System.UITypes,
-  System.Generics.Collections, Vcl.Grids, RbwDataGrid4, JvSpin;
+  System.Generics.Collections, Vcl.Grids, RbwDataGrid4, JvSpin,
+  OrderedCollectionUnit, ModflowParameterUnit,
+  ModflowTransientListParameterUnit, HufDefinition;
 
 type
-  TPestObsGroupColumn = (pogcName, pogcUseTarget, pogcTarget, pogcFileName);
+  TPestObsGroupColumn = (pogcName, pogcRegularization, pogcUseTarget,
+    pogcTarget, pogcFileName);
   TPilotPointColumns = (ppcX, ppcY);
+  TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName);
 
   TUndoPestOptions = class(TCustomUndo)
   private
@@ -28,6 +32,15 @@ type
     FNewFluxObsList: TFluxObservationObjectList;
     FOldHobList: THobObjectList;
     FNewHobList: THobObjectList;
+    FNewSteadyParameters: TModflowSteadyParameters;
+    FOldSteadyParameters: TModflowSteadyParameters;
+    FNewTransientParameters: TModflowTransientListParameters;
+    FOldTransientParameters: TModflowTransientListParameters;
+    FNewHufParameters: THufModflowParameters;
+    FOldHufParameters: THufModflowParameters;
+    procedure AssignParameters(SteadyParameters: TModflowSteadyParameters;
+      HufParameters: THufModflowParameters;
+      TransientListParameters: TModflowTransientListParameters);
   protected
     function Description: string; override;
     procedure UpdateProperties(PestProperties: TPestProperties;
@@ -38,6 +51,9 @@ type
       var NewObsList: TObservationObjectList;
       var NewFluxObservationList: TFluxObservationObjectList;
       var NewHobList: THobObjectList;
+      var NewSteadyParameters: TModflowSteadyParameters;
+      var NewHufParameters: THufModflowParameters;
+      var NewTransientListParameters: TModflowTransientListParameters;
       PestDirectory: String);
     destructor Destroy; override;
     procedure DoCommand; override;
@@ -219,6 +235,10 @@ type
     lblREGWEIGHTRAT: TLabel;
     rdeREGSINGTHRESH: TRbwDataEntry;
     lblREGSINGTHRESH: TLabel;
+    jvspPriorInfoObsGroups: TJvStandardPage;
+    framePriorInfoObservationGroups: TframeGrid;
+    jvspInitialValue: TJvStandardPage;
+    rdgPriorInfoInitialValue: TRbwDataGrid4;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -253,6 +273,16 @@ type
     procedure rdeIREGADJChange(Sender: TObject);
     procedure rdeREGWEIGHTRATChange(Sender: TObject);
     procedure rdeREGSINGTHRESHChange(Sender: TObject);
+    procedure frameObservationGroupsGridBeforeDrawCell(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure frameObservationGroupsGridStateChange(Sender: TObject; ACol,
+      ARow: Integer; const Value: TCheckBoxState);
+    procedure rdgPriorInfoInitialValueStateChange(Sender: TObject; ACol,
+      ARow: Integer; const Value: TCheckBoxState);
+    procedure rdgPriorInfoInitialValueSetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure rdgPriorInfoInitialValueBeforeDrawCell(Sender: TObject; ACol,
+      ARow: Integer);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -261,15 +291,20 @@ type
     FHobList: THobList;
     FNewHobList: THobObjectList;
     FLocalObsGroups: TPestObservationGroups;
+    FLocalPriorInfoObsGroups: TPestObservationGroups;
     InvalidateModelEvent: TNotifyEvent;
     FGroupDictionary: TDictionary<TPestObservationGroup, TTreeNode>;
     FGroupNameDictionary: TDictionary<string, TPestObservationGroup>;
     FNoNameNode: TTreeNode;
+    FNewSteadyParameters: TModflowSteadyParameters;
+    FNewHufParameters: THufModflowParameters;
+    FNewTransientListParameters: TModflowTransientListParameters;
     procedure GetData;
     procedure SetData;
-    procedure FixObsGroupNames;
+    procedure FixObsGroupNames(ObsGridFrame: TframeGrid);
     procedure HandleGroupDeletion(Group: TPestObservationGroup);
-    procedure HandleAddedGroup(ObsGroup: TPestObservationGroup);
+    procedure HandleAddedGroup(TreeObsGroupFrame: TframeParentChild;
+      ObsGroup: TPestObservationGroup);
     procedure CheckPestDirectory;
     procedure ImportPilotPoints(const FileName: string);
     procedure AutoSetPhimAccept;
@@ -277,7 +312,23 @@ type
     procedure SetWfMaxVisibility;
     function GetIREGADJ: Integer;
     procedure SetIREGADJ(const Value: Integer);
+    procedure GetUsedTypes(var UsedTypes: TParameterTypes);
     property IREGADJ: Integer read GetIREGADJ write SetIREGADJ;
+    procedure InsertObsGroup(ObsGroupFrame: TframeGrid; Sender: TObject);
+    procedure GetCovarianceFileName(ObsGridFrame: TframeGrid;
+      ACol, ARow: Integer);
+    procedure CanSelectObsGridCell(ObsGridFrame: TframeGrid;
+      ARow, ACol: Integer; var CanSelect: Boolean);
+    procedure ChangeObservationGroupName(Grid: TRbwDataGrid4;
+      ARow, ACol: Integer; const Value: string);
+    procedure ObsGroupDeleteButtonClick(ObsGroupFrame: TframeGrid;
+      Sender: TObject);
+    procedure GetObsGroups(ObsGroupFrame: TframeGrid;
+      ObsGroups, EditedObsGroups: TPestObservationGroups);
+    procedure ChangeObsGroupNumber(ObsNameGrid: TframeGrid;
+      EditedObsGroups: TPestObservationGroups);
+    procedure SetObsGroups(ObsGroups: TPestObservationGroups;
+      ObsGroupFrame: TframeGrid; EditedObsGroups: TPestObservationGroups);
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -296,7 +347,7 @@ uses
   frmGoPhastUnit, GoPhastTypes, JvComCtrls, PhastModelUnit,
   PointCollectionUnit, QuadTreeClass, ShapefileUnit, System.IOUtils, FastGEO,
   ModelMuseUtilities, ScreenObjectUnit, TriCP_Routines, TriPackRoutines,
-  SutraPestObsUnit;
+  SutraPestObsUnit, System.Math;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
@@ -306,6 +357,7 @@ resourcestring
   StrTheShapeHeaderFil = 'The shape header file "%s" could not be found.';
   StrLine0d1sM = 'Line %0:d ("%1:s") must contain at least two values separa' +
   'ted by a comma or space character.';
+  StrRegularizationGroup = 'Regularization Group';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -350,11 +402,12 @@ procedure TfrmPEST.plMainChange(Sender: TObject);
 var
   Grid: TRbwDataGrid4;
   RowIndex: Integer;
+  PickList: TStringList;
 begin
   inherited;
   if plMain.ActivePage = jvspObservationGroups then
   begin
-    FixObsGroupNames;
+    FixObsGroupNames(frameObservationGroups);
 //    comboObsGroup.Items.Clear;
 //    comboObsGroup.Items.Capacity := frameObservationGroups.seNumber.AsInteger;
     Grid := frameObservationGroups.Grid;
@@ -365,6 +418,21 @@ begin
 //        comboObsGroup.Items.AddObject(Grid.Cells[Ord(pogcName), RowIndex],
 //          Grid.Objects[Ord(pogcName), RowIndex]);
       end;
+    end;
+  end;
+  if plMain.ActivePage = jvspInitialValue then
+  begin
+    PickList := TStringList.Create;
+    try
+      PickList.AddStrings(framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)]);
+      PickList.Delete(0);
+      while PickList.Count > framePriorInfoObservationGroups.seNumber.AsInteger do
+      begin
+        PickList.Delete(PickList.Count-1);
+      end;
+      rdgPriorInfoInitialValue.Columns[Ord(ppcGroupName)].PickList := PickList;
+    finally
+      PickList.Free;
     end;
   end;
 end;
@@ -437,6 +505,56 @@ begin
   else
   begin
     rdeWFTOL.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdgPriorInfoInitialValueBeforeDrawCell(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  inherited;
+  if (ARow > 0) and (ACol = Ord(ppcGroupName)) then
+  begin
+    if rdgPriorInfoInitialValue.Checked[Ord(ppcRegularization), ARow] then
+    begin
+      if rdgPriorInfoInitialValue.ItemIndex[ACol, ARow] < 0 then
+      begin
+        rdgPriorInfoInitialValue.Canvas.Brush.Color := clRed;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.rdgPriorInfoInitialValueSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+var
+  AParam: TModflowParameter;
+begin
+  inherited;
+  if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
+  begin
+    AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
+    if AParam <> nil then
+    begin
+      AParam.RegularizationGroup := rdgPriorInfoInitialValue.Cells[ACol, ARow];
+    end;
+  end;
+//
+end;
+
+procedure TfrmPEST.rdgPriorInfoInitialValueStateChange(Sender: TObject; ACol,
+  ARow: Integer; const Value: TCheckBoxState);
+var  
+  AParam: TModflowParameter;
+begin
+  inherited;
+    //TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName);
+  if (ACol = Ord(ppcRegularization)) and (ARow > 0) then
+  begin
+    AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
+    if AParam <> nil then
+    begin
+      AParam.RegularizeInitialValue := rdgPriorInfoInitialValue.Checked[ACol, ARow];
+    end;
   end;
 end;
 
@@ -914,6 +1032,7 @@ var
   ControlDataNode: TJvPageIndexNode;
   ObservationNode: TJvPageIndexNode;
   RegularizationNode: TJvPageIndexNode;
+  PriorInfoNode: TJvPageIndexNode;
 begin
   inherited;
   FObsList := TObservationList.Create;
@@ -925,8 +1044,13 @@ begin
   FHobList :=  THobList.Create;
   FNewHobList := THobObjectList.Create;
 
+  FNewSteadyParameters := TModflowSteadyParameters.Create(nil);
+  FNewHufParameters := THufModflowParameters.Create(nil);
+  FNewTransientListParameters := TModflowTransientListParameters.Create(nil);
+
   InvalidateModelEvent := nil;
   FLocalObsGroups := TPestObservationGroups.Create(nil);
+  FLocalPriorInfoObsGroups := TPestObservationGroups.Create(nil);
   FGroupDictionary := TDictionary<TPestObservationGroup, TTreeNode>.Create;
   FGroupNameDictionary := TDictionary<string, TPestObservationGroup>.Create;
 
@@ -990,6 +1114,18 @@ begin
     ObservationNode, 'Observation Group Assignments') as TJvPageIndexNode;
   NewNode.PageIndex := jvspObsGroupAssignments.PageIndex;
 
+  PriorInfoNode := tvPEST.Items.AddChild(
+    nil, 'Prior Information') as TJvPageIndexNode;
+  ObservationNode.PageIndex := -1;
+
+  NewNode := tvPEST.Items.AddChild(
+    PriorInfoNode, 'Prior Information Groups') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPriorInfoObsGroups.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    PriorInfoNode, 'Initial Value Prior Information') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspInitialValue.PageIndex;
+
   RegularizationNode := tvPEST.Items.AddChild(
     nil, 'Regularization') as TJvPageIndexNode;
   RegularizationNode.PageIndex := -1;
@@ -1016,8 +1152,13 @@ end;
 procedure TfrmPEST.FormDestroy(Sender: TObject);
 begin
   inherited;
+  FNewSteadyParameters.Free;
+  FNewHufParameters.Free;
+  FNewTransientListParameters.Free;
+  
   FGroupNameDictionary.Free;
   FGroupDictionary.Free;
+  FLocalPriorInfoObsGroups.Free;
   FLocalObsGroups.Free;
 
   FHobList.Free;
@@ -1030,144 +1171,65 @@ begin
   FNewObsList.Free;
 end;
 
+procedure TfrmPEST.frameObservationGroupsGridBeforeDrawCell(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  if (ARow > 0) and (ACol = Ord(pogcName)) then
+  begin
+    if frameObservationGroups.Grid.Checked[Ord(pogcRegularization), ARow]
+     and (Length(frameObservationGroups.Grid.Cells[Ord(pogcName), ARow]) > 7) then
+    begin
+      frameObservationGroups.Grid.Canvas.Brush.Color := clRed
+    end;
+  end;
+end;
+
 procedure TfrmPEST.frameObservationGroupsGridButtonClick(Sender: TObject; ACol,
   ARow: Integer);
 begin
   inherited;
-  dlgOpenCovarianceMatrixFile.FileName :=
-    frameObservationGroups.Grid.Cells[ACol, ARow];
-  if dlgOpenCovarianceMatrixFile.Execute then
-  begin
-    frameObservationGroups.Grid.Cells[ACol, ARow] :=
-      dlgOpenCovarianceMatrixFile.FileName;
-  end;
+  GetCovarianceFileName(frameObservationGroups, ACol, ARow);
 end;
 
 procedure TfrmPEST.frameObservationGroupsGridSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
-  if (ARow > 0) and (ACol = Ord(pogcTarget)) then
-  begin
-    CanSelect := frameObservationGroups.Grid.Checked[Ord(pogcUseTarget), ARow];
-  end;
+  CanSelectObsGridCell(frameObservationGroups, ARow, ACol, CanSelect);
 end;
 
 procedure TfrmPEST.frameObservationGroupsGridSetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
-var
-  Grid: TRbwDataGrid4;
-  Group: TPestObservationGroup;
-  OtherGroup: TPestObservationGroup;
-  TreeNode: TTreeNode;
 begin
   inherited;
-  Grid := frameObservationGroups.Grid;
-  if (ARow >= Grid.FixedRows) and (ACol = Ord(pogcName)) then
-  begin
-    Group := Grid.Objects[ACol, ARow] as TPestObservationGroup;
-    if Group <> nil then
-    begin
-      if FGroupNameDictionary.TryGetValue(UpperCase(Group.ObsGroupName), OtherGroup) then
-      begin
-        if Group = OtherGroup then
-        begin
-          FGroupNameDictionary.Remove(UpperCase(Group.ObsGroupName));
-        end;
-      end;
-      Group.ObsGroupName := ValidObsGroupName(Value);
-      if Group.ObsGroupName <> '' then
-      begin
-        if not FGroupNameDictionary.ContainsKey(UpperCase(Group.ObsGroupName)) then
-        begin
-          FGroupNameDictionary.Add(UpperCase(Group.ObsGroupName), Group)
-        end;
-      end;
+  ChangeObservationGroupName(frameObservationGroups.Grid, ARow, ACol, Value);
+end;
 
-      if FGroupDictionary.TryGetValue(Group, TreeNode) then
-      begin
-        TreeNode.Text := Group.ObsGroupName;
-      end;
-    end;
-  end;
+procedure TfrmPEST.frameObservationGroupsGridStateChange(Sender: TObject; ACol,
+  ARow: Integer; const Value: TCheckBoxState);
+begin
+  inherited;
+  frameObservationGroups.Grid.Invalidate;
 end;
 
 procedure TfrmPEST.frameObservationGroupssbDeleteClick(Sender: TObject);
-var
-  Grid: TRbwDataGrid4;
-  Group: TPestObservationGroup;
 begin
   inherited;
-  Grid := frameObservationGroups.Grid;
-  if Grid.SelectedRow >= Grid.FixedRows  then
-  begin
-    if Grid.Objects[Ord(pogcName), Grid.SelectedRow] <> nil then
-    begin
-      Group := Grid.Objects[Ord(pogcName), Grid.SelectedRow] as TPestObservationGroup;
-      HandleGroupDeletion(Group);
-      Group.Free;
-      Grid.Objects[Ord(pogcName), Grid.SelectedRow] := nil;
-    end;
-  end;
-
-  frameObservationGroups.sbDeleteClick(Sender);
-
+  ObsGroupDeleteButtonClick(frameObservationGroups, Sender);
 end;
 
 procedure TfrmPEST.frameObservationGroupssbInsertClick(Sender: TObject);
-var
-  NewGroup: TPestObservationGroup;
-  Grid: TRbwDataGrid4;
 begin
   inherited;
-  Grid := frameObservationGroups.Grid;
-  NewGroup := nil;
-  if Grid.SelectedRow >= Grid.FixedRows then
-  begin
-    NewGroup := FLocalObsGroups.Add;
-  end;
-  frameObservationGroups.sbInsertClick(Sender);
-  if NewGroup <> nil then
-  begin
-    Grid.Objects[Ord(pogcName), Grid.SelectedRow] := NewGroup;
-    NewGroup.Index := Grid.SelectedRow -1;
-    HandleAddedGroup(NewGroup);
-  end;
+  InsertObsGroup(frameObservationGroups, Sender);
 
 end;
 
 procedure TfrmPEST.frameObservationGroupsseNumberChange(Sender: TObject);
-var
-  Grid: TRbwDataGrid4;
-  NewGroup: TPestObservationGroup;
-  Names: TStrings;
-  OldGroup: TPestObservationGroup;
-  index: Integer;
 begin
   inherited;
-  Grid := frameObservationGroups.Grid;
-  Names := Grid.Cols[Ord(pogcName)];
-  frameObservationGroups.seNumberChange(Sender);
-  while frameObservationGroups.seNumber.AsInteger > FLocalObsGroups.Count do
-  begin
-    NewGroup := FLocalObsGroups.Add;
-    Grid.Objects[Ord(pogcName), FLocalObsGroups.Count] := NewGroup;
-    NewGroup.ObsGroupName := ValidObsGroupName(
-      Grid.Cells[Ord(pogcName), FLocalObsGroups.Count]);
-    HandleAddedGroup(NewGroup);
-  end;
-  while frameObservationGroups.seNumber.AsInteger < FLocalObsGroups.Count do
-  begin
-    OldGroup := FLocalObsGroups.Last as TPestObservationGroup;
-    index := Names.IndexOfObject(OldGroup);
-    HandleGroupDeletion(OldGroup);
-    OldGroup.Free;
-    if index >= 1 then
-    begin
-      Grid.Objects[Ord(pogcName),index] := nil;
-    end;
-  end;
-
+  ChangeObsGroupNumber(frameObservationGroups, FLocalObsGroups);
 end;
 
 procedure TfrmPEST.GetData;
@@ -1176,8 +1238,7 @@ var
   PestControlData: TPestControlData;
   SvdProperties: TSingularValueDecompositionProperties;
   LsqrProperties: TLsqrProperties;
-  Grid: TRbwDataGrid4;
-  ObsGroups: TPestObservationGroups;
+//  ObsGroups: TPestObservationGroups;
   ItemIndex: Integer;
   ObsGroup: TPestObservationGroup;
   index: Integer;
@@ -1194,6 +1255,15 @@ var
   FNewHobItem: THobItem;
   PointItem: TPointItem;
   Regularization: TPestRegularization;
+//  ObsGroupFrame: TframeGrid;
+  EditedObsGroups: TPestObservationGroups;
+  TreeFrame: TframeParentChild;
+  UsedTypes: TParameterTypes;
+  ParamList: TList<TModflowParameter>;
+  PIndex: Integer;
+  AParam: TModflowParameter;
+  PickList: TStrings;
+  ObsGroupIndex: Integer;
 //  InvalidateModelEvent: TNotifyEvent;
 begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
@@ -1247,7 +1317,6 @@ begin
     rdgBetweenObs.EndUpdate;
   end;
   {$ENDREGION}
-
 
   {$REGION 'Control Data'}
   PestControlData := PestProperties.PestControlData;
@@ -1333,49 +1402,25 @@ begin
   {$ENDREGION}
 
   {$REGION 'Observation Groups'}
-  ObsGroups := nil;
-  Grid := frameObservationGroups.Grid;
-  Grid.BeginUpdate;
-  try
-    Grid.Cells[Ord(pogcName), 0] := StrObservationGroupNa;
-    Grid.Cells[Ord(pogcUseTarget), 0] := StrUseGroupTargetGT;
-    Grid.Cells[Ord(pogcTarget), 0] := StrGroupTargetGTARG;
-    Grid.Cells[Ord(pogcFileName), 0] := StrCovarianceMatrixFi;
-
-    ObsGroups := PestProperties.ObservationGroups;
-    FLocalObsGroups.Assign(ObsGroups);
-    frameObservationGroups.seNumber.AsInteger := FLocalObsGroups.Count;
-    for ItemIndex := 0 to FLocalObsGroups.Count - 1 do
-    begin
-      ObsGroup := FLocalObsGroups[ItemIndex];
-      Grid.Objects[Ord(pogcName), ItemIndex+1] := ObsGroup;
-      Grid.Cells[Ord(pogcName), ItemIndex+1] := ObsGroup.ObsGroupName;
-      Grid.Checked[Ord(pogcUseTarget), ItemIndex+1] := ObsGroup.UseGroupTarget;
-      Grid.RealValue[Ord(pogcTarget), ItemIndex+1] :=
-        ObsGroup.GroupTarget;
-      Grid.Cells[Ord(pogcFileName), ItemIndex+1] :=
-        ObsGroup.AbsoluteCorrelationFileName;
-    end;
-
-  finally
-    Grid.EndUpdate;
-    if ObsGroups <> nil then
-    begin
-      frameObservationGroups.seNumber.AsInteger := ObsGroups.Count;
-    end;
-  end;
+  GetObsGroups(frameObservationGroups, PestProperties.ObservationGroups,
+    FLocalObsGroups);
+  GetObsGroups(framePriorInfoObservationGroups,
+    PestProperties.PriorInfoObservationGroups, FLocalPriorInfoObsGroups);
   {$ENDREGION}
 
   {$REGION 'Observation Group Assignments'}
   FGroupDictionary.Clear;
   FGroupNameDictionary.Clear;
-  Tree := frameParentObsGroups.tvTree;
+  EditedObsGroups := FLocalObsGroups;
+
+  TreeFrame := frameParentObsGroups;
+  Tree := TreeFrame.tvTree;
   Tree.Items.Clear;
   FNoNameNode := Tree.Items.AddChild(nil, StrNone);
-  for GroupIndex := 0 to FLocalObsGroups.Count - 1 do
+  for GroupIndex := 0 to EditedObsGroups.Count - 1 do
   begin
-    ObsGroup := FLocalObsGroups[GroupIndex];
-    HandleAddedGroup(ObsGroup);
+    ObsGroup := EditedObsGroups[GroupIndex];
+    HandleAddedGroup(TreeFrame, ObsGroup);
   end;
 
   frmGoPhast.PhastModel.FillObsItemList(FObsList, True);
@@ -1457,6 +1502,64 @@ begin
   end;
   {$ENDREGION}
 
+
+  {$REGION 'Prior Information Observation Groups'}
+  PickList := rdgPriorInfoInitialValue.Columns[Ord(ppcGroupName)].PickList;
+  PickList.Clear;
+  for ObsGroupIndex := 0 to FLocalPriorInfoObsGroups.Count - 1 do
+  begin
+    ObsGroup := FLocalPriorInfoObsGroups[ObsGroupIndex];
+    PickList.AddObject(ObsGroup.ObsGroupName, ObsGroup);
+  end;
+ {$ENDREGION}
+
+  GetUsedTypes(UsedTypes);
+  FNewSteadyParameters.Assign(frmGoPhast.PhastModel.ModflowSteadyParameters);
+  FNewHufParameters.Assign(frmGoPhast.PhastModel.HufParameters);
+  FNewTransientListParameters.Assign(frmGoPhast.PhastModel.ModflowTransientParameters);
+  ParamList := TList<TModflowParameter>.Create;
+  try
+    for PIndex := 0 to FNewSteadyParameters.Count -1 do
+    begin
+      AParam := FNewSteadyParameters[PIndex];
+      if (AParam.ParameterType in UsedTypes)
+        and (AParam.Transform in [ptNoTransform, ptLog]) then
+      begin
+        ParamList.Add(AParam);
+      end;
+    end;
+    for PIndex := 0 to FNewHufParameters.Count -1 do
+    begin
+      AParam := FNewHufParameters[PIndex];
+      if (AParam.ParameterType in UsedTypes)
+        and (AParam.Transform in [ptNoTransform, ptLog]) then
+      begin
+        ParamList.Add(AParam);
+      end;
+    end;
+    for PIndex := 0 to FNewTransientListParameters.Count -1 do
+    begin
+      AParam := FNewTransientListParameters[PIndex];
+      if (AParam.ParameterType in UsedTypes)
+        and (AParam.Transform in [ptNoTransform, ptLog]) then
+      begin
+        ParamList.Add(AParam);
+      end;
+    end;
+    //TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName);
+    rdgPriorInfoInitialValue.RowCount := Max(2, ParamList.Count+1);
+    for PIndex := 0 to ParamList.Count -1 do
+    begin
+      AParam := ParamList[PIndex];
+      rdgPriorInfoInitialValue.Cells[Ord(ppcName), PIndex+1] := AParam.ParameterName;
+      rdgPriorInfoInitialValue.Objects[Ord(ppcName), PIndex+1] := AParam;
+      rdgPriorInfoInitialValue.Checked[Ord(ppcRegularization), PIndex+1] := AParam.RegularizeInitialValue;
+      rdgPriorInfoInitialValue.Cells[Ord(ppcGroupName), PIndex+1] := AParam.RegularizationGroup;
+    end;
+  finally
+    ParamList.Free;
+  end;
+
   {$REGION 'Regularization'}
     Regularization := PestProperties.Regularization;
     rdePhimLim.RealValue := Regularization.PhiMLim;
@@ -1477,7 +1580,7 @@ begin
     rdeREGSINGTHRESH.RealValue := Regularization.RegularizationSingularValueThreshhold;
   {$ENDREGION}  
 
-  
+
 end;
 
 function TfrmPEST.GetIREGADJ: Integer;
@@ -1537,10 +1640,8 @@ var
   PestControlData: TPestControlData;
   SvdProperties: TSingularValueDecompositionProperties;
   LsqrProperties: TLsqrProperties;
-  RowIndex: Integer;
   Grid: TRbwDataGrid4;
-  ObsGroups: TPestObservationGroups;
-  AnObsGroup: TPestObservationGroup;
+//  ObsGroups: TPestObservationGroups;
   ANode: TTreeNode;
   ObsGroup: TPestObservationGroup;
   ChildNode: TTreeNode;
@@ -1551,6 +1652,8 @@ var
   PointItem: TPointItem;
   ItemIndex: Integer;
   Regularization: TPestRegularization;
+//  ObsGroupFrame: TframeGrid;
+//  EditedObsGroups: TPestObservationGroups;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(nil);
@@ -1605,7 +1708,6 @@ begin
     end;
 
     {$ENDREGION}
-
 
     {$REGION 'Control Data'}
     PestControlData := PestProperties.PestControlData;
@@ -1782,29 +1884,13 @@ begin
     {$ENDREGION}
 
     {$REGION 'Observation Groups'}
-    ObsGroups := PestProperties.ObservationGroups;
-    Grid := frameObservationGroups.Grid;
-//    ObsIndex := 0;
-    for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
-    begin
-      AnObsGroup := Grid.Objects[Ord(pogcName), RowIndex]
-        as TPestObservationGroup;
-      if (AnObsGroup = nil) and (Grid.Cells[Ord(pogcName), RowIndex] <> '') then
-      begin
-        AnObsGroup := FLocalObsGroups.Add;
-      end;
-      if AnObsGroup <> nil then
-      begin
-        if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
-        begin
-          AnObsGroup.ObsGroupName := Grid.Cells[Ord(pogcName), RowIndex];
-        end;
-        AnObsGroup.UseGroupTarget := Grid.Checked[Ord(pogcUseTarget), RowIndex];
-        AnObsGroup.GroupTarget := Grid.RealValueDefault[Ord(pogcTarget), RowIndex, 0];
-        AnObsGroup.AbsoluteCorrelationFileName := Grid.Cells[Ord(pogcFileName), RowIndex];
-        AnObsGroup.Collection := ObsGroups;
-      end;
-    end;
+//    ObsGroups := PestProperties.ObservationGroups;
+//    ObsGroupFrame := frameObservationGroups;
+//    EditedObsGroups := FLocalObsGroups;
+    SetObsGroups(PestProperties.ObservationGroups, frameObservationGroups,
+      FLocalObsGroups);
+    SetObsGroups(PestProperties.PriorInfoObservationGroups,
+      framePriorInfoObservationGroups, FLocalPriorInfoObsGroups);
     {$ENDREGION}
 
     {$REGION 'Observation Group Assignments'}
@@ -1880,7 +1966,8 @@ begin
     {$ENDREGION}
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties,
-      FNewObsList, FNewFluxObservationList, FNewHobList, diredPest.Text));
+      FNewObsList, FNewFluxObservationList, FNewHobList, FNewSteadyParameters,
+      FNewHufParameters, FNewTransientListParameters, diredPest.Text));
   finally
     PestProperties.Free
   end;
@@ -1948,14 +2035,229 @@ begin
   end;
 end;
 
-procedure TfrmPEST.FixObsGroupNames;
+procedure TfrmPEST.InsertObsGroup(ObsGroupFrame: TframeGrid; Sender: TObject);
+var
+  Grid: TRbwDataGrid4;
+  NewGroup: TPestObservationGroup;
+begin
+  Grid := ObsGroupFrame.Grid;
+  NewGroup := nil;
+  if Grid.SelectedRow >= Grid.FixedRows then
+  begin
+    NewGroup := FLocalObsGroups.Add;
+  end;
+  ObsGroupFrame.sbInsertClick(Sender);
+  if NewGroup <> nil then
+  begin
+    Grid.Objects[Ord(pogcName), Grid.SelectedRow] := NewGroup;
+    NewGroup.Index := Grid.SelectedRow - 1;
+    HandleAddedGroup(frameParentObsGroups, NewGroup);
+  end;
+end;
+
+procedure TfrmPEST.GetCovarianceFileName(ObsGridFrame: TframeGrid;
+  ACol, ARow: Integer);
+begin
+  dlgOpenCovarianceMatrixFile.FileName := ObsGridFrame.Grid.Cells[ACol, ARow];
+  if dlgOpenCovarianceMatrixFile.Execute then
+  begin
+    ObsGridFrame.Grid.Cells[ACol, ARow] := dlgOpenCovarianceMatrixFile.FileName;
+  end;
+end;
+
+procedure TfrmPEST.CanSelectObsGridCell(ObsGridFrame: TframeGrid;
+  ARow, ACol: Integer; var CanSelect: Boolean);
+begin
+  if (ARow > 0) and (ACol = Ord(pogcTarget)) then
+  begin
+    CanSelect := ObsGridFrame.Grid.Checked[Ord(pogcUseTarget), ARow];
+  end;
+end;
+
+procedure TfrmPEST.ChangeObservationGroupName(Grid: TRbwDataGrid4;
+  ARow, ACol: Integer; const Value: string);
+var
+  Group: TPestObservationGroup;
+  OtherGroup: TPestObservationGroup;
+  TreeNode: TTreeNode;
+begin
+  if (ARow >= Grid.FixedRows) and (ACol = Ord(pogcName)) then
+  begin
+    Group := Grid.Objects[ACol, ARow] as TPestObservationGroup;
+    if Group <> nil then
+    begin
+      if FGroupNameDictionary.TryGetValue(UpperCase(Group.ObsGroupName), OtherGroup) then
+      begin
+        if Group = OtherGroup then
+        begin
+          FGroupNameDictionary.Remove(UpperCase(Group.ObsGroupName));
+        end;
+      end;
+      Group.ObsGroupName := ValidObsGroupName(Value);
+      if Group.ObsGroupName <> '' then
+      begin
+        if not FGroupNameDictionary.ContainsKey(UpperCase(Group.ObsGroupName)) then
+        begin
+          FGroupNameDictionary.Add(UpperCase(Group.ObsGroupName), Group);
+        end;
+      end;
+      if FGroupDictionary.TryGetValue(Group, TreeNode) then
+      begin
+        TreeNode.Text := Group.ObsGroupName;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.ObsGroupDeleteButtonClick(ObsGroupFrame: TframeGrid;
+  Sender: TObject);
+var
+  Grid: TRbwDataGrid4;
+  Group: TPestObservationGroup;
+begin
+  Grid := ObsGroupFrame.Grid;
+  if Grid.SelectedRow >= Grid.FixedRows then
+  begin
+    if Grid.Objects[Ord(pogcName), Grid.SelectedRow] <> nil then
+    begin
+      Group := Grid.Objects[Ord(pogcName), Grid.SelectedRow] as TPestObservationGroup;
+      HandleGroupDeletion(Group);
+      Group.Free;
+      Grid.Objects[Ord(pogcName), Grid.SelectedRow] := nil;
+    end;
+  end;
+  ObsGroupFrame.sbDeleteClick(Sender);
+end;
+
+
+procedure TfrmPEST.GetObsGroups(ObsGroupFrame: TframeGrid;
+  ObsGroups, EditedObsGroups: TPestObservationGroups);
+var
+  Grid: TRbwDataGrid4;
+  ItemIndex: Integer;
+  ObsGroup: TPestObservationGroup;
+begin
+  Grid := ObsGroupFrame.Grid;
+  Grid.BeginUpdate;
+  try
+    Grid.Cells[Ord(pogcName), 0] := StrObservationGroupNa;
+    Grid.Cells[Ord(pogcRegularization), 0] := StrRegularizationGroup;
+    Grid.Cells[Ord(pogcUseTarget), 0] := StrUseGroupTargetGT;
+    Grid.Cells[Ord(pogcTarget), 0] := StrGroupTargetGTARG;
+    Grid.Cells[Ord(pogcFileName), 0] := StrCovarianceMatrixFi;
+    EditedObsGroups.Assign(ObsGroups);
+    ObsGroupFrame.seNumber.AsInteger := EditedObsGroups.Count;
+    for ItemIndex := 0 to EditedObsGroups.Count - 1 do
+    begin
+      ObsGroup := EditedObsGroups[ItemIndex];
+      Grid.Objects[Ord(pogcName), ItemIndex + 1] := ObsGroup;
+      Grid.Cells[Ord(pogcName), ItemIndex + 1] := ObsGroup.ObsGroupName;
+      Grid.Checked[Ord(pogcRegularization), ItemIndex + 1] := ObsGroup.IsRegularizationGroup;
+      Grid.Checked[Ord(pogcUseTarget), ItemIndex + 1] := ObsGroup.UseGroupTarget;
+      Grid.RealValue[Ord(pogcTarget), ItemIndex + 1] := ObsGroup.GroupTarget;
+      Grid.Cells[Ord(pogcFileName), ItemIndex + 1] := ObsGroup.AbsoluteCorrelationFileName;
+    end;
+  finally
+    Grid.EndUpdate;
+    if ObsGroups <> nil then
+    begin
+      ObsGroupFrame.seNumber.AsInteger := ObsGroups.Count;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.ChangeObsGroupNumber(ObsNameGrid: TframeGrid;
+  EditedObsGroups: TPestObservationGroups);
+var
+  Grid: TRbwDataGrid4;
+  Names: TStrings;
+  NewGroup: TPestObservationGroup;
+  OldGroup: TPestObservationGroup;
+  index: Integer;
+begin
+  Grid := ObsNameGrid.Grid;
+  Names := Grid.Cols[Ord(pogcName)];
+  ObsNameGrid.seNumberChange(nil);
+  while ObsNameGrid.seNumber.AsInteger > EditedObsGroups.Count do
+  begin
+    NewGroup := EditedObsGroups.Add;
+    Grid.Objects[Ord(pogcName), EditedObsGroups.Count] := NewGroup;
+    NewGroup.ObsGroupName := ValidObsGroupName(Grid.Cells[Ord(pogcName), EditedObsGroups.Count]);
+    HandleAddedGroup(frameParentObsGroups, NewGroup);
+  end;
+  while ObsNameGrid.seNumber.AsInteger < EditedObsGroups.Count do
+  begin
+    OldGroup := EditedObsGroups.Last as TPestObservationGroup;
+    index := Names.IndexOfObject(OldGroup);
+    HandleGroupDeletion(OldGroup);
+    OldGroup.Free;
+    if index >= 1 then
+    begin
+      Grid.Objects[Ord(pogcName), index] := nil;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.GetUsedTypes(var UsedTypes: TParameterTypes);
+begin
+  UsedTypes := [];
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    UsedTypes := Mf15ParamType;
+  end
+  else if frmGoPhast.ModelSelection in Modflow2005Selection then
+  begin
+    UsedTypes := Mf2005ParamType;
+  end
+  else if frmGoPhast.ModelSelection in SutraSelection then
+  begin
+    UsedTypes := SutraParamType;
+  end
+  else
+  begin
+    Assert(False);
+  end;
+end;
+
+procedure TfrmPEST.SetObsGroups(ObsGroups: TPestObservationGroups;
+  ObsGroupFrame: TframeGrid; EditedObsGroups: TPestObservationGroups);
+var
+  RowIndex: Integer;
+  AnObsGroup: TPestObservationGroup;
+  Grid: TRbwDataGrid4;
+begin
+  Grid := ObsGroupFrame.Grid;
+  //    ObsIndex := 0;
+  for RowIndex := 1 to ObsGroupFrame.seNumber.AsInteger do
+  begin
+    AnObsGroup := Grid.Objects[Ord(pogcName), RowIndex] as TPestObservationGroup;
+    if (AnObsGroup = nil) and (Grid.Cells[Ord(pogcName), RowIndex] <> '') then
+    begin
+      AnObsGroup := EditedObsGroups.Add;
+    end;
+    if AnObsGroup <> nil then
+    begin
+      if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
+      begin
+        AnObsGroup.ObsGroupName := Grid.Cells[Ord(pogcName), RowIndex];
+      end;
+      AnObsGroup.IsRegularizationGroup := Grid.Checked[Ord(pogcRegularization), RowIndex];
+      AnObsGroup.UseGroupTarget := Grid.Checked[Ord(pogcUseTarget), RowIndex];
+      AnObsGroup.GroupTarget := Grid.RealValueDefault[Ord(pogcTarget), RowIndex, 0];
+      AnObsGroup.AbsoluteCorrelationFileName := Grid.Cells[Ord(pogcFileName), RowIndex];
+      AnObsGroup.Collection := ObsGroups;
+    end;
+  end;
+end;
+procedure TfrmPEST.FixObsGroupNames(ObsGridFrame: TframeGrid);
 var
   Grid: TRbwDataGrid4;
   RowIndex: Integer;
   ValidName: string;
 begin
-  Grid := frameObservationGroups.Grid;
-  for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
+//  ObsGridFrame := frameObservationGroups;
+  Grid := ObsGridFrame.Grid;
+  for RowIndex := 1 to ObsGridFrame.seNumber.AsInteger do
   begin
     if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
     begin
@@ -2207,11 +2509,14 @@ begin
   rdeIREGADJ.IntegerValue := IREGADJ;
 end;
 
-procedure TfrmPEST.HandleAddedGroup(ObsGroup: TPestObservationGroup);
+procedure TfrmPEST.HandleAddedGroup(TreeObsGroupFrame: TframeParentChild;
+  ObsGroup: TPestObservationGroup);
 var
   NewNode: TTreeNode;
+//  TreeObsGroupFrame: TframeParentChild;
 begin
-  NewNode := frameParentObsGroups.tvTree.Items.AddChild(nil,
+//  TreeObsGroupFrame := frameParentObsGroups;
+  NewNode := TreeObsGroupFrame.tvTree.Items.AddChild(nil,
     ObsGroup.ObsGroupName);
   NewNode.Data := ObsGroup;
   FGroupDictionary.Add(ObsGroup, NewNode);
@@ -2242,6 +2547,9 @@ constructor TUndoPestOptions.Create(var NewPestProperties: TPestProperties;
   var NewObsList: TObservationObjectList;
   var NewFluxObservationList: TFluxObservationObjectList;
   var NewHobList: THobObjectList;
+  var NewSteadyParameters: TModflowSteadyParameters;
+  var NewHufParameters: THufModflowParameters;
+  var NewTransientListParameters: TModflowTransientListParameters;
   PestDirectory: String);
 var
   InvalidateModelEvent: TNotifyEvent;
@@ -2322,6 +2630,59 @@ begin
 
   FNewHobList := NewHobList;
   NewHobList := nil;
+  
+  FNewSteadyParameters := NewSteadyParameters;
+  FNewHufParameters := NewHufParameters;
+  FNewTransientParameters := NewTransientListParameters;
+  NewSteadyParameters := nil;
+  NewHufParameters := nil;
+  NewTransientListParameters := nil;
+
+  FOldSteadyParameters := TModflowSteadyParameters.Create(nil);
+  FOldHufParameters := THufModflowParameters.Create(nil);
+  FOldTransientParameters := TModflowTransientListParameters.Create(nil);
+  FOldSteadyParameters.Assign(frmGoPhast.PhastModel.ModflowSteadyParameters);
+  FOldHufParameters.Assign(frmGoPhast.PhastModel.HufParameters);
+  FOldTransientParameters.Assign(frmGoPhast.PhastModel.ModflowTransientParameters);
+end;
+
+procedure TUndoPestOptions.AssignParameters(SteadyParameters: TModflowSteadyParameters;
+  HufParameters: THufModflowParameters; TransientListParameters: TModflowTransientListParameters);
+var
+  ModelSteadyParameters: TModflowSteadyParameters;
+  ParamIndex: Integer;
+  ExistingParam: TModflowParameter;
+  ModifiedParam: TModflowParameter;
+  ModelHufParameters: THufModflowParameters;
+  ModelTransientListParameters: TModflowTransientListParameters;
+begin
+  ModelSteadyParameters := frmGoPhast.PhastModel.ModflowSteadyParameters;
+  Assert(ModelSteadyParameters.Count = SteadyParameters.Count);
+  for ParamIndex := 0 to SteadyParameters.Count -1 do
+  begin
+    ExistingParam := ModelSteadyParameters[ParamIndex];
+    ModifiedParam := SteadyParameters[ParamIndex];
+    ExistingParam.RegularizeInitialValue := ModifiedParam.RegularizeInitialValue;
+    ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
+  end;
+  ModelHufParameters := frmGoPhast.PhastModel.HufParameters;
+  Assert(ModelHufParameters.Count = HufParameters.Count);
+  for ParamIndex := 0 to HufParameters.Count -1 do
+  begin
+    ExistingParam := ModelHufParameters[ParamIndex];
+    ModifiedParam := HufParameters[ParamIndex];
+    ExistingParam.RegularizeInitialValue := ModifiedParam.RegularizeInitialValue;
+    ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
+  end;
+  ModelTransientListParameters := frmGoPhast.PhastModel.ModflowTransientParameters;
+  Assert(ModelTransientListParameters.Count = TransientListParameters.Count);
+  for ParamIndex := 0 to TransientListParameters.Count -1 do
+  begin
+    ExistingParam := ModelTransientListParameters[ParamIndex];
+    ModifiedParam := TransientListParameters[ParamIndex];
+    ExistingParam.RegularizeInitialValue := ModifiedParam.RegularizeInitialValue;
+    ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
+  end;
 end;
 
 function TUndoPestOptions.Description: string;
@@ -2331,6 +2692,12 @@ end;
 
 destructor TUndoPestOptions.Destroy;
 begin
+  FNewSteadyParameters.Free;
+  FNewHufParameters.Free;
+  FNewTransientParameters.Free;
+  FOldSteadyParameters.Free;
+  FOldHufParameters.Free;
+  FOldTransientParameters.Free;
   FNewFluxObsList.Free;
   FOldFluxObsList.Free;
   FOldObsList.Free;
@@ -2349,6 +2716,7 @@ begin
   inherited;
 //  frmGoPhast.PhastModel.PestProperties := FNewPestProperties;
   UpdateProperties(FNewPestProperties, FNewObsList, FNewFluxObsList, FNewHobList);
+  AssignParameters(FNewSteadyParameters, FNewHufParameters, FNewTransientParameters);
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := NewPestLocation;
   frmGoPhast.PhastModel.SetMf2005ObsGroupNames;
@@ -2361,6 +2729,7 @@ var
 begin
   inherited;
   UpdateProperties(FOldPestProperties, FOldObsList, FOldFluxObsList, FOldHobList);
+  AssignParameters(FOldSteadyParameters, FOldHufParameters, FOldTransientParameters);
   Locations := frmGoPhast.PhastModel.ProgramLocations;
   Locations.PestDirectory := OldPestLocation;
   frmGoPhast.PhastModel.SetMf2005ObsGroupNames;

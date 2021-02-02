@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.Generics.Collections, DataSetUnit,
-  OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes;
+  OrderedCollectionUnit, ModflowParameterUnit, GoPhastTypes,
+  PointCollectionUnit;
 
 type
   TPilotPointFileObject = class(TObject)
@@ -17,6 +18,7 @@ type
     FParameter: TModflowSteadyParameter;
     FParamFamily: string;
     FValues: TList<double>;
+    FPoints: TSimplePointCollection;
     procedure SetCount(const Value: Integer);
     procedure SetDataArray(const Value: TDataArray);
     procedure SetFileName(const Value: string);
@@ -25,6 +27,7 @@ type
     procedure SetParameterIndex(const Value: Integer);
     procedure SetParamFamily(const Value: string);
     function GetValue(Index: Integer): double;
+    procedure SetPoints(const Value: TSimplePointCollection);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -38,6 +41,7 @@ type
     property ParamFamily: string read FParamFamily write SetParamFamily;
     property Values[Index: Integer]: double read GetValue;
     procedure AddValue(AValue: double);
+    property Points: TSimplePointCollection read FPoints write SetPoints;
   end;
 
   TPilotPointFiles = TObjectList<TPilotPointFileObject>;
@@ -51,6 +55,7 @@ type
     FValues: TRealCollection;
     FLayer: Integer;
     FDataArrayName: string;
+    FPoints: TSimplePointCollection;
     procedure SetBaseParamName(const Value: string);
     procedure SetCount(const Value: Integer);
     procedure SetParamFamily(const Value: string);
@@ -58,6 +63,7 @@ type
     procedure SetValues(const Value: TRealCollection);
     procedure SetLayer(const Value: Integer);
     procedure SetDataArrayName(const Value: string);
+    procedure SetPoints(const Value: TSimplePointCollection);
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -72,6 +78,7 @@ type
     property Values: TRealCollection read FValues write SetValues;
     property Layer: Integer read FLayer write SetLayer;
     Property DataArrayName: string read FDataArrayName write SetDataArrayName;
+    property Points: TSimplePointCollection read FPoints write SetPoints;
   end;
 
 
@@ -111,10 +118,12 @@ end;
 constructor TPilotPointFileObject.Create;
 begin
   FValues:= TList<double>.Create;
+  FPoints := TSimplePointCollection.Create;
 end;
 
 destructor TPilotPointFileObject.Destroy;
 begin
+  FPoints.Free;
   FValues.Free;
   inherited;
 end;
@@ -165,6 +174,11 @@ begin
   FParamFamily := Value;
 end;
 
+procedure TPilotPointFileObject.SetPoints(const Value: TSimplePointCollection);
+begin
+  FPoints.Assign(Value);
+end;
+
 { TStoredPilotParamDataItem }
 
 procedure TStoredPilotParamDataItem.Assign(Source: TPersistent);
@@ -181,6 +195,7 @@ begin
     Values := SourceItem.Values;
     Layer := SourceItem.Layer;
     DataArrayName := SourceItem.DataArrayName;
+    Points := SourceItem.Points;
   end
   else
   begin
@@ -205,6 +220,7 @@ begin
   end;
   Layer := Source.Layer;
   DataArrayName := Source.DataArray.Name;
+  Points := Source.Points;
 end;
 
 constructor TStoredPilotParamDataItem.Create(Collection: TCollection);
@@ -214,10 +230,12 @@ begin
   inherited;
   Dummy := nil;
   FValues := TRealCollection.Create(Dummy);
+  FPoints := TSimplePointCollection.Create;
 end;
 
 destructor TStoredPilotParamDataItem.Destroy;
 begin
+  FPoints.Free;
   FValues.Free;
   inherited;
 end;
@@ -255,6 +273,12 @@ end;
 procedure TStoredPilotParamDataItem.SetParamFamily(const Value: string);
 begin
   FParamFamily := Value;
+end;
+
+procedure TStoredPilotParamDataItem.SetPoints(
+  const Value: TSimplePointCollection);
+begin
+  FPoints.Assign(Value);
 end;
 
 procedure TStoredPilotParamDataItem.SetValues(const Value: TRealCollection);

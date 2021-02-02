@@ -14,6 +14,7 @@ type
     FUsedObservations: TObservationInterfaceList;
     FUsePval: Boolean;
     F_AbsParMax: TRealList;
+    FPriorInfomationEquations: TStringList;
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
     procedure WriteControlSection;
@@ -53,9 +54,6 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
-const
-  SutraParamType: TParameterTypes = [ptPEST];
-
 implementation
 
 uses
@@ -64,7 +62,7 @@ uses
   PestObsExtractorInputWriterUnit, frmErrorsAndWarningsUnit,
   ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
   ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
-  ModflowPackagesUnit, DataSetUnit, PilotPointDataUnit;
+  ModflowPackagesUnit, DataSetUnit, PilotPointDataUnit, System.Math;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -83,20 +81,13 @@ resourcestring
   StrParameterUndefined = 'Parameter undefined';
   StrPilotPointsWereDe = 'Pilot points were defined for %s but no parameter ' +
   'by that name that uses pilot points has been defined.';
+  StrObservationGroupNa = 'Observation Group name too long';
+  StrTheNamesOfSHas = 'The names of %s has been truncated because "regul" mu' +
+  'st be inserted at the beginning of the observation group name to indicate' +
+  ' it is to be used for regularization.';
+  StrRegul = 'regul';
 
 { TPestControlFileWriter }
-
-const
-  Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST, ptCHD,
-  ptGHB, ptQ, ptRIV, ptDRN, ptPEST];
-
-  Mf2005ParamType: TParameterTypes = [ptLPF_HK, ptLPF_HANI, ptLPF_VK,
-    ptLPF_VANI, ptLPF_SS, ptLPF_SY, ptLPF_VKCB, ptRCH, ptEVT, ptETS,
-    ptCHD, ptGHB, ptQ,
-    ptRIV, ptDRN, ptDRT, ptSFR, ptHFB,
-    ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY,
-    ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX, ptPEST];
-
 
 
 constructor TPestControlFileWriter.Create(AModel: TCustomModel;
@@ -106,10 +97,12 @@ begin
   FUsedObservations := TObservationInterfaceList.Create;
   F_AbsParMax:= TRealList.Create;
   F_AbsParMax.Sorted := True;
+  FPriorInfomationEquations := TStringList.Create;
 end;
 
 destructor TPestControlFileWriter.Destroy;
 begin
+  FPriorInfomationEquations.Free;
   F_AbsParMax.Free;
   FUsedObservations.Free;
   inherited;
@@ -122,7 +115,8 @@ end;
 
 function TPestControlFileWriter.NumberOfObservationGroups: Integer;
 begin
-  result := Model.PestProperties.ObservationGroups.Count;
+  result := Model.PestProperties.ObservationGroups.Count
+    + Model.PestProperties.PriorInfoObservationGroups.Count;
   if result = 0 then
   begin
     frmErrorsAndWarnings.AddError(Model, StrNoObservationGroup,
@@ -246,10 +240,159 @@ begin
 end;
 
 function TPestControlFileWriter.NumberOfPriorInformation: Integer;
+const
+  EquationRoot = 'eq_';
+var
+  UsedTypes: TParameterTypes;
+  PilotPointParameters: TStringList;
+  ParamIndex: Integer;
+  AParam: TModflowParameter;
+  index: Integer;
+  PilotPointItem: TStoredPilotParamDataItem;
+  ParameterIndex: Integer;
+  PilotParamName: string;
+  EquationCount: Integer;
+  ObservationGroupNames: TStringList;
+  ObsGroupIndex: Integer;
+  ObservationGroups: TPestObservationGroups;
+  ObsGroup: TPestObservationGroup;
+  procedure WriteInitialValueEquation(Param: TModflowParameter; InitialValue: double;
+    ParameterName: string = '');
+  var
+    EquationName: string;
+    ObsGroupName: string;
+    Equation: string;
+  begin
+    if ParameterName = '' then
+    begin
+      ParameterName := Param.ParameterName;
+    end;
+    Inc(EquationCount);
+    EquationName := EquationRoot + IntToStr(EquationCount);
+    ObsGroupIndex := ObservationGroupNames.IndexOf(Param.RegularizationGroup);
+    if ObsGroupIndex < 0 then
+    begin
+      ObsGroup := ObservationGroups.Add;
+      ObsGroup.ObsGroupName := Param.RegularizationGroup;
+      ObsGroup.IsRegularizationGroup := True;
+      ObservationGroupNames.AddObject(ObsGroup.ObsGroupName, ObsGroup);
+    end;
+    if ObsGroup.IsRegularizationGroup then
+    begin
+      ObsGroupName := strRegul + Copy(ObsGroup.ObsGroupName, 1, 7)
+    end
+    else
+    begin
+      ObsGroupName := ObsGroup.ObsGroupName;
+    end;
+    if Param.Transform = ptLog then
+    begin
+      Equation := Format('1.0 * log(%0:s) = %1:g', [ParameterName, Log10(InitialValue)]);
+    end
+    else
+    begin
+      Equation := Format('1.0 * %0:s = %1:g', [ParameterName, InitialValue]);
+    end;
+    FPriorInfomationEquations.Add(Format(' %0:s          %1:s       1.00000     %2:s',
+      [EquationName, Equation, ObsGroupName]));
+  end;
 begin
+  FPriorInfomationEquations.Clear;
+  GetUsedTypes(UsedTypes);
+
+  EquationCount := 0;
+  ObservationGroupNames := TStringList.Create;
+  try
+    ObservationGroupNames.Sorted := True;
+    ObservationGroupNames.Duplicates := dupIgnore;
+    ObservationGroupNames.CaseSensitive := False;
+    ObservationGroups := Model.PestProperties.PriorInfoObservationGroups;
+    for ObsGroupIndex := 0 to ObservationGroups.Count - 1 do
+    begin
+      ObsGroup := ObservationGroups[ObsGroupIndex];
+      ObservationGroupNames.AddObject(ObsGroup.ObsGroupName, ObsGroup);
+    end;
+//    forb
+
+    PilotPointParameters := TStringList.Create;
+    try
+      FUsePval := False;
+      for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
+      begin
+        AParam := Model.ModflowSteadyParameters[ParamIndex];
+        if AParam.ParameterType in UsedTypes then
+        begin
+          if AParam.RegularizeInitialValue
+            and (AParam.Transform in [ptNoTransform, ptLog]) then
+          begin
+            WriteInitialValueEquation(AParam, AParam.Value);
+            if (AParam is TModflowSteadyParameter)
+              and TModflowSteadyParameter(AParam).UsePilotPoints then
+            begin
+              PilotPointParameters.AddObject(AParam.ParameterName, AParam);
+            end;
+          end;
+        end;
+      end;
+      PilotPointParameters.CaseSensitive := False;
+      PilotPointParameters.Sorted := True;
+
+      for index := 0 to Model.PilotPointData.Count - 1 do
+      begin
+        PilotPointItem := Model.PilotPointData[index];
+        ParamIndex := PilotPointParameters.IndexOf(PilotPointItem.BaseParamName);
+        if ParamIndex >= 0 then
+        begin
+          AParam := PilotPointParameters.Objects[ParamIndex] as TModflowParameter;
+          for ParameterIndex := 1 to PilotPointItem.Count do
+          begin
+            PilotParamName := PilotPointItem.ParameterName(ParameterIndex);
+            WriteInitialValueEquation(AParam,
+              PilotPointItem.Values[ParameterIndex-1].Value, PilotParamName);
+          end;
+        end
+        else
+        begin
+          frmErrorsAndWarnings.AddError(Model, StrParameterUndefined,
+            Format(StrPilotPointsWereDe, [PilotPointItem.BaseParamName]));
+        end;
+      end;
+    finally
+      PilotPointParameters.Free;
+    end;
+
+    for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+    begin
+      AParam := Model.ModflowTransientParameters[ParamIndex];
+      if AParam.ParameterType in UsedTypes then
+      begin
+        if AParam.RegularizeInitialValue
+          and (AParam.Transform in [ptNoTransform, ptLog]) then
+        begin
+          WriteInitialValueEquation(AParam, AParam.Value);
+        end;
+      end;
+    end;
+
+    for ParamIndex := 0 to Model.HufParameters.Count - 1 do
+    begin
+      AParam := Model.HufParameters[ParamIndex];
+      if AParam.ParameterType in UsedTypes then
+      begin
+        if AParam.RegularizeInitialValue
+          and (AParam.Transform in [ptNoTransform, ptLog]) then
+        begin
+          WriteInitialValueEquation(AParam, AParam.Value);
+        end;
+      end;
+    end;
+
+  finally
+    ObservationGroupNames.Free;
+  end;
   // prior information will be added by the running ADDREG1 or a program in the
   // Groundwater Utility suite,
-  result := 0;
+  result := FPriorInfomationEquations.Count;
 
 end;
 
@@ -775,6 +918,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterGroupName);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupNo);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterUndefined);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrObservationGroupNa);
 
   if not Model.PestUsed then
   begin
@@ -966,34 +1110,86 @@ end;
 
 procedure TPestControlFileWriter.WriteObservationGroups;
 var
-  ObservationGroups: TPestObservationGroups;
-  ObsGrpIndex: Integer;
-  ObsGroup: TPestObservationGroup;
+//  ObservationGroups: TPestObservationGroups;
   Mode: TPestMode;
-  CorrelationFileName: string;
+  Procedure WriteObsGroups(ObsGroups: TPestObservationGroups);
+  var
+    ObsGrpIndex: Integer;
+    ObsGroup: TPestObservationGroup;
+    CorrelationFileName: string;
+  begin
+    for ObsGrpIndex := 0 to ObsGroups.Count - 1 do
+    begin
+      ObsGroup := ObsGroups[ObsGrpIndex];
+      if ObsGroup.IsRegularizationGroup then
+      begin
+        WriteString(StrRegul);
+        WriteString(Copy(ObsGroup.ObsGroupName,1,7));
+        if Length(ObsGroup.ObsGroupName) > 7 then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, StrObservationGroupNa,
+            Format(StrTheNamesOfSHas, [ObsGroup.ObsGroupName]))
+        end;
+      end
+      else
+      begin
+        WriteString(ObsGroup.ObsGroupName);
+      end;
+      if Mode = pmRegularisation then
+      begin
+        if ObsGroup.UseGroupTarget then
+        begin
+          WriteFloat(ObsGroup.GroupTarget);
+        end;
+      end;
+      if ObsGroup. AbsoluteCorrelationFileName <> '' then
+      begin
+        CorrelationFileName := ' ' + ExtractRelativePath(FNameOfFile, ObsGroup.AbsoluteCorrelationFileName);
+        WriteString(CorrelationFileName);
+      end;
+      NewLine;
+    end;
+  end;
 begin
   WriteSectionHeader('observation groups');
-  ObservationGroups := Model.PestProperties.ObservationGroups;
+//  ObservationGroups := Model.PestProperties.ObservationGroups;
   Mode := Model.PestProperties.PestControlData.PestMode;
-  for ObsGrpIndex := 0 to ObservationGroups.Count - 1 do
-  begin
-    ObsGroup := ObservationGroups[ObsGrpIndex];
-    WriteString(ObsGroup.ObsGroupName);
-    if Mode = pmRegularisation then
-    begin
-      if ObsGroup.UseGroupTarget then
-      begin
-        WriteFloat(ObsGroup.GroupTarget);
-      end;
-    end;
-    if ObsGroup. AbsoluteCorrelationFileName <> '' then
-    begin
-      CorrelationFileName := ' ' + ExtractRelativePath(FNameOfFile, ObsGroup.AbsoluteCorrelationFileName);
-      WriteString(CorrelationFileName);
-    end;
-    NewLine;
-  end;
+  WriteObsGroups(Model.PestProperties.ObservationGroups);
+  WriteObsGroups(Model.PestProperties.PriorInfoObservationGroups);
+//  for ObsGrpIndex := 0 to ObservationGroups.Count - 1 do
+//  begin
+//    ObsGroup := ObservationGroups[ObsGrpIndex];
+//    if ObsGroup.IsRegularizationGroup then
+//    begin
+//      WriteString(StrRegul);
+//      WriteString(Copy(ObsGroup.ObsGroupName,1,7));
+//      if Length(ObsGroup.ObsGroupName) > 7 then
+//      begin
+//        frmErrorsAndWarnings.AddWarning(Model, StrObservationGroupNa,
+//          Format(StrTheNamesOfSHas, [ObsGroup.ObsGroupName]))
+//      end;
+//    end
+//    else
+//    begin
+//      WriteString(ObsGroup.ObsGroupName);
+//    end;
+//    if Mode = pmRegularisation then
+//    begin
+//      if ObsGroup.UseGroupTarget then
+//      begin
+//        WriteFloat(ObsGroup.GroupTarget);
+//      end;
+//    end;
+//    if ObsGroup. AbsoluteCorrelationFileName <> '' then
+//    begin
+//      CorrelationFileName := ' ' + ExtractRelativePath(FNameOfFile, ObsGroup.AbsoluteCorrelationFileName);
+//      WriteString(CorrelationFileName);
+//    end;
+//    NewLine;
+//  end;
   NewLine;
+
+//  Model.PestProperties.PriorInfoObservationGroups
 end;
 
 procedure TPestControlFileWriter.WriteObservations;
@@ -1387,9 +1583,15 @@ begin
 end;
 
 procedure TPestControlFileWriter.WritePriorInformation;
+var
+  PriorIndex: Integer;
 begin
-  // prior information will be added by the running ADDREG1 or a program in the
-  // Groundwater Utility suite,
+  WriteSectionHeader('prior information');
+  for PriorIndex := 0 to FPriorInfomationEquations.Count - 1 do
+  begin
+    WriteString(FPriorInfomationEquations[PriorIndex]);
+    NewLine;
+  end;
 end;
 
 procedure TPestControlFileWriter.WriteRegularisation;

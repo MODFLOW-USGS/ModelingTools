@@ -639,6 +639,7 @@ type
     FStoredPilotPointBuffer: TRealStorage;
     FStoredMinimumSeparation: TRealStorage;
     FRegularization: TPestRegularization;
+    FPriorInfoObservatioGroups: TPestObservationGroups;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -666,6 +667,7 @@ type
     function GetMinimumSeparation: Double;
     procedure SetMinimumSeparation(const Value: Double);
     procedure SetRegularization(const Value: TPestRegularization);
+    procedure SetPriorInfoObservatioGroups(const Value: TPestObservationGroups);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -699,6 +701,8 @@ type
       write SetLsqrProperties;
     property ObservationGroups: TPestObservationGroups read FObservatioGroups
       write SetObservatioGroups;
+    property PriorInfoObservationGroups: TPestObservationGroups read FPriorInfoObservatioGroups
+      write SetPriorInfoObservatioGroups;
     property SpecifiedPilotPoints: TSimplePointCollection
       read FSpecifiedPilotPoints write SetSpecifiedPilotPoints;
     property BetweenObservationsPilotPoints: TSimplePointCollection
@@ -743,6 +747,7 @@ begin
     SvdProperties := PestSource.SvdProperties;
     LsqrProperties := PestSource.LsqrProperties;
     ObservationGroups := PestSource.ObservationGroups;
+    PriorInfoObservationGroups := PestSource.PriorInfoObservationGroups;
     SpecifiedPilotPoints := PestSource.SpecifiedPilotPoints;
     BetweenObservationsPilotPoints := PestSource.BetweenObservationsPilotPoints;
     UseBetweenObservationsPilotPoints  := PestSource.UseBetweenObservationsPilotPoints;
@@ -777,6 +782,7 @@ begin
     TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
   FLsqrProperties := TLsqrProperties.Create(InvalidateModelEvent);
   FObservatioGroups := TPestObservationGroups.Create(Model);
+  FPriorInfoObservatioGroups := TPestObservationGroups.Create(Model);
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
   FStoredPilotPointBuffer.OnChange := InvalidateModelEvent;
   FStoredMinimumSeparation.OnChange := InvalidateModelEvent;
@@ -791,6 +797,7 @@ begin
   FRegularization.Free;
   FBetweenObservationsPilotPoints.Free;
   FSpecifiedPilotPoints.Free;
+  FPriorInfoObservatioGroups.Free;
   FObservatioGroups.Free;
   FLsqrProperties.Free;
   FSvdProperties.Free;
@@ -1017,6 +1024,7 @@ begin
   FLsqrProperties.InitializeVariables;
   Regularization.InitializeVariables;
 
+  FPriorInfoObservatioGroups.Clear;
   FObservatioGroups.Clear;
   SpecifiedPilotPoints.Clear;
   BetweenObservationsPilotPoints.Clear;
@@ -1077,6 +1085,12 @@ end;
 procedure TPestProperties.SetPilotPointSpacing(const Value: double);
 begin
   FStoredPilotPointSpacing.Value := Value;
+end;
+
+procedure TPestProperties.SetPriorInfoObservatioGroups(
+  const Value: TPestObservationGroups);
+begin
+  FPriorInfoObservatioGroups.Assign(Value);
 end;
 
 procedure TPestProperties.SetRegularization(const Value: TPestRegularization);

@@ -295,6 +295,7 @@ begin
 
               FileProperties.Count := PIndex;
               FileProperties.AddValue(Value);
+              FileProperties.Points.AddPoint2D(APilotPoint);
 
               SwitchToMain;
               WriteString(Format('%0:s%1:d', [FileProperties.ParamFamily, PIndex]));

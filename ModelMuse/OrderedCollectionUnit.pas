@@ -316,6 +316,8 @@ type
     FParameterGroup: string;
     FStoredUpperBound: TRealStorage;
     FStoredAbsoluteN: TRealStorage;
+    FRegularizeInitialValue: Boolean;
+    FRegularizationGroup: string;
     procedure NotifyHufKx;
     procedure NotifyHufKy;
     procedure NotifyHufKz;
@@ -340,6 +342,8 @@ type
     procedure SetStoredAbsoluteN(const Value: TRealStorage);
     function GetAbsoluteN: double;
     procedure SetAbsoluteN(const Value: double);
+    procedure SetRegularizeInitialValue(const Value: Boolean);
+    procedure SetRegularizationGroup(const Value: string);
   protected
     // See @link(ParameterName).
     FParameterName: string;
@@ -408,10 +412,31 @@ type
     // Absolute(N) and ABSPARMAX(N) in PEST
     property StoredAbsoluteN: TRealStorage read FStoredAbsoluteN
       write SetStoredAbsoluteN;
+    // @name determines whether or not the parameter will be included in
+    // a prior information equation setting it equal to its initial value.
+    property RegularizeInitialValue: Boolean read FRegularizeInitialValue
+      write SetRegularizeInitialValue Stored True;
+    // @name is the regularization group of the parameter in the
+    // initial value prior information equation.
+    property RegularizationGroup: string read FRegularizationGroup
+      write SetRegularizationGroup;
   end;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
 function CorrectParamName(const Value: string): string;
+
+const
+  Mf15ParamType: TParameterTypes = [ptRCH, ptETS, ptHFB, ptPEST, ptCHD,
+    ptGHB, ptQ, ptRIV, ptDRN, ptPEST];
+
+  Mf2005ParamType: TParameterTypes = [ptLPF_HK, ptLPF_HANI, ptLPF_VK,
+    ptLPF_VANI, ptLPF_SS, ptLPF_SY, ptLPF_VKCB, ptRCH, ptEVT, ptETS,
+    ptCHD, ptGHB, ptQ,
+    ptRIV, ptDRN, ptDRT, ptSFR, ptHFB,
+    ptHUF_HK, ptHUF_HANI, ptHUF_VK, ptHUF_VANI, ptHUF_SS, ptHUF_SY,
+    ptHUF_SYTP, ptHUF_KDEP, ptHUF_LVDA, ptSTR, ptQMAX, ptPEST];
+
+  SutraParamType: TParameterTypes = [ptPEST];
 
 implementation
 
@@ -805,6 +830,9 @@ begin
     ParameterGroup := SourceParameter.ParameterGroup;
     TiedParameterName := SourceParameter.TiedParameterName;
     AbsoluteN := SourceParameter.AbsoluteN;
+    RegularizeInitialValue := SourceParameter.RegularizeInitialValue;
+    RegularizationGroup := SourceParameter.RegularizationGroup;
+    // RegularizationGroup
   end;
   inherited;
 end;
@@ -844,6 +872,7 @@ begin
   FStoredAbsoluteN := TRealStorage.Create;
   FStoredAbsoluteN.OnChange := OnInvalidateModelEvent;
   Scale := 1;
+  FRegularizeInitialValue := True;
 end;
 
 destructor TModflowParameter.Destroy;
@@ -1043,7 +1072,9 @@ begin
     (ChangeLimitation = AnotherParameter.ChangeLimitation) and
     (ParameterGroup = AnotherParameter.ParameterGroup) and
     (TiedParameterName = AnotherParameter.TiedParameterName) and
-    (AbsoluteN = AnotherParameter.AbsoluteN);
+    (AbsoluteN = AnotherParameter.AbsoluteN) and
+    (RegularizeInitialValue = AnotherParameter.RegularizeInitialValue) and
+    (RegularizationGroup = AnotherParameter.RegularizationGroup);
 end;
 
 procedure TModflowParameter.SetAbsoluteN(const Value: double);
@@ -1352,6 +1383,16 @@ begin
     FParameterType := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowParameter.SetRegularizationGroup(const Value: string);
+begin
+  SetCaseSensitiveStringProperty(FRegularizationGroup, Value);
+end;
+
+procedure TModflowParameter.SetRegularizeInitialValue(const Value: Boolean);
+begin
+  FRegularizeInitialValue := Value;
 end;
 
 procedure TModflowParameter.SetScale(const Value: double);

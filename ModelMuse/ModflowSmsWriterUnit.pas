@@ -147,6 +147,7 @@ var
   InnerDvClose: Double;
 begin
   WriteString('  INNER_DVCLOSE');
+  InnerDvClose := 0.0001;
   if soInnerHclose in FImsPackage.SmsOverrides then
   begin
     InnerDvClose := FImsPackage.InnerHclose;
