@@ -32,7 +32,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 554
     Height = 443
-    ActivePage = jvspInitialValue
+    ActivePage = jvspPriorInfoContinuity
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1942,6 +1942,12 @@ inherited frmPEST: TfrmPEST
           Width = 554
           Height = 402
           ColCount = 5
+          OnExit = framePriorInfoObservationGroupsGridExit
+          OnSelectCell = framePriorInfoObservationGroupsGridSelectCell
+          OnSetEditText = framePriorInfoObservationGroupsGridSetEditText
+          OnBeforeDrawCell = framePriorInfoObservationGroupsGridBeforeDrawCell
+          OnButtonClick = framePriorInfoObservationGroupsGridButtonClick
+          OnStateChange = framePriorInfoObservationGroupsGridStateChange
           Columns = <
             item
               AutoAdjustRowHeights = True
@@ -2069,17 +2075,17 @@ inherited frmPEST: TfrmPEST
         end
       end
     end
-    object jvspInitialValue: TJvStandardPage
+    object jvspPriorInfoInitialValue: TJvStandardPage
       Left = 0
       Top = 0
       Width = 554
       Height = 443
-      Caption = 'jvspInitialValue'
+      Caption = 'jvspPriorInfoInitialValue'
       object rdgPriorInfoInitialValue: TRbwDataGrid4
         Left = 0
-        Top = 0
+        Top = 41
         Width = 554
-        Height = 443
+        Height = 402
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -2095,6 +2101,176 @@ inherited frmPEST: TfrmPEST
         UnselectableColor = clBtnFace
         OnBeforeDrawCell = rdgPriorInfoInitialValueBeforeDrawCell
         OnStateChange = rdgPriorInfoInitialValueStateChange
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4Boolean
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = True
+            Format = rcf4String
+            LimitToList = True
+            MaxLength = 12
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end>
+        WordWrapRowCaptions = False
+      end
+      object Panel5: TPanel
+        Left = 0
+        Top = 0
+        Width = 554
+        Height = 41
+        Align = alTop
+        TabOrder = 1
+        object cbInitialValue: TCheckBox
+          Left = 6
+          Top = 12
+          Width = 291
+          Height = 17
+          Caption = 'Use initial value prior information'
+          TabOrder = 0
+        end
+      end
+    end
+    object jvspPriorInfoContinuity: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 554
+      Height = 443
+      Caption = 'jvspPriorInfoContinuity'
+      object pnlPriorInfoContinuity: TPanel
+        Left = 0
+        Top = 0
+        Width = 554
+        Height = 121
+        Align = alTop
+        TabOrder = 0
+        object lblSearchDistance: TLabel
+          Left = 157
+          Top = 44
+          Width = 116
+          Height = 18
+          Caption = 'Search Distance'
+        end
+        object lblMaxPilotPoints: TLabel
+          Left = 160
+          Top = 72
+          Width = 219
+          Height = 18
+          Caption = 'Maximum number of pilot points'
+        end
+        object cbPriorInfoContinuity: TCheckBox
+          Left = 6
+          Top = 18
+          Width = 291
+          Height = 17
+          Caption = 'Use continuity prior information'
+          TabOrder = 0
+          OnClick = cbPriorInfoContinuityClick
+        end
+        object rdeSearchDistance: TRbwDataEntry
+          Left = 6
+          Top = 41
+          Width = 145
+          Height = 22
+          TabOrder = 1
+          Text = '0'
+          OnChange = rdeSearchDistanceChange
+          DataType = dtReal
+          Max = 1.000000000000000000
+          CheckMin = True
+          ChangeDisabledColor = True
+        end
+        object seMaxPilotPoints: TJvSpinEdit
+          Left = 6
+          Top = 69
+          Width = 145
+          Height = 26
+          TabOrder = 2
+        end
+      end
+      object rdgPriorInfoContinuity: TRbwDataGrid4
+        Left = 0
+        Top = 121
+        Width = 554
+        Height = 322
+        Align = alClient
+        ColCount = 3
+        FixedCols = 1
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 1
+        OnSetEditText = rdgPriorInfoContinuitySetEditText
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        OnBeforeDrawCell = rdgPriorInfoContinuityBeforeDrawCell
+        OnStateChange = rdgPriorInfoContinuityStateChange
         ColorRangeSelection = False
         Columns = <
           item

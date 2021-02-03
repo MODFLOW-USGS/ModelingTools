@@ -640,6 +640,10 @@ type
     FStoredMinimumSeparation: TRealStorage;
     FRegularization: TPestRegularization;
     FPriorInfoObservatioGroups: TPestObservationGroups;
+    FUseInitialValuePriorInfo: Boolean;
+    FUseSpatialContinuityPriorInfo: Boolean;
+    FStoredSeachDistance: TRealStorage;
+    FMaxPilotPointsInRange: Integer;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -668,6 +672,12 @@ type
     procedure SetMinimumSeparation(const Value: Double);
     procedure SetRegularization(const Value: TPestRegularization);
     procedure SetPriorInfoObservatioGroups(const Value: TPestObservationGroups);
+    procedure SetUseInitialValuePriorInfo(const Value: Boolean);
+    procedure SetUseSpatialContinuityPriorInfo(const Value: Boolean);
+    procedure SetStoredSeachDistance(const Value: TRealStorage);
+    function GetSeachDistance: double;
+    procedure SetSeachDistance(const Value: double);
+    procedure SetMaxPilotPointsInRange(const Value: Integer);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -683,6 +693,7 @@ type
     property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
     property MinimumSeparation: Double read GetMinimumSeparation
       write SetMinimumSeparation;
+    property SeachDistance: double read GetSeachDistance write SetSeachDistance;
   Published
     property PestUsed: Boolean read FPestUsed write SetPestUsed Stored True;
     property TemplateCharacter: Char read FTemplateCharacter
@@ -718,13 +729,21 @@ type
       write SetStoredMinimumSeparation;
     property Regularization: TPestRegularization read FRegularization
       write SetRegularization;
+    property UseInitialValuePriorInfo: Boolean read FUseInitialValuePriorInfo
+      write SetUseInitialValuePriorInfo;
+    property UseSpatialContinuityPriorInfo: Boolean read FUseSpatialContinuityPriorInfo
+      write SetUseSpatialContinuityPriorInfo;
+    Property StoredSeachDistance: TRealStorage read FStoredSeachDistance
+      write SetStoredSeachDistance;
+    property MaxPilotPointsInRange: Integer read FMaxPilotPointsInRange
+      write SetMaxPilotPointsInRange;
   end;
 
 implementation
 
 uses
   ZoomBox2, BigCanvasMethods, frmGoPhastUnit, PhastModelUnit, System.Math;
-  
+
 var  
   TriangleRowHeightFactor: double;
 
@@ -754,6 +773,10 @@ begin
     ArrayPilotPointSelection := PestSource.ArrayPilotPointSelection;
     MinimumSeparation := PestSource.MinimumSeparation;
     Regularization := PestSource.Regularization;
+    UseInitialValuePriorInfo := PestSource.UseInitialValuePriorInfo;
+    UseSpatialContinuityPriorInfo := PestSource.UseSpatialContinuityPriorInfo;
+    SeachDistance := PestSource.SeachDistance;
+    MaxPilotPointsInRange := PestSource.MaxPilotPointsInRange;
   end
   else
   begin
@@ -777,15 +800,19 @@ begin
   FStoredPilotPointSpacing := TRealStorage.Create;
   FStoredPilotPointBuffer := TRealStorage.Create;
   FStoredMinimumSeparation := TRealStorage.Create;
+  FStoredSeachDistance := TRealStorage.Create;
   FPestControlData := TPestControlData.Create(InvalidateModelEvent);
   FSvdProperties :=
     TSingularValueDecompositionProperties.Create(InvalidateModelEvent);
   FLsqrProperties := TLsqrProperties.Create(InvalidateModelEvent);
   FObservatioGroups := TPestObservationGroups.Create(Model);
   FPriorInfoObservatioGroups := TPestObservationGroups.Create(Model);
+
   FStoredPilotPointSpacing.OnChange := InvalidateModelEvent;
   FStoredPilotPointBuffer.OnChange := InvalidateModelEvent;
   FStoredMinimumSeparation.OnChange := InvalidateModelEvent;
+  FStoredSeachDistance.OnChange := InvalidateModelEvent;
+
   FSpecifiedPilotPoints := TSimplePointCollection.Create;
   FBetweenObservationsPilotPoints := TSimplePointCollection.Create;
   FRegularization := TPestRegularization.Create(InvalidateModelEvent);
@@ -802,6 +829,7 @@ begin
   FLsqrProperties.Free;
   FSvdProperties.Free;
   FPestControlData.Free;
+  FStoredSeachDistance.Free;
   FStoredPilotPointBuffer.Free;
   FStoredPilotPointSpacing.Free;
   FStoredMinimumSeparation.Free;
@@ -1008,6 +1036,11 @@ begin
   result := FStoredPilotPointSpacing.Value;
 end;
 
+function TPestProperties.GetSeachDistance: double;
+begin
+  result := StoredSeachDistance.Value;
+end;
+
 procedure TPestProperties.InitializeVariables;
 begin
   FPestUsed := False;
@@ -1018,6 +1051,10 @@ begin
   FUseBetweenObservationsPilotPoints := True;
   FArrayPilotPointSelection := appsNone;
   PilotPointBuffer := 0;
+  FUseInitialValuePriorInfo := True;
+  SeachDistance := 0;
+  MaxPilotPointsInRange := 4;
+  FUseSpatialContinuityPriorInfo := True;
 
   FPestControlData.InitializeVariables;
   FSvdProperties.InitializeVariables;
@@ -1054,6 +1091,11 @@ end;
 procedure TPestProperties.SetLsqrProperties(const Value: TLsqrProperties);
 begin
   FLsqrProperties.Assign(Value);
+end;
+
+procedure TPestProperties.SetMaxPilotPointsInRange(const Value: Integer);
+begin
+  SetIntegerProperty(FMaxPilotPointsInRange, Value);
 end;
 
 procedure TPestProperties.SetMinimumSeparation(const Value: Double);
@@ -1098,6 +1140,11 @@ begin
   FRegularization.Assign(Value);
 end;
 
+procedure TPestProperties.SetSeachDistance(const Value: double);
+begin
+  StoredSeachDistance.Value := Value;
+end;
+
 procedure TPestProperties.SetShowPilotPoints(const Value: Boolean);
 begin
   SetBooleanProperty(FShowPilotPoints, Value);
@@ -1124,6 +1171,11 @@ begin
   FStoredPilotPointSpacing.Assign(Value);
 end;
 
+procedure TPestProperties.SetStoredSeachDistance(const Value: TRealStorage);
+begin
+  FStoredSeachDistance.Assign(Value);
+end;
+
 procedure TPestProperties.SetSvdProperties(
   const Value: TSingularValueDecompositionProperties);
 begin
@@ -1139,6 +1191,17 @@ procedure TPestProperties.SetUseBetweenObservationsPilotPoints(
   const Value: Boolean);
 begin
   SetBooleanProperty(FUseBetweenObservationsPilotPoints, Value)
+end;
+
+procedure TPestProperties.SetUseInitialValuePriorInfo(const Value: Boolean);
+begin
+  SetBooleanProperty(FUseInitialValuePriorInfo, Value);
+end;
+
+procedure TPestProperties.SetUseSpatialContinuityPriorInfo(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseSpatialContinuityPriorInfo, Value);
 end;
 
 { TPestControlData }

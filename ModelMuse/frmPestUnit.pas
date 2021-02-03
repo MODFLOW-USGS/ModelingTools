@@ -237,8 +237,18 @@ type
     lblREGSINGTHRESH: TLabel;
     jvspPriorInfoObsGroups: TJvStandardPage;
     framePriorInfoObservationGroups: TframeGrid;
-    jvspInitialValue: TJvStandardPage;
+    jvspPriorInfoInitialValue: TJvStandardPage;
     rdgPriorInfoInitialValue: TRbwDataGrid4;
+    Panel5: TPanel;
+    cbInitialValue: TCheckBox;
+    jvspPriorInfoContinuity: TJvStandardPage;
+    pnlPriorInfoContinuity: TPanel;
+    cbPriorInfoContinuity: TCheckBox;
+    rdgPriorInfoContinuity: TRbwDataGrid4;
+    rdeSearchDistance: TRbwDataEntry;
+    seMaxPilotPoints: TJvSpinEdit;
+    lblSearchDistance: TLabel;
+    lblMaxPilotPoints: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -283,6 +293,25 @@ type
       ARow: Integer; const Value: string);
     procedure rdgPriorInfoInitialValueBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
+    procedure framePriorInfoObservationGroupsGridBeforeDrawCell(Sender: TObject;
+      ACol, ARow: Integer);
+    procedure framePriorInfoObservationGroupsGridButtonClick(Sender: TObject;
+      ACol, ARow: Integer);
+    procedure framePriorInfoObservationGroupsGridSelectCell(Sender: TObject;
+      ACol, ARow: Integer; var CanSelect: Boolean);
+    procedure framePriorInfoObservationGroupsGridSetEditText(Sender: TObject;
+      ACol, ARow: Integer; const Value: string);
+    procedure framePriorInfoObservationGroupsGridStateChange(Sender: TObject;
+      ACol, ARow: Integer; const Value: TCheckBoxState);
+    procedure rdgPriorInfoContinuityBeforeDrawCell(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure rdgPriorInfoContinuitySetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure rdgPriorInfoContinuityStateChange(Sender: TObject; ACol,
+      ARow: Integer; const Value: TCheckBoxState);
+    procedure rdeSearchDistanceChange(Sender: TObject);
+    procedure cbPriorInfoContinuityClick(Sender: TObject);
+    procedure framePriorInfoObservationGroupsGridExit(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -329,6 +358,9 @@ type
       EditedObsGroups: TPestObservationGroups);
     procedure SetObsGroups(ObsGroups: TPestObservationGroups;
       ObsGroupFrame: TframeGrid; EditedObsGroups: TPestObservationGroups);
+    procedure CheckObsGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
+    procedure CheckPriorInfoGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
+    procedure SetSearchDistanceColor;
     { Private declarations }
   public
 //    procedure btnOK1Click(Sender: TObject);
@@ -358,6 +390,10 @@ resourcestring
   StrLine0d1sM = 'Line %0:d ("%1:s") must contain at least two values separa' +
   'ted by a comma or space character.';
   StrRegularizationGroup = 'Regularization Group';
+  StrX = 'X';
+  StrY = 'Y';
+  StrParameterName = 'Parameter name';
+  StrDefinePriorInforma = 'Define Prior Information';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -399,10 +435,45 @@ begin
 end;
 
 procedure TfrmPEST.plMainChange(Sender: TObject);
+const
+  EmptyRect: TGridRect = (Left: 2; Top: 1; Right: 2; Bottom: 1);
 var
   Grid: TRbwDataGrid4;
   RowIndex: Integer;
   PickList: TStringList;
+//  procedure FillPickList(Grid: TRbwDataGrid4);
+//  var
+//    ObsGroup: TPestObservationGroup;
+//    ObsIndex: Integer;
+//    RowIndex: Integer;
+//  begin
+//    PickList := TStringList.Create;
+//    try
+//      PickList.AddStrings(framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)]);
+//      PickList.Delete(0);
+//      while PickList.Count > framePriorInfoObservationGroups.seNumber.AsInteger do
+//      begin
+//        PickList.Delete(PickList.Count-1);
+//      end;
+//      Grid.Columns[Ord(ppcGroupName)].PickList := PickList;
+//      for RowIndex := 1 to Grid.RowCount - 1 do
+//      begin
+//        ObsGroup := Grid.Objects[Ord(ppcGroupName), RowIndex] as TPestObservationGroup;
+//        if (ObsGroup <> nil) then
+//        begin
+//          ObsIndex := PickList.IndexOfObject(ObsGroup);
+//          if (ObsIndex >= 0)
+//            and (PickList[ObsIndex] <> Grid.Cells[Ord(ppcGroupName), RowIndex]) then
+//          begin
+//            Grid.Cells[Ord(ppcGroupName), RowIndex] := PickList[ObsIndex];
+//          end;
+//        end;
+//      end;
+//      Grid.Invalidate;
+//    finally
+//      PickList.Free;
+//    end;
+//  end;
 begin
   inherited;
   if plMain.ActivePage = jvspObservationGroups then
@@ -420,20 +491,15 @@ begin
       end;
     end;
   end;
-  if plMain.ActivePage = jvspInitialValue then
+  if plMain.ActivePage = jvspPriorInfoInitialValue then
   begin
-    PickList := TStringList.Create;
-    try
-      PickList.AddStrings(framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)]);
-      PickList.Delete(0);
-      while PickList.Count > framePriorInfoObservationGroups.seNumber.AsInteger do
-      begin
-        PickList.Delete(PickList.Count-1);
-      end;
-      rdgPriorInfoInitialValue.Columns[Ord(ppcGroupName)].PickList := PickList;
-    finally
-      PickList.Free;
-    end;
+    rdgPriorInfoInitialValue.HideEditor
+//    FillPickList(rdgPriorInfoInitialValue);
+  end;
+  if plMain.ActivePage = jvspPriorInfoContinuity then
+  begin
+    rdgPriorInfoContinuity.HideEditor;
+//    FillPickList(rdgPriorInfoContinuity);
   end;
 end;
 
@@ -508,30 +574,76 @@ begin
   end;
 end;
 
+procedure TfrmPEST.rdgPriorInfoContinuityBeforeDrawCell(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  inherited;
+  CheckPriorInfoGroupName(rdgPriorInfoContinuity, ARow, ACol);
+end;
+
+procedure TfrmPEST.rdgPriorInfoContinuitySetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+var
+  AParam: TModflowSteadyParameter;
+  ObsGroupIndex: Integer;
+begin
+  inherited;
+  if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
+  begin
+    ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
+      IndexOf(rdgPriorInfoContinuity.Cells[ACol, ARow]);
+    if ObsGroupIndex >= 1 then
+    begin
+      rdgPriorInfoContinuity.Objects[ACol, ARow] :=
+        framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+    end;
+    AParam := rdgPriorInfoContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+    if AParam <> nil then
+    begin
+      AParam.SpatialContinuityGroupName := rdgPriorInfoContinuity.Cells[ACol, ARow];
+    end;
+  end;
+end;
+
+procedure TfrmPEST.rdgPriorInfoContinuityStateChange(Sender: TObject; ACol,
+  ARow: Integer; const Value: TCheckBoxState);
+var
+  AParam: TModflowSteadyParameter;
+begin
+  inherited;
+  if (ACol = Ord(ppcRegularization)) and (ARow > 0) then
+  begin
+    AParam := rdgPriorInfoContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+    if AParam <> nil then
+    begin
+      AParam.UseSpatialContinuityPriorInfo := rdgPriorInfoContinuity.Checked[ACol, ARow];
+    end;
+  end;
+end;
+
 procedure TfrmPEST.rdgPriorInfoInitialValueBeforeDrawCell(Sender: TObject; ACol,
   ARow: Integer);
 begin
   inherited;
-  if (ARow > 0) and (ACol = Ord(ppcGroupName)) then
-  begin
-    if rdgPriorInfoInitialValue.Checked[Ord(ppcRegularization), ARow] then
-    begin
-      if rdgPriorInfoInitialValue.ItemIndex[ACol, ARow] < 0 then
-      begin
-        rdgPriorInfoInitialValue.Canvas.Brush.Color := clRed;
-      end;
-    end;
-  end;
+  CheckPriorInfoGroupName(rdgPriorInfoInitialValue, ARow, ACol);
 end;
 
 procedure TfrmPEST.rdgPriorInfoInitialValueSetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
 var
   AParam: TModflowParameter;
+  ObsGroupIndex: Integer;
 begin
   inherited;
   if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
   begin
+    ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
+      IndexOf(rdgPriorInfoInitialValue.Cells[ACol, ARow]);
+    if ObsGroupIndex >= 1 then
+    begin
+      rdgPriorInfoInitialValue.Objects[ACol, ARow] :=
+        framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+    end;
     AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
     if AParam <> nil then
     begin
@@ -553,7 +665,7 @@ begin
     AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
     if AParam <> nil then
     begin
-      AParam.RegularizeInitialValue := rdgPriorInfoInitialValue.Checked[ACol, ARow];
+      AParam.UseInitialValuePriorInfo := rdgPriorInfoInitialValue.Checked[ACol, ARow];
     end;
   end;
 end;
@@ -634,6 +746,13 @@ begin
   begin
     rdeREGWEIGHTRAT.Color := clWindow;
   end;
+end;
+
+procedure TfrmPEST.rdeSearchDistanceChange(Sender: TObject);
+begin
+  inherited;
+  SetSearchDistanceColor;
+
 end;
 
 procedure TfrmPEST.rdeSwitchCriterionChange(Sender: TObject);
@@ -972,6 +1091,12 @@ begin
   rdePhimAccept.Enabled := not cbAutomaticallySetPHIMACCEPT.Checked;
 end;
 
+procedure TfrmPEST.cbPriorInfoContinuityClick(Sender: TObject);
+begin
+  inherited;
+  SetSearchDistanceColor;
+end;
+
 procedure TfrmPEST.cbUseLqsrClick(Sender: TObject);
 begin
   inherited;
@@ -1124,7 +1249,11 @@ begin
 
   NewNode := tvPEST.Items.AddChild(
     PriorInfoNode, 'Initial Value Prior Information') as TJvPageIndexNode;
-  NewNode.PageIndex := jvspInitialValue.PageIndex;
+  NewNode.PageIndex := jvspPriorInfoInitialValue.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    PriorInfoNode, 'Horizontal Continuity Prior Information') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPriorInfoContinuity.PageIndex;
 
   RegularizationNode := tvPEST.Items.AddChild(
     nil, 'Regularization') as TJvPageIndexNode;
@@ -1140,11 +1269,19 @@ begin
 
   plMain.ActivePageIndex := 0;
 
-  framePilotPoints.Grid.Cells[Ord(ppcX), 0] := 'X';
-  framePilotPoints.Grid.Cells[Ord(ppcY), 0] := 'Y';
+  framePilotPoints.Grid.Cells[Ord(ppcX), 0] := StrX;
+  framePilotPoints.Grid.Cells[Ord(ppcY), 0] := StrY;
 
-  rdgBetweenObs.Cells[Ord(ppcX), 0] := 'X';
-  rdgBetweenObs.Cells[Ord(ppcY), 0] := 'Y';
+  rdgBetweenObs.Cells[Ord(ppcX), 0] := StrX;
+  rdgBetweenObs.Cells[Ord(ppcY), 0] := StrY;
+
+  rdgPriorInfoInitialValue.Cells[Ord(ppcName), 0] := StrParameterName;
+  rdgPriorInfoInitialValue.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
+  rdgPriorInfoInitialValue.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
+
+  rdgPriorInfoContinuity.Cells[Ord(ppcName), 0] := StrParameterName;
+  rdgPriorInfoContinuity.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
+  rdgPriorInfoContinuity.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
 
   GetData;
 end;
@@ -1175,14 +1312,7 @@ procedure TfrmPEST.frameObservationGroupsGridBeforeDrawCell(Sender: TObject;
   ACol, ARow: Integer);
 begin
   inherited;
-  if (ARow > 0) and (ACol = Ord(pogcName)) then
-  begin
-    if frameObservationGroups.Grid.Checked[Ord(pogcRegularization), ARow]
-     and (Length(frameObservationGroups.Grid.Cells[Ord(pogcName), ARow]) > 7) then
-    begin
-      frameObservationGroups.Grid.Canvas.Brush.Color := clRed
-    end;
-  end;
+  CheckObsGroupName(frameObservationGroups.Grid, ARow, ACol);
 end;
 
 procedure TfrmPEST.frameObservationGroupsGridButtonClick(Sender: TObject; ACol,
@@ -1232,6 +1362,99 @@ begin
   ChangeObsGroupNumber(frameObservationGroups, FLocalObsGroups);
 end;
 
+procedure TfrmPEST.framePriorInfoObservationGroupsGridBeforeDrawCell(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  inherited;
+  CheckObsGroupName(framePriorInfoObservationGroups.Grid, ARow, ACol);
+end;
+
+procedure TfrmPEST.framePriorInfoObservationGroupsGridButtonClick(
+  Sender: TObject; ACol, ARow: Integer);
+begin
+  inherited;
+  GetCovarianceFileName(framePriorInfoObservationGroups, ACol, ARow);
+end;
+
+procedure TfrmPEST.framePriorInfoObservationGroupsGridExit(Sender: TObject);
+var
+  PickList: TStringList;
+  procedure AssignPickList(Grid: TRbwDataGrid4);
+  var
+    RowIndex: Integer;
+    ObsGroup: TPestObservationGroup;
+    ObsIndex: Integer;
+  begin
+    Grid.Columns[Ord(ppcGroupName)].PickList := PickList;
+    for RowIndex := 1 to Grid.RowCount - 1 do
+    begin
+      ObsGroup := Grid.Objects[Ord(ppcGroupName), RowIndex] as TPestObservationGroup;
+      if (ObsGroup <> nil) then
+      begin
+        ObsIndex := PickList.IndexOfObject(ObsGroup);
+        if (ObsIndex >= 0)
+          and (PickList[ObsIndex] <> Grid.Cells[Ord(ppcGroupName), RowIndex]) then
+        begin
+          Grid.Cells[Ord(ppcGroupName), RowIndex] := PickList[ObsIndex];
+        end;
+      end;
+    end;
+    Grid.Invalidate;
+  end;
+begin
+  inherited;
+  PickList := TStringList.Create;
+  try
+    PickList.AddStrings(framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)]);
+    PickList.Delete(0);
+    while PickList.Count > framePriorInfoObservationGroups.seNumber.AsInteger do
+    begin
+      PickList.Delete(PickList.Count-1);
+    end;
+    AssignPickList(rdgPriorInfoInitialValue);
+    AssignPickList(rdgPriorInfoContinuity);
+  finally
+    PickList.Free;
+  end;
+
+end;
+
+procedure TfrmPEST.framePriorInfoObservationGroupsGridSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  CanSelectObsGridCell(framePriorInfoObservationGroups, ARow, ACol, CanSelect);
+end;
+
+procedure TfrmPEST.framePriorInfoObservationGroupsGridSetEditText(
+  Sender: TObject; ACol, ARow: Integer; const Value: string);
+var
+  NewValue: string;
+  Obs: TPestObservationGroup;
+begin
+  inherited;
+  if (Ord(pogcName) = ACol) and (ARow > 0) then
+  begin
+    NewValue := ValidObsGroupName(Value);
+    if NewValue <> Value then
+    begin
+      framePriorInfoObservationGroups.Grid.Cells[ACol, ARow] := NewValue;
+    end;
+    Obs := framePriorInfoObservationGroups.Grid.Objects[ACol, ARow] as TPestObservationGroup;
+    if Obs <> nil then
+    begin
+      Obs.ObsGroupName := NewValue;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.framePriorInfoObservationGroupsGridStateChange(
+  Sender: TObject; ACol, ARow: Integer; const Value: TCheckBoxState);
+begin
+  inherited;
+  framePriorInfoObservationGroups.Grid.Invalidate;
+end;
+
 procedure TfrmPEST.GetData;
 var
   PestProperties: TPestProperties;
@@ -1260,10 +1483,28 @@ var
   TreeFrame: TframeParentChild;
   UsedTypes: TParameterTypes;
   ParamList: TList<TModflowParameter>;
+  ArrayParamList: TList<TModflowSteadyParameter>;
   PIndex: Integer;
   AParam: TModflowParameter;
+//  PickList: TStrings;
+//  ObsGroupIndex: Integer;
+  ASteadyParam: TModflowSteadyParameter;
   PickList: TStrings;
-  ObsGroupIndex: Integer;
+  ObsIndex: Integer;
+  procedure SetPriorInfoObsGroupPicklist(Grid: TRbwDataGrid4);
+  var
+    PickList: TStrings;
+    ObsGroupIndex: Integer;
+    ObsGroup: TPestObservationGroup;
+  begin
+    PickList := Grid.Columns[Ord(ppcGroupName)].PickList;
+    PickList.Clear;
+    for ObsGroupIndex := 0 to FLocalPriorInfoObsGroups.Count - 1 do
+    begin
+      ObsGroup := FLocalPriorInfoObsGroups[ObsGroupIndex];
+      PickList.AddObject(ObsGroup.ObsGroupName, ObsGroup);
+    end;
+  end;
 //  InvalidateModelEvent: TNotifyEvent;
 begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
@@ -1502,30 +1743,38 @@ begin
   end;
   {$ENDREGION}
 
-
   {$REGION 'Prior Information Observation Groups'}
-  PickList := rdgPriorInfoInitialValue.Columns[Ord(ppcGroupName)].PickList;
-  PickList.Clear;
-  for ObsGroupIndex := 0 to FLocalPriorInfoObsGroups.Count - 1 do
-  begin
-    ObsGroup := FLocalPriorInfoObsGroups[ObsGroupIndex];
-    PickList.AddObject(ObsGroup.ObsGroupName, ObsGroup);
-  end;
+  SetPriorInfoObsGroupPicklist(rdgPriorInfoInitialValue);
+  SetPriorInfoObsGroupPicklist(rdgPriorInfoContinuity);
  {$ENDREGION}
+
+  PickList := rdgPriorInfoInitialValue.Columns[Ord(ppcGroupName)].PickList;
+
+  {$REGION 'Prior Information'}
+  cbInitialValue.Checked := PestProperties.UseInitialValuePriorInfo;
+
+  cbPriorInfoContinuity.Checked := PestProperties.UseSpatialContinuityPriorInfo;
+  rdeSearchDistance.RealValue := PestProperties.SeachDistance;
+  seMaxPilotPoints.AsInteger := PestProperties.MaxPilotPointsInRange;
 
   GetUsedTypes(UsedTypes);
   FNewSteadyParameters.Assign(frmGoPhast.PhastModel.ModflowSteadyParameters);
   FNewHufParameters.Assign(frmGoPhast.PhastModel.HufParameters);
   FNewTransientListParameters.Assign(frmGoPhast.PhastModel.ModflowTransientParameters);
   ParamList := TList<TModflowParameter>.Create;
+  ArrayParamList := TList<TModflowSteadyParameter>.Create;
   try
     for PIndex := 0 to FNewSteadyParameters.Count -1 do
     begin
-      AParam := FNewSteadyParameters[PIndex];
-      if (AParam.ParameterType in UsedTypes)
-        and (AParam.Transform in [ptNoTransform, ptLog]) then
+      ASteadyParam := FNewSteadyParameters[PIndex];
+      if (ASteadyParam.ParameterType in UsedTypes)
+        and (ASteadyParam.Transform in [ptNoTransform, ptLog]) then
       begin
-        ParamList.Add(AParam);
+        ParamList.Add(ASteadyParam);
+        if ASteadyParam.UsePilotPoints then
+        begin
+          ArrayParamList.Add(ASteadyParam);
+        end;
       end;
     end;
     for PIndex := 0 to FNewHufParameters.Count -1 do
@@ -1553,12 +1802,35 @@ begin
       AParam := ParamList[PIndex];
       rdgPriorInfoInitialValue.Cells[Ord(ppcName), PIndex+1] := AParam.ParameterName;
       rdgPriorInfoInitialValue.Objects[Ord(ppcName), PIndex+1] := AParam;
-      rdgPriorInfoInitialValue.Checked[Ord(ppcRegularization), PIndex+1] := AParam.RegularizeInitialValue;
+      rdgPriorInfoInitialValue.Checked[Ord(ppcRegularization), PIndex+1] := AParam.UseInitialValuePriorInfo;
       rdgPriorInfoInitialValue.Cells[Ord(ppcGroupName), PIndex+1] := AParam.RegularizationGroup;
+      ObsIndex := PickList.IndexOf(AParam.RegularizationGroup);
+      if ObsIndex >= 0 then
+      begin
+        rdgPriorInfoInitialValue.Objects[Ord(ppcGroupName), PIndex+1] :=
+          PickList.Objects[ObsIndex];
+      end;
+    end;
+    rdgPriorInfoContinuity.RowCount := Max(2, ArrayParamList.Count+1);
+    for PIndex := 0 to ArrayParamList.Count -1 do
+    begin
+      ASteadyParam := ArrayParamList[PIndex];
+      rdgPriorInfoContinuity.Cells[Ord(ppcName), PIndex+1] := ASteadyParam.ParameterName;
+      rdgPriorInfoContinuity.Objects[Ord(ppcName), PIndex+1] := ASteadyParam;
+      rdgPriorInfoContinuity.Checked[Ord(ppcRegularization), PIndex+1] := ASteadyParam.UseSpatialContinuityPriorInfo;
+      rdgPriorInfoContinuity.Cells[Ord(ppcGroupName), PIndex+1] := ASteadyParam.SpatialContinuityGroupName;
+      ObsIndex := PickList.IndexOf(ASteadyParam.SpatialContinuityGroupName);
+      if ObsIndex >= 0 then
+      begin
+        rdgPriorInfoContinuity.Objects[Ord(ppcGroupName), PIndex+1] :=
+          PickList.Objects[ObsIndex];
+      end;
     end;
   finally
     ParamList.Free;
+    ArrayParamList.Free;
   end;
+  {$ENDREGION}
 
   {$REGION 'Regularization'}
     Regularization := PestProperties.Regularization;
@@ -1891,6 +2163,13 @@ begin
       FLocalObsGroups);
     SetObsGroups(PestProperties.PriorInfoObservationGroups,
       framePriorInfoObservationGroups, FLocalPriorInfoObsGroups);
+    {$ENDREGION}
+
+    {$REGION 'Prior Information'}
+    PestProperties.UseInitialValuePriorInfo := cbInitialValue.Checked;
+    PestProperties.UseSpatialContinuityPriorInfo := cbPriorInfoContinuity.Checked;
+    PestProperties.SeachDistance := rdeSearchDistance.RealValue;
+    PestProperties.MaxPilotPointsInRange := seMaxPilotPoints.AsInteger;
     {$ENDREGION}
 
     {$REGION 'Observation Group Assignments'}
@@ -2247,6 +2526,44 @@ begin
       AnObsGroup.AbsoluteCorrelationFileName := Grid.Cells[Ord(pogcFileName), RowIndex];
       AnObsGroup.Collection := ObsGroups;
     end;
+  end;
+end;
+
+procedure TfrmPEST.CheckObsGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
+begin
+  if (ARow > 0) and (ACol = Ord(pogcName)) then
+  begin
+    if Grid.Checked[Ord(pogcRegularization), ARow]
+      and (Length(Grid.Cells[Ord(pogcName), ARow]) > 7) then
+    begin
+      Grid.Canvas.Brush.Color := clRed;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.CheckPriorInfoGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
+begin
+  if (ARow > 0) and (ACol = Ord(ppcGroupName)) then
+  begin
+    if Grid.Checked[Ord(ppcRegularization), ARow] then
+    begin
+      if Grid.ItemIndex[ACol, ARow] < 0 then
+      begin
+        Grid.Canvas.Brush.Color := clRed;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmPEST.SetSearchDistanceColor;
+begin
+  if cbPriorInfoContinuity.Checked and (rdeSearchDistance.RealValue = 0) then
+  begin
+    rdeSearchDistance.Color := clRed;
+  end
+  else
+  begin
+    rdeSearchDistance.Color := clWindow;
   end;
 end;
 procedure TfrmPEST.FixObsGroupNames(ObsGridFrame: TframeGrid);
@@ -2662,7 +2979,7 @@ begin
   begin
     ExistingParam := ModelSteadyParameters[ParamIndex];
     ModifiedParam := SteadyParameters[ParamIndex];
-    ExistingParam.RegularizeInitialValue := ModifiedParam.RegularizeInitialValue;
+    ExistingParam.UseInitialValuePriorInfo := ModifiedParam.UseInitialValuePriorInfo;
     ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
   end;
   ModelHufParameters := frmGoPhast.PhastModel.HufParameters;
@@ -2671,7 +2988,7 @@ begin
   begin
     ExistingParam := ModelHufParameters[ParamIndex];
     ModifiedParam := HufParameters[ParamIndex];
-    ExistingParam.RegularizeInitialValue := ModifiedParam.RegularizeInitialValue;
+    ExistingParam.UseInitialValuePriorInfo := ModifiedParam.UseInitialValuePriorInfo;
     ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
   end;
   ModelTransientListParameters := frmGoPhast.PhastModel.ModflowTransientParameters;
@@ -2680,7 +2997,7 @@ begin
   begin
     ExistingParam := ModelTransientListParameters[ParamIndex];
     ModifiedParam := TransientListParameters[ParamIndex];
-    ExistingParam.RegularizeInitialValue := ModifiedParam.RegularizeInitialValue;
+    ExistingParam.UseInitialValuePriorInfo := ModifiedParam.UseInitialValuePriorInfo;
     ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
   end;
 end;

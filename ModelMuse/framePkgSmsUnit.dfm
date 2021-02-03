@@ -19,10 +19,11 @@ inherited framePkgSms: TframePkgSms
     Top = 157
     Width = 495
     Height = 360
-    ActivePage = tabBasic
+    ActivePage = tabNonLinear
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
+    OnChange = pgcControlsChange
     object tabBasic: TTabSheet
       Caption = 'Basic'
       object lblPrintOption: TLabel
@@ -290,6 +291,7 @@ inherited framePkgSms: TframePkgSms
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -313,6 +315,7 @@ inherited framePkgSms: TframePkgSms
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -336,6 +339,7 @@ inherited framePkgSms: TframePkgSms
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -393,6 +397,7 @@ inherited framePkgSms: TframePkgSms
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -416,6 +421,7 @@ inherited framePkgSms: TframePkgSms
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -439,6 +445,7 @@ inherited framePkgSms: TframePkgSms
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

@@ -370,9 +370,11 @@ type
       var Points: TQuadPointInRegionArray);
     // @name finds all the locations stored in the @link(TRbwQuadTree)
     // that are within a distance of Radius from CenterX, CenterY and returns
-    // them and their associated data in Points.  Points is not sorted.
+    // them and their associated data in Points.  If Sort is set to True,
+    // Points is sorted in order of increasing distance from (CenterX, CenterY).
+    // Sorting is not thread safe.
     procedure FindPointsInCircle(const CenterX, CenterY, Radius: double;
-      var Points: TQuadPointInRegionArray);
+      var Points: TQuadPointInRegionArray; Sort: Boolean = False);
     // @name, finds the location in the @link(TRbwQuadTree) that is
     // closest to X, Y and returns it in X, Y.  The associated data is returned
     // in Data. In the event of ties in location, the location that is returned
@@ -440,6 +442,8 @@ type
 procedure Register;
 
 implementation
+
+uses Math;
 
 resourcestring
   StrErrorNoDataPoint = 'Error: No data points in QuadTree.';
@@ -1643,8 +1647,26 @@ begin
   end;
 end;
 
+var
+  CircleCenterX: double;
+  CircleCenterY: double;
+
+function CompareDistances(Item1, Item2: Pointer): Integer;
+var
+  P1: TQPoint;
+  P2: TQPoint;
+  DistanceSqr1: double;
+  DistanceSqr2: double;
+begin
+  P1 := PQPoint(Item1)^;
+  P2 := PQPoint(Item2)^;
+  DistanceSqr1 := Sqr(CircleCenterX-P1.X) + Sqr(CircleCenterY-P1.Y);
+  DistanceSqr2 := Sqr(CircleCenterX-P2.X) + Sqr(CircleCenterY-P2.Y);
+  result := Sign(DistanceSqr1 - DistanceSqr2);
+end;
+
 procedure TRbwQuadTree.FindPointsInCircle(const CenterX, CenterY,
-  Radius: double; var Points: TQuadPointInRegionArray);
+  Radius: double; var Points: TQuadPointInRegionArray; Sort: Boolean = False);
 var
   List: TList;
   PointIndex, DataIndex: integer;
@@ -1655,6 +1677,12 @@ begin
   try
     FQTreeNode.FindPointsInCircle(CenterX, CenterY, Radius, Sqr(Radius), List);
     SetLength(Points, List.Count);
+    if Sort then
+    begin
+      CircleCenterX := CenterX;
+      CircleCenterY := CenterY;
+      List.Sort(CompareDistances);
+    end;
     for PointIndex := 0 to List.Count - 1 do
     begin
       PointAddress := List[PointIndex];

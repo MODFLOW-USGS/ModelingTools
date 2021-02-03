@@ -50,6 +50,7 @@ type
       const Value: TCheckBoxState);
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
     procedure cbNewtonClick(Sender: TObject);
+    procedure pgcControlsChange(Sender: TObject);
   private
     FInitializedGrid: boolean;
     FUnderRelaxPickList: TStringList;
@@ -387,6 +388,19 @@ function TframePkgSms.LinearRowToToSmsOrd(Row: Integer): TSmsOverride;
 begin
   Result := TSmsOverride(Row - 1 + Ord(soInnerMaxIterations));
   Assert(Result in [soInnerMaxIterations..soReorderingMethod]);
+end;
+
+procedure TframePkgSms.pgcControlsChange(Sender: TObject);
+begin
+  inherited;
+  if pgcControls.ActivePage = tabNonLinear then
+  begin
+    rdgNonlinearOptions.HideEditor;
+  end
+  else if pgcControls.ActivePage = tabLinear then
+  begin
+    rdgLinearOptions.HideEditor;
+  end;
 end;
 
 function TframePkgSms.SmsOrdToRow(SmsOrdinal: TSmsOverride): Integer;

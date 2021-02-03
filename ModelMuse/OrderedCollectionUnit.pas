@@ -316,7 +316,7 @@ type
     FParameterGroup: string;
     FStoredUpperBound: TRealStorage;
     FStoredAbsoluteN: TRealStorage;
-    FRegularizeInitialValue: Boolean;
+    FUseInitialValuePriorInfo: Boolean;
     FRegularizationGroup: string;
     procedure NotifyHufKx;
     procedure NotifyHufKy;
@@ -342,7 +342,7 @@ type
     procedure SetStoredAbsoluteN(const Value: TRealStorage);
     function GetAbsoluteN: double;
     procedure SetAbsoluteN(const Value: double);
-    procedure SetRegularizeInitialValue(const Value: Boolean);
+    procedure SetUseInitialValuePriorInfo(const Value: Boolean);
     procedure SetRegularizationGroup(const Value: string);
   protected
     // See @link(ParameterName).
@@ -392,30 +392,75 @@ type
     // PARVAL1 in PEST
     property Value: double read FValue write SetValue;
     // PARTRANS in PEST
-    property Transform: TPestTransform read FTransform write SetTransform;
+    property Transform: TPestTransform read FTransform write SetTransform
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     // PARCHGLIM in PEST
-    property ChangeLimitation: TPestChangeLimitation read FChangeLimitation write SetChangeLimitation;
+    property ChangeLimitation: TPestChangeLimitation read FChangeLimitation
+      write SetChangeLimitation
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     // PARLBND in PEST
-    property StoredLowerBound: TRealStorage read FStoredLowerBound write SetStoredLowerBound;
+    property StoredLowerBound: TRealStorage read FStoredLowerBound
+      write SetStoredLowerBound
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     // PARUBND in PEST
-    property StoredUpperBound: TRealStorage read FStoredUpperBound write SetStoredUpperBound;
+    property StoredUpperBound: TRealStorage read FStoredUpperBound
+      write SetStoredUpperBound
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     // PARGP in PEST
-    property ParameterGroup: string read FParameterGroup write SetParameterGroup;
+    property ParameterGroup: string read FParameterGroup write SetParameterGroup
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     // SCALE in PEST
-    property StoredScale: TRealStorage read FStoredScale write SetStoredScale;
+    property StoredScale: TRealStorage read FStoredScale write SetStoredScale
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     // OFFSET in PEST
-    property StoredOffset: TRealStorage read FStoredOffset write SetStoredOffset;
+    property StoredOffset: TRealStorage read FStoredOffset write SetStoredOffset
     // DERCOM in PEST is not currently supported.
     // PARTIED in PEST
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     property TiedParameterName: string read FTiedParameterName
-      write SetTiedParameterName;
+      write SetTiedParameterName
     // Absolute(N) and ABSPARMAX(N) in PEST
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
     property StoredAbsoluteN: TRealStorage read FStoredAbsoluteN
-      write SetStoredAbsoluteN;
+      write SetStoredAbsoluteN
     // @name determines whether or not the parameter will be included in
     // a prior information equation setting it equal to its initial value.
-    property RegularizeInitialValue: Boolean read FRegularizeInitialValue
-      write SetRegularizeInitialValue Stored True;
+    {$IFNDEF PEST}
+    Stored False
+    {$ENDIF}
+    ;
+    property UseInitialValuePriorInfo: Boolean read FUseInitialValuePriorInfo
+      write SetUseInitialValuePriorInfo
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
     // @name is the regularization group of the parameter in the
     // initial value prior information equation.
     property RegularizationGroup: string read FRegularizationGroup
@@ -830,7 +875,7 @@ begin
     ParameterGroup := SourceParameter.ParameterGroup;
     TiedParameterName := SourceParameter.TiedParameterName;
     AbsoluteN := SourceParameter.AbsoluteN;
-    RegularizeInitialValue := SourceParameter.RegularizeInitialValue;
+    UseInitialValuePriorInfo := SourceParameter.UseInitialValuePriorInfo;
     RegularizationGroup := SourceParameter.RegularizationGroup;
     // RegularizationGroup
   end;
@@ -872,7 +917,7 @@ begin
   FStoredAbsoluteN := TRealStorage.Create;
   FStoredAbsoluteN.OnChange := OnInvalidateModelEvent;
   Scale := 1;
-  FRegularizeInitialValue := True;
+  FUseInitialValuePriorInfo := True;
 end;
 
 destructor TModflowParameter.Destroy;
@@ -1073,7 +1118,7 @@ begin
     (ParameterGroup = AnotherParameter.ParameterGroup) and
     (TiedParameterName = AnotherParameter.TiedParameterName) and
     (AbsoluteN = AnotherParameter.AbsoluteN) and
-    (RegularizeInitialValue = AnotherParameter.RegularizeInitialValue) and
+    (UseInitialValuePriorInfo = AnotherParameter.UseInitialValuePriorInfo) and
     (RegularizationGroup = AnotherParameter.RegularizationGroup);
 end;
 
@@ -1390,9 +1435,9 @@ begin
   SetCaseSensitiveStringProperty(FRegularizationGroup, Value);
 end;
 
-procedure TModflowParameter.SetRegularizeInitialValue(const Value: Boolean);
+procedure TModflowParameter.SetUseInitialValuePriorInfo(const Value: Boolean);
 begin
-  FRegularizeInitialValue := Value;
+  FUseInitialValuePriorInfo := Value;
 end;
 
 procedure TModflowParameter.SetScale(const Value: double);

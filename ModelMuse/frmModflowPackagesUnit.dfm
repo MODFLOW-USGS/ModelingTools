@@ -6,8 +6,6 @@ inherited frmModflowPackages: TfrmModflowPackages
   ClientWidth = 782
   OnClose = FormClose
   OnResize = FormResize
-  ExplicitLeft = -86
-  ExplicitTop = -172
   ExplicitWidth = 798
   ExplicitHeight = 596
   PixelsPerInch = 96
@@ -30,7 +28,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspZoneBudget
+    ActivePage = jvspLPF
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -118,6 +116,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -141,6 +140,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -164,6 +164,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -187,6 +188,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -4557,6 +4559,7 @@ inherited frmModflowPackages: TfrmModflowPackages
               Columns = <
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4580,6 +4583,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4603,6 +4607,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4639,6 +4644,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4662,6 +4668,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4685,6 +4692,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4708,6 +4716,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4731,6 +4740,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4754,6 +4764,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4777,6 +4788,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4800,6 +4812,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4823,6 +4836,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4846,6 +4860,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4869,6 +4884,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4892,6 +4908,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4915,6 +4932,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4938,6 +4956,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4961,6 +4980,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -4984,6 +5004,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5007,6 +5028,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5030,6 +5052,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5053,6 +5076,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5076,6 +5100,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5099,6 +5124,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5122,6 +5148,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5145,6 +5172,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5168,6 +5196,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -5191,6 +5220,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -6149,6 +6179,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                   Columns = <
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = '...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6172,6 +6203,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = '...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6195,6 +6227,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                     end
                     item
                       AutoAdjustRowHeights = False
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'Select...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6247,6 +6280,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                   Columns = <
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = '...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6270,6 +6304,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = '...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6293,6 +6328,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                     end
                     item
                       AutoAdjustRowHeights = False
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'Select...'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -9875,6 +9911,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
+        ExplicitTop = -8
         ExplicitWidth = 595
         ExplicitHeight = 516
         inherited lblComments: TLabel
@@ -9903,7 +9940,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 595
           ExplicitHeight = 389
           inherited tabBasic: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 587
             ExplicitHeight = 356
@@ -9974,25 +10010,24 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
           end
           inherited tabNonLinear: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 487
             ExplicitHeight = 327
             inherited rdgNonlinearOptions: TRbwDataGrid4
-              Height = 327
+              Width = 587
+              Height = 356
               FixedCols = 0
-              ExplicitHeight = 327
+              ExplicitWidth = 587
+              ExplicitHeight = 356
             end
           end
           inherited tabLinear: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 487
             ExplicitHeight = 327
             inherited rdgLinearOptions: TRbwDataGrid4
-              Height = 327
+              Width = 587
+              Height = 356
               FixedCols = 0
-              ExplicitHeight = 327
+              ExplicitHeight = 356
             end
           end
         end

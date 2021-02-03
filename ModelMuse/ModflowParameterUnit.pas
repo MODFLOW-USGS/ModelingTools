@@ -27,6 +27,8 @@ type
     FZoneArrayNames: TStringList;
     FNamesToRemove: TStringList;
     FUsePilotPoints: Boolean;
+    FUseSpatialContinuityPriorInfo: Boolean;
+    FSpatialContinuityGroupName: string;
     // See @link(MultiplierName).
     procedure SetMultiplierName(const Value: string);
     // See @link(UseMultiplier).
@@ -58,6 +60,8 @@ type
     procedure UnLockGlobalVariables;
     procedure SetUsePilotPoints(const Value: Boolean);
     procedure InvalidatePestDataArrays(CheckAll: Boolean = False);
+    procedure SetUseSpatialContinuityPriorInfo(const Value: Boolean);
+    procedure SetSpatialContinuityGroupName(const Value: string);
   protected
     // Besides setting the name of the parameter, @name also updates the
     // names of the @link(TDataArray)s used to define multiplier and zone
@@ -97,6 +101,22 @@ type
     // @name lists the zone array names exported to MODFLOW.
     function ZoneArrayName(ModflowLayer: integer; AModel: TBaseModel): string;
     property UsePilotPoints: Boolean read FUsePilotPoints write SetUsePilotPoints
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
+    property UseSpatialContinuityPriorInfo: Boolean
+      read FUseSpatialContinuityPriorInfo write SetUseSpatialContinuityPriorInfo
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
+    property SpatialContinuityGroupName: string read FSpatialContinuityGroupName
+      write SetSpatialContinuityGroupName
     {$IFDEF PEST}
     Stored True
     {$ELSE}
@@ -177,6 +197,9 @@ begin
     UseMultiplier := SourceParameter.UseMultiplier;
     UseZone := SourceParameter.UseZone;
     UsePilotPoints := SourceParameter.UsePilotPoints;
+    UseSpatialContinuityPriorInfo :=
+      SourceParameter.UseSpatialContinuityPriorInfo;
+    SpatialContinuityGroupName := SourceParameter.SpatialContinuityGroupName;
   end;
 end;
 
@@ -194,6 +217,7 @@ end;
 constructor TModflowSteadyParameter.Create(Collection: TCollection);
 begin
   inherited;
+  FUseSpatialContinuityPriorInfo := True;
   FMultiplierArrayNames:= TStringList.Create;
   FZoneArrayNames:= TStringList.Create;
   FNamesToRemove:= TStringList.Create;
@@ -263,7 +287,10 @@ begin
     (MultiplierName = AnotherParameter.MultiplierName) and
     (UseMultiplier = AnotherParameter.UseMultiplier) and
     (UseZone = AnotherParameter.UseZone) and
-    (ZoneName = AnotherParameter.ZoneName);
+    (ZoneName = AnotherParameter.ZoneName) and
+    (UseSpatialContinuityPriorInfo = AnotherParameter.UseSpatialContinuityPriorInfo) and
+    (SpatialContinuityGroupName = AnotherParameter.SpatialContinuityGroupName);
+
 end;
 
 procedure TModflowSteadyParameter.FillArrayNameList(List: TStringList;
@@ -562,6 +589,12 @@ begin
 
 end;
 
+procedure TModflowSteadyParameter.SetSpatialContinuityGroupName(
+  const Value: string);
+begin
+  SetCaseSensitiveStringProperty(FSpatialContinuityGroupName, Value);
+end;
+
 procedure TModflowSteadyParameter.SetUseMultiplier(const Value: boolean);
 begin
   if FUseMultiplier <> Value then
@@ -579,6 +612,12 @@ begin
     FUsePilotPoints := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowSteadyParameter.SetUseSpatialContinuityPriorInfo(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseSpatialContinuityPriorInfo, Value);
 end;
 
 procedure TModflowSteadyParameter.SetUseZone(const Value: boolean);

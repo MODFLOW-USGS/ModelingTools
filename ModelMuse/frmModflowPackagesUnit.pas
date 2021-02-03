@@ -2668,6 +2668,15 @@ end;
 procedure TfrmModflowPackages.jvplPackagesChange(Sender: TObject);
 begin
   inherited;
+  if jvplPackages.ActivePage = jvspNPF then
+  begin
+    framePkgNpf.rdgOptions.HideEditor;
+  end;
+  if (jvplPackages.ActivePage = jvspLPF) then
+  begin
+    framePkgLPF.rdgOptions.HideEditor;
+  end;
+
   if (jvplPackages.ActivePage = jvspLPF) or (jvplPackages.ActivePage = jvspUPW) then
   begin
     tvLpfParameterTypes.Parent := jvplPackages.ActivePage;

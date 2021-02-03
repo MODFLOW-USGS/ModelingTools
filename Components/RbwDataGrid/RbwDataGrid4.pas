@@ -722,6 +722,7 @@ type
       DefaultValue: integer = 0]: integer read GetIntegerValueDefault;
     Property IsUpdating: boolean read GetIsUpdating;
     procedure SetEditorUpdateToEnd;
+    procedure HideEditor;
   published
     // When distributing a text to multiple cells (@link(DistributeText),
     // if @name is @true, the procedure will use up multiple
@@ -5261,6 +5262,11 @@ begin
   begin
     result := FSpecialFormat[ACol, ARow].Used;
   end;
+end;
+
+procedure TCustomRBWDataGrid.HideEditor;
+begin
+  inherited;
 end;
 
 procedure TCustomRBWDataGrid.WMHScroll(var Msg: TWMHScroll);
