@@ -241,14 +241,18 @@ type
     rdgPriorInfoInitialValue: TRbwDataGrid4;
     Panel5: TPanel;
     cbInitialValue: TCheckBox;
-    jvspPriorInfoContinuity: TJvStandardPage;
+    jvspPriorInfoHorizContinuity: TJvStandardPage;
     pnlPriorInfoContinuity: TPanel;
-    cbPriorInfoContinuity: TCheckBox;
-    rdgPriorInfoContinuity: TRbwDataGrid4;
+    cbPriorInfoHorizContinuity: TCheckBox;
+    rdgPriorInfoHorizContinuity: TRbwDataGrid4;
     rdeSearchDistance: TRbwDataEntry;
     seMaxPilotPoints: TJvSpinEdit;
     lblSearchDistance: TLabel;
     lblMaxPilotPoints: TLabel;
+    jvspPriorInfoVertContinuity: TJvStandardPage;
+    Panel6: TPanel;
+    cbPriorInfoVertContinuity: TCheckBox;
+    rdgPriorInfoVertContinuity: TRbwDataGrid4;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -303,15 +307,21 @@ type
       ACol, ARow: Integer; const Value: string);
     procedure framePriorInfoObservationGroupsGridStateChange(Sender: TObject;
       ACol, ARow: Integer; const Value: TCheckBoxState);
-    procedure rdgPriorInfoContinuityBeforeDrawCell(Sender: TObject; ACol,
+    procedure rdgPriorInfoHorizContinuityBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
-    procedure rdgPriorInfoContinuitySetEditText(Sender: TObject; ACol,
+    procedure rdgPriorInfoHorizContinuitySetEditText(Sender: TObject; ACol,
       ARow: Integer; const Value: string);
-    procedure rdgPriorInfoContinuityStateChange(Sender: TObject; ACol,
+    procedure rdgPriorInfoHorizContinuityStateChange(Sender: TObject; ACol,
       ARow: Integer; const Value: TCheckBoxState);
     procedure rdeSearchDistanceChange(Sender: TObject);
-    procedure cbPriorInfoContinuityClick(Sender: TObject);
+    procedure cbPriorInfoHorizContinuityClick(Sender: TObject);
     procedure framePriorInfoObservationGroupsGridExit(Sender: TObject);
+    procedure rdgPriorInfoVertContinuityBeforeDrawCell(Sender: TObject; ACol,
+      ARow: Integer);
+    procedure rdgPriorInfoVertContinuitySetEditText(Sender: TObject; ACol,
+      ARow: Integer; const Value: string);
+    procedure rdgPriorInfoVertContinuityStateChange(Sender: TObject; ACol,
+      ARow: Integer; const Value: TCheckBoxState);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -379,7 +389,7 @@ uses
   frmGoPhastUnit, GoPhastTypes, JvComCtrls, PhastModelUnit,
   PointCollectionUnit, QuadTreeClass, ShapefileUnit, System.IOUtils, FastGEO,
   ModelMuseUtilities, ScreenObjectUnit, TriCP_Routines, TriPackRoutines,
-  SutraPestObsUnit, System.Math;
+  SutraPestObsUnit, System.Math, PestControlFileWriterUnit;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
@@ -440,7 +450,7 @@ const
 var
   Grid: TRbwDataGrid4;
   RowIndex: Integer;
-  PickList: TStringList;
+//  PickList: TStringList;
 //  procedure FillPickList(Grid: TRbwDataGrid4);
 //  var
 //    ObsGroup: TPestObservationGroup;
@@ -494,13 +504,16 @@ begin
   if plMain.ActivePage = jvspPriorInfoInitialValue then
   begin
     rdgPriorInfoInitialValue.HideEditor
-//    FillPickList(rdgPriorInfoInitialValue);
   end;
-  if plMain.ActivePage = jvspPriorInfoContinuity then
+  if plMain.ActivePage = jvspPriorInfoHorizContinuity then
   begin
-    rdgPriorInfoContinuity.HideEditor;
-//    FillPickList(rdgPriorInfoContinuity);
+    rdgPriorInfoHorizContinuity.HideEditor;
   end;
+  if plMain.ActivePage = jvspPriorInfoVertContinuity then
+  begin
+    rdgPriorInfoVertContinuity.HideEditor;
+  end;
+
 end;
 
 procedure TfrmPEST.rdeWFMAXChange(Sender: TObject);
@@ -574,14 +587,14 @@ begin
   end;
 end;
 
-procedure TfrmPEST.rdgPriorInfoContinuityBeforeDrawCell(Sender: TObject; ACol,
+procedure TfrmPEST.rdgPriorInfoHorizContinuityBeforeDrawCell(Sender: TObject; ACol,
   ARow: Integer);
 begin
   inherited;
-  CheckPriorInfoGroupName(rdgPriorInfoContinuity, ARow, ACol);
+  CheckPriorInfoGroupName(rdgPriorInfoHorizContinuity, ARow, ACol);
 end;
 
-procedure TfrmPEST.rdgPriorInfoContinuitySetEditText(Sender: TObject; ACol,
+procedure TfrmPEST.rdgPriorInfoHorizContinuitySetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
 var
   AParam: TModflowSteadyParameter;
@@ -591,21 +604,21 @@ begin
   if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
   begin
     ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
-      IndexOf(rdgPriorInfoContinuity.Cells[ACol, ARow]);
+      IndexOf(rdgPriorInfoHorizContinuity.Cells[ACol, ARow]);
     if ObsGroupIndex >= 1 then
     begin
-      rdgPriorInfoContinuity.Objects[ACol, ARow] :=
+      rdgPriorInfoHorizContinuity.Objects[ACol, ARow] :=
         framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
     end;
-    AParam := rdgPriorInfoContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+    AParam := rdgPriorInfoHorizContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
     if AParam <> nil then
     begin
-      AParam.SpatialContinuityGroupName := rdgPriorInfoContinuity.Cells[ACol, ARow];
+      AParam.HorizontalSpatialContinuityGroupName := rdgPriorInfoHorizContinuity.Cells[ACol, ARow];
     end;
   end;
 end;
 
-procedure TfrmPEST.rdgPriorInfoContinuityStateChange(Sender: TObject; ACol,
+procedure TfrmPEST.rdgPriorInfoHorizContinuityStateChange(Sender: TObject; ACol,
   ARow: Integer; const Value: TCheckBoxState);
 var
   AParam: TModflowSteadyParameter;
@@ -613,10 +626,10 @@ begin
   inherited;
   if (ACol = Ord(ppcRegularization)) and (ARow > 0) then
   begin
-    AParam := rdgPriorInfoContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+    AParam := rdgPriorInfoHorizContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
     if AParam <> nil then
     begin
-      AParam.UseSpatialContinuityPriorInfo := rdgPriorInfoContinuity.Checked[ACol, ARow];
+      AParam.UseHorizontalSpatialContinuityPriorInfo := rdgPriorInfoHorizContinuity.Checked[ACol, ARow];
     end;
   end;
 end;
@@ -650,7 +663,6 @@ begin
       AParam.RegularizationGroup := rdgPriorInfoInitialValue.Cells[ACol, ARow];
     end;
   end;
-//
 end;
 
 procedure TfrmPEST.rdgPriorInfoInitialValueStateChange(Sender: TObject; ACol,
@@ -659,13 +671,60 @@ var
   AParam: TModflowParameter;
 begin
   inherited;
-    //TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName);
   if (ACol = Ord(ppcRegularization)) and (ARow > 0) then
   begin
     AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
     if AParam <> nil then
     begin
       AParam.UseInitialValuePriorInfo := rdgPriorInfoInitialValue.Checked[ACol, ARow];
+    end;
+  end;
+end;
+
+procedure TfrmPEST.rdgPriorInfoVertContinuityBeforeDrawCell(Sender: TObject;
+  ACol, ARow: Integer);
+begin
+  inherited;
+  CheckPriorInfoGroupName(rdgPriorInfoVertContinuity, ARow, ACol);
+end;
+
+procedure TfrmPEST.rdgPriorInfoVertContinuitySetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+var
+  AParam: TModflowSteadyParameter;
+  ObsGroupIndex: Integer;
+begin
+  inherited;
+  if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
+  begin
+    ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
+      IndexOf(rdgPriorInfoVertContinuity.Cells[ACol, ARow]);
+    if ObsGroupIndex >= 1 then
+    begin
+      rdgPriorInfoVertContinuity.Objects[ACol, ARow] :=
+        framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+    end;
+    AParam := rdgPriorInfoVertContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+    if AParam <> nil then
+    begin
+      AParam.VertSpatialContinuityGroupName := rdgPriorInfoVertContinuity.Cells[ACol, ARow];
+    end;
+  end;
+end;
+
+procedure TfrmPEST.rdgPriorInfoVertContinuityStateChange(Sender: TObject; ACol,
+  ARow: Integer; const Value: TCheckBoxState);
+var
+  AParam: TModflowSteadyParameter;
+begin
+  inherited;
+    //TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName);
+  if (ACol = Ord(ppcRegularization)) and (ARow > 0) then
+  begin
+    AParam := rdgPriorInfoVertContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+    if AParam <> nil then
+    begin
+      AParam.UseVertSpatialContinuityPriorInfo := rdgPriorInfoVertContinuity.Checked[ACol, ARow];
     end;
   end;
 end;
@@ -1091,7 +1150,7 @@ begin
   rdePhimAccept.Enabled := not cbAutomaticallySetPHIMACCEPT.Checked;
 end;
 
-procedure TfrmPEST.cbPriorInfoContinuityClick(Sender: TObject);
+procedure TfrmPEST.cbPriorInfoHorizContinuityClick(Sender: TObject);
 begin
   inherited;
   SetSearchDistanceColor;
@@ -1252,8 +1311,12 @@ begin
   NewNode.PageIndex := jvspPriorInfoInitialValue.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    PriorInfoNode, 'Horizontal Continuity Prior Information') as TJvPageIndexNode;
-  NewNode.PageIndex := jvspPriorInfoContinuity.PageIndex;
+    PriorInfoNode, 'Within-Layer Continuity Prior Information') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPriorInfoHorizContinuity.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    PriorInfoNode, 'Between-Layer Continuity Prior Information') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPriorInfoVertContinuity.PageIndex;
 
   RegularizationNode := tvPEST.Items.AddChild(
     nil, 'Regularization') as TJvPageIndexNode;
@@ -1279,9 +1342,13 @@ begin
   rdgPriorInfoInitialValue.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
   rdgPriorInfoInitialValue.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
 
-  rdgPriorInfoContinuity.Cells[Ord(ppcName), 0] := StrParameterName;
-  rdgPriorInfoContinuity.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
-  rdgPriorInfoContinuity.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
+  rdgPriorInfoHorizContinuity.Cells[Ord(ppcName), 0] := StrParameterName;
+  rdgPriorInfoHorizContinuity.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
+  rdgPriorInfoHorizContinuity.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
+
+  rdgPriorInfoVertContinuity.Cells[Ord(ppcName), 0] := StrParameterName;
+  rdgPriorInfoVertContinuity.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
+  rdgPriorInfoVertContinuity.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
 
   GetData;
 end;
@@ -1396,6 +1463,8 @@ var
           and (PickList[ObsIndex] <> Grid.Cells[Ord(ppcGroupName), RowIndex]) then
         begin
           Grid.Cells[Ord(ppcGroupName), RowIndex] := PickList[ObsIndex];
+          Assert(Assigned(Grid.OnSetEditText));
+          Grid.OnSetEditText(Grid, Ord(ppcGroupName), RowIndex, PickList[ObsIndex]);
         end;
       end;
     end;
@@ -1412,7 +1481,8 @@ begin
       PickList.Delete(PickList.Count-1);
     end;
     AssignPickList(rdgPriorInfoInitialValue);
-    AssignPickList(rdgPriorInfoContinuity);
+    AssignPickList(rdgPriorInfoHorizContinuity);
+    AssignPickList(rdgPriorInfoVertContinuity);
   finally
     PickList.Free;
   end;
@@ -1745,7 +1815,8 @@ begin
 
   {$REGION 'Prior Information Observation Groups'}
   SetPriorInfoObsGroupPicklist(rdgPriorInfoInitialValue);
-  SetPriorInfoObsGroupPicklist(rdgPriorInfoContinuity);
+  SetPriorInfoObsGroupPicklist(rdgPriorInfoHorizContinuity);
+  SetPriorInfoObsGroupPicklist(rdgPriorInfoVertContinuity);
  {$ENDREGION}
 
   PickList := rdgPriorInfoInitialValue.Columns[Ord(ppcGroupName)].PickList;
@@ -1753,9 +1824,11 @@ begin
   {$REGION 'Prior Information'}
   cbInitialValue.Checked := PestProperties.UseInitialValuePriorInfo;
 
-  cbPriorInfoContinuity.Checked := PestProperties.UseSpatialContinuityPriorInfo;
+  cbPriorInfoHorizContinuity.Checked := PestProperties.UseHorizontalSpatialContinuityPriorInfo;
   rdeSearchDistance.RealValue := PestProperties.SeachDistance;
   seMaxPilotPoints.AsInteger := PestProperties.MaxPilotPointsInRange;
+
+  cbPriorInfoVertContinuity.Checked := PestProperties.UseVertSpatialContinuityPriorInfo;
 
   GetUsedTypes(UsedTypes);
   FNewSteadyParameters.Assign(frmGoPhast.PhastModel.ModflowSteadyParameters);
@@ -1811,18 +1884,35 @@ begin
           PickList.Objects[ObsIndex];
       end;
     end;
-    rdgPriorInfoContinuity.RowCount := Max(2, ArrayParamList.Count+1);
+
+    rdgPriorInfoHorizContinuity.RowCount := Max(2, ArrayParamList.Count+1);
     for PIndex := 0 to ArrayParamList.Count -1 do
     begin
       ASteadyParam := ArrayParamList[PIndex];
-      rdgPriorInfoContinuity.Cells[Ord(ppcName), PIndex+1] := ASteadyParam.ParameterName;
-      rdgPriorInfoContinuity.Objects[Ord(ppcName), PIndex+1] := ASteadyParam;
-      rdgPriorInfoContinuity.Checked[Ord(ppcRegularization), PIndex+1] := ASteadyParam.UseSpatialContinuityPriorInfo;
-      rdgPriorInfoContinuity.Cells[Ord(ppcGroupName), PIndex+1] := ASteadyParam.SpatialContinuityGroupName;
-      ObsIndex := PickList.IndexOf(ASteadyParam.SpatialContinuityGroupName);
+      rdgPriorInfoHorizContinuity.Cells[Ord(ppcName), PIndex+1] := ASteadyParam.ParameterName;
+      rdgPriorInfoHorizContinuity.Objects[Ord(ppcName), PIndex+1] := ASteadyParam;
+      rdgPriorInfoHorizContinuity.Checked[Ord(ppcRegularization), PIndex+1] := ASteadyParam.UseHorizontalSpatialContinuityPriorInfo;
+      rdgPriorInfoHorizContinuity.Cells[Ord(ppcGroupName), PIndex+1] := ASteadyParam.HorizontalSpatialContinuityGroupName;
+      ObsIndex := PickList.IndexOf(ASteadyParam.HorizontalSpatialContinuityGroupName);
       if ObsIndex >= 0 then
       begin
-        rdgPriorInfoContinuity.Objects[Ord(ppcGroupName), PIndex+1] :=
+        rdgPriorInfoHorizContinuity.Objects[Ord(ppcGroupName), PIndex+1] :=
+          PickList.Objects[ObsIndex];
+      end;
+    end;
+
+    rdgPriorInfoVertContinuity.RowCount := Max(2, ArrayParamList.Count+1);
+    for PIndex := 0 to ArrayParamList.Count -1 do
+    begin
+      ASteadyParam := ArrayParamList[PIndex];
+      rdgPriorInfoVertContinuity.Cells[Ord(ppcName), PIndex+1] := ASteadyParam.ParameterName;
+      rdgPriorInfoVertContinuity.Objects[Ord(ppcName), PIndex+1] := ASteadyParam;
+      rdgPriorInfoVertContinuity.Checked[Ord(ppcRegularization), PIndex+1] := ASteadyParam.UseVertSpatialContinuityPriorInfo;
+      rdgPriorInfoVertContinuity.Cells[Ord(ppcGroupName), PIndex+1] := ASteadyParam.VertSpatialContinuityGroupName;
+      ObsIndex := PickList.IndexOf(ASteadyParam.VertSpatialContinuityGroupName);
+      if ObsIndex >= 0 then
+      begin
+        rdgPriorInfoVertContinuity.Objects[Ord(ppcGroupName), PIndex+1] :=
           PickList.Objects[ObsIndex];
       end;
     end;
@@ -2167,9 +2257,10 @@ begin
 
     {$REGION 'Prior Information'}
     PestProperties.UseInitialValuePriorInfo := cbInitialValue.Checked;
-    PestProperties.UseSpatialContinuityPriorInfo := cbPriorInfoContinuity.Checked;
+    PestProperties.UseHorizontalSpatialContinuityPriorInfo := cbPriorInfoHorizContinuity.Checked;
     PestProperties.SeachDistance := rdeSearchDistance.RealValue;
     PestProperties.MaxPilotPointsInRange := seMaxPilotPoints.AsInteger;
+    PestProperties.UseVertSpatialContinuityPriorInfo := cbPriorInfoVertContinuity.Checked;
     {$ENDREGION}
 
     {$REGION 'Observation Group Assignments'}
@@ -2534,7 +2625,8 @@ begin
   if (ARow > 0) and (ACol = Ord(pogcName)) then
   begin
     if Grid.Checked[Ord(pogcRegularization), ARow]
-      and (Length(Grid.Cells[Ord(pogcName), ARow]) > 7) then
+      and (Length(Grid.Cells[Ord(pogcName), ARow]) >
+      AllowableGroupNameLength - Length(strRegul)) then
     begin
       Grid.Canvas.Brush.Color := clRed;
     end;
@@ -2557,7 +2649,7 @@ end;
 
 procedure TfrmPEST.SetSearchDistanceColor;
 begin
-  if cbPriorInfoContinuity.Checked and (rdeSearchDistance.RealValue = 0) then
+  if cbPriorInfoHorizContinuity.Checked and (rdeSearchDistance.RealValue = 0) then
   begin
     rdeSearchDistance.Color := clRed;
   end

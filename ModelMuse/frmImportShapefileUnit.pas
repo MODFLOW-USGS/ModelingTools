@@ -617,6 +617,7 @@ type
     procedure frameDiversionsSfrMf6seNumberChange(Sender: TObject);
     procedure cbGroundwaterFlowObservationClick(Sender: TObject);
     procedure comboObjectNameMethodChange(Sender: TObject);
+    procedure pcImportShapeChange(Sender: TObject);
   private
     FGeometryFileName: string;
     FIndexFileName: string;
@@ -9074,6 +9075,15 @@ begin
     end;
   finally
     InvalidNames.Free;
+  end;
+end;
+
+procedure TfrmImportShapefile.pcImportShapeChange(Sender: TObject);
+begin
+  inherited;
+  if pcImportShape.ActivePage = tabData then
+  begin
+    dgFields.HideEditor;
   end;
 end;
 

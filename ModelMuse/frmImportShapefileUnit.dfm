@@ -85,9 +85,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Top = 0
     Width = 771
     Height = 555
-    ActivePage = tabOptions
+    ActivePage = tabData
     Align = alClient
     TabOrder = 0
+    OnChange = pcImportShapeChange
     object tabOptions: TTabSheet
       Caption = 'Options 1'
       ImageIndex = 3
@@ -551,6 +552,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'Browse'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -654,6 +656,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -677,6 +680,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -700,6 +704,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -723,6 +728,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -881,6 +887,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -904,6 +911,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -927,6 +935,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -950,6 +959,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1287,6 +1297,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               Columns = <
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = 'F()'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -1311,6 +1322,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = 'F()'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -1335,6 +1347,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = 'F()'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -2710,6 +2723,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                     Columns = <
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'Browse'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -2799,6 +2813,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                     Columns = <
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'Browse'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -2824,6 +2839,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                       end
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = '...'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -2997,6 +3013,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                     Columns = <
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'Browse'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -3020,6 +3037,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                       end
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = '...'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -3043,6 +3061,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                       end
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = '...'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -3066,6 +3085,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                       end
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = '...'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText

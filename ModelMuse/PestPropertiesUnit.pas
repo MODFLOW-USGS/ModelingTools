@@ -644,6 +644,7 @@ type
     FUseSpatialContinuityPriorInfo: Boolean;
     FStoredSeachDistance: TRealStorage;
     FMaxPilotPointsInRange: Integer;
+    FUseVertSpatialContinuityPriorInfo: Boolean;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -678,6 +679,7 @@ type
     function GetSeachDistance: double;
     procedure SetSeachDistance(const Value: double);
     procedure SetMaxPilotPointsInRange(const Value: Integer);
+    procedure SetUseVertSpatialContinuityPriorInfo(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -731,12 +733,16 @@ type
       write SetRegularization;
     property UseInitialValuePriorInfo: Boolean read FUseInitialValuePriorInfo
       write SetUseInitialValuePriorInfo;
-    property UseSpatialContinuityPriorInfo: Boolean read FUseSpatialContinuityPriorInfo
+    property UseHorizontalSpatialContinuityPriorInfo: Boolean
+      read FUseSpatialContinuityPriorInfo
       write SetUseSpatialContinuityPriorInfo;
     Property StoredSeachDistance: TRealStorage read FStoredSeachDistance
       write SetStoredSeachDistance;
     property MaxPilotPointsInRange: Integer read FMaxPilotPointsInRange
       write SetMaxPilotPointsInRange;
+    property UseVertSpatialContinuityPriorInfo: Boolean
+      read FUseVertSpatialContinuityPriorInfo
+      write SetUseVertSpatialContinuityPriorInfo;
   end;
 
 implementation
@@ -774,9 +780,10 @@ begin
     MinimumSeparation := PestSource.MinimumSeparation;
     Regularization := PestSource.Regularization;
     UseInitialValuePriorInfo := PestSource.UseInitialValuePriorInfo;
-    UseSpatialContinuityPriorInfo := PestSource.UseSpatialContinuityPriorInfo;
+    UseHorizontalSpatialContinuityPriorInfo := PestSource.UseHorizontalSpatialContinuityPriorInfo;
     SeachDistance := PestSource.SeachDistance;
     MaxPilotPointsInRange := PestSource.MaxPilotPointsInRange;
+    UseVertSpatialContinuityPriorInfo := PestSource.UseVertSpatialContinuityPriorInfo;
   end
   else
   begin
@@ -1055,6 +1062,7 @@ begin
   SeachDistance := 0;
   MaxPilotPointsInRange := 4;
   FUseSpatialContinuityPriorInfo := True;
+  FUseVertSpatialContinuityPriorInfo := True;
 
   FPestControlData.InitializeVariables;
   FSvdProperties.InitializeVariables;
@@ -1202,6 +1210,12 @@ procedure TPestProperties.SetUseSpatialContinuityPriorInfo(
   const Value: Boolean);
 begin
   SetBooleanProperty(FUseSpatialContinuityPriorInfo, Value);
+end;
+
+procedure TPestProperties.SetUseVertSpatialContinuityPriorInfo(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseVertSpatialContinuityPriorInfo, Value);
 end;
 
 { TPestControlData }

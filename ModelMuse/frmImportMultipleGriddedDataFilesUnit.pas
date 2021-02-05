@@ -55,6 +55,7 @@ resourcestring
   StrCreatedFromTextFi = 'Created from text file';
   StrErrorDoesNotExist = 'There was an error reading %s. Please check that t' +
   'he file exists and that you are allowed to open it.';
+  StrImportedFrom0sO = 'Imported from %0:s on %1:s.';
 
 {$R *.dfm}
 
@@ -304,6 +305,8 @@ begin
         TDataArray, NewName, '0', NewName, [], rdtDouble,
         AScreenObject.EvaluatedAt, dsoTop,
         strDefaultClassification + '|' + StrCreatedFromTextFi);
+      DataSet.Comment := Format(StrImportedFrom0sO,
+        [FileNames[FileIndex], DateTimeToStr(Now)]);
 
       NewDataSets.Add(DataSet);
 

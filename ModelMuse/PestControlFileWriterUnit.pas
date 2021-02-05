@@ -54,6 +54,12 @@ type
     procedure WriteFile(const AFileName: string);
   end;
 
+resourcestring
+  StrRegul = 'regul_';
+
+const
+  AllowableGroupNameLength = 12;
+
 implementation
 
 uses
@@ -63,7 +69,8 @@ uses
   ModflowCHD_WriterUnit, ModflowHobUnit, ModflowDRN_WriterUnit,
   ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
   ModflowPackagesUnit, DataSetUnit, PilotPointDataUnit, System.Math,
-  QuadTreeClass, PointCollectionUnit, System.Generics.Collections, FastGEO;
+  QuadTreeClass, PointCollectionUnit, System.Generics.Collections, FastGEO,
+  System.Generics.Defaults;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -86,7 +93,6 @@ resourcestring
   StrTheNamesOfSHas = 'The names of %s has been truncated because "regul" mu' +
   'st be inserted at the beginning of the observation group name to indicate' +
   ' it is to be used for regularization.';
-  StrRegul = 'regul';
 
 { TPestControlFileWriter }
 
@@ -263,7 +269,95 @@ var
   ASteadyParam: TModflowSteadyParameter;
   SearchDistance: Double;
   MaxPilotPointsInRange: Integer;
-  procedure WriteHorizontalContinuityEquation(Param: TModflowSteadyParameter;
+  PilotPointItemSortList: TList<TStoredPilotParamDataItem>;
+  ItemIndex: Integer;
+  PilotPointItem1: TStoredPilotParamDataItem;
+  PilotPointItem2: TStoredPilotParamDataItem;
+  procedure WriteVerticalContinuityEquation(
+    PPItem1, PPItem2: TStoredPilotParamDataItem; AParam: TModflowSteadyParameter);
+  var
+    PPIndex: Integer;
+    PilotPoint: TPointItem;
+//    X: Double;
+//    Y: Double;
+    OtherPP: TPointItem;
+    EquationName: string;
+    ObsGroupName: string;
+    ParameterName1: string;
+    ParameterName2: string;
+    Equation: string;
+//    Value1: Double;
+//    Value2: Double;
+  begin
+    ObsGroupName := '';
+    LocationQuadTree.Clear;
+    for PPIndex := 0 to PPItem1.Points.Count - 1 do
+    begin
+      PilotPoint := PPItem1.Points[PPIndex];
+      LocationQuadTree.AddPoint(PilotPoint.X, PilotPoint.Y, PilotPoint);
+    end;
+    for PPIndex := 0 to PPItem2.Points.Count - 1 do
+    begin
+      PilotPoint := PPItem2.Points[PPIndex];
+      OtherPP := LocationQuadTree.NearestPointsFirstData(PilotPoint.X, PilotPoint.Y);
+      if (PilotPoint.X <> OtherPP.X) or (PilotPoint.Y <> OtherPP.Y) then
+      begin
+        Continue;
+      end;
+
+      ParameterName1 := PPItem1.ParameterName(OtherPP.Index+1);
+      ParameterName2 := PPItem2.ParameterName(PilotPoint.Index+1);
+//      Value1 := PPItem1.Values[OtherPP.Index].Value;
+//      Value2 := PPItem2.Values[PilotPoint.Index].Value;
+
+      Inc(EquationCount);
+      EquationName := EquationRoot + IntToStr(EquationCount);
+
+      if ObsGroupName = '' then
+      begin
+        if AParam.VertSpatialContinuityGroupName = '' then
+        begin
+          AParam.VertSpatialContinuityGroupName :=
+            'Grp' + IntToStr(ObservationGroups.Count);
+        end;
+        ObsGroupIndex := ObservationGroupNames.IndexOf(
+          AParam.VertSpatialContinuityGroupName);
+        if ObsGroupIndex < 0 then
+        begin
+          ObsGroup := ObservationGroups.Add;
+          ObsGroup.ObsGroupName := AParam.VertSpatialContinuityGroupName;
+          ObsGroup.IsRegularizationGroup := True;
+          ObservationGroupNames.AddObject(ObsGroup.ObsGroupName, ObsGroup);
+        end
+        else
+        begin
+          ObsGroup := ObservationGroupNames.Objects[ObsGroupIndex]
+            as TPestObservationGroup;
+        end;
+        if ObsGroup.IsRegularizationGroup then
+        begin
+          ObsGroupName := strRegul + Copy(ObsGroup.ObsGroupName, 1,
+            AllowableGroupNameLength - Length(strRegul));
+        end
+        else
+        begin
+          ObsGroupName := ObsGroup.ObsGroupName;
+        end;
+      end;
+
+      if AParam.Transform = ptLog then
+      begin
+        Equation := Format('1.0 * log(%0:s) - 1.0 * log(%1:s) = 0.0', [ParameterName1, ParameterName2]);
+      end
+      else
+      begin
+        Equation := Format('1.0 * %0:s - 1.0 * %1:s = 0.0', [ParameterName1, ParameterName2]);
+      end;
+      FPriorInfomationEquations.Add(Format(' %0:s          %1:s       1.00000     %2:s',
+        [EquationName, Equation, ObsGroupName]));
+    end;
+  end;
+  procedure WriteHorizontalContinuityEquations(Param: TModflowSteadyParameter;
     PPItem: TStoredPilotParamDataItem);
   var
     PPIndex: Integer;
@@ -342,25 +436,29 @@ var
           end;
           Inc(EquationCount);
           EquationName := EquationRoot + IntToStr(EquationCount);
-          if Param.SpatialContinuityGroupName = '' then
+          if Param.HorizontalSpatialContinuityGroupName = '' then
           begin
-            Param.SpatialContinuityGroupName := 'Grp' + IntToStr(ObservationGroups.Count);
+            Param.HorizontalSpatialContinuityGroupName :=
+              'Grp' + IntToStr(ObservationGroups.Count);
           end;
-          ObsGroupIndex := ObservationGroupNames.IndexOf(Param.SpatialContinuityGroupName);
+          ObsGroupIndex := ObservationGroupNames.IndexOf(
+            Param.HorizontalSpatialContinuityGroupName);
           if ObsGroupIndex < 0 then
           begin
             ObsGroup := ObservationGroups.Add;
-            ObsGroup.ObsGroupName := Param.SpatialContinuityGroupName;
+            ObsGroup.ObsGroupName := Param.HorizontalSpatialContinuityGroupName;
             ObsGroup.IsRegularizationGroup := True;
             ObservationGroupNames.AddObject(ObsGroup.ObsGroupName, ObsGroup);
           end
           else
           begin
-            ObsGroup := ObservationGroupNames.Objects[ObsGroupIndex] as TPestObservationGroup;
+            ObsGroup := ObservationGroupNames.Objects[ObsGroupIndex]
+              as TPestObservationGroup;
           end;
           if ObsGroup.IsRegularizationGroup then
           begin
-            ObsGroupName := strRegul + Copy(ObsGroup.ObsGroupName, 1, 7)
+            ObsGroupName := strRegul + Copy(ObsGroup.ObsGroupName, 1,
+              AllowableGroupNameLength - Length(strRegul));
           end
           else
           begin
@@ -418,7 +516,8 @@ var
     end;
     if ObsGroup.IsRegularizationGroup then
     begin
-      ObsGroupName := strRegul + Copy(ObsGroup.ObsGroupName, 1, 7)
+      ObsGroupName := strRegul + Copy(ObsGroup.ObsGroupName, 1,
+        AllowableGroupNameLength - Length(strRegul))
     end
     else
     begin
@@ -438,7 +537,8 @@ var
 begin
   FPriorInfomationEquations.Clear;
   if not Model.PestProperties.UseInitialValuePriorInfo
-    and not Model.PestProperties.UseSpatialContinuityPriorInfo then
+    and not Model.PestProperties.UseHorizontalSpatialContinuityPriorInfo
+    and not Model.PestProperties.UseVertSpatialContinuityPriorInfo then
   begin
     result := 0;
     Exit;
@@ -484,10 +584,12 @@ begin
         ASteadyParam := Model.ModflowSteadyParameters[ParamIndex];
         if ASteadyParam.ParameterType in UsedTypes then
         begin
-          if ASteadyParam.UseInitialValuePriorInfo
-            and (ASteadyParam.Transform in [ptNoTransform, ptLog]) then
+          if (ASteadyParam.Transform in [ptNoTransform, ptLog]) then
           begin
-            WriteInitialValueEquation(ASteadyParam, ASteadyParam.Value);
+            if ASteadyParam.UseInitialValuePriorInfo then
+            begin
+              WriteInitialValueEquation(ASteadyParam, ASteadyParam.Value);
+            end;
             if (ASteadyParam is TModflowSteadyParameter)
               and TModflowSteadyParameter(ASteadyParam).UsePilotPoints then
             begin
@@ -506,17 +608,20 @@ begin
         if ParamIndex >= 0 then
         begin
           ASteadyParam := PilotPointParameters.Objects[ParamIndex] as TModflowSteadyParameter;
-          for ParameterIndex := 1 to PilotPointItem.Count do
+          if ASteadyParam.UseInitialValuePriorInfo then
           begin
-            PilotParamName := PilotPointItem.ParameterName(ParameterIndex);
-            WriteInitialValueEquation(ASteadyParam,
-              PilotPointItem.Values[ParameterIndex-1].Value, PilotParamName);
+            for ParameterIndex := 1 to PilotPointItem.Count do
+            begin
+              PilotParamName := PilotPointItem.ParameterName(ParameterIndex);
+              WriteInitialValueEquation(ASteadyParam,
+                PilotPointItem.Values[ParameterIndex-1].Value, PilotParamName);
+            end;
           end;
 
-          if Model.PestProperties.UseSpatialContinuityPriorInfo
-            and ASteadyParam.UseSpatialContinuityPriorInfo then
+          if Model.PestProperties.UseHorizontalSpatialContinuityPriorInfo
+            and ASteadyParam.UseHorizontalSpatialContinuityPriorInfo then
           begin
-            WriteHorizontalContinuityEquation(ASteadyParam, PilotPointItem)
+            WriteHorizontalContinuityEquations(ASteadyParam, PilotPointItem)
             // Write Spatial Continuity equations
           end;
         end
@@ -526,32 +631,99 @@ begin
             Format(StrPilotPointsWereDe, [PilotPointItem.BaseParamName]));
         end;
       end;
+
+      if Model.PestProperties.UseVertSpatialContinuityPriorInfo
+        and (Model.LayerCount > 1) then
+      begin
+        PilotPointItemSortList := TList<TStoredPilotParamDataItem>.Create;
+        try
+          for index := 0 to Model.PilotPointData.Count - 1 do
+          begin
+            PilotPointItem := Model.PilotPointData[index];
+            PilotPointItemSortList.Add(PilotPointItem);
+          end;
+          PilotPointItemSortList.Sort(
+            TComparer<TStoredPilotParamDataItem>.Construct(
+              function(const Left, Right: TStoredPilotParamDataItem): Integer
+              begin
+  //          BaseParamName
+                Result := CompareStr( Left.BaseParamName, Right.BaseParamName);
+                if Result = 0 then
+                begin
+                  Result := CompareStr( Left.DataArrayName, Right.DataArrayName);
+                  if result = 0 then
+                  begin
+                    result := Left.Layer - Right.Layer;
+                  end;
+                end;
+              end
+            ));
+            for ItemIndex := 0 to PilotPointItemSortList.Count - 2 do
+            begin
+              PilotPointItem1 := PilotPointItemSortList[ItemIndex];
+              PilotPointItem2 := PilotPointItemSortList[ItemIndex+1];
+              if (PilotPointItem1.Points.Count = 0) or (PilotPointItem2.Points.Count = 0) then
+              begin
+                Continue;
+              end;
+              if
+                (PilotPointItem1.BaseParamName = PilotPointItem2.BaseParamName)
+                and (PilotPointItem1.DataArrayName = PilotPointItem2.DataArrayName)
+                and (Abs(PilotPointItem1.Layer - PilotPointItem2.Layer) = 1)
+                then
+              begin
+                ParamIndex := PilotPointParameters.IndexOf(
+                  PilotPointItem.BaseParamName);
+                if ParamIndex >= 0 then
+                begin
+                  ASteadyParam := PilotPointParameters.Objects[ParamIndex]
+                    as TModflowSteadyParameter;
+                  if ASteadyParam.UseVertSpatialContinuityPriorInfo then
+                  begin
+                    WriteVerticalContinuityEquation(PilotPointItem1,
+                      PilotPointItem2, ASteadyParam);
+                  end;
+                end
+                else
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrParameterUndefined,
+                    Format(StrPilotPointsWereDe, [PilotPointItem.BaseParamName]));
+                end;
+              end;
+            end;
+          finally
+          PilotPointItemSortList.Free;
+        end;
+      end;
     finally
       PilotPointParameters.Free;
     end;
 
-    for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
+    if Model.PestProperties.UseInitialValuePriorInfo then
     begin
-      AParam := Model.ModflowTransientParameters[ParamIndex];
-      if AParam.ParameterType in UsedTypes then
+      for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do
       begin
-        if AParam.UseInitialValuePriorInfo
-          and (AParam.Transform in [ptNoTransform, ptLog]) then
+        AParam := Model.ModflowTransientParameters[ParamIndex];
+        if AParam.ParameterType in UsedTypes then
         begin
-          WriteInitialValueEquation(AParam, AParam.Value);
+          if AParam.UseInitialValuePriorInfo
+            and (AParam.Transform in [ptNoTransform, ptLog]) then
+          begin
+            WriteInitialValueEquation(AParam, AParam.Value);
+          end;
         end;
       end;
-    end;
 
-    for ParamIndex := 0 to Model.HufParameters.Count - 1 do
-    begin
-      AParam := Model.HufParameters[ParamIndex];
-      if AParam.ParameterType in UsedTypes then
+      for ParamIndex := 0 to Model.HufParameters.Count - 1 do
       begin
-        if AParam.UseInitialValuePriorInfo
-          and (AParam.Transform in [ptNoTransform, ptLog]) then
+        AParam := Model.HufParameters[ParamIndex];
+        if AParam.ParameterType in UsedTypes then
         begin
-          WriteInitialValueEquation(AParam, AParam.Value);
+          if AParam.UseInitialValuePriorInfo
+            and (AParam.Transform in [ptNoTransform, ptLog]) then
+          begin
+            WriteInitialValueEquation(AParam, AParam.Value);
+          end;
         end;
       end;
     end;
@@ -1295,7 +1467,8 @@ var
       if ObsGroup.IsRegularizationGroup then
       begin
         WriteString(StrRegul);
-        WriteString(Copy(ObsGroup.ObsGroupName,1,7));
+        WriteString(Copy(ObsGroup.ObsGroupName,1,
+          AllowableGroupNameLength - Length(strRegul)));
         if Length(ObsGroup.ObsGroupName) > 7 then
         begin
           frmErrorsAndWarnings.AddWarning(Model, StrObservationGroupNa,

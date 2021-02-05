@@ -27,8 +27,10 @@ type
     FZoneArrayNames: TStringList;
     FNamesToRemove: TStringList;
     FUsePilotPoints: Boolean;
-    FUseSpatialContinuityPriorInfo: Boolean;
-    FSpatialContinuityGroupName: string;
+    FUseHorizontalSpatialContinuityPriorInfo: Boolean;
+    FHorizontalSpatialContinuityGroupName: string;
+    FVertSpatialContinuityGroupName: string;
+    FUseVertSpatialContinuityPriorInfo: Boolean;
     // See @link(MultiplierName).
     procedure SetMultiplierName(const Value: string);
     // See @link(UseMultiplier).
@@ -60,8 +62,10 @@ type
     procedure UnLockGlobalVariables;
     procedure SetUsePilotPoints(const Value: Boolean);
     procedure InvalidatePestDataArrays(CheckAll: Boolean = False);
-    procedure SetUseSpatialContinuityPriorInfo(const Value: Boolean);
-    procedure SetSpatialContinuityGroupName(const Value: string);
+    procedure SetUseHorizontalSpatialContinuityPriorInfo(const Value: Boolean);
+    procedure SetHorizontalSpatialContinuityGroupName(const Value: string);
+    procedure SetUseVertSpatialContinuityPriorInfo(const Value: Boolean);
+    procedure SetVertSpatialContinuityGroupName(const Value: string);
   protected
     // Besides setting the name of the parameter, @name also updates the
     // names of the @link(TDataArray)s used to define multiplier and zone
@@ -107,16 +111,36 @@ type
     Stored False
     {$ENDIF}
     ;
-    property UseSpatialContinuityPriorInfo: Boolean
-      read FUseSpatialContinuityPriorInfo write SetUseSpatialContinuityPriorInfo
+    property UseHorizontalSpatialContinuityPriorInfo: Boolean
+      read FUseHorizontalSpatialContinuityPriorInfo
+      write SetUseHorizontalSpatialContinuityPriorInfo
     {$IFDEF PEST}
     Stored True
     {$ELSE}
     Stored False
     {$ENDIF}
     ;
-    property SpatialContinuityGroupName: string read FSpatialContinuityGroupName
-      write SetSpatialContinuityGroupName
+    property HorizontalSpatialContinuityGroupName: string
+      read FHorizontalSpatialContinuityGroupName
+      write SetHorizontalSpatialContinuityGroupName
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
+    Property UseVertSpatialContinuityPriorInfo: Boolean
+      read FUseVertSpatialContinuityPriorInfo
+      write SetUseVertSpatialContinuityPriorInfo
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
+    property VertSpatialContinuityGroupName: string
+      read FVertSpatialContinuityGroupName
+      write SetVertSpatialContinuityGroupName
     {$IFDEF PEST}
     Stored True
     {$ELSE}
@@ -197,9 +221,14 @@ begin
     UseMultiplier := SourceParameter.UseMultiplier;
     UseZone := SourceParameter.UseZone;
     UsePilotPoints := SourceParameter.UsePilotPoints;
-    UseSpatialContinuityPriorInfo :=
-      SourceParameter.UseSpatialContinuityPriorInfo;
-    SpatialContinuityGroupName := SourceParameter.SpatialContinuityGroupName;
+    UseHorizontalSpatialContinuityPriorInfo :=
+      SourceParameter.UseHorizontalSpatialContinuityPriorInfo;
+    HorizontalSpatialContinuityGroupName :=
+      SourceParameter.HorizontalSpatialContinuityGroupName;
+    UseVertSpatialContinuityPriorInfo :=
+      SourceParameter.UseVertSpatialContinuityPriorInfo;
+    VertSpatialContinuityGroupName :=
+      SourceParameter.VertSpatialContinuityGroupName;
   end;
 end;
 
@@ -217,7 +246,8 @@ end;
 constructor TModflowSteadyParameter.Create(Collection: TCollection);
 begin
   inherited;
-  FUseSpatialContinuityPriorInfo := True;
+  FUseHorizontalSpatialContinuityPriorInfo := True;
+  FUseVertSpatialContinuityPriorInfo := True;
   FMultiplierArrayNames:= TStringList.Create;
   FZoneArrayNames:= TStringList.Create;
   FNamesToRemove:= TStringList.Create;
@@ -288,8 +318,10 @@ begin
     (UseMultiplier = AnotherParameter.UseMultiplier) and
     (UseZone = AnotherParameter.UseZone) and
     (ZoneName = AnotherParameter.ZoneName) and
-    (UseSpatialContinuityPriorInfo = AnotherParameter.UseSpatialContinuityPriorInfo) and
-    (SpatialContinuityGroupName = AnotherParameter.SpatialContinuityGroupName);
+    (UseHorizontalSpatialContinuityPriorInfo = AnotherParameter.UseHorizontalSpatialContinuityPriorInfo) and
+    (HorizontalSpatialContinuityGroupName = AnotherParameter.HorizontalSpatialContinuityGroupName) and
+    (UseVertSpatialContinuityPriorInfo = AnotherParameter.UseVertSpatialContinuityPriorInfo) and
+    (VertSpatialContinuityGroupName = AnotherParameter.VertSpatialContinuityGroupName);
 
 end;
 
@@ -589,10 +621,10 @@ begin
 
 end;
 
-procedure TModflowSteadyParameter.SetSpatialContinuityGroupName(
+procedure TModflowSteadyParameter.SetHorizontalSpatialContinuityGroupName(
   const Value: string);
 begin
-  SetCaseSensitiveStringProperty(FSpatialContinuityGroupName, Value);
+  SetCaseSensitiveStringProperty(FHorizontalSpatialContinuityGroupName, Value);
 end;
 
 procedure TModflowSteadyParameter.SetUseMultiplier(const Value: boolean);
@@ -614,10 +646,16 @@ begin
   end;
 end;
 
-procedure TModflowSteadyParameter.SetUseSpatialContinuityPriorInfo(
+procedure TModflowSteadyParameter.SetUseVertSpatialContinuityPriorInfo(
   const Value: Boolean);
 begin
-  SetBooleanProperty(FUseSpatialContinuityPriorInfo, Value);
+  SetBooleanProperty(FUseVertSpatialContinuityPriorInfo, Value);
+end;
+
+procedure TModflowSteadyParameter.SetUseHorizontalSpatialContinuityPriorInfo(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseHorizontalSpatialContinuityPriorInfo, Value);
 end;
 
 procedure TModflowSteadyParameter.SetUseZone(const Value: boolean);
@@ -638,6 +676,12 @@ begin
   end;
   inherited;
 
+end;
+
+procedure TModflowSteadyParameter.SetVertSpatialContinuityGroupName(
+  const Value: string);
+begin
+  SetCaseSensitiveStringProperty(FVertSpatialContinuityGroupName, Value);
 end;
 
 procedure TModflowSteadyParameter.CreateNewDataSetVariables(
