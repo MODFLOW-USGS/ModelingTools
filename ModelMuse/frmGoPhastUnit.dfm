@@ -1143,8 +1143,7 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object mmMainMenu: TMainMenu
     Images = ilImageList
-    Left = 96
-    Top = 16
+    Left = 264
     object miFile: TMenuItem
       AutoHotkeys = maAutomatic
       Caption = '&File'
@@ -1303,6 +1302,9 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object PESTControlfile1: TMenuItem
           Action = acRunPest
+        end
+        object miRunParRep: TMenuItem
+          Action = acExportParRep
         end
         object miShapefile: TMenuItem
           Caption = '&Shapefile'
@@ -3625,7 +3627,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acRunPest: TAction
       Category = 'File'
-      Caption = 'Run PEST'
+      Caption = 'Export PEST control file'
       Hint = 'Run PEST|Export PEST control file and run PEST'
       OnExecute = acRunPestExecute
     end
@@ -3657,6 +3659,11 @@ inherited frmGoPhast: TfrmGoPhast
         'ints.'
       ImageIndex = 98
       OnExecute = acDeletePilotPointExecute
+    end
+    object acExportParRep: TAction
+      Category = 'File'
+      Caption = 'Export ParRep file'
+      OnExecute = acExportParRepExecute
     end
   end
   object ilDisabledImageList: TImageList
@@ -9706,8 +9713,8 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object pmExportModel: TPopupMenu
     Alignment = paCenter
-    Left = 504
-    Top = 16
+    Left = 400
+    Top = 72
     object miExportModpathPopUp: TMenuItem
       Action = acExportModpath
       Caption = 'Export MODPATH Input Files'
@@ -9719,6 +9726,9 @@ inherited frmGoPhast: TfrmGoPhast
     object miRunMt3dmsPopup: TMenuItem
       Action = acRunMt3dms
       Caption = 'Export MT3DMS Input Files'
+    end
+    object miRunPEST: TMenuItem
+      Action = acRunPest
     end
   end
   object sdSutraInput: TSaveDialog
@@ -9796,5 +9806,17 @@ inherited frmGoPhast: TfrmGoPhast
     OnTypeChange = odSutraFilesTypeChange
     Left = 600
     Top = 128
+  end
+  object odRunParRep: TOpenDialog
+    OnClose = odRunParRepClose
+    OnShow = odRunParRepShow
+    Filter = 
+      'All parameter value files (*.par.*, *.bpa)|*.par.*;*.bpa|Best pa' +
+      'rameter value files (*.bpa)|*.bpa|Iteration Parameter value file' +
+      's (*.par.*, *.bpa)|*.par.*|Any file|*.*'
+    InitialDir = '(Directory)'
+    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Left = 656
+    Top = 120
   end
 end

@@ -4643,6 +4643,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
     procedure ExportPestInput(FileName: string; RunPest: Boolean);
+    procedure ExportParRepInput(FileName: string; RunParRep: Boolean);
     procedure SetMf2005ObsGroupNames; override;
 //    property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
     procedure DrawPilotPoints(BitMap32: TBitmap32);
@@ -40224,6 +40225,54 @@ begin
       MessageDlg(E.Message, mtError, [mbOK], 0);
     end;
   end;
+end;
+
+procedure TPhastModel.ExportParRepInput(FileName: string; RunParRep: Boolean);
+var
+  Base: string;
+  ExistingPestFile: string;
+  NewPestFile: string;
+  BatchFileName: string;
+  PestName: string;
+  ParRepName: string;
+  BatchFile: TStringList;
+begin
+// FileName has for form base.par.number;
+  Base := ChangeFileExt(FileName, '');
+  Base := ChangeFileExt(Base, '');
+  ExistingPestFile := ExtractFileName(ChangeFileExt(Base, '.pst'));
+  NewPestFile := ExtractFileName(Base + '_parrep.pst');
+  BatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+    + 'RunParRep.bat';
+  PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+    + 'I64pest.exe';
+  if not FileExists(Trim(PestName)) then
+  begin
+    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+      + 'pest.exe';
+  end;
+  if not FileExists(Trim(PestName)) then
+  begin
+    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+      + 'pest_hp.exe';
+  end;
+  ParRepName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+    + 'parrep.exe';
+  BatchFile := TStringList.Create;
+  try
+    BatchFile.Add(Format('"%0:s" %1:s %2:s %3:s 0', [ParRepName, ExtractFileName(FileName), ExistingPestFile, NewPestFile]));
+    BatchFile.Add(Format('"%0:s" %1:s', [PestName, NewPestFile]));
+    BatchFile.Add('pause');
+    BatchFile.SaveToFile(BatchFileName);
+  finally
+    BatchFile.Free;
+  end;
+  
+  if RunParRep then
+  begin
+    RunAProgram('"' + BatchFileName + '"');
+  end;
+
 end;
 
 procedure TPhastModel.ExportPestInput(FileName: string; RunPest: Boolean);

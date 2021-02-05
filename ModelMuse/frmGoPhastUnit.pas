@@ -29,7 +29,7 @@ uses System.UITypes,
   frmExportModpathShapefileUnit, SutraMeshUnit, frmSwrObservationsUnit,
   JvExStdCtrls, JvCombobox, JvListComb, FootprintGridUnit, frmRunFootprintUnit,
   System.ImageList, System.Actions, ModflowIrregularMeshUnit, JvComponentBase,
-  JvBalloonHint, frmRunPestUnit;
+  JvBalloonHint, frmRunPestUnit, frmRunParRepUnit;
 
   { TODO : 
 Consider making CurrentTool a property of TframeView instead of 
@@ -530,6 +530,10 @@ type
     acDeletePilotPoint: TAction;
     AddPilotPoint1: TMenuItem;
     DeletePilotPoint1: TMenuItem;
+    odRunParRep: TOpenDialog;
+    miRunPEST: TMenuItem;
+    acExportParRep: TAction;
+    miRunParRep: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -724,6 +728,9 @@ type
     procedure odSutraFilesTypeChange(Sender: TObject);
     procedure acAddPilotPointExecute(Sender: TObject);
     procedure acDeletePilotPointExecute(Sender: TObject);
+    procedure odRunParRepShow(Sender: TObject);
+    procedure odRunParRepClose(Sender: TObject);
+    procedure acExportParRepExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -778,6 +785,8 @@ type
     FRunPestForm: TfrmRunPest;
     FRunPest: Boolean;
     FExporting: Boolean;
+    FRunParRepForm: TfrmRunParRep;
+    FRunParRep: Boolean;
 //    FWriteErrorRaised: Boolean;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
@@ -3428,6 +3437,7 @@ begin
   FRunMt3dms := True;
   FRunFootprint := True;
   FRunPest := True;
+  FRunParRep := True;
   FSynchronizeCount := 0;
   FCreatingMainForm := True;
   try
@@ -6232,6 +6242,20 @@ begin
   begin
     frmDisplayData.NilDisplay;
   end;
+end;
+
+procedure TfrmGoPhast.odRunParRepClose(Sender: TObject);
+begin
+  inherited;
+  FRunParRep := FRunParRepForm.cbRun.Checked;
+  FRunParRepForm.Free;
+end;
+
+procedure TfrmGoPhast.odRunParRepShow(Sender: TObject);
+begin
+  inherited;
+  FRunParRepForm := TfrmRunParRep.createfordialog(odRunParRep);
+  FRunParRepForm.cbRun.Checked := FRunParRep;
 end;
 
 procedure TfrmGoPhast.odSutraFilesTypeChange(Sender: TObject);
@@ -13219,6 +13243,15 @@ begin
     begin
       frmErrorsAndWarnings.Show;
     end;
+  end;
+end;
+
+procedure TfrmGoPhast.acExportParRepExecute(Sender: TObject);
+begin
+  inherited;
+  if odRunParRep.Execute then
+  begin
+    PhastModel.ExportParRepInput(odRunParRep.FileName, FRunParRep)
   end;
 end;
 

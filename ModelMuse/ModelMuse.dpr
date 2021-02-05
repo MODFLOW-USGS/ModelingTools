@@ -723,7 +723,8 @@ uses
   PilotPointDataUnit in 'PilotPointDataUnit.pas',
   LockedGlobalVariableChangers in 'LockedGlobalVariableChangers.pas',
   SutraImportUnit in 'SutraImportUnit.pas',
-  PointCollectionUnit in 'PointCollectionUnit.pas';
+  PointCollectionUnit in 'PointCollectionUnit.pas',
+  frmRunParRepUnit in 'frmRunParRepUnit.pas' {frmRunParRep};
 
 {$R *.res}
 
@@ -740,6 +741,7 @@ begin
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmRunPest, frmRunPest);
   Application.CreateForm(TfrmColors, frmColors);
+  Application.CreateForm(TfrmRunParRep, frmRunParRep);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

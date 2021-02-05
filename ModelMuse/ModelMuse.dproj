@@ -1596,6 +1596,10 @@
         <DCCReference Include="LockedGlobalVariableChangers.pas"/>
         <DCCReference Include="SutraImportUnit.pas"/>
         <DCCReference Include="PointCollectionUnit.pas"/>
+        <DCCReference Include="frmRunParRepUnit.pas">
+            <Form>frmRunParRep</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

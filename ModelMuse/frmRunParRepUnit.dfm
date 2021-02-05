@@ -1,8 +1,8 @@
-object frmRunPest: TfrmRunPest
+object frmRunParRep: TfrmRunParRep
   Left = 0
   Top = 0
   BorderStyle = bsNone
-  Caption = 'Run Pest'
+  Caption = 'Select Parameter file'
   ClientHeight = 35
   ClientWidth = 118
   Color = clBtnFace
@@ -19,7 +19,7 @@ object frmRunPest: TfrmRunPest
     Top = 8
     Width = 102
     Height = 17
-    Caption = 'Run PEST'
+    Caption = 'Run ParRep'
     Checked = True
     State = cbChecked
     TabOrder = 0

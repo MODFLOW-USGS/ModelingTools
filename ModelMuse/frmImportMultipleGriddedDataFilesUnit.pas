@@ -298,7 +298,7 @@ begin
         end;
       end;
 
-      NewName := ExtractFileName(NewName);
+      NewName := ChangeFileExt(ExtractFileName(NewName), '');
       NewName := GenerateNewName(NewName);
 
       DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
