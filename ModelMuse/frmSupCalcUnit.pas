@@ -36,6 +36,8 @@ type
     lblExpected: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
+    procedure fedPestControlFileChange(Sender: TObject);
+    procedure rdeExpectedChange(Sender: TObject);
   private
     procedure GetData;
     procedure SetData;
@@ -50,7 +52,11 @@ var
 implementation
 
 uses
-  frmGoPhastUnit;
+  frmGoPhastUnit, System.IOUtils;
+
+resourcestring
+  StrYouMustSelectAnE = 'You must select an existing PEST control file.';
+  StrYouMustSetAnExpe = 'You must set an expected value greater than zero.';
 
 {$R *.dfm}
 
@@ -59,7 +65,35 @@ uses
 procedure TfrmSupCalc.btnOKClick(Sender: TObject);
 begin
   inherited;
+  if not (TFile.Exists(fedPestControlFile.FileName)) then
+  begin
+    Beep;
+    MessageDlg(StrYouMustSelectAnE, mtError, [mbOK], 0);
+    ModalResult := mrNone;
+    Exit;
+  end;
+  if (rdeExpected.Text = '') or (rdeExpected.RealValue = 0) then
+  begin
+    Beep;
+    MessageDlg(StrYouMustSetAnExpe, mtError, [mbOK], 0);
+    ModalResult := mrNone;
+    Exit;
+  end;
+
   SetData;
+end;
+
+procedure TfrmSupCalc.fedPestControlFileChange(Sender: TObject);
+begin
+  inherited;
+  if not (TFile.Exists(fedPestControlFile.FileName)) then
+  begin
+    fedPestControlFile.Color := clRed;
+  end
+  else
+  begin
+    fedPestControlFile.Color := clWindow;
+  end;
 end;
 
 procedure TfrmSupCalc.FormCreate(Sender: TObject);
@@ -78,6 +112,21 @@ begin
   rdeExpected.RealValue := SupCalc.ExpectedValue;
   cbRunPest.Checked := SupCalc.RunPest;
   cbRunSlupCalc.Checked := SupCalc.RunSupCalc;
+  fedPestControlFileChange(nil);
+  rdeExpectedChange(nil);
+end;
+
+procedure TfrmSupCalc.rdeExpectedChange(Sender: TObject);
+begin
+  inherited;
+  if (rdeExpected.Text = '') or (rdeExpected.RealValue = 0) then
+  begin
+    rdeExpected.Color := clRed;
+  end
+  else
+  begin
+    rdeExpected.Color := clWindow;
+  end;
 end;
 
 procedure TfrmSupCalc.SetData;

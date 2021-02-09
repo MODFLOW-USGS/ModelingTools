@@ -26970,5 +26970,11 @@ object TTaskHistory
       Categories.Strings = (
         'PEST'
         'PEST Regularization')
+    end
+    item
+      Date = 44236.000000000000000000
+      Categories.Strings = (
+        'PEST Regularization'
+        'PEST')
     end>
 end

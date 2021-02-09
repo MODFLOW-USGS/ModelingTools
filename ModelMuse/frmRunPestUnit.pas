@@ -4,11 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, CustomExtendedDialogForm;
+  Dialogs, StdCtrls, CustomExtendedDialogForm, Vcl.ExtCtrls;
 
 type
   TfrmRunPest = class(TCustomExtendedDialog)
-    cbRun: TCheckBox;
+    rgRun: TRadioGroup;
   private
     { Private declarations }
   public

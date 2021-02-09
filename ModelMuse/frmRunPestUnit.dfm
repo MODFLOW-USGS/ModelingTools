@@ -3,8 +3,8 @@ object frmRunPest: TfrmRunPest
   Top = 0
   BorderStyle = bsNone
   Caption = 'Run Pest'
-  ClientHeight = 35
-  ClientWidth = 118
+  ClientHeight = 55
+  ClientWidth = 337
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,14 +14,17 @@ object frmRunPest: TfrmRunPest
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object cbRun: TCheckBox
-    Left = 8
+  object rgRun: TRadioGroup
+    Left = 0
     Top = 8
-    Width = 102
-    Height = 17
-    Caption = 'Run PEST'
-    Checked = True
-    State = cbChecked
+    Width = 329
+    Height = 41
+    Caption = 'Run'
+    Columns = 3
+    Items.Strings = (
+      'Don'#39't run'
+      'Run PestChek'
+      'Run PEST')
     TabOrder = 0
   end
 end

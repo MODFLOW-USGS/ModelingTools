@@ -534,7 +534,7 @@ type
     miRunPEST: TMenuItem;
     acExportParRep: TAction;
     miRunParRep: TMenuItem;
-    acRunSutraPrep: TAction;
+    acRunSvdaPrep: TAction;
     acCalcSuperParameters: TAction;
     PEST1: TMenuItem;
     miCalcSuperParameters: TMenuItem;
@@ -737,7 +737,7 @@ type
     procedure odRunParRepClose(Sender: TObject);
     procedure acExportParRepExecute(Sender: TObject);
     procedure acCalcSuperParametersExecute(Sender: TObject);
-    procedure acRunSutraPrepExecute(Sender: TObject);
+    procedure acRunSvdaPrepExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -790,7 +790,7 @@ type
     FRunMt3dModel: TCustomModel;
     FInvalidatingAllViews: Boolean;
     FRunPestForm: TfrmRunPest;
-    FRunPest: Boolean;
+    FRunPest: TPestExportChoice;
     FExporting: Boolean;
     FRunParRepForm: TfrmRunParRep;
     FRunParRep: Boolean;
@@ -3446,7 +3446,7 @@ begin
   FRunModelMate := True;
   FRunMt3dms := True;
   FRunFootprint := True;
-  FRunPest := True;
+  FRunPest := pecPestCheck;
 //  FRunSupCalc := True;
   FRunParRep := True;
   FSynchronizeCount := 0;
@@ -10123,7 +10123,7 @@ begin
 
         PhastModel.FinalizePvalAndTemplate(FileName);
 
-        PhastModel.ExportPestInput(FileName, False);
+        PhastModel.ExportPestInput(FileName, pecNone);
       finally
         Observations.Free;
         Schedules.Free;
@@ -10262,7 +10262,7 @@ end;
 procedure TfrmGoPhast.dlgSavePestClose(Sender: TObject);
 begin
   inherited;
-  FRunPest := FRunPestForm.cbRun.Checked;
+  FRunPest := TPestExportChoice(FRunPestForm.rgRun.ItemIndex);
   FRunPestForm.Free;
 end;
 
@@ -10270,7 +10270,7 @@ procedure TfrmGoPhast.dlgSavePestShow(Sender: TObject);
 begin
   inherited;
   FRunPestForm := TfrmRunPest.createfordialog(dlgSavePest);
-  FRunPestForm.cbRun.Checked := FRunPest;
+  FRunPestForm.rgRun.ItemIndex := Ord(FRunPest);
 end;
 
 procedure TfrmGoPhast.miGeneralClick(Sender: TObject);
@@ -14409,7 +14409,7 @@ begin
   end;
 end;
 
-procedure TfrmGoPhast.acRunSutraPrepExecute(Sender: TObject);
+procedure TfrmGoPhast.acRunSvdaPrepExecute(Sender: TObject);
 begin
   inherited;
   if PhastModel.ModelFileName <> '' then

@@ -1,5 +1,5 @@
 inherited frmSupCalc: TfrmSupCalc
-  Caption = 'frmSupCalc'
+  Caption = 'SupCalc Options'
   ClientHeight = 287
   ClientWidth = 369
   ExplicitWidth = 385
@@ -29,6 +29,7 @@ inherited frmSupCalc: TfrmSupCalc
     Filter = 'Pest Control File (*.pst)|*.pst'
     TabOrder = 0
     Text = ''
+    OnChange = fedPestControlFileChange
   end
   object rgSuperParameterCalculation: TRadioGroup
     Left = 8
@@ -94,6 +95,7 @@ inherited frmSupCalc: TfrmSupCalc
     Height = 22
     TabOrder = 7
     Text = '0'
+    OnChange = rdeExpectedChange
     DataType = dtReal
     Max = 1.000000000000000000
     CheckMin = True

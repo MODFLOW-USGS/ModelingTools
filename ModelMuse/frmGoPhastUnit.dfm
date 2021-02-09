@@ -1297,6 +1297,21 @@ inherited frmGoPhast: TfrmGoPhast
         object miRunSutra: TMenuItem
           Action = acRunSutra
         end
+        object PEST1: TMenuItem
+          Caption = 'PEST'
+          object PESTControlfile1: TMenuItem
+            Action = acRunPest
+          end
+          object miCalcSuperParameters: TMenuItem
+            Action = acCalcSuperParameters
+          end
+          object miRunSutraPrep: TMenuItem
+            Action = acRunSvdaPrep
+          end
+          object miRunParRep: TMenuItem
+            Action = acExportParRep
+          end
+        end
         object miRunFootprint: TMenuItem
           Action = acRunFootprint
         end
@@ -1371,21 +1386,6 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object miExportSutra2DMesh: TMenuItem
           Action = acExportSutra2DMesh
-        end
-        object PEST1: TMenuItem
-          Caption = 'PEST'
-          object PESTControlfile1: TMenuItem
-            Action = acRunPest
-          end
-          object miRunParRep: TMenuItem
-            Action = acExportParRep
-          end
-          object miCalcSuperParameters: TMenuItem
-            Action = acCalcSuperParameters
-          end
-          object miRunSutraPrep: TMenuItem
-            Action = acRunSutraPrep
-          end
         end
       end
       object miFilesToArchive: TMenuItem
@@ -3671,13 +3671,13 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acExportParRep: TAction
       Category = 'File'
-      Caption = 'Export ParRep file'
+      Caption = 'Replace Parameters in PEST Control File'
       OnExecute = acExportParRepExecute
     end
-    object acRunSutraPrep: TAction
+    object acRunSvdaPrep: TAction
       Category = 'File'
-      Caption = 'acRunSutraPrep'
-      OnExecute = acRunSutraPrepExecute
+      Caption = 'Modify PEST Control with SVDAPREP'
+      OnExecute = acRunSvdaPrepExecute
     end
     object acCalcSuperParameters: TAction
       Category = 'File'

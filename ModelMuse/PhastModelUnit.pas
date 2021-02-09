@@ -790,6 +790,8 @@ type
 
   TModelMateOperation = (mmoImport, mmoExport);
 
+  TPestExportChoice = (pecNone, pecPestCheck, pecPest);
+
   TGetZoomBoxEvent = procedure (Sender: TObject; VD: TViewDirection;
     var ZoomBox: TQrbwZoomBox2) of object;
   TGetCurrentScreenObjectEvent = procedure (Sender: TObject; VD: TViewDirection;
@@ -4647,7 +4649,7 @@ that affects the model output should also have a comment. }
     function UzfSeepageUsed: boolean; override;
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
-    procedure ExportPestInput(FileName: string; RunPest: Boolean; SetNOPTMAX: Boolean = False);
+    procedure ExportPestInput(FileName: string; RunPest: TPestExportChoice; SetNOPTMAX: Boolean = False);
     procedure ExportParRepInput(FileName: string; RunParRep: Boolean);
     procedure ExportSupCalcInput;
     procedure ExportSvdaPrep;
@@ -40295,7 +40297,7 @@ begin
       TFile.Delete(TempName);
     end;
     TFile.Copy(SupCalcProperties.FileName, TempName);
-    ExportPestInput(SupCalcProperties.FileName, False, True);
+    ExportPestInput(SupCalcProperties.FileName, pecNone, True);
   end;
 
   SupCalcName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
@@ -40352,30 +40354,36 @@ var
   BatchFileName: string;
   WorkingDirectory: String;
   PestCleanExecutableName: string;
-  PestCleanInputFileName: string;
-  PestCleanOutputFileName: string;
+//  PestCleanInputFileName: string;
+//  PestCleanOutputFileName: string;
+  PestDirectory: string;
+  PestDirParCalcName: string;
+  WorkDirParCalcName: string;
+  WorkDirPiCalcName: string;
+  PestDirPiCalcName: string;
+  JcoFileName: string;
+  NewJcoFileName: string;
+  SvdaFileName: string;
 begin
   WorkingDirectory := IncludeTrailingPathDelimiter(ExtractFileDir(SvdaPrepProperties.FileName));
-  ExportPestInput(SvdaPrepProperties.FileName, False, True);
+  PestDirectory := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory);
+  ExportPestInput(SvdaPrepProperties.FileName, pecNone);
   PestInputFileName := ChangeFileExt(SvdaPrepProperties.FileName , '.pst');
+  JcoFileName := ChangeFileExt(SvdaPrepProperties.FileName , '.jco');
   CaseName := ChangeFileExt(PestInputFileName , '');
-  PestCleanInputFileName := CaseName + '_NotCleaned.pst';
-  PestCleanOutputFileName := CaseName + '_PstCleaned.pst';
   PreSvdaFileName := CaseName + '_PreSvda.pst';
-  if TFile.Exists(PestCleanInputFileName) then
+  SvdaFileName := CaseName + '_Svda.pst';
+  NewJcoFileName := ChangeFileExt(PreSvdaFileName , '.jco');
+  if TFile.Exists(NewJcoFileName) then
   begin
-    TFile.Delete(PestCleanInputFileName);
+    TFile.Delete(NewJcoFileName);
   end;
-  if TFile.Exists(PestCleanOutputFileName) then
-  begin
-    TFile.Delete(PestCleanOutputFileName);
-  end;
+  TFile.Copy(JcoFileName, NewJcoFileName);
   if TFile.Exists(PreSvdaFileName) then
-    TFile.Delete(PreSvdaFileName);
   begin
+    TFile.Delete(PreSvdaFileName);
   end;
-  TFile.Copy(PestInputFileName, PestCleanOutputFileName);
-  CaseName := ExtractFileName(ChangeFileExt(PestCleanOutputFileName , ''));
+  CaseName := ExtractFileName(ChangeFileExt(PreSvdaFileName , ''));
   
   PestInputFileName := ExtractFileName(ChangeFileExt(SvdaPrepProperties.FileName , '.pst'));
   SvdaPrepInputFileName := WorkingDirectory + CaseName + '.SvdaPrepInput';
@@ -40386,7 +40394,7 @@ begin
     SvdaPrepInput.Add('n');
     SvdaPrepInput.Add(IntToStr(Ord(SvdaPrepProperties.Method)+1));
     SvdaPrepInput.Add(IntToStr(SvdaPrepProperties.NumberOfSuperParameters));
-    SvdaPrepInput.Add(ExtractFileName(SvdaPrepProperties.FileName));
+    SvdaPrepInput.Add(ExtractFileName(SvdaFileName));
     SvdaPrepInput.Add('');
     SvdaPrepInput.Add('');
     SvdaPrepInput.Add('');
@@ -40399,20 +40407,36 @@ begin
   end;
 
   PestName := GetPestName;
-  PestCleanExecutableName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory) + 'pstclean.exe';
-  SvdaPrepExecutableName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory) + 'svdaprep.exe';
+  PestCleanExecutableName := PestDirectory + 'pstclean.exe';
+  SvdaPrepExecutableName := PestDirectory + 'svdaprep.exe';
+
+  WorkDirParCalcName := WorkingDirectory + 'parcalc.exe';
+  WorkDirPiCalcName := WorkingDirectory + 'picalc.exe';
+  
+  if not TFile.Exists(WorkDirParCalcName) then
+  begin
+    PestDirParCalcName := PestDirectory + 'parcalc.exe';
+    TFile.Copy(PestDirParCalcName, WorkDirParCalcName)
+  end;
+  if not TFile.Exists(WorkDirPiCalcName) then
+  begin
+    PestDirPiCalcName := PestDirectory + 'picalc.exe';
+    TFile.Copy(PestDirPiCalcName, WorkDirPiCalcName)
+  end;
+
   BatchFileName := WorkingDirectory + 'RunSvdaPrep.bat';
   
   BatchFile := TStringList.Create;
   try
     BatchFile.Add(Format('"%0:s" %1:s %2:s',
-      [PestCleanExecutableName, ExtractFileName(PestCleanInputFileName), ExtractFileName(PestCleanOutputFileName)]));
+      [PestCleanExecutableName, ExtractFileName(PestInputFileName), ExtractFileName(PreSvdaFileName)]));
     BatchFile.Add(Format('"%0:s" < %1:s',
       [SvdaPrepExecutableName, ExtractFileName(SvdaPrepInputFileName)]));
     if SvdaPrepProperties.RunPest then
     begin
-      BatchFile.Add('"' + PestName + '" ' + ChangeFileExt(ExtractFileName(SvdaPrepProperties.FileName), ''));
+      BatchFile.Add('"' + PestName + '" ' + ChangeFileExt(ExtractFileName(SvdaFileName), ''));
     end;
+    BatchFile.Add('pause');
     BatchFile.SaveToFile(BatchFileName);
   finally
     BatchFile.Free;
@@ -40464,7 +40488,8 @@ begin
 
 end;
 
-procedure TPhastModel.ExportPestInput(FileName: string; RunPest: Boolean; SetNOPTMAX: Boolean = False);
+procedure TPhastModel.ExportPestInput(FileName: string;
+  RunPest: TPestExportChoice; SetNOPTMAX: Boolean = False);
 var
   PestControlWriter: TPestControlFileWriter;
   BatchFileName: string;
@@ -40518,9 +40543,16 @@ begin
     BatchFile.Free;
   end;
 
-  if RunPest then
-  begin
-    RunAProgram('"' + BatchFileName + '"');
+  case RunPest of 
+    pecNone: ; // do nothing;
+    pecPestCheck: 
+      begin
+        RunAProgram('"' + PestCheckBatchFileName + '"');
+      end;
+    pecPest: 
+      begin
+        RunAProgram('"' + BatchFileName + '"');
+      end;
   end;
 end;
 
@@ -42240,7 +42272,7 @@ begin
 
       if self is TPhastModel then
       begin
-        TPhastModel(self).ExportPestInput(FileName, False);
+        TPhastModel(self).ExportPestInput(FileName, pecNone);
       end;
 
     except on E: EInvalidTime do
