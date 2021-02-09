@@ -42,7 +42,7 @@ uses System.UITypes,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
   PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit,
-  PilotPointDataUnit;
+  PilotPointDataUnit, SvdaPrepPropertiesUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -3817,6 +3817,8 @@ that affects the model output should also have a comment. }
     FParamGroups: TPestParamGroups;
     FPestProperties: TPestProperties;
     FFilesToDelete: TStringList;
+    FSvdaPrepProperties: TSvdaPrepProperties;
+    FSupCalcProperties: TSupCalcProperties;
     //     See @link(OwnsScreenObjects).
     function GetOwnsScreenObjects: boolean;
 //     See @link(ObjectList).
@@ -4012,6 +4014,9 @@ that affects the model output should also have a comment. }
     procedure SetRipPlantGroups(const Value: TRipPlantGroups);
     procedure RemoveNonAncillaryFiles;
     procedure FixSpecifyingGridByThreeDObjects;
+    function GetPestName: string;
+    procedure SetSvdaPrepProperties(const Value: TSvdaPrepProperties);
+    procedure SetSupCalcProperties(const Value: TSupCalcProperties);
 //    function GetPilotPoint(Index: Integer): TPoint2D;
 //    function GetPilotPointSpacing: double;
   protected
@@ -4642,8 +4647,10 @@ that affects the model output should also have a comment. }
     function UzfSeepageUsed: boolean; override;
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
-    procedure ExportPestInput(FileName: string; RunPest: Boolean);
+    procedure ExportPestInput(FileName: string; RunPest: Boolean; SetNOPTMAX: Boolean = False);
     procedure ExportParRepInput(FileName: string; RunParRep: Boolean);
+    procedure ExportSupCalcInput;
+    procedure ExportSvdaPrep;
     procedure SetMf2005ObsGroupNames; override;
 //    property PilotPoints[Index: Integer]: TPoint2D read GetPilotPoint;
     procedure DrawPilotPoints(BitMap32: TBitmap32);
@@ -4817,6 +4824,10 @@ that affects the model output should also have a comment. }
     property UseGsflowFormat;
     property ParamGroups;
     property PestProperties;
+    property SvdaPrepProperties: TSvdaPrepProperties read FSvdaPrepProperties
+      write SetSvdaPrepProperties;
+    property SupCalcProperties: TSupCalcProperties read FSupCalcProperties
+      write SetSupCalcProperties;
   end;
 
   TChildDiscretization = class(TOrderedItem)
@@ -10809,6 +10820,8 @@ begin
     GeoRef := SourceModel.GeoRef;
     CtsSystems := SourceModel.CtsSystems;
     ParamGroups := SourceModel.ParamGroups;
+    SvdaPrepProperties := SourceModel.SvdaPrepProperties;
+    SupCalcProperties := SourceModel.SupCalcProperties;
   end;
   inherited;
 
@@ -11051,6 +11064,9 @@ begin
   FFilesToDelete := TStringList.Create;
   FFilesToDelete.Sorted := True;
   FFilesToDelete.Duplicates := dupIgnore;
+
+  FSvdaPrepProperties := TSvdaPrepProperties.Create(Invalidate);
+  FSupCalcProperties := TSupCalcProperties.Create(Invalidate);
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -11472,6 +11488,8 @@ begin
       FClearing := False;
     end;
 
+    FSupCalcProperties.Free;
+    FSvdaPrepProperties.Free;
     FFilesToDelete.Free;
     FPestProperties.Free;
     FParamGroups.Free;
@@ -12390,6 +12408,8 @@ begin
   MaxVectors.InitializeVariables;
   MidVectors.InitializeVariables;
   MinVectors.InitializeVariables;
+  SvdaPrepProperties.InitializeVariables;
+  SupCalcProperties.InitializeVariables;
 
   FArchiveName := '';
   Invalidate(self);
@@ -22029,6 +22049,19 @@ begin
   result := PestProperties.ShouldDrawPilotPoints;
 end;
 
+function TPhastModel.GetPestName: string;
+begin
+  result := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory) + 'I64pest.exe';
+  if not FileExists(Trim(result)) then
+  begin
+    result := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory) + 'pest.exe';
+  end;
+  if not FileExists(Trim(result)) then
+  begin
+    result := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory) + 'pest_hp.exe';
+  end;
+end;
+
 function TPhastModel.StrIsSelected: Boolean;
 var
   ChildIndex: Integer;
@@ -22131,6 +22164,11 @@ begin
   FStrStreamLinkPlot.Assign(Value);
 end;
 
+procedure TPhastModel.SetSupCalcProperties(const Value: TSupCalcProperties);
+begin
+  FSupCalcProperties.Assign(Value);
+end;
+
 procedure TPhastModel.SetSutraLayerStructure(const Value: TSutraLayerStructure);
 begin
   FSutraLayerStructure.Assign(Value);
@@ -22145,6 +22183,11 @@ end;
 procedure TPhastModel.SetSutraTimeOptions(const Value: TSutraTimeOptions);
 begin
   FSutraTimeOptions.Assign(Value);
+end;
+
+procedure TPhastModel.SetSvdaPrepProperties(const Value: TSvdaPrepProperties);
+begin
+  FSvdaPrepProperties.Assign(Value);
 end;
 
 procedure TPhastModel.SetSwrReachConnectionsPlot(
@@ -40227,6 +40270,161 @@ begin
   end;
 end;
 
+procedure TPhastModel.ExportSupCalcInput;
+const
+  BatchFileName = 'RunSupCalc.bat';
+var
+  SupCalcBatFile: TStringList;
+  SupCalcName: string;
+  CaseName: string;
+  WorkingDirectory: string;
+  PestName: string;
+  SupCalcInput: TStringList;
+  SupCalcInputName: string;
+  TempName: string;
+begin
+  Assert(TFile.Exists(SupCalcProperties.FileName));
+  WorkingDirectory := IncludeTrailingPathDelimiter(ExtractFileDir(SupCalcProperties.FileName));
+  CaseName := ExtractFileName(ChangeFileExt(SupCalcProperties.FileName, ''));
+  TempName := '';
+  if SupCalcProperties.RunPest then
+  begin
+    TempName := WorkingDirectory + CaseName + '_backup.pst';
+    if TFile.Exists(TempName) then
+    begin
+      TFile.Delete(TempName);
+    end;
+    TFile.Copy(SupCalcProperties.FileName, TempName);
+    ExportPestInput(SupCalcProperties.FileName, False, True);
+  end;
+
+  SupCalcName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+    + 'supcalc.exe';
+  SupCalcInputName := WorkingDirectory + CaseName + '_SupCalcInput.txt';
+
+  SupCalcInput := TStringList.Create;
+  try
+    SupCalcInput.Add(ExtractFileName(SupCalcProperties.FileName));
+    SupCalcInput.Add(FortranFloatToStr(SupCalcProperties.ExpectedValue));
+    SupCalcInput.Add(IntToStr(Ord(SupCalcProperties.Method)+1));
+    SupCalcInput.Add('b');
+    SupCalcInput.Add(WorkingDirectory + CaseName + '_SupCalcOut.txt');
+    SupCalcInput.SaveToFile(SupCalcInputName);
+  finally
+    SupCalcInput.Free;
+  end;  
+
+  SupCalcBatFile := TStringList.Create;
+  try
+    if SupCalcProperties.RunPest then
+    begin
+      PestName := GetPestName;
+      SupCalcBatFile.Add('"' + PestName + '" ' + CaseName);
+      if TFile.Exists(TempName) then
+      begin
+        SupCalcBatFile.Add('rem Restore backed up PEST control file.');
+        SupCalcBatFile.Add('del ' + ExtractFileName(SupCalcProperties.FileName));
+        SupCalcBatFile.Add('copy "' + TempName + '" "' + SupCalcProperties.FileName + '"');
+      end;
+    end;
+    SupCalcBatFile.Add('"' + SupCalcName + '" < ' + ExtractFileName(SupCalcInputName));
+    SupCalcBatFile.Add('pause');
+    SupCalcBatFile.SaveToFile(WorkingDirectory + BatchFileName);
+  finally
+    SupCalcBatFile.Free;
+  end;
+  if SupCalcProperties.RunSupCalc then
+  begin
+    RunAProgram('"' + WorkingDirectory + BatchFileName + '"');
+  end;
+end;
+
+procedure TPhastModel.ExportSvdaPrep;
+var
+  PestName: string;
+  PestInputFileName: string;
+  CaseName: string;
+  PreSvdaFileName: string;
+  BatchFile: TStringList;
+  SvdaPrepInput: TStringList;
+  SvdaPrepInputFileName: string;
+  SvdaPrepExecutableName: string;
+  BatchFileName: string;
+  WorkingDirectory: String;
+  PestCleanExecutableName: string;
+  PestCleanInputFileName: string;
+  PestCleanOutputFileName: string;
+begin
+  WorkingDirectory := IncludeTrailingPathDelimiter(ExtractFileDir(SvdaPrepProperties.FileName));
+  ExportPestInput(SvdaPrepProperties.FileName, False, True);
+  PestInputFileName := ChangeFileExt(SvdaPrepProperties.FileName , '.pst');
+  CaseName := ChangeFileExt(PestInputFileName , '');
+  PestCleanInputFileName := CaseName + '_NotCleaned.pst';
+  PestCleanOutputFileName := CaseName + '_PstCleaned.pst';
+  PreSvdaFileName := CaseName + '_PreSvda.pst';
+  if TFile.Exists(PestCleanInputFileName) then
+  begin
+    TFile.Delete(PestCleanInputFileName);
+  end;
+  if TFile.Exists(PestCleanOutputFileName) then
+  begin
+    TFile.Delete(PestCleanOutputFileName);
+  end;
+  if TFile.Exists(PreSvdaFileName) then
+    TFile.Delete(PreSvdaFileName);
+  begin
+  end;
+  TFile.Copy(PestInputFileName, PestCleanOutputFileName);
+  CaseName := ExtractFileName(ChangeFileExt(PestCleanOutputFileName , ''));
+  
+  PestInputFileName := ExtractFileName(ChangeFileExt(SvdaPrepProperties.FileName , '.pst'));
+  SvdaPrepInputFileName := WorkingDirectory + CaseName + '.SvdaPrepInput';
+
+  SvdaPrepInput := TStringList.Create;
+  try
+    SvdaPrepInput.Add(CaseName);
+    SvdaPrepInput.Add('n');
+    SvdaPrepInput.Add(IntToStr(Ord(SvdaPrepProperties.Method)+1));
+    SvdaPrepInput.Add(IntToStr(SvdaPrepProperties.NumberOfSuperParameters));
+    SvdaPrepInput.Add(ExtractFileName(SvdaPrepProperties.FileName));
+    SvdaPrepInput.Add('');
+    SvdaPrepInput.Add('');
+    SvdaPrepInput.Add('');
+    SvdaPrepInput.Add('');
+    SvdaPrepInput.Add('');
+    SvdaPrepInput.Add('');
+    SvdaPrepInput.SaveToFile(SvdaPrepInputFileName);
+  finally
+    SvdaPrepInput.Free;
+  end;
+
+  PestName := GetPestName;
+  PestCleanExecutableName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory) + 'pstclean.exe';
+  SvdaPrepExecutableName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory) + 'svdaprep.exe';
+  BatchFileName := WorkingDirectory + 'RunSvdaPrep.bat';
+  
+  BatchFile := TStringList.Create;
+  try
+    BatchFile.Add(Format('"%0:s" %1:s %2:s',
+      [PestCleanExecutableName, ExtractFileName(PestCleanInputFileName), ExtractFileName(PestCleanOutputFileName)]));
+    BatchFile.Add(Format('"%0:s" < %1:s',
+      [SvdaPrepExecutableName, ExtractFileName(SvdaPrepInputFileName)]));
+    if SvdaPrepProperties.RunPest then
+    begin
+      BatchFile.Add('"' + PestName + '" ' + ChangeFileExt(ExtractFileName(SvdaPrepProperties.FileName), ''));
+    end;
+    BatchFile.SaveToFile(BatchFileName);
+  finally
+    BatchFile.Free;
+  end;
+  
+  if SvdaPrepProperties.RunSvdaPrep then
+  begin
+    RunAProgram(BatchFileName);
+  end;
+  
+end;
+
 procedure TPhastModel.ExportParRepInput(FileName: string; RunParRep: Boolean);
 var
   Base: string;
@@ -40244,18 +40442,9 @@ begin
   NewPestFile := ExtractFileName(Base + '_parrep.pst');
   BatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
     + 'RunParRep.bat';
-  PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-    + 'I64pest.exe';
-  if not FileExists(Trim(PestName)) then
-  begin
-    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-      + 'pest.exe';
-  end;
-  if not FileExists(Trim(PestName)) then
-  begin
-    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-      + 'pest_hp.exe';
-  end;
+
+  PestName := GetPestName;
+
   ParRepName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
     + 'parrep.exe';
   BatchFile := TStringList.Create;
@@ -40275,7 +40464,7 @@ begin
 
 end;
 
-procedure TPhastModel.ExportPestInput(FileName: string; RunPest: Boolean);
+procedure TPhastModel.ExportPestInput(FileName: string; RunPest: Boolean; SetNOPTMAX: Boolean = False);
 var
   PestControlWriter: TPestControlFileWriter;
   BatchFileName: string;
@@ -40286,7 +40475,7 @@ var
 begin
   PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
   try
-    PestControlWriter.WriteFile(FileName)
+    PestControlWriter.WriteFile(FileName, SetNOPTMAX)
   finally
     PestControlWriter.Free;
   end;
@@ -40295,18 +40484,8 @@ begin
     + 'RunPest.bat';
   PestCheckBatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
     + 'RunPestChek.bat';
-  PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-    + 'I64pest.exe';
-  if not FileExists(Trim(PestName)) then
-  begin
-    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-      + 'pest.exe';
-  end;
-  if not FileExists(Trim(PestName)) then
-  begin
-    PestName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-      + 'pest_hp.exe';
-  end;
+
+  PestName := GetPestName;
 
   PestCheckName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
     + 'I64pestchek.exe';

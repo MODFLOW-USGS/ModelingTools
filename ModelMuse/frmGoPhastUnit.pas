@@ -534,6 +534,11 @@ type
     miRunPEST: TMenuItem;
     acExportParRep: TAction;
     miRunParRep: TMenuItem;
+    acRunSutraPrep: TAction;
+    acCalcSuperParameters: TAction;
+    PEST1: TMenuItem;
+    miCalcSuperParameters: TMenuItem;
+    miRunSutraPrep: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -731,6 +736,8 @@ type
     procedure odRunParRepShow(Sender: TObject);
     procedure odRunParRepClose(Sender: TObject);
     procedure acExportParRepExecute(Sender: TObject);
+    procedure acCalcSuperParametersExecute(Sender: TObject);
+    procedure acRunSutraPrepExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -787,6 +794,8 @@ type
     FExporting: Boolean;
     FRunParRepForm: TfrmRunParRep;
     FRunParRep: Boolean;
+//    FfrmRunSupCalc: TfrmRunSupCalc;
+//    FRunSupCalc: Boolean;
 //    FWriteErrorRaised: Boolean;
     procedure SetCreateArchive(const Value: Boolean);
     property CreateArchive: Boolean read FCreateArchive write SetCreateArchive;
@@ -2116,7 +2125,8 @@ uses
   frmSimplifyObjectsCriteriaUnit, ModflowOutputControlUnit,
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
   SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
-  PlProcUnit, PestControlFileWriterUnit, SutraImportUnit;
+  PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
+  frmSupCalcUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -3437,6 +3447,7 @@ begin
   FRunMt3dms := True;
   FRunFootprint := True;
   FRunPest := True;
+//  FRunSupCalc := True;
   FRunParRep := True;
   FSynchronizeCount := 0;
   FCreatingMainForm := True;
@@ -7937,6 +7948,30 @@ begin
     FDefaultCreateArchive := dcaDontSave;
   end;
   acArchiveModel.Checked := CreateArchive;
+end;
+
+procedure TfrmGoPhast.acCalcSuperParametersExecute(Sender: TObject);
+begin
+  inherited;
+  if PhastModel.ModelFileName <> '' then
+  begin
+    PhastModel.SupCalcProperties.FileName := ChangeFileExt(PhastModel.ModelFileName, '.pst')
+  end;
+  frmSupCalc := TfrmSupCalc.Create(nil);
+  try
+    frmSupCalc.ShowModal;
+    if frmSupCalc.ModalResult = mrOK then
+    begin
+      PhastModel.ExportSupCalcInput;
+    end;
+  finally
+    frmSupCalc.Free;
+  end;
+
+//  if sdRunSupCalc.Execute then
+//  begin
+////    PhastModel.ExportSupCalcInput(sdRunSupCalc.FileName, FRunSupCalc);
+//  end;
 end;
 
 procedure TfrmGoPhast.acColorExecute(Sender: TObject);
@@ -14371,6 +14406,25 @@ begin
 
     NilDisplay;
     ExportSutra(FRunSutra, sdSutraInput.FileName);
+  end;
+end;
+
+procedure TfrmGoPhast.acRunSutraPrepExecute(Sender: TObject);
+begin
+  inherited;
+  if PhastModel.ModelFileName <> '' then
+  begin
+    PhastModel.SvdaPrepProperties.FileName := ChangeFileExt(PhastModel.ModelFileName, '.pst')
+  end;
+  frmSvdaPrepInput := TfrmSvdaPrepInput.Create(nil);
+  try
+    frmSvdaPrepInput.ShowModal;
+    if frmSvdaPrepInput.ModalResult = mrOK then
+    begin
+      PhastModel.ExportSvdaPrep;
+    end;
+  finally
+    frmSvdaPrepInput.Free;
   end;
 end;
 

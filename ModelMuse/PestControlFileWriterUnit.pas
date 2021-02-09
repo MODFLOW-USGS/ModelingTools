@@ -17,7 +17,7 @@ type
     FPriorInfomationEquations: TStringList;
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
-    procedure WriteControlSection;
+    procedure WriteControlSection(SetNOPTMAX: Boolean = False);
     procedure WriteSensitivityReuse;
     procedure WriteSingularValueDecomposition;
     procedure WriteLsqr;
@@ -51,7 +51,7 @@ type
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
-    procedure WriteFile(const AFileName: string);
+    procedure WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False);
   end;
 
 resourcestring
@@ -817,7 +817,7 @@ begin
   NewLine;
 end;
 
-procedure TPestControlFileWriter.WriteControlSection;
+procedure TPestControlFileWriter.WriteControlSection(SetNOPTMAX: Boolean = False);
 var
   PestControlData: TPestControlData;
   NINSFLE: Integer;
@@ -908,34 +908,6 @@ begin
       Assert(False);
     msModflow, msModflowLGR, msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp:
       begin
-//        if Model.ModflowPackages.HobPackage.IsSelected then
-//        begin
-//          Inc(NINSFLE);
-//        end;
-//        if Model.ModflowPackages.ChobPackage.IsSelected then
-//        begin
-//          Inc(NINSFLE);
-//        end;
-//        if Model.ModflowPackages.DrobPackage.IsSelected then
-//        begin
-//          Inc(NINSFLE);
-//        end;
-//        if Model.ModflowPackages.GbobPackage.IsSelected then
-//        begin
-//          Inc(NINSFLE);
-//        end;
-//        if Model.ModflowPackages.RvobPackage.IsSelected then
-//        begin
-//          Inc(NINSFLE);
-//        end;
-//        if Model.ModflowPackages.StobPackage.IsSelected then
-//        begin
-//          Inc(NINSFLE);
-//        end;
-//        if FUsedObservations.Count > 0 then
-//        begin
-//          Inc(NINSFLE);
-//        end;
         NINSFLE := 1;
       end;
     msSutra22, msSutra30:
@@ -1123,7 +1095,14 @@ begin
   {$REGION 'eighth line 4.2.9'}
   // eighth line 4.2.9
   // NOPTMAX
-  WriteInteger(PestControlData.MaxIterations);
+  if SetNOPTMAX then
+  begin
+    WriteInteger(-2);
+  end
+  else
+  begin
+    WriteInteger(PestControlData.MaxIterations);
+  end;
   // PHIREDSTP
   WriteFloat(PestControlData.SlowConvergenceCriterion);
   // NPHISTP
@@ -1252,7 +1231,7 @@ begin
 // The Derivatives is not currently supported.
 end;
 
-procedure TPestControlFileWriter.WriteFile(const AFileName: string);
+procedure TPestControlFileWriter.WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False);
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParametersHaveB);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationGroup);
@@ -1272,7 +1251,7 @@ begin
   OpenFile(FNameOfFile);
   try
     WriteFirstLine;
-    WriteControlSection;
+    WriteControlSection(SetNOPTMAX);
     // The Sensitivity Reuse Section is not currently supported.
     WriteSensitivityReuse;
     WriteSingularValueDecomposition;

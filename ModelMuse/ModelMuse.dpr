@@ -724,7 +724,10 @@ uses
   LockedGlobalVariableChangers in 'LockedGlobalVariableChangers.pas',
   SutraImportUnit in 'SutraImportUnit.pas',
   PointCollectionUnit in 'PointCollectionUnit.pas',
-  frmRunParRepUnit in 'frmRunParRepUnit.pas' {frmRunParRep};
+  frmRunParRepUnit in 'frmRunParRepUnit.pas' {frmRunParRep},
+  frmSvdaPrepInputUnit in 'frmSvdaPrepInputUnit.pas' {frmSvdaPrepInput},
+  SvdaPrepPropertiesUnit in 'SvdaPrepPropertiesUnit.pas',
+  frmSupCalcUnit in 'frmSupCalcUnit.pas' {frmSupCalc};
 
 {$R *.res}
 
@@ -739,9 +742,8 @@ begin
   Application.CreateForm(TfrmScreenObjectProperties, frmScreenObjectProperties);
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
-  Application.CreateForm(TfrmRunPest, frmRunPest);
   Application.CreateForm(TfrmColors, frmColors);
-  Application.CreateForm(TfrmRunParRep, frmRunParRep);
+  Application.CreateForm(TfrmSupCalc, frmSupCalc);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

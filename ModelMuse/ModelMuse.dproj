@@ -1600,6 +1600,15 @@
             <Form>frmRunParRep</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="frmSvdaPrepInputUnit.pas">
+            <Form>frmSvdaPrepInput</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="SvdaPrepPropertiesUnit.pas"/>
+        <DCCReference Include="frmSupCalcUnit.pas">
+            <Form>frmSupCalc</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

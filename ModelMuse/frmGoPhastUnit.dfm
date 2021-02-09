@@ -1300,12 +1300,6 @@ inherited frmGoPhast: TfrmGoPhast
         object miRunFootprint: TMenuItem
           Action = acRunFootprint
         end
-        object PESTControlfile1: TMenuItem
-          Action = acRunPest
-        end
-        object miRunParRep: TMenuItem
-          Action = acExportParRep
-        end
         object miShapefile: TMenuItem
           Caption = '&Shapefile'
           HelpContext = 1550
@@ -1377,6 +1371,21 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object miExportSutra2DMesh: TMenuItem
           Action = acExportSutra2DMesh
+        end
+        object PEST1: TMenuItem
+          Caption = 'PEST'
+          object PESTControlfile1: TMenuItem
+            Action = acRunPest
+          end
+          object miRunParRep: TMenuItem
+            Action = acExportParRep
+          end
+          object miCalcSuperParameters: TMenuItem
+            Action = acCalcSuperParameters
+          end
+          object miRunSutraPrep: TMenuItem
+            Action = acRunSutraPrep
+          end
         end
       end
       object miFilesToArchive: TMenuItem
@@ -3664,6 +3673,17 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'File'
       Caption = 'Export ParRep file'
       OnExecute = acExportParRepExecute
+    end
+    object acRunSutraPrep: TAction
+      Category = 'File'
+      Caption = 'acRunSutraPrep'
+      OnExecute = acRunSutraPrepExecute
+    end
+    object acCalcSuperParameters: TAction
+      Category = 'File'
+      Caption = 'Calculate number of super-parameters'
+      Hint = 'Run SUPCALC'
+      OnExecute = acCalcSuperParametersExecute
     end
   end
   object ilDisabledImageList: TImageList
