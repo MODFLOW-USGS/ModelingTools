@@ -3023,6 +3023,10 @@ begin
     for ParamIndex := 0 to FSteadyParameters.Count - 1 do
     begin
       Param := FSteadyParameters[ParamIndex];
+      if Param.ParameterType = ptPEST then
+      begin
+        Continue;
+      end;
       if Params[Param.ParameterType] <> nil then
       begin
         result := Param.UseZone and Params[Param.ParameterType].UseZone;

@@ -536,7 +536,7 @@ type
     miRunParRep: TMenuItem;
     acRunSvdaPrep: TAction;
     acCalcSuperParameters: TAction;
-    PEST1: TMenuItem;
+    miPEST: TMenuItem;
     miCalcSuperParameters: TMenuItem;
     miRunSutraPrep: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
@@ -3386,6 +3386,7 @@ begin
   acEditObservationComparisons.Visible := False;
   acPEST.Visible := False;
   acRunPest.Visible := False;
+  miPEST.Visible := False;
   {$ENDIF}
   
   tbarEditScreenObjects.Width := 227;

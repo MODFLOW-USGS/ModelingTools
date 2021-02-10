@@ -8152,6 +8152,11 @@ var
   Contourer: TMultipleContourCreator;
   LocalModel: TCustomModel;
 begin
+  LocalModel := Model as TCustomModel;
+  if not LocalModel.CanDrawContours then
+  begin
+    Exit;
+  end;
   if (ColumnCount >= 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
     if SideContourDataSet <> nil then
@@ -8159,7 +8164,6 @@ begin
       Contourer := TMultipleContourCreator.Create;
       try
         PlotList := FSideContourPlotList;
-        LocalModel := Model as TCustomModel;
         Contourer.DataSet := SideContourDataSet;
         Contourer.ActiveDataSet := LocalModel.DataArrayManager.GetDataSetByName(rsActive);
         Contourer.BitMap := BitMap;
@@ -8643,6 +8647,11 @@ var
   Contourer: TMultipleContourCreator;
   LocalModel: TCustomModel;
 begin
+  LocalModel := Model as TCustomModel;
+  if not LocalModel.CanDrawContours then
+  begin
+    Exit;
+  end;
   if (ColumnCount >= 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
     if TopContourDataSet <> nil then
@@ -8651,7 +8660,6 @@ begin
       try
         PlotList := FTopContourPlotList;
         Contourer.DataSet := TopContourDataSet;
-        LocalModel := Model as TCustomModel;
         Contourer.ActiveDataSet :=
           LocalModel.DataArrayManager.GetDataSetByName(rsActive);
         Contourer.BitMap := BitMap;
@@ -8944,6 +8952,11 @@ var
   Contourer: TMultipleContourCreator;
   LocalModel: TCustomModel;
 begin
+  LocalModel := Model as TCustomModel;
+  if not LocalModel.CanDrawContours then
+  begin
+    Exit;
+  end;
   if (ColumnCount >= 0) and (RowCount > 0) and (LayerCount > 0) then
   begin
     if FrontContourDataSet <> nil then
@@ -8951,7 +8964,6 @@ begin
       Contourer := TMultipleContourCreator.Create;
       try
         PlotList := FFrontContourPlotList;
-        LocalModel := Model as TCustomModel;
         Contourer.DataSet := FrontContourDataSet;
         Contourer.ActiveDataSet := LocalModel.DataArrayManager.GetDataSetByName(rsActive);
         Contourer.BitMap := BitMap;

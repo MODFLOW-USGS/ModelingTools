@@ -322,6 +322,10 @@ type
       ARow: Integer; const Value: string);
     procedure rdgPriorInfoVertContinuityStateChange(Sender: TObject; ACol,
       ARow: Integer; const Value: TCheckBoxState);
+    procedure rgRegOptionClick(Sender: TObject);
+    procedure rgGroupWeightMethodClick(Sender: TObject);
+    procedure rgIndividualAdjustmentMethodClick(Sender: TObject);
+    procedure cbRegApplyGroupWeightClick(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -338,6 +342,7 @@ type
     FNewSteadyParameters: TModflowSteadyParameters;
     FNewHufParameters: THufModflowParameters;
     FNewTransientListParameters: TModflowTransientListParameters;
+    FSettingIREGADJ: Boolean;
     procedure GetData;
     procedure SetData;
     procedure FixObsGroupNames(ObsGridFrame: TframeGrid);
@@ -727,6 +732,24 @@ begin
       AParam.UseVertSpatialContinuityPriorInfo := rdgPriorInfoVertContinuity.Checked[ACol, ARow];
     end;
   end;
+end;
+
+procedure TfrmPEST.rgGroupWeightMethodClick(Sender: TObject);
+begin
+  inherited;
+  rdeIREGADJ.IntegerValue := IREGADJ;
+end;
+
+procedure TfrmPEST.rgIndividualAdjustmentMethodClick(Sender: TObject);
+begin
+  inherited;
+  rdeIREGADJ.IntegerValue := IREGADJ;
+end;
+
+procedure TfrmPEST.rgRegOptionClick(Sender: TObject);
+begin
+  inherited;
+  rdeIREGADJ.IntegerValue := IREGADJ;
 end;
 
 procedure TfrmPEST.rdeFRACPHIMChange(Sender: TObject);
@@ -1156,6 +1179,12 @@ begin
   SetSearchDistanceColor;
 end;
 
+procedure TfrmPEST.cbRegApplyGroupWeightClick(Sender: TObject);
+begin
+  inherited;
+  rdeIREGADJ.IntegerValue := IREGADJ;
+end;
+
 procedure TfrmPEST.cbUseLqsrClick(Sender: TObject);
 begin
   inherited;
@@ -1300,7 +1329,7 @@ begin
 
   PriorInfoNode := tvPEST.Items.AddChild(
     nil, 'Prior Information') as TJvPageIndexNode;
-  ObservationNode.PageIndex := -1;
+  PriorInfoNode.PageIndex := -1;
 
   NewNode := tvPEST.Items.AddChild(
     PriorInfoNode, 'Prior Information Groups') as TJvPageIndexNode;
@@ -1940,7 +1969,7 @@ begin
     seNOPTREGADJ.AsInteger := Regularization.OptimizationInterval;
     rdeREGWEIGHTRAT.RealValue := Regularization.RegWeightRatio;
     rdeREGSINGTHRESH.RealValue := Regularization.RegularizationSingularValueThreshhold;
-  {$ENDREGION}  
+  {$ENDREGION}
 
 
 end;
@@ -1982,7 +2011,7 @@ begin
             begin
               result := 4;
             end;
-          2:
+          1:
             begin
               result := 5;
             end;
@@ -2350,58 +2379,68 @@ begin
   begin
     Exit;
   end;
-  rgGroupWeightMethod.Enabled := False;
-  cbRegApplyGroupWeight.Enabled := False;
-  rgIndividualAdjustmentMethod.Enabled := False;
-  seNOPTREGADJ.Enabled := False;
-  rdeREGWEIGHTRAT.Enabled := False;
-  rdeREGSINGTHRESH.Enabled := False;
-  case Value of
-    0:
-      begin
-        rgRegOption.ItemIndex := 0;
-      end;
-    1:
-      begin
-        rgRegOption.ItemIndex := 1;
-        rgGroupWeightMethod.Enabled := True;
-        rgGroupWeightMethod.ItemIndex := 0;
-        cbRegApplyGroupWeight.Enabled := True;
-        cbRegApplyGroupWeight.Checked := False;
-      end;
-    2:
-      begin
-        rgRegOption.ItemIndex := 1;
-        rgGroupWeightMethod.Enabled := True;
-        rgGroupWeightMethod.ItemIndex := 1;
-      end;
-    3:
-      begin
-        rgRegOption.ItemIndex := 1;
-        rgGroupWeightMethod.Enabled := True;
-        rgGroupWeightMethod.ItemIndex := 0;
-        cbRegApplyGroupWeight.Enabled := True;
-        cbRegApplyGroupWeight.Checked := True;
-      end;
-    4:
-      begin
-        rgRegOption.ItemIndex := 2;
-        rgIndividualAdjustmentMethod.Enabled := True;
-        rgIndividualAdjustmentMethod.ItemIndex := 0;
-        seNOPTREGADJ.Enabled := True;
-        rdeREGWEIGHTRAT.Enabled := True;
-      end;
-    5:
-      begin
-        rgRegOption.ItemIndex := 2;
-        rgIndividualAdjustmentMethod.ItemIndex := 1;
-        rgIndividualAdjustmentMethod.Enabled := True;
-        seNOPTREGADJ.Enabled := True;
-        rdeREGWEIGHTRAT.Enabled := True;
-        rdeREGSINGTHRESH.Enabled := True;
-      end;
-    else
-      Assert(False);
+  if FSettingIREGADJ then
+  begin
+    Exit;
+  end;
+  FSettingIREGADJ := True;
+  try
+    rgGroupWeightMethod.Enabled := False;
+    cbRegApplyGroupWeight.Enabled := False;
+    rgIndividualAdjustmentMethod.Enabled := False;
+    seNOPTREGADJ.Enabled := False;
+    rdeREGWEIGHTRAT.Enabled := False;
+    rdeREGSINGTHRESH.Enabled := False;
+    rdeIREGADJ.IntegerValue := Value;
+    case Value of
+      0:
+        begin
+          rgRegOption.ItemIndex := 0;
+        end;
+      1:
+        begin
+          rgRegOption.ItemIndex := 1;
+          rgGroupWeightMethod.Enabled := True;
+          rgGroupWeightMethod.ItemIndex := 0;
+          cbRegApplyGroupWeight.Enabled := True;
+          cbRegApplyGroupWeight.Checked := False;
+        end;
+      2:
+        begin
+          rgRegOption.ItemIndex := 1;
+          rgGroupWeightMethod.Enabled := True;
+          rgGroupWeightMethod.ItemIndex := 1;
+        end;
+      3:
+        begin
+          rgRegOption.ItemIndex := 1;
+          rgGroupWeightMethod.Enabled := True;
+          rgGroupWeightMethod.ItemIndex := 0;
+          cbRegApplyGroupWeight.Enabled := True;
+          cbRegApplyGroupWeight.Checked := True;
+        end;
+      4:
+        begin
+          rgRegOption.ItemIndex := 2;
+          rgIndividualAdjustmentMethod.Enabled := True;
+          rgIndividualAdjustmentMethod.ItemIndex := 0;
+          seNOPTREGADJ.Enabled := True;
+          rdeREGWEIGHTRAT.Enabled := True;
+        end;
+      5:
+        begin
+          rgRegOption.ItemIndex := 2;
+          rgIndividualAdjustmentMethod.ItemIndex := 1;
+          rgIndividualAdjustmentMethod.Enabled := True;
+          seNOPTREGADJ.Enabled := True;
+          rdeREGWEIGHTRAT.Enabled := True;
+          rdeREGSINGTHRESH.Enabled := True;
+        end;
+//      else
+//        Assert(False);
+    end;
+  finally
+    FSettingIREGADJ := False;
   end;
 end;
 

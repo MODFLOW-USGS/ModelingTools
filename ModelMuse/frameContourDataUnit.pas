@@ -7,7 +7,8 @@ uses System.UITypes,
   Dialogs, frameCustomColorUnit, ExtCtrls, ArgusDataEntry, Grids, RbwDataGrid4,
   frameDisplayLimitUnit, SsButtonEd, RbwStringTreeCombo, StdCtrls, ComCtrls,
   JvExComCtrls, JvUpDown, JvExControls, JvxSlider, Mask, JvExMask, JvSpin,
-  JvExStdCtrls, JvCheckBox, DataSetUnit, VirtualTrees;
+  JvExStdCtrls, JvCheckBox, DataSetUnit, VirtualTrees, Vcl.CheckLst,
+  JvExCheckLst, JvCheckListBox;
 
 type
   TframeContourData = class(TframeCustomColor)
@@ -22,6 +23,8 @@ type
     rdeContourInterval: TRbwDataEntry;
     seLabelSpacing: TJvSpinEdit;
     lblSpacing: TLabel;
+    lblModel: TLabel;
+    clbxModel: TJvCheckListBox;
     procedure cbSpecifyContoursClick(Sender: TObject);
     procedure btnEditContoursClick(Sender: TObject);
     procedure virttreecomboDataSetsChange(Sender: TObject);
@@ -32,6 +35,7 @@ type
     procedure cbLogTransformClick(Sender: TObject);
     procedure btnContourFontClick(Sender: TObject);
     procedure cbLabelContoursClick(Sender: TObject);
+    procedure clbxModelClickCheck(Sender: TObject);
   private
     FContours: TContours;
     FGettingData: Boolean;
@@ -165,6 +169,30 @@ begin
   btnEditContours.Enabled := cbSpecifyContours.Checked;
 end;
 
+procedure TframeContourData.clbxModelClickCheck(Sender: TObject);
+var
+  ItemIndex: Integer;
+  AllChecked: Boolean;
+begin
+  inherited;
+  if clbxModel.Selected[0] then
+  begin
+    for ItemIndex := 1 to clbxModel.Items.Count - 1 do
+    begin
+      clbxModel.Checked[ItemIndex] := clbxModel.Checked[0];
+    end;
+  end
+  else
+  begin
+    AllChecked := True;
+    for ItemIndex := 1 to clbxModel.Items.Count - 1 do
+    begin
+      AllChecked := AllChecked and clbxModel.Checked[ItemIndex];
+    end;
+    clbxModel.Checked[0] := AllChecked;
+  end;
+end;
+
 procedure TframeContourData.ContourData(AnObject: TObject);
 var
   Index: Integer;
@@ -178,6 +206,8 @@ var
 //  Mesh: TSutraMesh3D;
   ChildDataArray: TDataArray;
   Mesh: IMesh3D;
+  ModelIndex: Integer;
+  AModel: TCustomModel;
 begin
   Application.ProcessMessages;
   frmProgressMM.ShouldContinue := True;
@@ -237,6 +267,18 @@ begin
   end
   else if (AnObject is TDataArray) then
   begin
+    if frmGoPhast.ModelSelection in [msModflowLGR, msModflowLGR2] then
+    begin
+      for ModelIndex := 1 to clbxModel.Items.Count - 1 do
+      begin
+        AModel := clbxModel.Items.Objects[ModelIndex] as TCustomModel;
+        AModel.CanDrawContours := clbxModel.Checked[ModelIndex];
+      end;
+    end
+    else
+    begin
+      frmGoPhast.PhastModel.CanDrawContours := True;
+    end;
     DataSet := TDataArray(AnObject);
     DataSet.ContourAlg := TContourAlg(comboAlgorithm.ItemIndex);
     DataSet.ContourInterval.Value := StrToFloat(rdeContourInterval.Text);
@@ -377,6 +419,10 @@ procedure TframeContourData.GetData;
 var
   ContourColors: TColorParameters;
   VirtNoneNode: PVirtualNode;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+  ItemIndex: Integer;
+  AllCanDrawContours: Boolean;
 begin
   inherited;
   Handle;
@@ -388,6 +434,31 @@ begin
 
   FGettingData := True;
   try
+    if frmGoPhast.ModelSelection in [msModflowLGR, msModflowLGR2] then
+    begin
+      clbxModel.Items.Clear;
+      clbxModel.Visible := True;
+      lblModel.Visible := True;
+      clbxModel.Items.Add('All');
+      clbxModel.Items.AddObject('Parent', frmGoPhast.PhastModel);
+      ItemIndex := 1;
+      clbxModel.Checked[ItemIndex] := frmGoPhast.PhastModel.CanDrawContours;
+      AllCanDrawContours := frmGoPhast.PhastModel.CanDrawContours;
+      for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
+      begin
+        ChildModel := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
+        clbxModel.Items.AddObject(ChildModel.ModelName, ChildModel);
+        Inc(ItemIndex);
+        clbxModel.Checked[ItemIndex] := ChildModel.CanDrawContours;
+        AllCanDrawContours := AllCanDrawContours and ChildModel.CanDrawContours
+      end;
+      clbxModel.Checked[0] := AllCanDrawContours;
+    end
+    else
+    begin
+      clbxModel.Visible := False;
+      lblModel.Visible := False;
+    end;
     if frmGoPhast.PhastModel.ColorSchemes.Count > 0 then
     begin
       UpdateColorSchemes;

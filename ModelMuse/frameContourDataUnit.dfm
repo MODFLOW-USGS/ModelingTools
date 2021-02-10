@@ -6,6 +6,7 @@ inherited frameContourData: TframeContourData
   inherited pcChoices: TPageControl
     Width = 578
     Height = 501
+    ActivePage = tabFilters
     ExplicitWidth = 578
     ExplicitHeight = 501
     inherited tabSelection: TTabSheet
@@ -75,13 +76,11 @@ inherited frameContourData: TframeContourData
         Left = 482
         Top = 346
         Width = 85
-        Height = 21
         Anchors = [akLeft, akRight, akBottom]
         TabOrder = 13
         ExplicitLeft = 482
         ExplicitTop = 346
         ExplicitWidth = 85
-        ExplicitHeight = 21
       end
       inherited jsColorExponent: TJvxSlider
         Top = 428
@@ -89,10 +88,8 @@ inherited frameContourData: TframeContourData
       end
       inherited seColorExponent: TJvSpinEdit
         Top = 428
-        Height = 21
         TabOrder = 15
         ExplicitTop = 428
-        ExplicitHeight = 21
       end
       inherited cbLogTransform: TCheckBox
         Left = 231
@@ -105,11 +102,9 @@ inherited frameContourData: TframeContourData
       inherited udDataSets: TJvUpDown
         Left = 319
         Top = 20
-        Width = 17
         TabOrder = 2
         ExplicitLeft = 319
         ExplicitTop = 20
-        ExplicitWidth = 17
       end
       inherited rgUpdateLimitChoice: TRadioGroup
         Top = 248
@@ -121,12 +116,10 @@ inherited frameContourData: TframeContourData
       inherited virttreecomboDataSets: TRbwStringTreeCombo
         Top = 26
         Width = 305
-        Height = 21
         Tree.OnGetNodeDataSize = virttreecomboDataSetsTreeGetNodeDataSize
         TabOrder = 1
         ExplicitTop = 26
         ExplicitWidth = 305
-        ExplicitHeight = 21
       end
       inherited reComment: TRichEdit
         Width = 559
@@ -237,15 +230,31 @@ inherited frameContourData: TframeContourData
         Top = 449
         ExplicitTop = 441
       end
+      object lblModel: TLabel [5]
+        Left = 203
+        Top = 152
+        Width = 88
+        Height = 13
+        Caption = 'Models to Contour'
+      end
       inherited rdgValuesToIgnore: TRbwDataGrid4
         Height = 325
         ExplicitHeight = 325
       end
       inherited seNumberOfValuesToIgnore: TJvSpinEdit
         Top = 446
-        Height = 21
         ExplicitTop = 446
-        ExplicitHeight = 21
+      end
+      object clbxModel: TJvCheckListBox
+        Left = 203
+        Top = 171
+        Width = 121
+        Height = 150
+        OnClickCheck = clbxModelClickCheck
+        DoubleBuffered = False
+        ItemHeight = 13
+        ParentDoubleBuffered = False
+        TabOrder = 6
       end
     end
     inherited tabLegend: TTabSheet
@@ -275,9 +284,7 @@ inherited frameContourData: TframeContourData
         end
         inherited seLegendRows: TJvSpinEdit
           Top = 433
-          Height = 21
           ExplicitTop = 433
-          ExplicitHeight = 21
         end
         inherited rdgLegend: TRbwDataGrid4
           Height = 347

@@ -235,6 +235,9 @@ resourcestring
   StrTheMaximumLengthO = 'The maximum length of an observation is %0:d. The ' +
   'observation named %1:1s in %2:s woud be exported as "%3:s" which is longe' +
   'r than the maximum length. It will be truncated to %4:s.';
+//  StrObservationNameToo = 'Observation name too long';
+  StrTheNameOfTheHead = 'The name of the head observation named %0:s at Laye' +
+  'r %1:d, Row %2:d, Column %3:d is too long.';
 
 
 { TModflow6Obs_Writer }
@@ -423,6 +426,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrHeadObservationObj);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingHeadO);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model,StrObservationNameToo);
   if Model.PestUsed then
   begin
     // These two properties need to be specified outside of TModflow6Obs_Writer;
@@ -1555,7 +1559,15 @@ var
         begin
           obsnam := Format('%0:sObs%1:d', [Prefix, ObsIndex+1]);
         end;
-        Assert(Length(obsnam) <= MaxBoundNameLength);
+
+        if Length(obsnam) > MaxBoundNameLength then
+        begin
+          frmErrorsAndWarnings.AddError(Model,StrObservationNameToo,
+            Format(StrTheNameOfTheHead,
+            [HeadObs.FName, HeadObs.FCell.Layer+ 1, HeadObs.FCell.Row+ 1,
+            HeadObs.FCell.Column+ 1]));
+        end;
+//        Assert(Length(obsnam) <= MaxBoundNameLength);
         WriteString('  ''');
         WriteString(obsnam);
         WriteString(''' ');

@@ -2218,6 +2218,7 @@ that affects the model output should also have a comment. }
     FVelocityVectors: TVectorCollection;
     FPilotPointData: TStoredPilotParamDataCollection;
     FKrigfactorsScriptLines: TStringList;
+    FCanDrawContours: Boolean;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -2451,6 +2452,7 @@ that affects the model output should also have a comment. }
     function GetPilotPointCount: integer;
     function GetPilotPoint(Index: Integer): TPoint2D;
     function GetPilotPointBuffer: double;
+    procedure SetCanDrawContours(const Value: Boolean);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3353,6 +3355,8 @@ that affects the model output should also have a comment. }
     property FilesToDelete: TStrings read GetFilesToDelete;
     procedure AddFilestToDeleteToBatchFile(BatchFile: TStrings;
       const BatchFileName: string);
+    property CanDrawContours: Boolean read FCanDrawContours
+      write SetCanDrawContours;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -5895,6 +5899,8 @@ resourcestring
   StrStressPeriodAdded = 'No stress periods were defined in the MODFLOW Time' +
   ' dialog box. One has been added automatically.';
   StrS = '"%s" ';
+  StrPESTWasNotFoundI = 'PEST was not found in %s';
+  StrPESTNotFound = 'PEST not found.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -10205,10 +10211,16 @@ const
 //                unless more than one file was selected.
 //    '4.3.0.37' Bug fix: Fixed bug in exporting the UZF input in MODFLOW 6 that
 //                caused the convergence history file to be misnamed.
+//    '4.3.0.38' Enhancement: When contour a data set in a MODFLOW-LGR model,
+//                the user can now choose which models should be contoured
+//                on the filter tab of the contour pane of the Data
+//                Visualization dialog box.
+//    '4.3.0.39' Bug fix: not in released version. ModelMuse no longer
+//                Generates PEST control file if PEST is not activated.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.37';
+  IIModelVersion = '4.3.0.39';
 
 function IModelVersion: string;
 begin
@@ -28385,6 +28397,7 @@ end;
 constructor TCustomModel.Create(AnOwner: TComponent);
 begin
   inherited;
+  FCanDrawContours := True;
   FSutraPestScripts := TStringList.Create;
   FPestTemplateLines := TStringList.Create;
   FKrigfactorsScriptLines := TStringList.Create;
@@ -29535,6 +29548,11 @@ begin
     Invalidate(self);
   end;
   FBatchFileAdditionsBeforeModel.Assign(Value);
+end;
+
+procedure TCustomModel.SetCanDrawContours(const Value: Boolean);
+begin
+  FCanDrawContours := Value;
 end;
 
 procedure TCustomModel.SetCrossSection(const Value: TCrossSection);
@@ -40498,6 +40516,11 @@ var
   PestCheckName: string;
   PestCheckBatchFileName: string;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(self, StrPESTNotFound);
+  if not PestUsed then
+  begin
+    Exit;
+  end;
   PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
   try
     PestControlWriter.WriteFile(FileName, SetNOPTMAX)
@@ -40522,9 +40545,11 @@ begin
 
   if not FileExists(PestName) then
   begin
-    Beep;
-    MessageDlg(Format('PEST was not found in %s',
-      [ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
+    //Beep;
+    frmErrorsAndWarnings.AddError(self, StrPESTNotFound,
+      Format(StrPESTWasNotFoundI, [ProgramLocations.PestDirectory]));
+//    MessageDlg(Format(StrPESTWasNotFoundI,
+//      [ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
 //      Exit;
   end;
 

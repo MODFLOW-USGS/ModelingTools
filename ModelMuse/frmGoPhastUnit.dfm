@@ -1297,7 +1297,7 @@ inherited frmGoPhast: TfrmGoPhast
         object miRunSutra: TMenuItem
           Action = acRunSutra
         end
-        object PEST1: TMenuItem
+        object miPEST: TMenuItem
           Caption = 'PEST'
           object PESTControlfile1: TMenuItem
             Action = acRunPest
