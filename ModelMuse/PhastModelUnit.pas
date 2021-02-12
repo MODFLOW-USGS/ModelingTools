@@ -4141,6 +4141,7 @@ that affects the model output should also have a comment. }
   public
     function Mt3dMSUsed(Sender: TObject): boolean; override;
     procedure RefreshGlobalVariables(CompilerList: TList);
+//    procedure RefreshDataArraysVariables;
     procedure CreateGlobalVariables;
     function LakBathymetryUsed: Boolean;
     function TobIsSelected: Boolean;
@@ -5901,6 +5902,9 @@ resourcestring
   StrS = '"%s" ';
   StrPESTWasNotFoundI = 'PEST was not found in %s';
   StrPESTNotFound = 'PEST not found.';
+  StrIllegalGlobalVaria = 'Illegal global variable name';
+  StrAGlobalVariableNa = 'A global variable named %s has the same name as a ' +
+  'data set. The global variable has been deleted.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -10217,6 +10221,9 @@ const
 //                Visualization dialog box.
 //    '4.3.0.39' Bug fix: not in released version. ModelMuse no longer
 //                Generates PEST control file if PEST is not activated.
+//               Bug fix: Fixed bug in implementation of the K22OVERK and
+//                K33OVERK options in the NPF package.
+
 
 const
   // version number of ModelMuse.
@@ -32862,6 +32869,17 @@ begin
   FGlobalVariables.Assign(Value);
 end;
 
+//procedure TPhastModel.RefreshDataArraysVariables;
+//begin
+//  CompilerList := TList.Create;
+//  try
+//    FillCompilerList(CompilerList);
+////    RefreshGlobalVariables(CompilerList);
+//  finally
+//    CompilerList.Free;
+//  end;
+//end;
+
 procedure TPhastModel.RefreshGlobalVariables(CompilerList: TList);
 var
   Compiler: TRbwParser;
@@ -32906,8 +32924,8 @@ begin
       Variable := GlobalVariables[VariableIndex];
       if DataSetNames.IndexOf(Variable.Name) >= 0 then
       begin
-        frmErrorsAndWarnings.AddWarning(self, 'Illegal global variable name',
-          Format('A global variable named %s has the same name as a data set. The global variable has been deleted.', [Variable.Name]));
+        frmErrorsAndWarnings.AddWarning(self, StrIllegalGlobalVaria,
+          Format(StrAGlobalVariableNa, [Variable.Name]));
         GlobalVariables.Delete(VariableIndex);
       end;
     end;

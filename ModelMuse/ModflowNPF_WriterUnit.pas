@@ -182,7 +182,19 @@ begin
     WriteString('  SAVE_SPECIFIC_DISCHARGE');
     NewLine;
   end;
-//  if not NpfPackage.UseNewtonRaphson then
+
+  if FNpfPackage.UseHorizontalAnisotropy then
+  begin
+    WriteString('  K22OVERK');
+    NewLine;
+  end;
+
+  if FNpfPackage.UseVerticalAnisotropy then
+  begin
+    WriteString('  K33OVERK');
+    NewLine;
+  end;
+  //  if not NpfPackage.UseNewtonRaphson then
 //  begin
 //    WriteString('  NO_NEWTON');
 //    NewLine;

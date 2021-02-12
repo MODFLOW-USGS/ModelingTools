@@ -19,6 +19,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 193
     Height = 443
+    AutoExpand = False
     ShowButtons = True
     PageDefault = 0
     PageList = plMain

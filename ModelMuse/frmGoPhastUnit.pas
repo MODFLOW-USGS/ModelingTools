@@ -833,6 +833,7 @@ type
     procedure HaveUsersDefineSutraLayers;
     procedure HaveUsersDefineModflowLayers;
     procedure SetToolbarPositions;
+    procedure CheckSvdaActivated;
   published
     // @name is the TAction for @link(miAddVerticalGridLine)
     // and @link(tbAddVerticalBoundary).
@@ -2126,7 +2127,7 @@ uses
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
   SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
   PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
-  frmSupCalcUnit;
+  frmSupCalcUnit, PestPropertiesUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -2370,6 +2371,8 @@ resourcestring
   StrPrintingCellLists = 'Printing cell lists has been deactivated.';
   StrSutraObsExtractorex = 'SutraObsExtractor.exe';
   StrSWasNotARecog = '"%s" was not a recognized file type.';
+  StrSingularValueDecom = 'Singular value decomposition is deactivated. Do y' +
+  'ou want to activate it?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -6405,6 +6408,21 @@ begin
     or (PhastModel.PestProperties.BetweenObservationsPilotPoints.Count > 0));
 end;
 
+procedure TfrmGoPhast.CheckSvdaActivated;
+var
+  SvdProperties: TSingularValueDecompositionProperties;
+begin
+  SvdProperties := PhastModel.PestProperties.SvdProperties;
+  if SvdProperties.Mode = smNone then
+  begin
+    Beep;
+    if (MessageDlg(StrSingularValueDecom, mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+    begin
+      SvdProperties.Mode := smNormal;
+    end;
+  end;
+end;
+
 procedure TfrmGoPhast.EnableSwrObs;
 var
   ShouldEnable: Boolean;
@@ -7954,6 +7972,7 @@ end;
 procedure TfrmGoPhast.acCalcSuperParametersExecute(Sender: TObject);
 begin
   inherited;
+  CheckSvdaActivated;
   if PhastModel.ModelFileName <> '' then
   begin
     PhastModel.SupCalcProperties.FileName := ChangeFileExt(PhastModel.ModelFileName, '.pst')
@@ -7968,11 +7987,6 @@ begin
   finally
     frmSupCalc.Free;
   end;
-
-//  if sdRunSupCalc.Execute then
-//  begin
-////    PhastModel.ExportSupCalcInput(sdRunSupCalc.FileName, FRunSupCalc);
-//  end;
 end;
 
 procedure TfrmGoPhast.acColorExecute(Sender: TObject);
@@ -14413,6 +14427,7 @@ end;
 procedure TfrmGoPhast.acRunSvdaPrepExecute(Sender: TObject);
 begin
   inherited;
+  CheckSvdaActivated;
   if PhastModel.ModelFileName <> '' then
   begin
     PhastModel.SvdaPrepProperties.FileName := ChangeFileExt(PhastModel.ModelFileName, '.pst')

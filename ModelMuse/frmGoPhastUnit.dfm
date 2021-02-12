@@ -3676,12 +3676,12 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acRunSvdaPrep: TAction
       Category = 'File'
-      Caption = 'Modify PEST Control with SVDAPREP'
+      Caption = 'Modify PEST control file with SVDAPREP'
       OnExecute = acRunSvdaPrepExecute
     end
     object acCalcSuperParameters: TAction
       Category = 'File'
-      Caption = 'Calculate number of super-parameters'
+      Caption = 'Calculate number of super parameters'
       Hint = 'Run SUPCALC'
       OnExecute = acCalcSuperParametersExecute
     end

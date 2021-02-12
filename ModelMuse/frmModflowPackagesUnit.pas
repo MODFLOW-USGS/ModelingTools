@@ -1741,6 +1741,7 @@ procedure TfrmModflowPackages.FormShow(Sender: TObject);
 begin
   inherited;
   EnableLpfParameterControls;
+  jvplPackagesChange(nil);
 end;
 
 procedure TfrmModflowPackages.frameCropConsumptiveUserdgGridSelectCell(

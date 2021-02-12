@@ -27,6 +27,7 @@ inherited frmSupCalc: TfrmSupCalc
     Height = 26
     DefaultExt = '.pst'
     Filter = 'Pest Control File (*.pst)|*.pst'
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
     Text = ''
     OnChange = fedPestControlFileChange
@@ -55,7 +56,7 @@ inherited frmSupCalc: TfrmSupCalc
   end
   object btnOK: TBitBtn
     Left = 174
-    Top = 248
+    Top = 246
     Width = 89
     Height = 33
     Kind = bkOK

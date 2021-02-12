@@ -2298,6 +2298,7 @@ begin
     UpdateObjectDisplay := (DeletedDataSets.Count > 0)
       or (AddedDataSets.Count > 0);
     ClearExpressionsAndVariables;
+//    frmGoPhast.PhastModel.RefreshDataArraysVariables;
     frmGoPhast.PhastModel.CreateGlobalVariables;
     DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
     DataArrayManager.HandleDeletedDataArrays(DeletedDataSets);
