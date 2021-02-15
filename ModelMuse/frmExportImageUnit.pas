@@ -210,7 +210,8 @@ type
     procedure SetStateOfMultipleNodes(BaseNode: PVirtualNode;
       NewState: TCheckState);
     procedure CollapseOtherPanels(Sender: TObject);
-    procedure ApplyMacro(CommentLines: TStringList; CommentSearchKey: string; TextSearchKey: string; var TextToDraw: string);
+    procedure ApplyMacro(CommentLines: TStringList; CommentSearchKey: string;
+      TextSearchKey: string; var TextToDraw: string);
     procedure AssignASetting(PhastModel: TPhastModel; ASetting: TDisplaySettingsItem);
     procedure ApplyASetting(ASetting: TDisplaySettingsItem; PhastModel: TPhastModel);
     procedure AssignEndpointSettings(ASetting: TDisplaySettingsItem);
@@ -1244,6 +1245,12 @@ begin
           end;
         end;
       end;
+
+      if ViewDirection = vdTop then
+      begin
+        LocalModel.DrawPilotPoints(FModelImage);
+      end;
+
 
       for ScreenObjectIndex := 0 to
         frmGoPhast.PhastModel.ScreenObjectCount - 1 do
@@ -3747,6 +3754,7 @@ begin
   begin
     ASetting.CrossSectionLayersToUse.Add.Value := PhastModel.CrossSection.LayersToUse[Index];
   end;
+  ASetting.ShowPilotPoints := PhastModel.PestProperties.ShowPilotPoints;
 end;
 
 procedure TfrmExportImage.ApplyASetting(ASetting: TDisplaySettingsItem; PhastModel: TPhastModel);
@@ -3763,6 +3771,7 @@ var
   SelectedVelocityDescription: string;
 begin
   comboView.ItemIndex := Ord(ASetting.ViewToDisplay);
+  PhastModel.PestProperties.ShowPilotPoints := ASetting.ShowPilotPoints;
   PhastModel.Exaggeration := ASetting.VerticalExaggeration;
   PhastModel.SutraMesh.Assign(ASetting.SutraSettings);
   PhastModel.MaxVectors := ASetting.MaxVectors;
@@ -3771,7 +3780,8 @@ begin
   PhastModel.VelocityVectors := ASetting.VelocityVectors;
   if ASetting.VelocityVectors.SelectedItem >= 0 then
   begin
-    SelectedVelocityDescription := (ASetting.VelocityVectors.Items[ASetting.VelocityVectors.SelectedItem] as TVectorItem).Description;
+    SelectedVelocityDescription := (ASetting.VelocityVectors.Items[
+      ASetting.VelocityVectors.SelectedItem] as TVectorItem).Description;
     PhastModel.VelocityVectors.SetItemByName(SelectedVelocityDescription);
   end
   else
@@ -3860,7 +3870,8 @@ begin
     for Index := 0 to PhastModel.ScreenObjectCount - 1 do
     begin
       AScreenObject := PhastModel.ScreenObjects[Index];
-      NewVisibility := (not AScreenObject.Deleted) and (ASetting.VisibleObjects.IndexOf(AScreenObject.Name) >= 0);
+      NewVisibility := (not AScreenObject.Deleted)
+        and (ASetting.VisibleObjects.IndexOf(AScreenObject.Name) >= 0);
       if AScreenObject.Visible <> NewVisibility then
       begin
         VisibilityChanged := True;

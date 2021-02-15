@@ -743,7 +743,6 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
-  Application.CreateForm(TfrmSupCalc, frmSupCalc);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

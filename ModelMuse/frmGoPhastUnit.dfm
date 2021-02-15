@@ -3676,12 +3676,12 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acRunSvdaPrep: TAction
       Category = 'File'
-      Caption = 'Modify PEST control file with SVDAPREP'
+      Caption = 'Modify PEST Control File with SVDAPREP'
       OnExecute = acRunSvdaPrepExecute
     end
     object acCalcSuperParameters: TAction
       Category = 'File'
-      Caption = 'Calculate number of super parameters'
+      Caption = 'Calculate Number of Super-Parameters'
       Hint = 'Run SUPCALC'
       OnExecute = acCalcSuperParametersExecute
     end
@@ -9817,7 +9817,7 @@ inherited frmGoPhast: TfrmGoPhast
   object odSutraFiles: TOpenDialog
     DefaultExt = '.14B'
     Filter = 
-      'SUTRA Files (*.14B, *.14B, *.PVEC;*.UVEC)|*.14B;*.15B;*.PVEC;*.U' +
+      'SUTRA Files (*.14B, *.15B, *.PVEC;*.UVEC)|*.14B;*.15B;*.PVEC;*.U' +
       'VEC|SUTRA Data Set 14B (*.14B)|*.14B|SUTRA Data Set 15B (*.15B)|' +
       '*.15B|SUTRA Inital Pressure file (*.PVEC)|*.PVEC|SUTRA Inital U ' +
       'file (*.UVEC)|*.UVEC'
@@ -9831,9 +9831,9 @@ inherited frmGoPhast: TfrmGoPhast
     OnClose = odRunParRepClose
     OnShow = odRunParRepShow
     Filter = 
-      'All parameter value files (*.par.*, *.bpa)|*.par.*;*.bpa|Best pa' +
-      'rameter value files (*.bpa)|*.bpa|Iteration Parameter value file' +
-      's (*.par.*, *.bpa)|*.par.*|Any file|*.*'
+      'Best parameter value files (*.bpa)|*.bpa|Iteration Parameter val' +
+      'ue files (*.par.*, *.bpa)|*.par.*|All parameter value files (*.p' +
+      'ar.*, *.bpa)|*.par.*;*.bpa|Any file|*.*'
     InitialDir = '(Directory)'
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 656

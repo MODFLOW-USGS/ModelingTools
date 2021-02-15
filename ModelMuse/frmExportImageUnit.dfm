@@ -55,7 +55,7 @@ inherited frmExportImage: TfrmExportImage
         object pnlAnimation: TPanel
           Left = 0
           Top = 0
-          Width = 243
+          Width = 245
           Height = 0
           Align = alClient
           BevelOuter = bvNone
@@ -63,7 +63,7 @@ inherited frmExportImage: TfrmExportImage
           object JvNetscapeSplitter1: TJvNetscapeSplitter
             Left = 0
             Top = 168
-            Width = 243
+            Width = 245
             Height = 10
             Cursor = crVSplit
             Align = alTop
@@ -78,17 +78,17 @@ inherited frmExportImage: TfrmExportImage
           object Panel1: TPanel
             Left = 0
             Top = -84
-            Width = 243
+            Width = 245
             Height = 84
             Align = alBottom
             TabOrder = 0
             DesignSize = (
-              243
+              245
               84)
             object rgDisplayChoice: TRadioGroup
               Left = 3
               Top = 6
-              Width = 236
+              Width = 238
               Height = 43
               Anchors = [akLeft, akTop, akRight]
               Caption = 'Display choice'
@@ -144,7 +144,7 @@ inherited frmExportImage: TfrmExportImage
           object rdgDataSets: TRbwDataGrid4
             Left = 0
             Top = 178
-            Width = 243
+            Width = 245
             Height = 98
             Align = alClient
             ColCount = 2
@@ -163,6 +163,7 @@ inherited frmExportImage: TfrmExportImage
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -186,6 +187,7 @@ inherited frmExportImage: TfrmExportImage
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -215,7 +217,7 @@ inherited frmExportImage: TfrmExportImage
           object vstDataSets: TVirtualStringTree
             Left = 0
             Top = 0
-            Width = 243
+            Width = 245
             Height = 168
             Align = alTop
             Colors.BorderColor = 15987699
@@ -260,7 +262,7 @@ inherited frmExportImage: TfrmExportImage
         object pnlText: TPanel
           Left = 0
           Top = 0
-          Width = 243
+          Width = 245
           Height = 0
           Align = alClient
           TabOrder = 0
@@ -397,7 +399,7 @@ inherited frmExportImage: TfrmExportImage
         object Panel3: TPanel
           Left = 0
           Top = 0
-          Width = 243
+          Width = 245
           Height = 360
           Align = alClient
           TabOrder = 0

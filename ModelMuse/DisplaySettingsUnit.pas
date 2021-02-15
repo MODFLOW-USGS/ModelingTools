@@ -393,6 +393,7 @@ type
     FCrossSectionDataSets: TStringList;
     FCrossSectionLayersToUse: TIntegerCollection;
     FCrossSectionColors: TIntegerCollection;
+    FShowPilotPoints: Boolean;
     procedure OnChangeEventHandler(Sender: TObject);
     procedure SetAdditionalText(const Value: TTextCollection);
     procedure SetGridDisplayChoice(const Value: TGridLineDrawingChoice);
@@ -425,6 +426,7 @@ type
     procedure SetCrossSectionDataSets(const Value: TStringList);
     procedure SetCrossSectionLayersToUse(const Value: TIntegerCollection);
     procedure SetCrossSectionColors(const Value: TIntegerCollection);
+    procedure SetShowPilotPoints(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with a TNotifyEvent or interface. }
@@ -494,6 +496,7 @@ type
       write SetCrossSectionColors;
     property CrossSectionLayersToUse: TIntegerCollection
       read FCrossSectionLayersToUse write SetCrossSectionLayersToUse;
+    property ShowPilotPoints: Boolean read FShowPilotPoints write SetShowPilotPoints;
   end;
 
   { @name is a collection of @link(TDisplaySettingsItem)s.
@@ -755,7 +758,7 @@ begin
     CrossSectionDataSets := SourceDisplay.CrossSectionDataSets;
     CrossSectionLayersToUse := SourceDisplay.CrossSectionLayersToUse;
     CrossSectionColors := SourceDisplay.CrossSectionColors;
-
+    ShowPilotPoints := SourceDisplay.ShowPilotPoints;
   end
   else
   begin
@@ -1095,6 +1098,11 @@ procedure TDisplaySettingsItem.SetShowModpathPathLineSettings(
   const Value: TPathLineSettings);
 begin
   FModpathPathLineSettings.Assign(Value);
+end;
+
+procedure TDisplaySettingsItem.SetShowPilotPoints(const Value: Boolean);
+begin
+  SetBooleanProperty(FShowPilotPoints, Value);
 end;
 
 procedure TDisplaySettingsItem.SetSutraSettings(const Value: TSutraSettings);

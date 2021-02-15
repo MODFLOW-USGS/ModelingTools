@@ -96,6 +96,7 @@ inherited frmSvdaPrepInput: TfrmSvdaPrepInput
     Height = 26
     DefaultExt = '.pst'
     Filter = 'Pest Control File (*.pst)|*.pst'
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 7
     Text = ''
     OnChange = fedPestControlFileChange

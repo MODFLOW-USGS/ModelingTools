@@ -40323,6 +40323,7 @@ var
 begin
   Assert(TFile.Exists(SupCalcProperties.FileName));
   WorkingDirectory := IncludeTrailingPathDelimiter(ExtractFileDir(SupCalcProperties.FileName));
+  SetCurrentDir(WorkingDirectory);
   CaseName := ExtractFileName(ChangeFileExt(SupCalcProperties.FileName, ''));
   TempName := '';
   if SupCalcProperties.RunPest then
@@ -40402,13 +40403,14 @@ var
   SvdaFileName: string;
 begin
   WorkingDirectory := IncludeTrailingPathDelimiter(ExtractFileDir(SvdaPrepProperties.FileName));
+  SetCurrentDir(WorkingDirectory);
   PestDirectory := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory);
   ExportPestInput(SvdaPrepProperties.FileName, pecNone);
   PestInputFileName := ChangeFileExt(SvdaPrepProperties.FileName , '.pst');
   JcoFileName := ChangeFileExt(SvdaPrepProperties.FileName , '.jco');
   CaseName := ChangeFileExt(PestInputFileName , '');
-  PreSvdaFileName := CaseName + '_PreSvda.pst';
-  SvdaFileName := CaseName + '_Svda.pst';
+  PreSvdaFileName := CaseName + '_Svda.pst';
+  SvdaFileName := CaseName + '_PostSvda.pst';
   NewJcoFileName := ChangeFileExt(PreSvdaFileName , '.jco');
   if TFile.Exists(NewJcoFileName) then
   begin
@@ -40509,7 +40511,8 @@ begin
     + 'parrep.exe';
   BatchFile := TStringList.Create;
   try
-    BatchFile.Add(Format('"%0:s" %1:s %2:s %3:s 0', [ParRepName, ExtractFileName(FileName), ExistingPestFile, NewPestFile]));
+    BatchFile.Add(Format('"%0:s" %1:s %2:s %3:s 0', [ParRepName,
+      ExtractFileName(FileName), ExistingPestFile, NewPestFile]));
     BatchFile.Add(Format('"%0:s" %1:s', [PestName, NewPestFile]));
     BatchFile.Add('pause');
     BatchFile.SaveToFile(BatchFileName);

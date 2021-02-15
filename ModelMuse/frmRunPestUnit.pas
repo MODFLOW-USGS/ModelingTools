@@ -15,8 +15,8 @@ type
     { Public declarations }
   end;
 
-var
-  frmRunPest: TfrmRunPest;
+//var
+//  frmRunPest: TfrmRunPest;
 
 implementation
 
