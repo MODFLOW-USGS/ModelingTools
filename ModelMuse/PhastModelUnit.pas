@@ -10223,11 +10223,16 @@ const
 //                Generates PEST control file if PEST is not activated.
 //               Bug fix: Fixed bug in implementation of the K22OVERK and
 //                K33OVERK options in the NPF package.
+//    '4.3.0.40' Bug fix: Fixed a bug that could cause some cells to be
+//                incorrectly selected two or more times fy the same object
+//                when the object selects both enclosed and intersected cells.
+//    '4.3.0.41' Bug fix: Fixed a bug that prevented MT3D concentration results
+//                from being imported.
 
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.39';
+  IIModelVersion = '4.3.0.41';
 
 function IModelVersion: string;
 begin

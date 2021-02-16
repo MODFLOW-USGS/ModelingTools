@@ -148,9 +148,9 @@ begin
   PackageIdentifiers.Add('CSUB -- COMPACTION PACKAGE');
   PackageIdentifiers.Add('DISU -- UNSTRUCTURED GRID DISCRETIZATION PACKAGE');
   PackageIdentifiers.Add('DISV -- VERTEX GRID DISCRETIZATION PACKAGE');
-//  PackageIdentifiers.Add('READING SOLUTIONGROUP');
-//  PackageIdentifiers.Add('IMS -- ITERATIVE MODEL SOLUTION PACKAGE');
 //  PackageIdentifiers.Add('IMSLINEAR -- UNSTRUCTURED LINEAR SOLUTION PACKAGE');
+  PackageIdentifiers.Add('READING WATER MOVERS ');
+
 //  PackageIdentifiers.Add('CALLS TO NUMERICAL SOLUTION IN TIME STEP');
 //  PackageIdentifiers.Add('INFORMATION ON VARIABLES STORED IN THE MEMORY MANAGER');
 //  PackageIdentifiers.Add('PROCESSING GWF EXCHANGE OPTIONS');
@@ -399,7 +399,6 @@ begin
   BoundaryIdentifiers.Add('UZ CELL BOTTOM ELEV.');
 //  BoundaryIdentifiers.Add(StrINSTANCE);
   BoundaryIdentifiers.Add('VOLUMETRIC BUDGET FOR ENTIRE MODEL');
-  BoundaryIdentifiers.Add('BUDGET FOR ENTIRE MODEL');
 
   BoundaryIdentifiers.Add('REACH           REACH  REACH                  REACH      REACH      REACH       GWF      STREAMBED   STREAMBED');
   BoundaryIdentifiers.Add('REACH           REACH  REACH                 EXTERNAL      REACH       REACH       REACH       REACH       REACH       REACH     EXTERNAL      REACH      PERCENT');
@@ -670,7 +669,11 @@ begin
   BoundaryIdentifiers.Add('MAW-NT_WELL BUDGET FOR ENTIRE MODEL AT END OF TIME STEP');
   BoundaryIdentifiers.Add('NEWTON-RAPHSON');
   BoundaryIdentifiers.Add('LAMINAR PRECALCULATION');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('BUDGET FOR ENTIRE MODEL');
+  BoundaryIdentifiers.Add('SFR PACKAGE (');
+  BoundaryIdentifiers.Add('GHB NO.    LAYER  CELL2D       ');
+  BoundaryIdentifiers.Add('SFR-1 PACKAGE - SUMMARY OF FLOWS');
+  BoundaryIdentifiers.Add('LAK PACKAGE (');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');

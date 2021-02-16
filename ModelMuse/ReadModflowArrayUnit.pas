@@ -310,7 +310,7 @@ begin
       Exit
     end;
 
-    Assert(AFile.Position = 0);
+    AFile.Position := 0;
     AFile.Read(NTRANS, SizeOf(NTRANS));
     AFile.Read(KSTP, SizeOf(KSTP));
     AFile.Read(KPER, SizeOf(KPER));

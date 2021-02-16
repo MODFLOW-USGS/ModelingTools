@@ -2648,7 +2648,7 @@ view. }
       const ErrorMessage, Source: string; var Formula: string;
       DataType: TRbwDataType);
     procedure SetCanInvalidateModel(const Value: boolean);
-    procedure EliminateHoleCells(CellList: TCellAssignmentList);
+//    procedure EliminateHoleCells(CellList: TCellAssignmentList);
     procedure SetDuplicatesAllowed(const Value: Boolean);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -24663,9 +24663,14 @@ var
   EvalAt: TEvaluatedAt;
   Orientation: TDataSetOrientation;
   AssignmentMethod: TAssignmentMethod;
+  UsedCells: array of array of array of Boolean;
+  LocalModel: TCustomModel;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
 begin
   Assert(CellList.Count = 0);
-  LocalGrid := (AModel as TCustomModel).PhastGrid;
+  LocalModel := AModel as TCustomModel;
+  LocalGrid := LocalModel.PhastGrid;
   IAnnotation := IntersectAnnotation(DataSetFunction, OtherData);
   EAnnotation := EncloseAnnotation(DataSetFunction, OtherData);
   UpdateCurrentScreenObject(FScreenObject);
@@ -24912,6 +24917,16 @@ begin
     end;
     if FScreenObject.SetValuesOfIntersectedCells then
     begin
+      if FScreenObject.SetValuesOfEnclosedCells then
+      begin
+        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+          LocalModel.ColumnCount + 1);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+        end;
+      end;
 //      if not FScreenObject.Segments.UpToDate then
 //      begin
 //        UpdateFrontSegments(Grid, DataSet.EvaluatedAt);
@@ -24965,12 +24980,14 @@ begin
               end;
             else Assert(False);
           end;
+          ACell := nil;
           case FScreenObject.ElevationCount of
             ecZero:
               begin
-                CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                ACell := TCellAssignment.Create(ASegment.Layer,
                   ASegment.Row, ASegment.Col, ASegment,
-                  ASegment.SectionIndex, Annotation, amIntersect));
+                  ASegment.SectionIndex, Annotation, amIntersect);
+//                CellList.Add(ACell);
               end;
             ecOne:
               begin
@@ -24980,9 +24997,10 @@ begin
                   or ((FScreenObject.BottomElevation = UpperBound)
                   and (ASegment.Row = RowLimit)))) then
                 begin
-                  CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                  ACell := TCellAssignment.Create(ASegment.Layer,
                     ASegment.Row, ASegment.Col, ASegment,
-                    ASegment.SectionIndex, Annotation, amIntersect));
+                    ASegment.SectionIndex, Annotation, amIntersect);
+//                  CellList.Add(ACell);
                 end;
               end;
             ecTwo:
@@ -24995,9 +25013,10 @@ begin
                         ((FScreenObject.TopElevation >= Middle)
                         and (FScreenObject.BottomElevation <= Middle)) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect);
+//                        CellList.Add(ACell);
                       end;
                     end;
                   eaNodes:
@@ -25006,15 +25025,36 @@ begin
                         ((FScreenObject.TopElevation >= LowerBound)
                         and (FScreenObject.BottomElevation <= UpperBound)) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect);
+//                        CellList.Add(ACell);
                       end;
                     end;
                   else Assert(False);
                 end;
               end;
             else Assert(False);
+          end;
+          if ACell <> nil then
+          begin
+            if FScreenObject.SetValuesOfEnclosedCells then
+            begin
+              if UsedCells[ACell.Layer, ACell.Row, ACell.Column]
+                and FScreenObject.SectionClosed[ASegment.SectionIndex] then
+              begin
+                ACell.Free;
+              end
+              else
+              begin
+                CellList.Add(ACell);
+                UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+              end;
+            end
+            else
+            begin
+              CellList.Add(ACell);
+            end;
           end;
         end;
       end;
@@ -25060,9 +25100,14 @@ var
   EvalAt: TEvaluatedAt;
   Orientation: TDataSetOrientation;
   AssignmentMethod: TAssignmentMethod;
+  UsedCells: array of array of array of Boolean;
+  LocalModel: TCustomModel;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
 begin
   Assert(CellList.Count = 0);
-  LocalGrid := (AModel as TCustomModel).PhastGrid;
+  LocalModel := AModel as TCustomModel;
+  LocalGrid := LocalModel.PhastGrid;
   IAnnotation := IntersectAnnotation(DataSetFunction, OtherData);
   EAnnotation := EncloseAnnotation(DataSetFunction, OtherData);
   UpdateCurrentScreenObject(FScreenObject);
@@ -25313,6 +25358,16 @@ begin
     end;
     if FScreenObject.SetValuesOfIntersectedCells then
     begin
+      if FScreenObject.SetValuesOfEnclosedCells then
+      begin
+        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+          LocalModel.ColumnCount + 1);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+        end;
+      end;
 //      if not FScreenObject.Segments.UpToDate then
 //      begin
 //        UpdateSideSegments(Grid, DataSet.EvaluatedAt);
@@ -25366,12 +25421,14 @@ begin
               end;
             else Assert(False);
           end;
+          ACell := nil;
           case FScreenObject.ElevationCount of
             ecZero:
               begin
-                CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                ACell := TCellAssignment.Create(ASegment.Layer,
                   ASegment.Row, ASegment.Col, ASegment,
-                  ASegment.SectionIndex, Annotation, amIntersect));
+                  ASegment.SectionIndex, Annotation, amIntersect);
+//                CellList.Add(ACell);
               end;
             ecOne:
               begin
@@ -25381,9 +25438,10 @@ begin
                   or ((FScreenObject.BottomElevation = UpperBound)
                   and (ASegment.Col = ColumnLimit)))) then
                 begin
-                  CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                  ACell := TCellAssignment.Create(ASegment.Layer,
                     ASegment.Row, ASegment.Col, ASegment,
-                    ASegment.SectionIndex, Annotation, amIntersect));
+                    ASegment.SectionIndex, Annotation, amIntersect);
+//                  CellList.Add(ACell);
                 end;
               end;
             ecTwo:
@@ -25396,9 +25454,10 @@ begin
                         ((FScreenObject.TopElevation >= Middle)
                         and (FScreenObject.BottomElevation <= Middle)) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect);
+//                        CellList.Add(ACell);
                       end;
                     end;
                   eaNodes:
@@ -25407,15 +25466,36 @@ begin
                         ((FScreenObject.TopElevation >= LowerBound)
                         and (FScreenObject.BottomElevation <= UpperBound)) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect);
+//                        CellList.Add(ACell);
                       end;
                     end;
                   else Assert(False);
                 end;
               end;
             else Assert(False);
+          end;
+          if ACell <> nil then
+          begin
+            if FScreenObject.SetValuesOfEnclosedCells then
+            begin
+              if UsedCells[ACell.Layer, ACell.Row, ACell.Column]
+                and FScreenObject.SectionClosed[ASegment.SectionIndex] then
+              begin
+                ACell.Free;
+              end
+              else
+              begin
+                CellList.Add(ACell);
+                UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+              end;
+            end
+            else
+            begin
+              CellList.Add(ACell);
+            end;
           end;
         end;
       end;
@@ -25463,10 +25543,15 @@ var
   EvalAt: TEvaluatedAt;
   Orientation: TDataSetOrientation;
   AssignmentMethod: TAssignmentMethod;
+  UsedCells: array of array of array of Boolean;
+  LocalModel: TCustomModel;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
 begin
   Assert(CellList <> nil);
   Assert(CellList.Count = 0);
-  LocalGrid := (AModel as TCustomModel).PhastGrid;
+  LocalModel := AModel as TCustomModel;
+  LocalGrid := LocalModel.PhastGrid;
   IAnnotation := IntersectAnnotation(DataSetFunction, OtherData);
   EAnnotation := EncloseAnnotation(DataSetFunction, OtherData);
   UpdateCurrentScreenObject(FScreenObject);
@@ -25716,6 +25801,16 @@ begin
     end;
     if FScreenObject.SetValuesOfIntersectedCells then
     begin
+      if FScreenObject.SetValuesOfEnclosedCells then
+      begin
+        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+          LocalModel.ColumnCount + 1);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+        end;
+      end;
       PriorCol := -1;
       PriorRow := -1;
       FirstElevationIndex := 0;
@@ -25764,12 +25859,14 @@ begin
               end;
             else Assert(False);
           end;
+          ACell := nil;
           case FScreenObject.ElevationCount of
             ecZero:
               begin
-                CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                ACell := TCellAssignment.Create(ASegment.Layer,
                   ASegment.Row, ASegment.Col, ASegment,
-                  ASegment.SectionIndex, Annotation, amIntersect));
+                  ASegment.SectionIndex, Annotation, amIntersect);
+//                CellList.Add(ACell);
               end;
             ecOne:
               begin
@@ -25782,9 +25879,10 @@ begin
                         or  ((FScreenObject.BottomElevation = UpperBound)
                         and (ASegment.Layer = LocalGrid.LayerCount-1)))) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect);
+//                        CellList.Add(ACell);
                       end;
                     end;
                   eaNodes:
@@ -25795,9 +25893,10 @@ begin
                         or  ((FScreenObject.BottomElevation = UpperBound)
                         and (ASegment.Layer = LocalGrid.LayerCount)))) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect);
+//                        CellList.Add(ACell);
                       end;
                     end;
                   else Assert(False);
@@ -25813,9 +25912,10 @@ begin
                         ((FScreenObject.TopElevation >= Middle)
                         and (FScreenObject.BottomElevation <= Middle)) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect);
+//                        CellList.Add(ACell);
                       end;
                     end;
                   eaNodes:
@@ -25824,15 +25924,36 @@ begin
                         ((FScreenObject.TopElevation >= LowerBound)
                         and (FScreenObject.BottomElevation <= UpperBound)) then
                       begin
-                        CellList.Add(TCellAssignment.Create(ASegment.Layer,
+                        ACell := TCellAssignment.Create(ASegment.Layer,
                           ASegment.Row, ASegment.Col, ASegment,
-                          ASegment.SectionIndex, Annotation, amIntersect));
+                          ASegment.SectionIndex, Annotation, amIntersect)
+//                        CellList.Add(ACell);
                       end;
                     end;
                   else Assert(False);
                 end;
               end;
             else Assert(False);
+          end;
+          if ACell <> nil then
+          begin
+            if FScreenObject.SetValuesOfEnclosedCells then
+            begin
+              if UsedCells[ACell.Layer, ACell.Row, ACell.Column]
+                and FScreenObject.SectionClosed[ASegment.SectionIndex] then
+              begin
+                ACell.Free;
+              end
+              else
+              begin
+                CellList.Add(ACell);
+                UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+              end;
+            end
+            else
+            begin
+              CellList.Add(ACell);
+            end;
           end;
         end;
       end;
@@ -27553,6 +27674,10 @@ var
   AssignmentMethod: TAssignmentMethod;
   Segments: TCellElementSegmentList;
   Grid: TCustomModelGrid;
+  UsedCells: array of array of array of Boolean;
+  LocalModel: TCustomModel;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
   procedure GetCellBounds;
   begin
     case FScreenObject.ViewDirection of
@@ -27578,7 +27703,8 @@ var
   end;
 begin
   Assert(not FScreenObject.Deleted);
-  Grid :=  (AModel as TCustomModel).Grid;
+  LocalModel := AModel as TCustomModel;
+  Grid :=  LocalModel.Grid;
   Assert(CellList.Count = 0);
   if (Grid.ColumnCount <= 0) or (Grid.RowCount <= 0)
     or (Grid.LayerCount <=0) then
@@ -27696,6 +27822,16 @@ begin
     end;
     if FScreenObject.SetValuesOfIntersectedCells then
     begin
+      if FScreenObject.SetValuesOfEnclosedCells then
+      begin
+        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+          LocalModel.ColumnCount + 1);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+        end;
+      end;
       Segments := FScreenObject.Segments[AModel];
       SelectX := 0;
       SelectY := 0;
@@ -27793,13 +27929,30 @@ begin
         Annotation := IAnnotation;
         if Orientation = dso3D then
         begin
-          CellList.Add(TCellAssignment.Create(ASegment.Layer, ASegment.Row,
-            ASegment.Col, ASegment, ASegment.SectionIndex, Annotation, amIntersect));
+          ACell := TCellAssignment.Create(ASegment.Layer, ASegment.Row,
+            ASegment.Col, ASegment, ASegment.SectionIndex, Annotation, amIntersect);
         end
         else
         begin
-          CellList.Add(TCellAssignment.Create(0, ASegment.Row,
-            ASegment.Col, ASegment, ASegment.SectionIndex, Annotation, amIntersect));
+          ACell := TCellAssignment.Create(0, ASegment.Row,
+            ASegment.Col, ASegment, ASegment.SectionIndex, Annotation, amIntersect);
+        end;
+        if FScreenObject.SetValuesOfEnclosedCells then
+        begin
+          if UsedCells[ACell.Layer, ACell.Row, ACell.Column]
+            and FScreenObject.SectionClosed[ASegment.SectionIndex] then
+          begin
+            ACell.Free;
+          end
+          else
+          begin
+            CellList.Add(ACell);
+            UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+          end;
+        end
+        else
+        begin
+          CellList.Add(ACell);
         end;
       end;
     end;
@@ -33485,189 +33638,189 @@ end;
 //  end;
 //end;
 
-procedure TScreenObject.EliminateHoleCells(CellList: TCellAssignmentList);
-const
-  MaxSections = 1000;
-var
-  SO_Polygon: TGpcPolygonClass;
-  ClosedSections: TIntegerList;
-  ASection: NativeInt;
-  PointIndex: Integer;
-  StartIndex: integer;
-  VertexIndex: Integer;
-  EmptyPolygon: TGpcPolygonClass;
-  IntersectionPolygon: TGpcPolygonClass;
-  TranslationIndices: TIntegerList;
-  SearchQuad: TRbwQuadTree;
-  APoint: TPoint2D;
-  ContourIndex: Integer;
-  CellIndex: integer;
-  ACell: TCellAssignment;
-  SectionIndex: integer;
-  HasHoles: Boolean;
-  NewIntersectionPolygon: TGpcPolygonClass;
-  PolySectionIndex: Integer;
-  function HoleSection(ACell: TCellAssignment): Boolean;
-  var
-    ContourIndex: Integer;
-  begin
-    result := False;
-    if ClosedSections = nil then
-    begin
-      Exit;
-    end;
-    ContourIndex := TranslationIndices.IndexOf(ACell.Section);
-    if (ContourIndex >= 0) then
-    begin
-      result := SO_Polygon.Holes[ContourIndex];
-    end;
-  end;
-begin
-  Exit;
-  SO_Polygon := nil;
-  ClosedSections := nil;
-  TranslationIndices := nil;
-  EmptyPolygon := nil;
-  try
-    if Closed and (SectionCount > 1) then
-    begin
-      ClosedSections := TIntegerList.Create;
-      TranslationIndices := TIntegerList.Create;
-      for SectionIndex := 0 to SectionCount - 1 do
-      begin
-        if SectionClosed[SectionIndex] then
-        begin
-          ClosedSections.Add(SectionIndex);
-        end;
-      end;
-      if ClosedSections.Count > 1 then
-      begin
-        EmptyPolygon := TGpcPolygonClass.Create;
-        EmptyPolygon.NumberOfContours := 0;
-        SearchQuad := TRbwQuadTree.Create(nil);
-        try
-          SearchQuad.XMin := MinX;
-          SearchQuad.XMax := MaxX;
-          SearchQuad.YMin := MinY;
-          SearchQuad.YMax := MaxY;
-
-          IntersectionPolygon := nil;
-          SO_Polygon := TGpcPolygonClass.Create;
-          SO_Polygon.NumberOfContours := Min(MaxSections, ClosedSections.Count);
-          for SectionIndex := 0 to ClosedSections.Count - 1 do
-          begin
-            ASection := ClosedSections[SectionIndex];
-            Assert(SectionClosed[ASection]);
-            PolySectionIndex := SectionIndex mod MaxSections;
-            SO_Polygon.VertexCount[PolySectionIndex] :=
-              SectionLength[ASection]-1;
-            StartIndex := SectionStart[ASection];
-            for PointIndex := StartIndex to
-              SectionEnd[ASection] - 1 do
-            begin
-              VertexIndex := PointIndex-StartIndex;
-              APoint := Points[PointIndex];
-              SO_Polygon.Vertices[PolySectionIndex, VertexIndex] := APoint;
-              SearchQuad.AddPoint(APoint.x, APoint.y, Pointer(ASection));
-            end;
-            if ((SectionIndex + 1) mod MaxSections) = 0 then
-            begin
-              if IntersectionPolygon = nil then
-              begin
-                NewIntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
-                  GPC_DIFF, SO_Polygon, EmptyPolygon);
-              end
-              else
-              begin
-                NewIntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
-                  GPC_DIFF, SO_Polygon, IntersectionPolygon);
-              end;
-              IntersectionPolygon.Free;
-              IntersectionPolygon := NewIntersectionPolygon;
-              SO_Polygon.NumberOfContours := Min(MaxSections,
-                ClosedSections.Count - SectionIndex -1);
-            end;
-          end;
-
-          if (ClosedSections.Count mod MaxSections) <> 0 then
-          begin
-            if IntersectionPolygon = nil then
-            begin
-              try
-                IntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
-                  GPC_DIFF, SO_Polygon, EmptyPolygon);
-              finally
-                SO_Polygon.Free;
-                SO_Polygon := IntersectionPolygon;
-              end;
-            end
-            else
-            begin
-              NewIntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
-                GPC_DIFF, SO_Polygon, IntersectionPolygon);
-              IntersectionPolygon.Free;
-              SO_Polygon.Free;
-              SO_Polygon := NewIntersectionPolygon;
-            end;
-          end
-          else
-          begin
-            SO_Polygon.Free;
-            SO_Polygon := IntersectionPolygon;
-          end;
-
-          HasHoles := False;
-          for ContourIndex := 0 to SO_Polygon.NumberOfContours - 1 do
-          begin
-            HasHoles := SO_Polygon.Holes[ContourIndex];
-            if HasHoles then
-            begin
-              break;
-            end;
-          end;
-
-          if not HasHoles then
-          begin
-            Exit;
-          end;
-
-          for ContourIndex := 0 to SO_Polygon.NumberOfContours - 1 do
-          begin
-            APoint := SO_Polygon.Vertices[ContourIndex,0];
-            ASection := NativeInt(SearchQuad.
-              NearestPointsFirstData(APoint.x, APoint.y));
-            TranslationIndices.Add(ASection);
-          end;
-
-          if TranslationIndices.Count <> ClosedSections.Count then
-          begin
-            // The object contains closed sections some of which
-            // share edges. It is assumed that such objects have
-            // no true holes.
-            Exit;
-          end;
-          Assert(TranslationIndices.Count = ClosedSections.Count);
-
-          for CellIndex := CellList.Count - 1 downto 0 do
-          begin
-            ACell := CellList[CellIndex];
-            if HoleSection(ACell) then
-            begin
-              CellList.Delete(CellIndex);
-            end
-          end;
-        finally
-          SearchQuad.Free;
-          SO_Polygon.Free;
-        end;
-      end;
-    end
-  finally
-    ClosedSections.Free;
-    TranslationIndices.Free;
-    EmptyPolygon.Free;
-  end;
-end;
+//procedure TScreenObject.EliminateHoleCells(CellList: TCellAssignmentList);
+//const
+//  MaxSections = 1000;
+//var
+//  SO_Polygon: TGpcPolygonClass;
+//  ClosedSections: TIntegerList;
+//  ASection: NativeInt;
+//  PointIndex: Integer;
+//  StartIndex: integer;
+//  VertexIndex: Integer;
+//  EmptyPolygon: TGpcPolygonClass;
+//  IntersectionPolygon: TGpcPolygonClass;
+//  TranslationIndices: TIntegerList;
+//  SearchQuad: TRbwQuadTree;
+//  APoint: TPoint2D;
+//  ContourIndex: Integer;
+//  CellIndex: integer;
+//  ACell: TCellAssignment;
+//  SectionIndex: integer;
+//  HasHoles: Boolean;
+//  NewIntersectionPolygon: TGpcPolygonClass;
+//  PolySectionIndex: Integer;
+//  function HoleSection(ACell: TCellAssignment): Boolean;
+//  var
+//    ContourIndex: Integer;
+//  begin
+//    result := False;
+//    if ClosedSections = nil then
+//    begin
+//      Exit;
+//    end;
+//    ContourIndex := TranslationIndices.IndexOf(ACell.Section);
+//    if (ContourIndex >= 0) then
+//    begin
+//      result := SO_Polygon.Holes[ContourIndex];
+//    end;
+//  end;
+//begin
+//  Exit;
+//  SO_Polygon := nil;
+//  ClosedSections := nil;
+//  TranslationIndices := nil;
+//  EmptyPolygon := nil;
+//  try
+//    if Closed and (SectionCount > 1) then
+//    begin
+//      ClosedSections := TIntegerList.Create;
+//      TranslationIndices := TIntegerList.Create;
+//      for SectionIndex := 0 to SectionCount - 1 do
+//      begin
+//        if SectionClosed[SectionIndex] then
+//        begin
+//          ClosedSections.Add(SectionIndex);
+//        end;
+//      end;
+//      if ClosedSections.Count > 1 then
+//      begin
+//        EmptyPolygon := TGpcPolygonClass.Create;
+//        EmptyPolygon.NumberOfContours := 0;
+//        SearchQuad := TRbwQuadTree.Create(nil);
+//        try
+//          SearchQuad.XMin := MinX;
+//          SearchQuad.XMax := MaxX;
+//          SearchQuad.YMin := MinY;
+//          SearchQuad.YMax := MaxY;
+//
+//          IntersectionPolygon := nil;
+//          SO_Polygon := TGpcPolygonClass.Create;
+//          SO_Polygon.NumberOfContours := Min(MaxSections, ClosedSections.Count);
+//          for SectionIndex := 0 to ClosedSections.Count - 1 do
+//          begin
+//            ASection := ClosedSections[SectionIndex];
+//            Assert(SectionClosed[ASection]);
+//            PolySectionIndex := SectionIndex mod MaxSections;
+//            SO_Polygon.VertexCount[PolySectionIndex] :=
+//              SectionLength[ASection]-1;
+//            StartIndex := SectionStart[ASection];
+//            for PointIndex := StartIndex to
+//              SectionEnd[ASection] - 1 do
+//            begin
+//              VertexIndex := PointIndex-StartIndex;
+//              APoint := Points[PointIndex];
+//              SO_Polygon.Vertices[PolySectionIndex, VertexIndex] := APoint;
+//              SearchQuad.AddPoint(APoint.x, APoint.y, Pointer(ASection));
+//            end;
+//            if ((SectionIndex + 1) mod MaxSections) = 0 then
+//            begin
+//              if IntersectionPolygon = nil then
+//              begin
+//                NewIntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
+//                  GPC_DIFF, SO_Polygon, EmptyPolygon);
+//              end
+//              else
+//              begin
+//                NewIntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
+//                  GPC_DIFF, SO_Polygon, IntersectionPolygon);
+//              end;
+//              IntersectionPolygon.Free;
+//              IntersectionPolygon := NewIntersectionPolygon;
+//              SO_Polygon.NumberOfContours := Min(MaxSections,
+//                ClosedSections.Count - SectionIndex -1);
+//            end;
+//          end;
+//
+//          if (ClosedSections.Count mod MaxSections) <> 0 then
+//          begin
+//            if IntersectionPolygon = nil then
+//            begin
+//              try
+//                IntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
+//                  GPC_DIFF, SO_Polygon, EmptyPolygon);
+//              finally
+//                SO_Polygon.Free;
+//                SO_Polygon := IntersectionPolygon;
+//              end;
+//            end
+//            else
+//            begin
+//              NewIntersectionPolygon := TGpcPolygonClass.CreateFromOperation(
+//                GPC_DIFF, SO_Polygon, IntersectionPolygon);
+//              IntersectionPolygon.Free;
+//              SO_Polygon.Free;
+//              SO_Polygon := NewIntersectionPolygon;
+//            end;
+//          end
+//          else
+//          begin
+//            SO_Polygon.Free;
+//            SO_Polygon := IntersectionPolygon;
+//          end;
+//
+//          HasHoles := False;
+//          for ContourIndex := 0 to SO_Polygon.NumberOfContours - 1 do
+//          begin
+//            HasHoles := SO_Polygon.Holes[ContourIndex];
+//            if HasHoles then
+//            begin
+//              break;
+//            end;
+//          end;
+//
+//          if not HasHoles then
+//          begin
+//            Exit;
+//          end;
+//
+//          for ContourIndex := 0 to SO_Polygon.NumberOfContours - 1 do
+//          begin
+//            APoint := SO_Polygon.Vertices[ContourIndex,0];
+//            ASection := NativeInt(SearchQuad.
+//              NearestPointsFirstData(APoint.x, APoint.y));
+//            TranslationIndices.Add(ASection);
+//          end;
+//
+//          if TranslationIndices.Count <> ClosedSections.Count then
+//          begin
+//            // The object contains closed sections some of which
+//            // share edges. It is assumed that such objects have
+//            // no true holes.
+//            Exit;
+//          end;
+//          Assert(TranslationIndices.Count = ClosedSections.Count);
+//
+//          for CellIndex := CellList.Count - 1 downto 0 do
+//          begin
+//            ACell := CellList[CellIndex];
+//            if HoleSection(ACell) then
+//            begin
+//              CellList.Delete(CellIndex);
+//            end
+//          end;
+//        finally
+//          SearchQuad.Free;
+//          SO_Polygon.Free;
+//        end;
+//      end;
+//    end
+//  finally
+//    ClosedSections.Free;
+//    TranslationIndices.Free;
+//    EmptyPolygon.Free;
+//  end;
+//end;
 
 procedure TScreenObject.GetCellsToAssign(
   const DataSetFunction: string; OtherData: TObject;
@@ -33685,15 +33838,15 @@ begin
       DataSet, CellList, AssignmentLocation, AModel);
     else Assert(False);
   end;
-  if DuplicatesAllowed then
+  if not DuplicatesAllowed then
   begin
-    if SetValuesOfEnclosedCells then
-    begin
-      EliminateHoleCells(CellList);
-    end;
-  end
-  else
-  begin
+//    if SetValuesOfEnclosedCells then
+//    begin
+//      EliminateHoleCells(CellList);
+//    end;
+//  end
+//  else
+//  begin
     EliminateDuplicates(CellList,Model)
   end;
 end;
@@ -44027,6 +44180,10 @@ var
   index: integer;
   Mesh: IMesh3D;
   PointIndex: Integer;
+  UsedCells: array of array of array of Boolean;
+  LocalModel: TCustomModel;
+  CellIndex: Integer;
+  ACell: TCellAssignment;
   procedure GetCellBounds(LayerIndex,ColIndex: integer);
   begin
     UpperLimit := Limits[LayerIndex,ColIndex].UpperLimit;
@@ -44262,7 +44419,8 @@ begin
     EvaluatedAt := DataSet.EvaluatedAt;
     Orientation := DataSet.Orientation;
   end;
-  Mesh :=  (AModel as TCustomModel).Mesh3D;
+  LocalModel := AModel as TCustomModel;
+  Mesh :=  LocalModel.Mesh3D;
   Assert(CellList.Count = 0);
   if (Mesh.Mesh2DI.NodeCount <= 0)
     or (Mesh.LayerCount <=0) then
@@ -44279,22 +44437,6 @@ begin
   Mesh.FrontPolygons(FScreenObject.SutraAngle, EvaluatedAt, Limits);
   try
     UpdateCurrentScreenObject(FScreenObject);
-
-//    LayerLimit := -1;
-//    ColLimit := -1;
-//    case EvaluatedAt of
-//      eaBlocks:
-//        begin
-//          LayerLimit := Mesh.LayerCount;
-//          ColLimit := Mesh.Mesh2D.Elements.Count;
-//        end;
-//      eaNodes:
-//        begin
-//          LayerLimit := Mesh.LayerCount+1;
-//          ColLimit := Mesh.Mesh2D.Nodes.Count;
-//        end;
-//      else Assert(False);
-//    end;
 
     if (FScreenObject.SetValuesOfEnclosedCells
       or (FScreenObject.SetValuesOfIntersectedCells
@@ -44384,6 +44526,16 @@ begin
     end;
     if FScreenObject.SetValuesOfIntersectedCells then
     begin
+      if FScreenObject.SetValuesOfEnclosedCells then
+      begin
+        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+          LocalModel.ColumnCount + 1);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+        end;
+      end;
       Segments := FScreenObject.Segments[AModel];
       SelectX := 0;
       SelectY := 0;
@@ -44474,14 +44626,14 @@ begin
             ACellAssignment := TCellAssignment.Create(ASegment.Layer, ASegment.Row,
               ASegment.Col, ASegment, ASegment.SectionIndex, Annotation,
               amIntersect);
-            CellList.Add(ACellAssignment);
+//            CellList.Add(ACellAssignment);
           end
           else
           begin
             ACellAssignment := TCellAssignment.Create(0, ASegment.Row,
               ASegment.Col, ASegment, ASegment.SectionIndex, Annotation,
               amIntersect);
-            CellList.Add(ACellAssignment);
+//            CellList.Add(ACellAssignment);
           end;
           ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/2;
           ACellAssignment.FSutraZ := (ASegment.Y1 + ASegment.Y2)/2;
@@ -44499,6 +44651,23 @@ begin
                 ACellAssignment.FSutraY := (FScreenObject.FTopElevation
                   + FScreenObject.FBottomElevation)/2;
               end;
+          end;
+          if FScreenObject.SetValuesOfEnclosedCells then
+          begin
+            if UsedCells[ACell.Layer, ACell.Row, ACell.Column]
+              and FScreenObject.SectionClosed[ASegment.SectionIndex] then
+            begin
+              ACell.Free;
+            end
+            else
+            begin
+              CellList.Add(ACell);
+              UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+            end;
+          end
+          else
+          begin
+            CellList.Add(ACell);
           end;
         end
       end;
@@ -44546,7 +44715,7 @@ var
   Element3D: IElement3D;
   Node3D: INode3D;
   Node2: INode3D;
-  ACellAssignment: TCellAssignment;
+  ACell: TCellAssignment;
   LayerIndex: Integer;
   Intersected: Boolean;
   PriorLayer: Integer;
@@ -44558,6 +44727,10 @@ var
   Node2D: INode2D;
   AnObject: TInterfacedPhastCollectionItem;
   ObjectIndex: Integer;
+  UsedCells: array of array of array of Boolean;
+  LocalModel: TCustomModel;
+  CellIndex: Integer;
+//  ACell: TCellAssignment;
 begin
   if DataSet = nil then
   begin
@@ -44575,7 +44748,8 @@ begin
   end;
   Assert(CellList <> nil);
   Assert(CellList.Count = 0);
-  Mesh := (AModel as TCustomModel).Mesh3D;
+  LocalModel := AModel as TCustomModel;
+  Mesh := LocalModel.Mesh3D;
   IAnnotation := IntersectAnnotation(DataSetFunction, OtherData);
   EAnnotation := EncloseAnnotation(DataSetFunction, OtherData);
   UpdateCurrentScreenObject(FScreenObject);
@@ -44818,6 +44992,16 @@ begin
     end;
     if FScreenObject.SetValuesOfIntersectedCells then
     begin
+      if FScreenObject.SetValuesOfEnclosedCells then
+      begin
+        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+          LocalModel.ColumnCount + 1);
+        for CellIndex := 0 to CellList.Count - 1 do
+        begin
+          ACell := CellList[CellIndex];
+          UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+        end;
+      end;
       PriorCol := -1;
       PriorRow := -1;
       PriorLayer := -1;
@@ -44907,30 +45091,30 @@ begin
                 end;
               end;
             end;
-
+            ACell := nil;
             case Mesh.Is3DMesh of
               False:
                 begin
-                  ACellAssignment := TCellAssignment.Create(ASegment.Layer,
+                  ACell := TCellAssignment.Create(ASegment.Layer,
                     ASegment.Row, ASegment.Col, ASegment,
                     ASegment.SectionIndex, Annotation, amIntersect);
-                  CellList.Add(ACellAssignment);
-                  ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/2;
-                  ACellAssignment.FSutraY := (ASegment.Y1 + ASegment.Y2)/2;
-                  ACellAssignment.FSutraZ :=0;
+//                  CellList.Add(ACell);
+                  ACell.FSutraX := (ASegment.X1 + ASegment.X2)/2;
+                  ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/2;
+                  ACell.FSutraZ :=0;
                 end;
               True:
                 begin
                   case FScreenObject.ElevationCount of
                     ecZero:
                       begin
-                        ACellAssignment := TCellAssignment.Create(LayerIndex,
+                        ACell := TCellAssignment.Create(LayerIndex,
                           ASegment.Row, ASegment.Col, ASegment,
                           ASegment.SectionIndex, Annotation, amIntersect);
-                        CellList.Add(ACellAssignment);
-                        ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/2;
-                        ACellAssignment.FSutraY := (ASegment.Y1 + ASegment.Y2)/2;
-                        ACellAssignment.FSutraZ :=0;
+//                        CellList.Add(ACell);
+                        ACell.FSutraX := (ASegment.X1 + ASegment.X2)/2;
+                        ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/2;
+                        ACell.FSutraZ :=0;
                       end;
                     ecOne:
                       begin
@@ -44943,15 +45127,15 @@ begin
                                 or  ((FScreenObject.BottomElevation = UpperBound)
                                 and (LayerIndex = 0))) then
                               begin
-                                ACellAssignment := TCellAssignment.Create(LayerIndex,
+                                ACell := TCellAssignment.Create(LayerIndex,
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
-                                CellList.Add(ACellAssignment);
-                                ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/
+//                                CellList.Add(ACell);
+                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACellAssignment.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACellAssignment.FSutraZ :=FScreenObject.FTopElevation;
+                                ACell.FSutraZ :=FScreenObject.FTopElevation;
                               end;
                             end;
                           eaNodes:
@@ -44985,15 +45169,15 @@ begin
                               end;
                               if Intersected then
                               begin
-                                ACellAssignment := TCellAssignment.Create(LayerIndex,
+                                ACell := TCellAssignment.Create(LayerIndex,
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
-                                CellList.Add(ACellAssignment);
-                                ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/
+//                                CellList.Add(ACell);
+                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACellAssignment.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACellAssignment.FSutraZ :=FScreenObject.FTopElevation;
+                                ACell.FSutraZ :=FScreenObject.FTopElevation;
                               end;
                             end;
                           else Assert(False);
@@ -45012,15 +45196,15 @@ begin
                                 ((FScreenObject.TopElevation >= LowerBound)
                                 and (FScreenObject.BottomElevation <= UpperBound)) then
                               begin
-                                ACellAssignment := TCellAssignment.Create(LayerIndex,
+                                ACell := TCellAssignment.Create(LayerIndex,
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
-                                CellList.Add(ACellAssignment);
-                                ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/
+//                                CellList.Add(ACell);
+                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACellAssignment.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACellAssignment.FSutraZ := Middle;
+                                ACell.FSutraZ := Middle;
                               end;
                             end;
                           eaNodes:
@@ -45029,15 +45213,15 @@ begin
                                 ((FScreenObject.TopElevation >= LowerBound)
                                 and (FScreenObject.BottomElevation <= UpperBound)) then
                               begin
-                                ACellAssignment := TCellAssignment.Create(LayerIndex,
+                                ACell := TCellAssignment.Create(LayerIndex,
                                   ASegment.Row, ASegment.Col, ASegment,
                                   ASegment.SectionIndex, Annotation, amIntersect);
-                                CellList.Add(ACellAssignment);
-                                ACellAssignment.FSutraX := (ASegment.X1 + ASegment.X2)/
+//                                CellList.Add(ACell);
+                                ACell.FSutraX := (ASegment.X1 + ASegment.X2)/
                                   2;
-                                ACellAssignment.FSutraY := (ASegment.Y1 + ASegment.Y2)/
+                                ACell.FSutraY := (ASegment.Y1 + ASegment.Y2)/
                                   2;
-                                ACellAssignment.FSutraZ := (FScreenObject.FTopElevation
+                                ACell.FSutraZ := (FScreenObject.FTopElevation
                                   + FScreenObject.FBottomElevation)/2;
                               end;
                             end;
@@ -45048,6 +45232,26 @@ begin
                   end;
                 end;
               else Assert(False);
+            end;
+            if ACell <> nil then
+            begin
+              if FScreenObject.SetValuesOfEnclosedCells then
+              begin
+                if UsedCells[ACell.Layer, ACell.Row, ACell.Column]
+                  and FScreenObject.SectionClosed[ASegment.SectionIndex] then
+                begin
+                  ACell.Free;
+                end
+                else
+                begin
+                  CellList.Add(ACell);
+                  UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+                end;
+              end
+              else
+              begin
+                CellList.Add(ACell);
+              end;
             end;
           end
         end;
