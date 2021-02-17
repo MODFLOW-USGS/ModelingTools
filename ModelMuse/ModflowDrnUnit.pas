@@ -500,6 +500,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
   Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition]);
   Assert(Expression <> nil);
 

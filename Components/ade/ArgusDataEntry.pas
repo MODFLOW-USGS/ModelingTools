@@ -1047,13 +1047,13 @@ end;
 function TArgusDataEntry.GetRealValue: Double;
 begin
   Assert(DataType = dtReal);
-  if Text <> '' then
+  if (Text <> '') and (Text <> '+') and (Text <> '-') then
   begin
     result := StrToFloat(Text)
   end
   else
   begin
-    Result := 0;
+    Result := 0.0;
   end;
 end;
 

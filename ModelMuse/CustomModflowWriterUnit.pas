@@ -3775,10 +3775,6 @@ begin
   try
     RemoveNoDefinedError(NoDefinedErrorRoot);
     NoAssignmentErrorRoot := Format(StrNoBoundaryConditio, [Package.PackageIdentifier]);
-  //  NoAssignmentErrorRoot := 'No boundary conditions assigned to the '
-  //    + Package.PackageIdentifier
-  //    + ' because the object does not '
-  //    + 'set the values of either enclosed or intersected cells.';
     frmProgressMM.AddMessage(Format(StrEvaluatingSData, [Package.PackageIdentifier]));
 
     StorePotentialObservationLocationsAndNames;
@@ -3787,23 +3783,6 @@ begin
     begin
       Exit;
     end;
-
-//    SetLength(ObsCells, Model.LayerCount, Model.RowCount, Model.ColumnCount);
-//    SetLength(BoundaryCells, Model.LayerCount, Model.RowCount, Model.ColumnCount);
-//    SetLength(FMf6ObsArray, Model.LayerCount, Model.RowCount, Model.ColumnCount);
-
-//    for LayerIndex := 0 to Model.LayerCount - 1 do
-//    begin
-//      for RowIndex := 0 to Model.RowCount - 1 do
-//      begin
-//        for ColIndex := 0 to Model.ColumnCount - 1 do
-//        begin
-//          ObsCells[LayerIndex, RowIndex, ColIndex] := False;
-//          BoundaryCells[LayerIndex, RowIndex, ColIndex] := False;
-////          FMf6ObsArray[LayerIndex, RowIndex, ColIndex] := nil;
-//        end;
-//      end;
-//    end;
 
     for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
     begin
@@ -3831,19 +3810,6 @@ begin
         end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS,
           [ScreenObject.Name]));
-
-//        CellList:= TCellAssignmentList.Create;
-//        try
-//          ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList,
-//            alAll, Model);
-//          for CellIndex := 0 to CellList.Count - 1 do
-//          begin
-//            ACell := CellList[CellIndex];
-//            BoundaryCells[ACell.Layer, ACell.Row, ACell.Column] := True;
-//          end;
-//        finally
-//          CellList.Free;
-//        end;
 
         Boundary.GetCellValues(FValues, FParamValues, Model);
 

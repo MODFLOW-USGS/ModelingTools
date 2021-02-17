@@ -235,7 +235,7 @@ end;
 procedure TModflowDRN_Writer.Evaluate;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoDrainsDefined);
-  inherited;
+  inherited Evaluate;
 end;
 
 class function TModflowDRN_Writer.Extension: string;

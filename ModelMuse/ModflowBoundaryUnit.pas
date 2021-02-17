@@ -3750,6 +3750,7 @@ begin
       for BoundaryFunctionIndex := 0 to AnItem.BoundaryFormulaCount - 1 do
       begin
         Formula := AdjustedFormula(BoundaryFunctionIndex, ItemIndex);
+        { TODO -cPEST : Add PEST support for PEST here }
         ErrorFormula := Formula;
         try
           Compiler.Compile(Formula)
@@ -3829,6 +3830,7 @@ begin
             CellList.Delete(EliminateIndicies[Index]);
           end;
 
+        { TODO -cPEST : Add PEST support for PEST here }
           AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
             BoundaryFunctionIndex, Variables, DataSets, LocalModel, AScreenObject);
         finally

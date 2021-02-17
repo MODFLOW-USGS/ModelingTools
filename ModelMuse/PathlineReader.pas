@@ -1253,6 +1253,9 @@ resourcestring
   StrProgrammingErrorN = 'Programming error: no MODPATH file type selected.';
   StrThereIsSomethingW = 'There is something wrong with the PATHLINE file. P' +
   'lease contact the developer for support.';
+  StrThereWasAnErrorReading = 'There was an error reading this %0:s file. Th' +
+  'e error message was "%1:s" Contact the ModelMuse developer for more assis' +
+  'tance.';
 
 const
   StrSTARTLAY: AnsiString = 'START_LAY';
@@ -1894,6 +1897,14 @@ begin
       Beep;
       MessageDlg(Format(StrThereWasAnErrorR, ['pathline', E.Message]), mtError, [mbOK], 0);
       raise;
+    end;
+    on E: EInOutError do
+    begin
+      FLinesV5.Clear;
+      FLinesV6.Clear;
+      FLinesV7.Clear;
+      Beep;
+      MessageDlg(Format(StrThereWasAnErrorReading, ['pathline', E.Message]), mtError, [mbOK], 0);
     end;
   end;
 end;
@@ -3858,6 +3869,14 @@ begin
       PointsV7.Clear;
       Beep;
       MessageDlg(Format(StrThereWasAnErrorR, ['end point', E.Message]), mtError, [mbOK], 0);
+    end;
+    on E: EInOutError do
+    begin
+      Points.Clear;
+      PointsV6.Clear;
+      PointsV7.Clear;
+      Beep;
+      MessageDlg(Format(StrThereWasAnErrorReading, ['end point', E.Message]), mtError, [mbOK], 0);
     end;
   end;
 end;
@@ -5872,6 +5891,14 @@ begin
       FSeriesV7.Clear;
       Beep;
       MessageDlg(Format(StrThereWasAnErrorR, ['time series', E.Message]), mtError, [mbOK], 0);
+    end;
+    on E: EInOutError do
+    begin
+      FSeries.Clear;
+      FSeriesV6.Clear;
+      FSeriesV7.Clear;
+      Beep;
+      MessageDlg(Format(StrThereWasAnErrorReading, ['time series', E.Message]), mtError, [mbOK], 0);
     end;
   end;
 end;
