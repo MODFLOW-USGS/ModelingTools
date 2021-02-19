@@ -501,6 +501,8 @@ var
   ACell: TCellAssignment;
 begin
         { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter if present,
+        // record PEST DataArray
   Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition]);
   Assert(Expression <> nil);
 

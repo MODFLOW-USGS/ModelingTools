@@ -10228,11 +10228,13 @@ const
 //                when the object selects both enclosed and intersected cells.
 //    '4.3.0.41' Bug fix: Fixed a bug that prevented MT3D concentration results
 //                from being imported.
+//    '4.3.0.42' Enhancement: ModelMuse now checks for MNW2 well screens
+//                that are below the bottom of the grid.
 
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.41';
+  IIModelVersion = '4.3.0.42';
 
 function IModelVersion: string;
 begin

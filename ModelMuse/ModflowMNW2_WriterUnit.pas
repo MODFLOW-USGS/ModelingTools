@@ -24,6 +24,7 @@ type
     Destructor Destroy; override;
     class function IsScreenObjectVertical(
       AScreenObject: TScreenObject): Boolean;
+    property ScreenObject: TScreenObject read FScreenObject;
   end;
   
   TObsFileLink = class(TObject)
@@ -102,7 +103,7 @@ implementation
 uses
   ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit, GoPhastTypes,
   ModflowTimeUnit, ModflowBoundaryUnit, frmFormulaErrorsUnit, Math, Forms,
-  DataSetUnit, ObservationComparisonsUnit, ModelMuseUtilities;
+  DataSetUnit, ObservationComparisonsUnit, ModelMuseUtilities, AbstractGridUnit;
 
 resourcestring
   SignError = 'The deactivation pumping rate and reactivation pumping rate '
@@ -141,6 +142,9 @@ resourcestring
   'kage, is does not suppport the MNW2 package. MT3D-USGS does support the MNW2 package.';
 //  StrWritingDataSet3 = '  Writing Data Set 3.';
   StrNoWellID = 'The following objects failed to define WELLIDs in the MNW2 package.';
+  StrMultinodeWellScree = 'Multinode well screen top too low.';
+  StrTheTopOfTheMulti = 'The top of the multinode well screen (%0:g) defined' +
+  ' by %1:s is below the bottom of the grid (%2:g).';
 
 //  StrTheFollowingObject
 
@@ -231,6 +235,7 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrVerticalScreensAre);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrWhenPumpingCapacit);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheMNW2PackageMt3dms);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMultinodeWellScree);
 
     if Model.ModflowPackages.Mt3dBasic.IsSelected
       and (Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS) then
@@ -1302,6 +1307,8 @@ var
   C: double;
   P: Double;
   CWC: double;
+  LocalGrid: TCustomModelGrid;
+  GridBottom: double;
   procedure WriteOptionalData;
   var
     Rw: Double;
@@ -1355,11 +1362,13 @@ var
     end;
   end;
 begin
+  LocalGrid := Model.Grid;
   if Well.VerticalWell and (WellBoundary.LossType <> mltNone) then
   begin
     Cell := Well.Cells[0] as TMnw2_Cell;
     ROW := Cell.Row+1;
     COL := Cell.Column+1;
+    GridBottom := LocalGrid.CellElevation[Cell.Column, Cell.Row, LocalGrid.LayerCount];
     if WellBoundary.VerticalScreens.Count > 0 then
     begin
       for ScreenIndex := 0 to WellBoundary.VerticalScreens.Count - 1 do
@@ -1368,6 +1377,12 @@ begin
           VerticalScreens.Items[ScreenIndex] as TVerticalScreen;
         Ztop := VerticalScreen.ZTop;
         Zbotm := VerticalScreen.ZBottom;
+        if Ztop <= GridBottom then
+        begin
+          frmErrorsAndWarnings.AddError(Model, StrMultinodeWellScree,
+            Format(StrTheTopOfTheMulti,
+            [Ztop, Well.ScreenObject.Name, GridBottom]), Well.ScreenObject)
+        end;
         WriteFloat(Ztop);
         WriteFloat(Zbotm);
         WriteInteger(ROW);

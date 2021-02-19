@@ -1357,7 +1357,7 @@ var
   INFLE: string;
   PLPROC_Location: string;
 //  DataArrayIndex: Integer;
-  KrigFactorsFileName: string;
+//  KrigFactorsFileName: string;
 begin
 
   ADirectory:= GetCurrentDir;
