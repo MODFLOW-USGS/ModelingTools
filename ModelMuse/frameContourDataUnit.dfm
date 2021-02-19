@@ -233,9 +233,9 @@ inherited frameContourData: TframeContourData
       object lblModel: TLabel [5]
         Left = 203
         Top = 152
-        Width = 88
+        Width = 121
         Height = 13
-        Caption = 'Models to Contour'
+        Caption = 'Models to contour'
       end
       inherited rdgValuesToIgnore: TRbwDataGrid4
         Height = 325

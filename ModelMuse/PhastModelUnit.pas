@@ -10230,13 +10230,12 @@ const
 //                from being imported.
 //    '4.3.0.42' Enhancement: ModelMuse now checks for MNW2 well screens
 //                that are below the bottom of the grid.
-
-//               Bug fix: Fixed bug in deleting Subsidence-related interbeds.
+//    '4.3.0.43' Bug fix: Fixed bug in deleting Subsidence-related interbeds.
 
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.42';
+  IIModelVersion = '4.3.0.43';
 
 function IModelVersion: string;
 begin
