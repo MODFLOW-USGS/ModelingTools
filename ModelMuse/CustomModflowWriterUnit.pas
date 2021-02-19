@@ -1357,7 +1357,9 @@ var
   INFLE: string;
   PLPROC_Location: string;
 //  DataArrayIndex: Integer;
-//  KrigFactorsFileName: string;
+{$IFDEF PEST}
+  KrigFactorsFileName: string;
+{$ENDIF}
 begin
 
   ADirectory:= GetCurrentDir;

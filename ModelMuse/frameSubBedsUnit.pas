@@ -34,6 +34,7 @@ type
       const Value: string);
     procedure rdgSubBedStateChange(Sender: TObject; ACol, ARow: Integer;
       const Value: TCheckBoxState);
+    procedure rdgSubBedBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
   private
     FOldCount: Integer;
     FOnGetSelectedSubLayers: TGetSelectedSubLayers;
@@ -159,6 +160,18 @@ begin
   end;
 end;
 
+procedure TframeSubBeds.rdgSubBedBeforeDrawCell(Sender: TObject; ACol,
+  ARow: Integer);
+begin
+  if (ACol = Ord(scName)) and (ARow > 0) then
+  begin
+    if rdgSubBed.Cols[ACol].IndexOf(rdgSubBed.Cells[ACol, ARow]) <  ARow then
+    begin
+      rdgSubBed.Canvas.Brush.Color := clRed;
+    end;
+  end;
+end;
+
 procedure TframeSubBeds.rdgSubBedSelectCell(Sender: TObject; ACol,
   ARow: Integer; var CanSelect: Boolean);
 begin
@@ -242,17 +255,20 @@ begin
     if (rdgSubBed.Row >= 1) and (rdgSubBed.Row < rdgSubBed.RowCount) then
     begin
       rdgSubBed.DeleteRow(rdgSubBed.Row);
-      seCount.AsInteger := seCount.AsInteger - 1;
-      seCountChange(nil);
 
       if Assigned(OnGetSelectedSubLayers) then
       begin
         OnGetSelectedSubLayers(self, SubLayers);
-        if SubLayers <> nil then
+        if (SubLayers <> nil) and (SubLayers.Count > rdgSubBed.Row-1)
+          and (SubLayers.Count >= seCount.AsInteger) then
         begin
           SubLayers.Delete(rdgSubBed.Row-1);
         end;
       end;
+
+      seCount.AsInteger := seCount.AsInteger - 1;
+      seCountChange(nil);
+
     end;
   end;
 end;
@@ -334,7 +350,8 @@ begin
           if Assigned(OnGetSelectedSubLayers) then
           begin
             OnGetSelectedSubLayers(self, SubLayers);
-            if SubLayers <> nil then
+            if (SubLayers <> nil) and (SubLayers.Count <> seCount.AsInteger)
+              and (SubLayers.Count > FOldCount-1) then
             begin
               SubLayers.Delete(FOldCount-1);
             end;

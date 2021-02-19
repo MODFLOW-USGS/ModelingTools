@@ -10231,6 +10231,8 @@ const
 //    '4.3.0.42' Enhancement: ModelMuse now checks for MNW2 well screens
 //                that are below the bottom of the grid.
 
+//               Bug fix: Fixed bug in deleting Subsidence-related interbeds.
+
 
 const
   // version number of ModelMuse.

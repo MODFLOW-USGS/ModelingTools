@@ -11,8 +11,8 @@ object frameSubBeds: TframeSubBeds
   object lblCount: TLabel
     Left = 63
     Top = 324
-    Width = 45
-    Height = 16
+    Width = 37
+    Height = 13
     Anchors = [akLeft, akBottom]
     Caption = 'Number'
   end
@@ -116,11 +116,13 @@ object frameSubBeds: TframeSubBeds
     AutoIncreaseRowCount = False
     SelectedRowOrColumnColor = clAqua
     UnselectableColor = clBtnFace
+    OnBeforeDrawCell = rdgSubBedBeforeDrawCell
     OnStateChange = rdgSubBedStateChange
     ColorRangeSelection = False
     Columns = <
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -139,10 +141,12 @@ object frameSubBeds: TframeSubBeds
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = True
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -161,10 +165,12 @@ object frameSubBeds: TframeSubBeds
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = False
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -183,10 +189,12 @@ object frameSubBeds: TframeSubBeds
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = False
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -205,10 +213,12 @@ object frameSubBeds: TframeSubBeds
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = False
       end
       item
         AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -227,14 +237,16 @@ object frameSubBeds: TframeSubBeds
         WordWrapCaptions = False
         WordWrapCells = False
         CaseSensitivePicklist = False
+        CheckStyle = csCheck
         AutoAdjustColWidths = False
       end>
+    WordWrapRowCaptions = False
   end
   object seCount: TJvSpinEdit
     Left = 3
     Top = 321
     Width = 54
-    Height = 24
+    Height = 21
     CheckMinValue = True
     ButtonKind = bkClassic
     Anchors = [akLeft, akBottom]

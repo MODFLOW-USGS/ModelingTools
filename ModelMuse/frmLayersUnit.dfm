@@ -5,7 +5,6 @@ inherited frmLayers: TfrmLayers
   ClientHeight = 481
   ClientWidth = 583
   OnResize = FormResize
-  ExplicitTop = -12
   ExplicitWidth = 599
   ExplicitHeight = 520
   PixelsPerInch = 96
@@ -22,15 +21,17 @@ inherited frmLayers: TfrmLayers
     Top = 0
     Width = 441
     Height = 440
-    ActivePage = tabDiscretization
+    ActivePage = tabSWT
     Align = alClient
     TabOrder = 1
     OnChange = pcLayerGroupsChange
-    ExplicitHeight = 383
     object tabBasics: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Basics_Tab'
       Caption = 'Basics'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 350
       DesignSize = (
         433
@@ -222,7 +223,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Discretization_Tab'
       Caption = 'Discretization'
       ImageIndex = 1
-      ExplicitHeight = 390
       inline frameDiscretization: TframeDiscretization
         Left = 0
         Top = 0
@@ -230,7 +230,7 @@ inherited frmLayers: TfrmLayers
         Height = 407
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 390
+        ExplicitHeight = 407
         inherited lbl1: TLabel
           Width = 148
           Height = 18
@@ -245,7 +245,7 @@ inherited frmLayers: TfrmLayers
         end
         inherited pnlDiscritization: TPanel
           Height = 405
-          ExplicitHeight = 388
+          ExplicitHeight = 405
           inherited spl1: TSplitter
             Height = 364
             ExplicitHeight = 307
@@ -269,19 +269,22 @@ inherited frmLayers: TfrmLayers
           end
           inherited pnlPaintboxParent: TPanel
             Height = 364
-            ExplicitHeight = 347
+            ExplicitHeight = 364
             inherited pbSubLayers: TPaintBox
               Height = 332
               ExplicitHeight = 275
             end
             inherited sbInsertLine: TSpeedButton
               Top = 336
+              ExplicitTop = 336
             end
             inherited sbMoveLine: TSpeedButton
               Top = 336
+              ExplicitTop = 336
             end
             inherited sbDeleteLine: TSpeedButton
               Top = 336
+              ExplicitTop = 336
             end
           end
         end
@@ -290,7 +293,7 @@ inherited frmLayers: TfrmLayers
         end
         inherited rgMethod: TRadioGroup
           Height = 289
-          ExplicitHeight = 272
+          ExplicitHeight = 289
         end
       end
     end
@@ -299,7 +302,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'No_Delay_Beds_Tab'
       Caption = 'No-Delay Beds'
       ImageIndex = 2
-      ExplicitHeight = 390
       inline frameSubNoDelayBeds: TframeSubBeds
         Left = 0
         Top = 0
@@ -309,11 +311,12 @@ inherited frmLayers: TfrmLayers
         TabOrder = 0
         TabStop = True
         ExplicitWidth = 433
-        ExplicitHeight = 390
+        ExplicitHeight = 407
         inherited lblCount: TLabel
           Top = 381
           Width = 55
           Height = 18
+          ExplicitTop = 381
           ExplicitWidth = 55
           ExplicitHeight = 18
         end
@@ -321,23 +324,26 @@ inherited frmLayers: TfrmLayers
           Left = 349
           Top = 378
           ExplicitLeft = 349
+          ExplicitTop = 378
         end
         inherited sbInsert: TSpeedButton
           Left = 378
           Top = 378
           ExplicitLeft = 378
+          ExplicitTop = 378
         end
         inherited sbDelete: TSpeedButton
           Left = 407
           Top = 378
           ExplicitLeft = 407
+          ExplicitTop = 378
         end
         inherited rdgSubBed: TRbwDataGrid4
           Width = 433
           Height = 368
           AutoDistributeText = True
           ExplicitWidth = 433
-          ExplicitHeight = 351
+          ExplicitHeight = 368
           ColWidths = (
             64
             64
@@ -351,7 +357,7 @@ inherited frmLayers: TfrmLayers
         inherited seCount: TJvSpinEdit
           Top = 378
           Height = 26
-          ExplicitTop = 361
+          ExplicitTop = 378
           ExplicitHeight = 26
         end
       end
@@ -361,6 +367,9 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Delay_Beds_Tab'
       Caption = 'Delay Beds'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 390
       inline frameSubDelayBeds: TframeSubBeds
         Left = 0
@@ -376,6 +385,7 @@ inherited frmLayers: TfrmLayers
           Top = 381
           Width = 55
           Height = 18
+          ExplicitTop = 381
           ExplicitWidth = 55
           ExplicitHeight = 18
         end
@@ -383,16 +393,19 @@ inherited frmLayers: TfrmLayers
           Left = 349
           Top = 378
           ExplicitLeft = 328
+          ExplicitTop = 378
         end
         inherited sbInsert: TSpeedButton
           Left = 378
           Top = 378
           ExplicitLeft = 357
+          ExplicitTop = 378
         end
         inherited sbDelete: TSpeedButton
           Left = 407
           Top = 378
           ExplicitLeft = 386
+          ExplicitTop = 378
         end
         inherited rdgSubBed: TRbwDataGrid4
           Width = 433
@@ -423,7 +436,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'SWT_Tab'
       Caption = 'SWT'
       ImageIndex = 4
-      ExplicitHeight = 390
       inline frameSwt: TframeSubBeds
         Left = 0
         Top = 0
@@ -433,11 +445,12 @@ inherited frmLayers: TfrmLayers
         TabOrder = 0
         TabStop = True
         ExplicitWidth = 433
-        ExplicitHeight = 390
+        ExplicitHeight = 407
         inherited lblCount: TLabel
           Top = 381
           Width = 55
           Height = 18
+          ExplicitTop = 381
           ExplicitWidth = 55
           ExplicitHeight = 18
         end
@@ -445,23 +458,26 @@ inherited frmLayers: TfrmLayers
           Left = 349
           Top = 378
           ExplicitLeft = 349
+          ExplicitTop = 378
         end
         inherited sbInsert: TSpeedButton
           Left = 378
           Top = 378
           ExplicitLeft = 378
+          ExplicitTop = 378
         end
         inherited sbDelete: TSpeedButton
           Left = 407
           Top = 378
           ExplicitLeft = 407
+          ExplicitTop = 378
         end
         inherited rdgSubBed: TRbwDataGrid4
           Width = 433
           Height = 368
           AutoDistributeText = True
           ExplicitWidth = 433
-          ExplicitHeight = 351
+          ExplicitHeight = 368
           ColWidths = (
             64
             64
@@ -475,7 +491,7 @@ inherited frmLayers: TfrmLayers
         inherited seCount: TJvSpinEdit
           Top = 378
           Height = 26
-          ExplicitTop = 361
+          ExplicitTop = 378
           ExplicitHeight = 26
         end
       end
@@ -485,6 +501,9 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Dispersion_Tab'
       Caption = 'Dispersion'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 390
       object rdgDispersion: TRbwDataGrid4
         Left = 0
@@ -513,6 +532,7 @@ inherited frmLayers: TfrmLayers
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -536,6 +556,7 @@ inherited frmLayers: TfrmLayers
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -559,6 +580,7 @@ inherited frmLayers: TfrmLayers
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -582,6 +604,7 @@ inherited frmLayers: TfrmLayers
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -643,6 +666,9 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Conduit_Layers_Tab'
       Caption = 'Conduit Layers'
       ImageIndex = 6
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 390
       object rdgConduitLayers: TRbwDataGrid4
         Left = 0
@@ -670,6 +696,7 @@ inherited frmLayers: TfrmLayers
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -693,6 +720,7 @@ inherited frmLayers: TfrmLayers
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -716,6 +744,7 @@ inherited frmLayers: TfrmLayers
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -740,6 +769,7 @@ inherited frmLayers: TfrmLayers
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -763,6 +793,7 @@ inherited frmLayers: TfrmLayers
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -831,7 +862,6 @@ inherited frmLayers: TfrmLayers
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 383
     DesignSize = (
       583
       41)
@@ -875,7 +905,6 @@ inherited frmLayers: TfrmLayers
     Height = 440
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 383
     object GridPanel1: TGridPanel
       Left = 1
       Top = 407
@@ -884,13 +913,13 @@ inherited frmLayers: TfrmLayers
       Align = alBottom
       ColumnCollection = <
         item
-          Value = 33.333333333333340000
+          Value = 33.167082294264350000
         end
         item
-          Value = 33.333333333333340000
+          Value = 33.167082294264350000
         end
         item
-          Value = 33.834586466165410000
+          Value = 33.665835411471310000
         end>
       ControlCollection = <
         item
@@ -913,7 +942,6 @@ inherited frmLayers: TfrmLayers
           Value = 100.000000000000000000
         end>
       TabOrder = 1
-      ExplicitTop = 350
       DesignSize = (
         135
         32)
@@ -1016,7 +1044,6 @@ inherited frmLayers: TfrmLayers
       StateImages = ilTreeView
       TabOrder = 0
       OnChange = tvLayerGroupsChange
-      ExplicitHeight = 349
     end
   end
   object ilCombo: TImageList
