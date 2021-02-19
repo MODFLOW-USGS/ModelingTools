@@ -3,10 +3,10 @@
         <ProjectGuid>{E5E9B48D-41AF-41FA-87D8-2CA8DF4C4774}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="GR32_RS10_4.dproj">
+        <Projects Include="GR32_DSGN_RS10_4.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="GR32_DSGN_RS10_4.dproj">
+        <Projects Include="GR32_RS10_4.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,15 +17,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="GR32_RS10_4">
-        <MSBuild Projects="GR32_RS10_4.dproj"/>
-    </Target>
-    <Target Name="GR32_RS10_4:Clean">
-        <MSBuild Projects="GR32_RS10_4.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="GR32_RS10_4:Make">
-        <MSBuild Projects="GR32_RS10_4.dproj" Targets="Make"/>
-    </Target>
     <Target Name="GR32_DSGN_RS10_4">
         <MSBuild Projects="GR32_DSGN_RS10_4.dproj"/>
     </Target>
@@ -35,14 +26,23 @@
     <Target Name="GR32_DSGN_RS10_4:Make">
         <MSBuild Projects="GR32_DSGN_RS10_4.dproj" Targets="Make"/>
     </Target>
+    <Target Name="GR32_RS10_4">
+        <MSBuild Projects="GR32_RS10_4.dproj"/>
+    </Target>
+    <Target Name="GR32_RS10_4:Clean">
+        <MSBuild Projects="GR32_RS10_4.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GR32_RS10_4:Make">
+        <MSBuild Projects="GR32_RS10_4.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="GR32_RS10_4;GR32_DSGN_RS10_4"/>
+        <CallTarget Targets="GR32_DSGN_RS10_4;GR32_RS10_4"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="GR32_RS10_4:Clean;GR32_DSGN_RS10_4:Clean"/>
+        <CallTarget Targets="GR32_DSGN_RS10_4:Clean;GR32_RS10_4:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="GR32_RS10_4:Make;GR32_DSGN_RS10_4:Make"/>
+        <CallTarget Targets="GR32_DSGN_RS10_4:Make;GR32_RS10_4:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
