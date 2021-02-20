@@ -325,7 +325,7 @@ inherited frmModflowOptions: TfrmModflowOptions
         Top = 396
         Width = 409
         Height = 17
-        Caption = 'Write binary grid file (MODFLOW-6)'
+        Caption = 'Write binary grid file (MODFLOW-6) (Inverse of NOGRB option)'
         TabOrder = 9
       end
       object cbUseGsflowFormat: TCheckBox
