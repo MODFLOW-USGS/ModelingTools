@@ -311,6 +311,9 @@ var
   ParameterName: string;
   MultiplierValue: double;
 begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
 //  TemplateCharacter := nil;
   Inc(FBoundaryIndex);
 
@@ -323,7 +326,18 @@ begin
     WriteInteger(Drn_Cell.Row+1);
   end;
   WriteInteger(Drn_Cell.Column+1);
-  WriteFloat(Drn_Cell.Elevation);
+
+  if WritingTemplate and (Drn_Cell.ElevationPest <> '') then
+  begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
+    WriteFloat(Drn_Cell.Elevation);
+  end
+  else
+  begin
+    WriteFloat(Drn_Cell.Elevation);
+  end;
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
@@ -338,33 +352,21 @@ begin
     begin
       MultiplierValue := Drn_Cell.Conductance / Drn_Cell.ConductanceParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue);
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
+    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else
   begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
+    WriteFloat(Drn_Cell.Elevation);
     WriteFloat(Drn_Cell.Conductance);
   end;
-//  if Drn_Cell.ConductanceParameterName = '' then
-//  begin
-//    WriteFloat(Drn_Cell.Conductance);
-//  end
-//  else
-//  begin
-    //WriteFloat(Drn_Cell.Conductance * Drn_Cell.ConductanceParameterValue);
-//  end;
 
-//  if Drn_Cell.TimeSeriesName = '' then
-//  begin
-//    WriteFloat(Drn_Cell.Conductance);
-//  end
-//  else
-//  begin
-//    WriteString(' ');
-//    WriteString(Drn_Cell.TimeSeriesName);
-//    WriteString(' ');
-//  end;
 
-//  WriteFloat(Drn_Cell.Conductance);
   WriteIface(Drn_Cell.IFace);
   WriteBoundName(Drn_Cell);
   if Model.DisvUsed then

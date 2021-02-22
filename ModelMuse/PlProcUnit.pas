@@ -737,7 +737,15 @@ begin
         begin
           WriteString('calc_kriging_factors_auto_2d( &');
           NewLine;
-          WriteString(Format('  target_clist=%s, &', [KDisName]));
+          if Model.ModelSelection = msModflow2015 then
+          begin
+            WriteString(Format('  target_clist=%0:s%1:d, &',
+              [KDisName, FileProperties.Layer+1]));
+          end
+          else
+          begin
+            WriteString(Format('  target_clist=%s, &', [KDisName]));
+          end;
           NewLine;
           WriteString(Format('  source_clist=PilotPoints%d, &', [PPIndex+1]));
           NewLine;
@@ -805,24 +813,33 @@ begin
           GrbFileName := ChangeFileExt(GrbFileName, '.dis.grb');
         end;
         GrbFileName := ExtractFileName(GrbFileName);
-        WriteString(Format('%0:s = read_mf6_grid_specs(file=''%1:s'', &',
-          [KDisName, GrbFileName]));
-        NewLine;
-        WriteString('  dimensions=2, &');
-        NewLine;
+
         for LayerIndex := 0 to Model.LayerCount - 1 do
         begin
+          WriteString(Format('%0:s%2:d = read_mf6_grid_specs(file=''%1:s'', &',
+            [KDisName, GrbFileName, LayerIndex+1]));
+          NewLine;
+          WriteString('  dimensions=2, &');
+          NewLine;
           WriteString(Format('  slist_layer_idomain=id%0:d; layer=%0:d, &',
             [LayerIndex + 1]));
           NewLine;
-        end;
-        for LayerIndex := 0 to Model.LayerCount - 1 do
-        begin
           WriteString(Format('  plist_layer_bottom =bot%0:d; layer=%0:d, &',
             [LayerIndex + 1]));
           NewLine;
+          if LayerIndex = 0 then
+          begin
+            WriteString('  plist_top = top)');
+          end
+          else
+          begin
+            WriteString('  )');
+          end;
+          NewLine;
         end;
-        WriteString('  plist_top = top)');
+//        for LayerIndex := 0 to Model.LayerCount - 1 do
+//        begin
+//        end;
         NewLine;
         NewLine;
       end;
@@ -1030,8 +1047,16 @@ begin
     ColIndex := 2;
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
-      WriteString(Format('read_list_file(reference_clist=''%s'',skiplines=1, &',
-        [KDisName]));
+      if Model.ModelSelection = msModflow2015 then
+      begin
+        WriteString(Format('read_list_file(reference_clist=''%0:s%1:d'',skiplines=1, &',
+          [KDisName, LayerIndex+1]));
+      end
+      else
+      begin
+        WriteString(Format('read_list_file(reference_clist=''%s'',skiplines=1, &',
+          [KDisName]));
+      end;
       NewLine;
       SListName := Format('s_PIndex%0:d', [LayerIndex + 1]);
       WriteString(Format('  slist=%0:s;column=%1:d, &',
@@ -1095,12 +1120,20 @@ begin
     WriteString('# Modfify data values');
     NewLine;
     {$REGION 'Modify data values'}
-    WriteString(Format('temp=new_plist(reference_clist=%s,value=0.0)',
-      [KDisName]));
-    NewLine;
 
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
+      if Model.ModelSelection = msModflow2015 then
+      begin
+        WriteString(Format('temp%1:d=new_plist(reference_clist=%0:s%1:d,value=0.0)',
+          [KDisName, LayerIndex+1]));
+      end
+      else
+      begin
+        WriteString(Format('temp%1:d=new_plist(reference_clist=%0:s,value=0.0)',
+          [KDisName, LayerIndex+1]));
+      end;
+      NewLine;
       WriteString('# Setting values for layer');
       WriteInteger(LayerIndex + 1);
       NewLine;
@@ -1138,8 +1171,8 @@ begin
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
-              '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
-              [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1]));
+              '    temp=%0:s%3:d.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
+              [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1, LayerIndex+1]));
             NewLine;
             if AParam.Transform = ptLog then
             begin
@@ -1153,7 +1186,7 @@ begin
             WriteString('    # Write interpolated values in zones');
             NewLine;
             WriteString(Format(
-              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp',
+              '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp%0:d',
               [LayerIndex + 1, ParameterIndex+1]));
             NewLine;
           end

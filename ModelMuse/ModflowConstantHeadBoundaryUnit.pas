@@ -46,6 +46,8 @@ type
     TimeSeriesName: string;
     HeadParameterName: string;
     HeadParameterValue: double;
+    StartHeadPest: string;
+    EndHeadPest: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -97,7 +99,8 @@ type
     //
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
   public
@@ -418,7 +421,7 @@ end;
 procedure TChdCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   ChdStorage: TChdStorage;
   CellList: TCellAssignmentList;
@@ -442,11 +445,13 @@ begin
           begin
             StartingHead := Expression.DoubleResult;
             StartAnnotation := ACell.Annotation;
+            StartHeadPest := PestName;
           end;
         1:
           begin
             EndingHead := Expression.DoubleResult;
             EndAnnotation := ACell.Annotation;
+            EndHeadPest := PestName;
           end;
         else Assert(False);
       end;
@@ -1055,6 +1060,8 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(EndAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(HeadParameterName));
+  WriteCompInt(Comp, Strings.IndexOf(StartHeadPest));
+  WriteCompInt(Comp, Strings.IndexOf(EndHeadPest));
 end;
 
 procedure TChdRecord.RecordStrings(Strings: TStringList);
@@ -1063,6 +1070,8 @@ begin
   Strings.Add(EndAnnotation);
   Strings.Add(TimeSeriesName);
   Strings.Add(HeadParameterName);
+  Strings.Add(StartHeadPest);
+  Strings.Add(EndHeadPest);
 end;
 
 procedure TChdRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1077,6 +1086,8 @@ begin
   EndAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   HeadParameterName := Annotations[ReadCompInt(Decomp)];
+  StartHeadPest := Annotations[ReadCompInt(Decomp)];
+  EndHeadPest := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TChdStorage }

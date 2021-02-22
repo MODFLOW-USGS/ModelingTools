@@ -181,7 +181,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
@@ -755,13 +756,18 @@ end;
 
 procedure TMvrItems.AssignCellList(Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-  Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject);
+  Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+  PestName: string);
 var
   MvrStorage: TMvrSourceStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
 //  Assert(BoundaryFunctionIndex in [HeadPosition,ConductancePosition]);
   Assert(Expression <> nil);
 

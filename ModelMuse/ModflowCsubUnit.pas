@@ -230,7 +230,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel); override;
    public
@@ -1156,7 +1157,7 @@ end;
 procedure TCSubCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   CSubStorage: TCSubStorage;
   CellList: TCellAssignmentList;
@@ -1164,6 +1165,10 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 

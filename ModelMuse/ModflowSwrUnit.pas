@@ -83,7 +83,8 @@ type
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel); override;
     procedure InitializeTimeLists(ListOfTimeLists: TList;
@@ -542,13 +543,17 @@ end;
 procedure TCustomSwrListCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   ValueStorage: TSwrStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 

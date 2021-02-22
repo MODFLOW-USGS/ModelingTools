@@ -5,7 +5,7 @@ interface
 uses Windows, SysUtils, Classes, ZLib, RbwParser, GoPhastTypes,
   OrderedCollectionUnit, ModflowTransientListParameterUnit, DataSetUnit,
   RealListUnit, TempFiles, SubscriptionUnit, FormulaManagerUnit, SparseDataSets,
-  System.Generics.Collections;
+  System.Generics.Collections, System.AnsiStrings;
 
 type
     // @name defines how a formula is interpreted.
@@ -524,7 +524,8 @@ type
     // @link(TCustomBoundaryStorage BoundaryStorage)
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); virtual; abstract;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); virtual; abstract;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -572,7 +573,8 @@ type
     // @link(TCustomBoundaryStorage BoundaryStorage)
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -1083,7 +1085,7 @@ implementation
 uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
   GIS_Functions, IntListUnit, ModflowCellUnit, frmProgressUnit, Dialogs,
-  EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit;
+  EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';
@@ -1417,7 +1419,7 @@ end;
 procedure TCustomMF_ArrayBoundColl.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 begin
   // this is only used with cell lists.
   Assert(False);
@@ -3518,6 +3520,9 @@ var
   NumberOfRows: Integer;
   NumberOfColumns: Integer;
   IDomainArray: TDataArray;
+  UnmodifiedFormula: string;
+  PestParam: TModflowSteadyParameter;
+  PestParamName: string;
 begin
   if Count = 0 then
   begin
@@ -3726,7 +3731,8 @@ begin
                 UpdateCurrentScreenObject(AScreenObject);
 
                 AssignCellList(Expression, CellList, Boundaries[0, AModel],
-                  BoundaryFunctionIndex, Variables, DataSets, LocalModel, AScreenObject);
+                  BoundaryFunctionIndex, Variables, DataSets, LocalModel,
+                  AScreenObject, PestParamName);
 
                 LocalModel.DataArrayManager.CacheDataArrays;
               end;
@@ -3750,6 +3756,21 @@ begin
       for BoundaryFunctionIndex := 0 to AnItem.BoundaryFormulaCount - 1 do
       begin
         Formula := AdjustedFormula(BoundaryFunctionIndex, ItemIndex);
+        // The UnmodifiedFormula might by a PEST parameter or a TDataArray
+        // that is modified by PEST.
+        UnmodifiedFormula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
+        // handle the situation if it is a PEST parameter
+        PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
+        if PestParam = nil then
+        begin
+          PestParamName := '';
+        end
+        else
+        begin
+          Formula := ReplaceText(Formula, UnmodifiedFormula,
+            FloatToStr(PestParam.Value));
+          PestParamName := PestParam.ParameterName;
+        end;
         { TODO -cPEST : Add PEST support for PEST here }
         ErrorFormula := Formula;
         try
@@ -3832,7 +3853,8 @@ begin
 
         { TODO -cPEST : Add PEST support for PEST here }
           AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
-            BoundaryFunctionIndex, Variables, DataSets, LocalModel, AScreenObject);
+            BoundaryFunctionIndex, Variables, DataSets, LocalModel,
+            AScreenObject, PestParamName);
         finally
           Variables.Free;
           DataSets.Free;
@@ -3883,6 +3905,18 @@ begin
                   begin
                     Formula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
                   end;
+                  // The UnmodifiedFormula might by a PEST parameter or a TDataArray
+                  // that is modified by PEST.
+                  PestParam := LocalModel.GetPestParameterByName(Formula);
+                  if PestParam = nil then
+                  begin
+                    PestParamName := '';
+                  end
+                  else
+                  begin
+                    Formula := FloatToStr(PestParam.Value);
+                    PestParamName := PestParam.ParameterName;
+                  end;
                   Compiler.Compile(Formula);
                   Expression := Compiler.CurrentExpression;
 
@@ -3896,7 +3930,8 @@ begin
                   UpdateCurrentScreenObject(AScreenObject);
 
                   AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
-                    BoundaryFunctionIndex, Variables, DataSets, LocalModel, AScreenObject);
+                    BoundaryFunctionIndex, Variables, DataSets, LocalModel,
+                    AScreenObject, PestParamName);
                 end;
               finally
                 Variables.Free;

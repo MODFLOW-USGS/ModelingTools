@@ -456,6 +456,9 @@ var
   ParameterName: string;
   MultiplierValue: double;
 begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
   Inc(FBoundaryIndex);
 
   Well_Cell := Cell as TWell_Cell;
@@ -481,7 +484,7 @@ begin
     begin
       MultiplierValue := Well_Cell.PumpingRate / Well_Cell.PumpingParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue);
+    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else
   begin

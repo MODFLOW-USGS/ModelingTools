@@ -238,7 +238,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
   end;
@@ -1103,14 +1104,20 @@ end;
 procedure TMnw1WellCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject;
+  PestName: string);
 var
   Mnw1Storage: TMnw1Storage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  Assert(BoundaryFunctionIndex in [DesiredPumpingRatePosition..ReactivationPumpingRatePosition]);
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
+  Assert(BoundaryFunctionIndex in
+    [DesiredPumpingRatePosition..ReactivationPumpingRatePosition]);
   Assert(Expression <> nil);
 
   Mnw1Storage := BoundaryStorage as TMnw1Storage;

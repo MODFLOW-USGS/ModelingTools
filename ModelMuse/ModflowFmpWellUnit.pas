@@ -121,7 +121,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
   public
     function TimeListCount(AModel: TBaseModel): integer; override;
   end;
@@ -667,13 +668,18 @@ end;
 procedure TFmpWellCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject;
+  PestName: string);
 var
   FmpWellStorage: TFmpWellStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [FmpWellMaxPumpingRatePosition,
     FmpWellPumpOnlyIfCropRequiresWaterPosition,

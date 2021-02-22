@@ -846,6 +846,9 @@ var
   ParameterName: string;
   MultiplierValue: double;
 begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   UsedLocations := T2DSparseBooleanArray.Create(SPASmall, SPASmall);
   try
@@ -886,7 +889,7 @@ begin
           begin
             MultiplierValue := EvtCell.EvapotranspirationRate / EvtCell.ETParameterValue;
           end;
-          WriteTemplateFormula(ParameterName, MultiplierValue);
+          WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
         end
         else
         begin

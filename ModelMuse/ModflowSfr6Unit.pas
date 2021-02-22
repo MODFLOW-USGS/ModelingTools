@@ -184,7 +184,8 @@ type
       override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
   public
@@ -1330,7 +1331,7 @@ end;
 procedure TSfrMf6Collection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   Sfr6Storage: TSfrMf6Storage;
   CellList: TCellAssignmentList;
@@ -1339,6 +1340,10 @@ var
   RequiredLength: Integer;
   FractionAnnotation: string;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
 //  Assert(BoundaryFunctionIndex in [HeadPosition,ConductancePosition]);
   Assert(Expression <> nil);
 

@@ -341,6 +341,9 @@ var
   ParameterName: string;
   MultiplierValue: double;
 begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
   Inc(FBoundaryIndex);
 
   Riv_Cell := Cell as TRiv_Cell;
@@ -367,7 +370,7 @@ begin
     begin
       MultiplierValue := Riv_Cell.Conductance / Riv_Cell.ConductanceParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue);
+    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else
   begin

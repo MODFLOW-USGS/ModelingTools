@@ -115,7 +115,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel); override;
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
@@ -620,7 +621,7 @@ end;
 procedure TLktInitConcCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   LktInitConcStorage: TLktInitConcStorage;
   CellList: TCellAssignmentList;
@@ -628,6 +629,10 @@ var
   ACell: TCellAssignment;
 //  LocalScreenObject: TScreenObject;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [TLktInitConcItem.InitConcPosition]);
   Assert(Expression <> nil);

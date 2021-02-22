@@ -20,6 +20,9 @@ type
     ConductanceAnnotation: string;
     ElevationAnnotation: string;
     ReturnFractionAnnotation: string;
+    ElevationPest: string;
+    ConductancePest: string;
+    ReturnFractionPest: string;
     ReturnCell: TCellLocation;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -101,7 +104,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -526,7 +530,7 @@ end;
 procedure TDrtCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   DrtStorage: TDrtStorage;
   CellList: TCellAssignmentList;
@@ -535,6 +539,10 @@ var
   DrtBoundaryGroup: TDrtBoundary;
   ReturnLocation: TCellLocation;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition,
     ReturnPosition]);
   Assert(Expression <> nil);
@@ -558,17 +566,20 @@ begin
           begin
             Elevation := Expression.DoubleResult;
             ElevationAnnotation := ACell.Annotation;
+            ElevationPest := PestName;
           end;
         ConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
+            ConductancePest := PestName;
             ReturnCell := ReturnLocation;
           end;
         ReturnPosition:
           begin
             ReturnFraction := Expression.DoubleResult;
             ReturnFractionAnnotation := ACell.Annotation;
+            ReturnFractionPest := PestName;
           end
         else
           Assert(False);
@@ -1381,9 +1392,9 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ElevationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ReturnFractionAnnotation));
-//  WriteCompString(Comp, ConductanceAnnotation);
-//  WriteCompString(Comp, ElevationAnnotation);
-//  WriteCompString(Comp, ReturnFractionAnnotation);
+  WriteCompInt(Comp, Strings.IndexOf(ElevationPest));
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
+  WriteCompInt(Comp, Strings.IndexOf(ReturnFractionPest));
   WriteCompCell(Comp, ReturnCell);
 end;
 
@@ -1392,6 +1403,9 @@ begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(ElevationAnnotation);
   Strings.Add(ReturnFractionAnnotation);
+  Strings.Add(ElevationPest);
+  Strings.Add(ConductancePest);
+  Strings.Add(ReturnFractionPest);
 end;
 
 procedure TDrtRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1405,9 +1419,9 @@ begin
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   ElevationAnnotation := Annotations[ReadCompInt(Decomp)];
   ReturnFractionAnnotation := Annotations[ReadCompInt(Decomp)];
-//  ConductanceAnnotation := ReadCompString(Decomp, Annotations);
-//  ElevationAnnotation := ReadCompString(Decomp, Annotations);
-//  ReturnFractionAnnotation := ReadCompString(Decomp, Annotations);
+  ElevationPest := Annotations[ReadCompInt(Decomp)];
+  ConductancePest := Annotations[ReadCompInt(Decomp)];
+  ReturnFractionPest := Annotations[ReadCompInt(Decomp)];
   ReturnCell := ReadCompCell(Decomp);
 end;
 

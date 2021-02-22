@@ -197,6 +197,9 @@ var
   ParameterName: string;
   MultiplierValue: double;
 begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
   CHD_Cell := Cell as TCHD_Cell;
   LocalLayer := Model.
     DataSetLayerToModflowLayer(CHD_Cell.Layer);
@@ -220,7 +223,7 @@ begin
     begin
       MultiplierValue := CHD_Cell.StartingHead / CHD_Cell.HeadParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue);
+    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else
   begin

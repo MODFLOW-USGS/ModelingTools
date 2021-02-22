@@ -2025,6 +2025,7 @@ that affects the model output should also have a comment. }
     FPestTemplateLines: TStringList;
 //    FMeshFileName: string;
     FPilotPointDataArrays: TDataArrayList;
+    FPestParamDictionay: TDictionary<string, TModflowSteadyParameter>;
 
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
     procedure SetSomeSegmentsUpToDate(const Value: boolean); virtual; abstract;
@@ -3357,6 +3358,8 @@ that affects the model output should also have a comment. }
       const BatchFileName: string);
     property CanDrawContours: Boolean read FCanDrawContours
       write SetCanDrawContours;
+    function GetPestParameterByName(PestParamName: string): TModflowSteadyParameter;
+    procedure ClearPestParmDictionary;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -10231,11 +10234,13 @@ const
 //    '4.3.0.42' Enhancement: ModelMuse now checks for MNW2 well screens
 //                that are below the bottom of the grid.
 //    '4.3.0.43' Bug fix: Fixed bug in deleting Subsidence-related interbeds.
+//    '4.3.0.44' Bug fix: Not in released version. Fixed export of PLPROC
+//                script.
 
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.43';
+  IIModelVersion = '4.3.0.44';
 
 function IModelVersion: string;
 begin
@@ -29267,6 +29272,7 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+  FPestParamDictionay.Free;
   FPilotPointData.Free;
   FPilotPointDataArrays.Free;
   FVelocityVectors.Free;
@@ -31863,6 +31869,11 @@ begin
   end;
 end;
 
+procedure TCustomModel.ClearPestParmDictionary;
+begin
+  FreeAndNil(FPestParamDictionay);
+end;
+
 procedure TCustomModel.ClearPval;
 begin
   FPValFile.Clear;
@@ -31870,6 +31881,7 @@ begin
   FPestPValFile.Clear;
   FPestPvalTemplate.Clear;
   FilesToDelete.Clear;
+  ClearPestParmDictionary;
 end;
 
 procedure TCustomModel.ClearViewedItems;
@@ -46561,6 +46573,32 @@ begin
     FPathLine := TPathLineReader.Create(self);
   end;
   result := FPathLine;
+end;
+
+function TCustomModel.GetPestParameterByName(
+  PestParamName: string): TModflowSteadyParameter;
+var
+  ParameterIndex: Integer;
+  AParam: TModflowSteadyParameter;
+begin
+  if FPestParamDictionay = nil then
+  begin
+    FPestParamDictionay := TDictionary<string, TModflowSteadyParameter>.Create;
+
+    for ParameterIndex := 0 to ModflowSteadyParameters.Count - 1 do
+    begin
+      AParam := ModflowSteadyParameters[ParameterIndex];
+      if AParam.ParameterType = ptPEST then
+      begin
+        FPestParamDictionay.Add(UpperCase(AParam.ParameterName), AParam);
+      end;
+    end;
+  end;
+
+  if not FPestParamDictionay.TryGetValue(UpperCase(PestParamName), result) then
+  begin
+    result := nil;
+  end;
 end;
 
 function TCustomModel.GetPestUsed: Boolean;

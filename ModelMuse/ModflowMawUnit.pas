@@ -226,7 +226,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
     function AllowInactiveMf6Cells: boolean; override;
@@ -469,7 +470,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel); override;
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
@@ -1035,7 +1037,7 @@ end;
 procedure TMawWellScreenCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   MawStorage: TMawSteadyConnectionStorage;
   CellList: TCellAssignmentList;
@@ -1043,6 +1045,10 @@ var
   ACell: TCellAssignment;
 //  LocalScreenObject: TScreenObject;
 begin
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [TMawWellScreenItem.ScreenBottomPosition .. TMawWellScreenItem.SkinRadiusPosition]);
   Assert(Expression <> nil);
@@ -2661,14 +2667,19 @@ end;
 procedure TMawWellCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   MawStorage: TMawTransientStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  Assert(BoundaryFunctionIndex in [FlowingWellElevationPosition..FlowingWellReductionLengthPostion]);
+        { TODO -cPEST : Add PEST support for PEST here }
+        // record PEST parameter name if present.
+        // record PEST DataArray name if present.
+        // cache and restore PEST data.
+  Assert(BoundaryFunctionIndex in
+    [FlowingWellElevationPosition..FlowingWellReductionLengthPostion]);
   Assert(Expression <> nil);
 
   MawStorage := BoundaryStorage as TMawTransientStorage;

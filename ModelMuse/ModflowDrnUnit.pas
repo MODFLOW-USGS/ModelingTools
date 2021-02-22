@@ -32,6 +32,8 @@ type
     MvrIndex: Integer;
     ConductanceParameterName: string;
     ConductanceParameterValue: double;
+    ElevationPest: string;
+    ConductancePest: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -119,7 +121,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -160,6 +163,8 @@ type
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
     function GetConductanceParameterValue: double;
+    function GetConductancePest: string;
+    function GetElevationPest: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -198,6 +203,8 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
     property ConductanceParameterName: string read GetConductanceParameterName;
     property ConductanceParameterValue: double read GetConductanceParameterValue;
+    property ElevationPest: string read GetElevationPest;
+    property ConductancePest: string read GetConductancePest;
   end;
 
   // @name represents the MODFLOW Drain boundaries associated with
@@ -493,16 +500,13 @@ end;
 procedure TDrnCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
 var
   DrnStorage: TDrnStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter if present,
-        // record PEST DataArray
   Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition]);
   Assert(Expression <> nil);
 
@@ -522,11 +526,13 @@ begin
           begin
             Elevation := Expression.DoubleResult;
             ElevationAnnotation := ACell.Annotation;
+            ElevationPest := PestName;
           end;
         ConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
+            ConductancePest := PestName;
           end;
         else
           Assert(False);
@@ -642,6 +648,11 @@ begin
   result := Values.ElevationAnnotation;
 end;
 
+function TDrn_Cell.GetElevationPest: string;
+begin
+  result := Values.ElevationPest;
+end;
+
 function TDrn_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -684,6 +695,11 @@ end;
 function TDrn_Cell.GetConductanceParameterValue: double;
 begin
   result := Values.ConductanceParameterValue;
+end;
+
+function TDrn_Cell.GetConductancePest: string;
+begin
+  result := Values.ConductancePest;
 end;
 
 function TDrn_Cell.GetLayer: integer;
@@ -1159,6 +1175,8 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ElevationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
+  WriteCompInt(Comp, Strings.IndexOf(ElevationPest));
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -1169,6 +1187,8 @@ begin
   Strings.Add(ElevationAnnotation);
   Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
+  Strings.Add(ElevationPest);
+  Strings.Add(ConductancePest);
 end;
 
 procedure TDrnRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1183,6 +1203,8 @@ begin
   ElevationAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
+  ElevationPest := Annotations[ReadCompInt(Decomp)];
+  ConductancePest := Annotations[ReadCompInt(Decomp)];
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 end;

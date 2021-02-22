@@ -94,7 +94,8 @@ type
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject); override;
+      Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+      PestName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -440,7 +441,8 @@ end;
 procedure TSutraGeneralTransportCollection.AssignCellList(
   Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
-  Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject);
+  Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
+  PestName: string);
 begin
   inherited;
   // this needs to be changed?

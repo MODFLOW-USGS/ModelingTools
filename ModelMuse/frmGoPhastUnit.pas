@@ -2373,6 +2373,9 @@ resourcestring
   StrSWasNotARecog = '"%s" was not a recognized file type.';
   StrSingularValueDecom = 'Singular value decomposition is deactivated. Do y' +
   'ou want to activate it?';
+  StrPESTIsActiveButT = 'PEST is active but the PEST directory "%0:s" does n' +
+  'ot exist. Check the PEST directory in "Model|PEST Properties';
+  StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -12806,6 +12809,7 @@ var
   ModelOptions: TModelOptions;
   DisvGrid: TModflowDisvGrid;
   ZoneBudgetLocation: string;
+  PlProcLocation: string;
 begin
   inherited;
   if FExporting then
@@ -12961,6 +12965,24 @@ begin
         PhastModel.AddBinaryFile(PhastModel.ModflowLocation);
       end;
 
+      if PhastModel.PestUsed then
+      begin
+        if not TDirectory.Exists(PhastModel.ProgramLocations.PestDirectory) then
+        begin
+          Beep;
+          MessageDlg(Format(StrPESTIsActiveButT,
+            [PhastModel.ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
+          Exit;
+        end;
+        PlProcLocation := GetPLPROC_Location(FileName, PhastModel);
+        if not TFile.Exists(PlProcLocation) then
+        begin
+          Beep;
+          MessageDlg(Format(StrPLPROCWasNotFound,
+            [PhastModel.ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
+          Exit;
+        end;
+      end;
 
       frmErrorsAndWarnings.Clear;
 

@@ -58,6 +58,7 @@ type
       }
   TErrorType = (etError, etWarning);
   TArrayWritingFormat = (awfModflow, awfMt3dms, awfModflow_6);
+  TPestParamMethod = (ppmMultiply, ppmAdd);
 
   TBoundaryFlowObservationLocation = record
 //    FCell: TCellLocation;
@@ -95,7 +96,7 @@ type
     // MODFLOW input file to be exported.
     class function Extension: string; virtual; abstract;
     procedure WriteTemplateFormula(ParameterName: string;
-      MultiplierValue: double);
+      ModifierValue: double; Method: TPestParamMethod);
     procedure WritePestTemplateLine(AFileName: string);
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID: string);
@@ -1023,6 +1024,8 @@ procedure SetCurrentNameFileWriter(NameFileWriter: TCustomNameFileWriter);
 procedure AddOpenListFileLine(ListFile: string; OpenListFile: Boolean;
   BatchFile: TStringList; ProgramLocations: TProgramLocations);
 
+function GetPLPROC_Location(const FileName: string; Model: TCustomModel): string;
+
 resourcestring
   StrObservationFactor = '(Observation factor for the ' + sLineBreak + '%s)';
   StrNoBoundaryConditio = 'No boundary conditions assigned to the %s because' +
@@ -1118,7 +1121,7 @@ resourcestring
   'e values of zero at that cell.';
   Str0sMultipliedByParam = '%0:s (multiplied by %1:s = %2:g)';
   StrPestFormulaFormat = ' %0:s                   %1:s             %2:s%1:s ' +
-  '* %3:g%0:s ';
+  '%4:s %3:g%0:s ';
   StrNoAlternativeSolve = 'No alternative solver specified';
   StrInTheMODFLOWName = 'In the MODFLOW Name file dialog box, the option to ' +
   'specify an alternative solver was selected but none was specified.';
@@ -8994,17 +8997,28 @@ begin
 end;
 
 procedure TCustomFileWriter.WriteTemplateFormula(ParameterName: string;
-MultiplierValue: double);
+  ModifierValue: double; Method: TPestParamMethod);
 var
   TemplateCharacter: string;
   ExtendedTemplateCharacter: string;
+  Operation: string;
 begin
   TemplateCharacter := Model.PestProperties.TemplateCharacter;
   ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+  case Method of
+    ppmMultiply:
+      begin
+        Operation := '*';
+      end;
+    ppmAdd:
+      begin
+        Operation := '+';
+      end;
+  end;
   WriteString
     (Format(StrPestFormulaFormat,
     [ExtendedTemplateCharacter, TemplateCharacter, ParameterName,
-    MultiplierValue]));
+    ModifierValue, Operation]));
 end;
 
 procedure TCustomModflowWriter.WriteTemplateHeader;

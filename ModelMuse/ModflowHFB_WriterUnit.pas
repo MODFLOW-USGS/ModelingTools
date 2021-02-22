@@ -2040,6 +2040,9 @@ var
   HydraulicConductivity: Double;
   TimeIndex: Integer;
 begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
   for TimeIndex := FPriorIndex to FStartTimes.Count - 1 do
   begin
     if FStartTimes[TimeIndex] <= time then
@@ -2095,7 +2098,7 @@ begin
         else
         begin
           Writer.WriteTemplateFormula(FParameter.ParameterName,
-            HydraulicConductivity/Thickness/FParameter.Value);
+            HydraulicConductivity/Thickness/FParameter.Value, ppmMultiply);
         end;
       end
       else

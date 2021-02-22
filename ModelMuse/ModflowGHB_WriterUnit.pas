@@ -306,6 +306,9 @@ var
   ParameterName: string;
   MultiplierValue: double;
 begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
   Inc(FBoundaryIndex);
 
   GHB_Cell := Cell as TGhb_Cell;
@@ -332,7 +335,7 @@ begin
     begin
       MultiplierValue := GHB_Cell.Conductance / GHB_Cell.ConductanceParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue);
+    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else
   begin
