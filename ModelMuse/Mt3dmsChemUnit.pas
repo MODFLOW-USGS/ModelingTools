@@ -52,6 +52,7 @@ type
     StartingTime: double;
     EndingTime: double;
     ConcentrationAnnotation: array of string;
+    ConcentrationPest: array of string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -655,10 +656,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(Expression <> nil);
 
   ConcStorage := BoundaryStorage as TMt3dmsConcStorage;
@@ -674,6 +671,7 @@ begin
     begin
       Concentration[BoundaryFunctionIndex] := Expression.DoubleResult;
       ConcentrationAnnotation[BoundaryFunctionIndex] := ACell.Annotation;
+      ConcentrationPest[BoundaryFunctionIndex] := PestName;
     end;
   end;
 end;
@@ -947,6 +945,8 @@ begin
     SetLength(Mt3dmsConclArray[BoundaryIndex].Concentration, ComponentCount);
     SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationAnnotation,
       ComponentCount);
+    SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPest,
+      ComponentCount);
   end;
   inherited;
 end;
@@ -1172,6 +1172,7 @@ procedure TMt3dmsConc_Cell.SetConcentrationLength(ALength: Integer);
 begin
   SetLength(FValues.Concentration, ALength);
   SetLength(FValues.ConcentrationAnnotation, ALength);
+  SetLength(FValues.ConcentrationPest, ALength);
 end;
 
 procedure TMt3dmsConc_Cell.SetLayer(const Value: integer);
@@ -1647,6 +1648,10 @@ begin
   begin
     WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotation[Index]));
   end;
+  for Index := 0 to Length(ConcentrationPest) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPest[Index]));
+  end;
 end;
 
 procedure TMt3dmsConcentrationRecord.RecordStrings(Strings: TStringList);
@@ -1656,6 +1661,10 @@ begin
   for Index := 0 to Length(ConcentrationAnnotation) - 1 do
   begin
     Strings.Add(ConcentrationAnnotation[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPest) - 1 do
+  begin
+    Strings.Add(ConcentrationPest[Index]);
   end;
 end;
 
@@ -1671,6 +1680,7 @@ begin
   Count := ReadCompInt(Decomp);
   SetLength(Concentration, Count);
   SetLength(ConcentrationAnnotation, Count);
+  SetLength(ConcentrationPest, Count);
   for Index := 0 to Count - 1 do
   begin
     Concentration[Index] := ReadCompReal(Decomp);
@@ -1678,6 +1688,10 @@ begin
   for Index := 0 to Count - 1 do
   begin
     ConcentrationAnnotation[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPest[Index] := Annotations[ReadCompInt(Decomp)];
   end;
 end;
 
@@ -2090,6 +2104,7 @@ var
   Boundary: TMt3dmsConcStorage;
   FirstArray: TDataArray;
 begin
+  { TODO -cPEST : Does PEST need to be supported here? }
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
   Boundary := Boundaries[ItemIndex, AModel] as TMt3dmsConcStorage;
@@ -2151,10 +2166,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(Expression <> nil);
 
   ConcStorage := BoundaryStorage as TMt3dmsConcStorage;
@@ -2170,6 +2181,7 @@ begin
     begin
       Concentration[BoundaryFunctionIndex] := Expression.DoubleResult;
       ConcentrationAnnotation[BoundaryFunctionIndex] := ACell.Annotation;
+      ConcentrationPest[BoundaryFunctionIndex] := PestName;
     end;
   end;
 end;
@@ -2458,6 +2470,8 @@ begin
   begin
     SetLength(Mt3dmsConclArray[BoundaryIndex].Concentration, ComponentCount);
     SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationAnnotation,
+      ComponentCount);
+    SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPest,
       ComponentCount);
   end;
   inherited;
