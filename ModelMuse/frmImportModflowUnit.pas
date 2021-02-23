@@ -51,8 +51,9 @@ type
     rdeLastRow: TRbwDataEntry;
     lblPolygon: TLabel;
     fedPolygon: TJvFilenameEdit;
-    procedure btnOKClick(Sender: TObject);
+    rgMethod: TRadioGroup;
     procedure fedNameFileChange(Sender: TObject);
+    procedure btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
@@ -542,6 +543,7 @@ begin
       ImportParameters.ModelType := mtParent;
       ImportParameters.NameFile := NameFileName;
       ImportParameters.GridOrigin := TGridOrigin(comboGridOrigin.ItemIndex);
+      ImportParameters.AssignmentMethod := TCellAssignmentMethod(rgMethod.ItemIndex);
       ImportModflow2005(ImportParameters);
       DeleteFile(NameFileName);
       if PValFileName <> '' then

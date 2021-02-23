@@ -15,6 +15,8 @@ type
   TGridOrigin = (goUpperLeft, goLowerLeft);
 
   THeadFileType = (hftText, hftBinary);
+  
+  TCellAssignmentMethod = (camInterpolate, camIntersected);
 
   TImportParameters = Class
     ListFileName: string;
@@ -34,6 +36,7 @@ type
     LastCol: Integer;
     FirstRow: Integer;
     LastRow: Integer;
+    AssignmentMethod: TCellAssignmentMethod;
     destructor Destroy; override;
   end;
 
@@ -7507,7 +7510,14 @@ begin
 
     FModel.AddScreenObject(GlobalCellCenterScreenObject);
     GlobalCellCenterScreenObject.ElevationCount := ecZero;
-    GlobalCellCenterScreenObject.SetValuesByInterpolation := True;
+    if FImporter.FImportParameters.AssignmentMethod = camInterpolate then
+    begin
+      GlobalCellCenterScreenObject.SetValuesByInterpolation := True;
+    end
+    else
+    begin
+      GlobalCellCenterScreenObject.SetValuesOfIntersectedCells := True;
+    end;
     GlobalCellCenterScreenObject.EvaluatedAt := eaBlocks;
     GlobalCellCenterScreenObject.Visible := False;
     GlobalCellCenterScreenObject.Capacity := FGrid.RowCount * FGrid.ColumnCount;

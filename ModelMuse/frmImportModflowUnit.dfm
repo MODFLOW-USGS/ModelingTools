@@ -76,15 +76,11 @@ inherited frmImportModflow: TfrmImportModflow
     Top = 0
     Width = 491
     Height = 340
-    ActivePage = tabSubmodel
+    ActivePage = tabModel
     Align = alClient
     TabOrder = 0
     object tabModel: TTabSheet
       Caption = 'Model'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         483
         307)
@@ -199,6 +195,21 @@ inherited frmImportModflow: TfrmImportModflow
         Items.Strings = (
           'Upper left'
           'Lower left')
+      end
+      object rgMethod: TRadioGroup
+        Left = 8
+        Top = 201
+        Width = 472
+        Height = 105
+        Caption = 'Method of assigning values to arrays'
+        ItemIndex = 0
+        Items.Strings = (
+          
+            'Nearest point interpolation (better if you want to change the gr' +
+            'id)'
+          'Intersected (faster if you don'#39't change the grid)')
+        TabOrder = 6
+        WordWrap = True
       end
     end
     object tabSubmodel: TTabSheet

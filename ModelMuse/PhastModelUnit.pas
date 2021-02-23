@@ -10236,11 +10236,13 @@ const
 //    '4.3.0.43' Bug fix: Fixed bug in deleting Subsidence-related interbeds.
 //    '4.3.0.44' Bug fix: Not in released version. Fixed export of PLPROC
 //                script.
+//    '4.3.0.45' Enhancement: Allowed the user to choose how to assign gridded
+//                data when importing existing MODFLOW models.
 
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.44';
+  IIModelVersion = '4.3.0.45';
 
 function IModelVersion: string;
 begin
