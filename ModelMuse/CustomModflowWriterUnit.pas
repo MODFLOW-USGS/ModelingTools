@@ -1302,22 +1302,21 @@ begin
     if not FileExists(result) then
     begin
       TestedLocations.Add(result);
-//      frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
-//        Format(StrPLPROCWasNotFound, [result]));
       result := IncludeTrailingPathDelimiter(
         ExtractFileDir(Application.ExeName)) + StrPlprocexe;
       if not FileExists(result) then
       begin
         TestedLocations.Add(result);
-//        frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
-//          Format(StrPLPROCWasNotFound, [result]));
         result := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
           + StrPlprocexe;
         if not FileExists(result) then
         begin
           TestedLocations.Add(result);
+          if Model.PestUsed then
+          begin
           frmErrorsAndWarnings.AddWarning(Model, StrPLPROCNotFound,
             Format(StrPLPROCWasNotFound, [TestedLocations.DelimitedText]));
+          end;
           result := StrPlprocexe;
         end;
       end;

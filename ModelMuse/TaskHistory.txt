@@ -27050,6 +27050,9 @@ object TTaskHistory
     item
       Date = 44250.000000000000000000
       Categories.Strings = (
-        'Import')
+        'Import'
+        'core code'
+        'PEST'
+        'Pest parameter substitution')
     end>
 end

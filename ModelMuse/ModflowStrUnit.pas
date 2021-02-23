@@ -1069,10 +1069,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in [StreamStagePosition, StreamConductancePosition,
     StreamBedTopPosition, StreamBedBottomPosition, StreamFlowPosition,
     StreamWidthPosition, StreamSlopePosition, StreamRoughnessPosition]);
