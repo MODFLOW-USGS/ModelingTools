@@ -23,6 +23,7 @@ type
     Cell: TCellLocation;
     BoundaryValue: double;
     BoundaryValueAnnotation: string;
+    BoundaryValuePest: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -470,10 +471,6 @@ var
   Compiler: TRbwParser;
   NewFormula: string;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in [BoundaryValuePosition]);
   Assert(Expression <> nil);
 
@@ -505,6 +502,7 @@ begin
           begin
             BoundaryValue := Expression.DoubleResult;
             BoundaryValueAnnotation := ACell.Annotation;
+            BoundaryValuePest := PestName;
           end;
         else
           Assert(False);
@@ -628,11 +626,13 @@ begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, BoundaryValue);
   WriteCompInt(Comp, Strings.IndexOf(BoundaryValueAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(BoundaryValuePest));
 end;
 
 procedure TFhbRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(BoundaryValueAnnotation);
+  Strings.Add(BoundaryValuePest);
 end;
 
 procedure TFhbRecord.Restore(Decomp: TDecompressionStream;
@@ -641,6 +641,7 @@ begin
   Cell := ReadCompCell(Decomp);
   BoundaryValue := ReadCompReal(Decomp);
   BoundaryValueAnnotation := Annotations[ReadCompInt(Decomp)];
+  BoundaryValuePest := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TFhbStorage }

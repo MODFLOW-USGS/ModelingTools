@@ -2,10 +2,11 @@
 
 interface
 
-uses Windows, SysUtils, Classes, ZLib, RbwParser, GoPhastTypes,
+uses Winapi.Windows, System.UITypes, SysUtils, Classes, ZLib, RbwParser,
+  GoPhastTypes,
   OrderedCollectionUnit, ModflowTransientListParameterUnit, DataSetUnit,
   RealListUnit, TempFiles, SubscriptionUnit, FormulaManagerUnit, SparseDataSets,
-  System.Generics.Collections, System.AnsiStrings;
+  System.Generics.Collections, System.StrUtils;
 
 type
     // @name defines how a formula is interpreted.

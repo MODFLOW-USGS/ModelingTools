@@ -441,7 +441,7 @@ var
 begin
   DeleteIECacheEntry(URL_String);
 
-  result := False;
+//  result := False;
   if InternetAttemptConnect(0) <> ERROR_SUCCESS then
   begin
     raise EInternetConnectionError.Create(StrFailedToEstablish);

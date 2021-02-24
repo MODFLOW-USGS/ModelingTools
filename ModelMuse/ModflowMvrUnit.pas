@@ -27,6 +27,7 @@ type
     EndingTime: double;
     MvrIndex: Integer;
     ValueAnnotations: array of string;
+    ValuePests: array of string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -764,11 +765,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
-//  Assert(BoundaryFunctionIndex in [HeadPosition,ConductancePosition]);
   Assert(Expression <> nil);
 
   MvrStorage := BoundaryStorage as TMvrSourceStorage;
@@ -785,6 +781,7 @@ begin
       Assert(BoundaryFunctionIndex < Length(Values));
       Values[BoundaryFunctionIndex] := Expression.DoubleResult;
       ValueAnnotations[BoundaryFunctionIndex] := ACell.Annotation;
+      ValuePests[BoundaryFunctionIndex] := PestName;
     end;
   end;
 end;
@@ -915,6 +912,8 @@ begin
     SetLength(MvrRecordArray[BoundaryIndex].Values, ReceiverCount);
     SetLength(MvrRecordArray[BoundaryIndex].MvrTypes, ReceiverCount);
     SetLength(MvrRecordArray[BoundaryIndex].ValueAnnotations,
+      ReceiverCount);
+    SetLength(MvrRecordArray[BoundaryIndex].ValuePests,
       ReceiverCount);
   end;
   inherited;
@@ -1176,6 +1175,10 @@ begin
   begin
     WriteCompInt(Comp, Strings.IndexOf(ValueAnnotations[Index]));
   end;
+  for Index := 0 to Length(ValuePests) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ValuePests[Index]));
+  end;
   WriteCompInt(Comp, MvrIndex);
 end;
 
@@ -1186,6 +1189,10 @@ begin
   for Index := 0 to Length(ValueAnnotations) - 1 do
   begin
     Strings.Add(ValueAnnotations[Index]);
+  end;
+  for Index := 0 to Length(ValuePests) - 1 do
+  begin
+    Strings.Add(ValuePests[Index]);
   end;
 end;
 
@@ -1202,6 +1209,7 @@ begin
   SetLength(Values, Count);
   SetLength(MvrTypes, Count);
   SetLength(ValueAnnotations, Count);
+  SetLength(ValuePests, Count);
   for Index := 0 to Count - 1 do
   begin
     Values[Index] := ReadCompReal(Decomp);
@@ -1213,6 +1221,10 @@ begin
   for Index := 0 to Count - 1 do
   begin
     ValueAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    ValuePests[Index] := Annotations[ReadCompInt(Decomp)];
   end;
   MvrIndex := ReadCompInt(Decomp)
 end;
@@ -1421,6 +1433,7 @@ begin
   SetLength(FValues.Values, ALength);
   SetLength(FValues.MvrTypes, ALength);
   SetLength(FValues.ValueAnnotations, ALength);
+  SetLength(FValues.ValuePests, ALength);
 end;
 
 end.

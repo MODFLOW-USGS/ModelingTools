@@ -139,6 +139,7 @@ type
     StartingTime: double;
     EndingTime: double;
     StressOffsetAnnotation: string;
+    StressOffsetPest: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -931,11 +932,13 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(StressOffsetAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(StressOffsetPest));
 end;
 
 procedure TCSubRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(StressOffsetAnnotation);
+  Strings.Add(StressOffsetPest);
 end;
 
 procedure TCSubRecord.Restore(Decomp: TDecompressionStream;
@@ -946,6 +949,7 @@ begin
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   StressOffsetAnnotation := Annotations[ReadCompInt(Decomp)];
+  StressOffsetPest := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TCsubStorage }
@@ -1165,10 +1169,6 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 
@@ -1186,6 +1186,7 @@ begin
       begin
         StressOffset := Expression.DoubleResult;
         StressOffsetAnnotation := ACell.Annotation;
+        StressOffsetPest := PestName;
       end;
     except on E: EMathError do
       begin
@@ -1193,6 +1194,7 @@ begin
         begin
           StressOffset := 0;
           StressOffsetAnnotation := StrStressOffsetSetTo;
+          StressOffsetPest := PestName;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 

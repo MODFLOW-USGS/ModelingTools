@@ -12,7 +12,8 @@ unit frame3DViewUnit;
 interface
 
 uses
-  Windows, SysUtils, Types, Classes, Variants, Graphics, Controls, Forms,
+  Winapi.Windows, System.UITypes, SysUtils, Types, Classes, Variants, Graphics,
+  Controls, Forms,
   Dialogs, GLWidget, arcball, OpenGL;
 
 type

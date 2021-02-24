@@ -97,6 +97,7 @@ type
     class function Extension: string; virtual; abstract;
     procedure WriteTemplateFormula(ParameterName: string;
       ModifierValue: double; Method: TPestParamMethod);
+    procedure WriteTemplateReplace(ParameterName: string);
     procedure WritePestTemplateLine(AFileName: string);
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID: string);
@@ -8993,6 +8994,15 @@ begin
   finally
     UsedLocations.Free;
   end;
+end;
+
+procedure TCustomFileWriter.WriteTemplateReplace(ParameterName: string);
+var
+  TemplateCharacter: string;
+begin
+  TemplateCharacter := Model.PestProperties.TemplateCharacter;
+  WriteString(Format('%0:s                %1:s%0:s',
+    [TemplateCharacter, ParameterName]));
 end;
 
 procedure TCustomFileWriter.WriteTemplateFormula(ParameterName: string;

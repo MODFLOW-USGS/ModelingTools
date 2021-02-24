@@ -18,6 +18,8 @@ type
     EndingTime: double;
     HydraulicConductivityAnnotation: string;
     ThicknessAnnotation: string;
+    HydraulicConductivityPest: string;
+    ThicknessPest: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -785,12 +787,16 @@ begin
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(ThicknessAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(ThicknessPest));
+  WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityPest));
 end;
 
 procedure THfbRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(ThicknessAnnotation);
   Strings.Add(HydraulicConductivityAnnotation);
+  Strings.Add(ThicknessPest);
+  Strings.Add(HydraulicConductivityPest);
 end;
 
 procedure THfbRecord.Restore(Decomp: TDecompressionStream;
@@ -804,6 +810,8 @@ begin
   EndingTime := ReadCompReal(Decomp);
   ThicknessAnnotation := Annotations[ReadCompInt(Decomp)];
   HydraulicConductivityAnnotation := Annotations[ReadCompInt(Decomp)];
+  ThicknessPest := Annotations[ReadCompInt(Decomp)];
+  HydraulicConductivityPest := Annotations[ReadCompInt(Decomp)];
 end;
 
 { THfbStorage }
@@ -921,10 +929,6 @@ var
   LocalScreenObject: TScreenObject;
   ErrorAnnotation: string;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in [ThicknessPosition, HydraulicConductivityPosition]);
   Assert(Expression <> nil);
 
@@ -945,11 +949,13 @@ begin
             begin
               Thickness := Expression.DoubleResult;
               ThicknessAnnotation := ACell.Annotation;
+              ThicknessPest := PestName;
             end;
           HydraulicConductivityPosition:
             begin
               HydraulicConductivity := Expression.DoubleResult;
               HydraulicConductivityAnnotation := ACell.Annotation;
+              HydraulicConductivityPest := PestName;
             end;
           else
             Assert(False);
@@ -966,12 +972,14 @@ begin
                 Thickness := 0;
                 ThicknessAnnotation := StrHFBThicknessSetTo;
                 ErrorAnnotation := ThicknessAnnotation;
+                ThicknessPest := PestName;
               end;
             HydraulicConductivityPosition:
               begin
                 HydraulicConductivity := 0;
                 HydraulicConductivityAnnotation := StrHFBHydraulicConduc;
                 ErrorAnnotation := HydraulicConductivityAnnotation;
+                HydraulicConductivityPest := PestName;
               end;
             else
               Assert(False);

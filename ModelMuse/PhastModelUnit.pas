@@ -10238,11 +10238,13 @@ const
 //                script.
 //    '4.3.0.45' Enhancement: Allowed the user to choose how to assign gridded
 //                data when importing existing MODFLOW models.
+//    '4.3.0.46' Bug fix: Not in released version. Fixed double export of drain
+//                elevation.
 
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.45';
+  IIModelVersion = '4.3.0.46';
 
 function IModelVersion: string;
 begin

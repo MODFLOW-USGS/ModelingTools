@@ -2066,6 +2066,8 @@ var
 
 implementation
 
+{$WARN SYMBOL_PLATFORM OFF}
+
 uses
   {$IFDEF Win64}
   GR32_Blend,

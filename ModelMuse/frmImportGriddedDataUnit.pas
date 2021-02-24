@@ -3,7 +3,8 @@ unit frmImportGriddedDataUnit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Winapi.Windows, System.UITypes, Messages, SysUtils, Variants, Classes,
+  Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, Grids, RbwDataGrid4, JvPageList,  ExtCtrls,
   JvExControls, ComCtrls, StdCtrls, Buttons, Mask, FastGEO, JvExMask, JvSpin,
   DataSetUnit, ScreenObjectUnit, ValueArrayStorageUnit, GoPhastTypes,

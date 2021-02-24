@@ -126,8 +126,8 @@ end;
 
 destructor TSoilItem.Destroy;
 var
-  LocalModel: TPhastModel;
-  Position: integer;
+//  LocalModel: TPhastModel;
+//  Position: integer;
   Unlocker: TDefineGlobalIntegerObject;
 begin
   if (Model <> nil) and (SoilName <> '')  then
@@ -142,7 +142,7 @@ begin
         Unlocker.Free;
       end;
     end;
-    LocalModel := Model as TPhastModel;
+//    LocalModel := Model as TPhastModel;
 //    Position := LocalModel.GlobalVariables.IndexOfVariable(SoilName);
 //    if Position >= 0 then
 //    begin

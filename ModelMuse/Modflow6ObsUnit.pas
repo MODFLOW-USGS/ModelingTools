@@ -463,7 +463,7 @@ function TModflow6Obs.GetName: string;
 begin
   if FName <> '' then
   begin
-    if FName[1] in ['0'..'9'] then
+    if CharInSet(FName[1], ['0'..'9']) then
     begin
       FName := '_' + FName
     end;

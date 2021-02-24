@@ -47,6 +47,8 @@ resourcestring
 
 implementation
 
+{$WARN SYMBOL_PLATFORM OFF}
+
 uses
   ModflowUnitNumbers, frmProgressUnit, SysUtils, GoPhastTypes,
   DataSetUnit, Mt3dmsChemSpeciesUnit, ModflowOutputControlUnit, Mt3dmsTimesUnit,

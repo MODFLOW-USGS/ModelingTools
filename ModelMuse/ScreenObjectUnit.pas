@@ -44654,20 +44654,20 @@ begin
           end;
           if FScreenObject.SetValuesOfEnclosedCells then
           begin
-            if UsedCells[ACell.Layer, ACell.Row, ACell.Column]
+            if UsedCells[ACellAssignment.Layer, ACellAssignment.Row, ACellAssignment.Column]
               and FScreenObject.SectionClosed[ASegment.SectionIndex] then
             begin
-              ACell.Free;
+              ACellAssignment.Free;
             end
             else
             begin
-              CellList.Add(ACell);
-              UsedCells[ACell.Layer, ACell.Row, ACell.Column] := True;
+              CellList.Add(ACellAssignment);
+              UsedCells[ACellAssignment.Layer, ACellAssignment.Row, ACellAssignment.Column] := True;
             end;
           end
           else
           begin
-            CellList.Add(ACell);
+            CellList.Add(ACellAssignment);
           end;
         end
       end;

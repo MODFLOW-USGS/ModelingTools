@@ -16,6 +16,7 @@ type
     MXACTD: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FPestParamUsed: Boolean;
 //    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -63,7 +64,8 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit;
+  RbwParser, DataSetUnit, Forms, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
+  ModflowParameterUnit;
 
 resourcestring
   StrTheFollowingDrain = 'The following Drain observation names may be valid' +
@@ -310,11 +312,11 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
+  Param: TModflowSteadyParameter;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
-    // handle pest parameter
+    // handle pest data
     // handle multiply or add
-//  TemplateCharacter := nil;
   Inc(FBoundaryIndex);
 
   Drn_Cell := Cell as TDrn_Cell;
@@ -327,12 +329,18 @@ begin
   end;
   WriteInteger(Drn_Cell.Column+1);
 
-  if WritingTemplate and (Drn_Cell.ElevationPest <> '') then
+  if (Drn_Cell.ElevationPest <> '') or (Drn_Cell.ConductancePest <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+  if Model.PestUsed and WritingTemplate and (Drn_Cell.ElevationPest <> '') then
   begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
     // handle multiply or add
-    WriteFloat(Drn_Cell.Elevation);
+    // handle PEST data set.
+    WriteTemplateReplace(Drn_Cell.ElevationPest);
+//    WriteFloat(Drn_Cell.Elevation);
   end
   else
   begin
@@ -343,6 +351,7 @@ begin
     and WritingTemplate
     and ( Drn_Cell.ConductanceParameterName <> '') then
   begin
+    Assert(Drn_Cell.ConductancePest = '');
     ParameterName := Drn_Cell.ConductanceParameterName;
     if Drn_Cell.ConductanceParameterValue = 0 then
     begin
@@ -350,22 +359,32 @@ begin
     end
     else
     begin
-      MultiplierValue := Drn_Cell.Conductance / Drn_Cell.ConductanceParameterValue;
+      MultiplierValue := Drn_Cell.Conductance
+        / Drn_Cell.ConductanceParameterValue;
     end;
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
     // handle multiply or add
     WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
+  else if Model.PestUsed and WritingTemplate
+    and (Drn_Cell.ConductancePest <> '') then
+  begin
+    Param := Model.GetPestParameterByName(Drn_Cell.ConductancePest);
+    if Param.Value = 0 then
+    begin
+      MultiplierValue := 0.0;
+    end
+    else
+    begin
+      MultiplierValue := Drn_Cell.Conductance / Param.Value;
+    end;
+    WriteTemplateFormula(Drn_Cell.ConductancePest, MultiplierValue, ppmMultiply);
+  end
   else
   begin
-    { TODO -cPEST : Add PEST support for PEST here }
-    // handle pest parameter
-    // handle multiply or add
-    WriteFloat(Drn_Cell.Elevation);
     WriteFloat(Drn_Cell.Conductance);
   end;
-
 
   WriteIface(Drn_Cell.IFace);
   WriteBoundName(Drn_Cell);
@@ -469,6 +488,7 @@ var
 //  NameOfFile: string;
   ShouldWriteObservationFile: Boolean;
 begin
+  FPestParamUsed := False;
   if MvrWriter <> nil then
   begin
     Assert(MvrWriter is TModflowMvrWriter);
@@ -535,8 +555,8 @@ begin
     WriteModflow6FlowObs(NameOfFile, FEvaluationType);
   end;
 
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParamValues.Count > 0) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try

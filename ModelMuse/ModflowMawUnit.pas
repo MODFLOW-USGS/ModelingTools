@@ -56,6 +56,18 @@ type
     ScalingLengthAnnotation: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
+
+    FlowingWellElevationPest: string;
+    FlowingWellConductancePest: string;
+    FlowingWellReductionLengthPest: string;
+    RatePest: string;
+    WellHeadPest: string;
+    HeadLimitPest: string;
+    MinRatePest: string;
+    MaxRatePest: string;
+    PumpElevationPest: string;
+    ScalingLengthPest: string;
+
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -1875,6 +1887,18 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(MaxRateAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(PumpElevationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ScalingLengthAnnotation));
+
+  WriteCompInt(Comp, Strings.IndexOf(FlowingWellElevationPest));
+  WriteCompInt(Comp, Strings.IndexOf(FlowingWellConductancePest));
+  WriteCompInt(Comp, Strings.IndexOf(FlowingWellReductionLengthPest));
+  WriteCompInt(Comp, Strings.IndexOf(RatePest));
+  WriteCompInt(Comp, Strings.IndexOf(WellHeadPest));
+  WriteCompInt(Comp, Strings.IndexOf(HeadLimitPest));
+  WriteCompInt(Comp, Strings.IndexOf(MinRatePest));
+  WriteCompInt(Comp, Strings.IndexOf(MaxRatePest));
+  WriteCompInt(Comp, Strings.IndexOf(PumpElevationPest));
+  WriteCompInt(Comp, Strings.IndexOf(ScalingLengthPest));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -1891,6 +1915,18 @@ begin
   Strings.Add(MaxRateAnnotation);
   Strings.Add(PumpElevationAnnotation);
   Strings.Add(ScalingLengthAnnotation);
+
+  Strings.Add(FlowingWellElevationPest);
+  Strings.Add(FlowingWellConductancePest);
+  Strings.Add(FlowingWellReductionLengthPest);
+  Strings.Add(RatePest);
+  Strings.Add(WellHeadPest);
+  Strings.Add(HeadLimitPest);
+  Strings.Add(MinRatePest);
+  Strings.Add(MaxRatePest);
+  Strings.Add(PumpElevationPest);
+  Strings.Add(ScalingLengthPest);
+
 end;
 
 procedure TMawTransientRecord.Restore(Decomp: TDecompressionStream;
@@ -1927,6 +1963,17 @@ begin
   MaxRateAnnotation := Annotations[ReadCompInt(Decomp)];
   PumpElevationAnnotation := Annotations[ReadCompInt(Decomp)];
   ScalingLengthAnnotation := Annotations[ReadCompInt(Decomp)];
+
+  FlowingWellElevationPest := Annotations[ReadCompInt(Decomp)];
+  FlowingWellConductancePest := Annotations[ReadCompInt(Decomp)];
+  FlowingWellReductionLengthPest := Annotations[ReadCompInt(Decomp)];
+  RatePest := Annotations[ReadCompInt(Decomp)];
+  WellHeadPest := Annotations[ReadCompInt(Decomp)];
+  HeadLimitPest := Annotations[ReadCompInt(Decomp)];
+  MinRatePest := Annotations[ReadCompInt(Decomp)];
+  MaxRatePest := Annotations[ReadCompInt(Decomp)];
+  PumpElevationPest := Annotations[ReadCompInt(Decomp)];
+  ScalingLengthPest := Annotations[ReadCompInt(Decomp)];
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
@@ -2674,10 +2721,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [FlowingWellElevationPosition..FlowingWellReductionLengthPostion]);
   Assert(Expression <> nil);
@@ -2698,51 +2741,61 @@ begin
           begin
             FlowingWellElevation := Expression.DoubleResult;
             FlowingWellElevationAnnotation := ACell.Annotation;
+            FlowingWellElevationPest := PestName;
           end;
         FlowingWellConductancePosition:
           begin
             FlowingWellConductance := Expression.DoubleResult;
             FlowingWellConductanceAnnotation := ACell.Annotation;
+            FlowingWellConductancePest := PestName;
           end;
         RatePosition:
           begin
             Rate := Expression.DoubleResult;
             RateAnnotation := ACell.Annotation;
+            RatePest := PestName;
           end;
         WellHeadPosition:
           begin
             WellHead := Expression.DoubleResult;
             WellHeadAnnotation := ACell.Annotation;
+            WellHeadPest := PestName;
           end;
         HeadLimitPosition:
           begin
             HeadLimit := Expression.DoubleResult;
             HeadLimitAnnotation := ACell.Annotation;
+            HeadLimitPest := PestName;
           end;
         MinRatePosition:
           begin
             MinRate := Expression.DoubleResult;
             MinRateAnnotation := ACell.Annotation;
+            MinRatePest := PestName;
           end;
         MaxRatePosition:
           begin
             MaxRate := Expression.DoubleResult;
             MaxRateAnnotation := ACell.Annotation;
+            MaxRatePest := PestName;
           end;
         PumpElevationPosition:
           begin
             PumpElevation := Expression.DoubleResult;
             PumpElevationAnnotation := ACell.Annotation;
+            PumpElevationPest := PestName;
           end;
         ScalingLengthPosition:
           begin
             ScalingLength := Expression.DoubleResult;
             ScalingLengthAnnotation := ACell.Annotation;
+            ScalingLengthPest := PestName;
           end;
         FlowingWellReductionLengthPostion:
           begin
             FlowingWellReductionLength := Expression.DoubleResult;
             FlowingWellReductionLengthAnnotation := ACell.Annotation;
+            FlowingWellReductionLengthPest := PestName;
           end
         else
           Assert(False);

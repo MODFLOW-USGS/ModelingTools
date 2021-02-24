@@ -30,6 +30,9 @@ type
     ConductanceAnnotation: string;
     RiverStageAnnotation: string;
     RiverBottomAnnotation: string;
+    ConductancePest: string;
+    RiverStagePest: string;
+    RiverBottomPest: string;
     TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
@@ -37,7 +40,7 @@ type
     ConductanceParameterValue: double;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
-    procedure RecordStrings(Strings: TStringList); 
+    procedure RecordStrings(Strings: TStringList);
   end;
 
   TRivArray = array of TRivRecord;
@@ -547,10 +550,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in [StagePosition,ConductancePosition, BottomPosition]);
   Assert(Expression <> nil);
 
@@ -570,16 +569,19 @@ begin
           begin
             RiverStage := Expression.DoubleResult;
             RiverStageAnnotation := ACell.Annotation;
+            RiverStagePest := PestName;
           end;
         ConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
+            ConductancePest := PestName;
           end;
         BottomPosition:
           begin
             RiverBottom := Expression.DoubleResult;
             RiverBottomAnnotation := ACell.Annotation;
+            RiverBottomPest := PestName;
           end;
         else
           Assert(False);
@@ -1266,6 +1268,11 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(RiverStageAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(RiverBottomAnnotation));
+
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
+  WriteCompInt(Comp, Strings.IndexOf(RiverStagePest));
+  WriteCompInt(Comp, Strings.IndexOf(RiverBottomPest));
+
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompBoolean(Comp, MvrUsed);
@@ -1280,6 +1287,9 @@ begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(RiverStageAnnotation);
   Strings.Add(RiverBottomAnnotation);
+  Strings.Add(ConductancePest);
+  Strings.Add(RiverStagePest);
+  Strings.Add(RiverBottomPest);
   Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
 end;
@@ -1296,6 +1306,11 @@ begin
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   RiverStageAnnotation := Annotations[ReadCompInt(Decomp)];
   RiverBottomAnnotation := Annotations[ReadCompInt(Decomp)];
+
+  ConductancePest := Annotations[ReadCompInt(Decomp)];
+  RiverStagePest := Annotations[ReadCompInt(Decomp)];
+  RiverBottomPest := Annotations[ReadCompInt(Decomp)];
+
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
   MvrUsed := ReadCompBoolean(Decomp);

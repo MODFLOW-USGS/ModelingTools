@@ -2,7 +2,7 @@ unit ContourExport;
 
 interface
 
-uses System.Types, Classes, FastGeo, QuadtreeClass, RealListUnit, AbstractGridUnit,
+uses System.UITypes, System.Types, Classes, FastGeo, QuadtreeClass, RealListUnit, AbstractGridUnit,
   DataSetUnit, SysUtils, GoPhastTypes, ContourUnit, ValueArrayStorageUnit,
   PhastModelUnit, Vcl.Dialogs;
 

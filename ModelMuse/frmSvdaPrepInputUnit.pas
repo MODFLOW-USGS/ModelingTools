@@ -3,7 +3,8 @@ unit frmSvdaPrepInputUnit;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, System.UITypes, Winapi.Messages, System.SysUtils,
+  System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
   Vcl.Mask, JvExMask, JvSpin, Vcl.ExtCtrls, Vcl.Buttons, UndoItems, SvdaPrepPropertiesUnit,
   JvToolEdit;

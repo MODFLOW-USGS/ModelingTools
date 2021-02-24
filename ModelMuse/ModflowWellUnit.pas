@@ -29,6 +29,7 @@ type
     StartingTime: double;
     EndingTime: double;
     PumpingRateAnnotation: string;
+    PumpingRatePest: string;
     TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
@@ -376,10 +377,6 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 
@@ -397,6 +394,7 @@ begin
       begin
         PumpingRate := Expression.DoubleResult;
         PumpingRateAnnotation := ACell.Annotation;
+        PumpingRatePest := PestName;
       end;
     except on E: EMathError do
       begin
@@ -404,6 +402,7 @@ begin
         begin
           PumpingRate := 0;
           PumpingRateAnnotation := StrWellFormulaError;
+          PumpingRatePest := PestName;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 
@@ -1147,6 +1146,7 @@ begin
   WriteCompReal(Comp, EndingTime);
   WriteCompReal(Comp, PumpingParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(PumpingRateAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(PumpingRatePest));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
   WriteCompBoolean(Comp, MvrUsed);
@@ -1156,6 +1156,7 @@ end;
 procedure TWellRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(PumpingRateAnnotation);
+  Strings.Add(PumpingRatePest);
   Strings.Add(TimeSeriesName);
   Strings.Add(PumpingParameterName);
 end;
@@ -1168,6 +1169,7 @@ begin
   EndingTime := ReadCompReal(Decomp);
   PumpingParameterValue := ReadCompReal(Decomp);
   PumpingRateAnnotation := Annotations[ReadCompInt(Decomp)];
+  PumpingRatePest := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   PumpingParameterName := Annotations[ReadCompInt(Decomp)];
   MvrUsed := ReadCompBoolean(Decomp);

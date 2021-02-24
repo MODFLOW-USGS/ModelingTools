@@ -18,6 +18,8 @@ type
     EndingTime: double;
     LandElevationAnnotation: string;
     CoverageAnnotations: array of string;
+    LandElevationPest: string;
+    CoveragePests: array of string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -228,9 +230,14 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(LandElevationAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(LandElevationPest));
   for index := 0 to Length(Coverages) - 1 do
   begin
     WriteCompInt(Comp, Strings.IndexOf(CoverageAnnotations[index]));
+  end;
+  for index := 0 to Length(Coverages) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(CoveragePests[index]));
   end;
 end;
 
@@ -239,9 +246,14 @@ var
   index: Integer;
 begin
   Strings.Add(LandElevationAnnotation);
+  Strings.Add(LandElevationPest);
   for index := 0 to Length(Coverages) - 1 do
   begin
     Strings.Add(CoverageAnnotations[index]);
+  end;
+  for index := 0 to Length(Coverages) - 1 do
+  begin
+    Strings.Add(CoveragePests[index]);
   end;
 end;
 
@@ -265,10 +277,16 @@ begin
   EndingTime := ReadCompReal(Decomp);
 
   LandElevationAnnotation := Annotations[ReadCompInt(Decomp)];
+  LandElevationPest := Annotations[ReadCompInt(Decomp)];
   SetLength(CoverageAnnotations, ArrayLength);
+  SetLength(CoveragePests, ArrayLength);
   for index := 0 to Length(CoverageAnnotations) - 1 do
   begin
     CoverageAnnotations[index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for index := 0 to Length(CoveragePests) - 1 do
+  begin
+    CoveragePests[index] := Annotations[ReadCompInt(Decomp)];
   end;
 end;
 
@@ -784,10 +802,6 @@ var
   ACell: TCellAssignment;
   PlantGroupCount: Integer;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   PlantGroupCount := frmGoPhast.PhastModel.RipPlantGroups.Count;
   Assert(BoundaryFunctionIndex in [LandElevationPosition..PlantGroupCount]);
   Assert(Expression <> nil);
@@ -808,11 +822,13 @@ begin
           begin
             LandElevation := Expression.DoubleResult;
             LandElevationAnnotation := ACell.Annotation;
+            LandElevationPest := PestName;
           end;
         else
           begin
             Coverages[BoundaryFunctionIndex-1] := Expression.DoubleResult;
             CoverageAnnotations[BoundaryFunctionIndex-1] := ACell.Annotation;
+            CoveragePests[BoundaryFunctionIndex-1] := PestName;
           end;
       end;
     end;
@@ -945,6 +961,8 @@ begin
       FRipArray[Index].Coverages, PlantGroupCount);
     SetLength((Boundaries[ItemIndex, AModel] as TRipStorage).
       FRipArray[Index].CoverageAnnotations, PlantGroupCount);
+    SetLength((Boundaries[ItemIndex, AModel] as TRipStorage).
+      FRipArray[Index].CoveragePests, PlantGroupCount);
   end;
   inherited;
 end;

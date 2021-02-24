@@ -3,7 +3,8 @@ unit SutraTimeScheduleWriterUnit;
 interface
 
 uses
-  Windows, CustomModflowWriterUnit, PhastModelUnit, SutraTimeScheduleUnit, RealListUnit,
+  Winapi.Windows, System.UITypes, CustomModflowWriterUnit, PhastModelUnit,
+  SutraTimeScheduleUnit, RealListUnit,
   Generics.Collections, SysUtils, GoPhastTypes, Classes, ScreenObjectUnit,
   Vcl.Dialogs;
 

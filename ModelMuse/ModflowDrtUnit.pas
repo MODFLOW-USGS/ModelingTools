@@ -539,10 +539,6 @@ var
   DrtBoundaryGroup: TDrtBoundary;
   ReturnLocation: TCellLocation;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition,
     ReturnPosition]);
   Assert(Expression <> nil);
@@ -1392,8 +1388,8 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ElevationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ReturnFractionAnnotation));
-  WriteCompInt(Comp, Strings.IndexOf(ElevationPest));
   WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
+  WriteCompInt(Comp, Strings.IndexOf(ElevationPest));
   WriteCompInt(Comp, Strings.IndexOf(ReturnFractionPest));
   WriteCompCell(Comp, ReturnCell);
 end;
@@ -1403,8 +1399,8 @@ begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(ElevationAnnotation);
   Strings.Add(ReturnFractionAnnotation);
-  Strings.Add(ElevationPest);
   Strings.Add(ConductancePest);
+  Strings.Add(ElevationPest);
   Strings.Add(ReturnFractionPest);
 end;
 
@@ -1419,8 +1415,8 @@ begin
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   ElevationAnnotation := Annotations[ReadCompInt(Decomp)];
   ReturnFractionAnnotation := Annotations[ReadCompInt(Decomp)];
-  ElevationPest := Annotations[ReadCompInt(Decomp)];
   ConductancePest := Annotations[ReadCompInt(Decomp)];
+  ElevationPest := Annotations[ReadCompInt(Decomp)];
   ReturnFractionPest := Annotations[ReadCompInt(Decomp)];
   ReturnCell := ReadCompCell(Decomp);
 end;

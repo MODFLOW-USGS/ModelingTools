@@ -272,6 +272,8 @@ procedure ReadSurferAsciiFile(FileName: string; SurferRaster: TSurferRaster6); o
 
 implementation
 
+{$WARN SYMBOL_PLATFORM OFF}
+
 uses
   System.Math;
 

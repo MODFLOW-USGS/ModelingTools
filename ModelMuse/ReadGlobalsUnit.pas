@@ -3,7 +3,8 @@ unit ReadGlobalsUnit;
 interface
 
 uses
-  Generics.Collections, IOUtils, Types, Vcl.Dialogs;
+  Winapi.Windows, System.UITypes, Generics.Collections, IOUtils, Types,
+  Vcl.Dialogs;
 
 type
   TGlobalItem = class(TObject)

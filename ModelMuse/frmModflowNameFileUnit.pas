@@ -3,7 +3,8 @@ unit frmModflowNameFileUnit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Winapi.Windows, System.UITypes,  Messages, SysUtils, Variants, Classes,
+  Graphics, Controls, Forms,
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, UndoItems, ExtCtrls,
   PhastModelUnit;
 

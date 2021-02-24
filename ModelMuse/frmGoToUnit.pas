@@ -6,7 +6,8 @@ unit frmGoToUnit;
 interface
 
 uses
-  UndoItemsScreenObjects, SysUtils, Types, Classes, Graphics, Controls, Forms,
+  Winapi.Windows, System.UITypes,UndoItemsScreenObjects, SysUtils, Types,
+  Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, frmCustomGoPhastUnit, ComCtrls, Buttons,
   CompressedImageUnit, ExtCtrls, Spin, ArgusDataEntry, Mask, JvExMask, JvSpin,
   AbstractGridUnit, GoPhastTypes, ScreenObjectUnit, GrayTabs;

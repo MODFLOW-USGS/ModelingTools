@@ -23,9 +23,11 @@ type
     // GZSHIFT
     VerticalOffset: double;
     VerticalOffsetAnnotation: string;
+    VerticalOffsetPest: string;
     // STAGE
     Stage: double;
     StageAnnotation: string;
+    StagePest: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Strings: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -593,10 +595,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in [VerticalOffsetPosition, StagePosition]);
   Assert(Expression <> nil);
 
@@ -616,11 +614,13 @@ begin
           begin
             VerticalOffset := Expression.DoubleResult;
             VerticalOffsetAnnotation := ACell.Annotation;
+            VerticalOffsetPest := PestName;
           end;
         StagePosition:
           begin
             Stage := Expression.DoubleResult;
             StageAnnotation := ACell.Annotation;
+            StagePest := PestName;
           end;
         else
           Assert(False);
@@ -828,8 +828,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(GeometryName));
   WriteCompReal(Comp, VerticalOffset);
   WriteCompInt(Comp, Strings.IndexOf(VerticalOffsetAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(VerticalOffsetPest));
   WriteCompReal(Comp, Stage);
   WriteCompInt(Comp, Strings.IndexOf(StageAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(StagePest));
 end;
 
 procedure TSwrReachTransientRecord.RecordStrings(Strings: TStringList);
@@ -837,6 +839,8 @@ begin
   Strings.Add(GeometryName);
   Strings.Add(VerticalOffsetAnnotation);
   Strings.Add(StageAnnotation);
+  Strings.Add(VerticalOffsetPest);
+  Strings.Add(StagePest);
 end;
 
 procedure TSwrReachTransientRecord.Restore(Decomp: TDecompressionStream;
@@ -847,8 +851,10 @@ begin
   GeometryName := Strings[ReadCompInt(Decomp)];
   VerticalOffset := ReadCompReal(Decomp);
   VerticalOffsetAnnotation := Strings[ReadCompInt(Decomp)];
+  VerticalOffsetPest := Strings[ReadCompInt(Decomp)];
   Stage := ReadCompReal(Decomp);
   StageAnnotation := Strings[ReadCompInt(Decomp)];
+  StagePest := Strings[ReadCompInt(Decomp)];
 end;
 
 { TSwrTransientCell }
