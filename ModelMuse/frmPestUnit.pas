@@ -253,6 +253,8 @@ type
     Panel6: TPanel;
     cbPriorInfoVertContinuity: TCheckBox;
     rdgPriorInfoVertContinuity: TRbwDataGrid4;
+    lblArrayMarker: TLabel;
+    comboArrayMarker: TComboBox;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -436,16 +438,26 @@ type
 procedure TfrmPEST.MarkerChange(Sender: TObject);
 begin
   inherited;
+  comboTemplateCharacter.Color := clWindow;
+  comboFormulaMarker.Color := clWindow;
+  comboArrayMarker.Color := clWindow;
   if comboTemplateCharacter.Text = comboFormulaMarker.Text then
   begin
     comboTemplateCharacter.Color := clRed;
     comboFormulaMarker.Color := clRed;
     Beep;
-  end
-  else
+  end;
+  if comboArrayMarker.Text = comboFormulaMarker.Text then
   begin
-    comboTemplateCharacter.Color := clWindow;
-    comboFormulaMarker.Color := clWindow;
+    comboArrayMarker.Color := clRed;
+    comboFormulaMarker.Color := clRed;
+    Beep;
+  end;
+  if comboTemplateCharacter.Text = comboArrayMarker.Text then
+  begin
+    comboTemplateCharacter.Color := clRed;
+    comboArrayMarker.Color := clRed;
+    Beep;
   end;
 end;
 
@@ -1618,6 +1630,9 @@ begin
   comboFormulaMarker.ItemIndex :=
     comboFormulaMarker.Items.IndexOf(PestProperties.ExtendedTemplateCharacter);
 
+  comboArrayMarker.ItemIndex :=
+    comboArrayMarker.Items.IndexOf(PestProperties.ArrayTemplateCharacter);
+
   diredPest.Text := Locations.PestDirectory;
   CheckPestDirectory;
   {$ENDREGION}
@@ -2059,6 +2074,10 @@ begin
     if comboFormulaMarker.Text <> '' then
     begin
       PestProperties.ExtendedTemplateCharacter := comboFormulaMarker.Text[1];
+    end;
+    if comboArrayMarker.Text <> '' then
+    begin
+      PestProperties.ArrayTemplateCharacter := comboArrayMarker.Text[1];
     end;
     {$ENDREGION}
 

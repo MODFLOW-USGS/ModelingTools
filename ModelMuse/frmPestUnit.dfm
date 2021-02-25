@@ -33,18 +33,17 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspRegularisation
+    ActivePage = jvspBasic
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
-    ExplicitWidth = 554
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
       Width = 566
       Height = 443
       Caption = 'jvspBasic'
-      ExplicitWidth = 554
+      ExplicitLeft = 1
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -60,11 +59,18 @@ inherited frmPEST: TfrmPEST
         Caption = 'Formula marker'
       end
       object lblPestDirectory: TLabel
-        Left = 16
-        Top = 168
+        Left = 17
+        Top = 232
         Width = 109
         Height = 18
         Caption = 'PEST Directory'
+      end
+      object lblArrayMarker: TLabel
+        Left = 17
+        Top = 168
+        Width = 172
+        Height = 18
+        Caption = 'Array substitution marker'
       end
       object cbPEST: TCheckBox
         Left = 16
@@ -114,12 +120,31 @@ inherited frmPEST: TfrmPEST
       end
       object diredPest: TJvDirectoryEdit
         Left = 16
-        Top = 192
+        Top = 256
         Width = 305
         Height = 26
         TabOrder = 3
         Text = 'C:\PEST'
         OnChange = diredPestChange
+      end
+      object comboArrayMarker: TComboBox
+        Left = 17
+        Top = 192
+        Width = 65
+        Height = 26
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 4
+        Text = '~'
+        OnChange = MarkerChange
+        Items.Strings = (
+          '~'
+          '@'
+          '$'
+          '%'
+          ':'
+          ';'
+          '?')
       end
     end
     object jvspControlDataMode: TJvStandardPage
@@ -128,7 +153,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspControlDataMode'
-      ExplicitWidth = 554
       object lblPestMode: TLabel
         Left = 23
         Top = 40
@@ -164,7 +188,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspDimensions'
-      ExplicitWidth = 554
       object lblMaxCompDim: TLabel
         Left = 85
         Top = 6
@@ -210,7 +233,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspInversionControls'
-      ExplicitWidth = 554
       object lblInitialLambda: TLabel
         Left = 95
         Top = 6
@@ -349,7 +371,6 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
-      ExplicitWidth = 554
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -441,7 +462,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspInversionControls2'
-      ExplicitWidth = 554
       object lblSwitchCriterion: TLabel
         Left = 93
         Top = 6
@@ -546,7 +566,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspIterationControls'
-      ExplicitWidth = 554
       object lblMaxIterations: TLabel
         Left = 93
         Top = 6
@@ -709,7 +728,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspOutputOptions'
-      ExplicitWidth = 554
       object cbWriteCov: TCheckBox
         Left = 6
         Top = 3
@@ -800,7 +818,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspSingularValueDecomp'
-      ExplicitWidth = 554
       object lblSvdMode: TLabel
         Left = 6
         Top = 8
@@ -886,7 +903,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspLqsr'
-      ExplicitWidth = 554
       object lblMatrixTolerance: TLabel
         Left = 157
         Top = 29
@@ -989,7 +1005,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspObservationGroups'
-      ExplicitWidth = 554
       inline frameObservationGroups: TframeGrid
         Left = 0
         Top = 0
@@ -997,13 +1012,13 @@ inherited frmPEST: TfrmPEST
         Height = 443
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 554
+        ExplicitWidth = 566
         ExplicitHeight = 443
         inherited Panel: TPanel
           Top = 402
           Width = 566
           ExplicitTop = 402
-          ExplicitWidth = 554
+          ExplicitWidth = 566
           DesignSize = (
             566
             41)
@@ -1164,7 +1179,7 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 554
+          ExplicitWidth = 566
           ExplicitHeight = 402
         end
       end
@@ -1175,7 +1190,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspObsGroupAssignments'
-      ExplicitWidth = 554
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1183,12 +1197,12 @@ inherited frmPEST: TfrmPEST
         Height = 443
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 554
+        ExplicitWidth = 566
         ExplicitHeight = 443
         inherited tvTree: TTreeView
           Width = 566
           Height = 443
-          ExplicitWidth = 554
+          ExplicitWidth = 566
           ExplicitHeight = 443
         end
       end
@@ -1199,7 +1213,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspPilotPoints'
-      ExplicitWidth = 554
       object Panel2: TPanel
         Left = 0
         Top = 140
@@ -1207,7 +1220,6 @@ inherited frmPEST: TfrmPEST
         Height = 303
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 554
         object Splitter1: TSplitter
           Left = 242
           Top = 1
@@ -1370,7 +1382,6 @@ inherited frmPEST: TfrmPEST
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
-          ExplicitWidth = 306
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 169
@@ -1439,7 +1450,6 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
-            ExplicitWidth = 302
             ColWidths = (
               64
               64)
@@ -1451,7 +1461,6 @@ inherited frmPEST: TfrmPEST
             Height = 149
             Align = alTop
             TabOrder = 1
-            ExplicitWidth = 302
             object lblMinSeparation: TLabel
               Left = 4
               Top = 45
@@ -1500,7 +1509,6 @@ inherited frmPEST: TfrmPEST
         Height = 140
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 554
         object lblPilotPointBuffer: TLabel
           Left = 6
           Top = 39
@@ -1524,7 +1532,6 @@ inherited frmPEST: TfrmPEST
           Align = alRight
           Caption = 'Regularly spaced pilot points'
           TabOrder = 1
-          ExplicitLeft = 290
           object lblArrayPattern: TLabel
             Left = 16
             Top = 27
@@ -1583,7 +1590,6 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
-      ExplicitLeft = 1
       object lblPhimLim: TLabel
         Left = 127
         Top = 19
@@ -1786,7 +1792,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspRegularizationOption'
-      ExplicitWidth = 554
       object lblIREGADJ: TLabel
         Left = 103
         Top = 299
@@ -1924,7 +1929,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspPriorInfoObsGroups'
-      ExplicitWidth = 554
       inline framePriorInfoObservationGroups: TframeGrid
         Left = 0
         Top = 0
@@ -1932,13 +1936,13 @@ inherited frmPEST: TfrmPEST
         Height = 443
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 554
+        ExplicitWidth = 566
         ExplicitHeight = 443
         inherited Panel: TPanel
           Top = 402
           Width = 566
           ExplicitTop = 402
-          ExplicitWidth = 554
+          ExplicitWidth = 566
           DesignSize = (
             566
             41)
@@ -2097,7 +2101,7 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 554
+          ExplicitWidth = 566
           ExplicitHeight = 402
         end
       end
@@ -2108,7 +2112,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspPriorInfoInitialValue'
-      ExplicitWidth = 554
       object rdgPriorInfoInitialValue: TRbwDataGrid4
         Left = 0
         Top = 41
@@ -2204,7 +2207,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 554
       end
       object Panel5: TPanel
         Left = 0
@@ -2213,7 +2215,6 @@ inherited frmPEST: TfrmPEST
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 554
         object cbInitialValue: TCheckBox
           Left = 6
           Top = 12
@@ -2230,7 +2231,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspPriorInfoHorizContinuity'
-      ExplicitWidth = 554
       object pnlPriorInfoContinuity: TPanel
         Left = 0
         Top = 0
@@ -2238,7 +2238,6 @@ inherited frmPEST: TfrmPEST
         Height = 97
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 554
         object lblSearchDistance: TLabel
           Left = 157
           Top = 36
@@ -2378,7 +2377,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 554
       end
     end
     object jvspPriorInfoVertContinuity: TJvStandardPage
@@ -2387,7 +2385,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspPriorInfoVertContinuity'
-      ExplicitWidth = 554
       object Panel6: TPanel
         Left = 0
         Top = 0
@@ -2395,7 +2392,6 @@ inherited frmPEST: TfrmPEST
         Height = 41
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 554
         object cbPriorInfoVertContinuity: TCheckBox
           Left = 6
           Top = 12
@@ -2500,7 +2496,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 554
       end
     end
   end
@@ -2511,7 +2506,6 @@ inherited frmPEST: TfrmPEST
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitWidth = 752
     object btnHelp: TBitBtn
       Left = 446
       Top = 6

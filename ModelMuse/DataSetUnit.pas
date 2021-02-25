@@ -475,6 +475,7 @@ type
     FPestParametersAllowed: Boolean;
     FPilotPointsUsed: Boolean;
     FSuppressCache: Boolean;
+    FPestArrayFileNames: TStringList;
     // See @link(TwoDInterpolatorClass).
     function GetTwoDInterpolatorClass: string;
     // @name is called if an invalid formula has been specified.
@@ -561,6 +562,7 @@ type
     procedure SetUsedPestParameters(const Value: TStrings);
     procedure SetPestParametersAllowed(const Value: Boolean);
     procedure SetPilotPointsUsed(const Value: Boolean);
+    function GetPestArrayFileNames: TStringList;
   protected
     // See @link(DimensionsChanged).
     FDimensionsChanged: boolean;
@@ -892,7 +894,9 @@ type
     // The data set named @name will hold the names of parameters that apply
     // to a @classname
     property ParamDataSetName: string read GetParamDataSetName;
-    property PilotPointsUsed: Boolean read FPilotPointsUsed write SetPilotPointsUsed;
+    property PilotPointsUsed: Boolean read FPilotPointsUsed
+      write SetPilotPointsUsed;
+    property PestArrayFileNames: TStringList read GetPestArrayFileNames;
   published
     // @name indicates the hierarchical position of this instance of
     // @classname when it is required by the model.
@@ -1810,6 +1814,7 @@ destructor TDataArray.Destroy;
 var
   LocalModel: TCustomModel;
 begin
+  FPestArrayFileNames.Free;
   LocalModel := nil;
   if (FModel <> nil)
     and (not (csDestroying in FModel.ComponentState))
@@ -8213,6 +8218,15 @@ end;
 function TDataArray.GetParamDataSetName: string;
 begin
   result := Format(StrSParameterNames, [Name]);
+end;
+
+function TDataArray.GetPestArrayFileNames: TStringList;
+begin
+  if FPestArrayFileNames = nil then
+  begin
+    FPestArrayFileNames := TStringList.Create;
+  end;
+  result := FPestArrayFileNames;
 end;
 
 procedure TDataArray.CacheData;

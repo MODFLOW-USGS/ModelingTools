@@ -74,6 +74,7 @@ type
     // name is the file that is created by @classname.
     FFileStream: TFileStream;
     FMainFileStream: TFileStream;
+    FPestDataArrays: TDictionary<string, TDataArray>;
   private
     // See @link(Model).
     FModel: TCustomModel;
@@ -98,6 +99,7 @@ type
     procedure WriteTemplateFormula(ParameterName: string;
       ModifierValue: double; Method: TPestParamMethod);
     procedure WriteTemplateReplace(ParameterName: string);
+    procedure WriteArrayReplace(ArrayName: string; Layer, Row, Column: Integer);
     procedure WritePestTemplateLine(AFileName: string);
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID: string);
@@ -123,6 +125,7 @@ type
     // @name creates and instance of @classname.
     // @param(Model is the @link(TCustomModel) to be exported.)
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); virtual;
+    destructor Destroy; override;
     // @name writes an end of line to the output file.
     procedure NewLine; virtual;
     // @name writes Value to the output with a leading blank space.
@@ -145,6 +148,12 @@ type
     procedure WriteString(const Value: AnsiString); overload; virtual;
     class function PestUtilityProgramPath(UtilityProgramName,
       AFileName: string): string;
+    procedure AddUsedPestDataArray(ADataArray: TDataArray);
+    function GetUsedPestDataArrays: TArray<TDataArray>;
+    // Name returns an empty string if no file needs to be created.
+    // otherwise, it returns the name of the arrays file to be used
+    // in the template.
+    function WriteArraysFile(TemplateFileName: string): string;
   end;
 
   { @name is an abstract base class used as an ancestor for classes that
@@ -216,7 +225,7 @@ type
     procedure WriteEndPeriod;
     procedure WriteBeginGridData;
     procedure WriteEndGridData;
-    procedure WriteTemplateHeader;
+    procedure WriteTemplateHeader; virtual;
   public
     // @name converts AFileName to use the correct extension for the file.
 //    class function FileName(const AFileName: string): string;
@@ -639,6 +648,7 @@ type
     procedure WriteBoundaryArrayParams;
     property NameOfFile: string read FNameOfFile;
     //    procedure WriteBeginPeriod(TimeIndex: integer);
+    procedure WriteTemplateHeader; override;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -2449,6 +2459,14 @@ begin
   Model.DataArrayManager.AddDataSetToCache(DataArray);
 end;
 
+procedure TCustomFileWriter.AddUsedPestDataArray(ADataArray: TDataArray);
+begin
+  if not FPestDataArrays.ContainsKey(UpperCase(ADataArray.Name)) then
+  begin
+    FPestDataArrays.Add(UpperCase(ADataArray.Name), ADataArray);
+  end;
+end;
+
 procedure TCustomFileWriter.CloseFile;
 begin
   if FFileStream = FMainFileStream then
@@ -2538,8 +2556,15 @@ constructor TCustomFileWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited Create;
+  FPestDataArrays := TDictionary<string, TDataArray>.Create;
   FEvaluationType := EvaluationType;
   FModel := AModel;
+end;
+
+destructor TCustomFileWriter.Destroy;
+begin
+  FPestDataArrays.Free;
+  inherited;
 end;
 
 //class function TCustomFileWriter.Extension: string;
@@ -2627,6 +2652,20 @@ begin
   end;
 end;
 
+function TCustomFileWriter.GetUsedPestDataArrays: TArray<TDataArray>;
+var
+  Index: Integer;
+  Value: TDataArray;
+begin
+  SetLength(result, FPestDataArrays.Count);
+  Index := 0;
+  for Value in FPestDataArrays.Values do
+  begin
+    result[Index] := Value;
+    Inc(Index);
+  end;
+end;
+
 procedure TCustomFileWriter.NewLine;
 begin
   WriteString(sLineBreak);
@@ -2670,6 +2709,10 @@ begin
 
   if DataArrayUsesPestParameters(DataArray, LayerIndex) then
   begin
+    if LayerIndex = 0 then
+    begin
+      DataArray.PestArrayFileNames.Clear;
+    end;
     LayerArrayWriter := TLayerArrayWriter.Create(Model, FEvaluationType);
     try
       Assert(FInputFileName <> '');
@@ -2699,6 +2742,7 @@ begin
 
     WriteString('  OPEN/CLOSE ');
     WriteString(ArrayFileName);
+    DataArray.PestArrayFileNames.Add(ArrayFileName);
     if Model.ModelSelection <> msModflow2015 then
     begin
       WriteString(' 1.0 (Free) ');
@@ -2786,6 +2830,52 @@ begin
   if CacheArray then
   begin
     FModel.DataArrayManager.AddDataSetToCache(DataArray);
+  end;
+end;
+
+procedure TCustomFileWriter.WriteArrayReplace(ArrayName: string; Layer, Row,
+  Column: Integer);
+var
+  TemplateCharacter: Char;
+begin
+  // Layer, Row, and Column are for a One-based array.
+  TemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+  WriteString(Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+    [TemplateCharacter, ArrayName, Layer, Row, Column]));
+end;
+
+function TCustomFileWriter.WriteArraysFile(TemplateFileName: string): string;
+var
+  ArraysFile: TStringList;
+  DataArrays: TArray<TDataArray>;
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+  ALine: WideString;
+begin
+  if FPestDataArrays.Count = 0 then
+  begin
+    result := '';
+  end
+  else
+  begin
+    result := ExpandFileName(ChangeFileExt(TemplateFileName, '.arrays'));
+    ArraysFile := TStringList.Create;
+    try
+      ArraysFile.Add(Model.PestProperties.ArrayTemplateCharacter);
+      DataArrays := GetUsedPestDataArrays;
+      for DataArrayIndex := 0 to Length(DataArrays) - 1 do
+      begin
+        ADataArray := DataArrays[DataArrayIndex];
+        ALine := Format('%0:s[%1:d, %2:d, %3:d] ', [ADataArray.Name,
+          ADataArray.LayerCount, ADataArray.RowCount, ADataArray.ColumnCount])
+          + ADataArray.PestArrayFileNames.DelimitedText;
+        ArraysFile.Add(ALine);
+      end;
+
+      ArraysFile.SaveToFile(result)
+    finally
+      ArraysFile.Free;
+    end;
   end;
 end;
 
@@ -8867,6 +8957,24 @@ begin
   end;
 end;
 
+procedure TCustomParameterTransientWriter.WriteTemplateHeader;
+var
+  ArraysFileName: string;
+begin
+  inherited;
+  ArraysFileName := WriteArraysFile(FNameOfFile);
+  if ArraysFileName <> '' then
+  begin
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    WriteString('ReadArrays(');
+    WriteString(ArraysFileName);
+    WriteString(')');
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    NewLine;
+  end;
+
+end;
+
 procedure TCustomParameterTransientWriter.CountParametersAndParameterCells
   (var ParamCount, ParamCellCount: integer);
 var
@@ -9001,7 +9109,7 @@ var
   TemplateCharacter: string;
 begin
   TemplateCharacter := Model.PestProperties.TemplateCharacter;
-  WriteString(Format('%0:s                %1:s%0:s',
+  WriteString(Format(' %0:s                %1:s%0:s',
     [TemplateCharacter, ParameterName]));
 end;
 

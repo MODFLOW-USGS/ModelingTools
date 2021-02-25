@@ -645,6 +645,7 @@ type
     FStoredSeachDistance: TRealStorage;
     FMaxPilotPointsInRange: Integer;
     FUseVertSpatialContinuityPriorInfo: Boolean;
+    FArrayTemplateCharacter: Char;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -680,6 +681,7 @@ type
     procedure SetSeachDistance(const Value: double);
     procedure SetMaxPilotPointsInRange(const Value: Integer);
     procedure SetUseVertSpatialContinuityPriorInfo(const Value: Boolean);
+    procedure SetArrayTemplateCharacter(const Value: Char);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -702,6 +704,8 @@ type
       write SetTemplateCharacter;
     property ExtendedTemplateCharacter: Char read FExtendedTemplateCharacter
       write SetExtendedTemplateCharacter;
+    property ArrayTemplateCharacter: Char read FArrayTemplateCharacter
+      write SetArrayTemplateCharacter;
     property ShowPilotPoints: Boolean read FShowPilotPoints
       write SetShowPilotPoints Stored True;
     property StoredPilotPointSpacing: TRealStorage
@@ -768,6 +772,7 @@ begin
     PilotPointBuffer := PestSource.PilotPointBuffer;
     TemplateCharacter := PestSource.TemplateCharacter;
     ExtendedTemplateCharacter := PestSource.ExtendedTemplateCharacter;
+    ArrayTemplateCharacter := PestSource.ArrayTemplateCharacter;
     PestControlData := PestSource.PestControlData;
     SvdProperties := PestSource.SvdProperties;
     LsqrProperties := PestSource.LsqrProperties;
@@ -1055,6 +1060,7 @@ begin
   PilotPointSpacing := 0;
   FTemplateCharacter := '@';
   FExtendedTemplateCharacter := '%';
+  FArrayTemplateCharacter := '~';
   FUseBetweenObservationsPilotPoints := True;
   FArrayPilotPointSelection := appsNone;
   PilotPointBuffer := 0;
@@ -1083,6 +1089,11 @@ begin
     FArrayPilotPointSelection := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TPestProperties.SetArrayTemplateCharacter(const Value: Char);
+begin
+  SetCharacterProperty(FArrayTemplateCharacter, Value);
 end;
 
 procedure TPestProperties.SetBetweenObservationsPilotPoints(

@@ -318,6 +318,7 @@ type
     FStoredAbsoluteN: TRealStorage;
     FUseInitialValuePriorInfo: Boolean;
     FRegularizationGroup: string;
+    FAddedToPval: Boolean;
     procedure NotifyHufKx;
     procedure NotifyHufKy;
     procedure NotifyHufKz;
@@ -378,6 +379,7 @@ type
     property Offset: double read GetOffset write SetOffset;
     // Absolute(N) and ABSPARMAX(N) in PEST
     property AbsoluteN: double read GetAbsoluteN write SetAbsoluteN;
+    property AddedToPval: Boolean read FAddedToPval write FAddedToPval;
   published
     // @name is the name of the parameter.  All parameter names must be unique
     // but ensuring that they are unique is left up to the GUI rather than

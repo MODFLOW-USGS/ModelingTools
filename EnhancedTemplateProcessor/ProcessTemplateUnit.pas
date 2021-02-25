@@ -69,6 +69,7 @@ type
     FFormulaDelimiter: Char;
     FArrayDelimiter: Char;
     FArrayDictionary: TArrayDictionary;
+    procedure CreateArrayNameReader;
     procedure WriteUsage;
     procedure WriteParameters;
     procedure GetFileNames;
@@ -151,6 +152,7 @@ resourcestring
     +' name in %s';
   rsUnmatchedArr = 'Unmatched array delimiters in "%0:s".';
   rsMissingArray = 'missing array between array delimiters in "%0:s".';
+  rsUnableToConv = 'Unable to convert "%0:s" to a number in "%1:s".';
 
 const
   ValidArrayNameCharacters = ['A'..'Z', 'a'..'z', '0'..'9', '_'];
@@ -230,6 +232,23 @@ begin
   WriteLn('A PVAL file is not required if formulas do not require parameter value substitution.');
   WriteLn('An Arrays file is not required if formulas do not require array value substitution.');
   WriteLn('File names that include white space must be enclosed in quotation marks');
+end;
+
+procedure TParameterProcessor.CreateArrayNameReader;
+begin
+  if FArrayNamesFile <> '' then
+  begin
+    FArrayNameReader.Free;
+    {$IFDEF FPC}
+    FArrayNameReader := TSimpleStreamReader.Create(FArrayNamesFile);
+    {$ELSE}
+    FArrayNameReader := TStreamReader.Create(FArrayNamesFile);
+    {$ENDIF}
+  end
+  else
+  begin
+    FArrayNameReader := nil;
+  end;
 end;
 
 procedure TParameterProcessor.WriteParameters;
@@ -325,18 +344,7 @@ begin
     ChangeFileExt(FTemplateFileName, ''));
   {$ENDIF}
 
-  if FArrayNamesFile <> '' then
-  begin
-    {$IFDEF FPC}
-    FArrayNameReader := TSimpleStreamReader.Create(FArrayNamesFile);
-    {$ELSE}
-    FArrayNameReader := TStreamReader.Create(FArrayNamesFile);
-    {$ENDIF}
-  end
-  else
-  begin
-    FArrayNameReader := nil;
-  end;
+  CreateArrayNameReader;
 end;
 
 procedure TParameterProcessor.ProcessTemplate;
@@ -372,6 +380,8 @@ begin
 end;
 
 procedure TParameterProcessor.ProcessTemplateLine(ALine: string);
+Const
+  ReadArrays = 'ReadArrays(';
 var
   StartPosition: Integer;
   EndPos: Integer;
@@ -385,6 +395,8 @@ var
   Formula: string;
   StartFormula: Integer;
   OriginalFormula: string;
+  StartArrayNameFile: Integer;
+  EndArrayNameFile: Integer;
   function CountFormulaDelimiterBefore(APosition: Integer): integer;
   var
     FormulaDelimiterPosition: Integer;
@@ -416,7 +428,7 @@ var
     ReplacementString: string;
   begin
     ArrayStart := Pos(FArrayDelimiter, ALine);
-    if ArrayStart < 0 then
+    if ArrayStart <= 0 then
     begin
       Exit;
     end;
@@ -552,9 +564,20 @@ var
       Splitter.Free;
     end;
   end;
-
 begin
   OriginalLine := ALine;
+  StartArrayNameFile := Pos(FFormulaDelimiter + UpperCase(ReadArrays), UpperCase(ALine));
+  if StartArrayNameFile >= 1  then
+  begin
+    StartArrayNameFile := Length(ReadArrays) + 2;
+    EndArrayNameFile := Pos(')', ALine);
+    Assert(False, Format('Unbalanced parenthesis in "%s"', [OriginalLine]));
+    FArrayNamesFile := Copy(ALine, StartArrayNameFile, EndArrayNameFile-StartArrayNameFile);
+    FArrayNamesFile := ExpandFileName(FArrayNamesFile);
+    CreateArrayNameReader;
+    ReadArrayFiles;
+    Exit;
+  end;
   if FArrayDelimiter <> ' ' then
   begin
     SubstituteArrayValues(ALine);
@@ -677,7 +700,7 @@ var
   CloseBracePosition, LayerIndex, RowIndex, ColIndex, NumberIndex,
     CharIndex: Integer;
   ArrayName: string;
-  FileName, DataLine: string;
+  FileNames, DataLine: string;
   Splitter: TStringList;
   LayerCount, RowCount, ColumnCount: Longint;
   NamedArray: TNamedArray;
@@ -687,13 +710,15 @@ var
   ArrayFile: TStreamReader;
   {$ENDIF}
   ANumber: Double;
+  FileNameList: TStringList;
+  FileIndex: Integer;
 begin
   if (ALine = '') or (ALine[1] = '#') then
   begin
     Exit;
   end;
   // The line is defines an array as follows
-  // ArrayName[LayerCount, RowCount, ColumnCount] FileName
+  // ArrayName[LayerCount, RowCount, ColumnCount] FileNames
   // If the file name has any white space, it must be enclosed in double quotes.
   // Example:
   // HK[3, 9, 12]  "HK Array.txt"
@@ -733,95 +758,126 @@ begin
     raise EReadArrayError.Create(Format(rsTheArrayName ,
       [ArrayName, FArrayNamesFile]));
   end;
-  FileName := Trim(Copy(ALine, CloseBracePosition+1, MAXINT));
-  if FileName = '' then
+  FileNames := Trim(Copy(ALine, CloseBracePosition+1, MAXINT));
+  if FileNames = '' then
   begin
     raise EReadArrayError.Create(Format(rsWhileReading2,
       [FArrayNamesFile, ALine]));
   end;
-  FileName := ExpandFileName(FileName);
-  if not FileExists(FileName) then
-  begin
-    raise EReadArrayError.Create(Format(rsWhileReading3,
-      [FArrayNamesFile, FileName, ALine]));
-  end;
-  Splitter := TStringList.Create;
-  try
-    Splitter.DelimitedText := Copy(ALine, OpenBracePosition+1,
-      CloseBracePosition-OpenBracePosition -1);
-    if Splitter.Count <> 3 then
-    begin
-      raise EReadArrayError.Create(Format(rsWhileReading4,
-        [ArrayName, ALine, FArrayNamesFile]));
-    end;
-    if not TryStrToInt(Splitter[0], LayerCount) then
-    begin
-      raise EReadArrayError.Create(Format(rsUnableToRead,
-        ['layers', ArrayName, ALine, FArrayNamesFile, Splitter[0]]));
-    end;
-    if not TryStrToInt(Splitter[1], RowCount) then
-    begin
-      raise EReadArrayError.Create(Format(rsUnableToRead,
-        ['rows', ArrayName, ALine, FArrayNamesFile, Splitter[1]]));
-    end;
-    if not TryStrToInt(Splitter[2], ColumnCount) then
-    begin
-      raise EReadArrayError.Create(Format(rsUnableToRead,
-        ['columns', ArrayName, ALine, FArrayNamesFile, Splitter[2]]));
-    end;
-    NamedArray.ArrayName:= ArrayName;
-    SetLength(NamedArray.Values, LayerCount, RowCount, ColumnCount);
 
-    {$IFDEF FPC}
-    ArrayFile := TSimpleStreamReader.Create(FileName);
-    {$ELSE}
-    ArrayFile := TStreamReader.Create(FileName);
-    {$ENDIF}
-    try
-      LayerIndex := 0;
-      RowIndex := 0;
-      ColIndex := 0;
-      while not ArrayFile.EndOfStream do
+  FileNameList := TStringList.Create;
+  try
+    FileNameList.DelimitedText := FileNames;
+    for FileIndex := 0 to Pred(FileNameList.Count) do
+    begin
+      FileNameList[FileIndex] := ExpandFileName(FileNameList[FileIndex]);
+      if not FileExists(FileNameList[FileIndex]) then
       begin
-        DataLine := ArrayFile.ReadLine;
-        Splitter.CommaText := DataLine;
-        for NumberIndex := 0 to Pred(Splitter.Count) do
+        raise EReadArrayError.Create(Format(rsWhileReading3,
+          [FArrayNamesFile, FileNameList[FileIndex], ALine]));
+      end;
+    end;
+    //FileNames := ExpandFileName(FileNames);
+    //if not FileExists(FileNames) then
+    //begin
+    //  raise EReadArrayError.Create(Format(rsWhileReading3,
+    //    [FArrayNamesFile, FileNames, ALine]));
+    //end;
+    Splitter := TStringList.Create;
+    try
+      Splitter.DelimitedText := Copy(ALine, OpenBracePosition+1,
+        CloseBracePosition-OpenBracePosition -1);
+      if Splitter.Count <> 3 then
+      begin
+        raise EReadArrayError.Create(Format(rsWhileReading4,
+          [ArrayName, ALine, FArrayNamesFile]));
+      end;
+      if not TryStrToInt(Splitter[0], LayerCount) then
+      begin
+        raise EReadArrayError.Create(Format(rsUnableToRead,
+          ['layers', ArrayName, ALine, FArrayNamesFile, Splitter[0]]));
+      end;
+      if not TryStrToInt(Splitter[1], RowCount) then
+      begin
+        raise EReadArrayError.Create(Format(rsUnableToRead,
+          ['rows', ArrayName, ALine, FArrayNamesFile, Splitter[1]]));
+      end;
+      if not TryStrToInt(Splitter[2], ColumnCount) then
+      begin
+        raise EReadArrayError.Create(Format(rsUnableToRead,
+          ['columns', ArrayName, ALine, FArrayNamesFile, Splitter[2]]));
+      end;
+      NamedArray.ArrayName:= ArrayName;
+      SetLength(NamedArray.Values, LayerCount, RowCount, ColumnCount);
+
+      FileIndex := 0;
+      {$IFDEF FPC}
+      ArrayFile := TSimpleStreamReader.Create(FileNameList[FileIndex]);
+      {$ELSE}
+      ArrayFile := TStreamReader.Create(FileNameList[FileIndex]);
+      {$ENDIF}
+      try
+        LayerIndex := 0;
+        RowIndex := 0;
+        ColIndex := 0;
+        while (ArrayFile <> nil) and (not ArrayFile.EndOfStream) do
         begin
-          if not TryStrToFloat(Splitter[NumberIndex], ANumber) then
+          DataLine := ArrayFile.ReadLine;
+          Splitter.CommaText := DataLine;
+          for NumberIndex := 0 to Pred(Splitter.Count) do
           begin
-            raise EReadArrayError.Create(Format('Unable to convert "%0:s" to a number in "%1:s".', [Splitter[NumberIndex], FileName]));
-          end;
-          if LayerIndex >= LayerCount then
-          begin
-            raise EReadArrayError.Create(Format(rsThereAreTooM,
-              [ArrayName, FileName]));
-          end;
-          NamedArray.Values[LayerIndex, RowIndex, ColIndex] := ANumber;
-          Inc(ColIndex);
-          if ColIndex = ColumnCount then
-          begin
-            ColIndex := 0;
-            Inc(RowIndex);
-            if RowIndex = RowCount then
+            if not TryStrToFloat(Splitter[NumberIndex], ANumber) then
             begin
-              RowIndex := 0;
-              Inc(LayerIndex);
+              raise EReadArrayError.Create(Format(rsUnableToConv,
+                [Splitter[NumberIndex], FileNames]));
+            end;
+            if LayerIndex >= LayerCount then
+            begin
+              raise EReadArrayError.Create(Format(rsThereAreTooM,
+                [ArrayName, FileNames]));
+            end;
+            NamedArray.Values[LayerIndex, RowIndex, ColIndex] := ANumber;
+            Inc(ColIndex);
+            if ColIndex = ColumnCount then
+            begin
+              ColIndex := 0;
+              Inc(RowIndex);
+              if RowIndex = RowCount then
+              begin
+                RowIndex := 0;
+                Inc(LayerIndex);
+              end;
+            end;
+          end;
+          if ArrayFile.EndOfStream then
+          begin
+            Inc(FileIndex);
+            if FileIndex < FileNameList.Count then
+            begin
+              FreeAndNil(ArrayFile);
+              {$IFDEF FPC}
+              ArrayFile := TSimpleStreamReader.Create(FileNameList[FileIndex]);
+              {$ELSE}
+              ArrayFile := TStreamReader.Create(FileNameList[FileIndex]);
+              {$ENDIF}
             end;
           end;
         end;
+        if LayerIndex <> LayerCount then
+        begin
+          raise EReadArrayError.Create(Format(rsThereAreNotE,
+            [ArrayName, FileNames]));
+        end;
+      finally
+        ArrayFile.Free;
       end;
-      if LayerIndex <> LayerCount then
-      begin
-        raise EReadArrayError.Create(Format(rsThereAreNotE,
-          [ArrayName, FileName]));
-      end;
-    finally
-      ArrayFile.Free;
-    end;
 
-    FArrayDictionary.Add(UpperCase(NamedArray.ArrayName), NamedArray);
+      FArrayDictionary.Add(UpperCase(NamedArray.ArrayName), NamedArray);
+    finally
+      Splitter.Free;
+    end;
   finally
-    Splitter.Free;
+    FileNameList.Free;
   end;
 end;
 

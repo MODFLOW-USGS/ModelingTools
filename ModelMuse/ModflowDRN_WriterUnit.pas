@@ -313,6 +313,8 @@ var
   ParameterName: string;
   MultiplierValue: double;
   Param: TModflowSteadyParameter;
+  DataArray: TDataArray;
+  AScreenObject: TScreenObject;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest data
@@ -339,12 +341,44 @@ begin
     // handle pest parameter
     // handle multiply or add
     // handle PEST data set.
-    WriteTemplateReplace(Drn_Cell.ElevationPest);
+    Param := Model.GetPestParameterByName(Drn_Cell.ElevationPest);
+    if Param <> nil then
+    begin
+      WriteTemplateReplace(Drn_Cell.ElevationPest);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+    end
+    else
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drn_Cell.ElevationPest);
+      if DataArray <> nil then
+      begin
+//        AddUsedPestDataArray(DataArray);
+        WriteArrayReplace(DataArray.Name,
+          LocalLayer, Drn_Cell.Row+1, Drn_Cell.Column+1);
+      end
+      else
+      begin
+        AScreenObject := Drn_Cell.ScreenObject as TScreenObject;
+        frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+          Format('%0:s was not recognized in %1:s',
+          [Drn_Cell.ElevationPest, AScreenObject.Name]), AScreenObject);
+      end;
+    end;
 //    WriteFloat(Drn_Cell.Elevation);
   end
   else
   begin
     WriteFloat(Drn_Cell.Elevation);
+    if Drn_Cell.ElevationPest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drn_Cell.ElevationPest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
   end;
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
@@ -371,6 +405,7 @@ begin
     and (Drn_Cell.ConductancePest <> '') then
   begin
     Param := Model.GetPestParameterByName(Drn_Cell.ConductancePest);
+    Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
     if Param.Value = 0 then
     begin
       MultiplierValue := 0.0;

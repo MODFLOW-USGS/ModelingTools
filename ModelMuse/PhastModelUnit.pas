@@ -31879,6 +31879,8 @@ begin
 end;
 
 procedure TCustomModel.ClearPval;
+var
+  Index: Integer;
 begin
   FPValFile.Clear;
   FPvalTemplate.Clear;
@@ -31886,6 +31888,10 @@ begin
   FPestPvalTemplate.Clear;
   FilesToDelete.Clear;
   ClearPestParmDictionary;
+  for Index := 0 to ModflowSteadyParameters.Count - 1 do
+  begin
+    ModflowSteadyParameters[Index].AddedToPval := False;
+  end;
 end;
 
 procedure TCustomModel.ClearViewedItems;
@@ -32641,9 +32647,11 @@ var
   PValFileName: string;
   Comment: string;
   FirstLine: string;
+  UseWithMF2005: Boolean;
 begin
   if (FPValFile.Count > 0) or (FPestPValFile.Count > 0) then
   begin
+    UseWithMF2005 := FPValFile.Count > 0;
     if PackageGeneratedExternally('PVAL') then
     begin
       Exit;
@@ -32677,7 +32685,7 @@ begin
       FPvalTemplate.SaveToFile(TemplateFileName);
 //    end;
 
-    if ModelSelection in Modflow2005Selection then
+    if UseWithMF2005 and (ModelSelection in Modflow2005Selection) then
     begin
       TCustomModflowWriter.WriteToNameFile('PVAL',
         UnitNumbers.UnitNumber(StrPval), PValFileName, foInput, self);
@@ -39646,6 +39654,11 @@ begin
       + '                  ' + UcodeDelimiter;
   if Parameter.ParameterType = ptPEST then
   begin
+    if Parameter.AddedToPval then
+    begin
+      Exit;
+    end;
+    Parameter.AddedToPval := True;
     if not (Parameter as TModflowSteadyParameter).UsePilotPoints then
     begin
       NewLine := '#-- ' + NewLine;

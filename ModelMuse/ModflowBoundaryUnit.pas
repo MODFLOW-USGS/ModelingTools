@@ -3524,6 +3524,7 @@ var
   UnmodifiedFormula: string;
   PestParam: TModflowSteadyParameter;
   PestParamName: string;
+  ADataSet: TDataArray;
 begin
   if Count = 0 then
   begin
@@ -3760,17 +3761,25 @@ begin
         // The UnmodifiedFormula might by a PEST parameter or a TDataArray
         // that is modified by PEST.
         UnmodifiedFormula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
-        // handle the situation if it is a PEST parameter
-        PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
-        if PestParam = nil then
+        ADataSet := LocalModel.DataArrayManager.GetDataSetByName(UnmodifiedFormula);
+        if (ADataSet <> nil) and ADataSet.PestParametersUsed then
         begin
-          PestParamName := '';
+          PestParamName := ADataSet.Name;
         end
         else
         begin
-          Formula := ReplaceText(Formula, UnmodifiedFormula,
-            FloatToStr(PestParam.Value));
-          PestParamName := PestParam.ParameterName;
+          // handle the situation if it is a PEST parameter
+          PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
+          if PestParam = nil then
+          begin
+            PestParamName := '';
+          end
+          else
+          begin
+            Formula := ReplaceText(Formula, UnmodifiedFormula,
+              FloatToStr(PestParam.Value));
+            PestParamName := PestParam.ParameterName;
+          end;
         end;
         { TODO -cPEST : Add PEST support for PEST here }
         ErrorFormula := Formula;
