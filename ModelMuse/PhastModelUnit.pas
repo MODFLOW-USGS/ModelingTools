@@ -4666,6 +4666,7 @@ that affects the model output should also have a comment. }
     procedure DrawPilotPoints(BitMap32: TBitmap32);
     function ShouldDrawPilotPoints: Boolean;
 //    property PilotPointSpacing: double read GetPilotPointSpacing;
+    procedure DisconnectObservers;
   published
     // The following properties are obsolete.
 
@@ -10241,6 +10242,10 @@ const
 //    '4.3.0.46' Bug fix: Not in released version. Fixed double export of drain
 //                elevation.
 
+//               Bug fix: Fixed a bug that could cause an access violation if
+//                the name of a global variable that was used in a model feature
+//                was changed.
+
 
 const
   // version number of ModelMuse.
@@ -12274,12 +12279,7 @@ end;
 
 procedure TPhastModel.InternalClear;
 var
-  Index: Integer;
-//  DataSet: TDataArray;
-  ScreenObject: TScreenObject;
-  Variable: TGlobalVariable;
   ChildIndex: Integer;
-  DataArray: TDataArray;
 begin
   SelectedModel := Self;
 
@@ -12293,28 +12293,7 @@ begin
   FGeoRef.Initialize;
   FSaveBfhBoundaryConditions := True;
 
-  SutraFluxObs.StopTalkingToAnyOne;
-  RipPlantGroups.StopTalkingToAnyone;
-  AllObserversStopTalking;
-  FLayerStructure.StopTalkingToAnyone;
-//  FSutraLayerStructure.StopTalkingToAnyone;
-  for Index := 0 to GlobalVariables.Count - 1 do
-  begin
-    Variable := GlobalVariables[Index];
-    Variable.StopTalkingToAnyone;
-  end;
-  for Index := 0 to ScreenObjectCount - 1 do
-  begin
-    ScreenObject := ScreenObjects[Index];
-    ScreenObject.StopTalkingToAnyone;
-  end;
-  for Index := 0 to FDataArrayManager.DataSetCount - 1 do
-  begin
-    DataArray := FDataArrayManager.DataSets[Index];
-    DataArray.StopTalkingToAnyone;
-//      frmFileProgress.pbProgress.StepIt;
-//      Application.ProcessMessages;
-  end;
+  DisconnectObservers;
 
   SutraFluxObs.Clear;
   RipPlantGroups.Clear;
@@ -22085,6 +22064,35 @@ end;
 function TPhastModel.ShouldDrawPilotPoints: Boolean;
 begin
   result := PestProperties.ShouldDrawPilotPoints;
+end;
+
+procedure TPhastModel.DisconnectObservers;
+var
+  Index: Integer;
+  Variable: TGlobalVariable;
+  ScreenObject: TScreenObject;
+  DataArray: TDataArray;
+begin
+  SutraFluxObs.StopTalkingToAnyOne;
+  RipPlantGroups.StopTalkingToAnyone;
+  AllObserversStopTalking;
+  FLayerStructure.StopTalkingToAnyone;
+  //  FSutraLayerStructure.StopTalkingToAnyone;
+  for Index := 0 to GlobalVariables.Count - 1 do
+  begin
+    Variable := GlobalVariables[Index];
+    Variable.StopTalkingToAnyone;
+  end;
+  for Index := 0 to ScreenObjectCount - 1 do
+  begin
+    ScreenObject := ScreenObjects[Index];
+    ScreenObject.StopTalkingToAnyone;
+  end;
+  for Index := 0 to FDataArrayManager.DataSetCount - 1 do
+  begin
+    DataArray := FDataArrayManager.DataSets[Index];
+    DataArray.StopTalkingToAnyone;
+  end;
 end;
 
 function TPhastModel.GetPestName: string;

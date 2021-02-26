@@ -3574,7 +3574,7 @@ begin
   try
     Compiler := LocalModel.rpThreeDFormulaCompiler;
 
-    AScreenObject.GetCellsToAssign({Grid,} '0', nil, nil, CellList, alAll, LocalModel);
+    AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, LocalModel);
 
     if CellList.Count = 0 then
     begin
@@ -3583,7 +3583,7 @@ begin
     // FSectionDuplicatesAllowed is set to True in TSwrReachCollection
     // and TStrCollection.
     // SFR in MODFLOW 6 requires duplicate cells to be used.
-    if not FSectionDuplicatesAllowed {or (LocalModel.ModelSelection = msModflow2015)} then
+    if not FSectionDuplicatesAllowed then
     begin
       // eliminate cells that are at the same location and are part of the
       // same section;
@@ -3627,7 +3627,8 @@ begin
             end
             else if (LocalModel.ModelSelection = msModflow2015)
               and not AllowInactiveMf6Cells
-              and (IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] <= 0) then
+              and (IDomainArray.IntegerData[
+              ACell.Layer, ACell.Row, ACell.Column] <= 0) then
             begin
               EliminateIndicies.Add(CellIndex);
             end
@@ -3724,7 +3725,7 @@ begin
                 Expression := Compiler.CurrentExpression;
 
                 CellList.Clear;
-                AScreenObject.GetCellsToAssign({Grid,} Formula, nil, nil, CellList,
+                AScreenObject.GetCellsToAssign(Formula, nil, nil, CellList,
                   alAll, LocalModel);
                 for Index := 0 to EliminateIndicies.Count - 1  do
                 begin
@@ -3732,6 +3733,9 @@ begin
                 end;
                 UpdateCurrentScreenObject(AScreenObject);
 
+                // This should be an inactive boundary so no parameter
+                // should be applied.
+                PestParamName := '';
                 AssignCellList(Expression, CellList, Boundaries[0, AModel],
                   BoundaryFunctionIndex, Variables, DataSets, LocalModel,
                   AScreenObject, PestParamName);
@@ -3854,7 +3858,7 @@ begin
 
           UpdateCurrentScreenObject(AScreenObject);
           CellList.Clear;
-          AScreenObject.GetCellsToAssign({Grid,} Formula, nil, nil, CellList,
+          AScreenObject.GetCellsToAssign(Formula, nil, nil, CellList,
             alAll, LocalModel);
           for Index := 0 to EliminateIndicies.Count - 1  do
           begin
@@ -3957,59 +3961,6 @@ begin
       end;
       Boundaries[StoredCount, AModel].CacheData;
     end;
-
-
-
-
-//    InitializeTimeLists(ListOfTimeLists);
-
-{
-
-    TestIfObservationsPresent(EndOfLastStressPeriod, StartOfFirstStressPeriod,
-      ObservationsPresent);
-    PriorTime := StartOfFirstStressPeriod;
-    ItemCount := 0;
-    for ItemIndex := 0 to Count - 1 do
-    begin
-      AnItem := Items[ItemIndex];
-      if ObservationsPresent then
-      begin
-        if PriorTime < AnItem.StartTime then
-        begin
-          ExtraItem := TNoFormulaItem.Create(nil);
-          try
-            ExtraItem.FStartTime := PriorTime;
-            ExtraItem.FEndTime := AnItem.StartTime;
-//            DataSets.Clear;
-//            AssignCellsWithItem(ExtraItem, ItemCount, DataSets, ListOfTimeLists);
-            Inc(ItemCount);
-          finally
-            ExtraItem.Free;
-          end;
-        end;
-        PriorTime := AnItem.EndTime;
-      end;
-//      DataSets.Clear;
-//      AssignCellsWithItem(AnItem, ItemCount, DataSets, ListOfTimeLists);
-      Inc(ItemCount);
-      if (ItemIndex = Count - 1) and ObservationsPresent then
-      begin
-        if AnItem.EndTime < EndOfLastStressPeriod then
-        begin
-          ExtraItem := TNoFormulaItem.Create(nil);
-          try
-            ExtraItem.FStartTime := AnItem.EndTime;
-            ExtraItem.FEndTime := EndOfLastStressPeriod;
-//            DataSets.Clear;
-//            AssignCellsWithItem(ExtraItem, ItemCount, DataSets, ListOfTimeLists);
-            Inc(ItemCount);
-          finally
-            ExtraItem.Free;
-          end;
-        end;
-      end;
-    end;
-    }
 
   finally
     EliminateIndicies.Free;

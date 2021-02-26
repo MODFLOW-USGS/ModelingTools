@@ -4,7 +4,8 @@ interface
 
 uses ZLib, SysUtils, Classes, Contnrs, ModflowBoundaryUnit,
   OrderedCollectionUnit, ModflowCellUnit, FormulaManagerUnit,
-  SubscriptionUnit, RbwParser, GoPhastTypes, ModflowTransientListParameterUnit;
+  SubscriptionUnit, RbwParser, GoPhastTypes, ModflowTransientListParameterUnit,
+  ModflowParameterUnit;
 
 type
   TDrnRecord = record
@@ -221,9 +222,20 @@ type
   TDrnBoundary = class(TSpecificModflowBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
+    FPestElevFormula: TFormulaObject;
+    FPestCondFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestElevationObserver: TObserver;
+    FPestConductanceObserver: TObserver;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
+    function GetPestElevFormula: string;
+    procedure SetPestElevFormula(const Value: string);
+    function GetPestConductanceFormula: string;
+    procedure SetPestConductanceFormula(const Value: string);
+    function GetPestConductanceObserver: TObserver;
+    function GetPestElevationObserver: TObserver;
   protected
 
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -238,7 +250,18 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestElevationObserver: TObserver read GetPestElevationObserver;
+    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent);override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TDrnStorage) in
@@ -254,8 +277,22 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+//    property PestElevationParameter: TModflowSteadyParameter
+//      read FPestElevationParameter write SetPestElevationParameter;
   published
     property Interp;
+    property PestElevFormula: string read GetPestElevFormula
+      write SetPestElevFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceFormula: string read GetPestConductanceFormula
+      write SetPestConductanceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
@@ -798,14 +835,15 @@ end;
 
 { TDrnBoundary }
 procedure TDrnBoundary.Assign(Source: TPersistent);
-//var
-//  SourceDrn: TDrnBoundary;
+var
+  SourceDrn: TDrnBoundary;
 begin
-//  if Source is TDrnBoundary then
-//  begin
-//    SourceDrn := TDrnBoundary(Source);
-//    Interp := SourceDrn.Interp;
-//  end;
+  if Source is TDrnBoundary then
+  begin
+    SourceDrn := TDrnBoundary(Source);
+    PestElevFormula := SourceDrn.PestElevFormula;
+    PestConductanceFormula := SourceDrn.PestConductanceFormula;
+  end;
   inherited;
 end;
 
@@ -862,11 +900,8 @@ begin
         begin
           BoundaryValues.Conductance :=
             BoundaryValues.Conductance * FCurrentParameter.Value;
-//          BoundaryValues.ConductanceAnnotation :=
-//            BoundaryValues.ConductanceAnnotation
-//            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
-          BoundaryValues.ConductanceAnnotation := Format(Str0sMultipliedByT, [
-            BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
+          BoundaryValues.ConductanceAnnotation := Format(Str0sMultipliedByT,
+            [BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
           BoundaryValues.ConductanceParameterName := FCurrentParameter.ParameterName;
           BoundaryValues.ConductanceParameterValue := FCurrentParameter.Value;
         end
@@ -895,6 +930,41 @@ begin
   result := TDrnCollection;
 end;
 
+function TDrnBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestDrn_';
+end;
+
+constructor TDrnBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  PestElevFormula := '0';
+  PestConductanceFormula := '0';
+end;
+
+procedure TDrnBoundary.CreateFormulaObjects;
+begin
+  FPestElevFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TDrnBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestElevationObserver);
+    FObserverList.Add(PestConductanceObserver);
+  end;
+end;
+
+destructor TDrnBoundary.Destroy;
+begin
+  PestElevFormula := '0';
+  PestConductanceFormula := '0';
+
+  inherited;
+end;
+
 procedure TDrnBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel);
 const
@@ -914,16 +984,6 @@ var
   ValueCount: Integer;
   Item: TCustomModflowBoundaryItem;
   LocalModel: TCustomModel;
-//  BoundaryList: TList;
-//  StressPeriods: TModflowStressPeriods;
-//  StartTime: Double;
-//  EndTime: Double;
-//  TimeCount: Integer;
-//  ItemIndex: Integer;
-//  TimeSeriesList: TTimeSeriesList;
-//  TimeSeries: TTimeSeries;
-//  SeriesIndex: Integer;
-//  InitialTime: Double;
 begin
   FCurrentParameter := nil;
   EvaluateListBoundaries(AModel);
@@ -953,7 +1013,7 @@ begin
       AssignCells(BoundaryStorage, ValueTimeList, AModel);
       Inc(ValueCount);
     end;
-    if {(ValueIndex = Values.Count - 1) and} ObservationsPresent then
+    if ObservationsPresent then
     begin
       if Item.EndTime < EndOfLastStressPeriod then
       begin
@@ -973,7 +1033,8 @@ begin
     ParamName := Param.Param.ParamName;
     if LocalModel.ModelSelection = msModflow2015 then
     begin
-      FCurrentParameter := LocalModel.ModflowTransientParameters.GetParamByName(ParamName);
+      FCurrentParameter := LocalModel.ModflowTransientParameters.
+        GetParamByName(ParamName);
     end
     else
     begin
@@ -990,93 +1051,6 @@ begin
       Times := ParamList.Objects[Position] as TList;
     end;
 
-
-//    if FCurrentParameter <> nil then
-//    begin
-////      BoundaryList := Param.Param.BoundaryList[AModel];
-////      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-////      StartTime := StressPeriods.First.StartTime;
-////      EndTime := StressPeriods.Last.EndTime;
-////      TimeCount := BoundaryList.Count;
-////      for ItemIndex := 0 to BoundaryList.Count - 1 do
-////      begin
-//////        BoundaryStorage := BoundaryList[ItemIndex];
-//////        if BoundaryStorage.StartingTime > StartTime then
-//////        begin
-//////          Inc(TimeCount);
-//////        end;
-//////        StartTime := BoundaryStorage.EndingTime;
-////      end;
-////      BoundaryStorage := BoundaryList.Last;
-////      if BoundaryStorage.EndingTime <= EndTime then
-////      begin
-////        Inc(TimeCount);
-////      end;
-//
-////      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-////      TimeSeries := TTimeSeries.Create;
-////      TimeSeriesList.Add(TimeSeries);
-////      TimeSeries.SeriesCount := Length(BoundaryStorage.DrnArray);
-////      TimeSeries.TimeCount := TimeCount;
-////      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-////      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-////      for SeriesIndex := 0 to Length(BoundaryStorage.DrnArray) - 1 do
-////      begin
-////        TimeSeries.SeriesNames[SeriesIndex] :=
-////          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-////          TimeSeriesList.Count, SeriesIndex+1]);
-////        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-////        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-////      end;
-//
-////      TimeCount := 0;
-////      StartTime := StressPeriods.First.StartTime;
-////      InitialTime := StartTime;
-////      for ItemIndex := 0 to BoundaryList.Count - 1 do
-////      begin
-//////        BoundaryStorage := BoundaryList[ItemIndex];
-//////        if BoundaryStorage.StartingTime > StartTime then
-//////        begin
-////////          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-////////          for SeriesIndex := 0 to Length(BoundaryStorage.DrnArray) - 1 do
-////////          begin
-////////            if ItemIndex > 0 then
-////////            begin
-////////              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-////////            end
-////////            else
-////////            begin
-////////              TimeSeries.Values[SeriesIndex,TimeCount] :=
-////////                BoundaryStorage.DrnArray[SeriesIndex].Conductance;
-////////            end;
-////////          end;
-////////          Inc(TimeCount);
-//////        end;
-//////        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-//////        for SeriesIndex := 0 to Length(BoundaryStorage.DrnArray) - 1 do
-//////        begin
-//////          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//////            BoundaryStorage.DrnArray[SeriesIndex].Conductance;
-//////          BoundaryStorage.DrnArray[SeriesIndex].TimeSeriesName :=
-//////            TimeSeries.SeriesNames[SeriesIndex];
-//////        end;
-//////        StartTime := BoundaryStorage.EndingTime;
-//////        Inc(TimeCount);
-////      end;
-////      BoundaryStorage := BoundaryList.Last;
-////      if BoundaryStorage.EndingTime <= EndTime then
-////      begin
-//////        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-//////        for SeriesIndex := 0 to Length(BoundaryStorage.DrnArray) - 1 do
-//////        begin
-//////          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//////            BoundaryStorage.DrnArray[SeriesIndex].Conductance;
-//////        end;
-////      end;
-//    end;
-
-
-
     PriorTime := StartOfFirstStressPeriod;
     ValueCount := 0;
     for ValueIndex := 0 to Param.Param.Count - 1 do
@@ -1088,7 +1062,8 @@ begin
         begin
           if ValueCount < Param.Param.BoundaryCount[AModel] then
           begin
-            BoundaryStorage := Param.Param.Boundaries[ValueCount, AModel] as TDrnStorage;
+            BoundaryStorage := Param.Param.
+              Boundaries[ValueCount, AModel] as TDrnStorage;
             AssignCells(BoundaryStorage, Times, AModel);
             Inc(ValueCount);
           end;
@@ -1097,17 +1072,19 @@ begin
       end;
       if ValueCount < Param.Param.BoundaryCount[AModel] then
       begin
-        BoundaryStorage := Param.Param.Boundaries[ValueCount, AModel] as TDrnStorage;
+        BoundaryStorage := Param.Param
+          .Boundaries[ValueCount, AModel] as TDrnStorage;
         AssignCells(BoundaryStorage, Times, AModel);
         Inc(ValueCount);
       end;
-      if {(ValueIndex = Param.Param.Count - 1) and} ObservationsPresent then
+      if ObservationsPresent then
       begin
         if Item.EndTime < EndOfLastStressPeriod then
         begin
           if ValueCount < Param.Param.BoundaryCount[AModel] then
           begin
-            BoundaryStorage := Param.Param.Boundaries[ValueCount, AModel] as TDrnStorage;
+            BoundaryStorage := Param.Param.
+              Boundaries[ValueCount, AModel] as TDrnStorage;
             AssignCells(BoundaryStorage, Times, AModel);
             Inc(ValueCount);
           end;
@@ -1115,6 +1092,70 @@ begin
       end;
     end;
   end;
+end;
+
+function TDrnBoundary.GetPestConductanceFormula: string;
+begin
+  Result := FPestCondFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(ConductancePosition);
+  end;
+end;
+
+function TDrnBoundary.GetPestConductanceObserver: TObserver;
+begin
+  if FPestConductanceObserver = nil then
+  begin
+    CreateObserver('PestConductance_', FPestConductanceObserver, nil);
+  end;
+  result := FPestConductanceObserver;
+end;
+
+function TDrnBoundary.GetPestElevationObserver: TObserver;
+begin
+  if FPestElevationObserver = nil then
+  begin
+    CreateObserver('PestElevation_', FPestElevationObserver, nil);
+  end;
+  result := FPestElevationObserver;
+end;
+
+function TDrnBoundary.GetPestElevFormula: string;
+begin
+  Result := FPestElevFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(ElevationPosition);
+  end;
+end;
+
+procedure TDrnBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestElevFormula then
+  begin
+    List.Add(FObserverList[ElevationPosition]);
+  end;
+  if Sender = FPestCondFormula then
+  begin
+    List.Add(FObserverList[ConductancePosition]);
+  end;
+
+end;
+
+function TDrnBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestDRN_Used_', FUsedObserver, nil);
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TDrnBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
 end;
 
 procedure TDrnBoundary.InvalidateDisplay;
@@ -1138,6 +1179,16 @@ end;
 function TDrnBoundary.ParameterType: TParameterType;
 begin
   result := ptDRN;
+end;
+
+procedure TDrnBoundary.SetPestConductanceFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ConductancePosition, FPestCondFormula);
+end;
+
+procedure TDrnBoundary.SetPestElevFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ElevationPosition, FPestElevFormula);
 end;
 
 procedure TDrnBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,

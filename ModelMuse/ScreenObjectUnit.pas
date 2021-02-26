@@ -3292,7 +3292,7 @@ view. }
     procedure GetCellsToAssign({const Grid: TCustomModelGrid; }
       const DataSetFunction: string; OtherData: TObject;
       const DataSet: TDataArray; CellList: TCellAssignmentList;
-      AssignmentLocation: TAssignmentLocation; AModel: TBaseModel); {overload;}
+      AssignmentLocation: TAssignmentLocation; AModel: TBaseModel);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
 {    procedure GetCellsToAssign(const Mesh: IMesh3D;
@@ -33838,15 +33838,9 @@ begin
       DataSet, CellList, AssignmentLocation, AModel);
     else Assert(False);
   end;
+
   if not DuplicatesAllowed then
   begin
-//    if SetValuesOfEnclosedCells then
-//    begin
-//      EliminateHoleCells(CellList);
-//    end;
-//  end
-//  else
-//  begin
     EliminateDuplicates(CellList,Model)
   end;
 end;

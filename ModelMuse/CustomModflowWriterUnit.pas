@@ -98,6 +98,9 @@ type
     class function Extension: string; virtual; abstract;
     procedure WriteTemplateFormula(ParameterName: string;
       ModifierValue: double; Method: TPestParamMethod);
+    procedure WriteArrayReplacementFormula(DataSetName: string;
+      ModifierValue: double; Method: TPestParamMethod; Layer, Row,
+      Column: Integer);
     procedure WriteTemplateReplace(ParameterName: string);
     procedure WriteArrayReplace(ArrayName: string; Layer, Row, Column: Integer);
     procedure WritePestTemplateLine(AFileName: string);
@@ -1142,6 +1145,8 @@ resourcestring
   'ed.';
   StrPLPROCNotFound = 'PLPROC not found';
   StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
+  StrArrayFormulaFormat = ' %0:s                   %1:s                   %2' +
+  ':s[%5:d,%6:d,%7:d]%1:s %4:s %3:g%0:s ';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
@@ -9111,6 +9116,31 @@ begin
   TemplateCharacter := Model.PestProperties.TemplateCharacter;
   WriteString(Format(' %0:s                %1:s%0:s',
     [TemplateCharacter, ParameterName]));
+end;
+
+procedure TCustomFileWriter.WriteArrayReplacementFormula(DataSetName: string;
+  ModifierValue: double; Method: TPestParamMethod; Layer, Row, Column: Integer);
+var
+  ArrayTemplateCharacter: string;
+  ExtendedTemplateCharacter: string;
+  Operation: string;
+begin
+  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+  case Method of
+    ppmMultiply:
+      begin
+        Operation := '*';
+      end;
+    ppmAdd:
+      begin
+        Operation := '+';
+      end;
+  end;
+  WriteString
+    (Format(StrArrayFormulaFormat,
+    [ExtendedTemplateCharacter, ArrayTemplateCharacter, DataSetName,
+    ModifierValue, Operation, Layer, Row, Column]));
 end;
 
 procedure TCustomFileWriter.WriteTemplateFormula(ParameterName: string;

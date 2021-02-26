@@ -311,7 +311,8 @@ begin
   begin
     FSubscribers.Add(Observer);
     // is the following OK?
-    // The following may be needed when adding or removing a new HUF multiplier or zone array.
+    // The following may be needed when adding or removing
+    // a new HUF multiplier or zone array.
     Observer.UpToDate := False;
   end;
 end;
@@ -328,7 +329,8 @@ begin
     begin
       FSubscribers.Remove(Observer);
       // is the following OK?
-      // The following may be needed when adding or removing a new HUF multiplier or zone array.
+      // The following may be needed when adding
+      // or removing a new HUF multiplier or zone array.
       if Observer <> nil then
       begin
         Observer.UpToDate := False;

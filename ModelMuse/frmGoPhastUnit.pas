@@ -3945,13 +3945,18 @@ begin
   Hide;
   }
 
+  // The UndoStack may contain items that would cause an error when being
+  // destroyed if the Observers like global variables were still talking
+  // to them. Because of that, DisconnectObservers is called before clearing
+  // the UndoStack
+  FPhastModel.DisconnectObservers;
   UndoStack.Clear;
   // Get rid of the model.
 //  FreeAndNil(FPhastModel);
   // Formula manager needs FPhastModel to be defined during FPhastModel.Free;
   FPhastModel.Free;
   FPhastModel := nil;
-  FPhastModel := nil;
+//  FPhastModel := nil;
   inherited;
 //  OutputDebugString('SAMPLING OFF');
 end;

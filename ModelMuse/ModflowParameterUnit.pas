@@ -675,7 +675,6 @@ begin
     InvalidatePestDataArrays;
   end;
   inherited;
-
 end;
 
 procedure TModflowSteadyParameter.SetVertSpatialContinuityGroupName(

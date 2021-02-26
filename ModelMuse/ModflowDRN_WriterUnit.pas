@@ -315,6 +315,8 @@ var
   Param: TModflowSteadyParameter;
   DataArray: TDataArray;
   AScreenObject: TScreenObject;
+  DataArrayLayer: Integer;
+  DataArrayValue: double;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest data
@@ -353,9 +355,16 @@ begin
         Drn_Cell.ElevationPest);
       if DataArray <> nil then
       begin
-//        AddUsedPestDataArray(DataArray);
+        if DataArray.Orientation = dsoTop then
+        begin
+          DataArrayLayer := 1;
+        end
+        else
+        begin
+          DataArrayLayer := LocalLayer;
+        end;
         WriteArrayReplace(DataArray.Name,
-          LocalLayer, Drn_Cell.Row+1, Drn_Cell.Column+1);
+          DataArrayLayer, Drn_Cell.Row+1, Drn_Cell.Column+1);
       end
       else
       begin
@@ -365,7 +374,6 @@ begin
           [Drn_Cell.ElevationPest, AScreenObject.Name]), AScreenObject);
       end;
     end;
-//    WriteFloat(Drn_Cell.Elevation);
   end
   else
   begin
@@ -385,6 +393,8 @@ begin
     and WritingTemplate
     and ( Drn_Cell.ConductanceParameterName <> '') then
   begin
+    // PEST parameters are not allowed to be combined
+    // with MF-2005 style parameters.
     Assert(Drn_Cell.ConductancePest = '');
     ParameterName := Drn_Cell.ConductanceParameterName;
     if Drn_Cell.ConductanceParameterValue = 0 then
@@ -396,29 +406,79 @@ begin
       MultiplierValue := Drn_Cell.Conductance
         / Drn_Cell.ConductanceParameterValue;
     end;
-    { TODO -cPEST : Add PEST support for PEST here }
-    // handle pest parameter
-    // handle multiply or add
     WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else if Model.PestUsed and WritingTemplate
     and (Drn_Cell.ConductancePest <> '') then
   begin
+    { TODO -cPEST : Add PEST support for PEST here }
+    // handle pest parameter
+    // handle multiply or add
     Param := Model.GetPestParameterByName(Drn_Cell.ConductancePest);
-    Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
-    if Param.Value = 0 then
+    if Param <> nil then
     begin
-      MultiplierValue := 0.0;
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+      if Param.Value = 0 then
+      begin
+        MultiplierValue := 0.0;
+      end
+      else
+      begin
+        MultiplierValue := Drn_Cell.Conductance / Param.Value;
+      end;
+      WriteTemplateFormula(Drn_Cell.ConductancePest, MultiplierValue, ppmMultiply);
     end
     else
     begin
-      MultiplierValue := Drn_Cell.Conductance / Param.Value;
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drn_Cell.ConductancePest);
+      if DataArray <> nil then
+      begin
+        if DataArray.Orientation = dsoTop then
+        begin
+          DataArrayLayer := 1;
+          DataArrayValue := DataArray.RealData[0,Drn_Cell.Row,Drn_Cell.Column];
+        end
+        else
+        begin
+          DataArrayLayer := LocalLayer;
+          DataArrayValue := DataArray.RealData[Drn_Cell.Layer,Drn_Cell.Row,Drn_Cell.Column];
+        end;
+        if DataArrayValue = 0 then
+        begin
+          MultiplierValue := 0.0;
+        end
+        else
+        begin
+          MultiplierValue := Drn_Cell.Conductance / DataArrayValue;
+        end;
+
+        WriteArrayReplacementFormula(DataArray.Name,
+          MultiplierValue, ppmMultiply,
+          DataArrayLayer, Drn_Cell.Row+1, Drn_Cell.Column+1)
+      end
+      else
+      begin
+        AScreenObject := Drn_Cell.ScreenObject as TScreenObject;
+        frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+          Format('%0:s was not recognized in %1:s',
+          [Drn_Cell.ConductancePest, AScreenObject.Name]), AScreenObject);
+      end;
+
     end;
-    WriteTemplateFormula(Drn_Cell.ConductancePest, MultiplierValue, ppmMultiply);
   end
   else
   begin
     WriteFloat(Drn_Cell.Conductance);
+    if Drn_Cell.ConductancePest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drn_Cell.ConductancePest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
   end;
 
   WriteIface(Drn_Cell.IFace);
