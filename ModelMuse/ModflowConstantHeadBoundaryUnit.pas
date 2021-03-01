@@ -100,7 +100,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
   public
@@ -421,13 +422,15 @@ end;
 procedure TChdCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   ChdStorage: TChdStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   ChdStorage := BoundaryStorage as TChdStorage;

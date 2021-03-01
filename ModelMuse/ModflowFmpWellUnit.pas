@@ -122,7 +122,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
   public
     function TimeListCount(AModel: TBaseModel): integer; override;
   end;
@@ -669,13 +670,14 @@ procedure TFmpWellCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
   AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   FmpWellStorage: TFmpWellStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
         { TODO -cPEST : Add PEST support for PEST here }
         // record PEST parameter name if present.
         // record PEST DataArray name if present.

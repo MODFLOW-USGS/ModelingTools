@@ -35,6 +35,10 @@ type
     ConductanceParameterValue: double;
     ElevationPest: string;
     ConductancePest: string;
+    ElevationPestSeries: string;
+    ConductancePestSeries: string;
+    ElevationPestSeriesMethod: TPestParamMethod;
+    ConductancePestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -123,7 +127,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -166,6 +171,10 @@ type
     function GetConductanceParameterValue: double;
     function GetConductancePest: string;
     function GetElevationPest: string;
+    function GetConductancePestSeries: string;
+    function GetElevationPestSeries: string;
+    function GetConductancePestSeriesMethod: TPestParamMethod;
+    function GetElevationPestSeriesMethod: TPestParamMethod;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -202,10 +211,18 @@ type
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    // MODFLOW-2000 style parameter
     property ConductanceParameterName: string read GetConductanceParameterName;
     property ConductanceParameterValue: double read GetConductanceParameterValue;
+    // PEST parameters
     property ElevationPest: string read GetElevationPest;
     property ConductancePest: string read GetConductancePest;
+    property ElevationPestSeries: string read GetElevationPestSeries;
+    property ConductancePestSeries: string read GetConductancePestSeries;
+    property ElevationPestSeriesMethod: TPestParamMethod
+      read GetElevationPestSeriesMethod;
+    property ConductancePestSeriesMethod: TPestParamMethod
+      read GetConductancePestSeriesMethod;
   end;
 
   // @name represents the MODFLOW Drain boundaries associated with
@@ -227,6 +244,8 @@ type
     FUsedObserver: TObserver;
     FPestElevationObserver: TObserver;
     FPestConductanceObserver: TObserver;
+    FPestConductanceMethod: TPestParamMethod;
+    FPestElevMethod: TPestParamMethod;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
@@ -236,6 +255,14 @@ type
     procedure SetPestConductanceFormula(const Value: string);
     function GetPestConductanceObserver: TObserver;
     function GetPestElevationObserver: TObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string);
+    procedure SetPestConductanceMethod(const Value: TPestParamMethod);
+    procedure SetPestElevMethod(const Value: TPestParamMethod);
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod);
   protected
 
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -279,6 +306,10 @@ type
     procedure InvalidateDisplay; override;
 //    property PestElevationParameter: TModflowSteadyParameter
 //      read FPestElevationParameter write SetPestElevationParameter;
+    property PestBoundaryFormula[FormulaIndex: integer]: string
+      read GetPestBoundaryFormula write SetPestBoundaryFormula;
+    property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
+      read GetPestBoundaryMethod write SetPestBoundaryMethod;
   published
     property Interp;
     property PestElevFormula: string read GetPestElevFormula
@@ -289,6 +320,18 @@ type
       ;
     property PestConductanceFormula: string read GetPestConductanceFormula
       write SetPestConductanceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestElevMethod: TPestParamMethod read FPestElevMethod
+      write SetPestElevMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceMethod: TPestParamMethod
+      read FPestConductanceMethod write SetPestConductanceMethod
       {$IFNDEF PEST}
       Stored False
       {$ENDIF}
@@ -537,13 +580,15 @@ end;
 procedure TDrnCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   DrnStorage: TDrnStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition]);
   Assert(Expression <> nil);
 
@@ -564,12 +609,16 @@ begin
             Elevation := Expression.DoubleResult;
             ElevationAnnotation := ACell.Annotation;
             ElevationPest := PestName;
+            ElevationPestSeries := PestSeriesName;
+            ElevationPestSeriesMethod := PestSeriesMethod;
           end;
         ConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
             ConductancePest := PestName;
+            ConductancePestSeries := PestSeriesName;
+            ConductancePestSeriesMethod := PestSeriesMethod;
           end;
         else
           Assert(False);
@@ -690,6 +739,16 @@ begin
   result := Values.ElevationPest;
 end;
 
+function TDrn_Cell.GetElevationPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.ElevationPestSeriesMethod;
+end;
+
+function TDrn_Cell.GetElevationPestSeries: string;
+begin
+  result := Values.ElevationPestSeries;
+end;
+
 function TDrn_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -737,6 +796,16 @@ end;
 function TDrn_Cell.GetConductancePest: string;
 begin
   result := Values.ConductancePest;
+end;
+
+function TDrn_Cell.GetConductancePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.ConductancePestSeriesMethod;
+end;
+
+function TDrn_Cell.GetConductancePestSeries: string;
+begin
+  result := Values.ConductancePestSeries;
 end;
 
 function TDrn_Cell.GetLayer: integer;
@@ -938,6 +1007,10 @@ end;
 constructor TDrnBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
   PestElevFormula := '0';
   PestConductanceFormula := '0';
 end;
@@ -1094,6 +1167,41 @@ begin
   end;
 end;
 
+function TDrnBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        result := PestElevFormula;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TDrnBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := PestConductanceMethod;
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        result := PestElevMethod;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceMethod;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 function TDrnBoundary.GetPestConductanceFormula: string;
 begin
   Result := FPestCondFormula.Formula;
@@ -1108,6 +1216,7 @@ begin
   if FPestConductanceObserver = nil then
   begin
     CreateObserver('PestConductance_', FPestConductanceObserver, nil);
+//    FPestConductanceObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FPestConductanceObserver;
 end;
@@ -1117,6 +1226,7 @@ begin
   if FPestElevationObserver = nil then
   begin
     CreateObserver('PestElevation_', FPestElevationObserver, nil);
+//    FPestElevationObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FPestElevationObserver;
 end;
@@ -1148,6 +1258,7 @@ begin
   if FUsedObserver = nil then
   begin
     CreateObserver('PestDRN_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FUsedObserver;
 end;
@@ -1181,14 +1292,66 @@ begin
   result := ptDRN;
 end;
 
+procedure TDrnBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        PestElevFormula := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TDrnBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        PestElevMethod := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceMethod := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 procedure TDrnBoundary.SetPestConductanceFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, ConductancePosition, FPestCondFormula);
 end;
 
+procedure TDrnBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
+begin
+  if FPestConductanceMethod <> Value then
+  begin
+    FPestConductanceMethod := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TDrnBoundary.SetPestElevFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, ElevationPosition, FPestElevFormula);
+end;
+
+procedure TDrnBoundary.SetPestElevMethod(const Value: TPestParamMethod);
+begin
+  if FPestElevMethod <> Value then
+  begin
+    FPestElevMethod := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TDrnBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,
@@ -1228,6 +1391,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompInt(Comp, Strings.IndexOf(ElevationPest));
   WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
+  WriteCompInt(Comp, Strings.IndexOf(ElevationPestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePestSeries));
+  WriteCompInt(Comp, Ord(ElevationPestSeriesMethod));
+  WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -1240,6 +1407,8 @@ begin
   Strings.Add(ConductanceParameterName);
   Strings.Add(ElevationPest);
   Strings.Add(ConductancePest);
+  Strings.Add(ElevationPestSeries);
+  Strings.Add(ConductancePestSeries);
 end;
 
 procedure TDrnRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1256,6 +1425,10 @@ begin
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
   ElevationPest := Annotations[ReadCompInt(Decomp)];
   ConductancePest := Annotations[ReadCompInt(Decomp)];
+  ElevationPestSeries := Annotations[ReadCompInt(Decomp)];
+  ConductancePestSeries := Annotations[ReadCompInt(Decomp)];
+  ElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 end;

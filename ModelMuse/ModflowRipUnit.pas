@@ -109,7 +109,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -794,7 +795,8 @@ end;
 procedure TRipCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   RipStorage: TRipStorage;
   CellList: TCellAssignmentList;
@@ -802,6 +804,7 @@ var
   ACell: TCellAssignment;
   PlantGroupCount: Integer;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   PlantGroupCount := frmGoPhast.PhastModel.RipPlantGroups.Count;
   Assert(BoundaryFunctionIndex in [LandElevationPosition..PlantGroupCount]);
   Assert(Expression <> nil);

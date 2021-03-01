@@ -232,7 +232,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel); override;
    public
@@ -1161,7 +1162,8 @@ end;
 procedure TCSubCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   CSubStorage: TCSubStorage;
   CellList: TCellAssignmentList;
@@ -1169,6 +1171,7 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 

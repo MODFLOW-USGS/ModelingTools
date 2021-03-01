@@ -129,7 +129,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
   end;
 
   // Each @name stores a @link(TWellCollection).
@@ -369,7 +370,8 @@ end;
 procedure TWellCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   WellStorage: TWellStorage;
   CellList: TCellAssignmentList;
@@ -377,6 +379,7 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 

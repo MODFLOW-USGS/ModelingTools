@@ -526,7 +526,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); virtual; abstract;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); virtual; abstract;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -575,7 +576,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -1086,7 +1088,8 @@ implementation
 uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
   GIS_Functions, IntListUnit, ModflowCellUnit, frmProgressUnit, Dialogs,
-  EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit;
+  EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
+  ModflowDrnUnit, CustomModflowWriterUnit;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';
@@ -1420,7 +1423,8 @@ end;
 procedure TCustomMF_ArrayBoundColl.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 begin
   // this is only used with cell lists.
   Assert(False);
@@ -3525,6 +3529,8 @@ var
   PestParam: TModflowSteadyParameter;
   PestParamName: string;
   ADataSet: TDataArray;
+  Method: TPestParamMethod;
+  PestSeriesName: string;
 begin
   if Count = 0 then
   begin
@@ -3736,9 +3742,11 @@ begin
                 // This should be an inactive boundary so no parameter
                 // should be applied.
                 PestParamName := '';
+                PestSeriesName := '';
+                Method := ppmMultiply;
                 AssignCellList(Expression, CellList, Boundaries[0, AModel],
                   BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-                  AScreenObject, PestParamName);
+                  AScreenObject, PestParamName, PestSeriesName, Method);
 
                 LocalModel.DataArrayManager.CacheDataArrays;
               end;
@@ -3765,6 +3773,62 @@ begin
         // The UnmodifiedFormula might by a PEST parameter or a TDataArray
         // that is modified by PEST.
         UnmodifiedFormula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
+
+        if BoundaryGroup is TDrnBoundary then
+        begin
+          PestSeriesName := TDrnBoundary(BoundaryGroup).
+            PestBoundaryFormula[BoundaryFunctionIndex];
+          Method := TDrnBoundary(BoundaryGroup).
+            PestBoundaryMethod[BoundaryFunctionIndex];
+          if (PestSeriesName <> '') and (PestSeriesName <> '0') then
+          begin
+            ADataSet := LocalModel.DataArrayManager.GetDataSetByName(UnmodifiedFormula);
+            if (ADataSet <> nil) and ADataSet.PestParametersUsed then
+            begin
+              PestSeriesName := ADataSet.Name;
+              case Method of
+                ppmMultiply:
+                  begin
+                    Formula := '(' + Formula + ') * ' + PestSeriesName;
+                  end;
+                ppmAdd:
+                  begin
+                    Formula := '(' + Formula + ') + ' + PestSeriesName;
+                  end;
+              end;
+
+  //            Case TDrnBoundary(BoundaryGroup).
+  //            PestBoundaryMethod[BoundaryFunctionIndex];
+            end
+            else
+            begin
+              PestParam := LocalModel.GetPestParameterByName(PestSeriesName);
+              if PestParam = nil then
+              begin
+                PestSeriesName := '';
+              end
+              else
+              begin
+                Case Method of
+                  ppmMultiply:
+                    begin
+                      Formula := Format('(%0:s) * %1:g', [Formula, PestParam.Value]);
+                    end;
+                  ppmAdd:
+                    begin
+                      Formula := Format('(%0:s) + %1:g', [Formula, PestParam.Value]);
+                    end;
+                End;
+                PestSeriesName := PestParam.ParameterName;
+              end;
+            end;
+          end;
+        end
+        else
+        begin
+          PestSeriesName := '';
+        end;
+
         ADataSet := LocalModel.DataArrayManager.GetDataSetByName(UnmodifiedFormula);
         if (ADataSet <> nil) and ADataSet.PestParametersUsed then
         begin
@@ -3865,10 +3929,23 @@ begin
             CellList.Delete(EliminateIndicies[Index]);
           end;
 
+        if BoundaryGroup is TDrnBoundary then
+        begin
+          PestSeriesName := TDrnBoundary(BoundaryGroup).
+            PestBoundaryFormula[BoundaryFunctionIndex];
+          Method := TDrnBoundary(BoundaryGroup).
+            PestBoundaryMethod[BoundaryFunctionIndex];
+        end
+        else
+        begin
+          PestSeriesName := '';
+          Method := ppmMultiply;
+        end;
+
         { TODO -cPEST : Add PEST support for PEST here }
           AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
             BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-            AScreenObject, PestParamName);
+            AScreenObject, PestParamName, PestSeriesName, Method);
         finally
           Variables.Free;
           DataSets.Free;
@@ -3945,7 +4022,7 @@ begin
 
                   AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
                     BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-                    AScreenObject, PestParamName);
+                    AScreenObject, PestParamName, PestSeriesName, Method);
                 end;
               finally
                 Variables.Free;

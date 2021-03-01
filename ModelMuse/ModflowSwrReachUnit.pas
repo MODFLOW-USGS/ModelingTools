@@ -138,7 +138,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     class function ItemClass: TBoundaryItemClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -588,13 +589,15 @@ end;
 procedure TSwrReachCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   SwrStorage: TSwrReachTransientStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [VerticalOffsetPosition, StagePosition]);
   Assert(Expression <> nil);
 

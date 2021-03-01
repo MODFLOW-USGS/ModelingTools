@@ -118,7 +118,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -920,7 +921,8 @@ end;
 procedure THfbCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   HfbStorage: THfbStorage;
   CellList: TCellAssignmentList;
@@ -929,6 +931,7 @@ var
   LocalScreenObject: TScreenObject;
   ErrorAnnotation: string;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [ThicknessPosition, HydraulicConductivityPosition]);
   Assert(Expression <> nil);
 

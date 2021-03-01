@@ -95,7 +95,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -442,9 +443,10 @@ procedure TSutraGeneralTransportCollection.AssignCellList(
   Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
   Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 begin
   inherited;
+  { TODO -cPEST : Handle PestSeriesName }
   // this needs to be changed?
   Assert(False);
 end;

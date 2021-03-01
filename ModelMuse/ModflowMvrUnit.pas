@@ -183,7 +183,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
@@ -758,13 +759,14 @@ end;
 procedure TMvrItems.AssignCellList(Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
   Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   MvrStorage: TMvrSourceStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   MvrStorage := BoundaryStorage as TMvrSourceStorage;

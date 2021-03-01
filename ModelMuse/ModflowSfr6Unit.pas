@@ -194,7 +194,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     procedure AssignDirectlySpecifiedValues( AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
   public
@@ -1378,7 +1379,8 @@ end;
 procedure TSfrMf6Collection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   Sfr6Storage: TSfrMf6Storage;
   CellList: TCellAssignmentList;
@@ -1387,6 +1389,7 @@ var
   RequiredLength: Integer;
   FractionAnnotation: string;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   Sfr6Storage := BoundaryStorage as TSfrMf6Storage;

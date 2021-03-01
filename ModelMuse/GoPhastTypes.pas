@@ -282,6 +282,8 @@ type
     msModflowLGR2, msModflowNWT, msModflowFmp, msModflowCfp, msSutra22,
     msSutra30, msFootPrint, msModflow2015);
 
+  TPestParamMethod = (ppmMultiply, ppmAdd);
+
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
     msModflowFmp, msModflowCfp, msModflow2015];

@@ -58,7 +58,6 @@ type
       }
   TErrorType = (etError, etWarning);
   TArrayWritingFormat = (awfModflow, awfMt3dms, awfModflow_6);
-  TPestParamMethod = (ppmMultiply, ppmAdd);
 
   TBoundaryFlowObservationLocation = record
 //    FCell: TCellLocation;
@@ -98,12 +97,15 @@ type
     class function Extension: string; virtual; abstract;
     procedure WriteTemplateFormula(ParameterName: string;
       ModifierValue: double; Method: TPestParamMethod);
-    procedure WriteArrayReplacementFormula(DataSetName: string;
-      ModifierValue: double; Method: TPestParamMethod; Layer, Row,
-      Column: Integer);
-    procedure WriteTemplateReplace(ParameterName: string);
-    procedure WriteArrayReplace(ArrayName: string; Layer, Row, Column: Integer);
+//    procedure WriteArrayReplacementFormula(DataSetName: string;
+//      ModifierValue: double; Method: TPestParamMethod; Layer, Row,
+//      Column: Integer);
+//    procedure WriteTemplateReplace(ParameterName: string);
+//    procedure WriteArrayReplace(ArrayName: string; Layer, Row, Column: Integer);
     procedure WritePestTemplateLine(AFileName: string);
+    procedure WritePestTemplateFormula(Value: double; PestParValue: string;
+      PestSeriesValue: string; Method: TPestParamMethod;
+      ACell: TValueCell);
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID: string);
     procedure OpenTempFile(const FileName: string);
@@ -2491,6 +2493,245 @@ begin
   end;
 end;
 
+procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
+  PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
+  ACell: TValueCell);
+var
+  Param: TModflowSteadyParameter;
+  AScreenObject: TScreenObject;
+  DataArray: TDataArray;
+  DataArrayLayer: Integer;
+  SeriesValue: double;
+  SeriesParam: TModflowSteadyParameter;
+  SeriesDataArray: TDataArray;
+  TemplateCharacter: string;
+  ArrayTemplateCharacter: string;
+  ExtendedTemplateCharacter: string;
+  SeriesReplacement: WideString;
+  CellValueReplacement: string;
+  Operation: String;
+  Formula: string;
+  procedure GetSeriesData;
+  var
+    LocalLayer: Integer;
+  begin
+    SeriesValue := 0;
+    SeriesParam := Model.GetPestParameterByName(PestSeriesValue);
+    if SeriesParam <> nil then
+    begin
+	    SeriesValue := SeriesParam.Value;
+      //WriteTemplateReplace(PestParValue);
+      Model.WritePValAndTemplate(SeriesParam.ParameterName, SeriesParam.Value,
+        SeriesParam);
+
+      SeriesReplacement := Format(' %0:s                %1:s%0:s',
+        [TemplateCharacter, PestSeriesValue])
+    end
+    else
+    begin
+      SeriesDataArray := Model.DataArrayManager.
+        GetDataSetByName(PestSeriesValue);
+      if SeriesDataArray <> nil then
+      begin
+        if SeriesDataArray.PestParametersUsed then
+        begin
+          if SeriesDataArray.Orientation = dsoTop then
+          begin
+            DataArrayLayer := 0;
+          end
+          else
+          begin
+            DataArrayLayer := ACell.Layer;
+          end;
+          SeriesValue := SeriesDataArray.RealData[
+            ACell.Layer, ACell.Row, ACell.Column];
+          LocalLayer := Model.DataSetLayerToModflowLayer(ACell.Layer);
+
+          SeriesReplacement := Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+            [ArrayTemplateCharacter, SeriesDataArray.Name,
+            LocalLayer, ACell.Row+1, ACell.Column+1]);
+  //        WriteArrayReplace(DataArray.Name, DataArrayLayer, Row, Column);
+        end
+        else
+        begin
+          SeriesReplacement := '';
+          SeriesValue := 0;
+        end;
+      end
+      else
+      begin
+        AScreenObject := ACell.ScreenObject as TScreenObject;
+        frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+          Format('%0:s was not recognized in %1:s',
+          [PestSeriesValue, AScreenObject.Name]), AScreenObject);
+      end;
+	  end;
+
+    if SeriesReplacement <> '' then
+    begin
+      Case Method of
+        ppmAdd:
+          begin
+            Value := Value - SeriesValue;
+          end;
+        ppmMultiply:
+          begin
+            if SeriesValue = 0 then
+            begin
+              Value := 0;
+            end
+            else
+            begin
+              Value := Value/SeriesValue;
+            end;
+          end;
+        else
+          Assert(False);
+      end;
+    end;
+  end;
+  procedure GetCellData;
+  var
+    ModifierValue: Double;
+    LocalLayer: Integer;
+  begin
+    ModifierValue := 0;
+    Param := Model.GetPestParameterByName(PestParValue);
+    if Param <> nil then
+    begin
+	    ModifierValue := Param.Value;
+      //WriteTemplateReplace(PestParValue);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+      CellValueReplacement := Format(' %0:s                %1:s%0:s',
+        [TemplateCharacter, PestParValue])
+    end
+    else
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(PestParValue);
+      if DataArray <> nil then
+      begin
+        if DataArray.PestParametersUsed then
+        begin
+          if DataArray.Orientation = dsoTop then
+          begin
+            DataArrayLayer := 0;
+          end
+          else
+          begin
+            DataArrayLayer := ACell.Layer;
+          end;
+          ModifierValue := DataArray.RealData[ACell.Layer, ACell.Row, ACell.Column];
+
+          LocalLayer := Model.DataSetLayerToModflowLayer(ACell.Layer);
+          CellValueReplacement := Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+            [ArrayTemplateCharacter, DataArray.Name,
+            LocalLayer, ACell.Row+1, ACell.Column+1]);
+
+  //        WriteArrayReplace(DataArray.Name, DataArrayLayer, Row, Column);
+        end
+        else
+        begin
+          CellValueReplacement := ''
+        end;
+      end
+      else
+      begin
+        AScreenObject := ACell.ScreenObject as TScreenObject;
+        frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+          Format('%0:s was not recognized in %1:s',
+          [PestParValue, AScreenObject.Name]), AScreenObject);
+      end;
+	  end;
+
+    if CellValueReplacement <> '' then
+    begin
+      if ModifierValue = 0 then
+      begin
+        Value := 0;
+      end
+      else
+      begin
+        Value := Value/ModifierValue;
+      end;
+    end;
+  end;
+begin
+  TemplateCharacter := Model.PestProperties.TemplateCharacter;
+  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+  Case Method of
+    ppmAdd:
+      begin
+        Operation := '+';
+      end;
+    ppmMultiply:
+      begin
+        Operation := '*';
+      end;
+    else
+      Assert(False);
+  end;
+
+  if (PestParValue <> '') and (PestSeriesValue <> '') then
+  begin
+    GetSeriesData;
+    GetCellData;
+
+    if (CellValueReplacement <> '') and (SeriesReplacement <> '') then
+    begin
+      Formula := Format(' %4:s              (%0:g * %1:s) %2:s %3:s%4:s',
+        [Value, CellValueReplacement, Operation, SeriesReplacement,
+        ExtendedTemplateCharacter]);
+      WriteString(Formula);
+    end
+    else if (CellValueReplacement <> '') then
+    begin
+      Formula := Format(' %2:s              %0:g * %1:s%2:s',
+        [Value, CellValueReplacement, ExtendedTemplateCharacter]);
+      WriteString(Formula);
+    end
+    else if (SeriesReplacement <> '') then
+    begin
+      Formula := Format(' %3:s              %0:g  %1:s %2:s%3:s',
+        [Value, Operation, SeriesReplacement, ExtendedTemplateCharacter]);
+      WriteString(Formula);
+    end
+    else
+    begin
+      WriteFloat(Value);
+    end;
+  end
+  else if (PestParValue <> '') then
+  begin
+    GetCellData;
+    if (CellValueReplacement <> '') then
+    begin
+      Formula := Format(' %2:s              %0:g * %1:s%2:s',
+        [Value, CellValueReplacement, ExtendedTemplateCharacter]);
+      WriteString(Formula);
+    end
+    else
+    begin
+      WriteFloat(Value);
+    end;
+  end
+  else
+  begin
+    Assert(PestSeriesValue <> '');
+    GetSeriesData;
+    if SeriesReplacement <> '' then
+    begin
+      Formula := Format(' %3:s              %0:g  %1:s %2:s%3:s',
+        [Value, Operation, SeriesReplacement, ExtendedTemplateCharacter]);
+      WriteString(Formula);
+    end
+    else
+    begin
+      WriteFloat(Value);
+    end;
+  end;
+end;
+
 procedure TCustomFileWriter.WritePestTemplateLine(AFileName: string);
 var
   PValFileName: string;
@@ -2838,16 +3079,16 @@ begin
   end;
 end;
 
-procedure TCustomFileWriter.WriteArrayReplace(ArrayName: string; Layer, Row,
-  Column: Integer);
-var
-  TemplateCharacter: Char;
-begin
-  // Layer, Row, and Column are for a One-based array.
-  TemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
-  WriteString(Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
-    [TemplateCharacter, ArrayName, Layer, Row, Column]));
-end;
+//procedure TCustomFileWriter.WriteArrayReplace(ArrayName: string; Layer, Row,
+//  Column: Integer);
+//var
+//  TemplateCharacter: Char;
+//begin
+//  // Layer, Row, and Column are for a One-based array.
+//  TemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+//  WriteString(Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+//    [TemplateCharacter, ArrayName, Layer, Row, Column]));
+//end;
 
 function TCustomFileWriter.WriteArraysFile(TemplateFileName: string): string;
 var
@@ -9109,39 +9350,39 @@ begin
   end;
 end;
 
-procedure TCustomFileWriter.WriteTemplateReplace(ParameterName: string);
-var
-  TemplateCharacter: string;
-begin
-  TemplateCharacter := Model.PestProperties.TemplateCharacter;
-  WriteString(Format(' %0:s                %1:s%0:s',
-    [TemplateCharacter, ParameterName]));
-end;
+//procedure TCustomFileWriter.WriteTemplateReplace(ParameterName: string);
+//var
+//  TemplateCharacter: string;
+//begin
+//  TemplateCharacter := Model.PestProperties.TemplateCharacter;
+//  WriteString(Format(' %0:s                %1:s%0:s',
+//    [TemplateCharacter, ParameterName]));
+//end;
 
-procedure TCustomFileWriter.WriteArrayReplacementFormula(DataSetName: string;
-  ModifierValue: double; Method: TPestParamMethod; Layer, Row, Column: Integer);
-var
-  ArrayTemplateCharacter: string;
-  ExtendedTemplateCharacter: string;
-  Operation: string;
-begin
-  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
-  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-  case Method of
-    ppmMultiply:
-      begin
-        Operation := '*';
-      end;
-    ppmAdd:
-      begin
-        Operation := '+';
-      end;
-  end;
-  WriteString
-    (Format(StrArrayFormulaFormat,
-    [ExtendedTemplateCharacter, ArrayTemplateCharacter, DataSetName,
-    ModifierValue, Operation, Layer, Row, Column]));
-end;
+//procedure TCustomFileWriter.WriteArrayReplacementFormula(DataSetName: string;
+//  ModifierValue: double; Method: TPestParamMethod; Layer, Row, Column: Integer);
+//var
+//  ArrayTemplateCharacter: string;
+//  ExtendedTemplateCharacter: string;
+//  Operation: string;
+//begin
+//  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+//  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+//  case Method of
+//    ppmMultiply:
+//      begin
+//        Operation := '*';
+//      end;
+//    ppmAdd:
+//      begin
+//        Operation := '+';
+//      end;
+//  end;
+//  WriteString
+//    (Format(StrArrayFormulaFormat,
+//    [ExtendedTemplateCharacter, ArrayTemplateCharacter, DataSetName,
+//    ModifierValue, Operation, Layer, Row, Column]));
+//end;
 
 procedure TCustomFileWriter.WriteTemplateFormula(ParameterName: string;
   ModifierValue: double; Method: TPestParamMethod);

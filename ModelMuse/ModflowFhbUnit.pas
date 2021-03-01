@@ -100,7 +100,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -462,7 +463,7 @@ procedure TFhbHeadCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
   AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   FhbStorage: TFhbStorage;
   CellList: TCellAssignmentList;
@@ -471,6 +472,7 @@ var
   Compiler: TRbwParser;
   NewFormula: string;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [BoundaryValuePosition]);
   Assert(Expression <> nil);
 

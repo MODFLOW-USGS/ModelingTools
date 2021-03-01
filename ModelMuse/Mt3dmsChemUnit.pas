@@ -225,7 +225,7 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod); override;
     procedure InsertNewSpecies(SpeciesIndex: integer; const Name: string);
     procedure DeleteSpecies(SpeciesIndex: integer);
     procedure CreateTimeLists;
@@ -243,7 +243,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     // @name is used in @link(RenameTimeList)
     function ConcName: string; virtual;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -649,13 +650,15 @@ end;
 procedure TCustomMt3dmsConcCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
-  AModel: TBaseModel; AScreenObject: TObject; PestName: string);
+  AModel: TBaseModel; AScreenObject: TObject; PestName: string;
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   ConcStorage: TMt3dmsConcStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   ConcStorage := BoundaryStorage as TMt3dmsConcStorage;
@@ -2159,13 +2162,14 @@ procedure TCustomMt3dmsArrayConcCollection.AssignCellList(
   Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
   Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 var
   ConcStorage: TMt3dmsConcStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   ConcStorage := BoundaryStorage as TMt3dmsConcStorage;
