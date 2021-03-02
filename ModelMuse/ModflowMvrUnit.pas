@@ -28,6 +28,8 @@ type
     MvrIndex: Integer;
     ValueAnnotations: array of string;
     ValuePests: array of string;
+    ValuePestSeriesNames: array of string;
+    ValuePestSeriesMethods: array of TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -766,7 +768,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   MvrStorage := BoundaryStorage as TMvrSourceStorage;
@@ -784,6 +785,8 @@ begin
       Values[BoundaryFunctionIndex] := Expression.DoubleResult;
       ValueAnnotations[BoundaryFunctionIndex] := ACell.Annotation;
       ValuePests[BoundaryFunctionIndex] := PestName;
+      ValuePestSeriesNames[BoundaryFunctionIndex] := PestSeriesName;
+      ValuePestSeriesMethods[BoundaryFunctionIndex] := PestSeriesMethod;
     end;
   end;
 end;
@@ -916,6 +919,10 @@ begin
     SetLength(MvrRecordArray[BoundaryIndex].ValueAnnotations,
       ReceiverCount);
     SetLength(MvrRecordArray[BoundaryIndex].ValuePests,
+      ReceiverCount);
+    SetLength(MvrRecordArray[BoundaryIndex].ValuePestSeriesNames,
+      ReceiverCount);
+    SetLength(MvrRecordArray[BoundaryIndex].ValuePestSeriesMethods,
       ReceiverCount);
   end;
   inherited;
@@ -1181,6 +1188,14 @@ begin
   begin
     WriteCompInt(Comp, Strings.IndexOf(ValuePests[Index]));
   end;
+  for Index := 0 to Length(ValuePestSeriesNames) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ValuePestSeriesNames[Index]));
+  end;
+  for Index := 0 to Length(ValuePestSeriesMethods) - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ValuePestSeriesMethods[Index]));
+  end;
   WriteCompInt(Comp, MvrIndex);
 end;
 
@@ -1195,6 +1210,10 @@ begin
   for Index := 0 to Length(ValuePests) - 1 do
   begin
     Strings.Add(ValuePests[Index]);
+  end;
+  for Index := 0 to Length(ValuePestSeriesNames) - 1 do
+  begin
+    Strings.Add(ValuePestSeriesNames[Index]);
   end;
 end;
 
@@ -1212,6 +1231,8 @@ begin
   SetLength(MvrTypes, Count);
   SetLength(ValueAnnotations, Count);
   SetLength(ValuePests, Count);
+  SetLength(ValuePestSeriesNames, Count);
+  SetLength(ValuePestSeriesMethods, Count);
   for Index := 0 to Count - 1 do
   begin
     Values[Index] := ReadCompReal(Decomp);
@@ -1227,6 +1248,14 @@ begin
   for Index := 0 to Count - 1 do
   begin
     ValuePests[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    ValuePestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    ValuePestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
   MvrIndex := ReadCompInt(Decomp)
 end;
@@ -1436,6 +1465,8 @@ begin
   SetLength(FValues.MvrTypes, ALength);
   SetLength(FValues.ValueAnnotations, ALength);
   SetLength(FValues.ValuePests, ALength);
+  SetLength(FValues.ValuePestSeriesNames, ALength);
+  SetLength(FValues.ValuePestSeriesMethods, ALength);
 end;
 
 end.

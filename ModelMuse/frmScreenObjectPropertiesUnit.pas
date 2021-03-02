@@ -22079,7 +22079,7 @@ begin
         Formula := NewValue;
         // The user edits the formula.
         ShowModal;
-        if ResultSet then
+        if ResultSet and (ModalResult = mrOK) then
         begin
           try
             CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,

@@ -487,7 +487,6 @@ procedure TCustomSutraBoundaryCollection.AssignCellList(Expression: TExpression;
   PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 begin
   inherited;
-  { TODO -cPEST : Handle PestSeriesName }
   // this needs to be changed?
   Assert(False);
 end;

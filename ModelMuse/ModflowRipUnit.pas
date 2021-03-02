@@ -18,8 +18,14 @@ type
     EndingTime: double;
     LandElevationAnnotation: string;
     CoverageAnnotations: array of string;
+
     LandElevationPest: string;
+    LandElevationPestSeriesName: string;
+    LandElevationPestSeriesMethod: TPestParamMethod;
+
     CoveragePests: array of string;
+    CoveragePestSeriesNames: array of string;
+    CoveragePestSeriesMethods: array of TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -232,6 +238,8 @@ begin
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(LandElevationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(LandElevationPest));
+  WriteCompInt(Comp, Strings.IndexOf(LandElevationPestSeriesName));
+  WriteCompInt(Comp, Ord(LandElevationPestSeriesMethod));
   for index := 0 to Length(Coverages) - 1 do
   begin
     WriteCompInt(Comp, Strings.IndexOf(CoverageAnnotations[index]));
@@ -239,6 +247,14 @@ begin
   for index := 0 to Length(Coverages) - 1 do
   begin
     WriteCompInt(Comp, Strings.IndexOf(CoveragePests[index]));
+  end;
+  for index := 0 to Length(Coverages) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(CoveragePestSeriesNames[index]));
+  end;
+  for index := 0 to Length(Coverages) - 1 do
+  begin
+    WriteCompInt(Comp, Ord(CoveragePestSeriesMethods[index]));
   end;
 end;
 
@@ -248,6 +264,7 @@ var
 begin
   Strings.Add(LandElevationAnnotation);
   Strings.Add(LandElevationPest);
+  Strings.Add(LandElevationPestSeriesName);
   for index := 0 to Length(Coverages) - 1 do
   begin
     Strings.Add(CoverageAnnotations[index]);
@@ -255,6 +272,10 @@ begin
   for index := 0 to Length(Coverages) - 1 do
   begin
     Strings.Add(CoveragePests[index]);
+  end;
+  for index := 0 to Length(Coverages) - 1 do
+  begin
+    Strings.Add(CoveragePestSeriesNames[index]);
   end;
 end;
 
@@ -269,7 +290,6 @@ begin
   ArrayLength := ReadCompInt(Decomp);
   SetLength(Coverages, ArrayLength);
 
-
   for index := 0 to Length(Coverages) - 1 do
   begin
     Coverages[index] := ReadCompReal(Decomp);
@@ -279,8 +299,13 @@ begin
 
   LandElevationAnnotation := Annotations[ReadCompInt(Decomp)];
   LandElevationPest := Annotations[ReadCompInt(Decomp)];
+  LandElevationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  LandElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
   SetLength(CoverageAnnotations, ArrayLength);
   SetLength(CoveragePests, ArrayLength);
+  SetLength(CoveragePestSeriesNames, ArrayLength);
+  SetLength(CoveragePestSeriesMethods, ArrayLength);
   for index := 0 to Length(CoverageAnnotations) - 1 do
   begin
     CoverageAnnotations[index] := Annotations[ReadCompInt(Decomp)];
@@ -288,6 +313,14 @@ begin
   for index := 0 to Length(CoveragePests) - 1 do
   begin
     CoveragePests[index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for index := 0 to Length(CoveragePests) - 1 do
+  begin
+    CoveragePestSeriesNames[index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for index := 0 to Length(CoveragePests) - 1 do
+  begin
+    CoveragePestSeriesMethods[index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
 end;
 
@@ -804,7 +837,6 @@ var
   ACell: TCellAssignment;
   PlantGroupCount: Integer;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   PlantGroupCount := frmGoPhast.PhastModel.RipPlantGroups.Count;
   Assert(BoundaryFunctionIndex in [LandElevationPosition..PlantGroupCount]);
   Assert(Expression <> nil);
@@ -826,12 +858,16 @@ begin
             LandElevation := Expression.DoubleResult;
             LandElevationAnnotation := ACell.Annotation;
             LandElevationPest := PestName;
+            LandElevationPestSeriesName := PestSeriesName;
+            LandElevationPestSeriesMethod := PestSeriesMethod;
           end;
         else
           begin
             Coverages[BoundaryFunctionIndex-1] := Expression.DoubleResult;
             CoverageAnnotations[BoundaryFunctionIndex-1] := ACell.Annotation;
             CoveragePests[BoundaryFunctionIndex-1] := PestName;
+            CoveragePestSeriesNames[BoundaryFunctionIndex-1] := PestSeriesName;
+            CoveragePestSeriesMethods[BoundaryFunctionIndex-1] := PestSeriesMethod;
           end;
       end;
     end;
@@ -1178,6 +1214,10 @@ begin
         Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
         SetLength(Cell.Values.Coverages, Length(Cell.Values.Coverages));
+        SetLength(Cell.Values.CoverageAnnotations, Length(Cell.Values.Coverages));
+        SetLength(Cell.Values.CoveragePests, Length(Cell.Values.Coverages));
+        SetLength(Cell.Values.CoveragePestSeriesNames, Length(Cell.Values.Coverages));
+        SetLength(Cell.Values.CoveragePestSeriesMethods, Length(Cell.Values.Coverages));
         Cell.ScreenObject := ScreenObject;
         LocalModel.AdjustCellPosition(Cell);
 

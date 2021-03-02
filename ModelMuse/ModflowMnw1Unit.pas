@@ -21,42 +21,73 @@ type
     // Qdes
     DesiredPumpingRate: double;
     DesiredPumpingRateAnnotation: string;
+    DesiredPumpingRatePestName: string;
+    DesiredPumpingRatePestSeriesName: string;
+    DesiredPumpingRatePestSeriesMethod: TPestParamMethod;
     // QWval
     WaterQuality: double;
     WaterQualityAnnotation: string;
+    WaterQualityPestName: string;
+    WaterQualityPestSeriesName: string;
+    WaterQualityPestSeriesMethod: TPestParamMethod;
     // Rw
     ConductanceMethod: TMnw1ConductanceMethod;
     // Rw
     WellRadius: double;
     WellRadiusAnnotation: string;
+    WellRadiusPestName: string;
+    WellRadiusPestSeriesName: string;
+    WellRadiusPestSeriesMethod: TPestParamMethod;
     // Rw
     Conductance: double;
     ConductanceAnnotation: string;
+    ConductancePestName: string;
+    ConductancePestSeriesName: string;
+    ConductancePestSeriesMethod: TPestParamMethod;
     // Skin
     SkinFactor: double;
     SkinFactorAnnotation: string;
+    SkinFactorPestName: string;
+    SkinFactorPestSeriesName: string;
+    SkinFactorPestSeriesMethod: TPestParamMethod;
     // DD
     WaterLevelLimitType: TMnw1WaterLevelLimitType;
     // Hlim
     LimitingWaterLevel: double;
     LimitingWaterLevelAnnotation: string;
+    LimitingWaterLevelPestName: string;
+    LimitingWaterLevelPestSeriesName: string;
+    LimitingWaterLevelPestSeriesMethod: TPestParamMethod;
     // Href
     ReferenceElevation: double;
     ReferenceElevationAnnotation: string;
+    ReferenceElevationPestName: string;
+    ReferenceElevationPestSeriesName: string;
+    ReferenceElevationPestSeriesMethod: TPestParamMethod;
     // Iwgrp
     WaterQualityGroup: integer;
     WaterQualityGroupAnnotation: string;
     // Cp:C
     NonLinearLossCoefficient: double;
     NonLinearLossCoefficientAnnotation: string;
+    NonLinearLossCoefficientPestName: string;
+    NonLinearLossCoefficientPestSeriesName: string;
+    NonLinearLossCoefficientPestSeriesMethod: TPestParamMethod;
     // QCUT, Q-%CUT:
     PumpingLimitType: TMnw1PumpingLimitType;
     // Qfrcmn
     MinimumPumpingRate: double;
     MinimumPumpingRateAnnotation: string;
+    MinimumPumpingRatePestName: string;
+    MinimumPumpingRatePestSeriesName: string;
+    MinimumPumpingRatePestSeriesMethod: TPestParamMethod;
     // Qfrcmx
     MaximumPumpingRate: double;
     MaximumPumpingRateAnnotation: string;
+    MaximumPumpingRatePestName: string;
+    MaximumPumpingRatePestSeriesName: string;
+    MaximumPumpingRatePestSeriesMethod: TPestParamMethod;
+
     StartingTime: double;
     EndingTime: double;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
@@ -836,31 +867,75 @@ begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
+
   WriteCompReal(Comp, DesiredPumpingRate);
   WriteCompInt(Comp, Strings.IndexOf(DesiredPumpingRateAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(DesiredPumpingRatePestName));
+  WriteCompInt(Comp, Strings.IndexOf(DesiredPumpingRatePestSeriesName));
+  WriteCompInt(Comp, Ord(DesiredPumpingRatePestSeriesMethod));
+
   WriteCompReal(Comp, WaterQuality);
   WriteCompInt(Comp, Strings.IndexOf(WaterQualityAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(WaterQualityPestName));
+  WriteCompInt(Comp, Strings.IndexOf(WaterQualityPestSeriesName));
+  WriteCompInt(Comp, Ord(WaterQualityPestSeriesMethod));
+
   WriteCompInt(Comp, Ord(ConductanceMethod));
+
   WriteCompReal(Comp, WellRadius);
   WriteCompInt(Comp, Strings.IndexOf(WellRadiusAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(WellRadiusPestName));
+  WriteCompInt(Comp, Strings.IndexOf(WellRadiusPestSeriesName));
+  WriteCompInt(Comp, Ord(WellRadiusPestSeriesMethod));
+
   WriteCompReal(Comp, Conductance);
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePestName));
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePestSeriesName));
+  WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
+
   WriteCompReal(Comp, SkinFactor);
   WriteCompInt(Comp, Strings.IndexOf(SkinFactorAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(SkinFactorPestName));
+  WriteCompInt(Comp, Strings.IndexOf(SkinFactorPestSeriesName));
+  WriteCompInt(Comp, Ord(SkinFactorPestSeriesMethod));
+
   WriteCompInt(Comp, Ord(WaterLevelLimitType));
+
   WriteCompReal(Comp, LimitingWaterLevel);
   WriteCompInt(Comp, Strings.IndexOf(LimitingWaterLevelAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(LimitingWaterLevelPestName));
+  WriteCompInt(Comp, Strings.IndexOf(LimitingWaterLevelPestSeriesName));
+  WriteCompInt(Comp, Ord(LimitingWaterLevelPestSeriesMethod));
+
   WriteCompReal(Comp, ReferenceElevation);
   WriteCompInt(Comp, Strings.IndexOf(ReferenceElevationAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(ReferenceElevationPestName));
+  WriteCompInt(Comp, Strings.IndexOf(ReferenceElevationPestSeriesName));
+  WriteCompInt(Comp, Ord(ReferenceElevationPestSeriesMethod));
+
   WriteCompInt(Comp, WaterQualityGroup);
   WriteCompInt(Comp, Strings.IndexOf(WaterQualityGroupAnnotation));
+
   WriteCompReal(Comp, NonLinearLossCoefficient);
   WriteCompInt(Comp, Strings.IndexOf(NonLinearLossCoefficientAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(NonLinearLossCoefficientPestName));
+  WriteCompInt(Comp, Strings.IndexOf(NonLinearLossCoefficientPestSeriesName));
+  WriteCompInt(Comp, Ord(NonLinearLossCoefficientPestSeriesMethod));
+
   WriteCompInt(Comp, Ord(PumpingLimitType));
+
   WriteCompReal(Comp, MinimumPumpingRate);
   WriteCompInt(Comp, Strings.IndexOf(MinimumPumpingRateAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(MinimumPumpingRatePestName));
+  WriteCompInt(Comp, Strings.IndexOf(MinimumPumpingRatePestSeriesName));
+  WriteCompInt(Comp, Ord(MinimumPumpingRatePestSeriesMethod));
+
   WriteCompReal(Comp, MaximumPumpingRate);
   WriteCompInt(Comp, Strings.IndexOf(MaximumPumpingRateAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(MaximumPumpingRatePestName));
+  WriteCompInt(Comp, Strings.IndexOf(MaximumPumpingRatePestSeriesName));
+  WriteCompInt(Comp, Ord(MaximumPumpingRatePestSeriesMethod));
 end;
 
 procedure TMnw1CellRecord.RecordStrings(Strings: TStringList);
@@ -876,6 +951,28 @@ begin
   Strings.Add(NonLinearLossCoefficientAnnotation);
   Strings.Add(MinimumPumpingRateAnnotation);
   Strings.Add(MaximumPumpingRateAnnotation);
+
+  Strings.Add(DesiredPumpingRatePestName);
+  Strings.Add(WaterQualityPestName);
+  Strings.Add(WellRadiusPestName);
+  Strings.Add(ConductancePestName);
+  Strings.Add(SkinFactorPestName);
+  Strings.Add(LimitingWaterLevelPestName);
+  Strings.Add(ReferenceElevationPestName);
+  Strings.Add(NonLinearLossCoefficientPestName);
+  Strings.Add(MinimumPumpingRatePestName);
+  Strings.Add(MaximumPumpingRatePestName);
+
+  Strings.Add(DesiredPumpingRatePestSeriesName);
+  Strings.Add(WaterQualityPestSeriesName);
+  Strings.Add(WellRadiusPestSeriesName);
+  Strings.Add(ConductancePestSeriesName);
+  Strings.Add(SkinFactorPestSeriesName);
+  Strings.Add(LimitingWaterLevelPestSeriesName);
+  Strings.Add(ReferenceElevationPestSeriesName);
+  Strings.Add(NonLinearLossCoefficientPestSeriesName);
+  Strings.Add(MinimumPumpingRatePestSeriesName);
+  Strings.Add(MaximumPumpingRatePestSeriesName);
 end;
 
 procedure TMnw1CellRecord.Restore(Decomp: TDecompressionStream;
@@ -887,42 +984,72 @@ begin
 
   DesiredPumpingRate := ReadCompReal(Decomp);
   DesiredPumpingRateAnnotation := Annotations[ReadCompInt(Decomp)];
+  DesiredPumpingRatePestName := Annotations[ReadCompInt(Decomp)];
+  DesiredPumpingRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  DesiredPumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   WaterQuality := ReadCompReal(Decomp);
   WaterQualityAnnotation := Annotations[ReadCompInt(Decomp)];
+  WaterQualityPestName := Annotations[ReadCompInt(Decomp)];
+  WaterQualityPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  WaterQualityPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   ConductanceMethod := TMnw1ConductanceMethod(ReadCompInt(Decomp));
 
   WellRadius := ReadCompReal(Decomp);
   WellRadiusAnnotation := Annotations[ReadCompInt(Decomp)];
+  WellRadiusPestName := Annotations[ReadCompInt(Decomp)];
+  WellRadiusPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  WellRadiusPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   Conductance := ReadCompReal(Decomp);
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
+  ConductancePestName := Annotations[ReadCompInt(Decomp)];
+  ConductancePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   SkinFactor := ReadCompReal(Decomp);
   SkinFactorAnnotation := Annotations[ReadCompInt(Decomp)];
+  SkinFactorPestName := Annotations[ReadCompInt(Decomp)];
+  SkinFactorPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  SkinFactorPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   WaterLevelLimitType := TMnw1WaterLevelLimitType(ReadCompInt(Decomp));
 
   LimitingWaterLevel := ReadCompReal(Decomp);
   LimitingWaterLevelAnnotation := Annotations[ReadCompInt(Decomp)];
+  LimitingWaterLevelPestName := Annotations[ReadCompInt(Decomp)];
+  LimitingWaterLevelPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  LimitingWaterLevelPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   ReferenceElevation := ReadCompReal(Decomp);
   ReferenceElevationAnnotation := Annotations[ReadCompInt(Decomp)];
+  ReferenceElevationPestName := Annotations[ReadCompInt(Decomp)];
+  ReferenceElevationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  ReferenceElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   WaterQualityGroup := ReadCompInt(Decomp);
   WaterQualityGroupAnnotation := Annotations[ReadCompInt(Decomp)];
 
   NonLinearLossCoefficient := ReadCompReal(Decomp);
   NonLinearLossCoefficientAnnotation := Annotations[ReadCompInt(Decomp)];
+  NonLinearLossCoefficientPestName := Annotations[ReadCompInt(Decomp)];
+  NonLinearLossCoefficientPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  NonLinearLossCoefficientPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   PumpingLimitType := TMnw1PumpingLimitType(ReadCompInt(Decomp));
 
   MinimumPumpingRate := ReadCompReal(Decomp);
   MinimumPumpingRateAnnotation := Annotations[ReadCompInt(Decomp)];
+  MinimumPumpingRatePestName := Annotations[ReadCompInt(Decomp)];
+  MinimumPumpingRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MinimumPumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   MaximumPumpingRate := ReadCompReal(Decomp);
   MaximumPumpingRateAnnotation := Annotations[ReadCompInt(Decomp)];
+  MaximumPumpingRatePestName := Annotations[ReadCompInt(Decomp)];
+  MaximumPumpingRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MaximumPumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 
@@ -1113,11 +1240,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [DesiredPumpingRatePosition..ReactivationPumpingRatePosition]);
   Assert(Expression <> nil);
@@ -1138,36 +1260,57 @@ begin
           begin
             DesiredPumpingRate := Expression.DoubleResult;
             DesiredPumpingRateAnnotation := ACell.Annotation;
+            DesiredPumpingRatePestName := PestName;
+            DesiredPumpingRatePestSeriesName := PestSeriesName;
+            DesiredPumpingRatePestSeriesMethod := PestSeriesMethod;
           end;
         WaterQualityPosition:
           begin
             WaterQuality := Expression.DoubleResult;
             WaterQualityAnnotation := ACell.Annotation;
+            WaterQualityPestName := PestName;
+            WaterQualityPestSeriesName := PestSeriesName;
+            WaterQualityPestSeriesMethod := PestSeriesMethod;
           end;
         WellRadiusPosition:
           begin
             WellRadius := Expression.DoubleResult;
             WellRadiusAnnotation := ACell.Annotation;
+            WellRadiusPestName := PestName;
+            WellRadiusPestSeriesName := PestSeriesName;
+            WellRadiusPestSeriesMethod := PestSeriesMethod;
           end;
         ConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
+            ConductancePestName := PestName;
+            ConductancePestSeriesName := PestSeriesName;
+            ConductancePestSeriesMethod := PestSeriesMethod;
           end;
         SkinFactorPosition:
           begin
             SkinFactor := Expression.DoubleResult;
             SkinFactorAnnotation := ACell.Annotation;
+            SkinFactorPestName := PestName;
+            SkinFactorPestSeriesName := PestSeriesName;
+            SkinFactorPestSeriesMethod := PestSeriesMethod;
           end;
         LimitingWaterLevelPosition:
           begin
             LimitingWaterLevel := Expression.DoubleResult;
             LimitingWaterLevelAnnotation := ACell.Annotation;
+            LimitingWaterLevelPestName := PestName;
+            LimitingWaterLevelPestSeriesName := PestSeriesName;
+            LimitingWaterLevelPestSeriesMethod := PestSeriesMethod;
           end;
         ReferenceElevationPosition:
           begin
             ReferenceElevation := Expression.DoubleResult;
             ReferenceElevationAnnotation := ACell.Annotation;
+            ReferenceElevationPestName := PestName;
+            ReferenceElevationPestSeriesName := PestSeriesName;
+            ReferenceElevationPestSeriesMethod := PestSeriesMethod;
           end;
         WaterQualityGroupPosition:
           begin
@@ -1178,16 +1321,25 @@ begin
           begin
             NonLinearLossCoefficient := Expression.DoubleResult;
             NonLinearLossCoefficientAnnotation := ACell.Annotation;
+            NonLinearLossCoefficientPestName := PestName;
+            NonLinearLossCoefficientPestSeriesName := PestSeriesName;
+            NonLinearLossCoefficientPestSeriesMethod := PestSeriesMethod;
           end;
         MinimumPumpingRatePosition:
           begin
             MinimumPumpingRate := Expression.DoubleResult;
             MinimumPumpingRateAnnotation := ACell.Annotation;
+            MinimumPumpingRatePestName := PestName;
+            MinimumPumpingRatePestSeriesName := PestSeriesName;
+            MinimumPumpingRatePestSeriesMethod := PestSeriesMethod;
           end;
         ReactivationPumpingRatePosition:
           begin
             MaximumPumpingRate := Expression.DoubleResult;
             MaximumPumpingRateAnnotation := ACell.Annotation;
+            MaximumPumpingRatePestName := PestName;
+            MaximumPumpingRatePestSeriesName := PestSeriesName;
+            MaximumPumpingRatePestSeriesMethod := PestSeriesMethod;
           end;
         else
           Assert(False);

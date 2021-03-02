@@ -140,6 +140,8 @@ type
     EndingTime: double;
     StressOffsetAnnotation: string;
     StressOffsetPest: string;
+    StressOffsetPestSeriesName: string;
+    StressOffsetPestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -934,12 +936,15 @@ begin
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(StressOffsetAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StressOffsetPest));
+  WriteCompInt(Comp, Strings.IndexOf(StressOffsetPestSeriesName));
+  WriteCompInt(Comp, Ord(StressOffsetPestSeriesMethod));
 end;
 
 procedure TCSubRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(StressOffsetAnnotation);
   Strings.Add(StressOffsetPest);
+  Strings.Add(StressOffsetPestSeriesName);
 end;
 
 procedure TCSubRecord.Restore(Decomp: TDecompressionStream;
@@ -951,6 +956,8 @@ begin
   EndingTime := ReadCompReal(Decomp);
   StressOffsetAnnotation := Annotations[ReadCompInt(Decomp)];
   StressOffsetPest := Annotations[ReadCompInt(Decomp)];
+  StressOffsetPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  StressOffsetPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TCsubStorage }
@@ -1171,7 +1178,6 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 
@@ -1190,6 +1196,8 @@ begin
         StressOffset := Expression.DoubleResult;
         StressOffsetAnnotation := ACell.Annotation;
         StressOffsetPest := PestName;
+        StressOffsetPestSeriesName := PestSeriesName;
+        StressOffsetPestSeriesMethod := PestSeriesMethod;
       end;
     except on E: EMathError do
       begin
@@ -1198,6 +1206,8 @@ begin
           StressOffset := 0;
           StressOffsetAnnotation := StrStressOffsetSetTo;
           StressOffsetPest := PestName;
+          StressOffsetPestSeriesName := PestSeriesName;
+          StressOffsetPestSeriesMethod := PestSeriesMethod;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 

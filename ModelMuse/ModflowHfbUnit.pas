@@ -20,6 +20,10 @@ type
     ThicknessAnnotation: string;
     HydraulicConductivityPest: string;
     ThicknessPest: string;
+    HydraulicConductivityPestSeriesName: string;
+    ThicknessPestSeriesName: string;
+    HydraulicConductivityPestSeriesMethod: TPestParamMethod;
+    ThicknessPestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -790,6 +794,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ThicknessPest));
   WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityPest));
+  WriteCompInt(Comp, Strings.IndexOf(ThicknessPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityPestSeriesName));
+  WriteCompInt(Comp, Ord(ThicknessPestSeriesMethod));
+  WriteCompInt(Comp, Ord(HydraulicConductivityPestSeriesMethod));
 end;
 
 procedure THfbRecord.RecordStrings(Strings: TStringList);
@@ -798,6 +806,7 @@ begin
   Strings.Add(HydraulicConductivityAnnotation);
   Strings.Add(ThicknessPest);
   Strings.Add(HydraulicConductivityPest);
+  Strings.Add(ThicknessPestSeriesName);
 end;
 
 procedure THfbRecord.Restore(Decomp: TDecompressionStream;
@@ -813,6 +822,10 @@ begin
   HydraulicConductivityAnnotation := Annotations[ReadCompInt(Decomp)];
   ThicknessPest := Annotations[ReadCompInt(Decomp)];
   HydraulicConductivityPest := Annotations[ReadCompInt(Decomp)];
+  ThicknessPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  HydraulicConductivityPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  ThicknessPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  HydraulicConductivityPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { THfbStorage }
@@ -931,7 +944,6 @@ var
   LocalScreenObject: TScreenObject;
   ErrorAnnotation: string;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [ThicknessPosition, HydraulicConductivityPosition]);
   Assert(Expression <> nil);
 
@@ -953,12 +965,16 @@ begin
               Thickness := Expression.DoubleResult;
               ThicknessAnnotation := ACell.Annotation;
               ThicknessPest := PestName;
+              ThicknessPestSeriesName := PestSeriesName;
+              ThicknessPestSeriesMethod := PestSeriesMethod;
             end;
           HydraulicConductivityPosition:
             begin
               HydraulicConductivity := Expression.DoubleResult;
               HydraulicConductivityAnnotation := ACell.Annotation;
               HydraulicConductivityPest := PestName;
+              HydraulicConductivityPestSeriesName := PestSeriesName;
+              HydraulicConductivityPestSeriesMethod := PestSeriesMethod;
             end;
           else
             Assert(False);
@@ -976,6 +992,8 @@ begin
                 ThicknessAnnotation := StrHFBThicknessSetTo;
                 ErrorAnnotation := ThicknessAnnotation;
                 ThicknessPest := PestName;
+                ThicknessPestSeriesName := PestSeriesName;
+                ThicknessPestSeriesMethod := PestSeriesMethod;
               end;
             HydraulicConductivityPosition:
               begin
@@ -983,6 +1001,8 @@ begin
                 HydraulicConductivityAnnotation := StrHFBHydraulicConduc;
                 ErrorAnnotation := HydraulicConductivityAnnotation;
                 HydraulicConductivityPest := PestName;
+                HydraulicConductivityPestSeriesName := PestSeriesName;
+                HydraulicConductivityPestSeriesMethod := PestSeriesMethod;
               end;
             else
               Assert(False);

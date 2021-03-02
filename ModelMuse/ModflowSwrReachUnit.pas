@@ -24,10 +24,14 @@ type
     VerticalOffset: double;
     VerticalOffsetAnnotation: string;
     VerticalOffsetPest: string;
+    VerticalOffsetPestSeriesName: string;
+    VerticalOffsetPestSeriesMethod: TPestParamMethod;
     // STAGE
     Stage: double;
     StageAnnotation: string;
     StagePest: string;
+    StagePestSeriesName: string;
+    StagePestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Strings: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -597,7 +601,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [VerticalOffsetPosition, StagePosition]);
   Assert(Expression <> nil);
 
@@ -618,12 +621,16 @@ begin
             VerticalOffset := Expression.DoubleResult;
             VerticalOffsetAnnotation := ACell.Annotation;
             VerticalOffsetPest := PestName;
+            VerticalOffsetPestSeriesName := PestSeriesName;
+            VerticalOffsetPestSeriesMethod := PestSeriesMethod;
           end;
         StagePosition:
           begin
             Stage := Expression.DoubleResult;
             StageAnnotation := ACell.Annotation;
             StagePest := PestName;
+            StagePestSeriesName := PestSeriesName;
+            StagePestSeriesMethod := PestSeriesMethod;
           end;
         else
           Assert(False);
@@ -832,9 +839,13 @@ begin
   WriteCompReal(Comp, VerticalOffset);
   WriteCompInt(Comp, Strings.IndexOf(VerticalOffsetAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(VerticalOffsetPest));
+  WriteCompInt(Comp, Strings.IndexOf(VerticalOffsetPestSeriesName));
+  WriteCompInt(Comp, Ord(VerticalOffsetPestSeriesMethod));
   WriteCompReal(Comp, Stage);
   WriteCompInt(Comp, Strings.IndexOf(StageAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StagePest));
+  WriteCompInt(Comp, Strings.IndexOf(StagePestSeriesName));
+  WriteCompInt(Comp, Ord(StagePestSeriesMethod));
 end;
 
 procedure TSwrReachTransientRecord.RecordStrings(Strings: TStringList);
@@ -844,6 +855,8 @@ begin
   Strings.Add(StageAnnotation);
   Strings.Add(VerticalOffsetPest);
   Strings.Add(StagePest);
+  Strings.Add(VerticalOffsetPestSeriesName);
+  Strings.Add(StagePestSeriesName);
 end;
 
 procedure TSwrReachTransientRecord.Restore(Decomp: TDecompressionStream;
@@ -855,9 +868,14 @@ begin
   VerticalOffset := ReadCompReal(Decomp);
   VerticalOffsetAnnotation := Strings[ReadCompInt(Decomp)];
   VerticalOffsetPest := Strings[ReadCompInt(Decomp)];
+  VerticalOffsetPestSeriesName := Strings[ReadCompInt(Decomp)];
+  VerticalOffsetPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
   Stage := ReadCompReal(Decomp);
   StageAnnotation := Strings[ReadCompInt(Decomp)];
   StagePest := Strings[ReadCompInt(Decomp)];
+  StagePestSeriesName := Strings[ReadCompInt(Decomp)];
+  StagePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TSwrTransientCell }

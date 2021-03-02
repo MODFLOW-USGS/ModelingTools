@@ -30,6 +30,8 @@ type
     EndingTime: double;
     PumpingRateAnnotation: string;
     PumpingRatePest: string;
+    PumpingRatePestSeriesName: string;
+    PumpingRatePestSeriesMethod: TPestParamMethod;
     TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
@@ -379,7 +381,6 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 
@@ -398,6 +399,8 @@ begin
         PumpingRate := Expression.DoubleResult;
         PumpingRateAnnotation := ACell.Annotation;
         PumpingRatePest := PestName;
+        PumpingRatePestSeriesName := PestSeriesName;
+        PumpingRatePestSeriesMethod := PestSeriesMethod;
       end;
     except on E: EMathError do
       begin
@@ -406,6 +409,8 @@ begin
           PumpingRate := 0;
           PumpingRateAnnotation := StrWellFormulaError;
           PumpingRatePest := PestName;
+          PumpingRatePestSeriesName := PestSeriesName;
+          PumpingRatePestSeriesMethod := PestSeriesMethod;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 
@@ -1150,6 +1155,8 @@ begin
   WriteCompReal(Comp, PumpingParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(PumpingRateAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(PumpingRatePest));
+  WriteCompInt(Comp, Strings.IndexOf(PumpingRatePestSeriesName));
+  WriteCompInt(Comp, Ord(PumpingRatePestSeriesMethod));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
   WriteCompBoolean(Comp, MvrUsed);
@@ -1160,6 +1167,7 @@ procedure TWellRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(PumpingRateAnnotation);
   Strings.Add(PumpingRatePest);
+  Strings.Add(PumpingRatePestSeriesName);
   Strings.Add(TimeSeriesName);
   Strings.Add(PumpingParameterName);
 end;
@@ -1173,6 +1181,8 @@ begin
   PumpingParameterValue := ReadCompReal(Decomp);
   PumpingRateAnnotation := Annotations[ReadCompInt(Decomp)];
   PumpingRatePest := Annotations[ReadCompInt(Decomp)];
+  PumpingRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  PumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   PumpingParameterName := Annotations[ReadCompInt(Decomp)];
   MvrUsed := ReadCompBoolean(Decomp);

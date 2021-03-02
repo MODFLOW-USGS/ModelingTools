@@ -319,6 +319,10 @@ resourcestring
   'he stream or lake into which the segment flows. The outflow segment ' +
   'should be zero if the segment does not flow into any other segment in the ' +
   'model.';
+  StrSFRChildModelLink = 'SFR child model linkage undefined.';
+  StrTheObjectSMayNo = 'The object %s may not set values for both the parent' +
+  ' and child models. This may prevent the proper linking of streams between' +
+  ' the parent and child models.';
 
 resourcestring
   DupErrorCategory = 'Duplicate SFR segment numbers';
@@ -1167,6 +1171,7 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrWhenUnsaturatedFlo);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheMinimumZValue);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheSFRPackageIsN);
+    frmErrorsAndWarnings.RemoveWarningGroup(Model, StrSFRChildModelLink);
 
     if Model.ModflowPackages.Mt3dBasic.IsSelected
       and (Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS) then
@@ -6344,6 +6349,7 @@ var
   SourceSegment: TSegment;
   UpstreamScreenObject: TScreenObject;
   DownstreamScreenObject: TScreenObject;
+  ScreenObject: TScreenObject;
 
 begin
 //  IsChildModel := Model is TChildModel;
@@ -6361,9 +6367,18 @@ begin
     Assert(SubSeg <> nil);
     Assert(SubSeg.FAssociatedLgrSubSeg <> nil);
     ParentSeg := SubSeg.FAssociatedLgrSubSeg.FSegment;
-    Assert(ParentSeg <> nil);
-    FirstSegmentInParent :=
-      ParentSeg.FSubSegmentList[0] = SubSeg.FAssociatedLgrSubSeg;
+    if ParentSeg <> nil then
+    begin
+      FirstSegmentInParent :=
+        ParentSeg.FSubSegmentList[0] = SubSeg.FAssociatedLgrSubSeg;
+    end
+    else
+    begin
+      FirstSegmentInParent := False;
+      ScreenObject := SfrBoundary.ScreenObject as TScreenObject;
+      frmErrorsAndWarnings.AddWarning(Model, StrSFRChildModelLink,
+        Format(StrTheObjectSMayNo, [ScreenObject.Name], ScreenObject))
+    end;
   end
   else
   begin

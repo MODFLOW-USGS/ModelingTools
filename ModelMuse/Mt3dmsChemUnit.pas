@@ -53,6 +53,8 @@ type
     EndingTime: double;
     ConcentrationAnnotation: array of string;
     ConcentrationPest: array of string;
+    ConcentrationPestSeriesNames: array of string;
+    ConcentrationPestSeriesMethods: array of TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -225,7 +227,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     procedure InsertNewSpecies(SpeciesIndex: integer; const Name: string);
     procedure DeleteSpecies(SpeciesIndex: integer);
     procedure CreateTimeLists;
@@ -658,7 +661,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   ConcStorage := BoundaryStorage as TMt3dmsConcStorage;
@@ -675,6 +677,8 @@ begin
       Concentration[BoundaryFunctionIndex] := Expression.DoubleResult;
       ConcentrationAnnotation[BoundaryFunctionIndex] := ACell.Annotation;
       ConcentrationPest[BoundaryFunctionIndex] := PestName;
+      ConcentrationPestSeriesNames[BoundaryFunctionIndex] := PestSeriesName;
+      ConcentrationPestSeriesMethods[BoundaryFunctionIndex] := PestSeriesMethod;
     end;
   end;
 end;
@@ -950,6 +954,10 @@ begin
       ComponentCount);
     SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPest,
       ComponentCount);
+    SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPestSeriesNames,
+      ComponentCount);
+    SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPestSeriesMethods,
+      ComponentCount);
   end;
   inherited;
 end;
@@ -1176,6 +1184,8 @@ begin
   SetLength(FValues.Concentration, ALength);
   SetLength(FValues.ConcentrationAnnotation, ALength);
   SetLength(FValues.ConcentrationPest, ALength);
+  SetLength(FValues.ConcentrationPestSeriesNames, ALength);
+  SetLength(FValues.ConcentrationPestSeriesMethods, ALength);
 end;
 
 procedure TMt3dmsConc_Cell.SetLayer(const Value: integer);
@@ -1655,6 +1665,14 @@ begin
   begin
     WriteCompInt(Comp, Strings.IndexOf(ConcentrationPest[Index]));
   end;
+  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
+  end;
+  for Index := 0 to Length(ConcentrationPestSeriesMethods) - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
+  end;
 end;
 
 procedure TMt3dmsConcentrationRecord.RecordStrings(Strings: TStringList);
@@ -1668,6 +1686,10 @@ begin
   for Index := 0 to Length(ConcentrationPest) - 1 do
   begin
     Strings.Add(ConcentrationPest[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestSeriesNames[Index]);
   end;
 end;
 
@@ -1684,6 +1706,8 @@ begin
   SetLength(Concentration, Count);
   SetLength(ConcentrationAnnotation, Count);
   SetLength(ConcentrationPest, Count);
+  SetLength(ConcentrationPestSeriesNames, Count);
+  SetLength(ConcentrationPestSeriesMethods, Count);
   for Index := 0 to Count - 1 do
   begin
     Concentration[Index] := ReadCompReal(Decomp);
@@ -1695,6 +1719,14 @@ begin
   for Index := 0 to Count - 1 do
   begin
     ConcentrationPest[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
 end;
 
@@ -2169,7 +2201,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   ConcStorage := BoundaryStorage as TMt3dmsConcStorage;
@@ -2186,6 +2217,8 @@ begin
       Concentration[BoundaryFunctionIndex] := Expression.DoubleResult;
       ConcentrationAnnotation[BoundaryFunctionIndex] := ACell.Annotation;
       ConcentrationPest[BoundaryFunctionIndex] := PestName;
+      ConcentrationPestSeriesNames[BoundaryFunctionIndex] := PestSeriesName;
+      ConcentrationPestSeriesMethods[BoundaryFunctionIndex] := PestSeriesMethod;
     end;
   end;
 end;
@@ -2476,6 +2509,10 @@ begin
     SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationAnnotation,
       ComponentCount);
     SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPest,
+      ComponentCount);
+    SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPestSeriesNames,
+      ComponentCount);
+    SetLength(Mt3dmsConclArray[BoundaryIndex].ConcentrationPestSeriesMethods,
       ComponentCount);
   end;
   inherited;

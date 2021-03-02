@@ -587,7 +587,6 @@ procedure TSutraGeneralFlowCollection.AssignCellList(
   PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
 begin
   inherited;
-  { TODO -cPEST : Handle PestSeriesName }
   // this needs to be changed?
   Assert(False);
 end;

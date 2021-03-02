@@ -23,6 +23,10 @@ type
     ConductanceParameterValue: double;
     ConductancePest: string;
     BoundaryHeadPest: string;
+    ConductancePestSeriesName: string;
+    BoundaryHeadPestSeriesName: string;
+    ConductancePestSeriesMethod: TPestParamMethod;
+    BoundaryHeadPestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -118,7 +122,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -505,7 +510,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [HeadPosition,ConductancePosition]);
   Assert(Expression <> nil);
 
@@ -526,12 +530,16 @@ begin
             BoundaryHead := Expression.DoubleResult;
             BoundaryHeadAnnotation := ACell.Annotation;
             BoundaryHeadPest := PestName;
+            BoundaryHeadPestSeriesName := PestSeriesName;
+            BoundaryHeadPestSeriesMethod := PestSeriesMethod;
           end;
         ConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
             ConductancePest := PestName;
+            ConductancePestSeriesName := PestSeriesName;
+            ConductancePestSeriesMethod := PestSeriesMethod;
           end;
         else
           Assert(False);
@@ -1208,6 +1216,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
   WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadPest));
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadPestSeriesName));
+  WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
+  WriteCompInt(Comp, Ord(BoundaryHeadPestSeriesMethod));
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -1220,6 +1232,8 @@ begin
   Strings.Add(ConductanceParameterName);
   Strings.Add(ConductancePest);
   Strings.Add(BoundaryHeadPest);
+  Strings.Add(ConductancePestSeriesName);
+  Strings.Add(BoundaryHeadPestSeriesName);
 end;
 
 procedure TGhbRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1236,6 +1250,10 @@ begin
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
   ConductancePest := Annotations[ReadCompInt(Decomp)];
   BoundaryHeadPest := Annotations[ReadCompInt(Decomp)];
+  ConductancePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  BoundaryHeadPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  BoundaryHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 end;

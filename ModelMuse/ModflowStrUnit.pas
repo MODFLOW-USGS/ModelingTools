@@ -29,6 +29,7 @@ type
     RoughnessAnnotation: string;
     SegmentNumber: Integer;
     ReachNumber: Integer;
+
     ConductancePest: string;
     StagePest: string;
     BedTopPest: string;
@@ -37,6 +38,25 @@ type
     WidthPest: string;
     SlopePest: string;
     RoughnessPest: string;
+
+    ConductancePestSeriesName: string;
+    StagePestSeriesName: string;
+    BedTopPestSeriesName: string;
+    BedBottomPestSeriesName: string;
+    FlowPestSeriesName: string;
+    WidthPestSeriesName: string;
+    SlopePestSeriesName: string;
+    RoughnessPestSeriesName: string;
+
+    ConductancePestSeriesMethod: TPestParamMethod;
+    StagePestSeriesMethod: TPestParamMethod;
+    BedTopPestSeriesMethod: TPestParamMethod;
+    BedBottomPestSeriesMethod: TPestParamMethod;
+    FlowPestSeriesMethod: TPestParamMethod;
+    WidthPestSeriesMethod: TPestParamMethod;
+    SlopePestSeriesMethod: TPestParamMethod;
+    RoughnessPestSeriesMethod: TPestParamMethod;
+
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -175,7 +195,8 @@ type
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-      PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod); override;
+      PestName: string; PestSeriesName: string;
+      PestSeriesMethod: TPestParamMethod); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -387,6 +408,23 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(SlopePest));
   WriteCompInt(Comp, Strings.IndexOf(RoughnessPest));
 
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(StagePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(BedTopPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(BedBottomPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(FlowPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(WidthPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(SlopePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RoughnessPestSeriesName));
+
+  WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
+  WriteCompInt(Comp, Ord(StagePestSeriesMethod));
+  WriteCompInt(Comp, Ord(BedTopPestSeriesMethod));
+  WriteCompInt(Comp, Ord(BedBottomPestSeriesMethod));
+  WriteCompInt(Comp, Ord(FlowPestSeriesMethod));
+  WriteCompInt(Comp, Ord(WidthPestSeriesMethod));
+  WriteCompInt(Comp, Ord(SlopePestSeriesMethod));
+  WriteCompInt(Comp, Ord(RoughnessPestSeriesMethod));
 end;
 
 procedure TStrRecord.RecordStrings(Strings: TStringList);
@@ -408,6 +446,15 @@ begin
   Strings.Add(WidthPest);
   Strings.Add(SlopePest);
   Strings.Add(RoughnessPest);
+
+  Strings.Add(ConductancePestSeriesName);
+  Strings.Add(StagePestSeriesName);
+  Strings.Add(BedTopPestSeriesName);
+  Strings.Add(BedBottomPestSeriesName);
+  Strings.Add(FlowPestSeriesName);
+  Strings.Add(WidthPestSeriesName);
+  Strings.Add(SlopePestSeriesName);
+  Strings.Add(RoughnessPestSeriesName);
 
 end;
 
@@ -445,6 +492,23 @@ begin
   SlopePest := Annotations[ReadCompInt(Decomp)];
   RoughnessPest := Annotations[ReadCompInt(Decomp)];
 
+  ConductancePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  StagePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  BedTopPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  BedBottomPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  FlowPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  WidthPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  SlopePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RoughnessPestSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  StagePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  BedTopPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  BedBottomPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  FlowPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  WidthPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  SlopePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RoughnessPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TStrStorage }
@@ -1070,7 +1134,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [StreamStagePosition, StreamConductancePosition,
     StreamBedTopPosition, StreamBedBottomPosition, StreamFlowPosition,
     StreamWidthPosition, StreamSlopePosition, StreamRoughnessPosition]);
@@ -1093,48 +1156,64 @@ begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
             ConductancePest := PestName;
+            ConductancePestSeriesName := PestSeriesName;
+            ConductancePestSeriesMethod := PestSeriesMethod;
           end;
         StreamBedTopPosition:
           begin
             BedTop := Expression.DoubleResult;
             BedTopAnnotation := ACell.Annotation;
             BedTopPest := PestName;
+            BedTopPestSeriesName := PestSeriesName;
+            BedTopPestSeriesMethod := PestSeriesMethod;
           end;
         StreamBedBottomPosition:
           begin
             BedBottom := Expression.DoubleResult;
             BedBottomAnnotation := ACell.Annotation;
             BedBottomPest := PestName;
+            BedBottomPestSeriesName := PestSeriesName;
+            BedBottomPestSeriesMethod := PestSeriesMethod;
           end;
         StreamFlowPosition:
           begin
             Flow := Expression.DoubleResult;
             FlowAnnotation := ACell.Annotation;
             FlowPest := PestName;
+            FlowPestSeriesName := PestSeriesName;
+            FlowPestSeriesMethod := PestSeriesMethod;
           end;
         StreamStagePosition:
           begin
             Stage := Expression.DoubleResult;
             StageAnnotation := ACell.Annotation;
             StagePest := PestName;
+            StagePestSeriesName := PestSeriesName;
+            StagePestSeriesMethod := PestSeriesMethod;
           end;
         StreamWidthPosition:
           begin
             Width := Expression.DoubleResult;
             WidthAnnotation := ACell.Annotation;
             WidthPest := PestName;
+            WidthPestSeriesName := PestSeriesName;
+            WidthPestSeriesMethod := PestSeriesMethod;
           end;
         StreamSlopePosition:
           begin
             Slope := Expression.DoubleResult;
             SlopeAnnotation := ACell.Annotation;
             SlopePest := PestName;
+            SlopePestSeriesName := PestSeriesName;
+            SlopePestSeriesMethod := PestSeriesMethod;
           end;
         StreamRoughnessPosition:
           begin
             Roughness := Expression.DoubleResult;
             RoughnessAnnotation := ACell.Annotation;
             RoughnessPest := PestName;
+            RoughnessPestSeriesName := PestSeriesName;
+            RoughnessPestSeriesMethod := PestSeriesMethod;
           end;
         else
           Assert(False);

@@ -48,6 +48,10 @@ type
     HeadParameterValue: double;
     StartHeadPest: string;
     EndHeadPest: string;
+    StartHeadPestSeriesName: string;
+    EndHeadPestSeriesName: string;
+    StartHeadPestSeriesMethod: TPestParamMethod;
+    EndHeadPestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -430,7 +434,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   ChdStorage := BoundaryStorage as TChdStorage;
@@ -449,12 +452,16 @@ begin
             StartingHead := Expression.DoubleResult;
             StartAnnotation := ACell.Annotation;
             StartHeadPest := PestName;
+            StartHeadPestSeriesName := PestSeriesName;
+            StartHeadPestSeriesMethod := PestSeriesMethod;
           end;
         1:
           begin
             EndingHead := Expression.DoubleResult;
             EndAnnotation := ACell.Annotation;
             EndHeadPest := PestName;
+            EndHeadPestSeriesName := PestSeriesName;
+            EndHeadPestSeriesMethod := PestSeriesMethod;
           end;
         else Assert(False);
       end;
@@ -1065,6 +1072,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(HeadParameterName));
   WriteCompInt(Comp, Strings.IndexOf(StartHeadPest));
   WriteCompInt(Comp, Strings.IndexOf(EndHeadPest));
+  WriteCompInt(Comp, Strings.IndexOf(StartHeadPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(EndHeadPestSeriesName));
+  WriteCompInt(Comp, Ord(StartHeadPestSeriesMethod));
+  WriteCompInt(Comp, Ord(EndHeadPestSeriesMethod));
 end;
 
 procedure TChdRecord.RecordStrings(Strings: TStringList);
@@ -1075,6 +1086,8 @@ begin
   Strings.Add(HeadParameterName);
   Strings.Add(StartHeadPest);
   Strings.Add(EndHeadPest);
+  Strings.Add(StartHeadPestSeriesName);
+  Strings.Add(EndHeadPestSeriesName);
 end;
 
 procedure TChdRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1091,6 +1104,10 @@ begin
   HeadParameterName := Annotations[ReadCompInt(Decomp)];
   StartHeadPest := Annotations[ReadCompInt(Decomp)];
   EndHeadPest := Annotations[ReadCompInt(Decomp)];
+  StartHeadPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  EndHeadPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  StartHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  EndHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TChdStorage }

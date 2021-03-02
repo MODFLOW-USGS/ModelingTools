@@ -49,6 +49,24 @@ type
     RoughnessPest: string;
     DiversionPests: array of string;
 
+    InflowPestSeriesName: string;
+    RainfallPestSeriesName: string;
+    EvaporationPestSeriesName: string;
+    RunoffPestSeriesName: string;
+    UpstreamFractionPestSeriesName: string;
+    StagePestSeriesName: string;
+    RoughnessPestSeriesName: string;
+    DiversionPestSeriesNames: array of string;
+
+    InflowPestSeriesMethod: TPestParamMethod;
+    RainfallPestSeriesMethod: TPestParamMethod;
+    EvaporationPestSeriesMethod: TPestParamMethod;
+    RunoffPestSeriesMethod: TPestParamMethod;
+    UpstreamFractionPestSeriesMethod: TPestParamMethod;
+    StagePestSeriesMethod: TPestParamMethod;
+    RoughnessPestSeriesMethod: TPestParamMethod;
+    DiversionPestSeriesMethods: array of TPestParamMethod;
+
     Status: TStreamStatus;
     ReachNumber: Integer;
     MvrUsed: Boolean;
@@ -540,6 +558,23 @@ begin
     WriteCompInt(Comp, Strings.IndexOf(DiversionPests[index]));
   end;
 
+  WriteCompInt(Comp, Strings.IndexOf(InflowPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RainfallPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(EvaporationPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RunoffPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(UpstreamFractionPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(StagePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RoughnessPestSeriesName));
+
+  for index := 0 to Length(DiversionPestSeriesNames) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(DiversionPestSeriesNames[index]));
+  end;
+  for index := 0 to Length(DiversionPestSeriesMethods) - 1 do
+  begin
+    WriteCompInt(Comp, Ord(DiversionPestSeriesMethods[index]));
+  end;
+
   WriteCompInt(Comp, ReachNumber);
 
   WriteCompBoolean(Comp, MvrUsed);
@@ -574,6 +609,18 @@ begin
   for index := 0 to Length(DiversionPests) - 1 do
   begin
     Strings.Add(DiversionPests[index]);
+  end;
+
+  Strings.Add(InflowPestSeriesName);
+  Strings.Add(RainfallPestSeriesName);
+  Strings.Add(EvaporationPestSeriesName);
+  Strings.Add(RunoffPestSeriesName);
+  Strings.Add(UpstreamFractionPestSeriesName);
+  Strings.Add(StagePestSeriesName);
+  Strings.Add(RoughnessPestSeriesName);
+  for index := 0 to Length(DiversionPestSeriesNames) - 1 do
+  begin
+    Strings.Add(DiversionPestSeriesNames[index]);
   end;
 end;
 
@@ -627,6 +674,26 @@ begin
   for index := 0 to ArraySize - 1 do
   begin
     DiversionPests[index] := Annotations[ReadCompInt(Decomp)];
+  end;
+
+  InflowPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RainfallPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  EvaporationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RunoffPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  UpstreamFractionPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  StagePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RoughnessPestSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  SetLength(DiversionPestSeriesNames, ArraySize);
+  for index := 0 to ArraySize - 1 do
+  begin
+    DiversionPestSeriesNames[index] := Annotations[ReadCompInt(Decomp)];
+  end;
+
+  SetLength(DiversionPestSeriesMethods, ArraySize);
+  for index := 0 to ArraySize - 1 do
+  begin
+    DiversionPestSeriesMethods[index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
 
   ReachNumber := ReadCompInt(Decomp);
@@ -1389,7 +1456,6 @@ var
   RequiredLength: Integer;
   FractionAnnotation: string;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
   Assert(Expression <> nil);
 
   Sfr6Storage := BoundaryStorage as TSfrMf6Storage;
@@ -1410,24 +1476,32 @@ begin
             Inflow := Expression.DoubleResult;
             InflowAnnotation := ACell.Annotation;
             InflowPest := PestName;
+            InflowPestSeriesName := PestSeriesName;
+            InflowPestSeriesMethod := PestSeriesMethod;
           end;
         RainfallPosition:
           begin
             Rainfall := Expression.DoubleResult;
             RainfallAnnotation := ACell.Annotation;
             RainfallPest := PestName;
+            RainfallPestSeriesName := PestSeriesName;
+            RainfallPestSeriesMethod := PestSeriesMethod;
           end;
         EvaporationPosition:
           begin
             Evaporation := Expression.DoubleResult;
             EvaporationAnnotation := ACell.Annotation;
             EvaporationPest := PestName;
+            EvaporationPestSeriesName := PestSeriesName;
+            EvaporationPestSeriesMethod := PestSeriesMethod;
           end;
         RunoffPosition:
           begin
             Runoff := Expression.DoubleResult;
             RunoffAnnotation := ACell.Annotation;
             RunoffPest := PestName;
+            RunoffPestSeriesName := PestSeriesName;
+            RunoffPestSeriesMethod := PestSeriesMethod;
           end;
         UpstreamFractionPosition:
           begin
@@ -1436,12 +1510,16 @@ begin
               UpstreamFraction := Expression.DoubleResult;
               UpstreamFractionAnnotation := ACell.Annotation;
               UpstreamFractionPest := PestName;
+              UpstreamFractionPestSeriesName := PestSeriesName;
+              UpstreamFractionPestSeriesMethod := PestSeriesMethod;
             end
             else
             begin
               UpstreamFraction := 1;
               UpstreamFractionAnnotation := FractionAnnotation;
               UpstreamFractionPest := PestName;
+              UpstreamFractionPestSeriesName := PestSeriesName;
+              UpstreamFractionPestSeriesMethod := PestSeriesMethod;
             end;
           end;
         StagePosition:
@@ -1449,12 +1527,16 @@ begin
             Stage := Expression.DoubleResult;
             StageAnnotation := ACell.Annotation;
             StagePest := PestName;
+            StagePestSeriesName := PestSeriesName;
+            StagePestSeriesMethod := PestSeriesMethod;
           end;
         RoughnessPosition:
           begin
             Roughness := Expression.DoubleResult;
             RoughnessAnnotation := ACell.Annotation;
             RoughnessPest := PestName;
+            RoughnessPestSeriesName := PestSeriesName;
+            RoughnessPestSeriesMethod := PestSeriesMethod;
           end;
         else
           begin
@@ -1466,6 +1548,8 @@ begin
                 SetLength(Diversions, RequiredLength);
                 SetLength(DiversionAnnotations, RequiredLength);
                 SetLength(DiversionPests, RequiredLength);
+                SetLength(DiversionPestSeriesNames, RequiredLength);
+                SetLength(DiversionPestSeriesMethods, RequiredLength);
               end;
               Diversions[BoundaryFunctionIndex - DiversionStartPosition]
                 := Expression.DoubleResult;
@@ -1473,6 +1557,10 @@ begin
                 := ACell.Annotation;
               DiversionPests[BoundaryFunctionIndex - DiversionStartPosition]
                 := PestName;
+              DiversionPestSeriesNames[BoundaryFunctionIndex - DiversionStartPosition]
+                := PestSeriesName;
+              DiversionPestSeriesMethods[BoundaryFunctionIndex - DiversionStartPosition]
+                := PestSeriesMethod;
             end;
           end;
       end;

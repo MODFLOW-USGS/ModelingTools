@@ -21,6 +21,10 @@ type
     Mnw1Well: boolean;
     Mnw2Well: Boolean;
     Mnw2Name: string;
+
+    MaxPumpingRatePestName: string;
+    MaxPumpingRatePestSeriesName: string;
+    MaxPumpingRatePestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -249,6 +253,10 @@ begin
   WriteCompBoolean(Comp, Mnw1Well);
   WriteCompBoolean(Comp, Mnw2Well);
   WriteCompInt(Comp, Strings.IndexOf(Mnw2Name));
+
+  WriteCompInt(Comp, Strings.IndexOf(MaxPumpingRatePestName));
+  WriteCompInt(Comp, Strings.IndexOf(MaxPumpingRatePestSeriesName));
+  WriteCompInt(Comp, Ord(MaxPumpingRatePestSeriesMethod));
 end;
 
 procedure TFmpWellRecord.RecordStrings(Strings: TStringList);
@@ -257,6 +265,9 @@ begin
   Strings.Add(PumpOnlyIfCropRequiresWaterAnnotation);
   Strings.Add(FarmIDAnnotation);
   Strings.Add(Mnw2Name);
+
+  Strings.Add(MaxPumpingRatePestName);
+  Strings.Add(MaxPumpingRatePestSeriesName);
 end;
 
 procedure TFmpWellRecord.Restore(Decomp: TDecompressionStream;
@@ -274,6 +285,10 @@ begin
   Mnw1Well := ReadCompBoolean(Decomp);
   Mnw2Well := ReadCompBoolean(Decomp);
   Mnw2Name := Annotations[ReadCompInt(Decomp)];
+
+  MaxPumpingRatePestName := Annotations[ReadCompInt(Decomp)];
+  MaxPumpingRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MaxPumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TFmpWellStorage }
@@ -677,11 +692,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [FmpWellMaxPumpingRatePosition,
     FmpWellPumpOnlyIfCropRequiresWaterPosition,
@@ -704,6 +714,9 @@ begin
           begin
             MaxPumpingRate := Expression.DoubleResult;
             MaxPumpingRateAnnotation := ACell.Annotation;
+            MaxPumpingRatePestName := PestName;
+            MaxPumpingRatePestSeriesName := PestSeriesName;
+            MaxPumpingRatePestSeriesMethod := PestSeriesMethod;
           end;
         FmpWellFarmIDPosition:
           begin

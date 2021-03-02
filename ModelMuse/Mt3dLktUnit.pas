@@ -35,6 +35,9 @@ type
     Cell: TCellLocation;
     InitialConcentration: double;
     InitialConcentrationAnnotation: string;
+    InitialConcentrationPestName: string;
+    InitialConcentrationPestSeriesName: string;
+    InitialConcentrationPestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -629,13 +632,7 @@ var
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
-//  LocalScreenObject: TScreenObject;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [TLktInitConcItem.InitConcPosition]);
   Assert(Expression <> nil);
@@ -656,6 +653,9 @@ begin
           begin
             InitialConcentration := Expression.DoubleResult;
             InitialConcentrationAnnotation := ACell.Annotation;
+            InitialConcentrationPestName := PestName;
+            InitialConcentrationPestSeriesName := PestSeriesName;
+            InitialConcentrationPestSeriesMethod := PestSeriesMethod;
           end;
         else Assert(False);
       end;
@@ -821,14 +821,12 @@ procedure TLktInitConcRecord.Cache(Comp: TCompressionStream;
   Strings: TStringList);
 begin
   WriteCompCell(Comp, Cell);
-//  WriteCompInt(Comp, WellNumber);
   WriteCompReal(Comp, InitialConcentration);
-//  WriteCompReal(Comp, ScreenBottom);
-//  WriteCompReal(Comp, SkinK);
-//  WriteCompReal(Comp, SkinRadius);
-//  WriteCompInt(Comp, ConnectionNumber);
 
   WriteCompInt(Comp, Strings.IndexOf(InitialConcentrationAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(InitialConcentrationPestName));
+  WriteCompInt(Comp, Strings.IndexOf(InitialConcentrationPestSeriesName));
+  WriteCompInt(Comp, Ord(InitialConcentrationPestSeriesMethod));
 //  WriteCompInt(Comp, Strings.IndexOf(ScreenBottomAnnotation));
 //  WriteCompInt(Comp, Strings.IndexOf(SkinKAnnotation));
 //  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusAnnotation));
@@ -838,6 +836,8 @@ end;
 procedure TLktInitConcRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(InitialConcentrationAnnotation);
+  Strings.Add(InitialConcentrationPestName);
+  Strings.Add(InitialConcentrationPestSeriesName);
 //  Strings.Add(ScreenBottomAnnotation);
 //  Strings.Add(SkinKAnnotation);
 //  Strings.Add(SkinRadiusAnnotation);
@@ -847,16 +847,13 @@ procedure TLktInitConcRecord.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
 begin
   Cell := ReadCompCell(Decomp);
-//  WellNumber := ReadCompInt(Decomp);
+
   InitialConcentration := ReadCompReal(Decomp);
-//  ScreenBottom := ReadCompReal(Decomp);
-//  SkinK := ReadCompReal(Decomp);
-//  SkinRadius := ReadCompReal(Decomp);
-//  ConnectionNumber := ReadCompInt(Decomp);
+
   InitialConcentrationAnnotation := Annotations[ReadCompInt(Decomp)];
-//  ScreenBottomAnnotation := Annotations[ReadCompInt(Decomp)];
-//  SkinKAnnotation := Annotations[ReadCompInt(Decomp)];
-//  SkinRadiusAnnotation := Annotations[ReadCompInt(Decomp)];
+  InitialConcentrationPestName := Annotations[ReadCompInt(Decomp)];
+  InitialConcentrationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  InitialConcentrationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TLktInitConcStorage }

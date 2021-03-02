@@ -12,7 +12,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitTop = -111
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -22,7 +21,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabProperties
+    ActivePage = tabSutraFeatures
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -31,7 +30,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       HelpType = htKeyword
       HelpKeyword = 'Properties_Tab'
       Caption = 'Properties'
-      ExplicitTop = 32
       DesignSize = (
         776
         476)
@@ -916,6 +914,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -940,6 +939,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -964,6 +964,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -988,6 +989,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1012,6 +1014,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1036,6 +1039,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1106,6 +1110,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1130,6 +1135,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1154,6 +1160,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1178,6 +1185,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1202,6 +1210,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1226,6 +1235,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1363,6 +1373,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1387,6 +1398,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1411,6 +1423,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1435,6 +1448,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1459,6 +1473,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1483,6 +1498,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1687,6 +1703,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1711,6 +1728,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1735,6 +1753,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1759,6 +1778,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1962,6 +1982,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -1986,6 +2007,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2010,6 +2032,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2076,6 +2099,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Columns = <
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2100,6 +2124,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2124,6 +2149,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2148,6 +2174,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -2572,6 +2599,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -2596,6 +2624,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -2620,6 +2649,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -2644,6 +2674,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -2814,6 +2845,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -2838,6 +2870,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -2862,6 +2895,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -2886,6 +2920,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3078,6 +3113,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3102,6 +3138,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3126,6 +3163,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3293,6 +3331,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3317,6 +3356,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3341,6 +3381,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3365,6 +3406,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3389,6 +3431,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3562,6 +3605,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3586,6 +3630,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3610,6 +3655,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3634,6 +3680,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3789,6 +3836,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3813,6 +3861,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3837,6 +3886,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3861,6 +3911,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -3885,6 +3936,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4253,6 +4305,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4277,6 +4330,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4301,6 +4355,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4325,6 +4380,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4469,6 +4525,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4493,6 +4550,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4517,6 +4575,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4671,6 +4730,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4695,6 +4755,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4719,6 +4780,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4835,6 +4897,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4859,6 +4922,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4883,6 +4947,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -4907,6 +4972,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5108,6 +5174,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5132,6 +5199,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5156,6 +5224,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5180,6 +5249,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5204,6 +5274,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5228,6 +5299,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5252,6 +5324,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5276,6 +5349,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -5507,12 +5581,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 155
                 inherited framePestObsLak: TframePestObs
                   Width = 573
                   Height = 155
+                  ExplicitLeft = 0
+                  ExplicitTop = 0
                   ExplicitWidth = 573
                   ExplicitHeight = 155
                   inherited splObservations: TSplitter
@@ -5830,6 +5907,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Columns = <
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -5854,6 +5932,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -5878,6 +5957,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -5902,6 +5982,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = False
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -5926,6 +6007,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6028,6 +6110,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Columns = <
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6052,6 +6135,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6076,6 +6160,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6100,6 +6185,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6124,6 +6210,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6148,6 +6235,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6206,6 +6294,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Columns = <
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6230,6 +6319,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6254,6 +6344,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6278,6 +6369,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6302,6 +6394,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6326,6 +6419,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6350,6 +6444,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6403,6 +6498,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Columns = <
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6427,6 +6523,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6451,6 +6548,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6475,6 +6573,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6499,6 +6598,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6523,6 +6623,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6547,6 +6648,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6617,6 +6719,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Columns = <
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6641,6 +6744,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6665,6 +6769,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6689,6 +6794,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = True
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6770,6 +6876,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Columns = <
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6794,6 +6901,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6818,6 +6926,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6842,6 +6951,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6866,6 +6976,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6890,6 +7001,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     item
                       AutoAdjustRowHeights = True
+                      AutoAdjustCaptionRowHeights = False
                       ButtonCaption = 'F()'
                       ButtonFont.Charset = DEFAULT_CHARSET
                       ButtonFont.Color = clWindowText
@@ -6952,6 +7064,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Columns = <
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -6976,6 +7089,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       item
                         AutoAdjustRowHeights = False
+                        AutoAdjustCaptionRowHeights = False
                         ButtonCaption = 'F()'
                         ButtonFont.Charset = DEFAULT_CHARSET
                         ButtonFont.Color = clWindowText
@@ -7274,6 +7388,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 442
@@ -7447,6 +7562,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -7471,6 +7587,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -7495,6 +7612,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -7519,6 +7637,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -7543,6 +7662,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -7567,6 +7687,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -9792,6 +9913,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Columns = <
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -9815,6 +9937,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -9838,6 +9961,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = True
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = 'F()'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -9861,6 +9985,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = '...'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -9884,6 +10009,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   item
                     AutoAdjustRowHeights = False
+                    AutoAdjustCaptionRowHeights = False
                     ButtonCaption = '...'
                     ButtonFont.Charset = DEFAULT_CHARSET
                     ButtonFont.Color = clWindowText
@@ -11087,6 +11213,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       Columns = <
                         item
                           AutoAdjustRowHeights = False
+                          AutoAdjustCaptionRowHeights = False
                           ButtonCaption = 'F()'
                           ButtonFont.Charset = DEFAULT_CHARSET
                           ButtonFont.Color = clWindowText
@@ -11110,6 +11237,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                         item
                           AutoAdjustRowHeights = True
+                          AutoAdjustCaptionRowHeights = False
                           ButtonCaption = 'F()'
                           ButtonFont.Charset = DEFAULT_CHARSET
                           ButtonFont.Color = clWindowText
@@ -11133,6 +11261,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                         item
                           AutoAdjustRowHeights = True
+                          AutoAdjustCaptionRowHeights = False
                           ButtonCaption = '...'
                           ButtonFont.Charset = DEFAULT_CHARSET
                           ButtonFont.Color = clWindowText
@@ -11156,6 +11285,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                         item
                           AutoAdjustRowHeights = True
+                          AutoAdjustCaptionRowHeights = False
                           ButtonCaption = 'F()'
                           ButtonFont.Charset = DEFAULT_CHARSET
                           ButtonFont.Color = clWindowText
@@ -11179,6 +11309,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                         item
                           AutoAdjustRowHeights = True
+                          AutoAdjustCaptionRowHeights = False
                           ButtonCaption = '...'
                           ButtonFont.Charset = DEFAULT_CHARSET
                           ButtonFont.Color = clWindowText
@@ -11206,6 +11337,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                         item
                           AutoAdjustRowHeights = True
+                          AutoAdjustCaptionRowHeights = False
                           ButtonCaption = 'F()'
                           ButtonFont.Charset = DEFAULT_CHARSET
                           ButtonFont.Color = clWindowText
@@ -12506,6 +12638,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabCalibration: TTabSheet
+                ExplicitLeft = 4
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 371
@@ -14060,7 +14193,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspGeneralizedTransport
+        ActivePage = jvspSutraStateObs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -14228,6 +14361,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
+                ExplicitLeft = 6
                 ExplicitWidth = 603
                 ExplicitHeight = 215
                 ColWidths = (
@@ -14743,6 +14877,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 208
                 OnButtonClick = SutraBoundaryButtonClick
+                ExplicitLeft = 6
                 ExplicitWidth = 603
                 ExplicitHeight = 208
                 ColWidths = (
@@ -15147,9 +15282,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 19
             end
             inherited rdgObservationGroups: TRbwDataGrid4
+              Top = 33
               Width = 599
               Height = 441
               OnStateChange = frameSutraSpecUObsrdgObservationGroupsStateChange
+              ExplicitTop = 33
               ExplicitWidth = 599
               ExplicitHeight = 441
             end
@@ -15209,9 +15346,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 19
             end
             inherited rdgObservationGroups: TRbwDataGrid4
+              Top = 33
               Width = 599
               Height = 441
               OnStateChange = frameSutraGenTransObsrdgObservationGroupsStateChange
+              ExplicitTop = 33
               ExplicitWidth = 599
               ExplicitHeight = 441
             end
@@ -15318,6 +15457,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15342,6 +15482,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15365,6 +15506,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15389,6 +15531,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15413,6 +15556,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15478,6 +15622,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15501,6 +15646,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15524,6 +15670,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15547,6 +15694,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15570,6 +15718,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15642,6 +15791,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -15665,6 +15815,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

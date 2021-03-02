@@ -13,6 +13,9 @@ type
     StartingTime: double;
     EndingTime: double;
     SwrValueAnnotation: string;
+    SwrValuePestName: string;
+    SwrValuePestSeriesName: string;
+    SwrValuePestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -552,11 +555,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 
@@ -574,6 +572,9 @@ begin
       begin
         SwrValue := Expression.DoubleResult;
         SwrValueAnnotation := ACell.Annotation;
+        SwrValuePestName := PestName;
+        SwrValuePestSeriesName := PestSeriesName;
+        SwrValuePestSeriesMethod := PestSeriesMethod;
       end;
     except on E: EMathError do
       begin
@@ -775,11 +776,16 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(SwrValueAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(SwrValuePestName));
+  WriteCompInt(Comp, Strings.IndexOf(SwrValuePestSeriesName));
+  WriteCompInt(Comp, Ord(SwrValuePestSeriesMethod));
 end;
 
 procedure TSwrRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(SwrValueAnnotation);
+  Strings.Add(SwrValuePestName);
+  Strings.Add(SwrValuePestSeriesName);
 end;
 
 procedure TSwrRecord.Restore(Decomp: TDecompressionStream;
@@ -790,6 +796,9 @@ begin
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   SwrValueAnnotation := Annotations[ReadCompInt(Decomp)];
+  SwrValuePestName := Annotations[ReadCompInt(Decomp)];
+  SwrValuePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  SwrValuePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TRainStorage }

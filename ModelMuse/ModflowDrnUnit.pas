@@ -263,6 +263,8 @@ type
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod);
+    procedure InvalidateElevationData(Sender: TObject);
+    procedure InvalidateConductanceData(Sender: TObject);
   protected
 
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -588,7 +590,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
+  { DONE -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition]);
   Assert(Expression <> nil);
 
@@ -1216,7 +1218,7 @@ begin
   if FPestConductanceObserver = nil then
   begin
     CreateObserver('PestConductance_', FPestConductanceObserver, nil);
-//    FPestConductanceObserver.OnUpToDateSet := HandleChangedValue;
+    FPestConductanceObserver.OnUpToDateSet := InvalidateConductanceData;
   end;
   result := FPestConductanceObserver;
 end;
@@ -1226,7 +1228,7 @@ begin
   if FPestElevationObserver = nil then
   begin
     CreateObserver('PestElevation_', FPestElevationObserver, nil);
-//    FPestElevationObserver.OnUpToDateSet := HandleChangedValue;
+    FPestElevationObserver.OnUpToDateSet := InvalidateElevationData;
   end;
   result := FPestElevationObserver;
 end;
@@ -1269,6 +1271,33 @@ begin
   InvalidateDisplay;
 end;
 
+procedure TDrnBoundary.InvalidateConductanceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfDrnConductance(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfDrnConductance(self);
+    end;
+  end;
+end;
+
 procedure TDrnBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1279,6 +1308,33 @@ begin
     Model := ParentModel as TPhastModel;
     Model.InvalidateMfDrnConductance(self);
     Model.InvalidateMfDrnElevation(self);
+  end;
+end;
+
+procedure TDrnBoundary.InvalidateElevationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfDrnElevation(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfDrnElevation(self);
+    end;
   end;
 end;
 

@@ -68,6 +68,29 @@ type
     PumpElevationPest: string;
     ScalingLengthPest: string;
 
+    FlowingWellElevationPestSeriesName: string;
+    FlowingWellConductancePestSeriesName: string;
+    FlowingWellReductionLengthPestSeriesName: string;
+    RatePestSeriesName: string;
+    WellHeadPestSeriesName: string;
+    HeadLimitPestSeriesName: string;
+    MinRatePestSeriesName: string;
+    MaxRatePestSeriesName: string;
+    PumpElevationPestSeriesName: string;
+    ScalingLengthPestSeriesName: string;
+
+    FlowingWellElevationPestSeriesMethod: TPestParamMethod;
+    FlowingWellConductancePestSeriesMethod: TPestParamMethod;
+    FlowingWellReductionLengthPestSeriesMethod: TPestParamMethod;
+    RatePestSeriesMethod: TPestParamMethod;
+    WellHeadPestSeriesMethod: TPestParamMethod;
+    HeadLimitPestSeriesMethod: TPestParamMethod;
+    MinRatePestSeriesMethod: TPestParamMethod;
+    MaxRatePestSeriesMethod: TPestParamMethod;
+    PumpElevationPestSeriesMethod: TPestParamMethod;
+    ScalingLengthPestSeriesMethod: TPestParamMethod;
+
+
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -371,6 +394,22 @@ type
     SkinKAnnotation: string;
     SkinRadiusAnnotation: string;
     ScreenObjectName: string;
+
+    ScreenTopPestName: string;
+    ScreenBottomPestName: string;
+    SkinKPestName: string;
+    SkinRadiusPestName: string;
+
+    ScreenTopPestSeriesName: string;
+    ScreenBottomPestSeriesName: string;
+    SkinKPestSeriesName: string;
+    SkinRadiusPestSeriesName: string;
+
+    ScreenTopPestSeriesMethod: TPestParamMethod;
+    ScreenBottomPestSeriesMethod: TPestParamMethod;
+    SkinKPestSeriesMethod: TPestParamMethod;
+    SkinRadiusPestSeriesMethod: TPestParamMethod;
+
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -664,7 +703,22 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ScreenBottomAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(SkinKAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(SkinRadiusAnnotation));
-  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(ScreenObjectName));
+
+  WriteCompInt(Comp, Strings.IndexOf(ScreenTopPestName));
+  WriteCompInt(Comp, Strings.IndexOf(ScreenBottomPestName));
+  WriteCompInt(Comp, Strings.IndexOf(SkinKPestName));
+  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusPestName));
+
+  WriteCompInt(Comp, Strings.IndexOf(ScreenTopPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(ScreenBottomPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(SkinKPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusPestSeriesName));
+
+  WriteCompInt(Comp, Ord(ScreenTopPestSeriesMethod));
+  WriteCompInt(Comp, Ord(ScreenBottomPestSeriesMethod));
+  WriteCompInt(Comp, Ord(SkinKPestSeriesMethod));
+  WriteCompInt(Comp, Ord(SkinRadiusPestSeriesMethod));
 end;
 
 procedure TMawSteadyConnectionRecord.RecordStrings(Strings: TStringList);
@@ -675,6 +729,15 @@ begin
   Strings.Add(SkinRadiusAnnotation);
   Strings.Add(ScreenObjectName);
 
+  Strings.Add(ScreenTopPestName);
+  Strings.Add(ScreenBottomPestName);
+  Strings.Add(SkinKPestName);
+  Strings.Add(SkinRadiusPestName);
+
+  Strings.Add(ScreenTopPestSeriesName);
+  Strings.Add(ScreenBottomPestSeriesName);
+  Strings.Add(SkinKPestSeriesName);
+  Strings.Add(SkinRadiusPestSeriesName);
 end;
 
 procedure TMawSteadyConnectionRecord.Restore(Decomp: TDecompressionStream;
@@ -692,6 +755,21 @@ begin
   SkinKAnnotation := Annotations[ReadCompInt(Decomp)];
   SkinRadiusAnnotation := Annotations[ReadCompInt(Decomp)];
   ScreenObjectName := Annotations[ReadCompInt(Decomp)];
+
+  ScreenTopPestName := Annotations[ReadCompInt(Decomp)];
+  ScreenBottomPestName := Annotations[ReadCompInt(Decomp)];
+  SkinKPestName := Annotations[ReadCompInt(Decomp)];
+  SkinRadiusPestName := Annotations[ReadCompInt(Decomp)];
+
+  ScreenTopPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  ScreenBottomPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  SkinKPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  SkinRadiusPestSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  ScreenTopPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  ScreenBottomPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  SkinKPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  SkinRadiusPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TMawStorage }
@@ -1060,11 +1138,6 @@ var
   ACell: TCellAssignment;
 //  LocalScreenObject: TScreenObject;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [TMawWellScreenItem.ScreenBottomPosition .. TMawWellScreenItem.SkinRadiusPosition]);
   Assert(Expression <> nil);
@@ -1085,22 +1158,33 @@ begin
           begin
             ScreenBottom := Expression.DoubleResult;
             ScreenBottomAnnotation := ACell.Annotation;
+            ScreenBottomPestName := PestName;
+            ScreenBottomPestSeriesName := PestSeriesName;
+            ScreenBottomPestSeriesMethod := PestSeriesMethod;
           end;
         TMawWellScreenItem.ScreenTopPosition:
           begin
             ScreenTop := Expression.DoubleResult;
             ScreenTopAnnotation := ACell.Annotation;
+            ScreenTopPestName := PestName;
+            ScreenTopPestSeriesName := PestSeriesName;
+            ScreenTopPestSeriesMethod := PestSeriesMethod;
           end;
         TMawWellScreenItem.SkinKPosition:
           begin
             SkinK := Expression.DoubleResult;
             SkinKAnnotation := ACell.Annotation;
-
+            SkinKPestName := PestName;
+            SkinKPestSeriesName := PestSeriesName;
+            SkinKPestSeriesMethod := PestSeriesMethod;
           end;
         TMawWellScreenItem.SkinRadiusPosition:
           begin
             SkinRadius := Expression.DoubleResult;
             SkinRadiusAnnotation := ACell.Annotation;
+            SkinRadiusPestName := PestName;
+            SkinRadiusPestSeriesName := PestSeriesName;
+            SkinRadiusPestSeriesMethod := PestSeriesMethod;
           end;
         else Assert(False);
       end;
@@ -1903,6 +1987,28 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PumpElevationPest));
   WriteCompInt(Comp, Strings.IndexOf(ScalingLengthPest));
 
+  WriteCompInt(Comp, Strings.IndexOf(FlowingWellElevationPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(FlowingWellConductancePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(FlowingWellReductionLengthPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RatePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(WellHeadPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(HeadLimitPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(MinRatePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(MaxRatePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(PumpElevationPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(ScalingLengthPestSeriesName));
+
+  WriteCompInt(Comp, Ord(FlowingWellElevationPestSeriesMethod));
+  WriteCompInt(Comp, Ord(FlowingWellConductancePestSeriesMethod));
+  WriteCompInt(Comp, Ord(FlowingWellReductionLengthPestSeriesMethod));
+  WriteCompInt(Comp, Ord(RatePestSeriesMethod));
+  WriteCompInt(Comp, Ord(WellHeadPestSeriesMethod));
+  WriteCompInt(Comp, Ord(HeadLimitPestSeriesMethod));
+  WriteCompInt(Comp, Ord(MinRatePestSeriesMethod));
+  WriteCompInt(Comp, Ord(MaxRatePestSeriesMethod));
+  WriteCompInt(Comp, Ord(PumpElevationPestSeriesMethod));
+  WriteCompInt(Comp, Ord(ScalingLengthPestSeriesMethod));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -1930,6 +2036,17 @@ begin
   Strings.Add(MaxRatePest);
   Strings.Add(PumpElevationPest);
   Strings.Add(ScalingLengthPest);
+
+  Strings.Add(FlowingWellElevationPestSeriesName);
+  Strings.Add(FlowingWellConductancePestSeriesName);
+  Strings.Add(FlowingWellReductionLengthPestSeriesName);
+  Strings.Add(RatePestSeriesName);
+  Strings.Add(WellHeadPestSeriesName);
+  Strings.Add(HeadLimitPestSeriesName);
+  Strings.Add(MinRatePestSeriesName);
+  Strings.Add(MaxRatePestSeriesName);
+  Strings.Add(PumpElevationPestSeriesName);
+  Strings.Add(ScalingLengthPestSeriesName);
 
 end;
 
@@ -1978,6 +2095,28 @@ begin
   MaxRatePest := Annotations[ReadCompInt(Decomp)];
   PumpElevationPest := Annotations[ReadCompInt(Decomp)];
   ScalingLengthPest := Annotations[ReadCompInt(Decomp)];
+
+  FlowingWellElevationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  FlowingWellConductancePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  FlowingWellReductionLengthPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  WellHeadPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  HeadLimitPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MinRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MaxRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  PumpElevationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  ScalingLengthPestSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  FlowingWellElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  FlowingWellConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  FlowingWellReductionLengthPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  WellHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  HeadLimitPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  MinRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  MaxRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  PumpElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  ScalingLengthPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
@@ -2726,11 +2865,6 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
-        { TODO -cPEST : Add PEST support for PEST here }
-        // record PEST parameter name if present.
-        // record PEST DataArray name if present.
-        // cache and restore PEST data.
   Assert(BoundaryFunctionIndex in
     [FlowingWellElevationPosition..FlowingWellReductionLengthPostion]);
   Assert(Expression <> nil);
@@ -2752,60 +2886,80 @@ begin
             FlowingWellElevation := Expression.DoubleResult;
             FlowingWellElevationAnnotation := ACell.Annotation;
             FlowingWellElevationPest := PestName;
+            FlowingWellElevationPestSeriesName := PestSeriesName;
+            FlowingWellElevationPestSeriesMethod := PestSeriesMethod;
           end;
         FlowingWellConductancePosition:
           begin
             FlowingWellConductance := Expression.DoubleResult;
             FlowingWellConductanceAnnotation := ACell.Annotation;
             FlowingWellConductancePest := PestName;
+            FlowingWellConductancePestSeriesName := PestSeriesName;
+            FlowingWellConductancePestSeriesMethod := PestSeriesMethod;
           end;
         RatePosition:
           begin
             Rate := Expression.DoubleResult;
             RateAnnotation := ACell.Annotation;
             RatePest := PestName;
+            RatePestSeriesName := PestSeriesName;
+            RatePestSeriesMethod := PestSeriesMethod;
           end;
         WellHeadPosition:
           begin
             WellHead := Expression.DoubleResult;
             WellHeadAnnotation := ACell.Annotation;
             WellHeadPest := PestName;
+            WellHeadPestSeriesName := PestSeriesName;
+            WellHeadPestSeriesMethod := PestSeriesMethod;
           end;
         HeadLimitPosition:
           begin
             HeadLimit := Expression.DoubleResult;
             HeadLimitAnnotation := ACell.Annotation;
             HeadLimitPest := PestName;
+            HeadLimitPestSeriesName := PestSeriesName;
+            HeadLimitPestSeriesMethod := PestSeriesMethod;
           end;
         MinRatePosition:
           begin
             MinRate := Expression.DoubleResult;
             MinRateAnnotation := ACell.Annotation;
             MinRatePest := PestName;
+            MinRatePestSeriesName := PestSeriesName;
+            MinRatePestSeriesMethod := PestSeriesMethod;
           end;
         MaxRatePosition:
           begin
             MaxRate := Expression.DoubleResult;
             MaxRateAnnotation := ACell.Annotation;
             MaxRatePest := PestName;
+            MaxRatePestSeriesName := PestSeriesName;
+            MaxRatePestSeriesMethod := PestSeriesMethod;
           end;
         PumpElevationPosition:
           begin
             PumpElevation := Expression.DoubleResult;
             PumpElevationAnnotation := ACell.Annotation;
             PumpElevationPest := PestName;
+            PumpElevationPestSeriesName := PestSeriesName;
+            PumpElevationPestSeriesMethod := PestSeriesMethod;
           end;
         ScalingLengthPosition:
           begin
             ScalingLength := Expression.DoubleResult;
             ScalingLengthAnnotation := ACell.Annotation;
             ScalingLengthPest := PestName;
+            ScalingLengthPestSeriesName := PestSeriesName;
+            ScalingLengthPestSeriesMethod := PestSeriesMethod;
           end;
         FlowingWellReductionLengthPostion:
           begin
             FlowingWellReductionLength := Expression.DoubleResult;
             FlowingWellReductionLengthAnnotation := ACell.Annotation;
             FlowingWellReductionLengthPest := PestName;
+            FlowingWellReductionLengthPestSeriesName := PestSeriesName;
+            FlowingWellReductionLengthPestSeriesMethod := PestSeriesMethod;
           end
         else
           Assert(False);

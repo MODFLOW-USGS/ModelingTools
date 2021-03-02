@@ -2275,7 +2275,7 @@ end;
 
 constructor TModflowBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
-  inherited;
+  inherited Create(Model, ScreenObject);
 //  Assert((ScreenObject = nil) or (ScreenObject is TScreenObject));
 //  FScreenObject := ScreenObject;
 //  Assert((Model = nil) or (Model is TPhastModel));

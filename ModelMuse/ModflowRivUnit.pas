@@ -30,9 +30,19 @@ type
     ConductanceAnnotation: string;
     RiverStageAnnotation: string;
     RiverBottomAnnotation: string;
+
     ConductancePest: string;
     RiverStagePest: string;
     RiverBottomPest: string;
+
+    ConductancePestSeriesName: string;
+    RiverStagePestSeriesName: string;
+    RiverBottomPestSeriesName: string;
+
+    ConductancePestSeriesMethod: TPestParamMethod;
+    RiverStagePestSeriesMethod: TPestParamMethod;
+    RiverBottomPestSeriesMethod: TPestParamMethod;
+
     TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
@@ -552,8 +562,8 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  { TODO -cPEST : Handle PestSeriesName }
-  Assert(BoundaryFunctionIndex in [StagePosition,ConductancePosition, BottomPosition]);
+  Assert(BoundaryFunctionIndex in
+    [StagePosition,ConductancePosition, BottomPosition]);
   Assert(Expression <> nil);
 
   RivStorage := BoundaryStorage as TRivStorage;
@@ -573,18 +583,24 @@ begin
             RiverStage := Expression.DoubleResult;
             RiverStageAnnotation := ACell.Annotation;
             RiverStagePest := PestName;
+            RiverStagePestSeriesName := PestSeriesName;
+            RiverStagePestSeriesMethod := PestSeriesMethod;
           end;
         ConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
             ConductancePest := PestName;
+            ConductancePestSeriesName := PestSeriesName;
+            ConductancePestSeriesMethod := PestSeriesMethod;
           end;
         BottomPosition:
           begin
             RiverBottom := Expression.DoubleResult;
             RiverBottomAnnotation := ACell.Annotation;
             RiverBottomPest := PestName;
+            RiverBottomPestSeriesName := PestSeriesName;
+            RiverBottomPestSeriesMethod := PestSeriesMethod;
           end;
         else
           Assert(False);
@@ -1276,6 +1292,14 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(RiverStagePest));
   WriteCompInt(Comp, Strings.IndexOf(RiverBottomPest));
 
+  WriteCompInt(Comp, Strings.IndexOf(ConductancePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RiverStagePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RiverBottomPestSeriesName));
+
+  WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
+  WriteCompInt(Comp, Ord(RiverStagePestSeriesMethod));
+  WriteCompInt(Comp, Ord(RiverBottomPestSeriesMethod));
+
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompBoolean(Comp, MvrUsed);
@@ -1293,6 +1317,11 @@ begin
   Strings.Add(ConductancePest);
   Strings.Add(RiverStagePest);
   Strings.Add(RiverBottomPest);
+
+  Strings.Add(ConductancePestSeriesName);
+  Strings.Add(RiverStagePestSeriesName);
+  Strings.Add(RiverBottomPestSeriesName);
+
   Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
 end;
@@ -1313,6 +1342,14 @@ begin
   ConductancePest := Annotations[ReadCompInt(Decomp)];
   RiverStagePest := Annotations[ReadCompInt(Decomp)];
   RiverBottomPest := Annotations[ReadCompInt(Decomp)];
+
+  ConductancePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RiverStagePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RiverBottomPestSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RiverStagePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RiverBottomPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
