@@ -31,6 +31,8 @@ uses System.UITypes, Windows,
   Vcl.CheckLst, System.StrUtils;
 
 type
+  EImportShapeFileError = class(Exception);
+
   TSfrColumns = (scStartTime, scEndTime, scIcalc,
     scOutflowSegment, scDiversionSegment, scIprior,
     scFlow, scPtsw, scEtsw,
@@ -1090,6 +1092,14 @@ resourcestring
   StrUZTRechConcd = 'UZT_RechConc_%0:d_%1:d';
   StrUZTSatEtConcd = 'UZT_SatEtConc_%0:d_%1:d';
   StrUZTUnSatEtConcd = 'UZT_UnSatEtConc_%0:d_%1:d';
+  StrNoObservationType = 'No observation type is specified in the MODFLOW 6 ' +
+  'observation in row %d';
+  StrNoObservationTime = 'No observation time is specified in the MODFLOW 6 ' +
+  'observation in row %d';
+  StrNoObservationValue = 'No observation value is specified in the MODFLOW ' +
+  '6 observation in row %d';
+  StrNoObservationWeigh = 'No observation weight is specified in the MODFLOW' +
+  ' 6 observation in row %d';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -3387,7 +3397,9 @@ begin
       end;
       if TypeIndex < 0 then
       begin
-        Continue;
+        raise EImportShapeFileError.Create(
+          Format(StrNoObservationType, [RowIndex]));
+//        Continue;
       end;
 
       if AName = '' then
@@ -3396,20 +3408,29 @@ begin
         AName := Format('%0:s_%1:d_%2:d', [AName, FShapeIndex+1, RowIndex]);
       end;
 
-      ObsTime := GetRealValueFromText(rdgBoundaryConditions.Cells[Ord(mpocTime), RowIndex], ShouldIgnore);
+      ObsTime := GetRealValueFromText(rdgBoundaryConditions.Cells[
+        Ord(mpocTime), RowIndex], ShouldIgnore);
       if ShouldIgnore then
       begin
-        Continue;
+        raise EImportShapeFileError.Create(
+          Format(StrNoObservationTime, [RowIndex]));
+//        Continue;
       end;
-      ObsValue := GetRealValueFromText(rdgBoundaryConditions.Cells[Ord(mpocValue), RowIndex], ShouldIgnore);
+      ObsValue := GetRealValueFromText(rdgBoundaryConditions.Cells[
+        Ord(mpocValue), RowIndex], ShouldIgnore);
       if ShouldIgnore then
       begin
-        Continue;
+        raise EImportShapeFileError.Create(
+          Format(StrNoObservationValue, [RowIndex]));
+//        Continue;
       end;
-      ObsWeight := GetRealValueFromText(rdgBoundaryConditions.Cells[Ord(mpocWeight), RowIndex], ShouldIgnore);
+      ObsWeight := GetRealValueFromText(rdgBoundaryConditions.Cells[
+        Ord(mpocWeight), RowIndex], ShouldIgnore);
       if ShouldIgnore then
       begin
-        Continue;
+        raise EImportShapeFileError.Create(
+          Format(StrNoObservationWeigh,[RowIndex]));
+//        Continue;
       end;
 
       CalibObs := CalibrationObservations.Add;
@@ -10401,11 +10422,17 @@ begin
       FInvalidParameterNames.Free;
       ObjectNames.Free;
     end;
-  except on E: EXBaseException do
-    begin
-      Beep;
-      MessageDlg(Format(StrThereWasAnErrorP, [E.Message]), mtError, [mbOK], 0);
-    end;
+  except
+    on E: EImportShapeFileError do
+      begin
+        Beep;
+        MessageDlg(E.Message, mtError, [mbOK], 0);
+      end;
+    on E: EXBaseException do
+      begin
+        Beep;
+        MessageDlg(Format(StrThereWasAnErrorP, [E.Message]), mtError, [mbOK], 0);
+      end;
   end;
 end;
 

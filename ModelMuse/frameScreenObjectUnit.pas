@@ -82,32 +82,6 @@ begin
   begin
     frmCustomGoPhastUnit.UpdateNextTimeCell(DataGrid, ACol, ARow);
   end;
-//  if FrameLoaded and (ARow >= DataGrid.FixedRows) and (ACol in [0, 1])
-//    and (FLastTimeColumn = 1) then
-//  begin
-//    SelectIndex := DataGrid.ItemIndex[ACol, ARow];
-//    if SelectIndex >= 0 then
-//    begin
-//      if (ACol = 0) then
-//      begin
-//        if DataGrid.Cells[1, ARow] = '' then
-//        begin
-//          DataGrid.ItemIndex[1, ARow] := SelectIndex;
-//        end;
-//      end
-//      else if (ACol = 1) then
-//      begin
-//        if (ARow + 1 < DataGrid.RowCount) and
-//          (DataGrid.Cells[0, ARow + 1] = '') then
-//        begin
-//          if SelectIndex + 1 < DataGrid.Columns[0].PickList.Count then
-//          begin
-//            DataGrid.ItemIndex[0, ARow + 1] := SelectIndex + 1;
-//          end;
-//        end;
-//      end;
-//    end;
-//  end;
 end;
 
 end.

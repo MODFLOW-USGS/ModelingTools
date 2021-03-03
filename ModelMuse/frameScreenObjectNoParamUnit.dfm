@@ -23,7 +23,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
     end
     object seNumberOfTimes: TJvSpinEdit
       Left = 9
-      Top = 5
+      Top = 6
       Width = 49
       Height = 21
       ButtonKind = bkClassic
@@ -172,6 +172,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -195,6 +196,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -218,6 +220,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -240,7 +243,6 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
-      ExplicitLeft = 2
     end
   end
 end

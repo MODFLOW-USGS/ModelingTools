@@ -314,11 +314,11 @@ begin
   begin
     CoveragePests[index] := Annotations[ReadCompInt(Decomp)];
   end;
-  for index := 0 to Length(CoveragePests) - 1 do
+  for index := 0 to Length(CoveragePestSeriesNames) - 1 do
   begin
     CoveragePestSeriesNames[index] := Annotations[ReadCompInt(Decomp)];
   end;
-  for index := 0 to Length(CoveragePests) - 1 do
+  for index := 0 to Length(CoveragePestSeriesMethods) - 1 do
   begin
     CoveragePestSeriesMethods[index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
@@ -1002,6 +1002,10 @@ begin
       FRipArray[Index].CoverageAnnotations, PlantGroupCount);
     SetLength((Boundaries[ItemIndex, AModel] as TRipStorage).
       FRipArray[Index].CoveragePests, PlantGroupCount);
+    SetLength((Boundaries[ItemIndex, AModel] as TRipStorage).
+      FRipArray[Index].CoveragePestSeriesNames, PlantGroupCount);
+    SetLength((Boundaries[ItemIndex, AModel] as TRipStorage).
+      FRipArray[Index].CoveragePestSeriesMethods, PlantGroupCount);
   end;
   inherited;
 end;

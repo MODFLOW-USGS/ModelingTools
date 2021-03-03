@@ -1754,7 +1754,7 @@ procedure UpdateNextTimeCell(Grid: TRbwDataGrid4; ACol, ARow: Integer);
 var
   SelectIndex: Integer;
 begin
-  if (ARow >= Grid.FixedRows) and (ACol in [0, 1])then
+  if (ARow >= Grid.FixedRows + PestRowOffset) and (ACol in [0, 1])then
   begin
     SelectIndex := Grid.ItemIndex[ACol, ARow];
     if SelectIndex >= 0 then

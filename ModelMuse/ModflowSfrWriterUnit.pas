@@ -6377,7 +6377,7 @@ begin
       FirstSegmentInParent := False;
       ScreenObject := SfrBoundary.ScreenObject as TScreenObject;
       frmErrorsAndWarnings.AddWarning(Model, StrSFRChildModelLink,
-        Format(StrTheObjectSMayNo, [ScreenObject.Name], ScreenObject))
+        Format(StrTheObjectSMayNo, [ScreenObject.Name]), ScreenObject)
     end;
   end
   else

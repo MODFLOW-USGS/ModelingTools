@@ -14437,8 +14437,8 @@ begin
       for TimeIndex := 0 to Values.Count - 1 do
       begin
         Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-        RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-        Assert(RowIndex >= 1);
+        RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1 + PestRowOffset;
+        Assert(RowIndex >= 1 + PestRowOffset);
         for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
         begin
           DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -15382,8 +15382,8 @@ begin
             for ChdIndex := 0 to BoundaryItem.Param.Count - 1 do
             begin
               Item := BoundaryItem.Param[ChdIndex] as TCustomModflowBoundaryItem;
-              RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-              Assert(RowIndex >= 1);
+              RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1 + PestRowOffset;
+              Assert(RowIndex >= 1 + PestRowOffset);
               for BoundIndex := 0 to Boundary.Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
               begin
                 DataGrid.Cells[ColIndex + BoundIndex, RowIndex] :=
@@ -15562,7 +15562,7 @@ var
 begin
   DataGrid := Frame.rdgModflowBoundary;
   SetLength(Times, DataGrid.RowCount);
-  for RowIndex := 1 to DataGrid.RowCount - 1 do
+  for RowIndex := 1 + PestRowOffset to DataGrid.RowCount - 1 do
   begin
     Times[RowIndex].TimeOK :=
       TryStrToFloat(DataGrid.Cells[0, RowIndex], Times[RowIndex].StartTime)
@@ -15584,7 +15584,7 @@ var
 begin
   DataGrid := Frame.rdgModflowBoundary;
 
-  for RowIndex := 1 to DataGrid.RowCount - 1 do
+  for RowIndex := 1 + PestRowOffset to DataGrid.RowCount - 1 do
   begin
     if Times[RowIndex].TimeOK then
     begin
@@ -15594,9 +15594,9 @@ begin
         NewValue := DataGrid.Cells[ColIndex, RowIndex];
         if Frame.DeletedCells[ColIndex,RowIndex] or (NewValue <> '') then
         begin
-          if RowIndex - 1 < BoundaryValues.Count then
+          if RowIndex - 1 - PestRowOffset < BoundaryValues.Count then
           begin
-            BoundItem := BoundaryValues.Items[RowIndex - 1] as TCustomModflowBoundaryItem;
+            BoundItem := BoundaryValues.Items[RowIndex - 1 - PestRowOffset] as TCustomModflowBoundaryItem;
           end
           else
           begin
@@ -15609,11 +15609,11 @@ begin
       end;
     end;
   end;
-  for RowIndex := DataGrid.RowCount  to BoundaryValues.Count do
+  for RowIndex := DataGrid.RowCount  to BoundaryValues.Count + PestRowOffset do
   begin
     for BoundIndex := 0 to BoundaryValues.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
-      BoundItem := BoundaryValues.Items[RowIndex - 1] as TCustomModflowBoundaryItem;
+      BoundItem := BoundaryValues.Items[RowIndex - 1 - PestRowOffset] as TCustomModflowBoundaryItem;
       BoundItem.BoundaryFormula[BoundIndex] := '';
     end;
   end;
@@ -15701,7 +15701,7 @@ begin
       ParamPosition := Frame.clbParameters.Items.IndexOfObject(Param);
       AssignToAll := Frame.clbParameters.State[ParamPosition] = cbChecked;
       ParamItem := nil;
-      for RowIndex := 1 to DataGrid.RowCount - 1 do
+      for RowIndex := 1 + PestRowOffset to DataGrid.RowCount - 1 do
       begin
         if Times[RowIndex].TimeOK then
         begin
@@ -15991,9 +15991,16 @@ begin
 
     Frame.seNumberOfTimes.Value := TimeList.Count;
     DataGrid := Frame.rdgModflowBoundary;
+    for ColIndex := 1 to DataGrid.ColCount - 1 do
+    begin
+      for RowIndex := 1 to PestRowOffset do
+      begin
+        DataGrid.Cells[ColIndex, RowIndex] := '';
+      end;
+    end;
     for ColIndex := 0 to DataGrid.ColCount - 1 do
     begin
-      for RowIndex := 1 to DataGrid.RowCount - 1 do
+      for RowIndex := 1 + PestRowOffset to DataGrid.RowCount - 1 do
       begin
         DataGrid.Cells[ColIndex, RowIndex] := '';
       end;
@@ -16003,8 +16010,8 @@ begin
     for TimeIndex := 0 to TimeList.Count - 1 do
     begin
       Time := TimeList[TimeIndex];
-      DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-      DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+      DataGrid.Cells[0, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.StartTime);
+      DataGrid.Cells[1, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.EndTime);
     end;
     GetModflowBoundaryValues(Parameter, ScreenObjectList, TimeList, DataGrid);
     GetModflowBoundaryParameters(Parameter, ScreenObjectList, Frame, TimeList);
@@ -24520,7 +24527,7 @@ procedure TfrmScreenObjectProperties.UpdateNonParamCheckBox(
 begin
   if (Frame.clbParameters.Items.Count > 0)
     and (Frame.clbParameters.State[0] = cbUnchecked)
-    and (ARow >= Frame.rdgModflowBoundary.FixedRows)
+    and (ARow >= Frame.rdgModflowBoundary.FixedRows + PestRowOffset)
     and (ACol >= 2) and (ACol < ParamCol) and (Value <> '') then
   begin
     Frame.clbParameters.Checked[0] := True;

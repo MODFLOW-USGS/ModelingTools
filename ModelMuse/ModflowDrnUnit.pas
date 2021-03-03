@@ -255,14 +255,8 @@ type
     procedure SetPestConductanceFormula(const Value: string);
     function GetPestConductanceObserver: TObserver;
     function GetPestElevationObserver: TObserver;
-    function GetPestBoundaryFormula(FormulaIndex: integer): string;
-    procedure SetPestBoundaryFormula(FormulaIndex: integer;
-      const Value: string);
     procedure SetPestConductanceMethod(const Value: TPestParamMethod);
     procedure SetPestElevMethod(const Value: TPestParamMethod);
-    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod;
-    procedure SetPestBoundaryMethod(FormulaIndex: integer;
-      const Value: TPestParamMethod);
     procedure InvalidateElevationData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
   protected
@@ -288,6 +282,12 @@ type
     procedure CreateObservers; //override;
     property PestElevationObserver: TObserver read GetPestElevationObserver;
     property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
@@ -308,10 +308,10 @@ type
     procedure InvalidateDisplay; override;
 //    property PestElevationParameter: TModflowSteadyParameter
 //      read FPestElevationParameter write SetPestElevationParameter;
-    property PestBoundaryFormula[FormulaIndex: integer]: string
-      read GetPestBoundaryFormula write SetPestBoundaryFormula;
-    property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
-      read GetPestBoundaryMethod write SetPestBoundaryMethod;
+//    property PestBoundaryFormula[FormulaIndex: integer]: string
+//      read GetPestBoundaryFormula write SetPestBoundaryFormula;
+//    property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
+//      read GetPestBoundaryMethod write SetPestBoundaryMethod;
   published
     property Interp;
     property PestElevFormula: string read GetPestElevFormula

@@ -680,6 +680,12 @@ procedure AssignTimeUnitStringsToPicklist(TimePickList: TStrings;
   ModelType: TModelSelection);
 
 const
+{$IFDEF PEST}
+  PestRowOffset = 2;
+{$ELSE}
+  PestRowOffset = 0;
+{$ENDIF}
+
   TimeEpsilon = 1e-6;
 
   kModelTop = 'Model_Top';

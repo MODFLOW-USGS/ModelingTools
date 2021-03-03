@@ -794,6 +794,12 @@ type
       Displayer: TObserver); override;
     function BoundaryObserverPrefix: string; virtual; abstract;
     procedure CreateBoundaryObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; virtual;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); virtual;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; virtual;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); virtual;
   public
     // @name is used when @classname contains properties that are not transient.
     // @link(TModflowSteadyBoundary.CreateFormulaObjects), @link(CreateBoundaryObserver)
@@ -805,6 +811,10 @@ type
     destructor Destroy; override;
     procedure StopTalkingToAnyone; virtual;
     procedure Invalidate;
+    property PestBoundaryFormula[FormulaIndex: integer]: string
+      read GetPestBoundaryFormula write SetPestBoundaryFormula;
+    property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
+      read GetPestBoundaryMethod write SetPestBoundaryMethod;
   end;
 
   TMultiHeadItem = class(TOrderedItem)
@@ -1089,7 +1099,7 @@ uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
   GIS_Functions, IntListUnit, ModflowCellUnit, frmProgressUnit, Dialogs,
   EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
-  ModflowDrnUnit, CustomModflowWriterUnit;
+  CustomModflowWriterUnit;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';
@@ -2940,6 +2950,18 @@ begin
   inherited;
 end;
 
+function TModflowScreenObjectProperty.GetPestBoundaryFormula(
+  FormulaIndex: integer): string;
+begin
+  result := '';
+end;
+
+function TModflowScreenObjectProperty.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := ppmMultiply;
+end;
+
 procedure TModflowScreenObjectProperty.GetPropertyObserver(Sender: TObject;
   List: TList);
 begin
@@ -3005,6 +3027,18 @@ begin
   finally
     Observers.Free;
   end;
+end;
+
+procedure TModflowScreenObjectProperty.SetPestBoundaryFormula(
+  FormulaIndex: integer; const Value: string);
+begin
+  // do nothing, at least for now.
+end;
+
+procedure TModflowScreenObjectProperty.SetPestBoundaryMethod(
+  FormulaIndex: integer; const Value: TPestParamMethod);
+begin
+// do nothing, for now at least.
 end;
 
 procedure TModflowScreenObjectProperty.StopTalkingToAnyone;
@@ -3774,11 +3808,13 @@ begin
         // that is modified by PEST.
         UnmodifiedFormula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
 
-        if BoundaryGroup is TDrnBoundary then
+//        if BoundaryGroup is TDrnBoundary then
         begin
-          PestSeriesName := TDrnBoundary(BoundaryGroup).
+//          PestSeriesName := TDrnBoundary(BoundaryGroup).
+          PestSeriesName := BoundaryGroup.
             PestBoundaryFormula[BoundaryFunctionIndex];
-          Method := TDrnBoundary(BoundaryGroup).
+//          Method := TDrnBoundary(BoundaryGroup).
+          Method := BoundaryGroup.
             PestBoundaryMethod[BoundaryFunctionIndex];
           if (PestSeriesName <> '') and (PestSeriesName <> '0') then
           begin
@@ -3823,10 +3859,12 @@ begin
               end;
             end;
           end;
-        end
-        else
-        begin
-          PestSeriesName := '';
+//          end;
+//          end
+//          else
+//          begin
+//            PestSeriesName := '';
+//            Method := ppmMultiply;
         end;
 
         ADataSet := LocalModel.DataArrayManager.GetDataSetByName(UnmodifiedFormula);
@@ -3929,17 +3967,19 @@ begin
             CellList.Delete(EliminateIndicies[Index]);
           end;
 
-        if BoundaryGroup is TDrnBoundary then
+//        if BoundaryGroup is TDrnBoundary then
         begin
-          PestSeriesName := TDrnBoundary(BoundaryGroup).
+//          PestSeriesName := TDrnBoundary(BoundaryGroup).
+          PestSeriesName := BoundaryGroup.
             PestBoundaryFormula[BoundaryFunctionIndex];
-          Method := TDrnBoundary(BoundaryGroup).
+//          Method := TDrnBoundary(BoundaryGroup).
+          Method := BoundaryGroup.
             PestBoundaryMethod[BoundaryFunctionIndex];
-        end
-        else
-        begin
-          PestSeriesName := '';
-          Method := ppmMultiply;
+//        end
+//        else
+//        begin
+//          PestSeriesName := '';
+//          Method := ppmMultiply;
         end;
 
         { TODO -cPEST : Add PEST support for PEST here }
@@ -3996,6 +4036,66 @@ begin
                   begin
                     Formula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
                   end;
+
+//                  if BoundaryGroup is TDrnBoundary then
+                  begin
+//                    PestSeriesName := TDrnBoundary(BoundaryGroup).
+                    PestSeriesName := BoundaryGroup.
+                      PestBoundaryFormula[BoundaryFunctionIndex];
+//                    Method := TDrnBoundary(BoundaryGroup).
+                    Method := BoundaryGroup.
+                      PestBoundaryMethod[BoundaryFunctionIndex];
+                    if (PestSeriesName <> '') and (PestSeriesName <> '0') then
+                    begin
+                      ADataSet := LocalModel.DataArrayManager.GetDataSetByName(UnmodifiedFormula);
+                      if (ADataSet <> nil) and ADataSet.PestParametersUsed then
+                      begin
+                        PestSeriesName := ADataSet.Name;
+                        case Method of
+                          ppmMultiply:
+                            begin
+                              Formula := '(' + Formula + ') * ' + PestSeriesName;
+                            end;
+                          ppmAdd:
+                            begin
+                              Formula := '(' + Formula + ') + ' + PestSeriesName;
+                            end;
+                        end;
+
+            //            Case TDrnBoundary(BoundaryGroup).
+            //            PestBoundaryMethod[BoundaryFunctionIndex];
+                      end
+                      else
+                      begin
+                        PestParam := LocalModel.GetPestParameterByName(PestSeriesName);
+                        if PestParam = nil then
+                        begin
+                          PestSeriesName := '';
+                        end
+                        else
+                        begin
+                          Case Method of
+                            ppmMultiply:
+                              begin
+                                Formula := Format('(%0:s) * %1:g', [Formula, PestParam.Value]);
+                              end;
+                            ppmAdd:
+                              begin
+                                Formula := Format('(%0:s) + %1:g', [Formula, PestParam.Value]);
+                              end;
+                          End;
+                          PestSeriesName := PestParam.ParameterName;
+                        end;
+                      end;
+                    end;
+//                    end;
+//                    end
+//                    else
+//                    begin
+//                      PestSeriesName := '';
+//                      Method := ppmMultiply;
+                  end;
+
                   // The UnmodifiedFormula might by a PEST parameter or a TDataArray
                   // that is modified by PEST.
                   PestParam := LocalModel.GetPestParameterByName(Formula);
