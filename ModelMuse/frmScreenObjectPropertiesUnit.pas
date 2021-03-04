@@ -1701,6 +1701,8 @@ type
     FSutraSpecConcObs_Node: TJvPageIndexNode;
     FSutraGenFlowObs_Node: TJvPageIndexNode;
     FSutraGenTransObs_Node: TJvPageIndexNode;
+    FPestMethods: TStringList;
+    FPestParametersAndDataSets: TStringList;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2194,6 +2196,13 @@ type
     procedure CreateUzMf6fNode(AScreenObject: TScreenObject);
     procedure UzfMf6Changed(Sender: TObject);
     procedure GetUzMf6Boundary(const ScreenObjectList: TList);
+    function GetPestMethod(Grid: TRbwDataGrid4;
+      ACol: Integer): TPestParamMethod;
+    procedure SetPestMethod(Grid: TRbwDataGrid4; ACol: Integer;
+      const Value: TPestParamMethod);
+    function GetPestModifier(Grid: TRbwDataGrid4; ACol: Integer): string;
+    procedure SetPestModifier(Grid: TRbwDataGrid4; ACol: Integer;
+      const Value: string);
 //    procedure GetPilotPointsForAdditionalObject(AScreenObject: TScreenObject);
 
     // @name is set to @true when the @classname has stored values of the
@@ -2411,6 +2420,16 @@ type
     procedure GetSwtObs(ListOfScreenObjects: TList);
     procedure SubObsChanged(Sender: TObject);
     procedure SwtObsChanged(Sender: TObject);
+    procedure EnablePestCells(Sender: TObject; ACol, ARow: Longint;
+      var CanSelect: Boolean);
+    Property PestMethod[Grid: TRbwDataGrid4; ACol: Integer]: TPestParamMethod
+      read GetPestMethod write SetPestMethod;
+    Property PestModifier[Grid: TRbwDataGrid4; ACol: Integer]: string
+      read GetPestModifier write SetPestModifier;
+    procedure GetPestModifiers(Frame: TframeScreenObjectCondParam;
+      Parameter: TParameterType; ScreenObjectList: TList);
+    procedure StorePestModifiers(Frame: TframeScreenObjectParam;
+      ParamType: TParameterType; Node: TJvPageIndexNode);
     { Private declarations }
   public
     procedure Initialize;
@@ -2470,9 +2489,11 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowMawUnit, Modflow6ObsUnit, ModflowLakMf6Unit, frameLakeOutletUnit,
   ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
-  framePestObsMf6Unit;
+  framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit;
 
 resourcestring
+  StrMultiply = 'Multiply';
+  StrAdd = 'Add';
   StrConcentrationObserv = 'Concentration Observations: ';
   StrFluxObserv = 'Flux Observations: ';
   StrUseToSetGridElem = 'Use to set grid element size';
@@ -2614,6 +2635,7 @@ resourcestring
   StrGeneralizedFlowObs = 'Generalized Flow Observations';
   StrGeneralizedTranspor = 'Generalized Transport Observations';
   StrSpecifiedFlowObser = 'Specified Flow Observations';
+  StrNone = 'none';
 //  StrMassOrEnergyFlux = 'Mass or Energy Flux';
 
 {$R *.dfm}
@@ -2691,6 +2713,49 @@ begin
   end;
 
   btnOK.Enabled := Enable;
+end;
+
+procedure TfrmScreenObjectProperties.EnablePestCells(Sender: TObject; ACol,
+  ARow: Longint; var CanSelect: Boolean);
+var
+  Column: TRbwColumn4;
+begin
+  if Sender = frameDrnParam.rdgModflowBoundary then
+  begin
+    if (ARow >= 1) and (ACol >= 2) then
+    begin
+      Column := (Sender as TRbwDataGrid4).Columns[ACol];
+      if (ARow <= PestRowOffset)  then
+      begin
+        if ACol in [2,3] then
+        begin
+          Column.ComboUsed := True;
+          Column.LimitToList := True;
+          if ARow = PestMethodRow then
+          begin
+            Column.PickList := FPestMethods
+          end
+          else
+          begin
+            Column.PickList := FPestParametersAndDataSets
+          end;
+        end
+        else
+        begin
+          CanSelect := False
+        end;
+      end
+      else
+      begin
+        Column.ButtonUsed := True;
+        Column.LimitToList := False;
+      end;
+    end
+    else if (ACol = 1) and (ARow >= 1) and (ARow <= PestRowOffset) then
+    begin
+      CanSelect := False
+    end;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.btnColorClick(Sender: TObject);
@@ -3934,7 +3999,36 @@ var
 //  ItemIndex: integer;
   TempList: TList;
   SutraStateObs: TSutraStateObservations;
+  DataArrayManager: TDataArrayManager;
+  DataSetIndex: Integer;
+  ADataArray: TDataArray;
+  ModflowSteadyParameters: TModflowSteadyParameters;
+  ParameterIndex: Integer;
+  AParameter: TModflowSteadyParameter;
 begin
+  FPestParametersAndDataSets.Clear;
+  DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
+  for DataSetIndex := 0 to DataArrayManager.DataSetCount - 1 do
+  begin
+    ADataArray := DataArrayManager.DataSets[DataSetIndex];
+    if ADataArray.PestParametersUsed then
+    begin
+      FPestParametersAndDataSets.AddObject(ADataArray.Name, ADataArray);
+    end;
+  end;
+  ModflowSteadyParameters := frmGoPhast.PhastModel.ModflowSteadyParameters;
+  for ParameterIndex := 0 to ModflowSteadyParameters.Count - 1 do
+  begin
+    AParameter := ModflowSteadyParameters[ParameterIndex];
+    if AParameter.ParameterType = ptPEST then
+    begin
+      FPestParametersAndDataSets.AddObject(AParameter.ParameterName, AParameter);
+    end;
+  end;
+  FPestParametersAndDataSets.Sorted := True;
+  FPestParametersAndDataSets.Sorted := False;
+  FPestParametersAndDataSets.Insert(0, strNone);
+
   FObjectCount := 1;
   FVertexCount := AScreenObject.Count;
   ShowGageObservations;
@@ -5398,6 +5492,12 @@ end;
 procedure TfrmScreenObjectProperties.FormCreate(Sender: TObject);
 begin
   inherited;
+  FPestMethods := TStringList.Create;
+  FPestMethods.Add(StrMultiply);
+  FPestMethods.Add(StrAdd);
+  FPestParametersAndDataSets := TStringList.Create;
+
+
   frameObsMf6.OnChangeProperties := Mf6ObsChanged;
 
   reDataSetFormula.DoubleBuffered := False;
@@ -5478,6 +5578,8 @@ begin
   framePestObsSwt.InitializeControls;
   framePestObsSwt.SpecifyObservationTypes(SwtTypes);
   framePestObsSwt.OnControlsChange := SwtObsChanged;
+
+  frameDrnParam.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -6032,6 +6134,29 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TfrmScreenObjectProperties.SetPestMethod(Grid: TRbwDataGrid4;
+  ACol: Integer; const Value: TPestParamMethod);
+//var
+//  ItemIndex: Integer;
+begin
+  if PestMethodRow = 0 then
+  begin
+    Exit;
+  end;
+  Grid.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
+end;
+
+procedure TfrmScreenObjectProperties.SetPestModifier(Grid: TRbwDataGrid4;
+  ACol: Integer; const Value: string);
+begin
+  if PestRowOffset = 0 then
+  begin
+    Assert(False);
+    Exit;
+  end;
+  Grid.Cells[ACol, PestModifierRow] := Value;
 end;
 
 procedure TfrmScreenObjectProperties.GetObjectLabelForAdditionalScreenObject(
@@ -12031,6 +12156,162 @@ begin
   end;
 end;
 
+function TfrmScreenObjectProperties.GetPestMethod(Grid: TRbwDataGrid4;
+  ACol: Integer): TPestParamMethod;
+var
+  ItemIndex: Integer;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := ppmMultiply;
+    Assert(False);
+    Exit;
+  end;
+  ItemIndex := FPestMethods.IndexOf(Grid.Cells[ACol,PestMethodRow]);
+  if ItemIndex >= 0 then
+  begin
+    result := TPestParamMethod(ItemIndex);
+  end
+  else
+  begin
+    result := ppmMultiply;
+  end;
+end;
+
+function TfrmScreenObjectProperties.GetPestModifier(Grid: TRbwDataGrid4;
+  ACol: Integer): string;
+//var
+//  ItemIndex: Integer;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := '';
+    Assert(False);
+    Exit;
+  end;
+  result := Grid.Cells[ACol, PestModifierRow];
+end;
+
+procedure TfrmScreenObjectProperties.GetPestModifiers(
+  Frame: TframeScreenObjectCondParam; Parameter: TParameterType;
+  ScreenObjectList: TList);
+var
+  ValuesFunction: TGetBoundaryCollectionEvent;
+  ColumnOffset: Integer;
+  BoundaryCount: Integer;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  Boundary: TModflowParamBoundary;
+  Values: TCustomMF_BoundColl;
+  BoundaryIndex: Integer;
+  First: Boolean;
+  Identical: Boolean;
+  Method: TPestParamMethod;
+  Modifier: string;
+begin
+  ValuesFunction := GetBoundaryValues;
+  ColumnOffset := 2;
+
+  BoundaryCount := -1;
+  for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    Boundary := AScreenObject.GetMfBoundary(Parameter);
+    if (Boundary <> nil) and Boundary.Used then
+    begin
+      Values := ValuesFunction(Boundary);
+      BoundaryCount := Values.TimeListCount(frmGoPhast.PhastModel);
+      break;
+    end;
+  end;
+  if BoundaryCount = -1 then
+  begin
+    Exit;
+  end;
+
+  Frame.rdgModflowBoundary.BeginUpdate;
+  try
+    for BoundaryIndex := 0 to BoundaryCount - 1 do
+    begin
+      First := True;
+      Identical := True;
+      Method := ppmMultiply;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.GetMfBoundary(Parameter);
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Method := Boundary.PestBoundaryMethod[BoundaryIndex];
+            First := False;
+          end
+          else
+          begin
+            Identical := Method = Boundary.PestBoundaryMethod[BoundaryIndex];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+      if Identical then
+      begin
+        PestMethod[Frame.rdgModflowBoundary, ColumnOffset+BoundaryIndex] := Method;
+      end
+      else
+      begin
+        Frame.rdgModflowBoundary.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] := '';
+      end;
+    end;
+
+    for BoundaryIndex := 0 to BoundaryCount - 1 do
+    begin
+      First := True;
+      Identical := True;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.GetMfBoundary(Parameter);
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Modifier := Boundary.PestBoundaryFormula[BoundaryIndex];
+            First := False;
+          end
+          else
+          begin
+            Identical := Modifier = Boundary.PestBoundaryFormula[BoundaryIndex];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+      if Identical then
+      begin
+        if Modifier = '' then
+        begin
+          Modifier := StrNone
+        end;
+        PestModifier[Frame.rdgModflowBoundary,
+          ColumnOffset+BoundaryIndex] := Modifier;
+      end
+      else
+      begin
+        PestModifier[Frame.rdgModflowBoundary,
+          ColumnOffset+BoundaryIndex] := '';
+      end;
+    end;
+  finally
+    Frame.rdgModflowBoundary.EndUpdate;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.GetPhastBoundariesForSingleObject;
 var
   UsedTimes: TRealList;
@@ -16712,6 +16993,8 @@ begin
   FDataEdits.Free;
   FChildModels.Free;
   FChildModelsScreenObjects.Free;
+  FPestParametersAndDataSets.Free;
+  FPestMethods.Free;
 end;
 
 procedure TfrmScreenObjectProperties.FormKeyUp(Sender: TObject; var Key: Word;
@@ -17509,6 +17792,10 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetDrnBoundary(ScreenObjectList: TList);
+const
+  ElevationPosition = 0;
+  ConductancePosition = 1;
+  ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
@@ -17522,8 +17809,15 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FDRN_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FDRN_Node);
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ElevationPosition] :=
+    TDrnBoundary.DefaultBoundaryMethod(ElevationPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
+    TDrnBoundary.DefaultBoundaryMethod(ConductancePosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
-
 function TfrmScreenObjectProperties.GetRechargeLayers(
   Boundary: TModflowBoundary): TCustomMF_BoundColl;
 begin
@@ -23583,6 +23877,9 @@ begin
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FDRN_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FDRN_Node);
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FDRN_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -26726,6 +27023,62 @@ begin
     InterpValuesItem.Values.MixtureFormula :=
       framePhastInterpolationBoundaries.edMixFormula.Text;
   end;
+end;
+
+procedure TfrmScreenObjectProperties.StorePestModifiers(
+  Frame: TframeScreenObjectParam; ParamType: TParameterType;
+  Node: TJvPageIndexNode);
+var
+  Index: Integer;
+  Item: TScreenObjectEditItem;
+  Boundary: TModflowParamBoundary;
+  BoundaryValues: TCustomMF_BoundColl;
+  DataGrid: TRbwDataGrid4;
+  BoundaryIndex: Integer;
+  Modifier: string;
+  ColumnOffset: Integer;
+  BoundaryCount: Integer;
+begin
+  if (Node = nil) then
+  begin
+    Exit;
+  end;
+
+  Assert(Node <> nil);
+  DataGrid := Frame.rdgModflowBoundary;
+
+  for Index := 0 to FNewProperties.Count - 1 do
+  begin
+    Item := FNewProperties[Index];
+    Boundary := Item.ScreenObject.GetMfBoundary(ParamType);
+    Assert(Boundary <> nil);
+    if ShouldStoreBoundary(Node, Boundary) then
+    begin
+      ColumnOffset := 2;
+      BoundaryValues := Boundary.Values;
+      BoundaryCount := BoundaryValues.TimeListCount(frmGoPhast.PhastModel);
+      for BoundaryIndex := 0 to BoundaryCount - 1 do
+      begin
+        if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
+        begin
+          Boundary.PestBoundaryMethod[BoundaryIndex] :=
+            PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
+        end;
+        Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
+        if Modifier <> '' then
+        begin
+          if Modifier = strNone then
+          begin
+            Modifier := '';
+          end;
+          Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
+        end;
+      end;
+
+//      StoreMF_BoundColl(ColumnOffset, BoundaryValues, Times, Frame);
+    end;
+  end;
+
 end;
 
 procedure TfrmScreenObjectProperties.StorePhastBoundary;

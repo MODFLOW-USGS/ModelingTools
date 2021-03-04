@@ -811,6 +811,8 @@ type
     destructor Destroy; override;
     procedure StopTalkingToAnyone; virtual;
     procedure Invalidate;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; virtual;
     property PestBoundaryFormula[FormulaIndex: integer]: string
       read GetPestBoundaryFormula write SetPestBoundaryFormula;
     property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
@@ -2918,6 +2920,12 @@ begin
 end;
 
 { TModflowScreenObjectProperty }
+
+class function TModflowScreenObjectProperty.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := ppmMultiply;
+end;
 
 destructor TModflowScreenObjectProperty.Destroy;
 var

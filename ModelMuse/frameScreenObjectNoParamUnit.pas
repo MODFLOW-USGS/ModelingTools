@@ -86,14 +86,13 @@ type
     FDeleting: Boolean;
     FDeletedCells: array of array of boolean;
     FConductanceColumn: Integer;
-    FPestMethods: TStringList;
-    FPestParametersAndDataSets: TStringList;
+    FOnCheckPestCell: TSelectCellEvent;
     // See @link(DeletedCells)
     function GetDeletedCells(ACol, ARow: integer): boolean;
     // See @link(DeletedCells)
     procedure SetDeletedCells(ACol, ARow: integer; const Value: boolean);
-    function GetPestMethod(ACol: Integer): TPestParamMethod;
-    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
+//    function GetPestMethod(ACol: Integer): TPestParamMethod;
+//    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
     { Private declarations }
   protected
     procedure LayoutMultiRowEditControls; virtual;
@@ -121,22 +120,22 @@ type
     // specified by Col.
     procedure GetEndTimes(Col: Integer);
     procedure SetButtonCaptions;
-    Property PestMethod[ACol: Integer]: TPestParamMethod read GetPestMethod
-      write SetPestMethod;
+//    Property PestMethod[ACol: Integer]: TPestParamMethod read GetPestMethod
+//      write SetPestMethod;
+    property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
+      write FOnCheckPestCell;
     { Public declarations }
   end;
 
 implementation
 
 uses OrderedCollectionUnit, frmGoPhastUnit, ModflowTimeUnit,
-  frmCustomGoPhastUnit, DataSetUnit, ModflowParameterUnit, PhastModelUnit;
+  frmCustomGoPhastUnit;
 
 resourcestring
   StrF = 'F()';
   StrPestModifier = 'Pest Modifier';
   StrModificationMethod = 'Modification Method';
-  StrMultiply = 'Multiply';
-  StrAdd = 'Add';
 
 
 {$R *.dfm}
@@ -161,33 +160,13 @@ var
   GridRect: TGridRect;
   ColIndex: Integer;
   RowIndex: Integer;
-  DataArrayManager: TDataArrayManager;
-  DataSetIndex: Integer;
-  ADataArray: TDataArray;
-  ModflowSteadyParameters: TModflowSteadyParameters;
-  ParameterIndex: Integer;
-  AParameter: TModflowSteadyParameter;
+//  DataArrayManager: TDataArrayManager;
+//  DataSetIndex: Integer;
+//  ADataArray: TDataArray;
+//  ModflowSteadyParameters: TModflowSteadyParameters;
+//  ParameterIndex: Integer;
+//  AParameter: TModflowSteadyParameter;
 begin
-  FPestParametersAndDataSets.Clear;
-  DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
-  for DataSetIndex := 0 to DataArrayManager.DataSetCount - 1 do
-  begin
-    ADataArray := DataArrayManager.DataSets[DataSetIndex];
-    if ADataArray.PestParametersUsed then
-    begin
-      FPestParametersAndDataSets.AddObject(ADataArray.Name, ADataArray);
-    end;
-  end;
-  ModflowSteadyParameters := frmGoPhast.PhastModel.ModflowSteadyParameters;
-  for ParameterIndex := 0 to ModflowSteadyParameters.Count - 1 do
-  begin
-    AParameter := ModflowSteadyParameters[ParameterIndex];
-    if AParameter.ParameterType = ptPEST then
-    begin
-      FPestParametersAndDataSets.AddObject(AParameter.ParameterName, AParameter);
-    end;
-  end;
-
   seNumberOfTimes.AsInteger := 0;
   for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
   begin
@@ -238,11 +217,13 @@ begin
         rdgModflowBoundary.WidthNeededToFitText(ColIndex,0);
     end;
   end;
+  rdgModflowBoundary.HideEditor;
   GridRect.Left := 2;
   GridRect.Right := 2;
-  GridRect.Top := 1;
-  GridRect.Bottom := 1;
+  GridRect.Top := 1 + PestRowOffset;
+  GridRect.Bottom := 1 + PestRowOffset;
   rdgModflowBoundary.Selection := GridRect;
+  rdgModflowBoundary.HideEditor;
   SetButtonCaptions;
 end;
 
@@ -278,16 +259,10 @@ constructor TframeScreenObjectNoParam.Create(AOwner: TComponent);
 begin
   inherited;
   ConductanceColumn := -1;
-  FPestMethods := TStringList.Create;
-  FPestMethods.Add(StrMultiply);
-  FPestMethods.Add(StrAdd);
-  FPestParametersAndDataSets := TStringList.Create;
 end;
 
 destructor TframeScreenObjectNoParam.Destroy;
 begin
-  FPestMethods.Free;
-  FPestParametersAndDataSets.Free;
   inherited;
 end;
 
@@ -338,6 +313,17 @@ begin
     FSelectedText := rdgModflowBoundary.Cells[ACol, ARow];
     CanSelect := False;
     Exit;
+  end;
+
+  if (ACol in [0,1]) and (ARow >= 1) and (ARow <= PestRowOffset) then
+  begin
+    CanSelect := False
+  end;
+
+  if Assigned(OnCheckPestCell)
+    and not (csCustomPaint in rdgModflowBoundary.ControlState) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
   end;
 end;
 
@@ -396,20 +382,20 @@ begin
     rdgModflowBoundary, Col);
 end;
 
-function TframeScreenObjectNoParam.GetPestMethod(ACol: Integer): TPestParamMethod;
-var
-  ItemIndex: Integer;
-begin
-  ItemIndex := FPestMethods.IndexOf(rdgModflowBoundary.Cells[ACol,PestMethodRow]);
-  if ItemIndex >= 0 then
-  begin
-    result := TPestParamMethod(ItemIndex);
-  end
-  else
-  begin
-    result := ppmMultiply;
-  end;
-end;
+//function TframeScreenObjectNoParam.GetPestMethod(ACol: Integer): TPestParamMethod;
+//var
+//  ItemIndex: Integer;
+//begin
+//  ItemIndex := FPestMethods.IndexOf(rdgModflowBoundary.Cells[ACol,PestMethodRow]);
+//  if ItemIndex >= 0 then
+//  begin
+//    result := TPestParamMethod(ItemIndex);
+//  end
+//  else
+//  begin
+//    result := ppmMultiply;
+//  end;
+//end;
 
 procedure TframeScreenObjectNoParam.LayoutMultiRowEditControls;
 begin
@@ -540,11 +526,11 @@ begin
   FDeletedCells[ACol, ARow] := Value;
 end;
 
-procedure TframeScreenObjectNoParam.SetPestMethod(ACol: Integer;
-  const Value: TPestParamMethod);
-begin
-  rdgModflowBoundary.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
-end;
+//procedure TframeScreenObjectNoParam.SetPestMethod(ACol: Integer;
+//  const Value: TPestParamMethod);
+//begin
+//  rdgModflowBoundary.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
+//end;
 
 procedure TframeScreenObjectNoParam.SetButtonCaptions;
 var

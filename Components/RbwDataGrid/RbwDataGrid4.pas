@@ -1000,7 +1000,7 @@ type
     FPressed: Boolean;
     FTracking: Boolean;
     FOnGetButtonCaption: TGetButtonCaptionEvent;
-    FOnGetButtonWidt: TGetButtonWidthEvent;
+    FOnGetButtonWidth: TGetButtonWidthEvent;
     procedure WMLButtonDblClk(var Message: TWMLButtonDblClk);
       message wm_LButtonDblClk;
     procedure WMSetCursor(var Message: TWMSetCursor); message WM_SetCursor;
@@ -1025,7 +1025,7 @@ type
     property OnGetButtonCaption: TGetButtonCaptionEvent read FOnGetButtonCaption
       write FOnGetButtonCaption;
     property OnGetButtonWidth: TGetButtonWidthEvent
-      read FOnGetButtonWidt write FOnGetButtonWidt;
+      read FOnGetButtonWidth write FOnGetButtonWidth;
   end;
 
 procedure Register;

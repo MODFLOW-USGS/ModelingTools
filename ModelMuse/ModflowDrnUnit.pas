@@ -306,12 +306,8 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
-//    property PestElevationParameter: TModflowSteadyParameter
-//      read FPestElevationParameter write SetPestElevationParameter;
-//    property PestBoundaryFormula[FormulaIndex: integer]: string
-//      read GetPestBoundaryFormula write SetPestBoundaryFormula;
-//    property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
-//      read GetPestBoundaryMethod write SetPestBoundaryMethod;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property Interp;
     property PestElevFormula: string read GetPestElevFormula
@@ -914,6 +910,8 @@ begin
     SourceDrn := TDrnBoundary(Source);
     PestElevFormula := SourceDrn.PestElevFormula;
     PestConductanceFormula := SourceDrn.PestConductanceFormula;
+    PestElevMethod := SourceDrn.PestElevMethod;
+    PestConductanceMethod := SourceDrn.PestConductanceMethod;
   end;
   inherited;
 end;
@@ -1013,8 +1011,10 @@ begin
   CreateBoundaryObserver;
   CreateObservers;
 
-  PestElevFormula := '0';
-  PestConductanceFormula := '0';
+  PestElevFormula := '';
+  PestConductanceFormula := '';
+  FPestElevMethod := DefaultBoundaryMethod(ElevationPosition);
+  FPestConductanceMethod := DefaultBoundaryMethod(ConductancePosition);
 end;
 
 procedure TDrnBoundary.CreateFormulaObjects;
@@ -1029,6 +1029,24 @@ begin
   begin
     FObserverList.Add(PestElevationObserver);
     FObserverList.Add(PestConductanceObserver);
+  end;
+end;
+
+class function TDrnBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        result := ppmAdd;
+      end;
+    ConductancePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      result := inherited;
+      Assert(False);
   end;
 end;
 
@@ -1246,11 +1264,17 @@ procedure TDrnBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestElevFormula then
   begin
-    List.Add(FObserverList[ElevationPosition]);
+    if ElevationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ElevationPosition]);
+    end;
   end;
   if Sender = FPestCondFormula then
   begin
-    List.Add(FObserverList[ConductancePosition]);
+    if ConductancePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ConductancePosition]);
+    end;
   end;
 
 end;
