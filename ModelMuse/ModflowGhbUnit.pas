@@ -167,6 +167,12 @@ type
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
     function GetConductanceParameterValue: double;
+    function GetBoundaryHeadPest: string;
+    function GetBoundaryHeadPestSeries: string;
+    function GetBoundaryHeadPestSeriesMethod: TPestParamMethod;
+    function GetConductancePest: string;
+    function GetConductancePestSeries: string;
+    function GetConductancePestSeriesMethod: TPestParamMethod;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -201,6 +207,15 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
     property ConductanceParameterName: string read GetConductanceParameterName;
     property ConductanceParameterValue: double read GetConductanceParameterValue;
+    // PEST parameters
+    property BoundaryHeadPest: string read GetBoundaryHeadPest;
+    property ConductancePest: string read GetConductancePest;
+    property BoundaryHeadPestSeries: string read GetBoundaryHeadPestSeries;
+    property ConductancePestSeries: string read GetConductancePestSeries;
+    property BoundaryHeadPestSeriesMethod: TPestParamMethod
+      read GetBoundaryHeadPestSeriesMethod;
+    property ConductancePestSeriesMethod: TPestParamMethod
+      read GetConductancePestSeriesMethod;
   end;
 
   // @name represents the MODFLOW General-Head boundaries associated with
@@ -216,10 +231,27 @@ type
   // @seealso(TGhbCollection)
   TGhbBoundary = class(TSpecificModflowBoundary)
   private
+    FPestConductanceMethod: TPestParamMethod;
+    FPestHeadMethod: TPestParamMethod;
+    FPestHeadFormula: TFormulaObject;
+    FPestConductanceFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestConductanceObserver: TObserver;
+    FPestHeadObserver: TObserver;
 //    FInterp: TMf6InterpolationMethods;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
+    function GetPestConductanceFormula: string;
+    function GetPestConductanceObserver: TObserver;
+    function GetPestHeadFormula: string;
+    function GetPestHeadObserver: TObserver;
+    procedure SetPestConductanceFormula(const Value: string);
+    procedure SetPestConductanceMethod(const Value: TPestParamMethod);
+    procedure SetPestHeadFormula(const Value: string);
+    procedure SetPestHeadMethod(const Value: TPestParamMethod);
+    procedure InvalidateConductanceData(Sender: TObject);
+    procedure InvalidateHeadData(Sender: TObject);
 //    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -235,7 +267,24 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestHeadObserver: TObserver read GetPestHeadObserver;
+    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent);override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name fills ValueTimeList via a call to AssignCells for each
@@ -252,8 +301,34 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property Interp;
+    property PestHeadFormula: string read GetPestHeadFormula
+      write SetPestHeadFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceFormula: string read GetPestConductanceFormula
+      write SetPestConductanceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHeadMethod: TPestParamMethod read FPestHeadMethod
+      write SetPestHeadMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceMethod: TPestParamMethod
+      read FPestConductanceMethod write SetPestConductanceMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
@@ -678,6 +753,21 @@ begin
   result := FValues.BoundaryHeadAnnotation;
 end;
 
+function TGhb_Cell.GetBoundaryHeadPest: string;
+begin
+  result := FValues.BoundaryHeadPest;
+end;
+
+function TGhb_Cell.GetBoundaryHeadPestSeries: string;
+begin
+  result := FValues.BoundaryHeadPestSeriesName;
+end;
+
+function TGhb_Cell.GetBoundaryHeadPestSeriesMethod: TPestParamMethod;
+begin
+  result := FValues.BoundaryHeadPestSeriesMethod;
+end;
+
 function TGhb_Cell.GetColumn: integer;
 begin
   result := FValues.Cell.Column;
@@ -701,6 +791,21 @@ end;
 function TGhb_Cell.GetConductanceParameterValue: double;
 begin
   result := FValues.ConductanceParameterValue;
+end;
+
+function TGhb_Cell.GetConductancePest: string;
+begin
+  result := FValues.ConductancePest;
+end;
+
+function TGhb_Cell.GetConductancePestSeries: string;
+begin
+  result := FValues.ConductancePestSeriesName;
+end;
+
+function TGhb_Cell.GetConductancePestSeriesMethod: TPestParamMethod;
+begin
+  result := FValues.ConductancePestSeriesMethod;
 end;
 
 function TGhb_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -823,14 +928,22 @@ end;
 { TGhbBoundary }
 
 procedure TGhbBoundary.Assign(Source: TPersistent);
-//var
-//  SourceGhb: TGhbBoundary;
+var
+  SourceGhb: TGhbBoundary;
 begin
 //  if Source is TGhbBoundary then
 //  begin
 //    SourceGhb := TGhbBoundary(Source);
 //    Interp := SourceGhb.Interp;
 //  end;
+  if Source is TGhbBoundary then
+  begin
+    SourceGhb := TGhbBoundary(Source);
+    PestHeadFormula := SourceGhb.PestHeadFormula;
+    PestConductanceFormula := SourceGhb.PestConductanceFormula;
+    PestHeadMethod := SourceGhb.PestHeadMethod;
+    PestConductanceMethod := SourceGhb.PestConductanceMethod;
+  end;
   inherited;
 end;
 
@@ -919,6 +1032,65 @@ end;
 class function TGhbBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TGhbCollection;
+end;
+
+function TGhbBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestGhb_';
+end;
+
+constructor TGhbBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestHeadFormula := '';
+  PestConductanceFormula := '';
+  FPestHeadMethod := DefaultBoundaryMethod(HeadPosition);
+  FPestConductanceMethod := DefaultBoundaryMethod(ConductancePosition);
+end;
+
+procedure TGhbBoundary.CreateFormulaObjects;
+begin
+  FPestHeadFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestConductanceFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TGhbBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestHeadObserver);
+    FObserverList.Add(PestConductanceObserver);
+  end;
+end;
+
+class function TGhbBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    HeadPosition:
+      begin
+        result := ppmAdd;
+      end;
+    ConductancePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+destructor TGhbBoundary.Destroy;
+begin
+  PestHeadFormula := '';
+  PestConductanceFormula := '';
+
+  inherited;
 end;
 
 procedure TGhbBoundary.GetCellValues(ValueTimeList: TList;
@@ -1141,6 +1313,134 @@ begin
   end;
 end;
 
+function TGhbBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    HeadPosition:
+      begin
+        result := PestHeadFormula;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TGhbBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := PestConductanceMethod;
+  case FormulaIndex of
+    HeadPosition:
+      begin
+        result := PestHeadMethod;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceMethod;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TGhbBoundary.GetPestConductanceFormula: string;
+begin
+  Result := FPestConductanceFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(ConductancePosition);
+  end;
+end;
+
+function TGhbBoundary.GetPestConductanceObserver: TObserver;
+begin
+  if FPestConductanceObserver = nil then
+  begin
+    CreateObserver('PestConductance_', FPestConductanceObserver, nil);
+    FPestConductanceObserver.OnUpToDateSet := InvalidateConductanceData;
+  end;
+  result := FPestConductanceObserver;
+end;
+
+function TGhbBoundary.GetPestHeadFormula: string;
+begin
+  Result := FPestHeadFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(HeadPosition);
+  end;
+
+end;
+
+function TGhbBoundary.GetPestHeadObserver: TObserver;
+begin
+  if FPestHeadObserver = nil then
+  begin
+    CreateObserver('PestConductance_', FPestHeadObserver, nil);
+    FPestHeadObserver.OnUpToDateSet := InvalidateHeadData;
+  end;
+  result := FPestHeadObserver;
+end;
+
+procedure TGhbBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestHeadFormula then
+  begin
+    if HeadPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[HeadPosition]);
+    end;
+  end;
+  if Sender = FPestConductanceFormula then
+  begin
+    if ConductancePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ConductancePosition]);
+    end;
+  end;
+end;
+
+function TGhbBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestDRN_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TGhbBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
+procedure TGhbBoundary.InvalidateConductanceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMfGhbConductance(self);
+
+  for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    ChildModel.InvalidateMfGhbConductance(self);
+  end;
+end;
+
 procedure TGhbBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1154,6 +1454,26 @@ begin
   end;
 end;
 
+procedure TGhbBoundary.InvalidateHeadData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMfGhbBoundaryHead(self);
+
+  for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    ChildModel.InvalidateMfGhbBoundaryHead(self);
+  end;
+end;
+
 class function TGhbBoundary.ModflowParamItemClass: TModflowParamItemClass;
 begin
   result := TGhbParamItem;
@@ -1162,6 +1482,60 @@ end;
 function TGhbBoundary.ParameterType: TParameterType;
 begin
   result := ptGHB;
+end;
+
+procedure TGhbBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    HeadPosition:
+      begin
+        PestHeadFormula := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TGhbBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    HeadPosition:
+      begin
+        PestHeadMethod := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceMethod := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TGhbBoundary.SetPestConductanceFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ConductancePosition, FPestConductanceFormula);
+end;
+
+procedure TGhbBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestConductanceMethod, Value);
+end;
+
+procedure TGhbBoundary.SetPestHeadFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, HeadPosition, FPestHeadFormula);
+end;
+
+procedure TGhbBoundary.SetPestHeadMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestHeadMethod, Value);
 end;
 
 //procedure TGhbBoundary.SetInterp(const Value: TMf6InterpolationMethods);

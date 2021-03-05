@@ -18,6 +18,7 @@ type
     FWellBoundaryList: TList<TMfWellBoundary>;
     MXACTW: integer;
     FAbbreviation: string;
+    FPestParamUsed: Boolean;
     procedure WriteNWT_Options;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -32,12 +33,12 @@ type
       override;
     function Package: TModflowPackageSelection; override;
     function ParameterType: TParameterType; override;
+    procedure WriteCell(Cell: TValueCell;
+      const DataSetIdentifier, VariableIdentifiers: string); override;
     procedure WriteParameterCells(CellList: TValueCellList; NLST: Integer;
       const VariableIdentifiers, DataSetIdentifier: string;
       AssignmentMethod: TUpdateMethod; MultiplierArrayNames: TTransientMultCollection;
       ZoneArrayNames: TTransientZoneCollection); override;
-    procedure WriteCell(Cell: TValueCell;
-      const DataSetIdentifier, VariableIdentifiers: string); override;
     procedure Evaluate; override;
     procedure WriteListOptions(InputFileName: string); override;
     procedure GetITMP(var ITMP: integer; TimeIndex: integer;
@@ -67,7 +68,7 @@ implementation
 
 uses ModflowUnitNumbers, frmProgressUnit, Forms, frmErrorsAndWarningsUnit,
   System.IOUtils, ModflowTimeSeriesUnit, ModflowTimeSeriesWriterUnit,
-  ModflowMvrWriterUnit, ModflowMvrUnit;
+  ModflowMvrWriterUnit, ModflowMvrUnit, DataSetUnit;
 
 resourcestring
   StrWritingWELPackage = 'Writing WEL Package input.';
@@ -455,6 +456,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
+  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -471,10 +473,39 @@ begin
   end;
   WriteInteger(Well_Cell.Column+1);
 
+  if (Well_Cell.PumpingRatePest <> '')
+    or (Well_Cell.PumpingRatePestSeries <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
+//  if Model.PestUsed and (Model.ModelSelection = msModflow2015)
+//    and WritingTemplate
+//    and ( Well_Cell.PumpingParameterName <> '') then
+//  begin
+//    ParameterName := Well_Cell.PumpingParameterName;
+//    if Well_Cell.PumpingParameterValue = 0 then
+//    begin
+//      MultiplierValue := 0.0;
+//    end
+//    else
+//    begin
+//      MultiplierValue := Well_Cell.PumpingRate / Well_Cell.PumpingParameterValue;
+//    end;
+//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+//  end
+//  else
+//  begin
+//    WriteFloat(Well_Cell.PumpingRate);
+//  end;
+
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
-    and ( Well_Cell.PumpingParameterName <> '') then
+    and (Well_Cell.PumpingParameterName <> '') then
   begin
+    // PEST parameters are not allowed to be combined
+    // with MF-2005 style parameters.
+    Assert(Well_Cell.PumpingRatePest = '');
     ParameterName := Well_Cell.PumpingParameterName;
     if Well_Cell.PumpingParameterValue = 0 then
     begin
@@ -482,25 +513,41 @@ begin
     end
     else
     begin
-      MultiplierValue := Well_Cell.PumpingRate / Well_Cell.PumpingParameterValue;
+      MultiplierValue := Well_Cell.PumpingRate
+        / Well_Cell.PumpingParameterValue;
     end;
     WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+  end
+  else if Model.PestUsed and WritingTemplate
+    and ((Well_Cell.PumpingRatePest <> '') or (Well_Cell.PumpingRatePestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Well_Cell.PumpingRate, Well_Cell.PumpingRatePest,
+      Well_Cell.PumpingRatePestSeries, Well_Cell.PumpingRatePestSeriesMethod,
+      Well_Cell);
   end
   else
   begin
     WriteFloat(Well_Cell.PumpingRate);
+    if Well_Cell.PumpingRatePest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Well_Cell.PumpingRatePest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Well_Cell.PumpingRatePestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Well_Cell.PumpingRatePestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
   end;
 
-//  if Well_Cell.TimeSeriesName = '' then
-//  begin
-//    WriteFloat(Well_Cell.PumpingRate);
-//  end
-//  else
-//  begin
-//    WriteString(' ');
-//    WriteString(Well_Cell.TimeSeriesName);
-//    WriteString(' ');
-//  end;
   WriteIface(Well_Cell.IFace);
   WriteBoundName(Well_Cell);
   if Model.DisvUsed then
@@ -620,6 +667,7 @@ end;
 
 procedure TModflowWEL_Writer.WriteFile(const AFileName: string);
 begin
+  FPestParamUsed := False;
   if MvrWriter <> nil then
   begin
     Assert(MvrWriter is TModflowMvrWriter);
@@ -759,8 +807,8 @@ begin
     WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
   end;
 
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParamValues.Count > 0) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try

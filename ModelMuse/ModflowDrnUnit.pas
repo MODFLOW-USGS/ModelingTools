@@ -1052,8 +1052,8 @@ end;
 
 destructor TDrnBoundary.Destroy;
 begin
-  PestElevFormula := '0';
-  PestConductanceFormula := '0';
+  PestElevFormula := '';
+  PestConductanceFormula := '';
 
   inherited;
 end;
@@ -1207,7 +1207,6 @@ end;
 function TDrnBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
-  result := PestConductanceMethod;
   case FormulaIndex of
     ElevationPosition:
       begin
@@ -1218,6 +1217,7 @@ begin
         result := PestConductanceMethod;
       end;
     else
+      result := PestConductanceMethod;
       Assert(False);
   end;
 end;
@@ -1276,7 +1276,6 @@ begin
       List.Add(FObserverList[ConductancePosition]);
     end;
   end;
-
 end;
 
 function TDrnBoundary.GetUsedObserver: TObserver;
@@ -1413,11 +1412,7 @@ end;
 
 procedure TDrnBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
 begin
-  if FPestConductanceMethod <> Value then
-  begin
-    FPestConductanceMethod := Value;
-    InvalidateModel;
-  end;
+  SetPestParamMethod(FPestConductanceMethod, Value);
 end;
 
 procedure TDrnBoundary.SetPestElevFormula(const Value: string);
@@ -1427,11 +1422,7 @@ end;
 
 procedure TDrnBoundary.SetPestElevMethod(const Value: TPestParamMethod);
 begin
-  if FPestElevMethod <> Value then
-  begin
-    FPestElevMethod := Value;
-    InvalidateModel;
-  end;
+  SetPestParamMethod(FPestElevMethod, Value);
 end;
 
 procedure TDrnBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,

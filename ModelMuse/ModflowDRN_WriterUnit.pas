@@ -368,7 +368,7 @@ begin
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
-    and ( Drn_Cell.ConductanceParameterName <> '') then
+    and (Drn_Cell.ConductanceParameterName <> '') then
   begin
     // PEST parameters are not allowed to be combined
     // with MF-2005 style parameters.

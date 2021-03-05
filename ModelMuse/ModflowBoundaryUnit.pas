@@ -800,6 +800,8 @@ type
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; virtual;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); virtual;
+    procedure SetPestParamMethod(var Field: TPestParamMethod;
+      NewValue: TPestParamMethod);
   public
     // @name is used when @classname contains properties that are not transient.
     // @link(TModflowSteadyBoundary.CreateFormulaObjects), @link(CreateBoundaryObserver)
@@ -3047,6 +3049,16 @@ procedure TModflowScreenObjectProperty.SetPestBoundaryMethod(
   FormulaIndex: integer; const Value: TPestParamMethod);
 begin
 // do nothing, for now at least.
+end;
+
+procedure TModflowScreenObjectProperty.SetPestParamMethod(
+  var Field: TPestParamMethod; NewValue: TPestParamMethod);
+begin
+  if Field <> NewValue then
+  begin
+    Field := NewValue;
+    InvalidateModel;
+  end;
 end;
 
 procedure TModflowScreenObjectProperty.StopTalkingToAnyone;

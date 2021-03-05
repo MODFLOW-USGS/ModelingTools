@@ -190,6 +190,15 @@ type
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
     function GetConductanceParameterValue: double;
+    function GetConductancePest: string;
+    function GetConductancePestSeriesMethod: TPestParamMethod;
+    function GetConductancePestSeriesName: string;
+    function GetRiverBottomPest: string;
+    function GetRiverBottomPestSeriesMethod: TPestParamMethod;
+    function GetRiverBottomPestSeriesName: string;
+    function GetRiverStagePest: string;
+    function GetRiverStagePestSeriesMethod: TPestParamMethod;
+    function GetRiverStagePestSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -230,6 +239,19 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
     property ConductanceParameterName: string read GetConductanceParameterName;
     property ConductanceParameterValue: double read GetConductanceParameterValue;
+    // PEST properties
+    property ConductancePest: string read GetConductancePest;
+    property RiverStagePest: string read GetRiverStagePest;
+    property RiverBottomPest: string read GetRiverBottomPest;
+
+    property ConductancePestSeries: string read GetConductancePestSeriesName;
+    property RiverStagePestSeries: string read GetRiverStagePestSeriesName;
+    property RiverBottomPestSeries: string read GetRiverBottomPestSeriesName;
+
+    property ConductancePestSeriesMethod: TPestParamMethod read GetConductancePestSeriesMethod;
+    property RiverStagePestSeriesMethod: TPestParamMethod read GetRiverStagePestSeriesMethod;
+    property RiverBottomPestSeriesMethod: TPestParamMethod read GetRiverBottomPestSeriesMethod;
+
   end;
 
   // @name represents the MODFLOW River boundaries associated with
@@ -246,10 +268,33 @@ type
   TRivBoundary = class(TSpecificModflowBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
+    FPestConductanceMethod: TPestParamMethod;
+    FPestRiverBottomMethod: TPestParamMethod;
+    FPestRiverStageMethod: TPestParamMethod;
+
+    FPestCondFormula: TFormulaObject;
+    FPestRiverStageFormula: TFormulaObject;
+    FPestRiverBottomFormula: TFormulaObject;
+    FPestConductanceObserver: TObserver;
+    FPestRiverBottomObserver: TObserver;
+    FUsedObserver: TObserver;
+    FPestRiverStageObserver: TObserver;
 //    FInterp: TMf6InterpolationMethods;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
+    function GetPestConductanceFormula: string;
+    function GetPestRiverBottomFormula: string;
+    function GetPestRiverStageFormula: string;
+    procedure SetPestConductanceFormula(const Value: string);
+    procedure SetPestConductanceMethod(const Value: TPestParamMethod);
+    procedure SetPestRiverBottomFormula(const Value: string);
+    procedure SetPestRiverBottomMethod(const Value: TPestParamMethod);
+    procedure SetPestRiverStageFormula(const Value: string);
+    procedure SetPestRiverStageMethod(const Value: TPestParamMethod);
+    function GetPestConductanceObserver: TObserver;
+    function GetPestRiverBottomObserver: TObserver;
+    function GetPestRiverStageObserver: TObserver;
 //    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -264,7 +309,25 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestRiverStageObserver: TObserver read GetPestRiverStageObserver;
+    property PestRiverBottomObserver: TObserver read GetPestRiverBottomObserver;
+    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent);override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TRivStorage) in
@@ -280,8 +343,46 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property Interp;
+    property PestRiverBottomFormula: string read GetPestRiverBottomFormula
+      write SetPestRiverBottomFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRiverStageFormula: string read GetPestRiverStageFormula
+      write SetPestRiverStageFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceFormula: string read GetPestConductanceFormula
+      write SetPestConductanceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRiverBottomMethod: TPestParamMethod read FPestRiverBottomMethod
+      write SetPestRiverBottomMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRiverStageMethod: TPestParamMethod read FPestRiverStageMethod
+      write SetPestRiverStageMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceMethod: TPestParamMethod
+      read FPestConductanceMethod write SetPestConductanceMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
@@ -764,6 +865,21 @@ begin
   result := Values.RiverBottomAnnotation;
 end;
 
+function TRiv_Cell.GetRiverBottomPest: string;
+begin
+  result := Values.RiverBottomPest;
+end;
+
+function TRiv_Cell.GetRiverBottomPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.RiverBottomPestSeriesMethod;
+end;
+
+function TRiv_Cell.GetRiverBottomPestSeriesName: string;
+begin
+  result := Values.RiverBottomPestSeriesName;
+end;
+
 function TRiv_Cell.GetRiverStage: double;
 begin
   result := Values.RiverStage;
@@ -772,6 +888,21 @@ end;
 function TRiv_Cell.GetRiverStageAnnotation: string;
 begin
   result := Values.RiverStageAnnotation;
+end;
+
+function TRiv_Cell.GetRiverStagePest: string;
+begin
+  result := Values.RiverStagePest;
+end;
+
+function TRiv_Cell.GetRiverStagePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.RiverStagePestSeriesMethod;
+end;
+
+function TRiv_Cell.GetRiverStagePestSeriesName: string;
+begin
+  result := Values.RiverStagePestSeriesName;
 end;
 
 procedure TRiv_Cell.Cache(Comp: TCompressionStream; Strings: TStringList);
@@ -806,7 +937,23 @@ begin
   result := Values.ConductanceParameterValue;
 end;
 
-function TRiv_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
+function TRiv_Cell.GetConductancePest: string;
+begin
+  result := Values.ConductancePest;
+end;
+
+function TRiv_Cell.GetConductancePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.ConductancePestSeriesMethod;
+end;
+
+function TRiv_Cell.GetConductancePestSeriesName: string;
+begin
+  result := Values.ConductancePestSeriesName;
+end;
+
+function TRiv_Cell.GetIntegerAnnotation(Index: integer;
+  AModel: TBaseModel): string;
 begin
   result := '';
   Assert(False);
@@ -994,6 +1141,75 @@ begin
   result := TRivCollection;
 end;
 
+function TRivBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'Pest_Riv';
+end;
+
+constructor TRivBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestRiverStageFormula := '';
+  PestRiverBottomFormula := '';
+  PestConductanceFormula := '';
+  FPestRiverStageMethod := DefaultBoundaryMethod(StagePosition);
+  FPestRiverBottomMethod := DefaultBoundaryMethod(BottomPosition);
+  FPestConductanceMethod := DefaultBoundaryMethod(ConductancePosition);
+
+end;
+
+procedure TRivBoundary.CreateFormulaObjects;
+begin
+  FPestRiverStageFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestRiverBottomFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TRivBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestRiverStageObserver);
+    FObserverList.Add(PestConductanceObserver);
+    FObserverList.Add(PestRiverBottomObserver);
+  end;
+end;
+
+class function TRivBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    StagePosition:
+      begin
+        result := ppmAdd;
+      end;
+    ConductancePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    BottomPosition:
+      begin
+        result := ppmAdd;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+destructor TRivBoundary.Destroy;
+begin
+  PestRiverStageFormula := '';
+  PestRiverBottomFormula := '';
+  PestConductanceFormula := '';
+
+  inherited;
+end;
+
 procedure TRivBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel);
 const
@@ -1013,16 +1229,6 @@ var
   ValueCount: Integer;
   Item: TCustomModflowBoundaryItem;
   LocalModel: TCustomModel;
-//  BoundaryList: TList;
-//  StressPeriods: TModflowStressPeriods;
-//  StartTime: Double;
-//  EndTime: Double;
-//  TimeCount: Integer;
-//  ItemIndex: Integer;
-//  TimeSeriesList: TTimeSeriesList;
-//  TimeSeries: TTimeSeries;
-//  SeriesIndex: Integer;
-//  InitialTime: Double;
 begin
   FCurrentParameter := nil;
   EvaluateListBoundaries(AModel);
@@ -1089,90 +1295,6 @@ begin
       Times := ParamList.Objects[Position] as TList;
     end;
 
-//    if FCurrentParameter <> nil then
-//    begin
-////      BoundaryList := Param.Param.BoundaryList[AModel];
-////      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-////      StartTime := StressPeriods.First.StartTime;
-////      EndTime := StressPeriods.Last.EndTime;
-////      TimeCount := BoundaryList.Count;
-////      for ItemIndex := 0 to BoundaryList.Count - 1 do
-////      begin
-//////        BoundaryStorage := BoundaryList[ItemIndex];
-//////        if BoundaryStorage.StartingTime > StartTime then
-//////        begin
-//////          Inc(TimeCount);
-//////        end;
-//////        StartTime := BoundaryStorage.EndingTime;
-////      end;
-////      BoundaryStorage := BoundaryList.Last;
-////      if BoundaryStorage.EndingTime <= EndTime then
-////      begin
-////        Inc(TimeCount);
-////      end;
-//
-////      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-////      TimeSeries := TTimeSeries.Create;
-////      TimeSeriesList.Add(TimeSeries);
-////      TimeSeries.SeriesCount := Length(BoundaryStorage.RivArray);
-////      TimeSeries.TimeCount := TimeCount;
-////      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-////      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-////      for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-////      begin
-////        TimeSeries.SeriesNames[SeriesIndex] :=
-////          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-////          TimeSeriesList.Count, SeriesIndex+1]);
-////        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-////        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-////      end;
-//
-////      TimeCount := 0;
-////      StartTime := StressPeriods.First.StartTime;
-////      InitialTime := StartTime;
-////      for ItemIndex := 0 to BoundaryList.Count - 1 do
-////      begin
-//////        BoundaryStorage := BoundaryList[ItemIndex];
-//////        if BoundaryStorage.StartingTime > StartTime then
-//////        begin
-////////          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-////////          for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-////////          begin
-////////            if ItemIndex > 0 then
-////////            begin
-////////              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-////////            end
-////////            else
-////////            begin
-////////              TimeSeries.Values[SeriesIndex,TimeCount] :=
-////////                BoundaryStorage.RivArray[SeriesIndex].Conductance;
-////////            end;
-////////          end;
-////////          Inc(TimeCount);
-//////        end;
-//////        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-//////        for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-//////        begin
-////////          TimeSeries.Values[SeriesIndex,TimeCount] :=
-////////            BoundaryStorage.RivArray[SeriesIndex].Conductance;
-////////          BoundaryStorage.RivArray[SeriesIndex].TimeSeriesName :=
-////////            TimeSeries.SeriesNames[SeriesIndex];
-//////        end;
-//////        StartTime := BoundaryStorage.EndingTime;
-//////        Inc(TimeCount);
-////      end;
-////      BoundaryStorage := BoundaryList.Last;
-////      if BoundaryStorage.EndingTime <= EndTime then
-////      begin
-//////        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-//////        for SeriesIndex := 0 to Length(BoundaryStorage.RivArray) - 1 do
-//////        begin
-//////          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//////            BoundaryStorage.RivArray[SeriesIndex].Conductance;
-//////        end;
-////      end;
-//    end;
-
     PriorTime := StartOfFirstStressPeriod;
     ValueCount := 0;
     for ValueIndex := 0 to Param.Param.Count - 1 do
@@ -1213,6 +1335,146 @@ begin
   end;
 end;
 
+function TRivBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    StagePosition:
+      begin
+        result := PestRiverStageFormula;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceFormula;
+      end;
+    BottomPosition:
+      begin
+        result := PestRiverSBottomFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TRivBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    StagePosition:
+      begin
+        result := PestRiverStageMethod;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceMethod;
+      end;
+    BottomPosition:
+      begin
+        result := PestRiverBottomMethod;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TRivBoundary.GetPestConductanceFormula: string;
+begin
+  Result := FPestCondFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(ConductancePosition);
+  end;
+end;
+
+function TRivBoundary.GetPestConductanceObserver: TObserver;
+begin
+  if FPestConductanceObserver = nil then
+  begin
+    CreateObserver('PestConductance_', FPestConductanceObserver, nil);
+    FPestConductanceObserver.OnUpToDateSet := InvalidateConductanceData;
+  end;
+  result := FPestConductanceObserver;
+end;
+
+function TRivBoundary.GetPestRiverBottomFormula: string;
+begin
+  Result := FPestRiverBottomFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(BottomPosition);
+  end;
+end;
+
+function TRivBoundary.GetPestRiverBottomObserver: TObserver;
+begin
+  if FPestRiverBottomObserver = nil then
+  begin
+    CreateObserver('PestConductance_', FPestRiverBottomObserver, nil);
+    FPestRiverBottomObserver.OnUpToDateSet := InvalidateRiverBottomData;
+  end;
+  result := FPestRiverBottomObserver;
+end;
+
+function TRivBoundary.GetPestRiverStageFormula: string;
+begin
+  Result := FPestRiverStageFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StagePosition);
+  end;
+end;
+
+function TRivBoundary.GetPestRiverStageObserver: TObserver;
+begin
+  if FPestRiverStageObserver = nil then
+  begin
+    CreateObserver('PestConductance_', FPestRiverStageObserver, nil);
+    FPestRiverStageObserver.OnUpToDateSet := InvalidateStageBottomData;
+  end;
+  result := FPestRiverStageObserver;
+end;
+
+procedure TRivBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestRiverStageFormula then
+  begin
+    if StagePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StagePosition]);
+    end;
+  end;
+  if Sender = FPestCondFormula then
+  begin
+    if ConductancePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ConductancePosition]);
+    end;
+  end;
+  if Sender = FPestRiverBottomFormula then
+  begin
+    if BottomPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[BottomPosition]);
+    end;
+  end;
+end;
+
+function TRivBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestRiv_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TRivBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TRivBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1235,6 +1497,78 @@ end;
 function TRivBoundary.ParameterType: TParameterType;
 begin
   result := ptRIV;
+end;
+
+procedure TRivBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    StagePosition:
+      begin
+        PestRiverStageFormula := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceFormula := Value;
+      end;
+    BottomPosition:
+      begin
+        PestRiverBottomFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TRivBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    StagePosition:
+      begin
+        PestRiverStageMethod := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceMethod := Value;
+      end;
+    BottomPosition:
+      begin
+        PestRiverBottomMethod := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TRivBoundary.SetPestConductanceFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ConductancePosition, FPestCondFormula);
+end;
+
+procedure TRivBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestConductanceMethod, Value);
+end;
+
+procedure TRivBoundary.SetPestRiverBottomFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, BottomPosition, FPestRiverBottomFormula);
+end;
+
+procedure TRivBoundary.SetPestRiverBottomMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRiverBottomMethod, Value);
+end;
+
+procedure TRivBoundary.SetPestRiverStageFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StagePosition, FPestRiverStageFormula);
+end;
+
+procedure TRivBoundary.SetPestRiverStageMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRiverStageMethod, Value);
 end;
 
 //procedure TRivBoundary.SetInterp(const Value: TMf6InterpolationMethods);

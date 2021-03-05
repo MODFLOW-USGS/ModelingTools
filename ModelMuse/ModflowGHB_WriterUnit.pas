@@ -17,6 +17,7 @@ type
     MXACTC: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FPestParamUsed: Boolean;
 //    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -32,12 +33,12 @@ type
       override;
     function Package: TModflowPackageSelection; override;
     function ParameterType: TParameterType; override;
+    procedure WriteCell(Cell: TValueCell;
+      const DataSetIdentifier, VariableIdentifiers: string); override;
     procedure WriteParameterCells(CellList: TValueCellList; NLST: Integer;
       const VariableIdentifiers, DataSetIdentifier: string;
       AssignmentMethod: TUpdateMethod; MultiplierArrayNames: TTransientMultCollection;
       ZoneArrayNames: TTransientZoneCollection); override;
-    procedure WriteCell(Cell: TValueCell;
-      const DataSetIdentifier, VariableIdentifiers: string); override;
     class function ObservationExtension: string; override;
     function ObsNameWarningString: string; override;
     procedure CheckCell(ValueCell: TValueCell; const PackageName: string); override;
@@ -305,6 +306,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
+  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -320,27 +322,115 @@ begin
     WriteInteger(GHB_Cell.Row+1);
   end;
   WriteInteger(GHB_Cell.Column+1);
-  WriteFloat(GHB_Cell.BoundaryHead);
+
+  if (GHB_Cell.BoundaryHeadPest <> '')
+    or (GHB_Cell.ConductancePest <> '')
+    or (GHB_Cell.BoundaryHeadPestSeries <> '')
+    or (GHB_Cell.ConductancePestSeries <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
+  if Model.PestUsed and WritingTemplate and
+    ((Ghb_Cell.BoundaryHeadPest <> '') or (Ghb_Cell.BoundaryHeadPestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Ghb_Cell.BoundaryHead, Ghb_Cell.BoundaryHeadPest,
+      Ghb_Cell.BoundaryHeadPestSeries, Ghb_Cell.BoundaryHeadPestSeriesMethod, Ghb_Cell);
+  end
+  else
+  begin
+    WriteFloat(Ghb_Cell.BoundaryHead);
+    if Ghb_Cell.BoundaryHeadPest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Ghb_Cell.BoundaryHeadPest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Ghb_Cell.BoundaryHeadPestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Ghb_Cell.BoundaryHeadPestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+  end;
+
+//  WriteFloat(GHB_Cell.BoundaryHead);
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
-    and ( GHB_Cell.ConductanceParameterName <> '') then
+    and (Ghb_Cell.ConductanceParameterName <> '') then
   begin
-    ParameterName := GHB_Cell.ConductanceParameterName;
-    if GHB_Cell.ConductanceParameterValue = 0 then
+    // PEST parameters are not allowed to be combined
+    // with MF-2005 style parameters.
+    Assert(Ghb_Cell.ConductancePest = '');
+    ParameterName := Ghb_Cell.ConductanceParameterName;
+    if Ghb_Cell.ConductanceParameterValue = 0 then
     begin
       MultiplierValue := 0.0;
     end
     else
     begin
-      MultiplierValue := GHB_Cell.Conductance / GHB_Cell.ConductanceParameterValue;
+      MultiplierValue := Ghb_Cell.Conductance
+        / Ghb_Cell.ConductanceParameterValue;
     end;
     WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
+  else if Model.PestUsed and WritingTemplate
+    and ((Ghb_Cell.ConductancePest <> '') or (Ghb_Cell.ConductancePestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Ghb_Cell.Conductance, Ghb_Cell.ConductancePest,
+      Ghb_Cell.ConductancePestSeries, Ghb_Cell.ConductancePestSeriesMethod,
+      Ghb_Cell);
+  end
   else
   begin
-    WriteFloat(GHB_Cell.Conductance);
+    WriteFloat(Ghb_Cell.Conductance);
+    if Ghb_Cell.ConductancePest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Ghb_Cell.ConductancePest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Ghb_Cell.ConductancePestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Ghb_Cell.ConductancePestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
   end;
+
+
+//  if Model.PestUsed and (Model.ModelSelection = msModflow2015)
+//    and WritingTemplate
+//    and ( GHB_Cell.ConductanceParameterName <> '') then
+//  begin
+//    ParameterName := GHB_Cell.ConductanceParameterName;
+//    if GHB_Cell.ConductanceParameterValue = 0 then
+//    begin
+//      MultiplierValue := 0.0;
+//    end
+//    else
+//    begin
+//      MultiplierValue := GHB_Cell.Conductance / GHB_Cell.ConductanceParameterValue;
+//    end;
+//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+//  end
+//  else
+//  begin
+//    WriteFloat(GHB_Cell.Conductance);
+//  end;
 
 //  if GHB_Cell.TimeSeriesName = '' then
 //  begin
@@ -449,6 +539,7 @@ var
 //  NameOfFile: string;
   ShouldWriteObservationFile: Boolean;
 begin
+  FPestParamUsed := False;
   if MvrWriter <> nil then
   begin
     Assert(MvrWriter is TModflowMvrWriter);
@@ -517,8 +608,8 @@ begin
     WriteModflow6FlowObs(NameOfFile, FEvaluationType);
   end;
 
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParamValues.Count > 0) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try
@@ -570,6 +661,7 @@ begin
     begin
       Exit;
     end;
+
     if Model.ModelSelection = msModflow2015 then
     begin
       frmProgressMM.AddMessage(StrWritingOptions);
@@ -579,6 +671,7 @@ begin
       begin
         Exit;
       end;
+
       frmProgressMM.AddMessage(StrWritingDimensions);
       WriteDimensionsMF6;
       Application.ProcessMessages;
@@ -621,6 +714,7 @@ begin
       WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrGHB),
         NameOfFile, foInput, Model);
     end;
+
     //      if Model.ModelSelection <> msModflow2015 then
     begin
       frmProgressMM.AddMessage(StrWritingDataSets3and4);
@@ -631,6 +725,7 @@ begin
         Exit;
       end;
     end;
+
     frmProgressMM.AddMessage(StrWritingDataSets5to7);
     WriteDataSets5To7;
   finally

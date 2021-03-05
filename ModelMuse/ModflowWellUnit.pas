@@ -153,6 +153,9 @@ type
     function GetMvrIndex: Integer;
     function GetPumpingParameterName: string;
     function GetPumpingParameterValue: double;
+    function GetPumpingRatePest: string;
+    function GetPumpingRatePestSeriesMethod: TPestParamMethod;
+    function GetPumpingRatePestSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -177,6 +180,10 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
     property PumpingParameterName: string read GetPumpingParameterName;
     property PumpingParameterValue: double read GetPumpingParameterValue;
+    // PEST parameters
+    property PumpingRatePest: string read GetPumpingRatePest;
+    property PumpingRatePestSeries: string read GetPumpingRatePestSeriesName;
+    property PumpingRatePestSeriesMethod: TPestParamMethod read GetPumpingRatePestSeriesMethod;
   end;
 
   // @name represents the MODFLOW Well boundaries associated with
@@ -192,16 +199,26 @@ type
   // @seealso(TWellCollection)
   TMfWellBoundary = class(TSpecificModflowBoundary)
   private
+    const
+      PumpingRatePosition = 0;
+    var
     FMaxTabCells: Integer;
     FTabFileName: string;
     FRelativeTabFileName: string;
     FTabFileLines: Integer;
-//    FInterp: TMf6InterpolationMethods;
+    FPestPumpingRateMethod: TPestParamMethod;
+    FPestPumpingRateFormula: TFormulaObject;
+    FPestPumpingRateObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetTabFileName(const Value: string);
     function GetRelativeTabFileName: string;
     procedure SetRelativeTabFileName(const Value: string);
     procedure SetTabFileLines(const Value: Integer);
-//    procedure SetInterp(const Value: TMf6InterpolationMethods);
+    function GetPestPumpingRateFormula: string;
+    procedure SetPestPumpingRateFormula(const Value: string);
+    procedure SetPestPumpingRateMethod(const Value: TPestParamMethod);
+    function GetPestPumpingRateObserver: TObserver;
+    procedure InvalidatePumpingRateData(Sender: TObject);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -215,7 +232,24 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestPumpingRateObserver: TObserver
+      read GetPestPumpingRateObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent);override;
     property MaxTabCells: Integer read FMaxTabCells;
     // @name fills ValueTimeList via a call to AssignCells for each
@@ -236,10 +270,24 @@ type
       var StartRangeExtended, EndRangeExtended: boolean; AModel: TBaseModel); override;
     property TabFileName: string read FTabFileName write SetTabFileName;
     property TabFileLines: Integer read FTabFileLines write SetTabFileLines;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property RelativeTabFileName: string read GetRelativeTabFileName
       write SetRelativeTabFileName;
     property Interp;
+    property PestPumpingRateFormula: string read GetPestPumpingRateFormula
+      write SetPestPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestPumpingRateMethod: TPestParamMethod read FPestPumpingRateMethod
+      write SetPestPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 resourcestring
@@ -707,6 +755,21 @@ begin
   result := Values.PumpingRateAnnotation;
 end;
 
+function TWell_Cell.GetPumpingRatePest: string;
+begin
+  result := Values.PumpingRatePest;
+end;
+
+function TWell_Cell.GetPumpingRatePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.PumpingRatePestSeriesMethod;
+end;
+
+function TWell_Cell.GetPumpingRatePestSeriesName: string;
+begin
+  result := Values.PumpingRatePestSeriesName;
+end;
+
 function TWell_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -793,7 +856,8 @@ begin
   begin
     SourceWell := TMfWellBoundary(Source);
     RelativeTabFileName := SourceWell.RelativeTabFileName;
-//    Interp := SourceWell.Interp;
+    PestPumpingRateFormula := SourceWell.PestPumpingRateFormula;
+    PestPumpingRateMethod := SourceWell.PestPumpingRateMethod;
   end;
   inherited;
 end;
@@ -880,6 +944,56 @@ end;
 class function TMfWellBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TWellCollection;
+end;
+
+function TMfWellBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestWel_';
+end;
+
+constructor TMfWellBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestPumpingRateFormula := '';
+  FPestPumpingRateMethod := DefaultBoundaryMethod(PumpingRatePosition);
+end;
+
+procedure TMfWellBoundary.CreateFormulaObjects;
+begin
+  FPestPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TMfWellBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestPumpingRateObserver);
+  end;
+end;
+
+class function TMfWellBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    PumpingRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+destructor TMfWellBoundary.Destroy;
+begin
+  PestPumpingRateFormula := '';
+
+  inherited;
 end;
 
 procedure TMfWellBoundary.GetCellValues(ValueTimeList: TList;
@@ -1049,6 +1163,63 @@ begin
   end;
 end;
 
+function TMfWellBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    PumpingRatePosition:
+      begin
+        result := PestPumpingRateFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TMfWellBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    PumpingRatePosition:
+      begin
+        result := PestPumpingRateMethod;
+      end;
+    else
+      result := PestPumpingRateMethod;
+      Assert(False);
+  end;
+end;
+
+function TMfWellBoundary.GetPestPumpingRateFormula: string;
+begin
+  Result := FPestPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(PumpingRatePosition);
+  end;
+end;
+
+function TMfWellBoundary.GetPestPumpingRateObserver: TObserver;
+begin
+  if FPestPumpingRateObserver = nil then
+  begin
+    CreateObserver('PestPumpingRate_', FPestPumpingRateObserver, nil);
+    FPestPumpingRateObserver.OnUpToDateSet := InvalidatePumpingRateData;
+  end;
+  result := FPestPumpingRateObserver;
+end;
+
+procedure TMfWellBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestPumpingRateFormula then
+  begin
+    if PumpingRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[PumpingRatePosition]);
+    end;
+  end;
+end;
+
 function TMfWellBoundary.GetRelativeTabFileName: string;
 var
   ModelFileName: string;
@@ -1065,12 +1236,55 @@ begin
   result := FRelativeTabFileName;
 end;
 
+function TMfWellBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestDell_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TMfWellBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TMfWellBoundary.InvalidateDisplay;
 begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
     (ParentModel as TPhastModel).InvalidateMfWellPumpage(self);
+  end;
+end;
+
+procedure TMfWellBoundary.InvalidatePumpingRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfWellPumpage(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfWellPumpage(self);
+    end;
   end;
 end;
 
@@ -1084,14 +1298,42 @@ begin
   result := ptQ;
 end;
 
-//procedure TMfWellBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-//begin
-//  if FInterp <> Value then
-//  begin
-//    InvalidateModel;
-//    FInterp := Value;
-//  end;
-//end;
+procedure TMfWellBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    PumpingRatePosition:
+      begin
+        PestPumpingRateFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TMfWellBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    PumpingRatePosition:
+      begin
+        PestPumpingRateMethod := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TMfWellBoundary.SetPestPumpingRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, PumpingRatePosition, FPestPumpingRateFormula);
+end;
+
+procedure TMfWellBoundary.SetPestPumpingRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestPumpingRateMethod, Value);
+end;
 
 procedure TMfWellBoundary.SetRelativeTabFileName(const Value: string);
 begin

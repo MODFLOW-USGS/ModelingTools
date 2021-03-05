@@ -5266,7 +5266,10 @@ end;
 
 procedure TCustomRBWDataGrid.HideEditor;
 begin
-  inherited;
+  if EditorMode then
+  begin
+    inherited;
+  end;
 end;
 
 procedure TCustomRBWDataGrid.WMHScroll(var Msg: TWMHScroll);

@@ -1744,7 +1744,8 @@ type
     // are used to chose the TRbwParser.
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
       const ACol, ARow: integer; Formula: string;
-      const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
+      const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt;
+      PestParamAllowed: Boolean);
 
     // @name creates a @link(TExpression) for a @link(TScreenObjectDataEdit).
     procedure CreateFormula(const DataSetIndex: integer;
@@ -2719,42 +2720,53 @@ procedure TfrmScreenObjectProperties.EnablePestCells(Sender: TObject; ACol,
   ARow: Longint; var CanSelect: Boolean);
 var
   Column: TRbwColumn4;
+  ParameterColumns: set of Byte;
 begin
-  if Sender = frameDrnParam.rdgModflowBoundary then
+  ParameterColumns := [];
+   { TODO  -cPEST: Support PEST here }
+  if (Sender = frameDrnParam.rdgModflowBoundary)
+    or (Sender = frameGhbParam.rdgModflowBoundary) then
   begin
-    if (ARow >= 1) and (ACol >= 2) then
+    ParameterColumns := [2,3]
+  end
+  else if (Sender = frameWellParam.rdgModflowBoundary) then
+  begin
+    ParameterColumns := [2]
+  end;
+
+  Assert(ParameterColumns <> []);
+  if (ARow >= 1) and (ACol >= 2) then
+  begin
+    Column := (Sender as TRbwDataGrid4).Columns[ACol];
+    if (ARow <= PestRowOffset)  then
     begin
-      Column := (Sender as TRbwDataGrid4).Columns[ACol];
-      if (ARow <= PestRowOffset)  then
+      if ACol in ParameterColumns then
       begin
-        if ACol in [2,3] then
+        Column.ComboUsed := True;
+        Column.LimitToList := True;
+        if ARow = PestMethodRow then
         begin
-          Column.ComboUsed := True;
-          Column.LimitToList := True;
-          if ARow = PestMethodRow then
-          begin
-            Column.PickList := FPestMethods
-          end
-          else
-          begin
-            Column.PickList := FPestParametersAndDataSets
-          end;
+          Column.PickList := FPestMethods
         end
         else
         begin
-          CanSelect := False
+          Column.PickList := FPestParametersAndDataSets
         end;
       end
       else
       begin
-        Column.ButtonUsed := True;
-        Column.LimitToList := False;
+        CanSelect := False
       end;
     end
-    else if (ACol = 1) and (ARow >= 1) and (ARow <= PestRowOffset) then
+    else
     begin
-      CanSelect := False
+      Column.ButtonUsed := True;
+      Column.LimitToList := False;
     end;
+  end
+  else if (ACol = 1) and (ARow >= 1) and (ARow <= PestRowOffset) then
+  begin
+    CanSelect := False
   end;
 end;
 
@@ -4702,7 +4714,7 @@ begin
               if NewValue <> '' then
               begin
                 CreateBoundaryFormula(DataGrid, Col, RowIndex, NewValue,
-                  Orientation, EvaluatedAt);
+                  Orientation, EvaluatedAt, False);
               end;
             end;
           end;
@@ -5579,7 +5591,10 @@ begin
   framePestObsSwt.SpecifyObservationTypes(SwtTypes);
   framePestObsSwt.OnControlsChange := SwtObsChanged;
 
+   { TODO  -cPEST: Support PEST here }
   frameDrnParam.OnCheckPestCell := EnablePestCells;
+  frameGhbParam.OnCheckPestCell := EnablePestCells;
+  frameWellParam.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -17304,6 +17319,10 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetGhbBoundary(ScreenObjectList: TList);
+const
+  HeadPosition = 0;
+  ConductancePosition = 1;
+  ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
@@ -17317,9 +17336,20 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FGHB_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FGHB_Node);
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+HeadPosition] :=
+    TGhbBoundary.DefaultBoundaryMethod(HeadPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
+    TGhbBoundary.DefaultBoundaryMethod(ConductancePosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
 
 procedure TfrmScreenObjectProperties.GetWellBoundary(ScreenObjectList: TList);
+const
+  PumpingRatePosition = 0;
+  ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
@@ -17337,6 +17367,12 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FWEL_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FWEL_Node);
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+PumpingRatePosition] :=
+    TMfWellBoundary.DefaultBoundaryMethod(PumpingRatePosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
   First := True;
   for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
   begin
@@ -18961,7 +18997,8 @@ end;
 
 procedure TfrmScreenObjectProperties.CreateBoundaryFormula(const DataGrid:
   TRbwDataGrid4; const ACol, ARow: integer; Formula: string;
-  const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
+  const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt;
+  PestParamAllowed: Boolean);
 var
   TempCompiler: TRbwParser;
   CompiledFormula: TExpression;
@@ -19198,9 +19235,20 @@ begin
     Assert(False);
   end;
 
+  if PestParamAllowed then
+  begin
+    PestParamAllowed :=
+      frmGoPhast.PhastModel.GetPestParameterByName(
+      CompiledFormula.DecompileDisplay) <> nil;
+  end;
+
   if (ResultType = CompiledFormula.ResultType) or
     ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
       then
+  begin
+    DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+  end
+  else if PestParamAllowed then
   begin
     DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
   end
@@ -21752,7 +21800,7 @@ begin
       begin
         try
           CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-            EvaluatedAt);
+            EvaluatedAt, False);
         except on E: Exception do
           begin
             Beep;
@@ -22384,7 +22432,7 @@ begin
         begin
           try
             CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-              EvaluatedAt);
+              EvaluatedAt, False);
           except on E: Exception do
             begin
               Beep;
@@ -23401,6 +23449,9 @@ begin
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FGHB_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FGHB_Node);
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FGHB_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -24188,6 +24239,9 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.StoreWellBoundary;
+const
+  PumpingRatePosition = 0;
+  ColumnOffset = 2;
 var
   ParamType: TParameterType;
   Frame: TframeScreenObjectCondParam;
@@ -24220,6 +24274,12 @@ begin
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FWEL_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FWEL_Node);
+
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FWEL_Node);
+    {$ENDIF}
+    Frame.rdgModflowBoundary.HideEditor;
+
   end;
 end;
 
@@ -24680,6 +24740,7 @@ var
   Edit: TScreenObjectDataEdit;
   DataArrayManager: TDataArrayManager;
   ASeries: TObSeries;
+  PestParamAllowed: Boolean;
 begin
   inherited;
   DataGrid := Sender as TRbwDataGrid4;
@@ -24687,6 +24748,12 @@ begin
   // VariableList will hold a list of variables that can
   // be used in the function
   try
+   { TODO -cPEST: Support PEST here }
+    PestParamAllowed :=
+      (DataGrid = frameDrnParam.rdgModflowBoundary)
+      or (DataGrid = frameGhbParam.rdgModflowBoundary)
+      or (DataGrid = frameWellParam.rdgModflowBoundary);
+
     // get the orientation of the data set.
     if (DataGrid = frameRchParam.rdgModflowBoundary)
       or (DataGrid = frameEvtParam.rdgModflowBoundary)
@@ -24789,7 +24856,7 @@ begin
         begin
           try
             CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-              EvaluatedAt);
+              EvaluatedAt, PestParamAllowed);
           except on E: Exception do
             begin
               Beep;
@@ -26633,7 +26700,7 @@ begin
         begin
           try
             CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-              EvaluatedAt);
+              EvaluatedAt, False);
           except on E: Exception do
             begin
               Beep;
