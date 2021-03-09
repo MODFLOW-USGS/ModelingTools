@@ -757,7 +757,7 @@ begin
     PriorIndex := VertexIndex;
   end;
 end;
-
+
 // From https://www.experts-exchange.com/questions/26419234/Drivecombobox-Delphi-what's-the-proper-way-to-test-if-removeable-media-is-present.html#answer33492618
 //function DiskInDrive(Drive: AnsiChar): Boolean;
 //var

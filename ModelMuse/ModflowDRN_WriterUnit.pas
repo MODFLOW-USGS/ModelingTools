@@ -294,11 +294,6 @@ begin
   result := 'drn';
 end;
 
-//function TModflowDRN_Writer.ObsTypeMF6: string;
-//begin
-//  result := ' drn';
-//end;
-
 function TModflowDRN_Writer.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.DrnPackage;
@@ -383,7 +378,9 @@ begin
       MultiplierValue := Drn_Cell.Conductance
         / Drn_Cell.ConductanceParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+    WriteModflowParamFormula(ParameterName, Drn_Cell.ConductancePest,
+      MultiplierValue, Drn_Cell);
   end
   else if Model.PestUsed and WritingTemplate
     and ((Drn_Cell.ConductancePest <> '') or (Drn_Cell.ConductancePestSeries <> '')) then

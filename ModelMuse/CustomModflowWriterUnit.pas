@@ -97,6 +97,9 @@ type
     class function Extension: string; virtual; abstract;
     procedure WriteTemplateFormula(ParameterName: string;
       ModifierValue: double; Method: TPestParamMethod);
+    procedure WriteModflowParamFormula(ModflowParameterName: string;
+      PestParValue: string; Value: double; ACell: TValueCell);
+
 //    procedure WriteArrayReplacementFormula(DataSetName: string;
 //      ModifierValue: double; Method: TPestParamMethod; Layer, Row,
 //      Column: Integer);
@@ -9383,6 +9386,103 @@ end;
 //    [ExtendedTemplateCharacter, ArrayTemplateCharacter, DataSetName,
 //    ModifierValue, Operation, Layer, Row, Column]));
 //end;
+
+procedure TCustomFileWriter.WriteModflowParamFormula(ModflowParameterName: string;
+  PestParValue: string; Value: double; ACell: TValueCell);
+var
+  CellValueReplacement: string;
+  TemplateCharacter: string;
+  ExtendedTemplateCharacter: string;
+  ArrayTemplateCharacter: Char;
+  procedure GetCellData;
+  var
+    ModifierValue: Double;
+    LocalLayer: Integer;
+    Param: TModflowSteadyParameter;
+    DataArray: TDataArray;
+    DataArrayLayer: Integer;
+    AScreenObject: TScreenObject;
+  begin
+    ModifierValue := 0;
+    Param := Model.GetPestParameterByName(PestParValue);
+    if Param <> nil then
+    begin
+	    ModifierValue := Param.Value;
+      //WriteTemplateReplace(PestParValue);
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+      CellValueReplacement := Format(' %0:s                %1:s%0:s',
+        [TemplateCharacter, PestParValue])
+    end
+    else
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(PestParValue);
+      if DataArray <> nil then
+      begin
+        if DataArray.PestParametersUsed then
+        begin
+          if DataArray.Orientation = dsoTop then
+          begin
+            DataArrayLayer := 0;
+          end
+          else
+          begin
+            DataArrayLayer := ACell.Layer;
+          end;
+          ModifierValue := DataArray.RealData[ACell.Layer, ACell.Row, ACell.Column];
+
+          LocalLayer := Model.DataSetLayerToModflowLayer(ACell.Layer);
+          CellValueReplacement := Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+            [ArrayTemplateCharacter, DataArray.Name,
+            LocalLayer, ACell.Row+1, ACell.Column+1]);
+
+  //        WriteArrayReplace(DataArray.Name, DataArrayLayer, Row, Column);
+        end
+        else
+        begin
+          CellValueReplacement := ''
+        end;
+      end
+      else
+      begin
+        CellValueReplacement := '';
+        AScreenObject := ACell.ScreenObject as TScreenObject;
+        frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+          Format('%0:s was not recognized in %1:s',
+          [PestParValue, AScreenObject.Name]), AScreenObject);
+      end;
+	  end;
+
+    if CellValueReplacement <> '' then
+    begin
+      if ModifierValue = 0 then
+      begin
+        Value := 0;
+      end
+      else
+      begin
+        Value := Value/ModifierValue;
+      end;
+    end;
+  end;
+begin
+  if PestParValue <> '' then
+  begin
+    TemplateCharacter := Model.PestProperties.TemplateCharacter;
+    ArrayTemplateCharacter :=Model.PestProperties.ArrayTemplateCharacter;
+    ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+    GetCellData;
+    WriteString
+      (Format(' %0:s                   %1:s             %2:s%1:s * %3:g * %4:s%0:s ',
+      [ExtendedTemplateCharacter, TemplateCharacter, ModflowParameterName,
+      Value, CellValueReplacement]));
+
+  end
+  else
+  begin
+    WriteTemplateFormula(ModflowParameterName, Value, ppmMultiply)
+  end;
+end;
+
 
 procedure TCustomFileWriter.WriteTemplateFormula(ParameterName: string;
   ModifierValue: double; Method: TPestParamMethod);

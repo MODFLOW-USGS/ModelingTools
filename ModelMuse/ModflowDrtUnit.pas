@@ -150,6 +150,15 @@ type
     function GetConductanceAnnotation: string;
     function GetElevationAnnotation: string;
     function GetReturnFractionAnnotation: string;
+    function GetConductancePest: string;
+    function GetConductancePestSeriesMethod: TPestParamMethod;
+    function GetConductancePestSeriesName: string;
+    function GetElevationPest: string;
+    function GetElevationPestSeriesMethod: TPestParamMethod;
+    function GetElevationPestSeriesName: string;
+    function GetReturnFractionPest: string;
+    function GetReturnFractionPestSeriesMethod: TPestParamMethod;
+    function GetReturnFractionPestSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -174,6 +183,19 @@ type
     property ElevationAnnotation: string read GetElevationAnnotation;
     property ReturnFractionAnnotation: string read GetReturnFractionAnnotation;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    // PEST PROPERTIES
+    property ElevationPest: string read GetElevationPest;
+    property ConductancePest: string read GetConductancePest;
+    property ReturnFractionPest: string read GetReturnFractionPest;
+
+    property ElevationPestSeries: string read GetElevationPestSeriesName;
+    property ConductancePestSeries: string read GetConductancePestSeriesName;
+    property ReturnFractionPestSeries: string read GetReturnFractionPestSeriesName;
+
+    property ElevationPestSeriesMethod: TPestParamMethod read GetElevationPestSeriesMethod;
+    property ConductancePestSeriesMethod: TPestParamMethod read GetConductancePestSeriesMethod;
+    property ReturnFractionPestSeriesMethod: TPestParamMethod read GetReturnFractionPestSeriesMethod;
+
   end;
 
 
@@ -277,7 +299,32 @@ type
   TDrtBoundary = class(TSpecificModflowBoundary)
   private
     FDrainReturn: TDrainReturn;
+    FPestElevFormula: TFormulaObject;
+    FPestCondFormula: TFormulaObject;
+    FPestReturnFractionFormula: TFormulaObject;
+    FPestConductanceMethod: TPestParamMethod;
+    FPestElevMethod: TPestParamMethod;
+    FPestReturnFractionMethod: TPestParamMethod;
+    FPestConductanceObserver: TObserver;
+    FPestElevationObserver: TObserver;
+    FPestReturnFractionObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetDrainReturn(const Value: TDrainReturn);
+    function GetPestConductanceObserver: TObserver;
+    function GetPestElevationObserver: TObserver;
+    function GetPestReturnFractionObserver: TObserver;
+    procedure InvalidateElevationData(Sender: TObject);
+    procedure InvalidateConductanceData(Sender: TObject);
+    procedure InvalidateReturnFractionData(Sender: TObject);
+    function GetPestConductanceFormula: string;
+    function GetPestElevFormula: string;
+    function GetPestReturnFractionFormula: string;
+    procedure SetPestConductanceFormula(const Value: string);
+    procedure SetPestConductanceMethod(const Value: TPestParamMethod);
+    procedure SetPestReturnFractionFormula(const Value: string);
+    procedure SetPestElevFormula(const Value: string);
+    procedure SetPestElevMethod(const Value: TPestParamMethod);
+    procedure SetPestReturnFractionMethod(const Value: TPestParamMethod);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -291,6 +338,22 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestElevationObserver: TObserver read GetPestElevationObserver;
+    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    property PestReturnFractionObserver: TObserver read GetPestReturnFractionObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
   public
     // @name copies @link(Values) and @link(Parameters) from the Source
     // @classname to this @classname.
@@ -313,8 +376,46 @@ type
       AModel: TBaseModel); override;
     Destructor Destroy; override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property DrainReturn: TDrainReturn read FDrainReturn write SetDrainReturn;
+    property PestElevFormula: string read GetPestElevFormula
+      write SetPestElevFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceFormula: string read GetPestConductanceFormula
+      write SetPestConductanceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestReturnFractionFormula: string read GetPestReturnFractionFormula
+      write SetPestReturnFractionFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestElevMethod: TPestParamMethod read FPestElevMethod
+      write SetPestElevMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceMethod: TPestParamMethod
+      read FPestConductanceMethod write SetPestConductanceMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestReturnFractionMethod: TPestParamMethod
+      read FPestReturnFractionMethod write SetPestReturnFractionMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
@@ -734,6 +835,21 @@ begin
   result := Values.ElevationAnnotation;
 end;
 
+function TDrt_Cell.GetElevationPest: string;
+begin
+  result := Values.ElevationPest;
+end;
+
+function TDrt_Cell.GetElevationPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.ElevationPestSeriesMethod;
+end;
+
+function TDrt_Cell.GetElevationPestSeriesName: string;
+begin
+  result := Values.ElevationPestSeriesName;
+end;
+
 function TDrt_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -766,6 +882,21 @@ end;
 function TDrt_Cell.GetConductanceAnnotation: string;
 begin
   result := Values.ConductanceAnnotation;
+end;
+
+function TDrt_Cell.GetConductancePest: string;
+begin
+  result := Values.ConductancePest
+end;
+
+function TDrt_Cell.GetConductancePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.ConductancePestSeriesMethod;
+end;
+
+function TDrt_Cell.GetConductancePestSeriesName: string;
+begin
+  result := Values.ConductancePestSeriesName;
 end;
 
 function TDrt_Cell.GetLayer: integer;
@@ -808,6 +939,21 @@ end;
 function TDrt_Cell.GetReturnFractionAnnotation: string;
 begin
   result := Values.ReturnFractionAnnotation;
+end;
+
+function TDrt_Cell.GetReturnFractionPest: string;
+begin
+  result := Values.ReturnFractionPest;
+end;
+
+function TDrt_Cell.GetReturnFractionPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.ReturnFractionPestSeriesMethod;
+end;
+
+function TDrt_Cell.GetReturnFractionPestSeriesName: string;
+begin
+  result := Values.ReturnFractionPestSeriesName;
 end;
 
 function TDrt_Cell.GetRow: integer;
@@ -928,6 +1074,11 @@ begin
   result := TDrtCollection;
 end;
 
+function TDrtBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestDrt_';
+end;
+
 procedure TDrtBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel);
 var
@@ -973,6 +1124,174 @@ begin
   end;
 end;
 
+function TDrtBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        result := PestElevFormula;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceFormula;
+      end;
+    ReturnPosition:
+      begin
+        result := PestReturnFractionFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TDrtBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        result := PestElevMethod;
+      end;
+    ConductancePosition:
+      begin
+        result := PestConductanceMethod;
+      end;
+    ReturnPosition:
+      begin
+        result := PestReturnFractionMethod;
+      end;
+    else
+      result := PestConductanceMethod;
+      Assert(False);
+  end;
+end;
+
+function TDrtBoundary.GetPestConductanceFormula: string;
+begin
+  Result := FPestCondFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(ConductancePosition);
+  end;
+end;
+
+function TDrtBoundary.GetPestConductanceObserver: TObserver;
+begin
+  if FPestConductanceObserver = nil then
+  begin
+    CreateObserver('PestConductance_', FPestConductanceObserver, nil);
+    FPestConductanceObserver.OnUpToDateSet := InvalidateConductanceData;
+  end;
+  result := FPestConductanceObserver;
+end;
+
+function TDrtBoundary.GetPestElevationObserver: TObserver;
+begin
+  if FPestElevationObserver = nil then
+  begin
+    CreateObserver('PestElevation_', FPestElevationObserver, nil);
+    FPestElevationObserver.OnUpToDateSet := InvalidateElevationData;
+  end;
+  result := FPestElevationObserver;
+end;
+
+function TDrtBoundary.GetPestElevFormula: string;
+begin
+  Result := FPestElevFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(ElevationPosition);
+  end;
+end;
+
+function TDrtBoundary.GetPestReturnFractionObserver: TObserver;
+begin
+  if FPestReturnFractionObserver = nil then
+  begin
+    CreateObserver('PestReturnFraction_', FPestReturnFractionObserver, nil);
+    FPestReturnFractionObserver.OnUpToDateSet := InvalidateReturnFractionData;
+  end;
+  result := FPestReturnFractionObserver;
+end;
+
+function TDrtBoundary.GetPestReturnFractionFormula: string;
+begin
+  Result := FPestReturnFractionFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(ReturnPosition);
+  end;
+end;
+
+procedure TDrtBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestElevFormula then
+  begin
+    if ElevationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ElevationPosition]);
+    end;
+  end;
+  if Sender = FPestCondFormula then
+  begin
+    if ConductancePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ConductancePosition]);
+    end;
+  end;
+  if Sender = FPestReturnFractionFormula then
+  begin
+    if ReturnPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ReturnPosition]);
+    end;
+  end;
+end;
+
+function TDrtBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestDRT_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TDrtBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
+procedure TDrtBoundary.InvalidateConductanceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfDrtConductance(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfDrtConductance(self);
+    end;
+  end;
+end;
+
 procedure TDrtBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -987,6 +1306,60 @@ begin
   end;
 end;
 
+procedure TDrtBoundary.InvalidateElevationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfDrtElevation(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfDrtElevation(self);
+    end;
+  end;
+end;
+
+procedure TDrtBoundary.InvalidateReturnFractionData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfDrtReturnFraction(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfDrtReturnFraction(self);
+    end;
+  end;
+end;
+
 class function TDrtBoundary.ModflowParamItemClass: TModflowParamItemClass;
 begin
   result := TDrtParamItem;
@@ -994,15 +1367,23 @@ end;
 
 function TDrtBoundary.ParameterType: TParameterType;
 begin
-  result := ptDRT
+  result := ptDRT;
 end;
 
 procedure TDrtBoundary.Assign(Source: TPersistent);
+var
+  SourceDrt: TDrtBoundary;
 begin
   if Source is TDrtBoundary then
   begin
-    DrainReturn :=
-      TDrtBoundary(Source).DrainReturn;
+    SourceDrt := TDrtBoundary(Source);
+    DrainReturn := SourceDrt.DrainReturn;
+    PestElevFormula := SourceDrt.PestElevFormula;
+    PestConductanceFormula := SourceDrt.PestConductanceFormula;
+    PestReturnFractionFormula := SourceDrt.PestReturnFractionFormula;
+    PestElevMethod := SourceDrt.PestElevMethod;
+    PestConductanceMethod := SourceDrt.PestConductanceMethod;
+    PestReturnFractionMethod := SourceDrt.PestReturnFractionMethod;
   end;
   inherited;
 end;
@@ -1021,10 +1402,66 @@ begin
   end;
   inherited Create(Model, ScreenObject);
   FDrainReturn := TDrainReturn.Create(OnInvalidateModelEvent);
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestElevFormula := '';
+  PestConductanceFormula := '';
+  PestReturnFractionFormula := '';
+  FPestElevMethod := DefaultBoundaryMethod(ElevationPosition);
+  FPestConductanceMethod := DefaultBoundaryMethod(ConductancePosition);
+  FPestReturnFractionMethod := DefaultBoundaryMethod(ReturnPosition);
+
+end;
+
+procedure TDrtBoundary.CreateFormulaObjects;
+begin
+  FPestElevFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestReturnFractionFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TDrtBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestElevationObserver);
+    FObserverList.Add(PestConductanceObserver);
+    FObserverList.Add(PestReturnFractionObserver);
+  end;
+end;
+
+class function TDrtBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        result := ppmAdd;
+      end;
+    ConductancePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    ReturnPosition:
+      begin
+        result := ppmAdd;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 destructor TDrtBoundary.Destroy;
 begin
+  PestElevFormula := '';
+  PestConductanceFormula := '';
+  PestReturnFractionFormula := '';
   FDrainReturn.Free;
   inherited;
 end;
@@ -1032,6 +1469,79 @@ end;
 procedure TDrtBoundary.SetDrainReturn(const Value: TDrainReturn);
 begin
   FDrainReturn.Assign(Value);
+end;
+
+procedure TDrtBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        PestElevFormula := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceFormula := Value;
+      end;
+    ReturnPosition:
+      begin
+        PestReturnFractionFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TDrtBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    ElevationPosition:
+      begin
+        PestElevMethod := Value;
+      end;
+    ConductancePosition:
+      begin
+        PestConductanceMethod := Value;
+      end;
+    ReturnPosition:
+      begin
+        PestReturnFractionMethod := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TDrtBoundary.SetPestConductanceFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ConductancePosition, FPestCondFormula);
+end;
+
+procedure TDrtBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestConductanceMethod, Value);
+end;
+
+procedure TDrtBoundary.SetPestElevFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ElevationPosition, FPestElevFormula);
+end;
+
+procedure TDrtBoundary.SetPestElevMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestElevMethod, Value);
+end;
+
+procedure TDrtBoundary.SetPestReturnFractionMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestReturnFractionMethod, Value);
+end;
+
+procedure TDrtBoundary.SetPestReturnFractionFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ReturnPosition, FPestReturnFractionFormula);
 end;
 
 { TReturnCell }

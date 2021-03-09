@@ -16,6 +16,7 @@ type
     MXACTC: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
@@ -320,11 +321,6 @@ begin
   result := 'riv';
 end;
 
-//function TModflowRIV_Writer.ObsTypeMF6: string;
-//begin
-//  result := ' riv';
-//end;
-
 function TModflowRIV_Writer.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.RivPackage;
@@ -340,6 +336,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
+  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -355,12 +352,54 @@ begin
     WriteInteger(Riv_Cell.Row+1);
   end;
   WriteInteger(Riv_Cell.Column+1);
-  WriteFloat(Riv_Cell.RiverStage);
+
+  if (Riv_Cell.ConductancePest <> '')
+    or (Riv_Cell.RiverStagePest <> '')
+    or (Riv_Cell.RiverBottomPest <> '')
+    or (Riv_Cell.ConductancePestSeries <> '')
+    or (Riv_Cell.RiverStagePestSeries <> '')
+    or (Riv_Cell.RiverBottomPestSeries <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
+  if Model.PestUsed and WritingTemplate and
+    ((Riv_Cell.RiverStagePest <> '') or (Riv_Cell.RiverStagePestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Riv_Cell.RiverStage, Riv_Cell.RiverStagePest,
+      Riv_Cell.RiverStagePestSeries, Riv_Cell.RiverStagePestSeriesMethod, Riv_Cell);
+  end
+  else
+  begin
+    WriteFloat(Riv_Cell.RiverStage);
+    if Riv_Cell.RiverStagePest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Riv_Cell.RiverStagePest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Riv_Cell.RiverStagePestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Riv_Cell.RiverStagePestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+  end;
+
+//  WriteFloat(Riv_Cell.RiverStage);
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
     and ( Riv_Cell.ConductanceParameterName <> '') then
   begin
+    // PEST parameters are not allowed to be combined
+    // with MF-2005 style parameters.
     ParameterName := Riv_Cell.ConductanceParameterName;
     if Riv_Cell.ConductanceParameterValue = 0 then
     begin
@@ -370,12 +409,44 @@ begin
     begin
       MultiplierValue := Riv_Cell.Conductance / Riv_Cell.ConductanceParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+    WriteModflowParamFormula(ParameterName, Riv_Cell.ConductancePest,
+      MultiplierValue, Riv_Cell);
+  end
+  else if Model.PestUsed and WritingTemplate
+    and ((Riv_Cell.ConductancePest <> '') or (Riv_Cell.ConductancePestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Riv_Cell.Conductance, Riv_Cell.ConductancePest,
+      Riv_Cell.ConductancePestSeries, Riv_Cell.ConductancePestSeriesMethod,
+      Riv_Cell);
   end
   else
   begin
     WriteFloat(Riv_Cell.Conductance);
+    if Riv_Cell.ConductancePest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Riv_Cell.ConductancePest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Riv_Cell.ConductancePestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Riv_Cell.ConductancePestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
   end;
+
+
+//  else
+//  begin
+//    WriteFloat(Riv_Cell.Conductance);
+//  end;
 //  if Riv_Cell.TimeSeriesName = '' then
 //  begin
 //    WriteFloat(Riv_Cell.Conductance);
@@ -388,7 +459,40 @@ begin
 //  end;
 
 //  WriteFloat(Riv_Cell.Conductance);
-  WriteFloat(Riv_Cell.RiverBottom);
+
+  if Model.PestUsed and WritingTemplate and
+    ((Riv_Cell.RiverBottomPest <> '') or (Riv_Cell.RiverBottomPestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Riv_Cell.RiverBottom, Riv_Cell.RiverBottomPest,
+      Riv_Cell.RiverBottomPestSeries, Riv_Cell.RiverBottomPestSeriesMethod, Riv_Cell);
+  end
+  else
+  begin
+    WriteFloat(Riv_Cell.RiverBottom);
+    if Riv_Cell.RiverBottomPest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Riv_Cell.RiverBottomPest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Riv_Cell.RiverBottomPestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Riv_Cell.RiverBottomPestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+  end;
+
+//  WriteFloat(Riv_Cell.RiverBottom);
+
+
+
   WriteIface(Riv_Cell.IFace);
   WriteBoundName(Riv_Cell);
   if Model.DisvUsed then
@@ -507,6 +611,7 @@ var
 //  NameOfFile: string;
   ShouldWriteObservationFile: Boolean;
 begin
+  FPestParamUsed := False;
   if MvrWriter <> nil then
   begin
     Assert(MvrWriter is TModflowMvrWriter);
@@ -564,88 +669,6 @@ begin
     end;
 
     WriteFileInternal;
-//    OpenFile(NameOfFile);
-//    try
-//      frmProgressMM.AddMessage(StrWritingRIVPackage);
-//      frmProgressMM.AddMessage(StrWritingDataSet0);
-//      WriteDataSet0;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      if Model.ModelSelection = msModflow2015 then
-//      begin
-//        frmProgressMM.AddMessage(StrWritingOptions);
-//        WriteOptionsMF6(NameOfFile);
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        frmProgressMM.AddMessage(StrWritingDimensions);
-//        WriteDimensionsMF6;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        if MAXBOUND = 0 then
-//        begin
-//          frmErrorsAndWarnings.AddWarning(Model, StrNoRiverCellsDefin, StrBecauseNoRiverCel);
-//          Exit;
-//        end;
-//      end
-//      else
-//      begin
-//        frmProgressMM.AddMessage(StrWritingDataSet1);
-//        WriteDataSet1;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        frmProgressMM.AddMessage(StrWritingDataSet2);
-//        WriteDataSet2;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        if MXACTC = 0 then
-//        begin
-//          frmErrorsAndWarnings.AddWarning(Model, StrNoRiverCellsDefin, StrBecauseNoRiverCel);
-//          Exit;
-//        end;
-//      end;
-//
-//      if FShouldWriteFile then
-//      begin
-//        WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrRIV),
-//          NameOfFile, foInput, Model);
-//      end;
-//
-////      if Model.ModelSelection <> msModflow2015 then
-//      begin
-//        frmProgressMM.AddMessage(StrWritingDataSets3and4);
-//        WriteDataSets3And4;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSets5to7);
-//      WriteDataSets5To7;
-//    finally
-//      CloseFile;
-//    end;
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -655,8 +678,8 @@ begin
     WriteModflow6FlowObs(NameOfFile, FEvaluationType);
   end;
 
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParamValues.Count > 0) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try

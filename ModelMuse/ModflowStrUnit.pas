@@ -249,6 +249,30 @@ type
     function GetWidthAnnotation: string;
     procedure SetFlow(const Value: double);
     procedure SetFlowAnnotation(const Value: string);
+    function GetBedBottomPest: string;
+    function GetBedBottomPestSeriesMethod: TPestParamMethod;
+    function GetBedBottomPestSeriesName: string;
+    function GetBedTopPest: string;
+    function GetBedTopPestSeriesMethod: TPestParamMethod;
+    function GetBedTopPestSeriesName: string;
+    function GetConductancePest: string;
+    function GetConductancePestSeriesMethod: TPestParamMethod;
+    function GetConductancePestSeriesName: string;
+    function GetFlowPest: string;
+    function GetFlowPestSeriesMethod: TPestParamMethod;
+    function GetFlowPestSeriesName: string;
+    function GetRoughnessPest: string;
+    function GetRoughnessPestSeriesMethod: TPestParamMethod;
+    function GetRoughnessPestSeriesName: string;
+    function GetSlopePest: string;
+    function GetSlopePestSeriesMethod: TPestParamMethod;
+    function GetSlopePestSeriesName: string;
+    function GetStagePest: string;
+    function GetStagePestSeriesMethod: TPestParamMethod;
+    function GetStagePestSeriesName: string;
+    function GetWidthPest: string;
+    function GetWidthPestSeriesMethod: TPestParamMethod;
+    function GetWidthPestSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -286,6 +310,34 @@ type
     property SlopeAnnotation: string read GetSlopeAnnotation;
     property RoughnessAnnotation: string read GetRoughnessAnnotation;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    // PEST properties
+
+    property ConductancePest: string read GetConductancePest;
+    property StagePest: string read GetStagePest;
+    property BedTopPest: string read GetBedTopPest;
+    property BedBottomPest: string read GetBedBottomPest;
+    property FlowPest: string read GetFlowPest;
+    property WidthPest: string read GetWidthPest;
+    property SlopePest: string read GetSlopePest;
+    property RoughnessPest: string read GetRoughnessPest;
+
+    property ConductancePestSeriesName: string read GetConductancePestSeriesName;
+    property StagePestSeriesName: string read GetStagePestSeriesName;
+    property BedTopPestSeriesName: string read GetBedTopPestSeriesName;
+    property BedBottomPestSeriesName: string read GetBedBottomPestSeriesName;
+    property FlowPestSeriesName: string read GetFlowPestSeriesName;
+    property WidthPestSeriesName: string read GetWidthPestSeriesName;
+    property SlopePestSeriesName: string read GetSlopePestSeriesName;
+    property RoughnessPestSeriesName: string read GetRoughnessPestSeriesName;
+
+    property ConductancePestSeriesMethod: TPestParamMethod read GetConductancePestSeriesMethod;
+    property StagePestSeriesMethod: TPestParamMethod read GetStagePestSeriesMethod;
+    property BedTopPestSeriesMethod: TPestParamMethod read GetBedTopPestSeriesMethod;
+    property BedBottomPestSeriesMethod: TPestParamMethod read GetBedBottomPestSeriesMethod;
+    property FlowPestSeriesMethod: TPestParamMethod read GetFlowPestSeriesMethod;
+    property WidthPestSeriesMethod: TPestParamMethod read GetWidthPestSeriesMethod;
+    property SlopePestSeriesMethod: TPestParamMethod read GetSlopePestSeriesMethod;
+    property RoughnessPestSeriesMethod: TPestParamMethod read GetRoughnessPestSeriesMethod;
 
   end;
 
@@ -320,7 +372,25 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+//    property PestElevationObserver: TObserver read GetPestElevationObserver;
+//    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     // @name insures that there are no time gaps in @link(TStrCollection)
     // by filling in any time gaps with inactive TStrItems.
     procedure FixItems;
@@ -341,6 +411,8 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property SegmentNumber: Integer read FSegmentNumber write SetSegmentNumber;
   end;
@@ -1585,6 +1657,21 @@ begin
   result := Values.BedBottomAnnotation;
 end;
 
+function TStr_Cell.GetBedBottomPest: string;
+begin
+  result := Values.BedBottomPest;
+end;
+
+function TStr_Cell.GetBedBottomPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.BedBottomPestSeriesMethod;
+end;
+
+function TStr_Cell.GetBedBottomPestSeriesName: string;
+begin
+  result := Values.BedBottomPestSeriesName;
+end;
+
 function TStr_Cell.GetBedTop: double;
 begin
   result := Values.BedTop;
@@ -1593,6 +1680,21 @@ end;
 function TStr_Cell.GetBedTopAnnotation: string;
 begin
   result := Values.BedTopAnnotation;
+end;
+
+function TStr_Cell.GetBedTopPest: string;
+begin
+  result := Values.BedTopPest;
+end;
+
+function TStr_Cell.GetBedTopPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.BedTopPestSeriesMethod;
+end;
+
+function TStr_Cell.GetBedTopPestSeriesName: string;
+begin
+  result := Values.BedTopPestSeriesName;
 end;
 
 function TStr_Cell.GetColumn: integer;
@@ -1610,6 +1712,21 @@ begin
   result := Values.ConductanceAnnotation;
 end;
 
+function TStr_Cell.GetConductancePest: string;
+begin
+  result := Values.ConductancePest;
+end;
+
+function TStr_Cell.GetConductancePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.ConductancePestSeriesMethod;
+end;
+
+function TStr_Cell.GetConductancePestSeriesName: string;
+begin
+  result := Values.ConductancePestSeriesName;
+end;
+
 function TStr_Cell.GetFlow: double;
 begin
   result := Values.Flow;
@@ -1618,6 +1735,21 @@ end;
 function TStr_Cell.GetFlowAnnotation: string;
 begin
   result := Values.FlowAnnotation;
+end;
+
+function TStr_Cell.GetFlowPest: string;
+begin
+  result := Values.FlowPest;
+end;
+
+function TStr_Cell.GetFlowPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.FlowPestSeriesMethod;
+end;
+
+function TStr_Cell.GetFlowPestSeriesName: string;
+begin
+  result := Values.FlowPestSeriesName;
 end;
 
 function TStr_Cell.GetIntegerAnnotation(Index: integer;
@@ -1682,6 +1814,21 @@ begin
   result := Values.RoughnessAnnotation;
 end;
 
+function TStr_Cell.GetRoughnessPest: string;
+begin
+  result := Values.RoughnessPest;
+end;
+
+function TStr_Cell.GetRoughnessPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.RoughnessPestSeriesMethod;
+end;
+
+function TStr_Cell.GetRoughnessPestSeriesName: string;
+begin
+  result := Values.RoughnessPestSeriesName;
+end;
+
 function TStr_Cell.GetRow: integer;
 begin
   result := Values.Cell.Row;
@@ -1702,6 +1849,21 @@ begin
   result := Values.SlopeAnnotation;
 end;
 
+function TStr_Cell.GetSlopePest: string;
+begin
+  result := Values.SlopePest;
+end;
+
+function TStr_Cell.GetSlopePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.SlopePestSeriesMethod;
+end;
+
+function TStr_Cell.GetSlopePestSeriesName: string;
+begin
+  result := Values.SlopePestSeriesName;
+end;
+
 function TStr_Cell.GetStage: double;
 begin
   result := Values.Stage;
@@ -1712,6 +1874,21 @@ begin
   result := Values.StageAnnotation;
 end;
 
+function TStr_Cell.GetStagePest: string;
+begin
+  result := Values.StagePest;
+end;
+
+function TStr_Cell.GetStagePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.StagePestSeriesMethod;
+end;
+
+function TStr_Cell.GetStagePestSeriesName: string;
+begin
+  result := Values.StagePestSeriesName;
+end;
+
 function TStr_Cell.GetWidth: double;
 begin
   result := Values.Width;
@@ -1720,6 +1897,21 @@ end;
 function TStr_Cell.GetWidthAnnotation: string;
 begin
   result := Values.WidthAnnotation;
+end;
+
+function TStr_Cell.GetWidthPest: string;
+begin
+  result := Values.WidthPest;
+end;
+
+function TStr_Cell.GetWidthPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.WidthPestSeriesMethod;
+end;
+
+function TStr_Cell.GetWidthPestSeriesName: string;
+begin
+  result := Values.WidthPestSeriesName;
 end;
 
 function TStr_Cell.IsIdentical(AnotherCell: TValueCell): boolean;

@@ -600,10 +600,10 @@ begin
     or integer(WidgetFlags_WResizeNoErase);
 end;
 
-{$ELSE}
+{$ELSE}
 
 procedure TGLWidget.CreateParams(var Params: TCreateParams);
-begin
+begin
   inherited;
   with Params do
   begin

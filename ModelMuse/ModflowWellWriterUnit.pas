@@ -516,7 +516,9 @@ begin
       MultiplierValue := Well_Cell.PumpingRate
         / Well_Cell.PumpingParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+    WriteModflowParamFormula(ParameterName, Well_Cell.PumpingRatePest,
+      MultiplierValue, Well_Cell);
+//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else if Model.PestUsed and WritingTemplate
     and ((Well_Cell.PumpingRatePest <> '') or (Well_Cell.PumpingRatePestSeries <> '')) then

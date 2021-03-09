@@ -2490,7 +2490,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowMawUnit, Modflow6ObsUnit, ModflowLakMf6Unit, frameLakeOutletUnit,
   ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
-  framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit;
+  framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit;
 
 resourcestring
   StrMultiply = 'Multiply';
@@ -2732,6 +2732,11 @@ begin
   else if (Sender = frameWellParam.rdgModflowBoundary) then
   begin
     ParameterColumns := [2]
+  end
+  else if (Sender = frameRivParam.rdgModflowBoundary)
+    or (Sender = frameDrtParam.rdgModflowBoundary) then
+  begin
+    ParameterColumns := [2,3,4]
   end;
 
   Assert(ParameterColumns <> []);
@@ -5595,6 +5600,8 @@ begin
   frameDrnParam.OnCheckPestCell := EnablePestCells;
   frameGhbParam.OnCheckPestCell := EnablePestCells;
   frameWellParam.OnCheckPestCell := EnablePestCells;
+  frameRivParam.OnCheckPestCell := EnablePestCells;
+  frameDrtParam.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -17409,6 +17416,11 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetRivBoundary(ScreenObjectList: TList);
+const
+  StagePosition = 0;
+  ConductancePosition = 1;
+  BottomPosition = 2;
+  ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
@@ -17422,6 +17434,16 @@ begin
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FRIV_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FRIV_Node);
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+StagePosition] :=
+    TRivBoundary.DefaultBoundaryMethod(StagePosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
+    TRivBoundary.DefaultBoundaryMethod(ConductancePosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+BottomPosition] :=
+    TRivBoundary.DefaultBoundaryMethod(BottomPosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
 
 function TfrmScreenObjectProperties.GetSfrParser(Sender: TObject): TRbwParser;
@@ -18826,6 +18848,11 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetDrtBoundary(ScreenObjectList: TList);
+const
+  ElevationPosition = 0;
+  ConductancePosition = 1;
+  ReturnPosition = 2;
+  ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
@@ -18993,6 +19020,16 @@ begin
   Parameter := ptDRT;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FDRT_Node);
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ElevationPosition] :=
+    TDrtBoundary.DefaultBoundaryMethod(ElevationPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
+    TDrtBoundary.DefaultBoundaryMethod(ConductancePosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ReturnPosition] :=
+    TDrtBoundary.DefaultBoundaryMethod(ReturnPosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
 
 procedure TfrmScreenObjectProperties.CreateBoundaryFormula(const DataGrid:
@@ -24235,6 +24272,9 @@ begin
     ParamType := ptDRT;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FDRT_Node);
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FDRT_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -24339,6 +24379,9 @@ begin
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FRIV_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FRIV_Node);
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FRIV_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -24752,7 +24795,10 @@ begin
     PestParamAllowed :=
       (DataGrid = frameDrnParam.rdgModflowBoundary)
       or (DataGrid = frameGhbParam.rdgModflowBoundary)
-      or (DataGrid = frameWellParam.rdgModflowBoundary);
+      or (DataGrid = frameWellParam.rdgModflowBoundary)
+      or (DataGrid = frameRivParam.rdgModflowBoundary)
+      or (DataGrid = frameDrtParam.rdgModflowBoundary)
+      ;
 
     // get the orientation of the data set.
     if (DataGrid = frameRchParam.rdgModflowBoundary)

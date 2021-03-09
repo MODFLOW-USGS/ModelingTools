@@ -379,7 +379,9 @@ begin
       MultiplierValue := Ghb_Cell.Conductance
         / Ghb_Cell.ConductanceParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+    WriteModflowParamFormula(ParameterName, Ghb_Cell.ConductancePest,
+      MultiplierValue, Ghb_Cell);
+//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else if Model.PestUsed and WritingTemplate
     and ((Ghb_Cell.ConductancePest <> '') or (Ghb_Cell.ConductancePestSeries <> '')) then

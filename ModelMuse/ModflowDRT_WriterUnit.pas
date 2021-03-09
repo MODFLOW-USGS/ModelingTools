@@ -13,10 +13,12 @@ type
     MXL: integer;
     FCells: array of array of TDrt_Cell;
     MXADRT: integer;
+    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSets2And3;
     procedure WriteDataSets4To6;
     procedure InitializeCells;
+    procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
     class function Extension: string; override;
@@ -25,12 +27,12 @@ type
     procedure GetOption(var Option: string); override;
     function Package: TModflowPackageSelection; override;
     function ParameterType: TParameterType; override;
+    procedure WriteCell(Cell: TValueCell;
+      const DataSetIdentifier, VariableIdentifiers: string); override;
     procedure WriteParameterCells(CellList: TValueCellList; NLST: Integer;
       const VariableIdentifiers, DataSetIdentifier: string;
       AssignmentMethod: TUpdateMethod; MultiplierArrayNames: TTransientMultCollection;
       ZoneArrayNames: TTransientZoneCollection); override;
-    procedure WriteCell(Cell: TValueCell;
-      const DataSetIdentifier, VariableIdentifiers: string); override;
     procedure CheckCell(ValueCell: TValueCell; const PackageName: string); override;
     procedure DoBeforeWriteCells; override;
     procedure Evaluate; override;
@@ -244,6 +246,7 @@ var
   Drt_Cell: TDrt_Cell;
   LocalLayer: integer;
   Limit: Integer;
+  DataArray: TDataArray;
 begin
   Drt_Cell := Cell as TDrt_Cell;
   LocalLayer := Model.
@@ -251,8 +254,80 @@ begin
   WriteInteger(LocalLayer);
   WriteInteger(Drt_Cell.Row+1);
   WriteInteger(Drt_Cell.Column+1);
-  WriteFloat(Drt_Cell.Elevation);
-  WriteFloat(Drt_Cell.Conductance);
+
+  if (Drt_Cell.ElevationPest <> '')
+    or (Drt_Cell.ConductancePest <> '')
+    or (Drt_Cell.ReturnFractionPest <> '')
+    or (Drt_Cell.ElevationPestSeries <> '')
+    or (Drt_Cell.ConductancePestSeries <> '')
+    or (Drt_Cell.ReturnFractionPestSeries <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
+  if Model.PestUsed and WritingTemplate and
+    ((Drt_Cell.ElevationPest <> '') or (Drt_Cell.ElevationPestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Drt_Cell.Elevation, Drt_Cell.ElevationPest,
+      Drt_Cell.ElevationPestSeries, Drt_Cell.ElevationPestSeriesMethod, Drt_Cell);
+  end
+  else
+  begin
+    WriteFloat(Drt_Cell.Elevation);
+    if Drt_Cell.ElevationPest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drt_Cell.ElevationPest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Drt_Cell.ElevationPestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drt_Cell.ElevationPestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+  end;
+
+  if Model.PestUsed and WritingTemplate
+    and ((Drt_Cell.ConductancePest <> '') or (Drt_Cell.ConductancePestSeries <> '')) then
+  begin
+    WritePestTemplateFormula(Drt_Cell.Conductance, Drt_Cell.ConductancePest,
+      Drt_Cell.ConductancePestSeries, Drt_Cell.ConductancePestSeriesMethod,
+      Drt_Cell);
+  end
+  else
+  begin
+    WriteFloat(Drt_Cell.Conductance);
+    if Drt_Cell.ConductancePest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drt_Cell.ConductancePest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Drt_Cell.ConductancePestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Drt_Cell.ConductancePestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+  end;
+
+
+
+//  WriteFloat(Drt_Cell.Elevation);
+//  WriteFloat(Drt_Cell.Conductance);
   WriteInteger(Drt_Cell.ReturnCell.Layer);
   if Model.ModelSelection = msModflowFmp then
   begin
@@ -262,11 +337,43 @@ begin
   begin
     Limit := 1;
   end;
+
   if Drt_Cell.ReturnCell.Layer >= Limit then
   begin
     WriteInteger(Drt_Cell.ReturnCell.Row);
     WriteInteger(Drt_Cell.ReturnCell.Column);
-    WriteFloat(Drt_Cell.ReturnFraction);
+
+    if Model.PestUsed and WritingTemplate
+      and ((Drt_Cell.ReturnFractionPest <> '') or (Drt_Cell.ReturnFractionPestSeries <> '')) then
+    begin
+      WritePestTemplateFormula(Drt_Cell.ReturnFraction, Drt_Cell.ReturnFractionPest,
+        Drt_Cell.ReturnFractionPestSeries, Drt_Cell.ReturnFractionPestSeriesMethod,
+        Drt_Cell);
+    end
+    else
+    begin
+      WriteFloat(Drt_Cell.ReturnFraction);
+      if Drt_Cell.ReturnFractionPest <> '' then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(
+          Drt_Cell.ReturnFractionPest);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+      if Drt_Cell.ReturnFractionPestSeries <> '' then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(
+          Drt_Cell.ReturnFractionPestSeries);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+    end;
+
+//    WriteFloat(Drt_Cell.ReturnFraction);
   end
   else
   begin
@@ -356,57 +463,86 @@ begin
     begin
       Exit;
     end;
+    FPestParamUsed := False;
     NameOfFile := FileName(AFileName);
     FInputFileName := NameOfFile;
     Evaluate;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin
-      Exit;
+//      Exit;
     end;
     ClearTimeLists(Model);
-    OpenFile(FileName(AFileName));
-    try
-      frmProgressMM.AddMessage(StrWritingDRNPackage);
-      frmProgressMM.AddMessage(StrWritingDataSet0);
-      WriteDataSet0;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
+    FNameOfFile := FileName(AFileName);
 
-      frmProgressMM.AddMessage(StrWritingDataSet1);
-      WriteDataSet1;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
+    WriteFileInternal;
 
-      if MXADRT = 0 then
-      begin
-        frmErrorsAndWarnings.AddWarning(Model, StrNoDrainReturnCell, StrBecauseNoDrainRet);
-        Exit;
-      end;
-
-      WriteToNameFile(StrDRT, Model.UnitNumbers.UnitNumber(StrDRT), NameOfFile, foInput, Model);
-
-      frmProgressMM.AddMessage(StrWritingDataSets2and3);
-      WriteDataSets2And3;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingDataSets4to6);
-      WriteDataSets4To6;
-    finally
-      CloseFile;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
     end;
+
+    if Model.PestUsed and FPestParamUsed then
+    begin
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+    end;
+
   finally
     frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
+procedure TModflowDRT_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingDRNPackage);
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet1);
+    WriteDataSet1;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    if MXADRT = 0 then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrNoDrainReturnCell,
+        StrBecauseNoDrainRet);
+    end;
+
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDRT, Model.UnitNumbers.UnitNumber(StrDRT), FNameOfFile,
+        foInput, Model);
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets2and3);
+    WriteDataSets2And3;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+    frmProgressMM.AddMessage(StrWritingDataSets4to6);
+    WriteDataSets4To6;
+  finally
+    CloseFile;
   end;
 end;
 

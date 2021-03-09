@@ -296,6 +296,9 @@ type
     function GetPestRiverBottomObserver: TObserver;
     function GetPestRiverStageObserver: TObserver;
 //    procedure SetInterp(const Value: TMf6InterpolationMethods);
+    procedure InvalidateStageData(Sender: TObject);
+    procedure InvalidateConductanceData(Sender: TObject);
+    procedure InvalidateRiverBottomData(Sender: TObject);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -1349,7 +1352,7 @@ begin
       end;
     BottomPosition:
       begin
-        result := PestRiverSBottomFormula;
+        result := PestRiverBottomFormula;
       end;
     else
       Assert(False);
@@ -1429,7 +1432,7 @@ begin
   if FPestRiverStageObserver = nil then
   begin
     CreateObserver('PestConductance_', FPestRiverStageObserver, nil);
-    FPestRiverStageObserver.OnUpToDateSet := InvalidateStageBottomData;
+    FPestRiverStageObserver.OnUpToDateSet := InvalidateStageData;
   end;
   result := FPestRiverStageObserver;
 end;
@@ -1475,6 +1478,33 @@ begin
   InvalidateDisplay;
 end;
 
+procedure TRivBoundary.InvalidateConductanceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfRivConductance(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfRivConductance(self);
+    end;
+  end;
+end;
+
 procedure TRivBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1486,6 +1516,60 @@ begin
     Model.InvalidateMfRivConductance(self);
     Model.InvalidateMfRivStage(self);
     Model.InvalidateMfRivBottom(self);
+  end;
+end;
+
+procedure TRivBoundary.InvalidateRiverBottomData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfRivBottom(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfRivBottom(self);
+    end;
+  end;
+end;
+
+procedure TRivBoundary.InvalidateStageData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfRivStage(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfRivStage(self);
+    end;
   end;
 end;
 
