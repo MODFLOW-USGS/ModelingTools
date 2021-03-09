@@ -847,6 +847,8 @@ resourcestring
   StrSPerUnitLength = '%s  per unit length or area';
   StrTotalSPerLayer = 'Total %s (per layer)';
   StrTotalS = ' total %s (per layer)';
+  StrMultiply = 'Multiply';
+  StrAdd = 'Add';
 
 
 const

@@ -2493,8 +2493,6 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit;
 
 resourcestring
-  StrMultiply = 'Multiply';
-  StrAdd = 'Add';
   StrConcentrationObserv = 'Concentration Observations: ';
   StrFluxObserv = 'Flux Observations: ';
   StrUseToSetGridElem = 'Use to set grid element size';
@@ -2636,7 +2634,7 @@ resourcestring
   StrGeneralizedFlowObs = 'Generalized Flow Observations';
   StrGeneralizedTranspor = 'Generalized Transport Observations';
   StrSpecifiedFlowObser = 'Specified Flow Observations';
-  StrNone = 'none';
+//  StrNone = 'none';
 //  StrMassOrEnergyFlux = 'Mass or Energy Flux';
 
 {$R *.dfm}
@@ -2737,6 +2735,10 @@ begin
     or (Sender = frameDrtParam.rdgModflowBoundary) then
   begin
     ParameterColumns := [2,3,4]
+  end
+  else if (Sender = frameScreenObjectSTR.rdgModflowBoundary) then
+  begin
+    ParameterColumns := [4..11];
   end;
 
   Assert(ParameterColumns <> []);
@@ -5602,6 +5604,7 @@ begin
   frameWellParam.OnCheckPestCell := EnablePestCells;
   frameRivParam.OnCheckPestCell := EnablePestCells;
   frameDrtParam.OnCheckPestCell := EnablePestCells;
+  frameScreenObjectStr.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -6178,7 +6181,14 @@ begin
     Assert(False);
     Exit;
   end;
-  Grid.Cells[ACol, PestModifierRow] := Value;
+  if Value = '' then
+  begin
+    Grid.Cells[ACol, PestModifierRow] := strNone;
+  end
+  else
+  begin
+    Grid.Cells[ACol, PestModifierRow] := Value;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.GetObjectLabelForAdditionalScreenObject(
@@ -12212,6 +12222,10 @@ begin
     Exit;
   end;
   result := Grid.Cells[ACol, PestModifierRow];
+  if result = strNone then
+  begin
+    result := ''
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.GetPestModifiers(
@@ -24798,6 +24812,7 @@ begin
       or (DataGrid = frameWellParam.rdgModflowBoundary)
       or (DataGrid = frameRivParam.rdgModflowBoundary)
       or (DataGrid = frameDrtParam.rdgModflowBoundary)
+      or (DataGrid = frameScreenObjectStr.rdgModflowBoundary)
       ;
 
     // get the orientation of the data set.

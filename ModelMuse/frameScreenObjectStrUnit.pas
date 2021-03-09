@@ -54,8 +54,8 @@ implementation
 uses
   frmGoPhastUnit, GoPhastTypes, ModflowTransientListParameterUnit,
   OrderedCollectionUnit, frmScreenObjectPropertiesUnit,
-  ScreenObjectUnit,
-  ModflowTimeUnit, ModflowBoundaryUnit;
+  ScreenObjectUnit, ModflowTimeUnit, ModflowBoundaryUnit,
+  frameScreenObjectNoParamUnit, frmCustomGoPhastUnit;
 
 resourcestring
   StrOutflowSegmentItr = 'Outflow segment (Itrib)';
@@ -78,12 +78,23 @@ resourcestring
 
 procedure TframeScreenObjectStr.AssignFirstItem(
   LocalList: TList<TStrBoundary>);
+const
+  StreamConductancePosition = 0;
+  StreamBedTopPosition = 1;
+  StreamBedBottomPosition = 2;
+  StreamFlowPosition = 3;
+  StreamStagePosition = 4;
+  StreamWidthPosition = 5;
+  StreamSlopePosition = 6;
+  StreamRoughnessPosition = 7;
+  ColumnOffset = 4;
 var
   Boundary: TStrBoundary;
   ParamItem: TStrParamItem;
   Item: TStrItem;
   Values: TStrCollection;
   ItemIndex: Integer;
+//  Index: Integer;
 begin
   Boundary := LocalList[0];
   seSegmentNumber.Enabled := True;
@@ -111,26 +122,48 @@ begin
   for ItemIndex := 0 to Values.Count - 1 do
   begin
     Item := Values[ItemIndex] as TStrItem;
-    rdgModflowBoundary.Cells[Ord(stcStartTime), ItemIndex+1] :=
+    rdgModflowBoundary.Cells[Ord(stcStartTime), ItemIndex+1+PestRowOffset] :=
       FloatToStr(Item.StartTime);
-    rdgModflowBoundary.Cells[Ord(stcEndTime), ItemIndex+1] :=
+    rdgModflowBoundary.Cells[Ord(stcEndTime), ItemIndex+1+PestRowOffset] :=
       FloatToStr(Item.EndTime);
-    rdgModflowBoundary.Cells[Ord(stcDownstreamSegment), ItemIndex+1] :=
+    rdgModflowBoundary.Cells[Ord(stcDownstreamSegment), ItemIndex+1+PestRowOffset] :=
       IntToStr(Item.OutflowSegment);
-    rdgModflowBoundary.Cells[Ord(stcDiversionSegment), ItemIndex+1] :=
+    rdgModflowBoundary.Cells[Ord(stcDiversionSegment), ItemIndex+1+PestRowOffset] :=
       IntToStr(Item.DiversionSegment);
-    rdgModflowBoundary.Cells[Ord(stcFlow), ItemIndex+1] := Item.Flow;
-    rdgModflowBoundary.Cells[Ord(stcStage), ItemIndex+1] := Item.Stage;
-    rdgModflowBoundary.Cells[Ord(stcCond), ItemIndex+1] := Item.Conductance;
-    rdgModflowBoundary.Cells[Ord(stcSbot), ItemIndex+1] := Item.BedBottom;
-    rdgModflowBoundary.Cells[Ord(stcStop), ItemIndex+1] := Item.BedTop;
+    rdgModflowBoundary.Cells[Ord(stcFlow), ItemIndex+1+PestRowOffset] := Item.Flow;
+    rdgModflowBoundary.Cells[Ord(stcStage), ItemIndex+1+PestRowOffset] := Item.Stage;
+    rdgModflowBoundary.Cells[Ord(stcCond), ItemIndex+1+PestRowOffset] := Item.Conductance;
+    rdgModflowBoundary.Cells[Ord(stcSbot), ItemIndex+1+PestRowOffset] := Item.BedBottom;
+    rdgModflowBoundary.Cells[Ord(stcStop), ItemIndex+1+PestRowOffset] := Item.BedTop;
     if FCalculateStage then
     begin
-      rdgModflowBoundary.Cells[Ord(stcWidth), ItemIndex+1] := Item.Width;
-      rdgModflowBoundary.Cells[Ord(stcSlope), ItemIndex+1] := Item.Slope;
-      rdgModflowBoundary.Cells[Ord(stcRough), ItemIndex+1] := Item.Roughness;
+      rdgModflowBoundary.Cells[Ord(stcWidth), ItemIndex+1+PestRowOffset] := Item.Width;
+      rdgModflowBoundary.Cells[Ord(stcSlope), ItemIndex+1+PestRowOffset] := Item.Slope;
+      rdgModflowBoundary.Cells[Ord(stcRough), ItemIndex+1+PestRowOffset] := Item.Roughness;
     end;
   end;
+
+  {$IFDEF PEST}
+
+  PestMethod[Ord(stcFlow)] := Boundary.PestBoundaryMethod[StreamFlowPosition];
+  PestMethod[Ord(stcStage)] := Boundary.PestBoundaryMethod[StreamStagePosition];
+  PestMethod[Ord(stcCond)] := Boundary.PestBoundaryMethod[StreamConductancePosition];
+  PestMethod[Ord(stcSbot)] := Boundary.PestBoundaryMethod[StreamBedBottomPosition];
+  PestMethod[Ord(stcStop)] := Boundary.PestBoundaryMethod[StreamBedTopPosition];
+  PestMethod[Ord(stcWidth)] := Boundary.PestBoundaryMethod[StreamWidthPosition];
+  PestMethod[Ord(stcSlope)] := Boundary.PestBoundaryMethod[StreamSlopePosition];
+  PestMethod[Ord(stcRough)] := Boundary.PestBoundaryMethod[StreamRoughnessPosition];
+
+  PestModifier[Ord(stcFlow)] := Boundary.PestBoundaryFormula[StreamFlowPosition];
+  PestModifier[Ord(stcStage)] := Boundary.PestBoundaryFormula[StreamStagePosition];
+  PestModifier[Ord(stcCond)] := Boundary.PestBoundaryFormula[StreamConductancePosition];
+  PestModifier[Ord(stcSbot)] := Boundary.PestBoundaryFormula[StreamBedBottomPosition];
+  PestModifier[Ord(stcStop)] := Boundary.PestBoundaryFormula[StreamBedTopPosition];
+  PestModifier[Ord(stcWidth)] := Boundary.PestBoundaryFormula[StreamWidthPosition];
+  PestModifier[Ord(stcSlope)] := Boundary.PestBoundaryFormula[StreamSlopePosition];
+  PestModifier[Ord(stcRough)] := Boundary.PestBoundaryFormula[StreamRoughnessPosition];
+
+  {$ENDIF}
 
 end;
 
@@ -213,6 +246,7 @@ begin
       LocalList.Free;
     end;
     UpdateConductanceCaption;
+    rdgModflowBoundary.HideEditor;
   finally
     FGettingData := False;
   end;
@@ -221,6 +255,16 @@ end;
 type TGridCrack = class(TStringGrid);
 
 procedure TframeScreenObjectStr.InitializeControls;
+const
+  StreamConductancePosition = 0;
+  StreamBedTopPosition = 1;
+  StreamBedBottomPosition = 2;
+  StreamFlowPosition = 3;
+  StreamStagePosition = 4;
+  StreamWidthPosition = 5;
+  StreamSlopePosition = 6;
+  StreamRoughnessPosition = 7;
+  ColumnOffset = 4;
 var
   Parameters: TModflowTransientListParameters;
   ParamIndex: Integer;
@@ -231,6 +275,7 @@ var
   EndTimes: TStrings;
   TimeIndex: Integer;
   StressPeriod: TModflowStressPeriod;
+//  MethodIndex: Integer;
 begin
   comboFormulaInterp.ItemIndex := 0;
   Parameters := frmGoPhast.PhastModel.ModflowTransientParameters;
@@ -356,6 +401,20 @@ begin
       rdgModflowBoundary.Columns[ColIndex].ButtonCaption := StrF;
       rdgModflowBoundary.Columns[ColIndex].ButtonWidth := 40;
     end;
+
+    {$IFDEF PEST}
+    rdgModflowBoundary.Cells[0,PestMethodRow] := StrModificationMethod;
+    rdgModflowBoundary.Cells[0,PestModifierRow] := StrPestModifier;
+
+    PestMethod[Ord(stcFlow)] := TStrBoundary.DefaultBoundaryMethod(StreamFlowPosition);
+    PestMethod[Ord(stcStage)] := TStrBoundary.DefaultBoundaryMethod(StreamStagePosition);
+    PestMethod[Ord(stcCond)] := TStrBoundary.DefaultBoundaryMethod(StreamConductancePosition);
+    PestMethod[Ord(stcSbot)] := TStrBoundary.DefaultBoundaryMethod(StreamBedBottomPosition);
+    PestMethod[Ord(stcStop)] := TStrBoundary.DefaultBoundaryMethod(StreamBedTopPosition);
+    PestMethod[Ord(stcWidth)] := TStrBoundary.DefaultBoundaryMethod(StreamWidthPosition);
+    PestMethod[Ord(stcSlope)] := TStrBoundary.DefaultBoundaryMethod(StreamSlopePosition);
+    PestMethod[Ord(stcRough)] := TStrBoundary.DefaultBoundaryMethod(StreamRoughnessPosition);
+    {$ENDIF}
   finally
     rdgModflowBoundary.EndUpdate
   end;
@@ -381,6 +440,16 @@ end;
 
 procedure TframeScreenObjectStr.SetData(List: TScreenObjectEditCollection;
   SetAll, ClearAll: boolean);
+const
+  StreamConductancePosition = 0;
+  StreamBedTopPosition = 1;
+  StreamBedBottomPosition = 2;
+  StreamFlowPosition = 3;
+  StreamStagePosition = 4;
+  StreamWidthPosition = 5;
+  StreamSlopePosition = 6;
+  StreamRoughnessPosition = 7;
+  ColumnOffset = 4;
 var
   Index: Integer;
   Item: TScreenObjectEditItem;
@@ -395,6 +464,7 @@ var
   StrItem: TStrItem;
   SegNum: Integer;
   Formula: string;
+  MethodIndex: Integer;
 begin
   for Index := 0 to List.Count - 1 do
   begin
@@ -458,8 +528,10 @@ begin
       ItemIndex := 0;
       for RowIndex := 1 to seNumberOfTimes.AsInteger do
       begin
-        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(stcStartTime), RowIndex], StartTime)
-          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(stcEndTime), RowIndex], EndTime) then
+        if TryStrToFloat(rdgModflowBoundary.Cells[
+          Ord(stcStartTime), RowIndex+PestRowOffset], StartTime)
+          and TryStrToFloat(rdgModflowBoundary.Cells[
+          Ord(stcEndTime), RowIndex+PestRowOffset], EndTime) then
         begin
           if ItemIndex >= Values.Count then
           begin
@@ -474,42 +546,42 @@ begin
           StrItem.EndTime := EndTime;
 
           if TryStrToInt(rdgModflowBoundary.Cells[
-            Ord(stcDownstreamSegment), RowIndex], SegNum) then
+            Ord(stcDownstreamSegment), RowIndex+PestRowOffset], SegNum) then
           begin
             StrItem.OutflowSegment := SegNum
           end;
 
           if TryStrToInt(rdgModflowBoundary.Cells[
-            Ord(stcDiversionSegment), RowIndex], SegNum) then
+            Ord(stcDiversionSegment), RowIndex+PestRowOffset], SegNum) then
           begin
             StrItem.DiversionSegment := SegNum
           end;
 
-          Formula := rdgModflowBoundary.Cells[Ord(stcFlow), RowIndex];
+          Formula := rdgModflowBoundary.Cells[Ord(stcFlow), RowIndex+PestRowOffset];
           if Formula <> '' then
           begin
             StrItem.Flow := Formula;
           end;
 
-          Formula := rdgModflowBoundary.Cells[Ord(stcStage), RowIndex];
+          Formula := rdgModflowBoundary.Cells[Ord(stcStage), RowIndex+PestRowOffset];
           if Formula <> '' then
           begin
             StrItem.Stage := Formula;
           end;
 
-          Formula := rdgModflowBoundary.Cells[Ord(stcCond), RowIndex];
+          Formula := rdgModflowBoundary.Cells[Ord(stcCond), RowIndex+PestRowOffset];
           if Formula <> '' then
           begin
             StrItem.Conductance := Formula;
           end;
 
-          Formula := rdgModflowBoundary.Cells[Ord(stcSbot), RowIndex];
+          Formula := rdgModflowBoundary.Cells[Ord(stcSbot), RowIndex+PestRowOffset];
           if Formula <> '' then
           begin
             StrItem.BedBottom := Formula;
           end;
 
-          Formula := rdgModflowBoundary.Cells[Ord(stcStop), RowIndex];
+          Formula := rdgModflowBoundary.Cells[Ord(stcStop), RowIndex+PestRowOffset];
           if Formula <> '' then
           begin
             StrItem.BedTop := Formula;
@@ -517,19 +589,19 @@ begin
 
           if FCalculateStage then
           begin
-            Formula := rdgModflowBoundary.Cells[Ord(stcWidth), RowIndex];
+            Formula := rdgModflowBoundary.Cells[Ord(stcWidth), RowIndex+PestRowOffset];
             if Formula <> '' then
             begin
               StrItem.Width := Formula;
             end;
 
-            Formula := rdgModflowBoundary.Cells[Ord(stcSlope), RowIndex];
+            Formula := rdgModflowBoundary.Cells[Ord(stcSlope), RowIndex+PestRowOffset];
             if Formula <> '' then
             begin
               StrItem.Slope := Formula;
             end;
 
-            Formula := rdgModflowBoundary.Cells[Ord(stcRough), RowIndex];
+            Formula := rdgModflowBoundary.Cells[Ord(stcRough), RowIndex+PestRowOffset];
             if Formula <> '' then
             begin
               StrItem.Roughness := Formula;
@@ -539,8 +611,88 @@ begin
       end;
       Values.Count := ItemIndex;
     end;
-  end;
+    {$IFDEF PEST}
+    if rdgModflowBoundary.Cells[Ord(stcFlow),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamFlowPosition] := PestMethod[Ord(stcFlow)];
+    end;
 
+    if rdgModflowBoundary.Cells[Ord(stcStage),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamStagePosition] := PestMethod[Ord(stcStage)];
+    end;
+
+    if rdgModflowBoundary.Cells[Ord(stcCond),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamConductancePosition] := PestMethod[Ord(stcCond)];
+    end;
+
+    if rdgModflowBoundary.Cells[Ord(stcSbot),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamBedBottomPosition] := PestMethod[Ord(stcSbot)];
+    end;
+
+    if rdgModflowBoundary.Cells[Ord(stcStop),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamBedTopPosition] := PestMethod[Ord(stcStop)];
+    end;
+
+    if rdgModflowBoundary.Cells[Ord(stcWidth),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamWidthPosition] := PestMethod[Ord(stcWidth)];
+    end;
+
+    if rdgModflowBoundary.Cells[Ord(stcSlope),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamSlopePosition] := PestMethod[Ord(stcSlope)];
+    end;
+
+    if rdgModflowBoundary.Cells[Ord(stcRough),PestMethodRow] <> '' then
+    begin
+      Boundary.PestBoundaryMethod[StreamRoughnessPosition] := PestMethod[Ord(stcRough)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcFlow),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamFlowPosition] := PestModifier[Ord(stcFlow)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcStage),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamStagePosition] := PestModifier[Ord(stcStage)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcCond),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamConductancePosition] := PestModifier[Ord(stcCond)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcSbot),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamBedBottomPosition] := PestModifier[Ord(stcSbot)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcStop),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamBedTopPosition] := PestModifier[Ord(stcStop)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcWidth),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamWidthPosition] := PestModifier[Ord(stcWidth)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcSlope),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamSlopePosition] := PestModifier[Ord(stcSlope)];
+    end;
+
+    if (rdgModflowBoundary.Cells[Ord(stcRough),PestModifierRow] <> '') then
+    begin
+      Boundary.PestBoundaryFormula[StreamRoughnessPosition] := PestModifier[Ord(stcRough)];
+    end;
+    {$ENDIF}
+  end;
 end;
 
 procedure TframeScreenObjectStr.UpdateConductanceCaption;
@@ -567,6 +719,16 @@ begin
 end;
 
 function TframeScreenObjectStr.UpdateTimeTable(Boundary: TStrBoundary): boolean;
+const
+  StreamConductancePosition = 0;
+  StreamBedTopPosition = 1;
+  StreamBedBottomPosition = 2;
+  StreamFlowPosition = 3;
+  StreamStagePosition = 4;
+  StreamWidthPosition = 5;
+  StreamSlopePosition = 6;
+  StreamRoughnessPosition = 7;
+  ColumnOffset = 4;
 var
   ParamItem: TStrParamItem;
   Item: TStrItem;
@@ -576,6 +738,7 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   NewItemIndex: Integer;
+  Index: Integer;
 begin
   seSegmentNumber.Enabled := False;
   if comboFormulaInterp.ItemIndex <> Ord(Boundary.FormulaInterpretation) then
@@ -609,6 +772,136 @@ begin
     clbParameters.CheckedIndex := -1;
   end;
 
+  {$IFDEF PEST}
+  if rdgModflowBoundary.Cells[Ord(stcFlow),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcFlow)] <> Boundary.PestBoundaryMethod[StreamFlowPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcFlow),PestMethodRow] := ''
+    end;
+  end;
+
+  if rdgModflowBoundary.Cells[Ord(stcStage),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcStage)] <> Boundary.PestBoundaryMethod[StreamStagePosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcStage),PestMethodRow] := ''
+    end;
+  end;
+
+  if rdgModflowBoundary.Cells[Ord(stcCond),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcCond)] <> Boundary.PestBoundaryMethod[StreamConductancePosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcCond),PestMethodRow] := ''
+    end;
+  end;
+
+  if rdgModflowBoundary.Cells[Ord(stcSbot),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcSbot)] <> Boundary.PestBoundaryMethod[StreamBedBottomPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcSbot),PestMethodRow] := ''
+    end;
+  end;
+
+  if rdgModflowBoundary.Cells[Ord(stcStop),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcStop)] <> Boundary.PestBoundaryMethod[StreamBedTopPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcStop),PestMethodRow] := ''
+    end;
+  end;
+
+  if rdgModflowBoundary.Cells[Ord(stcWidth),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcWidth)] <> Boundary.PestBoundaryMethod[StreamWidthPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcWidth),PestMethodRow] := ''
+    end;
+  end;
+
+  if rdgModflowBoundary.Cells[Ord(stcSlope),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcSlope)] <> Boundary.PestBoundaryMethod[StreamSlopePosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcSlope),PestMethodRow] := ''
+    end;
+  end;
+
+  if rdgModflowBoundary.Cells[Ord(stcRough),PestMethodRow] <> '' then
+  begin
+    if PestMethod[Ord(stcRough)] <> Boundary.PestBoundaryMethod[StreamRoughnessPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcRough),PestMethodRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcFlow),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcFlow)] <> Boundary.PestBoundaryFormula[StreamFlowPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcFlow),PestModifierRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcStage),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcStage)] <> Boundary.PestBoundaryFormula[StreamStagePosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcStage),PestModifierRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcCond),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcCond)] <> Boundary.PestBoundaryFormula[StreamConductancePosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcCond),PestModifierRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcSbot),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcSbot)] <> Boundary.PestBoundaryFormula[StreamBedBottomPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcSbot),PestModifierRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcStop),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcStop)] <> Boundary.PestBoundaryFormula[StreamBedTopPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcStop),PestModifierRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcWidth),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcWidth)] <> Boundary.PestBoundaryFormula[StreamWidthPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcWidth),PestModifierRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcSlope),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcSlope)] <> Boundary.PestBoundaryFormula[StreamSlopePosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcSlope),PestModifierRow] := ''
+    end;
+  end;
+
+  if (rdgModflowBoundary.Cells[Ord(stcRough),PestModifierRow] <> strNone) then
+  begin
+    if PestModifier[Ord(stcRough)] <> Boundary.PestBoundaryFormula[StreamRoughnessPosition] then
+    begin
+      rdgModflowBoundary.Cells[Ord(stcRough),PestModifierRow] := ''
+    end;
+  end;
+  {$ENDIF}
+
   if Values.Count = seNumberOfTimes.AsInteger then
   begin
     result := True;
@@ -616,23 +909,23 @@ begin
     begin
       Item := Values[ItemIndex] as TStrItem;
       UpdateTimeGridCell(FloatToStr(Item.StartTime),
-        Ord(stcStartTime), ItemIndex+1);
+        Ord(stcStartTime), ItemIndex+1+PestRowOffset);
       UpdateTimeGridCell(FloatToStr(Item.EndTime),
-        Ord(stcEndTime), ItemIndex+1);
+        Ord(stcEndTime), ItemIndex+1+PestRowOffset);
       UpdateTimeGridCell(IntToStr(Item.OutflowSegment),
-        Ord(stcDownstreamSegment), ItemIndex+1);
+        Ord(stcDownstreamSegment), ItemIndex+1+PestRowOffset);
       UpdateTimeGridCell(IntToStr(Item.DiversionSegment),
-        Ord(stcDiversionSegment), ItemIndex+1);
-      UpdateTimeGridCell(Item.Flow, Ord(stcFlow), ItemIndex+1);
-      UpdateTimeGridCell(Item.Stage, Ord(stcStage), ItemIndex+1);
-      UpdateTimeGridCell(Item.Conductance, Ord(stcCond), ItemIndex+1);
-      UpdateTimeGridCell(Item.BedBottom, Ord(stcSbot), ItemIndex+1);
-      UpdateTimeGridCell(Item.BedTop, Ord(stcStop), ItemIndex+1);
+        Ord(stcDiversionSegment), ItemIndex+1+PestRowOffset);
+      UpdateTimeGridCell(Item.Flow, Ord(stcFlow), ItemIndex+1+PestRowOffset);
+      UpdateTimeGridCell(Item.Stage, Ord(stcStage), ItemIndex+1+PestRowOffset);
+      UpdateTimeGridCell(Item.Conductance, Ord(stcCond), ItemIndex+1+PestRowOffset);
+      UpdateTimeGridCell(Item.BedBottom, Ord(stcSbot), ItemIndex+1+PestRowOffset);
+      UpdateTimeGridCell(Item.BedTop, Ord(stcStop), ItemIndex+1+PestRowOffset);
       if FCalculateStage then
       begin
-        UpdateTimeGridCell(Item.Width, Ord(stcWidth), ItemIndex+1);
-        UpdateTimeGridCell(Item.Slope, Ord(stcSlope), ItemIndex+1);
-        UpdateTimeGridCell(Item.Roughness, Ord(stcRough), ItemIndex+1);
+        UpdateTimeGridCell(Item.Width, Ord(stcWidth), ItemIndex+1+PestRowOffset);
+        UpdateTimeGridCell(Item.Slope, Ord(stcSlope), ItemIndex+1+PestRowOffset);
+        UpdateTimeGridCell(Item.Roughness, Ord(stcRough), ItemIndex+1+PestRowOffset);
       end;
     end;
   end

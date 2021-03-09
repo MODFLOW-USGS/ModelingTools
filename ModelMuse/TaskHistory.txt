@@ -27138,5 +27138,13 @@ object TTaskHistory
         'PEST'
         'Dialog boxes'
         'core code')
+    end
+    item
+      Date = 44264.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Dialog boxes'
+        'PEST'
+        'Pest parameter substitution')
     end>
 end

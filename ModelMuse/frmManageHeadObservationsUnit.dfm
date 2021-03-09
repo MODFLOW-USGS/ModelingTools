@@ -101,6 +101,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -124,6 +125,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -151,6 +153,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -177,6 +180,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -200,6 +204,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -223,6 +228,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -246,6 +252,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -269,6 +276,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -298,6 +306,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -450,6 +459,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
         Rows = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -472,6 +482,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -494,6 +505,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -520,6 +532,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -545,6 +558,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -567,6 +581,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -589,6 +604,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -611,6 +627,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -633,6 +650,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -655,6 +673,7 @@ inherited frmManageHeadObservations: TfrmManageHeadObservations
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText

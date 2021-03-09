@@ -291,10 +291,12 @@ begin
       end;
     end;
   end;
-  ObsEdit := rdgObservations.Objects[
-    0,rdgObservations.SelectedRow] as TObsEdit;
-  ObsEdit.ScreenObject.Selected := True;
-
+  if rdgObservations.SelectedRow >= rdgObservations.FixedRows then
+  begin
+    ObsEdit := rdgObservations.Objects[
+      0,rdgObservations.SelectedRow] as TObsEdit;
+    ObsEdit.ScreenObject.Selected := True;
+  end;
 
   Undo.SetPostSelection;
 

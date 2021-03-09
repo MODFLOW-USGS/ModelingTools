@@ -355,10 +355,75 @@ type
   TStrBoundary = class(TSpecificModflowBoundary)
   private
     FSegmentNumber: Integer;
+    FConductancePestMethod: TPestParamMethod;
+    FRoughnessPestMethod: TPestParamMethod;
+    FSlopePestMethod: TPestParamMethod;
+    FWidthPestMethod: TPestParamMethod;
+    FFlowPestMethod: TPestParamMethod;
+    FBedBottomPestMethod: TPestParamMethod;
+    FStagePestMethod: TPestParamMethod;
+    FBedTopPestMethod: TPestParamMethod;
+    FStreamConductanceFormula: TFormulaObject;
+    FStreamBedTopFormula: TFormulaObject;
+    FStreamBedBottomFormula: TFormulaObject;
+    FStreamFlowFormula: TFormulaObject;
+    FStreamStageFormula: TFormulaObject;
+    FStreamWidthFormula: TFormulaObject;
+    FStreamSlopeFormula: TFormulaObject;
+    FStreamRoughnessFormula: TFormulaObject;
+    FBedBottomPestObserver: TObserver;
+    FBedTopPestObserver: TObserver;
+    FConductancePestObserver: TObserver;
+    FRoughnessPestObserver: TObserver;
+    FStagePestObserver: TObserver;
+    FWidthPestObserver: TObserver;
+    FSlopePestObserver: TObserver;
+    FFlowPestObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
     procedure SetSegmentNumber(const Value: Integer);
+    function GetBedBottomPest: string;
+    function GetBedBottomPestObserver: TObserver;
+    function GetBedTopPest: string;
+    function GetBedTopPestObserver: TObserver;
+    function GetConductancePest: string;
+    function GetConductancePestObserver: TObserver;
+    function GetFlowPest: string;
+    function GetFlowPestObserver: TObserver;
+    function GetRoughnessPest: string;
+    function GetRoughnessPestObserver: TObserver;
+    function GetSlopePest: string;
+    function GetSlopePestObserver: TObserver;
+    function GetStagePest: string;
+    function GetStagePestObserver: TObserver;
+    function GetWidthPest: string;
+    function GetWidthPestObserver: TObserver;
+    procedure SetBedBottomPest(const Value: string);
+    procedure SetBedTopPest(const Value: string);
+    procedure SetConductancePest(const Value: string);
+    procedure SetFlowPest(const Value: string);
+    procedure SetRoughnessPest(const Value: string);
+    procedure SetSlopePest(const Value: string);
+    procedure SetStagePest(const Value: string);
+    procedure SetWidthPest(const Value: string);
+    procedure SetBedBottomPestMethod(const Value: TPestParamMethod);
+    procedure SetBedTopPestMethod(const Value: TPestParamMethod);
+    procedure SetConductancePestMethod(const Value: TPestParamMethod);
+    procedure SetFlowPestMethod(const Value: TPestParamMethod);
+    procedure SetRoughnessPestMethod(const Value: TPestParamMethod);
+    procedure SetSlopePestMethod(const Value: TPestParamMethod);
+    procedure SetStagePestMethod(const Value: TPestParamMethod);
+    procedure SetWidthPestMethod(const Value: TPestParamMethod);
+    procedure InvalidateStageData(Sender: TObject);
+    procedure InvalidateConductanceData(Sender: TObject);
+    procedure InvalidateBedTopData(Sender: TObject);
+    procedure InvalidateBedBottomData(Sender: TObject);
+    procedure InvalidateFlowData(Sender: TObject);
+    procedure InvalidateWidthData(Sender: TObject);
+    procedure InvalidateSlopeData(Sender: TObject);
+    procedure InvalidateRoughnessData(Sender: TObject);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -379,15 +444,21 @@ type
     procedure CreateFormulaObjects; //override;
     function BoundaryObserverPrefix: string; override;
     procedure CreateObservers; //override;
-//    property PestElevationObserver: TObserver read GetPestElevationObserver;
-//    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
-    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod;
+      override;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
-
+    property ConductancePestObserver: TObserver read GetConductancePestObserver;
+    property StagePestObserver: TObserver read GetStagePestObserver;
+    property BedTopPestObserver: TObserver read GetBedTopPestObserver;
+    property BedBottomPestObserver: TObserver read GetBedBottomPestObserver;
+    property FlowPestObserver: TObserver read GetFlowPestObserver;
+    property WidthPestObserver: TObserver read GetWidthPestObserver;
+    property SlopePestObserver: TObserver read GetSlopePestObserver;
+    property RoughnessPestObserver: TObserver read GetRoughnessPestObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
@@ -396,7 +467,7 @@ type
     procedure FixItems;
     // @name copies @link(SegmentNumber) from the Source
     // @classname to this @classname and then calls inherited Assign.
-    procedure Assign(Source: TPersistent);override;
+    procedure Assign(Source: TPersistent); override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TStrStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -415,6 +486,96 @@ type
       FormulaIndex: integer): TPestParamMethod; override;
   published
     property SegmentNumber: Integer read FSegmentNumber write SetSegmentNumber;
+    property ConductancePest: string read GetConductancePest
+      write SetConductancePest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property StagePest: string read GetStagePest write SetStagePest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property BedTopPest: string read GetBedTopPest write SetBedTopPest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property BedBottomPest: string read GetBedBottomPest write SetBedBottomPest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property FlowPest: string read GetFlowPest write SetFlowPest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property WidthPest: string read GetWidthPest write SetWidthPest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property SlopePest: string read GetSlopePest write SetSlopePest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property RoughnessPest: string read GetRoughnessPest write SetRoughnessPest
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property ConductancePestMethod: TPestParamMethod read FConductancePestMethod
+      write SetConductancePestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property StagePestMethod: TPestParamMethod read FStagePestMethod
+      write SetStagePestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property BedTopPestMethod: TPestParamMethod read FBedTopPestMethod
+      write SetBedTopPestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property BedBottomPestMethod: TPestParamMethod read FBedBottomPestMethod
+      write SetBedBottomPestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property FlowPestMethod: TPestParamMethod read FFlowPestMethod
+      write SetFlowPestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property WidthPestMethod: TPestParamMethod read FWidthPestMethod
+      write SetWidthPestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property SlopePestMethod: TPestParamMethod read FSlopePestMethod
+      write SetSlopePestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property RoughnessPestMethod: TPestParamMethod read FRoughnessPestMethod
+      write SetRoughnessPestMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
   end;
 
 const
@@ -1980,10 +2141,28 @@ end;
 { TStrBoundary }
 
 procedure TStrBoundary.Assign(Source: TPersistent);
+var
+  StrBoundary: TStrBoundary;
+  Index: Integer;
 begin
   if Source is TStrBoundary then
   begin
-    SegmentNumber := TStrBoundary(Source).SegmentNumber;
+    StrBoundary := TStrBoundary(Source);
+    SegmentNumber := StrBoundary.SegmentNumber;
+
+    ConductancePest := StrBoundary.ConductancePest;
+    StagePest := StrBoundary.StagePest;
+    BedTopPest := StrBoundary.BedTopPest;
+    BedBottomPest := StrBoundary.BedBottomPest;
+    FlowPest := StrBoundary.FlowPest;
+    WidthPest := StrBoundary.WidthPest;
+    SlopePest := StrBoundary.SlopePest;
+    RoughnessPest := StrBoundary.RoughnessPest;
+
+    for Index := StreamConductancePosition to StreamRoughnessPosition do
+    begin
+      PestBoundaryMethod[Index] := StrBoundary.PestBoundaryMethod[Index];
+    end;
   end;
   inherited;
 end;
@@ -2048,6 +2227,119 @@ begin
   result := TStrCollection;
 end;
 
+function TStrBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestStr_';
+end;
+
+constructor TStrBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  ConductancePest := '';
+  StagePest := '';
+  BedTopPest := '';
+  BedBottomPest := '';
+  FlowPest := '';
+  WidthPest := '';
+  SlopePest := '';
+  RoughnessPest := '';
+  FConductancePestMethod := DefaultBoundaryMethod(StreamConductancePosition);
+  BedTopPestMethod := DefaultBoundaryMethod(StreamBedTopPosition);
+  BedBottomPestMethod := DefaultBoundaryMethod(StreamBedBottomPosition);
+  FlowPestMethod := DefaultBoundaryMethod(StreamFlowPosition);
+  StagePestMethod := DefaultBoundaryMethod(StreamStagePosition);
+  WidthPestMethod := DefaultBoundaryMethod(StreamWidthPosition);
+  SlopePestMethod := DefaultBoundaryMethod(StreamSlopePosition);
+  RoughnessPestMethod := DefaultBoundaryMethod(StreamRoughnessPosition);
+end;
+
+procedure TStrBoundary.CreateFormulaObjects;
+begin
+  FStreamConductanceFormula := CreateFormulaObjectBlocks(dso3D);
+  FStreamBedTopFormula := CreateFormulaObjectBlocks(dso3D);
+  FStreamBedBottomFormula := CreateFormulaObjectBlocks(dso3D);
+  FStreamFlowFormula := CreateFormulaObjectBlocks(dso3D);
+  FStreamStageFormula := CreateFormulaObjectBlocks(dso3D);
+  FStreamWidthFormula := CreateFormulaObjectBlocks(dso3D);
+  FStreamSlopeFormula := CreateFormulaObjectBlocks(dso3D);
+  FStreamRoughnessFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TStrBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(ConductancePestObserver);
+    FObserverList.Add(StagePestObserver);
+    FObserverList.Add(BedTopPestObserver);
+    FObserverList.Add(BedBottomPestObserver);
+    FObserverList.Add(FlowPestObserver);
+    FObserverList.Add(WidthPestObserver);
+    FObserverList.Add(SlopePestObserver);
+    FObserverList.Add(RoughnessPestObserver);
+  end;
+end;
+
+class function TStrBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    StreamConductancePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    StreamBedTopPosition:
+      begin
+        result := ppmAdd;
+      end;
+    StreamBedBottomPosition:
+      begin
+        result := ppmAdd;
+      end;
+    StreamFlowPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    StreamStagePosition:
+      begin
+        result := ppmAdd;
+      end;
+    StreamWidthPosition:
+      begin
+        result := ppmAdd;
+      end;
+    StreamSlopePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    StreamRoughnessPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+destructor TStrBoundary.Destroy;
+begin
+  ConductancePest := '';
+  StagePest := '';
+  BedTopPest := '';
+  BedBottomPest := '';
+  FlowPest := '';
+  WidthPest := '';
+  SlopePest := '';
+  RoughnessPest := '';
+
+  inherited;
+end;
+
 procedure TStrBoundary.FixItems;
 var
   ParamIndex: Integer;
@@ -2059,6 +2351,44 @@ begin
     Param := Parameters[ParamIndex];
     (Param.Param as TStrCollection).FixItems;
   end;
+end;
+
+function TStrBoundary.GetBedBottomPest: string;
+begin
+  Result := FStreamBedBottomFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamBedBottomPosition);
+  end;
+end;
+
+function TStrBoundary.GetBedBottomPestObserver: TObserver;
+begin
+  if FBedBottomPestObserver = nil then
+  begin
+    CreateObserver('BedBottomPest_', FBedBottomPestObserver, nil);
+    FBedBottomPestObserver.OnUpToDateSet := InvalidateBedBottomData;
+  end;
+  result := FBedBottomPestObserver;
+end;
+
+function TStrBoundary.GetBedTopPest: string;
+begin
+  Result := FStreamBedTopFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamBedTopPosition);
+  end;
+end;
+
+function TStrBoundary.GetBedTopPestObserver: TObserver;
+begin
+  if FBedTopPestObserver = nil then
+  begin
+    CreateObserver('BedTopPest_', FBedTopPestObserver, nil);
+    FBedTopPestObserver.OnUpToDateSet := InvalidateBedTopData;
+  end;
+  result := FBedTopPestObserver;
 end;
 
 procedure TStrBoundary.GetCellValues(ValueTimeList: TList;
@@ -2172,6 +2502,367 @@ begin
   end;
 end;
 
+function TStrBoundary.GetConductancePest: string;
+begin
+  Result := FStreamConductanceFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamConductancePosition);
+  end;
+end;
+
+function TStrBoundary.GetConductancePestObserver: TObserver;
+begin
+  if FConductancePestObserver = nil then
+  begin
+    CreateObserver('ConductancePest_', FConductancePestObserver, nil);
+    FConductancePestObserver.OnUpToDateSet := InvalidateConductanceData;
+  end;
+  result := FConductancePestObserver;
+end;
+
+function TStrBoundary.GetFlowPest: string;
+begin
+  Result := FStreamFlowFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamFlowPosition);
+  end;
+end;
+
+function TStrBoundary.GetFlowPestObserver: TObserver;
+begin
+  if FFlowPestObserver = nil then
+  begin
+    CreateObserver('FlowPest_', FFlowPestObserver, nil);
+    FFlowPestObserver.OnUpToDateSet := InvalidateFlowData;
+  end;
+  result := FFlowPestObserver;
+end;
+
+function TStrBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    StreamConductancePosition:
+      begin
+        result := ConductancePest;
+      end;
+    StreamBedTopPosition:
+      begin
+        result := BedTopPest;
+      end;
+    StreamBedBottomPosition:
+      begin
+        result := BedBottomPest;
+      end;
+    StreamFlowPosition:
+      begin
+        result := FlowPest;
+      end;
+    StreamStagePosition:
+      begin
+        result := StagePest;
+      end;
+    StreamWidthPosition:
+      begin
+        result := WidthPest;
+      end;
+    StreamSlopePosition:
+      begin
+        result := SlopePest;
+      end;
+    StreamRoughnessPosition:
+      begin
+        result := RoughnessPest;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TStrBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    StreamConductancePosition:
+      begin
+        result := ConductancePestMethod;
+      end;
+    StreamBedTopPosition:
+      begin
+        result := BedTopPestMethod;
+      end;
+    StreamBedBottomPosition:
+      begin
+        result := BedBottomPestMethod;
+      end;
+    StreamFlowPosition:
+      begin
+        result := FlowPestMethod;
+      end;
+    StreamStagePosition:
+      begin
+        result := StagePestMethod;
+      end;
+    StreamWidthPosition:
+      begin
+        result := WidthPestMethod;
+      end;
+    StreamSlopePosition:
+      begin
+        result := SlopePestMethod;
+      end;
+    StreamRoughnessPosition:
+      begin
+        result := RoughnessPestMethod;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+procedure TStrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FStreamConductanceFormula then
+  begin
+    if StreamConductancePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamConductancePosition]);
+    end;
+  end;
+
+  if Sender = FStreamBedTopFormula then
+  begin
+    if StreamBedTopPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamBedTopPosition]);
+    end;
+  end;
+
+  if Sender = FStreamBedBottomFormula then
+  begin
+    if StreamBedBottomPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamBedBottomPosition]);
+    end;
+  end;
+
+  if Sender = FStreamFlowFormula then
+  begin
+    if StreamFlowPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamFlowPosition]);
+    end;
+  end;
+
+  if Sender = FStreamStageFormula then
+  begin
+    if StreamStagePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamStagePosition]);
+    end;
+  end;
+
+  if Sender = FStreamWidthFormula then
+  begin
+    if StreamWidthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamWidthPosition]);
+    end;
+  end;
+
+  if Sender = FStreamSlopeFormula then
+  begin
+    if StreamSlopePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamSlopePosition]);
+    end;
+  end;
+
+  if Sender = FStreamRoughnessFormula then
+  begin
+    if StreamRoughnessPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StreamRoughnessPosition]);
+    end;
+  end;
+end;
+
+function TStrBoundary.GetRoughnessPest: string;
+begin
+  Result := FStreamRoughnessFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamRoughnessPosition);
+  end;
+end;
+
+function TStrBoundary.GetRoughnessPestObserver: TObserver;
+begin
+  if FRoughnessPestObserver = nil then
+  begin
+    CreateObserver('RoughnessPest_', FRoughnessPestObserver, nil);
+    FRoughnessPestObserver.OnUpToDateSet := InvalidateRoughnessData;
+  end;
+  result := FRoughnessPestObserver;
+end;
+
+function TStrBoundary.GetSlopePest: string;
+begin
+  Result := FStreamSlopeFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamSlopePosition);
+  end;
+end;
+
+function TStrBoundary.GetSlopePestObserver: TObserver;
+begin
+  if FSlopePestObserver = nil then
+  begin
+    CreateObserver('SlopePest_', FSlopePestObserver, nil);
+    FSlopePestObserver.OnUpToDateSet := InvalidateSlopeData;
+  end;
+  result := FSlopePestObserver;
+end;
+
+function TStrBoundary.GetStagePest: string;
+begin
+  Result := FStreamStageFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamStagePosition);
+  end;
+end;
+
+function TStrBoundary.GetStagePestObserver: TObserver;
+begin
+  if FStagePestObserver = nil then
+  begin
+    CreateObserver('StagePest_', FStagePestObserver, nil);
+    FStagePestObserver.OnUpToDateSet := InvalidateStageData;
+  end;
+  result := FStagePestObserver;
+end;
+
+function TStrBoundary.GetUsedObserver: TObserver;
+begin
+//  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestStr_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+function TStrBoundary.GetWidthPest: string;
+begin
+  Result := FStreamWidthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StreamWidthPosition);
+  end;
+end;
+
+function TStrBoundary.GetWidthPestObserver: TObserver;
+begin
+  if FWidthPestObserver = nil then
+  begin
+    CreateObserver('WidthPest_', FWidthPestObserver, nil);
+    FWidthPestObserver.OnUpToDateSet := InvalidateWidthData;
+  end;
+  result := FWidthPestObserver;
+end;
+
+procedure TStrBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
+procedure TStrBoundary.InvalidateBedBottomData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrBedBottom(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrBedBottom(self);
+    end;
+  end;
+end;
+
+procedure TStrBoundary.InvalidateBedTopData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrBedTop(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrBedTop(self);
+    end;
+  end;
+end;
+
+procedure TStrBoundary.InvalidateConductanceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrConductance(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrConductance(self);
+    end;
+  end;
+end;
+
 procedure TStrBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -2195,6 +2886,141 @@ begin
   end;
 end;
 
+procedure TStrBoundary.InvalidateFlowData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrFlow(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrFlow(self);
+    end;
+  end;
+end;
+
+procedure TStrBoundary.InvalidateRoughnessData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrRoughness(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrRoughness(self);
+    end;
+  end;
+end;
+
+procedure TStrBoundary.InvalidateSlopeData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrSlope(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrSlope(self);
+    end;
+  end;
+end;
+
+procedure TStrBoundary.InvalidateStageData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrStage(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrStage(self);
+    end;
+  end;
+end;
+
+procedure TStrBoundary.InvalidateWidthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfStrWidth(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfStrWidth(self);
+    end;
+  end;
+end;
+
 class function TStrBoundary.ModflowParamItemClass: TModflowParamItemClass;
 begin
   result := TStrParamItem;
@@ -2203,6 +3029,139 @@ end;
 function TStrBoundary.ParameterType: TParameterType;
 begin
   result := ptSTR;
+end;
+
+procedure TStrBoundary.SetBedBottomPest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamBedBottomPosition, FStreamBedBottomFormula);
+end;
+
+procedure TStrBoundary.SetBedBottomPestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FBedBottomPestMethod, Value);
+end;
+
+procedure TStrBoundary.SetBedTopPest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamBedTopPosition, FStreamBedTopFormula);
+end;
+
+procedure TStrBoundary.SetBedTopPestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FBedTopPestMethod, Value);
+end;
+
+procedure TStrBoundary.SetConductancePest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamConductancePosition, FStreamConductanceFormula);
+end;
+
+procedure TStrBoundary.SetConductancePestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FConductancePestMethod, Value);
+end;
+
+procedure TStrBoundary.SetFlowPest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamFlowPosition, FStreamFlowFormula);
+end;
+
+procedure TStrBoundary.SetFlowPestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FFlowPestMethod, Value);
+end;
+
+procedure TStrBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    StreamConductancePosition:
+      begin
+        ConductancePest := Value;
+      end;
+    StreamBedTopPosition:
+      begin
+        BedTopPest := Value;
+      end;
+    StreamBedBottomPosition:
+      begin
+        BedBottomPest := Value;
+      end;
+    StreamFlowPosition:
+      begin
+        FlowPest := Value;
+      end;
+    StreamStagePosition:
+      begin
+        StagePest := Value;
+      end;
+    StreamWidthPosition:
+      begin
+        WidthPest := Value;
+      end;
+    StreamSlopePosition:
+      begin
+        SlopePest := Value;
+      end;
+    StreamRoughnessPosition:
+      begin
+        RoughnessPest := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TStrBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    StreamConductancePosition:
+      begin
+        ConductancePestMethod := Value;
+      end;
+    StreamBedTopPosition:
+      begin
+        BedTopPestMethod := Value;
+      end;
+    StreamBedBottomPosition:
+      begin
+        BedBottomPestMethod := Value;
+      end;
+    StreamFlowPosition:
+      begin
+        FlowPestMethod := Value;
+      end;
+    StreamStagePosition:
+      begin
+        StagePestMethod := Value;
+      end;
+    StreamWidthPosition:
+      begin
+        WidthPestMethod := Value;
+      end;
+    StreamSlopePosition:
+      begin
+        SlopePestMethod := Value;
+      end;
+    StreamRoughnessPosition:
+      begin
+        RoughnessPestMethod := Value;
+      end;
+    else
+      inherited;
+      Assert(False);
+  end;
+end;
+
+procedure TStrBoundary.SetRoughnessPest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamRoughnessPosition, FStreamRoughnessFormula);
+end;
+
+procedure TStrBoundary.SetRoughnessPestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FRoughnessPestMethod, Value);
 end;
 
 procedure TStrBoundary.SetSegmentNumber(const Value: Integer);
@@ -2268,6 +3227,36 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TStrBoundary.SetSlopePest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamSlopePosition, FStreamSlopeFormula);
+end;
+
+procedure TStrBoundary.SetSlopePestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FSlopePestMethod, Value);
+end;
+
+procedure TStrBoundary.SetStagePest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamStagePosition, FStreamStageFormula);
+end;
+
+procedure TStrBoundary.SetStagePestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FStagePestMethod, Value);
+end;
+
+procedure TStrBoundary.SetWidthPest(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StreamWidthPosition, FStreamWidthFormula);
+end;
+
+procedure TStrBoundary.SetWidthPestMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FWidthPestMethod, Value);
 end;
 
 procedure TStrBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,

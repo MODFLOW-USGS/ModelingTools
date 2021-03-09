@@ -91,6 +91,10 @@ type
     function GetDeletedCells(ACol, ARow: integer): boolean;
     // See @link(DeletedCells)
     procedure SetDeletedCells(ACol, ARow: integer; const Value: boolean);
+    function GetPestMethod(ACol: Integer): TPestParamMethod;
+    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
+    function GetPestModifier(ACol: Integer): string;
+    procedure SetPestModifier(ACol: Integer; const Value: string);
 //    function GetPestMethod(ACol: Integer): TPestParamMethod;
 //    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
     { Private declarations }
@@ -124,8 +128,16 @@ type
 //      write SetPestMethod;
     property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
       write FOnCheckPestCell;
+    Property PestMethod[ACol: Integer]: TPestParamMethod
+      read GetPestMethod write SetPestMethod;
+    Property PestModifier[ACol: Integer]: string
+      read GetPestModifier write SetPestModifier;
     { Public declarations }
   end;
+
+resourcestring
+  StrPestModifier = 'Pest Modifier';
+  StrModificationMethod = 'Modification Method';
 
 implementation
 
@@ -134,9 +146,9 @@ uses OrderedCollectionUnit, frmGoPhastUnit, ModflowTimeUnit,
 
 resourcestring
   StrF = 'F()';
-  StrPestModifier = 'Pest Modifier';
-  StrModificationMethod = 'Modification Method';
 
+var
+  FPestMethods: TStringList;
 
 {$R *.dfm}
 
@@ -382,6 +394,44 @@ begin
     rdgModflowBoundary, Col);
 end;
 
+function TframeScreenObjectNoParam.GetPestMethod(
+  ACol: Integer): TPestParamMethod;
+var
+  ItemIndex: Integer;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := ppmMultiply;
+    Assert(False);
+    Exit;
+  end;
+  ItemIndex := FPestMethods.IndexOf(
+    rdgModflowBoundary.Cells[ACol,PestMethodRow]);
+  if ItemIndex >= 0 then
+  begin
+    result := TPestParamMethod(ItemIndex);
+  end
+  else
+  begin
+    result := ppmMultiply;
+  end;
+end;
+
+function TframeScreenObjectNoParam.GetPestModifier(ACol: Integer): string;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := '';
+    Assert(False);
+    Exit;
+  end;
+  result := rdgModflowBoundary.Cells[ACol, PestModifierRow];
+  if result = strNone then
+  begin
+    result := '';
+  end;
+end;
+
 //function TframeScreenObjectNoParam.GetPestMethod(ACol: Integer): TPestParamMethod;
 //var
 //  ItemIndex: Integer;
@@ -526,6 +576,34 @@ begin
   FDeletedCells[ACol, ARow] := Value;
 end;
 
+procedure TframeScreenObjectNoParam.SetPestMethod(ACol: Integer;
+  const Value: TPestParamMethod);
+begin
+  if PestMethodRow = 0 then
+  begin
+    Exit;
+  end;
+  rdgModflowBoundary.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
+end;
+
+procedure TframeScreenObjectNoParam.SetPestModifier(ACol: Integer;
+  const Value: string);
+begin
+  if PestRowOffset = 0 then
+  begin
+    Assert(False);
+    Exit;
+  end;
+  if Value = '' then
+  begin
+    rdgModflowBoundary.Cells[ACol, PestModifierRow] := strNone;
+  end
+  else
+  begin
+    rdgModflowBoundary.Cells[ACol, PestModifierRow] := Value;
+  end;
+end;
+
 //procedure TframeScreenObjectNoParam.SetPestMethod(ACol: Integer;
 //  const Value: TPestParamMethod);
 //begin
@@ -565,5 +643,13 @@ begin
     end;
   end;
 end;
+
+initialization
+  FPestMethods := TStringList.Create;
+  FPestMethods.Add(StrMultiply);
+  FPestMethods.Add(StrAdd);
+
+finalization
+ FPestMethods.Free;
 
 end.

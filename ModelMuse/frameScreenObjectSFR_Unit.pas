@@ -362,7 +362,7 @@ resourcestring
   's when unsaturated flow beneath a stream is simulated.';
   StrSorryICALCCanNot = 'Sorry, ICALC can not be changed to 1 or 2 after the' +
   ' first stress period when unsaturated flow beneath streams is simulated.';
-  StrNone = 'none';
+//  StrNone = 'none';
 
 {$R *.dfm}
 

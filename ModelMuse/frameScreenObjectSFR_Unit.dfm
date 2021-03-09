@@ -401,10 +401,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'Time_Tab'
       Caption = 'Time'
       ImageIndex = 7
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlParamTop: TPanel
         Left = 0
         Top = 0
@@ -519,6 +515,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -542,6 +539,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -565,6 +563,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -588,6 +587,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -611,6 +611,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -741,10 +742,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'Network_Tab'
       Caption = 'Network'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlNetwork: TPanel
         Left = 0
         Top = 0
@@ -840,6 +837,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -863,6 +861,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -886,6 +885,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'Closest'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -910,6 +910,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'Closest'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -934,6 +935,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -974,10 +976,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'Flows_Tab'
       Caption = 'Flows'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object dgFlowTimes: TRbwDataGrid4
         Left = 0
         Top = 57
@@ -1006,6 +1004,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1029,6 +1028,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1052,6 +1052,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1075,6 +1076,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1098,6 +1100,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1121,6 +1124,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1179,10 +1183,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpType = htKeyword
       HelpKeyword = 'Segment_Tab'
       Caption = 'Segment'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter1: TSplitter
         Left = 0
         Top = 209
@@ -1227,6 +1227,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1250,6 +1251,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1273,6 +1275,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1296,6 +1299,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1319,6 +1323,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1342,6 +1347,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1365,6 +1371,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1456,6 +1463,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1479,6 +1487,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1502,6 +1511,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1525,6 +1535,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1548,6 +1559,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1571,6 +1583,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1594,6 +1607,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1656,10 +1670,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'Channel_Tab'
       Caption = 'Channel'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -1705,6 +1715,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1728,6 +1739,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1751,6 +1763,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1774,6 +1787,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1886,10 +1900,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'Equation_Tab'
       Caption = 'Equation'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object dgSfrEquation: TRbwDataGrid4
         Left = 0
         Top = 57
@@ -1917,6 +1927,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1940,6 +1951,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1963,6 +1975,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -1986,6 +1999,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -2009,6 +2023,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -2032,6 +2047,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -2091,10 +2107,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'Flow_Table_Tab'
       Caption = 'Flow Table'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter2: TSplitter
         Left = 218
         Top = 0
@@ -2135,6 +2147,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -2158,6 +2171,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -2193,7 +2207,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             Value = 49.931993375315980000
           end
           item
-            Value = 50.090744101633390000
+            Value = 50.068006624684020000
           end>
         ControlCollection = <
           item
@@ -2645,10 +2659,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
       HelpKeyword = 'External_Flow_File'
       Caption = 'External Flow File'
       ImageIndex = 10
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameExternalFileValues: TframeGrid
         Left = 0
         Top = 145
@@ -2686,6 +2696,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -2709,6 +2720,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -2911,10 +2923,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     object tabObservations: TTabSheet
       Caption = 'Observations'
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameSfrPestObs: TframePestObs
         Left = 0
         Top = 0
