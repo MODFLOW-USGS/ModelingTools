@@ -32668,7 +32668,7 @@ begin
     if (ModelSelection = msModflowFmp)
       and ModflowOutputControl.PrintInputArrays then
     begin
-      FirstLine := FirstLine + ' PROPPRINT”';
+      FirstLine := FirstLine + ' PROPPRINT';
     end;
 
     FPValFile.Insert(0, FirstLine);

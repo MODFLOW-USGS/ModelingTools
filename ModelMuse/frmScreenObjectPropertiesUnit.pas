@@ -2727,7 +2727,8 @@ begin
   begin
     ParameterColumns := [2,3]
   end
-  else if (Sender = frameWellParam.rdgModflowBoundary) then
+  else if (Sender = frameWellParam.rdgModflowBoundary)
+    or (Sender = frameFarmWell.rdgModflowBoundary) then
   begin
     ParameterColumns := [2]
   end
@@ -5605,6 +5606,7 @@ begin
   frameRivParam.OnCheckPestCell := EnablePestCells;
   frameDrtParam.OnCheckPestCell := EnablePestCells;
   frameScreenObjectStr.OnCheckPestCell := EnablePestCells;
+  frameFarmWell.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -17415,6 +17417,9 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetFarmWell(ScreenObjectList: TList);
+const
+  FmpWellMaxPumpingRatePosition = 0;
+  ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
   Parameter: TParameterType;
@@ -17427,6 +17432,12 @@ begin
   Parameter := ptQMAX;
   GetFormulaInterpretation(Frame, Parameter, ScreenObjectList);
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FFarmWell_Node);
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+FmpWellMaxPumpingRatePosition] :=
+    TFmpWellBoundary.DefaultBoundaryMethod(FmpWellMaxPumpingRatePosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
 
 procedure TfrmScreenObjectProperties.GetRivBoundary(ScreenObjectList: TList);
@@ -24332,7 +24343,7 @@ begin
     {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FWEL_Node);
     {$ENDIF}
-    Frame.rdgModflowBoundary.HideEditor;
+//    Frame.rdgModflowBoundary.HideEditor;
 
   end;
 end;
@@ -24363,6 +24374,9 @@ begin
     end;
     StoreFormulaInterpretation(Frame, ParamType);
     StoreModflowBoundary(Frame, ParamType, FFarmWell_Node);
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FFarmWell_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -24813,6 +24827,7 @@ begin
       or (DataGrid = frameRivParam.rdgModflowBoundary)
       or (DataGrid = frameDrtParam.rdgModflowBoundary)
       or (DataGrid = frameScreenObjectStr.rdgModflowBoundary)
+      or (DataGrid = frameFarmWell.rdgModflowBoundary)
       ;
 
     // get the orientation of the data set.

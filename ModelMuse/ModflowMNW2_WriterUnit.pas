@@ -733,8 +733,11 @@ begin
     or FMnwPackage.SummarizeByWell or FMnwPackage.SummarizeByNode then
   begin
     NameOfMnwiFile := ChangeFileExt(AFileName, '.mnwi');
-    WriteToNameFile(StrMNWI, Model.UnitNumbers.UnitNumber(StrMNWI),
-      NameOfMnwiFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrMNWI, Model.UnitNumbers.UnitNumber(StrMNWI),
+        NameOfMnwiFile, foInput, Model);
+    end;
 
     OpenFile(NameOfMnwiFile);
     try
@@ -935,8 +938,11 @@ begin
     WriteString(' # WELLID, UNIT, QNDflag, QBHflag');
     NewLine;
 
-    WriteToNameFile(StrDATA, UNIT_Number,
-      OutputFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, UNIT_Number,
+        OutputFileName, foOutput, Model);
+    end;
 
   {$IFDEF PEST}
     if Boundary.Observations.Count > 0 then
@@ -976,8 +982,11 @@ begin
   begin
     WEL1flag := Model.UnitNumbers.UnitNumber(StrMNWI_Wells);
     OutputFileName := ChangeFileExt(AFileName, '.wel_out');
-    WriteToNameFile(StrDATA, WEL1flag,
-      OutputFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, WEL1flag,
+        OutputFileName, foOutput, Model);
+    end;
   end
   else
   begin
@@ -987,8 +996,11 @@ begin
   begin
     QSUMflag := Model.UnitNumbers.UnitNumber(StrMNWI_SummarizeByWell);
     OutputFileName := ChangeFileExt(AFileName, '.QSUM_out');
-    WriteToNameFile(StrDATA, QSUMflag,
-      OutputFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, QSUMflag,
+        OutputFileName, foOutput, Model);
+    end;
   end
   else
   begin
@@ -998,8 +1010,11 @@ begin
   begin
     BYNDflag := Model.UnitNumbers.UnitNumber(StrMNWI_SummarizeByNode);
     OutputFileName := ChangeFileExt(AFileName, '.BYND_out');
-    WriteToNameFile(StrDATA, BYNDflag,
-      OutputFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, BYNDflag,
+        OutputFileName, foOutput, Model);
+    end;
   end
   else
   begin

@@ -938,8 +938,11 @@ begin
     IDSAVE := Model.UnitNumbers.UnitNumber(StrSUBSaveRestart);
 
     SaveRestartFileName := ExtractFileName(ChangeFileExt(FNameOfFile, '.rst'));
-    WriteToNameFile(StrDATABINARY, IDSAVE,
-      SaveRestartFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATABINARY, IDSAVE,
+        SaveRestartFileName, foOutput, Model);
+    end;
   end
   else
   begin
@@ -960,8 +963,11 @@ begin
       frmErrorsAndWarnings.AddError(Model, StrRestartFileNamesI,
         StrTheRestartFileSav);
     end;
-    WriteToNameFile(StrDATABINARY, IDREST,
-      ReadRestartFileName, foInputAlreadyExists, Model, True);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATABINARY, IDREST,
+        ReadRestartFileName, foInputAlreadyExists, Model, True);
+    end;
   end;
 
   SUBLNK := Ord(FSubPackage.LinkSubsidence);
@@ -1035,8 +1041,11 @@ var
     if SubFileName = '' then
     begin
       SubFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubOut));
-      WriteToNameFile(StrDATABINARY, result,
-        SubFileName, foOutput, Model, True);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATABINARY, result,
+                SubFileName, foOutput, Model, True);
+      end;
       FCombinedSubFileName := SubFileName;
     end;
   end;
@@ -1087,8 +1096,11 @@ begin
           begin
             Iun1 := Model.UnitNumbers.UnitNumber(StrSubSUB_Out);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubSubOut));
-            WriteToNameFile(StrDATABINARY, Iun1,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun1,
+                            AFileName, foOutput, Model, True);
+            end;
             FMultipleSubFileNames[0] := AFileName;
           end
         else Assert(False);
@@ -1108,8 +1120,11 @@ begin
           begin
             Iun2 := Model.UnitNumbers.UnitNumber(StrSubCOM_ML_Out);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubComMlOut));
-            WriteToNameFile(StrDATABINARY, Iun2,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun2,
+                            AFileName, foOutput, Model, True);
+            end;
             FMultipleSubFileNames[1] := AFileName;
           end
         else Assert(False);
@@ -1129,8 +1144,11 @@ begin
           begin
             Iun3 := Model.UnitNumbers.UnitNumber(StrSubCOM_IS_Out);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubComIsOut));
-            WriteToNameFile(StrDATABINARY, Iun3,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun3,
+                            AFileName, foOutput, Model, True);
+            end;
             FMultipleSubFileNames[2] := AFileName;
             FMultipleSubFileNames[3] := AFileName;
           end
@@ -1151,8 +1169,11 @@ begin
           begin
             Iun4 := Model.UnitNumbers.UnitNumber(StrSub_VD_Out);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubVdOut));
-            WriteToNameFile(StrDATABINARY, Iun4,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun4,
+                            AFileName, foOutput, Model, True);
+            end;
             FMultipleSubFileNames[4] := AFileName;
           end
         else Assert(False);
@@ -1172,8 +1193,11 @@ begin
           begin
             Iun5 := Model.UnitNumbers.UnitNumber(StrSub_NDPCH_Out);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubNdCritHeadOut));
-            WriteToNameFile(StrDATABINARY, Iun5,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun5,
+                            AFileName, foOutput, Model, True);
+            end;
             FMultipleSubFileNames[5] := AFileName;
           end
         else Assert(False);
@@ -1193,8 +1217,11 @@ begin
           begin
             Iun6 := Model.UnitNumbers.UnitNumber(StrSub_DPCH_Out);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubDCritHeadOut));
-            WriteToNameFile(StrDATABINARY, Iun6,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun6,
+                            AFileName, foOutput, Model, True);
+            end;
             FMultipleSubFileNames[6] := AFileName;
           end
         else Assert(False);
@@ -1214,8 +1241,11 @@ begin
           begin
             Iun7 := Model.UnitNumbers.UnitNumber(StrSubElasCompML);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubElasCompMLOut));
-            WriteToNameFile(StrDATABINARY, Iun7,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun7,
+                            AFileName, foOutput, Model, True);
+            end;
           end
         else Assert(False);
       end;
@@ -1234,8 +1264,11 @@ begin
           begin
             Iun8 := Model.UnitNumbers.UnitNumber(StrSubInelasCompML);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubInelasCompMLOut));
-            WriteToNameFile(StrDATABINARY, Iun8,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun8,
+                            AFileName, foOutput, Model, True);
+            end;
           end
         else Assert(False);
       end;
@@ -1254,8 +1287,11 @@ begin
           begin
             Iun9 := Model.UnitNumbers.UnitNumber(StrSubElasCompIB);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubElasCompIBOut));
-            WriteToNameFile(StrDATABINARY, Iun9,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun9,
+                            AFileName, foOutput, Model, True);
+            end;
           end
         else Assert(False);
       end;
@@ -1275,8 +1311,11 @@ begin
           begin
             Iun10 := Model.UnitNumbers.UnitNumber(StrSubInelasCompIB);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubInlasCompIBOut));
-            WriteToNameFile(StrDATABINARY, Iun10,
-              AFileName, foOutput, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, Iun10,
+                            AFileName, foOutput, Model, True);
+            end;
           end
         else Assert(False);
       end;

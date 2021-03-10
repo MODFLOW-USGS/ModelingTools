@@ -87,7 +87,10 @@ var
 //    Inc(StartUnitNumber);
     OutputName := ChangeFileExt(FNameOfFile, '.sfrg');
     OutputName := OutputName + IntToStr(Gages.Count);
-    WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+    end;
     if (OUTTYPE = 4) then
     begin
       Observations := ObservationsArray[Reach.Layer, Reach.Row, Reach.Column];
@@ -279,8 +282,11 @@ begin
     frmProgressMM.AddMessage(StrWritingGAGEPackage);
     NUMGAGES := Gages.Count;
     Gages.Insert(0, IntToStr(NUMGAGES));
-    WriteToNameFile(StrGAG, Model.UnitNumbers.UnitNumber(StrGAG),
-      FNameOfFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrGAG, Model.UnitNumbers.UnitNumber(StrGAG),
+        FNameOfFile, foInput, Model);
+    end;
     Gages.SaveToFile(FNameOfFile);
   end;
   WriteObsScript(AFileName);

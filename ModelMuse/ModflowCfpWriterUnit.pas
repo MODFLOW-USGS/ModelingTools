@@ -1227,7 +1227,7 @@ begin
   end;
 
   NameOfFile := FileName(AFileName);
-  if ShouldWriteFile then
+  if ShouldWriteFile and not WritingTemplate then
   begin
     WriteToNameFile(StrCFP, Model.UnitNumbers.UnitNumber(StrCFP),
       NameOfFile, foInput, Model);
@@ -1335,8 +1335,11 @@ begin
       OutDir := ExtractFileDir(NameOfFile);
       OutDir := IncludeTrailingPathDelimiter(OutDir);
 
-      WriteToNameFile(StrCOC, Model.UnitNumbers.UnitNumber(StrCOC),
-        NameOfFile, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrCOC, Model.UnitNumbers.UnitNumber(StrCOC),
+                NameOfFile, foInput, Model);
+      end;
 
       OpenFile(NameOfFile);
       try
@@ -1416,8 +1419,11 @@ begin
   begin
     NameOfFile := ChangeFileExt(NameOfFile, '.crch');
 
-    WriteToNameFile(StrCRCH, Model.UnitNumbers.UnitNumber(StrCRCH),
-      NameOfFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrCRCH, Model.UnitNumbers.UnitNumber(StrCRCH),
+            NameOfFile, foInput, Model);
+    end;
 
     OpenFile(NameOfFile);
     try

@@ -68,6 +68,7 @@ type
     FCall_FileStream: TFileStream;
     FStressPeriod: Integer;
     FACtiveSurfaceCells: array of array of boolean;
+    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2a;
     procedure WriteDataSet2cParamDimen;
@@ -152,6 +153,8 @@ type
     procedure CheckIntegerDataSet(IntegerArray: TDataArray;
       const ErrorMessage: string);
     function GetObjectString(ErrorObject: TObject): string;
+    procedure WriteFileInternal;
+    procedure FreeFileStreams;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -161,13 +164,13 @@ type
     procedure WriteStressPeriods(const VariableIdentifiers, DataSetIdentifier,
       DS5, D7PNameIname, D7PName: string); override;
     function ParameterType: TParameterType; override;
+    procedure WriteCell(Cell: TValueCell;
+      const DataSetIdentifier, VariableIdentifiers: string); override;
     procedure WriteParameterCells(CellList: TValueCellList; NLST: Integer;
       const VariableIdentifiers, DataSetIdentifier: string;
       AssignmentMethod: TUpdateMethod;
       MultiplierArrayNames: TTransientMultCollection;
       ZoneArrayNames: TTransientZoneCollection); override;
-    procedure WriteCell(Cell: TValueCell;
-      const DataSetIdentifier, VariableIdentifiers: string); override;
     procedure WriteCustomStressPeriod(TimeIndex: Integer); override;
     procedure EvaluateAll;
     procedure GetFlowUnitNumber(var UnitNumber: Integer); override;
@@ -353,21 +356,7 @@ begin
   FFarmIDs.Free;
   FCropIDs.Free;
   FFarms.Free;
-  FOFE_FileStream.Free;
-  FFID_FileStream.Free;
-  FCID_FileStream.Free;
-  FRoot_FileStream.Free;
-  FCropUse_FileStream.Free;
-  FETR_FileStream.Free;
-  FET_Frac_FileStream.Free;
-  FSW_Losses_FileStream.Free;
-  FPFLX_FileStream.Free;
-  FCropFunc_FileStream.Free;
-  FWaterCost_FileStream.Free;
-  FDeliveries_FileStream.Free;
-  FSemiDeliveries_FileStream.Free;
-  FSemiReturn_FileStream.Free;
-  FCall_FileStream.Free;
+  FreeFileStreams;
   inherited;
 end;
 
@@ -888,6 +877,7 @@ var
   AuxValue: integer;
   AuxName: string;
   MNW2NAM: STRING;
+  DataArray: TDataArray;
 begin
   Well_Cell := Cell as TFmpWell_Cell;
   if Well_Cell.Mnw1 or Well_Cell.Mnw2 then
@@ -911,7 +901,46 @@ begin
     WriteInteger(FFarmWellID);
   end;
   WriteInteger(Well_Cell.FarmID);
-  WriteFloat(Well_Cell.MaxPumpingRate);
+
+  if (Well_Cell.MaxPumpingRatePestName <> '')
+    or (Well_Cell.MaxPumpingRatePestSeriesName <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
+  if Model.PestUsed and WritingTemplate
+    and ((Well_Cell.MaxPumpingRatePestName <> '') or (Well_Cell.MaxPumpingRatePestSeriesName <> '')) then
+  begin
+    WritePestTemplateFormula(Well_Cell.MaxPumpingRate, Well_Cell.MaxPumpingRatePestName,
+      Well_Cell.MaxPumpingRatePestSeriesName, Well_Cell.MaxPumpingRatePestSeriesMethod,
+      Well_Cell);
+  end
+  else
+  begin
+    WriteFloat(Well_Cell.MaxPumpingRate);
+    if Well_Cell.MaxPumpingRatePestName <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Well_Cell.MaxPumpingRatePestName);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if Well_Cell.MaxPumpingRatePestSeriesName <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        Well_Cell.MaxPumpingRatePestSeriesName);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+  end;
+
+//  WriteFloat(Well_Cell.MaxPumpingRate);
+
+
   if Well_Cell.Mnw2 then
   begin
     MNW2NAM := Copy(Well_Cell.MnwName, 1, 20);
@@ -1205,7 +1234,8 @@ var
 begin
   if (IRTFL = 1) then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.ROOT');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.ROOT');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1263,7 +1293,8 @@ var
 begin
   if (IFTEFL = 1) then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.ET_Frac');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.ET_Frac');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1317,7 +1348,8 @@ var
 begin
   if (IIESWFL = 1) then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.SW_Losses');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.SW_Losses');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1368,7 +1400,8 @@ var
 begin
   if ICCFL in [1,3] then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.PSI');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.PSI');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1417,7 +1450,8 @@ var
 begin
   if (IRTFL = 3) or (ICUFL = 3) or (IPFL = 3) then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.ET_Func');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.ET_Func');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1501,7 +1535,8 @@ var
 begin
   if (IRTFL = 3) or (ICUFL = 3) or (IPFL = 3) then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.TimeSeries');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.TimeSeries');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1582,7 +1617,8 @@ var
 begin
   if IDEFFL = -2 then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.IFALLOW');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.IFALLOW');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1625,7 +1661,8 @@ var
 begin
   if (IDEFFL > 0) and (IBEN = 1) then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.CropFunc');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.CropFunc');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1678,7 +1715,8 @@ var
 begin
   if (IDEFFL > 0) and (ICOST = 1) then
   begin
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.WaterCost');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.WaterCost');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -1813,8 +1851,11 @@ begin
   if FFID_FileStream = nil then
   begin
     AFileName := ChangeFileExt(FNameOfFile, '.FID');
-    WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpFID),
-      AFileName, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpFID),
+            AFileName, foInput, Model);
+    end;
     FFID_FileStream := TFileStream.Create(AFileName,
       fmCreate or fmShareDenyWrite);
   end;
@@ -1847,8 +1888,11 @@ begin
     if FOFE_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.OFE');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpOFE),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpOFE),
+                AFileName, foInput, Model);
+      end;
       FOFE_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -1927,8 +1971,11 @@ begin
   if FCID_FileStream = nil then
   begin
     AFileName := ChangeFileExt(FNameOfFile, '.CID');
-    WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCID),
-      AFileName, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCID),
+            AFileName, foInput, Model);
+    end;
     FCID_FileStream := TFileStream.Create(AFileName,
       fmCreate or fmShareDenyWrite);
   end;
@@ -1959,8 +2006,11 @@ begin
     if FRoot_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.ROOT');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpRoot),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpRoot),
+                AFileName, foInput, Model);
+      end;
       FRoot_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -2024,8 +2074,11 @@ begin
     if FCropUse_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.CropUse');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCropUse),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCropUse),
+                AFileName, foInput, Model);
+      end;
       FCropUse_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -2104,8 +2157,11 @@ begin
     if FETR_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.ETR');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpETR),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpETR),
+                AFileName, foInput, Model);
+      end;
       FETR_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -2135,8 +2191,11 @@ begin
     if FET_Frac_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.ET_Frac');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpETFrac),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpETFrac),
+                AFileName, foInput, Model);
+      end;
       FET_Frac_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -2196,8 +2255,11 @@ begin
     if FSW_Losses_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.SW_Losses');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSwLosses),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSwLosses),
+                AFileName, foInput, Model);
+      end;
       FSW_Losses_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -2427,7 +2489,11 @@ begin
   end
   else if ISDPFL > 1 then
   begin
-    WriteToNameFile(StrDATABINARY, ISDPFL, ChangeFileExt(FNameOfFile, '.FDS_BIN'), foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATABINARY, ISDPFL, ChangeFileExt(FNameOfFile,
+            '.FDS_BIN'), foOutput, Model);
+    end;
   end;
   {$ENDREGION}
 
@@ -2468,13 +2534,20 @@ begin
         begin
           if Odd(IFBPFL) then
           begin
-            WriteToNameFile(StrDATABINARY, IFBPFL,
-              ChangeFileExt(FNameOfFile, '.FB_COMPACT_BIN_OUT'), foOutput, Model);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, IFBPFL,
+                            ChangeFileExt(FNameOfFile, '.FB_COMPACT_BIN_OUT'), foOutput, Model);
+            end;
           end
           else
           begin
-            WriteToNameFile(StrDATABINARY, IFBPFL,
-              ChangeFileExt(FNameOfFile, '.FB_DETAILS_BIN_OUT'), foOutput, Model);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, IFBPFL,
+                ChangeFileExt(FNameOfFile, '.FB_DETAILS_BIN_OUT'),
+                foOutput, Model);
+            end;
           end;
         end;
       end;
@@ -2869,8 +2942,11 @@ begin
     if FPFLX_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.PFLX');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpPFLX),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpPFLX),
+                AFileName, foInput, Model);
+      end;
       FPFLX_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -2899,8 +2975,11 @@ begin
     if FCropFunc_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.CropFunc');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCropFunc),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCropFunc),
+                AFileName, foInput, Model);
+      end;
       FCropFunc_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -2947,8 +3026,11 @@ begin
     if FWaterCost_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.WaterCost');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpWaterCost),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpWaterCost),
+                AFileName, foInput, Model);
+      end;
       FWaterCost_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -3007,8 +3089,11 @@ begin
     if FDeliveries_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.NonRouteDeliv');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpDeliveries),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpDeliveries),
+                AFileName, foInput, Model);
+      end;
       FDeliveries_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -3096,8 +3181,11 @@ begin
     if FSemiDeliveries_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.SemiRouteDeliv');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSemiRouteDeliv),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSemiRouteDeliv),
+                AFileName, foInput, Model);
+      end;
       FSemiDeliveries_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -3155,8 +3243,11 @@ begin
     if FSemiReturn_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.SemiRouteReturn');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSemiRouteReturn),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSemiRouteReturn),
+                AFileName, foInput, Model);
+      end;
       FSemiReturn_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -3230,8 +3321,11 @@ begin
     if FCall_FileStream = nil then
     begin
       AFileName := ChangeFileExt(FNameOfFile, '.CALL');
-      WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCall),
-        AFileName, foInput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCall),
+                AFileName, foInput, Model);
+      end;
       FCall_FileStream := TFileStream.Create(AFileName,
         fmCreate or fmShareDenyWrite);
     end;
@@ -3326,244 +3420,25 @@ begin
   begin
     Exit;
   end;
+  FPestParamUsed := False;
 
-  ClearTimeLists(Model);
-  FFarmWellID := 1;
-  OpenFile(FNameOfFile);
-  try
-    FWriteLocation := wlMain;
-    frmProgressMM.AddMessage('Writing FMP3 Package input.');
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
+  WriteFileInternal;
+
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FreeFileStreams;
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
     end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet1);
-    WriteDataSet1;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet2a);
-    WriteDataSet2a;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    // Data set 2b is never used with ModelMuse. Data set 2c is used instead.
-
-    frmProgressMM.AddMessage(StrWritingDataSet2c);
-    WriteDataSet2cParamDimen;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cWhenToRead;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cWaterPolicy;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cCropConsumptiveUse;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cSurfaceWater;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cPrintFlags;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cAuxVar;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cOptions;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    WriteDataSet2cMnwOptions;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSets3and4);
-    WriteDataSets3And4;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet5);
-    WriteDataSet5;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    // Data set 6 is never used. Data set 26 is used instead.
-//    frmProgressMM.AddMessage(StrWritingDataSet6);
-//    WriteDataSet6;
-//    Application.ProcessMessages;
-//    if not frmProgressMM.ShouldContinue then
-//    begin
-//      Exit;
-//    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet7);
-    WriteDataSet7;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet8);
-    WriteDataSet8;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet9);
-    WriteDataSet9;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    // Data set 10 is never used. Data set 28 is always used instead.
-
-    frmProgressMM.AddMessage(StrWritingDataSet11);
-    WriteDataSet11;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet12);
-    WriteDataSet12;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet13);
-    WriteDataSet13;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet14);
-    WriteDataSet14;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet15);
-    WriteDataSet15;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet16);
-    WriteDataSet16;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet17);
-    WriteDataSet17;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet18);
-    WriteDataSet18;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet19);
-    WriteDataSet19;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet20);
-    WriteDataSet20;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-
-    // Data sets 21a and 21b are never used.
-    // Data sets 37a and 37b are used instead.
-
-    frmProgressMM.AddMessage(StrWritingDataSets);
-    WriteDataSets22to39;
-
-  finally
-    CloseFile;
   end;
+
 end;
 
 function TModflowFmpWriter.GetWellFieldOption: TWellFieldOption;
@@ -3834,7 +3709,8 @@ begin
   DataArray := Model.DataArrayManager.GetDataSetByName(KSoilID);
   Assert(DataArray <> nil);
   CheckIntegerDataSet(DataArray, StrInvalidSoilIDInF);
-  FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.SID');
+  FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+  FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.SID');
   Model.AddModelInputFile(FOpenCloseFileName);
   FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
     fmCreate or fmShareDenyWrite);
@@ -3871,6 +3747,266 @@ begin
     end;
   finally
     frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
+procedure TModflowFmpWriter.FreeFileStreams;
+begin
+ FreeAndNil(FOFE_FileStream);
+ FreeAndNil(FFID_FileStream);
+ FreeAndNil(FCID_FileStream);
+ FreeAndNil(FRoot_FileStream);
+ FreeAndNil(FCropUse_FileStream);
+ FreeAndNil(FETR_FileStream);
+ FreeAndNil(FET_Frac_FileStream);
+ FreeAndNil(FSW_Losses_FileStream);
+ FreeAndNil(FPFLX_FileStream);
+ FreeAndNil(FCropFunc_FileStream);
+ FreeAndNil(FWaterCost_FileStream);
+ FreeAndNil(FDeliveries_FileStream);
+ FreeAndNil(FSemiDeliveries_FileStream);
+ FreeAndNil(FSemiReturn_FileStream);
+ FreeAndNil(FCall_FileStream);
+end;
+
+procedure TModflowFmpWriter.WriteFileInternal;
+begin
+  ClearTimeLists(Model);
+  FFarmWellID := 1;
+  OpenFile(FNameOfFile);
+  try
+    FWriteLocation := wlMain;
+    frmProgressMM.AddMessage('Writing FMP3 Package input.');
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet1);
+    WriteDataSet1;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet2a);
+    WriteDataSet2a;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    // Data set 2b is never used with ModelMuse. Data set 2c is used instead.
+    frmProgressMM.AddMessage(StrWritingDataSet2c);
+    WriteDataSet2cParamDimen;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cWhenToRead;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cWaterPolicy;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cCropConsumptiveUse;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cSurfaceWater;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cPrintFlags;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cAuxVar;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cOptions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSet2cMnwOptions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets3and4);
+    WriteDataSets3And4;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet5);
+    WriteDataSet5;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    // Data set 6 is never used. Data set 26 is used instead.
+    //    frmProgressMM.AddMessage(StrWritingDataSet6);
+    //    WriteDataSet6;
+    //    Application.ProcessMessages;
+    //    if not frmProgressMM.ShouldContinue then
+    //    begin
+    //      Exit;
+    //    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet7);
+    WriteDataSet7;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet8);
+    WriteDataSet8;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet9);
+    WriteDataSet9;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    // Data set 10 is never used. Data set 28 is always used instead.
+
+    frmProgressMM.AddMessage(StrWritingDataSet11);
+    WriteDataSet11;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet12);
+    WriteDataSet12;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet13);
+    WriteDataSet13;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet14);
+    WriteDataSet14;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet15);
+    WriteDataSet15;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet16);
+    WriteDataSet16;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet17);
+    WriteDataSet17;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet18);
+    WriteDataSet18;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet19);
+    WriteDataSet19;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet20);
+    WriteDataSet20;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    // Data sets 21a and 21b are never used.
+    // Data sets 37a and 37b are used instead.
+
+    frmProgressMM.AddMessage(StrWritingDataSets);
+    WriteDataSets22to39;
+  finally
+    CloseFile;
   end;
 end;
 
@@ -4195,7 +4331,8 @@ var
   SoilID: Integer;
   Formula: string;
 begin
-  FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.SoilProp');
+  FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+  FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.SoilProp');
   Model.AddModelInputFile(FOpenCloseFileName);
   FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
     fmCreate or fmShareDenyWrite);
@@ -4294,8 +4431,8 @@ var
 begin
   if IEFFL = 1 then
   begin
-
-    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.OFE');
+    FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+    FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.OFE');
     Model.AddModelInputFile(FOpenCloseFileName);
     FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
       fmCreate or fmShareDenyWrite);
@@ -4354,7 +4491,8 @@ var
 begin
   DataArray := Model.DataArrayManager.GetDataSetByName(StrUzfLandSurface);
   Assert(DataArray <> nil);
-  FOpenCloseFileName := ChangeFileExt(FNameOfFile, '.GSURF');
+  FOpenCloseFileName := ChangeFileExt(FNameOfFile, '');
+  FOpenCloseFileName := ChangeFileExt(FOpenCloseFileName, '.GSURF');
   Model.AddModelInputFile(FOpenCloseFileName);
   FOpenCloseFileStream := TFileStream.Create(FOpenCloseFileName,
     fmCreate or fmShareDenyWrite);

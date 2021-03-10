@@ -150,6 +150,9 @@ type
     function GetMnw1: Boolean;
     function GetMnw2: Boolean;
     function GetMnwName: string;
+    function GetMaxPumpingRatePestName: string;
+    function GetMaxPumpingRatePestSeriesMethod: TPestParamMethod;
+    function GetMaxPumpingRatePestSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -181,9 +184,24 @@ type
     property Mnw2: Boolean read GetMnw2;
     property MnwName: string read GetMnwName;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    // PEST properties
+    property MaxPumpingRatePestName: string read GetMaxPumpingRatePestName;
+    property MaxPumpingRatePestSeriesName: string read GetMaxPumpingRatePestSeriesName;
+    property MaxPumpingRatePestSeriesMethod: TPestParamMethod read GetMaxPumpingRatePestSeriesMethod;
+
   end;
 
   TFmpWellBoundary = class(TSpecificModflowBoundary)
+  private
+    FPestMaxPumpingRateMethod: TPestParamMethod;
+    FPestMaxPumpingRateFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestMaxPumpingRateObserver: TObserver;
+    function GetPestMaxPumpingRateFormula: string;
+    function GetPestMaxPumpingRateObserver: TObserver;
+    procedure SetPestMaxPumpingRateFormula(const Value: string);
+    procedure SetPestMaxPumpingRateMethod(const Value: TPestParamMethod);
+    procedure InvalidateMaxPumpingRateData(Sender: TObject);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -198,7 +216,26 @@ type
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
 //    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestMaxPumpingRateObserver: TObserver
+      read GetPestMaxPumpingRateObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TFmpWellStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -213,6 +250,21 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
+  published
+    property PestMaxPumpingRateFormula: string read GetPestMaxPumpingRateFormula
+      write SetPestMaxPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMaxPumpingRateMethod: TPestParamMethod read FPestMaxPumpingRateMethod
+      write SetPestMaxPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
@@ -1000,6 +1052,21 @@ begin
   result := FValues.MaxPumpingRateAnnotation;
 end;
 
+function TFmpWell_Cell.GetMaxPumpingRatePestName: string;
+begin
+  result := FValues.MaxPumpingRatePestName;
+end;
+
+function TFmpWell_Cell.GetMaxPumpingRatePestSeriesMethod: TPestParamMethod;
+begin
+  result := FValues.MaxPumpingRatePestSeriesMethod;
+end;
+
+function TFmpWell_Cell.GetMaxPumpingRatePestSeriesName: string;
+begin
+  result := FValues.MaxPumpingRatePestSeriesName;
+end;
+
 function TFmpWell_Cell.GetMnw1: Boolean;
 begin
   result := FValues.Mnw1Well;
@@ -1110,6 +1177,19 @@ end;
 
 { TMfFmpWellBoundary }
 
+procedure TFmpWellBoundary.Assign(Source: TPersistent);
+var
+  SourceWell: TFmpWellBoundary;
+begin
+  if Source is TFmpWellBoundary then
+  begin
+    SourceWell := TFmpWellBoundary(Source);
+    PestMaxPumpingRateFormula := SourceWell.PestMaxPumpingRateFormula;
+    PestMaxPumpingRateMethod := SourceWell.PestMaxPumpingRateMethod;
+  end;
+  inherited;
+end;
+
 procedure TFmpWellBoundary.AssignCells(
   BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
   AModel: TBaseModel);
@@ -1209,6 +1289,59 @@ begin
 end;
 
 
+function TFmpWellBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestMaxWel_';
+end;
+
+constructor TFmpWellBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestMaxPumpingRateFormula := '';
+  FPestMaxPumpingRateMethod := DefaultBoundaryMethod(FmpWellMaxPumpingRatePosition);
+
+end;
+
+procedure TFmpWellBoundary.CreateFormulaObjects;
+begin
+  FPestMaxPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TFmpWellBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestMaxPumpingRateObserver);
+  end;
+end;
+
+class function TFmpWellBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    FmpWellMaxPumpingRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+destructor TFmpWellBoundary.Destroy;
+begin
+  PestMaxPumpingRateFormula := '';
+
+  inherited;
+end;
+
 procedure TFmpWellBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel);
 var
@@ -1254,6 +1387,80 @@ begin
   end;
 end;
 
+function TFmpWellBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FmpWellMaxPumpingRatePosition of
+    FmpWellMaxPumpingRatePosition:
+      begin
+        result := PestMaxPumpingRateFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TFmpWellBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FmpWellMaxPumpingRatePosition of
+    FmpWellMaxPumpingRatePosition:
+      begin
+        result := PestMaxPumpingRateMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TFmpWellBoundary.GetPestMaxPumpingRateFormula: string;
+begin
+  Result := FPestMaxPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(FmpWellMaxPumpingRatePosition);
+  end;
+end;
+
+function TFmpWellBoundary.GetPestMaxPumpingRateObserver: TObserver;
+begin
+  if FPestMaxPumpingRateObserver = nil then
+  begin
+    CreateObserver('PestMaxPumpingRate_', FPestMaxPumpingRateObserver, nil);
+    FPestMaxPumpingRateObserver.OnUpToDateSet := InvalidateMaxPumpingRateData;
+  end;
+  result := FPestMaxPumpingRateObserver;
+end;
+
+procedure TFmpWellBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestMaxPumpingRateFormula then
+  begin
+    if FmpWellMaxPumpingRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[FmpWellMaxPumpingRatePosition]);
+    end;
+  end;
+end;
+
+function TFmpWellBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestMaxWell_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TFmpWellBoundary.HandleChangedValue(Observer: TObserver);
+begin
+  InvalidateDisplay;
+end;
+
 procedure TFmpWellBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1267,6 +1474,33 @@ begin
   end;
 end;
 
+procedure TFmpWellBoundary.InvalidateMaxPumpingRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfFmpMaxPumpingRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfFmpMaxPumpingRate(self);
+    end;
+  end;
+end;
+
 class function TFmpWellBoundary.ModflowParamItemClass: TModflowParamItemClass;
 begin
   result := TFmpWellParamItem;
@@ -1275,6 +1509,46 @@ end;
 function TFmpWellBoundary.ParameterType: TParameterType;
 begin
   result := ptQMAX;
+end;
+
+procedure TFmpWellBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FmpWellMaxPumpingRatePosition of
+    FmpWellMaxPumpingRatePosition:
+      begin
+        PestMaxPumpingRateFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TFmpWellBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FmpWellMaxPumpingRatePosition of
+    FmpWellMaxPumpingRatePosition:
+      begin
+        PestMaxPumpingRateMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TFmpWellBoundary.SetPestMaxPumpingRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, FmpWellMaxPumpingRatePosition, FPestMaxPumpingRateFormula);
+end;
+
+procedure TFmpWellBoundary.SetPestMaxPumpingRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMaxPumpingRateMethod, Value);
 end;
 
 end.

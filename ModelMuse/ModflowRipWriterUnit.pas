@@ -406,8 +406,11 @@ begin
   begin
     IRIPCB1 := Model.UnitNumbers.UnitNumber(StrRipPlantGroupET);
     NameOfFile := ChangeFileExt(FNameOfFile, '.rip_et');
-    WriteToNameFile(StrData, Model.UnitNumbers.UnitNumber(StrRipPlantGroupET),
-      NameOfFile, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrData, Model.UnitNumbers.UnitNumber(StrRipPlantGroupET),
+            NameOfFile, foOutput, Model);
+    end;
   end
   else
   begin

@@ -984,8 +984,10 @@ begin
         result := ppmMultiply;
       end;
     else
-      result := inherited;
-      Assert(False);
+      begin
+        result := inherited;
+        Assert(False);
+      end;
   end;
 end;
 
@@ -1240,7 +1242,7 @@ function TMfWellBoundary.GetUsedObserver: TObserver;
 begin
   if FUsedObserver = nil then
   begin
-    CreateObserver('PestDell_Used_', FUsedObserver, nil);
+    CreateObserver('PestWell_Used_', FUsedObserver, nil);
 //    FUsedObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FUsedObserver;

@@ -451,8 +451,11 @@ begin
   FRchPackage.ZoneArrayNames.Clear;
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
-  WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrRCH),
-    FNameOfFile, foInput, Model);
+  if not WritingTemplate then
+  begin
+    WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrRCH),
+      FNameOfFile, foInput, Model);
+  end;
   Evaluate;
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then

@@ -2368,7 +2368,7 @@ resourcestring
   'le. The error message was "%0:s". Try saving the file as a .bin or .mmZli' +
   'b instead of a %1:s file.';
   StrMODFLOWOWHMMayCra = 'MODFLOW-OWHM may crash if cell lists are printed in ' +
-  'models with parameters. Do you want to turn of printing cell lists in the ' +
+  'models with parameters. Do you want to turn off printing cell lists in the ' +
   'MODFLOW Output Control dialog box?';
   StrPrintingCellLists = 'Printing cell lists has been deactivated.';
   StrSutraObsExtractorex = 'SutraObsExtractor.exe';

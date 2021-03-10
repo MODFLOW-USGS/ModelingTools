@@ -1080,8 +1080,10 @@ begin
         result := ppmMultiply;
       end;
     else
-      result := inherited;
-      Assert(False);
+      begin
+        result := inherited;
+        Assert(False);
+      end;
   end;
 end;
 

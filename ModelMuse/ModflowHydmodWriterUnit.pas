@@ -584,8 +584,11 @@ begin
   IHYDUN := Model.UnitNumbers.UnitNumber(StrHydmodOut);
 
   HydModOutFileName := ExtractFileName(ChangeFileExt(FNameOfFile, '.hyd_out'));
-  WriteToNameFile(StrDATABINARY, IHYDUN,
-    HydModOutFileName, foOutput, Model);
+  if not WritingTemplate then
+  begin
+    WriteToNameFile(StrDATABINARY, IHYDUN,
+        HydModOutFileName, foOutput, Model);
+  end;
 
   HYDNOH := (Package as THydPackageSelection).HYDNOH;
   WriteInteger(NHYD);

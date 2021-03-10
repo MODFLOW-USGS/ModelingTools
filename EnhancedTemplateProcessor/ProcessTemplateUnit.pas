@@ -916,6 +916,13 @@ begin
         Continue;
       end;
 
+      Splitter := TStringList.Create;
+      try
+        Splitter.DelimitedText := Aline;
+        Aline := Splitter[0];
+      finally
+        Splitter.Free;
+      end;
       if TryStrToInt(Aline, ParameterCount) then
       begin
         FParameters.Capacity := ParameterCount;

@@ -1199,8 +1199,10 @@ begin
         result := ppmAdd;
       end;
     else
-      result := inherited;
-      Assert(False);
+      begin
+        result := inherited;
+        Assert(False);
+      end;
   end;
 end;
 
@@ -1376,7 +1378,10 @@ begin
         result := PestRiverBottomMethod;
       end;
     else
-      Assert(False);
+      begin
+        result := inherited;
+        Assert(False);
+      end;
   end;
 end;
 

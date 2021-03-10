@@ -660,10 +660,11 @@ begin
     FNameOfFile := FileName(AFileName);
     FInputFileName := FNameOfFile;
 
-
-
-    WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrETS),
-      FNameOfFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrETS),
+        FNameOfFile, foInput, Model);
+    end;
     FInputFileName := FNameOfFile;
     Evaluate;
     Application.ProcessMessages;

@@ -485,10 +485,11 @@ begin
 
 //  ClearTimeLists(Model);
   FInputFileName := FFileName;
+  WriteToNameFile(Abbreviation, 0,
+    FFileName, foInput, Model);
+
   OpenFile(FFileName);
   try
-    WriteToNameFile(Abbreviation, 0,
-      FFileName, foInput, Model);
 
     frmProgressMM.AddMessage( 'Writing CSUB Package input.');
     frmProgressMM.AddMessage(StrWritingDataSet0);

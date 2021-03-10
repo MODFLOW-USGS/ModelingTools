@@ -817,8 +817,11 @@ var
     if SwtFileName = '' then
     begin
       SwtFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSwtOut));
-      WriteToNameFile(StrDATABINARY, result,
-        SwtFileName, foOutput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATABINARY, result,
+                SwtFileName, foOutput, Model);
+      end;
       FCombinedSubFileName := SwtFileName;
     end;
   end;
@@ -839,8 +842,11 @@ var
           begin
             result := Model.UnitNumbers.UnitNumber(Key);
             AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, Extension));
-            WriteToNameFile(StrDATABINARY, result, AFileName, foOutput, Model);
-            FMultipleSubFileNames[FileIndex] := AFileName;
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, result, AFileName, foOutput, Model);
+                          FMultipleSubFileNames[FileIndex] := AFileName;
+            end;
           end
         else Assert(False);
       end;

@@ -416,8 +416,11 @@ begin
   FEvtPackage.ZoneArrayNames.Clear;
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
-  WriteToNameFile(StrEVT, Model.UnitNumbers.UnitNumber(StrEVT),
-    FNameOfFile, foInput, Model);
+  if not WritingTemplate then
+  begin
+    WriteToNameFile(StrEVT, Model.UnitNumbers.UnitNumber(StrEVT),
+      FNameOfFile, foInput, Model);
+  end;
   Evaluate;
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then

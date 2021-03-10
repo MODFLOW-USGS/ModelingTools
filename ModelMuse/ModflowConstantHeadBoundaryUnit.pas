@@ -173,6 +173,12 @@ type
     function GetTimeSeriesName: string;
     function GetHeadParameterName: string;
     function GetHeadParameterValue: double;
+    function GetEndHeadPest: string;
+    function GetEndHeadPestSeriesMethod: TPestParamMethod;
+    function GetEndHeadPestSeriesName: string;
+    function GetStartHeadPest: string;
+    function GetStartHeadPestSeriesMethod: TPestParamMethod;
+    function GetStartHeadPestSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -205,6 +211,13 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
     property HeadParameterName: string read GetHeadParameterName;
     property HeadParameterValue: double read GetHeadParameterValue;
+    //PEST properties
+    property StartHeadPest: string read GetStartHeadPest;
+    property EndHeadPest: string read GetEndHeadPest;
+    property StartHeadPestSeriesName: string read GetStartHeadPestSeriesName;
+    property EndHeadPestSeriesName: string read GetEndHeadPestSeriesName;
+    property StartHeadPestSeriesMethod: TPestParamMethod read GetStartHeadPestSeriesMethod;
+    property EndHeadPestSeriesMethod: TPestParamMethod read GetEndHeadPestSeriesMethod;
   end;
 
 
@@ -929,6 +942,21 @@ begin
   result := Values.Cell.Column;
 end;
 
+function TCHD_Cell.GetEndHeadPest: string;
+begin
+  result := Values.EndHeadPest;
+end;
+
+function TCHD_Cell.GetEndHeadPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.EndHeadPestSeriesMethod;
+end;
+
+function TCHD_Cell.GetEndHeadPestSeriesName: string;
+begin
+  result := Values.EndHeadPestSeriesName;
+end;
+
 function TCHD_Cell.GetEndingHead: double;
 begin
   result := Values.EndingHead;
@@ -994,6 +1022,21 @@ end;
 function TCHD_Cell.GetSection: integer;
 begin
   result := Values.Cell.Section;
+end;
+
+function TCHD_Cell.GetStartHeadPest: string;
+begin
+  result := Values.StartHeadPest;
+end;
+
+function TCHD_Cell.GetStartHeadPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.StartHeadPestSeriesMethod;
+end;
+
+function TCHD_Cell.GetStartHeadPestSeriesName: string;
+begin
+  result := Values.StartHeadPestSeriesName;
 end;
 
 function TCHD_Cell.GetStartingHead: double;

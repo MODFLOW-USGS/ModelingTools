@@ -356,14 +356,20 @@ begin
     if Model.ModflowOutputControl.HeadOC.FormatDefined then
     begin
       NameOfFile := ChangeFileExt(FNameOfFile, StrHuffhd);
-      WriteToNameFile(StrDATA, IOHUFHEADS,
-        NameOfFile, foOutput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, IOHUFHEADS,
+          NameOfFile, foOutput, Model);
+      end;
     end
     else
     begin
       NameOfFile := ChangeFileExt(FNameOfFile, StrHufbhd);
-      WriteToNameFile(StrDATABINARY, IOHUFHEADS,
-        NameOfFile, foOutput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATABINARY, IOHUFHEADS,
+          NameOfFile, foOutput, Model);
+      end;
     end;
   end
   else
@@ -374,8 +380,11 @@ begin
   begin
     IOHUFFLOWS := Model.UnitNumbers.UnitNumber(StrIOHUFFLOWS);
     NameOfFile := ChangeFileExt(FNameOfFile, StrHufflow);
-    WriteToNameFile(StrDATABINARY, IOHUFFLOWS,
-      NameOfFile, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATABINARY, IOHUFFLOWS,
+        NameOfFile, foOutput, Model);
+    end;
   end
   else
   begin

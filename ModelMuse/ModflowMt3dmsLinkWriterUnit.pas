@@ -62,13 +62,19 @@ begin
   FtlFileName := ChangeFileExt(NameOfFile, '.ftl');
   if Model.ModelSelection = msModflowLGR2 then
   begin
-    WriteToNameFile(StrLMT7, Model.UnitNumbers.UnitNumber(StrLMT7),
-      NameOfFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrLMT7, Model.UnitNumbers.UnitNumber(StrLMT7),
+            NameOfFile, foInput, Model);
+    end;
   end
   else
   begin
-    WriteToNameFile(StrLMT6, Model.UnitNumbers.UnitNumber(StrLMT6),
-      NameOfFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrLMT6, Model.UnitNumbers.UnitNumber(StrLMT6),
+            NameOfFile, foInput, Model);
+    end;
   end;
 
   Model.AddModelOutputFile(FtlFileName);

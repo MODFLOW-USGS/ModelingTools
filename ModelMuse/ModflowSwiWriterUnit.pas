@@ -470,19 +470,25 @@ begin
   if ISWIOBS <> 0 then
   begin
     FObsOutputFileName := ChangeFileExt(FNameOfFile, '.swi_obs');
-    if ISWIOBS > 0 then
+    if not WritingTemplate then
     begin
-      WriteToNameFile(StrData, ISWIOBS, FObsOutputFileName, foOutput, Model);
-    end
-    else
-    begin
-      WriteToNameFile(StrDataBinary, -ISWIOBS, FObsOutputFileName, foOutput, Model);
+      if ISWIOBS > 0 then
+      begin
+        WriteToNameFile(StrData, ISWIOBS, FObsOutputFileName, foOutput, Model);
+      end
+      else
+      begin
+        WriteToNameFile(StrDataBinary, -ISWIOBS, FObsOutputFileName, foOutput, Model);
+      end;
     end;
   end;
   if ISWIZT <> 0 then
   begin
     ZetaFileName := ChangeFileExt(FNameOfFile, strZeta);
-    WriteToNameFile(StrDataBinary, ISWIZT, ZetaFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDataBinary, ISWIZT, ZetaFileName, foOutput, Model);
+    end;
   end;
   if FSwiPackage.Adaptive then
   begin
@@ -744,8 +750,11 @@ begin
 
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
-  WriteToNameFile(StrSWI, Model.UnitNumbers.UnitNumber(StrSWI),
-    FNameOfFile, foInput, Model);
+  if not WritingTemplate then
+  begin
+    WriteToNameFile(StrSWI, Model.UnitNumbers.UnitNumber(StrSWI),
+        FNameOfFile, foInput, Model);
+  end;
   OpenFile(FNameOfFile);
   try
       frmProgressMM.AddMessage('Writing SWI Package input.');

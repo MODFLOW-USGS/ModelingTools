@@ -393,7 +393,10 @@ begin
 
           TabFileName := ChangeFileExt(FNameOfFile, '.wel_tab' + IntToStr(TabNumber));
           Inc(TabNumber);
-          WriteToNameFile(StrDATA, TABUNIT, TabFileName, foInput, Model);
+          if not WritingTemplate then
+          begin
+            WriteToNameFile(StrDATA, TABUNIT, TabFileName, foInput, Model);
+          end;
 
           if ABoundary.TabFileName <> '' then
           begin
@@ -630,7 +633,10 @@ begin
     WriteString(' # Data Set 2b: SPECIFY PHIRAMP IUNITRAMP');
     NewLine;
     NameOfOutputFile := ChangeFileExt(FNameOfFile, '') + '.wel_dewater.txt';
-    WriteToNameFile(StrData, IUNITRAMP, NameOfOutputFile, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrData, IUNITRAMP, NameOfOutputFile, foOutput, Model);
+    end;
   end;
 end;
 
@@ -700,7 +706,7 @@ begin
   begin
     Exit;
   end;
-  ClearTimeLists(Model);
+
   WriteFileInternal;
 //  OpenFile(FNameOfFile);
 //  try
@@ -827,6 +833,7 @@ end;
 
 procedure TModflowWEL_Writer.WriteFileInternal;
 begin
+  ClearTimeLists(Model);
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingWELPackage);
@@ -998,7 +1005,10 @@ begin
 //    WriteString(' # Data Set 2b: SPECIFY PHIRAMP IUNITRAMP');
     NewLine;
     NameOfOutputFile := ChangeFileExt(FNameOfFile, '') + '.wel_dewater.txt';
-    WriteToNameFile(StrData, IUNITRAMP, NameOfOutputFile, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrData, IUNITRAMP, NameOfOutputFile, foOutput, Model);
+    end;
   end;
 
   if WellPackage.UseTabFilesInThisModel then

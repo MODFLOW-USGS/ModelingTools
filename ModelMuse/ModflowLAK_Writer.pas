@@ -317,7 +317,10 @@ begin
           begin
             BathymFileName := ChangeFileExt(FNameOfFile, '');
             BathymFileName := TExternalBathymetryFileWriter.FileName(BathymFileName) + IntToStr(Lake.TrueLakeID);
-            WriteToNameFile(StrData, IUNITLAKTAB, BathymFileName, foInput, Model, False);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrData, IUNITLAKTAB, BathymFileName, foInput, Model, False);
+            end;
             BathymWriter := TExternalBathymetryFileWriter.Create(Model,
               Lake.ExternalLakeTable, ScreenObject, Lake.TrueLakeID);
             try
@@ -336,8 +339,11 @@ begin
                 Format(StrTheLakeBathymetry2,
                 [LakeTableFileName, ScreenObject.Name]), ScreenObject);
             end;
-            WriteToNameFile(StrData, IUNITLAKTAB, LakeTableFileName,
-              foInputAlreadyExists, Model, True);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrData, IUNITLAKTAB, LakeTableFileName,
+                foInputAlreadyExists, Model, True);
+            end;
           end
         else Assert(False);
       end;
@@ -788,7 +794,10 @@ var
 //    Inc(StartUnitNumber);
     OutputName := ChangeFileExt(FNameOfFile, '.lakg');
     OutputName := OutputName + IntToStr(Lines.Count);
-    WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+    end;
     ScreenObject.ModflowLakBoundary.Observations.GageOutputName := OutputName;
   end;
 begin

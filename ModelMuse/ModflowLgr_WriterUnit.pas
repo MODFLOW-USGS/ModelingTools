@@ -420,7 +420,10 @@ begin
     if not FArchive then
     begin
 //      HeadFile := FParentOutputDirectory + ExtractFileName(HeadFile);
-      WriteToNameFile(StrDATA, IUPBHSV, HeadFile, foOutput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, IUPBHSV, HeadFile, foOutput, Model);
+      end;
     end;
   end;
   if IUPBFSV > 0 then
@@ -429,7 +432,10 @@ begin
     if not FArchive then
     begin
 //      FlowFile := FParentOutputDirectory + ExtractFileName(FlowFile);
-      WriteToNameFile(StrDATA, IUPBFSV, FlowFile, foOutput, Model);
+      if not WritingTemplate then
+      begin
+        WriteToNameFile(StrDATA, IUPBFSV, FlowFile, foOutput, Model);
+      end;
     end;
   end;
 end;

@@ -3650,7 +3650,10 @@ begin
       begin
         ISTCB2 := Model.UnitNumbers.UnitNumber(StrISTCB2);
         FlowFileName := ChangeFileExt(FNameOfFile, '.sfr_out');
-        WriteToNameFile('DATA', ISTCB2, FlowFileName, foOutput, Model);
+        if not WritingTemplate then
+        begin
+          WriteToNameFile('DATA', ISTCB2, FlowFileName, foOutput, Model);
+        end;
       end;
     else Assert(False);
   end;
@@ -5263,7 +5266,10 @@ var
 //    Inc(StartUnitNumber);
     OutputName := ChangeFileExt(FNameOfFile, '.sfrg');
     OutputName := OutputName + IntToStr(GageLines.Count);
-    WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, UNIT_Number, OutputName, foOutput, Model);
+    end;
 
     if OUTTYPE = 4 then
     begin
@@ -5678,8 +5684,11 @@ begin
             [FlowFileName, Segment.FScreenObject.Name]), Segment.FScreenObject);
         end;
         IUNIT := Model.ParentModel.UnitNumbers.SequentialUnitNumber;
-        WriteToNameFile(StrData, IUNIT, FlowFileName,
-          foInputAlreadyExists, Model, True);
+        if not WritingTemplate then
+        begin
+          WriteToNameFile(StrData, IUNIT, FlowFileName,
+            foInputAlreadyExists, Model, True);
+        end;
 
       end;
     ffcSpecify:
@@ -5687,7 +5696,10 @@ begin
         FlowFileName := ChangeFileExt(FNameOfFile, '');
         FlowFileName := TExternalFlowFileWriter.FileName(FlowFileName) + IntToStr(SEGNUM);
         IUNIT := Model.ParentModel.UnitNumbers.SequentialUnitNumber;
-        WriteToNameFile(StrData, IUNIT, FlowFileName, foInput, Model, False);
+        if not WritingTemplate then
+        begin
+          WriteToNameFile(StrData, IUNIT, FlowFileName, foInput, Model, False);
+        end;
         ExternalWriter := TExternalFlowFileWriter.Create(
           Model, Segment.ExternalFlow, SEGNUM);
         try

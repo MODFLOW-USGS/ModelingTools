@@ -317,7 +317,10 @@ begin
     WriteString(' WEL1:');
     WriteInteger(iunw1);
     NewLine;
-    WriteToNameFile(StrData, iunw1, WellFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrData, iunw1, WellFileName, foOutput, Model);
+    end;
   end;
 end;
 
@@ -360,7 +363,10 @@ begin
       WriteString(' ALLTIME');
     end;
     NewLine;
-    WriteToNameFile(StrData, iunby, ByNodeFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrData, iunby, ByNodeFileName, foOutput, Model);
+    end;
   end;
 end;
 
@@ -403,7 +409,10 @@ begin
       WriteString(' ALLTIME');
     end;
     NewLine;
-    WriteToNameFile(StrData, iunqs, QSumFileName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrData, iunqs, QSumFileName, foOutput, Model);
+    end;
   end;
 end;
 

@@ -350,8 +350,11 @@ begin
   FileRoot := ChangeFileExt(AFileName, '');
   for Index := 0 to NUZGAG - 1 do
   begin
-    WriteToNameFile(StrDATA, Model.ParentModel.UnitNumbers.SequentialUnitNumber, FileRoot
-      + IntToStr(Index + 1) + '.uzfg', foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, Model.ParentModel.UnitNumbers.SequentialUnitNumber, FileRoot
+        + IntToStr(Index + 1) + '.uzfg', foOutput, Model);
+    end;
   end;
 end;
 
@@ -524,10 +527,13 @@ begin
             WriteInteger(unitdis);
             NewLine;
 
-            WriteToNameFile(StrDATABINARY, unitrech,
-              ChangeFileExt(FNameOfFile, StrUzfRch), foOutput, Model);
-            WriteToNameFile(StrDATABINARY, unitdis,
-              ChangeFileExt(FNameOfFile, StrUzfDisch), foOutput, Model);
+            if not WritingTemplate then
+            begin
+              WriteToNameFile(StrDATABINARY, unitrech,
+                ChangeFileExt(FNameOfFile, StrUzfRch), foOutput, Model);
+              WriteToNameFile(StrDATABINARY, unitdis,
+                ChangeFileExt(FNameOfFile, StrUzfDisch), foOutput, Model);
+            end;
           end;
 
           WriteString('END');

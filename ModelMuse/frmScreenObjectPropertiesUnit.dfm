@@ -2465,7 +2465,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspSTR
+        ActivePage = jvspFarmWell
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -5578,6 +5578,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited framePestObsLak: TframePestObs
                   Width = 573
                   Height = 155
+                  ExplicitLeft = 0
+                  ExplicitTop = 0
                   ExplicitWidth = 573
                   ExplicitHeight = 155
                   inherited splObservations: TSplitter

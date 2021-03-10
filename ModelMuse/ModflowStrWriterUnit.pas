@@ -1955,8 +1955,11 @@ begin
     csfBinary:
       begin
         ISTCB2 := Model.UnitNumbers.UnitNumber(StrSTR_OUT);
-        WriteToNameFile(StrDATABINARY,
-          ISTCB2, ChangeFileExt(FNameOfFile,'.str_flow'), foOutput, Model);
+        if not WritingTemplate then
+        begin
+          WriteToNameFile(StrDATABINARY,
+                    ISTCB2, ChangeFileExt(FNameOfFile,'.str_flow'), foOutput, Model);
+        end;
       end;
   else
     begin
@@ -2665,12 +2668,18 @@ begin
     NQTST := 0;
 
     NameOfFile := ObservationFileName(AFileName);
-    WriteToNameFile(StrSTOB, Model.UnitNumbers.
-      UnitNumber(StrSTOB), NameOfFile, foInput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrSTOB, Model.UnitNumbers.
+            UnitNumber(StrSTOB), NameOfFile, foInput, Model);
+    end;
 
     IUSTOBSV := Model.UnitNumbers.UnitNumber(StrIUSTOBSV);
     OutputName := ObservationOutputFileName(AFileName);
-    WriteToNameFile(StrDATA, IUSTOBSV, OutputName, foOutput, Model);
+    if not WritingTemplate then
+    begin
+      WriteToNameFile(StrDATA, IUSTOBSV, OutputName, foOutput, Model);
+    end;
 
     if Model.PestUsed then
     begin
