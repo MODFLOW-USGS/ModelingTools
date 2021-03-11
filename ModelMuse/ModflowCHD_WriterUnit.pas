@@ -15,6 +15,7 @@ type
 //    FFileName: string;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
@@ -62,7 +63,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit,
-  ModflowGridUnit, Forms;
+  ModflowGridUnit, Forms, DataSetUnit;
 
 resourcestring
   StrErrorInCHDPackage = 'Error in CHD package';
@@ -196,6 +197,7 @@ var
   LocalLayer: integer;
   ParameterName: string;
   MultiplierValue: double;
+  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -210,6 +212,15 @@ begin
   end;
   WriteInteger(CHD_Cell.Column+1);
 
+  if (CHD_Cell.StartHeadPest <> '')
+    or (CHD_Cell.EndHeadPest <> '')
+    or (CHD_Cell.StartHeadPestSeriesName <> '')
+    or (CHD_Cell.EndHeadPestSeriesName <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
+
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
     and ( CHD_Cell.HeadParameterName <> '') then
@@ -223,12 +234,45 @@ begin
     begin
       MultiplierValue := CHD_Cell.StartingHead / CHD_Cell.HeadParameterValue;
     end;
-    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+    WriteModflowParamFormula(ParameterName, CHD_Cell.StartHeadPest,
+      MultiplierValue, CHD_Cell);
+  end
+  else if Model.PestUsed and WritingTemplate
+    and ((CHD_Cell.StartHeadPest <> '') or (CHD_Cell.StartHeadPestSeriesName <> '')) then
+  begin
+    WritePestTemplateFormula(CHD_Cell.StartingHead, CHD_Cell.StartHeadPest,
+      CHD_Cell.StartHeadPestSeriesName, CHD_Cell.StartHeadPestSeriesMethod,
+      CHD_Cell);
   end
   else
   begin
     WriteFloat(CHD_Cell.StartingHead);
+    if CHD_Cell.StartHeadPest <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        CHD_Cell.StartHeadPest);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if CHD_Cell.StartHeadPestSeriesName <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(
+        CHD_Cell.StartHeadPestSeriesName);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
   end;
+
+
+//  else
+//  begin
+//    WriteFloat(CHD_Cell.StartingHead);
+//  end;
 
 //  if CHD_Cell.TimeSeriesName = '' then
 //  begin
@@ -245,7 +289,36 @@ begin
 //  WriteFloat(CHD_Cell.StartingHead);
   if (Model.ModelSelection <> msModflow2015) then
   begin
-    WriteFloat(CHD_Cell.EndingHead);
+    if Model.PestUsed and WritingTemplate
+    and ((CHD_Cell.EndHeadPest <> '') or (CHD_Cell.EndHeadPestSeriesName <> '')) then
+    begin
+      WritePestTemplateFormula(CHD_Cell.EndingHead, CHD_Cell.EndHeadPest,
+        CHD_Cell.EndHeadPestSeriesName, CHD_Cell.EndHeadPestSeriesMethod,
+        CHD_Cell);
+    end
+    else
+    begin
+      WriteFloat(CHD_Cell.EndingHead);
+      if CHD_Cell.EndHeadPest <> '' then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(
+          CHD_Cell.EndHeadPest);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+      if CHD_Cell.EndHeadPestSeriesName <> '' then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(
+          CHD_Cell.EndHeadPestSeriesName);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+    end;
+//    WriteFloat(CHD_Cell.EndingHead);
   end;
   WriteIface(CHD_Cell.IFace);
   WriteBoundName(CHD_Cell);
@@ -363,81 +436,18 @@ begin
   begin
     Exit;
   end;
+  FPestParamUsed := False;
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
   WriteFileInternal;
-//  OpenFile(FNameOfFile);
-//  try
-//    frmProgressMM.AddMessage(StrWritingCHDPackage);
-//    frmProgressMM.AddMessage(StrWritingDataSet0);
-//    WriteDataSet0;
-//    Application.ProcessMessages;
-//    if not frmProgressMM.ShouldContinue then
-//    begin
-//      Exit;
-//    end;
-//
-//    if Model.ModelSelection = msModflow2015 then
-//    begin
-//      frmProgressMM.AddMessage(StrWritingOptions);
-//      WriteOptionsMF6(FNameOfFile);
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDimensions);
-//      WriteDimensionsMF6;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//    end
-//    else
-//    begin
-//      frmProgressMM.AddMessage(StrWritingDataSet1);
-//      WriteDataSet1;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSet2);
-//      WriteDataSet2;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//    end;
-//
-////    if Model.ModelSelection <> msModflow2015 then
-//    begin
-//      frmProgressMM.AddMessage(StrWritingDataSets3and4);
-//      WriteDataSets3And4;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//    end;
-//
-//    frmProgressMM.AddMessage(StrWritingDataSets5to7);
-//    WriteDataSets5To7;
-//  finally
-//    CloseFile;
-//  end;
 
   if Model.ModelSelection = msModflow2015 then
   begin
     WriteModflow6FlowObs(NameOfFile, FEvaluationType);
   end;
 
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParamValues.Count > 0) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try

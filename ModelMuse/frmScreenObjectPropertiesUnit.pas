@@ -2427,7 +2427,7 @@ type
       read GetPestMethod write SetPestMethod;
     Property PestModifier[Grid: TRbwDataGrid4; ACol: Integer]: string
       read GetPestModifier write SetPestModifier;
-    procedure GetPestModifiers(Frame: TframeScreenObjectCondParam;
+    procedure GetPestModifiers(Frame: TframeScreenObjectNoParam;
       Parameter: TParameterType; ScreenObjectList: TList);
     procedure StorePestModifiers(Frame: TframeScreenObjectParam;
       ParamType: TParameterType; Node: TJvPageIndexNode);
@@ -2723,7 +2723,9 @@ begin
   ParameterColumns := [];
    { TODO  -cPEST: Support PEST here }
   if (Sender = frameDrnParam.rdgModflowBoundary)
-    or (Sender = frameGhbParam.rdgModflowBoundary) then
+    or (Sender = frameGhbParam.rdgModflowBoundary)
+    or (Sender = frameChdParam.rdgModflowBoundary)
+    then
   begin
     ParameterColumns := [2,3]
   end
@@ -4426,6 +4428,10 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetChdBoundary(ScreenObjectList: TList);
+const
+  StartHeadPosition = 0;
+  EndHeadPosition = 1;
+  ColumnOffset = 2;
 var
   Frame: TframeScreenObjectParam;
   Parameter: TParameterType;
@@ -4438,6 +4444,14 @@ begin
   Parameter := ptCHD;
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FCHD_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FCHD_Node);
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+StartHeadPosition] :=
+    TChdBoundary.DefaultBoundaryMethod(StartHeadPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+EndHeadPosition] :=
+    TChdBoundary.DefaultBoundaryMethod(EndHeadPosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
 
 procedure TfrmScreenObjectProperties.btnOKClick(Sender: TObject);
@@ -5607,6 +5621,7 @@ begin
   frameDrtParam.OnCheckPestCell := EnablePestCells;
   frameScreenObjectStr.OnCheckPestCell := EnablePestCells;
   frameFarmWell.OnCheckPestCell := EnablePestCells;
+  frameChdParam.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -12231,7 +12246,7 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetPestModifiers(
-  Frame: TframeScreenObjectCondParam; Parameter: TParameterType;
+  Frame: TframeScreenObjectNoParam; Parameter: TParameterType;
   ScreenObjectList: TList);
 var
   ValuesFunction: TGetBoundaryCollectionEvent;
@@ -24749,6 +24764,9 @@ begin
     end;
     StoreModflowBoundary(Frame, ParamType, FCHD_Node);
     StoreModflowTimeInterpolation(Frame, ParamType, FCHD_Node);
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FCHD_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -24827,7 +24845,8 @@ begin
       or (DataGrid = frameRivParam.rdgModflowBoundary)
       or (DataGrid = frameDrtParam.rdgModflowBoundary)
       or (DataGrid = frameScreenObjectStr.rdgModflowBoundary)
-      or (DataGrid = frameFarmWell.rdgModflowBoundary)
+      or (DataGrid = frameChdParam.rdgModflowBoundary)
+      or ((DataGrid = frameFarmWell.rdgModflowBoundary) and (ACol = 2))
       ;
 
     // get the orientation of the data set.

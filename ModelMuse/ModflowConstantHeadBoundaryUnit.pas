@@ -228,8 +228,23 @@ type
   TChdBoundary = class(TModflowParamBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
-//    FInterp: TMf6InterpolationMethods;
-//    procedure SetInterp(const Value: TMf6InterpolationMethods);
+    FPestStartingHeadMethod: TPestParamMethod;
+    FPestEndingHeadMethod: TPestParamMethod;
+    FPestStartingHeadFormula: TFormulaObject;
+    FPestEndingHeadFormula: TFormulaObject;
+    FPestEndingObserver: TObserver;
+    FPestStartingObserver: TObserver;
+    FUsedObserver: TObserver;
+    function GetPestEndingHeadObserver: TObserver;
+    function GetPestStartingHeadObserver: TObserver;
+    function GetPestEndingHeadFormula: string;
+    function GetPestStartingHeadFormula: string;
+    procedure SetPestEndingHeadFormula(const Value: string);
+    procedure SetPestEndingHeadMethod(const Value: TPestParamMethod);
+    procedure SetPestStartingHeadFormula(const Value: string);
+    procedure SetPestStartingHeadMethod(const Value: TPestParamMethod);
+    procedure InvalidateStartingHeadData(Sender: TObject);
+    procedure InvalidateEndingHeadData(Sender: TObject);
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -238,16 +253,58 @@ type
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestStartingHeadObserver: TObserver read GetPestStartingHeadObserver;
+    property PestEndingHeadObserver: TObserver read GetPestEndingHeadObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
   public
-    procedure Assign(Source: TPersistent);override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property Interp;
+    property PestStartingHeadFormula: string read GetPestStartingHeadFormula
+      write SetPestStartingHeadFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEndingHeadFormula: string read GetPestEndingHeadFormula
+      write SetPestEndingHeadFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestStartingHeadMethod: TPestParamMethod read FPestStartingHeadMethod
+      write SetPestStartingHeadMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEndingHeadMethod: TPestParamMethod
+      read FPestEndingHeadMethod write SetPestEndingHeadMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
@@ -577,14 +634,18 @@ end;
 { TChdBoundary }
 
 procedure TChdBoundary.Assign(Source: TPersistent);
-//var
-//  SourceChd: TChdBoundary;
+var
+  SourceChd: TChdBoundary;
 begin
-//  if Source is TChdBoundary then
-//  begin
-//    SourceChd := TChdBoundary(Source);
+  if Source is TChdBoundary then
+  begin
+    SourceChd := TChdBoundary(Source);
 //    Interp := SourceChd.Interp;
-//  end;
+    PestStartingHeadFormula := SourceChd.PestStartingHeadFormula;
+    PestEndingHeadFormula := SourceChd.PestEndingHeadFormula;
+    PestStartingHeadMethod := SourceChd.PestStartingHeadMethod;
+    PestEndingHeadMethod := SourceChd.PestEndingHeadMethod;
+  end;
   inherited;
 end;
 
@@ -730,10 +791,66 @@ begin
   result := TChdCollection;
 end;
 
+function TChdBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestChd_';
+end;
+
 constructor TChdBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
   Interp := mimLinearEnd;
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestStartingHeadFormula := '';
+  PestEndingHeadFormula := '';
+  FPestStartingHeadMethod := DefaultBoundaryMethod(StartHeadPosition);
+  FPestEndingHeadMethod := DefaultBoundaryMethod(EndHeadPosition);
+
+end;
+
+procedure TChdBoundary.CreateFormulaObjects;
+begin
+  FPestStartingHeadFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestEndingHeadFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TChdBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestStartingHeadObserver);
+    FObserverList.Add(PestEndingHeadObserver);
+  end;
+end;
+
+class function TChdBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    StartHeadPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    EndHeadPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+destructor TChdBoundary.Destroy;
+begin
+  PestStartingHeadFormula := '';
+  PestEndingHeadFormula := '';
+
+  inherited;
 end;
 
 procedure TChdBoundary.GetCellValues(ValueTimeList: TList;
@@ -896,6 +1013,115 @@ begin
   end;
 end;
 
+function TChdBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    StartHeadPosition:
+      begin
+        result := PestStartingHeadFormula;
+      end;
+    EndHeadPosition:
+      begin
+        result := PestEndingHeadFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TChdBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    StartHeadPosition:
+      begin
+        result := PestStartingHeadMethod;
+      end;
+    EndHeadPosition:
+      begin
+        result := PestEndingHeadMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TChdBoundary.GetPestEndingHeadObserver: TObserver;
+begin
+  if FPestEndingObserver = nil then
+  begin
+    CreateObserver('PestEndingHead_', FPestEndingObserver, nil);
+    FPestEndingObserver.OnUpToDateSet := InvalidateEndingHeadData;
+  end;
+  result := FPestEndingObserver;
+end;
+
+function TChdBoundary.GetPestStartingHeadObserver: TObserver;
+begin
+  if FPestStartingObserver = nil then
+  begin
+    CreateObserver('PestStartingHead_', FPestStartingObserver, nil);
+    FPestStartingObserver.OnUpToDateSet := InvalidateStartingHeadData;
+  end;
+  result := FPestStartingObserver;
+end;
+
+function TChdBoundary.GetPestEndingHeadFormula: string;
+begin
+  Result := FPestEndingHeadFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(EndHeadPosition);
+  end;
+end;
+
+function TChdBoundary.GetPestStartingHeadFormula: string;
+begin
+  Result := FPestStartingHeadFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(StartHeadPosition);
+  end;
+end;
+
+procedure TChdBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestStartingHeadFormula then
+  begin
+    if StartHeadPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StartHeadPosition]);
+    end;
+  end;
+  if Sender = FPestEndingHeadFormula then
+  begin
+    if EndHeadPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[EndHeadPosition]);
+    end;
+  end;
+end;
+
+function TChdBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestChd_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TChdBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TChdBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -909,6 +1135,60 @@ begin
   end;
 end;
 
+procedure TChdBoundary.InvalidateEndingHeadData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfChdEndingHead(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfChdEndingHead(self);
+    end;
+  end;
+end;
+
+procedure TChdBoundary.InvalidateStartingHeadData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfChdStartingHead(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfChdStartingHead(self);
+    end;
+  end;
+end;
+
 class function TChdBoundary.ModflowParamItemClass: TModflowParamItemClass;
 begin
   result := TChdParamItem;
@@ -917,6 +1197,61 @@ end;
 function TChdBoundary.ParameterType: TParameterType;
 begin
   result := ptCHD;
+end;
+
+procedure TChdBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    StartHeadPosition:
+      begin
+        PestStartingHeadFormula := Value;
+      end;
+    EndHeadPosition:
+      begin
+        PestEndingHeadFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TChdBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    StartHeadPosition:
+      begin
+        PestStartingHeadMethod := Value;
+      end;
+    EndHeadPosition:
+      begin
+        PestEndingHeadMethod := Value;
+      end;
+    else
+      inherited;
+      Assert(False);
+  end;
+end;
+
+procedure TChdBoundary.SetPestEndingHeadFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, EndHeadPosition, FPestEndingHeadFormula);
+end;
+
+procedure TChdBoundary.SetPestEndingHeadMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestEndingHeadMethod, Value);
+end;
+
+procedure TChdBoundary.SetPestStartingHeadFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StartHeadPosition, FPestStartingHeadFormula);
+end;
+
+procedure TChdBoundary.SetPestStartingHeadMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestStartingHeadMethod, Value);
 end;
 
 //procedure TChdBoundary.SetInterp(const Value: TMf6InterpolationMethods);

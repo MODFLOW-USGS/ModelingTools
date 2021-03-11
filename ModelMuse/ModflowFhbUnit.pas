@@ -16,7 +16,7 @@ interface
 
 uses
   Classes, ZLib, ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit,
-  RbwParser, GoPhastTypes, ModflowCellUnit, SysUtils;
+  RbwParser, GoPhastTypes, ModflowCellUnit, SysUtils, SubscriptionUnit;
 
 type
   TFhbRecord = record
@@ -133,6 +133,9 @@ type
     Values: TFhbRecord;
     function GetBoundaryValue: double;
     function GetBoundaryValueAnnotation: string;
+    function GetBoundaryValuePest: string;
+    function GetBoundaryValuePestSeriesMethod: TPestParamMethod;
+    function GetBoundaryValuePestSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -152,6 +155,11 @@ type
     property BoundaryValue: double read GetBoundaryValue;
     property BoundaryValueAnnotation: string read GetBoundaryValueAnnotation;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    // PEST properties
+    property BoundaryValuePest: string read GetBoundaryValuePest;
+    property BoundaryValuePestSeriesName: string read GetBoundaryValuePestSeriesName;
+    property BoundaryValuePestSeriesMethod: TPestParamMethod read GetBoundaryValuePestSeriesMethod;
+
   end;
 
   TFhbCellList = class(TValueCellList)
@@ -168,6 +176,15 @@ type
   //
   // @seealso(TFhbHeadCollection)
   TFhbHeadBoundary = class(TModflowBoundary)
+  private
+    FPestFhbBoundaryMethod: TPestParamMethod;
+    FPestFhbBoundaryFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestBoundaryObserver: TObserver;
+    function GetPestBoundaryObserver: TObserver;
+    procedure SetFhbBoundaryMethod(const Value: TPestParamMethod);
+    function GetPestFhbBoundaryFormula: string;
+    procedure SetPestFhbBoundaryFormula(const Value: string);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -178,6 +195,21 @@ type
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     class function InterpolatedValue(Value1, Value2, Time1, Time2, Time: Double): double;
+
+    procedure InvalidateBoundaryData(Sender: TObject); virtual;
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestBoundaryObserver: TObserver read GetPestBoundaryObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
   public
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TDrnStorage) in
@@ -193,6 +225,21 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
+  published
+    property PestFhbBoundaryFormula: string read GetPestFhbBoundaryFormula
+      write SetPestFhbBoundaryFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestFhbBoundaryMethod: TPestParamMethod read FPestFhbBoundaryMethod
+      write SetFhbBoundaryMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
   // @name represents the MODFLOW FHB flow boundaries associated with
@@ -211,6 +258,8 @@ type
     FFormulaInterpretation: TFormulaInterpretation;
     procedure SetFormulaInterpretation(const Value: TFormulaInterpretation);
   protected
+    procedure InvalidateBoundaryData(Sender: TObject); override;
+    function BoundaryObserverPrefix: string; override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
   public
     // @name copies @link(FormulaInterpretation) from the Source
@@ -231,7 +280,7 @@ type
 implementation
 
 uses
-  PhastModelUnit, SubscriptionUnit, frmGoPhastUnit, ScreenObjectUnit,
+  PhastModelUnit, frmGoPhastUnit, ScreenObjectUnit,
   ModflowTimeUnit, GIS_Functions,
   frmFormulaErrorsUnit, System.Math;
 
@@ -736,6 +785,21 @@ begin
   result := Values.BoundaryValueAnnotation;
 end;
 
+function TFhb_Cell.GetBoundaryValuePest: string;
+begin
+  result := Values.BoundaryValuePest;
+end;
+
+function TFhb_Cell.GetBoundaryValuePestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.BoundaryValuePestSeriesMethod;
+end;
+
+function TFhb_Cell.GetBoundaryValuePestSeriesName: string;
+begin
+  result := Values.BoundaryValuePestSeriesName;
+end;
+
 function TFhb_Cell.GetColumn: integer;
 begin
   result := Values.Cell.Column;
@@ -991,6 +1055,30 @@ begin
   result := TFhbHeadCollection;
 end;
 
+function TFhbHeadBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestFhbHead_';
+end;
+
+procedure TFhbHeadBoundary.CreateFormulaObjects;
+begin
+  FPestFhbBoundaryFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TFhbHeadBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestBoundaryObserver);
+  end;
+end;
+
+class function TFhbHeadBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := ppmAdd;
+end;
+
 procedure TFhbHeadBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel);
 var
@@ -1054,6 +1142,81 @@ begin
 
 end;
 
+function TFhbHeadBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    BoundaryValuePosition:
+      begin
+        result := PestFhbBoundaryFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TFhbHeadBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    BoundaryValuePosition:
+      begin
+        result := PestFhbBoundaryMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TFhbHeadBoundary.GetPestBoundaryObserver: TObserver;
+begin
+  if FPestBoundaryObserver = nil then
+  begin
+    CreateObserver('PestFhbBoundary_', FPestBoundaryObserver, nil);
+    FPestBoundaryObserver.OnUpToDateSet := InvalidateBoundaryData;
+  end;
+  result := FPestBoundaryObserver;
+end;
+
+function TFhbHeadBoundary.GetPestFhbBoundaryFormula: string;
+begin
+  Result := FPestFhbBoundaryFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetItemObserver(BoundaryValuePosition);
+  end;
+end;
+
+procedure TFhbHeadBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestFhbBoundaryFormula then
+  begin
+    if BoundaryValuePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[BoundaryValuePosition]);
+    end;
+  end;
+end;
+
+function TFhbHeadBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestFhb_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TFhbHeadBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 class function TFhbHeadBoundary.InterpolatedValue(Value1, Value2, Time1, Time2,
   Time: Double): double;
 begin
@@ -1071,6 +1234,33 @@ begin
   end;
 end;
 
+procedure TFhbHeadBoundary.InvalidateBoundaryData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfFhbHeads(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfFhbHeads(self);
+    end;
+  end;
+end;
+
 procedure TFhbHeadBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1084,9 +1274,83 @@ begin
   end;
 end;
 
+procedure TFhbHeadBoundary.SetFhbBoundaryMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestFhbBoundaryMethod, Value);
+end;
+
+procedure TFhbHeadBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    BoundaryValuePosition:
+      begin
+        PestFhbBoundaryFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TFhbHeadBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    BoundaryValuePosition:
+      begin
+        PestFhbBoundaryMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TFhbHeadBoundary.SetPestFhbBoundaryFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, BoundaryValuePosition, FPestFhbBoundaryFormula);
+end;
+
 class function TFhbFlowBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TFhbFlowCollection;
+end;
+
+function TFhbFlowBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestFhbFlow_';
+end;
+
+procedure TFhbFlowBoundary.InvalidateBoundaryData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfFhbFlows(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfFhbFlows(self);
+    end;
+  end;
 end;
 
 procedure TFhbFlowBoundary.SetFormulaInterpretation(

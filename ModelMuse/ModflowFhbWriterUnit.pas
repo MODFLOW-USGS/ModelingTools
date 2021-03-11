@@ -20,6 +20,7 @@ type
     FPrintInputCellLists: Boolean;
     NFLW: Integer;
     NHED: integer;
+    FPestParamUsed: Boolean;
     procedure FillScreenObjectList;
     procedure GetModelTimes;
     procedure EvaluateHeadBoundaries;
@@ -695,6 +696,42 @@ var
   CellListIndex: Integer;
   CellStartIndex: Integer;
   PriorTimeCells: TFhbCellList;
+  procedure WriteFormulaOrValue(Cell: TFhb_Cell);
+  var
+    DataArray: TDataArray;
+  begin
+    if Model.PestUsed and WritingTemplate
+    and ((Cell.BoundaryValuePest <> '') or (Cell.BoundaryValuePestSeriesName <> '')) then
+    begin
+      FPestParamUsed := True;
+      WritePestTemplateFormula(Cell.BoundaryValue, Cell.BoundaryValuePest,
+        Cell.BoundaryValuePestSeriesName, Cell.BoundaryValuePestSeriesMethod,
+        Cell);
+    end
+    else
+    begin
+      WriteFloat(Cell.BoundaryValue);
+      if Cell.BoundaryValuePest <> '' then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(
+          Cell.BoundaryValuePest);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+      if Cell.BoundaryValuePestSeriesName <> '' then
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(
+          Cell.BoundaryValuePestSeriesName);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+    end;
+//    WriteFloat(Cell.BoundaryValue);
+  end;
 begin
   CellStartIndex := 0;
   Cells := nil;
@@ -720,7 +757,8 @@ begin
       WriteInteger(ACell.Row+1);
       WriteInteger(ACell.Column+1);
       WriteIface(ACell.IFace);
-      WriteFloat(ACell.BoundaryValue);
+      WriteFormulaOrValue(ACell);
+//      WriteFloat(ACell.BoundaryValue);
       TimeCells := Cells;
       PriorTimeCells := Cells;
       for TimeIndex := CellStartIndex+1 to ValuesToExport.Count - 1 do
@@ -746,7 +784,8 @@ begin
         Assert(ACell.Layer = TimeCell.Layer);
         Assert(ACell.Row = TimeCell.Row);
         Assert(ACell.Column = TimeCell.Column);
-        WriteFloat(TimeCell.BoundaryValue);
+        WriteFormulaOrValue(TimeCell);
+//        WriteFloat(TimeCell.BoundaryValue);
         if (((TimeIndex+1) mod 10) = 0)
           and (TimeIndex <> ValuesToExport.Count - 1) then
         begin
@@ -759,7 +798,8 @@ begin
         Assert(ACell.Layer = TimeCell.Layer);
         Assert(ACell.Row = TimeCell.Row);
         Assert(ACell.Column = TimeCell.Column);
-        WriteFloat(TimeCell.BoundaryValue);
+        WriteFormulaOrValue(TimeCell);
+//        WriteFloat(TimeCell.BoundaryValue);
       end;
       WriteString(LineComment);
       NewLine;
@@ -826,6 +866,7 @@ begin
   begin
     Exit;
   end;
+  FPestParamUsed := False;
 
   FInputFileName := FNameOfFile;
   OpenFile(FNameOfFile);
