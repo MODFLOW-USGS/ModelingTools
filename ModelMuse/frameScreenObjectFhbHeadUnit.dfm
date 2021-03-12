@@ -5,6 +5,7 @@ inherited frameScreenObjectFhbHead: TframeScreenObjectFhbHead
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -28,6 +29,7 @@ inherited frameScreenObjectFhbHead: TframeScreenObjectFhbHead
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

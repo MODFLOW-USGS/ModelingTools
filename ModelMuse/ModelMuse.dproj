@@ -1399,7 +1399,6 @@
         </DCCReference>
         <DCCReference Include="frameGridUnit.pas">
             <Form>frameGrid</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="DisclaimerTextUnit.pas"/>
@@ -1517,7 +1516,6 @@
         </DCCReference>
         <DCCReference Include="frameAvailableObjectsUnit.pas">
             <Form>frameAvailableObjects</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="frmEditSelectedWellsUnit.pas">
@@ -1568,26 +1566,22 @@
         </DCCReference>
         <DCCReference Include="framePestObsMf6Unit.pas">
             <Form>framePestObsMf6</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="PestObsExtractorInputWriterUnit.pas"/>
         <DCCReference Include="PestPropertiesUnit.pas"/>
         <DCCReference Include="frmPestUnit.pas">
             <Form>frmPEST</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="PestControlFileWriterUnit.pas"/>
         <DCCReference Include="PestParamGroupsUnit.pas"/>
         <DCCReference Include="PestObsGroupUnit.pas"/>
         <DCCReference Include="frameParentChildUnit.pas">
             <Form>frameParentChild</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="frmRunPestUnit.pas">
             <Form>frmRunPest</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ObsInterfaceUnit.pas"/>
         <DCCReference Include="PestPilotPointFileWriterUnit.pas"/>
@@ -1598,16 +1592,13 @@
         <DCCReference Include="PointCollectionUnit.pas"/>
         <DCCReference Include="frmRunParRepUnit.pas">
             <Form>frmRunParRep</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmSvdaPrepInputUnit.pas">
             <Form>frmSvdaPrepInput</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SvdaPrepPropertiesUnit.pas"/>
         <DCCReference Include="frmSupCalcUnit.pas">
             <Form>frmSupCalc</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">

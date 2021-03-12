@@ -40,6 +40,7 @@ type
       ValuesToExport: TList);
     procedure ClearTimeLists(AModel: TBaseModel);
     function TimeToPlot: double;
+    procedure WriteFileInternal;
   protected
     procedure Evaluate; override;
     function Package: TModflowPackageSelection; override;
@@ -511,6 +512,87 @@ begin
 
 end;
 
+procedure TModflowFhbWriter.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    frmProgressMM.AddMessage('Writing FHB Package input.');
+    frmProgressMM.AddMessage('  Writing Data Set 1.');
+    WriteDataSet1;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Sets 2 and 3.');
+    WriteDataSets2and3;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Set 4a.');
+    WriteDataSet4a;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Set 4b.');
+    WriteDataSet4b;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    if NFLW > 0 then
+    begin
+      frmProgressMM.AddMessage('  Writing Data Set 5.');
+      WriteDataSet5;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      frmProgressMM.AddMessage('  Writing Data Set 6.');
+      WriteDataSet6;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+    end;
+
+    if NHED > 0 then
+    begin
+      frmProgressMM.AddMessage('  Writing Data Set 7.');
+      WriteDataSet7;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+
+      frmProgressMM.AddMessage('  Writing Data Set 8.');
+      WriteDataSet8;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
 procedure TModflowFhbWriter.WriteDataSet1;
 const
   IFHBSS = 0;
@@ -703,13 +785,17 @@ var
     if Model.PestUsed and WritingTemplate
     and ((Cell.BoundaryValuePest <> '') or (Cell.BoundaryValuePestSeriesName <> '')) then
     begin
-      FPestParamUsed := True;
       WritePestTemplateFormula(Cell.BoundaryValue, Cell.BoundaryValuePest,
         Cell.BoundaryValuePestSeriesName, Cell.BoundaryValuePestSeriesMethod,
         Cell);
     end
     else
     begin
+      if ((Cell.BoundaryValuePest <> '')
+        or (Cell.BoundaryValuePestSeriesName <> '')) then
+      begin
+        FPestParamUsed := True;
+      end;
       WriteFloat(Cell.BoundaryValue);
       if Cell.BoundaryValuePest <> '' then
       begin
@@ -869,81 +955,20 @@ begin
   FPestParamUsed := False;
 
   FInputFileName := FNameOfFile;
-  OpenFile(FNameOfFile);
-  try
-    frmProgressMM.AddMessage('Writing FHB Package input.');
-    frmProgressMM.AddMessage('  Writing Data Set 1.');
-    WriteDataSet1;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
+  WriteFileInternal;
+
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
     end;
-
-    frmProgressMM.AddMessage('  Writing Data Sets 2 and 3.');
-    WriteDataSets2and3;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage('  Writing Data Set 4a.');
-    WriteDataSet4a;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage('  Writing Data Set 4b.');
-    WriteDataSet4b;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    if NFLW > 0 then
-    begin
-      frmProgressMM.AddMessage('  Writing Data Set 5.');
-      WriteDataSet5;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage('  Writing Data Set 6.');
-      WriteDataSet6;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-    end;
-
-    if NHED > 0 then
-    begin
-      frmProgressMM.AddMessage('  Writing Data Set 7.');
-      WriteDataSet7;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage('  Writing Data Set 8.');
-      WriteDataSet8;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-    end;
-
-  finally
-    CloseFile;
   end;
 
 end;

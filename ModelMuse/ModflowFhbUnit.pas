@@ -211,6 +211,9 @@ type
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TDrnStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -265,6 +268,8 @@ type
     // @name copies @link(FormulaInterpretation) from the Source
     // @classname to this @classname and then calls inherited Assign.
     procedure Assign(Source: TPersistent);override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     // @name determines whether the a formula represents
     // @unorderedlist(
@@ -907,6 +912,20 @@ begin
   inherited;
 end;
 
+procedure TFhbHeadBoundary.Assign(Source: TPersistent);
+var
+  FhbSource: TFhbHeadBoundary;
+begin
+  if Source is TFhbHeadBoundary then
+  begin
+    FhbSource := TFhbHeadBoundary(Source);
+    PestFhbBoundaryFormula := FhbSource.PestFhbBoundaryFormula;
+    PestFhbBoundaryMethod := FhbSource.PestFhbBoundaryMethod;
+  end;
+  inherited;
+
+end;
+
 procedure TFhbHeadBoundary.AssignCells(
   BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
   AModel: TBaseModel);
@@ -1060,6 +1079,17 @@ begin
   result := 'PestFhbHead_';
 end;
 
+constructor TFhbHeadBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestFhbBoundaryFormula := '';
+  PestFhbBoundaryMethod := DefaultBoundaryMethod(BoundaryValuePosition);
+end;
+
 procedure TFhbHeadBoundary.CreateFormulaObjects;
 begin
   FPestFhbBoundaryFormula := CreateFormulaObjectBlocks(dso3D);
@@ -1077,6 +1107,13 @@ class function TFhbHeadBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   result := ppmAdd;
+end;
+
+destructor TFhbHeadBoundary.Destroy;
+begin
+  PestFhbBoundaryFormula := '';
+
+  inherited;
 end;
 
 procedure TFhbHeadBoundary.GetCellValues(ValueTimeList: TList;
@@ -1324,6 +1361,12 @@ end;
 function TFhbFlowBoundary.BoundaryObserverPrefix: string;
 begin
   result := 'PestFhbFlow_';
+end;
+
+class function TFhbFlowBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := ppmMultiply;
 end;
 
 procedure TFhbFlowBoundary.InvalidateBoundaryData(Sender: TObject);

@@ -747,6 +747,12 @@ begin
         Cell.Values.HeadParameterName := BoundaryValues.HeadParameterName;
         Cell.Values.HeadParameterValue := BoundaryValues.HeadParameterValue;
         Cell.Values.TimeSeriesName := BoundaryValues.TimeSeriesName;
+        Cell.Values.StartHeadPest := BoundaryValues.StartHeadPest;
+        Cell.Values.EndHeadPest := BoundaryValues.EndHeadPest;
+        Cell.Values.StartHeadPestSeriesName := BoundaryValues.StartHeadPestSeriesName;
+        Cell.Values.EndHeadPestSeriesName := BoundaryValues.EndHeadPestSeriesName;
+        Cell.Values.StartHeadPestSeriesMethod := BoundaryValues.StartHeadPestSeriesMethod;
+        Cell.Values.EndHeadPestSeriesMethod := BoundaryValues.EndHeadPestSeriesMethod;
         Cell.Values.Cell := BoundaryValues.Cell;
         Cell.Values.StartingHead :=
           StartHeadFactor * BoundaryValues.StartingHead

@@ -48,7 +48,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit, ModflowTimeUnit;
+  frmGoPhastUnit, ModflowTimeUnit, GoPhastTypes;
 
 {$R *.dfm}
 
@@ -56,6 +56,8 @@ uses
 
 procedure TframeScreenObjectFhbHead.AssignFirstItem(
   ScreenObject: TScreenObject);
+const
+  BoundaryValuePosition = 0;
 var
   ABoundary: TFhbHeadBoundary;
   ItemIndex: Integer;
@@ -66,14 +68,18 @@ begin
   Assert(ABoundary <> nil);
   seNumberOfTimes.AsInteger := ABoundary.Values.Count;
   seNumberOfTimes.OnChange(nil);
-  Assert(rdgModflowBoundary.RowCount -1 = ABoundary.Values.Count);
+  Assert(rdgModflowBoundary.RowCount -1 = ABoundary.Values.Count + PestRowOffset);
   FhbItems := ABoundary.Values as TFhbHeadCollection;
   for ItemIndex := 0 to FhbItems.Count - 1 do
   begin
     AnItem := FhbItems[ItemIndex];
-    rdgModflowBoundary.Cells[Ord(fhcTime), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-    rdgModflowBoundary.Cells[Ord(fhcHead), ItemIndex+1] := AnItem.BoundaryValue;
+    rdgModflowBoundary.Cells[Ord(fhcTime), ItemIndex+PestRowOffset+1] := FloatToStr(AnItem.StartTime);
+    rdgModflowBoundary.Cells[Ord(fhcHead), ItemIndex+PestRowOffset+1] := AnItem.BoundaryValue;
   end;
+  {$IFDEF PEST}
+    PestMethod[Ord(fhcHead)] := ABoundary.PestBoundaryMethod[BoundaryValuePosition];
+    PestModifier[Ord(fhcHead)] := ABoundary.PestBoundaryFormula[BoundaryValuePosition];
+  {$ENDIF}
 end;
 
 constructor TframeScreenObjectFhbHead.Create(AOwner: TComponent);
@@ -143,6 +149,7 @@ var
   FhbItems: TFhbHeadCollection;
   ItemIndex: Integer;
   AnItem: TFhbItem;
+  FirstBoundary: TFhbHeadBoundary;
   procedure ClearGrid;
   var
     RowIndex: Integer;
@@ -176,30 +183,40 @@ begin
     if FInitialListOfScreenObjects.Count > 0 then
     begin
       AssignFirstItem(FInitialListOfScreenObjects[0]);
-    end;
-    for ScreenObjectIndex := 1 to FInitialListOfScreenObjects.Count - 1 do
-    begin
-      ABoundary := GetBoundary(FInitialListOfScreenObjects[ScreenObjectIndex]);
-      FhbItems := ABoundary.Values as TFhbHeadCollection;
-      if FhbItems.Count = seNumberOfTimes.AsInteger then
+      FirstBoundary := GetBoundary(FInitialListOfScreenObjects[0]);
+
+      for ScreenObjectIndex := 1 to FInitialListOfScreenObjects.Count - 1 do
       begin
-        for ItemIndex := 0 to FhbItems.Count - 1 do
+        ABoundary := GetBoundary(FInitialListOfScreenObjects[ScreenObjectIndex]);
+        if (ABoundary.PestFhbBoundaryFormula
+          <> FirstBoundary.PestFhbBoundaryFormula)
+          or (ABoundary.PestFhbBoundaryMethod
+          <> FirstBoundary.PestFhbBoundaryMethod) then
         begin
-          AnItem := FhbItems[ItemIndex];
-          if (rdgModflowBoundary.Cells[Ord(fhcTime), ItemIndex+1]
-            <> FloatToStr(AnItem.StartTime))
-            or (rdgModflowBoundary.Cells[Ord(fhcHead), ItemIndex+1]
-            <> AnItem.BoundaryValue) then
-          begin
-            ClearGrid;
-            Exit;
-          end;
+          ClearGrid;
+          Exit;
         end;
-      end
-      else
-      begin
-        ClearGrid;
-        break;
+        FhbItems := ABoundary.Values as TFhbHeadCollection;
+        if FhbItems.Count = seNumberOfTimes.AsInteger then
+        begin
+          for ItemIndex := 0 to FhbItems.Count - 1 do
+          begin
+            AnItem := FhbItems[ItemIndex];
+            if (rdgModflowBoundary.Cells[Ord(fhcTime), ItemIndex+1]
+              <> FloatToStr(AnItem.StartTime))
+              or (rdgModflowBoundary.Cells[Ord(fhcHead), ItemIndex+1]
+              <> AnItem.BoundaryValue) then
+            begin
+              ClearGrid;
+              Exit;
+            end;
+          end;
+        end
+        else
+        begin
+          ClearGrid;
+          break;
+        end;
       end;
     end;
   finally
@@ -209,6 +226,8 @@ begin
 end;
 
 procedure TframeScreenObjectFhbHead.InitializeControls;
+const
+  BoundaryValuePosition = 0;
 begin
   rdgModflowBoundary.Columns[Ord(fhcTime)].AutoAdjustColWidths := False;
   rdgModflowBoundary.Columns[Ord(fhcHead)].AutoAdjustColWidths := False;
@@ -223,6 +242,12 @@ begin
 //  rdgModflowBoundary.Columns[Ord(fhcTime)].AutoAdjustColWidths := False;
   rdgModflowBoundary.Columns[Ord(fhcHead)].AutoAdjustColWidths := False;
   LayoutMultiRowEditControls;
+  {$IFDEF PEST}
+  rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+  rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+  PestMethod[Ord(fhcHead)]
+    := TFhbHeadBoundary.DefaultBoundaryMethod(BoundaryValuePosition);
+  {$ENDIF}
 
 end;
 
@@ -326,6 +351,22 @@ begin
         end;
         if Boundary <> nil then
         begin
+          if rdgModflowBoundary.Cells[Ord(fhcHead),PestMethodRow] = '' then
+          begin
+            NewBoundary.PestFhbBoundaryMethod := Boundary.PestFhbBoundaryMethod;
+          end
+          else
+          begin
+            NewBoundary.PestFhbBoundaryMethod := PestMethod[Ord(fhcHead)];
+          end;
+          if rdgModflowBoundary.Cells[Ord(fhcHead),PestModifierRow] = '' then
+          begin
+            NewBoundary.PestFhbBoundaryFormula := Boundary.PestFhbBoundaryFormula;
+          end
+          else
+          begin
+            NewBoundary.PestFhbBoundaryFormula := PestModifier[Ord(fhcHead)];
+          end;
           Boundary.Assign(NewBoundary);
         end;
       end;

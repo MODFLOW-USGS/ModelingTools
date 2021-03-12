@@ -2718,40 +2718,49 @@ procedure TfrmScreenObjectProperties.EnablePestCells(Sender: TObject; ACol,
   ARow: Longint; var CanSelect: Boolean);
 var
   Column: TRbwColumn4;
-  ParameterColumns: set of Byte;
+  PestParameterColumns: set of Byte;
 begin
-  ParameterColumns := [];
+  PestParameterColumns := [];
    { TODO  -cPEST: Support PEST here }
   if (Sender = frameDrnParam.rdgModflowBoundary)
     or (Sender = frameGhbParam.rdgModflowBoundary)
     or (Sender = frameChdParam.rdgModflowBoundary)
     then
   begin
-    ParameterColumns := [2,3]
+    PestParameterColumns := [2,3]
   end
   else if (Sender = frameWellParam.rdgModflowBoundary)
     or (Sender = frameFarmWell.rdgModflowBoundary) then
   begin
-    ParameterColumns := [2]
+    PestParameterColumns := [2]
   end
   else if (Sender = frameRivParam.rdgModflowBoundary)
     or (Sender = frameDrtParam.rdgModflowBoundary) then
   begin
-    ParameterColumns := [2,3,4]
+    PestParameterColumns := [2,3,4]
   end
   else if (Sender = frameScreenObjectSTR.rdgModflowBoundary) then
   begin
-    ParameterColumns := [4..11];
+    PestParameterColumns := [4..11];
+  end
+  else if (Sender = frameFhbHead.rdgModflowBoundary)
+    or (Sender = frameFhbFlow.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [1];
+  end;
+  if not (ACol in PestParameterColumns) and (ARow >= 1) and (ARow <= PestRowOffset) then
+  begin
+    CanSelect := False
   end;
 
-  Assert(ParameterColumns <> []);
-  if (ARow >= 1) and (ACol >= 2) then
+  Assert(PestParameterColumns <> []);
+  if (ARow >= 1) and (ACol in PestParameterColumns) then
   begin
     Column := (Sender as TRbwDataGrid4).Columns[ACol];
     if (ARow <= PestRowOffset)  then
     begin
-      if ACol in ParameterColumns then
-      begin
+//      if ACol in PestParameterColumns then
+//      begin
         Column.ComboUsed := True;
         Column.LimitToList := True;
         if ARow = PestMethodRow then
@@ -2762,11 +2771,11 @@ begin
         begin
           Column.PickList := FPestParametersAndDataSets
         end;
-      end
-      else
-      begin
-        CanSelect := False
-      end;
+//      end
+//      else
+//      begin
+//        CanSelect := False
+//      end;
     end
     else
     begin
@@ -2774,7 +2783,7 @@ begin
       Column.LimitToList := False;
     end;
   end
-  else if (ACol = 1) and (ARow >= 1) and (ARow <= PestRowOffset) then
+  else if (ARow <= PestRowOffset) then
   begin
     CanSelect := False
   end;
@@ -5622,6 +5631,8 @@ begin
   frameScreenObjectStr.OnCheckPestCell := EnablePestCells;
   frameFarmWell.OnCheckPestCell := EnablePestCells;
   frameChdParam.OnCheckPestCell := EnablePestCells;
+  frameFhbHead.OnCheckPestCell := EnablePestCells;
+  frameFhbFlow.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -24847,6 +24858,8 @@ begin
       or (DataGrid = frameScreenObjectStr.rdgModflowBoundary)
       or (DataGrid = frameChdParam.rdgModflowBoundary)
       or ((DataGrid = frameFarmWell.rdgModflowBoundary) and (ACol = 2))
+      or (DataGrid = frameFhbHead.rdgModflowBoundary)
+      or (DataGrid = frameFhbFlow.rdgModflowBoundary)
       ;
 
     // get the orientation of the data set.
