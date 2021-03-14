@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Mf6RechargeOptionTest" FileType="bin">
-    <FileName Model_Name="Mf6RechargeOptionTest" FileType="bin">..\..\..\WRDAPP\mf6.1.1\bin\mf6.exe</FileName>
+    <FileName Model_Name="Mf6RechargeOptionTest" FileType="bin">..\..\..\WRDAPP\mf6.2.1\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="Mf6RechargeOptionTest" FileType="ancillary">
     <FileName Model_Name="Mf6RechargeOptionTest" FileType="ancillary">Mf6RechargeOptionTest.gpt</FileName>
