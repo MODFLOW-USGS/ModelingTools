@@ -580,6 +580,10 @@ begin
     frameCheck3DMax.Enabled := true;
     DataSet := TDataArray(AnObject);
     comboAlgorithm.ItemIndex := Ord(DataSet.ContourAlg);
+    if comboAlgorithm.ItemIndex < 0 then
+    begin
+      comboAlgorithm.ItemIndex := 0;
+    end;
     rdgValuesToIgnore.Enabled := DataSet.DataType <> rdtBoolean;
     seNumberOfValuesToIgnore.Enabled := DataSet.DataType <> rdtBoolean;
     if not seNumberOfValuesToIgnore.Enabled then

@@ -244,6 +244,7 @@ uses Math, RbwParser, BigCanvasMethods, PhastModelUnit,
 
 resourcestring
   StrErrorAttemptingTo = 'Error attempting to log transform %g';
+  StrInvalidContourAlgo = 'Invalid contour algorithm';
 
 function Interpolate(const C1, C2 : TPoint2D; Val1, Val2 : TFloat;
   ContourValue: TFloat) : TPoint2D;
@@ -700,7 +701,7 @@ begin
           Assert(Assigned(Mesh));
         end;
       end
-    else Assert(False);
+    else Assert(False, StrInvalidContourAlgo);
   end;
 
 
@@ -747,7 +748,7 @@ begin
               SelectedColRowLayer, DSValues, ViewDirection);
           end;
         end;
-      else Assert(False);
+      else Assert(False, StrInvalidContourAlgo);
     end;
   finally
     DSValues.Free;
@@ -1145,7 +1146,7 @@ begin
                 end;
               end;
             end;
-          else Assert(False);
+          else Assert(False, StrInvalidContourAlgo);
         end;
 
         GetSpecifiedMinMax(MinValue, MaxValue, DSValues);
@@ -3385,7 +3386,7 @@ begin
 //        end;
       end;
     else
-      Assert(False);
+      Assert(False, StrInvalidContourAlgo);
   end;
 
   DrawContourLabels;

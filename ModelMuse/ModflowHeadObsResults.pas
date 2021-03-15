@@ -189,6 +189,18 @@ var
   Angle: double;
   Color: TColor32;
   APolygon: TPolygon32;
+  ClipRect: TRect;
+  function GetClipRect(Graphic: TPersistent): TRect;
+  begin
+    if Graphic is TBitmap32 then
+    begin
+      result := TBitmap32(Graphic).Canvas.ClipRect;
+    end
+    else
+    begin
+      result := (Graphic as TCanvas).ClipRect;
+    end;
+  end;
 begin
   if not Visible then
   begin
@@ -207,6 +219,25 @@ begin
   Radius :=
     Sqrt(Abs(Residual)/FHeadObsCollection.FMaxResidual)
     * (FHeadObsCollection.MaxSymbolSize / 2);
+
+  ClipRect := GetClipRect(BitMap);
+  if XCenter + Radius < ClipRect.Left then
+  begin
+    Exit;
+  end;
+  if XCenter - Radius > ClipRect.Right then
+  begin
+    Exit;
+  end;
+  if YCenter + Radius < ClipRect.Top then
+  begin
+    Exit;
+  end;
+  if YCenter - Radius > ClipRect.Bottom then
+  begin
+    Exit;
+  end;
+
   SetLength(Points, MaxPoints);
   for PointIndex := 0 to MaxPoints - 1 do
   begin

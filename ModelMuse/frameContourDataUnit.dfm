@@ -6,12 +6,9 @@ inherited frameContourData: TframeContourData
   inherited pcChoices: TPageControl
     Width = 578
     Height = 501
-    ActivePage = tabFilters
     ExplicitWidth = 578
     ExplicitHeight = 501
     inherited tabSelection: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 570
       ExplicitHeight = 473
       DesignSize = (
@@ -181,7 +178,7 @@ inherited frameContourData: TframeContourData
         OnClick = btnContourFontClick
       end
       object comboAlgorithm: TComboBox
-        Left = 9
+        Left = 3
         Top = 210
         Width = 145
         Height = 21
@@ -219,8 +216,6 @@ inherited frameContourData: TframeContourData
       end
     end
     inherited tabFilters: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 570
       ExplicitHeight = 473
       DesignSize = (
@@ -233,7 +228,7 @@ inherited frameContourData: TframeContourData
       object lblModel: TLabel [5]
         Left = 203
         Top = 152
-        Width = 121
+        Width = 86
         Height = 13
         Caption = 'Models to contour'
       end
@@ -258,8 +253,6 @@ inherited frameContourData: TframeContourData
       end
     end
     inherited tabLegend: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 570
       ExplicitHeight = 473
       inherited imLegend: TImage
