@@ -138,7 +138,7 @@ type
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer;
       AModel: TBaseModel); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
   public
@@ -333,7 +333,7 @@ begin
   Result := FHydraulicConductivityFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(HydraulicConductivityPosition);
+    ResetBoundaryObserver(HydraulicConductivityPosition);
   end;
 end;
 
@@ -365,7 +365,7 @@ begin
   Result := FLayerOffsetFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(LayerOffsetPosition);
+    ResetBoundaryObserver(LayerOffsetPosition);
   end;
 end;
 
@@ -434,7 +434,7 @@ begin
   Result := FThicknessFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ThicknessPosition);
+    ResetBoundaryObserver(ThicknessPosition);
   end;
 end;
 
@@ -925,7 +925,8 @@ begin
 end;
 
 procedure THfbCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 begin
   inherited;
 

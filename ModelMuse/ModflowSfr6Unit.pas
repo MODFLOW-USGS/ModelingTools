@@ -2389,7 +2389,7 @@ begin
   Result := FGradient.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(GradientPosition);
+    ResetBoundaryObserver(GradientPosition);
   end;
 end;
 
@@ -2407,7 +2407,7 @@ begin
   Result := FHydraulicConductivity.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(HydraulicConductivityPosition);
+    ResetBoundaryObserver(HydraulicConductivityPosition);
   end;
 end;
 
@@ -2453,7 +2453,7 @@ begin
   Result := FReachLength.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ReachLengthPosition);
+    ResetBoundaryObserver(ReachLengthPosition);
   end;
 end;
 
@@ -2471,7 +2471,7 @@ begin
   Result := FReachWidth.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ReachWidthPosition);
+    ResetBoundaryObserver(ReachWidthPosition);
   end;
 end;
 
@@ -2507,7 +2507,7 @@ begin
   Result := FStreambedThickness.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreambedThicknessPosition);
+    ResetBoundaryObserver(StreambedThicknessPosition);
   end;
 end;
 
@@ -2525,7 +2525,7 @@ begin
   Result := FStreambedTop.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreambedTopPosition);
+    ResetBoundaryObserver(StreambedTopPosition);
   end;
 end;
 

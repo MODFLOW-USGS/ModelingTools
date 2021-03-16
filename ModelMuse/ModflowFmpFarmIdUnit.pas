@@ -107,10 +107,11 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -306,7 +307,7 @@ begin
 end;
 
 procedure TFmpFarmIDCollection.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   FarmIDArray: TDataArray;
   Boundary: TFmpFarmIDStorage;
@@ -368,7 +369,7 @@ begin
 end;
 
 procedure TFmpFarmIDCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

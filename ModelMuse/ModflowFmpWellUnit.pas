@@ -1421,7 +1421,7 @@ begin
   Result := FPestMaxPumpingRateFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(FmpWellMaxPumpingRatePosition);
+    ResetBoundaryObserver(FmpWellMaxPumpingRatePosition);
   end;
 end;
 

@@ -122,7 +122,7 @@ type
       PestName: string; PestSeriesName: string;
       PestSeriesMethod: TPestParamMethod); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
     procedure Loaded;
@@ -613,7 +613,8 @@ begin
 end;
 
 procedure TLktInitConcCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 begin
   // does anything need to be done here?
   // called from TCustomListArrayBoundColl.AssignArrayCellsWithItem

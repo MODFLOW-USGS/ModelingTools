@@ -146,10 +146,11 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -828,7 +829,8 @@ begin
 end;
 
 procedure TUzfMf6Collection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   InfiltrationArray: TDataArray;
   PotentialETArray: TDataArray;
@@ -948,7 +950,7 @@ begin
 end;
 
 procedure TUzfMf6Collection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1755,7 +1757,7 @@ begin
   Result := FBrooksCoreyEpsilon.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(BrooksCoreyEpsilonPosition);
+    ResetBoundaryObserver(BrooksCoreyEpsilonPosition);
   end;
 end;
 
@@ -1802,7 +1804,7 @@ begin
   Result := FInitialWaterContent.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(InitialWaterContentPosition);
+    ResetBoundaryObserver(InitialWaterContentPosition);
   end;
 end;
 
@@ -1860,7 +1862,7 @@ begin
   Result := FResidualWaterContent.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ResidualWaterContentPosition);
+    ResetBoundaryObserver(ResidualWaterContentPosition);
   end;
 end;
 
@@ -1890,7 +1892,7 @@ begin
   Result := FSaturatedWaterContent.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(SaturatedWaterContentPosition);
+    ResetBoundaryObserver(SaturatedWaterContentPosition);
   end;
 end;
 
@@ -1920,7 +1922,7 @@ begin
   Result := FSurfaceDepressionDepth.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(SurfaceDepressionDepthPosition);
+    ResetBoundaryObserver(SurfaceDepressionDepthPosition);
   end;
 end;
 
@@ -1950,7 +1952,7 @@ begin
   Result := FVerticalSaturatedK.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(VerticalSaturatedKPosition);
+    ResetBoundaryObserver(VerticalSaturatedKPosition);
   end;
 end;
 

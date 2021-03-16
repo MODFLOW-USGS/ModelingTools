@@ -157,11 +157,12 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList;
+      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -1139,7 +1140,8 @@ begin
 end;
 
 procedure TEtsSurfDepthCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   EvapotranspirationSurfaceArray: TDataArray;
   EvapotranspirationDepthArray: TDataArray;
@@ -1284,7 +1286,7 @@ begin
 end;
 
 procedure TEtsSurfDepthCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

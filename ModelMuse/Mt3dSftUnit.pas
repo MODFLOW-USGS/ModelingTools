@@ -141,7 +141,7 @@ type
     procedure CountArrayBoundaryCells(var BoundaryCount: Integer;
       DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
   public
     property BoundaryType: TSftBoundaryType read FBoundaryType write SetBoundaryType;
   end;
@@ -468,7 +468,8 @@ end;
 { TCustomMt3dSftReachCollection }
 
 procedure TCustomMt3dSftReachCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   ConcArray: TDataArray;
 //  LgrReachLengthArray: TDataArray;

@@ -90,9 +90,10 @@ type
       PestName: string; PestSeriesName: string;
       PestSeriesMethod: TPestParamMethod); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList;
+      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual; abstract;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -488,7 +489,8 @@ begin
 end;
 
 procedure TCustomSwrListCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   SwrArray: TDataArray;
   Boundary: TSwrStorage;
@@ -636,7 +638,7 @@ begin
 end;
 
 procedure TCustomSwrListCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

@@ -1320,7 +1320,7 @@ begin
   Result := FBedK.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(BedKPosition);
+    ResetBoundaryObserver(BedKPosition);
   end;
 end;
 
@@ -1347,7 +1347,7 @@ begin
   Result := FBedThickness.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(BedThicknessPosition);
+    ResetBoundaryObserver(BedThicknessPosition);
   end;
 end;
 
@@ -1374,7 +1374,7 @@ begin
   Result := FBottomElevation.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(BottomElevationPosition);
+    ResetBoundaryObserver(BottomElevationPosition);
   end;
 end;
 
@@ -1408,7 +1408,7 @@ begin
   Result := FConnectionLength.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ConnectionLengthPosition);
+    ResetBoundaryObserver(ConnectionLengthPosition);
   end;
 end;
 
@@ -1506,7 +1506,7 @@ begin
   Result := FStartingStage.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StartingStagePosition);
+    ResetBoundaryObserver(StartingStagePosition);
   end;
 end;
 
@@ -1533,7 +1533,7 @@ begin
   Result := FTopElevation.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(TopElevationPosition);
+    ResetBoundaryObserver(TopElevationPosition);
   end;
 end;
 

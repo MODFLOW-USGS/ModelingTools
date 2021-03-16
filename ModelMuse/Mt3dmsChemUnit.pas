@@ -264,9 +264,9 @@ type
     procedure DeleteSpecies(SpeciesIndex: integer);
     procedure CreateTimeLists;
     procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure RenameTimeList(const OldSpeciesName, NewSpeciesName: string);
     procedure RenameItems(const OldSpeciesName, NewSpeciesName: string);
     procedure ChangeSpeciesItemPosition(OldIndex, NewIndex: integer);
@@ -2118,7 +2118,8 @@ begin
 end;
 
 procedure TCustomMt3dmsArrayConcCollection.AssignArrayCellValues(
-  DataSets: TList; ItemIndex: Integer; AModel: TBaseModel);
+  DataSets: TList; ItemIndex: Integer; AModel: TBaseModel;
+  PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
 //  EvapotranspirationSurfaceArray: TDataArray;
 //  EvapotranspirationDepthArray: TDataArray;
@@ -2319,7 +2320,8 @@ begin
 end;
 
 procedure TCustomMt3dmsArrayConcCollection.InitializeTimeLists(
-  ListOfTimeLists: TList; AModel: TBaseModel);
+  ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   BoundaryValues: TBoundaryValueArray;
   Index: Integer;

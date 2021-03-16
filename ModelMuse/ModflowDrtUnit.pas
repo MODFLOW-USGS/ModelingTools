@@ -1172,7 +1172,7 @@ begin
   Result := FPestCondFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ConductancePosition);
+    ResetBoundaryObserver(ConductancePosition);
   end;
 end;
 
@@ -1201,7 +1201,7 @@ begin
   Result := FPestElevFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ElevationPosition);
+    ResetBoundaryObserver(ElevationPosition);
   end;
 end;
 
@@ -1220,7 +1220,7 @@ begin
   Result := FPestReturnFractionFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ReturnPosition);
+    ResetBoundaryObserver(ReturnPosition);
   end;
 end;
 

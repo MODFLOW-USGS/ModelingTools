@@ -89,7 +89,7 @@ begin
   Result := FFixedHead.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(FixedHeadPosition);
+    ResetBoundaryObserver(FixedHeadPosition);
   end;
 end;
 

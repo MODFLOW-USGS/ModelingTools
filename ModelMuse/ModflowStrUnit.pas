@@ -2360,7 +2360,7 @@ begin
   Result := FStreamBedBottomFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamBedBottomPosition);
+    ResetBoundaryObserver(StreamBedBottomPosition);
   end;
 end;
 
@@ -2379,7 +2379,7 @@ begin
   Result := FStreamBedTopFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamBedTopPosition);
+    ResetBoundaryObserver(StreamBedTopPosition);
   end;
 end;
 
@@ -2509,7 +2509,7 @@ begin
   Result := FStreamConductanceFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamConductancePosition);
+    ResetBoundaryObserver(StreamConductancePosition);
   end;
 end;
 
@@ -2528,7 +2528,7 @@ begin
   Result := FStreamFlowFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamFlowPosition);
+    ResetBoundaryObserver(StreamFlowPosition);
   end;
 end;
 
@@ -2697,7 +2697,7 @@ begin
   Result := FStreamRoughnessFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamRoughnessPosition);
+    ResetBoundaryObserver(StreamRoughnessPosition);
   end;
 end;
 
@@ -2716,7 +2716,7 @@ begin
   Result := FStreamSlopeFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamSlopePosition);
+    ResetBoundaryObserver(StreamSlopePosition);
   end;
 end;
 
@@ -2735,7 +2735,7 @@ begin
   Result := FStreamStageFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamStagePosition);
+    ResetBoundaryObserver(StreamStagePosition);
   end;
 end;
 
@@ -2764,7 +2764,7 @@ begin
   Result := FStreamWidthFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StreamWidthPosition);
+    ResetBoundaryObserver(StreamWidthPosition);
   end;
 end;
 

@@ -1081,7 +1081,7 @@ begin
   Result := FPestEndingHeadFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(EndHeadPosition);
+    ResetBoundaryObserver(EndHeadPosition);
   end;
 end;
 
@@ -1090,7 +1090,7 @@ begin
   Result := FPestStartingHeadFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StartHeadPosition);
+    ResetBoundaryObserver(StartHeadPosition);
   end;
 end;
 

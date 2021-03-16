@@ -1223,7 +1223,7 @@ begin
   Result := FPestFhbBoundaryFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(BoundaryValuePosition);
+    ResetBoundaryObserver(BoundaryValuePosition);
   end;
 end;
 

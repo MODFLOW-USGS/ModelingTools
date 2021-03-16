@@ -190,7 +190,7 @@ type
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure AssignDirectlySpecifiedValues(AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
   public
@@ -751,7 +751,7 @@ begin
 end;
 
 procedure TMvrItems.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 begin
   Assert(False);
 //  inherited;

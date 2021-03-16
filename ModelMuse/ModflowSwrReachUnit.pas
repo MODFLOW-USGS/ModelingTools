@@ -136,7 +136,7 @@ type
     procedure InvalidateStage(Sender: TObject);
   protected
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -585,7 +585,8 @@ begin
 end;
 
 procedure TSwrReachCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 begin
   Assert(False);
 end;
@@ -1261,7 +1262,7 @@ begin
   Result := FReachLengthFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ReachLengthPosition);
+    ResetBoundaryObserver(ReachLengthPosition);
   end;
 end;
 

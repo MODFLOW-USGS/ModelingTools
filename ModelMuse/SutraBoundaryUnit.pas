@@ -1497,25 +1497,25 @@ end;
 function TSutraLake.GetFractionDischargeDiverted: string;
 begin
   Result := FFractionDischargeDiverted.Formula;
-  ResetItemObserver(FractionDischargeDivertedPosition);
+  ResetBoundaryObserver(FractionDischargeDivertedPosition);
 end;
 
 function TSutraLake.GetFractionRechargeDiverted: string;
 begin
   Result := FFractionRechargeDiverted.Formula;
-  ResetItemObserver(FractionRechargeDivertedPosition);
+  ResetBoundaryObserver(FractionRechargeDivertedPosition);
 end;
 
 function TSutraLake.GetInitialConcentrationOrTemperature: string;
 begin
   Result := FInitialConcentrationOrTemperature.Formula;
-  ResetItemObserver(InitialConcentrationOrTemperaturePosition);
+  ResetBoundaryObserver(InitialConcentrationOrTemperaturePosition);
 end;
 
 function TSutraLake.GetInitialStage: string;
 begin
   Result := FInitialStage.Formula;
-  ResetItemObserver(InitialStagePosition);
+  ResetBoundaryObserver(InitialStagePosition);
 end;
 
 function TSutraLake.GetInitialStageObserver: TObserver;

@@ -4079,18 +4079,9 @@ var
   NoDefinedErrorRoot: string;
   FlowObs: TBoundaryFlowObservationLocation;
   Mf6Obs: TModflow6Obs;
-//  ObsCells: array of array of array of Boolean;
-//  BoundaryCells: array of array of array of Boolean;
-//  LayerIndex: Integer;
-//  RowIndex: Integer;
-//  ColIndex: Integer;
-//  CellList: TCellAssignmentList;
-//  ACell: TCellAssignment;
-//  ScreenObjectList: TScreenObjectList;
   ListIndex: Integer;
   ValueCellList: TValueCellList;
   AValueCell: TValueCell;
-//  CellIndex: Integer;
   procedure AssignMf6ObsNames(ValueCellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -4186,32 +4177,6 @@ begin
             FlowObs.FMf6Obs := Mf6Obs;
             FlowObs.FBoundName := ScreenObject.Name;
             FlowObsLocations.Add(FlowObs);
-//          end
-//          else
-//          begin
-//            CellList:= TCellAssignmentList.Create;
-//            try
-//              ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList,
-//                alAll, Model);
-//              for CellIndex := 0 to CellList.Count - 1 do
-//              begin
-//                ACell := CellList[CellIndex];
-//                if ObsLocationCheck.IsValue[ACell.Cell.Layer,
-//                  ACell.Cell.Row, ACell.Cell.Column] then
-//                begin
-//                  FlowObs.FCell := ACell.Cell;
-//                  FlowObs.FName := ObsLocationCheck[ACell.Cell.Layer,
-//                    ACell.Cell.Row, ACell.Cell.Column];
-//                  FlowObs.FBoundName := '';
-//                  FlowObs.FMf6Obs := FMf6ObsArray[ACell.Cell.Layer,
-//                  ACell.Cell.Row, ACell.Cell.Column];
-//                  FlowObsLocations.Add(FlowObs);
-//                end;
-//              end;
-//
-//            finally
-//              CellList.Free;
-//            end;
           end;
         end;
       end
@@ -4224,32 +4189,6 @@ begin
         FlowObs.FBoundName := Mf6Obs.Name;
         FlowObsLocations.Add(FlowObs);
 
-
-//        CellList:= TCellAssignmentList.Create;
-//        try
-//          ScreenObject.GetCellsToAssign({Model.Grid,} '0', nil, nil, CellList,
-//            alAll, Model);
-//          for CellIndex := 0 to CellList.Count - 1 do
-//          begin
-//            ACell := CellList[CellIndex];
-//            ObsCells[ACell.Layer, ACell.Row, ACell.Column] := True;
-//            if ScreenObject.Modflow6Obs <> nil then
-//            begin
-//              if FMf6ObsArray[ACell.Layer, ACell.Row, ACell.Column] = nil then
-//              begin
-//                ScreenObjectList := TScreenObjectList.Create;
-//                FMf6ObsArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObjectList;
-//              end
-//              else
-//              begin
-//                ScreenObjectList := FMf6ObsArray[ACell.Layer, ACell.Row, ACell.Column];
-//              end;
-//              ScreenObjectList.Add(ScreenObject);
-//            end;
-//          end;
-//        finally
-//          CellList.Free;
-//        end;
       end;
     end;
 
@@ -4290,39 +4229,6 @@ begin
       end;
     end;
 
-//    for LayerIndex := 0 to Model.LayerCount - 1 do
-//    begin
-//      for RowIndex := 0 to Model.RowCount - 1 do
-//      begin
-//        for ColIndex := 0 to Model.ColumnCount - 1 do
-//        begin
-//          if ObsCells[LayerIndex, RowIndex, ColIndex]
-//            and BoundaryCells[LayerIndex, RowIndex, ColIndex] then
-//          begin
-//            FlowObs.FCell.Layer := LayerIndex;
-//            FlowObs.FCell.Row := RowIndex;
-//            FlowObs.FCell.Column := ColIndex;
-//            ScreenObjectList := FMf6ObsArray[LayerIndex,
-//              RowIndex, ColIndex];
-//            FScreenObjectLists.Add(ScreenObjectList);
-//            FlowObs.FMf6Obs := ScreenObjectList[0].Modflow6Obs;
-//            if FlowObs.FMf6Obs <> nil then
-//            begin
-//              FlowObs.FName := FlowObs.FMf6Obs.Name;
-//            end;
-//            FlowObs.FName := Format('%0:s_%1:d_%2:d_%3:d',
-//              [FlowObs.FName, LayerIndex+1, RowIndex+1,ColIndex+1]);
-//            FlowObs.FBoundName := '';
-//            FlowObsLocations.Add(FlowObs);
-//          end
-//          else
-//          begin
-//            FMf6ObsArray[LayerIndex, RowIndex, ColIndex].Free;
-//            FMf6ObsArray[LayerIndex, RowIndex, ColIndex] := nil;
-//          end;
-//        end;
-//      end;
-//    end;
 
     if not BoundariesPresent then
     begin
@@ -9428,7 +9334,7 @@ var
           begin
             DataArrayLayer := ACell.Layer;
           end;
-          ModifierValue := DataArray.RealData[ACell.Layer, ACell.Row, ACell.Column];
+          ModifierValue := DataArray.RealData[DataArrayLayer, ACell.Row, ACell.Column];
 
           LocalLayer := Model.DataSetLayerToModflowLayer(ACell.Layer);
           CellValueReplacement := Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',

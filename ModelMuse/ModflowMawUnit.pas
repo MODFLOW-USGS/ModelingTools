@@ -526,7 +526,7 @@ type
       PestName: string; PestSeriesName: string;
       PestSeriesMethod: TPestParamMethod); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
     procedure Loaded; 
@@ -1117,7 +1117,7 @@ begin
 end;
 
 procedure TMawWellScreenCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 begin
   // does anything need to be done here?
   // called from TCustomListArrayBoundColl.AssignArrayCellsWithItem
@@ -1707,7 +1707,7 @@ begin
   Result := FBottom.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(BottomPosition);
+    ResetBoundaryObserver(BottomPosition);
   end;
 end;
 
@@ -1742,7 +1742,7 @@ begin
   Result := FInitialHead.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(InitialHeadPosition);
+    ResetBoundaryObserver(InitialHeadPosition);
   end;
 end;
 
@@ -1760,7 +1760,7 @@ begin
   Result := FRadius.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(RadiusPosition);
+    ResetBoundaryObserver(RadiusPosition);
   end;
 end;
 

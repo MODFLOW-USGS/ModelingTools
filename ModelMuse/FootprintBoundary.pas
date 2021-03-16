@@ -88,7 +88,7 @@ begin
   Result := FWithdrawalFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(PumpingRatePosition);
+    ResetBoundaryObserver(PumpingRatePosition);
   end;
 end;
 

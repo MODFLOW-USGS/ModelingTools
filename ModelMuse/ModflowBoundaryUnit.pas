@@ -486,7 +486,7 @@ type
     //
     procedure AssignArrayCellsWithItem(Item: TCustomModflowBoundaryItem;
       ItemIndex: Integer; DataSets: TList; ListOfTimeLists: TList;
-      AModel: TBaseModel);
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
   strict protected
     procedure AssignDirectlySpecifiedValues(AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); virtual;
@@ -494,14 +494,16 @@ type
     // @name is a virtual abstract method used to set the values of the
     // cell locations in @link(Boundaries) for a particular time period.
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); virtual; abstract;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList); virtual; abstract;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure CountArrayBoundaryCells(var BoundaryCount: Integer;
       DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel); virtual;
     // @name is a virtual abstract method that descendants use to
     // call (TModflowTimeList.Initialize TModflowTimeList.Initialize).
-    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel); virtual; abstract;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); virtual; abstract;
     // @name determines whether or not a single object may define more than
     // one boundary in the same cell. @name is set to @false in
     // @link(TChdCollection) because multiple CHD boundaries in the same
@@ -533,6 +535,7 @@ type
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       virtual; abstract;
     function AllowInactiveMf6Cells: boolean; virtual;
+
   public
     // @name is set to @True in @link(TSwrReachCollection),
     // @link(TStrCollection), @link(TSfrMf6Collection),
@@ -590,7 +593,8 @@ type
   // CHD, DRN, DRT, GHB, RIV, and WEL packages.
   TCustomMF_ListBoundColl = class(TCustomListArrayBoundColl)
   protected
-    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
   end;
 
   // @name is used to store a series of @link(TDataArray)s for boundary
@@ -758,7 +762,7 @@ type
       var FormulaObject: TFormulaObject);
     procedure UpdateFormulaNodes(Value: string; Position: integer;
       var FormulaObject: TFormulaObject);
-    procedure ResetItemObserver(Index: integer);
+    procedure ResetBoundaryObserver(Index: integer);
     function CreateFormulaObjectBlocks(
       Orientation: TDataSetOrientation): TFormulaObject;
     function CreateFormulaObjectNodes(
@@ -1103,7 +1107,7 @@ uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
   GIS_Functions, IntListUnit, ModflowCellUnit, frmProgressUnit, Dialogs,
   EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
-  CustomModflowWriterUnit;
+  CustomModflowWriterUnit, ModelMuseUtilities;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';
@@ -1475,7 +1479,8 @@ end;
 //end;
 
 procedure TCustomMF_ListBoundColl.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 begin
   // this procedure is only used with arrays.
   Assert(false);
@@ -3291,7 +3296,8 @@ end;
 
 procedure TCustomListArrayBoundColl.AssignArrayCellsWithItem(
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; DataSets,
-  ListOfTimeLists: TList; AModel: TBaseModel);
+  ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   BoundaryCount: Integer;
   DataArray2: TDataArray;
@@ -3317,7 +3323,8 @@ begin
   end;
   CountArrayBoundaryCells(BoundaryCount, DataArray1, DataSets, AModel);
   SetBoundaryStartAndEndTime(BoundaryCount, Item, ItemIndex, AModel);
-  AssignArrayCellValues(DataSets, ItemIndex, AModel);
+  AssignArrayCellValues(DataSets, ItemIndex, AModel, PestSeries, PestMethods,
+    PestItemNames);
   for TimeIndex := 0 to ListOfTimeLists.Count - 1 do
   begin
     TimeList1 := ListOfTimeLists[TimeIndex];
@@ -3409,6 +3416,9 @@ var
   LastUsedTime: Double;
   TimeIndex: Integer;
   TimeList1: TModflowTimeList;
+  PestSeries: TStringList;
+  PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList;
 begin
   if Count = 0 then
   begin
@@ -3449,10 +3459,14 @@ begin
   LastUsedTime := Min(LastUsedTime, LocalModel.ModflowStressPeriods[
     LocalModel.ModflowStressPeriods.Count - 1].EndTime);
 
+  PestSeries := TStringList.Create;
+  PestMethods := TPestMethodList.Create;
+  PestItemNames := TStringListObjectList.Create;
   ListOfTimeLists := TList.Create;
   DataSets := TList.Create;
   try
-    InitializeTimeLists(ListOfTimeLists, LocalModel);
+    InitializeTimeLists(ListOfTimeLists, LocalModel, PestSeries, PestMethods,
+      PestItemNames);
     TestIfObservationsPresent(EndOfLastStressPeriod, StartOfFirstStressPeriod,
       ObservationsPresent);
     PriorTime := StartOfFirstStressPeriod;
@@ -3487,7 +3501,9 @@ begin
             ExtraItem.FStartTime := PriorTime;
             ExtraItem.FEndTime := Item.StartTime;
             DataSets.Clear;
-            AssignArrayCellsWithItem(ExtraItem, ItemCount, DataSets, ListOfTimeLists, LocalModel);
+            AssignArrayCellsWithItem(ExtraItem, ItemCount, DataSets,
+              ListOfTimeLists, LocalModel, PestSeries, PestMethods,
+              PestItemNames);
             Inc(ItemCount);
           finally
             ExtraItem.Free;
@@ -3496,7 +3512,8 @@ begin
         PriorTime := Item.EndTime;
       end;
       DataSets.Clear;
-      AssignArrayCellsWithItem(Item, ItemCount, DataSets, ListOfTimeLists, LocalModel);
+      AssignArrayCellsWithItem(Item, ItemCount, DataSets, ListOfTimeLists,
+        LocalModel, PestSeries, PestMethods, PestItemNames);
       Inc(ItemCount);
       if (ItemIndex = Count - 1) and ObservationsPresent then
       begin
@@ -3508,7 +3525,7 @@ begin
             ExtraItem.FEndTime := EndOfLastStressPeriod;
             DataSets.Clear;
             AssignArrayCellsWithItem(ExtraItem, ItemCount, DataSets,
-              ListOfTimeLists, LocalModel);
+              ListOfTimeLists, LocalModel, PestSeries, PestMethods, PestItemNames);
             Inc(ItemCount);
           finally
             ExtraItem.Free;
@@ -3520,6 +3537,9 @@ begin
   finally
     DataSets.Free;
     ListOfTimeLists.Free;
+    PestItemNames.Free;
+    PestMethods.Free;
+    PestSeries.Free;
   end;
 end;
 
@@ -3903,7 +3923,7 @@ begin
           else
           begin
             Formula := ReplaceText(Formula, UnmodifiedFormula,
-              FloatToStr(PestParam.Value));
+              FortranFloatToStr(PestParam.Value));
             PestParamName := PestParam.ParameterName;
           end;
         end;
@@ -4125,7 +4145,7 @@ begin
                   end
                   else
                   begin
-                    Formula := FloatToStr(PestParam.Value);
+                    Formula := FortranFloatToStr(PestParam.Value);
                     PestParamName := PestParam.ParameterName;
                   end;
                   Compiler.Compile(Formula);
@@ -4166,7 +4186,7 @@ begin
   end;
 end;
 
-procedure TFormulaProperty.ResetItemObserver(Index: integer);
+procedure TFormulaProperty.ResetBoundaryObserver(Index: integer);
 var
   Observer: TObserver;
 begin

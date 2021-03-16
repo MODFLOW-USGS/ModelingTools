@@ -563,79 +563,6 @@ begin
   end;
 end;
 
-{procedure TWellCollection.InitializeTimeLists(ListOfTimeLists: TList);
-var
-  TimeIndex: Integer;
-  BoundaryValues: TBoundaryValueArray;
-  Index: Integer;
-  Item: TWellItem;
-  Boundary: TMfWellBoundary;
-  ScreenObject: TScreenObject;
-begin
-  // This procedure is no longer used.
-  Assert(False);
-
-  Boundary := BoundaryGroup as TMfWellBoundary;
-  ScreenObject := Boundary.ScreenObject as TScreenObject;
-  SetLength(BoundaryValues, Count);
-//  FPumpingRateData.Initialize(BoundaryValues, ScreenObject);
-  for Index := 0 to Count - 1 do
-  begin
-    Item := Items[Index] as TWellItem;
-    BoundaryValues[Index].Time := Item.StartTime;
-    case Boundary.FormulaInterpretation of
-      fiSpecific:
-        begin
-          if ScreenObject.ScreenObjectLength = 0 then
-          begin
-            BoundaryValues[Index].Formula := Item.PumpingRate;
-          end
-          else if ScreenObject.Closed then
-          begin
-            BoundaryValues[Index].Formula := '(' + Item.PumpingRate
-              + ') * ' + StrObjectIntersectArea;
-          end
-          else
-          begin
-            BoundaryValues[Index].Formula := '(' + Item.PumpingRate
-              + ') * ' + StrObjectIntersectLength;
-          end;
-        end;
-      fiDirect:
-        begin
-          BoundaryValues[Index].Formula := Item.PumpingRate;
-        end;
-      fiTotal:
-        begin
-          if ScreenObject.ScreenObjectLength = 0 then
-          begin
-            BoundaryValues[Index].Formula := Item.PumpingRate;
-          end
-          else if ScreenObject.Closed then
-          begin
-            BoundaryValues[Index].Formula := '((' + Item.PumpingRate
-              + ') * ' + StrObjectIntersectArea + ') / ' + StrObjectArea;
-          end
-          else
-          begin
-            BoundaryValues[Index].Formula := '((' + Item.PumpingRate
-              + ') * ' + StrObjectIntersectLength+ ') / ' + StrObjectLength;
-          end;
-        end;
-      else Assert(False);
-    end;
-  end;
-  FPumpingRateData.Initialize(BoundaryValues, ScreenObject, dsumAdd);
-  Assert(FPumpingRateData.Count = Count);
-  ClearBoundaries;
-  SetBoundaryCapacity(FPumpingRateData.Count);
-  for TimeIndex := 0 to FPumpingRateData.Count - 1 do
-  begin
-    AddBoundary(TWellStorage.Create);
-  end;
-  ListOfTimeLists.Add(FPumpingRateData);
-end; }
-
 procedure TWellCollection.InvalidateModel;
 var
   PhastModel: TPhastModel;
@@ -1197,7 +1124,7 @@ begin
   Result := FPestPumpingRateFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(PumpingRatePosition);
+    ResetBoundaryObserver(PumpingRatePosition);
   end;
 end;
 

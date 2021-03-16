@@ -225,7 +225,7 @@ begin
   Result := FConductancePermeability.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ConductancePermeabilityPosition);
+    ResetBoundaryObserver(ConductancePermeabilityPosition);
   end;
 end;
 
@@ -255,7 +255,7 @@ begin
   Result := FDiameter.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(DiameterPosition);
+    ResetBoundaryObserver(DiameterPosition);
   end;
 end;
 
@@ -285,7 +285,7 @@ begin
   Result := FElevation.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ElevationPosition);
+    ResetBoundaryObserver(ElevationPosition);
   end;
 end;
 
@@ -316,7 +316,7 @@ begin
   Result := FHigherCriticalR.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(HigherCriticalRPosition);
+    ResetBoundaryObserver(HigherCriticalRPosition);
   end;
 end;
 
@@ -346,7 +346,7 @@ begin
   Result := FLowerCriticalR.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(LowerCriticalRPosition);
+    ResetBoundaryObserver(LowerCriticalRPosition);
   end;
 end;
 
@@ -408,7 +408,7 @@ begin
   Result := FRoughnessHeight.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(RoughnessHeightPosition);
+    ResetBoundaryObserver(RoughnessHeightPosition);
   end;
 
 end;
@@ -439,7 +439,7 @@ begin
   Result := FTortuosity.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(TortuosityPosition);
+    ResetBoundaryObserver(TortuosityPosition);
   end;
 
 end;

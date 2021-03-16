@@ -172,10 +172,11 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -210,10 +211,11 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList;ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -981,7 +983,8 @@ begin
 end;
 
 procedure TUzfExtinctionDepthCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   ExtinctionDepthRateArray: TDataArray;
   Boundary: TUzfExtinctDepthStorage;
@@ -1043,7 +1046,8 @@ begin
 end;
 
 procedure TUzfExtinctionDepthCollection.InitializeTimeLists(
-  ListOfTimeLists: TList; AModel: TBaseModel);
+  ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1121,7 +1125,8 @@ begin
 end;
 
 procedure TUzfWaterContentCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   WaterContentArray: TDataArray;
   Boundary: TUzfWaterContentStorage;
@@ -1183,7 +1188,8 @@ begin
 end;
 
 procedure TUzfWaterContentCollection.InitializeTimeLists(
-  ListOfTimeLists: TList; AModel: TBaseModel);
+  ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

@@ -163,10 +163,11 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -198,11 +199,12 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList;
+      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -291,13 +293,20 @@ type
   TRchBoundary = class(TModflowParamBoundary)
   private
     FRechargeLayers: TRchLayerCollection;
-//    FInterp: TMf6InterpolationMethods;
     FCurrentParameter: TModflowTransientListParameter;
+    FPestRechargeMethod: TPestParamMethod;
+    FPestRechargeFormula: TFormulaObject;
+    FPestRechareObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetRechargeLayers(const Value: TRchLayerCollection);
     function GetTimeVaryingRechargeLayers: boolean;
     procedure AssignRechargeLayerCells(BoundaryStorage: TRchLayerStorage;
       ValueTimeList: TList);
-//    procedure SetInterp(const Value: TMf6InterpolationMethods);
+    function GetPestRechargeFormula: string;
+    procedure SetPestRechargeFormula(const Value: string);
+    procedure SetPestRechargeMethod(const Value: TPestParamMethod);
+    procedure InvalidateRechargeData(Sender: TObject);
+    function GetPestRechargeObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -311,11 +320,24 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
-  public
-    procedure Assign(Source: TPersistent);override;
 
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    property PestRechargeObserver: TObserver read GetPestRechargeObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+  public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // @link(TRchStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -337,17 +359,32 @@ type
     procedure GetRechargeLayerCells(LayerTimeList: TList; AModel: TBaseModel);
     procedure InvalidateDisplay; override;
     procedure Clear; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property RechargeLayers: TRchLayerCollection read FRechargeLayers
       write SetRechargeLayers;
     property Interp;
+    property PestRechargeFormula: string read GetPestRechargeFormula
+      write SetPestRechargeFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRechargeMethod: TPestParamMethod read FPestRechargeMethod
+      write SetPestRechargeMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit, TempFiles,
-  AbstractGridUnit, ModflowIrregularMeshUnit, ModflowTimeSeriesUnit;
+  AbstractGridUnit, ModflowIrregularMeshUnit, ModflowTimeSeriesUnit,
+  ModflowParameterUnit, ModelMuseUtilities;
 
 resourcestring
   StrRechargeLayer = 'Recharge layer';
@@ -457,7 +494,7 @@ begin
 end;
 
 procedure TRchCollection.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   RechargeRateArray: TDataArray;
   Boundary: TRchStorage;
@@ -519,7 +556,8 @@ begin
 end;
 
 procedure TRchCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -530,23 +568,96 @@ var
   RechargeRateData: TModflowTimeList;
   DataArrayIndex: Integer;
   DataArray: TTransientRealSparseDataSet;
-  Grid: TCustomModelGrid;
+//  Grid: TCustomModelGrid;
   RowIndex: Integer;
   ColIndex: Integer;
   LayerIndex: Integer;
   ShouldRemove: Boolean;
-  DisvGrid: TModflowDisvGrid;
+//  DisvGrid: TModflowDisvGrid;
   RowCount: Integer;
   ColumnCount: Integer;
   LayerCount: Integer;
+  LocalModel: TCustomModel;
+  PestParam: TModflowSteadyParameter;
+//  PestParamSeries: string;
+  RechargeMethod: TPestParamMethod;
+  Formula: string;
+  PestRechargeSeriesName: string;
+  PestParamSeries: TModflowSteadyParameter;
+  PestDataArray: TDataArray;
+  RechargeItems: TStringList;
 begin
+  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+  PestRechargeSeriesName := BoundaryGroup.PestBoundaryFormula[RechPosition];
+  PestSeries.Add(PestRechargeSeriesName);
+  RechargeMethod := BoundaryGroup.PestBoundaryMethod[RechPosition];
+  PestMethods.Add(RechargeMethod);
+
+  RechargeItems := TStringList.Create;
+  PestItemNames.Add(RechargeItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TRchItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.RechargeRate;
+    PestParam := LocalModel.GetPestParameterByName(Item.RechargeRate);
+    if PestParam = nil then
+    begin
+      Formula := Item.RechargeRate;
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        RechargeItems.Add(PestDataArray.Name);
+      end
+      else
+      begin
+        RechargeItems.Add('');
+      end;
+    end
+    else
+    begin
+      Formula := FortranFloatToStr(PestParam.Value);
+      RechargeItems.Add(PestParam.ParameterName)
+    end;
+
+    if PestRechargeSeriesName <> '' then
+    begin
+      PestParamSeries := LocalModel.GetPestParameterByName(PestRechargeSeriesName);
+      if PestParamSeries = nil then
+      begin
+        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestRechargeSeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          Case RechargeMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
+          End;
+        end;
+      end
+      else
+      begin
+        Case RechargeMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
+            end;
+        End;
+      end;
+    end;
+    BoundaryValues[Index].Formula := Formula;
+
   end;
   ALink := TimeListLink.GetLink(AModel) as TRchTimeListLink;
   RechargeRateData := ALink.FRechargeRateData;
@@ -555,20 +666,24 @@ begin
 
   if PackageAssignmentMethod(AModel) = umAdd then
   begin
-    if (AModel as TCustomModel).DisvUsed then
-    begin
-      DisvGrid := (AModel as TCustomModel).DisvGrid;
-      RowCount := DisvGrid.RowCount;
-      ColumnCount := DisvGrid.ColumnCount;
-      LayerCount := DisvGrid.LayerCount;
-    end
-    else
-    begin
-      Grid := (AModel as TCustomModel).Grid;
-      RowCount := Grid.RowCount;
-      ColumnCount := Grid.ColumnCount;
-      LayerCount := Grid.LayerCount;
-    end;
+
+    RowCount := LocalModel.RowCount;
+    ColumnCount := LocalModel.ColumnCount;
+    LayerCount := LocalModel.LayerCount;
+//    if (AModel as TCustomModel).DisvUsed then
+//    begin
+//      DisvGrid := (AModel as TCustomModel).DisvGrid;
+//      RowCount := DisvGrid.RowCount;
+//      ColumnCount := DisvGrid.ColumnCount;
+//      LayerCount := DisvGrid.LayerCount;
+//    end
+//    else
+//    begin
+//      Grid := (AModel as TCustomModel).Grid;
+//      RowCount := Grid.RowCount;
+//      ColumnCount := Grid.ColumnCount;
+//      LayerCount := Grid.LayerCount;
+//    end;
     for DataArrayIndex := 0 to RechargeRateData.Count - 1 do
     begin
       DataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
@@ -796,6 +911,9 @@ begin
   begin
     SourceBoundary := TRchBoundary(Source);
     RechargeLayers := SourceBoundary.RechargeLayers;
+
+    PestRechargeFormula := SourceBoundary.PestRechargeFormula;
+    PestRechargeMethod := SourceBoundary.PestRechargeMethod;
   end;
   inherited;
 end;
@@ -927,6 +1045,11 @@ begin
   result := TRchCollection;
 end;
 
+function TRchBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestRch_';
+end;
+
 procedure TRchBoundary.Clear;
 begin
   inherited;
@@ -936,11 +1059,49 @@ end;
 constructor TRchBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited Create(Model, ScreenObject);
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestRechargeFormula := '';
+  FPestRechargeMethod := DefaultBoundaryMethod(RechPosition);
+
   FRechargeLayers := TRchLayerCollection.Create(self, Model, ScreenObject);
+end;
+
+procedure TRchBoundary.CreateFormulaObjects;
+begin
+  FPestRechargeFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TRchBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestRechargeObserver);
+  end;
+end;
+
+class function TRchBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    RechPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 destructor TRchBoundary.Destroy;
 begin
+  PestRechargeFormula := '';
   FRechargeLayers.Free;
   inherited;
 end;
@@ -990,15 +1151,7 @@ var
   ParamName: string;
   Model: TCustomModel;
   BoundaryList: TList;
-//  StressPeriods: TModflowStressPeriods;
-//  StartTime: Double;
-//  EndTime: Double;
-//  TimeCount: Integer;
   ItemIndex: Integer;
-//  TimeSeriesList: TTimeSeriesList;
-//  TimeSeries: TTimeSeries;
-//  SeriesIndex: Integer;
-//  InitialTime: Double;
   ArrayIndex: Integer;
 begin
   FCurrentParameter := nil;
@@ -1043,10 +1196,6 @@ begin
       if FCurrentParameter <> nil then
       begin
         BoundaryList := Param.Param.BoundaryList[AModel];
-//        StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-//        StartTime := StressPeriods.First.StartTime;
-//        EndTime := StressPeriods.Last.EndTime;
-//        TimeCount := BoundaryList.Count;
         for ItemIndex := 0 to BoundaryList.Count - 1 do
         begin
           BoundaryStorage := BoundaryList[ItemIndex];
@@ -1055,79 +1204,7 @@ begin
             BoundaryStorage.RchArray[ArrayIndex].RechargeParameterName := FCurrentParameter.ParameterName;
             BoundaryStorage.RchArray[ArrayIndex].RechargeParameterValue := FCurrentParameter.Value;
           end;
-//          if BoundaryStorage.StartingTime > StartTime then
-//          begin
-////            Inc(TimeCount);
-//          end;
-//          StartTime := BoundaryStorage.EndingTime;
         end;
-//        BoundaryStorage := BoundaryList.Last;
-//        if BoundaryStorage.EndingTime <= EndTime then
-//        begin
-////          Inc(TimeCount);
-//        end;
-
-
-//        TimeSeriesList := FCurrentParameter.TimeSeriesList;
-//        TimeSeries := TTimeSeries.Create;
-//        TimeSeriesList.Add(TimeSeries);
-//        TimeSeries.SeriesCount := Length(BoundaryStorage.RchArray);
-//        TimeSeries.TimeCount := TimeCount;
-//        TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-//        TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-//        for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-//        begin
-//          TimeSeries.SeriesNames[SeriesIndex] :=
-//            Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-//            TimeSeriesList.Count, SeriesIndex+1]);
-//          TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-//          TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-//        end;
-
-//        TimeCount := 0;
-//        StartTime := StressPeriods.First.StartTime;
-//        InitialTime := StartTime;
-//        for ItemIndex := 0 to BoundaryList.Count - 1 do
-//        begin
-////          BoundaryStorage := BoundaryList[ItemIndex];
-////          if BoundaryStorage.StartingTime > StartTime then
-////          begin
-//////            TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-//////            for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-//////            begin
-//////              if ItemIndex > 0 then
-//////              begin
-//////                TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-//////              end
-//////              else
-//////              begin
-//////                TimeSeries.Values[SeriesIndex,TimeCount] :=
-//////                  BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
-//////              end;
-//////            end;
-//////            Inc(TimeCount);
-////          end;
-////          TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-////          for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-////          begin
-////            TimeSeries.Values[SeriesIndex,TimeCount] :=
-////              BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
-////            BoundaryStorage.RchArray[SeriesIndex].TimeSeriesName :=
-////              TimeSeries.SeriesNames[SeriesIndex];
-////          end;
-////          StartTime := BoundaryStorage.EndingTime;
-////          Inc(TimeCount);
-//        end;
-//        BoundaryStorage := BoundaryList.Last;
-//        if BoundaryStorage.EndingTime <= EndTime then
-//        begin
-////          TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-////          for SeriesIndex := 0 to Length(BoundaryStorage.RchArray) - 1 do
-////          begin
-////            TimeSeries.Values[SeriesIndex,TimeCount] :=
-////              BoundaryStorage.RchArray[SeriesIndex].RechargeRate;
-////          end;
-//        end;
       end;
 
       for ValueIndex := 0 to Param.Param.Count - 1 do
@@ -1141,6 +1218,65 @@ begin
     end;
   end;
   ClearBoundaries(AModel);
+end;
+
+function TRchBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    RechPosition:
+      begin
+        result := PestRechargeFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TRchBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    RechPosition:
+      begin
+        result := PestRechargeMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TRchBoundary.GetPestRechargeFormula: string;
+begin
+  Result := FPestRechargeFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(RechPosition);
+  end;
+end;
+
+function TRchBoundary.GetPestRechargeObserver: TObserver;
+begin
+  if FPestRechareObserver = nil then
+  begin
+    CreateObserver('PestRecharge_', FPestRechareObserver, nil);
+    FPestRechareObserver.OnUpToDateSet := InvalidateRechargeData;
+  end;
+  result := FPestRechareObserver;
+end;
+
+procedure TRchBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestRechargeFormula then
+  begin
+    if RechPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[RechPosition]);
+    end;
+  end;
 end;
 
 function TRchBoundary.GetTimeVaryingRechargeLayers: boolean;
@@ -1157,6 +1293,22 @@ begin
   end;
 end;
 
+function TRchBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestRecharge_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TRchBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TRchBoundary.InvalidateDisplay;
 var
   Model: TCustomModel;
@@ -1167,6 +1319,33 @@ begin
     Model := ParentModel as TCustomModel;
     Model.InvalidateMfRchRate(self);
     Model.InvalidateMfRchLayer(self);
+  end;
+end;
+
+procedure TRchBoundary.InvalidateRechargeData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfRchRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfRchRate(self);
+    end;
   end;
 end;
 
@@ -1189,14 +1368,48 @@ begin
   result := ptRCH;
 end;
 
-//procedure TRchBoundary.SetInterp(const Value: TMf6InterpolationMethods);
-//begin
-//  if FInterp <> Value then
-//  begin
-//    InvalidateModel;
-//    FInterp := Value;
-//  end;
-//end;
+procedure TRchBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+
+  case FormulaIndex of
+    RechPosition:
+      begin
+        PestRechargeFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TRchBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    RechPosition:
+      begin
+        PestRechargeMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TRchBoundary.SetPestRechargeFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, RechPosition, FPestRechargeFormula);
+end;
+
+procedure TRchBoundary.SetPestRechargeMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRechargeMethod, Value);
+end;
 
 procedure TRchBoundary.SetRechargeLayers(const Value: TRchLayerCollection);
 begin
@@ -1338,7 +1551,8 @@ begin
 end;
 
 procedure TRchLayerCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   RechargeLayerArray: TDataArray;
   Boundary: TRchLayerStorage;
@@ -1395,7 +1609,8 @@ begin
 end;
 
 procedure TRchLayerCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

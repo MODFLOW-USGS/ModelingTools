@@ -237,9 +237,10 @@ type
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; PestSeries: TStringList;
+      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -1002,7 +1003,8 @@ begin
 end;
 
 procedure TMnw2SpatialCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   WellRadiusArray: TDataArray;
   SkinRadiusArray: TDataArray;
@@ -1372,7 +1374,7 @@ begin
 end;
 
 procedure TMnw2SpatialCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

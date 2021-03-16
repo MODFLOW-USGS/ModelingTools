@@ -1390,7 +1390,7 @@ begin
   Result := FPestCondFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ConductancePosition);
+    ResetBoundaryObserver(ConductancePosition);
   end;
 end;
 
@@ -1409,7 +1409,7 @@ begin
   Result := FPestRiverBottomFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(BottomPosition);
+    ResetBoundaryObserver(BottomPosition);
   end;
 end;
 
@@ -1428,7 +1428,7 @@ begin
   Result := FPestRiverStageFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(StagePosition);
+    ResetBoundaryObserver(StagePosition);
   end;
 end;
 

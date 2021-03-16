@@ -74,7 +74,7 @@ type
     // parameter in @link(FParameters);
     FParameterSegments: TObjectList<TList<TStrSegment>>;
     // @name contains a list of parameter instance names for each parameter.
-    FParameterInstanceNames: TObjectList<TStringList>;
+    FParameterInstanceNames: TStringListObjectList;
 //    FNameOfFile: string;
     FCalculateStage: Boolean;
     // @name is a list of @link(TModflowTransientListParameter) that are in
@@ -289,7 +289,7 @@ EvaluationType: TEvaluationType);
 
   FParameters := TList<TModflowTransientListParameter>.Create;
 
-  FParameterInstanceNames:= TObjectList<TStringList>.Create;
+  FParameterInstanceNames:= TStringListObjectList.Create;
 end;
 
 destructor TStrWriter.Destroy;

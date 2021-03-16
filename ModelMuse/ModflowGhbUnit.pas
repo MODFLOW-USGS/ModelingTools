@@ -1355,7 +1355,7 @@ begin
   Result := FPestConductanceFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(ConductancePosition);
+    ResetBoundaryObserver(ConductancePosition);
   end;
 end;
 
@@ -1374,7 +1374,7 @@ begin
   Result := FPestHeadFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(HeadPosition);
+    ResetBoundaryObserver(HeadPosition);
   end;
 
 end;

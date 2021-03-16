@@ -284,6 +284,9 @@ type
 
   TPestParamMethod = (ppmMultiply, ppmAdd);
 
+  TPestMethodList = TList<TPestParamMethod>;
+  TStringListObjectList = TObjectList<TStringList>;
+
 const
   ModflowSelection = [msModflow, msModflowLGR, msModflowLGR2, msModflowNWT,
     msModflowFmp, msModflowCfp, msModflow2015];

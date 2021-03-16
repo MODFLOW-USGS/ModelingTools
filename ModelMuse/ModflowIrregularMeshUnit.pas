@@ -2098,10 +2098,6 @@ var
   APoint2D: TPoint2D;
   ModflowNode: TModflowNode;
   ACell: TModflowIrregularCell2D;
-//  MinEdgeDistance: double;
-//  TestDistance: double;
-//  Epsilon: Double;
-//  NodeQuadTree: TRbwQuadTree;
   InnerRowIndex: Integer;
   InnerColIndex: Integer;
   CornerPoint1: TPoint2D;
@@ -2127,31 +2123,6 @@ var
   CellCorner: TPoint2D;
   NewNodeNumber: Integer;
   CellCountNeeded: Integer;
-//  procedure AddNodeToCell(APoint: TPoint2D);
-//  var
-//    ModflowNode: TModflowNode;
-//    NewNodeNumber: Integer;
-//  begin
-//    ModflowNode := NodeQuadTree.NearestPointsFirstData(APoint.X, APoint.Y);
-//    if Distance(APoint, ModflowNode.Location) >  Epsilon then
-//    begin
-//      ModflowNode := CellCorners.Add;
-//      ModflowNode.Location := APoint;
-//      NodeQuadTree.AddPoint(APoint.X, APoint.y, ModflowNode);
-//    end;
-//    NewNodeNumber := ModflowNode.NodeNumber;
-//    ACell.NodeNumbers.Add.Value := NewNodeNumber;
-//    ACell.ElementCorners.Add(ModflowNode);
-//    ModflowNode.AddCell(ACell);
-//  end;
-//  procedure AddCenterPointoCell(Point1, Point2: TPoint2D);
-//  var
-//    APoint2D: TPoint2D;
-//  begin
-//    APoint2D.X := (Point1.X + Point2.X)/2;
-//    APoint2D.Y := (Point1.Y + Point2.Y)/2;
-//    AddNodeToCell(APoint2D);
-//  end;
 begin
   if Source is TModflowIrregularGrid2D then
   begin
@@ -2162,10 +2133,6 @@ begin
   end
   else if Source is TCustomModelGrid then
   begin
-//    NodeQuadTree := TRbwQuadTree.Create(nil);
-//    PriorRow := nil;
-//    PriorRow := TNodeArray2DList.Create;
-//    CurrentRow := TNodeArray2DList.Create;
     CellCountNeeded := 0;
     AllRows := TObjectList<TNodeArray2DList>.Create;
     try
@@ -2186,30 +2153,9 @@ begin
           APoint2D := FLocalGrid.TwoDElementCorner(ColIndex, RowIndex);
           ModflowNode := CellCorners.Add;
           ModflowNode.Location := APoint2D;
-//          NodeQuadTree.AddPoint(APoint2D.X, APoint2D.y, ModflowNode);
           ParentNodeArray[RowIndex, ColIndex] := ModflowNode;
         end;
       end;
-//      MinEdgeDistance := Abs(FLocalGrid.RowPosition[1] - FLocalGrid.RowPosition[0]);
-//      for RowIndex := 1 to FLocalGrid.RowCount - 1 do
-//      begin
-//        TestDistance := Abs(FLocalGrid.RowPosition[RowIndex+1]
-//          - FLocalGrid.RowPosition[RowIndex]);
-//        if TestDistance < MinEdgeDistance then
-//        begin
-//          MinEdgeDistance := TestDistance;
-//        end;
-//      end;
-//      for ColIndex := 0 to FLocalGrid.ColumnCount - 1 do
-//      begin
-//        TestDistance := Abs(FLocalGrid.ColumnPosition[ColIndex+1]
-//          - FLocalGrid.ColumnPosition[ColIndex]);
-//        if TestDistance < MinEdgeDistance then
-//        begin
-//          MinEdgeDistance := TestDistance;
-//        end;
-//      end;
-//      Epsilon := MinEdgeDistance/1e6;
       Angle1 := FLocalGrid.GridAngleDegrees;
       Angle2 := Angle1+270;
       while (Angle1 < 0) do
@@ -2237,7 +2183,6 @@ begin
             - FLocalGrid.ColumnPosition[ColIndex]);
           begin
             CellSubdivider := Round(IntPower(2,FQuadRefinement[RowIndex, ColIndex]));
-//            FirstCellCreated := False;
             SetLength(ChildNodeArray, CellSubdivider+1, CellSubdivider+1);
              
             CornerPoint1 := FLocalGrid.TwoDElementCorner(ColIndex, RowIndex);
@@ -2386,15 +2331,6 @@ begin
 
           for InnerRowIndex := 0 to CellSubdivider-1 do
           begin
-//              if InnerRowIndex = 0 then
-//              begin
-//                EdgePoint := CornerPoint1;
-//              end
-//              else
-//              begin
-//                EdgePoint := ProjectPoint(CornerPoint1, Angle2,
-//                  Distance2/CellSubdivider*InnerRowIndex);
-//              end;
             for InnerColIndex := 0 to CellSubdivider-1 do
             begin
               if not FirstCellCreated then
@@ -2406,23 +2342,6 @@ begin
               ACell.ElementCorners.Capacity := 4;
               ACell.NodeNumbers.Capacity := 4;
 
-//                if InnerColIndex = 0 then
-//                begin
-//                  CellFirstCorner := EdgePoint;
-//                end
-//                else
-//                begin
-//                  CellFirstCorner := ProjectPoint(EdgePoint, Angle1,
-//                    Distance1/CellSubdivider*InnerColIndex);
-//                end;
-//                CellSecondCorner := ProjectPoint(EdgePoint, Angle1,
-//                    Distance1/CellSubdivider*(InnerColIndex+1));
-//                CellThirdCorner := ProjectPoint(CellSecondCorner, Angle2,
-//                    Distance2/CellSubdivider);
-//                CellForthCorner := ProjectPoint(CellFirstCorner, Angle2,
-//                    Distance2/CellSubdivider);
-
-
               ModflowNode := ChildNodeArray[InnerRowIndex,InnerColIndex];
               // nodes must be in clockwise order.
 
@@ -2431,8 +2350,6 @@ begin
               ACell.ElementCorners.Add(ModflowNode);
               ModflowNode.AddCell(ACell);
               CellFirstCorner := ModflowNode.Location;
-
-//                AddNodeToCell(CellFirstCorner);
 
               if (InnerRowIndex = 0) and (RowIndex > 0) and
                 (FQuadRefinement[RowIndex-1, ColIndex]
@@ -2446,7 +2363,6 @@ begin
                 ACell.NodeNumbers.Add.Value := NewNodeNumber;
                 ACell.ElementCorners.Add(ModflowNode);
                 ModflowNode.AddCell(ACell);
-//                AddCenterPointoCell(CellFirstCorner, CellSecondCorner)
               end;
 
               ModflowNode := ChildNodeArray[InnerRowIndex,InnerColIndex+1];
@@ -2455,8 +2371,6 @@ begin
               ACell.ElementCorners.Add(ModflowNode);
               ModflowNode.AddCell(ACell);
               CellSecondCorner := ModflowNode.Location;
-
-//              AddNodeToCell(CellSecondCorner);
 
               if (InnerColIndex = CellSubdivider-1) and
                 (ColIndex < FLocalGrid.ColumnCount -1) and
@@ -2469,10 +2383,8 @@ begin
                 ACell.NodeNumbers.Add.Value := NewNodeNumber;
                 ACell.ElementCorners.Add(ModflowNode);
                 ModflowNode.AddCell(ACell);
-//                AddCenterPointoCell(CellSecondCorner, CellThirdCorner)
               end;
 
-//              AddNodeToCell(CellThirdCorner);
               ModflowNode := ChildNodeArray[InnerRowIndex+1,InnerColIndex+1];
               NewNodeNumber := ModflowNode.NodeNumber;
               ACell.NodeNumbers.Add.Value := NewNodeNumber;
@@ -2492,11 +2404,8 @@ begin
                 ACell.NodeNumbers.Add.Value := NewNodeNumber;
                 ACell.ElementCorners.Add(ModflowNode);
                 ModflowNode.AddCell(ACell);
-
-//                AddCenterPointoCell(CellThirdCorner, CellForthCorner)
               end;
 
-//              AddNodeToCell(CellForthCorner);
               ModflowNode := ChildNodeArray[InnerRowIndex+1,InnerColIndex];
               NewNodeNumber := ModflowNode.NodeNumber;
               ACell.NodeNumbers.Add.Value := NewNodeNumber;
@@ -2515,7 +2424,6 @@ begin
                 ACell.NodeNumbers.Add.Value := NewNodeNumber;
                 ACell.ElementCorners.Add(ModflowNode);
                 ModflowNode.AddCell(ACell);
-//                AddCenterPointoCell(CellForthCorner, CellFirstCorner)
               end;
 
               APoint2D.x := (CellFirstCorner.x + CellSecondCorner.x
@@ -2533,8 +2441,6 @@ begin
 
 
     finally
-//      NodeQuadTree.Free;
-//      PriorRow.Free;
       AllRows.Free;
       FLocalGrid := nil;
     end;
@@ -3704,7 +3610,6 @@ end;
 
 procedure TModflowIrregularGrid2D.CreateGhostNodes;
 var
-//  BelowWeightCells: TIrregular2DCellList;
   Refinement: Integer;
   RowStart: Integer;
   ContainingCell: TModflowIrregularCell2D;
@@ -3715,7 +3620,6 @@ var
   ColIndex: Integer;
   InnerColIndex: Integer;
   CellSubdivider: Integer;
-//  BelowDistance: double;
   CellSubdividerAbove: Integer;
   LeftLinkedCells: TCellIdCollection;
   RightLinkedCells: TCellIdCollection;
@@ -3729,9 +3633,6 @@ var
   OtherWeight: double;
   CellSubdividerLeft: Integer;
   CellSubdividerRight: Integer;
-//  AStringList: TStringList;
-//  GhostNodeIndex: Integer;
-//  AStringBuilder: TStringBuilder;
   InnerRowIndex: Integer;
   OtherRowWidth: Double;
   AboveLinkedCells: TCellIdCollection;
@@ -3872,7 +3773,6 @@ begin
         CellSubdividerBelow := CellsPerEdge(RowIndex + 1, ColIndex);
 
         RowStart := FCellStartCounts[RowIndex + 1, ColIndex];
-//          + CellSubdividerBelow * (CellSubdividerBelow - 1);
         for InnerColIndex := 0 to CellSubdivider - 1 do
         begin
           if InnerColIndex > 0 then
@@ -4224,34 +4124,6 @@ begin
       end;
     end;
   end;
-
-//  AStringList := TStringList.Create;
-//  AStringBuilder := TStringBuilder.Create;
-//  try
-//    for GhostNodeIndex := 0 to GhostNodes.Count - 1 do
-//    begin
-//      AGhostNode := GhostNodes[GhostNodeIndex];
-//      AStringBuilder.Append(AGhostNode.ContainingCell.Cell+1);
-//      AStringBuilder.Append(' ');
-//      AStringBuilder.Append(AGhostNode.LinkedCell.Cell+1);
-//      AStringBuilder.Append(' ');
-//      for NodeIndex := 0 to AGhostNode.CellWeights.Count - 1 do
-//      begin
-//        ACellWeight := AGhostNode.CellWeights[NodeIndex];
-//        AStringBuilder.Append(ACellWeight.Cell+1);
-//        AStringBuilder.Append(' ');
-//        AStringBuilder.Append(ACellWeight.Weight);
-//        AStringBuilder.Append(' ');
-//      end;
-//      AStringList.Add(AStringBuilder.ToString);
-//      AStringBuilder.Clear;
-//    end;
-//    AStringList.SaveToFile('C:\Colab\GWModelTools\ModelMuse\GhostNodes.txt');
-//  finally
-//    AStringBuilder.Free;
-//    AStringList.Free;
-//  end;
-
 
 end;
 
