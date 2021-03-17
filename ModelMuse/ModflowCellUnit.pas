@@ -72,6 +72,9 @@ type
       Annotations: TStringList); virtual;
     function GetSection: integer; virtual; abstract;
     procedure RecordStrings(Strings: TStringList); virtual;
+    function GetPestName(Index: Integer): string; virtual;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; virtual;
+    function GetPestSeriesName(Index: Integer): string; virtual;
   public
     Constructor Create; virtual;
     // @name is used for MODFLOW 6 PEST observations.
@@ -125,6 +128,9 @@ type
     function AreBooleanValuesIdentical(AnotherCell: TValueCell;
       DataIndex: integer): boolean;
     property Mf6ObsName: string read FMf6ObsName write FMf6ObsName;
+    Property PestName[Index: Integer]: string read GetPestName;
+    Property PestSeriesName[Index: Integer]: string read GetPestSeriesName;
+    Property PestSeriesMethod[Index: Integer]: TPestParamMethod read GetPestSeriesMethod;
   end;
 
   TValueCellType = class of TValueCell;
@@ -587,6 +593,21 @@ function TValueCell.GetBooleanValue(Index: integer;
 begin
   result := False;
   Assert(False);
+end;
+
+function TValueCell.GetPestName(Index: Integer): string;
+begin
+  result := ''
+end;
+
+function TValueCell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  result := ppmMultiply;
+end;
+
+function TValueCell.GetPestSeriesName(Index: Integer): string;
+begin
+  result := ''
 end;
 
 function TValueCell.IsIdentical(AnotherCell: TValueCell): boolean;

@@ -29,6 +29,9 @@ type
     TimeSeriesName: string;
     RechargeParameterName: string;
     RechargeParameterValue: double;
+    RechargePest: string;
+    RechargePestSeries: string;
+    RechargePestMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -236,6 +239,9 @@ type
     function GetTimeSeriesName: string;
     function GetRechargeParameterName: string;
     function GetRechargeParameterValue: double;
+    function GetRechargePest: string;
+    function GetRechargePestMethod: TPestParamMethod;
+    function GetRechargePestSeries: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -251,6 +257,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TRchRecord read FValues write FValues;
@@ -260,6 +269,10 @@ type
     property RechargeParameterName: string read GetRechargeParameterName;
     property RechargeParameterValue: double read GetRechargeParameterValue;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+
+    property RechargePest: string read GetRechargePest;
+    property RechargePestSeries: string read GetRechargePestSeries;
+    property RechargePestMethod: TPestParamMethod read GetRechargePestMethod;
   end;
 
   TRechargeLayerCell = class(TRechargeCell)
@@ -509,6 +522,10 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalRechargePestSeries: string;
+  LocalRechargePestMethod: TPestParamMethod;
+  RechargePestItems: TStringList;
+  LocalRechargePest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -516,6 +533,10 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TRchStorage;
   RechargeRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+  LocalRechargePestSeries := PestSeries[RechPosition];
+  LocalRechargePestMethod := PestMethods[RechPosition];
+  RechargePestItems := PestItemNames[RechPosition];
+  LocalRechargePest := RechargePestItems[ItemIndex];
   if LayerMin >= 0 then
   begin
     for LayerIndex := LayerMin to LayerMax do
@@ -538,6 +559,9 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 RechargeRateAnnotation := RechargeRateArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                RechargePest := LocalRechargePest;
+                RechargePestSeries := LocalRechargePestSeries;
+                RechargePestMethod := LocalRechargePestMethod;
               end;
               Inc(BoundaryIndex);
             end;
@@ -807,6 +831,51 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TRch_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    RechPosition:
+      begin
+        result := RechargePest;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TRch_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    RechPosition:
+      begin
+        result := RechargePestMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TRch_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    RechPosition:
+      begin
+        result := RechargePestSeries;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TRch_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -833,6 +902,21 @@ end;
 function TRch_Cell.GetRechargeParameterValue: double;
 begin
   result := Values.RechargeParameterValue;
+end;
+
+function TRch_Cell.GetRechargePest: string;
+begin
+  result := Values.RechargePest;
+end;
+
+function TRch_Cell.GetRechargePestMethod: TPestParamMethod;
+begin
+  result := Values.RechargePestMethod;
+end;
+
+function TRch_Cell.GetRechargePestSeries: string;
+begin
+  result := Values.RechargePestSeries;
 end;
 
 function TRch_Cell.GetRechargeRate: double;
@@ -1920,6 +2004,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(RechargeRateAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(RechargeParameterName));
+
+  WriteCompInt(Comp, Strings.IndexOf(RechargePest));
+  WriteCompInt(Comp, Strings.IndexOf(RechargePestSeries));
+  WriteCompInt(Comp, Ord(RechargePestMethod));
 //  WriteCompString(Comp, RechargeRateAnnotation);
 end;
 
@@ -1928,6 +2016,8 @@ begin
   Strings.Add(RechargeRateAnnotation);
   Strings.Add(TimeSeriesName);
   Strings.Add(RechargeParameterName);
+  Strings.Add(RechargePest);
+  Strings.Add(RechargePestSeries);
 end;
 
 procedure TRchRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1941,6 +2031,9 @@ begin
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RechargeParameterName := Annotations[ReadCompInt(Decomp)];
 //  RechargeRateAnnotation := ReadCompString(Decomp, Annotations);
+  RechargePest := Annotations[ReadCompInt(Decomp)];
+  RechargePestSeries := Annotations[ReadCompInt(Decomp)];
+  RechargePestMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TRchLayerRecord }

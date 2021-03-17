@@ -32,6 +32,8 @@ type
   }
   TThreeDRealArray = array of TTwoDRealArray;
 
+  TTwoDStringArray = array of array of string;
+
   {@abstract(@name is a pointer to a TPoint2D.)
   }
   P2DRealPoint = TPoint2DPtr;
