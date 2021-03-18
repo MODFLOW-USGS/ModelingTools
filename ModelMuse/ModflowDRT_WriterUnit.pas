@@ -13,7 +13,7 @@ type
     MXL: integer;
     FCells: array of array of TDrt_Cell;
     MXADRT: integer;
-    FPestParamUsed: Boolean;
+//    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSets2And3;
     procedure WriteDataSets4To6;

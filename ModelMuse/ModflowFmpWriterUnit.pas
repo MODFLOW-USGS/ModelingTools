@@ -68,7 +68,7 @@ type
     FCall_FileStream: TFileStream;
     FStressPeriod: Integer;
     FACtiveSurfaceCells: array of array of boolean;
-    FPestParamUsed: Boolean;
+//    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2a;
     procedure WriteDataSet2cParamDimen;

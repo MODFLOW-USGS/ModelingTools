@@ -86,7 +86,7 @@ type
     NQST: Integer;
     NQCST: Integer;
     NQTST: Integer;
-    FPestParamUsed: Boolean;
+//    FPestParamUsed: Boolean;
     procedure SortSegments;
     function FindSegment(OriginalSegmentNumber: integer): TStrSegment;
     procedure AssociateParametersWithSegments;

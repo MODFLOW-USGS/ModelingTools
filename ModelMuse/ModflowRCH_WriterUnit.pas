@@ -465,63 +465,14 @@ begin
   ClearTimeLists(Model);
 
   WriteFileInternal;
-//  OpenFile(FileName(AFileName));
-//  try
-//    frmProgressMM.AddMessage(StrWritingRCHPackage);
-//    frmProgressMM.AddMessage(StrWritingDataSet0);
-//    WriteDataSet0;
-//    Application.ProcessMessages;
-//    if not frmProgressMM.ShouldContinue then
-//    begin
-//      Exit;
-//    end;
-//
-//    if Model.ModelSelection <> msModflow2015 then
-//    begin
-//      frmProgressMM.AddMessage(StrWritingDataSet1);
-//      WriteDataSet1;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSet2);
-//      WriteDataSet2;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSets3and4);
-//      WriteDataSets3And4;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//    end
-//    else
-//    begin
-//      WriteOptions(FNameOfFile);
-//      WriteDimensions;
-//    end;
-//
-//    frmProgressMM.AddMessage(StrWritingDataSets5to8);
-//    WriteDataSets5To8;
-//  finally
-//    CloseFile;
-////    Clear;
-//  end;
 
   if Model.ModelSelection = msModflow2015 then
   begin
     WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
   end;
 
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParamValues.Count > 0) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try

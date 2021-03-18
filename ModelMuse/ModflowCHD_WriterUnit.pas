@@ -15,7 +15,7 @@ type
 //    FFileName: string;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
-    FPestParamUsed: Boolean;
+//    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;

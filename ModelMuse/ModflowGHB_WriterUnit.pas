@@ -17,7 +17,7 @@ type
     MXACTC: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
-    FPestParamUsed: Boolean;
+//    FPestParamUsed: Boolean;
 //    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2;

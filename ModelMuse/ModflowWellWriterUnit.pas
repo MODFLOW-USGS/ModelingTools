@@ -18,7 +18,7 @@ type
     FWellBoundaryList: TList<TMfWellBoundary>;
     MXACTW: integer;
     FAbbreviation: string;
-    FPestParamUsed: Boolean;
+//    FPestParamUsed: Boolean;
     procedure WriteNWT_Options;
     procedure WriteDataSet1;
     procedure WriteDataSet2;

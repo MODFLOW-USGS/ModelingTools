@@ -2730,7 +2730,9 @@ begin
     PestParameterColumns := [2,3]
   end
   else if (Sender = frameWellParam.rdgModflowBoundary)
-    or (Sender = frameFarmWell.rdgModflowBoundary) then
+    or (Sender = frameFarmWell.rdgModflowBoundary)
+    or (Sender = frameRchParam.rdgModflowBoundary)
+    then
   begin
     PestParameterColumns := [2]
   end
@@ -5633,6 +5635,7 @@ begin
   frameChdParam.OnCheckPestCell := EnablePestCells;
   frameFhbHead.OnCheckPestCell := EnablePestCells;
   frameFhbFlow.OnCheckPestCell := EnablePestCells;
+  frameRchParam.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -17958,6 +17961,9 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetRchBoundary(ScreenObjectList: TList);
+const
+  RechPostion = 0;
+  ColOffset = 2;
 var
   Frame: TframeScreenObjectParam;
   Parameter: TParameterType;
@@ -17987,8 +17993,14 @@ begin
     finally
       TimeList.Free;
     end;
-
   end;
+
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+RechPostion] :=
+    TDrnBoundary.DefaultBoundaryMethod(RechPostion);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
 
 procedure TfrmScreenObjectProperties.GetEvtBoundary(ScreenObjectList: TList);
@@ -24080,6 +24092,9 @@ begin
         end;
       end;
     end;
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FRCH_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -24860,6 +24875,7 @@ begin
       or ((DataGrid = frameFarmWell.rdgModflowBoundary) and (ACol = 2))
       or (DataGrid = frameFhbHead.rdgModflowBoundary)
       or (DataGrid = frameFhbFlow.rdgModflowBoundary)
+      or ((DataGrid = frameRchParam.rdgModflowBoundary) and (ACol = 2))
       ;
 
     // get the orientation of the data set.

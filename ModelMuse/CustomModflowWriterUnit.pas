@@ -172,7 +172,9 @@ type
     // @name writes a header for DataArray using either
     // @link(WriteConstantU2DINT) or @link(WriteU2DRELHeader).
     procedure WriteHeader(const DataArray: TDataArray;
-      const Comment: string; const MF6_ArrayName: string);
+      const Comment: string; const MF6_ArrayName: string); overload;
+    procedure WriteHeader(const DataType: TRbwDataType;
+      const Comment: string; const MF6_ArrayName: string); overload;
     function CheckArrayUniform(const LayerIndex: Integer;
       const DataArray: TDataArray): boolean;
     procedure WriteArrayValues(const LayerIndex: Integer;
@@ -180,7 +182,7 @@ type
   protected
     FArrayWritingFormat: TArrayWritingFormat;
     FInputFileName: string;
-
+    FPestParamUsed: Boolean;
     // @name generates a comment line for a MODFLOW input file indentifying
     // the package.
     function PackageID_Comment(APackage: TModflowPackageSelection): string; virtual;
@@ -3197,18 +3199,19 @@ end;
 procedure TCustomModflowWriter.WriteHeader(const DataArray: TDataArray;
   const Comment: string; const MF6_ArrayName: string);
 begin
-  case DataArray.DataType of
-    rdtDouble:
-      begin
-        WriteU2DRELHeader(Comment, matStructured, MF6_ArrayName);
-      end;
-    rdtInteger, rdtBoolean:
-      begin
-        WriteU2DINTHeader(Comment, matStructured, MF6_ArrayName);
-      end;
-  else
-    Assert(False);
-  end;
+  WriteHeader(DataArray.DataType, Comment, MF6_ArrayName);
+//  case DataArray.DataType of
+//    rdtDouble:
+//      begin
+//        WriteU2DRELHeader(Comment, matStructured, MF6_ArrayName);
+//      end;
+//    rdtInteger, rdtBoolean:
+//      begin
+//        WriteU2DINTHeader(Comment, matStructured, MF6_ArrayName);
+//      end;
+//  else
+//    Assert(False);
+//  end;
 end;
 
 procedure TCustomFileWriter.WriteF10Float(const Value: double);
@@ -6132,7 +6135,11 @@ var
   RowCount: Integer;
   ColumnCount: Integer;
   Formulas: TTwoDStringArray;
+  FormulasApplied: T2DBoolArray;
+  IsFormula: Boolean;
   Formula: string;
+  FormulasUsed: Boolean;
+  ExtendedTemplateCharacter: string;
   procedure AssignCellValues(CellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -6168,38 +6175,80 @@ var
                 end;
               else Assert(False);
             end;
-            Formula := '';
+            Formula := FortranFloatToStr(Cell.RealValue[DataTypeIndex, Model]);
             PestName := Cell.PestName[DataTypeIndex];
             PestSeriesName := Cell.PestSeriesName[DataTypeIndex];
+
             if (PestName <> '') or (PestSeriesName <> '') then
             begin
-              Value := Cell.RealValue[DataTypeIndex, Model];
-              PestSeriesMethod := Cell.PestSeriesMethod[DataTypeIndex];
-              Formula := GetPestTemplateFormula(Value, PestName, PestSeriesName,
-                PestSeriesMethod, Cell);
-              if Formula = '' then
+              FPestParamUsed := True;
+              FormulasUsed := True;
+            end;
+            if WritingTemplate then
+            begin
+              if (PestName <> '') or (PestSeriesName <> '') then
               begin
-                Formula := FortranFloatToStr(Value)
-              end;
+                Value := Cell.RealValue[DataTypeIndex, Model];
+                PestSeriesMethod := Cell.PestSeriesMethod[DataTypeIndex];
+                Formula := GetPestTemplateFormula(Value, PestName, PestSeriesName,
+                  PestSeriesMethod, Cell);
+                if Formula = '' then
+                begin
+                  IsFormula := False;
+                  Formula := FortranFloatToStr(Value)
+                end
+                else
+                begin
+                  IsFormula := True;
+                end;
 
-              if Formulas[Cell.Row, Cell.Column] = '' then
-              begin
-                Formulas[Cell.Row, Cell.Column] := Formula;
+                if Formulas[Cell.Row, Cell.Column] = '' then
+                begin
+                  Formulas[Cell.Row, Cell.Column] := Formula;
+                  FormulasApplied[Cell.Row, Cell.Column] := IsFormula;
+                end
+                else
+                begin
+                  case AssignmentMethod of
+                    umAssign:
+                      begin
+                        Formulas[Cell.Row, Cell.Column] := Formula;
+                        FormulasApplied[Cell.Row, Cell.Column] := IsFormula;
+                      end;
+                    umAdd:
+                      begin
+                        Formulas[Cell.Row, Cell.Column] := Format('%0:s + %1:s',
+                          [Formulas[Cell.Row, Cell.Column], Formula]);
+                        FormulasApplied[Cell.Row, Cell.Column] := True;
+                      end;
+                  end;
+                end;
               end
               else
               begin
-                case AssignmentMethod of
-                  umAssign:
-                    begin
-                      Formulas[Cell.Row, Cell.Column] := Formula;
-                    end;
-                  umAdd:
-                    begin
-                      Formulas[Cell.Row, Cell.Column] := Format('%0:s + %1:s',
-                        [Formulas[Cell.Row, Cell.Column], Formula]);
-                    end;
+                if Formulas[Cell.Row, Cell.Column] = '' then
+                begin
+                  Formulas[Cell.Row, Cell.Column] := Formula;
+                  FormulasApplied[Cell.Row, Cell.Column] := False;
+                end
+                else
+                begin
+                  case AssignmentMethod of
+                    umAssign:
+                      begin
+                        Formulas[Cell.Row, Cell.Column] := Formula;
+                        FormulasApplied[Cell.Row, Cell.Column] := False;
+                      end;
+                    umAdd:
+                      begin
+                        Formulas[Cell.Row, Cell.Column] := Format('%0:s + %1:s',
+                          [Formulas[Cell.Row, Cell.Column], Formula]);
+                        FormulasApplied[Cell.Row, Cell.Column] := True;
+                      end;
+                  end;
                 end;
               end;
+
             end;
           end;
         rdtInteger:
@@ -6234,6 +6283,7 @@ begin
   begin
     AdjustForLGR := False;
   end;
+  FormulasUsed := False;
   DummyAnnotation := 'none';
   ExportArray := TDataArray.Create(Model);
   try
@@ -6243,7 +6293,11 @@ begin
     ExportArray.DataType := DataType;
     RowCount := Model.RowCount;
     ColumnCount := Model.ColumnCount;
-    SetLength(Formulas, RowCount, ColumnCount);
+    if WritingTemplate then
+    begin
+      SetLength(Formulas, RowCount, ColumnCount);
+      SetLength(FormulasApplied, RowCount, ColumnCount);
+    end;
 
     ExportArray.UpdateDimensions(1, RowCount, ColumnCount, True);
 
@@ -6266,7 +6320,11 @@ begin
         else
           Assert(False);
         end;
-        Formulas[RowIndex, ColIndex] := '';
+        if WritingTemplate then
+        begin
+          Formulas[RowIndex, ColIndex] := '';
+          FormulasApplied[RowIndex, ColIndex] := False;
+        end;
       end;
     end;
 
@@ -6326,7 +6384,31 @@ begin
     end;
     ExportArray.Name := MF6_ArrayName;
     ExportArray.UpToDate := True;
-    WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False);
+    if WritingTemplate and FormulasUsed then
+    begin
+      ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+      WriteHeader(rdtDouble, Comment, MF6_ArrayName);
+      for RowIndex := 0 to RowCount - 1 do
+      begin
+        for ColIndex := 0 to ColumnCount - 1 do
+        begin
+          if FormulasApplied[RowIndex, ColIndex] then
+          begin
+            WriteString( Format(' %0:s              %1:s%0:s ',
+              [ExtendedTemplateCharacter, Formulas[RowIndex, ColIndex]]));
+          end
+          else
+          begin
+            WriteFloat(ExportArray.RealData[0, RowIndex, ColIndex]);
+          end;
+          NewLine;
+        end;
+      end;
+    end
+    else
+    begin
+      WriteArray(ExportArray, 0, Comment, DummyAnnotation, MF6_ArrayName, False);
+    end;
   finally
     if FreeArray then
     begin
@@ -9079,6 +9161,23 @@ begin
     WriteString('END PERIOD ');
     NewLine;
     NewLine;
+  end;
+end;
+
+procedure TCustomModflowWriter.WriteHeader(const DataType: TRbwDataType;
+  const Comment, MF6_ArrayName: string);
+begin
+  case DataType of
+    rdtDouble:
+      begin
+        WriteU2DRELHeader(Comment, matStructured, MF6_ArrayName);
+      end;
+    rdtInteger, rdtBoolean:
+      begin
+        WriteU2DINTHeader(Comment, matStructured, MF6_ArrayName);
+      end;
+  else
+    Assert(False);
   end;
 end;
 

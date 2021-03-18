@@ -26,6 +26,7 @@ type
     function GetUseGroupTarget: Boolean;
     function GetAbsoluteCorrelationFileName: string;
     procedure SetIsRegularizationGroup(const Value: Boolean);
+    function GetExportedGroupName: string;
   protected
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
@@ -40,6 +41,7 @@ type
       read GetAbsoluteCorrelationFileName write SetAbsoluteCorrelationFileName;
     // GTARG
     property GroupTarget: Double read GetGroupTarget write SetGroupTarget;
+    property ExportedGroupName: string read GetExportedGroupName;
   published
     // OBGNME
     property ObsGroupName: string read GetObsGroupName write SetObsGroupName;
@@ -69,6 +71,13 @@ type
   end;
 
   function ValidObsGroupName(Value: string): string;
+
+resourcestring
+  StrRegul = 'regul_';
+
+const
+  AllowableGroupNameLength = 12;
+
 
 implementation
 
@@ -135,6 +144,19 @@ end;
 function TPestObservationGroup.GetAbsoluteCorrelationFileName: string;
 begin
   result := FAbsoluteCorrelationFileName;
+end;
+
+function TPestObservationGroup.GetExportedGroupName: string;
+begin
+  if IsRegularizationGroup then
+  begin
+    result := StrRegul + ObsGroupName;
+    result := Copy(result, 1, AllowableGroupNameLength);
+  end
+  else
+  begin
+    result := ObsGroupName;
+  end;
 end;
 
 function TPestObservationGroup.GetGroupTarget: Double;
@@ -270,7 +292,7 @@ begin
   for Index := 0 to Count - 1 do
   begin
     AnItem :=Items[Index];
-    if AnItem.ObsGroupName = ObsGroupName then
+    if SameText(AnItem.ObsGroupName, ObsGroupName) then
     begin
       result := AnItem;
       Exit;

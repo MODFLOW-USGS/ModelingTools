@@ -813,15 +813,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               AlignWithMargins = True
               Left = 4
               Top = 4
-              Width = 277
-              Height = 65
+              Width = 256
+              Height = 57
               Align = alClient
               Caption = 
                 'Layer elevations can only be specified using objects with Zero Z' +
                 ' formulas.'
               WordWrap = True
-              ExplicitWidth = 256
-              ExplicitHeight = 57
             end
           end
         end
@@ -9627,8 +9625,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 405
               inherited pnlEditGrid: TPanel
                 Width = 579
-                ExplicitLeft = 6
-                ExplicitTop = -5
                 ExplicitWidth = 579
                 inherited lblFormula: TLabel
                   Width = 59

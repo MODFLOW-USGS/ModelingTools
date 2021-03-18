@@ -54,12 +54,6 @@ type
     procedure WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False);
   end;
 
-resourcestring
-  StrRegul = 'regul_';
-
-const
-  AllowableGroupNameLength = 12;
-
 implementation
 
 uses
@@ -1443,20 +1437,14 @@ var
     for ObsGrpIndex := 0 to ObsGroups.Count - 1 do
     begin
       ObsGroup := ObsGroups[ObsGrpIndex];
+      WriteString(ObsGroup.ExportedGroupName);
       if ObsGroup.IsRegularizationGroup then
       begin
-        WriteString(StrRegul);
-        WriteString(Copy(ObsGroup.ObsGroupName,1,
-          AllowableGroupNameLength - Length(strRegul)));
         if Length(ObsGroup.ObsGroupName) > 7 then
         begin
           frmErrorsAndWarnings.AddWarning(Model, StrObservationGroupNa,
             Format(StrTheNamesOfSHas, [ObsGroup.ObsGroupName]))
         end;
-      end
-      else
-      begin
-        WriteString(ObsGroup.ObsGroupName);
       end;
       if Mode = pmRegularisation then
       begin
@@ -1520,6 +1508,7 @@ var
   ObsIndex: Integer;
   AnObs: IObservationItem;
   ObsItem: TCustomObservationItem;
+  ObsGroup: TPestObservationGroup;
 begin
   WriteSectionHeader('observation data');
   for ObsIndex := 0 to FUsedObservations.Count - 1 do
@@ -1543,7 +1532,20 @@ begin
     end;
     WriteFloat(AnObs.ObservedValue);
     WriteFloat(AnObs.Weight);
-    WriteString(' ' + AnObs.ObservationGroup);
+    ObsGroup := Model.PestProperties.ObservationGroups.GetObsGroupByName(AnObs.ObservationGroup);
+    if ObsGroup = nil then
+    begin
+      ObsGroup := Model.PestProperties.PriorInfoObservationGroups.GetObsGroupByName(AnObs.ObservationGroup);
+    end;
+
+    if ObsGroup = nil then
+    begin
+      WriteString(' ' + AnObs.ObservationGroup);
+    end
+    else
+    begin
+      WriteString(' ' + ObsGroup.ExportedGroupName);
+    end;
     if AnObs.ObservationGroup = '' then
     begin
       frmErrorsAndWarnings.AddError(Model, StrObservationGroupNo,

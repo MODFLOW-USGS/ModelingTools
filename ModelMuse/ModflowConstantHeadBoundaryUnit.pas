@@ -839,11 +839,11 @@ begin
   case FormulaIndex of
     StartHeadPosition:
       begin
-        result := ppmMultiply;
+        result := ppmAdd;
       end;
     EndHeadPosition:
       begin
-        result := ppmMultiply;
+        result := ppmAdd;
       end;
     else
       result := inherited;

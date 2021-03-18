@@ -20,7 +20,7 @@ type
     FPrintInputCellLists: Boolean;
     NFLW: Integer;
     NHED: integer;
-    FPestParamUsed: Boolean;
+//    FPestParamUsed: Boolean;
     procedure FillScreenObjectList;
     procedure GetModelTimes;
     procedure EvaluateHeadBoundaries;
