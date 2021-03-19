@@ -594,7 +594,7 @@ begin
   try
     WriteTransient2DArray(Comment, DataTypeIndex, DataType,
       DefaultValue, CellList, Model.ModflowPackages.RchPackage.AssignmentMethod,
-      True, RechargeRate, VariableIdentifiers,False);
+      True, RechargeRate, VariableIdentifiers,0,False);
 
     ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
     for RowIndex := 0 to RechargeRate.RowCount - 1 do
@@ -631,6 +631,7 @@ var
   Layer: Integer;
   ParameterName: string;
   MultiplierValue: double;
+  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -658,6 +659,12 @@ begin
         end;
         WriteInteger(RchCell.Column+1);
 
+        if (RchCell.RechargePest <> '')
+          or (RchCell.RechargePestSeries <> '') then
+        begin
+          FPestParamUsed := True;
+        end;
+
         if Model.PestUsed and (Model.ModelSelection = msModflow2015)
           and WritingTemplate
           and ( RchCell.RechargeParameterName <> '') then
@@ -671,12 +678,43 @@ begin
           begin
             MultiplierValue := RchCell.RechargeRate / RchCell.RechargeParameterValue;
           end;
-          WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+//          WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
+          WriteModflowParamFormula(ParameterName, RchCell.RechargePest,
+            MultiplierValue, RchCell);
+        end
+        else if Model.PestUsed and WritingTemplate
+          and ((RchCell.RechargePest <> '') or (RchCell.RechargePestSeries <> '')) then
+        begin
+          WritePestTemplateFormula(RchCell.RechargeRate, RchCell.RechargePest,
+            RchCell.RechargePestSeries, RchCell.RechargePestMethod,
+            RchCell);
         end
         else
         begin
           WriteFloat(RchCell.RechargeRate);
+          if RchCell.RechargePest <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              RchCell.RechargePest);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
+          if RchCell.RechargePestSeries <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              RchCell.RechargePestSeries);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
         end;
+//        else
+//        begin
+//          WriteFloat(RchCell.RechargeRate);
+//        end;
 
 
 //        if RchCell.TimeSeriesName = '' then
@@ -867,7 +905,7 @@ begin
           end;
 
           // Data set 8
-          WriteLayerSelection(RechRateList, ParameterValues, TimeIndex, Comment, 'IRCH');
+          WriteLayerSelection(RechRateList, ParameterValues, TimeIndex, Comment, 'IRCH', 1);
           Application.ProcessMessages;
           if not frmProgressMM.ShouldContinue then
           begin

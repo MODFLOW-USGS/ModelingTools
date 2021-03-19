@@ -832,7 +832,7 @@ begin
   DataTypeIndex := 0;
   Comment := DataSetIdentifier + ' ' + VariableIdentifiers;
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, True, Dummy, VariableIdentifiers);
+    CellList, umAssign, True, Dummy, VariableIdentifiers, 0);
 end;
 
 procedure TModflowETS_Writer.WriteCellsMF6(DepthSurfaceCellList, EtRateList: TValueCellList);
@@ -944,7 +944,7 @@ begin
   DataTypeIndex := 0;
   Comment := 'Data Set 5: ETSS';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'SURFACE');
+    CellList, umAssign, False, Dummy, 'SURFACE', 1);
 end;
 
 procedure TModflowETS_Writer.WriteExtinctionDepth(CellList: TList);
@@ -960,7 +960,7 @@ begin
   DataTypeIndex := 1;
   Comment := 'Data Set 8: ETSX';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'DEPTH');
+    CellList, umAssign, False, Dummy, 'DEPTH', 1);
 end;
 
 procedure TModflowETS_Writer.WriteDepthFraction(CellList: TList;
@@ -977,7 +977,7 @@ begin
   DataTypeIndex := SegmentIndex*2;
   Comment := 'Data Set 10: PXDP';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, NewArray, 'PXDP', False);
+    CellList, umAssign, False, NewArray, 'PXDP', 3, False);
   CheckDepthFraction(NewArray, SegmentIndex);
   FPriorDepthFractionArray.Free;
   FPriorDepthFractionArray := NewArray;
@@ -1038,7 +1038,7 @@ begin
   DataTypeIndex := SegmentIndex*2+1;
   Comment := 'Data Set 11: PETM';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, NewArray, 'PETM', False);
+    CellList, umAssign, False, NewArray, 'PETM', 3, False);
   CheckRateFraction(NewArray, SegmentIndex);
   FPriorRateFractionArray.Free;
   FPriorRateFractionArray := NewArray;
@@ -1321,7 +1321,8 @@ begin
           MfDataSetName := 'IETS';
         end;
 
-        WriteLayerSelection(EtRateList, ParameterValues, TimeIndex, Comment, MfDataSetName);
+        WriteLayerSelection(EtRateList, ParameterValues, TimeIndex, Comment,
+          MfDataSetName, 3);
         Application.ProcessMessages;
         if not frmProgressMM.ShouldContinue then
         begin

@@ -309,7 +309,7 @@ type
     FCurrentParameter: TModflowTransientListParameter;
     FPestRechargeMethod: TPestParamMethod;
     FPestRechargeFormula: TFormulaObject;
-    FPestRechareObserver: TObserver;
+    FPestRechargeObserver: TObserver;
     FUsedObserver: TObserver;
     procedure SetRechargeLayers(const Value: TRchLayerCollection);
     function GetTimeVaryingRechargeLayers: boolean;
@@ -507,7 +507,8 @@ begin
 end;
 
 procedure TRchCollection.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList);
 var
   RechargeRateArray: TDataArray;
   Boundary: TRchStorage;
@@ -533,10 +534,12 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TRchStorage;
   RechargeRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
   LocalRechargePestSeries := PestSeries[RechPosition];
   LocalRechargePestMethod := PestMethods[RechPosition];
   RechargePestItems := PestItemNames[RechPosition];
   LocalRechargePest := RechargePestItems[ItemIndex];
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := LayerMin to LayerMax do
@@ -614,6 +617,7 @@ begin
   LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+
   PestRechargeSeriesName := BoundaryGroup.PestBoundaryFormula[RechPosition];
   PestSeries.Add(PestRechargeSeriesName);
   RechargeMethod := BoundaryGroup.PestBoundaryMethod[RechPosition];
@@ -1156,7 +1160,7 @@ end;
 
 procedure TRchBoundary.CreateFormulaObjects;
 begin
-  FPestRechargeFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestRechargeFormula := CreateFormulaObjectBlocks(dsoTop);
 end;
 
 procedure TRchBoundary.CreateObservers;
@@ -1313,7 +1317,10 @@ begin
         result := PestRechargeFormula;
       end;
     else
-      Assert(False);
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
   end;
 end;
 
@@ -1328,7 +1335,7 @@ begin
     else
       begin
         result := inherited;
-        Assert(False);
+//        Assert(False);
       end;
   end;
 end;
@@ -1344,12 +1351,12 @@ end;
 
 function TRchBoundary.GetPestRechargeObserver: TObserver;
 begin
-  if FPestRechareObserver = nil then
+  if FPestRechargeObserver = nil then
   begin
-    CreateObserver('PestRecharge_', FPestRechareObserver, nil);
-    FPestRechareObserver.OnUpToDateSet := InvalidateRechargeData;
+    CreateObserver('PestRecharge_', FPestRechargeObserver, nil);
+    FPestRechargeObserver.OnUpToDateSet := InvalidateRechargeData;
   end;
-  result := FPestRechareObserver;
+  result := FPestRechargeObserver;
 end;
 
 procedure TRchBoundary.GetPropertyObserver(Sender: TObject; List: TList);

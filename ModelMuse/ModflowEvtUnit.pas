@@ -21,6 +21,10 @@ type
     TimeSeriesName: string;
     ETParameterName: string;
     ETParameterValue: double;
+
+    RatePest: string;
+    RatePestSeries: string;
+    RatePestMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -37,6 +41,13 @@ type
     EndingTime: double;
     EvapotranspirationSurfaceAnnotation: string;
     EvapotranspirationDepthAnnotation: string;
+
+    SurfacePest: string;
+    SurfacePestSeries: string;
+    SurfacePestMethod: TPestParamMethod;
+    DepthPest: string;
+    DepthPestSeries: string;
+    DepthPestMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -349,6 +360,9 @@ type
     function GetTimeSeriesName: string;
     function GetETParameterName: string;
     function GetETParameterValue: double;
+    function GetRatePest: string;
+    function GetRatePestMethod: TPestParamMethod;
+    function GetRatePestSeries: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -364,6 +378,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property EvapotranspirationRate: double read GetEvapotranspirationRate;
     property EvapotranspirationRateAnnotation: string read GetEvapotranspirationRateAnnotation;
@@ -373,6 +390,11 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
     property ETParameterName: string read GetETParameterName;
     property ETParameterValue: double read GetETParameterValue;
+
+    property RatePest: string read GetRatePest;
+    property RatePestSeries: string read GetRatePestSeries;
+    property RatePestMethod: TPestParamMethod read GetRatePestMethod;
+
   end;
 
   TEvapotranspirationLayerCell = class(TEvapotranspirationCell)
@@ -410,6 +432,12 @@ type
     function GetEvapotranspirationDepth: double;
     function GetEvapotranspirationDepthAnnotation: string;
     function GetEvapotranspirationSurfaceAnnotation: string;
+    function GetDepthPest: string;
+    function GetDepthPestMethod: TPestParamMethod;
+    function GetDepthPestSeries: string;
+    function GetSurfacePest: string;
+    function GetSurfacePestMethod: TPestParamMethod;
+    function GetSurfacePestSeries: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -425,12 +453,22 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property EvapotranspirationSurface: double read GetEvapotranspirationSurface;
     property EvapotranspirationDepth: double read GetEvapotranspirationDepth;
     property EvapotranspirationSurfaceAnnotation: string read GetEvapotranspirationSurfaceAnnotation;
     property EvapotranspirationDepthAnnotation: string read GetEvapotranspirationDepthAnnotation;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    //PEST properties
+    property SurfacePest: string read GetSurfacePest;
+    property SurfacePestSeries: string read GetSurfacePestSeries;
+    property SurfacePestMethod: TPestParamMethod read GetSurfacePestMethod;
+    property DepthPest: string read GetDepthPest;
+    property DepthPestSeries: string read GetDepthPestSeries;
+    property DepthPestMethod: TPestParamMethod read GetDepthPestMethod;
   end;
 
 
@@ -442,13 +480,39 @@ type
   private
     FEvapotranspirationLayers: TEvtLayerCollection;
     FEvtSurfDepthCollection: TEvtSurfDepthCollection;
+    FPestDepthMethod: TPestParamMethod;
+    FPestEvapotranspirationRateMethod: TPestParamMethod;
+    FPestSurfaceMethod: TPestParamMethod;
+    FPestEvapotranspirationRateFormula: TFormulaObject;
+    FPestSurfaceFormula: TFormulaObject;
+    FPestDepthFormula: TFormulaObject;
+    FPestDepthObserver: TObserver;
+    FPestEvapotranspirationRateObserver: TObserver;
+    FPestSurfaceObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetEvapotranspirationLayers(const Value: TEvtLayerCollection);
     procedure SetEvtSurfDepthCollection(const Value: TEvtSurfDepthCollection);
     function GetTimeVaryingEvapotranspirationLayers: boolean;
-    procedure AssignEvapotranspirationLayerCells(BoundaryStorage: TEvtLayerStorage;
-      ValueTimeList: TList);
-    procedure AssignSurfaceDepthCells(AModel: TBaseModel; BoundaryStorage: TEvtSurfDepthStorage;
-      ValueTimeList: TList);
+    procedure AssignEvapotranspirationLayerCells(
+      BoundaryStorage: TEvtLayerStorage; ValueTimeList: TList);
+    procedure AssignSurfaceDepthCells(AModel: TBaseModel;
+      BoundaryStorage: TEvtSurfDepthStorage; ValueTimeList: TList);
+    function GetPestDepthFormula: string;
+    function GetPestDepthObserver: TObserver;
+    function GetPestEvapotranspirationRateFormula: string;
+    function GetPestEvapotranspirationRateObserver: TObserver;
+    function GetPestSurfaceObserver: TObserver;
+    function GetPestSurfaceFormula: string;
+    procedure SetPestDepthFormula(const Value: string);
+    procedure SetPestDepthMethod(const Value: TPestParamMethod);
+    procedure SetPestEvapotranspirationRateFormula(const Value: string);
+    procedure SetPestEvapotranspirationRateMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestSurfaceFormula(const Value: string);
+    procedure SetPestSurfaceMethod(const Value: TPestParamMethod);
+    procedure InvalidateDepthData(Sender: TObject);
+    procedure InvalidateEvapotranspirationRateData(Sender: TObject);
+    procedure InvalidateSurfaceData(Sender: TObject);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -462,11 +526,30 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+    // PEST
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+//    property PestEtRObserver: TObserver read GetPestRechargeObserver;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestEvapotranspirationRateObserver: TObserver
+      read GetPestEvapotranspirationRateObserver;
+    property PestSurfaceObserver: TObserver
+      read GetPestSurfaceObserver;
+    property PestDepthObserver: TObserver
+      read GetPestDepthObserver;
   public
-    procedure Assign(Source: TPersistent);override;
-
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TEvtStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -485,15 +568,58 @@ type
     function NonParameterColumns: integer; override;
     property TimeVaryingEvapotranspirationLayers: boolean
       read GetTimeVaryingEvapotranspirationLayers;
-    procedure GetEvapotranspirationLayerCells(LayerTimeList: TList; AModel: TBaseModel);
-    procedure GetEvapotranspirationSurfaceDepthCells(LayerTimeList: TList; AModel: TBaseModel);
+    procedure GetEvapotranspirationLayerCells(LayerTimeList: TList;
+      AModel: TBaseModel);
+    procedure GetEvapotranspirationSurfaceDepthCells(LayerTimeList: TList;
+      AModel: TBaseModel);
     procedure Clear; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property EvapotranspirationLayers: TEvtLayerCollection
       read FEvapotranspirationLayers write SetEvapotranspirationLayers;
     property EvtSurfDepthCollection: TEvtSurfDepthCollection
       read FEvtSurfDepthCollection write SetEvtSurfDepthCollection;
     procedure InvalidateDisplay; override;
+
+    property PestEvapotranspirationRateFormula: string
+      read GetPestEvapotranspirationRateFormula
+      write SetPestEvapotranspirationRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvapotranspirationRateMethod: TPestParamMethod
+      read FPestEvapotranspirationRateMethod
+      write SetPestEvapotranspirationRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestSurfaceFormula: string read GetPestSurfaceFormula
+      write SetPestSurfaceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestSurfaceMethod: TPestParamMethod read FPestSurfaceMethod
+      write SetPestSurfaceMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDepthFormula: string read GetPestDepthFormula
+      write SetPestDepthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDepthMethod: TPestParamMethod read FPestDepthMethod
+      write SetPestDepthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 resourcestring
@@ -506,7 +632,7 @@ implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
-  frmErrorsAndWarningsUnit;
+  frmErrorsAndWarningsUnit, ModflowParameterUnit, ModelMuseUtilities;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';
@@ -518,6 +644,10 @@ const
   LayerPosition = 0;
   SurfacePosition = 0;
   DepthPosition = 1;
+
+  RateBoundaryPosition = 0;
+  SurfaceBoundaryPosition = 1;
+  DepthBoundaryPosition = 2;
 
 { TEvtItem }
 
@@ -631,6 +761,10 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalRatePestSeries: string;
+  LocalRatePestMethod: TPestParamMethod;
+  RatePestItems: TStringList;
+  LocalRatePest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -638,6 +772,12 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TEvtStorage;
   EvapotranspirationRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
+  LocalRatePestSeries := PestSeries[RatePosition];
+  LocalRatePestMethod := PestMethods[RatePosition];
+  RatePestItems := PestItemNames[RatePosition];
+  LocalRatePest := RatePestItems[ItemIndex];
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := LayerMin to LayerMax do
@@ -660,6 +800,9 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 EvapotranspirationRateAnnotation := EvapotranspirationRateArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                RatePest := LocalRatePest;
+                RatePestSeries := LocalRatePestSeries;
+                RatePestMethod := LocalRatePestMethod;
               end;
               Inc(BoundaryIndex);
             end;
@@ -687,14 +830,88 @@ var
   ScreenObject: TScreenObject;
   ALink: TEvtTimeListLink;
   FEvapotranspirationRateData: TModflowTimeList;
+  PestRateSeriesName: string;
+  RateMethod: TPestParamMethod;
+  RateItems: TStringList;
+  LocalModel: TCustomModel;
+  PestParam: TModflowSteadyParameter;
+  Formula: string;
+  PestDataArray: TDataArray;
+  PestParamSeries: TModflowSteadyParameter;
 begin
+  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+
+  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[RatePosition];
+  PestSeries.Add(PestRateSeriesName);
+  RateMethod := BoundaryGroup.PestBoundaryMethod[RatePosition];
+  PestMethods.Add(RateMethod);
+
+  RateItems := TStringList.Create;
+  PestItemNames.Add(RateItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TEvtItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.EvapotranspirationRate;
+
+    PestParam := LocalModel.GetPestParameterByName(Item.EvapotranspirationRate);
+    if PestParam = nil then
+    begin
+      Formula := Item.EvapotranspirationRate;
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        RateItems.Add(PestDataArray.Name);
+      end
+      else
+      begin
+        RateItems.Add('');
+      end;
+    end
+    else
+    begin
+      Formula := FortranFloatToStr(PestParam.Value);
+      RateItems.Add(PestParam.ParameterName)
+    end;
+
+    if PestRateSeriesName <> '' then
+    begin
+      PestParamSeries := LocalModel.GetPestParameterByName(PestRateSeriesName);
+      if PestParamSeries = nil then
+      begin
+        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestRateSeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          Case RateMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
+          End;
+        end;
+      end
+      else
+      begin
+        Case RateMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
+            end;
+        End;
+      end;
+    end;
+
+    BoundaryValues[Index].Formula := Formula;
   end;
   ALink := TimeListLink.GetLink(AModel) as TEvtTimeListLink;
   FEvapotranspirationRateData := ALink.FEvapotranspirationRateData;
@@ -772,6 +989,51 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TEvt_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    RatePosition:
+      begin
+        result := RatePest;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+function TEvt_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    RatePosition:
+      begin
+        result := RatePestMethod;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+function TEvt_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    RatePosition:
+      begin
+        result := RatePestSeries;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
 function TEvt_Cell.GetETParameterName: string;
 begin
   result := Values.ETParameterName;
@@ -809,6 +1071,21 @@ begin
       DataSetLayerToModflowLayer(Layer);
     else Assert(False);
   end;
+end;
+
+function TEvt_Cell.GetRatePest: string;
+begin
+  result := Values.RatePest;
+end;
+
+function TEvt_Cell.GetRatePestMethod: TPestParamMethod;
+begin
+  result := Values.RatePestMethod;
+end;
+
+function TEvt_Cell.GetRatePestSeries: string;
+begin
+  result := Values.RatePestSeries
 end;
 
 function TEvt_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -896,6 +1173,14 @@ begin
     SourceBoundary := TEvtBoundary(Source);
     EvapotranspirationLayers := SourceBoundary.EvapotranspirationLayers;
     EvtSurfDepthCollection := SourceBoundary.EvtSurfDepthCollection;
+
+    PestEvapotranspirationRateFormula := SourceBoundary.PestEvapotranspirationRateFormula;
+    PestEvapotranspirationRateMethod := SourceBoundary.PestEvapotranspirationRateMethod;
+    PestSurfaceFormula := SourceBoundary.PestSurfaceFormula;
+    PestSurfaceMethod := SourceBoundary.PestSurfaceMethod;
+    PestDepthFormula := SourceBoundary.PestDepthFormula;
+    PestDepthMethod := SourceBoundary.PestDepthMethod;
+
   end;
   inherited;
 end;
@@ -1060,6 +1345,11 @@ begin
   result := TEvtCollection;
 end;
 
+function TEvtBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestEvt_';
+end;
+
 procedure TEvtBoundary.Clear;
 begin
   inherited;
@@ -1072,10 +1362,67 @@ begin
   inherited Create(Model, ScreenObject);
   FEvapotranspirationLayers := TEvtLayerCollection.Create(self, Model, ScreenObject);
   FEvtSurfDepthCollection := TEvtSurfDepthCollection.Create(self, Model, ScreenObject);
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestEvapotranspirationRateFormula := '';
+  PestSurfaceFormula := '';
+  PestDepthFormula := '';
+  FPestEvapotranspirationRateMethod := DefaultBoundaryMethod(RateBoundaryPosition);
+  FPestSurfaceMethod := DefaultBoundaryMethod(SurfaceBoundaryPosition);
+  FPestDepthMethod := DefaultBoundaryMethod(DepthBoundaryPosition);
+
+end;
+
+procedure TEvtBoundary.CreateFormulaObjects;
+begin
+  FPestEvapotranspirationRateFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestSurfaceFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestDepthFormula := CreateFormulaObjectBlocks(dsoTop);
+end;
+
+procedure TEvtBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestEvapotranspirationRateObserver);
+    FObserverList.Add(PestSurfaceObserver);
+    FObserverList.Add(PestDepthObserver);
+  end;
+end;
+
+class function TEvtBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    RateBoundaryPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    SurfaceBoundaryPosition:
+      begin
+        result := ppmAdd;
+      end;
+    DepthBoundaryPosition:
+      begin
+        result := ppmAdd;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 destructor TEvtBoundary.Destroy;
 begin
+  PestEvapotranspirationRateFormula := '';
+  PestSurfaceFormula := '';
+  PestDepthFormula := '';
+
   FEvtSurfDepthCollection.Free;
   FEvapotranspirationLayers.Free;
   inherited;
@@ -1125,6 +1472,134 @@ begin
       BoundaryStorage := EvtSurfDepthCollection.Boundaries[ValueIndex, AModel]
         as TEvtSurfDepthStorage;
       AssignSurfaceDepthCells(AModel, BoundaryStorage, LayerTimeList);
+    end;
+  end;
+end;
+
+function TEvtBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+//  result := '';
+  case FormulaIndex of
+    RateBoundaryPosition:
+      begin
+        result := PestEvapotranspirationRateFormula;
+      end;
+    SurfaceBoundaryPosition:
+      begin
+        result := PestSurfaceFormula;
+      end;
+    DepthBoundaryPosition:
+      begin
+        result := PestDepthFormula;
+      end;
+    else
+      result := inherited;
+//      Assert(False);
+  end;
+end;
+
+function TEvtBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    RateBoundaryPosition:
+      begin
+        result := PestEvapotranspirationRateMethod;
+      end;
+    SurfaceBoundaryPosition:
+      begin
+        result := PestSurfaceMethod;
+      end;
+    DepthBoundaryPosition:
+      begin
+        result := PestDepthMethod;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+function TEvtBoundary.GetPestDepthFormula: string;
+begin
+  Result := FPestDepthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DepthBoundaryPosition);
+  end;
+end;
+
+function TEvtBoundary.GetPestDepthObserver: TObserver;
+begin
+  if FPestDepthObserver = nil then
+  begin
+    CreateObserver('PestDepth_', FPestDepthObserver, nil);
+    FPestDepthObserver.OnUpToDateSet := InvalidateDepthData;
+  end;
+  result := FPestDepthObserver;
+end;
+
+function TEvtBoundary.GetPestEvapotranspirationRateFormula: string;
+begin
+  Result := FPestEvapotranspirationRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(RateBoundaryPosition);
+  end;
+end;
+
+function TEvtBoundary.GetPestEvapotranspirationRateObserver: TObserver;
+begin
+  if FPestEvapotranspirationRateObserver = nil then
+  begin
+    CreateObserver('PestEvapotranspirationRate_', FPestEvapotranspirationRateObserver, nil);
+    FPestEvapotranspirationRateObserver.OnUpToDateSet := InvalidateEvapotranspirationRateData;
+  end;
+  result := FPestEvapotranspirationRateObserver;
+end;
+
+function TEvtBoundary.GetPestSurfaceObserver: TObserver;
+begin
+  if FPestSurfaceObserver = nil then
+  begin
+    CreateObserver('PestEvapotranspirationSurface_', FPestSurfaceObserver, nil);
+    FPestSurfaceObserver.OnUpToDateSet := InvalidateSurfaceData;
+  end;
+  result := FPestSurfaceObserver;
+end;
+
+function TEvtBoundary.GetPestSurfaceFormula: string;
+begin
+  Result := FPestSurfaceFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SurfaceBoundaryPosition);
+  end;
+end;
+
+procedure TEvtBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestEvapotranspirationRateFormula then
+  begin
+    if RateBoundaryPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[RateBoundaryPosition]);
+    end;
+  end;
+  if Sender = FPestSurfaceFormula then
+  begin
+    if SurfaceBoundaryPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[SurfaceBoundaryPosition]);
+    end;
+  end;
+  if Sender = FPestDepthFormula then
+  begin
+    if DepthBoundaryPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DepthBoundaryPosition]);
     end;
   end;
 end;
@@ -1198,6 +1673,49 @@ begin
   end;
 end;
 
+function TEvtBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestEvt_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TEvtBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
+procedure TEvtBoundary.InvalidateDepthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfEvtEvapDepth(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfEvtEvapDepth(self);
+    end;
+  end;
+end;
+
 procedure TEvtBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -1210,6 +1728,60 @@ begin
     Model.InvalidateMfEvtEvapSurface(self);
     Model.InvalidateMfEvtEvapDepth(self);
     Model.InvalidateMfEvtEvapLayer(self);
+  end;
+end;
+
+procedure TEvtBoundary.InvalidateEvapotranspirationRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfEvtEvapRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfEvtEvapRate(self);
+    end;
+  end;
+end;
+
+procedure TEvtBoundary.InvalidateSurfaceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfEvtEvapSurface(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfEvtEvapSurface(self);
+    end;
   end;
 end;
 
@@ -1241,6 +1813,87 @@ procedure TEvtBoundary.SetEvtSurfDepthCollection(
   const Value: TEvtSurfDepthCollection);
 begin
   FEvtSurfDepthCollection.Assign(Value);
+end;
+
+procedure TEvtBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+
+  case FormulaIndex of
+    RateBoundaryPosition:
+      begin
+        PestEvapotranspirationRateFormula := Value;
+      end;
+    SurfaceBoundaryPosition:
+      begin
+        PestSurfaceFormula := Value;
+      end;
+    DepthBoundaryPosition:
+      begin
+        PestDepthFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TEvtBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    RateBoundaryPosition:
+      begin
+        PestEvapotranspirationRateMethod := Value;
+      end;
+    SurfaceBoundaryPosition:
+      begin
+        PestSurfaceMethod := Value;
+      end;
+    DepthBoundaryPosition:
+      begin
+        PestDepthMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TEvtBoundary.SetPestDepthFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DepthBoundaryPosition, FPestDepthFormula);
+end;
+
+procedure TEvtBoundary.SetPestDepthMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDepthMethod, Value);
+end;
+
+procedure TEvtBoundary.SetPestEvapotranspirationRateFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, RateBoundaryPosition, FPestEvapotranspirationRateFormula);
+end;
+
+procedure TEvtBoundary.SetPestEvapotranspirationRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestEvapotranspirationRateMethod, Value);
+end;
+
+procedure TEvtBoundary.SetPestSurfaceFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SurfaceBoundaryPosition, FPestSurfaceFormula);
+end;
+
+procedure TEvtBoundary.SetPestSurfaceMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestSurfaceMethod, Value);
 end;
 
 function TEvtBoundary.Used: boolean;
@@ -1764,6 +2417,14 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalSurfacePestSeries: string;
+  LocalSurfacePestMethod: TPestParamMethod;
+  SurfacePestItems: TStringList;
+  LocalSurfacePest: string;
+  LocalDepthPestSeries: string;
+  LocalDepthPestMethod: TPestParamMethod;
+  DepthPestItems: TStringList;
+  LocalDepthPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -1772,6 +2433,17 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TEvtSurfDepthStorage;
   EvapotranspirationSurfaceArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
+  LocalSurfacePestSeries := PestSeries[SurfacePosition];
+  LocalSurfacePestMethod := PestMethods[SurfacePosition];
+  SurfacePestItems := PestItemNames[SurfacePosition];
+  LocalSurfacePest := SurfacePestItems[ItemIndex];
+
+  LocalDepthPestSeries := PestSeries[DepthPosition];
+  LocalDepthPestMethod := PestMethods[DepthPosition];
+  DepthPestItems := PestItemNames[DepthPosition];
+  LocalDepthPest := DepthPestItems[ItemIndex];
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := 0 to EvapotranspirationSurfaceArray.LayerCount - 1 do
@@ -1799,6 +2471,15 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 EvapotranspirationDepthAnnotation := EvapotranspirationDepthArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+
+                SurfacePest := LocalSurfacePest;
+                SurfacePestSeries := LocalSurfacePestSeries;
+                SurfacePestMethod := LocalSurfacePestMethod;
+
+                DepthPest := LocalDepthPest;
+                DepthPestSeries := LocalDepthPestSeries;
+                DepthPestMethod := LocalDepthPestMethod;
+
               end;
               Inc(BoundaryIndex);
             end;
@@ -1829,15 +2510,102 @@ var
   ALink: TEvtSurfDepthListLink;
   EvapotranspirationSurfaceData: TModflowTimeList;
   EvapotranspirationDepthData: TModflowTimeList;
+  PestSurfaceSeriesName: string;
+  SurfaceMethod: TPestParamMethod;
+  SurfaceItems: TStringList;
+  PestDepthSeriesName: string;
+  DepthMethod: TPestParamMethod;
+  DepthItems: TStringList;
+  LocalModel: TCustomModel;
+  PestParam: TModflowSteadyParameter;
+  Formula: string;
+  PestDataArray: TDataArray;
+  PestParamSeries: TModflowSteadyParameter;
 begin
+  LocalModel := AModel as TCustomModel;
   Boundary := BoundaryGroup as TEvtBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+
+  PestSurfaceSeriesName := BoundaryGroup.PestBoundaryFormula[SurfacePosition];
+  PestSeries.Add(PestSurfaceSeriesName);
+  SurfaceMethod := BoundaryGroup.PestBoundaryMethod[SurfacePosition];
+  PestMethods.Add(SurfaceMethod);
+
+  SurfaceItems := TStringList.Create;
+  PestItemNames.Add(SurfaceItems);
+
+  PestDepthSeriesName := BoundaryGroup.PestBoundaryFormula[DepthPosition];
+  PestSeries.Add(PestDepthSeriesName);
+  DepthMethod := BoundaryGroup.PestBoundaryMethod[DepthPosition];
+  PestMethods.Add(DepthMethod);
+
+  DepthItems := TStringList.Create;
+  PestItemNames.Add(DepthItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TEvtSurfDepthItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.EvapotranspirationSurface;
+
+    PestParam := LocalModel.GetPestParameterByName(Item.EvapotranspirationSurface);
+    if PestParam = nil then
+    begin
+      Formula := Item.EvapotranspirationSurface;
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        SurfaceItems.Add(PestDataArray.Name);
+      end
+      else
+      begin
+        SurfaceItems.Add('');
+      end;
+    end
+    else
+    begin
+      Formula := FortranFloatToStr(PestParam.Value);
+      SurfaceItems.Add(PestParam.ParameterName)
+    end;
+
+    if PestSurfaceSeriesName <> '' then
+    begin
+      PestParamSeries := LocalModel.GetPestParameterByName(PestSurfaceSeriesName);
+      if PestParamSeries = nil then
+      begin
+        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestSurfaceSeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          Case SurfaceMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
+          End;
+        end;
+      end
+      else
+      begin
+        Case SurfaceMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
+            end;
+        End;
+      end;
+    end;
+    BoundaryValues[Index].Formula := Formula;
+
+
+//    BoundaryValues[Index].Formula := Item.EvapotranspirationSurface;
   end;
   ALink := TimeListLink.GetLink(AModel) as TEvtSurfDepthListLink;
   EvapotranspirationSurfaceData := ALink.FEvapotranspirationSurfaceData;
@@ -1848,7 +2616,64 @@ begin
   begin
     Item := Items[Index] as TEvtSurfDepthItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.EvapotranspirationDepth;
+
+    PestParam := LocalModel.GetPestParameterByName(Item.EvapotranspirationDepth);
+    if PestParam = nil then
+    begin
+      Formula := Item.EvapotranspirationDepth;
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        DepthItems.Add(PestDataArray.Name);
+      end
+      else
+      begin
+        DepthItems.Add('');
+      end;
+    end
+    else
+    begin
+      Formula := FortranFloatToStr(PestParam.Value);
+      DepthItems.Add(PestParam.ParameterName)
+    end;
+
+    if PestDepthSeriesName <> '' then
+    begin
+      PestParamSeries := LocalModel.GetPestParameterByName(PestDepthSeriesName);
+      if PestParamSeries = nil then
+      begin
+        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestDepthSeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          Case DepthMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
+          End;
+        end;
+      end
+      else
+      begin
+        Case DepthMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
+            end;
+        End;
+      end;
+    end;
+    BoundaryValues[Index].Formula := Formula;
+
+//    BoundaryValues[Index].Formula := Item.EvapotranspirationDepth;
   end;
   EvapotranspirationDepthData := ALink.FEvapotranspirationDepthData;
   EvapotranspirationDepthData.Initialize(BoundaryValues, ScreenObject, lctUse);
@@ -1943,6 +2768,21 @@ begin
   result := Values.Cell.Column;
 end;
 
+function TEvtSurfDepth_Cell.GetDepthPest: string;
+begin
+  result := Values.DepthPest;
+end;
+
+function TEvtSurfDepth_Cell.GetDepthPestMethod: TPestParamMethod;
+begin
+  result := Values.DepthPestMethod;
+end;
+
+function TEvtSurfDepth_Cell.GetDepthPestSeries: string;
+begin
+  result := Values.DepthPestSeries;
+end;
+
 function TEvtSurfDepth_Cell.GetEvapotranspirationDepth: double;
 begin
   result := Values.EvapotranspirationDepth;
@@ -1982,6 +2822,64 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TEvtSurfDepth_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    SurfacePosition:
+      begin
+        result := SurfacePest;
+      end;
+    DepthPosition:
+      begin
+        result := DepthPest;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+function TEvtSurfDepth_Cell.GetPestSeriesMethod(
+  Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    SurfacePosition:
+      begin
+        result := SurfacePestMethod;
+      end;
+    DepthPosition:
+      begin
+        result := DepthPestMethod;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+function TEvtSurfDepth_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    SurfacePosition:
+      begin
+        result := SurfacePestSeries;
+      end;
+    DepthPosition:
+      begin
+        result := DepthPestSeries;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
 function TEvtSurfDepth_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
@@ -2012,6 +2910,22 @@ end;
 function TEvtSurfDepth_Cell.GetSection: integer;
 begin
   result := Values.Cell.Section;
+end;
+
+function TEvtSurfDepth_Cell.GetSurfacePest: string;
+begin
+  result := Values.SurfacePest;
+end;
+
+function TEvtSurfDepth_Cell.GetSurfacePestMethod: TPestParamMethod;
+begin
+  result := Values.SurfacePestMethod;
+end;
+
+function TEvtSurfDepth_Cell.GetSurfacePestSeries: string;
+begin
+  result := Values.SurfacePestSeries;
+
 end;
 
 function TEvtSurfDepth_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
@@ -2264,6 +3178,9 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ETParameterName));
 
+  WriteCompInt(Comp, Strings.IndexOf(RatePest));
+  WriteCompInt(Comp, Strings.IndexOf(RatePestSeries));
+  WriteCompInt(Comp, Ord(RatePestMethod));
 end;
 
 procedure TEvtRecord.RecordStrings(Strings: TStringList);
@@ -2271,6 +3188,8 @@ begin
   Strings.Add(EvapotranspirationRateAnnotation);
   Strings.Add(TimeSeriesName);
   Strings.Add(ETParameterName);
+  Strings.Add(RatePest);
+  Strings.Add(RatePestSeries);
   {
     ETParameterName: string;
     ETParameterValue: double;
@@ -2288,6 +3207,9 @@ begin
   EvapotranspirationRateAnnotation := Annotations[ReadCompInt(Decomp)];
   TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ETParameterName := Annotations[ReadCompInt(Decomp)];
+  RatePest := Annotations[ReadCompInt(Decomp)];
+  RatePestSeries := Annotations[ReadCompInt(Decomp)];
+  RatePestMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TEvtSurfDepthRecord }
@@ -2306,7 +3228,14 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(EvapotranspirationSurfaceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(EvapotranspirationDepthAnnotation));
 
-//  CommentLength := Length(EvapotranspirationSurfaceAnnotation);
+  WriteCompInt(Comp, Strings.IndexOf(SurfacePest));
+  WriteCompInt(Comp, Strings.IndexOf(SurfacePestSeries));
+  WriteCompInt(Comp, Ord(SurfacePestMethod));
+
+  WriteCompInt(Comp, Strings.IndexOf(DepthPest));
+  WriteCompInt(Comp, Strings.IndexOf(DepthPestSeries));
+  WriteCompInt(Comp, Ord(DepthPestMethod));
+
 //  Comp.Write(CommentLength, SizeOf(CommentLength));
 //  Comp.WriteBuffer(Pointer(EvapotranspirationSurfaceAnnotation)^,
 //    CommentLength * SizeOf(Char));
@@ -2321,6 +3250,11 @@ procedure TEvtSurfDepthRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(EvapotranspirationSurfaceAnnotation);
   Strings.Add(EvapotranspirationDepthAnnotation);
+
+  Strings.Add(SurfacePest);
+  Strings.Add(SurfacePestSeries);
+  Strings.Add(DepthPest);
+  Strings.Add(DepthPestSeries);
 end;
 
 procedure TEvtSurfDepthRecord.Restore(Decomp: TDecompressionStream;
@@ -2333,6 +3267,13 @@ begin
   EndingTime := ReadCompReal(Decomp);
   EvapotranspirationSurfaceAnnotation := Annotations[ReadCompInt(Decomp)];
   EvapotranspirationDepthAnnotation := Annotations[ReadCompInt(Decomp)];
+
+  SurfacePest := Annotations[ReadCompInt(Decomp)];
+  SurfacePestSeries := Annotations[ReadCompInt(Decomp)];
+  SurfacePestMethod := TPestParamMethod(ReadCompInt(Decomp));
+  DepthPest := Annotations[ReadCompInt(Decomp)];
+  DepthPestSeries := Annotations[ReadCompInt(Decomp)];
+  DepthPestMethod := TPestParamMethod(ReadCompInt(Decomp));
 //  EvapotranspirationSurfaceAnnotation := ReadCompString(Decomp, Annotations);
 //  EvapotranspirationDepthAnnotation := ReadCompString(Decomp, Annotations);
 end;

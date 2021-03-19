@@ -24,6 +24,7 @@ Type
       VariableIdentifiers: string);
     procedure WriteEvapotranspirationSurface(CellList: TValueCellList);
     procedure WriteExtinctionDepth(CellList: TValueCellList);
+    procedure InternalWriteFile;
   protected
     function CellType: TValueCellType; override;
     function Prefix: string; override;
@@ -341,6 +342,54 @@ begin
   end;
 end;
 
+procedure TModflowEVT_Writer.InternalWriteFile;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingEVTPackage);
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet1);
+    WriteDataSet1;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet2);
+    WriteDataSet2;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets3and4);
+    WriteDataSets3And4;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets5to10);
+    WriteDataSets5To10;
+  finally
+    CloseFile;
+  end;
+  //    Clear;
+end;
+
 procedure TModflowEVT_Writer.WriteDataSets3And4;
 const
   DS3 = ' # Data Set 3: PARNAM PARTYP Parval NCLU';
@@ -428,47 +477,22 @@ begin
     Exit;
   end;
   ClearTimeLists(Model);
-  OpenFile(FileName(AFileName));
-  try
-    frmProgressMM.AddMessage(StrWritingEVTPackage);
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
+  InternalWriteFile;
 
-    frmProgressMM.AddMessage(StrWritingDataSet1);
-    WriteDataSet1;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      InternalWriteFile;
 
-    frmProgressMM.AddMessage(StrWritingDataSet2);
-    WriteDataSet2;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
+    finally
+      frmErrorsAndWarnings.EndUpdate;
     end;
-
-    frmProgressMM.AddMessage(StrWritingDataSets3and4);
-    WriteDataSets3And4;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSets5to10);
-    WriteDataSets5To10;
-  finally
-    CloseFile;
-//    Clear;
   end;
+
 end;
 
 procedure TModflowEVT_Writer.WriteCells(CellList: TValueCellList;
@@ -485,7 +509,7 @@ begin
   DataTypeIndex := 0;
   Comment := DataSetIdentifier + ' ' + VariableIdentifiers;
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, True, Dummy, VariableIdentifiers);
+    CellList, umAssign, True, Dummy, VariableIdentifiers, 0);
 end;
 
 procedure TModflowEVT_Writer.WriteEvapotranspirationSurface(CellList: TValueCellList);
@@ -501,7 +525,7 @@ begin
   DataTypeIndex := 0;
   Comment := 'Data Set 6: SURF';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'SURF');
+    CellList, umAssign, False, Dummy, 'SURF', 1);
 end;
 
 procedure TModflowEVT_Writer.WriteExtinctionDepth(CellList: TValueCellList);
@@ -517,7 +541,7 @@ begin
   DataTypeIndex := 1;
   Comment := 'Data Set 9: EXDP';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'EXDP');
+    CellList, umAssign, False, Dummy, 'EXDP', 1);
 end;
 
 procedure TModflowEVT_Writer.WriteStressPeriods(const VariableIdentifiers,
@@ -731,7 +755,7 @@ begin
         end;
 
         // data set 10
-        WriteLayerSelection(EtRateList, ParameterValues, TimeIndex, Comment, 'IEVT');
+        WriteLayerSelection(EtRateList, ParameterValues, TimeIndex, Comment, 'IEVT', 3);
         Application.ProcessMessages;
         if not frmProgressMM.ShouldContinue then
         begin

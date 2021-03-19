@@ -1864,7 +1864,7 @@ begin
   FWriteLocation := wlFID;
   try
     WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-      FarmIDList, umAssign, False, FarmIdArray, 'FID', False);
+      FarmIDList, umAssign, False, FarmIdArray, 'FID', 0, False);
     CheckIntegerDataSet(FarmIdArray, StrInvalidFarmID);
   finally
     FWriteLocation := wlMain;
@@ -1984,7 +1984,7 @@ begin
   FWriteLocation := wlCID;
   try
     WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-      CropIDList, umAssign, False, CropIdArray, 'CID', False);
+      CropIDList, umAssign, False, CropIdArray, 'CID', 0, False);
     CheckIntegerDataSet(CropIdArray, StrInvalidCropIDInF);
   finally
     FWriteLocation := wlMain;
@@ -2169,7 +2169,7 @@ begin
     FWriteLocation := wlETR;
     try
       WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-        RefEtList, umAssign, False, Dummy, 'ETR');
+        RefEtList, umAssign, False, Dummy, 'ETR', 0);
     finally
       FWriteLocation := wlMain;
     end;
@@ -2954,7 +2954,7 @@ begin
     FWriteLocation := wlPFLX;
     try
       WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-        PrecipList, FFarmProcess.AssignmentMethod, False, Dummy, 'PFLX');
+        PrecipList, FFarmProcess.AssignmentMethod, False, Dummy, 'PFLX', 0);
     finally
       FWriteLocation := wlMain;
     end;

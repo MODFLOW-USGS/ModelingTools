@@ -1756,7 +1756,7 @@ begin
   DataType := rdtDouble;
   DataTypeIndex := 0;
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, AssignmentMethod, True, Dummy, MF6_ArrayName);
+    CellList, AssignmentMethod, True, Dummy, MF6_ArrayName, 0);
 end;
 
 procedure TModflowSwrWriter.WriteDataSet5(TimeIndex: Integer);
@@ -3211,7 +3211,7 @@ begin
         DataTypeIndex := 0;
         DataType := rdtInteger;
         WriteTransient2DArray(' # Data Set 2: DROMAP2D' , DataTypeIndex,
-          DataType, DefaultValue, CellList, umAssign, True, Dummy, 'DROMAP2D');
+          DataType, DefaultValue, CellList, umAssign, True, Dummy, 'DROMAP2D', 0);
 
         // Skip Data Set 3.
 
@@ -3219,7 +3219,7 @@ begin
         DataTypeIndex := 1;
         DataType := rdtDouble;
         WriteTransient2DArray(' # Data Set 4: DROVAL2D' , DataTypeIndex,
-          DataType, DefaultValue, CellList, umAssign, True, Dummy, 'DROVAL2D');
+          DataType, DefaultValue, CellList, umAssign, True, Dummy, 'DROVAL2D', 0);
       end;
     finally
       CloseFile;

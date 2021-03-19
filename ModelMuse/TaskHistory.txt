@@ -27200,5 +27200,13 @@ object TTaskHistory
         'core code'
         'PEST'
         'Pest parameter substitution')
+    end
+    item
+      Date = 44274.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'core code'
+        'PEST'
+        'Pest parameter substitution')
     end>
 end

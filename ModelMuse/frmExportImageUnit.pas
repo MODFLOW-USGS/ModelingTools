@@ -768,7 +768,15 @@ begin
   inherited;
   if spdSaveImage.Execute then
   begin
+    try
     SaveImage(spdSaveImage.FilterIndex, spdSaveImage.FileName);
+    except
+      on E: EFCreateError do
+      begin
+        Beep;
+        MessageDlg(E.Message, mtError, [mbOK], 0);
+      end;
+    end;
   end;
 end;
 

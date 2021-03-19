@@ -2294,6 +2294,7 @@ end;
 procedure TUndoChangeParameters.DoCommand;
 begin
   inherited;
+  FExistingScreenObjects.Assign(FOldProperties);
   frmGoPhast.PhastModel.ClearPestParmDictionary;
   if (frmShowHideObjects <> nil) then
   begin

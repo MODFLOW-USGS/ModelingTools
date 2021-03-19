@@ -319,7 +319,7 @@ begin
   DataTypeIndex := 0;
   Comment := DataSetIdentifier + ' ' + VariableIdentifiers;
   WriteTransient2DArray(Comment, DataTypeIndex, DataType,
-    DefaultValue, CellList, umAssign, False, Dummy, VariableIdentifiers);
+    DefaultValue, CellList, umAssign, False, Dummy, VariableIdentifiers, 0);
 end;
 
 procedure TModflowRES_Writer.WriteDataSet1;
