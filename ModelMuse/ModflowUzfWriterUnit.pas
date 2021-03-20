@@ -371,7 +371,7 @@ begin
   DataTypeIndex := 0;
   Comment := '# Data Set 12: PET';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, True, Dummy, 'PET', 0);
+    CellList, umAssign, True, Dummy, 'PET');
 end;
 
 procedure TModflowUzfWriter.WriteExtinctionDepth(CellList: TList);
@@ -387,7 +387,7 @@ begin
   DataTypeIndex := 0;
   Comment := '# Data Set 14: EXTDP';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'EXTDP', 2);
+    CellList, umAssign, False, Dummy, 'EXTDP');
 end;
 
 procedure TModflowUzfWriter.WriteExtinctionWaterContent(CellList: TList);
@@ -403,7 +403,7 @@ begin
   DataTypeIndex := 0;
   Comment := '# Data Set 16: EXTWC';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'EXTWC', 3);
+    CellList, umAssign, False, Dummy, 'EXTWC');
 end;
 
 procedure TModflowUzfWriter.WriteDataSet1a;
@@ -1039,7 +1039,7 @@ begin
   Comment := '# Data Set 10: FINF';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
     CellList, Model.ModflowPackages.UzfPackage.AssignmentMethod,
-    True, Dummy, 'FINF', 1);
+    True, Dummy, 'FINF');
 end;
 
 

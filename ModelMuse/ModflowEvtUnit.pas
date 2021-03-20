@@ -843,9 +843,9 @@ begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
-  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[RatePosition];
+  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[RateBoundaryPosition];
   PestSeries.Add(PestRateSeriesName);
-  RateMethod := BoundaryGroup.PestBoundaryMethod[RatePosition];
+  RateMethod := BoundaryGroup.PestBoundaryMethod[RateBoundaryPosition];
   PestMethods.Add(RateMethod);
 
   RateItems := TStringList.Create;
@@ -2527,17 +2527,17 @@ begin
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
-  PestSurfaceSeriesName := BoundaryGroup.PestBoundaryFormula[SurfacePosition];
+  PestSurfaceSeriesName := BoundaryGroup.PestBoundaryFormula[SurfaceBoundaryPosition];
   PestSeries.Add(PestSurfaceSeriesName);
-  SurfaceMethod := BoundaryGroup.PestBoundaryMethod[SurfacePosition];
+  SurfaceMethod := BoundaryGroup.PestBoundaryMethod[SurfaceBoundaryPosition];
   PestMethods.Add(SurfaceMethod);
 
   SurfaceItems := TStringList.Create;
   PestItemNames.Add(SurfaceItems);
 
-  PestDepthSeriesName := BoundaryGroup.PestBoundaryFormula[DepthPosition];
+  PestDepthSeriesName := BoundaryGroup.PestBoundaryFormula[DepthBoundaryPosition];
   PestSeries.Add(PestDepthSeriesName);
-  DepthMethod := BoundaryGroup.PestBoundaryMethod[DepthPosition];
+  DepthMethod := BoundaryGroup.PestBoundaryMethod[DepthBoundaryPosition];
   PestMethods.Add(DepthMethod);
 
   DepthItems := TStringList.Create;

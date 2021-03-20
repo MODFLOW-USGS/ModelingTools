@@ -464,7 +464,7 @@ begin
         DataTypeIndex := SpeciesIndex;
         Comment := 'record 7: CUZINF; Species ' + IntToStr(SpeciesIndex+1);
         WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-          ValueList, umAssign, False, Dummy, 'CUZINF', 0);
+          ValueList, umAssign, False, Dummy, 'CUZINF');
       end;
     end
     else
@@ -490,7 +490,7 @@ begin
           DataTypeIndex := SpeciesIndex;
           Comment := 'record 9: CUZET; Species ' + IntToStr(SpeciesIndex+1);
           WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-            ValueList, umAssign, False, Dummy, 'CUZET', 0);
+            ValueList, umAssign, False, Dummy, 'CUZET');
         end;
       end
       else
@@ -514,7 +514,7 @@ begin
           DataTypeIndex := SpeciesIndex;
           Comment := 'record 11: CGWET; Species ' + IntToStr(SpeciesIndex+1);
           WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-            ValueList, umAssign, False, Dummy, 'CGWET', 0);
+            ValueList, umAssign, False, Dummy, 'CGWET');
         end;
       end
       else

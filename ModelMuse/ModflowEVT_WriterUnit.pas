@@ -509,7 +509,7 @@ begin
   DataTypeIndex := 0;
   Comment := DataSetIdentifier + ' ' + VariableIdentifiers;
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, True, Dummy, VariableIdentifiers, 0);
+    CellList, umAssign, True, Dummy, VariableIdentifiers);
 end;
 
 procedure TModflowEVT_Writer.WriteEvapotranspirationSurface(CellList: TValueCellList);
@@ -525,7 +525,7 @@ begin
   DataTypeIndex := 0;
   Comment := 'Data Set 6: SURF';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'SURF', 1);
+    CellList, umAssign, False, Dummy, 'SURF');
 end;
 
 procedure TModflowEVT_Writer.WriteExtinctionDepth(CellList: TValueCellList);
@@ -541,7 +541,7 @@ begin
   DataTypeIndex := 1;
   Comment := 'Data Set 9: EXDP';
   WriteTransient2DArray(Comment, DataTypeIndex, DataType, DefaultValue,
-    CellList, umAssign, False, Dummy, 'EXDP', 1);
+    CellList, umAssign, False, Dummy, 'EXDP');
 end;
 
 procedure TModflowEVT_Writer.WriteStressPeriods(const VariableIdentifiers,
@@ -755,7 +755,8 @@ begin
         end;
 
         // data set 10
-        WriteLayerSelection(EtRateList, ParameterValues, TimeIndex, Comment, 'IEVT', 3);
+        WriteLayerSelection(EtRateList, ParameterValues, TimeIndex,
+          Comment, 'IEVT');
         Application.ProcessMessages;
         if not frmProgressMM.ShouldContinue then
         begin

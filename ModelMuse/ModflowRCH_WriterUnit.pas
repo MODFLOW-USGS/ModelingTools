@@ -594,7 +594,7 @@ begin
   try
     WriteTransient2DArray(Comment, DataTypeIndex, DataType,
       DefaultValue, CellList, Model.ModflowPackages.RchPackage.AssignmentMethod,
-      True, RechargeRate, VariableIdentifiers,0,False);
+      True, RechargeRate, VariableIdentifiers,False);
 
     ActiveDataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
     for RowIndex := 0 to RechargeRate.RowCount - 1 do
@@ -905,7 +905,8 @@ begin
           end;
 
           // Data set 8
-          WriteLayerSelection(RechRateList, ParameterValues, TimeIndex, Comment, 'IRCH', 1);
+          WriteLayerSelection(RechRateList, ParameterValues, TimeIndex,
+            Comment, 'IRCH');
           Application.ProcessMessages;
           if not frmProgressMM.ShouldContinue then
           begin

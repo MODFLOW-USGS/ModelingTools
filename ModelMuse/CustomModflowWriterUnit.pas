@@ -214,7 +214,7 @@ type
     procedure WriteTransient2DArray(const Comment: string;
       DataTypeIndex: Integer; DataType: TRbwDataType; DefaultValue: Double;
       List: TList; AssignmentMethod: TUpdateMethod; AdjustForLGR: boolean;
-      var TransientArray: TDataArray; const MF6_ArrayName: string; BoundaryOffset: integer;
+      var TransientArray: TDataArray; const MF6_ArrayName: string;
       FreeArray: boolean = True);
     procedure WriteMf6_DataSet(DataArray: TDataArray; const ID: string);
     // SAVE_FLOWS
@@ -894,14 +894,14 @@ type
     // @name is used to write the layer on which the array boundary
     // condition is applied for each cell in Lists.
     procedure WriteLayerArray(Lists: TList; const Comment: string;
-      const MF6_ArrayName: string; BoundaryOffset: integer);
+      const MF6_ArrayName: string);
     // @name writes the layer where the array boundary should be applied.
     // If the layer is time-varying, FLayers is used to define the layers.
     // If parameters are used, ParameterValues is used to define the layers.
     // Otherwise, List is used to define the layers.
     procedure WriteLayerSelection(List: TValueCellList;
       ParameterValues: TList; TimeIndex: Integer; const Comment: string;
-      const MF6_ArrayName: string; BoundaryOffset: integer);
+      const MF6_ArrayName: string);
     // @name clears @link(FUsedInstanceNames) so that the same parameter
     //instance names will be used in the stress periods as used in the
     // paramater definitions.
@@ -5825,12 +5825,12 @@ begin
 end;
 
 procedure TCustomTransientArrayWriter.WriteLayerArray(Lists: TList;
-  const Comment: string; const MF6_ArrayName: string; BoundaryOffset: integer);
+  const Comment: string; const MF6_ArrayName: string);
 var
   Dummy: TDataArray;
 begin
   WriteTransient2DArray(Comment, 0, rdtInteger, 1, Lists, umAssign,
-    False, Dummy, MF6_ArrayName, BoundaryOffset);
+    False, Dummy, MF6_ArrayName);
 end;
 
 procedure TCustomTransientArrayWriter.UpdateLayerDataSet(List: TList;
@@ -5983,7 +5983,7 @@ end;
 
 procedure TCustomTransientArrayWriter.WriteLayerSelection(
   List: TValueCellList; ParameterValues: TList; TimeIndex: Integer;
-  const Comment: string; const MF6_ArrayName: string; BoundaryOffset: integer);
+  const Comment: string; const MF6_ArrayName: string);
 var
   LayerList: TValueCellList;
   LocalPackage: TCustomTransientLayerPackageSelection;
@@ -5996,13 +5996,13 @@ begin
       if TimeIndex < FLayers.Count then
       begin
         LayerList := FLayers[TimeIndex];
-        WriteLayerArray(LayerList, Comment, MF6_ArrayName, BoundaryOffset);
+        WriteLayerArray(LayerList, Comment, MF6_ArrayName);
       end
       else
       begin
         LayerList := TValueCellList.Create(CellType);
         try
-          WriteLayerArray(LayerList, Comment, MF6_ArrayName, BoundaryOffset);
+          WriteLayerArray(LayerList, Comment, MF6_ArrayName);
         finally
           LayerList.Free;
         end;
@@ -6010,11 +6010,11 @@ begin
     end
     else if ParameterCount > 0 then
     begin
-      WriteLayerArray(ParameterValues, Comment, MF6_ArrayName, BoundaryOffset);
+      WriteLayerArray(ParameterValues, Comment, MF6_ArrayName);
     end
     else
     begin
-      WriteLayerArray(List, Comment, MF6_ArrayName, BoundaryOffset);
+      WriteLayerArray(List, Comment, MF6_ArrayName);
     end;
   end;
   if (LocalPackage.LayerOption = loTop)
@@ -6119,7 +6119,7 @@ end;
 procedure TCustomModflowWriter.WriteTransient2DArray(const Comment: string;
   DataTypeIndex: Integer; DataType: TRbwDataType; DefaultValue: Double;
   List: TList; AssignmentMethod: TUpdateMethod; AdjustForLGR: boolean;
-  var TransientArray: TDataArray; const MF6_ArrayName: string; BoundaryOffset: integer;
+  var TransientArray: TDataArray; const MF6_ArrayName: string;
   FreeArray: boolean = True);
 var
   ColIndex: Integer;
@@ -6178,7 +6178,7 @@ var
             end;
             Formula := FortranFloatToStr(Cell.RealValue[DataTypeIndex, Model]);
             PestName := Cell.PestName[DataTypeIndex];
-            PestSeriesName := Cell.PestSeriesName[DataTypeIndex+BoundaryOffset];
+            PestSeriesName := Cell.PestSeriesName[DataTypeIndex];
 
             if (PestName <> '') or (PestSeriesName <> '') then
             begin
@@ -6190,7 +6190,7 @@ var
               if (PestName <> '') or (PestSeriesName <> '') then
               begin
                 Value := Cell.RealValue[DataTypeIndex, Model];
-                PestSeriesMethod := Cell.PestSeriesMethod[DataTypeIndex+BoundaryOffset];
+                PestSeriesMethod := Cell.PestSeriesMethod[DataTypeIndex];
                 Formula := GetPestTemplateFormula(Value, PestName, PestSeriesName,
                   PestSeriesMethod, Cell);
                 if Formula = '' then
