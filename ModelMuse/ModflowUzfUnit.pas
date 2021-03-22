@@ -10,15 +10,6 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, RealListUnit,
 type
 
   {
-    @longcode(
-  TUzfExtinctionDepthRecord = record
-    Cell: TCellLocation;
-    ExtinctionDepth: double;
-    StartingTime: double;
-    EndingTime: double;
-    ExtinctionDepthAnnotation: string;
-  end;
-    )
     @name stores the location, time, and ET extinction depth for a cell.
   }
   TUzfExtinctionDepthRecord = record
@@ -27,21 +18,15 @@ type
     StartingTime: double;
     EndingTime: double;
     ExtinctionDepthAnnotation: string;
+    ExtinctionDepthPest: string;
+    ExtinctionDepthPestSeries: string;
+    ExtinctionDepthPestMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
   end;
 
   {
-    @longcode(
-  TUzfWaterContentRecord = record
-    Cell: TCellLocation;
-    MinimumWaterContent: double;
-    StartingTime: double;
-    EndingTime: double;
-    MinimumWaterContentAnnotation: string;
-  end;
-    )
     @name stores the location, time, and ET extinction water content for a cell.
   }
   TUzfWaterContentRecord = record
@@ -50,8 +35,11 @@ type
     StartingTime: double;
     EndingTime: double;
     MinimumWaterContentAnnotation: string;
+    MinimumWaterContentPest: string;
+    MinimumWaterContentPestSeries: string;
+    MinimumWaterContentPestMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
-    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); 
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
   end;
 
@@ -176,7 +164,8 @@ type
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
-      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -215,7 +204,8 @@ type
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
-      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -255,6 +245,9 @@ type
     FStressPeriod: integer;
     function GetExtinctionDepth: double;
     function GetExtinctionDepthAnnotation: string;
+    function GetExtinctionDepthPest: string;
+    function GetExtinctionDepthPestMethod: TPestParamMethod;
+    function GetExtinctionDepthPestSeries: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -270,11 +263,17 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property ExtinctionDepth: double read GetExtinctionDepth;
     property ExtinctionDepthAnnotation: string read GetExtinctionDepthAnnotation;
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TUzfExtinctionDepthRecord read FValues write FValues;
+    property ExtinctionDepthPest: string read GetExtinctionDepthPest;
+    property ExtinctionDepthPestSeries: string read GetExtinctionDepthPestSeries;
+    property ExtinctionDepthPestMethod: TPestParamMethod read GetExtinctionDepthPestMethod;
   end;
 
   TUzfWaterContentCell = class(TValueCell)
@@ -283,6 +282,9 @@ type
     FStressPeriod: integer;
     function GetWaterContent: double;
     function GetWaterContentAnnotation: string;
+    function GetMinimumWaterContentPest: string;
+    function GetMinimumWaterContentPestMethod: TPestParamMethod;
+    function GetMinimumWaterContentPestSeries: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -298,11 +300,17 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property WaterContent: double read GetWaterContent;
     property WaterContentAnnotation: string read GetWaterContentAnnotation;
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TUzfWaterContentRecord read FValues write FValues;
+    property MinimumWaterContentPest: string read GetMinimumWaterContentPest;
+    property MinimumWaterContentPestSeries: string read GetMinimumWaterContentPestSeries;
+    property MinimumWaterContentPestMethod: TPestParamMethod read GetMinimumWaterContentPestMethod;
   end;
 
   TUzfBoundary = class(TModflowBoundary)
@@ -350,9 +358,9 @@ type
     // Param.Param.Boundaries)
     // Those represent parameter boundary conditions.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     function Used: boolean; override;
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel); override;
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
     procedure GetEvapotranspirationDemandCells(LayerTimeList: TList; AModel: TBaseModel);
     procedure GetExtinctionDepthCells(LayerTimeList: TList; AModel: TBaseModel);
@@ -535,10 +543,8 @@ begin
     if (StressPeriod.StartTime >= LocalBoundaryStorage.StartingTime)
       and (StressPeriod.EndTime <= LocalBoundaryStorage.EndingTime) then
     begin
-//      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.ExtinctDepthArray) - 1 do
       begin
-//        Cells.Cached := False;
         BoundaryValues := LocalBoundaryStorage.ExtinctDepthArray[BoundaryIndex];
         Cell := TUzfExtinctionDepthCell.Create;
         Assert(ScreenObject <> nil);
@@ -635,24 +641,24 @@ begin
   inherited;
 end;
 
-procedure TUzfBoundary.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TUzfBoundary.EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   if (ParentModel as TPhastModel).ModflowPackages.UzfPackage.SimulateET then
   begin
-    EvapotranspirationDemand.EvaluateArrayBoundaries(AModel);
-    ExtinctionDepth.EvaluateArrayBoundaries(AModel);
-    FWaterContent.EvaluateArrayBoundaries(AModel);
+    EvapotranspirationDemand.EvaluateArrayBoundaries(AModel, Writer);
+    ExtinctionDepth.EvaluateArrayBoundaries(AModel, Writer);
+    FWaterContent.EvaluateArrayBoundaries(AModel, Writer);
   end;
 end;
 
 procedure TUzfBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TRchStorage;
 begin
-  EvaluateArrayBoundaries(AModel);
+  EvaluateArrayBoundaries(AModel, Writer);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
     if ValueIndex < Values.BoundaryCount[AModel] then
@@ -672,7 +678,8 @@ begin
   begin
     if ValueIndex < EvapotranspirationDemand.BoundaryCount[AModel] then
     begin
-      BoundaryStorage := EvapotranspirationDemand.Boundaries[ValueIndex, AModel] as TEvtStorage;
+      BoundaryStorage := EvapotranspirationDemand.Boundaries[
+        ValueIndex, AModel] as TEvtStorage;
       AssignEvapotranspirationDemandCells(BoundaryStorage, LayerTimeList);
     end;
   end;
@@ -1047,7 +1054,8 @@ end;
 
 procedure TUzfExtinctionDepthCollection.InitializeTimeLists(
   ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList;
+  Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1189,7 +1197,8 @@ end;
 
 procedure TUzfWaterContentCollection.InitializeTimeLists(
   ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList;
+  Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1283,6 +1292,21 @@ begin
   result := Values.ExtinctionDepthAnnotation;
 end;
 
+function TUzfExtinctionDepthCell.GetExtinctionDepthPest: string;
+begin
+  result := Values.ExtinctionDepthPest;
+end;
+
+function TUzfExtinctionDepthCell.GetExtinctionDepthPestMethod: TPestParamMethod;
+begin
+  result := Values.ExtinctionDepthPestMethod;
+end;
+
+function TUzfExtinctionDepthCell.GetExtinctionDepthPestSeries: string;
+begin
+  result := Values.ExtinctionDepthPestSeries;
+end;
+
 function TUzfExtinctionDepthCell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -1298,6 +1322,49 @@ end;
 function TUzfExtinctionDepthCell.GetLayer: integer;
 begin
   result := Values.Cell.Layer;
+end;
+
+function TUzfExtinctionDepthCell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    UzfExtinctDepthPosition:
+      begin
+        result := ExtinctionDepthPest;
+      end;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
+function TUzfExtinctionDepthCell.GetPestSeriesMethod(
+  Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    UzfExtinctDepthPosition:
+      begin
+        result := ExtinctionDepthPestMethod;
+      end;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
+function TUzfExtinctionDepthCell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    UzfExtinctDepthPosition:
+      begin
+        result := ExtinctionDepthPestSeries;
+      end;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
 end;
 
 function TUzfExtinctionDepthCell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
@@ -1387,6 +1454,64 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TUzfWaterContentCell.GetMinimumWaterContentPest: string;
+begin
+  result := Values.MinimumWaterContentPest
+end;
+
+function TUzfWaterContentCell.GetMinimumWaterContentPestMethod: TPestParamMethod;
+begin
+  result := Values.MinimumWaterContentPestMethod;
+end;
+
+function TUzfWaterContentCell.GetMinimumWaterContentPestSeries: string;
+begin
+  result := Values.MinimumWaterContentPestSeries
+end;
+
+function TUzfWaterContentCell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    UzfWaterContentPosition:
+      begin
+        result := MinimumWaterContentPest;
+      end;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
+function TUzfWaterContentCell.GetPestSeriesMethod(
+  Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    UzfWaterContentPosition:
+      begin
+        result := MinimumWaterContentPestMethod;
+      end;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
+function TUzfWaterContentCell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    UzfWaterContentPosition:
+      begin
+        result := MinimumWaterContentPestSeries;
+      end;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
 function TUzfWaterContentCell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -1462,12 +1587,17 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(ExtinctionDepthAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(ExtinctionDepthPest));
+  WriteCompInt(Comp, Strings.IndexOf(ExtinctionDepthPestSeries));
+  WriteCompInt(Comp, Ord(ExtinctionDepthPestMethod));
 //  WriteCompString(Comp, ExtinctionDepthAnnotation);
 end;
 
 procedure TUzfExtinctionDepthRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(ExtinctionDepthAnnotation);
+  Strings.Add(ExtinctionDepthPest);
+  Strings.Add(ExtinctionDepthPestSeries);
 end;
 
 procedure TUzfExtinctionDepthRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1477,7 +1607,9 @@ begin
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   ExtinctionDepthAnnotation := Annotations[ReadCompInt(Decomp)];
-//  ExtinctionDepthAnnotation := ReadCompString(Decomp, Annotations);
+  ExtinctionDepthPest := Annotations[ReadCompInt(Decomp)];
+  ExtinctionDepthPestSeries := Annotations[ReadCompInt(Decomp)];
+  ExtinctionDepthPestMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TUzfWaterContentRecord }
@@ -1489,12 +1621,16 @@ begin
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(MinimumWaterContentAnnotation));
-//  WriteCompString(Comp, MinimumWaterContentAnnotation);
+  WriteCompInt(Comp, Strings.IndexOf(MinimumWaterContentPest));
+  WriteCompInt(Comp, Strings.IndexOf(MinimumWaterContentPestSeries));
+  WriteCompInt(Comp, Ord(MinimumWaterContentPestMethod));
 end;
 
 procedure TUzfWaterContentRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(MinimumWaterContentAnnotation);
+  Strings.Add(MinimumWaterContentPest);
+  Strings.Add(MinimumWaterContentPestSeries);
 end;
 
 procedure TUzfWaterContentRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1504,7 +1640,9 @@ begin
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
   MinimumWaterContentAnnotation := Annotations[ReadCompInt(Decomp)];
-//  MinimumWaterContentAnnotation := ReadCompString(Decomp, Annotations);
+  MinimumWaterContentPest := Annotations[ReadCompInt(Decomp)];
+  MinimumWaterContentPestSeries := Annotations[ReadCompInt(Decomp)];
+  MinimumWaterContentPestMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TUzfExtinctDepthStorage }

@@ -850,7 +850,7 @@ begin
 
     Dummy := TStringList.Create;
     try
-      Boundary.GetCellValues(FValues, Dummy, Model);
+      Boundary.GetCellValues(FValues, Dummy, Model, self);
       if FValues.Count > 0 then
       begin
         ASegment := TSfr6Segment.Create(Model);

@@ -708,19 +708,6 @@ begin
   end;
 end;
 
-//procedure TModflowDRN_Writer.WriteTemplateHeader;
-//begin
-//  if WritingTemplate then
-//  begin
-//    WriteString('ptf ');
-//    WriteString(Model.PestProperties.TemplateCharacter);
-//    NewLine;
-//    WriteString('etf ');
-//    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-//    NewLine;
-//  end;
-//end;
-
 procedure TModflowDRN_Writer.WriteListOptions(InputFileName: string);
 //var
 //  DrnPackage: TDrnPackage;

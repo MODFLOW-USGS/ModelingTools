@@ -155,7 +155,7 @@ type
   public
     // @name should not be called
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
 //    procedure InvalidateDisplay; override;
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -324,7 +324,7 @@ begin
 end;
 
 procedure TMt3dLktConcBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   Assert(False);
 end;

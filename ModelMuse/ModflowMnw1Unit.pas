@@ -380,7 +380,7 @@ type
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
   published
     // SITE: MNWsite
@@ -2047,7 +2047,7 @@ begin
 end;
 
 procedure TMnw1Boundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TMnw1Storage;

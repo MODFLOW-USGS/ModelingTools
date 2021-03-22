@@ -51,7 +51,7 @@ type
     // link  @link(TMt3dmsConcStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
   end;
 
@@ -279,12 +279,12 @@ begin
 end;
 
 procedure TMt3dUzSsmSinkConcBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TMt3dmsConcStorage;
 begin
-  EvaluateArrayBoundaries(AModel);
+  EvaluateArrayBoundaries(AModel, Writer);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
     if ValueIndex < Values.BoundaryCount[AModel] then

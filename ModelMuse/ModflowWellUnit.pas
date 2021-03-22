@@ -264,7 +264,7 @@ type
     // Param.Param.Boundaries)
     // Those represent parameter boundary conditions.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean; AModel: TBaseModel); override;
@@ -926,7 +926,7 @@ begin
 end;
 
 procedure TMfWellBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 const
   NoData = 3.0E30;
 var

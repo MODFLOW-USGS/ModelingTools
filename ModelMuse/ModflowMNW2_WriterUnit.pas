@@ -278,7 +278,7 @@ begin
         Item.EndTime := StressPeriod.EndTime;
 
         frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
-        Boundary.GetCellValues(FValues, Dummy, Model);
+        Boundary.GetCellValues(FValues, Dummy, Model, self);
         if (FValues.Count >= 1) then
         begin
           Assert(FValues.Count = 1);

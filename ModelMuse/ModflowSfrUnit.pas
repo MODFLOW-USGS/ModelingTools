@@ -203,11 +203,11 @@ type
     // Param.Param.Boundaries)
     // Those represent parameter boundary conditions.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel); override;
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject); override;
     function Used: boolean; override;
     property ISFROPT: integer read GetISFROPT write FIFSROPT;
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
@@ -428,7 +428,7 @@ begin
   inherited;
 end;
 
-procedure TSfrBoundary.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TSfrBoundary.EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
 var
   LocalModel: TCustomModel;
   FirstUsedTime: Double;
@@ -437,8 +437,8 @@ var
 begin
   inherited;
   ChannelValues.EvaluateBoundaries(AModel);
-  UpstreamSegmentValues.EvaluateArrayBoundaries(AModel);
-  DownstreamSegmentValues.EvaluateArrayBoundaries(AModel);
+  UpstreamSegmentValues.EvaluateArrayBoundaries(AModel, Writer);
+  DownstreamSegmentValues.EvaluateArrayBoundaries(AModel, Writer);
   LocalModel := AModel as TCustomModel;
   if (UpstreamUnsatSegmentValues.Count > 0)
     or (DownstreamUnsatSegmentValues.Count > 0) then
@@ -459,8 +459,8 @@ begin
       Item.EndTime := LastUsedTime;
     end;
   end;
-  UpstreamUnsatSegmentValues.EvaluateArrayBoundaries(AModel);
-  DownstreamUnsatSegmentValues.EvaluateArrayBoundaries(AModel);
+  UpstreamUnsatSegmentValues.EvaluateArrayBoundaries(AModel, Writer);
+  DownstreamUnsatSegmentValues.EvaluateArrayBoundaries(AModel, Writer);
 
   EquationValues.EvaluateBoundaries;
   TableCollection.EvaluateBoundaries;
@@ -586,12 +586,12 @@ begin
 end;
 
 procedure TSfrBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TSfrStorage;
 begin
-  EvaluateArrayBoundaries(AModel);
+  EvaluateArrayBoundaries(AModel, Writer);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
     if ValueIndex < Values.BoundaryCount[AModel] then

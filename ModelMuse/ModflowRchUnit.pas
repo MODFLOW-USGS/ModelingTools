@@ -9,15 +9,6 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
 
 type
   {
-    @longcode(
-  TRchRecord = record
-    Cell: TCellLocation;
-    RechargeRate: double;
-    StartingTime: double;
-    EndingTime: double;
-    RechargeRateAnnotation: string;
-  end;
-    )
     @name stores the location, time and recharge rate for a cell.
   }
   TRchRecord = record
@@ -170,7 +161,8 @@ type
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
-      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -205,9 +197,9 @@ type
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel; PestSeries: TStringList;
-      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -363,9 +355,9 @@ type
     // Param.Param.Boundaries)
     // Those represent parameter boundary conditions.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     function Used: boolean; override;
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel); override;
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject); override;
     function NonParameterColumns: integer; override;
     property TimeVaryingRechargeLayers: boolean
       read GetTimeVaryingRechargeLayers;
@@ -397,7 +389,7 @@ implementation
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   frmGoPhastUnit, TempFiles,
   AbstractGridUnit, ModflowIrregularMeshUnit, ModflowTimeSeriesUnit,
-  ModflowParameterUnit, ModelMuseUtilities;
+  ModflowParameterUnit, ModelMuseUtilities, CustomModflowWriterUnit;
 
 resourcestring
   StrRechargeLayer = 'Recharge layer';
@@ -584,7 +576,7 @@ end;
 
 procedure TRchCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList);
+  PestItemNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -613,7 +605,9 @@ var
   PestParamSeries: TModflowSteadyParameter;
   PestDataArray: TDataArray;
   RechargeItems: TStringList;
+  CustomWriter: TCustomFileWriter;
 begin
+  CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -638,6 +632,11 @@ begin
       if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
       begin
         RechargeItems.Add(PestDataArray.Name);
+        if CustomWriter = nil then
+        begin
+          CustomWriter := Writer as TCustomFileWriter;
+        end;
+        CustomWriter.AddUsedPestDataArray(PestDataArray);
       end
       else
       begin
@@ -668,6 +667,11 @@ begin
                 Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
               end;
           End;
+          if CustomWriter = nil then
+          begin
+            CustomWriter := Writer as TCustomFileWriter;
+          end;
+          CustomWriter.AddUsedPestDataArray(PestDataArray);
         end;
       end
       else
@@ -1194,13 +1198,13 @@ begin
   inherited;
 end;
 
-procedure TRchBoundary.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TRchBoundary.EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   if (ParentModel as TCustomModel).
     ModflowPackages.RchPackage.TimeVaryingLayers then
   begin
-    RechargeLayers.EvaluateArrayBoundaries(AModel);
+    RechargeLayers.EvaluateArrayBoundaries(AModel, Writer);
   end;
 end;
 
@@ -1226,7 +1230,7 @@ begin
 end;
 
 procedure TRchBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 const
   NoData = 3.0E30;
 var
@@ -1243,7 +1247,7 @@ var
   ArrayIndex: Integer;
 begin
   FCurrentParameter := nil;
-  EvaluateArrayBoundaries(AModel);
+  EvaluateArrayBoundaries(AModel, Writer);
   Model := ParentModel as TCustomModel;
   if Model.ModflowTransientParameters.CountParam(ParameterType) = 0 then
   begin
@@ -1701,7 +1705,7 @@ end;
 
 procedure TRchLayerCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList);
+  PestItemNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

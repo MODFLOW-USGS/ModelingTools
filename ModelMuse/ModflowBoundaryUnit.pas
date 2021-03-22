@@ -502,8 +502,10 @@ type
       DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel); virtual;
     // @name is a virtual abstract method that descendants use to
     // call (TModflowTimeList.Initialize TModflowTimeList.Initialize).
+    // Writer must be a TCustomFileWriter
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
-      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); virtual; abstract;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); virtual; abstract;
     // @name determines whether or not a single object may define more than
     // one boundary in the same cell. @name is set to @false in
     // @link(TChdCollection) because multiple CHD boundaries in the same
@@ -555,7 +557,7 @@ type
     // descedents and accessed through @link(TimeLists). Those data
     // are then transfered to descendants of @link(TCustomBoundaryStorage)
     // by calls to @link(AssignArrayCellsWithItem).
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel);
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name determines the locations, times, and values of
     // the boundary condition associated with @classname.
@@ -594,7 +596,8 @@ type
   TCustomMF_ListBoundColl = class(TCustomListArrayBoundColl)
   protected
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
-      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
   end;
 
   // @name is used to store a series of @link(TDataArray)s for boundary
@@ -702,7 +705,7 @@ type
     // @name calls @link(TCustomListArrayBoundColl.EvaluateArrayBoundaries
     // TCustomListArrayBoundColl.EvaluateArrayBoundaries) for each
     // @link(Items)[Index].@link(TCustomMF_ArrayBoundColl Param).
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel);
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure EvaluateListBoundaries(AModel: TBaseModel);
@@ -959,7 +962,7 @@ type
     // Values.EvaluateArrayBoundaries)
     // Descendents also call @link(TModflowParameters.EvaluateArrayBoundaries
     // Parameters.EvaluateArrayBoundaries).
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel); virtual;
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject); virtual;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure EvaluateListBoundaries(AModel: TBaseModel); virtual;
@@ -978,7 +981,7 @@ type
     // Param.Param.Boundaries)
     // Those represent parameter boundary conditions.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); virtual; abstract;
+      AModel: TBaseModel; Writer: TObject); virtual; abstract;
 
     function NonParameterColumns: integer; virtual;
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
@@ -1041,7 +1044,7 @@ type
     // @name calls @link(TModflowBoundary.EvaluateArrayBoundaries) and
     // @link(TModflowParameters.EvaluateArrayBoundaries
     // Parameters.EvaluateArrayBoundaries).
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel); override;
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure EvaluateListBoundaries(AModel: TBaseModel); override;
@@ -1479,8 +1482,8 @@ end;
 //end;
 
 procedure TCustomMF_ListBoundColl.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel;
-      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList; Writer: TObject);
 begin
   // this procedure is only used with arrays.
   Assert(false);
@@ -1981,14 +1984,14 @@ begin
   end;
 end;
 
-procedure TModflowParameters.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TModflowParameters.EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
 var
   Index: Integer;
 begin
   for Index := 0 to Count - 1 do
   begin
     (Items[Index].Param as TCustomMF_ArrayBoundColl).
-      EvaluateArrayBoundaries(AModel);
+      EvaluateArrayBoundaries(AModel, Writer);
   end;
 end;
 
@@ -2186,18 +2189,19 @@ begin
   inherited;
 end;
 
-procedure TModflowParamBoundary.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TModflowParamBoundary.EvaluateArrayBoundaries(AModel: TBaseModel;
+  Writer: TObject);
 var
   Model: TPhastModel;
 begin
   Model := FModel as TPhastModel;
   if Model.ModflowTransientParameters.CountParam(ParameterType) > 0 then
   begin
-    Parameters.EvaluateArrayBoundaries(AModel);
+    Parameters.EvaluateArrayBoundaries(AModel, Writer);
   end
   else
   begin
-    inherited EvaluateArrayBoundaries(AModel);
+    inherited EvaluateArrayBoundaries(AModel, Writer);
   end;
 end;
 
@@ -2314,10 +2318,11 @@ begin
   inherited;
 end;
 
-procedure TModflowBoundary.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TModflowBoundary.EvaluateArrayBoundaries(AModel: TBaseModel;
+  Writer: TObject);
 begin
   (Values as TCustomListArrayBoundColl).
-    EvaluateArrayBoundaries(AModel);
+    EvaluateArrayBoundaries(AModel, Writer);
 end;
 
 procedure TModflowBoundary.EvaluateListBoundaries(AModel: TBaseModel);
@@ -3399,7 +3404,8 @@ begin
 //  DataArray1.CacheData;
 end;
 
-procedure TCustomListArrayBoundColl.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TCustomListArrayBoundColl.EvaluateArrayBoundaries(AModel: TBaseModel;
+  Writer: TObject);
 var
   ItemIndex: integer;
   Item: TCustomModflowBoundaryItem;
@@ -3466,7 +3472,7 @@ begin
   DataSets := TList.Create;
   try
     InitializeTimeLists(ListOfTimeLists, LocalModel, PestSeries, PestMethods,
-      PestItemNames);
+      PestItemNames, Writer);
     TestIfObservationsPresent(EndOfLastStressPeriod, StartOfFirstStressPeriod,
       ObservationsPresent);
     PriorTime := StartOfFirstStressPeriod;

@@ -463,7 +463,7 @@ begin
           frmErrorsAndWarnings.AddError(Model, ErrorRoot, ScreenObject.Name,
             ScreenObject);
         end;
-        ABoundary.GetCellValues(FDirectRunoffValues, nil, Model);
+        ABoundary.GetCellValues(FDirectRunoffValues, nil, Model, self);
       end;
     end;
   finally
@@ -669,7 +669,7 @@ begin
           frmErrorsAndWarnings.AddError(Model, ErrorRoot, ScreenObject.Name,
             ScreenObject);
         end;
-        EvapBoundary.GetCellValues(FEvapValues, nil, Model);
+        EvapBoundary.GetCellValues(FEvapValues, nil, Model, self);
       end;
     end;
   finally
@@ -715,7 +715,7 @@ begin
           frmErrorsAndWarnings.AddError(Model, ErrorRoot, ScreenObject.Name,
             ScreenObject);
         end;
-        ABoundary.GetCellValues(FLatInflowValues, nil, Model);
+        ABoundary.GetCellValues(FLatInflowValues, nil, Model, self);
       end;
     end;
   finally
@@ -761,7 +761,7 @@ begin
           frmErrorsAndWarnings.AddError(Model, ErrorRoot, ScreenObject.Name,
             ScreenObject);
         end;
-        RainBoundary.GetCellValues(Values, nil, Model);
+        RainBoundary.GetCellValues(Values, nil, Model, self);
       end;
     end;
   finally
@@ -803,7 +803,7 @@ begin
       end;
       frmProgressMM.AddMessage(Format(StrEvaluatingS,
         [ScreenObject.Name]));
-      Boundary.GetCellValues(FTransientReachList, nil, Model);
+      Boundary.GetCellValues(FTransientReachList, nil, Model, self);
     end;
   end;
 end;
@@ -843,7 +843,7 @@ begin
             frmErrorsAndWarnings.AddError(Model, ErrorRoot, ScreenObject.Name,
               ScreenObject);
           end;
-          ABoundary.GetCellValues(FStageValues, nil, Model);
+          ABoundary.GetCellValues(FStageValues, nil, Model, self);
         end;
       end;
     end;

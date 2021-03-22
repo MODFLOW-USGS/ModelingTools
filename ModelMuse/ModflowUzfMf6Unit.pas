@@ -150,7 +150,8 @@ type
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
-      PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -285,7 +286,7 @@ type
     // Those represent non-parameter boundary conditions.
     // ParamList is not used.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
     procedure Loaded;
   published
@@ -950,7 +951,8 @@ begin
 end;
 
 procedure TUzfMf6Collection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1783,12 +1785,12 @@ begin
 end;
 
 procedure TUzfMf6Boundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TUzfMf6Storage;
 begin
-  EvaluateArrayBoundaries(AModel);
+  EvaluateArrayBoundaries(AModel, Writer);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
     if ValueIndex < Values.BoundaryCount[AModel] then

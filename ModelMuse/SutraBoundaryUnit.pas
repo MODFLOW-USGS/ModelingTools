@@ -350,7 +350,7 @@ type
       override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
   end;
 
   TSutraMassEnergySourceSinkItem = class(TCustomSutraBoundaryItem)
@@ -385,7 +385,7 @@ type
       override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
   end;
 
   TSutraSpecifiedPressureBoundaryItem = class(TCustomSutraAssociatedBoundaryItem)
@@ -421,7 +421,7 @@ type
       override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
   end;
 
   TSutraSpecifiedConcTempItem = class(TCustomSutraBoundaryItem)
@@ -456,7 +456,7 @@ type
       override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
   end;
 
 implementation
@@ -1190,7 +1190,7 @@ begin
 end;
 
 procedure TSutraFluidBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   Assert(False);
@@ -1212,7 +1212,7 @@ begin
 end;
 
 procedure TSutraMassEnergySourceSinkBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   Assert(False);
@@ -1234,7 +1234,7 @@ begin
 end;
 
 procedure TSutraSpecifiedPressureBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   Assert(False);
@@ -1256,7 +1256,7 @@ begin
 end;
 
 procedure TSutraSpecifiedConcTempBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   Assert(False);

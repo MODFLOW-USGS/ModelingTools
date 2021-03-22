@@ -360,7 +360,7 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure Loaded;
     procedure UpdateTimes(Times: TRealList; StartTestTime,
       EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean;
@@ -1397,7 +1397,7 @@ begin
 end;
 
 procedure TLakeMf6.GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-  AModel: TBaseModel);
+  AModel: TBaseModel; Writer: TObject);
 begin
 //  inherited;
 

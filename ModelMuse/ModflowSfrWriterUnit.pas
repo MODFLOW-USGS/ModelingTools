@@ -1216,7 +1216,7 @@ begin
         Item.StartTime := StartTime;
         Item.EndTime := EndTime;
 
-        Boundary.GetCellValues(FValues, Dummy, Model);
+        Boundary.GetCellValues(FValues, Dummy, Model, self);
 
         if (FValues.Count >= 1) then
         begin

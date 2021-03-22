@@ -122,7 +122,7 @@ type
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
   published
     property LakeInteractionType: TGeneralizedTransportInteractionType
       read FLakeInteractionType write SetLakeInteractionType default gtitUseDefaults;
@@ -564,7 +564,7 @@ begin
 end;
 
 procedure TSutraGeneralTransportBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   // does this need to change?

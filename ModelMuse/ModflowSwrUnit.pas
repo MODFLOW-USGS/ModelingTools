@@ -91,9 +91,9 @@ type
       PestSeriesMethod: TPestParamMethod); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
-    procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel; PestSeries: TStringList;
-      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual; abstract;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -138,7 +138,7 @@ type
     function SpecificationMethod: TSwrSpecificationMethod; virtual; abstract;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
   end;
 
   TCustomFormulaInterpSwrBoundary = class(TCustomSwrBoundary)
@@ -638,7 +638,8 @@ begin
 end;
 
 procedure TCustomSwrListCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1076,7 +1077,7 @@ begin
 end;
 
 procedure TCustomSwrBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TSwrStorage;
@@ -1088,7 +1089,7 @@ begin
       end;
     smArray:
       begin
-        EvaluateArrayBoundaries(AModel);
+        EvaluateArrayBoundaries(AModel, Writer);
       end;
     else
       Assert(False);

@@ -2739,6 +2739,7 @@ begin
   else if (Sender = frameRivParam.rdgModflowBoundary)
     or (Sender = frameDrtParam.rdgModflowBoundary)
     or (Sender = frameEvtParam.rdgModflowBoundary)
+    or (Sender = frameEtsParam.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2,3,4]
@@ -5639,6 +5640,7 @@ begin
   frameFhbFlow.OnCheckPestCell := EnablePestCells;
   frameRchParam.OnCheckPestCell := EnablePestCells;
   frameEvtParam.OnCheckPestCell := EnablePestCells;
+  frameEtsParam.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -18162,12 +18164,110 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetEtsBoundary(ScreenObjectList: TList);
+const
+  RateBoundaryPosition = 0;
+  SurfaceBoundaryPosition = 1;
+  DepthBoundaryPosition = 2;
+  ColOffset = 2;
 var
   Frame: TframeScreenObjectParam;
   Parameter: TParameterType;
   TimeList: TParameterTimeList;
   ValuesFunction: TGetBoundaryCollectionEvent;
   ColumnOffset: integer;
+  procedure GetSurfDepthModifiers;
+  var
+    BoundaryIndex: Integer;
+    First: Boolean;
+    Identical: Boolean;
+    Method: TPestParamMethod;
+    ScreenObjectIndex: Integer;
+    AScreenObject: TScreenObject;
+    Boundary: TEtsBoundary;
+    Modifier: string;
+  begin
+    Frame.rdgModflowBoundary.BeginUpdate;
+    try
+      for BoundaryIndex := 1 to 2 do
+      begin
+        First := True;
+        Identical := True;
+        Method := ppmMultiply;
+        for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+        begin
+          AScreenObject := ScreenObjectList[ScreenObjectIndex];
+          Boundary := AScreenObject.ModflowEtsBoundary;
+          if (Boundary <> nil) and Boundary.Used then
+          begin
+            if First then
+            begin
+              Method := Boundary.PestBoundaryMethod[BoundaryIndex];
+              First := False;
+            end
+            else
+            begin
+              Identical := Method = Boundary.PestBoundaryMethod[BoundaryIndex];
+              if not Identical then
+              begin
+                break;
+              end;
+            end;
+          end;
+        end;
+        if Identical then
+        begin
+          PestMethod[Frame.rdgModflowBoundary, ColOffset+BoundaryIndex] := Method;
+        end
+        else
+        begin
+          Frame.rdgModflowBoundary.Cells[ColOffset+BoundaryIndex,PestMethodRow] := '';
+        end;
+      end;
+
+      for BoundaryIndex := 1 to 2 do
+      begin
+        First := True;
+        Identical := True;
+        for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+        begin
+          AScreenObject := ScreenObjectList[ScreenObjectIndex];
+          Boundary := AScreenObject.ModflowEtsBoundary;
+          if (Boundary <> nil) and Boundary.Used then
+          begin
+            if First then
+            begin
+              Modifier := Boundary.PestBoundaryFormula[BoundaryIndex];
+              First := False;
+            end
+            else
+            begin
+              Identical := Modifier = Boundary.PestBoundaryFormula[BoundaryIndex];
+              if not Identical then
+              begin
+                break;
+              end;
+            end;
+          end;
+        end;
+        if Identical then
+        begin
+          if Modifier = '' then
+          begin
+            Modifier := StrNone
+          end;
+          PestModifier[Frame.rdgModflowBoundary,
+            ColOffset+BoundaryIndex] := Modifier;
+        end
+        else
+        begin
+          PestModifier[Frame.rdgModflowBoundary,
+            ColOffset+BoundaryIndex] := '';
+        end;
+      end;
+    finally
+      Frame.rdgModflowBoundary.EndUpdate;
+    end;
+  end;
 begin
   if not frmGoPhast.PhastModel.EtsIsSelected then
   begin
@@ -18205,6 +18305,17 @@ begin
   finally
     TimeList.Free;
   end;
+  {$IFDEF PEST}
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+RateBoundaryPosition] :=
+    TEtsBoundary.DefaultBoundaryMethod(RateBoundaryPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+SurfaceBoundaryPosition] :=
+    TEtsBoundary.DefaultBoundaryMethod(SurfaceBoundaryPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+DepthBoundaryPosition] :=
+    TEtsBoundary.DefaultBoundaryMethod(DepthBoundaryPosition);
+  GetPestModifiers(Frame, Parameter, ScreenObjectList);
+  GetSurfDepthModifiers;
+  {$ENDIF}
+  Frame.rdgModflowBoundary.HideEditor;
 end;
 
 procedure TfrmScreenObjectProperties.GetResBoundary(ScreenObjectList: TList);
@@ -24248,9 +24359,6 @@ var
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(Node, Boundary) then
       begin
-//        ColumnOffset := 2;
-  //      BoundaryValues := Boundary.Values;
-  //      BoundaryCount := BoundaryValues.TimeListCount(frmGoPhast.PhastModel);
         for BoundaryIndex := 1 to 2 do
         begin
           if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -24268,11 +24376,8 @@ var
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
-
-  //      StoreMF_BoundColl(ColumnOffset, BoundaryValues, Times, Frame);
       end;
     end;
-
   end;
 begin
   if IsLoaded then
@@ -24340,7 +24445,6 @@ begin
     {$IFDEF PEST}
     StorePestModifiers(Frame, ParamType, FEVT_Node);
     StoreEvtSurfaceDepth(FEVT_Node);
-
     {$ENDIF}
   end;
 end;
@@ -24355,6 +24459,52 @@ var
   Boundary: TEtsBoundary;
   ColumnOffset: Integer;
   BoundaryLayers: TCustomMF_BoundColl;
+  procedure StoreEvtSurfaceDepth(Node: TJvPageIndexNode);
+  const
+    ColumnOffset = 2;
+  var
+    Index: Integer;
+    Item: TScreenObjectEditItem;
+    Boundary: TEtsBoundary;
+    DataGrid: TRbwDataGrid4;
+    BoundaryIndex: Integer;
+    Modifier: string;
+  begin
+    if (Node = nil) then
+    begin
+      Exit;
+    end;
+
+    Assert(Node <> nil);
+    DataGrid := Frame.rdgModflowBoundary;
+
+    for Index := 0 to FNewProperties.Count - 1 do
+    begin
+      Item := FNewProperties[Index];
+      Boundary := Item.ScreenObject.ModflowEtsBoundary;
+      Assert(Boundary <> nil);
+      if ShouldStoreBoundary(Node, Boundary) then
+      begin
+        for BoundaryIndex := 1 to 2 do
+        begin
+          if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
+          begin
+            Boundary.PestBoundaryMethod[BoundaryIndex] :=
+              PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
+          end;
+          Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
+          if Modifier <> '' then
+          begin
+            if Modifier = strNone then
+            begin
+              Modifier := '';
+            end;
+            Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
+          end;
+        end;
+      end;
+    end;
+  end;
 begin
   if IsLoaded then
   begin
@@ -24423,6 +24573,10 @@ begin
         Boundary.Clear;
       end;
     end;
+    {$IFDEF PEST}
+    StorePestModifiers(Frame, ParamType, FETS_Node);
+    StoreEvtSurfaceDepth(FETS_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -25048,6 +25202,7 @@ begin
       or (DataGrid = frameFhbFlow.rdgModflowBoundary)
       or ((DataGrid = frameRchParam.rdgModflowBoundary) and (ACol = 2))
       or ((DataGrid = frameEvtParam.rdgModflowBoundary) and (ACol in [2,3,4]))
+      or ((DataGrid = frameEtsParam.rdgModflowBoundary) and (ACol in [2,3,4]))
       ;
 
     // get the orientation of the data set.

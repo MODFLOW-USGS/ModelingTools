@@ -409,7 +409,7 @@ type
     procedure CreateObservers;
     procedure Loaded;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
   published
     property SegmentNumber: Integer read FSegmentNumber write SetSegmentNumber;
@@ -2369,7 +2369,7 @@ begin
 end;
 
 procedure TSfrMf6Boundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TSfrMf6Storage;

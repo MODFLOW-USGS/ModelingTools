@@ -300,7 +300,7 @@ begin
       end;
       frmProgressMM.AddMessage(Format(StrEvaluatingS,
         [ScreenObject.Name]));
-      Boundary.GetCellValues(Values, nil, Model);
+      Boundary.GetCellValues(Values, nil, Model, self);
     end;
   end;
   CountCellsAndPolygons;

@@ -580,7 +580,7 @@ begin
         end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS,
           [ScreenObject.Name]));
-        Boundary.GetCellValues(FValues, nil, Model);
+        Boundary.GetCellValues(FValues, nil, Model, self);
       end;
     end;
     if (FValues.Count = 0) then

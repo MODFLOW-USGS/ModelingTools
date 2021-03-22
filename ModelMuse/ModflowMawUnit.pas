@@ -582,7 +582,7 @@ type
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     // The well number is assigned in the export process.
     property WellNumber: Integer read FWellNumber write SetWellNumber;
     procedure InitializeVariables;
@@ -1721,7 +1721,7 @@ begin
 end;
 
 procedure TMawBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TMawTransientStorage;

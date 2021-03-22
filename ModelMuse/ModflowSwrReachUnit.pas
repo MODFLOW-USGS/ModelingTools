@@ -283,7 +283,7 @@ type
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
     procedure Loaded;
     procedure RemoveGeom(Geom: TReachGeometryItem);
@@ -1227,7 +1227,7 @@ begin
 end;
 
 procedure TSwrReachBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TSwrReachTransientStorage;

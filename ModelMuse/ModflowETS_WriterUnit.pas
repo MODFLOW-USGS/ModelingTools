@@ -675,47 +675,6 @@ begin
     ClearTimeLists(Model);
 
     WriteFileInternal;
-//    OpenFile(FileName(AFileName));
-//    try
-//      frmProgressMM.AddMessage(StrWritingETSPackage);
-//      frmProgressMM.AddMessage(StrWritingDataSet0);
-//      WriteDataSet0;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      if Model.ModelSelection <> msModflow2015 then
-//      begin
-//        frmProgressMM.AddMessage(StrWritingDataSet1);
-//        WriteDataSet1;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//        frmProgressMM.AddMessage(StrWritingDataSets2and3);
-//        WriteDataSets2And3;
-//        Application.ProcessMessages;
-//        if not frmProgressMM.ShouldContinue then
-//        begin
-//          Exit;
-//        end;
-//
-//      end
-//      else
-//      begin
-//        WriteOptions(FNameOfFile);
-//        WriteDimensions;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSets4to11);
-//      WriteDataSets4To11;
-//    finally
-//      CloseFile;
-//    end;
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -725,8 +684,8 @@ begin
     WriteModflow6FlowObs(FNameOfFile, FEvaluationType);
   end;
 
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParamValues.Count > 0) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParamValues.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try

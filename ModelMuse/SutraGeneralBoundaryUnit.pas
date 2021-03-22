@@ -163,7 +163,7 @@ type
       override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure Loaded;
   published
     property LakeInteractionType: TGeneralizedFlowInteractionType
@@ -729,7 +729,7 @@ begin
 end;
 
 procedure TSutraGeneralFlowBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
   // does this need to change?

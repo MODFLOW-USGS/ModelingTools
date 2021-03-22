@@ -118,7 +118,7 @@ begin
         end;
 
         FWells.Add(Boundary);
-        Boundary.GetCellValues(Values, Dummy, Model);
+        Boundary.GetCellValues(Values, Dummy, Model, self);
       end;
     finally
       Dummy.Free;

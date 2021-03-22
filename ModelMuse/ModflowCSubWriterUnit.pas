@@ -166,7 +166,7 @@ begin
           frmErrorsAndWarnings.AddError(Model,
             NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
         end;
-        Boundary.GetCellValues(Values, nil, Model);
+        Boundary.GetCellValues(Values, nil, Model, self);
       end
       else if ObservationsUsed and IsMf6Observation(ScreenObject) then
       begin

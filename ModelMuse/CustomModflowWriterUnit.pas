@@ -74,6 +74,7 @@ type
     FFileStream: TFileStream;
     FMainFileStream: TFileStream;
     FPestDataArrays: TDictionary<string, TDataArray>;
+    FNameOfFile: string;
   private
     // See @link(Model).
     FModel: TCustomModel;
@@ -111,6 +112,7 @@ type
       const DataArrayID: string);
     procedure OpenTempFile(const FileName: string);
     procedure CloseTempFile;
+    property NameOfFile: string read FNameOfFile;
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -558,7 +560,6 @@ type
     // @link(TValueCell) defines one boundary cell for one stress period.
     // See @link(ParamValues).
     FParamValues: TStringList;
-    FNameOfFile: string;
     function BoundariesPresent: boolean; virtual;
     // @name is used to create a @link(TValueCellList) for a particular type
     // of @link(TValueCell).
@@ -654,9 +655,9 @@ type
     procedure CountParametersAndParameterCells(var ParamCount,
       ParamCellCount: integer);
     procedure WriteBoundaryArrayParams;
-    property NameOfFile: string read FNameOfFile;
+//    property NameOfFile: string read FNameOfFile;
     //    procedure WriteBeginPeriod(TimeIndex: integer);
-    procedure WriteTemplateHeader; override;
+//    procedure WriteTemplateHeader; override;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -4147,7 +4148,7 @@ begin
         frmProgressMM.AddMessage(Format(StrEvaluatingS,
           [ScreenObject.Name]));
 
-        Boundary.GetCellValues(FValues, FParamValues, Model);
+        Boundary.GetCellValues(FValues, FParamValues, Model, self);
 
         if Mf6ObservationsUsed then
         begin
@@ -9242,23 +9243,23 @@ begin
   end;
 end;
 
-procedure TCustomParameterTransientWriter.WriteTemplateHeader;
-var
-  ArraysFileName: string;
-begin
-  inherited;
-  ArraysFileName := WriteArraysFile(FNameOfFile);
-  if ArraysFileName <> '' then
-  begin
-    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-    WriteString('ReadArrays(');
-    WriteString(ArraysFileName);
-    WriteString(')');
-    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-    NewLine;
-  end;
-
-end;
+//procedure TCustomParameterTransientWriter.WriteTemplateHeader;
+//var
+//  ArraysFileName: string;
+//begin
+//  inherited;
+//  ArraysFileName := WriteArraysFile(FNameOfFile);
+//  if ArraysFileName <> '' then
+//  begin
+//    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+//    WriteString('ReadArrays(');
+//    WriteString(ArraysFileName);
+//    WriteString(')');
+////    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+//    NewLine;
+//  end;
+//
+//end;
 
 procedure TCustomParameterTransientWriter.CountParametersAndParameterCells
   (var ParamCount, ParamCellCount: integer);
@@ -9546,6 +9547,8 @@ begin
 end;
 
 procedure TCustomModflowWriter.WriteTemplateHeader;
+var
+  ArraysFileName: string;
 begin
   if WritingTemplate then
   begin
@@ -9556,6 +9559,18 @@ begin
     WriteString(Model.PestProperties.ExtendedTemplateCharacter);
     NewLine;
   end;
+
+  ArraysFileName := WriteArraysFile(FNameOfFile);
+  if (ArraysFileName <> '') and WritingTemplate then
+  begin
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    WriteString('ReadArrays(');
+    WriteString(ArraysFileName);
+    WriteString(')');
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    NewLine;
+  end;
+
 end;
 
 procedure TCustomParameterTransientWriter.WriteBoundaryArrayParams;

@@ -3502,7 +3502,7 @@ begin
       Boundary := ScreenObject.ModflowFmpRefEvap;
       if Boundary <> nil then
       begin
-        Boundary.GetCellValues(FRefEts, EmptyParamList, Model);
+        Boundary.GetCellValues(FRefEts, EmptyParamList, Model, self);
       end;
     end;
   finally
@@ -3536,7 +3536,7 @@ begin
       Boundary := ScreenObject.ModflowFmpPrecip;
       if Boundary <> nil then
       begin
-        Boundary.GetCellValues(FPrecip, EmptyParamList, Model);
+        Boundary.GetCellValues(FPrecip, EmptyParamList, Model, self);
       end;
     end;
   finally
@@ -3570,7 +3570,7 @@ begin
       Boundary := ScreenObject.ModflowFmpCropID;
       if Boundary <> nil then
       begin
-        Boundary.GetCellValues(FCropIDs, EmptyParamList, Model);
+        Boundary.GetCellValues(FCropIDs, EmptyParamList, Model, self);
       end;
     end;
   finally
@@ -3604,7 +3604,7 @@ begin
       Boundary := ScreenObject.ModflowFmpFarmID;
       if Boundary <> nil then
       begin
-        Boundary.GetCellValues(FFarmIDs, EmptyParamList, Model);
+        Boundary.GetCellValues(FFarmIDs, EmptyParamList, Model, self);
       end;
     end;
   finally

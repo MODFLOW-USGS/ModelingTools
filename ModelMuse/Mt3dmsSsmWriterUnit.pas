@@ -395,7 +395,7 @@ begin
             frmErrorsAndWarnings.AddError(Model,
               NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
           end;
-          Boundary.GetCellValues(Values, nil, Model);
+          Boundary.GetCellValues(Values, nil, Model, self);
           BoundaryList.Add(Boundary);
         end;
       end;
@@ -468,7 +468,7 @@ begin
           frmErrorsAndWarnings.AddError(Model,
             NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
         end;
-        Boundary.GetCellValues(FRechConValues, nil, Model);
+        Boundary.GetCellValues(FRechConValues, nil, Model, self);
         RechBoundaryList.Add(Boundary);
       end;
     end;
@@ -543,7 +543,7 @@ begin
             frmErrorsAndWarnings.AddError(Model,
               NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
           end;
-          Boundary.GetCellValues(FSeepConcValues, nil, Model);
+          Boundary.GetCellValues(FSeepConcValues, nil, Model, self);
           RechBoundaryList.Add(Boundary);
         end;
       end;

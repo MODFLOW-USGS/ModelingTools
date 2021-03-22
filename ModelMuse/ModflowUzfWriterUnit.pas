@@ -153,7 +153,7 @@ begin
           frmErrorsAndWarnings.AddError(Model,
             NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
         end;
-        Boundary.GetCellValues(Values, nil, Model);
+        Boundary.GetCellValues(Values, nil, Model, self);
         if Model.ModflowPackages.UzfPackage.SimulateET then
         begin
           Boundary.GetEvapotranspirationDemandCells(FEtDemand, Model);

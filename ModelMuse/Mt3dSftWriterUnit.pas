@@ -417,7 +417,7 @@ begin
         and ScreenObject.Mt3dSftConcBoundary.Used then
       begin
         ScreenObject.Mt3dSftConcBoundary.StartingReachNumber := StartingReach;
-        ScreenObject.Mt3dSftConcBoundary.GetCellValues(Values, nil, Model);
+        ScreenObject.Mt3dSftConcBoundary.GetCellValues(Values, nil, Model, self);
         // Evaluate initial concentration and dispersion
         ScreenObject.Mt3dSftConcBoundary.
           AssignInitConcAndDisp(Model, FSftSteadyList);

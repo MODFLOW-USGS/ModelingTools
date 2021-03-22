@@ -245,9 +245,9 @@ type
     // link  @link(TMt3dmsConcStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure Clear; override;
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel); override;
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject); override;
     procedure GetPrecipCells(PrecipTimeList: TList; AModel: TBaseModel);
     procedure GetRunOffCells(PrecipTimeList: TList; AModel: TBaseModel);
     procedure GetConstConcCells(PrecipTimeList: TList; AModel: TBaseModel);
@@ -1256,23 +1256,23 @@ begin
   inherited;
 end;
 
-procedure TMt3dSftBoundary.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TMt3dSftBoundary.EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
-  Precipitation.EvaluateArrayBoundaries(AModel);
-  RunOff.EvaluateArrayBoundaries(AModel);
-  ConstConc.EvaluateArrayBoundaries(AModel);
+  Precipitation.EvaluateArrayBoundaries(AModel, Writer);
+  RunOff.EvaluateArrayBoundaries(AModel, Writer);
+  ConstConc.EvaluateArrayBoundaries(AModel, Writer);
 end;
 
 procedure TMt3dSftBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TMt3dmsConcStorage;
 begin
   FCurrentBoundaryType := sbtHeadwater;
 
-  EvaluateArrayBoundaries(AModel);
+  EvaluateArrayBoundaries(AModel, Writer);
   for ValueIndex := 0 to Values.Count - 1 do
   begin
     if ValueIndex < Values.BoundaryCount[AModel] then

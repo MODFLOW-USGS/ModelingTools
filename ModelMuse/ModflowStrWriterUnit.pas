@@ -406,7 +406,7 @@ begin
       frmProgressMM.AddMessage(Format(StrEvaluatingS,
         [ScreenObject.Name]));
       Boundary.FixItems;
-      Boundary.GetCellValues(Values, FParamValues, Model);
+      Boundary.GetCellValues(Values, FParamValues, Model, self);
       if Values.Count > 0 then
       begin
         Assert(FParamValues.Count = 0);

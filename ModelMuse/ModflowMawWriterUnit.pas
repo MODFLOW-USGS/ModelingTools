@@ -262,7 +262,7 @@ begin
       end;
       Boundary.WellNumber := FMawObjects.Add(AScreenObject) + 1;
       FMawNames.AddObject(AScreenObject.Name, AScreenObject);
-      Boundary.GetCellValues(Values, Dummy, Model);
+      Boundary.GetCellValues(Values, Dummy, Model, self);
 
       if not FFlowingWells then
       begin

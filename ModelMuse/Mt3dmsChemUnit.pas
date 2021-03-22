@@ -263,8 +263,9 @@ type
     procedure InsertNewSpecies(SpeciesIndex: integer; const Name: string);
     procedure DeleteSpecies(SpeciesIndex: integer);
     procedure CreateTimeLists;
-    procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     procedure RenameTimeList(const OldSpeciesName, NewSpeciesName: string);
@@ -364,7 +365,7 @@ type
     // link  @link(TMt3dmsConcStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
   published
     property SpecifiedConcBoundary: boolean read FSpecifiedConcBoundary
@@ -1572,7 +1573,7 @@ begin
 end;
 
 procedure TMt3dmsConcBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
   EvaluateListBoundaries(AModel);
 end;
@@ -2321,7 +2322,8 @@ end;
 
 procedure TCustomMt3dmsArrayConcCollection.InitializeTimeLists(
   ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList;
+  Writer: TObject);
 var
   BoundaryValues: TBoundaryValueArray;
   Index: Integer;

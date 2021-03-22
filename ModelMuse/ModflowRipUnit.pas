@@ -200,7 +200,7 @@ type
     // @name fills ParamList with the names of the
     // The RIP package does not have parameters so ParamList is not used.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
     procedure RemovePlantGroup(PlantGroupID: Integer);
     procedure AddPlantGroup(PlantGroupID: Integer);
@@ -1239,7 +1239,7 @@ begin
 end;
 
 procedure TRipBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TRipStorage;

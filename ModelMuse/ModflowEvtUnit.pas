@@ -241,12 +241,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel; PestSeries: TStringList;
-      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -283,9 +284,9 @@ type
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel; PestSeries: TStringList;
-      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -327,9 +328,9 @@ type
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
-    procedure InitializeTimeLists(ListOfTimeLists: TList;
-      AModel: TBaseModel; PestSeries: TStringList;
-      PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+    procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
+      PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -533,7 +534,6 @@ type
     procedure CreateFormulaObjects; //override;
     function BoundaryObserverPrefix: string; override;
     procedure CreateObservers; //override;
-//    property PestEtRObserver: TObserver read GetPestRechargeObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
@@ -562,9 +562,9 @@ type
     // Param.Param.Boundaries)
     // Those represent parameter boundary conditions.
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel); override;
+      AModel: TBaseModel; Writer: TObject); override;
     function Used: boolean; override;
-    procedure EvaluateArrayBoundaries(AModel: TBaseModel); override;
+    procedure EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject); override;
     function NonParameterColumns: integer; override;
     property TimeVaryingEvapotranspirationLayers: boolean
       read GetTimeVaryingEvapotranspirationLayers;
@@ -632,7 +632,8 @@ implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
-  frmErrorsAndWarningsUnit, ModflowParameterUnit, ModelMuseUtilities;
+  frmErrorsAndWarningsUnit, ModflowParameterUnit, ModelMuseUtilities,
+  CustomModflowWriterUnit;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';
@@ -821,7 +822,8 @@ begin
 end;
 
 procedure TEvtCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -838,7 +840,9 @@ var
   Formula: string;
   PestDataArray: TDataArray;
   PestParamSeries: TModflowSteadyParameter;
+  CustomWriter: TCustomFileWriter;
 begin
+  CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -864,6 +868,11 @@ begin
       if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
       begin
         RateItems.Add(PestDataArray.Name);
+        if CustomWriter = nil then
+        begin
+          CustomWriter := Writer as TCustomFileWriter;
+        end;
+        CustomWriter.AddUsedPestDataArray(PestDataArray);
       end
       else
       begin
@@ -894,6 +903,11 @@ begin
                 Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
               end;
           End;
+          if CustomWriter = nil then
+          begin
+            CustomWriter := Writer as TCustomFileWriter;
+          end;
+          CustomWriter.AddUsedPestDataArray(PestDataArray);
         end;
       end
       else
@@ -1407,7 +1421,7 @@ begin
       end;
     DepthBoundaryPosition:
       begin
-        result := ppmAdd;
+        result := ppmMultiply;
       end;
     else
       begin
@@ -1428,14 +1442,14 @@ begin
   inherited;
 end;
 
-procedure TEvtBoundary.EvaluateArrayBoundaries(AModel: TBaseModel);
+procedure TEvtBoundary.EvaluateArrayBoundaries(AModel: TBaseModel; Writer: TObject);
 begin
   inherited;
-  EvtSurfDepthCollection.EvaluateArrayBoundaries(AModel);
+  EvtSurfDepthCollection.EvaluateArrayBoundaries(AModel, Writer);
   if (ParentModel as TPhastModel).
     ModflowPackages.EvtPackage.TimeVaryingLayers then
   begin
-    EvapotranspirationLayers.EvaluateArrayBoundaries(AModel);
+    EvapotranspirationLayers.EvaluateArrayBoundaries(AModel, Writer);
   end;
 end;
 
@@ -1478,7 +1492,6 @@ end;
 
 function TEvtBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
-//  result := '';
   case FormulaIndex of
     RateBoundaryPosition:
       begin
@@ -1605,7 +1618,7 @@ begin
 end;
 
 procedure TEvtBoundary.GetCellValues(ValueTimeList: TList;
-  ParamList: TStringList; AModel: TBaseModel);
+  ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
   ValueIndex: Integer;
   BoundaryStorage: TEvtStorage;
@@ -1616,7 +1629,7 @@ var
   ParamName: string;
   Model: TPhastModel;
 begin
-  EvaluateArrayBoundaries(AModel);
+  EvaluateArrayBoundaries(AModel, Writer);
   Model := ParentModel as TPhastModel;
   if Model.ModflowTransientParameters.CountParam(ParameterType) = 0 then
   begin
@@ -2096,7 +2109,8 @@ begin
 end;
 
 procedure TEvtLayerCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -2499,7 +2513,8 @@ begin
 end;
 
 procedure TEvtSurfDepthCollection.InitializeTimeLists(ListOfTimeLists: TList;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -2521,7 +2536,9 @@ var
   Formula: string;
   PestDataArray: TDataArray;
   PestParamSeries: TModflowSteadyParameter;
+  CustomWriter: TCustomFileWriter;
 begin
+  CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   Boundary := BoundaryGroup as TEvtBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -2556,6 +2573,11 @@ begin
       if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
       begin
         SurfaceItems.Add(PestDataArray.Name);
+        if CustomWriter = nil then
+        begin
+          CustomWriter := Writer as TCustomFileWriter;
+        end;
+        CustomWriter.AddUsedPestDataArray(PestDataArray);
       end
       else
       begin
@@ -2586,6 +2608,11 @@ begin
                 Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
               end;
           End;
+          if CustomWriter = nil then
+          begin
+            CustomWriter := Writer as TCustomFileWriter;
+          end;
+          CustomWriter.AddUsedPestDataArray(PestDataArray);
         end;
       end
       else
@@ -2630,6 +2657,11 @@ begin
       begin
         DepthItems.Add('');
       end;
+      if CustomWriter = nil then
+      begin
+        CustomWriter := Writer as TCustomFileWriter;
+      end;
+      CustomWriter.AddUsedPestDataArray(PestDataArray);
     end
     else
     begin
@@ -2655,6 +2687,11 @@ begin
                 Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
               end;
           End;
+          if CustomWriter = nil then
+          begin
+            CustomWriter := Writer as TCustomFileWriter;
+          end;
+          CustomWriter.AddUsedPestDataArray(PestDataArray);
         end;
       end
       else
@@ -3216,8 +3253,6 @@ end;
 
 procedure TEvtSurfDepthRecord.Cache(Comp: TCompressionStream;
   Strings: TStringList);
-//var
-//  CommentLength: Integer;
 begin
   Comp.Write(Cell, SizeOf(Cell));
   Comp.Write(EvapotranspirationSurface, SizeOf(EvapotranspirationSurface));
@@ -3236,14 +3271,6 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(DepthPestSeries));
   WriteCompInt(Comp, Ord(DepthPestMethod));
 
-//  Comp.Write(CommentLength, SizeOf(CommentLength));
-//  Comp.WriteBuffer(Pointer(EvapotranspirationSurfaceAnnotation)^,
-//    CommentLength * SizeOf(Char));
-//
-//  CommentLength := Length(EvapotranspirationDepthAnnotation);
-//  Comp.Write(CommentLength, SizeOf(CommentLength));
-//  Comp.WriteBuffer(Pointer(EvapotranspirationDepthAnnotation)^,
-//    CommentLength * SizeOf(Char));
 end;
 
 procedure TEvtSurfDepthRecord.RecordStrings(Strings: TStringList);

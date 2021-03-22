@@ -24,7 +24,7 @@ Type
       VariableIdentifiers: string);
     procedure WriteEvapotranspirationSurface(CellList: TValueCellList);
     procedure WriteExtinctionDepth(CellList: TValueCellList);
-    procedure InternalWriteFile;
+    procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
     function Prefix: string; override;
@@ -342,7 +342,7 @@ begin
   end;
 end;
 
-procedure TModflowEVT_Writer.InternalWriteFile;
+procedure TModflowEVT_Writer.WriteFileInternal;
 begin
   OpenFile(FNameOfFile);
   try
@@ -477,7 +477,7 @@ begin
     Exit;
   end;
   ClearTimeLists(Model);
-  InternalWriteFile;
+  WriteFileInternal;
 
   if  Model.PestUsed and FPestParamUsed then
   begin
@@ -486,7 +486,7 @@ begin
       FNameOfFile := FNameOfFile + '.tpl';
       WritePestTemplateLine(FNameOfFile);
       WritingTemplate := True;
-      InternalWriteFile;
+      WriteFileInternal;
 
     finally
       frmErrorsAndWarnings.EndUpdate;
