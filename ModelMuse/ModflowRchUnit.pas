@@ -522,6 +522,8 @@ var
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
+  // Note that TRchCollection is also used in UZF where RechPosition
+  // is the same as UzfInfiltrationBoundaryPosition.
   RechargeRateArray := DataSets[RechPosition];
   Boundary := Boundaries[ItemIndex, AModel] as TRchStorage;
   RechargeRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
@@ -612,6 +614,8 @@ begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
+  // Note that TRchCollection is also used in UZF where RechPosition
+  // is the same as UzfInfiltrationBoundaryPosition.
   PestRechargeSeriesName := BoundaryGroup.PestBoundaryFormula[RechPosition];
   PestSeries.Add(PestRechargeSeriesName);
   RechargeMethod := BoundaryGroup.PestBoundaryMethod[RechPosition];

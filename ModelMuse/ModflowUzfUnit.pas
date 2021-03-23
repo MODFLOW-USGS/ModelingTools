@@ -320,6 +320,19 @@ type
     FWaterContent: TUzfWaterContentCollection;
     FGageOption2: integer;
     FGageOption1: integer;
+    FPestExtinctionDepthMethod: TPestParamMethod;
+    FPestWaterContentMethod: TPestParamMethod;
+    FPestETDemandMethod: TPestParamMethod;
+    FPestInfiltrationRateMethod: TPestParamMethod;
+    FPestInfiltrationRateFormula: TFormulaObject;
+    FPestETDemandFormula: TFormulaObject;
+    FPestExtinctionDepthFormula: TFormulaObject;
+    FPestWaterContentFormula: TFormulaObject;
+    FPestETDemandObserver: TObserver;
+    FPestExtinctionDepthObserver: TObserver;
+    FPestInfiltrationRateObserver: TObserver;
+    FPestWaterContentObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetEvapotranspirationDemand(
       const Value: TUzfEvapotranspirationDemandCollection);
     procedure SetExtinctionDepth(const Value: TUzfExtinctionDepthCollection);
@@ -332,6 +345,26 @@ type
       ValueTimeList: TList);
     procedure SetGageOption1(const Value: integer);
     procedure SetGageOption2(const Value: integer);
+    procedure InvalidateInfiltrationRateData(Sender: TObject);
+    procedure InvalidateETDemandData(Sender: TObject);
+    procedure InvalidateExtinctionDepthData(Sender: TObject);
+    procedure InvalidateWaterContentData(Sender: TObject);
+    function GetPestETDemandFormula: string;
+    function GetPestETDemandObserver: TObserver;
+    function GetPestExtinctionDepthFormula: string;
+    function GetPestExtinctionDepthObserver: TObserver;
+    function GetPestInfiltrationRateFormula: string;
+    function GetPestInfiltrationRateObserver: TObserver;
+    function GetPestWaterContentFormula: string;
+    function GetPestWaterContentObserver: TObserver;
+    procedure SetPestETDemandFormula(const Value: string);
+    procedure SetPestETDemandMethod(const Value: TPestParamMethod);
+    procedure SetPestExtinctionDepthFormula(const Value: string);
+    procedure SetPestExtinctionDepthMethod(const Value: TPestParamMethod);
+    procedure SetPestInfiltrationRateFormula(const Value: string);
+    procedure SetPestInfiltrationRateMethod(const Value: TPestParamMethod);
+    procedure SetPestWaterContentFormula(const Value: string);
+    procedure SetPestWaterContentMethod(const Value: TPestParamMethod);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -341,11 +374,28 @@ type
     // See @link(TModflowBoundary.BoundaryCollectionClass
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestInfiltrationRateObserver: TObserver read GetPestInfiltrationRateObserver;
+    property PestETDemandObserver: TObserver read GetPestETDemandObserver;
+    property PestExtinctionDepthObserver: TObserver read GetPestExtinctionDepthObserver;
+    property PestWaterContentObserver: TObserver read GetPestWaterContentObserver;
   public
-    procedure Assign(Source: TPersistent);override;
-    procedure Clear; override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
+    procedure Clear; override;
     // @name fills ValueTimeList via a call to AssignCells for each
     // link  @link(TRchStorage) in
     // @link(TCustomMF_BoundColl.Boundaries Values.Boundaries);
@@ -367,6 +417,8 @@ type
     procedure GetWaterContentCells(LayerTimeList: TList; AModel: TBaseModel);
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean; AModel: TBaseModel); override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property GageOption1: integer read FGageOption1 write SetGageOption1;
     property GageOption2: integer read FGageOption2 write SetGageOption2;
@@ -376,12 +428,68 @@ type
       read FExtinctionDepth write SetExtinctionDepth;
     property WaterContent: TUzfWaterContentCollection
       read FWaterContent write SetWaterContent;
+    property PestInfiltrationRateFormula: string read GetPestInfiltrationRateFormula
+      write SetPestInfiltrationRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestInfiltrationRateMethod: TPestParamMethod read FPestInfiltrationRateMethod
+      write SetPestInfiltrationRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestETDemandFormula: string read GetPestETDemandFormula
+      write SetPestETDemandFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestETDemandMethod: TPestParamMethod read FPestETDemandMethod
+      write SetPestETDemandMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestExtinctionDepthFormula: string read GetPestExtinctionDepthFormula
+      write SetPestExtinctionDepthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestExtinctionDepthMethod: TPestParamMethod read FPestExtinctionDepthMethod
+      write SetPestExtinctionDepthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWaterContentFormula: string read GetPestWaterContentFormula
+      write SetPestWaterContentFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWaterContentMethod: TPestParamMethod read FPestWaterContentMethod
+      write SetPestWaterContentMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
+
+const
+  UzfInfiltrationBoundaryPosition = 0;
+  UzfETDemandBoundaryPosition = 1;
+  UzfExtinctionDepthBoundaryPosition = 2;
+  UzfWaterContentBoundaryPosition = 3;
+
 
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
-  ModflowTransientListParameterUnit, TempFiles, frmGoPhastUnit;
+  ModflowTransientListParameterUnit, TempFiles, frmGoPhastUnit,
+  CustomModflowWriterUnit, ModflowParameterUnit, ModelMuseUtilities;
 
 resourcestring
   StrEvapoTranspiration = 'Evapo- transpiration demand';
@@ -394,6 +502,11 @@ resourcestring
 const
   UzfExtinctDepthPosition = 0;
   UzfWaterContentPosition = 0;
+
+//  UzfInfiltrationBoundaryPosition = 0;
+//  UzfETDemandBoundaryPosition = 1;
+//  UzfExtinctionDepthBoundaryPosition = 2;
+//  UzfWaterContentBoundaryPosition = 3;
 
 { TUzfBoundary }
 
@@ -409,6 +522,16 @@ begin
     WaterContent := SourceBoundary.WaterContent;
     GageOption1 := SourceBoundary.GageOption1;
     GageOption2 := SourceBoundary.GageOption2;
+
+    PestInfiltrationRateFormula := SourceBoundary.PestInfiltrationRateFormula;
+    PestInfiltrationRateMethod := SourceBoundary.PestInfiltrationRateMethod;
+    PestETDemandFormula := SourceBoundary.PestETDemandFormula;
+    PestETDemandMethod := SourceBoundary.PestETDemandMethod;
+    PestExtinctionDepthFormula := SourceBoundary.PestExtinctionDepthFormula;
+    PestExtinctionDepthMethod := SourceBoundary.PestExtinctionDepthMethod;
+    PestWaterContentFormula := SourceBoundary.PestWaterContentFormula;
+    PestWaterContentMethod := SourceBoundary.PestWaterContentMethod;
+
   end;
   inherited;
 end;
@@ -449,10 +572,8 @@ begin
       begin
         Cells.Capacity := Cells.Count + Length(LocalBoundaryStorage.RchArray)
       end;
-//      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.RchArray) - 1 do
       begin
-//        Cells.Cached := False;
         BoundaryValues := LocalBoundaryStorage.RchArray[BoundaryIndex];
         Cell := TRch_Cell.Create;
         Cells.Add(Cell);
@@ -497,10 +618,8 @@ begin
     if (StressPeriod.StartTime >= LocalBoundaryStorage.StartingTime)
       and (StressPeriod.EndTime <= LocalBoundaryStorage.EndingTime) then
     begin
-//      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.EvtArray) - 1 do
       begin
-//        Cells.Cached := False;
         BoundaryValues := LocalBoundaryStorage.EvtArray[BoundaryIndex];
         Cell := TEvt_Cell.Create;
         Cells.Add(Cell);
@@ -592,7 +711,6 @@ begin
 //      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.WaterContentArray) - 1 do
       begin
-//        Cells.Cached := False;
         BoundaryValues := LocalBoundaryStorage.WaterContentArray[BoundaryIndex];
         Cell := TUzfWaterContentCell.Create;
         Assert(ScreenObject <> nil);
@@ -610,6 +728,11 @@ end;
 class function TUzfBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TUzfInfiltrationRateCollection;
+end;
+
+function TUzfBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestUzf_';
 end;
 
 procedure TUzfBoundary.Clear;
@@ -631,10 +754,76 @@ begin
     Create(self, Model, ScreenObject);
   FWaterContent := TUzfWaterContentCollection.
     Create(self, Model, ScreenObject);
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestInfiltrationRateFormula := '';
+  PestETDemandFormula := '';
+  PestExtinctionDepthFormula := '';
+  PestWaterContentFormula := '';
+  FPestInfiltrationRateMethod := DefaultBoundaryMethod(UzfInfiltrationBoundaryPosition);
+  FPestETDemandMethod := DefaultBoundaryMethod(UzfETDemandBoundaryPosition);
+  FPestExtinctionDepthMethod := DefaultBoundaryMethod(UzfExtinctionDepthBoundaryPosition);
+  FPestWaterContentMethod := DefaultBoundaryMethod(UzfWaterContentBoundaryPosition);
+
+end;
+
+procedure TUzfBoundary.CreateFormulaObjects;
+begin
+  FPestInfiltrationRateFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestETDemandFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestExtinctionDepthFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestWaterContentFormula := CreateFormulaObjectBlocks(dsoTop);
+end;
+
+procedure TUzfBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestInfiltrationRateObserver);
+    FObserverList.Add(PestETDemandObserver);
+    FObserverList.Add(PestExtinctionDepthObserver);
+    FObserverList.Add(PestWaterContentObserver);
+  end;
+end;
+
+class function TUzfBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    UzfInfiltrationBoundaryPosition:
+      begin
+        result := ppmMultiply
+      end;
+    UzfETDemandBoundaryPosition:
+      begin
+        result := ppmMultiply
+      end;
+    UzfExtinctionDepthBoundaryPosition:
+      begin
+        result := ppmMultiply
+      end;
+    UzfWaterContentBoundaryPosition:
+      begin
+        result := ppmMultiply
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 destructor TUzfBoundary.Destroy;
 begin
+  PestInfiltrationRateFormula := '';
+  PestETDemandFormula := '';
+  PestExtinctionDepthFormula := '';
+  PestWaterContentFormula := '';
+
   FWaterContent.Free;
   FExtinctionDepth.Free;
   FEvapotranspirationDemand.Free;
@@ -700,6 +889,184 @@ begin
   end;
 end;
 
+function TUzfBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    UzfInfiltrationBoundaryPosition:
+      begin
+        result := PestInfiltrationRateFormula;
+      end;
+    UzfETDemandBoundaryPosition:
+      begin
+        result := PestETDemandFormula;
+      end;
+    UzfExtinctionDepthBoundaryPosition:
+      begin
+        result := PestExtinctionDepthFormula;
+      end;
+    UzfWaterContentBoundaryPosition:
+      begin
+        result := PestWaterContentFormula;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+//  UzfInfiltrationBoundaryPosition = 0;
+//  UzfEtDemandBoundaryPosition = 1;
+//  UzfEtExtinctionDepthBoundaryPosition = 2;
+//  UzfWaterContentBoundaryPosition = 3;
+
+end;
+
+function TUzfBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    UzfInfiltrationBoundaryPosition:
+      begin
+        result := PestInfiltrationRateMethod;
+      end;
+    UzfETDemandBoundaryPosition:
+      begin
+        result := PestETDemandMethod;
+      end;
+    UzfExtinctionDepthBoundaryPosition:
+      begin
+        result := PestExtinctionDepthMethod;
+      end;
+    UzfWaterContentBoundaryPosition:
+      begin
+        result := PestWaterContentMethod;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+function TUzfBoundary.GetPestETDemandFormula: string;
+begin
+  Result := FPestETDemandFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UzfETDemandBoundaryPosition);
+  end;
+end;
+
+function TUzfBoundary.GetPestETDemandObserver: TObserver;
+begin
+  if FPestETDemandObserver = nil then
+  begin
+    CreateObserver('PestETDemand_', FPestETDemandObserver, nil);
+    FPestETDemandObserver.OnUpToDateSet := InvalidateETDemandData;
+  end;
+  result := FPestETDemandObserver;
+end;
+
+function TUzfBoundary.GetPestExtinctionDepthFormula: string;
+begin
+  Result := FPestExtinctionDepthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UzfExtinctionDepthBoundaryPosition);
+  end;
+end;
+
+function TUzfBoundary.GetPestExtinctionDepthObserver: TObserver;
+begin
+  if FPestExtinctionDepthObserver = nil then
+  begin
+    CreateObserver('PestExtinctionDepth_', FPestExtinctionDepthObserver, nil);
+    FPestExtinctionDepthObserver.OnUpToDateSet := InvalidateExtinctionDepthData;
+  end;
+  result := FPestExtinctionDepthObserver;
+end;
+
+function TUzfBoundary.GetPestInfiltrationRateFormula: string;
+begin
+  Result := FPestInfiltrationRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UzfInfiltrationBoundaryPosition);
+  end;
+end;
+
+function TUzfBoundary.GetPestInfiltrationRateObserver: TObserver;
+begin
+  if FPestInfiltrationRateObserver = nil then
+  begin
+    CreateObserver('PestInfiltrationRate_', FPestInfiltrationRateObserver, nil);
+    FPestInfiltrationRateObserver.OnUpToDateSet := InvalidateInfiltrationRateData;
+  end;
+  result := FPestInfiltrationRateObserver;
+end;
+
+function TUzfBoundary.GetPestWaterContentFormula: string;
+begin
+  Result := FPestWaterContentFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UzfWaterContentBoundaryPosition);
+  end;
+end;
+
+function TUzfBoundary.GetPestWaterContentObserver: TObserver;
+begin
+  if FPestWaterContentObserver = nil then
+  begin
+    CreateObserver('PestWaterContent_', FPestWaterContentObserver, nil);
+    FPestWaterContentObserver.OnUpToDateSet := InvalidateWaterContentData;
+  end;
+  result := FPestWaterContentObserver;
+end;
+
+procedure TUzfBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestInfiltrationRateFormula then
+  begin
+    if UzfInfiltrationBoundaryPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UzfInfiltrationBoundaryPosition]);
+    end;
+  end;
+  if Sender = FPestEtDemandFormula then
+  begin
+    if UzfEtDemandBoundaryPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UzfEtDemandBoundaryPosition]);
+    end;
+  end;
+  if Sender = FPestExtinctionDepthFormula then
+  begin
+    if UzfExtinctionDepthBoundaryPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UzfExtinctionDepthBoundaryPosition]);
+    end;
+  end;
+  if Sender = FPestWaterContentFormula then
+  begin
+    if UzfWaterContentBoundaryPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UzfWaterContentBoundaryPosition]);
+    end;
+  end;
+end;
+
+function TUzfBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestUzf_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
 procedure TUzfBoundary.GetWaterContentCells(LayerTimeList: TList; AModel: TBaseModel);
 var
   ValueIndex: Integer;
@@ -715,6 +1082,12 @@ begin
   end;
 end;
 
+procedure TUzfBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TUzfBoundary.InvalidateDisplay;
 var
   Model: TPhastModel;
@@ -727,6 +1100,114 @@ begin
     Model.InvalidateMfUzfEtDemand(self);
     Model.InvalidateMfUzfExtinctionDepth(self);
     Model.InvalidateMfUzfWaterContent(self);
+  end;
+end;
+
+procedure TUzfBoundary.InvalidateETDemandData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfUzfEtDemand(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfUzfEtDemand(self);
+    end;
+  end;
+end;
+
+procedure TUzfBoundary.InvalidateExtinctionDepthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfUzfExtinctionDepth(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfUzfExtinctionDepth(self);
+    end;
+  end;
+end;
+
+procedure TUzfBoundary.InvalidateInfiltrationRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfUzfInfiltration(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfUzfInfiltration(self);
+    end;
+  end;
+end;
+
+procedure TUzfBoundary.InvalidateWaterContentData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfUzfWaterContent(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfUzfWaterContent(self);
+    end;
   end;
 end;
 
@@ -768,6 +1249,104 @@ begin
     end;
     InvalidateModel;
   end;
+end;
+
+procedure TUzfBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    UzfInfiltrationBoundaryPosition:
+      begin
+        PestInfiltrationRateFormula := Value;
+      end;
+    UzfETDemandBoundaryPosition:
+      begin
+        PestETDemandFormula := Value;
+      end;
+    UzfExtinctionDepthBoundaryPosition:
+      begin
+        PestExtinctionDepthFormula := Value;
+      end;
+    UzfWaterContentBoundaryPosition:
+      begin
+        PestWaterContentFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+procedure TUzfBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    UzfInfiltrationBoundaryPosition:
+      begin
+        PestInfiltrationRateMethod := Value;
+      end;
+    UzfETDemandBoundaryPosition:
+      begin
+        PestETDemandMethod := Value;
+      end;
+    UzfExtinctionDepthBoundaryPosition:
+      begin
+        PestExtinctionDepthMethod := Value;
+      end;
+    UzfWaterContentBoundaryPosition:
+      begin
+        PestWaterContentMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+procedure TUzfBoundary.SetPestETDemandFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UzfETDemandBoundaryPosition, FPestETDemandFormula);
+end;
+
+procedure TUzfBoundary.SetPestETDemandMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestETDemandMethod, Value);
+end;
+
+procedure TUzfBoundary.SetPestExtinctionDepthFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UzfExtinctionDepthBoundaryPosition, FPestExtinctionDepthFormula);
+end;
+
+procedure TUzfBoundary.SetPestExtinctionDepthMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestExtinctionDepthMethod, Value);
+end;
+
+procedure TUzfBoundary.SetPestInfiltrationRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UzfInfiltrationBoundaryPosition, FPestInfiltrationRateFormula);
+end;
+
+procedure TUzfBoundary.SetPestInfiltrationRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestInfiltrationRateMethod, Value);
+end;
+
+procedure TUzfBoundary.SetPestWaterContentFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UzfWaterContentBoundaryPosition, FPestWaterContentFormula);
+end;
+
+procedure TUzfBoundary.SetPestWaterContentMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestWaterContentMethod, Value);
 end;
 
 procedure TUzfBoundary.SetWaterContent(const Value: TUzfWaterContentCollection);
@@ -1006,6 +1585,10 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalExtinctDepthPestSeries: string;
+  LocalExtinctDepthPestMethod: TPestParamMethod;
+  ExtinctDepthItems: TStringList;
+  LocalExtinctDepthPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -1013,6 +1596,12 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TUzfExtinctDepthStorage;
   ExtinctionDepthRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
+  LocalExtinctDepthPestSeries := PestSeries[UzfExtinctDepthPosition];
+  LocalExtinctDepthPestMethod := PestMethods[UzfExtinctDepthPosition];
+  ExtinctDepthItems := PestItemNames[UzfExtinctDepthPosition];
+  LocalExtinctDepthPest := ExtinctDepthItems[ItemIndex];
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := LayerMin to LayerMax do
@@ -1035,6 +1624,9 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 ExtinctionDepthAnnotation := ExtinctionDepthRateArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                ExtinctionDepthPest := LocalExtinctDepthPest;
+                ExtinctionDepthPestMethod := LocalExtinctDepthPestMethod;
+                ExtinctionDepthPestSeries := LocalExtinctDepthPestSeries;
               end;
               Inc(BoundaryIndex);
             end;
@@ -1064,14 +1656,102 @@ var
   ScreenObject: TScreenObject;
   ALink: TUzfExtinctionDepthTimeListLink;
   FExtinctionDepthData: TModflowTimeList;
+  CustomWriter: TCustomFileWriter;
+  LocalModel: TCustomModel;
+  PestExtinctionDepthSeriesName: string;
+  ExtinctionDepthMethod: TPestParamMethod;
+  ExtinctionDepthItems: TStringList;
+  PestParam: TModflowSteadyParameter;
+  Formula: string;
+  PestDataArray: TDataArray;
+  PestParamSeries: TModflowSteadyParameter;
 begin
+  CustomWriter := nil;
+  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+
+  PestExtinctionDepthSeriesName := BoundaryGroup.PestBoundaryFormula[UzfExtinctionDepthBoundaryPosition];
+  PestSeries.Add(PestExtinctionDepthSeriesName);
+  ExtinctionDepthMethod := BoundaryGroup.PestBoundaryMethod[UzfExtinctionDepthBoundaryPosition];
+  PestMethods.Add(ExtinctionDepthMethod);
+
+  ExtinctionDepthItems := TStringList.Create;
+  PestItemNames.Add(ExtinctionDepthItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TUzfExtinctDepthItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.UzfExtinctDepth;
+
+    PestParam := LocalModel.GetPestParameterByName(Item.UzfExtinctDepth);
+    if PestParam = nil then
+    begin
+      Formula := Item.UzfExtinctDepth;
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        ExtinctionDepthItems.Add(PestDataArray.Name);
+        if CustomWriter = nil then
+        begin
+          CustomWriter := Writer as TCustomFileWriter;
+        end;
+        CustomWriter.AddUsedPestDataArray(PestDataArray);
+      end
+      else
+      begin
+        ExtinctionDepthItems.Add('');
+      end;
+    end
+    else
+    begin
+      Formula := FortranFloatToStr(PestParam.Value);
+      ExtinctionDepthItems.Add(PestParam.ParameterName)
+    end;
+
+    if PestExtinctionDepthSeriesName <> '' then
+    begin
+      PestParamSeries := LocalModel.GetPestParameterByName(PestExtinctionDepthSeriesName);
+      if PestParamSeries = nil then
+      begin
+        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestExtinctionDepthSeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          Case ExtinctionDepthMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
+          End;
+          if CustomWriter = nil then
+          begin
+            CustomWriter := Writer as TCustomFileWriter;
+          end;
+          CustomWriter.AddUsedPestDataArray(PestDataArray);
+        end;
+      end
+      else
+      begin
+        Case ExtinctionDepthMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
+            end;
+        End;
+      end;
+    end;
+    BoundaryValues[Index].Formula := Formula;
+
+
+//    BoundaryValues[Index].Formula := Item.UzfExtinctDepth;
   end;
   ALink := TimeListLink.GetLink(AModel) as TUzfExtinctionDepthTimeListLink;
   FExtinctionDepthData := ALink.FExtinctionDepthData;
@@ -1149,6 +1829,10 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalMinimumWaterContentPestSeries: string;
+  LocalMinimumWaterContentPestMethod: TPestParamMethod;
+  MinimumWaterContentItems: TStringList;
+  LocalMinimumWaterContentPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -1156,6 +1840,13 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TUzfWaterContentStorage;
   WaterContentArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
+  LocalMinimumWaterContentPestSeries := PestSeries[UzfWaterContentPosition];
+  LocalMinimumWaterContentPestMethod := PestMethods[UzfWaterContentPosition];
+  MinimumWaterContentItems := PestItemNames[UzfWaterContentPosition];
+  LocalMinimumWaterContentPest := MinimumWaterContentItems[ItemIndex];
+
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := LayerMin to LayerMax do
@@ -1178,6 +1869,9 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 MinimumWaterContentAnnotation := WaterContentArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                MinimumWaterContentPest := LocalMinimumWaterContentPest;
+                MinimumWaterContentPestMethod := LocalMinimumWaterContentPestMethod;
+                MinimumWaterContentPestSeries := LocalMinimumWaterContentPestSeries;
               end;
               Inc(BoundaryIndex);
             end;
@@ -1207,14 +1901,101 @@ var
   ScreenObject: TScreenObject;
   ALink: TUzfWaterContentTimeListLink;
   WaterContentData: TModflowTimeList;
+  CustomWriter: TCustomFileWriter;
+  LocalModel: TCustomModel;
+  PestWaterContentSeriesName: string;
+  WaterContentMethod: TPestParamMethod;
+  WaterContentItems: TStringList;
+  PestParam: TModflowSteadyParameter;
+  Formula: string;
+  PestDataArray: TDataArray;
+  PestParamSeries: TModflowSteadyParameter;
 begin
+  CustomWriter := nil;
+  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+
+  PestWaterContentSeriesName := BoundaryGroup.PestBoundaryFormula[UzfWaterContentBoundaryPosition];
+  PestSeries.Add(PestWaterContentSeriesName);
+  WaterContentMethod := BoundaryGroup.PestBoundaryMethod[UzfWaterContentBoundaryPosition];
+  PestMethods.Add(WaterContentMethod);
+
+  WaterContentItems := TStringList.Create;
+  PestItemNames.Add(WaterContentItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TUzfWaterContentItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.UzfWaterContent;
+
+    PestParam := LocalModel.GetPestParameterByName(Item.UzfWaterContent);
+    if PestParam = nil then
+    begin
+      Formula := Item.UzfWaterContent;
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        WaterContentItems.Add(PestDataArray.Name);
+        if CustomWriter = nil then
+        begin
+          CustomWriter := Writer as TCustomFileWriter;
+        end;
+        CustomWriter.AddUsedPestDataArray(PestDataArray);
+      end
+      else
+      begin
+        WaterContentItems.Add('');
+      end;
+    end
+    else
+    begin
+      Formula := FortranFloatToStr(PestParam.Value);
+      WaterContentItems.Add(PestParam.ParameterName)
+    end;
+
+    if PestWaterContentSeriesName <> '' then
+    begin
+      PestParamSeries := LocalModel.GetPestParameterByName(PestWaterContentSeriesName);
+      if PestParamSeries = nil then
+      begin
+        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestWaterContentSeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          Case WaterContentMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
+          End;
+          if CustomWriter = nil then
+          begin
+            CustomWriter := Writer as TCustomFileWriter;
+          end;
+          CustomWriter.AddUsedPestDataArray(PestDataArray);
+        end;
+      end
+      else
+      begin
+        Case WaterContentMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
+            end;
+        End;
+      end;
+    end;
+    BoundaryValues[Index].Formula := Formula;
+
+//    BoundaryValues[Index].Formula := Item.UzfWaterContent;
   end;
   ALink := TimeListLink.GetLink(AModel) as TUzfWaterContentTimeListLink;
   WaterContentData := ALink.FWaterContentData;

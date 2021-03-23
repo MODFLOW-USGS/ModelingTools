@@ -633,7 +633,7 @@ implementation
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, frmGoPhastUnit, TempFiles,
   frmErrorsAndWarningsUnit, ModflowParameterUnit, ModelMuseUtilities,
-  CustomModflowWriterUnit;
+  CustomModflowWriterUnit, ModflowUzfUnit;
 
 resourcestring
   StrEvapoTranspirationRate = 'Evapo- transpiration rate';
@@ -774,6 +774,9 @@ begin
   EvapotranspirationRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
 
+  // Even when TEvtCollection is used with TUzfBoundary,
+  // RatePosition is the right variable to use here.
+
   LocalRatePestSeries := PestSeries[RatePosition];
   LocalRatePestMethod := PestMethods[RatePosition];
   RatePestItems := PestItemNames[RatePosition];
@@ -841,15 +844,23 @@ var
   PestDataArray: TDataArray;
   PestParamSeries: TModflowSteadyParameter;
   CustomWriter: TCustomFileWriter;
+  BoundaryPosition: Integer;
 begin
   CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+  // Note that TRchTEvtCollectionCollection is also used in UZF where RateBoundaryPosition
+  // is the different from as UzfETDemandBoundaryPosition.
+  BoundaryPosition := RateBoundaryPosition;
+  if BoundaryGroup is TUzfBoundary then
+  begin
+    BoundaryPosition := UzfETDemandBoundaryPosition
+  end;
 
-  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[RateBoundaryPosition];
+  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[BoundaryPosition];
   PestSeries.Add(PestRateSeriesName);
-  RateMethod := BoundaryGroup.PestBoundaryMethod[RateBoundaryPosition];
+  RateMethod := BoundaryGroup.PestBoundaryMethod[BoundaryPosition];
   PestMethods.Add(RateMethod);
 
   RateItems := TStringList.Create;

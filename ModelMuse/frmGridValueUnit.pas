@@ -1169,12 +1169,6 @@ begin
         Location.x := Location.y;
         Location.y := temp;
       end;
-//      case FViewDirection of
-//        vdTop: LocalAnisotropy := 1;
-//        vdFront: LocalAnisotropy := TUndoVerticalExaggeration.GetOldVE;
-//        vdSide: LocalAnisotropy := 1/TUndoVerticalExaggeration.GetOldVE;
-//        else Assert(False);
-//      end;
 
       Segment := nil;
       Segments := FSelectedScreenObject.Segments[Model];

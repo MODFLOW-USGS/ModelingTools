@@ -2752,7 +2752,12 @@ begin
     or (Sender = frameFhbFlow.rdgModflowBoundary) then
   begin
     PestParameterColumns := [1];
+  end
+  else if (Sender = frameScreenObjectUZF.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [2,3,4,5];
   end;
+
   if not (ACol in PestParameterColumns) and (ARow >= 1) and (ARow <= PestRowOffset) then
   begin
     CanSelect := False
@@ -5641,7 +5646,7 @@ begin
   frameRchParam.OnCheckPestCell := EnablePestCells;
   frameEvtParam.OnCheckPestCell := EnablePestCells;
   frameEtsParam.OnCheckPestCell := EnablePestCells;
-
+  frameScreenObjectUZF.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -14663,7 +14668,8 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime)
+        + 1 +  + PestRowOffset;
       Assert(RowIndex >= 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
@@ -15949,7 +15955,8 @@ begin
         begin
           if RowIndex - 1 - PestRowOffset < BoundaryValues.Count then
           begin
-            BoundItem := BoundaryValues.Items[RowIndex - 1 - PestRowOffset] as TCustomModflowBoundaryItem;
+            BoundItem := BoundaryValues.Items[RowIndex - 1 - PestRowOffset]
+              as TCustomModflowBoundaryItem;
           end
           else
           begin
@@ -15966,7 +15973,8 @@ begin
   begin
     for BoundIndex := 0 to BoundaryValues.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
-      BoundItem := BoundaryValues.Items[RowIndex - 1 - PestRowOffset] as TCustomModflowBoundaryItem;
+      BoundItem := BoundaryValues.Items[RowIndex - 1 - PestRowOffset]
+        as TCustomModflowBoundaryItem;
       BoundItem.BoundaryFormula[BoundIndex] := '';
     end;
   end;
@@ -17655,6 +17663,10 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetUzfBoundary(ScreenObjectList: TList);
+const
+  ColOffset = 2;
+  First = 0;
+  Last = 3;
 var
   TimeList: TParameterTimeList;
   ColumnOffset: integer;
@@ -17670,6 +17682,102 @@ var
   Gage1, Gage2: integer;
   FirstScreenObjectFound: boolean;
   State: TCheckBoxState;
+  FormulaIndex: Integer;
+  Frame: TframeScreenObjectNoParam;
+  procedure GetUzfModifiers;
+  var
+    BoundaryIndex: Integer;
+    FirstItem: Boolean;
+    Identical: Boolean;
+    Method: TPestParamMethod;
+    ScreenObjectIndex: Integer;
+    AScreenObject: TScreenObject;
+    Boundary: TUzfBoundary;
+    Modifier: string;
+  begin
+    Frame.rdgModflowBoundary.BeginUpdate;
+    try
+      for BoundaryIndex := First to Last do
+      begin
+        FirstItem := True;
+        Identical := True;
+        Method := ppmMultiply;
+        for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+        begin
+          AScreenObject := ScreenObjectList[ScreenObjectIndex];
+          Boundary := AScreenObject.ModflowUzfBoundary;
+          if (Boundary <> nil) and Boundary.Used then
+          begin
+            if FirstItem then
+            begin
+              Method := Boundary.PestBoundaryMethod[BoundaryIndex];
+              FirstItem := False;
+            end
+            else
+            begin
+              Identical := Method = Boundary.PestBoundaryMethod[BoundaryIndex];
+              if not Identical then
+              begin
+                break;
+              end;
+            end;
+          end;
+        end;
+        if Identical then
+        begin
+          PestMethod[Frame.rdgModflowBoundary, ColOffset+BoundaryIndex] := Method;
+        end
+        else
+        begin
+          Frame.rdgModflowBoundary.Cells[ColOffset+BoundaryIndex,PestMethodRow] := '';
+        end;
+      end;
+
+      for BoundaryIndex := First to Last do
+      begin
+        FirstItem := True;
+        Identical := True;
+        for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+        begin
+          AScreenObject := ScreenObjectList[ScreenObjectIndex];
+          Boundary := AScreenObject.ModflowUzfBoundary;
+          if (Boundary <> nil) and Boundary.Used then
+          begin
+            if FirstItem then
+            begin
+              Modifier := Boundary.PestBoundaryFormula[BoundaryIndex];
+              FirstItem := False;
+            end
+            else
+            begin
+              Identical := Modifier = Boundary.PestBoundaryFormula[BoundaryIndex];
+              if not Identical then
+              begin
+                break;
+              end;
+            end;
+          end;
+        end;
+        if Identical then
+        begin
+          if Modifier = '' then
+          begin
+            Modifier := StrNone
+          end;
+          PestModifier[Frame.rdgModflowBoundary,
+            ColOffset+BoundaryIndex] := Modifier;
+        end
+        else
+        begin
+          PestModifier[Frame.rdgModflowBoundary,
+            ColOffset+BoundaryIndex] := '';
+        end;
+      end;
+    finally
+      Frame.rdgModflowBoundary.EndUpdate;
+    end;
+
+  end;
 begin
   if not frmGoPhast.PhastModel.UzfIsSelected then
   begin
@@ -17831,8 +17939,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -17853,6 +17961,20 @@ begin
         GetUzfCollection(TimeList, ScreenObjectList, ColumnOffset,
           DataGrid, GetUzfEtExtinctionWaterContent);
       end;
+
+      {$IFDEF PEST}
+      Frame := frameScreenObjectUZF;
+      for FormulaIndex := First to Last do
+      begin
+        PestMethod[frameScreenObjectUZF.rdgModflowBoundary, ColOffset+FormulaIndex] :=
+          TUzfBoundary.DefaultBoundaryMethod(FormulaIndex);
+        GetUzfModifiers;
+      end;
+      {$ENDIF}
+      Frame.rdgModflowBoundary.HideEditor;
+
+
+
     finally
       DataGrid.EndUpdate;
     end;
@@ -25016,6 +25138,54 @@ var
   Boundary: TUzfBoundary;
   ColumnOffset: integer;
   Gage: integer;
+  procedure StoreUzfPest(Node: TJvPageIndexNode);
+  const
+    ColumnOffset = 2;
+    First = 0;
+    Last = 3;
+  var
+    Index: Integer;
+    Item: TScreenObjectEditItem;
+    Boundary: TUzfBoundary;
+    DataGrid: TRbwDataGrid4;
+    BoundaryIndex: Integer;
+    Modifier: string;
+  begin
+    if (Node = nil) then
+    begin
+      Exit;
+    end;
+
+    Assert(Node <> nil);
+    DataGrid := Frame.rdgModflowBoundary;
+
+    for Index := 0 to FNewProperties.Count - 1 do
+    begin
+      Item := FNewProperties[Index];
+      Boundary := Item.ScreenObject.ModflowUzfBoundary;
+      Assert(Boundary <> nil);
+      if ShouldStoreBoundary(Node, Boundary) then
+      begin
+        for BoundaryIndex := First to Last do
+        begin
+          if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
+          begin
+            Boundary.PestBoundaryMethod[BoundaryIndex] :=
+              PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
+          end;
+          Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
+          if Modifier <> '' then
+          begin
+            if Modifier = strNone then
+            begin
+              Modifier := '';
+            end;
+            Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
+          end;
+        end;
+      end;
+    end;
+  end;
 begin
   if IsLoaded then
   begin
@@ -25068,6 +25238,9 @@ begin
         Boundary.GageOption2 := Gage;
       end;
     end;
+    {$IFDEF PEST}
+    StoreUzfPest(FUZF_Node);
+    {$ENDIF}
   end;
 end;
 
@@ -25203,6 +25376,7 @@ begin
       or ((DataGrid = frameRchParam.rdgModflowBoundary) and (ACol = 2))
       or ((DataGrid = frameEvtParam.rdgModflowBoundary) and (ACol in [2,3,4]))
       or ((DataGrid = frameEtsParam.rdgModflowBoundary) and (ACol in [2,3,4]))
+      or (DataGrid = frameScreenObjectUZF.rdgModflowBoundary)
       ;
 
     // get the orientation of the data set.
