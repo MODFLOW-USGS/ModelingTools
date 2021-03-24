@@ -280,14 +280,14 @@ type
     procedure CreateFormulaObjects; //override;
     function BoundaryObserverPrefix: string; override;
     procedure CreateObservers; //override;
-    property PestElevationObserver: TObserver read GetPestElevationObserver;
-    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
+    property PestElevationObserver: TObserver read GetPestElevationObserver;
+    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;

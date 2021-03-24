@@ -805,6 +805,7 @@ var
   Layer: Integer;
   ParameterName: string;
   MultiplierValue: double;
+  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -834,7 +835,49 @@ begin
           WriteInteger(EvtCell.Row+1);
         end;
         WriteInteger(EvtCell.Column+1);
-        WriteFloat(SurfDepthCell.EvapotranspirationSurface);
+
+        if (SurfDepthCell.SurfacePest <> '')
+          or (SurfDepthCell.SurfacePestSeries <> '')
+          or (SurfDepthCell.DepthPest <> '')
+          or (SurfDepthCell.DepthPestSeries <> '')
+          or (EvtCell.RatePest <> '')
+          or (EvtCell.RatePestSeries <> '')
+          then
+        begin
+          FPestParamUsed := True;
+        end;
+
+        if Model.PestUsed and WritingTemplate
+          and ((SurfDepthCell.SurfacePest <> '') or (SurfDepthCell.SurfacePestSeries <> '')) then
+        begin
+          WritePestTemplateFormula(SurfDepthCell.EvapotranspirationSurface, SurfDepthCell.SurfacePest,
+            SurfDepthCell.SurfacePestSeries, SurfDepthCell.SurfacePestMethod,
+            SurfDepthCell);
+        end
+        else
+        begin
+          WriteFloat(SurfDepthCell.EvapotranspirationSurface);
+          if SurfDepthCell.SurfacePest <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              SurfDepthCell.SurfacePest);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
+          if SurfDepthCell.SurfacePestSeries <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              SurfDepthCell.SurfacePestSeries);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
+        end;
+
+//        WriteFloat(SurfDepthCell.EvapotranspirationSurface);
 
         if Model.PestUsed and (Model.ModelSelection = msModflow2015)
           and WritingTemplate
@@ -851,23 +894,70 @@ begin
           end;
           WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
         end
+        else if Model.PestUsed and WritingTemplate
+          and ((EvtCell.RatePest <> '') or (EvtCell.RatePestSeries <> '')) then
+        begin
+          WritePestTemplateFormula(EvtCell.EvapotranspirationRate, EvtCell.RatePest,
+            EvtCell.RatePestSeries, EvtCell.RatePestMethod,
+            EvtCell);
+        end
         else
         begin
           WriteFloat(EvtCell.EvapotranspirationRate);
+          if EvtCell.RatePest <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              EvtCell.RatePest);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
+          if EvtCell.RatePestSeries <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              EvtCell.RatePestSeries);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
         end;
-
-//        if EvtCell.TimeSeriesName = '' then
-//        begin
-//          WriteFloat(EvtCell.EvapotranspirationRate);
-//        end
 //        else
 //        begin
-//          WriteString(' ');
-//          WriteString(EvtCell.TimeSeriesName);
-//          WriteString(' ');
+//          WriteFloat(EvtCell.EvapotranspirationRate);
 //        end;
-  //      WriteFloat(EvtCell.EvapotranspirationRate);
-        WriteFloat(SurfDepthCell.EvapotranspirationDepth);
+
+        if Model.PestUsed and WritingTemplate
+          and ((SurfDepthCell.DepthPest <> '') or (SurfDepthCell.DepthPestSeries <> '')) then
+        begin
+          WritePestTemplateFormula(SurfDepthCell.EvapotranspirationDepth, SurfDepthCell.DepthPest,
+            SurfDepthCell.DepthPestSeries, SurfDepthCell.DepthPestMethod,
+            SurfDepthCell);
+        end
+        else
+        begin
+          WriteFloat(SurfDepthCell.EvapotranspirationDepth);
+          if SurfDepthCell.DepthPest <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              SurfDepthCell.DepthPest);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
+          if SurfDepthCell.DepthPestSeries <> '' then
+          begin
+            DataArray := Model.DataArrayManager.GetDataSetByName(
+              SurfDepthCell.DepthPestSeries);
+            if DataArray <> nil then
+            begin
+              AddUsedPestDataArray(DataArray);
+            end;
+          end;
+        end;
+//        WriteFloat(SurfDepthCell.EvapotranspirationDepth);
 
         for SegmentIndex := 1 to NETSEG - 1 do
         begin
