@@ -214,6 +214,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     // With MODFLOW 6, Conductance includes the effect of the parameter,
     // if any. In a template, the appropriate formula would be
@@ -388,15 +391,15 @@ type
       ;
   end;
 
+const
+  RivStagePosition = 0;
+  RivConductancePosition = 1;
+  RivBottomPosition = 2;
+
 implementation
 
-uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles, 
+uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
   frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit, ModflowMvrUnit;
-
-const
-  StagePosition = 0;
-  ConductancePosition = 1;
-  BottomPosition = 2;
 
 { TRivItem }
 
@@ -423,11 +426,11 @@ var
   BottomObserver: TObserver;
 begin
   ParentCollection := Collection as TRivCollection;
-  StageObserver := FObserverList[StagePosition];
+  StageObserver := FObserverList[RivStagePosition];
   StageObserver.OnUpToDateSet := ParentCollection.InvalidateStageData;
-  ConductanceObserver := FObserverList[ConductancePosition];
+  ConductanceObserver := FObserverList[RivConductancePosition];
   ConductanceObserver.OnUpToDateSet := ParentCollection.InvalidateConductanceData;
-  BottomObserver := FObserverList[BottomPosition];
+  BottomObserver := FObserverList[RivBottomPosition];
   BottomObserver.OnUpToDateSet := ParentCollection.InvalidateRiverBottomData;
 end;
 
@@ -454,9 +457,9 @@ end;
 function TRivItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    StagePosition: result := RiverStage;
-    ConductancePosition: result := Conductance;
-    BottomPosition: result := RiverBottom;
+    RivStagePosition: result := RiverStage;
+    RivConductancePosition: result := Conductance;
+    RivBottomPosition: result := RiverBottom;
     else Assert(False);
   end;
 end;
@@ -464,40 +467,40 @@ end;
 function TRivItem.GetConductance: string;
 begin
   Result := FConductance.Formula;
-  ResetItemObserver(ConductancePosition);
+  ResetItemObserver(RivConductancePosition);
 end;
 
 function TRivItem.GetConductanceIndex: Integer;
 begin
-  result := ConductancePosition;
+  result := RivConductancePosition;
 end;
 
 procedure TRivItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FRiverStage then
   begin
-    List.Add( FObserverList[StagePosition]);
+    List.Add( FObserverList[RivStagePosition]);
   end;
   if Sender = FConductance then
   begin
-    List.Add( FObserverList[ConductancePosition]);
+    List.Add( FObserverList[RivConductancePosition]);
   end;
   if Sender = FRiverBottom then
   begin
-    List.Add( FObserverList[BottomPosition]);
+    List.Add( FObserverList[RivBottomPosition]);
   end;
 end;
 
 function TRivItem.GetRiverBottom: string;
 begin
   Result := FRiverBottom.Formula;
-  ResetItemObserver(BottomPosition);
+  ResetItemObserver(RivBottomPosition);
 end;
 
 function TRivItem.GetRiverStage: string;
 begin
   Result := FRiverStage.Formula;
-  ResetItemObserver(StagePosition);
+  ResetItemObserver(RivStagePosition);
 end;
 
 procedure TRivItem.InvalidateModel;
@@ -544,26 +547,26 @@ procedure TRivItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   inherited;
   case Index of
-    StagePosition: RiverStage := Value;
-    ConductancePosition: Conductance := Value;
-    BottomPosition: RiverBottom := Value;
+    RivStagePosition: RiverStage := Value;
+    RivConductancePosition: Conductance := Value;
+    RivBottomPosition: RiverBottom := Value;
     else Assert(False);
   end;
 end;
 
 procedure TRivItem.SetRiverBottom(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, BottomPosition, FRiverBottom);
+  UpdateFormulaBlocks(Value, RivBottomPosition, FRiverBottom);
 end;
 
 procedure TRivItem.SetRiverStage(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StagePosition, FRiverStage);
+  UpdateFormulaBlocks(Value, RivStagePosition, FRiverStage);
 end;
 
 procedure TRivItem.SetConductance(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ConductancePosition, FConductance);
+  UpdateFormulaBlocks(Value, RivConductancePosition, FConductance);
 end;
 
 { TRivCollection }
@@ -603,7 +606,7 @@ var
   Item: TRivItem;
 begin
   Item := Items[ItemIndex] as TRivItem;
-  if FormulaIndex = ConductancePosition then
+  if FormulaIndex = RivConductancePosition then
   begin
     Boundary := BoundaryGroup as TRivBoundary;
     ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -667,7 +670,7 @@ var
   ACell: TCellAssignment;
 begin
   Assert(BoundaryFunctionIndex in
-    [StagePosition,ConductancePosition, BottomPosition]);
+    [RivStagePosition,RivConductancePosition, RivBottomPosition]);
   Assert(Expression <> nil);
 
   RivStorage := BoundaryStorage as TRivStorage;
@@ -682,7 +685,7 @@ begin
     with RivStorage.RivArray[Index] do
     begin
       case BoundaryFunctionIndex of
-        StagePosition:
+        RivStagePosition:
           begin
             RiverStage := Expression.DoubleResult;
             RiverStageAnnotation := ACell.Annotation;
@@ -690,7 +693,7 @@ begin
             RiverStagePestSeriesName := PestSeriesName;
             RiverStagePestSeriesMethod := PestSeriesMethod;
           end;
-        ConductancePosition:
+        RivConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
@@ -698,7 +701,7 @@ begin
             ConductancePestSeriesName := PestSeriesName;
             ConductancePestSeriesMethod := PestSeriesMethod;
           end;
-        BottomPosition:
+        RivBottomPosition:
           begin
             RiverBottom := Expression.DoubleResult;
             RiverBottomAnnotation := ACell.Annotation;
@@ -840,9 +843,9 @@ function TRiv_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string
 begin
   result := '';
   case Index of
-    StagePosition: result := RiverStageAnnotation;
-    ConductancePosition: result := ConductanceAnnotation;
-    BottomPosition: result := RiverBottomAnnotation;
+    RivStagePosition: result := RiverStageAnnotation;
+    RivConductancePosition: result := ConductanceAnnotation;
+    RivBottomPosition: result := RiverBottomAnnotation;
     else Assert(False);
   end;
 end;
@@ -851,9 +854,9 @@ function TRiv_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    StagePosition: result := RiverStage;
-    ConductancePosition: result := Conductance;
-    BottomPosition: result := RiverBottom;
+    RivStagePosition: result := RiverStage;
+    RivConductancePosition: result := Conductance;
+    RivBottomPosition: result := RiverBottom;
     else Assert(False);
   end;
 end;
@@ -981,6 +984,48 @@ end;
 function TRiv_Cell.GetMvrUsed: Boolean;
 begin
   result := Values.MvrUsed;
+end;
+
+function TRiv_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    RivStagePosition: result := RiverStagePest;
+    RivConductancePosition: result := ConductancePest;
+    RivBottomPosition: result := RiverBottomPest;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TRiv_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    RivStagePosition: result := RiverStagePestSeriesMethod;
+    RivConductancePosition: result := ConductancePestSeriesMethod;
+    RivBottomPosition: result := RiverBottomPestSeriesMethod;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TRiv_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    RivStagePosition: result := RiverStagePestSeries;
+    RivConductancePosition: result := ConductancePestSeries;
+    RivBottomPosition: result := RiverBottomPestSeries;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
 end;
 
 function TRiv_Cell.GetRow: integer;
@@ -1159,9 +1204,9 @@ begin
   PestRiverStageFormula := '';
   PestRiverBottomFormula := '';
   PestConductanceFormula := '';
-  FPestRiverStageMethod := DefaultBoundaryMethod(StagePosition);
-  FPestRiverBottomMethod := DefaultBoundaryMethod(BottomPosition);
-  FPestConductanceMethod := DefaultBoundaryMethod(ConductancePosition);
+  FPestRiverStageMethod := DefaultBoundaryMethod(RivStagePosition);
+  FPestRiverBottomMethod := DefaultBoundaryMethod(RivBottomPosition);
+  FPestConductanceMethod := DefaultBoundaryMethod(RivConductancePosition);
 
 end;
 
@@ -1186,15 +1231,15 @@ class function TRivBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    StagePosition:
+    RivStagePosition:
       begin
         result := ppmAdd;
       end;
-    ConductancePosition:
+    RivConductancePosition:
       begin
         result := ppmMultiply;
       end;
-    BottomPosition:
+    RivBottomPosition:
       begin
         result := ppmAdd;
       end;
@@ -1344,15 +1389,15 @@ function TRivBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   result := '';
   case FormulaIndex of
-    StagePosition:
+    RivStagePosition:
       begin
         result := PestRiverStageFormula;
       end;
-    ConductancePosition:
+    RivConductancePosition:
       begin
         result := PestConductanceFormula;
       end;
-    BottomPosition:
+    RivBottomPosition:
       begin
         result := PestRiverBottomFormula;
       end;
@@ -1365,15 +1410,15 @@ function TRivBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    StagePosition:
+    RivStagePosition:
       begin
         result := PestRiverStageMethod;
       end;
-    ConductancePosition:
+    RivConductancePosition:
       begin
         result := PestConductanceMethod;
       end;
-    BottomPosition:
+    RivBottomPosition:
       begin
         result := PestRiverBottomMethod;
       end;
@@ -1390,7 +1435,7 @@ begin
   Result := FPestCondFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ConductancePosition);
+    ResetBoundaryObserver(RivConductancePosition);
   end;
 end;
 
@@ -1409,7 +1454,7 @@ begin
   Result := FPestRiverBottomFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(BottomPosition);
+    ResetBoundaryObserver(RivBottomPosition);
   end;
 end;
 
@@ -1428,7 +1473,7 @@ begin
   Result := FPestRiverStageFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StagePosition);
+    ResetBoundaryObserver(RivStagePosition);
   end;
 end;
 
@@ -1446,23 +1491,23 @@ procedure TRivBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestRiverStageFormula then
   begin
-    if StagePosition < FObserverList.Count then
+    if RivStagePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StagePosition]);
+      List.Add(FObserverList[RivStagePosition]);
     end;
   end;
   if Sender = FPestCondFormula then
   begin
-    if ConductancePosition < FObserverList.Count then
+    if RivConductancePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[ConductancePosition]);
+      List.Add(FObserverList[RivConductancePosition]);
     end;
   end;
   if Sender = FPestRiverBottomFormula then
   begin
-    if BottomPosition < FObserverList.Count then
+    if RivBottomPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[BottomPosition]);
+      List.Add(FObserverList[RivBottomPosition]);
     end;
   end;
 end;
@@ -1592,15 +1637,15 @@ procedure TRivBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
-    StagePosition:
+    RivStagePosition:
       begin
         PestRiverStageFormula := Value;
       end;
-    ConductancePosition:
+    RivConductancePosition:
       begin
         PestConductanceFormula := Value;
       end;
-    BottomPosition:
+    RivBottomPosition:
       begin
         PestRiverBottomFormula := Value;
       end;
@@ -1613,15 +1658,15 @@ procedure TRivBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
-    StagePosition:
+    RivStagePosition:
       begin
         PestRiverStageMethod := Value;
       end;
-    ConductancePosition:
+    RivConductancePosition:
       begin
         PestConductanceMethod := Value;
       end;
-    BottomPosition:
+    RivBottomPosition:
       begin
         PestRiverBottomMethod := Value;
       end;
@@ -1632,7 +1677,7 @@ end;
 
 procedure TRivBoundary.SetPestConductanceFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ConductancePosition, FPestCondFormula);
+  UpdateFormulaBlocks(Value, RivConductancePosition, FPestCondFormula);
 end;
 
 procedure TRivBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
@@ -1642,7 +1687,7 @@ end;
 
 procedure TRivBoundary.SetPestRiverBottomFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, BottomPosition, FPestRiverBottomFormula);
+  UpdateFormulaBlocks(Value, RivBottomPosition, FPestRiverBottomFormula);
 end;
 
 procedure TRivBoundary.SetPestRiverBottomMethod(const Value: TPestParamMethod);
@@ -1652,7 +1697,7 @@ end;
 
 procedure TRivBoundary.SetPestRiverStageFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StagePosition, FPestRiverStageFormula);
+  UpdateFormulaBlocks(Value, RivStagePosition, FPestRiverStageFormula);
 end;
 
 procedure TRivBoundary.SetPestRiverStageMethod(const Value: TPestParamMethod);

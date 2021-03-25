@@ -459,7 +459,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -523,34 +523,9 @@ begin
       MultiplierValue, Well_Cell);
 //    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
-  else if Model.PestUsed and WritingTemplate
-    and ((Well_Cell.PumpingRatePest <> '') or (Well_Cell.PumpingRatePestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Well_Cell.PumpingRate, Well_Cell.PumpingRatePest,
-      Well_Cell.PumpingRatePestSeries, Well_Cell.PumpingRatePestSeriesMethod,
-      Well_Cell);
-  end
   else
   begin
-    WriteFloat(Well_Cell.PumpingRate);
-    if Well_Cell.PumpingRatePest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Well_Cell.PumpingRatePest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Well_Cell.PumpingRatePestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Well_Cell.PumpingRatePestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
+    WriteValueOrFormula(Well_Cell, WelPumpingRatePosition);
   end;
 
   WriteIface(Well_Cell.IFace);

@@ -1405,34 +1405,7 @@ begin
     WriteI5Integer(StrReach.ReachNumber, Format('Reach Number %d', [StrReach.ReachNumber]));
     if StrReach.ReachNumber = 1 then
     begin
-      if Model.PestUsed and WritingTemplate and
-        ((StrReach.FlowPest <> '') or (StrReach.FlowPestSeriesName <> '')) then
-      begin
-        WritePestTemplateFormula(StrReach.Flow, StrReach.FlowPest,
-          StrReach.FlowPestSeriesName, StrReach.FlowPestSeriesMethod, StrReach);
-      end
-      else
-      begin
-        WriteF15Float(StrReach.Flow);
-        if StrReach.FlowPest <> '' then
-        begin
-          DataArray := Model.DataArrayManager.GetDataSetByName(
-            StrReach.FlowPest);
-          if DataArray <> nil then
-          begin
-            AddUsedPestDataArray(DataArray);
-          end;
-        end;
-        if StrReach.FlowPestSeriesName <> '' then
-        begin
-          DataArray := Model.DataArrayManager.GetDataSetByName(
-            StrReach.FlowPestSeriesName);
-          if DataArray <> nil then
-          begin
-            AddUsedPestDataArray(DataArray);
-          end;
-        end;
-      end;
+      WriteValueOrFormula(StrReach, StrFlowPosition, 15);
 
 //      WriteF15Float(StrReach.Flow);
     end
@@ -1441,127 +1414,19 @@ begin
       WriteF15Float(0);
     end;
 
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.StagePest <> '') or (StrReach.StagePestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.Stage, StrReach.StagePest,
-        StrReach.StagePestSeriesName, StrReach.StagePestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteF10Float(StrReach.Stage);
-      if StrReach.StagePest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.StagePest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.StagePestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.StagePestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(StrReach, StrStagePosition, 10);
 
 //    WriteF10Float(StrReach.Stage);
 
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.ConductancePest <> '') or (StrReach.ConductancePestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.Conductance, StrReach.ConductancePest,
-        StrReach.ConductancePestSeriesName, StrReach.ConductancePestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteF10Float(StrReach.Conductance);
-      if StrReach.ConductancePest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.ConductancePest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.ConductancePestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.ConductancePestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(StrReach, StrConductancePosition, 10);
 
 //    WriteF10Float(StrReach.Conductance);
 
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.BedBottomPest <> '') or (StrReach.BedBottomPestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.BedBottom, StrReach.BedBottomPest,
-        StrReach.BedBottomPestSeriesName, StrReach.BedBottomPestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteF10Float(StrReach.BedBottom);
-      if StrReach.BedBottomPest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedBottomPest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.BedBottomPestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedBottomPestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(StrReach, StrBedBottomPosition, 10);
 
 //    WriteF10Float(StrReach.BedBottom);
 
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.BedTopPest <> '') or (StrReach.BedTopPestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.BedTop, StrReach.BedTopPest,
-        StrReach.BedTopPestSeriesName, StrReach.BedTopPestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteF10Float(StrReach.BedTop);
-      if StrReach.BedTopPest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedTopPest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.BedTopPestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedTopPestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(StrReach, StrBedTopPosition, 10);
 
 //    WriteF10Float(StrReach.BedTop);
 
@@ -1576,158 +1441,26 @@ begin
     WriteInteger(StrReach.ReachNumber);
     if StrReach.ReachNumber = 1 then
     begin
-      if Model.PestUsed and WritingTemplate and
-        ((StrReach.FlowPest <> '') or (StrReach.FlowPestSeriesName <> '')) then
-      begin
-        WritePestTemplateFormula(StrReach.Flow, StrReach.FlowPest,
-          StrReach.FlowPestSeriesName, StrReach.FlowPestSeriesMethod, StrReach);
-      end
-      else
-      begin
-        WriteFloat(StrReach.Flow);
-        if StrReach.FlowPest <> '' then
-        begin
-          DataArray := Model.DataArrayManager.GetDataSetByName(
-            StrReach.FlowPest);
-          if DataArray <> nil then
-          begin
-            AddUsedPestDataArray(DataArray);
-          end;
-        end;
-        if StrReach.FlowPestSeriesName <> '' then
-        begin
-          DataArray := Model.DataArrayManager.GetDataSetByName(
-            StrReach.FlowPestSeriesName);
-          if DataArray <> nil then
-          begin
-            AddUsedPestDataArray(DataArray);
-          end;
-        end;
-      end;
-//      WriteFloat(StrReach.Flow);
+      WriteValueOrFormula(StrReach, StrFlowPosition);
+
+      //      WriteFloat(StrReach.Flow);
     end
     else
     begin
       WriteFloat(0);
     end;
 
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.StagePest <> '') or (StrReach.StagePestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.Stage, StrReach.StagePest,
-        StrReach.StagePestSeriesName, StrReach.StagePestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteFloat(StrReach.Stage);
-      if StrReach.StagePest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.StagePest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.StagePestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.StagePestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(StrReach, StrStagePosition);
 //    WriteFloat(StrReach.Stage);
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.ConductancePest <> '') or (StrReach.ConductancePestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.Conductance, StrReach.ConductancePest,
-        StrReach.ConductancePestSeriesName, StrReach.ConductancePestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteFloat(StrReach.Conductance);
-      if StrReach.ConductancePest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.ConductancePest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.ConductancePestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.ConductancePestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+
+
+    WriteValueOrFormula(StrReach, StrConductancePosition);
 //    WriteFloat(StrReach.Conductance);
 
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.BedBottomPest <> '') or (StrReach.BedBottomPestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.BedBottom, StrReach.BedBottomPest,
-        StrReach.BedBottomPestSeriesName, StrReach.BedBottomPestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteFloat(StrReach.BedBottom);
-      if StrReach.BedBottomPest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedBottomPest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.BedBottomPestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedBottomPestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(StrReach, StrBedBottomPosition);
 //    WriteFloat(StrReach.BedBottom);
 
-    if Model.PestUsed and WritingTemplate and
-      ((StrReach.BedTopPest <> '') or (StrReach.BedTopPestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(StrReach.BedTop, StrReach.BedTopPest,
-        StrReach.BedTopPestSeriesName, StrReach.BedTopPestSeriesMethod, StrReach);
-    end
-    else
-    begin
-      WriteFloat(StrReach.BedTop);
-      if StrReach.BedTopPest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedTopPest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if StrReach.BedTopPestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          StrReach.BedTopPestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(StrReach, StrBedTopPosition);
 //    WriteFloat(StrReach.BedTop);
     WriteIface(StrReach.IFace);
   end;
@@ -2145,189 +1878,25 @@ begin
         AReach := Reaches[ReachIndex] as TStr_Cell;
         if UseFixedFormat then
         begin
-          if Model.PestUsed and WritingTemplate and
-            ((AReach.WidthPest <> '') or (AReach.WidthPestSeriesName <> '')) then
-          begin
-            WritePestTemplateFormula(AReach.Width, AReach.WidthPest,
-              AReach.WidthPestSeriesName, AReach.WidthPestSeriesMethod, AReach);
-          end
-          else
-          begin
-            WriteF10Float(AReach.Width);
-            if AReach.WidthPest <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.WidthPest);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-            if AReach.WidthPestSeriesName <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.WidthPestSeriesName);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-          end;
+          WriteValueOrFormula(AReach, StrWidthPosition, 10);
 //          WriteF10Float(AReach.Width);
 
-          if Model.PestUsed and WritingTemplate and
-            ((AReach.SlopePest <> '') or (AReach.SlopePestSeriesName <> '')) then
-          begin
-            WritePestTemplateFormula(AReach.Slope, AReach.SlopePest,
-              AReach.SlopePestSeriesName, AReach.SlopePestSeriesMethod, AReach);
-          end
-          else
-          begin
-            WriteF10Float(AReach.Slope);
-            if AReach.SlopePest <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.SlopePest);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-            if AReach.SlopePestSeriesName <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.SlopePestSeriesName);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-          end;
-
+          WriteValueOrFormula(AReach, StrSlopePosition, 10);
 //          WriteF10Float(AReach.Slope);
 
-          if Model.PestUsed and WritingTemplate and
-            ((AReach.RoughnessPest <> '') or (AReach.RoughnessPestSeriesName <> '')) then
-          begin
-            WritePestTemplateFormula(AReach.Roughness, AReach.RoughnessPest,
-              AReach.RoughnessPestSeriesName, AReach.RoughnessPestSeriesMethod, AReach);
-          end
-          else
-          begin
-            WriteF10Float(AReach.Roughness);
-            if AReach.RoughnessPest <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.RoughnessPest);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-            if AReach.RoughnessPestSeriesName <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.RoughnessPestSeriesName);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-          end;
-
+          WriteValueOrFormula(AReach, StrRoughnessPosition, 10);
 //          WriteF10Float(AReach.Roughness);
         end
-        else        
-        begin        
-          if Model.PestUsed and WritingTemplate and
-            ((AReach.WidthPest <> '') or (AReach.WidthPestSeriesName <> '')) then
-          begin
-            WritePestTemplateFormula(AReach.Width, AReach.WidthPest,
-              AReach.WidthPestSeriesName, AReach.WidthPestSeriesMethod, AReach);
-          end
-          else
-          begin
-            WriteFloat(AReach.Width);
-            if AReach.WidthPest <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.WidthPest);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-            if AReach.WidthPestSeriesName <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.WidthPestSeriesName);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-          end;
+        else
+        begin
+          WriteValueOrFormula(AReach, StrWidthPosition);
 //          WriteFloat(AReach.Width);
 
-          if Model.PestUsed and WritingTemplate and
-            ((AReach.SlopePest <> '') or (AReach.SlopePestSeriesName <> '')) then
-          begin
-            WritePestTemplateFormula(AReach.Slope, AReach.SlopePest,
-              AReach.SlopePestSeriesName, AReach.SlopePestSeriesMethod, AReach);
-          end
-          else
-          begin
-            WriteFloat(AReach.Slope);
-            if AReach.SlopePest <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.SlopePest);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-            if AReach.SlopePestSeriesName <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.SlopePestSeriesName);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-          end;
+          WriteValueOrFormula(AReach, StrSlopePosition);
 
 //          WriteFloat(AReach.Slope);
 
-          if Model.PestUsed and WritingTemplate and
-            ((AReach.RoughnessPest <> '') or (AReach.RoughnessPestSeriesName <> '')) then
-          begin
-            WritePestTemplateFormula(AReach.Roughness, AReach.RoughnessPest,
-              AReach.RoughnessPestSeriesName, AReach.RoughnessPestSeriesMethod, AReach);
-          end
-          else
-          begin
-            WriteFloat(AReach.Roughness);
-            if AReach.RoughnessPest <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.RoughnessPest);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-            if AReach.RoughnessPestSeriesName <> '' then
-            begin
-              DataArray := Model.DataArrayManager.GetDataSetByName(
-                AReach.RoughnessPestSeriesName);
-              if DataArray <> nil then
-              begin
-                AddUsedPestDataArray(DataArray);
-              end;
-            end;
-          end;
+          WriteValueOrFormula(AReach, StrRoughnessPosition);
 
 //          WriteFloat(AReach.Roughness);
         end;

@@ -107,7 +107,7 @@ type
       ACell: TValueCell): string;
     procedure WritePestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
-      ACell: TValueCell);
+      ACell: TValueCell; FixedLength: Integer = 0);
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID: string);
     procedure OpenTempFile(const FileName: string);
@@ -236,6 +236,8 @@ type
     procedure WriteBeginGridData;
     procedure WriteEndGridData;
     procedure WriteTemplateHeader; virtual;
+    procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
+      FixedLength: Integer = 0);
   public
     // @name converts AFileName to use the correct extension for the file.
 //    class function FileName(const AFileName: string): string;
@@ -2500,7 +2502,7 @@ end;
 
 procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
   PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
-  ACell: TValueCell);
+  ACell: TValueCell; FixedLength: Integer);
 var
   ExtendedTemplateCharacter: string;
   Formula: string;
@@ -2517,7 +2519,22 @@ begin
   end
   else
   begin
-    WriteFloat(Value);
+    if FixedLength = 0 then
+    begin
+      WriteFloat(Value);
+    end
+    else if FixedLength = 10 then
+    begin
+      WriteF10Float(Value);
+    end
+    else if FixedLength = 15 then
+    begin
+      WriteF15Float(Value);
+    end
+    else
+    begin
+      Assert(False);
+    end;
   end;
 end;
 
@@ -9703,6 +9720,66 @@ begin
   FreeAndNil(FFileStream);
   FFileStream := FMainFileStream;
   FMainFileStream := nil;
+end;
+
+procedure TCustomModflowWriter.WriteValueOrFormula(Cell: TValueCell;
+Index: integer; FixedLength: Integer);
+var
+  Value: double;
+  PestItem: string;
+  PestSeries: string;
+  PestMethod: TPestParamMethod;
+  DataArray: TDataArray;
+begin
+  Value := Cell.RealValue[Index, Model];
+  PestItem := Cell.PestName[Index];
+  PestSeries := Cell.PestSeriesName[Index];
+  if (PestItem <> '') or (PestSeries <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+  if Model.PestUsed and WritingTemplate and
+    ((PestItem <> '') or (PestSeries <> '')) then
+  begin
+    PestMethod := Cell.PestSeriesMethod[Index];
+    WritePestTemplateFormula(Value, PestItem, PestSeries, PestMethod, Cell, FixedLength);
+  end
+  else
+  begin
+    if FixedLength = 0 then
+    begin
+      WriteFloat(Value);
+    end
+    else if FixedLength = 10 then
+    begin
+      WriteF10Float(Value);
+    end
+    else if FixedLength = 15 then
+    begin
+      WriteF15Float(Value);
+    end
+    else
+    begin
+      Assert(False);
+    end;
+
+    if PestItem <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(PestItem);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+    if PestSeries <> '' then
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(PestSeries);
+      if DataArray <> nil then
+      begin
+        AddUsedPestDataArray(DataArray);
+      end;
+    end;
+  end;
 end;
 
 initialization

@@ -238,86 +238,16 @@ begin
     WriteModflowParamFormula(ParameterName, CHD_Cell.StartHeadPest,
       MultiplierValue, CHD_Cell);
   end
-  else if Model.PestUsed and WritingTemplate
-    and ((CHD_Cell.StartHeadPest <> '') or (CHD_Cell.StartHeadPestSeriesName <> '')) then
-  begin
-    WritePestTemplateFormula(CHD_Cell.StartingHead, CHD_Cell.StartHeadPest,
-      CHD_Cell.StartHeadPestSeriesName, CHD_Cell.StartHeadPestSeriesMethod,
-      CHD_Cell);
-  end
   else
   begin
-    WriteFloat(CHD_Cell.StartingHead);
-    if CHD_Cell.StartHeadPest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        CHD_Cell.StartHeadPest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if CHD_Cell.StartHeadPestSeriesName <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        CHD_Cell.StartHeadPestSeriesName);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
+    WriteValueOrFormula(CHD_Cell, ChdStartHeadPosition);
   end;
-
-
-//  else
-//  begin
-//    WriteFloat(CHD_Cell.StartingHead);
-//  end;
-
-//  if CHD_Cell.TimeSeriesName = '' then
-//  begin
-//    WriteFloat(CHD_Cell.StartingHead);
-//  end
-//  else
-//  begin
-//    WriteString(' ');
-//    WriteString(CHD_Cell.TimeSeriesName);
-//    WriteString(' ');
-//  end;
-
 
 //  WriteFloat(CHD_Cell.StartingHead);
   if (Model.ModelSelection <> msModflow2015) then
   begin
-    if Model.PestUsed and WritingTemplate
-    and ((CHD_Cell.EndHeadPest <> '') or (CHD_Cell.EndHeadPestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(CHD_Cell.EndingHead, CHD_Cell.EndHeadPest,
-        CHD_Cell.EndHeadPestSeriesName, CHD_Cell.EndHeadPestSeriesMethod,
-        CHD_Cell);
-    end
-    else
-    begin
-      WriteFloat(CHD_Cell.EndingHead);
-      if CHD_Cell.EndHeadPest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          CHD_Cell.EndHeadPest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if CHD_Cell.EndHeadPestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          CHD_Cell.EndHeadPestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(CHD_Cell, ChdEndHeadPosition);
+
 //    WriteFloat(CHD_Cell.EndingHead);
   end;
   WriteIface(CHD_Cell.IFace);

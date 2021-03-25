@@ -151,6 +151,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property BoundaryValue: double read GetBoundaryValue;
     property BoundaryValueAnnotation: string read GetBoundaryValueAnnotation;
@@ -281,6 +284,8 @@ type
       read FFormulaInterpretation write SetFormulaInterpretation;
   end;
 
+const
+  FhbBoundaryValuePosition = 0;
 
 implementation
 
@@ -293,9 +298,6 @@ resourcestring
   StrFHBHeads = 'FHB Heads';
   StrFHBFlows = 'FHB Flows';
   StrInterpolatedValueA = 'Interpolated value assigned by %s.';
-
-const
-  BoundaryValuePosition = 0;
 
 { TFhbItem }
 
@@ -317,7 +319,7 @@ begin
   inherited;
 
   ParentCollection := Collection as TFhbHeadCollection;
-  BoundaryValueObserver := FObserverList[BoundaryValuePosition];
+  BoundaryValueObserver := FObserverList[FhbBoundaryValuePosition];
   BoundaryValueObserver.OnUpToDateSet := ParentCollection.InvalidateBoundaryValueData;
 
 end;
@@ -341,7 +343,7 @@ end;
 function TFhbItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    BoundaryValuePosition:
+    FhbBoundaryValuePosition:
       result := BoundaryValue;
     else Assert(False);
   end;
@@ -350,14 +352,14 @@ end;
 function TFhbItem.GetBoundaryValue: string;
 begin
   Result := FBoundaryValue.Formula;
-  ResetItemObserver(BoundaryValuePosition);
+  ResetItemObserver(FhbBoundaryValuePosition);
 end;
 
 procedure TFhbItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FBoundaryValue then
   begin
-    List.Add(FObserverList[BoundaryValuePosition]);
+    List.Add(FObserverList[FhbBoundaryValuePosition]);
   end;
 end;
 
@@ -408,7 +410,7 @@ end;
 procedure TFhbItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    BoundaryValuePosition:
+    FhbBoundaryValuePosition:
       BoundaryValue := Value;
     else Assert(False);
   end;
@@ -416,7 +418,7 @@ end;
 
 procedure TFhbItem.SetBoundaryValue(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, BoundaryValuePosition, FBoundaryValue);
+  UpdateFormulaBlocks(Value, FhbBoundaryValuePosition, FBoundaryValue);
 end;
 
 { TFhbTimeListLink }
@@ -456,7 +458,7 @@ var
   Boundary: TFhbHeadBoundary;
 begin
   Item := Items[ItemIndex] as TFhbItem;
-  if FormulaIndex = BoundaryValuePosition then
+  if FormulaIndex = FhbBoundaryValuePosition then
   begin
     Boundary := BoundaryGroup as TFhbHeadBoundary;
     ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -528,7 +530,7 @@ var
   Compiler: TRbwParser;
   NewFormula: string;
 begin
-  Assert(BoundaryFunctionIndex in [BoundaryValuePosition]);
+  Assert(BoundaryFunctionIndex in [FhbBoundaryValuePosition]);
   Assert(Expression <> nil);
 
   FhbStorage := BoundaryStorage as TFhbStorage;
@@ -555,7 +557,7 @@ begin
     with FhbStorage.FhbArray[Index] do
     begin
       case BoundaryFunctionIndex of
-        BoundaryValuePosition:
+        FhbBoundaryValuePosition:
           begin
             BoundaryValue := Expression.DoubleResult;
             BoundaryValueAnnotation := ACell.Annotation;
@@ -828,12 +830,48 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TFhb_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    FhbBoundaryValuePosition: result := BoundaryValuePest;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TFhb_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    FhbBoundaryValuePosition: result := BoundaryValuePestSeriesMethod;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TFhb_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    FhbBoundaryValuePosition: result := BoundaryValuePestSeriesName;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
 function TFhb_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
   result := '';
   case Index of
-    BoundaryValuePosition: result := BoundaryValueAnnotation;
+    FhbBoundaryValuePosition: result := BoundaryValueAnnotation;
     else Assert(False);
   end;
 end;
@@ -842,7 +880,7 @@ function TFhb_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    BoundaryValuePosition: result := BoundaryValue;
+    FhbBoundaryValuePosition: result := BoundaryValue;
     else Assert(False);
   end;
 end;
@@ -1087,7 +1125,7 @@ begin
   CreateObservers;
 
   PestFhbBoundaryFormula := '';
-  PestFhbBoundaryMethod := DefaultBoundaryMethod(BoundaryValuePosition);
+  PestFhbBoundaryMethod := DefaultBoundaryMethod(FhbBoundaryValuePosition);
 end;
 
 procedure TFhbHeadBoundary.CreateFormulaObjects;
@@ -1183,7 +1221,7 @@ function TFhbHeadBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   result := '';
   case FormulaIndex of
-    BoundaryValuePosition:
+    FhbBoundaryValuePosition:
       begin
         result := PestFhbBoundaryFormula;
       end;
@@ -1196,7 +1234,7 @@ function TFhbHeadBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    BoundaryValuePosition:
+    FhbBoundaryValuePosition:
       begin
         result := PestFhbBoundaryMethod;
       end;
@@ -1223,7 +1261,7 @@ begin
   Result := FPestFhbBoundaryFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(BoundaryValuePosition);
+    ResetBoundaryObserver(FhbBoundaryValuePosition);
   end;
 end;
 
@@ -1231,9 +1269,9 @@ procedure TFhbHeadBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestFhbBoundaryFormula then
   begin
-    if BoundaryValuePosition < FObserverList.Count then
+    if FhbBoundaryValuePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[BoundaryValuePosition]);
+      List.Add(FObserverList[FhbBoundaryValuePosition]);
     end;
   end;
 end;
@@ -1320,7 +1358,7 @@ procedure TFhbHeadBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
-    BoundaryValuePosition:
+    FhbBoundaryValuePosition:
       begin
         PestFhbBoundaryFormula := Value;
       end;
@@ -1336,7 +1374,7 @@ procedure TFhbHeadBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
-    BoundaryValuePosition:
+    FhbBoundaryValuePosition:
       begin
         PestFhbBoundaryMethod := Value;
       end;
@@ -1350,7 +1388,7 @@ end;
 
 procedure TFhbHeadBoundary.SetPestFhbBoundaryFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, BoundaryValuePosition, FPestFhbBoundaryFormula);
+  UpdateFormulaBlocks(Value, FhbBoundaryValuePosition, FPestFhbBoundaryFormula);
 end;
 
 class function TFhbFlowBoundary.BoundaryCollectionClass: TMF_BoundCollClass;

@@ -307,7 +307,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
 begin
     { DONE -cPEST : Add PEST support for PEST here }
     // handle pest data
@@ -332,34 +332,7 @@ begin
     FPestParamUsed := True;
   end;
 
-  if Model.PestUsed and WritingTemplate and
-    ((Drn_Cell.ElevationPest <> '') or (Drn_Cell.ElevationPestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Drn_Cell.Elevation, Drn_Cell.ElevationPest,
-      Drn_Cell.ElevationPestSeries, Drn_Cell.ElevationPestSeriesMethod, Drn_Cell);
-  end
-  else
-  begin
-    WriteFloat(Drn_Cell.Elevation);
-    if Drn_Cell.ElevationPest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drn_Cell.ElevationPest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Drn_Cell.ElevationPestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drn_Cell.ElevationPestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-  end;
+  WriteValueOrFormula(Drn_Cell, DrnElevationPosition);
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
@@ -382,34 +355,9 @@ begin
     WriteModflowParamFormula(ParameterName, Drn_Cell.ConductancePest,
       MultiplierValue, Drn_Cell);
   end
-  else if Model.PestUsed and WritingTemplate
-    and ((Drn_Cell.ConductancePest <> '') or (Drn_Cell.ConductancePestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Drn_Cell.Conductance, Drn_Cell.ConductancePest,
-      Drn_Cell.ConductancePestSeries, Drn_Cell.ConductancePestSeriesMethod,
-      Drn_Cell);
-  end
   else
   begin
-    WriteFloat(Drn_Cell.Conductance);
-    if Drn_Cell.ConductancePest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drn_Cell.ConductancePest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Drn_Cell.ConductancePestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drn_Cell.ConductancePestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
+    WriteValueOrFormula(Drn_Cell, DrnConductancePosition);
   end;
 
   WriteIface(Drn_Cell.IFace);

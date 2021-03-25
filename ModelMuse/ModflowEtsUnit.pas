@@ -420,6 +420,10 @@ resourcestring
   'is less than zero';
   StrEvaporationDepthFr = 'Evaporation depth or rate fractions not assigned';
 
+const
+  EtsSurfacePosition = 0;
+  EtsDepthPosition = 1;
+
 implementation
 
 uses ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit, TempFiles,
@@ -432,9 +436,6 @@ resourcestring
   'igned.';
 
 const
-  SurfacePosition = 0;
-  DepthPosition = 1;
-
   RateBoundaryPosition = 0;
   SurfaceBoundaryPosition = 1;
   DepthBoundaryPosition = 2;
@@ -1402,9 +1403,9 @@ var
   DepthObserver: TObserver;
 begin
   ParentCollection := Collection as TEtsSurfDepthCollection;
-  SurfaceObserver := FObserverList[SurfacePosition];
+  SurfaceObserver := FObserverList[EtsSurfacePosition];
   SurfaceObserver.OnUpToDateSet := ParentCollection.InvalidateEtSurface;
-  DepthObserver := FObserverList[DepthPosition];
+  DepthObserver := FObserverList[EtsDepthPosition];
   DepthObserver.OnUpToDateSet := ParentCollection.InvalidateEtDepth;
 end;
 
@@ -1451,8 +1452,8 @@ var
   Collection: TStringCollection;
 begin
   case Index of
-    SurfacePosition: result := EvapotranspirationSurface;
-    DepthPosition: result := EvapotranspirationDepth;
+    EtsSurfacePosition: result := EvapotranspirationSurface;
+    EtsDepthPosition: result := EvapotranspirationDepth;
     else
       begin
         Dec(Index, 2);
@@ -1478,13 +1479,13 @@ end;
 function TEtsSurfDepthItem.GetEvapotranspirationDepth: string;
 begin
   Result := FEvapotranspirationDepth.Formula;
-  ResetItemObserver(DepthPosition);
+  ResetItemObserver(EtsDepthPosition);
 end;
 
 function TEtsSurfDepthItem.GetEvapotranspirationSurface: string;
 begin
   Result := FEvapotranspirationSurface.Formula;
-  ResetItemObserver(SurfacePosition);
+  ResetItemObserver(EtsSurfacePosition);
 end;
 
 procedure TEtsSurfDepthItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -1494,11 +1495,11 @@ var
 begin
   if Sender = FEvapotranspirationSurface then
   begin
-    List.Add(FObserverList[SurfacePosition]);
+    List.Add(FObserverList[EtsSurfacePosition]);
   end;
   if Sender = FEvapotranspirationDepth then
   begin
-    List.Add(FObserverList[DepthPosition]);
+    List.Add(FObserverList[EtsDepthPosition]);
   end;
 
   for Index := 0 to EtFractions.Count - 1 do
@@ -1585,12 +1586,12 @@ end;
 
 procedure TEtsSurfDepthItem.SetEvapotranspirationDepth(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, DepthPosition, FEvapotranspirationDepth);
+  UpdateFormulaBlocks(Value, EtsDepthPosition, FEvapotranspirationDepth);
 end;
 
 procedure TEtsSurfDepthItem.SetEvapotranspirationSurface(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, SurfacePosition, FEvapotranspirationSurface);
+  UpdateFormulaBlocks(Value, EtsSurfacePosition, FEvapotranspirationSurface);
 end;
 
 { TEtsSurfDepthCollection }
@@ -1648,20 +1649,20 @@ begin
   SegmentCount := LocalModel.
     ModflowPackages.EtsPackage.SegmentCount;
   BoundaryIndex := 0;
-  EvapotranspirationSurfaceArray := DataSets[SurfacePosition];
-  EvapotranspirationDepthArray := DataSets[DepthPosition];
+  EvapotranspirationSurfaceArray := DataSets[EtsSurfacePosition];
+  EvapotranspirationDepthArray := DataSets[EtsDepthPosition];
   Boundary := Boundaries[ItemIndex, AModel] as TEtsSurfDepthStorage;
   EvapotranspirationSurfaceArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
 
-  LocalSurfacePestSeries := PestSeries[SurfacePosition];
-  LocalSurfacePestMethod := PestMethods[SurfacePosition];
-  SurfacePestItems := PestItemNames[SurfacePosition];
+  LocalSurfacePestSeries := PestSeries[EtsSurfacePosition];
+  LocalSurfacePestMethod := PestMethods[EtsSurfacePosition];
+  SurfacePestItems := PestItemNames[EtsSurfacePosition];
   LocalSurfacePest := SurfacePestItems[ItemIndex];
 
-  LocalDepthPestSeries := PestSeries[DepthPosition];
-  LocalDepthPestMethod := PestMethods[DepthPosition];
-  DepthPestItems := PestItemNames[DepthPosition];
+  LocalDepthPestSeries := PestSeries[EtsDepthPosition];
+  LocalDepthPestMethod := PestMethods[EtsDepthPosition];
+  DepthPestItems := PestItemNames[EtsDepthPosition];
   LocalDepthPest := DepthPestItems[ItemIndex];
 
   if LayerMin >= 0 then
@@ -2214,11 +2215,11 @@ end;
 function TEtsSurfDepth_Cell.GetPestName(Index: Integer): string;
 begin
   case Index of
-    SurfacePosition:
+    EtsSurfacePosition:
       begin
         result := SurfacePest;
       end;
-    DepthPosition:
+    EtsDepthPosition:
       begin
         result := DepthPest;
       end;
@@ -2234,11 +2235,11 @@ function TEtsSurfDepth_Cell.GetPestSeriesMethod(
   Index: Integer): TPestParamMethod;
 begin
   case Index of
-    SurfacePosition:
+    EtsSurfacePosition:
       begin
         result := SurfacePestMethod;
       end;
-    DepthPosition:
+    EtsDepthPosition:
       begin
         result := DepthPestMethod;
       end;
@@ -2253,11 +2254,11 @@ end;
 function TEtsSurfDepth_Cell.GetPestSeriesName(Index: Integer): string;
 begin
   case Index of
-    SurfacePosition:
+    EtsSurfacePosition:
       begin
         result := SurfacePestSeries;
       end;
-    DepthPosition:
+    EtsDepthPosition:
       begin
         result := DepthPestSeries;
       end;

@@ -9,10 +9,6 @@ uses
   JvxCheckListBox, ExtCtrls, Buttons, Mask, JvExMask, JvSpin, ArgusDataEntry,
   ModflowBoundaryUnit, frameScreenObjectUnit, Vcl.ComCtrls, GoPhastTypes;
 
-const
-  PestModifierRow = 1;
-  PestMethodRow = 2;
-
 type
   // See @link(TframeScreenObjectParam.UnselectableColumnsIfParametersUsed).
   TColumn = 0..255;
@@ -124,8 +120,6 @@ type
     // specified by Col.
     procedure GetEndTimes(Col: Integer);
     procedure SetButtonCaptions;
-//    Property PestMethod[ACol: Integer]: TPestParamMethod read GetPestMethod
-//      write SetPestMethod;
     property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
       write FOnCheckPestCell;
     Property PestMethod[ACol: Integer]: TPestParamMethod
@@ -172,12 +166,6 @@ var
   GridRect: TGridRect;
   ColIndex: Integer;
   RowIndex: Integer;
-//  DataArrayManager: TDataArrayManager;
-//  DataSetIndex: Integer;
-//  ADataArray: TDataArray;
-//  ModflowSteadyParameters: TModflowSteadyParameters;
-//  ParameterIndex: Integer;
-//  AParameter: TModflowSteadyParameter;
 begin
   seNumberOfTimes.AsInteger := 0;
   for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
@@ -199,21 +187,15 @@ begin
   end;
   rdgModflowBoundary.Cells[0, 0] := StrStartingTime;
   rdgModflowBoundary.Cells[1, 0] := StrEndingTime;
+  {$IFDEF PEST}
   rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
   rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
-
-//  rdgModflowBoundary
-
+  {$ENDIF}
   if Boundary <> nil then
   begin
     for Index := 0 to Boundary.Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
       ColIndex := FLastTimeColumn+1+Index;
-//      if ColIndex >= rdgModflowBoundary.ColCount then
-//      begin
-//        Continue;
-//      end;
-//      rdgModflowBoundary.Columns[2+Index].AutoAdjustColWidths := True;
       TimeList := Boundary.Values.TimeLists[Index, frmGoPhast.PhastModel];
       if Index = ConductanceColumn then
       begin

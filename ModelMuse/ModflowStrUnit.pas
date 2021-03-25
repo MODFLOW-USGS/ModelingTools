@@ -288,6 +288,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property Conductance: double read GetConductance;
     property Stage: double read GetStage;
@@ -575,18 +578,17 @@ type
       Stored False
       {$ENDIF}
       ;
-
   end;
 
 const
-  StreamConductancePosition = 0;
-  StreamBedTopPosition = 1;
-  StreamBedBottomPosition = 2;
-  StreamFlowPosition = 3;
-  StreamStagePosition = 4;
-  StreamWidthPosition = 5;
-  StreamSlopePosition = 6;
-  StreamRoughnessPosition = 7;
+  StrConductancePosition = 0;
+  StrBedTopPosition = 1;
+  StrBedBottomPosition = 2;
+  StrFlowPosition = 3;
+  StrStagePosition = 4;
+  StrWidthPosition = 5;
+  StrSlopePosition = 6;
+  StrRoughnessPosition = 7;
 
 implementation
 
@@ -845,21 +847,21 @@ var
   RoughnessObserver: TObserver;
 begin
   ParentCollection := Collection as TStrCollection;
-  StageObserver := FObserverList[StreamStagePosition];
+  StageObserver := FObserverList[StrStagePosition];
   StageObserver.OnUpToDateSet := ParentCollection.InvalidateStageData;
-  ConductanceObserver := FObserverList[StreamConductancePosition];
+  ConductanceObserver := FObserverList[StrConductancePosition];
   ConductanceObserver.OnUpToDateSet := ParentCollection.InvalidateConductanceData;
-  BedTopObserver := FObserverList[StreamBedTopPosition];
+  BedTopObserver := FObserverList[StrBedTopPosition];
   BedTopObserver.OnUpToDateSet := ParentCollection.InvalidateBedTopData;
-  BedBottomObserver := FObserverList[StreamBedBottomPosition];
+  BedBottomObserver := FObserverList[StrBedBottomPosition];
   BedBottomObserver.OnUpToDateSet := ParentCollection.InvalidateBedBottomData;
-  FlowObserver := FObserverList[StreamFlowPosition];
+  FlowObserver := FObserverList[StrFlowPosition];
   FlowObserver.OnUpToDateSet := ParentCollection.InvalidateFlowData;
-  WidthObserver := FObserverList[StreamWidthPosition];
+  WidthObserver := FObserverList[StrWidthPosition];
   WidthObserver.OnUpToDateSet := ParentCollection.InvalidateWidthData;
-  SlopeObserver := FObserverList[StreamSlopePosition];
+  SlopeObserver := FObserverList[StrSlopePosition];
   SlopeObserver.OnUpToDateSet := ParentCollection.InvalidateSlopeData;
-  RoughnessObserver := FObserverList[StreamRoughnessPosition];
+  RoughnessObserver := FObserverList[StrRoughnessPosition];
   RoughnessObserver.OnUpToDateSet := ParentCollection.InvalidateRoughnessData;
 end;
 
@@ -906,26 +908,26 @@ end;
 function TStrItem.GetBedBottom: string;
 begin
   Result := FBedBottom.Formula;
-  ResetItemObserver(StreamBedBottomPosition);
+  ResetItemObserver(StrBedBottomPosition);
 end;
 
 function TStrItem.GetBedTop: string;
 begin
   Result := FBedTop.Formula;
-  ResetItemObserver(StreamBedTopPosition);
+  ResetItemObserver(StrBedTopPosition);
 end;
 
 function TStrItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    StreamConductancePosition: result := Conductance;
-    StreamBedTopPosition: result := BedTop;
-    StreamBedBottomPosition: result := BedBottom;
-    StreamFlowPosition: result := Flow;
-    StreamStagePosition: result := Stage;
-    StreamWidthPosition: result := Width;
-    StreamSlopePosition: result := Slope;
-    StreamRoughnessPosition: result := Roughness;
+    StrConductancePosition: result := Conductance;
+    StrBedTopPosition: result := BedTop;
+    StrBedBottomPosition: result := BedBottom;
+    StrFlowPosition: result := Flow;
+    StrStagePosition: result := Stage;
+    StrWidthPosition: result := Width;
+    StrSlopePosition: result := Slope;
+    StrRoughnessPosition: result := Roughness;
     else Assert(False);
   end;
 end;
@@ -933,48 +935,48 @@ end;
 function TStrItem.GetConductance: string;
 begin
   Result := FConductance.Formula;
-  ResetItemObserver(StreamConductancePosition);
+  ResetItemObserver(StrConductancePosition);
 end;
 
 function TStrItem.GetFlow: string;
 begin
   Result := FFlow.Formula;
-  ResetItemObserver(StreamFlowPosition);
+  ResetItemObserver(StrFlowPosition);
 end;
 
 procedure TStrItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FConductance then
   begin
-    List.Add(FObserverList[StreamConductancePosition]);
+    List.Add(FObserverList[StrConductancePosition]);
   end;
   if Sender = FStage then
   begin
-    List.Add(FObserverList[StreamStagePosition]);
+    List.Add(FObserverList[StrStagePosition]);
   end;
   if Sender = FBedTop then
   begin
-    List.Add(FObserverList[StreamBedTopPosition]);
+    List.Add(FObserverList[StrBedTopPosition]);
   end;
   if Sender = FBedBottom then
   begin
-    List.Add(FObserverList[StreamBedBottomPosition]);
+    List.Add(FObserverList[StrBedBottomPosition]);
   end;
   if Sender = FFlow then
   begin
-    List.Add(FObserverList[StreamFlowPosition]);
+    List.Add(FObserverList[StrFlowPosition]);
   end;
   if Sender = FWidth then
   begin
-    List.Add(FObserverList[StreamWidthPosition]);
+    List.Add(FObserverList[StrWidthPosition]);
   end;
   if Sender = FSlope then
   begin
-    List.Add(FObserverList[StreamSlopePosition]);
+    List.Add(FObserverList[StrSlopePosition]);
   end;
   if Sender = FRoughness then
   begin
-    List.Add(FObserverList[StreamRoughnessPosition]);
+    List.Add(FObserverList[StrRoughnessPosition]);
   end;
 
 end;
@@ -982,7 +984,7 @@ end;
 function TStrItem.GetRoughness: string;
 begin
   Result := FRoughness.Formula;
-  ResetItemObserver(StreamRoughnessPosition);
+  ResetItemObserver(StrRoughnessPosition);
 end;
 
 function TStrItem.GetSegmentNumber: Integer;
@@ -998,19 +1000,19 @@ end;
 function TStrItem.GetSlope: string;
 begin
   Result := FSlope.Formula;
-  ResetItemObserver(StreamSlopePosition);
+  ResetItemObserver(StrSlopePosition);
 end;
 
 function TStrItem.GetStage: string;
 begin
   Result := FStage.Formula;
-  ResetItemObserver(StreamStagePosition);
+  ResetItemObserver(StrStagePosition);
 end;
 
 function TStrItem.GetWidth: string;
 begin
   Result := FWidth.Formula;
-  ResetItemObserver(StreamWidthPosition);
+  ResetItemObserver(StrWidthPosition);
 end;
 
 procedure TStrItem.InvalidateModel;
@@ -1090,32 +1092,32 @@ end;
 
 procedure TStrItem.SetBedBottom(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamBedBottomPosition, FBedBottom);
+  UpdateFormulaBlocks(Value, StrBedBottomPosition, FBedBottom);
 end;
 
 procedure TStrItem.SetBedTop(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamBedTopPosition, FBedTop);
+  UpdateFormulaBlocks(Value, StrBedTopPosition, FBedTop);
 end;
 
 procedure TStrItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    StreamConductancePosition:
+    StrConductancePosition:
       Conductance := Value;
-    StreamBedTopPosition:
+    StrBedTopPosition:
       BedTop := Value;
-    StreamBedBottomPosition:
+    StrBedBottomPosition:
       BedBottom := Value;
-    StreamFlowPosition:
+    StrFlowPosition:
       Flow := Value;
-    StreamStagePosition:
+    StrStagePosition:
       Stage := Value;
-    StreamWidthPosition:
+    StrWidthPosition:
       Width := Value;
-    StreamSlopePosition:
+    StrSlopePosition:
       Slope := Value;
-    StreamRoughnessPosition:
+    StrRoughnessPosition:
       Roughness := Value;
     else Assert(False);
   end;
@@ -1123,7 +1125,7 @@ end;
 
 procedure TStrItem.SetConductance(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamConductancePosition, FConductance);
+  UpdateFormulaBlocks(Value, StrConductancePosition, FConductance);
 end;
 
 procedure TStrItem.SetDiversionSegment(const Value: integer);
@@ -1145,7 +1147,7 @@ end;
 
 procedure TStrItem.SetFlow(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamFlowPosition, FFlow);
+  UpdateFormulaBlocks(Value, StrFlowPosition, FFlow);
 end;
 
 procedure TStrItem.SetOutflowSegment(const Value: integer);
@@ -1167,22 +1169,22 @@ end;
 
 procedure TStrItem.SetRoughness(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamRoughnessPosition, FRoughness);
+  UpdateFormulaBlocks(Value, StrRoughnessPosition, FRoughness);
 end;
 
 procedure TStrItem.SetSlope(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamSlopePosition, FSlope);
+  UpdateFormulaBlocks(Value, StrSlopePosition, FSlope);
 end;
 
 procedure TStrItem.SetStage(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamStagePosition, FStage);
+  UpdateFormulaBlocks(Value, StrStagePosition, FStage);
 end;
 
 procedure TStrItem.SetWidth(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamWidthPosition, FWidth);
+  UpdateFormulaBlocks(Value, StrWidthPosition, FWidth);
 end;
 
 { TStrTimeListLink }
@@ -1304,7 +1306,7 @@ var
   Item: TStrItem;
 begin
   Item := Items[ItemIndex] as TStrItem;
-  if FormulaIndex = StreamConductancePosition then
+  if FormulaIndex = StrConductancePosition then
   begin
     Boundary := BoundaryGroup as TStrBoundary;
     ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -1367,9 +1369,9 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  Assert(BoundaryFunctionIndex in [StreamStagePosition, StreamConductancePosition,
-    StreamBedTopPosition, StreamBedBottomPosition, StreamFlowPosition,
-    StreamWidthPosition, StreamSlopePosition, StreamRoughnessPosition]);
+  Assert(BoundaryFunctionIndex in [StrStagePosition, StrConductancePosition,
+    StrBedTopPosition, StrBedBottomPosition, StrFlowPosition,
+    StrWidthPosition, StrSlopePosition, StrRoughnessPosition]);
   Assert(Expression <> nil);
 
   StrStorage := BoundaryStorage as TStrStorage;
@@ -1384,7 +1386,7 @@ begin
     with StrStorage.StrArray[Index] do
     begin
       case BoundaryFunctionIndex of
-        StreamConductancePosition:
+        StrConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
@@ -1392,7 +1394,7 @@ begin
             ConductancePestSeriesName := PestSeriesName;
             ConductancePestSeriesMethod := PestSeriesMethod;
           end;
-        StreamBedTopPosition:
+        StrBedTopPosition:
           begin
             BedTop := Expression.DoubleResult;
             BedTopAnnotation := ACell.Annotation;
@@ -1400,7 +1402,7 @@ begin
             BedTopPestSeriesName := PestSeriesName;
             BedTopPestSeriesMethod := PestSeriesMethod;
           end;
-        StreamBedBottomPosition:
+        StrBedBottomPosition:
           begin
             BedBottom := Expression.DoubleResult;
             BedBottomAnnotation := ACell.Annotation;
@@ -1408,7 +1410,7 @@ begin
             BedBottomPestSeriesName := PestSeriesName;
             BedBottomPestSeriesMethod := PestSeriesMethod;
           end;
-        StreamFlowPosition:
+        StrFlowPosition:
           begin
             Flow := Expression.DoubleResult;
             FlowAnnotation := ACell.Annotation;
@@ -1416,7 +1418,7 @@ begin
             FlowPestSeriesName := PestSeriesName;
             FlowPestSeriesMethod := PestSeriesMethod;
           end;
-        StreamStagePosition:
+        StrStagePosition:
           begin
             Stage := Expression.DoubleResult;
             StageAnnotation := ACell.Annotation;
@@ -1424,7 +1426,7 @@ begin
             StagePestSeriesName := PestSeriesName;
             StagePestSeriesMethod := PestSeriesMethod;
           end;
-        StreamWidthPosition:
+        StrWidthPosition:
           begin
             Width := Expression.DoubleResult;
             WidthAnnotation := ACell.Annotation;
@@ -1432,7 +1434,7 @@ begin
             WidthPestSeriesName := PestSeriesName;
             WidthPestSeriesMethod := PestSeriesMethod;
           end;
-        StreamSlopePosition:
+        StrSlopePosition:
           begin
             Slope := Expression.DoubleResult;
             SlopeAnnotation := ACell.Annotation;
@@ -1440,7 +1442,7 @@ begin
             SlopePestSeriesName := PestSeriesName;
             SlopePestSeriesMethod := PestSeriesMethod;
           end;
-        StreamRoughnessPosition:
+        StrRoughnessPosition:
           begin
             Roughness := Expression.DoubleResult;
             RoughnessAnnotation := ACell.Annotation;
@@ -1932,19 +1934,76 @@ begin
 end;
 
 
+function TStr_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    StrConductancePosition: result := ConductancePest;
+    StrBedTopPosition: result := BedTopPest;
+    StrBedBottomPosition: result := BedBottomPest;
+    StrFlowPosition: result := FlowPest;
+    StrStagePosition: result := StagePest;
+    StrWidthPosition: result := WidthPest;
+    StrSlopePosition: result := SlopePest;
+    StrRoughnessPosition: result := RoughnessPest;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TStr_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    StrConductancePosition: result := ConductancePestSeriesMethod;
+    StrBedTopPosition: result := BedTopPestSeriesMethod;
+    StrBedBottomPosition: result := BedBottomPestSeriesMethod;
+    StrFlowPosition: result := FlowPestSeriesMethod;
+    StrStagePosition: result := StagePestSeriesMethod;
+    StrWidthPosition: result := WidthPestSeriesMethod;
+    StrSlopePosition: result := SlopePestSeriesMethod;
+    StrRoughnessPosition: result := RoughnessPestSeriesMethod;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TStr_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    StrConductancePosition: result := ConductancePestSeriesName;
+    StrBedTopPosition: result := BedTopPestSeriesName;
+    StrBedBottomPosition: result := BedBottomPestSeriesName;
+    StrFlowPosition: result := FlowPestSeriesName;
+    StrStagePosition: result := StagePestSeriesName;
+    StrWidthPosition: result := WidthPestSeriesName;
+    StrSlopePosition: result := SlopePestSeriesName;
+    StrRoughnessPosition: result := RoughnessPestSeriesName;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
 function TStr_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
   result := '';
   case Index of
-    StreamConductancePosition: result := ConductanceAnnotation;
-    StreamBedTopPosition: result := BedTopAnnotation;
-    StreamBedBottomPosition: result := BedBottomAnnotation;
-    StreamFlowPosition: result := FlowAnnotation;
-    StreamStagePosition: result := StageAnnotation;
-    StreamWidthPosition: result := WidthAnnotation;
-    StreamSlopePosition: result := SlopeAnnotation;
-    StreamRoughnessPosition: result := RoughnessAnnotation;
+    StrConductancePosition: result := ConductanceAnnotation;
+    StrBedTopPosition: result := BedTopAnnotation;
+    StrBedBottomPosition: result := BedBottomAnnotation;
+    StrFlowPosition: result := FlowAnnotation;
+    StrStagePosition: result := StageAnnotation;
+    StrWidthPosition: result := WidthAnnotation;
+    StrSlopePosition: result := SlopeAnnotation;
+    StrRoughnessPosition: result := RoughnessAnnotation;
     else Assert(False);
   end;
 end;
@@ -1953,14 +2012,14 @@ function TStr_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    StreamConductancePosition: result := Conductance;
-    StreamBedTopPosition: result := BedTop;
-    StreamBedBottomPosition: result := BedBottom;
-    StreamFlowPosition: result := Flow;
-    StreamStagePosition: result := Stage;
-    StreamWidthPosition: result := Width;
-    StreamSlopePosition: result := Slope;
-    StreamRoughnessPosition: result := Roughness;
+    StrConductancePosition: result := Conductance;
+    StrBedTopPosition: result := BedTop;
+    StrBedBottomPosition: result := BedBottom;
+    StrFlowPosition: result := Flow;
+    StrStagePosition: result := Stage;
+    StrWidthPosition: result := Width;
+    StrSlopePosition: result := Slope;
+    StrRoughnessPosition: result := Roughness;
     else Assert(False);
   end;
 end;
@@ -2159,7 +2218,7 @@ begin
     SlopePest := StrBoundary.SlopePest;
     RoughnessPest := StrBoundary.RoughnessPest;
 
-    for Index := StreamConductancePosition to StreamRoughnessPosition do
+    for Index := StrConductancePosition to StrRoughnessPosition do
     begin
       PestBoundaryMethod[Index] := StrBoundary.PestBoundaryMethod[Index];
     end;
@@ -2247,14 +2306,14 @@ begin
   WidthPest := '';
   SlopePest := '';
   RoughnessPest := '';
-  FConductancePestMethod := DefaultBoundaryMethod(StreamConductancePosition);
-  BedTopPestMethod := DefaultBoundaryMethod(StreamBedTopPosition);
-  BedBottomPestMethod := DefaultBoundaryMethod(StreamBedBottomPosition);
-  FlowPestMethod := DefaultBoundaryMethod(StreamFlowPosition);
-  StagePestMethod := DefaultBoundaryMethod(StreamStagePosition);
-  WidthPestMethod := DefaultBoundaryMethod(StreamWidthPosition);
-  SlopePestMethod := DefaultBoundaryMethod(StreamSlopePosition);
-  RoughnessPestMethod := DefaultBoundaryMethod(StreamRoughnessPosition);
+  FConductancePestMethod := DefaultBoundaryMethod(StrConductancePosition);
+  BedTopPestMethod := DefaultBoundaryMethod(StrBedTopPosition);
+  BedBottomPestMethod := DefaultBoundaryMethod(StrBedBottomPosition);
+  FlowPestMethod := DefaultBoundaryMethod(StrFlowPosition);
+  StagePestMethod := DefaultBoundaryMethod(StrStagePosition);
+  WidthPestMethod := DefaultBoundaryMethod(StrWidthPosition);
+  SlopePestMethod := DefaultBoundaryMethod(StrSlopePosition);
+  RoughnessPestMethod := DefaultBoundaryMethod(StrRoughnessPosition);
 end;
 
 procedure TStrBoundary.CreateFormulaObjects;
@@ -2288,35 +2347,35 @@ class function TStrBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    StreamConductancePosition:
+    StrConductancePosition:
       begin
         result := ppmMultiply;
       end;
-    StreamBedTopPosition:
+    StrBedTopPosition:
       begin
         result := ppmAdd;
       end;
-    StreamBedBottomPosition:
+    StrBedBottomPosition:
       begin
         result := ppmAdd;
       end;
-    StreamFlowPosition:
+    StrFlowPosition:
       begin
         result := ppmMultiply;
       end;
-    StreamStagePosition:
+    StrStagePosition:
       begin
         result := ppmAdd;
       end;
-    StreamWidthPosition:
+    StrWidthPosition:
       begin
         result := ppmAdd;
       end;
-    StreamSlopePosition:
+    StrSlopePosition:
       begin
         result := ppmMultiply;
       end;
-    StreamRoughnessPosition:
+    StrRoughnessPosition:
       begin
         result := ppmMultiply;
       end;
@@ -2360,7 +2419,7 @@ begin
   Result := FStreamBedBottomFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamBedBottomPosition);
+    ResetBoundaryObserver(StrBedBottomPosition);
   end;
 end;
 
@@ -2379,7 +2438,7 @@ begin
   Result := FStreamBedTopFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamBedTopPosition);
+    ResetBoundaryObserver(StrBedTopPosition);
   end;
 end;
 
@@ -2509,7 +2568,7 @@ begin
   Result := FStreamConductanceFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamConductancePosition);
+    ResetBoundaryObserver(StrConductancePosition);
   end;
 end;
 
@@ -2528,7 +2587,7 @@ begin
   Result := FStreamFlowFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamFlowPosition);
+    ResetBoundaryObserver(StrFlowPosition);
   end;
 end;
 
@@ -2546,35 +2605,35 @@ function TStrBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   result := '';
   case FormulaIndex of
-    StreamConductancePosition:
+    StrConductancePosition:
       begin
         result := ConductancePest;
       end;
-    StreamBedTopPosition:
+    StrBedTopPosition:
       begin
         result := BedTopPest;
       end;
-    StreamBedBottomPosition:
+    StrBedBottomPosition:
       begin
         result := BedBottomPest;
       end;
-    StreamFlowPosition:
+    StrFlowPosition:
       begin
         result := FlowPest;
       end;
-    StreamStagePosition:
+    StrStagePosition:
       begin
         result := StagePest;
       end;
-    StreamWidthPosition:
+    StrWidthPosition:
       begin
         result := WidthPest;
       end;
-    StreamSlopePosition:
+    StrSlopePosition:
       begin
         result := SlopePest;
       end;
-    StreamRoughnessPosition:
+    StrRoughnessPosition:
       begin
         result := RoughnessPest;
       end;
@@ -2587,35 +2646,35 @@ function TStrBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    StreamConductancePosition:
+    StrConductancePosition:
       begin
         result := ConductancePestMethod;
       end;
-    StreamBedTopPosition:
+    StrBedTopPosition:
       begin
         result := BedTopPestMethod;
       end;
-    StreamBedBottomPosition:
+    StrBedBottomPosition:
       begin
         result := BedBottomPestMethod;
       end;
-    StreamFlowPosition:
+    StrFlowPosition:
       begin
         result := FlowPestMethod;
       end;
-    StreamStagePosition:
+    StrStagePosition:
       begin
         result := StagePestMethod;
       end;
-    StreamWidthPosition:
+    StrWidthPosition:
       begin
         result := WidthPestMethod;
       end;
-    StreamSlopePosition:
+    StrSlopePosition:
       begin
         result := SlopePestMethod;
       end;
-    StreamRoughnessPosition:
+    StrRoughnessPosition:
       begin
         result := RoughnessPestMethod;
       end;
@@ -2629,65 +2688,65 @@ procedure TStrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FStreamConductanceFormula then
   begin
-    if StreamConductancePosition < FObserverList.Count then
+    if StrConductancePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamConductancePosition]);
+      List.Add(FObserverList[StrConductancePosition]);
     end;
   end;
 
   if Sender = FStreamBedTopFormula then
   begin
-    if StreamBedTopPosition < FObserverList.Count then
+    if StrBedTopPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamBedTopPosition]);
+      List.Add(FObserverList[StrBedTopPosition]);
     end;
   end;
 
   if Sender = FStreamBedBottomFormula then
   begin
-    if StreamBedBottomPosition < FObserverList.Count then
+    if StrBedBottomPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamBedBottomPosition]);
+      List.Add(FObserverList[StrBedBottomPosition]);
     end;
   end;
 
   if Sender = FStreamFlowFormula then
   begin
-    if StreamFlowPosition < FObserverList.Count then
+    if StrFlowPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamFlowPosition]);
+      List.Add(FObserverList[StrFlowPosition]);
     end;
   end;
 
   if Sender = FStreamStageFormula then
   begin
-    if StreamStagePosition < FObserverList.Count then
+    if StrStagePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamStagePosition]);
+      List.Add(FObserverList[StrStagePosition]);
     end;
   end;
 
   if Sender = FStreamWidthFormula then
   begin
-    if StreamWidthPosition < FObserverList.Count then
+    if StrWidthPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamWidthPosition]);
+      List.Add(FObserverList[StrWidthPosition]);
     end;
   end;
 
   if Sender = FStreamSlopeFormula then
   begin
-    if StreamSlopePosition < FObserverList.Count then
+    if StrSlopePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamSlopePosition]);
+      List.Add(FObserverList[StrSlopePosition]);
     end;
   end;
 
   if Sender = FStreamRoughnessFormula then
   begin
-    if StreamRoughnessPosition < FObserverList.Count then
+    if StrRoughnessPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StreamRoughnessPosition]);
+      List.Add(FObserverList[StrRoughnessPosition]);
     end;
   end;
 end;
@@ -2697,7 +2756,7 @@ begin
   Result := FStreamRoughnessFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamRoughnessPosition);
+    ResetBoundaryObserver(StrRoughnessPosition);
   end;
 end;
 
@@ -2716,7 +2775,7 @@ begin
   Result := FStreamSlopeFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamSlopePosition);
+    ResetBoundaryObserver(StrSlopePosition);
   end;
 end;
 
@@ -2735,7 +2794,7 @@ begin
   Result := FStreamStageFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamStagePosition);
+    ResetBoundaryObserver(StrStagePosition);
   end;
 end;
 
@@ -2764,7 +2823,7 @@ begin
   Result := FStreamWidthFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreamWidthPosition);
+    ResetBoundaryObserver(StrWidthPosition);
   end;
 end;
 
@@ -3035,7 +3094,7 @@ end;
 
 procedure TStrBoundary.SetBedBottomPest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamBedBottomPosition, FStreamBedBottomFormula);
+  UpdateFormulaBlocks(Value, StrBedBottomPosition, FStreamBedBottomFormula);
 end;
 
 procedure TStrBoundary.SetBedBottomPestMethod(const Value: TPestParamMethod);
@@ -3045,7 +3104,7 @@ end;
 
 procedure TStrBoundary.SetBedTopPest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamBedTopPosition, FStreamBedTopFormula);
+  UpdateFormulaBlocks(Value, StrBedTopPosition, FStreamBedTopFormula);
 end;
 
 procedure TStrBoundary.SetBedTopPestMethod(const Value: TPestParamMethod);
@@ -3055,7 +3114,7 @@ end;
 
 procedure TStrBoundary.SetConductancePest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamConductancePosition, FStreamConductanceFormula);
+  UpdateFormulaBlocks(Value, StrConductancePosition, FStreamConductanceFormula);
 end;
 
 procedure TStrBoundary.SetConductancePestMethod(const Value: TPestParamMethod);
@@ -3065,7 +3124,7 @@ end;
 
 procedure TStrBoundary.SetFlowPest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamFlowPosition, FStreamFlowFormula);
+  UpdateFormulaBlocks(Value, StrFlowPosition, FStreamFlowFormula);
 end;
 
 procedure TStrBoundary.SetFlowPestMethod(const Value: TPestParamMethod);
@@ -3077,35 +3136,35 @@ procedure TStrBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
-    StreamConductancePosition:
+    StrConductancePosition:
       begin
         ConductancePest := Value;
       end;
-    StreamBedTopPosition:
+    StrBedTopPosition:
       begin
         BedTopPest := Value;
       end;
-    StreamBedBottomPosition:
+    StrBedBottomPosition:
       begin
         BedBottomPest := Value;
       end;
-    StreamFlowPosition:
+    StrFlowPosition:
       begin
         FlowPest := Value;
       end;
-    StreamStagePosition:
+    StrStagePosition:
       begin
         StagePest := Value;
       end;
-    StreamWidthPosition:
+    StrWidthPosition:
       begin
         WidthPest := Value;
       end;
-    StreamSlopePosition:
+    StrSlopePosition:
       begin
         SlopePest := Value;
       end;
-    StreamRoughnessPosition:
+    StrRoughnessPosition:
       begin
         RoughnessPest := Value;
       end;
@@ -3118,35 +3177,35 @@ procedure TStrBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
-    StreamConductancePosition:
+    StrConductancePosition:
       begin
         ConductancePestMethod := Value;
       end;
-    StreamBedTopPosition:
+    StrBedTopPosition:
       begin
         BedTopPestMethod := Value;
       end;
-    StreamBedBottomPosition:
+    StrBedBottomPosition:
       begin
         BedBottomPestMethod := Value;
       end;
-    StreamFlowPosition:
+    StrFlowPosition:
       begin
         FlowPestMethod := Value;
       end;
-    StreamStagePosition:
+    StrStagePosition:
       begin
         StagePestMethod := Value;
       end;
-    StreamWidthPosition:
+    StrWidthPosition:
       begin
         WidthPestMethod := Value;
       end;
-    StreamSlopePosition:
+    StrSlopePosition:
       begin
         SlopePestMethod := Value;
       end;
-    StreamRoughnessPosition:
+    StrRoughnessPosition:
       begin
         RoughnessPestMethod := Value;
       end;
@@ -3158,7 +3217,7 @@ end;
 
 procedure TStrBoundary.SetRoughnessPest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamRoughnessPosition, FStreamRoughnessFormula);
+  UpdateFormulaBlocks(Value, StrRoughnessPosition, FStreamRoughnessFormula);
 end;
 
 procedure TStrBoundary.SetRoughnessPestMethod(const Value: TPestParamMethod);
@@ -3233,7 +3292,7 @@ end;
 
 procedure TStrBoundary.SetSlopePest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamSlopePosition, FStreamSlopeFormula);
+  UpdateFormulaBlocks(Value, StrSlopePosition, FStreamSlopeFormula);
 end;
 
 procedure TStrBoundary.SetSlopePestMethod(const Value: TPestParamMethod);
@@ -3243,7 +3302,7 @@ end;
 
 procedure TStrBoundary.SetStagePest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamStagePosition, FStreamStageFormula);
+  UpdateFormulaBlocks(Value, StrStagePosition, FStreamStageFormula);
 end;
 
 procedure TStrBoundary.SetStagePestMethod(const Value: TPestParamMethod);
@@ -3253,7 +3312,7 @@ end;
 
 procedure TStrBoundary.SetWidthPest(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreamWidthPosition, FStreamWidthFormula);
+  UpdateFormulaBlocks(Value, StrWidthPosition, FStreamWidthFormula);
 end;
 
 procedure TStrBoundary.SetWidthPestMethod(const Value: TPestParamMethod);

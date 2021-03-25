@@ -265,66 +265,9 @@ begin
     FPestParamUsed := True;
   end;
 
-  if Model.PestUsed and WritingTemplate and
-    ((Drt_Cell.ElevationPest <> '') or (Drt_Cell.ElevationPestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Drt_Cell.Elevation, Drt_Cell.ElevationPest,
-      Drt_Cell.ElevationPestSeries, Drt_Cell.ElevationPestSeriesMethod, Drt_Cell);
-  end
-  else
-  begin
-    WriteFloat(Drt_Cell.Elevation);
-    if Drt_Cell.ElevationPest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drt_Cell.ElevationPest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Drt_Cell.ElevationPestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drt_Cell.ElevationPestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-  end;
+  WriteValueOrFormula(Drt_Cell, DrtElevationPosition);
 
-  if Model.PestUsed and WritingTemplate
-    and ((Drt_Cell.ConductancePest <> '') or (Drt_Cell.ConductancePestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Drt_Cell.Conductance, Drt_Cell.ConductancePest,
-      Drt_Cell.ConductancePestSeries, Drt_Cell.ConductancePestSeriesMethod,
-      Drt_Cell);
-  end
-  else
-  begin
-    WriteFloat(Drt_Cell.Conductance);
-    if Drt_Cell.ConductancePest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drt_Cell.ConductancePest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Drt_Cell.ConductancePestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Drt_Cell.ConductancePestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-  end;
-
-
+  WriteValueOrFormula(Drt_Cell, DrtConductancePosition);
 
 //  WriteFloat(Drt_Cell.Elevation);
 //  WriteFloat(Drt_Cell.Conductance);
@@ -343,35 +286,7 @@ begin
     WriteInteger(Drt_Cell.ReturnCell.Row);
     WriteInteger(Drt_Cell.ReturnCell.Column);
 
-    if Model.PestUsed and WritingTemplate
-      and ((Drt_Cell.ReturnFractionPest <> '') or (Drt_Cell.ReturnFractionPestSeries <> '')) then
-    begin
-      WritePestTemplateFormula(Drt_Cell.ReturnFraction, Drt_Cell.ReturnFractionPest,
-        Drt_Cell.ReturnFractionPestSeries, Drt_Cell.ReturnFractionPestSeriesMethod,
-        Drt_Cell);
-    end
-    else
-    begin
-      WriteFloat(Drt_Cell.ReturnFraction);
-      if Drt_Cell.ReturnFractionPest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          Drt_Cell.ReturnFractionPest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if Drt_Cell.ReturnFractionPestSeries <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          Drt_Cell.ReturnFractionPestSeries);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(Drt_Cell, DrtReturnPosition);
 
 //    WriteFloat(Drt_Cell.ReturnFraction);
   end

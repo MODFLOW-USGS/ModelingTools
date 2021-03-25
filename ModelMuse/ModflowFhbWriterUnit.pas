@@ -782,40 +782,7 @@ var
   var
     DataArray: TDataArray;
   begin
-    if Model.PestUsed and WritingTemplate
-    and ((Cell.BoundaryValuePest <> '') or (Cell.BoundaryValuePestSeriesName <> '')) then
-    begin
-      WritePestTemplateFormula(Cell.BoundaryValue, Cell.BoundaryValuePest,
-        Cell.BoundaryValuePestSeriesName, Cell.BoundaryValuePestSeriesMethod,
-        Cell);
-    end
-    else
-    begin
-      if ((Cell.BoundaryValuePest <> '')
-        or (Cell.BoundaryValuePestSeriesName <> '')) then
-      begin
-        FPestParamUsed := True;
-      end;
-      WriteFloat(Cell.BoundaryValue);
-      if Cell.BoundaryValuePest <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          Cell.BoundaryValuePest);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-      if Cell.BoundaryValuePestSeriesName <> '' then
-      begin
-        DataArray := Model.DataArrayManager.GetDataSetByName(
-          Cell.BoundaryValuePestSeriesName);
-        if DataArray <> nil then
-        begin
-          AddUsedPestDataArray(DataArray);
-        end;
-      end;
-    end;
+    WriteValueOrFormula(Cell, FhbBoundaryValuePosition);
 //    WriteFloat(Cell.BoundaryValue);
   end;
 begin

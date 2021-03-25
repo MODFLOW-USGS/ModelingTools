@@ -63,9 +63,6 @@ type
   // @name is stored by @link(TWellCollection).
   TWellItem = class(TCustomModflowBoundaryItem)
   private
-    const
-      PumpingRatePosition = 0;
-    var
     // See @link(PumpingRate).
     FPumpingRate: TFormulaObject;
     // See @link(PumpingRate).
@@ -171,6 +168,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property PumpingRate: double read GetPumpingRate;
     property TimeSeriesName: string read GetTimeSeriesName;
@@ -199,9 +199,6 @@ type
   // @seealso(TWellCollection)
   TMfWellBoundary = class(TSpecificModflowBoundary)
   private
-    const
-      PumpingRatePosition = 0;
-    var
     FMaxTabCells: Integer;
     FTabFileName: string;
     FRelativeTabFileName: string;
@@ -293,6 +290,9 @@ type
 resourcestring
   StrWellFormulaError = 'Pumping rate set to zero because of a math error';
 
+const
+  WelPumpingRatePosition = 0;
+
 implementation
 
 uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
@@ -301,9 +301,6 @@ uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
 
 resourcestring
   StrPumpingRateMultip = ' pumping rate multiplier';
-
-//const
-//  PumpingRatePosition = 0;
 
 { TWellItem }
 
@@ -323,7 +320,7 @@ var
   PumpingRateObserver: TObserver;
 begin
   ParentCollection := Collection as TWellCollection;
-  PumpingRateObserver := FObserverList[PumpingRatePosition];
+  PumpingRateObserver := FObserverList[WelPumpingRatePosition];
   PumpingRateObserver.OnUpToDateSet := ParentCollection.InvalidatePumpingRateData;
 end;
 
@@ -346,7 +343,7 @@ end;
 function TWellItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    PumpingRatePosition: result := PumpingRate;
+    WelPumpingRatePosition: result := PumpingRate;
     else Assert(False);
   end;
 end;
@@ -354,13 +351,13 @@ end;
 procedure TWellItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   Assert(Sender = FPumpingRate);
-  List.Add(FObserverList[PumpingRatePosition]);
+  List.Add(FObserverList[WelPumpingRatePosition]);
 end;
 
 function TWellItem.GetPumpingRate: string;
 begin
   Result := FPumpingRate.Formula;
-  ResetItemObserver(PumpingRatePosition);
+  ResetItemObserver(WelPumpingRatePosition);
 end;
 
 procedure TWellItem.InvalidateModel;
@@ -400,14 +397,14 @@ procedure TWellItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   inherited;
   case Index of
-    PumpingRatePosition: PumpingRate := Value;
+    WelPumpingRatePosition: PumpingRate := Value;
     else Assert(False);
   end;
 end;
 
 procedure TWellItem.SetPumpingRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, PumpingRatePosition, FPumpingRate);
+  UpdateFormulaBlocks(Value, WelPumpingRatePosition, FPumpingRate);
 end;
 
 { TWellCollection }
@@ -662,6 +659,42 @@ begin
   result := Values.MvrUsed;
 end;
 
+function TWell_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    WelPumpingRatePosition: result := PumpingRatePest;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TWell_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    WelPumpingRatePosition: result := PumpingRatePestSeriesMethod;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TWell_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    WelPumpingRatePosition: result := PumpingRatePestSeries;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
 function TWell_Cell.GetPumpingParameterName: string;
 begin
   result := Values.PumpingParameterName;
@@ -701,7 +734,7 @@ function TWell_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): strin
 begin
   result := '';
   case Index of
-    0: result := PumpingRateAnnotation;
+    WelPumpingRatePosition: result := PumpingRateAnnotation;
     else Assert(False);
   end;
 end;
@@ -710,7 +743,7 @@ function TWell_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    0: result := PumpingRate;
+    WelPumpingRatePosition: result := PumpingRate;
     else Assert(False);
   end;
 end;
@@ -886,7 +919,7 @@ begin
   CreateObservers;
 
   PestPumpingRateFormula := '';
-  FPestPumpingRateMethod := DefaultBoundaryMethod(PumpingRatePosition);
+  FPestPumpingRateMethod := DefaultBoundaryMethod(WelPumpingRatePosition);
 end;
 
 procedure TMfWellBoundary.CreateFormulaObjects;
@@ -906,7 +939,7 @@ class function TMfWellBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    PumpingRatePosition:
+    WelPumpingRatePosition:
       begin
         result := ppmMultiply;
       end;
@@ -1096,7 +1129,7 @@ function TMfWellBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   result := '';
   case FormulaIndex of
-    PumpingRatePosition:
+    WelPumpingRatePosition:
       begin
         result := PestPumpingRateFormula;
       end;
@@ -1109,7 +1142,7 @@ function TMfWellBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    PumpingRatePosition:
+    WelPumpingRatePosition:
       begin
         result := PestPumpingRateMethod;
       end;
@@ -1124,7 +1157,7 @@ begin
   Result := FPestPumpingRateFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(PumpingRatePosition);
+    ResetBoundaryObserver(WelPumpingRatePosition);
   end;
 end;
 
@@ -1142,9 +1175,9 @@ procedure TMfWellBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestPumpingRateFormula then
   begin
-    if PumpingRatePosition < FObserverList.Count then
+    if WelPumpingRatePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[PumpingRatePosition]);
+      List.Add(FObserverList[WelPumpingRatePosition]);
     end;
   end;
 end;
@@ -1231,7 +1264,7 @@ procedure TMfWellBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
-    PumpingRatePosition:
+    WelPumpingRatePosition:
       begin
         PestPumpingRateFormula := Value;
       end;
@@ -1244,7 +1277,7 @@ procedure TMfWellBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
-    PumpingRatePosition:
+    WelPumpingRatePosition:
       begin
         PestPumpingRateMethod := Value;
       end;
@@ -1255,7 +1288,7 @@ end;
 
 procedure TMfWellBoundary.SetPestPumpingRateFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, PumpingRatePosition, FPestPumpingRateFormula);
+  UpdateFormulaBlocks(Value, WelPumpingRatePosition, FPestPumpingRateFormula);
 end;
 
 procedure TMfWellBoundary.SetPestPumpingRateMethod(

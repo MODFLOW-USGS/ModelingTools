@@ -628,6 +628,11 @@ resourcestring
   StrEvapotranspirationD_EVT = 'Evapotranspiration depth in the EVT package ' +
   'is less than or equal to zero';
 
+const
+  EvtRatePosition = 0;
+  EvtSurfacePosition = 0;
+  EvtDepthPosition = 1;
+
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
@@ -641,10 +646,7 @@ resourcestring
   StrEvapoTranspirationLayer = 'Evapo- transpiration layer';
 
 const
-  RatePosition = 0;
   LayerPosition = 0;
-  SurfacePosition = 0;
-  DepthPosition = 1;
 
   RateBoundaryPosition = 0;
   SurfaceBoundaryPosition = 1;
@@ -668,7 +670,7 @@ var
   RateObserver: TObserver;
 begin
   ParentCollection := Collection as TEvtCollection;
-  RateObserver := FObserverList[RatePosition];
+  RateObserver := FObserverList[EvtRatePosition];
   RateObserver.OnUpToDateSet := ParentCollection.InvalidateEtRateData;
 end;
 
@@ -691,7 +693,7 @@ end;
 function TEvtItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    RatePosition: result := EvapotranspirationRate;
+    EvtRatePosition: result := EvapotranspirationRate;
     else Assert(False);
   end;
 end;
@@ -699,13 +701,13 @@ end;
 function TEvtItem.GetEvapotranspirationRate: string;
 begin
   Result := FEvapotranspirationRate.Formula;
-  ResetItemObserver(RatePosition);
+  ResetItemObserver(EvtRatePosition);
 end;
 
 procedure TEvtItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   Assert(Sender = FEvapotranspirationRate);
-  List.Add(FObserverList[RatePosition]);
+  List.Add(FObserverList[EvtRatePosition]);
 end;
 
 function TEvtItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -729,14 +731,14 @@ end;
 procedure TEvtItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    RatePosition: EvapotranspirationRate := Value;
+    EvtRatePosition: EvapotranspirationRate := Value;
     else Assert(False);
   end;
 end;
 
 procedure TEvtItem.SetEvapotranspirationRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, RatePosition, FEvapotranspirationRate);
+  UpdateFormulaBlocks(Value, EvtRatePosition, FEvapotranspirationRate);
 end;
 
 { TEvtCollection }
@@ -769,17 +771,17 @@ var
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
-  EvapotranspirationRateArray := DataSets[RatePosition];
+  EvapotranspirationRateArray := DataSets[EvtRatePosition];
   Boundary := Boundaries[ItemIndex, AModel] as TEvtStorage;
   EvapotranspirationRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
 
   // Even when TEvtCollection is used with TUzfBoundary,
-  // RatePosition is the right variable to use here.
+  // EvtRatePosition is the right variable to use here.
 
-  LocalRatePestSeries := PestSeries[RatePosition];
-  LocalRatePestMethod := PestMethods[RatePosition];
-  RatePestItems := PestItemNames[RatePosition];
+  LocalRatePestSeries := PestSeries[EvtRatePosition];
+  LocalRatePestMethod := PestMethods[EvtRatePosition];
+  RatePestItems := PestItemNames[EvtRatePosition];
   LocalRatePest := RatePestItems[ItemIndex];
 
   if LayerMin >= 0 then
@@ -949,7 +951,7 @@ end;
 function TEvt_Cell.GetPestName(Index: Integer): string;
 begin
   case Index of
-    RatePosition:
+    EvtRatePosition:
       begin
         result := RatePest;
       end;
@@ -964,7 +966,7 @@ end;
 function TEvt_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
 begin
   case Index of
-    RatePosition:
+    EvtRatePosition:
       begin
         result := RatePestMethod;
       end;
@@ -979,7 +981,7 @@ end;
 function TEvt_Cell.GetPestSeriesName(Index: Integer): string;
 begin
   case Index of
-    RatePosition:
+    EvtRatePosition:
       begin
         result := RatePestSeries;
       end;
@@ -1015,7 +1017,7 @@ function TEvt_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): str
 begin
   result := '';
   case Index of
-    RatePosition: result := 'Assigned from the cell''s layer';
+    EvtRatePosition: result := 'Assigned from the cell''s layer';
     else Assert(False);
   end;
 end;
@@ -1024,7 +1026,7 @@ function TEvt_Cell.GetIntegerValue(Index: integer; AModel: TBaseModel): integer;
 begin
   result := 0;
   case Index of
-    RatePosition: result := (AModel as TCustomModel).
+    EvtRatePosition: result := (AModel as TCustomModel).
       DataSetLayerToModflowLayer(Layer);
     else Assert(False);
   end;
@@ -1049,7 +1051,7 @@ function TEvt_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string
 begin
   result := '';
   case Index of
-    RatePosition: result := EvapotranspirationRateAnnotation;
+    EvtRatePosition: result := EvapotranspirationRateAnnotation;
     else Assert(False);
   end;
 end;
@@ -1058,7 +1060,7 @@ function TEvt_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    RatePosition: result := EvapotranspirationRate;
+    EvtRatePosition: result := EvapotranspirationRate;
     else Assert(False);
   end;
 end;
@@ -2249,9 +2251,9 @@ var
   DepthObserver: TObserver;
 begin
   ParentCollection := Collection as TEvtSurfDepthCollection;
-  SurfaceObserver := FObserverList[SurfacePosition];
+  SurfaceObserver := FObserverList[EvtSurfacePosition];
   SurfaceObserver.OnUpToDateSet := ParentCollection.InvalidateSurfaceData;
-  DepthObserver := FObserverList[DepthPosition];
+  DepthObserver := FObserverList[EvtDepthPosition];
   DepthObserver.OnUpToDateSet := ParentCollection.InvalidateDepthData;
 end;
 
@@ -2277,8 +2279,8 @@ end;
 function TEvtSurfDepthItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    SurfacePosition: result := EvapotranspirationSurface;
-    DepthPosition: result := EvapotranspirationDepth;
+    EvtSurfacePosition: result := EvapotranspirationSurface;
+    EvtDepthPosition: result := EvapotranspirationDepth;
     else Assert(False);
   end;
 end;
@@ -2286,24 +2288,24 @@ end;
 function TEvtSurfDepthItem.GetEvapotranspirationDepth: string;
 begin
   Result := FEvapotranspirationDepth.Formula;
-  ResetItemObserver(DepthPosition);
+  ResetItemObserver(EvtDepthPosition);
 end;
 
 function TEvtSurfDepthItem.GetEvapotranspirationSurface: string;
 begin
   Result := FEvapotranspirationSurface.Formula;
-  ResetItemObserver(SurfacePosition);
+  ResetItemObserver(EvtSurfacePosition);
 end;
 
 procedure TEvtSurfDepthItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FEvapotranspirationSurface then
   begin
-    List.Add( FObserverList[SurfacePosition]);
+    List.Add( FObserverList[EvtSurfacePosition]);
   end;
   if Sender = FEvapotranspirationDepth then
   begin
-    List.Add( FObserverList[DepthPosition]);
+    List.Add( FObserverList[EvtDepthPosition]);
   end;
 end;
 
@@ -2333,20 +2335,20 @@ procedure TEvtSurfDepthItem.SetBoundaryFormula(Index: integer;
   const Value: string);
 begin
   case Index of
-    SurfacePosition: EvapotranspirationSurface := Value;
-    DepthPosition: EvapotranspirationDepth := Value;
+    EvtSurfacePosition: EvapotranspirationSurface := Value;
+    EvtDepthPosition: EvapotranspirationDepth := Value;
     else Assert(False);
   end;
 end;
 
 procedure TEvtSurfDepthItem.SetEvapotranspirationDepth(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, DepthPosition, FEvapotranspirationDepth);
+  UpdateFormulaBlocks(Value, EvtDepthPosition, FEvapotranspirationDepth);
 end;
 
 procedure TEvtSurfDepthItem.SetEvapotranspirationSurface(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, SurfacePosition, FEvapotranspirationSurface);
+  UpdateFormulaBlocks(Value, EvtSurfacePosition, FEvapotranspirationSurface);
 end;
 
 { TEvtSurfDepthCollection }
@@ -2385,20 +2387,20 @@ var
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
-  EvapotranspirationSurfaceArray := DataSets[SurfacePosition];
-  EvapotranspirationDepthArray := DataSets[DepthPosition];
+  EvapotranspirationSurfaceArray := DataSets[EvtSurfacePosition];
+  EvapotranspirationDepthArray := DataSets[EvtDepthPosition];
   Boundary := Boundaries[ItemIndex, AModel] as TEvtSurfDepthStorage;
   EvapotranspirationSurfaceArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
 
-  LocalSurfacePestSeries := PestSeries[SurfacePosition];
-  LocalSurfacePestMethod := PestMethods[SurfacePosition];
-  SurfacePestItems := PestItemNames[SurfacePosition];
+  LocalSurfacePestSeries := PestSeries[EvtSurfacePosition];
+  LocalSurfacePestMethod := PestMethods[EvtSurfacePosition];
+  SurfacePestItems := PestItemNames[EvtSurfacePosition];
   LocalSurfacePest := SurfacePestItems[ItemIndex];
 
-  LocalDepthPestSeries := PestSeries[DepthPosition];
-  LocalDepthPestMethod := PestMethods[DepthPosition];
-  DepthPestItems := PestItemNames[DepthPosition];
+  LocalDepthPestSeries := PestSeries[EvtDepthPosition];
+  LocalDepthPestMethod := PestMethods[EvtDepthPosition];
+  DepthPestItems := PestItemNames[EvtDepthPosition];
   LocalDepthPest := DepthPestItems[ItemIndex];
 
   if LayerMin >= 0 then
@@ -2671,11 +2673,11 @@ end;
 function TEvtSurfDepth_Cell.GetPestName(Index: Integer): string;
 begin
   case Index of
-    SurfacePosition:
+    EvtSurfacePosition:
       begin
         result := SurfacePest;
       end;
-    DepthPosition:
+    EvtDepthPosition:
       begin
         result := DepthPest;
       end;
@@ -2691,11 +2693,11 @@ function TEvtSurfDepth_Cell.GetPestSeriesMethod(
   Index: Integer): TPestParamMethod;
 begin
   case Index of
-    SurfacePosition:
+    EvtSurfacePosition:
       begin
         result := SurfacePestMethod;
       end;
-    DepthPosition:
+    EvtDepthPosition:
       begin
         result := DepthPestMethod;
       end;
@@ -2710,11 +2712,11 @@ end;
 function TEvtSurfDepth_Cell.GetPestSeriesName(Index: Integer): string;
 begin
   case Index of
-    SurfacePosition:
+    EvtSurfacePosition:
       begin
         result := SurfacePestSeries;
       end;
-    DepthPosition:
+    EvtDepthPosition:
       begin
         result := DepthPestSeries;
       end;
@@ -2731,8 +2733,8 @@ function TEvtSurfDepth_Cell.GetRealAnnotation(Index: integer;
 begin
   result := '';
   case Index of
-    SurfacePosition: result := EvapotranspirationSurfaceAnnotation;
-    DepthPosition: result := EvapotranspirationDepthAnnotation;
+    EvtSurfacePosition: result := EvapotranspirationSurfaceAnnotation;
+    EvtDepthPosition: result := EvapotranspirationDepthAnnotation;
     else Assert(False);
   end;
 end;
@@ -2742,8 +2744,8 @@ function TEvtSurfDepth_Cell.GetRealValue(Index: integer;
 begin
   result := 0;
   case Index of
-    SurfacePosition: result := EvapotranspirationSurface;
-    DepthPosition: result := EvapotranspirationDepth;
+    EvtSurfacePosition: result := EvapotranspirationSurface;
+    EvtDepthPosition: result := EvapotranspirationDepth;
     else Assert(False);
   end;
 end;

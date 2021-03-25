@@ -464,7 +464,7 @@ var
   StrItem: TStrItem;
   SegNum: Integer;
   Formula: string;
-  MethodIndex: Integer;
+//  MethodIndex: Integer;
 begin
   for Index := 0 to List.Count - 1 do
   begin
@@ -738,7 +738,7 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   NewItemIndex: Integer;
-  Index: Integer;
+//  Index: Integer;
 begin
   seSegmentNumber.Enabled := False;
   if comboFormulaInterp.ItemIndex <> Ord(Boundary.FormulaInterpretation) then

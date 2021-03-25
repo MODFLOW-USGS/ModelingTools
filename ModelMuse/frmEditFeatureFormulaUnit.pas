@@ -1433,7 +1433,7 @@ begin
             begin
               Boundary := FeatureTypeToBoundary(MF_SelectedType.FFeatureType,
                 ScreenObject);
-              if FormulaIndex <= StreamRoughnessPosition then
+              if FormulaIndex <= StrRoughnessPosition then
               begin
                 SetValueParamFormula(Boundary);
               end

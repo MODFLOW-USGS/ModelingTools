@@ -2756,6 +2756,10 @@ begin
   else if (Sender = frameScreenObjectUZF.rdgModflowBoundary) then
   begin
     PestParameterColumns := [2,3,4,5];
+  end
+  else if (Sender = frameScreenObjectUzfMf6.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [2..8];
   end;
 
   if not (ACol in PestParameterColumns) and (ARow >= 1) and (ARow <= PestRowOffset) then
@@ -5647,6 +5651,7 @@ begin
   frameEvtParam.OnCheckPestCell := EnablePestCells;
   frameEtsParam.OnCheckPestCell := EnablePestCells;
   frameScreenObjectUZF.OnCheckPestCell := EnablePestCells;
+  frameScreenObjectUzfMf6.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -25377,6 +25382,7 @@ begin
       or ((DataGrid = frameEvtParam.rdgModflowBoundary) and (ACol in [2,3,4]))
       or ((DataGrid = frameEtsParam.rdgModflowBoundary) and (ACol in [2,3,4]))
       or (DataGrid = frameScreenObjectUZF.rdgModflowBoundary)
+      or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
       ;
 
     // get the orientation of the data set.

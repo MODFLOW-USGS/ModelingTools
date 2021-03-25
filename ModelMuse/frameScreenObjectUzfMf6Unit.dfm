@@ -45,6 +45,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -68,6 +69,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -91,6 +93,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -114,6 +117,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -137,6 +141,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -160,6 +165,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -183,6 +189,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -206,6 +213,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -229,6 +237,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -250,7 +259,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
+      ExplicitTop = 53
       ExplicitWidth = 452
       ExplicitHeight = 100
     end
@@ -491,10 +500,6 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     object tabTime: TTabSheet
       Caption = 'Time varying properties'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
 end

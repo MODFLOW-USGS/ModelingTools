@@ -75,11 +75,45 @@ resourcestring
 { TframeScreenObjectUzfMf6 }
 
 procedure TframeScreenObjectUzfMf6.InitializeFrame;
+const
+  InfiltrationPosition = 6;
+  PotentialETPosition = 7;
+  ExtinctionDepthPosition = 8;
+  ExtinctionWaterContentPosition = 9;
+  AirEntryPotentialPosition = 10;
+  RootPotentialPosition = 11;
+  RootActivityPosition = 12;
 var
 //  RowIndex: Integer;
   ColIndex: Integer;
 begin
   pcUzf.ActivePageIndex := 0;
+
+  {$IFDEF PEST}
+  seNumberOfTimes.OnChange(seNumberOfTimes);
+  rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
+  rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
+  rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
+  rdgModflowBoundary.SpecialFormat[0, PestMethodRow] := rcf4String;
+  rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+  rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+
+  PestMethod[Ord(ucInfiltration)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(InfiltrationPosition);
+  PestMethod[Ord(ucPotentialEt)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(PotentialETPosition);
+  PestMethod[Ord(ucExtinctionDepth)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(ExtinctionDepthPosition);
+  PestMethod[Ord(ucExtinctionWaterContent)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(ExtinctionWaterContentPosition);
+  PestMethod[Ord(ucAirEntryPotential)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(AirEntryPotentialPosition);
+  PestMethod[Ord(ucRootPotential)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(RootPotentialPosition);
+  PestMethod[Ord(ucRootActivity)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(RootActivityPosition);
+  {$ENDIF}
+
   if FIntializedFrame then
   begin
     Exit;
@@ -87,9 +121,8 @@ begin
   FIntializedFrame := True;
 
   MoveGridToTabSheet(tabTime);
-//  pnlBottom.Parent := tabTime;
-//  pnlGrid.Align := alClient;
-//  pnlGrid.Parent := tabTime;
+
+  seNumberOfTimes.OnChange(seNumberOfTimes);
 
   rdgModflowBoundary.Cells[Ord(ucStartTime), 0] := StrStartingTime;
   rdgModflowBoundary.Cells[Ord(ucEndTime), 0] := StrEndingTime;
@@ -101,10 +134,13 @@ begin
   rdgModflowBoundary.Cells[Ord(ucRootPotential), 0] := StrRootPotential;
   rdgModflowBoundary.Cells[Ord(ucRootActivity), 0] := StrRootActivity;
 
+
   for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
   begin
     rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := False;
   end;
+
+
 end;
 
 procedure TframeScreenObjectUzfMf6.rdgModflowBoundarySelectCell(Sender: TObject;
@@ -113,9 +149,10 @@ var
   UzfCol: TUzfColumns;
 begin
   inherited;
+
   if CanSelect then
   begin
-    if (ARow >= rdgModflowBoundary.FixedRows) and (ACol >= 0) then
+    if (ARow >= rdgModflowBoundary.FixedRows+PestRowOffset) and (ACol >= 0) then
     begin
       UzfCol := TUzfColumns(ACol);
       case UzfCol of
@@ -198,17 +235,10 @@ begin
     FGroundwaterET := UzfMf6Package.GroundwaterET;
     FUnsatET := UzfMf6Package.UnsatET;
 
+    ClearGrid(rdgModflowBoundary);
     InitializeFrame;
     GetStartTimes(Ord(ucStartTime));
     GetEndTimes(Ord(ucEndTime));
-    ClearGrid(rdgModflowBoundary);
-
-//    edSurfaceDepressionDepth.Text := '';
-//    edVerticalSaturatedK.Text := '';
-//    edResidualWaterContent.Text := '';
-//    edSaturatedWaterContent.Text := '';
-//    edInitialWaterContent.Text := '';
-//    edBrooksCoreyEpsilon.Text := '';
 
     seNumberOfTimes.AsInteger := 0;
     FoundFirst := False;
@@ -230,29 +260,46 @@ begin
           edInitialWaterContent.Text := UzfBoundary.InitialWaterContent;
           edBrooksCoreyEpsilon.Text := UzfBoundary.BrooksCoreyEpsilon;
 
+          {$IFDEF PEST}
+          PestModifier[Ord(ucInfiltration)] := UzfBoundary.PestInfiltrationFormula;
+          PestMethod[Ord(ucInfiltration)] := UzfBoundary.PestInfiltrationMethod;
+          PestModifier[Ord(ucPotentialEt)] := UzfBoundary.PestPotentialETFormula;
+          PestMethod[Ord(ucPotentialEt)] := UzfBoundary.PestPotentialETMethod;
+          PestModifier[Ord(ucExtinctionDepth)] := UzfBoundary.PestExtinctionDepthFormula;
+          PestMethod[Ord(ucExtinctionDepth)] := UzfBoundary.PestExtinctionDepthMethod;
+          PestModifier[Ord(ucExtinctionWaterContent)] := UzfBoundary.PestExtinctionWaterContentFormula;
+          PestMethod[Ord(ucExtinctionWaterContent)] := UzfBoundary.PestExtinctionWaterContentMethod;
+          PestModifier[Ord(ucAirEntryPotential)] := UzfBoundary.PestAirEntryPotentialFormula;
+          PestMethod[Ord(ucAirEntryPotential)] := UzfBoundary.PestAirEntryPotentialMethod;
+          PestModifier[Ord(ucRootPotential)] := UzfBoundary.PestRootPotentialFormula;
+          PestMethod[Ord(ucRootPotential)] := UzfBoundary.PestRootPotentialMethod;
+          PestModifier[Ord(ucRootActivity)] := UzfBoundary.PestRootActivityFormula;
+          PestMethod[Ord(ucRootActivity)] := UzfBoundary.PestRootActivityMethod;
+          {$ENDIF}
+
           seNumberOfTimes.asInteger := UzfBoundary.Values.Count;
           seNumberOfTimes.OnChange(seNumberOfTimes);
           for ItemIndex := 0 to UzfBoundary.Values.Count - 1 do
           begin
             AnItem := UzfBoundary.Values[ItemIndex] as TUzfMf6Item;
 
-            rdgModflowBoundary.RealValue[Ord(ucStartTime), ItemIndex+1]
+            rdgModflowBoundary.RealValue[Ord(ucStartTime), ItemIndex+1+PestRowOffset]
               := AnItem.StartTime;
-            rdgModflowBoundary.RealValue[Ord(ucEndTime), ItemIndex+1]
+            rdgModflowBoundary.RealValue[Ord(ucEndTime), ItemIndex+1+PestRowOffset]
               := AnItem.EndTime;
-            rdgModflowBoundary.Cells[Ord(ucInfiltration), ItemIndex+1]
+            rdgModflowBoundary.Cells[Ord(ucInfiltration), ItemIndex+1+PestRowOffset]
               := AnItem.Infiltration;
-            rdgModflowBoundary.Cells[Ord(ucPotentialEt), ItemIndex+1]
+            rdgModflowBoundary.Cells[Ord(ucPotentialEt), ItemIndex+1+PestRowOffset]
               := AnItem.PotentialET;
-            rdgModflowBoundary.Cells[Ord(ucExtinctionDepth), ItemIndex+1]
+            rdgModflowBoundary.Cells[Ord(ucExtinctionDepth), ItemIndex+1+PestRowOffset]
               := AnItem.ExtinctionDepth;
-            rdgModflowBoundary.Cells[Ord(ucExtinctionWaterContent), ItemIndex+1]
+            rdgModflowBoundary.Cells[Ord(ucExtinctionWaterContent), ItemIndex+1+PestRowOffset]
               := AnItem.ExtinctionWaterContent;
-            rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), ItemIndex+1]
+            rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), ItemIndex+1+PestRowOffset]
               := AnItem.AirEntryPotential;
-            rdgModflowBoundary.Cells[Ord(ucRootPotential), ItemIndex+1]
+            rdgModflowBoundary.Cells[Ord(ucRootPotential), ItemIndex+1+PestRowOffset]
               := AnItem.RootPotential;
-            rdgModflowBoundary.Cells[Ord(ucRootActivity), ItemIndex+1]
+            rdgModflowBoundary.Cells[Ord(ucRootActivity), ItemIndex+1+PestRowOffset]
               := AnItem.RootActivity;
           end;
 
@@ -285,6 +332,69 @@ begin
             edBrooksCoreyEpsilon.Text := '';
           end;
 
+          if FirstUzf.PestInfiltrationFormula <> UzfBoundary.PestInfiltrationFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucInfiltration), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestInfiltrationMethod <> UzfBoundary.PestInfiltrationMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucInfiltration), PestMethodRow] := '';
+          end;
+
+          if FirstUzf.PestPotentialETFormula <> UzfBoundary.PestPotentialETFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucPotentialEt), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestExtinctionDepthMethod <> UzfBoundary.PestExtinctionDepthMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucPotentialEt), PestMethodRow] := '';
+          end;
+
+          if FirstUzf.PestExtinctionDepthFormula <> UzfBoundary.PestExtinctionDepthFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucExtinctionDepth), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestExtinctionDepthMethod <> UzfBoundary.PestExtinctionDepthMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucExtinctionDepth), PestMethodRow] := '';
+          end;
+
+          if FirstUzf.PestExtinctionWaterContentFormula <> UzfBoundary.PestExtinctionWaterContentFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucExtinctionWaterContent), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestExtinctionWaterContentMethod <> UzfBoundary.PestExtinctionWaterContentMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucExtinctionWaterContent), PestMethodRow] := '';
+          end;
+
+          if FirstUzf.PestAirEntryPotentialFormula <> UzfBoundary.PestAirEntryPotentialFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestAirEntryPotentialMethod <> UzfBoundary.PestAirEntryPotentialMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), PestMethodRow] := '';
+          end;
+
+          if FirstUzf.PestRootPotentialFormula <> UzfBoundary.PestRootPotentialFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucRootPotential), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestRootPotentialMethod <> UzfBoundary.PestRootPotentialMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucRootPotential), PestMethodRow] := '';
+          end;
+
+          if FirstUzf.PestRootActivityFormula <> UzfBoundary.PestRootActivityFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucRootActivity), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestRootActivityMethod <> UzfBoundary.PestRootActivityMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucRootActivity), PestMethodRow] := '';
+          end;
+
           if TimeDataIdentical
             and not UzfBoundary.Values.IsSame(FirstUzf.Values) then
           begin
@@ -294,6 +404,7 @@ begin
         end;
       end;
     end;
+    rdgModflowBoundary.HideEditor;
   finally
     FGettingData := False;
   end;
@@ -380,29 +491,29 @@ begin
       for TimeIndex := 0 to seNumberOfTimes.AsInteger - 1 do
       begin
         if TryStrToFloat(rdgModflowBoundary.Cells[
-          Ord(ucStartTime), TimeIndex+1], StartTime)
+          Ord(ucStartTime), TimeIndex+1+PestRowOffset], StartTime)
           and TryStrToFloat(rdgModflowBoundary.Cells[
-          Ord(ucEndTime), TimeIndex+1], EndTime)
+          Ord(ucEndTime), TimeIndex+1+PestRowOffset], EndTime)
           and (rdgModflowBoundary.Cells[
-          Ord(ucInfiltration), TimeIndex+1] <> '') then
+          Ord(ucInfiltration), TimeIndex+1+PestRowOffset] <> '') then
         begin
           NewItem := NewValues.Add as TUzfMf6Item;
           NewItem.StartTime := StartTime;
           NewItem.EndTime := EndTime;
           NewItem.Infiltration := rdgModflowBoundary.Cells[
-            Ord(ucInfiltration), TimeIndex+1];
+            Ord(ucInfiltration), TimeIndex+1+PestRowOffset];
           NewItem.PotentialET := NonBlank(rdgModflowBoundary.Cells[
-            Ord(ucPotentialEt), TimeIndex+1]);
+            Ord(ucPotentialEt), TimeIndex+1+PestRowOffset]);
           NewItem.ExtinctionDepth := NonBlank(rdgModflowBoundary.Cells[
-            Ord(ucExtinctionDepth), TimeIndex+1]);
+            Ord(ucExtinctionDepth), TimeIndex+1+PestRowOffset]);
           NewItem.ExtinctionWaterContent := NonBlank(rdgModflowBoundary.Cells[
-            Ord(ucExtinctionWaterContent), TimeIndex+1]);
+            Ord(ucExtinctionWaterContent), TimeIndex+1+PestRowOffset]);
           NewItem.AirEntryPotential := NonBlank(rdgModflowBoundary.Cells[
-            Ord(ucAirEntryPotential), TimeIndex+1]);
+            Ord(ucAirEntryPotential), TimeIndex+1+PestRowOffset]);
           NewItem.RootPotential := NonBlank(rdgModflowBoundary.Cells[
-            Ord(ucRootPotential), TimeIndex+1]);
+            Ord(ucRootPotential), TimeIndex+1+PestRowOffset]);
           NewItem.RootActivity := NonBlank(rdgModflowBoundary.Cells[
-            Ord(ucRootActivity), TimeIndex+1]);
+            Ord(ucRootActivity), TimeIndex+1+PestRowOffset]);
         end;
       end;
     end;
@@ -490,6 +601,71 @@ begin
               Boundary.BrooksCoreyEpsilon;
           end;
         end;
+
+        {$IFDEF PEST}
+        if rdgModflowBoundary.Cells[Ord(ucInfiltration), PestModifierRow] <> '' then
+        begin
+          Boundary.PestInfiltrationFormula := PestModifier[Ord(ucInfiltration)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucInfiltration), PestMethodRow] <> '' then
+        begin
+          Boundary.PestInfiltrationMethod := PestMethod[Ord(ucInfiltration)];
+        end;
+
+        if rdgModflowBoundary.Cells[Ord(ucPotentialEt), PestModifierRow] <> '' then
+        begin
+          Boundary.PestPotentialETFormula := PestModifier[Ord(ucPotentialEt)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucPotentialEt), PestMethodRow] <> '' then
+        begin
+          Boundary.PestPotentialETMethod := PestMethod[Ord(ucPotentialEt)];
+        end;
+
+        if rdgModflowBoundary.Cells[Ord(ucExtinctionDepth), PestModifierRow] <> '' then
+        begin
+          Boundary.PestExtinctionDepthFormula := PestModifier[Ord(ucExtinctionDepth)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucExtinctionDepth), PestMethodRow] <> '' then
+        begin
+          Boundary.PestExtinctionDepthMethod := PestMethod[Ord(ucExtinctionDepth)];
+        end;
+
+        if rdgModflowBoundary.Cells[Ord(ucExtinctionWaterContent), PestModifierRow] <> '' then
+        begin
+          Boundary.PestExtinctionWaterContentFormula := PestModifier[Ord(ucExtinctionWaterContent)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucExtinctionWaterContent), PestMethodRow] <> '' then
+        begin
+          Boundary.PestExtinctionWaterContentMethod := PestMethod[Ord(ucExtinctionWaterContent)];
+        end;
+
+        if rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), PestModifierRow] <> '' then
+        begin
+          Boundary.PestAirEntryPotentialFormula := PestModifier[Ord(ucAirEntryPotential)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), PestMethodRow] <> '' then
+        begin
+          Boundary.PestAirEntryPotentialMethod := PestMethod[Ord(ucAirEntryPotential)];
+        end;
+
+        if rdgModflowBoundary.Cells[Ord(ucRootPotential), PestModifierRow] <> '' then
+        begin
+          Boundary.PestRootPotentialFormula := PestModifier[Ord(ucRootPotential)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucRootPotential), PestMethodRow] <> '' then
+        begin
+          Boundary.PestRootPotentialMethod := PestMethod[Ord(ucRootPotential)];
+        end;
+
+        if rdgModflowBoundary.Cells[Ord(ucRootActivity), PestModifierRow] <> '' then
+        begin
+          Boundary.PestRootActivityFormula := PestModifier[Ord(ucRootActivity)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucRootActivity), PestMethodRow] <> '' then
+        begin
+          Boundary.PestRootActivityMethod := PestMethod[Ord(ucRootActivity)];
+        end;
+        {$ENDIF}
 
         if NewValues.Count > 0 then
         begin

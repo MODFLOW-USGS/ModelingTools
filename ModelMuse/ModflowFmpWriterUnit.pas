@@ -908,38 +908,9 @@ begin
     FPestParamUsed := True;
   end;
 
-  if Model.PestUsed and WritingTemplate
-    and ((Well_Cell.MaxPumpingRatePestName <> '') or (Well_Cell.MaxPumpingRatePestSeriesName <> '')) then
-  begin
-    WritePestTemplateFormula(Well_Cell.MaxPumpingRate, Well_Cell.MaxPumpingRatePestName,
-      Well_Cell.MaxPumpingRatePestSeriesName, Well_Cell.MaxPumpingRatePestSeriesMethod,
-      Well_Cell);
-  end
-  else
-  begin
-    WriteFloat(Well_Cell.MaxPumpingRate);
-    if Well_Cell.MaxPumpingRatePestName <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Well_Cell.MaxPumpingRatePestName);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Well_Cell.MaxPumpingRatePestSeriesName <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Well_Cell.MaxPumpingRatePestSeriesName);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-  end;
+  WriteValueOrFormula(Well_Cell, FmpWellMaxPumpingRatePosition);
 
 //  WriteFloat(Well_Cell.MaxPumpingRate);
-
 
   if Well_Cell.Mnw2 then
   begin

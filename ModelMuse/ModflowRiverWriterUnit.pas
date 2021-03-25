@@ -336,7 +336,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -363,34 +363,7 @@ begin
     FPestParamUsed := True;
   end;
 
-  if Model.PestUsed and WritingTemplate and
-    ((Riv_Cell.RiverStagePest <> '') or (Riv_Cell.RiverStagePestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Riv_Cell.RiverStage, Riv_Cell.RiverStagePest,
-      Riv_Cell.RiverStagePestSeries, Riv_Cell.RiverStagePestSeriesMethod, Riv_Cell);
-  end
-  else
-  begin
-    WriteFloat(Riv_Cell.RiverStage);
-    if Riv_Cell.RiverStagePest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Riv_Cell.RiverStagePest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Riv_Cell.RiverStagePestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Riv_Cell.RiverStagePestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-  end;
+  WriteValueOrFormula(Riv_Cell, RivStagePosition);
 
 //  WriteFloat(Riv_Cell.RiverStage);
 
@@ -412,86 +385,15 @@ begin
     WriteModflowParamFormula(ParameterName, Riv_Cell.ConductancePest,
       MultiplierValue, Riv_Cell);
   end
-  else if Model.PestUsed and WritingTemplate
-    and ((Riv_Cell.ConductancePest <> '') or (Riv_Cell.ConductancePestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Riv_Cell.Conductance, Riv_Cell.ConductancePest,
-      Riv_Cell.ConductancePestSeries, Riv_Cell.ConductancePestSeriesMethod,
-      Riv_Cell);
-  end
   else
   begin
-    WriteFloat(Riv_Cell.Conductance);
-    if Riv_Cell.ConductancePest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Riv_Cell.ConductancePest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Riv_Cell.ConductancePestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Riv_Cell.ConductancePestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
+    WriteValueOrFormula(Riv_Cell, RivConductancePosition);
   end;
-
-
-//  else
-//  begin
-//    WriteFloat(Riv_Cell.Conductance);
-//  end;
-//  if Riv_Cell.TimeSeriesName = '' then
-//  begin
-//    WriteFloat(Riv_Cell.Conductance);
-//  end
-//  else
-//  begin
-//    WriteString(' ');
-//    WriteString(Riv_Cell.TimeSeriesName);
-//    WriteString(' ');
-//  end;
-
 //  WriteFloat(Riv_Cell.Conductance);
 
-  if Model.PestUsed and WritingTemplate and
-    ((Riv_Cell.RiverBottomPest <> '') or (Riv_Cell.RiverBottomPestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Riv_Cell.RiverBottom, Riv_Cell.RiverBottomPest,
-      Riv_Cell.RiverBottomPestSeries, Riv_Cell.RiverBottomPestSeriesMethod, Riv_Cell);
-  end
-  else
-  begin
-    WriteFloat(Riv_Cell.RiverBottom);
-    if Riv_Cell.RiverBottomPest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Riv_Cell.RiverBottomPest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Riv_Cell.RiverBottomPestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Riv_Cell.RiverBottomPestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-  end;
+  WriteValueOrFormula(Riv_Cell, RivBottomPosition);
 
 //  WriteFloat(Riv_Cell.RiverBottom);
-
-
 
   WriteIface(Riv_Cell.IFace);
   WriteBoundName(Riv_Cell);

@@ -384,6 +384,9 @@ type
       ;
   end;
 
+const
+  RechPosition = 0;
+
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
@@ -398,7 +401,6 @@ resourcestring
 
 const
   StrAssignedFromTheCe = 'assigned from the cell''s layer';
-  RechPosition = 0;
   LayerPosition = 0;
 
 { TRchItem }

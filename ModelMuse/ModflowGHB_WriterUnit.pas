@@ -306,7 +306,7 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -331,34 +331,7 @@ begin
     FPestParamUsed := True;
   end;
 
-  if Model.PestUsed and WritingTemplate and
-    ((Ghb_Cell.BoundaryHeadPest <> '') or (Ghb_Cell.BoundaryHeadPestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Ghb_Cell.BoundaryHead, Ghb_Cell.BoundaryHeadPest,
-      Ghb_Cell.BoundaryHeadPestSeries, Ghb_Cell.BoundaryHeadPestSeriesMethod, Ghb_Cell);
-  end
-  else
-  begin
-    WriteFloat(Ghb_Cell.BoundaryHead);
-    if Ghb_Cell.BoundaryHeadPest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Ghb_Cell.BoundaryHeadPest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Ghb_Cell.BoundaryHeadPestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Ghb_Cell.BoundaryHeadPestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-  end;
+  WriteValueOrFormula(Ghb_Cell, GhbHeadPosition);
 
 //  WriteFloat(GHB_Cell.BoundaryHead);
 
@@ -383,57 +356,10 @@ begin
       MultiplierValue, Ghb_Cell);
 //    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
-  else if Model.PestUsed and WritingTemplate
-    and ((Ghb_Cell.ConductancePest <> '') or (Ghb_Cell.ConductancePestSeries <> '')) then
-  begin
-    WritePestTemplateFormula(Ghb_Cell.Conductance, Ghb_Cell.ConductancePest,
-      Ghb_Cell.ConductancePestSeries, Ghb_Cell.ConductancePestSeriesMethod,
-      Ghb_Cell);
-  end
   else
   begin
-    WriteFloat(Ghb_Cell.Conductance);
-    if Ghb_Cell.ConductancePest <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Ghb_Cell.ConductancePest);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
-    if Ghb_Cell.ConductancePestSeries <> '' then
-    begin
-      DataArray := Model.DataArrayManager.GetDataSetByName(
-        Ghb_Cell.ConductancePestSeries);
-      if DataArray <> nil then
-      begin
-        AddUsedPestDataArray(DataArray);
-      end;
-    end;
+    WriteValueOrFormula(Ghb_Cell, GhbConductancePosition);
   end;
-
-
-//  if Model.PestUsed and (Model.ModelSelection = msModflow2015)
-//    and WritingTemplate
-//    and ( GHB_Cell.ConductanceParameterName <> '') then
-//  begin
-//    ParameterName := GHB_Cell.ConductanceParameterName;
-//    if GHB_Cell.ConductanceParameterValue = 0 then
-//    begin
-//      MultiplierValue := 0.0;
-//    end
-//    else
-//    begin
-//      MultiplierValue := GHB_Cell.Conductance / GHB_Cell.ConductanceParameterValue;
-//    end;
-//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
-//  end
-//  else
-//  begin
-//    WriteFloat(GHB_Cell.Conductance);
-//  end;
-
 //  if GHB_Cell.TimeSeriesName = '' then
 //  begin
 //    WriteFloat(GHB_Cell.Conductance);

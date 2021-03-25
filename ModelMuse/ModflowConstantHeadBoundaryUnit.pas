@@ -202,6 +202,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property StartingHead: double read GetStartingHead;
     property EndingHead: double read GetEndingHead;
@@ -307,15 +310,15 @@ type
       ;
   end;
 
+const
+  ChdStartHeadPosition = 0;
+  ChdEndHeadPosition = 1;
+
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
   frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit,
   frmErrorsAndWarningsUnit;
-
-const
-  StartHeadPosition = 0;
-  EndHeadPosition = 1;
 
 resourcestring
   FormatString =
@@ -372,9 +375,9 @@ var
   ParentCollection: TChdCollection;
 begin
   ParentCollection := Collection as TChdCollection;
-  StartObserver := FObserverList[StartHeadPosition];
+  StartObserver := FObserverList[ChdStartHeadPosition];
   StartObserver.OnUpToDateSet := ParentCollection.InvalidateStartData;
-  EndObserver := FObserverList[EndHeadPosition];
+  EndObserver := FObserverList[ChdEndHeadPosition];
   EndObserver.OnUpToDateSet := ParentCollection.InvalidateEndData;
 end;
 
@@ -386,8 +389,8 @@ end;
 function TChdItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    StartHeadPosition: result := StartHead;
-    EndHeadPosition: result := EndHead;
+    ChdStartHeadPosition: result := StartHead;
+    ChdEndHeadPosition: result := EndHead;
     else Assert(False);
   end;
 end;
@@ -395,25 +398,25 @@ end;
 function TChdItem.GetEndHead: string;
 begin
   Result := FEndHead.Formula;
-  ResetItemObserver(EndHeadPosition);
+  ResetItemObserver(ChdEndHeadPosition);
 end;
 
 procedure TChdItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FStartHead then
   begin
-    List.Add(FObserverList[StartHeadPosition]);
+    List.Add(FObserverList[ChdStartHeadPosition]);
   end;
   if Sender = FEndHead then
   begin
-    List.Add(FObserverList[EndHeadPosition]);
+    List.Add(FObserverList[ChdEndHeadPosition]);
   end;
 end;
 
 function TChdItem.GetStartHead: string;
 begin
   Result := FStartHead.Formula;
-  ResetItemObserver(StartHeadPosition);
+  ResetItemObserver(ChdStartHeadPosition);
 end;
 
 procedure TChdItem.InvalidateModel;
@@ -449,20 +452,20 @@ procedure TChdItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   inherited;
   case Index of
-    StartHeadPosition: StartHead := Value;
-    EndHeadPosition: EndHead := Value;
+    ChdStartHeadPosition: StartHead := Value;
+    ChdEndHeadPosition: EndHead := Value;
     else Assert(False);
   end;
 end;
 
 procedure TChdItem.SetEndHead(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, EndHeadPosition, FEndHead);
+  UpdateFormulaBlocks(Value, ChdEndHeadPosition, FEndHead);
 end;
 
 procedure TChdItem.SetStartHead(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StartHeadPosition, FStartHead);
+  UpdateFormulaBlocks(Value, ChdStartHeadPosition, FStartHead);
 end;
 
 { TChdParamItem }
@@ -813,8 +816,8 @@ begin
 
   PestStartingHeadFormula := '';
   PestEndingHeadFormula := '';
-  FPestStartingHeadMethod := DefaultBoundaryMethod(StartHeadPosition);
-  FPestEndingHeadMethod := DefaultBoundaryMethod(EndHeadPosition);
+  FPestStartingHeadMethod := DefaultBoundaryMethod(ChdStartHeadPosition);
+  FPestEndingHeadMethod := DefaultBoundaryMethod(ChdEndHeadPosition);
 
 end;
 
@@ -837,11 +840,11 @@ class function TChdBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    StartHeadPosition:
+    ChdStartHeadPosition:
       begin
         result := ppmAdd;
       end;
-    EndHeadPosition:
+    ChdEndHeadPosition:
       begin
         result := ppmAdd;
       end;
@@ -1023,11 +1026,11 @@ function TChdBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   result := '';
   case FormulaIndex of
-    StartHeadPosition:
+    ChdStartHeadPosition:
       begin
         result := PestStartingHeadFormula;
       end;
-    EndHeadPosition:
+    ChdEndHeadPosition:
       begin
         result := PestEndingHeadFormula;
       end;
@@ -1040,11 +1043,11 @@ function TChdBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    StartHeadPosition:
+    ChdStartHeadPosition:
       begin
         result := PestStartingHeadMethod;
       end;
-    EndHeadPosition:
+    ChdEndHeadPosition:
       begin
         result := PestEndingHeadMethod;
       end;
@@ -1081,7 +1084,7 @@ begin
   Result := FPestEndingHeadFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(EndHeadPosition);
+    ResetBoundaryObserver(ChdEndHeadPosition);
   end;
 end;
 
@@ -1090,7 +1093,7 @@ begin
   Result := FPestStartingHeadFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StartHeadPosition);
+    ResetBoundaryObserver(ChdStartHeadPosition);
   end;
 end;
 
@@ -1098,16 +1101,16 @@ procedure TChdBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestStartingHeadFormula then
   begin
-    if StartHeadPosition < FObserverList.Count then
+    if ChdStartHeadPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[StartHeadPosition]);
+      List.Add(FObserverList[ChdStartHeadPosition]);
     end;
   end;
   if Sender = FPestEndingHeadFormula then
   begin
-    if EndHeadPosition < FObserverList.Count then
+    if ChdEndHeadPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[EndHeadPosition]);
+      List.Add(FObserverList[ChdEndHeadPosition]);
     end;
   end;
 end;
@@ -1209,11 +1212,11 @@ procedure TChdBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
-    StartHeadPosition:
+    ChdStartHeadPosition:
       begin
         PestStartingHeadFormula := Value;
       end;
-    EndHeadPosition:
+    ChdEndHeadPosition:
       begin
         PestEndingHeadFormula := Value;
       end;
@@ -1226,11 +1229,11 @@ procedure TChdBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
-    StartHeadPosition:
+    ChdStartHeadPosition:
       begin
         PestStartingHeadMethod := Value;
       end;
-    EndHeadPosition:
+    ChdEndHeadPosition:
       begin
         PestEndingHeadMethod := Value;
       end;
@@ -1242,7 +1245,7 @@ end;
 
 procedure TChdBoundary.SetPestEndingHeadFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, EndHeadPosition, FPestEndingHeadFormula);
+  UpdateFormulaBlocks(Value, ChdEndHeadPosition, FPestEndingHeadFormula);
 end;
 
 procedure TChdBoundary.SetPestEndingHeadMethod(const Value: TPestParamMethod);
@@ -1252,7 +1255,7 @@ end;
 
 procedure TChdBoundary.SetPestStartingHeadFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StartHeadPosition, FPestStartingHeadFormula);
+  UpdateFormulaBlocks(Value, ChdStartHeadPosition, FPestStartingHeadFormula);
 end;
 
 procedure TChdBoundary.SetPestStartingHeadMethod(const Value: TPestParamMethod);
@@ -1335,12 +1338,51 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TCHD_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    ChdStartHeadPosition: result := StartHeadPest;
+    ChdEndHeadPosition: result := EndHeadPest;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TCHD_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    ChdStartHeadPosition: result := StartHeadPestSeriesMethod;
+    ChdEndHeadPosition: result := EndHeadPestSeriesMethod;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TCHD_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    ChdStartHeadPosition: result := StartHeadPestSeriesName;
+    ChdEndHeadPosition: result := EndHeadPestSeriesName;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TCHD_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
   case Index of
-    StartHeadPosition: result := StartingHeadAnnotation;
-    EndHeadPosition: result := EndingHeadAnnotation;
+    ChdStartHeadPosition: result := StartingHeadAnnotation;
+    ChdEndHeadPosition: result := EndingHeadAnnotation;
     else Assert(False);
   end;
 end;
@@ -1349,8 +1391,8 @@ function TCHD_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    StartHeadPosition: result := StartingHead;
-    EndHeadPosition: result := EndingHead;
+    ChdStartHeadPosition: result := StartingHead;
+    ChdEndHeadPosition: result := EndingHead;
     else Assert(False);
   end;
 end;

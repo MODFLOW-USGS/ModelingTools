@@ -14421,7 +14421,7 @@ end;
 procedure TStrPackageSelection.GetMfStrBedBottomElevationUseList(
   Sender: TObject; NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamBedBottomPosition, StrSTRStreamBottomElev);
+  UpdateDisplayUseList(NewUseList, ptStr, StrBedBottomPosition, StrSTRStreamBottomElev);
 end;
 
 procedure TStrPackageSelection.GetMfStrUseList(Sender: TObject;
@@ -14439,37 +14439,37 @@ end;
 procedure TStrPackageSelection.GetMfStrConductanceUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamConductancePosition, StrSTRStreamConductance);
+  UpdateDisplayUseList(NewUseList, ptStr, StrConductancePosition, StrSTRStreamConductance);
 end;
 
 procedure TStrPackageSelection.GetMfStrFlowUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamFlowPosition, StrSTRStreamFlow);
+  UpdateDisplayUseList(NewUseList, ptStr, StrFlowPosition, StrSTRStreamFlow);
 end;
 
 procedure TStrPackageSelection.GetMfStrRoughnessUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamRoughnessPosition, StrSTRStreamRoughness);
+  UpdateDisplayUseList(NewUseList, ptStr, StrRoughnessPosition, StrSTRStreamRoughness);
 end;
 
 procedure TStrPackageSelection.GetMfStrSlopeUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamSlopePosition, StrSTRStreamSlope);
+  UpdateDisplayUseList(NewUseList, ptStr, StrSlopePosition, StrSTRStreamSlope);
 end;
 
 procedure TStrPackageSelection.GetMfStrStageUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamStagePosition, StrSTRStreamStage);
+  UpdateDisplayUseList(NewUseList, ptStr, StrStagePosition, StrSTRStreamStage);
 end;
 
 procedure TStrPackageSelection.GetMfStrWidthUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamWidthPosition, StrSTRStreamWidth);
+  UpdateDisplayUseList(NewUseList, ptStr, StrWidthPosition, StrSTRStreamWidth);
 end;
 
 procedure TStrPackageSelection.InitializeStrDisplay(Sender: TObject);

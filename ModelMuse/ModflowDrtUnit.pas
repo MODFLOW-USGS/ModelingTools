@@ -174,6 +174,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property Conductance: double read GetConductance;
     property Elevation: double read GetElevation;
@@ -418,6 +421,11 @@ type
       ;
   end;
 
+const
+  DrtElevationPosition = 0;
+  DrtConductancePosition = 1;
+  DrtReturnPosition = 2;
+
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, FastGEO, GIS_Functions,
@@ -425,11 +433,6 @@ uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, FastGEO, GIS_Functions,
 
 resourcestring
   StrReturnFraction = 'Return fraction';
-
-const
-  ElevationPosition = 0;
-  ConductancePosition = 1;
-  ReturnPosition = 2;
 
 { TDrtItem }
 
@@ -454,11 +457,11 @@ var
   ReturnObserver: TObserver;
 begin
   ParentCollection := Collection as TDrtCollection;
-  ElevationObserver := FObserverList[ElevationPosition];
+  ElevationObserver := FObserverList[DrtElevationPosition];
   ElevationObserver.OnUpToDateSet := ParentCollection.InvalidateElevationData;
-  ConductanceObserver := FObserverList[ConductancePosition];
+  ConductanceObserver := FObserverList[DrtConductancePosition];
   ConductanceObserver.OnUpToDateSet := ParentCollection.InvalidateConductanceData;
-  ReturnObserver := FObserverList[ReturnPosition];
+  ReturnObserver := FObserverList[DrtReturnPosition];
   ReturnObserver.OnUpToDateSet := ParentCollection.InvalidateReturnData;
 end;
 
@@ -482,38 +485,38 @@ end;
 function TDrtItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    ElevationPosition: result := Elevation;
-    ConductancePosition: result := Conductance;
-    ReturnPosition: result := ReturnFraction;
+    DrtElevationPosition: result := Elevation;
+    DrtConductancePosition: result := Conductance;
+    DrtReturnPosition: result := ReturnFraction;
     else Assert(False);
   end;
 end;
 
 function TDrtItem.GetConductanceIndex: Integer;
 begin
-  Result := ConductancePosition;
+  Result := DrtConductancePosition;
 end;
 
 procedure TDrtItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FConductance then
   begin
-    List.Add(FObserverList[ConductancePosition]);
+    List.Add(FObserverList[DrtConductancePosition]);
   end;
   if Sender = FElevation then
   begin
-    List.Add(FObserverList[ElevationPosition]);
+    List.Add(FObserverList[DrtElevationPosition]);
   end;
   if Sender = FReturnFraction then
   begin
-    List.Add(FObserverList[ReturnPosition]);
+    List.Add(FObserverList[DrtReturnPosition]);
   end;
 end;
 
 function TDrtItem.GetReturnFraction: string;
 begin
   Result := FReturnFraction.Formula;
-  ResetItemObserver(ReturnPosition);
+  ResetItemObserver(DrtReturnPosition);
 end;
 
 procedure TDrtItem.InvalidateModel;
@@ -554,16 +557,16 @@ end;
 procedure TDrtItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    ElevationPosition: Elevation := Value;
-    ConductancePosition: Conductance := Value;
-    ReturnPosition: ReturnFraction := Value;
+    DrtElevationPosition: Elevation := Value;
+    DrtConductancePosition: Conductance := Value;
+    DrtReturnPosition: ReturnFraction := Value;
     else Assert(False);
   end;
 end;
 
 procedure TDrtItem.SetReturnFraction(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ReturnPosition, FReturnFraction);
+  UpdateFormulaBlocks(Value, DrtReturnPosition, FReturnFraction);
 end;
 
 { TDrtCollection }
@@ -586,7 +589,7 @@ var
   Item: TDrtItem;
 begin
   Item := Items[ItemIndex] as TDrtItem;
-  if FormulaIndex = ConductancePosition then
+  if FormulaIndex = DrtConductancePosition then
   begin
     Boundary := BoundaryGroup as TDrtBoundary;
     ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -651,8 +654,8 @@ var
   DrtBoundaryGroup: TDrtBoundary;
   ReturnLocation: TCellLocation;
 begin
-  Assert(BoundaryFunctionIndex in [ElevationPosition, ConductancePosition,
-    ReturnPosition]);
+  Assert(BoundaryFunctionIndex in [DrtElevationPosition, DrtConductancePosition,
+    DrtReturnPosition]);
   Assert(Expression <> nil);
 
   DrtBoundaryGroup := BoundaryGroup as TDrtBoundary;
@@ -670,7 +673,7 @@ begin
     with DrtStorage.DrtArray[Index] do
     begin
       case BoundaryFunctionIndex of
-        ElevationPosition:
+        DrtElevationPosition:
           begin
             Elevation := Expression.DoubleResult;
             ElevationAnnotation := ACell.Annotation;
@@ -678,7 +681,7 @@ begin
             ElevationPestSeriesName := PestSeriesName;
             ElevationPestSeriesMethod := PestSeriesMethod;
           end;
-        ConductancePosition:
+        DrtConductancePosition:
           begin
             Conductance := Expression.DoubleResult;
             ConductanceAnnotation := ACell.Annotation;
@@ -687,7 +690,7 @@ begin
             ConductancePestSeriesMethod := PestSeriesMethod;
             ReturnCell := ReturnLocation;
           end;
-        ReturnPosition:
+        DrtReturnPosition:
           begin
             ReturnFraction := Expression.DoubleResult;
             ReturnFractionAnnotation := ACell.Annotation;
@@ -904,13 +907,55 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TDrt_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    DrtElevationPosition: result := ElevationPest;
+    DrtConductancePosition: result := ConductancePest;
+    DrtReturnPosition: result := ReturnFractionPest;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TDrt_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    DrtElevationPosition: result := ElevationPestSeriesMethod;
+    DrtConductancePosition: result := ConductancePestSeriesMethod;
+    DrtReturnPosition: result := ReturnFractionPestSeriesMethod;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TDrt_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    DrtElevationPosition: result := ElevationPestSeries;
+    DrtConductancePosition: result := ConductancePestSeries;
+    DrtReturnPosition: result := ReturnFractionPestSeries;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TDrt_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
   case Index of
-    ElevationPosition: result := ElevationAnnotation;
-    ConductancePosition: result := ConductanceAnnotation;
-    ReturnPosition: result := ReturnFractionAnnotation;
+    DrtElevationPosition: result := ElevationAnnotation;
+    DrtConductancePosition: result := ConductanceAnnotation;
+    DrtReturnPosition: result := ReturnFractionAnnotation;
     else Assert(False);
   end;
 end;
@@ -919,9 +964,9 @@ function TDrt_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    ElevationPosition: result := Elevation;
-    ConductancePosition: result := Conductance;
-    ReturnPosition: result := ReturnFraction;
+    DrtElevationPosition: result := Elevation;
+    DrtConductancePosition: result := Conductance;
+    DrtReturnPosition: result := ReturnFraction;
     else Assert(False);
   end;
 end;
@@ -1128,15 +1173,15 @@ function TDrtBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   result := '';
   case FormulaIndex of
-    ElevationPosition:
+    DrtElevationPosition:
       begin
         result := PestElevFormula;
       end;
-    ConductancePosition:
+    DrtConductancePosition:
       begin
         result := PestConductanceFormula;
       end;
-    ReturnPosition:
+    DrtReturnPosition:
       begin
         result := PestReturnFractionFormula;
       end;
@@ -1149,15 +1194,15 @@ function TDrtBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    ElevationPosition:
+    DrtElevationPosition:
       begin
         result := PestElevMethod;
       end;
-    ConductancePosition:
+    DrtConductancePosition:
       begin
         result := PestConductanceMethod;
       end;
-    ReturnPosition:
+    DrtReturnPosition:
       begin
         result := PestReturnFractionMethod;
       end;
@@ -1172,7 +1217,7 @@ begin
   Result := FPestCondFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ConductancePosition);
+    ResetBoundaryObserver(DrtConductancePosition);
   end;
 end;
 
@@ -1201,7 +1246,7 @@ begin
   Result := FPestElevFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ElevationPosition);
+    ResetBoundaryObserver(DrtElevationPosition);
   end;
 end;
 
@@ -1220,7 +1265,7 @@ begin
   Result := FPestReturnFractionFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ReturnPosition);
+    ResetBoundaryObserver(DrtReturnPosition);
   end;
 end;
 
@@ -1228,23 +1273,23 @@ procedure TDrtBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestElevFormula then
   begin
-    if ElevationPosition < FObserverList.Count then
+    if DrtElevationPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[ElevationPosition]);
+      List.Add(FObserverList[DrtElevationPosition]);
     end;
   end;
   if Sender = FPestCondFormula then
   begin
-    if ConductancePosition < FObserverList.Count then
+    if DrtConductancePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[ConductancePosition]);
+      List.Add(FObserverList[DrtConductancePosition]);
     end;
   end;
   if Sender = FPestReturnFractionFormula then
   begin
-    if ReturnPosition < FObserverList.Count then
+    if DrtReturnPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[ReturnPosition]);
+      List.Add(FObserverList[DrtReturnPosition]);
     end;
   end;
 end;
@@ -1410,9 +1455,9 @@ begin
   PestElevFormula := '';
   PestConductanceFormula := '';
   PestReturnFractionFormula := '';
-  FPestElevMethod := DefaultBoundaryMethod(ElevationPosition);
-  FPestConductanceMethod := DefaultBoundaryMethod(ConductancePosition);
-  FPestReturnFractionMethod := DefaultBoundaryMethod(ReturnPosition);
+  FPestElevMethod := DefaultBoundaryMethod(DrtElevationPosition);
+  FPestConductanceMethod := DefaultBoundaryMethod(DrtConductancePosition);
+  FPestReturnFractionMethod := DefaultBoundaryMethod(DrtReturnPosition);
 
 end;
 
@@ -1437,15 +1482,15 @@ class function TDrtBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    ElevationPosition:
+    DrtElevationPosition:
       begin
         result := ppmAdd;
       end;
-    ConductancePosition:
+    DrtConductancePosition:
       begin
         result := ppmMultiply;
       end;
-    ReturnPosition:
+    DrtReturnPosition:
       begin
         result := ppmAdd;
       end;
@@ -1475,15 +1520,15 @@ procedure TDrtBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
-    ElevationPosition:
+    DrtElevationPosition:
       begin
         PestElevFormula := Value;
       end;
-    ConductancePosition:
+    DrtConductancePosition:
       begin
         PestConductanceFormula := Value;
       end;
-    ReturnPosition:
+    DrtReturnPosition:
       begin
         PestReturnFractionFormula := Value;
       end;
@@ -1496,15 +1541,15 @@ procedure TDrtBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
-    ElevationPosition:
+    DrtElevationPosition:
       begin
         PestElevMethod := Value;
       end;
-    ConductancePosition:
+    DrtConductancePosition:
       begin
         PestConductanceMethod := Value;
       end;
-    ReturnPosition:
+    DrtReturnPosition:
       begin
         PestReturnFractionMethod := Value;
       end;
@@ -1515,7 +1560,7 @@ end;
 
 procedure TDrtBoundary.SetPestConductanceFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ConductancePosition, FPestCondFormula);
+  UpdateFormulaBlocks(Value, DrtConductancePosition, FPestCondFormula);
 end;
 
 procedure TDrtBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
@@ -1525,7 +1570,7 @@ end;
 
 procedure TDrtBoundary.SetPestElevFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ElevationPosition, FPestElevFormula);
+  UpdateFormulaBlocks(Value, DrtElevationPosition, FPestElevFormula);
 end;
 
 procedure TDrtBoundary.SetPestElevMethod(const Value: TPestParamMethod);
@@ -1541,7 +1586,7 @@ end;
 
 procedure TDrtBoundary.SetPestReturnFractionFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ReturnPosition, FPestReturnFractionFormula);
+  UpdateFormulaBlocks(Value, DrtReturnPosition, FPestReturnFractionFormula);
 end;
 
 { TReturnCell }

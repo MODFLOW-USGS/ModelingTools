@@ -36,6 +36,7 @@ type
     procedure WritePackageData;
     procedure WriteStressPeriods; reintroduce;
     procedure IdentifyWaterContentObsLocations;
+    procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
@@ -154,7 +155,8 @@ begin
       Boundary := ScreenObject.ModflowUzfMf6Boundary;
       if Boundary <> nil then
       begin
-        if ObservationsUsed and IsMf6Observation(ScreenObject) then
+        if ObservationsUsed and IsMf6Observation(ScreenObject)
+          and not WritingTemplate then
         begin
           MfObs := ScreenObject.Modflow6Obs;
           Obs.FName := MfObs.Name;
@@ -173,7 +175,8 @@ begin
           FUzfObjectArray[ACell.Layer, ACell.Row, ACell.Column] := ScreenObject;
         end;
       end
-      else if ObservationsUsed and IsMf6Observation(ScreenObject) then
+      else if ObservationsUsed and IsMf6Observation(ScreenObject)
+        and not WritingTemplate then
       begin
         MfObs := ScreenObject.Modflow6Obs;
         Obs.FName := MfObs.Name;
@@ -400,6 +403,57 @@ begin
 
 end;
 
+procedure TModflowUzfMf6Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingOptions);
+    WriteOptions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDimensions);
+    WriteDimensions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingPackageData);
+    WritePackageData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingStressPerio);
+    WriteStressPeriods;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
 procedure TModflowUzfMf6Writer.WriteDimensions;
 var
   UzfDataArray: TDataArray;
@@ -481,50 +535,7 @@ begin
   WriteToNameFile(StrUZF6, 0, FNameOfFile, foInput, Model);
 
   FInputFileName := FNameOfFile;
-  OpenFile(FNameOfFile);
-  try
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingOptions);
-    WriteOptions;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDimensions);
-    WriteDimensions;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingPackageData);
-    WritePackageData;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingStressPerio);
-    WriteStressPeriods;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-  finally
-    CloseFile;
-  end;
+  WriteFileInternal;
 
 
   if FObsList.Count > 0 then
@@ -538,6 +549,21 @@ begin
       ObsWriter.Free;
     end;
   end;
+
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+
 end;
 
 procedure TModflowUzfMf6Writer.WriteOptions;
@@ -710,7 +736,7 @@ begin
 	    FUzflandflagLayers[RowIndex, ColumnIndex] := -1;
 	  end;
 	end;
-  
+
   DisvUsed := Model.DisvUsed;
   for LayerIndex := 0 to IDOMAINDataArray.LayerCount - 1 do
   begin
@@ -739,7 +765,7 @@ begin
             end;
           end;
           WriteInteger(landflag);
-		  
+
           if landflag = 1 then
           begin
             FUzflandflagLayers[RowIndex, ColumnIndex]  := LayerIndex;
@@ -939,13 +965,21 @@ begin
               begin
                 WriteString('  ');
                 WriteInteger(FUzfCellNumbers[LayerIndex, RowIndex, ColumnIndex]);
-                WriteFloat(UzfCell.Infiltration);
-                WriteFloat(UzfCell.PotentialET);
-                WriteFloat(UzfCell.ExtinctionDepth);
-                WriteFloat(UzfCell.ExtinctionWaterContent);
-                WriteFloat(UzfCell.AirEntryPotential);
-                WriteFloat(UzfCell.RootPotential);
-                WriteFloat(UzfCell.RootActivity);
+                WriteValueOrFormula(UzfCell, UzfMf6InfiltrationPosition);
+                WriteValueOrFormula(UzfCell, UzfMf6PotentialETPosition);
+                WriteValueOrFormula(UzfCell, UzfMf6ExtinctionDepthPosition);
+                WriteValueOrFormula(UzfCell, UzfMf6ExtinctionWaterContentPosition);
+                WriteValueOrFormula(UzfCell, UzfMf6AirEntryPotentialPosition);
+                WriteValueOrFormula(UzfCell, UzfMf6RootPotentialPosition);
+                WriteValueOrFormula(UzfCell, UzfMf6RootActivityPosition);
+
+//                WriteFloat(UzfCell.Infiltration);
+//                WriteFloat(UzfCell.PotentialET);
+//                WriteFloat(UzfCell.ExtinctionDepth);
+//                WriteFloat(UzfCell.ExtinctionWaterContent);
+//                WriteFloat(UzfCell.AirEntryPotential);
+//                WriteFloat(UzfCell.RootPotential);
+//                WriteFloat(UzfCell.RootActivity);
                 NewLine;
                 MvrReceiver.ReceiverKey.ScreenObject := UzfCell.ScreenObject;
 

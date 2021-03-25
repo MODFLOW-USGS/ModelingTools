@@ -172,6 +172,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property MaxPumpingRate: double read GetMaxPumpingRate;
     property MaxPumpingRateAnnotation: string read GetMaxPumpingRateAnnotation;
@@ -1080,6 +1083,42 @@ end;
 function TFmpWell_Cell.GetMnwName: string;
 begin
   result := FValues.Mnw2Name;
+end;
+
+function TFmpWell_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    FmpWellMaxPumpingRatePosition: result := MaxPumpingRatePestName;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TFmpWell_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    FmpWellMaxPumpingRatePosition: result := MaxPumpingRatePestSeriesMethod;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TFmpWell_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    FmpWellMaxPumpingRatePosition: result := MaxPumpingRatePestSeriesName;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
 end;
 
 function TFmpWell_Cell.GetPumpOnlyIfCropRequiresWater: boolean;

@@ -244,6 +244,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property Infiltration: double read GetInfiltration;
     property PotentialET: double read GetPotentialET;
@@ -453,6 +456,7 @@ type
     // eps
     property BrooksCoreyEpsilon: string read GetBrooksCoreyEpsilon
       write SetBrooksCoreyEpsilon;
+
     property PestInfiltrationFormula: string
       read GetPestInfiltrationFormula
       write SetPestInfiltrationFormula
@@ -1971,6 +1975,60 @@ end;
 function TUzfMf6_Cell.GetMvrUsed: Boolean;
 begin
   result := FValues.MvrUsed;
+end;
+
+function TUzfMf6_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    UzfMf6InfiltrationPosition: result := InfiltrationPest;
+    UzfMf6PotentialETPosition: result := PotentialETPest;
+    UzfMf6ExtinctionDepthPosition: result := ExtinctionDepthPest;
+    UzfMf6ExtinctionWaterContentPosition: result := ExtinctionWaterContentPest;
+    UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialPest;
+    UzfMf6RootPotentialPosition: result := RootPotentialPest;
+    UzfMf6RootActivityPosition: result := RootActivityPest;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TUzfMf6_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    UzfMf6InfiltrationPosition: result := InfiltrationPestSeriesMethod;
+    UzfMf6PotentialETPosition: result := PotentialETPestSeriesMethod;
+    UzfMf6ExtinctionDepthPosition: result := ExtinctionDepthPestSeriesMethod;
+    UzfMf6ExtinctionWaterContentPosition: result := ExtinctionWaterContentPestSeriesMethod;
+    UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialPestSeriesMethod;
+    UzfMf6RootPotentialPosition: result := RootPotentialPestSeriesMethod;
+    UzfMf6RootActivityPosition: result := RootActivityPestSeriesMethod;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TUzfMf6_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    UzfMf6InfiltrationPosition: result := InfiltrationPestSeriesName;
+    UzfMf6PotentialETPosition: result := PotentialETPestSeriesName;
+    UzfMf6ExtinctionDepthPosition: result := ExtinctionDepthPestSeriesName;
+    UzfMf6ExtinctionWaterContentPosition: result := ExtinctionWaterContentPestSeriesName;
+    UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialPestSeriesName;
+    UzfMf6RootPotentialPosition: result := RootPotentialPestSeriesName;
+    UzfMf6RootActivityPosition: result := RootActivityPestSeriesName;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 function TUzfMf6_Cell.GetPotentialET: double;

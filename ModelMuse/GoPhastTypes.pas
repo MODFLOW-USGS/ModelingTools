@@ -691,6 +691,9 @@ const
   PestRowOffset = 0;
 {$ENDIF}
 
+  PestModifierRow = 1;
+  PestMethodRow = 2;
+
   TimeEpsilon = 1e-6;
 
   kModelTop = 'Model_Top';

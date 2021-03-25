@@ -682,40 +682,10 @@ begin
           WriteModflowParamFormula(ParameterName, RchCell.RechargePest,
             MultiplierValue, RchCell);
         end
-        else if Model.PestUsed and WritingTemplate
-          and ((RchCell.RechargePest <> '') or (RchCell.RechargePestSeries <> '')) then
-        begin
-          WritePestTemplateFormula(RchCell.RechargeRate, RchCell.RechargePest,
-            RchCell.RechargePestSeries, RchCell.RechargePestMethod,
-            RchCell);
-        end
         else
         begin
-          WriteFloat(RchCell.RechargeRate);
-          if RchCell.RechargePest <> '' then
-          begin
-            DataArray := Model.DataArrayManager.GetDataSetByName(
-              RchCell.RechargePest);
-            if DataArray <> nil then
-            begin
-              AddUsedPestDataArray(DataArray);
-            end;
-          end;
-          if RchCell.RechargePestSeries <> '' then
-          begin
-            DataArray := Model.DataArrayManager.GetDataSetByName(
-              RchCell.RechargePestSeries);
-            if DataArray <> nil then
-            begin
-              AddUsedPestDataArray(DataArray);
-            end;
-          end;
+          WriteValueOrFormula(RchCell, RechPosition);
         end;
-//        else
-//        begin
-//          WriteFloat(RchCell.RechargeRate);
-//        end;
-
 
 //        if RchCell.TimeSeriesName = '' then
 //        begin
