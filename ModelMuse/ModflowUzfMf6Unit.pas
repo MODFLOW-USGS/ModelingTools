@@ -164,11 +164,6 @@ type
     procedure InvalidateUzfAirEntryPotentialData(Sender: TObject);
     procedure InvalidateUzfRootPotentialData(Sender: TObject);
     procedure InvalidateUzfRootActivityData(Sender: TObject);
-    procedure AssignBoundaryFormula(AModel: TBaseModel;
-      const SeriesName: string;
-      SeriesMethod: TPestParamMethod; PestItems: TStringList;
-      const ItemFormula: string; Writer: TObject;
-      var BoundaryValues: TBoundaryValueArray; Index: Integer);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -584,9 +579,9 @@ const
     'UZF_SatZoneEvapotranspiration', 'UZF_Infiltration', 'UZF_MvrInflow',
     'UZF_RejectInfiltration', 'UZF_RejectInfiltrationToMvr',
     'UZF_UnsatZoneEvapotranspiration', 'UZF_Storage', 'UZF_NetInfiltration', 'UZF_WaterContent');
-    
-var 
-  UzfObsNameList: TStringList;   
+
+var
+  UzfObsNameList: TStringList;
 
 procedure InitializeUzfObsNameList;
 var
@@ -1367,47 +1362,12 @@ var
   Item: TUzfMf6Item;
   ScreenObject: TScreenObject;
   ALink: TUzfMf6TimeListLink;
-  InfiltrationData: TModflowTimeList;
-  PotentialETData: TModflowTimeList;
-  ExtinctionDepthData: TModflowTimeList;
-  ExtinctionWaterContentData: TModflowTimeList;
-  AirEntryPotentialData: TModflowTimeList;
-  RootPotentialData: TModflowTimeList;
-  RootActivityData: TModflowTimeList;
-  CustomWriter: TCustomFileWriter;
-  LocalModel: TCustomModel;
-  InfiltrationSeriesName: string;
-  InfiltrationSeriesMethod: TPestParamMethod;
-  InfiltrationItems: TStringList;
-  PestParam: TModflowSteadyParameter;
-  Formula: string;
-  PestDataArray: TDataArray;
-  PestParamSeries: TModflowSteadyParameter;
-  PestPotentialETSeriesName: string;
-  PotentialETMethod: TPestParamMethod;
-  PotentialETItems: TStringList;
-  PestExtinctionDepthSeriesName: string;
-  ExtinctionDepthMethod: TPestParamMethod;
-  ExtinctionDepthItems: TStringList;
-  PestExtinctionWaterContentSeriesName: string;
-  ExtinctionWaterContentMethod: TPestParamMethod;
-  ExtinctionWaterContentItems: TStringList;
-  PestAirEntryPotentialSeriesName: string;
-  AirEntryPotentialMethod: TPestParamMethod;
-  AirEntryPotentialItems: TStringList;
-  PestRootPotentialSeriesName: string;
-  RootPotentialMethod: TPestParamMethod;
-  RootPotentialItems: TStringList;
-  PestRootActivitySeriesName: string;
-  RootActivityMethod: TPestParamMethod;
-  RootActivityItems: TStringList;
   SeriesName: string;
   SeriesMethod: TPestParamMethod;
   PestItems: TStringList;
   ItemFormula: string;
+  TimeList: TModflowTimeList;
 begin
-  CustomWriter := nil;
-  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
@@ -1426,14 +1386,15 @@ begin
 
     ItemFormula := Item.Infiltration;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues, Index);
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.Infiltration;
   end;
   ALink := TimeListLink.GetLink(AModel) as TUzfMf6TimeListLink;
-  InfiltrationData := ALink.FInfiltrationData;
-  InfiltrationData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(InfiltrationData.Count = Count);
+
+  TimeList := ALink.FInfiltrationData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
 
   SeriesName := BoundaryGroup.PestBoundaryFormula[PotentialETPosition];
   PestSeries.Add(SeriesName);
@@ -1450,79 +1411,13 @@ begin
 
     ItemFormula := Item.PotentialET;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues, Index);
-
-//    PestParam := LocalModel.GetPestParameterByName(Item.PotentialET);
-//    if PestParam = nil then
-//    begin
-//      Formula := Item.PotentialET;
-//      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-//      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//      begin
-//        PotentialETItems.Add(PestDataArray.Name);
-//        if CustomWriter = nil then
-//        begin
-//          CustomWriter := Writer as TCustomFileWriter;
-//        end;
-//        CustomWriter.AddUsedPestDataArray(PestDataArray);
-//      end
-//      else
-//      begin
-//        PotentialETItems.Add('');
-//      end;
-//    end
-//    else
-//    begin
-//      Formula := FortranFloatToStr(PestParam.Value);
-//      PotentialETItems.Add(PestParam.ParameterName)
-//    end;
-
-//    if PestPotentialETSeriesName <> '' then
-//    begin
-//      PestParamSeries := LocalModel.GetPestParameterByName(PestPotentialETSeriesName);
-//      if PestParamSeries = nil then
-//      begin
-//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestPotentialETSeriesName);
-//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//        begin
-//          Case PotentialETMethod of
-//            ppmMultiply:
-//              begin
-//                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//            ppmAdd:
-//              begin
-//                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//          End;
-//          if CustomWriter = nil then
-//          begin
-//            CustomWriter := Writer as TCustomFileWriter;
-//          end;
-//          CustomWriter.AddUsedPestDataArray(PestDataArray);
-//        end;
-//      end
-//      else
-//      begin
-//        Case PotentialETMethod of
-//          ppmMultiply:
-//            begin
-//              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//          ppmAdd:
-//            begin
-//              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//        End;
-//      end;
-//    end;
-//    BoundaryValues[Index].Formula := Formula;
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.PotentialET;
   end;
-  PotentialETData := ALink.FPotentialETData;
-  PotentialETData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(PotentialETData.Count = Count);
+  TimeList := ALink.FPotentialETData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
 
   SeriesName := BoundaryGroup.PestBoundaryFormula[ExtinctionDepthPosition];
   PestSeries.Add(SeriesName);
@@ -1539,79 +1434,14 @@ begin
 
     ItemFormula := Item.ExtinctionDepth;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues, Index);
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
-//    PestParam := LocalModel.GetPestParameterByName(Item.ExtinctionDepth);
-//    if PestParam = nil then
-//    begin
-//      Formula := Item.ExtinctionDepth;
-//      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-//      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//      begin
-//        ExtinctionDepthItems.Add(PestDataArray.Name);
-//        if CustomWriter = nil then
-//        begin
-//          CustomWriter := Writer as TCustomFileWriter;
-//        end;
-//        CustomWriter.AddUsedPestDataArray(PestDataArray);
-//      end
-//      else
-//      begin
-//        ExtinctionDepthItems.Add('');
-//      end;
-//    end
-//    else
-//    begin
-//      Formula := FortranFloatToStr(PestParam.Value);
-//      ExtinctionDepthItems.Add(PestParam.ParameterName)
-//    end;
-//
-//    if PestExtinctionDepthSeriesName <> '' then
-//    begin
-//      PestParamSeries := LocalModel.GetPestParameterByName(PestExtinctionDepthSeriesName);
-//      if PestParamSeries = nil then
-//      begin
-//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestExtinctionDepthSeriesName);
-//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//        begin
-//          Case ExtinctionDepthMethod of
-//            ppmMultiply:
-//              begin
-//                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//            ppmAdd:
-//              begin
-//                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//          End;
-//          if CustomWriter = nil then
-//          begin
-//            CustomWriter := Writer as TCustomFileWriter;
-//          end;
-//          CustomWriter.AddUsedPestDataArray(PestDataArray);
-//        end;
-//      end
-//      else
-//      begin
-//        Case ExtinctionDepthMethod of
-//          ppmMultiply:
-//            begin
-//              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//          ppmAdd:
-//            begin
-//              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//        End;
-//      end;
-//    end;
-//    BoundaryValues[Index].Formula := Formula;
 
 //    BoundaryValues[Index].Formula := Item.ExtinctionDepth;
   end;
-  ExtinctionDepthData := ALink.FExtinctionDepthData;
-  ExtinctionDepthData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(ExtinctionDepthData.Count = Count);
+  TimeList := ALink.FExtinctionDepthData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
 
   SeriesName := BoundaryGroup.PestBoundaryFormula[ExtinctionWaterContentPosition];
   PestSeries.Add(SeriesName);
@@ -1628,79 +1458,14 @@ begin
 
     ItemFormula := Item.ExtinctionWaterContent;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues, Index);
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
-//    PestParam := LocalModel.GetPestParameterByName(Item.ExtinctionWaterContent);
-//    if PestParam = nil then
-//    begin
-//      Formula := Item.ExtinctionWaterContent;
-//      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-//      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//      begin
-//        ExtinctionWaterContentItems.Add(PestDataArray.Name);
-//        if CustomWriter = nil then
-//        begin
-//          CustomWriter := Writer as TCustomFileWriter;
-//        end;
-//        CustomWriter.AddUsedPestDataArray(PestDataArray);
-//      end
-//      else
-//      begin
-//        ExtinctionWaterContentItems.Add('');
-//      end;
-//    end
-//    else
-//    begin
-//      Formula := FortranFloatToStr(PestParam.Value);
-//      ExtinctionWaterContentItems.Add(PestParam.ParameterName)
-//    end;
-
-//    if PestExtinctionWaterContentSeriesName <> '' then
-//    begin
-//      PestParamSeries := LocalModel.GetPestParameterByName(PestExtinctionWaterContentSeriesName);
-//      if PestParamSeries = nil then
-//      begin
-//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestExtinctionWaterContentSeriesName);
-//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//        begin
-//          Case ExtinctionWaterContentMethod of
-//            ppmMultiply:
-//              begin
-//                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//            ppmAdd:
-//              begin
-//                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//          End;
-//          if CustomWriter = nil then
-//          begin
-//            CustomWriter := Writer as TCustomFileWriter;
-//          end;
-//          CustomWriter.AddUsedPestDataArray(PestDataArray);
-//        end;
-//      end
-//      else
-//      begin
-//        Case ExtinctionWaterContentMethod of
-//          ppmMultiply:
-//            begin
-//              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//          ppmAdd:
-//            begin
-//              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//        End;
-//      end;
-//    end;
-//    BoundaryValues[Index].Formula := Formula;
 
 //    BoundaryValues[Index].Formula := Item.ExtinctionWaterContent;
   end;
-  ExtinctionWaterContentData := ALink.FExtinctionWaterContentData;
-  ExtinctionWaterContentData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(ExtinctionWaterContentData.Count = Count);
+  TimeList := ALink.FExtinctionWaterContentData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
 
   SeriesName := BoundaryGroup.PestBoundaryFormula[AirEntryPotentialPosition];
   PestSeries.Add(SeriesName);
@@ -1717,79 +1482,14 @@ begin
 
     ItemFormula := Item.AirEntryPotential;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues, Index);
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
-//    PestParam := LocalModel.GetPestParameterByName(Item.AirEntryPotential);
-//    if PestParam = nil then
-//    begin
-//      Formula := Item.AirEntryPotential;
-//      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-//      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//      begin
-//        AirEntryPotentialItems.Add(PestDataArray.Name);
-//        if CustomWriter = nil then
-//        begin
-//          CustomWriter := Writer as TCustomFileWriter;
-//        end;
-//        CustomWriter.AddUsedPestDataArray(PestDataArray);
-//      end
-//      else
-//      begin
-//        AirEntryPotentialItems.Add('');
-//      end;
-//    end
-//    else
-//    begin
-//      Formula := FortranFloatToStr(PestParam.Value);
-//      AirEntryPotentialItems.Add(PestParam.ParameterName)
-//    end;
-
-//    if PestAirEntryPotentialSeriesName <> '' then
-//    begin
-//      PestParamSeries := LocalModel.GetPestParameterByName(PestAirEntryPotentialSeriesName);
-//      if PestParamSeries = nil then
-//      begin
-//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestAirEntryPotentialSeriesName);
-//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//        begin
-//          Case AirEntryPotentialMethod of
-//            ppmMultiply:
-//              begin
-//                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//            ppmAdd:
-//              begin
-//                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//          End;
-//          if CustomWriter = nil then
-//          begin
-//            CustomWriter := Writer as TCustomFileWriter;
-//          end;
-//          CustomWriter.AddUsedPestDataArray(PestDataArray);
-//        end;
-//      end
-//      else
-//      begin
-//        Case AirEntryPotentialMethod of
-//          ppmMultiply:
-//            begin
-//              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//          ppmAdd:
-//            begin
-//              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//        End;
-//      end;
-//    end;
-//    BoundaryValues[Index].Formula := Formula;
 
 //    BoundaryValues[Index].Formula := Item.AirEntryPotential;
   end;
-  AirEntryPotentialData := ALink.FAirEntryPotentialData;
-  AirEntryPotentialData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(AirEntryPotentialData.Count = Count);
+  TimeList := ALink.FAirEntryPotentialData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
 
   SeriesName := BoundaryGroup.PestBoundaryFormula[RootPotentialPosition];
   PestSeries.Add(SeriesName);
@@ -1806,79 +1506,14 @@ begin
 
     ItemFormula := Item.RootPotential;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues, Index);
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
-//    PestParam := LocalModel.GetPestParameterByName(Item.RootPotential);
-//    if PestParam = nil then
-//    begin
-//      Formula := Item.RootPotential;
-//      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-//      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//      begin
-//        RootPotentialItems.Add(PestDataArray.Name);
-//        if CustomWriter = nil then
-//        begin
-//          CustomWriter := Writer as TCustomFileWriter;
-//        end;
-//        CustomWriter.AddUsedPestDataArray(PestDataArray);
-//      end
-//      else
-//      begin
-//        RootPotentialItems.Add('');
-//      end;
-//    end
-//    else
-//    begin
-//      Formula := FortranFloatToStr(PestParam.Value);
-//      RootPotentialItems.Add(PestParam.ParameterName)
-//    end;
-
-//    if PestRootPotentialSeriesName <> '' then
-//    begin
-//      PestParamSeries := LocalModel.GetPestParameterByName(PestRootPotentialSeriesName);
-//      if PestParamSeries = nil then
-//      begin
-//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestRootPotentialSeriesName);
-//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//        begin
-//          Case RootPotentialMethod of
-//            ppmMultiply:
-//              begin
-//                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//            ppmAdd:
-//              begin
-//                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//          End;
-//          if CustomWriter = nil then
-//          begin
-//            CustomWriter := Writer as TCustomFileWriter;
-//          end;
-//          CustomWriter.AddUsedPestDataArray(PestDataArray);
-//        end;
-//      end
-//      else
-//      begin
-//        Case RootPotentialMethod of
-//          ppmMultiply:
-//            begin
-//              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//          ppmAdd:
-//            begin
-//              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//        End;
-//      end;
-//    end;
-//    BoundaryValues[Index].Formula := Formula;
 
 //    BoundaryValues[Index].Formula := Item.RootPotential;
   end;
-  RootPotentialData := ALink.FRootPotentialData;
-  RootPotentialData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(RootPotentialData.Count = Count);
+  TimeList := ALink.FRootPotentialData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
 
   SeriesName := BoundaryGroup.PestBoundaryFormula[RootActivityPosition];
   PestSeries.Add(SeriesName);
@@ -1895,93 +1530,27 @@ begin
 
     ItemFormula := Item.RootActivity;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues, Index);
-
-//    PestParam := LocalModel.GetPestParameterByName(Item.RootActivity);
-//    if PestParam = nil then
-//    begin
-//      Formula := Item.RootActivity;
-//      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-//      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//      begin
-//        RootActivityItems.Add(PestDataArray.Name);
-//        if CustomWriter = nil then
-//        begin
-//          CustomWriter := Writer as TCustomFileWriter;
-//        end;
-//        CustomWriter.AddUsedPestDataArray(PestDataArray);
-//      end
-//      else
-//      begin
-//        RootActivityItems.Add('');
-//      end;
-//    end
-//    else
-//    begin
-//      Formula := FortranFloatToStr(PestParam.Value);
-//      RootActivityItems.Add(PestParam.ParameterName)
-//    end;
-
-//    if PestRootActivitySeriesName <> '' then
-//    begin
-//      PestParamSeries := LocalModel.GetPestParameterByName(PestRootActivitySeriesName);
-//      if PestParamSeries = nil then
-//      begin
-//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestRootActivitySeriesName);
-//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-//        begin
-//          Case RootActivityMethod of
-//            ppmMultiply:
-//              begin
-//                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//            ppmAdd:
-//              begin
-//                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-//              end;
-//          End;
-//          if CustomWriter = nil then
-//          begin
-//            CustomWriter := Writer as TCustomFileWriter;
-//          end;
-//          CustomWriter.AddUsedPestDataArray(PestDataArray);
-//        end;
-//      end
-//      else
-//      begin
-//        Case RootActivityMethod of
-//          ppmMultiply:
-//            begin
-//              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//          ppmAdd:
-//            begin
-//              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-//            end;
-//        End;
-//      end;
-//    end;
-//    BoundaryValues[Index].Formula := Formula;
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.RootActivity;
   end;
-  RootActivityData := ALink.FRootActivityData;
-  RootActivityData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(RootActivityData.Count = Count);
+  TimeList := ALink.FRootActivityData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
 
   ClearBoundaries(AModel);
-  SetBoundaryCapacity(InfiltrationData.Count, AModel);
-  for TimeIndex := 0 to InfiltrationData.Count - 1 do
+  SetBoundaryCapacity(TimeList.Count, AModel);
+  for TimeIndex := 0 to TimeList.Count - 1 do
   begin
     AddBoundary(TUzfMf6Storage.Create(AModel));
   end;
-  ListOfTimeLists.Add(InfiltrationData);
-  ListOfTimeLists.Add(PotentialETData);
-  ListOfTimeLists.Add(ExtinctionDepthData);
-  ListOfTimeLists.Add(ExtinctionWaterContentData);
-  ListOfTimeLists.Add(AirEntryPotentialData);
-  ListOfTimeLists.Add(RootPotentialData);
-  ListOfTimeLists.Add(RootActivityData);
+  ListOfTimeLists.Add(ALink.FInfiltrationData);
+  ListOfTimeLists.Add(ALink.FPotentialETData);
+  ListOfTimeLists.Add(ALink.FExtinctionDepthData);
+  ListOfTimeLists.Add(ALink.FExtinctionWaterContentData);
+  ListOfTimeLists.Add(ALink.FAirEntryPotentialData);
+  ListOfTimeLists.Add(ALink.FRootPotentialData);
+  ListOfTimeLists.Add(ALink.FRootActivityData);
 end;
 
 procedure TUzfMf6Collection.InvalidateUzfAirEntryPotentialData(Sender: TObject);
@@ -2172,88 +1741,6 @@ begin
     FUzfMf6Array, BoundaryCount);
   inherited;
 end;
-
-procedure TUzfMf6Collection.AssignBoundaryFormula(AModel: TBaseModel;
-  const SeriesName: string;
-  SeriesMethod: TPestParamMethod; PestItems: TStringList;
-  const ItemFormula: string; Writer: TObject;
-  var BoundaryValues: TBoundaryValueArray; Index: Integer);
-var
-  LocalModel: TCustomModel;
-  PestParam: TModflowSteadyParameter;
-  Formula: string;
-  PestDataArray: TDataArray;
-  PestParamSeries: TModflowSteadyParameter;
-  CustomWriter: TCustomFileWriter;
-begin
-  CustomWriter := nil;
-  LocalModel := AModel as TCustomModel;
-  PestParam := LocalModel.GetPestParameterByName(ItemFormula);
-  if PestParam = nil then
-  begin
-    Formula := ItemFormula;
-    PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-    if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-    begin
-      PestItems.Add(PestDataArray.Name);
-      if CustomWriter = nil then
-      begin
-        CustomWriter := Writer as TCustomFileWriter;
-      end;
-      CustomWriter.AddUsedPestDataArray(PestDataArray);
-    end
-    else
-    begin
-      PestItems.Add('');
-    end;
-  end
-  else
-  begin
-    Formula := FortranFloatToStr(PestParam.Value);
-    PestItems.Add(PestParam.ParameterName);
-  end;
-  if SeriesName <> '' then
-  begin
-    PestParamSeries := LocalModel.GetPestParameterByName(SeriesName);
-    if PestParamSeries = nil then
-    begin
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(SeriesName);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        case SeriesMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-            end;
-        end;
-        if CustomWriter = nil then
-        begin
-          CustomWriter := Writer as TCustomFileWriter;
-        end;
-        CustomWriter.AddUsedPestDataArray(PestDataArray);
-      end;
-    end
-    else
-    begin
-      case SeriesMethod of
-        ppmMultiply:
-          begin
-            Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-          end;
-        ppmAdd:
-          begin
-            Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-          end;
-      end;
-    end;
-  end;
-  BoundaryValues[Index].Formula := Formula;
-end;
-
 { TUzfMf6TimeListLink }
 
 procedure TUzfMf6TimeListLink.CreateTimeLists;

@@ -2,8 +2,8 @@
 
 interface
 
-uses Winapi.Windows, System.UITypes, SysUtils, Classes, ZLib, RbwParser,
-  GoPhastTypes,
+uses Winapi.Windows, System.UITypes, SysUtils,
+  Classes, ZLib, RbwParser, GoPhastTypes,
   OrderedCollectionUnit, ModflowTransientListParameterUnit, DataSetUnit,
   RealListUnit, TempFiles, SubscriptionUnit, FormulaManagerUnit, SparseDataSets,
   System.Generics.Collections, System.StrUtils;
@@ -414,6 +414,10 @@ type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name clears all the @link(TModflowTimeList)s in @link(TimeLists).
     procedure ClearTimeLists(AModel: TBaseModel);
+    procedure AssignBoundaryFormula(AModel: TBaseModel;
+      const SeriesName: string; SeriesMethod: TPestParamMethod;
+      PestItems: TStringList; const ItemFormula: string; Writer: TObject;
+      var BoundaryValue: TBoundaryValue);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -4706,6 +4710,88 @@ begin
     InvalidateModel;
     FInterp := Value;
   end;
+end;
+
+procedure TCustomMF_BoundColl.AssignBoundaryFormula(AModel: TBaseModel;
+  const SeriesName: string; SeriesMethod: TPestParamMethod;
+  PestItems: TStringList; const ItemFormula: string; Writer: TObject;
+  var BoundaryValue: TBoundaryValue);
+var
+  LocalModel: TCustomModel;
+  PestParam: TModflowSteadyParameter;
+  Formula: string;
+  PestDataArray: TDataArray;
+  PestParamSeries: TModflowSteadyParameter;
+  CustomWriter: TCustomFileWriter;
+begin
+  CustomWriter := nil;
+  LocalModel := AModel as TCustomModel;
+  PestParam := LocalModel.GetPestParameterByName(ItemFormula);
+  if PestParam = nil then
+  begin
+    Formula := ItemFormula;
+    PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+    if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+    begin
+      PestItems.Add(PestDataArray.Name);
+      if CustomWriter = nil then
+      begin
+        CustomWriter := Writer as TCustomFileWriter;
+      end;
+      CustomWriter.AddUsedPestDataArray(PestDataArray);
+    end
+    else
+    begin
+      PestItems.Add('');
+    end;
+  end
+  else
+  begin
+    Formula := FortranFloatToStr(PestParam.Value);
+    PestItems.Add(PestParam.ParameterName);
+  end;
+  if SeriesName <> '' then
+  begin
+    PestParamSeries := LocalModel.GetPestParameterByName(SeriesName);
+    if PestParamSeries = nil then
+    begin
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(SeriesName);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        case SeriesMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+            end;
+        end;
+        if CustomWriter = nil then
+        begin
+          CustomWriter := Writer as TCustomFileWriter;
+        end;
+        CustomWriter.AddUsedPestDataArray(PestDataArray);
+      end;
+    end
+    else
+    begin
+      case SeriesMethod of
+        ppmMultiply:
+          begin
+            Formula := Format('(%0:s) * %1:g',
+              [Formula, PestParamSeries.Value]);
+          end;
+        ppmAdd:
+          begin
+            Formula := Format('(%0:s) + %1:g',
+              [Formula, PestParamSeries.Value]);
+          end;
+      end;
+    end;
+  end;
+  BoundaryValue.Formula := Formula;
 end;
 
 end.

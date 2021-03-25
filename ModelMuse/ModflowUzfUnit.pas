@@ -1656,18 +1656,11 @@ var
   ScreenObject: TScreenObject;
   ALink: TUzfExtinctionDepthTimeListLink;
   FExtinctionDepthData: TModflowTimeList;
-  CustomWriter: TCustomFileWriter;
-  LocalModel: TCustomModel;
   PestExtinctionDepthSeriesName: string;
   ExtinctionDepthMethod: TPestParamMethod;
   ExtinctionDepthItems: TStringList;
-  PestParam: TModflowSteadyParameter;
-  Formula: string;
-  PestDataArray: TDataArray;
-  PestParamSeries: TModflowSteadyParameter;
+  ItemFormula: string;
 begin
-  CustomWriter := nil;
-  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
@@ -1684,72 +1677,9 @@ begin
     Item := Items[Index] as TUzfExtinctDepthItem;
     BoundaryValues[Index].Time := Item.StartTime;
 
-    PestParam := LocalModel.GetPestParameterByName(Item.UzfExtinctDepth);
-    if PestParam = nil then
-    begin
-      Formula := Item.UzfExtinctDepth;
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        ExtinctionDepthItems.Add(PestDataArray.Name);
-        if CustomWriter = nil then
-        begin
-          CustomWriter := Writer as TCustomFileWriter;
-        end;
-        CustomWriter.AddUsedPestDataArray(PestDataArray);
-      end
-      else
-      begin
-        ExtinctionDepthItems.Add('');
-      end;
-    end
-    else
-    begin
-      Formula := FortranFloatToStr(PestParam.Value);
-      ExtinctionDepthItems.Add(PestParam.ParameterName)
-    end;
-
-    if PestExtinctionDepthSeriesName <> '' then
-    begin
-      PestParamSeries := LocalModel.GetPestParameterByName(PestExtinctionDepthSeriesName);
-      if PestParamSeries = nil then
-      begin
-        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestExtinctionDepthSeriesName);
-        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-        begin
-          Case ExtinctionDepthMethod of
-            ppmMultiply:
-              begin
-                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-              end;
-            ppmAdd:
-              begin
-                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-              end;
-          End;
-          if CustomWriter = nil then
-          begin
-            CustomWriter := Writer as TCustomFileWriter;
-          end;
-          CustomWriter.AddUsedPestDataArray(PestDataArray);
-        end;
-      end
-      else
-      begin
-        Case ExtinctionDepthMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-            end;
-        End;
-      end;
-    end;
-    BoundaryValues[Index].Formula := Formula;
-
+    ItemFormula := Item.UzfExtinctDepth;
+    AssignBoundaryFormula(AModel, PestExtinctionDepthSeriesName, ExtinctionDepthMethod,
+      ExtinctionDepthItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.UzfExtinctDepth;
   end;
@@ -1901,18 +1831,11 @@ var
   ScreenObject: TScreenObject;
   ALink: TUzfWaterContentTimeListLink;
   WaterContentData: TModflowTimeList;
-  CustomWriter: TCustomFileWriter;
-  LocalModel: TCustomModel;
   PestWaterContentSeriesName: string;
   WaterContentMethod: TPestParamMethod;
   WaterContentItems: TStringList;
-  PestParam: TModflowSteadyParameter;
-  Formula: string;
-  PestDataArray: TDataArray;
-  PestParamSeries: TModflowSteadyParameter;
+  ItemFormula: string;
 begin
-  CustomWriter := nil;
-  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
@@ -1929,71 +1852,9 @@ begin
     Item := Items[Index] as TUzfWaterContentItem;
     BoundaryValues[Index].Time := Item.StartTime;
 
-    PestParam := LocalModel.GetPestParameterByName(Item.UzfWaterContent);
-    if PestParam = nil then
-    begin
-      Formula := Item.UzfWaterContent;
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        WaterContentItems.Add(PestDataArray.Name);
-        if CustomWriter = nil then
-        begin
-          CustomWriter := Writer as TCustomFileWriter;
-        end;
-        CustomWriter.AddUsedPestDataArray(PestDataArray);
-      end
-      else
-      begin
-        WaterContentItems.Add('');
-      end;
-    end
-    else
-    begin
-      Formula := FortranFloatToStr(PestParam.Value);
-      WaterContentItems.Add(PestParam.ParameterName)
-    end;
-
-    if PestWaterContentSeriesName <> '' then
-    begin
-      PestParamSeries := LocalModel.GetPestParameterByName(PestWaterContentSeriesName);
-      if PestParamSeries = nil then
-      begin
-        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestWaterContentSeriesName);
-        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-        begin
-          Case WaterContentMethod of
-            ppmMultiply:
-              begin
-                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-              end;
-            ppmAdd:
-              begin
-                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-              end;
-          End;
-          if CustomWriter = nil then
-          begin
-            CustomWriter := Writer as TCustomFileWriter;
-          end;
-          CustomWriter.AddUsedPestDataArray(PestDataArray);
-        end;
-      end
-      else
-      begin
-        Case WaterContentMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-            end;
-        End;
-      end;
-    end;
-    BoundaryValues[Index].Formula := Formula;
+    ItemFormula := Item.UzfWaterContent;
+    AssignBoundaryFormula(AModel, PestWaterContentSeriesName, WaterContentMethod,
+      WaterContentItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.UzfWaterContent;
   end;

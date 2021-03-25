@@ -838,16 +838,9 @@ var
   PestRateSeriesName: string;
   RateMethod: TPestParamMethod;
   RateItems: TStringList;
-  LocalModel: TCustomModel;
-  PestParam: TModflowSteadyParameter;
-  Formula: string;
-  PestDataArray: TDataArray;
-  PestParamSeries: TModflowSteadyParameter;
-  CustomWriter: TCustomFileWriter;
   BoundaryPosition: Integer;
+  ItemFormula: string;
 begin
-  CustomWriter := nil;
-  LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
   // Note that TRchTEvtCollectionCollection is also used in UZF where RateBoundaryPosition
@@ -871,72 +864,11 @@ begin
     Item := Items[Index] as TEvtItem;
     BoundaryValues[Index].Time := Item.StartTime;
 
-    PestParam := LocalModel.GetPestParameterByName(Item.EvapotranspirationRate);
-    if PestParam = nil then
-    begin
-      Formula := Item.EvapotranspirationRate;
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        RateItems.Add(PestDataArray.Name);
-        if CustomWriter = nil then
-        begin
-          CustomWriter := Writer as TCustomFileWriter;
-        end;
-        CustomWriter.AddUsedPestDataArray(PestDataArray);
-      end
-      else
-      begin
-        RateItems.Add('');
-      end;
-    end
-    else
-    begin
-      Formula := FortranFloatToStr(PestParam.Value);
-      RateItems.Add(PestParam.ParameterName)
-    end;
+    ItemFormula := Item.EvapotranspirationRate;
+    AssignBoundaryFormula(AModel, PestRateSeriesName, RateMethod,
+      RateItems, ItemFormula, Writer, BoundaryValues[Index]);
 
-    if PestRateSeriesName <> '' then
-    begin
-      PestParamSeries := LocalModel.GetPestParameterByName(PestRateSeriesName);
-      if PestParamSeries = nil then
-      begin
-        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestRateSeriesName);
-        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-        begin
-          Case RateMethod of
-            ppmMultiply:
-              begin
-                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-              end;
-            ppmAdd:
-              begin
-                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-              end;
-          End;
-          if CustomWriter = nil then
-          begin
-            CustomWriter := Writer as TCustomFileWriter;
-          end;
-          CustomWriter.AddUsedPestDataArray(PestDataArray);
-        end;
-      end
-      else
-      begin
-        Case RateMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-            end;
-        End;
-      end;
-    end;
-
-    BoundaryValues[Index].Formula := Formula;
+//    BoundaryValues[Index].Formula := Formula;
   end;
   ALink := TimeListLink.GetLink(AModel) as TEvtTimeListLink;
   FEvapotranspirationRateData := ALink.FEvapotranspirationRateData;
@@ -2536,112 +2468,31 @@ var
   ALink: TEvtSurfDepthListLink;
   EvapotranspirationSurfaceData: TModflowTimeList;
   EvapotranspirationDepthData: TModflowTimeList;
-  PestSurfaceSeriesName: string;
-  SurfaceMethod: TPestParamMethod;
-  SurfaceItems: TStringList;
-  PestDepthSeriesName: string;
-  DepthMethod: TPestParamMethod;
-  DepthItems: TStringList;
-  LocalModel: TCustomModel;
-  PestParam: TModflowSteadyParameter;
-  Formula: string;
-  PestDataArray: TDataArray;
-  PestParamSeries: TModflowSteadyParameter;
-  CustomWriter: TCustomFileWriter;
+  ItemFormula: string;
+  SeriesName: string;
+  SeriesMethod: TPestParamMethod;
+  PestItems: TStringList;
 begin
-  CustomWriter := nil;
-  LocalModel := AModel as TCustomModel;
   Boundary := BoundaryGroup as TEvtBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
-  PestSurfaceSeriesName := BoundaryGroup.PestBoundaryFormula[SurfaceBoundaryPosition];
-  PestSeries.Add(PestSurfaceSeriesName);
-  SurfaceMethod := BoundaryGroup.PestBoundaryMethod[SurfaceBoundaryPosition];
-  PestMethods.Add(SurfaceMethod);
+  SeriesName := BoundaryGroup.PestBoundaryFormula[SurfaceBoundaryPosition];
+  PestSeries.Add(SeriesName);
+  SeriesMethod := BoundaryGroup.PestBoundaryMethod[SurfaceBoundaryPosition];
+  PestMethods.Add(SeriesMethod);
 
-  SurfaceItems := TStringList.Create;
-  PestItemNames.Add(SurfaceItems);
-
-  PestDepthSeriesName := BoundaryGroup.PestBoundaryFormula[DepthBoundaryPosition];
-  PestSeries.Add(PestDepthSeriesName);
-  DepthMethod := BoundaryGroup.PestBoundaryMethod[DepthBoundaryPosition];
-  PestMethods.Add(DepthMethod);
-
-  DepthItems := TStringList.Create;
-  PestItemNames.Add(DepthItems);
+  PestItems := TStringList.Create;
+  PestItemNames.Add(PestItems);
 
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TEvtSurfDepthItem;
     BoundaryValues[Index].Time := Item.StartTime;
 
-    PestParam := LocalModel.GetPestParameterByName(Item.EvapotranspirationSurface);
-    if PestParam = nil then
-    begin
-      Formula := Item.EvapotranspirationSurface;
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        SurfaceItems.Add(PestDataArray.Name);
-        if CustomWriter = nil then
-        begin
-          CustomWriter := Writer as TCustomFileWriter;
-        end;
-        CustomWriter.AddUsedPestDataArray(PestDataArray);
-      end
-      else
-      begin
-        SurfaceItems.Add('');
-      end;
-    end
-    else
-    begin
-      Formula := FortranFloatToStr(PestParam.Value);
-      SurfaceItems.Add(PestParam.ParameterName)
-    end;
-
-    if PestSurfaceSeriesName <> '' then
-    begin
-      PestParamSeries := LocalModel.GetPestParameterByName(PestSurfaceSeriesName);
-      if PestParamSeries = nil then
-      begin
-        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestSurfaceSeriesName);
-        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-        begin
-          Case SurfaceMethod of
-            ppmMultiply:
-              begin
-                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-              end;
-            ppmAdd:
-              begin
-                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-              end;
-          End;
-          if CustomWriter = nil then
-          begin
-            CustomWriter := Writer as TCustomFileWriter;
-          end;
-          CustomWriter.AddUsedPestDataArray(PestDataArray);
-        end;
-      end
-      else
-      begin
-        Case SurfaceMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-            end;
-        End;
-      end;
-    end;
-    BoundaryValues[Index].Formula := Formula;
-
+    ItemFormula := Item.EvapotranspirationSurface;
+    AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.EvapotranspirationSurface;
   end;
@@ -2650,76 +2501,23 @@ begin
   EvapotranspirationSurfaceData.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(EvapotranspirationSurfaceData.Count = Count);
 
+  SeriesName := BoundaryGroup.PestBoundaryFormula[DepthBoundaryPosition];
+  PestSeries.Add(SeriesName);
+  SeriesMethod := BoundaryGroup.PestBoundaryMethod[DepthBoundaryPosition];
+  PestMethods.Add(SeriesMethod);
+
+  PestItems := TStringList.Create;
+  PestItemNames.Add(PestItems);
+
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TEvtSurfDepthItem;
     BoundaryValues[Index].Time := Item.StartTime;
 
-    PestParam := LocalModel.GetPestParameterByName(Item.EvapotranspirationDepth);
-    if PestParam = nil then
-    begin
-      Formula := Item.EvapotranspirationDepth;
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        DepthItems.Add(PestDataArray.Name);
-      end
-      else
-      begin
-        DepthItems.Add('');
-      end;
-      if CustomWriter = nil then
-      begin
-        CustomWriter := Writer as TCustomFileWriter;
-      end;
-      CustomWriter.AddUsedPestDataArray(PestDataArray);
-    end
-    else
-    begin
-      Formula := FortranFloatToStr(PestParam.Value);
-      DepthItems.Add(PestParam.ParameterName)
-    end;
-
-    if PestDepthSeriesName <> '' then
-    begin
-      PestParamSeries := LocalModel.GetPestParameterByName(PestDepthSeriesName);
-      if PestParamSeries = nil then
-      begin
-        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestDepthSeriesName);
-        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-        begin
-          Case DepthMethod of
-            ppmMultiply:
-              begin
-                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-              end;
-            ppmAdd:
-              begin
-                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-              end;
-          End;
-          if CustomWriter = nil then
-          begin
-            CustomWriter := Writer as TCustomFileWriter;
-          end;
-          CustomWriter.AddUsedPestDataArray(PestDataArray);
-        end;
-      end
-      else
-      begin
-        Case DepthMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-            end;
-        End;
-      end;
-    end;
-    BoundaryValues[Index].Formula := Formula;
+    ItemFormula := Item.EvapotranspirationDepth;
+    AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
+      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.EvapotranspirationDepth;
   end;

@@ -589,27 +589,19 @@ var
   RechargeRateData: TModflowTimeList;
   DataArrayIndex: Integer;
   DataArray: TTransientRealSparseDataSet;
-//  Grid: TCustomModelGrid;
   RowIndex: Integer;
   ColIndex: Integer;
   LayerIndex: Integer;
   ShouldRemove: Boolean;
-//  DisvGrid: TModflowDisvGrid;
   RowCount: Integer;
   ColumnCount: Integer;
   LayerCount: Integer;
   LocalModel: TCustomModel;
-  PestParam: TModflowSteadyParameter;
-//  PestParamSeries: string;
   RechargeMethod: TPestParamMethod;
-  Formula: string;
   PestRechargeSeriesName: string;
-  PestParamSeries: TModflowSteadyParameter;
-  PestDataArray: TDataArray;
   RechargeItems: TStringList;
-  CustomWriter: TCustomFileWriter;
+  ItemFormula: string;
 begin
-  CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -628,71 +620,10 @@ begin
   begin
     Item := Items[Index] as TRchItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    PestParam := LocalModel.GetPestParameterByName(Item.RechargeRate);
-    if PestParam = nil then
-    begin
-      Formula := Item.RechargeRate;
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        RechargeItems.Add(PestDataArray.Name);
-        if CustomWriter = nil then
-        begin
-          CustomWriter := Writer as TCustomFileWriter;
-        end;
-        CustomWriter.AddUsedPestDataArray(PestDataArray);
-      end
-      else
-      begin
-        RechargeItems.Add('');
-      end;
-    end
-    else
-    begin
-      Formula := FortranFloatToStr(PestParam.Value);
-      RechargeItems.Add(PestParam.ParameterName)
-    end;
 
-    if PestRechargeSeriesName <> '' then
-    begin
-      PestParamSeries := LocalModel.GetPestParameterByName(PestRechargeSeriesName);
-      if PestParamSeries = nil then
-      begin
-        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(PestRechargeSeriesName);
-        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-        begin
-          Case RechargeMethod of
-            ppmMultiply:
-              begin
-                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-              end;
-            ppmAdd:
-              begin
-                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-              end;
-          End;
-          if CustomWriter = nil then
-          begin
-            CustomWriter := Writer as TCustomFileWriter;
-          end;
-          CustomWriter.AddUsedPestDataArray(PestDataArray);
-        end;
-      end
-      else
-      begin
-        Case RechargeMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g', [Formula, PestParamSeries.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g', [Formula, PestParamSeries.Value]);
-            end;
-        End;
-      end;
-    end;
-    BoundaryValues[Index].Formula := Formula;
+    ItemFormula := Item.RechargeRate;
+    AssignBoundaryFormula(AModel, PestRechargeSeriesName, RechargeMethod,
+      RechargeItems, ItemFormula, Writer, BoundaryValues[Index]);
 
   end;
   ALink := TimeListLink.GetLink(AModel) as TRchTimeListLink;
@@ -706,20 +637,6 @@ begin
     RowCount := LocalModel.RowCount;
     ColumnCount := LocalModel.ColumnCount;
     LayerCount := LocalModel.LayerCount;
-//    if (AModel as TCustomModel).DisvUsed then
-//    begin
-//      DisvGrid := (AModel as TCustomModel).DisvGrid;
-//      RowCount := DisvGrid.RowCount;
-//      ColumnCount := DisvGrid.ColumnCount;
-//      LayerCount := DisvGrid.LayerCount;
-//    end
-//    else
-//    begin
-//      Grid := (AModel as TCustomModel).Grid;
-//      RowCount := Grid.RowCount;
-//      ColumnCount := Grid.ColumnCount;
-//      LayerCount := Grid.LayerCount;
-//    end;
     for DataArrayIndex := 0 to RechargeRateData.Count - 1 do
     begin
       DataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
