@@ -67,6 +67,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -90,6 +91,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -200,6 +202,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -223,6 +226,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -246,6 +250,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -268,6 +273,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitTop = 52
         end
       end
       object pnlBottom: TPanel
@@ -300,7 +306,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         end
         object btnDelete: TBitBtn
           Left = 293
-          Top = 5
+          Top = 6
           Width = 82
           Height = 33
           Anchors = [akTop, akRight]
@@ -337,7 +343,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           OnClick = btnDeleteClick
         end
         object btnInsert: TBitBtn
-          Left = 209
+          Left = 205
           Top = 5
           Width = 82
           Height = 33
@@ -398,6 +404,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'Closest'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -465,6 +472,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'Closest'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -488,6 +496,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

@@ -243,6 +243,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
+      ExplicitLeft = 0
       ExplicitTop = 52
     end
   end

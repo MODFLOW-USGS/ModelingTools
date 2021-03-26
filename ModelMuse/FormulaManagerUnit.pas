@@ -937,7 +937,6 @@ begin
     begin
       FSortedList.Delete(FormulaObject.Formula);
 
-
       if (FormulaObject.FPosition < FList.Count)
         and (FList[FormulaObject.FPosition] = FormulaObject) then
       begin

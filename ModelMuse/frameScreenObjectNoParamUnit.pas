@@ -91,8 +91,6 @@ type
     procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
     function GetPestModifier(ACol: Integer): string;
     procedure SetPestModifier(ACol: Integer; const Value: string);
-//    function GetPestMethod(ACol: Integer): TPestParamMethod;
-//    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
     { Private declarations }
   protected
     procedure LayoutMultiRowEditControls; virtual;
@@ -128,10 +126,6 @@ type
       read GetPestModifier write SetPestModifier;
     { Public declarations }
   end;
-
-resourcestring
-  StrPestModifier = 'Pest Modifier';
-  StrModificationMethod = 'Modification Method';
 
 implementation
 

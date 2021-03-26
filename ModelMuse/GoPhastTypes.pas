@@ -684,6 +684,10 @@ procedure AssignLengthUnitStringsToPicklist(LengthPickList: TStrings;
 procedure AssignTimeUnitStringsToPicklist(TimePickList: TStrings;
   ModelType: TModelSelection);
 
+resourcestring
+  StrPestModifier = 'Pest Modifier';
+  StrModificationMethod = 'Modification Method';
+
 const
 {$IFDEF PEST}
   PestRowOffset = 2;

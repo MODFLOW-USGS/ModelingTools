@@ -319,14 +319,14 @@ type
       Stored False
       {$ENDIF}
       ;
-    property PestConductanceFormula: string read GetPestConductanceFormula
-      write SetPestConductanceFormula
+    property PestElevMethod: TPestParamMethod read FPestElevMethod
+      write SetPestElevMethod
       {$IFNDEF PEST}
       Stored False
       {$ENDIF}
       ;
-    property PestElevMethod: TPestParamMethod read FPestElevMethod
-      write SetPestElevMethod
+    property PestConductanceFormula: string read GetPestConductanceFormula
+      write SetPestConductanceFormula
       {$IFNDEF PEST}
       Stored False
       {$ENDIF}

@@ -79,6 +79,8 @@ type
     FOnChange: TNotifyEvent;
     FChanging: Boolean;
     FPriorRowCount: Integer;
+    FValuesCleared: Boolean;
+    FOnCheckPestCell: TSelectCellEvent;
     procedure LayoutMultiRowEditControls;
     function GetDeletedCells(ACol, ARow: integer): boolean;
     procedure SetDeletedCells(ACol, ARow: integer; const Value: boolean);
@@ -104,6 +106,8 @@ type
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
+    property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
+      write FOnCheckPestCell;
     { Public declarations }
   end;
 
@@ -135,8 +139,8 @@ resourcestring
 procedure TframeScreenObjectSfr6.btnDeleteClick(Sender: TObject);
 begin
   inherited;
-  if (rdgModflowBoundary.RowCount > 2)
-    and (rdgModflowBoundary.Row> 0) then
+  if (rdgModflowBoundary.RowCount > 2 + PestRowOffset)
+    and (rdgModflowBoundary.Row> 0 + PestRowOffset) then
   begin
     rdgModflowBoundary.DeleteRow(rdgModflowBoundary.Row);
   end;
@@ -147,7 +151,7 @@ end;
 procedure TframeScreenObjectSfr6.btnInsertClick(Sender: TObject);
 begin
   inherited;
-  if (rdgModflowBoundary.SelectedRow <= 0)
+  if (rdgModflowBoundary.SelectedRow <= 0+ PestRowOffset)
     or (rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.RowCount) then
   begin
     Beep;
@@ -159,7 +163,7 @@ begin
     rdgModflowBoundary.InsertRow(rdgModflowBoundary.SelectedRow);
     rdgModflowBoundary.ItemIndex[Ord(s6cStatus), rdgModflowBoundary.SelectedRow] := 1;
   end;
-  FPriorRowCount := seNumberOfTimes.AsInteger +1;
+  FPriorRowCount := seNumberOfTimes.AsInteger +1+PestRowOffset;
   seNumberOfTimes.AsInteger := seNumberOfTimes.AsInteger +1;
 end;
 
@@ -263,6 +267,7 @@ var
   Values: TCustomMF_BoundColl;
   DownstreamSegments: TIntegerCollection;
   Diversions: TDiversionCollection;
+  FirstBoundary: TSfrMf6Boundary;
 begin
   Changing := True;
   tabDownstreamSegments.TabVisible := True;
@@ -272,6 +277,7 @@ begin
   DownstreamSegments := nil;
   Diversions := nil;
 
+  FValuesCleared := False;
   try
     pgcSfr6.ActivePageIndex := 0;
     InitializeGrids;
@@ -286,6 +292,7 @@ begin
     rdgModflowBoundary.BeginUpdate;
     try
 //    VerticalState := cbGrayed;
+      FirstBoundary := nil;
       for Index := 0 to ScreenObjectList.Count - 1 do
       begin
         Item := ScreenObjectList[Index];
@@ -303,8 +310,6 @@ begin
             rdgFormulas.Cells[1, Ord(s6brStreambedTop)] := Sf6Boundary.StreambedTop;
             rdgFormulas.Cells[1, Ord(s6brStreambedThickness)] := Sf6Boundary.StreambedThickness;
             rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)] := Sf6Boundary.HydraulicConductivity;
-  //          rdgFormulas.Cells[1, Ord(s6brRoughness)] := Sf6Boundary.Roughness;
-  //          rdgFormulas.Cells[1, Ord(s6brUpstreamFraction)] := Sf6Boundary.UpstreamFraction;
 
             DownstreamSegments := Sf6Boundary.DownstreamSegments;
             frmgrdDownstreamSegments.seNumber.AsInteger :=
@@ -328,6 +333,25 @@ begin
                 := Ord(ADiversion.Priority);
             end;
 
+            {$IFDEF PEST}
+            PestModifier[rdgModflowBoundary, Ord(s6cStage)] := Sf6Boundary.PestStageFormula;
+            PestMethod[rdgModflowBoundary, Ord(s6cStage)] := Sf6Boundary.PestStageMethod;
+            PestModifier[rdgModflowBoundary, Ord(s6cInflow)] := Sf6Boundary.PestInflowFormula;
+            PestMethod[rdgModflowBoundary, Ord(s6cInflow)] := Sf6Boundary.PestInflowMethod;
+            PestModifier[rdgModflowBoundary, Ord(s6cRainfall)] := Sf6Boundary.PestRainfallFormula;
+            PestMethod[rdgModflowBoundary, Ord(s6cRainfall)] := Sf6Boundary.PestRainfallMethod;
+            PestModifier[rdgModflowBoundary, Ord(s6cEvaporation)] := Sf6Boundary.PestEvaporationFormula;
+            PestMethod[rdgModflowBoundary, Ord(s6cEvaporation)] := Sf6Boundary.PestEvaporationMethod;
+            PestModifier[rdgModflowBoundary, Ord(s6cRunoff)] := Sf6Boundary.PestRunoffFormula;
+            PestMethod[rdgModflowBoundary, Ord(s6cRunoff)] := Sf6Boundary.PestRunoffMethod;
+            PestModifier[rdgModflowBoundary, Ord(s6cRoughness)] := Sf6Boundary.PestRoughnessFormula;
+            PestMethod[rdgModflowBoundary, Ord(s6cRoughness)] := Sf6Boundary.PestRoughnessMethod;
+            PestModifier[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := Sf6Boundary.PestUpstreamFractionFormula;
+            PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := Sf6Boundary.PestUpstreamFractionMethod;
+            {$ENDIF}
+
+            FirstBoundary := Sf6Boundary;
+
             seNumberOfTimes.AsInteger := Sf6Boundary.Values.Count;
             seNumberOfTimes.OnChange(nil);
             Values := Sf6Boundary.Values;
@@ -335,30 +359,30 @@ begin
             for TimeIndex := 0 to Sf6Boundary.Values.Count - 1 do
             begin
               Sfr6Item := Sf6Boundary.Values[TimeIndex] as TSfrMf6Item;
-              rdgModflowBoundary.RealValue[Ord(s6cStartTime), TimeIndex+1]
+              rdgModflowBoundary.RealValue[Ord(s6cStartTime), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.StartTime;
-              rdgModflowBoundary.RealValue[Ord(s6cEndtime), TimeIndex+1]
+              rdgModflowBoundary.RealValue[Ord(s6cEndtime), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.EndTime;
-              rdgModflowBoundary.ItemIndex[Ord(s6cStatus), TimeIndex+1]
+              rdgModflowBoundary.ItemIndex[Ord(s6cStatus), TimeIndex+1+PestRowOffset]
                 := Ord(Sfr6Item.StreamStatus);
-              rdgModflowBoundary.Cells[Ord(s6cStage), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(s6cStage), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.Stage;
-              rdgModflowBoundary.Cells[Ord(s6cInflow), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(s6cInflow), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.Inflow;
-              rdgModflowBoundary.Cells[Ord(s6cRainfall), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(s6cRainfall), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.Rainfall;
-              rdgModflowBoundary.Cells[Ord(s6cEvaporation), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(s6cEvaporation), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.Evaporation;
-              rdgModflowBoundary.Cells[Ord(s6cRunoff), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(s6cRunoff), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.Runoff;
-              rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.UpstreamFraction;
-              rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1+PestRowOffset]
                 := Sfr6Item.Roughness;
 
               for DiverIndex := 0 to Sfr6Item.Diversions.Count - 1 do
               begin
-                rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1]
+                rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1+PestRowOffset]
                   := Sfr6Item.Diversions[DiverIndex];
               end;
             end;
@@ -366,6 +390,72 @@ begin
           else
           begin
             rdeSegmentNumber.Enabled := False;
+
+            {$IFDEF PEST}
+
+            if Sf6Boundary.PestStageFormula <> FirstBoundary.PestStageFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(s6cStage)] := False
+            end;
+            if Sf6Boundary.PestStageMethod <> FirstBoundary.PestStageMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(s6cStage)] := False;
+            end;
+            if Sf6Boundary.PestInflowFormula <> FirstBoundary.PestInflowFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(s6cInflow)] := False;
+            end;
+            if Sf6Boundary.PestInflowMethod <> FirstBoundary.PestInflowMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(s6cInflow)] := False;
+            end;
+            if Sf6Boundary.PestRainfallFormula <> FirstBoundary.PestRainfallFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(s6cRainfall)] := False;
+            end;
+            if Sf6Boundary.PestRainfallMethod <> FirstBoundary.PestRainfallMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(s6cRainfall)] := False;
+            end;
+            if Sf6Boundary.PestEvaporationFormula <> FirstBoundary.PestEvaporationFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(s6cEvaporation)] := False;
+            end;
+            if Sf6Boundary.PestEvaporationMethod <> FirstBoundary.PestEvaporationMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(s6cEvaporation)] := False;
+            end;
+            if Sf6Boundary.PestRunoffFormula <> FirstBoundary.PestRunoffFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(s6cRunoff)] := False;
+            end;
+            if Sf6Boundary.PestRunoffMethod <> FirstBoundary.PestRunoffMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(s6cRunoff)] := False;
+            end;
+            if Sf6Boundary.PestRoughnessFormula <> FirstBoundary.PestRoughnessFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(s6cRoughness)] := False;
+            end;
+            if Sf6Boundary.PestRoughnessMethod <> FirstBoundary.PestRoughnessMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(s6cRoughness)] := False;
+            end;
+            if Sf6Boundary.PestUpstreamFractionFormula <> FirstBoundary.PestUpstreamFractionFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := False;
+            end;
+            if Sf6Boundary.PestUpstreamFractionMethod <> FirstBoundary.PestUpstreamFractionMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(s6cUpstreamFraction)] := False;
+            end;
+            {$ENDIF}
+
+            if not Values.isSame(Sf6Boundary.Values) then
+            begin
+              ClearGrid(rdgModflowBoundary);
+              FValuesCleared := True;
+            end;
 
             if not DownstreamSegments.isSame(Sf6Boundary.DownstreamSegments) then
             begin
@@ -406,16 +496,6 @@ begin
             begin
               rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)] := '';
             end;
-  //          if rdgFormulas.Cells[1, Ord(s6brRoughness)] <> Sf6Boundary.Roughness then
-  //          begin
-  //            rdgFormulas.Cells[1, Ord(s6brRoughness)] := '';
-  //          end;
-  //          if rdgFormulas.Cells[1, Ord(s6brUpstreamFraction)] <> Sf6Boundary.UpstreamFraction then
-  //          begin
-  //            rdgFormulas.Cells[1, Ord(s6brUpstreamFraction)] := '';
-  //          end;
-
-
           end;
         end;
       end;
@@ -474,6 +554,7 @@ begin
 
     ClearGrid(rdgModflowBoundary);
     seNumberOfTimes.AsInteger := 0;
+    seNumberOfTimesChange(seNumberOfTimes);
 
     rdgModflowBoundary.Cells[Ord(s6cStartTime),0] := StrStartingTime;
     rdgModflowBoundary.Cells[Ord(s6cEndtime),0] := StrEndingTime;
@@ -487,14 +568,38 @@ begin
     rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction),0] := StrUpstreamFractionMf6;
     rdgModflowBoundary.Cells[Ord(s6cRoughness),0] := StrRoughnessMf6;
 
+    {$IFDEF PEST}
+    rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
+    rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
+    rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
+    rdgModflowBoundary.SpecialFormat[0, PestMethodRow] := rcf4String;
+    rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+
+    PestMethod[rdgModflowBoundary, Ord(s6cStage)] :=
+      TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6StagePosition);
+    PestMethod[rdgModflowBoundary, Ord(s6cInflow)] :=
+      TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6InflowPosition);
+    PestMethod[rdgModflowBoundary, Ord(s6cRainfall)] :=
+      TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6RainfallPosition);
+    PestMethod[rdgModflowBoundary, Ord(s6cEvaporation)] :=
+      TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6EvaporationPosition);
+    PestMethod[rdgModflowBoundary, Ord(s6cRunoff)] :=
+      TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6RunoffPosition);
+    PestMethod[rdgModflowBoundary, Ord(s6cRoughness)] :=
+      TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6RoughnessPosition);
+    PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)] :=
+      TSfrMf6Boundary.DefaultBoundaryMethod(SfrMf6UpstreamFractionPosition);
+    {$ENDIF}
+
 //    rdgModflowBoundary.ItemIndex[Ord(s6cStatus),0] := 0;
-    rdgModflowBoundary.Cells[Ord(s6cStage),1] := '0';
-    rdgModflowBoundary.Cells[Ord(s6cInflow),1] := '0';
-    rdgModflowBoundary.Cells[Ord(s6cRainfall),1] := '0';
-    rdgModflowBoundary.Cells[Ord(s6cEvaporation),1] := '0';
-    rdgModflowBoundary.Cells[Ord(s6cRunoff),1] := '0';
-    rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction),1] := '1';
-    rdgModflowBoundary.Cells[Ord(s6cRoughness),1] := '0.03';
+    rdgModflowBoundary.Cells[Ord(s6cStage),1+PestRowOffset] := '0';
+    rdgModflowBoundary.Cells[Ord(s6cInflow),1+PestRowOffset] := '0';
+    rdgModflowBoundary.Cells[Ord(s6cRainfall),1+PestRowOffset] := '0';
+    rdgModflowBoundary.Cells[Ord(s6cEvaporation),1+PestRowOffset] := '0';
+    rdgModflowBoundary.Cells[Ord(s6cRunoff),1+PestRowOffset] := '0';
+    rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction),1+PestRowOffset] := '1';
+    rdgModflowBoundary.Cells[Ord(s6cRoughness),1+PestRowOffset] := '0.03';
 
     rdgModflowBoundary.Columns[Ord(s6cStatus)].Format := rcf4String;
     PickList := rdgModflowBoundary.Columns[Ord(s6cStatus)].PickList;
@@ -522,6 +627,7 @@ begin
   finally
     rdgModflowBoundary.EndUpdate;
   end;
+
   rdgModflowBoundary.BeginUpdate;
   try
     for ColIndex := Ord(s6cStage) to rdgModflowBoundary.ColCount - 1 do
@@ -659,7 +765,7 @@ var
 begin
   rdgModflowBoundary.BeginUpdate;
   try
-    for RowIndex := rdgModflowBoundary.FixedRows to
+    for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset to
       rdgModflowBoundary.RowCount - 1 do
     begin
       for ColIndex := FLastTimeColumn+2 to rdgModflowBoundary.ColCount - 1 do
@@ -730,7 +836,7 @@ end;
 procedure TframeScreenObjectSfr6.rdgModflowBoundaryEnter(Sender: TObject);
 begin
   inherited;
-  FPriorRowCount := seNumberOfTimes.AsInteger + 1;
+  FPriorRowCount := seNumberOfTimes.AsInteger + 1+PestRowOffset;
 end;
 
 procedure TframeScreenObjectSfr6.rdgModflowBoundaryHorizontalScroll(
@@ -776,6 +882,11 @@ begin
     CanSelect := False;
     Exit;
   end;
+  if Assigned(OnCheckPestCell)
+    and not (csCustomPaint in rdgModflowBoundary.ControlState) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
+  end;
 end;
 
 procedure TframeScreenObjectSfr6.rdgModflowBoundarySetEditText(Sender: TObject;
@@ -785,14 +896,19 @@ begin
   begin
     Exit;
   end;
-  if seNumberOfTimes.AsInteger < rdgModflowBoundary.RowCount -1  then
+  if seNumberOfTimes.AsInteger < rdgModflowBoundary.RowCount -1-PestRowOffset then
   begin
-    seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount -1;
+    seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount -1-PestRowOffset;
     seNumberOfTimes.OnChange(seNumberOfTimes);
   end;
   if FSelectedText <> Value then
   begin
     DeletedCells[ACol, ARow] := Value = '';
+  end;
+
+  if ARow >= rdgModflowBoundary.FixedRows + PestRowOffset then
+  begin
+    FValuesCleared := False;
   end;
 
   UpdateNextTimeCell(rdgModflowBoundary, ACol, ARow);
@@ -814,15 +930,18 @@ begin
   try
     if seNumberOfTimes.AsInteger = 0 then
     begin
-      rdgModflowBoundary.RowCount := 2;
+      rdgModflowBoundary.RowCount := 2+PestRowOffset;
       ClearGrid(rdgModflowBoundary);
     end
     else
     begin
-      rdgModflowBoundary.RowCount := seNumberOfTimes.AsInteger + 1;
-      for RowIndex := FPriorRowCount to rdgModflowBoundary.RowCount - 1 do
+      rdgModflowBoundary.RowCount := seNumberOfTimes.AsInteger + 1+PestRowOffset;
+      if not Changing then
       begin
-        rdgModflowBoundary.ItemIndex[Ord(s6cStatus), RowIndex] := 1;
+        for RowIndex := FPriorRowCount to rdgModflowBoundary.RowCount - 1 do
+        begin
+          rdgModflowBoundary.ItemIndex[Ord(s6cStatus), RowIndex] := 1;
+        end;
       end;
     end;
     btnDelete.Enabled := seNumberOfTimes.AsInteger >= 1;
@@ -883,7 +1002,6 @@ begin
       if BoundaryUsed then
       begin
         Boundary.Clear;
-//        Item.ScreenObject.RemoveDataSet(ReachLengthDataArray);
       end;
     end
     else if SetAll or BoundaryUsed then
@@ -901,9 +1019,6 @@ begin
       if Trim(rdgFormulas.Cells[1, Ord(s6brReachLength)]) <> '' then
       begin
         Boundary.ReachLength := rdgFormulas.Cells[1, Ord(s6brReachLength)];
-
-//        ItemPostion := Item.ScreenObject.AddDataSet(ReachLengthDataArray);
-//        Item.ScreenObject.DataSetFormulas[ItemPostion] := Boundary.ReachLength;
       end;
       if Trim(rdgFormulas.Cells[1, Ord(s6brReachWidth)]) <> '' then
       begin
@@ -925,14 +1040,6 @@ begin
       begin
         Boundary.HydraulicConductivity := rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)];
       end;
-//      if Trim(rdgFormulas.Cells[1, Ord(s6brRoughness)]) <> '' then
-//      begin
-//        Boundary.Roughness := rdgFormulas.Cells[1, Ord(s6brRoughness)];
-//      end;
-//      if Trim(rdgFormulas.Cells[1, Ord(s6brUpstreamFraction)]) <> '' then
-//      begin
-//        Boundary.UpstreamFraction := rdgFormulas.Cells[1, Ord(s6brUpstreamFraction)];
-//      end;
 
       if tabDownstreamSegments.TabVisible then
       begin
@@ -971,62 +1078,133 @@ begin
 
       if tabRates.TabVisible then
       begin
-        Boundary.Values.Count := seNumberOfTimes.AsInteger;
-        for TimeIndex := 0 to Boundary.Values.Count - 1 do
+        {$IFDEF PEST}
+        if PestModifierAssigned[rdgModflowBoundary, Ord(s6cStage)] then
         begin
-          Sfr6Item := Boundary.Values[TimeIndex] as TSfrMf6Item;
-          Sfr6Item.StartTime := rdgModflowBoundary.RealValue[Ord(s6cStartTime), TimeIndex+1];
-          Sfr6Item.EndTime := rdgModflowBoundary.RealValue[Ord(s6cEndtime), TimeIndex+1];
-          if rdgModflowBoundary.ItemIndex[Ord(s6cStatus), TimeIndex+1] >= 0 then
-          begin
-            Sfr6Item.StreamStatus := TStreamStatus(rdgModflowBoundary.ItemIndex[Ord(s6cStatus), TimeIndex+1]);
-          end;
-          if rdgModflowBoundary.Cells[Ord(s6cStage), TimeIndex+1] <> '' then
-          begin
-            Sfr6Item.Stage := rdgModflowBoundary.Cells[Ord(s6cStage), TimeIndex+1];
-          end;
-          if rdgModflowBoundary.Cells[Ord(s6cInflow), TimeIndex+1] <> '' then
-          begin
-            Sfr6Item.Inflow := rdgModflowBoundary.Cells[Ord(s6cInflow), TimeIndex+1];
-          end;
-          if rdgModflowBoundary.Cells[Ord(s6cRainfall), TimeIndex+1] <> '' then
-          begin
-            Sfr6Item.Rainfall := rdgModflowBoundary.Cells[Ord(s6cRainfall), TimeIndex+1];
-          end;
-          if rdgModflowBoundary.Cells[Ord(s6cEvaporation), TimeIndex+1] <> '' then
-          begin
-            Sfr6Item.Evaporation := rdgModflowBoundary.Cells[Ord(s6cEvaporation), TimeIndex+1];
-          end;
-          if rdgModflowBoundary.Cells[Ord(s6cRunoff), TimeIndex+1] <> '' then
-          begin
-            Sfr6Item.Runoff := rdgModflowBoundary.Cells[Ord(s6cRunoff), TimeIndex+1];
-          end;
-          if rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction), TimeIndex+1] <> '' then
-          begin
-            Sfr6Item.UpstreamFraction := rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction), TimeIndex+1];
-          end;
-          if rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1] <> '' then
-          begin
-            Sfr6Item.Roughness := rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1];
-          end;
+          Boundary.PestStageFormula := PestModifier[rdgModflowBoundary, Ord(s6cStage)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(s6cStage)] then
+        begin
+          Boundary.PestStageMethod := PestMethod[rdgModflowBoundary, Ord(s6cStage)];
+        end;
 
-          if tabDiversions.TabVisible then
+        if PestModifierAssigned[rdgModflowBoundary, Ord(s6cInflow)] then
+        begin
+          Boundary.PestInflowFormula := PestModifier[rdgModflowBoundary, Ord(s6cInflow)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(s6cInflow)] then
+        begin
+          Boundary.PestInflowMethod := PestMethod[rdgModflowBoundary, Ord(s6cInflow)];
+        end;
+
+        if PestModifierAssigned[rdgModflowBoundary, Ord(s6cRainfall)] then
+        begin
+          Boundary.PestRainfallFormula := PestModifier[rdgModflowBoundary, Ord(s6cRainfall)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(s6cRainfall)] then
+        begin
+          Boundary.PestRainfallMethod := PestMethod[rdgModflowBoundary, Ord(s6cRainfall)];
+        end;
+
+        if PestModifierAssigned[rdgModflowBoundary, Ord(s6cEvaporation)] then
+        begin
+          Boundary.PestEvaporationFormula := PestModifier[rdgModflowBoundary, Ord(s6cEvaporation)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(s6cEvaporation)] then
+        begin
+          Boundary.PestEvaporationMethod := PestMethod[rdgModflowBoundary, Ord(s6cEvaporation)];
+        end;
+
+        if PestModifierAssigned[rdgModflowBoundary, Ord(s6cRunoff)] then
+        begin
+          Boundary.PestRunoffFormula := PestModifier[rdgModflowBoundary, Ord(s6cRunoff)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(s6cRunoff)] then
+        begin
+          Boundary.PestRunoffMethod := PestMethod[rdgModflowBoundary, Ord(s6cRunoff)];
+        end;
+
+        if PestModifierAssigned[rdgModflowBoundary, Ord(s6cRoughness)] then
+        begin
+          Boundary.PestRoughnessFormula := PestModifier[rdgModflowBoundary, Ord(s6cRoughness)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(s6cRoughness)] then
+        begin
+          Boundary.PestRoughnessMethod := PestMethod[rdgModflowBoundary, Ord(s6cRoughness)];
+        end;
+
+        if PestModifierAssigned[rdgModflowBoundary, Ord(s6cUpstreamFraction)] then
+        begin
+          Boundary.PestUpstreamFractionFormula := PestModifier[rdgModflowBoundary, Ord(s6cUpstreamFraction)];
+        end;
+        if PestMethodAssigned[rdgModflowBoundary, Ord(s6cUpstreamFraction)] then
+        begin
+          Boundary.PestUpstreamFractionMethod := PestMethod[rdgModflowBoundary, Ord(s6cUpstreamFraction)];
+        end;
+        {$ENDIF}
+
+        if not FValuesCleared then
+        begin
+          Boundary.Values.Count := seNumberOfTimes.AsInteger;
+          for TimeIndex := 0 to Boundary.Values.Count - 1 do
           begin
-            Sfr6Item.DiversionCount := frmgrdDiversions.seNumber.AsInteger;
-            for DiverIndex := 0 to frmgrdDiversions.seNumber.AsInteger - 1 do
+            Sfr6Item := Boundary.Values[TimeIndex] as TSfrMf6Item;
+            Sfr6Item.StartTime := rdgModflowBoundary.
+              RealValue[Ord(s6cStartTime), TimeIndex+1+PestRowOffset];
+            Sfr6Item.EndTime := rdgModflowBoundary.
+              RealValue[Ord(s6cEndtime), TimeIndex+1+PestRowOffset];
+            if rdgModflowBoundary.ItemIndex[Ord(s6cStatus), TimeIndex+1+PestRowOffset] >= 0 then
             begin
-              RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1];
-              if RateFormula <> '' then
+              Sfr6Item.StreamStatus := TStreamStatus(rdgModflowBoundary.
+                ItemIndex[Ord(s6cStatus), TimeIndex+1+PestRowOffset]);
+            end;
+            if rdgModflowBoundary.Cells[Ord(s6cStage), TimeIndex+1+PestRowOffset] <> '' then
+            begin
+              Sfr6Item.Stage := rdgModflowBoundary.Cells[Ord(s6cStage), TimeIndex+1+PestRowOffset];
+            end;
+            if rdgModflowBoundary.Cells[Ord(s6cInflow), TimeIndex+1+PestRowOffset] <> '' then
+            begin
+              Sfr6Item.Inflow := rdgModflowBoundary.Cells[Ord(s6cInflow), TimeIndex+1+PestRowOffset];
+            end;
+            if rdgModflowBoundary.Cells[Ord(s6cRainfall), TimeIndex+1+PestRowOffset] <> '' then
+            begin
+              Sfr6Item.Rainfall := rdgModflowBoundary.Cells[Ord(s6cRainfall), TimeIndex+1+PestRowOffset];
+            end;
+            if rdgModflowBoundary.Cells[Ord(s6cEvaporation), TimeIndex+1+PestRowOffset] <> '' then
+            begin
+              Sfr6Item.Evaporation := rdgModflowBoundary.Cells[Ord(s6cEvaporation), TimeIndex+1+PestRowOffset];
+            end;
+            if rdgModflowBoundary.Cells[Ord(s6cRunoff), TimeIndex+1+PestRowOffset] <> '' then
+            begin
+              Sfr6Item.Runoff := rdgModflowBoundary.Cells[Ord(s6cRunoff), TimeIndex+1+PestRowOffset];
+            end;
+            if rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction), TimeIndex+1+PestRowOffset] <> '' then
+            begin
+              Sfr6Item.UpstreamFraction := rdgModflowBoundary.Cells[Ord(s6cUpstreamFraction), TimeIndex+1+PestRowOffset];
+            end;
+            if rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1+PestRowOffset] <> '' then
+            begin
+              Sfr6Item.Roughness := rdgModflowBoundary.Cells[Ord(s6cRoughness), TimeIndex+1+PestRowOffset];
+            end;
+
+            if tabDiversions.TabVisible then
+            begin
+              Sfr6Item.DiversionCount := frmgrdDiversions.seNumber.AsInteger;
+              for DiverIndex := 0 to frmgrdDiversions.seNumber.AsInteger - 1 do
               begin
-                Sfr6Item.DiversionFormulas[DiverIndex] := RateFormula;
-              end
-              else if Sfr6Item.DiversionFormulas[DiverIndex] = '' then
-              begin
-                Sfr6Item.DiversionFormulas[DiverIndex] := '0';
+                RateFormula := rdgModflowBoundary.Cells[Ord(s6cDiversionStart) + DiverIndex, TimeIndex+1];
+                if RateFormula <> '' then
+                begin
+                  Sfr6Item.DiversionFormulas[DiverIndex] := RateFormula;
+                end
+                else if Sfr6Item.DiversionFormulas[DiverIndex] = '' then
+                begin
+                  Sfr6Item.DiversionFormulas[DiverIndex] := '0';
+                end;
               end;
             end;
-          end;
-        end
+          end
+        end;
       end;
 
     end;

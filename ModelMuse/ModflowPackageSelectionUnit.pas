@@ -14433,7 +14433,7 @@ end;
 procedure TStrPackageSelection.GetMfStrBedTopElevationUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptStr, StreamBedTopPosition, StrSTRStreamTopElev);
+  UpdateDisplayUseList(NewUseList, ptStr, SfrMf6StreambedTopPosition, StrSTRStreamTopElev);
 end;
 
 procedure TStrPackageSelection.GetMfStrConductanceUseList(Sender: TObject;
@@ -19359,13 +19359,13 @@ end;
 procedure TSfrModflow6PackageSelection.GetEvaporationUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetSfr6UseList(EvaporationPosition, NewUseList, StrSFR6Evaporation);
+  GetSfr6UseList(SfrMf6EvaporationPosition, NewUseList, StrSFR6Evaporation);
 end;
 
 procedure TSfrModflow6PackageSelection.GetInflowUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetSfr6UseList(InflowPosition, NewUseList, StrSFR6Inflow);
+  GetSfr6UseList(SfrMf6InflowPosition, NewUseList, StrSFR6Inflow);
 end;
 
 function TSfrModflow6PackageSelection.GetMaxDepthChange: double;
@@ -19376,19 +19376,19 @@ end;
 procedure TSfrModflow6PackageSelection.GetRainfallUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetSfr6UseList(RainfallPosition, NewUseList, StrSFR6Rainfall);
+  GetSfr6UseList(SfrMf6RainfallPosition, NewUseList, StrSFR6Rainfall);
 end;
 
 procedure TSfrModflow6PackageSelection.GetRoughnessUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetSfr6UseList(RoughnessPosition, NewUseList, StrSFR6Roughness);
+  GetSfr6UseList(SfrMf6RoughnessPosition, NewUseList, StrSFR6Roughness);
 end;
 
 procedure TSfrModflow6PackageSelection.GetRunoffUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetSfr6UseList(RunoffPosition, NewUseList, StrSFR6Runoff);
+  GetSfr6UseList(SfrMf6RunoffPosition, NewUseList, StrSFR6Runoff);
 end;
 
 procedure TSfrModflow6PackageSelection.GetSfr6UseList(DataIndex: integer;
@@ -19424,13 +19424,13 @@ end;
 procedure TSfrModflow6PackageSelection.GetStageUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetSfr6UseList(StagePosition, NewUseList, StrSFR6Stage);
+  GetSfr6UseList(SfrMf6StagePosition, NewUseList, StrSFR6Stage);
 end;
 
 procedure TSfrModflow6PackageSelection.GetUpstreamFractionUseList(
   Sender: TObject; NewUseList: TStringList);
 begin
-  GetSfr6UseList(UpstreamFractionPosition, NewUseList, StrSFR6UpstreamFracti);
+  GetSfr6UseList(SfrMf6UpstreamFractionPosition, NewUseList, StrSFR6UpstreamFracti);
 end;
 
 procedure TSfrModflow6PackageSelection.InitializeSfr6Display(Sender: TObject);

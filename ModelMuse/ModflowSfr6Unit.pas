@@ -21,7 +21,6 @@ type
 
   TSfrMF6Record = record
     Cell: TCellLocation;
-
     Inflow: double;
     Rainfall: double;
     Evaporation: double;
@@ -246,6 +245,9 @@ type
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
     property Values: TSfrMF6Record read FValues;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   end;
 
   TDivisionPriority = (cpFraction, cpExcess, cpThreshold, cpUpTo);
@@ -348,11 +350,30 @@ type
     FHydraulicConductivityObserver: TObserver;
     FReachWidthObserver: TObserver;
     FStreambedTopObserver: TObserver;
-//    FRoughnessObserver: TObserver;
     FGradientObserver: TObserver;
     FStreambedThicknessObserver: TObserver;
-//    FSfrInflowLocation: TSfrInflowLocation;
-//    FUpstreamFractionObserver: TObserver;
+    FPestRainfallMethod: TPestParamMethod;
+    FPestRoughnessMethod: TPestParamMethod;
+    FPestRunoffMethod: TPestParamMethod;
+    FPestInflowMethod: TPestParamMethod;
+    FPestEvaporationMethod: TPestParamMethod;
+    FPestStageMethod: TPestParamMethod;
+    FPestUpstreamFractionMethod: TPestParamMethod;
+    FInflow: TFormulaObject;
+    FRainfall: TFormulaObject;
+    FEvaporation: TFormulaObject;
+    FRunoff: TFormulaObject;
+    FStage: TFormulaObject;
+    FUpstreamFractionFormula: TFormulaObject;
+    FRoughnessFormula: TFormulaObject;
+    FPestEvaporationObserver: TObserver;
+    FPestInflowObserver: TObserver;
+    FPestRainfallObserver: TObserver;
+    FPestRoughnessObserver: TObserver;
+    FPestRunoffObserver: TObserver;
+    FPestStageObserver: TObserver;
+    FPestUpstreamFractionObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetDiversions(const Value: TDiversionCollection);
     procedure SetDownstreamSegments(const Value: TIntegerCollection);
     procedure SetSegmentNumber(const Value: Integer);
@@ -361,27 +382,21 @@ type
     function GetGradient: string;
     function GetHydraulicConductivity: string;
     function GetReachWidth: string;
-//    function GetRoughness: string;
     function GetStreambedThickness: string;
     function GetStreambedTop: string;
-//    function GetUpstreamFraction: string;
     procedure SetGradient(const Value: string);
     procedure SetHydraulicConductivity(const Value: string);
     procedure SetReachWidth(const Value: string);
-//    procedure SetRoughness(const Value: string);
     procedure SetStreambedThickness(const Value: string);
     procedure SetStreambedTop(const Value: string);
-//    procedure SetUpstreamFraction(const Value: string);
-    procedure CreateFormulaObjects;
+//    procedure CreateFormulaObjects;
     procedure RemoveFormulaObjects;
     function GetGradientObserver: TObserver;
     function GetHydraulicConductivityObserver: TObserver;
     function GetReachLengthObserver: TObserver;
     function GetReachWidthObserver: TObserver;
-//    function GetRoughnessObserver: TObserver;
     function GetStreambedThicknessObserver: TObserver;
     function GetStreambedTopObserver: TObserver;
-//    function GetUpstreamFractionObserver: TObserver;
     procedure InvalidateDisplayTimeLists;
     procedure LinkReachLength;
     procedure LinkReachWidth;
@@ -389,7 +404,41 @@ type
     procedure LinkStreambedTop;
     procedure LinkStreambedThickness;
     procedure LinkHydraulicConductivity;
-//    procedure SetSfrInflowLocation(const Value: TSfrInflowLocation);
+    procedure InvalidateInflowData(Sender: TObject);
+    procedure InvalidateRainfallData(Sender: TObject);
+    procedure InvalidateEvaporationData(Sender: TObject);
+    procedure InvalidateRunoffData(Sender: TObject);
+    procedure InvalidateUpstreamFractionData(Sender: TObject);
+    procedure InvalidateStageData(Sender: TObject);
+    procedure InvalidateRoughnessData(Sender: TObject);
+    function GetPestEvaporationFormula: string;
+    function GetPestEvaporationObserver: TObserver;
+    function GetPestInflowFormula: string;
+    function GetPestInflowObserver: TObserver;
+    function GetPestRainfallFormula: string;
+    function GetPestRainfallObserver: TObserver;
+    function GetPestRoughnessFormula: string;
+    function GetPestRoughnessObserver: TObserver;
+    function GetPestRunoffFormula: string;
+    function GetPestRunoffObserver: TObserver;
+    function GetPestStageFormula: string;
+    function GetPestStageObserver: TObserver;
+    function GetPestUpstreamFractionFormula: string;
+    function GetPestUpstreamFractionObserver: TObserver;
+    procedure SetPestEvaporationFormula(const Value: string);
+    procedure SetPestEvaporationMethod(const Value: TPestParamMethod);
+    procedure SetPestInflowFormula(const Value: string);
+    procedure SetPestInflowMethod(const Value: TPestParamMethod);
+    procedure SetPestRainfallFormula(const Value: string);
+    procedure SetPestRainfallMethod(const Value: TPestParamMethod);
+    procedure SetPestRoughnessFormula(const Value: string);
+    procedure SetPestRoughnessMethod(const Value: TPestParamMethod);
+    procedure SetPestRunoffFormula(const Value: string);
+    procedure SetPestRunoffMethod(const Value: TPestParamMethod);
+    procedure SetPestStageFormula(const Value: string);
+    procedure SetPestStageMethod(const Value: TPestParamMethod);
+    procedure SetPestUpstreamFractionFormula(const Value: string);
+    procedure SetPestUpstreamFractionMethod(const Value: TPestParamMethod);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -402,15 +451,36 @@ type
     property StreambedThicknessObserver: TObserver read GetStreambedThicknessObserver;
     property HydraulicConductivityObserver: TObserver read GetHydraulicConductivityObserver;
     function BoundaryObserverPrefix: string; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+//    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+//    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestInflowObserver: TObserver read GetPestInflowObserver;
+    property PestRainfallObserver: TObserver read GetPestRainfallObserver;
+    property PestEvaporationObserver: TObserver read GetPestEvaporationObserver;
+    property PestRunoffObserver: TObserver read GetPestRunoffObserver;
+    property PestUpstreamFractionObserver: TObserver read GetPestUpstreamFractionObserver;
+    property PestStageObserver: TObserver read GetPestStageObserver;
+    property PestRoughnessObserver: TObserver read GetPestRoughnessObserver;
   public
-    Procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
-    procedure CreateObservers;
+    Procedure Assign(Source: TPersistent); override;
     procedure Loaded;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property SegmentNumber: Integer read FSegmentNumber write SetSegmentNumber;
     property DownstreamSegments: TIntegerCollection read FDownstreamSegments
@@ -420,32 +490,120 @@ type
     property ReachWidth: string read GetReachWidth write SetReachWidth;
     property Gradient: string read GetGradient write SetGradient;
     property StreambedTop: string read GetStreambedTop write SetStreambedTop;
-    property StreambedThickness: string read GetStreambedThickness write SetStreambedThickness;
-    property HydraulicConductivity: string read GetHydraulicConductivity write SetHydraulicConductivity;
+    property StreambedThickness: string read GetStreambedThickness
+      write SetStreambedThickness;
+    property HydraulicConductivity: string read GetHydraulicConductivity
+      write SetHydraulicConductivity;
+    // @name is only for backwards compatibility. It is not used.
     property Roughness: string read FRoughness write FRoughness stored False;
-    property UpstreamFraction: string read FUpstreamFraction write FUpstreamFraction stored False;
-//    property SfrInflowLocation: TSfrInflowLocation read FSfrInflowLocation
-//      write SetSfrInflowLocation stored True;
+    // @name is only for backwards compatibility. It is not used.
+    property UpstreamFraction: string read FUpstreamFraction
+      write FUpstreamFraction stored False;
+
+    property PestInflowFormula: string read GetPestInflowFormula
+      write SetPestInflowFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestInflowMethod: TPestParamMethod read FPestInflowMethod
+      write SetPestInflowMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRainfallFormula: string read GetPestRainfallFormula
+      write SetPestRainfallFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRainfallMethod: TPestParamMethod read FPestRainfallMethod
+      write SetPestRainfallMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationFormula: string read GetPestEvaporationFormula
+      write SetPestEvaporationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationMethod: TPestParamMethod read FPestEvaporationMethod
+      write SetPestEvaporationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRunoffFormula: string read GetPestRunoffFormula
+      write SetPestRunoffFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRunoffMethod: TPestParamMethod read FPestRunoffMethod
+      write SetPestRunoffMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamFractionFormula: string read GetPestUpstreamFractionFormula
+      write SetPestUpstreamFractionFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamFractionMethod: TPestParamMethod read FPestUpstreamFractionMethod
+      write SetPestUpstreamFractionMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestStageFormula: string read GetPestStageFormula
+      write SetPestStageFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestStageMethod: TPestParamMethod read FPestStageMethod
+      write SetPestStageMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRoughnessFormula: string read GetPestRoughnessFormula
+      write SetPestRoughnessFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRoughnessMethod: TPestParamMethod read FPestRoughnessMethod
+      write SetPestRoughnessMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
-  InflowPosition = 0;
-  RainfallPosition = 1;
-  EvaporationPosition = 2;
-  RunoffPosition = 3;
-  UpstreamFractionPosition = 4;
-  StagePosition = 5;
-  RoughnessPosition = 6;
-  DiversionStartPosition = 7;
+  SfrMf6InflowPosition = 0;
+  SfrMf6RainfallPosition = 1;
+  SfrMf6EvaporationPosition = 2;
+  SfrMf6RunoffPosition = 3;
+  SfrMf6UpstreamFractionPosition = 4;
+  SfrMf6StagePosition = 5;
+  SfrMf6RoughnessPosition = 6;
+  SfrMf6DiversionStartPosition = 7;
 
-  ReachLengthPosition = 0;
-  ReachWidthPosition = 1;
-  GradientPosition = 2;
-  StreambedTopPosition = 3;
-  StreambedThicknessPosition = 4;
-  HydraulicConductivityPosition = 5;
-//  SteadyRoughnessPosition = 6;
-//  SteadyUpstreamFractionPosition = 7;
+  SfrMf6ReachLengthPosition = 0;
+  SfrMf6ReachWidthPosition = 1;
+  SfrMf6GradientPosition = 2;
+  SfrMf6StreambedTopPosition = 3;
+  SfrMf6StreambedThicknessPosition = 4;
+  SfrMf6HydraulicConductivityPosition = 5;
+  SfrMf6PestBoundaryOffset = 6;
+
 function TryGetSfrOb(const SfrObName: string; var SfrOb: TSfrOb): Boolean;
 function SfrObToString(const SfrOb: TSfrOb): string;
 Procedure FillSfrSeriesNames(AList: TStrings);
@@ -570,6 +728,16 @@ begin
   begin
     WriteCompInt(Comp, Strings.IndexOf(DiversionPestSeriesNames[index]));
   end;
+
+  WriteCompInt(Comp, Ord(InflowPestSeriesMethod));
+  WriteCompInt(Comp, Ord(RainfallPestSeriesMethod));
+  WriteCompInt(Comp, Ord(EvaporationPestSeriesMethod));
+  WriteCompInt(Comp, Ord(RunoffPestSeriesMethod));
+  WriteCompInt(Comp, Ord(UpstreamFractionPestSeriesMethod));
+  WriteCompInt(Comp, Ord(StagePestSeriesMethod));
+  WriteCompInt(Comp, Ord(RoughnessPestSeriesMethod));
+
+
   for index := 0 to Length(DiversionPestSeriesMethods) - 1 do
   begin
     WriteCompInt(Comp, Ord(DiversionPestSeriesMethods[index]));
@@ -689,6 +857,14 @@ begin
   begin
     DiversionPestSeriesNames[index] := Annotations[ReadCompInt(Decomp)];
   end;
+
+  InflowPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RainfallPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  EvaporationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RunoffPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  UpstreamFractionPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  StagePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RoughnessPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   SetLength(DiversionPestSeriesMethods, ArraySize);
   for index := 0 to ArraySize - 1 do
@@ -846,30 +1022,30 @@ var
   DivIndex: Integer;
 begin
   ParentCollection := Collection as TSfrMf6Collection;
-  Observer := FObserverList[InflowPosition];
+  Observer := FObserverList[SfrMf6InflowPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateInflowData;
 
-  Observer := FObserverList[RainfallPosition];
+  Observer := FObserverList[SfrMf6RainfallPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateRainfallData;
 
-  Observer := FObserverList[EvaporationPosition];
+  Observer := FObserverList[SfrMf6EvaporationPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateEvaporationData;
 
-  Observer := FObserverList[RunoffPosition];
+  Observer := FObserverList[SfrMf6RunoffPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateRunoffData;
 
-  Observer := FObserverList[UpstreamFractionPosition];
+  Observer := FObserverList[SfrMf6UpstreamFractionPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateUpstreamFractionData;
 
-  Observer := FObserverList[StagePosition];
+  Observer := FObserverList[SfrMf6StagePosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateStageData;
 
-  Observer := FObserverList[RoughnessPosition];
+  Observer := FObserverList[SfrMf6RoughnessPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateRoughnessData;
 
   for DivIndex := 0 to DiversionCount - 1 do
   begin
-    Observer := FObserverList[DivIndex + DiversionStartPosition];
+    Observer := FObserverList[DivIndex + SfrMf6DiversionStartPosition];
     Observer.OnUpToDateSet := ParentCollection.InvalidateDiversionsData;
   end;
 end;
@@ -922,14 +1098,14 @@ end;
 function TSfrMf6Item.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    InflowPosition: result := Inflow;
-    RainfallPosition: result := Rainfall;
-    EvaporationPosition: result := Evaporation;
-    RunoffPosition: result := Runoff;
-    UpstreamFractionPosition: result := UpstreamFraction;
-    StagePosition: result := Stage;
-    RoughnessPosition: result := Roughness;
-    else result := DiversionFormulas[Index-DiversionStartPosition];
+    SfrMf6InflowPosition: result := Inflow;
+    SfrMf6RainfallPosition: result := Rainfall;
+    SfrMf6EvaporationPosition: result := Evaporation;
+    SfrMf6RunoffPosition: result := Runoff;
+    SfrMf6UpstreamFractionPosition: result := UpstreamFraction;
+    SfrMf6StagePosition: result := Stage;
+    SfrMf6RoughnessPosition: result := Roughness;
+    else result := DiversionFormulas[Index-SfrMf6DiversionStartPosition];
   end;
 end;
 
@@ -943,7 +1119,7 @@ begin
   Result := FDiversionFormulas[Index].Formula;
   if ScreenObject <> nil then
   begin
-    ResetItemObserver(DiversionStartPosition+Index);
+    ResetItemObserver(SfrMf6DiversionStartPosition+Index);
   end;
 end;
 
@@ -965,79 +1141,79 @@ end;
 function TSfrMf6Item.GetEvaporation: string;
 begin
   Result := FEvaporation.Formula;
-  ResetItemObserver(EvaporationPosition);
+  ResetItemObserver(SfrMf6EvaporationPosition);
 end;
 
 function TSfrMf6Item.GetInflow: string;
 begin
   Result := FInflow.Formula;
-  ResetItemObserver(InflowPosition);
+  ResetItemObserver(SfrMf6InflowPosition);
 end;
 
 procedure TSfrMf6Item.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FInflow then
   begin
-    List.Add(FObserverList[InflowPosition]);
+    List.Add(FObserverList[SfrMf6InflowPosition]);
   end;
   if Sender = FRainfall then
   begin
-    List.Add(FObserverList[RainfallPosition]);
+    List.Add(FObserverList[SfrMf6RainfallPosition]);
   end;
   if Sender = FEvaporation then
   begin
-    List.Add(FObserverList[EvaporationPosition]);
+    List.Add(FObserverList[SfrMf6EvaporationPosition]);
   end;
   if Sender = FRunoff then
   begin
-    List.Add(FObserverList[RunoffPosition]);
+    List.Add(FObserverList[SfrMf6RunoffPosition]);
   end;
   if Sender = FUpstreamFraction then
   begin
-    List.Add(FObserverList[UpstreamFractionPosition]);
+    List.Add(FObserverList[SfrMf6UpstreamFractionPosition]);
   end;
   if Sender = FStage then
   begin
-    List.Add(FObserverList[StagePosition]);
+    List.Add(FObserverList[SfrMf6StagePosition]);
   end;
   if Sender = FRoughness then
   begin
-    List.Add(FObserverList[RoughnessPosition]);
+    List.Add(FObserverList[SfrMf6RoughnessPosition]);
   end;
   if FDiversionFormulas.IndexOf(Sender as TFormulaObject) >= 0 then
   begin
-    List.Add(FObserverList[DiversionStartPosition]);
+    List.Add(FObserverList[SfrMf6DiversionStartPosition]);
   end;
 end;
 
 function TSfrMf6Item.GetRainfall: string;
 begin
   Result := FRainfall.Formula;
-  ResetItemObserver(RainfallPosition);
+  ResetItemObserver(SfrMf6RainfallPosition);
 end;
 
 function TSfrMf6Item.GetRoughness: string;
 begin
   Result := FRoughness.Formula;
-  ResetItemObserver(RoughnessPosition);
+  ResetItemObserver(SfrMf6RoughnessPosition);
 end;
 
 function TSfrMf6Item.GetRunoff: string;
 begin
   Result := FRunoff.Formula;
-  ResetItemObserver(RunoffPosition);
+  ResetItemObserver(SfrMf6RunoffPosition);
 end;
 
 function TSfrMf6Item.GetStage: string;
 begin
   Result := FStage.Formula;
-  ResetItemObserver(StagePosition);
+  ResetItemObserver(SfrMf6StagePosition);
 end;
 
 function TSfrMf6Item.GetUpstreamFraction: string;
 begin
   Result := FUpstreamFraction.Formula;
-  ResetItemObserver(UpstreamFractionPosition);
+  ResetItemObserver(SfrMf6UpstreamFractionPosition);
 end;
 
 procedure TSfrMf6Item.InvalidateModel;
@@ -1127,23 +1303,23 @@ end;
 procedure TSfrMf6Item.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    InflowPosition:
+    SfrMf6InflowPosition:
       Inflow := Value;
-    RainfallPosition:
+    SfrMf6RainfallPosition:
       Rainfall := Value;
-    EvaporationPosition:
+    SfrMf6EvaporationPosition:
       Evaporation := Value;
-    RunoffPosition:
+    SfrMf6RunoffPosition:
       Runoff := Value;
-    UpstreamFractionPosition:
+    SfrMf6UpstreamFractionPosition:
       UpstreamFraction := Value;
-    StagePosition:
+    SfrMf6StagePosition:
       Stage := Value;
-    RoughnessPosition:
+    SfrMf6RoughnessPosition:
       Roughness := Value;
 
     else
-      DiversionFormulas[Index-DiversionStartPosition] := Value;
+      DiversionFormulas[Index-SfrMf6DiversionStartPosition] := Value;
   end;
 end;
 
@@ -1160,7 +1336,7 @@ begin
   While Value < FDiversionFormulas.Count do
   begin
     FormulaObj := FDiversionFormulas[FDiversionFormulas.Count-1];
-    UpdateFormulaBlocks('0', DiversionStartPosition +FDiversionFormulas.Count-1, FormulaObj);
+    UpdateFormulaBlocks('0', SfrMf6DiversionStartPosition +FDiversionFormulas.Count-1, FormulaObj);
     FDiversionFormulas[FDiversionFormulas.Count-1] := FormulaObj;
     frmGoPhast.PhastModel.FormulaManager.Remove(FormulaObj,
       GlobalRemoveModflowBoundaryItemSubscription,
@@ -1174,7 +1350,7 @@ var
   FormulaObject: TFormulaObject;
 begin
   FormulaObject := FDiversionFormulas[Index];
-  UpdateFormulaBlocks(Value, DiversionStartPosition+Index, FormulaObject);
+  UpdateFormulaBlocks(Value, SfrMf6DiversionStartPosition+Index, FormulaObject);
   FDiversionFormulas[Index] := FormulaObject;
 end;
 
@@ -1191,7 +1367,7 @@ var
 begin
   if FEvaporation.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, EvaporationPosition, FEvaporation);
+    UpdateFormulaBlocks(Value, SfrMf6EvaporationPosition, FEvaporation);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1214,7 +1390,7 @@ var
 begin
   if FInflow.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, InflowPosition, FInflow);
+    UpdateFormulaBlocks(Value, SfrMf6InflowPosition, FInflow);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1232,7 +1408,7 @@ end;
 
 procedure TSfrMf6Item.SetRainfall(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, RainfallPosition, FRainfall);
+  UpdateFormulaBlocks(Value, SfrMf6RainfallPosition, FRainfall);
 end;
 
 procedure TSfrMf6Item.SetRoughness(const Value: string);
@@ -1242,7 +1418,7 @@ var
 begin
   if FRoughness.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, RoughnessPosition, FRoughness);
+    UpdateFormulaBlocks(Value, SfrMf6RoughnessPosition, FRoughness);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1265,7 +1441,7 @@ var
 begin
   if FRunoff.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, RunoffPosition, FRunoff);
+    UpdateFormulaBlocks(Value, SfrMf6RunoffPosition, FRunoff);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1288,7 +1464,7 @@ var
 begin
   if FStage.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, StagePosition, FStage);
+    UpdateFormulaBlocks(Value, SfrMf6StagePosition, FStage);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1340,7 +1516,7 @@ var
 begin
   if FUpstreamFraction.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, UpstreamFractionPosition, FUpstreamFraction);
+    UpdateFormulaBlocks(Value, SfrMf6UpstreamFractionPosition, FUpstreamFraction);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -1471,7 +1647,7 @@ begin
     with Sfr6Storage.SfrMF6Array[Index] do
     begin
       case BoundaryFunctionIndex of
-        InflowPosition:
+        SfrMf6InflowPosition:
           begin
             Inflow := Expression.DoubleResult;
             InflowAnnotation := ACell.Annotation;
@@ -1479,7 +1655,7 @@ begin
             InflowPestSeriesName := PestSeriesName;
             InflowPestSeriesMethod := PestSeriesMethod;
           end;
-        RainfallPosition:
+        SfrMf6RainfallPosition:
           begin
             Rainfall := Expression.DoubleResult;
             RainfallAnnotation := ACell.Annotation;
@@ -1487,7 +1663,7 @@ begin
             RainfallPestSeriesName := PestSeriesName;
             RainfallPestSeriesMethod := PestSeriesMethod;
           end;
-        EvaporationPosition:
+        SfrMf6EvaporationPosition:
           begin
             Evaporation := Expression.DoubleResult;
             EvaporationAnnotation := ACell.Annotation;
@@ -1495,7 +1671,7 @@ begin
             EvaporationPestSeriesName := PestSeriesName;
             EvaporationPestSeriesMethod := PestSeriesMethod;
           end;
-        RunoffPosition:
+        SfrMf6RunoffPosition:
           begin
             Runoff := Expression.DoubleResult;
             RunoffAnnotation := ACell.Annotation;
@@ -1503,7 +1679,7 @@ begin
             RunoffPestSeriesName := PestSeriesName;
             RunoffPestSeriesMethod := PestSeriesMethod;
           end;
-        UpstreamFractionPosition:
+        SfrMf6UpstreamFractionPosition:
           begin
             if Index = 0 then
             begin
@@ -1522,7 +1698,7 @@ begin
               UpstreamFractionPestSeriesMethod := PestSeriesMethod;
             end;
           end;
-        StagePosition:
+        SfrMf6StagePosition:
           begin
             Stage := Expression.DoubleResult;
             StageAnnotation := ACell.Annotation;
@@ -1530,7 +1706,7 @@ begin
             StagePestSeriesName := PestSeriesName;
             StagePestSeriesMethod := PestSeriesMethod;
           end;
-        RoughnessPosition:
+        SfrMf6RoughnessPosition:
           begin
             Roughness := Expression.DoubleResult;
             RoughnessAnnotation := ACell.Annotation;
@@ -1542,7 +1718,7 @@ begin
           begin
             if Index = CellList.Count - 1 then
             begin
-              RequiredLength := BoundaryFunctionIndex - DiversionStartPosition + 1;
+              RequiredLength := BoundaryFunctionIndex - SfrMf6DiversionStartPosition + 1;
               if Length(Diversions) <> RequiredLength then
               begin
                 SetLength(Diversions, RequiredLength);
@@ -1551,15 +1727,15 @@ begin
                 SetLength(DiversionPestSeriesNames, RequiredLength);
                 SetLength(DiversionPestSeriesMethods, RequiredLength);
               end;
-              Diversions[BoundaryFunctionIndex - DiversionStartPosition]
+              Diversions[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
                 := Expression.DoubleResult;
-              DiversionAnnotations[BoundaryFunctionIndex - DiversionStartPosition]
+              DiversionAnnotations[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
                 := ACell.Annotation;
-              DiversionPests[BoundaryFunctionIndex - DiversionStartPosition]
+              DiversionPests[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
                 := PestName;
-              DiversionPestSeriesNames[BoundaryFunctionIndex - DiversionStartPosition]
+              DiversionPestSeriesNames[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
                 := PestSeriesName;
-              DiversionPestSeriesMethods[BoundaryFunctionIndex - DiversionStartPosition]
+              DiversionPestSeriesMethods[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
                 := PestSeriesMethod;
             end;
           end;
@@ -2003,9 +2179,21 @@ begin
     StreambedTop := SourceSfr6.StreambedTop;
     StreambedThickness := SourceSfr6.StreambedThickness;
     HydraulicConductivity := SourceSfr6.HydraulicConductivity;
-//    SfrInflowLocation := SourceSfr6.SfrInflowLocation;
-//    Roughness := SourceSfr6.Roughness;
-//    UpstreamFraction := SourceSfr6.UpstreamFraction;
+
+    PestInflowFormula := SourceSfr6.PestInflowFormula;
+    PestInflowMethod := SourceSfr6.PestInflowMethod;
+    PestRainfallFormula := SourceSfr6.PestRainfallFormula;
+    PestRainfallMethod := SourceSfr6.PestRainfallMethod;
+    PestEvaporationFormula := SourceSfr6.PestEvaporationFormula;
+    PestEvaporationMethod := SourceSfr6.PestEvaporationMethod;
+    PestRunoffFormula := SourceSfr6.PestRunoffFormula;
+    PestRunoffMethod := SourceSfr6.PestRunoffMethod;
+    PestUpstreamFractionFormula := SourceSfr6.PestUpstreamFractionFormula;
+    PestUpstreamFractionMethod := SourceSfr6.PestUpstreamFractionMethod;
+    PestStageFormula := SourceSfr6.PestStageFormula;
+    PestStageMethod := SourceSfr6.PestStageMethod;
+    PestRoughnessFormula := SourceSfr6.PestRoughnessFormula;
+    PestRoughnessMethod := SourceSfr6.PestRoughnessMethod;
   end
   else if Source is TSfrBoundary then
   begin
@@ -2268,6 +2456,8 @@ begin
         if (BoundaryIndex > 0) then
         begin
           BoundaryValues.Inflow := 0;
+          BoundaryValues.InflowPest := '';
+          BoundaryValues.InflowPestSeriesName := '';
           BoundaryValues.InflowAnnotation := InflowAnnotation;
         end;
         Cell := TSfrMF6_Cell.Create;
@@ -2300,6 +2490,7 @@ end;
 constructor TSfrMf6Boundary.Create(Model: TBaseModel; ScreenObject: TObject);
 var
   InvalidateEvent: TNotifyEvent;
+  Index: Integer;
 begin
   inherited;
   if Model = nil then
@@ -2329,10 +2520,19 @@ begin
   StreambedTop := '0';
   StreambedThickness := '1';
   HydraulicConductivity := '0';
-//  FSfrInflowLocation := silAllCells;
-//  Roughness := '3.5E-7';
-//  UpstreamFraction := '1';
 
+  PestInflowFormula := '';
+  PestRainfallFormula := '';
+  PestEvaporationFormula := '';
+  PestRunoffFormula := '';
+  PestUpstreamFractionFormula := '';
+  PestStageFormula := '';
+  PestRoughnessFormula := '';
+
+  for Index := SfrMf6InflowPosition to SfrMf6RoughnessPosition do
+  begin
+    PestBoundaryMethod[Index] := DefaultBoundaryMethod(Index);
+  end;
 end;
 
 procedure TSfrMf6Boundary.CreateFormulaObjects;
@@ -2343,6 +2543,15 @@ begin
   FStreambedTop := CreateFormulaObjectBlocks(dso3D);
   FStreambedThickness := CreateFormulaObjectBlocks(dso3D);
   FHydraulicConductivity := CreateFormulaObjectBlocks(dso3D);
+
+  FInflow := CreateFormulaObjectBlocks(dso3D);
+  FRainfall := CreateFormulaObjectBlocks(dso3D);
+  FEvaporation := CreateFormulaObjectBlocks(dso3D);
+  FRunoff := CreateFormulaObjectBlocks(dso3D);
+  FUpstreamFractionFormula := CreateFormulaObjectBlocks(dso3D);
+  FStage := CreateFormulaObjectBlocks(dso3D);
+  FRoughnessFormula := CreateFormulaObjectBlocks(dso3D);
+
 end;
 
 procedure TSfrMf6Boundary.CreateObservers;
@@ -2355,13 +2564,68 @@ begin
     FObserverList.Add(StreambedTopObserver);
     FObserverList.Add(StreambedThicknessObserver);
     FObserverList.Add(HydraulicConductivityObserver);
-//    FObserverList.Add(RoughnessObserver);
-//    FObserverList.Add(UpstreamFractionObserver);
+
+    FObserverList.Add(PestInflowObserver);
+    FObserverList.Add(PestRainfallObserver);
+    FObserverList.Add(PestEvaporationObserver);
+    FObserverList.Add(PestRunoffObserver);
+    FObserverList.Add(PestUpstreamFractionObserver);
+    FObserverList.Add(PestStageObserver);
+    FObserverList.Add(PestRoughnessObserver);
+
+  end;
+end;
+
+class function TSfrMf6Boundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    SfrMf6InflowPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    SfrMf6RainfallPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    SfrMf6EvaporationPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    SfrMf6RunoffPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    SfrMf6UpstreamFractionPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    SfrMf6StagePosition:
+      begin
+        result := ppmAdd;
+      end;
+    SfrMf6RoughnessPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
   end;
 end;
 
 destructor TSfrMf6Boundary.Destroy;
 begin
+  PestInflowFormula := '';
+  PestRainfallFormula := '';
+  PestEvaporationFormula := '';
+  PestRunoffFormula := '';
+  PestUpstreamFractionFormula := '';
+  PestStageFormula := '';
+  PestRoughnessFormula := '';
+
   FDiversions.Free;
   FDownstreamSegments.Free;
   RemoveFormulaObjects;
@@ -2389,7 +2653,7 @@ begin
   Result := FGradient.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(GradientPosition);
+    ResetBoundaryObserver(SfrMf6GradientPosition);
   end;
 end;
 
@@ -2407,7 +2671,7 @@ begin
   Result := FHydraulicConductivity.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(HydraulicConductivityPosition);
+    ResetBoundaryObserver(SfrMf6HydraulicConductivityPosition);
   end;
 end;
 
@@ -2420,32 +2684,275 @@ begin
   result := FHydraulicConductivityObserver;
 end;
 
+function TSfrMf6Boundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    SfrMf6InflowPosition:
+      begin
+        result := PestInflowFormula;
+      end;
+    SfrMf6RainfallPosition:
+      begin
+        result := PestRainfallFormula;
+      end;
+    SfrMf6EvaporationPosition:
+      begin
+        result := PestEvaporationFormula;
+      end;
+    SfrMf6RunoffPosition:
+      begin
+        result := PestRunoffFormula;
+      end;
+    SfrMf6UpstreamFractionPosition:
+      begin
+        result := PestUpstreamFractionFormula;
+      end;
+    SfrMf6StagePosition:
+      begin
+        result := PestStageFormula;
+      end;
+    SfrMf6RoughnessPosition:
+      begin
+        result := PestRoughnessFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    SfrMf6InflowPosition:
+      begin
+        result := PestInflowMethod;
+      end;
+    SfrMf6RainfallPosition:
+      begin
+        result := PestRainfallMethod;
+      end;
+    SfrMf6EvaporationPosition:
+      begin
+        result := PestEvaporationMethod;
+      end;
+    SfrMf6RunoffPosition:
+      begin
+        result := PestRunoffMethod;
+      end;
+    SfrMf6UpstreamFractionPosition:
+      begin
+        result := PestUpstreamFractionMethod;
+      end;
+    SfrMf6StagePosition:
+      begin
+        result := PestStageMethod;
+      end;
+    SfrMf6RoughnessPosition:
+      begin
+        result := PestRoughnessMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestEvaporationFormula: string;
+begin
+  Result := FEvaporation.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6EvaporationPosition + SfrMf6PestBoundaryOffset);
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestEvaporationObserver: TObserver;
+begin
+  if FPestEvaporationObserver = nil then
+  begin
+    CreateObserver('PestEvaporation_', FPestEvaporationObserver, nil);
+    FPestEvaporationObserver.OnUpToDateSet := InvalidateEvaporationData;
+  end;
+  result := FPestEvaporationObserver;
+end;
+
+function TSfrMf6Boundary.GetPestInflowFormula: string;
+begin
+  Result := FInflow.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6InflowPosition + SfrMf6PestBoundaryOffset);
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestInflowObserver: TObserver;
+begin
+  if FPestInflowObserver = nil then
+  begin
+    CreateObserver('PestInflow_', FPestInflowObserver, nil);
+    FPestInflowObserver.OnUpToDateSet := InvalidateInflowData;
+  end;
+  result := FPestInflowObserver;
+end;
+
+function TSfrMf6Boundary.GetPestRainfallFormula: string;
+begin
+  Result := FRainfall.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6RainfallPosition + SfrMf6PestBoundaryOffset);
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestRainfallObserver: TObserver;
+begin
+  if FPestRainfallObserver = nil then
+  begin
+    CreateObserver('PestRainfall_', FPestRainfallObserver, nil);
+    FPestRainfallObserver.OnUpToDateSet := InvalidateRainfallData;
+  end;
+  result := FPestRainfallObserver;
+end;
+
+function TSfrMf6Boundary.GetPestRoughnessFormula: string;
+begin
+  Result := FRoughnessFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6RoughnessPosition + SfrMf6PestBoundaryOffset);
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestRoughnessObserver: TObserver;
+begin
+  if FPestRoughnessObserver = nil then
+  begin
+    CreateObserver('PestRoughness_', FPestRoughnessObserver, nil);
+    FPestRoughnessObserver.OnUpToDateSet := InvalidateRoughnessData;
+  end;
+  result := FPestRoughnessObserver;
+end;
+
+function TSfrMf6Boundary.GetPestRunoffFormula: string;
+begin
+  Result := FRunoff.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6RunoffPosition + SfrMf6PestBoundaryOffset);
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestRunoffObserver: TObserver;
+begin
+  if FPestRunoffObserver = nil then
+  begin
+    CreateObserver('PestRunoff_', FPestRunoffObserver, nil);
+    FPestRunoffObserver.OnUpToDateSet := InvalidateRunoffData;
+  end;
+  result := FPestRunoffObserver;
+end;
+
+function TSfrMf6Boundary.GetPestStageFormula: string;
+begin
+  Result := FStage.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6StagePosition + SfrMf6PestBoundaryOffset);
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestStageObserver: TObserver;
+begin
+  if FPestStageObserver = nil then
+  begin
+    CreateObserver('PestStage_', FPestStageObserver, nil);
+    FPestStageObserver.OnUpToDateSet := InvalidateStageData;
+  end;
+  result := FPestStageObserver;
+end;
+
+function TSfrMf6Boundary.GetPestUpstreamFractionFormula: string;
+begin
+  Result := FUpstreamFractionFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6UpstreamFractionPosition + SfrMf6PestBoundaryOffset);
+  end;
+end;
+
+function TSfrMf6Boundary.GetPestUpstreamFractionObserver: TObserver;
+begin
+  if FPestUpstreamFractionObserver = nil then
+  begin
+    CreateObserver('PestUpstreamFraction_', FPestUpstreamFractionObserver, nil);
+    FPestUpstreamFractionObserver.OnUpToDateSet := InvalidateUpstreamFractionData;
+  end;
+  result := FPestUpstreamFractionObserver;
+end;
+
 procedure TSfrMf6Boundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FReachLength then
   begin
-    List.Add(FObserverList[ReachLengthPosition]);
+    List.Add(FObserverList[SfrMf6ReachLengthPosition]);
   end;
   if Sender = FReachWidth then
   begin
-    List.Add(FObserverList[ReachWidthPosition]);
+    List.Add(FObserverList[SfrMf6ReachWidthPosition]);
   end;
   if Sender = FGradient then
   begin
-    List.Add(FObserverList[GradientPosition]);
+    List.Add(FObserverList[SfrMf6GradientPosition]);
   end;
   if Sender = FStreambedTop then
   begin
-    List.Add(FObserverList[StreambedTopPosition]);
+    List.Add(FObserverList[SfrMf6StreambedTopPosition]);
   end;
   if Sender = FStreambedThickness then
   begin
-    List.Add(FObserverList[StreambedThicknessPosition]);
+    List.Add(FObserverList[SfrMf6StreambedThicknessPosition]);
   end;
   if Sender = FHydraulicConductivity then
   begin
-    List.Add(FObserverList[HydraulicConductivityPosition]);
+    List.Add(FObserverList[SfrMf6HydraulicConductivityPosition]);
   end;
+
+  if Sender = FInflow then
+  begin
+    List.Add(FObserverList[SfrMf6InflowPosition + SfrMf6PestBoundaryOffset]);
+  end;
+  if Sender = FRainfall then
+  begin
+    List.Add(FObserverList[SfrMf6RainfallPosition + SfrMf6PestBoundaryOffset]);
+  end;
+  if Sender = FEvaporation then
+  begin
+    List.Add(FObserverList[SfrMf6EvaporationPosition + SfrMf6PestBoundaryOffset]);
+  end;
+  if Sender = FRunoff then
+  begin
+    List.Add(FObserverList[SfrMf6RunoffPosition + SfrMf6PestBoundaryOffset]);
+  end;
+  if Sender = FUpstreamFractionFormula then
+  begin
+    List.Add(FObserverList[SfrMf6UpstreamFractionPosition + SfrMf6PestBoundaryOffset]);
+  end;
+  if Sender = FStage then
+  begin
+    List.Add(FObserverList[SfrMf6StagePosition + SfrMf6PestBoundaryOffset]);
+  end;
+  if Sender = FRoughnessFormula then
+  begin
+    List.Add(FObserverList[SfrMf6RoughnessPosition + SfrMf6PestBoundaryOffset]);
+  end;
+
+
 end;
 
 function TSfrMf6Boundary.GetReachLength: string;
@@ -2453,7 +2960,7 @@ begin
   Result := FReachLength.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ReachLengthPosition);
+    ResetBoundaryObserver(SfrMf6ReachLengthPosition);
   end;
 end;
 
@@ -2471,7 +2978,7 @@ begin
   Result := FReachWidth.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ReachWidthPosition);
+    ResetBoundaryObserver(SfrMf6ReachWidthPosition);
   end;
 end;
 
@@ -2507,7 +3014,7 @@ begin
   Result := FStreambedThickness.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreambedThicknessPosition);
+    ResetBoundaryObserver(SfrMf6StreambedThicknessPosition);
   end;
 end;
 
@@ -2525,7 +3032,7 @@ begin
   Result := FStreambedTop.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(StreambedTopPosition);
+    ResetBoundaryObserver(SfrMf6StreambedTopPosition);
   end;
 end;
 
@@ -2538,23 +3045,21 @@ begin
   result := FStreambedTopObserver;
 end;
 
-//function TSfrMf6Boundary.GetUpstreamFraction: string;
-//begin
-//  Result := FUpstreamFraction.Formula;
-//  if ScreenObject <> nil then
-//  begin
-//    ResetItemObserver(SteadyUpstreamFractionPosition);
-//  end;
-//end;
+function TSfrMf6Boundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestSfr6_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
 
-//function TSfrMf6Boundary.GetUpstreamFractionObserver: TObserver;
-//begin
-//  if FUpstreamFractionObserver = nil then
-//  begin
-//    CreateObserver('SFR6_UpstreamFraction_', FUpstreamFractionObserver, nil);
-//  end;
-//  result := FUpstreamFractionObserver;
-//end;
+procedure TSfrMf6Boundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
 
 procedure TSfrMf6Boundary.InvalidateDisplay;
 begin
@@ -2583,6 +3088,62 @@ begin
   LocaModel.InvalidateSfr6Roughness(self);
   LocaModel.InvalidateSfr6StreamStatus(self);
   LocaModel.InvalidateSfr6ReachNumber(self);
+end;
+
+procedure TSfrMf6Boundary.InvalidateEvaporationData(Sender: TObject);
+begin
+  if ParentModel <> nil then
+  begin
+    (ParentModel as TPhastModel).InvalidateSfr6Evaporation(self);
+  end;
+end;
+
+procedure TSfrMf6Boundary.InvalidateInflowData(Sender: TObject);
+begin
+  if ParentModel <> nil then
+  begin
+    (ParentModel as TPhastModel).InvalidateSfr6Inflow(self);
+  end;
+end;
+
+procedure TSfrMf6Boundary.InvalidateRainfallData(Sender: TObject);
+begin
+  if ParentModel <> nil then
+  begin
+    (ParentModel as TPhastModel).InvalidateSfr6Rainfall(self);
+  end;
+end;
+
+procedure TSfrMf6Boundary.InvalidateRoughnessData(Sender: TObject);
+begin
+  if ParentModel <> nil then
+  begin
+    (ParentModel as TPhastModel).InvalidateSfr6Roughness(self);
+  end;
+end;
+
+procedure TSfrMf6Boundary.InvalidateRunoffData(Sender: TObject);
+begin
+  if ParentModel <> nil then
+  begin
+    (ParentModel as TPhastModel).InvalidateSfr6Runoff(self);
+  end;
+end;
+
+procedure TSfrMf6Boundary.InvalidateStageData(Sender: TObject);
+begin
+  if ParentModel <> nil then
+  begin
+    (ParentModel as TPhastModel).InvalidateSfr6Stage(self);
+  end;
+end;
+
+procedure TSfrMf6Boundary.InvalidateUpstreamFractionData(Sender: TObject);
+begin
+  if ParentModel <> nil then
+  begin
+    (ParentModel as TPhastModel).InvalidateSfr6UpstreamFraction(self);
+  end;
 end;
 
 procedure TSfrMf6Boundary.LinkGradient;
@@ -2737,18 +3298,37 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FReachWidth,
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
-//  frmGoPhast.PhastModel.FormulaManager.Remove(FRoughness,
-//    GlobalRemoveMFBoundarySubscription,
-//    GlobalRestoreMFBoundarySubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FStreambedThickness,
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FStreambedTop,
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
-//  frmGoPhast.PhastModel.FormulaManager.Remove(FUpstreamFraction,
-//    GlobalRemoveMFBoundarySubscription,
-//    GlobalRestoreMFBoundarySubscription, self);
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FInflow,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FRainfall,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FEvaporation,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FRunoff,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FUpstreamFractionFormula,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FStage,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FRoughnessFormula,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+
+
+
 
 end;
 
@@ -2765,24 +3345,176 @@ end;
 
 procedure TSfrMf6Boundary.SetGradient(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, GradientPosition, FGradient);
+  UpdateFormulaBlocks(Value, SfrMf6GradientPosition, FGradient);
 end;
 
 
 procedure TSfrMf6Boundary.SetHydraulicConductivity(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, HydraulicConductivityPosition, FHydraulicConductivity);
+  UpdateFormulaBlocks(Value, SfrMf6HydraulicConductivityPosition, FHydraulicConductivity);
 end;
 
 
+procedure TSfrMf6Boundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    SfrMf6InflowPosition:
+      begin
+        PestInflowFormula := Value;
+      end;
+    SfrMf6RainfallPosition:
+      begin
+        PestRainfallFormula := Value;
+      end;
+    SfrMf6EvaporationPosition:
+      begin
+        PestEvaporationFormula := Value;
+      end;
+    SfrMf6RunoffPosition:
+      begin
+        PestRunoffFormula := Value;
+      end;
+    SfrMf6UpstreamFractionPosition:
+      begin
+        PestUpstreamFractionFormula := Value;
+      end;
+    SfrMf6StagePosition:
+      begin
+        PestStageFormula := Value;
+      end;
+    SfrMf6RoughnessPosition:
+      begin
+        PestRoughnessFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSfrMf6Boundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    SfrMf6InflowPosition:
+      begin
+        PestInflowMethod := Value;
+      end;
+    SfrMf6RainfallPosition:
+      begin
+        PestRainfallMethod := Value;
+      end;
+    SfrMf6EvaporationPosition:
+      begin
+        PestEvaporationMethod := Value;
+      end;
+    SfrMf6RunoffPosition:
+      begin
+        PestRunoffMethod := Value;
+      end;
+    SfrMf6UpstreamFractionPosition:
+      begin
+        PestUpstreamFractionMethod := Value;
+      end;
+    SfrMf6StagePosition:
+      begin
+        PestStageMethod := Value;
+      end;
+    SfrMf6RoughnessPosition:
+      begin
+        PestRoughnessMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSfrMf6Boundary.SetPestEvaporationFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6EvaporationPosition + SfrMf6PestBoundaryOffset, FEvaporation);
+end;
+
+procedure TSfrMf6Boundary.SetPestEvaporationMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestEvaporationMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestInflowFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6InflowPosition + SfrMf6PestBoundaryOffset, FInflow);
+end;
+
+procedure TSfrMf6Boundary.SetPestInflowMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestInflowMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestRainfallFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6RainfallPosition + SfrMf6PestBoundaryOffset, FRainfall);
+end;
+
+procedure TSfrMf6Boundary.SetPestRainfallMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRainfallMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestRoughnessFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6RoughnessPosition + SfrMf6PestBoundaryOffset, FRoughnessFormula);
+end;
+
+procedure TSfrMf6Boundary.SetPestRoughnessMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRoughnessMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestRunoffFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6RunoffPosition + SfrMf6PestBoundaryOffset, FRunoff);
+end;
+
+procedure TSfrMf6Boundary.SetPestRunoffMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRunoffMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestStageFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6StagePosition + SfrMf6PestBoundaryOffset, FStage);
+end;
+
+procedure TSfrMf6Boundary.SetPestStageMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestStageMethod, Value);
+end;
+
+procedure TSfrMf6Boundary.SetPestUpstreamFractionFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6UpstreamFractionPosition + SfrMf6PestBoundaryOffset, FUpstreamFractionFormula);
+end;
+
+procedure TSfrMf6Boundary.SetPestUpstreamFractionMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamFractionMethod, Value);
+end;
+
 procedure TSfrMf6Boundary.SetReachLength(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ReachLengthPosition, FReachLength);
+  UpdateFormulaBlocks(Value, SfrMf6ReachLengthPosition, FReachLength);
 end;
 
 procedure TSfrMf6Boundary.SetReachWidth(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ReachWidthPosition, FReachWidth);
+  UpdateFormulaBlocks(Value, SfrMf6ReachWidthPosition, FReachWidth);
 end;
 
 //procedure TSfrMf6Boundary.SetRoughness(const Value: string);
@@ -2811,12 +3543,12 @@ end;
 
 procedure TSfrMf6Boundary.SetStreambedThickness(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreambedThicknessPosition, FStreambedThickness);
+  UpdateFormulaBlocks(Value, SfrMf6StreambedThicknessPosition, FStreambedThickness);
 end;
 
 procedure TSfrMf6Boundary.SetStreambedTop(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StreambedTopPosition, FStreambedTop);
+  UpdateFormulaBlocks(Value, SfrMf6StreambedTopPosition, FStreambedTop);
 end;
 
 //procedure TSfrMf6Boundary.SetUpstreamFraction(const Value: string);
@@ -2879,21 +3611,72 @@ begin
   result := Values.MvrUsed;
 end;
 
+function TSfrMf6_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    SfrMf6InflowPosition: result := FValues.InflowPest;
+    SfrMf6RainfallPosition: result := FValues.RainfallPest;
+    SfrMf6EvaporationPosition: result := FValues.EvaporationPest;
+    SfrMf6RunoffPosition: result := FValues.RunoffPest;
+    SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPest;
+    SfrMf6StagePosition: result := FValues.StagePest;
+    SfrMf6RoughnessPosition: result := FValues.RoughnessPest;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
+function TSfrMf6_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    SfrMf6InflowPosition: result := FValues.InflowPestSeriesMethod;
+    SfrMf6RainfallPosition: result := FValues.RainfallPestSeriesMethod;
+    SfrMf6EvaporationPosition: result := FValues.EvaporationPestSeriesMethod;
+    SfrMf6RunoffPosition: result := FValues.RunoffPestSeriesMethod;
+    SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPestSeriesMethod;
+    SfrMf6StagePosition: result := FValues.StagePestSeriesMethod;
+    SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesMethod;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
+function TSfrMf6_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    SfrMf6InflowPosition: result := FValues.InflowPestSeriesName;
+    SfrMf6RainfallPosition: result := FValues.RainfallPestSeriesName;
+    SfrMf6EvaporationPosition: result := FValues.EvaporationPestSeriesName;
+    SfrMf6RunoffPosition: result := FValues.RunoffPestSeriesName;
+    SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionPestSeriesName;
+    SfrMf6StagePosition: result := FValues.StagePestSeriesName;
+    SfrMf6RoughnessPosition: result := FValues.RoughnessPestSeriesName;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
 function TSfrMf6_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
   result := '';
   case Index of
-    InflowPosition: result := FValues.InflowAnnotation;
-    RainfallPosition: result := FValues.RainfallAnnotation;
-    EvaporationPosition: result := FValues.EvaporationAnnotation;
-    RunoffPosition: result := FValues.RunoffAnnotation;
-    UpstreamFractionPosition: result := FValues.UpstreamFractionAnnotation;
-    StagePosition: result := FValues.StageAnnotation;
-    RoughnessPosition: result := FValues.RoughnessAnnotation;
+    SfrMf6InflowPosition: result := FValues.InflowAnnotation;
+    SfrMf6RainfallPosition: result := FValues.RainfallAnnotation;
+    SfrMf6EvaporationPosition: result := FValues.EvaporationAnnotation;
+    SfrMf6RunoffPosition: result := FValues.RunoffAnnotation;
+    SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFractionAnnotation;
+    SfrMf6StagePosition: result := FValues.StageAnnotation;
+    SfrMf6RoughnessPosition: result := FValues.RoughnessAnnotation;
     else
       begin
-        result := FValues.DiversionAnnotations[Index-DiversionStartPosition];
+        result := FValues.DiversionAnnotations[Index-SfrMf6DiversionStartPosition];
       end;
   end;
 end;
@@ -2902,16 +3685,16 @@ function TSfrMf6_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
 //  result := 0;
   case Index of
-    InflowPosition: result := FValues.Inflow;
-    RainfallPosition: result := FValues.Rainfall;
-    EvaporationPosition: result := FValues.Evaporation;
-    RunoffPosition: result := FValues.Runoff;
-    UpstreamFractionPosition: result := FValues.UpstreamFraction;
-    StagePosition: result := FValues.Stage;
-    RoughnessPosition: result := FValues.Roughness;
+    SfrMf6InflowPosition: result := FValues.Inflow;
+    SfrMf6RainfallPosition: result := FValues.Rainfall;
+    SfrMf6EvaporationPosition: result := FValues.Evaporation;
+    SfrMf6RunoffPosition: result := FValues.Runoff;
+    SfrMf6UpstreamFractionPosition: result := FValues.UpstreamFraction;
+    SfrMf6StagePosition: result := FValues.Stage;
+    SfrMf6RoughnessPosition: result := FValues.Roughness;
     else
       begin
-        result := FValues.Diversions[Index-DiversionStartPosition];
+        result := FValues.Diversions[Index-SfrMf6DiversionStartPosition];
       end;
   end;
 end;
@@ -2999,27 +3782,27 @@ end;
 function TSfrMF6ConstantRecord.GetBoundaryAnnotation(Index: Integer): string;
 begin
   case Index of
-    ReachLengthPosition:
+    SfrMf6ReachLengthPosition:
       begin
         result := ReachLengthAnnotation;
       end;
-    ReachWidthPosition:
+    SfrMf6ReachWidthPosition:
       begin
         result := ReachWidthAnnotation;
       end;
-    GradientPosition:
+    SfrMf6GradientPosition:
       begin
         result := GradientAnnotation;
       end;
-    StreambedTopPosition:
+    SfrMf6StreambedTopPosition:
       begin
         result := StreambedTopAnnotation;
       end;
-    StreambedThicknessPosition:
+    SfrMf6StreambedThicknessPosition:
       begin
         result := StreambedThicknessAnnotation;
       end;
-    HydraulicConductivityPosition:
+    SfrMf6HydraulicConductivityPosition:
       begin
         result := HydraulicConductivityAnnotation;
       end;
@@ -3040,27 +3823,27 @@ function TSfrMF6ConstantRecord.GetBoundaryValue(Index: Integer): double;
 begin
   result := 0;
   case Index of
-    ReachLengthPosition:
+    SfrMf6ReachLengthPosition:
       begin
         result := ReachLength;
       end;
-    ReachWidthPosition:
+    SfrMf6ReachWidthPosition:
       begin
         result := ReachWidth;
       end;
-    GradientPosition:
+    SfrMf6GradientPosition:
       begin
         result := Gradient;
       end;
-    StreambedTopPosition:
+    SfrMf6StreambedTopPosition:
       begin
         result := StreambedTop;
       end;
-    StreambedThicknessPosition:
+    SfrMf6StreambedThicknessPosition:
       begin
         result := StreambedThickness;
       end;
-    HydraulicConductivityPosition:
+    SfrMf6HydraulicConductivityPosition:
       begin
         result := HydraulicConductivity;
       end;
@@ -3165,27 +3948,27 @@ procedure TSfrMF6ConstantRecord.SetBoundaryAnnotation(Index: Integer;
   const Value: string);
 begin
   case Index of
-    ReachLengthPosition:
+    SfrMf6ReachLengthPosition:
       begin
         ReachLengthAnnotation := Value;
       end;
-    ReachWidthPosition:
+    SfrMf6ReachWidthPosition:
       begin
         ReachWidthAnnotation := Value;
       end;
-    GradientPosition:
+    SfrMf6GradientPosition:
       begin
         GradientAnnotation := Value;
       end;
-    StreambedTopPosition:
+    SfrMf6StreambedTopPosition:
       begin
         StreambedTopAnnotation := Value;
       end;
-    StreambedThicknessPosition:
+    SfrMf6StreambedThicknessPosition:
       begin
         StreambedThicknessAnnotation := Value;
       end;
-    HydraulicConductivityPosition:
+    SfrMf6HydraulicConductivityPosition:
       begin
         HydraulicConductivityAnnotation := Value;
       end;
@@ -3206,27 +3989,27 @@ procedure TSfrMF6ConstantRecord.SetBoundaryValue(Index: Integer;
   const Value: double);
 begin
   case Index of
-    ReachLengthPosition:
+    SfrMf6ReachLengthPosition:
       begin
         ReachLength := Value;
       end;
-    ReachWidthPosition:
+    SfrMf6ReachWidthPosition:
       begin
         ReachWidth := Value;
       end;
-    GradientPosition:
+    SfrMf6GradientPosition:
       begin
         Gradient := Value;
       end;
-    StreambedTopPosition:
+    SfrMf6StreambedTopPosition:
       begin
         StreambedTop := Value;
       end;
-    StreambedThicknessPosition:
+    SfrMf6StreambedThicknessPosition:
       begin
         StreambedThickness := Value;
       end;
-    HydraulicConductivityPosition:
+    SfrMf6HydraulicConductivityPosition:
       begin
         HydraulicConductivity := Value;
       end;

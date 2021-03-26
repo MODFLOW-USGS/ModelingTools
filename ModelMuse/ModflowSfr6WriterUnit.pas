@@ -69,6 +69,7 @@ type
     procedure WriteDiversions;
     procedure WriteStressPeriods;
     procedure InternalUpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    procedure WriteFileInternal;
 //    // Check that stage decreases in the downstream direction.
 //    procedure CheckStage;
   protected
@@ -1027,56 +1028,56 @@ var
     begin
       DataArray := Inflow[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
-      DataArray.AddDataValue(Reach.RealAnnotation[InflowPosition, Model],
-        Reach.RealValue[InflowPosition, Model],
+      DataArray.AddDataValue(Reach.RealAnnotation[SfrMf6InflowPosition, Model],
+        Reach.RealValue[SfrMf6InflowPosition, Model],
         Reach.Column, Reach.Row, Reach.Layer);
     end;
     for TimeIndex := 0 to Rainfall.Count - 1 do
     begin
       DataArray := Rainfall[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
-      DataArray.AddDataValue(Reach.RealAnnotation[RainfallPosition, Model],
-        Reach.RealValue[RainfallPosition, Model],
+      DataArray.AddDataValue(Reach.RealAnnotation[SfrMf6RainfallPosition, Model],
+        Reach.RealValue[SfrMf6RainfallPosition, Model],
         Reach.Column, Reach.Row, Reach.Layer);
     end;
     for TimeIndex := 0 to Evaporation.Count - 1 do
     begin
       DataArray := Evaporation[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
-      DataArray.AddDataValue(Reach.RealAnnotation[EvaporationPosition, Model],
-        Reach.RealValue[EvaporationPosition, Model],
+      DataArray.AddDataValue(Reach.RealAnnotation[SfrMf6EvaporationPosition, Model],
+        Reach.RealValue[SfrMf6EvaporationPosition, Model],
         Reach.Column, Reach.Row, Reach.Layer);
     end;
     for TimeIndex := 0 to Runoff.Count - 1 do
     begin
       DataArray := Runoff[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
-      DataArray.AddDataValue(Reach.RealAnnotation[RunoffPosition, Model],
-        Reach.RealValue[RunoffPosition, Model],
+      DataArray.AddDataValue(Reach.RealAnnotation[SfrMf6RunoffPosition, Model],
+        Reach.RealValue[SfrMf6RunoffPosition, Model],
         Reach.Column, Reach.Row, Reach.Layer);
     end;
     for TimeIndex := 0 to UpstreamFraction.Count - 1 do
     begin
       DataArray := UpstreamFraction[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
-      DataArray.AddDataValue(Reach.RealAnnotation[UpstreamFractionPosition, Model],
-        Reach.RealValue[UpstreamFractionPosition, Model],
+      DataArray.AddDataValue(Reach.RealAnnotation[SfrMf6UpstreamFractionPosition, Model],
+        Reach.RealValue[SfrMf6UpstreamFractionPosition, Model],
         Reach.Column, Reach.Row, Reach.Layer);
     end;
     for TimeIndex := 0 to Stage.Count - 1 do
     begin
       DataArray := Stage[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
-      DataArray.AddDataValue(Reach.RealAnnotation[StagePosition, Model],
-        Reach.RealValue[StagePosition, Model],
+      DataArray.AddDataValue(Reach.RealAnnotation[SfrMf6StagePosition, Model],
+        Reach.RealValue[SfrMf6StagePosition, Model],
         Reach.Column, Reach.Row, Reach.Layer);
     end;
     for TimeIndex := 0 to Roughness.Count - 1 do
     begin
       DataArray := Roughness[TimeIndex]
         as TModflowBoundaryDisplayDataArray;
-      DataArray.AddDataValue(Reach.RealAnnotation[RoughnessPosition, Model],
-        Reach.RealValue[RoughnessPosition, Model],
+      DataArray.AddDataValue(Reach.RealAnnotation[SfrMf6RoughnessPosition, Model],
+        Reach.RealValue[SfrMf6RoughnessPosition, Model],
         Reach.Column, Reach.Row, Reach.Layer);
     end;
     for TimeIndex := 0 to StreamStatus.Count - 1 do
@@ -1097,13 +1098,13 @@ var
     end;
   end;
 begin
-  Inflow := TimeLists[InflowPosition];
-  Rainfall := TimeLists[RainfallPosition];
-  Evaporation := TimeLists[EvaporationPosition];
-  Runoff := TimeLists[RunoffPosition];
-  UpstreamFraction := TimeLists[UpstreamFractionPosition];
-  Stage := TimeLists[StagePosition];
-  Roughness := TimeLists[RoughnessPosition];
+  Inflow := TimeLists[SfrMf6InflowPosition];
+  Rainfall := TimeLists[SfrMf6RainfallPosition];
+  Evaporation := TimeLists[SfrMf6EvaporationPosition];
+  Runoff := TimeLists[SfrMf6RunoffPosition];
+  UpstreamFraction := TimeLists[SfrMf6UpstreamFractionPosition];
+  Stage := TimeLists[SfrMf6StagePosition];
+  Roughness := TimeLists[SfrMf6RoughnessPosition];
   StreamStatus := TimeLists[7];
   ReachNumber := TimeLists[8];
 
@@ -1167,6 +1168,66 @@ end;
 class function TModflowSFR_MF6_Writer.ObservationOutputExtension: string;
 begin
   result := '.ob_sfr_out';
+end;
+
+procedure TModflowSFR_MF6_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+
+    frmProgressMM.AddMessage(StrWritingSFROPTION);
+    WriteOptions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingSFRDimens);
+    WriteDimensions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingSFRPackag);
+    WritePackageData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingSFRConnec);
+    WriteConnections;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingSFRDivers);
+    WriteDiversions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingSFRStress);
+    WriteStressPeriods;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end;
 end;
 
 function TModflowSFR_MF6_Writer.ObservationsUsed: Boolean;
@@ -1540,60 +1601,7 @@ begin
     begin
       Exit;
     end;
-    OpenFile(FileName(FNameOfFile));
-    try
-      WriteDataSet0;
-
-      frmProgressMM.AddMessage(StrWritingSFROPTION);
-      WriteOptions;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingSFRDimens);
-      WriteDimensions;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingSFRPackag);
-      WritePackageData;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingSFRConnec);
-      WriteConnections;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingSFRDivers);
-      WriteDiversions;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingSFRStress);
-      WriteStressPeriods;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-    finally
-      CloseFile
-    end;
+    WriteFileInternal;
 
     if FObsList.Count > 0 then
     begin
@@ -1602,6 +1610,20 @@ begin
         ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, ObservationExtension));
       finally
         ObsWriter.Free;
+      end;
+    end;
+
+    if  Model.PestUsed and FPestParamUsed then
+    begin
+      frmErrorsAndWarnings.BeginUpdate;
+      try
+        FNameOfFile := FNameOfFile + '.tpl';
+        WritePestTemplateLine(FNameOfFile);
+        WritingTemplate := True;
+        WriteFileInternal;
+
+      finally
+        frmErrorsAndWarnings.EndUpdate;
       end;
     end;
 
@@ -1891,14 +1913,16 @@ begin
 
         WriteInteger(ReachNumber);
         WriteString(' UPSTREAM_FRACTION');
-        WriteFloat(ACell.Values.UpstreamFraction);
+        WriteValueOrFormula(ACell, SfrMf6UpstreamFractionPosition);
+//        WriteFloat(ACell.Values.UpstreamFraction);
         NewLine;
 
         if ACell.Values.Status = ssSimple then
         begin
           WriteInteger(ReachNumber);
           WriteString(' STAGE');
-          WriteFloat(ACell.Values.Stage);
+          WriteValueOrFormula(ACell, SfrMf6StagePosition);
+//          WriteFloat(ACell.Values.Stage);
           NewLine;
         end;
 
@@ -1906,22 +1930,26 @@ begin
         begin
           WriteInteger(ReachNumber);
           WriteString(' INFLOW');
-          WriteFloat(ACell.Values.Inflow);
+          WriteValueOrFormula(ACell, SfrMf6InflowPosition);
+//          WriteFloat(ACell.Values.Inflow);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' RAINFALL');
-          WriteFloat(ACell.Values.Rainfall);
+          WriteValueOrFormula(ACell, SfrMf6RainfallPosition);
+//          WriteFloat(ACell.Values.Rainfall);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' EVAPORATION');
-          WriteFloat(ACell.Values.Evaporation);
+          WriteValueOrFormula(ACell, SfrMf6EvaporationPosition);
+//          WriteFloat(ACell.Values.Evaporation);
           NewLine;
 
           WriteInteger(ReachNumber);
           WriteString(' RUNOFF');
-          WriteFloat(ACell.Values.Runoff);
+          WriteValueOrFormula(ACell, SfrMf6RunoffPosition);
+//          WriteFloat(ACell.Values.Runoff);
           NewLine;
         end;
 
@@ -1929,7 +1957,8 @@ begin
         begin
           WriteInteger(ReachNumber);
           WriteString(' MANNING');
-          WriteFloat(ACell.Values.Roughness);
+          WriteValueOrFormula(ACell, SfrMf6RoughnessPosition);
+//          WriteFloat(ACell.Values.Roughness);
           NewLine;
         end;
 
@@ -2017,8 +2046,6 @@ begin
     finally
       ConnectedStreams.Free;
     end;
-
-
   end;
 end;
 
