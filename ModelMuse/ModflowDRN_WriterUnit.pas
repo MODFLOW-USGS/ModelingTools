@@ -324,13 +324,13 @@ begin
   end;
   WriteInteger(Drn_Cell.Column+1);
 
-  if (Drn_Cell.ElevationPest <> '')
-    or (Drn_Cell.ConductancePest <> '')
-    or (Drn_Cell.ElevationPestSeries <> '')
-    or (Drn_Cell.ConductancePestSeries <> '') then
-  begin
-    FPestParamUsed := True;
-  end;
+//  if (Drn_Cell.ElevationPest <> '')
+//    or (Drn_Cell.ConductancePest <> '')
+//    or (Drn_Cell.ElevationPestSeries <> '')
+//    or (Drn_Cell.ConductancePestSeries <> '') then
+//  begin
+//    FPestParamUsed := True;
+//  end;
 
   WriteValueOrFormula(Drn_Cell, DrnElevationPosition);
 

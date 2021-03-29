@@ -415,7 +415,7 @@ begin
           WellList := Values[WellIndex];// as TValueCellList;
 //          Boundary := Well.MawBoundary;
           UsedIndicies := [];
-          for DataTypeIndex := FlowingWellElevationPosition to FlowingWellReductionLengthPostion do
+          for DataTypeIndex := MawFlowingWellElevationPosition to MawFlowingWellReductionLengthPosition do
           begin
 //            if Boundary.DataTypeUsed(DataTypeIndex) then
             begin
@@ -1051,9 +1051,14 @@ begin
           begin
             WriteInteger(ACell.WellNumber);
             WriteString(' FLOWING_WELL');
-            WriteFloat(ACell.FlowingWellElevation);
-            WriteFloat(ACell.FlowingWellConductance);
-            WriteFloat(ACell.FlowingWellReductionLength);
+            WriteValueOrFormula(ACell, MawFlowingWellElevationPosition);
+//            WriteFloat(ACell.FlowingWellElevation);
+
+            WriteValueOrFormula(ACell, MawFlowingWellConductancePosition);
+//            WriteFloat(ACell.FlowingWellConductance);
+
+            WriteValueOrFormula(ACell, MawFlowingWellReductionLengthPosition);
+//            WriteFloat(ACell.FlowingWellReductionLength);
             if ACell.FlowingWellReductionLength <= 0 then
             begin
               AScreenObject := ACell.ScreenObject as TScreenObject;
@@ -1070,7 +1075,8 @@ begin
       begin
         WriteInteger(ACell.WellNumber);
         WriteString(' RATE');
-        WriteFloat(ACell.Rate);
+        WriteValueOrFormula(ACell, MawRatePosition);
+//        WriteFloat(ACell.Rate);
         NewLine;
       end;
 
@@ -1081,7 +1087,8 @@ begin
       begin
         WriteInteger(ACell.WellNumber);
         WriteString(' WELL_HEAD');
-        WriteFloat(ACell.WellHead);
+        WriteValueOrFormula(ACell, MawWellHeadPosition);
+//        WriteFloat(ACell.WellHead);
         NewLine;
       end;
 
@@ -1089,7 +1096,8 @@ begin
       begin
         WriteInteger(ACell.WellNumber);
         WriteString(' HEAD_LIMIT');
-        WriteFloat(ACell.HeadLimit);
+        WriteValueOrFormula(ACell, MawHeadLimitPosition);
+//        WriteFloat(ACell.HeadLimit);
         NewLine;
       end;
 
@@ -1097,8 +1105,10 @@ begin
       begin
         WriteInteger(ACell.WellNumber);
         WriteString(' SHUT_OFF');
-        WriteFloat(ACell.MinRate);
-        WriteFloat(ACell.MaxRate);
+        WriteValueOrFormula(ACell, MawMinRatePosition);
+//        WriteFloat(ACell.MinRate);
+        WriteValueOrFormula(ACell, MawMaxRatePosition);
+//        WriteFloat(ACell.MaxRate);
         NewLine;
       end;
 
@@ -1106,8 +1116,10 @@ begin
       begin
         WriteInteger(ACell.WellNumber);
         WriteString(' RATE_SCALING');
-        WriteFloat(ACell.PumpElevation);
-        WriteFloat(ACell.ScalingLength);
+        WriteValueOrFormula(ACell, MawPumpElevationPosition);
+//        WriteFloat(ACell.PumpElevation);
+        WriteValueOrFormula(ACell, MawScalingLengthPosition);
+//        WriteFloat(ACell.ScalingLength);
         NewLine;
       end;
 

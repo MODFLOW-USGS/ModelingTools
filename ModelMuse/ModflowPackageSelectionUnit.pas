@@ -19701,61 +19701,61 @@ end;
 procedure TMawPackage.GetMaximumPumpRateUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(MaxRatePosition, NewUseList, StrMAWPumpingRate);
+  GetMawUseList(MawMaxRatePosition, NewUseList, StrMAWPumpingRate);
 end;
 
 procedure TMawPackage.GetMfFlowingWellConductanceUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(FlowingWellConductancePosition, NewUseList, StrMAWFlowingWell);
+  GetMawUseList(MawFlowingWellConductancePosition, NewUseList, StrMAWFlowingWell);
 end;
 
 procedure TMawPackage.GetMfFlowingWellReductionLengthUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(FlowingWellReductionLengthPostion, NewUseList, StrMAWWellRedLength);
+  GetMawUseList(MawFlowingWellReductionLengthPosition, NewUseList, StrMAWWellRedLength);
 end;
 
 procedure TMawPackage.GetMfWellHeadUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(WellHeadPosition, NewUseList, StrMAWWellHead);
+  GetMawUseList(MawWellHeadPosition, NewUseList, StrMAWWellHead);
 end;
 
 procedure TMawPackage.GetMfWellRateUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(RatePosition, NewUseList, StrMAWWellRate);
+  GetMawUseList(MawRatePosition, NewUseList, StrMAWWellRate);
 end;
 
 procedure TMawPackage.GetMfMawWellElevationUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(FlowingWellElevationPosition, NewUseList, StrMAWWellElevation);
+  GetMawUseList(MawFlowingWellElevationPosition, NewUseList, StrMAWWellElevation);
 end;
 
 procedure TMawPackage.GetMfWell_LimitUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(HeadLimitPosition, NewUseList, StrMAWWellLimit);
+  GetMawUseList(MawHeadLimitPosition, NewUseList, StrMAWWellLimit);
 end;
 
 procedure TMawPackage.GetMinimumPumpRateUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(MinRatePosition, NewUseList, StrMAWMinimumPumping);
+  GetMawUseList(MawMinRatePosition, NewUseList, StrMAWMinimumPumping);
 end;
 
 procedure TMawPackage.GetPumpElevationUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(PumpElevationPosition, NewUseList, StrMAWPumpElevation);
+  GetMawUseList(MawPumpElevationPosition, NewUseList, StrMAWPumpElevation);
 end;
 
 procedure TMawPackage.GetScalingLengthUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  GetMawUseList(ScalingLengthPosition, NewUseList, StrMAWScalingLength);
+  GetMawUseList(MawScalingLengthPosition, NewUseList, StrMAWScalingLength);
 end;
 
 function TMawPackage.GetShutDownKappa: double;

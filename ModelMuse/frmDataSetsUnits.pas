@@ -2799,19 +2799,6 @@ var
   NewInterpolatorName: string;
 begin
 
-//  ShowParametersTab := False;
-//  if (SelectedEdit <> nil) and frmGoPhast.PhastModel.PestUsed then
-//  begin
-//    DataSet := SelectedEdit.DataArray;
-//    if (DataSet <> nil) and (DataSet.DataType = rdtDouble)
-//      and (Pos(StrRequiredPart, DataSet.FullClassification) > 0) then
-//    begin
-//      ShowParametersTab := True;
-//    end;
-//  end;
-//  tabParameters.TabVisible := ShowParametersTab;
-
-
   if (FSelectedEdit <> Value) or (Value = nil) then
   begin
     reDefaultFormulaExit(nil);
@@ -2927,7 +2914,7 @@ begin
       tabParameters.TabVisible := (FSelectedEdit.DataType = rdtDouble)
         and (FSelectedEdit.DataArray <> nil)
         and FSelectedEdit.DataArray.PestParametersAllowed
-        and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0)
+//        and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0)
         and (Pos(StrLayerDefinition, FSelectedEdit.FullClassification) <= 0)
         and (FSelectedEdit.DataArray.Name <> rsWetDryThreshold)
         and (not FSelectedEdit.DataArray.ParameterUsed)

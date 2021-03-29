@@ -319,6 +319,9 @@ type
     procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property WellNumber: Integer read GetWellNumber;
     property MawStatus: TMawStatus read GetMawStatus;
@@ -536,10 +539,31 @@ type
   TMawBoundary = class(TModflowBoundary)
   private
     const
-      RadiusPosition = 0;
-      BottomPosition = 1;
-      InitialHeadPosition = 2;
+      RadiusPosition = 10;
+      BottomPosition = 11;
+      InitialHeadPosition = 12;
     var
+    FPestFlowingWellElevationMethod: TPestParamMethod;
+    FPestPumpElevationMethod: TPestParamMethod;
+    FPestRateMethod: TPestParamMethod;
+    FPestMaxRateMethod: TPestParamMethod;
+    FPestHeadLimitMethod: TPestParamMethod;
+    FPestFlowingWellReductionLengthMethod: TPestParamMethod;
+    FPestMinRateMethod: TPestParamMethod;
+    FPestFlowingWellConductanceMethod: TPestParamMethod;
+    FPestWellHeadMethod: TPestParamMethod;
+    FPestScalingLengthMethod: TPestParamMethod;
+    FUsedObserver: TObserver;
+    FPestFlowingWellElevationFormula: TFormulaObject;
+    FPestFlowingWellConductanceFormula: TFormulaObject;
+    FPestRateFormula: TFormulaObject;
+    FPestWellHeadFormula: TFormulaObject;
+    FPestHeadLimitFormula: TFormulaObject;
+    FPestMinRateFormula: TFormulaObject;
+    FPestMaxRateFormula: TFormulaObject;
+    FPestPumpElevationFormula: TFormulaObject;
+    FPestScalingLengthFormula: TFormulaObject;
+    FPestFlowingWellReductionLengthFormula: TFormulaObject;
     FWellNumber: Integer;
     FBottomObserver: TObserver;
     FInitialHeadObserver: TObserver;
@@ -549,6 +573,16 @@ type
     FBottom: TFormulaObject;
     FInitialHead: TFormulaObject;
     FWellScreens: TMawWellScreenCollection;
+    FPestFlowingWellConductanceObserver: TObserver;
+    FPestFlowingWellElevationObserver: TObserver;
+    FPestFlowingWellReductionLengthObserver: TObserver;
+    FPestHeadLimitObserver: TObserver;
+    FPestMaxRateObserver: TObserver;
+    FPestMinRateObserver: TObserver;
+    FPestPumpElevationObserver: TObserver;
+    FPestRateObserver: TObserver;
+    FPestScalingLengthObserver: TObserver;
+    FPestWellHeadObserver: TObserver;
     procedure SetWellNumber(const Value: Integer);
     function GetBottom: string;
     function GetInitialHead: string;
@@ -568,6 +602,58 @@ type
     procedure LinkBottom;
     procedure LinkInitialHead;
     procedure CreateObservers;
+    procedure InvalidateFlowingWellElevationData(Sender: TObject);
+    procedure InvalidateFlowingWellConductanceData(Sender: TObject);
+    procedure InvalidateRateData(Sender: TObject);
+    procedure InvalidateWellHeadData(Sender: TObject);
+    procedure InvalidateHeadLimitData(Sender: TObject);
+    procedure InvalidateMinRateData(Sender: TObject);
+    procedure InvalidateMaxRateData(Sender: TObject);
+    procedure InvalidatePumpElevationData(Sender: TObject);
+    procedure InvalidateScalingLengthData(Sender: TObject);
+    procedure InvalidateFlowingWellReductionLengthData(Sender: TObject);
+    function GetPestFlowingWellConductanceFormula: string;
+    function GetPestFlowingWellElevationFormula: string;
+    function GetPestFlowingWellReductionLengthFormula: string;
+    function GetPestHeadLimitFormula: string;
+    function GetPestMaxRateFormula: string;
+    function GetPestMinRateFormula: string;
+    function GetPestPumpElevationFormula: string;
+    function GetPestRateFormula: string;
+    function GetPestScalingLengthFormula: string;
+    function GetPestWellHeadFormula: string;
+    procedure SetPestFlowingWellConductanceFormula(const Value: string);
+    procedure SetPestFlowingWellConductanceMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestFlowingWellElevationFormula(const Value: string);
+    procedure SetPestFlowingWellElevationMethod(const Value: TPestParamMethod);
+    procedure SetPestFlowingWellReductionLengthFormula(const Value: string);
+    procedure SetPestFlowingWellReductionLengthMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestHeadLimitFormula(const Value: string);
+    procedure SetPestHeadLimitMethod(const Value: TPestParamMethod);
+    procedure SetPestMaxRateFormula(const Value: string);
+    procedure SetPestMaxRateMethod(const Value: TPestParamMethod);
+    procedure SetPestMinRateFormula(const Value: string);
+    procedure SetPestMinRateMethod(const Value: TPestParamMethod);
+    procedure SetPestPumpElevationFormula(const Value: string);
+    procedure SetPestPumpElevationMethod(const Value: TPestParamMethod);
+    procedure SetPestRateFormula(const Value: string);
+    procedure SetPestRateMethod(const Value: TPestParamMethod);
+    procedure SetPestScalingLengthFormula(const Value: string);
+    procedure SetPestScalingLengthMethod(const Value: TPestParamMethod);
+    procedure SetPestWellHeadFormula(const Value: string);
+    procedure SetPestWellHeadMethod(const Value: TPestParamMethod);
+    function GetPestFlowingWellConductanceObserver: TObserver;
+    function GetPestFlowingWellElevationObserver: TObserver;
+    function GetPestFlowingWellReductionLengthObserver: TObserver;
+    function GetPestHeadLimitObserver: TObserver;
+    function GetPestMaxRateObserver: TObserver;
+    function GetPestMinRateObserver: TObserver;
+    function GetPestPumpElevationObserver: TObserver;
+    function GetPestRateObserver: TObserver;
+    function GetPestScalingLengthObserver: TObserver;
+    function GetPestWellHeadObserver: TObserver;
   protected
     property RadiusObserver: TObserver read GetRadiusObserver;
     property BottomObserver: TObserver read GetBottomObserver;
@@ -577,10 +663,33 @@ type
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
     function BoundaryObserverPrefix: string; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+//    procedure CreateFormulaObjects; //override;
+//    function BoundaryObserverPrefix: string; override;
+//    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestFlowingWellElevationObserver: TObserver read GetPestFlowingWellElevationObserver;
+    property PestFlowingWellConductanceObserver: TObserver read GetPestFlowingWellConductanceObserver;
+    property PestRateObserver: TObserver read GetPestRateObserver;
+    property PestWellHeadObserver: TObserver read GetPestWellHeadObserver;
+    property PestHeadLimitObserver: TObserver read GetPestHeadLimitObserver;
+    property PestMinRateObserver: TObserver read GetPestMinRateObserver;
+    property PestMaxRateObserver: TObserver read GetPestMaxRateObserver;
+    property PestPumpElevationObserver: TObserver read GetPestPumpElevationObserver;
+    property PestScalingLengthObserver: TObserver read GetPestScalingLengthObserver;
+    property PestFlowingWellReductionLengthObserver: TObserver read GetPestFlowingWellReductionLengthObserver;
   public
-    Procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     Destructor Destroy; override;
+    Procedure Assign(Source: TPersistent); override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     // The well number is assigned in the export process.
@@ -588,6 +697,8 @@ type
     procedure InitializeVariables;
     procedure Loaded;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     // radius
     property Radius: string read GetRadius write SetRadius;
@@ -600,19 +711,149 @@ type
       write SetConductanceMethod;
     property WellScreens: TMawWellScreenCollection read FWellScreens
       write SetWellScreens;
+
+    property PestFlowingWellElevationFormula: string read GetPestFlowingWellElevationFormula
+      write SetPestFlowingWellElevationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestFlowingWellElevationMethod: TPestParamMethod read FPestFlowingWellElevationMethod
+      write SetPestFlowingWellElevationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestFlowingWellConductanceFormula: string read GetPestFlowingWellConductanceFormula
+      write SetPestFlowingWellConductanceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestFlowingWellConductanceMethod: TPestParamMethod read FPestFlowingWellConductanceMethod
+      write SetPestFlowingWellConductanceMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestRateFormula: string read GetPestRateFormula
+      write SetPestRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRateMethod: TPestParamMethod read FPestRateMethod
+      write SetPestRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestWellHeadFormula: string read GetPestWellHeadFormula
+      write SetPestWellHeadFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWellHeadMethod: TPestParamMethod read FPestWellHeadMethod
+      write SetPestWellHeadMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestHeadLimitFormula: string read GetPestHeadLimitFormula
+      write SetPestHeadLimitFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHeadLimitMethod: TPestParamMethod read FPestHeadLimitMethod
+      write SetPestHeadLimitMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestMinRateFormula: string read GetPestMinRateFormula
+      write SetPestMinRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMinRateMethod: TPestParamMethod read FPestMinRateMethod
+      write SetPestMinRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestMaxRateFormula: string read GetPestMaxRateFormula
+      write SetPestMaxRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMaxRateMethod: TPestParamMethod read FPestMaxRateMethod
+      write SetPestMaxRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestPumpElevationFormula: string read GetPestPumpElevationFormula
+      write SetPestPumpElevationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestPumpElevationMethod: TPestParamMethod read FPestPumpElevationMethod
+      write SetPestPumpElevationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestScalingLengthFormula: string read GetPestScalingLengthFormula
+      write SetPestScalingLengthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestScalingLengthMethod: TPestParamMethod read FPestScalingLengthMethod
+      write SetPestScalingLengthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestFlowingWellReductionLengthFormula: string read GetPestFlowingWellReductionLengthFormula
+      write SetPestFlowingWellReductionLengthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestFlowingWellReductionLengthMethod: TPestParamMethod read FPestFlowingWellReductionLengthMethod
+      write SetPestFlowingWellReductionLengthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
-  FlowingWellElevationPosition = 0;
-  FlowingWellConductancePosition = 1;
-  RatePosition = 2;
-  WellHeadPosition = 3;
-  HeadLimitPosition = 4;
-  MinRatePosition = 5;
-  MaxRatePosition = 6;
-  PumpElevationPosition = 7;
-  ScalingLengthPosition = 8;
-  FlowingWellReductionLengthPostion = 9;
+  MawFlowingWellElevationPosition = 0;
+  MawFlowingWellConductancePosition = 1;
+  MawRatePosition = 2;
+  MawWellHeadPosition = 3;
+  MawHeadLimitPosition = 4;
+  MawMinRatePosition = 5;
+  MawMaxRatePosition = 6;
+  MawPumpElevationPosition = 7;
+  MawScalingLengthPosition = 8;
+  MawFlowingWellReductionLengthPosition = 9;
 
 function TryGetMawOb(const MawObName: string; var MawOb: TMawOb): Boolean;
 function MawObToString(const MawOb: TMawOb): string;
@@ -1490,6 +1731,29 @@ begin
     InitialHead := SourceMAW.InitialHead;
     ConductanceMethod := SourceMAW.ConductanceMethod;
     WellScreens := SourceMAW.WellScreens;
+
+    PestFlowingWellElevationFormula := SourceMAW.PestFlowingWellElevationFormula;
+    PestFlowingWellConductanceFormula := SourceMAW.PestFlowingWellConductanceFormula;
+    PestRateFormula := SourceMAW.PestRateFormula;
+    PestWellHeadFormula := SourceMAW.PestWellHeadFormula;
+    PestHeadLimitFormula := SourceMAW.PestHeadLimitFormula;
+    PestMinRateFormula := SourceMAW.PestMinRateFormula;
+    PestMaxRateFormula := SourceMAW.PestMaxRateFormula;
+    PestPumpElevationFormula := SourceMAW.PestPumpElevationFormula;
+    PestScalingLengthFormula := SourceMAW.PestScalingLengthFormula;
+    PestFlowingWellReductionLengthFormula := SourceMAW.PestFlowingWellReductionLengthFormula;
+
+    PestFlowingWellElevationMethod := SourceMAW.PestFlowingWellElevationMethod;
+    PestFlowingWellConductanceMethod := SourceMAW.PestFlowingWellConductanceMethod;
+    PestRateMethod := SourceMAW.PestRateMethod;
+    PestWellHeadMethod := SourceMAW.PestWellHeadMethod;
+    PestHeadLimitMethod := SourceMAW.PestHeadLimitMethod;
+    PestMinRateMethod := SourceMAW.PestMinRateMethod;
+    PestMaxRateMethod := SourceMAW.PestMaxRateMethod;
+    PestPumpElevationMethod := SourceMAW.PestPumpElevationMethod;
+    PestScalingLengthMethod := SourceMAW.PestScalingLengthMethod;
+    PestFlowingWellReductionLengthMethod := SourceMAW.PestFlowingWellReductionLengthMethod;
+
     inherited;
   end
   else if Source is TMnw2Boundary then
@@ -1680,6 +1944,17 @@ end;
 
 procedure TMawBoundary.CreateFormulaObjects;
 begin
+  FPestFlowingWellElevationFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestFlowingWellConductanceFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestRateFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestWellHeadFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestHeadLimitFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestMinRateFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestMaxRateFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestPumpElevationFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestScalingLengthFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestFlowingWellReductionLengthFormula := CreateFormulaObjectBlocks(dsoTop);
+
   FRadius := CreateFormulaObjectBlocks(dso3D);
   FBottom := CreateFormulaObjectBlocks(dso3D);
   FInitialHead := CreateFormulaObjectBlocks(dso3D);
@@ -1689,14 +1964,88 @@ procedure TMawBoundary.CreateObservers;
 begin
   if ScreenObject <> nil then
   begin
+    FObserverList.Add(PestFlowingWellElevationObserver);
+    FObserverList.Add(PestFlowingWellConductanceObserver);
+    FObserverList.Add(PestRateObserver);
+    FObserverList.Add(PestWellHeadObserver);
+    FObserverList.Add(PestHeadLimitObserver);
+    FObserverList.Add(PestMinRateObserver);
+    FObserverList.Add(PestMaxRateObserver);
+    FObserverList.Add(PestPumpElevationObserver);
+    FObserverList.Add(PestScalingLengthObserver);
+    FObserverList.Add(PestFlowingWellReductionLengthObserver);
+
     FObserverList.Add(RadiusObserver);
     FObserverList.Add(BottomObserver);
     FObserverList.Add(InitialHeadObserver);
   end;
 end;
 
+class function TMawBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    MawFlowingWellElevationPosition:
+      begin
+        result := ppmAdd;
+      end;
+    MawFlowingWellConductancePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    MawRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    MawWellHeadPosition:
+      begin
+        result := ppmAdd;
+      end;
+    MawHeadLimitPosition:
+      begin
+        result := ppmAdd;
+      end;
+    MawMinRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    MawMaxRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    MawPumpElevationPosition:
+      begin
+        result := ppmAdd;
+      end;
+    MawScalingLengthPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    MawFlowingWellReductionLengthPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 destructor TMawBoundary.Destroy;
 begin
+  PestFlowingWellElevationFormula := '';
+  PestFlowingWellConductanceFormula := '';
+  PestRateFormula := '';
+  PestWellHeadFormula := '';
+  PestHeadLimitFormula := '';
+  PestMinRateFormula := '';
+  PestMaxRateFormula := '';
+  PestPumpElevationFormula := '';
+  PestScalingLengthFormula := '';
+  PestFlowingWellReductionLengthFormula := '';
+
   FWellScreens.Free;
   RemoveFormulaObjects;
   inherited;
@@ -1755,6 +2104,383 @@ begin
   result := FInitialHeadObserver;
 end;
 
+function TMawBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    MawFlowingWellElevationPosition:
+      begin
+        result := PestFlowingWellElevationFormula;
+      end;
+    MawFlowingWellConductancePosition:
+      begin
+        result := PestFlowingWellConductanceFormula;
+      end;
+    MawRatePosition:
+      begin
+        result := PestRateFormula;
+      end;
+    MawWellHeadPosition:
+      begin
+        result := PestWellHeadFormula;
+      end;
+    MawHeadLimitPosition:
+      begin
+        result := PestHeadLimitFormula;
+      end;
+    MawMinRatePosition:
+      begin
+        result := PestMinRateFormula;
+      end;
+    MawMaxRatePosition:
+      begin
+        result := PestMaxRateFormula;
+      end;
+    MawPumpElevationPosition:
+      begin
+        result := PestPumpElevationFormula;
+      end;
+    MawScalingLengthPosition:
+      begin
+        result := PestScalingLengthFormula;
+      end;
+    MawFlowingWellReductionLengthPosition:
+      begin
+        result := PestFlowingWellReductionLengthFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TMawBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    MawFlowingWellElevationPosition:
+      begin
+        result := PestFlowingWellElevationMethod;
+      end;
+    MawFlowingWellConductancePosition:
+      begin
+        result := PestFlowingWellConductanceMethod;
+      end;
+    MawRatePosition:
+      begin
+        result := PestRateMethod;
+      end;
+    MawWellHeadPosition:
+      begin
+        result := PestWellHeadMethod;
+      end;
+    MawHeadLimitPosition:
+      begin
+        result := PestHeadLimitMethod;
+      end;
+    MawMinRatePosition:
+      begin
+        result := PestMinRateMethod;
+      end;
+    MawMaxRatePosition:
+      begin
+        result := PestMaxRateMethod;
+      end;
+    MawPumpElevationPosition:
+      begin
+        result := PestPumpElevationMethod;
+      end;
+    MawScalingLengthPosition:
+      begin
+        result := PestScalingLengthMethod;
+      end;
+    MawFlowingWellReductionLengthPosition:
+      begin
+        result := PestFlowingWellReductionLengthMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TMawBoundary.GetPestFlowingWellConductanceFormula: string;
+begin
+  Result := FPestFlowingWellConductanceFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawFlowingWellConductancePosition);
+  end;
+end;
+
+function TMawBoundary.GetPestFlowingWellConductanceObserver: TObserver;
+begin
+  if FPestFlowingWellConductanceObserver = nil then
+  begin
+    CreateObserver('PestFlowingWellConductance_', FPestFlowingWellConductanceObserver, nil);
+    FPestFlowingWellConductanceObserver.OnUpToDateSet := InvalidateFlowingWellConductanceData;
+  end;
+  result := FPestFlowingWellConductanceObserver;
+end;
+
+function TMawBoundary.GetPestFlowingWellElevationFormula: string;
+begin
+  Result := FPestFlowingWellElevationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawFlowingWellElevationPosition);
+  end;
+end;
+
+function TMawBoundary.GetPestFlowingWellElevationObserver: TObserver;
+begin
+  if FPestFlowingWellElevationObserver = nil then
+  begin
+    CreateObserver('PestFlowingWellElevation_', FPestFlowingWellElevationObserver, nil);
+    FPestFlowingWellElevationObserver.OnUpToDateSet := InvalidateFlowingWellElevationData;
+  end;
+  result := FPestFlowingWellElevationObserver;
+end;
+
+function TMawBoundary.GetPestFlowingWellReductionLengthFormula: string;
+begin
+  Result := FPestFlowingWellReductionLengthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawFlowingWellReductionLengthPosition);
+  end;
+end;
+
+function TMawBoundary.GetPestFlowingWellReductionLengthObserver: TObserver;
+begin
+  if FPestFlowingWellReductionLengthObserver = nil then
+  begin
+    CreateObserver('PestFlowingWellReductionLength_', FPestFlowingWellReductionLengthObserver, nil);
+    FPestFlowingWellReductionLengthObserver.OnUpToDateSet := InvalidateFlowingWellReductionLengthData;
+  end;
+  result := FPestFlowingWellReductionLengthObserver;
+end;
+
+function TMawBoundary.GetPestHeadLimitFormula: string;
+begin
+  Result := FPestHeadLimitFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawHeadLimitPosition);
+  end;
+end;
+
+function TMawBoundary.GetPestHeadLimitObserver: TObserver;
+begin
+  if FPestHeadLimitObserver = nil then
+  begin
+    CreateObserver('PestHeadLimit_', FPestHeadLimitObserver, nil);
+    FPestHeadLimitObserver.OnUpToDateSet := InvalidateHeadLimitData;
+  end;
+  result := FPestHeadLimitObserver;
+end;
+
+function TMawBoundary.GetPestMaxRateFormula: string;
+begin
+  Result := FPestMaxRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawMaxRatePosition);
+  end;
+end;
+
+function TMawBoundary.GetPestMaxRateObserver: TObserver;
+begin
+  if FPestMaxRateObserver = nil then
+  begin
+    CreateObserver('PestMaxRate_', FPestMaxRateObserver, nil);
+    FPestMaxRateObserver.OnUpToDateSet := InvalidateMaxRateData;
+  end;
+  result := FPestMaxRateObserver;
+end;
+
+function TMawBoundary.GetPestMinRateFormula: string;
+begin
+  Result := FPestMinRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawMinRatePosition);
+  end;
+end;
+
+function TMawBoundary.GetPestMinRateObserver: TObserver;
+begin
+  if FPestMinRateObserver = nil then
+  begin
+    CreateObserver('PestMinRate_', FPestMinRateObserver, nil);
+    FPestMinRateObserver.OnUpToDateSet := InvalidateMinRateData;
+  end;
+  result := FPestMinRateObserver;
+end;
+
+function TMawBoundary.GetPestPumpElevationFormula: string;
+begin
+  Result := FPestPumpElevationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawPumpElevationPosition);
+  end;
+end;
+
+function TMawBoundary.GetPestPumpElevationObserver: TObserver;
+begin
+  if FPestPumpElevationObserver = nil then
+  begin
+    CreateObserver('PestPumpElevation_', FPestPumpElevationObserver, nil);
+    FPestPumpElevationObserver.OnUpToDateSet := InvalidatePumpElevationData;
+  end;
+  result := FPestPumpElevationObserver;
+end;
+
+function TMawBoundary.GetPestRateFormula: string;
+begin
+  Result := FPestRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawRatePosition);
+  end;
+end;
+
+function TMawBoundary.GetPestRateObserver: TObserver;
+begin
+  if FPestRateObserver = nil then
+  begin
+    CreateObserver('PestRate_', FPestRateObserver, nil);
+    FPestRateObserver.OnUpToDateSet := InvalidateRateData;
+  end;
+  result := FPestRateObserver;
+end;
+
+function TMawBoundary.GetPestScalingLengthFormula: string;
+begin
+  Result := FPestScalingLengthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawScalingLengthPosition);
+  end;
+end;
+
+function TMawBoundary.GetPestScalingLengthObserver: TObserver;
+begin
+  if FPestScalingLengthObserver = nil then
+  begin
+    CreateObserver('PestScalingLength_', FPestScalingLengthObserver, nil);
+    FPestScalingLengthObserver.OnUpToDateSet := InvalidateScalingLengthData;
+  end;
+  result := FPestScalingLengthObserver;
+end;
+
+function TMawBoundary.GetPestWellHeadFormula: string;
+begin
+  Result := FPestWellHeadFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MawWellHeadPosition);
+  end;
+end;
+
+function TMawBoundary.GetPestWellHeadObserver: TObserver;
+begin
+  if FPestWellHeadObserver = nil then
+  begin
+    CreateObserver('PestWellHead_', FPestWellHeadObserver, nil);
+    FPestWellHeadObserver.OnUpToDateSet := InvalidateWellHeadData;
+  end;
+  result := FPestWellHeadObserver;
+end;
+
+procedure TMawBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestFlowingWellElevationFormula then
+  begin
+    if MawFlowingWellElevationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawFlowingWellElevationPosition]);
+    end;
+  end;
+
+  if Sender = FPestFlowingWellConductanceFormula then
+  begin
+    if MawFlowingWellConductancePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawFlowingWellConductancePosition]);
+    end;
+  end;
+
+  if Sender = FPestRateFormula then
+  begin
+    if MawRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawRatePosition]);
+    end;
+  end;
+
+  if Sender = FPestWellHeadFormula then
+  begin
+    if MawWellHeadPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawWellHeadPosition]);
+    end;
+  end;
+
+  if Sender = FPestHeadLimitFormula then
+  begin
+    if MawHeadLimitPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawHeadLimitPosition]);
+    end;
+  end;
+
+  if Sender = FPestMinRateFormula then
+  begin
+    if MawMinRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawMinRatePosition]);
+    end;
+  end;
+
+  if Sender = FPestMaxRateFormula then
+  begin
+    if MawMaxRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawMaxRatePosition]);
+    end;
+  end;
+
+  if Sender = FPestPumpElevationFormula then
+  begin
+    if MawPumpElevationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawPumpElevationPosition]);
+    end;
+  end;
+
+  if Sender = FPestScalingLengthFormula then
+  begin
+    if MawScalingLengthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawScalingLengthPosition]);
+    end;
+  end;
+
+  if Sender = FPestFlowingWellReductionLengthFormula then
+  begin
+    if MawFlowingWellReductionLengthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MawFlowingWellReductionLengthPosition]);
+    end;
+  end;
+
+end;
+
 function TMawBoundary.GetRadius: string;
 begin
   Result := FRadius.Formula;
@@ -1774,12 +2500,46 @@ begin
   result := FRadiusObserver;
 end;
 
+function TMawBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestMAW_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TMawBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TMawBoundary.InitializeVariables;
+var
+  PestIndex: Integer;
 begin
   Radius := '0';
   Bottom := '0';
   InitialHead := '0';
   ConductanceMethod := mcmSpecified;
+
+  PestFlowingWellElevationFormula := '';
+  PestFlowingWellConductanceFormula := '';
+  PestRateFormula := '';
+  PestWellHeadFormula := '';
+  PestHeadLimitFormula := '';
+  PestMinRateFormula := '';
+  PestMaxRateFormula := '';
+  PestPumpElevationFormula := '';
+  PestScalingLengthFormula := '';
+  PestFlowingWellReductionLengthFormula := '';
+
+  for PestIndex := MawFlowingWellElevationPosition to MawFlowingWellReductionLengthPosition do
+  begin
+    PestBoundaryMethod[PestIndex] := DefaultBoundaryMethod(PestIndex);
+  end;
 end;
 
 procedure TMawBoundary.InvalidateDisplay;
@@ -1812,6 +2572,277 @@ begin
   LocaModel.InvalidateMawScalingLength(self);
 end;
 
+
+procedure TMawBoundary.InvalidateFlowingWellConductanceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawFlowingWellConductance(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawFlowingWellConductance(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateFlowingWellElevationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawFlowingWellElevation(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawFlowingWellElevation(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateFlowingWellReductionLengthData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawFlowingWellReductionLength(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawFlowingWellReductionLength(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateHeadLimitData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawWell_Limit(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawWell_Limit(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateMaxRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawMaximumPumpRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawMaximumPumpRate(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateMinRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawMinimumPumpRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawMinimumPumpRate(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidatePumpElevationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawPumpElevation(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawPumpElevation(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawWell_Rate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawWell_Rate(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateScalingLengthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawScalingLength(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawScalingLength(self);
+    end;
+  end;
+end;
+
+procedure TMawBoundary.InvalidateWellHeadData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMawWell_Head(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMawWell_Head(self);
+    end;
+  end;
+end;
 
 procedure TMawBoundary.LinkBottom;
 var
@@ -1858,7 +2889,7 @@ end;
 procedure TMawBoundary.LinkRadius;
 var
   LocalScreenObject: TScreenObject;
-  MawRadiushArray: TDataArray;
+  MawRadiusArray: TDataArray;
 begin
   LocalScreenObject := ScreenObject as TScreenObject;
   if (LocalScreenObject <> nil) and LocalScreenObject.CanInvalidateModel then
@@ -1866,11 +2897,11 @@ begin
     LocalScreenObject.TalksTo(RadiusObserver);
     if ParentModel <> nil then
     begin
-      MawRadiushArray := (ParentModel as TCustomModel).DataArrayManager.
+      MawRadiusArray := (ParentModel as TCustomModel).DataArrayManager.
         GetDataSetByName(KMAWRadius);
-      if MawRadiushArray <> nil then
+      if MawRadiusArray <> nil then
       begin
-        RadiusObserver.TalksTo(MawRadiushArray);
+        RadiusObserver.TalksTo(MawRadiusArray);
       end;
     end;
   end;
@@ -1895,6 +2926,37 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FRadius,
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
+
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestFlowingWellElevationFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestFlowingWellConductanceFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestRateFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestWellHeadFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestHeadLimitFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestMinRateFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestMaxRateFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestPumpElevationFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestScalingLengthFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FPestFlowingWellReductionLengthFormula,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 procedure TMawBoundary.SetBottom(const Value: string);
@@ -1919,6 +2981,217 @@ end;
 procedure TMawBoundary.SetInitialHead(const Value: string);
 begin
   UpdateFormulaBlocks(Value, InitialHeadPosition, FInitialHead);
+end;
+
+procedure TMawBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    MawFlowingWellElevationPosition:
+      begin
+        PestFlowingWellElevationFormula := Value;
+      end;
+    MawFlowingWellConductancePosition:
+      begin
+        PestFlowingWellConductanceFormula := Value;
+      end;
+    MawRatePosition:
+      begin
+        PestRateFormula := Value;
+      end;
+    MawWellHeadPosition:
+      begin
+        PestWellHeadFormula := Value;
+      end;
+    MawHeadLimitPosition:
+      begin
+        PestHeadLimitFormula := Value;
+      end;
+    MawMinRatePosition:
+      begin
+        PestMinRateFormula := Value;
+      end;
+    MawMaxRatePosition:
+      begin
+        PestMaxRateFormula := Value;
+      end;
+    MawPumpElevationPosition:
+      begin
+        PestPumpElevationFormula := Value;
+      end;
+    MawScalingLengthPosition:
+      begin
+        PestScalingLengthFormula := Value;
+      end;
+    MawFlowingWellReductionLengthPosition:
+      begin
+        PestFlowingWellReductionLengthFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TMawBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    MawFlowingWellElevationPosition:
+      begin
+        PestFlowingWellElevationMethod := Value;
+      end;
+    MawFlowingWellConductancePosition:
+      begin
+        PestFlowingWellConductanceMethod := Value;
+      end;
+    MawRatePosition:
+      begin
+        PestRateMethod := Value;
+      end;
+    MawWellHeadPosition:
+      begin
+        PestWellHeadMethod := Value;
+      end;
+    MawHeadLimitPosition:
+      begin
+        PestHeadLimitMethod := Value;
+      end;
+    MawMinRatePosition:
+      begin
+        PestMinRateMethod := Value;
+      end;
+    MawMaxRatePosition:
+      begin
+        PestMaxRateMethod := Value;
+      end;
+    MawPumpElevationPosition:
+      begin
+        PestPumpElevationMethod := Value;
+      end;
+    MawScalingLengthPosition:
+      begin
+        PestScalingLengthMethod := Value;
+      end;
+    MawFlowingWellReductionLengthPosition:
+      begin
+        PestFlowingWellReductionLengthMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TMawBoundary.SetPestFlowingWellConductanceFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawFlowingWellConductancePosition, FPestFlowingWellConductanceFormula);
+end;
+
+procedure TMawBoundary.SetPestFlowingWellConductanceMethod(
+  const Value: TPestParamMethod);
+begin
+  FPestFlowingWellConductanceMethod := Value;
+end;
+
+procedure TMawBoundary.SetPestFlowingWellElevationFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawFlowingWellElevationPosition, FPestFlowingWellElevationFormula);
+end;
+
+procedure TMawBoundary.SetPestFlowingWellElevationMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestFlowingWellElevationMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestFlowingWellReductionLengthFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawFlowingWellReductionLengthPosition, FPestFlowingWellReductionLengthFormula);
+end;
+
+procedure TMawBoundary.SetPestFlowingWellReductionLengthMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestFlowingWellReductionLengthMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestHeadLimitFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawHeadLimitPosition, FPestHeadLimitFormula);
+end;
+
+procedure TMawBoundary.SetPestHeadLimitMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestHeadLimitMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestMaxRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawMaxRatePosition, FPestMaxRateFormula);
+end;
+
+procedure TMawBoundary.SetPestMaxRateMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMaxRateMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestMinRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawMinRatePosition, FPestMinRateFormula);
+end;
+
+procedure TMawBoundary.SetPestMinRateMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMinRateMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestPumpElevationFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawPumpElevationPosition, FPestPumpElevationFormula);
+end;
+
+procedure TMawBoundary.SetPestPumpElevationMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestPumpElevationMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawRatePosition, FPestRateFormula);
+end;
+
+procedure TMawBoundary.SetPestRateMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRateMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestScalingLengthFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawScalingLengthPosition, FPestScalingLengthFormula);
+end;
+
+procedure TMawBoundary.SetPestScalingLengthMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestScalingLengthMethod, Value);
+end;
+
+procedure TMawBoundary.SetPestWellHeadFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MawWellHeadPosition, FPestWellHeadFormula);
+end;
+
+procedure TMawBoundary.SetPestWellHeadMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestWellHeadMethod, Value);
 end;
 
 procedure TMawBoundary.SetRadius(const Value: string);
@@ -2312,34 +3585,34 @@ var
 begin
   ParentCollection := Collection as TMawWellCollection;
 
-  AnObserver := FObserverList[FlowingWellElevationPosition];
+  AnObserver := FObserverList[MawFlowingWellElevationPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateFlowingWellElevationData;
 
-  AnObserver := FObserverList[FlowingWellConductancePosition];
+  AnObserver := FObserverList[MawFlowingWellConductancePosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateFlowingWellConductanceData;
 
-  AnObserver := FObserverList[RatePosition];
+  AnObserver := FObserverList[MawRatePosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateRateData;
 
-  AnObserver := FObserverList[WellHeadPosition];
+  AnObserver := FObserverList[MawWellHeadPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateWellHeadData;
 
-  AnObserver := FObserverList[HeadLimitPosition];
+  AnObserver := FObserverList[MawHeadLimitPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateHeadLimitData;
 
-  AnObserver := FObserverList[MinRatePosition];
+  AnObserver := FObserverList[MawMinRatePosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateMinRateData;
 
-  AnObserver := FObserverList[MaxRatePosition];
+  AnObserver := FObserverList[MawMaxRatePosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateMaxRateData;
 
-  AnObserver := FObserverList[PumpElevationPosition];
+  AnObserver := FObserverList[MawPumpElevationPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidatePumpElevationData;
 
-  AnObserver := FObserverList[ScalingLengthPosition];
+  AnObserver := FObserverList[MawScalingLengthPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateScalingLengthData;
 
-  AnObserver := FObserverList[FlowingWellReductionLengthPostion];
+  AnObserver := FObserverList[MawFlowingWellReductionLengthPosition];
   AnObserver.OnUpToDateSet := ParentCollection.InvalidateFlowingWellReductionLengthData;
 
 end;
@@ -2394,25 +3667,25 @@ end;
 function TMawItem.GetBoundaryFormula(Index: integer): string;
 begin
   case index of
-    FlowingWellElevationPosition:
+    MawFlowingWellElevationPosition:
       result := FlowingWellElevation;
-    FlowingWellConductancePosition:
+    MawFlowingWellConductancePosition:
       result := FlowingWellConductance;
-    RatePosition:
+    MawRatePosition:
       result := Rate;
-    WellHeadPosition:
+    MawWellHeadPosition:
       result := WellHead;
-    HeadLimitPosition:
+    MawHeadLimitPosition:
       result := HeadLimit;
-    MinRatePosition:
+    MawMinRatePosition:
       result := MinRate;
-    MaxRatePosition:
+    MawMaxRatePosition:
       result := MaxRate;
-    PumpElevationPosition:
+    MawPumpElevationPosition:
       result := PumpElevation;
-    ScalingLengthPosition:
+    MawScalingLengthPosition:
       result := ScalingLength;
-    FlowingWellReductionLengthPostion:
+    MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLength;
     else
       Assert(False);
@@ -2422,37 +3695,37 @@ end;
 function TMawItem.GetFlowingWellConductance: string;
 begin
   Result := FFlowingWellConductance.Formula;
-  ResetItemObserver(FlowingWellConductancePosition);
+  ResetItemObserver(MawFlowingWellConductancePosition);
 end;
 
 function TMawItem.GetFlowingWellElevation: string;
 begin
   Result := FFlowingWellElevation.Formula;
-  ResetItemObserver(FlowingWellElevationPosition);
+  ResetItemObserver(MawFlowingWellElevationPosition);
 end;
 
 function TMawItem.GetFlowingWellReductionLength: string;
 begin
   Result := FFlowingWellReductionLength.Formula;
-  ResetItemObserver(FlowingWellReductionLengthPostion);
+  ResetItemObserver(MawFlowingWellReductionLengthPosition);
 end;
 
 function TMawItem.GetHeadLimit: string;
 begin
   Result := FHeadLimit.Formula;
-  ResetItemObserver(HeadLimitPosition);
+  ResetItemObserver(MawHeadLimitPosition);
 end;
 
 function TMawItem.GetMaxRate: string;
 begin
   Result := FMaxRate.Formula;
-  ResetItemObserver(MaxRatePosition);
+  ResetItemObserver(MawMaxRatePosition);
 end;
 
 function TMawItem.GetMinRate: string;
 begin
   Result := FMinRate.Formula;
-  ResetItemObserver(MinRatePosition);
+  ResetItemObserver(MawMinRatePosition);
 end;
 
 procedure TMawItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -2460,56 +3733,56 @@ begin
   inherited;
   if Sender = FFlowingWellConductance then
   begin
-    List.Add(FObserverList[FlowingWellConductancePosition]);
+    List.Add(FObserverList[MawFlowingWellConductancePosition]);
   end
   else if Sender = FFlowingWellElevation then
   begin
-    List.Add(FObserverList[FlowingWellElevationPosition]);
+    List.Add(FObserverList[MawFlowingWellElevationPosition]);
   end
   else if Sender = FFlowingWellReductionLength then
   begin
-    List.Add(FObserverList[FlowingWellReductionLengthPostion]);
+    List.Add(FObserverList[MawFlowingWellReductionLengthPosition]);
   end
   else if Sender = FHeadLimit then
   begin
-    List.Add(FObserverList[HeadLimitPosition]);
+    List.Add(FObserverList[MawHeadLimitPosition]);
   end
   else if Sender = FMaxRate then
   begin
-    List.Add(FObserverList[MaxRatePosition]);
+    List.Add(FObserverList[MawMaxRatePosition]);
   end
   else if Sender = FMinRate then
   begin
-    List.Add(FObserverList[MinRatePosition]);
+    List.Add(FObserverList[MawMinRatePosition]);
   end
   else if Sender = FPumpElevation then
   begin
-    List.Add(FObserverList[PumpElevationPosition]);
+    List.Add(FObserverList[MawPumpElevationPosition]);
   end
   else if Sender = FRate then
   begin
-    List.Add(FObserverList[RatePosition]);
+    List.Add(FObserverList[MawRatePosition]);
   end
   else if Sender = FScalingLength then
   begin
-    List.Add(FObserverList[ScalingLengthPosition]);
+    List.Add(FObserverList[MawScalingLengthPosition]);
   end
   else if Sender = FWellHead then
   begin
-    List.Add(FObserverList[WellHeadPosition]);
+    List.Add(FObserverList[MawWellHeadPosition]);
   end
 end;
 
 function TMawItem.GetPumpElevation: string;
 begin
   Result := FPumpElevation.Formula;
-  ResetItemObserver(PumpElevationPosition);
+  ResetItemObserver(MawPumpElevationPosition);
 end;
 
 function TMawItem.GetRate: string;
 begin
   Result := FRate.Formula;
-  ResetItemObserver(RatePosition);
+  ResetItemObserver(MawRatePosition);
 end;
 
 function TMawItem.GetRateScaling: Boolean;
@@ -2520,7 +3793,7 @@ end;
 function TMawItem.GetScalingLength: string;
 begin
   Result := FScalingLength.Formula;
-  ResetItemObserver(ScalingLengthPosition);
+  ResetItemObserver(MawScalingLengthPosition);
 end;
 
 function TMawItem.GetShutoff: Boolean;
@@ -2531,7 +3804,7 @@ end;
 function TMawItem.GetWellHead: string;
 begin
   Result := FWellHead.Formula;
-  ResetItemObserver(WellHeadPosition);
+  ResetItemObserver(MawWellHeadPosition);
 end;
 
 procedure TMawItem.InvalidateModel;
@@ -2620,25 +3893,25 @@ end;
 procedure TMawItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case index of
-    FlowingWellElevationPosition:
+    MawFlowingWellElevationPosition:
       FlowingWellElevation := Value;
-    FlowingWellConductancePosition:
+    MawFlowingWellConductancePosition:
       FlowingWellConductance := Value;
-    RatePosition:
+    MawRatePosition:
       Rate := Value;
-    WellHeadPosition:
+    MawWellHeadPosition:
       WellHead := Value;
-    HeadLimitPosition:
+    MawHeadLimitPosition:
       HeadLimit := Value;
-    MinRatePosition:
+    MawMinRatePosition:
       MinRate := Value;
-    MaxRatePosition:
+    MawMaxRatePosition:
       MaxRate := Value;
-    PumpElevationPosition:
+    MawPumpElevationPosition:
       PumpElevation := Value;
-    ScalingLengthPosition:
+    MawScalingLengthPosition:
       ScalingLength := Value;
-    FlowingWellReductionLengthPostion:
+    MawFlowingWellReductionLengthPosition:
       FlowingWellReductionLength := Value;
     else
       Assert(False);
@@ -2652,23 +3925,23 @@ end;
 
 procedure TMawItem.SetFlowingWellConductance(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, FlowingWellConductancePosition, FFlowingWellConductance);
+  UpdateFormulaBlocks(Value, MawFlowingWellConductancePosition, FFlowingWellConductance);
 end;
 
 procedure TMawItem.SetFlowingWellElevation(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, FlowingWellElevationPosition, FFlowingWellElevation);
+  UpdateFormulaBlocks(Value, MawFlowingWellElevationPosition, FFlowingWellElevation);
 end;
 
 procedure TMawItem.SetFlowingWellReductionLength(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, FlowingWellReductionLengthPostion,
+  UpdateFormulaBlocks(Value, MawFlowingWellReductionLengthPosition,
     FFlowingWellReductionLength);
 end;
 
 procedure TMawItem.SetHeadLimit(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, HeadLimitPosition, FHeadLimit);
+  UpdateFormulaBlocks(Value, MawHeadLimitPosition, FHeadLimit);
 end;
 
 procedure TMawItem.SetHeadLimitChoice(const Value: Boolean);
@@ -2683,22 +3956,22 @@ end;
 
 procedure TMawItem.SetMaxRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, MaxRatePosition, FMaxRate);
+  UpdateFormulaBlocks(Value, MawMaxRatePosition, FMaxRate);
 end;
 
 procedure TMawItem.SetMinRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, MinRatePosition, FMinRate);
+  UpdateFormulaBlocks(Value, MawMinRatePosition, FMinRate);
 end;
 
 procedure TMawItem.SetPumpElevation(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, PumpElevationPosition, FPumpElevation);
+  UpdateFormulaBlocks(Value, MawPumpElevationPosition, FPumpElevation);
 end;
 
 procedure TMawItem.SetRate(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, RatePosition, FRate);
+  UpdateFormulaBlocks(Value, MawRatePosition, FRate);
 end;
 
 procedure TMawItem.SetRateLimitation(const Value: TRateLimitation);
@@ -2712,12 +3985,12 @@ end;
 
 procedure TMawItem.SetScalingLength(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ScalingLengthPosition, FScalingLength);
+  UpdateFormulaBlocks(Value, MawScalingLengthPosition, FScalingLength);
 end;
 
 procedure TMawItem.SetWellHead(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, WellHeadPosition, FWellHead);
+  UpdateFormulaBlocks(Value, MawWellHeadPosition, FWellHead);
 end;
 
 { TMawTimeListLink }
@@ -2866,7 +4139,7 @@ var
   ACell: TCellAssignment;
 begin
   Assert(BoundaryFunctionIndex in
-    [FlowingWellElevationPosition..FlowingWellReductionLengthPostion]);
+    [MawFlowingWellElevationPosition..MawFlowingWellReductionLengthPosition]);
   Assert(Expression <> nil);
 
   MawStorage := BoundaryStorage as TMawTransientStorage;
@@ -2881,7 +4154,7 @@ begin
     with MawStorage.MawTransientArray[Index] do
     begin
       case BoundaryFunctionIndex of
-        FlowingWellElevationPosition:
+        MawFlowingWellElevationPosition:
           begin
             FlowingWellElevation := Expression.DoubleResult;
             FlowingWellElevationAnnotation := ACell.Annotation;
@@ -2889,7 +4162,7 @@ begin
             FlowingWellElevationPestSeriesName := PestSeriesName;
             FlowingWellElevationPestSeriesMethod := PestSeriesMethod;
           end;
-        FlowingWellConductancePosition:
+        MawFlowingWellConductancePosition:
           begin
             FlowingWellConductance := Expression.DoubleResult;
             FlowingWellConductanceAnnotation := ACell.Annotation;
@@ -2897,7 +4170,7 @@ begin
             FlowingWellConductancePestSeriesName := PestSeriesName;
             FlowingWellConductancePestSeriesMethod := PestSeriesMethod;
           end;
-        RatePosition:
+        MawRatePosition:
           begin
             Rate := Expression.DoubleResult;
             RateAnnotation := ACell.Annotation;
@@ -2905,7 +4178,7 @@ begin
             RatePestSeriesName := PestSeriesName;
             RatePestSeriesMethod := PestSeriesMethod;
           end;
-        WellHeadPosition:
+        MawWellHeadPosition:
           begin
             WellHead := Expression.DoubleResult;
             WellHeadAnnotation := ACell.Annotation;
@@ -2913,7 +4186,7 @@ begin
             WellHeadPestSeriesName := PestSeriesName;
             WellHeadPestSeriesMethod := PestSeriesMethod;
           end;
-        HeadLimitPosition:
+        MawHeadLimitPosition:
           begin
             HeadLimit := Expression.DoubleResult;
             HeadLimitAnnotation := ACell.Annotation;
@@ -2921,7 +4194,7 @@ begin
             HeadLimitPestSeriesName := PestSeriesName;
             HeadLimitPestSeriesMethod := PestSeriesMethod;
           end;
-        MinRatePosition:
+        MawMinRatePosition:
           begin
             MinRate := Expression.DoubleResult;
             MinRateAnnotation := ACell.Annotation;
@@ -2929,7 +4202,7 @@ begin
             MinRatePestSeriesName := PestSeriesName;
             MinRatePestSeriesMethod := PestSeriesMethod;
           end;
-        MaxRatePosition:
+        MawMaxRatePosition:
           begin
             MaxRate := Expression.DoubleResult;
             MaxRateAnnotation := ACell.Annotation;
@@ -2937,7 +4210,7 @@ begin
             MaxRatePestSeriesName := PestSeriesName;
             MaxRatePestSeriesMethod := PestSeriesMethod;
           end;
-        PumpElevationPosition:
+        MawPumpElevationPosition:
           begin
             PumpElevation := Expression.DoubleResult;
             PumpElevationAnnotation := ACell.Annotation;
@@ -2945,7 +4218,7 @@ begin
             PumpElevationPestSeriesName := PestSeriesName;
             PumpElevationPestSeriesMethod := PestSeriesMethod;
           end;
-        ScalingLengthPosition:
+        MawScalingLengthPosition:
           begin
             ScalingLength := Expression.DoubleResult;
             ScalingLengthAnnotation := ACell.Annotation;
@@ -2953,7 +4226,7 @@ begin
             ScalingLengthPestSeriesName := PestSeriesName;
             ScalingLengthPestSeriesMethod := PestSeriesMethod;
           end;
-        FlowingWellReductionLengthPostion:
+        MawFlowingWellReductionLengthPosition:
           begin
             FlowingWellReductionLength := Expression.DoubleResult;
             FlowingWellReductionLengthAnnotation := ACell.Annotation;
@@ -3437,6 +4710,99 @@ begin
   result := FValues.MvrUsed;
 end;
 
+function TMawCell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    MawFlowingWellElevationPosition:
+      result := FValues.FlowingWellElevationPest;
+    MawFlowingWellConductancePosition:
+      result := FValues.FlowingWellConductancePest;
+    MawRatePosition:
+      result := FValues.RatePest;
+    MawWellHeadPosition:
+      result := FValues.WellHeadPest;
+    MawHeadLimitPosition:
+      result := FValues.HeadLimitPest;
+    MawMinRatePosition:
+      result := FValues.MinRatePest;
+    MawMaxRatePosition:
+      result := FValues.MaxRatePest;
+    MawPumpElevationPosition:
+      result := FValues.PumpElevationPest;
+    MawScalingLengthPosition:
+      result := FValues.ScalingLengthPest;
+    MawFlowingWellReductionLengthPosition:
+      result := FValues.FlowingWellReductionLengthPest;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TMawCell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    MawFlowingWellElevationPosition:
+      result := FValues.FlowingWellElevationPestSeriesMethod;
+    MawFlowingWellConductancePosition:
+      result := FValues.FlowingWellConductancePestSeriesMethod;
+    MawRatePosition:
+      result := FValues.RatePestSeriesMethod;
+    MawWellHeadPosition:
+      result := FValues.WellHeadPestSeriesMethod;
+    MawHeadLimitPosition:
+      result := FValues.HeadLimitPestSeriesMethod;
+    MawMinRatePosition:
+      result := FValues.MinRatePestSeriesMethod;
+    MawMaxRatePosition:
+      result := FValues.MaxRatePestSeriesMethod;
+    MawPumpElevationPosition:
+      result := FValues.PumpElevationPestSeriesMethod;
+    MawScalingLengthPosition:
+      result := FValues.ScalingLengthPestSeriesMethod;
+    MawFlowingWellReductionLengthPosition:
+      result := FValues.FlowingWellReductionLengthPestSeriesMethod;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TMawCell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    MawFlowingWellElevationPosition:
+      result := FValues.FlowingWellElevationPestSeriesName;
+    MawFlowingWellConductancePosition:
+      result := FValues.FlowingWellConductancePestSeriesName;
+    MawRatePosition:
+      result := FValues.RatePestSeriesName;
+    MawWellHeadPosition:
+      result := FValues.WellHeadPestSeriesName;
+    MawHeadLimitPosition:
+      result := FValues.HeadLimitPestSeriesName;
+    MawMinRatePosition:
+      result := FValues.MinRatePestSeriesName;
+    MawMaxRatePosition:
+      result := FValues.MaxRatePestSeriesName;
+    MawPumpElevationPosition:
+      result := FValues.PumpElevationPestSeriesName;
+    MawScalingLengthPosition:
+      result := FValues.ScalingLengthPestSeriesName;
+    MawFlowingWellReductionLengthPosition:
+      result := FValues.FlowingWellReductionLengthPestSeriesName;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TMawCell.GetPumpElevation: double;
 begin
   result := FValues.PumpElevation
@@ -3465,25 +4831,25 @@ end;
 function TMawCell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   case Index of
-    FlowingWellElevationPosition:
+    MawFlowingWellElevationPosition:
       result := FlowingWellElevationAnnotation;
-    FlowingWellConductancePosition:
+    MawFlowingWellConductancePosition:
       result := FlowingWellConductanceAnnotation;
-    RatePosition:
+    MawRatePosition:
       result := RateAnnotation;
-    WellHeadPosition:
+    MawWellHeadPosition:
       result := WellHeadAnnotation;
-    HeadLimitPosition:
+    MawHeadLimitPosition:
       result := HeadLimitAnnotation;
-    MinRatePosition:
+    MawMinRatePosition:
       result := MinRateAnnotation;
-    MaxRatePosition:
+    MawMaxRatePosition:
       result := MaxRateAnnotation;
-    PumpElevationPosition:
+    MawPumpElevationPosition:
       result := PumpElevationAnnotation;
-    ScalingLengthPosition:
+    MawScalingLengthPosition:
       result := ScalingLengthAnnotation;
-    FlowingWellReductionLengthPostion:
+    MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLengthAnnotation;
     else
       Assert(False);
@@ -3494,25 +4860,25 @@ function TMawCell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    FlowingWellElevationPosition:
+    MawFlowingWellElevationPosition:
       result := FlowingWellElevation;
-    FlowingWellConductancePosition:
+    MawFlowingWellConductancePosition:
       result := FlowingWellConductance;
-    RatePosition:
+    MawRatePosition:
       result := Rate;
-    WellHeadPosition:
+    MawWellHeadPosition:
       result := WellHead;
-    HeadLimitPosition:
+    MawHeadLimitPosition:
       result := HeadLimit;
-    MinRatePosition:
+    MawMinRatePosition:
       result := MinRate;
-    MaxRatePosition:
+    MawMaxRatePosition:
       result := MaxRate;
-    PumpElevationPosition:
+    MawPumpElevationPosition:
       result := PumpElevation;
-    ScalingLengthPosition:
+    MawScalingLengthPosition:
       result := ScalingLength;
-    FlowingWellReductionLengthPostion:
+    MawFlowingWellReductionLengthPosition:
       result := FlowingWellReductionLength;
     else
       Assert(False);

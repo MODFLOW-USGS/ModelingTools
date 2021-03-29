@@ -1854,6 +1854,7 @@ that affects the model output should also have a comment. }
     // @name adds DataSet to @link(FDataSets) and calls @link(AddDataSetToLookUpList);
     function AddDataSet(const DataSet: TDataArray): Integer;
     procedure UpdateDataSetDimensions;
+    procedure ClearPestArrayFileNames;
   public
     FDataArrayCreationRecords: array of TDataSetCreationData;
     FZetaDataDefinition: TDataSetCreationData;
@@ -2026,6 +2027,7 @@ that affects the model output should also have a comment. }
 //    FMeshFileName: string;
     FPilotPointDataArrays: TDataArrayList;
     FPestParamDictionay: TDictionary<string, TModflowSteadyParameter>;
+//    FPestBoundaryDataArrays: TDictionary<string, TDataArray>;
 
     function GetSomeSegmentsUpToDate: boolean; virtual; abstract;
     procedure SetSomeSegmentsUpToDate(const Value: boolean); virtual; abstract;
@@ -2146,6 +2148,7 @@ that affects the model output should also have a comment. }
     procedure UpdateAllDataArrayDimensions;
     procedure AssignModflow6LakeDisplayArrays(Sender: TObject);
     procedure UpdateIdomain(Sender: TObject);
+    procedure ClearPestArrayFileNames;
   private
     FGrid: TCustomModelGrid;
     FModflowOptions: TModflowOptions;
@@ -3360,6 +3363,8 @@ that affects the model output should also have a comment. }
       write SetCanDrawContours;
     function GetPestParameterByName(PestParamName: string): TModflowSteadyParameter;
     procedure ClearPestParmDictionary;
+//    procedure AddUsedPestDataArray(ADataArray: TDataArray);
+//    function IsUsedPestDataArray(ADataArray: TDataArray): Boolean;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -25838,6 +25843,11 @@ begin
   end;
 end;
 
+//function TCustomModel.IsUsedPestDataArray(ADataArray: TDataArray): Boolean;
+//begin
+//  result := FPestBoundaryDataArrays.ContainsKey(ADataArray.Name);
+//end;
+
 procedure TPhastModel.SetArchiveName(const Value: string);
 begin
   FArchiveName := Value;
@@ -28789,6 +28799,7 @@ begin
 
   FPilotPointDataArrays := TDataArrayList.Create;
   FPilotPointData := TStoredPilotParamDataCollection.Create;
+//  FPestBoundaryDataArrays := TDictionary<string, TDataArray>.Create;
 end;
 
 procedure TCustomModel.UpdateSutraTimeListNames;
@@ -29284,6 +29295,7 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+//  FPestBoundaryDataArrays.Free;
   FPestParamDictionay.Free;
   FPilotPointData.Free;
   FPilotPointDataArrays.Free;
@@ -31881,6 +31893,11 @@ begin
   end;
 end;
 
+procedure TCustomModel.ClearPestArrayFileNames;
+begin
+  DataArrayManager.ClearPestArrayFileNames
+end;
+
 procedure TCustomModel.ClearPestParmDictionary;
 begin
   FreeAndNil(FPestParamDictionay);
@@ -31896,6 +31913,7 @@ begin
   FPestPvalTemplate.Clear;
   FilesToDelete.Clear;
   ClearPestParmDictionary;
+//  FPestBoundaryDataArrays.Clear;
   for Index := 0 to ModflowSteadyParameters.Count - 1 do
   begin
     ModflowSteadyParameters[Index].AddedToPval := False;
@@ -33540,6 +33558,18 @@ begin
   for Index := 0 to ChildDataArrayManagerCount - 1 do
   begin
     ChildDataArrayManagers[Index].ClearDeletedDataSets;
+  end;
+end;
+
+procedure TDataArrayManager.ClearPestArrayFileNames;
+var
+  DataArrayIndex: Integer;
+  ADataArray: TDataArray;
+begin
+  for DataArrayIndex := 0 to DataSetCount - 1 do
+  begin
+    ADataArray := DataSets[DataArrayIndex];
+    ADataArray.PestArrayFileNames.Clear;
   end;
 end;
 
@@ -39025,6 +39055,14 @@ begin
   FTimeLists.Add(TimeList);
 end;
 
+//procedure TCustomModel.AddUsedPestDataArray(ADataArray: TDataArray);
+//begin
+//  if not FPestBoundaryDataArrays.ContainsKey(ADataArray.Name) then
+//  begin
+//    FPestBoundaryDataArrays.Add(ADataArray.Name, ADataArray);
+//  end;
+//end;
+
 procedure TCustomModel.AddZoneBudgetInputFile(AFileName: string);
 begin
   TestAddModelModelFile(AFileName, FZoneBudgetInputFiles);
@@ -40719,6 +40757,8 @@ var
 begin
   inherited;
 
+  ClearPestArrayFileNames;
+
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
   begin
@@ -41143,6 +41183,7 @@ var
   CSubWriter: TCSubWriter;
   ObsScriptWriter: TGlobalComparisonScriptWriter;
   PestObsExtractorInputWriter: TPestObsExtractorInputWriter;
+//  PestDataArrayWriter: TPestDataArrayWriter;
 begin
   PilotPointData.Clear;
   
@@ -42353,6 +42394,13 @@ begin
         ModflowMvrWriter.Free;
         UpdateCurrentModel(SelectedModel);
       end;
+
+//      PestDataArrayWriter := TPestDataArrayWriter.Create(Self, etExport);
+//      try
+//        PestDataArrayWriter.WriteFile(FileName);
+//      finally
+//        PestDataArrayWriter.Free;
+//      end;
 
       PestObsExtractorInputWriter := TPestObsExtractorInputWriter.Create(Self);
       try

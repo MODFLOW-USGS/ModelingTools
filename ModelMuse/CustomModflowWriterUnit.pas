@@ -160,7 +160,7 @@ type
     function GetUsedPestDataArrays: TArray<TDataArray>;
     // Name returns an empty string if no file needs to be created.
     // otherwise, it returns the name of the arrays file to be used
-    // in the template.
+    // in the PEST template for a boundary condition.
     function WriteArraysFile(TemplateFileName: string): string;
   end;
 
@@ -268,7 +268,7 @@ type
     If the result is @True, @link(WriteArray) will handle the data set
     differently
     }
-    function DataArrayUsesPestParameters(const DataArray: TDataArray; const LayerIndex: integer): Boolean;
+    function DataArrayUsesPestParameters(const DataArray: TDataArray): Boolean;
     { @name writes one layer of DataArray to the output file.
       @param(DataArray is the TDataArray to be written.)
       @param(LayerIndex is the layer in DataArray to be written.)
@@ -2478,6 +2478,7 @@ begin
   if not FPestDataArrays.ContainsKey(UpperCase(ADataArray.Name)) then
   begin
     FPestDataArrays.Add(UpperCase(ADataArray.Name), ADataArray);
+//    Model.AddUsedPestDataArray(ADataArray);
   end;
 end;
 
@@ -2588,7 +2589,7 @@ begin
 end;
 
 function TCustomModflowWriter.DataArrayUsesPestParameters(
-  const DataArray: TDataArray; const LayerIndex: integer): Boolean;
+  const DataArray: TDataArray): Boolean;
 begin
 //  {$IFDEF DEBUG}
   Assert(Model <> nil);
@@ -2974,12 +2975,12 @@ begin
     frmProgressMM.AddMessage(StrWritingArray);
   end;
 
-  if DataArrayUsesPestParameters(DataArray, LayerIndex) then
+  if DataArrayUsesPestParameters(DataArray) then
   begin
-    if LayerIndex = 0 then
-    begin
-      DataArray.PestArrayFileNames.Clear;
-    end;
+//    if LayerIndex = 0 then
+//    begin
+//      DataArray.PestArrayFileNames.Clear;
+//    end;
     LayerArrayWriter := TLayerArrayWriter.Create(Model, FEvaluationType);
     try
       Assert(FInputFileName <> '');
@@ -3118,13 +3119,18 @@ var
   DataArrayIndex: Integer;
   ADataArray: TDataArray;
   ALine: WideString;
+  TempFile: string;
+  LayerIndex: Integer;
+  ModflowWriter: TCustomModflowWriter;
+  ParameterZoneWriter: TParameterZoneWriter;
 begin
   if FPestDataArrays.Count = 0 then
   begin
     result := '';
   end
   else
-  begin
+  begin               
+    ModflowWriter := nil;
     result := ExpandFileName(ChangeFileExt(TemplateFileName, '.arrays'));
     ArraysFile := TStringList.Create;
     try
@@ -3133,6 +3139,33 @@ begin
       for DataArrayIndex := 0 to Length(DataArrays) - 1 do
       begin
         ADataArray := DataArrays[DataArrayIndex];
+        if ADataArray.PestArrayFileNames.Count = 0 then
+        begin
+          ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+          try
+            TempFile := ChangeFileExt(FNameOfFile, '');
+            ParameterZoneWriter.WriteFile(TempFile, ADataArray, ADataArray.Name);
+          finally
+            ParameterZoneWriter.Free;
+          end;
+        
+          TempFile := ChangeFileExt(FNameOfFile, '');
+          TempFile := ChangeFileExt(TempFile, '') + '.' + ADataArray.Name;
+          OpenTempFile(TempFile);
+          try
+            if ModflowWriter = nil then
+            begin
+              ModflowWriter := self as TCustomModflowWriter;
+            end;
+            for LayerIndex := 0 to ADataArray.LayerCount - 1 do
+            begin
+              ModflowWriter.WriteArray(ADataArray, 
+                LayerIndex, '', '', ADataArray.Name);
+            end;
+          finally
+            CloseTempFile;
+          end;
+        end;
         ALine := Format('%0:s[%1:d, %2:d, %3:d] ', [ADataArray.Name,
           ADataArray.LayerCount, ADataArray.RowCount, ADataArray.ColumnCount])
           + ADataArray.PestArrayFileNames.DelimitedText;

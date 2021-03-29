@@ -670,6 +670,9 @@ begin
     frameWellScreens.Grid.Cells[Ord(wscSkinRadius), 0] := StrSkinRadius;
 
     ClearGrid(rdgModflowBoundary);
+    seNumberOfTimes.AsInteger := 0;
+    seNumberOfTimesChange(seNumberOfTimes);
+
     frmGoPhast.PhastModel.ModflowStressPeriods.
       FillPickListWithStartTimes(rdgModflowBoundary, Ord(wfStartTime));
     frmGoPhast.PhastModel.ModflowStressPeriods.
@@ -690,6 +693,44 @@ begin
     rdgModflowBoundary.Cells[Ord(wtMaxRate), 0] := StrMaxFlowRate;
     rdgModflowBoundary.Cells[Ord(wtHeadLimitChoice), 0] := StrUseHeadLimit;
     rdgModflowBoundary.Cells[Ord(wtHeadLimit), 0] := StrLimitingHead;
+
+    {$IFDEF PEST}
+    rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
+    rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
+    rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
+    rdgModflowBoundary.SpecialFormat[0, PestMethodRow] := rcf4String;
+    rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+
+    PestMethod[rdgModflowBoundary, Ord(wfRate)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawRatePosition);
+    PestMethod[rdgModflowBoundary, Ord(wfSpecifiedHead)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawWellHeadPosition);
+    PestMethod[rdgModflowBoundary, Ord(wfFlowingWellElev)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawFlowingWellElevationPosition);
+    PestMethod[rdgModflowBoundary, Ord(wfFlowingWellCond)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawFlowingWellConductancePosition);
+    PestMethod[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawFlowingWellReductionLengthPosition);
+    PestMethod[rdgModflowBoundary, Ord(wtPumpElev)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawPumpElevationPosition);
+    PestMethod[rdgModflowBoundary, Ord(wtScalingLength)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawScalingLengthPosition);
+    PestMethod[rdgModflowBoundary, Ord(wtMinRate)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawMinRatePosition);
+    PestMethod[rdgModflowBoundary, Ord(wtMaxRate)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawMaxRatePosition);
+    PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)] :=
+      TMawBoundary.DefaultBoundaryMethod(MawHeadLimitPosition);
+
+{
+  TWellFlow = (wfStartTime, wfEndTime, wfStatus, wfRate, wfSpecifiedHead,
+    wfFlowingWell, wfFlowingWellElev, wfFlowingWellCond, wfFlowingWellReductionLength,
+    wtRateLimitation, wtPumpElev, wtScalingLength,
+    wtMinRate, wtMaxRate, wtHeadLimitChoice, wtHeadLimit);
+}
+    {$ENDIF}
+
   finally
     rdgModflowBoundary.EndUpdate
   end;
