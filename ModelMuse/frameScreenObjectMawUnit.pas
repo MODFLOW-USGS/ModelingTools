@@ -82,6 +82,7 @@ type
     FGettingData: Boolean;
     FWellScreensCleared: Boolean;
     FWellTimeDataCleared: Boolean;
+    FOnCheckPestCell: TSelectCellEvent;
     { Private declarations }
     procedure Edited;
     procedure CanSelectTimeCell(ARow: Integer; ACol: Integer; var CanSelect: Boolean);
@@ -98,6 +99,8 @@ type
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
     property OnEdited: TNotifyEvent read FOnEdited write FOnEdited;
+    property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
+      write FOnCheckPestCell;
     { Public declarations }
   end;
 
@@ -251,39 +254,71 @@ begin
             for TimeIndex := 0 to MawBound.Values.Count - 1 do
             begin
               MawItem := MawBound.Values[TimeIndex] as TMawItem;
-              rdgModflowBoundary.RealValue[Ord(wfStartTime), TimeIndex+1]
+              rdgModflowBoundary.RealValue[Ord(wfStartTime), TimeIndex+1 + PestRowOffset]
                 := MawItem.StartTime;
-              rdgModflowBoundary.RealValue[Ord(wfEndTime), TimeIndex+1]
+              rdgModflowBoundary.RealValue[Ord(wfEndTime), TimeIndex+1 + PestRowOffset]
                 := MawItem.EndTime;
-              rdgModflowBoundary.ItemIndex[Ord(wfStatus), TimeIndex+1]
+              rdgModflowBoundary.ItemIndex[Ord(wfStatus), TimeIndex+1 + PestRowOffset]
                 := Ord(MawItem.MawStatus);
-              rdgModflowBoundary.Cells[Ord(wfRate), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wfRate), TimeIndex+1 + PestRowOffset]
                 := MawItem.Rate;
-              rdgModflowBoundary.Cells[Ord(wfSpecifiedHead), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wfSpecifiedHead), TimeIndex+1 + PestRowOffset]
                 := MawItem.WellHead;
-              rdgModflowBoundary.Checked[Ord(wfFlowingWell), TimeIndex+1]
+              rdgModflowBoundary.Checked[Ord(wfFlowingWell), TimeIndex+1 + PestRowOffset]
                 := (MawItem.FlowingWell = fwFlowing);
-              rdgModflowBoundary.Cells[Ord(wfFlowingWellElev), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wfFlowingWellElev), TimeIndex+1 + PestRowOffset]
                 := MawItem.FlowingWellElevation;
-              rdgModflowBoundary.Cells[Ord(wfFlowingWellCond), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wfFlowingWellCond), TimeIndex+1 + PestRowOffset]
                 := MawItem.FlowingWellConductance;
-              rdgModflowBoundary.Cells[Ord(wfFlowingWellReductionLength), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wfFlowingWellReductionLength), TimeIndex+1 + PestRowOffset]
                 := MawItem.FlowingWellReductionLength;
-              rdgModflowBoundary.ItemIndex[Ord(wtRateLimitation), TimeIndex+1]
+              rdgModflowBoundary.ItemIndex[Ord(wtRateLimitation), TimeIndex+1 + PestRowOffset]
                 := Ord(MawItem.RateLimitation);
-              rdgModflowBoundary.Cells[Ord(wtPumpElev), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wtPumpElev), TimeIndex+1 + PestRowOffset]
                 := MawItem.PumpElevation;
-              rdgModflowBoundary.Cells[Ord(wtScalingLength), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wtScalingLength), TimeIndex+1 + PestRowOffset]
                 := MawItem.ScalingLength;
-              rdgModflowBoundary.Cells[Ord(wtMinRate), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wtMinRate), TimeIndex+1 + PestRowOffset]
                 := MawItem.MinRate;
-              rdgModflowBoundary.Cells[Ord(wtMaxRate), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wtMaxRate), TimeIndex+1 + PestRowOffset]
                 := MawItem.MaxRate;
-              rdgModflowBoundary.Checked[Ord(wtHeadLimitChoice), TimeIndex+1]
+              rdgModflowBoundary.Checked[Ord(wtHeadLimitChoice), TimeIndex+1 + PestRowOffset]
                 := MawItem.HeadLimitChoice;
-              rdgModflowBoundary.Cells[Ord(wtHeadLimit), TimeIndex+1]
+              rdgModflowBoundary.Cells[Ord(wtHeadLimit), TimeIndex+1 + PestRowOffset]
                 := MawItem.HeadLimit;
             end;
+
+            {$IFDEF PEST}
+            PestModifier[rdgModflowBoundary, Ord(wfRate)] := MawBound.PestRateFormula;
+            PestMethod[rdgModflowBoundary, Ord(wfRate)] := MawBound.PestRateMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wfSpecifiedHead)] := MawBound.PestWellHeadFormula;
+            PestMethod[rdgModflowBoundary, Ord(wfSpecifiedHead)] := MawBound.PestWellHeadMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wfFlowingWellElev)] := MawBound.PestFlowingWellElevationFormula;
+            PestMethod[rdgModflowBoundary, Ord(wfFlowingWellElev)] := MawBound.PestFlowingWellElevationMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wfFlowingWellCond)] := MawBound.PestFlowingWellConductanceFormula;
+            PestMethod[rdgModflowBoundary, Ord(wfFlowingWellCond)] := MawBound.PestFlowingWellConductanceMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)] := MawBound.PestFlowingWellReductionLengthFormula;
+            PestMethod[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)] := MawBound.PestFlowingWellReductionLengthMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wtPumpElev)] := MawBound.PestPumpElevationFormula;
+            PestMethod[rdgModflowBoundary, Ord(wtPumpElev)] := MawBound.PestPumpElevationMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wtScalingLength)] := MawBound.PestScalingLengthFormula;
+            PestMethod[rdgModflowBoundary, Ord(wtScalingLength)] := MawBound.PestScalingLengthMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wtMinRate)] := MawBound.PestMinRateFormula;
+            PestMethod[rdgModflowBoundary, Ord(wtMinRate)] := MawBound.PestMinRateMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wtMaxRate)] := MawBound.PestMaxRateFormula;
+            PestMethod[rdgModflowBoundary, Ord(wtMaxRate)] := MawBound.PestMaxRateMethod;
+
+            PestModifier[rdgModflowBoundary, Ord(wtHeadLimit)] := MawBound.PestHeadLimitFormula;
+            PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)] := MawBound.PestHeadLimitMethod;
+            {$ENDIF}
           end
           else
           begin
@@ -312,6 +347,98 @@ begin
                 ClearGrid(frameWellScreens.Grid);
               end;
             end;
+
+            {$IFDEF PEST}
+            if FirstMawBound.PestRateFormula <> MawBound.PestRateFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wfRate)] := False
+            end;
+            if FirstMawBound.PestRateMethod <> MawBound.PestRateMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wfRate)] := False;
+            end;
+
+            if FirstMawBound.PestWellHeadFormula <> MawBound.PestWellHeadFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wfSpecifiedHead)] := False
+            end;
+            if FirstMawBound.PestWellHeadMethod <> MawBound.PestWellHeadMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wfSpecifiedHead)] := False;
+            end;
+
+            if FirstMawBound.PestFlowingWellElevationFormula <> MawBound.PestFlowingWellElevationFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wfFlowingWellElev)] := False
+            end;
+            if FirstMawBound.PestFlowingWellElevationMethod <> MawBound.PestFlowingWellElevationMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wfFlowingWellElev)] := False;
+            end;
+
+            if FirstMawBound.PestFlowingWellConductanceFormula <> MawBound.PestFlowingWellConductanceFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wfFlowingWellCond)] := False
+            end;
+            if FirstMawBound.PestFlowingWellConductanceMethod <> MawBound.PestFlowingWellConductanceMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wfFlowingWellCond)] := False;
+            end;
+
+            if FirstMawBound.PestFlowingWellReductionLengthFormula <> MawBound.PestFlowingWellReductionLengthFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)] := False
+            end;
+            if FirstMawBound.PestFlowingWellReductionLengthMethod <> MawBound.PestFlowingWellReductionLengthMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)] := False;
+            end;
+
+            if FirstMawBound.PestPumpElevationFormula <> MawBound.PestPumpElevationFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wtPumpElev)] := False
+            end;
+            if FirstMawBound.PestPumpElevationMethod <> MawBound.PestPumpElevationMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wtPumpElev)] := False;
+            end;
+
+            if FirstMawBound.PestScalingLengthFormula <> MawBound.PestScalingLengthFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wtScalingLength)] := False
+            end;
+            if FirstMawBound.PestScalingLengthMethod <> MawBound.PestScalingLengthMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wtScalingLength)] := False;
+            end;
+
+            if FirstMawBound.PestMinRateFormula <> MawBound.PestMinRateFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wtMinRate)] := False
+            end;
+            if FirstMawBound.PestMinRateMethod <> MawBound.PestMinRateMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wtMinRate)] := False;
+            end;
+
+            if FirstMawBound.PestMaxRateFormula <> MawBound.PestMaxRateFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wtMaxRate)] := False
+            end;
+            if FirstMawBound.PestMaxRateMethod <> MawBound.PestMaxRateMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wtMaxRate)] := False;
+            end;
+
+            if FirstMawBound.PestHeadLimitFormula <> MawBound.PestHeadLimitFormula then
+            begin
+              PestModifierAssigned[rdgModflowBoundary, Ord(wtHeadLimit)] := False
+            end;
+            if FirstMawBound.PestHeadLimitMethod <> MawBound.PestHeadLimitMethod then
+            begin
+              PestMethodAssigned[rdgModflowBoundary, Ord(wtHeadLimit)] := False;
+            end;
+            {$ENDIF}
 
             if not FWellTimeDataCleared then
             begin
@@ -344,7 +471,7 @@ begin
   inherited;
   rdgModflowBoundary.BeginUpdate;
   try
-    for RowIndex := rdgModflowBoundary.FixedRows to
+    for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset to
       rdgModflowBoundary.RowCount - 1 do
     begin
       for ColIndex in [wfRate, wfSpecifiedHead, wfFlowingWellElev,
@@ -404,7 +531,8 @@ var
   ColIndex: TWellFlow;
 begin
   ShouldEnable := False;
-  for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
+  for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset
+    to rdgModflowBoundary.RowCount -1 do
   begin
     for ColIndex in [wfRate, wfSpecifiedHead, wfFlowingWellElev,
       wfFlowingWellCond, wfFlowingWellReductionLength, wtPumpElev,
@@ -424,7 +552,8 @@ begin
   rdeFormula.Enabled := ShouldEnable;
 
   ShouldEnable := False;
-  for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
+  for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset
+    to rdgModflowBoundary.RowCount -1 do
   begin
     ShouldEnable := rdgModflowBoundary.IsSelectedCell(Ord(wfStatus),RowIndex);
     if ShouldEnable then
@@ -435,7 +564,8 @@ begin
   comboStatus.Enabled := ShouldEnable;
 
   ShouldEnable := False;
-  for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
+  for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset
+    to rdgModflowBoundary.RowCount -1 do
   begin
     ShouldEnable := rdgModflowBoundary.IsSelectedCell(Ord(wfFlowingWell),RowIndex);
     if ShouldEnable then
@@ -446,7 +576,8 @@ begin
   cbFlowingWell.Enabled := ShouldEnable;
 
   ShouldEnable := False;
-  for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
+  for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset
+    to rdgModflowBoundary.RowCount -1 do
   begin
     ShouldEnable := rdgModflowBoundary.IsSelectedCell(Ord(wtRateLimitation),RowIndex);
     if ShouldEnable then
@@ -457,7 +588,8 @@ begin
   comboRateLimitation.Enabled := ShouldEnable;
 
   ShouldEnable := False;
-  for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
+  for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset
+    to rdgModflowBoundary.RowCount -1 do
   begin
     ShouldEnable := rdgModflowBoundary.IsSelectedCell(Ord(wtHeadLimitChoice),RowIndex);
     if ShouldEnable then
@@ -473,6 +605,11 @@ procedure TframeScreenObjectMAW.rdgModflowBoundarySelectCell(Sender: TObject;
 begin
   inherited;
   CanSelectTimeCell(ARow, ACol, CanSelect);
+  if Assigned(OnCheckPestCell)
+    and not (csCustomPaint in rdgModflowBoundary.ControlState) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
+  end;
 end;
 
 procedure TframeScreenObjectMAW.rdgModflowBoundarySetEditText(Sender: TObject;
@@ -483,7 +620,7 @@ begin
   Edited;
   FWellTimeDataCleared := False;
 
-  seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount -1;
+  seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount -1 - PestRowOffset;
   if TWellFlow(ACol) in [wfStatus, wfFlowingWell, wtRateLimitation, wtHeadLimitChoice] then
   begin
     rdgModflowBoundary.Invalidate;
@@ -500,7 +637,7 @@ end;
 procedure TframeScreenObjectMAW.seNumberOfTimesChange(Sender: TObject);
 begin
   inherited;
-  rdgModflowBoundary.RowCount := Max(2, seNumberOfTimes.AsInteger + 1);
+  rdgModflowBoundary.RowCount := Max(2, seNumberOfTimes.AsInteger + 1) + PestRowOffset;
   if seNumberOfTimes.AsInteger = 0 then
   begin
     ClearGrid(rdgModflowBoundary);
@@ -572,6 +709,98 @@ begin
           TMawConductanceMethod(comboConductEq.ItemIndex);
       end;
 
+      {$IFDEF PEST}
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wfRate)] then
+      begin
+        Boundary.PestRateFormula := PestModifier[rdgModflowBoundary, Ord(wfRate)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wfRate)] then
+      begin
+        Boundary.PestRateMethod := PestMethod[rdgModflowBoundary, Ord(wfRate)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wfSpecifiedHead)] then
+      begin
+        Boundary.PestWellHeadFormula := PestModifier[rdgModflowBoundary, Ord(wfSpecifiedHead)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wfSpecifiedHead)] then
+      begin
+        Boundary.PestWellHeadMethod := PestMethod[rdgModflowBoundary, Ord(wfSpecifiedHead)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wfFlowingWellElev)] then
+      begin
+        Boundary.PestFlowingWellElevationFormula := PestModifier[rdgModflowBoundary, Ord(wfFlowingWellElev)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wfFlowingWellElev)] then
+      begin
+        Boundary.PestFlowingWellElevationMethod := PestMethod[rdgModflowBoundary, Ord(wfFlowingWellElev)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wfFlowingWellCond)] then
+      begin
+        Boundary.PestFlowingWellConductanceFormula := PestModifier[rdgModflowBoundary, Ord(wfFlowingWellCond)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wfFlowingWellCond)] then
+      begin
+        Boundary.PestFlowingWellConductanceMethod := PestMethod[rdgModflowBoundary, Ord(wfFlowingWellCond)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)] then
+      begin
+        Boundary.PestFlowingWellReductionLengthFormula := PestModifier[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)] then
+      begin
+        Boundary.PestFlowingWellReductionLengthMethod := PestMethod[rdgModflowBoundary, Ord(wfFlowingWellReductionLength)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wtPumpElev)] then
+      begin
+        Boundary.PestPumpElevationFormula := PestModifier[rdgModflowBoundary, Ord(wtPumpElev)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wtPumpElev)] then
+      begin
+        Boundary.PestPumpElevationMethod := PestMethod[rdgModflowBoundary, Ord(wtPumpElev)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wtScalingLength)] then
+      begin
+        Boundary.PestScalingLengthFormula := PestModifier[rdgModflowBoundary, Ord(wtScalingLength)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wtScalingLength)] then
+      begin
+        Boundary.PestScalingLengthMethod := PestMethod[rdgModflowBoundary, Ord(wtScalingLength)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wtMinRate)] then
+      begin
+        Boundary.PestMinRateFormula := PestModifier[rdgModflowBoundary, Ord(wtMinRate)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wtMinRate)] then
+      begin
+        Boundary.PestMinRateMethod := PestMethod[rdgModflowBoundary, Ord(wtMinRate)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wtMaxRate)] then
+      begin
+        Boundary.PestMaxRateFormula := PestModifier[rdgModflowBoundary, Ord(wtMaxRate)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wtMaxRate)] then
+      begin
+        Boundary.PestMaxRateMethod := PestMethod[rdgModflowBoundary, Ord(wtMaxRate)];
+      end;
+
+      if PestModifierAssigned[rdgModflowBoundary, Ord(wtHeadLimit)] then
+      begin
+        Boundary.PestHeadLimitFormula := PestModifier[rdgModflowBoundary, Ord(wtHeadLimit)];
+      end;
+      if PestMethodAssigned[rdgModflowBoundary, Ord(wtHeadLimit)] then
+      begin
+        Boundary.PestHeadLimitMethod := PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)];
+      end;
+      {$ENDIF}
+
       if not FWellScreensCleared then
       begin
         Boundary.WellScreens.Count := frameWellScreens.seNumber.AsInteger;
@@ -592,31 +821,31 @@ begin
         for TimeIndex := 0 to Boundary.Values.Count - 1 do
         begin
           MawItem := Boundary.Values[TimeIndex] as TMawItem;
-          MawItem.StartTime := rdgModflowBoundary.RealValueDefault[Ord(wfStartTime), TimeIndex+1, 0];
-          MawItem.EndTime := rdgModflowBoundary.RealValueDefault[Ord(wfEndTime), TimeIndex+1, 0];
-          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(wfStatus), TimeIndex+1];
+          MawItem.StartTime := rdgModflowBoundary.RealValueDefault[Ord(wfStartTime), TimeIndex+1 + PestRowOffset, 0];
+          MawItem.EndTime := rdgModflowBoundary.RealValueDefault[Ord(wfEndTime), TimeIndex+1 + PestRowOffset, 0];
+          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(wfStatus), TimeIndex+1 + PestRowOffset];
           if ItemIndex >= 0 then
           begin
             MawItem.MawStatus := TMawStatus(ItemIndex);
           end;
-          MawItem.Rate := NonBlank(rdgModflowBoundary.Cells[Ord(wfRate), TimeIndex+1]);
-          MawItem.WellHead := NonBlank(rdgModflowBoundary.Cells[Ord(wfSpecifiedHead), TimeIndex+1]);
-          ItemBool := rdgModflowBoundary.Checked[Ord(wfFlowingWell), TimeIndex+1];
+          MawItem.Rate := NonBlank(rdgModflowBoundary.Cells[Ord(wfRate), TimeIndex+1 + PestRowOffset]);
+          MawItem.WellHead := NonBlank(rdgModflowBoundary.Cells[Ord(wfSpecifiedHead), TimeIndex+1 + PestRowOffset]);
+          ItemBool := rdgModflowBoundary.Checked[Ord(wfFlowingWell), TimeIndex+1 + PestRowOffset];
           MawItem.FlowingWell := TFlowingWell(ItemBool);
-          MawItem.FlowingWellElevation := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellElev), TimeIndex+1]);
-          MawItem.FlowingWellConductance := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellCond), TimeIndex+1]);
-          MawItem.FlowingWellReductionLength := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellReductionLength), TimeIndex+1]);
-          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(wtRateLimitation), TimeIndex+1];
+          MawItem.FlowingWellElevation := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellElev), TimeIndex+1 + PestRowOffset]);
+          MawItem.FlowingWellConductance := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellCond), TimeIndex+1 + PestRowOffset]);
+          MawItem.FlowingWellReductionLength := NonBlank(rdgModflowBoundary.Cells[Ord(wfFlowingWellReductionLength), TimeIndex+1 + PestRowOffset]);
+          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(wtRateLimitation), TimeIndex+1 + PestRowOffset];
           if ItemIndex >= 0 then
           begin
             MawItem.RateLimitation := TRateLimitation(ItemIndex);
           end;
-          MawItem.PumpElevation := NonBlank(rdgModflowBoundary.Cells[Ord(wtPumpElev), TimeIndex+1]);
-          MawItem.ScalingLength := NonBlank(rdgModflowBoundary.Cells[Ord(wtScalingLength), TimeIndex+1]);
-          MawItem.MinRate := NonBlank(rdgModflowBoundary.Cells[Ord(wtMinRate), TimeIndex+1]);
-          MawItem.MaxRate := NonBlank(rdgModflowBoundary.Cells[Ord(wtMaxRate), TimeIndex+1]);
-          MawItem.HeadLimitChoice := rdgModflowBoundary.Checked[Ord(wtHeadLimitChoice), TimeIndex+1];
-          MawItem.HeadLimit := NonBlank(rdgModflowBoundary.Cells[Ord(wtHeadLimit), TimeIndex+1]);
+          MawItem.PumpElevation := NonBlank(rdgModflowBoundary.Cells[Ord(wtPumpElev), TimeIndex+1 + PestRowOffset]);
+          MawItem.ScalingLength := NonBlank(rdgModflowBoundary.Cells[Ord(wtScalingLength), TimeIndex+1 + PestRowOffset]);
+          MawItem.MinRate := NonBlank(rdgModflowBoundary.Cells[Ord(wtMinRate), TimeIndex+1 + PestRowOffset]);
+          MawItem.MaxRate := NonBlank(rdgModflowBoundary.Cells[Ord(wtMaxRate), TimeIndex+1 + PestRowOffset]);
+          MawItem.HeadLimitChoice := rdgModflowBoundary.Checked[Ord(wtHeadLimitChoice), TimeIndex+1 + PestRowOffset];
+          MawItem.HeadLimit := NonBlank(rdgModflowBoundary.Cells[Ord(wtHeadLimit), TimeIndex+1 + PestRowOffset]);
         end;
       end;
     end;
@@ -723,12 +952,6 @@ begin
     PestMethod[rdgModflowBoundary, Ord(wtHeadLimit)] :=
       TMawBoundary.DefaultBoundaryMethod(MawHeadLimitPosition);
 
-{
-  TWellFlow = (wfStartTime, wfEndTime, wfStatus, wfRate, wfSpecifiedHead,
-    wfFlowingWell, wfFlowingWellElev, wfFlowingWellCond, wfFlowingWellReductionLength,
-    wtRateLimitation, wtPumpElev, wtScalingLength,
-    wtMinRate, wtMaxRate, wtHeadLimitChoice, wtHeadLimit);
-}
     {$ENDIF}
 
   finally
@@ -780,7 +1003,7 @@ var
 begin
   rdgModflowBoundary.BeginUpdate;
   try
-    for RowIndex := rdgModflowBoundary.FixedRows to
+    for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset to
       rdgModflowBoundary.RowCount - 1 do
     begin
       if rdgModflowBoundary.IsSelectedCell(Ord(ColIndex), RowIndex) then
@@ -807,7 +1030,7 @@ var
 begin
   rdgModflowBoundary.BeginUpdate;
   try
-    for RowIndex := rdgModflowBoundary.FixedRows to
+    for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset to
       rdgModflowBoundary.RowCount - 1 do
     begin
       if rdgModflowBoundary.IsSelectedCell(Ord(ColIndex), RowIndex) then
@@ -829,9 +1052,9 @@ end;
 procedure TframeScreenObjectMAW.btnDeleteClick(Sender: TObject);
 begin
   inherited;
-  if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows  then
+  if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows + PestRowOffset  then
   begin
-    if rdgModflowBoundary.RowCount > rdgModflowBoundary.FixedRows + 1 then
+    if rdgModflowBoundary.RowCount > rdgModflowBoundary.FixedRows + 1 + PestRowOffset then
     begin
       ClearSelectedRow;
       rdgModflowBoundary.DeleteRow(rdgModflowBoundary.SelectedRow);
@@ -848,7 +1071,7 @@ end;
 
 procedure TframeScreenObjectMAW.btnInsertClick(Sender: TObject);
 begin
-  if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows  then
+  if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows + PestRowOffset  then
   begin
     rdgModflowBoundary.InsertRow(rdgModflowBoundary.SelectedRow);
     ClearSelectedRow;
@@ -865,7 +1088,7 @@ var
   RateLimitation: TRateLimitation;
   HeadLimitChoice: Boolean;
 begin
-  if ARow >= 1 then
+  if ARow >= 1 + PestRowOffset then
   begin
     FlowCol := TWellFlow(ACol);
     MawStatus := TMawStatus(rdgModflowBoundary.ItemIndex[Ord(wfStatus), ARow]);

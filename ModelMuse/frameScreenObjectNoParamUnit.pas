@@ -91,6 +91,10 @@ type
     procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
     function GetPestModifier(ACol: Integer): string;
     procedure SetPestModifier(ACol: Integer; const Value: string);
+    function GetPestMethodAssigned(ACol: Integer): Boolean;
+    function GetPestModifierAssigned(ACol: Integer): Boolean;
+    procedure SetPestMethodAssigned(ACol: Integer; const Value: Boolean);
+    procedure SetPestModifierAssigned(ACol: Integer; const Value: Boolean);
     { Private declarations }
   protected
     procedure LayoutMultiRowEditControls; virtual;
@@ -124,6 +128,10 @@ type
       read GetPestMethod write SetPestMethod;
     Property PestModifier[ACol: Integer]: string
       read GetPestModifier write SetPestModifier;
+    Property PestMethodAssigned[ACol: Integer]: Boolean
+      read GetPestMethodAssigned write SetPestMethodAssigned;
+    Property PestModifierAssigned[ACol: Integer]: Boolean
+      read GetPestModifierAssigned write SetPestModifierAssigned;
     { Public declarations }
   end;
 
@@ -393,6 +401,12 @@ begin
   end;
 end;
 
+function TframeScreenObjectNoParam.GetPestMethodAssigned(
+  ACol: Integer): Boolean;
+begin
+  result := inherited PestMethodAssigned[rdgModflowBoundary, ACol];
+end;
+
 function TframeScreenObjectNoParam.GetPestModifier(ACol: Integer): string;
 begin
   if PestRowOffset = 0 then
@@ -406,6 +420,12 @@ begin
   begin
     result := '';
   end;
+end;
+
+function TframeScreenObjectNoParam.GetPestModifierAssigned(
+  ACol: Integer): Boolean;
+begin
+  result := inherited PestModifierAssigned[rdgModflowBoundary, ACol];
 end;
 
 //function TframeScreenObjectNoParam.GetPestMethod(ACol: Integer): TPestParamMethod;
@@ -562,6 +582,12 @@ begin
   rdgModflowBoundary.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
 end;
 
+procedure TframeScreenObjectNoParam.SetPestMethodAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  inherited PestMethodAssigned[rdgModflowBoundary, ACol] := Value;
+end;
+
 procedure TframeScreenObjectNoParam.SetPestModifier(ACol: Integer;
   const Value: string);
 begin
@@ -578,6 +604,12 @@ begin
   begin
     rdgModflowBoundary.Cells[ACol, PestModifierRow] := Value;
   end;
+end;
+
+procedure TframeScreenObjectNoParam.SetPestModifierAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  inherited PestModifierAssigned[rdgModflowBoundary, ACol] := Value;
 end;
 
 //procedure TframeScreenObjectNoParam.SetPestMethod(ACol: Integer;

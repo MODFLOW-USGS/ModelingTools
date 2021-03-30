@@ -35,6 +35,9 @@ resourcestring
   CbfFileExistsError = 'The following MODFLOW input or output files are '
     + 'required by MODPATH to run but they are not in the directory in which '
     + 'MODPATH is being run: "%s".';
+  StrHeadSavedInTextF = 'Head saved in text file';
+  StrMODPATH7RequiresT = 'MODPATH 7 requires that the heads be saved in a bi' +
+  'nary file but this model saves the heads in a text file instead.';
 
 { TModpathNameFileWriter }
 
@@ -373,6 +376,7 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, CbfFileExistsError);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrHeadSavedInTextF);
 
     Modelname := ChangeFileExt(ExtractFileName(FileName), '');
     ModflowInputPrefix := '..\..\model\model.' + Modelname + '\';
@@ -455,6 +459,8 @@ begin
         case Model.ModflowOutputControl.HeadOC.OutputFileType of
           oftText:
             begin
+              frmErrorsAndWarnings.AddError(Model, StrHeadSavedInTextF,
+                StrMODPATH7RequiresT)
             end;
           oftBinary:
             begin

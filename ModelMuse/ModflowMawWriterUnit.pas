@@ -37,6 +37,7 @@ type
     procedure WriteStressPeriods;
     function CheckOK(AScreenObject: TScreenObject;
       Boundary: TMawBoundary): Boolean;
+    procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -308,6 +309,62 @@ end;
 class function TModflowMAW_Writer.ObservationOutputExtension: string;
 begin
   result := '.ob_maw_out';
+end;
+
+procedure TModflowMAW_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingMAWPackage);
+    Application.ProcessMessages;
+
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+
+    frmProgressMM.AddMessage(StrWritingOptions);
+    WriteOptions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDimensions);
+    WriteDimensions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingMAWPackag);
+    WritePackageData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingMAWConnec);
+    Application.ProcessMessages;
+    WriteConnectionData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingMAWStress);
+    WriteStressPeriods;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end;
 end;
 
 function TModflowMAW_Writer.Mf6ObservationsUsed: Boolean;
@@ -758,58 +815,7 @@ begin
   end;
 
   FInputFileName := FNameOfFile;
-  OpenFile(FNameOfFile);
-  try
-    frmProgressMM.AddMessage(StrWritingMAWPackage);
-    Application.ProcessMessages;
-
-    WriteDataSet0;
-
-    frmProgressMM.AddMessage(StrWritingOptions);
-    WriteOptions;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-
-    frmProgressMM.AddMessage(StrWritingDimensions);
-    WriteDimensions;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingMAWPackag);
-    WritePackageData;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingMAWConnec);
-    Application.ProcessMessages;
-    WriteConnectionData;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingMAWStress);
-    WriteStressPeriods;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-  finally
-    CloseFile;
-  end;
+  WriteFileInternal;
 
   if FMawObservations.Count > 0 then
   begin
@@ -825,6 +831,14 @@ begin
     finally
       ObsWriter.Free;
     end;
+  end;
+
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
   end;
 
 end;
@@ -1019,7 +1033,7 @@ begin
       MvrReceiver.ReceiverKey.ScreenObject :=
         ACell.MawBoundary.ScreenObject;
       MvrReceiver.ReceiverValues.Index := ACell.WellNumber;
-      if MoverWriter <> nil then
+      if (MoverWriter <> nil) and not WritingTemplate then
       begin
         MoverWriter.AddMvrReceiver(MvrReceiver);
       end;
@@ -1123,7 +1137,8 @@ begin
         NewLine;
       end;
 
-      if ACell.MvrUsed and (MvrWriter <> nil) and (ACell.MawStatus <> mwInactive) then
+      if ACell.MvrUsed and (MvrWriter <> nil)
+        and (ACell.MawStatus <> mwInactive) and not WritingTemplate then
       begin
         MvrSource.Index := ACell.WellNumber;
         MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;

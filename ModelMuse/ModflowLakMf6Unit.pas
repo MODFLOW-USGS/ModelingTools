@@ -35,7 +35,6 @@ type
   TLakConnectionMf6Record = record
     Cell: TCellLocation;
     ConnectionType: TMf6LakeConnectionType;
-//    B
   end;
 
   TLakeOutletTimeItem = class(TCustomModflowBoundaryItem)
@@ -220,14 +219,6 @@ type
 
   TLakeTimeItem = class(TCustomModflowBoundaryItem)
   private
-    const
-      KStagePosition = 0;
-      KRainfallPosition = 1;
-      KRunoffPosition = 2;
-      KEvaporationPosition = 3;
-      KInflowPosition = 4;
-      KWithdrawalPosition = 5;
-    var
     FStatus: TLakeStatus;
     FStage: TFormulaObject;
     FRainfall: TFormulaObject;
@@ -287,13 +278,43 @@ type
   TLakeMf6 = class(TModflowBoundary)
   private
   const
-    BottomElevationPosition = 0;
-    TopElevationPosition = 1;
-    BedKPosition = 2;
-    BedThicknessPosition = 3;
-    ConnectionLengthPosition = 4;
-//    ConnectionWidthPosition = 5;
-    StartingStagePosition = 5;
+    BottomElevationPosition = 6;
+    TopElevationPosition = 7;
+    BedKPosition = 8;
+    BedThicknessPosition = 9;
+    ConnectionLengthPosition = 10;
+    StartingStagePosition = 11;
+  var
+    FPestRainfallMethod: TPestParamMethod;
+    FPestRunoffMethod: TPestParamMethod;
+    FPestWithdrawalMethod: TPestParamMethod;
+    FPestInflowMethod: TPestParamMethod;
+    FPestEvaporationMethod: TPestParamMethod;
+    FPestStageMethod: TPestParamMethod;
+    function GetPestEvaporationFormula: string;
+    function GetPestEvaporationObserver: TObserver;
+    function GetPestInflowFormula: string;
+    function GetPestInflowObserver: TObserver;
+    function GetPestRainfallFormula: string;
+    function GetPestRainfallObserver: TObserver;
+    function GetPestRunoffFormula: string;
+    function GetPestRunoffObserver: TObserver;
+    function GetPestStageFormula: string;
+    function GetPestStageObserver: TObserver;
+    function GetPestWithdrawalFormula: string;
+    function GetPestWithdrawalObserver: TObserver;
+    procedure SetPestEvaporationFormula(const Value: string);
+    procedure SetPestEvaporationMethod(const Value: TPestParamMethod);
+    procedure SetPestInflowFormula(const Value: string);
+    procedure SetPestInflowMethod(const Value: TPestParamMethod);
+    procedure SetPestRainfallFormula(const Value: string);
+    procedure SetPestRainfallMethod(const Value: TPestParamMethod);
+    procedure SetPestRunoffFormula(const Value: string);
+    procedure SetPestRunoffMethod(const Value: TPestParamMethod);
+    procedure SetPestStageFormula(const Value: string);
+    procedure SetPestStageMethod(const Value: TPestParamMethod);
+    procedure SetPestWithdrawalFormula(const Value: string);
+    procedure SetPestWithdrawalMethod(const Value: TPestParamMethod);
   var
     FOutlets: TLakeOutlets;
     FLakeTable: TLakeTableMf6;
@@ -304,7 +325,6 @@ type
     FBedK: TFormulaObject;
     FBedThickness: TFormulaObject;
     FConnectionLength: TFormulaObject;
-//    FConnectionWidth: TFormulaObject;
     FStartingStage: TFormulaObject;
     FBottomElevationObserver: TObserver;
     FTopElevationObserver: TObserver;
@@ -313,6 +333,19 @@ type
     FConnectionLengthObserver: TObserver;
     FConnectionWidthObserver: TObserver;
     FStartingStageObserver: TObserver;
+    FPestStageFormula: TFormulaObject;
+    FPestEvaporationFormula: TFormulaObject;
+    FPestInflowFormula: TFormulaObject;
+    FPestWithdrawalFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestEvaporationObserver: TObserver;
+    FPestInflowObserver: TObserver;
+    FPestRainfallObserver: TObserver;
+    FPestRunoffObserver: TObserver;
+    FPestStageObserver: TObserver;
+    FPestWithdrawalObserver: TObserver;
+    FPestRainfallFormula: TFormulaObject;
+    FPestRunoffFormula: TFormulaObject;
     procedure SetOutlets(const Value: TLakeOutlets);
     procedure SetLakeTable(const Value: TLakeTableMf6);
     procedure SetEmbedded(const Value: Boolean);
@@ -321,13 +354,11 @@ type
     function GetBedThickness: string;
     function GetBottomElevation: string;
     function GetConnectionLength: string;
-//    function GetConnectionWidth: string;
     function GetTopElevation: string;
     procedure SetBedK(const Value: string);
     procedure SetBedThickness(const Value: string);
     procedure SetBottomElevation(const Value: string);
     procedure SetConnectionLength(const Value: string);
-//    procedure SetConnectionWidth(const Value: string);
     procedure SetTopElevation(const Value: string);
     function GetBedKObserver: TObserver;
     function GetBedThicknessObserver: TObserver;
@@ -354,7 +385,25 @@ type
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
-//    function GetUsedObserver: TObserver; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+//    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+//    procedure CreateFormulaObjects; //override;
+//    function BoundaryObserverPrefix: string; override;
+//    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestStageObserver: TObserver read GetPestStageObserver;
+    property PestRainfallObserver: TObserver read GetPestRainfallObserver;
+    property PestRunoffObserver: TObserver read GetPestRunoffObserver;
+    property PestEvaporationObserver: TObserver read GetPestEvaporationObserver;
+    property PestInflowObserver: TObserver read GetPestInflowObserver;
+    property PestWithdrawalObserver: TObserver read GetPestWithdrawalObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
@@ -365,6 +414,8 @@ type
     procedure UpdateTimes(Times: TRealList; StartTestTime,
       EndTestTime: double; var StartRangeExtended, EndRangeExtended: boolean;
       AModel: TBaseModel); override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property Outlets: TLakeOutlets read FOutlets write SetOutlets;
     property LakeTable: TLakeTableMf6 read FLakeTable write SetLakeTable;
@@ -381,15 +432,94 @@ type
     Property BedThickness: string read GetBedThickness write SetBedThickness;
     // connlen
     property ConnectionLength: string read GetConnectionLength write SetConnectionLength;
-//    property ConnectionWidth: string read GetConnectionWidth write SetConnectionWidth;
     // strt
     property StartingStage: string read GetStartingStage write SetStartingStage;
-
+    property PestStageFormula: string read GetPestStageFormula
+      write SetPestStageFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestStageMethod: TPestParamMethod read FPestStageMethod
+      write SetPestStageMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRainfallFormula: string read GetPestRainfallFormula
+      write SetPestRainfallFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRainfallMethod: TPestParamMethod read FPestRainfallMethod
+      write SetPestRainfallMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRunoffFormula: string read GetPestRunoffFormula
+      write SetPestRunoffFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRunoffMethod: TPestParamMethod read FPestRunoffMethod
+      write SetPestRunoffMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationFormula: string read GetPestEvaporationFormula
+      write SetPestEvaporationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationMethod: TPestParamMethod read FPestEvaporationMethod
+      write SetPestEvaporationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestInflowFormula: string read GetPestInflowFormula
+      write SetPestInflowFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestInflowMethod: TPestParamMethod read FPestInflowMethod
+      write SetPestInflowMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWithdrawalFormula: string read GetPestWithdrawalFormula
+      write SetPestWithdrawalFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWithdrawalMethod: TPestParamMethod read FPestWithdrawalMethod
+      write SetPestWithdrawalMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 function TryGetLakOb(const CSubObName: string; var LakOb: TLakOb): Boolean;
 function LakObToString(const LakOb: TLakOb): string;
 Procedure FillLakSeriesNames(AList: TStrings);
+
+const
+  Lak6StagePosition = 0;
+  Lak6RainfallPosition = 1;
+  Lak6RunoffPosition = 2;
+  Lak6EvaporationPosition = 3;
+  Lak6InflowPosition = 4;
+  Lak6WithdrawalPosition = 5;
+
 
 implementation
 
@@ -481,22 +611,22 @@ begin
 //  inherited;
   ParentCollection := Collection as TLakTimeCollection;
 
-  StageObserver := FObserverList[KStagePosition];
+  StageObserver := FObserverList[Lak6StagePosition];
   StageObserver.OnUpToDateSet := ParentCollection.InvalidateStage;
 
-  RainfallObserver := FObserverList[KRainfallPosition];
+  RainfallObserver := FObserverList[Lak6RainfallPosition];
   RainfallObserver.OnUpToDateSet := ParentCollection.InvalidateRainfall;
 
-  RunoffObserver := FObserverList[KRunoffPosition];
+  RunoffObserver := FObserverList[Lak6RunoffPosition];
   RunoffObserver.OnUpToDateSet := ParentCollection.InvalidateRunoff;
 
-  EvaporationObserver := FObserverList[KEvaporationPosition];
+  EvaporationObserver := FObserverList[Lak6EvaporationPosition];
   EvaporationObserver.OnUpToDateSet := ParentCollection.InvalidateEvaporation;
 
-  InflowObserver := FObserverList[KInflowPosition];
+  InflowObserver := FObserverList[Lak6InflowPosition];
   InflowObserver.OnUpToDateSet := ParentCollection.InvalidateInflow;
 
-  WithdrawalObserver := FObserverList[KWithdrawalPosition];
+  WithdrawalObserver := FObserverList[Lak6WithdrawalPosition];
   WithdrawalObserver.OnUpToDateSet := ParentCollection.InvalidateWithdrawal;
 end;
 
@@ -519,12 +649,12 @@ end;
 function TLakeTimeItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    KStagePosition: result := Stage;
-    KRainfallPosition: result := Rainfall;
-    KRunoffPosition: result := Runoff;
-    KEvaporationPosition: result := Evaporation;
-    KInflowPosition: result := Inflow;
-    KWithdrawalPosition: result := Withdrawal;
+    Lak6StagePosition: result := Stage;
+    Lak6RainfallPosition: result := Rainfall;
+    Lak6RunoffPosition: result := Runoff;
+    Lak6EvaporationPosition: result := Evaporation;
+    Lak6InflowPosition: result := Inflow;
+    Lak6WithdrawalPosition: result := Withdrawal;
     else
       Assert(False);
   end;
@@ -533,13 +663,13 @@ end;
 function TLakeTimeItem.GetEvaporation: string;
 begin
   Result := FEvaporation.Formula;
-  ResetItemObserver(KEvaporationPosition);
+  ResetItemObserver(Lak6EvaporationPosition);
 end;
 
 function TLakeTimeItem.GetInflow: string;
 begin
   Result := FInflow.Formula;
-  ResetItemObserver(KInflowPosition);
+  ResetItemObserver(Lak6InflowPosition);
 end;
 
 procedure TLakeTimeItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -547,52 +677,52 @@ begin
   inherited;
   if Sender = FStage then
   begin
-    List.Add(FObserverList[KStagePosition]);
+    List.Add(FObserverList[Lak6StagePosition]);
   end;
   if Sender = FRainfall then
   begin
-    List.Add(FObserverList[KRainfallPosition]);
+    List.Add(FObserverList[Lak6RainfallPosition]);
   end;
   if Sender = FRunoff then
   begin
-    List.Add(FObserverList[KRunoffPosition]);
+    List.Add(FObserverList[Lak6RunoffPosition]);
   end;
   if Sender = FEvaporation then
   begin
-    List.Add(FObserverList[KEvaporationPosition]);
+    List.Add(FObserverList[Lak6EvaporationPosition]);
   end;
   if Sender = FInflow then
   begin
-    List.Add(FObserverList[KInflowPosition]);
+    List.Add(FObserverList[Lak6InflowPosition]);
   end;
   if Sender = FWithdrawal then
   begin
-    List.Add(FObserverList[KWithdrawalPosition]);
+    List.Add(FObserverList[Lak6WithdrawalPosition]);
   end;
 end;
 
 function TLakeTimeItem.GetRainfall: string;
 begin
   Result := FRainfall.Formula;
-  ResetItemObserver(KRainfallPosition);
+  ResetItemObserver(Lak6RainfallPosition);
 end;
 
 function TLakeTimeItem.GetRunoff: string;
 begin
   Result := FRunoff.Formula;
-  ResetItemObserver(KRunoffPosition);
+  ResetItemObserver(Lak6RunoffPosition);
 end;
 
 function TLakeTimeItem.GetStage: string;
 begin
   Result := FStage.Formula;
-  ResetItemObserver(KStagePosition);
+  ResetItemObserver(Lak6StagePosition);
 end;
 
 function TLakeTimeItem.GetWithdrawal: string;
 begin
   Result := FWithdrawal.Formula;
-  ResetItemObserver(KWithdrawalPosition);
+  ResetItemObserver(Lak6WithdrawalPosition);
 end;
 
 function TLakeTimeItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -640,17 +770,17 @@ end;
 procedure TLakeTimeItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    KStagePosition:
+    Lak6StagePosition:
       Stage := Value;
-    KRainfallPosition:
+    Lak6RainfallPosition:
       Rainfall := Value;
-    KRunoffPosition:
+    Lak6RunoffPosition:
       Runoff := Value;
-    KEvaporationPosition:
+    Lak6EvaporationPosition:
       Evaporation := Value;
-    KInflowPosition:
+    Lak6InflowPosition:
       Inflow := Value;
-    KWithdrawalPosition:
+    Lak6WithdrawalPosition:
       Withdrawal := Value;
     else
       Assert(False);
@@ -659,27 +789,27 @@ end;
 
 procedure TLakeTimeItem.SetEvaporation(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KEvaporationPosition, FEvaporation);
+  UpdateFormulaBlocks(Value, Lak6EvaporationPosition, FEvaporation);
 end;
 
 procedure TLakeTimeItem.SetInflow(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KInflowPosition, FInflow);
+  UpdateFormulaBlocks(Value, Lak6InflowPosition, FInflow);
 end;
 
 procedure TLakeTimeItem.SetRainfall(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KRainfallPosition, FRainfall);
+  UpdateFormulaBlocks(Value, Lak6RainfallPosition, FRainfall);
 end;
 
 procedure TLakeTimeItem.SetRunoff(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KRunoffPosition, FRunoff);
+  UpdateFormulaBlocks(Value, Lak6RunoffPosition, FRunoff);
 end;
 
 procedure TLakeTimeItem.SetStage(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KStagePosition, FStage);
+  UpdateFormulaBlocks(Value, Lak6StagePosition, FStage);
 end;
 
 procedure TLakeTimeItem.SetStatus(const Value: TLakeStatus);
@@ -689,7 +819,7 @@ end;
 
 procedure TLakeTimeItem.SetWithdrawal(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, KWithdrawalPosition, FWithdrawal);
+  UpdateFormulaBlocks(Value, Lak6WithdrawalPosition, FWithdrawal);
 end;
 
 { TLakeOutletTimeItem }
@@ -1248,7 +1378,7 @@ end;
 
 function TLakeMf6.BoundaryObserverPrefix: string;
 begin
-  Result := 'Lake';
+  Result := 'MF6_Lake';
 end;
 
 constructor TLakeMf6.Create(Model: TBaseModel; ScreenObject: TObject);
@@ -1272,12 +1402,18 @@ end;
 
 procedure TLakeMf6.CreateFormulaObjects;
 begin
+  FPestStageFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestRainfallFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestRunoffFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestEvaporationFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestInflowFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestWithdrawalFormula := CreateFormulaObjectBlocks(dso3D);
+
   FBottomElevation := CreateFormulaObjectBlocks(dso3D);
   FTopElevation := CreateFormulaObjectBlocks(dso3D);
   FBedK := CreateFormulaObjectBlocks(dso3D);
   FBedThickness := CreateFormulaObjectBlocks(dso3D);
   FConnectionLength := CreateFormulaObjectBlocks(dso3D);
-//  FConnectionWidth := CreateFormulaObject(dso3D);
   FStartingStage := CreateFormulaObjectBlocks(dso3D);
 end;
 
@@ -1285,12 +1421,13 @@ procedure TLakeMf6.CreateObservers;
 begin
   if ScreenObject <> nil then
   begin
-//    property BottomElevationObserver: TObserver read GetBottomElevationObserver;
-//    property TopElevationObserver: TObserver read GetTopElevationObserver;
-//    property BedKObserver: TObserver read GetBedKObserver;
-//    property BedThicknessObserver: TObserver read GetBedThicknessObserver;
-//    property ConnectionLengthObserver: TObserver read GetConnectionLengthObserver;
-//    property ConnectionWidthObserver: TObserver read GetConnectionWidthObserver;
+    FObserverList.Add(PestStageObserver);
+    FObserverList.Add(PestRainfallObserver);
+    FObserverList.Add(PestRunoffObserver);
+    FObserverList.Add(PestEvaporationObserver);
+    FObserverList.Add(PestInflowObserver);
+    FObserverList.Add(PestWithdrawalObserver);
+
     FObserverList.Add(BottomElevationObserver);
     FObserverList.Add(TopElevationObserver);
     FObserverList.Add(BedKObserver);
@@ -1298,6 +1435,42 @@ begin
     FObserverList.Add(ConnectionLengthObserver);
     FObserverList.Add(ConnectionWidthObserver);
     FObserverList.Add(StartingStageObserver);
+  end;
+end;
+
+class function TLakeMf6.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    Lak6StagePosition:
+      begin
+        result := ppmAdd;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
   end;
 end;
 
@@ -1457,48 +1630,245 @@ begin
   result := FConnectionWidthObserver;
 end;
 
+function TLakeMf6.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    Lak6StagePosition:
+      begin
+        result := PestStageFormula;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := PestRainfallFormula;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := PestRunoffFormula;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := PestEvaporationFormula;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := PestInflowFormula;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result := PestWithdrawalFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLakeMf6.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    Lak6StagePosition:
+      begin
+        result := PestStageMethod;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := PestRainfallMethod;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := PestRunoffMethod;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := PestEvaporationMethod;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := PestInflowMethod;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result := PestWithdrawalMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLakeMf6.GetPestEvaporationFormula: string;
+begin
+  Result := FPestEvaporationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Lak6EvaporationPosition);
+  end;
+end;
+
+function TLakeMf6.GetPestEvaporationObserver: TObserver;
+begin
+  if FPestEvaporationObserver = nil then
+  begin
+    CreateObserver('PestEvaporation_', FPestEvaporationObserver, nil);
+//    FPestEvaporationObserver.OnUpToDateSet := InvalidateEvaporationData;
+  end;
+  result := FPestEvaporationObserver;
+end;
+
+function TLakeMf6.GetPestInflowFormula: string;
+begin
+  Result := FPestInflowFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Lak6InflowPosition);
+  end;
+end;
+
+function TLakeMf6.GetPestInflowObserver: TObserver;
+begin
+  if FPestInflowObserver = nil then
+  begin
+    CreateObserver('PestInflow_', FPestInflowObserver, nil);
+//    FPestInflowObserver.OnUpToDateSet := InvalidateInflowData;
+  end;
+  result := FPestInflowObserver;
+end;
+
+function TLakeMf6.GetPestRainfallFormula: string;
+begin
+  Result := FPestRainfallFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Lak6RainfallPosition);
+  end;
+end;
+
+function TLakeMf6.GetPestRainfallObserver: TObserver;
+begin
+  if FPestRainfallObserver = nil then
+  begin
+    CreateObserver('PestRainfall_', FPestRainfallObserver, nil);
+//    FPestRainfallObserver.OnUpToDateSet := InvalidateRainfallData;
+  end;
+  result := FPestRainfallObserver;
+end;
+
+function TLakeMf6.GetPestRunoffFormula: string;
+begin
+  Result := FPestRunoffFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Lak6RunoffPosition);
+  end;
+end;
+
+function TLakeMf6.GetPestRunoffObserver: TObserver;
+begin
+  if FPestRunoffObserver = nil then
+  begin
+    CreateObserver('PestRunoff_', FPestRunoffObserver, nil);
+//    FPestRunoffObserver.OnUpToDateSet := InvalidateRunoffData;
+  end;
+  result := FPestRunoffObserver;
+end;
+
+function TLakeMf6.GetPestStageFormula: string;
+begin
+  Result := FPestStageFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Lak6StagePosition);
+  end;
+end;
+
+function TLakeMf6.GetPestStageObserver: TObserver;
+begin
+  if FPestStageObserver = nil then
+  begin
+    CreateObserver('PestStage_', FPestStageObserver, nil);
+//    FPestStageObserver.OnUpToDateSet := InvalidateStageData;
+  end;
+  result := FPestStageObserver;
+end;
+
+function TLakeMf6.GetPestWithdrawalFormula: string;
+begin
+  Result := FPestWithdrawalFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Lak6WithdrawalPosition);
+  end;
+end;
+
+function TLakeMf6.GetPestWithdrawalObserver: TObserver;
+begin
+  if FPestWithdrawalObserver = nil then
+  begin
+    CreateObserver('PestWithdrawal_', FPestWithdrawalObserver, nil);
+//    FPestWithdrawalObserver.OnUpToDateSet := InvalidateWithdrawalData;
+  end;
+  result := FPestWithdrawalObserver;
+end;
+
 procedure TLakeMf6.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  if Sender = FBottomElevation then
+  if Sender = FPestStageFormula then
+  begin
+    List.Add(FObserverList[Lak6StagePosition]);
+  end
+  else if Sender = FPestRainfallFormula then
+  begin
+    List.Add(FObserverList[Lak6RainfallPosition]);
+  end
+  else if Sender = FPestRunoffFormula then
+  begin
+    List.Add(FObserverList[Lak6RunoffPosition]);
+  end
+  else if Sender = FPestEvaporationFormula then
+  begin
+    List.Add(FObserverList[Lak6RunoffPosition]);
+  end
+  else if Sender = FPestEvaporationFormula then
+  begin
+    List.Add(FObserverList[Lak6EvaporationPosition]);
+  end
+  else if Sender = FPestInflowFormula then
+  begin
+    List.Add(FObserverList[Lak6InflowPosition]);
+  end
+  else if Sender = FPestWithdrawalFormula then
+  begin
+    List.Add(FObserverList[Lak6WithdrawalPosition]);
+  end
+  else if Sender = FBottomElevation then
   begin
     List.Add(FObserverList[BottomElevationPosition]);
   end
-  else
-  if Sender = FTopElevation then
+  else if Sender = FTopElevation then
   begin
     List.Add(FObserverList[TopElevationPosition]);
   end
-  else
-  if Sender = FBedK then
+  else if Sender = FBedK then
   begin
     List.Add(FObserverList[BedKPosition]);
   end
-  else
-  if Sender = FBedThickness then
+  else if Sender = FBedThickness then
   begin
     List.Add(FObserverList[BedThicknessPosition]);
   end
-  else
-  if Sender = FConnectionLength then
+  else if Sender = FConnectionLength then
   begin
     List.Add(FObserverList[ConnectionLengthPosition]);
   end
-  else
-//  if Sender = FConnectionWidth then
-//  begin
-//    List.Add(FObserverList[ConnectionWidthPosition]);
-//  end;
-  if Sender = FStartingStage then
+  else if Sender = FStartingStage then
   begin
     List.Add(FObserverList[StartingStagePosition]);
   end;
-{    FBottomElevation: TFormulaObject;
-    FTopElevation: TFormulaObject;
-    FBedK: TFormulaObject;
-    FBedThickness: TFormulaObject;
-    FConnectionLength: TFormulaObject;
-    FConnectionWidth: TFormulaObject;
-}
 end;
 
 function TLakeMf6.GetStartingStage: string;
@@ -1555,6 +1925,22 @@ begin
   result := FTopElevationObserver;
 end;
 
+function TLakeMf6.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestLAK6_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TLakeMf6.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TLakeMf6.Loaded;
 begin
   Outlets.Loaded;
@@ -1603,6 +1989,138 @@ end;
 procedure TLakeMf6.SetOutlets(const Value: TLakeOutlets);
 begin
   FOutlets.Assign(Value);
+end;
+
+procedure TLakeMf6.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    Lak6StagePosition:
+      begin
+        PestStageFormula := Value;
+      end;
+    Lak6RainfallPosition:
+      begin
+        PestRainfallFormula := Value;
+      end;
+    Lak6RunoffPosition:
+      begin
+        PestRunoffFormula := Value;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        PestEvaporationFormula := Value;
+      end;
+    Lak6InflowPosition:
+      begin
+        PestInflowFormula := Value;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        PestWithdrawalFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TLakeMf6.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    Lak6StagePosition:
+      begin
+        PestStageMethod := Value;
+      end;
+    Lak6RainfallPosition:
+      begin
+        PestRainfallMethod := Value;
+      end;
+    Lak6RunoffPosition:
+      begin
+        PestRunoffMethod := Value;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        PestEvaporationMethod := Value;
+      end;
+    Lak6InflowPosition:
+      begin
+        PestInflowMethod := Value;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        PestWithdrawalMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TLakeMf6.SetPestEvaporationFormula(const Value: string);
+begin
+
+end;
+
+procedure TLakeMf6.SetPestEvaporationMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestEvaporationMethod, Value);
+end;
+
+procedure TLakeMf6.SetPestInflowFormula(const Value: string);
+begin
+
+end;
+
+procedure TLakeMf6.SetPestInflowMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestInflowMethod, Value);
+end;
+
+procedure TLakeMf6.SetPestRainfallFormula(const Value: string);
+begin
+
+end;
+
+procedure TLakeMf6.SetPestRainfallMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRainfallMethod, Value);
+end;
+
+procedure TLakeMf6.SetPestRunoffFormula(const Value: string);
+begin
+
+end;
+
+procedure TLakeMf6.SetPestRunoffMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRainfallMethod, Value);
+end;
+
+procedure TLakeMf6.SetPestStageFormula(const Value: string);
+begin
+
+end;
+
+procedure TLakeMf6.SetPestStageMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestStageMethod, Value);
+end;
+
+procedure TLakeMf6.SetPestWithdrawalFormula(const Value: string);
+begin
+
+end;
+
+procedure TLakeMf6.SetPestWithdrawalMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestWithdrawalMethod, Value);
 end;
 
 procedure TLakeMf6.SetStartingStage(const Value: string);

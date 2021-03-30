@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, PhastModelUnit, CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, ModflowTimeUnit, ModflowLakUnit,
   ScreenObjectUnit, System.Generics.Collections, ModflowCellUnit,
-  ModflowLakMf6Unit, Modflow6ObsUnit;
+  ModflowLakMf6Unit, Modflow6ObsUnit, GoPhastTypes;
 
 type
   TLakObservation = record
@@ -73,6 +73,16 @@ type
   TLakeOutlets = TObjectList<TLakeOutletMf6>;
 
   TLakeSetting = class(TObject)
+  private
+    function GetPestMethod(Index: Integer): TPestParamMethod;
+    function GetPestName(Index: Integer): string;
+    function GetPestSeries(Index: Integer): string;
+    function GetValue(Index: Integer): double;
+    procedure SetPestMethod(Index: Integer; const Value: TPestParamMethod);
+    procedure SetPestName(Index: Integer; const Value: string);
+    procedure SetPestSeries(Index: Integer; const Value: string);
+    procedure SetValue(Index: Integer; const Value: double);
+  public
     StartTime: double;
     EndTime: double;
     Status: TLakeStatus;
@@ -82,6 +92,32 @@ type
     Runoff: double;
     Inflow: double;
     Withdrawal: double;
+
+    StagePest: string;
+    RainfallPest: string;
+    EvaporationPest: string;
+    RunoffPest: string;
+    InflowPest: string;
+    WithdrawalPest: string;
+
+    StagePestSeries: string;
+    RainfallPestSeries: string;
+    EvaporationPestSeries: string;
+    RunoffPestSeries: string;
+    InflowPestSeries: string;
+    WithdrawalPestSeries: string;
+
+    StagePestMethod: TPestParamMethod;
+    RainfallPestMethod: TPestParamMethod;
+    EvaporationPestMethod: TPestParamMethod;
+    RunoffPestMethod: TPestParamMethod;
+    InflowPestMethod: TPestParamMethod;
+    WithdrawalPestMethod: TPestParamMethod;
+
+    property Value[Index: Integer]: double read GetValue write SetValue;
+    property PestName[Index: Integer]: string read GetPestName write SetPestName;
+    property PestSeries[Index: Integer]: string read GetPestSeries write SetPestSeries;
+    property PestMethod[Index: Integer]: TPestParamMethod read GetPestMethod write SetPestMethod;
   end;
 
   TLakeSettings = TObjectList<TLakeSetting>;
@@ -155,7 +191,7 @@ implementation
 
 uses
   ModflowOptionsUnit, frmProgressUnit, SparseDataSets,
-  GoPhastTypes, SparseArrayUnit, frmErrorsAndWarningsUnit, DataSetUnit,
+  SparseArrayUnit, frmErrorsAndWarningsUnit, DataSetUnit,
   ModflowIrregularMeshUnit, AbstractGridUnit, RealListUnit, RbwParser,
   frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
   FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit;
@@ -1039,6 +1075,7 @@ begin
         [LakeSetting.StartTime]),
         ALake.FScreenObject.Name);
 
+
       LakeSetting.Rainfall := EvaluateFormula(LakeItem.Rainfall,
         Format(StrLakeRainfallAt0,
         [LakeSetting.StartTime]),
@@ -1810,7 +1847,7 @@ begin
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             MvrReceiver.ReceiverValues.Index := LakeIndex+1;
-            if MoverWriter <> nil then
+            if (MoverWriter <> nil) and not WritingTemplate then
             begin
               MoverWriter.AddMvrReceiver(MvrReceiver);
             end;
@@ -1928,7 +1965,7 @@ begin
               WriteFloat(OutletSetting.Rough);
               NewLine;
 
-              if MvrUsed and (UsedOutlets.IndexOf(OutletIndex+1) >= 0 ) then
+              if MvrUsed and (UsedOutlets.IndexOf(OutletIndex+1) >= 0 ) and not WritingTemplate then
               begin
                 TModflowMvrWriter(MvrWriter).AddMvrSource(MvrRegSourceKey);
               end;
@@ -1971,6 +2008,285 @@ begin
   FLakeCellList.Free;
   FCellList.Free;
   inherited;
+end;
+
+{ TLakeSetting }
+
+function TLakeSetting.GetPestMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        result := StagePestMethod;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := RainfallPestMethod;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := RunoffPestMethod;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := EvaporationPestMethod;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := InflowPestMethod;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result :=  WithdrawalPestMethod;
+      end;
+    else
+    begin
+      result := ppmMultiply;
+      Assert(False);
+    end;
+  end;
+end;
+
+function TLakeSetting.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        result := StagePest;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := RainfallPest;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := RunoffPest;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := EvaporationPest;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := InflowPest;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result :=  WithdrawalPest;
+      end;
+    else
+    begin
+      result := '';
+      Assert(False);
+    end;
+  end;
+end;
+
+function TLakeSetting.GetPestSeries(Index: Integer): string;
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        result := StagePestSeries;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := RainfallPestSeries;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := RunoffPestSeries;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := EvaporationPestSeries;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := InflowPestSeries;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result :=  WithdrawalPestSeries;
+      end;
+    else
+    begin
+      result := '';
+      Assert(False);
+    end;
+  end;
+end;
+
+function TLakeSetting.GetValue(Index: Integer): double;
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        result := Stage;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := Rainfall;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := Runoff;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := Evaporation;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := Inflow;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result :=  Withdrawal;
+      end;
+    else
+    begin
+      result := 0;
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TLakeSetting.SetPestMethod(Index: Integer;
+  const Value: TPestParamMethod);
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        StagePestMethod := Value;
+      end;
+    Lak6RainfallPosition:
+      begin
+        RainfallPestMethod := Value;
+      end;
+    Lak6RunoffPosition:
+      begin
+        RunoffPestMethod := Value;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        EvaporationPestMethod := Value;
+      end;
+    Lak6InflowPosition:
+      begin
+        InflowPestMethod := Value;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        WithdrawalPestMethod  := Value;
+      end;
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TLakeSetting.SetPestName(Index: Integer; const Value: string);
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        StagePest := Value;
+      end;
+    Lak6RainfallPosition:
+      begin
+        RainfallPest := Value;
+      end;
+    Lak6RunoffPosition:
+      begin
+        RunoffPest := Value;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        EvaporationPest := Value;
+      end;
+    Lak6InflowPosition:
+      begin
+        InflowPest := Value;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        WithdrawalPest  := Value;
+      end;
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TLakeSetting.SetPestSeries(Index: Integer; const Value: string);
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        StagePestSeries := Value;
+      end;
+    Lak6RainfallPosition:
+      begin
+        RainfallPestSeries := Value;
+      end;
+    Lak6RunoffPosition:
+      begin
+        RunoffPestSeries := Value;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        EvaporationPestSeries := Value;
+      end;
+    Lak6InflowPosition:
+      begin
+        InflowPestSeries := Value;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        WithdrawalPestSeries  := Value;
+      end;
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TLakeSetting.SetValue(Index: Integer; const Value: double);
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        Stage := Value;
+      end;
+    Lak6RainfallPosition:
+      begin
+        Rainfall := Value;
+      end;
+    Lak6RunoffPosition:
+      begin
+        Runoff := Value;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        Evaporation := Value;
+      end;
+    Lak6InflowPosition:
+      begin
+        Inflow := Value;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        Withdrawal  := Value;
+      end;
+    else
+    begin
+      Assert(False);
+    end;
+  end;
 end;
 
 end.

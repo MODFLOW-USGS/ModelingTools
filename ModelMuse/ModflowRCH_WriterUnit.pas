@@ -631,7 +631,7 @@ var
   Layer: Integer;
   ParameterName: string;
   MultiplierValue: double;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter

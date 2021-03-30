@@ -395,6 +395,71 @@ begin
             rdgModflowBoundary.Cells[Ord(ucRootActivity), PestMethodRow] := '';
           end;
 
+          {$IFDEF PEST}
+          if FirstUzf.PestInfiltrationFormula <> UzfBoundary.PestInfiltrationFormula then
+          begin
+            PestModifierAssigned[Ord(ucInfiltration)] := False;
+          end;
+          if FirstUzf.PestInfiltrationMethod <> UzfBoundary.PestInfiltrationMethod then
+          begin
+            PestMethodAssigned[Ord(ucInfiltration)] := False;
+          end;
+
+          if FirstUzf.PestPotentialETFormula <> UzfBoundary.PestPotentialETFormula then
+          begin
+            PestModifierAssigned[Ord(ucPotentialEt)] := False;
+          end;
+          if FirstUzf.PestPotentialETMethod <> UzfBoundary.PestPotentialETMethod then
+          begin
+            PestMethodAssigned[Ord(ucPotentialEt)] := False;
+          end;
+
+          if FirstUzf.PestExtinctionDepthFormula <> UzfBoundary.PestExtinctionDepthFormula then
+          begin
+            PestModifierAssigned[Ord(ucExtinctionDepth)] := False;
+          end;
+          if FirstUzf.PestExtinctionDepthMethod <> UzfBoundary.PestExtinctionDepthMethod then
+          begin
+            PestMethodAssigned[Ord(ucExtinctionDepth)] := False;
+          end;
+
+          if FirstUzf.PestExtinctionWaterContentFormula <> UzfBoundary.PestExtinctionWaterContentFormula then
+          begin
+            PestModifierAssigned[Ord(ucExtinctionWaterContent)] := False;
+          end;
+          if FirstUzf.PestExtinctionWaterContentMethod <> UzfBoundary.PestExtinctionWaterContentMethod then
+          begin
+            PestMethodAssigned[Ord(ucExtinctionWaterContent)] := False;
+          end;
+
+          if FirstUzf.PestAirEntryPotentialFormula <> UzfBoundary.PestAirEntryPotentialFormula then
+          begin
+            PestModifierAssigned[Ord(ucAirEntryPotential)] := False;
+          end;
+          if FirstUzf.PestAirEntryPotentialMethod <> UzfBoundary.PestAirEntryPotentialMethod then
+          begin
+            PestMethodAssigned[Ord(ucAirEntryPotential)] := False;
+          end;
+
+          if FirstUzf.PestRootPotentialFormula <> UzfBoundary.PestRootPotentialFormula then
+          begin
+            PestModifierAssigned[Ord(ucRootPotential)] := False;
+          end;
+          if FirstUzf.PestRootPotentialMethod <> UzfBoundary.PestRootPotentialMethod then
+          begin
+            PestMethodAssigned[Ord(ucRootPotential)] := False;
+          end;
+
+          if FirstUzf.PestRootActivityFormula <> UzfBoundary.PestRootActivityFormula then
+          begin
+            PestModifierAssigned[Ord(ucRootActivity)] := False;
+          end;
+          if FirstUzf.PestRootActivityMethod <> UzfBoundary.PestRootActivityMethod then
+          begin
+            PestMethodAssigned[Ord(ucRootActivity)] := False;
+          end;
+          {$ENDIF}
+
           if TimeDataIdentical
             and not UzfBoundary.Values.IsSame(FirstUzf.Values) then
           begin

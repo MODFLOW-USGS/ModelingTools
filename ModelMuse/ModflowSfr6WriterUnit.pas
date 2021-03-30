@@ -1982,7 +1982,7 @@ begin
         end;
         NewLine;
 
-        if ACell.MvrUsed and (MvrWriter <> nil) then
+        if ACell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then
         begin
           MvrSource.Index := ReachNumber;
           MvrSource.SourceKey.MvrIndex := ACell.MvrIndex;
@@ -1991,7 +1991,7 @@ begin
         end;
       end;
 
-      if MoverWriter <> nil then
+      if (MoverWriter <> nil) and not WritingTemplate then
       begin
         MoverWriter.AddMvrReceiver(MvrReceiver);
       end;

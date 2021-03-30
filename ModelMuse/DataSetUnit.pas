@@ -44,7 +44,7 @@ type
     btSutraSpecConcTemp, btSutraFluidFlux, btMassEnergyFlux, btSutraGeneralFlow,
     btSutraGenTransp, btMfFhb, btCFP, btMfFarm, btSWR, btMnw1, btMtmsObs, btRIP,
     btMt3dRchConc, mt3dUnsatConc, mt3dSatConc, btSfr_MF6, btMAW, btUzfMf6,
-    mtSft, btCSub);
+    btSft, btCSub, btMvr);
 
   TBoundaryTypes = set of TBoundaryType;
 
@@ -1740,6 +1740,7 @@ resourcestring
   'e wrong type. The formula is %1:s.';
   StrSParameterNames = '%s_Parameter_Names';
   StrSMultipliedByAP = '%s multiplied by a parameter value';
+  StrMODFLOW6MVR = 'MODFLOW 6 MVR';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -7692,8 +7693,14 @@ begin
   end
   else if Pos(StrSFT, Name) = 1 then
   begin
-    result := mtSft;
+    result := btSft;
   end
+  else if Name = StrMVRValue then
+  begin
+    result := btMvr;
+  end
+
+
 
   else
   begin
@@ -7871,14 +7878,18 @@ begin
         begin
           Result := StrMODFLOW6UZF;
         end;
-      mtSft:
+      btSft:
         begin
           Result := StrStreamTransport;
         end;
       btCSub:
         begin
-          result := StrMODFLOW6CSUB
-        end
+          result := StrMODFLOW6CSUB;
+        end;
+      btMvr:
+        begin
+          result := StrMODFLOW6MVR;
+        end;
 
       else
         Assert(False);

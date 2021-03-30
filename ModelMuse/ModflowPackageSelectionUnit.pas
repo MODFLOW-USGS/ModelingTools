@@ -5635,7 +5635,6 @@ resourcestring
   StrUZTSaturatedConcen = 'UZT Saturated Concentration';
   StrUZTUnsaturatedConc = 'UZT Unsaturated Concentration';
   StrMAWPumpingRate = 'MAW Pumping Rate';
-  StrMVRValue = 'MVR Value';
   StrUZFPotentialET = 'UZF Potential ET';
   StrSFRBrooksCoreyEps = 'SFR Brooks Corey Epsilon';
   StrSFRReachLength = 'SFR Reach Length';
@@ -5706,8 +5705,6 @@ resourcestring
   StrSFTPrecipConcd = 'SFT_Precip_Conc_%d';
   StrSFTRunoffConcd = 'SFT_Runoff_Conc_%d';
   StrSFTConstantConcd = 'SFT_Constant_Conc_%d';
-
-
 
 { TModflowPackageSelection }
 
@@ -20072,7 +20069,7 @@ begin
     MfMvrValue.OnInitialize := InitializeMfMvrValueDisplay;
     MfMvrValue.OnGetUseList := GetMfMvrValueUseList;
     MfMvrValue.OnTimeListUsed := PackageUsed;
-    MfMvrValue.Name := 'MVR Value';
+    MfMvrValue.Name := StrMVRValue;
     AddTimeList(MfMvrValue);
   end;
 end;

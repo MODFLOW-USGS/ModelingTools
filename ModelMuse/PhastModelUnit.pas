@@ -448,6 +448,7 @@ const
   StrUzfMf6RootActivity = 'UZF Mf6 Root Activity';
 
   StrCSUBStressOffset = 'CSUB Stress Offset';
+  StrMVRValue = 'MVR Value';
 
   StrWellRadius = 'Well Radius';
   StrSkinRadius = 'Skin Radius';

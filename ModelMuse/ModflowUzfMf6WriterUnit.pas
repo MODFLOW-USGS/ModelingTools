@@ -986,7 +986,8 @@ begin
                 Inc(BoundaryIndex);
                 MvrReceiver.ReceiverValues.Index := BoundaryIndex;
 
-                if UzfCell.MvrUsed and (MoverWriter <> nil) then
+                if UzfCell.MvrUsed and (MoverWriter <> nil)
+                  and not WritingTemplate then
                 begin
                   MvrKey.StressPeriod := StressPeriodIndex;
                   MvrKey.Index := BoundaryIndex;
@@ -1023,7 +1024,10 @@ begin
             MvrReceiver.ReceiverValues.UzfCells[CellIndex]
               := AUzfCellList[CellIndex].ReceiverValues.Index;
           end;
-          MoverWriter.AddMvrReceiver(MvrReceiver);
+          if (MoverWriter <> nil) and not WritingTemplate then
+          begin
+            MoverWriter.AddMvrReceiver(MvrReceiver);
+          end;
         end;
       finally
         ReceiverDictionary.Free;

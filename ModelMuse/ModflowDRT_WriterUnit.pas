@@ -246,7 +246,7 @@ var
   Drt_Cell: TDrt_Cell;
   LocalLayer: integer;
   Limit: Integer;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
 begin
   Drt_Cell := Cell as TDrt_Cell;
   LocalLayer := Model.

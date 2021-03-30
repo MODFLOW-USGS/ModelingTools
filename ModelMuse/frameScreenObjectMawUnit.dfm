@@ -464,7 +464,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           end
           object rdeFormula: TRbwDataEntry
             Left = 232
-            Top = 27
+            Top = 28
             Width = 57
             Height = 22
             Color = clBtnFace
@@ -522,7 +522,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
             Items = <>
           end
           object cbHeadLimit: TCheckBox
-            Left = 437
+            Left = 428
             Top = 33
             Width = 97
             Height = 17

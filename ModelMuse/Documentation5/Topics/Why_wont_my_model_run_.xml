@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Why won&apos;t my model run?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Why won&apos;t my model run?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are several reasons why a model might not be able to run.</text></para>
+    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">You might not have installed the model. The modeling programs such as MODFLOW and SUTRA are separate from ModelMuse and must be installed separately. You can download them from the USGS web site. </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://water.usgs.gov/software/lists/groundwater" target="_blank" styleclass="Normal" translate="true">https://water.usgs.gov/software/lists/groundwater</link></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">You might have installed the model but you haven&apos;t told ModelMuse where it is installed. For MODFLOW and related programs, you can display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Program_Locations_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Program Locations Dialog Box</link><text styleclass="Normal" translate="true">. For SUTRA, you can display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Program_Locations_Dialog" styleclass="Normal" translate="true">SUTRA Program Location Dialog Box</link><text styleclass="Normal" translate="true">.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">You might have specified a different program for running the model rather than one of the models supported by ModelMuse. See #2 above.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">You might be trying to generate the model input in a folder for which you do not have write permissions. Try generating it in a different folder.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">One of more of the input files is open in another program and has locked a file that ModelMuse is trying to recreate. You will need to close the other program.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">There may be an error in the input files that causes the program to fail. Check the &#160;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Errors_and_Warnings_Dialog_Box" styleclass="Normal" translate="true">Erro rs and Warnings Dialog Box</link><text styleclass="Normal" translate="true"> for errors and correct any that are listed. If there are no errors listed and the model still won&apos;t run, contact </text><link displaytype="text" defaultstyle="true" type="weblink" href="mailto:&lt;%LINK_CAPTION%&gt;" styleclass="Normal" translate="true">gs-w_modflow@usgs.gov</link><text styleclass="Normal" translate="true"> for assistance.</text></li>
+    </list>
+  </body>
+</topic>
