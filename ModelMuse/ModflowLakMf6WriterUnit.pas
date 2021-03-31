@@ -173,6 +173,8 @@ type
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; //override;
 //    function IsMf6ToMvrObservation(AScreenObject: TScreenObject): Boolean;
     class function ObservationExtension: string; //override;
+    procedure WriteLakeValueOrFormula(LakeSetting: TLakeSetting; Index: integer);
+    procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -194,7 +196,8 @@ uses
   SparseArrayUnit, frmErrorsAndWarningsUnit, DataSetUnit,
   ModflowIrregularMeshUnit, AbstractGridUnit, RealListUnit, RbwParser,
   frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
-  FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit;
+  FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit,
+  ModflowParameterUnit, ModelMuseUtilities;
 
 resourcestring
   StrTheFollowingObject = 'The following objects are supposed to define lake' +
@@ -454,31 +457,10 @@ begin
   FFileName := FileName(AFileName);
   FInputFileName := FFileName;
   WriteToNameFile('LAK6', 0, FFileName, foInput, Model);
+  FNameOfFile := FFileName;
 
   WriteLakeTables;
-
-  OpenFile(FFileName);
-  try
-    frmProgressMM.AddMessage(StrWritingLAK6Package);
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-
-    WriteOptions;
-
-    WriteDimensions;
-
-    WritePackageData;
-
-    WriteConnectionData;
-
-    WriteLakeTableNames;
-
-    WriteOutlets;
-
-    WritePeriods;
-  finally
-    CloseFile;
-  end;
+  WriteFileInternal;
 
   if FObservations.Count > 0 then
   begin
@@ -490,6 +472,18 @@ begin
     end;
   end;
 
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
 
 end;
 
@@ -594,6 +588,66 @@ begin
       frmErrorsAndWarnings.AddError(Model, StrTheFollowingObjectNoCells,
         ALake.FScreenObject.Name, ALake.FScreenObject);
     end;
+  end;
+end;
+
+procedure TModflowLAKMf6Writer.WriteLakeValueOrFormula(
+  LakeSetting: TLakeSetting; Index: integer);
+var
+  Value: double;
+  PestItem: string;
+  PestSeries: string;
+  PestMethod: TPestParamMethod;
+  DataArray: TDataArray;
+begin
+  Value := LakeSetting.Value[Index];
+  PestItem := LakeSetting.PestName[Index];
+  PestSeries := LakeSetting.PestSeries[Index];
+  if (PestItem <> '') or (PestSeries <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+  if Model.PestUsed and WritingTemplate and
+    ((PestItem <> '') or (PestSeries <> '')) then
+  begin
+    PestMethod := LakeSetting.PestMethod[Index];
+    WritePestTemplateFormula(Value, PestItem, PestSeries, PestMethod, nil);
+  end
+  else
+  begin
+//    if FixedLength = 0 then
+//    begin
+      WriteFloat(Value);
+//    end
+//    else if FixedLength = 10 then
+//    begin
+//      WriteF10Float(Value);
+//    end
+//    else if FixedLength = 15 then
+//    begin
+//      WriteF15Float(Value);
+//    end
+//    else
+//    begin
+//      Assert(False);
+//    end;
+
+//    if PestItem <> '' then
+//    begin
+//      DataArray := Model.DataArrayManager.GetDataSetByName(PestItem);
+//      if DataArray <> nil then
+//      begin
+//        AddUsedPestDataArray(DataArray);
+//      end;
+//    end;
+//    if PestSeries <> '' then
+//    begin
+//      DataArray := Model.DataArrayManager.GetDataSetByName(PestSeries);
+//      if DataArray <> nil then
+//      begin
+//        AddUsedPestDataArray(DataArray);
+//      end;
+//    end;
   end;
 end;
 
@@ -1056,6 +1110,57 @@ var
   TimeIndex: Integer;
   LakeItem: TLakeTimeItem;
   LakeSetting: TLakeSetting;
+  procedure AssignValue(DataSetIdentifier: Integer; const FormatString: string);
+  var
+    Formula: string;
+    Param: TModflowSteadyParameter;
+    Modifier: string;
+    Method: TPestParamMethod;
+  begin
+    Formula := LakeItem.BoundaryFormula[DataSetIdentifier];
+    Param := Model.GetPestParameterByName(Formula);
+    if Param <> nil then
+    begin
+      LakeSetting.PestName[DataSetIdentifier] := Param.ParameterName;
+      Formula := FortranFloatToStr(Param.Value);
+    end
+    else
+    begin
+      LakeSetting.PestName[DataSetIdentifier] := '';
+    end;
+    LakeSetting.Value[DataSetIdentifier] := EvaluateFormula(Formula,
+      Format(FormatString,
+      [LakeSetting.StartTime]),
+      ALake.FScreenObject.Name);
+    Modifier := LakeBoundary.PestBoundaryFormula[DataSetIdentifier];
+    Param := Model.GetPestParameterByName(Modifier);
+    if Param <> nil then
+    begin
+      LakeSetting.PestSeries[DataSetIdentifier] := Param.ParameterName;
+      Method := LakeBoundary.PestBoundaryMethod[DataSetIdentifier];
+      LakeSetting.PestMethod[DataSetIdentifier] := Method;
+      case Method of
+        ppmMultiply:
+          begin
+            LakeSetting.Value[DataSetIdentifier] :=
+              LakeSetting.Value[DataSetIdentifier] * Param.Value;
+          end;
+        ppmAdd:
+          begin
+            LakeSetting.Value[DataSetIdentifier] :=
+              LakeSetting.Value[DataSetIdentifier] + Param.Value;
+          end;
+        else
+          begin
+            Assert(False);
+          end;
+      end;
+    end
+    else
+    begin
+      LakeSetting.PestSeries[DataSetIdentifier] := ''
+    end;
+  end;
 begin
   for LakeIndex := 0 to FLakes.Count - 1 do
   begin
@@ -1070,22 +1175,24 @@ begin
       LakeSetting.EndTime := LakeItem.EndTime;
       LakeSetting.Status := LakeItem.Status;
 
-      LakeSetting.Stage := EvaluateFormula(LakeItem.Stage,
-        Format(StrLakeStageAt0g,
-        [LakeSetting.StartTime]),
-        ALake.FScreenObject.Name);
+      AssignValue(Lak6StagePosition, StrLakeStageAt0g);
+//      LakeSetting.Stage := EvaluateFormula(LakeItem.Stage,
+//        Format(StrLakeStageAt0g,
+//        [LakeSetting.StartTime]),
+//        ALake.FScreenObject.Name);
 
+      AssignValue(Lak6RainfallPosition, StrLakeRainfallAt0);
+//      LakeSetting.Rainfall := EvaluateFormula(LakeItem.Rainfall,
+//        Format(StrLakeRainfallAt0,
+//        [LakeSetting.StartTime]),
+//        ALake.FScreenObject.Name);
 
-      LakeSetting.Rainfall := EvaluateFormula(LakeItem.Rainfall,
-        Format(StrLakeRainfallAt0,
-        [LakeSetting.StartTime]),
-        ALake.FScreenObject.Name);
+      AssignValue(Lak6EvaporationPosition, StrLakeEvaporationAt);
+//      LakeSetting.Evaporation := EvaluateFormula(LakeItem.Evaporation,
+//        Format(StrLakeEvaporationAt,
+//        [LakeSetting.StartTime]),
+//        ALake.FScreenObject.Name);
 
-      LakeSetting.Evaporation := EvaluateFormula(LakeItem.Evaporation,
-        Format(StrLakeEvaporationAt,
-        [LakeSetting.StartTime]),
-        ALake.FScreenObject.Name);
-        
       if LakeSetting.Evaporation < 0 then
       begin
         frmErrorsAndWarnings.AddError(Model, StrLakeEtError,
@@ -1093,20 +1200,23 @@ begin
           [LakeItem.StartTime, ALake.FScreenObject]), ALake.FScreenObject)
       end;
 
-      LakeSetting.Runoff := EvaluateFormula(LakeItem.Runoff,
-        Format(StrLakeRunoffAt0g,
-        [LakeSetting.StartTime]),
-        ALake.FScreenObject.Name);
+      AssignValue(Lak6RunoffPosition, StrLakeRunoffAt0g);
+//      LakeSetting.Runoff := EvaluateFormula(LakeItem.Runoff,
+//        Format(StrLakeRunoffAt0g,
+//        [LakeSetting.StartTime]),
+//        ALake.FScreenObject.Name);
 
-      LakeSetting.Inflow := EvaluateFormula(LakeItem.Inflow,
-        Format( StrLakeInflowAt0g,
-        [LakeSetting.StartTime]),
-        ALake.FScreenObject.Name);
+      AssignValue(Lak6InflowPosition, StrLakeInflowAt0g);
+//      LakeSetting.Inflow := EvaluateFormula(LakeItem.Inflow,
+//        Format( StrLakeInflowAt0g,
+//        [LakeSetting.StartTime]),
+//        ALake.FScreenObject.Name);
 
-      LakeSetting.Withdrawal := EvaluateFormula(LakeItem.Withdrawal,
-        Format(StrLakeWithdrawalAt,
-        [LakeSetting.StartTime]),
-        ALake.FScreenObject.Name);
+      AssignValue(Lak6WithdrawalPosition, StrLakeWithdrawalAt);
+//      LakeSetting.Withdrawal := EvaluateFormula(LakeItem.Withdrawal,
+//        Format(StrLakeWithdrawalAt,
+//        [LakeSetting.StartTime]),
+//        ALake.FScreenObject.Name);
     end;
   end;
 end;
@@ -1268,6 +1378,35 @@ begin
   end;
   LakeDataArray.ComputeAverage;
   LakeDataArray.UpToDate := True;
+end;
+
+procedure TModflowLAKMf6Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingLAK6Package);
+
+    WriteTemplateHeader;
+
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+    WriteDataSet0;
+
+    WriteOptions;
+
+    WriteDimensions;
+
+    WritePackageData;
+
+    WriteConnectionData;
+
+    WriteLakeTableNames;
+
+    WriteOutlets;
+
+    WritePeriods;
+  finally
+    CloseFile;
+  end;
 end;
 
 procedure TModflowLAKMf6Writer.IdentifyLakesAndLakeCells;
@@ -1874,38 +2013,44 @@ begin
               WriteString('  ');
               WriteInteger(LakeIndex+1);
               WriteString('  STAGE');
-              WriteFloat(ALakeSetting.Stage);
+              WriteLakeValueOrFormula(ALakeSetting, Lak6StagePosition);
+//              WriteFloat(ALakeSetting.Stage);
               NewLine;
             end;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  RAINFALL');
-            WriteFloat(ALakeSetting.Rainfall);
+            WriteLakeValueOrFormula(ALakeSetting, Lak6RainfallPosition);
+//            WriteFloat(ALakeSetting.Rainfall);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  EVAPORATION');
-            WriteFloat(ALakeSetting.Evaporation);
+            WriteLakeValueOrFormula(ALakeSetting, Lak6EvaporationPosition);
+//            WriteFloat(ALakeSetting.Evaporation);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  RUNOFF');
-            WriteFloat(ALakeSetting.Runoff);
+            WriteLakeValueOrFormula(ALakeSetting, Lak6RunoffPosition);
+//            WriteFloat(ALakeSetting.Runoff);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  INFLOW');
-            WriteFloat(ALakeSetting.Inflow);
+            WriteLakeValueOrFormula(ALakeSetting, Lak6InflowPosition);
+//            WriteFloat(ALakeSetting.Inflow);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  WITHDRAWAL');
-            WriteFloat(ALakeSetting.Withdrawal);
+            WriteLakeValueOrFormula(ALakeSetting, Lak6WithdrawalPosition);
+//            WriteFloat(ALakeSetting.Withdrawal);
             NewLine;
           end;
         end;

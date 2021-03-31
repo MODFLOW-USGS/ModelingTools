@@ -987,10 +987,7 @@ var
   NewCount: Integer;
   SegmentIndex: Integer;
   ItemIndex: Integer;
-//  ReachLengthDataArray: TDataArray;
-//  ItemPostion: Integer;
 begin
-//  ReachLengthDataArray := frmGophast.PhastModel.DataArrayManager.GetDataSetByName(KReachLengthSFR);
   for Index := 0 to List.Count - 1 do
   begin
     Item := List.Items[Index];

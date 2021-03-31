@@ -2735,6 +2735,7 @@ var
     end
     else
     begin
+      Assert(ACell <> nil);
       SeriesDataArray := Model.DataArrayManager.
         GetDataSetByName(PestSeriesValue);
       if SeriesDataArray <> nil then
@@ -2815,6 +2816,7 @@ var
     end
     else
     begin
+      Assert(ACell <> nil);
       DataArray := Model.DataArrayManager.GetDataSetByName(PestParValue);
       if DataArray <> nil then
       begin
@@ -9756,7 +9758,7 @@ begin
 end;
 
 procedure TCustomModflowWriter.WriteValueOrFormula(Cell: TValueCell;
-Index: integer; FixedLength: Integer);
+  Index: integer; FixedLength: Integer);
 var
   Value: double;
   PestItem: string;

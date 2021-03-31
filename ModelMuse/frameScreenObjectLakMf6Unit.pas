@@ -14,7 +14,7 @@ uses
 type
   TLakeColumns = (lcStart, lcEnd, lcStatus, lcStage, lcRainfall, lcEvaporation,
     lcRunoff, lcInflow, lcWithdrawal);
-	
+
   TLakeTableColumns = (ltcStage, ltcVolume, ltcSurfaceArea, ltcExchangeArea);
 
   TframeScreenObjectLakMf6 = class(TframeScreenObjectNoParam)
@@ -201,6 +201,30 @@ begin
   try
     FreeAndNil(FOtherLakes);
     ClearGrid(rdgModflowBoundary);
+    seNumberOfTimes.AsInteger := 0;
+    seNumberOfTimesChange(seNumberOfTimes);
+    {$IFDEF PEST}
+    rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
+    rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
+    rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
+    rdgModflowBoundary.SpecialFormat[0, PestMethodRow] := rcf4String;
+    rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+
+    PestMethod[Ord(lcStage)] :=
+      TLakeMf6.DefaultBoundaryMethod(Lak6StagePosition);
+    PestMethod[Ord(lcRainfall)] :=
+      TLakeMf6.DefaultBoundaryMethod(Lak6RainfallPosition);
+    PestMethod[Ord(lcEvaporation)] :=
+      TLakeMf6.DefaultBoundaryMethod(Lak6EvaporationPosition);
+    PestMethod[Ord(lcRunoff)] :=
+      TLakeMf6.DefaultBoundaryMethod(Lak6RunoffPosition);
+    PestMethod[Ord(lcInflow)] :=
+      TLakeMf6.DefaultBoundaryMethod(Lak6InflowPosition);
+    PestMethod[Ord(lcWithdrawal)] :=
+      TLakeMf6.DefaultBoundaryMethod(Lak6WithdrawalPosition);
+    {$ENDIF}
+
     ClearGrid(frameLakeTable.Grid);
     ALake := nil;
     FGridCleared := False;
@@ -262,20 +286,40 @@ begin
       begin
         if not FoundFirst then
         begin
+
+          {$IFDEF PEST}
+          PestModifier[Ord(lcStage)] := ALake.PestStageFormula;
+          PestMethod[Ord(lcStage)] := ALake.PestStageMethod;
+          PestModifier[Ord(lcRainfall)] := ALake.PestRainfallFormula;
+          PestMethod[Ord(lcRainfall)] := ALake.PestRainfallMethod;
+          PestModifier[Ord(lcEvaporation)] := ALake.PestEvaporationFormula;
+          PestMethod[Ord(lcEvaporation)] := ALake.PestEvaporationMethod;
+          PestModifier[Ord(lcRunoff)] := ALake.PestRunoffFormula;
+          PestMethod[Ord(lcRunoff)] := ALake.PestRunoffMethod;
+          PestModifier[Ord(lcInflow)] := ALake.PestInflowFormula;
+          PestMethod[Ord(lcInflow)] := ALake.PestInflowMethod;
+          PestModifier[Ord(lcWithdrawal)] := ALake.PestWithdrawalFormula;
+          PestMethod[Ord(lcWithdrawal)] := ALake.PestWithdrawalMethod;
+          {$ENDIF}
+
+{
+  TLakeColumns = (lcStart, lcEnd, lcStatus, lcStage, lcRainfall, lcEvaporation,
+    lcRunoff, lcInflow, lcWithdrawal);
+}
           seNumberOfTimes.AsInteger := ALake.Values.Count;
           for TimeIndex := 0 to ALake.Values.Count - 1 do
           begin
             ALakeItem := ALake.Values[TimeIndex] as TLakeTimeItem;
 
-            rdgModflowBoundary.RealValue[Ord(lcStart), TimeIndex+1] := ALakeItem.StartTime;
-            rdgModflowBoundary.RealValue[Ord(lcEnd), TimeIndex+1] := ALakeItem.EndTime;
-            rdgModflowBoundary.ItemIndex[Ord(lcStatus), TimeIndex+1] := Ord(ALakeItem.Status);
-            rdgModflowBoundary.Cells[Ord(lcStage), TimeIndex+1] := ALakeItem.Stage;
-            rdgModflowBoundary.Cells[Ord(lcRainfall), TimeIndex+1] := ALakeItem.Rainfall;
-            rdgModflowBoundary.Cells[Ord(lcEvaporation), TimeIndex+1] := ALakeItem.Evaporation;
-            rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1] := ALakeItem.Runoff;
-            rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1] := ALakeItem.Inflow;
-            rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1] := ALakeItem.Withdrawal;
+            rdgModflowBoundary.RealValue[Ord(lcStart), TimeIndex+1+PestRowOffset] := ALakeItem.StartTime;
+            rdgModflowBoundary.RealValue[Ord(lcEnd), TimeIndex+1+PestRowOffset] := ALakeItem.EndTime;
+            rdgModflowBoundary.ItemIndex[Ord(lcStatus), TimeIndex+1+PestRowOffset] := Ord(ALakeItem.Status);
+            rdgModflowBoundary.Cells[Ord(lcStage), TimeIndex+1+PestRowOffset] := ALakeItem.Stage;
+            rdgModflowBoundary.Cells[Ord(lcRainfall), TimeIndex+1+PestRowOffset] := ALakeItem.Rainfall;
+            rdgModflowBoundary.Cells[Ord(lcEvaporation), TimeIndex+1+PestRowOffset] := ALakeItem.Evaporation;
+            rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1+PestRowOffset] := ALakeItem.Runoff;
+            rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1+PestRowOffset] := ALakeItem.Inflow;
+            rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1+PestRowOffset] := ALakeItem.Withdrawal;
           end;
 
           cbHorizontal.Checked := lctHorizontal in ALake.LakeConnections;
@@ -295,6 +339,62 @@ begin
         end
         else
         begin
+          {$IFDEF PEST}
+          if ALake.PestStageFormula <> FirstLake.PestStageFormula then
+          begin
+            PestModifierAssigned[Ord(lcStage)] := False
+          end;
+          if ALake.PestStageMethod <> FirstLake.PestStageMethod then
+          begin
+            PestMethodAssigned[Ord(lcStage)] := False;
+          end;
+
+          if ALake.PestRainfallFormula <> FirstLake.PestRainfallFormula then
+          begin
+            PestModifierAssigned[Ord(lcRainfall)] := False
+          end;
+          if ALake.PestRainfallMethod <> FirstLake.PestRainfallMethod then
+          begin
+            PestMethodAssigned[Ord(lcRainfall)] := False;
+          end;
+
+          if ALake.PestEvaporationFormula <> FirstLake.PestEvaporationFormula then
+          begin
+            PestModifierAssigned[Ord(lcEvaporation)] := False
+          end;
+          if ALake.PestEvaporationMethod <> FirstLake.PestEvaporationMethod then
+          begin
+            PestMethodAssigned[Ord(lcEvaporation)] := False;
+          end;
+
+          if ALake.PestRunoffFormula <> FirstLake.PestRunoffFormula then
+          begin
+            PestModifierAssigned[Ord(lcRunoff)] := False
+          end;
+          if ALake.PestRunoffMethod <> FirstLake.PestRunoffMethod then
+          begin
+            PestMethodAssigned[Ord(lcRunoff)] := False;
+          end;
+
+          if ALake.PestInflowFormula <> FirstLake.PestInflowFormula then
+          begin
+            PestModifierAssigned[Ord(lcInflow)] := False
+          end;
+          if ALake.PestInflowMethod <> FirstLake.PestInflowMethod then
+          begin
+            PestMethodAssigned[Ord(lcInflow)] := False;
+          end;
+
+          if ALake.PestWithdrawalFormula <> FirstLake.PestWithdrawalFormula then
+          begin
+            PestModifierAssigned[Ord(lcWithdrawal)] := False
+          end;
+          if ALake.PestWithdrawalMethod <> FirstLake.PestWithdrawalMethod then
+          begin
+            PestMethodAssigned[Ord(lcWithdrawal)] := False;
+          end;
+          {$ENDIF}
+
           if  (cbHorizontal.State <> cbGrayed) and
           (cbHorizontal.Checked <> (lctHorizontal in ALake.LakeConnections)) then
           begin
@@ -612,10 +712,6 @@ begin
         begin
           ALake.ConnectionLength := edConnLength.Text;
         end;
-//        if edConnWidth.Text <> '' then
-//        begin
-//          ALake.ConnectionWidth := edConnWidth.Text;
-//        end;
 
         if (LakeTimes = nil) and (seNumberOfTimes.AsInteger > 0) then
         begin
@@ -623,20 +719,20 @@ begin
 
           for TimeIndex := 0 to seNumberOfTimes.AsInteger - 1 do
           begin
-            if TryStrToFloat(rdgModflowBoundary.Cells[Ord(lcStart), TimeIndex+1], StartingTime)
-              and TryStrToFloat(rdgModflowBoundary.Cells[Ord(lcEnd), TimeIndex+1], EndingTime) then
+            if TryStrToFloat(rdgModflowBoundary.Cells[Ord(lcStart), TimeIndex+1+PestRowOffset], StartingTime)
+              and TryStrToFloat(rdgModflowBoundary.Cells[Ord(lcEnd), TimeIndex+1+PestRowOffset], EndingTime) then
             begin
               ALakeItem := LakeTimes.Add as TLakeTimeItem;
               ALakeItem.StartTime := StartingTime;
               ALakeItem.EndTime := EndingTime;
               ALakeItem.Status := TLakeStatus(Max(0,
-                rdgModflowBoundary.ItemIndex[Ord(lcStatus), TimeIndex+1]));
-              ALakeItem.Stage := rdgModflowBoundary.Cells[Ord(lcStage), TimeIndex+1];
-              ALakeItem.Rainfall := rdgModflowBoundary.Cells[Ord(lcRainfall), TimeIndex+1];
-              ALakeItem.Evaporation := rdgModflowBoundary.Cells[Ord(lcEvaporation), TimeIndex+1];
-              ALakeItem.Runoff := rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1];
-              ALakeItem.Inflow := rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1];
-              ALakeItem.Withdrawal := rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1];
+                rdgModflowBoundary.ItemIndex[Ord(lcStatus), TimeIndex+1+PestRowOffset]));
+              ALakeItem.Stage := rdgModflowBoundary.Cells[Ord(lcStage), TimeIndex+1+PestRowOffset];
+              ALakeItem.Rainfall := rdgModflowBoundary.Cells[Ord(lcRainfall), TimeIndex+1+PestRowOffset];
+              ALakeItem.Evaporation := rdgModflowBoundary.Cells[Ord(lcEvaporation), TimeIndex+1+PestRowOffset];
+              ALakeItem.Runoff := rdgModflowBoundary.Cells[Ord(lcRunoff), TimeIndex+1+PestRowOffset];
+              ALakeItem.Inflow := rdgModflowBoundary.Cells[Ord(lcInflow), TimeIndex+1+PestRowOffset];
+              ALakeItem.Withdrawal := rdgModflowBoundary.Cells[Ord(lcWithdrawal), TimeIndex+1+PestRowOffset];
             end;
           end;
         end;
@@ -673,6 +769,62 @@ begin
         begin
           ALake.Values.Clear;
         end;
+
+        {$IFDEF PEST}
+        if PestModifierAssigned[Ord(lcStage)] then
+        begin
+          ALake.PestStageFormula := PestModifier[Ord(lcStage)];
+        end;
+        if PestMethodAssigned[Ord(lcStage)] then
+        begin
+          ALake.PestStageMethod := PestMethod[Ord(lcStage)];
+        end;
+
+        if PestModifierAssigned[Ord(lcRainfall)] then
+        begin
+          ALake.PestRainfallFormula := PestModifier[Ord(lcRainfall)];
+        end;
+        if PestMethodAssigned[Ord(lcRainfall)] then
+        begin
+          ALake.PestRainfallMethod := PestMethod[Ord(lcRainfall)];
+        end;
+
+        if PestModifierAssigned[Ord(lcEvaporation)] then
+        begin
+          ALake.PestEvaporationFormula := PestModifier[Ord(lcEvaporation)];
+        end;
+        if PestMethodAssigned[Ord(lcEvaporation)] then
+        begin
+          ALake.PestEvaporationMethod := PestMethod[Ord(lcEvaporation)];
+        end;
+
+        if PestModifierAssigned[Ord(lcRunoff)] then
+        begin
+          ALake.PestRunoffFormula := PestModifier[Ord(lcRunoff)];
+        end;
+        if PestMethodAssigned[Ord(lcRunoff)] then
+        begin
+          ALake.PestRunoffMethod := PestMethod[Ord(lcRunoff)];
+        end;
+
+        if PestModifierAssigned[Ord(lcInflow)] then
+        begin
+          ALake.PestInflowFormula := PestModifier[Ord(lcInflow)];
+        end;
+        if PestMethodAssigned[Ord(lcInflow)] then
+        begin
+          ALake.PestInflowMethod := PestMethod[Ord(lcInflow)];
+        end;
+
+        if PestModifierAssigned[Ord(lcWithdrawal)] then
+        begin
+          ALake.PestWithdrawalFormula := PestModifier[Ord(lcWithdrawal)];
+        end;
+        if PestMethodAssigned[Ord(lcWithdrawal)] then
+        begin
+          ALake.PestWithdrawalMethod := PestMethod[Ord(lcWithdrawal)];
+        end;
+        {$ENDIF}
 
         if Outlets <> nil then
         begin

@@ -1703,6 +1703,7 @@ type
     FSutraGenTransObs_Node: TJvPageIndexNode;
     FPestMethods: TStringList;
     FPestParametersAndDataSets: TStringList;
+    FPestParameters: TStringList;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -1744,8 +1745,7 @@ type
     // are used to chose the TRbwParser.
     procedure CreateBoundaryFormula(const DataGrid: TRbwDataGrid4;
       const ACol, ARow: integer; Formula: string;
-      const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt;
-      PestParamAllowed: Boolean);
+      const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
 
     // @name creates a @link(TExpression) for a @link(TScreenObjectDataEdit).
     procedure CreateFormula(const DataSetIndex: integer;
@@ -2204,6 +2204,7 @@ type
     function GetPestModifier(Grid: TRbwDataGrid4; ACol: Integer): string;
     procedure SetPestModifier(Grid: TRbwDataGrid4; ACol: Integer;
       const Value: string);
+    function GetPestParameterAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
 //    procedure GetPilotPointsForAdditionalObject(AScreenObject: TScreenObject);
 
     // @name is set to @true when the @classname has stored values of the
@@ -2719,7 +2720,9 @@ procedure TfrmScreenObjectProperties.EnablePestCells(Sender: TObject; ACol,
 var
   Column: TRbwColumn4;
   PestParameterColumns: set of Byte;
+  ParametersOnly: Boolean;
 begin
+  ParametersOnly := False;
   PestParameterColumns := [];
    { TODO  -cPEST: Support PEST here }
   if (Sender = frameDrnParam.rdgModflowBoundary)
@@ -2768,9 +2771,15 @@ begin
   else if (Sender = frameMAW.rdgModflowBoundary) then
   begin
     PestParameterColumns := [3, 4, 6, 7, 8, 10..13, 15];
+  end
+  else if (Sender = frameLakMf6.rdgModflowBoundary) then
+  begin
+    ParametersOnly := True;
+    PestParameterColumns := [3..8];
   end;
 
-  if not (ACol in PestParameterColumns) and (ARow >= 1) and (ARow <= PestRowOffset) then
+  if not (ACol in PestParameterColumns) and (ARow >= 1)
+    and (ARow <= PestRowOffset) then
   begin
     CanSelect := False
   end;
@@ -2781,23 +2790,23 @@ begin
     Column := (Sender as TRbwDataGrid4).Columns[ACol];
     if (ARow <= PestRowOffset)  then
     begin
-//      if ACol in PestParameterColumns then
-//      begin
-        Column.ComboUsed := True;
-        Column.LimitToList := True;
-        if ARow = PestMethodRow then
+      Column.ComboUsed := True;
+      Column.LimitToList := True;
+      if ARow = PestMethodRow then
+      begin
+        Column.PickList := FPestMethods
+      end
+      else
+      begin
+        if ParametersOnly then
         begin
-          Column.PickList := FPestMethods
+          Column.PickList := FPestParameters;
         end
         else
         begin
-          Column.PickList := FPestParametersAndDataSets
+          Column.PickList := FPestParametersAndDataSets;
         end;
-//      end
-//      else
-//      begin
-//        CanSelect := False
-//      end;
+      end;
     end
     else
     begin
@@ -4060,6 +4069,7 @@ var
   AParameter: TModflowSteadyParameter;
 begin
   FPestParametersAndDataSets.Clear;
+  FPestParameters.Clear;
   DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   for DataSetIndex := 0 to DataArrayManager.DataSetCount - 1 do
   begin
@@ -4076,11 +4086,15 @@ begin
     if AParameter.ParameterType = ptPEST then
     begin
       FPestParametersAndDataSets.AddObject(AParameter.ParameterName, AParameter);
+      FPestParameters.AddObject(AParameter.ParameterName, AParameter);
     end;
   end;
   FPestParametersAndDataSets.Sorted := True;
   FPestParametersAndDataSets.Sorted := False;
+  FPestParameters.Sorted := True;
+  FPestParameters.Sorted := False;
   FPestParametersAndDataSets.Insert(0, strNone);
+  FPestParameters.Insert(0, strNone);
 
   FObjectCount := 1;
   FVertexCount := AScreenObject.Count;
@@ -4767,7 +4781,7 @@ begin
               if NewValue <> '' then
               begin
                 CreateBoundaryFormula(DataGrid, Col, RowIndex, NewValue,
-                  Orientation, EvaluatedAt, False);
+                  Orientation, EvaluatedAt);
               end;
             end;
           end;
@@ -5561,6 +5575,7 @@ begin
   FPestMethods.Add(StrMultiply);
   FPestMethods.Add(StrAdd);
   FPestParametersAndDataSets := TStringList.Create;
+  FPestParameters := TStringList.Create;
 
 
   frameObsMf6.OnChangeProperties := Mf6ObsChanged;
@@ -5662,6 +5677,7 @@ begin
   frameScreenObjectUzfMf6.OnCheckPestCell := EnablePestCells;
   frameScreenObjectSfr6.OnCheckPestCell := EnablePestCells;
   frameMAW.OnCheckPestCell := EnablePestCells;
+  frameLakMf6.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -17088,6 +17104,7 @@ begin
   FDataEdits.Free;
   FChildModels.Free;
   FChildModelsScreenObjects.Free;
+  FPestParameters.Free;
   FPestParametersAndDataSets.Free;
   FPestMethods.Free;
 end;
@@ -19459,8 +19476,7 @@ end;
 
 procedure TfrmScreenObjectProperties.CreateBoundaryFormula(const DataGrid:
   TRbwDataGrid4; const ACol, ARow: integer; Formula: string;
-  const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt;
-  PestParamAllowed: Boolean);
+  const Orientation: TDataSetOrientation; const EvaluatedAt: TEvaluatedAt);
 var
   TempCompiler: TRbwParser;
   CompiledFormula: TExpression;
@@ -19469,7 +19485,9 @@ var
   TestCol: Integer;
   CropIrrigationRequirement: TCropIrrigationRequirement;
   Divisor: integer;
+  PestParamAllowed: Boolean;
 begin
+  PestParamAllowed := GetPestParameterAllowed(DataGrid, ACol);
   if Formula = '' then
   begin
     Formula := '0';
@@ -22262,7 +22280,7 @@ begin
       begin
         try
           CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-            EvaluatedAt, False);
+            EvaluatedAt);
         except on E: Exception do
           begin
             Beep;
@@ -22894,7 +22912,7 @@ begin
         begin
           try
             CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-              EvaluatedAt, False);
+              EvaluatedAt);
           except on E: Exception do
             begin
               Beep;
@@ -25354,6 +25372,32 @@ begin
   StoreChdBoundary;
 end;
 
+function TfrmScreenObjectProperties.GetPestParameterAllowed(
+  DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
+begin
+ { TODO -cPEST: Support PEST here }
+  result :=
+    (DataGrid = frameDrnParam.rdgModflowBoundary)
+    or (DataGrid = frameGhbParam.rdgModflowBoundary)
+    or (DataGrid = frameWellParam.rdgModflowBoundary)
+    or (DataGrid = frameRivParam.rdgModflowBoundary)
+    or (DataGrid = frameDrtParam.rdgModflowBoundary)
+    or (DataGrid = frameScreenObjectStr.rdgModflowBoundary)
+    or (DataGrid = frameChdParam.rdgModflowBoundary)
+    or ((DataGrid = frameFarmWell.rdgModflowBoundary) and (ACol = 2))
+    or (DataGrid = frameFhbHead.rdgModflowBoundary)
+    or (DataGrid = frameFhbFlow.rdgModflowBoundary)
+    or ((DataGrid = frameRchParam.rdgModflowBoundary) and (ACol = 2))
+    or ((DataGrid = frameEvtParam.rdgModflowBoundary) and (ACol in [2,3,4]))
+    or ((DataGrid = frameEtsParam.rdgModflowBoundary) and (ACol in [2,3,4]))
+    or (DataGrid = frameScreenObjectUZF.rdgModflowBoundary)
+    or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
+    or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol in [3..9]))
+    or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3, 4, 6, 7, 8, 10..13, 15]))
+    or ((DataGrid = frameLakMf6.rdgModflowBoundary) and (ACol in [3..8]))
+    ;
+end;
+
 procedure TfrmScreenObjectProperties.frameChdParamdgModflowBoundaryButtonClick(
   Sender: TObject; ACol, ARow: Integer);
 var
@@ -25368,7 +25412,7 @@ var
   Edit: TScreenObjectDataEdit;
   DataArrayManager: TDataArrayManager;
   ASeries: TObSeries;
-  PestParamAllowed: Boolean;
+//  PestParamAllowed: Boolean;
 begin
   inherited;
   DataGrid := Sender as TRbwDataGrid4;
@@ -25376,26 +25420,7 @@ begin
   // VariableList will hold a list of variables that can
   // be used in the function
   try
-   { TODO -cPEST: Support PEST here }
-    PestParamAllowed :=
-      (DataGrid = frameDrnParam.rdgModflowBoundary)
-      or (DataGrid = frameGhbParam.rdgModflowBoundary)
-      or (DataGrid = frameWellParam.rdgModflowBoundary)
-      or (DataGrid = frameRivParam.rdgModflowBoundary)
-      or (DataGrid = frameDrtParam.rdgModflowBoundary)
-      or (DataGrid = frameScreenObjectStr.rdgModflowBoundary)
-      or (DataGrid = frameChdParam.rdgModflowBoundary)
-      or ((DataGrid = frameFarmWell.rdgModflowBoundary) and (ACol = 2))
-      or (DataGrid = frameFhbHead.rdgModflowBoundary)
-      or (DataGrid = frameFhbFlow.rdgModflowBoundary)
-      or ((DataGrid = frameRchParam.rdgModflowBoundary) and (ACol = 2))
-      or ((DataGrid = frameEvtParam.rdgModflowBoundary) and (ACol in [2,3,4]))
-      or ((DataGrid = frameEtsParam.rdgModflowBoundary) and (ACol in [2,3,4]))
-      or (DataGrid = frameScreenObjectUZF.rdgModflowBoundary)
-      or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
-      or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol in [3..9]))
-      or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3, 4, 6, 7, 8, 10..13, 15]))
-      ;
+//    PestParamAllowed := GetPestParameterAllowed(DataGrid);
 
     // get the orientation of the data set.
     if (DataGrid = frameRchParam.rdgModflowBoundary)
@@ -25499,7 +25524,7 @@ begin
         begin
           try
             CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-              EvaluatedAt, PestParamAllowed);
+              EvaluatedAt);
           except on E: Exception do
             begin
               Beep;
@@ -27343,7 +27368,7 @@ begin
         begin
           try
             CreateBoundaryFormula(DataGrid, ACol, ARow, Formula, Orientation,
-              EvaluatedAt, False);
+              EvaluatedAt);
           except on E: Exception do
             begin
               Beep;

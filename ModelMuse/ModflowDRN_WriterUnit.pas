@@ -549,10 +549,10 @@ begin
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingDRNPackage);
-    frmProgressMM.AddMessage(StrWritingDataSet0);
 
     WriteTemplateHeader;
 
+    frmProgressMM.AddMessage(StrWritingDataSet0);
     WriteDataSet0;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then

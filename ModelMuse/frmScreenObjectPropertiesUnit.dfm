@@ -2465,7 +2465,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMAW
+        ActivePage = jvspLakMf6
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -12157,6 +12157,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Width = 571
                     Height = 319
                     OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                    ExplicitTop = 51
                     ExplicitWidth = 571
                     ExplicitHeight = 319
                     ColWidths = (
@@ -12901,7 +12902,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pcLake: TPageControl
               Width = 581
               Height = 259
-              ActivePage = frameLakMf6.tabLakeTable
               ExplicitWidth = 581
               ExplicitHeight = 259
               inherited tabLakeProperties: TTabSheet
@@ -13010,7 +13010,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabLakeTransientProperties: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 301
+                ExplicitWidth = 573
+                ExplicitHeight = 225
               end
               inherited tabLakeTable: TTabSheet
                 ExplicitTop = 30

@@ -520,7 +520,6 @@ const
   Lak6InflowPosition = 4;
   Lak6WithdrawalPosition = 5;
 
-
 implementation
 
 uses
@@ -1345,6 +1344,7 @@ end;
 procedure TLakeMf6.Assign(Source: TPersistent);
 var
   LakeSource: TLakeMf6;
+  Index: Integer;
 begin
   if Source is TLakeMf6 then
   begin
@@ -1358,8 +1358,13 @@ begin
     BedK := LakeSource.BedK;
     BedThickness := LakeSource.BedThickness;
     ConnectionLength := LakeSource.ConnectionLength;
-//    ConnectionWidth := LakeSource.ConnectionWidth;
     StartingStage := LakeSource.StartingStage;
+
+    for Index := Lak6StagePosition to Lak6WithdrawalPosition do
+    begin
+      PestBoundaryFormula[Index] := LakeSource.PestBoundaryFormula[Index];
+      PestBoundaryMethod[Index] := LakeSource.PestBoundaryMethod[Index];
+    end;
   end;
   inherited;
 end;
@@ -1382,6 +1387,8 @@ begin
 end;
 
 constructor TLakeMf6.Create(Model: TBaseModel; ScreenObject: TObject);
+var
+  Index: Integer;
 begin
   inherited;
   CreateBoundaryObserver;
@@ -1398,6 +1405,18 @@ begin
   ConnectionLength := '0';
 //  ConnectionWidth := '0';
   StartingStage := '0';
+
+  PestStageFormula := '';
+  PestRainfallFormula := '';
+  PestRunoffFormula := '';
+  PestEvaporationFormula := '';
+  PestInflowFormula := '';
+  PestWithdrawalFormula := '';
+
+  for Index := Lak6StagePosition to Lak6WithdrawalPosition do
+  begin
+    PestBoundaryMethod[Index] := DefaultBoundaryMethod(Index);
+  end;
 end;
 
 procedure TLakeMf6.CreateFormulaObjects;
@@ -1483,6 +1502,14 @@ begin
   ConnectionLength := '0';
 //  ConnectionWidth := '0';
   StartingStage := '0';
+
+  PestStageFormula := '';
+  PestRainfallFormula := '';
+  PestRunoffFormula := '';
+  PestEvaporationFormula := '';
+  PestInflowFormula := '';
+  PestWithdrawalFormula := '';
+
   FLakeTable.Free;
   FOutlets.Free;
   inherited;
@@ -2065,7 +2092,7 @@ end;
 
 procedure TLakeMf6.SetPestEvaporationFormula(const Value: string);
 begin
-
+  UpdateFormulaBlocks(Value, Lak6EvaporationPosition, FPestEvaporationFormula);
 end;
 
 procedure TLakeMf6.SetPestEvaporationMethod(const Value: TPestParamMethod);
@@ -2075,7 +2102,7 @@ end;
 
 procedure TLakeMf6.SetPestInflowFormula(const Value: string);
 begin
-
+  UpdateFormulaBlocks(Value, Lak6InflowPosition, FPestInflowFormula);
 end;
 
 procedure TLakeMf6.SetPestInflowMethod(const Value: TPestParamMethod);
@@ -2085,7 +2112,7 @@ end;
 
 procedure TLakeMf6.SetPestRainfallFormula(const Value: string);
 begin
-
+  UpdateFormulaBlocks(Value, Lak6RainfallPosition, FPestRainfallFormula);
 end;
 
 procedure TLakeMf6.SetPestRainfallMethod(const Value: TPestParamMethod);
@@ -2095,7 +2122,7 @@ end;
 
 procedure TLakeMf6.SetPestRunoffFormula(const Value: string);
 begin
-
+  UpdateFormulaBlocks(Value, Lak6RunoffPosition, FPestRunoffFormula);
 end;
 
 procedure TLakeMf6.SetPestRunoffMethod(const Value: TPestParamMethod);
@@ -2105,7 +2132,7 @@ end;
 
 procedure TLakeMf6.SetPestStageFormula(const Value: string);
 begin
-
+  UpdateFormulaBlocks(Value, Lak6StagePosition, FPestStageFormula);
 end;
 
 procedure TLakeMf6.SetPestStageMethod(const Value: TPestParamMethod);
@@ -2115,7 +2142,7 @@ end;
 
 procedure TLakeMf6.SetPestWithdrawalFormula(const Value: string);
 begin
-
+  UpdateFormulaBlocks(Value, Lak6WithdrawalPosition, FPestWithdrawalFormula);
 end;
 
 procedure TLakeMf6.SetPestWithdrawalMethod(const Value: TPestParamMethod);

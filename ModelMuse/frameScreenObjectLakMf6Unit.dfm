@@ -53,6 +53,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -76,6 +77,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -99,6 +101,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -126,6 +129,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -149,6 +153,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -172,6 +177,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -195,6 +201,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -218,6 +225,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -241,6 +249,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -602,6 +611,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -625,6 +635,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -648,6 +659,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -671,6 +683,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

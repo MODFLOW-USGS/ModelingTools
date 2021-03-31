@@ -250,8 +250,6 @@ begin
 end;
 
 constructor TframeScreenObjectNoParam.Create(AOwner: TComponent);
-//var
-//  FPestParametersAndDataSets: TStringList;
 begin
   inherited;
   ConductanceColumn := -1;
@@ -611,12 +609,6 @@ procedure TframeScreenObjectNoParam.SetPestModifierAssigned(ACol: Integer;
 begin
   inherited PestModifierAssigned[rdgModflowBoundary, ACol] := Value;
 end;
-
-//procedure TframeScreenObjectNoParam.SetPestMethod(ACol: Integer;
-//  const Value: TPestParamMethod);
-//begin
-//  rdgModflowBoundary.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
-//end;
 
 procedure TframeScreenObjectNoParam.SetButtonCaptions;
 var
