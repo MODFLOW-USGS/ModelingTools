@@ -268,12 +268,12 @@ begin
         for TimeIndex := 0 to PrecipConc.Count - 1 do
         begin
           ConcItem := PrecipConc[TimeIndex] as TMt3dLktConcItem;
-          rdgModflowBoundary.RealValue[Ord(gcStartTime), TimeIndex+1] := ConcItem.StartTime;
-          rdgModflowBoundary.RealValue[Ord(gcEndTime), TimeIndex+1] := ConcItem.EndTime;
+          rdgModflowBoundary.RealValue[Ord(gcStartTime), TimeIndex+1+PestRowOffset] := ConcItem.StartTime;
+          rdgModflowBoundary.RealValue[Ord(gcEndTime), TimeIndex+1+PestRowOffset] := ConcItem.EndTime;
           for ComponentIndex := 0 to NCOMP - 1 do
           begin
             rdgModflowBoundary.Cells[ComponentIndex + Ord(gcComponentStart),
-              TimeIndex+1] := ConcItem.Mt3dmsConcRate[ComponentIndex];
+              TimeIndex+1+PestRowOffset] := ConcItem.Mt3dmsConcRate[ComponentIndex];
           end;
         end;
 
@@ -299,7 +299,7 @@ begin
           if (rdgModflowBoundary.Cells[0, ComponentIndex+1] <>
             Mt3dLktConcBoundary.InitialConcentrations[ComponentIndex].InitConc) then
           begin
-            rdgModflowBoundary.Cells[0, ComponentIndex+1] := '';
+            rdgModflowBoundary.Cells[0, ComponentIndex+1+PestRowOffset] := '';
           end;
         end;
 
@@ -392,16 +392,16 @@ begin
     begin
       for TimeIndex := 0 to seNumberOfTimes.AsInteger - 1 do
       begin
-        if RowOk(rdgModflowBoundary, TimeIndex+1) then
+        if RowOk(rdgModflowBoundary, TimeIndex+1+PestRowOffset) then
         begin
           ConcItem := PrecipConc.Add as TMt3dLktConcItem;
-          ConcItem.StartTime := rdgModflowBoundary.RealValue[Ord(gcStartTime), TimeIndex+1];
-          ConcItem.EndTime := rdgModflowBoundary.RealValue[Ord(gcEndTime), TimeIndex+1];
+          ConcItem.StartTime := rdgModflowBoundary.RealValue[Ord(gcStartTime), TimeIndex+1+PestRowOffset];
+          ConcItem.EndTime := rdgModflowBoundary.RealValue[Ord(gcEndTime), TimeIndex+1+PestRowOffset];
           for ComponentIndex := 0 to NCOMP - 1 do
           begin
             ConcItem.Mt3dmsConcRate[ComponentIndex] :=
               rdgModflowBoundary.Cells[ComponentIndex + Ord(gcComponentStart),
-              TimeIndex+1];
+              TimeIndex+1+PestRowOffset];
           end;
         end;
       end;

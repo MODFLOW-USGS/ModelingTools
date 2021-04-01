@@ -118,11 +118,11 @@ begin
         begin
           RipItem := RipCollection[TimeIndex] as TRipItem;
           Assert(RipItem.CoverageID.Count = RipPlantGroups.Count);
-          rdgModflowBoundary.RealValue[Ord(rcStartTime),TimeIndex+1] :=
+          rdgModflowBoundary.RealValue[Ord(rcStartTime),TimeIndex+1+PestRowOffset] :=
             RipItem.StartTime;
-          rdgModflowBoundary.RealValue[Ord(rcEndTime),TimeIndex+1] :=
+          rdgModflowBoundary.RealValue[Ord(rcEndTime),TimeIndex+1+PestRowOffset] :=
             RipItem.EndTime;
-          rdgModflowBoundary.Cells[Ord(rcGroundElevation),TimeIndex+1] :=
+          rdgModflowBoundary.Cells[Ord(rcGroundElevation),TimeIndex+1+PestRowOffset] :=
             RipItem.LandElevation;
           CoverageFormulas := RipItem.Coverages;
           Assert(CoverageFormulas.Count = RipPlantGroups.Count);
@@ -131,7 +131,7 @@ begin
             ColIndex := Ord(rcCoverageStart) + PlantGroupIndex;
             AnRipGroup := RipPlantGroups[PlantGroupIndex];
             (Assert(RipItem.CoverageID[PlantGroupIndex].Value = AnRipGroup.ID));
-            rdgModflowBoundary.Cells[ColIndex, TimeIndex+1] :=
+            rdgModflowBoundary.Cells[ColIndex, TimeIndex+1+PestRowOffset] :=
               CoverageFormulas[PlantGroupIndex];
           end;
         end;
@@ -203,7 +203,7 @@ begin
       else if SetAll or BoundaryUsed then
       begin
         if FMultipleDifferentObjects
-          and (rdgModflowBoundary.Cells[Ord(rcStartTime), 1] = '') then
+          and (rdgModflowBoundary.Cells[Ord(rcStartTime), 1+PestRowOffset] = '') then
         begin
           Exit;
         end;
@@ -224,14 +224,14 @@ begin
         end;
         for RowIndex := seNumberOfTimes.AsInteger downto 1 do
         begin
-          if TryStrToFloat(rdgModflowBoundary.Cells[Ord(rcStartTime), RowIndex], StartTime)
-            and TryStrToFloat(rdgModflowBoundary.Cells[Ord(rcEndTime), RowIndex], EndTime) then
+          if TryStrToFloat(rdgModflowBoundary.Cells[Ord(rcStartTime), RowIndex+PestRowOffset], StartTime)
+            and TryStrToFloat(rdgModflowBoundary.Cells[Ord(rcEndTime), RowIndex+PestRowOffset], EndTime) then
           begin
             AnItem := RipCollection.Items[RowIndex-1] as TRipItem;
             AnItem.StartTime := StartTime;
             AnItem.EndTime := EndTime;
 
-            AFormula := rdgModflowBoundary.Cells[Ord(rcGroundElevation), RowIndex];
+            AFormula := rdgModflowBoundary.Cells[Ord(rcGroundElevation), RowIndex+PestRowOffset];
             if (AFormula <> '')  then
             begin
               AnItem.LandElevation := AFormula;
@@ -247,7 +247,7 @@ begin
 
               for ColIndex := Ord(rcCoverageStart) to rdgModflowBoundary.ColCount - 1 do
               begin
-                AFormula := rdgModflowBoundary.Cells[ColIndex, RowIndex];
+                AFormula := rdgModflowBoundary.Cells[ColIndex, RowIndex+PestRowOffset];
                 while CoverageFormulas.Count <= ColIndex-Ord(rcCoverageStart) do
                 begin
                   CoverageFormulas.Add('');

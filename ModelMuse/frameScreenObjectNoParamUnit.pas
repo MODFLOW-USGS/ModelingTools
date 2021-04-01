@@ -170,6 +170,10 @@ var
   RowIndex: Integer;
 begin
   seNumberOfTimes.AsInteger := 0;
+  if Assigned(seNumberOfTimes.OnChange) then
+  begin
+    seNumberOfTimes.OnChange(seNumberOfTimes);
+  end;
   for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
   begin
     rdgModflowBoundary.Objects[ColIndex,0] := nil;
@@ -318,6 +322,13 @@ begin
     and not (csCustomPaint in rdgModflowBoundary.ControlState) then
   begin
     OnCheckPestCell(Sender, ACol, ARow, CanSelect);
+  end
+  else
+  begin
+    if ARow <= PestRowOffset then
+    begin
+      CanSelect := False;
+    end;
   end;
 end;
 

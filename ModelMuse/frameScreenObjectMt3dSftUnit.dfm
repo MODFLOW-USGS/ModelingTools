@@ -63,7 +63,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object lblObsLocation: TLabel
         Left = 176
         Top = 6
-        Width = 265
+        Width = 153
         Height = 13
         Caption = 'Observation location (ISFNOBS)'
       end
@@ -93,6 +93,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -116,6 +117,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -139,6 +141,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -337,6 +340,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -360,6 +364,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -383,6 +388,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -563,6 +569,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -586,6 +593,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -609,6 +617,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -789,6 +798,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -812,6 +822,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -835,6 +846,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

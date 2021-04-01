@@ -239,12 +239,12 @@ begin
         for TimeIndex := 0 to HeadWatersConc.Count - 1 do
         begin
           ConcItem := HeadWatersConc[TimeIndex] as TSftReachItem;
-          rdgModflowBoundary.RealValue[Ord(sbcStartTime), TimeIndex+1] := ConcItem.StartTime;
-          rdgModflowBoundary.RealValue[Ord(sbcEndTime), TimeIndex+1] := ConcItem.EndTime;
+          rdgModflowBoundary.RealValue[Ord(sbcStartTime), TimeIndex+1+PestRowOffset] := ConcItem.StartTime;
+          rdgModflowBoundary.RealValue[Ord(sbcEndTime), TimeIndex+1+PestRowOffset] := ConcItem.EndTime;
           for ComponentIndex := 0 to NCOMP - 1 do
           begin
             rdgModflowBoundary.Cells[ComponentIndex + Ord(sbcConc1),
-              TimeIndex+1] := ConcItem.Mt3dmsConcRate[ComponentIndex];
+              TimeIndex+1+PestRowOffset] := ConcItem.Mt3dmsConcRate[ComponentIndex];
           end;
         end;
 
@@ -759,16 +759,16 @@ begin
     begin
       for TimeIndex := 0 to seNumberOfTimes.AsInteger - 1 do
       begin
-        if RowOk(rdgModflowBoundary, TimeIndex+1) then
+        if RowOk(rdgModflowBoundary, TimeIndex+1+PestRowOffset) then
         begin
           ConcItem := HeadWatersConc.Add as TSftReachItem;
-          ConcItem.StartTime := rdgModflowBoundary.RealValue[Ord(sbcStartTime), TimeIndex+1];
-          ConcItem.EndTime := rdgModflowBoundary.RealValue[Ord(sbcEndTime), TimeIndex+1];
+          ConcItem.StartTime := rdgModflowBoundary.RealValue[Ord(sbcStartTime), TimeIndex+1+PestRowOffset];
+          ConcItem.EndTime := rdgModflowBoundary.RealValue[Ord(sbcEndTime), TimeIndex+1+PestRowOffset];
           for ComponentIndex := 0 to NCOMP - 1 do
           begin
             ConcItem.Mt3dmsConcRate[ComponentIndex] :=
               rdgModflowBoundary.Cells[ComponentIndex + Ord(sbcConc1),
-              TimeIndex+1];
+              TimeIndex+1+PestRowOffset];
           end;
         end;
       end;

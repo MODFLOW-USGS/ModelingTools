@@ -719,6 +719,8 @@ type
       ACol, ARow: Integer; const Value: TCheckBoxState);
     procedure frameChdParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure frameMT3D_SFTrdgModflowBoundarySelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -14970,8 +14972,8 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-      Assert(RowIndex >= 1);
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1 + PestRowOffset;
+      Assert(RowIndex >= 1 + PestRowOffset);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -15047,7 +15049,7 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1+PestRowOffset;
       Assert(RowIndex >= 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
@@ -15201,7 +15203,7 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1+PestRowOffset;
       Assert(RowIndex >= 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
@@ -15278,7 +15280,7 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1+PestRowOffset;
       Assert(RowIndex >= 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
@@ -16382,6 +16384,10 @@ begin
     end;
 
     Frame.seNumberOfTimes.Value := TimeList.Count;
+    if Assigned(Frame.seNumberOfTimes.OnChange) then
+    begin
+      Frame.seNumberOfTimes.OnChange(Frame.seNumberOfTimes);
+    end;
     DataGrid := Frame.rdgModflowBoundary;
     for ColIndex := 1 to DataGrid.ColCount - 1 do
     begin
@@ -18629,8 +18635,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -18749,8 +18755,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -18977,8 +18983,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -19064,8 +19070,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -26720,6 +26726,14 @@ begin
   inherited;
   frameMT3D_SFT.rdgConstConcSetEditText(Sender, ACol, ARow, Value);
   UpdateNodeState(FMt3d_SFT_Node);
+end;
+
+procedure TfrmScreenObjectProperties.frameMT3D_SFTrdgModflowBoundarySelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  frameMT3D_SFT.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
+
 end;
 
 procedure TfrmScreenObjectProperties.frameMT3D_SFTrdgModflowBoundarySetEditText(

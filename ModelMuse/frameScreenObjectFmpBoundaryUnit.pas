@@ -68,9 +68,9 @@ begin
   for ItemIndex := 0 to Items.Count - 1 do
   begin
     AnItem := Items[ItemIndex] as TCustomModflowBoundaryItem;
-    rdgModflowBoundary.Cells[Ord(pcStartTime), ItemIndex+1] := FloatToStr(AnItem.StartTime);
-    rdgModflowBoundary.Cells[Ord(pcEndTime), ItemIndex+1] := FloatToStr(AnItem.EndTime);
-    rdgModflowBoundary.Cells[Ord(pcValue), ItemIndex+1] := AnItem.BoundaryFormula[0];
+    rdgModflowBoundary.Cells[Ord(pcStartTime), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.StartTime);
+    rdgModflowBoundary.Cells[Ord(pcEndTime), ItemIndex+1+PestRowOffset] := FloatToStr(AnItem.EndTime);
+    rdgModflowBoundary.Cells[Ord(pcValue), ItemIndex+1+PestRowOffset] := AnItem.BoundaryFormula[0];
   end;
 end;
 
@@ -140,11 +140,11 @@ begin
           for ItemIndex := 0 to Items.Count - 1 do
           begin
             AnItem := Items[ItemIndex] as TCustomModflowBoundaryItem;
-            if (rdgModflowBoundary.Cells[Ord(pcStartTime), ItemIndex+1]
+            if (rdgModflowBoundary.Cells[Ord(pcStartTime), ItemIndex+1+PestRowOffset]
               <> FloatToStr(AnItem.StartTime))
-              or (rdgModflowBoundary.Cells[Ord(pcEndTime), ItemIndex+1]
+              or (rdgModflowBoundary.Cells[Ord(pcEndTime), ItemIndex+1+PestRowOffset]
               <> FloatToStr(AnItem.EndTime))
-              or (rdgModflowBoundary.Cells[Ord(pcValue), ItemIndex+1]
+              or (rdgModflowBoundary.Cells[Ord(pcValue), ItemIndex+1+PestRowOffset]
               <> AnItem.BoundaryFormula[0]) then
             begin
               ClearFmpGrid;
@@ -212,7 +212,7 @@ begin
 //      FirstTime := StressPeriods.First.StartTime;
 //      LastTime :=  StressPeriods.Last.EndTime;
 
-      for RowIndex := 1 to rdgModflowBoundary.RowCount - 1 do
+      for RowIndex := 1+PestRowOffset to rdgModflowBoundary.RowCount - 1 do
       begin
         if TryStrToFloat(rdgModflowBoundary.Cells[Ord(pcStartTime), RowIndex], StartTime)
           and TryStrToFloat(rdgModflowBoundary.Cells[Ord(pcEndTime), RowIndex], EndTime)

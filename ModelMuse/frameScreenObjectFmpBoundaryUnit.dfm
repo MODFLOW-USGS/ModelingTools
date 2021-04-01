@@ -4,6 +4,7 @@ inherited frameScreenObjectFmpBoundary: TframeScreenObjectFmpBoundary
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -27,6 +28,7 @@ inherited frameScreenObjectFmpBoundary: TframeScreenObjectFmpBoundary
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -50,6 +52,7 @@ inherited frameScreenObjectFmpBoundary: TframeScreenObjectFmpBoundary
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

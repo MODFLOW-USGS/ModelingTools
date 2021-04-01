@@ -119,13 +119,13 @@ begin
       for TimeIndex := 0 to Values.Count - 1 do
       begin
         AnItem := Values[TimeIndex] as THfbItem;
-        rdgModflowBoundary.Cells[Ord(hcStartTime), TimeIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(hcStartTime), TimeIndex+1+PestRowOffset] :=
           AnItem.StartTime.ToString;
-        rdgModflowBoundary.Cells[Ord(hcEndTime), TimeIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(hcEndTime), TimeIndex+1+PestRowOffset] :=
           AnItem.EndTime.ToString;
-        rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex+1+PestRowOffset] :=
           AnItem.Thickness;
-        rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex+1+PestRowOffset] :=
           AnItem.HydraulicConductivity;
       end;
 
@@ -240,16 +240,16 @@ begin
       NewValues := THfbCollection.Create(nil, nil, nil);
       for TimeIndex := 1 to seNumberOfTimes.AsInteger do
       begin
-        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(hcStartTime), TimeIndex], StartTime)
-          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(hcEndTime), TimeIndex], EndTime)
-          and (rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex] <> '')
-          and (rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex] <> '') then
+        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(hcStartTime), TimeIndex+PestRowOffset], StartTime)
+          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(hcEndTime), TimeIndex+PestRowOffset], EndTime)
+          and (rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex+PestRowOffset] <> '')
+          and (rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex+PestRowOffset] <> '') then
         begin
           NewItem := NewValues.Add;
           NewItem.StartTime := StartTime;
           NewItem.EndTime := EndTime;
-          NewItem.Thickness := rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex];
-          NewItem.HydraulicConductivity := rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex];
+          NewItem.Thickness := rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex+PestRowOffset];
+          NewItem.HydraulicConductivity := rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex+PestRowOffset];
         end;
       end;
     end;

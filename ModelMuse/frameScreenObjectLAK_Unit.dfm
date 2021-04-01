@@ -185,6 +185,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -208,6 +209,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -231,6 +233,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -254,6 +257,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -277,6 +281,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -300,6 +305,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -323,6 +329,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -346,6 +353,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -368,8 +376,18 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           AutoAdjustColWidths = False
         end>
       ExplicitLeft = 1
+      ExplicitTop = 51
       ExplicitWidth = 461
       ExplicitHeight = 44
+      ColWidths = (
+        64
+        64
+        64
+        64
+        64
+        64
+        64
+        64)
     end
   end
   object pcLake: TPageControl
@@ -382,18 +400,10 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     TabOrder = 3
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tabBathymetry: TTabSheet
       Caption = 'Bathymetry'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgLakeTable: TRbwDataGrid4
         Left = 0
         Top = 105
@@ -416,6 +426,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -439,6 +450,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -462,6 +474,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -530,69 +543,69 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Height = 161
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = -145
-        ExplicitTop = -259
+        ExplicitWidth = 455
+        ExplicitHeight = 161
         inherited splObservations: TSplitter
           Top = -17
           Width = 455
+          ExplicitTop = -17
+          ExplicitWidth = 455
         end
         inherited grpDirectObs: TGroupBox
           Width = 455
-          ExplicitLeft = 0
-          ExplicitWidth = 600
-          ExplicitHeight = 242
+          ExplicitWidth = 455
           inherited frameObservations: TframeGrid
             Width = 451
-            ExplicitTop = 15
-            ExplicitWidth = 596
-            ExplicitHeight = 225
+            ExplicitWidth = 451
             inherited Panel: TPanel
               Width = 451
-              ExplicitTop = 184
-              ExplicitWidth = 596
+              ExplicitWidth = 451
               inherited sbAdd: TSpeedButton
                 Left = 233
+                ExplicitLeft = 233
               end
               inherited sbInsert: TSpeedButton
                 Left = 277
+                ExplicitLeft = 277
               end
               inherited sbDelete: TSpeedButton
                 Left = 320
+                ExplicitLeft = 320
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 451
-              ExplicitWidth = 596
-              ExplicitHeight = 184
+              ExplicitWidth = 451
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
           Top = -12
           Width = 455
-          ExplicitLeft = 0
-          ExplicitWidth = 600
+          ExplicitTop = -12
+          ExplicitWidth = 455
           inherited frameObsComparisons: TframeGrid
             Width = 451
-            ExplicitTop = 15
-            ExplicitWidth = 596
-            ExplicitHeight = 156
+            ExplicitWidth = 451
             inherited Panel: TPanel
               Width = 451
-              ExplicitWidth = 596
+              ExplicitWidth = 451
               inherited sbAdd: TSpeedButton
                 Left = 233
+                ExplicitLeft = 233
               end
               inherited sbInsert: TSpeedButton
                 Left = 277
+                ExplicitLeft = 277
               end
               inherited sbDelete: TSpeedButton
                 Left = 320
+                ExplicitLeft = 320
               end
             end
             inherited Grid: TRbwDataGrid4
               Width = 451
-              ExplicitWidth = 596
+              ExplicitWidth = 451
             end
           end
         end

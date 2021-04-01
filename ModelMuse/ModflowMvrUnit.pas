@@ -224,6 +224,9 @@ type
       Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property MvrValues[Index: integer]: double read GetMvrValue;
     property MvrTypes[Index: Integer]: TMvrType read GetMvrType;
@@ -571,7 +574,6 @@ var
 begin
     LocalModel := AModel as TCustomModel;
 
-//    Grid := LocalModel.Grid;
     LocalBoundaryStorage := BoundaryStorage as TMvrSourceStorage;
     for TimeIndex := 0 to
       LocalModel.ModflowFullStressPeriods.Count - 1 do
@@ -586,8 +588,8 @@ begin
         ValueTimeList.Add(Cells);
       end;
       StressPeriod := LocalModel.ModflowFullStressPeriods[TimeIndex];
-//      // Check if the stress period is completely enclosed within the times
-//      // of the LocalBoundaryStorage;
+      // Check if the stress period is completely enclosed within the times
+      // of the LocalBoundaryStorage;
       if (StressPeriod.StartTime + LocalModel.SP_Epsilon >= LocalBoundaryStorage.StartingTime)
         and (StressPeriod.EndTime - LocalModel.SP_Epsilon <= LocalBoundaryStorage.EndingTime) then
       begin
@@ -604,9 +606,7 @@ begin
           BoundaryValues.MvrIndex := BoundaryIndex;
           Cell := TMvrSourceCell.Create;
           Cells.Add(Cell);
-//          Cell.BoundaryTypes.Assign(BoundaryTypes);
           LocalModel.AdjustCellPosition(Cell);
-//          Cell.IFace := LocalScreenObject.IFace;
           Cell.StressPeriod := TimeIndex;
           Cell.Values := BoundaryValues;
           Cell.ScreenObject := ScreenObject;
@@ -1398,6 +1398,21 @@ end;
 function TMvrSourceCell.GetMvrValueCount: Integer;
 begin
   result := Length(FValues.Values);
+end;
+
+function TMvrSourceCell.GetPestName(Index: Integer): string;
+begin
+  result := FValues.ValuePests[Index];
+end;
+
+function TMvrSourceCell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  result := FValues.ValuePestSeriesMethods[Index];
+end;
+
+function TMvrSourceCell.GetPestSeriesName(Index: Integer): string;
+begin
+  result := FValues.ValuePestSeriesNames[Index];
 end;
 
 function TMvrSourceCell.GetValueAnnotation(Index: integer): string;

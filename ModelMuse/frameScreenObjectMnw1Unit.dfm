@@ -19,9 +19,9 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
       Caption = 'Site label (Optional) (MNWSite)'
     end
     inherited seNumberOfTimes: TJvSpinEdit
-      Top = 46
+      Top = 43
       TabOrder = 1
-      ExplicitTop = 46
+      ExplicitTop = 43
     end
     inherited btnDelete: TBitBtn
       Top = 46
@@ -102,6 +102,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -125,6 +126,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -148,6 +150,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -171,6 +174,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -194,6 +198,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -217,6 +222,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -240,6 +246,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -263,6 +270,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -286,6 +294,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -309,6 +318,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -332,6 +342,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -355,6 +366,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -378,6 +390,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -401,6 +414,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -424,6 +438,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -447,6 +462,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -469,6 +485,8 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
           AutoAdjustColWidths = True
         end>
       OnEndUpdate = rdgModflowBoundaryEndUpdate
+      ExplicitLeft = 1
+      ExplicitTop = 51
       ExplicitHeight = 155
     end
   end

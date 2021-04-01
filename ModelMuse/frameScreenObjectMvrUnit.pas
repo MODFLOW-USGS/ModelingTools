@@ -42,6 +42,8 @@ type
     procedure frameReceiversGridBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
     procedure comboSourcePackageDropDown(Sender: TObject);
+    procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     FLakObjects: TStringList;
     FMawObjects: TStringList;
@@ -488,18 +490,18 @@ begin
           for TimeIndex := 0 to ModflowMvr.Values.Count - 1 do
           begin
             MvrItem := ModflowMvr.Values[TimeIndex] as TMvrItem;
-            rdgModflowBoundary.RealValue[Ord(mtcStartTime), TimeIndex+1] :=
+            rdgModflowBoundary.RealValue[Ord(mtcStartTime), TimeIndex+1+PestRowOffset] :=
                MvrItem.StartTime;
-            rdgModflowBoundary.RealValue[Ord(mtcEndTime), TimeIndex+1] :=
+            rdgModflowBoundary.RealValue[Ord(mtcEndTime), TimeIndex+1+PestRowOffset] :=
               MvrItem.EndTime;
 
             for ReceiverIndex := 0 to MvrItem.Items.Count - 1 do
             begin
               AReceiverItem := MvrItem.Items[ReceiverIndex];
               ColIndex := ReceiverIndex*2+2;
-              rdgModflowBoundary.Cells[ColIndex, TimeIndex+1] :=
+              rdgModflowBoundary.Cells[ColIndex, TimeIndex+1+PestRowOffset] :=
                 AReceiverItem.Value;
-              rdgModflowBoundary.ItemIndex[ColIndex+1, TimeIndex+1] :=
+              rdgModflowBoundary.ItemIndex[ColIndex+1, TimeIndex+1+PestRowOffset] :=
                 Ord(AReceiverItem.MvrType);
             end;
           end;
@@ -582,6 +584,10 @@ begin
     frameReceivers.Grid.Cells[Ord(rcPackage), 0] := StrReceiverPackage;
     frameReceivers.Grid.Cells[Ord(rcSfrChoice), 0] := StrSFRReceiverReach;
     frameReceivers.Grid.Cells[Ord(rcObject), 0] := StrReceiverObject;
+    {$IFDEF PEST}
+    rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+    {$ENDIF}
   finally
     frameReceivers.Grid.EndUpdate;
   end;
@@ -591,6 +597,7 @@ begin
     ClearGrid(rdgModflowBoundary);
 
     seNumberOfTimes.AsInteger := 0;
+    seNumberOfTimesChange(seNumberOfTimes);
 //    rdgModflowBoundary.RowCount := 2;
 
     frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes
@@ -681,6 +688,18 @@ begin
   comboMvrType.Enabled := ShouldEnableMultisetControls;
 end;
 
+procedure TframeScreenObjectMvr.rdgModflowBoundarySelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  {$IFDEF PEST}
+  if ARow <= PestRowOffset then
+  begin
+    CanSelect := False;
+  end;
+  {$ENDIF}
+end;
+
 procedure TframeScreenObjectMvr.rdgModflowBoundarySetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
 begin
@@ -725,7 +744,7 @@ begin
     begin
       TimeValues := TMvrItems.Create(nil, nil, nil);
       ItemCount := frameReceivers.seNumber.AsInteger;
-      for RowIndex := 1 to rdgModflowBoundary.RowCount - 1 do
+      for RowIndex := 1+PestRowOffset to rdgModflowBoundary.RowCount - 1 do
       begin
         RowOk := True;
 

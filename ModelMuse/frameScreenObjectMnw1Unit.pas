@@ -245,37 +245,37 @@ begin
       begin
         Mnw1Item := Mnw1Collection[ItemIndex] as TMnw1Item;
 
-        rdgModflowBoundary.RealValue[Ord(mcStartTime),ItemIndex+1] :=
+        rdgModflowBoundary.RealValue[Ord(mcStartTime),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.StartTime;
-        rdgModflowBoundary.RealValue[Ord(mcEndTime),ItemIndex+1] :=
+        rdgModflowBoundary.RealValue[Ord(mcEndTime),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.EndTime;
-        rdgModflowBoundary.Cells[Ord(mcDesiredPumpingRate),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcDesiredPumpingRate),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.DesiredPumpingRate;
-        rdgModflowBoundary.Cells[Ord(mcWaterQuality),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcWaterQuality),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.WaterQuality;
-        rdgModflowBoundary.ItemIndex[Ord(mcConductanceMethod),ItemIndex+1] :=
+        rdgModflowBoundary.ItemIndex[Ord(mcConductanceMethod),ItemIndex+1+PestRowOffset] :=
           Ord(Mnw1Item.ConductanceMethod);
-        rdgModflowBoundary.Cells[Ord(mcWellRadius),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcWellRadius),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.WellRadius;
-        rdgModflowBoundary.Cells[Ord(mcConductance),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcConductance),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.Conductance;
-        rdgModflowBoundary.Cells[Ord(mcSkinFactor),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcSkinFactor),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.SkinFactor;
-        rdgModflowBoundary.ItemIndex[Ord(mcWaterLevelLimitType),ItemIndex+1] :=
+        rdgModflowBoundary.ItemIndex[Ord(mcWaterLevelLimitType),ItemIndex+1+PestRowOffset] :=
           Ord(Mnw1Item.WaterLevelLimitType);
-        rdgModflowBoundary.Cells[Ord(mcLimitingWaterLevel),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcLimitingWaterLevel),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.LimitingWaterLevel;
-        rdgModflowBoundary.Cells[Ord(mcReferenceElevation),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcReferenceElevation),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.ReferenceElevation;
-        rdgModflowBoundary.Cells[Ord(mcWaterQualityGroup),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcWaterQualityGroup),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.WaterQualityGroup;
-        rdgModflowBoundary.Cells[Ord(mcNonLinearLossCoefficient),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcNonLinearLossCoefficient),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.NonLinearLossCoefficient;
-        rdgModflowBoundary.ItemIndex[Ord(mcPumpingLimitType),ItemIndex+1] :=
+        rdgModflowBoundary.ItemIndex[Ord(mcPumpingLimitType),ItemIndex+1+PestRowOffset] :=
           Ord(Mnw1Item.PumpingLimitType);
-        rdgModflowBoundary.Cells[Ord(mcMinimumActiveRate),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcMinimumActiveRate),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.MinimumPumpingRate;
-        rdgModflowBoundary.Cells[Ord(mcReactivationPumpingRate),ItemIndex+1] :=
+        rdgModflowBoundary.Cells[Ord(mcReactivationPumpingRate),ItemIndex+1+PestRowOffset] :=
           Mnw1Item.ReactivationPumpingRate;
       end;
 
@@ -328,7 +328,19 @@ var
 begin
   rdgModflowBoundary.BeginUpdate;
   try
-    rdgModflowBoundary.RowCount := 2;
+    seNumberOfTimes.AsInteger := 0;
+    if Assigned(seNumberOfTimes.OnChange) then
+    begin
+      seNumberOfTimes.OnChange(seNumberOfTimes);
+    end;
+    {$IFDEF PEST}
+//    rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
+//    rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
+//    rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
+//    rdgModflowBoundary.SpecialFormat[0, PestMethodRow] := rcf4String;
+    rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+     {$ENDIF}
 
     frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes
       (rdgModflowBoundary, Ord(mcStartTime));
@@ -556,14 +568,14 @@ begin
       end;
       for RowIndex := seNumberOfTimes.AsInteger downto 1 do
       begin
-        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(mcStartTime), RowIndex], StartTime)
-          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(mcEndTime), RowIndex], EndTime) then
+        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(mcStartTime), RowIndex+PestRowOffset], StartTime)
+          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(mcEndTime), RowIndex+PestRowOffset], EndTime) then
         begin
           AnItem := Mnw1Collection.Items[RowIndex-1] as TMnw1Item;
           AnItem.StartTime := StartTime;
           AnItem.EndTime := EndTime;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcDesiredPumpingRate), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcDesiredPumpingRate), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.DesiredPumpingRate := AFormula;
@@ -573,7 +585,7 @@ begin
             AnItem.DesiredPumpingRate := '0';
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcWaterQuality), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcWaterQuality), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.WaterQuality := AFormula;
@@ -583,13 +595,13 @@ begin
             AnItem.WaterQuality := '0';
           end;
 
-          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(mcConductanceMethod), RowIndex];
+          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(mcConductanceMethod), RowIndex+PestRowOffset];
           if ItemIndex >= 0 then
           begin
             AnItem.ConductanceMethod := TMnw1ConductanceMethod(ItemIndex);
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcWellRadius), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcWellRadius), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.WellRadius := AFormula;
@@ -599,7 +611,7 @@ begin
             AnItem.WellRadius := '0';
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcConductance), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcConductance), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.Conductance := AFormula;
@@ -609,7 +621,7 @@ begin
             AnItem.Conductance := '0';
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcSkinFactor), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcSkinFactor), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.SkinFactor := AFormula;
@@ -619,13 +631,13 @@ begin
             AnItem.SkinFactor := '0';
           end;
 
-          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(mcWaterLevelLimitType), RowIndex];
+          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(mcWaterLevelLimitType), RowIndex+PestRowOffset];
           if ItemIndex >= 0 then
           begin
             AnItem.WaterLevelLimitType := TMnw1WaterLevelLimitType(ItemIndex);
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcLimitingWaterLevel), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcLimitingWaterLevel), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.LimitingWaterLevel := AFormula;
@@ -635,7 +647,7 @@ begin
             AnItem.LimitingWaterLevel := '0';
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcReferenceElevation), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcReferenceElevation), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.ReferenceElevation := AFormula;
@@ -645,7 +657,7 @@ begin
             AnItem.ReferenceElevation := '0';
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcWaterQualityGroup), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcWaterQualityGroup), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.WaterQualityGroup := AFormula;
@@ -655,7 +667,7 @@ begin
             AnItem.WaterQualityGroup := '0';
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcNonLinearLossCoefficient), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcNonLinearLossCoefficient), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.NonLinearLossCoefficient := AFormula;
@@ -665,13 +677,13 @@ begin
             AnItem.NonLinearLossCoefficient := '0';
           end;
 
-          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(mcPumpingLimitType), RowIndex];
+          ItemIndex := rdgModflowBoundary.ItemIndex[Ord(mcPumpingLimitType), RowIndex+PestRowOffset];
           if ItemIndex >= 0 then
           begin
             AnItem.PumpingLimitType := TMnw1PumpingLimitType(ItemIndex);
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcMinimumActiveRate), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcMinimumActiveRate), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.MinimumPumpingRate := AFormula;
@@ -681,7 +693,7 @@ begin
             AnItem.MinimumPumpingRate := '0';
           end;
 
-          AFormula := rdgModflowBoundary.Cells[Ord(mcReactivationPumpingRate), RowIndex];
+          AFormula := rdgModflowBoundary.Cells[Ord(mcReactivationPumpingRate), RowIndex+PestRowOffset];
           if (AFormula <> '')  then
           begin
             AnItem.ReactivationPumpingRate := AFormula;

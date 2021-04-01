@@ -121,7 +121,8 @@ procedure TframeScreenObjectSwrReach.frameConnectionsGridBeforeDrawCell(
   Sender: TObject; ACol, ARow: Integer);
 begin
   inherited;
-  if (ACol = Ord(sccObjectName)) and (ARow >= frameConnections.Grid.FixedRows) then
+  if (ACol = Ord(sccObjectName))
+    and (ARow >= frameConnections.Grid.FixedRows+PestRowOffset) then
   begin
     if (frameConnections.Grid.Cells[ACol, ARow] <> '')
       and (frameConnections.Grid.ItemIndex[ACol, ARow] < 0) then
@@ -137,7 +138,8 @@ var
   ItemIndex: integer;
 begin
   inherited;
-  if (ARow >= frameConnections.Grid.FixedRows) and (ACol in [Ord(sccReach), Ord(sccObjectName)]) then
+  if (ARow >= frameConnections.Grid.FixedRows+PestRowOffset)
+    and (ACol in [Ord(sccReach), Ord(sccObjectName)]) then
   begin
     ItemIndex := frameConnections.Grid.ItemIndex[Ord(sccConnectionMethod), ARow];
     CanSelect := (ItemIndex >= 0);
@@ -172,7 +174,8 @@ procedure TframeScreenObjectSwrReach.frameSwrdgModflowBoundarySelectCell(
 begin
   inherited;
   frameSwr.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
-  if (ARow >= frameSwr.rdgModflowBoundary.FixedRows) and (ACol = Ord(srcStage)) then
+  if (ARow >= frameSwr.rdgModflowBoundary.FixedRows+PestRowOffset)
+    and (ACol = Ord(srcStage)) then
   begin
     CanSelect := (ARow = 1)
       or (frameSwr.rdgModflowBoundary.ItemIndex[Ord(srcReachType), ARow] = 2)
@@ -293,18 +296,19 @@ begin
       rdeGroupNumber.IntegerValue := Reaches.GroupNumber;
 
       frameSwr.seNumberOfTimes.AsInteger := Reaches.Values.Count;
+
       Grid := frameSwr.rdgModflowBoundary;
       for TimeIndex := 0 to Reaches.Values.Count - 1 do
       begin
         AnItem := Reaches.Values[TimeIndex] as TSwrTransientReachItem;
-        Grid.RealValue[Ord(srcStartTime), TimeIndex+1] := AnItem.StartTime;
-        Grid.RealValue[Ord(srcEndTime), TimeIndex+1] := AnItem.EndTime;
-        Grid.Cells[Ord(srcGeomName), TimeIndex+1] := AnItem.GeometryName;
-        Grid.Cells[Ord(srcVerticalOffset), TimeIndex+1] := AnItem.VerticalOffset;
-        Grid.ItemIndex[Ord(srcReachType), TimeIndex+1] := Ord(AnItem.ReachType);
+        Grid.RealValue[Ord(srcStartTime), TimeIndex+1+PestRowOffset] := AnItem.StartTime;
+        Grid.RealValue[Ord(srcEndTime), TimeIndex+1+PestRowOffset] := AnItem.EndTime;
+        Grid.Cells[Ord(srcGeomName), TimeIndex+1+PestRowOffset] := AnItem.GeometryName;
+        Grid.Cells[Ord(srcVerticalOffset), TimeIndex+1+PestRowOffset] := AnItem.VerticalOffset;
+        Grid.ItemIndex[Ord(srcReachType), TimeIndex+1+PestRowOffset] := Ord(AnItem.ReachType);
         if Ord(srcStage) < Grid.ColCount then
         begin
-          Grid.Cells[Ord(srcStage), TimeIndex+1] := AnItem.Stage;
+          Grid.Cells[Ord(srcStage), TimeIndex+1+PestRowOffset] := AnItem.Stage;
         end;
       end;
 
@@ -427,6 +431,11 @@ begin
   frameConnections.Grid.Cells[Ord(sccObjectName), 0] := StrObject;
   frameConnections.Grid.Cells[Ord(sccConnectionMethod), 0] := StrConnectionMethod;
   frameConnections.Grid.Cells[Ord(sccReach), 0] := StrReach;
+
+  if Assigned(frameSwr.seNumberOfTimes.OnChange) then
+  begin
+    frameSwr.seNumberOfTimes.OnChange(frameSwr.seNumberOfTimes);
+  end;
 
   frameSwr.GetStartTimes(Ord(srcStartTime));
   frameSwr.GetEndTimes(Ord(srcEndTime));

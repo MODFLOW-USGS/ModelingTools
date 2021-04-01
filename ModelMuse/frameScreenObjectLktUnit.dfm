@@ -57,6 +57,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -80,6 +81,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -107,10 +109,6 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
     object tabPrecipConc: TTabSheet
       Caption = 'Precipitation concentration'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tabRunoffConc: TTabSheet
       Caption = ' Runoff concentration'
@@ -266,6 +264,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -289,6 +288,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -312,6 +312,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

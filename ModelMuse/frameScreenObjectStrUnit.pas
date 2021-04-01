@@ -277,6 +277,11 @@ var
   StressPeriod: TModflowStressPeriod;
 //  MethodIndex: Integer;
 begin
+  seNumberOfTimes.AsInteger := 0;
+  if Assigned(seNumberOfTimes.OnChange) then
+  begin
+    seNumberOfTimes.OnChange(seNumberOfTimes);
+  end;
   comboFormulaInterp.ItemIndex := 0;
   Parameters := frmGoPhast.PhastModel.ModflowTransientParameters;
   clbParameters.Clear;
