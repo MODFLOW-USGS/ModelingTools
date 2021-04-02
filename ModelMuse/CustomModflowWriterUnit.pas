@@ -5125,7 +5125,7 @@ end;
 
 procedure TCustomListWriter.DoBeforeWriteCells;
 begin
-  // overriden in Farm process and DRN, RIV, GHB, DRT.
+  // overriden in Farm process and DRN, RIV, GHB, DRT, and CHD.
 end;
 
 procedure TCustomListWriter.DoBeforeWriteParamCells;
@@ -5213,9 +5213,6 @@ begin
           WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
             StrOneOrMoreSParam, TimeIndex);
           WriteEndPeriod;
-//          WriteString('END PERIOD');
-//          NewLine;
-//          NewLine;
         end;
         if TimeIndex = FValues.Count - 1 then
         begin

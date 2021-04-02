@@ -2157,6 +2157,9 @@
         <topicref type="topic" id="403503573838103" build="ALL" modified="2010-06-21T13:06:07.980Z" icon="0" href="Exporting_an_Image_of_the_Mode">
           <caption translate="true">Exporting an Image of the Model</caption>
         </topicref>
+        <topicref type="topic" id="442886527114439" build="ALL" modified="2021-04-02T11:29:28.473Z" icon="0" href="Changing_the_model_to_MODFLOW_">
+          <caption translate="true">Changing the model to MODFLOW 6</caption>
+        </topicref>
       </topicref>
       <topicref type="topic" id="397725475051432" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2008-11-20T16:10:56.796Z" icon="0" href="Simple_Model">
         <caption translate="true">Simple Model</caption>

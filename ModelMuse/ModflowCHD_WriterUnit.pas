@@ -15,6 +15,7 @@ type
 //    FFileName: string;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FChdCells: array of array of array of TCHD_Cell;
 //    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -51,6 +52,7 @@ type
     procedure WriteListOptions(InputFileName: string); override;
     Class function Mf6ObType: TObGeneral; override;
     function ObsFactors: TFluxObservationGroups; override;
+    procedure DoBeforeWriteCells; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -79,6 +81,11 @@ resourcestring
   StrInvalidCHDS = 'Invalid CHD %s';
   StrTheCHD0sInLay = 'The CHD %0:s in (Layer, Row, Column) = (%1:d, %2:d, %3' +
   ':d) defined by the object %4:s is below the bottom of the cell.';
+  StrMODFLOW6DoesNotA = 'MODFLOW 6 does not allow more than one CHD boundary' +
+  ' in the same cell';
+  StrTwoSpecifiedHead = 'Two specified head (CHD) boundaries are defined in ' +
+  'cell (Layer,Row,Column = (%0:d,%1:d,%2:d) by the objects "%3:s" and "%4:s' +
+  '".';
 //  StrWritingDataSet0 = '  Writing Data Set 0.';
 //  StrWritingDataSet1 = '  Writing Data Set 1.';
 //  StrWritingDataSet2 = '  Writing Data Set 2.';
@@ -131,6 +138,12 @@ begin
   end;
 end;
 
+procedure TModflowCHD_Writer.DoBeforeWriteCells;
+begin
+//  inherited;
+  FChdCells := nil;
+end;
+
 procedure TModflowCHD_Writer.Evaluate;
 var
   ParamCount, ParamCellCount: Integer;
@@ -141,6 +154,7 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrErrorInCHDPackage);
     frmErrorsAndWarnings.RemoveWarningGroup(Model,  Format(StrInvalidCHDS, [StrStartingHead]));
     frmErrorsAndWarnings.RemoveWarningGroup(Model,  Format(StrInvalidCHDS, [StrEndingHead]));
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMODFLOW6DoesNotA);
     inherited Evaluate;
     CountParametersAndParameterCells(ParamCount, ParamCellCount);
     CountCells(MXACTC);
@@ -197,12 +211,38 @@ var
   LocalLayer: integer;
   ParameterName: string;
   MultiplierValue: double;
+  OtherCell: TCHD_Cell;
+  CurrentScreenObject: TScreenObject;
+  OtherScreenObject: TScreenObject;
 //  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
     // handle multiply or add
   CHD_Cell := Cell as TCHD_Cell;
+  if (Model.ModelSelection = msModflow2015) then
+  begin
+    if Length(FChdCells) = 0 then
+    begin
+      SetLength(FChdCells, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+    end;
+    if FChdCells[CHD_Cell.Layer, CHD_Cell.Row, CHD_Cell.Column] <> nil then
+    begin
+      OtherCell := FChdCells[CHD_Cell.Layer, CHD_Cell.Row, CHD_Cell.Column];
+      CurrentScreenObject := CHD_Cell.ScreenObject as TScreenObject;
+      OtherScreenObject := OtherCell.ScreenObject as TScreenObject;
+      frmErrorsAndWarnings.AddError(Model, StrMODFLOW6DoesNotA,
+        Format(StrTwoSpecifiedHead, [CHD_Cell.Layer+1, CHD_Cell.Row+1,
+        CHD_Cell.Column+1, CurrentScreenObject.Name, OtherScreenObject.Name]),
+        CurrentScreenObject);
+    end
+    else
+    begin
+      FChdCells[CHD_Cell.Layer, CHD_Cell.Row, CHD_Cell.Column] := CHD_Cell;
+    end;
+  end;
+
+
   LocalLayer := Model.
     DataSetLayerToModflowLayer(CHD_Cell.Layer);
   WriteInteger(LocalLayer);

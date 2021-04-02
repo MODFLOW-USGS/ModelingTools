@@ -10251,7 +10251,8 @@ const
 //               Bug fix: Fixed a bug that could cause an access violation if
 //                the name of a global variable that was used in a model feature
 //                was changed.
-
+//               Bug fix. Fixed bug moving the first vertex of a closed object
+//                section.
 
 const
   // version number of ModelMuse.

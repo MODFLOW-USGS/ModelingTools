@@ -1769,6 +1769,7 @@ var
   ChildIndex: Integer;
   ChildModel: TChildModel;
   ScreenObjectCount: Integer;
+  EndNode: Integer;
 begin
   if not Undoing then
   begin
@@ -1804,11 +1805,12 @@ begin
       begin
         SetLength(Points, AScreenObject.Count);
       end;
+      EndNode := -1;
       for PointIndex := 0 to AScreenObject.Count - 1 do
       begin
         if MoveAll or AScreenObject.SelectedVertices[PointIndex] then
         begin
-          if PointIndex = FSelectedNode then
+          if (PointIndex = FSelectedNode) or (PointIndex = EndNode) then
           begin
             if Undoing then
             begin
@@ -1818,6 +1820,22 @@ begin
             begin
               APoint := FSelectedNodeNewLocation;
               FSelectedNodeOldLocation := AScreenObject.Points[PointIndex];
+            end;
+
+            for SectionIndex := 0 to AScreenObject.SectionCount - 1 do
+            begin
+              if AScreenObject.SectionClosed[SectionIndex]then
+              begin
+                if AScreenObject.SectionStart[SectionIndex] = FSelectedNode then
+                begin
+                  EndNode := AScreenObject.SectionEnd[SectionIndex];
+                  break;
+                end
+                else if AScreenObject.SectionStart[SectionIndex] > FSelectedNode then
+                begin
+                  break;
+                end;
+              end;
             end;
           end
           else

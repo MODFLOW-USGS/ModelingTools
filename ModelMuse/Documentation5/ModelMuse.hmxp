@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4132</config-value>
+      <config-value name="autohelpstart">4133</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -697,6 +697,7 @@ document.write('</frameset>');
       <helpcontext-number href="Change_Model_Selection_in_GWT_" value="4093"/>
       <helpcontext-number href="Changes_to_the_Main_ModelMuse_" value="3783"/>
       <helpcontext-number href="Changing_the_Magnification" value="2270"/>
+      <helpcontext-number href="Changing_the_model_to_MODFLOW_" value="4133"/>
       <helpcontext-number href="Channel_Tab" value="2130"/>
       <helpcontext-number href="CHD_Object_Pane" value="1950"/>
       <helpcontext-number href="CHD_Time_Variant_Specified_Head" value="2620"/>

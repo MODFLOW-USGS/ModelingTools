@@ -6,8 +6,9 @@
     <header>
       <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">Example Model</text></para>
     </header>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Please note that this example works with MODFLOW-2005 but for it to work with MODFLOW 6, some changes need to be made to the model.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The goals of this example are to: </text></para>
-    <list id="1" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
+    <list id="2" type="ol" listtype="decimal" formatstring="&#37;&#48;&#58;&#115;&#46;" format-charset="DEFAULT_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none; font-family:&apos;Times New Roman&apos;; font-size:12pt; color:#000000;">
       <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce the ModelMuse main window.</text></li>
       <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce objects.</text></li>
       <li styleclass="Normal" style="text-indent:0px; margin-right:0px; margin-left:0px; tabstops:none;"><text styleclass="Normal" translate="true">Introduce some of the important ModelMuse dialog boxes.</text></li>
