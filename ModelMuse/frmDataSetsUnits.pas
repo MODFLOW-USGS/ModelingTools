@@ -1972,16 +1972,6 @@ begin
   end;
 end;
 
-//procedure TfrmDataSets.edUnitsChange(Sender: TObject);
-//begin
-//  inherited;
-//  if FLoading or (SelectedEdit = nil) then
-//  begin
-//    Exit;
-//  end;
-//  SelectedEdit.Units := edUnits.Text;
-//end;
-
 procedure TfrmDataSets.EnableOK_Button(ForceCheck: boolean = False);
 var
   Index: integer;

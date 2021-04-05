@@ -1,7 +1,5 @@
 inherited frameScreenObjectCSub: TframeScreenObjectCSub
   inherited pcMain: TPageControl
-    ExplicitTop = 41
-    ExplicitHeight = 291
     object tabInterbedSystems: TTabSheet [0]
       Caption = 'Interbed systems'
       ImageIndex = 1
@@ -313,21 +311,11 @@ inherited frameScreenObjectCSub: TframeScreenObjectCSub
       end
     end
     inherited tabTransient: TTabSheet
-      inherited pnlBottom: TPanel
-        ExplicitTop = 217
-      end
       inherited pnlGrid: TPanel
-        ExplicitHeight = 217
         inherited rdgModflowBoundary: TRbwDataGrid4
-          ExplicitLeft = 0
-          ExplicitTop = 57
+          ExplicitLeft = 1
         end
       end
     end
-  end
-  inherited pnlCaption: TPanel
-    ExplicitLeft = 0
-    ExplicitTop = 0
-    ExplicitWidth = 396
   end
 end

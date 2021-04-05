@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="CSubExample" FileType="bin">
+    <FileName Model_Name="CSubExample" FileType="bin">..\..\..\WRDAPP\mf6.2.1\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="CSubExample" FileType="ancillary">
+    <FileName Model_Name="CSubExample" FileType="ancillary">..\Installer\ModelMuse4_3\data\CSub Example\Csub_ActiveCells.dbf</FileName>
+    <FileName Model_Name="CSubExample" FileType="ancillary">..\Installer\ModelMuse4_3\data\CSub Example\Csub_ActiveCells.shp</FileName>
+    <FileName Model_Name="CSubExample" FileType="ancillary">..\Installer\ModelMuse4_3\data\CSub Example\Csub_ActiveCells.shx</FileName>
+    <FileName Model_Name="CSubExample" FileType="ancillary">CSubExample.gpt</FileName>
+  </ancillary>
+  <model Model_Name="CSubExample" FileType="Model Input">
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.chd</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.csub</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.dis</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.ic</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.ims</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.nam.archive</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.npf</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.ob_csub</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.ob_gw</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.oc</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.rch</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.sto</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.tdis</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">CSubExample.wel</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Input">usgs.CSubExample.reference</FileName>
+  </model>
+  <output Model_Name="CSubExample" FileType="Model Output">
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.bhd</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.cbc</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.coarse-compaction_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.coarse-csub_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.csub_z_dis</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.csub-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.delay-preconstress_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.dis.grb</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.elastic-compaction_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.elastic-csub_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.estress-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.gstress-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.inelastic-csub_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.interbed-compaction_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.lst</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.ob_gw_out_head.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.sk-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.Solution.CSV</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.theta_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.wcomp-csub-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -5,7 +5,7 @@ interface
 uses
   GoPhastTypes, System.Classes, ModflowCellUnit, System.ZLib,
   ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit, RbwParser,
-  RealListUnit, System.SysUtils, System.Contnrs;
+  RealListUnit, System.SysUtils, System.Contnrs, SubscriptionUnit;
 
 type
   TCSubOb = (coCSub, coInelastCSub, coElastCSub, coCoarseCSub, coCSubCell,
@@ -166,9 +166,6 @@ type
 
   TCSubItem = class(TCustomModflowBoundaryItem)
   private
-    const
-      StressOffsetPosition = 0;
-    var
     // See @link(StressOffset).
     FStressOffset: TFormulaObject;
     // See @link(StressOffset).
@@ -264,6 +261,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property StressOffset: double read GetStressOffset;
     property StressOffsetAnnotation: string read GetStressOffsetAnnotation;
@@ -273,7 +273,16 @@ type
   TCSubBoundary = class(TModflowParamBoundary)
   private
     FCSubPackageData: TCSubPackageDataCollection;
+    FPestStressOffsetMethod: TPestParamMethod;
+    FPestStressOffsetFormula: TFormulaObject;
+    FPestStressOffsetObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetCSubPackageData(const Value: TCSubPackageDataCollection);
+    procedure InvalidateStressOffsetData(Sender: TObject);
+    function GetPestStressOffsetFormula: string;
+    function GetPestStressOffsetObserver: TObserver;
+    procedure SetPestStressOffsetFormula(const Value: string);
+    procedure SetPestStressOffsetMethod(const Value: TPestParamMethod);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -287,6 +296,20 @@ type
     // TModflowParamBoundary.ModflowParamItemClass).
     class function ModflowParamItemClass: TModflowParamItemClass; override;
     function ParameterType: TParameterType; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestStressOffsetObserver: TObserver read GetPestStressOffsetObserver;
   public
     constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
@@ -310,19 +333,35 @@ type
       var StartRangeExtended, EndRangeExtended: boolean; AModel: TBaseModel); override;
     function Used: boolean; override;
     procedure Loaded;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property CSubPackageData: TCSubPackageDataCollection read FCSubPackageData write SetCSubPackageData;
-//    property Interp;
+    property PestStressOffsetFormula: string read GetPestStressOffsetFormula
+      write SetPestStressOffsetFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestStressOffsetMethod: TPestParamMethod read FPestStressOffsetMethod
+      write SetPestStressOffsetMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 function TryGetCSubOb(const CSubObName: string; var CSubOb: TCSubOb): Boolean;
 function CSubObToString(const CSubOb: TCSubOb): string;
 Procedure FillCSubSeriesNames(AList: TStrings);
 
+const
+  CsubStressOffsetPosition = 0;
+
 implementation
 
 uses
-  SubscriptionUnit, frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
+  frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit, GIS_Functions,
   frmErrorsAndWarningsUnit, ModflowTimeUnit, ModflowTimeSeriesUnit,
   ModflowPackageSelectionUnit, ModflowCSubInterbed, DataSetUnit;
 
@@ -938,6 +977,11 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(StressOffsetPest));
   WriteCompInt(Comp, Strings.IndexOf(StressOffsetPestSeriesName));
   WriteCompInt(Comp, Ord(StressOffsetPestSeriesMethod));
+  {
+    property StressOffsetModifier: string;
+    property StressOffsetSeriesModifier: string;
+    property StressOffsetSeriesMethod: TPestParamMethod;
+  }
 end;
 
 procedure TCSubRecord.RecordStrings(Strings: TStringList);
@@ -1042,7 +1086,7 @@ var
   PumpingRateObserver: TObserver;
 begin
   ParentCollection := Collection as TCSubCollection;
-  PumpingRateObserver := FObserverList[StressOffsetPosition];
+  PumpingRateObserver := FObserverList[CsubStressOffsetPosition];
   PumpingRateObserver.OnUpToDateSet := ParentCollection.InvalidateStressOffsetData;
 end;
 
@@ -1065,7 +1109,7 @@ end;
 function TCSubItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    StressOffsetPosition: result := StressOffset;
+    CsubStressOffsetPosition: result := StressOffset;
     else Assert(False);
   end;
 end;
@@ -1073,13 +1117,13 @@ end;
 procedure TCSubItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   Assert(Sender = FStressOffset);
-  List.Add(FObserverList[StressOffsetPosition]);
+  List.Add(FObserverList[CsubStressOffsetPosition]);
 end;
 
 function TCSubItem.GetStressOffset: string;
 begin
   Result := FStressOffset.Formula;
-  ResetItemObserver(StressOffsetPosition);
+  ResetItemObserver(CsubStressOffsetPosition);
 end;
 
 procedure TCSubItem.InvalidateModel;
@@ -1120,14 +1164,14 @@ procedure TCSubItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   inherited;
   case Index of
-    StressOffsetPosition: StressOffset := Value;
+    CsubStressOffsetPosition: StressOffset := Value;
     else Assert(False);
   end;
 end;
 
 procedure TCSubItem.SetStressOffset(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StressOffsetPosition, FStressOffset);
+  UpdateFormulaBlocks(Value, CsubStressOffsetPosition, FStressOffset);
 end;
 
 { TCSubCollection }
@@ -1367,6 +1411,45 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TCSubCell.GetPestName(Index: Integer): string;
+begin
+  if Index = 0 then
+  begin
+    result := Values.StressOffsetPest;
+  end
+  else
+  begin
+    result := inherited;
+    Assert(False);
+  end;
+end;
+
+function TCSubCell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  if Index = 0 then
+  begin
+    result := Values.StressOffsetPestSeriesMethod;
+  end
+  else
+  begin
+    result := inherited;
+    Assert(False);
+  end;
+end;
+
+function TCSubCell.GetPestSeriesName(Index: Integer): string;
+begin
+  if Index = 0 then
+  begin
+    result := Values.StressOffsetPestSeriesName;
+  end
+  else
+  begin
+    result := inherited;
+    Assert(False);
+  end;
+end;
+
 function TCSubCell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
@@ -1460,7 +1543,9 @@ begin
   begin
     SourceCSub := TCSubBoundary(Source);
     CSubPackageData := SourceCSub.CSubPackageData;
-//    Interp := SourceCSub.Interp;
+
+    PestStressOffsetFormula := SourceCSub.PestStressOffsetFormula;
+    PestStressOffsetMethod := SourceCSub.PestStressOffsetMethod;
   end;
   Loaded;
   inherited;
@@ -1538,6 +1623,11 @@ begin
   result := TCSubCollection;
 end;
 
+function TCSubBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestCsub_';
+end;
+
 procedure TCSubBoundary.Clear;
 begin
   inherited;
@@ -1547,11 +1637,48 @@ end;
 constructor TCSubBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestStressOffsetFormula := '';
+  PestStressOffsetMethod := DefaultBoundaryMethod(CsubStressOffsetPosition);
+
   FCSubPackageData := TCSubPackageDataCollection.Create(Model, ScreenObject);
+end;
+
+procedure TCSubBoundary.CreateFormulaObjects;
+begin
+  FPestStressOffsetFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TCSubBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestStressOffsetObserver);
+  end;
+end;
+
+class function TCSubBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    CsubStressOffsetPosition:
+      begin
+        result := ppmAdd;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 destructor TCSubBoundary.Destroy;
 begin
+  PestStressOffsetFormula := '';
   FCSubPackageData.Free;
   inherited;
 end;
@@ -1577,12 +1704,117 @@ begin
   end;
 end;
 
+function TCSubBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    CsubStressOffsetPosition:
+      begin
+        result := PestStressOffsetFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TCSubBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    CsubStressOffsetPosition:
+      begin
+        result := PestStressOffsetMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TCSubBoundary.GetPestStressOffsetFormula: string;
+begin
+  Result := FPestStressOffsetFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(CsubStressOffsetPosition);
+  end;
+end;
+
+function TCSubBoundary.GetPestStressOffsetObserver: TObserver;
+begin
+  if FPestStressOffsetObserver = nil then
+  begin
+    CreateObserver('PestStressOffset_', FPestStressOffsetObserver, nil);
+    FPestStressOffsetObserver.OnUpToDateSet := InvalidateStressOffsetData;
+  end;
+  result := FPestStressOffsetObserver;
+
+end;
+
+procedure TCSubBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestStressOffsetFormula then
+  begin
+    if CsubStressOffsetPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[CsubStressOffsetPosition]);
+    end;
+  end;
+end;
+
+function TCSubBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestCSUB_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TCSubBoundary.HandleChangedValue(Observer: TObserver);
+begin
+//  inherited;
+  InvalidateDisplay;
+end;
+
 procedure TCSubBoundary.InvalidateDisplay;
 begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
     (ParentModel as TPhastModel).InvalidateCSubStressOffset(self);
+  end;
+end;
+
+procedure TCSubBoundary.InvalidateStressOffsetData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateCSubStressOffset(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateCSubStressOffset(self);
+    end;
   end;
 end;
 
@@ -1605,6 +1837,49 @@ procedure TCSubBoundary.SetCSubPackageData(
   const Value: TCSubPackageDataCollection);
 begin
   FCSubPackageData.Assign(Value);
+end;
+
+procedure TCSubBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    CsubStressOffsetPosition:
+      begin
+        PestStressOffsetFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TCSubBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    CsubStressOffsetPosition:
+      begin
+        PestStressOffsetMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TCSubBoundary.SetPestStressOffsetFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, CsubStressOffsetPosition, FPestStressOffsetFormula);
+end;
+
+procedure TCSubBoundary.SetPestStressOffsetMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestStressOffsetMethod, Value);
 end;
 
 procedure TCSubBoundary.UpdateTimes(Times: TRealList; StartTestTime,

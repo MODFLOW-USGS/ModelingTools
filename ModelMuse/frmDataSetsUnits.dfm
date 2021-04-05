@@ -133,7 +133,7 @@ inherited frmDataSets: TfrmDataSets
     Top = 0
     Width = 320
     Height = 395
-    ActivePage = tabParameters
+    ActivePage = tabBasic
     Align = alRight
     TabOrder = 1
     object tabBasic: TTabSheet

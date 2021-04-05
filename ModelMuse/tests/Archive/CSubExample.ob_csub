@@ -1,0 +1,70 @@
+# OBS: Observation Utility file created on 4/5/2021 by ModelMuse version 4.3.0.0.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.inelastic-csub_ob.csv
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.elastic-csub_ob.csv
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.coarse-csub_ob.csv
+  'cc_Well1_2_9_10' coarse-csub     2     9    10
+  'cc_Well2_4_12_7' coarse-csub     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.csub-cell_ob.csv
+  'cce_Well1_2_9_10' csub-cell     2     9    10
+  'cce_Well2_4_12_7' csub-cell     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.wcomp-csub-cell_ob.csv
+  'cw_Well1_2_9_10' wcomp-csub-cell     2     9    10
+  'cw_Well2_4_12_7' wcomp-csub-cell     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.sk-cell_ob.csv
+  'csc_Well1_2_9_10' sk-cell     2     9    10
+  'csc_Well2_4_12_7' sk-cell     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.estress-cell_ob.csv
+  'ces_Well1_Loc_1_9_10' estress-cell     1     9    10
+  'ces_Well1_Loc_2_9_10' estress-cell     2     9    10
+  'ces_Well1_Loc_3_9_10' estress-cell     3     9    10
+  'ces_Well1_Loc_4_9_10' estress-cell     4     9    10
+  'ces_Well2_Loc_1_12_7' estress-cell     1    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.gstress-cell_ob.csv
+  'cg_Well1_Loc_1_9_10' gstress-cell     1     9    10
+  'cg_Well1_Loc_2_9_10' gstress-cell     2     9    10
+  'cg_Well1_Loc_3_9_10' gstress-cell     3     9    10
+  'cg_Well1_Loc_4_9_10' gstress-cell     4     9    10
+  'cg_Well2_Loc_1_12_7' gstress-cell     1    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.interbed-compaction_ob.csv
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.elastic-compaction_ob.csv
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.coarse-compaction_ob.csv
+  'ccc_Well1_Loc_1_9_10' coarse-compaction     1     9    10
+  'ccc_Well1_Loc_2_9_10' coarse-compaction     2     9    10
+  'ccc_Well1_Loc_3_9_10' coarse-compaction     3     9    10
+  'ccc_Well1_Loc_4_9_10' coarse-compaction     4     9    10
+  'ccc_Well2_Loc_1_12_7' coarse-compaction     1    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.theta_ob.csv
+  'ct_Well1_300' theta   300
+  'ct_Well2_761' theta   761
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExample.delay-preconstress_ob.csv
+END CONTINUOUS
+

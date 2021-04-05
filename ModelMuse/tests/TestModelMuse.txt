@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4198
+4216
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4198,3 +4198,21 @@ ProfileTest.gpt
 	Archive\ProfileTest.oc
 	Archive\ProfileTest.pcg
 	Archive\usgs.ProfileTest.reference
+CSubExample.gpt
+	Archive\CSubExample.axml
+	Archive\CSubExample.chd
+	Archive\CSubExample.csub
+	Archive\CSubExample.dis
+	Archive\CSubExample.ic
+	Archive\CSubExample.ims
+	Archive\CSubExample.nam
+	Archive\CSubExample.nam.archive
+	Archive\CSubExample.npf
+	Archive\CSubExample.ob_csub
+	Archive\CSubExample.ob_gw
+	Archive\CSubExample.oc
+	Archive\CSubExample.rch
+	Archive\CSubExample.sto
+	Archive\CSubExample.tdis
+	Archive\CSubExample.wel
+	Archive\usgs.CSubExample.reference

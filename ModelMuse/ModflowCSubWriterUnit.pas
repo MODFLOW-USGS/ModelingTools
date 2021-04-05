@@ -46,6 +46,7 @@ type
     procedure WriteStressPeriods;
     function ObservationsUsed: Boolean;  reintroduce;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; reintroduce;
+    procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
@@ -335,6 +336,71 @@ begin
 
 end;
 
+procedure TCSubWriter.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    frmProgressMM.AddMessage('Writing CSUB Package input.');
+
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingOptions);
+    WriteOptions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDimensions);
+    WriteDimensions;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    if MAXBOUND = 0 then
+    begin
+      frmErrorsAndWarnings.AddWarning(Model, StrNoTransientCSUBDa, StrNoTransientDataIs);
+    end;
+
+    frmProgressMM.AddMessage(StrWritingGridData);
+    WriteGridData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingPackageData);
+    WritePackageData;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingStressPerio);
+    WriteStressPeriods;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
 procedure TCSubWriter.WriteAndCheckCells(List: TValueCellList;
   TimeIndex: integer);
 var
@@ -381,7 +447,8 @@ begin
     WriteInteger(CSubCell.Row+1);
   end;
   WriteInteger(CSubCell.Column+1);
-  WriteFloat(CSubCell.StressOffset);
+  WriteValueOrFormula(CSubCell, CsubStressOffsetPosition);
+//  WriteFloat(CSubCell.StressOffset);
   WriteBoundName(CSubCell);
   if Model.DisvUsed then
   begin
@@ -487,69 +554,8 @@ begin
   FInputFileName := FFileName;
   WriteToNameFile(Abbreviation, 0,
     FFileName, foInput, Model);
-
-  OpenFile(FFileName);
-  try
-
-    frmProgressMM.AddMessage( 'Writing CSUB Package input.');
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-//    if Model.ModelSelection = msModflow2015 then
-    begin
-      frmProgressMM.AddMessage(StrWritingOptions);
-      WriteOptions;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      frmProgressMM.AddMessage(StrWritingDimensions);
-      WriteDimensions;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
-
-      if MAXBOUND = 0 then
-      begin
-        frmErrorsAndWarnings.AddWarning(Model,  StrNoTransientCSUBDa, StrNoTransientDataIs);
-      end;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingGridData);
-    WriteGridData;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingPackageData);
-    WritePackageData;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingStressPerio);
-    WriteStressPeriods;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-  finally
-    CloseFile;
-  end;
+  FNameOfFile := FFileName;
+  WriteFileInternal;
 
   if FObservations.Count > 0 then
   begin
@@ -599,6 +605,20 @@ begin
       ObsWriter.WriteFile(ChangeFileExt(FFileName, ObservationExtension));
     finally
       ObsWriter.Free;
+    end;
+  end;
+
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
     end;
   end;
 

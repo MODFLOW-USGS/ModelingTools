@@ -313,13 +313,7 @@ begin
     Exit;
   end;
 
-//  if (ACol in [0,1]) and (ARow >= 1) and (ARow <= PestRowOffset) then
-//  begin
-//    CanSelect := False
-//  end;
-
-  if Assigned(OnCheckPestCell)
-    and not (csCustomPaint in rdgModflowBoundary.ControlState) then
+  if Assigned(OnCheckPestCell) then
   begin
     OnCheckPestCell(Sender, ACol, ARow, CanSelect);
   end

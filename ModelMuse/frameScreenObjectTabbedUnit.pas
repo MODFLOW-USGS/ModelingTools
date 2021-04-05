@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameScreenObjectUnit, Vcl.Grids,
   RbwDataGrid4, Vcl.StdCtrls, ArgusDataEntry, Vcl.Buttons, Vcl.Mask, JvExMask,
-  JvSpin, Vcl.ExtCtrls, Vcl.ComCtrls;
+  JvSpin, Vcl.ExtCtrls, Vcl.ComCtrls, GoPhastTypes;
 
 type
   TframeScreenObjectTabbed = class(TframeScreenObject)
@@ -35,11 +35,23 @@ type
       ARow: Integer; const Value: string);
     procedure rdgModflowBoundaryMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     FOnEdited: TNotifyEvent;
+    FOnCheckPestCell: TSelectCellEvent;
+    FSelectedText: string;
     procedure ClearSelectedRow;
     procedure UpdateNumTimes;
     procedure UpdateTransientEditor;
+    function GetPestMethod(ACol: Integer): TPestParamMethod;
+    function GetPestMethodAssigned(ACol: Integer): Boolean;
+    function GetPestModifier(ACol: Integer): string;
+    function GetPestModifierAssigned(ACol: Integer): Boolean;
+    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
+    procedure SetPestMethodAssigned(ACol: Integer; const Value: Boolean);
+    procedure SetPestModifier(ACol: Integer; const Value: string);
+    procedure SetPestModifierAssigned(ACol: Integer; const Value: Boolean);
     { Private declarations }
   protected
     FGettingData: Boolean;
@@ -51,6 +63,16 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     property OnEdited: TNotifyEvent read FOnEdited write FOnEdited;
+    property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
+      write FOnCheckPestCell;
+    Property PestMethod[ACol: Integer]: TPestParamMethod
+      read GetPestMethod write SetPestMethod;
+    Property PestModifier[ACol: Integer]: string
+      read GetPestModifier write SetPestModifier;
+    Property PestMethodAssigned[ACol: Integer]: Boolean
+      read GetPestMethodAssigned write SetPestMethodAssigned;
+    Property PestModifierAssigned[ACol: Integer]: Boolean
+      read GetPestModifierAssigned write SetPestModifierAssigned;
     { Public declarations }
   end;
 
@@ -67,9 +89,11 @@ uses
 procedure TframeScreenObjectTabbed.btnDeleteClick(Sender: TObject);
 begin
   inherited;
-  if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows  then
+  if rdgModflowBoundary.SelectedRow >=
+    rdgModflowBoundary.FixedRows+PestRowOffset  then
   begin
-    if rdgModflowBoundary.RowCount > rdgModflowBoundary.FixedRows + 1 then
+    if rdgModflowBoundary.RowCount >
+      rdgModflowBoundary.FixedRows + 1 + PestRowOffset then
     begin
       ClearSelectedRow;
       rdgModflowBoundary.DeleteRow(rdgModflowBoundary.SelectedRow);
@@ -87,7 +111,7 @@ end;
 
 procedure TframeScreenObjectTabbed.btnInsertClick(Sender: TObject);
 begin
-  if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows  then
+  if rdgModflowBoundary.SelectedRow >= rdgModflowBoundary.FixedRows+PestRowOffset  then
   begin
     rdgModflowBoundary.InsertRow(rdgModflowBoundary.SelectedRow);
     ClearSelectedRow;
@@ -143,6 +167,46 @@ begin
 
 end;
 
+function TframeScreenObjectTabbed.GetPestMethod(
+  ACol: Integer): TPestParamMethod;
+//var
+//  ItemIndex: Integer;
+begin
+  result := inherited PestMethod[rdgModflowBoundary, ACol];
+//  if PestRowOffset = 0 then
+//  begin
+//    result := ppmMultiply;
+//    Assert(False);
+//    Exit;
+//  end;
+//  ItemIndex := FPestMethods.IndexOf(
+//    rdgModflowBoundary.Cells[ACol,PestMethodRow]);
+//  if ItemIndex >= 0 then
+//  begin
+//    result := TPestParamMethod(ItemIndex);
+//  end
+//  else
+//  begin
+//    result := ppmMultiply;
+//  end;
+end;
+
+function TframeScreenObjectTabbed.GetPestMethodAssigned(ACol: Integer): Boolean;
+begin
+  result := inherited PestMethodAssigned[rdgModflowBoundary, ACol];
+end;
+
+function TframeScreenObjectTabbed.GetPestModifier(ACol: Integer): string;
+begin
+  result := inherited PestModifier[rdgModflowBoundary, ACol];
+end;
+
+function TframeScreenObjectTabbed.GetPestModifierAssigned(
+  ACol: Integer): Boolean;
+begin
+  result := inherited PestModifierAssigned[rdgModflowBoundary, ACol];
+end;
+
 procedure TframeScreenObjectTabbed.LayoutMultiRowEditControls;
 var
   FormulaColumn: Integer;
@@ -165,7 +229,7 @@ begin
   inherited;
   rdgModflowBoundary.BeginUpdate;
   try
-    for RowIndex := rdgModflowBoundary.FixedRows to
+    for RowIndex := rdgModflowBoundary.FixedRows+PestRowOffset to
       rdgModflowBoundary.RowCount - 1 do
     begin
       for ColIndex := 2 to rdgModflowBoundary.ColCount -1 do
@@ -217,7 +281,8 @@ var
   ColIndex: Integer;
 begin
   ShouldEnable := False;
-  for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount -1 do
+  for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset
+    to rdgModflowBoundary.RowCount -1 do
   begin
     for ColIndex := 2 to rdgModflowBoundary.ColCount do
     begin
@@ -236,19 +301,43 @@ begin
 
 end;
 
+procedure TframeScreenObjectTabbed.rdgModflowBoundarySelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  if (ARow = rdgModflowBoundary.FixedRows + PestRowOffset)
+    and (seNumberOfTimes.AsInteger = 0) then
+  begin
+    FSelectedText := rdgModflowBoundary.Cells[ACol, ARow];
+    CanSelect := False;
+    Exit;
+  end;
+
+  if Assigned(OnCheckPestCell) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
+  end
+  else
+  begin
+    if ARow <= PestRowOffset then
+    begin
+      CanSelect := False;
+    end;
+  end;
+end;
+
 procedure TframeScreenObjectTabbed.rdgModflowBoundarySetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin
   inherited;
   UpdateNextTimeCell(rdgModflowBoundary, ACol, ARow);
-  seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount -1;
+  seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount -1-PestRowOffset;
   Edited;
 end;
 
 procedure TframeScreenObjectTabbed.seNumberOfTimesChange(Sender: TObject);
 begin
   inherited;
-  rdgModflowBoundary.RowCount := Max(2, seNumberOfTimes.AsInteger + 1);
+  rdgModflowBoundary.RowCount := Max(2, seNumberOfTimes.AsInteger + 1)+PestRowOffset;
   if seNumberOfTimes.AsInteger = 0 then
   begin
     ClearGrid(rdgModflowBoundary);
@@ -256,11 +345,35 @@ begin
   Edited;
 end;
 
+procedure TframeScreenObjectTabbed.SetPestMethod(ACol: Integer;
+  const Value: TPestParamMethod);
+begin
+  inherited PestMethod[rdgModflowBoundary, ACol] := Value
+end;
+
+procedure TframeScreenObjectTabbed.SetPestMethodAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  inherited PestMethodAssigned[rdgModflowBoundary, ACol] := Value
+end;
+
+procedure TframeScreenObjectTabbed.SetPestModifier(ACol: Integer;
+  const Value: string);
+begin
+  inherited PestModifier[rdgModflowBoundary, ACol] := Value
+end;
+
+procedure TframeScreenObjectTabbed.SetPestModifierAssigned(ACol: Integer;
+  const Value: Boolean);
+begin
+  inherited PestModifierAssigned[rdgModflowBoundary, ACol] := Value
+end;
+
 procedure TframeScreenObjectTabbed.UpdateNumTimes;
 begin
   if seNumberOfTimes <> nil then
   begin
-    seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount - 1;
+    seNumberOfTimes.AsInteger := rdgModflowBoundary.RowCount - 1-PestRowOffset;
   end;
 end;
 

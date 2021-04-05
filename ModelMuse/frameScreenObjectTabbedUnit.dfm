@@ -11,12 +11,9 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
     ActivePage = tabTransient
     Align = alClient
     TabOrder = 0
-    ExplicitTop = 0
-    ExplicitHeight = 332
     object tabTransient: TTabSheet
       Caption = 'Transient'
       ImageIndex = 1
-      ExplicitHeight = 304
       object pnlBottom: TPanel
         Left = 0
         Top = 217
@@ -25,7 +22,6 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitTop = 258
         DesignSize = (
           388
           46)
@@ -112,7 +108,6 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
         Height = 217
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 258
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
@@ -131,7 +126,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           end
           object rdeFormula: TRbwDataEntry
             Left = 232
-            Top = 27
+            Top = 28
             Width = 57
             Height = 22
             Color = clBtnFace
@@ -155,6 +150,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
           TabOrder = 1
           OnMouseUp = rdgModflowBoundaryMouseUp
+          OnSelectCell = rdgModflowBoundarySelectCell
           OnSetEditText = rdgModflowBoundarySetEditText
           ExtendedAutoDistributeText = False
           AutoMultiEdit = True
@@ -169,6 +165,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -192,6 +189,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -215,6 +213,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -241,7 +240,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitTop = 58
+          ExplicitLeft = 0
           ColWidths = (
             64
             64
@@ -257,8 +256,5 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
     Height = 41
     Align = alTop
     TabOrder = 1
-    ExplicitLeft = 152
-    ExplicitTop = 8
-    ExplicitWidth = 185
   end
 end

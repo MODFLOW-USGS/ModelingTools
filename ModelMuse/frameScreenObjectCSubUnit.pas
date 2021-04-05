@@ -129,6 +129,14 @@ begin
           begin
             FoundFirst := True;
             FirstCSub := ModflowCSub;
+
+            {$IFDEF PEST}
+            PestModifier[CsubStressOffsetPosition + PestRowOffset] :=
+              ModflowCSub.PestStressOffsetFormula;
+            PestMethod[CsubStressOffsetPosition + PestRowOffset] :=
+              ModflowCSub.PestStressOffsetMethod;
+            {$ENDIF}
+
             for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
             begin
               Interbed := ModflowCSub.CSubPackageData[InterbedIndex];
@@ -160,11 +168,11 @@ begin
               for RowIndex := 1 to ModflowCSub.Values.Count do
               begin
                 Item := ModflowCSub.Values[RowIndex-1] as TCSubItem;
-                rdgModflowBoundary.Cells[Ord(scStartingTime), RowIndex] :=
+                rdgModflowBoundary.Cells[Ord(scStartingTime), RowIndex+PestRowOffset] :=
                   FloatToStr(Item.StartTime);
-                rdgModflowBoundary.Cells[Ord(scEndingTime), RowIndex] :=
+                rdgModflowBoundary.Cells[Ord(scEndingTime), RowIndex+PestRowOffset] :=
                   FloatToStr(Item.EndTime);
-                rdgModflowBoundary.Cells[Ord(scStressOffset), RowIndex] :=
+                rdgModflowBoundary.Cells[Ord(scStressOffset), RowIndex+PestRowOffset] :=
                   Item.StressOffset;
               end;
             finally
@@ -173,6 +181,18 @@ begin
           end
           else
           begin
+
+            {$IFDEF PEST}
+            if ModflowCSub.PestStressOffsetFormula <> FirstCSub.PestStressOffsetFormula then
+            begin
+              PestModifierAssigned[CsubStressOffsetPosition + PestRowOffset] := False;
+            end;
+            if ModflowCSub.PestStressOffsetMethod <> FirstCSub.PestStressOffsetMethod then
+            begin
+              PestMethodAssigned[CsubStressOffsetPosition + PestRowOffset] := False;
+            end;
+            {$ENDIF}
+
             if not ModflowCSub.CSubPackageData.IsSame(FirstCSub.CSubPackageData) then
             begin
               for InterbedIndex := 0 to ModflowCSub.CSubPackageData.Count -1 do
@@ -334,12 +354,22 @@ begin
 
   ClearGrid(rdgModflowBoundary);
 
+  seNumberOfTimes.AsInteger := 0;
+  seNumberOfTimes.OnChange(seNumberOfTimes);
+
   rdgModflowBoundary.BeginUpdate;
   try
     rdgModflowBoundary.Cells[Ord(scStartingTime), 0] := StrStartingTime;
     rdgModflowBoundary.Cells[Ord(scEndingTime), 0] := StrEndingTime;
     rdgModflowBoundary.Cells[Ord(scStressOffset), 0] := StrStressOffset;
     FillPicklistsWithStartTimes;
+
+    {$IFDEF PEST}
+    rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+    PestMethod[CsubStressOffsetPosition + PestRowOffset] :=
+      TCSubBoundary.DefaultBoundaryMethod(CsubStressOffsetPosition);
+    {$ENDIF}
   finally
     rdgModflowBoundary.EndUpdate;
   end;
@@ -556,14 +586,14 @@ begin
 
   for TimeIndex := 0 to seNumberOfTimes.AsInteger -1 do
   begin
-    if TryStrToFloat(rdgModflowBoundary.Cells[Ord(scStartingTime), TimeIndex+1], StartTime)
-      and TryStrToFloat(rdgModflowBoundary.Cells[Ord(scEndingTime), TimeIndex+1], EndTime)
-      and (rdgModflowBoundary.Cells[Ord(scStressOffset), TimeIndex+1] <> '') then
+    if TryStrToFloat(rdgModflowBoundary.Cells[Ord(scStartingTime), TimeIndex+1+PestRowOffset], StartTime)
+      and TryStrToFloat(rdgModflowBoundary.Cells[Ord(scEndingTime), TimeIndex+1+PestRowOffset], EndTime)
+      and (rdgModflowBoundary.Cells[Ord(scStressOffset), TimeIndex+1+PestRowOffset] <> '') then
     begin
       CSubItem := CSubValues.Add;
       CSubItem.StartTime := StartTime;
       CSubItem.EndTime := EndTime;
-      CSubItem.StressOffset := rdgModflowBoundary.Cells[Ord(scStressOffset), TimeIndex+1];
+      CSubItem.StressOffset := rdgModflowBoundary.Cells[Ord(scStressOffset), TimeIndex+1+PestRowOffset];
     end;
   end;
 
@@ -590,8 +620,19 @@ begin
         Boundary.CSubPackageData := CSubPackageData;
       end;
       
-      if (Boundary <> nil) then 
+      if (Boundary <> nil) then
       begin
+        {$IFDEF PEST}
+        if PestModifierAssigned[CsubStressOffsetPosition + PestRowOffset] then
+        begin
+          Boundary.PestStressOffsetFormula := PestModifier[CsubStressOffsetPosition + PestRowOffset]
+        end;
+        if PestMethodAssigned[CsubStressOffsetPosition + PestRowOffset] then
+        begin
+          Boundary.PestStressOffsetMethod := PestMethod[CsubStressOffsetPosition + PestRowOffset]
+        end;
+        {$ENDIF}
+
         Boundary.CSubPackageData := CSubPackageData;
         for PackageDataIndex := 0 to Boundary.CSubPackageData.Count - 1 do
         begin

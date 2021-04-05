@@ -75,6 +75,7 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -98,6 +99,7 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -121,6 +123,7 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -142,7 +145,8 @@ inherited frameScreenObjectParam: TframeScreenObjectParam
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
+      ExplicitLeft = 0
+      ExplicitTop = 51
       ExplicitHeight = 126
     end
   end

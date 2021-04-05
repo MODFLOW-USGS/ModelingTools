@@ -1,0 +1,20 @@
+# Name File for MODFLOW created on 4/5/2021 by ModelMuse Version 4.3.0.0
+BEGIN OPTIONS
+  LIST ..\..\output\output.CSubExample\CSubExample.lst
+  NEWTON
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.CSubExample\CSubExample.dis
+  IC6          ..\..\model\model.CSubExample\CSubExample.ic
+  NPF6         ..\..\model\model.CSubExample\CSubExample.npf
+  OBS6         ..\..\model\model.CSubExample\CSubExample.ob_gw
+  STO6         ..\..\model\model.CSubExample\CSubExample.sto
+  OC6          ..\..\model\model.CSubExample\CSubExample.oc
+  CHD6         ..\..\model\model.CSubExample\CSubExample.chd
+  WEL6         ..\..\model\model.CSubExample\CSubExample.wel
+  RCH6         ..\..\model\model.CSubExample\CSubExample.rch
+  CSUB6        ..\..\model\model.CSubExample\CSubExample.csub
+END PACKAGES

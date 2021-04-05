@@ -2207,6 +2207,8 @@ type
     procedure SetPestModifier(Grid: TRbwDataGrid4; ACol: Integer;
       const Value: string);
     function GetPestParameterAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
+    function GetPestModifierAssigned(Grid: TRbwDataGrid4;
+      ACol: Integer): Boolean;
 //    procedure GetPilotPointsForAdditionalObject(AScreenObject: TScreenObject);
 
     // @name is set to @true when the @classname has stored values of the
@@ -2435,6 +2437,8 @@ type
     procedure StorePestModifiers(Frame: TframeScreenObjectParam;
       ParamType: TParameterType; Node: TJvPageIndexNode);
     { Private declarations }
+    Property PestModifierAssigned[Grid: TRbwDataGrid4; ACol: Integer]: Boolean
+      read GetPestModifierAssigned;
   public
     procedure Initialize;
     procedure ClearExpressionsAndVariables;
@@ -2637,8 +2641,6 @@ resourcestring
   StrGeneralizedFlowObs = 'Generalized Flow Observations';
   StrGeneralizedTranspor = 'Generalized Transport Observations';
   StrSpecifiedFlowObser = 'Specified Flow Observations';
-//  StrNone = 'none';
-//  StrMassOrEnergyFlux = 'Mass or Energy Flux';
 
 {$R *.dfm}
 
@@ -2737,6 +2739,7 @@ begin
   else if (Sender = frameWellParam.rdgModflowBoundary)
     or (Sender = frameFarmWell.rdgModflowBoundary)
     or (Sender = frameRchParam.rdgModflowBoundary)
+    or (Sender = frameCSUB.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2]
@@ -2784,6 +2787,11 @@ begin
     and (ARow <= PestRowOffset) then
   begin
     CanSelect := False
+  end;
+
+  if csCustomPaint in (Sender as TRbwDataGrid4).ControlState then
+  begin
+    Exit;
   end;
 
   Assert(PestParameterColumns <> []);
@@ -5680,6 +5688,7 @@ begin
   frameScreenObjectSfr6.OnCheckPestCell := EnablePestCells;
   frameMAW.OnCheckPestCell := EnablePestCells;
   frameLakMf6.OnCheckPestCell := EnablePestCells;
+  frameCSUB.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -12300,6 +12309,18 @@ begin
   begin
     result := ''
   end;
+end;
+
+function TfrmScreenObjectProperties.GetPestModifierAssigned(Grid: TRbwDataGrid4;
+  ACol: Integer): Boolean;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := False;
+    Assert(False);
+    Exit;
+  end;
+  result := Grid.Cells[ACol, PestModifierRow] <> '';
 end;
 
 procedure TfrmScreenObjectProperties.GetPestModifiers(
@@ -24527,13 +24548,9 @@ var
             Boundary.PestBoundaryMethod[BoundaryIndex] :=
               PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
           end;
-          Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
-          if Modifier <> '' then
+          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex] then
           begin
-            if Modifier = strNone then
-            begin
-              Modifier := '';
-            end;
+            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
@@ -24653,13 +24670,9 @@ var
             Boundary.PestBoundaryMethod[BoundaryIndex] :=
               PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
           end;
-          Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
-          if Modifier <> '' then
+          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex] then
           begin
-            if Modifier = strNone then
-            begin
-              Modifier := '';
-            end;
+            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
@@ -25212,13 +25225,9 @@ var
             Boundary.PestBoundaryMethod[BoundaryIndex] :=
               PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
           end;
-          Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
-          if Modifier <> '' then
+          if PestModifierAssigned [DataGrid, ColumnOffset+BoundaryIndex] then
           begin
-            if Modifier = strNone then
-            begin
-              Modifier := '';
-            end;
+            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
@@ -25401,6 +25410,7 @@ begin
     or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol in [3..9]))
     or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3, 4, 6, 7, 8, 10..13, 15]))
     or ((DataGrid = frameLakMf6.rdgModflowBoundary) and (ACol in [3..8]))
+    or (DataGrid = frameCSUB.rdgModflowBoundary)
     ;
 end;
 
@@ -27813,18 +27823,12 @@ begin
           Boundary.PestBoundaryMethod[BoundaryIndex] :=
             PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
         end;
-        Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
-        if Modifier <> '' then
+        if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex] then
         begin
-          if Modifier = strNone then
-          begin
-            Modifier := '';
-          end;
+          Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
           Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
         end;
       end;
-
-//      StoreMF_BoundColl(ColumnOffset, BoundaryValues, Times, Frame);
     end;
   end;
 
