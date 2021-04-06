@@ -811,6 +811,7 @@ procedure TframeScreenObjectSfr6.rdgModflowBoundaryBeforeDrawCell(
 var
   EndTime: double;
   NextStartTime: double;
+  CanSelect: Boolean;
 begin
   if (ACol = 1) and (ARow >= rdgModflowBoundary.FixedRows)
     and (ARow < rdgModflowBoundary.RowCount -1) then
@@ -822,6 +823,15 @@ begin
       begin
         rdgModflowBoundary.Canvas.Brush.Color := clRed;
       end;
+    end;
+  end;
+  if Assigned(rdgModflowBoundary.OnSelectCell) then
+  begin
+    CanSelect := True;
+    rdgModflowBoundary.OnSelectCell(rdgModflowBoundary, ACol, ARow, CanSelect);
+    if not CanSelect then
+    begin
+      rdgModflowBoundary.Canvas.Brush.Color := clBtnFace;
     end;
   end;
 end;

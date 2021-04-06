@@ -273,7 +273,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitTop = 52
         end
       end
       object pnlBottom: TPanel

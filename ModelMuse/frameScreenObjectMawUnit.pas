@@ -502,7 +502,10 @@ var
 begin
   inherited;
   CanSelect := True;
-  CanSelectTimeCell(ARow, ACol, CanSelect);
+  if Assigned(rdgModflowBoundary.OnSelectCell) then
+  begin
+    rdgModflowBoundary.OnSelectCell(rdgModflowBoundary, ACol, ARow, CanSelect);
+  end;
   if not CanSelect then
   begin
     rdgModflowBoundary.Canvas.Brush.Color := clBtnFace;
@@ -605,8 +608,7 @@ procedure TframeScreenObjectMAW.rdgModflowBoundarySelectCell(Sender: TObject;
 begin
   inherited;
   CanSelectTimeCell(ARow, ACol, CanSelect);
-  if Assigned(OnCheckPestCell)
-    and not (csCustomPaint in rdgModflowBoundary.ControlState) then
+  if Assigned(OnCheckPestCell) then
   begin
     OnCheckPestCell(Sender, ACol, ARow, CanSelect);
   end;
