@@ -10253,6 +10253,8 @@ const
 //                was changed.
 //               Bug fix. Fixed bug moving the first vertex of a closed object
 //                section.
+//               Bug fix that could cause an assertion failure when writing
+//                the UZF file in MODFLOW 6.
 
 const
   // version number of ModelMuse.

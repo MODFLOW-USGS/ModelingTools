@@ -1143,7 +1143,7 @@ resourcestring
   ',%1:d,%2:d) is invalid because the %3:s, %4:s, and %5:s data sets all hav' +
   'e values of zero at that cell.';
   Str0sMultipliedByParam = '%0:s (multiplied by %1:s = %2:g)';
-  StrPestFormulaFormat = ' %0:s                   %1:s             %2:s%1:s ' +
+  StrPestFormulaFormat = ' %0:s                    %1:s                    %2:s%1:s ' +
   '%4:s %3:g%0:s ';
   StrNoAlternativeSolve = 'No alternative solver specified';
   StrInTheMODFLOWName = 'In the MODFLOW Name file dialog box, the option to ' +
@@ -1154,7 +1154,7 @@ resourcestring
   'ed.';
   StrPLPROCNotFound = 'PLPROC not found';
   StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
-  StrArrayFormulaFormat = ' %0:s                   %1:s                   %2' +
+  StrArrayFormulaFormat = ' %0:s                    %1:s                    %2' +
   ':s[%5:d,%6:d,%7:d]%1:s %4:s %3:g%0:s ';
 
 const
@@ -2514,7 +2514,7 @@ begin
     Method, ACell);
   if Formula <> '' then
   begin
-    Formula := Format(' %0:s              %1:s%0:s ',
+    Formula := Format(' %0:s                    %1:s%0:s ',
       [ExtendedTemplateCharacter, Formula]);
     WriteString(Formula);
   end
@@ -2730,7 +2730,7 @@ var
       Model.WritePValAndTemplate(SeriesParam.ParameterName, SeriesParam.Value,
         SeriesParam);
 
-      SeriesReplacement := Format(' %0:s                %1:s%0:s',
+      SeriesReplacement := Format(' %0:s                    %1:s%0:s',
         [TemplateCharacter, PestSeriesValue])
     end
     else
@@ -2754,7 +2754,7 @@ var
             DataArrayLayer, ACell.Row, ACell.Column];
           LocalLayer := Model.DataSetLayerToModflowLayer(DataArrayLayer);
 
-          SeriesReplacement := Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+          SeriesReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
             [ArrayTemplateCharacter, SeriesDataArray.Name,
             LocalLayer, ACell.Row+1, ACell.Column+1]);
         end
@@ -2811,7 +2811,7 @@ var
     begin
 	    ModifierValue := Param.Value;
       Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
-      CellValueReplacement := Format(' %0:s                %1:s%0:s',
+      CellValueReplacement := Format(' %0:s                    %1:s%0:s',
         [TemplateCharacter, PestParValue])
     end
     else
@@ -2833,7 +2833,7 @@ var
           ModifierValue := DataArray.RealData[DataArrayLayer, ACell.Row, ACell.Column];
 
           LocalLayer := Model.DataSetLayerToModflowLayer(DataArrayLayer);
-          CellValueReplacement := Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+          CellValueReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
             [ArrayTemplateCharacter, DataArray.Name,
             LocalLayer, ACell.Row+1, ACell.Column+1]);
         end
@@ -6445,7 +6445,7 @@ begin
         begin
           if FormulasApplied[RowIndex, ColIndex] then
           begin
-            WriteString( Format(' %0:s              %1:s%0:s ',
+            WriteString( Format(' %0:s                    %1:s%0:s ',
               [ExtendedTemplateCharacter, Formulas[RowIndex, ColIndex]]));
           end
           else
@@ -9496,7 +9496,7 @@ var
 	    ModifierValue := Param.Value;
       //WriteTemplateReplace(PestParValue);
       Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
-      CellValueReplacement := Format(' %0:s                %1:s%0:s',
+      CellValueReplacement := Format(' %0:s                    %1:s%0:s',
         [TemplateCharacter, PestParValue])
     end
     else
@@ -9517,7 +9517,7 @@ var
           ModifierValue := DataArray.RealData[DataArrayLayer, ACell.Row, ACell.Column];
 
           LocalLayer := Model.DataSetLayerToModflowLayer(ACell.Layer);
-          CellValueReplacement := Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
+          CellValueReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
             [ArrayTemplateCharacter, DataArray.Name,
             LocalLayer, ACell.Row+1, ACell.Column+1]);
 
@@ -9558,7 +9558,7 @@ begin
     ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
     GetCellData;
     WriteString
-      (Format(' %0:s                   %1:s             %2:s%1:s * %3:g * %4:s%0:s ',
+      (Format(' %0:s                    %1:s                    %2:s%1:s * %3:g * %4:s%0:s ',
       [ExtendedTemplateCharacter, TemplateCharacter, ModflowParameterName,
       Value, CellValueReplacement]));
 

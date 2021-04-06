@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="HfbMf6Test" FileType="bin">
+    <FileName Model_Name="HfbMf6Test" FileType="bin">..\..\..\WRDAPP\mf6.2.1\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="HfbMf6Test" FileType="ancillary">
+    <FileName Model_Name="HfbMf6Test" FileType="ancillary">HfbMf6Test.gpt</FileName>
+  </ancillary>
+  <model Model_Name="HfbMf6Test" FileType="Model Input">
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.chd</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.dis</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.hfb</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.ic</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.ims</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.jtf</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.nam.archive</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.npf</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.oc</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.pval</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">HfbMf6Test.tdis</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Input">usgs.HfbMf6Test.reference</FileName>
+  </model>
+  <output Model_Name="HfbMf6Test" FileType="Model Output">
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.bhd</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.cbc</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.dis.grb</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.lst</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.Solution.CSV</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

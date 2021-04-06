@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-4216
+4246
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4216,3 +4216,33 @@ CSubExample.gpt
 	Archive\CSubExample.tdis
 	Archive\CSubExample.wel
 	Archive\usgs.CSubExample.reference
+HfbMf6Test2.gpt
+	Archive\HfbMf6Test2.axml
+	Archive\HfbMf6Test2.chd
+	Archive\HfbMf6Test2.dis
+	Archive\HfbMf6Test2.hfb
+	Archive\HfbMf6Test2.ic
+	Archive\HfbMf6Test2.ims
+	Archive\HfbMf6Test2.jtf
+	Archive\HfbMf6Test2.nam
+	Archive\HfbMf6Test2.nam.archive
+	Archive\HfbMf6Test2.npf
+	Archive\HfbMf6Test2.oc
+	Archive\HfbMf6Test2.pval
+	Archive\HfbMf6Test2.tdis
+	Archive\usgs.HfbMf6Test2.reference
+HfbMf6Test.gpt
+	Archive\HfbMf6Test.axml
+	Archive\HfbMf6Test.chd
+	Archive\HfbMf6Test.dis
+	Archive\HfbMf6Test.hfb
+	Archive\HfbMf6Test.ic
+	Archive\HfbMf6Test.ims
+	Archive\HfbMf6Test.jtf
+	Archive\HfbMf6Test.nam
+	Archive\HfbMf6Test.nam.archive
+	Archive\HfbMf6Test.npf
+	Archive\HfbMf6Test.oc
+	Archive\HfbMf6Test.pval
+	Archive\HfbMf6Test.tdis
+	Archive\usgs.HfbMf6Test.reference

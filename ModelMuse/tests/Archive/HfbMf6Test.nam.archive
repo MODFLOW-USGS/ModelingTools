@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 4/6/2021 by ModelMuse Version 4.3.0.0
+BEGIN OPTIONS
+  LIST ..\..\output\output.HfbMf6Test\HfbMf6Test.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.HfbMf6Test\HfbMf6Test.dis
+  IC6          ..\..\model\model.HfbMf6Test\HfbMf6Test.ic
+  NPF6         ..\..\model\model.HfbMf6Test\HfbMf6Test.npf
+  OC6          ..\..\model\model.HfbMf6Test\HfbMf6Test.oc
+  CHD6         ..\..\model\model.HfbMf6Test\HfbMf6Test.chd
+  HFB6         ..\..\model\model.HfbMf6Test\HfbMf6Test.hfb
+END PACKAGES

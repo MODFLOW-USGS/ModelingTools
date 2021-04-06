@@ -3398,7 +3398,7 @@ begin
   {$ENDIF}
   
   tbarEditScreenObjects.Width := 227;
-  tbarView.Width := 162;
+  tbarView.Width := 176;
   tbarCreateScreenObject.Width := 231;
   tbarView3D.Width := 141;
   tbarEdit.Width := 145;

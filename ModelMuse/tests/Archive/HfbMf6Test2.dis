@@ -1,0 +1,56 @@
+# Discretization File created on 4/6/2021 by ModelMuse version 4.3.0.0.
+# Upper left corner: (0, 0)
+# Lower left corner: (0, -1000)
+# Upper right corner: (1000, 0)
+# Lower right corner: (1000, -1000)
+# Grid angle (in degrees counterclockwise): 0
+# Number of active cells = 700.
+BEGIN OPTIONS
+  LENGTH_UNITS METERS
+  XORIGIN  0.000000000000E+000 
+  YORIGIN -1.000000000000E+003 
+  ANGROT  0.000000000000E+000 
+END OPTIONS
+
+BEGIN DIMENSIONS
+  NLAY      7
+  NROW     10
+  NCOL     10
+END DIMENSIONS
+
+
+BEGIN GRIDDATA
+  DELR IPRN    12
+    CONSTANT   1.000000000000E+002  # DELR
+
+  DELC IPRN    12
+    CONSTANT   1.000000000000E+002  # DELC
+
+  TOP LAYERED IPRN    12
+    CONSTANT   0.000000000000E+000  # TOP
+
+  BOTM LAYERED IPRN    12
+    CONSTANT  -5.000000000000E+000  # BOTM, Upper Aquifer Layer 1
+
+    CONSTANT  -1.000000000000E+001  # BOTM, Upper Aquifer Layer 2
+
+    CONSTANT  -1.500000000000E+001  # BOTM, ConfiningBed
+
+    CONSTANT  -1.750000000000E+001  # BOTM, Middle Aquifer Layer 1
+
+    CONSTANT  -2.000000000000E+001  # BOTM, Middle Aquifer Layer 2
+
+    CONSTANT  -2.500000000000E+001  # BOTM, Lower Aquifer Layer 1
+
+    CONSTANT  -3.000000000000E+001  # BOTM, Lower Aquifer Layer 2
+
+  IDOMAIN LAYERED IPRN     5
+    CONSTANT      1 # IDOMAIN 1
+    CONSTANT      1 # IDOMAIN 2
+    CONSTANT      1 # IDOMAIN 3
+    CONSTANT      1 # IDOMAIN 4
+    CONSTANT      1 # IDOMAIN 5
+    CONSTANT      1 # IDOMAIN 6
+    CONSTANT      1 # IDOMAIN 7
+END GRIDDATA
+

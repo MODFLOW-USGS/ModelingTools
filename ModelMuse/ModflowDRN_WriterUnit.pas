@@ -307,7 +307,6 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-//  DataArray: TDataArray;
 begin
     { DONE -cPEST : Add PEST support for PEST here }
     // handle pest data

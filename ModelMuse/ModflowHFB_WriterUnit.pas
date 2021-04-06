@@ -19,6 +19,12 @@ type
     Thickness: double;
     HydraulicConductivityAnnotation: string;
     ThicknessAnnotation: string;
+    FPestHydraulicConductivityName: string;
+    FPestHydraulicConductivitySeriesName: string;
+    FPestHydraulicConductivitySeriesMethod: TPestParamMethod;
+    FPestThicknessName: string;
+    FPestThicknessSeriesName: string;
+    FPestThicknessSeriesMethod: TPestParamMethod;
     Function LocationSame(ABarrier: TBarrier): boolean;
     procedure WriteBarrier(Writer: TModflowHfb_Writer; const Comment: string);
   end;
@@ -37,6 +43,12 @@ type
     FDuplicate: Boolean;
     FPriorIndex: Integer;
     FScreenObject: TScreenObject;
+    FPestHydraulicConductivityNames: TStringList;
+    FPestHydraulicConductivitySeriesNames: TStringList;
+    FPestHydraulicConductivitySeriesMethods: TPestMethodList;
+    FPestThicknessNames: TStringList;
+    FPestThicknessSeriesNames: TStringList;
+    FPestThicknessSeriesMethods: TPestMethodList;
     function IdenticalDoubleList(List1, List2: TDoubleList): Boolean;
 //    function IdenticalStringList(List1, List2: TStringList): Boolean;
   protected
@@ -90,6 +102,12 @@ type
     ThicknessExpression: TExpression;
     ThicknessComment: string;
     ThicknessValue: double;
+    HydraulicConductivityPestName: string;
+    HydraulicConductivityPestSeriesName: string;
+    HydraulicConductivityPestSeriesMethod: TPestParamMethod;
+    ThicknessPestName: string;
+    ThicknessPestSeriesName: string;
+    ThicknessPestSeriesMethod: TPestParamMethod;
   end;
 
   TTransientExpressionList = TObjectList<TTransientExpressions>;
@@ -141,7 +159,7 @@ implementation
 uses Math, ModflowUnitNumbers, ModflowHfbUnit, OrderedCollectionUnit,
   frmErrorsAndWarningsUnit, ModflowGridUnit, GIS_Functions, 
   frmProgressUnit, frmFormulaErrorsUnit, Forms, ModflowIrregularMeshUnit,
-  FastGEO, QuadtreeClass, ModflowTimeUnit, DataSetUnit;
+  FastGEO, QuadtreeClass, ModflowTimeUnit, DataSetUnit, ModelMuseUtilities;
 
 resourcestring
   StrInTheHFBPackage = 'In the HFB package, one or more objects do not defin' +
@@ -227,8 +245,13 @@ var
   SubsequentSegments: TList;
   HydCondComment: string;
   ThicknessComment: string;
-//  UsedFunction: string;
-//  UsedExpression: TExpression;
+  ModflowHfbBoundary: THfbBoundary;
+  HydraulicConductivityParam: TModflowSteadyParameter;
+  HydraulicConductivityFormula: string;
+  ThicknessParam: TModflowSteadyParameter;
+  HydraulicConductivityPestName: string;
+  ThicknessPestName: string;
+  ThicknessFormula: string;
   procedure HandleSection;
   var
     Segment: TCellElementSegment;
@@ -242,6 +265,58 @@ var
     Barrier: TBarrier;
     Angle: double;
     Start: integer;
+    procedure ApplyHydraulicConductivitySeriesParam;
+    var
+      Param: TModflowSteadyParameter;
+      Method: TPestParamMethod;
+    begin
+      if Barrier.FPestHydraulicConductivitySeriesName <> '' then
+      begin
+        Param := Model.GetPestParameterByName(Barrier.FPestHydraulicConductivitySeriesName);
+        if Param <> nil then
+        begin
+          Method := Barrier.FPestHydraulicConductivitySeriesMethod;
+          case Method of
+            ppmMultiply:
+              begin
+                Barrier.HydraulicConductivity :=
+                  Barrier.HydraulicConductivity * Param.Value;
+              end;
+            ppmAdd:
+              begin
+                Barrier.HydraulicConductivity :=
+                  Barrier.HydraulicConductivity + Param.Value;
+              end;
+          end;
+        end;
+      end;
+    end;
+    procedure ApplyThicknessSeriesParam;
+    var
+      Param: TModflowSteadyParameter;
+      Method: TPestParamMethod;
+    begin
+      if Barrier.FPestThicknessSeriesName <> '' then
+      begin
+        Param := Model.GetPestParameterByName(Barrier.FPestThicknessSeriesName);
+        if Param <> nil then
+        begin
+          Method := Barrier.FPestThicknessSeriesMethod;
+          case Method of
+            ppmMultiply:
+              begin
+                Barrier.Thickness :=
+                  Barrier.Thickness * Param.Value;
+              end;
+            ppmAdd:
+              begin
+                Barrier.Thickness :=
+                  Barrier.Thickness + Param.Value;
+              end;
+          end;
+        end;
+      end;
+    end;
     procedure AssignValues;
     var
       Formula: string;
@@ -270,6 +345,12 @@ var
       end;
       Barrier.HydraulicConductivity := HydraulicConductivityExpression.DoubleResult;
       Barrier.HydraulicConductivityAnnotation := HydCondComment;
+      Barrier.FPestHydraulicConductivityName  := HydraulicConductivityPestName;
+      Barrier.FPestHydraulicConductivitySeriesName  := ModflowHfbBoundary.PestHydraulicConductivityFormula;
+      Barrier.FPestHydraulicConductivitySeriesMethod  := ModflowHfbBoundary.PestHydraulicConductivityMethod;
+      Barrier.FPestThicknessName  := ThicknessPestName;
+      Barrier.FPestThicknessSeriesName  := ModflowHfbBoundary.PestThicknessFormula;
+      Barrier.FPestThicknessSeriesMethod  := ModflowHfbBoundary.PestThicknessMethod;
 
       try
         ThicknessExpression.Evaluate;
@@ -346,13 +427,19 @@ var
             begin
               ScreenObjectList.AddBarrier(Barrier);
               AssignValues;
-              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
+//              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
               begin
                 Angle := ArcTan2(Segment.Y1-Segment.Y2,Segment.X1-Segment.X2);
                 case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
-                  amNone: Assert(False);
-                  amAllEdges: Barrier.HydraulicConductivity :=
-                    Barrier.HydraulicConductivity * Abs(Cos(Angle));
+                  amNone:
+                    begin
+//                      Assert(False);
+                    end;
+                  amAllEdges:
+                    begin
+                      Barrier.HydraulicConductivity :=
+                        Barrier.HydraulicConductivity * Abs(Cos(Angle));
+                    end;
                   amNearlyParallel:
                     begin
                       While Angle > Pi/2 do
@@ -375,6 +462,8 @@ var
                     end;
                   else Assert(False);
                 end;
+                ApplyHydraulicConductivitySeriesParam;
+                ApplyThicknessSeriesParam;
               end;
             end;
           end;
@@ -408,13 +497,19 @@ var
             begin
               ScreenObjectList.AddBarrier(Barrier);
               AssignValues;
-              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
+//              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
               begin
                 Angle := ArcTan2(Segment.X1-Segment.X2,Segment.Y1-Segment.Y2);
                 case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
-                  amNone: Assert(False);
-                  amAllEdges: Barrier.HydraulicConductivity :=
-                    Barrier.HydraulicConductivity * Abs(Cos(Angle));
+                  amNone:
+                    begin
+//                      Assert(False);
+                    end;
+                  amAllEdges:
+                    begin
+                      Barrier.HydraulicConductivity :=
+                        Barrier.HydraulicConductivity * Abs(Cos(Angle));
+                    end;
                   amNearlyParallel:
                     begin
                       While Angle > Pi/2 do
@@ -437,6 +532,8 @@ var
                     end;
                   else Assert(False);
                 end;
+                ApplyHydraulicConductivitySeriesParam;
+                ApplyThicknessSeriesParam;
               end;
             end;
           end;
@@ -475,33 +572,59 @@ begin
             Continue;
           end;
 
+          ModflowHfbBoundary := ScreenObject.ModflowHfbBoundary;
           // Initialize HydraulicConductivityExpression and
           // ThicknessExpression.
           DataToCompile := TModflowDataObject.Create;
           try
             DataToCompile.Compiler := Model.GetCompiler(dsoTop, eaBlocks);
-            DataToCompile.DataSetFunction :=
-              ScreenObject.ModflowHfbBoundary.HydraulicConductivityFormula;
+            HydraulicConductivityParam := Model.GetPestParameterByName(
+              ModflowHfbBoundary.HydraulicConductivityFormula);
+            if HydraulicConductivityParam <> nil then
+            begin
+              HydraulicConductivityPestName := HydraulicConductivityParam.ParameterName;
+              HydraulicConductivityFormula := FortranFloatToStr(HydraulicConductivityParam.Value);
+            end
+            else
+            begin
+              HydraulicConductivityPestName := '';
+              HydraulicConductivityFormula :=
+                ModflowHfbBoundary.HydraulicConductivityFormula;
+            end;
+            DataToCompile.DataSetFunction := HydraulicConductivityFormula;
+//              ModflowHfbBoundary.HydraulicConductivityFormula;
             DataToCompile.AlternateName := StrHFBHydraulicConduc;
             DataToCompile.AlternateDataType := rdtDouble;
-//            (ScreenObject.Delegate as TModflowDelegate).InitializeExpression(
             ScreenObject.Delegate.InitializeExpression(
               Compiler, DataSetFunction,
                 HydraulicConductivityExpression, nil,
                DataToCompile, Model);
             HydCondComment := Format(Str0sIn1s,
-              [ScreenObject.ModflowHfbBoundary.HydraulicConductivityFormula,
+              [ModflowHfbBoundary.HydraulicConductivityFormula,
               ScreenObject.Name]);
 
-            DataToCompile.DataSetFunction :=
-              ScreenObject.ModflowHfbBoundary.ThicknessFormula;
+            ThicknessParam := Model.GetPestParameterByName(
+              ModflowHfbBoundary.ThicknessFormula);
+            if ThicknessParam <> nil then
+            begin
+              ThicknessPestName := ThicknessParam.ParameterName;
+              ThicknessFormula := FortranFloatToStr(ThicknessParam.Value);
+            end
+            else
+            begin
+              ThicknessPestName := '';
+              ThicknessFormula :=
+                ModflowHfbBoundary.ThicknessFormula;
+            end;
+            DataToCompile.DataSetFunction := ThicknessFormula;
+//              ModflowHfbBoundary.ThicknessFormula;
             DataToCompile.AlternateName := StrHFBThickness;
 //            (ScreenObject.Delegate as TModflowDelegate).InitializeExpression(
             ScreenObject.Delegate.InitializeExpression(
               Compiler, DataSetFunction,
               ThicknessExpression, nil, DataToCompile, Model);
             ThicknessComment := Format(Str0sIn1s,
-              [ScreenObject.ModflowHfbBoundary.ThicknessFormula,
+              [ModflowHfbBoundary.ThicknessFormula,
               ScreenObject.Name]);
           finally
             DataToCompile.Free;
@@ -551,12 +674,8 @@ var
   Compiler: TRbwParser;
   DataToCompile: TModflowDataObject;
   DataSetFunction: string;
-//  HydraulicConductivityExpression: TExpression;
-//  ThicknessExpression: TExpression;
   PriorSegments: TList;
   SubsequentSegments: TList;
-//  HydCondComment: string;
-//  ThicknessComment: string;
   TransientData: TTransientExpressionList;
   TimeIndex: Integer;
   HfbItem: THfbItem;
@@ -573,8 +692,9 @@ var
   StartTime: Double;
   EndTime: Double;
   IDomainDataSet: TDataArray;
-//  UsedFunction: string;
-//  UsedExpression: TExpression;
+  ModflowHfbBoundary: THfbBoundary;
+  HydraulicConductivityParam: TModflowSteadyParameter;
+  ThicknessParam: TModflowSteadyParameter;
   procedure GetBarrierIndicies(ABarrier: TTransientBarrier; out X,Y : Integer);
   begin
     X := ABarrier.Layer * Model.RowCount * Model.ColumnCount
@@ -603,7 +723,6 @@ var
     CrossRow, CrossColumn: integer;
     Barrier: TTransientBarrier;
     Angle: double;
-//    Start: integer;
     TimeIndex: Integer;
     DisvGrid: TModflowDisvGrid;
     TwoDCell: TModflowIrregularCell2D;
@@ -676,153 +795,232 @@ var
         Barrier.FHydraulicConductivityAnnotations.Add(TransientExpressions.HydraulicConductivityComment);
         Barrier.FThicknessAnnotation.Add(TransientExpressions.ThicknessComment);
 
+        Barrier.FPestHydraulicConductivityNames.Add(
+          TransientExpressions.HydraulicConductivityPestName);
+        Barrier.FPestHydraulicConductivitySeriesNames.Add(
+          TransientExpressions.HydraulicConductivityPestSeriesName);
+        Barrier.FPestHydraulicConductivitySeriesMethods.Add(
+          TransientExpressions.HydraulicConductivityPestSeriesMethod);
+        Barrier.FPestThicknessNames.Add(
+          TransientExpressions.ThicknessPestName);
+        Barrier.FPestThicknessSeriesNames.Add(
+          TransientExpressions.ThicknessPestSeriesName);
+        Barrier.FPestThicknessSeriesMethods.Add(
+          TransientExpressions.ThicknessPestSeriesMethod);
+      end;
+    end;
+    procedure ApplyHydraulicConductivitySeriesParam;
+    var
+      HydraulicConductivitySeriesName: string;
+      Param: TModflowSteadyParameter;
+      Method: TPestParamMethod;
+    begin
+      HydraulicConductivitySeriesName :=
+        Barrier.FPestHydraulicConductivitySeriesNames[TimeIndex];
+      if HydraulicConductivitySeriesName <> '' then
+      begin
+        Param := Model.GetPestParameterByName(HydraulicConductivitySeriesName);
+        if Param <> nil then
+        begin
+          Method := Barrier.FPestHydraulicConductivitySeriesMethods[TimeIndex];
+          case Method of
+            ppmMultiply:
+              begin
+                Barrier.FHydraulicConductivities[TimeIndex] :=
+                  Barrier.FHydraulicConductivities[TimeIndex] * Param.Value;
+              end;
+            ppmAdd:
+              begin
+                Barrier.FHydraulicConductivities[TimeIndex] :=
+                  Barrier.FHydraulicConductivities[TimeIndex] + Param.Value;
+              end;
+          end;
+        end;
+      end;
+    end;
+    procedure ApplyThicknessSeriesParam;
+    var
+      ThicknessSeriesName: string;
+      Param: TModflowSteadyParameter;
+      Method: TPestParamMethod;
+    begin
+      ThicknessSeriesName :=
+        Barrier.FPestThicknessSeriesNames[TimeIndex];
+      if ThicknessSeriesName <> '' then
+      begin
+        Param := Model.GetPestParameterByName(ThicknessSeriesName);
+        if Param <> nil then
+        begin
+          Method := Barrier.FPestThicknessSeriesMethods[TimeIndex];
+          case Method of
+            ppmMultiply:
+              begin
+                Barrier.FThicknesses[TimeIndex] :=
+                  Barrier.FThicknesses[TimeIndex] * Param.Value;
+              end;
+            ppmAdd:
+              begin
+                Barrier.FThicknesses[TimeIndex] :=
+                  Barrier.FThicknesses[TimeIndex] + Param.Value;
+              end;
+          end;
+        end;
       end;
     end;
   begin
     // Handle one section of a TScreenObject.
     // All the TCellElementSegments in the section will be in SegmentList.
-//    Start := ScreenObjectList.TransientBarrierCount;
     if not Model.DisvUsed then
     begin
       Grid := Model.ModflowGrid;
       for SegmentIndex := 0 to SegmentList.Count - 1 do
       begin
         Segment := SegmentList[SegmentIndex];
-//        if Model.IsLayerSimulated(Segment.Layer) then
+
+        MinX := Min(Segment.X1, Segment.X2);
+        MaxX := Max(Segment.X1, Segment.X2);
+        MinY := Min(Segment.Y1, Segment.Y2);
+        MaxY := Max(Segment.Y1, Segment.Y2);
+        ColumnCenter := Grid.ColumnCenter(Segment.Col);
+        RowCenter := Grid.RowCenter(Segment.Row);
+        if (MinX <= ColumnCenter) and (MaxX > ColumnCenter) then
         begin
-          MinX := Min(Segment.X1, Segment.X2);
-          MaxX := Max(Segment.X1, Segment.X2);
-          MinY := Min(Segment.Y1, Segment.Y2);
-          MaxY := Max(Segment.Y1, Segment.Y2);
-          ColumnCenter := Grid.ColumnCenter(Segment.Col);
-          RowCenter := Grid.RowCenter(Segment.Row);
-          if (MinX <= ColumnCenter) and (MaxX > ColumnCenter) then
+          MidCellY := (ColumnCenter-Segment.X1)/(Segment.X2-Segment.X1)
+            *(Segment.Y2-Segment.Y1) + Segment.Y1;
+          if MidCellY > RowCenter then
           begin
-            MidCellY := (ColumnCenter-Segment.X1)/(Segment.X2-Segment.X1)
-              *(Segment.Y2-Segment.Y1) + Segment.Y1;
-            if MidCellY > RowCenter then
+            CrossRow := Segment.Row -1;
+          end
+          else
+          begin
+            CrossRow := Segment.Row +1;
+          end;
+          if (CrossRow >=0) and (CrossRow < Grid.RowCount)
+            and (IDomainDataSet.IntegerData[
+            Segment.Layer, CrossRow, Segment.Col] > 0) then
+          begin
+            Barrier := TTransientBarrier.Create(Model, ScreenObject);
+            Barrier.FCol1 := Segment.Col;
+            Barrier.FCol2 := Segment.Col;
+            Barrier.FRow1 := Segment.Row;
+            Barrier.FRow2 := CrossRow;
+            Barrier.FLayer := Segment.Layer;
+            Barrier.FParameter := ScreenObjectList.Parameter;
+            AddBarrierToQuadTree(Barrier);
+
+            ScreenObjectList.AddTransientBarrier(Barrier);
+            AssignValues;
+//            if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
             begin
-              CrossRow := Segment.Row -1;
-            end
-            else
-            begin
-              CrossRow := Segment.Row +1;
-            end;
-            if (CrossRow >=0) and (CrossRow < Grid.RowCount)
-              and (IDomainDataSet.IntegerData[
-              Segment.Layer, CrossRow, Segment.Col] > 0) then
-            begin
-              Barrier := TTransientBarrier.Create(Model, ScreenObject);
-              Barrier.FCol1 := Segment.Col;
-              Barrier.FCol2 := Segment.Col;
-              Barrier.FRow1 := Segment.Row;
-              Barrier.FRow2 := CrossRow;
-              Barrier.FLayer := Segment.Layer;
-              Barrier.FParameter := ScreenObjectList.Parameter;
-              AddBarrierToQuadTree(Barrier);
-//              if PreviousBarrierExists then
-//              begin
-//                Barrier.Free;
-//              end
-//              else
+              Angle := ArcTan2(Segment.Y1-Segment.Y2,Segment.X1-Segment.X2);
+              for TimeIndex := 0 to TransientData.Count -1 do
               begin
-                ScreenObjectList.AddTransientBarrier(Barrier);
-                AssignValues;
-                if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
-                begin
-                  Angle := ArcTan2(Segment.Y1-Segment.Y2,Segment.X1-Segment.X2);
-                  for TimeIndex := 0 to TransientData.Count -1 do
-                  begin
-                    case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
-                      amNone: Assert(False);
-                      amAllEdges: Barrier.FHydraulicConductivities[TimeIndex] :=
-                        Barrier.FHydraulicConductivities[TimeIndex] * Abs(Cos(Angle));
-                      amNearlyParallel:
-                        begin
-                          While Angle > Pi/2 do
-                          begin
-                            Angle := Angle - Pi;
-                          end;
-                          While Angle < -Pi/2 do
-                          begin
-                            Angle := Angle + Pi;
-                          end;
-                          if (Angle > Pi/4) or (Angle < -Pi/4) then
-                          begin
-                            Barrier.FHydraulicConductivities[TimeIndex] := 0;
-                          end
-                          else
-                          begin
-                            Barrier.FHydraulicConductivities[TimeIndex] :=
-                              Barrier.FHydraulicConductivities[TimeIndex]/Abs(Cos(Angle));
-                          end;
-                        end;
-                      else Assert(False);
+                case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
+                  amNone:
+                    begin
+//                      Assert(False);
                     end;
-                  end;
+                  amAllEdges:
+                    begin
+                      Barrier.FHydraulicConductivities[TimeIndex] :=
+                        Barrier.FHydraulicConductivities[TimeIndex]
+                        * Abs(Cos(Angle));
+                    end;
+                  amNearlyParallel:
+                    begin
+                      While Angle > Pi/2 do
+                      begin
+                        Angle := Angle - Pi;
+                      end;
+                      While Angle < -Pi/2 do
+                      begin
+                        Angle := Angle + Pi;
+                      end;
+                      if (Angle > Pi/4) or (Angle < -Pi/4) then
+                      begin
+                        Barrier.FHydraulicConductivities[TimeIndex] := 0;
+                      end
+                      else
+                      begin
+                        Barrier.FHydraulicConductivities[TimeIndex] :=
+                          Barrier.FHydraulicConductivities[TimeIndex]/Abs(Cos(Angle));
+                      end;
+                    end;
+                  else Assert(False);
                 end;
+                ApplyHydraulicConductivitySeriesParam;
+                ApplyThicknessSeriesParam;
               end;
             end;
           end;
-          if (MinY <= RowCenter) and (MaxY > RowCenter) then
+        end;
+        if (MinY <= RowCenter) and (MaxY > RowCenter) then
+        begin
+          MidCellX := (RowCenter-Segment.Y1)/(Segment.Y2-Segment.Y1)
+            *(Segment.X2-Segment.X1) + Segment.X1;
+          if MidCellX > ColumnCenter then
           begin
-            MidCellX := (RowCenter-Segment.Y1)/(Segment.Y2-Segment.Y1)
-              *(Segment.X2-Segment.X1) + Segment.X1;
-            if MidCellX > ColumnCenter then
-            begin
-              CrossColumn := Segment.Col +1;
-            end
-            else
-            begin
-              CrossColumn := Segment.Col -1;
-            end;
-            if (CrossColumn >=0) and (CrossColumn < Grid.ColumnCount)
-              and (IDomainDataSet.IntegerData[
-              Segment.Layer, Segment.Row, CrossColumn] > 0) then
-            begin
-              Barrier := TTransientBarrier.Create(Model, ScreenObject);
-              Barrier.FCol1 := Segment.Col;
-              Barrier.FCol2 := CrossColumn;
-              Barrier.FRow1 := Segment.Row;
-              Barrier.FRow2 := Segment.Row;
-              Barrier.FLayer := Segment.Layer;
-              Barrier.FParameter := ScreenObjectList.Parameter;
-              AddBarrierToQuadTree(Barrier);
+            CrossColumn := Segment.Col +1;
+          end
+          else
+          begin
+            CrossColumn := Segment.Col -1;
+          end;
+          if (CrossColumn >=0) and (CrossColumn < Grid.ColumnCount)
+            and (IDomainDataSet.IntegerData[
+            Segment.Layer, Segment.Row, CrossColumn] > 0) then
+          begin
+            Barrier := TTransientBarrier.Create(Model, ScreenObject);
+            Barrier.FCol1 := Segment.Col;
+            Barrier.FCol2 := CrossColumn;
+            Barrier.FRow1 := Segment.Row;
+            Barrier.FRow2 := Segment.Row;
+            Barrier.FLayer := Segment.Layer;
+            Barrier.FParameter := ScreenObjectList.Parameter;
+            AddBarrierToQuadTree(Barrier);
 
-              ScreenObjectList.AddTransientBarrier(Barrier);
-              AssignValues;
-              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
+            ScreenObjectList.AddTransientBarrier(Barrier);
+            AssignValues;
+//            if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
+            begin
+              Angle := ArcTan2(Segment.X1-Segment.X2,Segment.Y1-Segment.Y2);
+              for TimeIndex := 0 to TransientData.Count -1 do
               begin
-                Angle := ArcTan2(Segment.X1-Segment.X2,Segment.Y1-Segment.Y2);
-                for TimeIndex := 0 to TransientData.Count -1 do
-                begin
-                  case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
-                    amNone: Assert(False);
-                    amAllEdges: Barrier.FHydraulicConductivities[TimeIndex] :=
-                      Barrier.FHydraulicConductivities[TimeIndex] * Abs(Cos(Angle));
-                    amNearlyParallel:
+
+                case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
+                  amNone:
+                    begin
+//                      Assert(False);
+                    end;
+                  amAllEdges:
+                    begin
+                      Barrier.FHydraulicConductivities[TimeIndex] :=
+                        Barrier.FHydraulicConductivities[TimeIndex] * Abs(Cos(Angle));
+                    end;
+                  amNearlyParallel:
+                    begin
+                      While Angle > Pi/2 do
                       begin
-                        While Angle > Pi/2 do
-                        begin
-                          Angle := Angle - Pi;
-                        end;
-                        While Angle < -Pi/2 do
-                        begin
-                          Angle := Angle + Pi;
-                        end;
-                        if (Angle > Pi/4) or (Angle < -Pi/4) then
-                        begin
-                          Barrier.FHydraulicConductivities[TimeIndex] := 0;
-                        end
-                        else
-                        begin
-                          Barrier.FHydraulicConductivities[TimeIndex] :=
-                            Barrier.FHydraulicConductivities[TimeIndex]/Abs(Cos(Angle));
-                        end;
+                        Angle := Angle - Pi;
                       end;
-                    else Assert(False);
-                  end;
+                      While Angle < -Pi/2 do
+                      begin
+                        Angle := Angle + Pi;
+                      end;
+                      if (Angle > Pi/4) or (Angle < -Pi/4) then
+                      begin
+                        Barrier.FHydraulicConductivities[TimeIndex] := 0;
+                      end
+                      else
+                      begin
+                        Barrier.FHydraulicConductivities[TimeIndex] :=
+                          Barrier.FHydraulicConductivities[TimeIndex]/Abs(Cos(Angle));
+                      end;
+                    end;
+                  else Assert(False);
                 end;
+                ApplyHydraulicConductivitySeriesParam;
+                ApplyThicknessSeriesParam;
               end;
             end;
           end;
@@ -860,7 +1058,7 @@ var
                 ScreenObjectList.AddTransientBarrier(Barrier);
                 AssignValues;
 
-                if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
+//                if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
                 begin
                   // Calculate angle of interface between the cells
                   // in the barrier
@@ -876,10 +1074,17 @@ var
 
                   for TimeIndex := 0 to TransientData.Count -1 do
                   begin
+
                     case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
-                      amNone: Assert(False);
-                      amAllEdges: Barrier.FHydraulicConductivities[TimeIndex] :=
-                        Barrier.FHydraulicConductivities[TimeIndex] * Abs(Cos(Angle));
+                      amNone:
+                        begin
+//                          Assert(False);
+                        end;
+                      amAllEdges:
+                        begin
+                          Barrier.FHydraulicConductivities[TimeIndex] :=
+                            Barrier.FHydraulicConductivities[TimeIndex] * Abs(Cos(Angle));
+                        end;
                       amNearlyParallel:
                         begin
                           While Angle > Pi/2 do
@@ -902,6 +1107,8 @@ var
                         end;
                       else Assert(False);
                     end;
+                    ApplyHydraulicConductivitySeriesParam;
+                    ApplyThicknessSeriesParam;
                   end;
                 end
 
@@ -963,9 +1170,10 @@ begin
           try
             DataToCompile.Compiler := Model.GetCompiler(dsoTop, eaBlocks);
 
-            for TimeIndex := 0 to ScreenObject.ModflowHfbBoundary.Values.Count - 1 do
+            ModflowHfbBoundary := ScreenObject.ModflowHfbBoundary;
+            for TimeIndex := 0 to ModflowHfbBoundary.Values.Count - 1 do
             begin
-              HfbItem := ScreenObject.ModflowHfbBoundary.Values[TimeIndex];
+              HfbItem := ModflowHfbBoundary.Values[TimeIndex];
 
               if HfbItem.EndTime <= StartTime then
               begin
@@ -981,10 +1189,47 @@ begin
 
               TransientExpressions.StartTime := HfbItem.StartTime;
               TransientExpressions.EndTime := HfbItem.EndTime;
-              TransientExpressions.HydraulicConductivityFormula := HfbItem.HydraulicConductivity;
-              TransientExpressions.ThicknessFormula := HfbItem.Thickness;
 
-              DataToCompile.DataSetFunction := HfbItem.HydraulicConductivity;
+              HydraulicConductivityParam := Model.GetPestParameterByName(HfbItem.HydraulicConductivity);
+              if HydraulicConductivityParam <> nil then
+              begin
+                TransientExpressions.HydraulicConductivityFormula
+                  := FortranFloatToStr(HydraulicConductivityParam.Value);
+                TransientExpressions.HydraulicConductivityPestName :=
+                  HydraulicConductivityParam.ParameterName;
+              end
+              else
+              begin
+                TransientExpressions.HydraulicConductivityFormula
+                  := HfbItem.HydraulicConductivity;
+                TransientExpressions.HydraulicConductivityPestName := '';
+              end;
+
+              ThicknessParam := Model.GetPestParameterByName(HfbItem.Thickness);
+              if ThicknessParam <> nil then
+              begin
+                TransientExpressions.ThicknessFormula
+                  := FortranFloatToStr(ThicknessParam.Value);
+                TransientExpressions.ThicknessPestName := ThicknessParam.ParameterName;
+              end
+              else
+              begin
+                TransientExpressions.ThicknessFormula
+                  := HfbItem.Thickness;
+                TransientExpressions.ThicknessPestName := '';
+              end;
+
+              TransientExpressions.HydraulicConductivityPestSeriesName :=
+                ModflowHfbBoundary.PestHydraulicConductivityFormula;
+              TransientExpressions.HydraulicConductivityPestSeriesMethod :=
+                ModflowHfbBoundary.PestHydraulicConductivityMethod;
+              TransientExpressions.ThicknessPestSeriesName :=
+                ModflowHfbBoundary.PestThicknessFormula;
+              TransientExpressions.ThicknessPestSeriesMethod :=
+                ModflowHfbBoundary.PestThicknessMethod;
+
+              DataToCompile.DataSetFunction :=
+                TransientExpressions.HydraulicConductivityFormula;
               DataToCompile.AlternateName := StrHFBHydraulicConduc;
               DataToCompile.AlternateDataType := rdtDouble;
               ScreenObject.Delegate.InitializeExpression(
@@ -996,7 +1241,7 @@ begin
                 [HfbItem.HydraulicConductivity,
                 ScreenObject.Name]);
 
-              DataToCompile.DataSetFunction := HfbItem.Thickness;
+              DataToCompile.DataSetFunction := TransientExpressions.ThicknessFormula;
               DataToCompile.AlternateName := StrHFBThickness;
               DataToCompile.AlternateDataType := rdtDouble;
               ScreenObject.Delegate.InitializeExpression(
@@ -1464,8 +1709,10 @@ begin
   end;
 
   // The first item in  FParameterScreenObjectList is for non-parameters
-  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
-    and (FParameterScreenObjectList.Count > 1) then
+//  if (Model.ModelSelection = msModflow2015) and Model.PestUsed
+//    and (FParameterScreenObjectList.Count > 1) then
+  if  Model.PestUsed and (FPestParamUsed
+    or ((Model.ModelSelection = msModflow2015) and (FParameterScreenObjectList.Count > 0))) then
   begin
     frmErrorsAndWarnings.BeginUpdate;
     try
@@ -1842,6 +2089,10 @@ procedure TBarrier.WriteBarrier(Writer: TModflowHfb_Writer;
   const Comment: string);
 var
   ModelLayer: integer;
+  HydraulicConductivityFormula: string;
+  ThicknessFormula: string;
+  ExtendedTemplateCharacter: string;
+  Method: TPestParamMethod;
 begin
   ModelLayer := Writer.Model.
     DataSetLayerToModflowLayer(Layer);
@@ -1856,13 +2107,84 @@ begin
   end
   else
   begin
+    if (not Writer.WritingTemplate) or (Parameter <> nil) then
+    begin
+      Writer.WriteFloat(HydraulicConductivity/Thickness);
+      if Parameter <> nil then
+      begin
+        Writer.FPestParamUsed := True;
+      end
+      else if (FPestHydraulicConductivityName <> '')
+        or (FPestHydraulicConductivitySeriesName <> '')
+        or (FPestThicknessName <> '')
+        or (FPestThicknessSeriesName <> '')
+        then
+      begin
+        Writer.FPestParamUsed := True;
+      end;
+    end
+    else if Writer.WritingTemplate then
+    begin
+      if (FPestHydraulicConductivityName <> '')
+        or (FPestHydraulicConductivitySeriesName <> '')
+        or (FPestThicknessName <> '')
+        or (FPestThicknessSeriesName <> '')
+        then
+      begin
+        ExtendedTemplateCharacter := Writer.Model.PestProperties.ExtendedTemplateCharacter;
+        if (FPestHydraulicConductivityName <> '')
+          or (FPestHydraulicConductivitySeriesName <> '') then
+        begin
+          Method := FPestHydraulicConductivitySeriesMethod;
+          HydraulicConductivityFormula := Writer.GetPestTemplateFormula(
+            HydraulicConductivity, FPestHydraulicConductivityName,
+            FPestHydraulicConductivitySeriesName, Method, nil);
+        end
+        else
+        begin
+          HydraulicConductivityFormula := FortranFloatToStr(HydraulicConductivity)
+        end;
+
+        if (FPestThicknessName <> '')
+          or (FPestThicknessSeriesName <> '') then
+        begin
+          Method := FPestThicknessSeriesMethod;
+          ThicknessFormula := Writer.GetPestTemplateFormula(
+            Thickness, FPestThicknessName,
+            FPestThicknessSeriesName, Method, nil);
+        end
+        else
+        begin
+          ThicknessFormula := FortranFloatToStr(Thickness)
+        end;
+        Writer.WriteString(Format(
+          ' %0:s                    if((%2:s = 0), 0, (%1:s)/(%2:s))%0:s',
+          [ExtendedTemplateCharacter, HydraulicConductivityFormula,
+          ThicknessFormula]));
+      end
+      else
+      begin
+        Writer.WriteFloat(HydraulicConductivity/Thickness);
+      end;
+    end
+    else
+    begin
+      Writer.WriteFloat(HydraulicConductivity/Thickness);
+      if (FPestHydraulicConductivityName <> '')
+        or (FPestHydraulicConductivitySeriesName <> '')
+        or (FPestThicknessName <> '')
+        or (FPestThicknessSeriesName <> '')
+        then
+      begin
+        Writer.FPestParamUsed := True;
+      end;
+    end;
 //    if Writer.WritingTemplate and (Parameter <> nil) then
 //    begin
 //      Writer.WriteTemplateFormula(Parameter.ParameterName, HydraulicConductivity/Thickness);
 //    end
 //    else
 //    begin
-      Writer.WriteFloat(HydraulicConductivity/Thickness);
 //    end;
   end;
   if (Thickness <= 0) or (HydraulicConductivity <= 0) then
@@ -1889,10 +2211,24 @@ begin
   FPriorIndex := 0;
   FScreenObject := ScreenObject;
   Assert(ScreenObject <> nil);
+
+  FPestHydraulicConductivityNames := TStringList.Create;
+  FPestHydraulicConductivitySeriesNames := TStringList.Create;
+  FPestHydraulicConductivitySeriesMethods := TPestMethodList.Create;
+  FPestThicknessNames := TStringList.Create;
+  FPestThicknessSeriesNames := TStringList.Create;
+  FPestThicknessSeriesMethods := TPestMethodList.Create;
 end;
 
 destructor TTransientBarrier.Destroy;
 begin
+  FPestThicknessSeriesMethods.Free;
+  FPestThicknessSeriesNames.Free;
+  FPestThicknessNames.Free;
+  FPestHydraulicConductivitySeriesMethods.Free;
+  FPestHydraulicConductivitySeriesNames.Free;
+  FPestHydraulicConductivityNames.Free;
+
   FStartTimes.Free;
   FEndTimes.Free;
   FHydraulicConductivities.Free;
@@ -2039,6 +2375,14 @@ var
   Thickness: Double;
   HydraulicConductivity: Double;
   TimeIndex: Integer;
+  PestHydraulicConductivityName: string;
+  PestHydraulicConductivitySeriesName: string;
+  PestThicknessName: string;
+  PestThicknessSeriesName: string;
+  HydraulicConductivityFormula: string;
+  ThicknessFormula: string;
+  ExtendedTemplateCharacter: string;
+  Method: TPestParamMethod;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -2089,23 +2433,96 @@ begin
     end
     else
     begin
-      if Writer.WritingTemplate and (FParameter <> nil) then
+      if Writer.WritingTemplate then
       begin
-        if FParameter.Value = 0 then
+        if (FParameter <> nil) then
         begin
-          Writer.WriteFloat(0);
+          if FParameter.Value = 0 then
+          begin
+            Writer.WriteFloat(0);
+          end
+          else
+          begin
+            Writer.WriteTemplateFormula(FParameter.ParameterName,
+              HydraulicConductivity/Thickness/FParameter.Value, ppmMultiply);
+          end;
         end
         else
         begin
-          Writer.WriteTemplateFormula(FParameter.ParameterName,
-            HydraulicConductivity/Thickness/FParameter.Value, ppmMultiply);
-        end;
+          PestHydraulicConductivityName := FPestHydraulicConductivityNames[FPriorIndex];
+          PestHydraulicConductivitySeriesName := FPestHydraulicConductivitySeriesNames[FPriorIndex];
+          PestThicknessName := FPestThicknessNames[FPriorIndex];
+          PestThicknessSeriesName := FPestThicknessSeriesNames[FPriorIndex];
+
+          if (PestHydraulicConductivityName <> '')
+            or (PestHydraulicConductivitySeriesName <> '')
+            or (PestThicknessName <> '')
+            or (PestThicknessSeriesName <> '')
+            then
+          begin
+            ExtendedTemplateCharacter := Writer.Model.PestProperties.ExtendedTemplateCharacter;
+            if (PestHydraulicConductivityName <> '')
+              or (PestHydraulicConductivitySeriesName <> '') then
+            begin
+              Method := FPestHydraulicConductivitySeriesMethods[FPriorIndex];
+              HydraulicConductivityFormula := Writer.GetPestTemplateFormula(
+                HydraulicConductivity, PestHydraulicConductivityName,
+                PestHydraulicConductivitySeriesName, Method, nil);
+            end
+            else
+            begin
+              HydraulicConductivityFormula := FortranFloatToStr(HydraulicConductivity)
+            end;
+
+            if (PestThicknessName <> '')
+              or (PestThicknessSeriesName <> '') then
+            begin
+              Method := FPestThicknessSeriesMethods[FPriorIndex];
+              ThicknessFormula := Writer.GetPestTemplateFormula(
+                Thickness, PestThicknessName,
+                PestThicknessSeriesName, Method, nil);
+            end
+            else
+            begin
+              ThicknessFormula := FortranFloatToStr(Thickness)
+            end;
+            Writer.WriteString(Format(
+              ' %0:s                    if((%2:s = 0), 0, (%1:s)/(%2:s))%0:s',
+              [ExtendedTemplateCharacter, HydraulicConductivityFormula,
+              ThicknessFormula]));
+          end
+          else
+          begin
+            Writer.WriteFloat(HydraulicConductivity/Thickness);
+          end;
+        end
       end
       else
       begin
         Writer.WriteFloat(HydraulicConductivity/Thickness);
+        if (FParameter <> nil) then
+        begin
+          Writer.FPestParamUsed := True;
+        end
+        else
+        begin
+          PestHydraulicConductivityName := FPestHydraulicConductivityNames[FPriorIndex];
+          PestHydraulicConductivitySeriesName := FPestHydraulicConductivitySeriesNames[FPriorIndex];
+          PestThicknessName := FPestThicknessNames[FPriorIndex];
+          PestThicknessSeriesName := FPestThicknessSeriesNames[FPriorIndex];
+
+          if (PestHydraulicConductivityName <> '')
+            or (PestHydraulicConductivitySeriesName <> '')
+            or (PestThicknessName <> '')
+            or (PestThicknessSeriesName <> '')
+            then
+          begin
+            Writer.FPestParamUsed := True;
+          end;
+
+        end;
       end;
-//      Writer.WriteFloat(HydraulicConductivity/Thickness);
+
     end;
     if (Thickness <= 0) or (HydraulicConductivity <= 0) then
     begin

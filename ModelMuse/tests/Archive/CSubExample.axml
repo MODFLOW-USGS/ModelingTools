@@ -35,6 +35,7 @@
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.coarse-csub_ob.csv</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.csub_z_dis</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.csub-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.CsubConvergence.CSV</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.delay-preconstress_ob.csv</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.dis.grb</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.elastic-compaction_ob.csv</FileName>
@@ -42,11 +43,12 @@
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.estress-cell_ob.csv</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.gstress-cell_ob.csv</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.inelastic-csub_ob.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.InnerSolution.CSV</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.interbed-compaction_ob.csv</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.lst</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.ob_gw_out_head.csv</FileName>
+    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.OuterSolution.CSV</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.sk-cell_ob.csv</FileName>
-    <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.Solution.CSV</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.theta_ob.csv</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">CSubExample.wcomp-csub-cell_ob.csv</FileName>
     <FileName Model_Name="CSubExample" FileType="Model Output">mfsim.lst</FileName>

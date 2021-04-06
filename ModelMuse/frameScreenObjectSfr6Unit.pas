@@ -892,8 +892,7 @@ begin
     CanSelect := False;
     Exit;
   end;
-  if Assigned(OnCheckPestCell)
-    and not (csCustomPaint in rdgModflowBoundary.ControlState) then
+  if Assigned(OnCheckPestCell) then
   begin
     OnCheckPestCell(Sender, ACol, ARow, CanSelect);
   end;

@@ -159,10 +159,15 @@ type
     FVerticalBoundary: boolean;
     FLayerOffsetFormula: TFormulaObject;
     FLayerOffsetObserver: TObserver;
+    FPestHydraulicConductivityObserver: TObserver;
+    FPestThicknessFormula: TFormulaObject;
+    FPestHydraulicConductivityFormula: TFormulaObject;
   private
 
     // See @link(Values).
     FValues: THfbCollection;
+    FPestThicknessMethod: TPestParamMethod;
+    FPestHydraulicConductivityMethod: TPestParamMethod;
 
     // See @link(Values).
     procedure SetValues(const Value: THfbCollection);
@@ -181,6 +186,14 @@ type
     procedure SetVerticalBoundary(const Value: boolean);
     function GetLayerOffsetObserver: TObserver;
     function GetUsedMf6: Boolean;
+    function GetPestHydraulicConductivityFormula: string;
+    function GetPestThicknessFormula: string;
+    procedure SetPestHydraulicConductivityFormula(const Value: string);
+    procedure SetPestHydraulicConductivityMethod(const Value: TPestParamMethod);
+    procedure SetPestThicknessFormula(const Value: string);
+    procedure SetPestThicknessMethod(const Value: TPestParamMethod);
+    function GetPestHydraulicConductivityObserver: TObserver;
+    function GetPestThicknessObserver: TObserver;
   protected
     procedure HandleChangedValue(Observer: TObserver); override;
     function GetUsedObserver: TObserver; override;
@@ -196,6 +209,9 @@ type
     procedure CreateObservers; override;
     procedure CreateObserver(ObserverNameRoot: string; var Observer: TObserver;
       Displayer: TObserver); override;
+    property PestHydraulicConductivityObserver: TObserver
+      read GetPestHydraulicConductivityObserver;
+    property PestThicknessObserver: TObserver read GetPestThicknessObserver;
   public
     Procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -205,6 +221,8 @@ type
     property UsedMf6: Boolean read GetUsedMf6;
     procedure UpdateTimes(Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean; AModel: TBaseModel); virtual;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property ParameterName: string read FParameterName write SetParameterName;
     property HydraulicConductivityFormula: string read GetHydraulicConductivity
@@ -216,7 +234,36 @@ type
     property LayerOffsetFormula: string read GetLayerOffsetFormula
       write SetLayerOffsetFormula;
     property Values: THfbCollection read FValues write SetValues;
+    property PestHydraulicConductivityFormula: string read GetPestHydraulicConductivityFormula
+      write SetPestHydraulicConductivityFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHydraulicConductivityMethod: TPestParamMethod read FPestHydraulicConductivityMethod
+      write SetPestHydraulicConductivityMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestThicknessFormula: string read GetPestThicknessFormula
+      write SetPestThicknessFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestThicknessMethod: TPestParamMethod read FPestThicknessMethod
+      write SetPestThicknessMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
+
+const
+  HfbThicknessPosition = 0;
+  HfbHydraulicConductivityPosition = 1;
+  HfbLayerOffsetPosition = 2;
 
 implementation
 
@@ -227,24 +274,6 @@ resourcestring
   StrHFBThicknessSetTo = 'HFB Thickness set to 0 because of a math error.';
   StrHFBHydraulicConduc = 'HFB hydraulic conductivity set to 0 because of a ' +
   'math error.';
-
-const
-  ThicknessPosition = 0;
-  HydraulicConductivityPosition = 1;
-  LayerOffsetPosition = 2;
-
-//procedure RemoveHfbModflowBoundarySubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-//begin
-//  (Subject as THfbBoundary).RemoveSubscription(Sender, AName);
-//end;
-//
-//procedure RestoreHfbModflowBoundarySubscription(Sender: TObject; Subject: TObject;
-//  const AName: string);
-//begin
-//  (Subject as THfbBoundary).RestoreSubscription(Sender, AName);
-//end;
-
 
 { THfbBoundary }
 
@@ -288,9 +317,27 @@ end;
 
 procedure THfbBoundary.CreateFormulaObjects;
 begin
+  FPestThicknessFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestHydraulicConductivityFormula := CreateFormulaObjectBlocks(dso3D);
+
   FThicknessFormula := CreateFormulaObjectBlocks(dso3D);
   FHydraulicConductivityFormula := CreateFormulaObjectBlocks(dso3D);
   FLayerOffsetFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+class function THfbBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    HfbThicknessPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    HfbHydraulicConductivityPosition:
+      begin
+        result := ppmMultiply;
+      end;
+  end;
 end;
 
 destructor THfbBoundary.Destroy;
@@ -333,7 +380,7 @@ begin
   Result := FHydraulicConductivityFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(HydraulicConductivityPosition);
+    ResetBoundaryObserver(HfbHydraulicConductivityPosition);
   end;
 end;
 
@@ -365,7 +412,7 @@ begin
   Result := FLayerOffsetFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(LayerOffsetPosition);
+    ResetBoundaryObserver(HfbLayerOffsetPosition);
   end;
 end;
 
@@ -413,19 +460,71 @@ begin
   result := FParameterNameObserver;
 end;
 
+function THfbBoundary.GetPestHydraulicConductivityFormula: string;
+begin
+end;
+
+function THfbBoundary.GetPestHydraulicConductivityObserver: TObserver;
+var
+  Model: TPhastModel;
+  Observer: TObserver;
+begin
+  if FPestHydraulicConductivityObserver = nil then
+  begin
+    if ParentModel <> nil then
+    begin
+      Model := ParentModel as TPhastModel;
+      Observer := Model.HfbDisplayer;
+    end
+    else
+    begin
+      Observer := nil;
+    end;
+    CreateObserver('HFB_Thickness_', FPestHydraulicConductivityObserver, Observer);
+//    FObserverList.Add(FPestHydraulicConductivityObserver);
+  end;
+  result := FPestHydraulicConductivityObserver;
+end;
+
+function THfbBoundary.GetPestThicknessFormula: string;
+begin
+end;
+
+function THfbBoundary.GetPestThicknessObserver: TObserver;
+var
+  Model: TPhastModel;
+  Observer: TObserver;
+begin
+  if FPestThicknessObserver = nil then
+  begin
+    if ParentModel <> nil then
+    begin
+      Model := ParentModel as TPhastModel;
+      Observer := Model.HfbDisplayer;
+    end
+    else
+    begin
+      Observer := nil;
+    end;
+    CreateObserver('HFB_Thickness_', FPestThicknessObserver, Observer);
+//    FObserverList.Add(FPestThicknessObserver);
+  end;
+  result := FPestThicknessObserver;
+end;
+
 procedure THfbBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FThicknessFormula then
   begin
-    List.Add(FObserverList[ThicknessPosition]);
+    List.Add(FObserverList[HfbThicknessPosition]);
   end;
   if Sender = FHydraulicConductivityFormula then
   begin
-    List.Add(FObserverList[HydraulicConductivityPosition]);
+    List.Add(FObserverList[HfbHydraulicConductivityPosition]);
   end;
   if Sender = FLayerOffsetFormula then
   begin
-    List.Add(FObserverList[LayerOffsetPosition]);
+    List.Add(FObserverList[HfbLayerOffsetPosition]);
   end;
 end;
 
@@ -434,7 +533,7 @@ begin
   Result := FThicknessFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ThicknessPosition);
+    ResetBoundaryObserver(HfbThicknessPosition);
   end;
 end;
 
@@ -508,12 +607,12 @@ end;
 
 procedure THfbBoundary.SetHydraulicConductivity(Value: string);
 begin
-  UpdateFormulaBlocks(Value, HydraulicConductivityPosition, FHydraulicConductivityFormula);
+  UpdateFormulaBlocks(Value, HfbHydraulicConductivityPosition, FHydraulicConductivityFormula);
 end;
 
 procedure THfbBoundary.SetLayerOffsetFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, LayerOffsetPosition, FLayerOffsetFormula);
+  UpdateFormulaBlocks(Value, HfbLayerOffsetPosition, FLayerOffsetFormula);
 end;
 
 procedure THfbBoundary.SetParameterName(const Value: string);
@@ -536,9 +635,30 @@ begin
   end;
 end;
 
+procedure THfbBoundary.SetPestHydraulicConductivityFormula(const Value: string);
+begin
+
+end;
+
+procedure THfbBoundary.SetPestHydraulicConductivityMethod(
+  const Value: TPestParamMethod);
+begin
+  FPestHydraulicConductivityMethod := Value;
+end;
+
+procedure THfbBoundary.SetPestThicknessFormula(const Value: string);
+begin
+
+end;
+
+procedure THfbBoundary.SetPestThicknessMethod(const Value: TPestParamMethod);
+begin
+  FPestThicknessMethod := Value;
+end;
+
 procedure THfbBoundary.SetThickness(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ThicknessPosition, FThicknessFormula);
+  UpdateFormulaBlocks(Value, HfbThicknessPosition, FThicknessFormula);
 end;
 
 procedure THfbBoundary.SetValues(const Value: THfbCollection);
@@ -613,6 +733,8 @@ procedure THfbBoundary.CreateObservers;
 begin
   if ScreenObject <> nil then
   begin
+    FObserverList.Add(PestThicknessObserver);
+    FObserverList.Add(PestHydraulicConductivityObserver);
     FObserverList.Add(ThicknessObserver);
     FObserverList.Add(HydraulicConductivityObserver);
     FObserverList.Add(LayerOffsetObserver);
@@ -706,8 +828,8 @@ end;
 function THfbItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    ThicknessPosition: result := Thickness;
-    HydraulicConductivityPosition: result := HydraulicConductivity;
+    HfbThicknessPosition: result := Thickness;
+    HfbHydraulicConductivityPosition: result := HydraulicConductivity;
     else Assert(False);
   end;
 end;
@@ -715,25 +837,25 @@ end;
 function THfbItem.GetHydraulicConductivity: string;
 begin
   Result := FHydraulicConductivityFormula.Formula;
-  ResetItemObserver(HydraulicConductivityPosition);
+  ResetItemObserver(HfbHydraulicConductivityPosition);
 end;
 
 procedure THfbItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FThicknessFormula then
   begin
-    List.Add(FObserverList[ThicknessPosition]);
+    List.Add(FObserverList[HfbThicknessPosition]);
   end;
   if Sender = FHydraulicConductivityFormula then
   begin
-    List.Add(FObserverList[HydraulicConductivityPosition]);
+    List.Add(FObserverList[HfbHydraulicConductivityPosition]);
   end;
 end;
 
 function THfbItem.GetThickness: string;
 begin
   Result := FThicknessFormula.Formula;
-  ResetItemObserver(ThicknessPosition);
+  ResetItemObserver(HfbThicknessPosition);
 end;
 
 function THfbItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -762,9 +884,9 @@ end;
 procedure THfbItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    ThicknessPosition:
+    HfbThicknessPosition:
       Thickness := Value;
-    HydraulicConductivityPosition:
+    HfbHydraulicConductivityPosition:
       HydraulicConductivity := Value;
     else Assert(False);
   end;
@@ -772,12 +894,12 @@ end;
 
 procedure THfbItem.SetHydraulicConductivity(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, HydraulicConductivityPosition, FHydraulicConductivityFormula);
+  UpdateFormulaBlocks(Value, HfbHydraulicConductivityPosition, FHydraulicConductivityFormula);
 end;
 
 procedure THfbItem.SetThickness(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ThicknessPosition, FThicknessFormula);
+  UpdateFormulaBlocks(Value, HfbThicknessPosition, FThicknessFormula);
 end;
 
 { THfbRecord }
@@ -945,7 +1067,7 @@ var
   LocalScreenObject: TScreenObject;
   ErrorAnnotation: string;
 begin
-  Assert(BoundaryFunctionIndex in [ThicknessPosition, HydraulicConductivityPosition]);
+  Assert(BoundaryFunctionIndex in [HfbThicknessPosition, HfbHydraulicConductivityPosition]);
   Assert(Expression <> nil);
 
   HfbStorage := BoundaryStorage as THfbStorage;
@@ -961,7 +1083,7 @@ begin
       with HfbStorage.HfbArray[Index] do
       begin
         case BoundaryFunctionIndex of
-          ThicknessPosition:
+          HfbThicknessPosition:
             begin
               Thickness := Expression.DoubleResult;
               ThicknessAnnotation := ACell.Annotation;
@@ -969,7 +1091,7 @@ begin
               ThicknessPestSeriesName := PestSeriesName;
               ThicknessPestSeriesMethod := PestSeriesMethod;
             end;
-          HydraulicConductivityPosition:
+          HfbHydraulicConductivityPosition:
             begin
               HydraulicConductivity := Expression.DoubleResult;
               HydraulicConductivityAnnotation := ACell.Annotation;
@@ -987,7 +1109,7 @@ begin
         with HfbStorage.HfbArray[Index] do
         begin
           case BoundaryFunctionIndex of
-            ThicknessPosition:
+            HfbThicknessPosition:
               begin
                 Thickness := 0;
                 ThicknessAnnotation := StrHFBThicknessSetTo;
@@ -996,7 +1118,7 @@ begin
                 ThicknessPestSeriesName := PestSeriesName;
                 ThicknessPestSeriesMethod := PestSeriesMethod;
               end;
-            HydraulicConductivityPosition:
+            HfbHydraulicConductivityPosition:
               begin
                 HydraulicConductivity := 0;
                 HydraulicConductivityAnnotation := StrHFBHydraulicConduc;

@@ -174,19 +174,23 @@ var
   Exponent: Integer;
   ExponentStr: string;
   ExponentLength: Integer;
-  DecimalPostion: Integer;
+  DecimalPosition: Integer;
 begin
   result := FloatToStr(Value);
   if Length(result) > AvailableWidth then
   begin
     Exponent := Trunc(Log10(Abs(Value)));
+    if Exponent < 0 then
+    begin
+      Dec(Exponent);
+    end;
     result := FloatToStrF(Value, ffGeneral, AvailableWidth,
       Max(0, AvailableWidth-Exponent-1));
     if Length(result) > AvailableWidth then
     begin
-      DecimalPostion :=  Pos('.', result);
+      DecimalPosition :=  Pos('.', result);
       if (Pos('E', result) = 0) and
-        ((DecimalPostion <= AvailableWidth) and (DecimalPostion > 0)) then
+        ((DecimalPosition <= AvailableWidth) and (DecimalPosition > 0)) then
       begin
         result := Copy(result, 1, AvailableWidth);
       end

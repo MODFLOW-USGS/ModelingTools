@@ -1,4 +1,4 @@
-# CSUB: Skeletal Storage, Compaction, and Subsidence Package file created on 4/5/2021 by ModelMuse version 4.3.0.0.
+# CSUB: Skeletal Storage, Compaction, and Subsidence Package file created on 4/6/2021 by ModelMuse version 4.3.0.46.
 BEGIN OPTIONS
   BOUNDNAMES
     PRINT_INPUT
@@ -10,6 +10,7 @@ BEGIN OPTIONS
   UPDATE_MATERIAL_PROPERTIES
   EFFECTIVE_STRESS_LAG
   ZDISPLACEMENT FILEOUT CSubExample.csub_z_dis
+  PACKAGE_CONVERGENCE FILEOUT CSubExample.CsubConvergence.CSV
     OBS6 FILEIN CSubExample.ob_csub
 END OPTIONS
 

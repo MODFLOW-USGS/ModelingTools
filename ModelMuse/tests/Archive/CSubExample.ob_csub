@@ -1,13 +1,17 @@
-# OBS: Observation Utility file created on 4/5/2021 by ModelMuse version 4.3.0.0.
+# OBS: Observation Utility file created on 4/6/2021 by ModelMuse version 4.3.0.46.
 BEGIN OPTIONS
     DIGITS     10
     PRINT_INPUT
 END OPTIONS
 
 BEGIN CONTINUOUS FILEOUT CSubExample.inelastic-csub_ob.csv
+  'ci_Well1_300_1' inelastic-csub   300
+  'ci_Well2_761_1' inelastic-csub   761
 END CONTINUOUS
 
 BEGIN CONTINUOUS FILEOUT CSubExample.elastic-csub_ob.csv
+  'ce_Well1_300_1' elastic-csub   300
+  'ce_Well2_761_1' elastic-csub   761
 END CONTINUOUS
 
 BEGIN CONTINUOUS FILEOUT CSubExample.coarse-csub_ob.csv
@@ -47,9 +51,19 @@ BEGIN CONTINUOUS FILEOUT CSubExample.gstress-cell_ob.csv
 END CONTINUOUS
 
 BEGIN CONTINUOUS FILEOUT CSubExample.interbed-compaction_ob.csv
+  'cico_Well1_Loc_90_1' interbed-compaction    90
+  'cico_Well1_Loc_300_1' interbed-compaction   300
+  'cico_Well1_Loc_510_1' interbed-compaction   510
+  'cico_Well1_Loc_720_1' interbed-compaction   720
+  'cico_Well2_Loc_131_1' interbed-compaction   131
 END CONTINUOUS
 
 BEGIN CONTINUOUS FILEOUT CSubExample.elastic-compaction_ob.csv
+  'cec_Well1_Loc_90_1' elastic-compaction    90
+  'cec_Well1_Loc_300_1' elastic-compaction   300
+  'cec_Well1_Loc_510_1' elastic-compaction   510
+  'cec_Well1_Loc_720_1' elastic-compaction   720
+  'cec_Well2_Loc_131_1' elastic-compaction   131
 END CONTINUOUS
 
 BEGIN CONTINUOUS FILEOUT CSubExample.coarse-compaction_ob.csv
