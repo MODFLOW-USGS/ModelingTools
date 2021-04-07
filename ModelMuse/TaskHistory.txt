@@ -27322,7 +27322,6 @@ object TTaskHistory
       Categories.Strings = (
         'Pest parameter substitution'
         'PEST'
-        'Documentation'
         'Dialog boxes')
     end>
 end
