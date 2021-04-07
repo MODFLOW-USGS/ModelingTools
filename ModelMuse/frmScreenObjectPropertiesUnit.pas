@@ -2732,9 +2732,14 @@ begin
   if (Sender = frameDrnParam.rdgModflowBoundary)
     or (Sender = frameGhbParam.rdgModflowBoundary)
     or (Sender = frameChdParam.rdgModflowBoundary)
+    or (Sender = frameHfbMf6.rdgModflowBoundary)
     then
   begin
-    PestParameterColumns := [2,3]
+    PestParameterColumns := [2,3];
+    if (Sender = frameHfbMf6.rdgModflowBoundary) then
+    begin
+      ParametersOnly := True;
+    end;
   end
   else if (Sender = frameWellParam.rdgModflowBoundary)
     or (Sender = frameFarmWell.rdgModflowBoundary)
@@ -5689,6 +5694,7 @@ begin
   frameMAW.OnCheckPestCell := EnablePestCells;
   frameLakMf6.OnCheckPestCell := EnablePestCells;
   frameCSUB.OnCheckPestCell := EnablePestCells;
+  frameHfbMf6.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -10017,6 +10023,9 @@ var
   NewFormula: string;
   NewValue: string;
   OldFormula: string;
+  TempCompiler: TRbwParser;
+  CompiledFormula: TExpression;
+  PestParamAllowed: Boolean;
 begin
   Assert(Row >= 1);
   Assert(Col in [2,3]);
@@ -10040,13 +10049,51 @@ begin
       if ResultSet then
       begin
         NewFormula := Formula;
-        frameHfbMf6.rdgModflowBoundary.Cells[Col,Row] := NewFormula;
+
       end;
     finally
       Initialize;
 //      Free;
     end;
   end;
+
+  TempCompiler := GetCompiler(dso3D, eaBlocks);
+  try
+    TempCompiler.Compile(NewFormula);
+
+  except on E: ERbwParserError do
+    begin
+      NewFormula := '0';
+      TempCompiler.Compile(NewFormula);
+    end
+  end;
+  CompiledFormula := TempCompiler.CurrentExpression;
+
+  PestParamAllowed := (frameHfbMf6.comboHfbParameters.ItemIndex <= 0)
+    and GetPestParameterAllowed(frameHfbMf6.rdgModflowBoundary, Col);
+  if PestParamAllowed then
+  begin
+    PestParamAllowed :=
+      frmGoPhast.PhastModel.GetPestParameterByName(
+      CompiledFormula.DecompileDisplay) <> nil;
+  end;
+
+  if (CompiledFormula.ResultType in [rdtDouble, rdtInteger]) then
+  begin
+    frameHfbMf6.rdgModflowBoundary.Cells[Col, Row] := CompiledFormula.DecompileDisplay;
+  end
+  else if PestParamAllowed then
+  begin
+    frameHfbMf6.rdgModflowBoundary.Cells[Col, Row] := CompiledFormula.DecompileDisplay;
+  end
+  else
+  begin
+    NewFormula := AdjustFormula(NewFormula, CompiledFormula.ResultType, rdtDouble);
+    TempCompiler.Compile(NewFormula);
+    CompiledFormula := TempCompiler.CurrentExpression;
+    frameHfbMf6.rdgModflowBoundary.Cells[Col, Row] := CompiledFormula.DecompileDisplay;
+  end;
+
 end;
 
 procedure TfrmScreenObjectProperties.AssignHfbFormulas(Ed: TEdit);
@@ -10054,6 +10101,9 @@ var
   NewFormula: string;
   NewValue: string;
   OldFormula: string;
+  TempCompiler: TRbwParser;
+  CompiledFormula: TExpression;
+  PestParamAllowed: Boolean;
 begin
   OldFormula := Ed.Text;
   NewValue := OldFormula;
@@ -10075,13 +10125,48 @@ begin
       if ResultSet then
       begin
         NewFormula := Formula;
-        Ed.Text := NewFormula;
       end;
     finally
       Initialize;
 //      Free;
     end;
   end;
+
+  TempCompiler := GetCompiler(dso3D, eaBlocks);
+  try
+    TempCompiler.Compile(NewFormula);
+
+  except on E: ERbwParserError do
+    begin
+      Beep;
+      raise ERbwParserError.Create(Format(StrErrorInFormulaS,
+        [E.Message]));
+      Exit;
+    end
+  end;
+  CompiledFormula := TempCompiler.CurrentExpression;
+
+  PestParamAllowed := (frameHfbBoundary.comboHfbParameters.ItemIndex <= 0)
+    and (frmGoPhast.PhastModel.GetPestParameterByName(
+    CompiledFormula.DecompileDisplay) <> nil);
+
+  if (CompiledFormula.ResultType in [rdtDouble, rdtInteger]) then
+  begin
+    Ed.Text := CompiledFormula.DecompileDisplay;
+  end
+  else if PestParamAllowed then
+  begin
+    Ed.Text := CompiledFormula.DecompileDisplay;
+  end
+  else
+  begin
+    NewFormula := AdjustFormula(NewFormula, CompiledFormula.ResultType, rdtDouble);
+    TempCompiler.Compile(NewFormula);
+    CompiledFormula := TempCompiler.CurrentExpression;
+    Ed.Text := CompiledFormula.DecompileDisplay;
+  end;
+
+//  Ed.Text := NewFormula;
     // Don't allow the user to click the OK button if any formulas are invalid.
 //    EnableOK_Button;
 end;
@@ -15407,8 +15492,8 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-      Assert(RowIndex >= 1);
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1+PestRowOffset;
+      Assert(RowIndex >= 1+PestRowOffset);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -19186,8 +19271,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -25411,6 +25496,7 @@ begin
     or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3, 4, 6, 7, 8, 10..13, 15]))
     or ((DataGrid = frameLakMf6.rdgModflowBoundary) and (ACol in [3..8]))
     or (DataGrid = frameCSUB.rdgModflowBoundary)
+    or ((DataGrid = frameHfbMf6.rdgModflowBoundary) and (frameHfbMf6.comboHfbParameters.ItemIndex <= 0));
     ;
 end;
 

@@ -4,15 +4,15 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
   ExplicitWidth = 463
   ExplicitHeight = 567
   inherited pnlBottom: TPanel
-    Top = 310
+    Top = 448
     Width = 463
-    Height = 257
-    ExplicitTop = 310
+    Height = 119
+    ExplicitTop = 448
     ExplicitWidth = 463
-    ExplicitHeight = 257
+    ExplicitHeight = 119
     DesignSize = (
       463
-      257)
+      119)
     object lblInitialStage: TLabel [1]
       Left = 79
       Top = 80
@@ -98,66 +98,6 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
       Min = 1.000000000000000000
       CheckMin = True
       ChangeDisabledColor = True
-    end
-    object gbGage: TGroupBox
-      Left = 8
-      Top = 105
-      Width = 449
-      Height = 144
-      Anchors = [akLeft, akTop, akRight]
-      Caption = 'Gage output'
-      TabOrder = 7
-      DesignSize = (
-        449
-        144)
-      object cbGagStandard: TCheckBox
-        Left = 3
-        Top = 16
-        Width = 430
-        Height = 17
-        AllowGrayed = True
-        Caption = 'Time, stage, volume, and concentration'
-        TabOrder = 0
-        OnClick = cbGagStandardClick
-      end
-      object cbGagFluxAndCond: TCheckBox
-        Left = 3
-        Top = 39
-        Width = 443
-        Height = 17
-        AllowGrayed = True
-        Caption = 'Time-step fluxes for lake and total lake conductance'
-        Enabled = False
-        TabOrder = 1
-        OnClick = cbGagFluxAndCondClick
-      end
-      object cbGagDelta: TCheckBox
-        Left = 3
-        Top = 62
-        Width = 443
-        Height = 17
-        AllowGrayed = True
-        Caption = 'Changes in stage, volume, and concentration for lake'
-        Enabled = False
-        TabOrder = 2
-        OnClick = cbGagDeltaClick
-      end
-      object cbGage4: TCheckBox
-        Left = 3
-        Top = 85
-        Width = 443
-        Height = 56
-        AllowGrayed = True
-        Anchors = [akLeft, akTop, akRight]
-        Caption = 
-          'Time, lake stage, lake volume, solute concentration, rate of cha' +
-          'nge of lake volume, volumetric rates for all inflows to and outf' +
-          'lows from lakes, total lake conductance, and time-step budget er' +
-          'ror. '
-        TabOrder = 3
-        WordWrap = True
-        OnClick = cbGage4Click
-      end
     end
   end
   inherited pnlTop: TPanel
@@ -375,8 +315,6 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
-      ExplicitLeft = 1
-      ExplicitTop = 51
       ExplicitWidth = 461
       ExplicitHeight = 44
       ColWidths = (
@@ -394,12 +332,80 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     Left = 0
     Top = 121
     Width = 463
-    Height = 189
+    Height = 327
     ActivePage = tabObservations
     Align = alClient
     TabOrder = 3
+    ExplicitLeft = -1
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
+    end
+    object tabGage: TTabSheet
+      Caption = 'Gage'
+      ImageIndex = 3
+      DesignSize = (
+        455
+        299)
+      object gbGage: TGroupBox
+        Left = 6
+        Top = 17
+        Width = 449
+        Height = 144
+        Anchors = [akLeft, akTop, akRight]
+        Caption = 'Gage output'
+        TabOrder = 0
+        DesignSize = (
+          449
+          144)
+        object cbGagStandard: TCheckBox
+          Left = 3
+          Top = 16
+          Width = 430
+          Height = 17
+          AllowGrayed = True
+          Caption = 'Time, stage, volume, and concentration'
+          TabOrder = 0
+          OnClick = cbGagStandardClick
+        end
+        object cbGagFluxAndCond: TCheckBox
+          Left = 3
+          Top = 39
+          Width = 443
+          Height = 17
+          AllowGrayed = True
+          Caption = 'Time-step fluxes for lake and total lake conductance'
+          Enabled = False
+          TabOrder = 1
+          OnClick = cbGagFluxAndCondClick
+        end
+        object cbGagDelta: TCheckBox
+          Left = 3
+          Top = 62
+          Width = 443
+          Height = 17
+          AllowGrayed = True
+          Caption = 'Changes in stage, volume, and concentration for lake'
+          Enabled = False
+          TabOrder = 2
+          OnClick = cbGagDeltaClick
+        end
+        object cbGage4: TCheckBox
+          Left = 3
+          Top = 85
+          Width = 443
+          Height = 56
+          AllowGrayed = True
+          Anchors = [akLeft, akTop, akRight]
+          Caption = 
+            'Time, lake stage, lake volume, solute concentration, rate of cha' +
+            'nge of lake volume, volumetric rates for all inflows to and outf' +
+            'lows from lakes, total lake conductance, and time-step budget er' +
+            'ror. '
+          TabOrder = 3
+          WordWrap = True
+          OnClick = cbGage4Click
+        end
+      end
     end
     object tabBathymetry: TTabSheet
       Caption = 'Bathymetry'
@@ -408,7 +414,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Left = 0
         Top = 105
         Width = 455
-        Height = 56
+        Height = 194
         Align = alClient
         ColCount = 3
         FixedCols = 0
@@ -540,24 +546,27 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Left = 0
         Top = 0
         Width = 455
-        Height = 161
+        Height = 299
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 455
         ExplicitHeight = 161
         inherited splObservations: TSplitter
-          Top = -17
+          Top = 121
           Width = 455
           ExplicitTop = -17
           ExplicitWidth = 455
         end
         inherited grpDirectObs: TGroupBox
           Width = 455
+          Height = 121
           ExplicitWidth = 455
           inherited frameObservations: TframeGrid
             Width = 451
+            Height = 104
             ExplicitWidth = 451
             inherited Panel: TPanel
+              Top = 63
               Width = 451
               ExplicitWidth = 451
               inherited sbAdd: TSpeedButton
@@ -575,12 +584,13 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
             end
             inherited Grid: TRbwDataGrid4
               Width = 451
+              Height = 63
               ExplicitWidth = 451
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
-          Top = -12
+          Top = 126
           Width = 455
           ExplicitTop = -12
           ExplicitWidth = 455

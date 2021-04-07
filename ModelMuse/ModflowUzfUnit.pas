@@ -1664,9 +1664,11 @@ begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
 
-  PestExtinctionDepthSeriesName := BoundaryGroup.PestBoundaryFormula[UzfExtinctionDepthBoundaryPosition];
+  PestExtinctionDepthSeriesName := BoundaryGroup.PestBoundaryFormula[
+    UzfExtinctionDepthBoundaryPosition];
   PestSeries.Add(PestExtinctionDepthSeriesName);
-  ExtinctionDepthMethod := BoundaryGroup.PestBoundaryMethod[UzfExtinctionDepthBoundaryPosition];
+  ExtinctionDepthMethod := BoundaryGroup.PestBoundaryMethod[
+    UzfExtinctionDepthBoundaryPosition];
   PestMethods.Add(ExtinctionDepthMethod);
 
   ExtinctionDepthItems := TStringList.Create;

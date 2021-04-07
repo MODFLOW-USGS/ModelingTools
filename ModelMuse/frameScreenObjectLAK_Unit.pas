@@ -20,11 +20,6 @@ type
     lblSill: TLabel;
     rdeLakeID: TRbwDataEntry;
     lblLakeID: TLabel;
-    gbGage: TGroupBox;
-    cbGagStandard: TCheckBox;
-    cbGagFluxAndCond: TCheckBox;
-    cbGagDelta: TCheckBox;
-    cbGage4: TCheckBox;
     pcLake: TPageControl;
     tabLakeProperties: TTabSheet;
     tabBathymetry: TTabSheet;
@@ -34,6 +29,12 @@ type
     feLakeBathymetry: TJvFilenameEdit;
     tabObservations: TTabSheet;
     framePestObsLak: TframePestObs;
+    tabGage: TTabSheet;
+    gbGage: TGroupBox;
+    cbGagStandard: TCheckBox;
+    cbGagFluxAndCond: TCheckBox;
+    cbGagDelta: TCheckBox;
+    cbGage4: TCheckBox;
     procedure rdeCenterLakeChange(Sender: TObject);
     procedure cbGagStandardClick(Sender: TObject);
     procedure cbGagFluxAndCondClick(Sender: TObject);

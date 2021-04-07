@@ -21,6 +21,28 @@ type
     EvaporationAnnotation: string;
     OverlandRunoffAnnotation: string;
     WithdrawalAnnotation: string;
+
+    MinimumStagePestName: string;
+    MaximumStagePestName: string;
+    PrecipitationPestName: string;
+    EvaporationPestName: string;
+    OverlandRunoffPestName: string;
+    WithdrawalPestName: string;
+
+    MinimumStagePestSeriesName: string;
+    MaximumStagePestSeriesName: string;
+    PrecipitationPestSeriesName: string;
+    EvaporationPestSeriesName: string;
+    OverlandRunoffPestSeriesName: string;
+    WithdrawalPestSeriesName: string;
+
+    MinimumStagePestSeriesMethod: TPestParamMethod;
+    MaximumStagePestSeriesMethod: TPestParamMethod;
+    PrecipitationPestSeriesMethod: TPestParamMethod;
+    EvaporationPestSeriesMethod: TPestParamMethod;
+    OverlandRunoffPestSeriesMethod: TPestParamMethod;
+    WithdrawalPestSeriesMethod: TPestParamMethod;
+
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -125,6 +147,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property MinimumStage: double read GetMinimumStage;
     property MaximumStage: double read GetMaximumStage;
@@ -310,6 +335,25 @@ type
     FGage4: boolean;
     FExternalLakeTable: TExternalLakeTable;
     FObservations: TLakeObservations;
+    FPestMaximumStageMethod: TPestParamMethod;
+    FPestPrecipitationMethod: TPestParamMethod;
+    FPestMinimumStageMethod: TPestParamMethod;
+    FPestWithdrawalMethod: TPestParamMethod;
+    FPestOverlandRunoffMethod: TPestParamMethod;
+    FPestEvaporationMethod: TPestParamMethod;
+    FPestMinimumStageFormula: TFormulaObject;
+    FPestMaximumStageFormula: TFormulaObject;
+    FPestPrecipitationFormula: TFormulaObject;
+    FPestEvaporationFormula: TFormulaObject;
+    FPestOverlandRunoffFormula: TFormulaObject;
+    FPestWithdrawalFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestEvaporationObserver: TObserver;
+    FPestMaximumStageObserver: TObserver;
+    FPestMinimumStageObserver: TObserver;
+    FPestOverlandRunoffObserver: TObserver;
+    FPestPrecipitationObserver: TObserver;
+    FPestWithdrawalObserver: TObserver;
     procedure SetCenterLake(const Value: integer);
     procedure SetInitialStage(const Value: double);
     procedure SetSill(const Value: double);
@@ -323,18 +367,61 @@ type
     procedure SetGage4(const Value: boolean);
     procedure SetExternalLakeTable(const Value: TExternalLakeTable);
     procedure SetObservations(const Value: TLakeObservations);
+    function GetPestEvaporationFormula: string;
+    function GetPestEvaporationObserver: TObserver;
+    function GetPestMaximumStageFormula: string;
+    function GetPestMaximumStageObserver: TObserver;
+    function GetPestMinimumStageFormula: string;
+    function GetPestMinimumStageObserver: TObserver;
+    function GetPestOverlandRunoffFormula: string;
+    function GetPestOverlandRunoffObserver: TObserver;
+    function GetPestPrecipitationFormula: string;
+    function GetPestPrecipitationObserver: TObserver;
+    function GetPestWithdrawalFormula: string;
+    function GetPestWithdrawalObserver: TObserver;
+    procedure SetPestEvaporationFormula(const Value: string);
+    procedure SetPestEvaporationMethod(const Value: TPestParamMethod);
+    procedure SetPestMaximumStageFormula(const Value: string);
+    procedure SetPestMaximumStageMethod(const Value: TPestParamMethod);
+    procedure SetPestMinimumStageFormula(const Value: string);
+    procedure SetPestMinimumStageMethod(const Value: TPestParamMethod);
+    procedure SetPestOverlandRunoffFormula(const Value: string);
+    procedure SetPestOverlandRunoffMethod(const Value: TPestParamMethod);
+    procedure SetPestPrecipitationFormula(const Value: string);
+    procedure SetPestPrecipitationMethod(const Value: TPestParamMethod);
+    procedure SetPestWithdrawalFormula(const Value: string);
+    procedure SetPestWithdrawalMethod(const Value: TPestParamMethod);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestMinimumStageObserver: TObserver read GetPestMinimumStageObserver;
+    property PestMaximumStageObserver: TObserver read GetPestMaximumStageObserver;
+    property PestPrecipitationObserver: TObserver read GetPestPrecipitationObserver;
+    property PestEvaporationObserver: TObserver read GetPestEvaporationObserver;
+    property PestOverlandRunoffObserver: TObserver read GetPestOverlandRunoffObserver;
+    property PestWithdrawalObserver: TObserver read GetPestWithdrawalObserver;
   public
-    procedure Assign(Source: TPersistent); override;
-    procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
-      AModel: TBaseModel; Writer: TObject); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     // @name destroys the current instance of @classname.  Do not call
     // @name directly.  Call Free instead.
     Destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
+      AModel: TBaseModel; Writer: TObject); override;
     property SubLakeCount: integer read GetSubLakeCount;
     property SubLakes[Index: integer]: TObject read GetSubLake;
     procedure ClearSubLakes;
@@ -343,6 +430,8 @@ type
     procedure DeleteSubLake(Index: integer);
     property OutType: integer read GetOutType;
     procedure ReplaceGUID;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property InitialStage: double read FInitialStage write SetInitialStage;
     property CenterLake: integer read FCenterLake write SetCenterLake;
@@ -357,6 +446,78 @@ type
       write SetObservations
       {$IFNDEF PEST}
       stored False
+      {$ENDIF}
+      ;
+    property PestMinimumStageFormula: string read GetPestMinimumStageFormula
+      write SetPestMinimumStageFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMinimumStageMethod: TPestParamMethod read FPestMinimumStageMethod
+      write SetPestMinimumStageMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMaximumStageFormula: string read GetPestMaximumStageFormula
+      write SetPestMaximumStageFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMaximumStageMethod: TPestParamMethod read FPestMaximumStageMethod
+      write SetPestMaximumStageMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestPrecipitationFormula: string read GetPestPrecipitationFormula
+      write SetPestPrecipitationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestPrecipitationMethod: TPestParamMethod read FPestPrecipitationMethod
+      write SetPestPrecipitationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationFormula: string read GetPestEvaporationFormula
+      write SetPestEvaporationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvaporationMethod: TPestParamMethod read FPestEvaporationMethod
+      write SetPestEvaporationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestOverlandRunoffFormula: string read GetPestOverlandRunoffFormula
+      write SetPestOverlandRunoffFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestOverlandRunoffMethod: TPestParamMethod read FPestOverlandRunoffMethod
+      write SetPestOverlandRunoffMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWithdrawalFormula: string read GetPestWithdrawalFormula
+      write SetPestWithdrawalFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWithdrawalMethod: TPestParamMethod read FPestWithdrawalMethod
+      write SetPestWithdrawalMethod
+      {$IFNDEF PEST}
+      Stored False
       {$ENDIF}
       ;
   end;
@@ -858,6 +1019,111 @@ begin
   result := Values.OverlandRunoffAnnotation;
 end;
 
+function TLak_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    MinimumStagePosition:
+      begin
+        result := Values.MinimumStagePestName;
+      end;
+    MaximumStagePosition:
+      begin
+        result := Values.MaximumStagePestName;
+      end;
+    PrecipitationPosition:
+      begin
+        result := Values.PrecipitationPestName;
+      end;
+    EvaporationPosition:
+      begin
+        result := Values.EvaporationPestName;
+      end;
+    OverlandRunoffPosition:
+      begin
+        result := Values.OverlandRunoffPestName;
+      end;
+    WithdrawalPosition:
+      begin
+        result := Values.WithdrawalPestName;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLak_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    MinimumStagePosition:
+      begin
+        result := Values.MinimumStagePestSeriesMethod;
+      end;
+    MaximumStagePosition:
+      begin
+        result := Values.MaximumStagePestSeriesMethod;
+      end;
+    PrecipitationPosition:
+      begin
+        result := Values.PrecipitationPestSeriesMethod;
+      end;
+    EvaporationPosition:
+      begin
+        result := Values.EvaporationPestSeriesMethod;
+      end;
+    OverlandRunoffPosition:
+      begin
+        result := Values.OverlandRunoffPestSeriesMethod;
+      end;
+    WithdrawalPosition:
+      begin
+        result := Values.WithdrawalPestSeriesMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLak_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    MinimumStagePosition:
+      begin
+        result := Values.MinimumStagePestSeriesName;
+      end;
+    MaximumStagePosition:
+      begin
+        result := Values.MaximumStagePestSeriesName;
+      end;
+    PrecipitationPosition:
+      begin
+        result := Values.PrecipitationPestSeriesName;
+      end;
+    EvaporationPosition:
+      begin
+        result := Values.EvaporationPestSeriesName;
+      end;
+    OverlandRunoffPosition:
+      begin
+        result := Values.OverlandRunoffPestSeriesName;
+      end;
+    WithdrawalPosition:
+      begin
+        result := Values.WithdrawalPestSeriesName;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TLak_Cell.GetPrecipitation: double;
 begin
   result := Values.Precipitation;
@@ -973,6 +1239,30 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalMinimumStagePestSeries: string;
+  LocalMinimumStagePestMethod: TPestParamMethod;
+  MinimumStageItems: TStringList;
+  LocalMinimumStagePest: string;
+  LocalMaximumStagePestSeries: string;
+  LocalMaximumStagePestMethod: TPestParamMethod;
+  MaximumStageItems: TStringList;
+  LocalMaximumStagePest: string;
+  LocalPrecipitationPestSeries: string;
+  LocalPrecipitationPestMethod: TPestParamMethod;
+  PrecipitationItems: TStringList;
+  LocalPrecipitationPest: string;
+  LocalEvaporationPestSeries: string;
+  LocalEvaporationPestMethod: TPestParamMethod;
+  EvaporationItems: TStringList;
+  LocalEvaporationPest: string;
+  LocalOverlandRunoffPestSeries: string;
+  LocalOverlandRunoffPestMethod: TPestParamMethod;
+  OverlandRunoffItems: TStringList;
+  LocalOverlandRunoffPest: string;
+  LocalWithdrawalPestSeries: string;
+  LocalWithdrawalPestMethod: TPestParamMethod;
+  WithdrawalItems: TStringList;
+  LocalWithdrawalPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -985,6 +1275,37 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TLakStorage;
   MinimumStageArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
+  LocalMinimumStagePestSeries := PestSeries[MinimumStagePosition];
+  LocalMinimumStagePestMethod := PestMethods[MinimumStagePosition];
+  MinimumStageItems := PestItemNames[MinimumStagePosition];
+  LocalMinimumStagePest := MinimumStageItems[ItemIndex];
+
+  LocalMaximumStagePestSeries := PestSeries[MaximumStagePosition];
+  LocalMaximumStagePestMethod := PestMethods[MaximumStagePosition];
+  MaximumStageItems := PestItemNames[MaximumStagePosition];
+  LocalMaximumStagePest := MaximumStageItems[ItemIndex];
+
+  LocalPrecipitationPestSeries := PestSeries[PrecipitationPosition];
+  LocalPrecipitationPestMethod := PestMethods[PrecipitationPosition];
+  PrecipitationItems := PestItemNames[PrecipitationPosition];
+  LocalPrecipitationPest := PrecipitationItems[ItemIndex];
+
+  LocalEvaporationPestSeries := PestSeries[EvaporationPosition];
+  LocalEvaporationPestMethod := PestMethods[EvaporationPosition];
+  EvaporationItems := PestItemNames[EvaporationPosition];
+  LocalEvaporationPest := EvaporationItems[ItemIndex];
+
+  LocalOverlandRunoffPestSeries := PestSeries[OverlandRunoffPosition];
+  LocalOverlandRunoffPestMethod := PestMethods[OverlandRunoffPosition];
+  OverlandRunoffItems := PestItemNames[OverlandRunoffPosition];
+  LocalOverlandRunoffPest := OverlandRunoffItems[ItemIndex];
+
+  LocalWithdrawalPestSeries := PestSeries[WithdrawalPosition];
+  LocalWithdrawalPestMethod := PestMethods[WithdrawalPosition];
+  WithdrawalItems := PestItemNames[WithdrawalPosition];
+  LocalWithdrawalPest := WithdrawalItems[ItemIndex];
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := LayerMin to LayerMax do
@@ -1012,31 +1333,49 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 MinimumStageAnnotation := MinimumStageArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                MinimumStagePestName := LocalMinimumStagePest;
+                MinimumStagePestSeriesMethod := LocalMinimumStagePestMethod;
+                MinimumStagePestSeriesName := LocalMinimumStagePestSeries;
 
                 MaximumStage := MaximumStageArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 MaximumStageAnnotation := MaximumStageArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                MaximumStagePestName := LocalMaximumStagePest;
+                MaximumStagePestSeriesMethod := LocalMaximumStagePestMethod;
+                MaximumStagePestSeriesName := LocalMaximumStagePestSeries;
 
                 Precipitation := PrecipitationArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 PrecipitationAnnotation := PrecipitationArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                PrecipitationPestName := LocalPrecipitationPest;
+                PrecipitationPestSeriesMethod := LocalPrecipitationPestMethod;
+                PrecipitationPestSeriesName := LocalPrecipitationPestSeries;
 
                 Evaporation := EvaporationArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 EvaporationAnnotation := EvaporationArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                EvaporationPestName := LocalEvaporationPest;
+                EvaporationPestSeriesMethod := LocalEvaporationPestMethod;
+                EvaporationPestSeriesName := LocalEvaporationPestSeries;
 
                 OverlandRunoff := OverlandRunoffArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 OverlandRunoffAnnotation := OverlandRunoffArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                OverlandRunoffPestName := LocalOverlandRunoffPest;
+                OverlandRunoffPestSeriesMethod := LocalOverlandRunoffPestMethod;
+                OverlandRunoffPestSeriesName := LocalOverlandRunoffPestSeries;
 
                 Withdrawal := WithdrawalArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 WithdrawalAnnotation := WithdrawalArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                WithdrawalPestName := LocalWithdrawalPest;
+                WithdrawalPestSeriesMethod := LocalWithdrawalPestMethod;
+                WithdrawalPestSeriesName := LocalWithdrawalPestSeries;
               end;
               Inc(BoundaryIndex);
             end;
@@ -1076,61 +1415,150 @@ var
   EvaporationData: TModflowTimeList;
   OverlandRunoffData: TModflowTimeList;
   WithdrawalData: TModflowTimeList;
+  PestMinimumStageSeriesName: string;
+  MinimumStageMethod: TPestParamMethod;
+  MinimumStageItems: TStringList;
+  ItemFormula: string;
+  PestMaximumStageSeriesName: string;
+  MaximumStageMethod: TPestParamMethod;
+  MaximumStageItems: TStringList;
+  PestPrecipitationSeriesName: string;
+  PrecipitationMethod: TPestParamMethod;
+  PrecipitationItems: TStringList;
+  PestEvaporationSeriesName: string;
+  EvaporationMethod: TPestParamMethod;
+  EvaporationItems: TStringList;
+  PestOverlandRunoffSeriesName: string;
+  OverlandRunoffMethod: TPestParamMethod;
+  OverlandRunoffItems: TStringList;
+  PestWithdrawalSeriesName: string;
+  WithdrawalMethod: TPestParamMethod;
+  WithdrawalItems: TStringList;
 begin
   Boundary := BoundaryGroup as TLakBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
+
+  PestMinimumStageSeriesName := BoundaryGroup.PestBoundaryFormula[MinimumStagePosition];
+  PestSeries.Add(PestMinimumStageSeriesName);
+  MinimumStageMethod := BoundaryGroup.PestBoundaryMethod[MinimumStagePosition];
+  PestMethods.Add(MinimumStageMethod);
+
+  MinimumStageItems := TStringList.Create;
+  PestItemNames.Add(MinimumStageItems);
+
   SetLength(BoundaryValues, Count);
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TLakItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.MinimumStage;
+
+    ItemFormula := Item.MinimumStage;
+    AssignBoundaryFormula(AModel, PestMinimumStageSeriesName, MinimumStageMethod,
+      MinimumStageItems, ItemFormula, Writer, BoundaryValues[Index]);
+
+//    BoundaryValues[Index].Formula := Item.MinimumStage;
   end;
   ALink := TimeListLink.GetLink(AModel) as TLakTimeListLink;
   MinimumStageData := ALink.FMinimumStageData;
   MinimumStageData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
+  PestMaximumStageSeriesName := BoundaryGroup.PestBoundaryFormula[MaximumStagePosition];
+  PestSeries.Add(PestMaximumStageSeriesName);
+  MaximumStageMethod := BoundaryGroup.PestBoundaryMethod[MaximumStagePosition];
+  PestMethods.Add(MaximumStageMethod);
+
+  MaximumStageItems := TStringList.Create;
+  PestItemNames.Add(MaximumStageItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TLakItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.MaximumStage;
+
+    ItemFormula := Item.MaximumStage;
+    AssignBoundaryFormula(AModel, PestMaximumStageSeriesName, MaximumStageMethod,
+      MaximumStageItems, ItemFormula, Writer, BoundaryValues[Index]);
+//    BoundaryValues[Index].Formula := Item.MaximumStage;
   end;
   MaximumStageData := ALink.FMaximumStageData;
   MaximumStageData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
+  PestPrecipitationSeriesName := BoundaryGroup.PestBoundaryFormula[PrecipitationPosition];
+  PestSeries.Add(PestPrecipitationSeriesName);
+  PrecipitationMethod := BoundaryGroup.PestBoundaryMethod[PrecipitationPosition];
+  PestMethods.Add(PrecipitationMethod);
+
+  PrecipitationItems := TStringList.Create;
+  PestItemNames.Add(PrecipitationItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TLakItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.Precipitation;
+    ItemFormula := Item.Precipitation;
+    AssignBoundaryFormula(AModel, PestPrecipitationSeriesName, PrecipitationMethod,
+      PrecipitationItems, ItemFormula, Writer, BoundaryValues[Index]);
+//    BoundaryValues[Index].Formula := Item.Precipitation;
   end;
   PrecipitationData := ALink.FPrecipitationData;
   PrecipitationData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
+  PestEvaporationSeriesName := BoundaryGroup.PestBoundaryFormula[EvaporationPosition];
+  PestSeries.Add(PestEvaporationSeriesName);
+  EvaporationMethod := BoundaryGroup.PestBoundaryMethod[EvaporationPosition];
+  PestMethods.Add(EvaporationMethod);
+
+  EvaporationItems := TStringList.Create;
+  PestItemNames.Add(EvaporationItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TLakItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.Evaporation;
+    ItemFormula := Item.Evaporation;
+    AssignBoundaryFormula(AModel, PestEvaporationSeriesName, EvaporationMethod,
+      EvaporationItems, ItemFormula, Writer, BoundaryValues[Index]);
+//    BoundaryValues[Index].Formula := Item.Evaporation;
   end;
   EvaporationData := ALink.FEvaporationData;
   EvaporationData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
-  for Index := 0 to Count - 1 do
-  begin
-    Item := Items[Index] as TLakItem;
-    BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.OverlandRunoff;
-  end;
-  OverlandRunoffData := ALink.FOverlandRunoffData;
-  OverlandRunoffData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
+  PestOverlandRunoffSeriesName := BoundaryGroup.PestBoundaryFormula[OverlandRunoffPosition];
+  PestSeries.Add(PestOverlandRunoffSeriesName);
+  OverlandRunoffMethod := BoundaryGroup.PestBoundaryMethod[OverlandRunoffPosition];
+  PestMethods.Add(OverlandRunoffMethod);
+
+  OverlandRunoffItems := TStringList.Create;
+  PestItemNames.Add(OverlandRunoffItems);
 
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TLakItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.Withdrawal;
+    ItemFormula := Item.OverlandRunoff;
+    AssignBoundaryFormula(AModel, PestOverlandRunoffSeriesName, OverlandRunoffMethod,
+      OverlandRunoffItems, ItemFormula, Writer, BoundaryValues[Index]);
+//    BoundaryValues[Index].Formula := Item.OverlandRunoff;
+  end;
+  OverlandRunoffData := ALink.FOverlandRunoffData;
+  OverlandRunoffData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
+
+  PestWithdrawalSeriesName := BoundaryGroup.PestBoundaryFormula[WithdrawalPosition];
+  PestSeries.Add(PestWithdrawalSeriesName);
+  WithdrawalMethod := BoundaryGroup.PestBoundaryMethod[WithdrawalPosition];
+  PestMethods.Add(WithdrawalMethod);
+
+  WithdrawalItems := TStringList.Create;
+  PestItemNames.Add(WithdrawalItems);
+
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index] as TLakItem;
+    BoundaryValues[Index].Time := Item.StartTime;
+    ItemFormula := Item.Withdrawal;
+    AssignBoundaryFormula(AModel, PestWithdrawalSeriesName, WithdrawalMethod,
+      WithdrawalItems, ItemFormula, Writer, BoundaryValues[Index]);
+//    BoundaryValues[Index].Formula := Item.Withdrawal;
   end;
   WithdrawalData := ALink.FWithdrawalData;
   WithdrawalData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
@@ -1330,6 +1758,7 @@ end;
 procedure TLakBoundary.Assign(Source: TPersistent);
 var
   Lake: TLakBoundary;
+  Index: Integer;
 begin
   if Source is TLakBoundary then
   begin
@@ -1344,6 +1773,13 @@ begin
     Gage4 := Lake.Gage4;
     ExternalLakeTable := Lake.ExternalLakeTable;
     Observations := Lake.Observations;
+
+    for Index := MinimumStagePosition to WithdrawalPosition do
+    begin
+      PestBoundaryFormula[Index] := Lake.PestBoundaryFormula[Index];
+      PestBoundaryMethod[Index] := Lake.PestBoundaryMethod[Index];
+    end;
+
   end;
   inherited;
 end;
@@ -1406,6 +1842,11 @@ begin
   result := TLakCollection;
 end;
 
+function TLakBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestLak_';
+end;
+
 procedure TLakBoundary.ClearSubLakes;
 begin
   FSubLakes.Clear;
@@ -1414,6 +1855,7 @@ end;
 constructor TLakBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 var
   OnInvalidateModelEvent: TNotifyEvent;
+  Index: Integer;
 begin
   if Model = nil then
   begin
@@ -1426,7 +1868,78 @@ begin
   inherited;
   FSubLakes:= TList.Create;
   FExternalLakeTable := TExternalLakeTable.Create(Model);
-  FObservations := TLakeObservations.Create(OnInvalidateModelEvent, ScreenObject);
+  FObservations := TLakeObservations.Create(
+    OnInvalidateModelEvent, ScreenObject);
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  for Index := MinimumStagePosition to WithdrawalPosition do
+  begin
+    PestBoundaryFormula[Index] := '';
+    PestBoundaryMethod[Index] := DefaultBoundaryMethod(Index);
+  end;
+
+end;
+
+procedure TLakBoundary.CreateFormulaObjects;
+begin
+  FPestMinimumStageFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestMaximumStageFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestPrecipitationFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestEvaporationFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestOverlandRunoffFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestWithdrawalFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TLakBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestMinimumStageObserver);
+    FObserverList.Add(PestMaximumStageObserver);
+    FObserverList.Add(PestPrecipitationObserver);
+    FObserverList.Add(PestEvaporationObserver);
+    FObserverList.Add(PestOverlandRunoffObserver);
+    FObserverList.Add(PestWithdrawalObserver);
+  end;
+end;
+
+class function TLakBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    MinimumStagePosition:
+      begin
+        result := ppmAdd;
+      end;
+    MaximumStagePosition:
+      begin
+        result := ppmAdd;
+      end;
+    PrecipitationPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    EvaporationPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    OverlandRunoffPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    WithdrawalPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 procedure TLakBoundary.DeleteSubLake(Index: integer);
@@ -1435,7 +1948,13 @@ begin
 end;
 
 destructor TLakBoundary.Destroy;
+var
+  Index: Integer;
 begin
+  for Index := MinimumStagePosition to WithdrawalPosition do
+  begin
+    PestBoundaryFormula[Index] := '';
+  end;
   FObservations.Free;
   FExternalLakeTable.Free;
   FSubLakes.Free;
@@ -1479,6 +1998,237 @@ begin
   end;
 end;
 
+function TLakBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    MinimumStagePosition:
+      begin
+        result := PestMinimumStageFormula;
+      end;
+    MaximumStagePosition:
+      begin
+        result := PestMaximumStageFormula;
+      end;
+    PrecipitationPosition:
+      begin
+        result := PestPrecipitationFormula;
+      end;
+    EvaporationPosition:
+      begin
+        result := PestEvaporationFormula;
+      end;
+    OverlandRunoffPosition:
+      begin
+        result := PestOverlandRunoffFormula;
+      end;
+    WithdrawalPosition:
+      begin
+        result := PestWithdrawalFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLakBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    MinimumStagePosition:
+      begin
+        result := PestMinimumStageMethod;
+      end;
+    MaximumStagePosition:
+      begin
+        result := PestMaximumStageMethod;
+      end;
+    PrecipitationPosition:
+      begin
+        result := PestPrecipitationMethod;
+      end;
+    EvaporationPosition:
+      begin
+        result := PestEvaporationMethod;
+      end;
+    OverlandRunoffPosition:
+      begin
+        result := PestOverlandRunoffMethod;
+      end;
+    WithdrawalPosition:
+      begin
+        result := PestWithdrawalMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLakBoundary.GetPestEvaporationFormula: string;
+begin
+  Result := FPestEvaporationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(EvaporationPosition);
+  end;
+end;
+
+function TLakBoundary.GetPestEvaporationObserver: TObserver;
+begin
+  if FPestEvaporationObserver = nil then
+  begin
+    CreateObserver('PestEvaporation_', FPestEvaporationObserver, nil);
+//    FPestEvaporationObserver.OnUpToDateSet := InvalidateEvaporationData;
+  end;
+  result := FPestEvaporationObserver;
+end;
+
+function TLakBoundary.GetPestMaximumStageFormula: string;
+begin
+  Result := FPestMaximumStageFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MaximumStagePosition);
+  end;
+end;
+
+function TLakBoundary.GetPestMaximumStageObserver: TObserver;
+begin
+  if FPestMaximumStageObserver = nil then
+  begin
+    CreateObserver('PestMaximumStage_', FPestMaximumStageObserver, nil);
+//    FPestMaximumStageObserver.OnUpToDateSet := InvalidateMaximumStageData;
+  end;
+  result := FPestMaximumStageObserver;
+end;
+
+function TLakBoundary.GetPestMinimumStageFormula: string;
+begin
+  Result := FPestMinimumStageFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MinimumStagePosition);
+  end;
+end;
+
+function TLakBoundary.GetPestMinimumStageObserver: TObserver;
+begin
+  if FPestMinimumStageObserver = nil then
+  begin
+    CreateObserver('PestMinimumStage_', FPestMinimumStageObserver, nil);
+//    FPestMinimumStageObserver.OnUpToDateSet := InvalidateMinimumStageData;
+  end;
+  result := FPestMinimumStageObserver;
+end;
+
+function TLakBoundary.GetPestOverlandRunoffFormula: string;
+begin
+  Result := FPestOverlandRunoffFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(OverlandRunoffPosition);
+  end;
+end;
+
+function TLakBoundary.GetPestOverlandRunoffObserver: TObserver;
+begin
+  if FPestOverlandRunoffObserver = nil then
+  begin
+    CreateObserver('PestOverlandRunoff_', FPestOverlandRunoffObserver, nil);
+//    FPestOverlandRunoffObserver.OnUpToDateSet := InvalidateOverlandRunoffData;
+  end;
+  result := FPestOverlandRunoffObserver;
+end;
+
+function TLakBoundary.GetPestPrecipitationFormula: string;
+begin
+  Result := FPestPrecipitationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(PrecipitationPosition);
+  end;
+end;
+
+function TLakBoundary.GetPestPrecipitationObserver: TObserver;
+begin
+  if FPestPrecipitationObserver = nil then
+  begin
+    CreateObserver('PestPrecipitation_', FPestPrecipitationObserver, nil);
+//    FPestPrecipitationObserver.OnUpToDateSet := InvalidatePrecipitationData;
+  end;
+  result := FPestPrecipitationObserver;
+end;
+
+function TLakBoundary.GetPestWithdrawalFormula: string;
+begin
+  Result := FPestWithdrawalFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(WithdrawalPosition);
+  end;
+end;
+
+function TLakBoundary.GetPestWithdrawalObserver: TObserver;
+begin
+  if FPestWithdrawalObserver = nil then
+  begin
+    CreateObserver('PestWithdrawal_', FPestWithdrawalObserver, nil);
+//    FPestWithdrawalObserver.OnUpToDateSet := InvalidateWithdrawalData;
+  end;
+  result := FPestWithdrawalObserver;
+end;
+
+procedure TLakBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestMinimumStageFormula then
+  begin
+    if MinimumStagePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MinimumStagePosition]);
+    end;
+  end;
+  if Sender = FPestMaximumStageFormula then
+  begin
+    if MaximumStagePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[MaximumStagePosition]);
+    end;
+  end;
+  if Sender = FPestPrecipitationFormula then
+  begin
+    if PrecipitationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[PrecipitationPosition]);
+    end;
+  end;
+  if Sender = FPestEvaporationFormula then
+  begin
+    if EvaporationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[EvaporationPosition]);
+    end;
+  end;
+  if Sender = FPestOverlandRunoffFormula then
+  begin
+    if OverlandRunoffPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[OverlandRunoffPosition]);
+    end;
+  end;
+  if Sender = FPestWithdrawalFormula then
+  begin
+    if WithdrawalPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[WithdrawalPosition]);
+    end;
+  end;
+end;
+
 function TLakBoundary.GetSubLake(Index: Integer): TObject;
 begin
   result := FSubLakes[Index];
@@ -1487,6 +2237,21 @@ end;
 function TLakBoundary.GetSubLakeCount: integer;
 begin
   result := FSubLakes.Count;
+end;
+
+function TLakBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestLak_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TLakBoundary.HandleChangedValue(Observer: TObserver);
+begin
+  // nothing to do
 end;
 
 procedure TLakBoundary.ReplaceGUID;
@@ -1564,6 +2329,140 @@ begin
   FObservations.Assign(Value);
 end;
 
+procedure TLakBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    MinimumStagePosition:
+      begin
+        PestMinimumStageFormula := Value;
+      end;
+    MaximumStagePosition:
+      begin
+        PestMaximumStageFormula := Value;
+      end;
+    PrecipitationPosition:
+      begin
+        PestPrecipitationFormula := Value;
+      end;
+    EvaporationPosition:
+      begin
+        PestEvaporationFormula := Value;
+      end;
+    OverlandRunoffPosition:
+      begin
+        PestOverlandRunoffFormula := Value;
+      end;
+    WithdrawalPosition:
+      begin
+        PestWithdrawalFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TLakBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    MinimumStagePosition:
+      begin
+        PestMinimumStageMethod := Value;
+      end;
+    MaximumStagePosition:
+      begin
+        PestMaximumStageMethod := Value;
+      end;
+    PrecipitationPosition:
+      begin
+        PestPrecipitationMethod := Value;
+      end;
+    EvaporationPosition:
+      begin
+        PestEvaporationMethod := Value;
+      end;
+    OverlandRunoffPosition:
+      begin
+        PestOverlandRunoffMethod := Value;
+      end;
+    WithdrawalPosition:
+      begin
+        PestWithdrawalMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TLakBoundary.SetPestEvaporationFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, EvaporationPosition, FPestEvaporationFormula);
+end;
+
+procedure TLakBoundary.SetPestEvaporationMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestEvaporationMethod, Value);
+end;
+
+procedure TLakBoundary.SetPestMaximumStageFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MaximumStagePosition, FPestMaximumStageFormula);
+end;
+
+procedure TLakBoundary.SetPestMaximumStageMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMaximumStageMethod, Value);
+end;
+
+procedure TLakBoundary.SetPestMinimumStageFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MinimumStagePosition, FPestMinimumStageFormula);
+end;
+
+procedure TLakBoundary.SetPestMinimumStageMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMinimumStageMethod, Value);
+end;
+
+procedure TLakBoundary.SetPestOverlandRunoffFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, OverlandRunoffPosition, FPestOverlandRunoffFormula);
+end;
+
+procedure TLakBoundary.SetPestOverlandRunoffMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestOverlandRunoffMethod, Value);
+end;
+
+procedure TLakBoundary.SetPestPrecipitationFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, PrecipitationPosition, FPestPrecipitationFormula);
+end;
+
+procedure TLakBoundary.SetPestPrecipitationMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestPrecipitationMethod, Value);
+end;
+
+procedure TLakBoundary.SetPestWithdrawalFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, WithdrawalPosition, FPestWithdrawalFormula);
+end;
+
+procedure TLakBoundary.SetPestWithdrawalMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestWithdrawalMethod, Value);
+end;
+
 procedure TLakBoundary.SetSill(const Value: double);
 begin
   if FSill <> Value then
@@ -1600,12 +2499,44 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(EvaporationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(OverlandRunoffAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(WithdrawalAnnotation));
-//  WriteCompString(Comp, MinimumStageAnnotation);
-//  WriteCompString(Comp, MaximumStageAnnotation);
-//  WriteCompString(Comp, PrecipitationAnnotation);
-//  WriteCompString(Comp, EvaporationAnnotation);
-//  WriteCompString(Comp, OverlandRunoffAnnotation);
-//  WriteCompString(Comp, WithdrawalAnnotation);
+
+  WriteCompInt(Comp, Strings.IndexOf(MinimumStagePestName));
+  WriteCompInt(Comp, Strings.IndexOf(MaximumStagePestName));
+  WriteCompInt(Comp, Strings.IndexOf(PrecipitationPestName));
+  WriteCompInt(Comp, Strings.IndexOf(EvaporationPestName));
+  WriteCompInt(Comp, Strings.IndexOf(OverlandRunoffPestName));
+  WriteCompInt(Comp, Strings.IndexOf(WithdrawalPestName));
+
+  WriteCompInt(Comp, Strings.IndexOf(MinimumStagePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(MaximumStagePestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(PrecipitationPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(EvaporationPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(OverlandRunoffPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(WithdrawalPestSeriesName));
+
+  WriteCompInt(Comp, Ord(MinimumStagePestSeriesMethod));
+  WriteCompInt(Comp, Ord(MaximumStagePestSeriesMethod));
+  WriteCompInt(Comp, Ord(PrecipitationPestSeriesMethod));
+  WriteCompInt(Comp, Ord(EvaporationPestSeriesMethod));
+  WriteCompInt(Comp, Ord(OverlandRunoffPestSeriesMethod));
+  WriteCompInt(Comp, Ord(WithdrawalPestSeriesMethod));
+
+{
+    MinimumStagePestName: string;
+    MaximumStagePestName: string;
+    PrecipitationPestName: string;
+    EvaporationPestName: string;
+    OverlandRunoffPestName: string;
+    WithdrawalPestName: string;
+
+    MinimumStagePestSeriesName: string;
+    MaximumStagePestSeriesName: string;
+    PrecipitationPestSeriesName: string;
+    EvaporationPestSeriesName: string;
+    OverlandRunoffPestSeriesName: string;
+    WithdrawalPestSeriesName: string;
+}
+
 end;
 
 procedure TLakRecord.RecordStrings(Strings: TStringList);
@@ -1616,6 +2547,20 @@ begin
   Strings.Add(EvaporationAnnotation);
   Strings.Add(OverlandRunoffAnnotation);
   Strings.Add(WithdrawalAnnotation);
+
+  Strings.Add(MinimumStagePestName);
+  Strings.Add(MaximumStagePestName);
+  Strings.Add(PrecipitationPestName);
+  Strings.Add(EvaporationPestName);
+  Strings.Add(OverlandRunoffPestName);
+  Strings.Add(WithdrawalPestName);
+
+  Strings.Add(MinimumStagePestSeriesName);
+  Strings.Add(MaximumStagePestSeriesName);
+  Strings.Add(PrecipitationPestSeriesName);
+  Strings.Add(EvaporationPestSeriesName);
+  Strings.Add(OverlandRunoffPestSeriesName);
+  Strings.Add(WithdrawalPestSeriesName);
 end;
 
 procedure TLakRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1634,12 +2579,28 @@ begin
   EvaporationAnnotation := Annotations[ReadCompInt(Decomp)];
   OverlandRunoffAnnotation := Annotations[ReadCompInt(Decomp)];
   WithdrawalAnnotation := Annotations[ReadCompInt(Decomp)];
-//  MinimumStageAnnotation := ReadCompString(Decomp, Annotations);
-//  MaximumStageAnnotation := ReadCompString(Decomp, Annotations);
-//  PrecipitationAnnotation := ReadCompString(Decomp, Annotations);
-//  EvaporationAnnotation := ReadCompString(Decomp, Annotations);
-//  OverlandRunoffAnnotation := ReadCompString(Decomp, Annotations);
-//  WithdrawalAnnotation := ReadCompString(Decomp, Annotations);
+
+  MinimumStagePestName := Annotations[ReadCompInt(Decomp)];
+  MaximumStagePestName := Annotations[ReadCompInt(Decomp)];
+  PrecipitationPestName := Annotations[ReadCompInt(Decomp)];
+  EvaporationPestName := Annotations[ReadCompInt(Decomp)];
+  OverlandRunoffPestName := Annotations[ReadCompInt(Decomp)];
+  WithdrawalPestName := Annotations[ReadCompInt(Decomp)];
+
+  MinimumStagePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MaximumStagePestSeriesName := Annotations[ReadCompInt(Decomp)];
+  PrecipitationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  EvaporationPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  OverlandRunoffPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  WithdrawalPestSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  MinimumStagePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  MaximumStagePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  PrecipitationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  EvaporationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  OverlandRunoffPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  WithdrawalPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
 end;
 
 { TLakStorage }

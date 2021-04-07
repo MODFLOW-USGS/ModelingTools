@@ -20,11 +20,11 @@ type
     HydraulicConductivityAnnotation: string;
     ThicknessAnnotation: string;
     FPestHydraulicConductivityName: string;
-    FPestHydraulicConductivitySeriesName: string;
-    FPestHydraulicConductivitySeriesMethod: TPestParamMethod;
+//    FPestHydraulicConductivitySeriesName: string;
+//    FPestHydraulicConductivitySeriesMethod: TPestParamMethod;
     FPestThicknessName: string;
-    FPestThicknessSeriesName: string;
-    FPestThicknessSeriesMethod: TPestParamMethod;
+//    FPestThicknessSeriesName: string;
+//    FPestThicknessSeriesMethod: TPestParamMethod;
     Function LocationSame(ABarrier: TBarrier): boolean;
     procedure WriteBarrier(Writer: TModflowHfb_Writer; const Comment: string);
   end;
@@ -265,58 +265,58 @@ var
     Barrier: TBarrier;
     Angle: double;
     Start: integer;
-    procedure ApplyHydraulicConductivitySeriesParam;
-    var
-      Param: TModflowSteadyParameter;
-      Method: TPestParamMethod;
-    begin
-      if Barrier.FPestHydraulicConductivitySeriesName <> '' then
-      begin
-        Param := Model.GetPestParameterByName(Barrier.FPestHydraulicConductivitySeriesName);
-        if Param <> nil then
-        begin
-          Method := Barrier.FPestHydraulicConductivitySeriesMethod;
-          case Method of
-            ppmMultiply:
-              begin
-                Barrier.HydraulicConductivity :=
-                  Barrier.HydraulicConductivity * Param.Value;
-              end;
-            ppmAdd:
-              begin
-                Barrier.HydraulicConductivity :=
-                  Barrier.HydraulicConductivity + Param.Value;
-              end;
-          end;
-        end;
-      end;
-    end;
-    procedure ApplyThicknessSeriesParam;
-    var
-      Param: TModflowSteadyParameter;
-      Method: TPestParamMethod;
-    begin
-      if Barrier.FPestThicknessSeriesName <> '' then
-      begin
-        Param := Model.GetPestParameterByName(Barrier.FPestThicknessSeriesName);
-        if Param <> nil then
-        begin
-          Method := Barrier.FPestThicknessSeriesMethod;
-          case Method of
-            ppmMultiply:
-              begin
-                Barrier.Thickness :=
-                  Barrier.Thickness * Param.Value;
-              end;
-            ppmAdd:
-              begin
-                Barrier.Thickness :=
-                  Barrier.Thickness + Param.Value;
-              end;
-          end;
-        end;
-      end;
-    end;
+//    procedure ApplyHydraulicConductivitySeriesParam;
+//    var
+//      Param: TModflowSteadyParameter;
+//      Method: TPestParamMethod;
+//    begin
+//      if Barrier.FPestHydraulicConductivitySeriesName <> '' then
+//      begin
+//        Param := Model.GetPestParameterByName(Barrier.FPestHydraulicConductivitySeriesName);
+//        if Param <> nil then
+//        begin
+//          Method := Barrier.FPestHydraulicConductivitySeriesMethod;
+//          case Method of
+//            ppmMultiply:
+//              begin
+//                Barrier.HydraulicConductivity :=
+//                  Barrier.HydraulicConductivity * Param.Value;
+//              end;
+//            ppmAdd:
+//              begin
+//                Barrier.HydraulicConductivity :=
+//                  Barrier.HydraulicConductivity + Param.Value;
+//              end;
+//          end;
+//        end;
+//      end;
+//    end;
+//    procedure ApplyThicknessSeriesParam;
+//    var
+//      Param: TModflowSteadyParameter;
+//      Method: TPestParamMethod;
+//    begin
+//      if Barrier.FPestThicknessSeriesName <> '' then
+//      begin
+//        Param := Model.GetPestParameterByName(Barrier.FPestThicknessSeriesName);
+//        if Param <> nil then
+//        begin
+//          Method := Barrier.FPestThicknessSeriesMethod;
+//          case Method of
+//            ppmMultiply:
+//              begin
+//                Barrier.Thickness :=
+//                  Barrier.Thickness * Param.Value;
+//              end;
+//            ppmAdd:
+//              begin
+//                Barrier.Thickness :=
+//                  Barrier.Thickness + Param.Value;
+//              end;
+//          end;
+//        end;
+//      end;
+//    end;
     procedure AssignValues;
     var
       Formula: string;
@@ -346,11 +346,11 @@ var
       Barrier.HydraulicConductivity := HydraulicConductivityExpression.DoubleResult;
       Barrier.HydraulicConductivityAnnotation := HydCondComment;
       Barrier.FPestHydraulicConductivityName  := HydraulicConductivityPestName;
-      Barrier.FPestHydraulicConductivitySeriesName  := ModflowHfbBoundary.PestHydraulicConductivityFormula;
-      Barrier.FPestHydraulicConductivitySeriesMethod  := ModflowHfbBoundary.PestHydraulicConductivityMethod;
+//      Barrier.FPestHydraulicConductivitySeriesName  := ModflowHfbBoundary.PestHydraulicConductivityFormula;
+//      Barrier.FPestHydraulicConductivitySeriesMethod  := ModflowHfbBoundary.PestHydraulicConductivityMethod;
       Barrier.FPestThicknessName  := ThicknessPestName;
-      Barrier.FPestThicknessSeriesName  := ModflowHfbBoundary.PestThicknessFormula;
-      Barrier.FPestThicknessSeriesMethod  := ModflowHfbBoundary.PestThicknessMethod;
+//      Barrier.FPestThicknessSeriesName  := ModflowHfbBoundary.PestThicknessFormula;
+//      Barrier.FPestThicknessSeriesMethod  := ModflowHfbBoundary.PestThicknessMethod;
 
       try
         ThicknessExpression.Evaluate;
@@ -427,13 +427,13 @@ var
             begin
               ScreenObjectList.AddBarrier(Barrier);
               AssignValues;
-//              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
+              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
               begin
                 Angle := ArcTan2(Segment.Y1-Segment.Y2,Segment.X1-Segment.X2);
                 case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
                   amNone:
                     begin
-//                      Assert(False);
+                      Assert(False);
                     end;
                   amAllEdges:
                     begin
@@ -462,8 +462,8 @@ var
                     end;
                   else Assert(False);
                 end;
-                ApplyHydraulicConductivitySeriesParam;
-                ApplyThicknessSeriesParam;
+//                ApplyHydraulicConductivitySeriesParam;
+//                ApplyThicknessSeriesParam;
               end;
             end;
           end;
@@ -497,13 +497,13 @@ var
             begin
               ScreenObjectList.AddBarrier(Barrier);
               AssignValues;
-//              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
+              if ScreenObject.ModflowHfbBoundary.AdjustmentMethod <> amNone then
               begin
                 Angle := ArcTan2(Segment.X1-Segment.X2,Segment.Y1-Segment.Y2);
                 case ScreenObject.ModflowHfbBoundary.AdjustmentMethod of
                   amNone:
                     begin
-//                      Assert(False);
+                      Assert(False);
                     end;
                   amAllEdges:
                     begin
@@ -532,8 +532,8 @@ var
                     end;
                   else Assert(False);
                 end;
-                ApplyHydraulicConductivitySeriesParam;
-                ApplyThicknessSeriesParam;
+//                ApplyHydraulicConductivitySeriesParam;
+//                ApplyThicknessSeriesParam;
               end;
             end;
           end;
@@ -2092,7 +2092,7 @@ var
   HydraulicConductivityFormula: string;
   ThicknessFormula: string;
   ExtendedTemplateCharacter: string;
-  Method: TPestParamMethod;
+//  Method: TPestParamMethod;
 begin
   ModelLayer := Writer.Model.
     DataSetLayerToModflowLayer(Layer);
@@ -2115,9 +2115,9 @@ begin
         Writer.FPestParamUsed := True;
       end
       else if (FPestHydraulicConductivityName <> '')
-        or (FPestHydraulicConductivitySeriesName <> '')
+//        or (FPestHydraulicConductivitySeriesName <> '')
         or (FPestThicknessName <> '')
-        or (FPestThicknessSeriesName <> '')
+//        or (FPestThicknessSeriesName <> '')
         then
       begin
         Writer.FPestParamUsed := True;
@@ -2126,19 +2126,19 @@ begin
     else if Writer.WritingTemplate then
     begin
       if (FPestHydraulicConductivityName <> '')
-        or (FPestHydraulicConductivitySeriesName <> '')
+//        or (FPestHydraulicConductivitySeriesName <> '')
         or (FPestThicknessName <> '')
-        or (FPestThicknessSeriesName <> '')
+//        or (FPestThicknessSeriesName <> '')
         then
       begin
         ExtendedTemplateCharacter := Writer.Model.PestProperties.ExtendedTemplateCharacter;
         if (FPestHydraulicConductivityName <> '')
-          or (FPestHydraulicConductivitySeriesName <> '') then
+          {or (FPestHydraulicConductivitySeriesName <> '')} then
         begin
-          Method := FPestHydraulicConductivitySeriesMethod;
+//          Method := ppmMultiply;
           HydraulicConductivityFormula := Writer.GetPestTemplateFormula(
             HydraulicConductivity, FPestHydraulicConductivityName,
-            FPestHydraulicConductivitySeriesName, Method, nil);
+            '', ppmMultiply, nil);
         end
         else
         begin
@@ -2146,12 +2146,12 @@ begin
         end;
 
         if (FPestThicknessName <> '')
-          or (FPestThicknessSeriesName <> '') then
+          {or (FPestThicknessSeriesName <> '')} then
         begin
-          Method := FPestThicknessSeriesMethod;
+//          Method := FPestThicknessSeriesMethod;
           ThicknessFormula := Writer.GetPestTemplateFormula(
             Thickness, FPestThicknessName,
-            FPestThicknessSeriesName, Method, nil);
+            '', ppmMultiply, nil);
         end
         else
         begin
@@ -2171,9 +2171,9 @@ begin
     begin
       Writer.WriteFloat(HydraulicConductivity/Thickness);
       if (FPestHydraulicConductivityName <> '')
-        or (FPestHydraulicConductivitySeriesName <> '')
+//        or (FPestHydraulicConductivitySeriesName <> '')
         or (FPestThicknessName <> '')
-        or (FPestThicknessSeriesName <> '')
+//        or (FPestThicknessSeriesName <> '')
         then
       begin
         Writer.FPestParamUsed := True;

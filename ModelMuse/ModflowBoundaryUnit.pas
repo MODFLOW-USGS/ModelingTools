@@ -4156,8 +4156,11 @@ procedure TFormulaProperty.ResetBoundaryObserver(Index: integer);
 var
   Observer: TObserver;
 begin
-  Observer := FObserverList[Index];
-  Observer.UpToDate := True;
+  if Index < FObserverList.Count then
+  begin
+    Observer := FObserverList[Index];
+    Observer.UpToDate := True;
+  end;
 end;
 
 procedure TFormulaProperty.UpdateFormulaBlocks(Value: string;

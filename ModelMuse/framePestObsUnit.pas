@@ -467,6 +467,7 @@ begin
   try
     frameObservations.Grid.Cells[Ord(pocName), 0] := StrObservationName;
     frameObservations.Grid.Cells[Ord(pocType), 0] := StrObservationType;
+    frameObservations.Grid.Cells[Ord(pocGroup), 0] := StrObservationGroup;
     frameObservations.Grid.Cells[Ord(pocTime), 0] := StrObservationTime;
     frameObservations.Grid.Cells[Ord(pocValue), 0] := StrObservationValue;
     frameObservations.Grid.Cells[Ord(pocWeight), 0] := StrObservationWeight;

@@ -16,6 +16,9 @@ type
     rgAngleAdjustment: TRadioGroup;
     lblParameterName: TLabel;
     comboHfbParameters: TJvImageComboBox;
+    procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure comboHfbParametersChange(Sender: TObject);
   private
     procedure InitializeControls;
     procedure FillListOfScreenObjects(ListOfScreenObjects: TList;
@@ -48,6 +51,12 @@ resourcestring
 {$R *.dfm}
 
 { TframeScreenObjectHfbMf6 }
+
+procedure TframeScreenObjectHfbMf6.comboHfbParametersChange(Sender: TObject);
+begin
+  inherited;
+  rdgModflowBoundary.Invalidate;
+end;
 
 procedure TframeScreenObjectHfbMf6.FillListOfParameterNames(
   ParameterNames: TStringList);
@@ -89,7 +98,10 @@ var
   AnItem: THfbItem;
   ParameterNames: TStringList;
   ParamIndex: Integer;
+  FirstBoundary: THfbBoundary;
 begin
+  ClearGrid(rdgModflowBoundary);
+
   InitializeControls;
   ParameterNames := TStringList.Create;
   ListOfScreenObjects := TList.Create;
@@ -97,8 +109,6 @@ begin
     Assert(List.Count >= 1);
     FillListOfScreenObjects(ListOfScreenObjects, List);
     FillListOfParameterNames(ParameterNames);
-
-    ClearGrid(rdgModflowBoundary);
 
     Enabled := False;
     if ListOfScreenObjects.Count > 0 then
@@ -111,6 +121,14 @@ begin
         Enabled := True;
       end;
       rgAngleAdjustment.ItemIndex := Ord(Boundary.AdjustmentMethod);
+
+      {$IFDEF PEST}
+      PestModifier[Ord(hcThickness)] := Boundary.PestThicknessFormula;
+      PestMethod[Ord(hcThickness)] := Boundary.PestThicknessMethod;
+
+      PestModifier[Ord(hcHydraulicConductivity)] := Boundary.PestHydraulicConductivityFormula;
+      PestMethod[Ord(hcHydraulicConductivity)] := Boundary.PestHydraulicConductivityMethod;
+      {$ENDIF}
 
       Values := Boundary.Values;// as THfbCollection;
       FirstValues := Values;
@@ -139,12 +157,33 @@ begin
       end;
       comboHfbParameters.ItemIndex := ParamIndex;
 
-
+      FirstBoundary := Boundary;
 
       for Index := 1 to ListOfScreenObjects.Count - 1 do
       begin
         ScreenObject := ListOfScreenObjects[Index];
         Boundary := ScreenObject.ModflowHfbBoundary;
+
+        {$IFDEF PEST}
+        if Boundary.PestThicknessFormula <> FirstBoundary.PestThicknessFormula then
+        begin
+          PestModifierAssigned[Ord(hcThickness)] := False
+        end;
+        if Boundary.PestThicknessMethod <> FirstBoundary.PestThicknessMethod then
+        begin
+          PestMethodAssigned[Ord(hcThickness)] := False
+        end;
+
+        if Boundary.PestHydraulicConductivityFormula <> FirstBoundary.PestHydraulicConductivityFormula then
+        begin
+          PestModifierAssigned[Ord(hcHydraulicConductivity)] := False
+        end;
+        if Boundary.PestHydraulicConductivityMethod <> FirstBoundary.PestHydraulicConductivityMethod then
+        begin
+          PestMethodAssigned[Ord(hcHydraulicConductivity)] := False
+        end;
+        {$ENDIF}
+
         Assert(Boundary <> nil);
         if Boundary.UsedMf6 then
         begin
@@ -212,6 +251,41 @@ begin
     FillPickListWithEndTimes(rdgModflowBoundary, Ord(hcEndTime));
   rdgModflowBoundary.Cells[Ord(hcThickness), 0] := StrBarrierThickness;
   rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), 0] := StrBarrierHydraulicCo;
+
+  seNumberOfTimes.AsInteger := 0;
+  if Assigned(seNumberOfTimes.OnChange) then
+  begin
+    seNumberOfTimes.OnChange(seNumberOfTimes);
+  end;
+  {$IFDEF PEST}
+  rdgModflowBoundary.UseSpecialFormat[0, PestModifierRow] := True;
+  rdgModflowBoundary.UseSpecialFormat[0, PestMethodRow] := True;
+  rdgModflowBoundary.SpecialFormat[0, PestModifierRow] := rcf4String;
+  rdgModflowBoundary.SpecialFormat[0, PestMethodRow] := rcf4String;
+  rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+  rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+
+  PestMethod[Ord(hcThickness)] :=
+    THfbBoundary.DefaultBoundaryMethod(HfbPestThicknessPosition);
+  PestMethod[Ord(hcHydraulicConductivity)] :=
+    THfbBoundary.DefaultBoundaryMethod(HfbPestHydraulicConductivityPosition);
+  {$ENDIF}
+
+end;
+
+procedure TframeScreenObjectHfbMf6.rdgModflowBoundarySelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  {$IFDEF PEST}
+  if ARow <= PestRowOffset then
+  begin
+    if comboHfbParameters.ItemIndex > 0 then
+    begin
+      CanSelect := False;
+    end;
+  end;
+  {$ENDIF}
 end;
 
 procedure TframeScreenObjectHfbMf6.SetData(List: TScreenObjectEditCollection;
@@ -283,47 +357,42 @@ begin
           Boundary.AdjustmentMethod := TAdjustmentMethod(rgAngleAdjustment.ItemIndex);
         end;
 
-//        ItemCount := 0;
-//        for TimeIndex := 1 to seNumberOfTimes.AsInteger do
-//        begin
-//          if TryStrToFloat(rdgModflowBoundary.Cells[Ord(hcStartTime), TimeIndex], StartTime)
-//            and TryStrToFloat(rdgModflowBoundary.Cells[Ord(hcEndTime), TimeIndex], EndTime)
-//            and (rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex] <> '')
-//            and (rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex] <> '') then
-//          begin
-//            if ItemCount < Boundary.Values.Count then
-//            begin
-//              NewItem := Boundary.Values[ItemCount] as THfbItem;
-//            end
-//            else
-//            begin
-//              NewItem := Boundary.Values.Add;
-//            end;
-//            NewItem.StartTime := StartTime;
-//            NewItem.EndTime := EndTime;
-//            NewItem.Thickness := rdgModflowBoundary.Cells[Ord(hcThickness), TimeIndex];
-//            NewItem.HydraulicConductivity := rdgModflowBoundary.Cells[Ord(hcHydraulicConductivity), TimeIndex];
-//            Inc(ItemCount)
-//          end;
-//        end;
-//        Boundary.Values.Count := ItemCount;
-//
-//
         if (NewValues <> nil) and (NewValues.Count > 0) then
         begin
           Boundary.Values := NewValues;
         end;
-      end;
 
-      if comboHfbParameters.ItemIndex >= 0 then
-      begin
-        if comboHfbParameters.ItemIndex = 0 then
+
+        {$IFDEF PEST}
+        if PestModifierAssigned[Ord(hcThickness)] then
         begin
-          Boundary.ParameterName := ''
-        end
-        else
+          Boundary.PestThicknessFormula := PestModifier[Ord(hcThickness)];
+        end;
+        if PestMethodAssigned[Ord(hcThickness)] then
         begin
-          Boundary.ParameterName := comboHfbParameters.Text;
+          Boundary.PestThicknessMethod := PestMethod[Ord(hcThickness)];
+        end;
+
+        if PestModifierAssigned[Ord(hcHydraulicConductivity)] then
+        begin
+          Boundary.PestHydraulicConductivityFormula := PestModifier[Ord(hcHydraulicConductivity)];
+        end;
+        if PestMethodAssigned[Ord(hcHydraulicConductivity)] then
+        begin
+          Boundary.PestHydraulicConductivityMethod := PestMethod[Ord(hcHydraulicConductivity)];
+        end;
+        {$ENDIF}
+
+        if comboHfbParameters.ItemIndex >= 0 then
+        begin
+          if comboHfbParameters.ItemIndex = 0 then
+          begin
+            Boundary.ParameterName := ''
+          end
+          else
+          begin
+            Boundary.ParameterName := comboHfbParameters.Text;
+          end;
         end;
       end;
 

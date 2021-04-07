@@ -11,6 +11,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 275
     DesignSize = (
       320
       46)
@@ -243,8 +244,6 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
-      ExplicitLeft = 2
-      ExplicitTop = 52
     end
   end
 end
