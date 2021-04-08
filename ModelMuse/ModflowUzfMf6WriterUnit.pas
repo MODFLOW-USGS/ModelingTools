@@ -466,8 +466,11 @@ begin
   WriteBeginDimensions;
 
   IDOMAINDataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-  UzfDataArray := Model.DataArrayManager.GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
+  UzfDataArray := Model.DataArrayManager.GetDataSetByName(
+    StrUzfMf6SurfaceDepressionDepth);
+  Assert(UzfDataArray <> nil);
   IDOMAINDataArray.Initialize;
+  Assert(UzfDataArray <> nil);
   UzfDataArray.Initialize;
   uzfcells := 0;
   for LayerIndex := 0 to UzfDataArray.LayerCount - 1 do

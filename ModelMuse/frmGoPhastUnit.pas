@@ -5230,6 +5230,8 @@ begin
     begin
       UndoStack.Submit(TUndoConvertSubAndSwtToCSub.Create);
     end;
+
+    PhastModel.DataArrayManager.CreateInitialDataSets;
   end;
 end;
 

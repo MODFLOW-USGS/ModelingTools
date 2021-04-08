@@ -10251,10 +10251,17 @@ const
 //               Bug fix: Fixed a bug that could cause an access violation if
 //                the name of a global variable that was used in a model feature
 //                was changed.
-//               Bug fix. Fixed bug moving the first vertex of a closed object
+//               Bug fix: Fixed bug moving the first vertex of a closed object
 //                section.
-//               Bug fix that could cause an assertion failure when writing
-//                the UZF file in MODFLOW 6.
+//               Bug fix: Fixed bug that could cause an assertion failure when
+//                writing the UZF file in MODFLOW 6.
+//               Bug fix: Fixed bug that would cause an access violation if the
+//                UZF package in MODFLOW-2005 was converted to the UZF package
+//                in MODFLOW 6 and the model was exported without saving and
+//                closing the model first.
+//               Bug fix: Fixed bug that could cause a range check error if
+//                an object defining a stream in the MODFLOW 6 SFR package did
+//                not intersect any cells.
 
 const
   // version number of ModelMuse.

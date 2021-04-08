@@ -27,6 +27,8 @@ type
     procedure WriteGages(Lines: TStrings);
     procedure WriteObsScript(const AFileName: string);
     function HasLakeInStressPeriod(StressPeriod: TModflowStressPeriod): Boolean;
+    procedure WriteLakeValueOrFormula(Lake: TLakBoundary; LakeItem: TLakItem; Position: Integer);
+    procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -55,7 +57,7 @@ implementation
 
 uses ModflowUnitNumbers, ScreenObjectUnit, frmErrorsAndWarningsUnit,
   DataSetUnit, frmProgressUnit, Forms, GoPhastTypes, PestObsUnit,
-  PestParamRoots;
+  PestParamRoots, ModflowParameterUnit;
 
 resourcestring
   DupNameErrorMessage = 'The following Lakes have the same Lake ID.';
@@ -291,12 +293,13 @@ end;
 
 procedure TModflowLAK_Writer.WriteDataSet3;
 var
-  STAGES, SSMN, SSMX: double;
+  STAGES: double;
+//  SSMN, SSMX: double;
   FirstPeriodIsSteadyState: boolean;
   LakeIndex: Integer;
   ScreenObject: TScreenObject;
   Lake: TLakBoundary;
-  LakeTime: TLakItem;
+  LakeItem: TLakItem;
   IUNITLAKTAB: integer;
   LakeTableFileName: string;
   BathymWriter: TExternalBathymetryFileWriter;
@@ -357,12 +360,11 @@ begin
     WriteFloat(STAGES);
     if FirstPeriodIsSteadyState then
     begin
-      LakeTime := Lake.Values[0] as TLakItem;
-      SSMN := LakeTime.SSMN;
-      SSMX := LakeTime.SSMX;
-
-      WriteFloat(SSMN);
-      WriteFloat(SSMX);
+      LakeItem := Lake.Values[0] as TLakItem;
+      // SSMN
+      WriteLakeValueOrFormula(Lake, LakeItem, LakMinimumStagePosition);
+      // SSMX
+      WriteLakeValueOrFormula(Lake, LakeItem, LakMaximumStagePosition);
       if IUNITLAKTAB > 0 then
       begin
         WriteInteger(IUNITLAKTAB);
@@ -520,22 +522,33 @@ begin
       if (LakeItem.StartTime <= StressPeriod.StartTime)
         and (LakeItem.EndTime > StressPeriod.StartTime) then
       begin
-        PRCPLK := LakeItem.PRCPLK;
-        EVAPLK := LakeItem.EVAPLK;
-        RNF := LakeItem.RNF;
-        WTHDRW := LakeItem.WTHDRW;
+        // PRCPLK
+//        PRCPLK := LakeItem.PRCPLK(PestParValue);
+//        WriteFloat(PRCPLK);
+        WriteLakeValueOrFormula(Lake, LakeItem, LakPrecipitationPosition);
 
-        WriteFloat(PRCPLK);
-        WriteFloat(EVAPLK);
-        WriteFloat(RNF);
-        WriteFloat(WTHDRW);
+
+//        EVAPLK := LakeItem.EVAPLK(PestParValue);
+//        WriteFloat(EVAPLK);
+        WriteLakeValueOrFormula(Lake, LakeItem, LakEvaporationPosition);
+
+//        RNF := LakeItem.RNF(PestParValue);
+//        WriteFloat(RNF);
+        WriteLakeValueOrFormula(Lake, LakeItem, LakOverlandRunoffPosition);
+
+//        WTHDRW := LakeItem.WTHDRW(PestParValue);
+//        WriteFloat(WTHDRW);
+        WriteLakeValueOrFormula(Lake, LakeItem, LakWithdrawalPosition);
 
         if StressPeriod.StressPeriodType = sptSteadyState then
         begin
-          SSMN := LakeItem.SSMN;
-          SSMX := LakeItem.SSMX;
-          WriteFloat(SSMN);
-          WriteFloat(SSMX);
+//          SSMN := LakeItem.SSMN(PestParValue);
+//          WriteFloat(SSMN);
+          WriteLakeValueOrFormula(Lake, LakeItem, LakMinimumStagePosition);
+
+//          SSMX := LakeItem.SSMX(PestParValue);
+//          WriteFloat(SSMX);
+          WriteLakeValueOrFormula(Lake, LakeItem, LakMaximumStagePosition);
         end;
         WriteString(' # DataSet 9: PRCPLK EVAPLK RNF WTHDRW');
         if StressPeriod.StressPeriodType = sptSteadyState then
@@ -729,12 +742,38 @@ begin
     Exit;
   end;
   Evaluate;
-  OpenFile(FileName(AFileName));
+  WriteFileInternal;
+
+  WriteGages(Lines);
+  WriteObsScript(AFileName);
+
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+
+end;
+
+procedure TModflowLAK_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingLAKPackage);
+
+    WriteTemplateHeader;
+
     frmProgressMM.AddMessage(StrWritingDataSet1a);
     WriteDataSet1a;
-      Application.ProcessMessages;
+    Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin
       Exit;
@@ -742,7 +781,7 @@ begin
 
     frmProgressMM.AddMessage(StrWritingDataSet1b);
     WriteDataSet1b;
-      Application.ProcessMessages;
+    Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin
       Exit;
@@ -769,8 +808,50 @@ begin
   finally
     CloseFile;
   end;
-  WriteGages(Lines);
-  WriteObsScript(AFileName);
+end;
+
+procedure TModflowLAK_Writer.WriteLakeValueOrFormula(Lake: TLakBoundary; LakeItem: TLakItem; Position: Integer);
+var
+  Value: Double;
+  PestParValue: string;
+  PestSeriesValue: string;
+  Method: TPestParamMethod;
+  Formula: string;
+  Param: TModflowSteadyParameter;
+begin
+  Value := LakeItem.ItemValue(Position, PestParValue);
+  PestSeriesValue := Lake.PestBoundaryFormula[Position];
+  Method := Lake.PestBoundaryMethod[Position];
+  Formula := LakeItem.ItemFormula(Position);
+  if PestSeriesValue <> '' then
+  begin
+    Param := Model.GetPestParameterByName(Formula);
+  end
+  else
+  begin
+    Param := nil;
+  end;
+  if Param <> nil then
+  begin
+    case Method of
+      ppmMultiply:
+        Value := Value * Param.Value;
+      ppmAdd:
+        Value := Value + Param.Value;
+    end;
+  end;
+  if Model.PestUsed and WritingTemplate and ((PestParValue <> '') or (PestSeriesValue <> '')) then
+  begin
+    WritePestTemplateFormula(Value, PestParValue, PestSeriesValue, Method, nil);
+  end
+  else
+  begin
+    if (PestParValue <> '') or (Param <> nil) then
+    begin
+      FPestParamUsed := True;
+    end;
+    WriteFloat(Value);
+  end;
 end;
 
 procedure TModflowLAK_Writer.WriteGages(

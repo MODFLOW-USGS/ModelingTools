@@ -78,7 +78,7 @@ type
     procedure SetOverlandRunoff(const Value: string);
     procedure SetPrecipitation(const Value: string);
     procedure SetWithdrawal(const Value: string);
-    function ConvertString(Const AString: string): double;
+    function ConvertString(Const AString: string; Out PestParValue: string): double;
     function GetEvaporation: string;
     function GetMaximumStage: string;
     function GetMinimumStage: string;
@@ -98,12 +98,14 @@ type
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function BoundaryFormulaCount: integer; override;
   public
-    function SSMN: double;
-    function SSMX: double;
-    function PRCPLK: double;
-    function EVAPLK: double;
-    function RNF: double;
-    function WTHDRW: double;
+    function SSMN(Out PestParValue: string): double;
+    function SSMX(Out PestParValue: string): double;
+    function PRCPLK(Out PestParValue: string): double;
+    function EVAPLK(Out PestParValue: string): double;
+    function RNF(Out PestParValue: string): double;
+    function WTHDRW(Out PestParValue: string): double;
+    function ItemValue(PositionIndex: integer; Out PestParValue: string): double;
+    function ItemFormula(PositionIndex: integer): string;
     Destructor Destroy; override;
   published
     // @name copies Source to this @classname.
@@ -526,11 +528,19 @@ var
   LakeGageOutputTypes: TStringList;
   LakeGageUnits: TStringList;
 
+const
+  LakMinimumStagePosition = 0;
+  LakMaximumStagePosition = 1;
+  LakPrecipitationPosition = 2;
+  LakEvaporationPosition = 3;
+  LakOverlandRunoffPosition = 4;
+  LakWithdrawalPosition = 5;
+
 implementation
 
 uses RbwParser, ScreenObjectUnit, PhastModelUnit, ModflowTimeUnit,
   ModflowTransientListParameterUnit, TempFiles,
-  frmFormulaErrorsUnit, frmGoPhastUnit;
+  frmFormulaErrorsUnit, frmGoPhastUnit, ModflowParameterUnit;
 
 resourcestring
   StrEvaporationForThe = '(evaporation for the Lake package)';
@@ -545,14 +555,6 @@ resourcestring
   StrEvaporation = 'Evaporation';
   StrOverlandRunoff = 'Overland runoff';
   StrWithdrawal = 'Withdrawal';
-
-const
-  MinimumStagePosition = 0;
-  MaximumStagePosition = 1;
-  PrecipitationPosition = 2;
-  EvaporationPosition = 3;
-  OverlandRunoffPosition = 4;
-  WithdrawalPosition = 5;
 
 //  StreamGageOutputTypes: TStringList;
 
@@ -613,17 +615,17 @@ var
   WithdrawalObserver: TObserver;
 begin
   ParentCollection := Collection as TLakCollection;
-  MinStageObserver := FObserverList[MinimumStagePosition];
+  MinStageObserver := FObserverList[LakMinimumStagePosition];
   MinStageObserver.OnUpToDateSet := ParentCollection.InvalidateMinStageData;
-  MaxStageObserver := FObserverList[MaximumStagePosition];
+  MaxStageObserver := FObserverList[LakMaximumStagePosition];
   MaxStageObserver.OnUpToDateSet := ParentCollection.InvalidateMaxStageData;
-  PrecipObserver := FObserverList[PrecipitationPosition];
+  PrecipObserver := FObserverList[LakPrecipitationPosition];
   PrecipObserver.OnUpToDateSet := ParentCollection.InvalidatePrecipData;
-  EvapObserver := FObserverList[EvaporationPosition];
+  EvapObserver := FObserverList[LakEvaporationPosition];
   EvapObserver.OnUpToDateSet := ParentCollection.InvalidateEvapData;
-  RunoffObserver := FObserverList[OverlandRunoffPosition];
+  RunoffObserver := FObserverList[LakOverlandRunoffPosition];
   RunoffObserver.OnUpToDateSet := ParentCollection.InvalidateRunoffData;
-  WithdrawalObserver := FObserverList[WithdrawalPosition];
+  WithdrawalObserver := FObserverList[LakWithdrawalPosition];
   WithdrawalObserver.OnUpToDateSet := ParentCollection.InvalidateWithdrawalData;
 end;
 
@@ -632,21 +634,32 @@ begin
   result := 6;
 end;
 
-function TLakItem.ConvertString(const AString: string): double;
+function TLakItem.ConvertString(const AString: string; Out PestParValue: string): double;
 var
   Compiler: TRbwParser;
   Model: TPhastModel;
   OrderedCollection: TOrderedCollection;
   TempFormula: string;
+  Param: TModflowSteadyParameter;
 begin
   OrderedCollection := Collection as TOrderedCollection;
   Model := OrderedCollection.Model as TPhastModel;
   Compiler := Model.rpThreeDFormulaCompiler;
 
-  TempFormula := AString;
-  Compiler.Compile(TempFormula);
-  Compiler.CurrentExpression.Evaluate;
-  result := Compiler.CurrentExpression.DoubleResult;
+  Param := Model.GetPestParameterByName(AString);
+  if Param <> nil then
+  begin
+    result := Param.Value;
+    PestParValue := Param.ParameterName;
+  end
+  else
+  begin
+    TempFormula := AString;
+    Compiler.Compile(TempFormula);
+    Compiler.CurrentExpression.Evaluate;
+    result := Compiler.CurrentExpression.DoubleResult;
+    PestParValue := '';
+  end;
 end;
 
 procedure TLakItem.CreateFormulaObjects;
@@ -671,12 +684,12 @@ begin
   inherited;
 end;
 
-function TLakItem.EVAPLK: double;
+function TLakItem.EVAPLK(Out PestParValue: string): double;
 var
   LocalScreenObject: TScreenObject;
 begin
   try
-    result := ConvertString(Evaporation);
+    result := ConvertString(Evaporation, PestParValue);
   except on E: ERbwParserError do
     begin
       LocalScreenObject := ScreenObject as TScreenObject;
@@ -684,7 +697,7 @@ begin
         StrEvaporationForThe,
         Evaporation, E.Message);
       Evaporation := '0.';
-      result := ConvertString(Evaporation);
+      result := ConvertString(Evaporation, PestParValue);
     end;
   end;
 end;
@@ -692,12 +705,12 @@ end;
 function TLakItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    MinimumStagePosition: result := MinimumStage;
-    MaximumStagePosition: result := MaximumStage;
-    PrecipitationPosition: result := Precipitation;
-    EvaporationPosition: result := Evaporation;
-    OverlandRunoffPosition: result := OverlandRunoff;
-    WithdrawalPosition: result := Withdrawal;
+    LakMinimumStagePosition: result := MinimumStage;
+    LakMaximumStagePosition: result := MaximumStage;
+    LakPrecipitationPosition: result := Precipitation;
+    LakEvaporationPosition: result := Evaporation;
+    LakOverlandRunoffPosition: result := OverlandRunoff;
+    LakWithdrawalPosition: result := Withdrawal;
     else Assert(False);
   end;
 end;
@@ -705,65 +718,65 @@ end;
 function TLakItem.GetEvaporation: string;
 begin
   Result := FEvaporation.Formula;
-  ResetItemObserver(EvaporationPosition);
+  ResetItemObserver(LakEvaporationPosition);
 end;
 
 function TLakItem.GetMaximumStage: string;
 begin
   Result := FMaximumStage.Formula;
-  ResetItemObserver(MaximumStagePosition);
+  ResetItemObserver(LakMaximumStagePosition);
 end;
 
 function TLakItem.GetMinimumStage: string;
 begin
   Result := FMinimumStage.Formula;
-  ResetItemObserver(MinimumStagePosition);
+  ResetItemObserver(LakMinimumStagePosition);
 end;
 
 function TLakItem.GetOverlandRunoff: string;
 begin
   Result := FOverlandRunoff.Formula;
-  ResetItemObserver(OverlandRunoffPosition);
+  ResetItemObserver(LakOverlandRunoffPosition);
 end;
 
 function TLakItem.GetPrecipitation: string;
 begin
   Result := FPrecipitation.Formula;
-  ResetItemObserver(PrecipitationPosition);
+  ResetItemObserver(LakPrecipitationPosition);
 end;
 
 procedure TLakItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FMinimumStage then
   begin
-    List.Add(FObserverList[MinimumStagePosition]);
+    List.Add(FObserverList[LakMinimumStagePosition]);
   end;
   if Sender = FMaximumStage then
   begin
-    List.Add(FObserverList[MaximumStagePosition]);
+    List.Add(FObserverList[LakMaximumStagePosition]);
   end;
   if Sender = FPrecipitation then
   begin
-    List.Add(FObserverList[PrecipitationPosition]);
+    List.Add(FObserverList[LakPrecipitationPosition]);
   end;
   if Sender = FEvaporation then
   begin
-    List.Add(FObserverList[EvaporationPosition]);
+    List.Add(FObserverList[LakEvaporationPosition]);
   end;
   if Sender = FOverlandRunoff then
   begin
-    List.Add(FObserverList[OverlandRunoffPosition]);
+    List.Add(FObserverList[LakOverlandRunoffPosition]);
   end;
   if Sender = FWithdrawal then
   begin
-    List.Add(FObserverList[WithdrawalPosition]);
+    List.Add(FObserverList[LakWithdrawalPosition]);
   end;
 end;
 
 function TLakItem.GetWithdrawal: string;
 begin
   Result := FWithdrawal.Formula;
-  ResetItemObserver(WithdrawalPosition);
+  ResetItemObserver(LakWithdrawalPosition);
 end;
 
 function TLakItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -784,12 +797,84 @@ begin
   end;
 end;
 
-function TLakItem.PRCPLK: double;
+function TLakItem.ItemFormula(PositionIndex: integer): string;
+begin
+  case PositionIndex of
+    LakMinimumStagePosition:
+      begin
+        result := MinimumStage;
+      end;
+    LakMaximumStagePosition:
+      begin
+        result := MaximumStage;
+      end;
+    LakPrecipitationPosition:
+      begin
+        result := Precipitation;
+      end;
+    LakEvaporationPosition:
+      begin
+        result := Evaporation;
+      end;
+    LakOverlandRunoffPosition:
+      begin
+        result := OverlandRunoff;
+      end;
+    LakWithdrawalPosition:
+      begin
+        result := Withdrawal;
+      end;
+    else
+      begin
+        result := '';
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLakItem.ItemValue(PositionIndex: integer;
+  out PestParValue: string): double;
+begin
+  case PositionIndex of
+    LakMinimumStagePosition:
+      begin
+        result := SSMN(PestParValue);
+      end;
+    LakMaximumStagePosition:
+      begin
+        result := SSMX(PestParValue);
+      end;
+    LakPrecipitationPosition:
+      begin
+        result := PRCPLK(PestParValue);
+      end;
+    LakEvaporationPosition:
+      begin
+        result := EVAPLK(PestParValue);
+      end;
+    LakOverlandRunoffPosition:
+      begin
+        result := RNF(PestParValue);
+      end;
+    LakWithdrawalPosition:
+      begin
+        result := WTHDRW(PestParValue);
+      end;
+    else
+      begin
+        result := 0;
+        PestParValue := '';
+        Assert(False);
+      end;
+  end;
+end;
+
+function TLakItem.PRCPLK(Out PestParValue: string): double;
 var
   LocalScreenObject: TScreenObject;
 begin
   try
-    result := ConvertString(Precipitation);
+    result := ConvertString(Precipitation, PestParValue);
   except on E: ERbwParserError do
     begin
       LocalScreenObject := ScreenObject as TScreenObject;
@@ -797,7 +882,7 @@ begin
         StrPrecipitationForT,
         Precipitation, E.Message);
       Precipitation := '0.';
-      result := ConvertString(Precipitation);
+      result := ConvertString(Precipitation, PestParValue);
     end;
   end;
 end;
@@ -819,12 +904,12 @@ begin
     GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
-function TLakItem.RNF: double;
+function TLakItem.RNF(Out PestParValue: string): double;
 var
   LocalScreenObject: TScreenObject;
 begin
   try
-    result := ConvertString(OverlandRunoff);
+    result := ConvertString(OverlandRunoff, PestParValue);
   except on E: ERbwParserError do
     begin
       LocalScreenObject := ScreenObject as TScreenObject;
@@ -832,7 +917,7 @@ begin
         StrRunoffForTheLake,
         OverlandRunoff, E.Message);
       OverlandRunoff := '0.';
-      result := ConvertString(OverlandRunoff);
+      result := ConvertString(OverlandRunoff, PestParValue);
     end;
   end;
 end;
@@ -841,29 +926,29 @@ procedure TLakItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   inherited;
   case Index of
-    MinimumStagePosition: MinimumStage := Value;
-    MaximumStagePosition: MaximumStage := Value;
-    PrecipitationPosition: Precipitation := Value;
-    EvaporationPosition: Evaporation := Value;
-    OverlandRunoffPosition: OverlandRunoff := Value;
-    WithdrawalPosition: Withdrawal := Value;
+    LakMinimumStagePosition: MinimumStage := Value;
+    LakMaximumStagePosition: MaximumStage := Value;
+    LakPrecipitationPosition: Precipitation := Value;
+    LakEvaporationPosition: Evaporation := Value;
+    LakOverlandRunoffPosition: OverlandRunoff := Value;
+    LakWithdrawalPosition: Withdrawal := Value;
     else Assert(False);
   end;
 end;
 
 procedure TLakItem.SetEvaporation(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, EvaporationPosition, FEvaporation);
+  UpdateFormulaBlocks(Value, LakEvaporationPosition, FEvaporation);
 end;
 
 procedure TLakItem.SetMaximumStage(const Value: string);
 begin
-//  MinimumStagePosition = 0;
-//  MaximumStagePosition = 1;
-//  PrecipitationPosition = 2;
-//  EvaporationPosition = 3;
-//  OverlandRunoffPosition = 4;
-//  WithdrawalPosition = 5;
+//  LakMinimumStagePosition = 0;
+//  LakMaximumStagePosition = 1;
+//  LakPrecipitationPosition = 2;
+//  LakEvaporationPosition = 3;
+//  LakOverlandRunoffPosition = 4;
+//  LakWithdrawalPosition = 5;
 
 //    FMaximumStage: TFormulaObject;
 //    FPrecipitation: TFormulaObject;
@@ -871,35 +956,35 @@ begin
 //    FWithdrawal: TFormulaObject;
 //    FOverlandRunoff: TFormulaObject;
 //    FEvaporation: TFormulaObject;
-  UpdateFormulaBlocks(Value, MaximumStagePosition, FMaximumStage);
+  UpdateFormulaBlocks(Value, LakMaximumStagePosition, FMaximumStage);
 end;
 
 procedure TLakItem.SetMinimumStage(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, MinimumStagePosition, FMinimumStage);
+  UpdateFormulaBlocks(Value, LakMinimumStagePosition, FMinimumStage);
 end;
 
 procedure TLakItem.SetOverlandRunoff(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, OverlandRunoffPosition, FOverlandRunoff);
+  UpdateFormulaBlocks(Value, LakOverlandRunoffPosition, FOverlandRunoff);
 end;
 
 procedure TLakItem.SetPrecipitation(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, PrecipitationPosition, FPrecipitation);
+  UpdateFormulaBlocks(Value, LakPrecipitationPosition, FPrecipitation);
 end;
 
 procedure TLakItem.SetWithdrawal(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, WithdrawalPosition, FWithdrawal);
+  UpdateFormulaBlocks(Value, LakWithdrawalPosition, FWithdrawal);
 end;
 
-function TLakItem.SSMN: double;
+function TLakItem.SSMN(Out PestParValue: string): double;
 var
   LocalScreenObject: TScreenObject;
 begin
   try
-    result := ConvertString(MinimumStage);
+    result := ConvertString(MinimumStage, PestParValue);
   except on E: ERbwParserError do
     begin
       LocalScreenObject := ScreenObject as TScreenObject;
@@ -907,17 +992,17 @@ begin
         StrMinimumStageForT,
         MinimumStage, E.Message);
       MinimumStage := '0.';
-      result := ConvertString(MinimumStage);
+      result := ConvertString(MinimumStage, PestParValue);
     end;
   end;
 end;
 
-function TLakItem.SSMX: double;
+function TLakItem.SSMX(Out PestParValue: string): double;
 var
   LocalScreenObject: TScreenObject;
 begin
   try
-    result := ConvertString(MaximumStage);
+    result := ConvertString(MaximumStage, PestParValue);
   except on E: ERbwParserError do
     begin
       LocalScreenObject := ScreenObject as TScreenObject;
@@ -925,17 +1010,17 @@ begin
         StrMaximumStageForT,
         MaximumStage, E.Message);
       MaximumStage := '0.';
-      result := ConvertString(MaximumStage);
+      result := ConvertString(MaximumStage, PestParValue);
     end;
   end;
 end;
 
-function TLakItem.WTHDRW: double;
+function TLakItem.WTHDRW(Out PestParValue: string): double;
 var
   LocalScreenObject: TScreenObject;
 begin
   try
-  result := ConvertString(Withdrawal);
+  result := ConvertString(Withdrawal, PestParValue);
   except on E: ERbwParserError do
     begin
       LocalScreenObject := ScreenObject as TScreenObject;
@@ -943,7 +1028,7 @@ begin
         StrWithdrawalForThe,
         Withdrawal, E.Message);
       Withdrawal := '0.';
-      result := ConvertString(Withdrawal);
+      result := ConvertString(Withdrawal, PestParValue);
     end;
   end;
 end;
@@ -1022,27 +1107,27 @@ end;
 function TLak_Cell.GetPestName(Index: Integer): string;
 begin
   case Index of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         result := Values.MinimumStagePestName;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         result := Values.MaximumStagePestName;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         result := Values.PrecipitationPestName;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         result := Values.EvaporationPestName;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         result := Values.OverlandRunoffPestName;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         result := Values.WithdrawalPestName;
       end;
@@ -1057,27 +1142,27 @@ end;
 function TLak_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
 begin
   case Index of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         result := Values.MinimumStagePestSeriesMethod;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         result := Values.MaximumStagePestSeriesMethod;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         result := Values.PrecipitationPestSeriesMethod;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         result := Values.EvaporationPestSeriesMethod;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         result := Values.OverlandRunoffPestSeriesMethod;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         result := Values.WithdrawalPestSeriesMethod;
       end;
@@ -1092,27 +1177,27 @@ end;
 function TLak_Cell.GetPestSeriesName(Index: Integer): string;
 begin
   case Index of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         result := Values.MinimumStagePestSeriesName;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         result := Values.MaximumStagePestSeriesName;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         result := Values.PrecipitationPestSeriesName;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         result := Values.EvaporationPestSeriesName;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         result := Values.OverlandRunoffPestSeriesName;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         result := Values.WithdrawalPestSeriesName;
       end;
@@ -1276,34 +1361,34 @@ begin
   MinimumStageArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
 
-  LocalMinimumStagePestSeries := PestSeries[MinimumStagePosition];
-  LocalMinimumStagePestMethod := PestMethods[MinimumStagePosition];
-  MinimumStageItems := PestItemNames[MinimumStagePosition];
+  LocalMinimumStagePestSeries := PestSeries[LakMinimumStagePosition];
+  LocalMinimumStagePestMethod := PestMethods[LakMinimumStagePosition];
+  MinimumStageItems := PestItemNames[LakMinimumStagePosition];
   LocalMinimumStagePest := MinimumStageItems[ItemIndex];
 
-  LocalMaximumStagePestSeries := PestSeries[MaximumStagePosition];
-  LocalMaximumStagePestMethod := PestMethods[MaximumStagePosition];
-  MaximumStageItems := PestItemNames[MaximumStagePosition];
+  LocalMaximumStagePestSeries := PestSeries[LakMaximumStagePosition];
+  LocalMaximumStagePestMethod := PestMethods[LakMaximumStagePosition];
+  MaximumStageItems := PestItemNames[LakMaximumStagePosition];
   LocalMaximumStagePest := MaximumStageItems[ItemIndex];
 
-  LocalPrecipitationPestSeries := PestSeries[PrecipitationPosition];
-  LocalPrecipitationPestMethod := PestMethods[PrecipitationPosition];
-  PrecipitationItems := PestItemNames[PrecipitationPosition];
+  LocalPrecipitationPestSeries := PestSeries[LakPrecipitationPosition];
+  LocalPrecipitationPestMethod := PestMethods[LakPrecipitationPosition];
+  PrecipitationItems := PestItemNames[LakPrecipitationPosition];
   LocalPrecipitationPest := PrecipitationItems[ItemIndex];
 
-  LocalEvaporationPestSeries := PestSeries[EvaporationPosition];
-  LocalEvaporationPestMethod := PestMethods[EvaporationPosition];
-  EvaporationItems := PestItemNames[EvaporationPosition];
+  LocalEvaporationPestSeries := PestSeries[LakEvaporationPosition];
+  LocalEvaporationPestMethod := PestMethods[LakEvaporationPosition];
+  EvaporationItems := PestItemNames[LakEvaporationPosition];
   LocalEvaporationPest := EvaporationItems[ItemIndex];
 
-  LocalOverlandRunoffPestSeries := PestSeries[OverlandRunoffPosition];
-  LocalOverlandRunoffPestMethod := PestMethods[OverlandRunoffPosition];
-  OverlandRunoffItems := PestItemNames[OverlandRunoffPosition];
+  LocalOverlandRunoffPestSeries := PestSeries[LakOverlandRunoffPosition];
+  LocalOverlandRunoffPestMethod := PestMethods[LakOverlandRunoffPosition];
+  OverlandRunoffItems := PestItemNames[LakOverlandRunoffPosition];
   LocalOverlandRunoffPest := OverlandRunoffItems[ItemIndex];
 
-  LocalWithdrawalPestSeries := PestSeries[WithdrawalPosition];
-  LocalWithdrawalPestMethod := PestMethods[WithdrawalPosition];
-  WithdrawalItems := PestItemNames[WithdrawalPosition];
+  LocalWithdrawalPestSeries := PestSeries[LakWithdrawalPosition];
+  LocalWithdrawalPestMethod := PestMethods[LakWithdrawalPosition];
+  WithdrawalItems := PestItemNames[LakWithdrawalPosition];
   LocalWithdrawalPest := WithdrawalItems[ItemIndex];
 
   if LayerMin >= 0 then
@@ -1438,9 +1523,9 @@ begin
   Boundary := BoundaryGroup as TLakBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
 
-  PestMinimumStageSeriesName := BoundaryGroup.PestBoundaryFormula[MinimumStagePosition];
+  PestMinimumStageSeriesName := BoundaryGroup.PestBoundaryFormula[LakMinimumStagePosition];
   PestSeries.Add(PestMinimumStageSeriesName);
-  MinimumStageMethod := BoundaryGroup.PestBoundaryMethod[MinimumStagePosition];
+  MinimumStageMethod := BoundaryGroup.PestBoundaryMethod[LakMinimumStagePosition];
   PestMethods.Add(MinimumStageMethod);
 
   MinimumStageItems := TStringList.Create;
@@ -1462,9 +1547,9 @@ begin
   MinimumStageData := ALink.FMinimumStageData;
   MinimumStageData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
-  PestMaximumStageSeriesName := BoundaryGroup.PestBoundaryFormula[MaximumStagePosition];
+  PestMaximumStageSeriesName := BoundaryGroup.PestBoundaryFormula[LakMaximumStagePosition];
   PestSeries.Add(PestMaximumStageSeriesName);
-  MaximumStageMethod := BoundaryGroup.PestBoundaryMethod[MaximumStagePosition];
+  MaximumStageMethod := BoundaryGroup.PestBoundaryMethod[LakMaximumStagePosition];
   PestMethods.Add(MaximumStageMethod);
 
   MaximumStageItems := TStringList.Create;
@@ -1483,9 +1568,9 @@ begin
   MaximumStageData := ALink.FMaximumStageData;
   MaximumStageData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
-  PestPrecipitationSeriesName := BoundaryGroup.PestBoundaryFormula[PrecipitationPosition];
+  PestPrecipitationSeriesName := BoundaryGroup.PestBoundaryFormula[LakPrecipitationPosition];
   PestSeries.Add(PestPrecipitationSeriesName);
-  PrecipitationMethod := BoundaryGroup.PestBoundaryMethod[PrecipitationPosition];
+  PrecipitationMethod := BoundaryGroup.PestBoundaryMethod[LakPrecipitationPosition];
   PestMethods.Add(PrecipitationMethod);
 
   PrecipitationItems := TStringList.Create;
@@ -1503,9 +1588,9 @@ begin
   PrecipitationData := ALink.FPrecipitationData;
   PrecipitationData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
-  PestEvaporationSeriesName := BoundaryGroup.PestBoundaryFormula[EvaporationPosition];
+  PestEvaporationSeriesName := BoundaryGroup.PestBoundaryFormula[LakEvaporationPosition];
   PestSeries.Add(PestEvaporationSeriesName);
-  EvaporationMethod := BoundaryGroup.PestBoundaryMethod[EvaporationPosition];
+  EvaporationMethod := BoundaryGroup.PestBoundaryMethod[LakEvaporationPosition];
   PestMethods.Add(EvaporationMethod);
 
   EvaporationItems := TStringList.Create;
@@ -1523,9 +1608,9 @@ begin
   EvaporationData := ALink.FEvaporationData;
   EvaporationData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
-  PestOverlandRunoffSeriesName := BoundaryGroup.PestBoundaryFormula[OverlandRunoffPosition];
+  PestOverlandRunoffSeriesName := BoundaryGroup.PestBoundaryFormula[LakOverlandRunoffPosition];
   PestSeries.Add(PestOverlandRunoffSeriesName);
-  OverlandRunoffMethod := BoundaryGroup.PestBoundaryMethod[OverlandRunoffPosition];
+  OverlandRunoffMethod := BoundaryGroup.PestBoundaryMethod[LakOverlandRunoffPosition];
   PestMethods.Add(OverlandRunoffMethod);
 
   OverlandRunoffItems := TStringList.Create;
@@ -1543,9 +1628,9 @@ begin
   OverlandRunoffData := ALink.FOverlandRunoffData;
   OverlandRunoffData.Initialize(BoundaryValues, ScreenObject, lctIgnore);
 
-  PestWithdrawalSeriesName := BoundaryGroup.PestBoundaryFormula[WithdrawalPosition];
+  PestWithdrawalSeriesName := BoundaryGroup.PestBoundaryFormula[LakWithdrawalPosition];
   PestSeries.Add(PestWithdrawalSeriesName);
-  WithdrawalMethod := BoundaryGroup.PestBoundaryMethod[WithdrawalPosition];
+  WithdrawalMethod := BoundaryGroup.PestBoundaryMethod[LakWithdrawalPosition];
   PestMethods.Add(WithdrawalMethod);
 
   WithdrawalItems := TStringList.Create;
@@ -1774,7 +1859,7 @@ begin
     ExternalLakeTable := Lake.ExternalLakeTable;
     Observations := Lake.Observations;
 
-    for Index := MinimumStagePosition to WithdrawalPosition do
+    for Index := LakMinimumStagePosition to LakWithdrawalPosition do
     begin
       PestBoundaryFormula[Index] := Lake.PestBoundaryFormula[Index];
       PestBoundaryMethod[Index] := Lake.PestBoundaryMethod[Index];
@@ -1875,7 +1960,7 @@ begin
   CreateBoundaryObserver;
   CreateObservers;
 
-  for Index := MinimumStagePosition to WithdrawalPosition do
+  for Index := LakMinimumStagePosition to LakWithdrawalPosition do
   begin
     PestBoundaryFormula[Index] := '';
     PestBoundaryMethod[Index] := DefaultBoundaryMethod(Index);
@@ -1910,27 +1995,27 @@ class function TLakBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         result := ppmAdd;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         result := ppmAdd;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         result := ppmMultiply;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         result := ppmMultiply;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         result := ppmMultiply;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         result := ppmMultiply;
       end;
@@ -1951,7 +2036,7 @@ destructor TLakBoundary.Destroy;
 var
   Index: Integer;
 begin
-  for Index := MinimumStagePosition to WithdrawalPosition do
+  for Index := LakMinimumStagePosition to LakWithdrawalPosition do
   begin
     PestBoundaryFormula[Index] := '';
   end;
@@ -2001,27 +2086,27 @@ end;
 function TLakBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   case FormulaIndex of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         result := PestMinimumStageFormula;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         result := PestMaximumStageFormula;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         result := PestPrecipitationFormula;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         result := PestEvaporationFormula;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         result := PestOverlandRunoffFormula;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         result := PestWithdrawalFormula;
       end;
@@ -2037,27 +2122,27 @@ function TLakBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         result := PestMinimumStageMethod;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         result := PestMaximumStageMethod;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         result := PestPrecipitationMethod;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         result := PestEvaporationMethod;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         result := PestOverlandRunoffMethod;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         result := PestWithdrawalMethod;
       end;
@@ -2074,7 +2159,7 @@ begin
   Result := FPestEvaporationFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(EvaporationPosition);
+    ResetBoundaryObserver(LakEvaporationPosition);
   end;
 end;
 
@@ -2093,7 +2178,7 @@ begin
   Result := FPestMaximumStageFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(MaximumStagePosition);
+    ResetBoundaryObserver(LakMaximumStagePosition);
   end;
 end;
 
@@ -2112,7 +2197,7 @@ begin
   Result := FPestMinimumStageFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(MinimumStagePosition);
+    ResetBoundaryObserver(LakMinimumStagePosition);
   end;
 end;
 
@@ -2131,7 +2216,7 @@ begin
   Result := FPestOverlandRunoffFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(OverlandRunoffPosition);
+    ResetBoundaryObserver(LakOverlandRunoffPosition);
   end;
 end;
 
@@ -2150,7 +2235,7 @@ begin
   Result := FPestPrecipitationFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(PrecipitationPosition);
+    ResetBoundaryObserver(LakPrecipitationPosition);
   end;
 end;
 
@@ -2169,7 +2254,7 @@ begin
   Result := FPestWithdrawalFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(WithdrawalPosition);
+    ResetBoundaryObserver(LakWithdrawalPosition);
   end;
 end;
 
@@ -2187,44 +2272,44 @@ procedure TLakBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestMinimumStageFormula then
   begin
-    if MinimumStagePosition < FObserverList.Count then
+    if LakMinimumStagePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[MinimumStagePosition]);
+      List.Add(FObserverList[LakMinimumStagePosition]);
     end;
   end;
   if Sender = FPestMaximumStageFormula then
   begin
-    if MaximumStagePosition < FObserverList.Count then
+    if LakMaximumStagePosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[MaximumStagePosition]);
+      List.Add(FObserverList[LakMaximumStagePosition]);
     end;
   end;
   if Sender = FPestPrecipitationFormula then
   begin
-    if PrecipitationPosition < FObserverList.Count then
+    if LakPrecipitationPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[PrecipitationPosition]);
+      List.Add(FObserverList[LakPrecipitationPosition]);
     end;
   end;
   if Sender = FPestEvaporationFormula then
   begin
-    if EvaporationPosition < FObserverList.Count then
+    if LakEvaporationPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[EvaporationPosition]);
+      List.Add(FObserverList[LakEvaporationPosition]);
     end;
   end;
   if Sender = FPestOverlandRunoffFormula then
   begin
-    if OverlandRunoffPosition < FObserverList.Count then
+    if LakOverlandRunoffPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[OverlandRunoffPosition]);
+      List.Add(FObserverList[LakOverlandRunoffPosition]);
     end;
   end;
   if Sender = FPestWithdrawalFormula then
   begin
-    if WithdrawalPosition < FObserverList.Count then
+    if LakWithdrawalPosition < FObserverList.Count then
     begin
-      List.Add(FObserverList[WithdrawalPosition]);
+      List.Add(FObserverList[LakWithdrawalPosition]);
     end;
   end;
 end;
@@ -2333,27 +2418,27 @@ procedure TLakBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         PestMinimumStageFormula := Value;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         PestMaximumStageFormula := Value;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         PestPrecipitationFormula := Value;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         PestEvaporationFormula := Value;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         PestOverlandRunoffFormula := Value;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         PestWithdrawalFormula := Value;
       end;
@@ -2369,27 +2454,27 @@ procedure TLakBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
-    MinimumStagePosition:
+    LakMinimumStagePosition:
       begin
         PestMinimumStageMethod := Value;
       end;
-    MaximumStagePosition:
+    LakMaximumStagePosition:
       begin
         PestMaximumStageMethod := Value;
       end;
-    PrecipitationPosition:
+    LakPrecipitationPosition:
       begin
         PestPrecipitationMethod := Value;
       end;
-    EvaporationPosition:
+    LakEvaporationPosition:
       begin
         PestEvaporationMethod := Value;
       end;
-    OverlandRunoffPosition:
+    LakOverlandRunoffPosition:
       begin
         PestOverlandRunoffMethod := Value;
       end;
-    WithdrawalPosition:
+    LakWithdrawalPosition:
       begin
         PestWithdrawalMethod := Value;
       end;
@@ -2403,7 +2488,7 @@ end;
 
 procedure TLakBoundary.SetPestEvaporationFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, EvaporationPosition, FPestEvaporationFormula);
+  UpdateFormulaBlocks(Value, LakEvaporationPosition, FPestEvaporationFormula);
 end;
 
 procedure TLakBoundary.SetPestEvaporationMethod(const Value: TPestParamMethod);
@@ -2413,7 +2498,7 @@ end;
 
 procedure TLakBoundary.SetPestMaximumStageFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, MaximumStagePosition, FPestMaximumStageFormula);
+  UpdateFormulaBlocks(Value, LakMaximumStagePosition, FPestMaximumStageFormula);
 end;
 
 procedure TLakBoundary.SetPestMaximumStageMethod(const Value: TPestParamMethod);
@@ -2423,7 +2508,7 @@ end;
 
 procedure TLakBoundary.SetPestMinimumStageFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, MinimumStagePosition, FPestMinimumStageFormula);
+  UpdateFormulaBlocks(Value, LakMinimumStagePosition, FPestMinimumStageFormula);
 end;
 
 procedure TLakBoundary.SetPestMinimumStageMethod(const Value: TPestParamMethod);
@@ -2433,7 +2518,7 @@ end;
 
 procedure TLakBoundary.SetPestOverlandRunoffFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, OverlandRunoffPosition, FPestOverlandRunoffFormula);
+  UpdateFormulaBlocks(Value, LakOverlandRunoffPosition, FPestOverlandRunoffFormula);
 end;
 
 procedure TLakBoundary.SetPestOverlandRunoffMethod(
@@ -2444,7 +2529,7 @@ end;
 
 procedure TLakBoundary.SetPestPrecipitationFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, PrecipitationPosition, FPestPrecipitationFormula);
+  UpdateFormulaBlocks(Value, LakPrecipitationPosition, FPestPrecipitationFormula);
 end;
 
 procedure TLakBoundary.SetPestPrecipitationMethod(
@@ -2455,7 +2540,7 @@ end;
 
 procedure TLakBoundary.SetPestWithdrawalFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, WithdrawalPosition, FPestWithdrawalFormula);
+  UpdateFormulaBlocks(Value, LakWithdrawalPosition, FPestWithdrawalFormula);
 end;
 
 procedure TLakBoundary.SetPestWithdrawalMethod(const Value: TPestParamMethod);

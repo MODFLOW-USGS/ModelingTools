@@ -96,7 +96,8 @@ uses
   frmErrorsAndWarningsUnit, GoPhastTypes, frmProgressUnit, ModflowGridUnit,
   RbwParser, GIS_Functions, DataSetUnit, frmFormulaErrorsUnit, ModflowCellUnit,
   AbstractGridUnit, Modflow6ObsWriterUnit,
-  ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO;
+  ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO,
+  Vcl.Dialogs;
 
 resourcestring
   StrTheFollowingPairO = 'The following pair of objects have the same SFR se' +
@@ -170,6 +171,8 @@ resourcestring
   'at time.';
   StrIn0sThereWasA = 'In %0:s, there was a gap in time from %1:g to %2:g. An' +
   ' inactive period has been inserted to fill that time.';
+  StrTheSFRSegmentDefi = 'The SFR segment defined by %s doesn''t appear to i' +
+  'ntersect any active cells.';
 
 { TModflowSFR_MF6_Writer }
 
@@ -1541,8 +1544,26 @@ begin
           if SegmentDictionary.TryGetValue(ADiversion.DownstreamSegment,
             OtherSegment) then
           begin
-            AReach := ASegment.Last;
-            OtherReach := OtherSegment.First;
+            try
+              AReach := ASegment.Last;
+            except on ERangeError do
+              begin
+                Beep;
+                MessageDlg(Format(StrTheSFRSegmentDefi,
+                  [ASegment.ScreenObject.Name]), mtError, [mbOK], 0);
+                Exit;
+              end;
+            end;
+            try
+              OtherReach := OtherSegment.First;
+            except on ERangeError do
+              begin
+                Beep;
+                MessageDlg(Format(StrTheSFRSegmentDefi,
+                  [OtherSegment.ScreenObject.Name]), mtError, [mbOK], 0);
+                Exit;
+              end;
+            end;
             WriteInteger(AReach.ReachNumber);
 //            WriteInteger(ADiversion.DiversionNumber);
             WriteInteger(DiverIndex+1);

@@ -5260,6 +5260,7 @@ begin
 
   frmGoPhast.PhastModel.ModflowPackages.UzfMf6Package.Assign(
     frmGoPhast.PhastModel.ModflowPackages.UzfPackage);
+  frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
   for ObjectIndex := 0 to FScreenObjectList.Count - 1 do
   begin
     AScreenObject := FScreenObjectList[ObjectIndex];

@@ -2018,8 +2018,8 @@ type
 
     procedure GetGlobalVariables;
     procedure GetLakBoundary(ScreenObjectList: TList);
-    procedure GetLakeBoundaryCollection(DataGrid: TRbwDataGrid4;
-      ColumnOffset: Integer; ScreenObjectList: TList;
+    procedure GetLakeBoundaryCollection(
+      ScreenObjectList: TList;
       TimeList: TParameterTimeList);
     procedure StoreLakBoundary;
     procedure StoreUzfBoundary;
@@ -2786,6 +2786,11 @@ begin
   begin
     ParametersOnly := True;
     PestParameterColumns := [3..8];
+  end
+  else if (Sender = frameLak.rdgModflowBoundary) then
+  begin
+    ParametersOnly := True;
+    PestParameterColumns := [2..7];
   end;
 
   if not (ACol in PestParameterColumns) and (ARow >= 1)
@@ -5695,6 +5700,7 @@ begin
   frameLakMf6.OnCheckPestCell := EnablePestCells;
   frameCSUB.OnCheckPestCell := EnablePestCells;
   frameHfbMf6.OnCheckPestCell := EnablePestCells;
+  frameLak.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -15398,7 +15404,7 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetLakeBoundaryCollection(
-  DataGrid: TRbwDataGrid4; ColumnOffset: Integer; ScreenObjectList: TList;
+  ScreenObjectList: TList;
   TimeList: TParameterTimeList);
 var
   RowIndex: Integer;
@@ -15416,7 +15422,18 @@ var
   ExternalLakeTable: TExternalLakeTable;
   BathItem: TLakeTableItem;
   Index: integer;
+  DataGrid: TRbwDataGrid4;
+  ColumnOffset: Integer;
 begin
+  DataGrid := frameLak.rdgModflowBoundary;
+  ColumnOffset := 2;
+
+  for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
+  begin
+    frameLak.PestMethod[BoundaryIndex + ColumnOffset] :=
+      TLakBoundary.DefaultBoundaryMethod(BoundaryIndex);
+  end;
+
   frameLak.tabBathymetry.TabVisible := (ScreenObjectList.Count = 1)
     and frmGoPhast.PhastModel.LakBathymetryUsed;
   frameLak.tabLakeProperties.TabVisible :=
@@ -15456,6 +15473,7 @@ begin
     finally
       frameLak.rdgLakeTable.EndUpdate;
     end;
+
     Exit;
   end;
   for ColIndex := ColumnOffset to DataGrid.ColCount - 1 do
@@ -15466,7 +15484,38 @@ begin
     end;
   end;
   Assert(Boundary <> nil);
+//  FirstBoundary := Boundary;
   Values := Boundary.Values;
+
+  for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
+  begin
+    frameLak.PestModifier[BoundaryIndex + ColumnOffset] :=
+      Boundary.PestBoundaryFormula[BoundaryIndex];
+    frameLak.PestMethod[BoundaryIndex + ColumnOffset] :=
+      Boundary.PestBoundaryMethod[BoundaryIndex];
+  end;
+  for ScreenObjectIndex := FirstIndex+1 to ScreenObjectList.Count - 1 do
+  begin
+    AScreenObject := ScreenObjectList[ScreenObjectIndex];
+    AnotherBoundary := AScreenObject.ModflowLakBoundary;
+    if (AnotherBoundary <> nil) and AnotherBoundary.Used then
+    begin
+      for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
+      begin
+        if Boundary.PestBoundaryFormula[BoundaryIndex] <>
+          AnotherBoundary.PestBoundaryFormula[BoundaryIndex] then
+        begin
+          frameLak.PestModifierAssigned[BoundaryIndex + ColumnOffset] := False;
+        end;
+        if Boundary.PestBoundaryMethod[BoundaryIndex] <>
+          AnotherBoundary.PestBoundaryMethod[BoundaryIndex] then
+        begin
+          frameLak.PestMethodAssigned[BoundaryIndex + ColumnOffset] := False;
+        end;
+      end;
+    end;
+  end;
+
   ValuesIdentical := True;
   if ScreenObjectList.Count = 1 then
   begin
@@ -19195,7 +19244,7 @@ end;
 procedure TfrmScreenObjectProperties.GetLakBoundary(ScreenObjectList: TList);
 var
   TimeList: TParameterTimeList;
-  ColumnOffset: integer;
+//  ColumnOffset: integer;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
   Boundary: TLakBoundary;
@@ -19275,9 +19324,8 @@ begin
         DataGrid.Cells[1, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
-      ColumnOffset := 2;
-      GetLakeBoundaryCollection(DataGrid, ColumnOffset,
-        ScreenObjectList, TimeList);
+//      ColumnOffset := 2;
+      GetLakeBoundaryCollection(ScreenObjectList, TimeList);
 
       FirstGage := True;
       Gage0 := cbUnChecked;
@@ -24304,11 +24352,14 @@ var
   SurfaceArea: double;
   ExternalLakeTable: TExternalLakeTable;
   BathItem: TLakeTableItem;
+  ColumnOffset: Integer;
+  BoundaryIndex: Integer;
 begin
   if IsLoaded then
   begin
     Frame := frameLak;
     GetMF_BoundaryTimes(Times, Frame);
+    ColumnOffset := 2;
     for Index := 0 to FNewProperties.Count - 1 do
     begin
       Item := FNewProperties[Index];
@@ -24317,6 +24368,21 @@ begin
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(FLAK_Node, Boundary) then
       begin
+
+        for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
+        begin
+          if frameLak.PestModifierAssigned[BoundaryIndex + ColumnOffset] then
+          begin
+            Boundary.PestBoundaryFormula[BoundaryIndex] :=
+              frameLak.PestModifier[BoundaryIndex + ColumnOffset];
+          end;
+          if frameLak.PestMethodAssigned[BoundaryIndex + ColumnOffset] then
+          begin
+            Boundary.PestBoundaryMethod[BoundaryIndex] :=
+              frameLak.PestMethod[BoundaryIndex + ColumnOffset];
+          end;
+        end;
+
         StoreModflowBoundaryValues(Frame, Times, Boundary);
         if frameLak.cbGagStandard.State <> cbGrayed then
         begin
@@ -25496,7 +25562,8 @@ begin
     or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3, 4, 6, 7, 8, 10..13, 15]))
     or ((DataGrid = frameLakMf6.rdgModflowBoundary) and (ACol in [3..8]))
     or (DataGrid = frameCSUB.rdgModflowBoundary)
-    or ((DataGrid = frameHfbMf6.rdgModflowBoundary) and (frameHfbMf6.comboHfbParameters.ItemIndex <= 0));
+    or ((DataGrid = frameHfbMf6.rdgModflowBoundary) and (frameHfbMf6.comboHfbParameters.ItemIndex <= 0))
+    or (DataGrid = frameLak.rdgModflowBoundary)
     ;
 end;
 

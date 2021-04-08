@@ -2398,6 +2398,8 @@ begin
     Exit;
   end;
   inherited;
+
+
 end;
 
 procedure TSfrMf6Boundary.AssignCells(BoundaryStorage: TCustomBoundaryStorage;

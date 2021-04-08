@@ -234,6 +234,7 @@ resourcestring
   StrObject = 'Object';
   StrStructure = 'Structure';
   StrConnectedReach = 'Connected Reach';
+  StrNoModelSelectionH = 'No model selection has been made.';
 
 {$R *.dfm}
 
@@ -360,8 +361,8 @@ begin
   FDataSetDummyObjects := TObjectList.Create;
 
   case frmGoPhast.ModelSelection of
-    msPhast, msModflow, msModflowNWT, msModflowCfp, msModflow2015, msSutra22, msSutra30,
-      msFootPrint:
+    msPhast, msModflow, msModflowNWT, msModflowCfp, msModflow2015, msSutra22,
+       msSutra30, msFootPrint:
       begin
         comboModel.Items.AddObject(StrParentModel, frmGoPhast.PhastModel)
       end;
@@ -374,6 +375,13 @@ begin
           comboModel.Items.AddObject(ChildModel.ModelName, ChildModel);
         end;
       end;
+    msUndefined:
+      begin
+        Beep;
+        MessageDlg(StrNoModelSelectionH, mtError, [mbOK], 0);
+        Close;
+        Exit;
+      end
     else
       Assert(False);
   end;

@@ -2236,7 +2236,9 @@ begin
     LocalModel := UzfSource.ParentModel as TCustomModel;
     Assert(LocalModel <> nil);
 
-    SurfaceDepressionDepth := FortranFloatToStr(LocalModel.ModflowPackages.UzfPackage.DepthOfUndulations);
+    SurfaceDepressionDepth := FortranFloatToStr(LocalModel.ModflowPackages.
+      UzfPackage.DepthOfUndulations);
+
     if LocalModel.DataArrayManager.GetDataSetByName(StrUzfVerticalK) <> nil then
     begin
       VerticalSaturatedK := StrUzfVerticalK;
@@ -2304,6 +2306,66 @@ begin
     begin
       Values.Assign(UzfSource.WaterContent);
     end;
+
+    Loaded;
+
+//    Brooks_Corey_Epsilon := LocalModel.DataArrayManager.
+//      GetDataSetByName(StrUzfMf6BrooksCoreyEpsilon);
+//    Initial_Unsaturated_Water_Content := LocalModel.DataArrayManager.
+//      GetDataSetByName(StrUzfMf6InitialUnsaturatedWaterContent);
+//    Residual_Water_Content := LocalModel.DataArrayManager.
+//      GetDataSetByName(StrUzfMf6ReisidualWaterContent);
+//    Saturated_Water_Content := LocalModel.DataArrayManager.
+//      GetDataSetByName(StrUzfMf6SaturatedWaterContent);
+//    Surface_Depression_Depth := LocalModel.DataArrayManager.
+//      GetDataSetByName(StrUzfMf6SurfaceDepressionDepth);
+//    Vertical_Saturated_K := LocalModel.DataArrayManager.
+//      GetDataSetByName(StrUzfMf6VerticalSaturatedK);
+//
+//    Assert(ScreenObject <> nil);
+//    AScreenObject := ScreenObject as TScreenObject;
+//
+//    if Surface_Depression_Depth <> nil then
+//    begin
+//      DataSetIndex := AScreenObject.AddDataSet(Surface_Depression_Depth);
+//      AScreenObject.DataSetFormulas[DataSetIndex] :=
+//        SurfaceDepressionDepth;
+//    end;
+//
+//    if Vertical_Saturated_K <> nil then
+//    begin
+//      DataSetIndex := AScreenObject.AddDataSet(Vertical_Saturated_K);
+//      AScreenObject.DataSetFormulas[DataSetIndex] :=
+//        VerticalSaturatedK;
+//    end;
+//
+//    if Residual_Water_Content <> nil then
+//    begin
+//      DataSetIndex := AScreenObject.AddDataSet(Residual_Water_Content);
+//      AScreenObject.DataSetFormulas[DataSetIndex] :=
+//        ResidualWaterContent;
+//    end;
+//
+//    if Saturated_Water_Content <> nil then
+//    begin
+//      DataSetIndex := AScreenObject.AddDataSet(Saturated_Water_Content);
+//      AScreenObject.DataSetFormulas[DataSetIndex] :=
+//        SaturatedWaterContent;
+//    end;
+//
+//    if Initial_Unsaturated_Water_Content <> nil then
+//    begin
+//      DataSetIndex := AScreenObject.AddDataSet(Initial_Unsaturated_Water_Content);
+//      AScreenObject.DataSetFormulas[DataSetIndex] :=
+//        InitialWaterContent;
+//    end;
+//
+//    if Brooks_Corey_Epsilon <> nil then
+//    begin
+//      DataSetIndex := AScreenObject.AddDataSet(Brooks_Corey_Epsilon);
+//      AScreenObject.DataSetFormulas[DataSetIndex] :=
+//        BrooksCoreyEpsilon;
+//    end;
   end;
 
 end;
