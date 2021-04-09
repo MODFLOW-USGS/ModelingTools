@@ -26,8 +26,9 @@
     <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.bhd</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.cbc</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.dis.grb</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.InnerSolution.CSV</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.lst</FileName>
-    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.Solution.CSV</FileName>
+    <FileName Model_Name="HfbMf6Test" FileType="Model Output">HfbMf6Test.OuterSolution.CSV</FileName>
     <FileName Model_Name="HfbMf6Test" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

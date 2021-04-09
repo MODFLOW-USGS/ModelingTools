@@ -10262,6 +10262,11 @@ const
 //               Bug fix: Fixed bug that could cause a range check error if
 //                an object defining a stream in the MODFLOW 6 SFR package did
 //                not intersect any cells.
+//               Change: ModelMuse now creates a file named
+//                "usgs.model.reference." for the groundwater flow model.
+//                Previously, the "model" part of the
+//                file name would be the name of the model. A file with the
+//                model name as part of the file name is still created.
 
 const
   // version number of ModelMuse.

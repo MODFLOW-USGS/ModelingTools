@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">How can I export data from my model?</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">How can I export data from my model?</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are several ways you can export data from your model.</text></para>
+    <para styleclass="Strong"><text styleclass="Normal" translate="true">If you want to use the data in a Geographic Information System (GIS), you can use any of the commands under</text><text styleclass="Strong" translate="true">&#32;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="File" anchor="ExportShapeFile" styleclass="Strong" translate="true">File|Export|Shapefile</link><text styleclass="Strong" translate="true">&#32;</text><text styleclass="Normal" translate="true">such as</text><text styleclass="Strong" translate="true">&#32;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Shapefile_Dialog_Box" styleclass="Strong" translate="true">File|Export|Shapefile|Export Grid/Mesh Data to Shapefile</link><text styleclass="Strong" translate="true">.</text></para>
+    <para styleclass="Strong"><text styleclass="Normal" translate="true">If you prefer the data in a text file, you can use</text><text styleclass="Strong" translate="true">&#32;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Data_as_CSV_Dialog_Box" styleclass="Strong" translate="true">File|Export|Export Data Sets to CSV</link><text styleclass="Strong" translate="true">. </text><text styleclass="Normal" translate="true">A CSV file is a text file in which each line contains a series of values separated by commas. (CSV stands for comma-separated values).</text></para>
+    <para styleclass="Strong"><text styleclass="Normal" translate="true">You can export the values from one data set from the</text><text styleclass="Strong" translate="true">&#32;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Set_Values_Dialog_Box" styleclass="Strong" translate="true">Data Set Values dialog box</link><text styleclass="Strong" translate="true">&#32;</text><text styleclass="Normal" translate="true">which you can access by selecting &quot;</text><text styleclass="Strong" translate="true">Data|Display Data Set Values</text><text styleclass="Normal" translate="true">.&quot;</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If you want to export an image of your data, select </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Image_Dialog_Box" styleclass="Strong" translate="true">File|Export|Image</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

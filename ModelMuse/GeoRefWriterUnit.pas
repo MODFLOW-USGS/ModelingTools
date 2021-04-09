@@ -23,7 +23,8 @@ type
 implementation
 
 uses
-  GeoRefUnit, frmErrorsAndWarningsUnit, ModflowPackageSelectionUnit;
+  GeoRefUnit, frmErrorsAndWarningsUnit, ModflowPackageSelectionUnit,
+  System.IOUtils;
 
 resourcestring
   StrTheSOfYourModel = 'The %s of your model is undefined. You can define it' +
@@ -168,6 +169,11 @@ begin
     NewLine;
   finally
     CloseFile;
+  end;
+
+  if SubModelType = smtMain then
+  begin
+    TFile.Copy(FFileName, Directory + 'usgs.model.reference', True);
   end;
 end;
 

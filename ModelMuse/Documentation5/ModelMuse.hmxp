@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4133</config-value>
+      <config-value name="autohelpstart">4136</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -120,6 +120,7 @@
       <config-value name="make0status">(Complete)</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">(Complete)</config-value>
+      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -924,6 +925,7 @@ document.write('</frameset>');
       <helpcontext-number href="File#ExportHeadObservationsToShapefile" value="3967"/>
       <helpcontext-number href="File#ExportModflow" value="3974"/>
       <helpcontext-number href="File#ExportPathlinesToShapefile" value="3963"/>
+      <helpcontext-number href="File#ExportShapeFile" value="4135"/>
       <helpcontext-number href="File#ExportSutraMesh" value="4021"/>
       <helpcontext-number href="File#ExportTimeSeriesToShapefile" value="3965"/>
       <helpcontext-number href="File#ImportSutraMesh" value="4022"/>
@@ -1015,6 +1017,7 @@ document.write('</frameset>');
       <helpcontext-number href="HOB_Head_Observation_Package_P" value="3377"/>
       <helpcontext-number href="Horizontal_Subdivision" value="3958"/>
       <helpcontext-number href="How_can_I_estimate_the_step_si" value="4002"/>
+      <helpcontext-number href="How_can_I_export_data_from_my_" value="4134"/>
       <helpcontext-number href="How_do_I_plot_head__drawdown_o" value="3996"/>
       <helpcontext-number href="How_do_I_specify_MT3D_Observat" value="3994"/>
       <helpcontext-number href="Huf_Head_In_Formula" value="3556"/>

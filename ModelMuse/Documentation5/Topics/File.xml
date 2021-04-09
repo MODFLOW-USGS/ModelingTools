@@ -306,7 +306,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|Shapefile|Grid/Mesh Data to Shapefile...</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Export a Shapefile of gridded or meshed data. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Shapefile_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Export Grid/Mesh Data to Shapefile</link><text styleclass="Table Cell" translate="true"> dialog box. </text><text styleclass="Normal" translate="true">Shapefiles exported from ModelMuse do not contain information about the projection used for the model. You may need to supply the projection to use the Shapefile correctly.</text></para>
+          <para styleclass="Table Cell"><anchor id="ExportShapeFile" styleclass="Table Cell"></anchor><text styleclass="Table Cell" translate="true">Export a Shapefile of gridded or meshed data. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Export_Shapefile_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Export Grid/Mesh Data to Shapefile</link><text styleclass="Table Cell" translate="true"> dialog box. </text><text styleclass="Normal" translate="true">Shapefiles exported from ModelMuse do not contain information about the projection used for the model. You may need to supply the projection to use the Shapefile correctly.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
