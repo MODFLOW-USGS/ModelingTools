@@ -11657,6 +11657,7 @@ begin
           begin
             DataArrayManager.DataSets[Index].RestoreUpToDateStatus;
           end;
+          PhastModel.ModflowPackages.Loaded;
 
 //          if FootprintWithdrawalDataArray <> nil then
 //          begin

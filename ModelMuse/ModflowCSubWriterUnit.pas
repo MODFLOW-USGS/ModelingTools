@@ -901,6 +901,22 @@ var
   InterbedSystemCount: Integer;
   IbIndex: Integer;
   boundname: string;
+//  pcsPestNames: TDataArray;
+//  thick_fracPestNames: TDataArray;
+//  rnbPestNames: TDataArray;
+//  ssv_ccPestNames: TDataArray;
+//  kvPestNames: TDataArray;
+//  h0PestNames: TDataArray;
+//  sse_crPestNames: TDataArray;
+//  thetaPestNames: TDataArray;
+//  pcsPestName: string;
+//  thick_fracPestName: string;
+//  rnbPestName: string;
+//  ssv_ccPestName: string;
+//  sse_crPestName: string;
+//  thetaPestName: string;
+//  kvPestName: string;
+//  h0PestName: string;
 begin
   if ninterbeds = 0 then
   begin
@@ -926,41 +942,116 @@ begin
 // <icsubno> <cellid(ncelldim)> <pcs> <pcs0> <thick_fracDataArray> <rnbDataArray> <ssv_ccDataArray> <sse_crDataArray> <thetaDataArray> <kvDataArray> <h0DataArray> [<boundname>]
     pcsDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialOffset);
     pcsDataArray.Initialize;
+//    if DataArrayUsesPestParameters(pcsDataArray) then
+//    begin
+//      pcsPestNames := Model.DataArrayManager.
+//        GetDataSetByName(pcsDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      pcsPestNames := nil;
+//    end;
 
     thick_fracDataArray := DataArrayManager.GetDataSetByName(Interbed.Thickness);
     thick_fracDataArray.Initialize;
+//    if DataArrayUsesPestParameters(thick_fracDataArray) then
+//    begin
+//      thick_fracPestNames := Model.DataArrayManager.
+//        GetDataSetByName(thick_fracDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      thick_fracPestNames := nil;
+//    end;
 
     if Interbed.InterbedType = itDelay then
     begin
       rnbDataArray := DataArrayManager.GetDataSetByName(Interbed.EquivInterbedNumberName);
       rnbDataArray.Initialize;
+//      if DataArrayUsesPestParameters(rnbDataArray) then
+//      begin
+//        rnbPestNames := Model.DataArrayManager.
+//          GetDataSetByName(rnbDataArray.ParamDataSetName);
+//      end
+//      else
+//      begin
+//        rnbPestNames := nil;
+//      end;
     end
     else
     begin
       rnbDataArray := nil;
+//      rnbPestNames := nil;
     end;
 
     ssv_ccDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialInelasticSpecificStorage);
     ssv_ccDataArray.Initialize;
+//    if DataArrayUsesPestParameters(ssv_ccDataArray) then
+//    begin
+//      ssv_ccPestNames := Model.DataArrayManager.
+//        GetDataSetByName(ssv_ccDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      ssv_ccPestNames := nil;
+//    end;
 
     sse_crDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialElasticSpecificStorage);
     sse_crDataArray.Initialize;
+//    if DataArrayUsesPestParameters(sse_crDataArray) then
+//    begin
+//      sse_crPestNames := Model.DataArrayManager.
+//        GetDataSetByName(sse_crDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      sse_crPestNames := nil;
+//    end;
 
     thetaDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialPorosity);
     thetaDataArray.Initialize;
+//    if DataArrayUsesPestParameters(thetaDataArray) then
+//    begin
+//      thetaPestNames := Model.DataArrayManager.
+//        GetDataSetByName(thetaDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      thetaPestNames := nil;
+//    end;
 
     if Interbed.InterbedType = itDelay  then
     begin
       kvDataArray := DataArrayManager.GetDataSetByName(Interbed.DelayKvName);
       kvDataArray.Initialize;
+//      if DataArrayUsesPestParameters(kvDataArray) then
+//      begin
+//        kvPestNames := Model.DataArrayManager.
+//          GetDataSetByName(kvDataArray.ParamDataSetName);
+//      end
+//      else
+//      begin
+//        kvPestNames := nil;
+//      end;
 
       h0DataArray := DataArrayManager.GetDataSetByName(Interbed.InitialDelayHeadOffset);
       h0DataArray.Initialize;
+//      if DataArrayUsesPestParameters(h0DataArray) then
+//      begin
+//        h0PestNames := Model.DataArrayManager.
+//          GetDataSetByName(h0DataArray.ParamDataSetName);
+//      end
+//      else
+//      begin
+//        h0PestNames := nil;
+//      end;
     end
     else
     begin
       kvDataArray := nil;
       h0DataArray := nil;
+//      kvPestNames := nil;
+//      h0PestNames := nil;
     end;
 
     CSubDataArray := DataArrayManager.GetDataSetByName(Interbed.CSubBoundName);
@@ -987,37 +1078,111 @@ begin
             end;
             FInterBedNumbers[LayerIndex, RowIndex, ColIndex, InterbedIndex] := icsubno;
 
-            pcs := pcsDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            thick_frac := thick_fracDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            if rnbDataArray <> nil then
-            begin
-              rnb := rnbDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            end
-            else
-            begin
-              rnb := 1;
-            end;
-            ssv_cc := ssv_ccDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            sse_cr := sse_crDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            theta := thetaDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            if kvDataArray <> nil then
-            begin
-              kv := kvDataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            end
-            else
-            begin
-              kv := 999;
-            end;
-            if h0DataArray <> nil then
-            begin
-              h0 := h0DataArray.RealData[LayerIndex, RowIndex, ColIndex];
-            end
-            else
-            begin
-              h0 := 999;
-            end;
+//            pcs := pcsDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+////            if pcsPestNames <> nil then
+////            begin
+////              pcsPestName := pcsPestNames.StringData[LayerIndex, RowIndex, ColIndex];
+////            end
+////            else
+////            begin
+////              pcsPestName := ''
+////            end;
+//
+//            thick_frac := thick_fracDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//            if thick_fracPestNames <> nil then
+//            begin
+//              thick_fracPestName := thick_fracPestNames.StringData[LayerIndex, RowIndex, ColIndex];
+//            end
+//            else
+//            begin
+//              thick_fracPestName := '';
+//            end;
+//
+//            if rnbDataArray <> nil then
+//            begin
+//              rnb := rnbDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//              if rnbPestNames <> nil then
+//              begin
+//                rnbPestName := rnbPestNames.StringData[LayerIndex, RowIndex, ColIndex];
+//              end
+//              else
+//              begin
+//                rnbPestName := '';
+//              end;
+//            end
+//            else
+//            begin
+//              rnb := 1;
+//              rnbPestName := '';
+//            end;
+//
+//            ssv_cc := ssv_ccDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//            if ssv_ccPestNames <> nil then
+//            begin
+//              ssv_ccPestName := ssv_ccPestNames.StringData[LayerIndex, RowIndex, ColIndex];
+//            end
+//            else
+//            begin
+//              ssv_ccPestName := '';
+//            end;
+//
+//            sse_cr := sse_crDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//            if sse_crPestNames <> nil then
+//            begin
+//              sse_crPestName := sse_crPestNames.StringData[LayerIndex, RowIndex, ColIndex];
+//            end
+//            else
+//            begin
+//              sse_crPestName := '';
+//            end;
+//
+//            theta := thetaDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//            if thetaPestNames <> nil then
+//            begin
+//              thetaPestName := thetaPestNames.StringData[LayerIndex, RowIndex, ColIndex];
+//            end
+//            else
+//            begin
+//              thetaPestName := '';
+//            end;
+//
+//            if kvDataArray <> nil then
+//            begin
+//              kv := kvDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//              if kvPestNames <> nil then
+//              begin
+//                kvPestName := kvPestNames.StringData[LayerIndex, RowIndex, ColIndex];
+//              end
+//              else
+//              begin
+//                kvPestName := '';
+//              end;
+//            end
+//            else
+//            begin
+//              kv := 999;
+//              kvPestName := '';
+//            end;
+//
+//            if h0DataArray <> nil then
+//            begin
+//              h0 := h0DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+//              if h0PestNames <> nil then
+//              begin
+//                h0PestName := h0PestNames.StringData[LayerIndex, RowIndex, ColIndex];
+//              end
+//              else
+//              begin
+//                h0PestName := '';
+//              end;
+//            end
+//            else
+//            begin
+//              h0 := 999;
+//              h0PestName := '';
+//            end;
+
             boundname := ' ' + CSubDataArray.StringData[LayerIndex, RowIndex, ColIndex];
-//            boundname := Format(' "%s"', [boundname]);
 
             WriteString('  ');
             WriteInteger(icsubno);
@@ -1028,27 +1193,53 @@ begin
             end;
             WriteInteger(ColIndex+1);
             WriteString(cdelay);
-            WriteFloat(pcs);
-            WriteFloat(thick_frac);
-            WriteFloat(rnb);
-            WriteFloat(ssv_cc);
-            WriteFloat(sse_cr);
-            WriteFloat(theta);
-            WriteFloat(kv);
-            WriteFloat(h0);
-            WriteString(boundname);
 
-{
-            if Model.DisvUsed then
+//            WriteFloat(pcs);
+            WriteDataArrayValueOrFormula(pcsDataArray, LayerIndex, RowIndex, ColIndex);
+
+//            WriteFloat(thick_frac);
+            WriteDataArrayValueOrFormula(thick_fracDataArray, LayerIndex, RowIndex, ColIndex);
+
+            if rnbDataArray <> nil then
             begin
-              WriteString(Format(' L%:0d_C%:1d', [LayerIndex+1, ColIndex+1]));
+//              WriteFloat(rnb);
+              WriteDataArrayValueOrFormula(rnbDataArray, LayerIndex, RowIndex, ColIndex);
             end
             else
             begin
-              WriteString(Format(' L%:0d_R%:1d_C%:2d', [LayerIndex+1, RowIndex+1, ColIndex+1]));
+              WriteFloat(1);
             end;
-}           
 
+//            WriteFloat(ssv_cc);
+            WriteDataArrayValueOrFormula(ssv_ccDataArray, LayerIndex, RowIndex, ColIndex);
+
+//            WriteFloat(sse_cr);
+            WriteDataArrayValueOrFormula(sse_crDataArray, LayerIndex, RowIndex, ColIndex);
+
+//            WriteFloat(theta);
+            WriteDataArrayValueOrFormula(thetaDataArray, LayerIndex, RowIndex, ColIndex);
+
+            if kvDataArray <> nil then
+            begin
+//              WriteFloat(kv);
+              WriteDataArrayValueOrFormula(kvDataArray, LayerIndex, RowIndex, ColIndex);
+            end
+            else
+            begin
+              WriteFloat(999);
+            end;
+
+            if h0DataArray <> nil then
+            begin
+//              WriteFloat(h0);
+              WriteDataArrayValueOrFormula(kvDataArray, LayerIndex, RowIndex, ColIndex);
+            end
+            else
+            begin
+              WriteFloat(999);
+            end;
+
+            WriteString(boundname);
             NewLine;
           end;
         end;

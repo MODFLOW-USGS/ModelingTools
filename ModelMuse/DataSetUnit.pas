@@ -897,6 +897,7 @@ type
     property PilotPointsUsed: Boolean read FPilotPointsUsed
       write SetPilotPointsUsed;
     property PestArrayFileNames: TStringList read GetPestArrayFileNames;
+    procedure Loaded;
   published
     // @name indicates the hierarchical position of this instance of
     // @classname when it is required by the model.
@@ -4050,13 +4051,17 @@ begin
   begin
     if NameDataArray = nil then
     begin
+      if csLoading in LocalModel.ComponentState then
+      begin
+        Exit;
+      end;
       NameDataArray := LocalModel.DataArrayManager.CreateNewDataArray(
         TDataArray, DataSetName, '""',
         DataSetName,
         Lock, rdtString, EvaluatedAt,
         Orientation, Classification);
       NameDataArray.OnDataSetUsed := LocalModel.ParamNamesDataSetUsed;
-      NameDataArray.Lock := Lock;
+      NameDataArray.Lock := Lock - [dcFormula];
       NameDataArray.CheckMax := False;
       NameDataArray.CheckMin := False;
       NameDataArray.DisplayName := DataSetName;
@@ -5857,6 +5862,11 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TDataArray.Loaded;
+begin
+  CreatePestParmNameDataSet;
 end;
 
 procedure TDataArray.RestoreUpToDateStatus;
@@ -8160,6 +8170,7 @@ begin
   if (Source is TDataArray) then
   begin
     SourceDataArray := TDataArray(Source);
+    PestParametersUsed := SourceDataArray.PestParametersUsed;
     if SourceDataArray.FReadDataFromFile then
     begin
       FReadDataFromFile := True;

@@ -3292,6 +3292,7 @@ Type
     property Beta: double read GetBeta write SetBeta;
     procedure InitializeVariables; override;
     property StressOffset: TModflowBoundaryDisplayTimeList read FStressOffset;
+    procedure Loaded;
   published
      {GAMMAW <gammaw>
      unit weight of water. For freshwater, GAMMAW is 9806.65
@@ -21062,7 +21063,7 @@ begin
 
     if RenameDataSets and (FModel <> nil) then
     begin
-      Interbeds.UpdataInterbedDataSetNames;
+      Interbeds.UpdateInterbedDataSetNames;
     end;
   end;
   inherited;
@@ -21177,6 +21178,16 @@ begin
   FWriteConvergenceData := True;
 
 end;
+
+procedure TCSubPackageSelection.Loaded;
+begin
+  Interbeds.Loaded;
+end;
+
+//procedure TCSubPackageSelection.Loaded;
+//begin
+//  Interbeds.UpdateInterbedDataSetNames;
+//end;
 
 procedure TCSubPackageSelection.SetBeta(const Value: double);
 begin

@@ -1933,6 +1933,7 @@ that affects the model output should also have a comment. }
       read GetChildDataArrayManager;
     procedure UpdateClassifications;
     procedure RemoveDataSet(ADataArray: TDataArray);
+    procedure Loaded;
   end;
 
   TChildModelCollection = class;
@@ -36667,6 +36668,16 @@ begin
   end;
 end;
 
+procedure TDataArrayManager.Loaded;
+var
+  DataArrayIndex: Integer;
+begin
+  for DataArrayIndex := 0 to DataSetCount - 1 do
+  begin
+    DataSets[DataArrayIndex].Loaded;
+  end;
+end;
+
 function TDataArrayManager.LocalCount: integer;
 begin
   if FDataSets = nil then
@@ -38285,6 +38296,7 @@ begin
     DisvGrid.Loaded;
   end;
   ModflowPackages.Loaded;
+  DataArrayManager.Loaded;
 end;
 
 function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;

@@ -30,7 +30,8 @@ type
       Extension, DisplayExtension: string; const NewInterbedName: string;
       AModel: TBaseModel);
     function GetDataSetNames: TStringList;
-    procedure UpdataInterbedDataSetNames;
+    procedure UpdateInterbedDataSetNames;
+    procedure Loaded;
 //    procedure UpdatePackageDataFormulas;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
@@ -72,7 +73,8 @@ type
     property Items[Index: Integer]: TCSubInterbed read GetItem write SetItem; default;
     function DataArrayUsed(ADataArray: TDataArray): Boolean;
     function GetInterbedByName(AName: string): TCSubInterbed;
-    procedure UpdataInterbedDataSetNames;
+    procedure UpdateInterbedDataSetNames;
+    procedure Loaded;
   end;
 
 implementation
@@ -146,6 +148,54 @@ begin
   end;
 end;
 
+procedure TCSubInterbed.Loaded;
+var
+  LocalModel: TCustomModel;
+  CSubPackage: TCSubPackageSelection;
+  DataArray: TDataArray;
+begin
+  Exit;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    CSubPackage := LocalModel.ModflowPackages.CSubPackage;
+
+    DataArray := LocalModel.DataArrayManager.GetDataSetByName(FInitialOffset);
+    DataArray.Loaded;
+
+    DataArray := LocalModel.DataArrayManager.GetDataSetByName(FThickness);
+    DataArray.Loaded;
+
+    if InterbedType = itDelay then
+    begin
+      DataArray := LocalModel.DataArrayManager.GetDataSetByName(FEquivInterbedNumberName);
+      DataArray.Loaded;
+    end;
+
+    DataArray := LocalModel.DataArrayManager.GetDataSetByName(FInitialInelasticSpecificStorage);
+    DataArray.Loaded;
+
+    DataArray := LocalModel.DataArrayManager.GetDataSetByName(FInitialElasticSpecificStorage);
+    DataArray.Loaded;
+
+    DataArray := LocalModel.DataArrayManager.GetDataSetByName(FInitialPorosity);
+    DataArray.Loaded;
+
+    if InterbedType = itDelay then
+    begin
+      DataArray := LocalModel.DataArrayManager.GetDataSetByName(FDelayKvName);
+      DataArray.Loaded;
+   end;
+
+    if InterbedType = itDelay then
+    begin
+      DataArray := LocalModel.DataArrayManager.GetDataSetByName(FInitialDelayHeadOffset);
+      DataArray.Loaded;
+    end;
+
+  end;
+end;
+
 procedure TCSubInterbed.RenameInterbed(const NewInterbedName: string);
 var
   LocalModel: TCustomModel;
@@ -159,25 +209,30 @@ begin
 
     if CSubPackage.SpecifyInitialPreconsolidationStress then
     begin
-      CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialPreconsolidat, StrInitialPreconsolidat, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialPreconsolidat,
+        StrInitialPreconsolidat, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialOffset, StrInitialOffset, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialOffset, rdtDouble, KInitialOffset,
+        StrInitialOffset, NewInterbedName, Model);
     end;
-    
+
     if CSubPackage.InterbedThicknessMethod = itmThickness then
     begin
-      CreateOrRenameDataArray(FThickness, rdtDouble, KThickness, StrThickness, NewInterbedName, Model);
+      CreateOrRenameDataArray(FThickness, rdtDouble, KThickness, StrThickness,
+        NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FThickness, rdtDouble, KCellThicknessFractio, StrCellThicknessFractio, NewInterbedName, Model);
+      CreateOrRenameDataArray(FThickness, rdtDouble, KCellThicknessFractio,
+        StrCellThicknessFractio, NewInterbedName, Model);
     end;
 
     if InterbedType = itDelay then
     begin
-      CreateOrRenameDataArray(FEquivInterbedNumberName, rdtDouble, KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model);
+      CreateOrRenameDataArray(FEquivInterbedNumberName, rdtDouble,
+        KEquivInterbedNumber, StrEquivInterbedNumber, NewInterbedName, Model);
     end
     else
     begin
@@ -186,27 +241,33 @@ begin
 
     if CSubPackage.CompressionMethod = coRecompression then
     begin
-      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble, KInitialInelasticComp, StrInitialInelasticComp, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble,
+        KInitialInelasticComp, StrInitialInelasticComp, NewInterbedName, Model);
     end
     else
     begin
-      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble, KInitialInelasticSpec, StrInitialInelasticSpec, NewInterbedName, Model);
-    end;
-    
-    if CSubPackage.CompressionMethod = coRecompression then
-    begin
-      CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble, KInitialElasticCompre, StrInitialElasticCompre, NewInterbedName, Model);
-    end
-    else
-    begin
-      CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble, KInitialElasticSpecif, StrInitialElasticSpecif, NewInterbedName, Model);
+      CreateOrRenameDataArray(FInitialInelasticSpecificStorage, rdtDouble,
+        KInitialInelasticSpec, StrInitialInelasticSpec, NewInterbedName, Model);
     end;
 
-    CreateOrRenameDataArray(FInitialPorosity, rdtDouble, KInitialPorosity, StrInitialPorosity, NewInterbedName, Model);
+    if CSubPackage.CompressionMethod = coRecompression then
+    begin
+      CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble,
+        KInitialElasticCompre, StrInitialElasticCompre, NewInterbedName, Model);
+    end
+    else
+    begin
+      CreateOrRenameDataArray(FInitialElasticSpecificStorage, rdtDouble,
+        KInitialElasticSpecif, StrInitialElasticSpecif, NewInterbedName, Model);
+    end;
+
+    CreateOrRenameDataArray(FInitialPorosity, rdtDouble, KInitialPorosity,
+      StrInitialPorosity, NewInterbedName, Model);
 
     if InterbedType = itDelay then
     begin
-      CreateOrRenameDataArray(FDelayKvName, rdtDouble, KDelayKv, StrDelayKv, NewInterbedName, Model);
+      CreateOrRenameDataArray(FDelayKvName, rdtDouble, KDelayKv, StrDelayKv,
+        NewInterbedName, Model);
     end
     else
     begin
@@ -217,11 +278,13 @@ begin
     begin
       if CSubPackage.SpecifyInitialDelayHead then
       begin
-        CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model);
+        CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble,
+          KInitialDelayHead, StrInitialDelayHead, NewInterbedName, Model);
       end
       else
       begin
-        CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble, KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model);
+        CreateOrRenameDataArray(FInitialDelayHeadOffset, rdtDouble,
+          KInitialDelayHeadOffs, StrInitialDelayHeadOffs, NewInterbedName, Model);
       end;
     end
     else
@@ -229,12 +292,14 @@ begin
       FInitialDelayHeadOffset := '';
     end;
 
-    CreateOrRenameDataArray(FCSubBoundName, rdtString, KCSubBoundName, StrCSubBoundName, NewInterbedName, Model);
+    CreateOrRenameDataArray(FCSubBoundName, rdtString, KCSubBoundName,
+      StrCSubBoundName, NewInterbedName, Model);
   end;
 end;
 
-procedure TCSubInterbed.CreateOrRenameDataArray(var InterbedName: string; DataType: TRbwDataType;
-  Extension, DisplayExtension: string; const NewInterbedName: string; AModel: TBaseModel);
+procedure TCSubInterbed.CreateOrRenameDataArray(var InterbedName: string;
+  DataType: TRbwDataType; Extension, DisplayExtension: string;
+  const NewInterbedName: string; AModel: TBaseModel);
 var
   LocalModel: TCustomModel;
   DataArray: TDataArray;
@@ -392,7 +457,7 @@ begin
   SetCaseSensitiveStringProperty(FName, Value);
 end;
 
-procedure TCSubInterbed.UpdataInterbedDataSetNames;
+procedure TCSubInterbed.UpdateInterbedDataSetNames;
 begin
   RenameInterbed(Name);
 end;
@@ -464,18 +529,28 @@ begin
   result := inherited Items[index] as TCSubInterbed;
 end;
 
-procedure TCSubInterbeds.SetItem(Index: Integer; const Value: TCSubInterbed);
-begin
-  inherited Items[index] := Value;
-end;
-
-procedure TCSubInterbeds.UpdataInterbedDataSetNames;
+procedure TCSubInterbeds.Loaded;
 var
   Index: Integer;
 begin
   for Index := 0 to Count - 1 do
   begin
-    Items[Index].UpdataInterbedDataSetNames
+    Items[Index].Loaded;
+  end;
+end;
+
+procedure TCSubInterbeds.SetItem(Index: Integer; const Value: TCSubInterbed);
+begin
+  inherited Items[index] := Value;
+end;
+
+procedure TCSubInterbeds.UpdateInterbedDataSetNames;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Count - 1 do
+  begin
+    Items[Index].UpdateInterbedDataSetNames
   end;
 end;
 

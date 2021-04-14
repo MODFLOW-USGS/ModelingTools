@@ -927,6 +927,7 @@ var
   AParam: TModflowSteadyParameter;
   SListName: string;
   PListName: string;
+  DataValue: Double;
 begin
   SetLength(FZoneNumbers, FDataArray.LayerCount, FDataArray.RowCount,
     FDataArray.ColumnCount);
@@ -967,6 +968,15 @@ begin
           begin
             PIndex := FPNames.IndexOf(AName);
           end;
+
+          if FDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+          begin
+            DataValue := FDataArray.RealData[LayerIndex, RowIndex, ColIndex]
+          end
+          else
+          begin
+            DataValue := 0
+          end;
           if PIndex >= 0 then
           begin
             AParam := FPNames.Objects[PIndex] as TModflowSteadyParameter;
@@ -974,18 +984,18 @@ begin
             if AParam.Value <> 0 then
             begin
               FValues[LayerIndex, RowIndex, ColIndex] :=
-                FDataArray.RealData[LayerIndex, RowIndex, ColIndex] / AParam.Value;
+                DataValue / AParam.Value;
             end
             else
             begin
-              FValues[LayerIndex, RowIndex, ColIndex] :=
-                FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+              FValues[LayerIndex, RowIndex, ColIndex] := DataValue;
+//                FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
             end;
           end
           else
           begin
-            FValues[LayerIndex, RowIndex, ColIndex] :=
-              FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            FValues[LayerIndex, RowIndex, ColIndex] := DataValue
+//              FDataArray.RealData[LayerIndex, RowIndex, ColIndex];
           end;
           WriteInteger(PIndex + 1);
           WriteFloat(FValues[LayerIndex, RowIndex, ColIndex]);

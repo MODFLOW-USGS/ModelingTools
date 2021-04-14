@@ -113,6 +113,8 @@ type
     procedure OpenTempFile(const FileName: string);
     procedure CloseTempFile;
     property NameOfFile: string read FNameOfFile;
+    function GetPestNonTransientTemplateFormula(DataArray: TDataArray;
+      Layer, Row, Col: Integer): string;
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -238,6 +240,8 @@ type
     procedure WriteTemplateHeader; virtual;
     procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
       FixedLength: Integer = 0);
+    procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
+      Layer, Row, Col: Integer);
   public
     // @name converts AFileName to use the correct extension for the file.
 //    class function FileName(const AFileName: string): string;
@@ -2229,7 +2233,15 @@ begin
           begin
             // For very small numbers, limit values to the range of
             // single precision values.
-            AValue := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            if DataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+            begin
+              AValue := DataArray.RealData[LayerIndex, RowIndex, ColIndex];
+            end
+            else
+            begin
+              AValue := 0;
+            end;
+
             if (NegLimitValue < AValue) and (AValue < LimitValue) then
             begin
               AValue := 0;
@@ -2703,6 +2715,62 @@ begin
   begin
     result := ' ' + result
   end;
+end;
+
+function TCustomFileWriter.GetPestNonTransientTemplateFormula(
+  DataArray: TDataArray; Layer, Row, Col: Integer): string;
+var
+  TemplateCharacter: string;
+  ArrayTemplateCharacter: string;
+  Value: Double;
+  CellValueReplacement: string;
+  procedure GetCellData(out CellValueReplacement: string; out Value: Double);
+  var
+    ModifierValue: Double;
+    LocalLayer: Integer;
+  begin
+    ModifierValue := 0;
+    Value := DataArray.RealData[Layer, Row, Col];
+    if DataArray.PestParametersUsed then
+    begin
+      ModifierValue := DataArray.RealData[Layer, Row, Col];
+
+      LocalLayer := Model.DataSetLayerToModflowLayer(Layer);
+      CellValueReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
+        [ArrayTemplateCharacter, DataArray.Name,
+        LocalLayer, Row+1, Col+1]);
+    end
+    else
+    begin
+      CellValueReplacement := ''
+    end;
+
+    if CellValueReplacement <> '' then
+    begin
+      if ModifierValue = 0 then
+      begin
+        Value := 0;
+      end
+      else
+      begin
+        Value := Value/ModifierValue;
+      end;
+    end;
+  end;
+begin
+  TemplateCharacter := Model.PestProperties.TemplateCharacter;
+  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+
+  result := '';
+  begin
+    GetCellData(CellValueReplacement, Value);
+
+    if (CellValueReplacement <> '') then
+    begin
+      result := Format('%0:g * %1:s',
+        [Value, CellValueReplacement]);
+    end;
+  end
 end;
 
 function TCustomFileWriter.GetPestTemplateFormula(Value: double; PestParValue,
@@ -3248,6 +3316,33 @@ begin
     end;
   end;
   Model.DataArrayManager.AddDataSetToCache(DataArray);
+end;
+
+procedure TCustomModflowWriter.WriteDataArrayValueOrFormula(
+  DataArray: TDataArray; Layer, Row, Col: Integer);
+var
+  Formula: string;
+  ExtendedTemplateCharacter: string;
+//  Value: Double;
+begin
+  Formula := GetPestNonTransientTemplateFormula(DataArray,
+    Layer, Row, Col);
+  if not WritingTemplate or (Formula = '') then
+  begin
+    WriteFloat(DataArray.RealData[Layer, Row, Col]);
+    if Formula <> '' then
+    begin
+      FPestParamUsed := True;
+      AddUsedPestDataArray(DataArray);
+    end;
+  end
+  else
+  begin
+    ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+    Formula := Format(' %0:s                    %1:s%0:s ',
+      [ExtendedTemplateCharacter, Formula]);
+    WriteString(Formula);
+  end;
 end;
 
 procedure TCustomModflowWriter.WriteHeader(const DataArray: TDataArray;

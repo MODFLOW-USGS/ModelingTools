@@ -853,6 +853,7 @@ end;
 procedure TModflowPackages.Loaded;
 begin
   Mt3dSft.Loaded;
+  CsubPackage.Loaded;
 end;
 
 procedure TModflowPackages.Reset;
