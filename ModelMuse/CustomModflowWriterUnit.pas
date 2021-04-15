@@ -238,10 +238,18 @@ type
     procedure WriteBeginGridData;
     procedure WriteEndGridData;
     procedure WriteTemplateHeader; virtual;
+    // Write a value or a formula for EnhancedTemplateProcessor for a
+    // boundary condition cell.
     procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
       FixedLength: Integer = 0);
+    // Write either the data array value at the specified location
+    // or a formula to be evaluated by EnhancedTemplateProcessor
     procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
       Layer, Row, Col: Integer);
+    // Write a formula for EnhancedTemplateProcessor or write a value
+    // based on an identified parameter or PEST-modified data set.
+    procedure WriteFormulaOrValueBasedOnAPestName(PestName: string;
+      Value: double; Layer, Row, Column: Integer);
   public
     // @name converts AFileName to use the correct extension for the file.
 //    class function FileName(const AFileName: string): string;
@@ -2730,6 +2738,10 @@ var
     LocalLayer: Integer;
   begin
     ModifierValue := 0;
+    if DataArray.Orientation = dsoTop then
+    begin
+      Layer := 0;
+    end;
     Value := DataArray.RealData[Layer, Row, Col];
     if DataArray.PestParametersUsed then
     begin
@@ -9307,6 +9319,75 @@ begin
     WriteString('END PERIOD ');
     NewLine;
     NewLine;
+  end;
+end;
+
+procedure TCustomModflowWriter.WriteFormulaOrValueBasedOnAPestName(
+  PestName: string; Value: double; Layer, Row, Column: Integer);
+var
+  Param: TModflowSteadyParameter;
+  DataArray: TDataArray;
+  TemplateCharacter: string;
+  Formula: WideString;
+  ExtendedTemplateCharacter: Char;
+begin
+  if not WritingTemplate then
+  begin
+    WriteFloat(Value);
+    if PestName <> '' then
+    begin
+      FPestParamUsed := True;
+      Param := Model.GetPestParameterByName(PestName);
+      if Param <> nil then
+      begin
+        Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+      end
+      else
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
+        if DataArray <> nil then
+        begin
+          AddUsedPestDataArray(DataArray);
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    if PestName = '' then
+    begin
+      WriteFloat(Value);
+    end
+    else
+    begin
+      Param := Model.GetPestParameterByName(PestName);
+      if Param <> nil then
+      begin
+        TemplateCharacter := Model.PestProperties.TemplateCharacter;
+        Formula := Format(' %0:s                    %1:s%0:s ',
+          [TemplateCharacter, Param.ParameterName]);
+      end
+      else
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
+        Assert(DataArray <> nil);
+        Assert (DataArray.PestParametersUsed);
+        Formula := GetPestNonTransientTemplateFormula(DataArray,
+          Layer, Row, Column);
+        if Formula = '' then
+        begin
+          WriteFloat(Value);
+          Exit;
+        end
+        else
+        begin
+          ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+          Formula := Format(' %0:s                    %1:s%0:s ',
+            [ExtendedTemplateCharacter, Formula]);
+        end;
+      end;
+      WriteString(Formula);
+    end;
   end;
 end;
 

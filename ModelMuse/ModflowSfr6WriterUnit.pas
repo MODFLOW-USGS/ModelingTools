@@ -49,7 +49,7 @@ type
 
   TModflowSFR_MF6_Writer = class(TCustomPackageWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FValues: TList;
     FSegments: TSfr6SegmentList;
     FReachCount: integer;
@@ -97,7 +97,7 @@ uses
   RbwParser, GIS_Functions, DataSetUnit, frmFormulaErrorsUnit, ModflowCellUnit,
   AbstractGridUnit, Modflow6ObsWriterUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, ModflowIrregularMeshUnit, FastGEO,
-  Vcl.Dialogs;
+  Vcl.Dialogs, ModflowParameterUnit, ModelMuseUtilities;
 
 resourcestring
   StrTheFollowingPairO = 'The following pair of objects have the same SFR se' +
@@ -497,6 +497,9 @@ var
   FormulaIndex: Integer;
   CellValues: TSfrMF6ConstantRecord;
   CellBottom: Double;
+  Param: TModflowSteadyParameter;
+  PestParamName: string;
+  DataArray: TDataArray;
 begin
   CellList := TCellAssignmentList.Create;
   UseList := TStringList.Create;
@@ -515,13 +518,6 @@ begin
     PropertyFormulas.Add(ASegment.FSfr6Boundary.StreambedThickness);
     PropertyNames.Add(StrHydraulicConductivi);
     PropertyFormulas.Add(ASegment.FSfr6Boundary.HydraulicConductivity);
-//    PropertyNames.Add(StrRoughness);
-//    PropertyFormulas.Add(ASegment.FSfr6Boundary.Roughness);
-//    UpstreamFractionIndex := PropertyFormulas.Count;
-//    PropertyNames.Add(StrUpstreamFraction);
-//    PropertyFormulas.Add(ASegment.FSfr6Boundary.UpstreamFraction);
-
-//    Grid := Model.ModflowGrid;
     Compiler := Model.rpThreeDFormulaCompiler;
 
     ASegment.FScreenObject.GetCellsToAssign('0', nil, nil, CellList,
@@ -531,6 +527,26 @@ begin
     for FormulaIndex := 0 to PropertyFormulas.Count - 1 do
     begin
       Formula := PropertyFormulas[FormulaIndex];
+
+      Param := Model.GetPestParameterByName(Formula);
+      if Param <> nil then
+      begin
+        Formula := FortranFloatToStr(Param.Value);
+        PestParamName := Param.ParameterName;
+      end
+      else
+      begin
+        DataArray := Model.DataArrayManager.GetDataSetByName(Formula);
+        if (DataArray <> nil) and DataArray.PestParametersUsed then
+        begin
+          PestParamName := DataArray.Name;
+        end
+        else
+        begin
+          PestParamName := '';
+        end;
+      end;
+
       TempFormula := Formula;
       PropertyName := PropertyNames[FormulaIndex];
       try
@@ -582,28 +598,16 @@ begin
       end;
 
 
-  //    UpdateCurrentScreenObject(ASegment.FScreenObject);
       for CellIndex := 0 to CellList.Count - 1 do
       begin
         ACell := CellList[CellIndex];
         if FormulaIndex = 0 then
         begin
-//          Inc(FReachCount);
-//          ASegment.FSteadyValues[Index].ReachNumber := FReachCount;
           ASegment.FSteadyValues[CellIndex].Cell.Layer := ACell.Layer;
           ASegment.FSteadyValues[CellIndex].Cell.Row := ACell.Row;
           ASegment.FSteadyValues[CellIndex].Cell.Column := ACell.Column;
         end;
-//        if (FormulaIndex = UpstreamFractionIndex)
-//          and (Index <> 0) then
-//        begin
-//          //Always assign upstream fraction a value of 1 except for the
-//          // first reach in a segment
-//          ASegment.FSteadyValues[Index].BoundaryValue[FormulaIndex] := 1;
-//          AnnotationString := StrAllReachesInASeg;
-//          ASegment.FSteadyValues[Index].BoundaryAnnotation[FormulaIndex] := AnnotationString;
-//          continue;
-//        end;
+
         UpdateCurrentScreenObject(ASegment.FScreenObject);
         UpdateGlobalLocations(ACell.Column, ACell.Row, ACell.Layer,
           eaBlocks, Model);
@@ -621,7 +625,6 @@ begin
             begin
               ADataSet :=
                 Model.DataArrayManager.DataSets[DataSetIndex];
-  //            Assert(ADataSet <> self);
               Assert(Model = ADataSet.Model);
               Assert(ADataSet.DataType = Variable.ResultType);
               if ADataSet.Orientation = dsoTop then
@@ -684,11 +687,12 @@ begin
         ASegment.FSteadyValues[CellIndex].BoundaryValue[FormulaIndex] := Expression.DoubleResult;
         AnnotationString := ASegment.FScreenObject.IntersectAnnotation(Formula, nil);
         ASegment.FSteadyValues[CellIndex].BoundaryAnnotation[FormulaIndex] := AnnotationString;
+        ASegment.FSteadyValues[CellIndex].PestParamName[FormulaIndex] := PestParamName;
+
         if FormulaIndex = 0 then
         begin
           ASegment.FSteadyValues[CellIndex].BoundName := ASegment.FScreenObject.Name;
         end;
-  //      UpdateRequiredListData(DataSets, Variables, ACell, AModel);
       end;
     end;
 
@@ -1660,6 +1664,7 @@ var
   budgetfile: string;
   NameOfFile: string;
   CsvFile: string;
+  BaseFileName: string;
 begin
   WriteBeginOptions;
 
@@ -1684,10 +1689,11 @@ begin
   PrintFlowsOption;
   WriteSaveFlowsOption;
 
+  BaseFileName := ChangeFileExt(FNameOfFile, '');
   if SfrMf6Package.SaveStageFile then
   begin
     WriteString('    STAGE FILEOUT ');
-    stagefile := ChangeFileExt(FNameOfFile, '.stage');
+    stagefile := ChangeFileExt(BaseFileName, '.stage');
     Model.AddModelOutputFile(stagefile);
     stagefile := ExtractFileName(stagefile);
     WriteString(stagefile);
@@ -1697,7 +1703,7 @@ begin
   if SfrMf6Package.SaveBudgetFile then
   begin
     WriteString('    BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(FNameOfFile, '.sfr_budget');
+    budgetfile := ChangeFileExt(BaseFileName, '.sfr_budget');
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);
@@ -1707,7 +1713,7 @@ begin
   if SfrMf6Package.WriteConvergenceData then
   begin
     WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
-    CsvFile := ChangeFileExt(FNameOfFile, '.SfrConvergence.CSV');
+    CsvFile := ChangeFileExt(BaseFileName, '.SfrConvergence.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);
@@ -1731,7 +1737,7 @@ begin
   if FObsList.Count > 0 then
   begin
     WriteString('    OBS6 FILEIN ');
-    NameOfFile := ChangeFileExt(FNameOfFile, ObservationExtension);
+    NameOfFile := ChangeFileExt(BaseFileName, ObservationExtension);
     Model.AddModelInputFile(NameOfFile);
     NameOfFile := ExtractFileName(NameOfFile);
     WriteString(NameOfFile);
@@ -1799,23 +1805,52 @@ begin
         WriteInteger(ReachProp.Cell.Row+1);
       end;
       WriteInteger(ReachProp.Cell.Column+1);
-      WriteFloat(ReachProp.ReachLength);
-      WriteFloat(ReachProp.ReachWidth);
-      WriteFloat(ReachProp.Gradient);
-      WriteFloat(ReachProp.StreambedTop);
-      WriteFloat(ReachProp.StreambedThickness);
-      WriteFloat(ReachProp.HydraulicConductivity);
-      WriteFloat(ACell.Values.Roughness);
+//      WriteFloat(ReachProp.ReachLength);
+      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestReachLength,
+        ReachProp.ReachLength, ReachProp.Cell.Layer, ReachProp.Cell.Row,
+        ReachProp.Cell.Column);
+
+//      WriteFloat(ReachProp.ReachWidth);
+      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestReachWidth,
+        ReachProp.ReachWidth, ReachProp.Cell.Layer, ReachProp.Cell.Row,
+        ReachProp.Cell.Column);
+
+//      WriteFloat(ReachProp.Gradient);
+      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestGradient,
+        ReachProp.Gradient, ReachProp.Cell.Layer, ReachProp.Cell.Row,
+        ReachProp.Cell.Column);
+
+//      WriteFloat(ReachProp.StreambedTop);
+      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestStreambedTop,
+        ReachProp.StreambedTop, ReachProp.Cell.Layer, ReachProp.Cell.Row,
+        ReachProp.Cell.Column);
+
+//      WriteFloat(ReachProp.StreambedThickness);
+      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestStreambedThickness,
+        ReachProp.StreambedThickness, ReachProp.Cell.Layer, ReachProp.Cell.Row,
+        ReachProp.Cell.Column);
+
+//      WriteFloat(ReachProp.HydraulicConductivity);
+      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestHydraulicConductivity,
+        ReachProp.HydraulicConductivity, ReachProp.Cell.Layer, ReachProp.Cell.Row,
+        ReachProp.Cell.Column);
+
+//      WriteFloat(ACell.Values.Roughness);
+      WriteValueOrFormula(ACell, SfrMf6RoughnessPosition);
+
       ncon := Length(ReachProp.ConnectedReaches);
       WriteInteger(ncon);
+
       if ACell.Values.Status <> ssInactive then
       begin
-        WriteFloat(ACell.Values.UpstreamFraction);
+        WriteValueOrFormula(ACell, SfrMf6UpstreamFractionPosition);
+//        WriteFloat(ACell.Values.UpstreamFraction);
       end
       else
       begin
         WriteFloat(0);
       end;
+
       if ReachIndex = Length(ASegment.SteadyValues) - 1 then
       begin
         ndiv := ASegment.FSfr6Boundary.Diversions.Count;
@@ -1825,6 +1860,7 @@ begin
         ndiv := 0;
       end;
       WriteInteger(ndiv);
+
       boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
       WriteString(boundname);
 

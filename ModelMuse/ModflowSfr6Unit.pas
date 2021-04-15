@@ -269,6 +269,8 @@ type
     procedure SetBoundaryAnnotation(Index: Integer; const Value: string);
     procedure SetBoundaryValue(Index: Integer; const Value: double);
     procedure SetReachNumber(const Value: integer);
+    function GetPestParamName(Index: Integer): string;
+    procedure SetPestParamName(Index: Integer; const Value: string);
   public
     Cell: TCellLocation;
     ReachLength: Double;
@@ -277,8 +279,6 @@ type
     StreambedTop: Double;
     StreambedThickness: Double;
     HydraulicConductivity: Double;
-//    Roughness: Double;
-//    UpstreamFraction: Double;
     ConnectedReaches: array of integer;
     DownstreamDiversions: TDiversionArray;
     ReachLengthAnnotation: string;
@@ -288,15 +288,25 @@ type
     StreambedThicknessAnnotation: string;
     HydraulicConductivityAnnotation: string;
     BoundName: string;
-//    RoughnessAnnotation: string;
-//    UpstreamFractionAnnotation: string;
     ConnectedReacheAnnotations: array of string;
+
+    PestReachLength: string;
+    PestReachWidth: string;
+    PestGradient: string;
+    PestStreambedTop: string;
+    PestStreambedThickness: string;
+    PestHydraulicConductivity: string;
+
     property ReachNumber: integer read FReachNumber write SetReachNumber;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
-    property BoundaryValue[Index: Integer]: double read GetBoundaryValue write SetBoundaryValue;
-    property BoundaryAnnotation[Index: Integer]: string read GetBoundaryAnnotation write SetBoundaryAnnotation;
+    property BoundaryValue[Index: Integer]: double read GetBoundaryValue
+      write SetBoundaryValue;
+    property BoundaryAnnotation[Index: Integer]: string
+      read GetBoundaryAnnotation write SetBoundaryAnnotation;
+    property PestParamName[Index: Integer]: string read GetPestParamName
+      write SetPestParamName;
     function IsConnected(Value: Integer): boolean;
   end;
 
@@ -3773,7 +3783,14 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(StreambedThicknessAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(BoundName));
-//  WriteCompInt(Comp, Strings.IndexOf(RoughnessAnnotation));
+
+  WriteCompInt(Comp, Strings.IndexOf(PestReachLength));
+  WriteCompInt(Comp, Strings.IndexOf(PestReachWidth));
+  WriteCompInt(Comp, Strings.IndexOf(PestGradient));
+  WriteCompInt(Comp, Strings.IndexOf(PestStreambedTop));
+  WriteCompInt(Comp, Strings.IndexOf(PestStreambedThickness));
+  WriteCompInt(Comp, Strings.IndexOf(PestHydraulicConductivity));
+
   WriteCompInt(Comp, Length(ConnectedReacheAnnotations));
   for index := 0 to Length(ConnectedReacheAnnotations) - 1 do
   begin
@@ -3849,14 +3866,39 @@ begin
       begin
         result := HydraulicConductivity;
       end;
-//    SteadyRoughnessPosition:
-//      begin
-//        result := Roughness;
-//      end;
-//    SteadyUpstreamFractionPosition:
-//      begin
-//        result := UpstreamFraction;
-//      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TSfrMF6ConstantRecord.GetPestParamName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    SfrMf6ReachLengthPosition:
+      begin
+        result := PestReachLength;
+      end;
+    SfrMf6ReachWidthPosition:
+      begin
+        result := PestReachWidth;
+      end;
+    SfrMf6GradientPosition:
+      begin
+        result := PestGradient;
+      end;
+    SfrMf6StreambedTopPosition:
+      begin
+        result := PestStreambedTop;
+      end;
+    SfrMf6StreambedThicknessPosition:
+      begin
+        result := PestStreambedThickness;
+      end;
+    SfrMf6HydraulicConductivityPosition:
+      begin
+        result := PestHydraulicConductivity;
+      end;
     else
       Assert(False);
   end;
@@ -3888,6 +3930,14 @@ begin
   Strings.Add(StreambedThicknessAnnotation);
   Strings.Add(HydraulicConductivityAnnotation);
   Strings.Add(BoundName);
+
+  Strings.Add(PestReachLength);
+  Strings.Add(PestReachWidth);
+  Strings.Add(PestGradient);
+  Strings.Add(PestStreambedTop);
+  Strings.Add(PestStreambedThickness);
+  Strings.Add(PestHydraulicConductivity);
+
 //  Strings.Add(RoughnessAnnotation);
   for index := 0 to Length(ConnectedReacheAnnotations) - 1 do
   begin
@@ -3934,9 +3984,13 @@ begin
   StreambedThicknessAnnotation := Annotations[ReadCompInt(Decomp)];
   HydraulicConductivityAnnotation := Annotations[ReadCompInt(Decomp)];
   BoundName := Annotations[ReadCompInt(Decomp)];
-//  ReachLengthAnnotation := Annotations[ReadCompInt(Decomp)];
-//  ReachLengthAnnotation := Annotations[ReadCompInt(Decomp)];
-//  ReachLengthAnnotation := Annotations[ReadCompInt(Decomp)];
+
+  PestReachLength := Annotations[ReadCompInt(Decomp)];
+  PestReachWidth := Annotations[ReadCompInt(Decomp)];
+  PestGradient := Annotations[ReadCompInt(Decomp)];
+  PestStreambedTop := Annotations[ReadCompInt(Decomp)];
+  PestStreambedThickness := Annotations[ReadCompInt(Decomp)];
+  PestHydraulicConductivity := Annotations[ReadCompInt(Decomp)];
 
   Count := ReadCompInt(Decomp);
   SetLength(ConnectedReacheAnnotations, Count);
@@ -4023,6 +4077,39 @@ begin
 //      begin
 //        UpstreamFraction := Value;
 //      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TSfrMF6ConstantRecord.SetPestParamName(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    SfrMf6ReachLengthPosition:
+      begin
+        PestReachLength := Value;
+      end;
+    SfrMf6ReachWidthPosition:
+      begin
+        PestReachWidth := Value;
+      end;
+    SfrMf6GradientPosition:
+      begin
+        PestGradient := Value;
+      end;
+    SfrMf6StreambedTopPosition:
+      begin
+        PestStreambedTop := Value;
+      end;
+    SfrMf6StreambedThicknessPosition:
+      begin
+        PestStreambedThickness := Value;
+      end;
+    SfrMf6HydraulicConductivityPosition:
+      begin
+        PestHydraulicConductivity := Value;
+      end;
     else
       Assert(False);
   end;

@@ -26,7 +26,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
     Top = 25
     Width = 389
     Height = 247
-    ActivePage = tabRates
+    ActivePage = tabConfiguration
     Align = alClient
     TabOrder = 1
     object tabConfiguration: TTabSheet

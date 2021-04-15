@@ -25,7 +25,7 @@ type
 
   TModflowUzfMf6Writer = class(TCustomParameterTransientWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FUzfPackage: TUzfMf6PackageSelection;
     FUzfCellNumbers: TThreeDIntegerArray;
   	FUzflandflagLayers:  TTwoDIntegerArray;
@@ -574,6 +574,7 @@ var
   budgetfile: string;
   ObsFileName: string;
   CsvFile: string;
+  BaseName: string;
 begin
   WriteBeginOptions;
 
@@ -581,10 +582,11 @@ begin
   PrintFlowsOption;
   WriteSaveFlowsOption;
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if FUzfPackage.SaveBudgetFile then
   begin
     WriteString('  BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(FNameOfFile, '.uzf_budget');
+    budgetfile := ChangeFileExt(BaseName, '.uzf_budget');
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);
@@ -594,7 +596,7 @@ begin
   if FUzfPackage.WriteConvergenceData then
   begin
     WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
-    CsvFile := ChangeFileExt(FNameOfFile, '.UzfConvergence.CSV');
+    CsvFile := ChangeFileExt(BaseName, '.UzfConvergence.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);
@@ -651,7 +653,7 @@ begin
 
   if FObsList.Count > 0 then
   begin
-    ObsFileName := ExtractFileName(ChangeFileExt(FNameOfFile, ObservationExtension));
+    ObsFileName := ExtractFileName(ChangeFileExt(BaseName, ObservationExtension));
     WriteString('  OBS6 FILEIN ');
     WriteString(ObsFileName);
     NewLine;

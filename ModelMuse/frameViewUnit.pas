@@ -2361,7 +2361,7 @@ var
   AScreenObject: TScreenObject;
 begin
     // @name will draw the @link(TScreenObject)s on @link(FBitMap32).
-
+  Assert(FBitmap32 <> nil);
   try
     for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1
       do

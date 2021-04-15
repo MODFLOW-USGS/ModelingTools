@@ -25564,6 +25564,7 @@ begin
     or (DataGrid = frameCSUB.rdgModflowBoundary)
     or ((DataGrid = frameHfbMf6.rdgModflowBoundary) and (frameHfbMf6.comboHfbParameters.ItemIndex <= 0))
     or (DataGrid = frameLak.rdgModflowBoundary)
+    or (DataGrid = frameScreenObjectSfr6.rdgFormulas)
     ;
 end;
 
