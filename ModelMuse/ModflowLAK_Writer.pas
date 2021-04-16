@@ -10,7 +10,7 @@ type
   private
     // @name contains all the @link(TScreenObject)s that define lakes.
     FLakeList: TList;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FPackage: TLakePackageSelection;
     FLakeObservationsUsed: Boolean;
     FStressPeriod: TModflowStressPeriod;
@@ -872,8 +872,9 @@ var
       + IntToStr(-UNIT_Number) + ' '
       + IntToStr(OUTTYPE);
     Lines.Add(Line);
-//    Inc(StartUnitNumber);
-    OutputName := ChangeFileExt(FNameOfFile, '.lakg');
+
+    OutputName := ChangeFileExt(FNameOfFile, '');
+    OutputName := ChangeFileExt(OutputName, '.lakg');
     OutputName := OutputName + IntToStr(Lines.Count);
     if not WritingTemplate then
     begin

@@ -7,7 +7,7 @@ uses SysUtils, Classes, CustomModflowWriterUnit, ModflowPackageSelectionUnit;
 type
   TModflowKDEP_Writer = class(TCustomPackageWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     IFKDEP: Integer;
     // @name writes a comment identifying KDEP package.
     procedure WriteDataSet0;

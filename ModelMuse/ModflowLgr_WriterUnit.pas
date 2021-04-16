@@ -7,7 +7,7 @@ uses CustomModflowWriterUnit, Classes, PhastModelUnit;
 type
   TLgrWriter = class(TCustomModflowWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FParentNameFile: string;
     FArchive: boolean;
     FParentOutputDirectory: string;

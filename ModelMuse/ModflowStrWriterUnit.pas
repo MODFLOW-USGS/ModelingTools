@@ -75,7 +75,6 @@ type
     FParameterSegments: TObjectList<TList<TStrSegment>>;
     // @name contains a list of parameter instance names for each parameter.
     FParameterInstanceNames: TStringListObjectList;
-//    FNameOfFile: string;
     FCalculateStage: Boolean;
     // @name is a list of @link(TModflowTransientListParameter) that are in
     // use in the STR package.  The corresponding segments are in
@@ -1368,7 +1367,6 @@ procedure TStrWriter.WriteCell(Cell: TValueCell; const DataSetIdentifier,
 var
   StrReach: TStr_Cell;
   LocalLayer: Integer;
-  DataArray: TDataArray;
 begin
   StrReach := Cell as TStr_Cell;
   LocalLayer := Model.
@@ -1855,7 +1853,6 @@ var
   ReachIndex: Integer;
   AReach: TStr_Cell;
   Reaches: TValueCellList;
-  DataArray: TDataArray;
 begin
   StrPackage := Model.ModflowPackages.StrPackage;
   if StrPackage.CalculateStage then

@@ -7,7 +7,7 @@ uses System.Classes, SysUtils, CustomModflowWriterUnit, PhastModelUnit;
 type
   TModflowDiscretizationWriter = class(TCustomModflowWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
     procedure WriteIDomain;
@@ -19,7 +19,7 @@ type
 
   TMf6DisvWriter = class(TCustomModflowWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure WriteDataSet0;
     procedure WriteOptions;
     procedure WriteDimensions;

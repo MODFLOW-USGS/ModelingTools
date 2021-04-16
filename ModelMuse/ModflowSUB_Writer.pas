@@ -89,7 +89,7 @@ type
     // material zone numbers - Delay beds
     FNZ_List: TList;
     FSubPackage: TSubPackageSelection;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FObsList: TSubObsItemList;
     FUsedObsTypes: TStringList;
     FCombinedSubFileName: string;
@@ -917,6 +917,7 @@ var
   IDREST: Integer;
   SUBLNK: integer;
   ReadRestartFileName: string;
+  BaseName: string;
 begin
   GetFlowUnitNumber(ISUBCB);
   ISUBOC := FSubPackage.PrintChoices.Count;
@@ -933,11 +934,12 @@ begin
   AC2 := FSubPackage.AccelerationParameter2;
   ITMIN := FSubPackage.MinIterations;
   SaveRestartFileName := '';
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if FSubPackage.SaveDelayRestart then
   begin
     IDSAVE := Model.UnitNumbers.UnitNumber(StrSUBSaveRestart);
 
-    SaveRestartFileName := ExtractFileName(ChangeFileExt(FNameOfFile, '.rst'));
+    SaveRestartFileName := ExtractFileName(ChangeFileExt(BaseName, '.rst'));
     if not WritingTemplate then
     begin
       WriteToNameFile(StrDATABINARY, IDSAVE,
@@ -956,7 +958,7 @@ begin
   else
   begin
     IDREST := Model.UnitNumbers.UnitNumber(StrSUBReadRestart);
-    ReadRestartFileName := ExtractRelativePath(FNameOfFile, 
+    ReadRestartFileName := ExtractRelativePath(BaseName,
       FSubPackage.ReadDelayRestartFileName);
     if SaveRestartFileName = ReadRestartFileName then
     begin
@@ -1035,12 +1037,13 @@ var
   Iun9: Integer;
   Ifm10: Integer;
   Iun10: Integer;
+  BaseName: string;
   function GetCombinedUnitNumber: integer;
   begin
     result := Model.UnitNumbers.UnitNumber(StrSubSUB_Out);
     if SubFileName = '' then
     begin
-      SubFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubOut));
+      SubFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubOut));
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATABINARY, result,
@@ -1050,7 +1053,7 @@ var
     end;
   end;
 begin
-
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if FSubPackage.PrintChoices.Count > 0 then
   begin
     Save1 := False;
@@ -1095,7 +1098,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun1 := Model.UnitNumbers.UnitNumber(StrSubSUB_Out);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubSubOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubSubOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun1,
@@ -1119,7 +1122,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun2 := Model.UnitNumbers.UnitNumber(StrSubCOM_ML_Out);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubComMlOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubComMlOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun2,
@@ -1143,7 +1146,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun3 := Model.UnitNumbers.UnitNumber(StrSubCOM_IS_Out);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubComIsOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubComIsOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun3,
@@ -1168,7 +1171,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun4 := Model.UnitNumbers.UnitNumber(StrSub_VD_Out);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubVdOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubVdOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun4,
@@ -1192,7 +1195,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun5 := Model.UnitNumbers.UnitNumber(StrSub_NDPCH_Out);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubNdCritHeadOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubNdCritHeadOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun5,
@@ -1216,7 +1219,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun6 := Model.UnitNumbers.UnitNumber(StrSub_DPCH_Out);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubDCritHeadOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubDCritHeadOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun6,
@@ -1240,7 +1243,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun7 := Model.UnitNumbers.UnitNumber(StrSubElasCompML);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubElasCompMLOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubElasCompMLOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun7,
@@ -1263,7 +1266,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun8 := Model.UnitNumbers.UnitNumber(StrSubInelasCompML);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubInelasCompMLOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubInelasCompMLOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun8,
@@ -1286,7 +1289,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun9 := Model.UnitNumbers.UnitNumber(StrSubElasCompIB);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubElasCompIBOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubElasCompIBOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun9,
@@ -1310,7 +1313,7 @@ begin
         sbocMultipleFiles:
           begin
             Iun10 := Model.UnitNumbers.UnitNumber(StrSubInelasCompIB);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSubInlasCompIBOut));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, StrSubInlasCompIBOut));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, Iun10,

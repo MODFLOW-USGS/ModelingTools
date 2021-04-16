@@ -18,7 +18,7 @@ type
     FSftSteadyList: TSftSteadyObjectList;
     NCOMP: Integer;
     NOBSSF: Integer;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSet3;
@@ -465,6 +465,7 @@ var
   TimeIndex: Integer;
   SftRateList: TValueCellList;
   NTMP: Integer;
+  BaseFile: string;
 begin
   NSFINIT := 0;
   MXSFBC := 0;
@@ -499,10 +500,11 @@ begin
   end;
   ICBCSF := 0;
 
+  BaseFile := ChangeFileExt(FNameOfFile, '');
   if NOBSSF > 0 then
   begin
     IOUTOBS := mt3dSftObs;
-    SftObsOutputFileName := ChangeFileExt(FNameOfFile, '.obs_sft');
+    SftObsOutputFileName := ChangeFileExt(BaseFile, '.obs_sft');
     WriteToMt3dMsNameFile(StrDATA, mt3dSftObs,
       SftObsOutputFileName, foOutput, Model);
   end

@@ -46,7 +46,7 @@ type
   private
     FSfrWriter: TModflowSFR_Writer;
     FLocations: TList;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure Evaluate;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -579,11 +579,13 @@ var
   NHYD, IHYDUN: integer;
   HYDNOH: double;
   HydModOutFileName: string;
+  BaseName: string;
 begin
   NHYD := FLocations.Count;
   IHYDUN := Model.UnitNumbers.UnitNumber(StrHydmodOut);
 
-  HydModOutFileName := ExtractFileName(ChangeFileExt(FNameOfFile, '.hyd_out'));
+  BaseName := ChangeFileExt(FNameOfFile, '');
+  HydModOutFileName := ExtractFileName(ChangeFileExt(BaseName, '.hyd_out'));
   if not WritingTemplate then
   begin
     WriteToNameFile(StrDATABINARY, IHYDUN,

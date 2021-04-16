@@ -116,7 +116,7 @@ type
   private
     NPHFB: integer;
     FParameterScreenObjectList: TStringList;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure Evaluate;
     procedure EvaluateModflow6;
     {@name fills @link(FParameterScreenObjectList) with the names
@@ -1725,82 +1725,6 @@ begin
       frmErrorsAndWarnings.EndUpdate;
     end;
   end;
-
-
-//  OpenFile(FNameOfFile);
-//  try
-//    frmProgressMM.AddMessage(StrWritingHFB6Package);
-//    frmProgressMM.AddMessage(StrWritingDataSet0);
-//    WriteDataSet0;
-//    Application.ProcessMessages;
-//    if not frmProgressMM.ShouldContinue then
-//    begin
-//      Exit;
-//    end;
-//
-//    if Model.ModelSelection = msModflow2015 then
-//    begin
-//      WriteOptionsMF6;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      WriteDimensionsMF6;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      WriteStressPeriodsMF6;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//    end
-//    else
-//    begin
-//      frmProgressMM.AddMessage(StrWritingDataSet1);
-//      WriteDataSet1;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSets2and3);
-//      WriteDataSets2and3;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSet4);
-//      WriteDataSet4;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSet5);
-//      WriteDataSet5;
-//      Application.ProcessMessages;
-//      if not frmProgressMM.ShouldContinue then
-//      begin
-//        Exit;
-//      end;
-//
-//      frmProgressMM.AddMessage(StrWritingDataSet6);
-//      WriteDataSet6;
-//    end;
-//  finally
-//    CloseFile;
-//  end;
 end;
 
 procedure TModflowHfb_Writer.WriteOptionsMF6;

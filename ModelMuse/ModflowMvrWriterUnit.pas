@@ -65,7 +65,7 @@ type
     FReceiverDictionary: TDictionary<TMvrReceiverKey, TMvrReceiverValues>;
     FSourceLists: TObjectList<TMvrSources>;
     FSourceCellDictionaries: TObjectList<TMvrSourceCellDictionary>;
-    FNameOfFile: String;
+//    FNameOfFile: String;
     FUsedPackages: TSourcePackageChoices;
     function ShouldEvaluate: Boolean;
     procedure WriteOptions;
@@ -876,17 +876,19 @@ procedure TModflowMvrWriter.WriteOptions;
 var
   MvrPackage: TMvrPackage;
   budgetfile: string;
+  BaseFile: string;
 begin
   WriteBeginOptions;
 
   PrintListInputOption;
   PrintFlowsOption;
 
+  BaseFile := ChangeFileExt(FNameOfFile, '');
   MvrPackage := Model.ModflowPackages.MvrPackage;
   if MvrPackage.SaveBudgetFile then
   begin
     WriteString('    BUDGET FILEOUT ');
-    budgetfile := ChangeFileExt(FNameOfFile, '.mvr_budget');
+    budgetfile := ChangeFileExt(BaseFile, '.mvr_budget');
     Model.AddModelOutputFile(budgetfile);
     budgetfile := ExtractFileName(budgetfile);
     WriteString(budgetfile);

@@ -40,7 +40,7 @@ type
 
   TSutraGeneralFlowWriter = class(TCustomFileWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FPressure1TimeLists: TObjectList<TSutraTimeList>;
     FPressure2TimeLists: TObjectList<TSutraTimeList>;
     FFlow1TimeLists: TObjectList<TSutraTimeList>;

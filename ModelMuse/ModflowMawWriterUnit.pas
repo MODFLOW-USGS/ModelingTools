@@ -25,7 +25,7 @@ type
     FMawNames: TStringList;
     FWellProperties: array of TMawSteadyWellRecord;
     FWellConnections: TList<TMawSteadyConnectionRecord>;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FMawPackage: TMawPackage;
     FFlowingWells: Boolean;
     FMawObservations: TMawObservationList;
@@ -848,6 +848,7 @@ var
   AFileName: string;
 //  ObsName: string;
   NameOfFile: string;
+  BaseName: string;
 begin
   WriteBeginOptions;
 
@@ -861,10 +862,11 @@ begin
     NewLine;
   end;
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if  FMawPackage.SaveMnwHeads then
   begin
     WriteString('  HEAD FILEOUT ');
-    AFileName := ChangeFileExt(FNameOfFile, '.maw_head');
+    AFileName := ChangeFileExt(BaseName, '.maw_head');
     Model.AddModelOutputFile(AFileName);
     AFileName := ExtractFileName(AFileName);
     WriteString(AFileName);
@@ -877,7 +879,7 @@ begin
   if  FMawPackage.SaveMnwFlows then
   begin
     WriteString('  BUDGET FILEOUT ');
-    AFileName := ChangeFileExt(FNameOfFile, '.maw_bud');
+    AFileName := ChangeFileExt(BaseName, '.maw_bud');
     Model.AddModelOutputFile(AFileName);
     AFileName := ExtractFileName(AFileName);
     WriteString(AFileName);
@@ -907,7 +909,7 @@ begin
   if FMawObservations.Count > 0 then
   begin
     WriteString('    OBS6 FILEIN ');
-    NameOfFile := ObservationFileName(FNameOfFile);
+    NameOfFile := ObservationFileName(BaseName);
     Model.AddModelInputFile(NameOfFile);
     NameOfFile := ExtractFileName(NameOfFile);
     WriteString(NameOfFile);

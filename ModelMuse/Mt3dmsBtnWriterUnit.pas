@@ -9,7 +9,7 @@ uses System.UITypes,
 type
   TMt3dmsBtnWriter = class(TCustomModflowWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     NOBS: integer;
     FMt3dBasic: TMt3dBasic;
     procedure WriteDataSets1And2;

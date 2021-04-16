@@ -10,7 +10,7 @@ uses
 type
   TModflowMNW1_Writer = class(TCustomTransientWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FMnwPackage: TMnw1Package;
     FWells: TList<TMnw1Boundary>;
     procedure WriteDataSet1;

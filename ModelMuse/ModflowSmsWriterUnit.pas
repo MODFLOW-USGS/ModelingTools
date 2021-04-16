@@ -7,7 +7,7 @@ uses SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit;
 type
   TImsWriter = class(TCustomSolverWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FDVClose: Double;
     procedure WriteInnerMaximum;
     procedure WriteInnerHClose;
@@ -433,6 +433,7 @@ end;
 procedure TImsWriter.WriteOptions;
 var
   CsvFile: string;
+  BaseFile: string;
 begin
   WriteBeginOptions;
 
@@ -454,10 +455,11 @@ begin
   end;
   NewLine;
 
+  BaseFile := ChangeFileExt(FNameOfFile, '');
   if FImsPackage.CsvOutput <> sspNone then
   begin
     WriteString('  CSV_OUTER_OUTPUT FILEOUT ');
-    CsvFile := ChangeFileExt(FNameOfFile, '.OuterSolution.CSV');
+    CsvFile := ChangeFileExt(BaseFile, '.OuterSolution.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);
@@ -467,7 +469,7 @@ begin
   if FImsPackage.CsvOutput <> sspNone then
   begin
     WriteString('  CSV_INNER_OUTPUT FILEOUT ');
-    CsvFile := ChangeFileExt(FNameOfFile, '.InnerSolution.CSV');
+    CsvFile := ChangeFileExt(BaseFile, '.InnerSolution.CSV');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);

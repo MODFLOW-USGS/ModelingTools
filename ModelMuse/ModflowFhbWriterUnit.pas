@@ -14,7 +14,7 @@ type
     FFlowScreenObjects: TScreenObjectList;
     FTimes: TRealList;
     NoAssignmentErrorRoot: string;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FFlowValues: TList;
     FUnitNumber: integer;
     FPrintInputCellLists: Boolean;
@@ -779,8 +779,6 @@ var
   CellStartIndex: Integer;
   PriorTimeCells: TFhbCellList;
   procedure WriteFormulaOrValue(Cell: TFhb_Cell);
-  var
-    DataArray: TDataArray;
   begin
     WriteValueOrFormula(Cell, FhbBoundaryValuePosition);
 //    WriteFloat(Cell.BoundaryValue);

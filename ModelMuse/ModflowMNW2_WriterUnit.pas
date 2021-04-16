@@ -37,7 +37,7 @@ type
 
   TModflowMNW2_Writer = class(TCustomPackageWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FValues: TList;
     FWells: TList;
     FWellNames: TStringList;

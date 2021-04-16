@@ -94,7 +94,7 @@ type
 
   TModflowSFR_Writer = class(TCustomPackageWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FValues: TList;
     FSegments: TList;
     FLakes: TList;
@@ -3560,6 +3560,7 @@ var
   SubSeg: TSubSegment;
   ReachIndex: Integer;
   AReach: TSfr_Cell;
+  BaseName: string;
 //  Used: Boolean;
 begin
   NSTRM := 0;
@@ -3643,13 +3644,15 @@ begin
 //    ISTCB2 := 0;
 //  end;
   ISTCB2 := 0;
+
+  BaseName := ChangeFileExt(FNameOfFile, '');
   case SfrPackage.PrintFlows of
     pfNoPrint: ISTCB2 := 0;
     pfListing: ISTCB2 := Model.UnitNumbers.UnitNumber(StrLIST);
     pfText:
       begin
         ISTCB2 := Model.UnitNumbers.UnitNumber(StrISTCB2);
-        FlowFileName := ChangeFileExt(FNameOfFile, '.sfr_out');
+        FlowFileName := ChangeFileExt(BaseName, '.sfr_out');
         if not WritingTemplate then
         begin
           WriteToNameFile('DATA', ISTCB2, FlowFileName, foOutput, Model);
@@ -5264,7 +5267,9 @@ var
       + IntToStr(OUTTYPE);
     GageLines.Add(Line);
 //    Inc(StartUnitNumber);
-    OutputName := ChangeFileExt(FNameOfFile, '.sfrg');
+
+    OutputName := ChangeFileExt(FNameOfFile, '');
+    OutputName := ChangeFileExt(OutputName, '.sfrg');
     OutputName := OutputName + IntToStr(GageLines.Count);
     if not WritingTemplate then
     begin

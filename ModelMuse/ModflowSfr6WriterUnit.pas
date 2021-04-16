@@ -49,7 +49,6 @@ type
 
   TModflowSFR_MF6_Writer = class(TCustomPackageWriter)
   private
-//    FNameOfFile: string;
     FValues: TList;
     FSegments: TSfr6SegmentList;
     FReachCount: integer;

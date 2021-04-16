@@ -20,7 +20,7 @@ type
 
   TMt3dLktWriter = class(TCustomModflowWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     // @name contains Lake objects for MODFLOW-2005 or MODFLOW 6. Those may or
     // may not have lake transport objects.
     FLakeObjects: TScreenObjectList;
@@ -203,6 +203,7 @@ var
   ICBCLK: Integer;
   IETLAK: Integer;
   OutName: string;
+  BaseName: string;
 begin
   NLKINIT := FLakeObjects.Count;
   MXLKBC := 0;
@@ -224,10 +225,11 @@ begin
   end;
   Mt3dLkt := Model.ModflowPackages.Mt3dLkt;
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if Mt3dLkt.PrintLakeTransportBudget then
   begin
     ICBCLK := nt3dLktOut;
-    OutName := ChangeFileExt(FNameOfFile, '.lktobs');
+    OutName := ChangeFileExt(BaseName, '.lktobs');
 
     WriteToMt3dMsNameFile(StrDATA, ICBCLK,
       OutName, foOutput, Model);

@@ -25,7 +25,6 @@ type
 
   TModflowUzfMf6Writer = class(TCustomParameterTransientWriter)
   private
-//    FNameOfFile: string;
     FUzfPackage: TUzfMf6PackageSelection;
     FUzfCellNumbers: TThreeDIntegerArray;
   	FUzflandflagLayers:  TTwoDIntegerArray;

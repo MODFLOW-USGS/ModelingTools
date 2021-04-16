@@ -10,7 +10,7 @@ uses
 type
   TPestControlFileWriter = class(TCustomFileWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FUsedObservations: TObservationInterfaceList;
     FUsePval: Boolean;
     F_AbsParMax: TRealList;

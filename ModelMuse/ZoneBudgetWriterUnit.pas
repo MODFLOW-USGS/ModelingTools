@@ -32,7 +32,7 @@ type
   TZoneBudgetResponseFileWriter = class(TCustomModflowWriter)
   private
     FZoneBudget: TZoneBudgetSelect;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FEmbeddedExport: Boolean;
     procedure WriteResponse1(ArchiveFile: Boolean);
     procedure WriteResponse2(ArchiveFile: Boolean);
@@ -54,7 +54,7 @@ type
   TZoneBudgetNameFileWriter = class(TCustomModflowWriter)
   private
     FZoneBudget: TZoneBudgetSelect;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FEmbeddedExport: Boolean;
     procedure WriteBeginZonebudget;
     procedure WriteEndZonebudget;

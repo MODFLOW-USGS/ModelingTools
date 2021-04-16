@@ -598,7 +598,6 @@ var
   PestItem: string;
   PestSeries: string;
   PestMethod: TPestParamMethod;
-  DataArray: TDataArray;
 begin
   Value := LakeSetting.Value[Index];
   PestItem := LakeSetting.PestName[Index];
@@ -615,39 +614,7 @@ begin
   end
   else
   begin
-//    if FixedLength = 0 then
-//    begin
-      WriteFloat(Value);
-//    end
-//    else if FixedLength = 10 then
-//    begin
-//      WriteF10Float(Value);
-//    end
-//    else if FixedLength = 15 then
-//    begin
-//      WriteF15Float(Value);
-//    end
-//    else
-//    begin
-//      Assert(False);
-//    end;
-
-//    if PestItem <> '' then
-//    begin
-//      DataArray := Model.DataArrayManager.GetDataSetByName(PestItem);
-//      if DataArray <> nil then
-//      begin
-//        AddUsedPestDataArray(DataArray);
-//      end;
-//    end;
-//    if PestSeries <> '' then
-//    begin
-//      DataArray := Model.DataArrayManager.GetDataSetByName(PestSeries);
-//      if DataArray <> nil then
-//      begin
-//        AddUsedPestDataArray(DataArray);
-//      end;
-//    end;
+    WriteFloat(Value);
   end;
 end;
 

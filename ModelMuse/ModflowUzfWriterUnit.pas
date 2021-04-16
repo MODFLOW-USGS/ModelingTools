@@ -17,7 +17,7 @@ type
     FEtDemand: TList;
     FEExtinctionDepths: TList;
     FExtinctionWaterContent : TList;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     UzfPackage: TUzfPackageSelection;
     procedure CountGages;
     procedure WriteDataSet1a;
@@ -521,6 +521,7 @@ var
   NwtFormat: TNwtFormat;
   unitrech: Integer;
   unitdis: Integer;
+  BaseName: string;
 begin
   IUZFOPT := Model.ModflowPackages.UzfPackage.VerticalKSource;
   if not (Model.ModflowPackages.LpfPackage.IsSelected
@@ -639,10 +640,11 @@ begin
 
             if not WritingTemplate then
             begin
+              BaseName := ChangeFileExt(FNameOfFile, '');
               WriteToNameFile(StrDATABINARY, unitrech,
-                ChangeFileExt(FNameOfFile, StrUzfRch), foOutput, Model);
+                ChangeFileExt(BaseName, StrUzfRch), foOutput, Model);
               WriteToNameFile(StrDATABINARY, unitdis,
-                ChangeFileExt(FNameOfFile, StrUzfDisch), foOutput, Model);
+                ChangeFileExt(BaseName, StrUzfDisch), foOutput, Model);
             end;
           end;
 

@@ -732,6 +732,7 @@ end;
 procedure TMt3dmsTobWriter.WriteDataSet2;
 var
   inSaveObs: integer;
+  BaseName: string;
 begin
   if FTobPackage.SaveBinary = sbSave then
   begin
@@ -764,17 +765,18 @@ begin
   WriteString(' # Data Set 2: OUTNAM, inConcObs, inFluxObs, inSaveObs');
   NewLine;
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if inConcObs > 0 then
   begin
-    WriteToMt3dMsNameFile(StrData, Mt3dTob_inConcObs, ChangeFileExt(FNameOfFile, '.ocn'), foOutput, Model);
+    WriteToMt3dMsNameFile(StrData, Mt3dTob_inConcObs, ChangeFileExt(BaseName, '.ocn'), foOutput, Model);
   end;
   if inFluxObs > 0 then
   begin
-    WriteToMt3dMsNameFile(StrData, Mt3dTob_inFluxObs, ChangeFileExt(FNameOfFile, '.mfx'), foOutput, Model);
+    WriteToMt3dMsNameFile(StrData, Mt3dTob_inFluxObs, ChangeFileExt(BaseName, '.mfx'), foOutput, Model);
   end;
   if inSaveObs > 0 then
   begin
-    WriteToMt3dMsNameFile(StrDataBinary, Mt3dTob_inSaveObs, ChangeFileExt(FNameOfFile, '.pst'), foOutput, Model);
+    WriteToMt3dMsNameFile(StrDataBinary, Mt3dTob_inSaveObs, ChangeFileExt(BaseName, '.pst'), foOutput, Model);
   end;
 
 end;

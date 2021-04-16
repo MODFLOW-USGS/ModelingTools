@@ -9,7 +9,7 @@ type
   TModflowHUF_Writer = class(TCustomFlowPackageWriter)
   private
     FHufPackage: THufPackageSelection;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FTransient: Boolean;
     FConvertibleLayerPresent: Boolean;
     procedure CheckSytpParameters;
@@ -335,6 +335,7 @@ var
   IOHUFHEADS: integer;
   IOHUFFLOWS: integer;
   NameOfFile: string;
+  BaseName: string;
 begin
   IHUFCB := 0;
   GetFlowUnitNumber(IHUFCB);
@@ -350,12 +351,13 @@ begin
   begin
     NPHUF := Model.HufParameters.CountParameters(HufSteadyParameters);
   end;
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if FHufPackage.SaveHeads then
   begin
     IOHUFHEADS := Model.UnitNumbers.UnitNumber(StrIOHUFHEADS);
     if Model.ModflowOutputControl.HeadOC.FormatDefined then
     begin
-      NameOfFile := ChangeFileExt(FNameOfFile, StrHuffhd);
+      NameOfFile := ChangeFileExt(BaseName, StrHuffhd);
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, IOHUFHEADS,
@@ -364,7 +366,7 @@ begin
     end
     else
     begin
-      NameOfFile := ChangeFileExt(FNameOfFile, StrHufbhd);
+      NameOfFile := ChangeFileExt(BaseName, StrHufbhd);
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATABINARY, IOHUFHEADS,
@@ -379,7 +381,7 @@ begin
   if FHufPackage.SaveFlows then
   begin
     IOHUFFLOWS := Model.UnitNumbers.UnitNumber(StrIOHUFFLOWS);
-    NameOfFile := ChangeFileExt(FNameOfFile, StrHufflow);
+    NameOfFile := ChangeFileExt(BaseName, StrHufflow);
     if not WritingTemplate then
     begin
       WriteToNameFile(StrDATABINARY, IOHUFFLOWS,

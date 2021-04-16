@@ -49,7 +49,7 @@ type
     FCellList: TObjectList<TRipCell>;
     FCompiler: TRbwParser;
     FPlantGroups: TRipPlantGroups;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure CountCellsAndPolygons;
     function GetCell(Col, Row: Integer): TRipCell;
     procedure SetCell(Col, Row: Integer; const Value: TRipCell);
@@ -400,12 +400,14 @@ var
   IRIPCB: Integer;
   IRIPCB1: Integer;
   NameOfFile: string;
+  BaseFile: string;
 begin
   GetFlowUnitNumber(IRIPCB);
+  BaseFile := ChangeFileExt(FNameOfFile, '');
   if (Package as TRipPackage).WritePlantGroupET = wpgWrite then
   begin
     IRIPCB1 := Model.UnitNumbers.UnitNumber(StrRipPlantGroupET);
-    NameOfFile := ChangeFileExt(FNameOfFile, '.rip_et');
+    NameOfFile := ChangeFileExt(BaseFile, '.rip_et');
     if not WritingTemplate then
     begin
       WriteToNameFile(StrData, Model.UnitNumbers.UnitNumber(StrRipPlantGroupET),

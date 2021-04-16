@@ -25,7 +25,7 @@ type
     // @name contains only @link(TScreenObject)s used by SWR.
     FScreenObjectList: TList<TScreenObject>;
     FSwrPackage: TSwrPackage;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FStuctureDict: TObjectDictionary<Integer,TStructureList>;
     FDirectRunoffFileName: string;
     NREACHES: integer;
@@ -3404,6 +3404,7 @@ var
   OptionList: TStringList;
   OptionIndex: Integer;
   CSWROPT: string;
+  BaseName: string;
 begin
   NREACHES := FReachList.Count;
   if FSwrPackage.OnlyUseSWR then
@@ -3417,11 +3418,12 @@ begin
   GetFlowUnitNumber(ISWRCBC);
 
   ISWRPRGF := 0;
+  BaseName := ChangeFileExt(FNameOfFile, '');
   case FSwrPackage.PrintInflowsAndOutflows of
     spoNone: ISWRPRGF := 0;
     spoASCII:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrReachGroupFlowsA);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrReachGroupFlowsA);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrReachGroupStage);
         if not WritingTemplate then
         begin
@@ -3431,7 +3433,7 @@ begin
       end;
     spoBinary:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrReachGroupFlowsB);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrReachGroupFlowsB);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrReachGroupStage);
         if not WritingTemplate then
         begin
@@ -3448,7 +3450,7 @@ begin
     spoNone: ISWRPSTG := 0;
     spoASCII:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrReachStageA);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrReachStageA);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrReachStage);
         if not WritingTemplate then
         begin
@@ -3458,7 +3460,7 @@ begin
       end;
     spoBinary:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrReachStageB);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrReachStageB);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrReachStage);
         if not WritingTemplate then
         begin
@@ -3475,7 +3477,7 @@ begin
     spoNone: ISWRPQAQ := 0;
     spoASCII:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrReachExchangeA);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrReachExchangeA);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrReachExchange);
         if not WritingTemplate then
         begin
@@ -3485,7 +3487,7 @@ begin
       end;
     spoBinary:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrReachExchangeB);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrReachExchangeB);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrReachExchange);
         if not WritingTemplate then
         begin
@@ -3502,7 +3504,7 @@ begin
     spoNone: ISWRPQM := 0;
     spoASCII:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrLateralFlowA);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrLateralFlowA);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrLateral);
         if not WritingTemplate then
         begin
@@ -3512,7 +3514,7 @@ begin
       end;
     spoBinary:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrLateralFlowB);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrLateralFlowB);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrLateral);
         if not WritingTemplate then
         begin
@@ -3529,7 +3531,7 @@ begin
     spoNone: ISWRPSTR := 0;
     spoASCII:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrStructureFlowA);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrStructureFlowA);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrStructure);
         if not WritingTemplate then
         begin
@@ -3539,7 +3541,7 @@ begin
       end;
     spoBinary:
       begin
-        OutputFileName := ChangeFileExt(FNameOfFile, StrSwrStructureFlowB);
+        OutputFileName := ChangeFileExt(BaseName, StrSwrStructureFlowB);
         OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrStructure);
         if not WritingTemplate then
         begin
@@ -3571,7 +3573,7 @@ begin
       spoNone: ; // do nothing
       spoASCII:
         begin
-          OutputFileName := ChangeFileExt(FNameOfFile, StrSwrTimeStepLengthA);
+          OutputFileName := ChangeFileExt(BaseName, StrSwrTimeStepLengthA);
           OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrTimeSteps);
           if not WritingTemplate then
           begin
@@ -3581,7 +3583,7 @@ begin
         end;
       spoBinary:
         begin
-          OutputFileName := ChangeFileExt(FNameOfFile, StrSwrTimeStepLengthB);
+          OutputFileName := ChangeFileExt(BaseName, StrSwrTimeStepLengthB);
           OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrTimeSteps);
           if not WritingTemplate then
           begin
@@ -3600,7 +3602,7 @@ begin
 
     if FSwrPackage.SaveConvergenceHistory then
     begin
-      OutputFileName := ChangeFileExt(FNameOfFile, StrSwrConvergence);
+      OutputFileName := ChangeFileExt(BaseName, StrSwrConvergence);
       OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrConvergenceHistory);
       if not WritingTemplate then
       begin
@@ -3613,7 +3615,7 @@ begin
       ssrNone: ; // do nothing
       ssrSaveActive:
         begin
-          OutputFileName := ChangeFileExt(FNameOfFile, StrSwrRIV);
+          OutputFileName := ChangeFileExt(BaseName, StrSwrRIV);
           OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrRiver);
           if not WritingTemplate then
           begin
@@ -3623,7 +3625,7 @@ begin
         end;
       ssrSaveAll:
         begin
-          OutputFileName := ChangeFileExt(FNameOfFile, StrSwrRIV);
+          OutputFileName := ChangeFileExt(BaseName, StrSwrRIV);
           OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrRiver);
           if not WritingTemplate then
           begin
@@ -3653,7 +3655,7 @@ begin
           case FSwrPackage.ObsFormat of
             swofAscii:
               begin
-                OutputFileName := ChangeFileExt(FNameOfFile, StrSwrObsExt_A);
+                OutputFileName := ChangeFileExt(BaseName, StrSwrObsExt_A);
                 if not WritingTemplate then
                 begin
                   WriteToNameFile(StrData, OutputUnitNumber, OutputFileName, foOutput, Model);
@@ -3662,7 +3664,7 @@ begin
               end;
             swofBinary:
               begin
-                OutputFileName := ChangeFileExt(FNameOfFile, StrSwrObsExt_B);
+                OutputFileName := ChangeFileExt(BaseName, StrSwrObsExt_B);
                 if not WritingTemplate then
                 begin
                   WriteToNameFile(StrDataBinary, OutputUnitNumber, OutputFileName, foOutput, Model);
@@ -3684,7 +3686,7 @@ begin
 
     if FDirectRunoffValues.Count > 0 then
     begin
-      FDirectRunoffFileName := ChangeFileExt(FNameOfFile, StrSwrDirectRunoffExt);
+      FDirectRunoffFileName := ChangeFileExt(BaseName, StrSwrDirectRunoffExt);
       OutputUnitNumber := Model.UnitNumbers.UnitNumber(StrSwrDirectRunoff);
       if not WritingTemplate then
       begin

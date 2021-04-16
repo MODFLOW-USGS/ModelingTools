@@ -8,8 +8,8 @@ uses LayerStructureUnit, Classes, PhastModelUnit, SysUtils, HufDefinition,
 
 type
   TCustomMultZoneWriter = class(TCustomModflowWriter)
-  private
-    FNameOfFile: string;
+//  private
+//    FNameOfFile: string;
   protected
     FFileUnit: integer;
     FFileType: string;

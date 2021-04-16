@@ -7,7 +7,7 @@ uses Types, SysUtils, Classes, CustomModflowWriterUnit, ModflowPackageSelectionU
 type
   TModflowLVDA_Writer = class(TCustomPackageWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure CheckLvdaParameters;
     procedure WriteDataSet0;
     procedure WriteDataSet1;

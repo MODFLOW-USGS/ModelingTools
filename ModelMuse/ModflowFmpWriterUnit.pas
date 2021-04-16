@@ -25,7 +25,7 @@ type
     FFarmIDs: TList;
     FRefEts: TList;
     FPrecip: TList;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     NPFWL: Integer;
     MXL: Integer;
     FFarmWellID: Integer;
@@ -877,7 +877,7 @@ var
   AuxValue: integer;
   AuxName: string;
   MNW2NAM: STRING;
-  DataArray: TDataArray;
+//  DataArray: TDataArray;
 begin
   Well_Cell := Cell as TFmpWell_Cell;
   if Well_Cell.Mnw1 or Well_Cell.Mnw2 then
@@ -1807,6 +1807,7 @@ var
 //  Dummy: TDataArray;
   AFileName: string;
   FarmIdArray: TDataArray;
+  BaseName: string;
 begin
   if FFarmIDs.Count <= TimeIndex then
   begin
@@ -1819,9 +1820,10 @@ begin
   DataTypeIndex := 0;
   Comment := 'Data Set 26: FID';
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if FFID_FileStream = nil then
   begin
-    AFileName := ChangeFileExt(FNameOfFile, '.FID');
+    AFileName := ChangeFileExt(BaseName, '.FID');
     if not WritingTemplate then
     begin
       WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpFID),
@@ -1853,12 +1855,14 @@ var
   ACropEffCollection: TCropEfficiencyCollection;
   UsedCropEffItem: TCropEfficiencyItem;
   AFileName: string;
+  BaseName: string;
 begin
   if IEFFL = 2 then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FOFE_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.OFE');
+      AFileName := ChangeFileExt(BaseName, '.OFE');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpOFE),
@@ -1927,6 +1931,7 @@ var
 //  Dummy: TDataArray;
   AFileName: string;
   CropIdArray: TDataArray;
+  BaseName: string;
 begin
   if FCropIDs.Count <= TimeIndex then
   begin
@@ -1939,9 +1944,10 @@ begin
   DataTypeIndex := 0;
   Comment := 'Data Set 28: CID';
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if FCID_FileStream = nil then
   begin
-    AFileName := ChangeFileExt(FNameOfFile, '.CID');
+    AFileName := ChangeFileExt(BaseName, '.CID');
     if not WritingTemplate then
     begin
       WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCID),
@@ -1971,12 +1977,14 @@ var
   ARootDepthItem: TRootingDepthItem;
   CropID: Integer;
   AFileName: string;
+  BaseName: string;
 begin
   if (IRTFL = 2) then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FRoot_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.ROOT');
+      AFileName := ChangeFileExt(BaseName, '.ROOT');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpRoot),
@@ -2039,12 +2047,14 @@ var
   AWaterUseItem: TCropWaterUseItem;
   AFileName: string;
   ACrop: TCropItem;
+  BaseName: string;
 begin
   if ICUFL < 3  then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FCropUse_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.CropUse');
+      AFileName := ChangeFileExt(BaseName, '.CropUse');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCropUse),
@@ -2111,6 +2121,7 @@ var
   DefaultValue: Double;
   Dummy: TDataArray;
   AFileName: string;
+  BaseName: string;
 begin
   if (ICUFL = 1) or (ICUFL = -1) then
   begin
@@ -2125,9 +2136,10 @@ begin
     DataTypeIndex := 0;
     Comment := 'Data Set 30b: ETR';
 
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FETR_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.ETR');
+      AFileName := ChangeFileExt(BaseName, '.ETR');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpETR),
@@ -2155,13 +2167,15 @@ var
   EvapFractions: TEvapFractionsCollection;
   EvapFractionItem: TEvapFractionsItem;
   AFileName: string;
+  BaseName: string;
 begin
   if IFTEFL = 2 then
   begin
 
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FET_Frac_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.ET_Frac');
+      AFileName := ChangeFileExt(BaseName, '.ET_Frac');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpETFrac),
@@ -2220,12 +2234,14 @@ var
   CropID: Integer;
   LossesItem: TLossesItem;
   AFileName: string;
+  BaseName: string;
 begin
   if (IIESWFL = 2) then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FSW_Losses_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.SW_Losses');
+      AFileName := ChangeFileExt(BaseName, '.SW_Losses');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSwLosses),
@@ -2405,6 +2421,7 @@ var
   FileDir: string;
   CommentString: string;
   IRTPFL_Required: Boolean;
+  BaseName: string;
 //  AFileName: string;
 begin
   FileDir := IncludeTrailingPathDelimiter(ExtractFileDir(FNameOfFile));
@@ -2468,6 +2485,7 @@ begin
   end;
   {$ENDREGION}
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   {$REGION 'IFBPFL'}
   IFBPFL := Dummy;
   case FFarmProcess.FarmBudgetPrintFlags of
@@ -2508,7 +2526,7 @@ begin
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, IFBPFL,
-                            ChangeFileExt(FNameOfFile, '.FB_COMPACT_BIN_OUT'), foOutput, Model);
+                            ChangeFileExt(BaseName, '.FB_COMPACT_BIN_OUT'), foOutput, Model);
             end;
           end
           else
@@ -2516,7 +2534,7 @@ begin
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, IFBPFL,
-                ChangeFileExt(FNameOfFile, '.FB_DETAILS_BIN_OUT'),
+                ChangeFileExt(BaseName, '.FB_DETAILS_BIN_OUT'),
                 foOutput, Model);
             end;
           end;
@@ -2896,6 +2914,7 @@ var
   DefaultValue: Double;
   Dummy: TDataArray;
   AFileName: string;
+  BaseName: string;
 begin
   if (IPFL = 2) then
   begin
@@ -2910,9 +2929,10 @@ begin
     DataTypeIndex := 0;
     Comment := 'Data Set 33: PFLX';
 
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FPFLX_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.PFLX');
+      AFileName := ChangeFileExt(BaseName, '.PFLX');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpPFLX),
@@ -2940,12 +2960,14 @@ var
   CropFuncItem: TCropFunctionItem;
   CropID: Integer;
   AFileName: string;
+  BaseName: string;
 begin
   if (IDEFFL > 0) and (IBEN = 2) then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FCropFunc_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.CropFunc');
+      AFileName := ChangeFileExt(BaseName, '.CropFunc');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCropFunc),
@@ -2991,12 +3013,14 @@ var
   FarmIndex: Integer;
   AFarm: TFarm;
   AFileName: string;
+  BaseName: string;
 begin
   if (IDEFFL > 0) and (ICOST = 2) then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FWaterCost_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.WaterCost');
+      AFileName := ChangeFileExt(BaseName, '.WaterCost');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpWaterCost),
@@ -3054,12 +3078,14 @@ var
   NRDU: Integer;
   Expression: TExpression;
   AFileName: string;
+  BaseName: string;
 begin
   if INRDFL = 1 then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FDeliveries_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.NonRouteDeliv');
+      AFileName := ChangeFileExt(BaseName, '.NonRouteDeliv');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpDeliveries),
@@ -3146,12 +3172,14 @@ var
   ReturnCell: TCellLocation;
   SegmentReach: TSegmentReach;
   AFileName: string;
+  BaseName: string;
 begin
   if ISRDFL = 2 then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FSemiDeliveries_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.SemiRouteDeliv');
+      AFileName := ChangeFileExt(BaseName, '.SemiRouteDeliv');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSemiRouteDeliv),
@@ -3208,12 +3236,14 @@ var
   ReturnCell: TCellLocation;
   SegmentReach: TSegmentReach;
   AFileName: string;
+  BaseName: string;
 begin
   if ISRRFL = 2 then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FSemiReturn_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.SemiRouteReturn');
+      AFileName := ChangeFileExt(BaseName, '.SemiRouteReturn');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpSemiRouteReturn),
@@ -3286,12 +3316,14 @@ var
   WaterRights: TWaterRightsCollection;
   WaterRightsItem: TWaterRightsItem;
   AFileName: string;
+  BaseName: string;
 begin
   if IALLOTSW = 2 then
   begin
+    BaseName := ChangeFileExt(FNameOfFile, '');
     if FCall_FileStream = nil then
     begin
-      AFileName := ChangeFileExt(FNameOfFile, '.CALL');
+      AFileName := ChangeFileExt(BaseName, '.CALL');
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATA, Model.UnitNumbers.UnitNumber(StrFmpCall),

@@ -23,7 +23,7 @@ type
     FUsedWellCountDictionary: TDictionary<TScreenObject, Integer>;
     FUsedWelStartsDictionary: TDictionary<TScreenObject, Integer>;
     FParser: TRbwParser;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteStressPeriods;
     procedure WriteASystem(ACstSystem: TCtsSystem; StartTime: Double;
@@ -237,6 +237,7 @@ var
   ICTSPKG: Integer;
   WellIndex: Integer;
   ACount: Integer;
+  BaseFile: string;
   function CountWells(AList: TListOfObjects): integer;
   var
     WellIndex: Integer;
@@ -278,8 +279,9 @@ begin
   WriteString(' # Data Set 1, MXCTS, ICTSOUT, MXEXT, MXINJ, MXWEL, IFORCE, ICTSPKG');
   NewLine;
 
+  BaseFile := ChangeFileExt(FNameOfFile, '.cto');
   WriteToMt3dMsNameFile(StrData, Mt3dCtsOut,
-    ChangeFileExt(FNameOfFile, '.cto'), foOutput, Model);
+    ChangeFileExt(BaseFile, '.cto'), foOutput, Model);
 
 end;
 

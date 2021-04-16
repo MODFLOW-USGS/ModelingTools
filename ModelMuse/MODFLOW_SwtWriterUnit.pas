@@ -11,7 +11,7 @@ type
   TModflowSWT_Writer = class(TCustomSubWriter)
   private
     FSwtPackage: TSwtPackageSelection;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     // model layer assignments for each system of no-delay interbeds
     FLNWT: TIntegerList;
     FTHICK_List: TList;
@@ -811,12 +811,13 @@ var
   Iun11: Integer;
   Iun12: Integer;
   Iun13: Integer;
+  BaseName: string;
   function GetCombinedUnitNumber: integer;
   begin
     result := Model.UnitNumbers.UnitNumber(StrSwtSUB_Out);
     if SwtFileName = '' then
     begin
-      SwtFileName := ExtractFileName(ChangeFileExt(FNameOfFile, StrSwtOut));
+      SwtFileName := ExtractFileName(ChangeFileExt(BaseName, StrSwtOut));
       if not WritingTemplate then
       begin
         WriteToNameFile(StrDATABINARY, result,
@@ -841,7 +842,7 @@ var
         sbocMultipleFiles:
           begin
             result := Model.UnitNumbers.UnitNumber(Key);
-            AFileName := ExtractFileName(ChangeFileExt(FNameOfFile, Extension));
+            AFileName := ExtractFileName(ChangeFileExt(BaseName, Extension));
             if not WritingTemplate then
             begin
               WriteToNameFile(StrDATABINARY, result, AFileName, foOutput, Model);
@@ -853,6 +854,7 @@ var
     end;
   end;
 begin
+  BaseName:= ChangeFileExt(FNameOfFile, '');
   SwtFileName := '';
   PrintFormats := FSwtPackage.PrintFormats;
   Ifm1 := PrintFormats.SubsidenceFormat+1;

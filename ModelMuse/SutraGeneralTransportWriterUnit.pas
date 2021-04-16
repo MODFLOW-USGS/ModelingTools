@@ -39,7 +39,7 @@ type
 
   TSutraGeneralTransportWriter = class(TCustomFileWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FU1TimeLists: TObjectList<TSutraTimeList>;
     FU2TimeLists: TObjectList<TSutraTimeList>;
     FInflowUTimeLists: TObjectList<TSutraTimeList>;

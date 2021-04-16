@@ -8,7 +8,7 @@ type
   TCustomBasicWriter = class(TCustomModflowWriter)
   protected
     XSECTION: boolean;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     procedure CheckStartingHeads;
     procedure WriteDataSet(const DataSetName: string; DataArray: TDataArray);
     procedure WriteStartingHeads;

@@ -9,7 +9,7 @@ type
   TModflowGAG_Writer = class(TCustomModflowWriter)
   private
     FSfrWriter: TModflowSFR_Writer;
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FGagObservationsUsed: Boolean;
     FGageScreenObjectList: TScreenObjectList;
     procedure Evaluate(Gages: TStrings);

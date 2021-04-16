@@ -7,7 +7,7 @@ uses SysUtils, CustomModflowWriterUnit, ModflowPackageSelectionUnit;
 Type
   TPcgnWriter = class(TCustomSolverWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FPcgn: TPcgnSelection;
     procedure WriteDataSet1;
     procedure WriteDataSet2;

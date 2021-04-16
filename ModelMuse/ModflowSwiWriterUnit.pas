@@ -35,7 +35,7 @@ type
 
   TSwiWriter = class(TCustomPackageWriter)
   private
-    FNameOfFile: string;
+//    FNameOfFile: string;
     FSwiPackage: TSwiPackage;
     FObservations: TStringList;
     FObservationNames: TStringList;
@@ -427,6 +427,7 @@ var
   ISTRAT, ISWIZT, ISWIBD: integer;
   OPTIONS: string;
   ZetaFileName: string;
+  BaseName: string;
 begin
   WriteString('# Data Set 1: NSRF, ISTRAT, NOBS, ISWIZT, ISWIBD, ISWIOBS');
   if FSwiPackage.Adaptive then
@@ -467,9 +468,10 @@ begin
     NOBS := 0
   end;
 
+  BaseName := ChangeFileExt(FNameOfFile, '');
   if ISWIOBS <> 0 then
   begin
-    FObsOutputFileName := ChangeFileExt(FNameOfFile, '.swi_obs');
+    FObsOutputFileName := ChangeFileExt(BaseName, '.swi_obs');
     if not WritingTemplate then
     begin
       if ISWIOBS > 0 then
@@ -484,7 +486,7 @@ begin
   end;
   if ISWIZT <> 0 then
   begin
-    ZetaFileName := ChangeFileExt(FNameOfFile, strZeta);
+    ZetaFileName := ChangeFileExt(BaseName, strZeta);
     if not WritingTemplate then
     begin
       WriteToNameFile(StrDataBinary, ISWIZT, ZetaFileName, foOutput, Model);
