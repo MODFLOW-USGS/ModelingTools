@@ -85,6 +85,8 @@ type
     procedure InvalidateContours;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; virtual; abstract;
+    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double;
+      virtual; abstract;
   public
     // notify the views that the need to redraw;
     procedure ViewsChanged;
@@ -104,6 +106,8 @@ type
       Limits: TColoringLimits);
     property ItemTopLocation[const EvalAt: TEvaluatedAt; const Column,
       Row: integer]: TPoint2D read GetItemTopLocation;
+    property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
+      read GetShortestHorizontalBlockEdge;
   end;
   { TODO : ThreeDDataSet, TPhastModel.ThreeDTimeList, and
 TPhastModel.ThreeDDisplayTime are all related.  Maybe they should be
@@ -617,6 +621,7 @@ side views of the model.}
       ChildModel: TBaseModel): TDataArray;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
+    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
   public
     function OkLocation(const DataSet: TDataArray;
       const Layer, Row, Col: integer): boolean; override;
@@ -5340,6 +5345,12 @@ begin
       end;
     end;
   end;
+end;
+
+function TCustomModelGrid.GetShortestHorizontalBlockEdge(Layer, Row,
+  Column: Integer): double;
+begin
+  result := Min(ColumnWidth[Column], RowWidth[Row]);
 end;
 
 function TCustomModelGrid.GetSideCellColors(const Row, Layer: integer): TColor;

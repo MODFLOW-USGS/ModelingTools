@@ -121,6 +121,12 @@ resourcestring
   StrFlowingWellReducti = 'Flowing well reduction length <= 0';
   StrIn0sInStressPe = 'In %0:s in stress period %1:d, the flowing well reduc' +
   'tion length is less than or equal to zero.';
+  StrMAWWellRadiusToo = 'MAW well radius too large';
+  StrTheWellRadiusFor = 'The well radius for the multiaquifer well defined b' +
+  'y %s makes the well diameter larger than the cell size.';
+  StrMAWWellSkinRadius = 'MAW well skin radius too large';
+  StrTheWellSkinRadius = 'The well skin radius for the multiaquifer well def' +
+  'ined by %s makes the well skin diameter larger than the cell size.';
 
 { TModflowMAW_Writer }
 
@@ -210,6 +216,8 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFormulaErrorInMAW);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellScreensInv);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFlowingWellReducti);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellRadiusToo);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWWellSkinRadius);
 
   FFlowingWells := False;
 
@@ -1180,6 +1188,7 @@ var
   ConnectionFound: Boolean;
   ValidScreensFound: Boolean;
   IDomainArray: TDataArray;
+  CellSize: Double;
   procedure CompileFormula(Formula: string; const FormulaName: string;
     var OutFormula: string; SpecifiedLayer: Integer = 0);
   var
@@ -1410,6 +1419,24 @@ begin
                   frmErrorsAndWarnings.AddError(Model, StrMAWSkinRadiusLess,
                     Format(StrInSTheMAWSkin, [AScreenObject.Name]), AScreenObject);
                 end;
+
+                CellSize := Model.ShortestHorizontalBlockEdge[
+                  AWellConnection.Cell.Layer, AWellConnection.Cell.Row,
+                  AWellConnection.Cell.Column];
+
+                if AWellRecord.Radius * 2 >= CellSize then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrMAWWellRadiusToo,
+                    Format(StrTheWellRadiusFor, [AScreenObject.Name]), AScreenObject);
+                end
+                else if
+                  (Boundary.ConductanceMethod in [mcmSkin, mcmCumulative, mcmMean])
+                  and (AWellConnection.SkinRadius * 2 >= CellSize )then
+                begin
+                  frmErrorsAndWarnings.AddError(Model, StrMAWWellSkinRadius,
+                    Format(StrTheWellSkinRadius, [AScreenObject.Name]), AScreenObject);
+                end;
+
 
                 Inc(AWellRecord.CellCount);
                 AWellConnection.ConnectionNumber := AWellRecord.CellCount;

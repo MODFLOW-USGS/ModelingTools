@@ -363,6 +363,7 @@ type
       const EvaluatedAt: TEvaluatedAt): T2DTopCell;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
+    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
   public
     procedure Assign(Source: TPersistent); override;
     procedure Clear;
@@ -629,6 +630,7 @@ type
     function FrontOutline: TOutline;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
+    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
   public
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
@@ -2975,6 +2977,35 @@ end;
 function TModflowIrregularGrid2D.GetSelectedLayer: integer;
 begin
   Result := FMesh.SelectedLayer;
+end;
+
+function TModflowIrregularGrid2D.GetShortestHorizontalBlockEdge(Layer, Row,
+  Column: Integer): double;
+var
+  ACell: TModflowIrregularCell2D;
+  Node1: TPoint2D;
+  Node2: TPoint2D;
+  NodeIndex: Integer;
+  TestDistance: double;
+begin
+  // nodes in a cell may be colinear.
+  // Find the diagonal length and use it to determine the length of a side
+  // assuming that the cells are square.
+  ACell := Cells[Column];
+  Assert(ACell.ElementCorners.Count >= 2);
+  Node1 := ACell.ElementCorners[0].Location;
+  Node2 := ACell.ElementCorners[1].Location;
+  result := Distance(Node1, Node2);
+  for NodeIndex := 2 to ACell.ElementCorners.Count - 1 do
+  begin
+    Node2 := ACell.ElementCorners[NodeIndex].Location;
+    TestDistance :=  Distance(Node1, Node2);
+    if TestDistance > result then
+    begin
+      result := TestDistance;
+    end;
+  end;
+  result := Sqrt(Sqr(result)/2);
 end;
 
 procedure TModflowIrregularGrid2D.Loaded;
@@ -7105,6 +7136,12 @@ end;
 function TModflowDisvGrid.GetSelectedLayer: Integer;
 begin
   result := FSelectedLayer;
+end;
+
+function TModflowDisvGrid.GetShortestHorizontalBlockEdge(Layer, Row,
+  Column: Integer): double;
+begin
+  result := TwoDGrid.ShortestHorizontalBlockEdge[Layer, Row, Column];
 end;
 
 function TModflowDisvGrid.GetThreeDContourDataSet: TDataArray;

@@ -2459,6 +2459,8 @@ that affects the model output should also have a comment. }
     function GetPilotPoint(Index: Integer): TPoint2D;
     function GetPilotPointBuffer: double;
     procedure SetCanDrawContours(const Value: Boolean);
+    function GetShortestHorizontalBlockEdge(Layer, Row,
+      Column: Integer): double;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3365,8 +3367,8 @@ that affects the model output should also have a comment. }
       write SetCanDrawContours;
     function GetPestParameterByName(PestParamName: string): TModflowSteadyParameter;
     procedure ClearPestParmDictionary;
-//    procedure AddUsedPestDataArray(ADataArray: TDataArray);
-//    function IsUsedPestDataArray(ADataArray: TDataArray): Boolean;
+    property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
+      read GetShortestHorizontalBlockEdge;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -32022,6 +32024,19 @@ begin
   else
   begin
     result := 0;
+  end;
+end;
+
+function TCustomModel.GetShortestHorizontalBlockEdge(Layer, Row,
+  Column: Integer): double;
+begin
+  if DisvUsed then
+  begin
+    result := DisvGrid.ShortestHorizontalBlockEdge[Layer, Row, Column];
+  end
+  else
+  begin
+    result := Grid.ShortestHorizontalBlockEdge[Layer, Row, Column];
   end;
 end;
 

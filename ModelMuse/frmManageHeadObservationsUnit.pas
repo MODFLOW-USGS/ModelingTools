@@ -279,6 +279,7 @@ begin
 
   frmGoPhast.ResetSelectedScreenObjects;
 
+  ObsEdit := nil;
   for RowIndex := 1 to rdgObservations.RowCount - 1 do
   begin
     for ColIndex := 0 to rdgObservations.ColCount - 1 do
@@ -297,6 +298,7 @@ begin
       0,rdgObservations.SelectedRow] as TObsEdit;
     ObsEdit.ScreenObject.Selected := True;
   end;
+  Assert(ObsEdit <> nil);
 
   Undo.SetPostSelection;
 

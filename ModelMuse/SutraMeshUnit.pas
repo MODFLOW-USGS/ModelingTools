@@ -523,6 +523,7 @@ Type
     function GetActiveElementI2D(Index: integer): IElement2D;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
+    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
   public
     procedure Assign(Source: TPersistent); override;
     procedure GetMinMax(var MinMax: TMinMax; DataSet: TDataArray;
@@ -972,6 +973,7 @@ Type
     function FrontOutline: TOutline;
     function GetItemTopLocation(const EvalAt: TEvaluatedAt; const Column,
       Row: integer): TPoint2D; override;
+    function GetShortestHorizontalBlockEdge(Layer, Row, Column: Integer): double; override;
   public
     procedure UpdateNodeArray;
     procedure AssignNodeElevations;
@@ -4362,6 +4364,31 @@ begin
         end;
       end;
     else Assert(False);
+  end;
+end;
+
+function TSutraMesh2D.GetShortestHorizontalBlockEdge(Layer, Row,
+  Column: Integer): double;
+var
+  Element: TSutraElement2D;
+  Node1: TPoint2D;
+  NodeIndex: Integer;
+  TestDistance: double;
+  Node2: TPoint2D;
+begin
+  Element := Elements[Column];
+  Node1 := Element.Nodes[0].Node.Location;
+  Node2 := Element.Nodes[1].Node.Location;
+  result := Distance(Node1,Node2);
+  for NodeIndex := 2 to Element.Nodes.Count - 1 do
+  begin
+    Node1 := Node2;
+    Node2 := Element.Nodes[NodeIndex].Node.Location;
+    TestDistance := Distance(Node1,Node2);
+    if TestDistance < result then
+    begin
+      result := TestDistance;
+    end;
   end;
 end;
 
@@ -8469,6 +8496,12 @@ end;
 function TSutraMesh3D.GetSelectedLayer: integer;
 begin
   result := Mesh2D.SelectedLayer;
+end;
+
+function TSutraMesh3D.GetShortestHorizontalBlockEdge(Layer, Row,
+  Column: Integer): double;
+begin
+  result := Mesh2D.ShortestHorizontalBlockEdge[Layer, Row, Column]
 end;
 
 function TSutraMesh3D.GetThreeDContourDataSet: TDataArray;
