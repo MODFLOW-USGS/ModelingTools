@@ -467,6 +467,10 @@ object TTaskHistory
     item
       Name = 'PEST Regularization'
       Display = True
+    end
+    item
+      Name = 'MT3D-USGS RCT'
+      Display = True
     end>
   History = <
     item
@@ -27370,5 +27374,31 @@ object TTaskHistory
       Date = 44303.000000000000000000
       Categories.Strings = (
         'Error checking')
+    end
+    item
+      Date = 44304.000000000000000000
+    end
+    item
+      Date = 44305.000000000000000000
+    end
+    item
+      Date = 44306.000000000000000000
+    end
+    item
+      Date = 44307.000000000000000000
+    end
+    item
+      Date = 44308.000000000000000000
+    end
+    item
+      Date = 44309.000000000000000000
+    end
+    item
+      Date = 44310.000000000000000000
+    end
+    item
+      Date = 44311.000000000000000000
+      Categories.Strings = (
+        'MT3D-USGS RCT')
     end>
 end

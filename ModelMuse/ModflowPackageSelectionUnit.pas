@@ -4100,7 +4100,8 @@ Type
 
   TSorptionChoice = (scNone, scLinear, scFreundlich, scLangmuir,
     scFirstOrderKinetic, scDualDomainNoSorption, scDualDomainWithSorption);
-  TKineticChoice = (kcNone, kcFirstOrder, kcZeroOrder);
+  TKineticChoice = (kcNone, kcFirstOrder, kcMonod, kcFirstOrderChain,
+    kcZeroOrder);
   TOtherInitialConcChoice = (oicDontUse, oicUse);
 
   TMt3dmsChemReaction = class(TModflowPackageSelection)

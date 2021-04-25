@@ -4646,8 +4646,10 @@ that affects the model output should also have a comment. }
     function AnyMt3dSorbImmobConc: boolean;
     function AnyMt3dSorbParameter: boolean;
     function AnyMt3dReactions: Boolean;
+    function AnyMt3dUsgsMonod: Boolean;
     procedure UpdateMt3dmsChemDataSets; override;
     function Mt3dMsFirstSorbParamUsed(Sender: TObject): boolean;
+    function Mt3dUsgsMonodUsed(Sender: TObject): boolean;
     function Mt3dMsSecondSorbParamUsed(Sender: TObject): boolean;
     function Mt3dmsReactionRateDisolvedUsed(Sender: TObject): boolean;
     function Mt3dmsReactionRateSorbedUsed(Sender: TObject): boolean;
@@ -10803,6 +10805,28 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
         and (ChildModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice <> scNone);
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.AnyMt3dUsgsMonod: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := ModflowPackages.Mt3dmsChemReact.IsSelected
+    and (ModflowPackages.Mt3dmsChemReact.KineticChoice = kcMonod);
+  if not Result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
+        and (ChildModel.ModflowPackages.Mt3dmsChemReact.KineticChoice = kcMonod);
       if result then
       begin
         Exit;
@@ -19489,6 +19513,38 @@ begin
         end;
       end;
     end;
+  end;
+end;
+
+function TPhastModel.Mt3dUsgsMonodUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.HalfSaturationConstantDataArrayName = DataArray.Name;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := (ModelSelection in ModflowSelection)
+    and ModflowPackages.Mt3dBasic.IsSelected
+    and ModflowPackages.Mt3dmsChemReact.IsSelected
+    and (ModflowPackages.Mt3dmsChemReact.KineticChoice = kcMonod);
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+      or DataArrayUsed(ImmobileComponents);
   end;
 end;
 

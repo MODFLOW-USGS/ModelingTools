@@ -103,6 +103,16 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
       item
         Brush.Style = bsClear
         Indent = 0
+        Text = 'Monod (2)'
+      end
+      item
+        Brush.Style = bsClear
+        Indent = 0
+        Text = 'First-order chain (3)'
+      end
+      item
+        Brush.Style = bsClear
+        Indent = 0
         Text = 'Zero order (100)'
       end>
   end

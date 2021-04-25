@@ -19,6 +19,7 @@ type
     procedure WriteDataSet4;
     procedure WriteDataSet5;
     procedure WriteDataSet6;
+    procedure WriteDataSet7;
   protected
     class function Extension: string; override;
   public
@@ -30,7 +31,7 @@ implementation
 
 uses
   frmProgressUnit, ModflowUnitNumbers, DataSetUnit, SysUtils,
-  Mt3dmsChemSpeciesUnit, GoPhastTypes;
+  Mt3dmsChemSpeciesUnit, GoPhastTypes, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrSInTheMT3DMSRCT = '%s in the MT3DMS or MT3D-USGS RCT package';
@@ -41,6 +42,9 @@ resourcestring
   StrWritingDataSet2A = '  Writing Data Set 2A.';
   StrWritingDataSet2B = '  Writing Data Set 2B.';
   StrWritingDataSet2C = '  Writing Data Set 2C.';
+  StrMonodAndFirstorde = 'Monod and first-order chain reactions are only sim' +
+  'ulated in MT3D-USGS';
+  StrInvalidIREACTInMT = 'Invalid IREACT in MT3D';
 //  StrWritingDataSet3 = '  Writing Data Set 3.';
 //  StrWritingDataSet4 = '  Writing Data Set 4.';
 //  StrWritingDataSet5 = '  Writing Data Set 5.';
@@ -73,8 +77,14 @@ begin
   case ChemPkg.KineticChoice of
     kcNone: IREACT := 0;
     kcFirstOrder: IREACT := 1;
+    kcMonod: IREACT := 2;
+    kcFirstOrderChain: IREACT := 3;
     kcZeroOrder: IREACT := 100;
     else Assert(False);
+  end;
+  if (IREACT in [2,3]) and (Model.ModflowPackages.Mt3dBasic.Mt3dVersion <> mvUsgs) then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrInvalidIREACTInMT, StrMonodAndFirstorde);
   end;
   IRCTOP := 2;
   IGETSC := Ord(ChemPkg.OtherInitialConcChoice);
@@ -319,6 +329,43 @@ begin
   end;
 end;
 
+procedure TMt3dmsRctWriter.WriteDataSet7;
+var
+  SpeciesIndex: Integer;
+  Item: TChemSpeciesItem;
+  procedure WriteRC3;
+  var
+    LayerIndex: Integer;
+    DataArray: TDataArray;
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(
+      Item.HalfSaturationConstantDataArrayName);
+    DataArray.Initialize;
+    for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
+    begin
+      if Model.IsLayerSimulated(LayerIndex) then
+      begin
+        WriteArray(DataArray, LayerIndex, Format('Data Set: 7: RC3: %0:s, Layer: %1:d',
+          [Item.Name, Model.DataSetLayerToModflowLayer(LayerIndex)]), StrNoValueAssigned, 'RC3');
+      end;
+    end;
+  end;
+begin
+  if IREACT = 2 then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      Item := Model.MobileComponents[SpeciesIndex];
+      WriteRC3;
+    end;
+    for SpeciesIndex := 0 to Model.ImmobileComponents.Count - 1 do
+    begin
+      Item := Model.ImmobileComponents[SpeciesIndex];
+      WriteRC3;
+    end;
+  end;
+end;
+
 procedure TMt3dmsRctWriter.WriteFile(const AFileName: string);
 var
   NameOfFile: string;
@@ -329,6 +376,7 @@ begin
   end;
   // remove errors and warnings
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFileForTheInitial);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidIREACTInMT);
 
   if Model.PackageGeneratedExternally(StrRCT) then
   begin
@@ -409,6 +457,14 @@ begin
 
     frmProgressMM.AddMessage(StrWritingDataSet6);
     WriteDataSet6;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet7);
+    WriteDataSet7;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin
