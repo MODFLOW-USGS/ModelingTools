@@ -1,11 +1,11 @@
 inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
   Width = 371
-  Height = 319
+  Height = 433
   ExplicitWidth = 371
-  ExplicitHeight = 319
+  ExplicitHeight = 433
   DesignSize = (
     371
-    319)
+    433)
   object lblSorptionChoice: TLabel [2]
     Left = 233
     Top = 160
@@ -89,6 +89,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
     ImageWidth = 0
     ItemIndex = -1
     TabOrder = 2
+    OnChange = comboKineticChoiceChange
     Items = <
       item
         Brush.Style = bsClear
@@ -127,6 +128,76 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
     Enabled = False
     TabOrder = 3
     WordWrap = True
+  end
+  object rdgYieldCoefficient: TRbwDataGrid4 [8]
+    Left = 16
+    Top = 271
+    Width = 340
+    Height = 137
+    ColCount = 2
+    FixedCols = 1
+    RowCount = 2
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+    TabOrder = 4
+    ExtendedAutoDistributeText = False
+    AutoMultiEdit = False
+    AutoDistributeText = False
+    AutoIncreaseColCount = False
+    AutoIncreaseRowCount = False
+    SelectedRowOrColumnColor = clAqua
+    UnselectableColor = clBtnFace
+    OnButtonClick = rdgYieldCoefficientButtonClick
+    ColorRangeSelection = False
+    Columns = <
+      item
+        AutoAdjustRowHeights = False
+        AutoAdjustCaptionRowHeights = False
+        ButtonCaption = '...'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -11
+        ButtonFont.Name = 'Tahoma'
+        ButtonFont.Style = []
+        ButtonUsed = False
+        ButtonWidth = 20
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4String
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = False
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
+      end
+      item
+        AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
+        ButtonCaption = 'F()'
+        ButtonFont.Charset = DEFAULT_CHARSET
+        ButtonFont.Color = clWindowText
+        ButtonFont.Height = -11
+        ButtonFont.Name = 'Tahoma'
+        ButtonFont.Style = []
+        ButtonUsed = True
+        ButtonWidth = 35
+        CheckMax = False
+        CheckMin = False
+        ComboUsed = False
+        Format = rcf4String
+        LimitToList = False
+        MaxLength = 0
+        ParentButtonFont = False
+        WordWrapCaptions = True
+        WordWrapCells = False
+        CaseSensitivePicklist = False
+        CheckStyle = csCheck
+        AutoAdjustColWidths = True
+      end>
+    WordWrapRowCaptions = False
   end
   inherited rcSelectionController: TRbwController
     ControlList = <

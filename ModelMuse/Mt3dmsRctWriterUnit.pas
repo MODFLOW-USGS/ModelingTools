@@ -3,11 +3,15 @@ unit Mt3dmsRctWriterUnit;
 interface
 
 uses
-  CustomModflowWriterUnit, ModflowPackageSelectionUnit, Forms, PhastModelUnit;
+  System.Classes, CustomModflowWriterUnit, ModflowPackageSelectionUnit, Forms,
+  PhastModelUnit;
 
 type
   TMt3dmsRctWriter = class(TCustomModflowWriter)
   private
+  const
+    IREACTION = 0;
+  var
     ISOTHM: Integer;
     IREACT: Integer;
     IGETSC: Integer;
@@ -15,11 +19,13 @@ type
     procedure WriteDataSet2A;
     procedure WriteDataSet2B;
     procedure WriteDataSet2C;
-    procedure WriteDataSet3;
+    procedure WriteDataSet3A;
+    procedure WriteDataSet3B;
     procedure WriteDataSet4;
     procedure WriteDataSet5;
     procedure WriteDataSet6;
     procedure WriteDataSet7;
+    procedure WriteDataSet8;
   protected
     class function Extension: string; override;
   public
@@ -30,7 +36,7 @@ type
 implementation
 
 uses
-  frmProgressUnit, ModflowUnitNumbers, DataSetUnit, SysUtils,
+  frmProgressUnit, ModflowUnitNumbers, DataSetUnit, SysUtils, RbwParser,
   Mt3dmsChemSpeciesUnit, GoPhastTypes, frmErrorsAndWarningsUnit;
 
 resourcestring
@@ -65,8 +71,6 @@ begin
 end;
 
 procedure TMt3dmsRctWriter.WriteDataSet1;
-const
-  IREACTION = 0;
 var
   ChemPkg: TMt3dmsChemReaction;
   IRCTOP: Integer;
@@ -109,7 +113,7 @@ var
   LayerIndex: Integer;
   DataArray: TDataArray;
 begin
-  if ISOTHM in [1,2,3,4,6] then
+  if (ISOTHM in [1,2,3,4,6]) or (ISOTHM = -6) or (IREACTION = 2) then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsBulkDensity);
     DataArray.Initialize;
@@ -129,7 +133,7 @@ var
   LayerIndex: Integer;
   DataArray: TDataArray;
 begin
-  if ISOTHM in [5,6] then
+  if (ISOTHM in [5,6]) or (ISOTHM = -6) then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsImmobPorosity);
     DataArray.Initialize;
@@ -181,7 +185,7 @@ begin
   end;
 end;
 
-procedure TMt3dmsRctWriter.WriteDataSet3;
+procedure TMt3dmsRctWriter.WriteDataSet3A;
 var
   SpeciesIndex: Integer;
   Item: TChemSpeciesItem;
@@ -203,7 +207,7 @@ var
     end;
   end;
 begin
-  if ISOTHM > 0 then
+  if ISOTHM <> 0 then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -215,6 +219,14 @@ begin
       Item := Model.ImmobileComponents[SpeciesIndex];
       WriteSP1;
     end;
+  end;
+end;
+
+procedure TMt3dmsRctWriter.WriteDataSet3B;
+begin
+  if ISOTHM = -6 then
+  begin
+    // not yet supported.
   end;
 end;
 
@@ -240,7 +252,7 @@ var
     end;
   end;
 begin
-  if ISOTHM > 0 then
+  if ISOTHM <> 0 then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -366,6 +378,47 @@ begin
   end;
 end;
 
+procedure TMt3dmsRctWriter.WriteDataSet8;
+var
+  ChemPkg: TMt3dmsChemReaction;
+  YieldCoefficients: TStringList;
+  Compiler: TRbwParser;
+  ItemIndex: Integer;
+  CurrentExpression: TExpression;
+  Formula: string;
+  Value: Double;
+begin
+  if IREACT = 3 then
+  begin
+    ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
+    YieldCoefficients := ChemPkg.YieldCoefficients;
+    Compiler := Model.GetCompiler(dso3D, eaBlocks);
+    for ItemIndex := 0 to YieldCoefficients.Count - 1 do
+    begin
+      Formula := YieldCoefficients[ItemIndex];
+      try
+        Compiler.Compile(Formula);
+      except on ERbwParserError do
+        begin
+          Formula := '0.0';
+          Compiler.Compile(Formula);
+        end;
+      end;
+      CurrentExpression := Compiler.CurrentExpression;
+      if not (CurrentExpression.ResultType in [rdtDouble, rdtInteger]) then
+      begin
+        Formula := '0.0';
+        Compiler.Compile(Formula);
+        CurrentExpression := Compiler.CurrentExpression;
+      end;
+      CurrentExpression.Evaluate;
+      Value := CurrentExpression.DoubleResult;
+      WriteFloat(Value);
+      NewLine;
+    end;
+  end;
+end;
+
 procedure TMt3dmsRctWriter.WriteFile(const AFileName: string);
 var
   NameOfFile: string;
@@ -430,7 +483,7 @@ begin
     end;
 
     frmProgressMM.AddMessage(StrWritingDataSet3);
-    WriteDataSet3;
+    WriteDataSet3A;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin
@@ -465,6 +518,14 @@ begin
 
     frmProgressMM.AddMessage(StrWritingDataSet7);
     WriteDataSet7;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet8);
+    WriteDataSet8;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin

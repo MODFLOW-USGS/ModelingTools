@@ -22,7 +22,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
     Margins.Top = 120
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = tabSpecies
+    ActivePage = tabMT3D_USGS_Options
     Align = alClient
     TabOrder = 1
     object tabSpecies: TTabSheet
@@ -82,6 +82,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -105,6 +106,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -128,6 +130,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'Select...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -149,6 +152,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
+            ExplicitLeft = 1
             ExplicitWidth = 265
             ExplicitHeight = 241
           end
@@ -181,6 +185,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -204,6 +209,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -227,6 +233,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'Select...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -248,6 +255,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
+            ExplicitLeft = -1
             ExplicitWidth = 248
             ExplicitHeight = 241
           end

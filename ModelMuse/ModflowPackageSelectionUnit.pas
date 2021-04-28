@@ -4109,10 +4109,12 @@ Type
     FSorptionChoice: TSorptionChoice;
     FOtherInitialConcChoice: TOtherInitialConcChoice;
     FKineticChoice: TKineticChoice;
+    FYieldCoefficients: TStringList;
     procedure SetKineticChoice(const Value: TKineticChoice);
     procedure SetOtherInitialConcChoice(const Value: TOtherInitialConcChoice);
     procedure SetSorptionChoice(const Value: TSorptionChoice);
     procedure UpdateDataSets;
+    procedure SetYieldCoefficients(const Value: TStringList);
   protected
     procedure SetIsSelected(const Value: boolean); override;
   public
@@ -4120,6 +4122,7 @@ Type
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     Constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
     procedure InitializeVariables; override;
   published
     // ISOTHM
@@ -4131,6 +4134,8 @@ Type
     // IGETSC
     property OtherInitialConcChoice: TOtherInitialConcChoice
       read FOtherInitialConcChoice write SetOtherInitialConcChoice stored True;
+    property YieldCoefficients: TStringList read FYieldCoefficients
+      write SetYieldCoefficients;
   end;
 
   TConcObsResult = (corConc, corConcResid);
@@ -13701,6 +13706,7 @@ begin
     SorptionChoice := React.SorptionChoice;
     KineticChoice := React.KineticChoice;
     OtherInitialConcChoice := React.OtherInitialConcChoice;
+    YieldCoefficients := React.YieldCoefficients;
   end;
   inherited;
 end;
@@ -13708,7 +13714,14 @@ end;
 constructor TMt3dmsChemReaction.Create(Model: TBaseModel);
 begin
   inherited;
+  FYieldCoefficients := TStringList.Create;
   InitializeVariables;
+end;
+
+destructor TMt3dmsChemReaction.Destroy;
+begin
+  FYieldCoefficients.Free;
+  inherited;
 end;
 
 procedure TMt3dmsChemReaction.InitializeVariables;
@@ -13754,6 +13767,13 @@ begin
     InvalidateModel;
     UpdateDataSets;
   end;
+end;
+
+procedure TMt3dmsChemReaction.SetYieldCoefficients(
+  const Value: TStringList);
+begin
+  FYieldCoefficients.Assign(Value);
+  InvalidateModel;
 end;
 
 procedure TMt3dmsChemReaction.UpdateDataSets;

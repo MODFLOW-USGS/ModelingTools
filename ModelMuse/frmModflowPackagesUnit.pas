@@ -31,7 +31,7 @@ uses System.UITypes,
   ModflowTransientListParameterUnit, OrderedCollectionUnit,
   frameListParameterDefinitionUnit, frameArrayParameterDefinitionUnit,
   framePackageTransientLayerChoiceUnit, frameEtsPackageUnit, ImgList,
-  framePackageResUnit, PhastModelUnit, GoPhastTypes, RbwParser,
+  framePackageResUnit, PhastModelUnit, GoPhastTypes,
   framePackageLAK_Unit, DataSetUnit, framePackageSFRUnit,
   framePackageLayerChoiceUnit, framePackageUZFUnit, frameGmgUnit, frameSipUnit,
   frameDe4Unit, JvExComCtrls, JvComCtrls, RequiredDataSetsUndoUnit,
@@ -321,6 +321,11 @@ type
       Sender: TObject);
     procedure framePkgSMSrcSelectionControllerEnabledChange(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
+    procedure frameGridMobileseNumberChange(Sender: TObject);
+    procedure frameGridImmobileseNumberChange(Sender: TObject);
+    procedure frameGridMobileGridExit(Sender: TObject);
+    procedure frameGridImmobileGridExit(Sender: TObject);
+    procedure framePkgMt3dmsRctcomboKineticChoiceChange(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -384,6 +389,7 @@ type
     function PackageNodeChecked(const ID: string): boolean;
     procedure CheckXt3dGnc;
     procedure CheckIPHDRY;
+    procedure UpdateSpeciesNames;
     property CurrentPackages: TModflowPackages read FCurrentPackages
       write SetCurrentPackages;
     procedure StorePackageDataInFrames(Packages: TModflowPackages);
@@ -534,6 +540,11 @@ resourcestring
   'la would be ' + slinebreak + '"CellType <> 0)".' + slinebreak +
   'When it is not used, an appropriate formu' +
   'la would be ' + slinebreak + '"CellType > 0)".';
+  StrMonodAndFirstorde = 'Monod and first-order chain reactions are only ava' +
+  'ilable with MT3D-USGS. You can change your selected version of MT3D in th' +
+  'e MT3D Basic package.';
+  StrFirstorderChainRe = 'First-order chain reactions require at least two c' +
+  'hemical species in the MT3D Basic package.';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -1338,6 +1349,31 @@ begin
   EnableContaminantTreatmentSystem;
 end;
 
+procedure TfrmModflowPackages.framePkgMt3dmsRctcomboKineticChoiceChange(
+  Sender: TObject);
+var
+  KineticChoice: TKineticChoice;
+begin
+  inherited;
+  framePkgMt3dmsRct.comboKineticChoiceChange(Sender);
+  if (framePkgMt3dmsRct.comboKineticChoice.ItemIndex >= 0) and IsLoaded then
+  begin
+    KineticChoice := TKineticChoice(framePkgMt3dmsRct.comboKineticChoice.ItemIndex);
+    if (KineticChoice in [kcMonod, kcFirstOrderChain])
+      and (framePkgMt3dBasic.comboVersion.ItemIndex <> 0) then
+    begin
+      Beep;
+      MessageDlg(StrMonodAndFirstorde, mtWarning, [mbOK], 0);
+    end;
+    if (KineticChoice = kcFirstOrderChain)
+      and (framePkgMt3dmsRct.NumberOfSpecies < 2) then
+    begin
+      Beep;
+      MessageDlg(StrFirstorderChainRe, mtError, [mbOK], 0);
+    end;
+  end;
+end;
+
 procedure TfrmModflowPackages.framePkgNwtpcNWTChange(Sender: TObject);
 begin
   inherited;
@@ -1752,6 +1788,71 @@ begin
   begin
     CanSelect := False;
   end;
+end;
+
+procedure TfrmModflowPackages.UpdateSpeciesNames;
+var
+  SpeciesNames: TStringList;
+  RowIndex: Integer;
+  KineticChoice: TKineticChoice;
+begin
+  SpeciesNames := TStringList.Create;
+  try
+    SpeciesNames.Capacity :=
+      framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger
+      + framePkgMt3dBasic.frameGridImmobile.seNumber.AsInteger;
+    for RowIndex := 1 to framePkgMt3dBasic.frameGridMobile.seNumber.AsInteger do
+    begin
+      SpeciesNames.Add(framePkgMt3dBasic.frameGridMobile.Grid.Cells[0,RowIndex]);
+    end;
+    for RowIndex := 1 to framePkgMt3dBasic.frameGridImmobile.seNumber.AsInteger do
+    begin
+      SpeciesNames.Add(framePkgMt3dBasic.frameGridImmobile.Grid.Cells[0,RowIndex]);
+    end;
+    framePkgMt3dmsRct.SetSpeciesNames(SpeciesNames);
+
+    if IsLoaded then
+    begin
+      KineticChoice := TKineticChoice(framePkgMt3dmsRct.comboKineticChoice.ItemIndex);
+      if (KineticChoice = kcFirstOrderChain)
+        and (framePkgMt3dmsRct.NumberOfSpecies < 2) then
+      begin
+        Beep;
+        MessageDlg(StrFirstorderChainRe, mtError, [mbOK], 0);
+      end;
+    end;
+
+
+  finally
+    SpeciesNames.Free;
+  end;
+
+end;
+
+procedure TfrmModflowPackages.frameGridImmobileGridExit(Sender: TObject);
+begin
+  inherited;
+  UpdateSpeciesNames;
+end;
+
+procedure TfrmModflowPackages.frameGridImmobileseNumberChange(Sender: TObject);
+begin
+  inherited;
+  framePkgMt3dBasic.frameGridImmobile.seNumberChange(Sender);
+  UpdateSpeciesNames;
+end;
+
+procedure TfrmModflowPackages.frameGridMobileGridExit(Sender: TObject);
+begin
+  inherited;
+  UpdateSpeciesNames;
+end;
+
+procedure TfrmModflowPackages.frameGridMobileseNumberChange(Sender: TObject);
+begin
+  inherited;
+  framePkgMt3dBasic.frameGridMobile.seNumberChange(Sender);
+  UpdateSpeciesNames;
 end;
 
 procedure TfrmModflowPackages.frameModpathrcSelectionControllerEnabledChange(
