@@ -30,6 +30,8 @@ type
 
     FInitialConcentrationFileName: string;
     FUseInitialConcentrationFile: boolean;
+    FImmobilePartioningCoefficientDataArrayName: string;
+    FImmobilePartioningCoefficientDisplayName: string;
     procedure SetName(const Value: string); virtual;
     procedure SetInitialConcDataArrayName(const NewName: string);
     function Collection: TCustomChemSpeciesCollection;
@@ -45,6 +47,7 @@ type
     procedure SetInitialConcentrationFileName(const Value: string);
     procedure SetUseInitialConcentrationFile(const Value: boolean);
     procedure SetHalfSaturationConstantDataArrayName(const NewName: string);
+    procedure SetImmobilePartioningCoefficientDataArrayName(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -75,9 +78,14 @@ type
     property ReactionRateSorbedDataArrayName: string
       read FReactionRateSorbedDataArrayName write
       SetReactionRateSorbedDataArrayName;
+    // RCT package, RC3
     property HalfSaturationConstantDataArrayName: string
-      read FHalfSaturationConstantDataArrayName write
-      SetHalfSaturationConstantDataArrayName;
+      read FHalfSaturationConstantDataArrayName
+      write SetHalfSaturationConstantDataArrayName;
+    // RCT package, SP1IM
+    property ImmobilePartioningCoefficientDataArrayName:string
+      read FImmobilePartioningCoefficientDataArrayName
+      write SetImmobilePartioningCoefficientDataArrayName;
     property UseInitialConcentrationFile: boolean
       read FUseInitialConcentrationFile write SetUseInitialConcentrationFile;
     property InitialConcentrationFileName: string
@@ -147,8 +155,9 @@ const
   kSecondSorbParamPrefix = 'Sorption_Parameter2_';
   kRC1Prefix = 'Reaction_Rate_Dissolved_Phase_';
   kRC2Prefix = 'Reaction_Rate_Sorbed_Phase_';
-  kRC3Prefix = 'Half_SaturationConstant';
   kDiffCoefPrefix = 'Diffusion_Coefficient_';
+  kRC3Prefix = 'Half_Saturation_Constant_';
+  kSP1IMPrefix = 'Immobile_Partioning_Coefficient_';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -160,6 +169,7 @@ resourcestring
   StrRC2Prefix = kRC2Prefix;
   StrRC3Prefix = kRC3Prefix;
   StrDiffCoefPrefix = kDiffCoefPrefix;
+  StrSP1IMPrefix = kSP1IMPrefix;
 
   { TChemSpeciesItem }
 
@@ -217,6 +227,10 @@ begin
     FHalfSaturationConstantDataArrayName :='';
     HalfSaturationConstantDataArrayName :=
       SourceChem.HalfSaturationConstantDataArrayName;
+
+    FImmobilePartioningCoefficientDataArrayName :='';
+    ImmobilePartioningCoefficientDataArrayName :=
+      SourceChem.ImmobilePartioningCoefficientDataArrayName;
 
     UseInitialConcentrationFile := SourceChem.UseInitialConcentrationFile;
     InitialConcentrationFileName := SourceChem.InitialConcentrationFileName;
@@ -467,8 +481,9 @@ begin
       and (FirstSorbParamDataArrayName = ChemItem.FirstSorbParamDataArrayName)
       and (SecondSorbParamDataArrayName = ChemItem.SecondSorbParamDataArrayName)
       and (ReactionRateDisolvedDataArrayName = ChemItem.ReactionRateDisolvedDataArrayName)
-      and (HalfSaturationConstantDataArrayName = ChemItem.HalfSaturationConstantDataArrayName)
       and (ReactionRateSorbedDataArrayName = ChemItem.ReactionRateSorbedDataArrayName)
+      and (HalfSaturationConstantDataArrayName = ChemItem.HalfSaturationConstantDataArrayName)
+      and (ImmobilePartioningCoefficientDataArrayName = ChemItem.ImmobilePartioningCoefficientDataArrayName)
       and (UseInitialConcentrationFile = ChemItem.UseInitialConcentrationFile)
       and (InitialConcentrationFileName = ChemItem.InitialConcentrationFileName)
   end;
@@ -578,6 +593,22 @@ begin
       LocalModel.AnyMt3dUsgsMonod);
   end;
   SetCaseSensitiveStringProperty(FHalfSaturationConstantDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetImmobilePartioningCoefficientDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    UpdateDataArray(LocalModel.Mt3dUsgsDualSeparateUsed,
+      FImmobilePartioningCoefficientDataArrayName, NewName,
+      FImmobilePartioningCoefficientDisplayName, '1.', 'MT3D-USGS RCT package, SP1IM',
+      LocalModel.AnyMt3dUsgsDualSeparate);
+  end;
+  SetCaseSensitiveStringProperty(FImmobilePartioningCoefficientDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetIndex(Value: Integer);
@@ -730,6 +761,12 @@ begin
         ReactionRateDisolvedDataArrayName,
         GenerateNewRoot(FName),GenerateNewRoot(Value), []);
 
+      FReactionRateSorbedDisplayName := StringReplace(
+        FReactionRateSorbedDisplayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+      ReactionRateSorbedDataArrayName := StringReplace(
+        ReactionRateSorbedDataArrayName,
+        GenerateNewRoot(FName),GenerateNewRoot(Value), []);
 
       FHalfSaturationConstantDisplayName := StringReplace(
         FHalfSaturationConstantDisplayName,
@@ -738,12 +775,13 @@ begin
         HalfSaturationConstantDataArrayName,
         GenerateNewRoot(FName),GenerateNewRoot(Value), []);
 
-      FReactionRateSorbedDisplayName := StringReplace(
-        FReactionRateSorbedDisplayName,
+      FImmobilePartioningCoefficientDisplayName := StringReplace(
+        FImmobilePartioningCoefficientDisplayName,
         GenerateNewRoot(FName),GenerateNewRoot(Value), []);
-      ReactionRateSorbedDataArrayName := StringReplace(
-        ReactionRateSorbedDataArrayName,
+      ImmobilePartioningCoefficientDataArrayName := StringReplace(
+        ImmobilePartioningCoefficientDataArrayName,
         GenerateNewRoot(FName),GenerateNewRoot(Value), []);
+
     end
     else
     begin
@@ -784,15 +822,20 @@ begin
       ReactionRateDisolvedDataArrayName :=
         GenerateNewRoot(kRC1Prefix + Value);
 
+      FReactionRateSorbedDisplayName :=
+        GenerateNewRoot(StrRC2Prefix + Value);
+      ReactionRateSorbedDataArrayName :=
+        GenerateNewRoot(kRC2Prefix + Value);
+
       FHalfSaturationConstantDisplayName :=
         GenerateNewRoot(StrRC3Prefix + Value);
       HalfSaturationConstantDataArrayName :=
         GenerateNewRoot(kRC3Prefix + Value);
 
-      FReactionRateSorbedDisplayName :=
-        GenerateNewRoot(StrRC2Prefix + Value);
-      ReactionRateSorbedDataArrayName :=
-        GenerateNewRoot(kRC2Prefix + Value);
+      FImmobilePartioningCoefficientDisplayName :=
+        GenerateNewRoot(StrSP1IMPrefix + Value);
+      ImmobilePartioningCoefficientDataArrayName :=
+        GenerateNewRoot(kSP1IMPrefix + Value);
     end;
     RenameDependents(Value);
     SetCaseSensitiveStringProperty(FName, Value);

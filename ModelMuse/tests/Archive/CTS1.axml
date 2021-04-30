@@ -2,7 +2,7 @@
 <Model_Archive_List>
   <bin Model_Name="CTS1" FileType="bin">
     <FileName Model_Name="CTS1" FileType="bin">..\..\..\WRDAPP\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT.exe</FileName>
-    <FileName Model_Name="CTS1" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.0.1\bin\mt3d-usgs_1.0.1_32.exe</FileName>
+    <FileName Model_Name="CTS1" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_64.exe</FileName>
   </bin>
   <ancillary Model_Name="CTS1" FileType="ancillary">
     <FileName Model_Name="CTS1" FileType="ancillary">CTS1.gpt</FileName>

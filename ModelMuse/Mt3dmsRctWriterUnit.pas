@@ -44,17 +44,14 @@ resourcestring
   StrRHOBLayerD = 'Data Set 2A: RHOB Layer: %d';
   StrPRSITY2LayerD = 'Data Set 2B: PRSITY2 Layer: %d';
   StrWritingMT3DMSRCTP = 'Writing MT3DMS or MT3D-USGS RCT Package input.';
-//  StrWritingDataSet1 = '  Writing Data Set 1.';
   StrWritingDataSet2A = '  Writing Data Set 2A.';
   StrWritingDataSet2B = '  Writing Data Set 2B.';
   StrWritingDataSet2C = '  Writing Data Set 2C.';
   StrMonodAndFirstorde = 'Monod and first-order chain reactions are only sim' +
   'ulated in MT3D-USGS';
   StrInvalidIREACTInMT = 'Invalid IREACT in MT3D';
-//  StrWritingDataSet3 = '  Writing Data Set 3.';
-//  StrWritingDataSet4 = '  Writing Data Set 4.';
-//  StrWritingDataSet5 = '  Writing Data Set 5.';
-//  StrWritingDataSet6 = '  Writing Data Set 6.';
+  StrWritingDataSet3a = '  Writing Data Set 3a.';
+  StrWritingDataSet3b = '  Writing Data Set 3b.';
 
 { TMt3dmsRctWriter }
 
@@ -77,7 +74,15 @@ var
 begin
   ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
 
-  ISOTHM := Ord(ChemPkg.SorptionChoice);
+  if ChemPkg.SorptionChoice = scDualWithDifferingConstants then
+  begin
+    ISOTHM := -6;
+  end
+  else
+  begin
+    ISOTHM := Ord(ChemPkg.SorptionChoice);
+  end;
+
   case ChemPkg.KineticChoice of
     kcNone: IREACT := 0;
     kcFirstOrder: IREACT := 1;
@@ -201,7 +206,7 @@ var
     begin
       if Model.IsLayerSimulated(LayerIndex) then
       begin
-        WriteArray(DataArray, LayerIndex, Format('Data Set: 3: SP1: %0:s, Layer: %1:d',
+        WriteArray(DataArray, LayerIndex, Format('Data Set: 3a: SP1: %0:s, Layer: %1:d',
           [Item.Name, Model.DataSetLayerToModflowLayer(LayerIndex)]), StrNoValueAssigned, 'SP1');
       end;
     end;
@@ -223,10 +228,39 @@ begin
 end;
 
 procedure TMt3dmsRctWriter.WriteDataSet3B;
+var
+  SpeciesIndex: Integer;
+  Item: TChemSpeciesItem;
+  procedure WriteSP1IM;
+  var
+    LayerIndex: Integer;
+    DataArray: TDataArray;
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(
+      Item.ImmobilePartioningCoefficientDataArrayName);
+    DataArray.Initialize;
+    for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
+    begin
+      if Model.IsLayerSimulated(LayerIndex) then
+      begin
+        WriteArray(DataArray, LayerIndex, Format('Data Set: 3b: SP1IM: %0:s, Layer: %1:d',
+          [Item.Name, Model.DataSetLayerToModflowLayer(LayerIndex)]), StrNoValueAssigned, 'SP1');
+      end;
+    end;
+  end;
 begin
   if ISOTHM = -6 then
   begin
-    // not yet supported.
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      Item := Model.MobileComponents[SpeciesIndex];
+      WriteSP1IM;
+    end;
+    for SpeciesIndex := 0 to Model.ImmobileComponents.Count - 1 do
+    begin
+      Item := Model.ImmobileComponents[SpeciesIndex];
+      WriteSP1IM;
+    end;
   end;
 end;
 
@@ -482,8 +516,16 @@ begin
       Exit;
     end;
 
-    frmProgressMM.AddMessage(StrWritingDataSet3);
+    frmProgressMM.AddMessage(StrWritingDataSet3a);
     WriteDataSet3A;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet3b);
+    WriteDataSet3b;
     Application.ProcessMessages;
     if not frmProgressMM.ShouldContinue then
     begin

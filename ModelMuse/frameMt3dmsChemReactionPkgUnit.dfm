@@ -1,203 +1,596 @@
 inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
-  Width = 371
-  Height = 433
-  ExplicitWidth = 371
-  ExplicitHeight = 433
+  Width = 548
+  Height = 451
+  ExplicitWidth = 548
+  ExplicitHeight = 451
   DesignSize = (
-    371
-    433)
-  object lblSorptionChoice: TLabel [2]
-    Left = 233
-    Top = 160
-    Width = 123
-    Height = 13
-    Caption = 'Sorption choice (ISOTHM)'
-  end
-  object lblKineticChoice: TLabel [3]
-    Left = 233
-    Top = 197
-    Width = 112
-    Height = 13
-    Caption = 'Kinetic choice (IREACT)'
-  end
+    548
+    451)
   inherited memoComments: TMemo
-    Width = 340
-    ExplicitWidth = 340
+    Width = 517
+    ExplicitWidth = 517
   end
-  object comboSorptionChoice: TJvImageComboBox [5]
-    Left = 16
-    Top = 157
-    Width = 211
-    Height = 21
-    Style = csDropDownList
-    ButtonStyle = fsLighter
-    Color = clBtnFace
-    DroppedWidth = 211
-    Enabled = False
-    ImageHeight = 0
-    ImageWidth = 0
-    ItemIndex = -1
+  object PageControl1: TPageControl [3]
+    Left = 0
+    Top = 162
+    Width = 548
+    Height = 289
+    ActivePage = tabSpecialCases
+    Align = alBottom
+    Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
-    Items = <
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'None (0)'
+    object tabMain: TTabSheet
+      Caption = 'Main'
+      DesignSize = (
+        540
+        261)
+      object lblElectronAcceptor: TLabel
+        Left = 154
+        Top = 144
+        Width = 84
+        Height = 13
+        Caption = 'Electron acceptor'
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'Linear (1)'
+      object lblElectronDonor: TLabel
+        Left = 3
+        Top = 144
+        Width = 70
+        Height = 13
+        Caption = 'Electron donor'
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'Freundlich (2)'
+      object lblKineticChoice: TLabel
+        Left = 397
+        Top = 43
+        Width = 112
+        Height = 13
+        Caption = 'Kinetic choice (IREACT)'
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'Langmuir (3)'
+      object lblReactionChoice: TLabel
+        Left = 354
+        Top = 118
+        Width = 142
+        Height = 13
+        Caption = 'Reaction choice (IREACTION)'
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'First order kinetic (4)'
+      object lblSorptionChoice: TLabel
+        Left = 397
+        Top = 3
+        Width = 123
+        Height = 13
+        Caption = 'Sorption choice (ISOTHM)'
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'Dual domain - No sorption (5)'
+      object lblStochiometricRatio: TLabel
+        Left = 305
+        Top = 144
+        Width = 89
+        Height = 13
+        Caption = 'Stochiometric ratio'
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'Dual domain - With sorption (6)'
-      end>
-  end
-  object comboKineticChoice: TJvImageComboBox [6]
-    Left = 16
-    Top = 194
-    Width = 211
-    Height = 21
-    Style = csDropDownList
-    ButtonStyle = fsLighter
-    Color = clBtnFace
-    DroppedWidth = 211
-    Enabled = False
-    ImageHeight = 0
-    ImageWidth = 0
-    ItemIndex = -1
-    TabOrder = 2
-    OnChange = comboKineticChoiceChange
-    Items = <
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'None (0)'
+      object rdgYieldCoefficient: TRbwDataGrid4
+        Left = 3
+        Top = 191
+        Width = 517
+        Height = 65
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        ColCount = 2
+        FixedCols = 1
+        RowCount = 2
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 0
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        OnButtonClick = rdgYieldCoefficientButtonClick
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = 'F()'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = True
+            ButtonWidth = 35
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end>
+        WordWrapRowCaptions = False
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'First order (1)'
+      object cbInitialConcChoice: TCheckBox
+        Left = 3
+        Top = 77
+        Width = 273
+        Height = 34
+        Caption = 
+          'Specify initial concentration of adsorbed and immobile phases of' +
+          ' all species (IGETSC)'
+        Enabled = False
+        TabOrder = 1
+        WordWrap = True
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'Monod (2)'
+      object comboElectronAcceptor: TComboBox
+        Left = 154
+        Top = 163
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        TabOrder = 2
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'First-order chain (3)'
+      object comboElectronDonor: TComboBox
+        Left = 3
+        Top = 163
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        TabOrder = 3
       end
-      item
-        Brush.Style = bsClear
-        Indent = 0
-        Text = 'Zero order (100)'
-      end>
-  end
-  object cbInitialConcChoice: TCheckBox [7]
-    Left = 16
-    Top = 231
-    Width = 273
-    Height = 34
-    Caption = 
-      'Specify initial concentration of adsorbed and immobile phases of' +
-      ' all species (IGETSC)'
-    Enabled = False
-    TabOrder = 3
-    WordWrap = True
-  end
-  object rdgYieldCoefficient: TRbwDataGrid4 [8]
-    Left = 16
-    Top = 271
-    Width = 340
-    Height = 137
-    ColCount = 2
-    FixedCols = 1
-    RowCount = 2
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
-    TabOrder = 4
-    ExtendedAutoDistributeText = False
-    AutoMultiEdit = False
-    AutoDistributeText = False
-    AutoIncreaseColCount = False
-    AutoIncreaseRowCount = False
-    SelectedRowOrColumnColor = clAqua
-    UnselectableColor = clBtnFace
-    OnButtonClick = rdgYieldCoefficientButtonClick
-    ColorRangeSelection = False
-    Columns = <
-      item
-        AutoAdjustRowHeights = False
-        AutoAdjustCaptionRowHeights = False
-        ButtonCaption = '...'
-        ButtonFont.Charset = DEFAULT_CHARSET
-        ButtonFont.Color = clWindowText
-        ButtonFont.Height = -11
-        ButtonFont.Name = 'Tahoma'
-        ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
-        CheckMax = False
-        CheckMin = False
-        ComboUsed = False
-        Format = rcf4String
-        LimitToList = False
-        MaxLength = 0
-        ParentButtonFont = False
-        WordWrapCaptions = False
-        WordWrapCells = False
-        CaseSensitivePicklist = False
-        CheckStyle = csCheck
-        AutoAdjustColWidths = True
+      object comboKineticChoice: TJvImageComboBox
+        Left = 3
+        Top = 40
+        Width = 388
+        Height = 21
+        Style = csDropDownList
+        ButtonStyle = fsLighter
+        Color = clBtnFace
+        DroppedWidth = 388
+        Enabled = False
+        ImageHeight = 0
+        ImageWidth = 0
+        ItemIndex = -1
+        TabOrder = 4
+        OnChange = comboKineticChoiceChange
+        Items = <
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'None (0)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'First order (1)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Monod (2)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'First-order chain (3)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Zero order (100)'
+          end>
       end
-      item
-        AutoAdjustRowHeights = True
-        AutoAdjustCaptionRowHeights = False
-        ButtonCaption = 'F()'
-        ButtonFont.Charset = DEFAULT_CHARSET
-        ButtonFont.Color = clWindowText
-        ButtonFont.Height = -11
-        ButtonFont.Name = 'Tahoma'
-        ButtonFont.Style = []
-        ButtonUsed = True
-        ButtonWidth = 35
-        CheckMax = False
-        CheckMin = False
-        ComboUsed = False
-        Format = rcf4String
-        LimitToList = False
-        MaxLength = 0
-        ParentButtonFont = False
-        WordWrapCaptions = True
-        WordWrapCells = False
-        CaseSensitivePicklist = False
-        CheckStyle = csCheck
-        AutoAdjustColWidths = True
-      end>
-    WordWrapRowCaptions = False
+      object comboReactionChoice: TJvImageComboBox
+        Left = 3
+        Top = 117
+        Width = 339
+        Height = 21
+        Style = csDropDownList
+        ButtonStyle = fsLighter
+        Color = clBtnFace
+        DroppedWidth = 388
+        Enabled = False
+        ImageHeight = 0
+        ImageWidth = 0
+        ItemIndex = -1
+        TabOrder = 5
+        OnChange = comboReactionChoiceChange
+        Items = <
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'None (0)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Instantaneous EA/ED reaction (1)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Kinetic EA/ED reaction (2)'
+          end>
+      end
+      object comboSorptionChoice: TJvImageComboBox
+        Left = 3
+        Top = 3
+        Width = 388
+        Height = 21
+        Style = csDropDownList
+        ButtonStyle = fsLighter
+        Color = clBtnFace
+        DroppedWidth = 388
+        Enabled = False
+        ImageHeight = 0
+        ImageWidth = 0
+        ItemIndex = 7
+        TabOrder = 6
+        Items = <
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'None (0)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Linear (1)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Freundlich (2)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Langmuir (3)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'First order kinetic (4)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Dual domain - No sorption (5)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Dual domain - With sorption (6)'
+          end
+          item
+            Brush.Style = bsClear
+            Indent = 0
+            Text = 'Dual domain - With different sorption contants (-6)'
+          end>
+      end
+      object rdeStochiometricRatio: TRbwDataEntry
+        Left = 305
+        Top = 163
+        Width = 145
+        Height = 22
+        TabOrder = 7
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+    end
+    object tabKinetic1: TTabSheet
+      Caption = 'Kinetic 1'
+      ImageIndex = 1
+      object lblElectronDonors: TLabel
+        Left = 0
+        Top = 0
+        Width = 75
+        Height = 13
+        Caption = 'Electron donors'
+      end
+      object lblElectronAcceptors: TLabel
+        Left = 127
+        Top = 3
+        Width = 89
+        Height = 13
+        Caption = 'Electron acceptors'
+      end
+      object lblSpecialCases: TLabel
+        Left = 256
+        Top = 0
+        Width = 63
+        Height = 13
+        Caption = 'Special cases'
+      end
+      object seElectronDonors: TJvSpinEdit
+        Left = 0
+        Top = 19
+        Width = 121
+        Height = 21
+        TabOrder = 0
+        OnChange = seElectronDonorsChange
+      end
+      object seElectronAcceptors: TJvSpinEdit
+        Left = 129
+        Top = 22
+        Width = 121
+        Height = 21
+        TabOrder = 1
+        OnChange = seElectronAcceptorsChange
+      end
+      object clbSpecialCases: TJvCheckListBox
+        Left = 256
+        Top = 26
+        Width = 121
+        Height = 232
+        OnClickCheck = clbSpecialCasesClickCheck
+        DoubleBuffered = False
+        ItemHeight = 13
+        ParentDoubleBuffered = False
+        TabOrder = 2
+        OnEnter = clbSpecialCasesEnter
+        OnExit = clbSpecialCasesExit
+      end
+      object cbSolidFe: TCheckBox
+        Left = 383
+        Top = 3
+        Width = 193
+        Height = 17
+        Caption = 'Simulate solid phase Fe3+'
+        TabOrder = 3
+        WordWrap = True
+      end
+      object memoDonors: TMemo
+        Left = 0
+        Top = 41
+        Width = 121
+        Height = 217
+        ReadOnly = True
+        TabOrder = 4
+      end
+      object memoAcceptors: TMemo
+        Left = 127
+        Top = 49
+        Width = 121
+        Height = 209
+        ReadOnly = True
+        TabOrder = 5
+      end
+    end
+    object tabSpecialCases: TTabSheet
+      Caption = 'Kinetic Special Cases'
+      ImageIndex = 2
+      object rdgSpecialCases: TRbwDataGrid4
+        Left = 0
+        Top = 0
+        Width = 540
+        Height = 261
+        Align = alClient
+        ColCount = 3
+        FixedCols = 1
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 0
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = True
+            Format = rcf4String
+            LimitToList = True
+            MaxLength = 0
+            ParentButtonFont = False
+            PickList.Strings = (
+              'SOLID'
+              'MAXEC'
+              'STORE')
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end>
+        WordWrapRowCaptions = False
+        ExplicitLeft = 280
+        ExplicitTop = 80
+        ExplicitWidth = 320
+        ExplicitHeight = 120
+      end
+    end
+    object tabElectronAcceptors: TTabSheet
+      Caption = 'Elec. Accept. Prop.'
+      ImageIndex = 3
+      object rdgAcceptors: TRbwDataGrid4
+        Left = 0
+        Top = 0
+        Width = 540
+        Height = 261
+        Align = alClient
+        ColCount = 3
+        FixedCols = 1
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 0
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end>
+        WordWrapRowCaptions = False
+        ExplicitLeft = 3
+        ExplicitTop = -3
+      end
+    end
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -216,5 +609,6 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
       item
         Control = cbInitialConcChoice
       end>
+    OnEnabledChange = rcSelectionControllerEnabledChange
   end
 end

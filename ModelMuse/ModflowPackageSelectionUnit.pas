@@ -4099,10 +4099,12 @@ Type
   end;
 
   TSorptionChoice = (scNone, scLinear, scFreundlich, scLangmuir,
-    scFirstOrderKinetic, scDualDomainNoSorption, scDualDomainWithSorption);
+    scFirstOrderKinetic, scDualDomainNoSorption, scDualDomainWithSorption,
+    scDualWithDifferingConstants);
   TKineticChoice = (kcNone, kcFirstOrder, kcMonod, kcFirstOrderChain,
     kcZeroOrder);
   TOtherInitialConcChoice = (oicDontUse, oicUse);
+  TReactionChoice = (rcNone, rcInstantaneous, rcKinetic);
 
   TMt3dmsChemReaction = class(TModflowPackageSelection)
   private
@@ -4110,11 +4112,21 @@ Type
     FOtherInitialConcChoice: TOtherInitialConcChoice;
     FKineticChoice: TKineticChoice;
     FYieldCoefficients: TStringList;
+    FReactionChoice: TReactionChoice;
+    FElectronDonor: Integer;
+    FElectronAcceptor: Integer;
+    FStoredStochiometricRatio: TRealStorage;
     procedure SetKineticChoice(const Value: TKineticChoice);
     procedure SetOtherInitialConcChoice(const Value: TOtherInitialConcChoice);
     procedure SetSorptionChoice(const Value: TSorptionChoice);
     procedure UpdateDataSets;
     procedure SetYieldCoefficients(const Value: TStringList);
+    procedure SetReactionChoice(const Value: TReactionChoice);
+    procedure SetElectronAcceptor(const Value: Integer);
+    procedure SetElectronDonor(const Value: Integer);
+    procedure SetStoredStochiometricRatio(const Value: TRealStorage);
+    procedure SetStochiometricRatio(const Value: double);
+    function GetStochiometricRatio: double;
   protected
     procedure SetIsSelected(const Value: boolean); override;
   public
@@ -4124,6 +4136,9 @@ Type
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure InitializeVariables; override;
+    // F
+    property StochiometricRatio: double read GetStochiometricRatio
+      write SetStochiometricRatio;
   published
     // ISOTHM
     property SorptionChoice: TSorptionChoice read FSorptionChoice
@@ -4133,9 +4148,22 @@ Type
       write SetKineticChoice stored True;
     // IGETSC
     property OtherInitialConcChoice: TOtherInitialConcChoice
-      read FOtherInitialConcChoice write SetOtherInitialConcChoice stored True;
+      read FOtherInitialConcChoice write SetOtherInitialConcChoice
+      stored True;
+    // IREACTION
+    property ReactionChoice: TReactionChoice read FReactionChoice
+      write SetReactionChoice stored True;
     property YieldCoefficients: TStringList read FYieldCoefficients
       write SetYieldCoefficients;
+      // IED minus 1
+    property ElectronDonor: Integer read FElectronDonor
+      write SetElectronDonor stored True;
+    // IEA minus 1;
+    property ElectronAcceptor: Integer read FElectronAcceptor
+      write SetElectronAcceptor stored True;
+    // F
+    property StoredStochiometricRatio: TRealStorage
+      read FStoredStochiometricRatio write SetStoredStochiometricRatio;
   end;
 
   TConcObsResult = (corConc, corConcResid);
@@ -13706,6 +13734,7 @@ begin
     SorptionChoice := React.SorptionChoice;
     KineticChoice := React.KineticChoice;
     OtherInitialConcChoice := React.OtherInitialConcChoice;
+    ReactionChoice := React.ReactionChoice;
     YieldCoefficients := React.YieldCoefficients;
   end;
   inherited;
@@ -13715,13 +13744,21 @@ constructor TMt3dmsChemReaction.Create(Model: TBaseModel);
 begin
   inherited;
   FYieldCoefficients := TStringList.Create;
+  FStoredStochiometricRatio := TRealStorage.Create;
+  FStoredStochiometricRatio.OnChange := OnValueChanged;
   InitializeVariables;
 end;
 
 destructor TMt3dmsChemReaction.Destroy;
 begin
+  FStoredStochiometricRatio.Free;
   FYieldCoefficients.Free;
   inherited;
+end;
+
+function TMt3dmsChemReaction.GetStochiometricRatio: double;
+begin
+  result := StoredStochiometricRatio.Value;
 end;
 
 procedure TMt3dmsChemReaction.InitializeVariables;
@@ -13730,6 +13767,20 @@ begin
   SorptionChoice := scLinear;
   KineticChoice := kcNone;
   OtherInitialConcChoice := oicDontUse;
+  ReactionChoice := rcNone;
+  ElectronDonor := -1;
+  ElectronAcceptor := -1;
+  StochiometricRatio := 1;
+end;
+
+procedure TMt3dmsChemReaction.SetElectronAcceptor(const Value: Integer);
+begin
+  SetIntegerProperty(FElectronAcceptor, Value);
+end;
+
+procedure TMt3dmsChemReaction.SetElectronDonor(const Value: Integer);
+begin
+  SetIntegerProperty(FElectronDonor, Value);
 end;
 
 procedure TMt3dmsChemReaction.SetIsSelected(const Value: boolean);
@@ -13759,6 +13810,15 @@ begin
   end;
 end;
 
+procedure TMt3dmsChemReaction.SetReactionChoice(const Value: TReactionChoice);
+begin
+  if FReactionChoice <> Value then
+  begin
+    FReactionChoice := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TMt3dmsChemReaction.SetSorptionChoice(const Value: TSorptionChoice);
 begin
   if FSorptionChoice <> Value then
@@ -13767,6 +13827,17 @@ begin
     InvalidateModel;
     UpdateDataSets;
   end;
+end;
+
+procedure TMt3dmsChemReaction.SetStochiometricRatio(const Value: double);
+begin
+  StoredStochiometricRatio.Value := Value;
+end;
+
+procedure TMt3dmsChemReaction.SetStoredStochiometricRatio(
+  const Value: TRealStorage);
+begin
+  FStoredStochiometricRatio.Assign(Value);
 end;
 
 procedure TMt3dmsChemReaction.SetYieldCoefficients(

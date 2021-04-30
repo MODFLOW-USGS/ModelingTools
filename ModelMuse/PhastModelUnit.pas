@@ -4647,9 +4647,11 @@ that affects the model output should also have a comment. }
     function AnyMt3dSorbParameter: boolean;
     function AnyMt3dReactions: Boolean;
     function AnyMt3dUsgsMonod: Boolean;
+    function AnyMt3dUsgsDualSeparate: Boolean;
     procedure UpdateMt3dmsChemDataSets; override;
     function Mt3dMsFirstSorbParamUsed(Sender: TObject): boolean;
     function Mt3dUsgsMonodUsed(Sender: TObject): boolean;
+    function Mt3dUsgsDualSeparateUsed(Sender: TObject): boolean;
     function Mt3dMsSecondSorbParamUsed(Sender: TObject): boolean;
     function Mt3dmsReactionRateDisolvedUsed(Sender: TObject): boolean;
     function Mt3dmsReactionRateSorbedUsed(Sender: TObject): boolean;
@@ -10805,6 +10807,28 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
         and (ChildModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice <> scNone);
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+function TPhastModel.AnyMt3dUsgsDualSeparate: Boolean;
+var
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  result := ModflowPackages.Mt3dmsChemReact.IsSelected
+    and (ModflowPackages.Mt3dmsChemReact.SorptionChoice = scDualWithDifferingConstants);
+  if not Result and LgrUsed then
+  begin
+    for ChildIndex := 0 to ChildModels.Count - 1 do
+    begin
+      ChildModel := ChildModels[ChildIndex].ChildModel;
+      result := ChildModel.ModflowPackages.Mt3dmsChemReact.IsSelected
+        and (ChildModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice = scDualWithDifferingConstants);
       if result then
       begin
         Exit;
@@ -19513,6 +19537,38 @@ begin
         end;
       end;
     end;
+  end;
+end;
+
+function TPhastModel.Mt3dUsgsDualSeparateUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      result := AChemItem.ImmobilePartioningCoefficientDataArrayName = DataArray.Name;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := (ModelSelection in ModflowSelection)
+    and ModflowPackages.Mt3dBasic.IsSelected
+    and ModflowPackages.Mt3dmsChemReact.IsSelected
+    and (ModflowPackages.Mt3dmsChemReact.SorptionChoice = scDualWithDifferingConstants);
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+      or DataArrayUsed(ImmobileComponents);
   end;
 end;
 
@@ -38385,15 +38441,18 @@ end;
 function TCustomModel.Mt3dMSBulkDensityUsed(Sender: TObject): boolean;
 begin
   result := Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
-    and (ModflowPackages.Mt3dmsChemReact.SorptionChoice in [scLinear,
-    scFreundlich, scLangmuir, scFirstOrderKinetic, scDualDomainWithSorption]);
+    and ((ModflowPackages.Mt3dmsChemReact.SorptionChoice in [scLinear,
+    scFreundlich, scLangmuir, scFirstOrderKinetic, scDualDomainWithSorption,
+    scDualWithDifferingConstants])
+    or (ModflowPackages.Mt3dmsChemReact.ReactionChoice = rcKinetic));
 end;
 
 function TCustomModel.Mt3dMSImmobPorosityUsed(Sender: TObject): boolean;
 begin
   result := Mt3dMSUsed(Sender) and ModflowPackages.Mt3dmsChemReact.IsSelected
     and (ModflowPackages.Mt3dmsChemReact.SorptionChoice in
-    [scDualDomainNoSorption, scDualDomainWithSorption]);
+    [scDualDomainNoSorption, scDualDomainWithSorption,
+    scDualWithDifferingConstants]);
 end;
 
 function TCustomModel.Mt3dMSUsed(Sender: TObject): boolean;

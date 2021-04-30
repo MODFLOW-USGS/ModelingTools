@@ -6228,6 +6228,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                       CheckStyle = csCheck
                       AutoAdjustColWidths = True
                     end>
+                  ExplicitLeft = 0
                   ExplicitWidth = 281
                   ExplicitHeight = 320
                 end
@@ -6331,6 +6332,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                       CheckStyle = csCheck
                       AutoAdjustColWidths = True
                     end>
+                  ExplicitLeft = 0
                   ExplicitWidth = 299
                   ExplicitHeight = 320
                 end
@@ -6339,8 +6341,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           end
           inherited tabMT3D_Options: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 363
+            ExplicitHeight = 279
             inherited lblInactiveConcentration: TLabel
               Width = 278
               Height = 18
@@ -6445,6 +6446,7 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited chklstOptions: TJvgCheckListBox
               Width = 587
               Height = 363
+              ExplicitWidth = 587
               ExplicitHeight = 363
             end
           end
@@ -7129,39 +7131,184 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitWidth = 78
           ExplicitHeight = 18
         end
-        inherited lblSorptionChoice: TLabel
-          Width = 182
-          Height = 18
-          ExplicitWidth = 182
-          ExplicitHeight = 18
-        end
-        inherited lblKineticChoice: TLabel
-          Width = 169
-          Height = 18
-          ExplicitWidth = 169
-          ExplicitHeight = 18
-        end
         inherited memoComments: TMemo
           Width = 564
           ExplicitWidth = 564
         end
-        inherited comboSorptionChoice: TJvImageComboBox
-          Height = 26
-          ExplicitHeight = 26
-        end
-        inherited comboKineticChoice: TJvImageComboBox
-          Height = 26
-          OnChange = framePkgMt3dmsRctcomboKineticChoiceChange
-          ExplicitHeight = 26
-        end
-        inherited cbInitialConcChoice: TCheckBox
-          Width = 561
-          ExplicitWidth = 561
-        end
-        inherited rdgYieldCoefficient: TRbwDataGrid4
-          Height = 225
-          FixedCols = 0
-          ExplicitHeight = 225
+        inherited PageControl1: TPageControl
+          Top = 157
+          Width = 595
+          Height = 359
+          ActivePage = framePkgMt3dmsRct.tabSpecialCases
+          ExplicitTop = 157
+          ExplicitWidth = 595
+          ExplicitHeight = 359
+          inherited tabMain: TTabSheet
+            ExplicitTop = 29
+            ExplicitWidth = 587
+            ExplicitHeight = 326
+            inherited lblElectronAcceptor: TLabel
+              Width = 122
+              Height = 18
+              ExplicitWidth = 122
+              ExplicitHeight = 18
+            end
+            inherited lblElectronDonor: TLabel
+              Width = 101
+              Height = 18
+              ExplicitWidth = 101
+              ExplicitHeight = 18
+            end
+            inherited lblKineticChoice: TLabel
+              Width = 169
+              Height = 18
+              ExplicitWidth = 169
+              ExplicitHeight = 18
+            end
+            inherited lblReactionChoice: TLabel
+              Width = 209
+              Height = 18
+              ExplicitWidth = 209
+              ExplicitHeight = 18
+            end
+            inherited lblSorptionChoice: TLabel
+              Width = 182
+              Height = 18
+              ExplicitWidth = 182
+              ExplicitHeight = 18
+            end
+            inherited lblStochiometricRatio: TLabel
+              Width = 131
+              Height = 18
+              ExplicitWidth = 131
+              ExplicitHeight = 18
+            end
+            inherited rdgYieldCoefficient: TRbwDataGrid4
+              Width = 574
+              Height = 133
+              FixedCols = 0
+              ExplicitWidth = 574
+              ExplicitHeight = 133
+            end
+            inherited cbInitialConcChoice: TCheckBox
+              Width = 566
+              ExplicitWidth = 566
+            end
+            inherited comboElectronAcceptor: TComboBox
+              Height = 26
+              ExplicitHeight = 26
+            end
+            inherited comboElectronDonor: TComboBox
+              Height = 26
+              ExplicitHeight = 26
+            end
+            inherited comboKineticChoice: TJvImageComboBox
+              Height = 26
+              ExplicitHeight = 26
+            end
+            inherited comboReactionChoice: TJvImageComboBox
+              Height = 26
+              ExplicitHeight = 26
+            end
+            inherited comboSorptionChoice: TJvImageComboBox
+              Height = 26
+              ItemIndex = -1
+              ExplicitHeight = 26
+            end
+          end
+          inherited tabKinetic1: TTabSheet
+            ExplicitTop = 29
+            ExplicitWidth = 587
+            ExplicitHeight = 326
+            inherited lblElectronDonors: TLabel
+              Width = 109
+              Height = 18
+              ExplicitWidth = 109
+              ExplicitHeight = 18
+            end
+            inherited lblElectronAcceptors: TLabel
+              Top = 0
+              Width = 130
+              Height = 18
+              ExplicitTop = 0
+              ExplicitWidth = 130
+              ExplicitHeight = 18
+            end
+            inherited lblSpecialCases: TLabel
+              Left = 274
+              Width = 99
+              Height = 18
+              ExplicitLeft = 274
+              ExplicitWidth = 99
+              ExplicitHeight = 18
+            end
+            inherited seElectronDonors: TJvSpinEdit
+              Height = 23
+              ExplicitHeight = 23
+            end
+            inherited seElectronAcceptors: TJvSpinEdit
+              Left = 125
+              Top = 19
+              Height = 23
+              ExplicitLeft = 125
+              ExplicitTop = 19
+              ExplicitHeight = 23
+            end
+            inherited clbSpecialCases: TJvCheckListBox
+              Left = 272
+              Top = 24
+              Height = 300
+              ItemHeight = 18
+              ExplicitLeft = 272
+              ExplicitTop = 24
+              ExplicitHeight = 300
+            end
+            inherited cbSolidFe: TCheckBox
+              Left = 416
+              Top = 1
+              Width = 161
+              Height = 41
+              ExplicitLeft = 416
+              ExplicitTop = 1
+              ExplicitWidth = 161
+              ExplicitHeight = 41
+            end
+            inherited memoDonors: TMemo
+              Height = 283
+              ExplicitHeight = 283
+            end
+            inherited memoAcceptors: TMemo
+              Height = 275
+              ExplicitHeight = 275
+            end
+          end
+          inherited tabSpecialCases: TTabSheet
+            ExplicitTop = 29
+            ExplicitWidth = 587
+            ExplicitHeight = 326
+            inherited rdgSpecialCases: TRbwDataGrid4
+              Width = 587
+              Height = 326
+              ExplicitLeft = 0
+              ExplicitTop = 0
+              ExplicitWidth = 587
+              ExplicitHeight = 326
+            end
+          end
+          inherited tabElectronAcceptors: TTabSheet
+            ExplicitTop = 29
+            ExplicitWidth = 587
+            ExplicitHeight = 326
+            inherited rdgAcceptors: TRbwDataGrid4
+              Width = 587
+              Height = 326
+              FixedCols = 0
+              ExplicitLeft = 0
+              ExplicitTop = 0
+              ExplicitWidth = 587
+              ExplicitHeight = 326
+            end
+          end
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
