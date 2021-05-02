@@ -4105,6 +4105,96 @@ Type
     kcZeroOrder);
   TOtherInitialConcChoice = (oicDontUse, oicUse);
   TReactionChoice = (rcNone, rcInstantaneous, rcKinetic);
+  TSpecialTreatment = (stSolid, stMaxEC, stStore);
+  TSolidFE = (sfNo, sfUse);
+
+  TRctSpecialCase = class(TPhastCollectionItem)
+  private
+    FStoredEFCMAX: TRealStorage;
+    FSpecies: string;
+    FTreatment: TSpecialTreatment;
+    function GetEFCMAX: double;
+    procedure SetEFCMAX(const Value: double);
+    procedure SetSpecies(const Value: string);
+    procedure SetStoredEFCMAX(const Value: TRealStorage);
+    procedure SetTreatment(const Value: TSpecialTreatment);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    property EFCMAX: double read GetEFCMAX write SetEFCMAX;
+  published
+    property Species: string read FSpecies write SetSpecies;
+    property Treatment: TSpecialTreatment read FTreatment write SetTreatment;
+    property StoredEFCMAX: TRealStorage read FStoredEFCMAX write SetStoredEFCMAX;
+  end;
+
+  TRctSpecialCases = class(TPhastCollection)
+  private
+    function GetItem(Index: Integer): TRctSpecialCase;
+    procedure SetItem(Index: Integer; const Value: TRctSpecialCase);
+  public
+    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    property Items[Index: Integer]: TRctSpecialCase read GetItem Write SetItem; default;
+  end;
+
+  TEAProperties = class(TPhastCollectionItem)
+  private
+    FStoredHalfSaturation: TRealStorage;
+    FSpecies: string;
+    FStoredInhibitionConstant: TRealStorage;
+    procedure SetSpecies(const Value: string);
+    procedure SetStoredHalfSaturation(const Value: TRealStorage);
+    procedure SetStoredInhibitionConstant(const Value: TRealStorage);
+    function GetHalfSaturation: double;
+    function GetInhibitionConstant: double;
+    procedure SetHalfSaturation(const Value: double);
+    procedure SetInhibitionConstant(const Value: double);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    property HalfSaturation: double read GetHalfSaturation write SetHalfSaturation;
+    property InhibitionConstant: double read GetInhibitionConstant write SetInhibitionConstant;
+  published
+    property Species: string read FSpecies write SetSpecies;
+    property StoredHalfSaturation: TRealStorage read FStoredHalfSaturation write SetStoredHalfSaturation;
+    property StoredInhibitionConstant: TRealStorage read FStoredInhibitionConstant write SetStoredInhibitionConstant;
+  end;
+
+  TEAPropertiesCollection = class(TPhastCollection)
+  private
+    function GetItem(Index: Integer): TEAProperties;
+    procedure SetItem(Index: Integer; const Value: TEAProperties);
+  public
+    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    property Items[Index: Integer]: TEAProperties read GetItem Write SetItem; default;
+  end;
+
+  TSpeciesAssociatedValue = class(TPhastCollectionItem)
+  private
+    FValues: TRealCollection;
+    FSpecies: string;
+    procedure SetSpecies(const Value: string);
+    procedure SetValues(const Value: TRealCollection);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    property Species: string read FSpecies write SetSpecies;
+    property Values: TRealCollection read FValues write SetValues;
+  end;
+
+  TSpeciesAssociatedValues = class(TPhastCollection)
+  private
+    function GetItem(Index: Integer): TSpeciesAssociatedValue;
+    procedure SetItem(Index: Integer; const Value: TSpeciesAssociatedValue);
+  public
+    constructor Create(InvalidateModelEvent: TNotifyEvent);
+    property Items[Index: Integer]: TSpeciesAssociatedValue read GetItem
+      Write SetItem; default;
+  end;
 
   TMt3dmsChemReaction = class(TModflowPackageSelection)
   private
@@ -4116,6 +4206,13 @@ Type
     FElectronDonor: Integer;
     FElectronAcceptor: Integer;
     FStoredStochiometricRatio: TRealStorage;
+    FElectronDonorCount: Integer;
+    FElectronAcceptorCount: Integer;
+    FSpecialCases: TRctSpecialCases;
+    FEAProperties: TEAPropertiesCollection;
+    FDecayRates: TSpeciesAssociatedValues;
+    FYields: TSpeciesAssociatedValues;
+    FSolidFE: TSolidFE;
     procedure SetKineticChoice(const Value: TKineticChoice);
     procedure SetOtherInitialConcChoice(const Value: TOtherInitialConcChoice);
     procedure SetSorptionChoice(const Value: TSorptionChoice);
@@ -4127,6 +4224,13 @@ Type
     procedure SetStoredStochiometricRatio(const Value: TRealStorage);
     procedure SetStochiometricRatio(const Value: double);
     function GetStochiometricRatio: double;
+    procedure SetElectronAcceptorCount(const Value: Integer);
+    procedure SetElectronDonorCount(const Value: Integer);
+    procedure SetSpecialCases(const Value: TRctSpecialCases);
+    procedure SetEAProperties(const Value: TEAPropertiesCollection);
+    procedure SetDecayRates(const Value: TSpeciesAssociatedValues);
+    procedure SetYields(const Value: TSpeciesAssociatedValues);
+    procedure SetSolidFE(const Value: TSolidFE);
   protected
     procedure SetIsSelected(const Value: boolean); override;
   public
@@ -4164,6 +4268,25 @@ Type
     // F
     property StoredStochiometricRatio: TRealStorage
       read FStoredStochiometricRatio write SetStoredStochiometricRatio;
+    // rec_FileName NED
+    property ElectronDonorCount: Integer read FElectronDonorCount
+      write SetElectronDonorCount;
+    // rec_FileName NEA
+    property ElectronAcceptorCount: Integer read FElectronAcceptorCount
+      write SetElectronAcceptorCount;
+    // rec_FileName IFESLD
+    property SolidFE: TSolidFE read FSolidFE write SetSolidFE;
+    // rec_FileName NSPECIAL, ISPEC, SPECIAL(ISPEC), EFCMAX
+    property SpecialCases: TRctSpecialCases read FSpecialCases
+      write SetSpecialCases;
+    // rec_FileName HSC, IC
+    property EAProperties: TEAPropertiesCollection read FEAProperties
+      write SetEAProperties;
+    // rec_FileName DECAYRATE
+    property DecayRates: TSpeciesAssociatedValues read FDecayRates
+      write SetDecayRates;
+    // rec_FileName YIELDC
+    property Yields: TSpeciesAssociatedValues read FYields write SetYields;
   end;
 
   TConcObsResult = (corConc, corConcResid);
@@ -13736,6 +13859,16 @@ begin
     OtherInitialConcChoice := React.OtherInitialConcChoice;
     ReactionChoice := React.ReactionChoice;
     YieldCoefficients := React.YieldCoefficients;
+    ElectronDonor := React.ElectronDonor;
+    ElectronAcceptor := React.ElectronAcceptor;
+    StochiometricRatio := React.StochiometricRatio;
+    ElectronDonorCount := React.ElectronDonorCount;
+    ElectronAcceptorCount := React.ElectronAcceptorCount;
+    SolidFE := React.SolidFE;
+    SpecialCases := React.SpecialCases;
+    EAProperties := React.EAProperties;
+    DecayRates := React.DecayRates;
+    Yields := React.Yields;
   end;
   inherited;
 end;
@@ -13746,11 +13879,20 @@ begin
   FYieldCoefficients := TStringList.Create;
   FStoredStochiometricRatio := TRealStorage.Create;
   FStoredStochiometricRatio.OnChange := OnValueChanged;
+  FSpecialCases := TRctSpecialCases.Create(OnValueChanged);
+  FEAProperties := TEAPropertiesCollection.Create(OnValueChanged);
+  FDecayRates := TSpeciesAssociatedValues.Create(OnValueChanged);
+  FYields := TSpeciesAssociatedValues.Create(OnValueChanged);
+
   InitializeVariables;
 end;
 
 destructor TMt3dmsChemReaction.Destroy;
 begin
+  FYields.Free;
+  FDecayRates.Free;
+  FEAProperties.Free;
+  FSpecialCases.Free;
   FStoredStochiometricRatio.Free;
   FYieldCoefficients.Free;
   inherited;
@@ -13767,10 +13909,30 @@ begin
   SorptionChoice := scLinear;
   KineticChoice := kcNone;
   OtherInitialConcChoice := oicDontUse;
+  FYieldCoefficients.Clear;
   ReactionChoice := rcNone;
   ElectronDonor := -1;
   ElectronAcceptor := -1;
   StochiometricRatio := 1;
+  FElectronDonorCount := 0;
+  FElectronAcceptorCount := 0;
+  FSolidFE := sfNo;
+  FSpecialCases.Clear;
+  FEAProperties.Clear;
+  FDecayRates.Clear;
+  FYields.Clear;
+end;
+
+procedure TMt3dmsChemReaction.SetDecayRates(
+  const Value: TSpeciesAssociatedValues);
+begin
+  FDecayRates.Assign(Value);
+end;
+
+procedure TMt3dmsChemReaction.SetEAProperties(
+  const Value: TEAPropertiesCollection);
+begin
+  FEAProperties.Assign(Value);
 end;
 
 procedure TMt3dmsChemReaction.SetElectronAcceptor(const Value: Integer);
@@ -13778,9 +13940,19 @@ begin
   SetIntegerProperty(FElectronAcceptor, Value);
 end;
 
+procedure TMt3dmsChemReaction.SetElectronAcceptorCount(const Value: Integer);
+begin
+  SetIntegerProperty(FElectronAcceptorCount, Value);
+end;
+
 procedure TMt3dmsChemReaction.SetElectronDonor(const Value: Integer);
 begin
   SetIntegerProperty(FElectronDonor, Value);
+end;
+
+procedure TMt3dmsChemReaction.SetElectronDonorCount(const Value: Integer);
+begin
+  SetIntegerProperty(FElectronDonorCount, Value);
 end;
 
 procedure TMt3dmsChemReaction.SetIsSelected(const Value: boolean);
@@ -13819,6 +13991,15 @@ begin
   end;
 end;
 
+procedure TMt3dmsChemReaction.SetSolidFE(const Value: TSolidFE);
+begin
+  if FSolidFE <> Value then
+  begin
+    FSolidFE := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TMt3dmsChemReaction.SetSorptionChoice(const Value: TSorptionChoice);
 begin
   if FSorptionChoice <> Value then
@@ -13827,6 +14008,11 @@ begin
     InvalidateModel;
     UpdateDataSets;
   end;
+end;
+
+procedure TMt3dmsChemReaction.SetSpecialCases(const Value: TRctSpecialCases);
+begin
+  FSpecialCases.Assign(Value);
 end;
 
 procedure TMt3dmsChemReaction.SetStochiometricRatio(const Value: double);
@@ -13845,6 +14031,11 @@ procedure TMt3dmsChemReaction.SetYieldCoefficients(
 begin
   FYieldCoefficients.Assign(Value);
   InvalidateModel;
+end;
+
+procedure TMt3dmsChemReaction.SetYields(const Value: TSpeciesAssociatedValues);
+begin
+  FYields.Assign(Value);
 end;
 
 procedure TMt3dmsChemReaction.UpdateDataSets;
@@ -21381,6 +21572,233 @@ begin
     FCompressionMethod := Value;
     InvalidateModel;
   end;
+end;
+
+{ TRctSpecialCase }
+
+procedure TRctSpecialCase.Assign(Source: TPersistent);
+var
+  RctSource: TRctSpecialCase;
+begin
+  if Source is TRctSpecialCase then
+  begin
+    RctSource := TRctSpecialCase(Source);
+    Species := RctSource.Species;
+    Treatment := RctSource.Treatment;
+    EFCMAX := RctSource.EFCMAX;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TRctSpecialCase.Create(Collection: TCollection);
+begin
+  inherited;
+  FStoredEFCMAX := TRealStorage.Create;
+  FStoredEFCMAX.OnChange := OnInvalidateModel;
+end;
+
+destructor TRctSpecialCase.Destroy;
+begin
+  FStoredEFCMAX.Free;
+  inherited;
+end;
+
+function TRctSpecialCase.GetEFCMAX: double;
+begin
+  result := FStoredEFCMAX.Value;
+end;
+
+procedure TRctSpecialCase.SetEFCMAX(const Value: double);
+begin
+  FStoredEFCMAX.Value := Value;
+end;
+
+procedure TRctSpecialCase.SetSpecies(const Value: string);
+begin
+  SetStringProperty(FSpecies, Value);
+end;
+
+procedure TRctSpecialCase.SetStoredEFCMAX(const Value: TRealStorage);
+begin
+  FStoredEFCMAX.Assign(Value);
+end;
+
+procedure TRctSpecialCase.SetTreatment(const Value: TSpecialTreatment);
+begin
+  if FTreatment <> Value then
+  begin
+    FTreatment := Value;
+    InvalidateModel;
+  end;
+end;
+
+{ TRctSpecialCases }
+
+constructor TRctSpecialCases.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TRctSpecialCase, InvalidateModelEvent);
+end;
+
+function TRctSpecialCases.GetItem(Index: Integer): TRctSpecialCase;
+begin
+  result := inherited Items[Index] as TRctSpecialCase;
+end;
+
+procedure TRctSpecialCases.SetItem(Index: Integer;
+  const Value: TRctSpecialCase);
+begin
+  inherited Items[Index] := Value;
+end;
+
+{ TEAProperties }
+
+procedure TEAProperties.Assign(Source: TPersistent);
+var
+  EASource: TEAProperties;
+begin
+  if Source is TEAProperties then
+  begin
+    EASource := TEAProperties(Source);
+    Species := EASource.Species;
+    HalfSaturation := EASource.HalfSaturation;
+    InhibitionConstant := EASource.InhibitionConstant;
+  end
+  else
+  begin
+    inherited;
+  end;
+
+end;
+
+constructor TEAProperties.Create(Collection: TCollection);
+begin
+  inherited;
+  FStoredHalfSaturation := TRealStorage.Create;
+  FStoredInhibitionConstant := TRealStorage.Create;
+  FStoredHalfSaturation.OnChange := OnInvalidateModel;
+  FStoredInhibitionConstant.OnChange := OnInvalidateModel;
+end;
+
+destructor TEAProperties.Destroy;
+begin
+  FStoredInhibitionConstant.Free;
+  FStoredHalfSaturation.Free;
+  inherited;
+end;
+
+function TEAProperties.GetHalfSaturation: double;
+begin
+  result := StoredHalfSaturation.Value;
+end;
+
+function TEAProperties.GetInhibitionConstant: double;
+begin
+  result := StoredInhibitionConstant.Value;
+end;
+
+procedure TEAProperties.SetHalfSaturation(const Value: double);
+begin
+  StoredHalfSaturation.Value := Value;
+end;
+
+procedure TEAProperties.SetInhibitionConstant(const Value: double);
+begin
+  StoredInhibitionConstant.Value := Value;
+end;
+
+procedure TEAProperties.SetSpecies(const Value: string);
+begin
+  SetStringProperty(FSpecies, Value);
+end;
+
+procedure TEAProperties.SetStoredHalfSaturation(const Value: TRealStorage);
+begin
+  FStoredHalfSaturation.Assign(Value);
+end;
+
+procedure TEAProperties.SetStoredInhibitionConstant(const Value: TRealStorage);
+begin
+  FStoredInhibitionConstant.Assign(Value);
+end;
+
+{ TEAPropertiesCollection }
+
+constructor TEAPropertiesCollection.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TEAProperties, InvalidateModelEvent);
+end;
+
+function TEAPropertiesCollection.GetItem(Index: Integer): TEAProperties;
+begin
+  result := inherited Items[Index] as TEAProperties;
+end;
+
+procedure TEAPropertiesCollection.SetItem(Index: Integer;
+  const Value: TEAProperties);
+begin
+  inherited Items[Index] := Value
+end;
+
+{ TSpeciesAssociatedValue }
+
+procedure TSpeciesAssociatedValue.Assign(Source: TPersistent);
+var
+  SpSource: TSpeciesAssociatedValue;
+begin
+  if Source is TSpeciesAssociatedValue then
+  begin
+    SpSource := TSpeciesAssociatedValue(Source);
+    Species := SpSource.Species;
+    Values := SpSource.Values;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TSpeciesAssociatedValue.Create(Collection: TCollection);
+begin
+  inherited;
+  FValues := TRealCollection.Create(OnInvalidateModel);
+end;
+
+destructor TSpeciesAssociatedValue.Destroy;
+begin
+  FValues.Free;
+  inherited;
+end;
+
+procedure TSpeciesAssociatedValue.SetSpecies(const Value: string);
+begin
+  SetStringProperty(FSpecies, Value);
+end;
+
+procedure TSpeciesAssociatedValue.SetValues(const Value: TRealCollection);
+begin
+  FValues.Assign(Value);
+end;
+
+{ TSpeciesAssociatedValues }
+
+constructor TSpeciesAssociatedValues.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TSpeciesAssociatedValue, InvalidateModelEvent);
+end;
+
+function TSpeciesAssociatedValues.GetItem(
+  Index: Integer): TSpeciesAssociatedValue;
+begin
+  result := inherited Items[Index] as TSpeciesAssociatedValue
+end;
+
+procedure TSpeciesAssociatedValues.SetItem(Index: Integer;
+  const Value: TSpeciesAssociatedValue);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

@@ -10274,6 +10274,8 @@ const
 //                Previously, the "model" part of the
 //                file name would be the name of the model. A file with the
 //                model name as part of the file name is still created.
+//               Added support for features in RCT package in MT3D-USGS that
+//                are not in MT3DMS.
 
 const
   // version number of ModelMuse.

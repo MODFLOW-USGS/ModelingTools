@@ -10,6 +10,10 @@ uses
   JvCheckListBox, Vcl.Mask, JvExMask, JvSpin;
 
 type
+  TSpecialCaseColumns = (sccSpecies, sccTreatment, sccMaxEFC);
+  TElectronAcceptorColumns = (eaSpecies, eaHalfSat, eaInhibition);
+  TDecayYieldColumns = (dycSpecies, dycValues);
+
   TframeMt3dmsChemReactionPkg = class(TframePackage)
     comboSorptionChoice: TJvImageComboBox;
     comboKineticChoice: TJvImageComboBox;
@@ -27,7 +31,7 @@ type
     lblStochiometricRatio: TLabel;
     PageControl1: TPageControl;
     tabMain: TTabSheet;
-    tabKinetic1: TTabSheet;
+    tabKinetic: TTabSheet;
     seElectronDonors: TJvSpinEdit;
     lblElectronDonors: TLabel;
     lblElectronAcceptors: TLabel;
@@ -41,6 +45,10 @@ type
     rdgSpecialCases: TRbwDataGrid4;
     tabElectronAcceptors: TTabSheet;
     rdgAcceptors: TRbwDataGrid4;
+    tabDecayRates: TTabSheet;
+    rdgDecayRates: TRbwDataGrid4;
+    tabYield: TTabSheet;
+    rdgYields: TRbwDataGrid4;
     procedure rdgYieldCoefficientButtonClick(Sender: TObject; ACol,
       ARow: Integer);
     procedure comboKineticChoiceChange(Sender: TObject);
@@ -62,6 +70,7 @@ type
     procedure EnableYieldCoefficients;
     procedure AssignDonorsAndAcceptors;
     procedure UpdateSpecialCaseGrid;
+    procedure AssignSpecialYieldCaptions;
     { Private declarations }
   public
     procedure SetSpeciesNames(Names: TStringList);
@@ -199,6 +208,13 @@ begin
   inherited;
 end;
 
+procedure TframeMt3dmsChemReactionPkg.AssignSpecialYieldCaptions;
+begin
+  rdgSpecialCases.Cells[Ord(sccSpecies), 0] := 'Species';
+  rdgSpecialCases.Cells[Ord(sccTreatment), 0] := 'Treatment';
+  rdgSpecialCases.Cells[Ord(sccMaxEFC), 0] := 'Maximum express field capacity';
+end;
+
 procedure TframeMt3dmsChemReactionPkg.UpdateSpecialCaseGrid;
 var
   SpecialCases: TStringList;
@@ -238,9 +254,11 @@ begin
         else
         begin
           rdgSpecialCases.RowCount := 2;
+          rdgSpecialCases.FixedRows := 1;
           ClearGrid(rdgSpecialCases);
           rdgSpecialCases.Cells[0, 1] := '';
         end;
+        rdgSpecialCases.FixedCols := 1;
         for Index := 0 to SpecialCases.Count - 1 do
         begin
           if ExistingSpecialCases.IndexOf(SpecialCases[Index]) < 0 then
@@ -255,10 +273,12 @@ begin
         else
         begin
           rdgSpecialCases.RowCount := 2;
+          rdgSpecialCases.FixedRows := 1;
           ClearGrid(rdgSpecialCases);
           rdgSpecialCases.Cells[0, 1] := '';
         end;
         rdgSpecialCases.FixedRows := 1;
+        rdgSpecialCases.FixedCols := 1;
         for Index := 0 to ExistingSpecialCases.Count - 1 do
         begin
           rdgSpecialCases.Cells[0, Index + 1] := ExistingSpecialCases[Index];
@@ -280,6 +300,7 @@ var
   SpeciesIndex: Integer;
   Acceptors: TStringList;
   ExistingAcceptors: TStringList;
+  AColumn: TRbwColumn4;
 begin
   memoDonors.Clear;
   memoAcceptors.Clear;
@@ -320,6 +341,8 @@ begin
       rdgAcceptors.RowCount := 2;
     end;
     rdgAcceptors.FixedRows := 1;
+    rdgAcceptors.FixedCols := 1;
+
     for Index := 0 to Acceptors.Count - 1 do
     begin
       rdgAcceptors.Cells[0,Index+1] := Acceptors[Index];
@@ -329,6 +352,55 @@ begin
     Acceptors.Free;
     ExistingAcceptors.Free;
   end;
+
+  rdgDecayRates.RowCount := memoAcceptors.Lines.Count + 1;
+  rdgDecayRates.ColCount := memoDonors.Lines.Count + 1;
+  if rdgDecayRates.RowCount > 1 then
+  begin
+    rdgDecayRates.FixedRows := 1;
+  end;
+  if rdgDecayRates.ColCount > 1 then
+  begin
+    rdgDecayRates.FixedCols := 1;
+  end;
+  for Index := 0 to memoAcceptors.Lines.Count - 1 do
+  begin
+    rdgDecayRates.Cells[0, Index+1] := memoAcceptors.Lines[Index];
+  end;
+  for Index := 0 to memoDonors.Lines.Count - 1 do
+  begin
+    rdgDecayRates.Cells[Index+1, 0] := memoDonors.Lines[Index];
+    AColumn := rdgDecayRates.Columns[Index];
+    AColumn.Format := rcf4Real;
+    AColumn.AutoAdjustColWidths := True;
+  end;
+
+  rdgYields.RowCount := memoDonors.Lines.Count + memoAcceptors.Lines.Count + 1;
+  rdgYields.ColCount := memoDonors.Lines.Count + 1;
+  if rdgYields.RowCount > 1 then
+  begin
+    rdgYields.FixedRows := 1;
+  end;
+  if rdgYields.ColCount > 1 then
+  begin
+    rdgYields.FixedCols := 1;
+  end;
+  for Index := 0 to memoDonors.Lines.Count - 1 do
+  begin
+    rdgYields.Cells[0, Index+1] := memoDonors.Lines[Index];
+  end;
+  for Index := 0 to memoAcceptors.Lines.Count - 1 do
+  begin
+    rdgYields.Cells[0, memoDonors.Lines.Count + Index+1] :=
+      memoAcceptors.Lines[Index];
+  end;
+  for Index := 0 to memoDonors.Lines.Count - 1 do
+  begin
+    rdgYields.Cells[Index+1, 0] := memoDonors.Lines[Index];
+    AColumn := rdgYields.Columns[Index];
+    AColumn.Format := rcf4Real;
+    AColumn.AutoAdjustColWidths := True;
+  end;
 end;
 
 procedure TframeMt3dmsChemReactionPkg.GetData(
@@ -336,8 +408,23 @@ procedure TframeMt3dmsChemReactionPkg.GetData(
 var
   RctPkg: TMt3dmsChemReaction;
   ItemIndex: Integer;
+  Index: Integer;
+  SpecialCase: TRctSpecialCase;
+  SpeciesNames: TStringList;
+  EaProp: TEAProperties;
+  RowIndex: Integer;
+  DecayItem: TSpeciesAssociatedValue;
+  ColIndex: Integer;
+  YieldItem: TSpeciesAssociatedValue;
 begin
   inherited;
+  AssignSpecialYieldCaptions;
+//    TElectronAcceptor = (eaSpecies, eaHalfSat, eaInhibition);
+  rdgAcceptors.Cells[Ord(eaSpecies), 0] := 'Electron acceptor';
+  rdgAcceptors.Cells[Ord(eaHalfSat), 0] := 'Half saturation constant';
+  rdgAcceptors.Cells[Ord(eaInhibition), 0] := 'Inhibition constant';
+
+
   RctPkg := Package as TMt3dmsChemReaction;
   comboSorptionChoice.ItemIndex := Ord(RctPkg.SorptionChoice);
   comboKineticChoice.ItemIndex := Ord(RctPkg.KineticChoice);
@@ -366,6 +453,111 @@ begin
     comboElectronAcceptor.ItemIndex := -1;
   end;
   rdeStochiometricRatio.RealValue := RctPkg.StochiometricRatio;
+
+  seElectronDonors.AsInteger := RctPkg.ElectronDonorCount;
+  seElectronAcceptors.AsInteger := RctPkg.ElectronAcceptorCount;
+  cbSolidFe.Checked := Boolean(RctPkg.SolidFE);
+
+  for Index := 0 to RctPkg.SpecialCases.Count - 1 do
+  begin
+    SpecialCase := RctPkg.SpecialCases[Index];
+    ItemIndex := clbSpecialCases.Items.IndexOf(SpecialCase.Species);
+    if ItemIndex >= 0 then
+    begin
+      clbSpecialCases.Checked[ItemIndex] := True;
+    end;
+  end;
+  FSpecialChanged := True;
+  UpdateSpecialCaseGrid;
+
+  SpeciesNames := TStringList.Create;
+  try
+    SpeciesNames.Assign(rdgSpecialCases.Cols[Ord(sccSpecies)]);
+    SpeciesNames.Delete(0);
+    SpeciesNames.CaseSensitive := False;
+    for Index := 0 to RctPkg.SpecialCases.Count - 1 do
+    begin
+      SpecialCase := RctPkg.SpecialCases[Index];
+      RowIndex := SpeciesNames.IndexOf(SpecialCase.Species);
+      if RowIndex >=0 then
+      begin
+        Inc(RowIndex);
+        rdgSpecialCases.ItemIndex[Ord(sccTreatment), RowIndex] :=
+          Ord(SpecialCase.Treatment);
+        rdgSpecialCases.RealValue[Ord(sccMaxEFC), RowIndex] :=
+          SpecialCase.EFCMAX;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+
+    SpeciesNames.Assign(rdgAcceptors.Cols[Ord(eaSpecies)]);
+    SpeciesNames.Delete(0);
+    for Index := 0 to RctPkg.EAProperties.Count - 1 do
+    begin
+      EaProp := RctPkg.EAProperties[Index];
+      RowIndex := SpeciesNames.IndexOf(EaProp.Species);
+      if RowIndex >=0 then
+      begin
+        Inc(RowIndex);
+        rdgAcceptors.RealValue[Ord(eaHalfSat), RowIndex] :=
+          EaProp.HalfSaturation;
+        rdgAcceptors.RealValue[Ord(eaInhibition), RowIndex] :=
+          EaProp.InhibitionConstant;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+
+    SpeciesNames.Assign(rdgDecayRates.Cols[Ord(dycSpecies)]);
+    SpeciesNames.Delete(0);
+    for Index := 0 to RctPkg.DecayRates.Count - 1 do
+    begin
+      DecayItem := RctPkg.DecayRates[Index];
+      RowIndex := SpeciesNames.IndexOf(DecayItem.Species);
+      if RowIndex >=0 then
+      begin
+        Inc(RowIndex);
+        for ColIndex := 0 to DecayItem.Values.Count - 1 do
+        begin
+          rdgDecayRates.RealValue[Ord(dycValues)+ColIndex, RowIndex] :=
+            DecayItem.Values[ColIndex].Value;
+        end;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+
+    SpeciesNames.Assign(rdgYields.Cols[Ord(dycSpecies)]);
+    SpeciesNames.Delete(0);
+    for Index := 0 to RctPkg.Yields.Count - 1 do
+    begin
+      YieldItem := RctPkg.Yields[Index];
+      RowIndex := SpeciesNames.IndexOf(YieldItem.Species);
+      if RowIndex >=0 then
+      begin
+        Inc(RowIndex);
+        for ColIndex := 0 to YieldItem.Values.Count - 1 do
+        begin
+          rdgYields.RealValue[Ord(dycValues)+ColIndex, RowIndex] :=
+            YieldItem.Values[ColIndex].Value;
+        end;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+  finally
+    SpeciesNames.Free;
+  end;
+
 end;
 
 procedure TframeMt3dmsChemReactionPkg.rcSelectionControllerEnabledChange(
@@ -469,6 +661,14 @@ var
   RctPkg: TMt3dmsChemReaction;
   RowIndex: Integer;
   YieldCoefficients: TStringList;
+  SpecialCaseCount: Integer;
+  Index: Integer;
+  ItemIndex: Integer;
+  EAProps: TEAProperties;
+  DecayRate: TSpeciesAssociatedValue;
+  ColIndex: Integer;
+  Yield: TSpeciesAssociatedValue;
+  SpecialCase: TRctSpecialCase;
 begin
   inherited;
   RctPkg := Package as TMt3dmsChemReaction;
@@ -500,6 +700,74 @@ begin
   RctPkg.ElectronAcceptor := comboElectronAcceptor.ItemIndex;
   RctPkg.StochiometricRatio := rdeStochiometricRatio.RealValue;
 
+  RctPkg.ElectronDonorCount := seElectronDonors.AsInteger;
+  RctPkg.ElectronAcceptorCount := seElectronAcceptors.AsInteger;
+  RctPkg.SolidFE := TSolidFE(cbSolidFe.Checked);
+
+  SpecialCaseCount := 0;
+  for Index := 0 to clbSpecialCases.Items.Count - 1 do
+  begin
+    if clbSpecialCases.Checked[Index] then
+    begin
+      Inc(SpecialCaseCount);
+    end;
+  end;
+  RctPkg.SpecialCases.Count := SpecialCaseCount;
+  for RowIndex := 1 to SpecialCaseCount do
+  begin
+    SpecialCase := RctPkg.SpecialCases[RowIndex-1];
+    SpecialCase.Species := rdgSpecialCases.Cells[Ord(sccSpecies), RowIndex];
+    ItemIndex := rdgSpecialCases.ItemIndex[Ord(sccTreatment), RowIndex];
+    if ItemIndex < 0 then
+    begin
+      ItemIndex := 0;
+    end;
+    SpecialCase.Treatment := TSpecialTreatment(ItemIndex);
+    SpecialCase.EFCMAX :=
+      rdgSpecialCases.RealValueDefault[Ord(sccMaxEFC), RowIndex, 0];
+  end;
+
+  RctPkg.EAProperties.Count := RctPkg.ElectronAcceptorCount;
+  for RowIndex := 1 to RctPkg.ElectronAcceptorCount do
+  begin
+    EAProps := RctPkg.EAProperties[RowIndex-1];
+    EAProps.Species := rdgAcceptors.Cells[Ord(eaSpecies), RowIndex];
+    EAProps.HalfSaturation :=
+      rdgAcceptors.RealValueDefault[Ord(eaHalfSat), RowIndex, 0];
+    EAProps.InhibitionConstant :=
+      rdgAcceptors.RealValueDefault[Ord(eaInhibition), RowIndex, 0];
+  end;
+
+  RctPkg.DecayRates.Count := RctPkg.ElectronAcceptorCount;
+  for RowIndex := 1 to RctPkg.ElectronAcceptorCount do
+  begin
+    DecayRate := RctPkg.DecayRates[RowIndex-1];
+    DecayRate.Species := rdgDecayRates.Cells[Ord(dycSpecies), RowIndex];
+    DecayRate.Values.Count := RctPkg.ElectronDonorCount;
+    for ColIndex := 1 to RctPkg.ElectronDonorCount do
+    begin
+      DecayRate.Values[ColIndex-1].Value :=
+        rdgDecayRates.RealValueDefault[ColIndex, RowIndex, 0];
+    end;
+  end;
+
+  RctPkg.Yields.Count := RctPkg.ElectronAcceptorCount + RctPkg.ElectronDonorCount;
+  for RowIndex := 1 to RctPkg.Yields.Count do
+  begin
+    Yield := RctPkg.Yields[RowIndex-1];
+    Yield.Species := rdgDecayRates.Cells[Ord(dycSpecies), RowIndex];
+    Yield.Values.Count := RctPkg.ElectronDonorCount;
+    for ColIndex := 1 to RctPkg.ElectronDonorCount do
+    begin
+      Yield.Values[ColIndex-1].Value :=
+        rdgDecayRates.RealValueDefault[ColIndex, RowIndex, 0];
+    end;
+  end;
+{
+  TSpecialCaseColumns = (sccSpecies, sccTreatment, sccMaxEFC);
+  TElectronAcceptorColumns = (eaSpecies, eaHalfSat, eaInhibition);
+  TDecayYieldColumns = (dycSpecies, dycValues);
+}
 end;
 
 procedure TframeMt3dmsChemReactionPkg.EnableYieldCoefficients;
@@ -522,6 +790,13 @@ begin
   comboElectronDonor.Enabled := rcSelectionController.Enabled and (comboReactionChoice.ItemIndex = 1);
   comboElectronAcceptor.Enabled := comboElectronDonor.Enabled;
   rdeStochiometricRatio.Enabled := comboElectronDonor.Enabled;
+
+  tabKinetic.TabVisible := rcSelectionController.Enabled
+    and (comboReactionChoice.ItemIndex = 2);
+  tabSpecialCases.TabVisible := tabKinetic.TabVisible;
+  tabElectronAcceptors.TabVisible := tabKinetic.TabVisible;
+  tabDecayRates.TabVisible := tabKinetic.TabVisible;
+  tabYield.TabVisible := tabKinetic.TabVisible;
 end;
 
 procedure TframeMt3dmsChemReactionPkg.SetSpeciesNames(Names: TStringList);
@@ -597,7 +872,7 @@ begin
   end;
 
   FSpecialChanged := True;
-  UpdateSpecialCaseGrid
+  UpdateSpecialCaseGrid;
 end;
 
 end.

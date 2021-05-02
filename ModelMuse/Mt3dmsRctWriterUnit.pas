@@ -9,12 +9,11 @@ uses
 type
   TMt3dmsRctWriter = class(TCustomModflowWriter)
   private
-  const
-    IREACTION = 0;
-  var
     ISOTHM: Integer;
     IREACT: Integer;
     IGETSC: Integer;
+    IREACTION: Integer;
+    Frec_FileName: string;
     procedure WriteDataSet1;
     procedure WriteDataSet2A;
     procedure WriteDataSet2B;
@@ -26,6 +25,13 @@ type
     procedure WriteDataSet6;
     procedure WriteDataSet7;
     procedure WriteDataSet8;
+    procedure WriteDataSet9a;
+    procedure WriteDataSet9b;
+    procedure WriteRecDataSet1;
+    procedure WriteRecDataSet2;
+    procedure WriteRecDataSet3;
+    procedure WriteRecDataSet4;
+    procedure WriteRecDataSet5;
   protected
     class function Extension: string; override;
   public
@@ -97,6 +103,7 @@ begin
   end;
   IRCTOP := 2;
   IGETSC := Ord(ChemPkg.OtherInitialConcChoice);
+  IREACTION := Ord(ChemPkg.ReactionChoice);
   WriteI10Integer(ISOTHM, Format(StrSInTheMT3DMSRCT, ['ISOTHM']));
   WriteI10Integer(IREACT, Format(StrSInTheMT3DMSRCT, ['IREACT']));
   WriteI10Integer(IRCTOP, Format(StrSInTheMT3DMSRCT, ['IRCTOP']));
@@ -447,9 +454,33 @@ begin
       end;
       CurrentExpression.Evaluate;
       Value := CurrentExpression.DoubleResult;
-      WriteFloat(Value);
+      WriteF10Float(Value);
       NewLine;
     end;
+  end;
+end;
+
+procedure TMt3dmsRctWriter.WriteDataSet9a;
+var
+  ChemPkg: TMt3dmsChemReaction;
+begin
+  if IREACTION = 1 then
+  begin
+    ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
+    WriteI10Integer(ChemPkg.ElectronDonor + 1, 'IED in RCT');
+    WriteI10Integer(ChemPkg.ElectronAcceptor + 1, 'IEA in RCT');
+    WriteF10Float(ChemPkg.StochiometricRatio);
+    WriteString(' # IED, IEA, F');
+    NewLine;
+  end;
+end;
+
+procedure TMt3dmsRctWriter.WriteDataSet9b;
+begin
+  if IREACTION = 2 then
+  begin
+    Frec_FileName := ChangeFileExt(FInputFileName, '.Kinetic');
+    WriteString(ExtractFileName(Frec_FileName));
   end;
 end;
 
@@ -480,7 +511,7 @@ begin
 
   // PackageGeneratedExternally needs to be updated for MT3DMS
   FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  OpenFile(FInputFileName);
   try
     frmProgressMM.AddMessage(StrWritingMT3DMSRCTP);
 
@@ -574,8 +605,157 @@ begin
       Exit;
     end;
 
+    frmProgressMM.AddMessage('  Writing Data Set 9a');
+    WriteDataSet9a;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Set 9a');
+    WriteDataSet9b;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
   finally
     CloseFile;
+  end;
+
+  if IREACTION = 2 then
+  begin
+    FInputFileName := Frec_FileName;
+    OpenFile(FInputFileName);
+    try
+      frmProgressMM.AddMessage('  rec_File');
+//      WriteDataSet0;
+
+      WriteRecDataSet1;
+      WriteRecDataSet2;
+      WriteRecDataSet3;
+      WriteRecDataSet4;
+      WriteRecDataSet5;
+    finally
+      CloseFile;
+    end;
+  end;
+end;
+
+procedure TMt3dmsRctWriter.WriteRecDataSet1;
+var
+  ChemPkg: TMt3dmsChemReaction;
+begin
+  ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
+  WriteInteger(ChemPkg.ElectronDonorCount);
+  WriteInteger(ChemPkg.ElectronAcceptorCount);
+  WriteInteger(ChemPkg.SpecialCases.Count);
+  WriteInteger(Ord(ChemPkg.SolidFE));
+  WriteString(' # NED, NEA, NSPECIAL, IFESLD');
+  NewLine;
+end;
+
+procedure TMt3dmsRctWriter.WriteRecDataSet2;
+var
+  ChemPkg: TMt3dmsChemReaction;
+  Index: Integer;
+  SpecialCase: TRctSpecialCase;
+  ISPEC: Integer;
+begin
+  ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
+  for Index := 0 to ChemPkg.SpecialCases.Count - 1 do
+  begin
+    SpecialCase := ChemPkg.SpecialCases[Index];
+    ISPEC := Model.MobileComponents.IndexOfName(SpecialCase.Species);
+    if ISPEC >= 0 then
+    begin
+      Inc(ISPEC);
+    end
+    else
+    begin
+      ISPEC := Model.ImmobileComponents.IndexOfName(SpecialCase.Species);
+      if ISPEC >= 0 then
+      begin
+        ISPEC := ISPEC + Model.MobileComponents.Count + 1;
+      end;
+    end;
+    WriteInteger(ISPEC);
+    case SpecialCase.Treatment of
+      stSolid: WriteString(' SOLID');
+      stMaxEC: WriteString(' MAXEC');
+      stStore: WriteString(' STORE');
+      else Assert(False);
+    end;
+    WriteFloat(SpecialCase.EFCMAX);
+    WriteString(' # ISPEC, SPECIAL(ISPEC), EFCMAX for ');
+    WriteString(SpecialCase.Species);
+    NewLine;
+  end;
+end;
+
+procedure TMt3dmsRctWriter.WriteRecDataSet3;
+var
+  ChemPkg: TMt3dmsChemReaction;
+  Index: Integer;
+  EAProp: TEAProperties;
+begin
+  ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
+  for Index := 0 to ChemPkg.EAProperties.Count - 1 do
+  begin
+    EAProp := ChemPkg.EAProperties[Index];
+    WriteFloat(EAProp.HalfSaturation);
+    WriteFloat(EAProp.InhibitionConstant);
+    WriteString(' # HSC, IC for ');
+    WriteString(EAProp.Species);
+    NewLine;
+  end;
+end;
+
+procedure TMt3dmsRctWriter.WriteRecDataSet4;
+var
+  ChemPkg: TMt3dmsChemReaction;
+  Index: Integer;
+  Decay: TSpeciesAssociatedValue;
+  ValueIndex: Integer;
+  AValue: Double;
+begin
+  ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
+  for Index := 0 to ChemPkg.DecayRates.Count - 1 do
+  begin
+    Decay := ChemPkg.DecayRates[Index];
+    for ValueIndex := 0 to Decay.Values.Count - 1 do
+    begin
+      AValue := Decay.Values[ValueIndex].Value;
+      WriteFloat(AValue);
+    end;
+    WriteString(' # DECAYRATE(1:NED) for ');
+    WriteString(Decay.Species);
+    NewLine;
+  end;
+end;
+
+procedure TMt3dmsRctWriter.WriteRecDataSet5;
+var
+  ChemPkg: TMt3dmsChemReaction;
+  Index: Integer;
+  Yield: TSpeciesAssociatedValue;
+  ValueIndex: Integer;
+  AValue: Double;
+begin
+  ChemPkg := Model.ModflowPackages.Mt3dmsChemReact;
+  for Index := 0 to ChemPkg.Yields.Count - 1 do
+  begin
+    Yield := ChemPkg.Yields[Index];
+    for ValueIndex := 0 to Yield.Values.Count - 1 do
+    begin
+      AValue := Yield.Values[ValueIndex].Value;
+      WriteFloat(AValue);
+    end;
+    WriteString(' # YIELDC(1:NED) for ');
+    WriteString(Yield.Species);
+    NewLine;
   end;
 end;
 
