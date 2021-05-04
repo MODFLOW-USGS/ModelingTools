@@ -94,6 +94,8 @@ resourcestring
   StrErrorCallingTAscii = 'Error calling TAsciiRasterReader.ReadValues';
   StrErrorReadingDataV = 'Error reading data value for row = %0:d, column = ' +
   '%1:d. Value to be converted = %2:s.';
+  StrTheNumberOfRowsO = 'The number of rows or columns in %s is less than ze' +
+  'ro.';
 //  StrThereWasAnErrorW = 'There was an error when attempting to access the fi' +
 //  'le. Please check that the file is not locked by another process and that ' +
 //  'the file is an ASCII raster.';
@@ -519,6 +521,10 @@ begin
   try
     Reset(RasterFile);
     RasterHeader := ReadHeader(ShouldReadNoDataValue);
+    if (RasterHeader.NumberOfRows < 0) or (RasterHeader.NumberOfColumns < 0) then
+    begin
+      raise EAsciiRasterError.Create(Format(StrTheNumberOfRowsO, [FileName]));
+    end;
     SetLength(Values, RasterHeader.NumberOfRows * RasterHeader.NumberOfColumns);
     ReadValues(Values, RasterHeader, Progress);
   finally

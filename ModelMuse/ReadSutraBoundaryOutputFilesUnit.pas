@@ -110,7 +110,7 @@ type
 
   TLkstLists = TCustomBoundaryLists<TLkstItem>;
 
-procedure ReadFileHeader(const FileName: string; List: TStoredResultsList);
+function ReadFileHeader(const FileName: string; List: TStoredResultsList): Boolean;
 
 procedure ReadBcofFile(const FileName: string; DesiredItems: TStoredResultsList;
   List: TBcofLists);
@@ -130,9 +130,9 @@ procedure ReadLkstFile(const FileName: string; DesiredItems: TStoredResultsList;
 implementation
 
 uses
-  IOUtils, Classes, ModelMuseUtilities, SysUtils;
+  IOUtils, Classes, ModelMuseUtilities, SysUtils, Vcl.Dialogs;
 
-procedure ReadFileHeader(const FileName: string; List: TStoredResultsList);
+function ReadFileHeader(const FileName: string; List: TStoredResultsList): Boolean;
 const
   SearchText = '##    in this file      Time (sec)';
   SearchTextLength = Length(SearchText);
@@ -142,8 +142,16 @@ var
   Splitter: TStringList;
   HeaderItem: TStoredResults;
 begin
+  result := False;
   List.Clear;
-  FileReader := TFile.OpenText(FileName);
+  try
+    FileReader := TFile.OpenText(FileName);
+  except on E: EInOutError do
+    begin
+      Beep;
+      MessageDlg(E.message, mtError, [mbOK], 0);
+    end;
+  end;
   try
     while not FileReader.EndOfStream do
     begin
@@ -177,6 +185,7 @@ begin
   finally
     FileReader.Free;
   end;
+  result := True;
 end;
 
 procedure ReadBcofFile(const FileName: string; DesiredItems: TStoredResultsList; List: TBcofLists);

@@ -505,7 +505,11 @@ begin
           end;
 
           FResultList := TStoredResultsList.Create;
-          ReadFileHeader(dlgOpenSutraFile.FileName, FResultList);
+          if not ReadFileHeader(dlgOpenSutraFile.FileName, FResultList) then
+          begin
+            ModalResult := mrCancel;
+            Exit;
+          end;
           ShowAvailableTimeSteps;
         end;
       7:

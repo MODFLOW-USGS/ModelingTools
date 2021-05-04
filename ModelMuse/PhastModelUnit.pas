@@ -10254,8 +10254,7 @@ const
 //                data when importing existing MODFLOW models.
 //    '4.3.0.46' Bug fix: Not in released version. Fixed double export of drain
 //                elevation.
-
-//               Bug fix: Fixed a bug that could cause an access violation if
+//    '4.3.0.47' Bug fix: Fixed a bug that could cause an access violation if
 //                the name of a global variable that was used in a model feature
 //                was changed.
 //               Bug fix: Fixed bug moving the first vertex of a closed object
@@ -10276,10 +10275,11 @@ const
 //                model name as part of the file name is still created.
 //               Added support for features in RCT package in MT3D-USGS that
 //                are not in MT3DMS.
+//               Fixed check for connectivity in DISV grids in MODFLOW 6.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.46';
+  IIModelVersion = '4.3.0.47';
 
 function IModelVersion: string;
 begin

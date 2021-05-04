@@ -44,7 +44,7 @@ implementation
 uses ModflowUnitNumbers, frmProgressUnit, Forms, ModelMuseUtilities,
   frmGoPhastUnit, ModflowOptionsUnit, GoPhastTypes, ModflowPackageSelectionUnit,
   frmErrorsAndWarningsUnit, FastGEO, DataSetUnit, ModflowIrregularMeshUnit,
-  MeshRenumberingTypes, ModflowTimeUnit;
+  MeshRenumberingTypes, ModflowTimeUnit, System.Math;
 
 resourcestring
   StrWritingDiscretizati = 'Writing Discretization Package input.';
@@ -673,17 +673,13 @@ procedure TMf6DisvWriter.CheckConnectivity;
 var
   DataArray: TDataArray;
   ActiveCells: array of array of array of integer;
-//  MFLayer: Integer;
   Queue: TActiveCellQueue;
   FoundFirst: Boolean;
   ACell: TActiveCell;
   MfLayerCount: integer;
   LayerIndex: Integer;
-//  RowIndex: integer;
-//  ColIndex: integer;
   NewCell: TActiveCell;
   FirstCol: Integer;
-//  FirstRow: Integer;
   FirstLayer: Integer;
   CellCount: Integer;
   DisvGrid: TModflowDisvGrid;
@@ -692,6 +688,7 @@ var
   TwoDCell: TModflowIrregularCell2D;
   NeighborIndex: Integer;
   NeighborCell: TModflowIrregularCell2D;
+  LIndex: Integer;
 begin
   DisvGrid := Model.DisvGrid;
   DataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
@@ -708,19 +705,13 @@ begin
     begin
       for CellIndex := 0 to DisvGrid.TwoDGrid.ElementCount - 1 do
       begin
-        if DataArray.IntegerData[LayerIndex,0,CellIndex] = 0 then
-        begin
-          ActiveCells[LayerIndex,0,CellIndex] := 0;
-        end
-        else
-        begin
-          ActiveCells[LayerIndex,0,CellIndex] := 1;
-        end;
+        ActiveCells[LayerIndex,0,CellIndex] :=
+          Sign(DataArray.IntegerData[LayerIndex,0,CellIndex]);
         if not FoundFirst
-          and (ActiveCells[LayerIndex,0,CellIndex] <> 0) then
+          and (ActiveCells[LayerIndex,0,CellIndex] > 0) then
         begin
           ACell := TActiveCell.Create;
-          ACell.MFLayer := LayerIndex;
+//          ACell.MFLayer := LayerIndex;
           ACell.Layer := LayerIndex;
           ACell.Row := 0;
           ACell.Column := CellIndex;
@@ -734,7 +725,6 @@ begin
     repeat
       CellCount := 1;
       FirstCol := -1;
-//      FirstRow := -1;
       FirstLayer := -1;
       FoundFirst := False;
       While Queue.Count > 0 do
@@ -743,53 +733,67 @@ begin
         if not FoundFirst then
         begin
           FirstCol := ACell.Column;
-//          FirstRow := ACell.Row;
           FirstLayer := ACell.Layer;
           FoundFirst := True;
         end;
-        if ACell.MFLayer > 0 then
+        if ACell.Layer > 0 then
         begin
-          if (ActiveCells[ACell.MFLayer-1,ACell.Row,ACell.Column] = 1) then
+          for LIndex := ACell.Layer -1 downto 0 do
           begin
-            NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer-1;
-            NewCell.Layer := NewCell.MFLayer+1;
-            NewCell.Row := ACell.Row;
-            NewCell.Column := ACell.Column;
-            Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
-            Inc(CellCount);
+            if (ActiveCells[LIndex,ACell.Row,ACell.Column] in [0,2]) then
+            begin
+              break
+            end;
+            if (ActiveCells[LIndex,ACell.Row,ACell.Column] = 1) then
+            begin
+              NewCell := TActiveCell.Create;
+  //            NewCell.MFLayer := ACell.MFLayer-1;
+              NewCell.Layer := LIndex;
+              NewCell.Row := ACell.Row;
+              NewCell.Column := ACell.Column;
+              Queue.Enqueue(NewCell);
+              ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
+              Inc(CellCount);
+              break;
+            end;
           end;
         end;
-        if ACell.MFLayer < MfLayerCount-1 then
+        if ACell.Layer < MfLayerCount-1 then
         begin
-          if (ActiveCells[ACell.MFLayer+1,ACell.Row,ACell.Column] = 1) then
+          for LIndex := ACell.Layer+1 to MfLayerCount - 1 do
           begin
-            NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer+1;
-            NewCell.Layer := NewCell.MFLayer+1;
-            NewCell.Row := ACell.Row;
-            NewCell.Column := ACell.Column;
-            Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
-            Inc(CellCount);
+            if (ActiveCells[LIndex,ACell.Row,ACell.Column] in [0,2]) then
+            begin
+              break;
+            end;
+            if (ActiveCells[LIndex,ACell.Row,ACell.Column] = 1) then
+            begin
+              NewCell := TActiveCell.Create;
+              NewCell.Layer := LIndex;
+              NewCell.Row := ACell.Row;
+              NewCell.Column := ACell.Column;
+              Queue.Enqueue(NewCell);
+              ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
+              Inc(CellCount);
+              break;
+            end;
           end;
         end;
 
         TwoDCell := DisvGrid.TwoDGrid.Cells[ACell.Column];
-        TwoDCell.GetNeighbors(CellList);
+        TwoDCell.GetSharedEdgeNeighbors(CellList);
         for NeighborIndex := 0 to CellList.Count - 1 do
         begin
           NeighborCell := CellList[NeighborIndex];
-          if (ActiveCells[ACell.MFLayer,0,NeighborCell.ElementNumber] = 1) then
+          if (ActiveCells[ACell.Layer,0,NeighborCell.ElementNumber] = 1) then
           begin
             NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer;
             NewCell.Layer := ACell.Layer;
+//            NewCell.Layer := ACell.Layer;
             NewCell.Row := 0;
             NewCell.Column := NeighborCell.ElementNumber;
             Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
+            ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
             Inc(CellCount);
           end;
         end;
@@ -810,8 +814,8 @@ begin
                 [FirstLayer+1, FirstCol+1, CellCount,
                 LayerIndex+1, CellIndex+1]));
               ACell := TActiveCell.Create;
-              ACell.MFLayer := LayerIndex;
               ACell.Layer := LayerIndex;
+//              ACell.Layer := LayerIndex;
               ACell.Row := 0;
               ACell.Column := CellIndex;
               Queue.Enqueue(ACell);

@@ -92,10 +92,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     object tabOptions: TTabSheet
       Caption = 'Options 1'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         763
         522)
@@ -389,10 +385,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     object tabOptions2: TTabSheet
       Caption = 'Options 2'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblConvert: TLabel
         Left = 8
         Top = 159
@@ -508,10 +500,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     object tabCsv: TTabSheet
       Caption = 'CSV (Optional)'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameCSV: TframeGrid
         Left = 0
         Top = 0
@@ -599,10 +587,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     end
     object tabData: TTabSheet
       Caption = 'Data'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlData: TPanel
         Left = 0
         Top = 477
@@ -813,10 +797,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       Caption = 'Features'
       ImageIndex = 2
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlBoundaryCondition: TPanel
         Left = 0
         Top = 0
@@ -1443,10 +1423,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               TabOrder = 0
               object tabSfrBasic: TTabSheet
                 Caption = 'Basic'
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblSfrSegmentNumber: TLabel
                   Left = 13
                   Top = 9
@@ -1536,10 +1512,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabSfrUnsaturated: TTabSheet
                 Caption = 'Unsaturated'
                 ImageIndex = 1
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblSaturatedVolumetricWater: TLabel
                   Left = 3
                   Top = 6
@@ -1723,17 +1695,11 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabDrtNone: TTabSheet
                 Caption = 'tabDrtNone'
                 TabVisible = False
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
               end
               object tabDrtLocation: TTabSheet
                 Caption = 'tabDrtLocation'
                 ImageIndex = 2
                 TabVisible = False
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblDrtX: TLabel
                   Left = 3
                   Top = 7
@@ -1805,9 +1771,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 Caption = 'tabDrtCell'
                 ImageIndex = 3
                 TabVisible = False
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblDrtCol: TLabel
                   Left = 3
                   Top = 7
@@ -2034,10 +1997,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 HelpType = htKeyword
                 HelpKeyword = 'MNW2_Basic_Tab'
                 Caption = 'Basic'
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblWellId: TLabel
                   Left = 3
                   Top = 6
@@ -2206,10 +2165,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 HelpKeyword = 'MNW2_Loss_Controls_Tab'
                 Caption = 'Loss Controls'
                 ImageIndex = 1
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblWellRadius: TLabel
                   Left = 3
                   Top = 6
@@ -2314,10 +2269,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
                 HelpKeyword = 'MNW2_Discharge_Adjustment_Tab'
                 Caption = 'Discharge Adjustment'
                 ImageIndex = 2
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblReferenceHead: TLabel
                   Left = 8
                   Top = 6
@@ -2613,10 +2564,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               TabOrder = 0
               object tabSfrMf6Properties: TTabSheet
                 Caption = 'Properties'
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblSegNum: TLabel
                   Left = 3
                   Top = 16
@@ -2725,10 +2672,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabSfrMf6DownstreamSegments: TTabSheet
                 Caption = 'Downstream segments'
                 ImageIndex = 1
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 inline frameDownstreamSegmentsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
@@ -2817,10 +2760,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabDiversions: TTabSheet
                 Caption = 'Diversions'
                 ImageIndex = 2
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 inline frameDiversionsSfrMf6: TframeGrid
                   Left = 0
                   Top = 0
@@ -2956,10 +2895,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               TabOrder = 0
               object tabMawBasic: TTabSheet
                 Caption = 'Basic'
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object lblMawRadius: TLabel
                   Left = 15
                   Top = 14
@@ -3026,10 +2961,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               object tabMawWellScreens: TTabSheet
                 Caption = 'Well screens'
                 ImageIndex = 1
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 inline frameMawWellScreens: TframeGrid
                   Left = 0
                   Top = 0
@@ -3431,10 +3362,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     object tabCoordinateConversion: TTabSheet
       Caption = 'Coordinate Conversion'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object imageUtmZones: TImage
         Left = 8
         Top = 96

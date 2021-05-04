@@ -13683,6 +13683,12 @@ end;
 
 procedure TfrmGoPhast.miImportShapefileClick(Sender: TObject);
 begin
+  if ModelSelection = msUndefined then
+  begin
+    Beep;
+    MessageDlg('Error. No model type is selected.', mtError, [mbOK], 0);
+    Exit;
+  end;
   with TfrmImportShapefile.Create(nil) do
   begin
     try
