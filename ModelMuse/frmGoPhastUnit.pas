@@ -3191,7 +3191,23 @@ begin
   end;
   try
     IniFile.UpdateFile;
-  except on EFileStreamError do
+  except
+    on EFileStreamError do
+    begin
+      if TFile.Exists(BackUpFileName)
+        and TFile.Exists(IniFile.FileName) then
+      begin
+        try
+          TFile.Delete(IniFile.FileName);
+          TFile.Move(BackUpFileName, IniFile.FileName);
+        except on EInOutError do
+          begin
+            Exit;
+          end;
+        end;
+      end;
+    end;
+    on EWriteError do
     begin
       if TFile.Exists(BackUpFileName)
         and TFile.Exists(IniFile.FileName) then

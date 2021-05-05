@@ -259,6 +259,7 @@ type
       AModel: TBaseModel; Writer: TObject); override;
     procedure Loaded;
     procedure UpdateObservers;
+    function Used: boolean; override;
   published
     property SourcePackageChoice: TSourcePackageChoice read FSourcePackageChoice
       write SetSourcePackageChoice;
@@ -685,6 +686,11 @@ begin
   (Values as TMvrItems).UpdateObservers;
 end;
 
+function TMvrBoundary.Used: boolean;
+begin
+  result := inherited and (Receivers.Count > 0);
+end;
+
 { TMvrItems }
 
 function TIndividualMvrItems.Add: TIndividualMvrItem;
@@ -809,6 +815,10 @@ begin
     for CellIndex := 0 to MvrStorage.Count - 1 do
     begin
       AMvrRecord := MvrStorage.MvrRecordArray[CellIndex];
+      if Length(AMvrRecord.MvrTypes) < MvrItem.Items.Count then
+      begin
+        SetLength(AMvrRecord.MvrTypes, MvrItem.Items.Count);
+      end;
       AMvrRecord.MvrTypes[IndIndex]
         := IndItem.MvrType;
       MvrStorage.MvrRecordArray[CellIndex] := AMvrRecord;

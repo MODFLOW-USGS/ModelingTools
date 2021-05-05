@@ -98,6 +98,7 @@ var
   FirstRow: Integer;
   FirstLayer: Integer;
   CellCount: Integer;
+  LIndex: Integer;
 begin
   if Model.ModelSelection <> msModflow2015 then
   begin
@@ -110,26 +111,23 @@ begin
   Queue := TActiveCellQueue.Create(True);
   try
     FoundFirst := False;
-//    MFLayer := -1;
     for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
     begin
-//      if Model.IsLayerSimulated(LayerIndex) then
       begin
-//        Inc(MFLayer);
         for RowIndex := 0 to DataArray.RowCount - 1 do
         begin
           for ColIndex := 0 to DataArray.ColumnCount - 1 do
           begin
-            if DataArray.IntegerData[LayerIndex,RowIndex,ColIndex] = 0 then
-            begin
-              ActiveCells[LayerIndex,RowIndex,ColIndex] := 0;
-            end
-            else
-            begin
-              ActiveCells[LayerIndex,RowIndex,ColIndex] := 1;
-            end;
+//            if DataArray.IntegerData[LayerIndex,RowIndex,ColIndex] = 0 then
+//            begin
+              ActiveCells[LayerIndex,RowIndex,ColIndex] := Sign(DataArray.IntegerData[LayerIndex,RowIndex,ColIndex]);
+//            end
+//            else
+//            begin
+//              ActiveCells[LayerIndex,RowIndex,ColIndex] := 1;
+//            end;
             if not FoundFirst
-              and (ActiveCells[LayerIndex,RowIndex,ColIndex] <> 0) then
+              and (ActiveCells[LayerIndex,RowIndex,ColIndex] = 1) then
             begin
               ACell := TActiveCell.Create;
               ACell.MFLayer := LayerIndex;
@@ -160,87 +158,103 @@ begin
           FirstLayer := ACell.Layer;
           FoundFirst := True;
         end;
-        if ACell.MFLayer > 0 then
+        if ACell.Layer > 0 then
         begin
-          if (ActiveCells[ACell.MFLayer-1,ACell.Row,ACell.Column] = 1) then
+          for LIndex := ACell.Layer-1 downto 0 do
           begin
-            NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer-1;
-            NewCell.Layer := {Model.ModflowLayerToDataSetLayer(}NewCell.MFLayer+1;
-            NewCell.Row := ACell.Row;
-            NewCell.Column := ACell.Column;
-            Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
-            Inc(CellCount);
+            if (ActiveCells[LIndex,ACell.Row,ACell.Column] = 1) then
+            begin
+              NewCell := TActiveCell.Create;
+              NewCell.Layer := LIndex;
+//              NewCell.Layer := {Model.ModflowLayerToDataSetLayer(}NewCell.Layer+1;
+              NewCell.Row := ACell.Row;
+              NewCell.Column := ACell.Column;
+              Queue.Enqueue(NewCell);
+              ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
+              Inc(CellCount);
+              break;
+            end
+            else if (ActiveCells[LIndex,ACell.Row,ACell.Column] = 0) then
+            begin
+              break;
+            end;
           end;
         end;
-        if ACell.MFLayer < MfLayerCount-1 then
+        if ACell.Layer < MfLayerCount-1 then
         begin
-          if (ActiveCells[ACell.MFLayer+1,ACell.Row,ACell.Column] = 1) then
+          for LIndex := ACell.Layer+1 to MfLayerCount - 1 do
           begin
-            NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer+1;
-            NewCell.Layer := {Model.ModflowLayerToDataSetLayer(}NewCell.MFLayer+1;
-            NewCell.Row := ACell.Row;
-            NewCell.Column := ACell.Column;
-            Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
-            Inc(CellCount);
+            if (ActiveCells[LIndex,ACell.Row,ACell.Column] = 1) then
+            begin
+              NewCell := TActiveCell.Create;
+              NewCell.Layer := LIndex;
+//              NewCell.Layer := {Model.ModflowLayerToDataSetLayer(}NewCell.Layer+1;
+              NewCell.Row := ACell.Row;
+              NewCell.Column := ACell.Column;
+              Queue.Enqueue(NewCell);
+              ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
+              Inc(CellCount);
+              break;
+            end
+            else if (ActiveCells[LIndex,ACell.Row,ACell.Column] = 0) then
+            begin
+              break;
+            end;
           end;
         end;
         if ACell.Row > 0 then
         begin
-          if (ActiveCells[ACell.MFLayer,ACell.Row-1,ACell.Column] = 1) then
+          if (ActiveCells[ACell.Layer,ACell.Row-1,ACell.Column] = 1) then
           begin
             NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer;
             NewCell.Layer := ACell.Layer;
+//            NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row-1;
             NewCell.Column := ACell.Column;
             Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
+            ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
             Inc(CellCount);
           end;
         end;
         if ACell.Row < DataArray.RowCount-1 then
         begin
-          if (ActiveCells[ACell.MFLayer,ACell.Row+1,ACell.Column] = 1) then
+          if (ActiveCells[ACell.Layer,ACell.Row+1,ACell.Column] = 1) then
           begin
             NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer;
+//            NewCell.Layer := ACell.Layer;
             NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row+1;
             NewCell.Column := ACell.Column;
             Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
+            ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
             Inc(CellCount);
           end;
         end;
         if ACell.Column > 0 then
         begin
-          if (ActiveCells[ACell.MFLayer,ACell.Row,ACell.Column-1] = 1) then
+          if (ActiveCells[ACell.Layer,ACell.Row,ACell.Column-1] = 1) then
           begin
             NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer;
+//            NewCell.Layer := ACell.Layer;
             NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row;
             NewCell.Column := ACell.Column-1;
             Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
+            ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
             Inc(CellCount);
           end;
         end;
         if ACell.Column < DataArray.ColumnCount-1 then
         begin
-          if (ActiveCells[ACell.MFLayer,ACell.Row,ACell.Column+1] = 1) then
+          if (ActiveCells[ACell.Layer,ACell.Row,ACell.Column+1] = 1) then
           begin
             NewCell := TActiveCell.Create;
-            NewCell.MFLayer := ACell.MFLayer;
+//            NewCell.Layer := ACell.Layer;
             NewCell.Layer := ACell.Layer;
             NewCell.Row := ACell.Row;
             NewCell.Column := ACell.Column+1;
             Queue.Enqueue(NewCell);
-            ActiveCells[NewCell.MFLayer,NewCell.Row,NewCell.Column] := 2;
+            ActiveCells[NewCell.Layer,NewCell.Row,NewCell.Column] := 2;
             Inc(CellCount);
           end;
         end;
@@ -249,12 +263,12 @@ begin
       if FoundFirst then
       begin
 //        FoundFirst := False;
-//        MFLayer := -1;
+//        Layer := -1;
         for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
         begin
 //          if Model.IsLayerSimulated(LayerIndex) then
           begin
-//            Inc(MFLayer);
+//            Inc(Layer);
             for RowIndex := 0 to DataArray.RowCount - 1 do
             begin
               for ColIndex := 0 to DataArray.ColumnCount - 1 do
@@ -266,7 +280,7 @@ begin
                     [FirstLayer+1, FirstRow+1, FirstCol+1, CellCount,
                     LayerIndex+1, RowIndex+1, ColIndex+1]));
                   ACell := TActiveCell.Create;
-                  ACell.MFLayer := LayerIndex;
+                  ACell.Layer := LayerIndex;
                   ACell.Layer := LayerIndex;
                   ACell.Row := RowIndex;
                   ACell.Column := ColIndex;

@@ -8,8 +8,8 @@ inherited frmSelectObjects: TfrmSelectObjects
   ClientHeight = 375
   ClientWidth = 345
   ExplicitWidth = 361
-  ExplicitHeight = 413
-  PixelsPerInch = 120
+  ExplicitHeight = 414
+  PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -116,15 +116,11 @@ inherited frmSelectObjects: TfrmSelectObjects
     Top = 0
     Width = 345
     Height = 192
-    ActivePage = tabTop
+    ActivePage = tabSide
     Align = alClient
     TabOrder = 0
     object tabTop: TTabSheet
       Caption = 'Top'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lvTop: TListView
         Left = 0
         Top = 0
@@ -146,10 +142,6 @@ inherited frmSelectObjects: TfrmSelectObjects
     object tabFront: TTabSheet
       Caption = 'Front'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lvFront: TListView
         Left = 0
         Top = 0
@@ -171,10 +163,6 @@ inherited frmSelectObjects: TfrmSelectObjects
     object tabSide: TTabSheet
       Caption = 'Side'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lvSide: TListView
         Left = 0
         Top = 0

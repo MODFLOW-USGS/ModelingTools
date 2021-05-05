@@ -263,6 +263,10 @@ begin
         else
           Assert(False);
       end;
+    end
+    else
+    begin
+      frameReceivers.Grid.Canvas.Brush.Color := clRed;
     end;
   end;
 end;
@@ -533,6 +537,7 @@ begin
   finally
     Changing := False;
   end;
+  frameReceivers.Grid.HideEditor;
 end;
 
 function TframeScreenObjectMvr.GetLakObjects: TStringList;

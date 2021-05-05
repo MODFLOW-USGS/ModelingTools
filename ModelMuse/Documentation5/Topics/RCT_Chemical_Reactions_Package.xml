@@ -18,7 +18,8 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">=3, Langmuir isotherm (equilibrium-controlled);</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">=4, First-order kinetic sorption (nonequilibrium);</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">=5, Dual-domain mass transfer (without sorption);</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">=6, Dual-domain mass transfer (with sorption).</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=6, Dual-domain mass transfer (with sorption);</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=-6 Dual-domain mass transfer (with different sorption coefficients in mobile and immobile domains)</text><text styleclass="Normal" style="font-weight:bold;" translate="true">. (only available in MT3D-USGS)</text></para>
         </td>
       </tr>
     </table></para>
@@ -29,6 +30,8 @@
           <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT indicates which type of kinetic rate reaction is simulated:</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT = 0, no kinetic rate reaction is simulated;</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT = 1, first-order irreversible reaction. Note that this reaction package is not intended for modeling chemical reactions between species. An add-on reaction package developed specifically for that purpose may be used.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT = 2, MONOD kinetic reaction is simulated;</text><text styleclass="Normal" style="font-weight:bold;" translate="true"> (only available in MT3D-USGS)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT = 3, first-order chain reaction is simulated.</text><text styleclass="Normal" style="font-weight:bold;" translate="true"> (only available in MT3D-USGS)</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACT =100, zeroth-order reaction (decay or production).</text></para>
         </td>
       </tr>
@@ -37,12 +40,75 @@
     <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">IGETSC indicates whether the initial concentration for the nonequilibrium sorbed or immobile phase of all species should be read when nonequilibrium sorption (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 4) or dual-domain mass transfer (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 5 or 6) is simulated:</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IGETSC indicates whether the initial concentration for the nonequilibrium sorbed or immobile phase of all species should be read when nonequilibrium sorption (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 4) or dual-domain mass transfer (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 5, 6 or -6) is simulated:</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">If the checkbox is not checked, the initial concentration for the sorbed or immobile phase is not read. By default, the sorbed phase is assumed to be in equilibrium with the dissolved phase (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 4), and the immobile domain is assumed to have zero concentration (</text><link displaytype="text" defaultstyle="true" type="topiclink" href="RCT_Chemical_Reactions_Package" anchor="ISOTHM" styleclass="Normal" translate="true">ISOTHM</link><text styleclass="Normal" translate="true"> = 5 or 6).</text></para>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">If the checkbox is checked, the initial concentration for the sorbed phase or immobile liquid phase of all species will be read.</text></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal"></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal" style="font-weight:bold;"><caption translate="true"><![CDATA[IREACTION]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">IREACTION is used to select a reaction module. At least 2 species must be simulated when this option is used. (EA = Electron Acceptor; ED = Electron Donor) </text><text styleclass="Normal" style="font-weight:bold;" translate="true"> (only available in MT3D-USGS)</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If IREACTION=0, no reaction is simulated.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If IREACTION=1, instantaneous EA/ED reaction is simulated between an ED and an EA.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If IREACTION=2, kinetic reaction is simulated between multiple EAs and EDs.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Strong" translate="true">IED</text><text styleclass="Normal" translate="true"> is the electron donor participating in the EA/ED reaction.</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Strong" translate="true">IEA</text><text styleclass="Normal" translate="true"> is the electron acceptor participating in the EA/ED reaction.</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Strong" translate="true">F</text><text styleclass="Normal" translate="true"> is the stoiciometric ratio in the simulated equation ED + F*EA -&gt; Product</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><text styleclass="Normal" translate="true">If IREACTION = 2, additional tabs will appear.</text></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Kinetic]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Kinetic</text><text styleclass="Normal" translate="true"> tab is used to specify the electron donors, acceptors, special cases, and whether to simulate solid phase Fe. When listing the species in the MT3D Basic package, the electron donors must be listed first followed by the electron acceptors. When you specify the number of electron donors and acceptors, the species will be listed below the edit boxes for the counts.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Special Cases]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">For each special case identified on the Kinetic tab, the modeler must specify the treatment and the maximum express field capacity.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Treatment (</text><text styleclass="Strong" translate="true">SPECIAL</text><text styleclass="Normal" translate="true">) Three possible treatments are as follows:</text></para>
+          <list id="15" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+            <li styleclass="Normal"><text styleclass="Strong" translate="true">SOLID</text><text styleclass="Normal" translate="true"> – The solid phase concentration is used; it is for the iron reduction process. For this case, Fe3+ solid phase will be tracked.</text></li>
+            <li styleclass="Normal"><text styleclass="Strong" translate="true">MAXEC</text><text styleclass="Normal" translate="true"> – The method of Lu et al. (1999) to deal with the iron reduction and methanogenesis simulation is used.</text></li>
+            <li styleclass="Normal"><text styleclass="Strong" translate="true">STORE</text><text styleclass="Normal" translate="true"> – This keyword is for the methanogenesis simulation only. If the methane concentration is over the maximum express field capacity (EFC), the additional mass of methane will be stored, and the result will be output as an unformatted file with a name of “MT3D_Ad_methane.UCN”. This option uses the formula developed by Neville and Vlassopoulos (2008).</text></li>
+          </list>
+          <para styleclass="Normal"><text styleclass="Strong" translate="true">EFCMAX</text><text styleclass="Normal" translate="true"> is the maximum express field capacity (EFC). If keyword SOLID is used, then this variable is read but not used.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Normal"><caption translate="true"><![CDATA[Elec. Accept.]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">The Elec. Accept tab is where the modeler specifies properties for the electron acceptors.</text></para>
+          <para styleclass="Normal"><text styleclass="Strong" translate="true">HSC</text><text styleclass="Normal" translate="true"> is the half saturation constant.</text></para>
+          <para styleclass="Normal"><text styleclass="Strong" translate="true">IC</text><text styleclass="Normal" translate="true"> is the inhibition constants.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Decay Rates]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">DECAYRATE is the decay rate of each electron acceptor corresponding to each electron donor.</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Strong"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[Yields]]></caption></toggle></para>
+    <para styleclass="Strong" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">YIELDC is the yield coefficient of each component corresponding to each electron donor</text></para>
+        </td>
+      </tr>
+    </table></para>
   </body>
 </topic>

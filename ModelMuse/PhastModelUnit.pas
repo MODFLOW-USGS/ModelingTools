@@ -10277,6 +10277,10 @@ const
 //                are not in MT3DMS.
 //               Fixed check for connectivity in DISV grids in MODFLOW 6.
 
+//               Bug fix: Fixed bug with exporting MVR package.
+//               Bug fix: Fixed bug in importing Shapefiles if unnamed CSV
+//                attributes are included.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.47';

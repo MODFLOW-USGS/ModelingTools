@@ -201,10 +201,6 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
     object tabOptions: TTabSheet
       Caption = 'Options'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         468
         470)
@@ -282,6 +278,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -305,6 +302,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -330,6 +328,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -360,10 +359,6 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
       Caption = 'Legend'
       ImageIndex = 2
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object imLegend: TImage
         Left = 206
         Top = 0
@@ -463,6 +458,7 @@ object frameModpathEndpointDisplay: TframeModpathEndpointDisplay
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

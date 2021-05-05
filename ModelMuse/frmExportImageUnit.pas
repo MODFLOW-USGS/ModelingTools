@@ -251,6 +251,7 @@ resourcestring
   StrDefaultSettingPrefix = 'Setting_';
   StrTheSideViewCanNo = 'The side view can not be visualized in this model t' +
   'ype.';
+  StrUnableToSaveFile = 'Unable to save file. The error message was "%s".';
 
 const
   StrSP = '%SP';
@@ -769,7 +770,7 @@ begin
   if spdSaveImage.Execute then
   begin
     try
-    SaveImage(spdSaveImage.FilterIndex, spdSaveImage.FileName);
+      SaveImage(spdSaveImage.FilterIndex, spdSaveImage.FileName);
     except
       on E: EFCreateError do
       begin
@@ -1880,7 +1881,14 @@ begin
           finally
             MetaFileCanvas.Free;
           end;
-          MetaFile.SaveToFile(FileName);
+          try
+            MetaFile.SaveToFile(FileName);
+          except on E: EWriteError do
+            begin
+              Beep;
+              MessageDlg(Format(StrUnableToSaveFile, [E.message]), mtError, [mbOK], 0);
+            end;
+          end;
         finally
           MetaFile.Free;
         end;
@@ -1890,7 +1898,14 @@ begin
         ABitMap := TBitMap.Create;
         try
           ABitMap.Assign(imagePreview.Picture);
-          ABitMap.SaveToFile(FileName);
+          try
+            ABitMap.SaveToFile(FileName);
+          except on E: EWriteError do
+            begin
+              Beep;
+              MessageDlg(Format(StrUnableToSaveFile, [E.message]), mtError, [mbOK], 0);
+            end;
+          end;
         finally
           ABitMap.Free;
         end;
@@ -1900,7 +1915,14 @@ begin
         Png := TPngImage.Create;
         try
           Png.Assign(imagePreview.Picture.Graphic);
-          Png.SaveToFile(FileName);
+          try
+            Png.SaveToFile(FileName);
+          except on E: EWriteError do
+            begin
+              Beep;
+              MessageDlg(Format(StrUnableToSaveFile, [E.message]), mtError, [mbOK], 0);
+            end;
+          end;
         finally
           Png.Free;
         end;
@@ -1910,7 +1932,14 @@ begin
         Jpeg := TJPEGImage.Create;
         try
           Jpeg.Assign(imagePreview.Picture.Graphic);
-          Jpeg.SaveToFile(FileName);
+          try
+            Jpeg.SaveToFile(FileName);
+          except on E: EWriteError do
+            begin
+              Beep;
+              MessageDlg(Format(StrUnableToSaveFile, [E.message]), mtError, [mbOK], 0);
+            end;
+          end;
         finally
           Jpeg.Free;
         end;
@@ -1971,7 +2000,14 @@ begin
           finally
             MetaFileCanvas.Free;
           end;
-          MetaFile.SaveToFile(FileName);
+          try
+            MetaFile.SaveToFile(FileName);
+          except on E: EWriteError do
+            begin
+              Beep;
+              MessageDlg(Format(StrUnableToSaveFile, [E.message]), mtError, [mbOK], 0);
+            end;
+          end;
         finally
           MetaFile.Free;
         end;

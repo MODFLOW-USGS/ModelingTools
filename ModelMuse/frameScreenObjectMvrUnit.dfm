@@ -139,7 +139,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
       ExplicitHeight = 83
       ColWidths = (
         64

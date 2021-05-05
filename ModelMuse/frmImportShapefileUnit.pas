@@ -1100,6 +1100,8 @@ resourcestring
   '6 observation in row %d';
   StrNoObservationWeigh = 'No observation weight is specified in the MODFLOW' +
   ' 6 observation in row %d';
+  StrTheCsvAttributeNumber = 'The csv attribute number %d does not have a na' +
+  'me. It will be skipped.';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -11739,7 +11741,18 @@ begin
         mtWarning, [mbOK], 0);
       Continue;
     end;
-    Parser.CreateVariable(VariableName, StrAttributes, 0.0, TValueReal, VariableName);
+    if VariableName = '' then
+    begin
+      Beep;
+      MessageDlg(Format(StrTheCsvAttributeNumber, [AttrIndex + 1]),
+        mtWarning, [mbOK], 0);
+      Continue;
+    end
+    else
+    begin
+      Parser.CreateVariable(VariableName, StrAttributes, 0.0, TValueReal,
+        VariableName);
+    end;
   end;
 
   FMinXVar := Parser.CreateVariable(StrShapeMinX, StrAttributes, 0.0, TValueReal, StrShapeMinX);

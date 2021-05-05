@@ -15,7 +15,7 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
     Top = 162
     Width = 548
     Height = 289
-    ActivePage = tabElectronAcceptors
+    ActivePage = tabMain
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
@@ -27,16 +27,16 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
       object lblElectronAcceptor: TLabel
         Left = 154
         Top = 144
-        Width = 84
+        Width = 112
         Height = 13
-        Caption = 'Electron acceptor'
+        Caption = 'Electron acceptor (IEA)'
       end
       object lblElectronDonor: TLabel
         Left = 3
         Top = 144
-        Width = 70
+        Width = 98
         Height = 13
-        Caption = 'Electron donor'
+        Caption = 'Electron donor (IED)'
       end
       object lblKineticChoice: TLabel
         Left = 397
@@ -62,9 +62,9 @@ inherited frameMt3dmsChemReactionPkg: TframeMt3dmsChemReactionPkg
       object lblStochiometricRatio: TLabel
         Left = 305
         Top = 144
-        Width = 89
+        Width = 106
         Height = 13
-        Caption = 'Stochiometric ratio'
+        Caption = 'Stochiometric ratio (F)'
       end
       object rdgYieldCoefficient: TRbwDataGrid4
         Left = 3
