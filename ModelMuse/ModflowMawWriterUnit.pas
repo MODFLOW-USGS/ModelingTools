@@ -65,7 +65,8 @@ uses
   frmErrorsAndWarningsUnit, ModflowCellUnit, RbwParser, frmFormulaErrorsUnit,
   DataSetUnit, GIS_Functions, AbstractGridUnit, System.Math, ModflowUnitNumbers,
   MeshRenumberingTypes, Vcl.Dialogs, Modflow6ObsWriterUnit,
-  ModflowMvrUnit, ModflowMvrWriterUnit;
+  ModflowMvrUnit, ModflowMvrWriterUnit, ModflowParameterUnit,
+  ModelMuseUtilities;
 
 resourcestring
   StrTheFollowingObject = 'The following objects can not be used to define m' +
@@ -720,7 +721,8 @@ var
   ObjectIndex: Integer;
   ASCreenObject: TScreenObject;
 begin
-  SetLength(ExistingConnections, Model.LayerCount, Model.RowCount, Model.ColumnCount);
+  SetLength(ExistingConnections, Model.LayerCount, Model.RowCount,
+    Model.ColumnCount);
 
   WriteBeginConnectionData;
   WriteString('# <wellno> <icon> <cellid(ncelldim)> <scrn_top> <scrn_bot> <hk_skin> <radius_skin>');
@@ -759,10 +761,24 @@ begin
       WriteInteger(AWellConnection.Cell.Row+1);
     end;
     WriteInteger(AWellConnection.Cell.Column+1);
-    WriteFloat(AWellConnection.ScreenTop);
-    WriteFloat(AWellConnection.ScreenBottom);
-    WriteFloat(AWellConnection.SkinK);
-    WriteFloat(AWellConnection.SkinRadius);
+
+    WriteFormulaOrValueBasedOnAPestName(AWellConnection.ScreenTopPestName,
+      AWellConnection.ScreenTop, AWellConnection.Cell.Layer,
+      AWellConnection.Cell.Row, AWellConnection.Cell.Column);
+    WriteFormulaOrValueBasedOnAPestName(AWellConnection.ScreenBottomPestName,
+      AWellConnection.ScreenBottom, AWellConnection.Cell.Layer,
+      AWellConnection.Cell.Row, AWellConnection.Cell.Column);
+    WriteFormulaOrValueBasedOnAPestName(AWellConnection.SkinKPestName,
+      AWellConnection.SkinK, AWellConnection.Cell.Layer,
+      AWellConnection.Cell.Row, AWellConnection.Cell.Column);
+    WriteFormulaOrValueBasedOnAPestName(AWellConnection.SkinRadiusPestName,
+      AWellConnection.SkinRadius, AWellConnection.Cell.Layer,
+      AWellConnection.Cell.Row, AWellConnection.Cell.Column);
+
+//    WriteFloat(AWellConnection.ScreenTop);
+//    WriteFloat(AWellConnection.ScreenBottom);
+//    WriteFloat(AWellConnection.SkinK);
+//    WriteFloat(AWellConnection.SkinRadius);
     NewLine;
   end;
 
@@ -955,9 +971,20 @@ begin
   begin
     AWell := FWellProperties[WellIndex];
     WriteInteger(AWell.WellNumber);
-    WriteFloat(AWell.Radius);
-    WriteFloat(AWell.Bottom);
-    WriteFloat(AWell.StartingHead);
+
+    WriteFormulaOrValueBasedOnAPestName(AWell.RadiusPestName,
+      AWell.Radius, AWell.Layer, AWell.Row,
+      AWell.Column);
+    WriteFormulaOrValueBasedOnAPestName(AWell.BottomPestName,
+      AWell.Bottom, AWell.Layer, AWell.Row,
+      AWell.Column);
+    WriteFormulaOrValueBasedOnAPestName(AWell.StartingHeadPestName,
+      AWell.StartingHead, AWell.Layer, AWell.Row,
+      AWell.Column);
+
+//    WriteFloat(AWell.Radius);
+//    WriteFloat(AWell.Bottom);
+//    WriteFloat(AWell.StartingHead);
 
     case AWell.ConductanceMethod of
       mcmSpecified:
@@ -1189,19 +1216,45 @@ var
   ValidScreensFound: Boolean;
   IDomainArray: TDataArray;
   CellSize: Double;
+  PestParamName: string;
+  Column: Integer;
+  Row: Integer;
+  Layer: Integer;
   procedure CompileFormula(Formula: string; const FormulaName: string;
-    var OutFormula: string; SpecifiedLayer: Integer = 0);
+    var OutFormula: string; out PestParamName: string;
+    out Column, Row, Layer: Integer; SpecifiedLayer: Integer = 0);
   var
     VarIndex: Integer;
     VarName: string;
     VarPosition: Integer;
     Variable: TCustomValue;
     AnotherDataSet: TDataArray;
-    Column: Integer;
-    Row: Integer;
-    Layer: Integer;
+//    Column: Integer;
+//    Row: Integer;
+//    Layer: Integer;
     ASegment: TCellElementSegment;
+    Param: TModflowSteadyParameter;
+    DataArray: TDataArray;
   begin
+    Param := Model.GetPestParameterByName(Formula);
+    if Param <> nil then
+    begin
+      Formula := FortranFloatToStr(Param.Value);
+      PestParamName := Param.ParameterName;
+    end
+    else
+    begin
+      DataArray := Model.DataArrayManager.GetDataSetByName(Formula);
+      if (DataArray <> nil) and DataArray.PestParametersUsed then
+      begin
+        PestParamName := DataArray.Name;
+      end
+      else
+      begin
+        PestParamName := '';
+      end;
+    end;
+
     OutFormula := Formula;
     try
       Compiler.Compile(OutFormula);
@@ -1339,23 +1392,32 @@ begin
         AWellRecord.WellNumber := Boundary.WellNumber;
         AWellRecord.ScreenObjectName := AScreenObject.Name;
 
-        CompileFormula(Boundary.Radius, StrMAWRadius, Formula);
+        CompileFormula(Boundary.Radius, StrMAWRadius, Formula, PestParamName,
+         Column, Row, Layer);
         Expression.Evaluate;
         AWellRecord.Radius := Expression.DoubleResult;
         AWellRecord.RadiusAnnotation := Format(
           StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+        AWellRecord.RadiusPestName := PestParamName;
+        AWellRecord.Column := Column;
+        AWellRecord.Row := Row;
+        AWellRecord.Layer := 0;
 
-        CompileFormula(Boundary.Bottom, StrMAWBottom, Formula);
+        CompileFormula(Boundary.Bottom, StrMAWBottom, Formula, PestParamName,
+          Column, Row, Layer);
         Expression.Evaluate;
         AWellRecord.Bottom := Expression.DoubleResult;
         AWellRecord.BottomAnnotation := Format(
           StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+        AWellRecord.BottomPestName := PestParamName;
 
-        CompileFormula(Boundary.InitialHead, StrMAWInitialHead, Formula);
+        CompileFormula(Boundary.InitialHead, StrMAWInitialHead, Formula,
+          PestParamName, Column, Row, Layer);
         Expression.Evaluate;
         AWellRecord.StartingHead := Expression.DoubleResult;
         AWellRecord.StartingHeadAnnotation := Format(
           StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+        AWellRecord.StartingHeadPestName := PestParamName;
 
         AWellRecord.ConductanceMethod := Boundary.ConductanceMethod;
 
@@ -1375,17 +1437,21 @@ begin
         begin
           AWellScreen := Boundary.WellScreens[ScreenIndex] as TMawWellScreenItem;
 
-          CompileFormula(AWellScreen.ScreenTop, StrMAWScreenTop, Formula);
+          CompileFormula(AWellScreen.ScreenTop, StrMAWScreenTop, Formula,
+            PestParamName, Column, Row, Layer);
           Expression.Evaluate;
           AWellConnection.ScreenTop := Expression.DoubleResult;
           AWellConnection.ScreenTopAnnotation := Format(
             StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+          AWellConnection.ScreenTopPestName := PestParamName;
 
-          CompileFormula(AWellScreen.ScreenBottom, StrMAWScreenBottom, Formula);
+          CompileFormula(AWellScreen.ScreenBottom, StrMAWScreenBottom, Formula,
+            PestParamName, Column, Row, Layer);
           Expression.Evaluate;
           AWellConnection.ScreenBottom := Expression.DoubleResult;
           AWellConnection.ScreenBottomAnnotation := Format(
             StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+          AWellConnection.ScreenBottomPestName := PestParamName;
 
           ConnectionFound := False;
           for LayerIndex := 0 to LayerCount - 1 do
@@ -1401,17 +1467,21 @@ begin
                 Cell.Layer := LayerIndex;
                 AWellConnection.Cell := Cell;
 
-                CompileFormula(AWellScreen.SkinK, StrMAWSkinK, Formula, LayerIndex);
+                CompileFormula(AWellScreen.SkinK, StrMAWSkinK, Formula,
+                  PestParamName, Column, Row, Layer, LayerIndex);
                 Expression.Evaluate;
                 AWellConnection.SkinK := Expression.DoubleResult;
                 AWellConnection.SkinKAnnotation := Format(
                   StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+                AWellConnection.SkinKPestName := PestParamName;
 
-                CompileFormula(AWellScreen.SkinRadius, StrMAWSkinRadius, Formula, LayerIndex);
+                CompileFormula(AWellScreen.SkinRadius, StrMAWSkinRadius,
+                  Formula, PestParamName, Column, Row, Layer, LayerIndex);
                 Expression.Evaluate;
                 AWellConnection.SkinRadius := Expression.DoubleResult;
                 AWellConnection.SkinRadiusAnnotation := Format(
                   StrAssignedBy0sUsi, [AScreenObject.Name, Formula]);
+                AWellConnection.SkinRadiusPestName := PestParamName;
 
                 if (AWellConnection.SkinRadius <= AWellRecord.Radius)
                   and not (Boundary.ConductanceMethod in [mcmSpecified, mcmThiem]) then

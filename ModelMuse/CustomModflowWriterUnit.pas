@@ -248,6 +248,7 @@ type
       Layer, Row, Col: Integer);
     // Write a formula for EnhancedTemplateProcessor or write a value
     // based on an identified parameter or PEST-modified data set.
+    // If Layer < 0, only parameters will be used, not data sets.
     procedure WriteFormulaOrValueBasedOnAPestName(PestName: string;
       Value: double; Layer, Row, Column: Integer);
   public
@@ -669,9 +670,6 @@ type
     procedure CountParametersAndParameterCells(var ParamCount,
       ParamCellCount: integer);
     procedure WriteBoundaryArrayParams;
-//    property NameOfFile: string read FNameOfFile;
-    //    procedure WriteBeginPeriod(TimeIndex: integer);
-//    procedure WriteTemplateHeader; override;
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -2565,6 +2563,7 @@ var
 begin
   // strip off .tpl extension to get input file name.
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
+  PValFileName := ChangeFileExt(PValFileName, '');
   Model.FilesToDelete.Add(PValFileName);
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
   Model.PestTemplateLines.Add(PestUtilityProgramPath(
@@ -3182,17 +3181,6 @@ begin
     FModel.DataArrayManager.AddDataSetToCache(DataArray);
   end;
 end;
-
-//procedure TCustomFileWriter.WriteArrayReplace(ArrayName: string; Layer, Row,
-//  Column: Integer);
-//var
-//  TemplateCharacter: Char;
-//begin
-//  // Layer, Row, and Column are for a One-based array.
-//  TemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
-//  WriteString(Format(' %0:s                %1:s[%2:d, %3:d, %4:d]%0:s',
-//    [TemplateCharacter, ArrayName, Layer, Row, Column]));
-//end;
 
 function TCustomFileWriter.WriteArraysFile(TemplateFileName: string): string;
 var
@@ -9336,17 +9324,18 @@ begin
     WriteFloat(Value);
     if PestName <> '' then
     begin
-      FPestParamUsed := True;
       Param := Model.GetPestParameterByName(PestName);
       if Param <> nil then
       begin
         Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
+        FPestParamUsed := True;
       end
-      else
+      else if Layer >= 0 then
       begin
         DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
         if DataArray <> nil then
         begin
+          FPestParamUsed := True;
           AddUsedPestDataArray(DataArray);
         end;
       end;
@@ -9366,8 +9355,9 @@ begin
         TemplateCharacter := Model.PestProperties.TemplateCharacter;
         Formula := Format(' %0:s                    %1:s%0:s ',
           [TemplateCharacter, Param.ParameterName]);
+        WriteString(Formula);
       end
-      else
+      else if Layer >= 0 then
       begin
         DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
         Assert(DataArray <> nil);
@@ -9377,16 +9367,20 @@ begin
         if Formula = '' then
         begin
           WriteFloat(Value);
-          Exit;
+//          Exit;
         end
         else
         begin
           ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
           Formula := Format(' %0:s                    %1:s%0:s ',
             [ExtendedTemplateCharacter, Formula]);
+          WriteString(Formula);
         end;
+      end
+      else
+      begin
+        WriteFloat(Value);
       end;
-      WriteString(Formula);
     end;
   end;
 end;
@@ -9467,24 +9461,6 @@ begin
     end;
   end;
 end;
-
-//procedure TCustomParameterTransientWriter.WriteTemplateHeader;
-//var
-//  ArraysFileName: string;
-//begin
-//  inherited;
-//  ArraysFileName := WriteArraysFile(FNameOfFile);
-//  if ArraysFileName <> '' then
-//  begin
-//    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-//    WriteString('ReadArrays(');
-//    WriteString(ArraysFileName);
-//    WriteString(')');
-////    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-//    NewLine;
-//  end;
-//
-//end;
 
 procedure TCustomParameterTransientWriter.CountParametersAndParameterCells
   (var ParamCount, ParamCellCount: integer);

@@ -20534,16 +20534,27 @@ var
   FootprintWell: TFootprintWell;
   SutraLake: TSutraLake;
   ALake: TLakeMf6;
+  PestParamOK: Boolean;
 begin
 { TODO : See if some of this can be combined with ValidateEdFormula. }
 
   inherited;
+  PestParamOK := False;
   // edit the formula that is not part of a data set or boundary data set.
   DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   ed := nil;
   if Sender is TCustomEdit then
   begin
     ed := TCustomEdit(Sender);
+    if (ed = frameLakMf6.edBottomElev)
+      or (ed = frameLakMf6.edTopElev)
+      or (ed = frameLakMf6.edLakebedK)
+      or (ed = frameLakMf6.edLakebedThickness)
+      or (ed = frameLakMf6.edConnLength)
+      then
+    begin
+      PestParamOK := True;
+    end;
   end
   else if Sender = btnZ then
   begin
@@ -21167,9 +21178,16 @@ begin
       end
     end;
 
+    if PestParamOK then
+    begin
+      PestParamOK :=
+        frmGoPhast.PhastModel.GetPestParameterByName(FunctionString) <> nil;
+    end;
+
     CompiledFormula := Compiler.CurrentExpression;
     // check that the formula is OK.
-    if not (CompiledFormula.ResultType in [rdtDouble, rdtInteger]) then
+    if (not (CompiledFormula.ResultType in [rdtDouble, rdtInteger]))
+      and (not PestParamOK) then
     begin
       TCustomEditCrack(ed).Color := clRed;
       Beep;
@@ -22713,6 +22731,8 @@ var
   AVar: TCustomValue;
   DataArrayManager: TDataArrayManager;
   DataArray: TDataArray;
+  PestParamOK: Boolean;
+  Param: TModflowSteadyParameter;
 begin
 { TODO : See if some of this can be combined with ValidateEdFormula. }
 
@@ -22720,6 +22740,17 @@ begin
   DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   // edit the formula that is not part of a data set or boundary data set.
   ed := Sender as TJvComboEdit;
+
+  PestParamOK := False;
+  if (ed = frameMAW.edWellRadius)
+    or (ed = frameMAW.edBottom)
+    or (ed = frameMAW.edStartingHead)
+    or (ed = frameMAW.edStartingHead)
+    or (ed = frameLakMf6.edStartingStage)
+    then
+  begin
+    PestParamOK := True;
+  end;
 
   FunctionString := ed.Text;
   if (FunctionString = '') then
@@ -22808,9 +22839,16 @@ begin
       end
     end;
 
+    if PestParamOK then
+    begin
+      Param := frmGoPhast.PhastModel.GetPestParameterByName(FunctionString);
+      PestParamOK := (Param <> nil);
+    end;
+
     CompiledFormula := Compiler.CurrentExpression;
     // check that the formula is OK.
-    if not (CompiledFormula.ResultType in [rdtDouble, rdtInteger]) then
+    if (not PestParamOK) and
+      (not (CompiledFormula.ResultType in [rdtDouble, rdtInteger])) then
     begin
       ed.Color := clRed;
       Beep;
@@ -25565,6 +25603,9 @@ begin
     or ((DataGrid = frameHfbMf6.rdgModflowBoundary) and (frameHfbMf6.comboHfbParameters.ItemIndex <= 0))
     or (DataGrid = frameLak.rdgModflowBoundary)
     or (DataGrid = frameScreenObjectSfr6.rdgFormulas)
+    or (DataGrid = frameMAW.frameWellScreens.Grid)
+    or (DataGrid = frameLakMf6.frameLakeTable.Grid)
+    or (DataGrid.Owner is  TframeLakeOutlet)
     ;
 end;
 

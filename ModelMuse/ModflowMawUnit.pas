@@ -377,6 +377,12 @@ type
     CellCount: Integer;
     BoundName: string;
     ScreenObjectName: string;
+    RadiusPestName: string;
+    BottomPestName: string;
+    StartingHeadPestName: string;
+    Column: Integer;
+    Row: Integer;
+    Layer: Integer;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -402,16 +408,6 @@ type
     ScreenBottomPestName: string;
     SkinKPestName: string;
     SkinRadiusPestName: string;
-
-    ScreenTopPestSeriesName: string;
-    ScreenBottomPestSeriesName: string;
-    SkinKPestSeriesName: string;
-    SkinRadiusPestSeriesName: string;
-
-    ScreenTopPestSeriesMethod: TPestParamMethod;
-    ScreenBottomPestSeriesMethod: TPestParamMethod;
-    SkinKPestSeriesMethod: TPestParamMethod;
-    SkinRadiusPestSeriesMethod: TPestParamMethod;
 
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -950,16 +946,6 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ScreenBottomPestName));
   WriteCompInt(Comp, Strings.IndexOf(SkinKPestName));
   WriteCompInt(Comp, Strings.IndexOf(SkinRadiusPestName));
-
-  WriteCompInt(Comp, Strings.IndexOf(ScreenTopPestSeriesName));
-  WriteCompInt(Comp, Strings.IndexOf(ScreenBottomPestSeriesName));
-  WriteCompInt(Comp, Strings.IndexOf(SkinKPestSeriesName));
-  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusPestSeriesName));
-
-  WriteCompInt(Comp, Ord(ScreenTopPestSeriesMethod));
-  WriteCompInt(Comp, Ord(ScreenBottomPestSeriesMethod));
-  WriteCompInt(Comp, Ord(SkinKPestSeriesMethod));
-  WriteCompInt(Comp, Ord(SkinRadiusPestSeriesMethod));
 end;
 
 procedure TMawSteadyConnectionRecord.RecordStrings(Strings: TStringList);
@@ -974,11 +960,6 @@ begin
   Strings.Add(ScreenBottomPestName);
   Strings.Add(SkinKPestName);
   Strings.Add(SkinRadiusPestName);
-
-  Strings.Add(ScreenTopPestSeriesName);
-  Strings.Add(ScreenBottomPestSeriesName);
-  Strings.Add(SkinKPestSeriesName);
-  Strings.Add(SkinRadiusPestSeriesName);
 end;
 
 procedure TMawSteadyConnectionRecord.Restore(Decomp: TDecompressionStream;
@@ -1001,16 +982,6 @@ begin
   ScreenBottomPestName := Annotations[ReadCompInt(Decomp)];
   SkinKPestName := Annotations[ReadCompInt(Decomp)];
   SkinRadiusPestName := Annotations[ReadCompInt(Decomp)];
-
-  ScreenTopPestSeriesName := Annotations[ReadCompInt(Decomp)];
-  ScreenBottomPestSeriesName := Annotations[ReadCompInt(Decomp)];
-  SkinKPestSeriesName := Annotations[ReadCompInt(Decomp)];
-  SkinRadiusPestSeriesName := Annotations[ReadCompInt(Decomp)];
-
-  ScreenTopPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
-  ScreenBottomPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
-  SkinKPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
-  SkinRadiusPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TMawStorage }
@@ -1400,32 +1371,24 @@ begin
             ScreenBottom := Expression.DoubleResult;
             ScreenBottomAnnotation := ACell.Annotation;
             ScreenBottomPestName := PestName;
-            ScreenBottomPestSeriesName := PestSeriesName;
-            ScreenBottomPestSeriesMethod := PestSeriesMethod;
           end;
         TMawWellScreenItem.ScreenTopPosition:
           begin
             ScreenTop := Expression.DoubleResult;
             ScreenTopAnnotation := ACell.Annotation;
             ScreenTopPestName := PestName;
-            ScreenTopPestSeriesName := PestSeriesName;
-            ScreenTopPestSeriesMethod := PestSeriesMethod;
           end;
         TMawWellScreenItem.SkinKPosition:
           begin
             SkinK := Expression.DoubleResult;
             SkinKAnnotation := ACell.Annotation;
             SkinKPestName := PestName;
-            SkinKPestSeriesName := PestSeriesName;
-            SkinKPestSeriesMethod := PestSeriesMethod;
           end;
         TMawWellScreenItem.SkinRadiusPosition:
           begin
             SkinRadius := Expression.DoubleResult;
             SkinRadiusAnnotation := ACell.Annotation;
             SkinRadiusPestName := PestName;
-            SkinRadiusPestSeriesName := PestSeriesName;
-            SkinRadiusPestSeriesMethod := PestSeriesMethod;
           end;
         else Assert(False);
       end;
@@ -3471,12 +3434,19 @@ begin
   WriteCompInt(Comp, Ord(ConductanceMethod));
   WriteCompInt(Comp, CellCount);
 
+  WriteCompInt(Comp, Column);
+  WriteCompInt(Comp, Row);
+  WriteCompInt(Comp, Layer);
+
   WriteCompInt(Comp, Strings.IndexOf(RadiusAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(BottomAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StartingHeadAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(BoundName));
   WriteCompInt(Comp, Strings.IndexOf(ScreenObjectName));
 
+  WriteCompInt(Comp, Strings.IndexOf(RadiusPestName));
+  WriteCompInt(Comp, Strings.IndexOf(BottomPestName));
+  WriteCompInt(Comp, Strings.IndexOf(StartingHeadPestName));
 end;
 
 procedure TMawSteadyWellRecord.RecordStrings(Strings: TStringList);
@@ -3486,6 +3456,9 @@ begin
   Strings.Add(StartingHeadAnnotation);
   Strings.Add(BoundName);
   Strings.Add(ScreenObjectName);
+  Strings.Add(RadiusPestName);
+  Strings.Add(BottomPestName);
+  Strings.Add(StartingHeadPestName);
 end;
 
 procedure TMawSteadyWellRecord.Restore(Decomp: TDecompressionStream;
@@ -3498,11 +3471,19 @@ begin
   ConductanceMethod := TMawConductanceMethod(ReadCompInt(Decomp));
   CellCount := ReadCompInt(Decomp);
 
+  Column := ReadCompInt(Decomp);
+  Row := ReadCompInt(Decomp);
+  Layer := ReadCompInt(Decomp);
+
   RadiusAnnotation := Annotations[ReadCompInt(Decomp)];
   BottomAnnotation := Annotations[ReadCompInt(Decomp)];
   StartingHeadAnnotation := Annotations[ReadCompInt(Decomp)];
   BoundName := Annotations[ReadCompInt(Decomp)];
   ScreenObjectName := Annotations[ReadCompInt(Decomp)];
+
+  RadiusPestName := Annotations[ReadCompInt(Decomp)];
+  BottomPestName := Annotations[ReadCompInt(Decomp)];
+  StartingHeadPestName := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TMawItem }

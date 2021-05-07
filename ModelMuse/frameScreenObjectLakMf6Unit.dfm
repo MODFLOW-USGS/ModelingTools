@@ -271,7 +271,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 1
       ExplicitWidth = 449
       ExplicitHeight = 92
     end
@@ -281,7 +280,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Top = 25
     Width = 451
     Height = 335
-    ActivePage = tabLakeTransientProperties
+    ActivePage = tabLakeProperties
     Align = alClient
     TabOrder = 3
     object tabLakeProperties: TTabSheet

@@ -34,6 +34,13 @@ type
     ConnLengthAnnotation: String;
     ConnWidth: double;
     ConnWidthAnnotation: String;
+
+    BedLeakancePestName: string;
+    BedThicknessPestName: string;
+    BotElevPestName: string;
+    TopElevPestName: string;
+    ConnLengthPestName: string;
+//    ConnWidthPestName: string;
   end;
 
   TLakeCellList = TObjectList<TLakeCell>;
@@ -47,6 +54,10 @@ type
     SurfaceArea: double;
     // barea
     ExchangeArea: double;
+    StagePestName: string;
+    VolumePestName: string;
+    SurfaceAreaPestName: string;
+    ExchangeAreaPestName: string;
   end;
 
   TLakeTable = class(TObjectList<TLakeTableRow>)
@@ -61,6 +72,11 @@ type
     Width: double;
     Slope: double;
     Rough: double;
+    RatePestParam: string;
+    InvertPestParam: string;
+    WidthPestParam: string;
+    SlopePestParam: string;
+    RoughPestParam: string;
   end;
 
   TLakeOutletMf6 = class(TObjectList<TOutletSetting>)
@@ -135,6 +151,7 @@ type
     FLakeSettings: TLakeSettings;
     FStartingStage: double;
     FStartingTimeIndex: Integer;
+    FStartingStagePestName: string;
   public
     constructor Create;
     destructor Destroy; override;
@@ -161,7 +178,7 @@ type
     procedure SetLakeOutlets;
     procedure SetLakeTimeProperties;
     function EvaluateFormula(Formula: string; const DataIdentifier,
-      ScreenObjectName: string): double;
+      ScreenObjectName: string; out PestParamName: string): double;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WritePackageData;
@@ -374,24 +391,23 @@ begin
       end
       else
       begin
-        WriteFloat(ACell.BedLeakance);
+//        WriteFloat(ACell.BedLeakance);
+        WriteFormulaOrValueBasedOnAPestName(ACell.BedLeakancePestName,
+          ACell.BedLeakance, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
       end;
-      WriteFloat(ACell.BotElev);
-      WriteFloat(ACell.TopElev);
-      WriteFloat(ACell.ConnLength);
+      WriteFormulaOrValueBasedOnAPestName(ACell.BotElevPestName,
+        ACell.BotElev, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
+      WriteFormulaOrValueBasedOnAPestName(ACell.TopElevPestName,
+        ACell.TopElev, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
+      WriteFormulaOrValueBasedOnAPestName(ACell.ConnLengthPestName,
+        ACell.ConnLength, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
+//      WriteFormulaOrValueBasedOnAPestName(ACell.ConnWidthPestName,
+//        ACell.ConnWidth, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
+//      WriteFloat(ACell.BotElev);
+//      WriteFloat(ACell.TopElev);
+//      WriteFloat(ACell.ConnLength);
       WriteFloat(ACell.ConnWidth);
       NewLine;
-
-{  TLakeCell = class(TObject)
-    Cell: TCellLocation;
-    LakeType: TLakeType;
-    BedLeakance: double;
-    BotElev: double;
-    TopElev: double;
-    ConnLength: double;
-    CondWidth: double;
-  end;
-}
     end;
 
   end;
@@ -479,6 +495,7 @@ begin
       FNameOfFile := FNameOfFile + '.tpl';
       WritePestTemplateLine(FNameOfFile);
       WritingTemplate := True;
+      WriteLakeTables;
       WriteFileInternal;
     finally
       frmErrorsAndWarnings.EndUpdate;
@@ -526,6 +543,7 @@ var
   Embeded: Boolean;
   RowIndex: Integer;
   TableRow: TLakeTableRow;
+  LakeTableFFileName: string;
 begin
   for LakeIndex := 0 to FLakes.Count - 1 do
   begin
@@ -536,10 +554,21 @@ begin
       begin
         FormatString := '.%.' + Floor(Log10(FLakes.Count)+1).ToString + 'd.laktab';
         Extension := Format(FormatString, [LakeIndex+1]);
-        ALake.FLakeTable.FFileName := ChangeFileExt(FFileName,Extension);
-        OpenFile(ALake.FLakeTable.FFileName);
+        LakeTableFFileName := ChangeFileExt(FFileName,Extension);
+        ALake.FLakeTable.FFileName := LakeTableFFileName;
+
+        Model.FilesToDelete.Add(LakeTableFFileName);
+        if WritingTemplate then
+        begin
+          LakeTableFFileName := LakeTableFFileName + '.tpl';
+          WritePestTemplateLine(LakeTableFFileName);
+        end;
+
+        OpenFile(LakeTableFFileName);
         try
           frmProgressMM.AddMessage('Writing LAK6 Table input.');
+
+          WriteTemplateHeader;
 
           WriteBeginDimensions;
           WriteString('  NROW');
@@ -565,12 +594,20 @@ begin
           for RowIndex := 0 to ALake.FLakeTable.Count - 1 do
           begin
             TableRow := ALake.FLakeTable[RowIndex];
-            WriteFloat(TableRow.Stage);
-            WriteFloat(TableRow.Volume);
-            WriteFloat(TableRow.SurfaceArea);
+            WriteFormulaOrValueBasedOnAPestName(TableRow.StagePestName,
+              TableRow.Stage, -1, -1, -1);
+            WriteFormulaOrValueBasedOnAPestName(TableRow.VolumePestName,
+              TableRow.Volume, -1, -1, -1);
+            WriteFormulaOrValueBasedOnAPestName(TableRow.SurfaceAreaPestName,
+              TableRow.SurfaceArea, -1, -1, -1);
+//            WriteFloat(TableRow.Stage);
+//            WriteFloat(TableRow.Volume);
+//            WriteFloat(TableRow.SurfaceArea);
             if Embeded then
             begin
-              WriteFloat(TableRow.ExchangeArea);
+              WriteFormulaOrValueBasedOnAPestName(TableRow.ExchangeAreaPestName,
+                TableRow.ExchangeArea, -1, -1, -1);
+//              WriteFloat(TableRow.ExchangeArea);
             end;
             NewLine;
           end;
@@ -655,6 +692,9 @@ var
   CellBottom: Double;
   CellAnnotation: string;
   LakeTop: Double;
+  Param: TModflowSteadyParameter;
+  PestParamName: string;
+  DataArray: TDataArray;
 begin
   Grid := Model.Grid;
   Disv := Model.DisvGrid;
@@ -674,6 +714,25 @@ begin
         LakeBoundary := ScreenObject.ModflowLak6;
 
         BottomElevation := LakeBoundary.BottomElevation;
+        Param := Model.GetPestParameterByName(BottomElevation);
+        if Param <> nil then
+        begin
+          BottomElevation := FortranFloatToStr(Param.Value);
+          PestParamName := Param.ParameterName;
+        end
+        else
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(BottomElevation);
+          if (DataArray <> nil) and DataArray.PestParametersUsed then
+          begin
+            PestParamName := DataArray.Name;
+          end
+          else
+          begin
+            PestParamName := '';
+          end;
+        end;
+
         ScreenObject.AssignValuesWithCellList(BottomElevation, Model, CellList,
           Results, Annotation, StrLakeBottomElevatio);
         CellAnnotation := Format(StrSAndThenRaised, [Annotation]);
@@ -689,15 +748,35 @@ begin
           begin
             ALake.FLakeCellList[CellIndex].BotElev := CellBottom;
             ALake.FLakeCellList[CellIndex].BotElevAnnotation := CellAnnotation;
+            ALake.FLakeCellList[CellIndex].BotElevPestName := '';
           end
           else
           begin
             ALake.FLakeCellList[CellIndex].BotElev := LakeBottom;
             ALake.FLakeCellList[CellIndex].BotElevAnnotation := Annotation;
+            ALake.FLakeCellList[CellIndex].BotElevPestName := PestParamName;
           end;
         end;
 
         TopElevation := LakeBoundary.TopElevation;
+        Param := Model.GetPestParameterByName(TopElevation);
+        if Param <> nil then
+        begin
+          TopElevation := FortranFloatToStr(Param.Value);
+          PestParamName := Param.ParameterName;
+        end
+        else
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(TopElevation);
+          if (DataArray <> nil) and DataArray.PestParametersUsed then
+          begin
+            PestParamName := DataArray.Name;
+          end
+          else
+          begin
+            PestParamName := '';
+          end;
+        end;
         ScreenObject.AssignValuesWithCellList(TopElevation, Model, CellList,
           Results, Annotation, StrLakeTopElevation);
         CellAnnotation := Format(StrSAndThenLowered, [Annotation]);
@@ -714,44 +793,36 @@ begin
           begin
             ALake.FLakeCellList[CellIndex].TopElev := CellTop;
             ALake.FLakeCellList[CellIndex].TopElevAnnotation := CellAnnotation;
+            ALake.FLakeCellList[CellIndex].TopElevPestName := '';
           end
           else
           begin
             ALake.FLakeCellList[CellIndex].TopElev := LakeTop;
             ALake.FLakeCellList[CellIndex].TopElevAnnotation := Annotation;
+            ALake.FLakeCellList[CellIndex].TopElevPestName := PestParamName;
           end;
-
-//          ALake.FLakeCellList[CellIndex].TopElev := Results[CellIndex];
-//          ALake.FLakeCellList[CellIndex].TopElevAnnotation := Annotation;
-
-//          if ALake.FLakeCellList[CellIndex].LakeType = ltHoriz then
-//          begin
-//            ACell := ALake.FLakeCellList[CellIndex];
-//            if Grid <> nil then
-//            begin
-//              CellTop := Grid.CellElevation[ACell.Cell.Column, ACell.Cell.Row, 0]
-//            end
-//            else
-//            begin
-//              CellTop := Disv.LayerPosition(0, ACell.Cell.Column);
-//            end;
-//            if CellTop < ALake.FLakeCellList[CellIndex].TopElev then
-//            begin
-//              if Grid <> nil then
-//              begin
-//                frmErrorsAndWarnings.AddError(Model, StrLakeTopIsAboveTh,
-//                  Format(StrTheLakeDefinedByGrid, [ScreenObject.Name, ACell.Cell.Row+1, ACell.Cell.Column+1]), ScreenObject);
-//              end
-//              else
-//              begin
-//                frmErrorsAndWarnings.AddError(Model, StrLakeTopIsAboveTh,
-//                  Format(StrTheLakeDefinedByDisv, [ScreenObject.Name, ACell.Cell.Column+1]), ScreenObject);
-//              end;
-//            end;
-//          end;
         end;
 
         BedK := LakeBoundary.BedK;
+        Param := Model.GetPestParameterByName(BedK);
+        if Param <> nil then
+        begin
+          BedK := FortranFloatToStr(Param.Value);
+          PestParamName := Param.ParameterName;
+        end
+        else
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(BedK);
+          if (DataArray <> nil) and DataArray.PestParametersUsed then
+          begin
+            PestParamName := DataArray.Name;
+          end
+          else
+          begin
+            PestParamName := '';
+          end;
+        end;
+
         ScreenObject.AssignValuesWithCellList(BedK, Model, CellList, Results,
           Annotation, StrLakebedHydraulicCo);
         BedKAnnotation := Annotation;
@@ -759,9 +830,29 @@ begin
         for CellIndex := 0 to ALake.FLakeCellList.Count - 1 do
         begin
           ALake.FLakeCellList[CellIndex].BedLeakance := Results[CellIndex];
+          ALake.FLakeCellList[CellIndex].BedLeakancePestName := PestParamName;
         end;
 
         BedThickness := LakeBoundary.BedThickness;
+        Param := Model.GetPestParameterByName(BedThickness);
+        if Param <> nil then
+        begin
+          BedThickness := FortranFloatToStr(Param.Value);
+          PestParamName := Param.ParameterName;
+        end
+        else
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(BedThickness);
+          if (DataArray <> nil) and DataArray.PestParametersUsed then
+          begin
+            PestParamName := DataArray.Name;
+          end
+          else
+          begin
+            PestParamName := '';
+          end;
+        end;
+
         ScreenObject.AssignValuesWithCellList(BedThickness, Model, CellList,
           Results, Annotation, StrLakebedThickness);
         BedKAnnotation := Format('(%0:s / %1:s)', [BedKAnnotation, Annotation]);
@@ -781,9 +872,29 @@ begin
             ALake.FLakeCellList[CellIndex].BedLeakanceAnnotation := ThickZeroAnnotation;
           end;
           ALake.FLakeCellList[CellIndex].BedThickness := Results[CellIndex];
+          ALake.FLakeCellList[CellIndex].BedThicknessPestName := PestParamName;
         end;
 
         ConnectionLength := LakeBoundary.ConnectionLength;
+        Param := Model.GetPestParameterByName(ConnectionLength);
+        if Param <> nil then
+        begin
+          ConnectionLength := FortranFloatToStr(Param.Value);
+          PestParamName := Param.ParameterName;
+        end
+        else
+        begin
+          DataArray := Model.DataArrayManager.GetDataSetByName(ConnectionLength);
+          if (DataArray <> nil) and DataArray.PestParametersUsed then
+          begin
+            PestParamName := DataArray.Name;
+          end
+          else
+          begin
+            PestParamName := '';
+          end;
+        end;
+
         ScreenObject.AssignValuesWithCellList(ConnectionLength, Model,
           CellList, Results, Annotation, StrLakeConnectionLeng);
         Assert(ALake.FLakeCellList.Count = Results.Count);
@@ -808,18 +919,16 @@ begin
             end;
             ALake.FLakeCellList[CellIndex].ConnLength := Distance(LakeConnectionCenter,LakeCenter);
             ALake.FLakeCellList[CellIndex].ConnLengthAnnotation := LakeDistanceAnnotation;
+            ALake.FLakeCellList[CellIndex].ConnLengthPestName := '';
           end
           else
           begin
             ALake.FLakeCellList[CellIndex].ConnLength := Results[CellIndex];
             ALake.FLakeCellList[CellIndex].ConnLengthAnnotation := Annotation;
+            ALake.FLakeCellList[CellIndex].ConnLengthPestName := PestParamName;
           end;
         end;
 
-//        ConnectionWidth := LakeBoundary.ConnectionWidth;
-//        ScreenObject.AssignValuesWithCellList(ConnectionWidth, Model, CellList,
-//          Results, StrLakeConnectionWidt);
-//        Assert(ALake.FLakeCellList.Count = Results.Count);
         NonHorizConnWidth := StrConnectionWidthIs;
         for CellIndex := 0 to ALake.FLakeCellList.Count - 1 do
         begin
@@ -877,6 +986,7 @@ var
   TimeIndex: Integer;
   OutletTimeItem: TLakeOutletTimeItem;
   OutletSetting: TOutletSetting;
+  PestParamName: string;
 begin
   for LakeIndex := 0 to FLakes.Count - 1 do
   begin
@@ -920,43 +1030,48 @@ begin
           OutletSetting.Rate := EvaluateFormula(OutletTimeItem.Rate,
             Format(StrLakeOutletRateIn,
             [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name);
+            ALake.FScreenObject.Name, PestParamName);
+          OutletSetting.RatePestParam := PestParamName;
+
           OutletSetting.Invert := EvaluateFormula(OutletTimeItem.Invert,
             Format(StrLakeOutletInvertI,
             [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name);
+            ALake.FScreenObject.Name, PestParamName);
+          OutletSetting.InvertPestParam := PestParamName;
+
           OutletSetting.Width := EvaluateFormula(OutletTimeItem.Width,
             Format(StrLakeOutletWidthIn,
             [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name);
+            ALake.FScreenObject.Name, PestParamName);
+          OutletSetting.WidthPestParam := PestParamName;
+
           OutletSetting.Slope := EvaluateFormula(OutletTimeItem.Slope,
             Format(StrLakeOutletSlopeIn,
             [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name);
+            ALake.FScreenObject.Name, PestParamName);
+          OutletSetting.SlopePestParam := PestParamName;
+
           OutletSetting.Rough := EvaluateFormula(OutletTimeItem.Roughness,
             Format(StrLakeOutletRoughnes,
             [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name);
+            ALake.FScreenObject.Name, PestParamName);
+          OutletSetting.RoughPestParam := PestParamName;
         end;
-//      end
-//      else
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrLakeOutletIncorrec,
-//          Format(StrOutlet0dForThe, [OutletIndex+1, ALake.FScreenObject.Name]),
-//          ALake.FScreenObject);
       end;
     end;
   end;
 end;
 
 function TModflowLAKMf6Writer.EvaluateFormula(Formula: string;
-  const DataIdentifier, ScreenObjectName: string): double;
+  const DataIdentifier, ScreenObjectName: string;
+  out PestParamName: string): double;
 var
   Compiler: TRbwParser;
   ErrorFunction: string;
   Expression: TExpression;
   ErrorMessage: string;
   ResultTypeOK: Boolean;
+  Param: TModflowSteadyParameter;
   procedure HandleError(E: Exception);
   var
     ErrorMessage: string;
@@ -971,6 +1086,17 @@ var
     Expression.Evaluate;
   end;
 begin
+  Param := Model.GetPestParameterByName(Formula);
+  if Param <> nil then
+  begin
+    Formula := FortranFloatToStr(Param.Value);
+    PestParamName := Param.ParameterName;
+  end
+  else
+  begin
+    PestParamName := '';
+  end;
+
   Compiler := Model.rpThreeDFormulaCompiler;
   ErrorFunction := Formula;
   try
@@ -1028,6 +1154,7 @@ var
   Formula: string;
   DataIdentifier: string;
   ALakeTableRow: TLakeTableRow;
+  PestName: string;
 begin
   for LakeIndex := 0 to FLakes.Count - 1 do
   begin
@@ -1042,28 +1169,33 @@ begin
       Formula := TableItem.Stage;
       DataIdentifier := StrLakeStage;
       ALakeTableRow.Stage := EvaluateFormula(Formula, DataIdentifier,
-        ALake.FScreenObject.Name);
+        ALake.FScreenObject.Name, PestName);
+      ALakeTableRow.StagePestName := PestName;
 
       Formula := TableItem.Volume;
       DataIdentifier := StrLakeVolume;
       ALakeTableRow.Volume := EvaluateFormula(Formula, DataIdentifier,
-        ALake.FScreenObject.Name);
+        ALake.FScreenObject.Name, PestName);
+      ALakeTableRow.VolumePestName := PestName;
 
       Formula := TableItem.SurfaceArea;
       DataIdentifier := StrLakeSurfaceArea;
       ALakeTableRow.SurfaceArea := EvaluateFormula(Formula, DataIdentifier,
-        ALake.FScreenObject.Name);
+        ALake.FScreenObject.Name, PestName);
+      ALakeTableRow.SurfaceAreaPestName := PestName;
 
       Formula := TableItem.ExchangeArea;
       if Formula = '' then
       begin
         ALakeTableRow.ExchangeArea := 0;
+      ALakeTableRow.ExchangeAreaPestName := '';
       end
       else
       begin
         DataIdentifier := StrLakeExchangeArea;
         ALakeTableRow.ExchangeArea := EvaluateFormula(Formula, DataIdentifier,
-          ALake.FScreenObject.Name);
+          ALake.FScreenObject.Name, PestName);
+        ALakeTableRow.ExchangeAreaPestName := PestName;
       end;
     end;
   end;
@@ -1083,6 +1215,7 @@ var
     Param: TModflowSteadyParameter;
     Modifier: string;
     Method: TPestParamMethod;
+    DummyVariable: string;
   begin
     Formula := LakeItem.BoundaryFormula[DataSetIdentifier];
     Param := Model.GetPestParameterByName(Formula);
@@ -1098,7 +1231,7 @@ var
     LakeSetting.Value[DataSetIdentifier] := EvaluateFormula(Formula,
       Format(FormatString,
       [LakeSetting.StartTime]),
-      ALake.FScreenObject.Name);
+      ALake.FScreenObject.Name, DummyVariable);
     Modifier := LakeBoundary.PestBoundaryFormula[DataSetIdentifier];
     Param := Model.GetPestParameterByName(Modifier);
     if Param <> nil then
@@ -1393,6 +1526,7 @@ var
   NeighborCell: TCellLocation;
   Obs: TLakObservation;
   MfObs: TModflow6Obs;
+  PestParameterName: string;
 begin
   if Model.DisvUsed then
   begin
@@ -1427,7 +1561,8 @@ begin
         ALake.FScreenObject := ScreenObject;
 
         ALake.FStartingStage := EvaluateFormula(LakeBoundary.StartingStage,
-          StrLakeStartingStage, ALake.FScreenObject.Name);
+          StrLakeStartingStage, ALake.FScreenObject.Name, PestParameterName);
+        ALake.FStartingStagePestName := PestParameterName;
 
         ScreenObject.GetCellsToAssign('0', nil, nil, ALake.FCellList, alAll, Model);
         if LakeBoundary.Embedded and (ALake.FCellList.Count <> 1) then
@@ -1771,10 +1906,20 @@ begin
         end;
 
         ASetting := AnOutlet[0];
-        WriteFloat(ASetting.Invert);
-        WriteFloat(ASetting.Width);
-        WriteFloat(ASetting.Rough);
-        WriteFloat(ASetting.Slope);
+
+        WriteFormulaOrValueBasedOnAPestName(ASetting.InvertPestParam,
+          ASetting.Invert, -1, -1, -1);
+        WriteFormulaOrValueBasedOnAPestName(ASetting.WidthPestParam,
+          ASetting.Width, -1, -1, -1);
+        WriteFormulaOrValueBasedOnAPestName(ASetting.RoughPestParam,
+          ASetting.Rough, -1, -1, -1);
+        WriteFormulaOrValueBasedOnAPestName(ASetting.SlopePestParam,
+          ASetting.Slope, -1, -1, -1);
+
+//        WriteFloat(ASetting.Invert);
+//        WriteFloat(ASetting.Width);
+//        WriteFloat(ASetting.Rough);
+//        WriteFloat(ASetting.Slope);
         NewLine;
       end;
     end;
@@ -1796,7 +1941,11 @@ begin
     ALake := FLakes[LakeIndex];
     WriteString('  ');
     WriteInteger(LakeIndex+1);
-    WriteFloat(ALake.FStartingStage);
+
+    WriteFormulaOrValueBasedOnAPestName(ALake.FStartingStagePestName,
+      ALake.FStartingStage, -1, -1, -1);
+//    WriteFloat(ALake.FStartingStage);
+
     WriteInteger(ALake.FLakeCellList.Count);
     // aux
     BoundName := Copy(ALake.FScreenObject.Name, 1, MaxBoundNameLength);
@@ -2050,31 +2199,41 @@ begin
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  RATE');
-              WriteFloat(OutletSetting.Rate);
+              WriteFormulaOrValueBasedOnAPestName(OutletSetting.RatePestParam,
+                OutletSetting.Rate, -1, -1, -1);
+//              WriteFloat(OutletSetting.Rate);
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  INVERT');
-              WriteFloat(OutletSetting.Invert);
+              WriteFormulaOrValueBasedOnAPestName(OutletSetting.InvertPestParam,
+                OutletSetting.Invert, -1, -1, -1);
+//              WriteFloat(OutletSetting.Invert);
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  WIDTH');
-              WriteFloat(OutletSetting.Width);
+              WriteFormulaOrValueBasedOnAPestName(OutletSetting.WidthPestParam,
+                OutletSetting.Width, -1, -1, -1);
+//              WriteFloat(OutletSetting.Width);
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  SLOPE');
-              WriteFloat(OutletSetting.Slope);
+              WriteFormulaOrValueBasedOnAPestName(OutletSetting.SlopePestParam,
+                OutletSetting.Slope, -1, -1, -1);
+//              WriteFloat(OutletSetting.Slope);
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  ROUGH');
-              WriteFloat(OutletSetting.Rough);
+              WriteFormulaOrValueBasedOnAPestName(OutletSetting.RoughPestParam,
+                OutletSetting.Rough, -1, -1, -1);
+//              WriteFloat(OutletSetting.Rough);
               NewLine;
 
               if MvrUsed and (UsedOutlets.IndexOf(OutletIndex+1) >= 0 ) and not WritingTemplate then
