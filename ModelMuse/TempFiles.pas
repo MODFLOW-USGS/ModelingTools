@@ -442,17 +442,17 @@ var
   StoredStream: TMemoryStream;
 begin
   try
-  if FileExists(FileName) then
-  begin
-    DeleteFile(FileName);
-  end;
-  UpdateCurrentTempItems(FileName);
+    if FileExists(FileName) then
+    begin
+      DeleteFile(FileName);
+    end;
+    UpdateCurrentTempItems(FileName);
 
-  StoredStream := CurrentTempItems.StreamFromFileName(FileName, False);
-  StoredStream.Position := 0;
-  InStream.Position := 0;
-  InStream.SaveToStream(StoredStream);
-  CurrentTempItems.SetDirtyFile(FileName);
+    StoredStream := CurrentTempItems.StreamFromFileName(FileName, False);
+    StoredStream.Position := 0;
+    InStream.Position := 0;
+    InStream.SaveToStream(StoredStream);
+    CurrentTempItems.SetDirtyFile(FileName);
   except on E: EWriteError do
     begin
       Beep;

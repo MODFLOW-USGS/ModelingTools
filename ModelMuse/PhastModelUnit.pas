@@ -36431,11 +36431,11 @@ begin
   FDataArrayCreationRecords[Index].Formula := '3.5';
   FDataArrayCreationRecords[Index].Classification := strUzfClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UzfMf6PackageUsed;
-  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].Lock := StandardLock  + [dcFormula, dcInterpolation];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6UZF6PacEps;
-  FDataArrayCreationRecords[Index].Visible := False;
+  FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
@@ -36446,11 +36446,11 @@ begin
   FDataArrayCreationRecords[Index].Formula := '0.3';
   FDataArrayCreationRecords[Index].Classification := strUzfClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UzfMf6PackageUsed;
-  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].Lock := StandardLock  + [dcFormula, dcInterpolation];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6UZF6PacThti;
-  FDataArrayCreationRecords[Index].Visible := False;
+  FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
@@ -36461,11 +36461,11 @@ begin
   FDataArrayCreationRecords[Index].Formula := '0.2';
   FDataArrayCreationRecords[Index].Classification := strUzfClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UzfMf6PackageUsed;
-  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula, dcInterpolation];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6UZF6PacThtr;
-  FDataArrayCreationRecords[Index].Visible := False;
+  FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
@@ -36476,11 +36476,11 @@ begin
   FDataArrayCreationRecords[Index].Formula := '0.3';
   FDataArrayCreationRecords[Index].Classification := strUzfClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UzfMf6PackageUsed;
-  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula, dcInterpolation];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6UZF6PacThts;
-  FDataArrayCreationRecords[Index].Visible := False;
+  FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
@@ -36491,11 +36491,11 @@ begin
   FDataArrayCreationRecords[Index].Formula := '1';
   FDataArrayCreationRecords[Index].Classification := strUzfClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UzfMf6PackageUsed;
-  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula, dcInterpolation];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6UZF6PacSurfdep;
-  FDataArrayCreationRecords[Index].Visible := False;
+  FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TRealSparseDataSet;
@@ -36506,11 +36506,11 @@ begin
   FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := strUzfClassification;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.UzfMf6PackageUsed;
-  FDataArrayCreationRecords[Index].Lock := StandardLock;
+  FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula, dcInterpolation];
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrMODFLOW6UZF6PacVks;
-  FDataArrayCreationRecords[Index].Visible := False;
+  FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 
   FDataArrayCreationRecords[Index].DataSetType := TDataArray;

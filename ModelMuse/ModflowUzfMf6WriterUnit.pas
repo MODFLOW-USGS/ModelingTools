@@ -678,14 +678,23 @@ var
   InnerLayerIndex: Integer;
   landflag: Integer;
   ivertcon: Integer;
-  surfdep: Double;
-  vks: Double;
+//  surfdep: Double;
+//  vks: Double;
   thtr: Double;
   thts: Double;
   thti: Double;
-  eps: Double;
+//  eps: Double;
   ScreenObject: TScreenObject;
+//  SurfaceDepressionDepthPestNames: TDataArray;
+//  PestParamName: string;
+//  Param: TModflowSteadyParameter;
+//  TemplateCharacter: Char;
+//  ArrayTemplateCharacter: Char;
+//  Formula: string;
 begin
+//  TemplateCharacter := Model.PestProperties.TemplateCharacter;
+//  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+
   WriteBeginPackageData;
 
   IDOMAINDataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
@@ -786,44 +795,62 @@ begin
           end;
           WriteInteger(ivertcon);
 
-          surfdep := SurfaceDepressionDepthDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
-          WriteFloat(surfdep);
+//          surfdep := SurfaceDepressionDepthDataArray.
+//            RealData[LayerIndex, RowIndex, ColumnIndex];
+//          WriteFloat(surfdep);
+          WriteSparseDataArrayValueOrFormula(SurfaceDepressionDepthDataArray,
+            LayerIndex, RowIndex, ColumnIndex);
 
-          vks := VerticalSaturatedKDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
-          WriteFloat(vks);
+//          vks := VerticalSaturatedKDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
+//          WriteFloat(vks);
+          WriteSparseDataArrayValueOrFormula(VerticalSaturatedKDataArray,
+            LayerIndex, RowIndex, ColumnIndex);
 
-          thtr := ReisidualWaterContentDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
-          WriteFloat(thtr);
+          thtr := ReisidualWaterContentDataArray.RealData[
+            LayerIndex, RowIndex, ColumnIndex];
+//          WriteFloat(thtr);
+          WriteSparseDataArrayValueOrFormula(ReisidualWaterContentDataArray,
+            LayerIndex, RowIndex, ColumnIndex);
           if thtr <= 0 then
           begin
             frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageResid,
               Format(StrAtLayerRowColuResid,
               [LayerIndex+1, RowIndex+1, ColumnIndex+1, thtr,
-              ReisidualWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+              ReisidualWaterContentDataArray.Annotation[
+              LayerIndex, RowIndex, ColumnIndex]]));
           end;
 
-
-          thts := SaturatedWaterContentDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
-          WriteFloat(thts);
+          thts := SaturatedWaterContentDataArray.RealData[
+            LayerIndex, RowIndex, ColumnIndex];
+//          WriteFloat(thts);
+          WriteSparseDataArrayValueOrFormula(SaturatedWaterContentDataArray,
+            LayerIndex, RowIndex, ColumnIndex);
           if thts - thtr <= 0 then
           begin
             frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageSatResid,
               Format(StrAtLayerRowColuSatResid,
               [LayerIndex+1, RowIndex+1, ColumnIndex+1, thts,
-              SaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex],
-              thtr, ReisidualWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+              SaturatedWaterContentDataArray.Annotation[
+              LayerIndex, RowIndex, ColumnIndex],
+              thtr, ReisidualWaterContentDataArray.Annotation[
+              LayerIndex, RowIndex, ColumnIndex]]));
           end;
 
-          thti := InitialUnsaturatedWaterContentDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
-          WriteFloat(thti);
+          thti := InitialUnsaturatedWaterContentDataArray.RealData[
+            LayerIndex, RowIndex, ColumnIndex];
+//          WriteFloat(thti);
+          WriteSparseDataArrayValueOrFormula(InitialUnsaturatedWaterContentDataArray,
+            LayerIndex, RowIndex, ColumnIndex);
 
           if thti - thtr < 0 then
           begin
             frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageInitResid,
               Format(StrAtLayerRowColuInitResid,
               [LayerIndex+1, RowIndex+1, ColumnIndex+1, thti,
-              InitialUnsaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex],
-              thtr, ReisidualWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+              InitialUnsaturatedWaterContentDataArray.Annotation[
+              LayerIndex, RowIndex, ColumnIndex],
+              thtr, ReisidualWaterContentDataArray.Annotation[
+              LayerIndex, RowIndex, ColumnIndex]]));
           end;
 
           if thti >= thts then
@@ -831,12 +858,16 @@ begin
             frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageInitSat,
               Format(StrAtLayerRowColuInitSat,
               [LayerIndex+1, RowIndex+1, ColumnIndex+1, thti,
-              InitialUnsaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex],
-              thts, SaturatedWaterContentDataArray.Annotation[LayerIndex, RowIndex, ColumnIndex]]));
+              InitialUnsaturatedWaterContentDataArray.Annotation[
+              LayerIndex, RowIndex, ColumnIndex],
+              thts, SaturatedWaterContentDataArray.Annotation[
+              LayerIndex, RowIndex, ColumnIndex]]));
           end;
 
-          eps := BrooksCoreyEpsilonDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
-          WriteFloat(eps);
+//          eps := BrooksCoreyEpsilonDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
+//          WriteFloat(eps);
+          WriteSparseDataArrayValueOrFormula(BrooksCoreyEpsilonDataArray,
+            LayerIndex, RowIndex, ColumnIndex);
 
           ScreenObject := FUzfObjectArray[LayerIndex, RowIndex, ColumnIndex];
           if ScreenObject <> nil then
