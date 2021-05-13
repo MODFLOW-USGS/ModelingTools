@@ -377,6 +377,7 @@ begin
   begin
     frmProgressMM.AddMessage('  Writing WETDRY');
     DataArray := Model.DataArrayManager.GetDataSetByName(rsWetDry);
+    Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'WETDRY');
     WritePestZones(DataArray, FInputFileName, NPF_WETDRY);
   end;

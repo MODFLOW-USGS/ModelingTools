@@ -40,7 +40,12 @@ function MemoryUsed(out FileCount: integer): Int64;
 
 implementation
 
-uses RTLConsts, Contnrs, Forms, ModelMuseUtilities, TlHelp32;
+uses RTLConsts, Contnrs, Forms, ModelMuseUtilities, TlHelp32, Vcl.Dialogs;
+
+resourcestring
+  StrErrorSavingTempora = 'Error saving temporary file. The error was "%s". ' +
+  'Check that there is sufficient free disk space. Consider saving your work' +
+  ' and restarting ModelMuse.';
 
 var MaxItems: integer = 200;
 
@@ -436,6 +441,7 @@ procedure ZipAFile(const FileName: string; InStream: TMemoryStream);
 var
   StoredStream: TMemoryStream;
 begin
+  try
   if FileExists(FileName) then
   begin
     DeleteFile(FileName);
@@ -447,6 +453,13 @@ begin
   InStream.Position := 0;
   InStream.SaveToStream(StoredStream);
   CurrentTempItems.SetDirtyFile(FileName);
+  except on E: EWriteError do
+    begin
+      Beep;
+      MessageDlg(Format(StrErrorSavingTempora, [E.message]), mtError, [mbOK], 0);
+      raise
+    end;
+  end;
 end;
 
 procedure ExtractAFile(const FileName: string; OutStream: TMemoryStream);

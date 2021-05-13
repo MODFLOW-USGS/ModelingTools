@@ -38249,8 +38249,11 @@ end;
 
 function TCustomModel.WetDryUsed(Sender: TObject): boolean;
 begin
-  result := ModflowWettingOptions.WettingActive
-    and not ModflowPackages.UpwPackage.IsSelected;
+  result := ModflowWettingOptions.WettingActive;
+  if result and (ModelSelection in [msModflowNWT, msModflowFmp]) then
+  begin
+    result := not ModflowPackages.UpwPackage.IsSelected;
+  end;
 end;
 
 function TCustomModel.ModpathBudgetNeeded(Sender: TObject): boolean;

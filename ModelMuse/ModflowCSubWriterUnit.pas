@@ -887,20 +887,27 @@ var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
-  pcs: Double;
-  thick_frac: Double;
-  rnb: Double;
-  ssv_cc: Double;
-  sse_cr: Double;
-  theta: Double;
-  kv: Double;
-  h0: Double;
+//  pcs: Double;
+//  thick_frac: Double;
+//  rnb: Double;
+//  ssv_cc: Double;
+//  sse_cr: Double;
+//  theta: Double;
+//  kv: Double;
+//  h0: Double;
   DisvUsed: Boolean;
   icsubno: Integer;
   IDomain: TDataArray;
   InterbedSystemCount: Integer;
   IbIndex: Integer;
   boundname: string;
+//  PcsDataArrayPestNames: TDataArray;
+//  thick_fracDataArrayPestNames: TDataArray;
+//  rnbDataArrayPestNames: TDataArray;
+//  ssv_ccDataArrayPestNames: TDataArray;
+//  sse_crDataArrayPestNames: TDataArray;
+//  thetaDataArrayPestNames: TDataArray;
+//  kvDataArrayPestNames: TDataArray;
 begin
   if ninterbeds = 0 then
   begin
@@ -927,40 +934,111 @@ begin
     pcsDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialOffset);
     pcsDataArray.Initialize;
 
+//    if Model.PestUsed and pcsDataArray.PestParametersUsed then
+//    begin
+//      PcsDataArrayPestNames := DataArrayManager.GetDataSetByName(pcsDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      PcsDataArrayPestNames := nil;
+//    end;
+
     thick_fracDataArray := DataArrayManager.GetDataSetByName(Interbed.Thickness);
     thick_fracDataArray.Initialize;
+
+//    if Model.PestUsed and thick_fracDataArray.PestParametersUsed then
+//    begin
+//      thick_fracDataArrayPestNames := DataArrayManager.GetDataSetByName(thick_fracDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      thick_fracDataArrayPestNames := nil;
+//    end;
 
     if Interbed.InterbedType = itDelay then
     begin
       rnbDataArray := DataArrayManager.GetDataSetByName(Interbed.EquivInterbedNumberName);
       rnbDataArray.Initialize;
+
+//      if Model.PestUsed and rnbDataArray.PestParametersUsed then
+//      begin
+//        rnbDataArrayPestNames := DataArrayManager.GetDataSetByName(rnbDataArray.ParamDataSetName);
+//      end
+//      else
+//      begin
+//        rnbDataArrayPestNames := nil;
+//      end;
     end
     else
     begin
       rnbDataArray := nil;
+//      rnbDataArrayPestNames := nil;
     end;
 
     ssv_ccDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialInelasticSpecificStorage);
     ssv_ccDataArray.Initialize;
+//    if Model.PestUsed and ssv_ccDataArray.PestParametersUsed then
+//    begin
+//      ssv_ccDataArrayPestNames := DataArrayManager.GetDataSetByName(ssv_ccDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      ssv_ccDataArrayPestNames := nil;
+//    end;
+
 
     sse_crDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialElasticSpecificStorage);
     sse_crDataArray.Initialize;
+//    if Model.PestUsed and sse_crDataArray.PestParametersUsed then
+//    begin
+//      sse_crDataArrayPestNames := DataArrayManager.GetDataSetByName(sse_crDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      sse_crDataArrayPestNames := nil;
+//    end;
 
     thetaDataArray := DataArrayManager.GetDataSetByName(Interbed.InitialPorosity);
     thetaDataArray.Initialize;
+//    if Model.PestUsed and thetaDataArray.PestParametersUsed then
+//    begin
+//      thetaDataArrayPestNames := DataArrayManager.GetDataSetByName(thetaDataArray.ParamDataSetName);
+//    end
+//    else
+//    begin
+//      thetaDataArrayPestNames := nil;
+//    end;
 
     if Interbed.InterbedType = itDelay  then
     begin
       kvDataArray := DataArrayManager.GetDataSetByName(Interbed.DelayKvName);
       kvDataArray.Initialize;
+//      if Model.PestUsed and kvDataArray.PestParametersUsed then
+//      begin
+//        kvDataArrayPestNames := DataArrayManager.GetDataSetByName(kvDataArray.ParamDataSetName);
+//      end
+//      else
+//      begin
+//        kvDataArrayPestNames := nil;
+//      end;
 
       h0DataArray := DataArrayManager.GetDataSetByName(Interbed.InitialDelayHeadOffset);
       h0DataArray.Initialize;
+//      if Model.PestUsed and h0DataArray.PestParametersUsed then
+//      begin
+//        h0DataArrayPestNames := DataArrayManager.GetDataSetByName(h0DataArray.ParamDataSetName);
+//      end
+//      else
+//      begin
+//        h0DataArrayPestNames := nil;
+//      end;
     end
     else
     begin
       kvDataArray := nil;
       h0DataArray := nil;
+//      kvDataArrayPestNames := nil;
+//      h0DataArrayPestNames := nil;
     end;
 
     CSubDataArray := DataArrayManager.GetDataSetByName(Interbed.CSubBoundName);

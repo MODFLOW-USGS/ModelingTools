@@ -22747,6 +22747,12 @@ begin
     or (ed = frameMAW.edStartingHead)
     or (ed = frameMAW.edStartingHead)
     or (ed = frameLakMf6.edStartingStage)
+//    or (ed = frameScreenObjectUzfMf6.edSurfaceDepressionDepth)
+//    or (ed = frameScreenObjectUzfMf6.edVerticalSaturatedK)
+//    or (ed = frameScreenObjectUzfMf6.edResidualWaterContent)
+//    or (ed = frameScreenObjectUzfMf6.edSaturatedWaterContent)
+//    or (ed = frameScreenObjectUzfMf6.edInitialWaterContent)
+//    or (ed = frameScreenObjectUzfMf6.edBrooksCoreyEpsilon)
     then
   begin
     PestParamOK := True;
@@ -25606,6 +25612,7 @@ begin
     or (DataGrid = frameMAW.frameWellScreens.Grid)
     or (DataGrid = frameLakMf6.frameLakeTable.Grid)
     or (DataGrid.Owner is  TframeLakeOutlet)
+//    or (DataGrid = frameCSUB.rdgSubGroups)
     ;
 end;
 

@@ -2378,6 +2378,8 @@ resourcestring
   StrPESTIsActiveButT = 'PEST is active but the PEST directory "%0:s" does n' +
   'ot exist. Check the PEST directory in "Model|PEST Properties';
   StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
+  StrErrorSavingModelMu = 'Error saving ModelMuse initialization file. The e' +
+  'rror message was "%s". Check that there is sufficient disk space.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -3207,8 +3209,10 @@ begin
         end;
       end;
     end;
-    on EWriteError do
+    on E: EWriteError do
     begin
+      Beep;
+      MessageDlg(Format(StrErrorSavingModelMu, [E.message]), mtWarning, [mbOK], 0);
       if TFile.Exists(BackUpFileName)
         and TFile.Exists(IniFile.FileName) then
       begin
