@@ -798,18 +798,20 @@ begin
 //          surfdep := SurfaceDepressionDepthDataArray.
 //            RealData[LayerIndex, RowIndex, ColumnIndex];
 //          WriteFloat(surfdep);
-          WriteSparseDataArrayValueOrFormula(SurfaceDepressionDepthDataArray,
+          WriteDataArrayValueOrFormula(SurfaceDepressionDepthDataArray,
             LayerIndex, RowIndex, ColumnIndex);
+//          WriteDataArrayValueOrFormula(SurfaceDepressionDepthDataArray,
+//            LayerIndex, RowIndex, ColumnIndex);
 
 //          vks := VerticalSaturatedKDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
 //          WriteFloat(vks);
-          WriteSparseDataArrayValueOrFormula(VerticalSaturatedKDataArray,
+          WriteDataArrayValueOrFormula(VerticalSaturatedKDataArray,
             LayerIndex, RowIndex, ColumnIndex);
 
           thtr := ReisidualWaterContentDataArray.RealData[
             LayerIndex, RowIndex, ColumnIndex];
 //          WriteFloat(thtr);
-          WriteSparseDataArrayValueOrFormula(ReisidualWaterContentDataArray,
+          WriteDataArrayValueOrFormula(ReisidualWaterContentDataArray,
             LayerIndex, RowIndex, ColumnIndex);
           if thtr <= 0 then
           begin
@@ -823,7 +825,7 @@ begin
           thts := SaturatedWaterContentDataArray.RealData[
             LayerIndex, RowIndex, ColumnIndex];
 //          WriteFloat(thts);
-          WriteSparseDataArrayValueOrFormula(SaturatedWaterContentDataArray,
+          WriteDataArrayValueOrFormula(SaturatedWaterContentDataArray,
             LayerIndex, RowIndex, ColumnIndex);
           if thts - thtr <= 0 then
           begin
@@ -839,7 +841,7 @@ begin
           thti := InitialUnsaturatedWaterContentDataArray.RealData[
             LayerIndex, RowIndex, ColumnIndex];
 //          WriteFloat(thti);
-          WriteSparseDataArrayValueOrFormula(InitialUnsaturatedWaterContentDataArray,
+          WriteDataArrayValueOrFormula(InitialUnsaturatedWaterContentDataArray,
             LayerIndex, RowIndex, ColumnIndex);
 
           if thti - thtr < 0 then
@@ -866,7 +868,7 @@ begin
 
 //          eps := BrooksCoreyEpsilonDataArray.RealData[LayerIndex, RowIndex, ColumnIndex];
 //          WriteFloat(eps);
-          WriteSparseDataArrayValueOrFormula(BrooksCoreyEpsilonDataArray,
+          WriteDataArrayValueOrFormula(BrooksCoreyEpsilonDataArray,
             LayerIndex, RowIndex, ColumnIndex);
 
           ScreenObject := FUzfObjectArray[LayerIndex, RowIndex, ColumnIndex];

@@ -11393,6 +11393,7 @@ var
   FootprintWithdrawalDataArray: TDataArray;
   ActiveDataArray: TDataArray;
   ChildModel: TChildModel;
+  ADataSet: TDataArray;
 //  AValue: Boolean;
 begin
   Result := False;
@@ -11673,9 +11674,21 @@ begin
             end;
           end;
 
+          DataArrayManager.Loaded;
+
+//          for Index := DataArrayManager.DataSetCount - 1 downto 0 do
+//          begin
+//            ADataSet := DataArrayManager.DataSets[Index];
+//            if ADataSet.PestParametersUsed then
+//            begin
+//              ADataSet.CreatePestParmNameDataSet;
+//            end;
+//          end;
+
           for Index := 0 to DataArrayManager.DataSetCount - 1 do
           begin
-            DataArrayManager.DataSets[Index].RestoreUpToDateStatus;
+            ADataSet := DataArrayManager.DataSets[Index];
+            ADataSet.RestoreUpToDateStatus;
           end;
           PhastModel.ModflowPackages.Loaded;
 

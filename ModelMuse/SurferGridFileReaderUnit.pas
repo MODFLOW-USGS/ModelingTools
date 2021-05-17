@@ -290,7 +290,10 @@ var
   ID: array [0..3] of AnsiChar;
 begin
   result := sft6;
-  Assert(FileExists(FileName));
+  if not FileExists(FileName) then
+  begin
+    raise EGrdReadError.Create(Format('%s does not exist.', [FileName]));
+  end;
   GrdFile := TFileStream.Create(FileName,
     fmOpenRead or fmShareCompat or fmShareDenyWrite);
   try

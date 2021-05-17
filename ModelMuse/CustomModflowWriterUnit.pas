@@ -246,10 +246,6 @@ type
     // or a formula to be evaluated by EnhancedTemplateProcessor
     procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
       Layer, Row, Col: Integer);
-    // Write the value of a TDataArray at a specific location or
-    // the formula for that data set.
-    procedure WriteSparseDataArrayValueOrFormula(DataArray: TDataArray;
-      Layer, Row, Col: Integer);
     // Write a formula for EnhancedTemplateProcessor or write a value
     // based on an identified parameter or PEST-modified data set.
     // If Layer < 0, only parameters will be used, not data sets.
@@ -8791,81 +8787,6 @@ begin
     WriteString('    SAVE_FLOWS');
     NewLine;
   end;
-end;
-
-procedure TCustomModflowWriter.WriteSparseDataArrayValueOrFormula(
-  DataArray: TDataArray; Layer, Row, Col: Integer);
-var
-  TemplateCharacter: Char;
-  ExtendedTemplateCharacter: Char;
-  PestNamesDataArray: TDataArray;
-  PestParamName: string;
-  Value: Double;
-  Param: TModflowSteadyParameter;
-  ParamValue: Double;
-  Replacement: string;
-  Formula: string;
-begin
-  TemplateCharacter := Model.PestProperties.TemplateCharacter;
-  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-  if DataArray.PestParametersUsed then
-  begin
-    PestNamesDataArray := Model.DataArrayManager.GetDataSetByName(
-      DataArray.ParamDataSetName);
-  end
-  else
-  begin
-    PestNamesDataArray := nil;
-  end;
-
-  if PestNamesDataArray <> nil then
-  begin
-    PestParamName := PestNamesDataArray.
-      StringData[Layer, Row, Col];
-    if PestParamName <> '' then
-    begin
-      FPestParamUsed := True;
-    end;
-  end
-  else
-  begin
-    PestParamName := '';
-  end;
-  Value := DataArray.RealData[Layer, Row, Col];
-
-  if WritingTemplate and (PestParamName <> '') then
-  begin
-    Param := Model.GetPestParameterByName(PestParamName);
-    if Param <> nil then
-    begin
-      FPestParamUsed := True;
-      ParamValue := Param.Value;
-
-      Replacement := Format(' %0:s                    %1:s%0:s',
-        [TemplateCharacter, Param.ParameterName]);
-      if Param.Value = 0 then
-      begin
-        Value := 0;
-      end
-      else
-      begin
-        Value := Value/ParamValue;
-      end;
-      Formula := Format('%0:g * %1:s',[Value, Replacement]);
-      Formula := Format(' %0:s                    %1:s%0:s ',
-        [ExtendedTemplateCharacter, Formula]);
-      WriteString(Formula);
-    end
-    else
-    begin
-      WriteFloat(Value);
-    end;
-  end
-  else
-  begin
-    WriteFloat(Value);
-  end;
-
 end;
 
 procedure TCustomModflowWriter.WriteBeginOptions;

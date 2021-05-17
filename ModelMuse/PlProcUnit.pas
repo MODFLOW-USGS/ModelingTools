@@ -1025,6 +1025,7 @@ var
   FileIndex: Integer;
   FileProperties: TPilotPointFileObject;
   UsedFileProperties: TPilotPointFileObject;
+  ParamIndex: Integer;
 begin
   ScriptFileName := ChangeFileExt(FParamValuesFileName, '.script');
   if ScriptChoice = scWriteTemplate then
@@ -1151,6 +1152,7 @@ begin
       begin
         AParam := FUsedParamList.Objects[ParameterIndex]
           as TModflowSteadyParameter;
+        ParamIndex := FPNames.IndexOf(AParam.ParameterName);
 
         WriteString('  # Setting values for parameter ');
         WriteString(AParam.ParameterName);
@@ -1197,7 +1199,7 @@ begin
             NewLine;
             WriteString(Format(
               '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = temp%0:d',
-              [LayerIndex + 1, ParameterIndex+1]));
+              [LayerIndex + 1, ParamIndex+1]));
             NewLine;
           end
           else
@@ -1214,7 +1216,7 @@ begin
           NewLine;
           WriteString(Format(
             '    p_Value%0:d(select=(s_PIndex%0:d == %1:d)) = p_Value%0:d * %2:s',
-            [LayerIndex + 1, ParameterIndex+1, AParam.ParameterName]));
+            [LayerIndex + 1, ParamIndex+1, AParam.ParameterName]));
           NewLine;
         end;
       end;
