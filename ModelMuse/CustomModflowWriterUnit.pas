@@ -107,7 +107,7 @@ type
       ACell: TValueCell): string;
     procedure WritePestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
-      ACell: TValueCell; FixedLength: Integer = 0);
+      ACell: TValueCell; FixedLength: Integer = 0; ChangeSign: Boolean = False);
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID: string);
     procedure OpenTempFile(const FileName: string);
@@ -241,7 +241,7 @@ type
     // Write a value or a formula for EnhancedTemplateProcessor for a
     // boundary condition cell.
     procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
-      FixedLength: Integer = 0);
+      FixedLength: Integer = 0; ChangeSign: Boolean = False);
     // Write either the data array value at the specified location
     // or a formula to be evaluated by EnhancedTemplateProcessor
     procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
@@ -2521,7 +2521,7 @@ end;
 
 procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
   PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
-  ACell: TValueCell; FixedLength: Integer);
+  ACell: TValueCell; FixedLength: Integer; ChangeSign: Boolean);
 var
   ExtendedTemplateCharacter: string;
   Formula: string;
@@ -2530,6 +2530,10 @@ begin
 
   Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
     Method, ACell);
+  if ChangeSign then
+  begin
+    Formula := '-1*' + Formula;
+  end;
   if Formula <> '' then
   begin
     Formula := Format(' %0:s                    %1:s%0:s ',
@@ -9903,7 +9907,7 @@ begin
 end;
 
 procedure TCustomModflowWriter.WriteValueOrFormula(Cell: TValueCell;
-  Index: integer; FixedLength: Integer);
+  Index: integer; FixedLength: Integer; ChangeSign: Boolean);
 var
   Value: double;
   PestItem: string;
@@ -9912,6 +9916,10 @@ var
   DataArray: TDataArray;
 begin
   Value := Cell.RealValue[Index, Model];
+  if ChangeSign then
+  begin
+    Value := -Value;
+  end;
   PestItem := Cell.PestName[Index];
   PestSeries := Cell.PestSeriesName[Index];
   if (PestItem <> '') or (PestSeries <> '') then
@@ -9922,7 +9930,8 @@ begin
     ((PestItem <> '') or (PestSeries <> '')) then
   begin
     PestMethod := Cell.PestSeriesMethod[Index];
-    WritePestTemplateFormula(Value, PestItem, PestSeries, PestMethod, Cell, FixedLength);
+    WritePestTemplateFormula(Value, PestItem, PestSeries, PestMethod, Cell,
+      FixedLength, ChangeSign);
   end
   else
   begin

@@ -559,24 +559,43 @@ begin
         WriteInteger(Model.DataSetLayerToModflowLayer(Cell.Layer));
         WriteInteger(Cell.Row+1);
         WriteInteger(Cell.Column+1);
-        WriteFloat(Cell.DesiredPumpingRate);
+//        WriteFloat(Cell.DesiredPumpingRate);
+        WriteValueOrFormula(Cell, DesiredPumpingRatePosition);
+
+
         if (PriorCell <> nil) and (Cell.ConductanceMethod <> mcmFixed)
           and (PriorCell.ScreenObject = Cell.ScreenObject) then
         begin
           WriteString(' MN');
         end;
-        WriteFloat(Cell.WaterQuality);
+//        WriteFloat(Cell.WaterQuality);
+        WriteValueOrFormula(Cell, WaterQualityPosition);
         Rw := 0;
         case Cell.ConductanceMethod of
-          mcmRadius: Rw := Cell.WellRadius;
-          mcmFixed: Rw := 0;
-          mcmConductance: Rw := -Cell.Conductance;
+          mcmRadius:
+            begin
+              Rw := Cell.WellRadius;
+              WriteValueOrFormula(Cell, WellRadiusPosition);
+            end;
+          mcmFixed:
+            begin
+              Rw := 0;
+              WriteFloat(Rw);
+            end;
+          mcmConductance:
+            begin
+              Rw := -Cell.Conductance;
+              WriteValueOrFormula(Cell, ConductancePosition, 0, True);
+            end
           else Assert(False);
         end;
-        WriteFloat(Rw);
-        WriteFloat(Cell.SkinFactor);
-        WriteFloat(Cell.LimitingWaterLevel);
-        WriteFloat(Cell.ReferenceElevation);
+//        WriteFloat(Rw);
+//        WriteFloat(Cell.SkinFactor);
+        WriteValueOrFormula(Cell, SkinFactorPosition);
+//        WriteFloat(Cell.LimitingWaterLevel);
+        WriteValueOrFormula(Cell, LimitingWaterLevelPosition);
+//        WriteFloat(Cell.ReferenceElevation);
+        WriteValueOrFormula(Cell, ReferenceElevationPosition);
         if Cell.WaterLevelLimitType = mwlltRelative then
         begin
           WriteString(' DD');
@@ -585,7 +604,8 @@ begin
         if FMnwPackage.LossType = mlt1NonLinear then
         begin
           WriteString(' Cp: ');
-          WriteFloat(Cell.NonLinearLossCoefficient);
+//          WriteFloat(Cell.NonLinearLossCoefficient);
+          WriteValueOrFormula(Cell, NonLinearLossCoefficientPosition);
         end;
         if Cell.PumpingLimitType in [mpltAbsolute, mpltPercent] then
         begin
@@ -601,8 +621,10 @@ begin
           begin
             Assert(False);
           end;
-          WriteFloat(Cell.MinimumPumpingRate);
-          WriteFloat(Cell.MaximumPumpingRate);
+//          WriteFloat(Cell.MinimumPumpingRate);
+          WriteValueOrFormula(Cell, MinimumPumpingRatePosition);
+//          WriteFloat(Cell.MaximumPumpingRate);
+          WriteValueOrFormula(Cell, ReactivationPumpingRatePosition);
         end;
 
         if (Cell.Site <> '') then

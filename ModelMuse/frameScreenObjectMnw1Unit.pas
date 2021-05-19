@@ -279,6 +279,11 @@ begin
           Mnw1Item.ReactivationPumpingRate;
       end;
 
+      {$IFDEF PEST}
+//      PestModifier[rdgModflowBoundary, Ord(mcDesiredPumpingRate)] := FirstMnw1.PestRateFormula;
+//      PestMethod[rdgModflowBoundary, Ord(mcDesiredPumpingRate)] := FirstMnw1.PestRateMethod;
+      {$ENDIF}
+
       for BoundaryIndex := 1 to Mnw1List.Count - 1 do
       begin
         Mnw1Boundary := Mnw1List[BoundaryIndex];
@@ -299,6 +304,8 @@ begin
           seNumberOfTimes.OnChange(nil);
           Exit;
         end;
+        {$IFDEF PEST}
+        {$ENDIF}
       end;
 
       for BoundaryIndex := 1 to Mnw1List.Count - 1 do

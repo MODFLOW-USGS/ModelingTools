@@ -321,6 +321,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
     // Qdes
@@ -368,7 +371,91 @@ type
   TMnw1Boundary = class(TModflowBoundary)
   private
     FSite: string;
+    FPestDesiredPumpingRateMethod: TPestParamMethod;
+    FPestConductanceMethod: TPestParamMethod;
+    FPestNonLinearLossCoefficientMethod: TPestParamMethod;
+    FPestLimitingWaterLevelMethod: TPestParamMethod;
+    FPestReferenceElevationMethod: TPestParamMethod;
+    FPestMinimumPumpingRateMethod: TPestParamMethod;
+    FPestSkinFactorMethod: TPestParamMethod;
+    FPestWellRadiusMethod: TPestParamMethod;
+    FPestMaximumPumpingRateMethod: TPestParamMethod;
+    FPestWaterQualityMethod: TPestParamMethod;
+    FPestConductanceObserver: TObserver;
+    FPestDesiredPumpingRateObserver: TObserver;
+    FPestLimitingWaterLevelObserver: TObserver;
+    FPestMaximumPumpingRateObserver: TObserver;
+    FPestMinimumPumpingRateObserver: TObserver;
+    FPestNonLinearLossCoefficientObserver: TObserver;
+    FPestReferenceElevationObserver: TObserver;
+    FPestWaterQualityObserver: TObserver;
+    FPestWellRadiusObserver: TObserver;
+    FPestSkinFactorObserver: TObserver;
+    FPestDesiredPumpingRateFormula: TFormulaObject;
+    FPestWaterQualityFormula: TFormulaObject;
+    FPestWellRadiusFormula: TFormulaObject;
+    FPestConductanceFormula: TFormulaObject;
+    FPestSkinFactorFormula: TFormulaObject;
+    FPestLimitingWaterLevelFormula: TFormulaObject;
+    FPestReferenceElevationFormula: TFormulaObject;
+    FPestNonLinearLossCoefficientFormula: TFormulaObject;
+    FPestMinimumPumpingRateFormula: TFormulaObject;
+    FPestMaximumPumpingRateFormula: TFormulaObject;
+    FUsedObserver: TObserver;
     procedure SetSite(const Value: string);
+    function GetPestConductanceObserver: TObserver;
+    function GetPestDesiredPumpingRateObserver: TObserver;
+    function GetPestLimitingWaterLevelObserver: TObserver;
+    function GetPestMaximumPumpingRateObserver: TObserver;
+    function GetPestMinimumPumpingRateObserver: TObserver;
+    function GetPestNonLinearLossCoefficientObserver: TObserver;
+    function GetPestReferenceElevationObserver: TObserver;
+    function GetPestSkinFactorObserver: TObserver;
+    function GetPestWaterQualityObserver: TObserver;
+    function GetPestWellRadiusObserver: TObserver;
+    function GetPestDesiredPumpingRateFormula: string;
+    function GetPestConductanceFormula: string;
+    function GetPestLimitingWaterLevelFormula: string;
+    function GetPestMaximumPumpingRateFormula: string;
+    function GetPestMinimumPumpingRateFormula: string;
+    function GetPestNonLinearLossCoefficientFormula: string;
+    function GetPestReferenceElevationFormula: string;
+    function GetPestSkinFactorFormula: string;
+    function GetPestWaterQualityFormula: string;
+    function GetPestWellRadiusFormula: string;
+    procedure SetPestDesiredPumpingRateFormula(const Value: string);
+    procedure SetPestDesiredPumpingRateMethod(const Value: TPestParamMethod);
+    procedure SetPestConductanceFormula(const Value: string);
+    procedure SetPestConductanceMethod(const Value: TPestParamMethod);
+    procedure SetPestLimitingWaterLevelFormula(const Value: string);
+    procedure SetPestLimitingWaterLevelMethod(const Value: TPestParamMethod);
+    procedure SetPestMaximumPumpingRateFormula(const Value: string);
+    procedure SetPestMaximumPumpingRateMethod(const Value: TPestParamMethod);
+    procedure SetPestMinimumPumpingRateFormula(const Value: string);
+    procedure SetPestMinimumPumpingRateMethod(const Value: TPestParamMethod);
+    procedure SetPestNonLinearLossCoefficientFormula(const Value: string);
+    procedure SetPestNonLinearLossCoefficientMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestReferenceElevationFormula(const Value: string);
+    procedure SetPestReferenceElevationMethod(const Value: TPestParamMethod);
+    procedure SetPestSkinFactorFormula(const Value: string);
+    procedure SetPestSkinFactorMethod(const Value: TPestParamMethod);
+    procedure SetPestWaterQualityFormula(const Value: string);
+    procedure SetPestWaterQualityMethod(const Value: TPestParamMethod);
+    procedure SetPestWellRadiusFormula(const Value: string);
+    procedure SetPestWellRadiusMethod(const Value: TPestParamMethod);
+
+    procedure InvalidateDesiredPumpingRateData(Sender: TObject);
+    procedure InvalidateWaterQualityData(Sender: TObject);
+    procedure InvalidateWellRadiusData(Sender: TObject);
+    procedure InvalidateConductanceData(Sender: TObject);
+    procedure InvalidateSkinFactorData(Sender: TObject);
+    procedure InvalidateLimitingWaterLevelData(Sender: TObject);
+    procedure InvalidateReferenceElevationData(Sender: TObject);
+    procedure InvalidateNonLinearLossCoefficientData(Sender: TObject);
+    procedure InvalidateMinimumPumpingRateData(Sender: TObject);
+    procedure InvalidateMaximumPumpingRateData(Sender: TObject);
+
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -378,14 +465,164 @@ type
     // See @link(TModflowBoundary.BoundaryCollectionClass
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestDesiredPumpingRateObserver: TObserver read GetPestDesiredPumpingRateObserver;
+    property PestWaterQualityObserver: TObserver read GetPestWaterQualityObserver;
+    property PestWellRadiusObserver: TObserver read GetPestWellRadiusObserver;
+    property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    property PestSkinFactorObserver: TObserver read GetPestSkinFactorObserver;
+    property PestLimitingWaterLevelObserver: TObserver read GetPestLimitingWaterLevelObserver;
+    property PestReferenceElevationObserver: TObserver read GetPestReferenceElevationObserver;
+    property PestNonLinearLossCoefficientObserver: TObserver read GetPestNonLinearLossCoefficientObserver;
+    property PestMinimumPumpingRateObserver: TObserver read GetPestMinimumPumpingRateObserver;
+    property PestMaximumPumpingRateObserver: TObserver read GetPestMaximumPumpingRateObserver;
+
   public
+    procedure Assign(Source: TPersistent); override;
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Destructor Destroy; override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     // SITE: MNWsite
     property Site: string read FSite write SetSite;
-    procedure Assign(Source: TPersistent); override;
+
+    // PEST parameters
+    property PestDesiredPumpingRateFormula: string read GetPestDesiredPumpingRateFormula
+      write SetPestDesiredPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDesiredPumpingRateMethod: TPestParamMethod read FPestDesiredPumpingRateMethod
+      write SetPestDesiredPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWaterQualityFormula: string read GetPestWaterQualityFormula
+      write SetPestWaterQualityFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWaterQualityMethod: TPestParamMethod read FPestWaterQualityMethod
+      write SetPestWaterQualityMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWellRadiusFormula: string read GetPestWellRadiusFormula
+      write SetPestWellRadiusFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestWellRadiusMethod: TPestParamMethod read FPestWellRadiusMethod
+      write SetPestWellRadiusMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceFormula: string read GetPestConductanceFormula
+      write SetPestConductanceFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConductanceMethod: TPestParamMethod read FPestConductanceMethod
+      write SetPestConductanceMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestSkinFactorFormula: string read GetPestSkinFactorFormula
+      write SetPestSkinFactorFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestSkinFactorMethod: TPestParamMethod read FPestSkinFactorMethod
+      write SetPestSkinFactorMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestLimitingWaterLevelFormula: string read GetPestLimitingWaterLevelFormula
+      write SetPestLimitingWaterLevelFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestLimitingWaterLevelMethod: TPestParamMethod read FPestLimitingWaterLevelMethod
+      write SetPestLimitingWaterLevelMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestReferenceElevationFormula: string read GetPestReferenceElevationFormula
+      write SetPestReferenceElevationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestReferenceElevationMethod: TPestParamMethod read FPestReferenceElevationMethod
+      write SetPestReferenceElevationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestNonLinearLossCoefficientFormula: string read GetPestNonLinearLossCoefficientFormula
+      write SetPestNonLinearLossCoefficientFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestNonLinearLossCoefficientMethod: TPestParamMethod read FPestNonLinearLossCoefficientMethod
+      write SetPestNonLinearLossCoefficientMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMinimumPumpingRateFormula: string read GetPestMinimumPumpingRateFormula
+      write SetPestMinimumPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMinimumPumpingRateMethod: TPestParamMethod read FPestMinimumPumpingRateMethod
+      write SetPestMinimumPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMaximumPumpingRateFormula: string read GetPestMaximumPumpingRateFormula
+      write SetPestMaximumPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestMaximumPumpingRateMethod: TPestParamMethod read FPestMaximumPumpingRateMethod
+      write SetPestMaximumPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
@@ -400,6 +637,17 @@ const
   NonLinearLossCoefficientPosition = 8;
   MinimumPumpingRatePosition = 9;
   ReactivationPumpingRatePosition = 10;
+
+  Mnw1BoundDesiredPumpingRatePosition = 0;
+  Mnw1BoundWaterQualityPosition = 1;
+  Mnw1BoundWellRadiusPosition = 2;
+  Mnw1BoundConductancePosition = 3;
+  Mnw1BoundSkinFactorPosition = 4;
+  Mnw1BoundLimitingWaterLevelPosition = 5;
+  Mnw1BoundReferenceElevationPosition = 6;
+  Mnw1BoundNonLinearLossCoefficientPosition = 7;
+  Mnw1BoundMinimumPumpingRatePosition = 8;
+  Mnw1BoundReactivationPumpingRatePosition = 9;
 
 implementation
 
@@ -1807,6 +2055,63 @@ begin
   result := Values.NonLinearLossCoefficientAnnotation;
 end;
 
+function TMnw1Cell.GetPestName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    DesiredPumpingRatePosition: result := Values.DesiredPumpingRatePestName;
+    WaterQualityPosition: result := Values.WaterQualityPestName;
+    WellRadiusPosition: result := Values.WellRadiusPestName;
+    ConductancePosition: result := Values.ConductancePestName;
+    SkinFactorPosition: result := Values.SkinFactorPestName;
+    LimitingWaterLevelPosition: result := Values.LimitingWaterLevelPestName;
+    ReferenceElevationPosition: result := Values.ReferenceElevationPestName;
+    WaterQualityGroupPosition: result := '';
+    NonLinearLossCoefficientPosition: result := Values.NonLinearLossCoefficientPestName;
+    MinimumPumpingRatePosition: result := Values.MinimumPumpingRatePestName;
+    ReactivationPumpingRatePosition: result := Values.MaximumPumpingRatePestName;
+    else Assert(False);
+  end;
+end;
+
+function TMnw1Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  result := inherited;
+  case Index of
+    DesiredPumpingRatePosition: result := Values.DesiredPumpingRatePestSeriesMethod;
+    WaterQualityPosition: result := Values.WaterQualityPestSeriesMethod;
+    WellRadiusPosition: result := Values.WellRadiusPestSeriesMethod;
+    ConductancePosition: result := Values.ConductancePestSeriesMethod;
+    SkinFactorPosition: result := Values.SkinFactorPestSeriesMethod;
+    LimitingWaterLevelPosition: result := Values.LimitingWaterLevelPestSeriesMethod;
+    ReferenceElevationPosition: result := Values.ReferenceElevationPestSeriesMethod;
+//    WaterQualityGroupPosition: result := '';
+    NonLinearLossCoefficientPosition: result := Values.NonLinearLossCoefficientPestSeriesMethod;
+    MinimumPumpingRatePosition: result := Values.MinimumPumpingRatePestSeriesMethod;
+    ReactivationPumpingRatePosition: result := Values.MaximumPumpingRatePestSeriesMethod;
+    else Assert(False);
+  end;
+end;
+
+function TMnw1Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    DesiredPumpingRatePosition: result := Values.DesiredPumpingRatePestSeriesName;
+    WaterQualityPosition: result := Values.WaterQualityPestSeriesName;
+    WellRadiusPosition: result := Values.WellRadiusPestSeriesName;
+    ConductancePosition: result := Values.ConductancePestSeriesName;
+    SkinFactorPosition: result := Values.SkinFactorPestSeriesName;
+    LimitingWaterLevelPosition: result := Values.LimitingWaterLevelPestSeriesName;
+    ReferenceElevationPosition: result := Values.ReferenceElevationPestSeriesName;
+    WaterQualityGroupPosition: result := '';
+    NonLinearLossCoefficientPosition: result := Values.NonLinearLossCoefficientPestSeriesName;
+    MinimumPumpingRatePosition: result := Values.MinimumPumpingRatePestSeriesName;
+    ReactivationPumpingRatePosition: result := Values.MaximumPumpingRatePestSeriesName;
+    else Assert(False);
+  end;
+end;
+
 function TMnw1Cell.GetPumpingLimitType: TMnw1PumpingLimitType;
 begin
   result := Values.PumpingLimitType;
@@ -1977,10 +2282,13 @@ end;
 { TMnw1Boundary }
 
 procedure TMnw1Boundary.Assign(Source: TPersistent);
+var
+  Mnw1Source: TMnw1Boundary;
 begin
   if Source is TMnw1Boundary then
   begin
-    Site := TMnw1Boundary(Source).Site;
+    Mnw1Source := TMnw1Boundary(Source);
+    Site := Mnw1Source.Site;
   end;
   inherited;
 end;
@@ -2046,6 +2354,117 @@ begin
   Result := TMnw1WellCollection;
 end;
 
+function TMnw1Boundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestMnw1_';
+end;
+
+constructor TMnw1Boundary.Create(Model: TBaseModel; ScreenObject: TObject);
+var
+  Index: Integer;
+begin
+  inherited;
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  for Index := Mnw1BoundDesiredPumpingRatePosition to Mnw1BoundReactivationPumpingRatePosition do
+  begin
+    PestBoundaryFormula[Index] := '';
+    PestBoundaryMethod[Index] := DefaultBoundaryMethod(Index);
+  end;
+end;
+
+procedure TMnw1Boundary.CreateFormulaObjects;
+begin
+  FPestDesiredPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestWaterQualityFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestWellRadiusFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestConductanceFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestSkinFactorFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestLimitingWaterLevelFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestReferenceElevationFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestNonLinearLossCoefficientFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestMinimumPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestMaximumPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TMnw1Boundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestDesiredPumpingRateObserver);
+    FObserverList.Add(PestWaterQualityObserver);
+    FObserverList.Add(PestWellRadiusObserver);
+    FObserverList.Add(PestConductanceObserver);
+    FObserverList.Add(PestSkinFactorObserver);
+    FObserverList.Add(PestLimitingWaterLevelObserver);
+    FObserverList.Add(PestReferenceElevationObserver);
+    FObserverList.Add(PestNonLinearLossCoefficientObserver);
+    FObserverList.Add(PestMinimumPumpingRateObserver);
+    FObserverList.Add(PestMaximumPumpingRateObserver);
+  end;
+end;
+
+class function TMnw1Boundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    Mnw1BoundDesiredPumpingRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Mnw1BoundWaterQualityPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Mnw1BoundWellRadiusPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Mnw1BoundConductancePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Mnw1BoundSkinFactorPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Mnw1BoundLimitingWaterLevelPosition:
+      begin
+        result := ppmAdd;
+      end;
+    Mnw1BoundReferenceElevationPosition:
+      begin
+        result := ppmAdd;
+      end;
+    Mnw1BoundNonLinearLossCoefficientPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Mnw1BoundMinimumPumpingRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    Mnw1BoundReactivationPumpingRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+destructor TMnw1Boundary.Destroy;
+begin
+  for Index := Mnw1BoundDesiredPumpingRatePosition to Mnw1BoundReactivationPumpingRatePosition do
+  begin
+    PestBoundaryFormula[Index] := '';
+  end;
+  inherited;
+end;
+
 procedure TMnw1Boundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
@@ -2059,6 +2478,446 @@ begin
     begin
       BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TMnw1Storage;
       AssignCells(BoundaryStorage, ValueTimeList, AModel);
+    end;
+  end;
+end;
+
+function TMnw1Boundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    Mnw1BoundDesiredPumpingRatePosition:
+      begin
+        result := PestDesiredPumpingRateFormula;
+      end;
+    Mnw1BoundWaterQualityPosition:
+      begin
+        result := PestWaterQualityFormula;
+      end;
+    Mnw1BoundWellRadiusPosition:
+      begin
+        result := PestWellRadiusFormula;
+      end;
+    Mnw1BoundConductancePosition:
+      begin
+        result := PestConductanceFormula;
+      end;
+    Mnw1BoundSkinFactorPosition:
+      begin
+        result := PestSkinFactorFormula;
+      end;
+    Mnw1BoundLimitingWaterLevelPosition:
+      begin
+        result := PestLimitingWaterLevelFormula;
+      end;
+    Mnw1BoundReferenceElevationPosition:
+      begin
+        result := PestReferenceElevationFormula;
+      end;
+    Mnw1BoundNonLinearLossCoefficientPosition:
+      begin
+        result := PestNonLinearLossCoefficientFormula;
+      end;
+    Mnw1BoundMinimumPumpingRatePosition:
+      begin
+        result := PestMinimumPumpingRateFormula;
+      end;
+    Mnw1BoundReactivationPumpingRatePosition:
+      begin
+        result := PestMaximumPumpingRateFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TMnw1Boundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  result := '';
+  case FormulaIndex of
+    Mnw1BoundDesiredPumpingRatePosition:
+      begin
+        result := PestDesiredPumpingRateMethod;
+      end;
+    Mnw1BoundWaterQualityPosition:
+      begin
+        result := PestWaterQualityMethod;
+      end;
+    Mnw1BoundWellRadiusPosition:
+      begin
+        result := PestWellRadiusMethod;
+      end;
+    Mnw1BoundConductancePosition:
+      begin
+        result := PestConductanceMethod;
+      end;
+    Mnw1BoundSkinFactorPosition:
+      begin
+        result := PestSkinFactorMethod;
+      end;
+    Mnw1BoundLimitingWaterLevelPosition:
+      begin
+        result := PestLimitingWaterLevelMethod;
+      end;
+    Mnw1BoundReferenceElevationPosition:
+      begin
+        result := PestReferenceElevationMethod;
+      end;
+    Mnw1BoundNonLinearLossCoefficientPosition:
+      begin
+        result := PestNonLinearLossCoefficientMethod;
+      end;
+    Mnw1BoundMinimumPumpingRatePosition:
+      begin
+        result := PestMinimumPumpingRateMethod;
+      end;
+    Mnw1BoundReactivationPumpingRatePosition:
+      begin
+        result := PestMaximumPumpingRateMethod;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TMnw1Boundary.GetPestConductanceFormula: string;
+begin
+  Result := FPestConductanceFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundConductancePosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestConductanceObserver: TObserver;
+begin
+  if FPestConductanceObserver = nil then
+  begin
+    CreateObserver('Mnw1PestConductance_', FPestConductanceObserver, nil);
+    FPestConductanceObserver.OnUpToDateSet := InvalidateConductanceData;
+  end;
+  result := FPestConductanceObserver;
+end;
+
+function TMnw1Boundary.GetPestDesiredPumpingRateFormula: string;
+begin
+  Result := FPestDesiredPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundDesiredPumpingRatePosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestDesiredPumpingRateObserver: TObserver;
+begin
+  if FPestDesiredPumpingRateObserver = nil then
+  begin
+    CreateObserver('Mnw1PestDesiredPumpingRate_', FPestDesiredPumpingRateObserver, nil);
+    FPestDesiredPumpingRateObserver.OnUpToDateSet := InvalidateDesiredPumpingRateData;
+  end;
+  result := FPestDesiredPumpingRateObserver;
+end;
+
+function TMnw1Boundary.GetPestLimitingWaterLevelFormula: string;
+begin
+  Result := FPestLimitingWaterLevelFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundLimitingWaterLevelPosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestLimitingWaterLevelObserver: TObserver;
+begin
+  if FPestLimitingWaterLevelObserver = nil then
+  begin
+    CreateObserver('Mnw1PestLimitingWaterLevel_', FPestLimitingWaterLevelObserver, nil);
+    FPestLimitingWaterLevelObserver.OnUpToDateSet := InvalidateLimitingWaterLevelData;
+  end;
+  result := FPestLimitingWaterLevelObserver;
+end;
+
+function TMnw1Boundary.GetPestMaximumPumpingRateFormula: string;
+begin
+  Result := FPestMaximumPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundReactivationPumpingRatePosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestMaximumPumpingRateObserver: TObserver;
+begin
+  if FPestMaximumPumpingRateObserver = nil then
+  begin
+    CreateObserver('Mnw1PestMaximumPumpingRate_', FPestMaximumPumpingRateObserver, nil);
+    FPestMaximumPumpingRateObserver.OnUpToDateSet := InvalidateMaximumPumpingRateData;
+  end;
+  result := FPestMaximumPumpingRateObserver;
+end;
+
+function TMnw1Boundary.GetPestMinimumPumpingRateFormula: string;
+begin
+  Result := FPestMinimumPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundMinimumPumpingRatePosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestMinimumPumpingRateObserver: TObserver;
+begin
+  if FPestMinimumPumpingRateObserver = nil then
+  begin
+    CreateObserver('Mnw1PestMinimumPumpingRate_', FPestMinimumPumpingRateObserver, nil);
+    FPestMinimumPumpingRateObserver.OnUpToDateSet := InvalidateMinimumPumpingRateData;
+  end;
+  result := FPestMinimumPumpingRateObserver;
+end;
+
+function TMnw1Boundary.GetPestNonLinearLossCoefficientFormula: string;
+begin
+  Result := FPestNonLinearLossCoefficientFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundNonLinearLossCoefficientPosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestNonLinearLossCoefficientObserver: TObserver;
+begin
+  if FPestNonLinearLossCoefficientObserver = nil then
+  begin
+    CreateObserver('Mnw1PestNonLinearLossCoefficient_', FPestNonLinearLossCoefficientObserver, nil);
+    FPestNonLinearLossCoefficientObserver.OnUpToDateSet := InvalidateNonLinearLossCoefficientData;
+  end;
+  result := FPestNonLinearLossCoefficientObserver;
+end;
+
+function TMnw1Boundary.GetPestReferenceElevationFormula: string;
+begin
+  Result := FPestReferenceElevationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundReferenceElevationPosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestReferenceElevationObserver: TObserver;
+begin
+  if FPestReferenceElevationObserver = nil then
+  begin
+    CreateObserver('Mnw1PestReferenceElevation_', FPestReferenceElevationObserver, nil);
+    FPestReferenceElevationObserver.OnUpToDateSet := InvalidateReferenceElevationData;
+  end;
+  result := FPestReferenceElevationObserver;
+end;
+
+function TMnw1Boundary.GetPestSkinFactorFormula: string;
+begin
+  Result := FPestSkinFactorFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundSkinFactorPosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestSkinFactorObserver: TObserver;
+begin
+  if FPestSkinFactorObserver = nil then
+  begin
+    CreateObserver('Mnw1PestSkinFactor_', FPestSkinFactorObserver, nil);
+    FPestSkinFactorObserver.OnUpToDateSet := InvalidateSkinFactorData;
+  end;
+  result := FPestSkinFactorObserver;
+end;
+
+function TMnw1Boundary.GetPestWaterQualityFormula: string;
+begin
+  Result := FPestWaterQualityFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundWaterQualityPosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestWaterQualityObserver: TObserver;
+begin
+  if FPestWaterQualityObserver = nil then
+  begin
+    CreateObserver('Mnw1PestWaterQuality_', FPestWaterQualityObserver, nil);
+    FPestWaterQualityObserver.OnUpToDateSet := InvalidateWaterQualityData;
+  end;
+  result := FPestWaterQualityObserver;
+end;
+
+function TMnw1Boundary.GetPestWellRadiusFormula: string;
+begin
+  Result := FPestWellRadiusFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(Mnw1BoundWellRadiusPosition);
+  end;
+end;
+
+function TMnw1Boundary.GetPestWellRadiusObserver: TObserver;
+begin
+  if FPestWellRadiusObserver = nil then
+  begin
+    CreateObserver('Mnw1PestWellRadius_', FPestWellRadiusObserver, nil);
+    FPestWellRadiusObserver.OnUpToDateSet := InvalidateWellRadiusData;
+  end;
+  result := FPestWellRadiusObserver;
+end;
+
+procedure TMnw1Boundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestDesiredPumpingRateFormula then
+  begin
+    if Mnw1BoundDesiredPumpingRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundDesiredPumpingRatePosition]);
+    end;
+  end;
+  if Sender = FPestWaterQualityFormula then
+  begin
+    if Mnw1BoundWaterQualityPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundWaterQualityPosition]);
+    end;
+  end;
+
+  if Sender = FPestWellRadiusFormula then
+  begin
+    if Mnw1BoundWellRadiusPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundWellRadiusPosition]);
+    end;
+  end;
+  if Sender = FPestConductanceFormula then
+  begin
+    if Mnw1BoundConductancePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundConductancePosition]);
+    end;
+  end;
+  if Sender = FPestSkinFactorFormula then
+  begin
+    if Mnw1BoundSkinFactorPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundSkinFactorPosition]);
+    end;
+  end;
+  if Sender = FPestLimitingWaterLevelFormula then
+  begin
+    if Mnw1BoundLimitingWaterLevelPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundLimitingWaterLevelPosition]);
+    end;
+  end;
+  if Sender = FPestReferenceElevationFormula then
+  begin
+    if Mnw1BoundReferenceElevationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundReferenceElevationPosition]);
+    end;
+  end;
+  if Sender = FPestNonLinearLossCoefficientFormula then
+  begin
+    if Mnw1BoundNonLinearLossCoefficientPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundNonLinearLossCoefficientPosition]);
+    end;
+  end;
+  if Sender = FPestMinimumPumpingRateFormula then
+  begin
+    if Mnw1BoundMinimumPumpingRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundMinimumPumpingRatePosition]);
+    end;
+  end;
+  if Sender = FPestDesiredPumpingRateFormula then
+  begin
+    if Mnw1BoundDesiredPumpingRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundDesiredPumpingRatePosition]);
+    end;
+  end;
+  if Sender = FPestMaximumPumpingRateFormula then
+  begin
+    if Mnw1BoundReactivationPumpingRatePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[Mnw1BoundReactivationPumpingRatePosition]);
+    end;
+  end;
+end;
+
+function TMnw1Boundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestMnw1_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TMnw1Boundary.HandleChangedValue(Observer: TObserver);
+begin
+  InvalidateDisplay;
+end;
+
+procedure TMnw1Boundary.InvalidateConductanceData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1Conductance(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1Conductance(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateDesiredPumpingRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1DesiredPumpingRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1DesiredPumpingRate(self);
     end;
   end;
 end;
@@ -2083,8 +2942,408 @@ begin
     LocalModel.InvalidateMnw1MinimumPumpingRate(Self);
     LocalModel.InvalidateMnw1ReactivationPumpingRate(Self);
   end;
+end;
+
+procedure TMnw1Boundary.InvalidateLimitingWaterLevelData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1LimitingWaterLevel(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1LimitingWaterLevel(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateMaximumPumpingRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1ReactivationPumpingRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1ReactivationPumpingRate(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateMinimumPumpingRateData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1MinimumPumpingRate(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1MinimumPumpingRate(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateNonLinearLossCoefficientData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1NonLinearLossCoefficient(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1NonLinearLossCoefficient(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateReferenceElevationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1ReferenceElevation(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1ReferenceElevation(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateSkinFactorData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1SkinFactor(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1SkinFactor(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateWaterQualityData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMnw1WaterQuality(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMnw1WaterQuality(self);
+    end;
+  end;
+end;
+
+procedure TMnw1Boundary.InvalidateWellRadiusData(Sender: TObject);
+begin
 
 end;
+
+procedure TMnw1Boundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    Mnw1BoundDesiredPumpingRatePosition:
+      begin
+        PestDesiredPumpingRateFormula := Value;
+      end;
+    Mnw1BoundWaterQualityPosition:
+      begin
+        PestWaterQualityFormula := Value;
+      end;
+    Mnw1BoundWellRadiusPosition:
+      begin
+        PestWellRadiusFormula := Value;
+      end;
+    Mnw1BoundConductancePosition:
+      begin
+        PestConductanceFormula := Value;
+      end;
+    Mnw1BoundSkinFactorPosition:
+      begin
+        PestSkinFactorFormula := Value;
+      end;
+    Mnw1BoundLimitingWaterLevelPosition:
+      begin
+        PestLimitingWaterLevelFormula := Value;
+      end;
+    Mnw1BoundReferenceElevationPosition:
+      begin
+        PestReferenceElevationFormula := Value;
+      end;
+    Mnw1BoundNonLinearLossCoefficientPosition:
+      begin
+        PestNonLinearLossCoefficientFormula := Value;
+      end;
+    Mnw1BoundMinimumPumpingRatePosition:
+      begin
+        PestMinimumPumpingRateFormula := Value;
+      end;
+    Mnw1BoundReactivationPumpingRatePosition:
+      begin
+        PestMaximumPumpingRateFormula := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TMnw1Boundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    Mnw1BoundDesiredPumpingRatePosition:
+      begin
+        PestDesiredPumpingRateMethod := Value;
+      end;
+    Mnw1BoundWaterQualityPosition:
+      begin
+        PestWaterQualityMethod := Value;
+      end;
+    Mnw1BoundWellRadiusPosition:
+      begin
+        PestWellRadiusMethod := Value;
+      end;
+    Mnw1BoundConductancePosition:
+      begin
+        PestConductanceMethod := Value;
+      end;
+    Mnw1BoundSkinFactorPosition:
+      begin
+        PestSkinFactorMethod := Value;
+      end;
+    Mnw1BoundLimitingWaterLevelPosition:
+      begin
+        PestLimitingWaterLevelMethod := Value;
+      end;
+    Mnw1BoundReferenceElevationPosition:
+      begin
+        PestReferenceElevationMethod := Value;
+      end;
+    Mnw1BoundNonLinearLossCoefficientPosition:
+      begin
+        PestNonLinearLossCoefficientMethod := Value;
+      end;
+    Mnw1BoundMinimumPumpingRatePosition:
+      begin
+        PestMinimumPumpingRateMethod := Value;
+      end;
+    Mnw1BoundReactivationPumpingRatePosition:
+      begin
+        PestMaximumPumpingRateMethod := Value;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+procedure TMnw1Boundary.SetPestConductanceFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundConductancePosition, FPestConductanceFormula);
+end;
+
+procedure TMnw1Boundary.SetPestConductanceMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestConductanceMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestDesiredPumpingRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundDesiredPumpingRatePosition, FPestDesiredPumpingRateFormula);
+end;
+
+procedure TMnw1Boundary.SetPestDesiredPumpingRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDesiredPumpingRateMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestLimitingWaterLevelFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundLimitingWaterLevelPosition, FPestLimitingWaterLevelFormula);
+end;
+
+procedure TMnw1Boundary.SetPestLimitingWaterLevelMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestLimitingWaterLevelMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestMaximumPumpingRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundReactivationPumpingRatePosition, FPestMaximumPumpingRateFormula);
+end;
+
+procedure TMnw1Boundary.SetPestMaximumPumpingRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMaximumPumpingRateMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestMinimumPumpingRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundMinimumPumpingRatePosition, FPestMinimumPumpingRateFormula);
+end;
+
+procedure TMnw1Boundary.SetPestMinimumPumpingRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMinimumPumpingRateMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestNonLinearLossCoefficientFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundNonLinearLossCoefficientPosition, FPestNonLinearLossCoefficientFormula);
+end;
+
+procedure TMnw1Boundary.SetPestNonLinearLossCoefficientMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestNonLinearLossCoefficientMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestReferenceElevationFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundReferenceElevationPosition, FPestReferenceElevationFormula);
+end;
+
+procedure TMnw1Boundary.SetPestReferenceElevationMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestReferenceElevationMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestSkinFactorFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundSkinFactorPosition, FPestSkinFactorFormula);
+end;
+
+procedure TMnw1Boundary.SetPestSkinFactorMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestSkinFactorMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestWaterQualityFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundWaterQualityPosition, FPestWaterQualityFormula);
+end;
+
+procedure TMnw1Boundary.SetPestWaterQualityMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestWaterQualityMethod, Value);
+end;
+
+procedure TMnw1Boundary.SetPestWellRadiusFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, Mnw1BoundWellRadiusPosition, FPestConductanceFormula);
+end;
+
+procedure TMnw1Boundary.SetPestWellRadiusMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestWellRadiusMethod, Value);
+end;
+
 procedure TMnw1Boundary.SetSite(const Value: string);
 begin
   if FSite <> Value then
