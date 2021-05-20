@@ -20,6 +20,7 @@ type
     procedure WriteDataSet3b;
     procedure WriteDataSet3c;
     procedure WriteStressPeriods;
+    procedure WriteFileInternal;
   protected
     procedure Evaluate; override;
     function Package: TModflowPackageSelection; override;
@@ -53,6 +54,9 @@ resourcestring
   StrTheQSUMFileNameH = 'The QSUM file name has already been used.';
   StrTheBYNODEFileName = 'The BYNODE file name has already been used.';
   StrTheWEL1FileNameH = 'The WEL1 file name has already been used.';
+  StrPESTDelimiterConfl = 'PEST delimiter conflict';
+  StrSCanNotBeUsed = '"%s" can not be used as a PEST delimiter because it is' +
+  ' used in a different way in the MNW1 package';
 
 var
   Mnw1OutputNames: TStringList;
@@ -210,6 +214,75 @@ begin
     end;
   end;
 
+end;
+
+procedure TModflowMNW1_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingMNW1Package);
+    WriteTemplateHeader;
+
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+    WriteDataSet0;
+
+    frmProgressMM.AddMessage(StrWritingDataSet1);
+    WriteDataSet1;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet2);
+    WriteDataSet2;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    WriteDataSetX;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Set 3a.');
+    WriteDataSet3a;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Set 3b.');
+    WriteDataSet3b;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Set 3c.');
+    WriteDataSet3c;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage('  Writing Data Sets 4 and 5.');
+    WriteStressPeriods;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end;
 end;
 
 procedure TModflowMNW1_Writer.WriteDataSet1;
@@ -438,6 +511,7 @@ begin
   end;
 
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrDuplicateMNW1Outpu);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrPESTDelimiterConfl);
 
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
@@ -449,72 +523,15 @@ begin
   begin
     Exit;
   end;
-  OpenFile(FNameOfFile);
-  try
-    frmProgressMM.AddMessage(StrWritingMNW1Package);
+  WriteFileInternal;
 
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-
-    frmProgressMM.AddMessage(StrWritingDataSet1);
-    WriteDataSet1;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet2);
-    WriteDataSet2;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-//    frmProgressMM.AddMessage(StrWritingDataSet1);
-    WriteDataSetX;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage('  Writing Data Set 3a.');
-    WriteDataSet3a;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage('  Writing Data Set 3b.');
-    WriteDataSet3b;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage('  Writing Data Set 3c.');
-    WriteDataSet3c;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage('  Writing Data Sets 4 and 5.');
-    WriteStressPeriods;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-  finally
-    CloseFile;
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
   end;
-
 end;
 
 procedure TModflowMNW1_Writer.WriteStressPeriods;
@@ -527,7 +544,18 @@ var
   PriorCell: TMnw1Cell;
   Rw: double;
   NextCell: TMnw1Cell;
+  PestDelimiters: set of Char;
 begin
+  if Model.PestUsed then
+  begin
+    PestDelimiters := [Model.PestProperties.TemplateCharacter,
+      Model.PestProperties.ExtendedTemplateCharacter,
+      Model.PestProperties.ArrayTemplateCharacter];
+  end
+  else
+  begin
+    PestDelimiters := [];
+  end;
   for TimeIndex := 0 to Values.Count - 1 do
   begin
     Application.ProcessMessages;
@@ -606,6 +634,12 @@ begin
           WriteString(' Cp: ');
 //          WriteFloat(Cell.NonLinearLossCoefficient);
           WriteValueOrFormula(Cell, NonLinearLossCoefficientPosition);
+          if ':' in PestDelimiters then
+          begin
+            Exclude(PestDelimiters, ':');
+            frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,
+              Format(StrSCanNotBeUsed, [':']));
+          end;
         end;
         if Cell.PumpingLimitType in [mpltAbsolute, mpltPercent] then
         begin
@@ -616,6 +650,18 @@ begin
           else if Cell.PumpingLimitType = mpltPercent then
           begin
             WriteString(' Q-%CUT:');
+            if ':' in PestDelimiters then
+            begin
+              Exclude(PestDelimiters, ':');
+              frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,
+                Format(StrSCanNotBeUsed, [':']));
+            end;
+            if '%' in PestDelimiters then
+            begin
+              Exclude(PestDelimiters, '%');
+              frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,
+                Format(StrSCanNotBeUsed, ['%']));
+            end;
           end
           else
           begin
@@ -631,6 +677,12 @@ begin
         begin
           WriteString(' SITE:');
           WriteString(Cell.Site);
+          if ':' in PestDelimiters then
+          begin
+            Exclude(PestDelimiters, ':');
+            frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,
+              Format(StrSCanNotBeUsed, [':']));
+          end;
         end;
 
         if CellIndex < List.Count - 1 then

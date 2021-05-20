@@ -1057,22 +1057,32 @@ var
   Comment: string;
   QCut: Integer;
   Hlim: Double;
+  PestName: string;
 begin
   if WellBoundary.ConstrainPumping and
     not WellBoundary.ConstantConstraints then
   begin
     Hlim := TimeItem.LimitingWaterLevelValue;
+    PestName := TimeItem.BoundaryPestName[LimitingWaterLevelPosition];
+    WriteFloat(Hlim);
+    WriteFormulaOrValueBasedOnAPestName(PestName, Hlim, -1, 0, 0);
+
     QCut := GetQCut(TimeItem);
     Comment := ' # Data Set 4B: Hlim, QCut';
-    WriteFloat(Hlim);
     WriteInteger(QCut);
     if QCut <> 0 then
     begin
       Qfrcmn := TimeItem.InactivationPumpingRateValue;
+      PestName := TimeItem.BoundaryPestName[InactivationPumpingRatePosition];
+//      WriteFloat(Qfrcmn);
+      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmn, -1, 0, 0);
+
       Qfrcmx := TimeItem.ReactivationPumpingRateValue;
+      PestName := TimeItem.BoundaryPestName[ReactivationPumpingRatePosition];
+//      WriteFloat(Qfrcmx);
+      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmx, -1, 0, 0);
+
       Comment := Comment + ', Qfrcmn, Qfrcmx';
-      WriteFloat(Qfrcmn);
-      WriteFloat(Qfrcmx);
     end;
     WriteString(Comment);
     NewLine;
@@ -1102,6 +1112,7 @@ var
   Comment: string;
   CapMult: Double;
   IFACE: TIface;
+  PestName: string;
 begin
   WELLID := WellBoundary.WellID;
   if Pos(' ', WELLID) > 0 then
@@ -1109,14 +1120,20 @@ begin
     WELLID := '"' + WELLID + '"';
   end;
   WELLID := WELLID + ' ';
-  QDes := TimeItem.PumpingRateValue;
   WriteString(WELLID);
-  WriteFloat(QDes);
+
+  QDes := TimeItem.PumpingRateValue;
+  PestName := TimeItem.BoundaryPestName[PumpingRatePosition];
+//  WriteFloat(QDes);
+  WriteFormulaOrValueBasedOnAPestName(PestName, QDes, -1, 0, 0);
   Comment := ' # Data Set 4A: WELLID, QDes';
+
   if WellBoundary.AdjustPumping then
   begin
     CapMult := TimeItem.HeadCapacityMultiplierValue;
-    WriteFloat(CapMult);
+    PestName := TimeItem.BoundaryPestName[HeadCapacityMultiplierPosition];
+//    WriteFloat(CapMult);
+    WriteFormulaOrValueBasedOnAPestName(PestName, CapMult, -1, 0, 0);
     Comment := Comment + ', CapMult';
   end;
   IFACE := (WellBoundary.ScreenObject as TScreenObject).IFace;

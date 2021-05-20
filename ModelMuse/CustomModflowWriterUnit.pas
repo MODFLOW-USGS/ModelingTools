@@ -249,8 +249,10 @@ type
     // Write a formula for EnhancedTemplateProcessor or write a value
     // based on an identified parameter or PEST-modified data set.
     // If Layer < 0, only parameters will be used, not data sets.
-    procedure WriteFormulaOrValueBasedOnAPestName(PestName: string;
+    procedure WriteFormulaOrValueBasedOnAPestName(const PestName: string;
       Value: double; Layer, Row, Column: Integer);
+    procedure WritePestFormulaOrValue(const PestName, PestSeriesName: string;
+      PestMethod: TPestParamMethod; Value: double);
   public
     // @name converts AFileName to use the correct extension for the file.
 //    class function FileName(const AFileName: string): string;
@@ -8783,6 +8785,57 @@ begin
   end;
 end;
 
+procedure TCustomModflowWriter.WritePestFormulaOrValue(const PestName,
+  PestSeriesName: string; PestMethod: TPestParamMethod; Value: double);
+begin
+  if (PestName <> '') or (PestSeriesName <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+  if Model.PestUsed and WritingTemplate and
+    ((PestName <> '') or (PestSeriesName <> '')) then
+  begin
+    WritePestTemplateFormula(Value, PestName, PestSeriesName, PestMethod, nil,
+      0, False);
+  end
+  else
+  begin
+//    if FixedLength = 0 then
+//    begin
+      WriteFloat(Value);
+//    end
+//    else if FixedLength = 10 then
+//    begin
+//      WriteF10Float(Value);
+//    end
+//    else if FixedLength = 15 then
+//    begin
+//      WriteF15Float(Value);
+//    end
+//    else
+//    begin
+//      Assert(False);
+//    end;
+
+//    if PestName <> '' then
+//    begin
+//      DataArray := Model.DataArrayManager.GetDataSetByName(PestName);
+//      if DataArray <> nil then
+//      begin
+//        AddUsedPestDataArray(DataArray);
+//      end;
+//    end;
+//    if PestSeriesName <> '' then
+//    begin
+//      DataArray := Model.DataArrayManager.GetDataSetByName(PestSeriesName);
+//      if DataArray <> nil then
+//      begin
+//        AddUsedPestDataArray(DataArray);
+//      end;
+//    end;
+  end;
+end;
+
 procedure TCustomModflowWriter.WriteSaveFlowsOption;
 begin
   { TODO -cMODFLOW-6 : Need to modify for MODFLOW-6 to allow printing and saving in the same model }
@@ -9311,7 +9364,7 @@ begin
 end;
 
 procedure TCustomModflowWriter.WriteFormulaOrValueBasedOnAPestName(
-  PestName: string; Value: double; Layer, Row, Column: Integer);
+  const PestName: string; Value: double; Layer, Row, Column: Integer);
 var
   Param: TModflowSteadyParameter;
   DataArray: TDataArray;

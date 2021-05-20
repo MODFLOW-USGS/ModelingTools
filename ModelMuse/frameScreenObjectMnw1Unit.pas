@@ -136,7 +136,7 @@ var
   ItemIndex: Integer;
 begin
   inherited;
-  if (ARow >= rdgModflowBoundary.FixedRows)
+  if (ARow >= rdgModflowBoundary.FixedRows + PestRowOffset)
     and (ARow < rdgModflowBoundary.RowCount)
     and (ACol >= rdgModflowBoundary.FixedCols)
     and (ACol < rdgModflowBoundary.ColCount)
@@ -280,8 +280,35 @@ begin
       end;
 
       {$IFDEF PEST}
-//      PestModifier[rdgModflowBoundary, Ord(mcDesiredPumpingRate)] := FirstMnw1.PestRateFormula;
-//      PestMethod[rdgModflowBoundary, Ord(mcDesiredPumpingRate)] := FirstMnw1.PestRateMethod;
+      PestModifier[Ord(mcDesiredPumpingRate)] := FirstMnw1.PestDesiredPumpingRateFormula;
+      PestMethod[Ord(mcDesiredPumpingRate)] := FirstMnw1.PestDesiredPumpingRateMethod;
+
+      PestModifier[Ord(mcWaterQuality)] := FirstMnw1.PestWaterQualityFormula;
+      PestMethod[Ord(mcWaterQuality)] := FirstMnw1.PestWaterQualityMethod;
+
+      PestModifier[Ord(mcWellRadius)] := FirstMnw1.PestWellRadiusFormula;
+      PestMethod[Ord(mcWellRadius)] := FirstMnw1.PestWellRadiusMethod;
+
+      PestModifier[Ord(mcConductance)] := FirstMnw1.PestConductanceFormula;
+      PestMethod[Ord(mcConductance)] := FirstMnw1.PestConductanceMethod;
+
+      PestModifier[Ord(mcSkinFactor)] := FirstMnw1.PestSkinFactorFormula;
+      PestMethod[Ord(mcSkinFactor)] := FirstMnw1.PestSkinFactorMethod;
+
+      PestModifier[Ord(mcLimitingWaterLevel)] := FirstMnw1.PestLimitingWaterLevelFormula;
+      PestMethod[Ord(mcLimitingWaterLevel)] := FirstMnw1.PestLimitingWaterLevelMethod;
+
+      PestModifier[Ord(mcReferenceElevation)] := FirstMnw1.PestReferenceElevationFormula;
+      PestMethod[Ord(mcReferenceElevation)] := FirstMnw1.PestReferenceElevationMethod;
+
+      PestModifier[Ord(mcNonLinearLossCoefficient)] := FirstMnw1.PestNonLinearLossCoefficientFormula;
+      PestMethod[Ord(mcNonLinearLossCoefficient)] := FirstMnw1.PestNonLinearLossCoefficientMethod;
+
+      PestModifier[Ord(mcMinimumActiveRate)] := FirstMnw1.PestMinimumPumpingRateFormula;
+      PestMethod[Ord(mcMinimumActiveRate)] := FirstMnw1.PestMinimumPumpingRateMethod;
+
+      PestModifier[Ord(mcReactivationPumpingRate)] := FirstMnw1.PestMaximumPumpingRateFormula;
+      PestMethod[Ord(mcReactivationPumpingRate)] := FirstMnw1.PestMaximumPumpingRateMethod;
       {$ENDIF}
 
       for BoundaryIndex := 1 to Mnw1List.Count - 1 do
@@ -304,8 +331,6 @@ begin
           seNumberOfTimes.OnChange(nil);
           Exit;
         end;
-        {$IFDEF PEST}
-        {$ENDIF}
       end;
 
       for BoundaryIndex := 1 to Mnw1List.Count - 1 do
@@ -318,6 +343,102 @@ begin
         end;
       end;
 
+      {$IFDEF PEST}
+      for BoundaryIndex := 1 to Mnw1List.Count - 1 do
+      begin
+        Mnw1Boundary := Mnw1List[BoundaryIndex];
+
+        if FirstMnw1.PestDesiredPumpingRateFormula <> Mnw1Boundary.PestDesiredPumpingRateFormula then
+        begin
+          PestModifierAssigned[Ord(mcDesiredPumpingRate)] := False
+        end;
+        if FirstMnw1.PestDesiredPumpingRateMethod <> Mnw1Boundary.PestDesiredPumpingRateMethod then
+        begin
+          PestMethodAssigned[Ord(mcDesiredPumpingRate)] := False;
+        end;
+
+        if FirstMnw1.PestWaterQualityFormula <> Mnw1Boundary.PestWaterQualityFormula then
+        begin
+          PestModifierAssigned[Ord(mcWaterQuality)] := False
+        end;
+        if FirstMnw1.PestWaterQualityMethod <> Mnw1Boundary.PestWaterQualityMethod then
+        begin
+          PestMethodAssigned[Ord(mcWaterQuality)] := False;
+        end;
+
+        if FirstMnw1.PestWellRadiusFormula <> Mnw1Boundary.PestWellRadiusFormula then
+        begin
+          PestModifierAssigned[Ord(mcWellRadius)] := False
+        end;
+        if FirstMnw1.PestWellRadiusMethod <> Mnw1Boundary.PestWellRadiusMethod then
+        begin
+          PestMethodAssigned[Ord(mcWellRadius)] := False;
+        end;
+
+        if FirstMnw1.PestConductanceFormula <> Mnw1Boundary.PestConductanceFormula then
+        begin
+          PestModifierAssigned[Ord(mcConductance)] := False
+        end;
+        if FirstMnw1.PestConductanceMethod <> Mnw1Boundary.PestConductanceMethod then
+        begin
+          PestMethodAssigned[Ord(mcConductance)] := False;
+        end;
+
+        if FirstMnw1.PestSkinFactorFormula <> Mnw1Boundary.PestSkinFactorFormula then
+        begin
+          PestModifierAssigned[Ord(mcSkinFactor)] := False
+        end;
+        if FirstMnw1.PestSkinFactorMethod <> Mnw1Boundary.PestSkinFactorMethod then
+        begin
+          PestMethodAssigned[Ord(mcSkinFactor)] := False;
+        end;
+
+        if FirstMnw1.PestLimitingWaterLevelFormula <> Mnw1Boundary.PestLimitingWaterLevelFormula then
+        begin
+          PestModifierAssigned[Ord(mcLimitingWaterLevel)] := False
+        end;
+        if FirstMnw1.PestLimitingWaterLevelMethod <> Mnw1Boundary.PestLimitingWaterLevelMethod then
+        begin
+          PestMethodAssigned[Ord(mcLimitingWaterLevel)] := False;
+        end;
+
+        if FirstMnw1.PestReferenceElevationFormula <> Mnw1Boundary.PestReferenceElevationFormula then
+        begin
+          PestModifierAssigned[Ord(mcReferenceElevation)] := False
+        end;
+        if FirstMnw1.PestReferenceElevationMethod <> Mnw1Boundary.PestReferenceElevationMethod then
+        begin
+          PestMethodAssigned[Ord(mcReferenceElevation)] := False;
+        end;
+
+        if FirstMnw1.PestNonLinearLossCoefficientFormula <> Mnw1Boundary.PestNonLinearLossCoefficientFormula then
+        begin
+          PestModifierAssigned[Ord(mcNonLinearLossCoefficient)] := False
+        end;
+        if FirstMnw1.PestNonLinearLossCoefficientMethod <> Mnw1Boundary.PestNonLinearLossCoefficientMethod then
+        begin
+          PestMethodAssigned[Ord(mcNonLinearLossCoefficient)] := False;
+        end;
+
+        if FirstMnw1.PestMinimumPumpingRateFormula <> Mnw1Boundary.PestMinimumPumpingRateFormula then
+        begin
+          PestModifierAssigned[Ord(mcMinimumActiveRate)] := False
+        end;
+        if FirstMnw1.PestMinimumPumpingRateMethod <> Mnw1Boundary.PestMinimumPumpingRateMethod then
+        begin
+          PestMethodAssigned[Ord(mcMinimumActiveRate)] := False;
+        end;
+
+        if FirstMnw1.PestMaximumPumpingRateFormula <> Mnw1Boundary.PestMaximumPumpingRateFormula then
+        begin
+          PestModifierAssigned[Ord(mcReactivationPumpingRate)] := False
+        end;
+        if FirstMnw1.PestMaximumPumpingRateMethod <> Mnw1Boundary.PestMaximumPumpingRateMethod then
+        begin
+          PestMethodAssigned[Ord(mcReactivationPumpingRate)] := False;
+        end;
+      end;
+      {$ENDIF}
     finally
       Mnw1List.Free;
     end;
@@ -489,7 +610,7 @@ var
 begin
   rdgModflowBoundary.BeginUpdate;
   try
-    for RowIndex := rdgModflowBoundary.FixedRows to
+    for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset to
       rdgModflowBoundary.RowCount - 1 do
     begin
       for ColIndex in [mcDesiredPumpingRate, mcWaterQuality,
@@ -563,6 +684,98 @@ begin
       end;
 
       Boundary.Site := edSiteLabel.Text;
+
+      {$IFDEF PEST}
+      if PestModifierAssigned[Ord(mcDesiredPumpingRate)] then
+      begin
+        Boundary.PestDesiredPumpingRateFormula := PestModifier[Ord(mcDesiredPumpingRate)];
+      end;
+      if PestMethodAssigned[Ord(mcDesiredPumpingRate)] then
+      begin
+        Boundary.PestDesiredPumpingRateMethod := PestMethod[Ord(mcDesiredPumpingRate)];
+      end;
+
+      if PestModifierAssigned[Ord(mcWaterQuality)] then
+      begin
+        Boundary.PestWaterQualityFormula := PestModifier[Ord(mcWaterQuality)];
+      end;
+      if PestMethodAssigned[Ord(mcWaterQuality)] then
+      begin
+        Boundary.PestWaterQualityMethod := PestMethod[Ord(mcWaterQuality)];
+      end;
+
+      if PestModifierAssigned[Ord(mcWellRadius)] then
+      begin
+        Boundary.PestWellRadiusFormula := PestModifier[Ord(mcWellRadius)];
+      end;
+      if PestMethodAssigned[Ord(mcWellRadius)] then
+      begin
+        Boundary.PestWellRadiusMethod := PestMethod[Ord(mcWellRadius)];
+      end;
+
+      if PestModifierAssigned[Ord(mcConductance)] then
+      begin
+        Boundary.PestConductanceFormula := PestModifier[Ord(mcConductance)];
+      end;
+      if PestMethodAssigned[Ord(mcConductance)] then
+      begin
+        Boundary.PestConductanceMethod := PestMethod[Ord(mcConductance)];
+      end;
+
+      if PestModifierAssigned[Ord(mcSkinFactor)] then
+      begin
+        Boundary.PestSkinFactorFormula := PestModifier[Ord(mcSkinFactor)];
+      end;
+      if PestMethodAssigned[Ord(mcSkinFactor)] then
+      begin
+        Boundary.PestSkinFactorMethod := PestMethod[Ord(mcSkinFactor)];
+      end;
+
+      if PestModifierAssigned[Ord(mcLimitingWaterLevel)] then
+      begin
+        Boundary.PestLimitingWaterLevelFormula := PestModifier[Ord(mcLimitingWaterLevel)];
+      end;
+      if PestMethodAssigned[Ord(mcLimitingWaterLevel)] then
+      begin
+        Boundary.PestLimitingWaterLevelMethod := PestMethod[Ord(mcLimitingWaterLevel)];
+      end;
+
+      if PestModifierAssigned[Ord(mcReferenceElevation)] then
+      begin
+        Boundary.PestReferenceElevationFormula := PestModifier[Ord(mcReferenceElevation)];
+      end;
+      if PestMethodAssigned[Ord(mcReferenceElevation)] then
+      begin
+        Boundary.PestReferenceElevationMethod := PestMethod[Ord(mcReferenceElevation)];
+      end;
+
+      if PestModifierAssigned[Ord(mcNonLinearLossCoefficient)] then
+      begin
+        Boundary.PestNonLinearLossCoefficientFormula := PestModifier[Ord(mcNonLinearLossCoefficient)];
+      end;
+      if PestMethodAssigned[Ord(mcNonLinearLossCoefficient)] then
+      begin
+        Boundary.PestNonLinearLossCoefficientMethod := PestMethod[Ord(mcNonLinearLossCoefficient)];
+      end;
+
+      if PestModifierAssigned[Ord(mcMinimumActiveRate)] then
+      begin
+        Boundary.PestMinimumPumpingRateFormula := PestModifier[Ord(mcMinimumActiveRate)];
+      end;
+      if PestMethodAssigned[Ord(mcMinimumActiveRate)] then
+      begin
+        Boundary.PestMinimumPumpingRateMethod := PestMethod[Ord(mcMinimumActiveRate)];
+      end;
+
+      if PestModifierAssigned[Ord(mcReactivationPumpingRate)] then
+      begin
+        Boundary.PestMaximumPumpingRateFormula := PestModifier[Ord(mcReactivationPumpingRate)];
+      end;
+      if PestMethodAssigned[Ord(mcReactivationPumpingRate)] then
+      begin
+        Boundary.PestMaximumPumpingRateMethod := PestMethod[Ord(mcReactivationPumpingRate)];
+      end;
+      {$ENDIF}
 
       Mnw1Collection := Boundary.Values as TMnw1WellCollection;
       while Mnw1Collection.Count > seNumberOfTimes.AsInteger do
@@ -726,7 +939,7 @@ var
 begin
   rdgModflowBoundary.BeginUpdate;
   try
-    for RowIndex := rdgModflowBoundary.FixedRows to rdgModflowBoundary.RowCount - 1 do
+    for RowIndex := rdgModflowBoundary.FixedRows + PestRowOffset to rdgModflowBoundary.RowCount - 1 do
     begin
       if rdgModflowBoundary.IsSelectedCell(Ord(ColIndex), RowIndex) then
       begin

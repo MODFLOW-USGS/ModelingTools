@@ -6,6 +6,13 @@ uses Classes, ModflowBoundaryUnit, FormulaManagerUnit, OrderedCollectionUnit,
   RbwParser, ModflowCellUnit, ZLib, GoPhastTypes, RealListUnit,
   SubscriptionUnit, SysUtils, Contnrs, DataSetUnit, PestObsUnit;
 
+const
+  PumpingRatePosition = 0;
+  HeadCapacityMultiplierPosition = 1;
+  LimitingWaterLevelPosition = 2;
+  InactivationPumpingRatePosition = 3;
+  ReactivationPumpingRatePosition = 4;
+
 type
   TMnwLimitMethod = (mlmNoMinimum, mlmRate, mlmFraction);
   TMnwLossType = (mltNone, mltThiem, mltSkin, mltEquation, mtlSpecify);
@@ -29,6 +36,15 @@ type
     PAnnotation: string;
     CellToWellConductanceAnnotation: string;
     PartialPenetrationAnnotation: string;
+
+    WellRadiusPestName: string;
+    SkinRadiusPestName: string;
+    SkinKPestName: string;
+    BPestName: string;
+    CPestName: string;
+    PPestName: string;
+    CellToWellConductancePestName: string;
+    PartialPenetrationPestName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -62,6 +78,7 @@ type
     FCapMult: double;
     FQfrcmn: double;
     FQfrcmx: double;
+    FPestParamNames: array[PumpingRatePosition .. ReactivationPumpingRatePosition] of string;
     function GetHeadCapacityMultiplier: string;
     function GetInactivationPumpingRate: string;
     function GetLimitingWaterLevel: string;
@@ -80,6 +97,8 @@ type
     function GetReactivationPumpingRateValue: double;
     function GetBoundaryValue(Index: integer): double;
     procedure SetBoundaryValue(Index: integer; const Value: double);
+    function GetBoundaryPestName(Index: integer): string;
+    procedure SetBoundaryPestName(Index: integer; const Value: string);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -106,7 +125,10 @@ type
       read GetInactivationPumpingRateValue;
     property ReactivationPumpingRateValue: double
       read GetReactivationPumpingRateValue;
-    property BoundaryValue[Index: integer]: double read GetBoundaryValue write SetBoundaryValue;
+    property BoundaryValue[Index: integer]: double read GetBoundaryValue
+      write SetBoundaryValue;
+    property BoundaryPestName[Index: integer]: string read GetBoundaryPestName
+      write SetBoundaryPestName;
   published
     // QDes
     property PumpingRate: string read GetPumpingRate write SetPumpingRate;
@@ -522,6 +544,17 @@ type
     FVerticalScreens: TVerticalScreenCollection;
     FSaveMnwiInfo: boolean;
     FObservations: TMnw2Observations;
+    FPestHeadCapacityMultiplierMethod: TPestParamMethod;
+    FPestLimitingWaterLevelMethod: TPestParamMethod;
+    FPestPumpingRateMethod: TPestParamMethod;
+    FPestReactivationPumpingRateMethod: TPestParamMethod;
+    FPestInactivationPumpingRateMethod: TPestParamMethod;
+    FPestPumpingRateFormula: TFormulaObject;
+    FPestHeadCapacityMultiplierFormula: TFormulaObject;
+    FPestLimitingWaterLevelFormula: TFormulaObject;
+    FPestInactivationPumpingRateFormula: TFormulaObject;
+    FPestReactivationPumpingRateFormula: TFormulaObject;
+    FPestHeadCapacityMultiplierObserver: TObserver;
     procedure SetTimeValues(const Value: TMnw2TimeCollection);
     procedure SetAdjustPumping(const Value: boolean);
     procedure SetConstrainPumping(const Value: boolean);
@@ -542,6 +575,29 @@ type
     procedure SetVerticalScreens(const Value: TVerticalScreenCollection);
     procedure SetSaveMnwiInfo(const Value: boolean);
     procedure SetObservations(const Value: TMnw2Observations);
+    function GetPestHeadCapacityMultiplierFormula: string;
+    function GetPestInactivationPumpingRateFormula: string;
+    function GetPestLimitingWaterLevelFormula: string;
+    function GetPestPumpingRateFormula: string;
+    function GetPestReactivationPumpingRateFormula: string;
+    procedure SetPestHeadCapacityMultiplierFormula(const Value: string);
+    procedure SetPestHeadCapacityMultiplierMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestInactivationPumpingRateFormula(const Value: string);
+    procedure SetPestInactivationPumpingRateMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestLimitingWaterLevelFormula(const Value: string);
+    procedure SetPestLimitingWaterLevelMethod(const Value: TPestParamMethod);
+    procedure SetPestPumpingRateFormula(const Value: string);
+    procedure SetPestPumpingRateMethod(const Value: TPestParamMethod);
+    procedure SetPestReactivationPumpingRateFormula(const Value: string);
+    procedure SetPestReactivationPumpingRateMethod(
+      const Value: TPestParamMethod);
+    function GetPestHeadCapacityMultiplierObserver: TObserver;
+    function GetPestInactivationPumpingRateObserver: TObserver;
+    function GetPestLimitingWaterLevelObserver: TObserver;
+    function GetPestPumpingRateObserver: TObserver;
+    function GetPestReactivationPumpingRateObserver: TObserver;
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -550,6 +606,32 @@ type
     procedure AddBoundaryTimes(BoundCol: TCustomNonSpatialBoundColl;
       Times: TRealList; StartTestTime, EndTestTime: double;
       var StartRangeExtended, EndRangeExtended: boolean); override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestPumpingRateObserver: TObserver read GetPestPumpingRateObserver;
+    property PestHeadCapacityMultiplierObserver: TObserver read GetPestHeadCapacityMultiplierObserver;
+    property PestLimitingWaterLevelObserver: TObserver read GetPestLimitingWaterLevelObserver;
+    property PestInactivationPumpingRateObserver: TObserver read GetPestInactivationPumpingRateObserver;
+    property PestReactivationPumpingRateObserver: TObserver read GetPestReactivationPumpingRateObserver;
+
+//  PumpingRatePosition = 0;
+//  HeadCapacityMultiplierPosition = 1;
+//  LimitingWaterLevelPosition = 2;
+//  InactivationPumpingRatePosition = 3;
+//  ReactivationPumpingRatePosition = 4;
+
+
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -565,6 +647,8 @@ type
     procedure Clear; override;
     function DataTypeUsed(DataIndex: integer): boolean;
     procedure ReplaceGUID;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property TimeValues: TMnw2TimeCollection read FTimeValues
       write SetTimeValues;
@@ -607,14 +691,69 @@ type
       stored False
       {$ENDIF}
       ;
-  end;
+    // PEST parameters
+    property PestPumpingRateFormula: string read GetPestPumpingRateFormula
+      write SetPestPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestPumpingRateRateMethod: TPestParamMethod read FPestPumpingRateMethod
+      write SetPestPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHeadCapacityMultiplierFormula: string read GetPestHeadCapacityMultiplierFormula
+      write SetPestHeadCapacityMultiplierFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHeadCapacityMultiplierRateMethod: TPestParamMethod read FPestHeadCapacityMultiplierMethod
+      write SetPestHeadCapacityMultiplierMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
 
-const
-  PumpingRatePosition = 0;
-  HeadCapacityMultiplierPosition = 1;
-  LimitingWaterLevelPosition = 2;
-  InactivationPumpingRatePosition = 3;
-  ReactivationPumpingRatePosition = 4;
+    property PestLimitingWaterLevelFormula: string read GetPestLimitingWaterLevelFormula
+      write SetPestLimitingWaterLevelFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestLimitingWaterLevelRateMethod: TPestParamMethod read FPestLimitingWaterLevelMethod
+      write SetPestLimitingWaterLevelMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestInactivationPumpingRateFormula: string read GetPestInactivationPumpingRateFormula
+      write SetPestInactivationPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestInactivationPumpingRateRateMethod: TPestParamMethod read FPestInactivationPumpingRateMethod
+      write SetPestInactivationPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestReactivationPumpingRateFormula: string read GetPestReactivationPumpingRateFormula
+      write SetPestReactivationPumpingRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestReactivationPumpingRateRateMethod: TPestParamMethod read FPestReactivationPumpingRateMethod
+      write SetPestReactivationPumpingRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+  end;
 
 const
   WellRadiusPosition = 0;
@@ -631,7 +770,8 @@ implementation
 uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit,
   ModflowGridUnit, frmFormulaErrorsUnit, Math, SparseDataSets, SparseArrayUnit,
-  frmErrorsAndWarningsUnit, AbstractGridUnit;
+  frmErrorsAndWarningsUnit, AbstractGridUnit, ModflowParameterUnit,
+  ModelMuseUtilities;
 
 resourcestring
   StrOneOrMoreMNW2Wel = 'One or more MNW2 wells has a well radius that is '
@@ -704,6 +844,8 @@ var
   ObjectName: string;
   ErrorMessage: string;
   Expression: TExpression;
+  LocalModel: TCustomModel;
+  Param: TModflowSteadyParameter;
 begin
 // Set the following
 //    FHlim: double;
@@ -712,13 +854,24 @@ begin
 //    FQfrcmn: double;
 //    FQfrcmx: double;
 
-  Compiler := (Model as TPhastModel).rpThreeDFormulaCompiler;
+  LocalModel := Model as TCustomModel;
+  Compiler := LocalModel.rpThreeDFormulaCompiler;
   for FormulaIndex := 0 to BoundaryFormulaCount - 1 do
   begin
     Formula := BoundaryFormula[FormulaIndex];
     if Formula = '' then
     begin
       Formula := '0';
+    end;
+    Param := LocalModel.GetPestParameterByName(Formula);
+    if Param <> nil then
+    begin
+      Formula := FortranFloatToStr(Param.Value);
+      BoundaryPestName[FormulaIndex] := Param.ParameterName;
+    end
+    else
+    begin
+      BoundaryPestName[FormulaIndex] := '';
     end;
     try
       Compiler.Compile(Formula);
@@ -786,6 +939,11 @@ begin
     ReactivationPumpingRatePosition: result := ReactivationPumpingRate;
     else Assert(False);
   end;
+end;
+
+function TMnw2TimeItem.GetBoundaryPestName(Index: integer): string;
+begin
+  result := FPestParamNames[Index];
 end;
 
 function TMnw2TimeItem.GetBoundaryValue(Index: integer): double;
@@ -940,6 +1098,12 @@ begin
       ReactivationPumpingRate := Value;
     else Assert(False);
   end;
+end;
+
+procedure TMnw2TimeItem.SetBoundaryPestName(Index: integer;
+  const Value: string);
+begin
+  FPestParamNames[Index] := Value;
 end;
 
 procedure TMnw2TimeItem.SetBoundaryValue(Index: integer; const Value: double);
@@ -1999,6 +2163,11 @@ begin
   result := TMnw2SpatialCollection;
 end;
 
+function TMnw2Boundary.BoundaryObserverPrefix: string;
+begin
+
+end;
+
 procedure TMnw2Boundary.Clear;
 begin
   inherited;
@@ -2091,6 +2260,26 @@ begin
   FObservations := TMnw2Observations.Create(OnInvalidateModelEvent, ScreenObject);
 end;
 
+procedure TMnw2Boundary.CreateFormulaObjects;
+begin
+  FPestPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestHeadCapacityMultiplierFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestLimitingWaterLevelFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestInactivationPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestReactivationPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TMnw2Boundary.CreateObservers;
+begin
+
+end;
+
+class function TMnw2Boundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+
+end;
+
 destructor TMnw2Boundary.Destroy;
 begin
   FObservations.Free;
@@ -2123,6 +2312,103 @@ begin
   TimeValues.Evaluate;
 end;
 
+function TMnw2Boundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+
+end;
+
+function TMnw2Boundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+
+end;
+
+function TMnw2Boundary.GetPestHeadCapacityMultiplierFormula: string;
+begin
+  Result := FPestHeadCapacityMultiplierFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(HeadCapacityMultiplierPosition);
+  end;
+end;
+
+function TMnw2Boundary.GetPestHeadCapacityMultiplierObserver: TObserver;
+begin
+  if FPestHeadCapacityMultiplierObserver = nil then
+  begin
+    CreateObserver('Mnw2PestHeadCapacityMultiplier_', FPestHeadCapacityMultiplierObserver, nil);
+    FPestHeadCapacityMultiplierObserver.OnUpToDateSet := InvalidateHeadCapacityMultiplierData;
+  end;
+  result := FPestHeadCapacityMultiplierObserver;
+end;
+
+function TMnw2Boundary.GetPestInactivationPumpingRateFormula: string;
+begin
+  Result := FPestInactivationPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(InactivationPumpingRatePosition);
+  end;
+end;
+
+function TMnw2Boundary.GetPestInactivationPumpingRateObserver: TObserver;
+begin
+
+end;
+
+function TMnw2Boundary.GetPestLimitingWaterLevelFormula: string;
+begin
+  Result := FPestLimitingWaterLevelFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(LimitingWaterLevelPosition);
+  end;
+end;
+
+function TMnw2Boundary.GetPestLimitingWaterLevelObserver: TObserver;
+begin
+
+end;
+
+function TMnw2Boundary.GetPestPumpingRateFormula: string;
+begin
+  Result := FPestPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(PumpingRatePosition);
+  end;
+end;
+
+function TMnw2Boundary.GetPestPumpingRateObserver: TObserver;
+begin
+
+end;
+
+function TMnw2Boundary.GetPestReactivationPumpingRateFormula: string;
+begin
+  Result := FPestReactivationPumpingRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(ReactivationPumpingRatePosition);
+  end;
+end;
+
+function TMnw2Boundary.GetPestReactivationPumpingRateObserver: TObserver;
+begin
+
+end;
+
+procedure TMnw2Boundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  inherited;
+
+end;
+
+function TMnw2Boundary.GetUsedObserver: TObserver;
+begin
+
+end;
+
 function TMnw2Boundary.GetWellID: string;
 begin
   if Length(FWellID) > 20 then
@@ -2130,6 +2416,11 @@ begin
     SetLength(FWellID, 20);
   end;
   result := FWellID;
+end;
+
+procedure TMnw2Boundary.HandleChangedValue(Observer: TObserver);
+begin
+
 end;
 
 procedure TMnw2Boundary.InvalidateDisplay;
@@ -2220,6 +2511,77 @@ begin
     SpatialCollection := Values as TMnw2SpatialCollection;
     SpatialCollection.InvalidatePartialPenetration;
   end;
+end;
+
+procedure TMnw2Boundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  inherited;
+
+end;
+
+procedure TMnw2Boundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  inherited;
+
+end;
+
+procedure TMnw2Boundary.SetPestHeadCapacityMultiplierFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, HeadCapacityMultiplierPosition, FPestHeadCapacityMultiplierFormula);
+end;
+
+procedure TMnw2Boundary.SetPestHeadCapacityMultiplierMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestHeadCapacityMultiplierMethod, Value);
+end;
+
+procedure TMnw2Boundary.SetPestInactivationPumpingRateFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, InactivationPumpingRatePosition, FPestInactivationPumpingRateFormula);
+end;
+
+procedure TMnw2Boundary.SetPestInactivationPumpingRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestInactivationPumpingRateMethod, Value);
+end;
+
+procedure TMnw2Boundary.SetPestLimitingWaterLevelFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, LimitingWaterLevelPosition, FPestLimitingWaterLevelFormula);
+end;
+
+procedure TMnw2Boundary.SetPestLimitingWaterLevelMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestLimitingWaterLevelMethod, Value);
+end;
+
+procedure TMnw2Boundary.SetPestPumpingRateFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, PumpingRatePosition, FPestPumpingRateFormula);
+end;
+
+procedure TMnw2Boundary.SetPestPumpingRateMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestPumpingRateMethod, Value);
+end;
+
+procedure TMnw2Boundary.SetPestReactivationPumpingRateFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ReactivationPumpingRatePosition, FPestReactivationPumpingRateFormula);
+end;
+
+procedure TMnw2Boundary.SetPestReactivationPumpingRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestReactivationPumpingRateMethod, Value);
 end;
 
 procedure TMnw2Boundary.SetPumpCellTarget(const Value: TTarget);
@@ -2717,6 +3079,15 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(CellToWellConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(PartialPenetrationAnnotation));
+
+  WriteCompInt(Comp, Strings.IndexOf(WellRadiusPestName));
+  WriteCompInt(Comp, Strings.IndexOf(SkinRadiusPestName));
+  WriteCompInt(Comp, Strings.IndexOf(SkinKPestName));
+  WriteCompInt(Comp, Strings.IndexOf(BPestName));
+  WriteCompInt(Comp, Strings.IndexOf(CPestName));
+  WriteCompInt(Comp, Strings.IndexOf(PPestName));
+  WriteCompInt(Comp, Strings.IndexOf(CellToWellConductancePestName));
+  WriteCompInt(Comp, Strings.IndexOf(PartialPenetrationPestName));
 end;
 
 procedure TMnw2Record.RecordStrings(Strings: TStringList);
@@ -2729,6 +3100,15 @@ begin
   Strings.Add(PAnnotation);
   Strings.Add(CellToWellConductanceAnnotation);
   Strings.Add(PartialPenetrationAnnotation);
+
+  Strings.Add(WellRadiusPestName);
+  Strings.Add(SkinRadiusPestName);
+  Strings.Add(SkinKPestName);
+  Strings.Add(BPestName);
+  Strings.Add(CPestName);
+  Strings.Add(PPestName);
+  Strings.Add(CellToWellConductancePestName);
+  Strings.Add(PartialPenetrationPestName);
 end;
 
 procedure TMnw2Record.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -2752,6 +3132,15 @@ begin
   PAnnotation := Annotations[ReadCompInt(Decomp)];
   CellToWellConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   PartialPenetrationAnnotation := Annotations[ReadCompInt(Decomp)];
+
+  WellRadiusPestName := Annotations[ReadCompInt(Decomp)];
+  SkinRadiusPestName := Annotations[ReadCompInt(Decomp)];
+  SkinKPestName := Annotations[ReadCompInt(Decomp)];
+  BPestName := Annotations[ReadCompInt(Decomp)];
+  CPestName := Annotations[ReadCompInt(Decomp)];
+  PPestName := Annotations[ReadCompInt(Decomp)];
+  CellToWellConductancePestName := Annotations[ReadCompInt(Decomp)];
+  PartialPenetrationPestName := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TMnw2Storage }

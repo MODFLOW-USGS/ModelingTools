@@ -485,6 +485,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
           AutoAdjustColWidths = True
         end>
       OnEndUpdate = rdgModflowBoundaryEndUpdate
+      ExplicitTop = 53
       ExplicitHeight = 155
     end
   end

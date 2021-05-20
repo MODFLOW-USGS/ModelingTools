@@ -3002,8 +3002,11 @@ begin
     for index := 0 to FObserverList.Count - 1 do
     begin
       AnObserver := FObserverList[index];
-      AnObserver.UpToDate := True;
-      AnObserver.UpToDate := False;
+      if AnObserver <> nil then
+      begin
+        AnObserver.UpToDate := True;
+        AnObserver.UpToDate := False;
+      end;
     end;
   end;
 end;
