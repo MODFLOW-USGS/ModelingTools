@@ -4113,7 +4113,13 @@ begin
     TimeItem.StepSize := 0;
     TimeItem.TimeStepMultiplier := FirstStressPeriod.TimeStepMultiplier;
     TimeItem.MaxStepSize := 0;
-    TimeItem.MaxSteps := MfStressPeriods.NumberOfSteps * 1000;
+    try
+      TimeItem.MaxSteps := MfStressPeriods.NumberOfSteps * 1000;
+    except on EIntOverflow do
+      begin
+        TimeItem.MaxSteps := MAXINT;
+      end;
+    end;
     TimeItem.EndTime := MfStressPeriods[MfStressPeriods.Count-1].EndTime;
   end;
 

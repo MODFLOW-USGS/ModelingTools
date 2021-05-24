@@ -2465,7 +2465,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMNW1
+        ActivePage = jvspMNW2
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -8819,24 +8819,30 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pcMnw2: TPageControl
               Width = 581
+              ActivePage = frameMNW2.tabBasic
               OnChange = frameMNW2pcMnw2Change
+              ExplicitLeft = -4
+              ExplicitTop = 20
               ExplicitWidth = 581
               inherited tabBasic: TTabSheet
+                ExplicitWidth = 573
                 inherited comboLossType: TJvImageComboBox
                   ItemIndex = -1
                 end
                 inherited edPartialPenetration: TJvComboEdit
+                  Left = 227
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
+                  ExplicitLeft = 227
                 end
                 inherited framePumpLocationMethod: TframeLocationMethod
-                  Width = 501
+                  Width = 473
                   Font.Pitch = fpVariable
                   ExplicitWidth = 501
                   inherited pcLocationChoice: TJvPageControl
-                    Width = 164
+                    Width = 136
                     ExplicitWidth = 164
                     inherited tabNone: TTabSheet
-                      ExplicitWidth = 164
+                      ExplicitWidth = 136
                     end
                     inherited tabObject: TTabSheet
                       inherited comboObject: TComboBox
@@ -8853,6 +8859,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabLossControls: TTabSheet
+                ExplicitWidth = 573
                 inherited edWellRadius: TJvComboEdit
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
                 end
@@ -8876,6 +8883,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabDischargeAdjustment: TTabSheet
+                ExplicitWidth = 573
                 inherited rdgLiftTable: TRbwDataGrid4
                   ColWidths = (
                     64
@@ -8886,12 +8894,20 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabPumpingRate: TTabSheet
+                ExplicitWidth = 573
                 inherited rdgTimeTable: TRbwDataGrid4
+                  Width = 573
                   Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
                   RowHeights = (
                     24
                     24)
+                end
+                inherited Panel1: TPanel
+                  Width = 573
+                end
+                inherited Panel2: TPanel
+                  Width = 573
                 end
               end
               inherited tabWellScreens: TTabSheet

@@ -60,7 +60,7 @@ uses
   frmGoPhastUnit, ColorSchemes, frmFormulaErrorsUnit,
   frmErrorsAndWarningsUnit, frmCustomGoPhastUnit, PhastModelUnit, GoPhastTypes,
   RbwParser, frmProgressUnit, LegendUnit, Contnrs, RealListUnit,
-  ClassificationUnit, SutraMeshUnit, ModflowHfbDisplayUnit;
+  ClassificationUnit, SutraMeshUnit, ModflowHfbDisplayUnit, ModelMuseUtilities;
 
 resourcestring
   StrProgress = 'Progress';
@@ -207,7 +207,7 @@ begin
       ChildModel.EdgeDisplay := nil;
     end;
 
-    Time := StrToFloat(comboTime3D.Text);
+    Time := FortranStrToFloat(comboTime3D.Text);
     if (frmGoPhast.PhastModel.ThreeDTimeList <> TimeList)
       or (Time <> frmGoPhast.PhastModel.ThreeDDisplayTime) then
     begin

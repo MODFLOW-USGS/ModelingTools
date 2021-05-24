@@ -144,9 +144,8 @@ type
     FOnChange: TNotifyEvent;
     FChanging: Boolean;
     FVerticalWell: TCheckBoxState;
-//    FObservationsName: string;
-//    FMatchedCells1: TList<Integer>;
-//    FMatchedCells2: TList<Integer>;
+    FFirstBoundary: TMnw2Boundary;
+    FOnCheckPestCell: TSelectCellEvent;
     procedure Changed;
     procedure SetVerticalWell(const Value: TCheckBoxState);
     procedure EnablePartialPenetration;
@@ -189,6 +188,8 @@ type
     procedure SetData(List: TScreenObjectEditCollection; SetAll: boolean;
       ClearAll: boolean);
     constructor Create(AOwner: TComponent); override;
+    property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
+      write FOnCheckPestCell;
     { Public declarations }
   end;
 
@@ -240,12 +241,12 @@ end;
 
 procedure TframeScreenObjectMNW2.btnDeleteTimeClick(Sender: TObject);
 begin
-  if rdgTimeTable.Row < 1 then
+  if rdgTimeTable.Row < 1 + PestRowOffset then
   begin
     Exit;
   end;
   rdgTimeTable.DeleteRow(rdgTimeTable.Row);
-  seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1;
+  seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1- PestRowOffset;
   EnableDeleteTimeButton;
   Changed;
 end;
@@ -278,12 +279,12 @@ end;
 
 procedure TframeScreenObjectMNW2.btnInsertTimeClick(Sender: TObject);
 begin
-  if rdgTimeTable.Row < 1 then
+  if rdgTimeTable.Row < 1 + PestRowOffset then
   begin
     Exit;
   end;
   rdgTimeTable.InsertRow(rdgTimeTable.Row);
-  seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1;
+  seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1 - PestRowOffset;
   Changed;
 end;
 
@@ -404,7 +405,7 @@ begin
     Exit;
   end;
   NewText := comboQCUT.Text;
-  for RowIndex := rdgTimeTable.FixedRows to rdgTimeTable.RowCount - 1 do
+  for RowIndex := rdgTimeTable.FixedRows + PestRowOffset to rdgTimeTable.RowCount - 1 do
   begin
     if rdgTimeTable.IsSelectedCell(Ord(mtcLimitMethod), RowIndex) then
     begin
@@ -487,11 +488,6 @@ var
   Boundary: TMnw2Boundary;
   Item: TScreenObjectEditItem;
   VerticalState: TCheckBoxState;
-//  Mnw2Observations: TMnw2Observations;
-//  ItemIndex: Integer;
-//  Mnw2Ob: TMnw2ObsItem;
-//  Comparisons: TObsComparisons;
-//  Mnw2ObComp: TObsCompareItem;
 begin
 {$IFNDEF PEST}
   tabObservations.TabVisible := False;
@@ -571,6 +567,54 @@ begin
         for BoundaryIndex := 1 to LocalList.Count - 1 do
         begin
           Boundary := LocalList[BoundaryIndex];
+
+          {$IFDEF PEST}
+          if FFirstBoundary.PestPumpingRateFormula <> Boundary.PestPumpingRateFormula then
+          begin
+            PestModifierAssigned[rdgTimeTable, Ord(mtcPumpingRate)] := False
+          end;
+          if FFirstBoundary.PestPumpingRateMethod <> Boundary.PestPumpingRateMethod then
+          begin
+            PestMethodAssigned[rdgTimeTable, Ord(mtcPumpingRate)] := False
+          end;
+
+          if FFirstBoundary.PestHeadCapacityMultiplierFormula <> Boundary.PestHeadCapacityMultiplierFormula then
+          begin
+            PestModifierAssigned[rdgTimeTable, Ord(mtcMultiplier)] := False
+          end;
+          if FFirstBoundary.PestHeadCapacityMultiplierMethod <> Boundary.PestHeadCapacityMultiplierMethod then
+          begin
+            PestMethodAssigned[rdgTimeTable, Ord(mtcMultiplier)] := False
+          end;
+
+          if FFirstBoundary.PestLimitingWaterLevelFormula <> Boundary.PestLimitingWaterLevelFormula then
+          begin
+            PestModifierAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)] := False
+          end;
+          if FFirstBoundary.PestLimitingWaterLevelMethod <> Boundary.PestLimitingWaterLevelMethod then
+          begin
+            PestMethodAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)] := False
+          end;
+
+          if FFirstBoundary.PestInactivationPumpingRateFormula <> Boundary.PestInactivationPumpingRateFormula then
+          begin
+            PestModifierAssigned[rdgTimeTable, Ord(mtcMinRate)] := False
+          end;
+          if FFirstBoundary.PestInactivationPumpingRateMethod <> Boundary.PestInactivationPumpingRateMethod then
+          begin
+            PestMethodAssigned[rdgTimeTable, Ord(mtcMinRate)] := False
+          end;
+
+          if FFirstBoundary.PestReactivationPumpingRateFormula <> Boundary.PestReactivationPumpingRateFormula then
+          begin
+            PestModifierAssigned[rdgTimeTable, Ord(mtcMaxRate)] := False
+          end;
+          if FFirstBoundary.PestReactivationPumpingRateMethod <> Boundary.PestReactivationPumpingRateMethod then
+          begin
+            PestMethodAssigned[rdgTimeTable, Ord(mtcMaxRate)] := False
+          end;
+          {$ENDIF}
+
           if comboLossType.ItemIndex <> Ord(Boundary.LossType) then
           begin
             comboLossType.ItemIndex := -1;
@@ -828,13 +872,13 @@ procedure TframeScreenObjectMNW2.SetTimeGridCellForFirstItem(
 begin
   if SetValue then
   begin
-    rdgTimeTable.Cells[Ord(Column), TimeIndex + 1] := Value;
-    rdgTimeTable.Objects[Ord(Column), TimeIndex + 1] := TimeItem;
+    rdgTimeTable.Cells[Ord(Column), TimeIndex + 1 + PestRowOffset] := Value;
+    rdgTimeTable.Objects[Ord(Column), TimeIndex + 1 + PestRowOffset] := TimeItem;
   end
   else
   begin
-    rdgTimeTable.Cells[Ord(Column), TimeIndex + 1] := '';
-    rdgTimeTable.Objects[Ord(Column), TimeIndex + 1] := nil;
+    rdgTimeTable.Cells[Ord(Column), TimeIndex + 1 + PestRowOffset] := '';
+    rdgTimeTable.Objects[Ord(Column), TimeIndex + 1 + PestRowOffset] := nil;
   end;
 end;
 
@@ -917,6 +961,7 @@ var
   ColIndex: Integer;
 begin
   Boundary := LocalList[0];
+  FFirstBoundary := Boundary;
   if LocalList.Count = 1 then
   begin
     edWellId.Text := Boundary.WellID;
@@ -986,20 +1031,38 @@ begin
   seTimeTableRowsChange(nil);
   rdgTimeTable.BeginUpdate;
   try
+    {$IFDEF PEST}
+    PestModifier[rdgTimeTable, Ord(mtcPumpingRate)] := Boundary.PestPumpingRateFormula;
+    PestMethod[rdgTimeTable, Ord(mtcPumpingRate)] := Boundary.PestPumpingRateMethod;
+
+    PestModifier[rdgTimeTable, Ord(mtcMultiplier)] := Boundary.PestHeadCapacityMultiplierFormula;
+    PestMethod[rdgTimeTable, Ord(mtcMultiplier)] := Boundary.PestHeadCapacityMultiplierMethod;
+
+    PestModifier[rdgTimeTable, Ord(mtcLimitingWaterLevel)] := Boundary.PestLimitingWaterLevelFormula;
+    PestMethod[rdgTimeTable, Ord(mtcLimitingWaterLevel)] := Boundary.PestLimitingWaterLevelMethod;
+
+    PestModifier[rdgTimeTable, Ord(mtcMinRate)] := Boundary.PestInactivationPumpingRateFormula;
+    PestMethod[rdgTimeTable, Ord(mtcMinRate)] := Boundary.PestInactivationPumpingRateMethod;
+
+    PestModifier[rdgTimeTable, Ord(mtcMaxRate)] := Boundary.PestReactivationPumpingRateFormula;
+    PestMethod[rdgTimeTable, Ord(mtcMaxRate)] := Boundary.PestReactivationPumpingRateMethod;
+
+    {$ENDIF}
+
     for TimeIndex := 0 to Boundary.TimeValues.Count - 1 do
     begin
       TimeItem := Boundary.TimeValues.Items[TimeIndex] as TMnw2TimeItem;
-      rdgTimeTable.Cells[Ord(mtcStartTime), TimeIndex + 1] :=
+      rdgTimeTable.Cells[Ord(mtcStartTime), TimeIndex + 1 + PestRowOffset] :=
         FloatToStr(TimeItem.StartTime);
-      rdgTimeTable.Objects[Ord(mtcStartTime), TimeIndex + 1] := TimeItem;
+      rdgTimeTable.Objects[Ord(mtcStartTime), TimeIndex + 1 + PestRowOffset] := TimeItem;
 
-      rdgTimeTable.Cells[Ord(mtcEndTime), TimeIndex + 1] :=
+      rdgTimeTable.Cells[Ord(mtcEndTime), TimeIndex + 1 + PestRowOffset] :=
         FloatToStr(TimeItem.EndTime);
-      rdgTimeTable.Objects[Ord(mtcEndTime), TimeIndex + 1] := TimeItem;
+      rdgTimeTable.Objects[Ord(mtcEndTime), TimeIndex + 1 + PestRowOffset] := TimeItem;
 
-      rdgTimeTable.Cells[Ord(mtcPumpingRate), TimeIndex + 1] :=
+      rdgTimeTable.Cells[Ord(mtcPumpingRate), TimeIndex + 1 + PestRowOffset] :=
         TimeItem.PumpingRate;
-      rdgTimeTable.Objects[Ord(mtcPumpingRate), TimeIndex + 1] := TimeItem;
+      rdgTimeTable.Objects[Ord(mtcPumpingRate), TimeIndex + 1 + PestRowOffset] := TimeItem;
 
       SetTimeGridCellForFirstItem(mtcMultiplier, Boundary.AdjustPumping,
         TimeIndex, TimeItem, TimeItem.HeadCapacityMultiplier);
@@ -1010,15 +1073,15 @@ begin
 
       if Boundary.ConstrainPumping then
       begin
-        rdgTimeTable.ItemIndex[Ord(mtcLimitMethod), TimeIndex + 1] :=
+        rdgTimeTable.ItemIndex[Ord(mtcLimitMethod), TimeIndex + 1 + PestRowOffset] :=
           Ord(TimeItem.LimitMethod);
-        rdgTimeTable.Objects[Ord(mtcLimitMethod), TimeIndex + 1] :=
+        rdgTimeTable.Objects[Ord(mtcLimitMethod), TimeIndex + 1 + PestRowOffset] :=
           TimeItem;
       end
       else
       begin
-        rdgTimeTable.ItemIndex[Ord(mtcLimitMethod), TimeIndex + 1] := -1;
-        rdgTimeTable.Objects[Ord(mtcLimitMethod), TimeIndex + 1] := nil;
+        rdgTimeTable.ItemIndex[Ord(mtcLimitMethod), TimeIndex + 1 + PestRowOffset] := -1;
+        rdgTimeTable.Objects[Ord(mtcLimitMethod), TimeIndex + 1 + PestRowOffset] := nil;
       end;
 
       SetTimeGridCellForFirstItem(mtcMinRate,
@@ -1082,13 +1145,8 @@ end;
 procedure TframeScreenObjectMNW2.InitializeControls;
 var
   ColIndex: Integer;
-//  StartTimes: TStrings;
-//  EndTimes: TStrings;
-//  TimeIndex: Integer;
-//  StressPeriod: TModflowStressPeriod;
   ItemIndex: Integer;
   RowIndex: Integer;
-//  GridSel: TGridRect;
 begin
   rdgVerticalScreens.BeginUpdate;
   try
@@ -1125,6 +1183,33 @@ begin
 
   rdgTimeTable.BeginUpdate;
   try
+    {$IFDEF PEST}
+    seTimeTableRowsChange(nil);
+    rdgTimeTable.Cells[0, PestModifierRow] := StrPestModifier;
+    rdgTimeTable.Cells[0, PestMethodRow] := StrModificationMethod;
+
+    PestModifier[rdgTimeTable, Ord(mtcPumpingRate)] := '';
+    PestMethod[rdgTimeTable, Ord(mtcPumpingRate)] :=
+      TMnw2Boundary.DefaultBoundaryMethod(PumpingRatePosition);
+
+    PestModifier[rdgTimeTable, Ord(mtcMultiplier)] := '';
+    PestMethod[rdgTimeTable, Ord(mtcMultiplier)] :=
+      TMnw2Boundary.DefaultBoundaryMethod(HeadCapacityMultiplierPosition);
+
+    PestModifier[rdgTimeTable, Ord(mtcLimitingWaterLevel)] := '';
+    PestMethod[rdgTimeTable, Ord(mtcLimitingWaterLevel)] :=
+      TMnw2Boundary.DefaultBoundaryMethod(LimitingWaterLevelPosition);
+
+    PestModifier[rdgTimeTable, Ord(mtcMinRate)] := '';
+    PestMethod[rdgTimeTable, Ord(mtcMinRate)] :=
+      TMnw2Boundary.DefaultBoundaryMethod(InactivationPumpingRatePosition);
+
+    PestModifier[rdgTimeTable, Ord(mtcMaxRate)] := '';
+    PestMethod[rdgTimeTable, Ord(mtcMaxRate)] :=
+      TMnw2Boundary.DefaultBoundaryMethod(ReactivationPumpingRatePosition);
+
+    {$ENDIF}
+
     rdgTimeTable.Cells[Ord(mtcStartTime), 0] := StrStartingTime;
     rdgTimeTable.Cells[Ord(mtcEndTime), 0] := StrEndingTime;
     rdgTimeTable.Cells[Ord(mtcPumpingRate), 0] :=
@@ -1192,16 +1277,6 @@ begin
   frmGoPhast.PhastModel.ModflowStressPeriods.
     FillPickListWithEndTimes(rdgTimeTable, Ord(mtcEndTime));
 
-//  StartTimes := rdgTimeTable.Columns[Ord(mtcStartTime)].PickList;
-//  StartTimes.Clear;
-//  EndTimes := rdgTimeTable.Columns[Ord(mtcEndTime)].PickList;
-//  EndTimes.Clear;
-//  for TimeIndex := 0 to frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
-//  begin
-//    StressPeriod := frmGoPhast.PhastModel.ModflowStressPeriods[TimeIndex];
-//    StartTimes.Add(FloatToStr(StressPeriod.StartTime));
-//    EndTimes.Add(FloatToStr(StressPeriod.EndTime));
-//  end;
   comboQCUT.Items.Clear;
   for ItemIndex := 0 to rdgTimeTable.Columns[
     Ord(mtcLimitMethod)].PickList.Count - 1 do
@@ -1229,7 +1304,7 @@ var
   NewText: string;
 begin
   NewText := rdeFormula.Text;
-  for RowIndex := rdgTimeTable.FixedRows to rdgTimeTable.RowCount - 1 do
+  for RowIndex := rdgTimeTable.FixedRows + PestRowOffset to rdgTimeTable.RowCount - 1 do
   begin
     for ColIndex := Ord(mtcPumpingRate) to Ord(mtcMaxRate) do
     begin
@@ -1291,7 +1366,7 @@ procedure TframeScreenObjectMNW2.rdgTimeTableEndUpdate(Sender: TObject);
 begin
   if seTimeTableRows <> nil then
   begin
-    seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1;
+    seTimeTableRows.AsInteger := rdgTimeTable.RowCount - 1- PestRowOffset;
     Changed;
   end;
 end;
@@ -1315,7 +1390,7 @@ begin
     begin
       Continue;
     end;
-    for RowIndex := rdgTimeTable.FixedRows to rdgTimeTable.RowCount - 1 do
+    for RowIndex := rdgTimeTable.FixedRows + PestRowOffset to rdgTimeTable.RowCount - 1 do
     begin
       ShouldEnable := rdgTimeTable.IsSelectedCell(ColIndex, RowIndex);
       if ShouldEnable then
@@ -1331,7 +1406,7 @@ begin
   rdeFormula.Enabled := ShouldEnable;
 
   ShouldEnable := False;
-  for RowIndex := rdgTimeTable.FixedRows to rdgTimeTable.RowCount - 1 do
+  for RowIndex := rdgTimeTable.FixedRows + PestRowOffset to rdgTimeTable.RowCount - 1 do
   begin
     ShouldEnable := rdgTimeTable.IsSelectedCell(Ord(mtcLimitMethod), RowIndex);
     if ShouldEnable then
@@ -1348,7 +1423,7 @@ procedure TframeScreenObjectMNW2.rdgTimeTableSelectCell(Sender: TObject; ACol,
 var
   MnwColumn : TMnwTimeColumns;
 begin
-  if ARow >= 1 then
+  if ARow >= 1 + PestRowOffset then
   begin
     if (ACol >= 0 ) and (ACol < rdgTimeTable.ColCount) then
     begin
@@ -1375,12 +1450,24 @@ begin
       end;
     end;
   end;
+
+  if Assigned(OnCheckPestCell) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
+  end
+  else
+  begin
+    if ARow <= PestRowOffset then
+    begin
+      CanSelect := False;
+    end;
+  end;
 end;
 
 procedure TframeScreenObjectMNW2.rdgTimeTableSetEditText(Sender: TObject; ACol,
   ARow: Integer; const Value: string);
 begin
-  if (ARow >= 1) and (ACol = Ord(mtcLimitMethod)) then
+  if (ARow >= 1 + PestRowOffset) and (ACol = Ord(mtcLimitMethod)) then
   begin
     rdgTimeTable.Invalidate;
   end;
@@ -1528,21 +1615,7 @@ var
   LiftError1: Boolean;
   LiftError2: Boolean;
   ShowError: boolean;
-//  Observations: TMnw2Observations;
-//  RowOK: Boolean;
-//  ColIndex: Integer;
   ObsCount: Integer;
-//  Mnw2Ob: TMnw2ObsItem;
-//  ObNames: TStringList;
-//  ObIndex: Integer;
-//  Comparisons: TObsComparisons;
-//  CompCount: Integer;
-//  ItemIndex: Integer;
-//  Mnw2ObComp: TObsCompareItem;
-//  Index1: Integer;
-//  Index2: Integer;
-//  OtherMnw2Ob: TMnw2ObsItem;
-//  MyGuid: TGUID;
 begin
   ShowError := False;
   for Index := 0 to List.Count - 1 do
@@ -1572,7 +1645,6 @@ begin
       if List.Count = 1 then
       begin
         // Observations
-//        Observations := Boundary.Observations;
         framePestObsMnw2.SetData(Boundary.Observations);
       end;
 
@@ -1769,8 +1841,55 @@ begin
         end;
       end;
 
+      {$IFDEF PEST}
+      if PestModifierAssigned[rdgTimeTable, Ord(mtcPumpingRate)]  then
+      begin
+        Boundary.PestPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcPumpingRate)];
+      end;
+      if PestMethodAssigned[rdgTimeTable, Ord(mtcPumpingRate)] then
+      begin
+        Boundary.PestPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcPumpingRate)];
+      end;
+
+      if PestModifierAssigned[rdgTimeTable, Ord(mtcMultiplier)]  then
+      begin
+        Boundary.PestHeadCapacityMultiplierFormula := PestModifier[rdgTimeTable, Ord(mtcMultiplier)];
+      end;
+      if PestMethodAssigned[rdgTimeTable, Ord(mtcMultiplier)] then
+      begin
+        Boundary.PestHeadCapacityMultiplierMethod := PestMethod[rdgTimeTable, Ord(mtcMultiplier)];
+      end;
+
+      if PestModifierAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)]  then
+      begin
+        Boundary.PestLimitingWaterLevelFormula := PestModifier[rdgTimeTable, Ord(mtcLimitingWaterLevel)];
+      end;
+      if PestMethodAssigned[rdgTimeTable, Ord(mtcLimitingWaterLevel)] then
+      begin
+        Boundary.PestLimitingWaterLevelMethod := PestMethod[rdgTimeTable, Ord(mtcLimitingWaterLevel)];
+      end;
+
+      if PestModifierAssigned[rdgTimeTable, Ord(mtcMinRate)]  then
+      begin
+        Boundary.PestInactivationPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcMinRate)];
+      end;
+      if PestMethodAssigned[rdgTimeTable, Ord(mtcMinRate)] then
+      begin
+        Boundary.PestInactivationPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcMinRate)];
+      end;
+
+      if PestModifierAssigned[rdgTimeTable, Ord(mtcMaxRate)]  then
+      begin
+        Boundary.PestReactivationPumpingRateFormula := PestModifier[rdgTimeTable, Ord(mtcMaxRate)];
+      end;
+      if PestMethodAssigned[rdgTimeTable, Ord(mtcMaxRate)] then
+      begin
+        Boundary.PestReactivationPumpingRateMethod := PestMethod[rdgTimeTable, Ord(mtcMaxRate)];
+      end;
+      {$ENDIF}
+
       TimeCount := 0;
-      for RowIndex := 1 to rdgTimeTable.RowCount - 1 do
+      for RowIndex := 1 + PestRowOffset to rdgTimeTable.RowCount - 1 do
       begin
         if (rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex] <> '')
           and (rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex] <> '')
@@ -1790,7 +1909,7 @@ begin
           Boundary.TimeValues.Delete(Boundary.TimeValues.Count-1);
         end;
         TimeIndex := -1;
-        for RowIndex := 1 to rdgTimeTable.RowCount - 1 do
+        for RowIndex := 1 + PestRowOffset to rdgTimeTable.RowCount - 1 do
         begin
           if (rdgTimeTable.Cells[Ord(mtcStartTime), RowIndex] <> '')
             and (rdgTimeTable.Cells[Ord(mtcEndTime), RowIndex] <> '')
@@ -1993,10 +2112,10 @@ procedure TframeScreenObjectMNW2.seTimeTableRowsChange(Sender: TObject);
 var
   RowCount: Integer;
 begin
-  RowCount := seTimeTableRows.AsInteger;
-  if RowCount < 1 then
+  RowCount := seTimeTableRows.AsInteger + PestRowOffset;
+  if RowCount < 1 + PestRowOffset then
   begin
-    RowCount := 1;
+    RowCount := 1 + PestRowOffset;
   end;
   rdgTimeTable.RowCount := RowCount + 1;
   EnableDeleteTimeButton;

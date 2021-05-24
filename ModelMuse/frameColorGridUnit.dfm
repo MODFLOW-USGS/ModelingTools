@@ -10,10 +10,10 @@ inherited frameColorGrid: TframeColorGrid
     ExplicitHeight = 501
     inherited tabSelection: TTabSheet
       ExplicitWidth = 563
-      ExplicitHeight = 470
+      ExplicitHeight = 473
       DesignSize = (
         563
-        470)
+        473)
       inherited lblColorScheme: TLabel
         Left = 10
         Top = 291
@@ -43,8 +43,8 @@ inherited frameColorGrid: TframeColorGrid
       object lblTime: TLabel [6]
         Left = 420
         Top = 4
-        Width = 29
-        Height = 16
+        Width = 22
+        Height = 13
         Anchors = [akTop, akRight]
         Caption = 'Time'
       end
@@ -56,7 +56,6 @@ inherited frameColorGrid: TframeColorGrid
         ExplicitLeft = 10
         ExplicitTop = 315
         ExplicitWidth = 309
-        ExplicitHeight = 24
       end
       inherited seCycles: TJvSpinEdit
         Left = 457
@@ -82,13 +81,13 @@ inherited frameColorGrid: TframeColorGrid
       inherited udDataSets: TJvUpDown
         Left = 369
         Top = 26
-        Width = 20
-        Height = 24
+        Width = 16
+        Height = 21
         Associate = virttreecomboDataSets
         ExplicitLeft = 369
         ExplicitTop = 26
-        ExplicitWidth = 20
-        ExplicitHeight = 24
+        ExplicitWidth = 16
+        ExplicitHeight = 21
       end
       inherited rgUpdateLimitChoice: TRadioGroup
         Left = 10
@@ -108,7 +107,7 @@ inherited frameColorGrid: TframeColorGrid
         Text = '0'
         ExplicitLeft = 10
         ExplicitTop = 26
-        ExplicitWidth = 379
+        ExplicitWidth = 375
       end
       inherited reComment: TRichEdit
         Width = 550
@@ -127,7 +126,7 @@ inherited frameColorGrid: TframeColorGrid
       object udTime: TJvUpDown
         Left = 511
         Top = 25
-        Width = 21
+        Width = 17
         Height = 21
         Anchors = [akTop, akRight]
         Max = 0
@@ -138,7 +137,7 @@ inherited frameColorGrid: TframeColorGrid
         Left = 420
         Top = 26
         Width = 85
-        Height = 24
+        Height = 21
         Anchors = [akTop, akRight]
         TabOrder = 2
         Text = '0'
@@ -147,10 +146,10 @@ inherited frameColorGrid: TframeColorGrid
     end
     inherited tabFilters: TTabSheet
       ExplicitWidth = 563
-      ExplicitHeight = 470
+      ExplicitHeight = 473
       DesignSize = (
         563
-        470)
+        473)
       inherited lblNumberOfValuesToIgnore: TLabel
         Top = 443
         ExplicitTop = 443
@@ -161,42 +160,35 @@ inherited frameColorGrid: TframeColorGrid
       end
       inherited seNumberOfValuesToIgnore: TJvSpinEdit
         Top = 437
-        Height = 21
         ExplicitTop = 440
-        ExplicitHeight = 21
       end
     end
     inherited tabLegend: TTabSheet
       ExplicitWidth = 563
-      ExplicitHeight = 470
+      ExplicitHeight = 473
       inherited imLegend: TImage
         Width = 357
-        Height = 470
+        Height = 473
         ExplicitWidth = 395
         ExplicitHeight = 470
       end
       inherited splColor: TSplitter
-        Height = 470
+        Height = 473
         ExplicitHeight = 470
       end
       inherited pnlLegend: TPanel
-        Height = 470
-        ExplicitHeight = 470
+        Height = 473
+        ExplicitHeight = 473
         DesignSize = (
           201
-          470)
+          473)
         inherited lblColorLegendRows: TLabel
           Top = 376
           ExplicitTop = 376
         end
-        inherited comboMethod: TComboBox
-          ExplicitHeight = 24
-        end
         inherited seLegendRows: TJvSpinEdit
           Top = 395
-          Height = 21
           ExplicitTop = 395
-          ExplicitHeight = 21
         end
         inherited rdgLegend: TRbwDataGrid4
           Height = 311

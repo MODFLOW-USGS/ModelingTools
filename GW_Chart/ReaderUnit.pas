@@ -3523,6 +3523,12 @@ begin
           if Pos(' ', Rate) > 0 then
           begin
             Rate := GetStringBetween(Rate, '', ' ');
+            BudgetItem := GetStringBetween(CurrentLine, Rate, '');
+            if BudgetItem <> 'STORAGE' then
+            begin
+              CumBudgetItem.Name := BudgetItem;
+              RateBudgetItem.Name := BudgetItem;
+            end;
           end;
           RateBudgetItem.value := Rate;
         end;
@@ -3564,6 +3570,12 @@ begin
             if Pos(' ', Rate) > 0 then
             begin
               Rate := GetStringBetween(Rate, '', ' ');
+              BudgetItem := GetStringBetween(CurrentLine, Rate, '');
+              if BudgetItem <> 'STORAGE' then
+              begin
+                CumBudgetItem.Name := BudgetItem;
+                RateBudgetItem.Name := BudgetItem;
+              end;
             end;
             RateBudgetItem.value := Rate;
           end;

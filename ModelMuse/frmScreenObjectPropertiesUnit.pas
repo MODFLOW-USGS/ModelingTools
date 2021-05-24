@@ -2796,6 +2796,11 @@ begin
   begin
     PestParameterColumns := [2, 3, 5, 6, 7, 9, 10, 12, 14, 15];
   end
+  else if (Sender = frameMNW2.rdgTimeTable) then
+  begin
+    ParametersOnly := True;
+    PestParameterColumns := [2, 3, 4, 6, 7];
+  end
   ;
 
   if not (ACol in PestParameterColumns) and (ARow >= 1)
@@ -5707,6 +5712,7 @@ begin
   frameHfbMf6.OnCheckPestCell := EnablePestCells;
   frameLak.OnCheckPestCell := EnablePestCells;
   frameMNW1.OnCheckPestCell := EnablePestCells;
+  frameMNW2.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -22747,12 +22753,21 @@ begin
   // edit the formula that is not part of a data set or boundary data set.
   ed := Sender as TJvComboEdit;
 
+  { TODO -cPEST : Support PEST here }
   PestParamOK := False;
   if (ed = frameMAW.edWellRadius)
     or (ed = frameMAW.edBottom)
     or (ed = frameMAW.edStartingHead)
     or (ed = frameMAW.edStartingHead)
     or (ed = frameLakMf6.edStartingStage)
+    or (ed = frameMNW2.edWellRadius)
+    or (ed = frameMNW2.edSkinRadius)
+    or (ed = frameMNW2.edKSkin)
+    or (ed = frameMNW2.edBCoefficient)
+    or (ed = frameMNW2.edCCoefficient)
+    or (ed = frameMNW2.edPCoefficient)
+    or (ed = frameMNW2.edCellToWellConductance)
+    or (ed = frameMNW2.edPartialPenetration)
 //    or (ed = frameScreenObjectUzfMf6.edSurfaceDepressionDepth)
 //    or (ed = frameScreenObjectUzfMf6.edVerticalSaturatedK)
 //    or (ed = frameScreenObjectUzfMf6.edResidualWaterContent)
@@ -25618,6 +25633,7 @@ begin
     or (DataGrid = frameMAW.frameWellScreens.Grid)
     or (DataGrid = frameLakMf6.frameLakeTable.Grid)
     or ((DataGrid = frameMNW1.rdgModflowBoundary) and (ACol in [2, 3, 5, 6, 7, 9, 10, 12, 14, 15]))
+    or ((DataGrid = frameMNW2.rdgTimeTable) and (ACol in [2, 3, 4, 6, 7]))
     or (DataGrid.Owner is  TframeLakeOutlet)
 //    or (DataGrid = frameCSUB.rdgSubGroups)
     ;

@@ -28665,8 +28665,8 @@ begin
       and (TypeToCheck = rdtDouble));
     if not ResultTypeOK then
     begin
-    raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
-      [Expression.Decompile, FScreenObject.Name]), Expression.Decompile);
+      raise EInvalidDataType.Create(Format(StrTheFormula0sIn,
+        [Expression.Decompile, FScreenObject.Name]), Expression.Decompile);
 //      raise EInvalidDataType.Create(StrInvalidDataType, Expression.Decompile);
     end;
   end;

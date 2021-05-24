@@ -74,6 +74,7 @@ type
     procedure CheckWells;
     function CountNodes: integer;
     procedure WriteObsScript(const AFileName: string);
+    procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
@@ -410,6 +411,50 @@ begin
   end;
 end;
 
+procedure TModflowMNW2_Writer.WriteFileInternal;
+begin
+  FWellNames.Clear;
+  OpenFile(FNameOfFile);
+  try
+    frmProgressMM.AddMessage(StrWritingMNW2Package);
+    WriteTemplateHeader;
+
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet1);
+    WriteDataSet1;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet2);
+    WriteDataSet2;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets3and4);
+    WriteDataSets3and4;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
 class procedure TModflowMNW2_Writer.AdjustWellID(var WELLID: string);
 begin
   if Pos(' ', WELLID) > 0 then
@@ -676,42 +721,14 @@ begin
   begin
     Exit;
   end;
-  OpenFile(FNameOfFile);
-  try
-    frmProgressMM.AddMessage(StrWritingMNW2Package);
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
+  WriteFileInternal;
 
-    frmProgressMM.AddMessage(StrWritingDataSet1);
-    WriteDataSet1;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSet2);
-    WriteDataSet2;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSets3and4);
-    WriteDataSets3and4;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-  finally
-    CloseFile;
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
   end;
 end;
 
@@ -1058,14 +1075,19 @@ var
   QCut: Integer;
   Hlim: Double;
   PestName: string;
+  PestSeries: string;
+  Method: TPestParamMethod;
 begin
   if WellBoundary.ConstrainPumping and
     not WellBoundary.ConstantConstraints then
   begin
     Hlim := TimeItem.LimitingWaterLevelValue;
     PestName := TimeItem.BoundaryPestName[LimitingWaterLevelPosition];
-    WriteFloat(Hlim);
-    WriteFormulaOrValueBasedOnAPestName(PestName, Hlim, -1, 0, 0);
+    PestSeries := WellBoundary.PestLimitingWaterLevelFormula;
+    Method := WellBoundary.PestLimitingWaterLevelMethod;
+    WritePestFormulaOrValue(PestName, PestSeries, Method, Hlim);
+//    WriteFloat(Hlim);
+//    WriteFormulaOrValueBasedOnAPestName(PestName, Hlim, -1, 0, 0);
 
     QCut := GetQCut(TimeItem);
     Comment := ' # Data Set 4B: Hlim, QCut';
@@ -1074,13 +1096,19 @@ begin
     begin
       Qfrcmn := TimeItem.InactivationPumpingRateValue;
       PestName := TimeItem.BoundaryPestName[InactivationPumpingRatePosition];
+      PestSeries := WellBoundary.PestInactivationPumpingRateFormula;
+      Method := WellBoundary.PestInactivationPumpingRateMethod;
+      WritePestFormulaOrValue(PestName, PestSeries, Method, Qfrcmn);
 //      WriteFloat(Qfrcmn);
-      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmn, -1, 0, 0);
+//      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmn, -1, 0, 0);
 
       Qfrcmx := TimeItem.ReactivationPumpingRateValue;
       PestName := TimeItem.BoundaryPestName[ReactivationPumpingRatePosition];
+      PestSeries := WellBoundary.PestReactivationPumpingRateFormula;
+      Method := WellBoundary.PestReactivationPumpingRateMethod;
+      WritePestFormulaOrValue(PestName, PestSeries, Method, Qfrcmx);
 //      WriteFloat(Qfrcmx);
-      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmx, -1, 0, 0);
+//      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmx, -1, 0, 0);
 
       Comment := Comment + ', Qfrcmn, Qfrcmx';
     end;
@@ -1113,6 +1141,8 @@ var
   CapMult: Double;
   IFACE: TIface;
   PestName: string;
+  PestSeries: string;
+  Method: TPestParamMethod;
 begin
   WELLID := WellBoundary.WellID;
   if Pos(' ', WELLID) > 0 then
@@ -1124,16 +1154,22 @@ begin
 
   QDes := TimeItem.PumpingRateValue;
   PestName := TimeItem.BoundaryPestName[PumpingRatePosition];
+  PestSeries := WellBoundary.PestPumpingRateFormula;
+  Method := WellBoundary.PestPumpingRateMethod;
+  WritePestFormulaOrValue(PestName, PestSeries, Method, QDes);
 //  WriteFloat(QDes);
-  WriteFormulaOrValueBasedOnAPestName(PestName, QDes, -1, 0, 0);
+//  WriteFormulaOrValueBasedOnAPestName(PestName, QDes, -1, 0, 0);
   Comment := ' # Data Set 4A: WELLID, QDes';
 
   if WellBoundary.AdjustPumping then
   begin
     CapMult := TimeItem.HeadCapacityMultiplierValue;
     PestName := TimeItem.BoundaryPestName[HeadCapacityMultiplierPosition];
+    PestSeries := WellBoundary.PestHeadCapacityMultiplierFormula;
+    Method := WellBoundary.PestHeadCapacityMultiplierMethod;
+    WritePestFormulaOrValue(PestName, PestSeries, Method, CapMult);
 //    WriteFloat(CapMult);
-    WriteFormulaOrValueBasedOnAPestName(PestName, CapMult, -1, 0, 0);
+//    WriteFormulaOrValueBasedOnAPestName(PestName, CapMult, -1, 0, 0);
     Comment := Comment + ', CapMult';
   end;
   IFACE := (WellBoundary.ScreenObject as TScreenObject).IFace;
@@ -1567,7 +1603,8 @@ begin
       if WellBoundary.PartialPenetrationCorrection then
       begin
         PP := Cell.PartialPenetration;
-        WriteFloat(PP);
+        WriteValueOrFormula(Cell, PartialPenetrationPosition);
+//        WriteFloat(PP);
         Comment := Comment + ', PP';
       end;
       WriteString(Comment);
@@ -1599,13 +1636,14 @@ begin
           and ConstantWellLossParameters then
         begin
           Cell := Well.Cells[0] as TMnw2_Cell;
-          Rw := Cell.WellRadius;
+          WriteValueOrFormula(Cell, WellRadiusPosition);
+//          Rw := Cell.WellRadius;
         end
         else
         begin
           Rw := -1;
+          WriteFloat(Rw);
         end;
-        WriteFloat(Rw);
         WriteString(' # Data Set 2C; Rw');
         NewLine;
       end;
@@ -1615,19 +1653,22 @@ begin
           and ConstantWellLossParameters then
         begin
           Cell := Well.Cells[0] as TMnw2_Cell;
-          Rw := Cell.WellRadius;
-          Rskin := Cell.SkinRadius;
-          Kskin := Cell.SkinK;
+//          Rw := Cell.WellRadius;
+//          Rskin := Cell.SkinRadius;
+//          Kskin := Cell.SkinK;
+          WriteValueOrFormula(Cell, WellRadiusPosition);
+          WriteValueOrFormula(Cell, SkinRadiusPosition);
+          WriteValueOrFormula(Cell, SkinKPosition);
         end
         else
         begin
           Rw := -1;
           Rskin := -1;
           Kskin := -1;
+          WriteFloat(Rw);
+          WriteFloat(Rskin);
+          WriteFloat(Kskin);
         end;
-        WriteFloat(Rw);
-        WriteFloat(Rskin);
-        WriteFloat(Kskin);
         WriteString(' # Data Set 2C; Rw, Rskin, Kskin');
         NewLine;
       end;
@@ -1637,10 +1678,14 @@ begin
           and ConstantWellLossParameters then
         begin
           Cell := Well.Cells[0] as TMnw2_Cell;
-          Rw := Cell.WellRadius;
-          B := Cell.B;
-          C := Cell.C;
-          P := Cell.P;
+//          Rw := Cell.WellRadius;
+//          B := Cell.B;
+//          C := Cell.C;
+//          P := Cell.P;
+          WriteValueOrFormula(Cell, WellRadiusPosition);
+          WriteValueOrFormula(Cell, BPosition);
+          WriteValueOrFormula(Cell, CPosition);
+          WriteValueOrFormula(Cell, PPosition);
         end
         else
         begin
@@ -1648,11 +1693,11 @@ begin
           B := -1;
           C := -1;
           P := -1;
+          WriteFloat(Rw);
+          WriteFloat(B);
+          WriteFloat(C);
+          WriteFloat(P);
         end;
-        WriteFloat(Rw);
-        WriteFloat(B);
-        WriteFloat(C);
-        WriteFloat(P);
         WriteString(' # Data Set 2C; Rw, B, C, P');
         NewLine;
       end;
@@ -1662,13 +1707,14 @@ begin
           and ConstantWellLossParameters then
         begin
           Cell := Well.Cells[0] as TMnw2_Cell;
-          CWC := Cell.CellToWellConductance;
+//          CWC := Cell.CellToWellConductance;
+          WriteValueOrFormula(Cell, CellToWellConductancePosition);
         end
         else
         begin
           CWC := -1;
+          WriteFloat(CWC);
         end;
-        WriteFloat(CWC);
         WriteString(' # Data Set 2C; CWC');
         NewLine;
       end;

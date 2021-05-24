@@ -26,8 +26,8 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
   TextHeight = 15
   object Splitter1: TSplitter
     Left = 0
-    Top = 232
-    Width = 606
+    Top = 237
+    Width = 614
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -36,8 +36,8 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
   object chartZONEBDGT: TChart
     Left = 0
     Top = 0
-    Width = 606
-    Height = 232
+    Width = 614
+    Height = 237
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     Legend.Font.Charset = ANSI_CHARSET
@@ -92,13 +92,13 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 235
-    Width = 606
+    Top = 240
+    Width = 614
     Height = 281
     Align = alBottom
     TabOrder = 1
     object Panel1: TPanel
-      Left = 460
+      Left = 468
       Top = 1
       Width = 145
       Height = 279
@@ -242,7 +242,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
     object Panel5: TPanel
       Left = 1
       Top = 1
-      Width = 459
+      Width = 467
       Height = 279
       Align = alClient
       BevelOuter = bvNone
@@ -250,13 +250,13 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
       object Panel2: TPanel
         Left = 0
         Top = 180
-        Width = 459
+        Width = 467
         Height = 99
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
         DesignSize = (
-          459
+          467
           99)
         object lblTime: TLabel
           Left = 8
@@ -449,13 +449,13 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
       object pnlBudgetItems: TPanel
         Left = 0
         Top = 0
-        Width = 459
+        Width = 467
         Height = 180
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
         object splBudget: TSplitter
-          Left = 301
+          Left = 309
           Top = 0
           Height = 180
           Align = alRight
@@ -470,7 +470,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
         object pnlInBudget: TPanel
           Left = 158
           Top = 0
-          Width = 143
+          Width = 151
           Height = 180
           Align = alClient
           BevelOuter = bvNone
@@ -478,7 +478,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           object Panel7: TPanel
             Left = 0
             Top = 0
-            Width = 143
+            Width = 151
             Height = 24
             Align = alTop
             BevelOuter = bvNone
@@ -503,7 +503,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           object clbIn: TCheckListBox
             Left = 0
             Top = 24
-            Width = 143
+            Width = 151
             Height = 156
             OnClickCheck = clbInClickCheck
             Align = alClient
@@ -512,7 +512,7 @@ object frmZoneBdgtReader: TfrmZoneBdgtReader
           end
         end
         object pnlOutBudget: TPanel
-          Left = 304
+          Left = 312
           Top = 0
           Width = 155
           Height = 180
