@@ -151,14 +151,14 @@ end;
 procedure TCSubInterbed.Loaded;
 var
   LocalModel: TCustomModel;
-  CSubPackage: TCSubPackageSelection;
+//  CSubPackage: TCSubPackageSelection;
   DataArray: TDataArray;
 begin
   Exit;
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
-    CSubPackage := LocalModel.ModflowPackages.CSubPackage;
+//    CSubPackage := LocalModel.ModflowPackages.CSubPackage;
 
     DataArray := LocalModel.DataArrayManager.GetDataSetByName(FInitialOffset);
     DataArray.Loaded;

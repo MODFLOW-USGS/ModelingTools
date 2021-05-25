@@ -115,6 +115,7 @@ type
     property NameOfFile: string read FNameOfFile;
     function GetPestNonTransientTemplateFormula(DataArray: TDataArray;
       Layer, Row, Col: Integer): string;
+    function GetPestParamFormula(Value: double; PestParName: string): string;
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -2788,6 +2789,32 @@ begin
         [Value, CellValueReplacement]);
     end;
   end
+end;
+
+function TCustomFileWriter.GetPestParamFormula(Value: double;
+  PestParName: string): string;
+var
+  Param: TModflowSteadyParameter;
+  TemplateCharacter: string;
+begin
+  if PestParName = '' then
+  begin
+    result := FortranFloatToStr(Value)
+  end
+  else
+  begin
+    Param := Model.GetPestParameterByName(PestParName);
+    if Param <> nil then
+    begin
+      TemplateCharacter := Model.PestProperties.TemplateCharacter;
+      result := Format(' %0:s                    %1:s%0:s',
+        [TemplateCharacter, Param.ParameterName])
+    end
+    else
+    begin
+      result := FortranFloatToStr(Value)
+    end;
+  end;
 end;
 
 function TCustomFileWriter.GetPestTemplateFormula(Value: double; PestParValue,

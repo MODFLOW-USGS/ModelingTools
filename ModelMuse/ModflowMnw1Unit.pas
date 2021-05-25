@@ -2467,7 +2467,10 @@ begin
         result := inherited;
       end
     else
-      Assert(False);
+      begin
+        result := inherited;
+        Assert(False);
+      end;
   end;
 end;
 

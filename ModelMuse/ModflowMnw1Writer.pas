@@ -544,7 +544,7 @@ var
   PriorCell: TMnw1Cell;
   Rw: double;
   NextCell: TMnw1Cell;
-  PestDelimiters: set of Char;
+  PestDelimiters: TSysCharSet;
 begin
   if Model.PestUsed then
   begin
@@ -598,11 +598,11 @@ begin
         end;
 //        WriteFloat(Cell.WaterQuality);
         WriteValueOrFormula(Cell, WaterQualityPosition);
-        Rw := 0;
+//        Rw := 0;
         case Cell.ConductanceMethod of
           mcmRadius:
             begin
-              Rw := Cell.WellRadius;
+//              Rw := Cell.WellRadius;
               WriteValueOrFormula(Cell, WellRadiusPosition);
             end;
           mcmFixed:
@@ -612,7 +612,7 @@ begin
             end;
           mcmConductance:
             begin
-              Rw := -Cell.Conductance;
+//              Rw := -Cell.Conductance;
               WriteValueOrFormula(Cell, ConductancePosition, 0, True);
             end
           else Assert(False);
@@ -634,7 +634,7 @@ begin
           WriteString(' Cp: ');
 //          WriteFloat(Cell.NonLinearLossCoefficient);
           WriteValueOrFormula(Cell, NonLinearLossCoefficientPosition);
-          if ':' in PestDelimiters then
+          if {':' in PestDelimiters} CharInSet(':', PestDelimiters) then
           begin
             Exclude(PestDelimiters, ':');
             frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,
@@ -650,13 +650,13 @@ begin
           else if Cell.PumpingLimitType = mpltPercent then
           begin
             WriteString(' Q-%CUT:');
-            if ':' in PestDelimiters then
+            if {':' in PestDelimiters} CharInSet(':', PestDelimiters) then
             begin
               Exclude(PestDelimiters, ':');
               frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,
                 Format(StrSCanNotBeUsed, [':']));
             end;
-            if '%' in PestDelimiters then
+            if {'%' in PestDelimiters} CharInSet('%', PestDelimiters) then
             begin
               Exclude(PestDelimiters, '%');
               frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,
@@ -677,7 +677,7 @@ begin
         begin
           WriteString(' SITE:');
           WriteString(Cell.Site);
-          if ':' in PestDelimiters then
+          if {':' in PestDelimiters} CharInSet(':', PestDelimiters) then
           begin
             Exclude(PestDelimiters, ':');
             frmErrorsAndWarnings.AddError(Model, StrPESTDelimiterConfl,

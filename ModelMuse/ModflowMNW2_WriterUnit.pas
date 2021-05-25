@@ -104,7 +104,8 @@ implementation
 uses
   ModflowUnitNumbers, frmProgressUnit, frmErrorsAndWarningsUnit, GoPhastTypes,
   ModflowTimeUnit, ModflowBoundaryUnit, frmFormulaErrorsUnit, Math, Forms,
-  DataSetUnit, ObservationComparisonsUnit, ModelMuseUtilities, AbstractGridUnit;
+  DataSetUnit, ObservationComparisonsUnit, ModelMuseUtilities, AbstractGridUnit,
+  ModflowParameterUnit;
 
 resourcestring
   SignError = 'The deactivation pumping rate and reactivation pumping rate '
@@ -1377,6 +1378,8 @@ var
   CWC: double;
   LocalGrid: TCustomModelGrid;
   GridBottom: double;
+  Param: TModflowSteadyParameter;
+  ParamName: string;
   procedure WriteOptionalData;
   var
     Rw: Double;
@@ -1393,36 +1396,45 @@ var
         mltNone: Assert(False);
         mltThiem:
           begin
-            Rw := Cell.WellRadius;
-            WriteFloat(Rw);
+//            Rw := Cell.WellRadius;
+//            WriteFloat(Rw);
+            WriteValueOrFormula(Cell, WellRadiusPosition);
             Comment := Comment +', Rw';
           end;
         mltSkin:
           begin
-            Rw := Cell.WellRadius;
-            Rskin := Cell.SkinRadius;
-            Kskin := Cell.SkinK;
-            WriteFloat(Rw);
-            WriteFloat(Rskin);
-            WriteFloat(Kskin);
+//            Rw := Cell.WellRadius;
+//            Rskin := Cell.SkinRadius;
+//            Kskin := Cell.SkinK;
+//            WriteFloat(Rw);
+//            WriteFloat(Rskin);
+//            WriteFloat(Kskin);
+            WriteValueOrFormula(Cell, WellRadiusPosition);
+            WriteValueOrFormula(Cell, SkinRadiusPosition);
+            WriteValueOrFormula(Cell, SkinKPosition);
             Comment := Comment +', Rw, Rskin, Kskin';
           end;
         mltEquation:
           begin
-            Rw := Cell.WellRadius;
-            B := Cell.B;
-            C := Cell.C;
-            P := Cell.P;
-            WriteFloat(Rw);
-            WriteFloat(B);
-            WriteFloat(C);
-            WriteFloat(P);
+//            Rw := Cell.WellRadius;
+//            B := Cell.B;
+//            C := Cell.C;
+//            P := Cell.P;
+//            WriteFloat(Rw);
+//            WriteFloat(B);
+//            WriteFloat(C);
+//            WriteFloat(P);
+            WriteValueOrFormula(Cell, WellRadiusPosition);
+            WriteValueOrFormula(Cell, BPosition);
+            WriteValueOrFormula(Cell, CPosition);
+            WriteValueOrFormula(Cell, PPosition);
             Comment := Comment +', Rw, B, C, P';
           end;
         mtlSpecify:
           begin
-            CWC := Cell.CellToWellConductance;
-            WriteFloat(CWC);
+//            CWC := Cell.CellToWellConductance;
+//            WriteFloat(CWC);
+            WriteValueOrFormula(Cell, CellToWellConductancePosition);
             Comment := Comment +', CWC';
           end;
         else Assert(False);
@@ -1464,106 +1476,205 @@ begin
           mltThiem:
             begin
               Formula := VerticalScreen.WellRadius;
-              EvaluateVerticalScreenFormula(Expression, 'Rw', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.WellRadius then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.WellRadius := Formula;
+                ParamName := Param.ParameterName;
+                Rw := Param.Value;
+//                Formula := FortranFloatToStr(Param.Value);
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'Rw', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.WellRadius) then
+                begin
+                  VerticalScreen.WellRadius := Formula;
+                end;
+                Rw := Expression.DoubleResult;
               end;
-              Rw := Expression.DoubleResult;
-              WriteFloat(Rw);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, Rw);
+//              WriteFloat(Rw);
               Comment := Comment +', Rw';
             end;
           mltSkin:
             begin
               Formula := VerticalScreen.WellRadius;
-              EvaluateVerticalScreenFormula(Expression, 'Rw', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.WellRadius then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.WellRadius := Formula;
+                ParamName := Param.ParameterName;
+                Rw := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'Rw', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.WellRadius) then
+                begin
+                  VerticalScreen.WellRadius := Formula;
+                end;
+                Rw := Expression.DoubleResult;
               end;
-              Rw := Expression.DoubleResult;
-              WriteFloat(Rw);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, Rw);
+//              WriteFloat(Rw);
 
               Formula := VerticalScreen.SkinRadius;
-              EvaluateVerticalScreenFormula(Expression, 'Rskin', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.SkinRadius then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.SkinRadius := Formula;
+                ParamName := Param.ParameterName;
+                Rskin := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'Rskin', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.SkinRadius) then
+                begin
+                  VerticalScreen.SkinRadius := Formula;
+                end;
+                Rskin := Expression.DoubleResult;
               end;
-              Rskin := Expression.DoubleResult;
-              WriteFloat(Rskin);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, Rskin);
+//              WriteFloat(Rskin);
 
               Formula := VerticalScreen.SkinK;
-              EvaluateVerticalScreenFormula(Expression, 'Kskin', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.SkinK then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.SkinK := Formula;
+                ParamName := Param.ParameterName;
+                Kskin := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'Kskin', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.SkinK) then
+                begin
+                  VerticalScreen.SkinK := Formula;
+                end;
+                Kskin := Expression.DoubleResult;
               end;
-              Kskin := Expression.DoubleResult;
-              WriteFloat(Kskin);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, Kskin);
+//              WriteFloat(Kskin);
 
               Comment := Comment +', Rw, Rskin, Kskin';
             end;
           mltEquation:
             begin
               Formula := VerticalScreen.WellRadius;
-              EvaluateVerticalScreenFormula(Expression, 'Rw', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.WellRadius then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.WellRadius := Formula;
+                ParamName := Param.ParameterName;
+                Rw := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'Rw', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.WellRadius) then
+                begin
+                  VerticalScreen.WellRadius := Formula;
+                end;
+                Rw := Expression.DoubleResult;
               end;
-              Rw := Expression.DoubleResult;
-              WriteFloat(Rw);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, Rw);
+//              WriteFloat(Rw);
 
               Formula := VerticalScreen.B;
-              EvaluateVerticalScreenFormula(Expression, 'B', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.B then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.B := Formula;
+                ParamName := Param.ParameterName;
+                B := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'B', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.B) then
+                begin
+                  VerticalScreen.B := Formula;
+                end;
+                B := Expression.DoubleResult;
               end;
-              B := Expression.DoubleResult;
-              WriteFloat(B);
-
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, B);
+//              WriteFloat(B);
 
               Formula := VerticalScreen.C;
-              EvaluateVerticalScreenFormula(Expression, 'C', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.C then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.C := Formula;
+                ParamName := Param.ParameterName;
+                C := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'C', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.C) then
+                begin
+                  VerticalScreen.C := Formula;
+                end;
+                C := Expression.DoubleResult;
               end;
-              C := Expression.DoubleResult;
-              WriteFloat(C);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, C);
+//              WriteFloat(C);
 
               Formula := VerticalScreen.P;
-              EvaluateVerticalScreenFormula(Expression, 'P', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.P then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.P := Formula;
+                ParamName := Param.ParameterName;
+                P := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'P', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.P) then
+                begin
+                  VerticalScreen.P := Formula;
+                end;
+                P := Expression.DoubleResult;
               end;
-              P := Expression.DoubleResult;
-              WriteFloat(P);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, P);
+//              WriteFloat(P);
 
               Comment := Comment +', Rw, B, C, P';
             end;
           mtlSpecify:
             begin
               Formula := VerticalScreen.CellToWellConductance;
-              EvaluateVerticalScreenFormula(Expression, 'CWC', Formula,
-                Compiler, WellBoundary);
-              if Formula <> VerticalScreen.CellToWellConductance then
+              ParamName := '';
+              Param := Model.GetPestParameterByName(Formula);
+              if Param <> nil then
               begin
-                VerticalScreen.CellToWellConductance := Formula;
+                ParamName := Param.ParameterName;
+                CWC := Param.Value;
+              end
+              else
+              begin
+                EvaluateVerticalScreenFormula(Expression, 'CWC', Formula,
+                  Compiler, WellBoundary);
+                if (Formula <> VerticalScreen.CellToWellConductance) then
+                begin
+                  VerticalScreen.CellToWellConductance := Formula;
+                end;
+                CWC := Expression.DoubleResult;
               end;
-              CWC := Expression.DoubleResult;
-              WriteFloat(CWC);
+              WritePestFormulaOrValue(ParamName, '', ppmMultiply, CWC);
+//              WriteFloat(CWC);
 
               Comment := Comment +', CWC';
             end;

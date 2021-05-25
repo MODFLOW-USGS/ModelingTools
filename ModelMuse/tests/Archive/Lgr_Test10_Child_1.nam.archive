@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 2/5/2018 by ModelMuse Version 3.9.0.29
+# Name File for MODFLOW created on 5/25/2021 by ModelMuse Version 4.3.0.47
 LIST           1011 ..\..\output\output.Lgr_Test10_Child_1\Lgr_Test10_Child_1.lst REPLACE
 DATA(BINARY)   1009 ..\..\output\output.Lgr_Test10_Child_1\Lgr_Test10_Child_1.cbc REPLACE
 DIS            1012 ..\..\model\model.Lgr_Test10_Child_1\Lgr_Test10_Child_1.dis OLD
@@ -8,4 +8,4 @@ DATA           1037 ..\..\output\output.Lgr_Test10_Child_1\Lgr_Test10_Child_1.fh
 DATA           1038 ..\..\output\output.Lgr_Test10_Child_1\Lgr_Test10_Child_1.fdn REPLACE
 SIP            1035 ..\..\model\model.Lgr_Test10_Child_1\Lgr_Test10_Child_1.sip OLD
 BCF6           1064 ..\..\model\model.Lgr_Test10_Child_1\Lgr_Test10_Child_1.bcf OLD
-RES            1027 ..\..\model\model.Lgr_Test10_Child_1\Lgr_Test10_Child_1.res OLD
+RES            1027 ..\..\model\model.Lgr_Test10_Child_1\Lgr_Test10_Child_1.resv OLD

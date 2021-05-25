@@ -140,15 +140,76 @@ type
   TResBoundary = class(TModflowBoundary)
   private
     FResId: integer;
+    FPestEndHeadMethod: TPestParamMethod;
+    FPestStartHeadMethod: TPestParamMethod;
+    FPestStartHeadFormula: TFormulaObject;
+    FPestEndHeadFormula: TFormulaObject;
+    FPestEndHeadObserver: TObserver;
+    FPestStartHeadObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetResId(const Value: integer);
+    function GetPestEndHeadFormula: string;
+    function GetPestStartHeadFormula: string;
+    procedure SetPestEndHeadFormula(const Value: string);
+    procedure SetPestEndHeadMethod(const Value: TPestParamMethod);
+    procedure SetPestStartHeadMethod(const Value: TPestParamMethod);
+    procedure SetPestStartHeadFormula(const Value: string);
+    function GetPestEndHeadObserver: TObserver;
+    function GetPestStartHeadObserver: TObserver;
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    procedure InvalidateDisplay; override;
+    property PestStartHeadObserver: TObserver read GetPestStartHeadObserver;
+    property PestEndHeadObserver: TObserver read GetPestEndHeadObserver;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     property ResId: integer read FResId write SetResId;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
+  published
+    property PestStartHeadFormula: string read GetPestStartHeadFormula
+      write SetPestStartHeadFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestStartHeadMethod: TPestParamMethod read FPestStartHeadMethod
+      write SetPestStartHeadMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEndHeadFormula: string read GetPestEndHeadFormula
+      write SetPestEndHeadFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEndHeadMethod: TPestParamMethod read FPestEndHeadMethod
+      write SetPestEndHeadMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
@@ -439,6 +500,21 @@ end;
 
 { TResBoundary }
 
+procedure TResBoundary.Assign(Source: TPersistent);
+var
+  ResSource: TResBoundary;
+begin
+  if Source is TResBoundary then
+  begin
+    ResSource := TResBoundary(Source);
+    PestStartHeadFormula := ResSource.PestStartHeadFormula;
+    PestEndHeadFormula := ResSource.PestEndHeadFormula;
+    PestStartHeadMethod := ResSource.PestStartHeadMethod;
+    PestEndHeadMethod := ResSource.PestEndHeadMethod;
+  end;
+  inherited;
+end;
+
 procedure TResBoundary.AssignCells(BoundaryStorage: TCustomBoundaryStorage;
   ValueTimeList: TList; AModel: TBaseModel);
 var
@@ -499,6 +575,67 @@ begin
   result := TResCollection;
 end;
 
+function TResBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestRes_';
+end;
+
+constructor TResBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+  inherited;
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestStartHeadFormula := '';
+  PestEndHeadFormula := '';
+  PestStartHeadMethod := DefaultBoundaryMethod(StartPosition);
+  PestEndHeadMethod := DefaultBoundaryMethod(EndPosition);
+
+end;
+
+procedure TResBoundary.CreateFormulaObjects;
+begin
+  FPestStartHeadFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestEndHeadFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TResBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestStartHeadObserver);
+    FObserverList.Add(PestEndHeadObserver);
+  end;
+end;
+
+class function TResBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    StartPosition:
+      begin
+        result := ppmAdd;
+      end;
+    EndPosition:
+      begin
+        result := ppmAdd;
+      end;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
+destructor TResBoundary.Destroy;
+begin
+  PestStartHeadFormula := '';
+  PestEndHeadFormula := '';
+
+  inherited;
+end;
+
 procedure TResBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
@@ -516,6 +653,170 @@ begin
   end;
 end;
 
+function TResBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    StartPosition:
+      begin
+        result := PestStartHeadFormula;
+      end;
+    EndPosition:
+      begin
+        result := PestEndHeadFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TResBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+//  result := '';
+  case FormulaIndex of
+    StartPosition:
+      begin
+        result := PestStartHeadMethod;
+      end;
+    EndPosition:
+      begin
+        result := PestEndHeadMethod;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+function TResBoundary.GetPestEndHeadFormula: string;
+begin
+  Result := FPestEndHeadFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(EndPosition);
+  end;
+end;
+
+function TResBoundary.GetPestEndHeadObserver: TObserver;
+begin
+  if FPestEndHeadObserver = nil then
+  begin
+    CreateObserver('ResPestEndHead_', FPestEndHeadObserver, nil);
+//    FPestEndHeadObserver.OnUpToDateSet := InvalidateEndHeadData;
+  end;
+  result := FPestEndHeadObserver;
+end;
+
+function TResBoundary.GetPestStartHeadObserver: TObserver;
+begin
+  if FPestStartHeadObserver = nil then
+  begin
+    CreateObserver('ResPestStartHead_', FPestStartHeadObserver, nil);
+//    FPestStartHeadObserver.OnUpToDateSet := InvalidateStartHeadData;
+  end;
+  result := FPestStartHeadObserver;
+end;
+
+procedure TResBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestEndHeadFormula then
+  begin
+    if EndPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[EndPosition]);
+    end;
+  end;
+  if Sender = FPestStartHeadFormula then
+  begin
+    if StartPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[StartPosition]);
+    end;
+  end;
+end;
+
+function TResBoundary.GetPestStartHeadFormula: string;
+begin
+  Result := FPestStartHeadFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(StartPosition);
+  end;
+end;
+
+function TResBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestRES_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TResBoundary.HandleChangedValue(Observer: TObserver);
+begin
+  InvalidateDisplay;
+end;
+
+procedure TResBoundary.InvalidateDisplay;
+begin
+//  inherited;
+
+end;
+
+procedure TResBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    StartPosition:
+      begin
+        PestStartHeadFormula := Value;
+      end;
+    EndPosition:
+      begin
+        PestEndHeadFormula := Value;
+      end;
+    else
+      inherited;
+      Assert(False);
+  end;
+end;
+
+procedure TResBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    StartPosition:
+      begin
+        PestStartHeadMethod := Value;
+      end;
+    EndPosition:
+      begin
+        PestEndHeadMethod := Value;
+      end;
+    else
+      inherited;
+      Assert(False);
+  end;
+end;
+
+procedure TResBoundary.SetPestEndHeadFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, EndPosition, FPestEndHeadFormula);
+end;
+
+procedure TResBoundary.SetPestEndHeadMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestEndHeadMethod, Value);
+end;
+
+procedure TResBoundary.SetPestStartHeadMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestStartHeadMethod, Value);
+end;
+
 procedure TResBoundary.SetResId(const Value: integer);
 begin
   if FResId <> Value then
@@ -523,6 +824,11 @@ begin
     FResId := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TResBoundary.SetPestStartHeadFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, StartPosition, FPestStartHeadFormula);
 end;
 
 { TRes_Cell }

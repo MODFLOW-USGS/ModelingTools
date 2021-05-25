@@ -777,7 +777,7 @@ uses
   frmGoPhastUnit, ScreenObjectUnit, PhastModelUnit,
   ModflowGridUnit, frmFormulaErrorsUnit, Math, SparseDataSets, SparseArrayUnit,
   frmErrorsAndWarningsUnit, AbstractGridUnit, ModflowParameterUnit,
-  ModelMuseUtilities, CustomModflowWriterUnit;
+  ModelMuseUtilities, CustomModflowWriterUnit, ModflowMNW2_WriterUnit;
 
 resourcestring
   StrOneOrMoreMNW2Wel = 'One or more MNW2 wells has a well radius that is '
@@ -1226,6 +1226,22 @@ var
   UsedCells: T3DSparseIntegerArray;
   VerticalScreenCount: Integer;
   Grid: TCustomModelGrid;
+  Mnw2RwItems: TStringList;
+  Mnw2RskinItems: TStringList;
+  Mnw2KskinItems: TStringList;
+  Mnw2BItems: TStringList;
+  Mnw2CItems: TStringList;
+  Mnw2PItems: TStringList;
+  Mnw2CwcItems: TStringList;
+  Mnw2PpItems: TStringList;
+  LocalMnw2Rw: string;
+  LocalMnw2Rskin: string;
+  LocalMnw2Kskin: string;
+  LocalMnw2B: string;
+  LocalMnw2C: string;
+  LocalMnw2P: string;
+  LocalMnw2Cwc: string;
+  LocalMnw2Pp: string;
 begin
 { TODO -cPEST : Support PEST here }
   LocalModel := AModel as TCustomModel;
@@ -1243,6 +1259,15 @@ begin
   Mnw2PItems := PestItemNames[PPosition] ;
   Mnw2CwcItems := PestItemNames[CellToWellConductancePosition] ;
   Mnw2PpItems := PestItemNames[PartialPenetrationPosition] ;
+
+  LocalMnw2Rw := Mnw2RwItems[ItemIndex];
+  LocalMnw2Rskin := Mnw2RskinItems[ItemIndex];
+  LocalMnw2Kskin := Mnw2KskinItems[ItemIndex];
+  LocalMnw2B := Mnw2BItems[ItemIndex];
+  LocalMnw2C := Mnw2CItems[ItemIndex];
+  LocalMnw2P := Mnw2PItems[ItemIndex];
+  LocalMnw2Cwc := Mnw2CwcItems[ItemIndex];
+  LocalMnw2Pp := Mnw2PpItems[ItemIndex];
 
   if LossType in [mltThiem, mltSkin, mltEquation] then
   begin
@@ -1381,6 +1406,7 @@ begin
             frmErrorsAndWarnings.AddError(LocalModel, StrOneOrMoreMNW2Wel,
               LocalScreenObject.Name, LocalScreenObject);
           end;
+          WellRadiusPestName := LocalMnw2Rw;
         end;
 
         if SkinRadiusArray <> nil then
@@ -1400,6 +1426,7 @@ begin
             frmErrorsAndWarnings.AddError(LocalModel, MnwSkinToThinError,
               LocalScreenObject.Name, LocalScreenObject);
           end;
+          SkinRadiusPestName := LocalMnw2Rskin;
         end;
         if SkinKArray <> nil then
         begin
@@ -1412,6 +1439,7 @@ begin
             frmErrorsAndWarnings.AddError(LocalModel, MnwSkinKError,
               LocalScreenObject.Name, LocalScreenObject);
           end;
+          SkinKPestName := LocalMnw2Kskin;
         end;
 
         if BArray <> nil then
@@ -1420,6 +1448,7 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           BAnnotation := BArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          BPestName := LocalMnw2B;
         end;
         if CArray <> nil then
         begin
@@ -1427,6 +1456,7 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           CAnnotation := CArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          CPestName := LocalMnw2C;
         end;
         if PArray <> nil then
         begin
@@ -1434,6 +1464,7 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           PAnnotation := PArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          PPestName := LocalMnw2P;
         end;
 
         if CellToWellConductanceArray <> nil then
@@ -1442,6 +1473,7 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           CellToWellConductanceAnnotation := CellToWellConductanceArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          CellToWellConductancePestName := LocalMnw2Cwc;
         end;
 
         if PartialPenetrationArray <> nil then
@@ -1450,6 +1482,7 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           PartialPenetrationAnnotation := PartialPenetrationArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          PartialPenetrationPestName := LocalMnw2Pp;
         end;
       end;
     end;
@@ -1610,7 +1643,35 @@ var
   Mnw2CItems: TStringList;
   Mnw2PItems: TStringList;
   Mnw2CwcItems: TStringList;
-  Mnw2PpItems: TObject;
+  Mnw2PpItems: TStringList;
+  PestDataArray: TDataArray;
+  MNW2Writer: TModflowMNW2_Writer;
+  procedure AssignFormula(var Formula: string; PestItems: TStringList);
+  begin
+    Parameter := LocalModel.GetPestParameterByName(Formula);
+    if Parameter <> nil then
+    begin
+      Formula := FortranFloatToStr(Parameter.Value);
+      PestItems.Add(Parameter.ParameterName);
+    end
+    else
+    begin
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        PestItems.Add(PestDataArray.Name);
+        if MNW2Writer = nil then
+        begin
+          MNW2Writer := Writer as TModflowMNW2_Writer;
+        end;
+        MNW2Writer.AddUsedPestDataArray(PestDataArray);
+      end
+      else
+      begin
+        PestItems.Add('');
+      end;
+    end;
+  end;
 begin
   { TODO -cPEST : Support PEST here }
 
@@ -1663,16 +1724,36 @@ begin
     if ItemUsed then
     begin
       Formula := Item.WellRadius;
-      Parameter := LocalModel.GetPestParameterByName(Formula);
-      if Parameter <> nil then
-      begin
-        Formula := FortranFloatToStr(Parameter.Value);
-      end;
+      AssignFormula(Formula, Mnw2RwItems);
+//      Parameter := LocalModel.GetPestParameterByName(Formula);
+//      if Parameter <> nil then
+//      begin
+//        Formula := FortranFloatToStr(Parameter.Value);
+//        Mnw2RwItems.Add(Parameter.ParameterName);
+//      end
+//      else
+//      begin
+//        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
+//        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+//        begin
+//          Mnw2RwItems.Add(PestDataArray.Name);
+//          if MNW2Writer = nil then
+//          begin
+//            MNW2Writer := Writer as TModflowMNW2_Writer;
+//          end;
+//          MNW2Writer.AddUsedPestDataArray(PestDataArray);
+//        end
+//        else
+//        begin
+//          Mnw2RwItems.Add('');
+//        end;
+//      end;
       BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2RwItems.Add('');
     end;
   end;
   ALink := TimeListLink.GetLink(AModel) as TMnw2TimeListLink;
@@ -1686,11 +1767,14 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.SkinRadius;
+      Formula := Item.SkinRadius;
+      AssignFormula(Formula, Mnw2RskinItems);
+      BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2RskinItems.Add('');
     end;
   end;
   SkinRadiusData := ALink.FSkinRadiusData;
@@ -1703,11 +1787,14 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.SkinK;
+      Formula := Item.SkinK;
+      AssignFormula(Formula, Mnw2KskinItems);
+      BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2KskinItems.Add('');
     end;
   end;
   SkinKData := ALink.FSkinKData;
@@ -1720,11 +1807,14 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.B;
+      Formula := Item.B;
+      AssignFormula(Formula, Mnw2BItems);
+      BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2BItems.Add('');
     end;
   end;
   BData := ALink.FBData;
@@ -1738,11 +1828,14 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.C;
+      Formula := Item.C;
+      AssignFormula(Formula, Mnw2CItems);
+      BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2CItems.Add('');
     end;
   end;
   CData := ALink.FCData;
@@ -1756,11 +1849,14 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.P;
+      Formula := Item.P;
+      AssignFormula(Formula, Mnw2PItems);
+      BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2PItems.Add('');
     end;
   end;
   PData := ALink.FPData;
@@ -1774,11 +1870,14 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.CellToWellConductance;
+      Formula := Item.CellToWellConductance;
+      AssignFormula(Formula, Mnw2CwcItems);
+      BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2CwcItems.Add('');
     end;
   end;
   CellToWellConductanceData := ALink.FCellToWellConductanceData;
@@ -1793,11 +1892,14 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.PartialPenetration;
+      Formula := Item.PartialPenetration;
+      AssignFormula(Formula, Mnw2PpItems);
+      BoundaryValues[Index].Formula := Formula;
     end
     else
     begin
       BoundaryValues[Index].Formula := '0';
+      Mnw2PpItems.Add('');
     end;
   end;
   PartialPenetrationData := ALink.FPartialPenetrationData;

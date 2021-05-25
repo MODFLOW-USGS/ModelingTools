@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Lgr_Test10" FileType="bin">
-    <FileName Model_Name="Lgr_Test10" FileType="bin">C:\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
+    <FileName Model_Name="Lgr_Test10" FileType="bin">..\..\..\WRDAPP\mflgr.1_2\bin\mflgr.exe</FileName>
   </bin>
   <ancillary Model_Name="Lgr_Test10" FileType="ancillary">
     <FileName Model_Name="Lgr_Test10" FileType="ancillary">Lgr_Test10.gpt</FileName>
@@ -15,7 +15,7 @@
     <FileName Model_Name="Lgr_Test10" FileType="Model Input">Lgr_Test10.lgr.archive</FileName>
     <FileName Model_Name="Lgr_Test10" FileType="Model Input">Lgr_Test10.nam.archive</FileName>
     <FileName Model_Name="Lgr_Test10" FileType="Model Input">Lgr_Test10.oc</FileName>
-    <FileName Model_Name="Lgr_Test10" FileType="Model Input">Lgr_Test10.res</FileName>
+    <FileName Model_Name="Lgr_Test10" FileType="Model Input">Lgr_Test10.resv</FileName>
     <FileName Model_Name="Lgr_Test10" FileType="Model Input">Lgr_Test10.sip</FileName>
     <FileName Model_Name="Lgr_Test10" FileType="Model Input">RunModflow.Bat.archive</FileName>
     <FileName Model_Name="Lgr_Test10" FileType="Model Input">usgs.Lgr_Test10.reference</FileName>
@@ -27,7 +27,7 @@
     <FileName Model_Name="Lgr_Test10_Child_1" FileType="Model Input">Lgr_Test10_Child_1.gsf</FileName>
     <FileName Model_Name="Lgr_Test10_Child_1" FileType="Model Input">Lgr_Test10_Child_1.nam.archive</FileName>
     <FileName Model_Name="Lgr_Test10_Child_1" FileType="Model Input">Lgr_Test10_Child_1.oc</FileName>
-    <FileName Model_Name="Lgr_Test10_Child_1" FileType="Model Input">Lgr_Test10_Child_1.res</FileName>
+    <FileName Model_Name="Lgr_Test10_Child_1" FileType="Model Input">Lgr_Test10_Child_1.resv</FileName>
     <FileName Model_Name="Lgr_Test10_Child_1" FileType="Model Input">Lgr_Test10_Child_1.sip</FileName>
   </model>
   <output Model_Name="Lgr_Test10" FileType="Model Output">

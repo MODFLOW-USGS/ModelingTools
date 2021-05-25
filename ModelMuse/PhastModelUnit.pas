@@ -10280,6 +10280,9 @@ const
 //               Bug fix: Fixed bug with exporting MVR package.
 //               Bug fix: Fixed bug in importing Shapefiles if unnamed CSV
 //                attributes are included.
+//               Change: file extension for the Reservoir package input file
+//                change from ".res" to ".resv" to avoid conflict with a PEST
+//                output file.
 
 const
   // version number of ModelMuse.

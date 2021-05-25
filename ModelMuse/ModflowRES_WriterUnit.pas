@@ -22,7 +22,8 @@ type
       VariableIdentifiers: string);
     procedure CheckCells;
     procedure EvaluateStartAndEndHead(ResItem: TResItem; Reservoir: TResBoundary; var StartHead,
-      EndHead: double);
+      EndHead: double; var StartHeadPest, EndHeadPest: string);
+    procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
@@ -43,7 +44,8 @@ implementation
 
 uses RbwParser, ModflowUnitNumbers, DataSetUnit, PhastModelUnit,
   ModflowTimeUnit, frmProgressUnit, frmFormulaErrorsUnit, Forms, GoPhastTypes,
-  frmErrorsAndWarningsUnit, AbstractGridUnit, SolidGeom, PestParamRoots;
+  frmErrorsAndWarningsUnit, AbstractGridUnit, SolidGeom, PestParamRoots,
+  ModflowParameterUnit;
 
 resourcestring
   StrNoReservoirsDefine = 'No reservoirs defined';
@@ -95,6 +97,8 @@ var
   ResID: array of array of Integer;
   ColIndex: Integer;
   ScreenObject: TScreenObject;
+  StartHeadPest: string;
+  EndHeadPest: string;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheReservoirsAtThStart);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheReservoirsAtThEnd);
@@ -163,7 +167,8 @@ begin
         if (AResItem.StartTime < EndTime)
           and (AResItem.EndTime > StartTime) then
         begin
-          EvaluateStartAndEndHead(AResItem,Reservoir, StartHead, EndHead);
+          EvaluateStartAndEndHead(AResItem,Reservoir, StartHead, EndHead,
+            StartHeadPest, EndHeadPest);
           for RowIndex := 0 to Active.RowCount - 1 do
           begin
             for ColIndex := 0 to Active.ColumnCount - 1 do
@@ -281,7 +286,7 @@ end;
 
 class function TModflowRES_Writer.Extension: string;
 begin
-  result := '.res';
+  result := '.resv';
 end;
 
 function TModflowRES_Writer.GetBoundary(
@@ -401,59 +406,81 @@ begin
 end;
 
 procedure TModflowRES_Writer.EvaluateStartAndEndHead(ResItem: TResItem; Reservoir: TResBoundary;
-  var StartHead, EndHead: double);
+  var StartHead, EndHead: double; var StartHeadPest, EndHeadPest: string);
 var
   Compiler: TRbwParser;
   TempFormula: string;
   Expression: TExpression;
   ScreenObject: TScreenObject;
+  Param: TModflowSteadyParameter;
 begin
   Assert(ResItem <> nil);
   Compiler := Model.rpThreeDFormulaCompiler;
 
   TempFormula := ResItem.StartHead;
-  try
-    Compiler.Compile(TempFormula);
-    Expression := Compiler.CurrentExpression;
-    Expression.Evaluate;
-  except on E: ERbwParserError do
-    begin
-      ScreenObject := Reservoir.ScreenObject as TScreenObject;
-      frmFormulaErrors.AddFormulaError(ScreenObject.Name,
-        Format(StrEndingHeadForThe,
-        [sLineBreak+Package.PackageIdentifier]),
-        TempFormula, E.Message);
-
-      ResItem.EndHead := '0.';
-      TempFormula := ResItem.EndHead;
+  Param := Model.GetPestParameterByName(TempFormula);
+  if Param <> nil then
+  begin
+    StartHeadPest := Param.ParameterName;
+    StartHead := Param.Value;
+    FPestParamUsed := True;
+  end
+  else
+  begin
+    try
       Compiler.Compile(TempFormula);
       Expression := Compiler.CurrentExpression;
       Expression.Evaluate;
+    except on E: ERbwParserError do
+      begin
+        ScreenObject := Reservoir.ScreenObject as TScreenObject;
+        frmFormulaErrors.AddFormulaError(ScreenObject.Name,
+          Format(StrEndingHeadForThe,
+          [sLineBreak+Package.PackageIdentifier]),
+          TempFormula, E.Message);
+
+        ResItem.StartHead := '0.';
+        TempFormula := ResItem.StartHead;
+        Compiler.Compile(TempFormula);
+        Expression := Compiler.CurrentExpression;
+        Expression.Evaluate;
+      end;
     end;
+    StartHead := Expression.DoubleResult;
+    StartHeadPest := '';
   end;
-  StartHead := Expression.DoubleResult;
 
   TempFormula := ResItem.EndHead;
-  try
-    Compiler.Compile(TempFormula);
-    Expression := Compiler.CurrentExpression;
-    Expression.Evaluate;
-  except on E: ERbwParserError do
-    begin
-      ScreenObject := Reservoir.ScreenObject as TScreenObject;
-      frmFormulaErrors.AddFormulaError(ScreenObject.Name,
-        Format(StrEndingHeadForThe,
-        [sLineBreak+Package.PackageIdentifier]),
-        TempFormula, E.Message);
-
-      ResItem.EndHead := '0.';
-      TempFormula := ResItem.EndHead;
+  Param := Model.GetPestParameterByName(TempFormula);
+  if Param <> nil then
+  begin
+    EndHeadPest := Param.ParameterName;
+    EndHead := Param.Value;
+    FPestParamUsed := True;
+  end
+  else
+  begin
+    try
       Compiler.Compile(TempFormula);
       Expression := Compiler.CurrentExpression;
       Expression.Evaluate;
+    except on E: ERbwParserError do
+      begin
+        ScreenObject := Reservoir.ScreenObject as TScreenObject;
+        frmFormulaErrors.AddFormulaError(ScreenObject.Name,
+          Format(StrEndingHeadForThe,
+          [sLineBreak+Package.PackageIdentifier]),
+          TempFormula, E.Message);
+
+        ResItem.EndHead := '0.';
+        TempFormula := ResItem.EndHead;
+        Compiler.Compile(TempFormula);
+        Expression := Compiler.CurrentExpression;
+        Expression.Evaluate;
+      end;
     end;
+    EndHead := Expression.DoubleResult;
   end;
-  EndHead := Expression.DoubleResult;
 end;
 
 procedure TModflowRES_Writer.WriteDataSet7;
@@ -474,7 +501,16 @@ var
   ExportedEndHead: double;
   UseStartOnly: Boolean;
   UseLastOnly: Boolean;
+  StartHeadPest: string;
+  EndHeadPest: string;
+  ExportedStartHeadPest: string;
+  ExportedEndHeadPest: string;
+  StartHeadFormula: string;
+  EndHeadFormula: string;
+  ExtendedTemplateCharacter: Char;
+  Fraction: Extended;
 begin
+  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
   Reservoirs := TList.Create;
   try
     for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
@@ -548,45 +584,106 @@ begin
         end;
         Assert(ResItem <> nil);
 
-        EvaluateStartAndEndHead(ResItem, Reservoir, StartHead, EndHead);
+        EvaluateStartAndEndHead(ResItem, Reservoir, StartHead, EndHead,
+          StartHeadPest, EndHeadPest);
 
         if UseStartOnly then
         begin
           ExportedStartHead := StartHead;
           ExportedEndHead := StartHead;
+          ExportedStartHeadPest := GetPestParamFormula(StartHead, StartHeadPest);
+          ExportedEndHeadPest := ExportedStartHeadPest;
         end
         else if UseLastOnly then
         begin
           ExportedStartHead := EndHead;
           ExportedEndHead := EndHead;
+          ExportedStartHeadPest := GetPestParamFormula(EndHead, EndHeadPest);
+          ExportedEndHeadPest := ExportedStartHeadPest;
         end
         else
         begin
           if NearlyTheSame(ResItem.StartTime, Item.StartTime, Epsilon) then
           begin
-            ExportedStartHead := StartHead
+            ExportedStartHead := StartHead;
+            ExportedStartHeadPest := GetPestParamFormula(StartHead, StartHeadPest);
           end
           else
           begin
             Assert(ResItem.StartTime < Item.StartTime);
-            ExportedStartHead := StartHead + (Item.StartTime-ResItem.StartTime)
-              / (ResItem.EndTime-ResItem.StartTime)*(EndHead-StartHead);
+            Fraction := (Item.StartTime-ResItem.StartTime)
+                / (ResItem.EndTime-ResItem.StartTime);
+            if not WritingTemplate or
+              ((StartHeadPest = '') and (EndHeadPest = '')) then
+            begin
+              ExportedStartHead := StartHead + Fraction*(EndHead-StartHead);
+              ExportedStartHeadPest := '';
+            end
+            else
+            begin
+              StartHeadFormula := GetPestParamFormula(StartHead, StartHeadPest);
+              EndHeadFormula := GetPestParamFormula(EndHead, EndHeadPest);
+              ExportedStartHeadPest := Format('%0:s + %1:d * (%2:s - %0:s)',
+                [StartHeadFormula, Fraction, EndHeadFormula]);
+              ExportedStartHeadPest := Format(' %0:s          %1:s%0:s',
+                [ExtendedTemplateCharacter, ExportedStartHeadPest]);
+
+            end;
           end;
 
           if NearlyTheSame(ResItem.EndTime, Item.EndTime, Epsilon) then
           begin
             ExportedEndHead := EndHead;
+            ExportedEndHeadPest := GetPestParamFormula(EndHead, EndHeadPest);;
           end
           else
           begin
             Assert (ResItem.EndTime > Item.EndTime);
-            ExportedEndHead := StartHead + (Item.EndTime-ResItem.StartTime)
-              / (ResItem.EndTime-ResItem.StartTime)*(EndHead-StartHead);
+            Fraction := (Item.EndTime-ResItem.StartTime)
+              / (ResItem.EndTime-ResItem.StartTime);
+            if not WritingTemplate or
+              ((StartHeadPest = '') and (EndHeadPest = '')) then
+            begin
+              ExportedEndHead := StartHead + Fraction*(EndHead-StartHead);
+              ExportedEndHeadPest := ''
+            end
+            else
+            begin
+              StartHeadFormula := GetPestParamFormula(StartHead, StartHeadPest);
+              EndHeadFormula := GetPestParamFormula(EndHead, EndHeadPest);
+              ExportedEndHeadPest := Format('%0:s + %1:d * (%2:s - %0:s)',
+                [StartHeadFormula, Fraction, EndHeadFormula]);
+              ExportedEndHeadPest := Format(' %0:s          %1:s%0:s',
+                [ExtendedTemplateCharacter, ExportedEndHeadPest]);
+            end;
           end;
         end;
 
-        WriteF10Float(ExportedStartHead);
-        WriteF10Float(ExportedEndHead);
+        if (not WritingTemplate) or
+          ((StartHeadPest = '') and (EndHeadPest = '')) then
+        begin
+          WriteF10Float(ExportedStartHead);
+          WriteF10Float(ExportedEndHead);
+        end
+        else
+        begin
+          if ExportedStartHeadPest = '' then
+          begin
+            WriteF10Float(ExportedStartHead);
+          end
+          else
+          begin
+            WriteString(ExportedStartHeadPest)
+          end;
+          if ExportedEndHeadPest = '' then
+          begin
+            WriteF10Float(ExportedEndHead);
+          end
+          else
+          begin
+            WriteString(ExportedEndHeadPest)
+          end;
+        end;
         WriteString(' # Data Set 7, Stress period');
         WriteInteger(Index + 1);
         WriteString(': Ststage Endstage');
@@ -599,8 +696,6 @@ begin
 end;
 
 procedure TModflowRES_Writer.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
 begin
   if not Package.IsSelected then
   begin
@@ -614,9 +709,9 @@ begin
   begin
     Exit;
   end;
-  NameOfFile := FileName(AFileName);
-  FInputFileName := NameOfFile;
-  WriteToNameFile(StrRES, Model.UnitNumbers.UnitNumber(StrRES), NameOfFile, foInput, Model);
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
+  WriteToNameFile(StrRES, Model.UnitNumbers.UnitNumber(StrRES), FNameOfFile, foInput, Model);
   Evaluate;
   if NRES = 0 then
   begin
@@ -628,11 +723,25 @@ begin
     Exit;
   end;
   ClearTimeLists(Model);
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  FInputFileName := FNameOfFile;
+  WriteFileInternal;
+
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
+  end;
+end;
+
+procedure TModflowRES_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
   try
-//    WriteDataSet0;
+    //    WriteDataSet0;
     frmProgressMM.AddMessage(StrWritingRESPackage);
+
     frmProgressMM.AddMessage(StrWritingDataSet1);
     WriteDataSet1;
     Application.ProcessMessages;
@@ -686,7 +795,6 @@ begin
   finally
     CloseFile;
   end;
-
 end;
 
 procedure TModflowRES_Writer.WriteStressPeriods(const VariableIdentifiers,

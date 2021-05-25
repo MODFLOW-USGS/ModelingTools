@@ -2497,7 +2497,8 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowMawUnit, Modflow6ObsUnit, ModflowLakMf6Unit, frameLakeOutletUnit,
   ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
-  framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit;
+  framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit,
+  ModflowResUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -2733,10 +2734,13 @@ begin
     or (Sender = frameGhbParam.rdgModflowBoundary)
     or (Sender = frameChdParam.rdgModflowBoundary)
     or (Sender = frameHfbMf6.rdgModflowBoundary)
+    or (Sender = frameRes.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2,3];
-    if (Sender = frameHfbMf6.rdgModflowBoundary) then
+    if (Sender = frameHfbMf6.rdgModflowBoundary)
+      or (Sender = frameRes.rdgModflowBoundary)
+      then
     begin
       ParametersOnly := True;
     end;
@@ -5713,6 +5717,7 @@ begin
   frameLak.OnCheckPestCell := EnablePestCells;
   frameMNW1.OnCheckPestCell := EnablePestCells;
   frameMNW2.OnCheckPestCell := EnablePestCells;
+  frameRes.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -14981,6 +14986,10 @@ var
   TimeIndex: Integer;
   Item: TCustomModflowBoundaryItem;
   BoundaryIndex: Integer;
+  Method: TPestParamMethod;
+  Identical: Boolean;
+  First: Boolean;
+  Modifier: string;
 begin
   AScreenObject := ScreenObjectList[0];
   Boundary := AScreenObject.ModflowResBoundary;
@@ -15014,13 +15023,87 @@ begin
       break;
     end;
   end;
+
+  {$IFDEF PEST}
+//  GetPestModifiers(frameRes, Parameter, ScreenObjectList);
+  for BoundaryIndex := 0 to 1 do
+  begin
+    Identical := True;
+    First := True;
+    for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+    begin
+      AScreenObject := ScreenObjectList[ScreenObjectIndex];
+      Boundary := AScreenObject.ModflowResBoundary;
+      if (Boundary <> nil) and Boundary.Used then
+      begin
+        if First then
+        begin
+          Method := Boundary.PestBoundaryMethod[BoundaryIndex];
+          First := False;
+        end
+        else
+        begin
+          Identical := Method = Boundary.PestBoundaryMethod[BoundaryIndex];
+          if not Identical then
+          begin
+            break;
+          end;
+        end;
+      end;
+    end;
+    if Identical and not First then
+    begin
+      frameRes.PestMethod[ColumnOffset + BoundaryIndex] := Method;
+    end
+    else
+    begin
+      frameRes.PestMethodAssigned[ColumnOffset + BoundaryIndex] := False;
+    end;
+  end;
+
+  for BoundaryIndex := 0 to 1 do
+  begin
+    Identical := True;
+    First := True;
+    for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+    begin
+      AScreenObject := ScreenObjectList[ScreenObjectIndex];
+      Boundary := AScreenObject.ModflowResBoundary;
+      if (Boundary <> nil) and Boundary.Used then
+      begin
+        if First then
+        begin
+          Modifier := Boundary.PestBoundaryFormula[BoundaryIndex];
+          First := False;
+        end
+        else
+        begin
+          Identical := Modifier = Boundary.PestBoundaryFormula[BoundaryIndex];
+          if not Identical then
+          begin
+            break;
+          end;
+        end;
+      end;
+    end;
+    if Identical and not First then
+    begin
+      frameRes.PestModifier[ColumnOffset + BoundaryIndex] := Modifier;
+    end
+    else
+    begin
+      frameRes.PestModifierAssigned[ColumnOffset + BoundaryIndex] := False;
+    end;
+  end;
+  {$ENDIF}
+
   if ValuesIdentical and (Values <> nil) then
   begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-      Assert(RowIndex >= 1);
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1 +  + PestRowOffset;
+      Assert(RowIndex >= 1+ + PestRowOffset);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -18646,6 +18729,9 @@ begin
 end;
 
 procedure TfrmScreenObjectProperties.GetResBoundary(ScreenObjectList: TList);
+const
+  StartPosition = 0;
+  EndPosition = 1;
 var
   TimeList: TParameterTimeList;
   ColumnOffset: integer;
@@ -18660,6 +18746,13 @@ var
   DataGrid: TRbwDataGrid4;
   State: TCheckBoxState;
 begin
+  {$IFDEF PEST}
+  PestMethod[frameRes.rdgModflowBoundary, 2] :=
+    TDrnBoundary.DefaultBoundaryMethod(StartPosition);
+  PestMethod[frameRes.rdgModflowBoundary, 3] :=
+    TDrnBoundary.DefaultBoundaryMethod(EndPosition);
+//  GetPestModifiers(frameRes, Parameter, ScreenObjectList);
+  {$ENDIF}
   if not frmGoPhast.PhastModel.ResIsSelected then
   begin
     Exit;
@@ -18711,12 +18804,14 @@ begin
     frameRes.seNumberOfTimes.Value := TimeList.Count;
     DataGrid := frameRes.rdgModflowBoundary;
     DataGrid.BeginUpdate;
+
+
     try
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1 + PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -24166,7 +24261,7 @@ var
   Times: TTimeArray;
   Index: Integer;
   Item: TScreenObjectEditItem;
-  Boundary: TModflowBoundary;
+  Boundary: TResBoundary;
 begin
   if IsLoaded then
   begin
@@ -24188,6 +24283,24 @@ begin
       if ShouldStoreBoundary(FRES_Node, Boundary) then
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
+        {$IFDEF PEST}
+        if Frame.PestModifierAssigned[2] then
+        begin
+          Boundary.PestStartHeadFormula := Frame.PestModifier[2];
+        end;
+        if Frame.PestModifierAssigned[3] then
+        begin
+          Boundary.PestEndHeadFormula := Frame.PestModifier[3];
+        end;
+        if Frame.PestMethodAssigned[2] then
+        begin
+          Boundary.PestStartHeadMethod := Frame.PestMethod[2];
+        end;
+        if Frame.PestMethodAssigned[3] then
+        begin
+          Boundary.PestEndHeadMethod := Frame.PestMethod[3];
+        end;
+        {$ENDIF}
       end
       else if FRES_Node.StateIndex = 1 then
       begin
@@ -25634,6 +25747,8 @@ begin
     or (DataGrid = frameLakMf6.frameLakeTable.Grid)
     or ((DataGrid = frameMNW1.rdgModflowBoundary) and (ACol in [2, 3, 5, 6, 7, 9, 10, 12, 14, 15]))
     or ((DataGrid = frameMNW2.rdgTimeTable) and (ACol in [2, 3, 4, 6, 7]))
+    or ((DataGrid = frameMNW2.rdgVerticalScreens) and (ACol in [2..9]))
+    or (DataGrid = frameRes.rdgModflowBoundary)
     or (DataGrid.Owner is  TframeLakeOutlet)
 //    or (DataGrid = frameCSUB.rdgSubGroups)
     ;

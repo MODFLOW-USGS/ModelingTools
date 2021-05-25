@@ -357,7 +357,7 @@ ResTest.gpt
 	Archive\ResTest.nam.archive
 	Archive\ResTest.oc
 	Archive\ResTest.pcg
-	Archive\ResTest.res
+	Archive\ResTest.resv
 	Archive\usgs.ResTest.reference
 RivTest.gpt
 	Archive\RivTest.axml
@@ -2068,7 +2068,7 @@ Lgr_Test10.gpt
 	Archive\Lgr_Test10.nam
 	Archive\Lgr_Test10.nam.archive
 	Archive\Lgr_Test10.oc
-	Archive\Lgr_Test10.res
+	Archive\Lgr_Test10.resv
 	Archive\Lgr_Test10.sip
 	Archive\Lgr_Test10_Child_1.bas
 	Archive\Lgr_Test10_Child_1.bcf
@@ -2078,7 +2078,7 @@ Lgr_Test10.gpt
 	Archive\Lgr_Test10_Child_1.nam
 	Archive\Lgr_Test10_Child_1.nam.archive
 	Archive\Lgr_Test10_Child_1.oc
-	Archive\Lgr_Test10_Child_1.res
+	Archive\Lgr_Test10_Child_1.resv
 	Archive\Lgr_Test10_Child_1.sip
 	Archive\usgs.Lgr_Test10.reference
 Lgr_Test11.gpt
