@@ -4,9 +4,16 @@ interface
 
 uses SysUtils, Classes, CustomModflowWriterUnit, ModflowCellUnit,
   ModflowPackageSelectionUnit, ScreenObjectUnit, ModflowBoundaryUnit,
-  OrderedCollectionUnit, ModflowResUnit;
+  OrderedCollectionUnit, ModflowResUnit, GoPhastTypes;
 
 type
+  TPestData = record
+    PestName: string;
+    PestSeriesName: string;
+    PestSeriesMethod: TPestParamMethod;
+  end;
+
+
   TModflowRES_Writer = class(TCustomTransientArrayWriter)
   private
     NRES: integer;
@@ -22,7 +29,7 @@ type
       VariableIdentifiers: string);
     procedure CheckCells;
     procedure EvaluateStartAndEndHead(ResItem: TResItem; Reservoir: TResBoundary; var StartHead,
-      EndHead: double; var StartHeadPest, EndHeadPest: string);
+      EndHead: double; var StartHeadPest, EndHeadPest: TPestData);
     procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
@@ -43,7 +50,7 @@ type
 implementation
 
 uses RbwParser, ModflowUnitNumbers, DataSetUnit, PhastModelUnit,
-  ModflowTimeUnit, frmProgressUnit, frmFormulaErrorsUnit, Forms, GoPhastTypes,
+  ModflowTimeUnit, frmProgressUnit, frmFormulaErrorsUnit, Forms,
   frmErrorsAndWarningsUnit, AbstractGridUnit, SolidGeom, PestParamRoots,
   ModflowParameterUnit;
 
@@ -97,8 +104,8 @@ var
   ResID: array of array of Integer;
   ColIndex: Integer;
   ScreenObject: TScreenObject;
-  StartHeadPest: string;
-  EndHeadPest: string;
+  StartHeadPest: TPestData;
+  EndHeadPest: TPestData;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheReservoirsAtThStart);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheReservoirsAtThEnd);
@@ -406,7 +413,7 @@ begin
 end;
 
 procedure TModflowRES_Writer.EvaluateStartAndEndHead(ResItem: TResItem; Reservoir: TResBoundary;
-  var StartHead, EndHead: double; var StartHeadPest, EndHeadPest: string);
+  var StartHead, EndHead: double; var StartHeadPest, EndHeadPest: TPestData);
 var
   Compiler: TRbwParser;
   TempFormula: string;
@@ -417,11 +424,19 @@ begin
   Assert(ResItem <> nil);
   Compiler := Model.rpThreeDFormulaCompiler;
 
+  StartHeadPest.PestName := '';
+  StartHeadPest.PestSeriesName := Reservoir.PestStartHeadFormula;
+  StartHeadPest.PestSeriesMethod := Reservoir.PestStartHeadMethod;
+
+  EndHeadPest.PestName := '';
+  EndHeadPest.PestSeriesName := Reservoir.PestEndHeadFormula;
+  EndHeadPest.PestSeriesMethod := Reservoir.PestEndHeadMethod;
+
   TempFormula := ResItem.StartHead;
   Param := Model.GetPestParameterByName(TempFormula);
   if Param <> nil then
   begin
-    StartHeadPest := Param.ParameterName;
+    StartHeadPest.PestName := Param.ParameterName;
     StartHead := Param.Value;
     FPestParamUsed := True;
   end
@@ -447,14 +462,28 @@ begin
       end;
     end;
     StartHead := Expression.DoubleResult;
-    StartHeadPest := '';
+    StartHeadPest.PestName := '';
+  end;
+  Param := Model.GetPestParameterByName(StartHeadPest.PestSeriesName);
+  if Param <> nil then
+  begin
+    case StartHeadPest.PestSeriesMethod of
+      ppmAdd:
+        begin
+          StartHead := StartHead + Param.Value;
+        end;
+      ppmMultiply:
+        begin
+          StartHead := StartHead * Param.Value;
+        end;
+    end;
   end;
 
   TempFormula := ResItem.EndHead;
   Param := Model.GetPestParameterByName(TempFormula);
   if Param <> nil then
   begin
-    EndHeadPest := Param.ParameterName;
+    EndHeadPest.PestName := Param.ParameterName;
     EndHead := Param.Value;
     FPestParamUsed := True;
   end
@@ -480,6 +509,21 @@ begin
       end;
     end;
     EndHead := Expression.DoubleResult;
+    EndHeadPest.PestName := '';
+  end;
+  Param := Model.GetPestParameterByName(EndHeadPest.PestSeriesName);
+  if Param <> nil then
+  begin
+    case EndHeadPest.PestSeriesMethod of
+      ppmAdd:
+        begin
+          EndHead := EndHead + Param.Value;
+        end;
+      ppmMultiply:
+        begin
+          EndHead := EndHead * Param.Value;
+        end;
+    end;
   end;
 end;
 
@@ -501,8 +545,8 @@ var
   ExportedEndHead: double;
   UseStartOnly: Boolean;
   UseLastOnly: Boolean;
-  StartHeadPest: string;
-  EndHeadPest: string;
+  StartHeadPest: TPestData;
+  EndHeadPest: TPestData;
   ExportedStartHeadPest: string;
   ExportedEndHeadPest: string;
   StartHeadFormula: string;
@@ -591,14 +635,18 @@ begin
         begin
           ExportedStartHead := StartHead;
           ExportedEndHead := StartHead;
-          ExportedStartHeadPest := GetPestParamFormula(StartHead, StartHeadPest);
+          ExportedStartHeadPest := GetPestTemplateFormula(StartHead,
+            StartHeadPest.PestName, StartHeadPest.PestSeriesName,
+            StartHeadPest.PestSeriesMethod, nil);
           ExportedEndHeadPest := ExportedStartHeadPest;
         end
         else if UseLastOnly then
         begin
           ExportedStartHead := EndHead;
           ExportedEndHead := EndHead;
-          ExportedStartHeadPest := GetPestParamFormula(EndHead, EndHeadPest);
+          ExportedStartHeadPest := GetPestTemplateFormula(EndHead,
+            EndHeadPest.PestName, EndHeadPest.PestSeriesName,
+            EndHeadPest.PestSeriesMethod, nil);
           ExportedEndHeadPest := ExportedStartHeadPest;
         end
         else
@@ -606,7 +654,9 @@ begin
           if NearlyTheSame(ResItem.StartTime, Item.StartTime, Epsilon) then
           begin
             ExportedStartHead := StartHead;
-            ExportedStartHeadPest := GetPestParamFormula(StartHead, StartHeadPest);
+            ExportedStartHeadPest := GetPestTemplateFormula(StartHead,
+            StartHeadPest.PestName, StartHeadPest.PestSeriesName,
+            StartHeadPest.PestSeriesMethod, nil);
           end
           else
           begin
@@ -614,19 +664,25 @@ begin
             Fraction := (Item.StartTime-ResItem.StartTime)
                 / (ResItem.EndTime-ResItem.StartTime);
             if not WritingTemplate or
-              ((StartHeadPest = '') and (EndHeadPest = '')) then
+              ((StartHeadPest.PestName = '') and (EndHeadPest.PestName = '')
+              and (StartHeadPest.PestSeriesName = '') and (EndHeadPest.PestSeriesName = '')) then
             begin
               ExportedStartHead := StartHead + Fraction*(EndHead-StartHead);
               ExportedStartHeadPest := '';
             end
             else
             begin
-              StartHeadFormula := GetPestParamFormula(StartHead, StartHeadPest);
-              EndHeadFormula := GetPestParamFormula(EndHead, EndHeadPest);
-              ExportedStartHeadPest := Format('%0:s + %1:d * (%2:s - %0:s)',
+              ExportedStartHead := 1e-31;
+              StartHeadFormula := GetPestTemplateFormula(StartHead,
+                StartHeadPest.PestName, StartHeadPest.PestSeriesName,
+                StartHeadPest.PestSeriesMethod, nil);
+              EndHeadFormula := GetPestTemplateFormula(EndHead,
+                EndHeadPest.PestName, EndHeadPest.PestSeriesName,
+                EndHeadPest.PestSeriesMethod, nil);
+              ExportedStartHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
                 [StartHeadFormula, Fraction, EndHeadFormula]);
-              ExportedStartHeadPest := Format(' %0:s          %1:s%0:s',
-                [ExtendedTemplateCharacter, ExportedStartHeadPest]);
+//              ExportedStartHeadPest := Format(' %0:s          %1:s%0:s',
+//                [ExtendedTemplateCharacter, ExportedStartHeadPest]);
 
             end;
           end;
@@ -634,7 +690,9 @@ begin
           if NearlyTheSame(ResItem.EndTime, Item.EndTime, Epsilon) then
           begin
             ExportedEndHead := EndHead;
-            ExportedEndHeadPest := GetPestParamFormula(EndHead, EndHeadPest);;
+            ExportedEndHeadPest := GetPestTemplateFormula(EndHead,
+              EndHeadPest.PestName, EndHeadPest.PestSeriesName,
+              EndHeadPest.PestSeriesMethod, nil);
           end
           else
           begin
@@ -642,25 +700,32 @@ begin
             Fraction := (Item.EndTime-ResItem.StartTime)
               / (ResItem.EndTime-ResItem.StartTime);
             if not WritingTemplate or
-              ((StartHeadPest = '') and (EndHeadPest = '')) then
+              ((StartHeadPest.PestName = '') and (EndHeadPest.PestName = '')
+              and (StartHeadPest.PestSeriesName = '') and (EndHeadPest.PestSeriesName = '')) then
             begin
               ExportedEndHead := StartHead + Fraction*(EndHead-StartHead);
               ExportedEndHeadPest := ''
             end
             else
             begin
-              StartHeadFormula := GetPestParamFormula(StartHead, StartHeadPest);
-              EndHeadFormula := GetPestParamFormula(EndHead, EndHeadPest);
-              ExportedEndHeadPest := Format('%0:s + %1:d * (%2:s - %0:s)',
+              ExportedEndHead := 1e-31;
+              StartHeadFormula := GetPestTemplateFormula(StartHead,
+                StartHeadPest.PestName, StartHeadPest.PestSeriesName,
+                StartHeadPest.PestSeriesMethod, nil);
+              EndHeadFormula := GetPestTemplateFormula(EndHead,
+                EndHeadPest.PestName, EndHeadPest.PestSeriesName,
+                EndHeadPest.PestSeriesMethod, nil);
+              ExportedEndHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
                 [StartHeadFormula, Fraction, EndHeadFormula]);
-              ExportedEndHeadPest := Format(' %0:s          %1:s%0:s',
-                [ExtendedTemplateCharacter, ExportedEndHeadPest]);
+//              ExportedEndHeadPest := Format(' %0:s          %1:s%0:s',
+//                [ExtendedTemplateCharacter, ExportedEndHeadPest]);
             end;
           end;
         end;
 
         if (not WritingTemplate) or
-          ((StartHeadPest = '') and (EndHeadPest = '')) then
+          ((StartHeadPest.PestName = '') and (EndHeadPest.PestName = '')
+          and (StartHeadPest.PestSeriesName = '') and (EndHeadPest.PestSeriesName = '')) then
         begin
           WriteF10Float(ExportedStartHead);
           WriteF10Float(ExportedEndHead);
@@ -673,6 +738,8 @@ begin
           end
           else
           begin
+            ExportedStartHeadPest := Format(' %0:s        %1:s%0:s',
+              [ExtendedTemplateCharacter, ExportedStartHeadPest]);
             WriteString(ExportedStartHeadPest)
           end;
           if ExportedEndHeadPest = '' then
@@ -681,6 +748,8 @@ begin
           end
           else
           begin
+            ExportedEndHeadPest := Format(' %0:s        %1:s%0:s',
+              [ExtendedTemplateCharacter, ExportedEndHeadPest]);
             WriteString(ExportedEndHeadPest)
           end;
         end;
@@ -741,6 +810,7 @@ begin
   try
     //    WriteDataSet0;
     frmProgressMM.AddMessage(StrWritingRESPackage);
+    WriteTemplateHeader;
 
     frmProgressMM.AddMessage(StrWritingDataSet1);
     WriteDataSet1;

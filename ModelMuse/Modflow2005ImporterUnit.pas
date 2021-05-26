@@ -113,6 +113,7 @@ resourcestring
 //  StrTheFileYouSelecte = 'The file you selected is empty.';
   StrTheHeadFileYouSelecte = 'The head file you selected is empty.';
   StrTheFlowFileYouSelecte = 'The flow file you selected is empty.';
+  StrImportedFromExisti = 'Imported from existing model on %s';
 
 const
   StrParentModelHeads = 'ParentModelHeads';
@@ -5456,6 +5457,7 @@ begin
     DataArray := FModel.DataArrayManager.CreateNewDataArray(TDataArray,
       DataArrayName, '0', DataArrayName,
       [dcType], rdtInteger, eaBlocks, dsoTop, '');
+    DataArray.Comment := Format(StrImportedFromExisti, [DateTimeToStr(Now)]);
 
     DataArray.UpdateDimensions(FGrid.LayerCount, FGrid.RowCount,
       FGrid.ColumnCount);
@@ -7108,6 +7110,7 @@ begin
           begin
             DataArray := FModel.DataArrayManager.CreateNewDataArray(TDataArray,
               DataArrayName, 'True', DataArrayName, [], rdtBoolean, eaBlocks, dsoTop, '');
+            DataArray.Comment := Format(StrImportedFromExisti, [DateTimeToStr(Now)]);
 
             DataArray.UpdateDimensions(FGrid.LayerCount,
               FGrid.RowCount,FGrid.ColumnCount);
@@ -7674,6 +7677,7 @@ begin
     begin
       DataArray := FModel.DataArrayManager.CreateNewDataArray(TDataArray,
         DataArrayName, '0', DataArrayName, [dcType], rdtInteger, eaBlocks, dsoTop, '');
+      DataArray.Comment := Format(StrImportedFromExisti, [DateTimeToStr(Now)]);
 
       DataArray.UpdateDimensions(FGrid.LayerCount,
         FGrid.RowCount, FGrid.ColumnCount);
@@ -7722,6 +7726,7 @@ begin
       DataArray := FModel.DataArrayManager.CreateNewDataArray(TDataArray,
         DataArrayName, '0', DataArrayName,
         [dcType], rdtDouble, eaBlocks, dsoTop, '');
+      DataArray.Comment := Format(StrImportedFromExisti, [DateTimeToStr(Now)]);
 
       DataArray.UpdateDimensions(FGrid.LayerCount,
         FGrid.RowCount, FGrid.ColumnCount);
@@ -12221,16 +12226,6 @@ begin
 end;
 
 procedure TRchImporter.CreateRechargeRateDataSet(StressPeriodIndex: Integer);
-//var
-//  RechargeDataSet: TDataArray;
-//  ScreenObject: TScreenObject;
-//  ValueList: TRealList;
-//  Values: T2DDoubleArray;
-//  RowIndex: Integer;
-//  ColIndex: Integer;
-//  Value: Double;
-//  MaxCount: integer;
-//  Root: string;
 begin
   CreateTransientRealDataArray(StressPeriodIndex, FReuseRecharge,
     StrImportedRechargeSt, FConstantRecharge, FVariableRecharge,
@@ -12437,6 +12432,8 @@ begin
     begin
       CreateTransientDataSet(StressPeriodIndex, DataSetRoot, rdtInteger,
         AssignedLayerDataSet);
+      AssignedLayerDataSet.Comment := AssignedLayerDataSet.Comment
+        + sLineBreak + Format('Stress Period: %d', [StressPeriodIndex+1]);
       if (FConstantLayerIndicators <> nil)
         and FConstantLayerIndicators[StressPeriodIndex].IsConstant then
       begin
@@ -13020,6 +13017,12 @@ begin
 
   CreateAssignedLayerDataSet(FRchPackage, StrImportedRechargeEl,
     'Imported_RCH_Elevation', RechargeLayerDataSet);
+
+  if RechargeLayerDataSet <> nil then
+  begin
+    RechargeLayerDataSet.Comment := RechargeLayerDataSet.Comment
+      + sLineBreak + 'Stress Period: 1';
+  end;
 //  AssignSteadyRechargeLayerDataSet(RechargeLayerDataSet);
 
   if NP > 0 then
@@ -13509,7 +13512,9 @@ begin
   ScreenObject := nil;
   if not Reuse[StressPeriodIndex] then
   begin
-    CreateTransientDataSet(StressPeriodIndex, DataArrayRoot, rdtDouble, ADataArray);
+    CreateTransientDataSet(StressPeriodIndex, DataArrayRoot,
+      rdtDouble, ADataArray);
+
     if (ConstantValues <> nil) and ConstantValues[StressPeriodIndex].IsConstant then
     begin
       ADataArray.Formula := FortranFloatToStr(ConstantValues[StressPeriodIndex].RealValue);
@@ -19761,22 +19766,11 @@ var
   APoint: TPoint2D;
   Boundary: TUzfBoundary;
   StressPeriodIndex: Integer;
-//  StressPeriod: TModflowStressPeriod;
   InfiltrationItem: TRchItem;
-//  ImportedValues: TValueArrayItem;
-//  ImportedData: T2DDoubleArray;
   EvtItem: TEvtItem;
   ExtinctDepthItem: TUzfExtinctDepthItem;
   WaterContentItem: TUzfWaterContentItem;
   CellCenterScreenObject: TScreenObject;
-//  UndoCreateScreenObject: TCustomUndo;
-//  RowIndex: Integer;
-//  ColIndex: Integer;
-//  ReUse: Boolean;
-//  PriorInfiltrationItem: TRchItem;
-//  PriorEvtItem: TEvtItem;
-//  PriorWaterContentItem: TUzfWaterContentItem;
-//  PriorExtinctDetphItem: TUzfExtinctDepthItem;
   NewItemsNeeded: Boolean;
   InfiltrationName: string;
   EtName: string;
@@ -30873,6 +30867,7 @@ begin
             DataArray := FModel.DataArrayManager.CreateNewDataArray(
               TDataArray, DataArrayName, '0', DataArrayName, [dcType], rdtInteger,
               eaBlocks, dsoTop, '');
+            DataArray.Comment := Format(StrImportedFromExisti, [DateTimeToStr(Now)]);
             DataArray.UpdateDimensions(
               FGrid.LayerCount, FGrid.RowCount, FGrid.ColumnCount);
             Interpolator := TNearestPoint2DInterpolator.Create(nil);
@@ -35007,7 +35002,7 @@ begin
   end;
 end;
 
-procedure TPackageImporter.CreateTransientDataSet(StressPeriodIndex: integer; 
+procedure TPackageImporter.CreateTransientDataSet(StressPeriodIndex: integer;
   const Root: string; DataType: TRbwDataType; var DataSet: TDataArray);
 var
   NewName: string;
@@ -35024,6 +35019,9 @@ begin
   end;
   DataSet := FModel.DataArrayManager.CreateNewDataArray(TDataArray, NewName,
     '0', NewName, [dcType], DataType, eaBlocks, dsoTop, '');
+  DataSet.Comment := Format(StrImportedFromExisti, [DateTimeToStr(Now)]);
+  DataSet.Comment := DataSet.Comment + sLineBreak +
+    Format('Stress Period: %d', [StressPeriodIndex+1]);
   DataSet.UpdateDimensions(FGrid.LayerCount, FGrid.RowCount, FGrid.ColumnCount);
   // FModel.CreateVariables(DataSet);
   Interpolator := TNearestPoint2DInterpolator.Create(nil);

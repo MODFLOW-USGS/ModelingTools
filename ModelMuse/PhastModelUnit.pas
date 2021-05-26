@@ -10276,17 +10276,19 @@ const
 //               Added support for features in RCT package in MT3D-USGS that
 //                are not in MT3DMS.
 //               Fixed check for connectivity in DISV grids in MODFLOW 6.
-
-//               Bug fix: Fixed bug with exporting MVR package.
+//    '4.3.0.48' Bug fix: Fixed bug with exporting MVR package.
 //               Bug fix: Fixed bug in importing Shapefiles if unnamed CSV
 //                attributes are included.
 //               Change: file extension for the Reservoir package input file
 //                change from ".res" to ".resv" to avoid conflict with a PEST
 //                output file.
+//               Enhancement: When importing an existing model, imported arrays
+//                for transient data include the stress period as part of the
+//                comment.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.47';
+  IIModelVersion = '4.3.0.48';
 
 function IModelVersion: string;
 begin
