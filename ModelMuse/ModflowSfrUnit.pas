@@ -5,7 +5,8 @@ interface
 uses Classes, RbwParser, RealListUnit, OrderedCollectionUnit, ModflowCellUnit,
   ModflowBoundaryUnit, ModflowSfrReachUnit, ModflowSfrChannelUnit, GoPhastTypes,
   ModflowSfrSegment, ModflowSfrUnsatSegment, ModflowSfrTable, ModflowSfrFlows,
-  ModflowSfrEquationUnit, ModflowSfrParamIcalcUnit, PestObsUnit;
+  ModflowSfrEquationUnit, ModflowSfrParamIcalcUnit, PestObsUnit,
+  SubscriptionUnit, FormulaManagerUnit;
 
 type
   TGageLocation = (glNone, glFirst, glLast, glAll);
@@ -154,6 +155,34 @@ type
     FGageLocation: TGageLocation;
     FExternalFlow: TExternalFlowProperties;
     FObservations: TSfrObservations;
+    FPestPrecipMethod: TPestParamMethod;
+    FPestUpstreamKMethod: TPestParamMethod;
+    FPestDownstreamWidthMethod: TPestParamMethod;
+    FPestDownstreamBedThicknessMethod: TPestParamMethod;
+    FPestDownstreamBedElevationMethod: TPestParamMethod;
+    FPestUpstreamWidthMethod: TPestParamMethod;
+    FPestEvapMethod: TPestParamMethod;
+    FPestDownstreamDepthMethod: TPestParamMethod;
+    FPestUpstreamBedThicknessMethod: TPestParamMethod;
+    FPestUpstreamBedElevationMethod: TPestParamMethod;
+    FPestFlowMethod: TPestParamMethod;
+    FPestRunoffMethod: TPestParamMethod;
+    FPestUpstreamDepthMethod: TPestParamMethod;
+    FPestDownstreamKMethod: TPestParamMethod;
+    FPestUpstreamKFormula: TFormulaObject;
+    FPestUpstreamBedThicknessFormula: TFormulaObject;
+    FPestUpstreamBedElevationFormula: TFormulaObject;
+    FPestUpstreamWidthFormula: TFormulaObject;
+    FPestUpstreamDepthFormula: TFormulaObject;
+    FPestDownstreamKFormula: TFormulaObject;
+    FPestDownstreamBedThicknessFormula: TFormulaObject;
+    FPestDownstreamBedElevationFormula: TFormulaObject;
+    FPestDownstreamWidthFormula: TFormulaObject;
+    FPestDownstreamDepthFormula: TFormulaObject;
+    FPestFlowFormula: TFormulaObject;
+    FPestPrecipFormula: TFormulaObject;
+    FPestEvapFormula: TFormulaObject;
+    FPestRunoffFormula: TFormulaObject;
     procedure SetSegmentNumber(const Value: integer);
     procedure SetChannelValues(const Value: TSfrChannelCollection);
     procedure SetUpstreamSegmentValues(const Value: TSfrSegmentCollection);
@@ -179,6 +208,78 @@ type
     procedure SetGageLocation(const Value: TGageLocation);
     procedure SetExternalFlow(const Value: TExternalFlowProperties);
     procedure SetObservations(const Value: TSfrObservations);
+    function GetPestDownstreamBedElevationFormula: string;
+    function GetPestDownstreamBedThicknessFormula: string;
+    function GetPestDownstreamDepthFormula: string;
+    function GetPestDownstreamKFormula: string;
+    function GetPestDownstreamWidthFormula: string;
+    function GetPestEvapFormula: string;
+    function GetPestFlowFormula: string;
+    function GetPestPrecipFormula: string;
+    function GetPestRunoffFormula: string;
+    function GetPestUpstreamBedElevationFormula: string;
+    function GetPestUpstreamBedThicknessFormula: string;
+    function GetPestUpstreamDepthFormula: string;
+    function GetPestUpstreamKFormula: string;
+    function GetPestUpstreamWidthFormula: string;
+    procedure SetPestDownstreamBedElevationFormula(const Value: string);
+    procedure SetPestDownstreamBedElevationMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestDownstreamBedThicknessFormula(const Value: string);
+    procedure SetPestDownstreamBedThicknessMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestDownstreamDepthFormula(const Value: string);
+    procedure SetPestDownstreamDepthMethod(const Value: TPestParamMethod);
+    procedure SetPestDownstreamKFormula(const Value: string);
+    procedure SetPestDownstreamKMethod(const Value: TPestParamMethod);
+    procedure SetPestDownstreamWidthFormula(const Value: string);
+    procedure SetPestDownstreamWidthMethod(const Value: TPestParamMethod);
+    procedure SetPestEvapFormula(const Value: string);
+    procedure SetPestEvapMethod(const Value: TPestParamMethod);
+    procedure SetPestFlowFormula(const Value: string);
+    procedure SetPestFlowMethod(const Value: TPestParamMethod);
+    procedure SetPestPrecipFormula(const Value: string);
+    procedure SetPestPrecipMethod(const Value: TPestParamMethod);
+    procedure SetPestRunoffFormula(const Value: string);
+    procedure SetPestRunoffMethod(const Value: TPestParamMethod);
+    procedure SetPestUpstreamBedElevationFormula(const Value: string);
+    procedure SetPestUpstreamBedElevationMethod(const Value: TPestParamMethod);
+    procedure SetPestUpstreamBedThicknessFormula(const Value: string);
+    procedure SetPestUpstreamBedThicknessMethod(const Value: TPestParamMethod);
+    procedure SetPestUpstreamDepthFormula(const Value: string);
+    procedure SetPestUpstreamDepthMethod(const Value: TPestParamMethod);
+    procedure SetPestUpstreamKFormula(const Value: string);
+    procedure SetPestUpstreamKMethod(const Value: TPestParamMethod);
+    procedure SetPestUpstreamWidthFormula(const Value: string);
+    procedure SetPestUpstreamWidthMethod(const Value: TPestParamMethod);
+    function GetPestDownstreamBedElevationObserver: TObserver;
+    function GetPestDownstreamBedThicknessObserver: TObserver;
+    function GetPestDownstreamDepthObserver: TObserver;
+    function GetPestDownstreamKObserver: TObserver;
+    function GetPestDownstreamWidthObserver: TObserver;
+    function GetPestEvapObserver: TObserver;
+    function GetPestFlowObserver: TObserver;
+    function GetPestPrecipObserver: TObserver;
+    function GetPestRunoffObserver: TObserver;
+    function GetPestUpstreamBedElevationObserver: TObserver;
+    function GetPestUpstreamBedThicknessObserver: TObserver;
+    function GetPestUpstreamDepthObserver: TObserver;
+    function GetPestUpstreamKObserver: TObserver;
+    function GetPestUpstreamWidthObserver: TObserver;
+    procedure InvalidateUpstreamKData(Sender: TObject);
+    procedure InvalidateDownstreamKData(Sender: TObject);
+    procedure InvalidateUpstreamBedThicknessData(Sender: TObject);
+    procedure InvalidateDownstreamBedThicknessData(Sender: TObject);
+    procedure InvalidateUpstreamBedElevationData(Sender: TObject);
+    procedure InvalidateDownstreamBedElevationData(Sender: TObject);
+    procedure InvalidateUpstreamWidthData(Sender: TObject);
+    procedure InvalidateDownstreamWidthData(Sender: TObject);
+    procedure InvalidateUpstreamDepthData(Sender: TObject);
+    procedure InvalidateDownstreamDepthData(Sender: TObject);
+    procedure InvalidateFlowData(Sender: TObject);
+    procedure InvalidatePrecipData(Sender: TObject);
+    procedure InvalidateEvapData(Sender: TObject);
+    procedure InvalidateRunoffData(Sender: TObject);
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -188,6 +289,33 @@ type
     // See @link(TModflowBoundary.BoundaryCollectionClass
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestUpstreamKObserver: TObserver read GetPestUpstreamKObserver;
+    property PestDownstreamKObserver: TObserver read GetPestDownstreamKObserver;
+    property PestUpstreamBedThicknessObserver: TObserver read GetPestUpstreamBedThicknessObserver;
+    property PestDownstreamBedThicknessObserver: TObserver read GetPestDownstreamBedThicknessObserver;
+    property PestUpstreamBedElevationObserver: TObserver read GetPestUpstreamBedElevationObserver;
+    property PestDownstreamBedElevationObserver: TObserver read GetPestDownstreamBedElevationObserver;
+    property PestUpstreamWidthObserver: TObserver read GetPestUpstreamWidthObserver;
+    property PestDownstreamWidthObserver: TObserver read GetPestDownstreamWidthObserver;
+    property PestUpstreamDepthObserver: TObserver read GetPestUpstreamDepthObserver;
+    property PestDownstreamDepthObserver: TObserver read GetPestDownstreamDepthObserver;
+    property PestFlowObserver: TObserver read GetPestFlowObserver;
+    property PestPrecipObserver: TObserver read GetPestPrecipObserver;
+    property PestEvapObserver: TObserver read GetPestEvapObserver;
+    property PestRunoffObserver: TObserver read GetPestRunoffObserver;
   public
     procedure InvalidateSegmentNumberArray;
     procedure Assign(Source: TPersistent); override;
@@ -216,6 +344,8 @@ type
     property OutTypes: TByteSet read GetOutTypes;
     procedure FixCollections;
     procedure ReplaceGUID;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     // @name was mispelled. It is now @link(SegmentNumber).
     property SegementNumber: integer read FSegmentNumber
@@ -256,10 +386,196 @@ type
       stored False
     {$ENDIF}
       ;
+    property PestUpstreamKFormula: string read GetPestUpstreamKFormula
+      write SetPestUpstreamKFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamKMethod: TPestParamMethod
+      read FPestUpstreamKMethod write SetPestUpstreamKMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamKFormula: string read GetPestDownstreamKFormula
+      write SetPestDownstreamKFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamKMethod: TPestParamMethod
+      read FPestDownstreamKMethod write SetPestDownstreamKMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamBedThicknessFormula: string read GetPestUpstreamBedThicknessFormula
+      write SetPestUpstreamBedThicknessFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamBedThicknessMethod: TPestParamMethod
+      read FPestUpstreamBedThicknessMethod write SetPestUpstreamBedThicknessMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamBedThicknessFormula: string read GetPestDownstreamBedThicknessFormula
+      write SetPestDownstreamBedThicknessFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamBedThicknessMethod: TPestParamMethod
+      read FPestDownstreamBedThicknessMethod write SetPestDownstreamBedThicknessMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamBedElevationFormula: string read GetPestUpstreamBedElevationFormula
+      write SetPestUpstreamBedElevationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamBedElevationMethod: TPestParamMethod
+      read FPestUpstreamBedElevationMethod write SetPestUpstreamBedElevationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamBedElevationFormula: string read GetPestDownstreamBedElevationFormula
+      write SetPestDownstreamBedElevationFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamBedElevationMethod: TPestParamMethod
+      read FPestDownstreamBedElevationMethod write SetPestDownstreamBedElevationMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamWidthFormula: string read GetPestUpstreamWidthFormula
+      write SetPestUpstreamWidthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamWidthMethod: TPestParamMethod
+      read FPestUpstreamWidthMethod write SetPestUpstreamWidthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamWidthFormula: string read GetPestDownstreamWidthFormula
+      write SetPestDownstreamWidthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamWidthMethod: TPestParamMethod
+      read FPestDownstreamWidthMethod write SetPestDownstreamWidthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamDepthFormula: string read GetPestUpstreamDepthFormula
+      write SetPestUpstreamDepthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamDepthMethod: TPestParamMethod
+      read FPestUpstreamDepthMethod write SetPestUpstreamDepthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamDepthFormula: string read GetPestDownstreamDepthFormula
+      write SetPestDownstreamDepthFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamDepthMethod: TPestParamMethod
+      read FPestDownstreamDepthMethod write SetPestDownstreamDepthMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestFlowFormula: string read GetPestFlowFormula
+      write SetPestFlowFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestFlowMethod: TPestParamMethod
+      read FPestFlowMethod write SetPestFlowMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestPrecipFormula: string read GetPestPrecipFormula
+      write SetPestPrecipFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestPrecipMethod: TPestParamMethod
+      read FPestPrecipMethod write SetPestPrecipMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvapFormula: string read GetPestEvapFormula
+      write SetPestEvapFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestEvapMethod: TPestParamMethod
+      read FPestEvapMethod write SetPestEvapMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRunoffFormula: string read GetPestRunoffFormula
+      write SetPestRunoffFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRunoffMethod: TPestParamMethod
+      read FPestRunoffMethod write SetPestRunoffMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 resourcestring
   StrIncompleteSFRData = 'Incomplete SFR data';
+
+const
+  UpstreamKPosition = 0;
+  UpstreamBedThicknessPosition = 1;
+  UpstreamBedElevationPosition = 2;
+  UpstreamWidthPosition = 3;
+  UpstreamDepthPosition = 4;
+
+  DownstreamKPosition = 5;
+  DownstreamBedThicknessPosition = 6;
+  DownstreamBedElevationPosition = 7;
+  DownstreamWidthPosition = 8;
+  DownstreamDepthPosition = 9;
+
+  FlowPosition = 10;
+  PrecipPosition = 11;
+  EvapPosition = 12;
+  RunoffPosition = 13;
 
 var
   StreamGageOutputTypes: TStringList;
@@ -363,6 +679,11 @@ begin
   result := TSfrCollection;
 end;
 
+function TSfrBoundary.BoundaryObserverPrefix: string;
+begin
+
+end;
+
 procedure TSfrBoundary.Clear;
 begin
   inherited;
@@ -410,6 +731,53 @@ begin
   FExternalFlow := TExternalFlowProperties.Create(Model);
 
   FObservations := TSfrObservations.Create(OnInvalidateModelEvent, ScreenObject);
+end;
+
+procedure TSfrBoundary.CreateFormulaObjects;
+begin
+  FPestUpstreamKFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestUpstreamBedThicknessFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestUpstreamBedElevationFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestUpstreamWidthFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestUpstreamDepthFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamKFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamBedThicknessFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamBedElevationFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamWidthFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamDepthFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestFlowFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestPrecipFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestEvapFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestRunoffFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TSfrBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestUpstreamKObserver);
+    FObserverList.Add(PestUpstreamBedThicknessObserver);
+    FObserverList.Add(PestUpstreamBedElevationObserver);
+    FObserverList.Add(PestUpstreamWidthObserver);
+    FObserverList.Add(PestUpstreamDepthObserver);
+
+    FObserverList.Add(PestDownstreamKObserver);
+    FObserverList.Add(PestDownstreamBedThicknessObserver);
+    FObserverList.Add(PestDownstreamBedElevationObserver);
+    FObserverList.Add(PestDownstreamWidthObserver);
+    FObserverList.Add(PestDownstreamDepthObserver);
+
+    FObserverList.Add(PestFlowObserver);
+    FObserverList.Add(PestPrecipObserver);
+    FObserverList.Add(PestEvapObserver);
+    FObserverList.Add(PestRunoffObserver);
+  end;
+end;
+
+class function TSfrBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+
 end;
 
 destructor TSfrBoundary.Destroy;
@@ -655,6 +1023,229 @@ begin
   end;
 end;
 
+function TSfrBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+
+end;
+
+function TSfrBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+
+end;
+
+function TSfrBoundary.GetPestDownstreamBedElevationFormula: string;
+begin
+  Result := FPestDownstreamBedElevationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamBedElevationPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamBedElevationObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestDownstreamBedThicknessFormula: string;
+begin
+  Result := FPestDownstreamBedThicknessFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamBedThicknessPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamBedThicknessObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestDownstreamDepthFormula: string;
+begin
+  Result := FPestDownstreamDepthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamDepthPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamDepthObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestDownstreamKFormula: string;
+begin
+  Result := FPestDownstreamKFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamKPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamKObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestDownstreamWidthFormula: string;
+begin
+  Result := FPestDownstreamWidthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamWidthPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamWidthObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestEvapFormula: string;
+begin
+  Result := FPestEvapFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(EvapPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestEvapObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestFlowFormula: string;
+begin
+  Result := FPestFlowFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(FlowPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestFlowObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestPrecipFormula: string;
+begin
+  Result := FPestPrecipFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(PrecipPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestPrecipObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestRunoffFormula: string;
+begin
+  Result := FPestRunoffFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(RunoffPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestRunoffObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestUpstreamBedElevationFormula: string;
+begin
+  Result := FPestUpstreamBedElevationFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamBedElevationPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamBedElevationObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestUpstreamBedThicknessFormula: string;
+begin
+  Result := FPestUpstreamBedThicknessFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamBedThicknessPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamBedThicknessObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestUpstreamDepthFormula: string;
+begin
+  Result := FPestUpstreamDepthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamDepthPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamDepthObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestUpstreamKFormula: string;
+begin
+  Result := FPestUpstreamKFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamKPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamKObserver: TObserver;
+begin
+
+end;
+
+function TSfrBoundary.GetPestUpstreamWidthFormula: string;
+begin
+  Result := FPestUpstreamWidthFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamWidthPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamWidthObserver: TObserver;
+begin
+
+end;
+
+procedure TSfrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  inherited;
+
+end;
+
+function TSfrBoundary.GetUsedObserver: TObserver;
+begin
+
+end;
+
+procedure TSfrBoundary.HandleChangedValue(Observer: TObserver);
+begin
+
+end;
+
 procedure TSfrBoundary.InvalidateDisplay;
 begin
   inherited;
@@ -771,6 +1362,170 @@ end;
 procedure TSfrBoundary.SetParamIcalc(const Value: TSfrParamIcalcCollection);
 begin
   FParamIcalc.Assign(Value);
+end;
+
+procedure TSfrBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  inherited;
+
+end;
+
+procedure TSfrBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  inherited;
+
+end;
+
+procedure TSfrBoundary.SetPestDownstreamBedElevationFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamBedElevationPosition, FPestDownstreamBedElevationFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamBedElevationMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamBedElevationMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamBedThicknessFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamBedThicknessPosition, FPestDownstreamBedThicknessFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamBedThicknessMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamBedThicknessMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamDepthFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamDepthPosition, FPestDownstreamDepthFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamDepthMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamDepthMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamKFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamKPosition, FPestDownstreamKFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamKMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamKMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamWidthFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamWidthPosition, FPestDownstreamWidthFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamWidthMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamWidthMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestEvapFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, EvapPosition, FPestEvapFormula);
+end;
+
+procedure TSfrBoundary.SetPestEvapMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestEvapMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestFlowFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, FlowPosition, FPestFlowFormula);
+end;
+
+procedure TSfrBoundary.SetPestFlowMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestFlowMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestPrecipFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, PrecipPosition, FPestPrecipFormula);
+end;
+
+procedure TSfrBoundary.SetPestPrecipMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestPrecipMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestRunoffFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, RunoffPosition, FPestRunoffFormula);
+end;
+
+procedure TSfrBoundary.SetPestRunoffMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRunoffMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamBedElevationFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamBedElevationPosition, FPestUpstreamBedElevationFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamBedElevationMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamBedElevationMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamBedThicknessFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamBedThicknessPosition, FPestUpstreamBedThicknessFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamBedThicknessMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamBedThicknessMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamDepthFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamDepthPosition, FPestUpstreamDepthFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamDepthMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamDepthMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamKFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamKPosition, FPestUpstreamKFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamKMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamKMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamWidthFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamWidthPosition, FPestUpstreamWidthFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamWidthMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamWidthMethod, Value);
 end;
 
 procedure TSfrBoundary.SetSegmentNumber(const Value: integer);
@@ -891,6 +1646,51 @@ begin
   Model.InvalidateMfSfrDownstreamUnsatKz(self);
 end;
 
+procedure TSfrBoundary.InvalidateDownstreamBedElevationData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateDownstreamBedThicknessData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateDownstreamDepthData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateDownstreamKData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateDownstreamWidthData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateEvapData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateFlowData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidatePrecipData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateRunoffData(Sender: TObject);
+begin
+
+end;
+
 procedure TSfrBoundary.InvalidateSegmentNumberArray;
 begin
   if (ScreenObject <> nil)
@@ -899,6 +1699,31 @@ begin
   begin
     (ParentModel as TPhastModel).InvalidateMfSfrSegmentReachAndIcalc(self);
   end;
+end;
+
+procedure TSfrBoundary.InvalidateUpstreamBedElevationData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateUpstreamBedThicknessData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateUpstreamDepthData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateUpstreamKData(Sender: TObject);
+begin
+
+end;
+
+procedure TSfrBoundary.InvalidateUpstreamWidthData(Sender: TObject);
+begin
+
 end;
 
 procedure TSfrBoundary.ReplaceGUID;

@@ -3365,8 +3365,10 @@ that affects the model output should also have a comment. }
       const BatchFileName: string);
     property CanDrawContours: Boolean read FCanDrawContours
       write SetCanDrawContours;
-    function GetPestParameterByName(PestParamName: string): TModflowSteadyParameter;
+    function GetPestParameterByName(PestParamName: string)
+      : TModflowSteadyParameter;
     procedure ClearPestParmDictionary;
+    procedure InvalidateMfSfrReachLength(Sender: TObject);
     property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
       read GetShortestHorizontalBlockEdge;
   published
@@ -4507,7 +4509,6 @@ that affects the model output should also have a comment. }
       const RealPoint: TPoint2D): TPoint;
     procedure InvalidateMfSfrData(Sender: TObject);
     procedure InvalidateMfSfrSegmentReachAndIcalc(Sender: TObject);
-    procedure InvalidateMfSfrReachLength(Sender: TObject);
     procedure InvalidateMfSfrIprior(Sender: TObject);
     procedure InvalidateMfSfrFlow(Sender: TObject);
     procedure InvalidateMfSfrRunoff(Sender: TObject);
@@ -10285,10 +10286,12 @@ const
 //               Enhancement: When importing an existing model, imported arrays
 //                for transient data include the stress period as part of the
 //                comment.
+//    '4.3.0.49' Bug fix: Fixed reading TProgs binary data files containing
+//                byte-sized integer data.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.48';
+  IIModelVersion = '4.3.0.49';
 
 function IModelVersion: string;
 begin
@@ -24906,11 +24909,6 @@ end;
 procedure TPhastModel.InvalidateMfSfrPrecipitation(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.MfSfrPrecipitation.Invalidate;
-end;
-
-procedure TPhastModel.InvalidateMfSfrReachLength(Sender: TObject);
-begin
-  ModflowPackages.SfrPackage.MfSfrReachLength.Invalidate;
 end;
 
 procedure TPhastModel.InvalidateMfSfrRunoff(Sender: TObject);
@@ -40606,7 +40604,7 @@ begin
     SupCalcInput.SaveToFile(SupCalcInputName);
   finally
     SupCalcInput.Free;
-  end;  
+  end;
 
   SupCalcBatFile := TStringList.Create;
   try
@@ -40677,7 +40675,7 @@ begin
     TFile.Delete(PreSvdaFileName);
   end;
   CaseName := ExtractFileName(ChangeFileExt(PreSvdaFileName , ''));
-  
+
   PestInputFileName := ExtractFileName(ChangeFileExt(SvdaPrepProperties.FileName , '.pst'));
   SvdaPrepInputFileName := WorkingDirectory + CaseName + '.SvdaPrepInput';
 
@@ -40705,7 +40703,7 @@ begin
 
   WorkDirParCalcName := WorkingDirectory + 'parcalc.exe';
   WorkDirPiCalcName := WorkingDirectory + 'picalc.exe';
-  
+
   if not TFile.Exists(WorkDirParCalcName) then
   begin
     PestDirParCalcName := PestDirectory + 'parcalc.exe';
@@ -40718,7 +40716,7 @@ begin
   end;
 
   BatchFileName := WorkingDirectory + 'RunSvdaPrep.bat';
-  
+
   BatchFile := TStringList.Create;
   try
     BatchFile.Add(Format('"%0:s" %1:s %2:s',
@@ -40734,12 +40732,12 @@ begin
   finally
     BatchFile.Free;
   end;
-  
+
   if SvdaPrepProperties.RunSvdaPrep then
   begin
     RunAProgram(BatchFileName);
   end;
-  
+
 end;
 
 procedure TPhastModel.ExportParRepInput(FileName: string; RunParRep: Boolean);
@@ -40774,7 +40772,7 @@ begin
   finally
     BatchFile.Free;
   end;
-  
+
   if RunParRep then
   begin
     RunAProgram('"' + BatchFileName + '"');
@@ -40844,13 +40842,13 @@ begin
     BatchFile.Free;
   end;
 
-  case RunPest of 
+  case RunPest of
     pecNone: ; // do nothing;
-    pecPestCheck: 
+    pecPestCheck:
       begin
         RunAProgram('"' + PestCheckBatchFileName + '"');
       end;
-    pecPest: 
+    pecPest:
       begin
         RunAProgram('"' + BatchFileName + '"');
       end;
@@ -41358,7 +41356,7 @@ var
 //  PestDataArrayWriter: TPestDataArrayWriter;
 begin
   PilotPointData.Clear;
-  
+
   frmErrorsAndWarnings.RemoveWarningGroup(self, StrTheFollowingObjectNoCells);
   // Note: MODFLOW can not read Unicode text files.
 
@@ -47624,6 +47622,11 @@ end;
 function TCustomModel.GetPilotPointCount: integer;
 begin
   result := PestProperties.PilotPointCount;
+end;
+
+procedure TCustomModel.InvalidateMfSfrReachLength(Sender: TObject);
+begin
+  ModflowPackages.SfrPackage.MfSfrReachLength.Invalidate;
 end;
 
 initialization

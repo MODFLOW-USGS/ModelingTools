@@ -248,6 +248,10 @@ var
   CosAngle: Double;
   SinAngle: Double;
   SizeToRead: integer;
+  AnInt: Integer;
+  AByte: Byte;
+  ByteArray: array of Byte;
+  BytePosition: Integer;
 begin
   result := False;
   if fedTprogs.FileName = '' then
@@ -413,6 +417,8 @@ begin
             NLAY * NROW * NCOL * SizeOf(byte) ) then
           begin
             SizeToRead := SizeOf(byte);
+            SetLength(ByteArray, NLAY * NROW * NCOL);
+            BgrFile.Read(ByteArray[0], SizeOf(SizeToRead)*NLAY * NROW * NCOL);
           end
           else
           begin
@@ -430,14 +436,24 @@ begin
 //            Exit;
 //          end;
           SetLength(IntegerData, NLAY, NROW, NCOL);
+
+          BytePosition := 0;
           for LayerIndex := 0 to NLAY - 1 do
           begin
             for RowIndex := 0 to NROW - 1 do
             begin
               for ColIndex := 0 to NCOL - 1 do
               begin
-                BgrFile.Read(IntegerData[LayerIndex, RowIndex, ColIndex],
-                  SizeOf(SizeToRead));
+                if SizeToRead = SizeOf(Integer) then
+                begin
+                  BgrFile.Read(AnInt, SizeOf(SizeToRead));
+                end
+                else
+                begin
+                  AnInt := ByteArray[BytePosition];
+                  Inc(BytePosition);
+                end;
+                IntegerData[LayerIndex, RowIndex, ColIndex] := AnInt;
               end;
             end;
           end;

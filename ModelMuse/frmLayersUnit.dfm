@@ -29,10 +29,6 @@ inherited frmLayers: TfrmLayers
       HelpType = htKeyword
       HelpKeyword = 'Basics_Tab'
       Caption = 'Basics'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 350
       DesignSize = (
         433
         407)
@@ -230,7 +226,8 @@ inherited frmLayers: TfrmLayers
         Height = 407
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 407
+        ExplicitWidth = 154
+        ExplicitHeight = 127
         inherited lbl1: TLabel
           Width = 148
           Height = 18
@@ -261,8 +258,8 @@ inherited frmLayers: TfrmLayers
           end
           inherited pnl1: TPanel
             inherited lbl3: TLabel
-              Width = 185
-              Height = 41
+              Width = 179
+              Height = 36
               ExplicitWidth = 179
               ExplicitHeight = 36
             end
@@ -367,10 +364,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Delay_Beds_Tab'
       Caption = 'Delay Beds'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 390
       inline frameSubDelayBeds: TframeSubBeds
         Left = 0
         Top = 0
@@ -501,10 +494,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Dispersion_Tab'
       Caption = 'Dispersion'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 390
       object rdgDispersion: TRbwDataGrid4
         Left = 0
         Top = 41
@@ -666,10 +655,6 @@ inherited frmLayers: TfrmLayers
       HelpKeyword = 'Conduit_Layers_Tab'
       Caption = 'Conduit Layers'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 390
       object rdgConduitLayers: TRbwDataGrid4
         Left = 0
         Top = 41

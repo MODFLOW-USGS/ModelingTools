@@ -173,7 +173,6 @@ type
     function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
-    procedure InvalidateDisplay; override;
     property PestStartHeadObserver: TObserver read GetPestStartHeadObserver;
     property PestEndHeadObserver: TObserver read GetPestEndHeadObserver;
   public
@@ -183,6 +182,7 @@ type
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     property ResId: integer read FResId write SetResId;
+    procedure InvalidateDisplay; override;
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
   published
