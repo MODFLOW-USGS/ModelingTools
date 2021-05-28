@@ -3,10 +3,19 @@ unit ModflowSfrFlows;
 interface
 
 uses SysUtils, Classes, RbwParser, OrderedCollectionUnit, ModflowCellUnit,
-  ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit;
+  ModflowBoundaryUnit, FormulaManagerUnit, SubscriptionUnit, GoPhastTypes;
 
 type
   TSfrSegmentFlowRecord = record
+  private
+    function GetPestItem(Index: Integer): string;
+    function GetPestSeriesItem(Index: Integer): string;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+    procedure SetPestItem(Index: Integer; const Value: string);
+    procedure SetPestSeriesItem(Index: Integer; const Value: string);
+    procedure SetPestSeriesMethod(Index: Integer;
+      const Value: TPestParamMethod);
+  public
     Flow: double;
     Precipitation: double;
     Evapotranspiration: double;
@@ -17,6 +26,25 @@ type
     PrecipitationAnnotation: string;
     EvapotranspirationAnnotation: string;
     RunnoffAnnotation: string;
+
+    FlowPestItem: string;
+    PrecipitationPestItem: string;
+    EvapotranspirationPestItem: string;
+    RunnoffPestItem: string;
+
+    FlowPestSeriesItem: string;
+    PrecipitationPestSeriesItem: string;
+    EvapotranspirationPestSeriesItem: string;
+    RunnoffPestSeriesItem: string;
+
+    FlowPestSeriesMethod: TPestParamMethod;
+    PrecipitationPestSeriesMethod: TPestParamMethod;
+    EvapotranspirationPestSeriesMethod: TPestParamMethod;
+    RunnoffPestSeriesMethod: TPestParamMethod;
+
+    property PestItem[Index: Integer]: string read GetPestItem write SetPestItem;
+    property PestSeriesItem[Index: Integer]: string read GetPestSeriesItem write SetPestSeriesItem;
+    property PestSeriesMethod[Index: Integer]: TPestParamMethod read GetPestSeriesMethod write SetPestSeriesMethod;
   end;
 
   // @name represents a MODFLOW Streamflow Routing boundary for one time interval.
@@ -83,8 +111,9 @@ type
 implementation
 
 uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit, GoPhastTypes, 
-  frmGoPhastUnit, ModflowSfrChannelUnit;
+  ModflowSfrUnit, frmFormulaErrorsUnit, frmErrorsAndWarningsUnit,
+  frmGoPhastUnit, ModflowSfrChannelUnit, ModflowParameterUnit,
+  ModelMuseUtilities;
 
 resourcestring
   StrFlowForTheSFRPa = '(flow for the SFR package)';
@@ -365,16 +394,68 @@ var
   CurrentRecord: TSfrSegmentFlowRecord;
   CurrentItem: TSfrSegmentFlowItem;
   Compiler: TRbwParser;
-  PhastModel: TPhastModel;
+  LocalModel: TCustomModel;
   Formula: string;
   Expression: TExpression;
   ScrObj: TScreenObject;
   Index: integer;
+  SfrBoundary: TSfrBoundary;
+  procedure AssignFormula(var Formula: string; PropertyIndex: integer);
+    Const OffSet = 10;
+  var
+    PestSeriesItem: string;
+    Param: TModflowSteadyParameter;
+  begin
+    Param := LocalModel.GetPestParameterByName(Formula);
+    if Param <> nil then
+    begin
+      CurrentRecord.PestItem[PropertyIndex] := Formula;
+      Formula := FortranFloatToStr(Param.Value);
+    end
+    else
+    begin
+      CurrentRecord.PestItem[PropertyIndex] := '';
+    end;
+
+    PestSeriesItem := SfrBoundary.PestBoundaryFormula[PropertyIndex+Offset];
+    if PestSeriesItem <> '' then
+    begin
+      Param := LocalModel.GetPestParameterByName(PestSeriesItem);
+      if Param <> nil then
+      begin
+        CurrentRecord.PestSeriesItem[PropertyIndex] := PestSeriesItem;
+        CurrentRecord.PestSeriesMethod[PropertyIndex] :=
+          SfrBoundary.PestBoundaryMethod[PropertyIndex+Offset];
+        case CurrentRecord.PestSeriesMethod[PropertyIndex] of
+          ppmMultiply:
+            begin
+              Formula := Format('%0:g * (%1:s)', [Param.Value, Formula]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('%0:g + (%1:s)', [Param.Value, Formula]);
+            end;
+        end;
+      end
+      else
+      begin
+        frmErrorsAndWarnings.AddError(LocalModel, 'Unrecognized PEST parameter',
+          Format('"%0:s" is not recognized as a parameter in %1:s.',
+          [PestSeriesItem, ScrObj.Name]), ScrObj);
+        CurrentRecord.PestSeriesItem[PropertyIndex]  := '';
+      end;
+    end
+    else
+    begin
+      CurrentRecord.PestSeriesItem[PropertyIndex]  := '';
+    end;
+  end;
 begin
   ScrObj := ScreenObject as TScreenObject;
-  PhastModel := Model as TPhastModel;
+  SfrBoundary := BoundaryGroup as TSfrBoundary;
+  LocalModel := Model as TCustomModel;
   SetLength(FTimeValues, Count);
-  Compiler := PhastModel.rpThreeDFormulaCompiler;
+  Compiler := LocalModel.rpThreeDFormulaCompiler;
   for Index := 0 to Count - 1 do
   begin
     CurrentItem := Items[Index] as TSfrSegmentFlowItem;
@@ -383,8 +464,9 @@ begin
 
     Expression := nil;
     Formula := CurrentItem.Flow;
+    AssignFormula(Formula, FlowPosition);
     CurrentRecord.FlowAnnotation := Format(StrAssignedBy0sWit,
-        [ScrObj.Name, Formula]);
+      [ScrObj.Name, Formula]);
     try
       Compiler.Compile(Formula);
       Expression := Compiler.CurrentExpression;
@@ -407,6 +489,7 @@ begin
     CurrentRecord.Flow := Expression.DoubleResult;
 
     Formula := CurrentItem.Precipitation;
+    AssignFormula(Formula, PrecipitationPosition);
     CurrentRecord.PrecipitationAnnotation := Format(StrAssignedBy0sWit,
         [ScrObj.Name, Formula]);
     try
@@ -431,6 +514,7 @@ begin
     CurrentRecord.Precipitation := Expression.DoubleResult;
 
     Formula := CurrentItem.Evapotranspiration;
+    AssignFormula(Formula, EvapotranspirationPosition);
     CurrentRecord.EvapotranspirationAnnotation := Format(StrAssignedBy0sWit,
         [ScrObj.Name, Formula]);
     try
@@ -455,6 +539,7 @@ begin
     CurrentRecord.Evapotranspiration := Expression.DoubleResult;
 
     Formula := CurrentItem.Runnoff;
+    AssignFormula(Formula, RunnoffPosition);
     CurrentRecord.RunnoffAnnotation := Format(StrAssignedBy0sWit,
         [ScrObj.Name, Formula]);
     try
@@ -570,6 +655,171 @@ procedure TSfrSegmentFlowCollection.SetFlowTimeValues(Index: integer;
 begin
   Assert((Index >= 0) and (Index < Length(FTimeValues)));
   FTimeValues[Index] := Value;
+end;
+
+{ TSfrSegmentFlowRecord }
+
+function TSfrSegmentFlowRecord.GetPestItem(Index: Integer): string;
+begin
+  case Index of
+    FlowPosition:
+      begin
+        result := FlowPestItem;
+      end;
+    PrecipitationPosition:
+      begin
+        result := PrecipitationPestItem;
+      end;
+    EvapotranspirationPosition:
+      begin
+        result := EvapotranspirationPestItem;
+      end;
+    RunnoffPosition:
+      begin
+        result := RunnoffPestItem;
+      end;
+    else
+      begin
+        result := '';
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSfrSegmentFlowRecord.GetPestSeriesItem(Index: Integer): string;
+begin
+  case Index of
+    FlowPosition:
+      begin
+        result := FlowPestSeriesItem;
+      end;
+    PrecipitationPosition:
+      begin
+        result := PrecipitationPestSeriesItem;
+      end;
+    EvapotranspirationPosition:
+      begin
+        result := EvapotranspirationPestSeriesItem;
+      end;
+    RunnoffPosition:
+      begin
+        result := RunnoffPestSeriesItem;
+      end;
+    else
+      begin
+        result := '';
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSfrSegmentFlowRecord.GetPestSeriesMethod(
+  Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    FlowPosition:
+      begin
+        result := FlowPestSeriesMethod;
+      end;
+    PrecipitationPosition:
+      begin
+        result := PrecipitationPestSeriesMethod;
+      end;
+    EvapotranspirationPosition:
+      begin
+        result := EvapotranspirationPestSeriesMethod;
+      end;
+    RunnoffPosition:
+      begin
+        result := RunnoffPestSeriesMethod;
+      end;
+    else
+      begin
+        result := ppmMultiply;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSfrSegmentFlowRecord.SetPestItem(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    FlowPosition:
+      begin
+        FlowPestItem := Value;
+      end;
+    PrecipitationPosition:
+      begin
+        PrecipitationPestItem := Value;
+      end;
+    EvapotranspirationPosition:
+      begin
+        EvapotranspirationPestItem := Value;
+      end;
+    RunnoffPosition:
+      begin
+        RunnoffPestItem := Value;
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSfrSegmentFlowRecord.SetPestSeriesItem(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    FlowPosition:
+      begin
+        FlowPestSeriesItem := Value;
+      end;
+    PrecipitationPosition:
+      begin
+        PrecipitationPestSeriesItem := Value;
+      end;
+    EvapotranspirationPosition:
+      begin
+        EvapotranspirationPestSeriesItem := Value;
+      end;
+    RunnoffPosition:
+      begin
+        RunnoffPestSeriesItem := Value;
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSfrSegmentFlowRecord.SetPestSeriesMethod(Index: Integer;
+  const Value: TPestParamMethod);
+begin
+  case Index of
+    FlowPosition:
+      begin
+        FlowPestSeriesMethod := Value;
+      end;
+    PrecipitationPosition:
+      begin
+        PrecipitationPestSeriesMethod := Value;
+      end;
+    EvapotranspirationPosition:
+      begin
+        EvapotranspirationPestSeriesMethod := Value;
+      end;
+    RunnoffPosition:
+      begin
+        RunnoffPestSeriesMethod := Value;
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
 end;
 
 end.

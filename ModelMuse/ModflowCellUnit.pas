@@ -26,6 +26,8 @@ type
     class operator NotEqual(ACell: TCellLocation; BCell: TCellLocation): boolean;
   end;
 
+  PCellLocation = ^TCellLocation;
+
   TCellLocationArray = array of TCellLocation;
   TCellLocationList = TList<TCellLocation>;
 
@@ -75,6 +77,7 @@ type
     function GetPestName(Index: Integer): string; virtual;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; virtual;
     function GetPestSeriesName(Index: Integer): string; virtual;
+    function GetCellLocation: TCellLocation; virtual;
   public
     Constructor Create; virtual;
     // @name is used for MODFLOW 6 PEST observations.
@@ -131,6 +134,9 @@ type
     Property PestName[Index: Integer]: string read GetPestName;
     Property PestSeriesName[Index: Integer]: string read GetPestSeriesName;
     Property PestSeriesMethod[Index: Integer]: TPestParamMethod read GetPestSeriesMethod;
+    // The section may not be correct in @name.
+    // override GetCellLocation if the section needs to be correct.
+    property CellLocation: TCellLocation read GetCellLocation;
   end;
 
   TValueCellType = class of TValueCell;
@@ -593,6 +599,13 @@ function TValueCell.GetBooleanValue(Index: integer;
 begin
   result := False;
   Assert(False);
+end;
+
+function TValueCell.GetCellLocation: TCellLocation;
+begin
+  result.Layer := Layer;
+  result.Row := Row;
+  result.Column := Column;
 end;
 
 function TValueCell.GetPestName(Index: Integer): string;

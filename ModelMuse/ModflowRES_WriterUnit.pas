@@ -637,7 +637,7 @@ begin
           ExportedEndHead := StartHead;
           ExportedStartHeadPest := GetPestTemplateFormula(StartHead,
             StartHeadPest.PestName, StartHeadPest.PestSeriesName,
-            StartHeadPest.PestSeriesMethod, nil);
+            StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           ExportedEndHeadPest := ExportedStartHeadPest;
         end
         else if UseLastOnly then
@@ -646,7 +646,7 @@ begin
           ExportedEndHead := EndHead;
           ExportedStartHeadPest := GetPestTemplateFormula(EndHead,
             EndHeadPest.PestName, EndHeadPest.PestSeriesName,
-            EndHeadPest.PestSeriesMethod, nil);
+            EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           ExportedEndHeadPest := ExportedStartHeadPest;
         end
         else
@@ -656,7 +656,7 @@ begin
             ExportedStartHead := StartHead;
             ExportedStartHeadPest := GetPestTemplateFormula(StartHead,
             StartHeadPest.PestName, StartHeadPest.PestSeriesName,
-            StartHeadPest.PestSeriesMethod, nil);
+            StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           end
           else
           begin
@@ -675,10 +675,10 @@ begin
               ExportedStartHead := 1e-31;
               StartHeadFormula := GetPestTemplateFormula(StartHead,
                 StartHeadPest.PestName, StartHeadPest.PestSeriesName,
-                StartHeadPest.PestSeriesMethod, nil);
+                StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
               EndHeadFormula := GetPestTemplateFormula(EndHead,
                 EndHeadPest.PestName, EndHeadPest.PestSeriesName,
-                EndHeadPest.PestSeriesMethod, nil);
+                EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
               ExportedStartHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
                 [StartHeadFormula, Fraction, EndHeadFormula]);
 //              ExportedStartHeadPest := Format(' %0:s          %1:s%0:s',
@@ -692,7 +692,7 @@ begin
             ExportedEndHead := EndHead;
             ExportedEndHeadPest := GetPestTemplateFormula(EndHead,
               EndHeadPest.PestName, EndHeadPest.PestSeriesName,
-              EndHeadPest.PestSeriesMethod, nil);
+              EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           end
           else
           begin
@@ -711,10 +711,10 @@ begin
               ExportedEndHead := 1e-31;
               StartHeadFormula := GetPestTemplateFormula(StartHead,
                 StartHeadPest.PestName, StartHeadPest.PestSeriesName,
-                StartHeadPest.PestSeriesMethod, nil);
+                StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
               EndHeadFormula := GetPestTemplateFormula(EndHead,
                 EndHeadPest.PestName, EndHeadPest.PestSeriesName,
-                EndHeadPest.PestSeriesMethod, nil);
+                EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
               ExportedEndHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
                 [StartHeadFormula, Fraction, EndHeadFormula]);
 //              ExportedEndHeadPest := Format(' %0:s          %1:s%0:s',

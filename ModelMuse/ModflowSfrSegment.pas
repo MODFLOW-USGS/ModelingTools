@@ -21,6 +21,25 @@ type
     StreamBedThicknessAnnotation: string;
     StreamWidthAnnotation: string;
     StreamDepthAnnotation: string;
+
+    HydraulicConductivityPestItem: string;
+    StreambedElevationPestItem: string;
+    StreamBedThicknessPestItem: string;
+    StreamWidthPestItem: string;
+    StreamDepthPestItem: string;
+
+    HydraulicConductivityPestSeriesItem: string;
+    StreambedElevationPestSeriesItem: string;
+    StreamBedThicknessPestSeriesItem: string;
+    StreamWidthPestSeriesItem: string;
+    StreamDepthPestSeriesItem: string;
+
+    HydraulicConductivityPestSeriesMethod: TPestParamMethod;
+    StreambedElevationPestSeriesMethod: TPestParamMethod;
+    StreamBedThicknessPestSeriesMethod: TPestParamMethod;
+    StreamWidthPestSeriesMethod: TPestParamMethod;
+    StreamDepthPestSeriesMethod: TPestParamMethod;
+
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -177,6 +196,9 @@ type
     procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property Values: TSfrSegmentRecord read FValues write FValues;
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
@@ -624,6 +646,28 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+//  SfrBoundary: TSfrBoundary;
+//  OffSet: Integer;
+  LocalHydraulicConductivityPestSeries: string;
+  LocalHydraulicConductivityPestMethod: TPestParamMethod;
+  HydraulicConductivityPestItems: TStringList;
+  LocalHydraulicConductivityPest: string;
+  LocalStreamBedThicknessPestSeries: string;
+  LocalStreamBedThicknessPestMethod: TPestParamMethod;
+  StreamBedThicknessPestItems: TStringList;
+  LocalStreamBedThicknessPest: string;
+  LocalStreambedElevationPestSeries: string;
+  LocalStreambedElevationPestMethod: TPestParamMethod;
+  StreambedElevationPestItems: TStringList;
+  LocalStreambedElevationPest: string;
+  LocalStreamWidthPestSeries: string;
+  LocalStreamWidthPestMethod: TPestParamMethod;
+  StreamWidthPestItems: TStringList;
+  LocalStreamWidthPest: string;
+  LocalStreamDepthPestSeries: string;
+  LocalStreamDepthPestMethod: TPestParamMethod;
+  StreamDepthPestItems: TStringList;
+  LocalStreamDepthPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -633,6 +677,49 @@ begin
   StreamWidthArray := DataSets[StreamWidthPosition];
   StreamDepthArray := DataSets[StreamDepthPosition];
   Boundary := Boundaries[ItemIndex, AModel] as TSfrSegmentStorage;
+//  SfrBoundary := BoundaryGroup as TSfrBoundary;
+//  if SfrBoundary.UpstreamSegmentValues = self then
+//  begin
+//    OffSet := 0;
+//  end
+//  else
+//  begin
+//    OffSet := 5;
+//    Assert(SfrBoundary.DownstreamSegmentValues = self);
+//  end;
+
+  LocalHydraulicConductivityPestSeries := PestSeries[HydraulicConductivityPosition];
+  LocalHydraulicConductivityPestMethod := PestMethods[HydraulicConductivityPosition];
+  HydraulicConductivityPestItems := PestItemNames[HydraulicConductivityPosition];
+  LocalHydraulicConductivityPest := HydraulicConductivityPestItems[ItemIndex];
+
+  LocalStreamBedThicknessPestSeries := PestSeries[StreamBedThicknessPosition];
+  LocalStreamBedThicknessPestMethod := PestMethods[StreamBedThicknessPosition];
+  StreamBedThicknessPestItems := PestItemNames[StreamBedThicknessPosition];
+  LocalStreamBedThicknessPest := StreamBedThicknessPestItems[ItemIndex];
+
+  LocalStreambedElevationPestSeries := PestSeries[StreambedElevationPosition];
+  LocalStreambedElevationPestMethod := PestMethods[StreambedElevationPosition];
+  StreambedElevationPestItems := PestItemNames[StreambedElevationPosition];
+  LocalStreambedElevationPest := StreambedElevationPestItems[ItemIndex];
+
+  LocalStreamWidthPestSeries := PestSeries[StreamWidthPosition];
+  LocalStreamWidthPestMethod := PestMethods[StreamWidthPosition];
+  StreamWidthPestItems := PestItemNames[StreamWidthPosition];
+  LocalStreamWidthPest := StreamWidthPestItems[ItemIndex];
+
+  LocalStreamDepthPestSeries := PestSeries[StreamDepthPosition];
+  LocalStreamDepthPestMethod := PestMethods[StreamDepthPosition];
+  StreamDepthPestItems := PestItemNames[StreamDepthPosition];
+  LocalStreamDepthPest := StreamDepthPestItems[ItemIndex];
+
+{
+  HydraulicConductivityPosition = 0;
+  StreamBedThicknessPosition = 1;
+  StreambedElevationPosition = 2;
+  StreamWidthPosition = 3;
+  StreamDepthPosition = 4;
+}
 
   HydraulicConductivityArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
@@ -658,7 +745,7 @@ begin
                 Cell.Layer := LayerIndex;
                 Cell.Row := RowIndex;
                 Cell.Column := ColIndex;
-//                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+
                 HydraulicConductivity := HydraulicConductivityArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 HydraulicConductivityAnnotation := HydraulicConductivityArray.
@@ -679,6 +766,24 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 StreamDepthAnnotation := StreamDepthArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+
+                HydraulicConductivityPestItem := LocalHydraulicConductivityPest;
+                StreambedElevationPestItem := LocalStreambedElevationPest;
+                StreamBedThicknessPestItem := LocalStreamBedThicknessPest;
+                StreamWidthPestItem := LocalStreamWidthPest;
+                StreamDepthPestItem := LocalStreamDepthPest;
+
+                HydraulicConductivityPestSeriesItem := LocalHydraulicConductivityPestSeries;
+                StreambedElevationPestSeriesItem := LocalStreambedElevationPestSeries;
+                StreamBedThicknessPestSeriesItem := LocalStreamBedThicknessPestSeries;
+                StreamWidthPestSeriesItem := LocalStreamWidthPestSeries;
+                StreamDepthPestSeriesItem := LocalStreamDepthPestSeries;
+
+                HydraulicConductivityPestSeriesMethod := LocalHydraulicConductivityPestMethod;
+                StreambedElevationPestSeriesMethod := LocalStreambedElevationPestMethod;
+                StreamBedThicknessPestSeriesMethod := LocalStreamBedThicknessPestMethod;
+                StreamWidthPestSeriesMethod := LocalStreamWidthPestMethod;
+                StreamDepthPestSeriesMethod := LocalStreamDepthPestMethod;
               end;
               Inc(BoundaryIndex);
             end;
@@ -745,11 +850,38 @@ var
   StreamWidthData: TModflowTimeList;
   StreamDepthData: TModflowTimeList;
   ALink: TSfrSegmentTimeListLink;
+  OffSet: Integer;
+  PestHydraulicConductivitySeriesName: string;
+  PestHydraulicConductivityMethod: TPestParamMethod;
+  PestHydraulicConductivityItems: TStringList;
+  ItemFormula: string;
+  PestStreamBedThicknessSeriesName: string;
+  PestStreamBedThicknessMethod: TPestParamMethod;
+  PestStreamBedThicknessItems: TStringList;
+  PestStreamBedElevationSeriesName: string;
+  PestStreamBedElevationMethod: TPestParamMethod;
+  PestStreamBedElevationItems: TStringList;
+  PestStreamWidthSeriesName: string;
+  PestStreamWidthMethod: TPestParamMethod;
+  PestStreamWidthItems: TStringList;
+  PestStreamDepthSeriesName: string;
+  PestStreamDepthMethod: TPestParamMethod;
+  PestStreamDepthItems: TStringList;
 begin
   ISFROPT := (AModel as TCustomModel).ModflowPackages.SfrPackage.Isfropt;
   SetLength(BoundaryValues, Count);
 
   Boundary := BoundaryGroup as TSfrBoundary;
+  if Boundary.UpstreamSegmentValues = self then
+  begin
+    OffSet := 0;
+  end
+  else
+  begin
+    OffSet := 5;
+    Assert(Boundary.DownstreamSegmentValues = self);
+  end;
+
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   if (AssignmentLocation <> alAll)
     and (not ScreenObject.SetValuesOfIntersectedCells) then
@@ -758,6 +890,16 @@ begin
       ScreenObject);
     Exit;
   end;
+
+  PestHydraulicConductivitySeriesName :=
+    BoundaryGroup.PestBoundaryFormula[HydraulicConductivityPosition+Offset];
+  PestSeries.Add(PestHydraulicConductivitySeriesName);
+  PestHydraulicConductivityMethod :=
+    BoundaryGroup.PestBoundaryMethod[HydraulicConductivityPosition+Offset];
+  PestMethods.Add(PestHydraulicConductivityMethod);
+  PestHydraulicConductivityItems := TStringList.Create;
+  PestItemNames.Add(PestHydraulicConductivityItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TSfrSegmentItem;
@@ -765,17 +907,31 @@ begin
     ItemUsed := ISFROPT  in [0,4,5];
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.HydraulicConductivity;
+      ItemFormula := Item.HydraulicConductivity;
+//      BoundaryValues[Index].Formula := Item.HydraulicConductivity;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestHydraulicConductivitySeriesName,
+      PestHydraulicConductivityMethod, PestHydraulicConductivityItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TSfrSegmentTimeListLink;
   HydraulicConductivityData := ALink.FHydraulicConductivityData;
   HydraulicConductivityData.Initialize(BoundaryValues, ScreenObject, lctUse,
     AssignmentLocation);
+
+  PestStreamBedThicknessSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[StreamBedThicknessPosition+Offset];
+  PestSeries.Add(PestStreamBedThicknessSeriesName);
+  PestStreamBedThicknessMethod :=
+    BoundaryGroup.PestBoundaryMethod[StreamBedThicknessPosition+Offset];
+  PestMethods.Add(PestStreamBedThicknessMethod);
+  PestStreamBedThicknessItems := TStringList.Create;
+  PestItemNames.Add(PestStreamBedThicknessItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -800,16 +956,30 @@ begin
     end;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.StreamBedThickness;
+      ItemFormula := Item.StreamBedThickness;
+//      BoundaryValues[Index].Formula := Item.StreamBedThickness;
     end
     else
     begin
+      ItemFormula := '0';
       BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestStreamBedThicknessSeriesName,
+      PestStreamBedThicknessMethod, PestStreamBedThicknessItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamBedThicknessData := ALink.FStreamBedThicknessData;
   StreamBedThicknessData.Initialize(BoundaryValues, ScreenObject,
     lctUse, AssignmentLocation);
+
+  PestStreamBedElevationSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[StreamBedElevationPosition+Offset];
+  PestSeries.Add(PestStreamBedElevationSeriesName);
+  PestStreamBedElevationMethod :=
+    BoundaryGroup.PestBoundaryMethod[StreamBedElevationPosition+Offset];
+  PestMethods.Add(PestStreamBedElevationMethod);
+  PestStreamBedElevationItems := TStringList.Create;
+  PestItemNames.Add(PestStreamBedElevationItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -834,16 +1004,30 @@ begin
     end;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.StreamBedElevation;
+      ItemFormula := Item.StreamBedElevation;
+//      BoundaryValues[Index].Formula := Item.StreamBedElevation;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestStreamBedElevationSeriesName,
+      PestStreamBedElevationMethod, PestStreamBedElevationItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamBedElevationData := ALink.FStreamBedElevationData;
   StreamBedElevationData.Initialize(BoundaryValues, ScreenObject,
     lctUse, AssignmentLocation);
+
+  PestStreamWidthSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[StreamWidthPosition+Offset];
+  PestSeries.Add(PestStreamWidthSeriesName);
+  PestStreamWidthMethod :=
+    BoundaryGroup.PestBoundaryMethod[StreamWidthPosition+Offset];
+  PestMethods.Add(PestStreamWidthMethod);
+  PestStreamWidthItems := TStringList.Create;
+  PestItemNames.Add(PestStreamWidthItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -861,16 +1045,30 @@ begin
     end;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.StreamWidth;
+      ItemFormula := Item.StreamWidth;
+//      BoundaryValues[Index].Formula := Item.StreamWidth;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestStreamWidthSeriesName,
+      PestStreamWidthMethod, PestStreamWidthItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamWidthData := ALink.FStreamWidthData;
   StreamWidthData.Initialize(BoundaryValues, ScreenObject,
     lctUse, AssignmentLocation);
+
+  PestStreamDepthSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[StreamDepthPosition+Offset];
+  PestSeries.Add(PestStreamDepthSeriesName);
+  PestStreamDepthMethod :=
+    BoundaryGroup.PestBoundaryMethod[StreamDepthPosition+Offset];
+  PestMethods.Add(PestStreamDepthMethod);
+  PestStreamDepthItems := TStringList.Create;
+  PestItemNames.Add(PestStreamDepthItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -881,17 +1079,21 @@ begin
     ItemUsed := ICALC = 0;
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.StreamDepth;
+      ItemFormula := Item.StreamDepth;
+//      BoundaryValues[Index].Formula := Item.StreamDepth;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestStreamDepthSeriesName,
+      PestStreamDepthMethod, PestStreamDepthItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamDepthData := ALink.FStreamDepthData;
   StreamDepthData.Initialize(BoundaryValues, ScreenObject,
     lctUse, AssignmentLocation);
-
 
   Assert(HydraulicConductivityData.Count = Count);
   Assert(StreamBedThicknessData.Count = Count);
@@ -1100,6 +1302,101 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TSfrSegment_Cell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    HydraulicConductivityPosition:
+      begin
+        result := Values.HydraulicConductivityPestItem;
+      end;
+    StreamBedThicknessPosition:
+      begin
+        result := Values.StreamBedThicknessPestItem;
+      end;
+    StreambedElevationPosition:
+      begin
+        result := Values.StreambedElevationPestItem;
+      end;
+    StreamWidthPosition:
+      begin
+        result := Values.StreamWidthPestItem;
+      end;
+    StreamDepthPosition:
+      begin
+        result := Values.StreamDepthPestItem;
+      end;
+    else
+      begin
+        result := '';
+        Assert(False);
+      end;
+
+  end;
+end;
+
+function TSfrSegment_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    HydraulicConductivityPosition:
+      begin
+        result := Values.HydraulicConductivityPestSeriesMethod;
+      end;
+    StreamBedThicknessPosition:
+      begin
+        result := Values.StreamBedThicknessPestSeriesMethod;
+      end;
+    StreambedElevationPosition:
+      begin
+        result := Values.StreambedElevationPestSeriesMethod;
+      end;
+    StreamWidthPosition:
+      begin
+        result := Values.StreamWidthPestSeriesMethod;
+      end;
+    StreamDepthPosition:
+      begin
+        result := Values.StreamDepthPestSeriesMethod;
+      end;
+    else
+      begin
+        result := ppmMultiply;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSfrSegment_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    HydraulicConductivityPosition:
+      begin
+        result := Values.HydraulicConductivityPestSeriesItem;
+      end;
+    StreamBedThicknessPosition:
+      begin
+        result := Values.StreamBedThicknessPestSeriesItem;
+      end;
+    StreambedElevationPosition:
+      begin
+        result := Values.StreambedElevationPestSeriesItem;
+      end;
+    StreamWidthPosition:
+      begin
+        result := Values.StreamWidthPestSeriesItem;
+      end;
+    StreamDepthPosition:
+      begin
+        result := Values.StreamDepthPestSeriesItem;
+      end;
+    else
+      begin
+        result := '';
+        Assert(False);
+      end;
+
+  end;
+end;
+
 function TSfrSegment_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -1204,11 +1501,43 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(StreamBedThicknessAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StreamWidthAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StreamDepthAnnotation));
-//  WriteCompString(Comp, HydraulicConductivityAnnotation);
-//  WriteCompString(Comp, StreambedElevationAnnotation);
-//  WriteCompString(Comp, StreamBedThicknessAnnotation);
-//  WriteCompString(Comp, StreamWidthAnnotation);
-//  WriteCompString(Comp, StreamDepthAnnotation);
+
+  WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreambedElevationPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamBedThicknessPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamWidthPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamDepthPestItem));
+
+  WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityPestSeriesItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreambedElevationPestSeriesItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamBedThicknessPestSeriesItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamWidthPestSeriesItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamDepthPestSeriesItem));
+
+  WriteCompInt(Comp, Ord(HydraulicConductivityPestSeriesMethod));
+  WriteCompInt(Comp, Ord(StreambedElevationPestSeriesMethod));
+  WriteCompInt(Comp, Ord(StreamBedThicknessPestSeriesMethod));
+  WriteCompInt(Comp, Ord(StreamWidthPestSeriesMethod));
+  WriteCompInt(Comp, Ord(StreamDepthPestSeriesMethod));
+{
+    HydraulicConductivityPestItem: string;
+    StreambedElevationPestItem: string;
+    StreamBedThicknessPestItem: string;
+    StreamWidthPestItem: string;
+    StreamDepthPestItem: string;
+
+    HydraulicConductivityPestSeriesItem: string;
+    StreambedElevationPestSeriesItem: string;
+    StreamBedThicknessPestSeriesItem: string;
+    StreamWidthPestSeriesItem: string;
+    StreamDepthPestSeriesItem: string;
+
+    HydraulicConductivityPestSeriesMethod: TPestParamMethod;
+    StreambedElevationPestSeriesMethod: TPestParamMethod;
+    StreamBedThicknessPestSeriesMethod: TPestParamMethod;
+    StreamWidthPestSeriesMethod: TPestParamMethod;
+    StreamDepthPestSeriesMethod: TPestParamMethod;
+}
 end;
 
 procedure TSfrSegmentRecord.RecordStrings(Strings: TStringList);
@@ -1218,6 +1547,18 @@ begin
   Strings.Add(StreamBedThicknessAnnotation);
   Strings.Add(StreamWidthAnnotation);
   Strings.Add(StreamDepthAnnotation);
+
+  Strings.Add(HydraulicConductivityPestItem);
+  Strings.Add(StreambedElevationPestItem);
+  Strings.Add(StreamBedThicknessPestItem);
+  Strings.Add(StreamWidthPestItem);
+  Strings.Add(StreamDepthPestItem);
+
+  Strings.Add(HydraulicConductivityPestSeriesItem);
+  Strings.Add(StreambedElevationPestSeriesItem);
+  Strings.Add(StreamBedThicknessPestSeriesItem);
+  Strings.Add(StreamWidthPestSeriesItem);
+  Strings.Add(StreamDepthPestSeriesItem);
 end;
 
 procedure TSfrSegmentRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1237,11 +1578,24 @@ begin
   StreamBedThicknessAnnotation := Annotations[ReadCompInt(Decomp)];
   StreamWidthAnnotation := Annotations[ReadCompInt(Decomp)];
   StreamDepthAnnotation := Annotations[ReadCompInt(Decomp)];
-//  HydraulicConductivityAnnotation := ReadCompString(Decomp, Annotations);
-//  StreambedElevationAnnotation := ReadCompString(Decomp, Annotations);
-//  StreamBedThicknessAnnotation := ReadCompString(Decomp, Annotations);
-//  StreamWidthAnnotation := ReadCompString(Decomp, Annotations);
-//  StreamDepthAnnotation := ReadCompString(Decomp, Annotations);
+
+  HydraulicConductivityPestItem := Annotations[ReadCompInt(Decomp)];
+  StreambedElevationPestItem := Annotations[ReadCompInt(Decomp)];
+  StreamBedThicknessPestItem := Annotations[ReadCompInt(Decomp)];
+  StreamWidthPestItem := Annotations[ReadCompInt(Decomp)];
+  StreamDepthPestItem := Annotations[ReadCompInt(Decomp)];
+
+  HydraulicConductivityPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  StreambedElevationPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  StreamBedThicknessPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  StreamWidthPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  StreamDepthPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+
+  HydraulicConductivityPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  StreambedElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  StreamBedThicknessPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  StreamWidthPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  StreamDepthPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TSfrSegmentStorage }

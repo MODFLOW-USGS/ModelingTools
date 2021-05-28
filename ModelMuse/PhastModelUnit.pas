@@ -3369,6 +3369,12 @@ that affects the model output should also have a comment. }
       : TModflowSteadyParameter;
     procedure ClearPestParmDictionary;
     procedure InvalidateMfSfrReachLength(Sender: TObject);
+    procedure InvalidateMfSfrUpstreamDepth(Sender: TObject);
+    procedure InvalidateMfSfrDownstreamDepth(Sender: TObject);
+    procedure InvalidateMfSfrRunoff(Sender: TObject);
+    procedure InvalidateMfSfrPrecipitation(Sender: TObject);
+    procedure InvalidateMfSfrFlow(Sender: TObject);
+    procedure InvalidateMfSfrEvapotranspiration(Sender: TObject);
     property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
       read GetShortestHorizontalBlockEdge;
   published
@@ -4510,19 +4516,12 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfSfrData(Sender: TObject);
     procedure InvalidateMfSfrSegmentReachAndIcalc(Sender: TObject);
     procedure InvalidateMfSfrIprior(Sender: TObject);
-    procedure InvalidateMfSfrFlow(Sender: TObject);
-    procedure InvalidateMfSfrRunoff(Sender: TObject);
-    procedure InvalidateMfSfrPrecipitation(Sender: TObject);
-    procedure InvalidateMfSfrEvapotranspiration(Sender: TObject);
     procedure InvalidateMfSfrChannelRoughness(Sender: TObject);
     procedure InvalidateMfSfrBankRoughness(Sender: TObject);
     procedure InvalidateMfSfrDepthCoefficient(Sender: TObject);
     procedure InvalidateMfSfrDepthExponent(Sender: TObject);
     procedure InvalidateMfSfrWidthCoefficient(Sender: TObject);
     procedure InvalidateMfSfrWidthExponent(Sender: TObject);
-    procedure InvalidateMfSfrUpstreamDepth(Sender: TObject);
-    procedure InvalidateMfSfrDownstreamDepth(Sender: TObject);
-
     property ArchiveName: string read GetArchiveName write SetArchiveName;
     procedure CreateArchive(const FileName: string; const ArchiveCommand: string = '');
     function DefaultHigherElevationFormula(ViewDirection: TViewDirection;
@@ -23937,11 +23936,6 @@ begin
   ModflowPackages.SfrPackage.MfSfrDownstreamBrooksCorey.Invalidate;
 end;
 
-procedure TPhastModel.InvalidateMfSfrDownstreamDepth(Sender: TObject);
-begin
-  ModflowPackages.SfrPackage.MfSfrDownstreamDepth.Invalidate;
-end;
-
 procedure TCustomModel.InvalidateMfSfrDownstreamElevation(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.MfSfrDownstreamElevation.Invalidate;
@@ -24886,16 +24880,6 @@ begin
   ModflowPackages.SfrPackage.MfSfrDownstreamWidth.Invalidate;
 end;
 
-procedure TPhastModel.InvalidateMfSfrEvapotranspiration(Sender: TObject);
-begin
-  ModflowPackages.SfrPackage.MfSfrEvapotranspiration.Invalidate;
-end;
-
-procedure TPhastModel.InvalidateMfSfrFlow(Sender: TObject);
-begin
-  ModflowPackages.SfrPackage.MfSfrFlow.Invalidate;
-end;
-
 procedure TCustomModel.InvalidateMfSfrInitialWaterContent(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.MfSfrInitialWaterContent.Invalidate;
@@ -24904,16 +24888,6 @@ end;
 procedure TPhastModel.InvalidateMfSfrIprior(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.MfSfrIprior.Invalidate;
-end;
-
-procedure TPhastModel.InvalidateMfSfrPrecipitation(Sender: TObject);
-begin
-  ModflowPackages.SfrPackage.MfSfrPrecipitation.Invalidate;
-end;
-
-procedure TPhastModel.InvalidateMfSfrRunoff(Sender: TObject);
-begin
-  ModflowPackages.SfrPackage.MfSfrRunoff.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfSfrStreamK(Sender: TObject);
@@ -24945,11 +24919,6 @@ end;
 procedure TCustomModel.InvalidateMfSfrUpstreamBrooksCorey(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.MfSfrUpstreamBrooksCorey.Invalidate;
-end;
-
-procedure TPhastModel.InvalidateMfSfrUpstreamDepth(Sender: TObject);
-begin
-  ModflowPackages.SfrPackage.MfSfrUpstreamDepth.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfSfrUpstreamElevation(Sender: TObject);
@@ -47627,6 +47596,36 @@ end;
 procedure TCustomModel.InvalidateMfSfrReachLength(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.MfSfrReachLength.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfSfrUpstreamDepth(Sender: TObject);
+begin
+  ModflowPackages.SfrPackage.MfSfrUpstreamDepth.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfSfrDownstreamDepth(Sender: TObject);
+begin
+  ModflowPackages.SfrPackage.MfSfrDownstreamDepth.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfSfrRunoff(Sender: TObject);
+begin
+  ModflowPackages.SfrPackage.MfSfrRunoff.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfSfrPrecipitation(Sender: TObject);
+begin
+  ModflowPackages.SfrPackage.MfSfrPrecipitation.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfSfrFlow(Sender: TObject);
+begin
+  ModflowPackages.SfrPackage.MfSfrFlow.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfSfrEvapotranspiration(Sender: TObject);
+begin
+  ModflowPackages.SfrPackage.MfSfrEvapotranspiration.Invalidate;
 end;
 
 initialization

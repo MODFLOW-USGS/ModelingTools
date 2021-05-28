@@ -902,6 +902,10 @@ begin
               Formula := Format('(%0:s) + %:g', [Formula, SeriesParam.Value]);
             end;
         end;
+//      end
+//      else
+//      begin
+//        BoundaryPestSeriesName[FormulaIndex] := '';
       end;
     end;
 

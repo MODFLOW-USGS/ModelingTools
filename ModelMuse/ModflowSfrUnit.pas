@@ -183,6 +183,21 @@ type
     FPestPrecipFormula: TFormulaObject;
     FPestEvapFormula: TFormulaObject;
     FPestRunoffFormula: TFormulaObject;
+    FPestDownstreamBedElevationObserver: TObserver;
+    FPestDownstreamBedThicknessObserver: TObserver;
+    FPestDownstreamDepthObserver: TObserver;
+    FPestDownstreamKObserver: TObserver;
+    FPestDownstreamWidthObserver: TObserver;
+    FPestEvapObserver: TObserver;
+    FPestFlowObserver: TObserver;
+    FPestPrecipObserver: TObserver;
+    FPestRunoffObserver: TObserver;
+    FPestUpstreamBedElevationObserver: TObserver;
+    FPestUpstreamBedThicknessObserver: TObserver;
+    FPestUpstreamDepthObserver: TObserver;
+    FPestUpstreamKObserver: TObserver;
+    FPestUpstreamWidthObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetSegmentNumber(const Value: integer);
     procedure SetChannelValues(const Value: TSfrChannelCollection);
     procedure SetUpstreamSegmentValues(const Value: TSfrSegmentCollection);
@@ -584,13 +599,14 @@ var
 implementation
 
 uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
-  SysUtils;
+  SysUtils, frmGoPhastUnit;
 
 { TSfrBoundary }
 
 procedure TSfrBoundary.Assign(Source: TPersistent);
 var
   Sfr: TSfrBoundary;
+  Index: Integer;
 begin
   if Source is TSfrBoundary then
   begin
@@ -625,6 +641,13 @@ begin
     GageLocation := Sfr.GageLocation;
     ExternalFlow := Sfr.ExternalFlow;
     Observations := Sfr.Observations;
+
+    for Index := UpstreamKPosition to RunoffPosition do
+    begin
+      PestBoundaryFormula[Index] := Sfr.PestBoundaryFormula[Index];
+      PestBoundaryMethod[Index] := Sfr.PestBoundaryMethod[Index];
+    end;
+
   end;
   inherited;
 end;
@@ -681,7 +704,7 @@ end;
 
 function TSfrBoundary.BoundaryObserverPrefix: string;
 begin
-
+  result := 'PestSfr2005_';
 end;
 
 procedure TSfrBoundary.Clear;
@@ -701,6 +724,7 @@ end;
 constructor TSfrBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 var
   OnInvalidateModelEvent: TNotifyEvent;
+  Index: Integer;
 begin
   if Model = nil then
   begin
@@ -731,6 +755,16 @@ begin
   FExternalFlow := TExternalFlowProperties.Create(Model);
 
   FObservations := TSfrObservations.Create(OnInvalidateModelEvent, ScreenObject);
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  for Index := UpstreamKPosition to RunoffPosition do
+  begin
+    PestBoundaryFormula[Index] := '';
+    PestBoundaryMethod[Index] := DefaultBoundaryMethod(Index);
+  end;
 end;
 
 procedure TSfrBoundary.CreateFormulaObjects;
@@ -777,10 +811,74 @@ end;
 class function TSfrBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
-
+  case FormulaIndex of
+    UpstreamKPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UpstreamBedThicknessPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UpstreamBedElevationPosition:
+      begin
+        result := ppmAdd;
+      end;
+    UpstreamWidthPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UpstreamDepthPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    DownstreamKPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    DownstreamBedThicknessPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    DownstreamBedElevationPosition:
+      begin
+        result := ppmAdd;
+      end;
+    DownstreamWidthPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    DownstreamDepthPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    FlowPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    PrecipPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    EvapPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    RunoffPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 destructor TSfrBoundary.Destroy;
+var
+  Index: Integer;
 begin
   FreeAndNil(FObservations);
   FreeAndNil(FExternalFlow);
@@ -793,6 +891,10 @@ begin
   FreeAndNil(FUpstreamSegmentValues);
   FreeAndNil(FChannelValues);
   FreeAndNil(FParamIcalc);
+  for Index := UpstreamKPosition to RunoffPosition do
+  begin
+    PestBoundaryFormula[Index] := '';
+  end;
   inherited;
 end;
 
@@ -1025,13 +1127,137 @@ end;
 
 function TSfrBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
-
+  case FormulaIndex of
+    UpstreamKPosition:
+      begin
+        result := PestUpstreamKFormula;
+      end;
+    UpstreamBedThicknessPosition:
+      begin
+        result := PestUpstreamBedThicknessFormula;
+      end;
+    UpstreamBedElevationPosition:
+      begin
+        result := PestUpstreamBedElevationFormula;
+      end;
+    UpstreamWidthPosition:
+      begin
+        result := PestUpstreamWidthFormula;
+      end;
+    UpstreamDepthPosition:
+      begin
+        result := PestUpstreamDepthFormula;
+      end;
+    DownstreamKPosition:
+      begin
+        result := PestDownstreamKFormula;
+      end;
+    DownstreamBedThicknessPosition:
+      begin
+        result := PestDownstreamBedThicknessFormula;
+      end;
+    DownstreamBedElevationPosition:
+      begin
+        result := PestDownstreamBedElevationFormula;
+      end;
+    DownstreamWidthPosition:
+      begin
+        result := PestDownstreamWidthFormula;
+      end;
+    DownstreamDepthPosition:
+      begin
+        result := PestDownstreamDepthFormula;
+      end;
+    FlowPosition:
+      begin
+        result := PestFlowFormula;
+      end;
+    PrecipPosition:
+      begin
+        result := PestPrecipFormula;
+      end;
+    EvapPosition:
+      begin
+        result := PestEvapFormula;
+      end;
+    RunoffPosition:
+      begin
+        result := PestRunoffFormula;
+      end;
+    else
+      begin
+        result := '';
+        Assert(False);
+      end;
+  end;
 end;
 
 function TSfrBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
-
+  case FormulaIndex of
+    UpstreamKPosition:
+      begin
+        result := PestUpstreamKMethod;
+      end;
+    UpstreamBedThicknessPosition:
+      begin
+        result := PestUpstreamBedThicknessMethod;
+      end;
+    UpstreamBedElevationPosition:
+      begin
+        result := PestUpstreamBedElevationMethod;
+      end;
+    UpstreamWidthPosition:
+      begin
+        result := PestUpstreamWidthMethod;
+      end;
+    UpstreamDepthPosition:
+      begin
+        result := PestUpstreamDepthMethod;
+      end;
+    DownstreamKPosition:
+      begin
+        result := PestDownstreamKMethod;
+      end;
+    DownstreamBedThicknessPosition:
+      begin
+        result := PestDownstreamBedThicknessMethod;
+      end;
+    DownstreamBedElevationPosition:
+      begin
+        result := PestDownstreamBedElevationMethod;
+      end;
+    DownstreamWidthPosition:
+      begin
+        result := PestDownstreamWidthMethod;
+      end;
+    DownstreamDepthPosition:
+      begin
+        result := PestDownstreamDepthMethod;
+      end;
+    FlowPosition:
+      begin
+        result := PestFlowMethod;
+      end;
+    PrecipPosition:
+      begin
+        result := PestPrecipMethod;
+      end;
+    EvapPosition:
+      begin
+        result := PestEvapMethod;
+      end;
+    RunoffPosition:
+      begin
+        result := PestRunoffMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 function TSfrBoundary.GetPestDownstreamBedElevationFormula: string;
@@ -1045,7 +1271,12 @@ end;
 
 function TSfrBoundary.GetPestDownstreamBedElevationObserver: TObserver;
 begin
-
+  if FPestDownstreamBedElevationObserver = nil then
+  begin
+    CreateObserver('PestDownstreamBedElevation_', FPestDownstreamBedElevationObserver, nil);
+    FPestDownstreamBedElevationObserver.OnUpToDateSet := InvalidateDownstreamBedElevationData;
+  end;
+  result := FPestDownstreamBedElevationObserver;
 end;
 
 function TSfrBoundary.GetPestDownstreamBedThicknessFormula: string;
@@ -1059,7 +1290,12 @@ end;
 
 function TSfrBoundary.GetPestDownstreamBedThicknessObserver: TObserver;
 begin
-
+  if FPestDownstreamBedThicknessObserver = nil then
+  begin
+    CreateObserver('PestDownstreamBedThickness_', FPestDownstreamBedThicknessObserver, nil);
+    FPestDownstreamBedThicknessObserver.OnUpToDateSet := InvalidateDownstreamBedThicknessData;
+  end;
+  result := FPestDownstreamBedThicknessObserver;
 end;
 
 function TSfrBoundary.GetPestDownstreamDepthFormula: string;
@@ -1073,7 +1309,12 @@ end;
 
 function TSfrBoundary.GetPestDownstreamDepthObserver: TObserver;
 begin
-
+  if FPestDownstreamDepthObserver = nil then
+  begin
+    CreateObserver('PestDownstreamDepth_', FPestDownstreamDepthObserver, nil);
+    FPestDownstreamDepthObserver.OnUpToDateSet := InvalidateDownstreamDepthData;
+  end;
+  result := FPestDownstreamDepthObserver;
 end;
 
 function TSfrBoundary.GetPestDownstreamKFormula: string;
@@ -1087,7 +1328,12 @@ end;
 
 function TSfrBoundary.GetPestDownstreamKObserver: TObserver;
 begin
-
+  if FPestDownstreamKObserver = nil then
+  begin
+    CreateObserver('PestDownstreamK_', FPestDownstreamKObserver, nil);
+    FPestDownstreamKObserver.OnUpToDateSet := InvalidateDownstreamKData;
+  end;
+  result := FPestDownstreamKObserver;
 end;
 
 function TSfrBoundary.GetPestDownstreamWidthFormula: string;
@@ -1101,7 +1347,12 @@ end;
 
 function TSfrBoundary.GetPestDownstreamWidthObserver: TObserver;
 begin
-
+  if FPestDownstreamWidthObserver = nil then
+  begin
+    CreateObserver('PestDownstreamWidth_', FPestDownstreamWidthObserver, nil);
+    FPestDownstreamWidthObserver.OnUpToDateSet := InvalidateDownstreamWidthData;
+  end;
+  result := FPestDownstreamWidthObserver;
 end;
 
 function TSfrBoundary.GetPestEvapFormula: string;
@@ -1115,7 +1366,12 @@ end;
 
 function TSfrBoundary.GetPestEvapObserver: TObserver;
 begin
-
+  if FPestEvapObserver = nil then
+  begin
+    CreateObserver('PestEvap_', FPestEvapObserver, nil);
+    FPestEvapObserver.OnUpToDateSet := InvalidateEvapData;
+  end;
+  result := FPestEvapObserver;
 end;
 
 function TSfrBoundary.GetPestFlowFormula: string;
@@ -1129,7 +1385,12 @@ end;
 
 function TSfrBoundary.GetPestFlowObserver: TObserver;
 begin
-
+  if FPestFlowObserver = nil then
+  begin
+    CreateObserver('PestFlow_', FPestFlowObserver, nil);
+    FPestFlowObserver.OnUpToDateSet := InvalidateFlowData;
+  end;
+  result := FPestFlowObserver;
 end;
 
 function TSfrBoundary.GetPestPrecipFormula: string;
@@ -1143,7 +1404,12 @@ end;
 
 function TSfrBoundary.GetPestPrecipObserver: TObserver;
 begin
-
+  if FPestPrecipObserver = nil then
+  begin
+    CreateObserver('PestPrecip_', FPestPrecipObserver, nil);
+    FPestPrecipObserver.OnUpToDateSet := InvalidatePrecipData;
+  end;
+  result := FPestPrecipObserver;
 end;
 
 function TSfrBoundary.GetPestRunoffFormula: string;
@@ -1157,7 +1423,12 @@ end;
 
 function TSfrBoundary.GetPestRunoffObserver: TObserver;
 begin
-
+  if FPestRunoffObserver = nil then
+  begin
+    CreateObserver('PestRunoff_', FPestRunoffObserver, nil);
+    FPestRunoffObserver.OnUpToDateSet := InvalidateRunoffData;
+  end;
+  result := FPestRunoffObserver;
 end;
 
 function TSfrBoundary.GetPestUpstreamBedElevationFormula: string;
@@ -1171,7 +1442,12 @@ end;
 
 function TSfrBoundary.GetPestUpstreamBedElevationObserver: TObserver;
 begin
-
+  if FPestUpstreamBedElevationObserver = nil then
+  begin
+    CreateObserver('PestUpstreamBedElevation_', FPestUpstreamBedElevationObserver, nil);
+    FPestUpstreamBedElevationObserver.OnUpToDateSet := InvalidateUpstreamBedElevationData;
+  end;
+  result := FPestUpstreamBedElevationObserver;
 end;
 
 function TSfrBoundary.GetPestUpstreamBedThicknessFormula: string;
@@ -1185,7 +1461,12 @@ end;
 
 function TSfrBoundary.GetPestUpstreamBedThicknessObserver: TObserver;
 begin
-
+  if FPestUpstreamBedThicknessObserver = nil then
+  begin
+    CreateObserver('PestUpstreamBedThickness_', FPestUpstreamBedThicknessObserver, nil);
+    FPestUpstreamBedThicknessObserver.OnUpToDateSet := InvalidateUpstreamBedThicknessData;
+  end;
+  result := FPestUpstreamBedThicknessObserver;
 end;
 
 function TSfrBoundary.GetPestUpstreamDepthFormula: string;
@@ -1199,7 +1480,12 @@ end;
 
 function TSfrBoundary.GetPestUpstreamDepthObserver: TObserver;
 begin
-
+  if FPestUpstreamDepthObserver = nil then
+  begin
+    CreateObserver('PestUpstreamDepth_', FPestUpstreamDepthObserver, nil);
+    FPestUpstreamDepthObserver.OnUpToDateSet := InvalidateUpstreamDepthData;
+  end;
+  result := FPestUpstreamDepthObserver;
 end;
 
 function TSfrBoundary.GetPestUpstreamKFormula: string;
@@ -1213,7 +1499,12 @@ end;
 
 function TSfrBoundary.GetPestUpstreamKObserver: TObserver;
 begin
-
+  if FPestUpstreamKObserver = nil then
+  begin
+    CreateObserver('PestUpstreamK_', FPestUpstreamKObserver, nil);
+    FPestUpstreamKObserver.OnUpToDateSet := InvalidateUpstreamKData;
+  end;
+  result := FPestUpstreamKObserver;
 end;
 
 function TSfrBoundary.GetPestUpstreamWidthFormula: string;
@@ -1227,23 +1518,130 @@ end;
 
 function TSfrBoundary.GetPestUpstreamWidthObserver: TObserver;
 begin
-
+  if FPestUpstreamWidthObserver = nil then
+  begin
+    CreateObserver('PestUpstreamWidth_', FPestUpstreamWidthObserver, nil);
+    FPestUpstreamWidthObserver.OnUpToDateSet := InvalidateUpstreamWidthData;
+  end;
+  result := FPestUpstreamWidthObserver;
 end;
 
 procedure TSfrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
-  inherited;
+  if Sender = FPestUpstreamKFormula then
+  begin
+    if UpstreamKPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamKPosition]);
+    end;
+  end;
+  if Sender = FPestUpstreamBedThicknessFormula then
+  begin
+    if UpstreamBedThicknessPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamBedThicknessPosition]);
+    end;
+  end;
+  if Sender = FPestUpstreamBedElevationFormula then
+  begin
+    if UpstreamBedElevationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamBedElevationPosition]);
+    end;
+  end;
+  if Sender = FPestUpstreamWidthFormula then
+  begin
+    if UpstreamWidthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamWidthPosition]);
+    end;
+  end;
+  if Sender = FPestUpstreamDepthFormula then
+  begin
+    if UpstreamDepthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamDepthPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamKFormula then
+  begin
+    if DownstreamKPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamKPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamBedThicknessFormula then
+  begin
+    if DownstreamBedThicknessPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamBedThicknessPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamBedElevationFormula then
+  begin
+    if DownstreamBedElevationPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamBedElevationPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamWidthFormula then
+  begin
+    if DownstreamWidthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamWidthPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamDepthFormula then
+  begin
+    if DownstreamDepthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamDepthPosition]);
+    end;
+  end;
+  if Sender = FPestFlowFormula then
+  begin
+    if FlowPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[FlowPosition]);
+    end;
+  end;
+  if Sender = FPestPrecipFormula then
+  begin
+    if PrecipPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[PrecipPosition]);
+    end;
+  end;
+  if Sender = FPestEvapFormula then
+  begin
+    if EvapPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[EvapPosition]);
+    end;
+  end;
+  if Sender = FPestRunoffFormula then
+  begin
+    if RunoffPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[RunoffPosition]);
+    end;
+  end;
 
 end;
 
 function TSfrBoundary.GetUsedObserver: TObserver;
 begin
-
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestSFR_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
 end;
 
 procedure TSfrBoundary.HandleChangedValue(Observer: TObserver);
 begin
-
+  InvalidateDisplay;
 end;
 
 procedure TSfrBoundary.InvalidateDisplay;
@@ -1367,15 +1765,137 @@ end;
 procedure TSfrBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
-  inherited;
-
+  case FormulaIndex of
+    UpstreamKPosition:
+      begin
+        PestUpstreamKFormula := Value;
+      end;
+    UpstreamBedThicknessPosition:
+      begin
+        PestUpstreamBedThicknessFormula := Value;
+      end;
+    UpstreamBedElevationPosition:
+      begin
+        PestUpstreamBedElevationFormula := Value;
+      end;
+    UpstreamWidthPosition:
+      begin
+        PestUpstreamWidthFormula := Value;
+      end;
+    UpstreamDepthPosition:
+      begin
+        PestUpstreamDepthFormula := Value;
+      end;
+    DownstreamKPosition:
+      begin
+        PestDownstreamKFormula := Value;
+      end;
+    DownstreamBedThicknessPosition:
+      begin
+        PestDownstreamBedThicknessFormula := Value;
+      end;
+    DownstreamBedElevationPosition:
+      begin
+        PestDownstreamBedElevationFormula := Value;
+      end;
+    DownstreamWidthPosition:
+      begin
+        PestDownstreamWidthFormula := Value;
+      end;
+    DownstreamDepthPosition:
+      begin
+        PestDownstreamDepthFormula := Value;
+      end;
+    FlowPosition:
+      begin
+        PestFlowFormula := Value;
+      end;
+    PrecipPosition:
+      begin
+        PestPrecipFormula := Value;
+      end;
+    EvapPosition:
+      begin
+        PestEvapFormula := Value;
+      end;
+    RunoffPosition:
+      begin
+        PestRunoffFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 procedure TSfrBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
-  inherited;
-
+  case FormulaIndex of
+    UpstreamKPosition:
+      begin
+        PestUpstreamKMethod := Value;
+      end;
+    UpstreamBedThicknessPosition:
+      begin
+        PestUpstreamBedThicknessMethod := Value;
+      end;
+    UpstreamBedElevationPosition:
+      begin
+        PestUpstreamBedElevationMethod := Value;
+      end;
+    UpstreamWidthPosition:
+      begin
+        PestUpstreamWidthMethod := Value;
+      end;
+    UpstreamDepthPosition:
+      begin
+        PestUpstreamDepthMethod := Value;
+      end;
+    DownstreamKPosition:
+      begin
+        PestDownstreamKMethod := Value;
+      end;
+    DownstreamBedThicknessPosition:
+      begin
+        PestDownstreamBedThicknessMethod := Value;
+      end;
+    DownstreamBedElevationPosition:
+      begin
+        PestDownstreamBedElevationMethod := Value;
+      end;
+    DownstreamWidthPosition:
+      begin
+        PestDownstreamWidthMethod := Value;
+      end;
+    DownstreamDepthPosition:
+      begin
+        PestDownstreamDepthMethod := Value;
+      end;
+    FlowPosition:
+      begin
+        PestFlowMethod := Value;
+      end;
+    PrecipPosition:
+      begin
+        PestPrecipMethod := Value;
+      end;
+    EvapPosition:
+      begin
+        PestEvapMethod := Value;
+      end;
+    RunoffPosition:
+      begin
+        PestRunoffMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 procedure TSfrBoundary.SetPestDownstreamBedElevationFormula(
@@ -1647,48 +2167,246 @@ begin
 end;
 
 procedure TSfrBoundary.InvalidateDownstreamBedElevationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamElevation(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamElevation(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateDownstreamBedThicknessData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamThickness(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamThickness(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateDownstreamDepthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamDepth(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamDepth(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateDownstreamKData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamHydraulicConductivity(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamHydraulicConductivity(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateDownstreamWidthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamWidth(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamWidth(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateEvapData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrEvapotranspiration(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrEvapotranspiration(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateFlowData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrFlow(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrFlow(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidatePrecipData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrPrecipitation(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrPrecipitation(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateRunoffData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrRunoff(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrRunoff(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateSegmentNumberArray;
@@ -1702,28 +2420,138 @@ begin
 end;
 
 procedure TSfrBoundary.InvalidateUpstreamBedElevationData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamElevation(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamElevation(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateUpstreamBedThicknessData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamThickness(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamThickness(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateUpstreamDepthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamDepth(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamDepth(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateUpstreamKData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamHydraulicConductivity(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamHydraulicConductivity(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.InvalidateUpstreamWidthData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamWidth(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamWidth(self);
+    end;
+  end;
 end;
 
 procedure TSfrBoundary.ReplaceGUID;

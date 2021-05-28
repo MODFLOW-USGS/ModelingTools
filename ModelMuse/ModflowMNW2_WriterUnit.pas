@@ -1087,8 +1087,6 @@ begin
     PestSeries := WellBoundary.PestLimitingWaterLevelFormula;
     Method := WellBoundary.PestLimitingWaterLevelMethod;
     WritePestFormulaOrValue(PestName, PestSeries, Method, Hlim);
-//    WriteFloat(Hlim);
-//    WriteFormulaOrValueBasedOnAPestName(PestName, Hlim, -1, 0, 0);
 
     QCut := GetQCut(TimeItem);
     Comment := ' # Data Set 4B: Hlim, QCut';
@@ -1100,16 +1098,12 @@ begin
       PestSeries := WellBoundary.PestInactivationPumpingRateFormula;
       Method := WellBoundary.PestInactivationPumpingRateMethod;
       WritePestFormulaOrValue(PestName, PestSeries, Method, Qfrcmn);
-//      WriteFloat(Qfrcmn);
-//      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmn, -1, 0, 0);
 
       Qfrcmx := TimeItem.ReactivationPumpingRateValue;
       PestName := TimeItem.BoundaryPestName[ReactivationPumpingRatePosition];
       PestSeries := WellBoundary.PestReactivationPumpingRateFormula;
       Method := WellBoundary.PestReactivationPumpingRateMethod;
       WritePestFormulaOrValue(PestName, PestSeries, Method, Qfrcmx);
-//      WriteFloat(Qfrcmx);
-//      WriteFormulaOrValueBasedOnAPestName(PestName, Qfrcmx, -1, 0, 0);
 
       Comment := Comment + ', Qfrcmn, Qfrcmx';
     end;
@@ -1158,8 +1152,7 @@ begin
   PestSeries := WellBoundary.PestPumpingRateFormula;
   Method := WellBoundary.PestPumpingRateMethod;
   WritePestFormulaOrValue(PestName, PestSeries, Method, QDes);
-//  WriteFloat(QDes);
-//  WriteFormulaOrValueBasedOnAPestName(PestName, QDes, -1, 0, 0);
+
   Comment := ' # Data Set 4A: WELLID, QDes';
 
   if WellBoundary.AdjustPumping then
@@ -1169,8 +1162,7 @@ begin
     PestSeries := WellBoundary.PestHeadCapacityMultiplierFormula;
     Method := WellBoundary.PestHeadCapacityMultiplierMethod;
     WritePestFormulaOrValue(PestName, PestSeries, Method, CapMult);
-//    WriteFloat(CapMult);
-//    WriteFormulaOrValueBasedOnAPestName(PestName, CapMult, -1, 0, 0);
+
     Comment := Comment + ', CapMult';
   end;
   IFACE := (WellBoundary.ScreenObject as TScreenObject).IFace;

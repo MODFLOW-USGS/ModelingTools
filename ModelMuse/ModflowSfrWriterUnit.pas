@@ -205,7 +205,7 @@ uses ModflowUnitNumbers, OrderedCollectionUnit, frmErrorsAndWarningsUnit,
   ModflowSfrFlows, ModflowSfrChannelUnit, ModflowSfrEquationUnit,
   ModflowTimeUnit, frmProgressUnit, IntListUnit, Forms,
   ModflowBoundaryUnit, Math, DataSetUnit, ObservationComparisonsUnit,
-  PestObsUnit;
+  PestObsUnit, ModelMuseUtilities;
 
 resourcestring
   StrInvalidStartingTimeStep1 = 'Invalid starting time or missing data for the '
@@ -5885,7 +5885,12 @@ begin
   if ISFROPT in [0, 4, 5] then
   begin
     ValuesWriten := True;
-    WriteFloat(SegmentValues.HydraulicConductivity);
+//    WriteFloat(SegmentValues.HydraulicConductivity);
+    WritePestTemplateFormula(SegmentValues.HydraulicConductivity,
+      SegmentValues.HydraulicConductivityPestItem,
+      SegmentValues.HydraulicConductivityPestSeriesItem,
+      SegmentValues.HydraulicConductivityPestSeriesMethod,
+      PCellLocation(Addr(SegmentValues.Cell)), nil);
     if Parameter then
     begin
       if upstream then
@@ -5911,7 +5916,8 @@ begin
 
     if PSegValue = nil then
     begin
-      AqKx := AquiferKx(SegmentValues.Cell.Layer, SegmentValues.Cell.Row, SegmentValues.Cell.Column);
+      AqKx := AquiferKx(SegmentValues.Cell.Layer, SegmentValues.Cell.Row,
+        SegmentValues.Cell.Column);
       if AqKx > 0 then
       begin
         Ratio := SegmentValues.HydraulicConductivity*ParameterValue/AqKx;
@@ -5941,7 +5947,12 @@ begin
   if WriteValue then
   begin
     ValuesWriten := True;
-    WriteFloat(SegmentValues.StreamBedThickness);
+//    WriteFloat(SegmentValues.StreamBedThickness);
+    WritePestTemplateFormula(SegmentValues.StreamBedThickness,
+      SegmentValues.StreamBedThicknessPestItem,
+      SegmentValues.StreamBedThicknessPestSeriesItem,
+      SegmentValues.StreamBedThicknessPestSeriesMethod,
+      PCellLocation(Addr(SegmentValues.Cell)), nil);
     if upstream then
     begin
       CommentLine := CommentLine + ' THICKM1';
@@ -5955,7 +5966,12 @@ begin
   if WriteValue then
   begin
     ValuesWriten := True;
-    WriteFloat(SegmentValues.StreambedElevation);
+//    WriteFloat(SegmentValues.StreambedElevation);
+    WritePestTemplateFormula(SegmentValues.StreambedElevation,
+      SegmentValues.StreambedElevationPestItem,
+      SegmentValues.StreambedElevationPestSeriesItem,
+      SegmentValues.StreambedElevationPestSeriesMethod,
+      PCellLocation(Addr(SegmentValues.Cell)), nil);
     if upstream then
     begin
       CommentLine := CommentLine + ' ELEVUP';
@@ -5974,7 +5990,12 @@ begin
   if WriteValue then
   begin
     ValuesWriten := True;
-    WriteFloat(SegmentValues.StreamWidth);
+//    WriteFloat(SegmentValues.StreamWidth);
+    WritePestTemplateFormula(SegmentValues.StreamWidth,
+      SegmentValues.StreamWidthPestItem,
+      SegmentValues.StreamWidthPestSeriesItem,
+      SegmentValues.StreamWidthPestSeriesMethod,
+      PCellLocation(Addr(SegmentValues.Cell)), nil);
     if upstream then
     begin
       CommentLine := CommentLine + ' WIDTH1';
@@ -5988,7 +6009,12 @@ begin
   if ParamScreenObjectItem.ICalc = 0 then
   begin
     ValuesWriten := True;
-    WriteFloat(SegmentValues.StreamDepth);
+//    WriteFloat(SegmentValues.StreamDepth);
+    WritePestTemplateFormula(SegmentValues.StreamDepth,
+      SegmentValues.StreamDepthPestItem,
+      SegmentValues.StreamDepthPestSeriesItem,
+      SegmentValues.StreamDepthPestSeriesMethod,
+      PCellLocation(Addr(SegmentValues.Cell)), nil);
     if upstream then
     begin
       CommentLine := CommentLine + ' DEPTH1';
@@ -6367,8 +6393,11 @@ var
   UpstreamScreenObject: TScreenObject;
   DownstreamScreenObject: TScreenObject;
   ScreenObject: TScreenObject;
-
+  ExtendedTemplateCharacter: Char;
+  Formula: string;
+  Fraction: Extended;
 begin
+  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
 //  IsChildModel := Model is TChildModel;
   SubSeg := nil;
   if SubSegIndex >= 0 then
@@ -6540,7 +6569,10 @@ begin
   // FLOW
   if SubSegIndex < 0 then
   begin
-    WriteFloat(SegmentFlow.Flow);
+//    WriteFloat(SegmentFlow.Flow);
+    WritePestFormulaOrValue(SegmentFlow.FlowPestItem,
+      SegmentFlow.FlowPestSeriesItem, SegmentFlow.FlowPestSeriesMethod,
+      SegmentFlow.Flow);
   end
   else
   begin
@@ -6548,7 +6580,10 @@ begin
     begin
       if FirstSegmentInParent then
       begin
-        WriteFloat(SegmentFlow.Flow);
+//        WriteFloat(SegmentFlow.Flow);
+        WritePestFormulaOrValue(SegmentFlow.FlowPestItem,
+          SegmentFlow.FlowPestSeriesItem, SegmentFlow.FlowPestSeriesMethod,
+          SegmentFlow.Flow);
       end
       else
       begin
@@ -6559,7 +6594,10 @@ begin
     begin
       if SubSegIndex = 0 then
       begin
-        WriteFloat(SegmentFlow.Flow);
+//        WriteFloat(SegmentFlow.Flow);
+        WritePestFormulaOrValue(SegmentFlow.FlowPestItem,
+          SegmentFlow.FlowPestSeriesItem, SegmentFlow.FlowPestSeriesMethod,
+          SegmentFlow.Flow);
       end
       else
       begin
@@ -6570,6 +6608,14 @@ begin
 
   // RUNOFF
   RUNOFF := SegmentFlow.Runnoff;
+  Formula := GetPestTemplateFormula(SegmentFlow.Runnoff,
+    SegmentFlow.RunnoffPestItem, SegmentFlow.RunnoffPestSeriesItem,
+    SegmentFlow.RunnoffPestSeriesMethod, nil, nil);
+  if (SegmentFlow.RunnoffPestItem <> '') or (SegmentFlow.RunnoffPestSeriesItem <> '') then
+  begin
+    FPestParamUsed := True;
+  end;
+
   if SubSegIndex >= 0 then
   begin
     // Compute length of parent segment.
@@ -6585,20 +6631,41 @@ begin
     begin
       if FIsChildModel then
       begin
-        RUNOFF := RUNOFF * SubSeg.FAssociatedLgrSubSeg.FTotalLength/TotalParentSegLength;
+        Fraction := SubSeg.FAssociatedLgrSubSeg.FTotalLength/TotalParentSegLength;
       end
       else
       begin
-        RUNOFF := RUNOFF * SubSeg.FTotalLength/TotalParentSegLength;
+        Fraction := SubSeg.FTotalLength/TotalParentSegLength;
       end;
+      RUNOFF := RUNOFF * Fraction;
+      Formula := Format('0:s * (%1:s)', [FortranFloatToStr(Fraction), Formula]);
     end;
   end;
-  WriteFloat(RUNOFF);
+  if Model.PestUsed and WritingTemplate and
+    ((SegmentFlow.RunnoffPestItem <> '')
+    or (SegmentFlow.RunnoffPestSeriesItem <> '')) then
+  begin
+    Formula := Format(' %0:s                    %1:s%0:s ',
+      [ExtendedTemplateCharacter, Formula]);
+    WriteString(Formula);
+  end
+  else
+  begin
+    WriteFloat(RUNOFF);
+  end;
 
   // ETSW
-  WriteFloat(SegmentFlow.Evapotranspiration);
+//  WriteFloat(SegmentFlow.Evapotranspiration);
+  WritePestFormulaOrValue(SegmentFlow.EvapotranspirationPestItem,
+    SegmentFlow.EvapotranspirationPestSeriesItem,
+    SegmentFlow.EvapotranspirationPestSeriesMethod,
+    SegmentFlow.Evapotranspiration);
   // PPTSW
-  WriteFloat(SegmentFlow.Precipitation);
+//  WriteFloat(SegmentFlow.Precipitation);
+  WritePestFormulaOrValue(SegmentFlow.PrecipitationPestItem,
+    SegmentFlow.PrecipitationPestSeriesItem,
+    SegmentFlow.PrecipitationPestSeriesMethod,
+    SegmentFlow.Precipitation);
   // [ROUGHCH] [ROUGHBK] [CDPTH] [FDPTH]
   if ICALC in [1, 2] then
   begin

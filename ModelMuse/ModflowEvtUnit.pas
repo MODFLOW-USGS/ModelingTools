@@ -748,8 +748,9 @@ begin
   AddBoundary(TEvtStorage.Create(AModel));
 end;
 
-procedure TEvtCollection.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+procedure TEvtCollection.AssignArrayCellValues(DataSets: TList;
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
 var
   EvapotranspirationRateArray: TDataArray;
   Boundary: TEvtStorage;
@@ -857,7 +858,6 @@ begin
   PestSeries.Add(PestRateSeriesName);
   RateMethod := BoundaryGroup.PestBoundaryMethod[BoundaryPosition];
   PestMethods.Add(RateMethod);
-
   RateItems := TStringList.Create;
   PestItemNames.Add(RateItems);
 

@@ -104,10 +104,15 @@ type
     procedure WritePestTemplateLine(AFileName: string);
     function GetPestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
-      ACell: TValueCell): string;
+      ACell: PCellLocation; const AScreenObject: TObject): string;
     procedure WritePestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
-      ACell: TValueCell; FixedLength: Integer = 0; ChangeSign: Boolean = False);
+      ACell: TValueCell; FixedLength: Integer = 0;
+      ChangeSign: Boolean = False); overload;
+    procedure WritePestTemplateFormula(Value: double; PestParValue: string;
+      PestSeriesValue: string; Method: TPestParamMethod;
+      ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer = 0;
+      ChangeSign: Boolean = False); overload;
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
       const DataArrayID: string);
     procedure OpenTempFile(const FileName: string);
@@ -2526,13 +2531,71 @@ procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
   PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
   ACell: TValueCell; FixedLength: Integer; ChangeSign: Boolean);
 var
+//  ExtendedTemplateCharacter: string;
+//  Formula: string;
+  ACellLocation: TCellLocation;
+//  PCellLoc := TCellLocation;
+begin
+//  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+
+  Assert(ACell <> nil);
+  ACellLocation := ACell.CellLocation;
+
+  WritePestTemplateFormula(Value, PestParValue, PestSeriesValue, Method,
+    PCellLocation(Addr(ACellLocation)), ACell.ScreenObject,
+    FixedLength, ChangeSign);
+
+  {
+  Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
+    Method, PCellLocation(Addr(ACellLocation)), ACell.ScreenObject as TScreenObject);
+  if ChangeSign then
+  begin
+    Formula := '-1*' + Formula;
+  end;
+  if Formula <> '' then
+  begin
+    Formula := Format(' %0:s                    %1:s%0:s ',
+      [ExtendedTemplateCharacter, Formula]);
+    WriteString(Formula);
+  end
+  else
+  begin
+    if FixedLength = 0 then
+    begin
+      WriteFloat(Value);
+    end
+    else if FixedLength = 10 then
+    begin
+      WriteF10Float(Value);
+    end
+    else if FixedLength = 15 then
+    begin
+      WriteF15Float(Value);
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+  }
+end;
+
+procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
+  PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
+  ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer;
+  ChangeSign: Boolean);
+var
   ExtendedTemplateCharacter: string;
   Formula: string;
+//  ACellLocation: TCellLocation;
+//  PCellLoc := TCellLocation;
 begin
   ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
 
+//  Assert(ACell <> nil);
+//  ACellLocation := ACell.CellLocation;
   Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
-    Method, ACell);
+    Method, ACell, AScreenObject as TScreenObject);
   if ChangeSign then
   begin
     Formula := '-1*' + Formula;
@@ -2818,7 +2881,8 @@ begin
 end;
 
 function TCustomFileWriter.GetPestTemplateFormula(Value: double; PestParValue,
-  PestSeriesValue: string; Method: TPestParamMethod; ACell: TValueCell): string;
+  PestSeriesValue: string; Method: TPestParamMethod; ACell: PCellLocation;
+  const AScreenObject: TObject): string;
 var
   TemplateCharacter: string;
   ArrayTemplateCharacter: string;
@@ -2832,7 +2896,7 @@ var
     SeriesParam: TModflowSteadyParameter;
     SeriesDataArray: TDataArray;
     DataArrayLayer: Integer;
-    AScreenObject: TScreenObject;
+//    AScreenObject: TScreenObject;
   begin
     SeriesValue := 0;
     SeriesParam := Model.GetPestParameterByName(PestSeriesValue);
@@ -2878,10 +2942,20 @@ var
       end
       else
       begin
-        AScreenObject := ACell.ScreenObject as TScreenObject;
-        frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
-          Format('%0:s was not recognized in %1:s',
-          [PestSeriesValue, AScreenObject.Name]), AScreenObject);
+        if AScreenObject <> nil then
+        begin
+//          Assert(AScreenObject <> nil);
+  //        AScreenObject := ACell.ScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+            Format('%0:s was not recognized in %1:s',
+            [PestSeriesValue, (AScreenObject as TScreenObject).Name]), AScreenObject);
+        end
+        else
+        begin
+          frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+            Format('%0:s was not recognized in %1:s',
+            [PestSeriesValue, '(Unknown)']));
+        end;
       end;
 	  end;
 
@@ -2915,7 +2989,7 @@ var
     Param: TModflowSteadyParameter;
     DataArray: TDataArray;
     DataArrayLayer: Integer;
-    AScreenObject: TScreenObject;
+//    AScreenObject: TScreenObject;
   begin
     ModifierValue := 0;
     Param := Model.GetPestParameterByName(PestParValue);
@@ -2956,10 +3030,20 @@ var
       end
       else
       begin
-        AScreenObject := ACell.ScreenObject as TScreenObject;
-        frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
-          Format('%0:s was not recognized in %1:s',
-          [PestParValue, AScreenObject.Name]), AScreenObject);
+        if AScreenObject <> nil then
+        begin
+//          Assert(AScreenObject <> nil);
+  //        AScreenObject := ACell.ScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+            Format('%0:s was not recognized in %1:s',
+            [PestParValue, (AScreenObject as TScreenObject).Name]), AScreenObject);
+        end
+        else
+        begin
+          frmErrorsAndWarnings.AddError(Model, 'Unrecognized PEST parameter or data set',
+            Format('%0:s was not recognized in %1:s',
+            [PestParValue, '(Unknown)']));
+        end;
       end;
 	  end;
 
@@ -4696,7 +4780,8 @@ var
 begin
   result := 0;
   Packages := Model.ModflowPackages;
-  if Packages.LpfPackage.IsSelected or Packages.UpwPackage.IsSelected or Packages.NpfPackage.IsSelected then
+  if Packages.LpfPackage.IsSelected or Packages.UpwPackage.IsSelected
+    or Packages.NpfPackage.IsSelected then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsKx);
     Assert(DataArray <> nil);
@@ -6323,6 +6408,7 @@ var
     PestName: string;
     PestSeriesName: string;
     PestSeriesMethod: TPestParamMethod;
+    ACellLocation: TCellLocation;
   begin
     for CellIndex := 0 to CellList.Count - 1 do
     begin
@@ -6363,10 +6449,12 @@ var
             begin
               if (PestName <> '') or (PestSeriesName <> '') then
               begin
+                Assert(Cell <> nil);
                 Value := Cell.RealValue[DataTypeIndex, Model];
                 PestSeriesMethod := Cell.PestSeriesMethod[DataTypeIndex];
+                ACellLocation := Cell.CellLocation;
                 Formula := GetPestTemplateFormula(Value, PestName, PestSeriesName,
-                  PestSeriesMethod, Cell);
+                  PestSeriesMethod, PCellLocation(Addr(ACellLocation)), Cell.ScreenObject as TScreenObject);
                 if Formula = '' then
                 begin
                   IsFormula := False;

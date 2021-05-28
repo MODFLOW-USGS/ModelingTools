@@ -2062,7 +2062,7 @@ begin
 //          Method := ppmMultiply;
           HydraulicConductivityFormula := Writer.GetPestTemplateFormula(
             HydraulicConductivity, FPestHydraulicConductivityName,
-            '', ppmMultiply, nil);
+            '', ppmMultiply, nil, nil);
         end
         else
         begin
@@ -2075,7 +2075,7 @@ begin
 //          Method := FPestThicknessSeriesMethod;
           ThicknessFormula := Writer.GetPestTemplateFormula(
             Thickness, FPestThicknessName,
-            '', ppmMultiply, nil);
+            '', ppmMultiply, nil, nil);
         end
         else
         begin
@@ -2391,7 +2391,7 @@ begin
               Method := FPestHydraulicConductivitySeriesMethods[FPriorIndex];
               HydraulicConductivityFormula := Writer.GetPestTemplateFormula(
                 HydraulicConductivity, PestHydraulicConductivityName,
-                PestHydraulicConductivitySeriesName, Method, nil);
+                PestHydraulicConductivitySeriesName, Method, nil, nil);
             end
             else
             begin
@@ -2404,7 +2404,7 @@ begin
               Method := FPestThicknessSeriesMethods[FPriorIndex];
               ThicknessFormula := Writer.GetPestTemplateFormula(
                 Thickness, PestThicknessName,
-                PestThicknessSeriesName, Method, nil);
+                PestThicknessSeriesName, Method, nil, nil);
             end
             else
             begin
