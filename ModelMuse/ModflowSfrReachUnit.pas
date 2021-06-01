@@ -30,6 +30,16 @@ type
     InitialWaterContentAnnotation: string;
     BrooksCoreyExponentAnnotation: string;
     VerticalKAnnotation: string;
+
+    ReachLengthPestItem: string;
+    StreamSlopePestItem: string;
+    HydraulicConductivityPestItem: string;
+    StreambedElevationPestItem: string;
+    StreamBedThicknessPestItem: string;
+    SaturatedWaterContentPestItem: string;
+    InitialWaterContentPestItem: string;
+    BrooksCoreyExponentPestItem: string;
+    VerticalKPestItem: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -223,6 +233,7 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
   public
     property Values: TSfrRecord read FValues write SetValues;
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
@@ -254,6 +265,16 @@ procedure CountArrayBoundaryCellsSfr(var BoundaryCount: Integer;
   DataArray1: TDataArray; DataSets: TList; AModel: TBaseModel;
   ScreenObject: TObject);
 
+const
+  ReachLengthPosition = 0;
+  HydraulicConductivityPosition = 1;
+  StreamBedThicknessPosition = 2;
+  StreambedElevationPosition = 3;
+  StreamSlopePosition = 4;
+  SaturatedWaterContentPosition = 5;
+  InitialWaterContentPosition = 6;
+  BrooksCoreyExponentPosition = 7;
+  VerticalKPosition = 8;
 
 implementation
 
@@ -274,17 +295,6 @@ resourcestring
   StrBrooksCoreyExponen = 'Brooks-Corey exponent';
   StrMaximumVerticalUns = 'Maximum vertical unsaturated hydraulic conductivi' +
   'ty';
-
-const
-  ReachLengthPosition = 0;
-  HydraulicConductivityPosition = 1;
-  StreamBedThicknessPosition = 2;
-  StreambedElevationPosition = 3;
-  StreamSlopePosition = 4;
-  SaturatedWaterContentPosition = 5;
-  InitialWaterContentPosition = 6;
-  BrooksCoreyExponentPosition = 7;
-  VerticalKPosition = 8;
 
 { TSfrItem }
 
@@ -388,23 +398,23 @@ end;
 function TSfrItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    0:
+    ReachLengthPosition:
       result := ReachLength;
-    1:
+    HydraulicConductivityPosition:
       result := HydraulicConductivity;
-    2:
+    StreamBedThicknessPosition:
       result := StreamBedThickness;
-    3:
+    StreambedElevationPosition:
       result := StreambedElevation;
-    4:
+    StreamSlopePosition:
       result := StreamSlope;
-    5:
+    SaturatedWaterContentPosition:
       result := SaturatedWaterContent;
-    6:
+    InitialWaterContentPosition:
       result := InitialWaterContent;
-    7:
+    BrooksCoreyExponentPosition:
       result := BrooksCoreyExponent;
-    8:
+    VerticalKPosition:
       result := VerticalK;
     else Assert(False);
   end;
@@ -579,23 +589,23 @@ end;
 procedure TSfrItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    0:
+    ReachLengthPosition:
       ReachLength := Value;
-    1:
+    HydraulicConductivityPosition:
       HydraulicConductivity := Value;
-    2:
+    StreamBedThicknessPosition:
       StreamBedThickness := Value;
-    3:
+    StreambedElevationPosition:
       StreambedElevation := Value;
-    4:
+    StreamSlopePosition:
       StreamSlope := Value;
-    5:
+    SaturatedWaterContentPosition:
       SaturatedWaterContent := Value;
-    6:
+    InitialWaterContentPosition:
       InitialWaterContent := Value;
-    7:
+    BrooksCoreyExponentPosition:
       BrooksCoreyExponent := Value;
-    8:
+    VerticalKPosition:
       VerticalK := Value;
     else Assert(False);
   end;
@@ -818,6 +828,8 @@ end;
 procedure TSfrCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
   PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+const
+  LGR_Offset = 1;
 var
   ReachLengthArray: TDataArray;
   LgrReachLengthArray: TDataArray;
@@ -840,28 +852,76 @@ var
   Segment: TCellElementSegment;
   PriorCol, PriorRow, PriorLayer: integer;
   LocalModel: TCustomModel;
+  ReachLengthPestItems: TStringList;
+  LocalReachLengthPest: string;
+  HydraulicConductivityPestItems: TStringList;
+  LocalHydraulicConductivityPest: string;
+  StreamBedThicknessPestItems: TStringList;
+  LocalStreamBedThicknessPest: string;
+  StreambedElevationPestItems: TStringList;
+  LocalStreambedElevationPest: string;
+  StreamSlopePestItems: TStringList;
+  LocalStreamSlopePest: string;
+  SaturatedWaterContentPestItems: TStringList;
+  LocalSaturatedWaterContentPest: string;
+  InitialWaterContentPestItems: TStringList;
+  LocalInitialWaterContentPest: string;
+  BrooksCoreyExponentPestItems: TStringList;
+  LocalBrooksCoreyExponentPest: string;
+  VerticalKPestItems: TStringList;
+  LocalVerticalKPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   PriorCol := -1;
   PriorRow := -1;
   PriorLayer := -1;
+
   ISFROPT := (Model as TPhastModel).ModflowPackages.SfrPackage.Isfropt;
-  ReachLengthArray := DataSets[0];
-  LgrReachLengthArray := DataSets[1];
+
+  LocalHydraulicConductivityPest := '';
+  LocalStreamBedThicknessPest := '';
+  LocalStreambedElevationPest := '';
+  LocalStreamSlopePest := '';
+  LocalSaturatedWaterContentPest := '';
+  LocalInitialWaterContentPest := '';
+  LocalBrooksCoreyExponentPest := '';
+  LocalVerticalKPest := '';
+
+  ReachLengthPestItems := PestItemNames[ReachLengthPosition];
+  LocalReachLengthPest := ReachLengthPestItems[ItemIndex];
+  ReachLengthArray := DataSets[ReachLengthPosition];
+  LgrReachLengthArray := DataSets[ReachLengthPosition+LGR_Offset];
   if ISFROPT in [1,2,3] then
   begin
-    HydraulicConductivityArray := DataSets[2];
-    StreamBedThicknessArray := DataSets[3];
-    StreambedElevationArray := DataSets[4];
-    StreamSlopeArray := DataSets[5];
+    HydraulicConductivityPestItems := PestItemNames[HydraulicConductivityPosition];
+    LocalHydraulicConductivityPest := HydraulicConductivityPestItems[ItemIndex];
+    StreamBedThicknessPestItems := PestItemNames[StreamBedThicknessPosition];
+    LocalStreamBedThicknessPest := StreamBedThicknessPestItems[ItemIndex];
+    StreambedElevationPestItems := PestItemNames[StreambedElevationPosition];
+    LocalStreambedElevationPest := StreambedElevationPestItems[ItemIndex];
+    StreamSlopePestItems := PestItemNames[StreamSlopePosition];
+    LocalStreamSlopePest := StreamSlopePestItems[ItemIndex];
+
+    HydraulicConductivityArray := DataSets[HydraulicConductivityPosition+LGR_Offset];
+    StreamBedThicknessArray := DataSets[StreamBedThicknessPosition+LGR_Offset];
+    StreambedElevationArray := DataSets[StreambedElevationPosition+LGR_Offset];
+    StreamSlopeArray := DataSets[StreamSlopePosition+LGR_Offset];
     if ISFROPT in [2,3] then
     begin
-      SaturatedWaterContentArray := DataSets[6];
-      InitialWaterContentArray := DataSets[7];
-      BrooksCoreyExponentArray := DataSets[8];
+      SaturatedWaterContentPestItems := PestItemNames[SaturatedWaterContentPosition];
+      LocalSaturatedWaterContentPest := SaturatedWaterContentPestItems[ItemIndex];
+      InitialWaterContentPestItems := PestItemNames[InitialWaterContentPosition];
+      LocalInitialWaterContentPest := InitialWaterContentPestItems[ItemIndex];
+      BrooksCoreyExponentPestItems := PestItemNames[BrooksCoreyExponentPosition];
+      LocalBrooksCoreyExponentPest := BrooksCoreyExponentPestItems[ItemIndex];
+      SaturatedWaterContentArray := DataSets[SaturatedWaterContentPosition+LGR_Offset];
+      InitialWaterContentArray := DataSets[InitialWaterContentPosition+LGR_Offset];
+      BrooksCoreyExponentArray := DataSets[BrooksCoreyExponentPosition+LGR_Offset];
       if ISFROPT = 3 then
       begin
-        VerticalKArray := DataSets[9];
+        VerticalKPestItems := PestItemNames[VerticalKPosition];
+        LocalVerticalKPest := VerticalKPestItems[ItemIndex];
+        VerticalKArray := DataSets[VerticalKPosition+LGR_Offset];
       end
       else
       begin
@@ -888,7 +948,6 @@ begin
     VerticalKArray := nil;
   end;
 
-//  LastBoundaryIndex := -1;
   BoundaryIndex := -1;
   Boundary := Boundaries[ItemIndex, AModel] as TSfrStorage;
 
@@ -942,7 +1001,6 @@ begin
     end;
     if ReachLengthArray.IsValue[LayerIndex, RowIndex, ColIndex] then
     begin
-//      Boundary := Boundaries[ItemIndex] as TSfrStorage;
       Assert(BoundaryIndex < Length(Boundary.SfrArray));
       with Boundary.SfrArray[BoundaryIndex] do
       begin
@@ -954,6 +1012,8 @@ begin
           RealData[LayerIndex, RowIndex, ColIndex];
         ReachLengthAnnotation := ReachLengthArray.
           Annotation[LayerIndex, RowIndex, ColIndex];
+        ReachLengthPestItem := LocalReachLengthPest;
+
         LgrReachLength := LgrReachLengthArray.
           RealData[LayerIndex, RowIndex, ColIndex];
         if ISFROPT in [1,2,3] then
@@ -962,18 +1022,25 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           HydraulicConductivityAnnotation := HydraulicConductivityArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          HydraulicConductivityPestItem := LocalHydraulicConductivityPest;
+
           StreamBedThickness := StreamBedThicknessArray.
             RealData[LayerIndex, RowIndex, ColIndex];
           StreamBedThicknessAnnotation := StreamBedThicknessArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          StreamBedThicknessPestItem := LocalStreamBedThicknessPest;
+
           StreambedElevation := StreambedElevationArray.
             RealData[LayerIndex, RowIndex, ColIndex];
           StreambedElevationAnnotation := StreambedElevationArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          StreambedElevationPestItem := LocalStreambedElevationPest;
+
           StreamSlope := StreamSlopeArray.
             RealData[LayerIndex, RowIndex, ColIndex];
           StreamSlopeAnnotation := StreamSlopeArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          StreamSlopePestItem := LocalStreamSlopePest;
         end;
 
         if ISFROPT in [2,3] then
@@ -982,15 +1049,19 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           SaturatedWaterContentAnnotation := SaturatedWaterContentArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          SaturatedWaterContentPestItem := LocalSaturatedWaterContentPest;
+
           InitialWaterContent := InitialWaterContentArray.
             RealData[LayerIndex, RowIndex, ColIndex];
           InitialWaterContentAnnotation := InitialWaterContentArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          InitialWaterContentPestItem := LocalInitialWaterContentPest;
 
           BrooksCoreyExponent := BrooksCoreyExponentArray.
             RealData[LayerIndex, RowIndex, ColIndex];
           BrooksCoreyExponentAnnotation := BrooksCoreyExponentArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          BrooksCoreyExponentPestItem := LocalBrooksCoreyExponentPest;
         end;
         if ISFROPT = 3 then
         begin
@@ -998,6 +1069,7 @@ begin
             RealData[LayerIndex, RowIndex, ColIndex];
           VerticalKAnnotation := VerticalKArray.
             Annotation[LayerIndex, RowIndex, ColIndex];
+          VerticalKPestItem := LocalVerticalKPest;
         end;
       end;
     end;
@@ -1166,11 +1238,24 @@ var
   BrooksCoreyExponent: TModflowTimeList;
   VerticalK: TModflowTimeList;
   LgrReachLength: TModflowTimeList;
+  ReachLengthItems: TStringList;
+  ItemFormula: string;
+  HydraulicConductivityItems: TStringList;
+  StreamBedThicknessItems: TStringList;
+  StreamBedElevationItems: TStringList;
+  StreamSlopeItems: TStringList;
+  SaturatedWaterContentItems: TStringList;
+  InitialWaterContentItems: TStringList;
+  BrooksCoreyExponentItems: TStringList;
+  VerticalKItems: TStringList;
 begin
   ISFROPT := (Model as TPhastModel).ModflowPackages.SfrPackage.Isfropt;
 
   Assert(Count = 1);
   SetLength(BoundaryValues, Count);
+
+  ReachLengthItems := TStringList.Create;
+  PestItemNames.Add(ReachLengthItems);
 
   Boundary := BoundaryGroup as TSfrBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -1180,7 +1265,11 @@ begin
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
-      BoundaryValues[Index].Formula := Item.ReachLength;
+      ItemFormula := Item.ReachLength;
+      AssignBoundaryFormula(AModel, '', ppmMultiply,
+        ReachLengthItems, ItemFormula, Writer, BoundaryValues[Index]);
+
+//      BoundaryValues[Index].Formula := Item.ReachLength;
     end;
     ALink := TimeListLink.GetLink(AModel) as TSfrTimeListLink;
     ReachLength := ALink.FReachLength;
@@ -1205,78 +1294,120 @@ begin
 
   if ISFROPT in [1,2,3] then
   begin
+
+    HydraulicConductivityItems := TStringList.Create;
+    PestItemNames.Add(HydraulicConductivityItems);
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
-      BoundaryValues[Index].Formula := Item.HydraulicConductivity;
+      ItemFormula := Item.HydraulicConductivity;
+      AssignBoundaryFormula(AModel, '', ppmMultiply,
+        HydraulicConductivityItems, ItemFormula, Writer, BoundaryValues[Index]);
+
+//      BoundaryValues[Index].Formula := Item.HydraulicConductivity;
     end;
     HydraulicConductivityData.Initialize(BoundaryValues, ScreenObject, lctZero);
     Assert(HydraulicConductivityData.Count = Count);
 
+    StreamBedThicknessItems := TStringList.Create;
+    PestItemNames.Add(StreamBedThicknessItems);
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
-      BoundaryValues[Index].Formula := Item.StreamBedThickness;
+      ItemFormula := Item.StreamBedThickness;
+      AssignBoundaryFormula(AModel, '', ppmMultiply,
+        StreamBedThicknessItems, ItemFormula, Writer, BoundaryValues[Index]);
+//      BoundaryValues[Index].Formula := Item.StreamBedThickness;
     end;
     StreamBedThicknessData.Initialize(BoundaryValues, ScreenObject, lctZero);
     Assert(StreamBedThicknessData.Count = Count);
 
+    StreamBedElevationItems := TStringList.Create;
+    PestItemNames.Add(StreamBedElevationItems);
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
-      BoundaryValues[Index].Formula := Item.StreamBedElevation;
+      ItemFormula := Item.StreamBedElevation;
+      AssignBoundaryFormula(AModel, '', ppmMultiply,
+        StreamBedElevationItems, ItemFormula, Writer, BoundaryValues[Index]);
+//      BoundaryValues[Index].Formula := Item.StreamBedElevation;
     end;
     StreamBedElevationData.Initialize(BoundaryValues, ScreenObject, lctZero);
     Assert(StreamBedElevationData.Count = Count);
 
+    StreamSlopeItems := TStringList.Create;
+    PestItemNames.Add(StreamSlopeItems);
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
-      BoundaryValues[Index].Formula := Item.StreamSlope;
+      ItemFormula := Item.StreamSlope;
+      AssignBoundaryFormula(AModel, '', ppmMultiply,
+        StreamSlopeItems, ItemFormula, Writer, BoundaryValues[Index]);
+//      BoundaryValues[Index].Formula := Item.StreamSlope;
     end;
     StreamSlopeData.Initialize(BoundaryValues, ScreenObject, lctZero);
     Assert(StreamSlopeData.Count = Count);
 
     if ISFROPT in [2,3] then
     begin
+      SaturatedWaterContentItems := TStringList.Create;
+      PestItemNames.Add(SaturatedWaterContentItems);
       for Index := 0 to Count - 1 do
       begin
         Item := Items[Index] as TSfrItem;
         BoundaryValues[Index].Time := Item.StartTime;
-        BoundaryValues[Index].Formula := Item.SaturatedWaterContent;
+        ItemFormula := Item.SaturatedWaterContent;
+        AssignBoundaryFormula(AModel, '', ppmMultiply,
+          SaturatedWaterContentItems, ItemFormula, Writer, BoundaryValues[Index]);
+//        BoundaryValues[Index].Formula := Item.SaturatedWaterContent;
       end;
       SaturatedWaterContent.Initialize(BoundaryValues, ScreenObject, lctZero);
       Assert(SaturatedWaterContent.Count = Count);
 
+      InitialWaterContentItems := TStringList.Create;
+      PestItemNames.Add(InitialWaterContentItems);
       for Index := 0 to Count - 1 do
       begin
         Item := Items[Index] as TSfrItem;
         BoundaryValues[Index].Time := Item.StartTime;
-        BoundaryValues[Index].Formula := Item.InitialWaterContent;
+        ItemFormula := Item.InitialWaterContent;
+        AssignBoundaryFormula(AModel, '', ppmMultiply,
+          InitialWaterContentItems, ItemFormula, Writer, BoundaryValues[Index]);
+//        BoundaryValues[Index].Formula := Item.InitialWaterContent;
       end;
       InitialWaterContent.Initialize(BoundaryValues, ScreenObject, lctZero);
       Assert(InitialWaterContent.Count = Count);
 
+      BrooksCoreyExponentItems := TStringList.Create;
+      PestItemNames.Add(BrooksCoreyExponentItems);
       for Index := 0 to Count - 1 do
       begin
         Item := Items[Index] as TSfrItem;
         BoundaryValues[Index].Time := Item.StartTime;
-        BoundaryValues[Index].Formula := Item.BrooksCoreyExponent;
+        ItemFormula := Item.BrooksCoreyExponent;
+        AssignBoundaryFormula(AModel, '', ppmMultiply,
+          BrooksCoreyExponentItems, ItemFormula, Writer, BoundaryValues[Index]);
+//        BoundaryValues[Index].Formula := Item.BrooksCoreyExponent;
       end;
       BrooksCoreyExponent.Initialize(BoundaryValues, ScreenObject, lctZero);
       Assert(BrooksCoreyExponent.Count = Count);
 
       if ISFROPT = 3 then
       begin
+        VerticalKItems := TStringList.Create;
+        PestItemNames.Add(VerticalKItems);
         for Index := 0 to Count - 1 do
         begin
           Item := Items[Index] as TSfrItem;
           BoundaryValues[Index].Time := Item.StartTime;
-          BoundaryValues[Index].Formula := Item.VerticalK;
+          ItemFormula := Item.VerticalK;
+          AssignBoundaryFormula(AModel, '', ppmMultiply,
+            VerticalKItems, ItemFormula, Writer, BoundaryValues[Index]);
+//          BoundaryValues[Index].Formula := Item.VerticalK;
         end;
         VerticalK.Initialize(BoundaryValues, ScreenObject, lctZero);
         Assert(VerticalK.Count = Count);
@@ -1615,6 +1746,23 @@ begin
   result := Values.LgrReachLength;
 end;
 
+function TSfr_Cell.GetPestName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    ReachLengthPosition: result := FValues.ReachLengthPestItem;
+    HydraulicConductivityPosition: result := FValues.HydraulicConductivityPestItem;
+    StreambedElevationPosition: result := FValues.StreambedElevationPestItem;
+    StreamBedThicknessPosition: result := FValues.StreamBedThicknessPestItem;
+    StreamSlopePosition: result := FValues.StreamSlopePestItem;
+    SaturatedWaterContentPosition: result := FValues.SaturatedWaterContentPestItem;
+    InitialWaterContentPosition: result := FValues.InitialWaterContentPestItem;
+    BrooksCoreyExponentPosition: result := FValues.BrooksCoreyExponentPestItem;
+    VerticalKPosition: result := FValues.VerticalKPestItem;
+    else Assert(False);
+  end;
+end;
+
 function TSfr_Cell.GetReachLength: double;
 begin
   result := Values.ReachLength;
@@ -1629,15 +1777,15 @@ function TSfr_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string
 begin
   result := '';
   case Index of
-    0: result := ReachLengthAnnotation;
-    1: result := HydraulicConductivityAnnotation;
-    2: result := StreambedElevationAnnotation;
-    3: result := StreamBedThicknessAnnotation;
-    4: result := StreamSlopeAnnotation;
-    5: result := SaturatedWaterContentAnnotation;
-    6: result := InitialWaterContentAnnotation;
-    7: result := BrooksCoreyExponentAnnotation;
-    8: result := VerticalKAnnotation;
+    ReachLengthPosition: result := ReachLengthAnnotation;
+    HydraulicConductivityPosition: result := HydraulicConductivityAnnotation;
+    StreambedElevationPosition: result := StreambedElevationAnnotation;
+    StreamBedThicknessPosition: result := StreamBedThicknessAnnotation;
+    StreamSlopePosition: result := StreamSlopeAnnotation;
+    SaturatedWaterContentPosition: result := SaturatedWaterContentAnnotation;
+    InitialWaterContentPosition: result := InitialWaterContentAnnotation;
+    BrooksCoreyExponentPosition: result := BrooksCoreyExponentAnnotation;
+    VerticalKPosition: result := VerticalKAnnotation;
     else Assert(False);
   end;
 end;
@@ -1646,15 +1794,15 @@ function TSfr_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   result := 0;
   case Index of
-    0: result := ReachLength;
-    1: result := HydraulicConductivity;
-    2: result := StreambedElevation;
-    3: result := StreamBedThickness;
-    4: result := StreamSlope;
-    5: result := SaturatedWaterContent;
-    6: result := InitialWaterContent;
-    7: result := BrooksCoreyExponent;
-    8: result := VerticalK;
+    ReachLengthPosition: result := ReachLength;
+    HydraulicConductivityPosition: result := HydraulicConductivity;
+    StreambedElevationPosition: result := StreambedElevation;
+    StreamBedThicknessPosition: result := StreamBedThickness;
+    StreamSlopePosition: result := StreamSlope;
+    SaturatedWaterContentPosition: result := SaturatedWaterContent;
+    InitialWaterContentPosition: result := InitialWaterContent;
+    BrooksCoreyExponentPosition: result := BrooksCoreyExponent;
+    VerticalKPosition: result := VerticalK;
     else Assert(False);
   end;
 end;
@@ -1806,21 +1954,21 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(StreamSlopeAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StreambedElevationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StreamBedThicknessAnnotation));
-//  WriteCompString(Comp, ReachLengthAnnotation);
-//  WriteCompString(Comp, StreamSlopeAnnotation);
-//  WriteCompString(Comp, StreambedElevationAnnotation);
-//  WriteCompString(Comp, StreamBedThicknessAnnotation);
-
   WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(SaturatedWaterContentAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(InitialWaterContentAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(BrooksCoreyExponentAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(VerticalKAnnotation));
-//  WriteCompString(Comp, HydraulicConductivityAnnotation);
-//  WriteCompString(Comp, SaturatedWaterContentAnnotation);
-//  WriteCompString(Comp, InitialWaterContentAnnotation);
-//  WriteCompString(Comp, BrooksCoreyExponentAnnotation);
-//  WriteCompString(Comp, VerticalKAnnotation);
+
+  WriteCompInt(Comp, Strings.IndexOf(ReachLengthPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamSlopePestItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreambedElevationPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(StreamBedThicknessPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(SaturatedWaterContentPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(InitialWaterContentPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(BrooksCoreyExponentPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(VerticalKPestItem));
 end;
 
 procedure TSfrRecord.RecordStrings(Strings: TStringList);
@@ -1835,6 +1983,18 @@ begin
   Strings.Add(InitialWaterContentAnnotation);
   Strings.Add(BrooksCoreyExponentAnnotation);
   Strings.Add(VerticalKAnnotation);
+
+  Strings.Add(ReachLengthPestItem);
+  Strings.Add(StreamSlopePestItem);
+  Strings.Add(StreambedElevationPestItem);
+  Strings.Add(StreamBedThicknessPestItem);
+
+  Strings.Add(HydraulicConductivityPestItem);
+  Strings.Add(SaturatedWaterContentPestItem);
+  Strings.Add(InitialWaterContentPestItem);
+  Strings.Add(BrooksCoreyExponentPestItem);
+  Strings.Add(VerticalKPestItem);
+
 end;
 
 procedure TSfrRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1859,22 +2019,21 @@ begin
   StreamSlopeAnnotation := Annotations[ReadCompInt(Decomp)];
   StreambedElevationAnnotation := Annotations[ReadCompInt(Decomp)];
   StreamBedThicknessAnnotation := Annotations[ReadCompInt(Decomp)];
-//  ReachLengthAnnotation := ReadCompString(Decomp, Annotations);
-//  StreamSlopeAnnotation := ReadCompString(Decomp, Annotations);
-//  StreambedElevationAnnotation := ReadCompString(Decomp, Annotations);
-//  StreamBedThicknessAnnotation := ReadCompString(Decomp, Annotations);
-
   HydraulicConductivityAnnotation := Annotations[ReadCompInt(Decomp)];
   SaturatedWaterContentAnnotation := Annotations[ReadCompInt(Decomp)];
   InitialWaterContentAnnotation := Annotations[ReadCompInt(Decomp)];
   BrooksCoreyExponentAnnotation := Annotations[ReadCompInt(Decomp)];
   VerticalKAnnotation := Annotations[ReadCompInt(Decomp)];
-//  HydraulicConductivityAnnotation := ReadCompString(Decomp, Annotations);
-//  SaturatedWaterContentAnnotation := ReadCompString(Decomp, Annotations);
-//  InitialWaterContentAnnotation := ReadCompString(Decomp, Annotations);
-//  BrooksCoreyExponentAnnotation := ReadCompString(Decomp, Annotations);
-//  VerticalKAnnotation := ReadCompString(Decomp, Annotations);
 
+  ReachLengthPestItem := Annotations[ReadCompInt(Decomp)];
+  StreamSlopePestItem := Annotations[ReadCompInt(Decomp)];
+  StreambedElevationPestItem := Annotations[ReadCompInt(Decomp)];
+  StreamBedThicknessPestItem := Annotations[ReadCompInt(Decomp)];
+  HydraulicConductivityPestItem := Annotations[ReadCompInt(Decomp)];
+  SaturatedWaterContentPestItem := Annotations[ReadCompInt(Decomp)];
+  InitialWaterContentPestItem := Annotations[ReadCompInt(Decomp)];
+  BrooksCoreyExponentPestItem := Annotations[ReadCompInt(Decomp)];
+  VerticalKPestItem := Annotations[ReadCompInt(Decomp)];
 
 end;
 

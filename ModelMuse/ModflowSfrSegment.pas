@@ -878,7 +878,7 @@ begin
   end
   else
   begin
-    OffSet := 5;
+    OffSet := 9;
     Assert(Boundary.DownstreamSegmentValues = self);
   end;
 

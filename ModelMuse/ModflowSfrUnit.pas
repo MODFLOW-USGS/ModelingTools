@@ -198,6 +198,30 @@ type
     FPestUpstreamKObserver: TObserver;
     FPestUpstreamWidthObserver: TObserver;
     FUsedObserver: TObserver;
+    FPestDownstreamVerticalSaturatedKMethod: TPestParamMethod;
+    FPestDownstreamBrooksCoreyExponentMethod: TPestParamMethod;
+    FPestUpstreamVerticalSaturatedKMethod: TPestParamMethod;
+    FPestUpstreamBrooksCoreyExponentMethod: TPestParamMethod;
+    FPestDownstreamInitialWaterContentMethod: TPestParamMethod;
+    FPestDownstreamSaturatedWaterContentMethod: TPestParamMethod;
+    FPestUpstreamInitialWaterContentMethod: TPestParamMethod;
+    FPestUpstreamSaturatedWaterContentMethod: TPestParamMethod;
+    FPestDownstreamBrooksCoreyExponentObserver: TObserver;
+    FPestDownstreamInitialWaterContentObserver: TObserver;
+    FPestDownstreamSaturatedWaterContentObserver: TObserver;
+    FPestDownstreamVerticalSaturatedKObserver: TObserver;
+    FPestUpstreamBrooksCoreyExponentObserver: TObserver;
+    FPestUpstreamInitialWaterContentObserver: TObserver;
+    FPestUpstreamSaturatedWaterContentObserver: TObserver;
+    FPestUpstreamVerticalSaturatedKObserver: TObserver;
+    FPestUpstreamSaturatedWaterContentFormula: TFormulaObject;
+    FPestUpstreamInitialWaterContentFormula: TFormulaObject;
+    FPestUpstreamBrooksCoreyExponentFormula: TFormulaObject;
+    FPestUpstreamVerticalSaturatedKFormula: TFormulaObject;
+    FPestDownstreamSaturatedWaterContentFormula: TFormulaObject;
+    FPestDownstreamInitialWaterContentFormula: TFormulaObject;
+    FPestDownstreamBrooksCoreyExponentFormula: TFormulaObject;
+    FPestDownstreamVerticalSaturatedKFormula: TFormulaObject;
     procedure SetSegmentNumber(const Value: integer);
     procedure SetChannelValues(const Value: TSfrChannelCollection);
     procedure SetUpstreamSegmentValues(const Value: TSfrSegmentCollection);
@@ -295,6 +319,55 @@ type
     procedure InvalidatePrecipData(Sender: TObject);
     procedure InvalidateEvapData(Sender: TObject);
     procedure InvalidateRunoffData(Sender: TObject);
+    function GetPestDownstreamBrooksCoreyExponentFormula: string;
+    function GetPestDownstreamInitialWaterContentFormula: string;
+    function GetPestDownstreamSaturatedWaterContentFormula: string;
+    function GetPestDownstreamVerticalSaturatedKFormula: string;
+    function GetPestUpstreamBrooksCoreyExponentFormula: string;
+    function GetPestUpstreamInitialWaterContentFormula: string;
+    function GetPestUpstreamSaturatedWaterContentFormula: string;
+    function GetPestUpstreamVerticalSaturatedKFormula: string;
+    procedure SetPestDownstreamBrooksCoreyExponentFormula(const Value: string);
+    procedure SetPestDownstreamBrooksCoreyExponentMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestDownstreamInitialWaterContentFormula(const Value: string);
+    procedure SetPestDownstreamInitialWaterContentMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestDownstreamSaturatedWaterContentFormula(
+      const Value: string);
+    procedure SetPestDownstreamSaturatedWaterContentMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestDownstreamVerticalSaturatedKFormula(const Value: string);
+    procedure SetPestDownstreamVerticalSaturatedKMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestUpstreamBrooksCoreyExponentFormula(const Value: string);
+    procedure SetPestUpstreamBrooksCoreyExponentMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestUpstreamInitialWaterContentFormula(const Value: string);
+    procedure SetPestUpstreamInitialWaterContentMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestUpstreamSaturatedWaterContentFormula(const Value: string);
+    procedure SetPestUpstreamSaturatedWaterContentMethod(
+      const Value: TPestParamMethod);
+    procedure SetPestUpstreamVerticalSaturatedKFormula(const Value: string);
+    procedure SetPestUpstreamVerticalSaturatedKMethod(
+      const Value: TPestParamMethod);
+    procedure InvalidateUpstreamSaturatedWaterContentData(Sender: TObject);
+    procedure InvalidateDownstreamSaturatedWaterContentData(Sender: TObject);
+    procedure InvalidateUpstreamInitialWaterContentData(Sender: TObject);
+    procedure InvalidateDownstreamInitialWaterContentData(Sender: TObject);
+    procedure InvalidateUpstreamBrooksCoreyExponentData(Sender: TObject);
+    procedure InvalidateDownstreamBrooksCoreyExponentData(Sender: TObject);
+    procedure InvalidateUpstreamVerticalSaturatedKData(Sender: TObject);
+    procedure InvalidateDownstreamVerticalSaturatedKData(Sender: TObject);
+    function GetPestDownstreamBrooksCoreyExponentObserver: TObserver;
+    function GetPestDownstreamInitialWaterContentObserver: TObserver;
+    function GetPestDownstreamSaturatedWaterContentObserver: TObserver;
+    function GetPestDownstreamVerticalSaturatedKObserver: TObserver;
+    function GetPestUpstreamBrooksCoreyExponentObserver: TObserver;
+    function GetPestUpstreamInitialWaterContentObserver: TObserver;
+    function GetPestUpstreamSaturatedWaterContentObserver: TObserver;
+    function GetPestUpstreamVerticalSaturatedKObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -327,6 +400,16 @@ type
     property PestDownstreamWidthObserver: TObserver read GetPestDownstreamWidthObserver;
     property PestUpstreamDepthObserver: TObserver read GetPestUpstreamDepthObserver;
     property PestDownstreamDepthObserver: TObserver read GetPestDownstreamDepthObserver;
+
+    property PestUpstreamSaturatedWaterContentObserver: TObserver read GetPestUpstreamSaturatedWaterContentObserver;
+    property PestDownstreamSaturatedWaterContentObserver: TObserver read GetPestDownstreamSaturatedWaterContentObserver;
+    property PestUpstreamInitialWaterContentObserver: TObserver read GetPestUpstreamInitialWaterContentObserver;
+    property PestDownstreamInitialWaterContentObserver: TObserver read GetPestDownstreamInitialWaterContentObserver;
+    property PestUpstreamBrooksCoreyExponentObserver: TObserver read GetPestUpstreamBrooksCoreyExponentObserver;
+    property PestDownstreamBrooksCoreyExponentObserver: TObserver read GetPestDownstreamBrooksCoreyExponentObserver;
+    property PestUpstreamVerticalSaturatedKObserver: TObserver read GetPestUpstreamVerticalSaturatedKObserver;
+    property PestDownstreamVerticalSaturatedKObserver: TObserver read GetPestDownstreamVerticalSaturatedKObserver;
+
     property PestFlowObserver: TObserver read GetPestFlowObserver;
     property PestPrecipObserver: TObserver read GetPestPrecipObserver;
     property PestEvapObserver: TObserver read GetPestEvapObserver;
@@ -521,6 +604,110 @@ type
       Stored False
       {$ENDIF}
       ;
+
+    property PestUpstreamSaturatedWaterContentFormula: string read GetPestUpstreamSaturatedWaterContentFormula
+      write SetPestUpstreamSaturatedWaterContentFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamSaturatedWaterContentMethod: TPestParamMethod
+      read FPestUpstreamSaturatedWaterContentMethod write SetPestUpstreamSaturatedWaterContentMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamSaturatedWaterContentFormula: string read GetPestDownstreamSaturatedWaterContentFormula
+      write SetPestDownstreamSaturatedWaterContentFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamSaturatedWaterContentMethod: TPestParamMethod
+      read FPestDownstreamSaturatedWaterContentMethod write SetPestDownstreamSaturatedWaterContentMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestUpstreamInitialWaterContentFormula: string read GetPestUpstreamInitialWaterContentFormula
+      write SetPestUpstreamInitialWaterContentFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamInitialWaterContentMethod: TPestParamMethod
+      read FPestUpstreamInitialWaterContentMethod write SetPestUpstreamInitialWaterContentMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamInitialWaterContentFormula: string read GetPestDownstreamInitialWaterContentFormula
+      write SetPestDownstreamInitialWaterContentFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamInitialWaterContentMethod: TPestParamMethod
+      read FPestDownstreamInitialWaterContentMethod write SetPestDownstreamInitialWaterContentMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestUpstreamBrooksCoreyExponentFormula: string read GetPestUpstreamBrooksCoreyExponentFormula
+      write SetPestUpstreamBrooksCoreyExponentFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamBrooksCoreyExponentMethod: TPestParamMethod
+      read FPestUpstreamBrooksCoreyExponentMethod write SetPestUpstreamBrooksCoreyExponentMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamBrooksCoreyExponentFormula: string read GetPestDownstreamBrooksCoreyExponentFormula
+      write SetPestDownstreamBrooksCoreyExponentFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamBrooksCoreyExponentMethod: TPestParamMethod
+      read FPestDownstreamBrooksCoreyExponentMethod write SetPestDownstreamBrooksCoreyExponentMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+    property PestUpstreamVerticalSaturatedKFormula: string read GetPestUpstreamVerticalSaturatedKFormula
+      write SetPestUpstreamVerticalSaturatedKFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUpstreamVerticalSaturatedKMethod: TPestParamMethod
+      read FPestUpstreamVerticalSaturatedKMethod write SetPestUpstreamVerticalSaturatedKMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamVerticalSaturatedKFormula: string read GetPestDownstreamVerticalSaturatedKFormula
+      write SetPestDownstreamVerticalSaturatedKFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestDownstreamVerticalSaturatedKMethod: TPestParamMethod
+      read FPestDownstreamVerticalSaturatedKMethod write SetPestDownstreamVerticalSaturatedKMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
+
+
+
     property PestFlowFormula: string read GetPestFlowFormula
       write SetPestFlowFormula
       {$IFNDEF PEST}
@@ -581,16 +768,26 @@ const
   UpstreamWidthPosition = 3;
   UpstreamDepthPosition = 4;
 
-  DownstreamKPosition = 5;
-  DownstreamBedThicknessPosition = 6;
-  DownstreamBedElevationPosition = 7;
-  DownstreamWidthPosition = 8;
-  DownstreamDepthPosition = 9;
+  UpstreamSaturatedWaterContentPosition = 5;
+  UpstreamInitialWaterContentPosition = 6;
+  UpstreamBrooksCoreyExponentPosition = 7;
+  UpstreamVerticalSaturatedKPosition = 8;
 
-  FlowPosition = 10;
-  PrecipPosition = 11;
-  EvapPosition = 12;
-  RunoffPosition = 13;
+  DownstreamKPosition = 9;
+  DownstreamBedThicknessPosition = 10;
+  DownstreamBedElevationPosition = 11;
+  DownstreamWidthPosition = 12;
+  DownstreamDepthPosition = 13;
+
+  DownstreamSaturatedWaterContentPosition = 14;
+  DownstreamInitialWaterContentPosition = 15;
+  DownstreamBrooksCoreyExponentPosition = 16;
+  DownstreamVerticalSaturatedKPosition = 17;
+
+  FlowPosition = 18;
+  PrecipPosition = 19;
+  EvapPosition = 20;
+  RunoffPosition = 21;
 
 var
   StreamGageOutputTypes: TStringList;
@@ -774,11 +971,23 @@ begin
   FPestUpstreamBedElevationFormula := CreateFormulaObjectBlocks(dso3D);
   FPestUpstreamWidthFormula := CreateFormulaObjectBlocks(dso3D);
   FPestUpstreamDepthFormula := CreateFormulaObjectBlocks(dso3D);
+
+  FPestUpstreamSaturatedWaterContentFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestUpstreamInitialWaterContentFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestUpstreamBrooksCoreyExponentFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestUpstreamVerticalSaturatedKFormula := CreateFormulaObjectBlocks(dso3D);
+
   FPestDownstreamKFormula := CreateFormulaObjectBlocks(dso3D);
   FPestDownstreamBedThicknessFormula := CreateFormulaObjectBlocks(dso3D);
   FPestDownstreamBedElevationFormula := CreateFormulaObjectBlocks(dso3D);
   FPestDownstreamWidthFormula := CreateFormulaObjectBlocks(dso3D);
   FPestDownstreamDepthFormula := CreateFormulaObjectBlocks(dso3D);
+
+  FPestDownstreamSaturatedWaterContentFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamInitialWaterContentFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamBrooksCoreyExponentFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestDownstreamVerticalSaturatedKFormula := CreateFormulaObjectBlocks(dso3D);
+
   FPestFlowFormula := CreateFormulaObjectBlocks(dso3D);
   FPestPrecipFormula := CreateFormulaObjectBlocks(dso3D);
   FPestEvapFormula := CreateFormulaObjectBlocks(dso3D);
@@ -795,11 +1004,21 @@ begin
     FObserverList.Add(PestUpstreamWidthObserver);
     FObserverList.Add(PestUpstreamDepthObserver);
 
+    FObserverList.Add(PestUpstreamSaturatedWaterContentObserver);
+    FObserverList.Add(PestUpstreamInitialWaterContentObserver);
+    FObserverList.Add(PestUpstreamBrooksCoreyExponentObserver);
+    FObserverList.Add(PestUpstreamVerticalSaturatedKObserver);
+
     FObserverList.Add(PestDownstreamKObserver);
     FObserverList.Add(PestDownstreamBedThicknessObserver);
     FObserverList.Add(PestDownstreamBedElevationObserver);
     FObserverList.Add(PestDownstreamWidthObserver);
     FObserverList.Add(PestDownstreamDepthObserver);
+
+    FObserverList.Add(PestDownstreamSaturatedWaterContentObserver);
+    FObserverList.Add(PestDownstreamInitialWaterContentObserver);
+    FObserverList.Add(PestDownstreamBrooksCoreyExponentObserver);
+    FObserverList.Add(PestDownstreamVerticalSaturatedKObserver);
 
     FObserverList.Add(PestFlowObserver);
     FObserverList.Add(PestPrecipObserver);
@@ -832,6 +1051,24 @@ begin
       begin
         result := ppmMultiply;
       end;
+
+    UpstreamSaturatedWaterContentPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UpstreamInitialWaterContentPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UpstreamBrooksCoreyExponentPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UpstreamVerticalSaturatedKPosition:
+      begin
+        result := ppmMultiply;
+      end;
+
     DownstreamKPosition:
       begin
         result := ppmMultiply;
@@ -852,6 +1089,24 @@ begin
       begin
         result := ppmMultiply;
       end;
+
+    DownstreamSaturatedWaterContentPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    DownstreamInitialWaterContentPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    DownstreamBrooksCoreyExponentPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    DownstreamVerticalSaturatedKPosition:
+      begin
+        result := ppmMultiply;
+      end;
+
     FlowPosition:
       begin
         result := ppmMultiply;
@@ -1148,6 +1403,25 @@ begin
       begin
         result := PestUpstreamDepthFormula;
       end;
+
+    UpstreamSaturatedWaterContentPosition:
+      begin
+        result := PestUpstreamSaturatedWaterContentFormula;
+      end;
+    UpstreamInitialWaterContentPosition:
+      begin
+        result := PestUpstreamInitialWaterContentFormula;
+      end;
+    UpstreamBrooksCoreyExponentPosition:
+      begin
+        result := PestUpstreamBrooksCoreyExponentFormula;
+      end;
+    UpstreamVerticalSaturatedKPosition:
+      begin
+        result := PestUpstreamVerticalSaturatedKFormula;
+      end;
+
+
     DownstreamKPosition:
       begin
         result := PestDownstreamKFormula;
@@ -1168,6 +1442,24 @@ begin
       begin
         result := PestDownstreamDepthFormula;
       end;
+
+    DownstreamSaturatedWaterContentPosition:
+      begin
+        result := PestDownstreamSaturatedWaterContentFormula;
+      end;
+    DownstreamInitialWaterContentPosition:
+      begin
+        result := PestDownstreamInitialWaterContentFormula;
+      end;
+    DownstreamBrooksCoreyExponentPosition:
+      begin
+        result := PestDownstreamBrooksCoreyExponentFormula;
+      end;
+    DownstreamVerticalSaturatedKPosition:
+      begin
+        result := PestDownstreamVerticalSaturatedKFormula;
+      end;
+
     FlowPosition:
       begin
         result := PestFlowFormula;
@@ -1216,6 +1508,24 @@ begin
       begin
         result := PestUpstreamDepthMethod;
       end;
+
+    UpstreamSaturatedWaterContentPosition:
+      begin
+        result := PestUpstreamSaturatedWaterContentMethod;
+      end;
+    UpstreamInitialWaterContentPosition:
+      begin
+        result := PestUpstreamInitialWaterContentMethod;
+      end;
+    UpstreamBrooksCoreyExponentPosition:
+      begin
+        result := PestUpstreamBrooksCoreyExponentMethod;
+      end;
+    UpstreamVerticalSaturatedKPosition:
+      begin
+        result := PestUpstreamVerticalSaturatedKMethod;
+      end;
+
     DownstreamKPosition:
       begin
         result := PestDownstreamKMethod;
@@ -1236,6 +1546,24 @@ begin
       begin
         result := PestDownstreamDepthMethod;
       end;
+
+    DownstreamSaturatedWaterContentPosition:
+      begin
+        result := PestDownstreamSaturatedWaterContentMethod;
+      end;
+    DownstreamInitialWaterContentPosition:
+      begin
+        result := PestDownstreamInitialWaterContentMethod;
+      end;
+    DownstreamBrooksCoreyExponentPosition:
+      begin
+        result := PestDownstreamBrooksCoreyExponentMethod;
+      end;
+    DownstreamVerticalSaturatedKPosition:
+      begin
+        result := PestDownstreamVerticalSaturatedKMethod;
+      end;
+
     FlowPosition:
       begin
         result := PestFlowMethod;
@@ -1298,6 +1626,25 @@ begin
   result := FPestDownstreamBedThicknessObserver;
 end;
 
+function TSfrBoundary.GetPestDownstreamBrooksCoreyExponentFormula: string;
+begin
+  Result := FPestDownstreamBrooksCoreyExponentFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamBrooksCoreyExponentPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamBrooksCoreyExponentObserver: TObserver;
+begin
+  if FPestDownstreamBrooksCoreyExponentObserver = nil then
+  begin
+    CreateObserver('PestDownstreamBrooksCoreyExponent_', FPestDownstreamBrooksCoreyExponentObserver, nil);
+    FPestDownstreamBrooksCoreyExponentObserver.OnUpToDateSet := InvalidateDownstreamBrooksCoreyExponentData;
+  end;
+  result := FPestDownstreamBrooksCoreyExponentObserver;
+end;
+
 function TSfrBoundary.GetPestDownstreamDepthFormula: string;
 begin
   Result := FPestDownstreamDepthFormula.Formula;
@@ -1317,6 +1664,25 @@ begin
   result := FPestDownstreamDepthObserver;
 end;
 
+function TSfrBoundary.GetPestDownstreamInitialWaterContentFormula: string;
+begin
+  Result := FPestDownstreamInitialWaterContentFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamInitialWaterContentPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamInitialWaterContentObserver: TObserver;
+begin
+  if FPestDownstreamInitialWaterContentObserver = nil then
+  begin
+    CreateObserver('PestDownstreamInitialWaterContent_', FPestDownstreamInitialWaterContentObserver, nil);
+    FPestDownstreamInitialWaterContentObserver.OnUpToDateSet := InvalidateDownstreamInitialWaterContentData;
+  end;
+  result := FPestDownstreamInitialWaterContentObserver;
+end;
+
 function TSfrBoundary.GetPestDownstreamKFormula: string;
 begin
   Result := FPestDownstreamKFormula.Formula;
@@ -1334,6 +1700,44 @@ begin
     FPestDownstreamKObserver.OnUpToDateSet := InvalidateDownstreamKData;
   end;
   result := FPestDownstreamKObserver;
+end;
+
+function TSfrBoundary.GetPestDownstreamSaturatedWaterContentFormula: string;
+begin
+  Result := FPestDownstreamSaturatedWaterContentFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamSaturatedWaterContentPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamSaturatedWaterContentObserver: TObserver;
+begin
+  if FPestDownstreamSaturatedWaterContentObserver = nil then
+  begin
+    CreateObserver('PestDownstreamSaturatedWaterContent_', FPestDownstreamSaturatedWaterContentObserver, nil);
+    FPestDownstreamSaturatedWaterContentObserver.OnUpToDateSet := InvalidateDownstreamSaturatedWaterContentData;
+  end;
+  result := FPestDownstreamSaturatedWaterContentObserver;
+end;
+
+function TSfrBoundary.GetPestDownstreamVerticalSaturatedKFormula: string;
+begin
+  Result := FPestDownstreamVerticalSaturatedKFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DownstreamVerticalSaturatedKPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestDownstreamVerticalSaturatedKObserver: TObserver;
+begin
+  if FPestDownstreamVerticalSaturatedKObserver = nil then
+  begin
+    CreateObserver('PestDownstreamVerticalSaturatedK_', FPestDownstreamVerticalSaturatedKObserver, nil);
+    FPestDownstreamVerticalSaturatedKObserver.OnUpToDateSet := InvalidateDownstreamVerticalSaturatedKData;
+  end;
+  result := FPestDownstreamVerticalSaturatedKObserver;
 end;
 
 function TSfrBoundary.GetPestDownstreamWidthFormula: string;
@@ -1469,6 +1873,25 @@ begin
   result := FPestUpstreamBedThicknessObserver;
 end;
 
+function TSfrBoundary.GetPestUpstreamBrooksCoreyExponentFormula: string;
+begin
+  Result := FPestUpstreamBrooksCoreyExponentFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamBrooksCoreyExponentPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamBrooksCoreyExponentObserver: TObserver;
+begin
+  if FPestUpstreamBrooksCoreyExponentObserver = nil then
+  begin
+    CreateObserver('PestUpstreamBrooksCoreyExponent_', FPestUpstreamBrooksCoreyExponentObserver, nil);
+    FPestUpstreamBrooksCoreyExponentObserver.OnUpToDateSet := InvalidateUpstreamBrooksCoreyExponentData;
+  end;
+  result := FPestUpstreamBrooksCoreyExponentObserver;
+end;
+
 function TSfrBoundary.GetPestUpstreamDepthFormula: string;
 begin
   Result := FPestUpstreamDepthFormula.Formula;
@@ -1488,6 +1911,25 @@ begin
   result := FPestUpstreamDepthObserver;
 end;
 
+function TSfrBoundary.GetPestUpstreamInitialWaterContentFormula: string;
+begin
+  Result := FPestUpstreamInitialWaterContentFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamInitialWaterContentPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamInitialWaterContentObserver: TObserver;
+begin
+  if FPestUpstreamInitialWaterContentObserver = nil then
+  begin
+    CreateObserver('PestUpstreamInitialWaterContent_', FPestUpstreamInitialWaterContentObserver, nil);
+    FPestUpstreamInitialWaterContentObserver.OnUpToDateSet := InvalidateUpstreamInitialWaterContentData;
+  end;
+  result := FPestUpstreamInitialWaterContentObserver;
+end;
+
 function TSfrBoundary.GetPestUpstreamKFormula: string;
 begin
   Result := FPestUpstreamKFormula.Formula;
@@ -1505,6 +1947,44 @@ begin
     FPestUpstreamKObserver.OnUpToDateSet := InvalidateUpstreamKData;
   end;
   result := FPestUpstreamKObserver;
+end;
+
+function TSfrBoundary.GetPestUpstreamSaturatedWaterContentFormula: string;
+begin
+  Result := FPestUpstreamSaturatedWaterContentFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamSaturatedWaterContentPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamSaturatedWaterContentObserver: TObserver;
+begin
+  if FPestUpstreamSaturatedWaterContentObserver = nil then
+  begin
+    CreateObserver('PestUpstreamSaturatedWaterContent_', FPestUpstreamSaturatedWaterContentObserver, nil);
+    FPestUpstreamSaturatedWaterContentObserver.OnUpToDateSet := InvalidateUpstreamSaturatedWaterContentData;
+  end;
+  result := FPestUpstreamSaturatedWaterContentObserver;
+end;
+
+function TSfrBoundary.GetPestUpstreamVerticalSaturatedKFormula: string;
+begin
+  Result := FPestUpstreamVerticalSaturatedKFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UpstreamVerticalSaturatedKPosition);
+  end;
+end;
+
+function TSfrBoundary.GetPestUpstreamVerticalSaturatedKObserver: TObserver;
+begin
+  if FPestUpstreamVerticalSaturatedKObserver = nil then
+  begin
+    CreateObserver('PestUpstreamVerticalSaturatedK_', FPestUpstreamVerticalSaturatedKObserver, nil);
+    FPestUpstreamVerticalSaturatedKObserver.OnUpToDateSet := InvalidateUpstreamVerticalSaturatedKData;
+  end;
+  result := FPestUpstreamVerticalSaturatedKObserver;
 end;
 
 function TSfrBoundary.GetPestUpstreamWidthFormula: string;
@@ -1563,6 +2043,36 @@ begin
       List.Add(FObserverList[UpstreamDepthPosition]);
     end;
   end;
+
+  if Sender = FPestUpstreamSaturatedWaterContentFormula then
+  begin
+    if UpstreamSaturatedWaterContentPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamSaturatedWaterContentPosition]);
+    end;
+  end;
+  if Sender = FPestUpstreamInitialWaterContentFormula then
+  begin
+    if UpstreamInitialWaterContentPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamInitialWaterContentPosition]);
+    end;
+  end;
+  if Sender = FPestUpstreamBrooksCoreyExponentFormula then
+  begin
+    if UpstreamBrooksCoreyExponentPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamBrooksCoreyExponentPosition]);
+    end;
+  end;
+  if Sender = FPestUpstreamVerticalSaturatedKFormula then
+  begin
+    if UpstreamVerticalSaturatedKPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[UpstreamVerticalSaturatedKPosition]);
+    end;
+  end;
+
   if Sender = FPestDownstreamKFormula then
   begin
     if DownstreamKPosition < FObserverList.Count then
@@ -1598,6 +2108,36 @@ begin
       List.Add(FObserverList[DownstreamDepthPosition]);
     end;
   end;
+
+  if Sender = FPestDownstreamSaturatedWaterContentFormula then
+  begin
+    if DownstreamSaturatedWaterContentPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamSaturatedWaterContentPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamInitialWaterContentFormula then
+  begin
+    if DownstreamInitialWaterContentPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamInitialWaterContentPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamBrooksCoreyExponentFormula then
+  begin
+    if DownstreamBrooksCoreyExponentPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamBrooksCoreyExponentPosition]);
+    end;
+  end;
+  if Sender = FPestDownstreamVerticalSaturatedKFormula then
+  begin
+    if DownstreamVerticalSaturatedKPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DownstreamVerticalSaturatedKPosition]);
+    end;
+  end;
+
   if Sender = FPestFlowFormula then
   begin
     if FlowPosition < FObserverList.Count then
@@ -1786,6 +2326,24 @@ begin
       begin
         PestUpstreamDepthFormula := Value;
       end;
+
+    UpstreamSaturatedWaterContentPosition:
+      begin
+        PestUpstreamSaturatedWaterContentFormula := Value;
+      end;
+    UpstreamInitialWaterContentPosition:
+      begin
+        PestUpstreamInitialWaterContentFormula := Value;
+      end;
+    UpstreamBrooksCoreyExponentPosition:
+      begin
+        PestUpstreamBrooksCoreyExponentFormula := Value;
+      end;
+    UpstreamVerticalSaturatedKPosition:
+      begin
+        PestUpstreamVerticalSaturatedKFormula := Value;
+      end;
+
     DownstreamKPosition:
       begin
         PestDownstreamKFormula := Value;
@@ -1806,6 +2364,24 @@ begin
       begin
         PestDownstreamDepthFormula := Value;
       end;
+
+    DownstreamSaturatedWaterContentPosition:
+      begin
+        PestDownstreamSaturatedWaterContentFormula := Value;
+      end;
+    DownstreamInitialWaterContentPosition:
+      begin
+        PestDownstreamInitialWaterContentFormula := Value;
+      end;
+    DownstreamBrooksCoreyExponentPosition:
+      begin
+        PestDownstreamBrooksCoreyExponentFormula := Value;
+      end;
+    DownstreamVerticalSaturatedKPosition:
+      begin
+        PestDownstreamVerticalSaturatedKFormula := Value;
+      end;
+
     FlowPosition:
       begin
         PestFlowFormula := Value;
@@ -1854,6 +2430,24 @@ begin
       begin
         PestUpstreamDepthMethod := Value;
       end;
+
+    UpstreamSaturatedWaterContentPosition:
+      begin
+        PestUpstreamSaturatedWaterContentMethod := Value;
+      end;
+    UpstreamInitialWaterContentPosition:
+      begin
+        PestUpstreamInitialWaterContentMethod := Value;
+      end;
+    UpstreamBrooksCoreyExponentPosition:
+      begin
+        PestUpstreamBrooksCoreyExponentMethod := Value;
+      end;
+    UpstreamVerticalSaturatedKPosition:
+      begin
+        PestUpstreamVerticalSaturatedKMethod := Value;
+      end;
+
     DownstreamKPosition:
       begin
         PestDownstreamKMethod := Value;
@@ -1874,6 +2468,24 @@ begin
       begin
         PestDownstreamDepthMethod := Value;
       end;
+
+    DownstreamSaturatedWaterContentPosition:
+      begin
+        PestDownstreamSaturatedWaterContentMethod := Value;
+      end;
+    DownstreamInitialWaterContentPosition:
+      begin
+        PestDownstreamInitialWaterContentMethod := Value;
+      end;
+    DownstreamBrooksCoreyExponentPosition:
+      begin
+        PestDownstreamBrooksCoreyExponentMethod := Value;
+      end;
+    DownstreamVerticalSaturatedKPosition:
+      begin
+        PestDownstreamVerticalSaturatedKMethod := Value;
+      end;
+
     FlowPosition:
       begin
         PestFlowMethod := Value;
@@ -1922,6 +2534,18 @@ begin
   SetPestParamMethod(FPestDownstreamBedThicknessMethod, Value);
 end;
 
+procedure TSfrBoundary.SetPestDownstreamBrooksCoreyExponentFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamBrooksCoreyExponentPosition, FPestDownstreamBrooksCoreyExponentFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamBrooksCoreyExponentMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamBrooksCoreyExponentMethod, Value);
+end;
+
 procedure TSfrBoundary.SetPestDownstreamDepthFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, DownstreamDepthPosition, FPestDownstreamDepthFormula);
@@ -1933,6 +2557,18 @@ begin
   SetPestParamMethod(FPestDownstreamDepthMethod, Value);
 end;
 
+procedure TSfrBoundary.SetPestDownstreamInitialWaterContentFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamInitialWaterContentPosition, FPestDownstreamInitialWaterContentFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamInitialWaterContentMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamInitialWaterContentMethod, Value);
+end;
+
 procedure TSfrBoundary.SetPestDownstreamKFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, DownstreamKPosition, FPestDownstreamKFormula);
@@ -1941,6 +2577,30 @@ end;
 procedure TSfrBoundary.SetPestDownstreamKMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestDownstreamKMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamSaturatedWaterContentFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamSaturatedWaterContentPosition, FPestDownstreamSaturatedWaterContentFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamSaturatedWaterContentMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamSaturatedWaterContentMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamVerticalSaturatedKFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DownstreamVerticalSaturatedKPosition, FPestDownstreamVerticalSaturatedKFormula);
+end;
+
+procedure TSfrBoundary.SetPestDownstreamVerticalSaturatedKMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestDownstreamVerticalSaturatedKMethod, Value);
 end;
 
 procedure TSfrBoundary.SetPestDownstreamWidthFormula(const Value: string);
@@ -2016,6 +2676,18 @@ begin
   SetPestParamMethod(FPestUpstreamBedThicknessMethod, Value);
 end;
 
+procedure TSfrBoundary.SetPestUpstreamBrooksCoreyExponentFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamBrooksCoreyExponentPosition, FPestUpstreamBrooksCoreyExponentFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamBrooksCoreyExponentMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamBrooksCoreyExponentMethod, Value);
+end;
+
 procedure TSfrBoundary.SetPestUpstreamDepthFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, UpstreamDepthPosition, FPestUpstreamDepthFormula);
@@ -2027,6 +2699,18 @@ begin
   SetPestParamMethod(FPestUpstreamDepthMethod, Value);
 end;
 
+procedure TSfrBoundary.SetPestUpstreamInitialWaterContentFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamInitialWaterContentPosition, FPestUpstreamInitialWaterContentFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamInitialWaterContentMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamInitialWaterContentMethod, Value);
+end;
+
 procedure TSfrBoundary.SetPestUpstreamKFormula(const Value: string);
 begin
   UpdateFormulaBlocks(Value, UpstreamKPosition, FPestUpstreamKFormula);
@@ -2035,6 +2719,30 @@ end;
 procedure TSfrBoundary.SetPestUpstreamKMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestUpstreamKMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamSaturatedWaterContentFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamSaturatedWaterContentPosition, FPestUpstreamSaturatedWaterContentFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamSaturatedWaterContentMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamSaturatedWaterContentMethod, Value);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamVerticalSaturatedKFormula(
+  const Value: string);
+begin
+  UpdateFormulaBlocks(Value, UpstreamVerticalSaturatedKPosition, FPestUpstreamVerticalSaturatedKFormula);
+end;
+
+procedure TSfrBoundary.SetPestUpstreamVerticalSaturatedKMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUpstreamVerticalSaturatedKMethod, Value);
 end;
 
 procedure TSfrBoundary.SetPestUpstreamWidthFormula(const Value: string);
@@ -2220,6 +2928,34 @@ begin
   end;
 end;
 
+procedure TSfrBoundary.InvalidateDownstreamBrooksCoreyExponentData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamBrooksCorey(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamBrooksCorey(self);
+    end;
+  end;
+end;
+
 procedure TSfrBoundary.InvalidateDownstreamDepthData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -2247,6 +2983,34 @@ begin
   end;
 end;
 
+procedure TSfrBoundary.InvalidateDownstreamInitialWaterContentData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamUnsatInitialWaterContent(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamUnsatInitialWaterContent(self);
+    end;
+  end;
+end;
+
 procedure TSfrBoundary.InvalidateDownstreamKData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -2270,6 +3034,62 @@ begin
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
       ChildModel.InvalidateMfSfrDownstreamHydraulicConductivity(self);
+    end;
+  end;
+end;
+
+procedure TSfrBoundary.InvalidateDownstreamSaturatedWaterContentData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamUnsaturatedWaterContent(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamUnsaturatedWaterContent(self);
+    end;
+  end;
+end;
+
+procedure TSfrBoundary.InvalidateDownstreamVerticalSaturatedKData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamUnsatKz(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamUnsatKz(self);
     end;
   end;
 end;
@@ -2473,6 +3293,34 @@ begin
   end;
 end;
 
+procedure TSfrBoundary.InvalidateUpstreamBrooksCoreyExponentData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamBrooksCorey(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamBrooksCorey(self);
+    end;
+  end;
+end;
+
 procedure TSfrBoundary.InvalidateUpstreamDepthData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -2500,6 +3348,34 @@ begin
   end;
 end;
 
+procedure TSfrBoundary.InvalidateUpstreamInitialWaterContentData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamUnsatInitialWaterContent(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamUnsatInitialWaterContent(self);
+    end;
+  end;
+end;
+
 procedure TSfrBoundary.InvalidateUpstreamKData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -2523,6 +3399,62 @@ begin
     begin
       ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
       ChildModel.InvalidateMfSfrUpstreamHydraulicConductivity(self);
+    end;
+  end;
+end;
+
+procedure TSfrBoundary.InvalidateUpstreamSaturatedWaterContentData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrUpstreamUnsaturatedWaterContent(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrUpstreamUnsaturatedWaterContent(self);
+    end;
+  end;
+end;
+
+procedure TSfrBoundary.InvalidateUpstreamVerticalSaturatedKData(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSfrDownstreamBrooksCorey(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSfrDownstreamBrooksCorey(self);
     end;
   end;
 end;

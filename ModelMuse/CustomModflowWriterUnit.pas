@@ -245,7 +245,8 @@ type
     procedure WriteEndGridData;
     procedure WriteTemplateHeader; virtual;
     // Write a value or a formula for EnhancedTemplateProcessor for a
-    // boundary condition cell.
+    // boundary condition cell. Index is used to access the appropiate
+    // value, PEST name, PEST Series name and PEST series method.
     procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
       FixedLength: Integer = 0; ChangeSign: Boolean = False);
     // Write either the data array value at the specified location

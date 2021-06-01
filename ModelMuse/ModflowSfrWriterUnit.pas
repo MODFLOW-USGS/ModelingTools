@@ -3871,11 +3871,14 @@ var
     WriteInteger(Reach.Column+1);
     WriteInteger(SegmentNumber);
     WriteInteger(ReachIndex+1);
-    WriteFloat(Reach.ReachLength);
+    WriteValueOrFormula(Reach, ReachLengthPosition);
+//    WriteFloat(Reach.ReachLength);
     if ISFROPT in [1,2,3] then
     begin
-      WriteFloat(Reach.StreambedElevation);
-      WriteFloat(Reach.StreamSlope);
+      WriteValueOrFormula(Reach, StreambedElevationPosition);
+      WriteValueOrFormula(Reach, StreamSlopePosition);
+//      WriteFloat(Reach.StreambedElevation);
+//      WriteFloat(Reach.StreamSlope);
       if Reach.StreamSlope <= 0 then
       begin
         frmErrorsAndWarnings.AddError(Model, StrOneOrMoreSFRStre,
@@ -3884,8 +3887,10 @@ var
           Reach.Layer+1, Reach.Row + 1, Reach.Column + 1]),
           Segment.FScreenObject);
       end;
-      WriteFloat(Reach.StreamBedThickness);
-      WriteFloat(Reach.HydraulicConductivity);
+      WriteValueOrFormula(Reach, StreamBedThicknessPosition);
+      WriteValueOrFormula(Reach, HydraulicConductivityPosition);
+//      WriteFloat(Reach.StreamBedThickness);
+//      WriteFloat(Reach.HydraulicConductivity);
 
       AqKx := AquiferKx(Reach.Layer, Reach.Row, Reach.Column);
       if AqKx > 0 then
@@ -3911,13 +3916,17 @@ var
     end;
     if ISFROPT in [2,3] then
     begin
-      WriteFloat(Reach.SaturatedWaterContent);
-      WriteFloat(Reach.InitialWaterContent);
-      WriteFloat(Reach.BrooksCoreyExponent);
+      WriteValueOrFormula(Reach, SaturatedWaterContentPosition);
+      WriteValueOrFormula(Reach, InitialWaterContentPosition);
+      WriteValueOrFormula(Reach, BrooksCoreyExponentPosition);
+//      WriteFloat(Reach.SaturatedWaterContent);
+//      WriteFloat(Reach.InitialWaterContent);
+//      WriteFloat(Reach.BrooksCoreyExponent);
     end;
     if ISFROPT = 3 then
     begin
-      WriteFloat(Reach.VerticalK);
+      WriteValueOrFormula(Reach, VerticalKPosition);
+//      WriteFloat(Reach.VerticalK);
     end;
     WriteIface(IFACE);
     WriteString(' # Data Set 2: KRCH IRCH JRCH ISEG IREACH RCHLEN');
@@ -3949,6 +3958,7 @@ var
         Segment.FScreenObject);
     end;
   end;
+
   procedure WarnIfVerticallyAlignedReaches;
   begin
     if (PriorReach <> nil) and (PriorReach.Row = Reach.Row)

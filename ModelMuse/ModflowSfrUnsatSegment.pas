@@ -19,6 +19,19 @@ type
     SaturatedWaterContentAnnotation: string;
     InitialWaterContentAnnotation: string;
     VerticalSaturatedKAnnotation: string;
+
+    BrooksCoreyExponentPestItem: string;
+    SaturatedWaterContentPestItem: string;
+    InitialWaterContentPestItem: string;
+    VerticalSaturatedKPestItem: string;
+    BrooksCoreyExponentPestSeriesItem: string;
+    SaturatedWaterContentPestSeriesItem: string;
+    InitialWaterContentPestSeriesItem: string;
+    VerticalSaturatedKPestSeriesItem: string;
+    BrooksCoreyExponentPestSeriesMethod: TPestParamMethod;
+    SaturatedWaterContentPestSeriesMethod: TPestParamMethod;
+    InitialWaterContentPestSeriesMethod: TPestParamMethod;
+    VerticalSaturatedKPestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -164,6 +177,9 @@ type
     procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property Values: TSfrUnsatSegmentRecord read FValues write FValues;
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
@@ -177,6 +193,12 @@ type
     property VerticalSaturatedKAnnotation: string read GetVerticalSaturatedKAnnotation;
   end;
 
+const
+  UnsatSaturatedWaterContentPosition = 0;
+  UnSatInitialWaterContentPosition = 1;
+  UnSatBrooksCoreyExponentPosition = 2;
+  UnSatVerticalSaturatedKPosition = 3;
+
 implementation
 
 uses Contnrs, DataSetUnit, ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit,
@@ -188,12 +210,6 @@ resourcestring
   StrBrooksCoreyExponen = 'Brooks-Corey exponent';
   StrMaximumVerticalK = 'Maximum vertical K';
   StrMaximumVerticalK_LC = ' maximum vertical K';
-
-const
-  SaturatedWaterContentPosition = 0;
-  InitialWaterContentPosition = 1;
-  BrooksCoreyExponentPosition = 2;
-  VerticalSaturatedKPosition = 3;
 
 { TSfrUnsatSegmentItem }
 
@@ -222,13 +238,13 @@ var
   VerticalSaturatedKObserver: TObserver;
 begin
   ParentCollection := Collection as TSfrUnsatSegmentCollection;
-  SaturatedWaterContentObserver := FObserverList[SaturatedWaterContentPosition];
+  SaturatedWaterContentObserver := FObserverList[UnsatSaturatedWaterContentPosition];
   SaturatedWaterContentObserver.OnUpToDateSet := ParentCollection.InvalidateSaturatedWaterContentData;
-  InitialWaterContentObserver := FObserverList[InitialWaterContentPosition];
+  InitialWaterContentObserver := FObserverList[UnSatInitialWaterContentPosition];
   InitialWaterContentObserver.OnUpToDateSet := ParentCollection.InvalidateInitialWaterContentData;
-  BrooksCoreyExponentObserver := FObserverList[BrooksCoreyExponentPosition];
+  BrooksCoreyExponentObserver := FObserverList[UnSatBrooksCoreyExponentPosition];
   BrooksCoreyExponentObserver.OnUpToDateSet := ParentCollection.InvalidateBrooksCoreyExponentData;
-  VerticalSaturatedKObserver := FObserverList[VerticalSaturatedKPosition];
+  VerticalSaturatedKObserver := FObserverList[UnSatVerticalSaturatedKPosition];
   VerticalSaturatedKObserver.OnUpToDateSet := ParentCollection.InvalidateVerticalSaturatedKData;
 end;
 
@@ -268,13 +284,13 @@ end;
 function TSfrUnsatSegmentItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    SaturatedWaterContentPosition:
+    UnsatSaturatedWaterContentPosition:
       result := SaturatedWaterContent;
-    InitialWaterContentPosition:
+    UnSatInitialWaterContentPosition:
       result := InitialWaterContent;
-    BrooksCoreyExponentPosition:
+    UnSatBrooksCoreyExponentPosition:
       result := BrooksCoreyExponent;
-    VerticalSaturatedKPosition:
+    UnSatVerticalSaturatedKPosition:
       result := VerticalSaturatedK;
     else Assert(False);
   end;
@@ -283,45 +299,45 @@ end;
 function TSfrUnsatSegmentItem.GetBrooksCoreyExponent: string;
 begin
   Result := FBrooksCoreyExponent.Formula;
-  ResetItemObserver(BrooksCoreyExponentPosition);
+  ResetItemObserver(UnSatBrooksCoreyExponentPosition);
 end;
 
 function TSfrUnsatSegmentItem.GetInitialWaterContent: string;
 begin
   Result := FInitialWaterContent.Formula;
-  ResetItemObserver(InitialWaterContentPosition);
+  ResetItemObserver(UnSatInitialWaterContentPosition);
 end;
 
 procedure TSfrUnsatSegmentItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FSaturatedWaterContent then
   begin
-    List.Add(FObserverList[SaturatedWaterContentPosition]);
+    List.Add(FObserverList[UnsatSaturatedWaterContentPosition]);
   end;
   if Sender = FInitialWaterContent then
   begin
-    List.Add(FObserverList[InitialWaterContentPosition]);
+    List.Add(FObserverList[UnSatInitialWaterContentPosition]);
   end;
   if Sender = FBrooksCoreyExponent then
   begin
-    List.Add(FObserverList[BrooksCoreyExponentPosition]);
+    List.Add(FObserverList[UnSatBrooksCoreyExponentPosition]);
   end;
   if Sender = FVerticalSaturatedK then
   begin
-    List.Add(FObserverList[VerticalSaturatedKPosition]);
+    List.Add(FObserverList[UnSatVerticalSaturatedKPosition]);
   end;
 end;
 
 function TSfrUnsatSegmentItem.GetSaturatedWaterContent: string;
 begin
   Result := FSaturatedWaterContent.Formula;
-  ResetItemObserver(SaturatedWaterContentPosition);
+  ResetItemObserver(UnsatSaturatedWaterContentPosition);
 end;
 
 function TSfrUnsatSegmentItem.GetVerticalSaturatedK: string;
 begin
   Result := FVerticalSaturatedK.Formula;
-  ResetItemObserver(VerticalSaturatedKPosition);
+  ResetItemObserver(UnSatVerticalSaturatedKPosition);
 end;
 
 function TSfrUnsatSegmentItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -354,13 +370,13 @@ end;
 procedure TSfrUnsatSegmentItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   case Index of
-    SaturatedWaterContentPosition:
+    UnsatSaturatedWaterContentPosition:
       SaturatedWaterContent := Value;
-    InitialWaterContentPosition:
+    UnSatInitialWaterContentPosition:
       InitialWaterContent := Value;
-    BrooksCoreyExponentPosition:
+    UnSatBrooksCoreyExponentPosition:
       BrooksCoreyExponent := Value;
-    VerticalSaturatedKPosition:
+    UnSatVerticalSaturatedKPosition:
       VerticalSaturatedK := Value;
     else Assert(False);
   end;
@@ -374,7 +390,7 @@ var
 begin
   if FBrooksCoreyExponent.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, BrooksCoreyExponentPosition, FBrooksCoreyExponent);
+    UpdateFormulaBlocks(Value, UnSatBrooksCoreyExponentPosition, FBrooksCoreyExponent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -408,7 +424,7 @@ var
 begin
   if FSaturatedWaterContent.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, SaturatedWaterContentPosition, FSaturatedWaterContent);
+    UpdateFormulaBlocks(Value, UnsatSaturatedWaterContentPosition, FSaturatedWaterContent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil) and not PhastModel.Clearing
       and not (csDestroying in PhastModel.ComponentState)
@@ -441,7 +457,7 @@ var
 begin
   if FInitialWaterContent.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, InitialWaterContentPosition, FInitialWaterContent);
+    UpdateFormulaBlocks(Value, UnSatInitialWaterContentPosition, FInitialWaterContent);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -475,7 +491,7 @@ var
 begin
   if FVerticalSaturatedK.Formula <> Value then
   begin
-    UpdateFormulaBlocks(Value, VerticalSaturatedKPosition, FVerticalSaturatedK);
+    UpdateFormulaBlocks(Value, UnSatVerticalSaturatedKPosition, FVerticalSaturatedK);
     PhastModel := Model as TPhastModel;
     if (PhastModel <> nil)
       and not (csDestroying in PhastModel.ComponentState)
@@ -529,14 +545,50 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalSaturatedWaterContentPestSeries: string;
+  LocalSaturatedWaterContentPestMethod: TPestParamMethod;
+  SaturatedWaterContentPestItems: TStringList;
+  LocalSaturatedWaterContentPest: string;
+  LocalInitialWaterContentPestSeries: string;
+  LocalInitialWaterContentPestMethod: TPestParamMethod;
+  InitialWaterContentPestItems: TStringList;
+  LocalInitialWaterContentPest: string;
+  LocalBrooksCoreyExponentPestSeries: string;
+  LocalBrooksCoreyExponentPestMethod: TPestParamMethod;
+  BrooksCoreyExponentPestItems: TStringList;
+  LocalBrooksCoreyExponentPest: string;
+  LocalVerticalSaturatedKPestSeries: string;
+  LocalVerticalSaturatedKPestMethod: TPestParamMethod;
+  VerticalSaturatedKPestItems: TStringList;
+  LocalVerticalSaturatedKPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
-  SaturatedWaterContentArray := DataSets[0];
-  InitialWaterContentArray := DataSets[1];
-  BrooksCoreyExponentArray := DataSets[2];
-  VerticalSaturatedKArray := DataSets[3];
+  SaturatedWaterContentArray := DataSets[UnsatSaturatedWaterContentPosition];
+  InitialWaterContentArray := DataSets[UnSatInitialWaterContentPosition];
+  BrooksCoreyExponentArray := DataSets[UnSatBrooksCoreyExponentPosition];
+  VerticalSaturatedKArray := DataSets[UnSatVerticalSaturatedKPosition];
   Boundary := Boundaries[ItemIndex, AModel] as TSfrUnsatSegmentStorage;
+
+  LocalSaturatedWaterContentPestSeries := PestSeries[UnsatSaturatedWaterContentPosition];
+  LocalSaturatedWaterContentPestMethod := PestMethods[UnsatSaturatedWaterContentPosition];
+  SaturatedWaterContentPestItems := PestItemNames[UnsatSaturatedWaterContentPosition];
+  LocalSaturatedWaterContentPest := SaturatedWaterContentPestItems[ItemIndex];
+
+  LocalInitialWaterContentPestSeries := PestSeries[UnsatInitialWaterContentPosition];
+  LocalInitialWaterContentPestMethod := PestMethods[UnsatInitialWaterContentPosition];
+  InitialWaterContentPestItems := PestItemNames[UnsatInitialWaterContentPosition];
+  LocalInitialWaterContentPest := InitialWaterContentPestItems[ItemIndex];
+
+  LocalBrooksCoreyExponentPestSeries := PestSeries[UnsatBrooksCoreyExponentPosition];
+  LocalBrooksCoreyExponentPestMethod := PestMethods[UnsatBrooksCoreyExponentPosition];
+  BrooksCoreyExponentPestItems := PestItemNames[UnsatBrooksCoreyExponentPosition];
+  LocalBrooksCoreyExponentPest := BrooksCoreyExponentPestItems[ItemIndex];
+
+  LocalVerticalSaturatedKPestSeries := PestSeries[UnsatVerticalSaturatedKPosition];
+  LocalVerticalSaturatedKPestMethod := PestMethods[UnsatVerticalSaturatedKPosition];
+  VerticalSaturatedKPestItems := PestItemNames[UnsatVerticalSaturatedKPosition];
+  LocalVerticalSaturatedKPest := VerticalSaturatedKPestItems[ItemIndex];
 
   SaturatedWaterContentArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
@@ -566,18 +618,33 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 BrooksCoreyExponentAnnotation := BrooksCoreyExponentArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                BrooksCoreyExponentPestItem := LocalBrooksCoreyExponentPest;
+                BrooksCoreyExponentPestSeriesItem := LocalBrooksCoreyExponentPestSeries;
+                BrooksCoreyExponentPestSeriesMethod := LocalBrooksCoreyExponentPestMethod;
+
                 InitialWaterContent := InitialWaterContentArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 InitialWaterContentAnnotation := InitialWaterContentArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                InitialWaterContentPestItem := LocalInitialWaterContentPest;
+                InitialWaterContentPestSeriesItem := LocalInitialWaterContentPestSeries;
+                InitialWaterContentPestSeriesMethod := LocalInitialWaterContentPestMethod;
+
                 SaturatedWaterContent := SaturatedWaterContentArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 SaturatedWaterContentAnnotation := SaturatedWaterContentArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                SaturatedWaterContentPestItem := LocalSaturatedWaterContentPest;
+                SaturatedWaterContentPestSeriesItem := LocalSaturatedWaterContentPestSeries;
+                SaturatedWaterContentPestSeriesMethod := LocalSaturatedWaterContentPestMethod;
+
                 VerticalSaturatedK := VerticalSaturatedKArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
                 VerticalSaturatedKAnnotation := VerticalSaturatedKArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                VerticalSaturatedKPestItem := LocalVerticalSaturatedKPest;
+                VerticalSaturatedKPestSeriesItem := LocalVerticalSaturatedKPestSeries;
+                VerticalSaturatedKPestSeriesMethod := LocalVerticalSaturatedKPestMethod;
               end;
               Inc(BoundaryIndex);
             end;
@@ -642,11 +709,71 @@ var
   InitialWaterContentData: TModflowTimeList;
   SaturatedWaterContentData: TModflowTimeList;
   VerticalSaturatedKData: TModflowTimeList;
+  OffSet: Integer;
+  PestSaturatedWaterContentSeriesName: string;
+  PestSaturatedWaterContentMethod: TPestParamMethod;
+  PestSaturatedWaterContentItems: TStringList;
+  PestInitialWaterContentSeriesName: string;
+  PestInitialWaterContentMethod: TPestParamMethod;
+  PestInitialWaterContentItems: TStringList;
+  PestBrooksCoreyExponentSeriesName: string;
+  PestBrooksCoreyExponentMethod: TPestParamMethod;
+  PestBrooksCoreyExponentItems: TStringList;
+  PestVerticalSaturatedKSeriesName: string;
+  PestVerticalSaturatedKMethod: TPestParamMethod;
+  PestVerticalSaturatedKItems: TStringList;
+  ItemFormula: string;
 begin
   ISFROPT := (Model as TPhastModel).ModflowPackages.SfrPackage.Isfropt;
 
   SetLength(BoundaryValues, Count);
   Boundary := BoundaryGroup as TSfrBoundary;
+  if Boundary.UpstreamUnsatSegmentValues = self then
+  begin
+    OffSet := 5;
+  end
+  else
+  begin
+    OffSet := 14;
+    Assert(Boundary.DownstreamUnsatSegmentValues = self);
+  end;
+
+  PestSaturatedWaterContentSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[UnsatSaturatedWaterContentPosition+Offset];
+  PestSeries.Add(PestSaturatedWaterContentSeriesName);
+  PestSaturatedWaterContentMethod :=
+    BoundaryGroup.PestBoundaryMethod[UnsatSaturatedWaterContentPosition+Offset];
+  PestMethods.Add(PestSaturatedWaterContentMethod);
+  PestSaturatedWaterContentItems := TStringList.Create;
+  PestItemNames.Add(PestSaturatedWaterContentItems);
+
+  PestInitialWaterContentSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[UnsatInitialWaterContentPosition+Offset];
+  PestSeries.Add(PestInitialWaterContentSeriesName);
+  PestInitialWaterContentMethod :=
+    BoundaryGroup.PestBoundaryMethod[UnsatInitialWaterContentPosition+Offset];
+  PestMethods.Add(PestInitialWaterContentMethod);
+  PestInitialWaterContentItems := TStringList.Create;
+  PestItemNames.Add(PestInitialWaterContentItems);
+
+  PestBrooksCoreyExponentSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[UnsatBrooksCoreyExponentPosition+Offset];
+  PestSeries.Add(PestBrooksCoreyExponentSeriesName);
+  PestBrooksCoreyExponentMethod :=
+    BoundaryGroup.PestBoundaryMethod[UnsatBrooksCoreyExponentPosition+Offset];
+  PestMethods.Add(PestBrooksCoreyExponentMethod);
+  PestBrooksCoreyExponentItems := TStringList.Create;
+  PestItemNames.Add(PestBrooksCoreyExponentItems);
+
+  PestVerticalSaturatedKSeriesName :=
+    BoundaryGroup.PestBoundaryFormula[UnsatVerticalSaturatedKPosition+Offset];
+  PestSeries.Add(PestVerticalSaturatedKSeriesName);
+  PestVerticalSaturatedKMethod :=
+    BoundaryGroup.PestBoundaryMethod[UnsatVerticalSaturatedKPosition+Offset];
+  PestMethods.Add(PestVerticalSaturatedKMethod);
+  PestVerticalSaturatedKItems := TStringList.Create;
+  PestItemNames.Add(PestVerticalSaturatedKItems);
+
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   for Index := 0 to Count - 1 do
   begin
@@ -657,12 +784,17 @@ begin
     ItemUsed := (ISFROPT  in [4,5]) and (ICALC in [1,2]) and (Index = 0);
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.BrooksCoreyExponent;
+      ItemFormula := Item.BrooksCoreyExponent;
+//      BoundaryValues[Index].Formula := Item.BrooksCoreyExponent;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestBrooksCoreyExponentSeriesName,
+      PestBrooksCoreyExponentMethod, PestBrooksCoreyExponentItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TSfrUnsatSegmentTimeListLink;
   BrooksCoreyExponentData := ALink.FBrooksCoreyExponentData;
@@ -678,12 +810,17 @@ begin
     ItemUsed := (ISFROPT  in [4,5]) and (ICALC in [1,2]) and (Index = 0);
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.InitialWaterContent;
+      ItemFormula := Item.InitialWaterContent;
+//      BoundaryValues[Index].Formula := Item.InitialWaterContent;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestInitialWaterContentSeriesName,
+      PestInitialWaterContentMethod, PestInitialWaterContentItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   InitialWaterContentData := ALink.FInitialWaterContentData;
   InitialWaterContentData.Initialize(BoundaryValues, ScreenObject, lctZero,
@@ -698,12 +835,17 @@ begin
     ItemUsed := (ISFROPT  in [4,5]) and (ICALC in [1,2]) and (Index = 0);
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.SaturatedWaterContent;
+      ItemFormula := Item.SaturatedWaterContent;
+//      BoundaryValues[Index].Formula := Item.SaturatedWaterContent;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestSaturatedWaterContentSeriesName,
+      PestSaturatedWaterContentMethod, PestSaturatedWaterContentItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   SaturatedWaterContentData := ALink.FSaturatedWaterContentData;
   SaturatedWaterContentData.Initialize(BoundaryValues, ScreenObject, lctZero,
@@ -718,12 +860,17 @@ begin
     ItemUsed := (ISFROPT  = 5) and (ICALC in [1,2]) and (Index = 0);
     if ItemUsed then
     begin
-      BoundaryValues[Index].Formula := Item.VerticalSaturatedK;
+      ItemFormula := Item.VerticalSaturatedK;
+//      BoundaryValues[Index].Formula := Item.VerticalSaturatedK;
     end
     else
     begin
-      BoundaryValues[Index].Formula := '0';
+      ItemFormula := '0';
+//      BoundaryValues[Index].Formula := '0';
     end;
+    AssignBoundaryFormula(AModel, PestVerticalSaturatedKSeriesName,
+      PestVerticalSaturatedKMethod, PestVerticalSaturatedKItems,
+      ItemFormula, Writer, BoundaryValues[Index]);
   end;
   VerticalSaturatedKData := ALink.FVerticalSaturatedKData;
   VerticalSaturatedKData.Initialize(BoundaryValues, ScreenObject, lctZero,
@@ -908,14 +1055,54 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TSfrUnsatSegment_Cell.GetPestName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    UnsatSaturatedWaterContentPosition: result := FValues.SaturatedWaterContentPestItem;
+    UnSatInitialWaterContentPosition: result := FValues.InitialWaterContentPestItem;
+    UnSatBrooksCoreyExponentPosition: result := FValues.BrooksCoreyExponentPestItem;
+    UnSatVerticalSaturatedKPosition: result := FValues.VerticalSaturatedKPestItem;
+    else Assert(False);
+  end;
+end;
+
+function TSfrUnsatSegment_Cell.GetPestSeriesMethod(
+  Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    UnsatSaturatedWaterContentPosition: result := FValues.SaturatedWaterContentPestSeriesMethod;
+    UnSatInitialWaterContentPosition: result := FValues.InitialWaterContentPestSeriesMethod;
+    UnSatBrooksCoreyExponentPosition: result := FValues.BrooksCoreyExponentPestSeriesMethod;
+    UnSatVerticalSaturatedKPosition: result := FValues.VerticalSaturatedKPestSeriesMethod;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSfrUnsatSegment_Cell.GetPestSeriesName(Index: Integer): string;
+begin
+  result := '';
+  case Index of
+    UnsatSaturatedWaterContentPosition: result := FValues.SaturatedWaterContentPestSeriesItem;
+    UnSatInitialWaterContentPosition: result := FValues.InitialWaterContentPestSeriesItem;
+    UnSatBrooksCoreyExponentPosition: result := FValues.BrooksCoreyExponentPestSeriesItem;
+    UnSatVerticalSaturatedKPosition: result := FValues.VerticalSaturatedKPestSeriesItem;
+    else Assert(False);
+  end;
+end;
+
 function TSfrUnsatSegment_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
   case Index of
-    0: result := SaturatedWaterContentAnnotation;
-    1: result := InitialWaterContentAnnotation;
-    2: result := BrooksCoreyExponentAnnotation;
-    3: result := VerticalSaturatedKAnnotation;
+    UnsatSaturatedWaterContentPosition: result := SaturatedWaterContentAnnotation;
+    UnSatInitialWaterContentPosition: result := InitialWaterContentAnnotation;
+    UnSatBrooksCoreyExponentPosition: result := BrooksCoreyExponentAnnotation;
+    UnSatVerticalSaturatedKPosition: result := VerticalSaturatedKAnnotation;
     else Assert(False);
   end;
 end;
@@ -924,10 +1111,10 @@ function TSfrUnsatSegment_Cell.GetRealValue(Index: integer; AModel: TBaseModel):
 begin
   result := 0;
   case Index of
-    0: result := SaturatedWaterContent;
-    1: result := InitialWaterContent;
-    2: result := BrooksCoreyExponent;
-    3: result := VerticalSaturatedK;
+    UnsatSaturatedWaterContentPosition: result := SaturatedWaterContent;
+    UnSatInitialWaterContentPosition: result := InitialWaterContent;
+    UnSatBrooksCoreyExponentPosition: result := BrooksCoreyExponent;
+    UnSatVerticalSaturatedKPosition: result := VerticalSaturatedK;
     else Assert(False);
   end;
 end;
@@ -997,11 +1184,19 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(SaturatedWaterContentAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(InitialWaterContentAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(VerticalSaturatedKAnnotation));
-//  WriteCompString(Comp, BrooksCoreyExponentAnnotation);
-//  WriteCompString(Comp, SaturatedWaterContentAnnotation);
-//  WriteCompString(Comp, InitialWaterContentAnnotation);
-//  WriteCompString(Comp, VerticalSaturatedKAnnotation);
 
+  WriteCompInt(Comp, Strings.IndexOf(BrooksCoreyExponentPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(SaturatedWaterContentPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(InitialWaterContentPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(VerticalSaturatedKPestItem));
+  WriteCompInt(Comp, Strings.IndexOf(BrooksCoreyExponentPestSeriesItem));
+  WriteCompInt(Comp, Strings.IndexOf(SaturatedWaterContentPestSeriesItem));
+  WriteCompInt(Comp, Strings.IndexOf(InitialWaterContentPestSeriesItem));
+  WriteCompInt(Comp, Strings.IndexOf(VerticalSaturatedKPestSeriesItem));
+  WriteCompInt(Comp, Ord(BrooksCoreyExponentPestSeriesMethod));
+  WriteCompInt(Comp, Ord(SaturatedWaterContentPestSeriesMethod));
+  WriteCompInt(Comp, Ord(InitialWaterContentPestSeriesMethod));
+  WriteCompInt(Comp, Ord(VerticalSaturatedKPestSeriesMethod));
 end;
 
 procedure TSfrUnsatSegmentRecord.RecordStrings(Strings: TStringList);
@@ -1010,6 +1205,15 @@ begin
   Strings.Add(SaturatedWaterContentAnnotation);
   Strings.Add(InitialWaterContentAnnotation);
   Strings.Add(VerticalSaturatedKAnnotation);
+
+  Strings.Add(BrooksCoreyExponentPestItem);
+  Strings.Add(SaturatedWaterContentPestItem);
+  Strings.Add(InitialWaterContentPestItem);
+  Strings.Add(VerticalSaturatedKPestItem);
+  Strings.Add(BrooksCoreyExponentPestSeriesItem);
+  Strings.Add(SaturatedWaterContentPestSeriesItem);
+  Strings.Add(InitialWaterContentPestSeriesItem);
+  Strings.Add(VerticalSaturatedKPestSeriesItem);
 end;
 
 procedure TSfrUnsatSegmentRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1027,10 +1231,19 @@ begin
   SaturatedWaterContentAnnotation := Annotations[ReadCompInt(Decomp)];
   InitialWaterContentAnnotation := Annotations[ReadCompInt(Decomp)];
   VerticalSaturatedKAnnotation := Annotations[ReadCompInt(Decomp)];
-//  BrooksCoreyExponentAnnotation := ReadCompString(Decomp, Annotations);
-//  SaturatedWaterContentAnnotation := ReadCompString(Decomp, Annotations);
-//  InitialWaterContentAnnotation := ReadCompString(Decomp, Annotations);
-//  VerticalSaturatedKAnnotation := ReadCompString(Decomp, Annotations);
+
+  BrooksCoreyExponentPestItem := Annotations[ReadCompInt(Decomp)];
+  SaturatedWaterContentPestItem := Annotations[ReadCompInt(Decomp)];
+  InitialWaterContentPestItem := Annotations[ReadCompInt(Decomp)];
+  VerticalSaturatedKPestItem := Annotations[ReadCompInt(Decomp)];
+  BrooksCoreyExponentPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  SaturatedWaterContentPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  InitialWaterContentPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  VerticalSaturatedKPestSeriesItem := Annotations[ReadCompInt(Decomp)];
+  BrooksCoreyExponentPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  SaturatedWaterContentPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  InitialWaterContentPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  VerticalSaturatedKPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TSfrUnsatSegmentStorage }

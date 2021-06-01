@@ -401,7 +401,7 @@ var
   Index: integer;
   SfrBoundary: TSfrBoundary;
   procedure AssignFormula(var Formula: string; PropertyIndex: integer);
-    Const OffSet = 10;
+    Const OffSet = 18;
   var
     PestSeriesItem: string;
     Param: TModflowSteadyParameter;
