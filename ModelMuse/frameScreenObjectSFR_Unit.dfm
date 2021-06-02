@@ -10,7 +10,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     Top = 0
     Width = 561
     Height = 506
-    ActivePage = tabObservations
+    ActivePage = tabSegment
     Align = alClient
     TabOrder = 0
     object tabBasic: TTabSheet
@@ -115,7 +115,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Caption = 'Reach length (RCHLEN)'
         end
         object jceStreamTop: TJvComboEdit
-          Left = 5
+          Left = 3
           Top = 54
           Width = 218
           Height = 21
@@ -205,7 +205,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           OnChange = rdeSegmentNumberChange
         end
         object jceStreambedK: TJvComboEdit
-          Left = 5
+          Left = 3
           Top = 135
           Width = 218
           Height = 21
@@ -235,7 +235,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           OnChange = rdeSegmentNumberChange
         end
         object jceSaturatedVolumetricWater: TJvComboEdit
-          Left = 5
+          Left = 3
           Top = 162
           Width = 218
           Height = 21
@@ -265,7 +265,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           OnChange = rdeSegmentNumberChange
         end
         object jceInitialVolumetricWater: TJvComboEdit
-          Left = 5
+          Left = 3
           Top = 189
           Width = 218
           Height = 21
@@ -295,7 +295,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           OnChange = rdeSegmentNumberChange
         end
         object jceBrooksCoreyExponent: TJvComboEdit
-          Left = 5
+          Left = 3
           Top = 216
           Width = 218
           Height = 21
@@ -325,7 +325,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           OnChange = rdeSegmentNumberChange
         end
         object jceMaxUnsaturatedKz: TJvComboEdit
-          Left = 5
+          Left = 3
           Top = 243
           Width = 218
           Height = 21
@@ -985,7 +985,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         ColCount = 6
         DefaultColWidth = 50
         FixedCols = 0
-        RowCount = 2
+        RowCount = 4
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
         TabOrder = 1
         OnMouseUp = dgFlowTimesMouseUp
@@ -1147,6 +1147,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = 52
       end
       object pnlFlowTop: TPanel
         Left = 0
@@ -1208,7 +1209,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           ColCount = 7
           DefaultColWidth = 50
           FixedCols = 0
-          RowCount = 2
+          RowCount = 4
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
           TabOrder = 1
           OnMouseUp = dgUpMouseUp
@@ -1394,6 +1395,8 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitLeft = 0
+          ExplicitTop = 52
         end
         object pnlUpstream: TPanel
           Left = 1
@@ -1444,7 +1447,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           ColCount = 7
           DefaultColWidth = 50
           FixedCols = 0
-          RowCount = 2
+          RowCount = 4
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
           TabOrder = 1
           OnMouseUp = dgDownMouseUp
@@ -1630,6 +1633,14 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ColWidths = (
+            50
+            50
+            50
+            49
+            50
+            50
+            50)
         end
         object pnlDownstream: TPanel
           Left = 1
@@ -1875,7 +1886,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Exaggeration = 1.000000000000000000
         HorizontalDirection = hdRight
         Image32.Left = 0
-        Image32.Top = 68
+        Image32.Top = 0
         Image32.Width = 553
         Image32.Height = 109
         Image32.Anchors = [akLeft, akBottom]
@@ -1886,7 +1897,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Image32.Scale = 1.000000000000000000
         Image32.ScaleMode = smNormal
         Image32.TabOrder = 0
-        Image32.ExplicitTop = 0
         ImmediateResize = True
         Magnification = 1.000000000000000000
         VerticalDirection = vdUp
@@ -2237,7 +2247,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 108
+          Image32.Top = 0
           Image32.Width = 269
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2248,7 +2258,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
-          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp
@@ -2268,7 +2277,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Exaggeration = 1.000000000000000000
           HorizontalDirection = hdRight
           Image32.Left = 0
-          Image32.Top = 108
+          Image32.Top = 0
           Image32.Width = 270
           Image32.Height = 149
           Image32.Anchors = [akLeft, akBottom]
@@ -2279,7 +2288,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Image32.Scale = 1.000000000000000000
           Image32.ScaleMode = smNormal
           Image32.TabOrder = 0
-          Image32.ExplicitTop = 0
           ImmediateResize = True
           Magnification = 1.000000000000000000
           VerticalDirection = vdUp

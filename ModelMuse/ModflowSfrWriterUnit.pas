@@ -171,6 +171,7 @@ type
     procedure CheckStreamBottomElevation(ScreenObject: TScreenObject;
       Grid: TModflowGrid; SfrReach: TSfr_Cell);
     procedure WriteObsScript(const AFileName: string);
+    procedure WriteFileInternal;
   protected
     class function Extension: string; override;
     function Package: TModflowPackageSelection; override;
@@ -1692,6 +1693,54 @@ begin
       Beep;
       MessageDlg(E.Message, mtError, [mbOK], 0);
     end;
+  end;
+end;
+
+procedure TModflowSFR_Writer.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    frmProgressMM.AddMessage(StrWritingSFRPackage);
+    frmProgressMM.AddMessage(StrWritingDataSet0);
+    WriteDataSet0;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet1);
+    WriteDataSet1a;
+    WriteDataSet1b;
+    WriteDataSet1c;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSet2);
+    WriteDataSet2;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets3and4);
+    WriteDataSets3and4;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
+    begin
+      Exit;
+    end;
+
+    frmProgressMM.AddMessage(StrWritingDataSets5to7);
+    WriteDataSets5to7;
+  finally
+    CloseFile;
   end;
 end;
 
@@ -5203,50 +5252,25 @@ begin
   begin
     Exit;
   end;
-  OpenFile(FileName(AFileName));
-  try
-    frmProgressMM.AddMessage(StrWritingSFRPackage);
-    frmProgressMM.AddMessage(StrWritingDataSet0);
-    WriteDataSet0;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
 
-    frmProgressMM.AddMessage(StrWritingDataSet1);
-    WriteDataSet1a;
-    WriteDataSet1b;
-    WriteDataSet1c;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
+  FPestParamUsed := False;
+  WriteFileInternal;
 
-    frmProgressMM.AddMessage(StrWritingDataSet2);
-    WriteDataSet2;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSets3and4);
-    WriteDataSets3and4;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-
-    frmProgressMM.AddMessage(StrWritingDataSets5to7);
-    WriteDataSets5to7;
-  finally
-    CloseFile;
-  end;
   WriteGages(GageLines);
   WriteObsScript(AFileName);
+
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
 end;
 
 procedure TModflowSFR_Writer.WriteGages(GageLines: TStrings);
@@ -5823,7 +5847,11 @@ begin
     UnsatSegmentValues := UnsatUpstreamValues.SrfUnsatSegmentArray[0];
   end;
   // THTS1, THTS2
-  WriteFloat(UnsatSegmentValues.SaturatedWaterContent);
+  WritePestTemplateFormulaOrValue(UnsatSegmentValues.SaturatedWaterContent,
+    UnsatSegmentValues.SaturatedWaterContentPestItem,
+    '', ppmMultiply,
+    PCellLocation(Addr(UnsatSegmentValues.Cell)), nil);
+//  WriteFloat(UnsatSegmentValues.SaturatedWaterContent);
   if upstream then
   begin
     CommentLine := CommentLine + ' THTS1';
@@ -5833,7 +5861,11 @@ begin
     CommentLine := CommentLine + ' THTS2';
   end;
   // THTI1, THTI2
-  WriteFloat(UnsatSegmentValues.InitialWaterContent);
+  WritePestTemplateFormulaOrValue(UnsatSegmentValues.InitialWaterContent,
+    UnsatSegmentValues.InitialWaterContentPestItem,
+    '', ppmMultiply,
+    PCellLocation(Addr(UnsatSegmentValues.Cell)), nil);
+//  WriteFloat(UnsatSegmentValues.InitialWaterContent);
   if upstream then
   begin
     CommentLine := CommentLine + ' THTI1';
@@ -5843,7 +5875,11 @@ begin
     CommentLine := CommentLine + ' THTI2';
   end;
   // EPS1, EPS2
-  WriteFloat(UnsatSegmentValues.BrooksCoreyExponent);
+  WritePestTemplateFormulaOrValue(UnsatSegmentValues.BrooksCoreyExponent,
+    UnsatSegmentValues.BrooksCoreyExponentPestItem,
+    '', ppmMultiply,
+    PCellLocation(Addr(UnsatSegmentValues.Cell)), nil);
+//  WriteFloat(UnsatSegmentValues.BrooksCoreyExponent);
   if upstream then
   begin
     CommentLine := CommentLine + ' EPS1';
@@ -5855,7 +5891,11 @@ begin
   // UHC1, UHC2
   if ISFROPT = 5 then
   begin
-    WriteFloat(UnsatSegmentValues.VerticalSaturatedK);
+    WritePestTemplateFormulaOrValue(UnsatSegmentValues.VerticalSaturatedK,
+      UnsatSegmentValues.VerticalSaturatedKPestItem,
+      '', ppmMultiply,
+      PCellLocation(Addr(UnsatSegmentValues.Cell)), nil);
+//    WriteFloat(UnsatSegmentValues.VerticalSaturatedK);
     if upstream then
     begin
       CommentLine := CommentLine + ' UHC1';
@@ -5896,7 +5936,7 @@ begin
   begin
     ValuesWriten := True;
 //    WriteFloat(SegmentValues.HydraulicConductivity);
-    WritePestTemplateFormula(SegmentValues.HydraulicConductivity,
+    WritePestTemplateFormulaOrValue(SegmentValues.HydraulicConductivity,
       SegmentValues.HydraulicConductivityPestItem,
       SegmentValues.HydraulicConductivityPestSeriesItem,
       SegmentValues.HydraulicConductivityPestSeriesMethod,
@@ -5958,7 +5998,7 @@ begin
   begin
     ValuesWriten := True;
 //    WriteFloat(SegmentValues.StreamBedThickness);
-    WritePestTemplateFormula(SegmentValues.StreamBedThickness,
+    WritePestTemplateFormulaOrValue(SegmentValues.StreamBedThickness,
       SegmentValues.StreamBedThicknessPestItem,
       SegmentValues.StreamBedThicknessPestSeriesItem,
       SegmentValues.StreamBedThicknessPestSeriesMethod,
@@ -5977,7 +6017,7 @@ begin
   begin
     ValuesWriten := True;
 //    WriteFloat(SegmentValues.StreambedElevation);
-    WritePestTemplateFormula(SegmentValues.StreambedElevation,
+    WritePestTemplateFormulaOrValue(SegmentValues.StreambedElevation,
       SegmentValues.StreambedElevationPestItem,
       SegmentValues.StreambedElevationPestSeriesItem,
       SegmentValues.StreambedElevationPestSeriesMethod,
@@ -6001,7 +6041,7 @@ begin
   begin
     ValuesWriten := True;
 //    WriteFloat(SegmentValues.StreamWidth);
-    WritePestTemplateFormula(SegmentValues.StreamWidth,
+    WritePestTemplateFormulaOrValue(SegmentValues.StreamWidth,
       SegmentValues.StreamWidthPestItem,
       SegmentValues.StreamWidthPestSeriesItem,
       SegmentValues.StreamWidthPestSeriesMethod,
@@ -6020,7 +6060,7 @@ begin
   begin
     ValuesWriten := True;
 //    WriteFloat(SegmentValues.StreamDepth);
-    WritePestTemplateFormula(SegmentValues.StreamDepth,
+    WritePestTemplateFormulaOrValue(SegmentValues.StreamDepth,
       SegmentValues.StreamDepthPestItem,
       SegmentValues.StreamDepthPestSeriesItem,
       SegmentValues.StreamDepthPestSeriesMethod,
@@ -6618,7 +6658,7 @@ begin
 
   // RUNOFF
   RUNOFF := SegmentFlow.Runnoff;
-  Formula := GetPestTemplateFormula(SegmentFlow.Runnoff,
+  Formula := GetPestTemplateFormulaOrValue(SegmentFlow.Runnoff,
     SegmentFlow.RunnoffPestItem, SegmentFlow.RunnoffPestSeriesItem,
     SegmentFlow.RunnoffPestSeriesMethod, nil, nil);
   if (SegmentFlow.RunnoffPestItem <> '') or (SegmentFlow.RunnoffPestSeriesItem <> '') then

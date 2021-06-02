@@ -2141,7 +2141,6 @@ begin
       WritePestTemplateLine(FNameOfFile);
       WritingTemplate := True;
       WriteFileInternal;
-
     finally
       frmErrorsAndWarnings.EndUpdate;
     end;

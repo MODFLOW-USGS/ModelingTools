@@ -303,6 +303,7 @@ type
     procedure Loaded; override;
   private
     FTimesChanged: boolean;
+    FOnCheckPestCell: TSelectCellEvent;
     procedure Edited;
     { Private declarations }
   public
@@ -316,6 +317,8 @@ type
     property OnButtonClick: TGridButtonEvent read FOnButtonClick write SetOnButtonClick;
     property OnEdited: TNotifyEvent read FOnEdited write FOnEdited;
     procedure Clear;
+    property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
+      write FOnCheckPestCell;
     { Public declarations }
   end;
 
@@ -398,9 +401,9 @@ begin
     rdgParameters.DeleteRow(RowToDelete);
     rdgNetwork.DeleteRow(RowToDelete);
 
-    dgFlowTimes.DeleteRow(RowToDelete);
-    dgUp.DeleteRow(RowToDelete);
-    dgDown.DeleteRow(RowToDelete);
+    dgFlowTimes.DeleteRow(RowToDelete+PestRowOffset);
+    dgUp.DeleteRow(RowToDelete+PestRowOffset);
+    dgDown.DeleteRow(RowToDelete+PestRowOffset);
     dgSfrEquation.DeleteRow(RowToDelete);
 
     frameCrossSection1.DeleteItem(RowToDelete-1);
@@ -875,9 +878,9 @@ begin
   begin
     ARow := rdgParameters.SelectedRow;
     rdgParameters.InsertRow(ARow);
-    dgFlowTimes.InsertRow(ARow);
-    dgUp.InsertRow(ARow);
-    dgDown.InsertRow(ARow);
+    dgFlowTimes.InsertRow(ARow+PestRowOffset);
+    dgUp.InsertRow(ARow+PestRowOffset);
+    dgDown.InsertRow(ARow+PestRowOffset);
     dgSfrEquation.InsertRow(ARow);
     frameCrossSection1.InsertItem(ARow-1);
     frameFlowTable1.InsertIntem(ARow-1);
@@ -1046,6 +1049,11 @@ var
     dg.Cells[Ord(scBedElevation),0]  := StrStreambedElevation;
     dg.Cells[Ord(scStreamWidth),0]   := StrStreamWidth;
     dg.Cells[Ord(scStreamDepth),0]   := StrStreamDepth;
+
+    {$IFDEF PEST}
+    dg.Cells[Ord(scStartTime),PestModifierRow] := StrPestModifier;
+    dg.Cells[Ord(scStartTime),PestMethodRow] := StrModificationMethod;
+    {$ENDIF}
   end;
 begin
   inherited;
@@ -1086,6 +1094,11 @@ begin
   dgFlowTimes.Cells[Ord(sfcPrecip),0] := StrPrecipitationVolume;
   dgFlowTimes.Cells[Ord(sfcEvap),0] := StrEvapotranspirationV;
   dgFlowTimes.Cells[Ord(sfcRunoff),0] := StrRunoffVolumeRUNOF;
+
+  {$IFDEF PEST}
+  dgFlowTimes.Cells[Ord(sfcStartTime),PestModifierRow] := StrPestModifier;
+  dgFlowTimes.Cells[Ord(sfcStartTime),PestMethodRow] := StrModificationMethod;
+  {$ENDIF}
 
   rdgParameters.Cells[Ord(spicStartTime),0]  := StrStartingTime;
   rdgParameters.Cells[Ord(spicEndTime),0]    := StrEndingTime;
@@ -1285,11 +1298,12 @@ begin
   end;
 end;
 
-procedure TframeScreenObjectSFR.UpdatedTimesInSfrGrids(const Value: string; ACol: Integer; ARow: Integer);
+procedure TframeScreenObjectSFR.UpdatedTimesInSfrGrids(const Value: string;
+  ACol: Integer; ARow: Integer);
 begin
-  dgFlowTimes.Cells[ACol, ARow] := Value;
-  dgUp.Cells[ACol, ARow] := Value;
-  dgDown.Cells[ACol, ARow] := Value;
+  dgFlowTimes.Cells[ACol, ARow+PestRowOffset] := Value;
+  dgUp.Cells[ACol, ARow+PestRowOffset] := Value;
+  dgDown.Cells[ACol, ARow+PestRowOffset] := Value;
   dgSfrRough.Cells[ACol, ARow] := Value;
   dgSfrEquation.Cells[ACol, ARow] := Value;
   dgTableTime.Cells[ACol, ARow] := Value;
@@ -1313,11 +1327,22 @@ begin
   end;
 end;
 
-procedure TframeScreenObjectSFR.UpdateSpinEditValue(DataGrid: TRbwDataGrid4; SpinEdit: TJvSpinEdit);
+procedure TframeScreenObjectSFR.UpdateSpinEditValue(DataGrid: TRbwDataGrid4;
+  SpinEdit: TJvSpinEdit);
+var
+  OffSet: Integer;
 begin
-  if SpinEdit.AsInteger < DataGrid.RowCount - 1 then
+  if (DataGrid = dgFlowTimes) or (DataGrid = dgUp) or (DataGrid = dgDown) then
   begin
-    SpinEdit.AsInteger := DataGrid.RowCount - 1;
+    OffSet := PestRowOffset;
+  end
+  else
+  begin
+    OffSet := 0;
+  end;
+  if SpinEdit.AsInteger < DataGrid.RowCount - 1 - OffSet then
+  begin
+    SpinEdit.AsInteger := DataGrid.RowCount - 1 - OffSet;
     SpinEdit.OnChange(SpinEdit);
   end;
 end;
@@ -1330,14 +1355,25 @@ begin
   end;
 end;
 
-procedure TframeScreenObjectSFR.EnableMultiEditControl(EdControl: TControl; DataGrid: TRbwDataGrid4);
+procedure TframeScreenObjectSFR.EnableMultiEditControl(EdControl: TControl;
+  DataGrid: TRbwDataGrid4);
 var
   ShouldEnable: Boolean;
   RowIndex: Integer;
   ColIndex: Integer;
+  OffSet: Integer;
 begin
   ShouldEnable := False;
-  for RowIndex := DataGrid.FixedRows to DataGrid.RowCount - 1 do
+  if (DataGrid = dgFlowTimes) or (DataGrid = dgUp) or (DataGrid = dgDown) then
+  begin
+    OffSet := PestRowOffset;
+  end
+  else
+  begin
+    OffSet := 0;
+  end;
+
+  for RowIndex := DataGrid.FixedRows + Offset to DataGrid.RowCount - 1 do
   begin
     for ColIndex := 2 to DataGrid.ColCount - 1 do
     begin
@@ -1360,8 +1396,17 @@ procedure TframeScreenObjectSFR.AssignSelectedCellsInGrid(
 var
   ColIndex: Integer;
   RowIndex: Integer;
+  OffSet: Integer;
 begin
-  for RowIndex := DataGrid.FixedRows to DataGrid.RowCount - 1 do
+  if (DataGrid = dgFlowTimes) or (DataGrid = dgUp) or (DataGrid = dgDown) then
+  begin
+    OffSet := PestRowOffset;
+  end
+  else
+  begin
+    OffSet := 0;
+  end;
+  for RowIndex := DataGrid.FixedRows + OffSet to DataGrid.RowCount - 1 do
   begin
     for ColIndex := 2 to DataGrid.ColCount - 1 do
     begin
@@ -1439,6 +1484,56 @@ begin
     rgReferenceTimeChoice.ItemIndex := 0;
     fedExternalFileName.FileName := '';
     ClearTable(frameExternalFileValues.Grid);
+
+    {$IFDEF PEST}
+    PestMethod[dgUp, Ord(scK)] :=
+      TSfrBoundary.DefaultBoundaryMethod(UpstreamKPosition);
+    PestMethod[dgUp, Ord(scBedThickness)] :=
+      TSfrBoundary.DefaultBoundaryMethod(UpstreamBedThicknessPosition);
+    PestMethod[dgUp, Ord(scBedElevation)] :=
+      TSfrBoundary.DefaultBoundaryMethod(UpstreamBedElevationPosition);
+    PestMethod[dgUp, Ord(scStreamWidth)] :=
+      TSfrBoundary.DefaultBoundaryMethod(UpstreamWidthPosition);
+    PestMethod[dgUp, Ord(scStreamDepth)] :=
+      TSfrBoundary.DefaultBoundaryMethod(UpstreamDepthPosition);
+
+    PestMethod[dgDown, Ord(scK)] :=
+      TSfrBoundary.DefaultBoundaryMethod(DownstreamKPosition);
+    PestMethod[dgDown, Ord(scBedThickness)] :=
+      TSfrBoundary.DefaultBoundaryMethod(DownstreamBedThicknessPosition);
+    PestMethod[dgDown, Ord(scBedElevation)] :=
+      TSfrBoundary.DefaultBoundaryMethod(DownstreamBedElevationPosition);
+    PestMethod[dgDown, Ord(scStreamWidth)] :=
+      TSfrBoundary.DefaultBoundaryMethod(DownstreamWidthPosition);
+    PestMethod[dgDown, Ord(scStreamDepth)] :=
+      TSfrBoundary.DefaultBoundaryMethod(DownstreamDepthPosition);
+
+    PestMethod[dgFlowTimes, Ord(sfcFlow)] :=
+      TSfrBoundary.DefaultBoundaryMethod(FlowPosition);
+    PestMethod[dgFlowTimes, Ord(sfcPrecip)] :=
+      TSfrBoundary.DefaultBoundaryMethod(PrecipPosition);
+    PestMethod[dgFlowTimes, Ord(sfcEvap)] :=
+      TSfrBoundary.DefaultBoundaryMethod(EvapPosition);
+    PestMethod[dgFlowTimes, Ord(sfcRunoff)] :=
+      TSfrBoundary.DefaultBoundaryMethod(RunoffPosition);
+
+{
+  TSfrColumn = (scStartTime, scEndTime, scK, scBedThickness, scBedElevation,
+    scStreamWidth, scStreamDepth);
+  UpstreamKPosition = 0;
+  UpstreamBedThicknessPosition = 1;
+  UpstreamBedElevationPosition = 2;
+  UpstreamWidthPosition = 3;
+  UpstreamDepthPosition = 4;
+
+  DownstreamKPosition = 5;
+  DownstreamBedThicknessPosition = 6;
+  DownstreamBedElevationPosition = 7;
+  DownstreamWidthPosition = 8;
+  DownstreamDepthPosition = 9;
+}
+
+    {$ENDIF}
   finally
     FInitializing := False;
   end;
@@ -1479,36 +1574,89 @@ var
 begin
   if FoundFirst then
   begin
+    {$IFDEF PEST}
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcFlow)]
+      and (PestModifier[dgFlowTimes, Ord(sfcFlow)] <> Boundary.PestFlowFormula) then
+    begin
+      PestModifierAssigned[dgFlowTimes, Ord(sfcFlow)] := False;
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcFlow)]
+      and (PestMethod[dgFlowTimes, Ord(sfcFlow)] <> Boundary.PestFlowMethod) then
+    begin
+      PestMethodAssigned[dgFlowTimes, Ord(sfcFlow)] := False;
+    end;
+
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcPrecip)]
+      and (PestModifier[dgFlowTimes, Ord(sfcPrecip)] <> Boundary.PestPrecipFormula) then
+    begin
+      PestModifierAssigned[dgFlowTimes, Ord(sfcPrecip)] := False;
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcPrecip)]
+      and (PestMethod[dgFlowTimes, Ord(sfcPrecip)] <> Boundary.PestPrecipMethod) then
+    begin
+      PestMethodAssigned[dgFlowTimes, Ord(sfcPrecip)] := False;
+    end;
+
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcEvap)]
+      and (PestModifier[dgFlowTimes, Ord(sfcEvap)] <> Boundary.PestEvapFormula) then
+    begin
+      PestModifierAssigned[dgFlowTimes, Ord(sfcEvap)] := False;
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcEvap)]
+      and (PestMethod[dgFlowTimes, Ord(sfcEvap)] <> Boundary.PestEvapMethod) then
+    begin
+      PestMethodAssigned[dgFlowTimes, Ord(sfcEvap)] := False;
+    end;
+
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcRunoff)]
+      and (PestModifier[dgFlowTimes, Ord(sfcRunoff)] <> Boundary.PestRunoffFormula) then
+    begin
+      PestModifierAssigned[dgFlowTimes, Ord(sfcRunoff)] := False;
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcRunoff)]
+      and (PestMethod[dgFlowTimes, Ord(sfcRunoff)] <> Boundary.PestRunoffMethod) then
+    begin
+      PestMethodAssigned[dgFlowTimes, Ord(sfcRunoff)] := False;
+    end;
+    {$ENDIF}
+
     if seParametersCount.AsInteger = Boundary.SegmentFlows.Count then
     begin
       for TableIndex := 0 to Boundary.SegmentFlows.Count - 1 do
       begin
         FlowItem := Boundary.SegmentFlows.Items[TableIndex] as TSfrSegmentFlowItem;
-        Row := LocateRowFromStartAndEndTimes(FlowItem.StartTime, FlowItem.EndTime);
-        if Row >= 1 then
+        Row := LocateRowFromStartAndEndTimes(FlowItem.StartTime, FlowItem.EndTime)
+          + PestRowOffset;
+        if Row >= 1+PestRowOffset then
         begin
   //        Row := TableIndex + 1;
-          if dgFlowTimes.Cells[Ord(sfcStartTime), Row] <> FloatToStr(FlowItem.StartTime) then
+          if dgFlowTimes.Cells[Ord(sfcStartTime), Row]
+            <> FloatToStr(FlowItem.StartTime) then
           begin
             dgFlowTimes.Cells[Ord(sfcStartTime), Row] := '';
           end;
-          if dgFlowTimes.Cells[Ord(sfcEndTime), Row] <> FloatToStr(FlowItem.EndTime) then
+          if dgFlowTimes.Cells[Ord(sfcEndTime), Row]
+            <> FloatToStr(FlowItem.EndTime) then
           begin
             dgFlowTimes.Cells[Ord(sfcEndTime), Row] := '';
           end;
-          if dgFlowTimes.Cells[Ord(sfcFlow), Row] <> FlowItem.Flow then
+          if dgFlowTimes.Cells[Ord(sfcFlow), Row]
+            <> FlowItem.Flow then
           begin
             dgFlowTimes.Cells[Ord(sfcFlow), Row] := '';
           end;
-          if dgFlowTimes.Cells[Ord(sfcPrecip), Row] <> FlowItem.Precipitation then
+          if dgFlowTimes.Cells[Ord(sfcPrecip), Row]
+            <> FlowItem.Precipitation then
           begin
             dgFlowTimes.Cells[Ord(sfcPrecip), Row] := '';
           end;
-          if dgFlowTimes.Cells[Ord(sfcEvap), Row] <> FlowItem.Evapotranspiration then
+          if dgFlowTimes.Cells[Ord(sfcEvap), Row]
+            <> FlowItem.Evapotranspiration then
           begin
             dgFlowTimes.Cells[Ord(sfcEvap), Row] := '';
           end;
-          if dgFlowTimes.Cells[Ord(sfcRunoff), Row] <> FlowItem.Runnoff then
+          if dgFlowTimes.Cells[Ord(sfcRunoff), Row]
+            <> FlowItem.Runnoff then
           begin
             dgFlowTimes.Cells[Ord(sfcRunoff), Row] := '';
           end;
@@ -1527,12 +1675,24 @@ begin
   end
   else
   begin
+    {$IFDEF PEST}
+    PestModifier[dgFlowTimes, Ord(sfcFlow)] := Boundary.PestFlowFormula;
+    PestMethod[dgFlowTimes, Ord(sfcFlow)] := Boundary.PestFlowMethod;
+    PestModifier[dgFlowTimes, Ord(sfcPrecip)] := Boundary.PestPrecipFormula;
+    PestMethod[dgFlowTimes, Ord(sfcPrecip)] := Boundary.PestPrecipMethod;
+    PestModifier[dgFlowTimes, Ord(sfcEvap)] := Boundary.PestEvapFormula;
+    PestMethod[dgFlowTimes, Ord(sfcEvap)] := Boundary.PestEvapMethod;
+    PestModifier[dgFlowTimes, Ord(sfcRunoff)] := Boundary.PestRunoffFormula;
+    PestMethod[dgFlowTimes, Ord(sfcRunoff)] := Boundary.PestRunoffMethod;
+    {$ENDIF}
+
     Assert(seParametersCount.AsInteger >= Boundary.SegmentFlows.Count);
     for TableIndex := 0 to Boundary.SegmentFlows.Count - 1 do
     begin
       FlowItem := Boundary.SegmentFlows.Items[TableIndex] as TSfrSegmentFlowItem;
-      Row := LocateRowFromStartAndEndTimes(FlowItem.StartTime, FlowItem.EndTime);
-      if Row >= 1 then
+      Row := LocateRowFromStartAndEndTimes(FlowItem.StartTime, FlowItem.EndTime)
+        + PestRowOffset;
+      if Row >= 1 + PestRowOffset then
       begin
         dgFlowTimes.Cells[Ord(sfcStartTime), Row] := FloatToStr(FlowItem.StartTime);
         dgFlowTimes.Cells[Ord(sfcEndTime), Row] := FloatToStr(FlowItem.EndTime);
@@ -1613,18 +1773,46 @@ begin
 end;
 
 procedure TframeScreenObjectSFR.GetSfrSegments(Boundary: TSfrBoundary; FoundFirst: Boolean);
+const
+  KPosition = 0;
+  BedThicknessPosition = 1;
+  BedElevationPosition = 2;
+  WidthPosition = 3;
+  DepthPosition = 4;
   procedure AssignSegmentTable(SegmentCollection: TSfrSegmentCollection;
-    DataGrid: TStringGrid);
+    DataGrid: TRbwDataGrid4);
   var
     TableIndex: Integer;
     SegmentItem : TSfrSegmentItem;
     Row: integer;
+    Offset: Integer;
   begin
+    {$IFDEF PEST}
+    if (DataGrid = dgUp) then
+    begin
+      Offset := 0;
+    end
+    else
+    begin
+      Offset := 5;
+    end;
+    PestModifier[DataGrid, Ord(scK)] := Boundary.PestBoundaryFormula[KPosition+Offset];
+    PestMethod[DataGrid, Ord(scK)] := Boundary.PestBoundaryMethod[KPosition+Offset];
+    PestModifier[DataGrid, Ord(scBedThickness)] := Boundary.PestBoundaryFormula[BedThicknessPosition+Offset];
+    PestMethod[DataGrid, Ord(scBedThickness)] := Boundary.PestBoundaryMethod[BedThicknessPosition+Offset];
+    PestModifier[DataGrid, Ord(scBedElevation)] := Boundary.PestBoundaryFormula[BedElevationPosition+Offset];
+    PestMethod[DataGrid, Ord(scBedElevation)] := Boundary.PestBoundaryMethod[BedElevationPosition+Offset];
+    PestModifier[DataGrid, Ord(scStreamWidth)] := Boundary.PestBoundaryFormula[WidthPosition+Offset];
+    PestMethod[DataGrid, Ord(scStreamWidth)] := Boundary.PestBoundaryMethod[WidthPosition+Offset];
+    PestModifier[DataGrid, Ord(scStreamDepth)] := Boundary.PestBoundaryFormula[DepthPosition+Offset];
+    PestMethod[DataGrid, Ord(scStreamDepth)] := Boundary.PestBoundaryMethod[DepthPosition+Offset];
+    {$ENDIF}
     for TableIndex := 0 to SegmentCollection.Count - 1 do
     begin
       SegmentItem := SegmentCollection.Items[TableIndex] as TSfrSegmentItem;
-      Row := LocateRowFromStartAndEndTimes(SegmentItem.StartTime, SegmentItem.EndTime);
-      if Row >= 1 then
+      Row := LocateRowFromStartAndEndTimes(SegmentItem.StartTime, SegmentItem.EndTime)
+        +  + PestRowOffset;
+      if Row >= 1 +  + PestRowOffset then
       begin
         DataGrid.Cells[Ord(scStartTime), Row] := FloatToStr(SegmentItem.StartTime);
         DataGrid.Cells[Ord(scEndTime), Row] := FloatToStr(SegmentItem.EndTime);
@@ -1637,43 +1825,126 @@ procedure TframeScreenObjectSFR.GetSfrSegments(Boundary: TSfrBoundary; FoundFirs
     end;
   end;
   procedure CheckSegmentTable(SegmentCollection: TSfrSegmentCollection;
-    DataGrid: TStringGrid);
+    DataGrid: TRbwDataGrid4);
   var
     TableIndex: Integer;
     SegmentItem : TSfrSegmentItem;
     Row: integer;
+    Offset: Integer;
   begin
+    {$IFDEF PEST}
+    if (DataGrid = dgUp) then
+    begin
+      Offset := 0;
+    end
+    else
+    begin
+      Offset := 5;
+    end;
+    if PestModifierAssigned[DataGrid, Ord(scK)]
+      and (PestModifier[DataGrid, Ord(scK)] <> Boundary.PestBoundaryFormula[KPosition+Offset]) then
+    begin
+      PestModifierAssigned[DataGrid, Ord(scK)] := False;
+    end;
+    if PestMethodAssigned[DataGrid, Ord(scK)]
+      and (PestMethod[DataGrid, Ord(scK)] <> Boundary.PestBoundaryMethod[KPosition+Offset]) then
+    begin
+      PestMethodAssigned[DataGrid, Ord(scK)] := False;
+    end;
+//    PestModifier[DataGrid, Ord(scK)] := Boundary.PestBoundaryFormula[KPosition+Offset];
+//    PestMethod[DataGrid, Ord(scK)] := Boundary.PestBoundaryMethod[KPosition+Offset];
+
+    if PestModifierAssigned[DataGrid, Ord(scBedThickness)]
+      and (PestModifier[DataGrid, Ord(scBedThickness)] <> Boundary.PestBoundaryFormula[BedThicknessPosition+Offset]) then
+    begin
+      PestModifierAssigned[DataGrid, Ord(scBedThickness)] := False;
+    end;
+    if PestMethodAssigned[DataGrid, Ord(scBedThickness)]
+      and (PestMethod[DataGrid, Ord(scBedThickness)] <> Boundary.PestBoundaryMethod[BedThicknessPosition+Offset]) then
+    begin
+      PestMethodAssigned[DataGrid, Ord(scBedThickness)] := False;
+    end;
+//    PestModifier[DataGrid, Ord(scBedThickness)] := Boundary.PestBoundaryFormula[BedThicknessPosition+Offset];
+//    PestMethod[DataGrid, Ord(scBedThickness)] := Boundary.PestBoundaryMethod[BedThicknessPosition+Offset];
+
+    if PestModifierAssigned[DataGrid, Ord(scBedElevation)]
+      and (PestModifier[DataGrid, Ord(scBedElevation)] <> Boundary.PestBoundaryFormula[BedElevationPosition+Offset]) then
+    begin
+      PestModifierAssigned[DataGrid, Ord(scBedElevation)] := False;
+    end;
+    if PestMethodAssigned[DataGrid, Ord(scBedElevation)]
+      and (PestMethod[DataGrid, Ord(scBedElevation)] <> Boundary.PestBoundaryMethod[BedElevationPosition+Offset]) then
+    begin
+      PestMethodAssigned[DataGrid, Ord(scBedElevation)] := False;
+    end;
+//    PestModifier[DataGrid, Ord(scBedElevation)] := Boundary.PestBoundaryFormula[BedElevationPosition+Offset];
+//    PestMethod[DataGrid, Ord(scBedElevation)] := Boundary.PestBoundaryMethod[BedElevationPosition+Offset];
+
+    if PestModifierAssigned[DataGrid, Ord(scStreamWidth)]
+      and (PestModifier[DataGrid, Ord(scStreamWidth)] <> Boundary.PestBoundaryFormula[WidthPosition+Offset]) then
+    begin
+      PestModifierAssigned[DataGrid, Ord(scStreamWidth)] := False;
+    end;
+    if PestMethodAssigned[DataGrid, Ord(scStreamWidth)]
+      and (PestMethod[DataGrid, Ord(scStreamWidth)] <> Boundary.PestBoundaryMethod[WidthPosition+Offset]) then
+    begin
+      PestMethodAssigned[DataGrid, Ord(scStreamWidth)] := False;
+    end;
+//    PestModifier[DataGrid, Ord(scStreamWidth)] := Boundary.PestBoundaryFormula[WidthPosition+Offset];
+//    PestMethod[DataGrid, Ord(scStreamWidth)] := Boundary.PestBoundaryMethod[WidthPosition+Offset];
+
+    if PestModifierAssigned[DataGrid, Ord(scStreamDepth)]
+      and (PestModifier[DataGrid, Ord(scStreamDepth)] <> Boundary.PestBoundaryFormula[DepthPosition+Offset]) then
+    begin
+      PestModifierAssigned[DataGrid, Ord(scStreamDepth)] := False;
+    end;
+    if PestMethodAssigned[DataGrid, Ord(scStreamDepth)]
+      and (PestMethod[DataGrid, Ord(scStreamDepth)] <> Boundary.PestBoundaryMethod[DepthPosition+Offset]) then
+    begin
+      PestMethodAssigned[DataGrid, Ord(scStreamDepth)] := False;
+    end;
+//    PestModifier[DataGrid, Ord(scStreamDepth)] := Boundary.PestBoundaryFormula[DepthPosition+Offset];
+//    PestMethod[DataGrid, Ord(scStreamDepth)] := Boundary.PestBoundaryMethod[DepthPosition+Offset];
+    {$ENDIF}
     for TableIndex := 0 to SegmentCollection.Count - 1 do
     begin
       SegmentItem := SegmentCollection.Items[TableIndex] as TSfrSegmentItem;
-      Row := LocateRowFromStartAndEndTimes(SegmentItem.StartTime, SegmentItem.EndTime);
-      if Row >= 1 then
+      Row := LocateRowFromStartAndEndTimes(SegmentItem.StartTime, SegmentItem.EndTime)
+        + PestRowOffset;
+      if Row >= 1 + PestRowOffset then
       begin
-        if DataGrid.Cells[Ord(scStartTime), Row] <> FloatToStr(SegmentItem.StartTime) then
+        if DataGrid.Cells[Ord(scStartTime), Row]
+          <> FloatToStr(SegmentItem.StartTime) then
         begin
           DataGrid.Cells[Ord(scStartTime), Row] := '';
         end;
-        if DataGrid.Cells[Ord(scEndTime), Row] <> FloatToStr(SegmentItem.EndTime) then
+        if DataGrid.Cells[Ord(scEndTime), Row]
+          <> FloatToStr(SegmentItem.EndTime) then
         begin
           DataGrid.Cells[Ord(scEndTime), Row] := '';
         end;
-        if DataGrid.Cells[Ord(scK), Row] <> SegmentItem.HydraulicConductivity then
+        if DataGrid.Cells[Ord(scK), Row]
+          <> SegmentItem.HydraulicConductivity then
         begin
           DataGrid.Cells[Ord(scK), Row] := '';
         end;
-        if DataGrid.Cells[Ord(scBedThickness), Row] <> SegmentItem.StreamBedThickness then
+        if DataGrid.Cells[Ord(scBedThickness), Row]
+          <> SegmentItem.StreamBedThickness then
         begin
           DataGrid.Cells[Ord(scBedThickness), Row] := '';
         end;
-        if DataGrid.Cells[Ord(scBedElevation), Row] <> SegmentItem.StreambedElevation then
+        if DataGrid.Cells[Ord(scBedElevation), Row]
+          <> SegmentItem.StreambedElevation then
         begin
           DataGrid.Cells[Ord(scBedElevation), Row] := '';
         end;
-        if DataGrid.Cells[Ord(scStreamWidth), Row] <> SegmentItem.StreamWidth then
+        if DataGrid.Cells[Ord(scStreamWidth), Row]
+          <> SegmentItem.StreamWidth then
         begin
           DataGrid.Cells[Ord(scStreamWidth), Row] := '';
         end;
-        if DataGrid.Cells[Ord(scStreamDepth), Row] <> SegmentItem.StreamDepth then
+        if DataGrid.Cells[Ord(scStreamDepth), Row]
+          <> SegmentItem.StreamDepth then
         begin
           DataGrid.Cells[Ord(scStreamDepth), Row] := '';
         end;
@@ -1698,14 +1969,14 @@ begin
     end
     else
     begin
-      for Row := 1 to dgUp.RowCount - 1 do
+      for Row := 1 + PestRowOffset to dgUp.RowCount - 1 do
       begin
         for Column := Ord(scK) to dgUp.ColCount - 1 do
         begin
           dgUp.Cells[Column, Row] := '';
         end;
       end;
-      for Row := 1 to dgDown.RowCount - 1 do
+      for Row := 1 + PestRowOffset to dgDown.RowCount - 1 do
       begin
         for Column := Ord(scK) to dgDown.ColCount - 1 do
         begin
@@ -2666,6 +2937,10 @@ var
 begin
   ItemCount := seParametersCount.AsInteger;
   CanSelect := (ItemCount > 0) and not (ACol in [Ord(sfcStartTime), Ord(sfcEndTime)]);
+  if Assigned(OnCheckPestCell) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
+  end;
 end;
 
 procedure TframeScreenObjectSFR.dgFlowTimesSetEditText(Sender: TObject; ACol,
@@ -2759,6 +3034,10 @@ begin
         end;
       else Assert(False);
     end;
+  end;
+  if Assigned(OnCheckPestCell) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
   end;
 end;
 
@@ -3036,20 +3315,20 @@ begin
     SegmentFlows.Assign(Boundary.SegmentFlows);
     if FTimesChanged then
     begin
-      While SegmentFlows.Count > dgFlowTimes.RowCount - 1 do
+      While SegmentFlows.Count > dgFlowTimes.RowCount - 1 - PestRowOffset do
       begin
         SegmentFlows.Delete(SegmentFlows.Count-1);
       end;
     end;
-    for RowIndex := 1 to dgFlowTimes.RowCount - 1 do
+    for RowIndex := 1 + PestRowOffset to dgFlowTimes.RowCount - 1 do
     begin
       if TryStrToFloat(dgFlowTimes.Cells[Ord(sfcStartTime), RowIndex], StartTime)
         and TryStrToFloat(dgFlowTimes.Cells[Ord(sfcEndTime), RowIndex], EndTime)
         then
       begin
-        if RowIndex-1 < SegmentFlows.Count then
+        if RowIndex-1-PestRowOffset < SegmentFlows.Count then
         begin
-          Item := SegmentFlows.Items[RowIndex-1] as TSfrSegmentFlowItem;
+          Item := SegmentFlows.Items[RowIndex-1-PestRowOffset] as TSfrSegmentFlowItem;
         end
         else
         begin
@@ -3084,6 +3363,45 @@ begin
         end;
       end;
     end;
+
+    {$IFDEF PEST}
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcFlow)] then
+    begin
+      Boundary.PestFlowFormula := PestModifier[dgFlowTimes, Ord(sfcFlow)];
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcFlow)] then
+    begin
+      Boundary.PestFlowMethod := PestMethod[dgFlowTimes, Ord(sfcFlow)];
+    end;
+
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcPrecip)] then
+    begin
+      Boundary.PestPrecipFormula := PestModifier[dgFlowTimes, Ord(sfcPrecip)];
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcPrecip)] then
+    begin
+      Boundary.PestPrecipMethod := PestMethod[dgFlowTimes, Ord(sfcPrecip)];
+    end;
+
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcEvap)] then
+    begin
+      Boundary.PestEvapFormula := PestModifier[dgFlowTimes, Ord(sfcEvap)];
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcEvap)] then
+    begin
+      Boundary.PestEvapMethod := PestMethod[dgFlowTimes, Ord(sfcEvap)];
+    end;
+
+    if PestModifierAssigned[dgFlowTimes, Ord(sfcRunoff)] then
+    begin
+      Boundary.PestRunoffFormula := PestModifier[dgFlowTimes, Ord(sfcRunoff)];
+    end;
+    if PestMethodAssigned[dgFlowTimes, Ord(sfcRunoff)] then
+    begin
+      Boundary.PestRunoffMethod := PestMethod[dgFlowTimes, Ord(sfcRunoff)];
+    end;
+    {$ENDIF}
+
     if SegmentFlows.Count > 0 then
     begin
       Boundary.SegmentFlows := SegmentFlows;
@@ -3142,9 +3460,45 @@ begin
 end;
 
 procedure TframeScreenObjectSFR.SetSfrSegments(Boundary: TSfrBoundary);
-
+const
+  KPosition = 0;
+  BedThicknessPosition = 1;
+  BedElevationPosition = 2;
+  WidthPosition = 3;
+  DepthPosition = 4;
 var
   UpSegments, DownSegments: TSfrSegmentCollection;
+  procedure AssignPestValues(DataGrid: TRbwDataGrid4);
+  var
+    Offset: Integer;
+    FirstCol: Integer;
+    PropertyIndex: Integer;
+  begin
+    {$IFDEF PEST}
+    if (DataGrid = dgUp) then
+    begin
+      Offset := 0;
+    end
+    else
+    begin
+      Offset := 5;
+    end;
+    FirstCol := Ord(scK);
+    for PropertyIndex := KPosition to DepthPosition do
+    begin
+      if PestModifierAssigned[DataGrid, FirstCol + PropertyIndex] then
+      begin
+        Boundary.PestBoundaryFormula[PropertyIndex+Offset] :=
+          PestModifier[DataGrid, FirstCol + PropertyIndex];
+      end;
+      if PestMethodAssigned[DataGrid, FirstCol + PropertyIndex] then
+      begin
+        Boundary.PestBoundaryMethod[PropertyIndex+Offset] :=
+          PestMethod[DataGrid, FirstCol + PropertyIndex];
+      end;
+    end;
+    {$ENDIF}
+  end;
   procedure CreateSegments(Segments, ExistingSegments: TSfrSegmentCollection;
    Grid: TStringGrid);
   var
@@ -3162,15 +3516,15 @@ var
       end;
     end;
 
-    for RowIndex := 1 to Grid.RowCount - 1 do
+    for RowIndex := 1 + PestRowOffset to Grid.RowCount - 1 do
     begin
       if TryStrToFloat(Grid.Cells[Ord(scStartTime), RowIndex], StartTime)
         and TryStrToFloat(Grid.Cells[Ord(scEndTime), RowIndex], EndTime)
         then
       begin
-        if RowIndex - 1 < Segments.Count then
+        if RowIndex - 1 - PestRowOffset < Segments.Count then
         begin
-          Item := Segments.Items[RowIndex - 1] as TSfrSegmentItem;
+          Item := Segments.Items[RowIndex - 1 - PestRowOffset] as TSfrSegmentItem;
         end
         else
         begin
@@ -3213,6 +3567,9 @@ var
     end;
   end;
 begin
+  AssignPestValues(dgUp);
+  AssignPestValues(dgDown);
+
   UpSegments := TSfrSegmentCollection.Create(nil, nil, nil);
   DownSegments := TSfrSegmentCollection.Create(nil, nil, nil);
   try
@@ -3546,17 +3903,17 @@ begin
 
     if ItemCount = 0 then
     begin
-      dgFlowTimes.RowCount := 2;
-      dgUp.RowCount := 2;
-      dgDown.RowCount := 2;
+      dgFlowTimes.RowCount := 2+PestRowOffset;
+      dgUp.RowCount := 2+PestRowOffset;
+      dgDown.RowCount := 2+PestRowOffset;
       dgSfrEquation.RowCount := 2;
       rdgNetwork.RowCount := 2;
     end
     else
     begin
-      dgFlowTimes.RowCount := ItemCount + 1;
-      dgUp.RowCount := ItemCount + 1;
-      dgDown.RowCount := ItemCount + 1;
+      dgFlowTimes.RowCount := ItemCount + 1+PestRowOffset;
+      dgUp.RowCount := ItemCount + 1+PestRowOffset;
+      dgDown.RowCount := ItemCount + 1+PestRowOffset;
       dgSfrEquation.RowCount := ItemCount + 1;
       rdgNetwork.RowCount := ItemCount + 1;
     end;

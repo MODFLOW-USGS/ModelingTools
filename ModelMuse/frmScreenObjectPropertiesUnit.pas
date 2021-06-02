@@ -2805,6 +2805,16 @@ begin
     ParametersOnly := True;
     PestParameterColumns := [2, 3, 4, 6, 7];
   end
+  else if (Sender = frameScreenObjectSFR.dgFlowTimes) then
+  begin
+    ParametersOnly := True;
+    PestParameterColumns := [2..6];
+  end
+  else if (Sender = frameScreenObjectSFR.dgUp)
+    or (Sender = frameScreenObjectSFR.dgDown) then
+  begin
+    PestParameterColumns := [2..7];
+  end
   ;
 
   if not (ACol in PestParameterColumns) and (ARow >= 1)
@@ -5718,6 +5728,7 @@ begin
   frameMNW1.OnCheckPestCell := EnablePestCells;
   frameMNW2.OnCheckPestCell := EnablePestCells;
   frameRes.OnCheckPestCell := EnablePestCells;
+  frameScreenObjectSFR.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -15030,6 +15041,7 @@ begin
   begin
     Identical := True;
     First := True;
+    Method := ppmMultiply;
     for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
     begin
       AScreenObject := ScreenObjectList[ScreenObjectIndex];
@@ -22863,12 +22875,23 @@ begin
     or (ed = frameMNW2.edPCoefficient)
     or (ed = frameMNW2.edCellToWellConductance)
     or (ed = frameMNW2.edPartialPenetration)
-//    or (ed = frameScreenObjectUzfMf6.edSurfaceDepressionDepth)
-//    or (ed = frameScreenObjectUzfMf6.edVerticalSaturatedK)
-//    or (ed = frameScreenObjectUzfMf6.edResidualWaterContent)
-//    or (ed = frameScreenObjectUzfMf6.edSaturatedWaterContent)
-//    or (ed = frameScreenObjectUzfMf6.edInitialWaterContent)
-//    or (ed = frameScreenObjectUzfMf6.edBrooksCoreyEpsilon)
+    or (ed = frameScreenObjectSFR.jvcReachLength)
+    or (ed = frameScreenObjectSFR.jceStreamTop)
+    or (ed = frameScreenObjectSFR.jceSlope)
+    or (ed = frameScreenObjectSFR.jceStreambedThickness)
+    or (ed = frameScreenObjectSFR.jceStreambedK)
+    or (ed = frameScreenObjectSFR.jceSaturatedVolumetricWater)
+    or (ed = frameScreenObjectSFR.jceInitialVolumetricWater)
+    or (ed = frameScreenObjectSFR.jceBrooksCoreyExponent)
+    or (ed = frameScreenObjectSFR.jceMaxUnsaturatedKz)
+    or (ed = frameScreenObjectSFR.jceSaturatedVolumetricWaterUpstream)
+    or (ed = frameScreenObjectSFR.jceInitialVolumetricWaterUpstream)
+    or (ed = frameScreenObjectSFR.jceBrooksCoreyExponentUpstream)
+    or (ed = frameScreenObjectSFR.jceMaxUnsaturatedKzUpstream)
+    or (ed = frameScreenObjectSFR.jceSaturatedVolumetricWaterDownstream)
+    or (ed = frameScreenObjectSFR.jceInitialVolumetricWaterDownstream)
+    or (ed = frameScreenObjectSFR.jceBrooksCoreyExponentDownstream)
+    or (ed = frameScreenObjectSFR.jceMaxUnsaturatedKzDownstream)
     then
   begin
     PestParamOK := True;
@@ -25750,6 +25773,9 @@ begin
     or ((DataGrid = frameMNW2.rdgVerticalScreens) and (ACol in [2..9]))
     or (DataGrid = frameRes.rdgModflowBoundary)
     or (DataGrid.Owner is  TframeLakeOutlet)
+    or (DataGrid = frameScreenObjectSFR.dgFlowTimes)
+    or (DataGrid = frameScreenObjectSFR.dgUp)
+    or (DataGrid = frameScreenObjectSFR.dgDown)
 //    or (DataGrid = frameCSUB.rdgSubGroups)
     ;
 end;

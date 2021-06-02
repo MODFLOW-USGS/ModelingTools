@@ -78,8 +78,10 @@ type
   private
     // See @link(Model).
     FModel: TCustomModel;
+    FWritingTemplate: boolean;
   protected
     FEvaluationType: TEvaluationType;
+    FPestParamUsed: Boolean;
     // @name closes the file that is being exported.
     // @seealso(OpenFile)
     procedure CloseFile;
@@ -105,11 +107,18 @@ type
     function GetPestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
       ACell: PCellLocation; const AScreenObject: TObject): string;
+    function GetPestTemplateFormulaOrValue(Value: double; PestParValue: string;
+      PestSeriesValue: string; Method: TPestParamMethod;
+      ACell: PCellLocation; const AScreenObject: TObject): string;
     procedure WritePestTemplateFormula(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
       ACell: TValueCell; FixedLength: Integer = 0;
       ChangeSign: Boolean = False); overload;
     procedure WritePestTemplateFormula(Value: double; PestParValue: string;
+      PestSeriesValue: string; Method: TPestParamMethod;
+      ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer = 0;
+      ChangeSign: Boolean = False); overload;
+    procedure WritePestTemplateFormulaOrValue(Value: double; PestParValue: string;
       PestSeriesValue: string; Method: TPestParamMethod;
       ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer = 0;
       ChangeSign: Boolean = False); overload;
@@ -126,6 +135,8 @@ type
     class function FileName(const AFileName: string): string;
     {@name is the model to be exported.}
     property Model: TCustomModel read FModel;
+    // @name should be set to True when an input file template is being written.
+    property WritingTemplate: boolean read FWritingTemplate write FWritingTemplate;
     // the period as the decimal separator.
     class Function FortranDecimal(NumberString : string) : string;
     // @name converts "Value" to an string padded at the beginning with blank
@@ -177,7 +188,7 @@ type
   }
   TCustomModflowWriter = class(TCustomFileWriter)
   private
-    FWritingTemplate: Boolean;
+
 
     // @name writes a header for DataArray using either
     // @link(WriteConstantU2DINT) or @link(WriteU2DRELHeader).
@@ -192,7 +203,6 @@ type
   protected
     FArrayWritingFormat: TArrayWritingFormat;
     FInputFileName: string;
-    FPestParamUsed: Boolean;
     // @name generates a comment line for a MODFLOW input file indentifying
     // the package.
     function PackageID_Comment(APackage: TModflowPackageSelection): string; virtual;
@@ -331,8 +341,6 @@ type
     // @param(Comment is used to identify the array being written.)
     Procedure WriteU2DRELHeader(const Comment: string;
       ArrayType: TModflowArrayType; const MF6_ArrayName: string); virtual;
-    // @name should be set to True when an input file template is being written.
-    property WritingTemplate: Boolean read FWritingTemplate write FWritingTemplate;
     // @name writes a line to the name file.
     class procedure WriteToNameFile(const Ftype: string;
       const UnitNumber: integer; FileName: string;
@@ -2535,16 +2543,26 @@ var
 //  ExtendedTemplateCharacter: string;
 //  Formula: string;
   ACellLocation: TCellLocation;
+  CellLocAddr: PCellLocation;
+  ScreenObject: TObject;
 //  PCellLoc := TCellLocation;
 begin
 //  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
 
-  Assert(ACell <> nil);
-  ACellLocation := ACell.CellLocation;
+  if ACell <> nil then
+  begin
+    ACellLocation := ACell.CellLocation;
+    CellLocAddr := Addr(ACellLocation);
+    ScreenObject := ACell.ScreenObject;
+  end
+  else
+  begin
+    CellLocAddr := nil;
+    ScreenObject := nil;
+  end;
 
   WritePestTemplateFormula(Value, PestParValue, PestSeriesValue, Method,
-    PCellLocation(Addr(ACellLocation)), ACell.ScreenObject,
-    FixedLength, ChangeSign);
+    CellLocAddr, ScreenObject, FixedLength, ChangeSign);
 
   {
   Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
@@ -2625,6 +2643,45 @@ begin
     begin
       Assert(False);
     end;
+  end;
+end;
+
+procedure TCustomFileWriter.WritePestTemplateFormulaOrValue(Value: double;
+  PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
+  ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer;
+  ChangeSign: Boolean);
+begin
+  if (PestParValue <> '') or (PestSeriesValue = '') then
+  begin
+    FPestParamUsed := True;
+  end;
+  if (not WritingTemplate) or ((PestParValue = '') and (PestSeriesValue = '')) then
+  begin
+    if ChangeSign then
+    begin
+      Value := -Value
+    end;
+    if FixedLength = 0 then
+    begin
+      WriteFloat(Value);
+    end
+    else if FixedLength = 10 then
+    begin
+      WriteF10Float(Value);
+    end
+    else if FixedLength = 15 then
+    begin
+      WriteF15Float(Value);
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end
+  else
+  begin
+    WritePestTemplateFormula(Value, PestParValue, PestSeriesValue, Method,
+      ACell, AScreenObject, FixedLength, ChangeSign)
   end;
 end;
 
@@ -3119,6 +3176,21 @@ begin
   end;
 end;
 
+function TCustomFileWriter.GetPestTemplateFormulaOrValue(Value: double;
+  PestParValue, PestSeriesValue: string; Method: TPestParamMethod;
+  ACell: PCellLocation; const AScreenObject: TObject): string;
+begin
+  if (PestParValue = '') and (PestSeriesValue = '') then
+  begin
+    result := FortranFloatToStr(Value);
+  end
+  else
+  begin
+    result := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
+      Method, ACell, AScreenObject);
+  end;
+end;
+
 function TCustomFileWriter.GetUsedPestDataArrays: TArray<TDataArray>;
 var
   Index: Integer;
@@ -3313,7 +3385,7 @@ begin
     result := '';
   end
   else
-  begin               
+  begin
     ModflowWriter := nil;
     result := ExpandFileName(ChangeFileExt(TemplateFileName, '.arrays'));
     ArraysFile := TStringList.Create;
@@ -3332,7 +3404,7 @@ begin
           finally
             ParameterZoneWriter.Free;
           end;
-        
+
           TempFile := ChangeFileExt(FNameOfFile, '');
           TempFile := ChangeFileExt(TempFile, '') + '.' + ADataArray.Name;
           OpenTempFile(TempFile);
@@ -3343,7 +3415,7 @@ begin
             end;
             for LayerIndex := 0 to ADataArray.LayerCount - 1 do
             begin
-              ModflowWriter.WriteArray(ADataArray, 
+              ModflowWriter.WriteArray(ADataArray,
                 LayerIndex, '', '', ADataArray.Name);
             end;
           finally

@@ -1353,7 +1353,7 @@ var
   Zbotm: Double;
   Ztop: Double;
   Cell: TMnw2_Cell;
-  PP: Double;
+//  PP: Double;
   LAY: Integer;
   CellIndex: Integer;
   ScreenIndex: Integer;
@@ -1373,14 +1373,14 @@ var
   Param: TModflowSteadyParameter;
   ParamName: string;
   procedure WriteOptionalData;
-  var
-    Rw: Double;
-    Rskin: Double;
-    Kskin: Double;
-    B: Double;
-    C: Double;
-    P: Double;
-    CWC: Double;
+//  var
+//    Rw: Double;
+//    Rskin: Double;
+//    Kskin: Double;
+//    B: Double;
+//    C: Double;
+//    P: Double;
+//    CWC: Double;
   begin
     if not ConstantWellLossParameters then
     begin
@@ -1705,7 +1705,7 @@ begin
       WriteOptionalData;
       if WellBoundary.PartialPenetrationCorrection then
       begin
-        PP := Cell.PartialPenetration;
+//        PP := Cell.PartialPenetration;
         WriteValueOrFormula(Cell, PartialPenetrationPosition);
 //        WriteFloat(PP);
         Comment := Comment + ', PP';

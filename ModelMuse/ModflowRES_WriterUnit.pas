@@ -635,7 +635,7 @@ begin
         begin
           ExportedStartHead := StartHead;
           ExportedEndHead := StartHead;
-          ExportedStartHeadPest := GetPestTemplateFormula(StartHead,
+          ExportedStartHeadPest := GetPestTemplateFormulaOrValue(StartHead,
             StartHeadPest.PestName, StartHeadPest.PestSeriesName,
             StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           ExportedEndHeadPest := ExportedStartHeadPest;
@@ -644,7 +644,7 @@ begin
         begin
           ExportedStartHead := EndHead;
           ExportedEndHead := EndHead;
-          ExportedStartHeadPest := GetPestTemplateFormula(EndHead,
+          ExportedStartHeadPest := GetPestTemplateFormulaOrValue(EndHead,
             EndHeadPest.PestName, EndHeadPest.PestSeriesName,
             EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           ExportedEndHeadPest := ExportedStartHeadPest;
@@ -654,7 +654,7 @@ begin
           if NearlyTheSame(ResItem.StartTime, Item.StartTime, Epsilon) then
           begin
             ExportedStartHead := StartHead;
-            ExportedStartHeadPest := GetPestTemplateFormula(StartHead,
+            ExportedStartHeadPest := GetPestTemplateFormulaOrValue(StartHead,
             StartHeadPest.PestName, StartHeadPest.PestSeriesName,
             StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           end
@@ -673,10 +673,10 @@ begin
             else
             begin
               ExportedStartHead := 1e-31;
-              StartHeadFormula := GetPestTemplateFormula(StartHead,
+              StartHeadFormula := GetPestTemplateFormulaOrValue(StartHead,
                 StartHeadPest.PestName, StartHeadPest.PestSeriesName,
                 StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
-              EndHeadFormula := GetPestTemplateFormula(EndHead,
+              EndHeadFormula := GetPestTemplateFormulaOrValue(EndHead,
                 EndHeadPest.PestName, EndHeadPest.PestSeriesName,
                 EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
               ExportedStartHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
@@ -690,7 +690,7 @@ begin
           if NearlyTheSame(ResItem.EndTime, Item.EndTime, Epsilon) then
           begin
             ExportedEndHead := EndHead;
-            ExportedEndHeadPest := GetPestTemplateFormula(EndHead,
+            ExportedEndHeadPest := GetPestTemplateFormulaOrValue(EndHead,
               EndHeadPest.PestName, EndHeadPest.PestSeriesName,
               EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
           end
@@ -709,10 +709,10 @@ begin
             else
             begin
               ExportedEndHead := 1e-31;
-              StartHeadFormula := GetPestTemplateFormula(StartHead,
+              StartHeadFormula := GetPestTemplateFormulaOrValue(StartHead,
                 StartHeadPest.PestName, StartHeadPest.PestSeriesName,
                 StartHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
-              EndHeadFormula := GetPestTemplateFormula(EndHead,
+              EndHeadFormula := GetPestTemplateFormulaOrValue(EndHead,
                 EndHeadPest.PestName, EndHeadPest.PestSeriesName,
                 EndHeadPest.PestSeriesMethod, nil, Reservoir.ScreenObject);
               ExportedEndHeadPest := Format('(%0:s) + %1:g * ((%2:s) - (%0:s))',
