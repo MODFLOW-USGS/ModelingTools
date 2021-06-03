@@ -144,12 +144,14 @@ var
 begin
   result := False;
   List.Clear;
+  FileReader := nil;
   try
     FileReader := TFile.OpenText(FileName);
   except on E: EInOutError do
     begin
       Beep;
       MessageDlg(E.message, mtError, [mbOK], 0);
+      Exit;
     end;
   end;
   try

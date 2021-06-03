@@ -811,7 +811,8 @@ begin
     // handle pest parameter
     // handle multiply or add
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-  UsedLocations := T2DSparseBooleanArray.Create(SPASmall, SPASmall);
+  UsedLocations := T2DSparseBooleanArray.Create(GetQuantum(IDomain.RowCount),
+    GetQuantum(IDomain.ColumnCount));
   try
     Assert(DepthSurfaceCellList.Count = EtRateList.Count);
     for CellIndex := EtRateList.Count - 1 downto 0 do

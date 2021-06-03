@@ -4360,13 +4360,16 @@ end;
 constructor TCustomTransientWriter.Create(Model: TCustomModel; EvaluationType: TEvaluationType);
 begin
   inherited;
+  Assert(Model <> nil);
 //  FMf6ObsArray := nil;
 //  FScreenObjectLists := TObjectScreenObjectLists.Create;
   FValues := TObjectList.Create;
   if Mf6ObservationsUsed then
   begin
     FFlowObsLocations := TBoundaryFlowObservationLocationList.Create;
-    FObsLocationCheck := T3DSparseStringArray.Create(SPASmall, SPASmall, SPASmall);
+    FObsLocationCheck := T3DSparseStringArray.Create(
+      GetQuantum(Model.LayerCount), GetQuantum(Model.RowCount),
+      GetQuantum(Model.ColumnCount));
 //    FMf6ObsArray := T3DSparsePointerArray.Create(SPASmall, SPASmall, SPASmall);
     FToMvrFlowObsLocations := TBoundaryFlowObservationLocationList.Create;
   end;
@@ -5921,7 +5924,8 @@ begin
             if CellList.Count > 0 then
             begin
               // Data set 4a
-              DataArray:= TModflowBoundaryDisplayDataArray.Create(Model);
+              DataArray:= TModflowBoundaryDisplayDataArray.Create(Model,
+                Model.LayerCount, Model.RowCount, Model.ColumnCount);
               DataArray.Orientation := dso3D;
               DataArray.EvaluatedAt := eaBlocks;
               DataArray.UpdateDimensions(Model.LayerCount,
@@ -6195,7 +6199,8 @@ var
     end;
   end;
 begin
-  LayerArray := TIntegerSparseDataSet.Create(Model);
+  LayerArray := TIntegerSparseDataSet.Create(Model, Model.LayerCount,
+    Model.RowCount, Model.ColumnCount);
   try
     LayerArray.Orientation := dsoTop;
     LayerArray.EvaluatedAt := eaBlocks;
@@ -9810,7 +9815,8 @@ begin
   result := 0;
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   // Assert(DepthSurfaceCellList.Count = RchRateList.Count);
-  UsedLocations := T2DSparseBooleanArray.Create(SPASmall, SPASmall);
+  UsedLocations := T2DSparseBooleanArray.Create(GetQuantum(IDomain.RowCount),
+    GetQuantum(IDomain.ColumnCount));
   try
     for CellIndex := RateList.Count - 1 downto 0 do
     begin

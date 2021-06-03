@@ -38832,11 +38832,13 @@ begin
     case GetDatatype of
       rdtDouble:
         begin
-          AnArray := TSparseRealPhastDataSet.Create(Model);
+          AnArray := TSparseRealPhastDataSet.Create(Model, Model.LayerCount,
+            Model.RowCount, Model.ColumnCount);
         end;
       rdtInteger:
         begin
-          AnArray := TSparseIntegerPhastDataSet.Create(Model);
+          AnArray := TSparseIntegerPhastDataSet.Create(Model, Model.LayerCount,
+            Model.RowCount, Model.ColumnCount);
         end;
     else
       Assert(False);

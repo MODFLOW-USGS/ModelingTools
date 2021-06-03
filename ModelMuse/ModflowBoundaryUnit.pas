@@ -1720,12 +1720,14 @@ begin
       case DataType of
         rdtDouble:
           begin
-            DataArray := TTransientRealSparseDataSet.Create(LocalModel);
+            DataArray := TTransientRealSparseDataSet.Create(LocalModel,
+              LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
             DataArray.DataType := rdtDouble;
           end;
         rdtInteger:
           begin
-            DataArray := TTransientIntegerSparseDataSet.Create(LocalModel);
+            DataArray := TTransientIntegerSparseDataSet.Create(LocalModel,
+              LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
             DataArray.DataType := rdtInteger;
           end;
         else Assert(False);

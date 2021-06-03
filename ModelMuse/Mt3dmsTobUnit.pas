@@ -1007,7 +1007,8 @@ begin
         ComponentIndexError := True;
       end;
 
-      DataArray := TRealSparseDataSet.Create(LocalModel);
+      DataArray := TRealSparseDataSet.Create(LocalModel, LocalModel.LayerCount,
+        LocalModel.RowCount, LocalModel.ColumnCount);
       Add(Time, DataArray, ComponentIndex);
       DataArray.EvaluatedAt := eaBlocks;
       DataArray.Orientation := dso3D;

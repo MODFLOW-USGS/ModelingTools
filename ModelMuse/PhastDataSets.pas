@@ -665,7 +665,8 @@ to elements or cells.}
     property BoundaryDataType: TDataArray read FBoundaryDataType
       write FBoundaryDataType;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
+      ColumnCount: Integer); reintroduce; virtual;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -743,7 +744,8 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: double read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
+      ColumnCount: Integer); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -837,7 +839,8 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: integer read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent); override;
+    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
+      ColumnCount: Integer); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -2843,15 +2846,21 @@ end;
 
 { TSparseArrayPhastInterpolationDataSet }
 
-constructor TSparseArrayPhastInterpolationDataSet.Create(AnOwner: TComponent);
+constructor TSparseArrayPhastInterpolationDataSet.Create(AnOwner: TComponent;
+  LayerCount, RowCount, ColumnCount: Integer);
 begin
-  inherited;
-  FCellDistance1 := T3DSparseRealArray.Create(SPASmall, SPASmall, SPASmall);
-  FCellDistance2 := T3DSparseRealArray.Create(SPASmall, SPASmall, SPASmall);
+  inherited Create(AnOwner);
+  FCellDistance1 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FCellDistance2 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
   FCellInterpolationDirection :=
-    T3DSparseInterpolationDirectionArray.Create(SPASmall, SPASmall, SPASmall);
-  FIsInterpolatedCell := T3DSparseBooleanArray.Create(SPASmall, SPASmall, SPASmall);
-  FAnnotation := T3DSparseStringArray.Create(SPASmall, SPASmall, SPASmall);
+    T3DSparseInterpolationDirectionArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FIsInterpolatedCell := T3DSparseBooleanArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FAnnotation := T3DSparseStringArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
   // Sparase Array data sets are only used for boundary conditions in
   // PHAST and the boundary conditions all apply to nodes.
   EvaluatedAt := eaNodes;
@@ -3140,12 +3149,16 @@ begin
   inherited;
 end;
 
-constructor TSparseRealPhastDataSet.Create(AnOwner: TComponent);
+constructor TSparseRealPhastDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
+      ColumnCount: Integer);
 begin
   inherited;
-  FCellValue1 := T3DSparseRealArray.Create(SPASmall, SPASmall, SPASmall);
-  FCellValue2 := T3DSparseRealArray.Create(SPASmall, SPASmall, SPASmall);
-  FRealValues := T3DSparseRealArray.Create(SPASmall, SPASmall, SPASmall);
+  FCellValue1 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FCellValue2 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FRealValues := T3DSparseRealArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
   DataType := rdtDouble;
 end;
 
@@ -3402,13 +3415,18 @@ begin
   inherited;
 end;
 
-constructor TSparseIntegerPhastDataSet.Create(AnOwner: TComponent);
+constructor TSparseIntegerPhastDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
+      ColumnCount: Integer);
 begin
   inherited;
-  FCellValue1 := T3DSparseIntegerArray.Create(SPASmall, SPASmall, SPASmall);
-  FCellValue2 := T3DSparseIntegerArray.Create(SPASmall, SPASmall, SPASmall);
-  FIntegerValues := T3DSparseIntegerArray.Create(SPASmall, SPASmall, SPASmall);
-  FFraction := T3DSparseRealArray.Create(SPASmall, SPASmall, SPASmall);
+  FCellValue1 := T3DSparseIntegerArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FCellValue2 := T3DSparseIntegerArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FIntegerValues := T3DSparseIntegerArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  FFraction := T3DSparseRealArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
   DataType := rdtInteger;
 end;
 

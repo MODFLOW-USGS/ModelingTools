@@ -807,7 +807,8 @@ begin
 
         Times.Add(Time);
         Value := ObservationValues.SwiItems[Index].ObservedValue;
-        DataArray := TRealSparseDataSet.Create(LocalModel);
+        DataArray := TRealSparseDataSet.Create(LocalModel,
+          LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
         Add(Time, DataArray);
         DataArray.EvaluatedAt := eaBlocks;
         DataArray.Orientation := dso3D;

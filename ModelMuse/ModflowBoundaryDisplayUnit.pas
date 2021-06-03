@@ -629,7 +629,8 @@ begin
   for TimeIndex := 0 to LocalModel.ModflowFullStressPeriods.Count - 1 do
   begin
     StressPeriod := LocalModel.ModflowFullStressPeriods[TimeIndex];
-    DataArray := TModflowBoundaryDisplayDataArray.Create(LocalModel);
+    DataArray := TModflowBoundaryDisplayDataArray.Create(LocalModel,
+      LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
     DataArray.AddMethod := AddMethod;
     DataArray.Orientation := Orientation;
     DataArray.EvaluatedAt := eaBlocks;
@@ -685,7 +686,8 @@ begin
     end;
     for TimeIndex := 0 to Times.Count - 1 do
     begin
-      DataArray := TModflowBoundaryDisplayDataArray.Create(LocalModel);
+      DataArray := TModflowBoundaryDisplayDataArray.Create(LocalModel,
+        LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
       DataArray.Orientation := dso3D;
       DataArray.EvaluatedAt := eaBlocks;
       Add(Times[TimeIndex], DataArray);
@@ -747,7 +749,8 @@ begin
     end;
     for TimeIndex := 0 to Times.Count - 1 do
     begin
-      DataArray := TModflowBoundaryDisplayDataArray.Create(LocalModel);
+      DataArray := TModflowBoundaryDisplayDataArray.Create(LocalModel,
+        LocalModel.LayerCount, LocalModel.RowCount, LocalModel.ColumnCount);
       DataArray.Orientation := dso3D;
       DataArray.EvaluatedAt := eaBlocks;
       Add(Times[TimeIndex], DataArray);

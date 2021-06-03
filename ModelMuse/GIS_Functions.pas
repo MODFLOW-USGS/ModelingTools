@@ -1560,6 +1560,7 @@ var
   Cells: T3DSparseBooleanArray;
   CellIndex: Integer;
   ACell: TCellAssignment;
+  LocalModel: TCustomModel;
 begin
   result := 0;
   if GlobalCurrentScreenObject = nil then
@@ -1568,11 +1569,13 @@ begin
   end
   else
   begin
+    LocalModel := GlobalCurrentModel as TCustomModel;
     CellList := TCellAssignmentList.Create;
     try
       GlobalCurrentScreenObject.GetCellsToAssign({Grid,} '0', nil, nil,
         CellList, alAll, GlobalCurrentModel);
-      Cells := T3DSparseBooleanArray.Create(SPASmall, SPASmall, SPASmall);
+      Cells := T3DSparseBooleanArray.Create(GetQuantum(LocalModel.LayerCount),
+        GetQuantum(LocalModel.RowCount), GetQuantum(LocalModel.ColumnCount));
       try
         for CellIndex := 0 to CellList.Count - 1 do
         begin

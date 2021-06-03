@@ -2209,6 +2209,9 @@ type
     function GetPestParameterAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
     function GetPestModifierAssigned(Grid: TRbwDataGrid4;
       ACol: Integer): Boolean;
+//    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
+//    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
+//      const Value: Boolean);
 //    procedure GetPilotPointsForAdditionalObject(AScreenObject: TScreenObject);
 
     // @name is set to @true when the @classname has stored values of the
@@ -2430,6 +2433,8 @@ type
       var CanSelect: Boolean);
     Property PestMethod[Grid: TRbwDataGrid4; ACol: Integer]: TPestParamMethod
       read GetPestMethod write SetPestMethod;
+//    Property PestMethodAssigned[Grid: TRbwDataGrid4; ACol: Integer]: Boolean
+//      read GetPestMethodAssigned write SetPestMethodAssigned;
     Property PestModifier[Grid: TRbwDataGrid4; ACol: Integer]: string
       read GetPestModifier write SetPestModifier;
     procedure GetPestModifiers(Frame: TframeScreenObjectNoParam;
@@ -6296,6 +6301,12 @@ begin
   Grid.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
 end;
 
+//procedure TfrmScreenObjectProperties.SetPestMethodAssigned(Grid: TRbwDataGrid4;
+//  ACol: Integer; const Value: Boolean);
+//begin
+//
+//end;
+
 procedure TfrmScreenObjectProperties.SetPestModifier(Grid: TRbwDataGrid4;
   ACol: Integer; const Value: string);
 begin
@@ -8891,6 +8902,11 @@ var
   Time2: TParameterTime;
   DataGrid: TRbwDataGrid4;
   State: TCheckBoxState;
+  First: Boolean;
+  Identical: Boolean;
+  Method: TPestParamMethod;
+  Frame: TframeScreenObjectNoParam;
+  Modifier: string;
 //  First: Boolean;
 begin
   if not frmGoPhast.PhastModel.SwrIsSelected then
@@ -8958,6 +8974,91 @@ begin
       ColumnOffset := 2;
       GetSwrStageBoundaryCollection(DataGrid, ColumnOffset,
         ScreenObjectList, TimeList);
+
+      {$IFDEF PEST}
+      PestMethod[DataGrid, ColumnOffset{+ElevationPosition}] :=
+        TSwrReachBoundary.DefaultBoundaryMethod(SwrStagePosition);
+//      PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
+//        TDrnBoundary.DefaultBoundaryMethod(ConductancePosition);
+//      GetPestModifiers(Frame, Parameter, ScreenObjectList);
+
+
+//    begin
+      Frame := frameSWR_Stage;
+      First := True;
+      Identical := True;
+      Method := ppmMultiply;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.ModflowSwrStage;;
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Method := Boundary.PestBoundaryMethod[SwrStagePosition];
+            First := False;
+          end
+          else
+          begin
+            Identical := Method = Boundary.PestBoundaryMethod[SwrStagePosition];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+      if Identical then
+      begin
+        Frame.PestMethod[{Frame.rdgModflowBoundary,} ColumnOffset{+BoundaryIndex}] := Method;
+      end
+      else
+      begin
+        Frame.PestMethodAssigned[{Frame.rdgModflowBoundary,} ColumnOffset{+BoundaryIndex}] := False;
+      end;
+
+      Modifier := '';
+      First := True;
+      Identical := True;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.ModflowSwrStage;
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Modifier := Boundary.PestBoundaryFormula[SwrStagePosition];
+            First := False;
+          end
+          else
+          begin
+            Identical := Modifier = Boundary.PestBoundaryFormula[SwrStagePosition];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+
+      if Identical then
+      begin
+//        if Modifier = '' then
+//        begin
+//          Modifier := StrNone
+//        end;
+        Frame.PestModifier[{Frame.rdgModflowBoundary,}
+          ColumnOffset{+BoundaryIndex}] := Modifier;
+      end
+      else
+      begin
+        Frame.PestModifierAssigned[{Frame.rdgModflowBoundary,}
+          ColumnOffset{+BoundaryIndex}] := False;
+      end;
+      {$ENDIF}
+
     finally
       DataGrid.EndUpdate;
     end;
@@ -12411,6 +12512,18 @@ begin
     result := ppmMultiply;
   end;
 end;
+
+//function TfrmScreenObjectProperties.GetPestMethodAssigned(Grid: TRbwDataGrid4;
+//  ACol: Integer): Boolean;
+//begin
+//  if PestRowOffset = 0 then
+//  begin
+//    result := False;
+//    Assert(False);
+//    Exit;
+//  end;
+//  result := Grid.Cells[ACol, PestMethodRow] <> '';
+//end;
 
 function TfrmScreenObjectProperties.GetPestModifier(Grid: TRbwDataGrid4;
   ACol: Integer): string;

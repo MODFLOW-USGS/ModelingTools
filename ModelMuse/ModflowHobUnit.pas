@@ -979,7 +979,8 @@ begin
 
         Times.Add(Time);
         Value := ObservationValues.HobItems[Index].Head;
-        DataArray := TRealSparseDataSet.Create(LocalModel);
+        DataArray := TRealSparseDataSet.Create(LocalModel, Grid.LayerCount,
+          Grid.RowCount, Grid.ColumnCount);
         Add(Time, DataArray);
         DataArray.EvaluatedAt := eaBlocks;
         DataArray.Orientation := dso3D;

@@ -80,7 +80,7 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ScreenObjectUnit,
   SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
-  SutraMeshUnit, SutraFileWriterUnit;
+  SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit;
 
 resourcestring
   StrGeneralizedflowBou = 'generalized-flow boundary condition';

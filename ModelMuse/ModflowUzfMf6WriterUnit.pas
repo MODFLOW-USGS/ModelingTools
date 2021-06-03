@@ -70,7 +70,7 @@ uses
   ModflowUnitNumbers, frmProgressUnit, DataSetUnit,
   ModflowMvrWriterUnit, ModflowMvrUnit, System.Generics.Defaults,
   Modflow6ObsWriterUnit, ModflowIrregularMeshUnit,
-  ModflowGridUnit, frmErrorsAndWarningsUnit;
+  ModflowGridUnit, frmErrorsAndWarningsUnit, SparseArrayUnit;
 
 resourcestring
   StrWritingUZF6Package = 'Writing UZF6 Package input.';

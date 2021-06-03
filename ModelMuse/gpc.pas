@@ -1889,7 +1889,10 @@ begin
         begin
           e0.next.prev := prev_edge;
         end;
-        e1.next.prev := e1;
+        if e1.next <> nil then
+        begin
+          e1.next.prev := e1;
+        end;
         e0.next := next_edge;
 
         intersect := intersect.next;

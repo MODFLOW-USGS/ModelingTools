@@ -109,6 +109,8 @@ type
     property Items[Index: Integer]: TCustomData read GetAt write PutAt; default;
   end;
 
+function GetQuantum(RequiredSize: Integer): TSPAQuantum;
+
 implementation
 
 uses Windows;
@@ -339,6 +341,18 @@ begin
       end
   end);
   FHighBound := NewHighBound
+end;
+
+function GetQuantum(RequiredSize: Integer): TSPAQuantum;
+begin
+  if (RequiredSize > 0) and ((RequiredSize-1)shr 4 >= High(Word)) then
+  begin
+    result := SPALarge;
+  end
+  else
+  begin
+    result := SPASmall;
+  end;
 end;
 
 end.

@@ -186,6 +186,9 @@ type
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
     property ObjectName: string read FObjectName;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property VerticalOffSet: double read GetVerticalOffSet;
     property VerticalOffSetAnnotation: string read GetVerticalOffSetAnnotation;
@@ -248,6 +251,13 @@ type
     FGroupNumber: Integer;
     FGrouped: boolean;
     FObsTypes: TSwrObsTypes;
+    FPestVerticalOffsetMethod: TPestParamMethod;
+    FPestStageMethod: TPestParamMethod;
+    FPestVerticalOffsetFormula: TFormulaObject;
+    FPestStageFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestStageObserver: TObserver;
+    FPestVerticalOffsetObserver: TObserver;
     function GetReachLengthFormula: string;
     procedure SetReachLengthFormula(const Value: string);
     procedure SetRouteType(const Value: TSwrRouteType);
@@ -266,6 +276,16 @@ type
     procedure LinkRoutingType;
     procedure SetObjectObs(const Value: TSwrObsTypes);
     procedure EnsureRequiredItemsPresent;
+    function GetPestStageFormula: string;
+    function GetPestStageObserver: TObserver;
+    function GetPestVerticalOffsetFormula: string;
+    function GetPestVerticalOffsetObserver: TObserver;
+    procedure SetPestStageFormula(const Value: string);
+    procedure SetPestStageMethod(const Value: TPestParamMethod);
+    procedure SetPestVerticalOffsetFormula(const Value: string);
+    procedure SetPestVerticalOffsetMethod(const Value: TPestParamMethod);
+    procedure InvalidateStageData(Sender: TObject);
+    procedure InvalidateVerticalOffsetData(Sender: TObject);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
@@ -278,6 +298,21 @@ type
     property GroupNumberObserver: TObserver read GetGroupNumberObserver;
     property RoutingTypeObserver: TObserver read GetRoutingTypeObserver;
     function BoundaryObserverPrefix: string; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+//    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+//    procedure CreateFormulaObjects; //override;
+//    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestStageObserver: TObserver read GetPestStageObserver;
+    property PestVerticalOffsetObserver: TObserver read GetPestVerticalOffsetObserver;
   public
     Procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -289,6 +324,8 @@ type
     procedure RemoveGeom(Geom: TReachGeometryItem);
     class function DefaultReachLengthFormula: string;
     function ReachValues: TSwrReachCollection;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property MultiLayer: Boolean read FMultiLayer write SetMultiLayer;
     property RouteType: TSwrRouteType read FRouteType write SetRouteType;
@@ -298,10 +335,40 @@ type
     property Grouped: boolean read FGrouped write SetGrouped;
     property GroupNumber: Integer read FGroupNumber write SetGroupNumber;
     property ObsTypes: TSwrObsTypes read FObsTypes write SetObjectObs;
+    property PestStageFormula: string read GetPestStageFormula
+      write SetPestStageFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestStageMethod: TPestParamMethod
+      read FPestStageMethod write SetPestStageMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestVerticalOffsetFormula: string read GetPestVerticalOffsetFormula
+      write SetPestVerticalOffsetFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestVerticalOffsetMethod: TPestParamMethod
+      read FPestVerticalOffsetMethod write SetPestVerticalOffsetMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 resourcestring
   StrSWRGeometryNotDef = 'SWR Geometry not defined';
+
+const
+  SwrVerticalOffsetPosition = 0;
+  SwrStagePosition = 1;
+  SwrGeoNumberPosition = 2;
+  SwrReachTypePosition = 3;
 
 implementation
 
@@ -316,15 +383,11 @@ resourcestring
   StrAssignedBy = 'Assigned by ';
 
 const
-  VerticalOffsetPosition = 0;
-  StagePosition = 1;
-  GeoNumberPosition = 2;
-  ReachTypePosition = 3;
-
-  ReachLengthPosition = 0;
-  ReachNumberPosition = 1;
-  GroupNumberPosition = 2;
-  RoutingTypePosition = 3;
+  SwrOffset = 4;
+  SwrReachLengthPosition = 2;
+  SwrReachNumberPosition = 3;
+  SwrGroupNumberPosition = 4;
+  SwrRoutingTypePosition = 5;
 
 { TSwrTransientReachItem }
 
@@ -351,10 +414,10 @@ var
 begin
   ParentCollection := Collection as TSwrReachCollection;
 
-  VerticalOffsetObserver := FObserverList[VerticalOffsetPosition];
+  VerticalOffsetObserver := FObserverList[SwrVerticalOffsetPosition];
   VerticalOffsetObserver.OnUpToDateSet := ParentCollection.InvalidateVerticalOffset;
 
-  StageObserver := FObserverList[StagePosition];
+  StageObserver := FObserverList[SwrStagePosition];
   StageObserver.OnUpToDateSet := ParentCollection.InvalidateStage;
 end;
 
@@ -380,8 +443,8 @@ end;
 function TSwrTransientReachItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
-    VerticalOffsetPosition: result := VerticalOffset;
-    StagePosition: result := Stage;
+    SwrVerticalOffsetPosition: result := VerticalOffset;
+    SwrStagePosition: result := Stage;
     else
       Assert(False);
   end;
@@ -404,24 +467,24 @@ procedure TSwrTransientReachItem.GetPropertyObserver(Sender: TObject;
 begin
   if Sender = FVerticalOffset then
   begin
-    List.Add( FObserverList[VerticalOffsetPosition]);
+    List.Add( FObserverList[SwrVerticalOffsetPosition]);
   end;
   if Sender = FStageOffset then
   begin
-    List.Add( FObserverList[StagePosition]);
+    List.Add( FObserverList[SwrStagePosition]);
   end;
 end;
 
 function TSwrTransientReachItem.GetStage: string;
 begin
   Result := FStageOffset.Formula;
-  ResetItemObserver(StagePosition);
+  ResetItemObserver(SwrStagePosition);
 end;
 
 function TSwrTransientReachItem.GetVerticalOffset: string;
 begin
   Result := FVerticalOffset.Formula;
-  ResetItemObserver(VerticalOffsetPosition);
+  ResetItemObserver(SwrVerticalOffsetPosition);
 end;
 
 function TSwrTransientReachItem.IsSame(AnotherItem: TOrderedItem): boolean;
@@ -463,8 +526,8 @@ procedure TSwrTransientReachItem.SetBoundaryFormula(Index: integer;
 begin
   inherited;
   case Index of
-    VerticalOffsetPosition: VerticalOffset := Value;
-    StagePosition: Stage := Value;
+    SwrVerticalOffsetPosition: VerticalOffset := Value;
+    SwrStagePosition: Stage := Value;
     else
       Assert(False);
   end;
@@ -518,12 +581,12 @@ end;
 
 procedure TSwrTransientReachItem.SetStage(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, StagePosition, FStageOffset);
+  UpdateFormulaBlocks(Value, SwrStagePosition, FStageOffset);
 end;
 
 procedure TSwrTransientReachItem.SetVerticalOffset(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, VerticalOffsetPosition, FVerticalOffset);
+  UpdateFormulaBlocks(Value, SwrVerticalOffsetPosition, FVerticalOffset);
 end;
 
 { TSwrReachListLink }
@@ -602,7 +665,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
-  Assert(BoundaryFunctionIndex in [VerticalOffsetPosition, StagePosition]);
+  Assert(BoundaryFunctionIndex in [SwrVerticalOffsetPosition, SwrStagePosition]);
   Assert(Expression <> nil);
 
   SwrStorage := BoundaryStorage as TSwrReachTransientStorage;
@@ -617,7 +680,7 @@ begin
     with SwrStorage.Transient[Index] do
     begin
       case BoundaryFunctionIndex of
-        VerticalOffsetPosition:
+        SwrVerticalOffsetPosition:
           begin
             VerticalOffset := Expression.DoubleResult;
             VerticalOffsetAnnotation := ACell.Annotation;
@@ -625,7 +688,7 @@ begin
             VerticalOffsetPestSeriesName := PestSeriesName;
             VerticalOffsetPestSeriesMethod := PestSeriesMethod;
           end;
-        StagePosition:
+        SwrStagePosition:
           begin
             Stage := Expression.DoubleResult;
             StageAnnotation := ACell.Annotation;
@@ -915,6 +978,56 @@ begin
   result := FValues.Cell.Layer;
 end;
 
+function TSwrTransientCell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    SwrVerticalOffsetPosition:
+      begin
+        result := FValues.VerticalOffsetPest;
+      end;
+    SwrStagePosition:
+      begin
+        result := FValues.StagePest
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TSwrTransientCell.GetPestSeriesMethod(
+  Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    SwrVerticalOffsetPosition:
+      begin
+        result := FValues.VerticalOffsetPestSeriesMethod;
+      end;
+    SwrStagePosition:
+      begin
+        result := FValues.StagePestSeriesMethod;
+      end;
+    else
+      result := inherited;
+      Assert(False);
+  end;
+end;
+
+function TSwrTransientCell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    SwrVerticalOffsetPosition:
+      begin
+        result := FValues.VerticalOffsetPestSeriesName;
+      end;
+    SwrStagePosition:
+      begin
+        result := FValues.StagePestSeriesName;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 function TSwrTransientCell.GetReachType: TSwrReachType;
 begin
   result := FValues.ReachType;
@@ -925,9 +1038,9 @@ function TSwrTransientCell.GetRealAnnotation(Index: integer;
 begin
   result := '';
   case Index of
-    VerticalOffsetPosition: result := VerticalOffSetAnnotation;
-    StagePosition: result := StageAnnotation;
-    GeoNumberPosition, ReachTypePosition: result := StrAssignedBy + ObjectName;
+    SwrVerticalOffsetPosition: result := VerticalOffSetAnnotation;
+    SwrStagePosition: result := StageAnnotation;
+    SwrGeoNumberPosition, SwrReachTypePosition: result := StrAssignedBy + ObjectName;
     else Assert(False);
   end;
 end;
@@ -937,10 +1050,10 @@ function TSwrTransientCell.GetRealValue(Index: integer;
 begin
   result := 0;
   case Index of
-    VerticalOffsetPosition: result := VerticalOffSet;
-    StagePosition: result := Stage;
-    GeoNumberPosition: result := GeoNumber;
-    ReachTypePosition: result := -(Ord(ReachType)-1);
+    SwrVerticalOffsetPosition: result := VerticalOffSet;
+    SwrStagePosition: result := Stage;
+    SwrGeoNumberPosition: result := GeoNumber;
+    SwrReachTypePosition: result := -(Ord(ReachType)-1);
     else Assert(False);
   end;
 end;
@@ -1156,7 +1269,25 @@ end;
 
 procedure TSwrReachBoundary.CreateFormulaObjects;
 begin
+  FPestVerticalOffsetFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestStageFormula := CreateFormulaObjectBlocks(dsoTop);
   FReachLengthFormula := CreateFormulaObjectBlocks(dsoTop);
+end;
+
+procedure TSwrReachBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestVerticalOffsetObserver);
+    FObserverList.Add(PestStageObserver);
+  end;
+
+end;
+
+class function TSwrReachBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+
 end;
 
 class function TSwrReachBoundary.DefaultReachLengthFormula: string;
@@ -1246,14 +1377,109 @@ end;
 
 function TSwrReachBoundary.GetGroupNumberObserver: TObserver;
 begin
-  result := FObserverList[GroupNumberPosition];
+  result := FObserverList[SwrGroupNumberPosition];
+end;
+
+function TSwrReachBoundary.GetPestBoundaryFormula(
+  FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    SwrVerticalOffsetPosition:
+      begin
+        result := PestVerticalOffsetFormula;
+      end;
+    SwrStagePosition:
+      begin
+        result := PestStageFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSwrReachBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    SwrVerticalOffsetPosition:
+      begin
+        result := PestVerticalOffsetMethod;
+      end;
+    SwrStagePosition:
+      begin
+        result := PestStageMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSwrReachBoundary.GetPestStageFormula: string;
+begin
+  Result := FPestStageFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SwrStagePosition);
+  end;
+end;
+
+function TSwrReachBoundary.GetPestStageObserver: TObserver;
+begin
+  if FPestStageObserver = nil then
+  begin
+    CreateObserver('SwrPestStage_', FPestStageObserver, nil);
+    FPestStageObserver.OnUpToDateSet := InvalidateStageData;
+  end;
+  result := FPestStageObserver;
+end;
+
+function TSwrReachBoundary.GetPestVerticalOffsetFormula: string;
+begin
+  Result := FPestVerticalOffsetFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SwrVerticalOffsetPosition);
+  end;
+end;
+
+function TSwrReachBoundary.GetPestVerticalOffsetObserver: TObserver;
+begin
+  if FPestVerticalOffsetObserver = nil then
+  begin
+    CreateObserver('SwrPestVerticalOffset_', FPestVerticalOffsetObserver, nil);
+    FPestVerticalOffsetObserver.OnUpToDateSet := InvalidateVerticalOffsetData;
+  end;
+  result := FPestVerticalOffsetObserver;
 end;
 
 procedure TSwrReachBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
+  if Sender = FPestVerticalOffsetFormula then
+  begin
+    if SwrVerticalOffsetPosition+SwrOffset < FObserverList.Count then
+    begin
+      List.Add(FObserverList[SwrVerticalOffsetPosition+SwrOffset]);
+    end;
+  end;
+  if Sender = FPestStageFormula then
+  begin
+    if SwrStagePosition+SwrOffset < FObserverList.Count then
+    begin
+      List.Add(FObserverList[SwrStagePosition+SwrOffset]);
+    end;
+  end;
   if Sender = FReachLengthFormula then
   begin
-    List.Add(FObserverList[ReachLengthPosition]);
+    if SwrReachLengthPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[SwrReachLengthPosition]);
+    end;
   end;
 end;
 
@@ -1262,23 +1488,38 @@ begin
   Result := FReachLengthFormula.Formula;
   if ScreenObject <> nil then
   begin
-    ResetBoundaryObserver(ReachLengthPosition);
+    ResetBoundaryObserver(SwrReachLengthPosition);
   end;
 end;
 
 function TSwrReachBoundary.GetReachLengthObserver: TObserver;
 begin
-  result := FObserverList[ReachLengthPosition];
+  result := FObserverList[SwrReachLengthPosition];
 end;
 
 function TSwrReachBoundary.GetReachNumberObserver: TObserver;
 begin
-  result := FObserverList[ReachNumberPosition];
+  result := FObserverList[SwrReachNumberPosition];
 end;
 
 function TSwrReachBoundary.GetRoutingTypeObserver: TObserver;
 begin
-  result := FObserverList[RoutingTypePosition];
+  result := FObserverList[SwrRoutingTypePosition];
+end;
+
+function TSwrReachBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestSwr_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TSwrReachBoundary.HandleChangedValue(Observer: TObserver);
+begin
+  InvalidateDisplay;
 end;
 
 procedure TSwrReachBoundary.InvalidateDisplay;
@@ -1296,6 +1537,60 @@ begin
     LocalModel.InvalidateMfSwrVerticalOffset(self);
     LocalModel.InvalidateMfSwrBoundaryType(self);
     LocalModel.InvalidateMfSwrGeometryNumber(self);
+  end;
+end;
+
+procedure TSwrReachBoundary.InvalidateStageData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSwrStage(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSwrStage(self);
+    end;
+  end;
+end;
+
+procedure TSwrReachBoundary.InvalidateVerticalOffsetData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSwrVerticalOffset(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSwrVerticalOffset(self);
+    end;
   end;
 end;
 
@@ -1448,9 +1743,70 @@ begin
   end;
 end;
 
+procedure TSwrReachBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    SwrVerticalOffsetPosition:
+      begin
+        PestVerticalOffsetFormula := Value;
+      end;
+    SwrStagePosition:
+      begin
+        PestStageFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSwrReachBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    SwrVerticalOffsetPosition:
+      begin
+        PestVerticalOffsetMethod := Value;
+      end;
+    SwrStagePosition:
+      begin
+        PestStageMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSwrReachBoundary.SetPestStageFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SwrStagePosition+SwrOffset, FPestStageFormula);
+end;
+
+procedure TSwrReachBoundary.SetPestStageMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestStageMethod, Value);
+end;
+
+procedure TSwrReachBoundary.SetPestVerticalOffsetFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SwrVerticalOffsetPosition+SwrOffset, FPestVerticalOffsetFormula);
+end;
+
+procedure TSwrReachBoundary.SetPestVerticalOffsetMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestVerticalOffsetMethod, Value);
+end;
+
 procedure TSwrReachBoundary.SetReachLengthFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ReachLengthPosition, FReachLengthFormula);
+  UpdateFormulaBlocks(Value, SwrReachLengthPosition, FReachLengthFormula);
 end;
 
 procedure TSwrReachBoundary.SetRouteType(const Value: TSwrRouteType);

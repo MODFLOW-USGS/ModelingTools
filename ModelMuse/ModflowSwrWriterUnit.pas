@@ -1998,7 +1998,8 @@ begin
       then
     begin
       WriteInteger(Reach.FReachData.Reach);
-      WriteFloat(TransientCell.Stage);
+      WriteValueOrFormula(TransientCell, SwrStagePosition);
+//      WriteFloat(TransientCell.Stage);
       WriteString(' # Data Set 14A: IRCHSTG STAGE');
       NewLine;
     end;
@@ -2558,7 +2559,8 @@ begin
     end;
     WriteInteger(GeoItem.GeoNumber);
 
-    WriteFloat(TransientCell.VerticalOffSet);
+    WriteValueOrFormula(TransientCell, SwrVerticalOffsetPosition);
+//    WriteFloat(TransientCell.VerticalOffSet);
     WriteString(' # Data Set 10 IGMODRCH IGEONUMR GZSHIFT');
     NewLine;
     

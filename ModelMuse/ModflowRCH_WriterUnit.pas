@@ -638,7 +638,8 @@ begin
     // handle multiply or add
   IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
 //  Assert(DepthSurfaceCellList.Count = RchRateList.Count);
-  UsedLocations := T2DSparseBooleanArray.Create(SPASmall, SPASmall);
+  UsedLocations := T2DSparseBooleanArray.Create(GetQuantum(IDomain.RowCount),
+    GetQuantum(IDomain.ColumnCount));
   try
     for CellIndex := RchRateList.Count - 1 downto 0 do
     begin
