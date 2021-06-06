@@ -128,14 +128,10 @@ begin
       FractionRechargeDivertedFormula := ALake.FractionRechargeDiverted;
       FractionDischargeDivertedFormula := ALake.FractionDischargeDiverted;
 
-      InitalStageDataSet := TRealSparseDataSet.Create(Model,Model.LayerCount,
-        Model.RowCount,Model.ColumnCount);
-      InitialU := TRealSparseDataSet.Create(Model,Model.LayerCount,
-        Model.RowCount,Model.ColumnCount);
-      FractionRechargeDiverted := TRealSparseDataSet.Create(Model,
-        Model.LayerCount,Model.RowCount,Model.ColumnCount);
-      FractionDischargeDiverted := TRealSparseDataSet.Create(Model,
-        Model.LayerCount,Model.RowCount,Model.ColumnCount);
+      InitalStageDataSet := TRealSparseDataSet.Create(Model);
+      InitialU := TRealSparseDataSet.Create(Model);
+      FractionRechargeDiverted := TRealSparseDataSet.Create(Model);
+      FractionDischargeDiverted := TRealSparseDataSet.Create(Model);
       try
         InitalStageDataSet.DataType := rdtDouble;
         InitalStageDataSet.Name := ValidName('Initial_Stage');

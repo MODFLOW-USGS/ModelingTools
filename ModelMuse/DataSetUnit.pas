@@ -1197,8 +1197,7 @@ type
     procedure Invalidate; override;
     // @name creates an instance of @classname and sets
     // @link(TDataArray.EvaluatedAt) to eaNodes.
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); reintroduce; virtual;
+    constructor Create(AnOwner: TComponent); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1255,8 +1254,7 @@ type
       LayerMax, RowMax, ColMax: integer); override;
     // @name creates an instance of @classname and sets
     // @link(TDataArray.DataType) to rdtDouble.
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); override;
+    constructor Create(AnOwner: TComponent); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1301,8 +1299,7 @@ type
     // @name adds a value at the designated location.
     procedure AddDataValue(const DataAnnotation: string; DataValue: Double;
       ColIndex, RowIndex, LayerIndex: Integer);
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); override;
+    constructor Create(AnOwner: TComponent); override;
     destructor Destroy; override;
     // for each cell, @name computes the average of all the values that have
     // been assigned to the cell when @AddMethod has been assigned a value of
@@ -1360,8 +1357,7 @@ type
     procedure RemoveValue(const Layer, Row, Col: Integer);
     // @name creates an instance of @classname and sets
     // @link(TDataArray.DataType) to rdtInteger.
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); override;
+    constructor Create(AnOwner: TComponent); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -1407,8 +1403,7 @@ type
     procedure RemoveValue(const Layer, Row, Col: Integer);
     // @name creates an instance of @classname and sets
     // @link(TDataArray.DataType) to rdtInteger.
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); override;
+    constructor Create(AnOwner: TComponent); override;
     // @name destroys the the current instance of @classname.
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
@@ -6248,10 +6243,25 @@ begin
   FAnnotation.Clear;
 end;
 
-constructor TCustomSparseDataSet.Create(AnOwner: TComponent;
-  LayerCount, RowCount, ColumnCount: Integer);
+constructor TCustomSparseDataSet.Create(AnOwner: TComponent);
+var
+  LocalModel: TCustomModel;
+  LayerCount, RowCount, ColumnCount: Integer;
 begin
   inherited Create(AnOwner);
+  if AnOwner <> nil then
+  begin
+    LocalModel := AnOwner as TCustomModel;
+    LayerCount := LocalModel.LayerCount+1;
+    RowCount := LocalModel.RowCount+1;
+    ColumnCount := LocalModel.MaxColumnCount;
+  end
+  else
+  begin
+    LayerCount := 0;
+    RowCount := 0;
+    ColumnCount := 0;
+  end;
   FPriorLayer := -1;
   FPriorRow := -1;
   FPriorCol := -1;
@@ -6499,8 +6509,7 @@ begin
   end;
 end;
 
-constructor TRealSparseDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
-  ColumnCount: Integer);
+constructor TRealSparseDataSet.Create(AnOwner: TComponent);
 begin
   inherited;
   FRealValues := T3DSparseRealArray.Create(GetQuantum(LayerCount),
@@ -6654,8 +6663,7 @@ begin
   end;
 end;
 
-constructor TIntegerSparseDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
-  ColumnCount: Integer);
+constructor TIntegerSparseDataSet.Create(AnOwner: TComponent);
 begin
   inherited;
   FIntegerValues := T3DSparseIntegerArray.Create(GetQuantum(LayerCount),
@@ -9098,8 +9106,7 @@ begin
   end;
 end;
 
-constructor TCustomBoundaryRealSparseDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
-  ColumnCount: Integer);
+constructor TCustomBoundaryRealSparseDataSet.Create(AnOwner: TComponent);
 begin
   inherited;
   FDataCached := False;
@@ -9383,8 +9390,7 @@ begin
   end;
 end;
 
-constructor TStringSparseDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
-  ColumnCount: Integer);
+constructor TStringSparseDataSet.Create(AnOwner: TComponent);
 begin
   inherited;
   FStringValues := T3DSparseStringArray.Create(GetQuantum(LayerCount),

@@ -57,6 +57,8 @@ type
     procedure comboFileTypeChange(Sender: TObject);
     procedure comboInterpolationChange(Sender: TObject);
     procedure comboMethodChange(Sender: TObject);
+    procedure frameTabFilesGridBeforeDrawCell(Sender: TObject; ACol,
+      ARow: Integer);
   private
     procedure GetDataForAModel(TabFiles: TTabFileCollection);
     procedure SetDataForAModel(TabFiles: TTabFileCollection);
@@ -75,7 +77,7 @@ implementation
 
 uses
   frmSelectSwrObjectsUnit, RbwDataGrid4, frmGoPhastUnit,
-  frmSwrVertexNumbersUnit;
+  frmSwrVertexNumbersUnit, System.IOUtils;
 
 resourcestring
   StrITAB = 'ITAB';
@@ -211,6 +213,22 @@ procedure TfrmSwrTabfiles.FormResize(Sender: TObject);
 begin
   inherited;
   LayoutMultiRowEditControls
+end;
+
+procedure TfrmSwrTabfiles.frameTabFilesGridBeforeDrawCell(Sender: TObject; ACol,
+  ARow: Integer);
+var
+  FileName: string;
+begin
+  inherited;
+  if (ARow >= frameTabFiles.Grid.FixedRows) and (ACol = Ord(tcFileName)) then
+  begin
+    FileName := frameTabFiles.Grid.Cells[ACol, ARow];
+    if (FileName <> '') and not TFile.Exists(FileName) then
+    begin
+      frameTabFiles.Grid.Canvas.Brush.Color := clRed;
+    end;
+  end;
 end;
 
 procedure TfrmSwrTabfiles.frameTabFilesGridButtonClick(Sender: TObject; ACol,

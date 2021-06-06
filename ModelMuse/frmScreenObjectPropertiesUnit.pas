@@ -2820,6 +2820,10 @@ begin
   begin
     PestParameterColumns := [2..7];
   end
+  else if (Sender = frameSwrReach.frameSwr.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [3, 5];
+  end;
   ;
 
   if not (ACol in PestParameterColumns) and (ARow >= 1)
@@ -5734,6 +5738,7 @@ begin
   frameMNW2.OnCheckPestCell := EnablePestCells;
   frameRes.OnCheckPestCell := EnablePestCells;
   frameScreenObjectSFR.OnCheckPestCell := EnablePestCells;
+  frameSwrReach.frameSwr.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -25889,6 +25894,7 @@ begin
     or (DataGrid = frameScreenObjectSFR.dgFlowTimes)
     or (DataGrid = frameScreenObjectSFR.dgUp)
     or (DataGrid = frameScreenObjectSFR.dgDown)
+    or ((DataGrid = frameSwrReach.frameSwr.rdgModflowBoundary) and (ACol in [3,5]));
 //    or (DataGrid = frameCSUB.rdgSubGroups)
     ;
 end;

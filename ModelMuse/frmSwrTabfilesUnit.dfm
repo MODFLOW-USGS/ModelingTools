@@ -101,12 +101,14 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
       OnMouseUp = frameTabFilesGridMouseUp
       OnSelectCell = frameTabFilesGridSelectCell
       OnSetEditText = frameTabFilesGridSetEditText
+      OnBeforeDrawCell = frameTabFilesGridBeforeDrawCell
       OnButtonClick = frameTabFilesGridButtonClick
       OnColSize = frameTabFilesGridColSize
       OnHorizontalScroll = frameTabFilesGridHorizontalScroll
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -130,6 +132,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -160,6 +163,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'Browse'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -183,6 +187,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -209,6 +214,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -236,6 +242,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -264,6 +271,7 @@ inherited frmSwrTabfiles: TfrmSwrTabfiles
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'Edit'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

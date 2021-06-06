@@ -443,8 +443,7 @@ begin
     PQTimeList.Clear;
     for TimeIndex := 0 to Times.Count - 1 do
     begin
-      DataArray := TTransientRealSparseDataSet.Create(Model, Mesh.LayerCount+1,
-        1, Mesh.Mesh2D.Nodes.Count);
+      DataArray := TTransientRealSparseDataSet.Create(Model);
       DataArray.DataType := rdtDouble;
       DataArray.Orientation := dso3D;
       DataArray.UpdateDimensions(Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
@@ -465,8 +464,7 @@ begin
     UTimeList.Clear;
     for TimeIndex := 0 to Times.Count - 1 do
     begin
-      DataArray := TTransientRealSparseDataSet.Create(Model, Mesh.LayerCount+1,
-        1, Mesh.Mesh2D.Nodes.Count);
+      DataArray := TTransientRealSparseDataSet.Create(Model);
       DataArray.DataType := rdtDouble;
       DataArray.Orientation := dso3D;
       DataArray.UpdateDimensions(Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
@@ -482,13 +480,11 @@ begin
           try
             for TimeIndex := 0 to Times.Count - 1 do
             begin
-              DataArray := TTransientRealSparseDataSet.Create(Model,
-                Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
+              DataArray := TTransientRealSparseDataSet.Create(Model);
               DataArray.DataType := rdtDouble;
               PositiveFluxes.Add(Times[TimeIndex], DataArray);
 
-              DataArray := TTransientRealSparseDataSet.Create(Model,
-                Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
+              DataArray := TTransientRealSparseDataSet.Create(Model);
               DataArray.DataType := rdtDouble;
               PositiveUFluxes.Add(Times[TimeIndex], DataArray);
             end;

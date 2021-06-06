@@ -264,6 +264,17 @@ begin
   comboRouteType.ItemIndex := 0;
   edReachLength.Text := TSwrReachBoundary.DefaultReachLengthFormula;
   ClearGrid(frameSwr.rdgModflowBoundary);
+  {$IFDEF PEST}
+  frameSwr.rdgModflowBoundary.Cells[0, PestModifierRow] := StrPestModifier;
+  frameSwr.rdgModflowBoundary.Cells[0, PestMethodRow] := StrModificationMethod;
+  frameSwr.PestMethod[Ord(srcVerticalOffset)] :=
+    TSwrReachBoundary.DefaultBoundaryMethod(SwrVerticalOffsetPosition);
+  if Ord(srcStage) < frameSwr.rdgModflowBoundary.ColCount then
+  begin
+    frameSwr.PestMethod[Ord(srcStage)] :=
+      TSwrReachBoundary.DefaultBoundaryMethod(SwrStagePosition);
+  end;
+  {$ENDIF}
   ClearGrid(frameConnections.Grid);
   ScreenObjectList := TList.Create;
   try
@@ -294,6 +305,21 @@ begin
       cbMultilayer.Checked := Reaches.MultiLayer;
       cbGrouped.Checked := Reaches.Grouped;
       rdeGroupNumber.IntegerValue := Reaches.GroupNumber;
+
+      {$IFDEF PEST}
+      frameSwr.PestModifier[Ord(srcVerticalOffset)] :=
+        Reaches.PestVerticalOffsetFormula;
+      frameSwr.PestMethod[Ord(srcVerticalOffset)] :=
+        Reaches.PestVerticalOffsetMethod;
+
+      if Ord(srcStage) < frameSwr.rdgModflowBoundary.ColCount then
+      begin
+        frameSwr.PestModifier[Ord(srcStage)] :=
+          Reaches.PestStageFormula;
+        frameSwr.PestMethod[Ord(srcStage)] :=
+          Reaches.PestStageMethod;
+      end;
+      {$ENDIF}
 
       frameSwr.seNumberOfTimes.AsInteger := Reaches.Values.Count;
 
@@ -339,6 +365,38 @@ begin
       begin
         AScreenObject := ScreenObjectList[ObjectIndex];
         Reaches := AScreenObject.ModflowSwrReaches;
+
+        {$IFDEF PEST}
+        if frameSwr.PestModifierAssigned[Ord(srcVerticalOffset)]
+          and (frameSwr.PestModifier[Ord(srcVerticalOffset)] <>
+          Reaches.PestVerticalOffsetFormula) then
+        begin
+          frameSwr.PestModifierAssigned[Ord(srcVerticalOffset)] := False
+        end;
+        if frameSwr.PestMethodAssigned[Ord(srcVerticalOffset)]
+          and (frameSwr.PestMethod[Ord(srcVerticalOffset)] <>
+          Reaches.PestVerticalOffsetMethod) then
+        begin
+          frameSwr.PestMethodAssigned[Ord(srcVerticalOffset)] := False
+        end;
+
+        if Ord(srcStage) < frameSwr.rdgModflowBoundary.ColCount then
+        begin
+          if frameSwr.PestModifierAssigned[Ord(srcStage)]
+            and (frameSwr.PestModifier[Ord(srcStage)] <>
+            Reaches.PestStageFormula) then
+          begin
+            frameSwr.PestModifierAssigned[Ord(srcStage)] := False
+          end;
+          if frameSwr.PestMethodAssigned[Ord(srcStage)]
+            and (frameSwr.PestMethod[Ord(srcStage)] <>
+            Reaches.PestStageMethod) then
+          begin
+            frameSwr.PestMethodAssigned[Ord(srcStage)] := False
+          end;
+        end;
+        {$ENDIF}
+
         if comboRouteType.ItemIndex <> Ord(Reaches.RouteType) then
         begin
           comboRouteType.ItemIndex := -1;
@@ -490,7 +548,8 @@ begin
     NewConnections := TSwrConnections.Create(nil);
     try
       Grid := frameSwr.rdgModflowBoundary;
-      for RowIndex := 1 to frameSwr.seNumberOfTimes.AsInteger do
+      for RowIndex := 1 + PestRowOffset to
+        frameSwr.seNumberOfTimes.AsInteger + PestRowOffset do
       begin
         if TryStrToFloat(Grid.Cells[Ord(srcStartTime), RowIndex], StartTime)
           and TryStrToFloat(Grid.Cells[Ord(srcEndTime), RowIndex], EndTime) then
@@ -579,6 +638,32 @@ begin
         Reaches := AScreenObject.ModflowSwrReaches;
         if Reaches <> nil then
         begin
+          {$IFDEF PEST}
+          if frameSwr.PestModifierAssigned[Ord(srcVerticalOffset)] then
+          begin
+            Reaches.PestVerticalOffsetFormula :=
+              frameSwr.PestModifier[Ord(srcVerticalOffset)];
+          end;
+
+          if frameSwr.PestMethodAssigned[Ord(srcVerticalOffset)] then
+          begin
+            Reaches.PestVerticalOffsetMethod :=
+              frameSwr.PestMethod[Ord(srcVerticalOffset)];
+          end;
+
+          if Ord(srcStage) < frameSwr.rdgModflowBoundary.ColCount then
+          begin
+            if frameSwr.PestModifierAssigned[Ord(srcStage)] then
+            begin
+              Reaches.PestStageFormula := frameSwr.PestModifier[Ord(srcStage)];
+            end;
+            if frameSwr.PestMethodAssigned[Ord(srcStage)] then
+            begin
+              Reaches.PestStageMethod := frameSwr.PestMethod[Ord(srcStage)];
+            end;
+          end;
+          {$ENDIF}
+
           if comboRouteType.ItemIndex >= 0 then
           begin
             Reaches.RouteType := TSwrRouteType(comboRouteType.ItemIndex);

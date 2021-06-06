@@ -2691,8 +2691,8 @@ var
 begin
   // strip off .tpl extension to get input file name.
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
-  PValFileName := ChangeFileExt(PValFileName, '');
   Model.FilesToDelete.Add(PValFileName);
+  PValFileName := ChangeFileExt(PValFileName, '');
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
   Model.PestTemplateLines.Add(PestUtilityProgramPath(
     StrEnhancedTemplateProc, AFileName)
@@ -5924,8 +5924,7 @@ begin
             if CellList.Count > 0 then
             begin
               // Data set 4a
-              DataArray:= TModflowBoundaryDisplayDataArray.Create(Model,
-                Model.LayerCount, Model.RowCount, Model.ColumnCount);
+              DataArray:= TModflowBoundaryDisplayDataArray.Create(Model);
               DataArray.Orientation := dso3D;
               DataArray.EvaluatedAt := eaBlocks;
               DataArray.UpdateDimensions(Model.LayerCount,
@@ -6199,8 +6198,7 @@ var
     end;
   end;
 begin
-  LayerArray := TIntegerSparseDataSet.Create(Model, Model.LayerCount,
-    Model.RowCount, Model.ColumnCount);
+  LayerArray := TIntegerSparseDataSet.Create(Model);
   try
     LayerArray.Orientation := dsoTop;
     LayerArray.EvaluatedAt := eaBlocks;

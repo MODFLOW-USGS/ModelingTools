@@ -2705,6 +2705,7 @@ that affects the model output should also have a comment. }
     // Each value represents the fraction of the distance from the bottom
     // to the top of the layer group.
     function LayerFractions(LayerGroup: TCustomLayerGroup): TDoubleDynArray; virtual;
+    function MaxColumnCount: Integer;
     function ColumnCount: Integer;
     function RowCount: Integer;
     function LayerCount: integer; virtual;
@@ -11070,32 +11071,28 @@ begin
   FModelTimes := TRealList.Create;
   FFileVersion := IModelVersion;
 
-  FTopBoundaryType := TIntegerSparseDataSet.Create(self, LayerCount+1,
-    RowCount+1, ColumnCount+1);
+  FTopBoundaryType := TIntegerSparseDataSet.Create(self);
   FTopBoundaryType.Name := 'FTopBoundaryType';
   FTopBoundaryType.Orientation := dso3D;
   FTopBoundaryType.EvaluatedAt := eaNodes;
   (FTopBoundaryType as TIntegerSparseDataSet).BoundaryTypeDataSet :=
     FTopBoundaryType;
 
-  FFrontBoundaryType := TIntegerSparseDataSet.Create(self, LayerCount+1,
-    RowCount+1, ColumnCount+1);
+  FFrontBoundaryType := TIntegerSparseDataSet.Create(self);
   FFrontBoundaryType.Name := 'FFrontBoundaryType';
   FFrontBoundaryType.Orientation := dso3D;
   FFrontBoundaryType.EvaluatedAt := eaNodes;
   (FFrontBoundaryType as TIntegerSparseDataSet).BoundaryTypeDataSet :=
     FFrontBoundaryType;
 
-  FSideBoundaryType := TIntegerSparseDataSet.Create(self, LayerCount+1,
-    RowCount+1, ColumnCount+1);
+  FSideBoundaryType := TIntegerSparseDataSet.Create(self);
   FSideBoundaryType.Name := 'FSideBoundaryType';
   FSideBoundaryType.Orientation := dso3D;
   FSideBoundaryType.EvaluatedAt := eaNodes;
   (FSideBoundaryType as TIntegerSparseDataSet).BoundaryTypeDataSet :=
     FSideBoundaryType;
 
-  FTop2DBoundaryType := TIntegerSparseDataSet.Create(self, 1, RowCount+1,
-    ColumnCount+1);
+  FTop2DBoundaryType := TIntegerSparseDataSet.Create(self);
   FTop2DBoundaryType.Name := 'FTop2DBoundaryType';
   FTop2DBoundaryType.Orientation := dsoTop;
   FTop2DBoundaryType.EvaluatedAt := eaNodes;
@@ -25150,9 +25147,10 @@ begin
   // 2. Discretization,
   // 3. Basic,
   // 4. Output Control,
+  // The following are sometimes required.
   // 5. Zone Arrays,
   // 6. Multiplier Arrays
-  result := 3;
+  result := 4;
   result := result + ModflowPackages.SelectedModflowPackageCount;
   if ModflowPackages.SfrPackage.IsSelected
     or ModflowPackages.LakPackage.IsSelected then
@@ -25400,8 +25398,7 @@ procedure TPhastModel.CreateInitialDataSetsForPhastTimeLists;
 var
   PhastDataSet: TSparseArrayPhastInterpolationDataSet;
 begin
-  PhastDataSet := TSparseRealPhastDataSet.Create(self, LayerCount+1, RowCount+1,
-    ColumnCount+1);
+  PhastDataSet := TSparseRealPhastDataSet.Create(self);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName('Z_Flux_Boundary_Flux0');
   PhastDataSet.DataType := rdtDouble;
@@ -25412,8 +25409,7 @@ begin
   FTopFluxBoundaryFlux.Add(0, (PhastDataSet
     as TSparseArrayPhastInterpolationDataSet));
 
-  PhastDataSet := TSparseRealPhastDataSet.Create(self, LayerCount+1, RowCount+1,
-    ColumnCount+1);
+  PhastDataSet := TSparseRealPhastDataSet.Create(self);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName('Y_Flux_Boundary_Flux0');
   PhastDataSet.DataType := rdtDouble;
@@ -25424,8 +25420,7 @@ begin
   FFrontFluxBoundaryFlux.Add(0, PhastDataSet
     as TSparseArrayPhastInterpolationDataSet);
 
-  PhastDataSet := TSparseRealPhastDataSet.Create(self, LayerCount+1, RowCount+1,
-    ColumnCount+1);
+  PhastDataSet := TSparseRealPhastDataSet.Create(self);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName('X_Flux_Boundary_Flux0');
   PhastDataSet.DataType := rdtDouble;
@@ -25436,8 +25431,7 @@ begin
   FSideFluxBoundaryFlux.Add(0, PhastDataSet
     as TSparseArrayPhastInterpolationDataSet);
 
-  PhastDataSet := TSparseIntegerPhastDataSet.Create(self, LayerCount+1,
-    RowCount+1, ColumnCount+1);
+  PhastDataSet := TSparseIntegerPhastDataSet.Create(self);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName('Z_Flux_Boundary_Chemistry0');
   PhastDataSet.DataType := rdtInteger;
@@ -25448,8 +25442,7 @@ begin
   FTopFluxBoundaryChemistry.Add(0, (PhastDataSet
     as TSparseArrayPhastInterpolationDataSet));
 
-  PhastDataSet := TSparseIntegerPhastDataSet.Create(self, LayerCount+1,
-    RowCount+1, ColumnCount+1);
+  PhastDataSet := TSparseIntegerPhastDataSet.Create(self);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName('Y_Flux_Boundary_Chemistry0');
   PhastDataSet.DataType := rdtInteger;
@@ -25460,8 +25453,7 @@ begin
   FFrontFluxBoundaryChemistry.Add(0, PhastDataSet
     as TSparseArrayPhastInterpolationDataSet);
 
-  PhastDataSet := TSparseIntegerPhastDataSet.Create(self, LayerCount+1,
-    RowCount+1, ColumnCount+1);
+  PhastDataSet := TSparseIntegerPhastDataSet.Create(self);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName('X_Flux_Boundary_Chemistry0');
   PhastDataSet.DataType := rdtInteger;
@@ -29054,8 +29046,7 @@ begin
       Assert(FlowList.Count in [0,1]);
 
       FSutraGenFlowPress1.Clear;
-      DataArrayP1 := TSutraBoundaryDisplayDataArray.Create(self, LayerCount+1,
-        RowCount+1, ColumnCount+1);
+      DataArrayP1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayP1.DataType := rdtDouble;
       DataArrayP1.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29071,8 +29062,7 @@ begin
       FSutraGenFlowPress1.Add(ThreeDDisplayTime, DataArrayP1);
 
       FSutraGenFlowPress2.Clear;
-      DataArrayP2 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayP2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayP2.DataType := rdtDouble;
       DataArrayP2.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29088,8 +29078,7 @@ begin
       FSutraGenFlowPress2.Add(ThreeDDisplayTime, DataArrayP2);
 
       FSutraGenFlowRate1.Clear;
-      DataArrayFlow1 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayFlow1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayFlow1.DataType := rdtDouble;
       DataArrayFlow1.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29105,8 +29094,7 @@ begin
       FSutraGenFlowRate1.Add(ThreeDDisplayTime, DataArrayFlow1);
 
       FSutraGenFlowRate2.Clear;
-      DataArrayFlow2 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayFlow2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayFlow2.DataType := rdtDouble;
       DataArrayFlow2.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29122,8 +29110,7 @@ begin
       FSutraGenFlowRate2.Add(ThreeDDisplayTime, DataArrayFlow2);
 
       FSutraGenFlowU1.Clear;
-      DataArrayU1 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayU1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayU1.DataType := rdtDouble;
       DataArrayU1.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29139,8 +29126,7 @@ begin
       FSutraGenFlowU1.Add(ThreeDDisplayTime, DataArrayU1);
 
       FSutraGenFlowU2.Clear;
-      DataArrayU2 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayU2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayU2.DataType := rdtDouble;
       DataArrayU2.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29233,8 +29219,7 @@ begin
       Assert(FlowList.Count in [0, 1]);
 
       FSutraGenTranU1.Clear;
-      DataArrayTranU1 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayTranU1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranU1.DataType := rdtDouble;
       DataArrayTranU1.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29250,8 +29235,7 @@ begin
       FSutraGenTranU1.Add(ThreeDDisplayTime, DataArrayTranU1);
 
       FSutraGenTranU2.Clear;
-      DataArrayTranU2 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayTranU2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranU2.DataType := rdtDouble;
       DataArrayTranU2.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29267,8 +29251,7 @@ begin
       FSutraGenTranU2.Add(ThreeDDisplayTime, DataArrayTranU2);
 
       FSutraGenTranQU1.Clear;
-      DataArrayTranQU1 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayTranQU1 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranQU1.DataType := rdtDouble;
       DataArrayTranQU1.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -29284,8 +29267,7 @@ begin
       FSutraGenTranQU1.Add(ThreeDDisplayTime, DataArrayTranQU1);
 
       FSutraGenTranQU2.Clear;
-      DataArrayTranQU2 := TSutraBoundaryDisplayDataArray.Create(self,
-        SutraMesh.LayerCount+1, 1, SutraMesh.Mesh2D.Nodes.Count);
+      DataArrayTranQU2 := TSutraBoundaryDisplayDataArray.Create(self);
       DataArrayTranQU2.DataType := rdtDouble;
       DataArrayTranQU2.Orientation := dso3D;
       if SutraMesh.MeshType = mt3D then
@@ -33744,9 +33726,7 @@ procedure TDataArrayManager.CreateInitialBoundaryDataSets;
 var
   PhastDataSet: TDataArray;
 begin
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsTopLeakyHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -33757,9 +33737,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsTopLeakyThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -33770,9 +33748,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsFrontLeakyHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -33783,9 +33759,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsFrontLeakyThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -33796,9 +33770,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsSideLeakyHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -33809,9 +33781,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsSideLeakyThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -33822,9 +33792,7 @@ begin
   PhastDataSet.Min := 0;
   AddBoundaryDataSet(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverHydraulicConductivity);
   PhastDataSet.DataType := rdtDouble;
@@ -33836,9 +33804,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverWidth);
   PhastDataSet.DataType := rdtDouble;
@@ -33850,8 +33816,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel, 1,
-    FCustomModel.RowCount + 1, FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverDepth);
   PhastDataSet.DataType := rdtDouble;
@@ -33863,8 +33828,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TRealSparseDataSet.Create(FCustomModel, 1,
-    FCustomModel.RowCount + 1, FCustomModel.ColumnCount + 1);
+  PhastDataSet := TRealSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsRiverBedThickness);
   PhastDataSet.DataType := rdtDouble;
@@ -33876,9 +33840,7 @@ begin
   AddBoundaryDataSet(PhastDataSet);
   RiverDataSets.Add(PhastDataSet);
 
-  PhastDataSet := TIntegerSparseDataSet.Create(FCustomModel,
-    FCustomModel.LayerCount + 1, FCustomModel.RowCount + 1,
-    FCustomModel.ColumnCount + 1);
+  PhastDataSet := TIntegerSparseDataSet.Create(FCustomModel);
   PhastDataSet.Lock := [dcName, dcType, dcOrientation, dcEvaluatedAt];
   PhastDataSet.UpdateWithName(rsSolutionType);
   PhastDataSet.DataType := rdtInteger;
@@ -38342,9 +38304,13 @@ begin
   begin
     result := Grid.ColumnCount;
   end
-  else
+  else if Mesh3D <> nil then
   begin
     result := Mesh3D.Mesh2DI.ElementCount;
+  end
+  else
+  begin
+    result := 0;
   end;
 end;
 
@@ -39542,6 +39508,22 @@ end;
 function TCustomModel.MawSelected(Sender: TObject): Boolean;
 begin
   result := ModflowPackages.MawPackage.IsSelected;
+end;
+
+function TCustomModel.MaxColumnCount: Integer;
+begin
+  if Grid <> nil then
+  begin
+    result := Grid.ColumnCount+1;
+  end
+  else if Mesh3D <> nil then
+  begin
+    result := Mesh3D.Mesh2DI.NodeCount;
+  end
+  else
+  begin
+    result := 0;
+  end;
 end;
 
 function TCustomModel.Mf6ObsIsSelected: Boolean;

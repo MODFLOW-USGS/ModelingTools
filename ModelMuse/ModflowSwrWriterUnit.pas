@@ -29,6 +29,7 @@ type
     FStuctureDict: TObjectDictionary<Integer,TStructureList>;
     FDirectRunoffFileName: string;
     NREACHES: integer;
+    FTabUnitList: TList<Integer>;
     procedure WriteStressPeriods;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -89,6 +90,7 @@ type
     procedure AssignReachObservationLinks;
     procedure CheckThatTransientDataFullyDefined;
     procedure CheckStructuresUsed;
+    procedure WriteFileInternal;
   protected
     procedure Evaluate; override;
     class function Extension: string; override;
@@ -371,6 +373,7 @@ constructor TModflowSwrWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
+  FTabUnitList := TList<Integer>.Create;
   FSwrPackage := Model.ModflowPackages.SwrPackage;
   FReachList:= TObjectList<TReachObject>.Create;
   FEvapValues := TObjectList.Create;
@@ -392,6 +395,7 @@ begin
   FLatInflowValues.Free;
   FEvapValues.Free;
   FReachList.Free;
+  FTabUnitList.Free;
   inherited;
 end;
 
@@ -3171,24 +3175,7 @@ begin
   FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrSWR, Model.UnitNumbers.UnitNumber(StrSWR), FNameOfFile, foInput, Model);
   FInputFileName := FNameOfFile;
-  OpenFile(FNameOfFile);
-  try
-    WriteDataSet0;
-    WriteDataSet1;
-    WriteDataSet2;
-    WriteDataSet3;
-
-    WriteDataSet4A;
-    WriteDataSet4B;
-    WriteDataSet4C;
-    WriteDataSet4D;
-    WriteDataSet4E;
-    WriteDataSet4F;
-    frmProgressMM.AddMessage('  Writing Data Sets 5 to 15.');
-    WriteStressPeriods;
-  finally
-    CloseFile;
-  end;
+  WriteFileInternal;
 
   if FDirectRunoffValues.Count > 0 then
   begin
@@ -3227,6 +3214,21 @@ begin
       CloseFile;
     end;
   end;
+
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    frmErrorsAndWarnings.BeginUpdate;
+    try
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
+
+    finally
+      frmErrorsAndWarnings.EndUpdate;
+    end;
+  end;
+
 
 end;
 
@@ -4076,7 +4078,15 @@ begin
           else Assert(False);
         end;
       {$ENDREGION}
-        ITABUNIT := Model.ParentModel.UnitNumbers.SequentialUnitNumber;
+        if not WritingTemplate then
+        begin
+          ITABUNIT := Model.ParentModel.UnitNumbers.SequentialUnitNumber;
+          FTabUnitList.Add(ITABUNIT);
+        end
+        else
+        begin
+          ITABUNIT := FTabUnitList[TabFileIndex];
+        end;
         if Trim(TabItem.FullTabFileName) = '' then
         begin
           frmErrorsAndWarnings.AddError(Model, StrSWRTabfileNameNot,
@@ -4286,6 +4296,29 @@ begin
       end;
     sotBaseFlow: result := 'Basefl_' + result;
     else Assert(False);
+  end;
+end;
+
+procedure TModflowSwrWriter.WriteFileInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    WriteDataSet0;
+    WriteDataSet1;
+    WriteDataSet2;
+    WriteDataSet3;
+    WriteDataSet4A;
+    WriteDataSet4B;
+    WriteDataSet4C;
+    WriteDataSet4D;
+    WriteDataSet4E;
+    WriteDataSet4F;
+    frmProgressMM.AddMessage('  Writing Data Sets 5 to 15.');
+    WriteStressPeriods;
+  finally
+    CloseFile;
   end;
 end;
 

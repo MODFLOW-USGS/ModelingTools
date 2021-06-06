@@ -384,10 +384,10 @@ resourcestring
 
 const
   SwrOffset = 4;
-  SwrReachLengthPosition = 2;
-  SwrReachNumberPosition = 3;
-  SwrGroupNumberPosition = 4;
-  SwrRoutingTypePosition = 5;
+  SwrReachLengthPosition = 0;
+  SwrReachNumberPosition = 1;
+  SwrGroupNumberPosition = 2;
+  SwrRoutingTypePosition = 3;
 
 { TSwrTransientReachItem }
 
@@ -687,6 +687,7 @@ begin
             VerticalOffsetPest := PestName;
             VerticalOffsetPestSeriesName := PestSeriesName;
             VerticalOffsetPestSeriesMethod := PestSeriesMethod;
+
           end;
         SwrStagePosition:
           begin
@@ -1149,6 +1150,11 @@ begin
     Grouped := SourceSwr.Grouped;
     GroupNumber := SourceSwr.GroupNumber;
     ObsTypes := SourceSwr.ObsTypes;
+
+    PestStageFormula := SourceSwr.PestStageFormula;
+    PestStageMethod := SourceSwr.PestStageMethod;
+    PestVerticalOffsetFormula := SourceSwr.PestVerticalOffsetFormula;
+    PestVerticalOffsetMethod := SourceSwr.PestVerticalOffsetMethod;
   end;
   inherited;
 end;
@@ -1259,12 +1265,20 @@ begin
     end;
   end;
 
+  CreateObservers;
+
   LinkReachLength;
   LinkReachNumber;
   LinkGroupNumber;
   LinkRoutingType;
 
   ReachLengthFormula :=  DefaultReachLengthFormula;
+
+  PestStageFormula := '';
+  PestVerticalOffsetFormula := '';
+  FPestStageMethod := DefaultBoundaryMethod(SwrStagePosition);
+  FPestVerticalOffsetMethod := DefaultBoundaryMethod(SwrVerticalOffsetPosition);
+
 end;
 
 procedure TSwrReachBoundary.CreateFormulaObjects;
@@ -1287,7 +1301,21 @@ end;
 class function TSwrReachBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
-
+  case FormulaIndex of
+    SwrVerticalOffsetPosition:
+      begin
+        result := ppmAdd;
+      end;
+    SwrStagePosition:
+      begin
+        result := ppmAdd;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 class function TSwrReachBoundary.DefaultReachLengthFormula: string;
@@ -1297,6 +1325,8 @@ end;
 
 destructor TSwrReachBoundary.Destroy;
 begin
+  PestStageFormula := '';
+  PestVerticalOffsetFormula := '';
   ReachLengthFormula := '0';
 
   FConnections.Free;

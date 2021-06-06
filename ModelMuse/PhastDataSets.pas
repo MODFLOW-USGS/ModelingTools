@@ -665,8 +665,7 @@ to elements or cells.}
     property BoundaryDataType: TDataArray read FBoundaryDataType
       write FBoundaryDataType;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); reintroduce; virtual;
+    constructor Create(AnOwner: TComponent); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -744,8 +743,7 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: double read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); override;
+    constructor Create(AnOwner: TComponent); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -839,8 +837,7 @@ to elements or cells.}
     property CellValue2[const ALay, ARow, ACol: integer]: integer read
       GetCellValue2 write SetCellValue2;
     // @name creates an instance of @classname.
-    constructor Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer); override;
+    constructor Create(AnOwner: TComponent); override;
     // @name destroys the current instance of @classname.
     // Do not call @name directly.  Call Free instead.
     destructor Destroy; override;
@@ -2846,10 +2843,25 @@ end;
 
 { TSparseArrayPhastInterpolationDataSet }
 
-constructor TSparseArrayPhastInterpolationDataSet.Create(AnOwner: TComponent;
-  LayerCount, RowCount, ColumnCount: Integer);
+constructor TSparseArrayPhastInterpolationDataSet.Create(AnOwner: TComponent);
+var
+  LocalModel: TCustomModel;
+  LayerCount, RowCount, ColumnCount: Integer;
 begin
   inherited Create(AnOwner);
+  if AnOwner <> nil then
+  begin
+    LocalModel := AnOwner as TCustomModel;
+    LayerCount := LocalModel.LayerCount+1;
+    RowCount := LocalModel.RowCount+1;
+    ColumnCount := LocalModel.MaxColumnCount;
+  end
+  else
+  begin
+    LayerCount := 0;
+    RowCount := 0;
+    ColumnCount := 0;
+  end;
   FCellDistance1 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
     GetQuantum(RowCount), GetQuantum(ColumnCount));
   FCellDistance2 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
@@ -3149,8 +3161,7 @@ begin
   inherited;
 end;
 
-constructor TSparseRealPhastDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer);
+constructor TSparseRealPhastDataSet.Create(AnOwner: TComponent);
 begin
   inherited;
   FCellValue1 := T3DSparseRealArray.Create(GetQuantum(LayerCount),
@@ -3415,8 +3426,7 @@ begin
   inherited;
 end;
 
-constructor TSparseIntegerPhastDataSet.Create(AnOwner: TComponent; LayerCount, RowCount,
-      ColumnCount: Integer);
+constructor TSparseIntegerPhastDataSet.Create(AnOwner: TComponent);
 begin
   inherited;
   FCellValue1 := T3DSparseIntegerArray.Create(GetQuantum(LayerCount),

@@ -73,7 +73,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
         </td>
         <td>
-          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/usgspubs/ofr/ofr02293" target="_blank" styleclass="Citation" translate="true">Halford, K.J. and Hanson R.T., 2002, User Guide for the Drawdown-Limited, Multi-Node Well (MNW) Package for the U.S. Geological Survey’s Modular Three-Dimensional Finite-Difference Ground-Water Flow Model, Versions MODFLOW-96 and MODFLOW-2000t: U.S. Geological Survey Open-File Report 02-293, 33 p.</link></para>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/ofr02293" target="_blank" styleclass="Citation" translate="true">Halford, K.J. and Hanson R.T., 2002, User Guide for the Drawdown-Limited, Multi-Node Well (MNW) Package for the U.S. Geological Survey’s Modular Three-Dimensional Finite-Difference Ground-Water Flow Model, Versions MODFLOW-96 and MODFLOW-2000t: U.S. Geological Survey Open-File Report 02-293, 33 p.</link></para>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="MNW7.pdf" styleclass="Normal" translate="true">MNW7.pdf</link></para>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="MF2005_release.txt" styleclass="Normal" translate="true">release.txt for MODFLOW-2005</link></para>
         </td>
