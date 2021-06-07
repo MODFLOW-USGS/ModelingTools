@@ -10288,13 +10288,12 @@ const
 //                comment.
 //    '4.3.0.49' Bug fix: Fixed reading TProgs binary data files containing
 //                byte-sized integer data.
-
-//               Bug fix: Fixed a bug that could cause an exception to be
+//    '4.3.0.50' Bug fix: Fixed a bug that could cause an exception to be
 //                raised in models with large grids.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.49';
+  IIModelVersion = '4.3.0.50';
 
 function IModelVersion: string;
 begin
