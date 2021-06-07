@@ -10290,10 +10290,11 @@ const
 //                byte-sized integer data.
 //    '4.3.0.50' Bug fix: Fixed a bug that could cause an exception to be
 //                raised in models with large grids.
+//    '4.3.0.51' No real change.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.50';
+  IIModelVersion = '4.3.0.51';
 
 function IModelVersion: string;
 begin

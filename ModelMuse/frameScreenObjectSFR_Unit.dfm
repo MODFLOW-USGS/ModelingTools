@@ -10,7 +10,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     Top = 0
     Width = 561
     Height = 506
-    ActivePage = tabTime
+    ActivePage = tabFlows
     Align = alClient
     TabOrder = 0
     object tabBasic: TTabSheet
@@ -1148,6 +1148,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = 52
       end
       object pnlFlowTop: TPanel
         Left = 0

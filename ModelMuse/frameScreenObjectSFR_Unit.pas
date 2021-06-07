@@ -1039,8 +1039,6 @@ end;
 
 constructor TframeScreenObjectSFR.Create(AOwner: TComponent);
 var
-  seParametersCountChange(nil);
-
   TempLayer: TPositionedLayer;
   procedure AssignSegmentHeadings(dg: TStringGrid);
   begin
@@ -1059,6 +1057,8 @@ var
   end;
 begin
   inherited;
+  seParametersCountChange(nil);
+
   FUpdatingICalc := False;
   FGettingData := False;
   seParametersCountChange(nil);
