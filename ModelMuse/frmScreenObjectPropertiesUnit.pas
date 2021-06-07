@@ -12551,6 +12551,7 @@ end;
 function TfrmScreenObjectProperties.GetPestModifierAssigned(Grid: TRbwDataGrid4;
   ACol: Integer): Boolean;
 begin
+  {$IFDEF PEST}
   if PestRowOffset = 0 then
   begin
     result := False;
@@ -12558,6 +12559,7 @@ begin
     Exit;
   end;
   result := Grid.Cells[ACol, PestModifierRow] <> '';
+  {$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.GetPestModifiers(
@@ -12577,6 +12579,7 @@ var
   Method: TPestParamMethod;
   Modifier: string;
 begin
+  {$IFDEF PEST}
   ValuesFunction := GetBoundaryValues;
   ColumnOffset := 2;
 
@@ -12678,6 +12681,7 @@ begin
   finally
     Frame.rdgModflowBoundary.EndUpdate;
   end;
+  {$ENDIF}
 end;
 
 procedure TfrmScreenObjectProperties.GetPhastBoundariesForSingleObject;
@@ -15653,11 +15657,13 @@ begin
   DataGrid := frameLak.rdgModflowBoundary;
   ColumnOffset := 2;
 
+  {$IFDEF PEST}
   for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
   begin
     frameLak.PestMethod[BoundaryIndex + ColumnOffset] :=
       TLakBoundary.DefaultBoundaryMethod(BoundaryIndex);
   end;
+  {$ENDIF}
 
   frameLak.tabBathymetry.TabVisible := (ScreenObjectList.Count = 1)
     and frmGoPhast.PhastModel.LakBathymetryUsed;
@@ -15712,6 +15718,7 @@ begin
 //  FirstBoundary := Boundary;
   Values := Boundary.Values;
 
+  {$IFDEF PEST}
   for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
   begin
     frameLak.PestModifier[BoundaryIndex + ColumnOffset] :=
@@ -15719,6 +15726,7 @@ begin
     frameLak.PestMethod[BoundaryIndex + ColumnOffset] :=
       Boundary.PestBoundaryMethod[BoundaryIndex];
   end;
+  {$ENDIF}
   for ScreenObjectIndex := FirstIndex+1 to ScreenObjectList.Count - 1 do
   begin
     AScreenObject := ScreenObjectList[ScreenObjectIndex];
@@ -18113,6 +18121,7 @@ var
     Boundary: TUzfBoundary;
     Modifier: string;
   begin
+    {$IFDEF PEST}
     Frame.rdgModflowBoundary.BeginUpdate;
     try
       for BoundaryIndex := First to Last do
@@ -18194,7 +18203,7 @@ var
     finally
       Frame.rdgModflowBoundary.EndUpdate;
     end;
-
+    {$ENDIF}
   end;
 begin
   if not frmGoPhast.PhastModel.UzfIsSelected then
@@ -18571,6 +18580,7 @@ var
     Boundary: TEvtBoundary;
     Modifier: string;
   begin
+  {$IFDEF PEST}
     Frame.rdgModflowBoundary.BeginUpdate;
     try
       for BoundaryIndex := 1 to 2 do
@@ -18652,7 +18662,7 @@ var
     finally
       Frame.rdgModflowBoundary.EndUpdate;
     end;
-
+    {$ENDIF}
   end;
 begin
   if not frmGoPhast.PhastModel.EvtIsSelected then
@@ -18726,6 +18736,7 @@ var
     Boundary: TEtsBoundary;
     Modifier: string;
   begin
+    {$IFDEF PEST}
     Frame.rdgModflowBoundary.BeginUpdate;
     try
       for BoundaryIndex := 1 to 2 do
@@ -18807,6 +18818,7 @@ var
     finally
       Frame.rdgModflowBoundary.EndUpdate;
     end;
+    {$ENDIF}
   end;
 begin
   if not frmGoPhast.PhastModel.EtsIsSelected then
@@ -24688,6 +24700,7 @@ begin
       if ShouldStoreBoundary(FLAK_Node, Boundary) then
       begin
 
+        {$IFDEF PEST}
         for BoundaryIndex := LakMinimumStagePosition to LakWithdrawalPosition do
         begin
           if frameLak.PestModifierAssigned[BoundaryIndex + ColumnOffset] then
@@ -24701,6 +24714,7 @@ begin
               frameLak.PestMethod[BoundaryIndex + ColumnOffset];
           end;
         end;
+        {$ENDIF}
 
         StoreModflowBoundaryValues(Frame, Times, Boundary);
         if frameLak.cbGagStandard.State <> cbGrayed then
@@ -25011,6 +25025,7 @@ var
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(Node, Boundary) then
       begin
+        {$IFDEF PEST}
         for BoundaryIndex := 1 to 2 do
         begin
           if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -25024,6 +25039,7 @@ var
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
+        {$ENDIF}
       end;
     end;
   end;
@@ -25133,6 +25149,7 @@ var
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(Node, Boundary) then
       begin
+        {$IFDEF PEST}
         for BoundaryIndex := 1 to 2 do
         begin
           if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -25146,6 +25163,7 @@ var
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
+        {$ENDIF}
       end;
     end;
   end;
@@ -25688,6 +25706,7 @@ var
       Assert(Boundary <> nil);
       if ShouldStoreBoundary(Node, Boundary) then
       begin
+       {$IFDEF PEST}
         for BoundaryIndex := First to Last do
         begin
           if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -25701,6 +25720,7 @@ var
             Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
           end;
         end;
+        {$endif}
       end;
     end;
   end;
@@ -28301,6 +28321,7 @@ begin
       ColumnOffset := 2;
       BoundaryValues := Boundary.Values;
       BoundaryCount := BoundaryValues.TimeListCount(frmGoPhast.PhastModel);
+      {$ifdef PEST}
       for BoundaryIndex := 0 to BoundaryCount - 1 do
       begin
         if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
@@ -28314,6 +28335,7 @@ begin
           Boundary.PestBoundaryFormula[BoundaryIndex] := Modifier;
         end;
       end;
+      {$endif}
     end;
   end;
 
