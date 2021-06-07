@@ -336,7 +336,6 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     ActivePage = tabObservations
     Align = alClient
     TabOrder = 3
-    ExplicitLeft = -1
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
     end
@@ -550,7 +549,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 455
-        ExplicitHeight = 161
+        ExplicitHeight = 299
         inherited splObservations: TSplitter
           Top = 121
           Width = 455
@@ -561,13 +560,16 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           Width = 455
           Height = 121
           ExplicitWidth = 455
+          ExplicitHeight = 121
           inherited frameObservations: TframeGrid
             Width = 451
             Height = 104
             ExplicitWidth = 451
+            ExplicitHeight = 104
             inherited Panel: TPanel
               Top = 63
               Width = 451
+              ExplicitTop = 63
               ExplicitWidth = 451
               inherited sbAdd: TSpeedButton
                 Left = 233
@@ -586,13 +588,14 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
               Width = 451
               Height = 63
               ExplicitWidth = 451
+              ExplicitHeight = 63
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
           Top = 126
           Width = 455
-          ExplicitTop = -12
+          ExplicitTop = 126
           ExplicitWidth = 455
           inherited frameObsComparisons: TframeGrid
             Width = 451

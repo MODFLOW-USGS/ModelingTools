@@ -51,6 +51,7 @@ type
   private
     { Private declarations }
   public
+    constructor Create(Owner: TComponent); override;
     procedure SetFeLakeBathymetryColor(const FileName: string);
     { Public declarations }
   end;
@@ -88,6 +89,12 @@ begin
   cbGagStandard.AllowGrayed := cbGagStandard.State = cbGrayed;
   cbGagFluxAndCond.Enabled := cbGagStandard.State <> cbUnchecked;
   cbGagDelta.Enabled := cbGagStandard.State <> cbUnchecked;
+end;
+
+constructor TframeScreenObjectLAK.Create(Owner: TComponent);
+begin
+  inherited;
+  seNumberOfTimesChange(nil);
 end;
 
 procedure TframeScreenObjectLAK.feLakeBathymetryAfterDialog(Sender: TObject;
