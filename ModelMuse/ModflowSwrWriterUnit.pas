@@ -1742,7 +1742,8 @@ begin
     AReach := FReachList[index];
     // This is being done for all reaches even inactive ones.
     WriteInteger(AReach.FReachData.Reach);
-    WriteFloat(ACell.SwrValue);
+    WriteValueOrFormula(ACell, SwrValuePosition);
+//    WriteFloat(ACell.SwrValue);
     WriteString(Comment);
     NewLine;
   end;

@@ -4,7 +4,8 @@ interface
 
 uses
   SysUtils, Classes, ModflowBoundaryUnit, FormulaManagerUnit,
-  OrderedCollectionUnit, GoPhastTypes, RbwParser, ModflowCellUnit, ZLib;
+  OrderedCollectionUnit, GoPhastTypes, RbwParser, ModflowCellUnit, ZLib,
+  SubscriptionUnit;
 
 type
   TSwrRecord = record
@@ -122,6 +123,9 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
   public
     property SwrValue: double read GetSwrValue;
     property SwrValueAnnotation: string read GetSwrValueAnnotation;
@@ -129,6 +133,15 @@ type
   end;
 
   TCustomSwrBoundary = class(TModflowBoundary)
+  private
+    FPestValueMethod: TPestParamMethod;
+    FPestValueFormula: TFormulaObject;
+    FUsedObserver: TObserver;
+    FPestValueObserver: TObserver;
+    function GetPestValueFormula: string;
+    procedure SetPestValueFormula(const Value: string);
+    procedure SetPestValueMethod(const Value: TPestParamMethod);
+    function GetPestValueObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -136,9 +149,45 @@ type
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     function SpecificationMethod: TSwrSpecificationMethod; virtual; abstract;
+    // PEST
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    procedure InvalidateValueData(Sender: TObject); virtual; abstract;
+    property PestValueObserver: TObserver
+      read GetPestValueObserver;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    Destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
+  published
+    property PestValueFormula: string
+      read GetPestValueFormula
+      write SetPestValueFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestValueMethod: TPestParamMethod
+      read FPestValueMethod
+      write SetPestValueMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
   TCustomFormulaInterpSwrBoundary = class(TCustomSwrBoundary)
@@ -181,6 +230,7 @@ type
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     function SpecificationMethod: TSwrSpecificationMethod; override;
+    procedure InvalidateValueData(Sender: TObject); override;
   public
     procedure InvalidateDisplay; override;
   end;
@@ -214,6 +264,7 @@ type
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     function SpecificationMethod: TSwrSpecificationMethod; override;
+    procedure InvalidateValueData(Sender: TObject); override;
   public
     procedure InvalidateDisplay; override;
   end;
@@ -247,6 +298,7 @@ type
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     function SpecificationMethod: TSwrSpecificationMethod; override;
+    procedure InvalidateValueData(Sender: TObject); override;
   public
     procedure InvalidateDisplay; override;
   end;
@@ -280,19 +332,20 @@ type
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
     function SpecificationMethod: TSwrSpecificationMethod; override;
+    procedure InvalidateValueData(Sender: TObject); override;
   public
     procedure InvalidateDisplay; override;
   end;
 
+const
+  SwrValuePosition = 0;
+
 implementation
 
 uses
-  frmGoPhastUnit, SubscriptionUnit, PhastModelUnit,
+  frmGoPhastUnit, PhastModelUnit,
   frmErrorsAndWarningsUnit, DataSetUnit, AbstractGridUnit, ModflowTimeUnit,
   ScreenObjectUnit, GIS_Functions;
-
-const
-  SwrValuePosition = 0;
 
 resourcestring
   StrRainFormulaError = 'Rain rate set to zero because of a math error';
@@ -505,6 +558,10 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalValuePestSeries: string;
+  LocalValuePestMethod: TPestParamMethod;
+  ValuePestItems: TStringList;
+  LocalValuePest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -512,6 +569,13 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TSwrStorage;
   SwrArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
+  LocalValuePestSeries := PestSeries[SwrValuePosition];
+  LocalValuePestMethod := PestMethods[SwrValuePosition];
+  ValuePestItems := PestItemNames[SwrValuePosition];
+  LocalValuePest := ValuePestItems[ItemIndex];
+
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := LayerMin to LayerMax do
@@ -534,6 +598,10 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 SwrValueAnnotation := SwrArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+
+                SwrValuePestName := LocalValuePest;
+                SwrValuePestSeriesName := LocalValuePestSeries;
+                SwrValuePestSeriesMethod := LocalValuePestMethod;
               end;
               Inc(BoundaryIndex);
             end;
@@ -655,14 +723,29 @@ var
   ColIndex: Integer;
   LayerIndex: Integer;
   ShouldRemove: Boolean;
+  PestValueSeriesName: string;
+  ValueMethod: TPestParamMethod;
+  ValueItems: TStringList;
+  ItemFormula: string;
 begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+
+  PestValueSeriesName := BoundaryGroup.PestBoundaryFormula[SwrValuePosition];
+  PestSeries.Add(PestValueSeriesName);
+  ValueMethod := BoundaryGroup.PestBoundaryMethod[SwrValuePosition];
+  PestMethods.Add(ValueMethod);
+  ValueItems := TStringList.Create;
+  PestItemNames.Add(ValueItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TCustomSwrBoundaryItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.SwrValue;
+//    BoundaryValues[Index].Formula := Item.SwrValue;
+    ItemFormula := Item.SwrValue;
+    AssignBoundaryFormula(AModel, PestValueSeriesName, ValueMethod,
+      ValueItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TCustomSwrTimeListLink;
   SwrData := ALink.FSwrData;
@@ -923,6 +1006,51 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TSwrValueCell.GetPestName(Index: Integer): string;
+begin
+  case Index of
+    SwrValuePosition:
+      begin
+        result := Values.SwrValuePestName;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSwrValueCell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+begin
+  case Index of
+    SwrValuePosition:
+      begin
+        result := Values.SwrValuePestSeriesMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSwrValueCell.GetPestSeriesName(Index: Integer): string;
+begin
+  case Index of
+    SwrValuePosition:
+      begin
+        result := Values.SwrValuePestSeriesName;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TSwrValueCell.GetSwrValue: double;
 begin
   result := Values.SwrValue;
@@ -1016,6 +1144,19 @@ begin
   inherited;
 end;
 
+procedure TCustomSwrBoundary.Assign(Source: TPersistent);
+var
+  SwrSource: TCustomSwrBoundary;
+begin
+  if Source is TCustomSwrBoundary then
+  begin
+    SwrSource := TCustomSwrBoundary(Source);
+    PestValueFormula := SwrSource.PestValueFormula;
+    PestValueMethod := SwrSource.PestValueMethod;
+  end;
+  inherited;
+end;
+
 procedure TCustomSwrBoundary.AssignCells(BoundaryStorage: TCustomBoundaryStorage;
   ValueTimeList: TList; AModel: TBaseModel);
 var
@@ -1076,6 +1217,41 @@ begin
   result := TSwrRainListCollection;
 end;
 
+function TCustomSwrBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestSwr_';
+end;
+
+constructor TCustomSwrBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
+begin
+
+end;
+
+procedure TCustomSwrBoundary.CreateFormulaObjects;
+begin
+  FPestValueFormula := CreateFormulaObjectBlocks(dsoTop);
+end;
+
+procedure TCustomSwrBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestValueObserver);
+  end;
+end;
+
+class function TCustomSwrBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+
+end;
+
+destructor TCustomSwrBoundary.Destroy;
+begin
+
+  inherited;
+end;
+
 procedure TCustomSwrBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
@@ -1104,12 +1280,158 @@ begin
   end;
 end;
 
+function TCustomSwrBoundary.GetPestBoundaryFormula(
+  FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    SwrValuePosition:
+      begin
+        result := PestValueFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TCustomSwrBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    SwrValuePosition:
+      begin
+        result := PestValueMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TCustomSwrBoundary.GetPestValueFormula: string;
+begin
+  Result := FPestValueFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SwrValuePosition);
+  end;
+end;
+
+function TCustomSwrBoundary.GetPestValueObserver: TObserver;
+begin
+  if FPestValueObserver = nil then
+  begin
+    CreateObserver('PestValue_', FPestValueObserver, nil);
+    FPestValueObserver.OnUpToDateSet := InvalidateValueData;
+  end;
+  result := FPestValueObserver;
+end;
+
+procedure TCustomSwrBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  if Sender = FPestValueFormula then
+  begin
+    if SwrValuePosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[SwrValuePosition]);
+    end;
+  end;
+end;
+
+function TCustomSwrBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestSwr_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TCustomSwrBoundary.HandleChangedValue(Observer: TObserver);
+begin
+  InvalidateDisplay;
+end;
+
+procedure TCustomSwrBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    SwrValuePosition:
+      begin
+        PestValueFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TCustomSwrBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    SwrValuePosition:
+      begin
+        PestValueMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TCustomSwrBoundary.SetPestValueFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SwrValuePosition, FPestValueFormula);
+end;
+
+procedure TCustomSwrBoundary.SetPestValueMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestValueMethod, Value);
+end;
+
 procedure TSwrRainBoundary.InvalidateDisplay;
 begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
     (ParentModel as TPhastModel).InvalidateMfSwrRainfall(self);
+  end;
+end;
+
+procedure TSwrRainBoundary.InvalidateValueData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSwrRainfall(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSwrRainfall(self);
+    end;
   end;
 end;
 
@@ -1220,6 +1542,33 @@ begin
   end;
 end;
 
+procedure TSwrEvapBoundary.InvalidateValueData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSwrEvaporation(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSwrEvaporation(self);
+    end;
+  end;
+end;
+
 function TSwrEvapBoundary.SpecificationMethod: TSwrSpecificationMethod;
 begin
   result := frmGoPhast.PhastModel.ModflowPackages.SwrPackage.EvapSpecification;
@@ -1316,6 +1665,33 @@ begin
   end;
 end;
 
+procedure TSwrLatInflowBoundary.InvalidateValueData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSwrLateralInflow(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSwrLateralInflow(self);
+    end;
+  end;
+end;
+
 function TSwrLatInflowBoundary.SpecificationMethod: TSwrSpecificationMethod;
 begin
   result := frmGoPhast.PhastModel.ModflowPackages.SwrPackage.LateralInflowSpecification;
@@ -1409,6 +1785,33 @@ begin
       Exit;
     end;
     (ParentModel as TPhastModel).InvalidateMfSwrStage(self);
+  end;
+end;
+
+procedure TSwrStageBoundary.InvalidateValueData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSwrStage(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSwrStage(self);
+    end;
   end;
 end;
 

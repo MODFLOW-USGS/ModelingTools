@@ -6530,7 +6530,8 @@ var
                 PestSeriesMethod := Cell.PestSeriesMethod[DataTypeIndex];
                 ACellLocation := Cell.CellLocation;
                 Formula := GetPestTemplateFormula(Value, PestName, PestSeriesName,
-                  PestSeriesMethod, PCellLocation(Addr(ACellLocation)), Cell.ScreenObject as TScreenObject);
+                  PestSeriesMethod, PCellLocation(Addr(ACellLocation)),
+                  Cell.ScreenObject as TScreenObject);
                 if Formula = '' then
                 begin
                   IsFormula := False;
