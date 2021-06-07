@@ -4,7 +4,7 @@ interface
 
 uses
   ZLib, Classes, ModflowCellUnit, ModflowBoundaryUnit, FormulaManagerUnit,
-  OrderedCollectionUnit, GoPhastTypes, SysUtils;
+  OrderedCollectionUnit, GoPhastTypes, SysUtils, SubscriptionUnit;
 
 type
   TSwrDirectRunoffRecord = record
@@ -15,6 +15,9 @@ type
     EndingTime: double;
     ReachAnnotation: string;
     RunoffAnnotation: string;
+    RunoffPestName: string;
+    RunoffPestSeriesName: string;
+    RunoffPestSeriesMethod: TPestParamMethod;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -84,7 +87,8 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
@@ -94,7 +98,8 @@ type
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
-      Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
+      Item: TCustomModflowBoundaryItem; ItemIndex: Integer;
+      AModel: TBaseModel); override;
   end;
 
   TSwrDirectRunoff_Cell = class(TValueCell)
@@ -128,22 +133,64 @@ type
   end;
 
   TSwrDirectRunoffBoundary = class(TModflowBoundary)
+  private
+    FPestRunoffMethod: TPestParamMethod;
+    FUsedObserver: TObserver;
+    FPestRunoffFormula: TFormulaObject;
+    FPestRunoffObserver: TObserver;
+    function GetPestRunoffFormula: string;
+    procedure SetPestRunoffFormula(const Value: string);
+    procedure SetPestRunoffMethod(const Value: TPestParamMethod);
+    function GetPestRunoffObserver: TObserver;
+    procedure InvalidateRunoffData(Sender: TObject);
   protected
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     // See @link(TModflowBoundary.BoundaryCollectionClass
     // TModflowBoundary.BoundaryCollectionClass).
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
+
+    procedure HandleChangedValue(Observer: TObserver); //override;
+    function GetUsedObserver: TObserver; //override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure CreateFormulaObjects; //override;
+    function BoundaryObserverPrefix: string; override;
+    procedure CreateObservers; //override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestRunoffObserver: TObserver read GetPestRunoffObserver;
   public
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent);override;
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     procedure InvalidateDisplay; override;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
+  published
+    property PestRunoffFormula: string read GetPestRunoffFormula
+      write SetPestRunoffFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestRunoffMethod: TPestParamMethod
+      read FPestRunoffMethod write SetPestRunoffMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 implementation
 
 uses
-  PhastModelUnit, SubscriptionUnit, DataSetUnit,
+  PhastModelUnit, DataSetUnit,
   ModflowTimeUnit, ScreenObjectUnit, RbwParser, frmGoPhastUnit;
 
 resourcestring
@@ -166,12 +213,17 @@ begin
   WriteCompReal(Comp, EndingTime);
   WriteCompInt(Comp, Strings.IndexOf(ReachAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(RunoffAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(RunoffPestName));
+  WriteCompInt(Comp, Strings.IndexOf(RunoffPestSeriesName));
+  WriteCompInt(Comp, Ord(RunoffPestSeriesMethod));
 end;
 
 procedure TSwrDirectRunoffRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(ReachAnnotation);
   Strings.Add(RunoffAnnotation);
+  Strings.Add(RunoffPestName);
+  Strings.Add(RunoffPestSeriesName);
 end;
 
 procedure TSwrDirectRunoffRecord.Restore(Decomp: TDecompressionStream;
@@ -184,6 +236,9 @@ begin
   EndingTime := ReadCompReal(Decomp);
   ReachAnnotation := Annotations[ReadCompInt(Decomp)];
   RunoffAnnotation := Annotations[ReadCompInt(Decomp)];
+  RunoffPestName := Annotations[ReadCompInt(Decomp)];
+  RunoffPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  RunoffPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TTSwrDirectRunoffStorage }
@@ -439,6 +494,10 @@ var
   LayerMax: Integer;
   RowMax: Integer;
   ColMax: Integer;
+  LocalRunoffPestSeries: string;
+  LocalRunoffPestMethod: TPestParamMethod;
+  RunoffPestItems: TStringList;
+  LocalRunoffPest: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -447,6 +506,13 @@ begin
   Boundary := Boundaries[ItemIndex, AModel] as TSwrDirectRunoffStorage;
   ReachArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
+
+  LocalRunoffPestSeries := PestSeries[RunoffPosition];
+  LocalRunoffPestMethod := PestMethods[RunoffPosition];
+  RunoffPestItems := PestItemNames[RunoffPosition];
+  LocalRunoffPest := RunoffPestItems[ItemIndex];
+
+
   if LayerMin >= 0 then
   begin
     for LayerIndex := 0 to ReachArray.LayerCount - 1 do
@@ -474,6 +540,9 @@ begin
                   RealData[LayerIndex, RowIndex, ColIndex];
                 RunoffAnnotation := RunoffArray.
                   Annotation[LayerIndex, RowIndex, ColIndex];
+                RunoffPestName := LocalRunoffPest;
+                RunoffPestSeriesName := LocalRunoffPestSeries;
+                RunoffPestSeriesMethod := LocalRunoffPestMethod;
               end;
               Inc(BoundaryIndex);
             end;
@@ -505,10 +574,23 @@ var
   ALink: TSwrDirectRunoffListLink;
   ReachData: TModflowTimeList;
   RunoffData: TModflowTimeList;
+  PestRateSeriesName: string;
+  RateMethod: TPestParamMethod;
+  RateItems: TStringList;
+  ItemFormula: string;
 begin
   Boundary := BoundaryGroup as TSwrDirectRunoffBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
+
+//  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[BoundaryPosition];
+  PestSeries.Add('');
+//  RateMethod := BoundaryGroup.PestBoundaryMethod[BoundaryPosition];
+  PestMethods.Add(ppmMultiply);
+//  RateItems := TStringList.Create;
+  PestItemNames.Add(TStringList.Create);
+
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TSwrDirectRunoffItem;
@@ -520,11 +602,21 @@ begin
   ReachData.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(ReachData.Count = Count);
 
+  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[RunoffPosition];
+  PestSeries.Add(PestRateSeriesName);
+  RateMethod := BoundaryGroup.PestBoundaryMethod[RunoffPosition];
+  PestMethods.Add(RateMethod);
+  RateItems := TStringList.Create;
+  PestItemNames.Add(RateItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TSwrDirectRunoffItem;
     BoundaryValues[Index].Time := Item.StartTime;
-    BoundaryValues[Index].Formula := Item.Runoff;
+//    BoundaryValues[Index].Formula := Item.Runoff;
+    ItemFormula := Item.Runoff;
+    AssignBoundaryFormula(AModel, PestRateSeriesName, RateMethod,
+      RateItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   RunoffData := ALink.FRunoffData;
   RunoffData.Initialize(BoundaryValues, ScreenObject, lctUse);
@@ -740,6 +832,19 @@ end;
 
 { TSwrDirectRunoffBoundary }
 
+procedure TSwrDirectRunoffBoundary.Assign(Source: TPersistent);
+var
+  SwrRunoffSource: TSwrDirectRunoffBoundary;
+begin
+  if Source is TSwrDirectRunoffBoundary then
+  begin
+    SwrRunoffSource := TSwrDirectRunoffBoundary(Source);
+    PestRunoffFormula := SwrRunoffSource.PestRunoffFormula;
+    PestRunoffMethod := SwrRunoffSource.PestRunoffMethod;
+  end;
+  inherited;
+end;
+
 procedure TSwrDirectRunoffBoundary.AssignCells(
   BoundaryStorage: TCustomBoundaryStorage; ValueTimeList: TList;
   AModel: TBaseModel);
@@ -800,6 +905,58 @@ begin
   Result := TSwrDirectRunoffCollection;
 end;
 
+function TSwrDirectRunoffBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestSwrRunoff_';
+end;
+
+constructor TSwrDirectRunoffBoundary.Create(Model: TBaseModel;
+  ScreenObject: TObject);
+begin
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestRunoffFormula := '';
+  FPestRunoffMethod := DefaultBoundaryMethod(RunoffPosition);
+end;
+
+procedure TSwrDirectRunoffBoundary.CreateFormulaObjects;
+begin
+  FPestRunoffFormula := CreateFormulaObjectBlocks(dso3D);
+end;
+
+procedure TSwrDirectRunoffBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestRunoffObserver);
+  end;
+end;
+
+class function TSwrDirectRunoffBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    RunoffPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+destructor TSwrDirectRunoffBoundary.Destroy;
+begin
+  PestRunoffFormula := '';
+
+  inherited;
+end;
+
 procedure TSwrDirectRunoffBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 var
@@ -820,6 +977,86 @@ begin
   ClearBoundaries(AModel);
 end;
 
+function TSwrDirectRunoffBoundary.GetPestBoundaryFormula(
+  FormulaIndex: integer): string;
+begin
+  result := '';
+  case FormulaIndex of
+    RunoffPosition:
+      begin
+        result := PestRunoffFormula;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TSwrDirectRunoffBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    RunoffPosition:
+      begin
+        result := PestRunoffMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSwrDirectRunoffBoundary.GetPestRunoffFormula: string;
+const
+  OFFSET = 1;
+begin
+  Result := FPestRunoffFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(RunoffPosition-OFFSET);
+  end;
+end;
+
+function TSwrDirectRunoffBoundary.GetPestRunoffObserver: TObserver;
+begin
+
+  if FPestRunoffObserver = nil then
+  begin
+    CreateObserver('PestRunoff_', FPestRunoffObserver, nil);
+    FPestRunoffObserver.OnUpToDateSet := InvalidateRunoffData;
+  end;
+  result := FPestRunoffObserver;
+
+end;
+
+procedure TSwrDirectRunoffBoundary.GetPropertyObserver(Sender: TObject;
+  List: TList);
+begin
+  if Sender = FPestRunoffFormula then
+  begin
+    if RunoffPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[RunoffPosition]);
+    end;
+  end;
+end;
+
+function TSwrDirectRunoffBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestSwrRunoff_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
+end;
+
+procedure TSwrDirectRunoffBoundary.HandleChangedValue(Observer: TObserver);
+begin
+  InvalidateDisplay;
+end;
+
 procedure TSwrDirectRunoffBoundary.InvalidateDisplay;
 var
   LocalModel: TPhastModel;
@@ -831,6 +1068,78 @@ begin
     LocalModel.InvalidateMfSwrDirectRunoffReach(self);
     LocalModel.InvalidateMfSwrDirectRunoffValue(self);
   end;
+end;
+
+procedure TSwrDirectRunoffBoundary.InvalidateRunoffData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfSwrDirectRunoffValue(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateMfSwrDirectRunoffValue(self);
+    end;
+  end;
+end;
+
+procedure TSwrDirectRunoffBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    RunoffPosition:
+      begin
+        PestRunoffFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSwrDirectRunoffBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    RunoffPosition:
+      begin
+        PestRunoffMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSwrDirectRunoffBoundary.SetPestRunoffFormula(const Value: string);
+CONST
+  OFFSET = 1;
+begin
+  UpdateFormulaBlocks(Value, RunoffPosition-OFFSET, FPestRunoffFormula);
+end;
+
+procedure TSwrDirectRunoffBoundary.SetPestRunoffMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestRunoffMethod, Value);
 end;
 
 end.

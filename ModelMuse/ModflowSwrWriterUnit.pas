@@ -1673,7 +1673,7 @@ begin
     for ListIndex := 0 to TimeLists.Count - 1 do
     begin
       DisplayTimeList := TimeLists[ListIndex];
-      // FDirectRunoffValues contains lists of cells related to evaporation for
+      // FDirectRunoffValues contains lists of cells related to direct runoff for
       // each stress period.
       if (FDirectRunoffValues.Count <> 0) or (DisplayTimeList.Count = 0) then
       begin
