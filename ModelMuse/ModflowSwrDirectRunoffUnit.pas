@@ -913,6 +913,8 @@ end;
 constructor TSwrDirectRunoffBoundary.Create(Model: TBaseModel;
   ScreenObject: TObject);
 begin
+  inherited;
+
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;

@@ -2823,6 +2823,14 @@ begin
   else if (Sender = frameSwrReach.frameSwr.rdgModflowBoundary) then
   begin
     PestParameterColumns := [3, 5];
+  end
+  else if (Sender = frameSWR_Rain.rdgModflowBoundary)
+    or (Sender = frameSWR_Evap.rdgModflowBoundary)
+    or (Sender = frameSWR_LatInfl.rdgModflowBoundary)
+    or (Sender = frameSWR_Stage.rdgModflowBoundary)
+    then
+  begin
+    PestParameterColumns := [2];
   end;
   ;
 
@@ -5739,6 +5747,10 @@ begin
   frameRes.OnCheckPestCell := EnablePestCells;
   frameScreenObjectSFR.OnCheckPestCell := EnablePestCells;
   frameSwrReach.frameSwr.OnCheckPestCell := EnablePestCells;
+  frameSWR_Rain.OnCheckPestCell := EnablePestCells;
+  frameSWR_Evap.OnCheckPestCell := EnablePestCells;
+  frameSWR_LatInfl.OnCheckPestCell := EnablePestCells;
+  frameSWR_Stage.OnCheckPestCell := EnablePestCells;
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -8526,6 +8538,11 @@ var
   Time2: TParameterTime;
   DataGrid: TRbwDataGrid4;
   State: TCheckBoxState;
+  Frame: TframeScreenObjectNoParam;
+  First: Boolean;
+  Identical: Boolean;
+  Method: TPestParamMethod;
+  Modifier: string;
 //  First: Boolean;
 begin
   if not frmGoPhast.PhastModel.SwrIsSelected then
@@ -8586,13 +8603,87 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + PestRowOffset + 1] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + PestRowOffset + 1] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
       GetSwrEvapBoundaryCollection(DataGrid, ColumnOffset,
         ScreenObjectList, TimeList);
+
+      {$IFDEF PEST}
+      Frame := frameSWR_Evap;
+      Frame.PestMethod[ColumnOffset] :=
+        TCustomSwrBoundary.DefaultBoundaryMethod(SwrValuePosition);
+      First := True;
+      Identical := True;
+      Method := ppmMultiply;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.ModflowSwrEvap;
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Method := Boundary.PestBoundaryMethod[SwrValuePosition];
+            First := False;
+          end
+          else
+          begin
+            Identical := Method = Boundary.PestBoundaryMethod[SwrValuePosition];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+      if Identical then
+      begin
+        Frame.PestMethod[ ColumnOffset] := Method;
+      end
+      else
+      begin
+        Frame.PestMethodAssigned[ColumnOffset] := False;
+      end;
+
+      Modifier := '';
+      First := True;
+      Identical := True;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.ModflowSwrEvap;
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Modifier := Boundary.PestBoundaryFormula[SwrValuePosition];
+            First := False;
+          end
+          else
+          begin
+            Identical := Modifier = Boundary.PestBoundaryFormula[SwrValuePosition];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+
+      if Identical then
+      begin
+        Frame.PestModifier[ColumnOffset] := Modifier;
+      end
+      else
+      begin
+        Frame.PestModifierAssigned[ColumnOffset] := False;
+      end;
+      {$ENDIF}
+
+
     finally
       DataGrid.EndUpdate;
     end;
@@ -8618,6 +8709,10 @@ var
   DataGrid: TRbwDataGrid4;
   State: TCheckBoxState;
   First: Boolean;
+  Identical: Boolean;
+  Method: TPestParamMethod;
+  Modifier: string;
+  Frame: TframeScreenObjectSwr;
 begin
   if not frmGoPhast.PhastModel.SwrIsSelected then
   begin
@@ -8694,13 +8789,86 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + PestRowOffset + 1] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + PestRowOffset + 1] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
       GetSwrLatInflowBoundaryCollection(DataGrid, ColumnOffset,
         ScreenObjectList, TimeList);
+
+      {$IFDEF PEST}
+      Frame := frameSWR_LatInfl;
+      Frame.PestMethod[ColumnOffset] :=
+        TCustomSwrBoundary.DefaultBoundaryMethod(SwrValuePosition);
+      First := True;
+      Identical := True;
+      Method := ppmMultiply;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.ModflowSwrLatInflow;
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Method := Boundary.PestBoundaryMethod[SwrValuePosition];
+            First := False;
+          end
+          else
+          begin
+            Identical := Method = Boundary.PestBoundaryMethod[SwrValuePosition];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+      if Identical then
+      begin
+        Frame.PestMethod[ ColumnOffset] := Method;
+      end
+      else
+      begin
+        Frame.PestMethodAssigned[ColumnOffset] := False;
+      end;
+
+      Modifier := '';
+      First := True;
+      Identical := True;
+      for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+      begin
+        AScreenObject := ScreenObjectList[ScreenObjectIndex];
+        Boundary := AScreenObject.ModflowSwrLatInflow;
+        if (Boundary <> nil) and Boundary.Used then
+        begin
+          if First then
+          begin
+            Modifier := Boundary.PestBoundaryFormula[SwrValuePosition];
+            First := False;
+          end
+          else
+          begin
+            Identical := Modifier = Boundary.PestBoundaryFormula[SwrValuePosition];
+            if not Identical then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+
+      if Identical then
+      begin
+        Frame.PestModifier[ColumnOffset] := Modifier;
+      end
+      else
+      begin
+        Frame.PestModifierAssigned[ColumnOffset] := False;
+      end;
+      {$ENDIF}
+
     finally
       DataGrid.EndUpdate;
     end;
@@ -8725,12 +8893,17 @@ var
   Time2: TParameterTime;
   DataGrid: TRbwDataGrid4;
   State: TCheckBoxState;
-//  First: Boolean;
+  Frame: TframeScreenObjectNoParam;
+  First: Boolean;
+  Identical: Boolean;
+  Method: TPestParamMethod;
+  Modifier: string;
 begin
   if not frmGoPhast.PhastModel.SwrIsSelected then
   begin
     Exit;
   end;
+  ColumnOffset := 2;
   TimeList := TParameterTimeList.Create;
   try
     State := cbUnchecked;
@@ -8744,7 +8917,79 @@ begin
     begin
       FSWR_Rain_Node.StateIndex := Ord(State)+1;
     end;
-//    First := True;
+
+    {$IFDEF PEST}
+    Frame := frameSWR_Rain;
+    Frame.PestMethod[ColumnOffset] :=
+      TCustomSwrBoundary.DefaultBoundaryMethod(SwrValuePosition);
+    First := True;
+    Identical := True;
+    Method := ppmMultiply;
+    for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+    begin
+      AScreenObject := ScreenObjectList[ScreenObjectIndex];
+      Boundary := AScreenObject.ModflowSwrRain;
+      if (Boundary <> nil) and Boundary.Used then
+      begin
+        if First then
+        begin
+          Method := Boundary.PestBoundaryMethod[SwrValuePosition];
+          First := False;
+        end
+        else
+        begin
+          Identical := Method = Boundary.PestBoundaryMethod[SwrValuePosition];
+          if not Identical then
+          begin
+            break;
+          end;
+        end;
+      end;
+    end;
+    if Identical then
+    begin
+      Frame.PestMethod[ ColumnOffset] := Method;
+    end
+    else
+    begin
+      Frame.PestMethodAssigned[ColumnOffset] := False;
+    end;
+
+    Modifier := '';
+    First := True;
+    Identical := True;
+    for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
+    begin
+      AScreenObject := ScreenObjectList[ScreenObjectIndex];
+      Boundary := AScreenObject.ModflowSwrRain;
+      if (Boundary <> nil) and Boundary.Used then
+      begin
+        if First then
+        begin
+          Modifier := Boundary.PestBoundaryFormula[SwrValuePosition];
+          First := False;
+        end
+        else
+        begin
+          Identical := Modifier = Boundary.PestBoundaryFormula[SwrValuePosition];
+          if not Identical then
+          begin
+            break;
+          end;
+        end;
+      end;
+    end;
+
+    if Identical then
+    begin
+      Frame.PestModifier[ColumnOffset] := Modifier;
+    end
+    else
+    begin
+      Frame.PestModifierAssigned[ColumnOffset] := False;
+    end;
+    {$ENDIF}
+
     for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
     begin
       AScreenObject := ScreenObjectList[ScreenObjectIndex];
@@ -8784,11 +9029,10 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + 1+PestRowOffset] := FloatToStr(Time.EndTime);
       end;
 
-      ColumnOffset := 2;
       GetSwrRainBoundaryCollection(DataGrid, ColumnOffset,
         ScreenObjectList, TimeList);
     finally
@@ -8972,8 +9216,8 @@ begin
       for TimeIndex := 0 to TimeList.Count - 1 do
       begin
         Time := TimeList[TimeIndex];
-        DataGrid.Cells[0, TimeIndex + 1] := FloatToStr(Time.StartTime);
-        DataGrid.Cells[1, TimeIndex + 1] := FloatToStr(Time.EndTime);
+        DataGrid.Cells[0, TimeIndex + PestRowOffset + 1] := FloatToStr(Time.StartTime);
+        DataGrid.Cells[1, TimeIndex + PestRowOffset + 1] := FloatToStr(Time.EndTime);
       end;
 
       ColumnOffset := 2;
@@ -8981,14 +9225,12 @@ begin
         ScreenObjectList, TimeList);
 
       {$IFDEF PEST}
-      PestMethod[DataGrid, ColumnOffset{+ElevationPosition}] :=
-        TSwrReachBoundary.DefaultBoundaryMethod(SwrStagePosition);
+      PestMethod[DataGrid, ColumnOffset] :=
+        TSwrStageBoundary.DefaultBoundaryMethod(SwrValuePosition);
 //      PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
 //        TDrnBoundary.DefaultBoundaryMethod(ConductancePosition);
 //      GetPestModifiers(Frame, Parameter, ScreenObjectList);
 
-
-//    begin
       Frame := frameSWR_Stage;
       First := True;
       Identical := True;
@@ -9001,12 +9243,12 @@ begin
         begin
           if First then
           begin
-            Method := Boundary.PestBoundaryMethod[SwrStagePosition];
+            Method := Boundary.PestBoundaryMethod[SwrValuePosition];
             First := False;
           end
           else
           begin
-            Identical := Method = Boundary.PestBoundaryMethod[SwrStagePosition];
+            Identical := Method = Boundary.PestBoundaryMethod[SwrValuePosition];
             if not Identical then
             begin
               break;
@@ -9016,7 +9258,7 @@ begin
       end;
       if Identical then
       begin
-        Frame.PestMethod[{Frame.rdgModflowBoundary,} ColumnOffset{+BoundaryIndex}] := Method;
+        Frame.PestMethod[ColumnOffset] := Method;
       end
       else
       begin
@@ -9034,12 +9276,12 @@ begin
         begin
           if First then
           begin
-            Modifier := Boundary.PestBoundaryFormula[SwrStagePosition];
+            Modifier := Boundary.PestBoundaryFormula[SwrValuePosition];
             First := False;
           end
           else
           begin
-            Identical := Modifier = Boundary.PestBoundaryFormula[SwrStagePosition];
+            Identical := Modifier = Boundary.PestBoundaryFormula[SwrValuePosition];
             if not Identical then
             begin
               break;
@@ -9050,17 +9292,11 @@ begin
 
       if Identical then
       begin
-//        if Modifier = '' then
-//        begin
-//          Modifier := StrNone
-//        end;
-        Frame.PestModifier[{Frame.rdgModflowBoundary,}
-          ColumnOffset{+BoundaryIndex}] := Modifier;
+        Frame.PestModifier[ColumnOffset] := Modifier;
       end
       else
       begin
-        Frame.PestModifierAssigned[{Frame.rdgModflowBoundary,}
-          ColumnOffset{+BoundaryIndex}] := False;
+        Frame.PestModifierAssigned[ColumnOffset] := False;
       end;
       {$ENDIF}
 
@@ -9125,8 +9361,9 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-      Assert(RowIndex >= 1);
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime)
+        + PestRowOffset + 1;
+      Assert(RowIndex >= PestRowOffset + 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -9188,8 +9425,9 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-      Assert(RowIndex >= 1);
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime)
+        + PestRowOffset + 1;
+      Assert(RowIndex >= PestRowOffset + 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -9344,8 +9582,9 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-      Assert(RowIndex >= 1);
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime)
+        + PestRowOffset + 1;
+      Assert(RowIndex >= PestRowOffset + 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -9407,8 +9646,9 @@ begin
     for TimeIndex := 0 to Values.Count - 1 do
     begin
       Item := Values[TimeIndex] as TCustomModflowBoundaryItem;
-      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime) + 1;
-      Assert(RowIndex >= 1);
+      RowIndex := TimeList.IndexOfTime(Item.StartTime, Item.EndTime)
+        + PestRowOffset + 1;
+      Assert(RowIndex >= PestRowOffset + 1);
       for BoundaryIndex := 0 to Values.TimeListCount(frmGoPhast.PhastModel) - 1 do
       begin
         DataGrid.Cells[ColumnOffset + BoundaryIndex, RowIndex]
@@ -25469,6 +25709,16 @@ begin
       if ShouldStoreBoundary(FSWR_Evap_Node, Boundary) then
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
+        {$IFDEF PEST}
+        if Frame.PestModifierAssigned[2] then
+        begin
+          Boundary.PestValueFormula := Frame.PestModifier[2];
+        end;
+        if Frame.PestMethodAssigned[2] then
+        begin
+          Boundary.PestValueMethod := Frame.PestMethod[2];
+        end;
+        {$ENDIF}
       end
       else if FSWR_Evap_Node.StateIndex = 1 then
       begin
@@ -25511,6 +25761,16 @@ begin
           Boundary.FormulaInterpretation :=
             TFormulaInterpretation(frameSWR_LatInfl.comboFormulaInterp.ItemIndex)
         end;
+        {$IFDEF PEST}
+        if Frame.PestModifierAssigned[2] then
+        begin
+          Boundary.PestValueFormula := Frame.PestModifier[2];
+        end;
+        if Frame.PestMethodAssigned[2] then
+        begin
+          Boundary.PestValueMethod := Frame.PestMethod[2];
+        end;
+        {$ENDIF}
       end
       else if FSWR_LatInflow_Node.StateIndex = 1 then
       begin
@@ -25548,6 +25808,17 @@ begin
       if ShouldStoreBoundary(FSWR_Rain_Node, Boundary) then
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
+
+        {$IFDEF PEST}
+        if Frame.PestModifierAssigned[2] then
+        begin
+          Boundary.PestValueFormula := Frame.PestModifier[2];
+        end;
+        if Frame.PestMethodAssigned[2] then
+        begin
+          Boundary.PestValueMethod := Frame.PestMethod[2];
+        end;
+        {$ENDIF}
       end
       else if FSWR_Rain_Node.StateIndex = 1 then
       begin
@@ -25585,6 +25856,16 @@ begin
       if ShouldStoreBoundary(FSWR_Stage_Node, Boundary) then
       begin
         StoreModflowBoundaryValues(Frame, Times, Boundary);
+        {$IFDEF PEST}
+        if Frame.PestModifierAssigned[2] then
+        begin
+          Boundary.PestValueFormula := Frame.PestModifier[2];
+        end;
+        if Frame.PestMethodAssigned[2] then
+        begin
+          Boundary.PestValueMethod := Frame.PestMethod[2];
+        end;
+        {$ENDIF}
       end
       else if FSWR_Stage_Node.StateIndex = 1 then
       begin
@@ -25914,7 +26195,11 @@ begin
     or (DataGrid = frameScreenObjectSFR.dgFlowTimes)
     or (DataGrid = frameScreenObjectSFR.dgUp)
     or (DataGrid = frameScreenObjectSFR.dgDown)
-    or ((DataGrid = frameSwrReach.frameSwr.rdgModflowBoundary) and (ACol in [3,5]));
+    or ((DataGrid = frameSwrReach.frameSwr.rdgModflowBoundary) and (ACol in [3,5]))
+    or (DataGrid = frameSWR_Rain.rdgModflowBoundary)
+    or (DataGrid = frameSWR_Evap.rdgModflowBoundary)
+    or (DataGrid = frameSWR_LatInfl.rdgModflowBoundary)
+    or (DataGrid = frameSWR_Stage.rdgModflowBoundary)
 //    or (DataGrid = frameCSUB.rdgSubGroups)
     ;
 end;

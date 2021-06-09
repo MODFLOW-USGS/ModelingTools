@@ -151,7 +151,7 @@ begin
   if soInnerHclose in FImsPackage.SmsOverrides then
   begin
     InnerDvClose := FImsPackage.InnerHclose;
-    WriteFloat(FImsPackage.InnerHclose);
+//    WriteFloat(FImsPackage.InnerHclose);
   end
   else
   begin

@@ -1224,6 +1224,14 @@ end;
 
 constructor TCustomSwrBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
+  inherited;
+
+  CreateFormulaObjects;
+  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestValueFormula := '';
+  PestValueMethod := DefaultBoundaryMethod(SwrValuePosition);
 
 end;
 
@@ -1243,11 +1251,22 @@ end;
 class function TCustomSwrBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
-
+  case FormulaIndex of
+    SwrValuePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 destructor TCustomSwrBoundary.Destroy;
 begin
+  PestValueFormula := '';
 
   inherited;
 end;

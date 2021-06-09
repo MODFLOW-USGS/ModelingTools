@@ -10291,10 +10291,12 @@ const
 //    '4.3.0.50' Bug fix: Fixed a bug that could cause an exception to be
 //                raised in models with large grids.
 //    '4.3.0.51' No real change.
+//    '4.3.0.52' Not in released version. Bug fix: fixed reading
+//                existing models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.51';
+  IIModelVersion = '4.3.0.52';
 
 function IModelVersion: string;
 begin

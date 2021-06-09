@@ -2617,7 +2617,7 @@ begin
     Method, ACell, AScreenObject as TScreenObject);
   if ChangeSign then
   begin
-    Formula := '-1*' + Formula;
+    Formula := '-1*(' + Formula + ')';
   end;
   if Formula <> '' then
   begin
