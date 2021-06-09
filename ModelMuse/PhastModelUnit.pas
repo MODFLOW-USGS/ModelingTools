@@ -10294,6 +10294,13 @@ const
 //    '4.3.0.52' Not in released version. Bug fix: fixed reading
 //                existing models.
 
+//               Enhancement: In the Show or Hide Objects dialog box,
+//                double-clicking on a category heading will expand or collapse
+//                that category.
+//               Bug fix: ModelMuse will now correct the data type, orientation,
+//                and where the data set is evaluated for any required data set
+//                if those values are incorrect.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.52';
@@ -33885,6 +33892,21 @@ var
       DataArray.Visible := DataSetCreationData.Visible;
       DataArray.OnInitialize := DataSetCreationData.OnInitialize;
       DataArray.OnShouldUseOnInitialize := DataSetCreationData.OnShouldUseOnInitialize;
+      if ArrayNeeded(DataArray) then
+      begin
+        if DataArray.Orientation <> Orientation then
+        begin
+          DataArray.Orientation := Orientation
+        end;
+        if DataArray.EvaluatedAt <> DataSetCreationData.EvaluatedAt then
+        begin
+          DataArray.EvaluatedAt := DataSetCreationData.EvaluatedAt
+        end;
+        if DataArray.DataType <> DataType then
+        begin
+          DataArray.DataType := DataType
+        end;
+      end;
     end
     else if ArrayNeeded(DataArray)
       or (Assigned(ArrayArrayShouldBeCreated)

@@ -233,7 +233,7 @@ begin
   begin
     DisplayTime := 0;
   end;
-  
+
   case FBoundaryType of
     sbtFluidSource:
     begin
@@ -293,8 +293,6 @@ begin
     end;
     if ABoundary.Used then
     begin
-      
-      
       if (FBcsFileNames <> nil) and
         (FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction) then
       begin
@@ -326,6 +324,7 @@ begin
       begin
         SetLength(BoundaryValues, ABoundary.Values.Count);
       end;
+
       if FBoundaryType in [sbtFluidSource, sbtSpecPress] then
       begin
         TimeList := TSutraTimeList.Create(Model, ScreenObject);
@@ -337,7 +336,6 @@ begin
           BoundaryValues[0].Time := AssocItem.StartTime;
           BoundaryValues[0].UsedFormula := AssocItem.UsedFormula;
           BoundaryValues[0].Formula := AssocItem.PQFormula;
-//          BoundaryValues[0].LakeInteraction := ABoundary.LakeInteraction;
         end
         else
         begin
@@ -348,7 +346,6 @@ begin
             BoundaryValues[TimeIndex].Time := FixTime(AssocItem, AllTimes);
             BoundaryValues[TimeIndex].UsedFormula := AssocItem.UsedFormula;
             BoundaryValues[TimeIndex].Formula := AssocItem.PQFormula;
-//            BoundaryValues[TimeIndex].LakeInteraction := ABoundary.LakeInteraction;
           end;
         end;
         TimeList.Initialize(BoundaryValues);
@@ -362,7 +359,6 @@ begin
         BoundaryValues[0].Time := Item.StartTime;
         BoundaryValues[0].UsedFormula := Item.UsedFormula;
         BoundaryValues[0].Formula := Item.UFormula;
-//        BoundaryValues[0].LakeInteraction := ABoundary.LakeInteraction;
       end
       else
       begin
@@ -372,19 +368,19 @@ begin
           BoundaryValues[TimeIndex].Time := FixTime(Item, AllTimes);
           BoundaryValues[TimeIndex].UsedFormula := Item.UsedFormula;
           BoundaryValues[TimeIndex].Formula := Item.UFormula;
-//          BoundaryValues[TimeIndex].LakeInteraction := ABoundary.LakeInteraction;
         end;
       end;
       TimeList.Initialize(BoundaryValues);
 
       CellList := TCellAssignmentList.Create;
       try
-      ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-      for CellIndex := 0 to CellList.Count -1 do
-      begin
-        ACell := CellList[CellIndex];
-        FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] := ABoundary.UseBCTime;
-      end;
+        ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+        for CellIndex := 0 to CellList.Count -1 do
+        begin
+          ACell := CellList[CellIndex];
+          FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] :=
+            ABoundary.UseBCTime;
+        end;
       finally
         CellList.Free;
       end;

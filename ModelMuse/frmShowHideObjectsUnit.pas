@@ -679,6 +679,17 @@ begin
     begin
       miSelectClick(nil);
       frmGoPhast.EditScreenObjects;
+    end
+    else if (Sender = vstObjects) and (vstObjects.FocusedNode <> nil) then
+    begin
+      if vstObjects.Expanded[vstObjects.FocusedNode] then
+      begin
+        vstObjects.Expanded[vstObjects.FocusedNode] := False;
+      end
+      else
+      begin
+        vstObjects.Expanded[vstObjects.FocusedNode] := True;
+      end;
     end;
   finally
     CanEdit := True;

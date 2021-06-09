@@ -73,6 +73,7 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
     OnGetText = vstObjectsGetText
     OnInitNode = vstObjectsInitNode
     OnStateChange = vstObjectsStateChange
+    ExplicitTop = -2
     Columns = <>
   end
 end
