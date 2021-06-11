@@ -80,8 +80,16 @@ type
   private
     FLakeInteraction: TLakeBoundaryInteraction;
     FUseBCTime: Boolean;
+    FPestBoundaryValueMethod: TPestParamMethod;
+    FPestAssociatedValueMethod: TPestParamMethod;
     procedure SetLakeInteraction(const Value: TLakeBoundaryInteraction);
     procedure SetUseBCTime(const Value: Boolean);
+    function GetPestAssociatedValueFormula: string;
+    function GetPestBoundaryValueFormula: string;
+    procedure SetPestAssociatedValueFormula(const Value: string);
+    procedure SetPestAssociatedValueMethod(const Value: TPestParamMethod);
+    procedure SetPestBoundaryValueFormula(const Value: string);
+    procedure SetPestBoundaryValueMethod(const Value: TPestParamMethod);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -92,6 +100,32 @@ type
     property LakeInteraction: TLakeBoundaryInteraction read FLakeInteraction
       write SetLakeInteraction default lbiUseDefaults;
     property UseBCTime: Boolean read FUseBCTime write SetUseBCTime stored True;
+
+    property PestBoundaryValueFormula: string read GetPestBoundaryValueFormula
+      write SetPestBoundaryValueFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestBoundaryValueMethod: TPestParamMethod read FPestBoundaryValueMethod
+      write SetPestBoundaryValueMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestAssociatedValueFormula: string read GetPestAssociatedValueFormula
+      write SetPestAssociatedValueFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestAssociatedValueMethod: TPestParamMethod
+      read FPestAssociatedValueMethod write SetPestAssociatedValueMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+
   end;
 
   TSutraBoundaryList = TList<TSutraBoundary>;
@@ -1652,6 +1686,11 @@ begin
     SutraSource := TSutraBoundary(Source);
     LakeInteraction := SutraSource.LakeInteraction;
     UseBCTime := SutraSource.UseBCTime;
+
+    PestBoundaryValueFormula := SutraSource.PestBoundaryValueFormula;
+    PestBoundaryValueMethod := SutraSource.PestBoundaryValueMethod;
+    PestAssociatedValueFormula := SutraSource.PestAssociatedValueFormula;
+    PestAssociatedValueMethod := SutraSource.PestAssociatedValueMethod;
   end;
   inherited;
 end;
@@ -1664,23 +1703,21 @@ begin
   end;
 end;
 
-//procedure TSutraBoundary.ResetObserversUptodate;
-//var
-//  index: Integer;
-//  AnObserver: TObserver;
-//begin
-//  for index := 0 to FObserverList.Count - 1 do
-//  begin
-//    AnObserver := FObserverList[index];
-//    AnObserver.UpToDate := True;
-//  end;
-//end;
-
 constructor TSutraBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
   FLakeInteraction := lbiUseDefaults;
   FUseBCTime := False;
+end;
+
+function TSutraBoundary.GetPestAssociatedValueFormula: string;
+begin
+  result := '';
+end;
+
+function TSutraBoundary.GetPestBoundaryValueFormula: string;
+begin
+  result := '';
 end;
 
 procedure TSutraBoundary.Loaded;
@@ -1708,6 +1745,28 @@ begin
     FLakeInteraction := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TSutraBoundary.SetPestAssociatedValueFormula(const Value: string);
+begin
+
+end;
+
+procedure TSutraBoundary.SetPestAssociatedValueMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestAssociatedValueMethod, Value);
+end;
+
+procedure TSutraBoundary.SetPestBoundaryValueFormula(const Value: string);
+begin
+
+end;
+
+procedure TSutraBoundary.SetPestBoundaryValueMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestBoundaryValueMethod, Value);
 end;
 
 procedure TSutraBoundary.SetUseBCTime(const Value: Boolean);

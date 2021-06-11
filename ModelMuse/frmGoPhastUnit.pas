@@ -9823,8 +9823,6 @@ begin
       SpecifiedPressureNodes := TBoundaryNodes.Create;
       SpecifiedTempConcNodes := TBoundaryNodes.Create;
       GenFlowNodeLists := TObjectList<TList<IGeneralFlowNodes>>.Create;
-//      GeneralFlowNodes := TList<IGeneralFlowNodes>.Create;
-//      GeneralTransportNodes := TList<IGeneralTransportNodes>.Create;
       GeneralTransportList := TObjectList<TList<IGeneralTransportNodes>>.Create;
       Schedules := TStringList.Create;
       Observations := TStringList.Create;
