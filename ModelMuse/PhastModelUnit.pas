@@ -10293,17 +10293,18 @@ const
 //    '4.3.0.51' No real change.
 //    '4.3.0.52' Not in released version. Bug fix: fixed reading
 //                existing models.
-
-//               Enhancement: In the Show or Hide Objects dialog box,
+//    '4.3.0.53' Enhancement: In the Show or Hide Objects dialog box,
 //                double-clicking on a category heading will expand or collapse
 //                that category.
 //               Bug fix: ModelMuse will now correct the data type, orientation,
 //                and where the data set is evaluated for any required data set
 //                if those values are incorrect.
+//               Bug fix: ModelMuse will no longer attempt to export MNWI model
+//                input files in MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.52';
+  IIModelVersion = '4.3.0.53';
 
 function IModelVersion: string;
 begin

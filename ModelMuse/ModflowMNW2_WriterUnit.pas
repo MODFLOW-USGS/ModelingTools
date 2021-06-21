@@ -745,6 +745,10 @@ begin
   begin
     Exit;
   end;
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    Exit;
+  end;
   EvaluateMnwi;
   FMnwPackage := Model.ModflowPackages.Mnw2Package;
   if (FMnwiWells.Count > 0) or FMnwPackage.CreateWellFile
