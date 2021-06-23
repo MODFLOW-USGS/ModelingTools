@@ -2380,6 +2380,8 @@ resourcestring
   StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
   StrErrorSavingModelMu = 'Error saving ModelMuse initialization file. The e' +
   'rror message was "%s". Check that there is sufficient disk space.';
+  StrAMoreRecentVersionPest = 'A more recent version of PEST is available on' +
+  ' the PEST home page.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -2404,6 +2406,7 @@ var
   Mt3dUsgsDate: TDateTime;
   ZoneBudMf6Date: TDateTime;
   FootprintDate: TDateTime;
+  PestDate: TDateTime;
 
 const
 //  MfNwtDate = 40933; //40907;//40819;
@@ -14419,8 +14422,20 @@ end;
 procedure TfrmGoPhast.acRunPestExecute(Sender: TObject);
 var
   FileName: string;
+  PestName: string;
 begin
   inherited;
+  PestName := PhastModel.GetPestName;
+  if FileExists(PestName) then
+  begin
+    if not ModelUpToDate(PestName, PestDate) then
+    begin
+      Beep;
+      MessageDlg(StrAMoreRecentVersionPest, mtInformation, [mbOK], 0);
+    end;
+  end;
+
+
   FileName := '';
   if (PhastModel.ModelFileName <> '') then
   begin
@@ -15180,6 +15195,7 @@ initialization
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
+  PestDate := EncodeDate(2021,1,27);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

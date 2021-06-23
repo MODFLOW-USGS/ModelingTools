@@ -4041,7 +4041,6 @@ that affects the model output should also have a comment. }
     procedure SetRipPlantGroups(const Value: TRipPlantGroups);
     procedure RemoveNonAncillaryFiles;
     procedure FixSpecifyingGridByThreeDObjects;
-    function GetPestName: string;
     procedure SetSvdaPrepProperties(const Value: TSvdaPrepProperties);
     procedure SetSupCalcProperties(const Value: TSupCalcProperties);
 //    function GetPilotPoint(Index: Integer): TPoint2D;
@@ -4681,6 +4680,7 @@ that affects the model output should also have a comment. }
     function ShouldDrawPilotPoints: Boolean;
 //    property PilotPointSpacing: double read GetPilotPointSpacing;
     procedure DisconnectObservers;
+    function GetPestName: string;
   published
     // The following properties are obsolete.
 

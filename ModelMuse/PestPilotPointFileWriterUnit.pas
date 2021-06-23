@@ -230,7 +230,7 @@ begin
           FileProperties.FileName := AFileName;
           FileProperties.Layer := LayerIndex;
           FileProperties.ParamFamily := Format('Fam%d_',
-            [PilotPointFiles.Count+1]);
+            [PilotPointFiles.Count+1 + + Model.PilotPointData.Count]);
 //          FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
 //            [DataArrayID, ParamIndex+1, LayerIndex+1]);
 

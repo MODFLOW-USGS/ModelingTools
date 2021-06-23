@@ -1183,7 +1183,7 @@ begin
             WriteString('    # Get interpolated values');
             NewLine;
             WriteString(Format(
-              '    temp=%0:s%3:d.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
+              '    temp%3:d=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
               [PListName, ExtractFileName(FKrigingFactorsFile), PIndex+1, LayerIndex+1]));
             NewLine;
             if AParam.Transform = ptLog then
