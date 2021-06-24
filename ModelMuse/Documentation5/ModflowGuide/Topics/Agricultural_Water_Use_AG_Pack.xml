@@ -31,7 +31,7 @@
         </td>
         <td>
           <list id="33" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Citation" style="font-family:Symbol; font-size:12pt; color:#000000;">
-            <li styleclass="Citation"><text styleclass="Citation" translate="true">Niswonger, R.G., 2020. An Agricultural Water Use Package for MODFLOW and GSFLOW. Environmental Modelling &amp; Software, p.104617.</text></li>
+            <li styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://doi.org/10.1016/j.envsoft.2019.104617" target="_blank" styleclass="Citation" translate="true">Niswonger, R.G., 2020. An Agricultural Water Use Package for MODFLOW and GSFLOW. Environmental Modelling &amp; Software, p.104617.</link></li>
             <li styleclass="Citation"><text styleclass="Normal" translate="true">Input_instructions_AG.pdf</text></li>
           </list>
         </td>

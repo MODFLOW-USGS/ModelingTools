@@ -95,6 +95,7 @@ resourcestring
   StrYieldCoefficients = 'Yield Coefficients';
   StrErrorInFormulaS = 'Error in formula: %s';
   StrErrorIn0sRow = 'Error in %0:s Row: %1:d Column: %2:d. %3:s';
+  StrMT3DUSGSReactionP = 'MT3D-USGS Reaction package yield coefficients';
 
 {$R *.dfm}
 
@@ -629,7 +630,7 @@ begin
           begin
             Beep;
             MessageDlg(Format(StrErrorIn0sRow,
-              ['MT3D-USGS Reaction package yield coefficients',
+              [StrMT3DUSGSReactionP,
               ARow + 1, ACol+1, E.Message]), mtError,[mbOK], 0);
             Exit;
           end;

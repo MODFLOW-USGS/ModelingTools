@@ -41,7 +41,7 @@
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Documentation</text></para>
         </td>
         <td>
-          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://pubs.er.usgs.gov/publication/ofr98564" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., and Leake, S.A., 1999, Documentation for HYDMOD, a program for extracting and processing time-series data from the U.S. Geological Survey&apos;s modular three-dimensional finite-difference ground-water flow model: U.S. Geological Survey Open-File Report 98-564, 57 p.</link></para>
+          <para styleclass="Citation"><link displaytype="text" defaultstyle="true" type="weblink" href="https://doi.org/10.3133/ofr98564" target="_blank" styleclass="Citation" translate="true">Hanson, R.T., and Leake, S.A., 1999, Documentation for HYDMOD, a program for extracting and processing time-series data from the U.S. Geological Survey&apos;s modular three-dimensional finite-difference ground-water flow model: U.S. Geological Survey Open-File Report 98-564, 57 p.</link></para>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="filelink" href="Hydmod7.pdf" styleclass="Normal" translate="true">Hydmod7.pdf</link></para>
         </td>
       </tr>

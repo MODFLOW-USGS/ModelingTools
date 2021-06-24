@@ -834,6 +834,7 @@ type
     procedure HaveUsersDefineModflowLayers;
     procedure SetToolbarPositions;
     procedure CheckSvdaActivated;
+    function PestVersionOK: Boolean;
   published
     // @name is the TAction for @link(miAddVerticalGridLine)
     // and @link(tbAddVerticalBoundary).
@@ -2381,7 +2382,7 @@ resourcestring
   StrErrorSavingModelMu = 'Error saving ModelMuse initialization file. The e' +
   'rror message was "%s". Check that there is sufficient disk space.';
   StrAMoreRecentVersionPest = 'A more recent version of PEST is available on' +
-  ' the PEST home page.';
+  ' the PEST home page. Do you want to continue anyway?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -6443,6 +6444,27 @@ begin
     or (PhastModel.PestProperties.BetweenObservationsPilotPoints.Count > 0));
 end;
 
+function TfrmGoPhast.PestVersionOK: Boolean;
+var
+  PestName: string;
+begin
+  result := True;
+  PestName := PhastModel.GetPestName;
+  if FileExists(PestName) then
+  begin
+    if not ModelUpToDate(PestName, PestDate) then
+    begin
+      result := False;
+      Beep;
+      if not (MessageDlg(StrAMoreRecentVersionPest, mtInformation,
+        [mbYes, mbNo], 0, mbNo) = mrYes) then
+      begin
+        result := True;
+      end;
+    end;
+  end;
+end;
+
 procedure TfrmGoPhast.CheckSvdaActivated;
 var
   SvdProperties: TSingularValueDecompositionProperties;
@@ -8007,6 +8029,11 @@ end;
 procedure TfrmGoPhast.acCalcSuperParametersExecute(Sender: TObject);
 begin
   inherited;
+  if not PestVersionOK then
+  begin
+    Exit;
+  end;
+
   CheckSvdaActivated;
   if PhastModel.ModelFileName <> '' then
   begin
@@ -13365,6 +13392,11 @@ end;
 procedure TfrmGoPhast.acExportParRepExecute(Sender: TObject);
 begin
   inherited;
+  if not PestVersionOK then
+  begin
+    Exit;
+  end;
+
   if odRunParRep.Execute then
   begin
     PhastModel.ExportParRepInput(odRunParRep.FileName, FRunParRep)
@@ -14422,19 +14454,12 @@ end;
 procedure TfrmGoPhast.acRunPestExecute(Sender: TObject);
 var
   FileName: string;
-  PestName: string;
 begin
   inherited;
-  PestName := PhastModel.GetPestName;
-  if FileExists(PestName) then
+  if not PestVersionOK then
   begin
-    if not ModelUpToDate(PestName, PestDate) then
-    begin
-      Beep;
-      MessageDlg(StrAMoreRecentVersionPest, mtInformation, [mbOK], 0);
-    end;
+    Exit;
   end;
-
 
   FileName := '';
   if (PhastModel.ModelFileName <> '') then
@@ -14511,6 +14536,11 @@ end;
 procedure TfrmGoPhast.acRunSvdaPrepExecute(Sender: TObject);
 begin
   inherited;
+  if not PestVersionOK then
+  begin
+    Exit;
+  end;
+
   CheckSvdaActivated;
   if PhastModel.ModelFileName <> '' then
   begin
