@@ -10301,10 +10301,12 @@ const
 //                if those values are incorrect.
 //               Bug fix: ModelMuse will no longer attempt to export MNWI model
 //                input files in MODFLOW 6 models.
+//    '4.3.0.54' Bug fix: Fixed display of MODPATH output in MODFLOW DISV models
+//                in which the cross section angle is not zero.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.53';
+  IIModelVersion = '4.3.0.54';
 
 function IModelVersion: string;
 begin

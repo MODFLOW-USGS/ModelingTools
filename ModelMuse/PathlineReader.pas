@@ -3,7 +3,7 @@ unit PathlineReader;
 interface
 
 uses System.UITypes, Windows, Classes, SysUtils, GoPhastTypes, ColorSchemes, Graphics, GR32,
-  OpenGL, RealListUnit, QuadtreeClass, Generics.Collections, XBase1;
+  OpenGL, RealListUnit, QuadtreeClass, Generics.Collections, XBase1, FastGEO;
 
 type
   IDisplayer = interface
@@ -136,7 +136,8 @@ type
   public
     procedure Assign(Source: TPersistent); override;
     function ShouldShow(Limits: TPathLineDisplayLimits;
-      Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer): boolean;
+      Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer;
+      const Segment: TSegment2D; const DisvUsed: Boolean): boolean;
     function ShouldShowLine(Limits: TPathLineDisplayLimits): boolean;
     function ParentLine: TCustomPathLine;
     property AbsoluteTime: double read GetAbsoluteTime;
@@ -428,6 +429,7 @@ type
     // Reference time in MODPATH versions 6 and 7.
     property ReferenceTimeV6: double read FReferenceTimeV6
       write FReferenceTimeV6;
+//    procedure GetOriginOffset(CrossSectionSegment: TSegment2D; var OriginOffset: Double);
   end;
 
   TPathLinesObjectList = TObjectList<TPathLineReader>;
@@ -533,7 +535,8 @@ type
   public
     procedure Assign(Source: TPersistent); override;
     function ShouldShow(Limits: TEndPointDisplayLimits;
-      Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer): boolean;
+      Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer;
+      Segment: TSegment2D; DisvUsed: Boolean; WhereToPlot: TWhereToPlot): boolean;
   published
     // X position in grid coordinates of end point;
     property EndXPrime: double read FEndXPrime write FEndXPrime;
@@ -922,7 +925,8 @@ type
   public
     procedure Assign(Source: TPersistent); override;
     function ShouldShow(Limits: TTimeSeriesDisplayLimits;
-      Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer): boolean;
+      Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer;
+      const Segment: TSegment2D; const DisvUsed: Boolean): boolean;
     function ShouldShowSeries(Limits: TTimeSeriesDisplayLimits): boolean;
   published
     // Time point index
@@ -957,8 +961,6 @@ type
   private
     FSequenceNumber: integer;
     FCellNumber: Integer;
-  protected
-//    function CheckLimits(Limits: TTimeSeriesDisplayLimits): boolean; override;
   public
     procedure Assign(Source: TPersistent); override;
   published
@@ -1221,7 +1223,7 @@ type
 implementation
 
 uses
-  Contnrs, frmGoPhastUnit, FastGEO, ZoomBox2, ModflowGridUnit, BigCanvasMethods,
+  Contnrs, frmGoPhastUnit, ZoomBox2, ModflowGridUnit, BigCanvasMethods,
   ModelMuseUtilities, frmExportShapefileUnit,
   ShapefileUnit, AbstractGridUnit, Dialogs, System.Math, PhastModelUnit,
   ModflowIrregularMeshUnit, LayerStructureUnit;
@@ -1285,6 +1287,58 @@ const
   StrTIMESTEP: AnsiString = 'TIME_STEP';
   StrPARTICLE: AnsiString = 'PARTICLE';
   StrParticleGroup: AnsiString = 'PARTICLE_GROUP';
+
+function DisplayDisvPlot(Model: TCustomModel;
+  Orientation: TDataSetOrientation): Boolean;
+var
+  CrossSectionSegment: TSegment2D;
+begin
+  result := True;
+  if Model.DisvUsed and (Orientation = dsoFront) then
+  begin
+    CrossSectionSegment := Model.DisvGrid.CrossSection.Segment;
+    if (CrossSectionSegment[1].x = CrossSectionSegment[2].x)
+      and (CrossSectionSegment[1].y = CrossSectionSegment[2].y) then
+    begin
+      result := False;
+    end;
+  end;
+end;
+
+function GetOriginOffset(CrossSectionSegment: TSegment2D): Double;
+var
+  SegmentLine: TLine2D;
+  SegmentAngle: Double;
+  ClosestPoint: TPoint2D;
+  OriginAngle: Double;
+begin
+  SegmentLine := EquateLine(CrossSectionSegment[1], CrossSectionSegment[2]);
+  SegmentAngle := ArcTan2(CrossSectionSegment[1].Y - CrossSectionSegment[2].y,
+    CrossSectionSegment[1].x - CrossSectionSegment[2].x);
+  ClosestPoint := ClosestPointOnLineFromPoint(SegmentLine,
+    EquatePoint(0.0, 0.0));
+  result := Distance(ClosestPoint, CrossSectionSegment[1]);
+  if result <> 0 then
+  begin
+    OriginAngle := ArcTan2(CrossSectionSegment[1].Y - ClosestPoint.y,
+      CrossSectionSegment[1].x - ClosestPoint.x);
+    if Abs(SegmentAngle - OriginAngle) > 0.001 then
+    begin
+      result := -result;
+    end;
+  end;
+end;
+
+function DisvFrontProjectedXPrime(const CrossSectionSegment: TSegment2D;
+  APoint: TPoint2d; out XPrime: double): Boolean;
+var
+  ProjectedPoint: TPoint2D;
+begin
+  ProjectedPoint := ClosestPointOnSegmentFromPoint(CrossSectionSegment, APoint);
+  result := NotEqual(ProjectedPoint, CrossSectionSegment[1])
+    and NotEqual(ProjectedPoint, CrossSectionSegment[2]);
+  XPrime := Distance(ProjectedPoint, CrossSectionSegment[1]);
+end;
 
 procedure ConvertIndicies(NCol, NRow: Integer;
   var I, K, J: Integer);
@@ -1571,6 +1625,11 @@ end;
 procedure TPathLineReader.Draw(Orientation: TDataSetOrientation;
   const BitMap: TPersistent);
 begin
+  if not DisplayDisvPlot(FModel as TCustomModel, Orientation) then
+  begin
+    Exit;
+  end;
+
   case ModpathVersion of
     pv5:
       begin
@@ -2203,9 +2262,11 @@ begin
 end;
 
 function TPathLinePoint.ShouldShow(Limits: TPathLineDisplayLimits;
-  Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer): boolean;
+  Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer;
+  const Segment: TSegment2D; const DisvUsed: Boolean): boolean;
 var
   ColRowOrLayerToCheck: integer;
+  Dummy: Double;
 begin
   result := True;
   if Limits.LimitToCurrentIn2D and (Orientation <> dso3D) then
@@ -2308,6 +2369,10 @@ begin
         if not result then Exit;
       end;
     else Assert(False);
+  end;
+  if result and DisvUsed and (Orientation = dsoFront) then
+  begin
+    result := DisvFrontProjectedXPrime(Segment, EquatePoint(X, y), Dummy);
   end;
 end;
 
@@ -3055,9 +3120,11 @@ begin
 end;
 
 function TEndPoint.ShouldShow(Limits: TEndPointDisplayLimits;
-  Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer): boolean;
+  Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer;
+  Segment: TSegment2D; DisvUsed: Boolean; WhereToPlot: TWhereToPlot): boolean;
 var
   ColRowOrLayerToCheck: integer;
+  Dummy: Double;
 begin
   result := True;
   if Limits.LimitToCurrentIn2D and (Orientation <> dso3D) then
@@ -3119,6 +3186,19 @@ begin
         if not result then Exit;
       end;
     else Assert(False);
+  end;
+  if result and DisvUsed and (Orientation = dsoFront) then
+  begin
+    case WhereToPlot of
+      wtpStart:
+        begin
+          result := DisvFrontProjectedXPrime(Segment, EquatePoint(StartX, StartY), Dummy);
+        end;
+      wtpEnd:
+        begin
+          result := DisvFrontProjectedXPrime(Segment, EquatePoint(EndX, EndY), Dummy);
+        end;
+    end;
   end;
 end;
 
@@ -3215,23 +3295,40 @@ var
   Y: double;
   Data: Pointer;
   LocalModel: TCustomModel;
+  DisvUsed: Boolean;
+  CrossSectionSegment: TSegment2D;
+  OriginOffset: Double;
+  DisplayXPrime: Double;
 begin
   if not Visible then
   begin
     Exit;
   end;
   LocalModel := FModel as TCustomModel;
-//  Grid := LocalModel.ModflowGrid;
-//  if Grid = nil then
-//  begin
-//    Exit;
-//  end;
+
   if (LocalModel.LayerCount <= 0) or (LocalModel.RowCount <= 0)
     or (LocalModel.ColumnCount <= 0) then
   begin
     Exit;
   end;
-//  Assert(LocalPoints.Version in [mpv5, mpv6]);
+
+  if not DisplayDisvPlot(LocalModel, Orientation) then
+  begin
+    Exit;
+  end;
+
+  DisvUsed := LocalModel.DisvUsed;
+  if DisvUsed then
+  begin
+    CrossSectionSegment := LocalModel.DisvGrid.CrossSection.Segment;
+    OriginOffset := GetOriginOffset(CrossSectionSegment);
+  end
+  else
+  begin
+    OriginOffset := 0;
+    CrossSectionSegment := EquateSegment(0,0,0,0);
+  end;
+
   PixelPlus := EndPointSize div 2;
   PixelMinus := EndPointSize - PixelPlus;
   ColRowOrLayer := -1;
@@ -3242,14 +3339,6 @@ begin
       begin
         ZoomBox := frmGoPhast.frameTopView.ZoomBox;
         ColRowOrLayer := LocalModel.SelectedLayer+1;
-        {if LocalModel.DisvUsed then
-        begin
-          ColRowOrLayer := Grid.SelectedLayer+1;
-        end
-        else
-        begin
-
-        end;}
         QuadTree := TopQuadTree;
       end;
     dsoFront:
@@ -3347,7 +3436,8 @@ begin
     for EndPointIndex := LocalPoints.Count - 1 downto 0 do
     begin
       EndPoint := LocalPoints[EndPointIndex] as TEndPoint;
-      if EndPoint.ShouldShow(DisplayLimits, Orientation, ColRowOrLayer) then
+      if EndPoint.ShouldShow(DisplayLimits, Orientation, ColRowOrLayer,
+        CrossSectionSegment, DisvUsed, DisplayLimits.WhereToPlot) then
       begin
         case DisplayLimits.WhereToPlot of
           wtpStart:
@@ -3364,11 +3454,21 @@ begin
                   end;
                 dsoFront:
                   begin
-                    ADisplayPoint.X := ZoomBox.XCoord(EndPoint.StartXPrime);
+                    if DisvUsed then
+                    begin
+                      DisvFrontProjectedXPrime(CrossSectionSegment,
+                        EquatePoint(EndPoint.StartX, EndPoint.StartY), DisplayXPrime);
+                      DisplayXPrime := DisplayXPrime - OriginOffset;
+                    end
+                    else
+                    begin
+                      DisplayXPrime := EndPoint.StartXPrime;
+                    end;
+                    ADisplayPoint.X := ZoomBox.XCoord(DisplayXPrime);
                     ADisplayPoint.Y := ZoomBox.YCoord(EndPoint.StartZ);
                     if ShouldInitializeTree then
                     begin
-                      QuadTree.AddPoint(EndPoint.StartXPrime, EndPoint.StartZ, EndPoint);
+                      QuadTree.AddPoint(DisplayXPrime, EndPoint.StartZ, EndPoint);
                     end;
                   end;
                 dsoSide:
@@ -3397,11 +3497,21 @@ begin
                   end;
                 dsoFront:
                   begin
-                    ADisplayPoint.X := ZoomBox.XCoord(EndPoint.EndXPrime);
+                    if DisvUsed then
+                    begin
+                      DisvFrontProjectedXPrime(CrossSectionSegment,
+                        EquatePoint(EndPoint.EndX, EndPoint.EndY), DisplayXPrime);
+                      DisplayXPrime := DisplayXPrime - OriginOffset;
+                    end
+                    else
+                    begin
+                      DisplayXPrime := EndPoint.EndXPrime;
+                    end;
+                    ADisplayPoint.X := ZoomBox.XCoord(DisplayXPrime);
                     ADisplayPoint.Y := ZoomBox.YCoord(EndPoint.EndZ);
                     if ShouldInitializeTree then
                     begin
-                      QuadTree.AddPoint(EndPoint.EndXPrime, EndPoint.EndZ, EndPoint);
+                      QuadTree.AddPoint(DisplayXPrime, EndPoint.EndZ, EndPoint);
                     end;
                   end;
                 dsoSide:
@@ -4850,7 +4960,10 @@ begin
       for PointIndex := 0 to LocalPoints.Count - 1 do
       begin
         EndPoint := LocalPoints[PointIndex];
-        if EndPoint.ShouldShow(DisplayLimits, dso3D, ColRowOrLayer) then
+        // A dummy segment can be used because the segment isn't used
+        // if the orientation is dso3D.
+        if EndPoint.ShouldShow(DisplayLimits, dso3D, ColRowOrLayer,
+          EquateSegment(0,0,0,0), False, DisplayLimits.WhereToPlot) then
         begin
           AColor := GetPointColor(MaxValue, MinValue, EndPoint);
           AssignColor(AColor);
@@ -5255,6 +5368,11 @@ var
   PixelPlus: Integer;
   PixelMinus: Integer;
   Data: Pointer;
+  LocalModel: TCustomModel;
+  DisvUsed: Boolean;
+  CrossSectionSegment: TSegment2D;
+  OriginOffset: Double;
+  DisplayXPrime: Double;
 begin
   if not Visible then
   begin
@@ -5272,7 +5390,26 @@ begin
     Exit;
   end;
 
-  Grid := (FModel as TCustomModel).ModflowGrid;
+  if not DisplayDisvPlot(FModel as TCustomModel, Orientation) then
+  begin
+    Exit;
+  end;
+
+  LocalModel := FModel as TCustomModel;
+  DisvUsed := LocalModel.DisvUsed;
+  if DisvUsed then
+  begin
+    CrossSectionSegment := LocalModel.DisvGrid.CrossSection.Segment;
+    OriginOffset := GetOriginOffset(CrossSectionSegment);
+  end
+  else
+  begin
+    OriginOffset := 0;
+    CrossSectionSegment := EquateSegment(0,0,0,0);
+  end;
+
+
+  Grid := LocalModel.ModflowGrid;
   if Grid = nil then
   begin
     Exit;
@@ -5321,7 +5458,8 @@ begin
         if CheckShowSeries(TimeSeries) then
         begin
           APoint := TimeSeries.Points[PlotIndex];
-          if APoint.ShouldShow(DisplayLimits, Orientation, ColRowOrLayer) then
+          if APoint.ShouldShow(DisplayLimits, Orientation, ColRowOrLayer,
+            CrossSectionSegment, DisvUsed) then
           begin
             case Orientation of
               dsoTop:
@@ -5331,7 +5469,17 @@ begin
                 end;
               dsoFront:
                 begin
-                  ADisplayPoint.X := ZoomBox.XCoord(APoint.XPrime);
+                  if DisvUsed then
+                  begin
+                    DisvFrontProjectedXPrime(CrossSectionSegment,
+                      EquatePoint(APoint.X, APoint.Y), DisplayXPrime);
+                    DisplayXPrime := DisplayXPrime - OriginOffset;
+                  end
+                  else
+                  begin
+                    DisplayXPrime := APoint.XPrime;
+                  end;
+                  ADisplayPoint.X := ZoomBox.XCoord(DisplayXPrime);
                   ADisplayPoint.Y := ZoomBox.YCoord(APoint.Z);
                 end;
               dsoSide:
@@ -5360,21 +5508,11 @@ begin
               end;
               if UsePoint then
               begin
-
                 AColor := GetPointColor(MaxValue, MinValue, APoint);
                 AColor32 := Color32(AColor);
                 DisplayQuadTree.AddPoint(ADisplayPoint.X, ADisplayPoint.Y, APoint);
                 DisplayPointList.Add(ADisplayPoint);
                 DisplayColorList.Add(AColor32);
-
-
-//                AColor := GetPointColor(MaxValue, MinValue, APoint);
-//                AColor32 := Color32(AColor);
-//                ARect.Top := ADisplayPoint.Y -2;
-//                ARect.Bottom := ADisplayPoint.Y +2;
-//                ARect.Left := ADisplayPoint.X -2;
-//                ARect.Right := ADisplayPoint.X +2;
-//                DrawBigRectangle32(BitMap, AColor32, AColor32, 0, ARect);
               end;
             end;
           end;
@@ -6745,7 +6883,10 @@ begin
           if CheckShowSeries(ASeries) then
           begin
             TimeSeriesPoint := ASeries.Points[PlotIndex];
-            if TimeSeriesPoint.ShouldShow(DisplayLimits, dso3D, ColRowOrLayer) then
+            // A dummy segment can be used because the segment isn't used
+            // if the orientation is dso3D;
+            if TimeSeriesPoint.ShouldShow(DisplayLimits, dso3D, ColRowOrLayer,
+              EquateSegment(0,0,0,0), False) then
             begin
               AColor := GetPointColor(MaxValue, MinValue, TimeSeriesPoint);
               AssignColor(AColor);
@@ -6983,9 +7124,11 @@ begin
 end;
 
 function TTimeSeriesPoint.ShouldShow(Limits: TTimeSeriesDisplayLimits;
-  Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer): boolean;
+  Orientation: TDataSetOrientation; CurrentColRowOrLayer: integer;
+  const Segment: TSegment2D; const DisvUsed: Boolean): boolean;
 var
   ColRowOrLayerToCheck: Integer;
+  Dummy: Double;
 begin
   result := True;
   if Limits.LimitToCurrentIn2D and (Orientation <> dso3D) then
@@ -7024,7 +7167,10 @@ begin
       end;
     else Assert(False);
   end;
-
+  if result and DisvUsed and (Orientation = dsoFront) then
+  begin
+    result := DisvFrontProjectedXPrime(Segment, EquatePoint(X, y), Dummy);
+  end;
 end;
 
 function TTimeSeriesPoint.ShouldShowSeries(
@@ -7423,7 +7569,6 @@ var
   Points: array [0..1] of TPoint;
   ADisplayPoint: TPoint;
   MaxValue, MinValue: double;
-//  Grid: TModflowGrid;
   AColor: TColor;
   AColor32: TColor32;
   QuadTree: TRbwQuadTree;
@@ -7431,6 +7576,11 @@ var
   Limits: TGridLimit;
   ARect: TRect;
   LocalModel: TCustomModel;
+  CrossSectionSegment: TSegment2D;
+  DisvUsed: Boolean;
+  DisplayXPrime: Double;
+  OriginOffset: double;
+//  CrossSectionSegment: TLine2D;
 begin
 
   if not Visible then
@@ -7438,18 +7588,19 @@ begin
     Exit;
   end;
   LocalModel := FModel as TCustomModel;
-//  if not LocalModel.DisvUsed then
-//  begin
-//    Grid := LocalModel.ModflowGrid;
-//    if Grid = nil then
-//    begin
-//      Exit;
-//    end;
-//  end
-//  else
-//  begin
-//
-//  end;
+
+  DisvUsed := LocalModel.DisvUsed;
+  if DisvUsed then
+  begin
+    CrossSectionSegment := LocalModel.DisvGrid.CrossSection.Segment;
+    OriginOffset := GetOriginOffset(CrossSectionSegment);
+  end
+  else
+  begin
+    OriginOffset := 0;
+    CrossSectionSegment := EquateSegment(0,0,0,0);
+  end;
+
   if (LocalModel.LayerCount <= 0) or (LocalModel.RowCount <= 0)
     or (LocalModel.ColumnCount <= 0) then
   begin
@@ -7545,7 +7696,8 @@ begin
         for PointIndex := 0 to Line.Points.Count - 1 do
         begin
           APoint := Line.Points[PointIndex];
-          if APoint.ShouldShow(DisplayLimits, Orientation, ColRowOrLayer) then
+          if APoint.ShouldShow(DisplayLimits, Orientation, ColRowOrLayer,
+            CrossSectionSegment, DisvUsed) then
           begin
             case Orientation of
               dsoTop:
@@ -7559,11 +7711,21 @@ begin
                 end;
               dsoFront:
                 begin
-                  ADisplayPoint.X := ZoomBox.XCoord(APoint.XPrime);
+                  if LocalModel.DisvUsed then
+                  begin
+                    DisvFrontProjectedXPrime(CrossSectionSegment,
+                      EquatePoint(APoint.X, APoint.Y), DisplayXPrime);
+                    DisplayXPrime := DisplayXPrime - OriginOffset;
+                  end
+                  else
+                  begin
+                    DisplayXPrime := APoint.XPrime;
+                  end;
+                  ADisplayPoint.X := ZoomBox.XCoord(DisplayXPrime);
                   ADisplayPoint.Y := ZoomBox.YCoord(APoint.Z);
                   if ShouldInitializeTree then
                   begin
-                    QuadTree.AddPoint(APoint.XPrime, APoint.Z, APoint);
+                    QuadTree.AddPoint(DisplayXPrime, APoint.Z, APoint);
                   end;
                 end;
               dsoSide:
@@ -7970,18 +8132,10 @@ var
   APoint: TPathLinePointV7;
   Grid: TModflowGrid;
   ADate: TDateTime;
-//  LineIndex: Integer;
-//  Line: TCustomPathLine;
-//  FirstPoint: TPathLinePoint;
-//  LastPoint: TPathLinePoint;
-//  FirstTimeFound: Boolean;
   FTextFile: TextFile;
   TrackDirection: integer;
   RefTime: double;
   ParticleGroup: integer;
-//  TimePointIndex: integer;
-//  GridIndex: integer;
-//  LineSegmentIndex: integer;
   LocalX: double;
   LocalY: double;
   Splitter: TStringList;
@@ -8005,9 +8159,6 @@ var
   PIndex: Integer;
   APoint2D: TPoint2D;
   LineIndex: Integer;
-//  TimeIndex: integer;
-//  FirstPositiveTimeFound: Boolean;
-//  APathlinePoint: TPathLinePoint;
   function RotateToRealWorldCoordinates(
     const APoint: TPoint2D): TPoint2D;
   var
@@ -8026,8 +8177,6 @@ var
   end;
 
   procedure CellNumberToRowCol(CellNumber: Integer; out ARow, ACol: Integer);
-//  var
-//    Layer: Integer;
   begin
     if Grid = nil then
     begin
@@ -8036,7 +8185,6 @@ var
     end
     else
     begin
-//      Layer := (CellNumber -1) div (NRow * NCol) + 1;
       CellNumber := (CellNumber -1) mod (NRow * NCol);
       ARow := CellNumber div NCol + 1;
       ACol := CellNumber -(ARow-1)*NCol + 1;
@@ -8072,7 +8220,6 @@ var
     if LocalModel.DisvUsed then
     begin
       PositionToRowCol(APoint.FXPrime, APoint.FYPrime, Row, Column);
-
     end
     else
     begin
@@ -8093,13 +8240,11 @@ var
     APoint.FLayer := Layer;
     APoint.FRow := Row;
     APoint.FColumn := Column;
-//    APoint.FTimeStep := TS;
 
     APoint.ParticleGroup := ParticleGroup;
     APoint.TimePointIndex := 0;
     APoint.LineSegmentIndex := 0;
     APoint.ModpathVersion := pv7_2;
-//    APoint.HasV6Data := True;
     APoint.GridIndex := 0;
     APoint.LocalX := LocalX;
     APoint.LocalY := LocalY;
@@ -8227,13 +8372,6 @@ begin
             Layer := StrToInt(Splitter[8]);
             StressPeriod := StrToInt(Splitter[9]);
             TimeStep := StrToInt(Splitter[10]);
-  //
-  //          ParticleGroup := StrToInt(Splitter[1]);
-  //          TimePointIndex := StrToInt(Splitter[2]);
-  //          TS := StrToInt(Splitter[3]);
-  //          Column := StrToInt(Splitter[10]);
-  //          GridIndex := StrToInt(Splitter[11]);
-
 
             CreateParticle;
 
@@ -8254,13 +8392,7 @@ begin
                 MaxParticleGroup := ParticleGroup;
               end;
             end;
-
           end;
-
-
-
-  //        LineSegmentIndex := StrToInt(Splitter[15]);
-
         end;
       end;
     except on E: EInOutError do
@@ -8278,7 +8410,6 @@ begin
       begin
         Beep;
         MessageDlg(Format(StrThereWasAnErrorW, [E.Message]), mtError, [mbOK], 0);
-//        Exit;
       end;
     end;
   end;
@@ -8370,7 +8501,11 @@ begin
             for PointIndex := 0 to Line.Points.Count - 1 do
             begin
               APoint := Line.Points[PointIndex];
-              if APoint.ShouldShow(DisplayLimits, dso3D, ColRowOrLayer) then
+              // A dummy cross section segment can be used because
+              // it won't be used when the data set orientation is
+              // dso3D.
+              if APoint.ShouldShow(DisplayLimits, dso3D, ColRowOrLayer,
+                EquateSegment(0,0,0,0), False) then
               begin
 
                 if ShowPriorPoint then

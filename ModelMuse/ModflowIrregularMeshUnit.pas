@@ -6182,7 +6182,6 @@ var
   OriginAngle: Double;
   ActiveDataArray: TDataArray;
   MinMaxInitialized: Boolean;
-//  ANode: INode;
   function Interpolate(Length1, Length2, Value1, Value2: double): double;
   var
     Fraction: Double;
@@ -6204,14 +6203,10 @@ var
     begin
       PointAngle := ArcTan2(ALine[1].Y - ClosestPoint.y, ALine[1].x - ClosestPoint.x);
       if Abs(SegmentAngle - PointAngle) > 0.001 then
-      {if FastGEO.Orientation(ALocation,
-        CrossSection.StartPoint, CrossSection.EndPoint) =
-        LeftHandSide then}
       begin
         ADistance := -ADistance;
       end;
     end;
-//    ADistance := ADistance + OriginOffset;
     ADistance := ADistance + Offset;
   end;
 begin
@@ -6248,7 +6243,6 @@ begin
       ApplyLimittoMinMax(ThreeDDataSet, MinMax, ThreeDDataSet.Limits);
     end;
 
-
     SegmentLine := EquateLine(CrossSectionSegment[1],CrossSectionSegment[2]);
     SegmentAngle := ArcTan2(SegmentLine[1].Y - SegmentLine[2].y, SegmentLine[1].x - SegmentLine[2].x);
 
@@ -6259,9 +6253,6 @@ begin
     begin
       OriginAngle := ArcTan2(SegmentLine[1].Y - ClosestPoint.y, SegmentLine[1].x - ClosestPoint.x);
       if Abs(SegmentAngle - OriginAngle) > 0.001 then
-      {if FastGEO.Orientation(EquatePoint(0.0, 0.0),
-        CrossSection.StartPoint, CrossSection.EndPoint) =
-        LeftHandSide then}
       begin
         OriginOffset := -OriginOffset;
       end;
@@ -6271,9 +6262,6 @@ begin
     begin
       OriginAngle := ArcTan2(SegmentLine[1].Y - ClosestPoint.y, SegmentLine[1].x - ClosestPoint.x);
       if Abs(SegmentAngle - OriginAngle) > 0.001 then
-      {if FastGEO.Orientation(EquatePoint(0.0, 0.0),
-        CrossSection.StartPoint, CrossSection.EndPoint) =
-        LeftHandSide then}
       begin
         OffSet := -OffSet;
       end;
