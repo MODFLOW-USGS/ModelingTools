@@ -82,14 +82,33 @@ type
     FUseBCTime: Boolean;
     FPestBoundaryValueMethod: TPestParamMethod;
     FPestAssociatedValueMethod: TPestParamMethod;
+    FPestBoundaryValueFormula: TFormulaObject;
+    FPestAssociatedValueFormula: TFormulaObject;
+    FOnInvalidateAssociatedPestBoundaryValue: TNotifyEvent;
+    FOnInvalidatePestBoundaryValue: TNotifyEvent;
     procedure SetLakeInteraction(const Value: TLakeBoundaryInteraction);
     procedure SetUseBCTime(const Value: Boolean);
+    // PEST
     function GetPestAssociatedValueFormula: string;
     function GetPestBoundaryValueFormula: string;
     procedure SetPestAssociatedValueFormula(const Value: string);
     procedure SetPestAssociatedValueMethod(const Value: TPestParamMethod);
     procedure SetPestBoundaryValueFormula(const Value: string);
     procedure SetPestBoundaryValueMethod(const Value: TPestParamMethod);
+    function GetPestAssociatedValueObserver: TObserver;
+    function GetPestBoundaryValueObserver: TObserver;
+  protected
+    procedure CreateFormulaObjects; //override;
+    procedure CreateObservers; //override;
+    property PestBoundaryValueObserver: TObserver read GetPestBoundaryValueObserver;
+    property PestAssociatedValueObserver: TObserver read GetPestAssociatedValueObserver;
+    property OnInvalidatePestBoundaryValue: TNotifyEvent
+      read FOnInvalidatePestBoundaryValue write FOnInvalidatePestBoundaryValue;
+    property OnInvalidateAssociatedPestBoundaryValue: TNotifyEvent
+      read FOnInvalidateAssociatedPestBoundaryValue
+      write FOnInvalidateAssociatedPestBoundaryValue;
+    procedure PQChangeHandler(Sender: TObject); virtual; abstract;
+    procedure UChangeHandler(Sender: TObject); virtual; abstract;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -382,6 +401,8 @@ type
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
+    procedure PQChangeHandler(Sender: TObject); override;
+    procedure UChangeHandler(Sender: TObject); override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -417,6 +438,8 @@ type
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
+    procedure PQChangeHandler(Sender: TObject); override;
+    procedure UChangeHandler(Sender: TObject); override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -453,6 +476,8 @@ type
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
+    procedure PQChangeHandler(Sender: TObject); override;
+    procedure UChangeHandler(Sender: TObject); override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -488,6 +513,8 @@ type
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
+    procedure PQChangeHandler(Sender: TObject); override;
+    procedure UChangeHandler(Sender: TObject); override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -1230,6 +1257,60 @@ begin
   Assert(False);
 end;
 
+procedure TSutraFluidBoundary.PQChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraFluidFlux(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraFluidFlux(self);
+    end;
+  end;
+end;
+
+procedure TSutraFluidBoundary.UChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraFluidFluxU(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraFluidFluxU(self);
+    end;
+  end;
+end;
+
 { TSutraMassEnergySourceSinkBoundary }
 
 procedure TSutraMassEnergySourceSinkBoundary.AssignCells(
@@ -1250,6 +1331,38 @@ procedure TSutraMassEnergySourceSinkBoundary.GetCellValues(ValueTimeList: TList;
 begin
   inherited;
   Assert(False);
+end;
+
+procedure TSutraMassEnergySourceSinkBoundary.PQChangeHandler(Sender: TObject);
+begin
+
+end;
+
+procedure TSutraMassEnergySourceSinkBoundary.UChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraUFlux(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraUFlux(self);
+    end;
+  end;
 end;
 
 { TSutraSpecifiedPressureBoundary }
@@ -1274,6 +1387,16 @@ begin
   Assert(False);
 end;
 
+procedure TSutraSpecifiedPressureBoundary.PQChangeHandler(Sender: TObject);
+begin
+
+end;
+
+procedure TSutraSpecifiedPressureBoundary.UChangeHandler(Sender: TObject);
+begin
+
+end;
+
 { TSutraSpecifiedConcTempBoundary }
 
 procedure TSutraSpecifiedConcTempBoundary.AssignCells(
@@ -1296,7 +1419,15 @@ begin
   Assert(False);
 end;
 
-{ TSutraBoundary }
+procedure TSutraSpecifiedConcTempBoundary.PQChangeHandler(Sender: TObject);
+begin
+
+end;
+
+procedure TSutraSpecifiedConcTempBoundary.UChangeHandler(Sender: TObject);
+begin
+
+end;
 
 { TSutraTimeList }
 
@@ -1710,14 +1841,39 @@ begin
   FUseBCTime := False;
 end;
 
+procedure TSutraBoundary.CreateFormulaObjects;
+begin
+  FPestBoundaryValueFormula := CreateFormulaObjectNodes(dso3D);
+  FPestAssociatedValueFormula := CreateFormulaObjectNodes(dso3D);
+end;
+
+procedure TSutraBoundary.CreateObservers;
+begin
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestBoundaryValueObserver);
+    FObserverList.Add(PestAssociatedValueObserver);
+  end;
+end;
+
 function TSutraBoundary.GetPestAssociatedValueFormula: string;
 begin
   result := '';
 end;
 
+function TSutraBoundary.GetPestAssociatedValueObserver: TObserver;
+begin
+
+end;
+
 function TSutraBoundary.GetPestBoundaryValueFormula: string;
 begin
   result := '';
+end;
+
+function TSutraBoundary.GetPestBoundaryValueObserver: TObserver;
+begin
+
 end;
 
 procedure TSutraBoundary.Loaded;

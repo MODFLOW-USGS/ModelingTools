@@ -10304,6 +10304,8 @@ const
 //    '4.3.0.54' Bug fix: Fixed display of MODPATH output in MODFLOW DISV models
 //                in which the cross section angle is not zero.
 
+//               Bug fix: Fixed bug in resetting velocity vectors to not used.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.54';

@@ -321,7 +321,14 @@ begin
   end
   else
   begin
-    VItem := comboVectorSource.Items.Objects[comboVectorSource.ItemIndex] as TVectorItem;
+    if comboVectorSource.ItemIndex < 0 then
+    begin
+      VItem := nil;
+    end
+    else
+    begin
+      VItem := comboVectorSource.Items.Objects[comboVectorSource.ItemIndex] as TVectorItem;
+    end;
     if VItem = nil then
     begin
       LocalModel.VelocityVectors.SelectedItem := -1;

@@ -150,7 +150,7 @@ object frameVectors: TframeVectors
     ChangeDisabledColor = True
   end
   object udVectors: TJvUpDown
-    Left = 311
+    Left = 305
     Top = 27
     Width = 16
     Height = 21

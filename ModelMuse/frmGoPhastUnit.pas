@@ -2383,6 +2383,10 @@ resourcestring
   'rror message was "%s". Check that there is sufficient disk space.';
   StrAMoreRecentVersionPest = 'A more recent version of PEST is available on' +
   ' the PEST home page. Do you want to continue anyway?';
+  StrThereWasAnErrorO = 'There was an error opening your file. A common caus' +
+  'e of this error is an attempt to open a ModelMuse file created by a newer' +
+  ' version of ModelMuse than was used to open the file. This version of Mod' +
+  'elMuse that you are using to open the file is %s. Check the';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -11415,14 +11419,10 @@ var
   DataArrayManager: TDataArrayManager;
   WarningMessage: string;
   ChildIndex: integer;
-//  DistributedPumpageDataArray: TDataArray;
-//  ActiveDataArray: TDataArray;
-//  DepthRateDataArray: TDataArray;
   FootprintWithdrawalDataArray: TDataArray;
   ActiveDataArray: TDataArray;
   ChildModel: TChildModel;
   ADataSet: TDataArray;
-//  AValue: Boolean;
 begin
   Result := False;
   if not FileExists(FileName) then
@@ -11579,7 +11579,16 @@ begin
               else if FileFormat = ffZLib then
               begin
                 FStartTime := Now;
+                try
                 DecompressionStream.ReadComponent(PhastModel);
+                except on EZDecompressionError do
+                  begin
+                    Beep;
+                    MessageDlg(Format(StrThereWasAnErrorO, [IModelVersion]),
+                      mtError, [mbOK], 0);
+                    Exit;
+                  end;
+                end;
                 result := True;
               end
               else
@@ -11595,6 +11604,7 @@ begin
                 result := False;
                 MessageDlg(Format(StrReadingTheFileFai, [E.Message]),
                   mtError, [mbOK], 0);
+                Exit;
               end;
             end;
           finally
