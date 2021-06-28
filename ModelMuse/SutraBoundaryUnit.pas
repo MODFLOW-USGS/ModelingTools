@@ -86,6 +86,9 @@ type
     FPestAssociatedValueFormula: TFormulaObject;
     FOnInvalidateAssociatedPestBoundaryValue: TNotifyEvent;
     FOnInvalidatePestBoundaryValue: TNotifyEvent;
+    FPestAssociatedValueObserver: TObserver;
+    FPestBoundaryValueObserver: TObserver;
+    FUsedObserver: TObserver;
     procedure SetLakeInteraction(const Value: TLakeBoundaryInteraction);
     procedure SetUseBCTime(const Value: Boolean);
     // PEST
@@ -109,12 +112,22 @@ type
       write FOnInvalidateAssociatedPestBoundaryValue;
     procedure PQChangeHandler(Sender: TObject); virtual; abstract;
     procedure UChangeHandler(Sender: TObject); virtual; abstract;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    function GetUsedObserver: TObserver; //override;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
 //    procedure ResetObserversUptodate;
     procedure Changed;
     procedure Loaded;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property LakeInteraction: TLakeBoundaryInteraction read FLakeInteraction
       write SetLakeInteraction default lbiUseDefaults;
@@ -1335,7 +1348,7 @@ end;
 
 procedure TSutraMassEnergySourceSinkBoundary.PQChangeHandler(Sender: TObject);
 begin
-
+  // do nothing
 end;
 
 procedure TSutraMassEnergySourceSinkBoundary.UChangeHandler(Sender: TObject);
@@ -1388,15 +1401,58 @@ begin
 end;
 
 procedure TSutraSpecifiedPressureBoundary.PQChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraSpecPressure(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraSpecPressure(self);
+    end;
+  end;
 end;
 
 procedure TSutraSpecifiedPressureBoundary.UChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraSpecPressureU(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraSpecPressureU(self);
+    end;
+  end;
 end;
-
 { TSutraSpecifiedConcTempBoundary }
 
 procedure TSutraSpecifiedConcTempBoundary.AssignCells(
@@ -1421,12 +1477,34 @@ end;
 
 procedure TSutraSpecifiedConcTempBoundary.PQChangeHandler(Sender: TObject);
 begin
-
+  // do nothing
 end;
 
 procedure TSutraSpecifiedConcTempBoundary.UChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraSpecifiedU(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraSpecifiedU(self);
+    end;
+  end;
 end;
 
 { TSutraTimeList }
@@ -1839,41 +1917,154 @@ begin
   inherited;
   FLakeInteraction := lbiUseDefaults;
   FUseBCTime := False;
+
+  CreateFormulaObjects;
+//  CreateBoundaryObserver;
+  CreateObservers;
+
+  PestBoundaryValueFormula := '';
+  PestAssociatedValueFormula := '';
+  PestBoundaryValueMethod := DefaultBoundaryMethod(PQFormulaPosition);
+  PestAssociatedValueMethod := DefaultBoundaryMethod(UFormulaPosition);
 end;
 
 procedure TSutraBoundary.CreateFormulaObjects;
 begin
-  FPestBoundaryValueFormula := CreateFormulaObjectNodes(dso3D);
   FPestAssociatedValueFormula := CreateFormulaObjectNodes(dso3D);
+  FPestBoundaryValueFormula := CreateFormulaObjectNodes(dso3D);
 end;
 
 procedure TSutraBoundary.CreateObservers;
 begin
   if ScreenObject <> nil then
   begin
-    FObserverList.Add(PestBoundaryValueObserver);
     FObserverList.Add(PestAssociatedValueObserver);
+    FObserverList.Add(nil);
+    FObserverList.Add(PestBoundaryValueObserver);
   end;
+end;
+
+class function TSutraBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    PQFormulaPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UsedFormulaPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UFormulaPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
+end;
+
+destructor TSutraBoundary.Destroy;
+begin
+  inherited;
+  PestBoundaryValueFormula := '';
+  PestAssociatedValueFormula := '';
 end;
 
 function TSutraBoundary.GetPestAssociatedValueFormula: string;
 begin
-  result := '';
+  Result := FPestAssociatedValueFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UFormulaPosition);
+  end;
 end;
 
 function TSutraBoundary.GetPestAssociatedValueObserver: TObserver;
 begin
+  if FPestAssociatedValueObserver = nil then
+  begin
+    CreateObserver('PestAssociatedValue_', FPestAssociatedValueObserver, nil);
+    FPestAssociatedValueObserver.OnUpToDateSet := UChangeHandler;
+  end;
+  result := FPestAssociatedValueObserver;
+end;
 
+function TSutraBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    UFormulaPosition:
+      begin
+        result := PestAssociatedValueFormula;
+      end;
+    UsedFormulaPosition:
+      begin
+        result := ''
+      end;
+    PQFormulaPosition:
+      begin
+        result := PestBoundaryValueFormula
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSutraBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    UFormulaPosition:
+      begin
+        result := PestAssociatedValueMethod;
+      end;
+    UsedFormulaPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    PQFormulaPosition:
+      begin
+        result := PestBoundaryValueMethod
+      end;
+    else
+      begin
+        Assert(False);
+      end;
+  end;
 end;
 
 function TSutraBoundary.GetPestBoundaryValueFormula: string;
 begin
-  result := '';
+  Result := FPestBoundaryValueFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(PQFormulaPosition);
+  end;
 end;
 
 function TSutraBoundary.GetPestBoundaryValueObserver: TObserver;
 begin
+  if FPestBoundaryValueObserver = nil then
+  begin
+    CreateObserver('PestBoundaryValue_', FPestBoundaryValueObserver, nil);
+    FPestBoundaryValueObserver.OnUpToDateSet := PQChangeHandler;
+  end;
+  result := FPestBoundaryValueObserver;
+end;
 
+function TSutraBoundary.GetUsedObserver: TObserver;
+begin
+  if FUsedObserver = nil then
+  begin
+    CreateObserver('PestSutraBundary_Used_', FUsedObserver, nil);
+//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
+  end;
+  result := FUsedObserver;
 end;
 
 procedure TSutraBoundary.Loaded;
@@ -1905,7 +2096,7 @@ end;
 
 procedure TSutraBoundary.SetPestAssociatedValueFormula(const Value: string);
 begin
-
+  UpdateFormulaNodes(Value, PQFormulaPosition, FPestBoundaryValueFormula);
 end;
 
 procedure TSutraBoundary.SetPestAssociatedValueMethod(
@@ -1914,9 +2105,57 @@ begin
   SetPestParamMethod(FPestAssociatedValueMethod, Value);
 end;
 
+procedure TSutraBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
+  const Value: string);
+begin
+  case FormulaIndex of
+    UFormulaPosition:
+      begin
+        PestAssociatedValueFormula := Value;
+      end;
+    UsedFormulaPosition:
+      begin
+        inherited;
+      end;
+    PQFormulaPosition:
+      begin
+        PestBoundaryValueFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSutraBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    UFormulaPosition:
+      begin
+        PestAssociatedValueMethod := Value;
+      end;
+    UsedFormulaPosition:
+      begin
+        inherited;
+      end;
+    PQFormulaPosition:
+      begin
+        PestBoundaryValueMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 procedure TSutraBoundary.SetPestBoundaryValueFormula(const Value: string);
 begin
-
+  UpdateFormulaNodes(Value, UFormulaPosition, FPestAssociatedValueFormula);
 end;
 
 procedure TSutraBoundary.SetPestBoundaryValueMethod(

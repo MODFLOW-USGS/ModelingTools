@@ -154,6 +154,8 @@ type
     procedure SetLakeInteractionType(
       const Value: TGeneralizedFlowInteractionType);
   protected
+    procedure PQChangeHandler(Sender: TObject); override;
+    procedure UChangeHandler(Sender: TObject); override;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -753,6 +755,12 @@ begin
   end;
 end;
 
+procedure TSutraGeneralFlowBoundary.PQChangeHandler(Sender: TObject);
+begin
+  inherited;
+
+end;
+
 procedure TSutraGeneralFlowBoundary.SetLakeInteractionType(
   const Value: TGeneralizedFlowInteractionType);
 begin
@@ -761,6 +769,12 @@ begin
     FLakeInteractionType := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TSutraGeneralFlowBoundary.UChangeHandler(Sender: TObject);
+begin
+  inherited;
+
 end;
 
 { TSutraGeneralFlowTimeLink }

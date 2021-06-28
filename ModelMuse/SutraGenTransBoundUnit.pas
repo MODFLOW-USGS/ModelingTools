@@ -118,6 +118,8 @@ type
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
+    procedure PQChangeHandler(Sender: TObject); override;
+    procedure UChangeHandler(Sender: TObject); override;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -571,6 +573,12 @@ begin
   Assert(False);
 end;
 
+procedure TSutraGeneralTransportBoundary.PQChangeHandler(Sender: TObject);
+begin
+  inherited;
+
+end;
+
 procedure TSutraGeneralTransportBoundary.SetLakeInteractionType(
   const Value: TGeneralizedTransportInteractionType);
 begin
@@ -579,6 +587,12 @@ begin
     FLakeInteractionType := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TSutraGeneralTransportBoundary.UChangeHandler(Sender: TObject);
+begin
+  inherited;
+
 end;
 
 { TSutraGeneralFlowTimeLink }

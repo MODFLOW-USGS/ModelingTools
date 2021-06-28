@@ -10303,12 +10303,14 @@ const
 //                input files in MODFLOW 6 models.
 //    '4.3.0.54' Bug fix: Fixed display of MODPATH output in MODFLOW DISV models
 //                in which the cross section angle is not zero.
-
-//               Bug fix: Fixed bug in resetting velocity vectors to not used.
+//    '4.3.0.55' Bug fix: Fixed bug in resetting velocity vectors to not used.
+//               Bug fix: Fixed bug that could cause MODFLOW stress period
+//                starting and ending times to be saved with small rounding
+//                errors.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.54';
+  IIModelVersion = '4.3.0.55';
 
 function IModelVersion: string;
 begin
@@ -20104,6 +20106,8 @@ var
   FootprintWell: TFootprintWell;
   Withdrawals: TDataArray;
   Position: Integer;
+  StressPeriodIndex: Integer;
+  StressPeriod: TModflowStressPeriod;
 begin
   RenameOldVerticalLeakance;
   FixSpecifyingGridByThreeDObjects;
@@ -20509,6 +20513,16 @@ begin
   begin
     PestProperties.ArrayPilotPointSelection := appsRectangular;
     PestProperties.PilotPointBuffer := PestProperties.PilotPointSpacing * Sqrt(2);
+  end;
+
+  // prevent rounding errors in saved files from being used.
+  for StressPeriodIndex := 0 to ModflowStressPeriods.Count - 1 do
+  begin
+    StressPeriod := ModflowStressPeriods[StressPeriodIndex];
+    StressPeriod.StartTime := FortranStrToFloat(FortranFloatToStr(
+      StressPeriod.StartTime));
+    StressPeriod.EndTime := FortranStrToFloat(FortranFloatToStr(
+      StressPeriod.EndTime));
   end;
 
 end;
