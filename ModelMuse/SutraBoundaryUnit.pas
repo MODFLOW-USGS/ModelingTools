@@ -416,6 +416,7 @@ type
       override;
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
+    function BoundaryObserverPrefix: string; override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -453,6 +454,7 @@ type
       override;
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
+    function BoundaryObserverPrefix: string; override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -491,6 +493,7 @@ type
       override;
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
+    function BoundaryObserverPrefix: string; override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
@@ -528,10 +531,16 @@ type
       override;
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
+    function BoundaryObserverPrefix: string; override;
   public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
   end;
+
+const
+  UFormulaPosition = 0;
+  UsedFormulaPosition = 1;
+  PQFormulaPosition = 2;
 
 implementation
 
@@ -539,13 +548,9 @@ uses
   frmGoPhastUnit, PhastModelUnit, frmProgressUnit,
   ScreenObjectUnit, SutraMeshUnit, frmFormulaErrorsUnit;
 
-const
-  UFormulaPosition = 0;
-  UsedFormulaPosition = 1;
-  PQFormulaPosition = 2;
-
 //  FractionRechargeDivertedPosition = 0;
 
+const
   InitialStagePosition = 0;
   InitialConcentrationOrTemperaturePosition = 1;
   FractionRechargeDivertedPosition = 2;
@@ -906,16 +911,15 @@ procedure TCustomSutraBoundaryItem.AssignObserverEvents(
   Collection: TCollection);
 var
   ParentCollection: TCustomSutraBoundaryCollection;
-  PumpingRateObserver: TObserver;
+  AssociatedValueObserver: TObserver;
   UsedObserver: TObserver;
 begin
   ParentCollection := Collection as TCustomSutraBoundaryCollection;
-  PumpingRateObserver := FObserverList[UFormulaPosition];
-  PumpingRateObserver.OnUpToDateSet := ParentCollection.UChangeHandler;
+  AssociatedValueObserver := FObserverList[UFormulaPosition];
+  AssociatedValueObserver.OnUpToDateSet := ParentCollection.UChangeHandler;
 
   UsedObserver := FObserverList[UsedFormulaPosition];
   UsedObserver.OnUpToDateSet := ParentCollection.UsedChangeHandler;
-
 end;
 
 function TCustomSutraBoundaryItem.BoundaryFormulaCount: integer;
@@ -1263,6 +1267,11 @@ begin
   result := TSutraFluidBoundaryCollection;
 end;
 
+function TSutraFluidBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestFluidSource_'
+end;
+
 procedure TSutraFluidBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
@@ -1339,6 +1348,11 @@ begin
   result := TSutraMassEnergySourceSinkCollection;
 end;
 
+function TSutraMassEnergySourceSinkBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestMassEnergy_'
+end;
+
 procedure TSutraMassEnergySourceSinkBoundary.GetCellValues(ValueTimeList: TList;
   ParamList: TStringList; AModel: TBaseModel; Writer: TObject);
 begin
@@ -1391,6 +1405,11 @@ end;
 class function TSutraSpecifiedPressureBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TSutraSpecifiedPressureCollection;
+end;
+
+function TSutraSpecifiedPressureBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestSpecifiedPressure_';
 end;
 
 procedure TSutraSpecifiedPressureBoundary.GetCellValues(ValueTimeList: TList;
@@ -1466,6 +1485,11 @@ end;
 class function TSutraSpecifiedConcTempBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TSutraSpecifiedConcTempCollection;
+end;
+
+function TSutraSpecifiedConcTempBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestSpecifiedU_';
 end;
 
 procedure TSutraSpecifiedConcTempBoundary.GetCellValues(ValueTimeList: TList;
@@ -1919,7 +1943,7 @@ begin
   FUseBCTime := False;
 
   CreateFormulaObjects;
-//  CreateBoundaryObserver;
+  CreateBoundaryObserver;
   CreateObservers;
 
   PestBoundaryValueFormula := '';
@@ -1948,7 +1972,7 @@ class function TSutraBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
-    PQFormulaPosition:
+    UFormulaPosition:
       begin
         result := ppmMultiply;
       end;
@@ -1956,12 +1980,13 @@ begin
       begin
         result := ppmMultiply;
       end;
-    UFormulaPosition:
+    PQFormulaPosition:
       begin
         result := ppmMultiply;
       end;
     else
       begin
+        result := inherited;
         Assert(False);
       end;
   end;
@@ -1969,9 +1994,9 @@ end;
 
 destructor TSutraBoundary.Destroy;
 begin
-  inherited;
   PestBoundaryValueFormula := '';
   PestAssociatedValueFormula := '';
+  inherited;
 end;
 
 function TSutraBoundary.GetPestAssociatedValueFormula: string;
@@ -2033,6 +2058,7 @@ begin
       end;
     else
       begin
+        result := inherited;
         Assert(False);
       end;
   end;
@@ -2096,7 +2122,7 @@ end;
 
 procedure TSutraBoundary.SetPestAssociatedValueFormula(const Value: string);
 begin
-  UpdateFormulaNodes(Value, PQFormulaPosition, FPestBoundaryValueFormula);
+  UpdateFormulaNodes(Value, UFormulaPosition, FPestAssociatedValueFormula);
 end;
 
 procedure TSutraBoundary.SetPestAssociatedValueMethod(
@@ -2155,7 +2181,7 @@ end;
 
 procedure TSutraBoundary.SetPestBoundaryValueFormula(const Value: string);
 begin
-  UpdateFormulaNodes(Value, UFormulaPosition, FPestAssociatedValueFormula);
+  UpdateFormulaNodes(Value, PQFormulaPosition, FPestBoundaryValueFormula);
 end;
 
 procedure TSutraBoundary.SetPestBoundaryValueMethod(

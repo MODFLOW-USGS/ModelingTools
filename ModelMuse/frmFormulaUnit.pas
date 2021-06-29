@@ -1250,6 +1250,10 @@ begin
       MessageDlg(E.Message + SLineBreak + StrYouCanCheckTheDo, mtError, [mbOK], 0);
     end;
   end;
+  if FResultSet then
+  begin
+    ModalResult := mrOK
+  end;
   if tvItems.Selected <> nil then
   begin
     PriorSelectedText := tvItems.Selected.Text;

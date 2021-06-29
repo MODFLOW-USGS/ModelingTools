@@ -244,10 +244,6 @@ object frameCustomColor: TframeCustomColor
     object tabFilters: TTabSheet
       Caption = 'Filters'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         562
         400)
@@ -356,6 +352,7 @@ object frameCustomColor: TframeCustomColor
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -408,10 +405,6 @@ object frameCustomColor: TframeCustomColor
       Caption = 'Legend'
       ImageIndex = 2
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object imLegend: TImage
         Left = 206
         Top = 0
@@ -510,6 +503,7 @@ object frameCustomColor: TframeCustomColor
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

@@ -4,7 +4,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
   inherited pnlBottom: TPanel
     Top = 224
     Height = 128
-    ExplicitTop = 229
+    ExplicitTop = 224
     ExplicitHeight = 128
     DesignSize = (
       320
@@ -73,12 +73,13 @@ inherited frameSutraBoundary: TframeSutraBoundary
     Top = 81
     Height = 143
     ExplicitTop = 81
-    ExplicitHeight = 146
+    ExplicitHeight = 143
     inherited rdgSutraFeature: TRbwDataGrid4
       Top = 51
       Height = 91
       TabOrder = 1
       OnMouseUp = rdgSutraFeatureMouseUp
+      OnSelectCell = rdgSutraFeatureSelectCell
       OnSetEditText = rdgSutraFeatureSetEditText
       OnBeforeDrawCell = rdgSutraFeatureBeforeDrawCell
       OnColSize = rdgSutraFeatureColSize
@@ -86,6 +87,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -109,6 +111,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -132,6 +135,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -155,6 +159,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -178,7 +183,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
         end>
       OnEndUpdate = rdgSutraFeatureEndUpdate
       ExplicitTop = 51
-      ExplicitHeight = 94
+      ExplicitHeight = 91
     end
     object pnlEditGrid: TPanel
       Left = 1

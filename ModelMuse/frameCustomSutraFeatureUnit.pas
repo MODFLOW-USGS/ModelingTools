@@ -22,13 +22,23 @@ type
     pnlCaption: TPanel;
     comboSchedule: TComboBox;
     procedure comboScheduleChange(Sender: TObject);
+    procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   public
     procedure btnInsertClick(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
     procedure seNumberOfTimesChange(Sender: TObject);
   private
     FDeleting: Boolean;
-//    FOnActivate: TActivateEvent;
+    FOnCheckPestCell: TSelectCellEvent;
+    function GetPestMethod(ACol: Integer): TPestParamMethod;
+    function GetPestMethodAssigned(ACol: Integer): Boolean;
+    function GetPestModifier(ACol: Integer): string;
+    function GetPestModifierAssigned(ACol: Integer): Boolean;
+    procedure SetPestMethod(ACol: Integer; const Value: TPestParamMethod);
+    procedure SetPestMethodAssigned(ACol: Integer; const Value: Boolean);
+    procedure SetPestModifier(ACol: Integer; const Value: string);
+    procedure SetPestModifierAssigned(ACol: Integer; const Value: Boolean);
     { Private declarations }
   protected
     FGettingData: Boolean;
@@ -37,11 +47,20 @@ type
     procedure ClearData;
     function UsedColumn: Integer; virtual; abstract;
     procedure ClearBoundaries;
+    Property PestMethod[ACol: Integer]: TPestParamMethod
+      read GetPestMethod write SetPestMethod;
+    Property PestModifier[ACol: Integer]: string
+      read GetPestModifier write SetPestModifier;
+    Property PestMethodAssigned[ACol: Integer]: Boolean
+      read GetPestMethodAssigned write SetPestMethodAssigned;
+    Property PestModifierAssigned[ACol: Integer]: Boolean
+      read GetPestModifierAssigned write SetPestModifierAssigned;
   public
     procedure GetData(ScreenObjects: TScreenObjectEditCollection); virtual;
     procedure SetData(ScreenObjects: TScreenObjectEditCollection;
       SetAll, ClearAll: Boolean); virtual; abstract;
-//    property OnActivate: TActivateEvent read FOnActivate write FOnActivate;
+    property OnCheckPestCell: TSelectCellEvent read FOnCheckPestCell
+      write FOnCheckPestCell;
     { Public declarations }
   end;
 
@@ -52,15 +71,19 @@ uses
 
 resourcestring
   StrCustom = 'Custom';
+  StrNone = 'none';
 
 {$R *.dfm}
+
+var
+  FPestMethods: TStringList;
 
 { TframeCustomSutraFeature }
 
 procedure TframeCustomSutraTimeVaryingFeature.btnDeleteClick(Sender: TObject);
 begin
-  if (rdgSutraFeature.RowCount > 2)
-    and (rdgSutraFeature.Row> 0) then
+  if (rdgSutraFeature.RowCount > 2+PestRowOffset)
+    and (rdgSutraFeature.Row > 0+PestRowOffset) then
   begin
     rdgSutraFeature.DeleteRow(rdgSutraFeature.Row);
   end;
@@ -69,7 +92,7 @@ end;
 
 procedure TframeCustomSutraTimeVaryingFeature.btnInsertClick(Sender: TObject);
 begin
-  if (rdgSutraFeature.SelectedRow <= 0)
+  if (rdgSutraFeature.SelectedRow <= 0+ PestRowOffset)
     or (rdgSutraFeature.SelectedRow >= rdgSutraFeature.RowCount) then
   begin
     Beep;
@@ -118,6 +141,88 @@ begin
   end;
 end;
 
+function TframeCustomSutraTimeVaryingFeature.GetPestMethod(
+  ACol: Integer): TPestParamMethod;
+var
+  ItemIndex: Integer;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := ppmMultiply;
+    Assert(False);
+    Exit;
+  end;
+  ItemIndex := FPestMethods.IndexOf(
+    rdgSutraFeature.Cells[ACol,PestMethodRow]);
+  if ItemIndex >= 0 then
+  begin
+    result := TPestParamMethod(ItemIndex);
+  end
+  else
+  begin
+    result := ppmMultiply;
+  end;
+
+end;
+
+function TframeCustomSutraTimeVaryingFeature.GetPestMethodAssigned(
+  ACol: Integer): Boolean;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := False;
+    Assert(False);
+    Exit;
+  end;
+  result := FPestMethods.IndexOf(rdgSutraFeature.Cells[ACol,PestMethodRow]) >= 0;
+end;
+
+function TframeCustomSutraTimeVaryingFeature.GetPestModifier(
+  ACol: Integer): string;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := '';
+    Assert(False);
+    Exit;
+  end;
+  result := rdgSutraFeature.Cells[ACol, PestModifierRow];
+  if result = strNone then
+  begin
+    result := '';
+  end;
+end;
+
+function TframeCustomSutraTimeVaryingFeature.GetPestModifierAssigned(
+  ACol: Integer): Boolean;
+begin
+  if PestRowOffset = 0 then
+  begin
+    result := False;
+    Assert(False);
+    Exit;
+  end;
+  result := rdgSutraFeature.Cells[ACol, PestModifierRow] <> '';
+end;
+
+procedure TframeCustomSutraTimeVaryingFeature.rdgSutraFeatureSelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  if Assigned(OnCheckPestCell) then
+  begin
+    OnCheckPestCell(Sender, ACol, ARow, CanSelect);
+  end
+  else
+  begin
+    if ARow <= PestRowOffset then
+    begin
+      CanSelect := False;
+    end;
+  end;
+
+end;
+
 procedure TframeCustomSutraTimeVaryingFeature.seNumberOfTimesChange(Sender: TObject);
 var
   ColIndex: Integer;
@@ -126,15 +231,15 @@ begin
   try
     if seNumberOfTimes.AsInteger = 0 then
     begin
-      rdgSutraFeature.RowCount := 2;
+      rdgSutraFeature.RowCount := 2 + PestRowOffset;
       for ColIndex := 0 to rdgSutraFeature.ColCount - 1 do
       begin
-        rdgSutraFeature.Cells[ColIndex,1] := '';
+        rdgSutraFeature.Cells[ColIndex,1+PestRowOffset] := '';
       end;
     end
     else
     begin
-      rdgSutraFeature.RowCount := seNumberOfTimes.AsInteger + 1;
+      rdgSutraFeature.RowCount := seNumberOfTimes.AsInteger + 1+PestRowOffset;
     end;
     btnDelete.Enabled := seNumberOfTimes.AsInteger >= 1;
     rdgSutraFeature.Invalidate;
@@ -153,6 +258,61 @@ begin
     begin
       OnActivate(self, FCheckState);
     end;
+  end;
+end;
+
+procedure TframeCustomSutraTimeVaryingFeature.SetPestMethod(ACol: Integer;
+  const Value: TPestParamMethod);
+begin
+  if PestMethodRow = 0 then
+  begin
+    Exit;
+  end;
+  rdgSutraFeature.Cells[ACol,PestMethodRow] := FPestMethods[Ord(Value)];
+end;
+
+procedure TframeCustomSutraTimeVaryingFeature.SetPestMethodAssigned(
+  ACol: Integer; const Value: Boolean);
+begin
+  if PestMethodRow = 0 then
+  begin
+    Exit;
+  end;
+  if not Value then
+  begin
+    rdgSutraFeature.Cells[ACol,PestMethodRow] := '';
+  end;
+end;
+
+procedure TframeCustomSutraTimeVaryingFeature.SetPestModifier(ACol: Integer;
+  const Value: string);
+begin
+  if PestRowOffset = 0 then
+  begin
+    Assert(False);
+    Exit;
+  end;
+  if Value = '' then
+  begin
+    rdgSutraFeature.Cells[ACol, PestModifierRow] := strNone;
+  end
+  else
+  begin
+    rdgSutraFeature.Cells[ACol, PestModifierRow] := Value;
+  end;
+end;
+
+procedure TframeCustomSutraTimeVaryingFeature.SetPestModifierAssigned(
+  ACol: Integer; const Value: Boolean);
+begin
+  if PestRowOffset = 0 then
+  begin
+    Assert(False);
+    Exit;
+  end;
+  if not Value then
+  begin
+    rdgSutraFeature.Cells[ACol, PestModifierRow] := '';
   end;
 end;
 
@@ -184,12 +344,12 @@ var
   ColIndex: Integer;
 begin
   seNumberOfTimes.AsInteger := 0;
-  rdgSutraFeature.RowCount := 2;
+  rdgSutraFeature.RowCount := 2+PestRowOffset;
   for ColIndex := 0 to rdgSutraFeature.ColCount - 1 do
   begin
-    rdgSutraFeature.Cells[ColIndex,1] := '';
+    rdgSutraFeature.Cells[ColIndex,1+PestRowOffset] := '';
   end;
-  rdgSutraFeature.Checked[UsedColumn,1] := False;
+  rdgSutraFeature.Checked[UsedColumn,1+PestRowOffset] := False;
 end;
 
 procedure TframeCustomSutraTimeVaryingFeature.ClearData;
@@ -199,7 +359,7 @@ var
 begin
   rdgSutraFeature.BeginUpdate;
   try
-    for RowIndex := rdgSutraFeature.FixedRows to rdgSutraFeature.RowCount - 1 do
+    for RowIndex := rdgSutraFeature.FixedRows+PestRowOffset to rdgSutraFeature.RowCount - 1 do
     begin
       rdgSutraFeature.Checked[UsedColumn, RowIndex] := False;
       for ColIndex := rdgSutraFeature.FixedCols to rdgSutraFeature.
@@ -208,7 +368,7 @@ begin
         rdgSutraFeature.Cells[ColIndex, RowIndex] := '';
       end;
     end;
-    rdgSutraFeature.RowCount := 2;
+    rdgSutraFeature.RowCount := 2+PestRowOffset;
     seNumberOfTimes.AsInteger := 0;
     comboSchedule.ItemIndex := 0;
   finally
@@ -216,5 +376,13 @@ begin
   end;
 
 end;
+
+initialization
+  FPestMethods := TStringList.Create;
+  FPestMethods.Add(StrMultiply);
+  FPestMethods.Add(StrAdd);
+
+finalization
+ FPestMethods.Free;
 
 end.

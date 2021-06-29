@@ -53,7 +53,6 @@ type
     procedure UpdateColWidths;
     { Private declarations }
   protected
-//    procedure ClearBoundaries;
     function UsedColumn: Integer; override;
   public
     property BoundaryType: TSutraBoundaryType read FBoundaryType write SetBoundaryType;
@@ -114,6 +113,12 @@ begin
   try
     inherited;
     ClearData;
+
+    {$IFDEF PEST}
+    rdgSutraFeature.Cells[Ord(sbgtTime), PestModifierRow] := StrPestModifier;
+    rdgSutraFeature.Cells[Ord(sbgtTime), PestMethodRow] := StrModificationMethod;
+    {$ENDIF}
+
     cbBCTime.Checked := False;
 
 
@@ -176,10 +181,6 @@ begin
       GetScheduleName(BoundaryList);
       GetLakeEffect(BoundaryList);
       GetBoundaryValues(BoundaryList);
-  //    comboScheduleChange(nil);
-  //    CheckSchedule(BoundaryList);
-
-
     finally
       BoundaryList.Free;
       FGettingData := False;
@@ -192,23 +193,19 @@ end;
 
 procedure TframeSutraBoundary.GetLakeEffect(BoundaryList: TSutraBoundaryList);
 var
-//  ScheduleName: AnsiString;
   Same: Boolean;
   FirstBoundary: TSutraBoundary;
-//  ABoundColl: TCustomSutraBoundaryCollection;
-//  BoundColl: TCustomSutraBoundaryCollection;
   Index: Integer;
   ABoundary: TSutraBoundary;
   LakeInteraction: TLakeBoundaryInteraction;
 begin
   FirstBoundary := BoundaryList[0];
-//  BoundColl := FirstBoundary.Values as TCustomSutraBoundaryCollection;
+
   LakeInteraction := FirstBoundary.LakeInteraction;
   Same := True;
   for Index := 1 to BoundaryList.Count - 1 do
   begin
     ABoundary := BoundaryList[Index];
-//    ABoundColl := ABoundary.Values as TCustomSutraBoundaryCollection;
     Same := LakeInteraction = ABoundary.LakeInteraction;
     if not Same then
     begin
@@ -260,7 +257,6 @@ var
   SutraBoundaries: TSutraBoundaries;
   ABoundary: TSutraBoundary;
   LocalScreenObjects: TList<TScreenObject>;
-//  BoundaryName: string;
   BoundValues: TCustomSutraBoundaryCollection;
 begin
   inherited;
@@ -306,6 +302,39 @@ begin
     begin
       ABoundary := BoundaryList[index];
       BoundValues := ABoundary.Values as TCustomSutraBoundaryCollection;
+
+      case BoundaryType of
+        sbtFluidSource, sbtSpecPress:
+          begin
+            if PestMethodAssigned[Ord(sbgtVariable1)] then
+            begin
+              ABoundary.PestBoundaryValueMethod := PestMethod[Ord(sbgtVariable1)]
+            end;
+            if PestMethodAssigned[Ord(sbgtVariable2)] then
+            begin
+              ABoundary.PestAssociatedValueMethod := PestMethod[Ord(sbgtVariable2)]
+            end;
+            if PestModifierAssigned[Ord(sbgtVariable1)] then
+            begin
+              ABoundary.PestBoundaryValueFormula := PestModifier[Ord(sbgtVariable1)]
+            end;
+            if PestModifierAssigned[Ord(sbgtVariable2)] then
+            begin
+              ABoundary.PestAssociatedValueFormula := PestModifier[Ord(sbgtVariable2)]
+            end;
+          end;
+        sbtMassEnergySource, sbtSpecConcTemp:
+          begin
+            if PestMethodAssigned[Ord(sbgtVariable1)] then
+            begin
+              ABoundary.PestAssociatedValueMethod := PestMethod[Ord(sbgtVariable1)]
+            end;
+            if PestModifierAssigned[Ord(sbgtVariable1)] then
+            begin
+              ABoundary.PestAssociatedValueFormula := PestModifier[Ord(sbgtVariable1)]
+            end;
+          end;
+      end;
 
       if comboSchedule.ItemIndex > 0 then
       begin
@@ -368,7 +397,7 @@ var
   TestText: string;
 begin
   result := True;
-  if (ACol = Ord(sbgtTime)) and (ARow > 0) then
+  if (ACol = Ord(sbgtTime)) and (ARow > 0+PestRowOffset) then
   begin
     TestText := rdgSutraFeature.Cells[ACol, ARow];
     if TryStrToFloat(TestText, TestValue) then
@@ -415,14 +444,14 @@ begin
     ItemIndex := 0;
     for RowIndex := 1 to seNumberOfTimes.AsInteger do
     begin
-      if TryStrToFloat(rdgSutraFeature.Cells[Ord(sbgtTime), RowIndex], ATime) then
+      if TryStrToFloat(rdgSutraFeature.Cells[Ord(sbgtTime), RowIndex+PestRowOffset], ATime) then
       begin
         OK := False;
         StartIndex := Ord(sbgtUsed);
 
         for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
         begin
-          OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
+          OK := rdgSutraFeature.Cells[ColIndex, RowIndex+PestRowOffset] <> '';
           if not OK then
           begin
             Break;
@@ -461,17 +490,17 @@ begin
             frmErrorsAndWarnings.Show;
           end;
           BoundItem.StartTime := ATime;
-          BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(sbgtUsed), RowIndex];
+          BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(sbgtUsed), RowIndex+PestRowOffset];
 
           if BoundItem is TCustomSutraAssociatedBoundaryItem then
           begin
             AssocItem := TCustomSutraAssociatedBoundaryItem(BoundItem);
-            AssocItem.PQFormula := rdgSutraFeature.Cells[2, RowIndex];
-            AssocItem.UFormula := rdgSutraFeature.Cells[3, RowIndex];
+            AssocItem.PQFormula := rdgSutraFeature.Cells[2, RowIndex+PestRowOffset];
+            AssocItem.UFormula := rdgSutraFeature.Cells[3, RowIndex+PestRowOffset];
           end
           else
           begin
-            BoundItem.UFormula := rdgSutraFeature.Cells[2, RowIndex];
+            BoundItem.UFormula := rdgSutraFeature.Cells[2, RowIndex+PestRowOffset];
           end;
           Inc(ItemIndex);
         end;
@@ -495,8 +524,148 @@ var
   ABoundary: TSutraBoundary;
   ASchedule: TSutraTimeSchedule;
   BoundaryIndex: Integer;
+  FirstMethod: TPestParamMethod;
+  FirstModifier: string;
 begin
   FirstBoundary := BoundaryList[0];
+
+  {$IFDEF PEST}
+  if (FirstBoundary is TSutraFluidBoundary)
+    or (FirstBoundary is TSutraSpecifiedPressureBoundary) then
+  begin
+    PestMethod[Ord(sbgtVariable1)] :=
+      TSutraBoundary.DefaultBoundaryMethod(PQFormulaPosition);
+
+    FirstMethod := FirstBoundary.PestBoundaryValueMethod;
+    Same := True;
+    for Index := 1 to BoundaryList.Count - 1 do
+    begin
+      ABoundary := BoundaryList[Index];
+      Same := FirstMethod = ABoundary.PestBoundaryValueMethod;
+      if not Same then
+      begin
+        Break;
+      end;
+    end;
+    if Same then
+    begin
+      PestMethod[Ord(sbgtVariable1)] := FirstMethod;
+    end
+    else
+    begin
+      PestMethodAssigned[Ord(sbgtVariable1)] := False;
+    end;
+
+    PestMethod[Ord(sbgtVariable2)] :=
+      TSutraBoundary.DefaultBoundaryMethod(UFormulaPosition);
+
+    FirstMethod := FirstBoundary.PestAssociatedValueMethod;
+    Same := True;
+    for Index := 1 to BoundaryList.Count - 1 do
+    begin
+      ABoundary := BoundaryList[Index];
+      Same := FirstMethod = ABoundary.PestAssociatedValueMethod;
+      if not Same then
+      begin
+        Break;
+      end;
+    end;
+    if Same then
+    begin
+      PestMethod[Ord(sbgtVariable2)] := FirstMethod;
+    end
+    else
+    begin
+      PestMethodAssigned[Ord(sbgtVariable2)] := False;
+    end;
+
+    FirstModifier := FirstBoundary.PestBoundaryValueFormula;
+    Same := True;
+    for Index := 1 to BoundaryList.Count - 1 do
+    begin
+      ABoundary := BoundaryList[Index];
+      Same := FirstModifier = ABoundary.PestBoundaryValueFormula;
+      if not Same then
+      begin
+        Break;
+      end;
+    end;
+    if Same then
+    begin
+      PestModifier[Ord(sbgtVariable1)] := FirstModifier;
+    end
+    else
+    begin
+      PestMethodAssigned[Ord(sbgtVariable1)] := False;
+    end;
+
+    FirstModifier := FirstBoundary.PestAssociatedValueFormula;
+    Same := True;
+    for Index := 1 to BoundaryList.Count - 1 do
+    begin
+      ABoundary := BoundaryList[Index];
+      Same := FirstModifier = ABoundary.PestAssociatedValueFormula;
+      if not Same then
+      begin
+        Break;
+      end;
+    end;
+    if Same then
+    begin
+      PestModifier[Ord(sbgtVariable2)] := FirstModifier;
+    end
+    else
+    begin
+      PestMethodAssigned[Ord(sbgtVariable2)] := False;
+    end;
+  end
+  else
+  begin
+    PestMethod[Ord(sbgtVariable1)] :=
+      TSutraBoundary.DefaultBoundaryMethod(UFormulaPosition);
+
+    FirstMethod := FirstBoundary.PestAssociatedValueMethod;
+    Same := True;
+    for Index := 1 to BoundaryList.Count - 1 do
+    begin
+      ABoundary := BoundaryList[Index];
+      Same := FirstMethod = ABoundary.PestAssociatedValueMethod;
+      if not Same then
+      begin
+        Break;
+      end;
+    end;
+    if Same then
+    begin
+      PestMethod[Ord(sbgtVariable1)] := FirstMethod;
+    end
+    else
+    begin
+      PestMethodAssigned[Ord(sbgtVariable1)] := False;
+    end;
+
+    FirstModifier := FirstBoundary.PestAssociatedValueFormula;
+    Same := True;
+    for Index := 1 to BoundaryList.Count - 1 do
+    begin
+      ABoundary := BoundaryList[Index];
+      Same := FirstModifier = ABoundary.PestAssociatedValueFormula;
+      if not Same then
+      begin
+        Break;
+      end;
+    end;
+    if Same then
+    begin
+      PestModifier[Ord(sbgtVariable1)] := FirstModifier;
+    end
+    else
+    begin
+      PestMethodAssigned[Ord(sbgtVariable1)] := False;
+    end;
+  end;
+  {$ENDIF}
+
   cbBCTime.Checked := FirstBoundary.UseBCTime;
   BoundColl := FirstBoundary.Values as TCustomSutraBoundaryCollection;
   Same := True;
@@ -519,7 +688,6 @@ begin
 
       AdjustBoundaryValues(ASchedule, BoundColl);
     end;
-//    CheckSchedule(BoundaryList);
     DisplayBoundaries(BoundColl);
   end
   else
@@ -611,7 +779,7 @@ begin
         PickList.Add(FloatToStr(TimeList[TimeIndex]));
       end;
 
-      for RowIndex := 1 to rdgSutraFeature.RowCount - 1 do
+      for RowIndex := 1+PestRowOffset to rdgSutraFeature.RowCount - 1 do
       begin
         if TryStrToFloat(rdgSutraFeature.Cells[0,RowIndex], AValue) then
         begin
@@ -622,7 +790,7 @@ begin
           end;
         end;
       end;
-      for RowIndex := rdgSutraFeature.RowCount - 2 downto 1 do
+      for RowIndex := rdgSutraFeature.RowCount - 2 downto 1+PestRowOffset do
       begin
         if rdgSutraFeature.Cells[0,RowIndex+1] = rdgSutraFeature.Cells[0,RowIndex] then
         begin
@@ -631,7 +799,7 @@ begin
       end;
       if comboSchedule.ItemIndex <> 1 then
       begin
-        RowIndex := 1;
+        RowIndex := 1+PestRowOffset;
         While RowIndex < rdgSutraFeature.RowCount do
         begin
           if TryStrToFloat(rdgSutraFeature.Cells[0,RowIndex], AValue) then
@@ -651,7 +819,7 @@ begin
           end
           else
           begin
-            if RowIndex-1 >= TimeList.Count then
+            if RowIndex-1-PestRowOffset >= TimeList.Count then
             begin
               Break;
             end;
@@ -661,7 +829,7 @@ begin
           end;
           Inc(RowIndex);
         end;
-        while RowIndex-1 < TimeList.Count do
+        while RowIndex-1-PestRowOffset < TimeList.Count do
         begin
           rdgSutraFeature.RowCount := rdgSutraFeature.RowCount+1;
           seNumberOfTimes.AsInteger := seNumberOfTimes.AsInteger + 1;
@@ -673,56 +841,8 @@ begin
     finally
       TimeList.Free;
       rdgSutraFeature.EndUpdate;
-//      FSettingTimes := False;
     end;
     rdgSutraFeature.Columns[0].LimitToList := True;
-
-//    if (seNumberOfTimes.AsInteger > 0) then
-//    begin
-//      BoundValues := nil;
-//      try
-//        case BoundaryType of
-//          sbtFluidSource: BoundValues := TSutraFluidBoundaryCollection.Create(nil, nil, nil);
-//          sbtMassEnergySource: BoundValues := TSutraMassEnergySourceSinkCollection.Create(nil, nil, nil);
-//          sbtSpecPress: BoundValues := TSutraSpecifiedPressureCollection.Create(nil, nil, nil);
-//          sbtSpecConcTemp: BoundValues := TSutraSpecifiedConcTempCollection.Create(nil, nil, nil);
-//        end;
-//        SetBoundaryValues(BoundValues);
-//
-//        if Length(TimeValues) = BoundValues.Count then
-//        begin
-//          for TimeIndex := 0 to BoundValues.Count - 1 do
-//          begin
-//            BoundValues[TimeIndex].StartTime := TimeValues[TimeIndex];
-//          end;
-//        end
-//        else
-//        begin
-//          AdjustBoundaryTimes(TimeValues, BoundValues);
-//        end;
-//
-//        DisplayBoundaries(BoundValues);
-//      finally
-//        BoundValues.Free;
-//      end;
-//  //    BoundValues: TCustomSutraBoundaryCollection
-//    end
-//    else
-//    begin
-//      FSettingTimes := True;
-//      rdgSutraFeature.BeginUpdate;
-//      try
-//        seNumberOfTimes.AsInteger := Length(TimeValues);
-//        for TimeIndex := 0 to Length(TimeValues) - 1 do
-//        begin
-//          rdgSutraFeature.Cells[0,TimeIndex+1] := FloatToStr(TimeValues[TimeIndex]);
-//          rdgSutraFeature.Checked[1,TimeIndex+1] := True;
-//        end;
-//      finally
-//        rdgSutraFeature.EndUpdate;
-//        FSettingTimes := False;
-//      end;
-//    end;
   end
   else
   begin
@@ -734,7 +854,6 @@ begin
 
     PickList := rdgSutraFeature.Columns[0].PickList;
     PickList.Clear;
-//    FSettingTimes := True;
     for TimeIndex := 0 to Length(TimeValues) - 1 do
     begin
       case FBoundaryType of
@@ -766,30 +885,28 @@ var
   Item: TCustomSutraBoundaryItem;
   AssocItem: TCustomSutraAssociatedBoundaryItem;
 begin
-//  FDisplayingData := True;
   rdgSutraFeature.BeginUpdate;
   try
     seNumberOfTimes.AsInteger := BoundColl.Count;
-    rdgSutraFeature.RowCount := BoundColl.Count+1;
+    rdgSutraFeature.RowCount := BoundColl.Count+1+PestRowOffset;
     for ItemIndex := 0 to BoundColl.Count - 1 do
     begin
       Item := BoundColl[ItemIndex] as TCustomSutraBoundaryItem;
-      rdgSutraFeature.Cells[0,ItemIndex+1] := FloatToStr(Item.StartTime);
-      rdgSutraFeature.Cells[1,ItemIndex+1] := Item.UsedFormula;
+      rdgSutraFeature.Cells[0,ItemIndex+1+PestRowOffset] := FloatToStr(Item.StartTime);
+      rdgSutraFeature.Cells[1,ItemIndex+1+PestRowOffset] := Item.UsedFormula;
       if Item is TCustomSutraAssociatedBoundaryItem then
       begin
         AssocItem := TCustomSutraAssociatedBoundaryItem(Item);
-        rdgSutraFeature.Cells[2,ItemIndex+1] := AssocItem.PQFormula;
-        rdgSutraFeature.Cells[3,ItemIndex+1] := AssocItem.UFormula;
+        rdgSutraFeature.Cells[2,ItemIndex+1+PestRowOffset] := AssocItem.PQFormula;
+        rdgSutraFeature.Cells[3,ItemIndex+1+PestRowOffset] := AssocItem.UFormula;
       end
       else
       begin
-        rdgSutraFeature.Cells[2,ItemIndex+1] := Item.UFormula;
+        rdgSutraFeature.Cells[2,ItemIndex+1+PestRowOffset] := Item.UFormula;
       end;
     end;
   finally
     rdgSutraFeature.EndUpdate;
-//    FDisplayingData := False;
   end;
 end;
 
@@ -916,7 +1033,6 @@ begin
     end;
   end;
   LayoutControls(rdgSutraFeature, rdeFormula, lblFormula, Col);
-
 end;
 
 procedure TframeSutraBoundary.rdeFormulaChange(Sender: TObject);
@@ -934,7 +1050,8 @@ procedure TframeSutraBoundary.rdgSutraFeatureBeforeDrawCell(Sender: TObject;
   ACol, ARow: Integer);
 begin
   inherited;
-  if not GetValidTime(ACol, ARow) then
+  if (ARow >= rdgSutraFeature.FixedRows + PestRowOffset)
+    and not GetValidTime(ACol, ARow) then
   begin
     rdgSutraFeature.Canvas.Brush.Color := clRed;
   end;
@@ -952,7 +1069,7 @@ var
   RowIndex: Integer;
 begin
   inherited;
-  for RowIndex := 1 to rdgSutraFeature.RowCount - 1 do
+  for RowIndex := 1+PestRowOffset to rdgSutraFeature.RowCount - 1 do
   begin
     if not GetValidTime(Ord(sbgtTime), RowIndex) then
     begin
@@ -1004,7 +1121,7 @@ begin
   inherited;
   if Value <> '' then
   begin
-    seNumberOfTimes.AsInteger := rdgSutraFeature.RowCount -1;
+    seNumberOfTimes.AsInteger := rdgSutraFeature.RowCount -1-PestRowOffset;
   end;
 end;
 

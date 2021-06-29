@@ -868,15 +868,17 @@ var
   OldRow: Integer;
   RowIndex: Integer;
 begin
-
   if FModified then
   begin
-    for RowIndex := 0 to FCachedRows.Count -1 do
+    if FCachedRows <> nil then
     begin
-      OldRow := FCachedRows[RowIndex];
-      Position := GetOffset(0, OldRow);
-      FFileStream.Seek(Position, soBeginning);
-      FFileStream.WriteBuffer(FCachedZ[OldRow, 0], XCount * SizeOf(Double));
+      for RowIndex := 0 to FCachedRows.Count -1 do
+      begin
+        OldRow := FCachedRows[RowIndex];
+        Position := GetOffset(0, OldRow);
+        FFileStream.Seek(Position, soBeginning);
+        FFileStream.WriteBuffer(FCachedZ[OldRow, 0], XCount * SizeOf(Double));
+      end;
     end;
     FModified := False;
   end;

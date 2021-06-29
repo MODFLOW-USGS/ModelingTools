@@ -1704,7 +1704,8 @@ type
     FSutraGenFlowObs_Node: TJvPageIndexNode;
     FSutraGenTransObs_Node: TJvPageIndexNode;
     FPestMethods: TStringList;
-    FPestParametersAndDataSets: TStringList;
+    FPestBlockParametersAndDataSets: TStringList;
+    FPestNodeParametersAndDataSets: TStringList;
     FPestParameters: TStringList;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
@@ -2731,9 +2732,11 @@ var
   Column: TRbwColumn4;
   PestParameterColumns: set of Byte;
   ParametersOnly: Boolean;
+  UsedEvalAt: TEvaluatedAt;
 begin
   ParametersOnly := False;
   PestParameterColumns := [];
+  UsedEvalAt := eaBlocks;
    { TODO  -cPEST: Support PEST here }
   if (Sender = frameDrnParam.rdgModflowBoundary)
     or (Sender = frameGhbParam.rdgModflowBoundary)
@@ -2831,7 +2834,20 @@ begin
     then
   begin
     PestParameterColumns := [2];
-  end;
+  end
+  else if (Sender = frameSutraSpecifiedPressure.rdgSutraFeature)
+    or (Sender = frameSutraFluidFlux.rdgSutraFeature)
+    then
+  begin
+    PestParameterColumns := [2, 3];
+    UsedEvalAt := eaNodes;
+  end
+  else if (Sender = frameSutraMassEnergyFlux.rdgSutraFeature)
+    or (Sender = frameSutraSpecTempConc.rdgSutraFeature) then
+  begin
+    PestParameterColumns := [2];
+    UsedEvalAt := eaNodes;
+  end
   ;
 
   if not (ACol in PestParameterColumns) and (ARow >= 1)
@@ -2865,7 +2881,14 @@ begin
         end
         else
         begin
-          Column.PickList := FPestParametersAndDataSets;
+          if UsedEvalAt = eaBlocks then
+          begin
+            Column.PickList := FPestBlockParametersAndDataSets;
+          end
+          else
+          begin
+            Column.PickList := FPestNodeParametersAndDataSets;
+          end;
         end;
       end;
     end
@@ -4129,7 +4152,8 @@ var
   ParameterIndex: Integer;
   AParameter: TModflowSteadyParameter;
 begin
-  FPestParametersAndDataSets.Clear;
+  FPestBlockParametersAndDataSets.Clear;
+  FPestNodeParametersAndDataSets.Clear;
   FPestParameters.Clear;
   DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   for DataSetIndex := 0 to DataArrayManager.DataSetCount - 1 do
@@ -4137,7 +4161,14 @@ begin
     ADataArray := DataArrayManager.DataSets[DataSetIndex];
     if ADataArray.PestParametersUsed then
     begin
-      FPestParametersAndDataSets.AddObject(ADataArray.Name, ADataArray);
+      if ADataArray.EvaluatedAt = eaBlocks then
+      begin
+        FPestBlockParametersAndDataSets.AddObject(ADataArray.Name, ADataArray);
+      end
+      else
+      begin
+        FPestNodeParametersAndDataSets.AddObject(ADataArray.Name, ADataArray);
+      end;
     end;
   end;
   ModflowSteadyParameters := frmGoPhast.PhastModel.ModflowSteadyParameters;
@@ -4146,15 +4177,19 @@ begin
     AParameter := ModflowSteadyParameters[ParameterIndex];
     if AParameter.ParameterType = ptPEST then
     begin
-      FPestParametersAndDataSets.AddObject(AParameter.ParameterName, AParameter);
+      FPestBlockParametersAndDataSets.AddObject(AParameter.ParameterName, AParameter);
+      FPestNodeParametersAndDataSets.AddObject(AParameter.ParameterName, AParameter);
       FPestParameters.AddObject(AParameter.ParameterName, AParameter);
     end;
   end;
-  FPestParametersAndDataSets.Sorted := True;
-  FPestParametersAndDataSets.Sorted := False;
+  FPestBlockParametersAndDataSets.Sorted := True;
+  FPestBlockParametersAndDataSets.Sorted := False;
+  FPestNodeParametersAndDataSets.Sorted := True;
+  FPestNodeParametersAndDataSets.Sorted := False;
   FPestParameters.Sorted := True;
   FPestParameters.Sorted := False;
-  FPestParametersAndDataSets.Insert(0, strNone);
+  FPestBlockParametersAndDataSets.Insert(0, strNone);
+  FPestNodeParametersAndDataSets.Insert(0, strNone);
   FPestParameters.Insert(0, strNone);
 
   FObjectCount := 1;
@@ -5635,7 +5670,8 @@ begin
   FPestMethods := TStringList.Create;
   FPestMethods.Add(StrMultiply);
   FPestMethods.Add(StrAdd);
-  FPestParametersAndDataSets := TStringList.Create;
+  FPestBlockParametersAndDataSets := TStringList.Create;
+  FPestNodeParametersAndDataSets := TStringList.Create;
   FPestParameters := TStringList.Create;
 
 
@@ -5751,6 +5787,11 @@ begin
   frameSWR_Evap.OnCheckPestCell := EnablePestCells;
   frameSWR_LatInfl.OnCheckPestCell := EnablePestCells;
   frameSWR_Stage.OnCheckPestCell := EnablePestCells;
+  frameSutraSpecifiedPressure.OnCheckPestCell := EnablePestCells;
+  frameSutraFluidFlux.OnCheckPestCell := EnablePestCells;
+  frameSutraMassEnergyFlux.OnCheckPestCell := EnablePestCells;
+  frameSutraSpecTempConc.OnCheckPestCell := EnablePestCells;
+
 end;
 
 procedure TfrmScreenObjectProperties.ResetSpecifiedHeadGrid;
@@ -17739,7 +17780,8 @@ begin
   FChildModels.Free;
   FChildModelsScreenObjects.Free;
   FPestParameters.Free;
-  FPestParametersAndDataSets.Free;
+  FPestBlockParametersAndDataSets.Free;
+  FPestNodeParametersAndDataSets.Free;
   FPestMethods.Free;
 end;
 
@@ -26200,6 +26242,11 @@ begin
     or (DataGrid = frameSWR_Evap.rdgModflowBoundary)
     or (DataGrid = frameSWR_LatInfl.rdgModflowBoundary)
     or (DataGrid = frameSWR_Stage.rdgModflowBoundary)
+    or ((DataGrid = frameSutraSpecifiedPressure.rdgSutraFeature) and (ACol in [2,3]))
+    or ((DataGrid = frameSutraFluidFlux.rdgSutraFeature) and (ACol in [2,3]))
+    or ((DataGrid = frameSutraMassEnergyFlux.rdgSutraFeature) and (ACol in [2]))
+    or ((DataGrid = frameSutraSpecTempConc.rdgSutraFeature) and (ACol in [2]))
+
 //    or (DataGrid = frameCSUB.rdgSubGroups)
     ;
 end;

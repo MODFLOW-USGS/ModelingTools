@@ -6,6 +6,7 @@ inherited frameContourData: TframeContourData
   inherited pcChoices: TPageControl
     Width = 578
     Height = 501
+    ActivePage = tabLegend
     ExplicitWidth = 578
     ExplicitHeight = 501
     inherited tabSelection: TTabSheet
@@ -191,8 +192,8 @@ inherited frameContourData: TframeContourData
           'ACM 626')
       end
       object rdeContourInterval: TRbwDataEntry
-        Left = 347
-        Top = 56
+        Left = 344
+        Top = 55
         Width = 94
         Height = 22
         TabOrder = 4
@@ -280,7 +281,9 @@ inherited frameContourData: TframeContourData
           ExplicitTop = 433
         end
         inherited rdgLegend: TRbwDataGrid4
+          Left = 11
           Height = 347
+          ExplicitLeft = 11
           ExplicitHeight = 347
         end
       end

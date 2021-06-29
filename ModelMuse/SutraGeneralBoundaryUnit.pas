@@ -156,6 +156,7 @@ type
   protected
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
+    function BoundaryObserverPrefix: string; override;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -721,6 +722,11 @@ end;
 class function TSutraGeneralFlowBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TSutraGeneralFlowCollection;
+end;
+
+function TSutraGeneralFlowBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestGeneralizedFlow_';
 end;
 
 constructor TSutraGeneralFlowBoundary.Create(Model: TBaseModel;

@@ -259,7 +259,7 @@ var
   CellList: TCellAssignmentList;
   ValuePestNames: TStringList;
   UPestNames: TStringList;
-  UsedFormula: string;
+  ValueFormula: string;
   procedure AssignTimeListFormula(var Formula: string;
     const PestSeriesName: String; SeriesMethod: TPestParamMethod;
     PestNames: TStringList);
@@ -270,7 +270,7 @@ var
     Param := Model.GetPestParameterByName(Formula);
     if Param <> nil then
     begin
-      UPestNames.Add(Param.ParameterName);
+      PestNames.Add(Param.ParameterName);
       Formula := FortranFloatToStr(Param.Value);
       FPestParamUsed := True;
     end
@@ -280,12 +280,12 @@ var
       if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
       begin
         FPestParamUsed := True;
-        UPestNames.Add(PestDataArray.Name);
+        PestNames.Add(PestDataArray.Name);
         AddUsedPestDataArray(PestDataArray);
       end
       else
       begin
-        UPestNames.Add('');
+        PestNames.Add('');
       end;
     end;
 
@@ -450,12 +450,12 @@ begin
           AssocItem := ABoundary.Values[DisplayTimeIndex]
             as TCustomSutraAssociatedBoundaryItem;
           BoundaryValues[0].Time := AssocItem.StartTime;
-          UsedFormula := AssocItem.UsedFormula;
-          AssignTimeListFormula(UsedFormula,
+          ValueFormula := AssocItem.PQFormula;
+          AssignTimeListFormula(ValueFormula,
             ABoundary.PestBoundaryValueFormula,
             ABoundary.PestBoundaryValueMethod, ValuePestNames);
-          BoundaryValues[0].UsedFormula := UsedFormula;
-          BoundaryValues[0].Formula := AssocItem.PQFormula;
+          BoundaryValues[0].UsedFormula := AssocItem.UsedFormula;
+          BoundaryValues[0].Formula := ValueFormula;
         end
         else
         begin
@@ -464,12 +464,12 @@ begin
             AssocItem := ABoundary.Values[TimeIndex]
               as TCustomSutraAssociatedBoundaryItem;
             BoundaryValues[TimeIndex].Time := FixTime(AssocItem, AllTimes);
-            UsedFormula := AssocItem.UsedFormula;
-            AssignTimeListFormula(UsedFormula,
+            ValueFormula := AssocItem.PQFormula;
+            AssignTimeListFormula(ValueFormula,
               ABoundary.PestBoundaryValueFormula,
               ABoundary.PestBoundaryValueMethod, ValuePestNames);
-            BoundaryValues[TimeIndex].UsedFormula := UsedFormula;
-            BoundaryValues[TimeIndex].Formula := AssocItem.PQFormula;
+            BoundaryValues[TimeIndex].UsedFormula := AssocItem.UsedFormula;
+            BoundaryValues[TimeIndex].Formula := ValueFormula;
           end;
         end;
         TimeList.Initialize(BoundaryValues);
@@ -486,12 +486,12 @@ begin
       begin
         Item := ABoundary.Values[DisplayTimeIndex] as TCustomSutraBoundaryItem;
         BoundaryValues[0].Time := Item.StartTime;
-        UsedFormula := Item.UsedFormula;
-        AssignTimeListFormula(UsedFormula,
+        ValueFormula := Item.UFormula;
+        AssignTimeListFormula(ValueFormula,
           ABoundary.PestAssociatedValueFormula,
           ABoundary.PestAssociatedValueMethod, UPestNames);
-        BoundaryValues[0].UsedFormula := UsedFormula;
-        BoundaryValues[0].Formula := Item.UFormula;
+        BoundaryValues[0].UsedFormula := Item.UsedFormula;
+        BoundaryValues[0].Formula := ValueFormula;
       end
       else
       begin
@@ -499,12 +499,12 @@ begin
         begin
           Item := ABoundary.Values[TimeIndex] as TCustomSutraBoundaryItem;
           BoundaryValues[TimeIndex].Time := FixTime(Item, AllTimes);
-          UsedFormula := Item.UsedFormula;
-          AssignTimeListFormula(UsedFormula,
+          ValueFormula := Item.UFormula;
+          AssignTimeListFormula(ValueFormula,
             ABoundary.PestAssociatedValueFormula,
             ABoundary.PestAssociatedValueMethod, UPestNames);
-          BoundaryValues[TimeIndex].UsedFormula := UsedFormula;
-          BoundaryValues[TimeIndex].Formula := Item.UFormula;
+          BoundaryValues[TimeIndex].UsedFormula := Item.UsedFormula;
+          BoundaryValues[TimeIndex].Formula := ValueFormula;
         end;
       end;
       TimeList.Initialize(BoundaryValues);
@@ -781,8 +781,8 @@ begin
                   PositiveDataSet := PositiveFluxes[TimeIndex];
                   PositiveUDataSet := PositiveUFluxes[TimeIndex];
 
-                  PQPestName := PQPestNames[TimeIndex];
-                  UPestName := UPestNames[TimeIndex];
+                  PQPestName := PQPestNames[DataSetIndex];
+                  UPestName := UPestNames[DataSetIndex];
 
                   for LayerIndex := PQDataSet.MinLayer to PQDataSet.MaxLayer do
                   begin
@@ -1188,8 +1188,8 @@ begin
               begin
                 MergedPQDataSet := PQTimeList[TimeIndex];
                 MergedUDataSet := UTimeList[TimeIndex];
-                PQPestName := PQPestNames[TimeIndex];
-                UPestName := UPestNames[TimeIndex];
+                PQPestName := PQPestNames[DataSetIndex];
+                UPestName := UPestNames[DataSetIndex];
                 for LayerIndex := PQDataSet.MinLayer to PQDataSet.MaxLayer do
                 begin
                   CellLocation.Layer := LayerIndex;

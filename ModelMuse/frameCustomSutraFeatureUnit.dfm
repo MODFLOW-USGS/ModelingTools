@@ -104,6 +104,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
       RowCount = 2
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs]
       TabOrder = 0
+      OnSelectCell = rdgSutraFeatureSelectCell
       ExtendedAutoDistributeText = False
       AutoMultiEdit = True
       AutoDistributeText = True
@@ -115,6 +116,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -138,6 +140,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -161,6 +164,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -184,6 +188,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -206,6 +211,8 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
+      ExplicitLeft = 0
+      ExplicitTop = 2
     end
   end
   object pnlTop: TPanel

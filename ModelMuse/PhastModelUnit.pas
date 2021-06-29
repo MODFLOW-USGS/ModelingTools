@@ -10307,10 +10307,11 @@ const
 //               Bug fix: Fixed bug that could cause MODFLOW stress period
 //                starting and ending times to be saved with small rounding
 //                errors.
+//    '4.3.0.56' Bug fix: Fixed bug in displaying contour values.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.55';
+  IIModelVersion = '4.3.0.56';
 
 function IModelVersion: string;
 begin

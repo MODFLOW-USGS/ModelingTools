@@ -120,6 +120,7 @@ type
       override;
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
+    function BoundaryObserverPrefix: string; override;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
@@ -556,6 +557,11 @@ end;
 class function TSutraGeneralTransportBoundary.BoundaryCollectionClass: TMF_BoundCollClass;
 begin
   result := TSutraGeneralTransportCollection;
+end;
+
+function TSutraGeneralTransportBoundary.BoundaryObserverPrefix: string;
+begin
+  result := 'PestGeneralizedTransport_';
 end;
 
 constructor TSutraGeneralTransportBoundary.Create(Model: TBaseModel;

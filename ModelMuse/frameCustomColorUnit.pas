@@ -344,7 +344,11 @@ begin
           begin
             for index := 0 to FLegend.Values.Count - 1 do
             begin
-              rdgLegend.Cells[0,index+1] := FloatToStr(FLegend.Values.RealValues[index]);
+              // FloatToStr doesn't round properly when compiled
+              // with 64 bit precision.
+              rdgLegend.Cells[0,index+1] :=
+                FloatToStrF(FLegend.Values.RealValues[Index], ffGeneral, 14, 0)
+//              FloatToStr(FLegend.Values.RealValues[index]);
             end;
           end;
         rdtInteger:
@@ -855,8 +859,11 @@ begin
                 case FLegend.Values.DataType of
                   rdtDouble:
                     begin
+                    // FloatToStr doesn't round properly when compiled
+                    // with 64 bit precision.
                       rdgLegend.Cells[0,Index + 1] :=
-                        FloatToStr(FLegend.Values.RealValues[Index]);
+                        FloatToStrF(FLegend.Values.RealValues[Index],
+                          ffGeneral, 14, 0);
                     end;
                   rdtInteger:
                     begin
