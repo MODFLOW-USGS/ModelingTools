@@ -130,6 +130,8 @@ type
     function GetPestNonTransientTemplateFormula(DataArray: TDataArray;
       Layer, Row, Col: Integer): string;
     function GetPestParamFormula(Value: double; PestParName: string): string;
+    procedure WriteTemplateHeader;
+    procedure ExtendedTemplateFormula(var Formula: string);
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -188,8 +190,6 @@ type
   }
   TCustomModflowWriter = class(TCustomFileWriter)
   private
-
-
     // @name writes a header for DataArray using either
     // @link(WriteConstantU2DINT) or @link(WriteU2DRELHeader).
     procedure WriteHeader(const DataArray: TDataArray;
@@ -253,7 +253,7 @@ type
     procedure WriteEndPeriod;
     procedure WriteBeginGridData;
     procedure WriteEndGridData;
-    procedure WriteTemplateHeader; virtual;
+
     // Write a value or a formula for EnhancedTemplateProcessor for a
     // boundary condition cell. Index is used to access the appropiate
     // value, PEST name, PEST Series name and PEST series method.
@@ -1183,6 +1183,7 @@ resourcestring
   StrPLPROCWasNotFound = 'PLPROC was not found in %s.';
   StrArrayFormulaFormat = ' %0:s                    %1:s                    %2' +
   ':s[%5:d,%6:d,%7:d]%1:s %4:s %3:g%0:s ';
+  StrExtendedTemplateFormat = ' %0:s                    %1:s%0:s ';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
@@ -2604,12 +2605,12 @@ procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
   ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer;
   ChangeSign: Boolean);
 var
-  ExtendedTemplateCharacter: string;
+//  ExtendedTemplateCharacter: string;
   Formula: string;
 //  ACellLocation: TCellLocation;
 //  PCellLoc := TCellLocation;
 begin
-  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+//  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
 
 //  Assert(ACell <> nil);
 //  ACellLocation := ACell.CellLocation;
@@ -2621,8 +2622,7 @@ begin
   end;
   if Formula <> '' then
   begin
-    Formula := Format(' %0:s                    %1:s%0:s ',
-      [ExtendedTemplateCharacter, Formula]);
+    ExtendedTemplateFormula(Formula);
     WriteString(Formula);
   end
   else
@@ -3433,6 +3433,12 @@ begin
       ArraysFile.Free;
     end;
   end;
+end;
+
+procedure TCustomFileWriter.ExtendedTemplateFormula(var Formula: string);
+begin
+  Formula := Format(StrExtendedTemplateFormat,
+    [Model.PestProperties.ExtendedTemplateCharacter, Formula]);
 end;
 
 procedure TCustomFileWriter.WriteCommentLine(const Comment: string);
@@ -9993,33 +9999,6 @@ begin
     ModifierValue, Operation]));
 end;
 
-procedure TCustomModflowWriter.WriteTemplateHeader;
-var
-  ArraysFileName: string;
-begin
-  if WritingTemplate then
-  begin
-    WriteString('ptf ');
-    WriteString(Model.PestProperties.TemplateCharacter);
-    NewLine;
-    WriteString('etf ');
-    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-    NewLine;
-  end;
-
-  ArraysFileName := WriteArraysFile(FNameOfFile);
-  if (ArraysFileName <> '') and WritingTemplate then
-  begin
-    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-    WriteString('ReadArrays(');
-    WriteString(ArraysFileName);
-    WriteString(')');
-    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
-    NewLine;
-  end;
-
-end;
-
 procedure TCustomParameterTransientWriter.WriteBoundaryArrayParams;
 var
   ParamIndex: integer;
@@ -10214,6 +10193,31 @@ begin
         AddUsedPestDataArray(DataArray);
       end;
     end;
+  end;
+end;
+
+procedure TCustomFileWriter.WriteTemplateHeader;
+var
+  ArraysFileName: string;
+begin
+  if WritingTemplate then
+  begin
+    WriteString('ptf ');
+    WriteString(Model.PestProperties.TemplateCharacter);
+    NewLine;
+    WriteString('etf ');
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    NewLine;
+  end;
+  ArraysFileName := WriteArraysFile(FNameOfFile);
+  if (ArraysFileName <> '') and WritingTemplate then
+  begin
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    WriteString('ReadArrays(');
+    WriteString(ArraysFileName);
+    WriteString(')');
+    WriteString(Model.PestProperties.ExtendedTemplateCharacter);
+    NewLine;
   end;
 end;
 
