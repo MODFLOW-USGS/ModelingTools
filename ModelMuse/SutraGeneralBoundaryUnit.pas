@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, ModflowBoundaryUnit, FormulaManagerUnit, GoPhastTypes,
   OrderedCollectionUnit, RbwParser, SutraBoundaryUnit,
-  System.Generics.Collections, SutraOptionsUnit;
+  System.Generics.Collections, SutraOptionsUnit, SubscriptionUnit;
 
 type
   TSutraGeneralFlowItem = class(TCustomBoundaryItem)
@@ -151,26 +151,126 @@ type
   TSutraGeneralFlowBoundary = class(TSutraBoundary)
   private
     FLakeInteractionType: TGeneralizedFlowInteractionType;
+    FPestHigherPressureMethod: TPestParamMethod;
+    FPestLowerFlowRateMethod: TPestParamMethod;
+    FPestHigherFlowRateMethod: TPestParamMethod;
+    FPestUOutMethod: TPestParamMethod;
+    FPestLowerFlowRateFormula: TFormulaObject;
+    FPestHigherPressureFormula: TFormulaObject;
+    FPestHigherFlowRateFormula: TFormulaObject;
+    FPestUOutFormula: TFormulaObject;
+    FPestHigherFlowRateObserver: TObserver;
+    FPestHigherPressureObserver: TObserver;
+    FPestLowerFlowRateObserver: TObserver;
+    FPestUOutObserver: TObserver;
     procedure SetLakeInteractionType(
       const Value: TGeneralizedFlowInteractionType);
+    function GetPestHigherFlowRateFormula: string;
+    function GetPestHigherFlowRateObserver: TObserver;
+    function GetPestHigherPressureFormula: string;
+    function GetPestHigherPressureObserver: TObserver;
+    function GetPestLowerFlowRateFormula: string;
+    function GetPestLowerFlowRateObserver: TObserver;
+    function GetPestUOutFormula: string;
+    function GetPestUOutObserver: TObserver;
+    procedure SetPestHigherFlowRateFormula(const Value: string);
+    procedure SetPestHigherFlowRateMethod(const Value: TPestParamMethod);
+    procedure SetPestHigherPressureFormula(const Value: string);
+    procedure SetPestHigherPressureMethod(const Value: TPestParamMethod);
+    procedure SetPestLowerFlowRateFormula(const Value: string);
+    procedure SetPestLowerFlowRateMethod(const Value: TPestParamMethod);
+    procedure SetPestUOutFormula(const Value: string);
+    procedure SetPestUOutMethod(const Value: TPestParamMethod);
   protected
+    function BoundaryObserverPrefix: string; override;
+    // PEST
     procedure PQChangeHandler(Sender: TObject); override;
     procedure UChangeHandler(Sender: TObject); override;
-    function BoundaryObserverPrefix: string; override;
+    procedure LowerFlowRateChangeHandler(Sender: TObject);
+    procedure HigherPressureChangeHandler(Sender: TObject);
+    procedure HigherFlowRateChangeHandler(Sender: TObject);
+    procedure UOutChangeHandler(Sender: TObject);
+    procedure CreateFormulaObjects; override;
+    procedure CreateObservers; override;
+    function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
+    procedure SetPestBoundaryFormula(FormulaIndex: integer;
+      const Value: string); override;
+    function GetPestBoundaryMethod(FormulaIndex: integer): TPestParamMethod; override;
+    procedure SetPestBoundaryMethod(FormulaIndex: integer;
+      const Value: TPestParamMethod); override;
+    property PestLowerFlowRateObserver: TObserver read GetPestLowerFlowRateObserver;
+    property PestHigherPressureObserver: TObserver read GetPestHigherPressureObserver;
+    property PestHigherFlowRateObserver: TObserver read GetPestHigherFlowRateObserver;
+    property PestUOutObserver: TObserver read GetPestUOutObserver;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     procedure AssignCells(BoundaryStorage: TCustomBoundaryStorage;
       ValueTimeList: TList; AModel: TBaseModel); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass;
       override;
-  public
     procedure GetCellValues(ValueTimeList: TList; ParamList: TStringList;
       AModel: TBaseModel; Writer: TObject); override;
     procedure Loaded;
+    class function DefaultBoundaryMethod(
+      FormulaIndex: integer): TPestParamMethod; override;
   published
     property LakeInteractionType: TGeneralizedFlowInteractionType
-      read FLakeInteractionType write SetLakeInteractionType default gfitUseDefaults;
+      read FLakeInteractionType write SetLakeInteractionType
+      default gfitUseDefaults;
+    // PestBoundaryValueFormula is used with LowerPressure, PBG11
+    // PestAssociatedValueFormula is used with InflowU
+
+    // QPBG11
+    property PestLowerFlowRateFormula: string read GetPestLowerFlowRateFormula
+      write SetPestLowerFlowRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestLowerFlowRateMethod: TPestParamMethod read FPestLowerFlowRateMethod
+      write SetPestLowerFlowRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHigherPressureFormula: string read GetPestHigherPressureFormula
+      write SetPestHigherPressureFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHigherPressureMethod: TPestParamMethod read FPestHigherPressureMethod
+      write SetPestHigherPressureMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHigherFlowRateFormula: string read GetPestHigherFlowRateFormula
+      write SetPestHigherFlowRateFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestHigherFlowRateMethod: TPestParamMethod read FPestHigherFlowRateMethod
+      write SetPestHigherFlowRateMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUOutFormula: string read GetPestUOutFormula
+      write SetPestUOutFormula
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestUOutMethod: TPestParamMethod read FPestUOutMethod
+      write SetPestUOutMethod
+      {$IFNDEF PEST}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
   TSutraGeneralFlowBoundaryList = TList<TSutraGeneralFlowBoundary>;
@@ -182,12 +282,13 @@ const
   HigherPressurePosition = 3;
   HigherFlowRatePosition = 4;
   UInPosition = 5;
-  UoutPosition = 6;
+  UOutPosition = 6;
+  SutraGenOffset = 2;
 
 implementation
 
 uses
-  frmGoPhastUnit, SubscriptionUnit, PhastModelUnit, ScreenObjectUnit;
+  frmGoPhastUnit, PhastModelUnit, ScreenObjectUnit;
 
 { TSutraGeneralFlowItem }
 
@@ -245,7 +346,7 @@ begin
   UInObserver := FObserverList[UInPosition];
   UInObserver.OnUpToDateSet := ParentCollection.UInChangeHandler;
 
-  UIoutObserver := FObserverList[UoutPosition];
+  UIoutObserver := FObserverList[UOutPosition];
   UIoutObserver.OnUpToDateSet := ParentCollection.UOutChangeHandler;
 end;
 
@@ -298,7 +399,7 @@ begin
     HigherPressurePosition: result := HigherPressureFormula;
     HigherFlowRatePosition: result := HigherFlowRateFormula;
     UInPosition: result := UInFormula;
-    UoutPosition: result := UoutFormula;
+    UOutPosition: result := UoutFormula;
     else
       Assert(False);
   end;
@@ -353,7 +454,7 @@ begin
   end
   else if Sender = FUoutFormula then
   begin
-    List.Add(FObserverList[UoutPosition]);
+    List.Add(FObserverList[UOutPosition]);
   end
   else if Sender = FUsedFormulaObject then
   begin
@@ -375,7 +476,7 @@ end;
 function TSutraGeneralFlowItem.GetUoutFormula: string;
 begin
   Result := FUoutFormula.Formula;
-  ResetItemObserver(UoutPosition);
+  ResetItemObserver(UOutPosition);
 end;
 
 function TSutraGeneralFlowItem.GetUsed: Boolean;
@@ -489,7 +590,7 @@ begin
       HigherFlowRateFormula := Value;
     UInPosition:
       UInFormula := Value;
-    UoutPosition:
+    UOutPosition:
       UoutFormula := Value;
     else
       Assert(False);
@@ -542,7 +643,7 @@ end;
 
 procedure TSutraGeneralFlowItem.SetUoutFormula(const Value: string);
 begin
-  UpdateFormulaNodes(Value, UoutPosition, FUoutFormula);
+  UpdateFormulaNodes(Value, UOutPosition, FUoutFormula);
 end;
 
 procedure TSutraGeneralFlowItem.SetUpperLimitType(const Value: TSutraLimitType);
@@ -702,10 +803,21 @@ end;
 { TSutraGeneralFlowBoundary }
 
 procedure TSutraGeneralFlowBoundary.Assign(Source: TPersistent);
+var
+  GenFlowSource: TSutraGeneralFlowBoundary;
 begin
   if Source is TSutraGeneralFlowBoundary then
   begin
-    LakeInteractionType := TSutraGeneralFlowBoundary(Source).LakeInteractionType;
+    GenFlowSource := TSutraGeneralFlowBoundary(Source);
+    LakeInteractionType := GenFlowSource.LakeInteractionType;
+    PestLowerFlowRateFormula := GenFlowSource.PestLowerFlowRateFormula;
+    PestLowerFlowRateMethod := GenFlowSource.PestLowerFlowRateMethod;
+    PestHigherPressureFormula := GenFlowSource.PestHigherPressureFormula;
+    PestHigherPressureMethod := GenFlowSource.PestHigherPressureMethod;
+    PestHigherFlowRateFormula := GenFlowSource.PestHigherFlowRateFormula;
+    PestHigherFlowRateMethod := GenFlowSource.PestHigherFlowRateMethod;
+    PestUOutFormula := GenFlowSource.PestUOutFormula;
+    PestUOutMethod := GenFlowSource.PestUOutMethod;
   end;
   inherited;
 end;
@@ -731,9 +843,85 @@ end;
 
 constructor TSutraGeneralFlowBoundary.Create(Model: TBaseModel;
   ScreenObject: TObject);
+var
+  PestIndex: Integer;
 begin
   inherited;
   FLakeInteractionType := gfitUseDefaults;
+
+  for PestIndex := LowerPressurePosition to UoutPosition do
+  begin
+    PestBoundaryFormula[PestIndex] := '';
+    PestBoundaryMethod[PestIndex] := DefaultBoundaryMethod(PestIndex);
+  end;
+end;
+
+procedure TSutraGeneralFlowBoundary.CreateFormulaObjects;
+begin
+  inherited;
+  FPestLowerFlowRateFormula := CreateFormulaObjectNodes(dso3D);
+  FPestHigherPressureFormula := CreateFormulaObjectNodes(dso3D);
+  FPestHigherFlowRateFormula := CreateFormulaObjectNodes(dso3D);
+  FPestUOutFormula := CreateFormulaObjectNodes(dso3D);
+end;
+
+procedure TSutraGeneralFlowBoundary.CreateObservers;
+begin
+  inherited;
+  if ScreenObject <> nil then
+  begin
+    FObserverList.Add(PestLowerFlowRateObserver);
+    FObserverList.Add(PestHigherPressureObserver);
+    FObserverList.Add(PestHigherFlowRateObserver);
+    FObserverList.Add(PestUOutObserver);
+  end;
+end;
+
+class function TSutraGeneralFlowBoundary.DefaultBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    LowerPressurePosition:
+      begin
+        result := ppmAdd;
+      end;
+    LowerFlowRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    HigherPressurePosition:
+      begin
+        result := ppmAdd;
+      end;
+    HigherFlowRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UInPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    UOutPosition:
+      begin
+        result := ppmMultiply;
+      end;
+    else
+      begin
+        result := inherited;
+//        Assert(False);
+      end;
+  end;
+end;
+
+destructor TSutraGeneralFlowBoundary.Destroy;
+var
+  PestIndex: Integer;
+begin
+  for PestIndex := LowerPressurePosition to UoutPosition do
+  begin
+    PestBoundaryFormula[PestIndex] := '';
+  end;
+  inherited;
 end;
 
 procedure TSutraGeneralFlowBoundary.GetCellValues(ValueTimeList: TList;
@@ -742,6 +930,218 @@ begin
   inherited;
   // does this need to change?
   Assert(False);
+end;
+
+function TSutraGeneralFlowBoundary.GetPestBoundaryFormula(
+  FormulaIndex: integer): string;
+begin
+  case FormulaIndex of
+    UsedFormulaPosition:
+      begin
+        result := inherited;
+      end;
+    LowerPressurePosition:
+      begin
+        result := PestBoundaryValueFormula;
+      end;
+    LowerFlowRatePosition:
+      begin
+        result := PestLowerFlowRateFormula;
+      end;
+    HigherPressurePosition:
+      begin
+        result := PestHigherPressureFormula;
+      end;
+    HigherFlowRatePosition:
+      begin
+        result := PestHigherFlowRateFormula;
+      end;
+    UInPosition:
+      begin
+        result := PestAssociatedValueFormula;
+      end;
+    UOutPosition:
+      begin
+        result := PestUOutFormula;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestBoundaryMethod(
+  FormulaIndex: integer): TPestParamMethod;
+begin
+  case FormulaIndex of
+    UsedFormulaPosition:
+      begin
+        result := inherited;
+      end;
+    LowerPressurePosition:
+      begin
+        result := PestBoundaryValueMethod;
+      end;
+    LowerFlowRatePosition:
+      begin
+        result := PestLowerFlowRateMethod;
+      end;
+    HigherPressurePosition:
+      begin
+        result := PestHigherPressureMethod;
+      end;
+    HigherFlowRatePosition:
+      begin
+        result := PestHigherFlowRateMethod;
+      end;
+    UInPosition:
+      begin
+        result := PestAssociatedValueMethod;
+      end;
+    UOutPosition:
+      begin
+        result := PestUOutMethod;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestHigherFlowRateFormula: string;
+begin
+  Result := FPestHigherFlowRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(HigherFlowRatePosition+SutraGenOffset);
+  end;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestHigherFlowRateObserver: TObserver;
+begin
+  if FPestHigherFlowRateObserver = nil then
+  begin
+    CreateObserver('PestHigherFlowRate_', FPestHigherFlowRateObserver, nil);
+    FPestHigherFlowRateObserver.OnUpToDateSet := HigherFlowRateChangeHandler;
+  end;
+  result := FPestHigherFlowRateObserver;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestHigherPressureFormula: string;
+begin
+  Result := FPestHigherPressureFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(HigherPressurePosition+SutraGenOffset);
+  end;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestHigherPressureObserver: TObserver;
+begin
+//  if FPestHigherPressureObserver = nil then
+  begin
+    CreateObserver('PestHigherPressure_', FPestHigherPressureObserver, nil);
+    FPestHigherPressureObserver.OnUpToDateSet := HigherPressureChangeHandler;
+  end;
+  result := FPestHigherPressureObserver;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestLowerFlowRateFormula: string;
+begin
+  Result := FPestLowerFlowRateFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(LowerFlowRatePosition+SutraGenOffset);
+  end;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestLowerFlowRateObserver: TObserver;
+begin
+  if FPestLowerFlowRateObserver = nil then
+  begin
+    CreateObserver('PestLowerFlowRate_', FPestLowerFlowRateObserver, nil);
+    FPestLowerFlowRateObserver.OnUpToDateSet := LowerFlowRateChangeHandler;
+  end;
+  result := FPestLowerFlowRateObserver;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestUOutFormula: string;
+begin
+  Result := FPestUOutFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(UOutPosition+SutraGenOffset);
+  end;
+end;
+
+function TSutraGeneralFlowBoundary.GetPestUOutObserver: TObserver;
+begin
+  if FPestUOutObserver = nil then
+  begin
+    CreateObserver('PestUOut_', FPestUOutObserver, nil);
+    FPestUOutObserver.OnUpToDateSet := UOutChangeHandler;
+  end;
+  result := FPestUOutObserver;
+end;
+
+procedure TSutraGeneralFlowBoundary.HigherFlowRateChangeHandler(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraGenFlowRate2(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraGenFlowRate2(self);
+    end;
+  end;
+end;
+
+procedure TSutraGeneralFlowBoundary.HigherPressureChangeHandler(
+  Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraGenFlowPress2(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraGenFlowPress2(self);
+    end;
+  end;
 end;
 
 procedure TSutraGeneralFlowBoundary.Loaded;
@@ -761,10 +1161,58 @@ begin
   end;
 end;
 
-procedure TSutraGeneralFlowBoundary.PQChangeHandler(Sender: TObject);
+procedure TSutraGeneralFlowBoundary.LowerFlowRateChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
 begin
-  inherited;
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraGenFlowRate1(self);
 
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraGenFlowRate1(self);
+    end;
+  end;
+end;
+
+procedure TSutraGeneralFlowBoundary.PQChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraGenFlowPress1(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraGenFlowPress1(self);
+    end;
+  end;
 end;
 
 procedure TSutraGeneralFlowBoundary.SetLakeInteractionType(
@@ -777,10 +1225,181 @@ begin
   end;
 end;
 
-procedure TSutraGeneralFlowBoundary.UChangeHandler(Sender: TObject);
+procedure TSutraGeneralFlowBoundary.SetPestBoundaryFormula(
+  FormulaIndex: integer; const Value: string);
 begin
-  inherited;
+  case FormulaIndex of
+    LowerPressurePosition:
+      begin
+        PestBoundaryValueFormula := Value;
+      end;
+    LowerFlowRatePosition:
+      begin
+        PestLowerFlowRateFormula := Value;
+      end;
+    HigherPressurePosition:
+      begin
+        PestHigherPressureFormula := Value;
+      end;
+    HigherFlowRatePosition:
+      begin
+        PestHigherFlowRateFormula := Value;
+      end;
+    UInPosition:
+      begin
+        PestAssociatedValueFormula := Value;
+      end;
+    UOutPosition:
+      begin
+        PestUOutFormula := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
 
+procedure TSutraGeneralFlowBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
+  const Value: TPestParamMethod);
+begin
+  case FormulaIndex of
+    LowerPressurePosition:
+      begin
+        PestBoundaryValueMethod := Value;
+      end;
+    LowerFlowRatePosition:
+      begin
+        PestLowerFlowRateMethod := Value;
+      end;
+    HigherPressurePosition:
+      begin
+        PestHigherPressureMethod := Value;
+      end;
+    HigherFlowRatePosition:
+      begin
+        PestHigherFlowRateMethod := Value;
+      end;
+    UInPosition:
+      begin
+        PestAssociatedValueMethod := Value;
+      end;
+    UOutPosition:
+      begin
+        PestUOutMethod := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestHigherFlowRateFormula(
+  const Value: string);
+begin
+  UpdateFormulaNodes(Value, HigherFlowRatePosition+SutraGenOffset,
+    FPestHigherFlowRateFormula);
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestHigherFlowRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestHigherFlowRateMethod, Value);
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestHigherPressureFormula(
+  const Value: string);
+begin
+  UpdateFormulaNodes(Value, HigherPressurePosition+SutraGenOffset,
+    FPestHigherPressureFormula);
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestHigherPressureMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestHigherPressureMethod, Value);
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestLowerFlowRateFormula(
+  const Value: string);
+begin
+  UpdateFormulaNodes(Value, LowerFlowRatePosition+SutraGenOffset,
+    FPestLowerFlowRateFormula);
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestLowerFlowRateMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestLowerFlowRateMethod, Value);
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestUOutFormula(const Value: string);
+begin
+  UpdateFormulaNodes(Value, UoutPosition+SutraGenOffset,
+    FPestUOutFormula);
+end;
+
+procedure TSutraGeneralFlowBoundary.SetPestUOutMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestUOutMethod, Value);
+end;
+
+procedure TSutraGeneralFlowBoundary.UChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraGenFlowU1(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraGenFlowU1(self);
+    end;
+  end;
+end;
+
+procedure TSutraGeneralFlowBoundary.UOutChangeHandler(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateSutraGenFlowU2(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      ChildModel.InvalidateSutraGenFlowU2(self);
+    end;
+  end;
 end;
 
 { TSutraGeneralFlowTimeLink }

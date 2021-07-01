@@ -132,6 +132,9 @@ type
     function GetPestParamFormula(Value: double; PestParName: string): string;
     procedure WriteTemplateHeader;
     procedure ExtendedTemplateFormula(var Formula: string);
+    procedure AssignPestFormula(var Formula: string;
+      const PestSeriesName: string; SeriesMethod: TPestParamMethod;
+      PestNames: TStringList);
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -2605,15 +2608,8 @@ procedure TCustomFileWriter.WritePestTemplateFormula(Value: double;
   ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer;
   ChangeSign: Boolean);
 var
-//  ExtendedTemplateCharacter: string;
   Formula: string;
-//  ACellLocation: TCellLocation;
-//  PCellLoc := TCellLocation;
 begin
-//  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-
-//  Assert(ACell <> nil);
-//  ACellLocation := ACell.CellLocation;
   Formula := GetPestTemplateFormula(Value, PestParValue, PestSeriesValue,
     Method, ACell, AScreenObject as TScreenObject);
   if ChangeSign then
@@ -2954,7 +2950,6 @@ var
     SeriesParam: TModflowSteadyParameter;
     SeriesDataArray: TDataArray;
     DataArrayLayer: Integer;
-//    AScreenObject: TScreenObject;
   begin
     SeriesValue := 0;
     SeriesParam := Model.GetPestParameterByName(PestSeriesValue);
@@ -3047,7 +3042,6 @@ var
     Param: TModflowSteadyParameter;
     DataArray: TDataArray;
     DataArrayLayer: Integer;
-//    AScreenObject: TScreenObject;
   begin
     ModifierValue := 0;
     Param := Model.GetPestParameterByName(PestParValue);
@@ -10218,6 +10212,73 @@ begin
     WriteString(')');
     WriteString(Model.PestProperties.ExtendedTemplateCharacter);
     NewLine;
+  end;
+end;
+
+procedure TCustomFileWriter.AssignPestFormula(var Formula: string;
+const PestSeriesName: string; SeriesMethod: TPestParamMethod;
+PestNames: TStringList);
+var
+  Param: TModflowSteadyParameter;
+  PestDataArray: TDataArray;
+begin
+  Param := Model.GetPestParameterByName(Formula);
+  if Param <> nil then
+  begin
+    PestNames.Add(Param.ParameterName);
+    Formula := FortranFloatToStr(Param.Value);
+    FPestParamUsed := True;
+  end
+  else
+  begin
+    PestDataArray := Model.DataArrayManager.GetDataSetByName(Formula);
+    if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+    begin
+      FPestParamUsed := True;
+      PestNames.Add(PestDataArray.Name);
+      AddUsedPestDataArray(PestDataArray);
+    end
+    else
+    begin
+      PestNames.Add('');
+    end;
+  end;
+  if PestSeriesName <> '' then
+  begin
+    Param := Model.GetPestParameterByName(PestSeriesName);
+    if Param <> nil then
+    begin
+      FPestParamUsed := True;
+      case SeriesMethod of
+        ppmMultiply:
+          begin
+            Formula := Format('(%0:s) * %1:g', [Formula, Param.Value]);
+          end;
+        ppmAdd:
+          begin
+            Formula := Format('(%0:s) + %1:g', [Formula, Param.Value]);
+          end;
+      end;
+    end
+    else
+    begin
+      PestDataArray := Model.DataArrayManager.GetDataSetByName(PestSeriesName);
+      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+      begin
+        FPestParamUsed := True;
+        case SeriesMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+            end;
+        end;
+        AddUsedPestDataArray(PestDataArray);
+      end;
+    end;
   end;
 end;
 

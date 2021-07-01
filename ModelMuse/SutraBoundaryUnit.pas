@@ -84,8 +84,8 @@ type
     FPestAssociatedValueMethod: TPestParamMethod;
     FPestBoundaryValueFormula: TFormulaObject;
     FPestAssociatedValueFormula: TFormulaObject;
-    FOnInvalidateAssociatedPestBoundaryValue: TNotifyEvent;
-    FOnInvalidatePestBoundaryValue: TNotifyEvent;
+//    FOnInvalidateAssociatedPestBoundaryValue: TNotifyEvent;
+//    FOnInvalidatePestBoundaryValue: TNotifyEvent;
     FPestAssociatedValueObserver: TObserver;
     FPestBoundaryValueObserver: TObserver;
     FUsedObserver: TObserver;
@@ -101,15 +101,8 @@ type
     function GetPestAssociatedValueObserver: TObserver;
     function GetPestBoundaryValueObserver: TObserver;
   protected
-    procedure CreateFormulaObjects; //override;
-    procedure CreateObservers; //override;
-    property PestBoundaryValueObserver: TObserver read GetPestBoundaryValueObserver;
-    property PestAssociatedValueObserver: TObserver read GetPestAssociatedValueObserver;
-    property OnInvalidatePestBoundaryValue: TNotifyEvent
-      read FOnInvalidatePestBoundaryValue write FOnInvalidatePestBoundaryValue;
-    property OnInvalidateAssociatedPestBoundaryValue: TNotifyEvent
-      read FOnInvalidateAssociatedPestBoundaryValue
-      write FOnInvalidateAssociatedPestBoundaryValue;
+    procedure CreateFormulaObjects; virtual;
+    procedure CreateObservers; virtual;
     procedure PQChangeHandler(Sender: TObject); virtual; abstract;
     procedure UChangeHandler(Sender: TObject); virtual; abstract;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
@@ -119,6 +112,13 @@ type
     procedure SetPestBoundaryMethod(FormulaIndex: integer;
       const Value: TPestParamMethod); override;
     function GetUsedObserver: TObserver; //override;
+    property PestBoundaryValueObserver: TObserver read GetPestBoundaryValueObserver;
+    property PestAssociatedValueObserver: TObserver read GetPestAssociatedValueObserver;
+//    property OnInvalidatePestBoundaryValue: TNotifyEvent
+//      read FOnInvalidatePestBoundaryValue write FOnInvalidatePestBoundaryValue;
+//    property OnInvalidateAssociatedPestBoundaryValue: TNotifyEvent
+//      read FOnInvalidateAssociatedPestBoundaryValue
+//      write FOnInvalidateAssociatedPestBoundaryValue;
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);

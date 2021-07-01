@@ -9,6 +9,7 @@ type
    TValueAndAnnotation = record
      Value: Double;
      Annotation: string;
+     Formula: string;
    end;
 
   TGeneralFlowNode = record

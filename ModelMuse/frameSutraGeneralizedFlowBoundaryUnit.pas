@@ -136,22 +136,28 @@ begin
 //  FDisplayingData := True;
   rdgSutraFeature.BeginUpdate;
   try
-    seNumberOfTimes.AsInteger := BoundColl.Count;
-    rdgSutraFeature.RowCount := BoundColl.Count+1;
+    seNumberOfTimes.AsInteger := BoundColl.Count + PestRowOffset;
+    rdgSutraFeature.RowCount := BoundColl.Count+1 + PestRowOffset;
+
+    {$IFDEF PEST}
+    rdgSutraFeature.Cells[Ord(gfcTime), PestModifierRow] := StrPestModifier;
+    rdgSutraFeature.Cells[Ord(gfcTime), PestMethodRow] := StrModificationMethod;
+    {$ENDIF}
+
     for ItemIndex := 0 to BoundColl.Count - 1 do
     begin
       Item := BoundColl[ItemIndex] as TSutraGeneralFlowItem;
-      rdgSutraFeature.Cells[Ord(gfcTime),ItemIndex+1] := FloatToStr(Item.StartTime);
-      rdgSutraFeature.Cells[Ord(gfcUsed),ItemIndex+1] := Item.UsedFormula;
-      rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1] := Item.LowerPressureFormula;
-      rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1] := Item.LowerFlowRateFormula;
-      rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1] := Item.HigherPressureFormula;
-      rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1] := Item.HigherFlowRateFormula;
-      rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1] := Ord(Item.LowerLimitType);
-      rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1] := Ord(Item.UpperLimitType);
-      rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1] := Item.UInFormula;
-      rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1] := Ord(Item.ExitSpecMethod);
-      rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1] := Item.UoutFormula;
+      rdgSutraFeature.Cells[Ord(gfcTime),ItemIndex+1+PestRowOffset] := FloatToStr(Item.StartTime);
+      rdgSutraFeature.Cells[Ord(gfcUsed),ItemIndex+1+PestRowOffset] := Item.UsedFormula;
+      rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1+PestRowOffset] := Item.LowerPressureFormula;
+      rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1+PestRowOffset] := Item.LowerFlowRateFormula;
+      rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1+PestRowOffset] := Item.HigherPressureFormula;
+      rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1+PestRowOffset] := Item.HigherFlowRateFormula;
+      rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1+PestRowOffset] := Ord(Item.LowerLimitType);
+      rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1+PestRowOffset] := Ord(Item.UpperLimitType);
+      rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1+PestRowOffset] := Item.UInFormula;
+      rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1+PestRowOffset] := Ord(Item.ExitSpecMethod);
+      rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1+PestRowOffset] := Item.UoutFormula;
     end;
   finally
     rdgSutraFeature.EndUpdate;
@@ -168,6 +174,9 @@ var
   Index: Integer;
   ABoundary: TSutraGeneralFlowBoundary;
   ASchedule: TSutraTimeSchedule;
+  Columns: TGenericIntegerList;
+  FormulaIndexes: TGenericIntegerList;
+  BoundaryIndex: Integer;
 begin
   FirstBoundary := BoundaryList[0];
   cbBCTime.Checked := FirstBoundary.UseBCTime;
@@ -208,6 +217,81 @@ begin
   begin
     ClearBoundaries;
   end;
+
+  Columns := TGenericIntegerList.Create;
+  FormulaIndexes := TGenericIntegerList.Create;
+  try
+    Columns.Add(Ord(gfcPress1));
+    FormulaIndexes.Add(LowerPressurePosition);
+    Columns.Add(Ord(gfcFlow1));
+    FormulaIndexes.Add(LowerFlowRatePosition);
+    Columns.Add(Ord(gfcPress2));
+    FormulaIndexes.Add(HigherPressurePosition);
+    Columns.Add(Ord(gfcFlow2));
+    FormulaIndexes.Add(HigherFlowRatePosition);
+    Columns.Add(Ord(gfcInflowU));
+    FormulaIndexes.Add(UInPosition);
+    Columns.Add(Ord(gfcOutflowU));
+    FormulaIndexes.Add(UOutPosition);
+
+    for Index := 0 to Columns.Count - 1 do
+    begin
+      PestMethod[Columns[Index]] :=
+        TSutraGeneralFlowBoundary.DefaultBoundaryMethod(FormulaIndexes[Index]);
+
+      if BoundaryList.Count > 0 then
+      begin
+        FirstBoundary := BoundaryList[0];
+
+        Same := True;
+        for BoundaryIndex := 1 to BoundaryList.Count - 1 do
+        begin
+          ABoundary := BoundaryList[BoundaryIndex];
+          Same := FirstBoundary.PestBoundaryFormula[FormulaIndexes[Index]]
+            = ABoundary.PestBoundaryFormula[FormulaIndexes[Index]];
+          if not Same then
+          begin
+            Break;
+          end;
+        end;
+        if Same then
+        begin
+          PestModifier[Columns[Index]] :=
+            FirstBoundary.PestBoundaryFormula[FormulaIndexes[Index]];
+        end
+        else
+        begin
+          PestModifierAssigned[Columns[Index]] := False;
+        end;
+
+        Same := True;
+        for BoundaryIndex := 1 to BoundaryList.Count - 1 do
+        begin
+          ABoundary := BoundaryList[BoundaryIndex];
+          Same := FirstBoundary.PestBoundaryMethod[FormulaIndexes[Index]]
+            = ABoundary.PestBoundaryMethod[FormulaIndexes[Index]];
+          if not Same then
+          begin
+            Break;
+          end;
+        end;
+        if Same then
+        begin
+          PestMethod[Columns[Index]] :=
+            FirstBoundary.PestBoundaryMethod[FormulaIndexes[Index]];
+        end
+        else
+        begin
+          PestMethodAssigned[Columns[Index]] := False;
+        end;
+      end;
+
+    end;
+
+  finally
+    FormulaIndexes.Free;
+    Columns.Free;
+  end;
 end;
 
 procedure TframeSutraGeneralizedFlowBoundary.GetData(
@@ -222,7 +306,7 @@ begin
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonUsed := True;
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonCaption := 'F()';
   rdgSutraFeature.Columns[Ord(gfcUsed)].ButtonWidth := 35;
-  
+
   comboGeneralizedFlowPresent.ItemIndex := Ord(lbiUseDefaults);
   comboLakeGeneralizedFlowType.ItemIndex := Ord(gfitUseDefaults);
 
@@ -554,7 +638,7 @@ begin
   inherited;
   if Value <> '' then
   begin
-    seNumberOfTimes.AsInteger := rdgSutraFeature.RowCount -1;
+    seNumberOfTimes.AsInteger := rdgSutraFeature.RowCount -1 - PestRowOffset;
   end;
 end;
 
@@ -576,6 +660,7 @@ var
   ATime: Extended;
   OK: Boolean;
   StartIndex: Integer;
+  UsedRow: Integer;
 //  Initialtime: Double;
 //  BoundaryTypeString: string;
 begin
@@ -585,13 +670,14 @@ begin
     ItemIndex := 0;
     for RowIndex := 1 to seNumberOfTimes.AsInteger do
     begin
-      if TryStrToFloat(rdgSutraFeature.Cells[0, RowIndex], ATime) then
+      UsedRow := RowIndex+PestRowOffset;
+      if TryStrToFloat(rdgSutraFeature.Cells[0, UsedRow], ATime) then
       begin
         OK := False;
         StartIndex := Ord(gfcUsed);
         for ColIndex := StartIndex to rdgSutraFeature.ColCount - 1 do
         begin
-          OK := rdgSutraFeature.Cells[ColIndex, RowIndex] <> '';
+          OK := rdgSutraFeature.Cells[ColIndex, UsedRow] <> '';
           if not OK then
           begin
             Break;
@@ -608,17 +694,17 @@ begin
             BoundItem := BoundValues.Add as TSutraGeneralFlowItem;
           end;
           BoundItem.StartTime := ATime;
-          BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(gfcUsed), RowIndex];
-          BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1), RowIndex];
-          BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1),ItemIndex+1];
-          BoundItem.LowerFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow1),ItemIndex+1];
-          BoundItem.HigherPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress2),ItemIndex+1];
-          BoundItem.HigherFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow2),ItemIndex+1];
-          BoundItem.LowerLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit1),ItemIndex+1]);
-          BoundItem.UpperLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit2),ItemIndex+1]);
-          BoundItem.UInFormula := rdgSutraFeature.Cells[Ord(gfcInflowU),ItemIndex+1];
-          BoundItem.ExitSpecMethod := TSutraExitSpecificationMethod(rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),ItemIndex+1]);
-          BoundItem.UoutFormula := rdgSutraFeature.Cells[Ord(gfcOutflowU),ItemIndex+1];
+          BoundItem.UsedFormula := rdgSutraFeature.Cells[Ord(gfcUsed), UsedRow];
+          BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1), UsedRow];
+          BoundItem.LowerPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress1),UsedRow];
+          BoundItem.LowerFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow1),UsedRow];
+          BoundItem.HigherPressureFormula := rdgSutraFeature.Cells[Ord(gfcPress2),UsedRow];
+          BoundItem.HigherFlowRateFormula := rdgSutraFeature.Cells[Ord(gfcFlow2),UsedRow];
+          BoundItem.LowerLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit1),UsedRow]);
+          BoundItem.UpperLimitType := TSutraLimitType(rdgSutraFeature.ItemIndex[Ord(gfcLimit2),UsedRow]);
+          BoundItem.UInFormula := rdgSutraFeature.Cells[Ord(gfcInflowU),UsedRow];
+          BoundItem.ExitSpecMethod := TSutraExitSpecificationMethod(rdgSutraFeature.ItemIndex[Ord(gfcOutflowType),UsedRow]);
+          BoundItem.UoutFormula := rdgSutraFeature.Cells[Ord(gfcOutflowU),UsedRow];
           Inc(ItemIndex);
         end;
       end;
@@ -639,6 +725,9 @@ var
   ABoundary: TSutraGeneralFlowBoundary;
   LocalScreenObjects: TList<TScreenObject>;
   BoundValues: TSutraGeneralFlowCollection;
+  Columns: TGenericIntegerList;
+  FormulaIndexes: TGenericIntegerList;
+  BoundaryIndex: Integer;
 begin
   inherited;
   LocalScreenObjects := TList<TScreenObject>.Create;
@@ -692,6 +781,48 @@ begin
       begin
         ABoundary.UseBCTime := cbBCTime.Checked;
       end;
+    end;
+
+    Columns := TGenericIntegerList.Create;
+    FormulaIndexes := TGenericIntegerList.Create;
+    try
+      Columns.Add(Ord(gfcPress1));
+      FormulaIndexes.Add(LowerPressurePosition);
+      Columns.Add(Ord(gfcFlow1));
+      FormulaIndexes.Add(LowerFlowRatePosition);
+      Columns.Add(Ord(gfcPress2));
+      FormulaIndexes.Add(HigherPressurePosition);
+      Columns.Add(Ord(gfcFlow2));
+      FormulaIndexes.Add(HigherFlowRatePosition);
+      Columns.Add(Ord(gfcInflowU));
+      FormulaIndexes.Add(UInPosition);
+      Columns.Add(Ord(gfcOutflowU));
+      FormulaIndexes.Add(UOutPosition);
+
+      for Index := 0 to Columns.Count - 1 do
+      begin
+        if BoundaryList.Count > 0 then
+        begin
+          for BoundaryIndex := 0 to BoundaryList.Count - 1 do
+          begin
+            ABoundary := BoundaryList[BoundaryIndex];
+            if PestModifierAssigned[Columns[Index]] then
+            begin
+              ABoundary.PestBoundaryFormula[FormulaIndexes[Index]] :=
+                PestModifier[Columns[Index]];
+            end;
+            if PestMethodAssigned[Columns[Index]] then
+            begin
+              ABoundary.PestBoundaryMethod[FormulaIndexes[Index]] :=
+                PestMethod[Columns[Index]];
+            end;
+          end;
+        end;
+      end;
+
+    finally
+      FormulaIndexes.Free;
+      Columns.Free;
     end;
 
   finally

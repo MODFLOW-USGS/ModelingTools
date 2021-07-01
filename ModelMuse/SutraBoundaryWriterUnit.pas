@@ -56,13 +56,13 @@ type
     // PEST
     FPQPestSeriesNames: TStringList;
     FPQPestSeriesMethods: TList<TPestParamMethod>;
-    FPQPestNames: TObjectList<TStringList>;
+    FPQPestNames: TStringListObjectList;
     FPQPestTimeFormulas: TObjectList<T3DSparseStringArray>;
     FPQFormulaUsed: TObjectList<T2DSparseBooleanArray>;
 
     FUPestSeriesNames: TStringList;
     FUPestSeriesMethods: TList<TPestParamMethod>;
-    FUPestNames: TObjectList<TStringList>;
+    FUPestNames: TStringListObjectList;
     FUPestTimeFormulas: TObjectList<T3DSparseStringArray>;
     // @name is called by @link(UpdateMergeLists).
     procedure Evaluate;
@@ -141,13 +141,13 @@ begin
 
   FPQPestSeriesNames := TStringList.Create;
   FPQPestSeriesMethods := TList<TPestParamMethod>.Create;
-  FPQPestNames := TObjectList<TStringList>.Create;
+  FPQPestNames := TStringListObjectList.Create;
   FPQPestTimeFormulas := TObjectList<T3DSparseStringArray>.Create;
   FPQFormulaUsed := TObjectList<T2DSparseBooleanArray>.Create;
 
   FUPestSeriesNames := TStringList.Create;
   FUPestSeriesMethods := TList<TPestParamMethod>.Create;
-  FUPestNames := TObjectList<TStringList>.Create;
+  FUPestNames := TStringListObjectList.Create;
   FUPestTimeFormulas := TObjectList<T3DSparseStringArray>.Create;
   FUFormulaUsed := TObjectList<T2DSparseBooleanArray>.Create;
 
@@ -235,7 +235,6 @@ begin
   end;
 end;
 
-
 procedure TSutraBoundaryWriter.Evaluate;
 var
   ScreenObjectIndex: Integer;
@@ -261,75 +260,6 @@ var
   ValuePestNames: TStringList;
   UPestNames: TStringList;
   ValueFormula: string;
-  procedure AssignTimeListFormula(var Formula: string;
-    const PestSeriesName: String; SeriesMethod: TPestParamMethod;
-    PestNames: TStringList);
-  var
-    Param: TModflowSteadyParameter;
-    PestDataArray: TDataArray;
-  begin
-    Param := Model.GetPestParameterByName(Formula);
-    if Param <> nil then
-    begin
-      PestNames.Add(Param.ParameterName);
-      Formula := FortranFloatToStr(Param.Value);
-      FPestParamUsed := True;
-    end
-    else
-    begin
-      PestDataArray := Model.DataArrayManager.GetDataSetByName(Formula);
-      if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-      begin
-        FPestParamUsed := True;
-        PestNames.Add(PestDataArray.Name);
-        AddUsedPestDataArray(PestDataArray);
-      end
-      else
-      begin
-        PestNames.Add('');
-      end;
-    end;
-
-    if PestSeriesName <> '' then
-    begin
-      Param := Model.GetPestParameterByName(PestSeriesName);
-      if Param <> nil then
-      begin
-        FPestParamUsed := True;
-        case SeriesMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:g',
-                [Formula, Param.Value]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:g',
-                [Formula, Param.Value]);
-            end;
-        end;
-      end
-      else
-      begin
-        PestDataArray := Model.DataArrayManager.GetDataSetByName(PestSeriesName);
-        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
-        begin
-          FPestParamUsed := True;
-          case SeriesMethod of
-            ppmMultiply:
-              begin
-                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-              end;
-            ppmAdd:
-              begin
-                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-              end;
-          end;
-          AddUsedPestDataArray(PestDataArray);
-        end;
-      end;
-    end;
-  end;
 begin
   TransientAllowed := False;
   SimulationType := Model.SutraOptions.SimulationType;
@@ -452,7 +382,7 @@ begin
             as TCustomSutraAssociatedBoundaryItem;
           BoundaryValues[0].Time := AssocItem.StartTime;
           ValueFormula := AssocItem.PQFormula;
-          AssignTimeListFormula(ValueFormula,
+          AssignPestFormula(ValueFormula,
             ABoundary.PestBoundaryValueFormula,
             ABoundary.PestBoundaryValueMethod, ValuePestNames);
           BoundaryValues[0].UsedFormula := AssocItem.UsedFormula;
@@ -466,7 +396,7 @@ begin
               as TCustomSutraAssociatedBoundaryItem;
             BoundaryValues[TimeIndex].Time := FixTime(AssocItem, AllTimes);
             ValueFormula := AssocItem.PQFormula;
-            AssignTimeListFormula(ValueFormula,
+            AssignPestFormula(ValueFormula,
               ABoundary.PestBoundaryValueFormula,
               ABoundary.PestBoundaryValueMethod, ValuePestNames);
             BoundaryValues[TimeIndex].UsedFormula := AssocItem.UsedFormula;
@@ -488,7 +418,7 @@ begin
         Item := ABoundary.Values[DisplayTimeIndex] as TCustomSutraBoundaryItem;
         BoundaryValues[0].Time := Item.StartTime;
         ValueFormula := Item.UFormula;
-        AssignTimeListFormula(ValueFormula,
+        AssignPestFormula(ValueFormula,
           ABoundary.PestAssociatedValueFormula,
           ABoundary.PestAssociatedValueMethod, UPestNames);
         BoundaryValues[0].UsedFormula := Item.UsedFormula;
@@ -501,7 +431,7 @@ begin
           Item := ABoundary.Values[TimeIndex] as TCustomSutraBoundaryItem;
           BoundaryValues[TimeIndex].Time := FixTime(Item, AllTimes);
           ValueFormula := Item.UFormula;
-          AssignTimeListFormula(ValueFormula,
+          AssignPestFormula(ValueFormula,
             ABoundary.PestAssociatedValueFormula,
             ABoundary.PestAssociatedValueMethod, UPestNames);
           BoundaryValues[TimeIndex].UsedFormula := Item.UsedFormula;
@@ -1502,6 +1432,8 @@ var
   StartLayer: Integer;
   StartRow: Integer;
   StartCol: Integer;
+  UFormulasUsed: T2DSparseBooleanArray;
+  PQFormulasUsed: T2DSparseBooleanArray;
 begin
   if TimeIndex < PQTimeList.Count then
   begin
@@ -1527,15 +1459,19 @@ begin
     Count := 0;
     PriorUDataArray :=   UTimeList[TimeIndex-1] as TRealSparseDataSet;
     UDataArray :=   UTimeList[TimeIndex] as TRealSparseDataSet;
+    UFormulasUsed := FUFormulaUsed[TimeIndex];
+
     if TimeIndex < PQTimeList.Count then
     begin
       PriorPQDataArray :=   PQTimeList[TimeIndex-1] as TRealSparseDataSet;
       PQDataArray :=   PQTimeList[TimeIndex] as TRealSparseDataSet;
+      PQFormulasUsed := FPQFormulaUsed[TimeIndex];
     end
     else
     begin
       PriorPQDataArray := nil;
       PQDataArray := nil;
+      PQFormulasUsed := nil
     end;
     if (PriorUDataArray.MinLayer >= 0) or (UDataArray.MinLayer >= 0) then
     begin
@@ -1574,8 +1510,9 @@ begin
             end
             else if UDataArray.IsValue[LayerIndex, RowIndex, ColIndex] then
             begin
-              if UDataArray.RealData[LayerIndex, RowIndex, ColIndex]
-                <> PriorUDataArray.RealData[LayerIndex, RowIndex, ColIndex] then
+              if (UDataArray.RealData[LayerIndex, RowIndex, ColIndex]
+                <> PriorUDataArray.RealData[LayerIndex, RowIndex, ColIndex])
+                or UFormulasUsed[LayerIndex, ColIndex] then
               begin
                 Inc(Count);
               end
@@ -1583,8 +1520,9 @@ begin
               begin
                 if PQDataArray <> nil then
                 begin
-                  if PQDataArray.RealData[LayerIndex, RowIndex, ColIndex]
-                    <> PriorPQDataArray.RealData[LayerIndex, RowIndex, ColIndex] then
+                  if (PQDataArray.RealData[LayerIndex, RowIndex, ColIndex]
+                    <> PriorPQDataArray.RealData[LayerIndex, RowIndex, ColIndex])
+                    or PQFormulasUsed[LayerIndex, ColIndex]  then
                   begin
                     Inc(Count);
                   end
@@ -1806,7 +1744,7 @@ begin
                 <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex])
                 or (PQDataArray.RealData[LayerIndex, RowIndex,ColIndex]
                 <> PriorPqDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-              if not Changed and WritingTemplate then
+              if not Changed {and WritingTemplate} then
               begin
                 if PQFormulasUsed[LayerIndex, ColIndex]
                   or UFormulasUsed[LayerIndex, ColIndex] then
@@ -2009,7 +1947,7 @@ begin
             begin
               Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
                 <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-              if not Changed and WritingTemplate then
+              if not Changed {and WritingTemplate} then
               begin
                 if UFormulasUsed[LayerIndex, ColIndex] then
                 begin
@@ -2227,7 +2165,7 @@ begin
                   <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex])
                   or (PQDataArray.RealData[LayerIndex, RowIndex,ColIndex]
                   <> PriorPqDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-                if not Changed and WritingTemplate then
+                if not Changed {and WritingTemplate} then
                 begin
                   if PQFormulasUsed[LayerIndex, ColIndex]
                     or UFormulasUsed[LayerIndex, ColIndex] then
@@ -2301,12 +2239,9 @@ var
   PriorUDataArray: TDataArray;
   AnyChanged: Boolean;
   UseBCTime: Boolean;
-//  PQFormulas: T3DSparseStringArray;
-//  PQFormulasUsed: T2DSparseBooleanArray;
   UFormulas: T3DSparseStringArray;
   UFormulasUsed: T2DSparseBooleanArray;
   UFormula: string;
-//  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -2427,7 +2362,7 @@ begin
             begin
               Changed := (UDataArray.RealData[LayerIndex, RowIndex,ColIndex]
                 <> PriorUDataArray.RealData[LayerIndex, RowIndex,ColIndex]);
-              if not Changed and WritingTemplate then
+              if not Changed {and WritingTemplate} then
               begin
                 if UFormulasUsed[LayerIndex, ColIndex] then
                 begin
@@ -2505,7 +2440,7 @@ begin
         begin
           LakeExtension := '';
         end;
-      else 
+      else
         Assert(False);
     end;
   end
