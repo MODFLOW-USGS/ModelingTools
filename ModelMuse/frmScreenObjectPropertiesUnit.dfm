@@ -14020,7 +14020,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspGeneralizedFlow
+        ActivePage = jvspGeneralizedTransport
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -14798,7 +14798,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pnlBottom: TPanel
               Top = 355
               Width = 605
-              ExplicitLeft = 0
               ExplicitTop = 355
               ExplicitWidth = 605
               inherited lblNumTimes: TLabel

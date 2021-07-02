@@ -54,6 +54,7 @@ type
     procedure WriteDataSet1;
     procedure WriteDataSet2(TimeIndex: integer);
     procedure WriteDataSet7B(TimeIndex: integer);
+    procedure WriteFileInternal;
   protected
     class function Extension: string; override;
   public
@@ -182,7 +183,6 @@ var
   Item: TSutraGenTransportItem;
   SutraTimeOptions: TSutraTimeOptions;
   AllTimes: TRealList;
-//  AnItem: TSutraGenTransportItem;
   TimeIndex: Integer;
   ListIndex: Integer;
   SutraTimeList: TSutraTimeList;
@@ -529,6 +529,25 @@ begin
   end;
 end;
 
+procedure TSutraGeneralTransportWriter.WriteFileInternal;
+var
+  TimeIndex: Integer;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+    WriteDataSet0;
+    WriteDataSet1;
+    for TimeIndex := 0 to FTimes.Count - 1 do
+    begin
+      WriteDataSet2(TimeIndex);
+      WriteDataSet7B(TimeIndex);
+    end;
+  finally
+    CloseFile;
+  end;
+end;
+
 procedure TSutraGeneralTransportWriter.WriteDataSet0;
 begin
   WriteCommentLine(File_Comment('Generalized Transport'));
@@ -632,7 +651,6 @@ procedure TSutraGeneralTransportWriter.WriteFile(AFileName: string;
   GeneralBoundaries: TList<IGeneralTransportNodes>;
   BcsFileNames: TGenTransportInteractionStringList);
 var
-  TimeIndex: Integer;
   LakeExtension: string;
   TransportTypeExtension: string;
 //  LakeInteraction: TLakeBoundaryInteraction;
@@ -703,43 +721,32 @@ begin
     FileRoot := ChangeFileExt(AFileName, '');
     FNameOfFile := FileRoot + LakeExtension
       + TransportTypeExtension + Extension;
-//    FInputFileName := FNameOfFile;
-    OpenFile(FNameOfFile);
-    try
-      if BcsFileNames <> nil then
+    FInputFileName := FNameOfFile;
+
+    if BcsFileNames <> nil then
+    begin
+      if (BcsFileNames.LakeInteraction <> lbiUseDefaults)
+        or (BcsFileNames.TransportInteraction <> gtitUseDefaults) then
       begin
-        if (BcsFileNames.LakeInteraction <> lbiUseDefaults)
-          or (BcsFileNames.TransportInteraction <> gtitUseDefaults) then
-        begin
-          BcsFileNames.Add(FNameOfFile);
-        end
-        else
-        begin
-          BcsFileNames.Add('');
-        end;
-      end;
-      WriteDataSet0;
-      WriteDataSet1;
-      for TimeIndex := 0 to FTimes.Count - 1 do
+        BcsFileNames.Add(FNameOfFile);
+      end
+      else
       begin
-        WriteDataSet2(TimeIndex);
-        WriteDataSet7B(TimeIndex);
+        BcsFileNames.Add('');
       end;
-      SutraFileWriter.AddBoundaryFile(FNameOfFile);
-      FBcougFileName := ChangeFileExt(FileRoot, '.bcoug');
-//      if BcsFileNames <> nil then
-//      begin
-//        LakeInteraction := BcsFileNames.LakeInteraction;
-//        TransportInteraction := BcsFileNames.TransportInteraction;
-//      end
-//      else
-//      begin
-//        LakeInteraction := lbiUseDefaults;
-//        TransportInteraction := gtitUseDefaults;
-//      end;
-      SutraFileWriter.AddFile(sftBcoug, FBcougFileName);
-    finally
-      CloseFile;
+    end;
+    WriteFileInternal;
+
+    SutraFileWriter.AddBoundaryFile(FNameOfFile);
+    FBcougFileName := ChangeFileExt(FileRoot, '.bcoug');
+    SutraFileWriter.AddFile(sftBcoug, FBcougFileName);
+
+    if  Model.PestUsed and FPestParamUsed then
+    begin
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
     end;
   end
   else

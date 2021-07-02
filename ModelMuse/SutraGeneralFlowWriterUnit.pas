@@ -1096,6 +1096,7 @@ begin
     FileRoot := ChangeFileExt(AFileName, '');
     FNameOfFile := FileRoot + LakeExtension
       + FlowTypeExtension + Extension;
+    FInputFileName := FNameOfFile;
 
     if BcsFileNames <> nil then
     begin

@@ -1026,6 +1026,7 @@ var
   FileProperties: TPilotPointFileObject;
   UsedFileProperties: TPilotPointFileObject;
   ParamIndex: Integer;
+  Root: string;
 begin
   ScriptFileName := ChangeFileExt(FParamValuesFileName, '.script');
   if ScriptChoice = scWriteTemplate then
@@ -1224,13 +1225,14 @@ begin
     NewLine;
     {$ENDREGION}
 
+    Root := ChangeFileExt(AFileName, '');
     WriteString('#Write new data values');
     NewLine;
     {$REGION 'Write new data values'}
     for LayerIndex := 0 to FDataArray.LayerCount - 1 do
     begin
-      ModelInputFileName := AFileName + '.' + Trim(FDataArray.Name) + '_'
-        + IntToStr(LayerIndex + 1) + '.txt';
+      ModelInputFileName := Root + '.' + Trim(FDataArray.Name) + '_'
+        + IntToStr(LayerIndex + 1) + StrArraysExt;
       ModelInputFileName := 'arrays' + PathDelim
         + ExtractFileName(ModelInputFileName);
       WriteString('write_column_data_file(header=''no'', &');

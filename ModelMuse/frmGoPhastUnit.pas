@@ -9759,11 +9759,16 @@ var
   SutraPestObsWriterWriter: TSutraPestObsWriterWriter;
   SutraNodDisWriter: TSutraNodDisWriter;
   SutraEleDisWriter: TSutraEleDisWriter;
-  RunModelBatchFile: TStringList;
-  RunModelBatchFileName: string;
+  ParamEstBatFile: TStringList;
+  ParamEstBatFileName: string;
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
   SutraNod3DDisWriter: TSutraNod3DDisWriter;
+  ParamEstBatchFile: TStringList;
+  PLPROC_Location: string;
+  DSIndex: Integer;
+  ADataArray: TDataArray;
+  INFLE: string;
 begin
   case ModelSelection of
     msSutra22:
@@ -9813,7 +9818,7 @@ begin
   PhastModel.SutraPestScripts.Clear;
   PhastModel.KrigfactorsScriptLines.Clear;
   PhastModel.PilotPointData.Clear;
-
+  PhastModel.ClearPestArrayFileNames;
 
   SutraNodDisWriter := TSutraNodDisWriter.Create(PhastModel, etExport);
   try
@@ -10108,34 +10113,49 @@ begin
 
         SutraFileWriter.WriteFile;
         BatchFileName := ExtractFileDir(FileName);
-        RunModelBatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
+        ParamEstBatFileName := IncludeTrailingPathDelimiter(BatchFileName)
           + StrRunModelBat;
         BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
           + 'RunSutra.bat';
+
+
         BatchFile := TStringList.Create;
-        RunModelBatchFile := TStringList.Create;
+        ParamEstBatFile := TStringList.Create;
         try
           if NetworkDrive then
           begin
             BatchFile.Add('pushd ' + ModelDirectory);
-            RunModelBatchFile.Add('pushd ' + ModelDirectory);
+            ParamEstBatFile.Add('pushd ' + ModelDirectory);
           end;
 
-          PhastModel.AddFilestToDeleteToBatchFile(RunModelBatchFile, RunModelBatchFileName);
+          PhastModel.AddFilestToDeleteToBatchFile(ParamEstBatFile, ParamEstBatFileName);
+          PLPROC_Location := GetPLPROC_Location(FileName, PhastModel);
+          PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
+          for DSIndex := 0 to PhastModel.DataArrayManager.DataSetCount - 1 do
+          begin
+            ADataArray := PhastModel.DataArrayManager[DSIndex];
+            if ADataArray.PestParametersUsed then
+            begin
+              INFLE := ExtractFileName(ChangeFileExt(FileName,
+                '.' + ADataArray.Name + '.script' ));
+              ParamEstBatFile.Add(PLPROC_Location + INFLE);
+            end;
+          end;
+//          ParamEstBatFile.AddStrings(Model.PestTemplateLines);
 
           BatchFile.AddStrings(PhastModel.KrigfactorsScriptLines);
           BatchFile.AddStrings(PhastModel.PestTemplateLines);
-          RunModelBatchFile.AddStrings(PhastModel.PestTemplateLines);
+          ParamEstBatFile.AddStrings(PhastModel.PestTemplateLines);
 
           BatchFile.Add('"' + SutraFileName + '"');
-          RunModelBatchFile.Add('"' + SutraFileName + '"');
+          ParamEstBatFile.Add('"' + SutraFileName + '"');
 
           if PhastModel.PestUsed then
           begin
             BatchFile.Add(TCustomFileWriter.
               PestUtilityProgramPath(StrSutraObsExtractorex, FileName) + ' '
               + ChangeFileExt(ExtractFileName(FileName), StrSoei));
-            RunModelBatchFile.Add(TCustomFileWriter.
+            ParamEstBatFile.Add(TCustomFileWriter.
               PestUtilityProgramPath(StrSutraObsExtractorex, FileName) + ' '
               + ChangeFileExt(ExtractFileName(FileName), StrSoeev));
           end;
@@ -10146,11 +10166,11 @@ begin
           if NetworkDrive then
           begin
             BatchFile.Add('popd');
-            RunModelBatchFile.Add('popd');
+            ParamEstBatFile.Add('popd');
           end;
           BatchFile.Add('pause');
           BatchFile.SaveToFile(BatchFileName);
-          RunModelBatchFile.SaveToFile(RunModelBatchFileName);
+          ParamEstBatFile.SaveToFile(ParamEstBatFileName);
 
           BatchFile.Clear;
 
@@ -10163,8 +10183,9 @@ begin
           BatchFile.SaveToFile(BatchFileName + ArchiveExt);
 
         finally
+//          ParamEstBatFile.Free;
           BatchFile.Free;
-          RunModelBatchFile.Free;
+          ParamEstBatFile.Free;
         end;
         PhastModel.AddModelInputFile(BatchFileName + ArchiveExt);
         PhastModel.AddModelInputFile(SutraFileName);

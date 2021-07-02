@@ -1,0 +1,9 @@
+# OBS: Observation Utility file created on 7/2/2021 by ModelMuse version 4.3.0.56.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT PestPilotPointTest.drob_out_drn.csv
+  'drn_Drn' drn Drain
+END CONTINUOUS

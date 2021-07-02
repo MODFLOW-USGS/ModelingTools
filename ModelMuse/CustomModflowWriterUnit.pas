@@ -74,6 +74,7 @@ type
     FFileStream: TFileStream;
     FMainFileStream: TFileStream;
     FPestDataArrays: TDictionary<string, TDataArray>;
+    // @name is the name of the file being created.
     FNameOfFile: string;
   private
     // See @link(Model).
@@ -82,6 +83,11 @@ type
   protected
     FEvaluationType: TEvaluationType;
     FPestParamUsed: Boolean;
+    // @name is the name of the file that will eventually be read by the
+    // model. It differs from @link(FNameOfFile) in that is the same
+    // regardless or whether the file being created is the actual input file
+    // or a template file being created for PEST.
+    FInputFileName: string;
     // @name closes the file that is being exported.
     // @seealso(OpenFile)
     procedure CloseFile;
@@ -186,6 +192,15 @@ type
     // otherwise, it returns the name of the arrays file to be used
     // in the PEST template for a boundary condition.
     function WriteArraysFile(TemplateFileName: string): string;
+    { @name writes one layer of DataArray to the output file.
+      @param(DataArray is the TDataArray to be written.)
+      @param(LayerIndex is the layer in DataArray to be written.)
+      @param(ArrayName is written as a comment
+        identifying the data set being written.)
+    }
+    procedure WriteArray(const DataArray: TDataArray; const LayerIndex: integer;
+      const Comment: string;  NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
+      CacheArray: Boolean = True); virtual;
   end;
 
   { @name is an abstract base class used as an ancestor for classes that
@@ -205,7 +220,6 @@ type
       const DataArray: TDataArray);
   protected
     FArrayWritingFormat: TArrayWritingFormat;
-    FInputFileName: string;
     // @name generates a comment line for a MODFLOW input file indentifying
     // the package.
     function PackageID_Comment(APackage: TModflowPackageSelection): string; virtual;
@@ -312,7 +326,7 @@ type
     }
     procedure WriteArray(const DataArray: TDataArray; const LayerIndex: integer;
       const Comment: string;  NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-      CacheArray: Boolean = True);
+      CacheArray: Boolean = True); override;
     // @name writes value to the output file using the U2DINT format in MODFLOW
     // or the IARRAY array reader in MT3DMS depending on the value of
     // @link(FArrayWritingFormat)
@@ -1486,7 +1500,6 @@ begin
           ParamEstBatchFile.Add(PLPROC_Location + INFLE);
         end;
       end;
-
       ParamEstBatchFile.AddStrings(Model.PestTemplateLines);
 
       ArchiveBatchFile.Add('if not exist "..\..\output\NUL" mkdir "..\..\output"');
@@ -2981,7 +2994,14 @@ var
           end;
           SeriesValue := SeriesDataArray.RealData[
             DataArrayLayer, ACell.Row, ACell.Column];
-          LocalLayer := Model.DataSetLayerToModflowLayer(DataArrayLayer);
+          if Model.ModelSelection in ModflowSelection then
+          begin
+            LocalLayer := Model.DataSetLayerToModflowLayer(DataArrayLayer);
+          end
+          else
+          begin
+            LocalLayer := DataArrayLayer + 1;
+          end;
 
           SeriesReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
             [ArrayTemplateCharacter, SeriesDataArray.Name,
@@ -3256,6 +3276,7 @@ begin
     begin
       ArrayFileName := Copy(ArrayFileName, ArraysPos, MAXINT);
     end;
+    DataArray.PestArrayFileNames.Add(ArrayFileName);
 
     if (Model.ModelSelection = msModflow2015) and (MF6_ArrayName <> '') then
     begin
@@ -3271,7 +3292,6 @@ begin
 
     WriteString('  OPEN/CLOSE ');
     WriteString(ArrayFileName);
-    DataArray.PestArrayFileNames.Add(ArrayFileName);
     if Model.ModelSelection <> msModflow2015 then
     begin
       WriteString(' 1.0 (Free) ');
@@ -3362,6 +3382,32 @@ begin
   end;
 end;
 
+procedure TCustomFileWriter.WriteArray(const DataArray: TDataArray;
+  const LayerIndex: integer; const Comment: string;
+  NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
+  CacheArray: Boolean);
+var
+  LayerArrayWriter: TLayerArrayWriter;
+  ArrayFileName: string;
+  ArraysPos: Integer;
+begin
+  LayerArrayWriter := TLayerArrayWriter.Create(Model, FEvaluationType);
+  try
+    Assert(FInputFileName <> '');
+    ArrayFileName := LayerArrayWriter.WriteFile(FInputFileName,
+      DataArray, LayerIndex);
+  finally
+    LayerArrayWriter.Free;
+  end;
+  Model.AddModelInputFile(ArrayFileName);
+  ArraysPos := Pos(StrArrays, ArrayFileName);
+  if ArraysPos > 0 then
+  begin
+    ArrayFileName := Copy(ArrayFileName, ArraysPos, MAXINT);
+  end;
+  DataArray.PestArrayFileNames.Add(ArrayFileName);
+end;
+
 function TCustomFileWriter.WriteArraysFile(TemplateFileName: string): string;
 var
   ArraysFile: TStringList;
@@ -3371,7 +3417,7 @@ var
   ALine: WideString;
   TempFile: string;
   LayerIndex: Integer;
-  ModflowWriter: TCustomModflowWriter;
+//  ModflowWriter: TCustomModflowWriter;
   ParameterZoneWriter: TParameterZoneWriter;
 begin
   if FPestDataArrays.Count = 0 then
@@ -3380,8 +3426,9 @@ begin
   end
   else
   begin
-    ModflowWriter := nil;
-    result := ExpandFileName(ChangeFileExt(TemplateFileName, '.arrays'));
+//    ModflowWriter := nil;
+//    TemplateFileName :=   ChangeFileExt(TemplateFileName, '');
+    result := ExpandFileName(ChangeFileExt(TemplateFileName, '.txt'));
     ArraysFile := TStringList.Create;
     try
       ArraysFile.Add(Model.PestProperties.ArrayTemplateCharacter);
@@ -3403,13 +3450,13 @@ begin
           TempFile := ChangeFileExt(TempFile, '') + '.' + ADataArray.Name;
           OpenTempFile(TempFile);
           try
-            if ModflowWriter = nil then
-            begin
-              ModflowWriter := self as TCustomModflowWriter;
-            end;
+//            if ModflowWriter = nil then
+//            begin
+//              ModflowWriter := self as TCustomModflowWriter;
+//            end;
             for LayerIndex := 0 to ADataArray.LayerCount - 1 do
             begin
-              ModflowWriter.WriteArray(ADataArray,
+              {ModflowWriter.}WriteArray(ADataArray,
                 LayerIndex, '', '', ADataArray.Name);
             end;
           finally
@@ -10042,8 +10089,9 @@ var
 begin
   ArrayName := ADataArray.Name;
   Assert(ArrayName <> '');
-  OutputFileName := AFileName + '.' + Trim(ArrayName) + '_'
-    + IntToStr(ALayer+1) + '.txt';
+  OutputFileName := ChangeFileExt(AFileName, '');
+  OutputFileName := OutputFileName + '.' + Trim(ArrayName) + '_'
+    + IntToStr(ALayer+1) + StrArraysExt;
 
   result := ExtractFileName(OutputFileName);
   OutputDirectory := ExtractFileDir(OutputFileName);

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="PestPilotPointTest" FileType="bin">
+    <FileName Model_Name="PestPilotPointTest" FileType="bin">..\..\..\WRDAPP\mf6.2.1\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="PestPilotPointTest" FileType="ancillary">
+    <FileName Model_Name="PestPilotPointTest" FileType="ancillary">PestPilotPointTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="PestPilotPointTest" FileType="Model Input">
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">arrays\PestPilotPointTest.Kx_1.arrays</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">arrays\PestPilotPointTest.Kx_2.arrays</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">arrays\PestPilotPointTest.Kx_3.arrays</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">arrays\PestPilotPointTest.Ky_1.arrays</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">arrays\PestPilotPointTest.Ky_2.arrays</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">arrays\PestPilotPointTest.Ky_3.arrays</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.chd</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.dis</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.drn</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.ic</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.ims</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.jtf</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.nam.archive</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.npf</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.ob_drob</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.ob_gw</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.oc</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.ptf</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.pval</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">PestPilotPointTest.tdis</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Input">usgs.PestPilotPointTest.reference</FileName>
+  </model>
+  <output Model_Name="PestPilotPointTest" FileType="Model Output">
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.bhd</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.cbc</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.dis.grb</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.drob_out_drn.csv</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.InnerSolution.CSV</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.lst</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.ob_gw_out_head.csv</FileName>
+    <FileName Model_Name="PestPilotPointTest" FileType="Model Output">PestPilotPointTest.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

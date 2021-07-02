@@ -933,6 +933,7 @@ const
 
   clTransparent32 : TColor32 = 0;
   SelectEpsilon = 5;
+  StrArraysExt = '.arrays';
 
 var
   ObservationStatFlagLabels: TStringList = nil;

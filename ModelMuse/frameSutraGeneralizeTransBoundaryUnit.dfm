@@ -7,8 +7,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
     Top = 368
     Width = 586
     Height = 121
-    ExplicitLeft = 1
-    ExplicitTop = 373
+    ExplicitTop = 368
     ExplicitWidth = 586
     ExplicitHeight = 121
     DesignSize = (
@@ -95,13 +94,12 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
     Height = 237
     ExplicitTop = 131
     ExplicitWidth = 586
-    ExplicitHeight = 261
+    ExplicitHeight = 237
     inherited rdgSutraFeature: TRbwDataGrid4
       Width = 584
       Height = 235
       ColCount = 6
       OnMouseUp = rdgSutraFeatureMouseUp
-      OnSelectCell = rdgSutraFeatureSelectCell
       OnSetEditText = rdgSutraFeatureSetEditText
       OnBeforeDrawCell = rdgSutraFeatureBeforeDrawCell
       OnColSize = rdgSutraFeatureColSize
@@ -109,6 +107,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -132,6 +131,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -155,6 +155,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -178,6 +179,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -201,6 +203,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -224,6 +227,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -246,7 +250,7 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
           AutoAdjustColWidths = False
         end>
       ExplicitWidth = 584
-      ExplicitHeight = 259
+      ExplicitHeight = 235
     end
   end
   inherited pnlTop: TPanel

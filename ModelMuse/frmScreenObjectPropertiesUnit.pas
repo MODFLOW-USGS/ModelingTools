@@ -2853,6 +2853,11 @@ begin
     PestParameterColumns := [2..5, 8, 10];
     UsedEvalAt := eaNodes;
   end
+  else if (Sender = frameSutraGeneralizeTransBoundary.rdgSutraFeature) then
+  begin
+    PestParameterColumns := [2..5];
+    UsedEvalAt := eaNodes;
+  end
   ;
 
   if not (ACol in PestParameterColumns) and (ARow >= 1)
@@ -5797,6 +5802,7 @@ begin
   frameSutraMassEnergyFlux.OnCheckPestCell := EnablePestCells;
   frameSutraSpecTempConc.OnCheckPestCell := EnablePestCells;
   frameSutraGeneralizedFlowBoundary.OnCheckPestCell := EnablePestCells;
+  frameSutraGeneralizeTransBoundary.OnCheckPestCell := EnablePestCells;
 
 end;
 
@@ -26253,7 +26259,7 @@ begin
     or ((DataGrid = frameSutraMassEnergyFlux.rdgSutraFeature) and (ACol in [2]))
     or ((DataGrid = frameSutraSpecTempConc.rdgSutraFeature) and (ACol in [2]))
     or ((DataGrid = frameSutraGeneralizedFlowBoundary.rdgSutraFeature) and (ACol in [2..5, 8, 10]))
-//    or (DataGrid = frameCSUB.rdgSubGroups)
+    or ((DataGrid = frameSutraGeneralizeTransBoundary.rdgSutraFeature) and (ACol in [2..5]))
     ;
 end;
 

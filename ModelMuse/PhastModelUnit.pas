@@ -2150,7 +2150,6 @@ that affects the model output should also have a comment. }
     procedure UpdateAllDataArrayDimensions;
     procedure AssignModflow6LakeDisplayArrays(Sender: TObject);
     procedure UpdateIdomain(Sender: TObject);
-    procedure ClearPestArrayFileNames;
   private
     FGrid: TCustomModelGrid;
     FModflowOptions: TModflowOptions;
@@ -3378,6 +3377,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfSfrEvapotranspiration(Sender: TObject);
     property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
       read GetShortestHorizontalBlockEdge;
+    procedure ClearPestArrayFileNames;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid

@@ -2459,6 +2459,7 @@ begin
     else Assert(False);
   end;
   FNameOfFile := FileName;
+  FInputFileName := FNameOfFile;
 
   UTimeList := TSutraMergedTimeList.Create(Model);
   PQTimeList := TSutraMergedTimeList.Create(Model);

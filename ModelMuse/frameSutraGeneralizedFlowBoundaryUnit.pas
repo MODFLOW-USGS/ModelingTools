@@ -218,6 +218,7 @@ begin
     ClearBoundaries;
   end;
 
+  {$IFDEF PEST}
   Columns := TGenericIntegerList.Create;
   FormulaIndexes := TGenericIntegerList.Create;
   try
@@ -292,6 +293,7 @@ begin
     FormulaIndexes.Free;
     Columns.Free;
   end;
+  {$ENDIF}
 end;
 
 procedure TframeSutraGeneralizedFlowBoundary.GetData(
@@ -783,6 +785,7 @@ begin
       end;
     end;
 
+    {$IFDEF PEST}
     Columns := TGenericIntegerList.Create;
     FormulaIndexes := TGenericIntegerList.Create;
     try
@@ -824,7 +827,7 @@ begin
       FormulaIndexes.Free;
       Columns.Free;
     end;
-
+    {$ENDIF}
   finally
     BoundaryList.Free;
     LocalScreenObjects.Free;
