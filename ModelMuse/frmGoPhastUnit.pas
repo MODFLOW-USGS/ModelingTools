@@ -6460,7 +6460,7 @@ begin
     begin
       result := False;
       Beep;
-      if not (MessageDlg(StrAMoreRecentVersionPest, mtInformation,
+      if (MessageDlg(StrAMoreRecentVersionPest, mtInformation,
         [mbYes, mbNo], 0, mbNo) = mrYes) then
       begin
         result := True;
@@ -9769,6 +9769,22 @@ var
   DSIndex: Integer;
   ADataArray: TDataArray;
   INFLE: string;
+  PestInputDataArrays: TDictionary<string, TDataArray>;
+  PestDataArray: TDataArray;
+//  InputPestDataArrays: TArray<TDataArray>;
+  procedure AddPestDataArraysToDictionary(InputPestDataArrays: TArray<TDataArray>);
+  var
+    DataArray: TDataArray;
+  begin
+    for DataArray in InputPestDataArrays do
+    begin
+      if not PestInputDataArrays.ContainsKey(UpperCase(ADataArray.Name)) then
+      begin
+        PestInputDataArrays.Add(UpperCase(ADataArray.Name), ADataArray);
+      end;
+    end;
+  end;
+
 begin
   case ModelSelection of
     msSutra22:
@@ -9850,6 +9866,7 @@ begin
   PhastModel.ClearModelFiles;
   frmProgressMM.ShouldContinue := True;
   frmErrorsAndWarnings.RemoveWarningGroup(PhastModel, StrTheFollowingObjectNoCells);
+  PestInputDataArrays := TDictionary<string, TDataArray>.Create;
 //  BcopgFileNames := TStringList.Create;
 //  BcougFileNames := TStringList.Create;
   try
@@ -9874,6 +9891,8 @@ begin
             sbtFluidSource);
           try
             BoundaryWriter.WriteFile(FileName, FluidSourceNodes, nil);
+            AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
+//            InputPestDataArrays := BoundaryWriter.GetUsedPestDataArrays;
           finally
             BoundaryWriter.Free;
           end;
@@ -9890,6 +9909,7 @@ begin
             try
               BoundaryWriter.WriteFile(FileName, FluidSourceNodes,
                 FluidSourceBcsNames);
+              AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
             finally
               BoundaryWriter.Free;
             end;
@@ -9903,6 +9923,7 @@ begin
             sbtMassEnergySource);
           try
             BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes, nil);
+            AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
           finally
             BoundaryWriter.Free;
           end;
@@ -9919,6 +9940,7 @@ begin
             try
               BoundaryWriter.WriteFile(FileName, MassEnergySourceNodes,
                 MassEnergyBcsNames);
+              AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
             finally
               BoundaryWriter.Free;
             end;
@@ -9932,6 +9954,7 @@ begin
             sbtSpecPress);
           try
             BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes, nil);
+            AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
           finally
             BoundaryWriter.Free;
           end;
@@ -9948,6 +9971,7 @@ begin
             try
               BoundaryWriter.WriteFile(FileName, SpecifiedPressureNodes,
                 SpecifiedPressureBcsNames);
+              AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
             finally
               BoundaryWriter.Free;
             end;
@@ -9961,6 +9985,7 @@ begin
             sbtSpecConcTemp);
           try
             BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes, nil);
+            AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
           finally
             BoundaryWriter.Free;
           end;
@@ -9978,6 +10003,7 @@ begin
             try
               BoundaryWriter.WriteFile(FileName, SpecifiedTempConcNodes,
                 SpecifiedTempConcBcsNames);
+              AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
             finally
               BoundaryWriter.Free;
             end;
@@ -10009,6 +10035,7 @@ begin
           GenFlowWriter := TSutraGeneralFlowWriter.Create(PhastModel, etExport);
           try
             GenFlowWriter.WriteFile(FileName, GeneralFlowNodes, nil);
+            AddPestDataArraysToDictionary(GenFlowWriter.GetUsedPestDataArrays)
           finally
             GenFlowWriter.Free;
           end;
@@ -10032,6 +10059,7 @@ begin
               try
                 GenFlowWriter.WriteFile(FileName, GeneralFlowNodes,
                   GenFlowInteractionBcsNames);
+                AddPestDataArraysToDictionary(GenFlowWriter.GetUsedPestDataArrays)
               finally
                 GenFlowWriter.Free;
               end;
@@ -10048,6 +10076,7 @@ begin
           GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
           try
             GenTransWriter.WriteFile(FileName, GeneralTransportNodes, nil);
+            AddPestDataArraysToDictionary(GenTransWriter.GetUsedPestDataArrays)
           finally
             GenTransWriter.Free;
           end;
@@ -10071,6 +10100,7 @@ begin
               GenTransWriter := TSutraGeneralTransportWriter.Create(PhastModel, etExport);
               try
                 GenTransWriter.WriteFile(FileName, GeneralTransportNodes, GenTransportInteractionBcsNames);
+                AddPestDataArraysToDictionary(GenTransWriter.GetUsedPestDataArrays)
               finally
                 GenTransWriter.Free;
               end;
@@ -10089,6 +10119,12 @@ begin
         InputWriter := TSutraInputWriter.Create(PhastModel);
         try
           InputWriter.HasLakes := HasLakes;
+
+          for PestDataArray in PestInputDataArrays.Values do
+          begin
+            InputWriter.AddUsedPestDataArray(PestDataArray)
+          end;
+
           InputWriter.WriteFile(FileName, FluidSourceNodes,
             MassEnergySourceNodes, SpecifiedPressureNodes,
             SpecifiedTempConcNodes, NOBS, Schedules, Observations,
@@ -10254,6 +10290,7 @@ begin
     begin
       FreeAndNil(frmProgressMM);
     end;
+    PestInputDataArrays.Free;
   end;
 end;
 

@@ -620,7 +620,8 @@ begin
                       AssignNodeNumber;
                       if NodeNumber >= 0 then
                       begin
-                        NodeList.Add(TGeneralFlowNode.CreateInactive(NodeNumber, LayerIndex, ColIndex));
+                        NodeList.Add(TGeneralFlowNode.CreateInactive(NodeNumber,
+                          LayerIndex, ColIndex));
                       end;
                     end;
                   end;

@@ -2530,7 +2530,6 @@ begin
   if not FPestDataArrays.ContainsKey(UpperCase(ADataArray.Name)) then
   begin
     FPestDataArrays.Add(UpperCase(ADataArray.Name), ADataArray);
-//    Model.AddUsedPestDataArray(ADataArray);
   end;
 end;
 
@@ -3090,7 +3089,15 @@ var
           end;
           ModifierValue := DataArray.RealData[DataArrayLayer, ACell.Row, ACell.Column];
 
-          LocalLayer := Model.DataSetLayerToModflowLayer(DataArrayLayer);
+          if Model.ModelSelection in ModflowSelection then
+          begin
+            LocalLayer := Model.DataSetLayerToModflowLayer(DataArrayLayer);
+          end
+          else
+          begin
+            LocalLayer := DataArrayLayer + 1;
+          end;
+
           CellValueReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
             [ArrayTemplateCharacter, DataArray.Name,
             LocalLayer, ACell.Row+1, ACell.Column+1]);

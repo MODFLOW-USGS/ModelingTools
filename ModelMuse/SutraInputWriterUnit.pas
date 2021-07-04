@@ -97,6 +97,7 @@ type
     procedure WriteDataSet21B;
     procedure WriteDataSet22;
     procedure SetHasLakes(const Value: Boolean);
+    procedure WriteFileInternal;
   protected
     class function Extension: string; override;
   public
@@ -1096,8 +1097,34 @@ begin
       begin
         WriteInteger(ANode.NodeNumber);
       end;
-      WriteFloat(ANode.PressureOrFlow);
-      WriteFloat(ANode.TempOrConc);
+      if WritingTemplate and (ANode.PressureOrFlowFormula <> '') then
+      begin
+        WriteString(ANode.PressureOrFlowFormula);
+        FPestParamUsed := True;
+      end
+      else
+      begin
+        WriteFloat(ANode.PressureOrFlow);
+        if ANode.PressureOrFlowFormula <> '' then
+        begin
+          FPestParamUsed := True;
+        end;
+      end;
+      if WritingTemplate and (ANode.TempOrConcFormula <> '') then
+      begin
+        WriteString(ANode.TempOrConcFormula);
+        FPestParamUsed := True;
+      end
+      else
+      begin
+        WriteFloat(ANode.TempOrConc);
+        if ANode.TempOrConcFormula <> '' then
+        begin
+          FPestParamUsed := True;
+        end;
+      end;
+//      WriteFloat(ANode.PressureOrFlow);
+//      WriteFloat(ANode.TempOrConc);
       NewLine;
     end;
     WriteInteger(0);
@@ -1141,7 +1168,20 @@ begin
         WriteInteger(ANode.NodeNumber);
       end;
 //      WriteFloat(ANode.PressureOrFlow);
-      WriteFloat(ANode.TempOrConc);
+      if WritingTemplate and (ANode.TempOrConcFormula <> '') then
+      begin
+        WriteString(ANode.TempOrConcFormula);
+        FPestParamUsed := True;
+      end
+      else
+      begin
+        WriteFloat(ANode.TempOrConc);
+        if ANode.TempOrConcFormula <> '' then
+        begin
+          FPestParamUsed := True;
+        end;
+      end;
+//      WriteFloat(ANode.TempOrConc);
       NewLine;
     end;
     WriteInteger(0);
@@ -1184,8 +1224,34 @@ begin
       begin
         WriteInteger(ANode.NodeNumber);
       end;
-      WriteFloat(ANode.PressureOrFlow);
-      WriteFloat(ANode.TempOrConc);
+      if WritingTemplate and (ANode.PressureOrFlowFormula <> '') then
+      begin
+        WriteString(ANode.PressureOrFlowFormula);
+        FPestParamUsed := True;
+      end
+      else
+      begin
+        WriteFloat(ANode.PressureOrFlow);
+        if ANode.PressureOrFlowFormula <> '' then
+        begin
+          FPestParamUsed := True;
+        end;
+      end;
+      if WritingTemplate and (ANode.TempOrConcFormula <> '') then
+      begin
+        WriteString(ANode.TempOrConcFormula);
+        FPestParamUsed := True;
+      end
+      else
+      begin
+        WriteFloat(ANode.TempOrConc);
+        if ANode.TempOrConcFormula <> '' then
+        begin
+          FPestParamUsed := True;
+        end;
+      end;
+//      WriteFloat(ANode.PressureOrFlow);
+//      WriteFloat(ANode.TempOrConc);
       NewLine;
     end;
     WriteInteger(0);
@@ -1288,7 +1354,20 @@ begin
       begin
         WriteInteger(ANode.NodeNumber);
       end;
-      WriteFloat(ANode.TempOrConc);
+      if WritingTemplate and (ANode.TempOrConcFormula <> '') then
+      begin
+        WriteString(ANode.TempOrConcFormula);
+        FPestParamUsed := True;
+      end
+      else
+      begin
+        WriteFloat(ANode.TempOrConc);
+        if ANode.TempOrConcFormula <> '' then
+        begin
+          FPestParamUsed := True;
+        end;
+      end;
+//      WriteFloat(ANode.TempOrConc);
       NewLine;
     end;
     WriteInteger(0);
@@ -1328,30 +1407,106 @@ begin
         for NodeIndex := 0 to Length(NodeArray) - 1 do
         begin
           ANode := NodeArray[NodeIndex];
-//          if ANode.Active and (FlowNodes.TimeIndex <= 1) then
-//          begin
-            if ANode.FUseBCTime then
-            begin
-              WriteInteger(-ANode.NodeNumber-1);
-            end
-            else
-            begin
-              WriteInteger(ANode.NodeNumber+1);
-            end;
+          if ANode.FUseBCTime then
+          begin
+            WriteInteger(-ANode.NodeNumber-1);
+          end
+          else
+          begin
+            WriteInteger(ANode.NodeNumber+1);
+          end;
+
+          if WritingTemplate and (ANode.P1.Formula <> '') then
+          begin
+            WriteString(ANode.P1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.P1.Value);
+            if ANode.P1.Formula <> '' then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+          if WritingTemplate and (ANode.Q1.Formula <> '') then
+          begin
+            WriteString(ANode.Q1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.Q1.Value);
+            if ANode.Q1.Formula <> '' then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+          if WritingTemplate and (ANode.P2.Formula <> '') then
+          begin
+            WriteString(ANode.P2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.P2.Value);
+            if ANode.P2.Formula <> '' then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+          if WritingTemplate and (ANode.Q2.Formula <> '') then
+          begin
+            WriteString(ANode.Q2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.Q2.Value);
-            WriteLimit(ANode.Limit1);
-            WriteLimit(ANode.Limit2);
+            if ANode.Q2.Formula <> '' then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+          WriteLimit(ANode.Limit1);
+          WriteLimit(ANode.Limit2);
+          if WritingTemplate and (ANode.U1.Formula <> '') then
+          begin
+            WriteString(ANode.U1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.U1.Value);
-            WriteExitSpec(ANode.ExitSpecification);
+            if ANode.U1.Formula <> '' then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+          WriteExitSpec(ANode.ExitSpecification);
+          if WritingTemplate and (ANode.U2.Formula <> '') then
+          begin
+            WriteString(ANode.U2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.U2.Value);
-//          end
-//          else
-//          begin
-//            WriteInteger(-(ANode.NodeNumber+1));
-//          end;
+            if ANode.U2.Formula <> '' then
+            begin
+              FPestParamUsed := True;
+            end;
+          end;
+
+//          WriteFloat(ANode.P1.Value);
+//          WriteFloat(ANode.Q1.Value);
+//          WriteFloat(ANode.P2.Value);
+//          WriteFloat(ANode.Q2.Value);
+//          WriteLimit(ANode.Limit1);
+//          WriteLimit(ANode.Limit2);
+//          WriteFloat(ANode.U1.Value);
+//          WriteExitSpec(ANode.ExitSpecification);
+//          WriteFloat(ANode.U2.Value);
           NewLine;
         end;
       end
@@ -1396,25 +1551,56 @@ begin
         for NodeIndex := 0 to Length(NodeArray) - 1 do
         begin
           ANode := NodeArray[NodeIndex];
-//          if ANode.Active and (TransportNodes.TimeIndex <= 1) then
-//          begin
-            if ANode.FUseBCTime then
-            begin
-              WriteInteger(-ANode.NodeNumber-1);
-            end
-            else
-            begin
-              WriteInteger(ANode.NodeNumber+1);
-            end;
+          if ANode.FUseBCTime then
+          begin
+            WriteInteger(-ANode.NodeNumber-1);
+          end
+          else
+          begin
+            WriteInteger(ANode.NodeNumber+1);
+          end;
+
+          if WritingTemplate and (ANode.FUValue1.Formula <> '') then
+          begin
+            WriteString(ANode.FUValue1.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.FUValue1.Value);
+          end;
+          if WritingTemplate and (ANode.FSoluteEnergyInflow.Formula <> '') then
+          begin
+            WriteString(ANode.FSoluteEnergyInflow.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.FSoluteEnergyInflow.Value);
+          end;
+          if WritingTemplate and (ANode.FUValue2.Formula <> '') then
+          begin
+            WriteString(ANode.FUValue2.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.FUValue2.Value);
+          end;
+          if WritingTemplate and (ANode.FSoluteEnergyOutflow.Formula <> '') then
+          begin
+            WriteString(ANode.FSoluteEnergyOutflow.Formula);
+            FPestParamUsed := True;
+          end
+          else
+          begin
             WriteFloat(ANode.FSoluteEnergyOutflow.Value);
-//          end
-//          else
-//          begin
-//            WriteInteger(-(ANode.NodeNumber+1));
-//          end;
+          end;
+
+//          WriteFloat(ANode.FUValue1.Value);
+//          WriteFloat(ANode.FSoluteEnergyInflow.Value);
+//          WriteFloat(ANode.FUValue2.Value);
+//          WriteFloat(ANode.FSoluteEnergyOutflow.Value);
           NewLine;
         end;
       end;
@@ -1426,34 +1612,6 @@ begin
     NewLine;
   end;
 
-//  if FGeneralTransportNodes.Count > 0 then
-//  begin
-//    TransportNodes := FGeneralTransportNodes[0];
-//    if TransportNodes.Count > 0 then
-//    begin
-//      WriteCommentLine('Data set 21B');
-//      NodeArray := TransportNodes.ToArray;
-//      for NodeIndex := 0 to Length(NodeArray) - 1 do
-//      begin
-//        ANode := NodeArray[NodeIndex];
-//        if ANode.Active and (TransportNodes.TimeIndex <= 1) then
-//        begin
-//          WriteInteger(ANode.NodeNumber+1);
-//          WriteFloat(ANode.FUValue1.Value);
-//          WriteFloat(ANode.FSoluteEnergyInflow.Value);
-//          WriteFloat(ANode.FUValue2.Value);
-//          WriteFloat(ANode.FSoluteEnergyOutflow.Value);
-//        end
-//        else
-//        begin
-//          WriteInteger(-(ANode.NodeNumber+1));
-//        end;
-//        NewLine;
-//      end;
-//      WriteString('0');
-//      NewLine;
-//    end;
-//  end;
 end;
 
 procedure TSutraInputWriter.WriteDataSet22;
@@ -2181,48 +2339,63 @@ begin
     FGeneralTransportNodes := GeneralTransportNodes;
     FNOBS := NOBS;
 
-//    FInputFileName := FFileName;
-    OpenFile(FFileName);
-    try
-      WriteDataSet0;
-      WriteDataSet1;
-      WriteDataSet2A;
-      WriteDataSet2B;
-      WriteDataSet3;
-      WriteDataSet4;
-      WriteDataSet5;
-      WriteDataSet6;
-      WriteDataSet7A;
-      WriteDataSet7B;
-      WriteDataSet7C;
-      WriteDataSet8A;
-      WriteDataSet8B;
-      WriteDataSet8C;
-      WriteDataSet8D;
-      WriteDataSet8E;
-      WriteDataSet9;
-      WriteDataSet10;
-      WriteDataSet11;
-      WriteDataSet12;
-      WriteDataSet13;
-      WriteDataSet14A;
-      WriteDataSet14B;
-      WriteDataSet15A;
-      WriteDataSet15B;
-      WriteDataSet17;
-      WriteDataSet18;
-      WriteDataSet19;
-      WriteDataSet20;
+    FNameOfFile := FFileName;
+    WriteFileInternal;
 
-      WriteDataSet21A;
-      WriteDataSet21B;
-      WriteDataSet22;
-      SutraFileWriter.AddFile(sftInp, FFileName);
-    finally
-      CloseFile;
+    SutraFileWriter.AddFile(sftInp, FFileName);
+
+    if  Model.PestUsed and FPestParamUsed then
+    begin
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteFileInternal;
     end;
   finally
     frmErrorsAndWarnings.EndUpdate;
+  end;
+end;
+
+procedure TSutraInputWriter.WriteFileInternal;
+begin
+  //    FInputFileName := FFileName;
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+    WriteDataSet0;
+    WriteDataSet1;
+    WriteDataSet2A;
+    WriteDataSet2B;
+    WriteDataSet3;
+    WriteDataSet4;
+    WriteDataSet5;
+    WriteDataSet6;
+    WriteDataSet7A;
+    WriteDataSet7B;
+    WriteDataSet7C;
+    WriteDataSet8A;
+    WriteDataSet8B;
+    WriteDataSet8C;
+    WriteDataSet8D;
+    WriteDataSet8E;
+    WriteDataSet9;
+    WriteDataSet10;
+    WriteDataSet11;
+    WriteDataSet12;
+    WriteDataSet13;
+    WriteDataSet14A;
+    WriteDataSet14B;
+    WriteDataSet15A;
+    WriteDataSet15B;
+    WriteDataSet17;
+    WriteDataSet18;
+    WriteDataSet19;
+    WriteDataSet20;
+    WriteDataSet21A;
+    WriteDataSet21B;
+    WriteDataSet22;
+  finally
+    CloseFile;
   end;
 end;
 

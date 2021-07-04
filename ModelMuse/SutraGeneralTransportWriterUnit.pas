@@ -75,7 +75,7 @@ implementation
 uses
   frmErrorsAndWarningsUnit, ScreenObjectUnit,
   SutraTimeScheduleUnit, frmGoPhastUnit, DataSetUnit,
-  SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit;
+  SutraMeshUnit, SutraFileWriterUnit, SparseArrayUnit, ModflowCellUnit;
 
 resourcestring
   StrGeneralizedtranspor = 'generalized-transport boundary condition';
@@ -214,12 +214,43 @@ var
   CellIndex: Integer;
   ACell: TCellAssignment;
   UseBCTime: Boolean;
+  CellLocation: TCellLocation;
+  CellLocPointer: PCellLocation;
+  LowerUPestNamesList: TStringListObjectList;
+  LowerFlowUPestNamesList: TStringListObjectList;
+  HigherUPestNamesList: TStringListObjectList;
+  HigherFlowUPestNamesList: TStringListObjectList;
+  LowerUSeriesPestNames: TStringList;
+  LowerFlowUSeriesPestNames: TStringList;
+  HigherUSeriesPestNames: TStringList;
+  HigherFlowUSeriesPestNames: TStringList;
+  LowerUSeriesPestMethods: TPestMethodList;
+  LowerFlowUSeriesPestMethods: TPestMethodList;
+  HigherUSeriesPestMethods: TPestMethodList;
+  HigherFlowUSeriesPestMethods: TPestMethodList;
+  U1SeriesName: string;
+  U1SeriesMethod: TPestParamMethod;
+  U1Name: string;
+  U2SeriesName: string;
+  U2SeriesMethod: TPestParamMethod;
+  U2Name: string;
+  QU1SeriesName: string;
+  QU1SeriesMethod: TPestParamMethod;
+  QU1Name: string;
+  QU2SeriesName: string;
+  QU2SeriesMethod: TPestParamMethod;
+  QU2Name: string;
+  LowerUPestNames: TStringList;
+  LowerFlowUPestNames: TStringList;
+  HigherUPestNames: TStringList;
+  HigherFlowUPestNames: TStringList;
   procedure InitializeTimeList(ListOfTimeLists: TObjectList<TSutraTimeList>;
-    FormulaIndex: Integer; Descripion: string);
+    FormulaIndex: Integer; Descripion: string; PestNames: TStringList);
   var
     TimeList: TSutraTimeList;
     AnItem: TSutraGenTransportItem;
     TimeIndex: Integer;
+    Formula: string;
   begin
     TimeList := TSutraTimeList.Create(Model, ScreenObject);
     ListOfTimeLists.Add(TimeList);
@@ -228,8 +259,11 @@ var
       AnItem := ABoundary.Values[DisplayTimeIndex]
         as TSutraGenTransportItem;
       BoundaryValues[0].Time := AnItem.StartTime;
-        BoundaryValues[0].Formula := AnItem.BoundaryFormula[FormulaIndex];
-        BoundaryValues[0].UsedFormula := AnItem.UsedFormula;
+      Formula := AnItem.BoundaryFormula[FormulaIndex];
+      AssignPestFormula(Formula, ABoundary.PestBoundaryFormula[FormulaIndex],
+        ABoundary.PestBoundaryMethod[FormulaIndex], PestNames);
+      BoundaryValues[0].Formula := Formula;
+      BoundaryValues[0].UsedFormula := AnItem.UsedFormula;
     end
     else
     begin
@@ -238,7 +272,11 @@ var
         AnItem := ABoundary.Values[TimeIndex]
           as TSutraGenTransportItem;
         BoundaryValues[TimeIndex].Time := FixTime(AnItem, AllTimes);
-        BoundaryValues[TimeIndex].Formula := AnItem.BoundaryFormula[FormulaIndex];
+        Formula := AnItem.BoundaryFormula[FormulaIndex];
+        AssignPestFormula(Formula, ABoundary.PestBoundaryFormula[FormulaIndex],
+          ABoundary.PestBoundaryMethod[FormulaIndex], PestNames);
+        BoundaryValues[TimeIndex].Formula := Formula;
+//        BoundaryValues[TimeIndex].Formula := AnItem.BoundaryFormula[FormulaIndex];
         BoundaryValues[TimeIndex].UsedFormula := AnItem.UsedFormula;
       end;
     end;
@@ -267,6 +305,7 @@ var
     end;
   end;
 begin
+  CellLocPointer := Addr(CellLocation);
   SimulationType := Model.SutraOptions.SimulationType;
   TransientAllowed := SimulationType = stTransientFlowTransientTransport;
   RootError := Format(StrTheFollowingObjectSutra, [StrGeneralizedtranspor]);
@@ -283,230 +322,337 @@ begin
     SetLength(BoundaryValues, 1);
   end;
 
-
-  for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
-  begin
-    ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
-    if ScreenObject.Deleted then
+  LowerUPestNamesList := TStringListObjectList.Create;
+  LowerFlowUPestNamesList := TStringListObjectList.Create;
+  HigherUPestNamesList := TStringListObjectList.Create;
+  HigherFlowUPestNamesList := TStringListObjectList.Create;
+  LowerUSeriesPestNames := TStringList.Create;
+  LowerFlowUSeriesPestNames := TStringList.Create;
+  HigherUSeriesPestNames := TStringList.Create;
+  HigherFlowUSeriesPestNames := TStringList.Create;
+  LowerUSeriesPestMethods := TPestMethodList.Create;
+  LowerFlowUSeriesPestMethods := TPestMethodList.Create;
+  HigherUSeriesPestMethods := TPestMethodList.Create;
+  HigherFlowUSeriesPestMethods := TPestMethodList.Create;
+  try
+    for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
     begin
-      Continue;
-    end;
-    ABoundary := ScreenObject.SutraBoundaries.GenTransportBoundary;
-    if (ABoundary <> nil) and ABoundary.Used then
-    begin
-      if (FBcsFileNames <> nil)
-        and ((FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction)
-        or (FBcsFileNames.TransportInteraction <> ABoundary.LakeInteractionType))
-        then
+      ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
+      if ScreenObject.Deleted then
       begin
         Continue;
       end;
-
-      if not TransientAllowed and (ABoundary.Values.Count > 1) then
+      ABoundary := ScreenObject.SutraBoundaries.GenTransportBoundary;
+      if (ABoundary <> nil) and ABoundary.Used then
       begin
-        frmErrorsAndWarnings.AddWarning(Model, RootError, ScreenObject.Name,
-          ScreenObject);
-      end;
-      DisplayTimeIndex := 0;
-      if FEvaluationType = etDisplay then
-      begin
-        for TIndex := 0 to ABoundary.Values.Count - 1 do
+        if (FBcsFileNames <> nil)
+          and ((FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction)
+          or (FBcsFileNames.TransportInteraction <> ABoundary.LakeInteractionType))
+          then
         begin
-          Item := ABoundary.Values[TIndex] as TSutraGenTransportItem;
-          if Item.StartTime <= DisplayTime then
+          Continue;
+        end;
+
+        if not TransientAllowed and (ABoundary.Values.Count > 1) then
+        begin
+          frmErrorsAndWarnings.AddWarning(Model, RootError, ScreenObject.Name,
+            ScreenObject);
+        end;
+        DisplayTimeIndex := 0;
+        if FEvaluationType = etDisplay then
+        begin
+          for TIndex := 0 to ABoundary.Values.Count - 1 do
           begin
-            DisplayTimeIndex := TIndex
-          end
-          else
-          begin
-            break;
+            Item := ABoundary.Values[TIndex] as TSutraGenTransportItem;
+            if Item.StartTime <= DisplayTime then
+            begin
+              DisplayTimeIndex := TIndex
+            end
+            else
+            begin
+              break;
+            end;
           end;
-        end;
-      end
-      else
-      begin
-        SetLength(BoundaryValues, ABoundary.Values.Count);
-      end;
-
-      InitializeTimeList(FU1TimeLists, LowerUPosition, 'Lower_U');
-      InitializeTimeList(FU2TimeLists, HigherUPosition, 'Higher_U');
-      InitializeTimeList(FInflowUTimeLists, LowerFlowUPosition, 'U_Inflow_Rate');
-      InitializeTimeList(FOutflowUTimeLists, HigherFlowUPosition, 'U_Outflow_Rate');
-
-      CellList := TCellAssignmentList.Create;
-      try
-        ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-        for CellIndex := 0 to CellList.Count -1 do
+        end
+        else
         begin
-          ACell := CellList[CellIndex];
-          FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] := ABoundary.UseBCTime;
+          SetLength(BoundaryValues, ABoundary.Values.Count);
         end;
-      finally
-        CellList.Free;
+
+        LowerUPestNames := TStringList.Create;
+        LowerUPestNamesList.Add(LowerUPestNames);
+        LowerFlowUPestNames := TStringList.Create;
+        LowerFlowUPestNamesList.Add(LowerFlowUPestNames);
+        HigherUPestNames := TStringList.Create;
+        HigherUPestNamesList.Add(HigherUPestNames);
+        HigherFlowUPestNames := TStringList.Create;
+        HigherFlowUPestNamesList.Add(HigherFlowUPestNames);
+
+        LowerUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[LowerUPosition]);
+        LowerFlowUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[LowerFlowUPosition]);
+        HigherUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[HigherUPosition]);
+        HigherFlowUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[HigherFlowUPosition]);
+
+        LowerUSeriesPestMethods.Add(ABoundary.PestBoundaryMethod[LowerUPosition]);
+        LowerFlowUSeriesPestMethods.Add(ABoundary.PestBoundaryMethod[LowerFlowUPosition]);
+        HigherUSeriesPestMethods.Add(ABoundary.PestBoundaryMethod[HigherUPosition]);
+        HigherFlowUSeriesPestMethods.Add(ABoundary.PestBoundaryMethod[HigherFlowUPosition]);
+
+        InitializeTimeList(FU1TimeLists, LowerUPosition,
+          'Lower_U', LowerUPestNames);
+        InitializeTimeList(FU2TimeLists, HigherUPosition,
+          'Higher_U', HigherUPestNames);
+        InitializeTimeList(FInflowUTimeLists, LowerFlowUPosition,
+          'U_Inflow_Rate', LowerFlowUPestNames);
+        InitializeTimeList(FOutflowUTimeLists, HigherFlowUPosition,
+          'U_Outflow_Rate', HigherFlowUPestNames);
+
+        CellList := TCellAssignmentList.Create;
+        try
+          ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+          for CellIndex := 0 to CellList.Count -1 do
+          begin
+            ACell := CellList[CellIndex];
+            FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] := ABoundary.UseBCTime;
+          end;
+        finally
+          CellList.Free;
+        end;
       end;
     end;
-  end;
 
-  for ListIndex := 0 to FU1TimeLists.Count - 1 do
-  begin
-    SutraTimeList := FU1TimeLists[ListIndex];
-    for TimeIndex := 0 to SutraTimeList.Count - 1 do
-    begin
-      FTimes.AddUnique(SutraTimeList.Times[TimeIndex]);
-    end;
-  end;
-
-  FGeneralBoundaries.Clear;
-  for timeIndex := 0 to FTimes.Count - 1 do
-  begin
-    TransNodes := TGeneralTransportNodes.Create;
-    TransNodes.TimeIndex := AllTimes.IndexOf(FTimes[timeIndex]);
-    Assert(TransNodes.TimeIndex >= 0);
-    FGeneralBoundaries.Add(TransNodes);
-  end;
-
-  Mesh := Model.SutraMesh;
-//  ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
-  LastUsed := TIntegerList.Create;
-  try
     for ListIndex := 0 to FU1TimeLists.Count - 1 do
     begin
-      LastUsed.Add(0);
+      SutraTimeList := FU1TimeLists[ListIndex];
+      for TimeIndex := 0 to SutraTimeList.Count - 1 do
+      begin
+        FTimes.AddUnique(SutraTimeList.Times[TimeIndex]);
+      end;
     end;
 
-    for TimeIndex := 0 to FTimes.Count - 1 do
+    FGeneralBoundaries.Clear;
+    for timeIndex := 0 to FTimes.Count - 1 do
     begin
-      ATime := FTimes[TimeIndex];
-      NodeList := FGeneralBoundaries[TimeIndex];
+      TransNodes := TGeneralTransportNodes.Create;
+      TransNodes.TimeIndex := AllTimes.IndexOf(FTimes[timeIndex]);
+      Assert(TransNodes.TimeIndex >= 0);
+      FGeneralBoundaries.Add(TransNodes);
+    end;
 
+    Mesh := Model.SutraMesh;
+    LastUsed := TIntegerList.Create;
+    try
       for ListIndex := 0 to FU1TimeLists.Count - 1 do
       begin
-        UsedIndex := -1;
-        U1SutraTimeList :=FU1TimeLists[ListIndex];
-        for TIndex := LastUsed[ListIndex] to U1SutraTimeList.Count - 1 do
+        LastUsed.Add(0);
+      end;
+
+      for TimeIndex := 0 to FTimes.Count - 1 do
+      begin
+        ATime := FTimes[TimeIndex];
+        NodeList := FGeneralBoundaries[TimeIndex];
+
+        for ListIndex := 0 to FU1TimeLists.Count - 1 do
         begin
-          UsedIndex := TIndex;
-          if U1SutraTimeList.Times[TIndex] > ATime then
+          UsedIndex := -1;
+          U1SutraTimeList :=FU1TimeLists[ListIndex];
+          for TIndex := LastUsed[ListIndex] to U1SutraTimeList.Count - 1 do
           begin
-            Dec(UsedIndex);
-            break;
-          end;
-        end;
-        if UsedIndex >= 0 then
-        begin
-          LastUsed[ListIndex] :=  UsedIndex;
-          // Get data sets for selected time
-          U1Data := U1SutraTimeList[UsedIndex];
-          if U1Data = nil then
-          begin
-            // inactive
-            for InnerIndex := 0 to U1SutraTimeList.Count - 1 do
+            UsedIndex := TIndex;
+            if U1SutraTimeList.Times[TIndex] > ATime then
             begin
-              U1Data := U1SutraTimeList[InnerIndex];
+              Dec(UsedIndex);
+              break;
+            end;
+          end;
+          if UsedIndex >= 0 then
+          begin
+            LastUsed[ListIndex] :=  UsedIndex;
+            // Get data sets for selected time
+            U1Data := U1SutraTimeList[UsedIndex];
+            if U1Data = nil then
+            begin
+              // inactive
+              for InnerIndex := 0 to U1SutraTimeList.Count - 1 do
+              begin
+                U1Data := U1SutraTimeList[InnerIndex];
+                if U1Data <> nil then
+                begin
+                  break;
+                end;
+              end;
               if U1Data <> nil then
               begin
-                break;
-              end;
-            end;
-            if U1Data <> nil then
-            begin
-              if Mesh.meshType = mt3d then
-              begin
-                LayerLimit := Mesh.LayerCount;
-              end
-              else
-              begin
-                LayerLimit := 0
-              end;
-              for LayerIndex := 0 to LayerLimit do
-              begin
-                for ColIndex := 0 to Mesh.Mesh2D.Nodes.Count - 1 do
+                if Mesh.meshType = mt3d then
                 begin
-                  if U1Data.IsValue[LayerIndex,0,ColIndex] then
+                  LayerLimit := Mesh.LayerCount;
+                end
+                else
+                begin
+                  LayerLimit := 0
+                end;
+                for LayerIndex := 0 to LayerLimit do
+                begin
+                  for ColIndex := 0 to Mesh.Mesh2D.Nodes.Count - 1 do
                   begin
-                    AssignNodeNumber;
-                    if NodeNumber >= 0 then
+                    if U1Data.IsValue[LayerIndex,0,ColIndex] then
                     begin
-                      NodeList.Add(TGeneralTransportNode.CreateInactive(
-                        NodeNumber, LayerIndex, ColIndex));
+                      AssignNodeNumber;
+                      if NodeNumber >= 0 then
+                      begin
+                        NodeList.Add(TGeneralTransportNode.CreateInactive(
+                          NodeNumber, LayerIndex, ColIndex));
+                      end;
                     end;
                   end;
                 end;
               end;
+              Continue;
             end;
-            Continue;
-          end;
 
-          U2SutraTimeList := FU2TimeLists[ListIndex];
-          U2Data := U2SutraTimeList[UsedIndex];
-          Assert(U2Data <> nil);
+            U1SeriesName := LowerUSeriesPestNames[ListIndex];
+            U1SeriesMethod := LowerUSeriesPestMethods[ListIndex];
+            U1Name := LowerUPestNamesList[ListIndex][UsedIndex];
 
-          QU1SutraTimeList := FInflowUTimeLists[ListIndex];
-          QU1Data := QU1SutraTimeList[UsedIndex];
-          Assert(QU1Data <> nil);
+            U2SeriesName := HigherUSeriesPestNames[ListIndex];
+            U2SeriesMethod := HigherUSeriesPestMethods[ListIndex];
+            U2Name := HigherUPestNamesList[ListIndex][UsedIndex];
 
-          QU2SutraTimeList := FOutflowUTimeLists[ListIndex];
-          QU2Data := QU2SutraTimeList[UsedIndex];
-          Assert(QU2Data <> nil);
+            U2SutraTimeList := FU2TimeLists[ListIndex];
+            U2Data := U2SutraTimeList[UsedIndex];
+            Assert(U2Data <> nil);
 
-          if Mesh.meshType = mt3d then
-          begin
-            LayerLimit := Mesh.LayerCount;
-          end
-          else
-          begin
-            LayerLimit := 0
-          end;
-          for LayerIndex := 0 to LayerLimit do
-          begin
-            for ColIndex := 0 to Mesh.Mesh2D.Nodes.Count - 1 do
+            QU1SeriesName := LowerFlowUSeriesPestNames[ListIndex];
+            QU1SeriesMethod := LowerFlowUSeriesPestMethods[ListIndex];
+            QU1Name := LowerFlowUPestNamesList[ListIndex][UsedIndex];
+
+            QU1SutraTimeList := FInflowUTimeLists[ListIndex];
+            QU1Data := QU1SutraTimeList[UsedIndex];
+            Assert(QU1Data <> nil);
+
+            QU2SeriesName := HigherFlowUSeriesPestNames[ListIndex];
+            QU2SeriesMethod := HigherFlowUSeriesPestMethods[ListIndex];
+            QU2Name := HigherFlowUPestNamesList[ListIndex][UsedIndex];
+
+            QU2SutraTimeList := FOutflowUTimeLists[ListIndex];
+            QU2Data := QU2SutraTimeList[UsedIndex];
+            Assert(QU2Data <> nil);
+
+            if Mesh.meshType = mt3d then
             begin
-              if U1Data.IsValue[LayerIndex,0,ColIndex] then
+              LayerLimit := Mesh.LayerCount;
+            end
+            else
+            begin
+              LayerLimit := 0
+            end;
+            for LayerIndex := 0 to LayerLimit do
+            begin
+              for ColIndex := 0 to Mesh.Mesh2D.Nodes.Count - 1 do
               begin
-                AssignNodeNumber;
-                if NodeNumber < 0 then
+                if U1Data.IsValue[LayerIndex,0,ColIndex] then
                 begin
-                  Continue;
-                end;
-                U1.Value := U1Data.RealData[LayerIndex,0,ColIndex];
-                U1.Annotation := U1Data.Annotation[LayerIndex,0,ColIndex];
+                  CellLocation.Layer := LayerIndex;
+                  CellLocation.Row := 0;
+                  CellLocation.Column := ColIndex;
 
-                Assert(U2Data.IsValue[LayerIndex,0,ColIndex]);
-                U2.Value := U2Data.RealData[LayerIndex,0,ColIndex];
-                U2.Annotation := U2Data.Annotation[LayerIndex,0,ColIndex];
+                  AssignNodeNumber;
+                  if NodeNumber < 0 then
+                  begin
+                    Continue;
+                  end;
+                  U1.Value := U1Data.RealData[LayerIndex,0,ColIndex];
+                  U1.Annotation := U1Data.Annotation[LayerIndex,0,ColIndex];
+                  if (U1Name <> '') or (U1SeriesName <> '') then
+                  begin
+                    U1.Formula := GetPestTemplateFormula(U1.Value, U1Name,
+                      U1SeriesName, U1SeriesMethod, CellLocPointer, nil);
+                    ExtendedTemplateFormula(U1.Formula);
+                  end
+                  else
+                  begin
+                    U1.Formula := '';
+                  end;
 
-                Assert(QU1Data.IsValue[LayerIndex,0,ColIndex]);
-                QU1.Value := QU1Data.RealData[LayerIndex,0,ColIndex];
-                QU1.Annotation := QU1Data.Annotation[LayerIndex,0,ColIndex];
+                  Assert(U2Data.IsValue[LayerIndex,0,ColIndex]);
+                  U2.Value := U2Data.RealData[LayerIndex,0,ColIndex];
+                  U2.Annotation := U2Data.Annotation[LayerIndex,0,ColIndex];
+                  if (U2Name <> '') or (U2SeriesName <> '') then
+                  begin
+                    U2.Formula := GetPestTemplateFormula(U2.Value, U2Name,
+                      U2SeriesName, U2SeriesMethod, CellLocPointer, nil);
+                    ExtendedTemplateFormula(U2.Formula);
+                  end
+                  else
+                  begin
+                    U2.Formula := '';
+                  end;
 
-                Assert(QU2Data.IsValue[LayerIndex,0,ColIndex]);
-                QU2.Value := QU2Data.RealData[LayerIndex,0,ColIndex];
-                QU2.Annotation := QU2Data.Annotation[LayerIndex,0,ColIndex];
+                  Assert(QU1Data.IsValue[LayerIndex,0,ColIndex]);
+                  QU1.Value := QU1Data.RealData[LayerIndex,0,ColIndex];
+                  QU1.Annotation := QU1Data.Annotation[LayerIndex,0,ColIndex];
+                  if (QU1Name <> '') or (QU1SeriesName <> '') then
+                  begin
+                    QU1.Formula := GetPestTemplateFormula(QU1.Value, QU1Name,
+                      QU1SeriesName, QU1SeriesMethod, CellLocPointer, nil);
+                    ExtendedTemplateFormula(QU1.Formula);
+                  end
+                  else
+                  begin
+                    QU1.Formula := '';
+                  end;
 
-                if FUseBCTime.IsValue[LayerIndex, 0,ColIndex] then
-                begin
-                  UseBCTime := FUseBCTime.Items[LayerIndex, 0,ColIndex];
-                end
-                else
-                begin
-                  UseBCTime := False;
-                end;
+                  Assert(QU2Data.IsValue[LayerIndex,0,ColIndex]);
+                  QU2.Value := QU2Data.RealData[LayerIndex,0,ColIndex];
+                  QU2.Annotation := QU2Data.Annotation[LayerIndex,0,ColIndex];
+                  if (QU2Name <> '') or (QU2SeriesName <> '') then
+                  begin
+                    QU2.Formula := GetPestTemplateFormula(QU2.Value, QU2Name,
+                      QU2SeriesName, QU2SeriesMethod, CellLocPointer, nil);
+                    ExtendedTemplateFormula(QU2.Formula);
+                  end
+                  else
+                  begin
+                    QU2.Formula := '';
+                  end;
 
-                if NodeNumber >= 0 then
-                begin
-                  NodeList.Add(TGeneralTransportNode.Create(
-                    NodeNumber, U1, QU1, U2, QU2, LayerIndex, ColIndex, UseBCTime));
+                  if FUseBCTime.IsValue[LayerIndex, 0,ColIndex] then
+                  begin
+                    UseBCTime := FUseBCTime.Items[LayerIndex, 0,ColIndex];
+                  end
+                  else
+                  begin
+                    UseBCTime := False;
+                  end;
+
+                  if NodeNumber >= 0 then
+                  begin
+                    NodeList.Add(TGeneralTransportNode.Create(
+                      NodeNumber, U1, QU1, U2, QU2, LayerIndex, ColIndex, UseBCTime));
+                  end;
                 end;
               end;
             end;
           end;
         end;
       end;
+    finally
+      LastUsed.Free;
     end;
   finally
-    LastUsed.Free;
+    LowerUPestNamesList.Free;
+    LowerFlowUPestNamesList.Free;
+    HigherUPestNamesList.Free;
+    HigherFlowUPestNamesList.Free;
+    LowerUSeriesPestNames.Free;
+    LowerFlowUSeriesPestNames.Free;
+    HigherUSeriesPestNames.Free;
+    HigherFlowUSeriesPestNames.Free;
+    LowerUSeriesPestMethods.Free;
+    LowerFlowUSeriesPestMethods.Free;
+    HigherUSeriesPestMethods.Free;
+    HigherFlowUSeriesPestMethods.Free;
   end;
-
 end;
 
 class function TSutraGeneralTransportWriter.Extension: string;
@@ -630,10 +776,46 @@ begin
       if ANode.Active then
       begin
         WriteInteger(ANode.NodeNumber+1);
-        WriteFloat(ANode.FUValue1.Value);
-        WriteFloat(ANode.FSoluteEnergyInflow.Value);
-        WriteFloat(ANode.FUValue2.Value);
-        WriteFloat(ANode.FSoluteEnergyOutflow.Value);
+        if WritingTemplate and (ANode.FUValue1.Formula <> '') then
+        begin
+          WriteString(ANode.FUValue1.Formula);
+          FPestParamUsed := True;
+        end
+        else
+        begin
+          WriteFloat(ANode.FUValue1.Value);
+        end;
+        if WritingTemplate and (ANode.FSoluteEnergyInflow.Formula <> '') then
+        begin
+          WriteString(ANode.FSoluteEnergyInflow.Formula);
+          FPestParamUsed := True;
+        end
+        else
+        begin
+          WriteFloat(ANode.FSoluteEnergyInflow.Value);
+        end;
+        if WritingTemplate and (ANode.FUValue2.Formula <> '') then
+        begin
+          WriteString(ANode.FUValue2.Formula);
+          FPestParamUsed := True;
+        end
+        else
+        begin
+          WriteFloat(ANode.FUValue2.Value);
+        end;
+        if WritingTemplate and (ANode.FSoluteEnergyOutflow.Formula <> '') then
+        begin
+          WriteString(ANode.FSoluteEnergyOutflow.Formula);
+          FPestParamUsed := True;
+        end
+        else
+        begin
+          WriteFloat(ANode.FSoluteEnergyOutflow.Value);
+        end;
+//        WriteFloat(ANode.FUValue1.Value);
+//        WriteFloat(ANode.FSoluteEnergyInflow.Value);
+//        WriteFloat(ANode.FUValue2.Value);
+//        WriteFloat(ANode.FSoluteEnergyOutflow.Value);
       end
       else
       begin
