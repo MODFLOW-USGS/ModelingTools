@@ -28,7 +28,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
       OnChange = seNumberOfTimesChange
     end
     object btnDelete: TBitBtn
-      Left = 232
+      Left = 236
       Top = 6
       Width = 82
       Height = 33
@@ -67,7 +67,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
     end
     object btnInsert: TBitBtn
       Left = 148
-      Top = 6
+      Top = 5
       Width = 82
       Height = 33
       Anchors = [akTop, akRight]
@@ -211,8 +211,6 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
-      ExplicitLeft = 0
-      ExplicitTop = 2
     end
   end
   object pnlTop: TPanel
@@ -243,7 +241,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
     end
     object comboSchedule: TComboBox
       Left = 5
-      Top = 104
+      Top = 101
       Width = 306
       Height = 21
       Style = csDropDownList

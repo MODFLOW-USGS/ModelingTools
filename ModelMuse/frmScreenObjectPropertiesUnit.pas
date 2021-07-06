@@ -21094,6 +21094,10 @@ begin
       or (ed = frameLakMf6.edLakebedK)
       or (ed = frameLakMf6.edLakebedThickness)
       or (ed = frameLakMf6.edConnLength)
+      or (ed = frameSutraLake.btnedInitialStage)
+      or (ed = frameSutraLake.btnedInitialU)
+      or (ed = frameSutraLake.btnedFractionRechargeDiverted)
+      or (ed = frameSutraLake.btnedFractionDischargeDiverted)
       then
     begin
       PestParamOK := True;

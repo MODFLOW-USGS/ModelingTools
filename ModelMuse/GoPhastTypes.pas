@@ -688,7 +688,7 @@ procedure AssignTimeUnitStringsToPicklist(TimePickList: TStrings;
   ModelType: TModelSelection);
 
 resourcestring
-  StrPestModifier = 'Pest Modifier';
+  StrPestModifier = 'PEST Modifier';
   StrModificationMethod = 'Modification Method';
 
 const

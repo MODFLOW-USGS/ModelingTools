@@ -12,6 +12,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
+  ExplicitTop = -150
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -14020,7 +14021,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspGeneralizedTransport
+        ActivePage = jvspSutraLake
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -14613,9 +14614,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 27
             end
             inherited btnedInitialU: TButtonedEdit
+              Top = 124
               Width = 583
               Height = 27
               OnRightButtonClick = btnFormulaClick
+              ExplicitTop = 124
               ExplicitWidth = 583
               ExplicitHeight = 27
             end
@@ -14627,9 +14630,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 27
             end
             inherited btnedFractionDischargeDiverted: TButtonedEdit
+              Top = 262
               Width = 583
               Height = 27
               OnRightButtonClick = btnFormulaClick
+              ExplicitTop = 262
               ExplicitWidth = 583
               ExplicitHeight = 27
             end

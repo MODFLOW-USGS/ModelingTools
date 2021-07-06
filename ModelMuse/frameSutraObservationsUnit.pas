@@ -25,6 +25,8 @@ type
     procedure edNameExit(Sender: TObject);
     procedure rdgSutraFeatureSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
+    procedure rdgSutraFeatureSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     // @name is @true if all the features being displayed use the same set
     // of times.
@@ -332,12 +334,29 @@ end;
 procedure TframeSutraObservations.btnDeleteClick(Sender: TObject);
 begin
   inherited;
+  if (rdgSutraFeature.RowCount > 2)
+    and (rdgSutraFeature.Row > 0) then
+  begin
+    rdgSutraFeature.DeleteRow(rdgSutraFeature.Row);
+  end;
+  seNumberOfTimes.AsInteger := seNumberOfTimes.AsInteger -1;
   comboSchedule.ItemIndex := 0;
 end;
 
 procedure TframeSutraObservations.btnInsertClick(Sender: TObject);
 begin
-  inherited;
+  if (rdgSutraFeature.SelectedRow <= 0)
+    or (rdgSutraFeature.SelectedRow >= rdgSutraFeature.RowCount) then
+  begin
+    Beep;
+    MessageDlg(StrYouNeedToSelectA, mtInformation, [mbOK], 0);
+    Exit;
+  end;
+  if (seNumberOfTimes.AsInteger > 0) then
+  begin
+    rdgSutraFeature.InsertRow(rdgSutraFeature.SelectedRow);
+  end;
+  seNumberOfTimes.AsInteger := seNumberOfTimes.AsInteger +1;
   comboSchedule.ItemIndex := 0;
 end;
 
@@ -508,6 +527,13 @@ begin
   end;
 end;
 
+procedure TframeSutraObservations.rdgSutraFeatureSelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+//  inherited;
+
+end;
+
 procedure TframeSutraObservations.rdgSutraFeatureSetEditText(Sender: TObject;
   ACol, ARow: Integer; const Value: string);
 begin
@@ -516,8 +542,29 @@ begin
 end;
 
 procedure TframeSutraObservations.seNumberOfTimesChange(Sender: TObject);
+var
+  ColIndex: Integer;
 begin
-  inherited;
+  FDeleting := True;
+  try
+    if seNumberOfTimes.AsInteger = 0 then
+    begin
+      rdgSutraFeature.RowCount := 2;
+      for ColIndex := 0 to rdgSutraFeature.ColCount - 1 do
+      begin
+        rdgSutraFeature.Cells[ColIndex,1] := '';
+      end;
+    end
+    else
+    begin
+      rdgSutraFeature.RowCount := seNumberOfTimes.AsInteger + 1;
+    end;
+    btnDelete.Enabled := seNumberOfTimes.AsInteger >= 1;
+    rdgSutraFeature.Invalidate;
+  finally
+    FDeleting := False;
+  end;
+
   UpdateCheckState;
   if not FGettingData and not FDisplayingTime then
   begin

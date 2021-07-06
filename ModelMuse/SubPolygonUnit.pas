@@ -58,7 +58,7 @@ type
     procedure SetMaxAndMinWhenNoSubPolygons(const Count, Start: Integer;
       const Points: TRealPointArray);
     procedure SetMaxAndMinFromSubPolygons;
-    procedure InternalBoxIntersect(SubPolygons: TList;
+    procedure InternalBoxIntersect(SubPolygons: Classes.TList;
       const BoxMinX, BoxMaxX, BoxMinY, BoxMaxY: Double);
     function GetPoint(Index: Integer): TPoint2D;
     procedure SetPoint(Index: Integer; const Value: TPoint2D);
@@ -85,7 +85,7 @@ type
     // Do not call @name directly. Call Free instead.
     destructor Destroy; override;
     procedure GrowByOne;
-    Procedure BoxIntersect(const Point1, Point2: TPoint2D; SubPolygons: TList);
+    Procedure BoxIntersect(const Point1, Point2: TPoint2D; SubPolygons: Classes.TList);
     // If @name is created for a part of a @link(TScreenObject),
     // @name indicates which part of the @link(TScreenObject) it represents.
     property SectionIndex: integer read FSectionIndex;
@@ -141,7 +141,7 @@ uses
 { TSubPolygon }
 
 procedure TSubPolygon.BoxIntersect(const Point1, Point2: TPoint2D;
-  SubPolygons: TList);
+  SubPolygons: Classes.TList);
 var
   BoxMaxX, BoxMinX, BoxMaxY, BoxMinY: double;
 begin
@@ -277,7 +277,7 @@ begin
   end;
 end;
 
-procedure TSubPolygon.InternalBoxIntersect(SubPolygons: TList; const BoxMinX,
+procedure TSubPolygon.InternalBoxIntersect(SubPolygons: Classes.TList; const BoxMinX,
   BoxMaxX, BoxMinY, BoxMaxY: Double);
 begin
   if (BoxMaxX >= FMinX) and (BoxMinX <= FMaxX)

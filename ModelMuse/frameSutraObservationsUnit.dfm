@@ -6,10 +6,15 @@ inherited frameSutraObservations: TframeSutraObservations
   inherited pnlBottom: TPanel
     Top = 235
     Width = 347
+    ExplicitTop = 235
     ExplicitWidth = 347
     DesignSize = (
       347
       46)
+    inherited seNumberOfTimes: TJvSpinEdit
+      Left = 9
+      ExplicitLeft = 9
+    end
     inherited btnDelete: TBitBtn
       Left = 263
       ExplicitLeft = 263
@@ -25,7 +30,7 @@ inherited frameSutraObservations: TframeSutraObservations
     Height = 42
     ExplicitTop = 193
     ExplicitWidth = 347
-    ExplicitHeight = 1
+    ExplicitHeight = 42
     inherited rdgSutraFeature: TRbwDataGrid4
       Width = 345
       Height = 40
@@ -34,6 +39,7 @@ inherited frameSutraObservations: TframeSutraObservations
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -56,8 +62,10 @@ inherited frameSutraObservations: TframeSutraObservations
           AutoAdjustColWidths = True
         end>
       OnEndUpdate = rdgSutraFeatureEndUpdate
+      ExplicitLeft = 0
+      ExplicitTop = 2
       ExplicitWidth = 345
-      ExplicitHeight = 84
+      ExplicitHeight = 40
       ColWidths = (
         64)
     end
@@ -65,6 +73,7 @@ inherited frameSutraObservations: TframeSutraObservations
   inherited pnlTop: TPanel
     Width = 347
     Height = 193
+    ExplicitTop = -5
     ExplicitWidth = 347
     ExplicitHeight = 193
     DesignSize = (
@@ -94,10 +103,8 @@ inherited frameSutraObservations: TframeSutraObservations
       ExplicitWidth = 345
     end
     inherited comboSchedule: TComboBox
-      Top = 101
       Width = 333
       TabOrder = 2
-      ExplicitTop = 101
       ExplicitWidth = 333
     end
     object comboObservationFormat: TComboBox

@@ -413,6 +413,9 @@ resourcestring
   StrErrorMessage0 = 'Error message = "%0:s" in %1:s';
   StrNeitherPlproc64exe = 'Neither plproc64.exe nor plproc32.exe are in the ' +
   'ModelMuse directory.';
+  StrObjectHasNoVertic = 'Object has no vertices.';
+  StrTheObjectNamedSNoVert = 'The object named "%s" will not be used to assi' +
+  'gn values to data sets by interpolation because it has no vertices.';
 
 type
   TSortRecord = record
@@ -553,8 +556,18 @@ begin
       DataSetIndex := AScreenObject.IndexOfDataSet(DataSet);
       Assert(DataSetIndex >= 0);
 
-      ScreenObjectDistance := AScreenObject.DistanceToScreenObject(
-        LocalLocation, ClosestLocation, LocalAnisotropy, SectionIndex);
+      if AScreenObject.Count <= 0 then
+      begin
+        frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
+          StrObjectHasNoVertic, Format(StrTheObjectNamedSNoVert,
+          [AScreenObject.Name]), AScreenObject);
+        Continue
+      end
+      else
+      begin
+        ScreenObjectDistance := AScreenObject.DistanceToScreenObject(
+          LocalLocation, ClosestLocation, LocalAnisotropy, SectionIndex);
+      end;
 
 
       ScreenObjectFunction := AScreenObject.DataSetFormulas[DataSetIndex];

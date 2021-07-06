@@ -9778,9 +9778,9 @@ var
   begin
     for DataArray in InputPestDataArrays do
     begin
-      if not PestInputDataArrays.ContainsKey(UpperCase(ADataArray.Name)) then
+      if not PestInputDataArrays.ContainsKey(UpperCase(DataArray.Name)) then
       begin
-        PestInputDataArrays.Add(UpperCase(ADataArray.Name), ADataArray);
+        PestInputDataArrays.Add(UpperCase(DataArray.Name), DataArray);
       end;
     end;
   end;

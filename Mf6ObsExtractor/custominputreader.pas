@@ -608,6 +608,18 @@ begin
           begin
             CurrentStatus := dosObsName;
           end
+          else if UpperCase(FSplitter[0]) = rsEND then
+          begin
+            Assert(UpperCase(FSplitter[1]) = rsDERIVED_OBSE,
+              Format(rsUnmatchedEndDerObs, [FLineIndex+1,
+              FInputFileLines[FLineIndex]]));
+            CurrentStatus := dosNone;
+            FCurrentProcessStatus := psNone;
+            if FListingFile <> nil then
+            begin
+              FListingFile.Add(rsEndDERIVED_O);
+            end;
+          end
           else
           begin
             Assert(False, Format(rsLineMustStartObs, [FLineIndex+1,

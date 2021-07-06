@@ -29,7 +29,6 @@ type
     procedure btnDeleteClick(Sender: TObject);
     procedure seNumberOfTimesChange(Sender: TObject);
   private
-    FDeleting: Boolean;
     FOnCheckPestCell: TSelectCellEvent;
     function GetPestMethod(ACol: Integer): TPestParamMethod;
     function GetPestMethodAssigned(ACol: Integer): Boolean;
@@ -41,6 +40,7 @@ type
     procedure SetPestModifierAssigned(ACol: Integer; const Value: Boolean);
     { Private declarations }
   protected
+    FDeleting: Boolean;
     FGettingData: Boolean;
     procedure UpdateCheckState;
     procedure SetScheduleIndex(const ScheduleName: AnsiString; Same: Boolean);

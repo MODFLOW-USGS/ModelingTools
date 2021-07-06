@@ -17,6 +17,10 @@ type
     InitialUAnnotation: string;
     RechargeFractionAnnotation: string;
     DischargeFractionAnnotation: string;
+    InitialStagePestFormula: string;
+    InitialUPestFormula: string;
+    RechargeFractionPestFormula: string;
+    DischargeFractionPestFormula: string;
   end;
 
   TLakeNode = class(TObject)
@@ -47,6 +51,8 @@ type
     procedure WriteLakeInteractionDataSet5;
     procedure WriteLakeInteractionDataSet6A;
     procedure WriteLakeInteractionDataSet6B;
+    procedure WriteFileInternal;
+    procedure WriteLakeAreaInternal;
   protected
     class function Extension: string; override;
   public
@@ -61,7 +67,8 @@ implementation
 uses
   ScreenObjectUnit, SutraBoundariesUnit, GoPhastTypes, DataSetUnit, RbwParser,
   frmFormulaErrorsUnit, SutraMeshUnit, SutraFileWriterUnit, SutraBoundaryUnit,
-  frmErrorsAndWarningsUnit, MeshRenumberingTypes;
+  frmErrorsAndWarningsUnit, MeshRenumberingTypes, ModflowParameterUnit,
+  ModelMuseUtilities, ModflowCellUnit;
 
 resourcestring
   StrInitialLakeStage = 'Initial Lake Stage';
@@ -110,8 +117,22 @@ var
   Node2D: TSutraNode2D;
   NeighborNode: TSutraNode3D;
   ProblemNode: Boolean;
+  OriginalInitialStageFormula: string;
+  InitialStageParam: TModflowSteadyParameter;
+  OriginalInitialUFormula: string;
+  InitialUParam: TModflowSteadyParameter;
+  OriginalFractionRechargeDivertedFormula: string;
+  FractionRechargeDivertedParam: TModflowSteadyParameter;
+  CellLocation: TCellLocation;
+  CellLocPointer: PCellLocation;
+  OriginalFractionDischargeDivertedFormula: string;
+  FractionDischargeDivertedParam: TModflowSteadyParameter;
+  ADataArray: TDataArray;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidLakeNode);
+  CellLocPointer := Addr(CellLocation);
+  CellLocation.Layer := 0;
+  CellLocation.Row := 0;
   SetLength(LakeNodes, Model.SutraMesh.Nodes.Count);
   for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin
@@ -124,9 +145,77 @@ begin
     if ALake.IsUsed then
     begin
       InitialStageFormula := ALake.InitialStage;
+      OriginalInitialStageFormula := '';
+      InitialStageParam := Model.GetPestParameterByName(InitialStageFormula);
+//      InitialStagePestDataArray := nil;
+      if InitialStageParam <> nil then
+      begin
+        OriginalInitialStageFormula := InitialStageFormula;
+        InitialStageFormula := FortranFloatToStr(InitialStageParam.Value);
+      end
+      else
+      begin
+        ADataArray := Model.DataArrayManager.GetDataSetByName(InitialStageFormula);
+        if (ADataArray <> nil) and DataArrayUsesPestParameters(ADataArray) then
+        begin
+          OriginalInitialStageFormula := InitialStageFormula;
+          AddUsedPestDataArray(ADataArray);
+        end;
+      end;
+      
       InitialUFormula := ALake.InitialConcentrationOrTemperature;
+      OriginalInitialUFormula := '';
+      InitialUParam := Model.GetPestParameterByName(InitialUFormula);
+      if InitialUParam <> nil then
+      begin
+        OriginalInitialUFormula := InitialUFormula;
+        InitialUFormula := FortranFloatToStr(InitialUParam.Value)
+      end
+      else
+      begin
+        ADataArray := Model.DataArrayManager.GetDataSetByName(InitialUFormula);
+        if (ADataArray <> nil) and DataArrayUsesPestParameters(ADataArray) then
+        begin
+          OriginalInitialUFormula := InitialUFormula;
+          AddUsedPestDataArray(ADataArray);
+        end;
+      end;
+      
       FractionRechargeDivertedFormula := ALake.FractionRechargeDiverted;
+      OriginalFractionRechargeDivertedFormula := '';
+      FractionRechargeDivertedParam := Model.GetPestParameterByName(FractionRechargeDivertedFormula);
+      if FractionRechargeDivertedParam <> nil then
+      begin
+        OriginalFractionRechargeDivertedFormula := FractionRechargeDivertedFormula;
+        FractionRechargeDivertedFormula := FortranFloatToStr(FractionRechargeDivertedParam.Value)
+      end
+      else
+      begin
+        ADataArray := Model.DataArrayManager.GetDataSetByName(FractionRechargeDivertedFormula);
+        if (ADataArray <> nil) and DataArrayUsesPestParameters(ADataArray) then
+        begin
+          OriginalFractionRechargeDivertedFormula := FractionRechargeDivertedFormula;
+          AddUsedPestDataArray(ADataArray);
+        end;
+      end;
+      
       FractionDischargeDivertedFormula := ALake.FractionDischargeDiverted;
+      OriginalFractionDischargeDivertedFormula := '';
+      FractionDischargeDivertedParam := Model.GetPestParameterByName(FractionDischargeDivertedFormula);
+      if FractionDischargeDivertedParam <> nil then
+      begin
+        OriginalFractionDischargeDivertedFormula := FractionDischargeDivertedFormula;
+        FractionDischargeDivertedFormula := FortranFloatToStr(FractionDischargeDivertedParam.Value)
+      end
+      else
+      begin
+        ADataArray := Model.DataArrayManager.GetDataSetByName(FractionDischargeDivertedFormula);
+        if (ADataArray <> nil) and DataArrayUsesPestParameters(ADataArray) then
+        begin
+          OriginalFractionDischargeDivertedFormula := FractionDischargeDivertedFormula;
+          AddUsedPestDataArray(ADataArray);
+        end;
+      end;
 
       InitalStageDataSet := TRealSparseDataSet.Create(Model);
       InitialU := TRealSparseDataSet.Create(Model);
@@ -222,19 +311,77 @@ begin
             Assert(InitialU.IsValue[0,0,ColIndex]);
             Assert(FractionRechargeDiverted.IsValue[0,0,ColIndex]);
             Assert(FractionDischargeDiverted.IsValue[0,0,ColIndex]);
+            CellLocation.Column := ColIndex;
 
             Node3D :=Model.SutraMesh.NodeArray[0,ColIndex];
             NodeNumber := Node3D.Number;
 
-            LakeNodeRecord.InitialStage := InitalStageDataSet.RealData[0,0,ColIndex];
+            LakeNodeRecord.InitialStage := 
+              InitalStageDataSet.RealData[0,0,ColIndex];
             LakeNodeRecord.InitialU := InitialU.RealData[0,0,ColIndex];
-            LakeNodeRecord.RechargeFraction := FractionRechargeDiverted.RealData[0,0,ColIndex];
-            LakeNodeRecord.DischargeFraction := FractionDischargeDiverted.RealData[0,0,ColIndex];
+            LakeNodeRecord.RechargeFraction := 
+              FractionRechargeDiverted.RealData[0,0,ColIndex];
+            LakeNodeRecord.DischargeFraction := 
+              FractionDischargeDiverted.RealData[0,0,ColIndex];
 
-            LakeNodeRecord.InitialStageAnnotation := InitalStageDataSet.Annotation[0,0,ColIndex];
-            LakeNodeRecord.InitialUAnnotation := InitialU.Annotation[0,0,ColIndex];
-            LakeNodeRecord.RechargeFractionAnnotation := FractionRechargeDiverted.Annotation[0,0,ColIndex];
-            LakeNodeRecord.DischargeFractionAnnotation := FractionDischargeDiverted.Annotation[0,0,ColIndex];
+            LakeNodeRecord.InitialStageAnnotation := 
+              InitalStageDataSet.Annotation[0,0,ColIndex];
+            LakeNodeRecord.InitialUAnnotation := 
+              InitialU.Annotation[0,0,ColIndex];
+            LakeNodeRecord.RechargeFractionAnnotation := 
+              FractionRechargeDiverted.Annotation[0,0,ColIndex];
+            LakeNodeRecord.DischargeFractionAnnotation := 
+              FractionDischargeDiverted.Annotation[0,0,ColIndex];
+
+            if OriginalInitialStageFormula <> '' then
+            begin
+              LakeNodeRecord.InitialStagePestFormula := GetPestTemplateFormula(
+                LakeNodeRecord.InitialStage, OriginalInitialStageFormula,
+                '',  ppmMultiply, CellLocPointer, ScreenObject);
+              ExtendedTemplateFormula(LakeNodeRecord.InitialStagePestFormula);
+            end
+            else
+            begin
+              LakeNodeRecord.InitialStagePestFormula := '';
+            end;
+
+            if OriginalInitialUFormula <> '' then
+            begin
+              LakeNodeRecord.InitialUPestFormula := GetPestTemplateFormula(
+                LakeNodeRecord.InitialU, OriginalInitialUFormula,
+                '',  ppmMultiply, CellLocPointer, ScreenObject);
+              ExtendedTemplateFormula(LakeNodeRecord.InitialUPestFormula);
+            end
+            else
+            begin
+              LakeNodeRecord.InitialUPestFormula := '';
+            end;
+
+            if OriginalFractionRechargeDivertedFormula <> '' then
+            begin
+              LakeNodeRecord.RechargeFractionPestFormula :=
+                GetPestTemplateFormula( LakeNodeRecord.RechargeFraction,
+                OriginalFractionRechargeDivertedFormula,
+                '',  ppmMultiply, CellLocPointer, ScreenObject);
+              ExtendedTemplateFormula(LakeNodeRecord.RechargeFractionPestFormula);
+            end
+            else
+            begin
+              LakeNodeRecord.RechargeFractionPestFormula := '';
+            end;
+
+            if OriginalFractionDischargeDivertedFormula <> '' then
+            begin
+              LakeNodeRecord.DischargeFractionPestFormula :=
+                GetPestTemplateFormula( LakeNodeRecord.DischargeFraction,
+                OriginalFractionDischargeDivertedFormula,
+                '',  ppmMultiply, CellLocPointer, ScreenObject);
+              ExtendedTemplateFormula(LakeNodeRecord.DischargeFractionPestFormula);
+            end
+            else
+            begin
+              LakeNodeRecord.DischargeFractionPestFormula := '';
+            end;
 
             if LakeNodes[NodeNumber] = nil then
             begin
@@ -305,12 +452,9 @@ end;
 
 procedure TSutraLakeWriter.WriteDataSet1;
 var
-//  ITLMAX: Integer;
   NLAKPR: Integer;
 begin
-//  ITLMAX := FLakeOptions.MaxLakeIterations;
   NLAKPR := FSutraOutputControl.LakePrintFrequency;
-//  WriteInteger(ITLMAX);
   WriteInteger(NLAKPR);
   NewLine;
 end;
@@ -320,18 +464,15 @@ var
   NLSPEC: Integer;
   FRROD: Double;
   FDROD: Double;
-//  VLIM: Double;
   RNOLK: Double;
 begin
   NLSPEC := FLakeNodes.Count;
   FRROD := FLakeOptions.RechargeFraction;
   FDROD := FLakeOptions.DischargeFraction;
-//  VLIM := FLakeOptions.MinLakeVolume;
   RNOLK := FLakeOptions.SubmergedOutput;
   WriteInteger(NLSPEC);
   WriteFloat(FRROD);
   WriteFloat(FDROD);
-//  WriteFloat(VLIM);
   WriteFloat(RNOLK);
   NewLine;
 end;
@@ -347,28 +488,80 @@ var
   UWI: Double;
   FRRO: Double;
   FDRO: Double;
+  STGI_Formula: string;
+  UWI_Formula: string;
+  FRRO_Formula: string;
+  FDRO_Formula: string;
 begin
   for NodeIndex := 0 to FLakeNodes.Count - 1 do
   begin
     ALake := FLakeNodes[NodeIndex];
     ILON := ALake.NodeNumber + 1;
     STGI := ALake.LakeProperties.InitialStage;
+    STGI_Formula := ALake.LakeProperties.InitialStagePestFormula;
     UWI := ALake.LakeProperties.InitialU;
+    UWI_Formula := ALake.LakeProperties.InitialUPestFormula;
     FRRO := ALake.LakeProperties.RechargeFraction;
+    FRRO_Formula := ALake.LakeProperties.RechargeFractionPestFormula;
     FDRO := ALake.LakeProperties.DischargeFraction;
+    FDRO_Formula := ALake.LakeProperties.DischargeFractionPestFormula;
     WriteString(CTYPE);
     WriteInteger(ILON);
-    WriteFloat(STGI);
-    WriteFloat(UWI);
-    WriteFloat(FRRO);
-    WriteFloat(FDRO);
+    if WritingTemplate and (STGI_Formula <> '') then
+    begin
+      WriteString(STGI_Formula);
+    end
+    else
+    begin
+      WriteFloat(STGI);
+      if STGI_Formula <> '' then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+    if WritingTemplate and (UWI_Formula <> '') then
+    begin
+      WriteString(UWI_Formula);
+    end
+    else
+    begin
+      WriteFloat(UWI);
+      if UWI_Formula <> '' then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+    if WritingTemplate and (FRRO_Formula <> '') then
+    begin
+      WriteString(FRRO_Formula);
+    end
+    else
+    begin
+      WriteFloat(FRRO);
+      if FRRO_Formula <> '' then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+    if WritingTemplate and (FDRO_Formula <> '') then
+    begin
+      WriteString(FDRO_Formula);
+    end
+    else
+    begin
+      WriteFloat(FDRO);
+      if FDRO_Formula <> '' then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
     NewLine;
   end;
 end;
 
-procedure TSutraLakeWriter.WriteFile(const AFileName: string; BcsFileNames: TLakeInteractionStringLists);
+procedure TSutraLakeWriter.WriteFile(const AFileName: string;
+  BcsFileNames: TLakeInteractionStringLists);
 var
-  NameOfFile: string;
   LakeStageFile: string;
   LakeRestartFile: string;
   LakeBudgetFile: string;
@@ -397,33 +590,44 @@ begin
   Evaluate;
   FHasLakes := True;
 
-  NameOfFile := FileName(AFileName);
-//  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
-  try
-    WriteDataSet1;
-    WriteDataSet2;
-    WriteDataSet3;
-  finally
-    CloseFile;
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
+  WriteFileInternal;
+  SutraFileWriter.AddFile(sftLkin, FNameOfFile);
+
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
   end;
-  SutraFileWriter.AddFile(sftLkin, NameOfFile);
 
   if not FLakeOptions.AllNodesLakes then
   begin
-    NameOfFile := ChangeFileExt(AFileName, '.lkar');
-    OpenFile(NameOfFile);
-    try
-      WriteLakeAreaDataSet1a;
-      WriteLakeAreaDataSet1b;
-    finally
-      CloseFile;
+    WritingTemplate := False;
+    ClearUsedPestDataArrays;
+
+    FNameOfFile := ChangeFileExt(AFileName, '.lkar');
+    FInputFileName := FNameOfFile;
+    WriteLakeAreaInternal;
+    SutraFileWriter.AddFile(sftLkar, FNameOfFile);
+
+    if  Model.PestUsed and FPestParamUsed then
+    begin
+      FNameOfFile := FNameOfFile + '.tpl';
+      WritePestTemplateLine(FNameOfFile);
+      WritingTemplate := True;
+      WriteLakeAreaInternal;
     end;
-    SutraFileWriter.AddFile(sftLkar, NameOfFile);
   end;
 
-  NameOfFile := ChangeFileExt(AFileName, '.lkbc');
-  OpenFile(NameOfFile);
+  WritingTemplate := False;
+  ClearUsedPestDataArrays;
+
+  FNameOfFile := ChangeFileExt(AFileName, '.lkbc');
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     WriteLakeInteractionDataSet1;
     WriteLakeInteractionDataSet2;
@@ -435,7 +639,7 @@ begin
   finally
     CloseFile;
   end;
-  SutraFileWriter.AddFile(sftLkbc, NameOfFile);
+  SutraFileWriter.AddFile(sftLkbc, FNameOfFile);
 
 
   LakeStageFile := ChangeFileExt(AFileName, '.lkst');
@@ -452,6 +656,34 @@ begin
 
   LakeHierarchyFile := ChangeFileExt(AFileName, '.lkn');
   SutraFileWriter.AddFile(sftLkn, LakeHierarchyFile);
+end;
+
+procedure TSutraLakeWriter.WriteLakeAreaInternal;
+begin
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    WriteLakeAreaDataSet1a;
+    WriteLakeAreaDataSet1b;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TSutraLakeWriter.WriteFileInternal;
+begin
+  //  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
+  try
+    WriteTemplateHeader;
+
+    WriteDataSet1;
+    WriteDataSet2;
+    WriteDataSet3;
+  finally
+    CloseFile;
+  end;
 end;
 
 procedure TSutraLakeWriter.WriteLakeAreaDataSet1a;
@@ -478,7 +710,7 @@ var
   IL: Integer;
   Lake_Bottom: TDataArray;
   ANode: TLakeNode;
-  ELVLB: Double;
+//  ELVLB: Double;
 begin
   if FLakeOptions.SpecifyLakeBottom then
   begin
@@ -495,8 +727,9 @@ begin
     WriteInteger(IL);
     if FLakeOptions.SpecifyLakeBottom then
     begin
-      ELVLB := Lake_Bottom.RealData[0, 0, ANode.FCol];
-      WriteFloat(ELVLB);
+      WriteDataArrayValueOrFormula(Lake_Bottom, 0, 0, ANode.FCol);
+//      ELVLB := Lake_Bottom.RealData[0, 0, ANode.FCol];
+//      WriteFloat(ELVLB);
     end;
     NewLine;
   end;

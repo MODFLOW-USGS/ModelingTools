@@ -141,6 +141,10 @@ type
     procedure AssignPestFormula(var Formula: string;
       const PestSeriesName: string; SeriesMethod: TPestParamMethod;
       PestNames: TStringList);
+    // Write either the data array value at the specified location
+    // or a formula to be evaluated by EnhancedTemplateProcessor
+    procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
+      Layer, Row, Col: Integer);
   public
     // @name converts AFileName to use the correct extension for the file.
     class function FileName(const AFileName: string): string;
@@ -187,6 +191,7 @@ type
     class function PestUtilityProgramPath(UtilityProgramName,
       AFileName: string): string;
     procedure AddUsedPestDataArray(ADataArray: TDataArray);
+    procedure ClearUsedPestDataArrays;
     function GetUsedPestDataArrays: TArray<TDataArray>;
     // Name returns an empty string if no file needs to be created.
     // otherwise, it returns the name of the arrays file to be used
@@ -199,8 +204,15 @@ type
         identifying the data set being written.)
     }
     procedure WriteArray(const DataArray: TDataArray; const LayerIndex: integer;
-      const Comment: string;  NoValueAssignedAnnotation: string; const MF6_Arrayname: string;
-      CacheArray: Boolean = True); virtual;
+      const Comment: string;  NoValueAssignedAnnotation: string;
+      const MF6_Arrayname: string; CacheArray: boolean = True); virtual;
+    {
+    @name returns whether or not PEST parameters are used with DataArray in the
+    layer designated by LayerIndex.
+    If the result is @True, @link(WriteArray) will handle the data set
+    differently
+    }
+    function DataArrayUsesPestParameters(const DataArray: TDataArray): boolean;
   end;
 
   { @name is an abstract base class used as an ancestor for classes that
@@ -276,10 +288,7 @@ type
     // value, PEST name, PEST Series name and PEST series method.
     procedure WriteValueOrFormula(Cell: TValueCell; Index: integer;
       FixedLength: Integer = 0; ChangeSign: Boolean = False);
-    // Write either the data array value at the specified location
-    // or a formula to be evaluated by EnhancedTemplateProcessor
-    procedure WriteDataArrayValueOrFormula(DataArray: TDataArray;
-      Layer, Row, Col: Integer);
+
     // Write a formula for EnhancedTemplateProcessor or write a value
     // based on an identified parameter or PEST-modified data set.
     // If Layer < 0, only parameters will be used, not data sets.
@@ -311,13 +320,6 @@ type
     // @name creates and instance of @classname.
     // @param(Model is the @link(TCustomModel) to be exported.)
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
-    {
-    @name returns whether or not PEST parameters are used with DataArray in the
-    layer designated by LayerIndex.
-    If the result is @True, @link(WriteArray) will handle the data set
-    differently
-    }
-    function DataArrayUsesPestParameters(const DataArray: TDataArray): Boolean;
     { @name writes one layer of DataArray to the output file.
       @param(DataArray is the TDataArray to be written.)
       @param(LayerIndex is the layer in DataArray to be written.)
@@ -2533,6 +2535,11 @@ begin
   end;
 end;
 
+procedure TCustomFileWriter.ClearUsedPestDataArrays;
+begin
+  FPestDataArrays.Clear;
+end;
+
 procedure TCustomFileWriter.CloseFile;
 begin
   if FFileStream = FMainFileStream then
@@ -2743,18 +2750,6 @@ begin
   end;
 end;
 
-function TCustomModflowWriter.DataArrayUsesPestParameters(
-  const DataArray: TDataArray): Boolean;
-begin
-//  {$IFDEF DEBUG}
-  Assert(Model <> nil);
-  result := Model.PestUsed and (DataArray.DataType = rdtDouble)
-    and DataArray.PestParametersUsed;
-//  {$ELSE}
-//  result := False;
-//  {$ENDIF}
-end;
-
 class function TCustomFileWriter.FileName(const AFileName: string): string;
 begin
   result := ChangeFileExt(AFileName, Extension);
@@ -2882,7 +2877,14 @@ var
     begin
       ModifierValue := DataArray.RealData[Layer, Row, Col];
 
-      LocalLayer := Model.DataSetLayerToModflowLayer(Layer);
+      if Model.ModelSelection in ModflowSelection then
+      begin
+        LocalLayer := Model.DataSetLayerToModflowLayer(Layer);
+      end
+      else
+      begin
+        LocalLayer := Layer + 1;
+      end;
       CellValueReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
         [ArrayTemplateCharacter, DataArray.Name,
         LocalLayer, Row+1, Col+1]);
@@ -3556,33 +3558,6 @@ begin
     end;
   end;
   Model.DataArrayManager.AddDataSetToCache(DataArray);
-end;
-
-procedure TCustomModflowWriter.WriteDataArrayValueOrFormula(
-  DataArray: TDataArray; Layer, Row, Col: Integer);
-var
-  Formula: string;
-  ExtendedTemplateCharacter: string;
-//  Value: Double;
-begin
-  Formula := GetPestNonTransientTemplateFormula(DataArray,
-    Layer, Row, Col);
-  if not WritingTemplate or (Formula = '') then
-  begin
-    WriteFloat(DataArray.RealData[Layer, Row, Col]);
-    if Formula <> '' then
-    begin
-      FPestParamUsed := True;
-      AddUsedPestDataArray(DataArray);
-    end;
-  end
-  else
-  begin
-    ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
-    Formula := Format(' %0:s                    %1:s%0:s ',
-      [ExtendedTemplateCharacter, Formula]);
-    WriteString(Formula);
-  end;
 end;
 
 procedure TCustomModflowWriter.WriteHeader(const DataArray: TDataArray;
@@ -9968,7 +9943,14 @@ var
           end;
           ModifierValue := DataArray.RealData[DataArrayLayer, ACell.Row, ACell.Column];
 
-          LocalLayer := Model.DataSetLayerToModflowLayer(ACell.Layer);
+          if Model.ModelSelection in ModflowSelection then
+          begin
+            LocalLayer := Model.DataSetLayerToModflowLayer(ACell.Layer);
+          end
+          else
+          begin
+            LocalLayer := ACell.Layer + 1;
+          end;
           CellValueReplacement := Format(' %0:s                    %1:s[%2:d, %3:d, %4:d]%0:s',
             [ArrayTemplateCharacter, DataArray.Name,
             LocalLayer, ACell.Row+1, ACell.Column+1]);
@@ -10337,8 +10319,47 @@ begin
   end;
 end;
 
+function TCustomFileWriter.DataArrayUsesPestParameters(const DataArray
+  : TDataArray): boolean;
+begin
+  // {$IFDEF DEBUG}
+  Assert(Model <> nil);
+  result := Model.PestUsed and (DataArray.DataType = rdtDouble) and
+    DataArray.PestParametersUsed;
+  // {$ELSE}
+  // result := False;
+  // {$ENDIF}
+end;
+
+procedure TCustomFileWriter.WriteDataArrayValueOrFormula(DataArray: TDataArray;
+Layer, Row, Col: Integer);
+var
+  Formula: string;
+  ExtendedTemplateCharacter: string;
+  // Value: Double;
+begin
+  Formula := GetPestNonTransientTemplateFormula(DataArray, Layer, Row, Col);
+  if not WritingTemplate or (Formula = '') then
+  begin
+    WriteFloat(DataArray.RealData[Layer, Row, Col]);
+    if Formula <> '' then
+    begin
+      FPestParamUsed := True;
+      AddUsedPestDataArray(DataArray);
+    end;
+  end
+  else
+  begin
+    ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+    Formula := Format(' %0:s                    %1:s%0:s ',
+      [ExtendedTemplateCharacter, Formula]);
+    WriteString(Formula);
+  end;
+end;
+
 initialization
-  LimitValue := 1.18e-38;
+
+LimitValue := 1.18e-38;
   NegLimitValue := -LimitValue;
 
 
