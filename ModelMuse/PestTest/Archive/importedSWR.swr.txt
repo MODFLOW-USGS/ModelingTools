@@ -1,0 +1,2 @@
+~
+MyVertOffset[1, 6, 6] arrays\importedSWR.MyVertOffset_1.arrays

@@ -578,7 +578,7 @@ type
   private
     FValue: real;
     FOnChange: TNotifyEvent;
-    procedure SetValue(const Value: real);
+    procedure SetValue(Value: real);
   protected
     procedure ReadValue(Reader: TReader);
     procedure ReadStringValue(Reader: TReader);
@@ -1091,8 +1091,10 @@ begin
   Value := Reader.ReadFloat;
 end;
 
-procedure TRealStorage.SetValue(const Value: real);
+procedure TRealStorage.SetValue(Value: real);
 begin
+  // prevent rounding errors in saved files from being used.
+  Value := FortranStrToFloat(FortranFloatToStr(Value));
   if FValue <> Value then
   begin
     FValue := Value;

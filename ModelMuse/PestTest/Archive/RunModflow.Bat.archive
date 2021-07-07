@@ -1,0 +1,4 @@
+if not exist "..\..\output\NUL" mkdir "..\..\output"
+if not exist "..\..\output\output.Mnw1Test\NUL" mkdir "..\..\output\output.Mnw1Test"
+..\..\bin\mf2005.exe Mnw1Test.nam /wait
+pause

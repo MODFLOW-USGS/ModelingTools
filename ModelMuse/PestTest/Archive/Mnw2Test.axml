@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Mnw2Test" FileType="bin">
+    <FileName Model_Name="Mnw2Test" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Mnw2Test" FileType="ancillary">
+    <FileName Model_Name="Mnw2Test" FileType="ancillary">Mnw2Test.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Mnw2Test" FileType="Model Input">
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.bas</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.chd</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.dis</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.gsf</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.jtf</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.lpf</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.mnw2</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.nam.archive</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.ob_hob</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.oc</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.pcg</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.ptf</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">Mnw2Test.pval</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Input">usgs.Mnw2Test.reference</FileName>
+  </model>
+  <output Model_Name="Mnw2Test" FileType="Model Output">
+    <FileName Model_Name="Mnw2Test" FileType="Model Output">Mnw2Test.cbc</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Output">Mnw2Test.fdn</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Output">Mnw2Test.fhd</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Output">Mnw2Test.hob_out</FileName>
+    <FileName Model_Name="Mnw2Test" FileType="Model Output">Mnw2Test.lst</FileName>
+  </output>
+</Model_Archive_List>

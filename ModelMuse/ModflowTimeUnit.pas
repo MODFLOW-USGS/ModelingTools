@@ -29,13 +29,13 @@ type
     // @name calls @link(TBaseModel.Invalidate) indirectly.
     procedure InvalidateModel;
     // See @link(EndTime).
-    procedure SetEndTime(const Value: double);
+    procedure SetEndTime(Value: double);
     // See @link(MaxLengthOfFirstTimeStep).
     procedure SetMaxLengthOfFirstTimeStep(const Value: double);
     // See @link(PeriodLength).
     procedure SetPeriodLength(const Value: double);
     // See @link(StartTime).
-    procedure SetStartTime(const Value: double);
+    procedure SetStartTime(Value: double);
     // See @link(StressPeriodType).
     procedure SetStressPeriodType(const Value: TStressPeriodType);
     // See @link(TimeStepMultiplier).
@@ -140,7 +140,7 @@ implementation
 
 uses RTLConsts, Math, ModflowDiscretizationWriterUnit,
   frmErrorsAndWarningsUnit, Mt3dmsBtnWriterUnit, Mt3dmsTimesUnit,
-  ModflowPackageSelectionUnit, PhastModelUnit;
+  ModflowPackageSelectionUnit, PhastModelUnit, ModelMuseUtilities;
 
 resourcestring
   StrUnusualUseOfDrawd = 'Unusual use of Drawdown reference option';
@@ -280,8 +280,10 @@ begin
   end;
 end;
 
-procedure TModflowStressPeriod.SetEndTime(const Value: double);
+procedure TModflowStressPeriod.SetEndTime(Value: double);
 begin
+  // prevent rounding errors in saved files from being used.
+  Value := FortranStrToFloat(FortranFloatToStr(Value));
   if FEndTime <> Value then
   begin
     FEndTime := Value;
@@ -298,8 +300,10 @@ begin
   end;
 end;
 
-procedure TModflowStressPeriod.SetStartTime(const Value: double);
+procedure TModflowStressPeriod.SetStartTime(Value: double);
 begin
+  // prevent rounding errors in saved files from being used.
+  Value := FortranStrToFloat(FortranFloatToStr(Value));
   if FStartTime <> Value then
   begin
     FStartTime := Value;

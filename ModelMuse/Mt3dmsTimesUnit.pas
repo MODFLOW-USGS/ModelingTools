@@ -116,8 +116,6 @@ implementation
 uses
   Math;
 
-
-
 { TMt3dmsTimeItem }
 
 procedure TMt3dmsTimeItem.Assign(Source: TPersistent);

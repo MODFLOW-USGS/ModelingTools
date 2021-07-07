@@ -1,0 +1,66 @@
+pcf
+* control data
+restart estimation # RSTFLE PESTMODE
+     6     1     1     6    13     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
+     2     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+  1.000000000000E+001  -3.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
+  3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
+  1.000000000000E-001      1  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
+    50  5.000000000000E-003      4     4  5.000000000000E-003      4  0.000000000000E+000      1  0.000000000000E+000  # NOPTMAX, PHIREDSTP, NPHISTP, NPHINORED, RELPARSTP, NRELPAR, PHISTOPTHRESH, LASTRUN, PHIABANDON
+     1     1     1     0 jcosave nojcosaveitn verboserec reisaveitn parsaveitn noparsaverun # ICOV, ICOR, IEIG, IRES, JCOSAVE, JCOSAVEITN, VERBOSEREC, RESSAVEITN, PARSAVEITN, PARSAVERUN
+
+* singular value decomposition
+     1 # SVDMODE
+  1000  5.000000000000E-007  # MAXSING, EIGTHRESH
+     0 # EIGWRITE
+
+* lsqr
+     0 # LSQRMODE
+  1.000000000000E-004   1.000000000000E-004   1.000000000000E+003     24 # LSQR_ATOL LSQR_BTOL LSQR_CONLIM LSQR_ITNLIM
+     1 # LSQRWRITE
+
+* parameter groups
+SWR relative  1.000000000000E-002   0.000000000000E+000  switch  1.500000000000E+000  parabolic
+
+* parameter data
+Swr1 none relative  1.000000000000E-001   0.000000000000E+000   1.000000000000E+001  SWR  1.000000000000E+000   0.000000000000E+000 
+Swr2 none relative  1.000000000000E-001   0.000000000000E+000   1.000000000000E+001  SWR  1.000000000000E+000   0.000000000000E+000 
+SwrRain none relative  1.100000000000E+000   0.000000000000E+000   1.000000000000E+001  SWR  1.000000000000E+000   0.000000000000E+000 
+SwrEvap none relative  1.100000000000E+000   0.000000000000E+000   1.000000000000E+001  SWR  1.000000000000E+000   0.000000000000E+000 
+SwrLat none relative  1.100000000000E+000   0.000000000000E+000   1.000000000000E+001  SWR  1.000000000000E+000   0.000000000000E+000 
+SwrStage none relative  1.537000000000E+000   0.000000000000E+000   1.000000000000E+001  SWR  1.000000000000E+000   0.000000000000E+000 
+
+* observation groups
+CHOB_flows
+GHB_flows
+DRN_flows
+RIV_flows
+STR_flows
+Heads
+Head_Changes
+regul_Grp0
+regul_Grp1
+regul_Grp2
+regul_Grp3
+regul_Grp4
+regul_Grp5
+
+* observation data
+a  5.000000000000E-001   1.000000000000E+000  Heads
+
+* model command line
+RunModel.Bat
+
+* model input/output
+importedSWR.ptf importedSWR.pval
+importedSWR.MyVertOffset.script.tpl importedSWR.MyVertOffset.script
+importedSWR.PestIns importedSWR.Mf2005Values
+
+* prior information
+ eq_1          1.0 * Swr1 = 0.1       1.00000     regul_Grp0
+ eq_2          1.0 * Swr2 = 0.1       1.00000     regul_Grp1
+ eq_3          1.0 * SwrRain = 1.1       1.00000     regul_Grp2
+ eq_4          1.0 * SwrEvap = 1.1       1.00000     regul_Grp3
+ eq_5          1.0 * SwrLat = 1.1       1.00000     regul_Grp4
+ eq_6          1.0 * SwrStage = 1.537       1.00000     regul_Grp5
+

@@ -1,0 +1,82 @@
+# OBS: Observation Utility file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_stage_ob.csv
+ 'ls_LAK' stage Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_ext-inflow_ob.csv
+ 'lef_LAK' ext-inflow Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_outlet-inflow_ob.csv
+ 'lof_LAK' outlet-inflow Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_inflow_ob.csv
+ 'li_LAK' inflow Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_from_MVR_ob.csv
+ 'lfm_LAK' from-mvr Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_rainfall_ob.csv
+ 'lra_LAK' rainfall Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_runoff_ob.csv
+ 'lru_LAK' runoff Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_flow_ob.csv
+ 'lf_LAK' lak Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_withdrawal_ob.csv
+ 'lw_LAK' withdrawal Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_evaporation_ob.csv
+ 'le_LAK' evaporation Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_ext-outflow_ob.csv
+ 'leo_LAK' ext-outflow Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_to_mvr_ob.csv
+ 'l2m_LAK' to-mvr Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_storage_ob.csv
+ 'lst_LAK' storage Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_constant_flow_ob.csv
+ 'lc_LAK' constant Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_outlet_ob.csv
+ 'lo_LAK' outlet Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_volume_ob.csv
+ 'lv_LAK' volume Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_surface-area_ob.csv
+ 'lsa_LAK' surface-area Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_wetted-area_ob.csv
+ 'lwa_LAK' wetted-area Lake 
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.lak_conductance_ob.csv
+ 'lco_LAK' conductance Lake 
+END CONTINUOUS
+

@@ -71,7 +71,7 @@ resourcestring
   StrNoPestParameters = 'No parameters have been defined for use with PEST.';
   StrNoParameterGroups = 'No parameter groups defined';
   StrNoPESTParameterGr = 'No PEST parameter groups have been defined. Define them in "Model|Manage Parameters".';
-  StrNoObservationsDefi = 'No observations defined';
+  StrNoObservationsDefi = 'No calibration observations defined';
   StrNoObservationsHave = 'No observations have been defined for PEST.';
   StrNoObservationGroup = 'No observation groups defined';
   StrNoPESTObservation = 'No PEST observation groups have been defined. "Define them in "Model|Pest Properties".';
@@ -79,7 +79,7 @@ resourcestring
   StrTheParameterSH = 'The parameter "%s" has not been assigned to a paramet' +
   'er group ';
   StrObservationGroupNo = 'Observation group not assigned';
-  StrNoObservationGroupAssigned = 'No observation group has been assigned to %s.';
+//  StrNoObservationGroupAssigned = 'No observation group has been assigned to %s.';
   StrParameterUndefined = 'Parameter undefined';
   StrPilotPointsWereDe = 'Pilot points were defined for %s but no parameter ' +
   'by that name that uses pilot points has been defined.';
@@ -87,6 +87,15 @@ resourcestring
   StrTheNamesOfSHas = 'The names of %s has been truncated because "regul" mu' +
   'st be inserted at the beginning of the observation group name to indicate' +
   ' it is to be used for regularization.';
+  StrObservationGroupUn = 'Observation group undefined';
+  StrNoObservationGroupAssigned = 'No observation group is defined for "%s"';
+  StrInvalidParameterVa = 'Invalid parameter value';
+  StrForParameter0s = 'For parameter "%0:s", the parameter value is %1:s tha' +
+  'n the %2:s bound for the parameter.';
+  StrLess = 'less';
+  StrGreater = 'greater';
+  StrLower = 'lower';
+  StrUpper = 'upper';
 
 { TPestControlFileWriter }
 
@@ -1235,6 +1244,8 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupNo);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterUndefined);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrObservationGroupNa);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupUn);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidParameterVa);
 
   if not Model.PestUsed then
   begin
@@ -1541,16 +1552,26 @@ begin
     if ObsGroup = nil then
     begin
       WriteString(' ' + AnObs.ObservationGroup);
+      if AnObs.ObservationGroup = '' then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrObservationGroupUn,
+          Format(StrNoObservationGroupAssigned, [AnObs.Name]));
+      end;
     end
     else
     begin
       WriteString(' ' + ObsGroup.ExportedGroupName);
+      if ObsGroup.ExportedGroupName = '' then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrObservationGroupUn,
+          Format(StrNoObservationGroupAssigned, [AnObs.Name]));
+      end;
     end;
-    if AnObs.ObservationGroup = '' then
-    begin
-      frmErrorsAndWarnings.AddError(Model, StrObservationGroupNo,
-        Format(StrNoObservationGroupAssigned, [AnObs.Name]));
-    end;
+//    if AnObs.ObservationGroup = '' then
+//    begin
+//      frmErrorsAndWarnings.AddError(Model, StrObservationGroupNo,
+//        Format(StrNoObservationGroupAssigned, [AnObs.Name]));
+//    end;
     NewLine;
   end;
   NewLine;
@@ -1703,6 +1724,7 @@ var
   var
     PARNME: string;
     N: Integer;
+    PARVAL1: Double;
   begin
     //PARNME
     if ParameterName <> '' then
@@ -1757,20 +1779,34 @@ var
     end;
 
     //PARVAL1
+
     if ParameterName <> '' then
     begin
-      WriteFloat(Value);
+      PARVAL1 := Value;
+//      WriteFloat(Value);
     end
     else
     begin
-      WriteFloat(AParam.Value);
+      PARVAL1 := AParam.Value;
+//      WriteFloat(AParam.Value);
     end;
+    WriteFloat(PARVAL1);
 
     //PARLBND
     WriteFloat(AParam.LowerBound);
+    if PARVAL1 < AParam.LowerBound then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrInvalidParameterVa,
+        Format(StrForParameter0s, [PARNME, StrLess, StrLower]))
+    end;
 
     //PARUBND
     WriteFloat(AParam.UpperBound);
+    if PARVAL1 > AParam.UpperBound then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrInvalidParameterVa,
+        Format(StrForParameter0s, [PARNME, StrGreater, StrUpper]))
+    end;
 
     //PARGP
     if AParam.ParameterGroup = '' then

@@ -20107,8 +20107,9 @@ var
   FootprintWell: TFootprintWell;
   Withdrawals: TDataArray;
   Position: Integer;
-  StressPeriodIndex: Integer;
-  StressPeriod: TModflowStressPeriod;
+//  StressPeriodIndex: Integer;
+//  StressPeriod: TModflowStressPeriod;
+//  Mt3dStressPeriod: TMt3dmsTimeItem;
 begin
   RenameOldVerticalLeakance;
   FixSpecifyingGridByThreeDObjects;
@@ -20517,15 +20518,23 @@ begin
   end;
 
   // prevent rounding errors in saved files from being used.
-  for StressPeriodIndex := 0 to ModflowStressPeriods.Count - 1 do
-  begin
-    StressPeriod := ModflowStressPeriods[StressPeriodIndex];
-    StressPeriod.StartTime := FortranStrToFloat(FortranFloatToStr(
-      StressPeriod.StartTime));
-    StressPeriod.EndTime := FortranStrToFloat(FortranFloatToStr(
-      StressPeriod.EndTime));
-  end;
-
+//  for StressPeriodIndex := 0 to ModflowStressPeriods.Count - 1 do
+//  begin
+//    StressPeriod := ModflowStressPeriods[StressPeriodIndex];
+//    StressPeriod.StartTime := FortranStrToFloat(FortranFloatToStr(
+//      StressPeriod.StartTime));
+//    StressPeriod.EndTime := FortranStrToFloat(FortranFloatToStr(
+//      StressPeriod.EndTime));
+//  end;
+//
+//  for StressPeriodIndex := 0 to Mt3dmsTimes.Count - 1 do
+//  begin
+//    Mt3dStressPeriod := Mt3dmsTimes[StressPeriodIndex];
+//    Mt3dStressPeriod.StartTime := FortranStrToFloat(FortranFloatToStr(
+//      Mt3dStressPeriod.StartTime));
+//    Mt3dStressPeriod.EndTime := FortranStrToFloat(FortranFloatToStr(
+//      Mt3dStressPeriod.EndTime));
+//  end;
 end;
 
 procedure TPhastModel.RemoveNonAncillaryFiles;

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Mnw1Test" FileType="bin">
+    <FileName Model_Name="Mnw1Test" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Mnw1Test" FileType="ancillary">
+    <FileName Model_Name="Mnw1Test" FileType="ancillary">Mnw1Test.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Mnw1Test" FileType="Model Input">
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.bas</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.bcf</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.chd</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.dis</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.drn</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.gsf</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.jtf</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.mnw1</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.nam.archive</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.ob_drob</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.ob_hob</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.oc</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.pcg</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.ptf</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.pval</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">Mnw1Test.rch</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Input">usgs.Mnw1Test.reference</FileName>
+  </model>
+  <output Model_Name="Mnw1Test" FileType="Model Output">
+    <FileName Model_Name="Mnw1Test" FileType="Model Output">Mnw1Test.cbc</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Output">Mnw1Test.drob_out</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Output">Mnw1Test.fdn</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Output">Mnw1Test.fhd</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Output">Mnw1Test.hob_out</FileName>
+    <FileName Model_Name="Mnw1Test" FileType="Model Output">Mnw1Test.lst</FileName>
+  </output>
+</Model_Archive_List>

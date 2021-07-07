@@ -1,0 +1,16 @@
+# LPF: Layer Property Flow package file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+     9 -2.000000000000E+020      0 # ILPFCB, HDRY, NPLPF
+     0     0     0 # LAYTYP
+     0     0     0 # LAYAVG
+    -1    -1    -1 # CHANI
+     0     0     0 # LAYVKA
+     0     0     0 # LAYWET
+CONSTANT     1.000000000000E+002  # HK Upper Aquifer Layer 1
+  OPEN/CLOSE arrays\WellTest.Horizontal_Anisotropy_1.arrays 1.0 (Free)     12
+CONSTANT     1.000000000000E+000  # VKA Upper Aquifer Layer 1
+CONSTANT     1.000000000000E+002  # HK Middle Aquifer Layer 2
+  OPEN/CLOSE arrays\WellTest.Horizontal_Anisotropy_2.arrays 1.0 (Free)     12
+CONSTANT     1.000000000000E+000  # VKA Middle Aquifer Layer 2
+CONSTANT     1.000000000000E+002  # HK Lower Aquifer Layer 3
+  OPEN/CLOSE arrays\WellTest.Horizontal_Anisotropy_3.arrays 1.0 (Free)     12
+CONSTANT     1.000000000000E+000  # VKA Lower Aquifer Layer 3

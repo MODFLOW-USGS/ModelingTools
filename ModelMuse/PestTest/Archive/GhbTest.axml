@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="GhbTest" FileType="bin">
+    <FileName Model_Name="GhbTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="GhbTest" FileType="ancillary">
+    <FileName Model_Name="GhbTest" FileType="ancillary">GhbTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="GhbTest" FileType="Model Input">
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.bas</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.chd</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.dis</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.ghb</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.gsf</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.jtf</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.lpf</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.nam.archive</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.ob_hob</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.oc</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.pcg</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.ptf</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">GhbTest.pval</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Input">usgs.GhbTest.reference</FileName>
+  </model>
+  <output Model_Name="GhbTest" FileType="Model Output">
+    <FileName Model_Name="GhbTest" FileType="Model Output">GhbTest.cbc</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Output">GhbTest.fdn</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Output">GhbTest.fhd</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Output">GhbTest.hob_out</FileName>
+    <FileName Model_Name="GhbTest" FileType="Model Output">GhbTest.lst</FileName>
+  </output>
+</Model_Archive_List>

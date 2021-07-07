@@ -1,0 +1,16 @@
+# Name File for MODFLOW created on 7/7/2021 by ModelMuse Version 4.3.0.56
+LIST             11 ..\..\output\output.lakeTest\lakeTest.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.lakeTest\lakeTest.cbc REPLACE
+DIS              12 ..\..\model\model.lakeTest\lakeTest.dis OLD
+BAS6             13 ..\..\model\model.lakeTest\lakeTest.bas OLD
+OC               39 ..\..\model\model.lakeTest\lakeTest.oc OLD
+DATA             37 ..\..\output\output.lakeTest\lakeTest.fhd REPLACE
+DATA             38 ..\..\output\output.lakeTest\lakeTest.fdn REPLACE
+PCG              18 ..\..\model\model.lakeTest\lakeTest.pcg OLD
+LPF              14 ..\..\model\model.lakeTest\lakeTest.lpf OLD
+CHD              17 ..\..\model\model.lakeTest\lakeTest.chd OLD
+LAK              28 ..\..\model\model.lakeTest\lakeTest.lak OLD
+DATA          20205 ..\..\output\output.lakeTest\lakeTest.lakg1 REPLACE
+GAGE             40 ..\..\model\model.lakeTest\lakeTest.gag OLD
+HOB              41 ..\..\model\model.lakeTest\lakeTest.ob_hob OLD
+DATA             42 ..\..\output\output.lakeTest\lakeTest.hob_out REPLACE

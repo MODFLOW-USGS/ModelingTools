@@ -1,0 +1,2 @@
+~
+SfrWidth[1, 10, 10] arrays\MF6_TestSfrMawLakMvrUzf.SfrWidth_1.arrays

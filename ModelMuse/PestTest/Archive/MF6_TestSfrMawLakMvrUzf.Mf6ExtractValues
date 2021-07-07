@@ -1,0 +1,75 @@
+BEGIN OPTIONS
+  LISTING MF6_TestSfrMawLakMvrUzf.Mf6ObsExtInsLst
+  VALUES MF6_TestSfrMawLakMvrUzf.Mf6Values
+END OPTIONS
+
+BEGIN OBSERVATION_FILES
+FILENAME "MF6_TestSfrMawLakMvrUzf.ob_gw_out_head.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.ob_gw_out_drawdown.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.chob_out_chd.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.gbob_out_ghb.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.ob_wel_out_wel.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.rvob_out_riv.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.drob_out_drn.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_stage_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_ext-inflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_inflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_from_mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_rainfall_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_runoff_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_gw_exchange_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_evaporation_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_outflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_ext-outflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_to_mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_upstream-flow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.sfr_downstream-flow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_head_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_from_mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_flow_rate_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_cell_flow_rate_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_pump_rate_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_pump_rate_to_mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_cell_conductance_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.maw_flowing_well_conductance_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.ob_rch_out_rch.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.ob_evt_out_evt.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_stage_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_ext-inflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_outlet-inflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_inflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_from_MVR_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_rainfall_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_runoff_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_flow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_withdrawal_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_evaporation_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_ext-outflow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_to_mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_storage_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_constant_flow_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_outlet_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_volume_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_surface-area_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_wetted-area_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.lak_conductance_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.uzf-gwrch_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.uzf-gwd_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.uzf-gwd-to-mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.uzf-gwet_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.infiltration_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.from-mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.rej-inf_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.rej-inf-to-mvr_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.uzet_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.storage_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.net-infiltration_ob.csv" TEXT
+FILENAME "MF6_TestSfrMawLakMvrUzf.water-content_ob.csv" TEXT
+END OBSERVATION_FILES
+
+BEGIN IDENTIFIERS
+  ID chd_CHD1
+  OBSNAME MyCalib 1 PRINT
+
+END IDENTIFIERS
+

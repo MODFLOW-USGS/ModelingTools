@@ -1,0 +1,130 @@
+# OBS: Observation Utility file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_stage_ob.csv
+ 'ss_SFR_1' stage     1
+ 'ss_SFR_2' stage     2
+ 'ss_SFR_3' stage     3
+ 'ss_SFR_4' stage     4
+ 'ss_SFR_5' stage     5
+ 'ss_SFR_6' stage     6
+ 'ss_SFR_7' stage     7
+ 'ss_SFR_8' stage     8
+ 'ss_SFR2' stage    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_ext-inflow_ob.csv
+ 'sei_SFR2' ext-inflow    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_inflow_ob.csv
+ 'si_SFR_1' inflow     1
+ 'si_SFR_2' inflow     2
+ 'si_SFR_3' inflow     3
+ 'si_SFR_4' inflow     4
+ 'si_SFR_5' inflow     5
+ 'si_SFR_6' inflow     6
+ 'si_SFR_7' inflow     7
+ 'si_SFR_8' inflow     8
+ 'si_SFR2' inflow    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_from_mvr_ob.csv
+ 'sfm_SFR2' from-mvr    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_rainfall_ob.csv
+ 'sra_SFR_1' rainfall     1
+ 'sra_SFR_2' rainfall     2
+ 'sra_SFR_3' rainfall     3
+ 'sra_SFR_4' rainfall     4
+ 'sra_SFR_5' rainfall     5
+ 'sra_SFR_6' rainfall     6
+ 'sra_SFR_7' rainfall     7
+ 'sra_SFR_8' rainfall     8
+ 'sra_SFR2' rainfall    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_runoff_ob.csv
+ 'sru_SFR_1' runoff     1
+ 'sru_SFR_2' runoff     2
+ 'sru_SFR_3' runoff     3
+ 'sru_SFR_4' runoff     4
+ 'sru_SFR_5' runoff     5
+ 'sru_SFR_6' runoff     6
+ 'sru_SFR_7' runoff     7
+ 'sru_SFR_8' runoff     8
+ 'sru_SFR2' runoff    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_gw_exchange_ob.csv
+ 'sge_SFR_1' sfr     1
+ 'sge_SFR_2' sfr     2
+ 'sge_SFR_3' sfr     3
+ 'sge_SFR_4' sfr     4
+ 'sge_SFR_5' sfr     5
+ 'sge_SFR_6' sfr     6
+ 'sge_SFR_7' sfr     7
+ 'sge_SFR_8' sfr     8
+ 'sge_SFR2' sfr    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_evaporation_ob.csv
+ 'se_SFR_1' evaporation     1
+ 'se_SFR_2' evaporation     2
+ 'se_SFR_3' evaporation     3
+ 'se_SFR_4' evaporation     4
+ 'se_SFR_5' evaporation     5
+ 'se_SFR_6' evaporation     6
+ 'se_SFR_7' evaporation     7
+ 'se_SFR_8' evaporation     8
+ 'se_SFR2' evaporation    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_outflow_ob.csv
+ 'sof_SFR_1' outflow     1
+ 'sof_SFR_2' outflow     2
+ 'sof_SFR_3' outflow     3
+ 'sof_SFR_4' outflow     4
+ 'sof_SFR_5' outflow     5
+ 'sof_SFR_6' outflow     6
+ 'sof_SFR_7' outflow     7
+ 'sof_SFR_8' outflow     8
+ 'sof_SFR2' outflow    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_ext-outflow_ob.csv
+ 'seo_SFR2' ext-outflow    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_to_mvr_ob.csv
+ 's2m_SFR2' to-mvr    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_upstream-flow_ob.csv
+ 'suf_SFR_1' upstream-flow     1
+ 'suf_SFR_2' upstream-flow     2
+ 'suf_SFR_3' upstream-flow     3
+ 'suf_SFR_4' upstream-flow     4
+ 'suf_SFR_5' upstream-flow     5
+ 'suf_SFR_6' upstream-flow     6
+ 'suf_SFR_7' upstream-flow     7
+ 'suf_SFR_8' upstream-flow     8
+ 'suf_SFR2' upstream-flow    13
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_downstream-flow_ob.csv
+ 'sdf_SFR_1' downstream-flow     1
+ 'sdf_SFR_2' downstream-flow     2
+ 'sdf_SFR_3' downstream-flow     3
+ 'sdf_SFR_4' downstream-flow     4
+ 'sdf_SFR_5' downstream-flow     5
+ 'sdf_SFR_6' downstream-flow     6
+ 'sdf_SFR_7' downstream-flow     7
+ 'sdf_SFR_8' downstream-flow     8
+ 'sdf_SFR2' downstream-flow    13
+END CONTINUOUS
+

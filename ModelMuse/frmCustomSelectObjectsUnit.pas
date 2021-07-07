@@ -91,10 +91,13 @@ type
     FExapandedNodes: TStringList;
     FRefinementList: TList;
     FvstObsMf6Node: PVirtualNode;
+    FvstCalibrationObsMf6Node: PVirtualNode;
+
 //    FObs6List: TList;
 
     FvstHeadObsMf6Node: PVirtualNode;
     FHeadObs6List: TList;
+    FCalibrationObs6List: TList;
     FvstDrawDownObsMf6Node: PVirtualNode;
     FDrawDownObs6List: TList;
     FvstChdObsMf6Node: PVirtualNode;
@@ -455,6 +458,7 @@ resourcestring
   StrQuadtreeRefinement = 'Quadtree refinement';
   StrWellFootprintFeatur = 'WellFootprint Features';
   StrMODFLOW6Observatio = 'Observations (MODFLOW 6)';
+  StrMODFLOW6CalibrationObservatio = 'Calibration Observations (MODFLOW 6)';
   StrRechargeConcentrati = 'Recharge concentration: ';
   StrSaturatedETConcent = 'Saturated ET concentration: ';
   StrUnsaturatedETConce = 'Unsaturated ET concentration: ';
@@ -519,6 +523,11 @@ begin
     else if Node = FvstObsMf6Node then
     begin
       Data.Caption := StrMODFLOW6Observatio;
+      Node.CheckType := ctTriStateCheckBox;
+    end
+    else if Node = FvstCalibrationObsMf6Node then
+    begin
+      Data.Caption := StrMODFLOW6CalibrationObservatio;
       Node.CheckType := ctTriStateCheckBox;
     end
     else if Node = FvstDataSetRootNode then
@@ -1145,6 +1154,12 @@ begin
         + AScreenObject.Modflow6Obs.Name;
     end;
 
+    if FvstCalibrationObsMf6Node = Sender.NodeParent[Node] then
+    begin
+      CellText := CellText + ', '
+        + AScreenObject.Modflow6Obs.Name;
+    end;
+
     if FvstFootprintWellNode = Sender.NodeParent[Node] then
     begin
       CellText := CellText + ', '
@@ -1597,6 +1612,10 @@ begin
     if (AScreenObject.Modflow6Obs <> nil)
       and AScreenObject.Modflow6Obs.Used then
     begin
+      if AScreenObject.Modflow6Obs.CalibrationObservations.Count > 0 then
+      begin
+        InitializeData(FvstCalibrationObsMf6Node);
+      end;
       if ogHead in AScreenObject.Modflow6Obs.General then
       begin
         InitializeData(FvstHeadObsMf6Node);
@@ -1959,6 +1978,7 @@ begin
     vstCheckDeleteNode(FvstCsubObsMf6Node);
 
     vstCheckDeleteNode(FvstObsMf6Node);
+    vstCheckDeleteNode(FvstCalibrationObsMf6Node);
 
     ParentNodes := TList.Create;
     try
@@ -2173,13 +2193,18 @@ begin
     end;
     InitializeNodeData(FvstObsMf6Node, nil);
 
-  //  InitializeMF_BoundaryNode(FvstObsMf6Node, PriorNode, FObs6List);
-
+    if FvstCalibrationObsMf6Node = nil then
+    begin
+      FvstCalibrationObsMf6Node := vstObjects.InsertNode(
+        FvstObsMf6Node, amInsertAfter);
+      vstObjects.ReinitNode(FvstCalibrationObsMf6Node, False);
+    end;
+    InitializeNodeData(FvstCalibrationObsMf6Node, nil);
 
     if FvstModpathRoot = nil then
     begin
       FvstModpathRoot := vstObjects.InsertNode(
-        FvstObsMf6Node, amInsertAfter);
+        FvstCalibrationObsMf6Node, amInsertAfter);
       vstObjects.ReinitNode(FvstModpathRoot, False);
     end;
     InitializeNodeData(FvstModpathRoot, FModpathList);
@@ -2266,7 +2291,16 @@ begin
       vstObjects.ReinitNode(FvstHeadObsMf6Node, False);
     end;
     InitializeNodeData(FvstHeadObsMf6Node, FHeadObs6List);
-    PriorNode := FvstHeadObsMf6Node;
+
+    if FvstCalibrationObsMf6Node = nil then
+    begin
+      FvstCalibrationObsMf6Node := vstObjects.InsertNode(
+        FvstHeadObsMf6Node, amInsertAfter);
+      vstObjects.ReinitNode(FvstCalibrationObsMf6Node, False);
+    end;
+    InitializeNodeData(FvstCalibrationObsMf6Node, FCalibrationObs6List);
+
+    PriorNode := FvstCalibrationObsMf6Node;
 
     InitializeMF_BoundaryNode(FvstDrawDownObsMf6Node, PriorNode, FDrawDownObs6List);
     InitializeMF_BoundaryNode(FvstChdObsMf6Node, PriorNode, FChdObs6List);
@@ -2564,6 +2598,7 @@ begin
 
   FFootprintList.Free;
 
+  FCalibrationObs6List.Free;
   FHeadObs6List.Free;
   FDrawDownObs6List.Free;
   FChdObs6List.Free;
@@ -2671,6 +2706,7 @@ begin
   FFootprintList := TList.Create;
   FExapandedNodes := TStringList.Create;
 
+  FCalibrationObs6List := TList.Create;
   FHeadObs6List := TList.Create;
   FDrawDownObs6List := TList.Create;
   FChdObs6List := TList.Create;
@@ -2811,6 +2847,7 @@ begin
   FvstCsubObsMf6Node := nil;
 
   FvstObsMf6Node := nil;
+  FvstCalibrationObsMf6Node := nil;
 
 end;
 
@@ -3031,6 +3068,7 @@ begin
   FFootprintList.Sort(ScreenObjectCompare);
 
   FHeadObs6List.Sort(ScreenObjectCompare);
+  FCalibrationObs6List.Sort(ScreenObjectCompare);
   FDrawDownObs6List.Sort(ScreenObjectCompare);
   FChdObs6List.Sort(ScreenObjectCompare);
   FDrnObs6List.Sort(ScreenObjectCompare);
@@ -3289,6 +3327,7 @@ begin
       or (Node = FvstSutraFeaturesNode)
       or (Node = FvstFootprintFeaturesNode)
       or (Node = FvstObsMf6Node)
+      or (Node = FvstCalibrationObsMf6Node)
       then
     begin
       if Sender.CheckState[Node] <> csMixedNormal then
@@ -3461,6 +3500,7 @@ begin
         or (vstNode = FvstSutraFeaturesNode)
         or (vstNode = FvstFootprintFeaturesNode)
         or (vstNode = FvstObsMf6Node)
+//        or (vstNode = FvstCalibrationObsMf6Node)
         then
       begin
         // Convert vstObjects.ChildCount[Node] from Cardinal to integer to
@@ -3587,6 +3627,7 @@ begin
     UpdateChildCheck(FvstSizeNode);
     UpdateChildCheck(FvstRefinementNode);
     SetRootNodeStates(FvstObsMf6Node);
+    SetRootNodeStates(FvstCalibrationObsMf6Node);
   finally
     vstObjects.EndUpdate;
   end;

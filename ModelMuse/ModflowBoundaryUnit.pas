@@ -84,7 +84,7 @@ type
     // See @link(StartTime).
     FStartTime: double;
     // See @link(StartTime).
-    procedure SetStartTime(const Value: double);
+    procedure SetStartTime(Value: double);
   protected
     FObserverList: TObserverObjectList;
     procedure AssignObserverEvents(Collection: TCollection); virtual; abstract;
@@ -145,7 +145,7 @@ type
     // See @link(EndTime).
     FEndTime: double;
     // See @link(EndTime).
-    procedure SetEndTime(const Value: double);
+    procedure SetEndTime(Value: double);
   protected
     // @name returns @true if AnotherItem is a @classname and
     // @link(StartTime) and (EndTime) are the same in the current
@@ -1339,8 +1339,10 @@ begin
   end;
 end;
 
-procedure TCustomModflowBoundaryItem.SetEndTime(const Value: double);
+procedure TCustomModflowBoundaryItem.SetEndTime(Value: double);
 begin
+  // prevent rounding errors in saved files from being used.
+  Value := FortranStrToFloat(FortranFloatToStr(Value));
   if FEndTime <> Value then
   begin
     FEndTime := Value;
@@ -3229,8 +3231,10 @@ begin
   FCachedResult := result;
 end;
 
-procedure TCustomBoundaryItem.SetStartTime(const Value: double);
+procedure TCustomBoundaryItem.SetStartTime(Value: double);
 begin
+  // prevent rounding errors in saved files from being used.
+  Value := FortranStrToFloat(FortranFloatToStr(Value));
   if FStartTime <> Value then
   begin
     FStartTime := Value;

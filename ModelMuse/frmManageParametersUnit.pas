@@ -168,6 +168,8 @@ resourcestring
   StrTiedParameterPART = 'Tied Parameter (PARTIED)';
   StrNone = '(none)';
   StrABSPARMAXN = 'ABSPARMAX(N)';
+  StrTheNameOfThePara = 'The name of the parameter "%s" matches the name of ' +
+  'an existing data set, This is not allowed.';
 
 {$R *.dfm}
 type
@@ -472,8 +474,11 @@ procedure TfrmManageParameters.btnOKClick(Sender: TObject);
 var
   Names: TStringList;
   Index: Integer;
+  DataArrayManager: TDataArrayManager;
+  ExistingDataSet: TObject;
 begin
   inherited;
+  DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   Names := TStringList.Create;
   try
     Names.Assign(rdgParameters.Cols[Ord(pcName)]);
@@ -485,6 +490,18 @@ begin
       begin
         Beep;
         MessageDlg(Format(StrThereAreTwoOrMo,[Names[Index]]),
+          mtError, [mbOK], 0);
+        ModalResult := mrNone;
+        Exit;
+      end;
+    end;
+    for Index := 0 to Names.Count - 1 do
+    begin
+      ExistingDataSet := DataArrayManager.GetDataSetByName(Names[Index]);
+      if ExistingDataSet <> nil then
+      begin
+        Beep;
+        MessageDlg(Format(StrTheNameOfThePara,[Names[Index]]),
           mtError, [mbOK], 0);
         ModalResult := mrNone;
         Exit;
@@ -1612,8 +1629,11 @@ var
   OK_Combination: Boolean;
   LowerBound: Double;
   UpperBound: Double;
+  DataArrayManager: TDataArrayManager;
+  ExistingDataSet: TObject;
 begin
   inherited;
+  DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   if (ARow > 0) then
   begin
     if (ACol = Ord(pcName)) then
@@ -1624,6 +1644,15 @@ begin
         if Names.IndexOf(rdgParameters.Cells[ACol, ARow]) <> ARow then
         begin
           rdgParameters.Canvas.Brush.Color := clRed;
+        end
+        else
+        begin
+          ExistingDataSet := DataArrayManager.GetDataSetByName(
+            rdgParameters.Cells[ACol, ARow]);
+          if ExistingDataSet <> nil then
+          begin
+            rdgParameters.Canvas.Brush.Color := clRed;
+          end;
         end;
       finally
         Names.Free;

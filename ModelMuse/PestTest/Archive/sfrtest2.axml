@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="sfrtest2" FileType="bin">
+    <FileName Model_Name="sfrtest2" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="sfrtest2" FileType="ancillary">
+    <FileName Model_Name="sfrtest2" FileType="ancillary">sfrtest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="sfrtest2" FileType="Model Input">
+    <FileName Model_Name="sfrtest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.bas</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.chd</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.dis</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.gsf</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.jtf</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.lpf</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.nam.archive</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.ob_hob</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.oc</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.pcg</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.ptf</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.pval</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">sfrtest2.sfr</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Input">usgs.sfrtest2.reference</FileName>
+  </model>
+  <output Model_Name="sfrtest2" FileType="Model Output">
+    <FileName Model_Name="sfrtest2" FileType="Model Output">sfrtest2.cbc</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Output">sfrtest2.fdn</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Output">sfrtest2.fhd</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Output">sfrtest2.hob_out</FileName>
+    <FileName Model_Name="sfrtest2" FileType="Model Output">sfrtest2.lst</FileName>
+  </output>
+</Model_Archive_List>

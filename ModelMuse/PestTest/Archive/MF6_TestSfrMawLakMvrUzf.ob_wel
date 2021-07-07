@@ -1,0 +1,10 @@
+# OBS: Observation Utility file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT MF6_TestSfrMawLakMvrUzf.ob_wel_out_wel.csv
+  'wel_Well' wel Well
+  'Well_MVR' to-mvr Well
+END CONTINUOUS
