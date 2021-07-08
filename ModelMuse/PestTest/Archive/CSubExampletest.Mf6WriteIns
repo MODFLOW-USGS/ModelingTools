@@ -1,0 +1,54 @@
+BEGIN OPTIONS
+  LISTING CSubExampletest.Mf6ObsExtInsLst
+  INSTRUCTION CSubExampletest.PestIns
+END OPTIONS
+
+BEGIN OBSERVATION_FILES
+FILENAME "CSubExampletest.ob_gw_out_head.csv" TEXT
+FILENAME "CSubExampletest.inelastic-csub_ob.csv" TEXT
+FILENAME "CSubExampletest.elastic-csub_ob.csv" TEXT
+FILENAME "CSubExampletest.coarse-csub_ob.csv" TEXT
+FILENAME "CSubExampletest.csub-cell_ob.csv" TEXT
+FILENAME "CSubExampletest.wcomp-csub-cell_ob.csv" TEXT
+FILENAME "CSubExampletest.sk-cell_ob.csv" TEXT
+FILENAME "CSubExampletest.estress-cell_ob.csv" TEXT
+FILENAME "CSubExampletest.gstress-cell_ob.csv" TEXT
+FILENAME "CSubExampletest.interbed-compaction_ob.csv" TEXT
+FILENAME "CSubExampletest.elastic-compaction_ob.csv" TEXT
+FILENAME "CSubExampletest.coarse-compaction_ob.csv" TEXT
+FILENAME "CSubExampletest.compaction-cell_ob.csv" TEXT
+FILENAME "CSubExampletest.theta_ob.csv" TEXT
+FILENAME "CSubExampletest.delay-preconstress_ob.csv" TEXT
+END OBSERVATION_FILES
+
+BEGIN IDENTIFIERS
+  ID hd_CalibH_H1
+  LOCATION 17000 -17000
+  OBSNAME hd_CalibH_H1_1 30001
+
+  ID hd_CalibH_H2
+  LOCATION 17000 -19000
+  OBSNAME hd_CalibH_H2_1 30001
+
+  ID hd_CalibH_H3
+  LOCATION 15000 -19000
+  OBSNAME hd_CalibH_H3_1 30001
+
+  ID hd_CalibH_H4
+  LOCATION 15000 -17000
+  OBSNAME hd_CalibH_H4_1 30001
+
+  ID ccce_Well1_2_9_10
+  OBSNAME Wq_1_1 21941
+
+END IDENTIFIERS
+
+BEGIN DERIVED_OBSERVATIONS
+# Defined by Object0
+  OBSNAME H2 PRINT
+  INTERPOLATE 16702.5089605735 -17057.3476702509 hd_CalibH_H1_1 hd_CalibH_H2_1 hd_CalibH_H3_1 hd_CalibH_H4_1
+
+  OBSNAME Wq PRINT
+  FORMULA Wq_1_1
+
+END DERIVED_OBSERVATIONS

@@ -1,0 +1,21 @@
+# OBS: Observation Utility file created on 7/8/2021 by ModelMuse version 4.3.0.56.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.ob_gw_out_head.csv
+  'hd_H_1_9_10' head     1     9    10
+  'hd_H_2_9_10' head     2     9    10
+  'hd_H_3_9_10' head     3     9    10
+  'hd_H_4_9_10' head     4     9    10
+  'hd_H_1_12_8' head     1    12     8
+  'hd_H_2_12_8' head     2    12     8
+  'hd_H_3_12_8' head     3    12     8
+  'hd_H_4_12_8' head     4    12     8
+  'hd_CalibH_H1' head     1     9     9
+  'hd_CalibH_H2' head     1    10     9
+  'hd_CalibH_H3' head     1    10     8
+  'hd_CalibH_H4' head     1     9     8
+END CONTINUOUS
+

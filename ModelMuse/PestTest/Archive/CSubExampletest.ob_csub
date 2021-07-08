@@ -1,0 +1,88 @@
+# OBS: Observation Utility file created on 7/8/2021 by ModelMuse version 4.3.0.56.
+BEGIN OPTIONS
+    DIGITS     10
+    PRINT_INPUT
+END OPTIONS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.inelastic-csub_ob.csv
+  'ci_Well1_300_1' inelastic-csub   300
+  'ci_Well2_761_1' inelastic-csub   761
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.elastic-csub_ob.csv
+  'ce_Well1_300_1' elastic-csub   300
+  'ce_Well2_761_1' elastic-csub   761
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.coarse-csub_ob.csv
+  'cc_Well1_2_9_10' coarse-csub     2     9    10
+  'cc_Well2_4_12_7' coarse-csub     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.csub-cell_ob.csv
+  'cce_Well1_2_9_10' csub-cell     2     9    10
+  'cce_Well2_4_12_7' csub-cell     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.wcomp-csub-cell_ob.csv
+  'cw_Well1_2_9_10' wcomp-csub-cell     2     9    10
+  'cw_Well2_4_12_7' wcomp-csub-cell     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.sk-cell_ob.csv
+  'csc_Well1_2_9_10' sk-cell     2     9    10
+  'csc_Well2_4_12_7' sk-cell     4    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.estress-cell_ob.csv
+  'ces_Well1_Loc_1_9_10' estress-cell     1     9    10
+  'ces_Well1_Loc_2_9_10' estress-cell     2     9    10
+  'ces_Well1_Loc_3_9_10' estress-cell     3     9    10
+  'ces_Well1_Loc_4_9_10' estress-cell     4     9    10
+  'ces_Well2_Loc_1_12_7' estress-cell     1    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.gstress-cell_ob.csv
+  'cg_Well1_Loc_1_9_10' gstress-cell     1     9    10
+  'cg_Well1_Loc_2_9_10' gstress-cell     2     9    10
+  'cg_Well1_Loc_3_9_10' gstress-cell     3     9    10
+  'cg_Well1_Loc_4_9_10' gstress-cell     4     9    10
+  'cg_Well2_Loc_1_12_7' gstress-cell     1    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.interbed-compaction_ob.csv
+  'cico_Well1_Loc_90_1' interbed-compaction    90
+  'cico_Well1_Loc_300_1' interbed-compaction   300
+  'cico_Well1_Loc_510_1' interbed-compaction   510
+  'cico_Well1_Loc_720_1' interbed-compaction   720
+  'cico_Well2_Loc_131_1' interbed-compaction   131
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.elastic-compaction_ob.csv
+  'cec_Well1_Loc_90_1' elastic-compaction    90
+  'cec_Well1_Loc_300_1' elastic-compaction   300
+  'cec_Well1_Loc_510_1' elastic-compaction   510
+  'cec_Well1_Loc_720_1' elastic-compaction   720
+  'cec_Well2_Loc_131_1' elastic-compaction   131
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.coarse-compaction_ob.csv
+  'ccc_Well1_Loc_1_9_10' coarse-compaction     1     9    10
+  'ccc_Well1_Loc_2_9_10' coarse-compaction     2     9    10
+  'ccc_Well1_Loc_3_9_10' coarse-compaction     3     9    10
+  'ccc_Well1_Loc_4_9_10' coarse-compaction     4     9    10
+  'ccc_Well2_Loc_1_12_7' coarse-compaction     1    12     7
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.compaction-cell_ob.csv
+  'ccce_Well1_2_9_10' compaction-cell     2     9    10
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.theta_ob.csv
+  'ct_Well1_300' theta   300
+  'ct_Well2_761' theta   761
+END CONTINUOUS
+
+BEGIN CONTINUOUS FILEOUT CSubExampletest.delay-preconstress_ob.csv
+END CONTINUOUS
+

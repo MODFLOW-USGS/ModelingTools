@@ -612,6 +612,7 @@ object PhastModel: TPhastModel
   FilesToArchive.Strings = (
     'C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.gpt')
   ModelInputFiles.Strings = (
+    'C:\ModelingTools\ModelMuse\Beta\sutra_4_0_rbw_200520.exe'
     
       'C:\ModelingTools\ModelMuse\PestTest\arrays\SutraGenBoundLakeTest' +
       '.Lake_Bottom_1.arrays'
@@ -632,8 +633,7 @@ object PhastModel: TPhastModel
     'C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.pval'
     
       'C:\ModelingTools\ModelMuse\PestTest\usgs.SutraGenBoundLakeTest.r' +
-      'eference'
-    'C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe')
+      'eference')
   ModelOutputFiles.Strings = (
     'C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.bcopg'
     'C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.bcoug'
@@ -3451,7 +3451,7 @@ object PhastModel: TPhastModel
     end>
   SutraOptions.TransportChoice = tcSoluteHead
   SutraOptions.SaturationChoice = scSaturated
-  SutraOptions.SimulationType = stSteadyFlowSteadyTransport
+  SutraOptions.SimulationType = stTransientFlowTransientTransport
   SutraOptions.StartType = stCold
   SutraOptions.RestartFrequency = 9999
   SutraOptions.StoredFractionalUpstreamWeight.Value = 0.000000000000000000
@@ -3788,6 +3788,7 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
@@ -3904,6 +3905,7 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <>
       ScreenObject.SectionStarts.DataType = rdtInteger
       ScreenObject.SectionStarts.Count = 0
@@ -4045,6 +4047,7 @@ object PhastModel: TPhastModel
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
       ScreenObject.ViewDirection = vdTop
+      ScreenObject.Visible = False
       ScreenObject.InterpValues = <
         item
           Values.InterpolationDirection = pidX
@@ -4192,7 +4195,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = 'LayerBoundaryPosition(1)'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = 'LayerBoundaryPosition(2)'
-      ScreenObject.Selected = True
+      ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = False
       ScreenObject.SetValuesOfIntersectedCells = True
@@ -4265,9 +4268,235 @@ object PhastModel: TPhastModel
           StoredWeight.Value = 1.000000000000000000
           ObservationGroup = 'obgrp'
           ExportedName = 'mytest_P'
-          StoredTime.Value = 0.000000000000000000
+          StoredTime.Value = 1.000000000000000000
           ObsType = 'Pressure'
           GUID = '{D7508CF9-4111-4DF6-B831-7FF5F1C85804}'
+        end>
+      ScreenObject.ObjectLabel.Font.Charset = DEFAULT_CHARSET
+      ScreenObject.ObjectLabel.Font.Color = clBlack
+      ScreenObject.ObjectLabel.Font.Height = -11
+      ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
+      ScreenObject.ObjectLabel.Font.Style = []
+      ScreenObject.ObjectLabel.OffSetX = 0
+      ScreenObject.ObjectLabel.OffSetY = 20
+      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
+      ScreenObject.ObjectVertexLabel.Font.Color = clBlack
+      ScreenObject.ObjectVertexLabel.Font.Height = -11
+      ScreenObject.ObjectVertexLabel.Font.Name = 'Tahoma'
+      ScreenObject.ObjectVertexLabel.Font.Style = []
+      ScreenObject.ObjectVertexLabel.OffSetX = 0
+      ScreenObject.ObjectVertexLabel.OffSetY = 20
+      ScreenObject.ObjectVertexLabel.Visible = False
+      ScreenObject.StoredMinimumFraction.Value = 0.000000000000000000
+      ScreenObject.QuadtreeRefinementLevel = 0
+      SelectedVertices = <>
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      ElevationFormula = '(LayerBoundaryPosition(1) + LayerBoundaryPosition(2)) / 2.'
+      Points = <
+        item
+          X = -495.721197720262900000
+          Y = 7449.764967198716000000
+        end>
+      ScreenObject.Name = 'Object8'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecOne
+      ScreenObject.ElevationFormula = '(LayerBoundaryPosition(1) + LayerBoundaryPosition(2)) / 2.'
+      ScreenObject.EvaluatedAt = eaNodes
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = False
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = True
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.InterpValues = <>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      ScreenObject.UsedModels = <>
+      ScreenObject.PositionLocked = False
+      ScreenObject.SutraBoundaries.FluidSource.Values = <>
+      ScreenObject.SutraBoundaries.FluidSource.UseBCTime = False
+      ScreenObject.SutraBoundaries.FluidSource.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.FluidSource.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.MassEnergySource.Values = <>
+      ScreenObject.SutraBoundaries.MassEnergySource.UseBCTime = False
+      ScreenObject.SutraBoundaries.MassEnergySource.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.MassEnergySource.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedPressure.Values = <>
+      ScreenObject.SutraBoundaries.SpecifiedPressure.UseBCTime = False
+      ScreenObject.SutraBoundaries.SpecifiedPressure.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedPressure.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values = <>
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.UseBCTime = False
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.Observations.Times = <>
+      ScreenObject.SutraBoundaries.Observations.ObservationFormat = ofOBS
+      ScreenObject.SutraBoundaries.Lake.InitialStage = '0'
+      ScreenObject.SutraBoundaries.Lake.InitialConcentrationOrTemperature = '0'
+      ScreenObject.SutraBoundaries.Lake.FractionRechargeDiverted = '0'
+      ScreenObject.SutraBoundaries.Lake.FractionDischargeDiverted = '0'
+      ScreenObject.SutraBoundaries.Lake.IsUsed = False
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.Values = <>
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.UseBCTime = False
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestBoundaryValueMethod = ppmAdd
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestLowerFlowRateMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestHigherPressureMethod = ppmAdd
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestHigherFlowRateMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestUOutMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.Values = <>
+      ScreenObject.SutraBoundaries.GenTransportBoundary.UseBCTime = False
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestHigherUMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestLowerFlowUMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestHigherFlowUMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SutraStateObs.Comparisons = <>
+      ScreenObject.SutraBoundaries.SutraStateObs = <
+        item
+          Name = 'lk1'
+          StoredObservedValue.Value = 1.000000000000000000
+          StoredWeight.Value = 1.000000000000000000
+          ObservationGroup = 'obgrp'
+          ExportedName = 'lk1'
+          StoredTime.Value = 1.000000000000000000
+          ObsType = 'Lake stage'
+          GUID = '{4526AF07-E523-400D-8EE9-E27E318458A2}'
+        end>
+      ScreenObject.ObjectLabel.Font.Charset = DEFAULT_CHARSET
+      ScreenObject.ObjectLabel.Font.Color = clBlack
+      ScreenObject.ObjectLabel.Font.Height = -11
+      ScreenObject.ObjectLabel.Font.Name = 'Tahoma'
+      ScreenObject.ObjectLabel.Font.Style = []
+      ScreenObject.ObjectLabel.OffSetX = 0
+      ScreenObject.ObjectLabel.OffSetY = 20
+      ScreenObject.ObjectLabel.Visible = False
+      ScreenObject.ObjectVertexLabel.Font.Charset = DEFAULT_CHARSET
+      ScreenObject.ObjectVertexLabel.Font.Color = clBlack
+      ScreenObject.ObjectVertexLabel.Font.Height = -11
+      ScreenObject.ObjectVertexLabel.Font.Name = 'Tahoma'
+      ScreenObject.ObjectVertexLabel.Font.Style = []
+      ScreenObject.ObjectVertexLabel.OffSetX = 0
+      ScreenObject.ObjectVertexLabel.OffSetY = 20
+      ScreenObject.ObjectVertexLabel.Visible = False
+      ScreenObject.StoredMinimumFraction.Value = 0.000000000000000000
+      ScreenObject.QuadtreeRefinementLevel = 0
+      SelectedVertices = <>
+    end
+    item
+      ClassTypeName = 'TScreenObject'
+      ElevationFormula = '(LayerBoundaryPosition(1) + LayerBoundaryPosition(2)) / 2.'
+      Points = <
+        item
+          X = -1059.799920794802000000
+          Y = 6446.958348399536000000
+        end>
+      ScreenObject.Name = 'Object9'
+      ScreenObject.CellSize = 1.000000000000000000
+      ScreenObject.CellSizeUsed = False
+      ScreenObject.ColorLine = False
+      ScreenObject.ElevationCount = ecOne
+      ScreenObject.ElevationFormula = '(LayerBoundaryPosition(1) + LayerBoundaryPosition(2)) / 2.'
+      ScreenObject.EvaluatedAt = eaBlocks
+      ScreenObject.FillColor = clBlack
+      ScreenObject.FillScreenObject = False
+      ScreenObject.HigherElevationFormula = '0.'
+      ScreenObject.LineColor = clBlack
+      ScreenObject.LowerElevationFormula = '0.'
+      ScreenObject.Selected = False
+      ScreenObject.SetValuesByInterpolation = False
+      ScreenObject.SetValuesOfEnclosedCells = False
+      ScreenObject.SetValuesOfIntersectedCells = True
+      ScreenObject.ViewDirection = vdTop
+      ScreenObject.InterpValues = <>
+      ScreenObject.SectionStarts.DataType = rdtInteger
+      ScreenObject.SectionStarts.Count = 0
+      ScreenObject.SectionStarts.Values = (
+        0)
+      ScreenObject.ModpathParticles.ParticleDistribution = pdGrid
+      ScreenObject.ModpathParticles.GridParticles.LeftFace = False
+      ScreenObject.ModpathParticles.GridParticles.RightFace = False
+      ScreenObject.ModpathParticles.GridParticles.BackFace = False
+      ScreenObject.ModpathParticles.GridParticles.FrontFace = False
+      ScreenObject.ModpathParticles.GridParticles.BottomFace = False
+      ScreenObject.ModpathParticles.GridParticles.TopFace = False
+      ScreenObject.ModpathParticles.Used = False
+      ScreenObject.ModpathParticles.ReleaseTimes = <
+        item
+        end>
+      ScreenObject.UsedModels = <>
+      ScreenObject.PositionLocked = False
+      ScreenObject.SutraBoundaries.FluidSource.Values = <>
+      ScreenObject.SutraBoundaries.FluidSource.UseBCTime = False
+      ScreenObject.SutraBoundaries.FluidSource.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.FluidSource.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.MassEnergySource.Values = <>
+      ScreenObject.SutraBoundaries.MassEnergySource.UseBCTime = False
+      ScreenObject.SutraBoundaries.MassEnergySource.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.MassEnergySource.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedPressure.Values = <>
+      ScreenObject.SutraBoundaries.SpecifiedPressure.UseBCTime = False
+      ScreenObject.SutraBoundaries.SpecifiedPressure.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedPressure.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.Values = <>
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.UseBCTime = False
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SpecifiedConcTemp.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.Observations.Times = <>
+      ScreenObject.SutraBoundaries.Observations.ObservationFormat = ofOBS
+      ScreenObject.SutraBoundaries.Lake.InitialStage = '0'
+      ScreenObject.SutraBoundaries.Lake.InitialConcentrationOrTemperature = '0'
+      ScreenObject.SutraBoundaries.Lake.FractionRechargeDiverted = '0'
+      ScreenObject.SutraBoundaries.Lake.FractionDischargeDiverted = '0'
+      ScreenObject.SutraBoundaries.Lake.IsUsed = False
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.Values = <>
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.UseBCTime = False
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestBoundaryValueMethod = ppmAdd
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestLowerFlowRateMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestHigherPressureMethod = ppmAdd
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestHigherFlowRateMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GeneralFlowBoundary.PestUOutMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.Values = <>
+      ScreenObject.SutraBoundaries.GenTransportBoundary.UseBCTime = False
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestBoundaryValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestAssociatedValueMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestHigherUMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestLowerFlowUMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.GenTransportBoundary.PestHigherFlowUMethod = ppmMultiply
+      ScreenObject.SutraBoundaries.SutraStateObs.Comparisons = <>
+      ScreenObject.SutraBoundaries.SutraStateObs = <
+        item
+          Name = 'Lk2'
+          StoredObservedValue.Value = 1.000000000000000000
+          StoredWeight.Value = 1.000000000000000000
+          ObservationGroup = 'obgrp'
+          ExportedName = 'Lk2'
+          StoredTime.Value = 1.000000000000000000
+          ObsType = 'Lake stage'
+          GUID = '{8B217C7E-FB89-42E7-A28B-48458A691499}'
         end>
       ScreenObject.ObjectLabel.Font.Charset = DEFAULT_CHARSET
       ScreenObject.ObjectLabel.Font.Color = clBlack

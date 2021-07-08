@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="CSubExampletest" FileType="bin">
+    <FileName Model_Name="CSubExampletest" FileType="bin">..\..\..\WRDAPP\mf6.2.1\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="CSubExampletest" FileType="ancillary">
+    <FileName Model_Name="CSubExampletest" FileType="ancillary">..\Installer\ModelMuse4_3\data\CSub Example\Csub_ActiveCells.dbf</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="ancillary">..\Installer\ModelMuse4_3\data\CSub Example\Csub_ActiveCells.shp</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="ancillary">..\Installer\ModelMuse4_3\data\CSub Example\Csub_ActiveCells.shx</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="ancillary">CSubExampletest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="CSubExampletest" FileType="Model Input">
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">arrays\CSubExampletest.Confining_Bed_InitialPorosity_1.arrays</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">arrays\CSubExampletest.Confining_Bed_InitialPorosity_2.arrays</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">arrays\CSubExampletest.Confining_Bed_InitialPorosity_3.arrays</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">arrays\CSubExampletest.Confining_Bed_InitialPorosity_4.arrays</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.chd</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.csub</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.dis</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.ic</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.ims</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.jtf</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.nam.archive</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.npf</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.ob_csub</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.ob_gw</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.oc</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.ptf</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.pval</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.rch</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.sto</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.tdis</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">CSubExampletest.wel</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Input">usgs.CSubExampletest.reference</FileName>
+  </model>
+  <output Model_Name="CSubExampletest" FileType="Model Output">
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.bhd</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.cbc</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.coarse-compaction_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.coarse-csub_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.compaction-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.csub_z_dis</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.csub-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.CsubConvergence.CSV</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.delay-preconstress_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.dis.grb</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.elastic-compaction_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.elastic-csub_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.estress-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.gstress-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.inelastic-csub_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.InnerSolution.CSV</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.interbed-compaction_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.lst</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.ob_gw_out_head.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.OuterSolution.CSV</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.sk-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.theta_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">CSubExampletest.wcomp-csub-cell_ob.csv</FileName>
+    <FileName Model_Name="CSubExampletest" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1172,19 +1172,40 @@ var
 //  OutputFileNameRoot: string;
 //  SutraStateObs: TSutraStateObservations;
   FileName: string;
+  ObjectIndex: Integer;
+  FileRoot: string;
+  AScreenObject: TScreenObject;
+  SimulationType: TSimulationType;
 //  FileIndex: Integer;
 begin
 //  OutputFileNameRoot := ExtractFileName(ChangeFileExt(FFileName, '')) + '_';
   WriteString('BEGIN OBSERVATION_FILES');
   NewLine;
 
+  SimulationType := Model.SutraOptions.SimulationType;
   if FSutraObsObjects.Count > 0 then
   begin
-    FileName := ExtractFileName(ChangeFileExt(FFileName, '')) + '.obc';
-    WriteString('  FILENAME ');
-    WriteString(FileName);
-    WriteString(' OBC');
-    NewLine;
+    FileRoot := ExtractFileName(ChangeFileExt(FFileName, ''));
+    if SimulationType = stSteadyFlowSteadyTransport then
+    begin
+      FileName := FileRoot + '.obc';
+      WriteString('  FILENAME ');
+      WriteString(FileName);
+      WriteString(' OBC');
+      NewLine;
+    end
+    else
+    begin
+      for ObjectIndex := 0 to FSutraObsObjects.Count - 1 do
+      begin
+        AScreenObject := FSutraObsObjects[ObjectIndex];
+        FileName := FileRoot + '_' + AScreenObject.SutraScheduleName + '.obc';
+        WriteString('  FILENAME ');
+        WriteString(FileName);
+        WriteString(' OBC');
+        NewLine;
+      end;
+    end;
   end;
 
   if FSutraLakeObjects.Count > 0 then

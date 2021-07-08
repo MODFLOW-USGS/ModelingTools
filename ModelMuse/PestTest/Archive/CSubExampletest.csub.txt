@@ -1,0 +1,2 @@
+~
+Confining_Bed_InitialPorosity[4, 20, 15] arrays\CSubExampletest.Confining_Bed_InitialPorosity_1.arrays,arrays\CSubExampletest.Confining_Bed_InitialPorosity_2.arrays,arrays\CSubExampletest.Confining_Bed_InitialPorosity_3.arrays,arrays\CSubExampletest.Confining_Bed_InitialPorosity_4.arrays

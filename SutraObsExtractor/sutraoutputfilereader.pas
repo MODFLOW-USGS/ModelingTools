@@ -633,6 +633,10 @@ begin
           begin
             break;
           end;
+          if Trim(Copy(ALine, 1, 15)) <> '' then
+          begin
+            Continue;
+          end;
           CurrentLines.Add(ALine);
         until EOF(FTextFile);
 

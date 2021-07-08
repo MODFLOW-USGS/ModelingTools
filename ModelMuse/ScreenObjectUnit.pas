@@ -1942,6 +1942,7 @@ view. }
     FFootprintWell: TFootprintWell;
     FStoredMinimumFraction: TRealStorage;
     FQuadtreeRefinementLevel: Integer;
+    FSutraScheduleName: string;
 //    FVerticesArePilotPoints: Boolean;
 //    FSubObservations: TSubObservations;
 //    FModflow6Obs: TModflow6Obs;
@@ -3816,6 +3817,7 @@ view. }
     procedure ClearModflowBoundaries;
     procedure SimplifyStraightEdges(AngleEpsilon, DistanceEpsilon: double);
     procedure ReplaceGUID;
+    property SutraScheduleName: string read FSutraScheduleName write FSutraScheduleName;
   published
     // @name is deprecated.
     property ChildModelDiscretization: integer read FChildModelDiscretization

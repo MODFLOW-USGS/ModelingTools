@@ -466,7 +466,7 @@ resourcestring
   StrSUTRALake = 'SUTRA Lake';
   StrGeneralizedFlow = 'Generalized Flow';
   StrGeneralizedTranspor = 'Generalized Transport';
-  StrSUTRAStateObservat = 'SUTRA State Observations';
+  StrSUTRAStateObservat = 'SUTRA State Calibration Observations';
 
 {$R *.dfm}
 procedure TfrmCustomSelectObjects.vstObjectsInitNode(Sender: TBaseVirtualTree;

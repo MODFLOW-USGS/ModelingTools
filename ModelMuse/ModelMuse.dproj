@@ -135,7 +135,7 @@
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <DCC_Define>DEBUG;SWIObs;CSUB;PEST;$(DCC_Define)</DCC_Define>
+        <DCC_Define>DEBUG;SWIObs;CSUB;PEST;SwiObsExtractor;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
@@ -146,6 +146,7 @@
         <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <VerInfo_Keys>FileVersion=4.2.0.52;ProductVersion=4.3.0.48</VerInfo_Keys>
+        <VerInfo_Build>52</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <BRCC_Defines>STR_Package;FullDebugMode;$(BRCC_Defines)</BRCC_Defines>

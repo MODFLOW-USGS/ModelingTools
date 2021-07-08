@@ -1,0 +1,2 @@
+~
+Kx[3, 10, 10] arrays\ChdTest.Kx_1.arrays,arrays\ChdTest.Kx_2.arrays,arrays\ChdTest.Kx_3.arrays

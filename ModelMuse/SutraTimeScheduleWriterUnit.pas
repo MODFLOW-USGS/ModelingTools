@@ -163,6 +163,7 @@ begin
     StrResult := 'SCHED_' + IntToStr(FCustomScheduleIndex);
   end;
   FCustomScheduleNames.Add(StrResult);
+  AScreenObject.SutraScheduleName := StrResult;
   result := AnsiString(StrResult);
 end;
 

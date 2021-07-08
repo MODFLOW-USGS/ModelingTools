@@ -1941,28 +1941,14 @@ end;
 
 procedure TSutraInputWriter.WriteDataSet6;
 var
-//  DS6_FileName: string;
-//  StringList: TStringList;
   Index: Integer;
 begin
   WriteCommentLine('Data set 6');
-//  DS6_FileName := ChangeFileExt(FFileName, '.6');
-//  Assert(FileExists(DS6_FileName));
-//  StringList := TStringList.Create;
-//  try
-//    StringList.LoadFromFile(DS6_FileName);
     for Index := 0 to FSchedules.Count - 1 do
     begin
       WriteString(FSchedules[Index]);
       NewLine;
     end;
-//  finally
-//    StringList.Free;
-//  end;
-//  DS6_FileName := ''''+ DS6_FileName + '''';
-//  WriteString('@INSERT 52 ');
-//  WriteString(DS6_FileName);
-//  NewLine;
 end;
 
 procedure TSutraInputWriter.WriteDataSet7A;

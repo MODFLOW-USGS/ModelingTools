@@ -12,7 +12,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitTop = -150
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -14087,6 +14086,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlTop: TPanel
               Width = 605
+              ExplicitTop = 0
               ExplicitWidth = 605
               inherited lblSchedule: TLabel
                 Width = 153
@@ -14191,7 +14191,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
-                ExplicitLeft = 1
                 ExplicitWidth = 603
                 ExplicitHeight = 215
                 ColWidths = (
@@ -14298,7 +14297,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
-                ExplicitLeft = 1
                 ExplicitWidth = 603
                 ExplicitHeight = 215
                 ColWidths = (
@@ -14405,7 +14403,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
-                ExplicitLeft = 1
                 ExplicitWidth = 603
                 ExplicitHeight = 215
                 ColWidths = (
@@ -14510,7 +14507,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 215
                 OnButtonClick = SutraBoundaryButtonClick
-                ExplicitLeft = 1
                 ExplicitWidth = 603
                 ExplicitHeight = 215
                 ColWidths = (
@@ -14853,8 +14849,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 603
                 Height = 222
                 OnButtonClick = SutraBoundaryButtonClick
-                ExplicitLeft = 1
-                ExplicitTop = 1
                 ExplicitWidth = 603
                 ExplicitHeight = 222
                 ColWidths = (

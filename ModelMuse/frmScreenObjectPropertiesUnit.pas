@@ -20504,6 +20504,7 @@ var
   CompiledFormula: TExpression;
   ResultType: TRbwDataType;
   Edit:  TScreenObjectDataEdit;
+  PestParamOK: Boolean;
 begin
   if NewFormula = '' then
   begin
@@ -20511,6 +20512,19 @@ begin
   end;
   Edit := FDataEdits[DataSetIndex];
   // Create a formula for a cell
+
+  PestParamOK := False;
+  if Edit.DataArray <> nil then
+  begin
+    if (Edit.DataArray.Name = KSUTRAInitialLakeS)
+      or (Edit.DataArray.Name = KSUTRAInitialLakeU)
+      or (Edit.DataArray.Name = KSUTRALakeRecharge)
+      or (Edit.DataArray.Name = KSUTRALakeDischarge)
+      then
+    begin
+      PestParamOK := True;
+    end;
+  end;
 
   Formula := NewFormula;
   TempCompiler := GetCompilerByIndex(DataSetIndex);
@@ -20557,18 +20571,29 @@ begin
     end
     else
     begin
-      // If the formula is not OK, try to fix it.
-      Edit.Expression := nil;
-      if ShowError then
+      if (CompiledFormula.ResultType = rdtString) and PestParamOK then
       begin
-        Beep;
-        MessageDlg(StrTheFormulaYouEnte, mtError, [mbOK], 0);
+        PestParamOK := frmGoPhast.PhastModel.GetPestParameterByName(Formula) <> nil;
       end;
-      Formula := AdjustFormula(Formula, CompiledFormula.ResultType, ResultType);
-      TempCompiler.Compile(Formula);
-      CompiledFormula := TempCompiler.CurrentExpression;
-      Edit.Expression := CompiledFormula;
-      Edit.Formula := CompiledFormula.DecompileDisplay;
+      if PestParamOK then
+      begin
+        Edit.Expression := CompiledFormula;
+      end
+      else
+      begin
+        // If the formula is not OK, try to fix it.
+        Edit.Expression := nil;
+        if ShowError then
+        begin
+          Beep;
+          MessageDlg(StrTheFormulaYouEnte, mtError, [mbOK], 0);
+        end;
+        Formula := AdjustFormula(Formula, CompiledFormula.ResultType, ResultType);
+        TempCompiler.Compile(Formula);
+        CompiledFormula := TempCompiler.CurrentExpression;
+        Edit.Expression := CompiledFormula;
+        Edit.Formula := CompiledFormula.DecompileDisplay;
+      end;
     end;
   except
     Edit.Expression := nil;

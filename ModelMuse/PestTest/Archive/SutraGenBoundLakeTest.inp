@@ -1,4 +1,4 @@
-# Main SUTRA input file file created on 7/6/2021 by ModelMuse version 4.3.0.56.
+# Main SUTRA input file file created on 7/8/2021 by ModelMuse version 4.3.0.56.
 # Data set 1
 _
 _
@@ -9,19 +9,23 @@ _
 # Data set 3
    198    80     0     0     0     0     1     1     2
 # Data set 4
-'SATURATED' 'STEADY FLOW' 'STEADY TRANSPORT' 'COLD'   9999
+'SATURATED' 'TRANSIENT FLOW' 'TRANSIENT TRANSPORT' 'COLD'   9999
 # Data set 5
   0.000000000000E+000 
 # Data set 6
-     4     1     1
+     6     1     1
 # Schedule 1
 'TIME_STEPS' 'TIME CYCLE' 'ELAPSED'  1.000000000000E+000      1  0.000000000000E+000   1.000000000000E+099   1.000000000000E+000   9999  1.000000000000E+000   1.000000000000E-020   1.000000000000E+099 
 # Schedule 2
-'GenFlow'    'STEP LIST'     1     1
+'GenFlow'    'STEP LIST'     1     2
 # Schedule 3
-'GenTrans'   'STEP LIST'     1     1
+'GenTrans'   'STEP LIST'     1     2
 # Schedule 4
-'Object7'    'TIME LIST' 'ABSOLUTE'  1.000000000000E+000      2  0.000000000000E+000   0.000000000000E+000 
+'Object7'    'TIME LIST' 'ABSOLUTE'  1.000000000000E+000      2  0.000000000000E+000   1.000000000000E+000 
+# Schedule 5
+'Object8'    'TIME LIST' 'ABSOLUTE'  1.000000000000E+000      1  1.000000000000E+000 
+# Schedule 6
+'Object9'    'TIME LIST' 'ABSOLUTE'  1.000000000000E+000      1  1.000000000000E+000 
 -
 # Data set 7A
      1
