@@ -1,0 +1,12 @@
+# Name File for MODFLOW created on 7/11/2021 by ModelMuse Version 4.3.0.56
+LIST             11 ..\..\output\output.Drntest\Drntest.lst REPLACE
+DIS              12 ..\..\model\model.Drntest\Drntest.dis OLD
+BAS6             13 ..\..\model\model.Drntest\Drntest.bas OLD
+OC               39 ..\..\model\model.Drntest\Drntest.oc OLD
+DATA(BINARY)     38 ..\..\output\output.Drntest\Drntest.bdn REPLACE
+PCG              18 ..\..\model\model.Drntest\Drntest.pcg OLD
+LPF              14 ..\..\model\model.Drntest\Drntest.lpf OLD
+CHD              17 ..\..\model\model.Drntest\Drntest.chd OLD
+DRN              22 ..\..\model\model.Drntest\Drntest.drn OLD
+HOB              41 ..\..\model\model.Drntest\Drntest.ob_hob OLD
+DATA             42 ..\..\output\output.Drntest\Drntest.hob_out REPLACE

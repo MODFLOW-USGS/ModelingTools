@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SutraTest2" FileType="bin">
+    <FileName Model_Name="SutraTest2" FileType="bin">..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SutraTest2" FileType="ancillary">
+    <FileName Model_Name="SutraTest2" FileType="ancillary">SutraTest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SutraTest2" FileType="Model Input">
+    <FileName Model_Name="SutraTest2" FileType="Model Input">RunSutra.bat.archive</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">SutraTest2.FluxBcs</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">SutraTest2.ics</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">SutraTest2.inp</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">SutraTest2.SPecPBcs</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">SutraTest2.SPecUBcs</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">SutraTest2.UFluxBcs</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Input">usgs.SutraTest2.reference</FileName>
+  </model>
+  <output Model_Name="SutraTest2" FileType="Model Output">
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.bcof</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.bcop</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.bcos</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.bcou</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.ele</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.lst</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.nod</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.rst</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2.smy</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2_Object13.OBC</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2_Observatio.OBC</FileName>
+    <FileName Model_Name="SutraTest2" FileType="Model Output">SutraTest2_ObsSchec.OBS</FileName>
+  </output>
+</Model_Archive_List>

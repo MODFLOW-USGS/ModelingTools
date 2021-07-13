@@ -430,6 +430,7 @@ begin
       frmErrorsAndWarnings.EndUpdate;
     end;
   end;
+  WritingTemplate := False;
 end;
 
 procedure TModflowCHD_Writer.WriteFileInternal;

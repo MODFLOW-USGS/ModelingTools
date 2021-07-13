@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="HfbTest" FileType="bin">
+    <FileName Model_Name="HfbTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="HfbTest" FileType="ancillary">
+    <FileName Model_Name="HfbTest" FileType="ancillary">HfbTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="HfbTest" FileType="Model Input">
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.bas</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.chd</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.dis</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.gsf</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.hfb</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.jtf</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.lpf</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.nam.archive</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.ob_hob</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.oc</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.pcg</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.ptf</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">HfbTest.pval</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Input">usgs.HfbTest.reference</FileName>
+  </model>
+  <output Model_Name="HfbTest" FileType="Model Output">
+    <FileName Model_Name="HfbTest" FileType="Model Output">HfbTest.cbc</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Output">HfbTest.fdn</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Output">HfbTest.fhd</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Output">HfbTest.hob_out</FileName>
+    <FileName Model_Name="HfbTest" FileType="Model Output">HfbTest.lst</FileName>
+  </output>
+</Model_Archive_List>

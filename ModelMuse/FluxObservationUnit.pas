@@ -667,18 +667,27 @@ begin
   case StatFlag of
     stVariance:
       begin
-        result := 1/Statistic;
+        if Statistic <> 0 then
+        begin
+          result := 1/Statistic;
+        end;
       end;
     stStandardDev:
       begin
-        result := 1/Sqr(Statistic);
+        if Statistic <> 0 then
+        begin
+          result := 1/Sqr(Statistic);
+        end;
       end;
     stCoefVar:
       begin
+        if ObservedValue <> 0 then
+        begin
+          result := Sqr(Statistic/ObservedValue);
+        end;
         // Coefficient of variation = mean/standard deviation
         // SD := ObservedValue/Statistic;
         //result :=  1/Sqr(ObservedValue/Statistic);
-        result := Sqr(Statistic/ObservedValue);
       end;
     stWeight:
       begin

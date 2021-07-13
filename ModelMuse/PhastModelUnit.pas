@@ -12533,6 +12533,7 @@ begin
   MinVectors.InitializeVariables;
   SvdaPrepProperties.InitializeVariables;
   SupCalcProperties.InitializeVariables;
+  PestProperties.InitializeVariables;
 
   FArchiveName := '';
   Invalidate(self);

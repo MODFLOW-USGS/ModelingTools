@@ -548,6 +548,8 @@ begin
       frmErrorsAndWarnings.EndUpdate;
     end;
   end;
+
+  WritingTemplate := False;
 end;
 
 procedure TModflowGHB_Writer.WriteFluxObservationFile(const AFileName: string;

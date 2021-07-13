@@ -1,0 +1,2 @@
+~
+Kx[3, 10, 10] arrays\StreamTest1.Kx_1.arrays,arrays\StreamTest1.Kx_2.arrays,arrays\StreamTest1.Kx_3.arrays

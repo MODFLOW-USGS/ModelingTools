@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="UzfTest" FileType="bin">
+    <FileName Model_Name="UzfTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="UzfTest" FileType="ancillary">
+    <FileName Model_Name="UzfTest" FileType="ancillary">UzfTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="UzfTest" FileType="Model Input">
+    <FileName Model_Name="UzfTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">usgs.UzfTest.reference</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.bas</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.chd</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.dis</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.gag</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.gsf</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.jtf</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.lpf</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.nam.archive</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.ob_chob</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.oc</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.pcg</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.ptf</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.pval</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.sfr</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Input">UzfTest.uzf</FileName>
+  </model>
+  <output Model_Name="UzfTest" FileType="Model Output">
+    <FileName Model_Name="UzfTest" FileType="Model Output">UzfTest.cbc</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Output">UzfTest.chob_out</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Output">UzfTest.fdn</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Output">UzfTest.fhd</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Output">UzfTest.lst</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Output">UzfTest.sfrg1</FileName>
+    <FileName Model_Name="UzfTest" FileType="Model Output">UzfTest.sfrg2</FileName>
+  </output>
+</Model_Archive_List>

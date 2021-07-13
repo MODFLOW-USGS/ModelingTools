@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 7/11/2021 by ModelMuse Version 4.3.0.56
+LIST             11 ..\..\output\output.HfbTest\HfbTest.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.HfbTest\HfbTest.cbc REPLACE
+DIS              12 ..\..\model\model.HfbTest\HfbTest.dis OLD
+BAS6             13 ..\..\model\model.HfbTest\HfbTest.bas OLD
+OC               39 ..\..\model\model.HfbTest\HfbTest.oc OLD
+DATA             37 ..\..\output\output.HfbTest\HfbTest.fhd REPLACE
+DATA             38 ..\..\output\output.HfbTest\HfbTest.fdn REPLACE
+PCG              18 ..\..\model\model.HfbTest\HfbTest.pcg OLD
+LPF              14 ..\..\model\model.HfbTest\HfbTest.lpf OLD
+CHD              17 ..\..\model\model.HfbTest\HfbTest.chd OLD
+HFB6             43 ..\..\model\model.HfbTest\HfbTest.hfb OLD
+HOB              41 ..\..\model\model.HfbTest\HfbTest.ob_hob OLD
+DATA             42 ..\..\output\output.HfbTest\HfbTest.hob_out REPLACE

@@ -1,0 +1,2 @@
+~
+Kx[3, 10, 10] arrays\EtsTest.Kx_1.arrays,arrays\EtsTest.Kx_2.arrays,arrays\EtsTest.Kx_3.arrays

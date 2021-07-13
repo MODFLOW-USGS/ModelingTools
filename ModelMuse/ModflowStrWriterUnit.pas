@@ -2146,6 +2146,8 @@ begin
     end;
   end;
 
+  WritingTemplate := False;
+
 end;
 
 function TStrWriter.GetSegFromObject(AScreenObject: TScreenObject): TStrSegment;

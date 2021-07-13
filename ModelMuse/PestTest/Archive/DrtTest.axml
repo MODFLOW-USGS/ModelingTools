@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="DrtTest" FileType="bin">
+    <FileName Model_Name="DrtTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="DrtTest" FileType="ancillary">
+    <FileName Model_Name="DrtTest" FileType="ancillary">DrtTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="DrtTest" FileType="Model Input">
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.bas</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.chd</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.dis</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.drt</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.gsf</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.jtf</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.lpf</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.nam.archive</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.ob_chob</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.oc</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.pcg</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.ptf</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">DrtTest.pval</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Input">usgs.DrtTest.reference</FileName>
+  </model>
+  <output Model_Name="DrtTest" FileType="Model Output">
+    <FileName Model_Name="DrtTest" FileType="Model Output">DrtTest.cbc</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Output">DrtTest.chob_out</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Output">DrtTest.fdn</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Output">DrtTest.fhd</FileName>
+    <FileName Model_Name="DrtTest" FileType="Model Output">DrtTest.lst</FileName>
+  </output>
+</Model_Archive_List>

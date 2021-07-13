@@ -539,6 +539,8 @@ begin
       frmErrorsAndWarnings.EndUpdate;
     end;
   end;
+
+  WritingTemplate := False;
 end;
 
 procedure TModflowDRN_Writer.WriteFileInternal;

@@ -1,0 +1,12 @@
+# Output Control file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+BEGIN OPTIONS
+  BUDGET FILEOUT 'HfbMf6Test2.cbc'
+  HEAD FILEOUT 'HfbMf6Test2.bhd'
+END OPTIONS
+
+BEGIN PERIOD      1
+  SAVE HEAD ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+

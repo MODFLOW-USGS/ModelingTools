@@ -1,0 +1,14 @@
+# RIV: River package file created on 7/11/2021 by ModelMuse version 4.3.0.56.
+    11     9 AUXILIARY IFACE # DataSet 2: MXACTC IRIVCB Option
+    11     0 # Data Set 5: ITMP NP Stress period 1
+     1     8     3  2.000000000000E+000   1.849440610423E-005   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     7     3  2.000000000000E+000   1.217093293146E-002   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     7     4  2.000000000000E+000   3.170176932021E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     6     4  2.000000000000E+000   1.001628266973E-002   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     6     5  2.000000000000E+000   5.324827193746E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     5     5  2.000000000000E+000   7.861632408008E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     5     6  2.000000000000E+000   7.479477455470E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     4     6  2.000000000000E+000   5.706982146284E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     4     7  2.000000000000E+000   9.634127717194E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     3     7  2.000000000000E+000   3.552331884559E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE
+     1     3     8  2.000000000000E+000   5.363705708263E-003   1.000000000000E+000      0 # Data Set 6: Layer Row Column Stage Cond Rbot IFACE

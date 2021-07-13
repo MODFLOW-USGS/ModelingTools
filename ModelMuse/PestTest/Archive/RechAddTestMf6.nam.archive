@@ -1,0 +1,16 @@
+# Name File for MODFLOW created on 7/13/2021 by ModelMuse Version 4.3.0.56
+BEGIN OPTIONS
+  LIST ..\..\output\output.RechAddTestMf6\RechAddTestMf6.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.RechAddTestMf6\RechAddTestMf6.dis
+  IC6          ..\..\model\model.RechAddTestMf6\RechAddTestMf6.ic
+  NPF6         ..\..\model\model.RechAddTestMf6\RechAddTestMf6.npf
+  OBS6         ..\..\model\model.RechAddTestMf6\RechAddTestMf6.ob_gw
+  OC6          ..\..\model\model.RechAddTestMf6\RechAddTestMf6.oc
+  CHD6         ..\..\model\model.RechAddTestMf6\RechAddTestMf6.chd
+  RCH6         ..\..\model\model.RechAddTestMf6\RechAddTestMf6.rch
+END PACKAGES

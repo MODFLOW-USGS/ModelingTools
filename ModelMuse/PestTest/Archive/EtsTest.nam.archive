@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 7/11/2021 by ModelMuse Version 4.3.0.56
+LIST             11 ..\..\output\output.EtsTest\EtsTest.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.EtsTest\EtsTest.cbc REPLACE
+DIS              12 ..\..\model\model.EtsTest\EtsTest.dis OLD
+BAS6             13 ..\..\model\model.EtsTest\EtsTest.bas OLD
+OC               39 ..\..\model\model.EtsTest\EtsTest.oc OLD
+DATA             37 ..\..\output\output.EtsTest\EtsTest.fhd REPLACE
+DATA             38 ..\..\output\output.EtsTest\EtsTest.fdn REPLACE
+PCG              18 ..\..\model\model.EtsTest\EtsTest.pcg OLD
+LPF              14 ..\..\model\model.EtsTest\EtsTest.lpf OLD
+CHD              17 ..\..\model\model.EtsTest\EtsTest.chd OLD
+ETS              26 ..\..\model\model.EtsTest\EtsTest.ets OLD
+HOB              41 ..\..\model\model.EtsTest\EtsTest.ob_hob OLD
+DATA             42 ..\..\output\output.EtsTest\EtsTest.hob_out REPLACE

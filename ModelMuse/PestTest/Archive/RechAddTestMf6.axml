@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="RechAddTestMf6" FileType="bin">
+    <FileName Model_Name="RechAddTestMf6" FileType="bin">..\..\..\WRDAPP\mf6.2.1\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="RechAddTestMf6" FileType="ancillary">
+    <FileName Model_Name="RechAddTestMf6" FileType="ancillary">RechAddTestMf6.gpt</FileName>
+  </ancillary>
+  <model Model_Name="RechAddTestMf6" FileType="Model Input">
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.chd</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.dis</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.ic</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.ims</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.jtf</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.nam.archive</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.npf</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.ob_gw</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.oc</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.ptf</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.pval</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.rch</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RechAddTestMf6.tdis</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Input">usgs.RechAddTestMf6.reference</FileName>
+  </model>
+  <output Model_Name="RechAddTestMf6" FileType="Model Output">
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">RechAddTestMf6.bhd</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">RechAddTestMf6.cbc</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">RechAddTestMf6.dis.grb</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">RechAddTestMf6.InnerSolution.CSV</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">RechAddTestMf6.lst</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">RechAddTestMf6.ob_gw_out_head.csv</FileName>
+    <FileName Model_Name="RechAddTestMf6" FileType="Model Output">RechAddTestMf6.OuterSolution.CSV</FileName>
+  </output>
+</Model_Archive_List>

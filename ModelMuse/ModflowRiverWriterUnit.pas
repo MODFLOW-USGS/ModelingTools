@@ -594,6 +594,7 @@ begin
       frmErrorsAndWarnings.EndUpdate;
     end;
   end;
+  WritingTemplate := False;
 end;
 
 procedure TModflowRIV_Writer.WriteFluxObservationFile(const AFileName: string;

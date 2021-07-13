@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="EtsTest" FileType="bin">
+    <FileName Model_Name="EtsTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="EtsTest" FileType="ancillary">
+    <FileName Model_Name="EtsTest" FileType="ancillary">EtsTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="EtsTest" FileType="Model Input">
+    <FileName Model_Name="EtsTest" FileType="Model Input">arrays\EtsTest.Kx_1.arrays</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">arrays\EtsTest.Kx_2.arrays</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">arrays\EtsTest.Kx_3.arrays</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.bas</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.chd</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.dis</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.ets</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.gsf</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.jtf</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.lpf</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.nam.archive</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.ob_hob</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.oc</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.pcg</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.ptf</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">EtsTest.pval</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Input">usgs.EtsTest.reference</FileName>
+  </model>
+  <output Model_Name="EtsTest" FileType="Model Output">
+    <FileName Model_Name="EtsTest" FileType="Model Output">EtsTest.cbc</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Output">EtsTest.fdn</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Output">EtsTest.fhd</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Output">EtsTest.hob_out</FileName>
+    <FileName Model_Name="EtsTest" FileType="Model Output">EtsTest.lst</FileName>
+  </output>
+</Model_Archive_List>

@@ -1,0 +1,1 @@
+read_scalar_file(file="C:\ModelingTools\ModelMuse\PestTest\arrays\HfbTest.ParamValues", valuecolumn=2, namecolumn=1)
