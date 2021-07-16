@@ -29,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspMt3dmsRct
+    ActivePage = jvspModpath
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -1290,7 +1290,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 149
           Width = 595
           ExplicitTop = 149
-          ExplicitWidth = 117
+          ExplicitWidth = 595
           inherited lblLayerOption: TLabel
             Width = 173
             Height = 18
@@ -1413,7 +1413,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited pnLayerOption: TPanel
           Width = 595
-          ExplicitWidth = 117
+          ExplicitWidth = 595
           inherited lblLayerOption: TLabel
             Width = 136
             Height = 18
@@ -1529,7 +1529,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited pnLayerOption: TPanel
           Width = 595
-          ExplicitWidth = 117
+          ExplicitWidth = 595
           inherited lblLayerOption: TLabel
             Width = 136
             Height = 18
@@ -1664,8 +1664,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pnLayerOption: TPanel
           Top = 440
           Width = 595
-          ExplicitTop = 84
-          ExplicitWidth = 117
+          ExplicitTop = 440
+          ExplicitWidth = 595
           inherited lblLayerOption: TLabel
             Top = 5
             Width = 172
@@ -2307,8 +2307,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 139
           Width = 595
           Height = 377
-          ExplicitTop = -217
-          ExplicitWidth = 117
+          ExplicitTop = 139
+          ExplicitWidth = 595
           ExplicitHeight = 377
           inherited lblLayerOption: TLabel
             Width = 357
@@ -2491,8 +2491,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 214
           Width = 595
           Height = 302
-          ExplicitTop = -142
-          ExplicitWidth = 117
+          ExplicitTop = 214
+          ExplicitWidth = 595
           ExplicitHeight = 302
           inherited tabControlAndPrint: TTabSheet
             ExplicitTop = 29
@@ -4137,8 +4137,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited pcSub: TPageControl
           Height = 397
-          ExplicitTop = -237
-          ExplicitWidth = 117
+          ExplicitWidth = 595
           ExplicitHeight = 397
           inherited tabControls: TTabSheet
             ExplicitTop = 29
@@ -6333,7 +6332,7 @@ inherited frmModflowPackages: TfrmModflowPackages
                       CheckStyle = csCheck
                       AutoAdjustColWidths = True
                     end>
-                  ExplicitLeft = 1
+                  ExplicitLeft = 0
                   ExplicitWidth = 299
                   ExplicitHeight = 320
                 end
@@ -6649,8 +6648,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 148
           Width = 595
           Height = 368
-          ExplicitTop = -208
-          ExplicitWidth = 117
+          ExplicitTop = 148
+          ExplicitWidth = 595
           ExplicitHeight = 368
           inherited tabAdvection1: TTabSheet
             ExplicitTop = 29
@@ -7145,17 +7144,18 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 359
           inherited tabMain: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 256
+            ExplicitWidth = 587
+            ExplicitHeight = 326
             inherited lblElectronAcceptor: TLabel
-              Width = 122
+              Width = 161
               Height = 18
-              ExplicitWidth = 122
+              ExplicitWidth = 161
               ExplicitHeight = 18
             end
             inherited lblElectronDonor: TLabel
-              Width = 101
+              Width = 141
               Height = 18
-              ExplicitWidth = 101
+              ExplicitWidth = 141
               ExplicitHeight = 18
             end
             inherited lblKineticChoice: TLabel
@@ -7177,17 +7177,17 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 18
             end
             inherited lblStochiometricRatio: TLabel
-              Width = 131
+              Width = 155
               Height = 18
-              ExplicitWidth = 131
+              ExplicitWidth = 155
               ExplicitHeight = 18
             end
             inherited rdgYieldCoefficient: TRbwDataGrid4
               Width = 621
               Height = 203
               FixedCols = 0
-              ExplicitWidth = 574
-              ExplicitHeight = 133
+              ExplicitWidth = 621
+              ExplicitHeight = 203
             end
             inherited cbInitialConcChoice: TCheckBox
               Width = 566
@@ -7284,49 +7284,36 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitTop = 29
             ExplicitHeight = 256
             inherited rdgSpecialCases: TRbwDataGrid4
-              Width = 587
-              Height = 326
+              Height = 256
               FixedCols = 0
-              ExplicitWidth = 587
-              ExplicitHeight = 326
+              ExplicitHeight = 256
             end
           end
           inherited tabElectronAcceptors: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 587
-            ExplicitHeight = 326
+            ExplicitHeight = 256
             inherited rdgAcceptors: TRbwDataGrid4
-              Width = 587
-              Height = 326
+              Height = 256
               FixedCols = 0
-              ExplicitWidth = 587
-              ExplicitHeight = 326
+              ExplicitHeight = 256
             end
           end
           inherited tabDecayRates: TTabSheet
             ExplicitTop = 29
             ExplicitHeight = 256
             inherited rdgDecayRates: TRbwDataGrid4
-              Width = 587
-              Height = 326
+              Height = 256
               FixedCols = 0
-              ExplicitLeft = 2
-              ExplicitTop = -2
-              ExplicitWidth = 587
-              ExplicitHeight = 326
+              ExplicitHeight = 256
             end
           end
           inherited tabYield: TTabSheet
             ExplicitTop = 29
             ExplicitHeight = 256
             inherited rdgYields: TRbwDataGrid4
-              Width = 587
-              Height = 326
+              Height = 256
               FixedCols = 0
-              ExplicitLeft = 2
-              ExplicitTop = 4
-              ExplicitWidth = 587
-              ExplicitHeight = 326
+              ExplicitHeight = 256
             end
           end
         end
@@ -7523,8 +7510,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcControls: TPageControl
           Width = 595
           Height = 359
-          ExplicitTop = -199
-          ExplicitWidth = 117
+          ExplicitWidth = 595
           ExplicitHeight = 359
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
@@ -8018,12 +8004,12 @@ inherited frmModflowPackages: TfrmModflowPackages
           OnChange = framePkgFrmjvplFarmChange
           ExplicitLeft = 138
           ExplicitWidth = 457
-          ExplicitHeight = 6
+          ExplicitHeight = 362
           inherited jvspOptions: TJvStandardPage
             Width = 457
             Height = 362
             ExplicitWidth = 457
-            ExplicitHeight = 6
+            ExplicitHeight = 362
             inherited lblCropIrrigationRequirement: TLabel
               Top = 320
               Width = 322
@@ -8623,8 +8609,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pgcConduits: TPageControl
           Top = 137
           Width = 595
-          ExplicitTop = -219
-          ExplicitWidth = 117
+          ExplicitTop = 137
+          ExplicitWidth = 595
           inherited tabCFP: TTabSheet
             ExplicitTop = 29
             ExplicitWidth = 587
@@ -10078,8 +10064,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           Top = 127
           Width = 595
           Height = 389
-          ExplicitTop = -229
-          ExplicitWidth = 117
+          ExplicitTop = 127
+          ExplicitWidth = 595
           ExplicitHeight = 389
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
@@ -11121,8 +11107,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited pcCsub: TPageControl
           Top = 129
           Width = 595
-          ExplicitTop = -227
-          ExplicitWidth = 117
+          ExplicitTop = 129
+          ExplicitWidth = 595
           inherited tabInterbeds: TTabSheet
             ExplicitTop = 29
             ExplicitHeight = 354

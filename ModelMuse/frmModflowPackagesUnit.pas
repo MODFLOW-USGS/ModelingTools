@@ -390,6 +390,7 @@ type
     procedure CheckXt3dGnc;
     procedure CheckIPHDRY;
     procedure UpdateSpeciesNames;
+    function ValidModpathChoice: Boolean;
     property CurrentPackages: TModflowPackages read FCurrentPackages
       write SetCurrentPackages;
     procedure StorePackageDataInFrames(Packages: TModflowPackages);
@@ -985,6 +986,18 @@ begin
 
 end;
 
+function TfrmModflowPackages.ValidModpathChoice: Boolean;
+begin
+  result := True;
+  if (frmGoPhast.ModelSelection = msModflow2015) and frameModpath.Selected
+    and (frameModpath.rgModpathVersion.ItemIndex <> 2) then
+  begin
+    result := False;
+    Beep;
+    MessageDlg(StrOnlyMODPATH7CanB, mtError, [mbOK], 0);
+  end;
+end;
+
 procedure TfrmModflowPackages.btnOKClick(Sender: TObject);
 var
   NeedToDefineFluxObservations: Boolean;
@@ -997,6 +1010,12 @@ begin
   // left open for a long time.
   Handle;
   inherited;
+
+  if not ValidModpathChoice then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
 
   if DuplicateParameterNames then
   begin
@@ -2969,9 +2988,10 @@ var
   Root: string;
   Index: Integer;
   Param: TModflowParameter;
-  UpRoot, ParamUpRoot: string;
-  CountString: string;
-  Count, MaxCount: integer;
+//  UpRoot, ParamUpRoot: string;
+//  CountString: string;
+//  Count,
+  MaxCount: integer;
 begin
   case CurrentParameterType of
     ptUndefined: Assert(False);
@@ -3016,18 +3036,22 @@ begin
         for Index := 0 to FSteadyParameters.Count - 1 do
         begin
           Param := FSteadyParameters[Index];
-          ParamUpRoot := UpperCase(Param.ParameterName);
-          if Pos(UpRoot, ParamUpRoot) > 0 then
+          if Param.ParameterType = CurrentParameterType then
           begin
-            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
-            if TryStrToInt(CountString, Count) then
-            begin
-              if Count > MaxCount then
-              begin
-                MaxCount := Count;
-              end;
-            end;
+            Inc(MaxCount);
           end;
+//          ParamUpRoot := UpperCase(Param.ParameterName);
+//          if Pos(UpRoot, ParamUpRoot) > 0 then
+//          begin
+//            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
+//            if TryStrToInt(CountString, Count) then
+//            begin
+//              if Count > MaxCount then
+//              begin
+//                MaxCount := Count;
+//              end;
+//            end;
+//          end;
         end;
       end;
     ptCHD..ptSFR, ptRCH, ptEVT, ptETS, ptSTR, ptQMAX:
@@ -3035,18 +3059,22 @@ begin
         for Index := 0 to FTransientListParameters.Count - 1 do
         begin
           Param := FTransientListParameters[Index];
-          ParamUpRoot := UpperCase(Param.ParameterName);
-          if Pos(UpRoot, ParamUpRoot) > 0 then
+          if Param.ParameterType = CurrentParameterType then
           begin
-            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
-            if TryStrToInt(CountString, Count) then
-            begin
-              if Count > MaxCount then
-              begin
-                MaxCount := Count;
-              end;
-            end;
+            Inc(MaxCount);
           end;
+//          ParamUpRoot := UpperCase(Param.ParameterName);
+//          if Pos(UpRoot, ParamUpRoot) > 0 then
+//          begin
+//            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
+//            if TryStrToInt(CountString, Count) then
+//            begin
+//              if Count > MaxCount then
+//              begin
+//                MaxCount := Count;
+//              end;
+//            end;
+//          end;
         end;
       end;
     ptHUF_HK..ptHUF_SY, ptHUF_KDEP:
@@ -3054,24 +3082,34 @@ begin
         for Index := 0 to FHufParameters.Count - 1 do
         begin
           Param := FHufParameters.Items[Index] as TModflowParameter;
-          ParamUpRoot := UpperCase(Param.ParameterName);
-          if Pos(UpRoot, ParamUpRoot) > 0 then
+          if Param.ParameterType = CurrentParameterType then
           begin
-            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
-            if TryStrToInt(CountString, Count) then
-            begin
-              if Count > MaxCount then
-              begin
-                MaxCount := Count;
-              end;
-            end;
+            Inc(MaxCount);
           end;
+//          ParamUpRoot := UpperCase(Param.ParameterName);
+//          if Pos(UpRoot, ParamUpRoot) > 0 then
+//          begin
+//            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
+//            if TryStrToInt(CountString, Count) then
+//            begin
+//              if Count > MaxCount then
+//              begin
+//                MaxCount := Count;
+//              end;
+//            end;
+//          end;
         end;
       end;
     else Assert(False);
   end;
-  Inc(MaxCount);
+//  Inc(MaxCount);
   result := Root + IntToStr(MaxCount);
+
+  While (Length(result) > MaxLengthModflowParameterName) and (Root <> '') do
+  begin
+    Root := Copy(Root, 1, Length(Root) -1);
+    result := Root + IntToStr(MaxCount);
+  end;
 end;
 
 procedure TfrmModflowPackages.SetCurrentPackages(const Value: TModflowPackages);

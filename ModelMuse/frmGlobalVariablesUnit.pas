@@ -659,7 +659,7 @@ begin
       AChar := FormatSettings.DecimalSeparator;
       try
         FormatSettings.DecimalSeparator := '.';
-        for RowIndex := 1 to rdgGlobalVariables.RowCount - 1 do
+        for RowIndex := 1 to seGlobalVariableCount.AsInteger do
         begin
           AString := rdgGlobalVariables.Cells[Ord(gvName), RowIndex] + ' ';
           ItemIndex := rdgGlobalVariables.ItemIndex[Ord(gvType), RowIndex];

@@ -199,6 +199,9 @@ var
   // zone arrays that are exported to MODFLOW.
   UsedZoneArrayNames: TStringList;
 
+const
+  MaxLengthModflowParameterName = 10;
+
 implementation
 
 uses Math, RbwParser, PhastModelUnit, DataSetUnit, 
@@ -585,7 +588,7 @@ var
   ChangeGlobal: TDefineGlobalStringObject;
 begin
   NewName := CorrectParamName(Value);
-  Assert(Length(NewName) <= 10);
+  Assert(Length(NewName) <= MaxLengthModflowParameterName);
   if FParameterName <> NewName then
   begin
     InvalidatePestDataArrays;

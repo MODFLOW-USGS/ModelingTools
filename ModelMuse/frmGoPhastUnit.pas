@@ -12949,6 +12949,7 @@ var
   DisvGrid: TModflowDisvGrid;
   ZoneBudgetLocation: string;
   PlProcLocation: string;
+  MPathPackage: TModpathSelection;
 begin
   inherited;
   if FExporting then
@@ -12979,6 +12980,19 @@ begin
         Exit;
       end;
     end;
+
+    if (ModelSelection = msModflow2015) then
+    begin
+      MPathPackage := PhastModel.ModflowPackages.ModPath;
+      if (MPathPackage.IsSelected) and (MPathPackage.MpathVersion <> mp7) then
+      begin
+        Beep;
+        MessageDlg(StrOnlyMODPATH7CanB, mtError, [mbOK], 0);
+        Exit;
+      end;
+    end;
+
+
     InitializeModflowInputDialog;
     if sdModflowInput.Execute then
     begin

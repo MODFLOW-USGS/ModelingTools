@@ -891,6 +891,7 @@ resourcestring
   StrPumpOnlyIfCropRequiresWater = 'Pump only if irrigation required in cell';
   StrFarmID =  'FarmID';
   StrStressOffset = 'Stress offset';
+  StrOnlyMODPATH7CanB = 'Only MODPATH 7 can be used with MODFLOW 6.';
 
 
   StrVariance = 'Variance (0)';
