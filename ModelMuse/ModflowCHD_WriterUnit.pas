@@ -25,7 +25,6 @@ type
   protected
     function ObservationPackage: TModflowPackageSelection; override;
     function CellType: TValueCellType; override;
-    class function Extension: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
     function Package: TModflowPackageSelection; override;
@@ -59,6 +58,7 @@ type
       Purpose: TObservationPurpose);
     procedure ShowNoBoundaryError(const NoDefinedErrorRoot: string); override;
     class function ObservationOutputExtension: string; override;
+    class function Extension: string; override;
   end;
 
 implementation

@@ -1604,6 +1604,8 @@
         <DCCReference Include="frmSupCalcUnit.pas">
             <Form>frmSupCalc</Form>
         </DCCReference>
+        <DCCReference Include="Modflow6Importer.pas"/>
+        <DCCReference Include="PestFeatureDisplayerUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

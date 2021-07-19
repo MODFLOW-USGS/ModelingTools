@@ -727,7 +727,9 @@ uses
   frmRunParRepUnit in 'frmRunParRepUnit.pas' {frmRunParRep},
   frmSvdaPrepInputUnit in 'frmSvdaPrepInputUnit.pas' {frmSvdaPrepInput},
   SvdaPrepPropertiesUnit in 'SvdaPrepPropertiesUnit.pas',
-  frmSupCalcUnit in 'frmSupCalcUnit.pas' {frmSupCalc};
+  frmSupCalcUnit in 'frmSupCalcUnit.pas' {frmSupCalc},
+  Modflow6Importer in 'Modflow6Importer.pas',
+  PestFeatureDisplayerUnit in 'PestFeatureDisplayerUnit.pas';
 
 {$R *.res}
 

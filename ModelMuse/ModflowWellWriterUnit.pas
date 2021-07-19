@@ -28,7 +28,6 @@ type
     procedure WriteFileInternal;
   protected
     function CellType: TValueCellType; override;
-    class function Extension: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
     function Package: TModflowPackageSelection; override;
@@ -61,6 +60,7 @@ type
     procedure WriteFile(const AFileName: string);
     // @name is the file extension used for the observation output file.
     class function ObservationOutputExtension: string; override;
+    class function Extension: string; override;
   end;
 
 

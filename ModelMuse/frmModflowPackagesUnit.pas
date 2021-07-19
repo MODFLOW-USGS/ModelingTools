@@ -3027,7 +3027,7 @@ begin
     ptPEST: Root := 'PEST_Par';
     else Assert(False);
   end;
-  UpRoot := UpperCase(Root);
+//  UpRoot := UpperCase(Root);
   MaxCount := 0;
   case CurrentParameterType of
     ptUndefined: Assert(False);
