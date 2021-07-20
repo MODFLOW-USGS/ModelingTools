@@ -539,6 +539,8 @@ type
     miPEST: TMenuItem;
     miCalcSuperParameters: TMenuItem;
     miRunSutraPrep: TMenuItem;
+    acImportMf6FeatureFromPest: TAction;
+    ImportModelFeaturefromPEST1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -738,6 +740,7 @@ type
     procedure acExportParRepExecute(Sender: TObject);
     procedure acCalcSuperParametersExecute(Sender: TObject);
     procedure acRunSvdaPrepExecute(Sender: TObject);
+    procedure acImportMf6FeatureFromPestExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2130,7 +2133,8 @@ uses
   frmContaminantTreatmentSystemsUnit, frmObservationComparisonsUnit,
   SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
   PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
-  frmSupCalcUnit, PestPropertiesUnit;
+  frmSupCalcUnit, PestPropertiesUnit,
+  frmImportModflow6FeatureModifiedByPestUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -3423,6 +3427,7 @@ begin
   acPEST.Visible := False;
   acRunPest.Visible := False;
   miPEST.Visible := False;
+  acImportMf6FeatureFromPest.Visible := False;
   {$ENDIF}
   
   tbarEditScreenObjects.Width := 227;
@@ -4227,6 +4232,12 @@ begin
     else
       Assert(False);
   end;
+
+  {$IFDEF PEST}
+  acImportMf6FeatureFromPest.Visible := PhastModel.ModelSelection = msModflow2015;
+  {$ELSE}
+  acImportMf6FeatureFromPest.Visible := False;
+  {$ENDIF}
 
   case PhastModel.ModelSelection of
     msUndefined: ; // ignore
@@ -13601,6 +13612,13 @@ procedure TfrmGoPhast.acImportGriddedDataFilesExecute(Sender: TObject);
 begin
   inherited;
   ShowAForm(TfrmImportMultipleGriddedDataFiles);
+end;
+
+procedure TfrmGoPhast.acImportMf6FeatureFromPestExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmImportModflow6FeatureModifiedByPest)
+//
 end;
 
 procedure TfrmGoPhast.acImportModelMateExecute(Sender: TObject);

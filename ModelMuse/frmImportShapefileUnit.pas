@@ -10933,6 +10933,11 @@ begin
       end;
     end;
 
+    if FThreeDDataSet <> nil then
+    begin
+      frmGoPhast.InvalidateImage32AllViews;
+    end;
+
   finally
     AllowChildGridUpdates;
     frmGoPhast.CanDraw := True;

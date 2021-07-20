@@ -238,16 +238,16 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        AFeature.FCell.Layer := StrToInt(Splitter[0])-1;
-        AFeature.FCell.Row := StrToInt(Splitter[1])-1;
-        AFeature.FCell.Column := StrToInt(Splitter[2])-1;
+        AFeature.FCell.Layer := StrToInt(Splitter[0]);
+        AFeature.FCell.Row := StrToInt(Splitter[1]);
+        AFeature.FCell.Column := StrToInt(Splitter[2]);
       end;
     mggrDisv:
       begin
         Assert(Splitter .Count >= 3);
-        AFeature.FCell.Layer := StrToInt(Splitter[0])-1;
-        AFeature.FCell.Row := 0;
-        AFeature.FCell.Column := StrToInt(Splitter[1])-1;
+        AFeature.FCell.Layer := StrToInt(Splitter[0]);
+        AFeature.FCell.Row := 1;
+        AFeature.FCell.Column := StrToInt(Splitter[1]);
       end;
     else
       Assert(False);

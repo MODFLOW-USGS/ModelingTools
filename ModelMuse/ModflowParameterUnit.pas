@@ -437,6 +437,7 @@ begin
           end;
           CreateNewDataSetVariables(DataArray.Name, Value);
           DataArray.Name := Value;
+          DataArray.DisplayName := Value;
           DataArray.Lock := DataArray.Lock + [dcName];
         end
         else
@@ -800,6 +801,7 @@ begin
           end;
           CreateNewDataSetVariables(DataArray.Name, Value);
           DataArray.Name := Value;
+          DataArray.DisplayName := Value;
           DataArray.Lock := DataArray.Lock + [dcName];
         end
         else

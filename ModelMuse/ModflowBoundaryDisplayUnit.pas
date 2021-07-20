@@ -9,6 +9,8 @@ type
   TModflowBoundaryDisplayDataArray = class(TCustomBoundaryRealSparseDataSet)
   public
     procedure InitializeDisplayArray(DefaultValue: Double); override;
+  published
+    property AddMethod;
   end;
 
   TFootprintWithdrawalDataArray = class(TModflowBoundaryDisplayDataArray)

@@ -1733,6 +1733,7 @@ begin
         else Assert(False);
       end;
       DataArray.Name := ValidName(NonParamDescription) + '_' + IntToStr(Index+1);
+      DataArray.DisplayName := DataArray.Name;
       try
         Add(Time, DataArray);
       except on E: EInvalidTime do

@@ -1256,6 +1256,9 @@ inherited frmGoPhast: TfrmGoPhast
         object miImportSutraFiles: TMenuItem
           Action = acImportSutraFiles
         end
+        object ImportModelFeaturefromPEST1: TMenuItem
+          Action = acImportMf6FeatureFromPest
+        end
       end
       object miLinkedRasters: TMenuItem
         Caption = 'Linked Rasters'
@@ -3684,6 +3687,11 @@ inherited frmGoPhast: TfrmGoPhast
       Caption = 'Calculate Number of Super-Parameters'
       Hint = 'Run SUPCALC'
       OnExecute = acCalcSuperParametersExecute
+    end
+    object acImportMf6FeatureFromPest: TAction
+      Category = 'File'
+      Caption = 'Import Model Feature from PEST'
+      OnExecute = acImportMf6FeatureFromPestExecute
     end
   end
   object ilDisabledImageList: TImageList

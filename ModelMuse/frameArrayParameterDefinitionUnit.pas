@@ -61,7 +61,7 @@ type
     procedure dgParametersColSize(Sender: TObject; ACol, PriorWidth: Integer);
     procedure dgParametersHorizontalScroll(Sender: TObject);
     procedure dgParametersMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer); 
+      Shift: TShiftState; X, Y: Integer);
   private
     // @name places the controls used to edit multiple parameters at once
     // at the correct locations.

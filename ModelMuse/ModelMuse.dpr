@@ -729,7 +729,8 @@ uses
   SvdaPrepPropertiesUnit in 'SvdaPrepPropertiesUnit.pas',
   frmSupCalcUnit in 'frmSupCalcUnit.pas' {frmSupCalc},
   Modflow6Importer in 'Modflow6Importer.pas',
-  PestFeatureDisplayerUnit in 'PestFeatureDisplayerUnit.pas';
+  PestFeatureDisplayerUnit in 'PestFeatureDisplayerUnit.pas',
+  frmImportModflow6FeatureModifiedByPestUnit in 'frmImportModflow6FeatureModifiedByPestUnit.pas' {frmImportModflow6FeatureModifiedByPest};
 
 {$R *.res}
 
@@ -745,6 +746,7 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
+  Application.CreateForm(TfrmImportModflow6FeatureModifiedByPest, frmImportModflow6FeatureModifiedByPest);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

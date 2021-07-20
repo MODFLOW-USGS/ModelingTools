@@ -1268,7 +1268,7 @@ type
       NumberOfColumns: integer; ForceResize: boolean = False); override;
   end;
 
-  TValueAddMethod = (vamAdd, vamReplace, vamAveragedDelayed);
+  TValueAddMethod = (vamAdd, vamReplace, vamAveragedDelayed, vamAddDelayed);
 
   // @name can have multiple values assigned to the same cell. See
   // @link(ComputeAverage), @link(LabelAsSum), and @link(AddMethod).
@@ -4548,6 +4548,7 @@ begin
       if ParamDataSet <> nil then
       begin
         ParamDataSet.Name := NewParamDataSetName;
+        ParamDataSet.DisplayName := NewParamDataSetName;
       end;
     end;
 
@@ -9020,7 +9021,8 @@ begin
   // the reference count of the string is increased.  Thus, it
   // saves memory to change a string only when it really needs to be
   // changed and to just copy it whenever possible.
-  if (AddMethod in [vamAdd, vamAveragedDelayed]) and IsValue[LayerIndex, RowIndex, ColIndex] then
+  if (AddMethod in [vamAdd, vamAveragedDelayed, vamAddDelayed])
+    and IsValue[LayerIndex, RowIndex, ColIndex] then
   begin
     if Annotation[LayerIndex, RowIndex, ColIndex] = StrNoValueAssigned then
     begin
@@ -9234,7 +9236,7 @@ end;
 procedure TCustomBoundaryRealSparseDataSet.SetAnnotation(const Layer, Row,
   Col: integer; const Value: string);
 begin
-  if AddMethod <> vamAveragedDelayed then
+  if not (AddMethod in [vamAveragedDelayed, vamAddDelayed]) then
   begin
     inherited;
   end
@@ -9267,7 +9269,7 @@ end;
 procedure TCustomBoundaryRealSparseDataSet.SetRealData(const Layer, Row,
   Col: integer; const Value: double);
 begin
-  if AddMethod <> vamAveragedDelayed then
+  if not (AddMethod in [vamAveragedDelayed, vamAddDelayed]) then
   begin
     inherited;
   end
@@ -9286,6 +9288,10 @@ begin
     if AddMethod = vamAveragedDelayed then
     begin
       ComputeAverage;
+    end
+    else if AddMethod = vamAddDelayed then
+    begin
+      LabelAsSum;
     end;
   end;
   inherited;

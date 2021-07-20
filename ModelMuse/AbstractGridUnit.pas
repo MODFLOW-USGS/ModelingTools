@@ -1021,6 +1021,7 @@ side views of the model.}
     function GridOutline(ViewDirection: TViewDirection): TPolygon2D;
     property DrawColoredGridLines: boolean read FDrawColoredGridLines
       write FDrawColoredGridLines;
+    // @name returns the coordinates of a cell surrounding a node
     property CellCoordinates[Col, Row, Layer: integer]: T3DCellCoordinates
       read GetCellCoordinates;
     property ElementCoordinates[Col, Row, Layer: integer]: T3DElementCoordinates

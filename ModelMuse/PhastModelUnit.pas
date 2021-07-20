@@ -3349,6 +3349,7 @@ that affects the model output should also have a comment. }
     property ItemTopLocation[const EvalAt: TEvaluatedAt; const Column,
       Row: integer]: TPoint2D read GetItemTopLocation;
     function PointToCell(EvalAt: TEvaluatedAt; APoint: TPoint2D): T2DTopCell;
+    function CellToPoint(ACell: TCellLocation; EvalAt: TEvaluatedAt): TPoint3D;
     property PestProperties: TPestProperties read GetPestProperties
       write SetPestProperties
     {$IFNDEF PEST}
@@ -10309,6 +10310,9 @@ const
 //                errors.
 //    '4.3.0.56' Bug fix: Fixed bug in displaying contour values.
 
+//               Bug fix: Fixed renaming of data sets associated with MODFLOW
+//                parameters when the parameters are renamed.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.56';
@@ -12583,6 +12587,60 @@ begin
   (FScreenObjectList as TObjectList).OwnsObjects := Value;
 end;
 
+function TCustomModel.CellToPoint(ACell: TCellLocation; EvalAt: TEvaluatedAt): TPoint3D;
+var
+  ModelLayer: Integer;
+  ModelRow: Integer;
+  ModelColumn: Integer;
+  APoint: TPoint2D;
+  Element: IElement3D;
+  Node: INode3D;
+begin
+  if ModelSelection in ModflowSelection then
+  begin
+    Assert(EvalAt = eaBlocks);
+    ModelLayer := ModflowLayerToDataSetLayer(ACell.Layer);
+  end
+  else
+  begin
+    ModelLayer := ACell.Layer -1;
+  end;
+  ModelRow := ACell.Row -1;
+  ModelColumn := ACell.Column -1;
+  if Grid <> nil then
+  begin
+    case EvalAt of
+      eaBlocks:
+        begin
+          result.Z := Grid.LayerCenter(ModelColumn, ModelRow, ModelLayer);
+          APoint := Grid.TwoDElementCenter(ModelColumn, ModelRow);
+          result.x := APoint.x;
+          result.y := APoint.y;
+        end;
+      eaNodes:
+        begin
+          Assert(False);
+//          result.Z := Grid.LayerElevation(ModelColumn, ModelRow, ModelLayer);
+        end;
+      else
+        Assert(false);
+    end;
+  end
+  else
+  begin
+    case EvalAt of
+      eaBlocks:
+        begin
+          result := Mesh3D.ElementArrayI[ModelLayer, ModelColumn].CenterLocation;
+        end;
+      eaNodes:
+        begin
+          result := Mesh3D.NodeArrayI[ModelLayer, ModelColumn].NodeLocation;
+        end;
+    end;
+  end;
+end;
+
 function TCustomModel.CfpIsSelected: Boolean;
 begin
   result := (ModelSelection = msModflowCfp) and
@@ -14233,6 +14291,7 @@ begin
       if ADataSet.Name <> SearchName then
       begin
         ADataSet.Name := SearchName;
+        ADataSet.DisplayName := SearchName;
       end;
       AddDataSet(ADataSet);
       CreateVariables(ADataSet);

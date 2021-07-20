@@ -1606,6 +1606,10 @@
         </DCCReference>
         <DCCReference Include="Modflow6Importer.pas"/>
         <DCCReference Include="PestFeatureDisplayerUnit.pas"/>
+        <DCCReference Include="frmImportModflow6FeatureModifiedByPestUnit.pas">
+            <Form>frmImportModflow6FeatureModifiedByPest</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
