@@ -7,7 +7,7 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.IOUtils, ModflowCellUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, ModflowMawUnit;
 
 type
   TModflow6Feature = class(TObject)
@@ -33,7 +33,106 @@ type
     property Q: double read FQ;
   end;
 
-  TModflow6FeatureType = (m6ftChd, m6ftWell);
+  TDrnFeature = class(TModflow6Feature)
+  private
+    FElev: double;
+    FCond: double;
+  public
+    property Elev: double read FElev;
+    property Cond: double read FCond;
+  end;
+
+  TRivFeature = class(TModflow6Feature)
+  private
+    FStage: double;
+    FCond: double;
+    FRBot: double;
+  public
+    property Stage: double read FStage;
+    property Cond: double read FCond;
+    property RBot: double read FRBot;
+  end;
+
+  TGhbFeature = class(TModflow6Feature)
+  private
+    FHead: double;
+    FCond: double;
+  public
+    property Head: double read FHead;
+    property Cond: double read FCond;
+  end;
+
+  TRchFeature = class(TModflow6Feature)
+  private
+    FRecharge: double;
+  public
+    property Recharge: double read FRecharge;
+  end;
+
+  TEvtFeature = class(TModflow6Feature)
+  private
+    FSurface: double;
+    FRate: double;
+    FDepth: double;
+  public
+    property Surface: double read FSurface;
+    property Rate: double read FRate;
+    property Depth: double read FDepth;
+  end;
+
+  TCSubFeature = class(TModflow6Feature)
+  private
+    FSig0: double;
+  public
+    property Sig0: double read FSig0;
+  end;
+
+  TMawRecord = record
+  private
+    FStatus: TMawStatus;
+    FScalingLength: double;
+    FPumpElevation: double;
+    FHeadLimitUsed: Boolean;
+    FFwcond: double;
+    FFwelev: double;
+    FHead_limit: double;
+    FRateScaling: Boolean;
+    FRate: double;
+    FMaxRate: double;
+    FShutOff: Boolean;
+    FWell_Head: double;
+    FFwrlen: double;
+    FFlowingWell: Boolean;
+    FMinRate: double;
+  public
+    procedure Initialize;
+    property Status: TMawStatus read FStatus;
+    property FlowingWell: Boolean read FFlowingWell;
+    property Fwelev: double read FFwelev;
+    property Fwcond: double read FFwcond;
+    property Fwrlen: double read FFwrlen;
+    property Rate: double read FRate;
+    // used with Status = constant
+    property Well_Head: double read FWell_Head;
+    property HeadLimitUsed: Boolean read FHeadLimitUsed;
+    property Head_limit: double read FHead_limit;
+    property ShutOff: Boolean read FShutOff;
+    property MinRate: double read FMinRate;
+    property MaxRate: double read FMaxRate;
+    property RateScaling: Boolean read FRateScaling;
+    property PumpElevation: double read FPumpElevation;
+    property ScalingLength: double read FScalingLength;
+  end;
+
+  TMawFeature = class(TModflow6Feature)
+  private
+    FMawProperties: TMawRecord;
+  public
+    property MawProperties: TMawRecord read FMawProperties;
+  end;
+
+  TModflow6FeatureType = (m6ftChd, m6ftWell, m6ftDrn, m6ftRiv, m6ftGhb,
+    m6ftRch, m6ftEvt, m6ftCSub, m6ftMAW);
   TModflow6GridType = (m6gtStructured, mggrDisv);
 
   TModflow6FileReader = class (TObject)
@@ -41,6 +140,10 @@ type
     FFeatureType: TModflow6FeatureType;
     FInputFile: TStreamReader;
     FGridType: TModflow6GridType;
+    FNumberOfMawWells: Integer;
+    FMawWellCells: array of array of TCellLocation;
+    FNumberOfMawCells: Integer;
+    FMawWellProperties: array of TMawRecord;
     {
     @name removes comments from a line and converts it to upper case.
     If the entire line is a comment, @name returns an empty string.
@@ -54,9 +157,21 @@ type
       out Section: string): Boolean;
     function IsEndOfSection(const ALine: string): Boolean;
     function ReadAFeature(const Splitter: TStringList): TModflow6Feature;
-    function ReadAWellFeature(const Splitter: TStringList): TWellFeature;
     function ReadAChdFeature(const Splitter: TStringList): TChdFeature;
+    function ReadAWellFeature(const Splitter: TStringList): TWellFeature;
+    function ReadADrnFeature(const Splitter: TStringList): TDrnFeature;
+    function ReadARivFeature(const Splitter: TStringList): TRivFeature;
+    function ReadAGhbFeature(const Splitter: TStringList): TGhbFeature;
+    function ReadARchFeature(const Splitter: TStringList): TRchFeature;
+    function ReadAEvtFeature(const Splitter: TStringList): TEvtFeature;
+    function ReadACSubFeature(const Splitter: TStringList): TCSubFeature;
+    function ReadAMawFeature(const Splitter: TStringList): TMawFeature;
     procedure ReadCell(Splitter: TStringList; AFeature: TModflow6Feature);
+    procedure ReadNumberOfMawWells;
+    procedure ReadMawWellCells;
+    procedure ReadMawWellCellsPerWell;
+    procedure InitializeMawWellProperties;
+    procedure FinalizeMawFeatures(FeatureList: TModflowFeatureList);
   public
     constructor Create(GridType: TModflow6GridType);
     procedure OpenFile(const FileName: string);
@@ -68,7 +183,10 @@ type
 implementation
 
 uses
-  ModflowWellWriterUnit, ModelMuseUtilities, ModflowCHD_WriterUnit;
+  ModflowWellWriterUnit, ModelMuseUtilities, ModflowCHD_WriterUnit,
+  ModflowDRN_WriterUnit, ModflowRiverWriterUnit, ModflowGHB_WriterUnit,
+  ModflowRCH_WriterUnit, ModflowETS_WriterUnit, ModflowCSubWriterUnit,
+  ModflowMawWriterUnit;
 
 { TModflow6FileReader }
 
@@ -113,6 +231,36 @@ begin
   result := UpperCase(result);
 end;
 
+procedure TModflow6FileReader.FinalizeMawFeatures(
+  FeatureList: TModflowFeatureList);
+var
+  WellIndex: Integer;
+  CellIndex: Integer;
+  MawFeature: TMawFeature;
+begin
+  FeatureList.Clear;
+  for WellIndex := 0 to Length(FMawWellProperties) - 1 do
+  begin
+    for CellIndex := 0 to Length(FMawWellCells[WellIndex]) - 1 do
+    begin
+      MawFeature := TMawFeature.Create;
+      MawFeature.FCell := FMawWellCells[WellIndex, CellIndex];
+      MawFeature.FMawProperties := FMawWellProperties[WellIndex];
+      FeatureList.Add(MawFeature);
+    end;
+  end;
+end;
+
+procedure TModflow6FileReader.InitializeMawWellProperties;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Length(FMawWellProperties) - 1 do
+  begin
+    FMawWellProperties[Index].Initialize;
+  end;
+end;
+
 function TModflow6FileReader.IsBeginningOfSection(const ALine: string;
   out Section: string): Boolean;
 const
@@ -143,13 +291,41 @@ var
 begin
   FInputFile := TFile.OpenText(FileName);
   FileExtension := LowerCase(ExtractFileExt(FileName));
-  if FileExtension = TModflowCHD_Writer.Extension then
+  if SameText(FileExtension, TModflowCHD_Writer.Extension) then
   begin
     FFeatureType := m6ftChd;
   end
-  else if FileExtension = TModflowWEL_Writer.Extension then
+  else if SameText(FileExtension, TModflowWEL_Writer.Extension) then
   begin
     FFeatureType := m6ftWell;
+  end
+  else if SameText(FileExtension, TModflowDRN_Writer.Extension) then
+  begin
+    FFeatureType := m6ftDrn;
+  end
+  else if SameText(FileExtension, TModflowRIV_Writer.Extension) then
+  begin
+    FFeatureType := m6ftRiv;
+  end
+  else if SameText(FileExtension, TModflowGhb_Writer.Extension) then
+  begin
+    FFeatureType := m6ftGhb;
+  end
+  else if SameText(FileExtension, TModflowRch_Writer.Extension) then
+  begin
+    FFeatureType := m6ftRch;
+  end
+  else if SameText(FileExtension, TModflowETS_Writer.Extension) then
+  begin
+    FFeatureType := m6ftEvt;
+  end
+  else if SameText(FileExtension, TCSubWriter.Extension) then
+  begin
+    FFeatureType := m6ftCSub;
+  end
+  else if SameText(FileExtension, TModflowMAW_Writer.Extension) then
+  begin
+    FFeatureType := m6ftMaw;
   end
   else
   begin
@@ -189,6 +365,105 @@ begin
   end;
 end;
 
+function TModflow6FileReader.ReadACSubFeature(
+  const Splitter: TStringList): TCSubFeature;
+begin
+  case FGridType of
+    m6gtStructured:
+      begin
+        Assert(Splitter .Count >= 4);
+      end;
+    mggrDisv:
+      begin
+        Assert(Splitter .Count >= 3);
+      end;
+    else
+      Assert(False);
+  end;
+  result := TCSubFeature.Create;
+  ReadCell(Splitter, result);
+  case FGridType of
+    m6gtStructured:
+      begin
+        result.FSig0 := FortranStrToFloat(Splitter[3]);
+      end;
+    mggrDisv:
+      begin
+        result.FSig0 := FortranStrToFloat(Splitter[2]);
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TModflow6FileReader.ReadADrnFeature(
+  const Splitter: TStringList): TDrnFeature;
+begin
+  case FGridType of
+    m6gtStructured:
+      begin
+        Assert(Splitter .Count >= 5);
+      end;
+    mggrDisv:
+      begin
+        Assert(Splitter .Count >= 4);
+      end;
+    else
+      Assert(False);
+  end;
+  result := TDrnFeature.Create;
+  ReadCell(Splitter, result);
+  case FGridType of
+    m6gtStructured:
+      begin
+        result.FElev := FortranStrToFloat(Splitter[3]);
+        result.FCond := FortranStrToFloat(Splitter[4]);
+      end;
+    mggrDisv:
+      begin
+        result.FElev := FortranStrToFloat(Splitter[2]);
+        result.FCond := FortranStrToFloat(Splitter[3]);
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TModflow6FileReader.ReadAEvtFeature(
+  const Splitter: TStringList): TEvtFeature;
+begin
+  case FGridType of
+    m6gtStructured:
+      begin
+        Assert(Splitter .Count >= 6);
+      end;
+    mggrDisv:
+      begin
+        Assert(Splitter .Count >= 5);
+      end;
+    else
+      Assert(False);
+  end;
+  result := TEvtFeature.Create;
+  ReadCell(Splitter, result);
+  case FGridType of
+    m6gtStructured:
+      begin
+        result.FSurface := FortranStrToFloat(Splitter[3]);
+        result.FRate := FortranStrToFloat(Splitter[4]);
+        result.FDepth := FortranStrToFloat(Splitter[5]);
+      end;
+    mggrDisv:
+      begin
+        result.FSurface := FortranStrToFloat(Splitter[2]);
+        result.FRate := FortranStrToFloat(Splitter[3]);
+        result.FDepth := FortranStrToFloat(Splitter[4]);
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 function TModflow6FileReader.ReadAFeature(
   const Splitter: TStringList): TModflow6Feature;
 begin
@@ -196,6 +471,180 @@ begin
   case FFeatureType of
     m6ftWell: result := ReadAWellFeature(Splitter);
     m6ftChd: result := ReadAChdFeature(Splitter);
+    m6ftDrn: result := ReadADrnFeature(Splitter);
+    m6ftRiv: result := ReadARivFeature(Splitter);
+    m6ftGhb: result := ReadAGhbFeature(Splitter);
+    m6ftRch: result := ReadARchFeature(Splitter);
+    m6ftEvt: result := ReadAEvtFeature(Splitter);
+    m6ftCSub: result := ReadACSubFeature(Splitter);
+    m6ftMaw: result := ReadAMawFeature(Splitter);
+    else
+      Assert(False);
+  end;
+end;
+
+function TModflow6FileReader.ReadAGhbFeature(
+  const Splitter: TStringList): TGhbFeature;
+begin
+  case FGridType of
+    m6gtStructured:
+      begin
+        Assert(Splitter .Count >= 5);
+      end;
+    mggrDisv:
+      begin
+        Assert(Splitter .Count >= 4);
+      end;
+    else
+      Assert(False);
+  end;
+  result := TGhbFeature.Create;
+  ReadCell(Splitter, result);
+  case FGridType of
+    m6gtStructured:
+      begin
+        result.FHead := FortranStrToFloat(Splitter[3]);
+        result.FCond := FortranStrToFloat(Splitter[4]);
+      end;
+    mggrDisv:
+      begin
+        result.FHead := FortranStrToFloat(Splitter[2]);
+        result.FCond := FortranStrToFloat(Splitter[3]);
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TModflow6FileReader.ReadAMawFeature(
+  const Splitter: TStringList): TMawFeature;
+var
+  WellNo: Integer;
+  KeyWord: string;
+  Status: string;
+begin
+  result := nil;
+  Assert(Splitter.Count >= 3);
+  WellNo := StrToInt(Splitter[0]);
+  Assert(WellNo >0);
+  Assert(WellNo <= FNumberOfMawWells);
+  KeyWord := UpperCase(Splitter[1]);
+  if KeyWord = 'STATUS' then
+  begin
+    Status := UpperCase(Splitter[2]);
+    if Status = 'ACTIVE' then
+    begin
+      FMawWellProperties[WellNo-1].FStatus := mwActive;
+    end
+    else if Status = 'INACTIVE' then
+    begin
+      FMawWellProperties[WellNo-1].FStatus := mwInactive;
+    end
+    else if Status = 'CONSTANT' then
+    begin
+      FMawWellProperties[WellNo-1].FStatus := mwConstantHead;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end
+  else if KeyWord = 'FLOWING_WELL' then
+  begin
+    FMawWellProperties[WellNo-1].FFlowingWell := True;
+    FMawWellProperties[WellNo-1].FFwelev := FortranStrToFloat(Splitter[2]);
+    FMawWellProperties[WellNo-1].FFwcond := FortranStrToFloat(Splitter[3]);
+    FMawWellProperties[WellNo-1].FFwrlen := FortranStrToFloat(Splitter[4]);
+  end
+  else if KeyWord = 'RATE' then
+  begin
+    FMawWellProperties[WellNo-1].FRate := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'WELL_HEAD' then
+  begin
+    FMawWellProperties[WellNo-1].FWell_Head := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'HEAD_LIMIT' then
+  begin
+    FMawWellProperties[WellNo-1].FHeadLimitUsed := True;
+    FMawWellProperties[WellNo-1].FHead_limit := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'SHUT_OFF' then
+  begin
+    FMawWellProperties[WellNo-1].FShutOff := True;
+    FMawWellProperties[WellNo-1].FMinRate := FortranStrToFloat(Splitter[2]);
+    FMawWellProperties[WellNo-1].FMaxRate := FortranStrToFloat(Splitter[3]);
+  end
+  else if KeyWord = 'RATE_SCALING' then
+  begin
+    FMawWellProperties[WellNo-1].FRateScaling := True;
+    FMawWellProperties[WellNo-1].FPumpElevation := FortranStrToFloat(Splitter[2]);
+    FMawWellProperties[WellNo-1].FScalingLength := FortranStrToFloat(Splitter[3]);
+  end
+
+end;
+
+function TModflow6FileReader.ReadARchFeature(
+  const Splitter: TStringList): TRchFeature;
+begin
+  case FGridType of
+    m6gtStructured:
+      begin
+        Assert(Splitter .Count >= 4);
+      end;
+    mggrDisv:
+      begin
+        Assert(Splitter .Count >= 3);
+      end;
+    else
+      Assert(False);
+  end;
+  result := TRchFeature.Create;
+  ReadCell(Splitter, result);
+  case FGridType of
+    m6gtStructured:
+      begin
+        result.FRecharge := FortranStrToFloat(Splitter[3]);
+      end;
+    mggrDisv:
+      begin
+        result.FRecharge := FortranStrToFloat(Splitter[2]);
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
+function TModflow6FileReader.ReadARivFeature(
+  const Splitter: TStringList): TRivFeature;
+begin
+  case FGridType of
+    m6gtStructured:
+      begin
+        Assert(Splitter .Count >= 6);
+      end;
+    mggrDisv:
+      begin
+        Assert(Splitter .Count >= 5);
+      end;
+    else
+      Assert(False);
+  end;
+  result := TRivFeature.Create;
+  ReadCell(Splitter, result);
+  case FGridType of
+    m6gtStructured:
+      begin
+        result.FStage := FortranStrToFloat(Splitter[3]);
+        result.FCond := FortranStrToFloat(Splitter[4]);
+        result.FRBot := FortranStrToFloat(Splitter[5]);
+      end;
+    mggrDisv:
+      begin
+        result.FStage := FortranStrToFloat(Splitter[2]);
+        result.FCond := FortranStrToFloat(Splitter[3]);
+        result.FRBot := FortranStrToFloat(Splitter[4]);
+      end;
     else
       Assert(False);
   end;
@@ -255,6 +704,132 @@ begin
 
 end;
 
+procedure TModflow6FileReader.ReadMawWellCells;
+var
+  Count: Integer;
+  ALine: string;
+  Splitter: TStringList;
+  ACell: TCellLocation;
+  WellNo: Integer;
+  ICon: Integer;
+begin
+  Splitter := TStringList.Create;
+  try
+    Count := 0;
+    while (Count < FNumberOfMawCells) and (not FInputFile.EndOfStream) do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      Splitter.DelimitedText := ALine;
+      case FGridType of
+        m6gtStructured:
+          begin
+            Assert(Splitter .Count >= 5);
+          end;
+        mggrDisv:
+          begin
+            Assert(Splitter .Count >= 4);
+          end;
+        else
+          Assert(False);
+      end;
+      WellNo := StrToInt(Splitter[0]);
+      Assert(WellNo > 0);
+      Assert(WellNo <= FNumberOfMawWells);
+      ICon := StrToInt(Splitter[1]);
+      Assert(ICon > 0);
+      Assert(Icon <= Length(FMawWellCells[WellNo-1]));
+      case FGridType of
+        m6gtStructured:
+          begin
+            ACell.Layer := StrToInt(Splitter[2]);
+            ACell.Row := StrToInt(Splitter[3]);
+            ACell.Column := StrToInt(Splitter[4]);
+          end;
+        mggrDisv:
+          begin
+            ACell.Layer := StrToInt(Splitter[2]);
+            ACell.Row := 1;
+            ACell.Column := StrToInt(Splitter[3]);
+          end;
+        else
+          Assert(False);
+      end;
+      FMawWellCells[WellNo-1, ICon-1] := ACell;
+    end;
+  finally
+    Splitter.Free;
+  end;
+end;
+
+procedure TModflow6FileReader.ReadMawWellCellsPerWell;
+var
+  WellNo: Integer;
+  Ngwfnodes: Integer;
+  Splitter: TStringList;
+  ALine: string;
+  Count: Integer;
+begin
+  FNumberOfMawCells := 0;
+  Count := 0;
+  Splitter := TStringList.Create;
+  try
+    while (Count < FNumberOfMawWells) and not FInputFile.EndOfStream do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      Splitter.DelimitedText := ALine;
+      Assert(Splitter.Count >= 6);
+      WellNo := StrToInt(Splitter[0]);
+      Assert(WellNo > 0);
+      Assert(WellNo <= FNumberOfMawWells);
+      Ngwfnodes := StrToInt(Splitter[5]);
+      Inc(FNumberOfMawCells, Ngwfnodes);
+      SetLength(FMawWellCells[WellNo-1], Ngwfnodes);
+      Inc(Count);
+
+      Assert(not IsEndOfSection(ALine));
+    end;
+  finally
+    Splitter.Free;
+  end;
+end;
+
+procedure TModflow6FileReader.ReadNumberOfMawWells;
+var
+  Splitter: TStringList;
+  ALine: string;
+begin
+  Splitter := TStringList.Create;
+  try
+    while not FInputFile.EndOfStream do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      Splitter.DelimitedText := ALine;
+      if SameText(Splitter[0], 'NMAWWELLS') then
+      begin
+        FNumberOfMawWells := StrToInt(Splitter[1]);
+        SetLength(FMawWellCells, FNumberOfMawWells);
+        SetLength(FMawWellProperties, FNumberOfMawWells);
+        Exit;
+      end;
+      Assert(not IsEndOfSection(ALine));
+    end;
+  finally
+    Splitter.Free;
+  end;
+end;
+
 function TModflow6FileReader.ReadStressPeriod(
   StressPeriod: Integer): TModflowFeatureList;
 var
@@ -263,6 +838,17 @@ var
   CurrentPeriod: Integer;
   Splitter: TStringList;
   PeriodPosition: Integer;
+  procedure SkipToEndOfSection;
+  begin
+    while not FInputFile.EndOfStream do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if IsEndOfSection(ALine) then
+      begin
+        break;
+      end;
+    end;
+  end;
 begin
   Splitter := TStringList.Create;
   try
@@ -276,31 +862,41 @@ begin
       end;
       if IsBeginningOfSection(ALine, Section) then
       begin
-        if Section = 'OPTIONS' then
+        if SameText(Section, 'OPTIONS') then
         begin
-          while not FInputFile.EndOfStream do
-          begin
-            ALine := ExtractNonCommentLine(FInputFile.ReadLine);
-            if IsEndOfSection(ALine) then
-            begin
-              break;
-            end;
-          end;
+          SkipToEndOfSection;
         end
-        else if Section = 'DIMENSIONS' then
+        else if SameText(Section, 'DIMENSIONS') then
         begin
-          while not FInputFile.EndOfStream do
+          if FFeatureType = m6ftMAW then
           begin
-            ALine := ExtractNonCommentLine(FInputFile.ReadLine);
-            if IsEndOfSection(ALine) then
-            begin
-              break;
-            end;
+            ReadNumberOfMawWells;
           end;
+          SkipToEndOfSection;
+        end
+        else if SameText(Section, 'GRIDDATA') then
+        begin
+          SkipToEndOfSection;
+        end
+        else if SameText(Section, 'PACKAGEDATA') then
+        begin
+          if FFeatureType = m6ftMAW then
+          begin
+            ReadMawWellCellsPerWell;
+          end;
+          SkipToEndOfSection;
+        end
+        else if SameText(Section, 'CONNECTIONDATA') then
+        begin
+          if FFeatureType = m6ftMAW then
+          begin
+            ReadMawWellCells;
+          end;
+          SkipToEndOfSection;
         end
         else
         begin
-          PeriodPosition := Pos('PERIOD ', Section);
+          PeriodPosition := Pos('PERIOD ', UpperCase(Section));
           if PeriodPosition = 1 then
           begin
             CurrentPeriod := StrToInt(Trim(Copy(Section, Length('PERIOD ')+1,
@@ -310,6 +906,11 @@ begin
               Exit;
             end;
             result.Clear;
+            if FFeatureType = m6ftMAW then
+            begin
+              InitializeMawWellProperties;
+            end;
+
             while not FInputFile.EndOfStream do
             begin
               ALine := ExtractNonCommentLine(FInputFile.ReadLine);
@@ -332,10 +933,26 @@ begin
         end;
       end;
     end;
+    if FFeatureType = m6ftMAW then
+    begin
+      FinalizeMawFeatures(result);
+    end;
   finally
     Splitter.Free;
   end;
 
+end;
+
+{ TMawRecord }
+
+procedure TMawRecord.Initialize;
+begin
+  FStatus := mwActive;
+  FFlowingWell := False;
+  FRate := 0;
+  FHeadLimitUsed := False;
+  FShutOff := False;
+  FRateScaling := False;
 end;
 
 end.

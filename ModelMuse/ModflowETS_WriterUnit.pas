@@ -37,7 +37,6 @@ Type
   protected
     function CellType: TValueCellType; override;
     function Prefix: string; override;
-    class function Extension: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
     function Package: TModflowPackageSelection; override;
@@ -85,6 +84,7 @@ Type
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     // @name is the file extension used for the observation output file.
     class function ObservationOutputExtension: string; override;
+    class function Extension: string; override;
   end;
 
 implementation
@@ -293,8 +293,6 @@ begin
       frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheETSRate);
       frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheETSDepth);
       frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoEvapotranspiratio);
-
-
 
       if not Package.IsSelected then
       begin

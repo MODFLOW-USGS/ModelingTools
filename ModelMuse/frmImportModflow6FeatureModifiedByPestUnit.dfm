@@ -23,7 +23,9 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
     Top = 32
     Width = 408
     Height = 26
-    Filter = 'MODFLOW 6 Feature files|*.chd; *.wel'
+    Filter = 
+      'MODFLOW 6 Feature files|*.chd; *.wel;*.drn;*.riv;*.ghb;*.rch;*.e' +
+      'vt;*.csub'
     TabOrder = 0
     Text = ''
   end
@@ -45,9 +47,6 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitLeft = -37
-    ExplicitTop = 185
-    ExplicitWidth = 461
     DesignSize = (
       424
       41)
@@ -60,7 +59,6 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 361
     end
     object btnOK: TBitBtn
       Left = 227
@@ -72,7 +70,6 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 264
     end
     object btnHelp: TBitBtn
       Left = 131
@@ -83,7 +80,6 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 168
     end
   end
 end

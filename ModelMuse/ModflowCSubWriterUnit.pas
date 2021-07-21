@@ -50,16 +50,16 @@ type
   protected
     function Package: TModflowPackageSelection; override;
     procedure Evaluate; override;
-    class function Extension: string; override;
     procedure WriteAndCheckCells(List: TValueCellList;
       TimeIndex: integer);
-    procedure WriteCell(Cell: TValueCell); 
+    procedure WriteCell(Cell: TValueCell);
     class function ObservationExtension: string; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    class function Extension: string; override;
   end;
 
 implementation

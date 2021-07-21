@@ -29,7 +29,6 @@ Type
   protected
     function CellType: TValueCellType; override;
     function Prefix: string; override;
-    class function Extension: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
     function Package: TModflowPackageSelection; override;
@@ -49,6 +48,7 @@ Type
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     // @name is the file extension used for the observation output file.
     class function ObservationOutputExtension: string; override;
+    class function Extension: string; override;
   end;
 
 implementation

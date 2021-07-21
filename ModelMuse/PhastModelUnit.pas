@@ -12593,8 +12593,6 @@ var
   ModelRow: Integer;
   ModelColumn: Integer;
   APoint: TPoint2D;
-  Element: IElement3D;
-  Node: INode3D;
 begin
   if ModelSelection in ModflowSelection then
   begin

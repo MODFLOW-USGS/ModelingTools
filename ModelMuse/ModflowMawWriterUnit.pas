@@ -40,7 +40,6 @@ type
     procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
-    class function Extension: string; override;
     procedure Evaluate; override;
     // @name is the file extension used for the observation input file.
     class function ObservationExtension: string; override;
@@ -55,6 +54,7 @@ type
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
     procedure UpdateSteadyData;
     class function ObservationOutputExtension: string; override;
+    class function Extension: string; override;
   end;
 
 

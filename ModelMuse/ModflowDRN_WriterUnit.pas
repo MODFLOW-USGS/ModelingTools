@@ -25,7 +25,6 @@ type
   protected
     function ObservationPackage: TModflowPackageSelection; override;
     function CellType: TValueCellType; override;
-    class function Extension: string; override;
     class function ObservationExtension: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
       override;
@@ -56,6 +55,7 @@ type
     procedure WriteFluxObservationFile(const AFileName: string;
       Purpose: TObservationPurpose);
     class function ObservationOutputExtension: string; override;
+    class function Extension: string; override;
   end;
 
 implementation
