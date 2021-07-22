@@ -30,7 +30,7 @@ implementation
 uses
   ModflowBoundaryDisplayUnit, PhastModelUnit, ScreenObjectUnit, frmGoPhastUnit,
   FastGEO, ValueArrayStorageUnit, DataSetUnit, RbwParser, UndoItems,
-  GIS_Functions, System.Contnrs, AbstractGridUnit, Vcl.Dialogs;
+  GIS_Functions, System.Contnrs, AbstractGridUnit, Vcl.Dialogs, ModflowMawUnit;
 
 resourcestring
   StrAnErrorOccurredWh = 'An error occurred while importing the file. Check ' +
@@ -100,7 +100,46 @@ var
   EvtRateValueArrayItem: TValueArrayItem;
   EvtDepthValueArrayItem: TValueArrayItem;
   CSubStressOffsetDataArray: TModflowBoundaryDisplayDataArray;
-  CSubStressOffsestValueArrayItem: TValueArrayItem;
+  CSubStressOffsetValueArrayItem: TValueArrayItem;
+  MawFeature: TMawFeature;
+  MawRateDataArray: TModflowBoundaryDisplayDataArray;
+  MawFwelevDataArray: TModflowBoundaryDisplayDataArray;
+  MawFwcondDataArray: TModflowBoundaryDisplayDataArray;
+  MawFwrlenDataArray: TModflowBoundaryDisplayDataArray;
+  MawWell_HeadDataArray: TModflowBoundaryDisplayDataArray;
+  MawHead_limitDataArray: TModflowBoundaryDisplayDataArray;
+  MawMinRateDataArray: TModflowBoundaryDisplayDataArray;
+  MawMaxRateDataArray: TModflowBoundaryDisplayDataArray;
+  MawPumpElevationDataArray: TModflowBoundaryDisplayDataArray;
+  MawScalingLengthDataArray: TModflowBoundaryDisplayDataArray;
+  MawRateScreenObject: TScreenObject;
+  MawFlowingWellScreenObject: TScreenObject;
+  MawWellHeadScreenObject: TScreenObject;
+  MawHeadLimitScreenObject: TScreenObject;
+  MawShutOffScreenObject: TScreenObject;
+  MawRateScalingScreenObject: TScreenObject;
+  MawRateValueArrayItem: TValueArrayItem;
+  MawFwelevValueArrayItem: TValueArrayItem;
+  MawFwcondValueArrayItem: TValueArrayItem;
+  MawFwrlenValueArrayItem: TValueArrayItem;
+  MawWell_HeadValueArrayItem: TValueArrayItem;
+  MawHead_limitValueArrayItem: TValueArrayItem;
+  MawMinRateValueArrayItem: TValueArrayItem;
+  MawMaxRateValueArrayItem: TValueArrayItem;
+  MawPumpElevationValueArrayItem: TValueArrayItem;
+  MawScalingLengthValueArrayItem: TValueArrayItem;
+  MawRateCount: Integer;
+  MawFlowingWellCount: Integer;
+  MawConstantHeadCount: Integer;
+  MawHeadLimitCount: Integer;
+  MawShutoffCount: Integer;
+  MawRateScalingCount: Integer;
+  ImportedMawRateSectionElevations: TValueArrayStorage;
+  ImportedMawFlowingWellSectionElevations: TValueArrayStorage;
+  ImportedMawConstantHeadSectionElevations: TValueArrayStorage;
+  ImportedMawHeadLimitSectionElevations: TValueArrayStorage;
+  ImportedMawShutoffSectionElevations: TValueArrayStorage;
+  ImportedMawRateScalingSectionElevations: TValueArrayStorage;
   function CreateDataSet(const Root: string;
     Method: TValueAddMethod): TModflowBoundaryDisplayDataArray;
   begin
@@ -115,16 +154,32 @@ var
     NewDataSets.Add(result);
     LocalModel.UpdateDataArrayDimensions(result);
   end;
-  function CreateValueArrayItem(
+  function CreateValueArrayItem(ScreenObject: TScreenObject;
     DataArray: TModflowBoundaryDisplayDataArray): TValueArrayItem;
   begin
-    Position := AScreenObject.AddDataSet(DataArray);
-    result := AScreenObject.ImportedValues.Add;
+    Position := ScreenObject.AddDataSet(DataArray);
+    result := ScreenObject.ImportedValues.Add;
     result.Name := 'Imported_' + DataArray.Name;
     result.Values.DataType := rdtDouble;
     result.Values.Count := FFeatures.Count;
-    AScreenObject.DataSetFormulas[Position]
+    ScreenObject.DataSetFormulas[Position]
       := rsObjectImportedValuesR + '("' + result.Name + '")';
+  end;
+  function MakeNewScreenObject: TScreenObject;
+  begin
+    result :=
+      TScreenObject.CreateWithViewDirection(
+      frmGoPhast.PhastModel, vdTop,
+      UndoCreateScreenObject, False);
+    result.Comment := 'Imported from ' + FileName +' on ' + DateTimeToStr(Now);
+    result.SetValuesOfEnclosedCells := False;
+    result.SetValuesOfIntersectedCells := True;
+    result.SetValuesByInterpolation := False;
+    result.ElevationCount := ecOne;
+    result.Capacity := FFeatures.Count;
+    result.EvaluatedAt := eaBlocks;
+    result.ElevationFormula := rsObjectImportedValuesR
+      + '("' + StrImportedElevations + '")';
   end;
 begin
   FeatureReader := TModflow6FileReader.Create(GridType);
@@ -155,6 +210,23 @@ begin
   EvtRateDataArray := nil;
   EvtDepthDataArray := nil;
   CSubStressOffsetDataArray := nil;
+  MawRateDataArray := nil;
+  MawFwelevDataArray := nil;
+  MawFwcondDataArray := nil;
+  MawFwrlenDataArray := nil;
+  MawWell_HeadDataArray := nil;
+  MawHead_limitDataArray := nil;
+  MawMinRateDataArray := nil;
+  MawMaxRateDataArray := nil;
+  MawPumpElevationDataArray := nil;
+  MawScalingLengthDataArray := nil;
+
+  MawRateCount := 0;
+  MawFlowingWellCount := 0;
+  MawConstantHeadCount := 0;
+  MawHeadLimitCount := 0;
+  MawShutoffCount := 0;
+  MawRateScalingCount := 0;
 
   LocalModel := FModel as TCustomModel;
   InvalidNames:= TStringList.Create;
@@ -209,6 +281,73 @@ begin
           CSubStressOffsetDataArray := CreateDataSet('CSUB_Stress_Offset', vamAveragedDelayed);
           Root := 'CSUB';
         end;
+      m6ftMaw:
+        begin
+          for FeatureIndex := 0 to FFeatures.Count - 1 do
+          begin
+            MawFeature := FFeatures[FeatureIndex] as TMawFeature;
+            if MawFeature.MawProperties.Status = mwInactive then
+            begin
+              Continue;
+            end;
+
+            Inc(MawRateCount);
+            if MawRateDataArray = nil then
+            begin
+              MawRateDataArray := CreateDataSet('MAW_Rate', vamAddDelayed);
+            end;
+
+            if MawFeature.MawProperties.FlowingWell then
+            begin
+              Inc(MawFlowingWellCount);
+              if MawFwelevDataArray = nil then
+              begin
+                MawFwelevDataArray := CreateDataSet('MAW_FlowingWellElevation', vamAveragedDelayed);
+                MawFwcondDataArray := CreateDataSet('MAW_FlowingWellConductance', vamAveragedDelayed);
+                MawFwrlenDataArray := CreateDataSet('MAW_FlowingWellReductionLength', vamAveragedDelayed);
+              end;
+            end;
+
+            if MawFeature.MawProperties.Status = mwConstantHead then
+            begin
+              Inc(MawConstantHeadCount);
+              if MawWell_HeadDataArray = nil then
+              begin
+                MawWell_HeadDataArray := CreateDataSet('MAW_WellHead', vamAveragedDelayed);
+              end;
+            end;
+
+            if MawFeature.MawProperties.HeadLimitUsed then
+            begin
+              Inc(MawHeadLimitCount);
+              if MawHead_limitDataArray = nil then
+              begin
+                MawHead_limitDataArray := CreateDataSet('MAW_Head_limit', vamAveragedDelayed);
+              end;
+            end;
+
+            if MawFeature.MawProperties.ShutOff then
+            begin
+              Inc(MawShutoffCount);
+              if MawMinRateDataArray = nil then
+              begin
+                MawMinRateDataArray := CreateDataSet('MAW_MinRate', vamAveragedDelayed);
+                MawMaxRateDataArray := CreateDataSet('MAW_MaxRate', vamAveragedDelayed);
+              end;
+            end;
+
+            if MawFeature.MawProperties.RateScaling then
+            begin
+              Inc(MawRateScalingCount);
+              if MawPumpElevationDataArray = nil then
+              begin
+                MawPumpElevationDataArray := CreateDataSet('MAW_PumpElevation', vamAveragedDelayed);
+                MawScalingLengthDataArray := CreateDataSet('MAW_ScalingLength', vamAveragedDelayed);
+              end;
+            end;
+          end;
+          Root := 'MAW';
+        end;
       else
         Assert(False);
     end;
@@ -229,80 +368,245 @@ begin
     EvtSurfaceValueArrayItem := nil;
     EvtRateValueArrayItem := nil;
     EvtDepthValueArrayItem := nil;
-    CSubStressOffsestValueArrayItem := nil;
+    CSubStressOffsetValueArrayItem := nil;
+    MawRateValueArrayItem := nil;
+    MawFwelevValueArrayItem := nil;
+    MawFwcondValueArrayItem := nil;
+    MawFwrlenValueArrayItem := nil;
+    MawWell_HeadValueArrayItem := nil;
+    MawHead_limitValueArrayItem := nil;
+    MawMinRateValueArrayItem := nil;
+    MawMaxRateValueArrayItem := nil;
+    MawPumpElevationValueArrayItem := nil;
+    MawScalingLengthValueArrayItem := nil;
 
     AFeature := nil;
     try
-      AScreenObject :=
-        TScreenObject.CreateWithViewDirection(
-        frmGoPhast.PhastModel, vdTop,
-        UndoCreateScreenObject, False);
-      AScreenObject.Comment := 'Imported from ' + FileName +' on ' + DateTimeToStr(Now);
-      AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
-      AScreenObject.SetValuesOfEnclosedCells := False;
-      AScreenObject.SetValuesOfIntersectedCells := True;
-      AScreenObject.SetValuesByInterpolation := False;
-      AScreenObject.ElevationCount := ecOne;
-      AScreenObject.Capacity := FFeatures.Count;
-      AScreenObject.EvaluatedAt := eaBlocks;
-      AScreenObject.ElevationFormula := rsObjectImportedValuesR
-        + '("' + StrImportedElevations + '")';
-      ScreenObjectList.Add(AScreenObject);
+      AScreenObject := nil;
+      MawRateScreenObject := nil;
+      MawFlowingWellScreenObject := nil;
+      MawWellHeadScreenObject := nil;
+      MawHeadLimitScreenObject := nil;
+      MawShutOffScreenObject := nil;
+      MawRateScalingScreenObject := nil;
+
+      if FFeatureType = m6ftMaw then
+      begin
+        if MawRateDataArray <> nil then
+        begin
+          MawRateScreenObject := MakeNewScreenObject;
+          MawRateScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+          ScreenObjectList.Add(MawRateScreenObject);
+          Inc(ExistingObjectCount);
+        end;
+        if MawFwelevDataArray <> nil then
+        begin
+          MawFlowingWellScreenObject := MakeNewScreenObject;
+          MawFlowingWellScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+          ScreenObjectList.Add(MawFlowingWellScreenObject);
+          Inc(ExistingObjectCount);
+        end;
+        if MawWell_HeadDataArray <> nil then
+        begin
+          MawWellHeadScreenObject := MakeNewScreenObject;
+          MawWellHeadScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+          ScreenObjectList.Add(MawWellHeadScreenObject);
+          Inc(ExistingObjectCount);
+        end;
+        if MawHead_limitDataArray <> nil then
+        begin
+          MawHeadLimitScreenObject := MakeNewScreenObject;
+          MawHeadLimitScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+          ScreenObjectList.Add(MawHeadLimitScreenObject);
+          Inc(ExistingObjectCount);
+        end;
+        if MawMinRateDataArray <> nil then
+        begin
+          MawShutOffScreenObject := MakeNewScreenObject;
+          MawShutOffScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+          ScreenObjectList.Add(MawShutOffScreenObject);
+          Inc(ExistingObjectCount);
+        end;
+        if MawPumpElevationDataArray <> nil then
+        begin
+          MawRateScalingScreenObject := MakeNewScreenObject;
+          MawRateScalingScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+          ScreenObjectList.Add(MawRateScalingScreenObject);
+//          Inc(ExistingObjectCount);
+        end;
+      end
+      else
+      begin
+        AScreenObject := MakeNewScreenObject;
+        AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+        ScreenObjectList.Add(AScreenObject);
+      end;
       case FFeatureType of
         m6ftChd:
           begin
-            HeadValueArrayItem := CreateValueArrayItem(HeadDataArray);
+            HeadValueArrayItem := CreateValueArrayItem(AScreenObject,
+              HeadDataArray);
           end;
         m6ftWell:
           begin
-            WelValueArrayItem := CreateValueArrayItem(WellDataArray);
+            WelValueArrayItem := CreateValueArrayItem(AScreenObject,
+              WellDataArray);
           end;
         m6ftDrn:
           begin
-            DrnElevValueArrayItem := CreateValueArrayItem(DrnElevDataArray);
-            DrnCondValueArrayItem := CreateValueArrayItem(DrnCondDataArray);
+            DrnElevValueArrayItem := CreateValueArrayItem(AScreenObject,
+              DrnElevDataArray);
+            DrnCondValueArrayItem := CreateValueArrayItem(AScreenObject,
+              DrnCondDataArray);
           end;
         m6ftRiv:
           begin
-            RivStageValueArrayItem := CreateValueArrayItem(RivStageDataArray);
-            RivCondValueArrayItem := CreateValueArrayItem(RivCondDataArray);
-            RivRBotValueArrayItem := CreateValueArrayItem(RivRBotDataArray);
+            RivStageValueArrayItem := CreateValueArrayItem(AScreenObject,
+              RivStageDataArray);
+            RivCondValueArrayItem := CreateValueArrayItem(AScreenObject,
+              RivCondDataArray);
+            RivRBotValueArrayItem := CreateValueArrayItem(AScreenObject,
+              RivRBotDataArray);
           end;
         m6ftGhb:
           begin
-            GhbHeadValueArrayItem := CreateValueArrayItem(GhbHeadDataArray);
-            GhbCondValueArrayItem := CreateValueArrayItem(GhbCondDataArray);
+            GhbHeadValueArrayItem := CreateValueArrayItem(AScreenObject,
+              GhbHeadDataArray);
+            GhbCondValueArrayItem := CreateValueArrayItem(AScreenObject,
+              GhbCondDataArray);
           end;
         m6ftRch:
           begin
-            RchRechargeValueArrayItem := CreateValueArrayItem(RechargeDataArray);
+            RchRechargeValueArrayItem := CreateValueArrayItem(AScreenObject,
+              RechargeDataArray);
           end;
         m6ftEvt:
           begin
-            EvtSurfaceValueArrayItem := CreateValueArrayItem(EvtSurfaceDataArray);
-            EvtRateValueArrayItem := CreateValueArrayItem(EvtRateDataArray);
-            EvtDepthValueArrayItem := CreateValueArrayItem(EvtDepthDataArray);
+            EvtSurfaceValueArrayItem := CreateValueArrayItem(AScreenObject,
+              EvtSurfaceDataArray);
+            EvtRateValueArrayItem := CreateValueArrayItem(AScreenObject,
+              EvtRateDataArray);
+            EvtDepthValueArrayItem := CreateValueArrayItem(AScreenObject,
+              EvtDepthDataArray);
           end;
         m6ftCSub:
           begin
-            CSubStressOffsestValueArrayItem := CreateValueArrayItem(CSubStressOffsetDataArray);
+            CSubStressOffsetValueArrayItem := CreateValueArrayItem(AScreenObject,
+              CSubStressOffsetDataArray);
           end;
+        m6ftMaw:
+          begin
+            if MawRateScreenObject <> nil then
+            begin
+              MawRateValueArrayItem := CreateValueArrayItem(MawRateScreenObject,
+                MawRateDataArray);
+            end;
+            if MawFlowingWellScreenObject <> nil then
+            begin
+              MawFwelevValueArrayItem := CreateValueArrayItem(MawFlowingWellScreenObject,
+                MawFwelevDataArray);
+              MawFwcondValueArrayItem := CreateValueArrayItem(MawFlowingWellScreenObject,
+                MawFwcondDataArray);
+              MawFwrlenValueArrayItem := CreateValueArrayItem(MawFlowingWellScreenObject,
+                MawFwrlenDataArray);
+            end;
+            if MawWellHeadScreenObject <> nil then
+            begin
+              MawWell_HeadValueArrayItem := CreateValueArrayItem(MawWellHeadScreenObject,
+                MawWell_HeadDataArray);
+            end;
+            if MawHeadLimitScreenObject <> nil then
+            begin
+              MawHead_limitValueArrayItem := CreateValueArrayItem(MawHeadLimitScreenObject,
+                MawHead_limitDataArray);
+            end;
+            if MawShutOffScreenObject <> nil then
+            begin
+              MawMinRateValueArrayItem := CreateValueArrayItem(MawShutOffScreenObject,
+                MawMinRateDataArray);
+              MawMaxRateValueArrayItem := CreateValueArrayItem(MawShutOffScreenObject,
+                MawMaxRateDataArray);
+            end;
+            if MawRateScalingScreenObject <> nil then
+            begin
+              MawPumpElevationValueArrayItem := CreateValueArrayItem(MawRateScalingScreenObject,
+                MawPumpElevationDataArray);
+              MawScalingLengthValueArrayItem := CreateValueArrayItem(MawRateScalingScreenObject,
+                MawScalingLengthDataArray);
+            end;
+          end
         else
           Assert(False);
       end;
 
-      ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
-      ImportedSectionElevations.Count := FFeatures.Count;
+      ImportedSectionElevations := nil;
+      ImportedMawRateSectionElevations := nil;
+      ImportedMawFlowingWellSectionElevations := nil;
+      ImportedMawConstantHeadSectionElevations := nil;
+      ImportedMawHeadLimitSectionElevations := nil;
+      ImportedMawShutoffSectionElevations := nil;
+      ImportedMawRateScalingSectionElevations := nil;
+      if FFeatureType = m6ftMaw then
+      begin
+        if MawRateScreenObject <> nil then
+        begin
+          ImportedMawRateSectionElevations := MawRateScreenObject.ImportedSectionElevations;
+          ImportedMawRateSectionElevations.Count := MawRateCount;
+        end;
+        if MawFlowingWellScreenObject <> nil then
+        begin
+          ImportedMawFlowingWellSectionElevations := MawFlowingWellScreenObject.ImportedSectionElevations;
+          ImportedMawFlowingWellSectionElevations.Count := MawFlowingWellCount;
+        end;
+        if MawWellHeadScreenObject <> nil then
+        begin
+          ImportedMawConstantHeadSectionElevations := MawWellHeadScreenObject.ImportedSectionElevations;
+          ImportedMawConstantHeadSectionElevations.Count := MawConstantHeadCount;
+        end;
+        if MawHeadLimitScreenObject <> nil then
+        begin
+          ImportedMawHeadLimitSectionElevations := MawHeadLimitScreenObject.ImportedSectionElevations;
+          ImportedMawHeadLimitSectionElevations.Count := MawHeadLimitCount;
+        end;
+        if MawShutOffScreenObject <> nil then
+        begin
+          ImportedMawShutoffSectionElevations := MawShutOffScreenObject.ImportedSectionElevations;
+          ImportedMawShutoffSectionElevations.Count := MawShutoffCount;
+        end;
+        if MawRateScalingScreenObject <> nil then
+        begin
+          ImportedMawRateScalingSectionElevations := MawRateScalingScreenObject.ImportedSectionElevations;
+          ImportedMawRateScalingSectionElevations.Count := MawRateScalingCount;
+        end;
+      end
+      else
+      begin
+        ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
+        ImportedSectionElevations.Count := FFeatures.Count;
+      end;
 
+      Assert(LocalModel.ModelSelection in ModflowSelection);
+
+      MawRateCount := 0;
+      MawFlowingWellCount := 0;
+      MawConstantHeadCount := 0;
+      MawHeadLimitCount := 0;
+      MawShutoffCount := 0;
+      MawRateScalingCount := 0;
       for FeatureIndex := 0 to FFeatures.Count - 1 do
       begin
         AFeature := FFeatures[FeatureIndex];
-        Assert(LocalModel.ModelSelection in ModflowSelection);
         ALocation := LocalModel.CellToPoint(AFeature.Cell, eaBlocks);
         APoint.x := ALocation.x;
         APoint.y := ALocation.y;
-        AScreenObject.AddPoint(APoint, True);
-        ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+        if FFeatureType = m6ftMaw then
+        begin
+        end
+        else
+        begin
+          AScreenObject.AddPoint(APoint, True);
+          ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+        end;
         case FFeatureType of
           m6ftChd:
             begin
@@ -353,8 +657,81 @@ begin
             end;
           m6ftCSub:
             begin
-              CSubStressOffsestValueArrayItem.Values.RealValues[FeatureIndex]
+              CSubStressOffsetValueArrayItem.Values.RealValues[FeatureIndex]
                 := (AFeature as TCSubFeature).Sig0;
+            end;
+          m6ftMAW:
+            begin
+              MawFeature := AFeature as TMawFeature;
+              if MawFeature.MawProperties.Status = mwInactive then
+              begin
+                Continue;
+              end;
+
+              MawRateScreenObject.AddPoint(APoint, True);
+              ImportedMawRateSectionElevations.RealValues
+                [MawRateCount] := ALocation.Z;
+              MawRateValueArrayItem.Values.RealValues[MawRateCount]
+                := MawFeature.MawProperties.Rate;
+              Inc(MawRateCount);
+
+              if MawFeature.MawProperties.FlowingWell then
+              begin
+                MawFlowingWellScreenObject.AddPoint(APoint, True);
+                ImportedMawFlowingWellSectionElevations.RealValues
+                  [MawFlowingWellCount] := ALocation.Z;
+                MawFwelevValueArrayItem.Values.RealValues[MawFlowingWellCount]
+                  := MawFeature.MawProperties.Fwelev;
+                MawFwcondValueArrayItem.Values.RealValues[MawFlowingWellCount]
+                  := MawFeature.MawProperties.Fwcond;
+                MawFwrlenValueArrayItem.Values.RealValues[MawFlowingWellCount]
+                  := MawFeature.MawProperties.Fwrlen;
+                Inc(MawFlowingWellCount);
+              end;
+
+              if MawFeature.MawProperties.Status = mwConstantHead then
+              begin
+                MawWellHeadScreenObject.AddPoint(APoint, True);
+                ImportedMawConstantHeadSectionElevations.RealValues
+                  [MawConstantHeadCount] := ALocation.Z;
+                MawWell_HeadValueArrayItem.Values.RealValues[MawConstantHeadCount]
+                  := MawFeature.MawProperties.Well_Head;
+                Inc(MawConstantHeadCount);
+              end;
+
+              if MawFeature.MawProperties.HeadLimitUsed then
+              begin
+                MawHeadLimitScreenObject.AddPoint(APoint, True);
+                ImportedMawHeadLimitSectionElevations.RealValues
+                  [MawHeadLimitCount] := ALocation.Z;
+                MawHead_limitValueArrayItem.Values.RealValues[MawHeadLimitCount]
+                  := MawFeature.MawProperties.Head_limit;
+                Inc(MawHeadLimitCount);
+              end;
+
+              if MawFeature.MawProperties.ShutOff then
+              begin
+                MawShutOffScreenObject.AddPoint(APoint, True);
+                ImportedMawShutoffSectionElevations.RealValues
+                  [MawShutoffCount] := ALocation.Z;
+                MawMinRateValueArrayItem.Values.RealValues[MawShutoffCount]
+                  := MawFeature.MawProperties.MinRate;
+                MawMaxRateValueArrayItem.Values.RealValues[MawShutoffCount]
+                  := MawFeature.MawProperties.MaxRate;
+                Inc(MawShutoffCount);
+              end;
+
+              if MawFeature.MawProperties.RateScaling then
+              begin
+                MawShutOffScreenObject.AddPoint(APoint, True);
+                ImportedMawRateScalingSectionElevations.RealValues
+                  [MawRateScalingCount] := ALocation.Z;
+                MawPumpElevationValueArrayItem.Values.RealValues[MawRateScalingCount]
+                  := MawFeature.MawProperties.PumpElevation;
+                MawScalingLengthValueArrayItem.Values.RealValues[MawRateScalingCount]
+                  := MawFeature.MawProperties.ScalingLength;
+                Inc(MawRateScalingCount);
+              end;
             end;
           else
             Assert(False);

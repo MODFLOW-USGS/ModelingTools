@@ -25,7 +25,7 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
     Height = 26
     Filter = 
       'MODFLOW 6 Feature files|*.chd; *.wel;*.drn;*.riv;*.ghb;*.rch;*.e' +
-      'vt;*.csub'
+      'vt;*.csub;*.maw6'
     TabOrder = 0
     Text = ''
   end

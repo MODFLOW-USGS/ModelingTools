@@ -219,6 +219,11 @@ resourcestring
   'm bed is %2:g, and the stream bed vertical elevation offset is %3:g. Toge' +
   'ther, these add up to %4:g which is higher than the top of the model (%5:' +
   'g).';
+  StrMaximumSWRTimeSte = 'Maximum SWR time step length too long.';
+  StrTheSWRPackageRequ = 'The SWR package requires that the maximum time ste' +
+  'p length (RTMAX) must be less than or equal to the smallest time step len' +
+  'gth. In your model, the smallest time step length is in stress periond %0' +
+  ':d with a length of %1:g. RTMAX is %2:g';
 //  StrUnusedSWRReachGeo = 'Unused SWR reach geometry';
 //  StrTheSWRReachGeomet = 'The SWR reach geometry named "%s" has not been use' +
 //  'd. This can cause problems for SWR.';
@@ -415,6 +420,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingSWRSt);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInitialSWRStagesN);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheSWRStreamBotto);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMaximumSWRTimeSte);
 
   if Model.ModflowPackages.Mt3dBasic.IsSelected then
   begin
@@ -3821,6 +3827,11 @@ var
   DMAXSTG: double;
   DMAXINF: double;
   Comment: string;
+  StressPeriods: TModflowStressPeriods;
+  MinValue: Double;
+  MinIndex: Integer;
+  StressPeriodIndex: Integer;
+  AValue: Double;
 begin
   case Model.ModflowOptions.LengthUnit of
     1: {feet} DLENCONV :=  3.28081;
@@ -3872,6 +3883,28 @@ begin
 
   WriteString(Comment);
   NewLine;
+
+  StressPeriods := Model.ModflowFullStressPeriods;
+  if StressPeriods.Count > 0 then
+  begin
+    MinValue := StressPeriods[0].LengthOfFirstTimeStep;
+    MinIndex := 0;
+    for StressPeriodIndex := 1 to StressPeriods.Count - 1 do
+    begin
+      AValue := StressPeriods[StressPeriodIndex].LengthOfFirstTimeStep;
+      if AValue < MinValue then
+      begin
+        MinValue := AValue;
+        MinIndex := StressPeriodIndex;
+      end;
+    end;
+
+    if RTMAX > MinValue then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrMaximumSWRTimeSte,
+        Format(StrTheSWRPackageRequ, [MinIndex + 1, MinValue, RTMAX]));
+    end;
+  end;
 
 end;
 

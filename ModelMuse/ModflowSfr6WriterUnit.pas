@@ -73,7 +73,6 @@ type
 //    procedure CheckStage;
   protected
     function Package: TModflowPackageSelection; override;
-    class function Extension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean;
     function ObservationsUsed: Boolean;
     class function ObservationExtension: string;
@@ -87,6 +86,7 @@ type
     property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
     class function ObservationOutputExtension: string;
+    class function Extension: string; override;
   end;
 
 implementation
