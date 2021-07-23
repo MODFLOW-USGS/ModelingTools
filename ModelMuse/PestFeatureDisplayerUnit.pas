@@ -3,7 +3,8 @@ unit PestFeatureDisplayerUnit;
 interface
 
 uses Winapi.Windows, System.UITypes, Modflow6Importer, GoPhastTypes,
-  frmImportShapefileUnit, System.Classes, System.SysUtils;
+  frmImportShapefileUnit, System.Classes, System.SysUtils,
+  System.Generics.Collections;
 
 type
   TUndoImportPestModelFeatureDisplay = class(TUndoImportShapefile)
@@ -30,7 +31,8 @@ implementation
 uses
   ModflowBoundaryDisplayUnit, PhastModelUnit, ScreenObjectUnit, frmGoPhastUnit,
   FastGEO, ValueArrayStorageUnit, DataSetUnit, RbwParser, UndoItems,
-  GIS_Functions, System.Contnrs, AbstractGridUnit, Vcl.Dialogs, ModflowMawUnit;
+  GIS_Functions, System.Contnrs, AbstractGridUnit, Vcl.Dialogs, ModflowMawUnit,
+  ModflowSfr6Unit, ModflowLakMf6Unit;
 
 resourcestring
   StrAnErrorOccurredWh = 'An error occurred while importing the file. Check ' +
@@ -140,17 +142,65 @@ var
   ImportedMawHeadLimitSectionElevations: TValueArrayStorage;
   ImportedMawShutoffSectionElevations: TValueArrayStorage;
   ImportedMawRateScalingSectionElevations: TValueArrayStorage;
+  SfrManningDataArray: TModflowBoundaryDisplayDataArray;
+  SfrStageDataArray: TModflowBoundaryDisplayDataArray;
+  SfrInflowDataArray: TModflowBoundaryDisplayDataArray;
+  SfrRainfallDataArray: TModflowBoundaryDisplayDataArray;
+  SfrEvaporationDataArray: TModflowBoundaryDisplayDataArray;
+  SfrRunoffDataArray: TModflowBoundaryDisplayDataArray;
+  SfrUpstreamFractionDataArray: TModflowBoundaryDisplayDataArray;
+  SfrManningValueArrayItem: TValueArrayItem;
+  SfrStageValueArrayItem: TValueArrayItem;
+  SfrInflowValueArrayItem: TValueArrayItem;
+  SfrRainfallValueArrayItem: TValueArrayItem;
+  SfrEvaporationValueArrayItem: TValueArrayItem;
+  SfrRunoffValueArrayItem: TValueArrayItem;
+  SfrUpstreamFractionValueArrayItem: TValueArrayItem;
+  PointsToDelete: TList<Integer>;
+  SfrFeature: TSfrFeature;
+  PointIndex: Integer;
+  LakStageDataArray: TModflowBoundaryDisplayDataArray;
+  LakRainfallDataArray: TModflowBoundaryDisplayDataArray;
+  LakEvaporationDataArray: TModflowBoundaryDisplayDataArray;
+  LakRunoffDataArray: TModflowBoundaryDisplayDataArray;
+  LakInflowDataArray: TModflowBoundaryDisplayDataArray;
+  LakWithdrawalDataArray: TModflowBoundaryDisplayDataArray;
+  LakStageValueArrayItem: TValueArrayItem;
+  LakRainfallValueArrayItem: TValueArrayItem;
+  LakEvaporationValueArrayItem: TValueArrayItem;
+  LakRunoffValueArrayItem: TValueArrayItem;
+  LakInflowValueArrayItem: TValueArrayItem;
+  LakWithdrawalValueArrayItem: TValueArrayItem;
+  LakFeature: TLakeFeature;
+  UzfInfDataArray: TModflowBoundaryDisplayDataArray;
+  UzfPetDataArray: TModflowBoundaryDisplayDataArray;
+  UzfExtdpDataArray: TModflowBoundaryDisplayDataArray;
+  UzfExtwcDataArray: TModflowBoundaryDisplayDataArray;
+  UzfHaDataArray: TModflowBoundaryDisplayDataArray;
+  UzfHRootDataArray: TModflowBoundaryDisplayDataArray;
+  UzfRootActDataArray: TModflowBoundaryDisplayDataArray;
+  UzfInfValueArrayItem: TValueArrayItem;
+  UzfPetValueArrayItem: TValueArrayItem;
+  UzfExtdpValueArrayItem: TValueArrayItem;
+  UzfExtwcValueArrayItem: TValueArrayItem;
+  UzfHaValueArrayItem: TValueArrayItem;
+  UzfHRootValueArrayItem: TValueArrayItem;
+  UzfRootActValueArrayItem: TValueArrayItem;
+  UzfFeature: TUzfFeature;
   function CreateDataSet(const Root: string;
     Method: TValueAddMethod): TModflowBoundaryDisplayDataArray;
   begin
     result := TModflowBoundaryDisplayDataArray.Create(LocalModel);
     result.Orientation := dso3D;
     result.EvaluatedAt := eaBlocks;
-    result.AddMethod := vamAveragedDelayed;
+    result.AddMethod := Method;
     result.Name := GenerateNewName(Format('%0:s_SP_%1:d',
       [Root, StressPeriod]), InvalidNames, '_');
     result.Formula := '0';
-    (result.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := 0;
+    if Method = vamAveragedDelayed then
+    begin
+      (result.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := 0;
+    end;
     NewDataSets.Add(result);
     LocalModel.UpdateDataArrayDimensions(result);
   end;
@@ -220,6 +270,26 @@ begin
   MawMaxRateDataArray := nil;
   MawPumpElevationDataArray := nil;
   MawScalingLengthDataArray := nil;
+  SfrManningDataArray := nil;
+  SfrStageDataArray := nil;
+  SfrInflowDataArray := nil;
+  SfrRainfallDataArray := nil;
+  SfrEvaporationDataArray := nil;
+  SfrRunoffDataArray := nil;
+  SfrUpstreamFractionDataArray := nil;
+  LakStageDataArray := nil;
+  LakRainfallDataArray := nil;
+  LakEvaporationDataArray := nil;
+  LakRunoffDataArray := nil;
+  LakInflowDataArray := nil;
+  LakWithdrawalDataArray := nil;
+  UzfInfDataArray := nil;
+  UzfPetDataArray := nil;
+  UzfExtdpDataArray := nil;
+  UzfExtwcDataArray := nil;
+  UzfHaDataArray := nil;
+  UzfHRootDataArray := nil;
+  UzfRootActDataArray := nil;
 
   MawRateCount := 0;
   MawFlowingWellCount := 0;
@@ -232,6 +302,7 @@ begin
   InvalidNames:= TStringList.Create;
   NewDataSets := TList.Create;
   ScreenObjectList := TObjectList.Create;
+  PointsToDelete := TList<Integer>.Create;
   Undo := TUndoImportPestModelFeatureDisplay.Create;
   try
     case FFeatureType of
@@ -348,6 +419,38 @@ begin
           end;
           Root := 'MAW';
         end;
+      m6ftSfr:
+        begin
+          SfrManningDataArray := CreateDataSet('SFR_Manning', vamAveragedDelayed);
+          SfrStageDataArray := CreateDataSet('SFR_Stage', vamAveragedDelayed);
+          SfrInflowDataArray := CreateDataSet('SFR_Inflow', vamAddDelayed);
+          SfrRainfallDataArray := CreateDataSet('SFR_Rainfall', vamAddDelayed);
+          SfrEvaporationDataArray := CreateDataSet('SFR_Evaporation', vamAddDelayed);
+          SfrRunoffDataArray := CreateDataSet('SFR_Runoff', vamAddDelayed);
+          SfrUpstreamFractionDataArray := CreateDataSet('SFR_UpstreamFraction', vamAveragedDelayed);
+          Root := 'SFR';
+        end;
+      m6ftLak:
+        begin
+          LakStageDataArray := CreateDataSet('LAK_Stage', vamAveragedDelayed);
+          LakRainfallDataArray := CreateDataSet('LAK_Rainfall', vamAddDelayed);
+          LakEvaporationDataArray := CreateDataSet('LAK_Evaporation', vamAddDelayed);
+          LakRunoffDataArray := CreateDataSet('LAK_Runoff', vamAddDelayed);
+          LakInflowDataArray := CreateDataSet('LAK_Inflow', vamAddDelayed);
+          LakWithdrawalDataArray := CreateDataSet('LAK_Withdrawal', vamAddDelayed);
+          Root := 'LAK';
+        end;
+      m6ftUzf:
+        begin
+          UzfInfDataArray := CreateDataSet('UZF_Infiltration', vamAddDelayed);
+          UzfPetDataArray := CreateDataSet('UZF_PotentialEvapotranspiration', vamAddDelayed);
+          UzfExtdpDataArray := CreateDataSet('UZF_ET_ExtinctionDepth', vamAveragedDelayed);
+          UzfExtwcDataArray := CreateDataSet('UZF_ET_ExtinctionWaterContent', vamAveragedDelayed);
+          UzfHaDataArray := CreateDataSet('UZF_AirEntryPotential', vamAveragedDelayed);
+          UzfHRootDataArray := CreateDataSet('UZF_RootPotential', vamAveragedDelayed);
+          UzfRootActDataArray := CreateDataSet('UZF_RootActivityFunction', vamAveragedDelayed);
+          Root := 'UZF';
+        end;
       else
         Assert(False);
     end;
@@ -379,6 +482,26 @@ begin
     MawMaxRateValueArrayItem := nil;
     MawPumpElevationValueArrayItem := nil;
     MawScalingLengthValueArrayItem := nil;
+    SfrManningValueArrayItem := nil;
+    SfrStageValueArrayItem := nil;
+    SfrInflowValueArrayItem := nil;
+    SfrRainfallValueArrayItem := nil;
+    SfrEvaporationValueArrayItem := nil;
+    SfrRunoffValueArrayItem := nil;
+    SfrUpstreamFractionValueArrayItem := nil;
+    LakStageValueArrayItem := nil;
+    LakRainfallValueArrayItem := nil;
+    LakEvaporationValueArrayItem := nil;
+    LakRunoffValueArrayItem := nil;
+    LakInflowValueArrayItem := nil;
+    LakWithdrawalValueArrayItem := nil;
+    UzfInfValueArrayItem := nil;
+    UzfPetValueArrayItem := nil;
+    UzfExtdpValueArrayItem := nil;
+    UzfExtwcValueArrayItem := nil;
+    UzfHaValueArrayItem := nil;
+    UzfHRootValueArrayItem := nil;
+    UzfRootActValueArrayItem := nil;
 
     AFeature := nil;
     try
@@ -534,7 +657,56 @@ begin
               MawScalingLengthValueArrayItem := CreateValueArrayItem(MawRateScalingScreenObject,
                 MawScalingLengthDataArray);
             end;
-          end
+          end;
+        m6ftSfr:
+          begin
+            SfrManningValueArrayItem := CreateValueArrayItem(AScreenObject,
+              SfrManningDataArray);
+            SfrStageValueArrayItem := CreateValueArrayItem(AScreenObject,
+              SfrStageDataArray);
+            SfrInflowValueArrayItem := CreateValueArrayItem(AScreenObject,
+              SfrInflowDataArray);
+            SfrRainfallValueArrayItem := CreateValueArrayItem(AScreenObject,
+              SfrRainfallDataArray);
+            SfrEvaporationValueArrayItem := CreateValueArrayItem(AScreenObject,
+              SfrEvaporationDataArray);
+            SfrRunoffValueArrayItem := CreateValueArrayItem(AScreenObject,
+              SfrRunoffDataArray);
+            SfrUpstreamFractionValueArrayItem := CreateValueArrayItem(AScreenObject,
+              SfrUpstreamFractionDataArray);
+          end;
+        m6ftLak:
+          begin
+            LakStageValueArrayItem := CreateValueArrayItem(AScreenObject,
+              LakStageDataArray);
+            LakRainfallValueArrayItem := CreateValueArrayItem(AScreenObject,
+              LakRainfallDataArray);
+            LakEvaporationValueArrayItem := CreateValueArrayItem(AScreenObject,
+              LakEvaporationDataArray);
+            LakRunoffValueArrayItem := CreateValueArrayItem(AScreenObject,
+              LakRunoffDataArray);
+            LakInflowValueArrayItem := CreateValueArrayItem(AScreenObject,
+              LakInflowDataArray);
+            LakWithdrawalValueArrayItem := CreateValueArrayItem(AScreenObject,
+              LakWithdrawalDataArray);
+          end;
+        m6ftUzf:
+          begin
+            UzfInfValueArrayItem := CreateValueArrayItem(AScreenObject,
+              UzfInfDataArray);
+            UzfPetValueArrayItem := CreateValueArrayItem(AScreenObject,
+              UzfPetDataArray);
+            UzfExtdpValueArrayItem := CreateValueArrayItem(AScreenObject,
+              UzfExtdpDataArray);
+            UzfExtwcValueArrayItem := CreateValueArrayItem(AScreenObject,
+              UzfExtwcDataArray);
+            UzfHaValueArrayItem := CreateValueArrayItem(AScreenObject,
+              UzfHaDataArray);
+            UzfHRootValueArrayItem := CreateValueArrayItem(AScreenObject,
+              UzfHRootDataArray);
+            UzfRootActValueArrayItem := CreateValueArrayItem(AScreenObject,
+              UzfRootActDataArray);
+          end;
         else
           Assert(False);
       end;
@@ -599,10 +771,7 @@ begin
         ALocation := LocalModel.CellToPoint(AFeature.Cell, eaBlocks);
         APoint.x := ALocation.x;
         APoint.y := ALocation.y;
-        if FFeatureType = m6ftMaw then
-        begin
-        end
-        else
+        if FFeatureType <> m6ftMaw then
         begin
           AScreenObject.AddPoint(APoint, True);
           ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
@@ -733,8 +902,76 @@ begin
                 Inc(MawRateScalingCount);
               end;
             end;
+          m6ftSfr:
+            begin
+              SfrFeature := AFeature as TSfrFeature;
+              if SfrFeature.Status = ssInactive then
+              begin
+                PointsToDelete.Add(FeatureIndex);
+              end;
+              SfrManningValueArrayItem.Values.RealValues[FeatureIndex]
+                := SfrFeature.MANNING;
+              SfrStageValueArrayItem.Values.RealValues[FeatureIndex]
+                := SfrFeature.STAGE;
+              SfrInflowValueArrayItem.Values.RealValues[FeatureIndex]
+                := SfrFeature.INFLOW;
+              SfrRainfallValueArrayItem.Values.RealValues[FeatureIndex]
+                := SfrFeature.RAINFALL;
+              SfrEvaporationValueArrayItem.Values.RealValues[FeatureIndex]
+                := SfrFeature.EVAPORATION;
+              SfrRunoffValueArrayItem.Values.RealValues[FeatureIndex]
+                := SfrFeature.RUNOFF;
+              SfrUpstreamFractionValueArrayItem.Values.RealValues[FeatureIndex]
+                := SfrFeature.UPSTREAM_FRACTION;
+            end;
+          m6ftLak:
+            begin
+              LakFeature := AFeature as TLakeFeature;
+              if LakFeature.LakeProperties.Status = lsInactive then
+              begin
+                PointsToDelete.Add(FeatureIndex);
+              end;
+              LakStageValueArrayItem.Values.RealValues[FeatureIndex]
+                := LakFeature.LakeProperties.Stage;
+              LakRainfallValueArrayItem.Values.RealValues[FeatureIndex]
+                := LakFeature.LakeProperties.RAINFALL;
+              LakEvaporationValueArrayItem.Values.RealValues[FeatureIndex]
+                := LakFeature.LakeProperties.EVAPORATION;
+              LakRunoffValueArrayItem.Values.RealValues[FeatureIndex]
+                := LakFeature.LakeProperties.RUNOFF;
+              LakInflowValueArrayItem.Values.RealValues[FeatureIndex]
+                := LakFeature.LakeProperties.INFLOW;
+              LakWithdrawalValueArrayItem.Values.RealValues[FeatureIndex]
+                := LakFeature.LakeProperties.WITHDRAWAL;
+            end;
+          m6ftUzf:
+            begin
+              UzfFeature := AFeature as TUzfFeature;
+              UzfInfValueArrayItem.Values.RealValues[FeatureIndex]
+                := UzfFeature.Finf;
+              UzfPetValueArrayItem.Values.RealValues[FeatureIndex]
+                := UzfFeature.Pet;
+              UzfExtdpValueArrayItem.Values.RealValues[FeatureIndex]
+                := UzfFeature.Extdp;
+              UzfExtwcValueArrayItem.Values.RealValues[FeatureIndex]
+                := UzfFeature.Extwc;
+              UzfHaValueArrayItem.Values.RealValues[FeatureIndex]
+                := UzfFeature.Ha;
+              UzfHRootValueArrayItem.Values.RealValues[FeatureIndex]
+                := UzfFeature.HRoot;
+              UzfRootActValueArrayItem.Values.RealValues[FeatureIndex]
+                := UzfFeature.RootAct;
+            end;
           else
             Assert(False);
+        end;
+      end;
+
+      if FFeatureType in [m6ftSfr, m6ftLak] then
+      begin
+        for PointIndex := PointsToDelete.Count - 1 downto 0 do
+        begin
+          AScreenObject.DeletePoint(PointsToDelete[PointIndex]);
         end;
       end;
 
@@ -766,10 +1003,10 @@ begin
           MessageDlg(StrAnErrorOccurredWh, mtError, [mbOK], 0);
         end;
       end;
-
     end;
 
   finally
+    PointsToDelete.Free;
     ScreenObjectList.Free;
     NewDataSets.Free;
     Undo.Free;

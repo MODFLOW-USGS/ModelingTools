@@ -7,7 +7,8 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.IOUtils, ModflowCellUnit,
-  System.Generics.Collections, ModflowMawUnit, ModflowSfr6Unit;
+  System.Generics.Collections, ModflowMawUnit, ModflowSfr6Unit,
+  ModflowLakMf6Unit;
 
 type
   TModflow6Feature = class(TObject)
@@ -153,9 +154,59 @@ type
     constructor Create;
   end;
 
+  TLakeRecord = record
+  private
+    FRAINFALL: double;
+    FRUNOFF: double;
+    FStatus: TLakeStatus;
+    FWITHDRAWAL: double;
+    FINFLOW: double;
+    FEVAPORATION: double;
+    FStage: double;
+  public
+    property Status: TLakeStatus read FStatus;
+    property Stage: double read FStage;
+    property RAINFALL: double read FRAINFALL;
+    property EVAPORATION: double read FEVAPORATION;
+    property RUNOFF: double read FRUNOFF;
+    property INFLOW: double read FINFLOW;
+    property WITHDRAWAL: double read FWITHDRAWAL;
+//    property RATE: double read FRATE;
+//    property INVERT: double read FINVERT;
+//    property WIDTH: double read FWIDTH;
+//    property SLOPE: double read FSLOPE;
+//    property ROUGH: double read FROUGH;
+    procedure Initialize;
+  end;
+
+  TLakeFeature = class(TModflow6Feature)
+  private
+    FLakeProperties: TLakeRecord;
+  public
+    property LakeProperties: TLakeRecord read FLakeProperties;
+  end;
+
+  TUzfFeature = class(TModflow6Feature)
+  private
+    FExtwc: double;
+    FExtdp: double;
+    FPet: double;
+    FRootAct: double;
+    FHa: double;
+    FFinf: double;
+    FHRoot: double;
+  public
+    property Finf :double read FFinf;
+    property Pet :double read FPet;
+    property Extdp :double read FExtdp;
+    property Extwc :double read FExtwc;
+    property Ha :double read FHa;
+    property HRoot :double read FHRoot;
+    property RootAct :double read FRootAct;
+  end;
 
   TModflow6FeatureType = (m6ftChd, m6ftWell, m6ftDrn, m6ftRiv, m6ftGhb,
-    m6ftRch, m6ftEvt, m6ftCSub, m6ftMAW, m6ftSFR);
+    m6ftRch, m6ftEvt, m6ftCSub, m6ftMAW, m6ftSFR, m6ftLak, m6ftUzf);
   TModflow6GridType = (m6gtStructured, mggrDisv);
 
   TModflow6FileReader = class (TObject)
@@ -169,6 +220,12 @@ type
     FMawWellProperties: array of TMawRecord;
     FNumberOfReaches: Integer;
     FSfrFeatures: TObjectList<TSfrFeature>;
+    FLakeProperties: array of TLakeRecord;
+    FNumberOfLakes: integer;
+    FLakeCells: array of array of TCellLocation;
+    FNumberOfLakeCells: Integer;
+    FUzfCells: array of TCellLocation;
+    FNumberUzfCells: Integer;
     {
     @name removes comments from a line and converts it to upper case.
     If the entire line is a comment, @name returns an empty string.
@@ -192,6 +249,8 @@ type
     function ReadACSubFeature(const Splitter: TStringList): TCSubFeature;
     function ReadAMawFeature(const Splitter: TStringList): TMawFeature;
     function ReadASfrFeature(const Splitter: TStringList): TSfrFeature;
+    function ReadALakFeature(const Splitter: TStringList): TSfrFeature;
+    function ReadAUzfFeature(const Splitter: TStringList): TUzfFeature;
     procedure ReadCell(Splitter: TStringList; AFeature: TModflow6Feature);
     procedure ReadNumberOfMawWells;
     procedure ReadMawWellCells;
@@ -201,7 +260,14 @@ type
     procedure ReadNumberOfSfrCells;
     procedure ReadSfrCells;
     function GetNumberOfItems(SearchItem: string): Integer;
-    procedure FinalizeSfrProperties(FeatureList: TModflowFeatureList);
+    procedure FinalizeSfrFeatures(FeatureList: TModflowFeatureList);
+    procedure ReadNumberOfLakes;
+    procedure ReadNumberOfCellsPerLake;
+    procedure ReadLakCells;
+    procedure FinalizeLakeFeatures(FeatureList: TModflowFeatureList);
+    procedure InitializeLakeProperties;
+    procedure ReadNumberOfUzfCells;
+    procedure ReadUzfCells;
   public
     constructor Create(GridType: TModflow6GridType);
     procedure OpenFile(const FileName: string);
@@ -216,7 +282,8 @@ uses
   ModflowWellWriterUnit, ModelMuseUtilities, ModflowCHD_WriterUnit,
   ModflowDRN_WriterUnit, ModflowRiverWriterUnit, ModflowGHB_WriterUnit,
   ModflowRCH_WriterUnit, ModflowETS_WriterUnit, ModflowCSubWriterUnit,
-  ModflowMawWriterUnit, ModflowSfr6WriterUnit;
+  ModflowMawWriterUnit, ModflowSfr6WriterUnit, ModflowLakMf6WriterUnit,
+  ModflowUzfMf6WriterUnit;
 
 { TModflow6FileReader }
 
@@ -291,6 +358,26 @@ begin
   result := UpperCase(result);
 end;
 
+procedure TModflow6FileReader.FinalizeLakeFeatures(
+  FeatureList: TModflowFeatureList);
+var
+  LakeIndex: Integer;
+  CellIndex: Integer;
+  LakFeature: TLakeFeature;
+begin
+  FeatureList.Clear;
+  for LakeIndex := 0 to Length(FLakeProperties) - 1 do
+  begin
+    for CellIndex := 0 to Length(FLakeCells[LakeIndex]) - 1 do
+    begin
+      LakFeature := TLakeFeature.Create;
+      LakFeature.FCell := FLakeCells[LakeIndex, CellIndex];
+      LakFeature.FLakeProperties := FLakeProperties[LakeIndex];
+      FeatureList.Add(LakFeature);
+    end;
+  end;
+end;
+
 procedure TModflow6FileReader.FinalizeMawFeatures(
   FeatureList: TModflowFeatureList);
 var
@@ -311,7 +398,7 @@ begin
   end;
 end;
 
-procedure TModflow6FileReader.FinalizeSfrProperties(FeatureList: TModflowFeatureList);
+procedure TModflow6FileReader.FinalizeSfrFeatures(FeatureList: TModflowFeatureList);
 var
   Index: Integer;
 begin
@@ -322,6 +409,16 @@ begin
     FeatureList.Add(FSfrFeatures[Index]);
   end;
   FSfrFeatures.OwnsObjects := False;
+end;
+
+procedure TModflow6FileReader.InitializeLakeProperties;
+var
+  Index: Integer;
+begin
+  for Index := 0 to Length(FLakeProperties) - 1 do
+  begin
+    FLakeProperties[Index].Initialize;
+  end;
 end;
 
 procedure TModflow6FileReader.InitializeMawWellProperties;
@@ -403,6 +500,14 @@ begin
   else if SameText(FileExtension, TModflowSFR_MF6_Writer.Extension) then
   begin
     FFeatureType := m6ftSfr;
+  end
+  else if SameText(FileExtension, TModflowLAKMf6Writer.Extension) then
+  begin
+    FFeatureType := m6ftLak;
+  end
+  else if SameText(FileExtension, TModflowUzfMf6Writer.Extension) then
+  begin
+    FFeatureType := m6ftUzf;
   end
   else
   begin
@@ -556,6 +661,8 @@ begin
     m6ftCSub: result := ReadACSubFeature(Splitter);
     m6ftMaw: result := ReadAMawFeature(Splitter);
     m6ftSfr: result := ReadASfrFeature(Splitter);
+    m6ftLak: result := ReadALakFeature(Splitter);
+    m6ftUzf: result := ReadAUzfFeature(Splitter);
     else
       Assert(False);
   end;
@@ -592,6 +699,65 @@ begin
     else
       Assert(False);
   end;
+end;
+
+function TModflow6FileReader.ReadALakFeature(
+  const Splitter: TStringList): TSfrFeature;
+var
+  LakeNo: Integer;
+  KeyWord: string;
+  Status: string;
+begin
+  result := nil;
+  Assert(Splitter.Count >= 3);
+  LakeNo := StrToInt(Splitter[0]);
+  Assert(LakeNo >0);
+  Assert(LakeNo <= FNumberOfLakes);
+  KeyWord := UpperCase(Splitter[1]);
+  if KeyWord = 'STATUS' then
+  begin
+    Status := UpperCase(Splitter[2]);
+    if Status = 'ACTIVE' then
+    begin
+      FLakeProperties[LakeNo-1].FStatus := lsActive;
+    end
+    else if Status = 'INACTIVE' then
+    begin
+      FLakeProperties[LakeNo-1].FStatus := lsInactive;
+    end
+    else if Status = 'CONSTANT' then
+    begin
+      FLakeProperties[LakeNo-1].FStatus := lsConstant;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end
+  else if KeyWord = 'STAGE' then
+  begin
+    FLakeProperties[LakeNo-1].FSTAGE := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'RAINFALL' then
+  begin
+    FLakeProperties[LakeNo-1].FRAINFALL := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'EVAPORATION' then
+  begin
+    FLakeProperties[LakeNo-1].FEVAPORATION := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'RUNOFF' then
+  begin
+    FLakeProperties[LakeNo-1].FRUNOFF := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'INFLOW' then
+  begin
+    FLakeProperties[LakeNo-1].FINFLOW := FortranStrToFloat(Splitter[2]);
+  end
+  else if KeyWord = 'WITHDRAWAL' then
+  begin
+    FLakeProperties[LakeNo-1].FWITHDRAWAL := FortranStrToFloat(Splitter[2]);
+  end
 end;
 
 function TModflow6FileReader.ReadAMawFeature(
@@ -787,6 +953,24 @@ begin
   end;
 end;
 
+function TModflow6FileReader.ReadAUzfFeature(
+  const Splitter: TStringList): TUzfFeature;
+var
+  UzfNo: Integer;
+begin
+  Assert(Splitter .Count >= 8);
+  result := TUzfFeature.Create;
+  UzfNo := StrToInt(Splitter[0]);
+  result.Cell := FUzfCells[UzfNo-1];
+  result.FFinf := FortranStrToFloat(Splitter[1]);
+  result.FPet := FortranStrToFloat(Splitter[2]);
+  result.FExtdp := FortranStrToFloat(Splitter[3]);
+  result.FExtwc := FortranStrToFloat(Splitter[4]);
+  result.FHa := FortranStrToFloat(Splitter[5]);
+  result.FHRoot := FortranStrToFloat(Splitter[6]);
+  result.FRootAct := FortranStrToFloat(Splitter[7]);
+end;
+
 function TModflow6FileReader.ReadAWellFeature(
   const Splitter: TStringList): TWellFeature;
 begin
@@ -839,6 +1023,68 @@ begin
       Assert(False);
   end;
 
+end;
+
+procedure TModflow6FileReader.ReadLakCells;
+var
+  Count: Integer;
+  ALine: string;
+  Splitter: TStringList;
+  ACell: TCellLocation;
+  LakeNo: Integer;
+  ICon: Integer;
+begin
+  Splitter := TStringList.Create;
+  try
+    Count := 0;
+    while (Count < FNumberOfLakeCells) and (not FInputFile.EndOfStream) do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      Splitter.DelimitedText := ALine;
+      case FGridType of
+        m6gtStructured:
+          begin
+            Assert(Splitter.Count >= 5);
+          end;
+        mggrDisv:
+          begin
+            Assert(Splitter.Count >= 4);
+          end;
+        else
+          Assert(False);
+      end;
+      LakeNo := StrToInt(Splitter[0]);
+      Assert(LakeNo > 0);
+      Assert(LakeNo <= FNumberOfLakes);
+      ICon := StrToInt(Splitter[1]);
+      Assert(ICon > 0);
+      Assert(Icon <= Length(FLakeCells[LakeNo-1]));
+      case FGridType of
+        m6gtStructured:
+          begin
+            ACell.Layer := StrToInt(Splitter[2]);
+            ACell.Row := StrToInt(Splitter[3]);
+            ACell.Column := StrToInt(Splitter[4]);
+          end;
+        mggrDisv:
+          begin
+            ACell.Layer := StrToInt(Splitter[2]);
+            ACell.Row := 1;
+            ACell.Column := StrToInt(Splitter[3]);
+          end;
+        else
+          Assert(False);
+      end;
+      FLakeCells[LakeNo-1, ICon-1] := ACell;
+      Inc(Count);
+    end;
+  finally
+    Splitter.Free;
+  end;
 end;
 
 procedure TModflow6FileReader.ReadMawWellCells;
@@ -939,11 +1185,56 @@ begin
   end;
 end;
 
+procedure TModflow6FileReader.ReadNumberOfCellsPerLake;
+var
+  LakeNo: Integer;
+  Splitter: TStringList;
+  ALine: string;
+  Count: Integer;
+  nlakeconn: Integer;
+begin
+  FNumberOfLakeCells := 0;
+  Count := 0;
+  Splitter := TStringList.Create;
+  try
+    while (Count < FNumberOfLakes) and not FInputFile.EndOfStream do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      Splitter.DelimitedText := ALine;
+      Assert(Splitter.Count >= 3);
+      LakeNo := StrToInt(Splitter[0]);
+      Assert(LakeNo > 0);
+      Assert(LakeNo <= FNumberOfLakes);
+      nlakeconn := StrToInt(Splitter[2]);
+      Inc(FNumberOfLakeCells, nlakeconn);
+      SetLength(FLakeCells[LakeNo-1], nlakeconn);
+      Inc(Count);
+
+      Assert(not IsEndOfSection(ALine));
+    end;
+  finally
+    Splitter.Free;
+  end;
+end;
+
+procedure TModflow6FileReader.ReadNumberOfLakes;
+begin
+  FNumberOfLakes := GetNumberOfItems('NLAKES');
+  SetLength(FLakeCells, FNumberOfLakes);
+  SetLength(FLakeProperties, FNumberOfLakes);
+  InitializeLakeProperties;
+end;
+
 procedure TModflow6FileReader.ReadNumberOfMawWells;
 begin
   FNumberOfMawWells := GetNumberOfItems('NMAWWELLS');
   SetLength(FMawWellCells, FNumberOfMawWells);
   SetLength(FMawWellProperties, FNumberOfMawWells);
+  InitializeMawWellProperties;
 end;
 
 procedure TModflow6FileReader.ReadNumberOfSfrCells;
@@ -956,6 +1247,12 @@ begin
   begin
     FSfrFeatures.Add(TSfrFeature.Create);
   end;
+end;
+
+procedure TModflow6FileReader.ReadNumberOfUzfCells;
+begin
+  FNumberUzfCells := GetNumberOfItems('NUZFCELLS');
+  SetLength(FUzfCells, FNumberUzfCells);
 end;
 
 procedure TModflow6FileReader.ReadSfrCells;
@@ -1036,10 +1333,6 @@ var
     end;
   end;
 begin
-  if FFeatureType = m6ftMAW then
-  begin
-    InitializeMawWellProperties;
-  end;
   Splitter := TStringList.Create;
   try
     result := TModflowFeatureList.Create;
@@ -1065,6 +1358,14 @@ begin
           else if FFeatureType = m6ftSfr then
           begin
             ReadNumberOfSfrCells;
+          end
+          else if FFeatureType = m6ftLak then
+          begin
+            ReadNumberOfLakes;
+          end
+          else if FFeatureType = m6ftUzf then
+          begin
+            ReadNumberOfUzfCells;
           end;
           SkipToEndOfSection;
         end
@@ -1081,6 +1382,14 @@ begin
           else if FFeatureType = m6ftSfr then
           begin
             ReadSfrCells;
+          end
+          else if FFeatureType = m6ftLak then
+          begin
+            ReadNumberOfCellsPerLake;
+          end
+          else if FFeatureType = m6ftUzf then
+          begin
+            ReadUzfCells
           end;
           SkipToEndOfSection;
         end
@@ -1089,7 +1398,19 @@ begin
           if FFeatureType = m6ftMAW then
           begin
             ReadMawWellCells;
+          end
+          else if FFeatureType = m6ftLak then
+          begin
+            ReadLakCells;
           end;
+          SkipToEndOfSection;
+        end
+        else if SameText(Section, 'TABLES') then
+        begin
+          SkipToEndOfSection;
+        end
+        else if SameText(Section, 'OUTLETS') then
+        begin
           SkipToEndOfSection;
         end
         else
@@ -1133,12 +1454,74 @@ begin
     end
     else if FFeatureType = m6ftSfr then
     begin
-      FinalizeSfrProperties(result);
+      FinalizeSfrFeatures(result);
+    end
+    else if FFeatureType = m6ftLak then
+    begin
+      FinalizeLakeFeatures(result);
     end;
   finally
     Splitter.Free;
   end;
 
+end;
+
+procedure TModflow6FileReader.ReadUzfCells;
+var
+  Count: Integer;
+  ALine: string;
+  Splitter: TStringList;
+  ACell: TCellLocation;
+  UzfNo: Integer;
+begin
+  Splitter := TStringList.Create;
+  try
+    Count := 0;
+    while (Count < FNumberUzfCells) and (not FInputFile.EndOfStream) do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      Splitter.DelimitedText := ALine;
+      case FGridType of
+        m6gtStructured:
+          begin
+            Assert(Splitter.Count >= 4);
+          end;
+        mggrDisv:
+          begin
+            Assert(Splitter.Count >= 4);
+          end;
+        else
+          Assert(False);
+      end;
+      UzfNo := StrToInt(Splitter[0]);
+      Assert(UzfNo > 0);
+      Assert(UzfNo <= FNumberUzfCells);
+      case FGridType of
+        m6gtStructured:
+          begin
+            ACell.Layer := StrToInt(Splitter[1]);
+            ACell.Row := StrToInt(Splitter[2]);
+            ACell.Column := StrToInt(Splitter[3]);
+          end;
+        mggrDisv:
+          begin
+            ACell.Layer := StrToInt(Splitter[1]);
+            ACell.Row := 1;
+            ACell.Column := StrToInt(Splitter[2]);
+          end;
+        else
+          Assert(False);
+      end;
+      FUzfCells[UzfNo-1] := ACell;
+      Inc(Count);
+    end;
+  finally
+    Splitter.Free;
+  end;
 end;
 
 { TMawRecord }
@@ -1158,6 +1541,18 @@ end;
 constructor TSfrFeature.Create;
 begin
   FStatus := ssActive;
+end;
+
+{ TLakeRecord }
+
+procedure TLakeRecord.Initialize;
+begin
+  FStatus := lsActive;
+  FRAINFALL := 0;
+  FEVAPORATION := 0;
+  FRUNOFF := 0;
+  FINFLOW := 0;
+  FWITHDRAWAL := 0;
 end;
 
 end.

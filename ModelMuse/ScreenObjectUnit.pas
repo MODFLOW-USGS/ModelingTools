@@ -5438,6 +5438,10 @@ resourcestring
   ' wrong type.';
   StrTheFormulaForUse = 'The formula for "Used" must result in a Boolean val' +
   'ue.';
+  StrTheDataSet0s = 'The data set "%0:s" does not have the correct data type' +
+  ' where it is being used by the object "%1:s."';
+  StrTheGlobalVariable = 'The global variable "%0:s" does not have the corre' +
+  'ct data type where it is being used by the object "%1:s."';
 
 const
   SquareSize = 3;
@@ -18263,7 +18267,12 @@ begin
       if AnotherDataSet <> nil then
       begin
         Assert(AnotherDataSet <> DataSet);
-        Assert(AnotherDataSet.DataType = Variable.ResultType);
+        if AnotherDataSet.DataType <> Variable.ResultType then
+        begin
+          raise EInvalidDataType.Create(Format(StrTheDataSet0s,
+            [AnotherDataSet.Name, Name]), AnotherDataSet.Name);
+        end;
+//        Assert(AnotherDataSet.DataType = Variable.ResultType);
         AnotherDataSet.Initialize;
         LocalModel.DataArrayManager.AddDataSetToCache(AnotherDataSet);
       end
@@ -18271,7 +18280,12 @@ begin
       begin
         GlobalVariable := LocalModel.GlobalVariables.GetVariableByName(VarName);
         Assert(GlobalVariable <> nil);
-        Assert(Variable.ResultType = GlobalVariable.Format);
+        if Variable.ResultType <> GlobalVariable.Format then
+        begin
+          raise EInvalidDataType.Create(Format(StrTheGlobalVariable,
+            [GlobalVariable.Name, Name]), GlobalVariable.Name);
+        end;
+//        Assert(Variable.ResultType = GlobalVariable.Format);
       end;
     end;
   end;
@@ -32182,17 +32196,17 @@ begin
     end;
 
     try
-    case ViewDirection of
-      vdTop: AssignValuesToTopDataSet(DataSet, OtherData, AModel);
-      vdFront: AssignValuesToFrontDataSet(DataSet, OtherData, AModel,
-        UseLgrEdgeCells);
-      vdSide: AssignValuesToSideDataSet(DataSet, OtherData, AModel,
-        UseLgrEdgeCells);
-      else
-        begin
-          Assert(False);
-        end;
-    end;
+      case ViewDirection of
+        vdTop: AssignValuesToTopDataSet(DataSet, OtherData, AModel);
+        vdFront: AssignValuesToFrontDataSet(DataSet, OtherData, AModel,
+          UseLgrEdgeCells);
+        vdSide: AssignValuesToSideDataSet(DataSet, OtherData, AModel,
+          UseLgrEdgeCells);
+        else
+          begin
+            Assert(False);
+          end;
+      end;
     except on E: EInvalidDataType do
       begin
         frmFormulaErrors.AddFormulaError(self.Name, DataSet.Name, E.Formula, E.Message);

@@ -194,7 +194,6 @@ type
     procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
-    class function Extension: string; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -203,6 +202,7 @@ type
     property DirectObsLines: TStrings read FDirectObsLines write FDirectObsLines;
     property CalculatedObsLines: TStrings read FCalculatedObsLines write FCalculatedObsLines;
     property FileNameLines: TStrings read FFileNameLines write FFileNameLines;
+    class function Extension: string; override;
   end;
 
 

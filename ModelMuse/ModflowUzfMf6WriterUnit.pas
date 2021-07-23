@@ -53,7 +53,6 @@ type
       AssignmentMethod: TUpdateMethod;
       MultiplierArrayNames: TTransientMultCollection;
       ZoneArrayNames: TTransientZoneCollection); override;
-    class function Extension: string; override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; reintroduce;
     function ObservationsUsed: Boolean;  reintroduce;
     class function ObservationExtension: string;  override;
@@ -63,6 +62,7 @@ type
     Destructor Destroy; override;
     procedure WriteFile(const AFileName: string);
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
+    class function Extension: string; override;
   end;
 implementation
 
