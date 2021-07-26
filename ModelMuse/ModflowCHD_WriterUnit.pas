@@ -86,6 +86,10 @@ resourcestring
   StrTwoSpecifiedHead = 'Two specified head (CHD) boundaries are defined in ' +
   'cell (Layer,Row,Column = (%0:d,%1:d,%2:d) by the objects "%3:s" and "%4:s' +
   '".';
+  StrCHDPackageIncompat = 'CHD package incompatible with SWR option ISWRONLY';
+  StrBecauseTheCHDPack = 'Because the CHD package can not be used with the S' +
+  'WR package when only surface water routing is used, the CHD package will ' +
+  'not be included in this model.';
 //  StrWritingDataSet0 = '  Writing Data Set 0.';
 //  StrWritingDataSet1 = '  Writing Data Set 1.';
 //  StrWritingDataSet2 = '  Writing Data Set 2.';
@@ -363,10 +367,23 @@ var
 //  NameOfFile: string;
   ShouldWriteObservationFile: Boolean;
 begin
+  FrmErrorsAndWarnings.RemoveWarningGroup(Model, StrCHDPackageIncompat);
+
   if not Package.IsSelected then
   begin
     Exit
   end;
+
+  if (Model.ModelSelection <> msModflow2015)
+    and Model.ModflowPackages.SwrPackage.IsSelected
+    and (Model.ModflowPackages.SwrPackage.OnlyUseSWR) then
+  begin
+    FrmErrorsAndWarnings.AddWarning(Model, StrCHDPackageIncompat,
+      StrBecauseTheCHDPack);
+    Exit;
+  end;
+
+
   if Model.ModelSelection = msModflow2015 then
   begin
     FAbbreviation := 'CHD6';

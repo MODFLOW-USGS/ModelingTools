@@ -730,7 +730,8 @@ uses
   frmSupCalcUnit in 'frmSupCalcUnit.pas' {frmSupCalc},
   Modflow6Importer in 'Modflow6Importer.pas',
   PestFeatureDisplayerUnit in 'PestFeatureDisplayerUnit.pas',
-  frmImportModflow6FeatureModifiedByPestUnit in 'frmImportModflow6FeatureModifiedByPestUnit.pas' {frmImportModflow6FeatureModifiedByPest};
+  frmImportModflow6FeatureModifiedByPestUnit in 'frmImportModflow6FeatureModifiedByPestUnit.pas' {frmImportModflow6FeatureModifiedByPest},
+  ImportSutraUnit in 'ImportSutraUnit.pas';
 
 {$R *.res}
 

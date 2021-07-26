@@ -66,6 +66,10 @@ resourcestring
   'ject %0:s, was after the last time in the model';
   StrOneOrMoreOfTheSpecFlow = 'One or more of the specified flow times in ob' +
   'ject %0:s, was after the last time in the model';
+  StrFHBPackageIncompat = 'FHB package incompatible with SWR option ISWRONLY';
+  StrBecauseTheFHBPack = 'Because the FHB package can not be used with the S' +
+  'WR package when only surface water routing is used, the FHB package will ' +
+  'not be included in this model.';
 
 { TModflowFhbWriter }
 
@@ -893,10 +897,22 @@ end;
 
 procedure TModflowFhbWriter.WriteFile(const AFileName: string);
 begin
+  FrmErrorsAndWarnings.RemoveWarningGroup(Model, StrFhbPackageIncompat);
+
   if not Package.IsSelected then
   begin
     Exit
   end;
+
+  if (Model.ModelSelection <> msModflow2015)
+    and Model.ModflowPackages.SwrPackage.IsSelected
+    and (Model.ModflowPackages.SwrPackage.OnlyUseSWR) then
+  begin
+    FrmErrorsAndWarnings.AddWarning(Model, StrFhbPackageIncompat,
+      StrBecauseTheFhbPack);
+    Exit;
+  end;
+
   if Model.PackageGeneratedExternally(StrFHB) then
   begin
     Exit;
