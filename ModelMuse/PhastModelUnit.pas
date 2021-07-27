@@ -10312,6 +10312,8 @@ const
 
 //               Bug fix: Fixed renaming of data sets associated with MODFLOW
 //                parameters when the parameters are renamed.
+//               Bug fix: (not in released version) Fixed renaming transient
+//                parameters in the Manage Parameters dialog box.
 
 const
   // version number of ModelMuse.

@@ -45,10 +45,10 @@ end;
 
 procedure TfrmImportModflow6FeatureModifiedByPest.SetData;
 var
-  Importer: TPestFeatureDisplayer;
+  Importer: TPestModflow6FeatureDisplayer;
   GridType: TModflow6GridType;
 begin
-  Importer := TPestFeatureDisplayer.Create(frmGoPhast.PhastModel);
+  Importer := TPestModflow6FeatureDisplayer.Create(frmGoPhast.PhastModel);
   try
     if frmGoPhast.PhastModel.DisvUsed then
     begin

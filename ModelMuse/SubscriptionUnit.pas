@@ -221,30 +221,19 @@ begin
   end;
   if not FUpToDate and Changed then
   begin
-    ObserverList.NotifyOnChange(self);
+    if Assigned(FObserverlist) then
+    begin
+      ObserverList.NotifyOnChange(self);
+    end;
 
-//    try
-      if FSubscribers <> nil then
+    if FSubscribers <> nil then
+    begin
+      for ListenerIndex := 0 to FSubscribers.Count - 1 do
       begin
-        for ListenerIndex := 0 to FSubscribers.Count - 1 do
-        begin
-          AnotherObserver := FSubscribers[ListenerIndex];
-
-//          AnotherObserver.UpToDate := True
-//          causes an access violation if a data set is colored
-//          while changing the model selection.
-//          if not AnotherObserver.UpToDate then
-//          begin
-//            AnotherObserver.UpToDate := True;
-//          end;
-
-          AnotherObserver.UpToDate := False;
-        end;
+        AnotherObserver := FSubscribers[ListenerIndex];
+        AnotherObserver.UpToDate := False;
       end;
-//
-//      ShowMessage(Name);
-//
-
+    end;
   end;
 end;
 

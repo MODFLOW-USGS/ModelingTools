@@ -86,6 +86,7 @@ type
     FParameterNameNameDictionary: TDictionary<string, TModflowParameter>;
     FDragging: Boolean;
     FDeletingGroup: Boolean;
+    FParameterTypesChanged: Boolean;
     procedure GetData;
     procedure SetData;
     procedure UpdateParameterTable;
@@ -170,6 +171,11 @@ resourcestring
   StrABSPARMAXN = 'ABSPARMAX(N)';
   StrTheNameOfThePara = 'The name of the parameter "%s" matches the name of ' +
   'an existing data set, This is not allowed.';
+  StrTheParameterTypeO = 'The parameter type of one or more existing paramet' +
+  'ers have been changed. Changing the type of an existing parameter is usua' +
+  'lly a bad idea and can have far ranging consequences including deleting a' +
+  'ny boundary conditions associated with the parameter. Are you sure you wa' +
+  'nt to do this?';
 
 {$R *.dfm}
 type
@@ -478,6 +484,16 @@ var
   ExistingDataSet: TObject;
 begin
   inherited;
+  if FParameterTypesChanged then
+  begin
+    Beep;
+    if (MessageDlg(StrTheParameterTypeO, mtConfirmation, [mbYes, mbNo],
+      0, mbNo) <> mrYes) then
+    begin
+      ModalResult := mrNone;
+      Exit;
+    end;
+  end;
   DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
   Names := TStringList.Create;
   try
@@ -1041,6 +1057,7 @@ begin
       end;
     end;
   end;
+  FParameterTypesChanged := False;
 end;
 
 function TfrmManageParameters.ParamValid(ParamType: TParameterType): boolean;
@@ -1199,10 +1216,15 @@ begin
       begin
         if AParam is TModflowSteadyParameter then
         begin
+          if AParam.ParameterType <> ParamIndex then
+          begin
+            FParameterTypesChanged := True;
+          end;
           AParam.ParameterType := ParamIndex;
         end
         else
         begin
+          FParameterTypesChanged := True;
           FreeAParam(AParam);
           AParam := nil;
           rdgParameters.Objects[Ord(pcName), ARow] := nil;
@@ -1212,10 +1234,15 @@ begin
       begin
         if AParam is TModflowTransientListParameter then
         begin
+          if AParam.ParameterType <> ParamIndex then
+          begin
+            FParameterTypesChanged := True;
+          end;
           AParam.ParameterType := ParamIndex;
         end
         else
         begin
+          FParameterTypesChanged := True;
           FreeAParam(AParam);
           AParam := nil;
           rdgParameters.Objects[Ord(pcName), ARow] := nil;
@@ -1225,10 +1252,15 @@ begin
       begin
         if AParam is THufParameter then
         begin
+          if AParam.ParameterType <> ParamIndex then
+          begin
+            FParameterTypesChanged := True;
+          end;
           AParam.ParameterType := ParamIndex;
         end
         else
         begin
+          FParameterTypesChanged := True;
           FreeAParam(AParam);
           AParam := nil;
           rdgParameters.Objects[Ord(pcName), ARow] := nil;
@@ -2323,7 +2355,8 @@ end;
 procedure TUndoChangeParameters.DoCommand;
 begin
   inherited;
-  FExistingScreenObjects.Assign(FOldProperties);
+  // Assigning the old properties undos assigning the parameter names
+//  FExistingScreenObjects.Assign(FOldProperties);
   frmGoPhast.PhastModel.ClearPestParmDictionary;
   if (frmShowHideObjects <> nil) then
   begin

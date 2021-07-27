@@ -4,7 +4,7 @@ interface
 
 uses Winapi.Windows, System.UITypes, Modflow6Importer, GoPhastTypes,
   frmImportShapefileUnit, System.Classes, System.SysUtils,
-  System.Generics.Collections;
+  System.Generics.Collections, SutraImporter;
 
 type
   TUndoImportPestModelFeatureDisplay = class(TUndoImportShapefile)
@@ -13,7 +13,7 @@ type
     function Description: string; override;
   end;
 
-  TPestFeatureDisplayer = class(TObject)
+  TPestModflow6FeatureDisplayer = class(TObject)
   private
     FModel: TBaseModel;
     FFeatures: TModflowFeatureList;
@@ -24,6 +24,27 @@ type
     procedure ImportFeatures(const FileName: string; GridType: TModflow6GridType;
       StressPeriod: integer);
     property FeatureType: TModflow6FeatureType read FFeatureType;
+  end;
+
+  TSutraFeatureType = (sftSpecPres, sftSpecU, sftFluidFlux, sftUFlux,
+    sftGenFlow, sftGenTransport);
+  TSutraFeatureTypes = set of TSutraFeatureType;
+
+  TPestSutraFeatureDisplayer = class(TObject)
+  private
+    FModel: TBaseModel;
+    FSutraInput: TSutraInputReader;
+  public
+    constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure ImportFeatures(const FileName: string;
+      FeatureTypes: TSutraFeatureTypes);
+    procedure ImportSpecifiedPressures;
+    procedure ImportSpecifiedU;
+    procedure ImportFluidFluxes;
+    procedure ImportUFluxes;
+    procedure ImportGeneralizeFlows;
+    procedure ImportGeneraizedTransport;
   end;
 
 implementation
@@ -45,18 +66,18 @@ resourcestring
 
 { TPestFeatureDisplayer }
 
-constructor TPestFeatureDisplayer.Create(Model: TBaseModel);
+constructor TPestModflow6FeatureDisplayer.Create(Model: TBaseModel);
 begin
   FModel := Model;
 end;
 
-destructor TPestFeatureDisplayer.Destroy;
+destructor TPestModflow6FeatureDisplayer.Destroy;
 begin
   FFeatures.Free;
   inherited;
 end;
 
-procedure TPestFeatureDisplayer.ImportFeatures(const FileName: string;
+procedure TPestModflow6FeatureDisplayer.ImportFeatures(const FileName: string;
   GridType: TModflow6GridType; StressPeriod: integer);
 var
   HeadDataArray: TModflowBoundaryDisplayDataArray;
@@ -1020,6 +1041,80 @@ end;
 function TUndoImportPestModelFeatureDisplay.Description: string;
 begin
   result := 'import model feature data sets.';
+end;
+
+{ TPestSutraFeatureDisplayer }
+
+constructor TPestSutraFeatureDisplayer.Create(Model: TBaseModel);
+begin
+  FModel := Model;
+end;
+
+destructor TPestSutraFeatureDisplayer.Destroy;
+begin
+  FSutraInput.Free;
+  inherited;
+end;
+
+procedure TPestSutraFeatureDisplayer.ImportFeatures(const FileName: string;
+  FeatureTypes: TSutraFeatureTypes);
+begin
+  FSutraInput := TSutraInputReader.Create(FileName);
+  FSutraInput.ReadInputFile;
+  if sftSpecPres in FeatureTypes then
+  begin
+    ImportSpecifiedPressures;
+  end;
+  if sftSpecU in FeatureTypes then
+  begin
+    ImportSpecifiedU;
+  end;
+  if sftFluidFlux in FeatureTypes then
+  begin
+    ImportFluidFluxes;
+  end;
+  if sftUFlux in FeatureTypes then
+  begin
+    ImportUFluxes;
+  end;
+  if sftGenFlow in FeatureTypes then
+  begin
+    ImportGeneralizeFlows;
+  end;
+  if sftGenTransport in FeatureTypes then
+  begin
+    ImportGeneraizedTransport;
+  end;
+end;
+
+procedure TPestSutraFeatureDisplayer.ImportFluidFluxes;
+begin
+
+end;
+
+procedure TPestSutraFeatureDisplayer.ImportGeneraizedTransport;
+begin
+
+end;
+
+procedure TPestSutraFeatureDisplayer.ImportGeneralizeFlows;
+begin
+
+end;
+
+procedure TPestSutraFeatureDisplayer.ImportSpecifiedPressures;
+begin
+
+end;
+
+procedure TPestSutraFeatureDisplayer.ImportSpecifiedU;
+begin
+
+end;
+
+procedure TPestSutraFeatureDisplayer.ImportUFluxes;
+begin
+
 end;
 
 end.

@@ -1,4 +1,4 @@
-unit ImportSutraUnit;
+unit SutraImporter;
 
 interface
 
@@ -59,6 +59,34 @@ Type
 
   TSutraSpecifiedUs = TList<TSutraSpecifiedU>;
 
+  TSutraLimitType = (sltQ, sltP, sltNone);
+  TSutraUSpecificationType = (sustDirect, sustRelative);
+
+  TSutraGeneralizedFlow = record
+    NodeNumber: Integer;
+    PBG1: double;
+    QPBG1: double;
+    PBG2: double;
+    QPBG2: double;
+    CPQL1: TSutraLimitType;
+    CPQL2: TSutraLimitType;
+    UPBGI: double;
+    USpectype: TSutraUSpecificationType;
+    UPBGO: double;
+  end;
+
+  TSutraGeneralizedFlows = TList<TSutraGeneralizedFlow>;
+
+  TSutraGeneralizedTransport = record
+    NodeNumber: Integer;
+    UBG1: double;
+    QUBG1: double;
+    UBG2: double;
+    QUBG2: double;
+  end;
+
+  TSutraGeneralizedTransports = TList<TSutraGeneralizedTransport>;
+
   TSutraInputReader = class(TObject)
   private
     FFile: TStreamReader;
@@ -102,6 +130,8 @@ Type
     FUSources: TSutraUSources;
     FSpecifiedPressures: TSutraSpecifiedPressures;
     FSpecifiedUs: TSutraSpecifiedUs;
+    FGeneralizedFlows: TSutraGeneralizedFlows;
+    FGeneralizedTransports: TSutraGeneralizedTransports;
     function ReadNextNonCommentLine: string;
     procedure ReadDataSet1;
     procedure ReadDataSet2A;
@@ -131,10 +161,23 @@ Type
     procedure ReadDataSet18;
     procedure ReadDataSet19;
     procedure ReadDataSet20;
+    procedure ReadDataSet21A;
+    procedure ReadDataSet21B;
+    procedure ReadDataSet22;
+    function GetNode(Index: Integer): TPoint3D;
+    function GetNodeCount: Integer;
   public
     constructor Create(const FileName: string);
     Destructor Destroy; override;
     procedure ReadInputFile;
+    property NodeCount: Integer read GetNodeCount;
+    property Nodes[Index: Integer]: TPoint3D read GetNode;
+    property FluidSources: TSutraFluidSources read FFluidSources;
+    property USources: TSutraUSources read FUSources;
+    property SpecifiedPressures: TSutraSpecifiedPressures read FSpecifiedPressures;
+    property SpecifiedUs: TSutraSpecifiedUs read FSpecifiedUs;
+    property GeneralizedFlows: TSutraGeneralizedFlows read FGeneralizedFlows;
+    property GeneralizedTransports: TSutraGeneralizedTransports read FGeneralizedTransports;
   end;
 
 implementation
@@ -155,10 +198,14 @@ begin
   FUSources := TSutraUSources.Create;
   FSpecifiedPressures := TSutraSpecifiedPressures.Create;
   FSpecifiedUs := TSutraSpecifiedUs.Create;
+  FGeneralizedFlows := TSutraGeneralizedFlows.Create;
+  FGeneralizedTransports := TSutraGeneralizedTransports.Create;
 end;
 
 destructor TSutraInputReader.Destroy;
 begin
+  FGeneralizedTransports.Free;
+  FGeneralizedFlows.Free;
   FSpecifiedUs.Free;
   FSpecifiedPressures.Free;
   FUSources.Free;
@@ -168,6 +215,16 @@ begin
   FEmbeddedFiles.Free;
   FFile.Free;
   inherited;
+end;
+
+function TSutraInputReader.GetNode(Index: Integer): TPoint3D;
+begin
+  result := FNodes[Index];
+end;
+
+function TSutraInputReader.GetNodeCount: Integer;
+begin
+  result := Length(FNodes);
 end;
 
 procedure TSutraInputReader.ReadDataSet1;
@@ -335,6 +392,116 @@ begin
   ALine := ReadNextNonCommentLine;
   FSplitter.DelimitedText := ALine;
   Assert(FSplitter[0] = '0');
+end;
+
+procedure TSutraInputReader.ReadDataSet21A;
+var
+  BoundaryIndex: Integer;
+  ALine: string;
+  ABoundary: TSutraGeneralizedFlow;
+  Selection: string;
+begin
+  FGeneralizedFlows.Capacity := FNPBG;
+  for BoundaryIndex := 0 to FNPBG - 1 do
+  begin
+    ALine := ReadNextNonCommentLine;
+    FSplitter.DelimitedText := ALine;
+    Assert(FSplitter.Count >= 10);
+    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+    ABoundary.PBG1 := FortranStrToFloat(FSplitter[1]);
+    ABoundary.QPBG1 := FortranStrToFloat(FSplitter[2]);
+    ABoundary.PBG2 := FortranStrToFloat(FSplitter[3]);
+    ABoundary.QPBG2 := FortranStrToFloat(FSplitter[4]);
+    Selection := UpperCase(FSplitter[5]);
+    if Selection = 'Q' then
+    begin
+      ABoundary.CPQL1 := sltQ;
+    end
+    else if Selection = 'P' then
+    begin
+      ABoundary.CPQL1 := sltP;
+    end
+    else if Selection = 'N' then
+    begin
+      ABoundary.CPQL1 := sltNone;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+    Selection := UpperCase(FSplitter[6]);
+    if Selection = 'Q' then
+    begin
+      ABoundary.CPQL2 := sltQ;
+    end
+    else if Selection = 'P' then
+    begin
+      ABoundary.CPQL2 := sltP;
+    end
+    else if Selection = 'N' then
+    begin
+      ABoundary.CPQL2 := sltNone;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+    ABoundary.UPBGI := FortranStrToFloat(FSplitter[7]);
+
+    Selection := UpperCase(FSplitter[8]);
+    if Selection = 'DIR' then
+    begin
+      ABoundary.USpectype := sustDirect;
+    end
+    else if Selection = 'REL' then
+    begin
+      ABoundary.USpectype := sustRelative;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+
+    ABoundary.UPBGO := FortranStrToFloat(FSplitter[9]);
+    FGeneralizedFlows.Add(ABoundary);
+  end;
+  ALine := ReadNextNonCommentLine;
+  FSplitter.DelimitedText := ALine;
+  Assert(FSplitter[0] = '0');
+end;
+
+procedure TSutraInputReader.ReadDataSet21B;
+var
+  BoundaryIndex: Integer;
+  ALine: string;
+  ABoundary: TSutraGeneralizedTransport;
+  Selection: string;
+begin
+  FGeneralizedTransports.Capacity := FNUBG;
+  for BoundaryIndex := 0 to FNUBG - 1 do
+  begin
+    ALine := ReadNextNonCommentLine;
+    FSplitter.DelimitedText := ALine;
+    Assert(FSplitter.Count >= 10);
+    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+    ABoundary.UBG1 := FortranStrToFloat(FSplitter[1]);
+    ABoundary.QUBG1 := FortranStrToFloat(FSplitter[2]);
+    ABoundary.UBG2 := FortranStrToFloat(FSplitter[3]);
+    ABoundary.QUBG2 := FortranStrToFloat(FSplitter[4]);
+    FGeneralizedTransports.Add(ABoundary);
+  end;
+  ALine := ReadNextNonCommentLine;
+  FSplitter.DelimitedText := ALine;
+  Assert(FSplitter[0] = '0');
+end;
+procedure TSutraInputReader.ReadDataSet22;
+var
+  Index: Integer;
+begin
+  for Index := 0 to FNE do
+  begin
+    ReadNextNonCommentLine;
+  end;
 end;
 
 procedure TSutraInputReader.ReadDataSet2A;
@@ -766,6 +933,9 @@ begin
   ReadDataSet18;
   ReadDataSet19;
   ReadDataSet20;
+  ReadDataSet21A;
+  ReadDataSet21B;
+  ReadDataSet22;
 end;
 
 function TSutraInputReader.ReadNextNonCommentLine: string;
