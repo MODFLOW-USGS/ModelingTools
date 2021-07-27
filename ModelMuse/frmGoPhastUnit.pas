@@ -541,6 +541,8 @@ type
     miRunSutraPrep: TMenuItem;
     acImportMf6FeatureFromPest: TAction;
     ImportModelFeaturefromPEST1: TMenuItem;
+    acImportSutraFeaturesFromPest: TAction;
+    ImportModelFeaturefromPEST2: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -741,6 +743,7 @@ type
     procedure acCalcSuperParametersExecute(Sender: TObject);
     procedure acRunSvdaPrepExecute(Sender: TObject);
     procedure acImportMf6FeatureFromPestExecute(Sender: TObject);
+    procedure acImportSutraFeaturesFromPestExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2134,7 +2137,7 @@ uses
   SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
   PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
   frmSupCalcUnit, PestPropertiesUnit,
-  frmImportModflow6FeatureModifiedByPestUnit;
+  frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -3428,6 +3431,7 @@ begin
   acRunPest.Visible := False;
   miPEST.Visible := False;
   acImportMf6FeatureFromPest.Visible := False;
+  acImportSutraFeaturesFromPest.Visible := False;
   {$ENDIF}
   
   tbarEditScreenObjects.Width := 227;
@@ -4235,8 +4239,10 @@ begin
 
   {$IFDEF PEST}
   acImportMf6FeatureFromPest.Visible := PhastModel.ModelSelection = msModflow2015;
+  acImportSutraFeaturesFromPest.Visible := PhastModel.ModelSelection in SutraSelection;
   {$ELSE}
   acImportMf6FeatureFromPest.Visible := False;
+  acImportSutraFeaturesFromPest.Visible := False;
   {$ENDIF}
 
   case PhastModel.ModelSelection of
@@ -13618,7 +13624,6 @@ procedure TfrmGoPhast.acImportMf6FeatureFromPestExecute(Sender: TObject);
 begin
   inherited;
   ShowAForm(TfrmImportModflow6FeatureModifiedByPest)
-//
 end;
 
 procedure TfrmGoPhast.acImportModelMateExecute(Sender: TObject);
@@ -13647,6 +13652,12 @@ begin
     PhastModel.ModelMateProjectFileName :=
       ExtractRelativePath(sdSaveDialog.FileName, odModelMate.FileName);
   end;
+end;
+
+procedure TfrmGoPhast.acImportSutraFeaturesFromPestExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmImportSutraFeatures)
 end;
 
 procedure TfrmGoPhast.acImportSutraFilesExecute(Sender: TObject);

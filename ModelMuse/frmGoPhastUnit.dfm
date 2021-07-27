@@ -1259,6 +1259,9 @@ inherited frmGoPhast: TfrmGoPhast
         object ImportModelFeaturefromPEST1: TMenuItem
           Action = acImportMf6FeatureFromPest
         end
+        object ImportModelFeaturefromPEST2: TMenuItem
+          Action = acImportSutraFeaturesFromPest
+        end
       end
       object miLinkedRasters: TMenuItem
         Caption = 'Linked Rasters'
@@ -3692,6 +3695,11 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'File'
       Caption = 'Import Model Feature from PEST'
       OnExecute = acImportMf6FeatureFromPestExecute
+    end
+    object acImportSutraFeaturesFromPest: TAction
+      Category = 'File'
+      Caption = 'Import Model Feature from PEST'
+      OnExecute = acImportSutraFeaturesFromPestExecute
     end
   end
   object ilDisabledImageList: TImageList

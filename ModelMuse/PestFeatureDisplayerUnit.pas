@@ -4,7 +4,9 @@ interface
 
 uses Winapi.Windows, System.UITypes, Modflow6Importer, GoPhastTypes,
   frmImportShapefileUnit, System.Classes, System.SysUtils,
-  System.Generics.Collections, SutraImporter;
+  System.Generics.Collections, SutraImporter, ScreenObjectUnit,
+  ModflowBoundaryDisplayUnit, ValueArrayStorageUnit, DataSetUnit,
+  System.Contnrs, SutraBoundaryDisplayUnit;
 
 type
   TUndoImportPestModelFeatureDisplay = class(TUndoImportShapefile)
@@ -34,25 +36,35 @@ type
   private
     FModel: TBaseModel;
     FSutraInput: TSutraInputReader;
+    FFileName: string;
+    FNewDataSets: TList;
+    FInvalidNames: TStringList;
+    FScreenObjectList: TObjectList;
+
+    procedure ImportSpecifiedPressures;
+    procedure ImportSpecifiedU;
+    procedure ImportFluidFluxes;
+    procedure ImportUFluxes;
+    procedure ImportGeneralizedFlows;
+    procedure ImportGeneralizedTransport;
+    function MakeNewScreenObject(ACapacity: Integer): TScreenObject;
+    function CreateDataSet(const Root: string;
+      Method: TValueAddMethod; StressPeriod: Integer): TSutraBoundaryDisplayDataArray;
+    function CreateValueArrayItem(ScreenObject: TScreenObject; Count: Integer;
+      DataArray: TSutraBoundaryDisplayDataArray): TValueArrayItem;
   public
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure ImportFeatures(const FileName: string;
       FeatureTypes: TSutraFeatureTypes);
-    procedure ImportSpecifiedPressures;
-    procedure ImportSpecifiedU;
-    procedure ImportFluidFluxes;
-    procedure ImportUFluxes;
-    procedure ImportGeneralizeFlows;
-    procedure ImportGeneraizedTransport;
   end;
 
 implementation
 
 uses
-  ModflowBoundaryDisplayUnit, PhastModelUnit, ScreenObjectUnit, frmGoPhastUnit,
-  FastGEO, ValueArrayStorageUnit, DataSetUnit, RbwParser, UndoItems,
-  GIS_Functions, System.Contnrs, AbstractGridUnit, Vcl.Dialogs, ModflowMawUnit,
+  PhastModelUnit, frmGoPhastUnit,
+  FastGEO, RbwParser, UndoItems,
+  GIS_Functions, AbstractGridUnit, Vcl.Dialogs, ModflowMawUnit,
   ModflowSfr6Unit, ModflowLakMf6Unit;
 
 resourcestring
@@ -1048,17 +1060,71 @@ end;
 constructor TPestSutraFeatureDisplayer.Create(Model: TBaseModel);
 begin
   FModel := Model;
+  FNewDataSets := TList.Create;
+  FInvalidNames := TStringList.Create;
+  FScreenObjectList := TObjectList.Create;
+end;
+
+function TPestSutraFeatureDisplayer.CreateDataSet(const Root: string;
+  Method: TValueAddMethod; StressPeriod: Integer): TSutraBoundaryDisplayDataArray;
+var
+  LocalModel: TCustomModel;
+begin
+  LocalModel := FModel as TCustomModel;
+  result := TSutraBoundaryDisplayDataArray.Create(LocalModel);
+  result.Orientation := dso3D;
+  result.EvaluatedAt := eaNodes;
+  result.AddMethod := Method;
+  if StressPeriod > 0 then
+  begin
+    result.Name := GenerateNewName(Format('%0:s_SP_%1:d',
+      [Root, StressPeriod]), FInvalidNames, '_');
+  end
+  else
+  begin
+    result.Name := GenerateNewName(Format('%0:s',
+      [Root]), FInvalidNames, '_');
+  end;
+  result.Formula := '0';
+//  if Method = vamAveragedDelayed then
+//  begin
+//    (result.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := 0;
+//  end;
+  FNewDataSets.Add(result);
+  LocalModel.UpdateDataArrayDimensions(result);
+
+end;
+
+function TPestSutraFeatureDisplayer.CreateValueArrayItem(
+  ScreenObject: TScreenObject; Count: Integer;
+  DataArray: TSutraBoundaryDisplayDataArray): TValueArrayItem;
+var
+  Position: Integer;
+begin
+  Position := ScreenObject.AddDataSet(DataArray);
+  result := ScreenObject.ImportedValues.Add;
+  result.Name := 'Imported_' + DataArray.Name;
+  result.Values.DataType := rdtDouble;
+  result.Values.Count := Count;
+  ScreenObject.DataSetFormulas[Position]
+    := rsObjectImportedValuesR + '("' + result.Name + '")';
 end;
 
 destructor TPestSutraFeatureDisplayer.Destroy;
 begin
+  FScreenObjectList.Free;
+  FInvalidNames.Free;
+  FNewDataSets.Free;
   FSutraInput.Free;
   inherited;
 end;
 
 procedure TPestSutraFeatureDisplayer.ImportFeatures(const FileName: string;
   FeatureTypes: TSutraFeatureTypes);
+var
+  Undo: TUndoImportPestModelFeatureDisplay;
 begin
+  FFileName := FileName;
   FSutraInput := TSutraInputReader.Create(FileName);
   FSutraInput.ReadInputFile;
   if sftSpecPres in FeatureTypes then
@@ -1079,42 +1145,390 @@ begin
   end;
   if sftGenFlow in FeatureTypes then
   begin
-    ImportGeneralizeFlows;
+    ImportGeneralizedFlows;
   end;
   if sftGenTransport in FeatureTypes then
   begin
-    ImportGeneraizedTransport;
+    ImportGeneralizedTransport;
   end;
+
+  Undo := TUndoImportPestModelFeatureDisplay.Create;
+  try
+    Undo.StoreNewScreenObjects(FScreenObjectList);
+    Undo.StoreNewDataSets(FNewDataSets);
+    frmGoPhast.UndoStack.Submit(Undo);
+    Undo := nil;
+    FScreenObjectList.OwnsObjects := False;
+    frmGoPhast.PhastModel.AddFileToArchive(FileName);
+  finally
+    Undo.Free;
+  end;
+
 end;
 
 procedure TPestSutraFeatureDisplayer.ImportFluidFluxes;
+var
+  FlowRateDataArray: TSutraBoundaryDisplayDataArray;
+  UFlowDataArray: TSutraBoundaryDisplayDataArray;
+  Root: string;
+  ExistingObjectCount: Integer;
+  AScreenObject: TScreenObject;
+  FlowRateValueArrayItem: TValueArrayItem;
+  FlowRateUValueArrayItem: TValueArrayItem;
+  AFeature: TSutraFluidSource;
+  ALocation: TPoint3D;
+  APoint: TPoint2D;
+  ImportedSectionElevations: TValueArrayStorage;
+  FeatureIndex: Integer;
 begin
+  if FSutraInput.FluidSources.Count > 0 then
+  begin
+    FlowRateDataArray := CreateDataSet('Specified_Flow', vamAveragedDelayed, 0);
+    UFlowDataArray := CreateDataSet('Specified_Flow_Associated_U', vamAveragedDelayed, 0);
+    Root := 'Spec_Flow';
 
+    ExistingObjectCount :=
+      frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
+
+    AScreenObject := MakeNewScreenObject(FSutraInput.FluidSources.Count);
+    AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+    FScreenObjectList.Add(AScreenObject);
+
+    ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
+    ImportedSectionElevations.Count := FSutraInput.FluidSources.Count;
+
+    FlowRateValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.FluidSources.Count, FlowRateDataArray);
+    FlowRateUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.FluidSources.Count, UFlowDataArray);
+
+    for FeatureIndex := 0 to FSutraInput.FluidSources.Count - 1 do
+    begin
+      AFeature := FSutraInput.FluidSources[FeatureIndex];
+      ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
+      APoint.x := ALocation.x;
+      APoint.y := ALocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+
+      FlowRateValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.QINC;
+      FlowRateUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.UINC;
+    end;
+  end;
 end;
 
-procedure TPestSutraFeatureDisplayer.ImportGeneraizedTransport;
+procedure TPestSutraFeatureDisplayer.ImportGeneralizedTransport;
+var
+  LowerGeneralizedUDataArray: TSutraBoundaryDisplayDataArray;
+  LowerGeneralizedURateDataArray: TSutraBoundaryDisplayDataArray;
+  Root: string;
+  ExistingObjectCount: Integer;
+  AScreenObject: TScreenObject;
+  LowerGeneralizeUValueArrayItem: TValueArrayItem;
+  LowerGeneralizedURateValueArrayItem: TValueArrayItem;
+  ALocation: TPoint3D;
+  APoint: TPoint2D;
+  ImportedSectionElevations: TValueArrayStorage;
+  FeatureIndex: Integer;
+  HigherGeneralizedUDataArray: TSutraBoundaryDisplayDataArray;
+  HigherGeneralizedURateDataArray: TSutraBoundaryDisplayDataArray;
+  HigherGeneralizeUValueArrayItem: TValueArrayItem;
+  HigherGeneralizedURateValueArrayItem: TValueArrayItem;
+  AFeature: TSutraGeneralizedTransport;
 begin
+  if FSutraInput.GeneralizedTransports.Count > 0 then
+  begin
+    LowerGeneralizedUDataArray := CreateDataSet('Lower_Generalized_Transport_U', vamAveragedDelayed, 0);
+    LowerGeneralizedURateDataArray := CreateDataSet('Lower_Generalized_Transport_U_Rate', vamAveragedDelayed, 0);
+    HigherGeneralizedUDataArray := CreateDataSet('Higher_Generalized_Transport_U', vamAveragedDelayed, 0);
+    HigherGeneralizedURateDataArray := CreateDataSet('Higher_Generalized_Transport_U_Rate', vamAveragedDelayed, 0);
+    Root := 'Gen_Transport';
 
+    ExistingObjectCount :=
+      frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
+
+    AScreenObject := MakeNewScreenObject(FSutraInput.GeneralizedTransports.Count);
+    AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+    FScreenObjectList.Add(AScreenObject);
+
+    ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
+    ImportedSectionElevations.Count := FSutraInput.GeneralizedTransports.Count;
+
+    LowerGeneralizeUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedTransports.Count, LowerGeneralizedUDataArray);
+    LowerGeneralizedURateValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedTransports.Count, LowerGeneralizedURateDataArray);
+    HigherGeneralizeUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedTransports.Count, HigherGeneralizedUDataArray);
+    HigherGeneralizedURateValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedTransports.Count, HigherGeneralizedURateDataArray);
+
+    for FeatureIndex := 0 to FSutraInput.GeneralizedTransports.Count - 1 do
+    begin
+      AFeature := FSutraInput.GeneralizedTransports[FeatureIndex];
+      ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
+      APoint.x := ALocation.x;
+      APoint.y := ALocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+
+      LowerGeneralizeUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.UBG1;
+      LowerGeneralizedURateValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.QUBG1;
+      HigherGeneralizeUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.UBG2;
+      HigherGeneralizedURateValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.QUBG2;
+    end;
+  end;
 end;
 
-procedure TPestSutraFeatureDisplayer.ImportGeneralizeFlows;
+procedure TPestSutraFeatureDisplayer.ImportGeneralizedFlows;
+var
+  LowerGeneralizedPressureDataArray: TSutraBoundaryDisplayDataArray;
+  LowerGeneralizedUDataArray: TSutraBoundaryDisplayDataArray;
+  Root: string;
+  ExistingObjectCount: Integer;
+  AScreenObject: TScreenObject;
+  LowerGeneralizePressureValueArrayItem: TValueArrayItem;
+  LowerGeneralizedUValueArrayItem: TValueArrayItem;
+  ALocation: TPoint3D;
+  APoint: TPoint2D;
+  ImportedSectionElevations: TValueArrayStorage;
+  FeatureIndex: Integer;
+  HigherGeneralizedPressureDataArray: TSutraBoundaryDisplayDataArray;
+  HigherGeneralizedUDataArray: TSutraBoundaryDisplayDataArray;
+  AFeature: TSutraGeneralizedFlow;
+  HigherGeneralizePressureValueArrayItem: TValueArrayItem;
+  HigherGeneralizedUValueArrayItem: TValueArrayItem;
+  IncomingGeneralizedUDataArray: TSutraBoundaryDisplayDataArray;
+  OutgoingGeneralizedUDataArray: TSutraBoundaryDisplayDataArray;
+  IncomingUValueArrayItem: TValueArrayItem;
+  OutgoingUValueArrayItem: TValueArrayItem;
 begin
+  if FSutraInput.GeneralizedFlows.Count > 0 then
+  begin
+    LowerGeneralizedPressureDataArray := CreateDataSet('Lower_Generalized_Pressure', vamAveragedDelayed, 0);
+    LowerGeneralizedUDataArray := CreateDataSet('Lower_Generalized_U', vamAveragedDelayed, 0);
+    HigherGeneralizedPressureDataArray := CreateDataSet('Higher_Generalized_Pressure', vamAveragedDelayed, 0);
+    HigherGeneralizedUDataArray := CreateDataSet('Higher_Generalized_U', vamAveragedDelayed, 0);
+    IncomingGeneralizedUDataArray := CreateDataSet('Incoming_Fluid_U', vamAveragedDelayed, 0);
+    OutgoingGeneralizedUDataArray := CreateDataSet('Outgoing_Fluid_U', vamAveragedDelayed, 0);
+    Root := 'Gen_Press';
 
+    ExistingObjectCount :=
+      frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
+
+    AScreenObject := MakeNewScreenObject(FSutraInput.GeneralizedFlows.Count);
+    AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+    FScreenObjectList.Add(AScreenObject);
+
+    ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
+    ImportedSectionElevations.Count := FSutraInput.GeneralizedFlows.Count;
+
+    LowerGeneralizePressureValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedFlows.Count, LowerGeneralizedPressureDataArray);
+    LowerGeneralizedUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedFlows.Count, LowerGeneralizedUDataArray);
+    HigherGeneralizePressureValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedFlows.Count, HigherGeneralizedPressureDataArray);
+    HigherGeneralizedUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedFlows.Count, HigherGeneralizedUDataArray);
+    IncomingUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedFlows.Count, IncomingGeneralizedUDataArray);
+    OutgoingUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.GeneralizedFlows.Count, OutgoingGeneralizedUDataArray);
+
+    for FeatureIndex := 0 to FSutraInput.GeneralizedFlows.Count - 1 do
+    begin
+      AFeature := FSutraInput.GeneralizedFlows[FeatureIndex];
+      ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
+      APoint.x := ALocation.x;
+      APoint.y := ALocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+
+      LowerGeneralizePressureValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.PBG1;
+      LowerGeneralizedUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.QPBG1;
+      HigherGeneralizePressureValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.PBG2;
+      HigherGeneralizedUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.QPBG2;
+      IncomingUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.UPBGI;
+      OutgoingUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.UPBGO;
+    end;
+  end;
 end;
 
 procedure TPestSutraFeatureDisplayer.ImportSpecifiedPressures;
+var
+  SpecifiedPressureDataArray: TSutraBoundaryDisplayDataArray;
+  USpecifiedPressureDataArray: TSutraBoundaryDisplayDataArray;
+  Root: string;
+  ExistingObjectCount: Integer;
+  AScreenObject: TScreenObject;
+  SpecifiedPressureValueArrayItem: TValueArrayItem;
+  USpecifiedPressureValueArrayItem: TValueArrayItem;
+  AFeature: TSutraSpecifiedPressure;
+  ALocation: TPoint3D;
+  APoint: TPoint2D;
+  ImportedSectionElevations: TValueArrayStorage;
+  FeatureIndex: Integer;
 begin
+  if FSutraInput.SpecifiedPressures.Count > 0 then
+  begin
+    SpecifiedPressureDataArray := CreateDataSet('Specified_Pressure', vamAveragedDelayed, 0);
+    USpecifiedPressureDataArray := CreateDataSet('Specified_Pressure_U', vamAveragedDelayed, 0);
+    Root := 'Spec_Press';
 
+    ExistingObjectCount :=
+      frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
+
+    AScreenObject := MakeNewScreenObject(FSutraInput.SpecifiedPressures.Count);
+    AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+    FScreenObjectList.Add(AScreenObject);
+
+    ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
+    ImportedSectionElevations.Count := FSutraInput.SpecifiedPressures.Count;
+
+    SpecifiedPressureValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.SpecifiedPressures.Count, SpecifiedPressureDataArray);
+    USpecifiedPressureValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.SpecifiedPressures.Count, USpecifiedPressureDataArray);
+
+    for FeatureIndex := 0 to FSutraInput.SpecifiedPressures.Count - 1 do
+    begin
+      AFeature := FSutraInput.SpecifiedPressures[FeatureIndex];
+      ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
+      APoint.x := ALocation.x;
+      APoint.y := ALocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+
+      SpecifiedPressureValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.PBC;
+      USpecifiedPressureValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.UBC;
+    end;
+  end;
 end;
 
 procedure TPestSutraFeatureDisplayer.ImportSpecifiedU;
+var
+  SpecifiedUDataArray: TSutraBoundaryDisplayDataArray;
+  Root: string;
+  ExistingObjectCount: Integer;
+  AScreenObject: TScreenObject;
+  SpecifiedUValueArrayItem: TValueArrayItem;
+  ALocation: TPoint3D;
+  APoint: TPoint2D;
+  ImportedSectionElevations: TValueArrayStorage;
+  FeatureIndex: Integer;
+  AFeature: TSutraSpecifiedU;
 begin
+  if FSutraInput.SpecifiedUs.Count > 0 then
+  begin
+    SpecifiedUDataArray := CreateDataSet('Specified_U', vamAveragedDelayed, 0);
+    Root := 'U';
 
+    ExistingObjectCount :=
+      frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
+
+    AScreenObject := MakeNewScreenObject(FSutraInput.SpecifiedUs.Count);
+    AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+    FScreenObjectList.Add(AScreenObject);
+
+    ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
+    ImportedSectionElevations.Count := FSutraInput.SpecifiedUs.Count;
+
+    SpecifiedUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.SpecifiedUs.Count, SpecifiedUDataArray);
+
+    for FeatureIndex := 0 to FSutraInput.SpecifiedUs.Count - 1 do
+    begin
+      AFeature := FSutraInput.SpecifiedUs[FeatureIndex];
+      ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
+      APoint.x := ALocation.x;
+      APoint.y := ALocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+
+      SpecifiedUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.UBC;
+    end;
+  end;
 end;
 
 procedure TPestSutraFeatureDisplayer.ImportUFluxes;
+var
+  USourceDataArray: TSutraBoundaryDisplayDataArray;
+  Root: string;
+  ExistingObjectCount: Integer;
+  AScreenObject: TScreenObject;
+  SpecifiedUValueArrayItem: TValueArrayItem;
+  ALocation: TPoint3D;
+  APoint: TPoint2D;
+  ImportedSectionElevations: TValueArrayStorage;
+  FeatureIndex: Integer;
+  AFeature: TSutraUSource;
 begin
+  if FSutraInput.USources.Count > 0 then
+  begin
+    USourceDataArray := CreateDataSet('U_Source', vamAveragedDelayed, 0);
+    Root := 'U_Source';
 
+    ExistingObjectCount :=
+      frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
+
+    AScreenObject := MakeNewScreenObject(FSutraInput.USources.Count);
+    AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
+    FScreenObjectList.Add(AScreenObject);
+
+    ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
+    ImportedSectionElevations.Count := FSutraInput.USources.Count;
+
+    SpecifiedUValueArrayItem := CreateValueArrayItem(AScreenObject,
+      FSutraInput.USources.Count, USourceDataArray);
+
+    for FeatureIndex := 0 to FSutraInput.USources.Count - 1 do
+    begin
+      AFeature := FSutraInput.USources[FeatureIndex];
+      ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
+      APoint.x := ALocation.x;
+      APoint.y := ALocation.y;
+      AScreenObject.AddPoint(APoint, True);
+      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+
+      SpecifiedUValueArrayItem.Values.RealValues[FeatureIndex]
+        := AFeature.QUINC;
+    end;
+  end;
+end;
+
+function TPestSutraFeatureDisplayer.MakeNewScreenObject(ACapacity: Integer): TScreenObject;
+var
+  UndoCreateScreenObject: TCustomUndo;
+begin
+  result :=
+    TScreenObject.CreateWithViewDirection(
+    frmGoPhast.PhastModel, vdTop,
+    UndoCreateScreenObject, False);
+  result.Comment := 'Imported from ' + FFileName +' on ' + DateTimeToStr(Now);
+  result.SetValuesOfEnclosedCells := False;
+  result.SetValuesOfIntersectedCells := True;
+  result.SetValuesByInterpolation := False;
+  result.ElevationCount := ecOne;
+  result.Capacity := ACapacity;
+  result.EvaluatedAt := eaNodes;
+  result.ElevationFormula := rsObjectImportedValuesR
+    + '("' + StrImportedElevations + '")';
 end;
 
 end.

@@ -193,6 +193,7 @@ begin
   FCurrentFile := FFile;
   FEmbeddedFiles := TObjectList<TStreamReader>.Create;
   FSplitter := TStringList.Create;
+  FSplitter.QuoteChar := '''';
   FSchedules := TSutraSchedules.Create;
   FFluidSources := TSutraFluidSources.Create;
   FUSources := TSutraUSources.Create;
@@ -258,6 +259,7 @@ var
   ALine: string;
 begin
   ALine := ReadNextNonCommentLine;
+  ALine := ReplaceText(ALine, '"', '''');
   FSplitter.DelimitedText := ALine;
   Assert(FSplitter.Count >= 5);
   Assert(UpperCase(FSplitter[0]) = 'NODE');
@@ -280,10 +282,10 @@ begin
     FSplitter.DelimitedText := ALine;
     NodeNumber := StrToInt(FSplitter[0]);
     APoint.x := FortranStrToFloat(FSplitter[2]) * FScaleX;
-    APoint.y := FortranStrToFloat(FSplitter[2]) * FScaleY;
+    APoint.y := FortranStrToFloat(FSplitter[3]) * FScaleY;
     if FMeshDimensions = smd3 then
     begin
-      APoint.z := FortranStrToFloat(FSplitter[2]) * FScaleZ;
+      APoint.z := FortranStrToFloat(FSplitter[4]) * FScaleZ;
     end
     else
     begin
@@ -315,19 +317,22 @@ var
   ABoundary: TSutraFluidSource;
 begin
   FFluidSources.Capacity := FNSOP;
-  for BoundaryIndex := 0 to FNSOP - 1 do
+  if FNSOP > 0 then
   begin
+    for BoundaryIndex := 0 to FNSOP - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      Assert(FSplitter.Count >= 3);
+      ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+      ABoundary.QINC := FortranStrToFloat(FSplitter[1]);
+      ABoundary.UINC := FortranStrToFloat(FSplitter[2]);
+      FFluidSources.Add(ABoundary);
+    end;
     ALine := ReadNextNonCommentLine;
     FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count >= 3);
-    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
-    ABoundary.QINC := FortranStrToFloat(FSplitter[1]);
-    ABoundary.UINC := FortranStrToFloat(FSplitter[2]);
-    FFluidSources.Add(ABoundary);
+    Assert(FSplitter[0] = '0');
   end;
-  ALine := ReadNextNonCommentLine;
-  FSplitter.DelimitedText := ALine;
-  Assert(FSplitter[0] = '0');
 end;
 
 procedure TSutraInputReader.ReadDataSet18;
@@ -337,18 +342,21 @@ var
   ABoundary: TSutraUSource;
 begin
   FUSources.Capacity := FNSOU;
-  for BoundaryIndex := 0 to FNSOU - 1 do
+  if FNSOU > 0 then
   begin
+    for BoundaryIndex := 0 to FNSOU - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      Assert(FSplitter.Count >= 2);
+      ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+      ABoundary.QUINC := FortranStrToFloat(FSplitter[1]);
+      FUSources.Add(ABoundary);
+    end;
     ALine := ReadNextNonCommentLine;
     FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count >= 2);
-    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
-    ABoundary.QUINC := FortranStrToFloat(FSplitter[1]);
-    FUSources.Add(ABoundary);
+    Assert(FSplitter[0] = '0');
   end;
-  ALine := ReadNextNonCommentLine;
-  FSplitter.DelimitedText := ALine;
-  Assert(FSplitter[0] = '0');
 end;
 
 procedure TSutraInputReader.ReadDataSet19;
@@ -358,19 +366,22 @@ var
   ABoundary: TSutraSpecifiedPressure;
 begin
   FSpecifiedPressures.Capacity := FNPBC;
-  for BoundaryIndex := 0 to FNPBC - 1 do
+  if FNPBC > 0 then
   begin
+    for BoundaryIndex := 0 to FNPBC - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      Assert(FSplitter.Count >= 3);
+      ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+      ABoundary.PBC := FortranStrToFloat(FSplitter[1]);
+      ABoundary.UBC := FortranStrToFloat(FSplitter[2]);
+      FSpecifiedPressures.Add(ABoundary);
+    end;
     ALine := ReadNextNonCommentLine;
     FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count >= 3);
-    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
-    ABoundary.PBC := FortranStrToFloat(FSplitter[1]);
-    ABoundary.UBC := FortranStrToFloat(FSplitter[2]);
-    FSpecifiedPressures.Add(ABoundary);
+    Assert(FSplitter[0] = '0');
   end;
-  ALine := ReadNextNonCommentLine;
-  FSplitter.DelimitedText := ALine;
-  Assert(FSplitter[0] = '0');
 end;
 
 procedure TSutraInputReader.ReadDataSet20;
@@ -380,18 +391,21 @@ var
   ABoundary: TSutraSpecifiedU;
 begin
   FSpecifiedUs.Capacity := FNSOU;
-  for BoundaryIndex := 0 to FNSOU - 1 do
+  if FNSOU > 0 then
   begin
+    for BoundaryIndex := 0 to FNSOU - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      Assert(FSplitter.Count >= 2);
+      ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+      ABoundary.UBC := FortranStrToFloat(FSplitter[1]);
+      FSpecifiedUs.Add(ABoundary);
+    end;
     ALine := ReadNextNonCommentLine;
     FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count >= 2);
-    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
-    ABoundary.UBC := FortranStrToFloat(FSplitter[1]);
-    FSpecifiedUs.Add(ABoundary);
+    Assert(FSplitter[0] = '0');
   end;
-  ALine := ReadNextNonCommentLine;
-  FSplitter.DelimitedText := ALine;
-  Assert(FSplitter[0] = '0');
 end;
 
 procedure TSutraInputReader.ReadDataSet21A;
@@ -402,72 +416,76 @@ var
   Selection: string;
 begin
   FGeneralizedFlows.Capacity := FNPBG;
-  for BoundaryIndex := 0 to FNPBG - 1 do
+  if FNPBG > 0 then
   begin
+    for BoundaryIndex := 0 to FNPBG - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      ALine := ReplaceText(ALine, '"', '''');
+      FSplitter.DelimitedText := ALine;
+      Assert(FSplitter.Count >= 10);
+      ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+      ABoundary.PBG1 := FortranStrToFloat(FSplitter[1]);
+      ABoundary.QPBG1 := FortranStrToFloat(FSplitter[2]);
+      ABoundary.PBG2 := FortranStrToFloat(FSplitter[3]);
+      ABoundary.QPBG2 := FortranStrToFloat(FSplitter[4]);
+      Selection := UpperCase(FSplitter[5]);
+      if Selection = 'Q' then
+      begin
+        ABoundary.CPQL1 := sltQ;
+      end
+      else if Selection = 'P' then
+      begin
+        ABoundary.CPQL1 := sltP;
+      end
+      else if Selection = 'N' then
+      begin
+        ABoundary.CPQL1 := sltNone;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+      Selection := UpperCase(FSplitter[6]);
+      if Selection = 'Q' then
+      begin
+        ABoundary.CPQL2 := sltQ;
+      end
+      else if Selection = 'P' then
+      begin
+        ABoundary.CPQL2 := sltP;
+      end
+      else if Selection = 'N' then
+      begin
+        ABoundary.CPQL2 := sltNone;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+      ABoundary.UPBGI := FortranStrToFloat(FSplitter[7]);
+
+      Selection := UpperCase(FSplitter[8]);
+      if Selection = 'DIR' then
+      begin
+        ABoundary.USpectype := sustDirect;
+      end
+      else if Selection = 'REL' then
+      begin
+        ABoundary.USpectype := sustRelative;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+
+      ABoundary.UPBGO := FortranStrToFloat(FSplitter[9]);
+      FGeneralizedFlows.Add(ABoundary);
+    end;
     ALine := ReadNextNonCommentLine;
     FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count >= 10);
-    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
-    ABoundary.PBG1 := FortranStrToFloat(FSplitter[1]);
-    ABoundary.QPBG1 := FortranStrToFloat(FSplitter[2]);
-    ABoundary.PBG2 := FortranStrToFloat(FSplitter[3]);
-    ABoundary.QPBG2 := FortranStrToFloat(FSplitter[4]);
-    Selection := UpperCase(FSplitter[5]);
-    if Selection = 'Q' then
-    begin
-      ABoundary.CPQL1 := sltQ;
-    end
-    else if Selection = 'P' then
-    begin
-      ABoundary.CPQL1 := sltP;
-    end
-    else if Selection = 'N' then
-    begin
-      ABoundary.CPQL1 := sltNone;
-    end
-    else
-    begin
-      Assert(False);
-    end;
-    Selection := UpperCase(FSplitter[6]);
-    if Selection = 'Q' then
-    begin
-      ABoundary.CPQL2 := sltQ;
-    end
-    else if Selection = 'P' then
-    begin
-      ABoundary.CPQL2 := sltP;
-    end
-    else if Selection = 'N' then
-    begin
-      ABoundary.CPQL2 := sltNone;
-    end
-    else
-    begin
-      Assert(False);
-    end;
-    ABoundary.UPBGI := FortranStrToFloat(FSplitter[7]);
-
-    Selection := UpperCase(FSplitter[8]);
-    if Selection = 'DIR' then
-    begin
-      ABoundary.USpectype := sustDirect;
-    end
-    else if Selection = 'REL' then
-    begin
-      ABoundary.USpectype := sustRelative;
-    end
-    else
-    begin
-      Assert(False);
-    end;
-
-    ABoundary.UPBGO := FortranStrToFloat(FSplitter[9]);
-    FGeneralizedFlows.Add(ABoundary);
+    Assert(FSplitter[0] = '0');
   end;
-  ALine := ReadNextNonCommentLine;
-  FSplitter.DelimitedText := ALine;
-  Assert(FSplitter[0] = '0');
 end;
 
 procedure TSutraInputReader.ReadDataSet21B;
@@ -475,25 +493,29 @@ var
   BoundaryIndex: Integer;
   ALine: string;
   ABoundary: TSutraGeneralizedTransport;
-  Selection: string;
 begin
   FGeneralizedTransports.Capacity := FNUBG;
-  for BoundaryIndex := 0 to FNUBG - 1 do
+  if FNUBG > 0 then
   begin
+    for BoundaryIndex := 0 to FNUBG - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      ALine := ReplaceText(ALine, '"', '''');
+      FSplitter.DelimitedText := ALine;
+      Assert(FSplitter.Count >= 10);
+      ABoundary.NodeNumber := StrToInt(FSplitter[0]);
+      ABoundary.UBG1 := FortranStrToFloat(FSplitter[1]);
+      ABoundary.QUBG1 := FortranStrToFloat(FSplitter[2]);
+      ABoundary.UBG2 := FortranStrToFloat(FSplitter[3]);
+      ABoundary.QUBG2 := FortranStrToFloat(FSplitter[4]);
+      FGeneralizedTransports.Add(ABoundary);
+    end;
     ALine := ReadNextNonCommentLine;
     FSplitter.DelimitedText := ALine;
-    Assert(FSplitter.Count >= 10);
-    ABoundary.NodeNumber := StrToInt(FSplitter[0]);
-    ABoundary.UBG1 := FortranStrToFloat(FSplitter[1]);
-    ABoundary.QUBG1 := FortranStrToFloat(FSplitter[2]);
-    ABoundary.UBG2 := FortranStrToFloat(FSplitter[3]);
-    ABoundary.QUBG2 := FortranStrToFloat(FSplitter[4]);
-    FGeneralizedTransports.Add(ABoundary);
+    Assert(FSplitter[0] = '0');
   end;
-  ALine := ReadNextNonCommentLine;
-  FSplitter.DelimitedText := ALine;
-  Assert(FSplitter[0] = '0');
 end;
+
 procedure TSutraInputReader.ReadDataSet22;
 var
   Index: Integer;
@@ -510,6 +532,7 @@ var
 begin
   ALine := ReadNextNonCommentLine;
   ALine := ReplaceText(ALine, '"', '');
+  ALine := ReplaceText(ALine, '''', '');
   FSplitter.DelimitedText := UpperCase(ALine);
   Assert(FSplitter.Count >= 2);
   Assert(FSplitter[0] = 'SUTRA');
@@ -553,6 +576,7 @@ var
 begin
   ALine := ReadNextNonCommentLine;
   ALine := ReplaceText(ALine, '"', '');
+  ALine := ReplaceText(ALine, '''', '');
   FSplitter.DelimitedText := UpperCase(ALine);
   Assert(FSplitter.Count >= 2);
   if FSplitter[0] = '2D' then
@@ -704,12 +728,14 @@ var
   ISTEPC: Integer;
 begin
   ALine := ReadNextNonCommentLine;
+//  ALine := ReplaceText(ALine, '"', '''');
   FSplitter.DelimitedText := ALine;
   Assert(FSplitter.Count >= 3);
   FNSCH := StrToInt(FSplitter[0]);
   for ScheduleIndex := 0 to FNSCH - 1 do
   begin
     ALine := ReadNextNonCommentLine;
+    ALine := ReplaceText(ALine, '"', '''');
     FSplitter.DelimitedText := ALine;
 
     ASchedule := TSutraSchedule.Create;
@@ -772,10 +798,11 @@ begin
 
           if CREFT = 'ABSOLUTE' then
           begin
-            AbsoluteTime := True
+            AbsoluteTime := True;
           end
           else
           begin
+            AbsoluteTime := False;
             Assert(CREFT = 'ELAPSED');
           end;
 
@@ -820,7 +847,11 @@ begin
               NextIndex := 0
             end;
             AStep := StrToInt(FSplitter[NextIndex]);
-            ASchedule.FTimes.Add(TimeSteps.Times[AStep-1]);
+            if AStep >= TimeSteps.TimeCount then
+            begin
+              break;
+            end;
+            ASchedule.FTimes.Add(TimeSteps.Times[AStep]);
           end;
         end;
       sstStepCycle:
@@ -834,7 +865,7 @@ begin
           ISTEPC := StrToInt(FSplitter[5]);
 
           AStep := ISTEPI;
-          ASchedule.FTimes.Add(TimeSteps.Times[AStep-1]);
+          ASchedule.FTimes.Add(TimeSteps.Times[AStep]);
           for StepIndex := 0 to NSMAX - 1 do
           begin
             AStep := AStep + ISTEPC;
@@ -842,7 +873,11 @@ begin
             begin
               break;
             end;
-            ASchedule.FTimes.Add(TimeSteps.Times[AStep-1]);
+            if AStep >= TimeSteps.TimeCount then
+            begin
+              break;
+            end;
+            ASchedule.FTimes.Add(TimeSteps.Times[AStep]);
           end;
         end;
       else
@@ -886,9 +921,15 @@ begin
 end;
 
 procedure TSutraInputReader.ReadDataSet8D;
+var
+  Index: Integer;
 begin
   if FNOBS > 0 then
   begin
+    for Index := 0 to FNOBS do
+    begin
+      ReadNextNonCommentLine;
+    end;
     ReadNextNonCommentLine;
   end;
 end;
