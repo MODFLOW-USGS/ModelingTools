@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, System.SysUtils, System.IOUtils, System.Generics.Collections,
-  System.StrUtils, FastGEO;
+  System.StrUtils, FastGEO, GoPhastTypes, RealListUnit;
 
 Type
   TSutraVersion = (sv2_0, sv2_1, sv2_2, sv3_0);
@@ -30,31 +30,47 @@ Type
   TSutraSchedules = TObjectList<TSutraSchedule>;
 
   TSutraFluidSource = record
+  private
+    function GetActive: Boolean;
+  public
     NodeNumber: Integer;
     QINC: double;
     UINC: double;
+    property Active: Boolean read GetActive;
   end;
 
   TSutraFluidSources = TList<TSutraFluidSource>;
 
   TSutraUSource = record
+  private
+    function GetActive: Boolean;
+  public
     NodeNumber: Integer;
     QUINC: double;
+    property Active: Boolean read GetActive;
   end;
 
   TSutraUSources = TList<TSutraUSource>;
 
   TSutraSpecifiedPressure = record
+  private
+    function GetActive: Boolean;
+  public
     NodeNumber: Integer;
     PBC: double;
     UBC: double;
+    property Active: Boolean read GetActive;
   end;
 
   TSutraSpecifiedPressures = TList<TSutraSpecifiedPressure>;
 
   TSutraSpecifiedU = record
+  private
+    function GetActive: Boolean;
+  public
     NodeNumber: Integer;
     UBC: double;
+    property Active: Boolean read GetActive;
   end;
 
   TSutraSpecifiedUs = TList<TSutraSpecifiedU>;
@@ -63,6 +79,9 @@ Type
   TSutraUSpecificationType = (sustDirect, sustRelative);
 
   TSutraGeneralizedFlow = record
+  private
+    function GetActive: Boolean;
+  public
     NodeNumber: Integer;
     PBG1: double;
     QPBG1: double;
@@ -73,26 +92,40 @@ Type
     UPBGI: double;
     USpectype: TSutraUSpecificationType;
     UPBGO: double;
+    property Active: Boolean read GetActive;
   end;
 
   TSutraGeneralizedFlows = TList<TSutraGeneralizedFlow>;
 
   TSutraGeneralizedTransport = record
+  private
+    function GetActive: Boolean;
+  public
     NodeNumber: Integer;
     UBG1: double;
     QUBG1: double;
     UBG2: double;
     QUBG2: double;
+    property Active: Boolean read GetActive;
   end;
 
   TSutraGeneralizedTransports = TList<TSutraGeneralizedTransport>;
 
-  TSutraInputReader = class(TObject)
+  TCustomSutraReader = class(TObject)
   private
+    FSplitter: TStringList;
     FFile: TStreamReader;
     FCurrentFile: TStreamReader;
     FEmbeddedFiles: TObjectList<TStreamReader>;
-    FSplitter: TStringList;
+  protected
+    function ReadNextNonCommentLine: string;
+  public
+    constructor Create(const FileName: string);
+    Destructor Destroy; override;
+  end;
+
+  TSutraInputReader = class(TCustomSutraReader)
+  private
     FVersion: TSutraVersion;
     FMeshDimensions: TSutraMeshDimensions;
     FMeshType: TSutraMeshType;
@@ -132,6 +165,7 @@ Type
     FSpecifiedUs: TSutraSpecifiedUs;
     FGeneralizedFlows: TSutraGeneralizedFlows;
     FGeneralizedTransports: TSutraGeneralizedTransports;
+    FScheduleDictionary: TDictionary<String, TSutraSchedule>;
     function ReadNextNonCommentLine: string;
     procedure ReadDataSet1;
     procedure ReadDataSet2A;
@@ -170,15 +204,73 @@ Type
     constructor Create(const FileName: string);
     Destructor Destroy; override;
     procedure ReadInputFile;
+    function GetScheduleByName(const AName: string): TSutraSchedule;
     property NodeCount: Integer read GetNodeCount;
     property Nodes[Index: Integer]: TPoint3D read GetNode;
     property FluidSources: TSutraFluidSources read FFluidSources;
     property USources: TSutraUSources read FUSources;
-    property SpecifiedPressures: TSutraSpecifiedPressures read FSpecifiedPressures;
+    property SpecifiedPressures: TSutraSpecifiedPressures
+     read FSpecifiedPressures;
     property SpecifiedUs: TSutraSpecifiedUs read FSpecifiedUs;
     property GeneralizedFlows: TSutraGeneralizedFlows read FGeneralizedFlows;
-    property GeneralizedTransports: TSutraGeneralizedTransports read FGeneralizedTransports;
+    property GeneralizedTransports: TSutraGeneralizedTransports
+      read FGeneralizedTransports;
+    property Version: TSutraVersion read FVersion;
+
   end;
+
+  TBcsInputReader = class(TCustomSutraReader)
+  private
+    FInputFileReader: TSutraInputReader;
+    FSpecifiedPressureIndices: TOneDIntegerArray;
+    FSpecifiedUIndices: TOneDIntegerArray;
+    FFluidSourceIndices: TOneDIntegerArray;
+    FMassEnergySourcesIndices: TOneDIntegerArray;
+    FGeneralizedPressBoundaryIndices: TOneDIntegerArray;
+    FGeneralizedTransportIndices: TOneDIntegerArray;
+    FTimeStep: Integer;
+    FAllTimes: TRealList;
+    FBoundaryTimes: TRealList;
+    FStepToUse: Integer;
+    FCurrentStep: Integer;
+    FStepsInFile: TList<Integer>;
+    FNSOP1: Integer;
+    FNSOU1: Integer;
+    FNPBC1: Integer;
+    FNUBC1: Integer;
+    FNPBG1: Integer;
+    FNUBG1: Integer;
+    procedure ReadDataSet1;
+    procedure ReadDataSet2;
+    procedure ReadDataSet3;
+    procedure ReadDataSet4;
+    procedure ReadDataSet5;
+    procedure ReadDataSet6;
+    procedure ReadDataSet7A;
+    procedure ReadDataSet7B;
+  public
+    constructor Create(const FileName: string);
+    Destructor Destroy; override;
+    property InputFileReader: TSutraInputReader read FInputFileReader
+      write FInputFileReader;
+    procedure ReadBcsFile(TimeStep: integer);
+    procedure ReadAStep;
+  end;
+
+  TSutraFilReader = class(TObject)
+  private
+    FSutraFile: TStreamReader;
+    FBcsFileReaders: TObjectList<TBcsInputReader>;
+    FSplitter: TStringList;
+    FInputFileReader: TSutraInputReader;
+    function ReadNextNonCommentLine: string;
+  public
+    constructor Create(const FileName: string);
+    destructor Destroy; override;
+    property InputFileReader: TSutraInputReader read FInputFileReader;
+    procedure ReadInput(TimeStep: integer);
+  end;
+
 
 implementation
 
@@ -189,11 +281,7 @@ uses
 
 constructor TSutraInputReader.Create(const FileName: string);
 begin
-  FFile := TFile.OpenText(FileName);
-  FCurrentFile := FFile;
-  FEmbeddedFiles := TObjectList<TStreamReader>.Create;
-  FSplitter := TStringList.Create;
-  FSplitter.QuoteChar := '''';
+  inherited;
   FSchedules := TSutraSchedules.Create;
   FFluidSources := TSutraFluidSources.Create;
   FUSources := TSutraUSources.Create;
@@ -205,6 +293,7 @@ end;
 
 destructor TSutraInputReader.Destroy;
 begin
+  FScheduleDictionary.Free;
   FGeneralizedTransports.Free;
   FGeneralizedFlows.Free;
   FSpecifiedUs.Free;
@@ -212,9 +301,6 @@ begin
   FUSources.Free;
   FFluidSources.Free;
   FSchedules.Free;
-  FSplitter.Free;
-  FEmbeddedFiles.Free;
-  FFile.Free;
   inherited;
 end;
 
@@ -226,6 +312,25 @@ end;
 function TSutraInputReader.GetNodeCount: Integer;
 begin
   result := Length(FNodes);
+end;
+
+function TSutraInputReader.GetScheduleByName(
+  const AName: string): TSutraSchedule;
+var
+  Index: Integer;
+  ASchedule: TSutraSchedule;
+begin
+  result := nil;
+  if FScheduleDictionary = nil then
+  begin
+    FScheduleDictionary := TDictionary<string, TSutraSchedule>.Create;
+    for Index := 0 to FSchedules.Count - 1 do
+    begin
+      ASchedule := FSchedules[Index];
+      FScheduleDictionary.Add(UpperCase(ASchedule.UnitName), ASchedule);
+    end;
+  end;
+  FScheduleDictionary.TryGetValue(UpperCase(AName), result);
 end;
 
 procedure TSutraInputReader.ReadDataSet1;
@@ -1044,6 +1149,550 @@ end;
 function TSutraSchedule.GetTimeCount: integer;
 begin
   result := FTimes.Count;
+end;
+
+{ TCustomSutraReader }
+
+constructor TCustomSutraReader.Create(const FileName: string);
+begin
+  FFile := TFile.OpenText(FileName);
+  FCurrentFile := FFile;
+  FEmbeddedFiles := TObjectList<TStreamReader>.Create;
+  FSplitter := TStringList.Create;
+  FSplitter.QuoteChar := '''';
+end;
+
+destructor TCustomSutraReader.Destroy;
+begin
+  FSplitter.Free;
+  FEmbeddedFiles.Free;
+  FFile.Free;
+  inherited;
+end;
+
+function TCustomSutraReader.ReadNextNonCommentLine: string;
+const
+  InsertCommand = '@INSERT';
+var
+  ALine: string;
+  EmbeddedFileName: string;
+  EmbeddedFile: TStreamReader;
+begin
+  result := '';
+  ALine := '';
+  while (not FCurrentFile.EndOfStream) or (FEmbeddedFiles.Count > 0) do
+  begin
+    ALine := FCurrentFile.ReadLine;
+    if (ALine <> '') and (ALine[1] <> '#') then
+    begin
+      if UpperCase(Copy(Trim(ALine), 1, Length(InsertCommand))) = InsertCommand
+      then
+      begin
+        FSplitter.DelimitedText := ALine;
+        Assert(FSplitter.Count >= 3);
+        EmbeddedFileName := FSplitter[2];
+        EmbeddedFile := TFile.OpenText(EmbeddedFileName);
+        FEmbeddedFiles.Add(EmbeddedFile);
+        FCurrentFile := EmbeddedFile;
+        Continue;
+      end;
+      result := ALine;
+      Exit;
+    end;
+    if FCurrentFile.EndOfStream and (FEmbeddedFiles.Count > 0) then
+    begin
+      FEmbeddedFiles.Delete(FEmbeddedFiles.Count - 1);
+      if FEmbeddedFiles.Count > 0 then
+      begin
+        FCurrentFile := FEmbeddedFiles[FEmbeddedFiles.Count - 1];
+      end
+      else
+      begin
+        FCurrentFile := FFile;
+      end;
+    end;
+  end;
+end;
+
+{ TBcsInputReader }
+
+constructor TBcsInputReader.Create(const FileName: string);
+begin
+  inherited;
+  FAllTimes := TRealList.Create;
+  FBoundaryTimes := TRealList.Create;
+  FStepsInFile := TList<Integer>.Create;
+end;
+
+destructor TBcsInputReader.Destroy;
+begin
+  FStepsInFile.Free;
+  FBoundaryTimes.Free;
+  FAllTimes.Free;
+  inherited;
+end;
+
+procedure TBcsInputReader.ReadAStep;
+begin
+  if FStepsInFile.IndexOf(FCurrentStep) >= 0 then
+  begin
+    ReadDataSet2;
+    ReadDataSet3;
+    ReadDataSet4;
+    ReadDataSet5;
+    ReadDataSet6;
+    ReadDataSet7A;
+    ReadDataSet7B;
+  end;
+  Inc(FCurrentStep);
+end;
+
+procedure TBcsInputReader.ReadBcsFile(TimeStep: integer);
+begin
+  FTimeStep := TimeStep;
+  Assert(InputFileReader <> nil);
+  ReadDataSet1;
+end;
+
+procedure TBcsInputReader.ReadDataSet1;
+var
+  ASchedule: TSutraSchedule;
+  TimeSteps: TSutraSchedule;
+  TimeIndex: Integer;
+  TimeToUse: Double;
+  BCSSCH: string;
+begin
+  BCSSCH := Trim(ReadNextNonCommentLine);
+  ASchedule := InputFileReader.GetScheduleByName(BCSSCH);
+  TimeSteps := InputFileReader.GetScheduleByName('TIME_STEPS');
+  FBoundaryTimes.Capacity := ASchedule.TimeCount;
+  for TimeIndex := 0 to ASchedule.TimeCount - 1 do
+  begin
+    FBoundaryTimes.Add(ASchedule.Times[TimeIndex]);
+  end;
+  FAllTimes.Capacity := TimeSteps.TimeCount;
+  for TimeIndex := 0 to TimeSteps.TimeCount - 1 do
+  begin
+    FAllTimes.Add(TimeSteps.Times[TimeIndex]);
+  end;
+  FBoundaryTimes.Sorted := True;
+  FAllTimes.Sorted := True;
+  Assert(FTimeStep <= FAllTimes.Count);
+  TimeToUse := FAllTimes[FTimeStep];
+  FStepToUse := FBoundaryTimes.IndexOfClosest(TimeToUse);
+  FCurrentStep := 0;
+
+  FStepsInFile.Capacity := FBoundaryTimes.Count;
+  for TimeIndex := 0 to FBoundaryTimes.Count - 1 do
+  begin
+    FStepsInFile.Add(FAllTimes.IndexOfClosest(FBoundaryTimes[TimeIndex]));
+  end;
+end;
+
+procedure TBcsInputReader.ReadDataSet2;
+var
+  ALine: string;
+begin
+  ALine := ReadNextNonCommentLine;
+  ALine := ReplaceText(ALine, '"', '');
+  FSplitter.DelimitedText := ALine;
+  FNSOP1 := StrToInt(FSplitter[1]);
+  FNSOU1 := StrToInt(FSplitter[2]);
+  FNPBC1 := StrToInt(FSplitter[3]);
+  FNUBC1 := StrToInt(FSplitter[4]);
+  FNPBG1 := StrToInt(FSplitter[5]);
+  FNUBG1 := StrToInt(FSplitter[6]);
+end;
+
+procedure TBcsInputReader.ReadDataSet3;
+var
+  Index: Integer;
+  LineIndex: Integer;
+  ALine: string;
+  IQCP1: Integer;
+  BoundaryIndex: Integer;
+  FluidSources: TSutraFluidSources;
+  ABoundary: TSutraFluidSource;
+begin
+  if FNSOP1 > 0 then
+  begin
+    FluidSources := InputFileReader.FluidSources;
+    if FFluidSourceIndices = nil then
+    begin
+      SetLength(FFluidSourceIndices, InputFileReader.FNN+1);
+      for Index := 0 to FluidSources.Count - 1 do
+      begin
+        FFluidSourceIndices[FluidSources[Index].NodeNumber] := Index;
+      end;
+    end;
+    for LineIndex := 0 to FNSOP1 - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      IQCP1 := StrToInt(FSplitter[0]);
+      BoundaryIndex := FFluidSourceIndices[Abs(IQCP1)];
+      ABoundary := FluidSources[BoundaryIndex];
+      ABoundary.NodeNumber := IQCP1;
+      ABoundary.QINC := FortranStrToFloat(FSplitter[1]);
+      ABoundary.UINC := FortranStrToFloat(FSplitter[2]);
+      FluidSources[BoundaryIndex] := ABoundary;
+    end;
+    ReadNextNonCommentLine;
+  end;
+end;
+
+procedure TBcsInputReader.ReadDataSet4;
+var
+  Index: Integer;
+  USources: TSutraUSources;
+  LineIndex: Integer;
+  ALine: string;
+  IQCU1: Integer;
+  BoundaryIndex: Integer;
+  ABoundary: TSutraUSource;
+begin
+  if FNSOU1 > 0 then
+  begin
+    USources := InputFileReader.USources;
+    if FMassEnergySourcesIndices = nil then
+    begin
+      SetLength(FMassEnergySourcesIndices, InputFileReader.FNN+1);
+      for Index := 0 to USources.Count - 1 do
+      begin
+        FMassEnergySourcesIndices[USources[Index].NodeNumber] := Index;
+      end;
+    end;
+    for LineIndex := 0 to FNSOU1 - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      IQCU1 := StrToInt(FSplitter[0]);
+      BoundaryIndex := FMassEnergySourcesIndices[Abs(IQCU1)];
+      ABoundary := USources[BoundaryIndex];
+      ABoundary.NodeNumber := IQCU1;
+      ABoundary.QUINC := FortranStrToFloat(FSplitter[1]);
+      USources[BoundaryIndex] := ABoundary;
+    end;
+    ReadNextNonCommentLine;
+  end;
+end;
+
+procedure TBcsInputReader.ReadDataSet5;
+var
+  Index: Integer;
+  SpecifiedPressures: TSutraSpecifiedPressures;
+  LineIndex: Integer;
+  ALine: string;
+  IPBC1: Integer;
+  BoundaryIndex: Integer;
+  ABoundary: TSutraSpecifiedPressure;
+begin
+  if FNPBC1 > 0 then
+  begin
+    SpecifiedPressures := InputFileReader.SpecifiedPressures;
+    if FSpecifiedPressureIndices = nil then
+    begin
+      SetLength(FSpecifiedPressureIndices, InputFileReader.FNN+1);
+      for Index := 0 to SpecifiedPressures.Count - 1 do
+      begin
+        FSpecifiedPressureIndices[SpecifiedPressures[Index].NodeNumber] := Index;
+      end;
+    end;
+    for LineIndex := 0 to FNPBC1 - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      IPBC1 := StrToInt(FSplitter[0]);
+      BoundaryIndex := FSpecifiedPressureIndices[Abs(IPBC1)];
+      ABoundary := SpecifiedPressures[BoundaryIndex];
+      ABoundary.NodeNumber := IPBC1;
+      ABoundary.PBC := FortranStrToFloat(FSplitter[1]);
+      ABoundary.UBC := FortranStrToFloat(FSplitter[2]);
+      SpecifiedPressures[BoundaryIndex] := ABoundary;
+    end;
+    ReadNextNonCommentLine;
+  end;
+end;
+
+procedure TBcsInputReader.ReadDataSet6;
+var
+  Index: Integer;
+  SpecifiedUs: TSutraSpecifiedUs;
+  LineIndex: Integer;
+  ALine: string;
+  IUBC1: Integer;
+  BoundaryIndex: Integer;
+  ABoundary: TSutraSpecifiedU;
+begin
+  if FNUBC1 > 0 then
+  begin
+    SpecifiedUs := InputFileReader.SpecifiedUs;
+    if FSpecifiedUIndices = nil then
+    begin
+      SetLength(FSpecifiedUIndices, InputFileReader.FNN+1);
+      for Index := 0 to SpecifiedUs.Count - 1 do
+      begin
+        FSpecifiedUIndices[SpecifiedUs[Index].NodeNumber] := Index;
+      end;
+    end;
+    for LineIndex := 0 to FNUBC1 - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      IUBC1 := StrToInt(FSplitter[0]);
+      BoundaryIndex := FSpecifiedUIndices[Abs(IUBC1)];
+      ABoundary := SpecifiedUs[BoundaryIndex];
+      ABoundary.NodeNumber := IUBC1;
+      ABoundary.UBC := FortranStrToFloat(FSplitter[1]);
+      SpecifiedUs[BoundaryIndex] := ABoundary;
+    end;
+    ReadNextNonCommentLine;
+  end;
+end;
+
+procedure TBcsInputReader.ReadDataSet7A;
+var
+  Index: Integer;
+  GeneralizedFlows: TSutraGeneralizedFlows;
+  LineIndex: Integer;
+  ALine: string;
+  IPBG: Integer;
+  BoundaryIndex: Integer;
+  ABoundary: TSutraGeneralizedFlow;
+  Selection: string;
+begin
+  if FNPBG1 > 0 then
+  begin
+    GeneralizedFlows := InputFileReader.GeneralizedFlows;
+    if FGeneralizedPressBoundaryIndices = nil then
+    begin
+      SetLength(FGeneralizedPressBoundaryIndices, InputFileReader.FNN+1);
+      for Index := 0 to GeneralizedFlows.Count - 1 do
+      begin
+        FGeneralizedPressBoundaryIndices[GeneralizedFlows[Index].NodeNumber] := Index;
+      end;
+    end;
+    for LineIndex := 0 to FNUBC1 - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      ALine := ReplaceText(ALine, '"', '');
+      FSplitter.DelimitedText := ALine;
+      IPBG := StrToInt(FSplitter[0]);
+      BoundaryIndex := FGeneralizedPressBoundaryIndices[Abs(IPBG)];
+      ABoundary := GeneralizedFlows[BoundaryIndex];
+      ABoundary.NodeNumber := IPBG;
+      ABoundary.PBG1 := FortranStrToFloat(FSplitter[1]);
+      ABoundary.QPBG1 := FortranStrToFloat(FSplitter[2]);
+      ABoundary.PBG2 := FortranStrToFloat(FSplitter[3]);
+      ABoundary.QPBG2 := FortranStrToFloat(FSplitter[4]);
+      Selection := UpperCase(FSplitter[5]);
+
+      if Selection = 'Q' then
+      begin
+        ABoundary.CPQL1 := sltQ;
+      end
+      else if Selection = 'P' then
+      begin
+        ABoundary.CPQL1 := sltP;
+      end
+      else if Selection = 'N' then
+      begin
+        ABoundary.CPQL1 := sltNone;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+      Selection := UpperCase(FSplitter[6]);
+      if Selection = 'Q' then
+      begin
+        ABoundary.CPQL2 := sltQ;
+      end
+      else if Selection = 'P' then
+      begin
+        ABoundary.CPQL2 := sltP;
+      end
+      else if Selection = 'N' then
+      begin
+        ABoundary.CPQL2 := sltNone;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+
+      ABoundary.UPBGI := FortranStrToFloat(FSplitter[7]);
+      Selection := UpperCase(FSplitter[8]);
+      if Selection = 'DIR' then
+      begin
+        ABoundary.USpectype := sustDirect;
+      end
+      else if Selection = 'REL' then
+      begin
+        ABoundary.USpectype := sustRelative;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+      ABoundary.UPBGO := FortranStrToFloat(FSplitter[9]);
+      GeneralizedFlows[BoundaryIndex] := ABoundary;
+    end;
+    ReadNextNonCommentLine;
+  end;
+end;
+
+procedure TBcsInputReader.ReadDataSet7B;
+var
+  Index: Integer;
+  GeneralizedTransports: TSutraGeneralizedTransports;
+  LineIndex: Integer;
+  ALine: string;
+  IUBG: Integer;
+  BoundaryIndex: Integer;
+  ABoundary: TSutraGeneralizedTransport;
+begin
+  if FNUBG1 > 0 then
+  begin
+    GeneralizedTransports := InputFileReader.GeneralizedTransports;
+    if FGeneralizedTransportIndices = nil then
+    begin
+      SetLength(FGeneralizedTransportIndices, InputFileReader.FNN+1);
+      for Index := 0 to GeneralizedTransports.Count - 1 do
+      begin
+        FGeneralizedTransportIndices[GeneralizedTransports[Index].NodeNumber] := Index;
+      end;
+    end;
+    for LineIndex := 0 to FNUBC1 - 1 do
+    begin
+      ALine := ReadNextNonCommentLine;
+      FSplitter.DelimitedText := ALine;
+      IUBG := StrToInt(FSplitter[0]);
+      BoundaryIndex := FGeneralizedTransportIndices[Abs(IUBG)];
+      ABoundary := GeneralizedTransports[BoundaryIndex];
+      ABoundary.NodeNumber := IUBG;
+      ABoundary.UBG1 := FortranStrToFloat(FSplitter[1]);
+      ABoundary.QUBG1 := FortranStrToFloat(FSplitter[2]);
+      ABoundary.UBG2 := FortranStrToFloat(FSplitter[3]);
+      ABoundary.QUBG2 := FortranStrToFloat(FSplitter[4]);
+      GeneralizedTransports[BoundaryIndex] := ABoundary;
+    end;
+
+  end;
+end;
+
+{ TSutraFluidSource }
+
+function TSutraFluidSource.GetActive: Boolean;
+begin
+  result := NodeNumber > 0;
+end;
+
+{ TSutraUSource }
+
+function TSutraUSource.GetActive: Boolean;
+begin
+  result := NodeNumber > 0;
+end;
+
+{ TSutraSpecifiedPressure }
+
+function TSutraSpecifiedPressure.GetActive: Boolean;
+begin
+  result := NodeNumber > 0;
+end;
+
+{ TSutraSpecifiedU }
+
+function TSutraSpecifiedU.GetActive: Boolean;
+begin
+  result := NodeNumber > 0;
+end;
+
+{ TSutraGeneralizedFlow }
+
+function TSutraGeneralizedFlow.GetActive: Boolean;
+begin
+  result := NodeNumber > 0;
+end;
+
+{ TSutraGeneralizedTransport }
+
+function TSutraGeneralizedTransport.GetActive: Boolean;
+begin
+  result := NodeNumber > 0;
+end;
+
+{ TSutraFilReader }
+
+constructor TSutraFilReader.Create(const FileName: string);
+begin
+  FSutraFile := TFile.OpenText(FileName);
+  FBcsFileReaders := TObjectList<TBcsInputReader>.Create;
+  FSplitter := TStringList.Create;
+  FSplitter.QuoteChar := '''';
+end;
+
+destructor TSutraFilReader.Destroy;
+begin
+  FInputFileReader.Free;
+  FSplitter.Free;
+  FBcsFileReaders.Free;
+  FSutraFile.Free;
+end;
+
+procedure TSutraFilReader.ReadInput(TimeStep: integer);
+var
+  BcsReader: TBcsInputReader;
+  ReaderIndex: Integer;
+  TimeIndex: Integer;
+begin
+  while (not FSutraFile.EndOfStream) do
+  begin
+    FSplitter.DelimitedText := ReadNextNonCommentLine;
+    if UpperCase(FSplitter[0]) = 'INP' then
+    begin
+      FInputFileReader := TSutraInputReader.Create(FSplitter[2]);
+    end
+    else if UpperCase(FSplitter[0]) = 'BCS' then
+    begin
+      BcsReader := TBcsInputReader.Create(FSplitter[2]);
+      FBcsFileReaders.Add(BcsReader);
+    end;
+  end;
+  Assert(FInputFileReader <> nil);
+  FInputFileReader.ReadInputFile;
+  for ReaderIndex := 0 to FBcsFileReaders.Count - 1 do
+  begin
+    BcsReader := FBcsFileReaders[ReaderIndex];
+    BcsReader.InputFileReader := FInputFileReader;
+    BcsReader.ReadBcsFile(TimeStep);
+  end;
+  for TimeIndex := 0 to TimeStep do
+  begin
+    for ReaderIndex := 0 to FBcsFileReaders.Count - 1 do
+    begin
+      BcsReader := FBcsFileReaders[ReaderIndex];
+      BcsReader.ReadAStep;
+    end;
+  end;
+end;
+
+function TSutraFilReader.ReadNextNonCommentLine: string;
+var
+  ALine: string;
+begin
+  result := '';
+  ALine := '';
+  while (not FSutraFile.EndOfStream) do
+  begin
+    ALine := FSutraFile.ReadLine;
+    if (ALine <> '') and (ALine[1] <> '#') then
+    begin
+      result := ALine;
+      Exit;
+    end;
+  end;
 end;
 
 end.
