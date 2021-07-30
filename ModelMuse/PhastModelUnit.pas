@@ -10314,6 +10314,11 @@ const
 //                parameters when the parameters are renamed.
 //               Bug fix: (not in released version) Fixed renaming transient
 //                parameters in the Manage Parameters dialog box.
+//               Bug fix: Fixed a bug in exporting SUTRA time schedules for
+//                BCS files in which the time steps were one greater than they
+//                should have been.
+//               Bug fix: Fixed a bug importing SUTRA BCOF, BCOP, BCOS, and BCOU
+//                files in which inactive boundaries were not handled correctly.
 
 const
   // version number of ModelMuse.

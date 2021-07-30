@@ -44089,7 +44089,7 @@ begin
     else Assert(False);
   end;
 
-  if OtherData is TSutraDataObject then
+  {if OtherData is TSutraDataObject then
   begin
     UsedFunction := TSutraDataObject(OtherData).UsedFunction;
     if UsedFunction <> 'True' then
@@ -44148,7 +44148,7 @@ begin
         VariablesForUsedExpression.Free;
       end;
     end;
-  end;
+  end;}
 end;
 
 procedure TCustomMeshDelegate.GetFrontCellsToAssign(const DataSetFunction: string;

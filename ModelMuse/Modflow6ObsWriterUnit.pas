@@ -238,6 +238,9 @@ resourcestring
 //  StrObservationNameToo = 'Observation name too long';
   StrTheNameOfTheHead = 'The name of the head observation named %0:s at Laye' +
   'r %1:d, Row %2:d, Column %3:d is too long.';
+  StrObservationTimeTo = 'Observation time to late.';
+  StrAnObservationTime = 'An observation time defined by "%0:s is after the ' +
+  'end of the simulation';
 
 
 { TModflow6Obs_Writer }
@@ -406,6 +409,7 @@ var
   IntersectCellThickness: Double;
   CellListStart: Integer;
   CellListEnd: Integer;
+  LastTime: double;
 //  SplitterIndex: Integer;
 //  FirstCell: Boolean;
   function GetLocation(ACell: TCellLocation): TPoint2D;
@@ -420,6 +424,7 @@ var
     end;
   end;
 begin
+  LastTime := Model.ModflowFullStressPeriods.Last.EndTime;
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidHeadOrDrawCalib);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidObjectZFor);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMultilayerHeadOrD);
@@ -427,6 +432,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingHeadO);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   frmErrorsAndWarnings.RemoveErrorGroup(Model,StrObservationNameToo);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationTimeTo);
   if Model.PestUsed then
   begin
     // These two properties need to be specified outside of TModflow6Obs_Writer;
@@ -789,6 +795,12 @@ begin
                           DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
                             ['hd_' + ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
+                          if LastTime > Observation.Time then
+                          begin
+                            frmErrorsAndWarnings.AddError(Model, StrObservationTimeTo,
+                              Format(StrAnObservationTime,
+                              [AScreenObject.Name]), AScreenObject)
+                          end;
                         end;
                       end;
                       DirectObsLines.Add('');

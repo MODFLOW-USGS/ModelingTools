@@ -231,7 +231,7 @@ Type
     FTimeStep: Integer;
     FAllTimes: TRealList;
     FBoundaryTimes: TRealList;
-    FStepToUse: Integer;
+//    FStepToUse: Integer;
     FCurrentStep: Integer;
     FStepsInFile: TList<Integer>;
     FNSOP1: Integer;
@@ -327,7 +327,7 @@ begin
     for Index := 0 to FSchedules.Count - 1 do
     begin
       ASchedule := FSchedules[Index];
-      FScheduleDictionary.Add(UpperCase(ASchedule.UnitName), ASchedule);
+      FScheduleDictionary.Add(UpperCase(ASchedule.SCHNAM), ASchedule);
     end;
   end;
   FScheduleDictionary.TryGetValue(UpperCase(AName), result);
@@ -886,6 +886,7 @@ begin
             end;
             ATime := FortranStrToFloat(FSplitter[NextIndex])*SCALT;
             ASchedule.FTimes.Add(ATime);
+            Inc(NextIndex);
           end;
         end;
       sstTimeCycle:
@@ -957,6 +958,7 @@ begin
               break;
             end;
             ASchedule.FTimes.Add(TimeSteps.Times[AStep]);
+            Inc(NextIndex);
           end;
         end;
       sstStepCycle:
@@ -1262,24 +1264,47 @@ var
   TimeToUse: Double;
   BCSSCH: string;
 begin
-  BCSSCH := Trim(ReadNextNonCommentLine);
-  ASchedule := InputFileReader.GetScheduleByName(BCSSCH);
   TimeSteps := InputFileReader.GetScheduleByName('TIME_STEPS');
-  FBoundaryTimes.Capacity := ASchedule.TimeCount;
-  for TimeIndex := 0 to ASchedule.TimeCount - 1 do
-  begin
-    FBoundaryTimes.Add(ASchedule.Times[TimeIndex]);
-  end;
   FAllTimes.Capacity := TimeSteps.TimeCount;
   for TimeIndex := 0 to TimeSteps.TimeCount - 1 do
   begin
     FAllTimes.Add(TimeSteps.Times[TimeIndex]);
   end;
-  FBoundaryTimes.Sorted := True;
   FAllTimes.Sorted := True;
+
+  FSplitter.DelimitedText := Trim(ReadNextNonCommentLine);
+  BCSSCH := FSplitter[0];
+  if BCSSCH = 'STEP_0' then
+  begin
+    FBoundaryTimes.Capacity := 1;
+    FBoundaryTimes.Add(TimeSteps.Times[0]);
+  end
+  else if BCSSCH = 'STEP_1' then
+  begin
+    FBoundaryTimes.Capacity := 1;
+    FBoundaryTimes.Add(TimeSteps.Times[1]);
+  end
+  else if BCSSCH = 'STEPS_1&UP' then
+  begin
+    FBoundaryTimes.Capacity := TimeSteps.TimeCount-1;
+    for TimeIndex := 1 to TimeSteps.TimeCount - 1 do
+    begin
+      FBoundaryTimes.Add(ASchedule.Times[TimeIndex]);
+    end;
+  end
+  else
+  begin
+    ASchedule := InputFileReader.GetScheduleByName(BCSSCH);
+    FBoundaryTimes.Capacity := ASchedule.TimeCount;
+    for TimeIndex := 0 to ASchedule.TimeCount - 1 do
+    begin
+      FBoundaryTimes.Add(ASchedule.Times[TimeIndex]);
+    end;
+  end;
+  FBoundaryTimes.Sorted := True;
   Assert(FTimeStep <= FAllTimes.Count);
   TimeToUse := FAllTimes[FTimeStep];
-  FStepToUse := FBoundaryTimes.IndexOfClosest(TimeToUse);
+//  FStepToUse := FBoundaryTimes.IndexOfClosest(TimeToUse);
   FCurrentStep := 0;
 
   FStepsInFile.Capacity := FBoundaryTimes.Count;
@@ -1300,8 +1325,16 @@ begin
   FNSOU1 := StrToInt(FSplitter[2]);
   FNPBC1 := StrToInt(FSplitter[3]);
   FNUBC1 := StrToInt(FSplitter[4]);
-  FNPBG1 := StrToInt(FSplitter[5]);
-  FNUBG1 := StrToInt(FSplitter[6]);
+  if FInputFileReader.Version = sv3_0 then
+  begin
+    FNPBG1 := StrToInt(FSplitter[5]);
+    FNUBG1 := StrToInt(FSplitter[6]);
+  end
+  else
+  begin
+    FNPBG1 := 0;
+    FNUBG1 := 0;
+  end;
 end;
 
 procedure TBcsInputReader.ReadDataSet3;
@@ -1333,8 +1366,11 @@ begin
       BoundaryIndex := FFluidSourceIndices[Abs(IQCP1)];
       ABoundary := FluidSources[BoundaryIndex];
       ABoundary.NodeNumber := IQCP1;
-      ABoundary.QINC := FortranStrToFloat(FSplitter[1]);
-      ABoundary.UINC := FortranStrToFloat(FSplitter[2]);
+      if IQCP1 > 0 then
+      begin
+        ABoundary.QINC := FortranStrToFloat(FSplitter[1]);
+        ABoundary.UINC := FortranStrToFloat(FSplitter[2]);
+      end;
       FluidSources[BoundaryIndex] := ABoundary;
     end;
     ReadNextNonCommentLine;
@@ -1370,7 +1406,10 @@ begin
       BoundaryIndex := FMassEnergySourcesIndices[Abs(IQCU1)];
       ABoundary := USources[BoundaryIndex];
       ABoundary.NodeNumber := IQCU1;
-      ABoundary.QUINC := FortranStrToFloat(FSplitter[1]);
+      if IQCU1 > 0 then
+      begin
+        ABoundary.QUINC := FortranStrToFloat(FSplitter[1]);
+      end;
       USources[BoundaryIndex] := ABoundary;
     end;
     ReadNextNonCommentLine;
@@ -1406,8 +1445,11 @@ begin
       BoundaryIndex := FSpecifiedPressureIndices[Abs(IPBC1)];
       ABoundary := SpecifiedPressures[BoundaryIndex];
       ABoundary.NodeNumber := IPBC1;
-      ABoundary.PBC := FortranStrToFloat(FSplitter[1]);
-      ABoundary.UBC := FortranStrToFloat(FSplitter[2]);
+      if IPBC1 > 0 then
+      begin
+        ABoundary.PBC := FortranStrToFloat(FSplitter[1]);
+        ABoundary.UBC := FortranStrToFloat(FSplitter[2]);
+      end;
       SpecifiedPressures[BoundaryIndex] := ABoundary;
     end;
     ReadNextNonCommentLine;
@@ -1443,7 +1485,10 @@ begin
       BoundaryIndex := FSpecifiedUIndices[Abs(IUBC1)];
       ABoundary := SpecifiedUs[BoundaryIndex];
       ABoundary.NodeNumber := IUBC1;
-      ABoundary.UBC := FortranStrToFloat(FSplitter[1]);
+      if IUBC1 > 0 then
+      begin
+        ABoundary.UBC := FortranStrToFloat(FSplitter[1]);
+      end;
       SpecifiedUs[BoundaryIndex] := ABoundary;
     end;
     ReadNextNonCommentLine;
@@ -1481,61 +1526,64 @@ begin
       BoundaryIndex := FGeneralizedPressBoundaryIndices[Abs(IPBG)];
       ABoundary := GeneralizedFlows[BoundaryIndex];
       ABoundary.NodeNumber := IPBG;
-      ABoundary.PBG1 := FortranStrToFloat(FSplitter[1]);
-      ABoundary.QPBG1 := FortranStrToFloat(FSplitter[2]);
-      ABoundary.PBG2 := FortranStrToFloat(FSplitter[3]);
-      ABoundary.QPBG2 := FortranStrToFloat(FSplitter[4]);
-      Selection := UpperCase(FSplitter[5]);
+      if IPBG > 0 then
+      begin
+        ABoundary.PBG1 := FortranStrToFloat(FSplitter[1]);
+        ABoundary.QPBG1 := FortranStrToFloat(FSplitter[2]);
+        ABoundary.PBG2 := FortranStrToFloat(FSplitter[3]);
+        ABoundary.QPBG2 := FortranStrToFloat(FSplitter[4]);
+        Selection := UpperCase(FSplitter[5]);
 
-      if Selection = 'Q' then
-      begin
-        ABoundary.CPQL1 := sltQ;
-      end
-      else if Selection = 'P' then
-      begin
-        ABoundary.CPQL1 := sltP;
-      end
-      else if Selection = 'N' then
-      begin
-        ABoundary.CPQL1 := sltNone;
-      end
-      else
-      begin
-        Assert(False);
-      end;
-      Selection := UpperCase(FSplitter[6]);
-      if Selection = 'Q' then
-      begin
-        ABoundary.CPQL2 := sltQ;
-      end
-      else if Selection = 'P' then
-      begin
-        ABoundary.CPQL2 := sltP;
-      end
-      else if Selection = 'N' then
-      begin
-        ABoundary.CPQL2 := sltNone;
-      end
-      else
-      begin
-        Assert(False);
-      end;
+        if Selection = 'Q' then
+        begin
+          ABoundary.CPQL1 := sltQ;
+        end
+        else if Selection = 'P' then
+        begin
+          ABoundary.CPQL1 := sltP;
+        end
+        else if Selection = 'N' then
+        begin
+          ABoundary.CPQL1 := sltNone;
+        end
+        else
+        begin
+          Assert(False);
+        end;
+        Selection := UpperCase(FSplitter[6]);
+        if Selection = 'Q' then
+        begin
+          ABoundary.CPQL2 := sltQ;
+        end
+        else if Selection = 'P' then
+        begin
+          ABoundary.CPQL2 := sltP;
+        end
+        else if Selection = 'N' then
+        begin
+          ABoundary.CPQL2 := sltNone;
+        end
+        else
+        begin
+          Assert(False);
+        end;
 
-      ABoundary.UPBGI := FortranStrToFloat(FSplitter[7]);
-      Selection := UpperCase(FSplitter[8]);
-      if Selection = 'DIR' then
-      begin
-        ABoundary.USpectype := sustDirect;
-      end
-      else if Selection = 'REL' then
-      begin
-        ABoundary.USpectype := sustRelative;
-      end
-      else
-      begin
-        Assert(False);
+        ABoundary.UPBGI := FortranStrToFloat(FSplitter[7]);
+        Selection := UpperCase(FSplitter[8]);
+        if Selection = 'DIR' then
+        begin
+          ABoundary.USpectype := sustDirect;
+        end
+        else if Selection = 'REL' then
+        begin
+          ABoundary.USpectype := sustRelative;
+        end
+        else
+        begin
+          Assert(False);
+        end;
+        ABoundary.UPBGO := FortranStrToFloat(FSplitter[9]);
       end;
-      ABoundary.UPBGO := FortranStrToFloat(FSplitter[9]);
       GeneralizedFlows[BoundaryIndex] := ABoundary;
     end;
     ReadNextNonCommentLine;
@@ -1571,10 +1619,13 @@ begin
       BoundaryIndex := FGeneralizedTransportIndices[Abs(IUBG)];
       ABoundary := GeneralizedTransports[BoundaryIndex];
       ABoundary.NodeNumber := IUBG;
-      ABoundary.UBG1 := FortranStrToFloat(FSplitter[1]);
-      ABoundary.QUBG1 := FortranStrToFloat(FSplitter[2]);
-      ABoundary.UBG2 := FortranStrToFloat(FSplitter[3]);
-      ABoundary.QUBG2 := FortranStrToFloat(FSplitter[4]);
+      if IUBG > 0 then
+      begin
+        ABoundary.UBG1 := FortranStrToFloat(FSplitter[1]);
+        ABoundary.QUBG1 := FortranStrToFloat(FSplitter[2]);
+        ABoundary.UBG2 := FortranStrToFloat(FSplitter[3]);
+        ABoundary.QUBG2 := FortranStrToFloat(FSplitter[4]);
+      end;
       GeneralizedTransports[BoundaryIndex] := ABoundary;
     end;
 

@@ -40,7 +40,8 @@ type
     FNewDataSets: TList;
     FInvalidNames: TStringList;
     FScreenObjectList: TObjectList;
-
+    FSutraModel: TSutraFilReader;
+    FTimeStep: Integer;
     procedure ImportSpecifiedPressures;
     procedure ImportSpecifiedU;
     procedure ImportFluidFluxes;
@@ -49,14 +50,14 @@ type
     procedure ImportGeneralizedTransport;
     function MakeNewScreenObject(ACapacity: Integer): TScreenObject;
     function CreateDataSet(const Root: string;
-      Method: TValueAddMethod; StressPeriod: Integer): TSutraBoundaryDisplayDataArray;
+      Method: TValueAddMethod): TSutraBoundaryDisplayDataArray;
     function CreateValueArrayItem(ScreenObject: TScreenObject; Count: Integer;
       DataArray: TSutraBoundaryDisplayDataArray): TValueArrayItem;
   public
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure ImportFeatures(const FileName: string;
-      FeatureTypes: TSutraFeatureTypes);
+      FeatureTypes: TSutraFeatureTypes; TimeStep: Integer);
   end;
 
 implementation
@@ -1066,7 +1067,7 @@ begin
 end;
 
 function TPestSutraFeatureDisplayer.CreateDataSet(const Root: string;
-  Method: TValueAddMethod; StressPeriod: Integer): TSutraBoundaryDisplayDataArray;
+  Method: TValueAddMethod): TSutraBoundaryDisplayDataArray;
 var
   LocalModel: TCustomModel;
 begin
@@ -1075,10 +1076,10 @@ begin
   result.Orientation := dso3D;
   result.EvaluatedAt := eaNodes;
   result.AddMethod := Method;
-  if StressPeriod > 0 then
+  if FTimeStep >= 0 then
   begin
-    result.Name := GenerateNewName(Format('%0:s_SP_%1:d',
-      [Root, StressPeriod]), FInvalidNames, '_');
+    result.Name := GenerateNewName(Format('%0:s_TS_%1:d',
+      [Root, FTimeStep]), FInvalidNames, '_');
   end
   else
   begin
@@ -1115,18 +1116,36 @@ begin
   FScreenObjectList.Free;
   FInvalidNames.Free;
   FNewDataSets.Free;
-  FSutraInput.Free;
+  if FSutraModel = nil then
+  begin
+    FSutraInput.Free;
+  end
+  else
+  begin
+    FSutraModel.Free;
+  end;
   inherited;
 end;
 
 procedure TPestSutraFeatureDisplayer.ImportFeatures(const FileName: string;
-  FeatureTypes: TSutraFeatureTypes);
+  FeatureTypes: TSutraFeatureTypes; TimeStep: Integer);
 var
   Undo: TUndoImportPestModelFeatureDisplay;
 begin
   FFileName := FileName;
-  FSutraInput := TSutraInputReader.Create(FileName);
-  FSutraInput.ReadInputFile;
+  if SameText(ExtractFileName(FFileName), 'sutra.fil') then
+  begin
+    FSutraModel := TSutraFilReader.Create(FileName);
+    FSutraModel.ReadInput(TimeStep);
+    FSutraInput := FSutraModel.InputFileReader;
+    FTimeStep := TimeStep;
+  end
+  else
+  begin
+    FSutraInput := TSutraInputReader.Create(FileName);
+    FSutraInput.ReadInputFile;
+    FTimeStep := -1;
+  end;
   if sftSpecPres in FeatureTypes then
   begin
     ImportSpecifiedPressures;
@@ -1180,17 +1199,32 @@ var
   APoint: TPoint2D;
   ImportedSectionElevations: TValueArrayStorage;
   FeatureIndex: Integer;
+  ActiveCount: Integer;
 begin
   if FSutraInput.FluidSources.Count > 0 then
   begin
-    FlowRateDataArray := CreateDataSet('Specified_Flow', vamAveragedDelayed, 0);
-    UFlowDataArray := CreateDataSet('Specified_Flow_Associated_U', vamAveragedDelayed, 0);
+    ActiveCount := 0;
+    for FeatureIndex := 0 to FSutraInput.FluidSources.Count - 1 do
+    begin
+      AFeature := FSutraInput.FluidSources[FeatureIndex];
+      if AFeature.Active then
+      begin
+        Inc(ActiveCount);
+      end;
+    end;
+    if ActiveCount = 0 then
+    begin
+      Exit;
+    end;
+
+    FlowRateDataArray := CreateDataSet('Specified_Flow', vamAveragedDelayed);
+    UFlowDataArray := CreateDataSet('Specified_Flow_Associated_U', vamAveragedDelayed);
     Root := 'Spec_Flow';
 
     ExistingObjectCount :=
       frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
 
-    AScreenObject := MakeNewScreenObject(FSutraInput.FluidSources.Count);
+    AScreenObject := MakeNewScreenObject(ActiveCount);
     AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
     FScreenObjectList.Add(AScreenObject);
 
@@ -1202,19 +1236,25 @@ begin
     FlowRateUValueArrayItem := CreateValueArrayItem(AScreenObject,
       FSutraInput.FluidSources.Count, UFlowDataArray);
 
+    ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.FluidSources.Count - 1 do
     begin
       AFeature := FSutraInput.FluidSources[FeatureIndex];
+      if not AFeature.Active then
+      begin
+        Continue;
+      end;
       ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
       APoint.x := ALocation.x;
       APoint.y := ALocation.y;
       AScreenObject.AddPoint(APoint, True);
-      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+      ImportedSectionElevations.RealValues[ActiveCount] := ALocation.Z;
 
-      FlowRateValueArrayItem.Values.RealValues[FeatureIndex]
+      FlowRateValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.QINC;
-      FlowRateUValueArrayItem.Values.RealValues[FeatureIndex]
+      FlowRateUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.UINC;
+      Inc(ActiveCount);
     end;
   end;
 end;
@@ -1237,19 +1277,34 @@ var
   HigherGeneralizeUValueArrayItem: TValueArrayItem;
   HigherGeneralizedURateValueArrayItem: TValueArrayItem;
   AFeature: TSutraGeneralizedTransport;
+  ActiveCount: Integer;
 begin
   if FSutraInput.GeneralizedTransports.Count > 0 then
   begin
-    LowerGeneralizedUDataArray := CreateDataSet('Lower_Generalized_Transport_U', vamAveragedDelayed, 0);
-    LowerGeneralizedURateDataArray := CreateDataSet('Lower_Generalized_Transport_U_Rate', vamAveragedDelayed, 0);
-    HigherGeneralizedUDataArray := CreateDataSet('Higher_Generalized_Transport_U', vamAveragedDelayed, 0);
-    HigherGeneralizedURateDataArray := CreateDataSet('Higher_Generalized_Transport_U_Rate', vamAveragedDelayed, 0);
+    ActiveCount := 0;
+    for FeatureIndex := 0 to FSutraInput.GeneralizedTransports.Count - 1 do
+    begin
+      AFeature := FSutraInput.GeneralizedTransports[FeatureIndex];
+      if AFeature.Active then
+      begin
+        Inc(ActiveCount);
+      end;
+    end;
+    if ActiveCount = 0 then
+    begin
+      Exit;
+    end;
+
+    LowerGeneralizedUDataArray := CreateDataSet('Lower_Generalized_Transport_U', vamAveragedDelayed);
+    LowerGeneralizedURateDataArray := CreateDataSet('Lower_Generalized_Transport_U_Rate', vamAveragedDelayed);
+    HigherGeneralizedUDataArray := CreateDataSet('Higher_Generalized_Transport_U', vamAveragedDelayed);
+    HigherGeneralizedURateDataArray := CreateDataSet('Higher_Generalized_Transport_U_Rate', vamAveragedDelayed);
     Root := 'Gen_Transport';
 
     ExistingObjectCount :=
       frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
 
-    AScreenObject := MakeNewScreenObject(FSutraInput.GeneralizedTransports.Count);
+    AScreenObject := MakeNewScreenObject(ActiveCount);
     AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
     FScreenObjectList.Add(AScreenObject);
 
@@ -1265,23 +1320,29 @@ begin
     HigherGeneralizedURateValueArrayItem := CreateValueArrayItem(AScreenObject,
       FSutraInput.GeneralizedTransports.Count, HigherGeneralizedURateDataArray);
 
+    ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.GeneralizedTransports.Count - 1 do
     begin
       AFeature := FSutraInput.GeneralizedTransports[FeatureIndex];
+      if not AFeature.Active then
+      begin
+        Continue;
+      end;
       ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
       APoint.x := ALocation.x;
       APoint.y := ALocation.y;
       AScreenObject.AddPoint(APoint, True);
-      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+      ImportedSectionElevations.RealValues[ActiveCount] := ALocation.Z;
 
-      LowerGeneralizeUValueArrayItem.Values.RealValues[FeatureIndex]
+      LowerGeneralizeUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.UBG1;
-      LowerGeneralizedURateValueArrayItem.Values.RealValues[FeatureIndex]
+      LowerGeneralizedURateValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.QUBG1;
-      HigherGeneralizeUValueArrayItem.Values.RealValues[FeatureIndex]
+      HigherGeneralizeUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.UBG2;
-      HigherGeneralizedURateValueArrayItem.Values.RealValues[FeatureIndex]
+      HigherGeneralizedURateValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.QUBG2;
+      Inc(ActiveCount);
     end;
   end;
 end;
@@ -1308,21 +1369,36 @@ var
   OutgoingGeneralizedUDataArray: TSutraBoundaryDisplayDataArray;
   IncomingUValueArrayItem: TValueArrayItem;
   OutgoingUValueArrayItem: TValueArrayItem;
+  ActiveCount: Integer;
 begin
   if FSutraInput.GeneralizedFlows.Count > 0 then
   begin
-    LowerGeneralizedPressureDataArray := CreateDataSet('Lower_Generalized_Pressure', vamAveragedDelayed, 0);
-    LowerGeneralizedUDataArray := CreateDataSet('Lower_Generalized_U', vamAveragedDelayed, 0);
-    HigherGeneralizedPressureDataArray := CreateDataSet('Higher_Generalized_Pressure', vamAveragedDelayed, 0);
-    HigherGeneralizedUDataArray := CreateDataSet('Higher_Generalized_U', vamAveragedDelayed, 0);
-    IncomingGeneralizedUDataArray := CreateDataSet('Incoming_Fluid_U', vamAveragedDelayed, 0);
-    OutgoingGeneralizedUDataArray := CreateDataSet('Outgoing_Fluid_U', vamAveragedDelayed, 0);
+    ActiveCount := 0;
+    for FeatureIndex := 0 to FSutraInput.GeneralizedFlows.Count - 1 do
+    begin
+      AFeature := FSutraInput.GeneralizedFlows[FeatureIndex];
+      if AFeature.Active then
+      begin
+        Inc(ActiveCount);
+      end;
+    end;
+    if ActiveCount = 0 then
+    begin
+      Exit;
+    end;
+
+    LowerGeneralizedPressureDataArray := CreateDataSet('Lower_Generalized_Pressure', vamAveragedDelayed);
+    LowerGeneralizedUDataArray := CreateDataSet('Lower_Generalized_U', vamAveragedDelayed);
+    HigherGeneralizedPressureDataArray := CreateDataSet('Higher_Generalized_Pressure', vamAveragedDelayed);
+    HigherGeneralizedUDataArray := CreateDataSet('Higher_Generalized_U', vamAveragedDelayed);
+    IncomingGeneralizedUDataArray := CreateDataSet('Incoming_Fluid_U', vamAveragedDelayed);
+    OutgoingGeneralizedUDataArray := CreateDataSet('Outgoing_Fluid_U', vamAveragedDelayed);
     Root := 'Gen_Press';
 
     ExistingObjectCount :=
       frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
 
-    AScreenObject := MakeNewScreenObject(FSutraInput.GeneralizedFlows.Count);
+    AScreenObject := MakeNewScreenObject(ActiveCount);
     AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
     FScreenObjectList.Add(AScreenObject);
 
@@ -1342,27 +1418,33 @@ begin
     OutgoingUValueArrayItem := CreateValueArrayItem(AScreenObject,
       FSutraInput.GeneralizedFlows.Count, OutgoingGeneralizedUDataArray);
 
+    ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.GeneralizedFlows.Count - 1 do
     begin
       AFeature := FSutraInput.GeneralizedFlows[FeatureIndex];
+      if not AFeature.Active then
+      begin
+        Continue;
+      end;
       ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
       APoint.x := ALocation.x;
       APoint.y := ALocation.y;
       AScreenObject.AddPoint(APoint, True);
-      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+      ImportedSectionElevations.RealValues[ActiveCount] := ALocation.Z;
 
-      LowerGeneralizePressureValueArrayItem.Values.RealValues[FeatureIndex]
+      LowerGeneralizePressureValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.PBG1;
-      LowerGeneralizedUValueArrayItem.Values.RealValues[FeatureIndex]
+      LowerGeneralizedUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.QPBG1;
-      HigherGeneralizePressureValueArrayItem.Values.RealValues[FeatureIndex]
+      HigherGeneralizePressureValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.PBG2;
-      HigherGeneralizedUValueArrayItem.Values.RealValues[FeatureIndex]
+      HigherGeneralizedUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.QPBG2;
-      IncomingUValueArrayItem.Values.RealValues[FeatureIndex]
+      IncomingUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.UPBGI;
-      OutgoingUValueArrayItem.Values.RealValues[FeatureIndex]
+      OutgoingUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.UPBGO;
+      Inc(ActiveCount);
     end;
   end;
 end;
@@ -1381,41 +1463,62 @@ var
   APoint: TPoint2D;
   ImportedSectionElevations: TValueArrayStorage;
   FeatureIndex: Integer;
+  ActiveCount: Integer;
 begin
   if FSutraInput.SpecifiedPressures.Count > 0 then
   begin
-    SpecifiedPressureDataArray := CreateDataSet('Specified_Pressure', vamAveragedDelayed, 0);
-    USpecifiedPressureDataArray := CreateDataSet('Specified_Pressure_U', vamAveragedDelayed, 0);
+    ActiveCount := 0;
+    for FeatureIndex := 0 to FSutraInput.SpecifiedPressures.Count - 1 do
+    begin
+      AFeature := FSutraInput.SpecifiedPressures[FeatureIndex];
+      if AFeature.Active then
+      begin
+        Inc(ActiveCount);
+      end;
+    end;
+    if ActiveCount = 0 then
+    begin
+      Exit;
+    end;
+
+    SpecifiedPressureDataArray := CreateDataSet('Specified_Pressure', vamAveragedDelayed);
+    USpecifiedPressureDataArray := CreateDataSet('Specified_Pressure_U', vamAveragedDelayed);
     Root := 'Spec_Press';
 
     ExistingObjectCount :=
       frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
 
-    AScreenObject := MakeNewScreenObject(FSutraInput.SpecifiedPressures.Count);
+    AScreenObject := MakeNewScreenObject(ActiveCount);
     AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
     FScreenObjectList.Add(AScreenObject);
 
     ImportedSectionElevations := AScreenObject.ImportedSectionElevations;
-    ImportedSectionElevations.Count := FSutraInput.SpecifiedPressures.Count;
+    ImportedSectionElevations.Count := ActiveCount;
 
     SpecifiedPressureValueArrayItem := CreateValueArrayItem(AScreenObject,
       FSutraInput.SpecifiedPressures.Count, SpecifiedPressureDataArray);
     USpecifiedPressureValueArrayItem := CreateValueArrayItem(AScreenObject,
       FSutraInput.SpecifiedPressures.Count, USpecifiedPressureDataArray);
 
+    ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.SpecifiedPressures.Count - 1 do
     begin
       AFeature := FSutraInput.SpecifiedPressures[FeatureIndex];
+      if not AFeature.Active then
+      begin
+        Continue;
+      end;
       ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
       APoint.x := ALocation.x;
       APoint.y := ALocation.y;
       AScreenObject.AddPoint(APoint, True);
-      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+      ImportedSectionElevations.RealValues[ActiveCount] := ALocation.Z;
 
-      SpecifiedPressureValueArrayItem.Values.RealValues[FeatureIndex]
+      SpecifiedPressureValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.PBC;
-      USpecifiedPressureValueArrayItem.Values.RealValues[FeatureIndex]
+      USpecifiedPressureValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.UBC;
+      Inc(ActiveCount);
     end;
   end;
 end;
@@ -1432,16 +1535,31 @@ var
   ImportedSectionElevations: TValueArrayStorage;
   FeatureIndex: Integer;
   AFeature: TSutraSpecifiedU;
+  ActiveCount: Integer;
 begin
   if FSutraInput.SpecifiedUs.Count > 0 then
   begin
-    SpecifiedUDataArray := CreateDataSet('Specified_U', vamAveragedDelayed, 0);
+    ActiveCount := 0;
+    for FeatureIndex := 0 to FSutraInput.SpecifiedUs.Count - 1 do
+    begin
+      AFeature := FSutraInput.SpecifiedUs[FeatureIndex];
+      if AFeature.Active then
+      begin
+        Inc(ActiveCount);
+      end;
+    end;
+    if ActiveCount = 0 then
+    begin
+      Exit;
+    end;
+
+    SpecifiedUDataArray := CreateDataSet('Specified_U', vamAveragedDelayed);
     Root := 'U';
 
     ExistingObjectCount :=
       frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
 
-    AScreenObject := MakeNewScreenObject(FSutraInput.SpecifiedUs.Count);
+    AScreenObject := MakeNewScreenObject(ActiveCount);
     AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
     FScreenObjectList.Add(AScreenObject);
 
@@ -1451,17 +1569,23 @@ begin
     SpecifiedUValueArrayItem := CreateValueArrayItem(AScreenObject,
       FSutraInput.SpecifiedUs.Count, SpecifiedUDataArray);
 
+    ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.SpecifiedUs.Count - 1 do
     begin
       AFeature := FSutraInput.SpecifiedUs[FeatureIndex];
+      if not AFeature.Active then
+      begin
+        Continue;
+      end;
       ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
       APoint.x := ALocation.x;
       APoint.y := ALocation.y;
       AScreenObject.AddPoint(APoint, True);
-      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+      ImportedSectionElevations.RealValues[ActiveCount] := ALocation.Z;
 
-      SpecifiedUValueArrayItem.Values.RealValues[FeatureIndex]
+      SpecifiedUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.UBC;
+      Inc(ActiveCount);
     end;
   end;
 end;
@@ -1478,16 +1602,31 @@ var
   ImportedSectionElevations: TValueArrayStorage;
   FeatureIndex: Integer;
   AFeature: TSutraUSource;
+  ActiveCount: Integer;
 begin
   if FSutraInput.USources.Count > 0 then
   begin
-    USourceDataArray := CreateDataSet('U_Source', vamAveragedDelayed, 0);
+    ActiveCount := 0;
+    for FeatureIndex := 0 to FSutraInput.USources.Count - 1 do
+    begin
+      AFeature := FSutraInput.USources[FeatureIndex];
+      if AFeature.Active then
+      begin
+        Inc(ActiveCount);
+      end;
+    end;
+    if ActiveCount = 0 then
+    begin
+      Exit;
+    end;
+
+    USourceDataArray := CreateDataSet('U_Source', vamAveragedDelayed);
     Root := 'U_Source';
 
     ExistingObjectCount :=
       frmGoPhast.PhastModel.NumberOfLargestScreenObjectsStartingWith(Root);
 
-    AScreenObject := MakeNewScreenObject(FSutraInput.USources.Count);
+    AScreenObject := MakeNewScreenObject(ActiveCount);
     AScreenObject.Name := Format('%0:s_%1:d', [Root, ExistingObjectCount+1]);
     FScreenObjectList.Add(AScreenObject);
 
@@ -1497,17 +1636,23 @@ begin
     SpecifiedUValueArrayItem := CreateValueArrayItem(AScreenObject,
       FSutraInput.USources.Count, USourceDataArray);
 
+    ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.USources.Count - 1 do
     begin
       AFeature := FSutraInput.USources[FeatureIndex];
+      if not AFeature.Active then
+      begin
+        Continue;
+      end;
       ALocation := FSutraInput.Nodes[AFeature.NodeNumber-1];
       APoint.x := ALocation.x;
       APoint.y := ALocation.y;
       AScreenObject.AddPoint(APoint, True);
-      ImportedSectionElevations.RealValues[FeatureIndex] := ALocation.Z;
+      ImportedSectionElevations.RealValues[ActiveCount] := ALocation.Z;
 
-      SpecifiedUValueArrayItem.Values.RealValues[FeatureIndex]
+      SpecifiedUValueArrayItem.Values.RealValues[ActiveCount]
         := AFeature.QUINC;
+      Inc(ActiveCount);
     end;
   end;
 end;

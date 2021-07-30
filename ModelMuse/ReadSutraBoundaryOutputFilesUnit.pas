@@ -247,10 +247,19 @@ begin
             CurrentItem := TBcofItem.Create;
             CurrentList.Add(CurrentItem);
             CurrentItem.FNode := StrToInt(Splitter[0]);
-            Splitter.DelimitedText := Copy(ALine, 68, MaxInt);
-            CurrentItem.FSpecifiedFluidSourceRate := FortranStrToFloat(Splitter[0]);
-            CurrentItem.FSpecifiedU := FortranStrToFloat(Splitter[1]);
-            CurrentItem.FResultantU := FortranStrToFloat(Splitter[2]);
+            if Pos('INACTIVE', ALine) > 0 then
+            begin
+              CurrentItem.FSpecifiedFluidSourceRate := -1e98;
+              CurrentItem.FSpecifiedU := -1e98;
+              CurrentItem.FResultantU := -1e98;
+            end
+            else
+            begin
+              Splitter.DelimitedText := Copy(ALine, 68, MaxInt);
+              CurrentItem.FSpecifiedFluidSourceRate := FortranStrToFloat(Splitter[0]);
+              CurrentItem.FSpecifiedU := FortranStrToFloat(Splitter[1]);
+              CurrentItem.FResultantU := FortranStrToFloat(Splitter[2]);
+            end;
           end;
 
           Inc(DesiredIndex);
@@ -323,12 +332,23 @@ begin
             begin
               break;
             end;
+            if Pos('INACTIVE', ALine) > 0 then
+            begin
+              Continue;
+            end;
             Splitter.DelimitedText := ALine;
             CurrentItem := TBcosItem.Create;
             CurrentList.Add(CurrentItem);
             CurrentItem.FNode := StrToInt(Splitter[0]);
-            Splitter.DelimitedText := Copy(ALine, 68, MaxInt);
-            CurrentItem.FSpecifiedU := FortranStrToFloat(Splitter[0]);
+            if Pos('INACTIVE', ALine) > 0 then
+            begin
+              CurrentItem.FSpecifiedU := -1E98;
+            end
+            else
+            begin
+              Splitter.DelimitedText := Copy(ALine, 68, MaxInt);
+              CurrentItem.FSpecifiedU := FortranStrToFloat(Splitter[0]);
+            end;
           end;
 
           Inc(DesiredIndex);
@@ -406,11 +426,22 @@ begin
             CurrentList.Add(CurrentItem);
             CurrentItem.FNode := StrToInt(Splitter[0]);
             Splitter.DelimitedText := Copy(ALine, 68, MaxInt);
-            CurrentItem.FResultantFluidSource := FortranStrToFloat(Splitter[0]);
-            CurrentItem.FU := FortranStrToFloat(Splitter[1]);
-            CurrentItem.FResultantURate := FortranStrToFloat(Splitter[2]);
-            CurrentItem.FComputedPressure := FortranStrToFloat(Splitter[3]);
-            CurrentItem.FSpecifiedPressure := FortranStrToFloat(Splitter[4]);
+            if Pos('INACTIVE', ALine) > 0 then
+            begin
+              CurrentItem.FResultantFluidSource := -1e98;
+              CurrentItem.FU := -1e98;
+              CurrentItem.FResultantURate := -1e98;
+              CurrentItem.FComputedPressure := -1e98;
+              CurrentItem.FSpecifiedPressure := -1e98;
+            end
+            else
+            begin
+              CurrentItem.FResultantFluidSource := FortranStrToFloat(Splitter[0]);
+              CurrentItem.FU := FortranStrToFloat(Splitter[1]);
+              CurrentItem.FResultantURate := FortranStrToFloat(Splitter[2]);
+              CurrentItem.FComputedPressure := FortranStrToFloat(Splitter[3]);
+              CurrentItem.FSpecifiedPressure := FortranStrToFloat(Splitter[4]);
+            end;
           end;
 
           Inc(DesiredIndex);
@@ -483,14 +514,27 @@ begin
             begin
               break;
             end;
+            if Pos('INACTIVE', ALine) > 0 then
+            begin
+              Continue;
+            end;
             Splitter.DelimitedText := ALine;
             CurrentItem := TBcouItem.Create;
             CurrentList.Add(CurrentItem);
             CurrentItem.FNode := StrToInt(Splitter[0]);
-            Splitter.DelimitedText := Copy(ALine, 68, MaxInt);
-            CurrentItem.FResultantURate := FortranStrToFloat(Splitter[0]);
-            CurrentItem.FComputedU := FortranStrToFloat(Splitter[1]);
-            CurrentItem.FSpecifiedU := FortranStrToFloat(Splitter[2]);
+            if Pos('INACTIVE', ALine) > 0 then
+            begin
+              CurrentItem.FResultantURate := -1E98;
+              CurrentItem.FComputedU := -1E98;
+              CurrentItem.FSpecifiedU := -1E98;
+            end
+            else
+            begin
+              Splitter.DelimitedText := Copy(ALine, 68, MaxInt);
+              CurrentItem.FResultantURate := FortranStrToFloat(Splitter[0]);
+              CurrentItem.FComputedU := FortranStrToFloat(Splitter[1]);
+              CurrentItem.FSpecifiedU := FortranStrToFloat(Splitter[2]);
+            end;
           end;
 
           Inc(DesiredIndex);

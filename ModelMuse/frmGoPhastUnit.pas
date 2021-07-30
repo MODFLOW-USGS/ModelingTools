@@ -9884,8 +9884,6 @@ begin
   frmProgressMM.ShouldContinue := True;
   frmErrorsAndWarnings.RemoveWarningGroup(PhastModel, StrTheFollowingObjectNoCells);
   PestInputDataArrays := TDictionary<string, TDataArray>.Create;
-//  BcopgFileNames := TStringList.Create;
-//  BcougFileNames := TStringList.Create;
   try
     try
       AdjustSutraBoundaries;
@@ -10042,7 +10040,6 @@ begin
           ObsWriter.Free;
         end;
 
-//        BcopgFileName := '';
         if not PhastModel.SutraLakesUsed then
         begin
           BcsFileNames.Add(nil);
@@ -10298,8 +10295,6 @@ begin
       end;
     end;
   finally
-//    BcopgFileNames.Free;
-//    BcougFileNames.Free;
     frmProgressMM.ShouldContinue := False;
     frmProgressMM.btnAbort.Visible := False;
     frmProgressMM.Hide;

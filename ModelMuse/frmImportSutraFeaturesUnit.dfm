@@ -1,7 +1,7 @@
 inherited frmImportSutraFeatures: TfrmImportSutraFeatures
   Caption = 'Import SUTRA Feature Modified by PEST'
-  ClientHeight = 243
-  ExplicitHeight = 282
+  ClientHeight = 293
+  ExplicitHeight = 332
   PixelsPerInch = 96
   TextHeight = 18
   object lblModelFeatureFile: TLabel
@@ -11,24 +11,31 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
     Height = 18
     Caption = 'SUTRA Input file'
   end
+  object lblTimeStep: TLabel
+    Left = 8
+    Top = 198
+    Width = 68
+    Height = 18
+    Caption = 'Time step'
+  end
   object fedModelFeatureFile: TJvFilenameEdit
     Left = 8
     Top = 32
     Width = 408
     Height = 26
-    Filter = 'SUTRA input files (*.inp)|*.inp'
+    Filter = 'SUTRA input files (*.inp, sutra.fil)|*.inp;sutra.fil'
     TabOrder = 0
     Text = ''
+    OnChange = fedModelFeatureFileChange
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 202
+    Top = 252
     Width = 424
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 133
     DesignSize = (
       424
       41)
@@ -43,11 +50,12 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
       TabOrder = 2
     end
     object btnOK: TBitBtn
-      Left = 227
+      Left = 228
       Top = 2
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
+      Enabled = False
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
@@ -69,6 +77,7 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
     Top = 64
     Width = 408
     Height = 121
+    OnClickCheck = clbFeaturesClickCheck
     ItemHeight = 18
     Items.Strings = (
       'Specified Pressure'
@@ -78,5 +87,14 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
       'Generalized Pressure Boundary'
       'Generalized Mass or Energy Boundary')
     TabOrder = 2
+  end
+  object seTimeStep: TJvSpinEdit
+    Left = 8
+    Top = 222
+    Width = 121
+    Height = 26
+    MaxValue = 2147483647.000000000000000000
+    Enabled = False
+    TabOrder = 3
   end
 end

@@ -55,6 +55,7 @@ type
     FBcsFileNames: TGenFlowInteractionStringList;
     FUseBctime: T3DSparseBooleanArray;
     FBcopgFileName: string;
+    FNodeNumbers: T3DSparseIntegerArray;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -150,6 +151,11 @@ end;
 
 constructor TSutraGeneralFlowWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
+var
+  Mesh: TSutraMesh3D;
+  NumberOfLayers: Integer;
+  NumberOfRows: Integer;
+  NumberOfColumns: Integer;
 begin
   inherited;
   FBcopgFileName :='';
@@ -167,10 +173,36 @@ begin
   FTimes := TRealList.Create;
   FUseBctime := T3DSparseBooleanArray.Create(GetQuantum(Model.LayerCount+1),
     GetQuantum(Model.RowCount+1), GetQuantum(Model.ColumnCount+1));
+
+  Mesh := Model.SutraMesh;
+  if Mesh <> nil then
+  begin
+    if ((Model.Mesh as TSutraMesh3D).MeshType = mt3D) then
+    begin
+      NumberOfLayers := frmGoPhast.PhastModel.
+        SutraLayerStructure.LayerCount+1;
+    end
+    else
+    begin
+      NumberOfLayers := frmGoPhast.PhastModel.
+        SutraLayerStructure.LayerCount;
+    end;
+    NumberOfRows := 1;
+    NumberOfColumns := Mesh.Mesh2D.Nodes.Count;
+  end
+  else
+  begin
+    NumberOfLayers := 0;
+    NumberOfRows := 0;
+    NumberOfColumns := 0;
+  end;
+  FNodeNumbers := T3DSparseIntegerArray.Create(GetQuantum(NumberOfLayers),
+    GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
 end;
 
 destructor TSutraGeneralFlowWriter.Destroy;
 begin
+  FNodeNumbers.Free;
   FUseBctime.Free;
   FTimes.Free;
 
@@ -184,7 +216,7 @@ begin
   FFlow1TimeLists.Free;
   FPressure2TimeLists.Free;
   FPressure1TimeLists.Free;
-
+  FNodeNumbers.Free;
   inherited;
 end;
 
@@ -387,6 +419,7 @@ begin
   UInSeriesPestMethods := TPestMethodList.Create;
   UOutSeriesPestMethods := TPestMethodList.Create;
   try
+    FNodeNumbers.Clear;
     for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
     begin
       ScreenObject := Model.ScreenObjects[ScreenObjectIndex];
@@ -532,6 +565,7 @@ begin
           begin
             ACell := CellList[CellIndex];
             FUseBctime.Items[ACell.Layer, ACell.Row, ACell.Column] := ABoundary.UseBCTime;
+            FNodeNumbers[ACell.Layer, ACell.Row, ACell.Column] := 1;
           end;
         finally
           CellList.Free;
@@ -618,7 +652,7 @@ begin
                     if P1Data.IsValue[LayerIndex,0,ColIndex] then
                     begin
                       AssignNodeNumber;
-                      if NodeNumber >= 0 then
+//                      if NodeNumber >= 0 then
                       begin
                         NodeList.Add(TGeneralFlowNode.CreateInactive(NodeNumber,
                           LayerIndex, ColIndex));

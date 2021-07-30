@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, Vcl.StdCtrls,
-  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Mask, JvExMask, JvToolEdit, Vcl.CheckLst;
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Mask, JvExMask, JvToolEdit, Vcl.CheckLst,
+  JvSpin, PestFeatureDisplayerUnit;
 
 type
   TfrmImportSutraFeatures = class(TfrmCustomGoPhast)
@@ -16,8 +17,14 @@ type
     btnOK: TBitBtn;
     btnHelp: TBitBtn;
     clbFeatures: TCheckListBox;
+    seTimeStep: TJvSpinEdit;
+    lblTimeStep: TLabel;
     procedure btnOKClick(Sender: TObject);
+    procedure fedModelFeatureFileChange(Sender: TObject);
+    procedure clbFeaturesClickCheck(Sender: TObject);
   private
+    procedure SetData(const FileName: string; Features: TSutraFeatureTypes);
+    procedure EnableOkButton;
     { Private declarations }
   public
     { Public declarations }
@@ -29,19 +36,66 @@ var
 implementation
 
 uses
-  PestFeatureDisplayerUnit, frmGoPhastUnit;
+  frmGoPhastUnit;
 
 {$R *.dfm}
+
+procedure TfrmImportSutraFeatures.clbFeaturesClickCheck(Sender: TObject);
+begin
+  inherited;
+  EnableOkButton;
+end;
+
+procedure TfrmImportSutraFeatures.EnableOkButton;
+var
+  BoundaryTypeIndex: Integer;
+  ShouldEnable: Boolean;
+begin
+  ShouldEnable := FileExists(fedModelFeatureFile.FileName);
+  if ShouldEnable then
+  begin
+    ShouldEnable := False;
+    for BoundaryTypeIndex := 0 to clbFeatures.Items.Count - 1 do
+    begin
+      if clbFeatures.Checked[BoundaryTypeIndex] then
+      begin
+        ShouldEnable := True;
+        break;
+      end;
+    end;
+  end;
+  btnOK.Enabled := ShouldEnable;
+end;
+
+procedure TfrmImportSutraFeatures.fedModelFeatureFileChange(Sender: TObject);
+begin
+  inherited;
+  EnableOkButton;
+  seTimeStep.Enabled :=
+    SameText(ExtractFileName(fedModelFeatureFile.FileName), 'sutra.fil');
+end;
+
+procedure TfrmImportSutraFeatures.SetData(const FileName: string; Features: TSutraFeatureTypes);
+var
+  FeatureDisplayer: TPestSutraFeatureDisplayer;
+begin
+  FeatureDisplayer := TPestSutraFeatureDisplayer.Create(frmGoPhast.PhastModel);
+  try
+    FeatureDisplayer.ImportFeatures(FileName, Features, seTimeStep.AsInteger);
+  finally
+    FeatureDisplayer.Free;
+  end;
+end;
 
 procedure TfrmImportSutraFeatures.btnOKClick(Sender: TObject);
 var
   FileName: TFileName;
   Features: TSutraFeatureTypes;
   Index: TSutraFeatureType;
-  FeatureDisplayer: TPestSutraFeatureDisplayer;
 begin
   inherited;
   FileName := fedModelFeatureFile.FileName;
+  Assert(FileExists(FileName));
   Features := [];
   for Index := Low(TSutraFeatureType) to High(TSutraFeatureType) do
   begin
@@ -50,15 +104,8 @@ begin
       Include(Features, Index);
     end;
   end;
-  if FileExists(FileName) and (Features <> []) then
-  begin
-    FeatureDisplayer := TPestSutraFeatureDisplayer.Create(frmGoPhast.PhastModel);
-    try
-      FeatureDisplayer.ImportFeatures(FileName, Features);
-    finally
-      FeatureDisplayer.Free;
-    end;
-  end;
+  Assert(Features <> []);
+  SetData(FileName, Features);
 end;
 
 end.

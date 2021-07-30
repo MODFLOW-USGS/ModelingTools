@@ -898,7 +898,7 @@ begin
         MessageDlg(Format(StrSomethingWentWrong, [SCHNAM]), mtError, [mbOK], 0);
       end;
     end;
-    Inc(ISLIST);
+//    Inc(ISLIST);
     WriteInteger(ISLIST);
     if (TimeIndex+1) mod 10 = 0 then
     begin

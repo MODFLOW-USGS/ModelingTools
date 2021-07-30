@@ -1,6 +1,6 @@
 ptf @
 etf %
-# Main SUTRA input file file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+# Main SUTRA input file file created on 7/29/2021 by ModelMuse version 4.3.0.56.
 # Data set 1
 _
 _
@@ -21,13 +21,13 @@ _
 # Schedule 2
 'ObsSchec'   'STEP CYCLE'     2     0 2147483647     2
 # Schedule 3
-'FluidFlux'  'STEP LIST'     2     2     3
+'FluidFlux'  'STEP LIST'     2     1     2
 # Schedule 4
-'UFlux'      'STEP LIST'     1     2
+'UFlux'      'STEP LIST'     1     1
 # Schedule 5
-'SpecifiedP' 'STEP LIST'     2     2     3
+'SpecifiedP' 'STEP LIST'     2     1     2
 # Schedule 6
-'SpecifiedU' 'STEP LIST'     1     2
+'SpecifiedU' 'STEP LIST'     1     1
 # Schedule 7
 'Observatio' 'TIME LIST' 'ABSOLUTE'  1.000000000000E+000      2  0.000000000000E+000   1.000000000000E+000 
 # Schedule 8

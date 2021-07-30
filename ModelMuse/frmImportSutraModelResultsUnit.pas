@@ -1726,8 +1726,8 @@ begin
     DryLakeValue := frmGoPhast.PhastModel.SutraOptions.
       LakeOptions.SubmergedOutput;
     (DataSet.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := DryLakeValue;
-    (DataSet.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := -1e98;
   end;
+  (DataSet.Limits.RealValuesToSkip.Add as TSkipReal).RealValue := -1e98;
 end;
 
 procedure TfrmImportSutraModelResults.CreateBoundaryNodeDataSets
@@ -1760,7 +1760,7 @@ begin
       end
       else
       begin
-        NewFormula := '0.';
+        NewFormula := '-1E98';
       end;
 
       DataSet := frmGoPhast.PhastModel.DataArrayManager.CreateNewDataArray(
