@@ -31,7 +31,7 @@ type
   TLinearElement = array[TLinearNodes] of double;
   TLinearNodeValues = array[TLinearNodes] of double;
 
-  TElement = array of TPoint2D;
+  TElement = TPolygon2D;
 
 //  TTriangularNodes = (niI, niJ, niK);
   TTriangularElement = TElement;

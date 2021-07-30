@@ -1,6 +1,9 @@
 unit OutputFileReader;
 
-{$mode objfpc}{$H+}
+{$IFDEF FPC}
+{$mode delphi}
+{$ENDIF}
+{$H+}
 {$ASSERTIONS ON}
 
 interface
@@ -99,7 +102,9 @@ begin
       Splitter.Delimiter := ',';
       Splitter.DelimitedText := ALine;
       FNOBS := Splitter.Count - 1;
+      {$IFDEF FPC}
       FObservationDictionary.Capacity := FObservationDictionary.Count + Splitter.Count;
+      {$Endif}
       for ObsNameIndex := 1 to Splitter.Count -1 do
       begin
         ID := UpperCase(Splitter[ObsNameIndex]);

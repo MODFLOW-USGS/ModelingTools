@@ -1,6 +1,9 @@
 unit CustomInputReader;
 
-{$mode objfpc}{$H+}
+{$IFDEF FPC}
+  {$mode delphi}
+{$ENDIF}
+{$H+}
 
 interface
 
@@ -19,8 +22,8 @@ type
     APoint: TPoint2D;
   end;
 
-  TLocationList = specialize TList<TLocationID>;
-  TLocationDictionary = specialize TDictionary<string, TLocationID>;
+  TLocationList = {specialize} TList<TLocationID>;
+  TLocationDictionary = {specialize} TDictionary<string, TLocationID>;
 
   { TDerivedObs }
 
@@ -33,22 +36,26 @@ type
     TimeAssigned: Boolean;
   end;
 
-  TDerivedObsList = specialize TList<TDerivedObs>;
+  TDerivedObsList = {specialize} TList<TDerivedObs>;
 
   { TDerivedObsCompare }
 
-  TDerivedObsCompare = class(specialize TComparer<TDerivedObs>)
+  TDerivedObsCompare = class(TComparer<TDerivedObs>)
+    {$IFDEF FPC}
     function Compare(constref Left, Right: TDerivedObs): Integer; override;
+    {$ELSE}
+    function Compare(const Left, Right: TDerivedObs): Integer; override;
+    {$ENDIF}
   end;
 
   { TDerivedObsObjectList }
 
-  TDerivedObsObjectList = class(specialize TObjectList<TDerivedObs>)
+  TDerivedObsObjectList = class({specialize} TObjectList<TDerivedObs>)
   public
     procedure Sort;
   end;
 
-  TDerivedObsDictionary = specialize TDictionary<string, TDerivedObs>;
+  TDerivedObsDictionary = {specialize} TDictionary<string, TDerivedObs>;
 
   { TInputHandler }
 
@@ -1398,7 +1405,8 @@ begin
       NodeValues[1] := DerivedObs2.Value;
       NodeValues[2] := DerivedObs3.Value;
       NodeValues[3] := DerivedObs4.Value;
-      AnObs.Value := QuadrilateralBasisFunction(Corners, NodeValues, NewLocation.APoint);
+      AnObs.Value := QuadrilateralBasisFunction(TQuadrilateralElement(Corners),
+        TRectangularNodeValues(NodeValues), NewLocation.APoint);
 
       AddLocationToDictionary(NewLocation);
 
@@ -1630,7 +1638,11 @@ end;
 
 { TDerivedObsCompare }
 
+{$IFDEF FPC}
 function TDerivedObsCompare.Compare(constref Left, Right: TDerivedObs): Integer;
+{$ELSE}
+function TDerivedObsCompare.Compare(const Left, Right: TDerivedObs): Integer;
+{$ENDIF}
 begin
   Result := Sign(Left.Time - Right.Time);
   if Result = 0 then

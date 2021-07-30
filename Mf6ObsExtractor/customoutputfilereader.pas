@@ -1,6 +1,8 @@
 unit CustomOutputFileReader;
 
-{$mode objfpc}{$H+}
+{$IFDEF FPC}
+  {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -19,7 +21,11 @@ type
     Position: Integer;
   end;
 
+{$IFDEF FPC}
   TObservationDictionary = specialize TDictionary<string, TFileId>;
+{$ELSE}
+  TObservationDictionary = TDictionary<string, TFileId>;
+{$ENDIF}
 
   { TCustomOutputFile }
 
@@ -54,7 +60,11 @@ type
     property FileType: TFileType read FFileType;
   end;
 
+{$IFDEF FPC}
   TOutputFileObjectList = specialize TObjectList<TCustomOutputFile>;
+{$ELSE}
+  TOutputFileObjectList = TObjectList<TCustomOutputFile>;
+{$ENDIF}
 
   EReadOutputError = class(Exception);
 
@@ -97,16 +107,16 @@ constructor TCustomOutputFile.Create(AFileName: string; AFileType: TFileType;
   ObservationDictionary: TObservationDictionary);
 begin
   //FTime := 0;
-  FFileName := AFileName;
+  FFileName := ExpandFileName(AFileName);
   FFileType := AFileType;
   if AFileType = ftBinary then
   begin
-    FBinaryFile := TFileStream.Create(AFileName, fmOpenRead);
+    FBinaryFile := TFileStream.Create(FFileName, fmOpenRead);
     FBinaryFileSize := FBinaryFile.Size;
   end
   else
   begin
-    AssignFile(FTextFile, AFileName);
+    AssignFile(FTextFile, FFileName);
     reset(FTextFile);
   end;
   FObservationDictionary:= ObservationDictionary;

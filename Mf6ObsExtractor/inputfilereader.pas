@@ -1,6 +1,9 @@
 unit InputFileReader;
 
-{$mode objfpc}{$H+}
+{$IFDEF FPC}
+  {$mode DELPHI}
+{$endif}
+{$H+}
 {$ASSERTIONS ON}
 
 interface
