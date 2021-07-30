@@ -161,7 +161,10 @@ begin
           WriteLn('normal termination');
         Except on E: Exception do
           begin
+            WriteLn('');
+            WriteLn('ERROR');
             WriteLn(E.message);
+            WriteLn('');
           end;
         end;
       finally

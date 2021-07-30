@@ -28,12 +28,17 @@ type
   { TDerivedObs }
 
   TDerivedObs = class
+  private
+    FValue: double;
+    FValueAssigned: Boolean;
+    procedure SetValue(AValue: double);
+  public
     ID: string;
     Obsname: string;
     Time: double;
     Print: boolean;
-    Value: double;
     TimeAssigned: Boolean;
+    property Value: double read FValue write SetValue;
   end;
 
   TDerivedObsList = {specialize} TList<TDerivedObs>;
@@ -284,6 +289,14 @@ resourcestring
     result := (A = B)
       or (Abs(A-B)/Abs(A + B) < Epsilon)
   end;
+
+{ TDerivedObs }
+
+procedure TDerivedObs.SetValue(AValue: double);
+begin
+  FValue:=AValue;
+  FValueAssigned := True;
+end;
 
 { TCustomInputHandler }
 
@@ -1089,6 +1102,7 @@ var
   SecondValue: double;
   FirstTime: double;
   SecondTime: double;
+  ErrorMessage: string;
 begin
   if FListingFile <> nil then
   begin
@@ -1162,6 +1176,21 @@ begin
         FListingFile.Add(Format(rsObservationV, [AnObs.Value]));
         FListingFile.Add('');
       end;
+    end;
+  end;
+  for ObsIndex := 0 to Pred(FDerivedObsList.Count) do
+  begin
+    AnObs := FDerivedObsList[ObsIndex];
+    if not AnObs.FValueAssigned then
+    begin
+      ErrorMessage := Format('ERROR: The observation time for %s was not included in the output.', [AnObs.Obsname]);
+      if FListingFile <> nil then
+      begin
+        FListingFile.Add('');
+        FListingFile.Add(ErrorMessage);
+        FListingFile.Add('');
+      end;
+      WriteLn(ErrorMessage);
     end;
   end;
   if FListingFile <> nil then
