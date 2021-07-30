@@ -1,6 +1,7 @@
 ptf @
 etf %
-# HFB: Horizontal Flow Barrier package file created on 7/11/2021 by ModelMuse version 4.3.0.56.
+# HFB: Horizontal Flow Barrier package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
      0     0    54 # Data set 1: NPHFB MXFB NHFBNP
      3     3     7     4     7 %                    if((1 *  @                    a@ = 0), 0, (1.01662436240105E-9)/(1 *  @                    a@))% # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr
      4     3     7     4     7 %                    if((1 *  @                    a@ = 0), 0, (1.01662436240105E-9)/(1 *  @                    a@))% # Data set 4: Layer IROW1 ICOL1 IROW2  ICOL2 Hydchr

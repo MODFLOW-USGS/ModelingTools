@@ -27,12 +27,20 @@ type
   private
     FScreenObject: TObject;
     FDescription: string;
+    FUsedData: TObjectList<TDataArray>;
+    function GetUsedItems(const Index: integer): TDataArray;
+    procedure SetUsedItems(const Index: integer; const Value: TDataArray);
   protected
     procedure CheckSameModel(const Data: TDataArray); override;
   public
+    procedure Clear; override;
     constructor Create(Model: TBaseModel; ScreenObject: TObject);
+    destructor Destroy; override;
     procedure Initialize(BoundaryValues: TSutraBoundaryValueArray); reintroduce;
     property Description: string read FDescription write FDescription;
+    function Add(const ATime: double; const Data, UsedDataArray: TDataArray): integer;
+    property UsedItems[const Index: integer]: TDataArray read GetUsedItems
+      write SetUsedItems;
   end;
 
   {
@@ -64,16 +72,23 @@ type
   }
   TSutraMergedTimeList = class(TCustomTimeList)
   private
-//    FOnGetUseList: TOnGetUseList;
     FOnInitialize: TNotifyEvent;
+    FUsedData: TObjectList<TDataArray>;
     procedure SetOnInitialize(const Value: TNotifyEvent);
+    function GetUsedItems(const Index: integer): TDataArray;
+    procedure SetUsedItems(const Index: integer; const Value: TDataArray);
+    function GetUpToDate: boolean;
+    procedure SetUpToDate(const Value: boolean);
   public
+    constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
     procedure Initialize; override;
-//    property OnGetUseList: TOnGetUseList read FOnGetUseList
-//      write FOnGetUseList;
     property OnInitialize: TNotifyEvent read FOnInitialize
       write SetOnInitialize;
     property UpToDate: boolean read GetUpToDate write SetUpToDate;
+    function Add(const ATime: double; const Data, UsedDataArray: TDataArray): integer;
+    property UsedItems[const Index: integer]: TDataArray read GetUsedItems
+      write SetUsedItems;
   end;
 
   TSutraBoundary = class(TModflowBoundary)
@@ -1533,6 +1548,13 @@ end;
 
 { TSutraTimeList }
 
+function TSutraTimeList.Add(const ATime: double; const Data,
+  UsedDataArray: TDataArray): integer;
+begin
+  result := inherited Add(ATime, Data);
+  FUsedData.Add(UsedDataArray);
+end;
+
 procedure TSutraTimeList.CheckSameModel(const Data: TDataArray);
 begin
   if Data <> nil then
@@ -1541,10 +1563,32 @@ begin
   end;
 end;
 
+procedure TSutraTimeList.Clear;
+begin
+  inherited;
+  FUsedData.Clear;
+end;
+
 constructor TSutraTimeList.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited Create(Model);
   FScreenObject := ScreenObject;
+  FUsedData := TObjectList<TDataArray>.Create;
+end;
+
+destructor TSutraTimeList.Destroy;
+begin
+  FUsedData.Free;
+  inherited;
+end;
+
+function TSutraTimeList.GetUsedItems(const Index: integer): TDataArray;
+begin
+  result := FUsedData[Index];
+  if result <> nil then
+  begin
+    result.ATimeList := self;
+  end;
 end;
 
 procedure TSutraTimeList.Initialize(BoundaryValues: TSutraBoundaryValueArray);
@@ -1558,6 +1602,7 @@ var
   Formula: string;
   DataArray: TDataArray;
   UsedFormula: string;
+  UsedDataArray: TDataArray;
 begin
   if not frmProgressMM.ShouldContinue then
   begin
@@ -1594,12 +1639,19 @@ begin
           end;
         else Assert(False);
       end;
+      UsedDataArray := TBooleanSparseDataSet.Create(LocalModel);
       DataArray.Name := ValidName(Description) + '_' + IntToStr(Index+1);
-      Add(Time, DataArray);
+      UsedDataArray.Name := ValidName('Used_' + Description) + '_' + IntToStr(Index+1);
+      Add(Time, DataArray, UsedDataArray);
       DataArray.UseLgrEdgeCells := lctUse;
       DataArray.EvaluatedAt := eaNodes;
       DataArray.Orientation := dso3D;
       LocalModel.UpdateDataArrayDimensions(DataArray);
+
+      UsedDataArray.UseLgrEdgeCells := lctUse;
+      UsedDataArray.EvaluatedAt := eaNodes;
+      UsedDataArray.Orientation := dso3D;
+      LocalModel.UpdateDataArrayDimensions(UsedDataArray);
 
       try
         LocalScreenObject.AssignValuesToSutraDataSet(Mesh, DataArray,
@@ -1616,9 +1668,28 @@ begin
             Formula, LocalModel, UsedFormula);
         end;
       end;
+
+      try
+        LocalScreenObject.AssignValuesToSutraDataSet(Mesh, UsedDataArray,
+          UsedFormula, LocalModel, 'True');
+      except on E: ErbwParserError do
+        begin
+          frmFormulaErrors.AddFormulaError(LocalScreenObject.Name, Name,
+            Formula, E.Message);
+          Formula := 'True';
+          UsedFormula := 'True';
+          BoundaryValues[Index].Formula := Formula;
+          BoundaryValues[Index].UsedFormula := UsedFormula;
+          LocalScreenObject.AssignValuesToSutraDataSet(Mesh, UsedDataArray,
+            UsedFormula, LocalModel, 'True');
+        end;
+      end;
+
       LocalModel.DataArrayManager.CacheDataArrays;
       DataArray.UpToDate := True;
       DataArray.CacheData;
+      UsedDataArray.UpToDate := True;
+      UsedDataArray.CacheData;
     end;
     SetUpToDate(True);
   finally
@@ -1626,7 +1697,50 @@ begin
   end
 end;
 
+procedure TSutraTimeList.SetUsedItems(const Index: integer;
+  const Value: TDataArray);
+begin
+  if FUsedData[Index] <> Value then
+  begin
+    FUsedData[Index] := Value;
+    Invalidate;
+  end;
+end;
+
 { TSutraMergedTimeList }
+
+function TSutraMergedTimeList.Add(const ATime: double; const Data,
+  UsedDataArray: TDataArray): integer;
+begin
+  result := inherited Add(ATime, Data);
+  FUsedData.Add(UsedDataArray);
+end;
+
+constructor TSutraMergedTimeList.Create(Model: TBaseModel);
+begin
+  inherited;
+  FUsedData := TObjectList<TDataArray>.Create;
+end;
+
+destructor TSutraMergedTimeList.Destroy;
+begin
+  FUsedData.Free;
+  inherited;
+end;
+
+function TSutraMergedTimeList.GetUpToDate: boolean;
+begin
+  result := inherited;
+end;
+
+function TSutraMergedTimeList.GetUsedItems(const Index: integer): TDataArray;
+begin
+  result := FUsedData[Index];
+  if result <> nil then
+  begin
+    result.ATimeList := self;
+  end;
+end;
 
 procedure TSutraMergedTimeList.Initialize;
 var
@@ -1651,6 +1765,21 @@ begin
   if Addr(FOnInitialize) <> Addr(Value) then
   begin
     FOnInitialize := Value;
+    Invalidate;
+  end;
+end;
+
+procedure TSutraMergedTimeList.SetUpToDate(const Value: boolean);
+begin
+  inherited;
+end;
+
+procedure TSutraMergedTimeList.SetUsedItems(const Index: integer;
+  const Value: TDataArray);
+begin
+  if FUsedData[Index] <> Value then
+  begin
+    FUsedData[Index] := Value;
     Invalidate;
   end;
 end;

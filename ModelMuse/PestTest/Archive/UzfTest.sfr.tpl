@@ -1,6 +1,7 @@
 ptf @
 etf %
-# SFR: Stream-Flow Routing package file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+# SFR: Stream-Flow Routing package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 OPTIONS
 REACHINPUT 
 END

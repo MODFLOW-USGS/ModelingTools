@@ -1268,6 +1268,52 @@ type
       NumberOfColumns: integer; ForceResize: boolean = False); override;
   end;
 
+  TBooleanSparseDataSet = class(TCustomSparseDataSet)
+  private
+    // @name is used to store the real numbers in @classname.
+    FBooleanValues: T3DSparseBooleanArray;
+    function GetMaxColumn: Integer;
+    function GetMaxLayer: Integer;
+    function GetMaxRow: Integer;
+    function GetMinColumn: Integer;
+    function GetMinLayer: Integer;
+    function GetMinRow: Integer;
+  protected
+    procedure Clear; override;
+    // @name checks whether @link(FRealValues) has been
+    // assigned at Layer, Row, Col as well as inherited @name.
+    function GetIsValue(const Layer, Row, Col: Integer): boolean;
+      override;
+    // @name retrieves the real number at Layer, Row, Col.
+    function GetBooleanData(const Layer, Row, Col: integer): Boolean; override;
+    // @name checks that Value is rdtDouble.
+    procedure SetDataType(const Value: TRbwDataType); override;
+    // @name clears FRealValues and calls
+    // inherited @Link(TCustomSparseDataSet.SetDimensions).
+    procedure SetDimensions(const SetToZero: boolean); override;
+    // @name stores a real number at Layer, Row, Col.
+    procedure SetBooleanData(const Layer, Row, Col: integer;
+      const Value: Boolean); override;
+  public
+    procedure RemoveValue(const Layer, Row, Col: Integer);
+    procedure GetMinMaxStoredLimits(out LayerMin, RowMin, ColMin,
+      LayerMax, RowMax, ColMax: integer); override;
+    // @name creates an instance of @classname and sets
+    // @link(TDataArray.DataType) to rdtDouble.
+    constructor Create(AnOwner: TComponent); override;
+    // @name destroys the the current instance of @classname.
+    // Do not call @name directly. Call Free instead.
+    destructor Destroy; override;
+    property MinLayer: Integer read GetMinLayer;
+    property MaxLayer: Integer read GetMaxLayer;
+    property MinRow: Integer read GetMinRow;
+    property MaxRow: Integer read GetMaxRow;
+    property MinColumn: Integer read GetMinColumn;
+    property MaxColumn: Integer read GetMaxColumn;
+    procedure UpdateDimensions(NumberOfLayers, NumberOfRows,
+      NumberOfColumns: integer; ForceResize: boolean = False); override;
+  end;
+
   TValueAddMethod = (vamAdd, vamReplace, vamAveragedDelayed, vamAddDelayed);
 
   // @name can have multiple values assigned to the same cell. See
@@ -9499,6 +9545,149 @@ begin
   begin
     FStringValues.Free;
     FStringValues := T3DSparseStringArray.Create(GetQuantum(NumberOfLayers),
+      GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
+  end;
+end;
+
+{ TBooleanSparseDataSet }
+
+procedure TBooleanSparseDataSet.Clear;
+begin
+  inherited;
+  if FBooleanValues <> nil then
+  begin
+    FBooleanValues.Clear;
+  end;
+end;
+
+constructor TBooleanSparseDataSet.Create(AnOwner: TComponent);
+begin
+  inherited;
+  FBooleanValues := T3DSparseBooleanArray.Create(GetQuantum(LayerCount),
+    GetQuantum(RowCount), GetQuantum(ColumnCount));
+  DataType := rdtBoolean;
+end;
+
+destructor TBooleanSparseDataSet.Destroy;
+begin
+  FreeAndNil(FBooleanValues);
+  inherited;
+end;
+
+function TBooleanSparseDataSet.GetBooleanData(const Layer, Row,
+  Col: integer): Boolean;
+begin
+  Assert(IsValue[Layer, Row, Col]);
+  result := FBooleanValues[Layer, Row, Col];
+end;
+
+function TBooleanSparseDataSet.GetIsValue(const Layer, Row,
+  Col: Integer): boolean;
+begin
+  result := inherited GetIsValue(Layer, Row, Col);
+  if result then
+  begin
+    result := FBooleanValues.IsValue[Layer, Row, Col];
+    FPriorResult := result;
+  end;
+end;
+
+function TBooleanSparseDataSet.GetMaxColumn: Integer;
+begin
+  CheckRestoreData;
+  result := FBooleanValues.MaxCol;
+end;
+
+function TBooleanSparseDataSet.GetMaxLayer: Integer;
+begin
+  CheckRestoreData;
+  result := FBooleanValues.MaxLayer;
+end;
+
+function TBooleanSparseDataSet.GetMaxRow: Integer;
+begin
+  CheckRestoreData;
+  result := FBooleanValues.MaxRow;
+end;
+
+function TBooleanSparseDataSet.GetMinColumn: Integer;
+begin
+  CheckRestoreData;
+  result := FBooleanValues.MinCol;
+end;
+
+function TBooleanSparseDataSet.GetMinLayer: Integer;
+begin
+  CheckRestoreData;
+  result := FBooleanValues.MinLayer
+end;
+
+procedure TBooleanSparseDataSet.GetMinMaxStoredLimits(out LayerMin, RowMin,
+  ColMin, LayerMax, RowMax, ColMax: integer);
+begin
+  CheckRestoreData;
+  LayerMin := FBooleanValues.MinLayer;
+  RowMin := FBooleanValues.MinRow;
+  ColMin := FBooleanValues.MinCol;
+  LayerMax := FBooleanValues.MaxLayer;
+  RowMax := FBooleanValues.MaxRow;
+  ColMax := FBooleanValues.MaxCol;
+end;
+
+function TBooleanSparseDataSet.GetMinRow: Integer;
+begin
+  CheckRestoreData;
+  result := FBooleanValues.MinRow
+end;
+
+procedure TBooleanSparseDataSet.RemoveValue(const Layer, Row, Col: Integer);
+begin
+  if IsValue[Layer, Row, Col] then
+  begin
+    FBooleanValues.RemoveValue(Layer, Row, Col);
+  end;
+end;
+
+procedure TBooleanSparseDataSet.SetBooleanData(const Layer, Row, Col: integer;
+  const Value: Boolean);
+begin
+  // don't call inherited;
+  FBooleanValues[Layer, Row, Col] := Value;
+end;
+
+procedure TBooleanSparseDataSet.SetDataType(const Value: TRbwDataType);
+begin
+  Assert(Value = rdtBoolean);
+  inherited;
+end;
+
+procedure TBooleanSparseDataSet.SetDimensions(const SetToZero: boolean);
+begin
+  inherited;
+  if FBooleanValues <> nil then
+  begin
+    FBooleanValues.Clear;
+  end;
+end;
+
+procedure TBooleanSparseDataSet.UpdateDimensions(NumberOfLayers, NumberOfRows,
+  NumberOfColumns: integer; ForceResize: boolean);
+var
+  OldLayerCount: integer;
+  OldRowCount: integer;
+  OldColumnCount: integer;
+begin
+  OldLayerCount := LayerCount;
+  OldRowCount := RowCount;
+  OldColumnCount := ColumnCount;
+  inherited;
+  if ((OldLayerCount > MaxSmallArraySize) <> (NumberOfLayers > MaxSmallArraySize))
+    or ((OldRowCount > MaxSmallArraySize) <> (NumberOfRows > MaxSmallArraySize))
+    or ((OldColumnCount > MaxSmallArraySize) <> (NumberOfColumns > MaxSmallArraySize))
+    then
+  begin
+    FBooleanValues.Free;
+    FBooleanValues := T3DSparseBooleanArray.Create(GetQuantum(NumberOfLayers),
       GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
   end;
 end;

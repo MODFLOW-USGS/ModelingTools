@@ -1,7 +1,8 @@
 ptf @
 etf %
 %ReadArrays(C:\ModelingTools\ModelMuse\PestTest\CSubExampletest.csub.txt)%
-# CSUB: Skeletal Storage, Compaction, and Subsidence Package file created on 7/8/2021 by ModelMuse version 4.3.0.56.
+# CSUB: Skeletal Storage, Compaction, and Subsidence Package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
   BOUNDNAMES
     PRINT_INPUT

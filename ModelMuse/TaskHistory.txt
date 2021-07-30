@@ -274,7 +274,7 @@ object TTaskHistory
     end
     item
       Name = 'SUTRA Model'
-      Display = False
+      Display = True
     end
     item
       Name = '64 bit'
@@ -370,7 +370,7 @@ object TTaskHistory
     end
     item
       Name = 'SUTRA 3.0'
-      Display = False
+      Display = True
     end
     item
       Name = 'Metadata Editor'
@@ -27875,5 +27875,13 @@ object TTaskHistory
         'Import'
         'PEST'
         'Error checking')
+    end
+    item
+      Date = 44407.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Testing'
+        'SUTRA 3.0'
+        'SUTRA Model')
     end>
 end

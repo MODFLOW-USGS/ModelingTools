@@ -1,6 +1,7 @@
 ptf @
 etf %
-# FMP: Farm Process file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+# FMP: Farm Process file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 PARAMETER     1    28 # DataSet 1: PARAMETER NPFWL MXL
 FLAG_BLOCKS # DataSet 2a
     15     8     6     3 # Data Set 2c Parameter Dimensions: MXACTW NFARMS NCROPS NSOILS

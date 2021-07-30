@@ -505,6 +505,12 @@ var
   CellLocationAddr: PCellLocation;
   PQFormula: string;
   UFormula: string;
+  UsedDataArray: TDataArray;
+  PositiveUsedFluxes: TSutraFluxCheckList;
+  UsedDataSet: TBooleanSparseDataSet;
+  MergedUsedDataArray: TDataArray;
+  UsedBoundary: Boolean;
+  MergedUsed: Boolean;
   procedure SaveFormulaOrValue(PestSeriesName, PestName: string;
     PestSeriesMethod: TPestParamMethod;
     DataSet: TDataArray; FormulasUsed: T2DSparseBooleanArray;
@@ -599,7 +605,13 @@ begin
       DataArray.Orientation := dso3D;
       DataArray.UpdateDimensions(Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
 //      DataArray.SetDimensions(False);
-      PQTimeList.Add(Times[TimeIndex], DataArray)
+
+      UsedDataArray := TBooleanSparseDataSet.Create(Model);
+      UsedDataArray.DataType := rdtBoolean;
+      UsedDataArray.Orientation := dso3D;
+      UsedDataArray.UpdateDimensions(Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
+
+      PQTimeList.Add(Times[TimeIndex], DataArray, UsedDataArray)
     end;
 
     Times.Clear;
@@ -619,7 +631,13 @@ begin
       DataArray.DataType := rdtDouble;
       DataArray.Orientation := dso3D;
       DataArray.UpdateDimensions(Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
-      UTimeList.Add(Times[TimeIndex], DataArray)
+
+      UsedDataArray := TBooleanSparseDataSet.Create(Model);
+      UsedDataArray.DataType := rdtBoolean;
+      UsedDataArray.Orientation := dso3D;
+      UsedDataArray.UpdateDimensions(Mesh.LayerCount+1, 1, Mesh.Mesh2D.Nodes.Count);
+
+      UTimeList.Add(Times[TimeIndex], DataArray, UsedDataArray);
     end;
 
     if FBoundaryType in [sbtFluidSource, sbtSpecPress] then
@@ -656,6 +674,7 @@ begin
         begin
           PositiveFluxes := TSutraFluxCheckList.Create(nil);
           PositiveUFluxes := TSutraFluxCheckList.Create(nil);
+          PositiveUsedFluxes := TSutraFluxCheckList.Create(nil);
           try
             for TimeIndex := 0 to Times.Count - 1 do
             begin
@@ -666,6 +685,10 @@ begin
               DataArray := TTransientRealSparseDataSet.Create(Model);
               DataArray.DataType := rdtDouble;
               PositiveUFluxes.Add(Times[TimeIndex], DataArray);
+
+              UsedDataArray := TBooleanSparseDataSet.Create(Model);
+              UsedDataArray.DataType := rdtBoolean;
+              PositiveUsedFluxes.Add(Times[TimeIndex], UsedDataArray);
             end;
 
             Assert(PQTimeList.Count = UTimeList.Count);
@@ -691,19 +714,12 @@ begin
                   as TTransientRealSparseDataSet;
                 UDataSet := AUTimeList[DataSetIndex]
                   as TTransientRealSparseDataSet;
+                UsedDataSet := AUTimeList.UsedItems[DataSetIndex]
+                  as TBooleanSparseDataSet;
+
                 Assert(PQDataSet <> nil);
                 Assert(UDataSet <> nil);
 
-//                PositiveDataSet := PositiveFluxes[DataSetIndex];
-//                PositiveUDataSet := PositiveUFluxes[DataSetIndex];
-//                Assert(PositiveDataSet <> nil);
-//                Assert(PositiveUDataSet <> nil);
-//
-//                PQFormulas := FPQPestTimeFormulas[DataSetIndex];
-//                PQFormulasUsed := FPQFormulaUsed[DataSetIndex];
-//                UFormulas := FUPestTimeFormulas[DataSetIndex];
-//                UFormulasUsed := FUFormulaUsed[DataSetIndex];
-//
                 StartTimeIndex :=
                   Times.IndexOf(APQTimeList.Times[DataSetIndex]);
                 if DataSetIndex < APQTimeList.Count - 1 then
@@ -722,6 +738,8 @@ begin
                   MergedUDataSet := UTimeList[TimeIndex];
                   PositiveDataSet := PositiveFluxes[TimeIndex];
                   PositiveUDataSet := PositiveUFluxes[TimeIndex];
+
+                  MergedUsedDataArray := PQTimeList.UsedItems[TimeIndex];
 
                   PQFormulas := FPQPestTimeFormulas[TimeIndex];
                   PQFormulasUsed := FPQFormulaUsed[TimeIndex];
@@ -746,11 +764,17 @@ begin
                         if PQDataSet.IsValue[LayerIndex, RowIndex, ColIndex]
                         then
                         begin
+                          UsedBoundary := UsedDataSet.BooleanData[
+                            LayerIndex, RowIndex, ColIndex];
+                          MergedUsed := MergedUsedDataArray.IsValue[
+                            LayerIndex, RowIndex, ColIndex]
+                            and MergedUsedDataArray.BooleanData[
+                            LayerIndex, RowIndex, ColIndex];
                           Assert(UDataSet.IsValue[LayerIndex, RowIndex,
                             ColIndex]);
                           FNodeNumbers[LayerIndex, RowIndex, ColIndex] := 1;
                           if MergedPQDataSet.IsValue[LayerIndex, RowIndex,
-                            ColIndex] then
+                            ColIndex] and UsedBoundary and MergedUsed then
                           begin
                             MergedPQDataSet.RealData[LayerIndex, RowIndex,
                               ColIndex] := MergedPQDataSet.RealData
@@ -775,66 +799,11 @@ begin
                             SaveCombinedFormulaOrValue(PQPestSeriesName,
                               PQPestName, PQPestSeriesMethod, PQDataSet,
                               MergedPQDataSet, PQFormulasUsed, PQFormulas, PQFormula);
-//                            if (PQPestSeriesName <> '') or (PQPestName <> '') then
-//                            begin
-//                              PQFormula := GetPestTemplateFormula(
-//                                PQDataSet.RealData[LayerIndex, RowIndex,
-//                                ColIndex], PQPestName, PQPestSeriesName,
-//                                PQPestSeriesMethod, CellLocationAddr, nil);
-//                              PQFormulasUsed[LayerIndex, ColIndex] := True;
-//                              PQFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                Format('(%:0s) + (%1:s)',
-//                                [PQFormula, PQFormulas[LayerIndex, RowIndex, ColIndex]]);
-//                            end
-//                            else
-//                            begin
-//                              if PQFormulasUsed[LayerIndex, ColIndex] then
-//                              begin
-//                                PQFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                  Format('(%:0g) + (%1:s)',
-//                                  [PQDataSet.RealData[LayerIndex, RowIndex, ColIndex],
-//                                  PQFormulas[LayerIndex, RowIndex, ColIndex]]);
-//                              end
-//                              else
-//                              begin
-//                                PQFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                  FortranFloatToStr(MergedPQDataSet.RealData[LayerIndex,
-//                                  RowIndex, ColIndex])
-//                              end;
-//                            end;
 
                             SaveCombinedFormulaOrValue(UPestSeriesName,
                               UPestName, UPestSeriesMethod, UDataSet,
                               MergedUDataSet, UFormulasUsed, UFormulas, UFormula,
                               PQFormula);
-//                            if (UPestSeriesName <> '') or (UPestName <> '') then
-//                            begin
-//                              UFormula := GetPestTemplateFormula(
-//                                UDataSet.RealData[LayerIndex, RowIndex,
-//                                ColIndex], UPestName, UPestSeriesName,
-//                                UPestSeriesMethod, CellLocationAddr, nil);
-//                              UFormulasUsed[LayerIndex, ColIndex] := True;
-//                              UFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                Format('(%:0s) + (%1:s)',
-//                                [UFormula, UFormulas[LayerIndex, RowIndex, ColIndex]]);
-//                            end
-//                            else
-//                            begin
-//                              if UFormulasUsed[LayerIndex, ColIndex] then
-//                              begin
-//                                UFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                  Format('(%:0g) + (%1:s)',
-//                                  [UDataSet.RealData[LayerIndex, RowIndex, ColIndex],
-//                                  UFormulas[LayerIndex, RowIndex, ColIndex]]);
-//                              end
-//                              else
-//                              begin
-//                                UFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                  FortranFloatToStr(MergedUDataSet.RealData[LayerIndex,
-//                                  RowIndex, ColIndex])
-//                              end;
-//                            end;
-
                           end
                           else
                           begin
@@ -851,49 +820,21 @@ begin
                               ColIndex] := UDataSet.Annotation
                               [LayerIndex, RowIndex, ColIndex];
 
+                            MergedUsedDataArray.BooleanData[
+                              LayerIndex, RowIndex, ColIndex] := UsedBoundary;
+                            MergedUsedDataArray.Annotation[
+                              LayerIndex, RowIndex, ColIndex] := 'Assigned';
+
                             SaveFormulaOrValue(PQPestSeriesName, PQPestName,
                               PQPestSeriesMethod, PQDataSet, PQFormulasUsed,
                               PQFormulas);
-//                            if (PQPestSeriesName <> '') or (PQPestName <> '') then
-//                            begin
-//                              PQFormula := GetPestTemplateFormula(
-//                                PQDataSet.RealData[LayerIndex, RowIndex,
-//                                ColIndex], PQPestName, PQPestSeriesName,
-//                                PQPestSeriesMethod, CellLocationAddr, nil);
-//                              PQFormulasUsed[LayerIndex, ColIndex] := True;
-//                              PQFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                PQFormula;
-//                            end
-//                            else
-//                            begin
-//                              PQFormulasUsed[LayerIndex, ColIndex] := False;
-//                              PQFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                FortranFloatToStr(MergedPQDataSet.RealData[LayerIndex,
-//                                RowIndex, ColIndex])
-//                            end;
 
                             SaveFormulaOrValue(UPestSeriesName, UPestName,
                               UPestSeriesMethod, UDataSet, UFormulasUsed,
                               UFormulas, PQFormulas[LayerIndex, RowIndex, ColIndex]);
-//                            if (UPestSeriesName <> '') or (UPestName <> '') then
-//                            begin
-//                              UFormula := GetPestTemplateFormula(
-//                                UDataSet.RealData[LayerIndex, RowIndex,
-//                                ColIndex], UPestName, UPestSeriesName,
-//                                UPestSeriesMethod, CellLocationAddr, nil);
-//                              UFormulasUsed[LayerIndex, ColIndex] := True;
-//                              UFormulas[LayerIndex, RowIndex, ColIndex] := UFormula;
-//                            end
-//                            else
-//                            begin
-//                              UFormulasUsed[LayerIndex, ColIndex] := False;
-//                              UFormulas[LayerIndex, RowIndex, ColIndex] :=
-//                                FortranFloatToStr(MergedUDataSet.RealData[LayerIndex,
-//                                RowIndex, ColIndex])
-//                            end;
                           end;
-                          if PQDataSet.RealData[LayerIndex, RowIndex,
-                            ColIndex] > 0 then
+                          if (PQDataSet.RealData[LayerIndex, RowIndex,
+                            ColIndex] > 0) and UsedBoundary then
                           begin
                             Assert(PositiveDataSet.IsValue[LayerIndex, RowIndex,
                               ColIndex] = PositiveUDataSet.IsValue[LayerIndex,
@@ -1023,6 +964,7 @@ begin
               end;
             end;
           finally
+            PositiveUsedFluxes.Free;
             PositiveUFluxes.Free;
             PositiveFluxes.Free;
           end;
@@ -1042,6 +984,8 @@ begin
             begin
               UDataSet := AUTimeList[DataSetIndex]
                 as TTransientRealSparseDataSet;
+              UsedDataSet := AUTimeList.UsedItems[DataSetIndex]
+                as TBooleanSparseDataSet;
 
               UFormulas := FUPestTimeFormulas[DataSetIndex];
               UFormulasUsed := FUFormulaUsed[DataSetIndex];
@@ -1061,6 +1005,8 @@ begin
               for TimeIndex := StartTimeIndex to NextTimeIndex do
               begin
                 MergedUDataSet := UTimeList[TimeIndex];
+                MergedUsedDataArray := UTimeList.UsedItems[TimeIndex];
+
                 UPestName := UPestNames[TimeIndex];
                 for LayerIndex := UDataSet.MinLayer to UDataSet.MaxLayer do
                 begin
@@ -1075,9 +1021,16 @@ begin
                       if UDataSet.IsValue[LayerIndex, RowIndex, ColIndex] then
                       begin
                         FNodeNumbers[LayerIndex, RowIndex, ColIndex] := 1;
+                        UsedBoundary := UsedDataSet.BooleanData[
+                          LayerIndex, RowIndex, ColIndex];
+                        MergedUsed := MergedUsedDataArray.IsValue[
+                          LayerIndex, RowIndex, ColIndex]
+                          and MergedUsedDataArray.BooleanData[
+                          LayerIndex, RowIndex, ColIndex];
                         if MergedUDataSet.IsValue[LayerIndex, RowIndex, ColIndex]
-                        then
+                          and UsedBoundary and MergedUsed then
                         begin
+
                           MergedUDataSet.RealData[LayerIndex, RowIndex,
                             ColIndex] := MergedUDataSet.RealData
                             [LayerIndex, RowIndex, ColIndex] + UDataSet.RealData
@@ -1098,6 +1051,10 @@ begin
                           MergedUDataSet.Annotation[LayerIndex, RowIndex,
                             ColIndex] := UDataSet.Annotation[LayerIndex,
                             RowIndex, ColIndex];
+                          MergedUsedDataArray.BooleanData[
+                            LayerIndex, RowIndex, ColIndex] := UsedBoundary;
+                          MergedUsedDataArray.Annotation[
+                            LayerIndex, RowIndex, ColIndex] := 'Assigned';
                           SaveFormulaOrValue(UPestSeriesName, UPestName,
                             UPestSeriesMethod, UDataSet, UFormulasUsed,
                             UFormulas);
@@ -1135,12 +1092,9 @@ begin
                 as TTransientRealSparseDataSet;
               UDataSet := AUTimeList[DataSetIndex]
                 as TTransientRealSparseDataSet;
+              UsedDataSet := AUTimeList.UsedItems[DataSetIndex]
+                as TBooleanSparseDataSet;
 
-//              PQFormulas := FPQPestTimeFormulas[DataSetIndex];
-//              PQFormulasUsed := FPQFormulaUsed[DataSetIndex];
-//              UFormulas := FUPestTimeFormulas[DataSetIndex];
-//              UFormulasUsed := FUFormulaUsed[DataSetIndex];
-//
               Assert(PQDataSet <> nil);
               Assert(UDataSet <> nil);
               StartTimeIndex := Times.IndexOf(APQTimeList.Times[DataSetIndex]);
@@ -1161,11 +1115,12 @@ begin
                 PQPestName := PQPestNames[DataSetIndex];
                 UPestName := UPestNames[DataSetIndex];
 
+                MergedUsedDataArray := PQTimeList.UsedItems[TimeIndex];
+
                 PQFormulas := FPQPestTimeFormulas[TimeIndex];
                 PQFormulasUsed := FPQFormulaUsed[TimeIndex];
                 UFormulas := FUPestTimeFormulas[TimeIndex];
                 UFormulasUsed := FUFormulaUsed[TimeIndex];
-
 
                 for LayerIndex := PQDataSet.MinLayer to PQDataSet.MaxLayer do
                 begin
@@ -1181,6 +1136,13 @@ begin
                         = UDataSet.IsValue[LayerIndex, RowIndex, ColIndex]);
                       if PQDataSet.IsValue[LayerIndex, RowIndex, ColIndex] then
                       begin
+                        UsedBoundary := UsedDataSet.BooleanData[
+                          LayerIndex, RowIndex, ColIndex];
+//                        MergedUsed := MergedUsedDataArray.IsValue[
+//                          LayerIndex, RowIndex, ColIndex]
+//                          and MergedUsedDataArray.BooleanData[
+//                          LayerIndex, RowIndex, ColIndex];
+
                         FNodeNumbers[LayerIndex, RowIndex, ColIndex] := 1;
                         MergedPQDataSet.RealData[LayerIndex, RowIndex, ColIndex]
                           := PQDataSet.RealData[LayerIndex, RowIndex, ColIndex];
@@ -1192,6 +1154,11 @@ begin
                         MergedUDataSet.Annotation[LayerIndex, RowIndex,
                           ColIndex] := UDataSet.Annotation[LayerIndex, RowIndex,
                           ColIndex];
+
+                        MergedUsedDataArray.BooleanData[
+                          LayerIndex, RowIndex, ColIndex] := UsedBoundary;
+                        MergedUsedDataArray.Annotation[
+                          LayerIndex, RowIndex, ColIndex] := 'Assigned';
 
                         SaveFormulaOrValue(PQPestSeriesName, PQPestName,
                           PQPestSeriesMethod, PQDataSet, PQFormulasUsed,
@@ -1224,6 +1191,8 @@ begin
               UDataSet := AUTimeList[DataSetIndex]
                 as TTransientRealSparseDataSet;
               Assert(UDataSet <> nil);
+              UsedDataSet := AUTimeList.UsedItems[DataSetIndex]
+                as TBooleanSparseDataSet;
 
               UFormulas := FUPestTimeFormulas[DataSetIndex];
               UFormulasUsed := FUFormulaUsed[DataSetIndex];
@@ -1242,6 +1211,8 @@ begin
               for TimeIndex := StartTimeIndex to NextTimeIndex do
               begin
                 MergedUDataSet := UTimeList[TimeIndex];
+                MergedUsedDataArray := UTimeList.UsedItems[TimeIndex];
+
                 UPestName := UPestNames[TimeIndex];
                 for LayerIndex := UDataSet.MinLayer to UDataSet.MaxLayer do
                 begin
@@ -1256,11 +1227,22 @@ begin
                       if UDataSet.IsValue[LayerIndex, RowIndex, ColIndex] then
                       begin
                         FNodeNumbers[LayerIndex, RowIndex, ColIndex] := 1;
+                        UsedBoundary := UsedDataSet.BooleanData[
+                          LayerIndex, RowIndex, ColIndex];
+//                        MergedUsed := MergedUsedDataArray.IsValue[
+//                          LayerIndex, RowIndex, ColIndex]
+//                          and MergedUsedDataArray.BooleanData[
+//                          LayerIndex, RowIndex, ColIndex];
+
                         MergedUDataSet.RealData[LayerIndex, RowIndex, ColIndex]
                           := UDataSet.RealData[LayerIndex, RowIndex, ColIndex];
                         MergedUDataSet.Annotation[LayerIndex, RowIndex,
                           ColIndex] := UDataSet.Annotation[LayerIndex, RowIndex,
                           ColIndex];
+                        MergedUsedDataArray.BooleanData[
+                          LayerIndex, RowIndex, ColIndex] := UsedBoundary;
+                        MergedUsedDataArray.Annotation[
+                          LayerIndex, RowIndex, ColIndex] := 'Assigned';
                         SaveFormulaOrValue(UPestSeriesName, UPestName,
                           UPestSeriesMethod, UDataSet, UFormulasUsed,
                           UFormulas);
@@ -1329,6 +1311,10 @@ begin
     sbtSpecConcTemp: Comment := '# Specified Temperature/Concentration Boundary Condition File';
   end;
   WriteString(File_Comment(Comment));
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
   NewLine;
 end;
 
@@ -1597,6 +1583,7 @@ var
   UFormulasUsed: T2DSparseBooleanArray;
   PQFormula: string;
   UFormula: string;
+  MergedUsedDataArray: TDataArray;
 //  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
@@ -1644,6 +1631,7 @@ begin
 
   UDataArray := UTimeList[TimeIndex];
   PQDataArray := PQTimeList[TimeIndex];
+  MergedUsedDataArray := PQTimeList.UsedItems[TimeIndex];
 
   PQFormulas := FPQPestTimeFormulas[TimeIndex];
   PQFormulasUsed := FPQFormulaUsed[TimeIndex];
@@ -1672,6 +1660,10 @@ begin
               Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
               IQCP1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
               Assert(IQCP1 > 0);
+              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IQCP1 := -IQCP1;
+              end;
               QINC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               UINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
@@ -1711,7 +1703,7 @@ begin
             begin
               UseBCTime := False;
             end;
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCP1), QINC1,
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(IQCP1, QINC1,
               UINC1, UseBCTime, PQFormula, UFormula));
           end;
         end;
@@ -1763,6 +1755,10 @@ begin
               Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
               IQCP1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
               Assert(IQCP1 > 0);
+              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IQCP1 := -IQCP1;
+              end;
               QINC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               UINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
 
@@ -1822,6 +1818,7 @@ var
   UFormulas: T3DSparseStringArray;
   UFormulasUsed: T2DSparseBooleanArray;
   UFormula: string;
+  MergedUsedDataArray: TDataArray;
 //  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
@@ -1866,6 +1863,7 @@ begin
 
 //  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
+  MergedUsedDataArray := UTimeList.UsedItems[TimeIndex];
 
 //  PQFormulas := FPQPestTimeFormulas[TimeIndex];
 //  PQFormulasUsed := FPQFormulaUsed[TimeIndex];
@@ -1891,6 +1889,10 @@ begin
             begin
               IQCU1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
               Assert(IQCU1 > 0);
+              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IQCU1 := -IQCU1;
+              end;
               QUINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
               Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
@@ -1919,7 +1921,7 @@ begin
             begin
               UseBCTime := False;
             end;
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IQCU1), 0,
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(IQCU1, 0,
               QUINC1, UseBCTime, '', UFormula));
           end;
         end;
@@ -1962,6 +1964,10 @@ begin
             begin
               IQCU1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
               Assert(IQCU1 > 0);
+              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IQCU1 := -IQCU1;
+              end;
               QUINC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
               Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
@@ -2012,6 +2018,7 @@ var
   UFormulasUsed: T2DSparseBooleanArray;
   PQFormula: string;
   UFormula: string;
+  MergedUsedDataArray: TDataArray;
 //  ActiveNodeDataArray: TDataArray;
   procedure WriteALine;
   begin
@@ -2064,6 +2071,7 @@ begin
 //  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
   PQDataArray := PQTimeList[TimeIndex];
+  MergedUsedDataArray := PQTimeList.UsedItems[TimeIndex];
 
   PQFormulas := FPQPestTimeFormulas[TimeIndex];
   PQFormulasUsed := FPQFormulaUsed[TimeIndex];
@@ -2091,6 +2099,10 @@ begin
                 Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
                 IPBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
                 Assert(IPBC1 > 0);
+                if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  IPBC1 := -IPBC1;
+                end;
                 PBC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
                 UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
                 Assert(PQFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
@@ -2132,7 +2144,7 @@ begin
               begin
                 UseBCTime := False;
               end;
-              FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IPBC1), PBC1,
+              FIBoundaryNodes.AddUnique(TBoundaryNode.Create(IPBC1, PBC1,
                 UBC1, UseBCTime, PQFormula, UFormula));
             end;
           end;
@@ -2184,6 +2196,10 @@ begin
                 Assert(PQDataArray.IsValue[LayerIndex, RowIndex,ColIndex]);
                 IPBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
                 Assert(IPBC1 > 0);
+                if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+                begin
+                  IPBC1 := -IPBC1;
+                end;
                 PBC1 := PQDataArray.RealData[LayerIndex, RowIndex,ColIndex];
                 UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
 
@@ -2242,6 +2258,7 @@ var
   UFormulas: T3DSparseStringArray;
   UFormulasUsed: T2DSparseBooleanArray;
   UFormula: string;
+  MergedUsedDataArray: TDataArray;
   procedure WriteALine;
   begin
     AnyChanged := True;
@@ -2283,6 +2300,7 @@ begin
   end;
 //  ActiveNodeDataArray := Model.DataArrayManager.GetDataSetByName(KNodeActive);
   UDataArray := UTimeList[TimeIndex];
+  MergedUsedDataArray := UTimeList.UsedItems[TimeIndex];
 
 //  PQFormulas := FPQPestTimeFormulas[TimeIndex];
 //  PQFormulasUsed := FPQFormulaUsed[TimeIndex];
@@ -2306,6 +2324,10 @@ begin
             begin
               IUBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
               Assert(IUBC1 > 0);
+              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IUBC1 := -IUBC1;
+              end;
               UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
               Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);
@@ -2334,7 +2356,7 @@ begin
             begin
               UseBCTime := False;
             end;
-            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(Abs(IUBC1), 0, UBC1,
+            FIBoundaryNodes.AddUnique(TBoundaryNode.Create(IUBC1, 0, UBC1,
               UseBCTime, '', UFormula));
           end;
         end;
@@ -2377,6 +2399,10 @@ begin
             begin
               IUBC1 := FNodeNumbers[LayerIndex, RowIndex,ColIndex] + 1;
               Assert(IUBC1 > 0);
+              if not MergedUsedDataArray.BooleanData[LayerIndex, RowIndex,ColIndex] then
+              begin
+                IUBC1 := -IUBC1;
+              end;
               UBC1 := UDataArray.RealData[LayerIndex, RowIndex,ColIndex];
               Assert(UFormulas.IsValue[LayerIndex, RowIndex,ColIndex]);
               Assert(UFormulasUsed.IsValue[LayerIndex, ColIndex]);

@@ -1,6 +1,7 @@
 ptf @
 etf %
-# UZF: Unsaturated-Zone Flow package file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+# UZF: Unsaturated-Zone Flow package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 OPTIONS
 END
      1     1     1     1     0    -9    15    20     0  1.000000000000E+000  # Data Set 1b: NUZTOP IUZFOPT IRUNFLG IETFLG IUZFCB1 IUZFCB2 NTRAIL2 NSETS2 NUZGAG SURFDEP

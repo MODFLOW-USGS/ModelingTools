@@ -183,6 +183,8 @@ var
   StartingTime: Extended;
   JtfFile: Boolean;
   AxmlFile: Boolean;
+  PestTemplate: Boolean;
+  ReadArraysLine: Boolean;
 begin
   result := True;
   ErrorMessage:= '';
@@ -229,11 +231,36 @@ begin
     end;
     JtfFile := ExtractFileExt(ArchiveFileName) = '.jtf';
     AxmlFile := ExtractFileExt(ArchiveFileName) = '.axml';
+    PestTemplate := ExtractFileExt(ArchiveFileName) = '.tpl';
+    ReadArraysLine := False;
     for Index := 0 to ArchiveFile.Count - 1 do
     begin
       ArchiveLine := ArchiveFile[Index];
       OutputLine := OutputFile[Index];
-      if JtfFile then
+      if PestTemplate then
+      begin
+        if (Index = 2)
+          and (Length(ArchiveLine) <> 0)
+          and (ArchiveLine[1] = '#')
+          and (Length(OutputLine) <> 0)
+          and (OutputLine[1] = '#') then
+        begin
+          Continue;
+        end
+        else if (Index = 2) and (Pos('%ReadArrays', OutputLine) > 0) then
+        begin
+          ReadArraysLine := True;
+        end;
+        if (Index = 3) and ReadArraysLine
+          and (Length(ArchiveLine) <> 0)
+          and (ArchiveLine[1] = '#')
+          and (Length(OutputLine) <> 0)
+          and (OutputLine[1] = '#') then
+        begin
+          Continue;
+        end
+      end
+      else if JtfFile then
       begin
         if (Index = 1)
           and (Length(ArchiveLine) <> 0)

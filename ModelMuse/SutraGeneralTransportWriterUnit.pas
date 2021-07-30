@@ -49,7 +49,7 @@ type
     FBcsFileNames: TGenTransportInteractionStringList;
     FUseBctime: T3DSparseBooleanArray;
     FBcougFileName: string;
-    FNodeNumbers: T3DSparseIntegerArray;
+//    FNodeNumbers: T3DSparseIntegerArray;
     procedure Evaluate;
     procedure WriteDataSet0;
     procedure WriteDataSet1;
@@ -144,11 +144,11 @@ end;
 
 constructor TSutraGeneralTransportWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
-var
-  Mesh: TSutraMesh3D;
-  NumberOfLayers: Integer;
-  NumberOfRows: Integer;
-  NumberOfColumns: Integer;
+//var
+//  Mesh: TSutraMesh3D;
+//  NumberOfLayers: Integer;
+//  NumberOfRows: Integer;
+//  NumberOfColumns: Integer;
 begin
   inherited;
   FU1TimeLists := TObjectList<TSutraTimeList>.Create;
@@ -160,35 +160,35 @@ begin
   FUseBctime := T3DSparseBooleanArray.Create(GetQuantum(Model.LayerCount+1),
     GetQuantum(Model.RowCount+1), GetQuantum(Model.ColumnCount+1));
 
-  Mesh := Model.SutraMesh;
-  if Mesh <> nil then
-  begin
-    if ((Model.Mesh as TSutraMesh3D).MeshType = mt3D) then
-    begin
-      NumberOfLayers := frmGoPhast.PhastModel.
-        SutraLayerStructure.LayerCount+1;
-    end
-    else
-    begin
-      NumberOfLayers := frmGoPhast.PhastModel.
-        SutraLayerStructure.LayerCount;
-    end;
-    NumberOfRows := 1;
-    NumberOfColumns := Mesh.Mesh2D.Nodes.Count;
-  end
-  else
-  begin
-    NumberOfLayers := 0;
-    NumberOfRows := 0;
-    NumberOfColumns := 0;
-  end;
-  FNodeNumbers := T3DSparseIntegerArray.Create(GetQuantum(NumberOfLayers),
-    GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
+//  Mesh := Model.SutraMesh;
+//  if Mesh <> nil then
+//  begin
+//    if ((Model.Mesh as TSutraMesh3D).MeshType = mt3D) then
+//    begin
+//      NumberOfLayers := frmGoPhast.PhastModel.
+//        SutraLayerStructure.LayerCount+1;
+//    end
+//    else
+//    begin
+//      NumberOfLayers := frmGoPhast.PhastModel.
+//        SutraLayerStructure.LayerCount;
+//    end;
+//    NumberOfRows := 1;
+//    NumberOfColumns := Mesh.Mesh2D.Nodes.Count;
+//  end
+//  else
+//  begin
+//    NumberOfLayers := 0;
+//    NumberOfRows := 0;
+//    NumberOfColumns := 0;
+//  end;
+//  FNodeNumbers := T3DSparseIntegerArray.Create(GetQuantum(NumberOfLayers),
+//    GetQuantum(NumberOfRows), GetQuantum(NumberOfColumns));
 end;
 
 destructor TSutraGeneralTransportWriter.Destroy;
 begin
-  FNodeNumbers.Free;
+//  FNodeNumbers.Free;
   FUseBctime.Free;
   FTimes.Free;
 
@@ -276,6 +276,7 @@ var
   LowerFlowUPestNames: TStringList;
   HigherUPestNames: TStringList;
   HigherFlowUPestNames: TStringList;
+  BoundaryActiveData: TDataArray;
   procedure InitializeTimeList(ListOfTimeLists: TObjectList<TSutraTimeList>;
     FormulaIndex: Integer; Descripion: string; PestNames: TStringList);
   var
@@ -354,14 +355,23 @@ begin
     SetLength(BoundaryValues, 1);
   end;
 
+  // Create objects for storing PEST parameters that apply to
+  // individual time steps for all objects.
+  // There will be one TStringList list for each TScreenObject.
   LowerUPestNamesList := TStringListObjectList.Create;
   LowerFlowUPestNamesList := TStringListObjectList.Create;
   HigherUPestNamesList := TStringListObjectList.Create;
   HigherFlowUPestNamesList := TStringListObjectList.Create;
+
+  // Create string lists for storing PEST parameters that apply
+  // to all time steps for all objects.
   LowerUSeriesPestNames := TStringList.Create;
   LowerFlowUSeriesPestNames := TStringList.Create;
   HigherUSeriesPestNames := TStringList.Create;
   HigherFlowUSeriesPestNames := TStringList.Create;
+
+  // Create lists for storing how PEST parameters that apply
+  // to all time steps are to be applied.
   LowerUSeriesPestMethods := TPestMethodList.Create;
   LowerFlowUSeriesPestMethods := TPestMethodList.Create;
   HigherUSeriesPestMethods := TPestMethodList.Create;
@@ -377,6 +387,8 @@ begin
       ABoundary := ScreenObject.SutraBoundaries.GenTransportBoundary;
       if (ABoundary <> nil) and ABoundary.Used then
       begin
+        // If lakes are used, separate BCS files are needed for each type
+        // of lake interaction.
         if (FBcsFileNames <> nil)
           and ((FBcsFileNames.LakeInteraction <> ABoundary.LakeInteraction)
           or (FBcsFileNames.TransportInteraction <> ABoundary.LakeInteractionType))
@@ -393,6 +405,8 @@ begin
         DisplayTimeIndex := 0;
         if FEvaluationType = etDisplay then
         begin
+          // Identify the item that should be applied for the
+          // selected display time.
           for TIndex := 0 to ABoundary.Values.Count - 1 do
           begin
             Item := ABoundary.Values[TIndex] as TSutraGenTransportItem;
@@ -411,6 +425,8 @@ begin
           SetLength(BoundaryValues, ABoundary.Values.Count);
         end;
 
+        // Create lists of PEST parameter names to apply to a single object
+        // for each time step.
         LowerUPestNames := TStringList.Create;
         LowerUPestNamesList.Add(LowerUPestNames);
         LowerFlowUPestNames := TStringList.Create;
@@ -420,11 +436,15 @@ begin
         HigherFlowUPestNames := TStringList.Create;
         HigherFlowUPestNamesList.Add(HigherFlowUPestNames);
 
+        // Store the PEST names that apply to all stress periods.
+        // The value that is stored is either the name of a PEST parameter
+        // or the name of a data set that will be directly modified by PEST.
         LowerUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[LowerUPosition]);
         LowerFlowUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[LowerFlowUPosition]);
         HigherUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[HigherUPosition]);
         HigherFlowUSeriesPestNames.Add(ABoundary.PestBoundaryFormula[HigherFlowUPosition]);
 
+        // Store the method used to apply the PEST names.
         LowerUSeriesPestMethods.Add(ABoundary.PestBoundaryMethod[LowerUPosition]);
         LowerFlowUSeriesPestMethods.Add(ABoundary.PestBoundaryMethod[LowerFlowUPosition]);
         HigherUSeriesPestMethods.Add(ABoundary.PestBoundaryMethod[HigherUPosition]);
@@ -439,6 +459,7 @@ begin
         InitializeTimeList(FOutflowUTimeLists, HigherFlowUPosition,
           'U_Outflow_Rate', HigherFlowUPestNames);
 
+        // The value of UseBCTime at each node.
         CellList := TCellAssignmentList.Create;
         try
           ScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
@@ -453,6 +474,7 @@ begin
       end;
     end;
 
+    // make a list of times in all the time lists.
     for ListIndex := 0 to FU1TimeLists.Count - 1 do
     begin
       SutraTimeList := FU1TimeLists[ListIndex];
@@ -462,6 +484,8 @@ begin
       end;
     end;
 
+    // Create a list for storeing nodes for each time step at which
+    // values will be changed.
     FGeneralBoundaries.Clear;
     for timeIndex := 0 to FTimes.Count - 1 do
     begin
@@ -472,6 +496,8 @@ begin
     end;
 
     Mesh := Model.SutraMesh;
+    // LastUsed will store the index of the data set that was used
+    // in the previous time step.
     LastUsed := TIntegerList.Create;
     try
       for ListIndex := 0 to FU1TimeLists.Count - 1 do
@@ -479,6 +505,8 @@ begin
         LastUsed.Add(0);
       end;
 
+      // For each time at which something is changed,
+      // process the time lists.
       for TimeIndex := 0 to FTimes.Count - 1 do
       begin
         ATime := FTimes[TimeIndex];
@@ -486,6 +514,9 @@ begin
 
         for ListIndex := 0 to FU1TimeLists.Count - 1 do
         begin
+          // For each list, identify the index of the data set that
+          // applies for the current time step. Start searching with the one
+          // that was used for the previous time step as stored in LastUsed.
           UsedIndex := -1;
           U1SutraTimeList :=FU1TimeLists[ListIndex];
           for TIndex := LastUsed[ListIndex] to U1SutraTimeList.Count - 1 do
@@ -499,12 +530,14 @@ begin
           end;
           if UsedIndex >= 0 then
           begin
+            // Store the index of the data set used for the current time step.
             LastUsed[ListIndex] :=  UsedIndex;
-            // Get data sets for selected time
+            // Get data sets for selected time.
             U1Data := U1SutraTimeList[UsedIndex];
+            BoundaryActiveData := U1SutraTimeList.UsedItems[UsedIndex];
             if U1Data = nil then
             begin
-              // inactive
+              // inactive in this time period.
               for InnerIndex := 0 to U1SutraTimeList.Count - 1 do
               begin
                 U1Data := U1SutraTimeList[InnerIndex];
@@ -532,6 +565,9 @@ begin
                       AssignNodeNumber;
                       if NodeNumber >= 0 then
                       begin
+                        // Create an inactive general transport boundary at each
+                        // active node in the grid where the object
+                        // for the current time list defines one.
                         NodeList.Add(TGeneralTransportNode.CreateInactive(
                           NodeNumber, LayerIndex, ColIndex));
                       end;
@@ -542,9 +578,14 @@ begin
               Continue;
             end;
 
+            // Retrieve the PEST names and methods for the object that defined
+            // the current set of lists.
+            // Also get the data for the current time list and time step.
             U1SeriesName := LowerUSeriesPestNames[ListIndex];
             U1SeriesMethod := LowerUSeriesPestMethods[ListIndex];
             U1Name := LowerUPestNamesList[ListIndex][UsedIndex];
+
+            // U1SutraTimeList and U1Data have already been retrieved.
 
             U2SeriesName := HigherUSeriesPestNames[ListIndex];
             U2SeriesMethod := HigherUSeriesPestMethods[ListIndex];
@@ -591,8 +632,17 @@ begin
                   AssignNodeNumber;
                   if NodeNumber < 0 then
                   begin
+                    // don't bother assigning data for inactive nodes.
                     Continue;
                   end;
+
+                  if not BoundaryActiveData.BooleanData[LayerIndex,0,ColIndex] then
+                  begin
+                    NodeList.Add(TGeneralTransportNode.CreateInactive(
+                      NodeNumber, LayerIndex, ColIndex));
+                    Continue;
+                  end;
+
                   U1.Value := U1Data.RealData[LayerIndex,0,ColIndex];
                   U1.Annotation := U1Data.Annotation[LayerIndex,0,ColIndex];
                   if (U1Name <> '') or (U1SeriesName <> '') then
@@ -801,6 +851,7 @@ var
 begin
   if FGeneralBoundaries[TimeIndex].Count > 0 then
   begin
+    WriteCommentLine('Data set 7B');
     NodeArray := FGeneralBoundaries[TimeIndex].ToArray;
     for NodeIndex := 0 to Length(NodeArray) - 1 do
     begin

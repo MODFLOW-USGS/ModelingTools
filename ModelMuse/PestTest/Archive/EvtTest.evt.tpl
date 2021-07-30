@@ -1,6 +1,7 @@
 ptf @
 etf %
-# EVT: Evapotranspiration package file created on 7/11/2021 by ModelMuse version 4.3.0.56.
+# EVT: Evapotranspiration package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
      2     9 # DataSet 2: NEVTOP IEVTCB
      1     1     1     1 # Data Set 5: INSURF INEVTR INEXDP INIEVT Stress period 1
 INTERNAL 1.0 (FREE)       12 # Data Set 6: SURF

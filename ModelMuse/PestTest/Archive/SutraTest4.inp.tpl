@@ -1,6 +1,6 @@
 ptf @
 etf %
-# Main SUTRA input file file created on 7/29/2021 by ModelMuse version 4.3.0.56.
+# Main SUTRA input file file created on 7/30/2021 by ModelMuse version 4.3.0.56.
 # Data set 1
 _
 _

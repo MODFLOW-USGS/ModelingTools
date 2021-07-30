@@ -1089,14 +1089,15 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      if ANode.UseBCTime then
-      begin
-        WriteInteger(-ANode.NodeNumber);
-      end
-      else
-      begin
-        WriteInteger(ANode.NodeNumber);
-      end;
+      WriteInteger(Abs(ANode.NodeNumber));
+//      if ANode.UseBCTime then
+//      begin
+//        WriteInteger(-ANode.NodeNumber);
+//      end
+//      else
+//      begin
+//        WriteInteger(ANode.NodeNumber);
+//      end;
       if WritingTemplate and (ANode.PressureOrFlowFormula <> '') then
       begin
         WriteString(ANode.PressureOrFlowFormula);
@@ -1159,14 +1160,15 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      if ANode.UseBCTime then
-      begin
-        WriteInteger(-ANode.NodeNumber);
-      end
-      else
-      begin
-        WriteInteger(ANode.NodeNumber);
-      end;
+      WriteInteger(Abs(ANode.NodeNumber));
+//      if ANode.UseBCTime then
+//      begin
+//        WriteInteger(-ANode.NodeNumber);
+//      end
+//      else
+//      begin
+//        WriteInteger(ANode.NodeNumber);
+//      end;
 //      WriteFloat(ANode.PressureOrFlow);
       if WritingTemplate and (ANode.TempOrConcFormula <> '') then
       begin
@@ -1216,14 +1218,15 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      if ANode.UseBCTime then
-      begin
-        WriteInteger(-ANode.NodeNumber);
-      end
-      else
-      begin
-        WriteInteger(ANode.NodeNumber);
-      end;
+      WriteInteger(Abs(ANode.NodeNumber));
+//      if ANode.UseBCTime then
+//      begin
+//        WriteInteger(-ANode.NodeNumber);
+//      end
+//      else
+//      begin
+//        WriteInteger(ANode.NodeNumber);
+//      end;
       if WritingTemplate and (ANode.PressureOrFlowFormula <> '') then
       begin
         WriteString(ANode.PressureOrFlowFormula);
@@ -1346,14 +1349,15 @@ begin
     for NodeIndex := 0 to Length(Nodes) - 1 do
     begin
       ANode := Nodes[NodeIndex].Value;
-      if ANode.UseBCTime then
-      begin
-        WriteInteger(-ANode.NodeNumber);
-      end
-      else
-      begin
-        WriteInteger(ANode.NodeNumber);
-      end;
+      WriteInteger(Abs(ANode.NodeNumber));
+//      if ANode.UseBCTime then
+//      begin
+//        WriteInteger(-ANode.NodeNumber);
+//      end
+//      else
+//      begin
+//        WriteInteger(ANode.NodeNumber);
+//      end;
       if WritingTemplate and (ANode.TempOrConcFormula <> '') then
       begin
         WriteString(ANode.TempOrConcFormula);

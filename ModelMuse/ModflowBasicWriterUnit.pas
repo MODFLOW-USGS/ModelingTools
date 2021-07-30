@@ -342,6 +342,10 @@ begin
   WriteCommentLine('Basic Package file created on ' + DateToStr(Now) + ' by '
     + Model.ProgramName
     + ' version ' + IModelVersion + '.');
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
   ActiveCellCount := 0;
   DataArray := Model.DataArrayManager.GetDataSetByName(rsActive);
   DataArray.Initialize;

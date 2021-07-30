@@ -627,6 +627,10 @@ begin
   WriteCommentLine('Zone (ZONE) File created on '
     + DateToStr(Now) + ' by ' + Model.ProgramName
     + ' version ' + IModelVersion + '.');
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
 end;
 
 procedure TModflowZoneWriter.WriteDataSet1;
@@ -779,6 +783,10 @@ begin
   WriteCommentLine('Multiplier (MULT) File created on '
     + DateToStr(Now) + ' by ' + Model.ProgramName
     + ' version ' + IModelVersion + '.');
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
 end;
 
 procedure TModflowMultiplierWriter.WriteDataSet1;

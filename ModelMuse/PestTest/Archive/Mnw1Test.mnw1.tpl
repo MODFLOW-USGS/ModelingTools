@@ -1,6 +1,7 @@
 ptf @
 etf $
-# MNW1: Multi-Node Well package file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+# MNW1: Multi-Node Well package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
     17     9     0  9999 REF     3 # Data Set 1: MXMNW IWL2CB IWELPT [NOMOITER] REFerence SP: kspref
 SKIN  # Data Set 2: LOSSTYPE
 PREFIX: FILEPREFIX

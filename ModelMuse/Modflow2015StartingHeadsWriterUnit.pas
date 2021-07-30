@@ -44,6 +44,10 @@ begin
   WriteCommentLine('Initial Conditions Package file created on ' + DateToStr(Now) + ' by '
     + Model.ProgramName
     + ' version ' + IModelVersion + '.');
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
 end;
 
 procedure TModflowStartingHeadsWriter.WriteFile(const AFileName: string);

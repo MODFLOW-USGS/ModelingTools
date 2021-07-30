@@ -192,7 +192,6 @@ object frmMain: TfrmMain
     TabOrder = 0
     OnCustomDrawItem = tvModflowCustomDrawItem
     OnDblClick = tvModflowDblClick
-    ExplicitTop = 1
   end
   object memoErrors: TMemo
     Left = 0

@@ -122,6 +122,14 @@ begin
   Result.Active := False;
   Result.FLayer := Layer;
   Result.FCol := Col;
+  Result.P1.Value := 0;
+  Result.P2.Value := 1;
+  Result.Q1.Value := 1;
+  Result.Q2.Value := 0;
+  Result.P1.Annotation := 'Inactive';
+  Result.P2.Annotation := 'Inactive';
+  Result.Q1.Annotation := 'Inactive';
+  Result.Q2.Annotation := 'Inactive';
 end;
 
 { TGeneralTransportNode }

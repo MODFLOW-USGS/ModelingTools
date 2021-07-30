@@ -1,6 +1,7 @@
 ptf @
 etf %
-# Specified Pressure Boundary Condition File file created on 7/8/2021 by ModelMuse version 4.3.0.56.
+# Specified Pressure Boundary Condition File file created on 7/30/2021 by ModelMuse version 4.3.0.56.# (and then modified by a parameter estimation program.)
+
 # Data set 1
 'STEP_0' # BCSSCH
 # Data set 2; Time = 1

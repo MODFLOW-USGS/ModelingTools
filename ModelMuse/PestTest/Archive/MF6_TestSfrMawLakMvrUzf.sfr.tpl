@@ -1,7 +1,8 @@
 ptf @
 etf %
 %ReadArrays(C:\ModelingTools\ModelMuse\PestTest\MF6_TestSfrMawLakMvrUzf.sfr.txt)%
-# SFR: MODFLOW-6 Stream Flow Routing package file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+# SFR: MODFLOW-6 Stream Flow Routing package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     PRINT_INPUT
     PRINT_STAGE

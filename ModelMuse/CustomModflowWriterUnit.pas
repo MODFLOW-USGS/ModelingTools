@@ -6460,6 +6460,10 @@ var
 begin
   APackage := Package;
   WriteCommentLine(PackageID_Comment(APackage));
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
   for Index := 0 to APackage.Comments.Count - 1 do
   begin
     WriteCommentLine(APackage.Comments[Index]);

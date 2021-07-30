@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-71
+84
 SutraTest1.gpt
 	Archive\SutraTest1.axml
 	Archive\SutraTest1.FluxBcs
@@ -71,3 +71,16 @@ SutraGenBoundLakeTest.gpt
 	Archive\SutraGenBoundLakeTest.lkbc
 	Archive\SutraGenBoundLakeTest.lkin
 	Archive\usgs.SutraGenBoundLakeTest.reference
+SutraGenBoundInactivate.gpt
+	Archive\SutraGenBoundInactivate.axml
+	Archive\SutraGenBoundInactivate.c_ele
+	Archive\SutraGenBoundInactivate.c_nod
+	Archive\SutraGenBoundInactivate.c_nod3D
+	Archive\SutraGenBoundInactivate.GfbBCS
+	Archive\SutraGenBoundInactivate.GtbBCS
+	Archive\SutraGenBoundInactivate.ics
+	Archive\SutraGenBoundInactivate.inp
+	Archive\SutraGenBoundInactivate.lkar
+	Archive\SutraGenBoundInactivate.lkbc
+	Archive\SutraGenBoundInactivate.lkin
+	Archive\usgs.SutraGenBoundInactivate.reference

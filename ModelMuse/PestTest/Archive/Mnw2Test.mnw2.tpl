@@ -1,6 +1,7 @@
 ptf @
 etf %
-# MNW2: Multi-Node Well package file created on 7/7/2021 by ModelMuse version 4.3.0.56.
+# MNW2: Multi-Node Well package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
     -5    13     9     2 AUXILIARY IFACE # DataSet 1: MNWMAX, NODTOT, IWL2CB, MNWPRNT, OPTION
 MyWell     -1 # Data Set 2A: WELLID, NNODES
 THIEM      0     0     0     0 # Data Set 2B: LOSSTYPE, PUMPLOC, Qlimit, PPFLAG, PUMPCAP

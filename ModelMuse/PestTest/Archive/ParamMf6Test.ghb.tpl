@@ -1,6 +1,7 @@
 ptf @
 etf %
-# GHB: General-Head Boundary package file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+# GHB: General-Head Boundary package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     AUXILIARY IFACE
     BOUNDNAMES

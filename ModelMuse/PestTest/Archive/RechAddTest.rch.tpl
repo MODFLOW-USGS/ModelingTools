@@ -1,6 +1,7 @@
 ptf @
 etf %
-# RCH: Recharge package file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+# RCH: Recharge package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
      1     9 # DataSet 2: NRCHOP IRCHCB
      1     1 # Data Set 5: INRECH INIRCH Stress period 1
 INTERNAL 1.0 (FREE)       12 # Data Set 6: RECH

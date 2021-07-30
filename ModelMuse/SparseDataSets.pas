@@ -185,6 +185,7 @@ type
     // See @link(Items).
     procedure SetItems(const Layer, Row, Col: NativeInt; const Value: boolean);
   public
+    procedure RemoveValue(const Layer, Row, Col: NativeInt);
     // @name creates an instance of @classname.
     constructor Create(Quantum1, Quantum2, Quantum3: TSPAQuantum);
     // @name provides access to the boolean stored at location
@@ -498,6 +499,11 @@ begin
   resultPtr := inherited Items[Layer, Row, Col];
   Assert(resultPtr <> nil);
   result := PBoolean(resultPtr)^
+end;
+
+procedure T3DSparseBooleanArray.RemoveValue(const Layer, Row, Col: NativeInt);
+begin
+  inherited Items[Layer, Row, Col] := nil;
 end;
 
 procedure T3DSparseBooleanArray.SetItems(const Layer, Row, Col: NativeInt;

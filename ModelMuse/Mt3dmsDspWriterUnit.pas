@@ -64,6 +64,10 @@ begin
   if Model.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
   begin
     inherited;
+    if WritingTemplate then
+    begin
+      WriteCommentLine('(and then modified by a parameter estimation program.)');
+    end;
   end;
   WriteOptions;
 end;

@@ -522,6 +522,10 @@ begin
   WriteCommentLine('Discretization File created on ' + DateToStr(Now) + ' by '
     + Model.ProgramName
     + ' version ' + IModelVersion + '.');
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
   WriteCommentLines(Model.ModflowOptions.Description);
 
   WriteCorner('Upper left corner:', Model.Grid.TwoDElementCorner(0,0));
@@ -950,6 +954,13 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
 begin
+  WriteCommentLine('Discretization File created on ' + DateToStr(Now) + ' by '
+    + Model.ProgramName
+    + ' version ' + IModelVersion + '.');
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
   WriteCommentLines(Model.ModflowOptions.Description);
   ActiveCellCount := 0;
   DataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);

@@ -1,7 +1,8 @@
 ptf @
 etf %
 %ReadArrays(C:\ModelingTools\ModelMuse\PestTest\ChdTest.chd.txt)%
-# CHD: Time-Variant Specified-Head package file created on 7/8/2021 by ModelMuse version 4.3.0.56.
+# CHD: Time-Variant Specified-Head package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 PARAMETER     2    10 # PARAMETER NPCHD MXL
     12 AUXILIARY IFACE # MXACTC Option
 CHD_Par1 CHD  3.000000000000E+001      5 # Data Set 3: PARNAM PARTYP Parval NLST

@@ -29162,7 +29162,8 @@ begin
         DataArrayP1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayP1.AddMethod := vamAveragedDelayed;
-      FSutraGenFlowPress1.Add(ThreeDDisplayTime, DataArrayP1);
+      FSutraGenFlowPress1.Add(ThreeDDisplayTime, DataArrayP1,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenFlowPress2.Clear;
       DataArrayP2 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29178,7 +29179,8 @@ begin
         DataArrayP2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayP2.AddMethod := vamAveragedDelayed;
-      FSutraGenFlowPress2.Add(ThreeDDisplayTime, DataArrayP2);
+      FSutraGenFlowPress2.Add(ThreeDDisplayTime, DataArrayP2,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenFlowRate1.Clear;
       DataArrayFlow1 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29194,7 +29196,8 @@ begin
         DataArrayFlow1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayFlow1.AddMethod := vamAveragedDelayed;
-      FSutraGenFlowRate1.Add(ThreeDDisplayTime, DataArrayFlow1);
+      FSutraGenFlowRate1.Add(ThreeDDisplayTime, DataArrayFlow1,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenFlowRate2.Clear;
       DataArrayFlow2 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29210,7 +29213,8 @@ begin
         DataArrayFlow2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayFlow2.AddMethod := vamAveragedDelayed;
-      FSutraGenFlowRate2.Add(ThreeDDisplayTime, DataArrayFlow2);
+      FSutraGenFlowRate2.Add(ThreeDDisplayTime, DataArrayFlow2,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenFlowU1.Clear;
       DataArrayU1 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29226,7 +29230,8 @@ begin
         DataArrayU1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayU1.AddMethod := vamAveragedDelayed;
-      FSutraGenFlowU1.Add(ThreeDDisplayTime, DataArrayU1);
+      FSutraGenFlowU1.Add(ThreeDDisplayTime, DataArrayU1,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenFlowU2.Clear;
       DataArrayU2 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29242,7 +29247,8 @@ begin
         DataArrayU2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayU2.AddMethod := vamAveragedDelayed;
-      FSutraGenFlowU2.Add(ThreeDDisplayTime, DataArrayU2);
+      FSutraGenFlowU2.Add(ThreeDDisplayTime, DataArrayU2,
+        TBooleanSparseDataSet.Create(self));
 
       if FlowList.Count > 0 then
       begin
@@ -29335,7 +29341,8 @@ begin
         DataArrayTranU1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayTranU1.AddMethod := vamAveragedDelayed;
-      FSutraGenTranU1.Add(ThreeDDisplayTime, DataArrayTranU1);
+      FSutraGenTranU1.Add(ThreeDDisplayTime, DataArrayTranU1,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenTranU2.Clear;
       DataArrayTranU2 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29351,7 +29358,8 @@ begin
         DataArrayTranU2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayTranU2.AddMethod := vamAveragedDelayed;
-      FSutraGenTranU2.Add(ThreeDDisplayTime, DataArrayTranU2);
+      FSutraGenTranU2.Add(ThreeDDisplayTime, DataArrayTranU2,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenTranQU1.Clear;
       DataArrayTranQU1 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29367,7 +29375,8 @@ begin
         DataArrayTranQU1.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayTranQU1.AddMethod := vamAveragedDelayed;
-      FSutraGenTranQU1.Add(ThreeDDisplayTime, DataArrayTranQU1);
+      FSutraGenTranQU1.Add(ThreeDDisplayTime, DataArrayTranQU1,
+        TBooleanSparseDataSet.Create(self));
 
       FSutraGenTranQU2.Clear;
       DataArrayTranQU2 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -29383,7 +29392,8 @@ begin
         DataArrayTranQU2.UpdateDimensions(1, 1, SutraMesh.Mesh2D.Nodes.Count);
       end;
       DataArrayTranQU2.AddMethod := vamAveragedDelayed;
-      FSutraGenTranQU2.Add(ThreeDDisplayTime, DataArrayTranQU2);
+      FSutraGenTranQU2.Add(ThreeDDisplayTime, DataArrayTranQU2,
+        TBooleanSparseDataSet.Create(self));
 
 //      FSutraGenFlowU1.Clear;
 //      DataArrayU1 := TSutraBoundaryDisplayDataArray.Create(self);
@@ -32093,8 +32103,11 @@ begin
   BaseArray := DataArrayManager.GetDataSetByName(BaseArrayName);
   if BaseArray <> nil then
   begin
-    result := BaseArray.PestParametersUsed
-      and BaseArray.OnDataSetUsed(BaseArray);
+    result := BaseArray.PestParametersUsed;
+    if result and Assigned(BaseArray.OnDataSetUsed) then
+    begin
+      result := BaseArray.OnDataSetUsed(BaseArray);
+    end;
   end
   else
   begin

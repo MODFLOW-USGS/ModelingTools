@@ -60,6 +60,10 @@ end;
 procedure TModflowKDEP_Writer.WriteDataSet0;
 begin
   WriteCommentLine(PackageID_Comment);
+  if WritingTemplate then
+  begin
+    WriteCommentLine('(and then modified by a parameter estimation program.)');
+  end;
 end;
 
 procedure TModflowKDEP_Writer.WriteDataSet1;

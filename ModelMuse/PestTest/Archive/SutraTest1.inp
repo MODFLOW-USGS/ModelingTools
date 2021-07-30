@@ -1,4 +1,4 @@
-# Main SUTRA input file file created on 7/29/2021 by ModelMuse version 4.3.0.56.
+# Main SUTRA input file file created on 7/30/2021 by ModelMuse version 4.3.0.56.
 # Data set 1
 _
 _
@@ -224,8 +224,8 @@ _
     48  1.000000000000E-003 
      0
 # Data set 19
-     3  1.000000000000E+000   1.100000000000E+000 
     77  0.000000000000E+000   0.000000000000E+000 
+     3  1.000000000000E+000   1.100000000000E+000 
      0
 # Data set 20
      4  2.000000000000E+001 

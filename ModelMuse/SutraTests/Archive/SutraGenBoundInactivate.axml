@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SutraGenBoundInactivate" FileType="bin">
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="bin">..\..\..\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SutraGenBoundInactivate" FileType="ancillary">
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="ancillary">SutraGenBoundInactivate.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SutraGenBoundInactivate" FileType="Model Input">
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">RunSutra.bat.archive</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SutraGenBoundInactivate.GfbBCS</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SutraGenBoundInactivate.GtbBCS</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SutraGenBoundInactivate.ics</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SutraGenBoundInactivate.inp</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SutraGenBoundInactivate.lkar</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SutraGenBoundInactivate.lkbc</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">SutraGenBoundInactivate.lkin</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Input">usgs.SutraGenBoundInactivate.reference</FileName>
+  </model>
+  <output Model_Name="SutraGenBoundInactivate" FileType="Model Output">
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.bcopg</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.bcoug</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.ele</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.lkbu</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.lkh</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.lkn</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.lkrs</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.lkst</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.lst</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.nod</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.rst</FileName>
+    <FileName Model_Name="SutraGenBoundInactivate" FileType="Model Output">SutraGenBoundInactivate.smy</FileName>
+  </output>
+</Model_Archive_List>
