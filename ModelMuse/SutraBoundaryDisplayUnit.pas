@@ -9,6 +9,8 @@ type
   TSutraBoundaryDisplayDataArray = class(TCustomBoundaryRealSparseDataSet)
   public
     procedure InitializeDisplayArray(DefaultValue: Double); override;
+  published
+    property AddMethod;
   end;
 
 

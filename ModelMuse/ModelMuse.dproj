@@ -1611,6 +1611,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SutraImporter.pas"/>
+        <DCCReference Include="frmImportSutraFeaturesUnit.pas">
+            <Form>frmImportSutraFeatures</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
