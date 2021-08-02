@@ -36,7 +36,7 @@ var
 implementation
 
 uses
-  frmGoPhastUnit;
+  frmGoPhastUnit, SutraImporter;
 
 {$R *.dfm}
 
@@ -81,7 +81,15 @@ var
 begin
   FeatureDisplayer := TPestSutraFeatureDisplayer.Create(frmGoPhast.PhastModel);
   try
-    FeatureDisplayer.ImportFeatures(FileName, Features, seTimeStep.AsInteger);
+    try
+      FeatureDisplayer.ImportFeatures(FileName, Features, seTimeStep.AsInteger);
+    except on E: EImportSutraError do
+      begin
+        Beep;
+        MessageDlg(E.Message, mtError, [mbOK], 0);
+        Exit;
+      end;
+    end;
   finally
     FeatureDisplayer.Free;
   end;

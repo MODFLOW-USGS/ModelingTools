@@ -13,6 +13,8 @@ Type
   TSutraOrdering = (soAcross, soWithin);
   TSutraScheduleType = (sstTimeList, sstTimeCycle, sstStepList, sstStepCycle);
 
+  EImportSutraError = class(Exception);
+
   TSutraSchedule = class(TObject)
   private
     FSCHNAM: string;
@@ -276,6 +278,10 @@ implementation
 
 uses
   ModelMuseUtilities;
+
+resourcestring
+  StrTheSpecifiedTimeS = 'The specified time step "%0:d" is too large.' +
+  ' There aren''t that many time steps in the simulation.';
 
 { TSutraInputReader }
 
@@ -1157,7 +1163,12 @@ end;
 
 constructor TCustomSutraReader.Create(const FileName: string);
 begin
-  FFile := TFile.OpenText(FileName);
+  try
+    FFile := TFile.OpenText(FileName);
+  except on E: Exception do
+    Exception.RaiseOuterException(EImportSutraError.Create(
+      Format('Error opening %0:s. The error was "%1:s"', [FileName, E.Message])));
+  end;
   FCurrentFile := FFile;
   FEmbeddedFiles := TObjectList<TStreamReader>.Create;
   FSplitter := TStringList.Create;
@@ -1261,7 +1272,7 @@ var
   ASchedule: TSutraSchedule;
   TimeSteps: TSutraSchedule;
   TimeIndex: Integer;
-  TimeToUse: Double;
+//  TimeToUse: Double;
   BCSSCH: string;
 begin
   TimeSteps := InputFileReader.GetScheduleByName('TIME_STEPS');
@@ -1289,7 +1300,7 @@ begin
     FBoundaryTimes.Capacity := TimeSteps.TimeCount-1;
     for TimeIndex := 1 to TimeSteps.TimeCount - 1 do
     begin
-      FBoundaryTimes.Add(ASchedule.Times[TimeIndex]);
+      FBoundaryTimes.Add(TimeSteps.Times[TimeIndex]);
     end;
   end
   else
@@ -1302,8 +1313,12 @@ begin
     end;
   end;
   FBoundaryTimes.Sorted := True;
-  Assert(FTimeStep <= FAllTimes.Count);
-  TimeToUse := FAllTimes[FTimeStep];
+  if FTimeStep >= FAllTimes.Count then
+  begin
+    raise EImportSutraError.Create(Format(StrTheSpecifiedTimeS, [FTimeStep]));
+  end;
+//  Assert(FTimeStep < FAllTimes.Count, Format(StrTheSpecifiedTimeS, [FTimeStep]));
+//  TimeToUse := FAllTimes[FTimeStep];
 //  FStepToUse := FBoundaryTimes.IndexOfClosest(TimeToUse);
   FCurrentStep := 0;
 

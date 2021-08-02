@@ -2047,7 +2047,6 @@ var
   SvdProperties: TSingularValueDecompositionProperties;
   LsqrProperties: TLsqrProperties;
   Grid: TRbwDataGrid4;
-//  ObsGroups: TPestObservationGroups;
   ANode: TTreeNode;
   ObsGroup: TPestObservationGroup;
   ChildNode: TTreeNode;
@@ -2058,8 +2057,6 @@ var
   PointItem: TPointItem;
   ItemIndex: Integer;
   Regularization: TPestRegularization;
-//  ObsGroupFrame: TframeGrid;
-//  EditedObsGroups: TPestObservationGroups;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(nil);

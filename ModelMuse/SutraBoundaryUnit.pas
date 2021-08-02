@@ -77,8 +77,9 @@ type
     procedure SetOnInitialize(const Value: TNotifyEvent);
     function GetUsedItems(const Index: integer): TDataArray;
     procedure SetUsedItems(const Index: integer; const Value: TDataArray);
-    function GetUpToDate: boolean;
-    procedure SetUpToDate(const Value: boolean);
+  protected
+    function GetUpToDate: boolean; override;
+    procedure SetUpToDate(const Value: boolean);  override;
   public
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;

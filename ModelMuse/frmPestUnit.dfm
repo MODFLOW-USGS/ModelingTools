@@ -33,7 +33,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspBasic
+    ActivePage = jvspControlDataMode
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -43,7 +43,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspBasic'
-      ExplicitLeft = 1
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40

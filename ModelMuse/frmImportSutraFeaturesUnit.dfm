@@ -1,7 +1,7 @@
 inherited frmImportSutraFeatures: TfrmImportSutraFeatures
   Caption = 'Import SUTRA Feature Modified by PEST'
-  ClientHeight = 293
-  ExplicitHeight = 332
+  ClientHeight = 297
+  ExplicitHeight = 336
   PixelsPerInch = 96
   TextHeight = 18
   object lblModelFeatureFile: TLabel
@@ -30,12 +30,13 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 252
+    Top = 256
     Width = 424
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 252
     DesignSize = (
       424
       41)

@@ -18,21 +18,28 @@ type
     procedure WriteFirstLine;
     procedure WriteSectionHeader(const SectionID: String);
     procedure WriteControlSection(SetNOPTMAX: Boolean = False);
+    // @name is not currently supported. Chapter 7
     procedure WriteSensitivityReuse;
     procedure WriteSingularValueDecomposition;
     procedure WriteLsqr;
+    // @name is not currently supported. Section 6.3
     procedure WriteAutomaticUserIntervention;
+    // @name is not currently written by ModelMuse. Section 10
+    // It is writen by SVDAPREP.
     procedure WriteSVD_Assist;
     procedure WriteParameterGroups;
     procedure WriteParameters;
     procedure WriteObservationGroups;
     procedure WriteObservations;
+    // @name is not supported because it is only relevant to MODFLOW-2000.
     procedure WriteDerivatives;
     procedure WriteCommandLine;
     procedure WriteModelInputOutput;
     procedure WritePriorInformation;
+    // @name is not currently supported. Section 8
     procedure WritePredictiveAnalysis;
     procedure WriteRegularisation;
+    // @name is not currently supported. Section 13
     procedure WritePareto;
     // NPAR
     function NumberOfParameters: Integer;
