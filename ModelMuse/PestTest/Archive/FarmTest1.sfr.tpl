@@ -1,6 +1,7 @@
 ptf @
 etf %
-# SFR: Stream-Flow Routing package file created on 7/13/2021 by ModelMuse version 4.3.0.56.
+# SFR: Stream-Flow Routing package file created on 8/2/2021 by ModelMuse version 4.3.0.56.
+# (and then modified by a parameter estimation program.)
 # Project 1 New Stream Aquifer Package
    104    15     0     0  8.640000000000E+004   9.999999700000E-005      9    11 IFACE # Data Set 1: NSTRM NSS NSFRPAR NPARSEG CONST DLEAK ISTCB1  ISTCB2
      1    13     1     1     1  5.000000000000E+002      0 # Data Set 2: KRCH IRCH JRCH ISEG IREACH RCHLEN IFACE Defined by object: Imported_Sfr__1

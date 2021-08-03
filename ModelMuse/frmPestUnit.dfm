@@ -33,7 +33,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspControlDataMode
+    ActivePage = jvspPrediction1
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -168,15 +168,16 @@ inherited frmPEST: TfrmPEST
         TabOrder = 0
       end
       object comboPestMode: TComboBox
-        Left = 23
+        Left = 22
         Top = 64
-        Width = 145
+        Width = 203
         Height = 26
         Style = csDropDownList
         TabOrder = 1
+        OnChange = comboPestModeChange
         Items.Strings = (
           'estimation'
-          'prediction'
+          'prediction analysis'
           'regularization'
           'pareto')
       end
@@ -2495,6 +2496,327 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+      end
+    end
+    object jvspPrediction1: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 566
+      Height = 443
+      Caption = 'jvspPrediction1'
+      object lblPredMinMax: TLabel
+        Left = 157
+        Top = 19
+        Width = 314
+        Height = 18
+        Caption = 'Goal of predictive analysis (NPREDMAXMIN)'
+      end
+      object lblTargetObjectiveFunction: TLabel
+        Left = 159
+        Top = 75
+        Width = 212
+        Height = 18
+        Caption = 'Target objective function (PD0)'
+      end
+      object lblAcceptedObjectiveFunction: TLabel
+        Left = 159
+        Top = 99
+        Width = 248
+        Height = 18
+        Caption = 'Acceptable objective function (PD1)'
+      end
+      object lblTestLambdaPhi: TLabel
+        Left = 157
+        Top = 130
+        Width = 378
+        Height = 18
+        Caption = 'Objective function for altering testing procedures (PD2)'
+      end
+      object lblAbsoluteLamdaCriterion: TLabel
+        Left = 157
+        Top = 155
+        Width = 350
+        Height = 36
+        Caption = 
+          'Absolute prediction change to terminate Marquardt lambda testing' +
+          ' (ABSPREDLAM)'
+        WordWrap = True
+      end
+      object lblRelativeLamdaCriterion: TLabel
+        Left = 157
+        Top = 197
+        Width = 349
+        Height = 36
+        Caption = 
+          'Relative prediction change to terminate Marquardt lambda testing' +
+          ' (RELPREDLAM)'
+        WordWrap = True
+      end
+      object lblInitialLineSearchFactor: TLabel
+        Left = 157
+        Top = 239
+        Width = 263
+        Height = 18
+        Caption = 'Initial line search factor (INITSCHFAC)'
+      end
+      object lblUpdateLineSearchFactor: TLabel
+        Left = 157
+        Top = 267
+        Width = 303
+        Height = 18
+        Caption = 'Line search factor multiplier (MULSCHFAC)'
+      end
+      object lblLineSearchRuns: TLabel
+        Left = 79
+        Top = 295
+        Width = 407
+        Height = 18
+        Caption = 'Maximum number of model runs in line search (NSEARCH)'
+      end
+      object lblAbsolutePredictionSwitch: TLabel
+        Left = 157
+        Top = 330
+        Width = 349
+        Height = 36
+        Caption = 
+          'Absolute prediction change at which to use central derivatives c' +
+          'alculation (ABSPREDSWH) '
+        WordWrap = True
+      end
+      object lblRelativePredictionSwitch: TLabel
+        Left = 157
+        Top = 372
+        Width = 344
+        Height = 36
+        Caption = 
+          'Relative prediction change at which to use central derivatives c' +
+          'alculation (RELPREDSWH)'
+        WordWrap = True
+      end
+      object comboPredMinMax: TComboBox
+        Left = 6
+        Top = 16
+        Width = 145
+        Height = 26
+        Style = csDropDownList
+        ItemIndex = 1
+        TabOrder = 0
+        Text = 'Maximize (+1)'
+        Items.Strings = (
+          'Minimize (-1)'
+          'Maximize (+1)')
+      end
+      object cbPredictiveNoise: TCheckBox
+        Left = 6
+        Top = 48
+        Width = 403
+        Height = 17
+        Caption = 'Take into account predictive noise (PREDNOISE)'
+        TabOrder = 1
+      end
+      object rdeTargetObjectiveFunction: TRbwDataEntry
+        Left = 8
+        Top = 71
+        Width = 145
+        Height = 22
+        TabOrder = 2
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeAcceptedObjectiveFunction: TRbwDataEntry
+        Left = 6
+        Top = 99
+        Width = 145
+        Height = 22
+        TabOrder = 3
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeTestLambdaPhi: TRbwDataEntry
+        Left = 6
+        Top = 127
+        Width = 145
+        Height = 22
+        TabOrder = 4
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeAbsoluteLamdaCriterion: TRbwDataEntry
+        Left = 6
+        Top = 155
+        Width = 145
+        Height = 22
+        TabOrder = 5
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeRelativeLamdaCriterion: TRbwDataEntry
+        Left = 6
+        Top = 197
+        Width = 145
+        Height = 22
+        TabOrder = 6
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeInitialLineSearchFactor: TRbwDataEntry
+        Left = 6
+        Top = 239
+        Width = 145
+        Height = 22
+        TabOrder = 7
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeUpdateLineSearchFactor: TRbwDataEntry
+        Left = 6
+        Top = 267
+        Width = 145
+        Height = 22
+        TabOrder = 8
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object seLineSearchRuns: TJvSpinEdit
+        Left = 6
+        Top = 295
+        Width = 67
+        Height = 26
+        MaxValue = 2147483647.000000000000000000
+        TabOrder = 9
+      end
+      object rdeAbsolutePredictionSwitch: TRbwDataEntry
+        Left = 6
+        Top = 327
+        Width = 145
+        Height = 22
+        TabOrder = 10
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeRelativePredictionSwitch: TRbwDataEntry
+        Left = 6
+        Top = 372
+        Width = 145
+        Height = 22
+        TabOrder = 11
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+    end
+    object jvspPrediction2: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 566
+      Height = 443
+      Caption = 'jvspPrediction2'
+      object lblMaxNoPredictionImprovmentRuns: TLabel
+        Left = 79
+        Top = 18
+        Width = 407
+        Height = 36
+        Caption = 
+          'Iterations since prediction improved at which termination is tri' +
+          'ggered (NPREDNORED) '
+        WordWrap = True
+      end
+      object lblAbsoluteImprovementCriterion: TLabel
+        Left = 157
+        Top = 63
+        Width = 319
+        Height = 36
+        Caption = 
+          'Absolute prediction change at which to trigger termination (ABSP' +
+          'REDSTP)'
+        WordWrap = True
+      end
+      object lblRelativeImprovementCriterion: TLabel
+        Left = 157
+        Top = 105
+        Width = 314
+        Height = 36
+        Caption = 
+          'Relative prediction change at which to trigger termination (RELP' +
+          'REDSTP)'
+        WordWrap = True
+      end
+      object lblNumberOfPredictionsToCompare: TLabel
+        Left = 79
+        Top = 147
+        Width = 474
+        Height = 36
+        Caption = 
+          'Number of iterations over which ABSPREDSTP and RELPREDSTP apply ' +
+          '(NPREDSTP)'
+        WordWrap = True
+      end
+      object seMaxNoPredictionImprovmentRuns: TJvSpinEdit
+        Left = 6
+        Top = 15
+        Width = 67
+        Height = 26
+        TabOrder = 0
+      end
+      object rdeAbsoluteImprovementCriterion: TRbwDataEntry
+        Left = 6
+        Top = 60
+        Width = 145
+        Height = 22
+        TabOrder = 1
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object rdeRelativeImprovementCriterion: TRbwDataEntry
+        Left = 6
+        Top = 105
+        Width = 145
+        Height = 22
+        TabOrder = 2
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
+      object seNumberOfPredictionsToCompare: TJvSpinEdit
+        Left = 6
+        Top = 144
+        Width = 67
+        Height = 26
+        MaxValue = 2147483647.000000000000000000
+        MinValue = 2.000000000000000000
+        Value = 2.000000000000000000
+        TabOrder = 3
       end
     end
   end

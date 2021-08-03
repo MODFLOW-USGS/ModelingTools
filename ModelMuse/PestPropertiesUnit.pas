@@ -614,6 +614,180 @@ type
       read FStoredRegularizationSingularValueThreshhold write SetStoredRegularizationSingularValueThreshhold;
   end;
 
+  //NPREDMAXMIN
+  // -1 or 1
+  TMinOrMax = (mmMinimize, mmMaximize);
+  // PREDNOISE
+  // 0 or 1
+  TPredictiveNoise = (pnNoNoise, pnUseNoise);
+
+  TPredictionProperties = class(TGoPhastPersistent)
+  private
+    FStoredAcceptedPhi: TRealStorage;
+    FStoredUpdateLineSearchFactor: TRealStorage;
+    FMinOrMax: TMinOrMax;
+    FStoredAbsoluteImprovementCriterion: TRealStorage;
+    FStoredRelativeImprovementCriterion: TRealStorage;
+    FPredictiveNoise: TPredictiveNoise;
+    FNumberOfPredictionsToCompare: Integer;
+    FLineSearchRuns: Integer;
+    FStoredTestLambdaPhi: TRealStorage;
+    FStoredTargetPhi: TRealStorage;
+    FStoredAbsolutePredictionSwitch: TRealStorage;
+    FStoredInitialLineSearchFactor: TRealStorage;
+    FMaxNoPredictionImprovmentRuns: Integer;
+    FStoredRelativePredictionSwitch: TRealStorage;
+    FStoredAbsoluteLamdaCriterion: TRealStorage;
+    FStoredRelativeLamdaCriterion: TRealStorage;
+    function GetAbsoluteImprovementCriterion: double;
+    function GetAbsoluteLamdaCriterion: double;
+    function GetAbsolutePredictionSwitch: double;
+    function GetAcceptedPhi: double;
+    function GetInitialLineSearchFactor: double;
+    function GetRelativeImprovementCriterion: double;
+    function GetRelativeLamdaCriterion: double;
+    function GetRelativePredictionSwitch: double;
+    function GetTargetPhi: double;
+    function GetTestLambdaPhi: double;
+    function GetUpdateLineSearchFactor: double;
+    procedure SetAbsoluteImprovementCriterion(const Value: double);
+    procedure SetAbsoluteLamdaCriterion(const Value: double);
+    procedure SetAbsolutePredictionSwitch(const Value: double);
+    procedure SetAcceptedPhi(const Value: double);
+    procedure SetInitialLineSearchFactor(const Value: double);
+    procedure SetLineSearchRuns(const Value: Integer);
+    procedure SetMaxNoPredictionImprovmentRuns(const Value: Integer);
+    procedure SetMinOrMax(const Value: TMinOrMax);
+    procedure SetNumberOfPredictionsToCompare(const Value: Integer);
+    procedure SetPredictiveNoise(const Value: TPredictiveNoise);
+    procedure SetRelativeImprovementCriterion(const Value: double);
+    procedure SetRelativeLamdaCriterion(const Value: double);
+    procedure SetRelativePredictionSwitch(const Value: double);
+    procedure SetStoredAbsoluteImprovementCriterion(const Value: TRealStorage);
+    procedure SetStoredAbsoluteLamdaCriterion(const Value: TRealStorage);
+    procedure SetStoredAbsolutePredictionSwitch(const Value: TRealStorage);
+    procedure SetStoredAcceptedPhi(const Value: TRealStorage);
+    procedure SetStoredInitialLineSearchFactor(const Value: TRealStorage);
+    procedure SetStoredRelativeImprovementCriterion(const Value: TRealStorage);
+    procedure SetStoredRelativeLamdaCriterion(const Value: TRealStorage);
+    procedure SetStoredRelativePredictionSwitch(const Value: TRealStorage);
+    procedure SetStoredTargetPhi(const Value: TRealStorage);
+    procedure SetStoredTestLambdaPhi(const Value: TRealStorage);
+    procedure SetStoredUpdateLineSearchFactor(const Value: TRealStorage);
+    procedure SetTargetPhi(const Value: double);
+    procedure SetTestLambdaPhi(const Value: double);
+    procedure SetUpdateLineSearchFactor(const Value: double);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables;
+    // PD0
+    property TargetPhi: double read GetTargetPhi write SetTargetPhi;
+    // PD1
+    property AcceptedPhi: double read GetAcceptedPhi write SetAcceptedPhi;
+    // PD2
+    property TestLambdaPhi: double read GetTestLambdaPhi write SetTestLambdaPhi;
+    // ABSPREDLAM
+    property AbsoluteLamdaCriterion: double read GetAbsoluteLamdaCriterion
+      write SetAbsoluteLamdaCriterion;
+    // RELPREDLAM
+    property RelativeLamdaCriterion: double read GetRelativeLamdaCriterion
+      write SetRelativeLamdaCriterion;
+    // INITSCHFAC
+    // Usually 0.2 to 0.3
+    property InitialLineSearchFactor: double read GetInitialLineSearchFactor
+      write SetInitialLineSearchFactor;
+    // MULSCHFAC
+    // Usually 1.3 to 1.7
+    property UpdateLineSearchFactor: double read GetUpdateLineSearchFactor
+      write SetUpdateLineSearchFactor;
+    // ABSPREDSWH
+    // Usually 0
+    property AbsolutePredictionSwitch: double read GetAbsolutePredictionSwitch
+      write SetAbsolutePredictionSwitch;
+    // RELPREDSWH
+    // Usually 0.05
+    property RelativePredictionSwitch: double read GetRelativePredictionSwitch
+      write SetRelativePredictionSwitch;
+    // ABSPREDSTP
+    // Typically 0
+    property AbsoluteImprovementCriterion: double
+      read GetAbsoluteImprovementCriterion
+      write SetAbsoluteImprovementCriterion;
+    // RELPREDSTP
+    // Typically 0.005
+    property RelativeImprovementCriterion: double
+      read GetRelativeImprovementCriterion
+      write SetRelativeImprovementCriterion;
+  published
+    //NPREDMAXMIN
+    // -1 or 1
+    property MinOrMax: TMinOrMax read FMinOrMax write SetMinOrMax Stored True;
+    // PREDNOISE
+    // 0 or 1
+    property PredictiveNoise: TPredictiveNoise read FPredictiveNoise
+      write SetPredictiveNoise Stored True;
+    // PD0
+    property StoredTargetPhi: TRealStorage read FStoredTargetPhi
+      write SetStoredTargetPhi;
+    // PD1
+    property StoredAcceptedPhi: TRealStorage read FStoredAcceptedPhi
+      write SetStoredAcceptedPhi;
+    // PD2
+    property StoredTestLambdaPhi: TRealStorage read FStoredTestLambdaPhi
+      write SetStoredTestLambdaPhi;
+    // ABSPREDLAM
+    property StoredAbsoluteLamdaCriterion: TRealStorage
+      read FStoredAbsoluteLamdaCriterion write SetStoredAbsoluteLamdaCriterion;
+    // RELPREDLAM
+    property StoredRelativeLamdaCriterion: TRealStorage
+      read FStoredRelativeLamdaCriterion write SetStoredRelativeLamdaCriterion;
+    // INITSCHFAC
+    // Usually 0.2 to 0.3
+    property StoredInitialLineSearchFactor: TRealStorage
+      read FStoredInitialLineSearchFactor
+      write SetStoredInitialLineSearchFactor;
+    // MULSCHFAC
+    // Usually 1.3 to 1.7
+    property StoredUpdateLineSearchFactor: TRealStorage
+      read FStoredUpdateLineSearchFactor write SetStoredUpdateLineSearchFactor;
+    // NSEARCH
+    // >= 0
+    property LineSearchRuns: Integer read FLineSearchRuns
+      write SetLineSearchRuns;
+    // ABSPREDSWH
+    // Usually 0
+    property StoredAbsolutePredictionSwitch: TRealStorage
+      read FStoredAbsolutePredictionSwitch
+      write SetStoredAbsolutePredictionSwitch;
+    // RELPREDSWH
+    // Usually 0.05
+    property StoredRelativePredictionSwitch: TRealStorage
+      read FStoredRelativePredictionSwitch
+      write SetStoredRelativePredictionSwitch;
+    // NPREDNORED
+    // Typically 4
+    property MaxNoPredictionImprovmentRuns: Integer
+      read FMaxNoPredictionImprovmentRuns
+      write SetMaxNoPredictionImprovmentRuns;
+    // ABSPREDSTP
+    // Typically 0
+    property StoredAbsoluteImprovementCriterion: TRealStorage
+      read FStoredAbsoluteImprovementCriterion
+      write SetStoredAbsoluteImprovementCriterion;
+    // RELPREDSTP
+    // Typically 0.005
+    property StoredRelativeImprovementCriterion: TRealStorage
+      read FStoredRelativeImprovementCriterion
+      write SetStoredRelativeImprovementCriterion;
+    // NPREDSTP
+    // Typically 4
+    property NumberOfPredictionsToCompare: Integer
+      read FNumberOfPredictionsToCompare write SetNumberOfPredictionsToCompare;
+  end;
+
+
   TArrayPilotPointSelection = (appsNone, appsRectangular, appsTriangular);
 
   TPestProperties = class(TGoPhastPersistent)
@@ -646,6 +820,7 @@ type
     FMaxPilotPointsInRange: Integer;
     FUseVertSpatialContinuityPriorInfo: Boolean;
     FArrayTemplateCharacter: Char;
+    FPredictionProperties: TPredictionProperties;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -682,6 +857,7 @@ type
     procedure SetMaxPilotPointsInRange(const Value: Integer);
     procedure SetUseVertSpatialContinuityPriorInfo(const Value: Boolean);
     procedure SetArrayTemplateCharacter(const Value: Char);
+    procedure SetPredictionProperties(const Value: TPredictionProperties);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -747,6 +923,7 @@ type
     property UseVertSpatialContinuityPriorInfo: Boolean
       read FUseVertSpatialContinuityPriorInfo
       write SetUseVertSpatialContinuityPriorInfo;
+    property PredictionProperties: TPredictionProperties read FPredictionProperties write SetPredictionProperties;
   end;
 
 implementation
@@ -789,6 +966,7 @@ begin
     SeachDistance := PestSource.SeachDistance;
     MaxPilotPointsInRange := PestSource.MaxPilotPointsInRange;
     UseVertSpatialContinuityPriorInfo := PestSource.UseVertSpatialContinuityPriorInfo;
+    PredictionProperties := PestSource.PredictionProperties;
   end
   else
   begin
@@ -828,11 +1006,13 @@ begin
   FSpecifiedPilotPoints := TSimplePointCollection.Create;
   FBetweenObservationsPilotPoints := TSimplePointCollection.Create;
   FRegularization := TPestRegularization.Create(InvalidateModelEvent);
+  FPredictionProperties := TPredictionProperties.Create(InvalidateModelEvent);
   InitializeVariables;
 end;
 
 destructor TPestProperties.Destroy;
 begin
+  FPredictionProperties.Free;
   FRegularization.Free;
   FBetweenObservationsPilotPoints.Free;
   FSpecifiedPilotPoints.Free;
@@ -1074,6 +1254,7 @@ begin
   FSvdProperties.InitializeVariables;
   FLsqrProperties.InitializeVariables;
   Regularization.InitializeVariables;
+  PredictionProperties.InitializeVariables;
 
   FPriorInfoObservatioGroups.Clear;
   FObservatioGroups.Clear;
@@ -1146,6 +1327,12 @@ end;
 procedure TPestProperties.SetPilotPointSpacing(const Value: double);
 begin
   FStoredPilotPointSpacing.Value := Value;
+end;
+
+procedure TPestProperties.SetPredictionProperties(
+  const Value: TPredictionProperties);
+begin
+  FPredictionProperties.Assign(Value);
 end;
 
 procedure TPestProperties.SetPriorInfoObservatioGroups(
@@ -2343,6 +2530,320 @@ procedure TPestRegularization.SetStoredWeightFactorTolerance(
   const Value: TRealStorage);
 begin
   FStoredWeightFactorTolerance.Assign(Value);
+end;
+
+{ TPredictionProperties }
+
+procedure TPredictionProperties.Assign(Source: TPersistent);
+var
+  PredSource: TPredictionProperties;
+begin
+  if Source is TPredictionProperties then
+  begin
+    PredSource := TPredictionProperties(Source);
+    MinOrMax := PredSource.MinOrMax;
+    PredictiveNoise := PredSource.PredictiveNoise;
+    TargetPhi := PredSource.TargetPhi;
+    AcceptedPhi := PredSource.AcceptedPhi;
+    TestLambdaPhi := PredSource.TestLambdaPhi;
+    AbsoluteLamdaCriterion := PredSource.AbsoluteLamdaCriterion;
+    RelativeLamdaCriterion := PredSource.RelativeLamdaCriterion;
+    InitialLineSearchFactor := PredSource.InitialLineSearchFactor;
+    UpdateLineSearchFactor := PredSource.UpdateLineSearchFactor;
+    LineSearchRuns := PredSource.LineSearchRuns;
+    AbsolutePredictionSwitch := PredSource.AbsolutePredictionSwitch;
+    RelativePredictionSwitch := PredSource.RelativePredictionSwitch;
+    MaxNoPredictionImprovmentRuns := PredSource.MaxNoPredictionImprovmentRuns;
+    AbsoluteImprovementCriterion := PredSource.AbsoluteImprovementCriterion;
+    RelativeImprovementCriterion := PredSource.RelativeImprovementCriterion;
+    NumberOfPredictionsToCompare := PredSource.NumberOfPredictionsToCompare;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TPredictionProperties.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited;
+
+  FStoredAcceptedPhi := TRealStorage.Create;
+  FStoredUpdateLineSearchFactor := TRealStorage.Create;
+  FStoredAbsoluteImprovementCriterion := TRealStorage.Create;
+  FStoredRelativeImprovementCriterion := TRealStorage.Create;
+  FStoredTestLambdaPhi := TRealStorage.Create;
+  FStoredTargetPhi := TRealStorage.Create;
+  FStoredAbsolutePredictionSwitch := TRealStorage.Create;
+  FStoredInitialLineSearchFactor := TRealStorage.Create;
+  FStoredRelativePredictionSwitch := TRealStorage.Create;
+  FStoredAbsoluteLamdaCriterion := TRealStorage.Create;
+  FStoredRelativeLamdaCriterion := TRealStorage.Create;
+
+  FStoredAcceptedPhi.OnChange := InvalidateModelEvent;
+  FStoredUpdateLineSearchFactor.OnChange := InvalidateModelEvent;
+  FStoredAbsoluteImprovementCriterion.OnChange := InvalidateModelEvent;
+  FStoredRelativeImprovementCriterion.OnChange := InvalidateModelEvent;
+  FStoredTestLambdaPhi.OnChange := InvalidateModelEvent;
+  FStoredTargetPhi.OnChange := InvalidateModelEvent;
+  FStoredAbsolutePredictionSwitch.OnChange := InvalidateModelEvent;
+  FStoredInitialLineSearchFactor.OnChange := InvalidateModelEvent;
+  FStoredRelativePredictionSwitch.OnChange := InvalidateModelEvent;
+  FStoredAbsoluteLamdaCriterion.OnChange := InvalidateModelEvent;
+  FStoredRelativeLamdaCriterion.OnChange := InvalidateModelEvent;
+
+  InitializeVariables;
+end;
+
+destructor TPredictionProperties.Destroy;
+begin
+  FStoredAcceptedPhi.Free;
+  FStoredUpdateLineSearchFactor.Free;
+  FStoredAbsoluteImprovementCriterion.Free;
+  FStoredRelativeImprovementCriterion.Free;
+  FStoredTestLambdaPhi.Free;
+  FStoredTargetPhi.Free;
+  FStoredAbsolutePredictionSwitch.Free;
+  FStoredInitialLineSearchFactor.Free;
+  FStoredRelativePredictionSwitch.Free;
+  FStoredAbsoluteLamdaCriterion.Free;
+  FStoredRelativeLamdaCriterion.Free;
+
+  inherited;
+end;
+
+function TPredictionProperties.GetAbsoluteImprovementCriterion: double;
+begin
+  result := StoredAbsoluteImprovementCriterion.Value;
+end;
+
+function TPredictionProperties.GetAbsoluteLamdaCriterion: double;
+begin
+  result := StoredAbsoluteLamdaCriterion.Value;
+end;
+
+function TPredictionProperties.GetAbsolutePredictionSwitch: double;
+begin
+  result := StoredAbsolutePredictionSwitch.Value;
+end;
+
+function TPredictionProperties.GetAcceptedPhi: double;
+begin
+  result := StoredAcceptedPhi.Value;
+end;
+
+function TPredictionProperties.GetInitialLineSearchFactor: double;
+begin
+  result := StoredInitialLineSearchFactor.Value;
+end;
+
+function TPredictionProperties.GetRelativeImprovementCriterion: double;
+begin
+  result := StoredRelativeImprovementCriterion.Value;
+end;
+
+function TPredictionProperties.GetRelativeLamdaCriterion: double;
+begin
+  result := StoredRelativeLamdaCriterion.Value;
+end;
+
+function TPredictionProperties.GetRelativePredictionSwitch: double;
+begin
+  result := StoredRelativePredictionSwitch.Value;
+end;
+
+function TPredictionProperties.GetTargetPhi: double;
+begin
+  result := StoredTargetPhi.Value;
+end;
+
+function TPredictionProperties.GetTestLambdaPhi: double;
+begin
+  result := StoredTestLambdaPhi.Value;
+end;
+
+function TPredictionProperties.GetUpdateLineSearchFactor: double;
+begin
+  result := StoredUpdateLineSearchFactor.Value;
+end;
+
+procedure TPredictionProperties.InitializeVariables;
+begin
+  FMinOrMax := mmMaximize;
+  FPredictiveNoise := pnNoNoise;
+  TargetPhi := 0;
+  AcceptedPhi := 0;
+  TestLambdaPhi := 0;
+  AbsoluteLamdaCriterion := 0;
+  RelativeLamdaCriterion :=0.005;
+  InitialLineSearchFactor := 0.25;
+  UpdateLineSearchFactor := 1.5;
+  LineSearchRuns := 0;
+  AbsolutePredictionSwitch := 0;
+  RelativePredictionSwitch := 0.5;
+  MaxNoPredictionImprovmentRuns := 4;
+  AbsoluteImprovementCriterion := 0;
+  RelativeImprovementCriterion := 0.005;
+  NumberOfPredictionsToCompare := 4;
+end;
+
+procedure TPredictionProperties.SetAbsoluteImprovementCriterion(
+  const Value: double);
+begin
+  StoredAbsoluteImprovementCriterion.Value := Value;
+end;
+
+procedure TPredictionProperties.SetAbsoluteLamdaCriterion(const Value: double);
+begin
+  StoredAbsoluteLamdaCriterion.Value := Value;
+end;
+
+procedure TPredictionProperties.SetAbsolutePredictionSwitch(
+  const Value: double);
+begin
+  StoredAbsolutePredictionSwitch.Value := Value;
+end;
+
+procedure TPredictionProperties.SetAcceptedPhi(const Value: double);
+begin
+  StoredAcceptedPhi.Value := Value;
+end;
+
+procedure TPredictionProperties.SetInitialLineSearchFactor(const Value: double);
+begin
+  StoredInitialLineSearchFactor.Value := Value;
+end;
+
+procedure TPredictionProperties.SetLineSearchRuns(const Value: Integer);
+begin
+  SetIntegerProperty(FLineSearchRuns, Value);
+end;
+
+procedure TPredictionProperties.SetMaxNoPredictionImprovmentRuns(
+  const Value: Integer);
+begin
+  SetIntegerProperty(FMaxNoPredictionImprovmentRuns, Value);
+end;
+
+procedure TPredictionProperties.SetMinOrMax(const Value: TMinOrMax);
+begin
+  if FMinOrMax <> Value then
+  begin
+    FMinOrMax := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPredictionProperties.SetNumberOfPredictionsToCompare(
+  const Value: Integer);
+begin
+  SetIntegerProperty(FNumberOfPredictionsToCompare, Value);
+end;
+
+procedure TPredictionProperties.SetPredictiveNoise(
+  const Value: TPredictiveNoise);
+begin
+  if FPredictiveNoise <> Value then
+  begin
+    FPredictiveNoise := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPredictionProperties.SetRelativeImprovementCriterion(
+  const Value: double);
+begin
+  StoredRelativeImprovementCriterion.Value := Value;
+end;
+
+procedure TPredictionProperties.SetRelativeLamdaCriterion(const Value: double);
+begin
+  StoredRelativeLamdaCriterion.Value := Value;
+end;
+
+procedure TPredictionProperties.SetRelativePredictionSwitch(
+  const Value: double);
+begin
+  StoredRelativePredictionSwitch.Value := Value;
+end;
+
+procedure TPredictionProperties.SetStoredAbsoluteImprovementCriterion(
+  const Value: TRealStorage);
+begin
+  FStoredAbsoluteImprovementCriterion.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredAbsoluteLamdaCriterion(
+  const Value: TRealStorage);
+begin
+  FStoredAbsoluteLamdaCriterion.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredAbsolutePredictionSwitch(
+  const Value: TRealStorage);
+begin
+  FStoredAbsolutePredictionSwitch.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredAcceptedPhi(const Value: TRealStorage);
+begin
+  FStoredAcceptedPhi.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredInitialLineSearchFactor(
+  const Value: TRealStorage);
+begin
+  FStoredInitialLineSearchFactor.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredRelativeImprovementCriterion(
+  const Value: TRealStorage);
+begin
+  FStoredRelativeImprovementCriterion.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredRelativeLamdaCriterion(
+  const Value: TRealStorage);
+begin
+  FStoredRelativeLamdaCriterion.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredRelativePredictionSwitch(
+  const Value: TRealStorage);
+begin
+  FStoredRelativePredictionSwitch.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredTargetPhi(const Value: TRealStorage);
+begin
+  FStoredTargetPhi.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredTestLambdaPhi(
+  const Value: TRealStorage);
+begin
+  FStoredTestLambdaPhi.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetStoredUpdateLineSearchFactor(
+  const Value: TRealStorage);
+begin
+  FStoredUpdateLineSearchFactor.Assign(Value);
+end;
+
+procedure TPredictionProperties.SetTargetPhi(const Value: double);
+begin
+  StoredTargetPhi.Value := Value;
+end;
+
+procedure TPredictionProperties.SetTestLambdaPhi(const Value: double);
+begin
+  StoredTestLambdaPhi.Value := Value;
+end;
+
+procedure TPredictionProperties.SetUpdateLineSearchFactor(const Value: double);
+begin
+  StoredUpdateLineSearchFactor.Value := Value;
 end;
 
 initialization

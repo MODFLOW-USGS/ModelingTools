@@ -212,6 +212,7 @@ type
       be changed to Max or Min, whichever is closer and raises an
       OnExceededBounds event.}
     property RealValue: Double read GetRealValue write SetRealValue;
+    function RealValueDefault(DefaultValue: double): double;
     property IntegerValue: Integer read GetIntegerValue write SetIntegerValue;
   published
     { Published declarations }
@@ -447,6 +448,20 @@ begin
   end;
 end;
 
+
+function TArgusDataEntry.RealValueDefault(DefaultValue: double): double;
+begin
+  Assert(DataType = dtReal);
+  // If this is changed, change GetRealValue too.
+  if (Text <> '') and (Text <> '+') and (Text <> '-') then
+  begin
+    result := StrToFloat(Text)
+  end
+  else
+  begin
+    Result := DefaultValue;
+  end;
+end;
 
 procedure TArgusDataEntry.SetMax(Value : extended);
 begin
@@ -1047,6 +1062,7 @@ end;
 function TArgusDataEntry.GetRealValue: Double;
 begin
   Assert(DataType = dtReal);
+  // If this is changed, change RealValueDefault too.
   if (Text <> '') and (Text <> '+') and (Text <> '-') then
   begin
     result := StrToFloat(Text)

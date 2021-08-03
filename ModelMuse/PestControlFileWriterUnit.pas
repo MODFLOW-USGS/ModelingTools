@@ -24,8 +24,9 @@ type
     procedure WriteLsqr;
     // @name is not currently supported. Section 6.3
     procedure WriteAutomaticUserIntervention;
-    // @name is not currently written by ModelMuse. Section 10
-    // It is writen by SVDAPREP.
+    // @name is not currently written by ModelMuse.
+    // It is written by SVDAPREP.
+    // Section 10
     procedure WriteSVD_Assist;
     procedure WriteParameterGroups;
     procedure WriteParameters;
@@ -36,7 +37,6 @@ type
     procedure WriteCommandLine;
     procedure WriteModelInputOutput;
     procedure WritePriorInformation;
-    // @name is not currently supported. Section 8
     procedure WritePredictiveAnalysis;
     procedure WriteRegularisation;
     // @name is not currently supported. Section 13
@@ -103,6 +103,16 @@ resourcestring
   StrGreater = 'greater';
   StrLower = 'lower';
   StrUpper = 'upper';
+  StrInvalidPESTVariabl = 'Invalid PEST variable value';
+  Str0sInThePESTPre = '%0:s in the PEST Predictive Analysis section must be ' +
+  'greater than 0 but has a value of %1:g.';
+  Str0sInThePESTPre2 = '%0:s in the PEST Predictive Analysis section must be' +
+  ' greater than %1:s 0 but they have values of %2:g and %3:g.';
+  StrPredictionObservati = 'Prediction observation specified incorrectly';
+  StrIfThePredictionAn = 'If the prediction analysis mode is used in PEST, t' +
+  'here must be exactly one observation assigned to the "predict" observatio' +
+  'n group. In this model there were %d such observation assigned to the "pr' +
+  'edict" group.';
 
 { TPestControlFileWriter }
 
@@ -1253,6 +1263,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrObservationGroupNa);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupUn);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidParameterVa);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrPredictionObservati);
 
   if not Model.PestUsed then
   begin
@@ -1527,7 +1538,13 @@ var
   AnObs: IObservationItem;
   ObsItem: TCustomObservationItem;
   ObsGroup: TPestObservationGroup;
+  PestControlData: TPestControlData;
+  CheckPredictGroup: Boolean;
+  PredictGroupCount: Integer;
 begin
+  PestControlData := Model.PestProperties.PestControlData;
+  CheckPredictGroup := PestControlData.PestMode = pmPrediction;
+  PredictGroupCount := 0;
   WriteSectionHeader('observation data');
   for ObsIndex := 0 to FUsedObservations.Count - 1 do
   begin
@@ -1564,10 +1581,18 @@ begin
         frmErrorsAndWarnings.AddError(Model, StrObservationGroupUn,
           Format(StrNoObservationGroupAssigned, [AnObs.Name]));
       end;
+      if SameText(AnObs.ObservationGroup, 'predict') then
+      begin
+        Inc(PredictGroupCount);
+      end;
     end
     else
     begin
       WriteString(' ' + ObsGroup.ExportedGroupName);
+      if SameText(ObsGroup.ExportedGroupName, 'predict') then
+      begin
+        Inc(PredictGroupCount);
+      end;
       if ObsGroup.ExportedGroupName = '' then
       begin
         frmErrorsAndWarnings.AddError(Model, StrObservationGroupUn,
@@ -1582,6 +1607,11 @@ begin
     NewLine;
   end;
   NewLine;
+  if CheckPredictGroup and (PredictGroupCount <> 1) then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrPredictionObservati,
+      Format(StrIfThePredictionAn, [PredictGroupCount]))
+  end;
 end;
 
 procedure TPestControlFileWriter.WriteParameterGroups;
@@ -1946,8 +1976,77 @@ begin
 end;
 
 procedure TPestControlFileWriter.WritePredictiveAnalysis;
+var
+  PredictionProperties: TPredictionProperties;
 begin
-// The Predictive Analysis section is not currently supported.
+  if Model.PestProperties.PestControlData.PestMode <> pmPrediction then
+  begin
+    Exit;
+  end;
+  WriteSectionHeader('predictive analysis');
+  PredictionProperties := Model.PestProperties.PredictionProperties;
+
+  if PredictionProperties.MinOrMax = mmMinimize then
+  begin
+    WriteInteger(-1);
+  end
+  else
+  begin
+    WriteInteger(1);
+  end;
+  WriteInteger(Ord(PredictionProperties.PredictiveNoise));
+  NewLine;
+
+  if PredictionProperties.TargetPhi <= 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrInvalidPESTVariabl,
+      Format(Str0sInThePESTPre, ['PD0', PredictionProperties.TargetPhi]))
+  end;
+  if PredictionProperties.AcceptedPhi <= PredictionProperties.TargetPhi then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrInvalidPESTVariabl,
+      Format(Str0sInThePESTPre2, ['PD1', 'PD0',
+      PredictionProperties.AcceptedPhi, PredictionProperties.TargetPhi]))
+  end;
+  if PredictionProperties.TestLambdaPhi <= PredictionProperties.AcceptedPhi then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrInvalidPESTVariabl,
+      Format(Str0sInThePESTPre2, ['PD2', 'PD1',
+      PredictionProperties.TestLambdaPhi, PredictionProperties.AcceptedPhi]))
+  end;
+  WriteFloat(PredictionProperties.TargetPhi);
+  WriteFloat(PredictionProperties.AcceptedPhi);
+  WriteFloat(PredictionProperties.TestLambdaPhi);
+  NewLine;
+
+  WriteFloat(PredictionProperties.AbsoluteLamdaCriterion);
+  WriteFloat(PredictionProperties.RelativeLamdaCriterion);
+  if PredictionProperties.InitialLineSearchFactor <= 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrInvalidPESTVariabl,
+      Format(Str0sInThePESTPre, ['INITSCHFAC',
+      PredictionProperties.InitialLineSearchFactor]))
+  end;
+  WriteFloat(PredictionProperties.InitialLineSearchFactor);
+  if PredictionProperties.InitialLineSearchFactor <= 0 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrInvalidPESTVariabl,
+      Format(Str0sInThePESTPre, ['MULSCHFAC',
+      PredictionProperties.UpdateLineSearchFactor]))
+  end;
+  WriteFloat(PredictionProperties.UpdateLineSearchFactor);
+  WriteInteger(PredictionProperties.LineSearchRuns);
+  NewLine;
+
+  WriteFloat(PredictionProperties.AbsolutePredictionSwitch);
+  WriteFloat(PredictionProperties.RelativePredictionSwitch);
+  NewLine;
+
+  WriteInteger(PredictionProperties.MaxNoPredictionImprovmentRuns);
+  WriteFloat(PredictionProperties.AbsoluteImprovementCriterion);
+  WriteFloat(PredictionProperties.RelativeImprovementCriterion);
+  WriteInteger(PredictionProperties.NumberOfPredictionsToCompare);
+  NewLine;
 end;
 
 procedure TPestControlFileWriter.WritePriorInformation;
@@ -1974,7 +2073,7 @@ begin
   begin
     Exit;
   end;
-  
+
   Regularization := Model.PestProperties.Regularization;
   WriteSectionHeader('regularisation');
   WriteFloat(Regularization.PhiMLim);

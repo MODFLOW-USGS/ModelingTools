@@ -255,6 +255,39 @@ type
     rdgPriorInfoVertContinuity: TRbwDataGrid4;
     lblArrayMarker: TLabel;
     comboArrayMarker: TComboBox;
+    jvspPrediction1: TJvStandardPage;
+    comboPredMinMax: TComboBox;
+    lblPredMinMax: TLabel;
+    cbPredictiveNoise: TCheckBox;
+    rdeTargetObjectiveFunction: TRbwDataEntry;
+    lblTargetObjectiveFunction: TLabel;
+    rdeAcceptedObjectiveFunction: TRbwDataEntry;
+    lblAcceptedObjectiveFunction: TLabel;
+    rdeTestLambdaPhi: TRbwDataEntry;
+    lblTestLambdaPhi: TLabel;
+    rdeAbsoluteLamdaCriterion: TRbwDataEntry;
+    lblAbsoluteLamdaCriterion: TLabel;
+    rdeRelativeLamdaCriterion: TRbwDataEntry;
+    lblRelativeLamdaCriterion: TLabel;
+    rdeInitialLineSearchFactor: TRbwDataEntry;
+    lblInitialLineSearchFactor: TLabel;
+    rdeUpdateLineSearchFactor: TRbwDataEntry;
+    lblUpdateLineSearchFactor: TLabel;
+    seLineSearchRuns: TJvSpinEdit;
+    lblLineSearchRuns: TLabel;
+    rdeAbsolutePredictionSwitch: TRbwDataEntry;
+    lblAbsolutePredictionSwitch: TLabel;
+    rdeRelativePredictionSwitch: TRbwDataEntry;
+    lblRelativePredictionSwitch: TLabel;
+    jvspPrediction2: TJvStandardPage;
+    seMaxNoPredictionImprovmentRuns: TJvSpinEdit;
+    rdeAbsoluteImprovementCriterion: TRbwDataEntry;
+    lblMaxNoPredictionImprovmentRuns: TLabel;
+    lblAbsoluteImprovementCriterion: TLabel;
+    rdeRelativeImprovementCriterion: TRbwDataEntry;
+    lblRelativeImprovementCriterion: TLabel;
+    seNumberOfPredictionsToCompare: TJvSpinEdit;
+    lblNumberOfPredictionsToCompare: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -328,6 +361,7 @@ type
     procedure rgGroupWeightMethodClick(Sender: TObject);
     procedure rgIndividualAdjustmentMethodClick(Sender: TObject);
     procedure cbRegApplyGroupWeightClick(Sender: TObject);
+    procedure comboPestModeChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -359,6 +393,7 @@ type
     function GetIREGADJ: Integer;
     procedure SetIREGADJ(const Value: Integer);
     procedure GetUsedTypes(var UsedTypes: TParameterTypes);
+    function PredictGroupOK: boolean;
     property IREGADJ: Integer read GetIREGADJ write SetIREGADJ;
     procedure InsertObsGroup(ObsGroupFrame: TframeGrid; Sender: TObject);
     procedure GetCovarianceFileName(ObsGridFrame: TframeGrid;
@@ -411,6 +446,9 @@ resourcestring
   StrY = 'Y';
   StrParameterName = 'Parameter name';
   StrDefinePriorInforma = 'Define Prior Information';
+  StrWhenThePrediction = 'When the prediction analysis mode is used, there m' +
+  'ust be an observation group named "predict" with exactly one observation ' +
+  'assigned to it.';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -1172,9 +1210,102 @@ begin
   end;
 end;
 
+function TfrmPEST.PredictGroupOK: boolean;
+var
+  Grid: TRbwDataGrid4;
+  PredictGroupFound: Boolean;
+  ObsGroupIndex: Integer;
+  GroupName: string;
+  ANode: TTreeNode;
+  ObsGroup: TPestObservationGroup;
+  ChildNode: TTreeNode;
+  AnObject: TObject;
+  PredictCount: Integer;
+  AnObs: TCustomObservationItem;
+  FluxObs: TFluxObservationGroup;
+  HobItem: THobItem;
+begin
+  result := True;
+  if comboPestMode.ItemIndex = Ord(pmPrediction) then
+  begin
+    Grid := frameObservationGroups.Grid;
+    PredictGroupFound := False;
+    for ObsGroupIndex := 0 to frameObservationGroups.seNumber.AsInteger - 1 do
+    begin
+      GroupName := LowerCase(Grid.Cells[Ord(pogcName), ObsGroupIndex + 1]);
+      if GroupName = 'predict' then
+      begin
+        PredictGroupFound := True;
+        break;
+      end;
+    end;
+    if not PredictGroupFound then
+    begin
+      result := False;
+      Exit;
+    end;
+
+    PredictCount := 0;
+    ANode := FNoNameNode;
+    while ANode <> nil do
+    begin
+      ObsGroup := ANode.Data;
+      ChildNode := ANode.getFirstChild;
+      while ChildNode <> nil do
+      begin
+        AnObject := ChildNode.Data;
+        if AnObject is TCustomObservationItem then
+        begin
+          AnObs := TCustomObservationItem(AnObject);
+          if ObsGroup <> nil then
+          begin
+            if SameText(ObsGroup.ObsGroupName, 'predict') then
+            begin
+              Inc(PredictCount);
+            end;
+          end;
+        end
+        else if AnObject is TFluxObservationGroup then
+        begin
+          FluxObs := TFluxObservationGroup(AnObject);
+          if ObsGroup <> nil then
+          begin
+            if SameText(ObsGroup.ObsGroupName, 'predict') then
+            begin
+              Inc(PredictCount);
+            end;
+          end;
+        end
+        else
+        begin
+          HobItem := AnObject as THobItem;
+          if ObsGroup <> nil then
+          begin
+            if SameText(ObsGroup.ObsGroupName, 'predict') then
+            begin
+              Inc(PredictCount);
+            end;
+          end;
+        end;
+        ChildNode := ChildNode.GetNextSibling;
+      end;
+
+      ANode := ANode.GetNextSibling;
+    end;
+    result := PredictCount = 1;
+  end;
+end;
+
 procedure TfrmPEST.btnOKClick(Sender: TObject);
 begin
   inherited;
+  if not PredictGroupOK then
+  begin
+    Beep;
+    MessageDlg(StrWhenThePrediction, mtError, [mbOK], 0);
+    ModalResult := mrNone;
+    Exit;
+  end;
   SetData;
 end;
 
@@ -1236,6 +1367,38 @@ end;
 //  end;
 //end;
 
+procedure TfrmPEST.comboPestModeChange(Sender: TObject);
+var
+  ObsGroupIndex: Integer;
+  Grid: TRbwDataGrid4;
+  GroupName: string;
+  PredictGroupFound: Boolean;
+begin
+  inherited;
+  if comboPestMode.ItemIndex = Ord(pmPrediction) then
+  begin
+    Grid := frameObservationGroups.Grid;
+    PredictGroupFound := False;
+    for ObsGroupIndex := 0 to frameObservationGroups.seNumber.AsInteger - 1 do
+    begin
+      GroupName := LowerCase(Grid.Cells[Ord(pogcName), ObsGroupIndex + 1]);
+      if GroupName = 'predict' then
+      begin
+        PredictGroupFound := True;
+        break;
+      end;
+    end;
+    if not PredictGroupFound then
+    begin
+      frameObservationGroups.seNumber.AsInteger :=
+        frameObservationGroups.seNumber.AsInteger +1;
+      Grid.Cells[Ord(pogcName), frameObservationGroups.seNumber.AsInteger] := 'predict';
+      frameObservationGroupsGridSetEditText(Grid, Ord(pogcName),
+        frameObservationGroups.seNumber.AsInteger, 'predict');
+    end;
+  end;
+end;
+
 procedure TfrmPEST.comboSvdModeChange(Sender: TObject);
 begin
   inherited;
@@ -1258,6 +1421,7 @@ var
   ObservationNode: TJvPageIndexNode;
   RegularizationNode: TJvPageIndexNode;
   PriorInfoNode: TJvPageIndexNode;
+  PredictionNode: TJvPageIndexNode;
 begin
   inherited;
   FObsList := TObservationList.Create;
@@ -1358,6 +1522,18 @@ begin
   NewNode := tvPEST.Items.AddChild(
     PriorInfoNode, 'Between-Layer Continuity Prior Information') as TJvPageIndexNode;
   NewNode.PageIndex := jvspPriorInfoVertContinuity.PageIndex;
+
+  PredictionNode := tvPEST.Items.AddChild(
+    nil, 'Prediction Analysis') as TJvPageIndexNode;
+  PredictionNode.PageIndex := -1;
+
+  NewNode := tvPEST.Items.AddChild(
+    PredictionNode, 'Prediction Analysis Control') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPrediction1.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    PredictionNode, 'Prediction Analysis Termination') as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPrediction2.PageIndex;
 
   RegularizationNode := tvPEST.Items.AddChild(
     nil, 'Regularization') as TJvPageIndexNode;
@@ -1602,6 +1778,7 @@ var
   ASteadyParam: TModflowSteadyParameter;
   PickList: TStrings;
   ObsIndex: Integer;
+  PredictionProperties: TPredictionProperties;
   procedure SetPriorInfoObsGroupPicklist(Grid: TRbwDataGrid4);
   var
     PickList: TStrings;
@@ -1986,7 +2163,25 @@ begin
     rdeREGSINGTHRESH.RealValue := Regularization.RegularizationSingularValueThreshhold;
   {$ENDREGION}
 
-
+  {$REGION 'Predictive analysis'}
+  PredictionProperties := PestProperties.PredictionProperties;
+  comboPredMinMax.ItemIndex := Ord(PredictionProperties.MinOrMax);
+  cbPredictiveNoise.Checked := PredictionProperties.PredictiveNoise = pnUseNoise;
+  rdeTargetObjectiveFunction.RealValue := PredictionProperties.TargetPhi;
+  rdeAcceptedObjectiveFunction.RealValue := PredictionProperties.AcceptedPhi;
+  rdeTestLambdaPhi.RealValue := PredictionProperties.TestLambdaPhi;
+  rdeAbsoluteLamdaCriterion.RealValue := PredictionProperties.AbsoluteLamdaCriterion;
+  rdeRelativeLamdaCriterion.RealValue := PredictionProperties.RelativeLamdaCriterion;
+  rdeInitialLineSearchFactor.RealValue := PredictionProperties.InitialLineSearchFactor;
+  rdeUpdateLineSearchFactor.RealValue := PredictionProperties.UpdateLineSearchFactor;
+  seLineSearchRuns.AsInteger := PredictionProperties.LineSearchRuns;
+  rdeAbsolutePredictionSwitch.RealValue := PredictionProperties.AbsolutePredictionSwitch;
+  rdeRelativePredictionSwitch.RealValue := PredictionProperties.RelativePredictionSwitch;
+  seMaxNoPredictionImprovmentRuns.AsInteger := PredictionProperties.MaxNoPredictionImprovmentRuns;
+  rdeAbsoluteImprovementCriterion.RealValue := PredictionProperties.AbsoluteImprovementCriterion;
+  rdeRelativeImprovementCriterion.RealValue := PredictionProperties.RelativeImprovementCriterion;
+  seNumberOfPredictionsToCompare.AsInteger := PredictionProperties.NumberOfPredictionsToCompare;
+  {$ENDREGION}
 end;
 
 function TfrmPEST.GetIREGADJ: Integer;
@@ -2057,6 +2252,7 @@ var
   PointItem: TPointItem;
   ItemIndex: Integer;
   Regularization: TPestRegularization;
+  PredProp: TPredictionProperties;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(nil);
@@ -2378,6 +2574,40 @@ begin
       Regularization.OptimizationInterval := seNOPTREGADJ.AsInteger;
       Regularization.RegWeightRatio := rdeREGWEIGHTRAT.RealValue;
       Regularization.RegularizationSingularValueThreshhold := rdeREGSINGTHRESH.RealValue;
+    {$ENDREGION}
+
+    {$REGION 'Predictive analysis'}
+    PredProp := PestProperties.PredictionProperties;
+    PredProp.MinOrMax := TMinOrMax(comboPredMinMax.ItemIndex);
+    PredProp.PredictiveNoise :=
+      TPredictiveNoise(cbPredictiveNoise.Checked);
+    PredProp.TargetPhi :=
+      rdeTargetObjectiveFunction.RealValueDefault(PredProp.TargetPhi);
+    PredProp.AcceptedPhi :=
+      rdeAcceptedObjectiveFunction.RealValueDefault(PredProp.AcceptedPhi);
+    PredProp.TestLambdaPhi :=
+      rdeTestLambdaPhi.RealValueDefault(PredProp.TestLambdaPhi);
+    PredProp.AbsoluteLamdaCriterion :=
+      rdeAbsoluteLamdaCriterion.RealValueDefault(PredProp.AbsoluteLamdaCriterion);
+    PredProp.RelativeLamdaCriterion :=
+      rdeRelativeLamdaCriterion.RealValueDefault(PredProp.RelativeLamdaCriterion);
+    PredProp.InitialLineSearchFactor :=
+      rdeInitialLineSearchFactor.RealValueDefault(PredProp.InitialLineSearchFactor);
+    PredProp.UpdateLineSearchFactor :=
+      rdeUpdateLineSearchFactor.RealValueDefault(PredProp.UpdateLineSearchFactor);
+    PredProp.LineSearchRuns := seLineSearchRuns.AsInteger;
+    PredProp.AbsolutePredictionSwitch :=
+      rdeAbsolutePredictionSwitch.RealValueDefault(PredProp.AbsolutePredictionSwitch);
+    PredProp.RelativePredictionSwitch :=
+      rdeRelativePredictionSwitch.RealValueDefault(PredProp.AbsolutePredictionSwitch);
+    PredProp.MaxNoPredictionImprovmentRuns :=
+      seMaxNoPredictionImprovmentRuns.AsInteger;
+    PredProp.AbsoluteImprovementCriterion :=
+      rdeAbsoluteImprovementCriterion.RealValueDefault(PredProp.AbsoluteImprovementCriterion);
+    PredProp.RelativeImprovementCriterion :=
+      rdeRelativeImprovementCriterion.RealValueDefault(PredProp.RelativeImprovementCriterion);
+    PredProp.NumberOfPredictionsToCompare :=
+      seNumberOfPredictionsToCompare.AsInteger;
     {$ENDREGION}
 
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties,
