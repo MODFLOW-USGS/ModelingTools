@@ -130,6 +130,10 @@ var
   Index: Integer;
   StringValue: string;
   CachedData: TMemoryStream;
+  SizeToRestore: Int64;
+  MaxItemsToRestore: Integer;
+  MaxSizeToRestore: Integer;
+  PositionToRestore: Integer;
 begin
   FErrorRestoringData := False;
   if not FCached or not FCleared then
@@ -154,7 +158,20 @@ begin
         case DataType of
           rdtDouble:
             begin
-              DecompressionStream.Read(FRealValues[0], LocalCount*SizeOf(double));
+              SizeToRestore := LocalCount*SizeOf(double);
+              MaxItemsToRestore := High(LongInt) div SizeOf(double);
+              MaxSizeToRestore := MaxItemsToRestore*SizeOf(double);
+              PositionToRestore := 0;
+              while SizeToRestore > MaxSizeToRestore do
+              begin
+                DecompressionStream.Read(FRealValues[PositionToRestore], MaxSizeToRestore);
+                Inc(PositionToRestore, MaxItemsToRestore);
+                SizeToRestore := SizeToRestore - MaxSizeToRestore
+              end;
+              if SizeToRestore > 0 then
+              begin
+                DecompressionStream.Read(FRealValues[PositionToRestore], SizeToRestore);
+              end;
             end;
           rdtInteger:
             begin
@@ -321,11 +338,15 @@ end;
 procedure TValueArrayStorage.CacheData;
 var
   Compressor: TCompressionStream;
-  LocalCount: Integer;
+  LocalCount: Int64;
   Index: Integer;
   StringValue: string;
   ValueLength: Integer;
   CachedData: TMemoryStream;
+  SizeToSave: Int64;
+  MaxItemsToSave: Integer;
+  MaxSizeToSave: Integer;
+  PositionToSave: Integer;
 begin
   if FCached then
   begin
@@ -351,14 +372,29 @@ begin
       case DataType of
         rdtDouble:
           begin
-            Compressor.Write(FRealValues[0], LocalCount*SizeOf(double));
+            SizeToSave := LocalCount*SizeOf(double);
+            MaxItemsToSave := High(LongInt) div SizeOf(double);
+            MaxSizeToSave := MaxItemsToSave*SizeOf(double);
+            PositionToSave := 0;
+            While SizeToSave > MaxSizeToSave do
+            begin
+              Compressor.Write(FRealValues[PositionToSave], MaxSizeToSave);
+              Inc(PositionToSave, MaxItemsToSave);
+              SizeToSave := SizeToSave - MaxSizeToSave;
+            end;
+            if SizeToSave > 0 then
+            begin
+              Compressor.Write(FRealValues[PositionToSave], SizeToSave);
+            end;
           end;
         rdtInteger:
           begin
+//            SizeToSave := LocalCount*SizeOf(integer);
             Compressor.Write(FIntValues[0], LocalCount*SizeOf(integer));
           end;
         rdtBoolean:
           begin
+//            SizeToSave := LocalCount*SizeOf(boolean);
             Compressor.Write(FBooleanValues[0], LocalCount*SizeOf(boolean));
           end;
         rdtString:

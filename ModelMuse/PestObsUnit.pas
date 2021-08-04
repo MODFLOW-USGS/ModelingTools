@@ -154,7 +154,7 @@ function PrefixedIntName(Prefix: string; ObjectIndex: Integer;
 implementation
 
 uses
-  ModelMuseUtilities;
+  ModelMuseUtilities, frmGoPhastUnit, PestPropertiesUnit;
 
 const
   ValidFirstChar = ['A'..'Z', 'a'..'z', '_'];
@@ -302,6 +302,8 @@ procedure TCustomObservationItem.SetName(const Value: string);
 var
   NewName: string;
   CharIndex: Integer;
+  PestProperties: TPestProperties;
+  ParetoPosition: Integer;
 begin
   NewName := Value;
   if NewName = '' then
@@ -324,6 +326,21 @@ begin
       begin
         NewName[CharIndex] := '_';
       end;
+    end;
+  end;
+  if Assigned(OnInvalidateModel) then
+  begin
+    PestProperties := frmGoPhast.PhastModel.PestProperties;
+    if SameText(PestProperties.ParetoProperties.ObservationName, FName) then
+    begin
+      PestProperties.ParetoProperties.ObservationName := NewName;
+    end;
+    ParetoPosition :=
+      PestProperties.ParetoProperties.ObservationsToReport.IndexOf(FName);
+    if ParetoPosition >= 0 then
+    begin
+      PestProperties.ParetoProperties.ObservationsToReport[ParetoPosition]
+        := NewName;
     end;
   end;
   SetStringProperty(FName, NewName);

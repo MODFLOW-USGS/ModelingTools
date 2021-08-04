@@ -182,22 +182,27 @@
         <DCCReference Include="frame3DViewUnit.pas">
             <Form>frame3DView</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameDisplayLimitUnit.pas">
             <Form>frameDisplayLimit</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePhastInterpolationUnit.pas">
             <Form>framePhastInterpolation</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameRulerOptionsUnit.pas">
             <Form>frameRulerOptions</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameViewUnit.pas">
             <Form>frameView</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmAboutUnit.pas">
             <Form>frmAbout</Form>
@@ -381,6 +386,7 @@
         <DCCReference Include="frameInitialGridPositionUnit.pas">
             <Form>frameInitialGridPosition</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="LayerStructureUnit.pas"/>
         <DCCReference Include="GuiSettingsUnit.pas"/>
@@ -416,6 +422,7 @@
         <DCCReference Include="frameScreenObjectParamUnit.pas">
             <Form>frameScreenObjectParam</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="CountObjectsUnit.pas"/>
         <DCCReference Include="ModflowConstantHeadBoundaryUnit.pas"/>
@@ -426,11 +433,13 @@
         <DCCReference Include="framePackageUnit.pas">
             <Form>framePackage</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowPackageSelectionUnit.pas"/>
         <DCCReference Include="framePcgUnit.pas">
             <Form>framePCG</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowPackagesUnit.pas"/>
         <DCCReference Include="ModflowPCG_WriterUnit.pas"/>
@@ -448,6 +457,7 @@
         <DCCReference Include="frameScreenObjectCondParamUnit.pas">
             <Form>frameScreenObjectCondParam</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowWellUnit.pas"/>
         <DCCReference Include="ModflowWellWriterUnit.pas"/>
@@ -460,10 +470,12 @@
         <DCCReference Include="frameListParameterDefinitionUnit.pas">
             <Form>frameListParameterDefinition</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameArrayParameterDefinitionUnit.pas">
             <Form>frameArrayParameterDefinition</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowRchUnit.pas"/>
         <DCCReference Include="ModflowRCH_WriterUnit.pas"/>
@@ -473,15 +485,18 @@
         <DCCReference Include="framePackageTransientLayerChoiceUnit.pas">
             <Form>framePackageTransientLayerChoice</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameEtsPackageUnit.pas">
             <Form>frameEtsPackage</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowETS_WriterUnit.pas"/>
         <DCCReference Include="framePackageResUnit.pas">
             <Form>framePackageRes</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowResUnit.pas"/>
         <DCCReference Include="ModflowRES_WriterUnit.pas"/>
@@ -492,38 +507,46 @@
         <DCCReference Include="framePackageLAK_Unit.pas">
             <Form>framePackageLAK</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectNoParamUnit.pas">
             <Form>frameScreenObjectNoParam</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectLAK_Unit.pas">
             <Form>frameScreenObjectLAK</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowLakUnit.pas"/>
         <DCCReference Include="ModflowLAK_Writer.pas"/>
         <DCCReference Include="frameOutputControlUnit.pas">
             <Form>frameOutputControl</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowBoundaryDisplayUnit.pas"/>
         <DCCReference Include="IniFileUtilities.pas"/>
         <DCCReference Include="frameCrossSectionUnit.pas">
             <Form>frameCrossSection</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameFlowTableUnit.pas">
             <Form>frameFlowTable</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectSFR_Unit.pas">
             <Form>frameScreenObjectSFR</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageSFRUnit.pas">
             <Form>framePackageSFR</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowSfrUnit.pas"/>
         <DCCReference Include="ModflowSfrReachUnit.pas"/>
@@ -538,31 +561,37 @@
         <DCCReference Include="frameSfrParamInstancesUnit.pas">
             <Form>frameSfrParamInstances</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="IntervalTree.pas"/>
         <DCCReference Include="framePackageUZFUnit.pas">
             <Form>framePackageUZF</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageLayerChoiceUnit.pas">
             <Form>framePackageLayerChoice</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowUzfUnit.pas"/>
         <DCCReference Include="ModflowUzfWriterUnit.pas"/>
         <DCCReference Include="frameGmgUnit.pas">
             <Form>frameGMG</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowGMG_WriterUnit.pas"/>
         <DCCReference Include="frameSipUnit.pas">
             <Form>frameSIP</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowSIP_WriterUnit.pas"/>
         <DCCReference Include="frameDe4Unit.pas">
             <Form>frameDE4</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowDE4_WriterUnit.pas"/>
         <DCCReference Include="ModflowOC_Writer.pas"/>
@@ -580,6 +609,7 @@
         <DCCReference Include="framePackageHobUnit.pas">
             <Form>framePackageHob</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowHobUnit.pas"/>
         <DCCReference Include="ClassificationUnit.pas"/>
@@ -589,6 +619,7 @@
         <DCCReference Include="frameHfbScreenObjectUnit.pas">
             <Form>frameHfbScreenObject</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowHFB_WriterUnit.pas"/>
         <DCCReference Include="EdgeDisplayUnit.pas"/>
@@ -605,6 +636,7 @@
         <DCCReference Include="framePackageLpfUnit.pas">
             <Form>framePackageLpf</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ContourUnit.pas"/>
         <DCCReference Include="ReadModflowArrayUnit.pas"/>
@@ -633,6 +665,7 @@
         <DCCReference Include="frameIfaceUnit.pas">
             <Form>frameIface</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmImportGriddedDataUnit.pas">
             <Form>frmImportGriddedData</Form>
@@ -640,11 +673,13 @@
         <DCCReference Include="frameModpathSelectionUnit.pas">
             <Form>frameModpathSelection</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModpathParticleUnit.pas"/>
         <DCCReference Include="frameModpathParticlesUnit.pas">
             <Form>frameModpathParticles</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModpathStartingLocationsWriter.pas"/>
         <DCCReference Include="ModpathMainFileWriterUnit.pas"/>
@@ -690,6 +725,7 @@
         <DCCReference Include="framePackageHufUnit.pas">
             <Form>framePackageHuf</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmBatchFileAdditionsUnit.pas">
             <Form>frmBatchFileAdditions</Form>
@@ -697,6 +733,7 @@
         <DCCReference Include="frameBatchFileLinesUnit.pas">
             <Form>frameBatchFileLines</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowHUF_WriterUnit.pas"/>
         <DCCReference Include="frmCustomSelectObjectsUnit.pas">
@@ -722,16 +759,19 @@
         <DCCReference Include="framePackageMnw2Unit.pas">
             <Form>framePackageMnw2</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectMNW2Unit.pas">
             <Form>frameScreenObjectMNW2</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowMnw2Unit.pas"/>
         <DCCReference Include="ModflowMNW2_WriterUnit.pas"/>
         <DCCReference Include="frameLocationMethodUnit.pas">
             <Form>frameLocationMethod</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="PathlineReader.pas"/>
         <DCCReference Include="frmPhastLocationUnit.pas">
@@ -742,10 +782,12 @@
         <DCCReference Include="frameSubBedsUnit.pas">
             <Form>frameSubBeds</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageSubUnit.pas">
             <Form>framePackageSub</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowSUB_Writer.pas"/>
         <DCCReference Include="UnitList.pas"/>
@@ -763,6 +805,7 @@
         <DCCReference Include="frameZoneBudgetUnit.pas">
             <Form>frameZoneBudget</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ZoneBudgetWriterUnit.pas"/>
         <DCCReference Include="frmRunZoneBudgetUnit.pas">
@@ -784,15 +827,18 @@
         <DCCReference Include="framePackageSwtUnit.pas">
             <Form>framePackageSwt</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="MODFLOW_SwtWriterUnit.pas"/>
         <DCCReference Include="framePkgHydmodUnit.pas">
             <Form>framePkgHydmod</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectHydmodUnit.pas">
             <Form>frameScreenObjectHydmod</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowHydmodUnit.pas"/>
         <DCCReference Include="ModflowHydmodWriterUnit.pas"/>
@@ -824,15 +870,18 @@
         <DCCReference Include="framePackageRCHUnit.pas">
             <Form>framePackageRCH</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowLgr_WriterUnit.pas"/>
         <DCCReference Include="framePackageUpwUnit.pas">
             <Form>framePackageUpw</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageNwtUnit.pas">
             <Form>framePackageNwt</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowNWT_WriterUnit.pas"/>
         <DCCReference Include="ModflowUPW_WriterUnit.pas"/>
@@ -840,11 +889,13 @@
         <DCCReference Include="frameScreenObjectUnit.pas">
             <Form>frameScreenObject</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowHeadObsResults.pas"/>
         <DCCReference Include="frameStreamLinkUnit.pas">
             <Form>frameStreamLink</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmDisplayDataUnit.pas">
             <Form>frmDisplayData</Form>
@@ -852,53 +903,65 @@
         <DCCReference Include="frameHeadObservationResultsUnit.pas">
             <Form>frameHeadObservationResults</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameModpathDisplayUnit.pas">
             <Form>frameModpathDisplay</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameModpathTimeSeriesDisplayUnit.pas">
             <Form>frameModpathTimeSeriesDisplay</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameModpathEndpointDisplayUnit.pas">
             <Form>frameModpathEndpointDisplay</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameCustomColorUnit.pas">
             <Form>frameCustomColor</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameColorGridUnit.pas">
             <Form>frameColorGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameContourDataUnit.pas">
             <Form>frameContourData</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameMt3dBasicPkgUnit.pas">
             <Form>frameMt3dBasicPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dmsTimesUnit.pas"/>
         <DCCReference Include="frameMt3dmsGcgPackageUnit.pas">
             <Form>frameMt3dmsGcgPackage</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameMt3dmsAdvPkgUnit.pas">
             <Form>frameMt3dmsAdvPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameMt3dmsDispersionPkgUnit.pas">
             <Form>frameMt3dmsDispersionPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dmsChemUnit.pas"/>
         <DCCReference Include="Mt3dmsChemSpeciesUnit.pas"/>
         <DCCReference Include="frameMt3dmsChemReactionPkgUnit.pas">
             <Form>frameMt3dmsChemReactionPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dmsBtnWriterUnit.pas"/>
         <DCCReference Include="frmRunMt3dmsUnit.pas">
@@ -910,39 +973,47 @@
         <DCCReference Include="frameScreenObjectSsmUnit.pas">
             <Form>frameScreenObjectSsm</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dmsRctWriterUnit.pas"/>
         <DCCReference Include="Mt3dmsGcgWriterUnit.pas"/>
         <DCCReference Include="frameMt3dmsTransObsPkgUnit.pas">
             <Form>frameMt3dmsTransObsPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dmsTobUnit.pas"/>
         <DCCReference Include="frameCustomCellObservationUnit.pas">
             <Form>frameCustomCellObservation</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameHeadObservationsUnit.pas">
             <Form>frameHeadObservations</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameConcentrationObservationUnit.pas">
             <Form>frameConcentrationObservation</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dmsFluxObservationsUnit.pas"/>
         <DCCReference Include="Mt3dmsTobWriterUnit.pas"/>
         <DCCReference Include="CustomFrameFluxObsUnit.pas">
             <Form>CustomframeFluxObs</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameFluxObsUnit.pas">
             <Form>frameFluxObs</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameMt3dmsFluxObsUnit.pas">
             <Form>frameMt3dmsFluxObs</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowMt3dmsLinkWriterUnit.pas"/>
         <DCCReference Include="ReadPvalUnit.pas"/>
@@ -957,10 +1028,12 @@
         <DCCReference Include="framePackagePcgnUnit.pas">
             <Form>framePackagePcgn</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameDiscretizationUnit.pas">
             <Form>frameDiscretization</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmSutraLayersUnit.pas">
             <Form>frmSutraLayers</Form>
@@ -973,6 +1046,7 @@
         <DCCReference Include="framePackageWellUnit.pas">
             <Form>framePackageWell</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SutraTimeScheduleUnit.pas"/>
         <DCCReference Include="frmSutraTimesUnit.pas">
@@ -982,14 +1056,17 @@
         <DCCReference Include="frameCustomSutraFeatureUnit.pas">
             <Form>frameCustomSutraTimeVaryingFeature</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameSutraBoundaryUnit.pas">
             <Form>frameSutraBoundary</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameSutraObservationsUnit.pas">
             <Form>frameSutraObservations</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmSutraTimeAdjustChoiceUnit.pas">
             <Form>frmSutraTimeAdjustChoice</Form>
@@ -1050,6 +1127,7 @@
         <DCCReference Include="frameVectorsUnit.pas">
             <Form>frameVectors</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmNodeLocationUnit.pas">
             <Form>frmNodeLocation</Form>
@@ -1064,10 +1142,12 @@
         <DCCReference Include="framePackageStrUnit.pas">
             <Form>framePackageStr</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectStrUnit.pas">
             <Form>frameScreenObjectStr</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowStrWriterUnit.pas"/>
         <DCCReference Include="ModflowFhbUnit.pas"/>
@@ -1075,10 +1155,12 @@
         <DCCReference Include="frameScreenObjectFhbHeadUnit.pas">
             <Form>frameScreenObjectFhbHead</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectFhbFlowUnit.pas">
             <Form>frameScreenObjectFhbFlow</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowFmpWellUnit.pas"/>
         <DCCReference Include="ModflowFmpFarmUnit.pas"/>
@@ -1089,6 +1171,7 @@
         <DCCReference Include="framePackageFrmUnit.pas">
             <Form>framePkgFarm</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmCropPropertiesUnit.pas">
             <Form>frmCropProperties</Form>
@@ -1096,6 +1179,7 @@
         <DCCReference Include="frameFormulaGridUnit.pas">
             <Form>frameFormulaGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmSoilPropertiesUnit.pas">
             <Form>frmSoilProperties</Form>
@@ -1106,14 +1190,17 @@
         <DCCReference Include="frameFarmUnit.pas">
             <Form>frameFarm</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameDeliveryGridUnit.pas">
             <Form>frameDeliveryGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameFarmDiversionUnit.pas">
             <Form>frameFarmDiversion</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowFmpBaseClasses.pas"/>
         <DCCReference Include="AdjustSutraBoundaryValuesUnit.pas"/>
@@ -1121,19 +1208,23 @@
         <DCCReference Include="frameScreenObjectFmpBoundaryUnit.pas">
             <Form>frameScreenObjectFmpBoundary</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectFmpPrecipUnit.pas">
             <Form>frameScreenObjectFmpPrecip</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectFmpEvapUnit.pas">
             <Form>frameScreenObjectFmpEvap</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowFmpCropSpatialUnit.pas"/>
         <DCCReference Include="frameScreenObjectCropIDUnit.pas">
             <Form>frameScreenObjectCropID</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowFmpWriterUnit.pas"/>
         <DCCReference Include="ModflowFmpAllotmentUnit.pas"/>
@@ -1143,20 +1234,24 @@
         <DCCReference Include="frameRadioGridUnit.pas">
             <Form>frameRadioGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageCFPUnit.pas">
             <Form>framePackageCFP</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowCfpPipeUnit.pas"/>
         <DCCReference Include="frameScreenObjectCfpPipesUnit.pas">
             <Form>frameScreenObjectCfpPipes</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowCfpFixedUnit.pas"/>
         <DCCReference Include="frameScreenObjectCfpFixedUnit.pas">
             <Form>frameScreenObjectCfpFixed</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmHelpVersionUnit.pas">
             <Form>frmHelpVersion</Form>
@@ -1166,15 +1261,18 @@
         <DCCReference Include="framePackageSwiUnit.pas">
             <Form>framePackageSWI</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowSwiWriterUnit.pas"/>
         <DCCReference Include="frameDrawCrossSectionUnit.pas">
             <Form>frameDrawCrossSection</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageSwrUnit.pas">
             <Form>framePackageSwr</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmSwrTabfilesUnit.pas">
             <Form>frmSwrTabfiles</Form>
@@ -1196,12 +1294,14 @@
         <DCCReference Include="frameScreenObjectSwrUnit.pas">
             <Form>frameScreenObjectSwr</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowSwrDirectRunoffUnit.pas"/>
         <DCCReference Include="ModflowSwrReachUnit.pas"/>
         <DCCReference Include="frameScreenObjectSwrReachUnit.pas">
             <Form>frameScreenObjectSwrReach</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmSwrVertexNumbersUnit.pas">
             <Form>frmSwrVertexNumbers</Form>
@@ -1220,24 +1320,29 @@
         <DCCReference Include="frameSwrReachConnectionsUnit.pas">
             <Form>frameSwrReachConnections</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SwrReachObjectUnit.pas"/>
         <DCCReference Include="frameReachGeomGridUnit.pas">
             <Form>frameReachGeomGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameStructureGridUnit.pas">
             <Form>frameStructureGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePlotGridUnit.pas">
             <Form>framePlotGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ReadSwrOutputUnit.pas"/>
         <DCCReference Include="frameSwrObsDisplayUnit.pas">
             <Form>frameSwrObsDisplay</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmConsoleLinesUnit.pas">
             <Form>frmConsoleLines</Form>
@@ -1247,10 +1352,12 @@
         <DCCReference Include="framePackageMnw1Unit.pas">
             <Form>framePackageMnw1</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectMnw1Unit.pas">
             <Form>frameScreenObjectMnw1</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="CacheableSparseDataSets.pas"/>
         <DCCReference Include="Export2DMeshUnit.pas"/>
@@ -1261,6 +1368,7 @@
         <DCCReference Include="frameScreenObjectFarmIDUnit.pas">
             <Form>frameScreenObjectFarmID</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmBudgetPrecisionQueryUnit.pas">
             <Form>frmBudgetPrecisionQuery</Form>
@@ -1281,6 +1389,7 @@
         <DCCReference Include="frameScreenObjectFootprintWellUnit.pas">
             <Form>frameScreenObjectFootprintWell</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="FootprintPropertiesUnit.pas"/>
         <DCCReference Include="frmFootprintPropertiesUnit.pas">
@@ -1302,21 +1411,25 @@
         <DCCReference Include="framePackageNpfUnit.pas">
             <Form>framePackageNpf</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePkgStoUnit.pas">
             <Form>framePkgSto</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowStoWriterUnit.pas"/>
         <DCCReference Include="framePkgSmsUnit.pas">
             <Form>framePkgSms</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowSmsWriterUnit.pas"/>
         <DCCReference Include="ModflowTDisWriterUnit.pas"/>
         <DCCReference Include="frameSwiObsInterpolatedUnit.pas">
             <Form>frameSwiObsInterpolated</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="BasisFunctionUnit.pas"/>
         <DCCReference Include="ModflowSwiObsUnit.pas"/>
@@ -1330,11 +1443,13 @@
         <DCCReference Include="frameScreenObjectRIPUnit.pas">
             <Form>frameScreenObjectRIP</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowRipWriterUnit.pas"/>
         <DCCReference Include="framePackageRipUnit.pas">
             <Form>framePackageRip</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Xml.VerySimple.pas"/>
         <DCCReference Include="..\ModelArchiver\ArchiveNodeInterface.pas"/>
@@ -1343,6 +1458,7 @@
         <DCCReference Include="frameSutraLakeUnit.pas">
             <Form>frameSutraLake</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmExportModelOutlineUnit.pas">
             <Form>frmExportModelOutline</Form>
@@ -1350,6 +1466,7 @@
         <DCCReference Include="frameActivatibleFeatureUnit.pas">
             <Form>frameActivatibleFeature</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SutraLakeWriterUnit.pas"/>
         <DCCReference Include="GeoRefUnit.pas"/>
@@ -1361,6 +1478,7 @@
         <DCCReference Include="frameScreenObjectWelUnit.pas">
             <Form>frameScreenObjectWel</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SutraGeneralBoundaryUnit.pas"/>
         <DCCReference Include="SutraBoundaryUnit.pas"/>
@@ -1369,12 +1487,14 @@
         <DCCReference Include="frameSutraGeneralizedFlowBoundaryUnit.pas">
             <Form>frameSutraGeneralizedFlowBoundary</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SutraGenTransBoundUnit.pas"/>
         <DCCReference Include="SutraGeneralTransportWriterUnit.pas"/>
         <DCCReference Include="frameSutraGeneralizeTransBoundaryUnit.pas">
             <Form>frameSutraGeneralizeTransBoundary</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmFileTypesUnit.pas">
             <Form>frmFileTypes</Form>
@@ -1391,24 +1511,29 @@
         <DCCReference Include="frameScreenObjectSfr6Unit.pas">
             <Form>frameScreenObjectSfr6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageSfrMF6Unit.pas">
             <Form>framePackageSfrMF6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowMawWriterUnit.pas"/>
         <DCCReference Include="frameScreenObjectMawUnit.pas">
             <Form>frameScreenObjectMAW</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameGridUnit.pas">
             <Form>frameGrid</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DisclaimerTextUnit.pas"/>
         <DCCReference Include="framePackageMawUnit.pas">
             <Form>framePackageMaw</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowIrregularMeshUnit.pas"/>
         <DCCReference Include="GrayTabs.pas"/>
@@ -1421,14 +1546,17 @@
         <DCCReference Include="framePackageGNC_Unit.pas">
             <Form>framePackageGNC</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageMf6ObsUnit.pas">
             <Form>framePackageMf6Obs</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectObsMf6Unit.pas">
             <Form>frameScreenObjectObsMf6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Modflow6ObsUnit.pas"/>
         <DCCReference Include="Modflow6ObsWriterUnit.pas"/>
@@ -1443,19 +1571,23 @@
         <DCCReference Include="frameScreenObjectHfbMf6Unit.pas">
             <Form>frameScreenObjectHfbMf6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowLakMf6Unit.pas"/>
         <DCCReference Include="frameScreenObjectLakMf6Unit.pas">
             <Form>frameScreenObjectLakMf6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameLakeOutletUnit.pas">
             <Form>frameLakeOutlet</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="framePackageLakMf6Unit.pas">
             <Form>framePackageLakMf6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmGridPositionUnit.pas">
             <Form>frmGridPosition</Form>
@@ -1465,30 +1597,36 @@
         <DCCReference Include="frameScreenObjectMvrUnit.pas">
             <Form>frameScreenObjectMvr</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowMvrWriterUnit.pas"/>
         <DCCReference Include="framePackageMvrUnit.pas">
             <Form>framePackageMvr</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowUzfMf6Unit.pas"/>
         <DCCReference Include="framePackageUzfMf6Unit.pas">
             <Form>framePackageUzfMf6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectUzfMf6Unit.pas">
             <Form>frameScreenObjectUzfMf6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowUzfMf6WriterUnit.pas"/>
         <DCCReference Include="Mt3dLktUnit.pas"/>
         <DCCReference Include="frameMt3dLktPkgUnit.pas">
             <Form>frameMt3dLktPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectLktUnit.pas">
             <Form>frameScreenObjectLkt</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="JediMath\Basics\JmBasics.pas"/>
         <DCCReference Include="JediMath\Basics\JmFloatMatrix.pas"/>
@@ -1501,10 +1639,12 @@
         <DCCReference Include="frameScreenObjectMt3dSftUnit.pas">
             <Form>frameScreenObjectMt3dSft</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameMt3dSftUnit.pas">
             <Form>frameMt3dSftPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dSftWriterUnit.pas"/>
         <DCCReference Include="frmSimplifyObjectsCriteriaUnit.pas">
@@ -1513,6 +1653,7 @@
         <DCCReference Include="frameMt3dCtsPkgUnit.pas">
             <Form>frameMt3dCtsPkg</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Mt3dCtsSystemUnit.pas"/>
         <DCCReference Include="frmContaminantTreatmentSystemsUnit.pas">
@@ -1521,6 +1662,7 @@
         <DCCReference Include="frameAvailableObjectsUnit.pas">
             <Form>frameAvailableObjects</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmEditSelectedWellsUnit.pas">
             <Form>frmEditSelectedWells</Form>
@@ -1532,15 +1674,18 @@
         <DCCReference Include="framePackageCsubUnit.pas">
             <Form>framePackageCsub</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowCsubUnit.pas"/>
         <DCCReference Include="frameScreenObjectTabbedUnit.pas">
             <Form>frameScreenObjectTabbed</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frameScreenObjectCSubUnit.pas">
             <Form>frameScreenObjectCSub</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="ModflowCSubWriterUnit.pas"/>
         <DCCReference Include="ModflowCSubInterbed.pas"/>
@@ -1552,17 +1697,20 @@
         <DCCReference Include="framePestObsUnit.pas">
             <Form>framePestObs</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="PestGlobalComparisonScriptWriterUnit.pas"/>
         <DCCReference Include="frameSubPestObsUnit.pas">
             <Form>frameSubPestObs</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="InterpolatedObsCellUnit.pas"/>
         <DCCReference Include="SutraPestObsUnit.pas"/>
         <DCCReference Include="framePestObsCaptionedUnit.pas">
             <Form>framePestObsCaptioned</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="SutraPestObsWriterUnit.pas"/>
         <DCCReference Include="frmManageSutraBoundaryObservationsUnit.pas">
@@ -1571,6 +1719,7 @@
         <DCCReference Include="framePestObsMf6Unit.pas">
             <Form>framePestObsMf6</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="PestObsExtractorInputWriterUnit.pas"/>
         <DCCReference Include="PestPropertiesUnit.pas"/>
@@ -1583,6 +1732,7 @@
         <DCCReference Include="frameParentChildUnit.pas">
             <Form>frameParentChild</Form>
             <DesignClass>TFrame</DesignClass>
+			 <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmRunPestUnit.pas">
             <Form>frmRunPest</Form>

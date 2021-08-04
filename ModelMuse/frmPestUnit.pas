@@ -19,6 +19,7 @@ type
     pogcTarget, pogcFileName);
   TPilotPointColumns = (ppcX, ppcY);
   TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName);
+  TParetoColumns = (pcName, pcReport);
 
   TUndoPestOptions = class(TCustomUndo)
   private
@@ -288,6 +289,33 @@ type
     lblRelativeImprovementCriterion: TLabel;
     seNumberOfPredictionsToCompare: TJvSpinEdit;
     lblNumberOfPredictionsToCompare: TLabel;
+    jvspPareto1: TJvStandardPage;
+    comboParetoGroup: TComboBox;
+    lblParetoGroup: TLabel;
+    rdeInitialParetoWeight: TRbwDataEntry;
+    lblInitialParetoWeight: TLabel;
+    rdeFinalParetoWeight: TRbwDataEntry;
+    lblFinalParetoWeight: TLabel;
+    seParetoIncrements: TJvSpinEdit;
+    lblParetoIncrements: TLabel;
+    seInitialIterationCount: TJvSpinEdit;
+    lblInitialIterationCount: TLabel;
+    seIntermediateIterationCount: TJvSpinEdit;
+    lblIntermediateIterationCount: TLabel;
+    seFinalIterationCount: TJvSpinEdit;
+    lblFinalIterationCount: TLabel;
+    Panel7: TPanel;
+    jsvpPareto2: TJvStandardPage;
+    cbAltTerminationOption: TCheckBox;
+    comboObservationName: TComboBox;
+    lblObservationName: TLabel;
+    comboAltDirection: TComboBox;
+    lblAltDirection: TLabel;
+    rdeAltThreshold: TRbwDataEntry;
+    lblAltThreshold: TLabel;
+    seAltIterations: TJvSpinEdit;
+    lblAltIterations: TLabel;
+    rdgObservationsToReport: TRbwDataGrid4;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -449,6 +477,7 @@ resourcestring
   StrWhenThePrediction = 'When the prediction analysis mode is used, there m' +
   'ust be an observation group named "predict" with exactly one observation ' +
   'assigned to it.';
+//  StrObservationsToMoni = 'Observations to monitor (OBS_REPORT_[N])';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -1239,6 +1268,20 @@ begin
         break;
       end;
     end;
+//    if not PredictGroupFound then
+//    begin
+//      Grid := framePriorInfoObservationGroups.Grid;
+//      PredictGroupFound := False;
+//      for ObsGroupIndex := 0 to framePriorInfoObservationGroups.seNumber.AsInteger - 1 do
+//      begin
+//        GroupName := LowerCase(Grid.Cells[Ord(pogcName), ObsGroupIndex + 1]);
+//        if GroupName = 'predict' then
+//        begin
+//          PredictGroupFound := True;
+//          break;
+//        end;
+//      end;
+//    end;
     if not PredictGroupFound then
     begin
       result := False;
@@ -1259,7 +1302,7 @@ begin
           AnObs := TCustomObservationItem(AnObject);
           if ObsGroup <> nil then
           begin
-            if SameText(ObsGroup.ObsGroupName, 'predict') then
+            if SameText(AnObs.ObservationGroup, 'predict') then
             begin
               Inc(PredictCount);
             end;
@@ -1270,7 +1313,7 @@ begin
           FluxObs := TFluxObservationGroup(AnObject);
           if ObsGroup <> nil then
           begin
-            if SameText(ObsGroup.ObsGroupName, 'predict') then
+            if SameText(FluxObs.ObservationGroup, 'predict') then
             begin
               Inc(PredictCount);
             end;
@@ -1281,7 +1324,7 @@ begin
           HobItem := AnObject as THobItem;
           if ObsGroup <> nil then
           begin
-            if SameText(ObsGroup.ObsGroupName, 'predict') then
+            if SameText(HobItem.ObservationGroup, 'predict') then
             begin
               Inc(PredictCount);
             end;
@@ -1388,8 +1431,22 @@ begin
         break;
       end;
     end;
+//    if not PredictGroupFound then
+//    begin
+//      Grid := framePriorInfoObservationGroups.Grid;
+//      for ObsGroupIndex := 0 to framePriorInfoObservationGroups.seNumber.AsInteger - 1 do
+//      begin
+//        GroupName := LowerCase(Grid.Cells[Ord(pogcName), ObsGroupIndex + 1]);
+//        if GroupName = 'predict' then
+//        begin
+//          PredictGroupFound := True;
+//          break;
+//        end;
+//      end;
+//    end;
     if not PredictGroupFound then
     begin
+      Grid := frameObservationGroups.Grid;
       frameObservationGroups.seNumber.AsInteger :=
         frameObservationGroups.seNumber.AsInteger +1;
       Grid.Cells[Ord(pogcName), frameObservationGroups.seNumber.AsInteger] := 'predict';
@@ -1567,6 +1624,9 @@ begin
   rdgPriorInfoVertContinuity.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
   rdgPriorInfoVertContinuity.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
 
+  rdgObservationsToReport.Cells[Ord(pcName), 0] := 'Observations';
+  rdgObservationsToReport.Cells[Ord(pcReport), 0] := 'Generate report';
+//  frameParetoParameters.Grid.Cells[0,0] := StrObservationsToMoni;
   GetData;
 end;
 
@@ -1748,7 +1808,6 @@ var
   PestControlData: TPestControlData;
   SvdProperties: TSingularValueDecompositionProperties;
   LsqrProperties: TLsqrProperties;
-//  ObsGroups: TPestObservationGroups;
   ItemIndex: Integer;
   ObsGroup: TPestObservationGroup;
   index: Integer;
@@ -1765,7 +1824,6 @@ var
   FNewHobItem: THobItem;
   PointItem: TPointItem;
   Regularization: TPestRegularization;
-//  ObsGroupFrame: TframeGrid;
   EditedObsGroups: TPestObservationGroups;
   TreeFrame: TframeParentChild;
   UsedTypes: TParameterTypes;
@@ -1773,12 +1831,15 @@ var
   ArrayParamList: TList<TModflowSteadyParameter>;
   PIndex: Integer;
   AParam: TModflowParameter;
-//  PickList: TStrings;
-//  ObsGroupIndex: Integer;
   ASteadyParam: TModflowSteadyParameter;
   PickList: TStrings;
   ObsIndex: Integer;
   PredictionProperties: TPredictionProperties;
+  ParetoProperties: TParetoProperties;
+  ObsGroupIndex: Integer;
+  ObsNames: TStringList;
+  ObsGroupNames: TStringList;
+  ParetoGroup: TCaption;
   procedure SetPriorInfoObsGroupPicklist(Grid: TRbwDataGrid4);
   var
     PickList: TStrings;
@@ -1793,7 +1854,6 @@ var
       PickList.AddObject(ObsGroup.ObsGroupName, ObsGroup);
     end;
   end;
-//  InvalidateModelEvent: TNotifyEvent;
 begin
   Locations := frmGoPhast.PhastModel.ProgramLocations;
 
@@ -2182,6 +2242,65 @@ begin
   rdeRelativeImprovementCriterion.RealValue := PredictionProperties.RelativeImprovementCriterion;
   seNumberOfPredictionsToCompare.AsInteger := PredictionProperties.NumberOfPredictionsToCompare;
   {$ENDREGION}
+
+  ParetoProperties := PestProperties.ParetoProperties;
+  ObsGroupNames := TStringList.Create;
+  try
+    ObsGroupNames.CaseSensitive := False;
+    for ObsGroupIndex := 0 to FLocalObsGroups.Count - 1 do
+    begin
+      ObsGroup := FLocalObsGroups[ObsGroupIndex];
+      ObsGroupNames.AddObject(ObsGroup.ObsGroupName, ObsGroup);
+    end;
+    comboParetoGroup.Items.Assign(ObsGroupNames);
+    comboParetoGroup.ItemIndex :=
+      ObsGroupNames.IndexOf(ParetoProperties.ParetoGroupName);
+    ParetoGroup := comboParetoGroup.Text;
+
+    if ParetoGroup <> '' then
+    begin
+      rdgObservationsToReport.BeginUpdate;
+      ObsNames := TStringList.Create;
+      try
+        ObsNames.CaseSensitive := False;
+        for index := 0 to FObsList.Count - 1 do
+        begin
+          AnObs := FObsList[index];
+          if SameText(AnObs.ObservationGroup, ParetoGroup) then
+          begin
+            ObsNames.AddObject(AnObs.Name, AnObs);
+          end;
+        end;
+        rdgObservationsToReport.RowCount := Min(2, ObsNames.Count+1);
+        for ObsIndex := 0 to ObsNames.Count - 1 do
+        begin
+          rdgObservationsToReport.Cells[Ord(pcReport), ObsIndex+1]
+            := ObsNames[ObsIndex];
+          rdgObservationsToReport.Checked[Ord(pcReport), ObsIndex+1]
+            := ParetoProperties.ObservationsToReport.IndexOf(ObsNames[ObsIndex]) >= 0;
+        end;
+
+        comboObservationName.Items := ObsNames;
+        comboObservationName.ItemIndex :=
+          ObsNames.IndexOf(ParetoProperties.ObservationName)
+      finally
+        ObsNames.Free;
+        rdgObservationsToReport.EndUpdate;
+      end;
+    end;
+  finally
+    ObsGroupNames.Free;
+  end;
+  rdeInitialParetoWeight.RealValue := ParetoProperties.InitialParetoWeight;
+  rdeFinalParetoWeight.RealValue := ParetoProperties.FinalParetoWeight;
+  seParetoIncrements.AsInteger := ParetoProperties.ParetoIncrements;
+  seInitialIterationCount.AsInteger := ParetoProperties.InitialIterationCount;
+  seIntermediateIterationCount.AsInteger := ParetoProperties.IntermediateIterationCount;
+  seFinalIterationCount.AsInteger := ParetoProperties.FinalIterationCount;
+  cbAltTerminationOption.Checked := Boolean(ParetoProperties.AltTerminationOption);
+  comboAltDirection.ItemIndex := Ord(ParetoProperties.AltDirection);
+  rdeAltThreshold.RealValue := ParetoProperties.AltThreshold;
+  seAltIterations.AsInteger := ParetoProperties.AltIterations;
 end;
 
 function TfrmPEST.GetIREGADJ: Integer;
@@ -2735,12 +2854,19 @@ var
   Group: TPestObservationGroup;
   OtherGroup: TPestObservationGroup;
   TreeNode: TTreeNode;
+  OldGroupName: string;
+  NewGroupName: string;
+  ParetoGroupIndex: Integer;
+  ExistingIndex: Integer;
 begin
+  OldGroupName := '';
+  NewGroupName := '';
   if (ARow >= Grid.FixedRows) and (ACol = Ord(pogcName)) then
   begin
     Group := Grid.Objects[ACol, ARow] as TPestObservationGroup;
     if Group <> nil then
     begin
+      OldGroupName := Group.ObsGroupName;
       if FGroupNameDictionary.TryGetValue(UpperCase(Group.ObsGroupName), OtherGroup) then
       begin
         if Group = OtherGroup then
@@ -2759,6 +2885,13 @@ begin
       if FGroupDictionary.TryGetValue(Group, TreeNode) then
       begin
         TreeNode.Text := Group.ObsGroupName;
+      end;
+      ParetoGroupIndex := comboParetoGroup.Items.IndexOfObject(Group);
+      if ParetoGroupIndex >=0 then
+      begin
+        ExistingIndex := comboParetoGroup.ItemIndex;
+        comboParetoGroup.Items[ParetoGroupIndex] := Group.ObsGroupName;
+        comboParetoGroup.ItemIndex := ExistingIndex;
       end;
     end;
   end;

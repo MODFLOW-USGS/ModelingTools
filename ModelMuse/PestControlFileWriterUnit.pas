@@ -39,7 +39,7 @@ type
     procedure WritePriorInformation;
     procedure WritePredictiveAnalysis;
     procedure WriteRegularisation;
-    // @name is not currently supported. Section 13
+    // Section 13
     procedure WritePareto;
     // NPAR
     function NumberOfParameters: Integer;
@@ -1492,44 +1492,10 @@ var
   end;
 begin
   WriteSectionHeader('observation groups');
-//  ObservationGroups := Model.PestProperties.ObservationGroups;
   Mode := Model.PestProperties.PestControlData.PestMode;
   WriteObsGroups(Model.PestProperties.ObservationGroups);
   WriteObsGroups(Model.PestProperties.PriorInfoObservationGroups);
-//  for ObsGrpIndex := 0 to ObservationGroups.Count - 1 do
-//  begin
-//    ObsGroup := ObservationGroups[ObsGrpIndex];
-//    if ObsGroup.IsRegularizationGroup then
-//    begin
-//      WriteString(StrRegul);
-//      WriteString(Copy(ObsGroup.ObsGroupName,1,7));
-//      if Length(ObsGroup.ObsGroupName) > 7 then
-//      begin
-//        frmErrorsAndWarnings.AddWarning(Model, StrObservationGroupNa,
-//          Format(StrTheNamesOfSHas, [ObsGroup.ObsGroupName]))
-//      end;
-//    end
-//    else
-//    begin
-//      WriteString(ObsGroup.ObsGroupName);
-//    end;
-//    if Mode = pmRegularisation then
-//    begin
-//      if ObsGroup.UseGroupTarget then
-//      begin
-//        WriteFloat(ObsGroup.GroupTarget);
-//      end;
-//    end;
-//    if ObsGroup. AbsoluteCorrelationFileName <> '' then
-//    begin
-//      CorrelationFileName := ' ' + ExtractRelativePath(FNameOfFile, ObsGroup.AbsoluteCorrelationFileName);
-//      WriteString(CorrelationFileName);
-//    end;
-//    NewLine;
-//  end;
   NewLine;
-
-//  Model.PestProperties.PriorInfoObservationGroups
 end;
 
 procedure TPestControlFileWriter.WriteObservations;
@@ -1971,8 +1937,58 @@ begin
 end;
 
 procedure TPestControlFileWriter.WritePareto;
+var
+  ParetoProperties: TParetoProperties;
+  ObsIndex: Integer;
 begin
-// The Pareto section is not currently supported.
+  if Model.PestProperties.PestControlData.PestMode <> pmPareto then
+  begin
+    Exit;
+  end;
+  WriteSectionHeader('pareto');
+  ParetoProperties := Model.PestProperties.ParetoProperties;
+
+  WriteFloat(ParetoProperties.InitialParetoWeight);
+  WriteFloat(ParetoProperties.FinalParetoWeight);
+  WriteInteger(ParetoProperties.ParetoIncrements);
+  NewLine;
+
+  WriteInteger(ParetoProperties.InitialIterationCount);
+  WriteInteger(ParetoProperties.IntermediateIterationCount);
+  WriteInteger(ParetoProperties.FinalIterationCount);
+  NewLine;
+
+  WriteInteger(Ord(ParetoProperties.AltTerminationOption));
+  NewLine;
+
+  if ParetoProperties.AltTerminationOption = atoUse then
+  begin
+    WriteString(ParetoProperties.ObservationName);
+    case ParetoProperties.AltDirection of
+      adAbove:
+        begin
+          WriteString(' above');
+        end;
+      adBelow:
+        begin
+          WriteString(' below');
+        end;
+      else
+        Assert(False);
+    end;
+    WriteFloat(ParetoProperties.AltThreshold);
+    WriteInteger(ParetoProperties.AltIterations);
+    NewLine;
+  end;
+
+  WriteInteger(ParetoProperties.ObservationsToReport.Count);
+  NewLine;
+
+  for ObsIndex := 0 to ParetoProperties.ObservationsToReport.Count - 1 do
+  begin
+    WriteString(' ' + ParetoProperties.ObservationsToReport[ObsIndex]);
+  end;
+  NewLine;
 end;
 
 procedure TPestControlFileWriter.WritePredictiveAnalysis;

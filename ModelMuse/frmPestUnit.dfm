@@ -33,7 +33,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspPrediction1
+    ActivePage = jsvpPareto2
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1179,6 +1179,7 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitLeft = 1
           ExplicitWidth = 566
           ExplicitHeight = 402
         end
@@ -2817,6 +2818,307 @@ inherited frmPEST: TfrmPEST
         MinValue = 2.000000000000000000
         Value = 2.000000000000000000
         TabOrder = 3
+      end
+    end
+    object jvspPareto1: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 566
+      Height = 443
+      Caption = 'jvspPareto1'
+      object Panel7: TPanel
+        Left = 0
+        Top = 0
+        Width = 566
+        Height = 289
+        Align = alTop
+        BevelOuter = bvNone
+        Caption = 'Panel7'
+        TabOrder = 0
+        ExplicitLeft = 1
+        object lblFinalIterationCount: TLabel
+          Left = 79
+          Top = 243
+          Width = 388
+          Height = 36
+          Caption = 
+            'Number of optimisation iterations with final weight factor (NUM_' +
+            'ITER_FIN)'
+          WordWrap = True
+        end
+        object lblFinalParetoWeight: TLabel
+          Left = 157
+          Top = 96
+          Width = 391
+          Height = 18
+          Caption = 'Pareto group final weight factor (PARETO_WTFAC_FIN)'
+          WordWrap = True
+        end
+        object lblInitialIterationCount: TLabel
+          Left = 79
+          Top = 156
+          Width = 396
+          Height = 36
+          Caption = 
+            'Number of optimisation iterations with initial weight factor (NU' +
+            'M_ITER_START)'
+          WordWrap = True
+        end
+        object lblInitialParetoWeight: TLabel
+          Left = 157
+          Top = 51
+          Width = 227
+          Height = 36
+          Caption = 'Pareto group initial weight factor (PARETO_WTFAC_START)'
+          WordWrap = True
+        end
+        object lblIntermediateIterationCount: TLabel
+          Left = 79
+          Top = 201
+          Width = 455
+          Height = 36
+          Caption = 
+            'Number of optimisation iterations with intermediate weight facto' +
+            'rs (NUM_ITER_GEN)'
+          WordWrap = True
+        end
+        object lblParetoGroup: TLabel
+          Left = 157
+          Top = 19
+          Width = 354
+          Height = 18
+          Caption = 'Pareto observation group (PARETO_OBSGROUP)'
+        end
+        object lblParetoIncrements: TLabel
+          Left = 79
+          Top = 124
+          Width = 349
+          Height = 18
+          Caption = 'Number of Pareto increments (NUM_WTFAC_INT)'
+        end
+        object comboParetoGroup: TComboBox
+          Left = 6
+          Top = 16
+          Width = 145
+          Height = 26
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object rdeFinalParetoWeight: TRbwDataEntry
+          Left = 6
+          Top = 93
+          Width = 145
+          Height = 22
+          TabOrder = 1
+          Text = '0'
+          DataType = dtReal
+          Max = 1.000000000000000000
+          CheckMin = True
+          ChangeDisabledColor = True
+        end
+        object rdeInitialParetoWeight: TRbwDataEntry
+          Left = 6
+          Top = 48
+          Width = 145
+          Height = 22
+          TabOrder = 2
+          Text = '0'
+          DataType = dtReal
+          Max = 1.000000000000000000
+          CheckMin = True
+          ChangeDisabledColor = True
+        end
+        object seFinalIterationCount: TJvSpinEdit
+          Left = 6
+          Top = 243
+          Width = 67
+          Height = 26
+          MaxValue = 2147483647.000000000000000000
+          TabOrder = 3
+        end
+        object seInitialIterationCount: TJvSpinEdit
+          Left = 6
+          Top = 153
+          Width = 67
+          Height = 26
+          CheckMinValue = True
+          TabOrder = 4
+        end
+        object seIntermediateIterationCount: TJvSpinEdit
+          Left = 6
+          Top = 198
+          Width = 67
+          Height = 26
+          MaxValue = 2147483647.000000000000000000
+          MinValue = 1.000000000000000000
+          Value = 1.000000000000000000
+          TabOrder = 5
+        end
+        object seParetoIncrements: TJvSpinEdit
+          Left = 6
+          Top = 121
+          Width = 67
+          Height = 26
+          MaxValue = 2147483647.000000000000000000
+          MinValue = 1.000000000000000000
+          Value = 1.000000000000000000
+          TabOrder = 6
+        end
+      end
+      object rdgObservationsToReport: TRbwDataGrid4
+        Left = 0
+        Top = 289
+        Width = 566
+        Height = 154
+        Align = alClient
+        ColCount = 2
+        FixedCols = 1
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
+        TabOrder = 1
+        ExtendedAutoDistributeText = False
+        AutoMultiEdit = False
+        AutoDistributeText = False
+        AutoIncreaseColCount = False
+        AutoIncreaseRowCount = False
+        SelectedRowOrColumnColor = clAqua
+        UnselectableColor = clBtnFace
+        ColorRangeSelection = False
+        Columns = <
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4String
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4Boolean
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = False
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
+          end>
+        WordWrapRowCaptions = False
+        ExplicitLeft = 1
+      end
+    end
+    object jsvpPareto2: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 566
+      Height = 443
+      Caption = 'jsvpPareto2'
+      ExplicitLeft = 1
+      object lblObservationName: TLabel
+        Left = 157
+        Top = 42
+        Width = 379
+        Height = 18
+        Caption = 'Observation used to halt Pareto analysis (OBS_TERM)'
+      end
+      object lblAltDirection: TLabel
+        Left = 157
+        Top = 74
+        Width = 400
+        Height = 36
+        Caption = 'Condition requited to halt Pareto analysis (ABOVE_OR_BELOW)'
+        WordWrap = True
+      end
+      object lblAltThreshold: TLabel
+        Left = 157
+        Top = 119
+        Width = 403
+        Height = 18
+        Caption = 'Threshold for terminating Pareto analysis (OBS_THRESH)'
+      end
+      object lblAltIterations: TLabel
+        Left = 71
+        Top = 147
+        Width = 482
+        Height = 36
+        Caption = 
+          'Number of optimization iterations for terminating Pareto analysi' +
+          's (ITER_THRESH)'
+        WordWrap = True
+      end
+      object cbAltTerminationOption: TCheckBox
+        Left = 6
+        Top = 16
+        Width = 539
+        Height = 17
+        Caption = 'Terminate Pareto analysis based on observation value (ALT_TERM)'
+        TabOrder = 0
+      end
+      object comboObservationName: TComboBox
+        Left = 6
+        Top = 39
+        Width = 145
+        Height = 26
+        Style = csDropDownList
+        TabOrder = 1
+      end
+      object comboAltDirection: TComboBox
+        Left = 6
+        Top = 71
+        Width = 145
+        Height = 26
+        Style = csDropDownList
+        TabOrder = 2
+        Items.Strings = (
+          'above'
+          'below')
+      end
+      object rdeAltThreshold: TRbwDataEntry
+        Left = 6
+        Top = 116
+        Width = 145
+        Height = 22
+        TabOrder = 3
+        Text = '0'
+        DataType = dtReal
+        Max = 1.000000000000000000
+        ChangeDisabledColor = True
+      end
+      object seAltIterations: TJvSpinEdit
+        Left = 6
+        Top = 144
+        Width = 59
+        Height = 26
+        TabOrder = 4
       end
     end
   end

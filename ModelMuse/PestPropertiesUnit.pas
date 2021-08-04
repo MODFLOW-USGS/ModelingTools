@@ -621,6 +621,7 @@ type
   // 0 or 1
   TPredictiveNoise = (pnNoNoise, pnUseNoise);
 
+  // PEST documentation Section 8.
   TPredictionProperties = class(TGoPhastPersistent)
   private
     FStoredAcceptedPhi: TRealStorage;
@@ -787,6 +788,102 @@ type
       read FNumberOfPredictionsToCompare write SetNumberOfPredictionsToCompare;
   end;
 
+  TAltTerminationOption = (atoDontUse, atoUse);
+  TAltDirection = (adAbove, adBelow);
+
+  // PEST documentation Section 13
+  TParetoProperties = class(TGoPhastPersistent)
+  private
+    FObservationsToReport: TStrings;
+    FParetoIncrements: Integer;
+    FParetoGroupName: string;
+    FAltTerminationOption: TAltTerminationOption;
+    FAltDirection: TAltDirection;
+    FInitialIterationCount: Integer;
+    FObservationName: string;
+    FStoredInitialParetoWeight: TRealStorage;
+    FAltIterations: Integer;
+    FFinalIterationCount: Integer;
+    FIntermediateIterationCount: Integer;
+    FStoredAltThreshold: TRealStorage;
+    FStoredFinalParetoWeight: TRealStorage;
+    procedure SetAltDirection(const Value: TAltDirection);
+    procedure SetAltIterations(const Value: Integer);
+    procedure SetAltTerminationOption(const Value: TAltTerminationOption);
+    procedure SetStoredAltThreshold(const Value: TRealStorage);
+    procedure SetFinalIterationCount(const Value: Integer);
+    procedure SetStoredFinalParetoWeight(const Value: TRealStorage);
+    procedure SetInitialIterationCount(const Value: Integer);
+    procedure SetStoredInitialParetoWeight(const Value: TRealStorage);
+    procedure SetIntermediateIterationCount(const Value: Integer);
+    procedure SetObservationName(const Value: string);
+    procedure SetObservationsToReport(const Value: TStrings);
+    procedure SetParetoGroupName(const Value: string);
+    procedure SetParetoIncrements(const Value: Integer);
+    function GetAltThreshold: double;
+    function GetFinalParetoWeight: double;
+    function GetInitialParetoWeight: double;
+    procedure SetAltThreshold(const Value: double);
+    procedure SetFinalParetoWeight(const Value: double);
+    procedure SetInitialParetoWeight(const Value: double);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    procedure Assign(Source: TPersistent); override;
+    Destructor Destroy; override;
+    procedure InitializeVariables;
+    // PARETO_WTFAC_START
+    // Typical value = 0;
+    property InitialParetoWeight: double read GetInitialParetoWeight
+      write SetInitialParetoWeight;
+    // PARETO_WTFAC_FIN
+    // Typical value = 1;
+    property FinalParetoWeight: double read GetFinalParetoWeight
+      write SetFinalParetoWeight;
+    // OBS_THRESH
+    property AltThreshold: double read GetAltThreshold write SetAltThreshold;
+  published
+    // PARETO_OBSGROUP
+    property ParetoGroupName: string read FParetoGroupName
+      write SetParetoGroupName;
+    // PARETO_WTFAC_START
+    // Typical value = 0;
+    property StoredInitialParetoWeight: TRealStorage
+      read FStoredInitialParetoWeight write SetStoredInitialParetoWeight;
+    // PARETO_WTFAC_FIN
+    // Typical value = 1;
+    property StoredFinalParetoWeight: TRealStorage read FStoredFinalParetoWeight
+      write SetStoredFinalParetoWeight;
+    // NUM_WTFAC_INC
+    // use 10 as initial value?
+    property ParetoIncrements: Integer read FParetoIncrements
+      write SetParetoIncrements;
+    // NUM_ITER_START
+    property InitialIterationCount: Integer read FInitialIterationCount
+      write SetInitialIterationCount;
+    // NUM_ITER_GEN
+    property IntermediateIterationCount: Integer
+      read FIntermediateIterationCount write SetIntermediateIterationCount;
+    // NUM_ITER_FIN
+    property FinalIterationCount: Integer read FFinalIterationCount
+      write SetFinalIterationCount;
+    // ALT_TERM
+    property AltTerminationOption: TAltTerminationOption
+      read FAltTerminationOption write SetAltTerminationOption Stored True;
+    // OBS_TERM
+    property ObservationName: string read FObservationName
+      write SetObservationName;
+    // ABOVE_OR_BELOW
+    property AltDirection: TAltDirection read FAltDirection
+      write SetAltDirection Stored True;
+    // OBS_THRESH
+    property StoredAltThreshold: TRealStorage read FStoredAltThreshold
+      write SetStoredAltThreshold;
+    // NUM_ITER_THRESH
+    property AltIterations: Integer read FAltIterations write SetAltIterations;
+    // NOBS_REPORT, OBS_REPORT_1, OBS_REPORT_2, etc.
+    property ObservationsToReport: TStrings read FObservationsToReport
+      write SetObservationsToReport;
+  end;
 
   TArrayPilotPointSelection = (appsNone, appsRectangular, appsTriangular);
 
@@ -821,6 +918,7 @@ type
     FUseVertSpatialContinuityPriorInfo: Boolean;
     FArrayTemplateCharacter: Char;
     FPredictionProperties: TPredictionProperties;
+    FParetoProperties: TParetoProperties;
     procedure SetTemplateCharacter(const Value: Char);
     procedure SetExtendedTemplateCharacter(const Value: Char);
     function GetPilotPointSpacing: double;
@@ -858,6 +956,7 @@ type
     procedure SetUseVertSpatialContinuityPriorInfo(const Value: Boolean);
     procedure SetArrayTemplateCharacter(const Value: Char);
     procedure SetPredictionProperties(const Value: TPredictionProperties);
+    procedure SetParetoProperties(const Value: TParetoProperties);
   public
     Constructor Create(Model: TBaseModel);
     procedure Assign(Source: TPersistent); override;
@@ -923,7 +1022,10 @@ type
     property UseVertSpatialContinuityPriorInfo: Boolean
       read FUseVertSpatialContinuityPriorInfo
       write SetUseVertSpatialContinuityPriorInfo;
-    property PredictionProperties: TPredictionProperties read FPredictionProperties write SetPredictionProperties;
+    property PredictionProperties: TPredictionProperties
+      read FPredictionProperties write SetPredictionProperties;
+    property ParetoProperties: TParetoProperties read FParetoProperties
+      write SetParetoProperties;
   end;
 
 implementation
@@ -967,6 +1069,7 @@ begin
     MaxPilotPointsInRange := PestSource.MaxPilotPointsInRange;
     UseVertSpatialContinuityPriorInfo := PestSource.UseVertSpatialContinuityPriorInfo;
     PredictionProperties := PestSource.PredictionProperties;
+    ParetoProperties := PestSource.ParetoProperties;
   end
   else
   begin
@@ -1007,11 +1110,13 @@ begin
   FBetweenObservationsPilotPoints := TSimplePointCollection.Create;
   FRegularization := TPestRegularization.Create(InvalidateModelEvent);
   FPredictionProperties := TPredictionProperties.Create(InvalidateModelEvent);
+  FParetoProperties := TParetoProperties.Create(InvalidateModelEvent);
   InitializeVariables;
 end;
 
 destructor TPestProperties.Destroy;
 begin
+  FParetoProperties.Free;
   FPredictionProperties.Free;
   FRegularization.Free;
   FBetweenObservationsPilotPoints.Free;
@@ -1255,6 +1360,7 @@ begin
   FLsqrProperties.InitializeVariables;
   Regularization.InitializeVariables;
   PredictionProperties.InitializeVariables;
+  ParetoProperties.InitializeVariables;
 
   FPriorInfoObservatioGroups.Clear;
   FObservatioGroups.Clear;
@@ -1307,6 +1413,11 @@ procedure TPestProperties.SetObservatioGroups(
   const Value: TPestObservationGroups);
 begin
   FObservatioGroups.Assign(Value);
+end;
+
+procedure TPestProperties.SetParetoProperties(const Value: TParetoProperties);
+begin
+  FParetoProperties.Assign(Value);
 end;
 
 procedure TPestProperties.SetPestControlData(const Value: TPestControlData);
@@ -2844,6 +2955,183 @@ end;
 procedure TPredictionProperties.SetUpdateLineSearchFactor(const Value: double);
 begin
   StoredUpdateLineSearchFactor.Value := Value;
+end;
+
+{ TParetoProperties }
+
+procedure TParetoProperties.Assign(Source: TPersistent);
+var
+  SourcePProp: TParetoProperties;
+begin
+  if Source is TParetoProperties then
+  begin
+    SourcePProp := TParetoProperties(Source);
+    InitialParetoWeight := SourcePProp.InitialParetoWeight;
+    FinalParetoWeight := SourcePProp.FinalParetoWeight;
+    AltThreshold := SourcePProp.AltThreshold;
+    ParetoGroupName := SourcePProp.ParetoGroupName;
+    ParetoIncrements := SourcePProp.ParetoIncrements;
+    IntermediateIterationCount := SourcePProp.IntermediateIterationCount;
+    InitialIterationCount := SourcePProp.InitialIterationCount;
+    FinalIterationCount := SourcePProp.FinalIterationCount;
+    AltTerminationOption := SourcePProp.AltTerminationOption;
+    ObservationName := SourcePProp.ObservationName;
+    AltDirection := SourcePProp.AltDirection;
+    AltIterations := SourcePProp.AltIterations;
+    ObservationsToReport := SourcePProp.ObservationsToReport;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+constructor TParetoProperties.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited;
+  FObservationsToReport := TStringList.Create;
+  FStoredInitialParetoWeight := TRealStorage.Create;
+  FStoredAltThreshold := TRealStorage.Create;
+  FStoredFinalParetoWeight := TRealStorage.Create;
+
+  (FObservationsToReport as TStringList).OnChange := InvalidateModelEvent;
+  (FObservationsToReport as TStringList).CaseSensitive := False;
+  FStoredInitialParetoWeight.OnChange := InvalidateModelEvent;
+  FStoredAltThreshold.OnChange := InvalidateModelEvent;
+  FStoredFinalParetoWeight.OnChange := InvalidateModelEvent;
+
+  InitializeVariables;
+end;
+
+destructor TParetoProperties.Destroy;
+begin
+  FObservationsToReport.Free;
+  FStoredInitialParetoWeight.Free;
+  FStoredAltThreshold.Free;
+  FStoredFinalParetoWeight.Free;
+
+  inherited;
+end;
+
+function TParetoProperties.GetAltThreshold: double;
+begin
+  result := StoredAltThreshold.Value;
+end;
+
+function TParetoProperties.GetFinalParetoWeight: double;
+begin
+  result := StoredFinalParetoWeight.Value;
+end;
+
+function TParetoProperties.GetInitialParetoWeight: double;
+begin
+  result := StoredInitialParetoWeight.Value;
+end;
+
+procedure TParetoProperties.InitializeVariables;
+begin
+  InitialParetoWeight := 0;
+  FinalParetoWeight := 1;
+  AltThreshold := 0;
+  ParetoGroupName := '';
+  ParetoIncrements := 10;
+  InitialIterationCount := 0;
+  IntermediateIterationCount := 1;
+  FinalIterationCount := 0;
+  AltTerminationOption := atoDontUse;
+  ObservationName := '';
+  AltDirection := adAbove;
+  AltIterations := 1;
+  ObservationsToReport.Clear;
+end;
+
+procedure TParetoProperties.SetAltDirection(const Value: TAltDirection);
+begin
+  if FAltDirection <> Value then
+  begin
+    FAltDirection := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TParetoProperties.SetAltIterations(const Value: Integer);
+begin
+  SetIntegerProperty(FAltIterations, Value);
+end;
+
+procedure TParetoProperties.SetAltTerminationOption(
+  const Value: TAltTerminationOption);
+begin
+  if FAltTerminationOption <> Value then
+  begin
+    FAltTerminationOption := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TParetoProperties.SetAltThreshold(const Value: double);
+begin
+  StoredAltThreshold.Value := Value;
+end;
+
+procedure TParetoProperties.SetStoredAltThreshold(const Value: TRealStorage);
+begin
+  FStoredAltThreshold.Assign(Value);
+end;
+
+procedure TParetoProperties.SetFinalIterationCount(const Value: Integer);
+begin
+  SetIntegerProperty(FFinalIterationCount, Value);
+end;
+
+procedure TParetoProperties.SetFinalParetoWeight(const Value: double);
+begin
+  StoredFinalParetoWeight.Value := Value;
+end;
+
+procedure TParetoProperties.SetStoredFinalParetoWeight(const Value: TRealStorage);
+begin
+  FStoredFinalParetoWeight.Assign(Value);
+end;
+
+procedure TParetoProperties.SetInitialIterationCount(const Value: Integer);
+begin
+  SetIntegerProperty(FInitialIterationCount, Value);
+end;
+
+procedure TParetoProperties.SetInitialParetoWeight(const Value: double);
+begin
+  StoredInitialParetoWeight.Value := Value;
+end;
+
+procedure TParetoProperties.SetStoredInitialParetoWeight(const Value: TRealStorage);
+begin
+  FStoredInitialParetoWeight.Assign(Value);
+end;
+
+procedure TParetoProperties.SetIntermediateIterationCount(const Value: Integer);
+begin
+  SetIntegerProperty(FIntermediateIterationCount, Value);
+end;
+
+procedure TParetoProperties.SetObservationName(const Value: string);
+begin
+  SetStringProperty(FObservationName, Value);
+end;
+
+procedure TParetoProperties.SetObservationsToReport(const Value: TStrings);
+begin
+  FObservationsToReport.Assign(Value);
+end;
+
+procedure TParetoProperties.SetParetoGroupName(const Value: string);
+begin
+  SetStringProperty(FParetoGroupName, Value);
+end;
+
+procedure TParetoProperties.SetParetoIncrements(const Value: Integer);
+begin
+  SetIntegerProperty(FParetoIncrements, Value);
 end;
 
 initialization
