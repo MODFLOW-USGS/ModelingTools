@@ -390,6 +390,7 @@ type
     procedure rgIndividualAdjustmentMethodClick(Sender: TObject);
     procedure cbRegApplyGroupWeightClick(Sender: TObject);
     procedure comboPestModeChange(Sender: TObject);
+    procedure comboParetoGroupChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -441,10 +442,9 @@ type
     procedure CheckObsGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
     procedure CheckPriorInfoGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
     procedure SetSearchDistanceColor;
+    procedure AssignParetoObsReports(ParetoProperties: TParetoProperties);
     { Private declarations }
   public
-//    procedure btnOK1Click(Sender: TObject);
-
     { Public declarations }
   end;
 
@@ -477,6 +477,35 @@ resourcestring
   StrWhenThePrediction = 'When the prediction analysis mode is used, there m' +
   'ust be an observation group named "predict" with exactly one observation ' +
   'assigned to it.';
+  StrBasic = 'Basic';
+  StrPilotPoints = 'Pilot Points';
+  StrControlData = 'Control Data';
+  StrMode = 'Mode';
+  StrDimensions = 'Dimensions';
+  StrInversionControls1 = 'Inversion Controls 1';
+  StrParameterAdjustment = 'Parameter Adjustment Controls';
+  StrInversionControls2 = 'Inversion Controls 2';
+  StrIterationControls = 'Iteration Controls';
+  StrOutput = 'Output';
+  StrSingularValueDecom = 'Singular Value Decomposition';
+  StrLQSR = 'LQSR';
+  StrObservations = 'Observations';
+  StrObservationGroups = 'Observation Groups';
+  StrObservationGroupAs = 'Observation Group Assignments';
+  StrPriorInformation = 'Prior Information';
+  StrPriorInformationGr = 'Prior Information Groups';
+  StrInitialValuePrior = 'Initial Value Prior Information';
+  StrWithinLayerContinu = 'Within-Layer Continuity Prior Information';
+  StrBetweenLayerContin = 'Between-Layer Continuity Prior Information';
+  StrPredictionAnalysis = 'Prediction Analysis';
+  StrPredictionAnalysisC = 'Prediction Analysis Control';
+  StrPredictionAnalysisT = 'Prediction Analysis Termination';
+  StrRegularization = 'Regularization';
+  StrRegularizationContr = 'Regularization Controls';
+  StrRegularizationOptio = 'Regularization Option';
+  StrPareto = 'Pareto';
+  StrParetoControls = 'Pareto Controls';
+  StrParetoAlternateTer = 'Pareto Alternate Termination';
 //  StrObservationsToMoni = 'Observations to monitor (OBS_REPORT_[N])';
 
 type
@@ -1380,35 +1409,17 @@ begin
   end;
 end;
 
-//procedure TfrmPEST.comboObsGroupChange(Sender: TObject);
-//var
-//  AName: string;
-//  ObsIndex: Integer;
-//  AnObs: TCustomObservationItem;
-//begin
-//  inherited;
-//  if comboObsGroup.ItemIndex >= 0 then
-//  begin
-//    AName := comboObsGroup.Text;
-//    frameObsGroupAssignments.lbSrcObjects.Items.BeginUpdate;
-//    frameObsGroupAssignments.lbDstObjects.Items.BeginUpdate;
-//    try
-//      frameObsGroupAssignments.lbSrcObjects.Items.Clear;
-//      frameObsGroupAssignments.lbDstObjects.Items.Clear;
-//      for ObsIndex := 0 to FNewObsList.Count - 1 do
-//      begin
-//        AnObs := FNewObsList[ObsIndex];
-//        if AnObs.ObservationGroup = AName then
-//        begin
-//
-//        end;
-//      end;
-//    finally
-//      frameObsGroupAssignments.lbDstObjects.Items.EndUpdate;
-//      frameObsGroupAssignments.lbSrcObjects.Items.EndUpdate;
-//    end;
-//  end;
-//end;
+
+procedure TfrmPEST.comboParetoGroupChange(Sender: TObject);
+var
+  PestProperties: TPestProperties;
+  ParetoProperties: TParetoProperties;
+begin
+  inherited;
+  PestProperties := frmGoPhast.PhastModel.PestProperties;
+  ParetoProperties := PestProperties.ParetoProperties;
+  AssignParetoObsReports(ParetoProperties);
+end;
 
 procedure TfrmPEST.comboPestModeChange(Sender: TObject);
 var
@@ -1479,6 +1490,7 @@ var
   RegularizationNode: TJvPageIndexNode;
   PriorInfoNode: TJvPageIndexNode;
   PredictionNode: TJvPageIndexNode;
+  ParetoNode: TJvPageIndexNode;
 begin
   inherited;
   FObsList := TObservationList.Create;
@@ -1501,108 +1513,120 @@ begin
   FGroupNameDictionary := TDictionary<string, TPestObservationGroup>.Create;
 
   NewNode := tvPEST.Items.AddChild(
-    nil, 'Basic') as TJvPageIndexNode;
+    nil, StrBasic) as TJvPageIndexNode;
   NewNode.PageIndex := jvspBasic.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    nil, 'Pilot Points') as TJvPageIndexNode;
+    nil, StrPilotPoints) as TJvPageIndexNode;
   NewNode.PageIndex := jvspPilotPoints.PageIndex;
 
   ControlDataNode := tvPEST.Items.AddChild(
-    nil, 'Control Data') as TJvPageIndexNode;
+    nil, StrControlData) as TJvPageIndexNode;
   ControlDataNode.PageIndex := -1;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Mode') as TJvPageIndexNode;
+    ControlDataNode, StrMode) as TJvPageIndexNode;
   NewNode.PageIndex := jvspControlDataMode.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Dimensions') as TJvPageIndexNode;
+    ControlDataNode, StrDimensions) as TJvPageIndexNode;
   NewNode.PageIndex := jvspDimensions.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Inversion Controls 1') as TJvPageIndexNode;
+    ControlDataNode, StrInversionControls1) as TJvPageIndexNode;
   NewNode.PageIndex := jvspInversionControls.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Parameter Adjustment Controls') as TJvPageIndexNode;
+    ControlDataNode, StrParameterAdjustment) as TJvPageIndexNode;
   NewNode.PageIndex := jvspParameterAdjustmentControls.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Inversion Controls 2') as TJvPageIndexNode;
+    ControlDataNode, StrInversionControls2) as TJvPageIndexNode;
   NewNode.PageIndex := jvspInversionControls2.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Iteration Controls') as TJvPageIndexNode;
+    ControlDataNode, StrIterationControls) as TJvPageIndexNode;
   NewNode.PageIndex := jvspIterationControls.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, 'Output') as TJvPageIndexNode;
+    ControlDataNode, StrOutput) as TJvPageIndexNode;
   NewNode.PageIndex := jvspOutputOptions.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    nil, 'Singular Value Decomposition') as TJvPageIndexNode;
+    nil, StrSingularValueDecom) as TJvPageIndexNode;
   NewNode.PageIndex := jvspSingularValueDecomp.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    nil, 'LQSR') as TJvPageIndexNode;
+    nil, StrLQSR) as TJvPageIndexNode;
   NewNode.PageIndex := jvspLqsr.PageIndex;
 
   ObservationNode := tvPEST.Items.AddChild(
-    nil, 'Observations') as TJvPageIndexNode;
+    nil, StrObservations) as TJvPageIndexNode;
   ObservationNode.PageIndex := -1;
 
   NewNode := tvPEST.Items.AddChild(
-    ObservationNode, 'Observation Groups') as TJvPageIndexNode;
+    ObservationNode, StrObservationGroups) as TJvPageIndexNode;
   NewNode.PageIndex := jvspObservationGroups.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    ObservationNode, 'Observation Group Assignments') as TJvPageIndexNode;
+    ObservationNode, StrObservationGroupAs) as TJvPageIndexNode;
   NewNode.PageIndex := jvspObsGroupAssignments.PageIndex;
 
   PriorInfoNode := tvPEST.Items.AddChild(
-    nil, 'Prior Information') as TJvPageIndexNode;
+    nil, StrPriorInformation) as TJvPageIndexNode;
   PriorInfoNode.PageIndex := -1;
 
   NewNode := tvPEST.Items.AddChild(
-    PriorInfoNode, 'Prior Information Groups') as TJvPageIndexNode;
+    PriorInfoNode, StrPriorInformationGr) as TJvPageIndexNode;
   NewNode.PageIndex := jvspPriorInfoObsGroups.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    PriorInfoNode, 'Initial Value Prior Information') as TJvPageIndexNode;
+    PriorInfoNode, StrInitialValuePrior) as TJvPageIndexNode;
   NewNode.PageIndex := jvspPriorInfoInitialValue.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    PriorInfoNode, 'Within-Layer Continuity Prior Information') as TJvPageIndexNode;
+    PriorInfoNode, StrWithinLayerContinu) as TJvPageIndexNode;
   NewNode.PageIndex := jvspPriorInfoHorizContinuity.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    PriorInfoNode, 'Between-Layer Continuity Prior Information') as TJvPageIndexNode;
+    PriorInfoNode, StrBetweenLayerContin) as TJvPageIndexNode;
   NewNode.PageIndex := jvspPriorInfoVertContinuity.PageIndex;
 
   PredictionNode := tvPEST.Items.AddChild(
-    nil, 'Prediction Analysis') as TJvPageIndexNode;
+    nil, StrPredictionAnalysis) as TJvPageIndexNode;
   PredictionNode.PageIndex := -1;
 
   NewNode := tvPEST.Items.AddChild(
-    PredictionNode, 'Prediction Analysis Control') as TJvPageIndexNode;
+    PredictionNode, StrPredictionAnalysisC) as TJvPageIndexNode;
   NewNode.PageIndex := jvspPrediction1.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    PredictionNode, 'Prediction Analysis Termination') as TJvPageIndexNode;
+    PredictionNode, StrPredictionAnalysisT) as TJvPageIndexNode;
   NewNode.PageIndex := jvspPrediction2.PageIndex;
 
   RegularizationNode := tvPEST.Items.AddChild(
-    nil, 'Regularization') as TJvPageIndexNode;
+    nil, StrRegularization) as TJvPageIndexNode;
   RegularizationNode.PageIndex := -1;
 
   NewNode := tvPEST.Items.AddChild(
-    RegularizationNode, 'Regularization Controls') as TJvPageIndexNode;
+    RegularizationNode, StrRegularizationContr) as TJvPageIndexNode;
   NewNode.PageIndex := jvspRegularisation.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
-    RegularizationNode, 'Regularization Option') as TJvPageIndexNode;
+    RegularizationNode, StrRegularizationOptio) as TJvPageIndexNode;
   NewNode.PageIndex := jvspRegularizationOption.PageIndex;
+
+  ParetoNode := tvPEST.Items.AddChild(
+    nil, StrPareto) as TJvPageIndexNode;
+  ParetoNode.PageIndex := -1;
+
+  NewNode := tvPEST.Items.AddChild(
+    ParetoNode, StrParetoControls) as TJvPageIndexNode;
+  NewNode.PageIndex := jvspPareto1.PageIndex;
+
+  NewNode := tvPEST.Items.AddChild(
+    ParetoNode, StrParetoAlternateTer) as TJvPageIndexNode;
+  NewNode.PageIndex := jsvpPareto2.PageIndex;
 
   plMain.ActivePageIndex := 0;
 
@@ -1837,9 +1861,7 @@ var
   PredictionProperties: TPredictionProperties;
   ParetoProperties: TParetoProperties;
   ObsGroupIndex: Integer;
-  ObsNames: TStringList;
   ObsGroupNames: TStringList;
-  ParetoGroup: TCaption;
   procedure SetPriorInfoObsGroupPicklist(Grid: TRbwDataGrid4);
   var
     PickList: TStrings;
@@ -2243,6 +2265,7 @@ begin
   seNumberOfPredictionsToCompare.AsInteger := PredictionProperties.NumberOfPredictionsToCompare;
   {$ENDREGION}
 
+  {$REGION 'Pareto'}
   ParetoProperties := PestProperties.ParetoProperties;
   ObsGroupNames := TStringList.Create;
   try
@@ -2255,39 +2278,7 @@ begin
     comboParetoGroup.Items.Assign(ObsGroupNames);
     comboParetoGroup.ItemIndex :=
       ObsGroupNames.IndexOf(ParetoProperties.ParetoGroupName);
-    ParetoGroup := comboParetoGroup.Text;
-
-    if ParetoGroup <> '' then
-    begin
-      rdgObservationsToReport.BeginUpdate;
-      ObsNames := TStringList.Create;
-      try
-        ObsNames.CaseSensitive := False;
-        for index := 0 to FObsList.Count - 1 do
-        begin
-          AnObs := FObsList[index];
-          if SameText(AnObs.ObservationGroup, ParetoGroup) then
-          begin
-            ObsNames.AddObject(AnObs.Name, AnObs);
-          end;
-        end;
-        rdgObservationsToReport.RowCount := Min(2, ObsNames.Count+1);
-        for ObsIndex := 0 to ObsNames.Count - 1 do
-        begin
-          rdgObservationsToReport.Cells[Ord(pcReport), ObsIndex+1]
-            := ObsNames[ObsIndex];
-          rdgObservationsToReport.Checked[Ord(pcReport), ObsIndex+1]
-            := ParetoProperties.ObservationsToReport.IndexOf(ObsNames[ObsIndex]) >= 0;
-        end;
-
-        comboObservationName.Items := ObsNames;
-        comboObservationName.ItemIndex :=
-          ObsNames.IndexOf(ParetoProperties.ObservationName)
-      finally
-        ObsNames.Free;
-        rdgObservationsToReport.EndUpdate;
-      end;
-    end;
+    AssignParetoObsReports(ParetoProperties);
   finally
     ObsGroupNames.Free;
   end;
@@ -2301,6 +2292,7 @@ begin
   comboAltDirection.ItemIndex := Ord(ParetoProperties.AltDirection);
   rdeAltThreshold.RealValue := ParetoProperties.AltThreshold;
   seAltIterations.AsInteger := ParetoProperties.AltIterations;
+  {$ENDREGION}
 end;
 
 function TfrmPEST.GetIREGADJ: Integer;
@@ -2372,6 +2364,10 @@ var
   ItemIndex: Integer;
   Regularization: TPestRegularization;
   PredProp: TPredictionProperties;
+  ParetoProperties: TParetoProperties;
+  ReportedObs: TStringList;
+  RowIndex: Integer;
+  AName: string;
 begin
   InvalidateModelEvent := nil;
   PestProperties := TPestProperties.Create(nil);
@@ -2729,6 +2725,46 @@ begin
       seNumberOfPredictionsToCompare.AsInteger;
     {$ENDREGION}
 
+    {$REGION 'Pareto'}
+    ParetoProperties := PestProperties.ParetoProperties;
+    ParetoProperties.ParetoGroupName := comboParetoGroup.Text;
+    ParetoProperties.InitialParetoWeight :=
+      rdeInitialParetoWeight.RealValueDefault(
+      ParetoProperties.InitialParetoWeight);
+    ParetoProperties.FinalParetoWeight :=
+      rdeFinalParetoWeight.RealValueDefault(
+      ParetoProperties.FinalParetoWeight);
+    ParetoProperties.ParetoIncrements := seParetoIncrements.AsInteger;
+    ParetoProperties.InitialIterationCount :=
+      seInitialIterationCount.AsInteger;
+    ParetoProperties.IntermediateIterationCount :=
+      seIntermediateIterationCount.AsInteger;
+    ParetoProperties.FinalIterationCount := seFinalIterationCount.AsInteger;
+    ParetoProperties.AltTerminationOption :=
+      TAltTerminationOption(cbAltTerminationOption.Checked);
+    ParetoProperties.ObservationName := comboObservationName.Text;
+    ParetoProperties.AltDirection := TAltDirection(comboAltDirection.ItemIndex);
+    ParetoProperties.AltThreshold  :=
+      rdeAltThreshold.RealValueDefault(
+      ParetoProperties.AltThreshold);
+    ParetoProperties.AltIterations := seAltIterations.AsInteger;
+    ReportedObs := TStringList.Create;
+    try
+      for RowIndex := 1 to rdgObservationsToReport.RowCount - 1 do
+      begin
+        AName := rdgObservationsToReport.Cells[Ord(pcName), RowIndex];
+        if (AName <> '')
+          and rdgObservationsToReport.Checked[Ord(pcReport), RowIndex] then
+        begin
+          ReportedObs.Add(AName);
+        end;
+      end;
+      ParetoProperties.ObservationsToReport := ReportedObs;
+    finally
+      ReportedObs.Free;
+    end;
+    {$ENDREGION}
+
     frmGoPhast.UndoStack.Submit(TUndoPestOptions.Create(PestProperties,
       FNewObsList, FNewFluxObservationList, FNewHobList, FNewSteadyParameters,
       FNewHufParameters, FNewTransientListParameters, diredPest.Text));
@@ -3076,6 +3112,50 @@ begin
     rdeSearchDistance.Color := clWindow;
   end;
 end;
+
+procedure TfrmPEST.AssignParetoObsReports(ParetoProperties: TParetoProperties);
+var
+  ParetoGroup: TCaption;
+  ObsNames: TStringList;
+  Index: Integer;
+  ObsIndex: Integer;
+  AnObs: TCustomObservationItem;
+begin
+  ParetoGroup := comboParetoGroup.Text;
+  if ParetoGroup <> '' then
+  begin
+    rdgObservationsToReport.BeginUpdate;
+    ObsNames := TStringList.Create;
+    try
+      ObsNames.CaseSensitive := False;
+      for Index := 0 to FObsList.Count - 1 do
+      begin
+        AnObs := FObsList[Index];
+        if SameText(AnObs.ObservationGroup, ParetoGroup) then
+        begin
+          ObsNames.AddObject(AnObs.Name, AnObs);
+        end;
+      end;
+      rdgObservationsToReport.RowCount := Max(2, ObsNames.Count + 1);
+      if ObsNames.Count = 0 then
+      begin
+        rdgObservationsToReport.Cells[Ord(pcName), 1] := '';
+        rdgObservationsToReport.Checked[Ord(pcReport), 1] := False;
+      end;
+      for ObsIndex := 0 to ObsNames.Count - 1 do
+      begin
+        rdgObservationsToReport.Cells[Ord(pcName), ObsIndex + 1] := ObsNames[ObsIndex];
+        rdgObservationsToReport.Objects[Ord(pcName), ObsIndex + 1] := ObsNames.Objects[ObsIndex];
+        rdgObservationsToReport.Checked[Ord(pcReport), ObsIndex + 1] := ParetoProperties.ObservationsToReport.IndexOf(ObsNames[ObsIndex]) >= 0;
+      end;
+      comboObservationName.Items := ObsNames;
+      comboObservationName.ItemIndex := ObsNames.IndexOf(ParetoProperties.ObservationName);
+    finally
+      ObsNames.Free;
+      rdgObservationsToReport.EndUpdate;
+    end;
+  end;
+end;
 procedure TfrmPEST.FixObsGroupNames(ObsGridFrame: TframeGrid);
 var
   Grid: TRbwDataGrid4;
@@ -3102,7 +3182,34 @@ var
   OtherGroup: TPestObservationGroup;
   TreeNode: TTreeNode;
   ChildNode: TTreeNode;
+  GroupIndex: Integer;
+  ParetoGroupIndex: Integer;
+  SelectedGroup: TObject;
 begin
+  GroupIndex := comboParetoGroup.Items.IndexOfObject(Group);
+  if GroupIndex >= 0 then
+  begin
+    ParetoGroupIndex := comboParetoGroup.ItemIndex;
+    if ParetoGroupIndex >= 0 then
+    begin
+      SelectedGroup := comboParetoGroup.Items.Objects[ParetoGroupIndex];
+    end
+    else
+    begin
+      SelectedGroup := nil;
+    end;
+    comboParetoGroup.Items.Delete(GroupIndex);
+    if SelectedGroup <> nil then
+    begin
+      ParetoGroupIndex := comboParetoGroup.Items.IndexOfObject(SelectedGroup);
+    end
+    else
+    begin
+      ParetoGroupIndex := -1;
+    end;
+    comboParetoGroup.ItemIndex := ParetoGroupIndex;
+  end;
+
   if FGroupNameDictionary.TryGetValue(
     UpperCase(Group.ObsGroupName), OtherGroup) then
   begin
@@ -3340,6 +3447,7 @@ procedure TfrmPEST.HandleAddedGroup(TreeObsGroupFrame: TframeParentChild;
   ObsGroup: TPestObservationGroup);
 var
   NewNode: TTreeNode;
+  ParetoGroupIndex: Integer;
 //  TreeObsGroupFrame: TframeParentChild;
 begin
 //  TreeObsGroupFrame := frameParentObsGroups;
@@ -3354,6 +3462,9 @@ begin
       FGroupNameDictionary.Add(UpperCase(ObsGroup.ObsGroupName), ObsGroup);
     end;
   end;
+  ParetoGroupIndex := comboParetoGroup.ItemIndex;
+  comboParetoGroup.Items.AddObject(ObsGroup.ObsGroupName, ObsGroup);
+  comboParetoGroup.ItemIndex := ParetoGroupIndex;
 end;
 
 procedure TfrmPEST.CheckPestDirectory;

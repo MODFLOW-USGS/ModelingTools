@@ -1179,7 +1179,6 @@ inherited frmPEST: TfrmPEST
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 1
           ExplicitWidth = 566
           ExplicitHeight = 402
         end
@@ -2835,7 +2834,6 @@ inherited frmPEST: TfrmPEST
         BevelOuter = bvNone
         Caption = 'Panel7'
         TabOrder = 0
-        ExplicitLeft = 1
         object lblFinalIterationCount: TLabel
           Left = 79
           Top = 243
@@ -2903,6 +2901,7 @@ inherited frmPEST: TfrmPEST
           Height = 26
           Style = csDropDownList
           TabOrder = 0
+          OnChange = comboParetoGroupChange
         end
         object rdeFinalParetoWeight: TRbwDataEntry
           Left = 6
@@ -3033,7 +3032,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = 1
       end
     end
     object jsvpPareto2: TJvStandardPage
@@ -3042,7 +3040,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jsvpPareto2'
-      ExplicitLeft = 1
       object lblObservationName: TLabel
         Left = 157
         Top = 42
@@ -3053,7 +3050,7 @@ inherited frmPEST: TfrmPEST
       object lblAltDirection: TLabel
         Left = 157
         Top = 74
-        Width = 400
+        Width = 288
         Height = 36
         Caption = 'Condition requited to halt Pareto analysis (ABOVE_OR_BELOW)'
         WordWrap = True
@@ -3068,7 +3065,7 @@ inherited frmPEST: TfrmPEST
       object lblAltIterations: TLabel
         Left = 71
         Top = 147
-        Width = 482
+        Width = 446
         Height = 36
         Caption = 
           'Number of optimization iterations for terminating Pareto analysi' +

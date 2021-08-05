@@ -11565,7 +11565,7 @@ begin
       tbSelectClick(tbSelect);
 
       frmFileProgress := TfrmProgressMM.Create(nil);
-      FFileStream := TFileStream.Create(FileName,
+      FFileStream := TBufferedFileStream.Create(FileName,
         fmOpenRead or fmShareDenyWrite, ReadWritePermissions);
       try
         FFileStream.Position := 0;
