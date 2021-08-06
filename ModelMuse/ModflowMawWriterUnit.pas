@@ -128,6 +128,8 @@ resourcestring
   StrMAWWellSkinRadius = 'MAW well skin radius too large';
   StrTheWellSkinRadius = 'The well skin radius for the multiaquifer well def' +
   'ined by %s makes the well skin diameter larger than the cell size.';
+  StrMAWStartingHeadLe = 'MAW starting head less than well bottom';
+  StrMAWStartingHeadTo = 'MAW starting head too low at (%0:d, %1:d, %2:d)';
 
 { TModflowMAW_Writer }
 
@@ -814,6 +816,10 @@ begin
     Exit;
   end;
 
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrMAWStartingHeadLe);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrMAWPackageSkipped);
+
+
   frmProgressMM.AddMessage(StrEvaluatingMAWPacka);
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
@@ -971,6 +977,13 @@ begin
   begin
     AWell := FWellProperties[WellIndex];
     WriteInteger(AWell.WellNumber);
+
+    if AWell.StartingHead < AWell.Bottom then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrMAWStartingHeadLe,
+        Format(StrMAWStartingHeadTo, [AWell.Layer+1,
+        AWell.Row + 1, AWell.Column + 1]))
+    end;
 
     WriteFormulaOrValueBasedOnAPestName(AWell.RadiusPestName,
       AWell.Radius, AWell.Layer, AWell.Row,

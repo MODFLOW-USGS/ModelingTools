@@ -7,7 +7,10 @@ interface
   {$WARNINGS OFF}
 {$ENDIF}
 
-uses FastGeo, TripackTypes;
+uses FastGeo, TripackTypes, SysUtils;
+
+type
+  ESfrProcedureException = class(Exception);
 
 procedure ARCINT (const B,X1,X2,Y1,Y2,H1,H2,HX1,HX2,HY1,
   HY2,SIGMA : TFloat; const DFLAG: longbool; var HP,HXP,HYP: TFloat; var IER: longint);
@@ -3656,7 +3659,11 @@ begin
 //C
 //      ITER = ITER + 1
 //      IF (DGMX .GT. TOL) GO TO 2
-      until (DGMX <= TOL);
+      until (DGMX <= TOL) or IsNan(DGMX);
+      if IsNan(DGMX) then
+      begin
+        raise ESfrProcedureException.Create('Error determing gradients. Check that values are not too extreme.');
+      end;
 //C
 //C Method converged.
 //C

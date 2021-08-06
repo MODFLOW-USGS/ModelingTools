@@ -4044,6 +4044,7 @@ that affects the model output should also have a comment. }
     procedure FixSpecifyingGridByThreeDObjects;
     procedure SetSvdaPrepProperties(const Value: TSvdaPrepProperties);
     procedure SetSupCalcProperties(const Value: TSupCalcProperties);
+    procedure FixScreenObjectNames;
 //    function GetPilotPoint(Index: Integer): TPoint2D;
 //    function GetPilotPointSpacing: double;
   protected
@@ -10309,8 +10310,7 @@ const
 //                starting and ending times to be saved with small rounding
 //                errors.
 //    '4.3.0.56' Bug fix: Fixed bug in displaying contour values.
-
-//               Bug fix: Fixed renaming of data sets associated with MODFLOW
+//    '4.3.0.57' Bug fix: Fixed renaming of data sets associated with MODFLOW
 //                parameters when the parameters are renamed.
 //               Bug fix: (not in released version) Fixed renaming transient
 //                parameters in the Manage Parameters dialog box.
@@ -10319,10 +10319,16 @@ const
 //                should have been.
 //               Bug fix: Fixed a bug importing SUTRA BCOF, BCOP, BCOS, and BCOU
 //                files in which inactive boundaries were not handled correctly.
+//               Bug fix: Fixed a bug that could cause errors when exporting
+//                files if object names were not unique.
+//               Bug fix: Fixed a bug that could cause ModelMuse to enter an
+//                infinite loop when using triangel interpolation.
+//               Enhancement: Added some error checking when exporting the
+//                MAW input file.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.56';
+  IIModelVersion = '4.3.0.57';
 
 function IModelVersion: string;
 begin
@@ -20136,6 +20142,52 @@ begin
   end;
 end;
 
+procedure TPhastModel.FixScreenObjectNames;
+var
+  Names: TStringList;
+  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+  DuplicatesFound: Boolean;
+  NewIndex: Integer;
+  NewName: string;
+begin
+  Names := TStringList.Create;
+  try
+    repeat
+      Names.Clear;
+      DuplicatesFound := False;
+      Names.Capacity := ScreenObjectCount;
+      for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+      begin
+        AScreenObject := ScreenObjects[ScreenObjectIndex];
+        Names.AddObject(AScreenObject.Name, AScreenObject);
+      end;
+      Names.CaseSensitive := False;
+      Names.Sorted := True;
+      NewIndex := Names.Count + 1;
+      for ScreenObjectIndex := 1 to Names.Count - 1 do
+      begin
+        if SameText(Names[ScreenObjectIndex], Names[ScreenObjectIndex-1]) then
+        begin
+          DuplicatesFound := True;
+          NewName := Format('Object%d', [NewIndex]);
+          While Names.IndexOf(NewName) >= 0 do
+          begin
+            Inc(NewIndex);
+            NewName := Format('Object%d', [NewIndex]);
+          end;
+          AScreenObject := Names.Objects[ScreenObjectIndex] as TScreenObject;
+          AScreenObject.Name := NewName;
+          Inc(NewIndex);
+        end;
+      end;
+    until not DuplicatesFound
+  finally
+    Names.Free;
+  end;
+  FreeAndNil(FSortedObjectList);
+end;
+
 procedure TPhastModel.FixOldModel;
 var
   ModpathZone: TDataArray;
@@ -20176,6 +20228,7 @@ var
 //  StressPeriod: TModflowStressPeriod;
 //  Mt3dStressPeriod: TMt3dmsTimeItem;
 begin
+  FixScreenObjectNames;
   RenameOldVerticalLeakance;
   FixSpecifyingGridByThreeDObjects;
 

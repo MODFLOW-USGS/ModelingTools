@@ -1713,7 +1713,7 @@ uses Contnrs, frmGoPhastUnit, frmConvertChoiceUnit, GIS_Functions,
   ScreenObjectUnit, frmFormulaErrorsUnit, InterpolationUnit,
   PhastModelUnit, AbstractGridUnit, frmErrorsAndWarningsUnit, frmProgressUnit,
   GlobalVariablesUnit, frmDisplayDataUnit, SutraMeshUnit, PhastDataSets,
-  ModflowParameterUnit, OrderedCollectionUnit;
+  ModflowParameterUnit, OrderedCollectionUnit, SfrProcedures;
 
 resourcestring
   StrUnassigned = 'Unassigned';
@@ -2282,6 +2282,7 @@ var
   DisLimits: TGridLimit;
   ErrorMessage: string;
   NameDataArray: TDataArray;
+  OkAssignment: Boolean;
   procedure GetLimits;
   begin
     if LocalModel.ModelSelection in SutraSelection then
@@ -2540,519 +2541,523 @@ begin
         end
         else
         begin
-          UpdateCurrentScreenObject(nil);
-          if (Orientation <> dso3D) and (TwoDInterpolator <> nil)
-            and TwoDInterpolator.ShouldInterpolate then
-          begin
-            DisLimits := (Model as TCustomModel).
-              DiscretizationLimits(OrientationToViewDirection(Orientation));
-            TwoDInterpolator.EpsilonX := (DisLimits.MaxX - DisLimits.MinX)/1E8;
-            TwoDInterpolator.EpsilonY := (DisLimits.MaxY - DisLimits.MinY)/1E8;
-  //          FWaitingOnInterpolator := True;
-            TwoDInterpolator.Initialize(self);
-            while not TwoDInterpolator.Ready do
+          repeat
+            OkAssignment := True;
+            UpdateCurrentScreenObject(nil);
+            if (Orientation <> dso3D) and (TwoDInterpolator <> nil)
+              and TwoDInterpolator.ShouldInterpolate then
             begin
-
-            end;
-
-            if InterpAnnString = '' then
-            begin
-              InterpAnnString := Format(DataSetInterpolatorExplanation,
-                [TwoDInterpolator.InterpolatorName]);
-              PriorInterpAnnString := InterpAnnString;
-            end;
-            case Orientation of
-              dsoTop:
-                begin
-                  case EvaluatedAt of
-                    eaBlocks:
-                      begin
-                        for RowIndex := 0 to RowLimit do
-                        begin
-                          for ColIndex := 0 to ColLimit do
-                          begin
-                            CellCenter :=
-                              LocalModel.TwoDElementCenter(ColIndex,
-                              RowIndex);
-
-                            UpdateGlobalLocations(ColIndex,
-                              RowIndex, 0, EvaluatedAt, FModel);
-
-                            case Datatype of
-                              rdtDouble:
-                                begin
-                                  AValue := TwoDInterpolator.RealResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                  if IsInfinite(AValue) or IsNan(AValue) then
-                                  begin
-                                    if Name = '' then
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        ErrorMessageInterpUnNamed, Format(ErrorString,
-                                        [1,RowIndex+1,ColIndex+1] ));
-                                    end
-                                    else
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        Format(ErrorMessageInterpNamed, [Name]),
-                                        Format(ErrorString,
-                                        [1,RowIndex+1,ColIndex+1]));
-                                    end;
-                                    RealData[0, RowIndex, ColIndex] := MaxReal
-                                  end
-                                  else
-                                  begin
-                                    RealData[0, RowIndex, ColIndex] := AValue;
-                                  end;
-                                end;
-                              rdtInteger:
-                                begin
-                                  IntegerData[0, RowIndex, ColIndex] :=
-                                    TwoDInterpolator.IntegerResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtBoolean:
-                                begin
-                                  BooleanData[0, RowIndex, ColIndex] :=
-                                    TwoDInterpolator.BooleanResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtString:
-                                begin
-                                  StringData[0, RowIndex, ColIndex] :=
-                                    TwoDInterpolator.StringResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                            else
-                              Assert(False);
-                            end;
-                            Annotation[0, RowIndex, ColIndex] := InterpAnnString;
-                          end
-                        end;
-                      end;
-                    eaNodes:
-                      begin
-                        for RowIndex := 0 to RowLimit do
-                        begin
-                          for ColIndex := 0 to ColLimit do
-                          begin
-                            CellCorner :=
-                              LocalModel.TwoDElementCorner(ColIndex,
-                              RowIndex);
-                            UpdateGlobalLocations(ColIndex,
-                              RowIndex, 0, EvaluatedAt, FModel);
-
-                            case Datatype of
-                              rdtDouble:
-                                begin
-    //                              try
-                                  AValue := TwoDInterpolator.RealResult(CellCorner);
-    //                              except
-    //                                Beep;
-    //                                raise;
-    //                              end;
-                                  UpdateInterpAnnString;
-                                  if IsInfinite(AValue) or IsNan(AValue) then
-                                  begin
-                                    if Name = '' then
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        ErrorMessageInterpUnNamed,
-                                        Format(ErrorString, [1,RowIndex+1,ColIndex+1] ));
-                                    end
-                                    else
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        Format(ErrorMessageInterpNamed, [Name]),
-                                        Format(ErrorString,
-                                        [1,RowIndex+1,ColIndex+1]));
-                                    end;
-                                    RealData[0, RowIndex, ColIndex] := MaxReal
-                                  end
-                                  else
-                                  begin
-                                    RealData[0, RowIndex, ColIndex] := AValue;
-                                  end;
-                                end;
-                              rdtInteger:
-                                begin
-                                  IntegerData[0, RowIndex, ColIndex] :=
-                                    TwoDInterpolator.IntegerResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtBoolean:
-                                begin
-                                  BooleanData[0, RowIndex, ColIndex] :=
-                                    TwoDInterpolator.BooleanResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtString:
-                                begin
-                                  StringData[0, RowIndex, ColIndex] :=
-                                    TwoDInterpolator.StringResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                            else
-                              Assert(False);
-                            end;
-                            Annotation[0, RowIndex, ColIndex] := InterpAnnString
-                          end
-                        end;
-                      end;
-                  else
-                    begin
-                      Assert(False);
-                    end;
-                  end;
-                end;
-              dsoFront:
-                begin
-                  case EvaluatedAt of
-                    eaBlocks:
-                      begin
-                        for LayerIndex := 0 to LayerLimit do
-                        begin
-                          for ColIndex := 0 to ColLimit do
-                          begin
-                            CellCenter3D := LocalModel.Grid.ThreeDElementCenter(
-                              ColIndex, 0, LayerIndex);
-
-                            UpdateGlobalLocations(ColIndex, 0,
-                              LayerIndex, EvaluatedAt, FModel);
-
-                            CellCenter.X := CellCenter3D.X;
-                            CellCenter.Y := CellCenter3D.Z;
-
-                            case Datatype of
-                              rdtDouble:
-                                begin
-                                  AValue := TwoDInterpolator.RealResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                  if IsInfinite(AValue) or IsNan(AValue) then
-                                  begin
-                                    if Name = '' then
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        ErrorMessageInterpUnNamed, Format(ErrorString,
-                                        [LayerIndex+1,1,ColIndex+1] ));
-                                    end
-                                    else
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        Format(ErrorMessageInterpNamed, [Name]),
-                                        Format(ErrorString,
-                                        [LayerIndex+1,1,ColIndex+1]));
-                                    end;
-                                    RealData[LayerIndex, 0, ColIndex] := MaxReal
-                                  end
-                                  else
-                                  begin
-                                    RealData[LayerIndex, 0, ColIndex] := AValue;
-                                  end;
-                                end;
-                              rdtInteger:
-                                begin
-                                  IntegerData[LayerIndex, 0, ColIndex] :=
-                                    TwoDInterpolator.IntegerResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtBoolean:
-                                begin
-                                  BooleanData[LayerIndex, 0, ColIndex] :=
-                                    TwoDInterpolator.BooleanResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtString:
-                                begin
-                                  StringData[LayerIndex, 0, ColIndex] :=
-                                    TwoDInterpolator.StringResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                            else
-                              Assert(False);
-                            end;
-                            Annotation[LayerIndex, 0, ColIndex] := InterpAnnString;
-                          end;
-                        end;
-                      end;
-                    eaNodes:
-                      begin
-                        for LayerIndex := 0 to LayerLimit do
-                        begin
-                          for ColIndex := 0 to ColLimit do
-                          begin
-                            CellCorner3D := LocalModel.Grid.ThreeDElementCorner(
-                              ColIndex, 0, LayerIndex);
-
-                            UpdateGlobalLocations(ColIndex, 0,
-                              LayerIndex, EvaluatedAt, FModel);
-
-                            CellCorner.X := CellCorner3D.X;
-                            CellCorner.Y := CellCorner3D.Z;
-
-                            case Datatype of
-                              rdtDouble:
-                                begin
-                                  AValue := TwoDInterpolator.RealResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                  if IsInfinite(AValue) or IsNan(AValue) then
-                                  begin
-                                    if Name = '' then
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        ErrorMessageInterpUnNamed, Format(ErrorString,
-                                        [LayerIndex+1,1,ColIndex+1] ));
-                                    end
-                                    else
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        Format(ErrorMessageInterpNamed, [Name]),
-                                        Format(ErrorString,
-                                        [LayerIndex+1,1,ColIndex+1]));
-                                    end;
-                                    RealData[LayerIndex, 0, ColIndex] := MaxReal
-                                  end
-                                  else
-                                  begin
-                                    RealData[LayerIndex, 0, ColIndex] := AValue;
-                                  end;
-                                end;
-                              rdtInteger:
-                                begin
-                                  IntegerData[LayerIndex, 0, ColIndex] :=
-                                    TwoDInterpolator.IntegerResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtBoolean:
-                                begin
-                                  BooleanData[LayerIndex, 0, ColIndex] :=
-                                    TwoDInterpolator.BooleanResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtString:
-                                begin
-                                  StringData[LayerIndex, 0, ColIndex] :=
-                                    TwoDInterpolator.StringResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                            else
-                              Assert(False);
-                            end;
-                            Annotation[LayerIndex, 0, ColIndex] := InterpAnnString;
-                          end;
-                        end;
-                      end;
-                  else
-                    begin
-                      Assert(False);
-                    end;
-
-                  end;
-                end;
-              dsoSide:
-                begin
-                  case EvaluatedAt of
-                    eaBlocks:
-                      begin
-                        for LayerIndex := 0 to LayerLimit do
-                        begin
-                          for RowIndex := 0 to RowLimit do
-                          begin
-                            CellCenter3D := LocalModel.Grid.ThreeDElementCenter(
-                              0, RowIndex, LayerIndex);
-
-                            UpdateGlobalLocations(0,
-                              RowIndex, LayerIndex, EvaluatedAt, FModel);
-
-                            CellCenter.X := CellCenter3D.Y;
-                            CellCenter.Y := CellCenter3D.Z;
-
-                            case Datatype of
-                              rdtDouble:
-                                begin
-                                  AValue := TwoDInterpolator.RealResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                  if IsInfinite(AValue) or IsNan(AValue) then
-                                  begin
-                                    if Name = '' then
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        ErrorMessageInterpUnNamed, Format(ErrorString,
-                                        [LayerIndex+1,RowIndex+1,1] ));
-                                    end
-                                    else
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        Format(ErrorMessageInterpNamed, [Name]),
-                                        Format(ErrorString,
-                                        [LayerIndex+1,RowIndex+1,1]));
-                                    end;
-                                    RealData[LayerIndex, RowIndex, 0] := MaxReal
-                                  end
-                                  else
-                                  begin
-                                    RealData[LayerIndex, RowIndex, 0] := AValue;
-                                  end;
-                                end;
-                              rdtInteger:
-                                begin
-                                  IntegerData[LayerIndex, RowIndex, 0] :=
-                                    TwoDInterpolator.IntegerResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtBoolean:
-                                begin
-                                  BooleanData[LayerIndex, RowIndex, 0] :=
-                                    TwoDInterpolator.BooleanResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtString:
-                                begin
-                                  StringData[LayerIndex, RowIndex, 0] :=
-                                    TwoDInterpolator.StringResult(CellCenter);
-                                  UpdateInterpAnnString;
-                                end;
-                            else
-                              Assert(False);
-                            end;
-                            Annotation[LayerIndex, RowIndex, 0] := InterpAnnString;
-                          end;
-                        end;
-                      end;
-                    eaNodes:
-                      begin
-                        for LayerIndex := 0 to LayerLimit do
-                        begin
-                          for RowIndex := 0 to RowLimit do
-                          begin
-                            CellCorner3D :=
-                              LocalModel.Grid.ThreeDElementCorner(
-                              0, RowIndex, LayerIndex);
-
-                            UpdateGlobalLocations(0,
-                              RowIndex, LayerIndex, EvaluatedAt, FModel);
-
-                            CellCorner.X := CellCorner3D.Y;
-                            CellCorner.Y := CellCorner3D.Z;
-
-                            case Datatype of
-                              rdtDouble:
-                                begin
-                                  AValue := TwoDInterpolator.RealResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                  if IsInfinite(AValue) or IsNan(AValue) then
-                                  begin
-                                    if Name = '' then
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        ErrorMessageInterpUnNamed, Format(ErrorString,
-                                        [LayerIndex+1,RowIndex+1,1] ));
-                                    end
-                                    else
-                                    begin
-                                      frmErrorsAndWarnings.AddError(Model,
-                                        Format(ErrorMessageInterpNamed, [Name]),
-                                        Format(ErrorString,
-                                        [LayerIndex+1,RowIndex+1,1]));
-                                    end;
-                                    RealData[LayerIndex, RowIndex, 0] := MaxReal
-                                  end
-                                  else
-                                  begin
-                                    RealData[LayerIndex, RowIndex, 0] := AValue;
-                                  end;
-                                end;
-                              rdtInteger:
-                                begin
-                                  IntegerData[LayerIndex, RowIndex, 0] :=
-                                    TwoDInterpolator.IntegerResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtBoolean:
-                                begin
-                                  BooleanData[LayerIndex, RowIndex, 0] :=
-                                    TwoDInterpolator.BooleanResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                              rdtString:
-                                begin
-                                  StringData[LayerIndex, RowIndex, 0] :=
-                                    TwoDInterpolator.StringResult(CellCorner);
-                                  UpdateInterpAnnString;
-                                end;
-                            else
-                              Assert(False);
-                            end;
-                            Annotation[LayerIndex, RowIndex, 0] := InterpAnnString;
-                          end;
-                        end;
-                      end;
-                  else
-                    begin
-                      Assert(False);
-                    end;
-                  end;
-                end;
-            else
-              Assert(False);
-            end;
-            TwoDInterpolator.Finalize(self);
-          end
-          else
-          begin
-            TempUseList := TStringList.Create;
-            try
-              TempUseList.Duplicates := dupIgnore;
-              TempUseList.Sorted := True;
-              TempUseList.Capacity := UseList.Count;
-              TempUseList.Assign(UseList);
-
-              for VarIndex := 0 to TempUseList.Count - 1 do
-              begin
-                VarName := TempUseList[VarIndex];
-                AnotherDataSet := DataArrayManager.GetDataSetByName(VarName);
-                if AnotherDataSet <> nil then
-                begin
-                  Assert(AnotherDataSet <> self);
-                  AnotherDataSet.Initialize;
-                  DataArrayManager.AddDataSetToCache(AnotherDataSet);
-                end;
-              end;
-              GlobalEvaluatedAt := EvaluatedAt;
-
-              Compiler := GetCompiler;
-              if ParameterUsed then
-              begin
-                TempFormula := ParameterFormula;
-              end
-              else
-              begin
-                TempFormula := Formula;
-              end;
-
               try
-                Compiler.Compile(TempFormula);
-              except on E: ERbwParserError do
+                DisLimits := (Model as TCustomModel).
+                  DiscretizationLimits(OrientationToViewDirection(Orientation));
+                TwoDInterpolator.EpsilonX := (DisLimits.MaxX - DisLimits.MinX)/1E8;
+                TwoDInterpolator.EpsilonY := (DisLimits.MaxY - DisLimits.MinY)/1E8;
+      //          FWaitingOnInterpolator := True;
+                try
+                  TwoDInterpolator.Initialize(self);
+                  while not TwoDInterpolator.Ready do
+                  begin
+
+                  end;
+                Except on E: ESfrProcedureException do
+                  begin
+                    OkAssignment := False;
+                    Exception.RaiseOuterException(EInterpolationException.Create(Format(
+                      'Error assigning values to Data set "%0:s" using the interpolation algorithm "%1:s." The error message was %2:s"',
+                      [Name, TwoDInterpolator.InterpolatorName, E.Message])));
+                  end;
+                end;
+
+                if InterpAnnString = '' then
                 begin
-                  ResetFormula(Compiler, E.Message);
+                  InterpAnnString := Format(DataSetInterpolatorExplanation,
+                    [TwoDInterpolator.InterpolatorName]);
+                  PriorInterpAnnString := InterpAnnString;
+                end;
+                case Orientation of
+                  dsoTop:
+                    begin
+                      case EvaluatedAt of
+                        eaBlocks:
+                          begin
+                            for RowIndex := 0 to RowLimit do
+                            begin
+                              for ColIndex := 0 to ColLimit do
+                              begin
+                                CellCenter :=
+                                  LocalModel.TwoDElementCenter(ColIndex,
+                                  RowIndex);
+
+                                UpdateGlobalLocations(ColIndex,
+                                  RowIndex, 0, EvaluatedAt, FModel);
+
+                                case Datatype of
+                                  rdtDouble:
+                                    begin
+                                      AValue := TwoDInterpolator.RealResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                      if IsInfinite(AValue) or IsNan(AValue) then
+                                      begin
+                                        if Name = '' then
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            ErrorMessageInterpUnNamed, Format(ErrorString,
+                                            [1,RowIndex+1,ColIndex+1] ));
+                                        end
+                                        else
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            Format(ErrorMessageInterpNamed, [Name]),
+                                            Format(ErrorString,
+                                            [1,RowIndex+1,ColIndex+1]));
+                                        end;
+                                        RealData[0, RowIndex, ColIndex] := MaxReal
+                                      end
+                                      else
+                                      begin
+                                        RealData[0, RowIndex, ColIndex] := AValue;
+                                      end;
+                                    end;
+                                  rdtInteger:
+                                    begin
+                                      IntegerData[0, RowIndex, ColIndex] :=
+                                        TwoDInterpolator.IntegerResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtBoolean:
+                                    begin
+                                      BooleanData[0, RowIndex, ColIndex] :=
+                                        TwoDInterpolator.BooleanResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtString:
+                                    begin
+                                      StringData[0, RowIndex, ColIndex] :=
+                                        TwoDInterpolator.StringResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                else
+                                  Assert(False);
+                                end;
+                                Annotation[0, RowIndex, ColIndex] := InterpAnnString;
+                              end
+                            end;
+                          end;
+                        eaNodes:
+                          begin
+                            for RowIndex := 0 to RowLimit do
+                            begin
+                              for ColIndex := 0 to ColLimit do
+                              begin
+                                CellCorner :=
+                                  LocalModel.TwoDElementCorner(ColIndex,
+                                  RowIndex);
+                                UpdateGlobalLocations(ColIndex,
+                                  RowIndex, 0, EvaluatedAt, FModel);
+
+                                case Datatype of
+                                  rdtDouble:
+                                    begin
+        //                              try
+                                      AValue := TwoDInterpolator.RealResult(CellCorner);
+        //                              except
+        //                                Beep;
+        //                                raise;
+        //                              end;
+                                      UpdateInterpAnnString;
+                                      if IsInfinite(AValue) or IsNan(AValue) then
+                                      begin
+                                        if Name = '' then
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            ErrorMessageInterpUnNamed,
+                                            Format(ErrorString, [1,RowIndex+1,ColIndex+1] ));
+                                        end
+                                        else
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            Format(ErrorMessageInterpNamed, [Name]),
+                                            Format(ErrorString,
+                                            [1,RowIndex+1,ColIndex+1]));
+                                        end;
+                                        RealData[0, RowIndex, ColIndex] := MaxReal
+                                      end
+                                      else
+                                      begin
+                                        RealData[0, RowIndex, ColIndex] := AValue;
+                                      end;
+                                    end;
+                                  rdtInteger:
+                                    begin
+                                      IntegerData[0, RowIndex, ColIndex] :=
+                                        TwoDInterpolator.IntegerResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtBoolean:
+                                    begin
+                                      BooleanData[0, RowIndex, ColIndex] :=
+                                        TwoDInterpolator.BooleanResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtString:
+                                    begin
+                                      StringData[0, RowIndex, ColIndex] :=
+                                        TwoDInterpolator.StringResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                else
+                                  Assert(False);
+                                end;
+                                Annotation[0, RowIndex, ColIndex] := InterpAnnString
+                              end
+                            end;
+                          end;
+                      else
+                        begin
+                          Assert(False);
+                        end;
+                      end;
+                    end;
+                  dsoFront:
+                    begin
+                      case EvaluatedAt of
+                        eaBlocks:
+                          begin
+                            for LayerIndex := 0 to LayerLimit do
+                            begin
+                              for ColIndex := 0 to ColLimit do
+                              begin
+                                CellCenter3D := LocalModel.Grid.ThreeDElementCenter(
+                                  ColIndex, 0, LayerIndex);
+
+                                UpdateGlobalLocations(ColIndex, 0,
+                                  LayerIndex, EvaluatedAt, FModel);
+
+                                CellCenter.X := CellCenter3D.X;
+                                CellCenter.Y := CellCenter3D.Z;
+
+                                case Datatype of
+                                  rdtDouble:
+                                    begin
+                                      AValue := TwoDInterpolator.RealResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                      if IsInfinite(AValue) or IsNan(AValue) then
+                                      begin
+                                        if Name = '' then
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            ErrorMessageInterpUnNamed, Format(ErrorString,
+                                            [LayerIndex+1,1,ColIndex+1] ));
+                                        end
+                                        else
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            Format(ErrorMessageInterpNamed, [Name]),
+                                            Format(ErrorString,
+                                            [LayerIndex+1,1,ColIndex+1]));
+                                        end;
+                                        RealData[LayerIndex, 0, ColIndex] := MaxReal
+                                      end
+                                      else
+                                      begin
+                                        RealData[LayerIndex, 0, ColIndex] := AValue;
+                                      end;
+                                    end;
+                                  rdtInteger:
+                                    begin
+                                      IntegerData[LayerIndex, 0, ColIndex] :=
+                                        TwoDInterpolator.IntegerResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtBoolean:
+                                    begin
+                                      BooleanData[LayerIndex, 0, ColIndex] :=
+                                        TwoDInterpolator.BooleanResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtString:
+                                    begin
+                                      StringData[LayerIndex, 0, ColIndex] :=
+                                        TwoDInterpolator.StringResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                else
+                                  Assert(False);
+                                end;
+                                Annotation[LayerIndex, 0, ColIndex] := InterpAnnString;
+                              end;
+                            end;
+                          end;
+                        eaNodes:
+                          begin
+                            for LayerIndex := 0 to LayerLimit do
+                            begin
+                              for ColIndex := 0 to ColLimit do
+                              begin
+                                CellCorner3D := LocalModel.Grid.ThreeDElementCorner(
+                                  ColIndex, 0, LayerIndex);
+
+                                UpdateGlobalLocations(ColIndex, 0,
+                                  LayerIndex, EvaluatedAt, FModel);
+
+                                CellCorner.X := CellCorner3D.X;
+                                CellCorner.Y := CellCorner3D.Z;
+
+                                case Datatype of
+                                  rdtDouble:
+                                    begin
+                                      AValue := TwoDInterpolator.RealResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                      if IsInfinite(AValue) or IsNan(AValue) then
+                                      begin
+                                        if Name = '' then
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            ErrorMessageInterpUnNamed, Format(ErrorString,
+                                            [LayerIndex+1,1,ColIndex+1] ));
+                                        end
+                                        else
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            Format(ErrorMessageInterpNamed, [Name]),
+                                            Format(ErrorString,
+                                            [LayerIndex+1,1,ColIndex+1]));
+                                        end;
+                                        RealData[LayerIndex, 0, ColIndex] := MaxReal
+                                      end
+                                      else
+                                      begin
+                                        RealData[LayerIndex, 0, ColIndex] := AValue;
+                                      end;
+                                    end;
+                                  rdtInteger:
+                                    begin
+                                      IntegerData[LayerIndex, 0, ColIndex] :=
+                                        TwoDInterpolator.IntegerResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtBoolean:
+                                    begin
+                                      BooleanData[LayerIndex, 0, ColIndex] :=
+                                        TwoDInterpolator.BooleanResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtString:
+                                    begin
+                                      StringData[LayerIndex, 0, ColIndex] :=
+                                        TwoDInterpolator.StringResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                else
+                                  Assert(False);
+                                end;
+                                Annotation[LayerIndex, 0, ColIndex] := InterpAnnString;
+                              end;
+                            end;
+                          end;
+                      else
+                        begin
+                          Assert(False);
+                        end;
+
+                      end;
+                    end;
+                  dsoSide:
+                    begin
+                      case EvaluatedAt of
+                        eaBlocks:
+                          begin
+                            for LayerIndex := 0 to LayerLimit do
+                            begin
+                              for RowIndex := 0 to RowLimit do
+                              begin
+                                CellCenter3D := LocalModel.Grid.ThreeDElementCenter(
+                                  0, RowIndex, LayerIndex);
+
+                                UpdateGlobalLocations(0,
+                                  RowIndex, LayerIndex, EvaluatedAt, FModel);
+
+                                CellCenter.X := CellCenter3D.Y;
+                                CellCenter.Y := CellCenter3D.Z;
+
+                                case Datatype of
+                                  rdtDouble:
+                                    begin
+                                      AValue := TwoDInterpolator.RealResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                      if IsInfinite(AValue) or IsNan(AValue) then
+                                      begin
+                                        if Name = '' then
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            ErrorMessageInterpUnNamed, Format(ErrorString,
+                                            [LayerIndex+1,RowIndex+1,1] ));
+                                        end
+                                        else
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            Format(ErrorMessageInterpNamed, [Name]),
+                                            Format(ErrorString,
+                                            [LayerIndex+1,RowIndex+1,1]));
+                                        end;
+                                        RealData[LayerIndex, RowIndex, 0] := MaxReal
+                                      end
+                                      else
+                                      begin
+                                        RealData[LayerIndex, RowIndex, 0] := AValue;
+                                      end;
+                                    end;
+                                  rdtInteger:
+                                    begin
+                                      IntegerData[LayerIndex, RowIndex, 0] :=
+                                        TwoDInterpolator.IntegerResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtBoolean:
+                                    begin
+                                      BooleanData[LayerIndex, RowIndex, 0] :=
+                                        TwoDInterpolator.BooleanResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtString:
+                                    begin
+                                      StringData[LayerIndex, RowIndex, 0] :=
+                                        TwoDInterpolator.StringResult(CellCenter);
+                                      UpdateInterpAnnString;
+                                    end;
+                                else
+                                  Assert(False);
+                                end;
+                                Annotation[LayerIndex, RowIndex, 0] := InterpAnnString;
+                              end;
+                            end;
+                          end;
+                        eaNodes:
+                          begin
+                            for LayerIndex := 0 to LayerLimit do
+                            begin
+                              for RowIndex := 0 to RowLimit do
+                              begin
+                                CellCorner3D :=
+                                  LocalModel.Grid.ThreeDElementCorner(
+                                  0, RowIndex, LayerIndex);
+
+                                UpdateGlobalLocations(0,
+                                  RowIndex, LayerIndex, EvaluatedAt, FModel);
+
+                                CellCorner.X := CellCorner3D.Y;
+                                CellCorner.Y := CellCorner3D.Z;
+
+                                case Datatype of
+                                  rdtDouble:
+                                    begin
+                                      AValue := TwoDInterpolator.RealResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                      if IsInfinite(AValue) or IsNan(AValue) then
+                                      begin
+                                        if Name = '' then
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            ErrorMessageInterpUnNamed, Format(ErrorString,
+                                            [LayerIndex+1,RowIndex+1,1] ));
+                                        end
+                                        else
+                                        begin
+                                          frmErrorsAndWarnings.AddError(Model,
+                                            Format(ErrorMessageInterpNamed, [Name]),
+                                            Format(ErrorString,
+                                            [LayerIndex+1,RowIndex+1,1]));
+                                        end;
+                                        RealData[LayerIndex, RowIndex, 0] := MaxReal
+                                      end
+                                      else
+                                      begin
+                                        RealData[LayerIndex, RowIndex, 0] := AValue;
+                                      end;
+                                    end;
+                                  rdtInteger:
+                                    begin
+                                      IntegerData[LayerIndex, RowIndex, 0] :=
+                                        TwoDInterpolator.IntegerResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtBoolean:
+                                    begin
+                                      BooleanData[LayerIndex, RowIndex, 0] :=
+                                        TwoDInterpolator.BooleanResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                  rdtString:
+                                    begin
+                                      StringData[LayerIndex, RowIndex, 0] :=
+                                        TwoDInterpolator.StringResult(CellCorner);
+                                      UpdateInterpAnnString;
+                                    end;
+                                else
+                                  Assert(False);
+                                end;
+                                Annotation[LayerIndex, RowIndex, 0] := InterpAnnString;
+                              end;
+                            end;
+                          end;
+                      else
+                        begin
+                          Assert(False);
+                        end;
+                      end;
+                    end;
+                else
+                  Assert(False);
+                end;
+                TwoDInterpolator.Finalize(self);
+                break;
+              except on E: EInterpolationException do
+                begin
+                  TwoDInterpolator := nil;
+                  frmFormulaErrors.AddFormulaError('', Name, '', E.message);
                 end;
               end;
+            end
+            else
+            begin
+              TempUseList := TStringList.Create;
+              try
+                TempUseList.Duplicates := dupIgnore;
+                TempUseList.Sorted := True;
+                TempUseList.Capacity := UseList.Count;
+                TempUseList.Assign(UseList);
 
-              if ParameterUsed then
-              begin
-                TempFormula := ParameterFormula;
-              end
-              else
-              begin
-                TempFormula := Formula;
-              end;
-              Compiler.Compile(TempFormula);
-              Expression := Compiler.CurrentExpression;
-              ResultTypeOK := (Expression.ResultType = Datatype)
-                or ((Expression.ResultType = rdtInteger) and (Datatype = rdtDouble));
-              if not ResultTypeOK then
-              begin
-                ResetFormula(Compiler, StrInvalidDataType);
+                for VarIndex := 0 to TempUseList.Count - 1 do
+                begin
+                  VarName := TempUseList[VarIndex];
+                  AnotherDataSet := DataArrayManager.GetDataSetByName(VarName);
+                  if AnotherDataSet <> nil then
+                  begin
+                    Assert(AnotherDataSet <> self);
+                    AnotherDataSet.Initialize;
+                    DataArrayManager.AddDataSetToCache(AnotherDataSet);
+                  end;
+                end;
+                GlobalEvaluatedAt := EvaluatedAt;
+
+                Compiler := GetCompiler;
+                if ParameterUsed then
+                begin
+                  TempFormula := ParameterFormula;
+                end
+                else
+                begin
+                  TempFormula := Formula;
+                end;
+
+                try
+                  Compiler.Compile(TempFormula);
+                except on E: ERbwParserError do
+                  begin
+                    ResetFormula(Compiler, E.Message);
+                  end;
+                end;
+
                 if ParameterUsed then
                 begin
                   TempFormula := ParameterFormula;
@@ -3067,211 +3072,228 @@ begin
                   or ((Expression.ResultType = rdtInteger) and (Datatype = rdtDouble));
                 if not ResultTypeOK then
                 begin
-//                  Beep;
-//                  MessageDlg(Format(StrTheDefaultFormula, [Name, Expression.Decompile]), mtError, [mbOK], 0);
-                  raise EInvalidDataType.Create(Format(StrTheDefaultFormula, [Name, Expression.Decompile]), Expression.Decompile);
+                  ResetFormula(Compiler, StrInvalidDataType);
+                  if ParameterUsed then
+                  begin
+                    TempFormula := ParameterFormula;
+                  end
+                  else
+                  begin
+                    TempFormula := Formula;
+                  end;
+                  Compiler.Compile(TempFormula);
+                  Expression := Compiler.CurrentExpression;
+                  ResultTypeOK := (Expression.ResultType = Datatype)
+                    or ((Expression.ResultType = rdtInteger) and (Datatype = rdtDouble));
+                  if not ResultTypeOK then
+                  begin
+  //                  Beep;
+  //                  MessageDlg(Format(StrTheDefaultFormula, [Name, Expression.Decompile]), mtError, [mbOK], 0);
+                    raise EInvalidDataType.Create(Format(StrTheDefaultFormula, [Name, Expression.Decompile]), Expression.Decompile);
+                  end;
                 end;
-              end;
 
-              if ParameterUsed then
-              begin
-                AnnotationString := Format(StrSetUsingParameters, [TempFormula]);
-              end
-              else
-              begin
-                AnnotationString := Format(
-                  StrSetViaDefaultForm, [TempFormula]);
-              end;
-
-              SetLength(VariablePositions, TempUseList.Count);
-              SetLength(DataSetIndexes, TempUseList.Count);
-              for VarIndex := 0 to TempUseList.Count - 1 do
-              begin
-                VarName := TempUseList[VarIndex];
-                VarPosition := Compiler.IndexOfVariable(VarName);
-                VariablePositions[VarIndex] := VarPosition;
-                if VarPosition >= 0 then
+                if ParameterUsed then
                 begin
-                  DataSetIndex := DataArrayManager.IndexOfDataSet(VarName);
-                  DataSetIndexes[VarIndex] := DataSetIndex;
+                  AnnotationString := Format(StrSetUsingParameters, [TempFormula]);
                 end
                 else
                 begin
-                  DataSetIndexes[VarIndex] := -1;
+                  AnnotationString := Format(
+                    StrSetViaDefaultForm, [TempFormula]);
                 end;
-              end;
 
-              for LayerIndex := 0 to LayerLimit do
-              begin
-                for RowIndex := 0 to RowLimit do
+                SetLength(VariablePositions, TempUseList.Count);
+                SetLength(DataSetIndexes, TempUseList.Count);
+                for VarIndex := 0 to TempUseList.Count - 1 do
                 begin
-                  for ColIndex := 0 to ColLimit do
+                  VarName := TempUseList[VarIndex];
+                  VarPosition := Compiler.IndexOfVariable(VarName);
+                  VariablePositions[VarIndex] := VarPosition;
+                  if VarPosition >= 0 then
                   begin
+                    DataSetIndex := DataArrayManager.IndexOfDataSet(VarName);
+                    DataSetIndexes[VarIndex] := DataSetIndex;
+                  end
+                  else
+                  begin
+                    DataSetIndexes[VarIndex] := -1;
+                  end;
+                end;
 
-                    UpdateGlobalLocations(ColIndex, RowIndex, LayerIndex,
-                      EvaluatedAt, FModel);
-
-                    for VarIndex := 0 to TempUseList.Count - 1 do
+                for LayerIndex := 0 to LayerLimit do
+                begin
+                  for RowIndex := 0 to RowLimit do
+                  begin
+                    for ColIndex := 0 to ColLimit do
                     begin
-                      VarName := TempUseList[VarIndex];
-                      VarPosition := VariablePositions[VarIndex];
-                      if VarPosition >= 0 then
-                      begin
-                        Variable := Compiler.Variables[VarPosition];
-                        DataSetIndex := DataSetIndexes[VarIndex];
-                        if DataSetIndex >= 0 then
-                        begin
-                          AnotherDataSet :=
-                            DataArrayManager.DataSets[DataSetIndex];
-                          Assert(AnotherDataSet <> self);
-                          Assert(Model = AnotherDataSet.Model);
-                          Assert(AnotherDataSet.DataType = Variable.ResultType);
-                          if AnotherDataSet.Orientation = dsoTop then
-                          begin
-                            LayerToUse := 0;
-                          end
-                          else
-                          begin
-                            LayerToUse := LayerIndex;
-                          end;
-                          if AnotherDataSet.Orientation = dsoFront then
-                          begin
-                            RowToUse := 0;
-                          end
-                          else
-                          begin
-                            RowToUse := RowIndex;
-                          end;
-                          if AnotherDataSet.Orientation = dsoSide then
-                          begin
-                            ColToUse := 0;
-                          end
-                          else
-                          begin
-                            ColToUse := ColIndex;
-                          end;
 
-                          case Variable.ResultType of
-                            rdtDouble:
-                              begin
-                                TRealVariable(Variable).Value :=
-                                  AnotherDataSet.RealData[LayerToUse, RowToUse,
-                                  ColToUse];
-                              end;
-                            rdtInteger:
-                              begin
-                                TIntegerVariable(Variable).Value :=
-                                  AnotherDataSet.IntegerData[LayerToUse, RowToUse,
-                                  ColToUse];
-                              end;
-                            rdtBoolean:
-                              begin
-                                TBooleanVariable(Variable).Value :=
-                                  AnotherDataSet.BooleanData[LayerToUse, RowToUse,
-                                  ColToUse];
-                              end;
-                            rdtString:
-                              begin
-                                TStringVariable(Variable).Value :=
-                                  AnotherDataSet.StringData[LayerToUse, RowToUse,
-                                  ColToUse];
-                              end;
-                          else
-                            Assert(False);
-                          end;
-                        end;
-                      end;
-                    end;
-                    ResultOK := True;
-                    try
-                      Expression.Evaluate;
-                    except
-                      on E: ERbwParserError do
-                      begin
-                        ResetFormula(Compiler, E.Message);
-                        TempFormula := Formula;
-                        Compiler.Compile(TempFormula);
-                        Expression := Compiler.CurrentExpression;
-                        Expression.Evaluate;
-                      end;
-                      on E: EInvalidOp do
-                      begin
-                        HandleError;
-                      end;
-                      on E: EDivByZero do
-                      begin
-                        HandleError;
-                      end;
-                      on E: EZeroDivide do
-                      begin
-                        HandleError;
-                      end;
-                    end;
+                      UpdateGlobalLocations(ColIndex, RowIndex, LayerIndex,
+                        EvaluatedAt, FModel);
 
-                    case Datatype of
-                      rdtDouble:
+                      for VarIndex := 0 to TempUseList.Count - 1 do
+                      begin
+                        VarName := TempUseList[VarIndex];
+                        VarPosition := VariablePositions[VarIndex];
+                        if VarPosition >= 0 then
                         begin
-                          if ResultOK then
+                          Variable := Compiler.Variables[VarPosition];
+                          DataSetIndex := DataSetIndexes[VarIndex];
+                          if DataSetIndex >= 0 then
                           begin
-                            AValue := Expression.DoubleResult;
-                          end;
-                          if IsInfinite(AValue) or IsNan(AValue) then
-                          begin
-                            if Name = '' then
+                            AnotherDataSet :=
+                              DataArrayManager.DataSets[DataSetIndex];
+                            Assert(AnotherDataSet <> self);
+                            Assert(Model = AnotherDataSet.Model);
+                            Assert(AnotherDataSet.DataType = Variable.ResultType);
+                            if AnotherDataSet.Orientation = dsoTop then
                             begin
-                              frmErrorsAndWarnings.AddError(Model,
-                                ErrorMessageFormulaUnNamed, Format(ErrorString,
-                                [LayerIndex+1,RowIndex+1,ColIndex+1] ));
+                              LayerToUse := 0;
                             end
                             else
                             begin
-                              frmErrorsAndWarnings.AddError(Model,
-                                Format(ErrorMessageFormulaNamed, [Name]),
-                                Format(ErrorString,
-                                [LayerIndex+1,RowIndex+1,ColIndex+1]));
+                              LayerToUse := LayerIndex;
                             end;
-                            RealData[LayerIndex, RowIndex, ColIndex] := MaxReal
-                          end
-                          else
-                          begin
-                            RealData[LayerIndex, RowIndex, ColIndex] := AValue;
+                            if AnotherDataSet.Orientation = dsoFront then
+                            begin
+                              RowToUse := 0;
+                            end
+                            else
+                            begin
+                              RowToUse := RowIndex;
+                            end;
+                            if AnotherDataSet.Orientation = dsoSide then
+                            begin
+                              ColToUse := 0;
+                            end
+                            else
+                            begin
+                              ColToUse := ColIndex;
+                            end;
+
+                            case Variable.ResultType of
+                              rdtDouble:
+                                begin
+                                  TRealVariable(Variable).Value :=
+                                    AnotherDataSet.RealData[LayerToUse, RowToUse,
+                                    ColToUse];
+                                end;
+                              rdtInteger:
+                                begin
+                                  TIntegerVariable(Variable).Value :=
+                                    AnotherDataSet.IntegerData[LayerToUse, RowToUse,
+                                    ColToUse];
+                                end;
+                              rdtBoolean:
+                                begin
+                                  TBooleanVariable(Variable).Value :=
+                                    AnotherDataSet.BooleanData[LayerToUse, RowToUse,
+                                    ColToUse];
+                                end;
+                              rdtString:
+                                begin
+                                  TStringVariable(Variable).Value :=
+                                    AnotherDataSet.StringData[LayerToUse, RowToUse,
+                                    ColToUse];
+                                end;
+                            else
+                              Assert(False);
+                            end;
                           end;
                         end;
-                      rdtInteger:
+                      end;
+                      ResultOK := True;
+                      try
+                        Expression.Evaluate;
+                      except
+                        on E: ERbwParserError do
                         begin
-                          if ResultOK then
-                          begin
-                            IntegerData[LayerIndex, RowIndex, ColIndex]
-                              := Expression.IntegerResult;
-                          end;
+                          ResetFormula(Compiler, E.Message);
+                          TempFormula := Formula;
+                          Compiler.Compile(TempFormula);
+                          Expression := Compiler.CurrentExpression;
+                          Expression.Evaluate;
                         end;
-                      rdtBoolean:
+                        on E: EInvalidOp do
                         begin
-                          if ResultOK then
-                          begin
-                            BooleanData[LayerIndex, RowIndex, ColIndex]
-                              := Expression.BooleanResult;
-                          end;
+                          HandleError;
                         end;
-                      rdtString:
+                        on E: EDivByZero do
                         begin
-                          if ResultOK then
-                          begin
-                            StringData[LayerIndex, RowIndex, ColIndex]
-                              := Expression.StringResult;
-                          end;
+                          HandleError;
                         end;
-                    else
-                      Assert(False);
+                        on E: EZeroDivide do
+                        begin
+                          HandleError;
+                        end;
+                      end;
+
+                      case Datatype of
+                        rdtDouble:
+                          begin
+                            if ResultOK then
+                            begin
+                              AValue := Expression.DoubleResult;
+                            end;
+                            if IsInfinite(AValue) or IsNan(AValue) then
+                            begin
+                              if Name = '' then
+                              begin
+                                frmErrorsAndWarnings.AddError(Model,
+                                  ErrorMessageFormulaUnNamed, Format(ErrorString,
+                                  [LayerIndex+1,RowIndex+1,ColIndex+1] ));
+                              end
+                              else
+                              begin
+                                frmErrorsAndWarnings.AddError(Model,
+                                  Format(ErrorMessageFormulaNamed, [Name]),
+                                  Format(ErrorString,
+                                  [LayerIndex+1,RowIndex+1,ColIndex+1]));
+                              end;
+                              RealData[LayerIndex, RowIndex, ColIndex] := MaxReal
+                            end
+                            else
+                            begin
+                              RealData[LayerIndex, RowIndex, ColIndex] := AValue;
+                            end;
+                          end;
+                        rdtInteger:
+                          begin
+                            if ResultOK then
+                            begin
+                              IntegerData[LayerIndex, RowIndex, ColIndex]
+                                := Expression.IntegerResult;
+                            end;
+                          end;
+                        rdtBoolean:
+                          begin
+                            if ResultOK then
+                            begin
+                              BooleanData[LayerIndex, RowIndex, ColIndex]
+                                := Expression.BooleanResult;
+                            end;
+                          end;
+                        rdtString:
+                          begin
+                            if ResultOK then
+                            begin
+                              StringData[LayerIndex, RowIndex, ColIndex]
+                                := Expression.StringResult;
+                            end;
+                          end;
+                      else
+                        Assert(False);
+                      end;
+                      Annotation[LayerIndex, RowIndex, ColIndex] := AnnotationString;
                     end;
-                    Annotation[LayerIndex, RowIndex, ColIndex] := AnnotationString;
                   end;
                 end;
+              finally
+                TempUseList.Free;
               end;
-            finally
-              TempUseList.Free;
+              break;
             end;
-          end;
+          until OkAssignment;
 
           AssignValuesWithScreenObjects;
         end;

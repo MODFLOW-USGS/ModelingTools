@@ -721,6 +721,7 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure frameMT3D_SFTrdgModflowBoundarySelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure dgVerticiesExit(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -7296,6 +7297,10 @@ var
   TempString: string;
   Index: Integer;
 begin
+  if dgVerticies.DistributingText then
+  begin
+    Exit
+  end;
   if FSettingVerticies then
   begin
     Exit;
@@ -20651,6 +20656,12 @@ procedure TfrmScreenObjectProperties.dgVerticiesEnter(Sender: TObject);
 begin
   inherited;
   FVertexRowCount := dgVerticies.RowCount;
+end;
+
+procedure TfrmScreenObjectProperties.dgVerticiesExit(Sender: TObject);
+begin
+  inherited;
+  UpdateSectionNumbers;
 end;
 
 procedure TfrmScreenObjectProperties.dgVerticiesStateChange(Sender: TObject;
