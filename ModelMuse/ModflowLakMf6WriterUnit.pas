@@ -284,6 +284,10 @@ resourcestring
   StrLakeEtError = 'Lake evaporation rate less than zero.';
   StrTheLakeEvaporation = 'The lake evaporation rate at time = %0:g defined ' +
   'by the object %1:s is less than zero.';
+  StrLakeBottomAndTop = 'Lake bottom and top elevations inconsistent';
+  StrAtLayerRowColumn = 'At (Layer,Row,Column) = (%0:d,%1:d,%2:d), the lake ' +
+  'bottom was greater than or equal to the lake top. The lake bottom and top' +
+  ' were assigned via the following methods: "%3:s" and "%4:s"';
 
 { TModflowLAKMf6Writer }
 
@@ -317,6 +321,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectNoCells);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeEtError);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeBottomAndTop);
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeTopIsAboveTh);
 
   IdentifyLakesAndLakeCells;
@@ -395,6 +400,15 @@ begin
         WriteFormulaOrValueBasedOnAPestName(ACell.BedLeakancePestName,
           ACell.BedLeakance, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
       end;
+
+      if ACell.BotElev >= ACell.TopElev then
+      begin
+        frmErrorsAndWarnings.AddError(Model, StrLakeBottomAndTop,
+          Format(StrAtLayerRowColumn,
+            [ACell.Cell.Layer+1, ACell.Cell.Row+1, ACell.Cell.Column+1,
+            ACell.BotElevAnnotation, ACell.TopElevAnnotation]));
+      end;
+
       WriteFormulaOrValueBasedOnAPestName(ACell.BotElevPestName,
         ACell.BotElev, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
       WriteFormulaOrValueBasedOnAPestName(ACell.TopElevPestName,

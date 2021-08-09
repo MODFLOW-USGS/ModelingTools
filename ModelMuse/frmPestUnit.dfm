@@ -33,7 +33,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jsvpPareto2
+    ActivePage = jvspSingularValueDecomp
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -893,8 +893,8 @@ inherited frmPEST: TfrmPEST
         Style = csDropDownList
         TabOrder = 3
         Items.Strings = (
-          'singular values (1)'
-          'singular values and eigenvectors (2)')
+          'singular values (0)'
+          'singular values and eigenvectors (1)')
       end
     end
     object jvspLqsr: TJvStandardPage

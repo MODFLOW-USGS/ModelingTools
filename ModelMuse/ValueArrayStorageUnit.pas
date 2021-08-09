@@ -338,7 +338,7 @@ end;
 procedure TValueArrayStorage.CacheData;
 var
   Compressor: TCompressionStream;
-  LocalCount: Int64;
+  LocalCount: Integer;
   Index: Integer;
   StringValue: string;
   ValueLength: Integer;
@@ -372,7 +372,7 @@ begin
       case DataType of
         rdtDouble:
           begin
-            SizeToSave := LocalCount*SizeOf(double);
+            SizeToSave := Int64(LocalCount)*SizeOf(double);
             MaxItemsToSave := High(LongInt) div SizeOf(double);
             MaxSizeToSave := MaxItemsToSave*SizeOf(double);
             PositionToSave := 0;

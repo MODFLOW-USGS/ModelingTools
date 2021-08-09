@@ -10326,6 +10326,9 @@ const
 //               Enhancement: Added some error checking when exporting the
 //                MAW input file.
 
+//               Bug fix (not in released version) Fixed a bug in copying the
+//                starting and ending points of object sections.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.57';
@@ -12551,6 +12554,10 @@ begin
   SvdaPrepProperties.InitializeVariables;
   SupCalcProperties.InitializeVariables;
   PestProperties.InitializeVariables;
+  if CtsSystems <> nil then
+  begin
+    CtsSystems.Clear;
+  end;
 
   FArchiveName := '';
   Invalidate(self);
@@ -30944,10 +30951,6 @@ begin
   FreeAndNil(FTimeSeries);
   FreeAndNil(FEndPoints);
   FreeAndNil(FHeadObsResults);
-  if CtsSystems <> nil then
-  begin
-    CtsSystems.Clear;
-  end;
   if ParamGroups <> nil then
   begin
     ParamGroups.Clear;
@@ -38299,8 +38302,9 @@ end;
 
 function TCustomModel.StoreDisvGrid: Boolean;
 begin
-  result := (DisvGrid.TwoDGrid.ElementCount > 0)
-    and (DisvGrid.Layers.Count > 0);
+  result := // ((ModelSelection <> msModflow2015) or DisvUsed) and
+    ((DisvGrid.TwoDGrid.ElementCount > 0)
+    and (DisvGrid.Layers.Count > 0));
 end;
 
 function TCustomModel.StoreDrainObservations: Boolean;

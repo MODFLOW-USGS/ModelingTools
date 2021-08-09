@@ -18688,8 +18688,8 @@ begin
           DataGrid, GetUzfEtExtinctionWaterContent);
       end;
 
-      {$IFDEF PEST}
       Frame := frameScreenObjectUZF;
+      {$IFDEF PEST}
       for FormulaIndex := First to Last do
       begin
         PestMethod[frameScreenObjectUZF.rdgModflowBoundary, ColOffset+FormulaIndex] :=

@@ -1541,18 +1541,30 @@ begin
       case ViewDirection of
         vdTop:
           begin
+            if ChildModel.Grid.TopContourDataSet = nil then
+            begin
+              Continue;
+            end;
             EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
               ChildModel.Grid.TopContourDataSet,
               ChildModel.Grid.SelectedLayer);
           end;
         vdFront:
           begin
+            if ChildModel.Grid.FrontContourDataSet = nil then
+            begin
+              Continue;
+            end;
             EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
               ChildModel.Grid.FrontContourDataSet,
               ChildModel.Grid.SelectedRow);
           end;
         vdSide:
           begin
+            if ChildModel.Grid.SideContourDataSet = nil then
+            begin
+              Continue;
+            end;
             EvaluateMinMax(ChildMaxValue, ChildMinValue, ChildMinPositive, DSValues, Active,
               ChildModel.Grid.SideContourDataSet,
               ChildModel.Grid.SelectedColumn);
