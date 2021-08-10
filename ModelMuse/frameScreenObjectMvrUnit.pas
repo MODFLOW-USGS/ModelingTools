@@ -90,7 +90,8 @@ implementation
 {$R *.dfm}
 
 uses frmGoPhastUnit, ScreenObjectUnit, GoPhastTypes,
-  System.Math, frmCustomGoPhastUnit;
+  System.Math, frmCustomGoPhastUnit, frmErrorsAndWarningsUnit,
+  ModflowLakMf6Unit;
 
 resourcestring
   StrValue = ' Value';
@@ -101,6 +102,12 @@ resourcestring
   StrReceiverObject = 'Receiver Object';
   StrReceiver1 = 'Receiver 1';
   StrReceiver = 'Receiver ';
+  StrInvalidLakeSource = 'Invalid Lake source in MVR Package';
+  StrInvalidLakeOutlet = 'Invalid Lake outlet in MVR Package';
+  StrInvalidLakeSourceExplanation = 'The object "%s" defines a Lake MVR sour' +
+  'ce but the object does not define a lake.';
+  StrInvalidLakeOutletExplanation = 'The object "%s" defines a Lake MVR sour' +
+  'ce but the lake outlet number is invalid.';
 
 { TframeScreenObjectMvr }
 
@@ -742,7 +749,10 @@ var
   ItemIndex: Integer;
   Receivers: TReceiverCollection;
   ReceiverItem: TReceiverItem;
+  ModflowLak6: TLakeMf6;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel, StrInvalidLakeSource);
+  frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel, StrInvalidLakeOutlet);
   TimeValues := nil;
   try
     if not ClearAll then
@@ -785,7 +795,6 @@ begin
         end;
       end;
     end;
-
 
     Receivers := TReceiverCollection.Create(nil);
     try
@@ -874,6 +883,30 @@ begin
         if (TimeValues <> nil) and (TimeValues.Count > 0) then
         begin
           Boundary.Values.Assign(TimeValues);
+        end;
+
+        if Boundary.SourcePackageChoice = spcLak then
+        begin
+          ModflowLak6 := Item.ScreenObject.ModflowLak6;
+          if ModflowLak6 = nil then
+          begin
+            frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
+              StrInvalidLakeSource, Format(StrInvalidLakeSourceExplanation,
+              [Item.ScreenObject.Name]));
+          end
+          else
+          begin
+            for ItemIndex := 0 to Boundary.Receivers.Count - 1 do
+            begin
+              ReceiverItem := Boundary.Receivers[ItemIndex];
+              if ReceiverItem.LakeOutlet > ModflowLak6.Outlets.Count then
+              begin
+                frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel,
+                  StrInvalidLakeOutlet, Format(StrInvalidLakeOutletExplanation,
+                  [Item.ScreenObject.Name]));
+              end;
+            end;
+          end;
         end;
       end;
     finally

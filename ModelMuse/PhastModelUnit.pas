@@ -10322,16 +10322,15 @@ const
 //               Bug fix: Fixed a bug that could cause errors when exporting
 //                files if object names were not unique.
 //               Bug fix: Fixed a bug that could cause ModelMuse to enter an
-//                infinite loop when using triangel interpolation.
+//                infinite loop when using triangle interpolation.
 //               Enhancement: Added some error checking when exporting the
 //                MAW input file.
-
-//               Bug fix (not in released version) Fixed a bug in copying the
+//    '4.3.0.58' Bug fix (not in released version) Fixed a bug in copying the
 //                starting and ending points of object sections.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.57';
+  IIModelVersion = '4.3.0.58';
 
 function IModelVersion: string;
 begin

@@ -3128,17 +3128,8 @@ var
   VertexValueName: string;
   LocalPPV: TPointPositionValues;
   Index: Integer;
-//  FirstIndex: Integer;
-//  MidIndex: Integer;
-//  LastIndex: Integer;
   Item: TPointValuesItem;
-//  FirstItem: TPointValuesItem;
-//  MidItem: TPointValuesItem;
-//  LastItem: TPointValuesItem;
   VVIndex: Integer;
-//  FirstVVIndex: Integer;
-//  MidVVIndex: Integer;
-//  LastVVIndex: Integer;
   AValue: Double;
   BeforeValue: Double;
   AfterValue: Double;
@@ -3161,6 +3152,7 @@ var
   end;
 begin
   Assert(Length(Values) >= 1);
+  Assert(Values[0] <> nil);
   VertexValueName := PString(Values[0])^;
   result := 0;
   if TestVertexValuesCanBeTested(StrInterpolatedVertexValues, VertexValueName) then

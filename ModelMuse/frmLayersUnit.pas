@@ -174,7 +174,7 @@ resourcestring
   StrLayerBoundary = 'Layer boundary';
   StrHorizontalTransvers = 'Horizontal transverse dispersivity ratio (TRPT)';
   StrVerticalTransverse = 'Vertical transverse dispersivity ratio (TRPV)';
-  StrDiffusionCoefficien = 'Diffusion coefficient (DMCOEF)';
+  StrDiffusionCoefficien = 'Effective diffusion coefficient (DMCOEF)';
   StrHarmonicMean0 = 'Harmonic mean (0)';
   StrArithmeticMean1 = 'Arithmetic mean (1)';
   StrLogarithmicMean2 = 'Logarithmic mean (2)';
