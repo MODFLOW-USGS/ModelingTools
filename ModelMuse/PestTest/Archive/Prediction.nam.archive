@@ -1,0 +1,22 @@
+# Name File for MODFLOW created on 8/15/2021 by ModelMuse Version 4.3.0.58
+BEGIN OPTIONS
+  LIST ..\..\output\output.Prediction\Prediction.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.Prediction\Prediction.dis
+  IC6          ..\..\model\model.Prediction\Prediction.ic
+  NPF6         ..\..\model\model.Prediction\Prediction.npf
+  OBS6         ..\..\model\model.Prediction\Prediction.ob_gw
+  STO6         ..\..\model\model.Prediction\Prediction.sto
+  OC6          ..\..\model\model.Prediction\Prediction.oc
+  CHD6         ..\..\model\model.Prediction\Prediction.chd
+  GHB6         ..\..\model\model.Prediction\Prediction.ghb
+  WEL6         ..\..\model\model.Prediction\Prediction.wel
+  RIV6         ..\..\model\model.Prediction\Prediction.riv
+  DRN6         ..\..\model\model.Prediction\Prediction.drn
+  RCH6         ..\..\model\model.Prediction\Prediction.rch
+  EVT6         ..\..\model\model.Prediction\Prediction.evt
+END PACKAGES

@@ -795,7 +795,7 @@ begin
                           DirectObsLines.Add(Format('  OBSNAME %0:s %1:g',
                             ['hd_' + ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
-                          if LastTime > Observation.Time then
+                          if LastTime < Observation.Time then
                           begin
                             frmErrorsAndWarnings.AddError(Model, StrObservationTimeTo,
                               Format(StrAnObservationTime,
@@ -822,6 +822,12 @@ begin
                           DirectObsLines.Add(Format('  OBSNAME %0:s 1:g',
                             ['ddn_' + ObservationName, Observation.Time - StartTime]));
                           Observation.InterpObsNames.Add(ObservationName);
+                          if LastTime < Observation.Time then
+                          begin
+                            frmErrorsAndWarnings.AddError(Model, StrObservationTimeTo,
+                              Format(StrAnObservationTime,
+                              [AScreenObject.Name]), AScreenObject)
+                          end;
                         end;
                       end;
                       DirectObsLines.Add('');

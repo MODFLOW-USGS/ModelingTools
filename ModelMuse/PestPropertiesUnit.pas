@@ -2789,7 +2789,7 @@ begin
   RelativeLamdaCriterion :=0.005;
   InitialLineSearchFactor := 0.25;
   UpdateLineSearchFactor := 1.5;
-  LineSearchRuns := 0;
+  LineSearchRuns := 10;
   AbsolutePredictionSwitch := 0;
   RelativePredictionSwitch := 0.5;
   MaxNoPredictionImprovmentRuns := 4;

@@ -391,6 +391,9 @@ type
     procedure cbRegApplyGroupWeightClick(Sender: TObject);
     procedure comboPestModeChange(Sender: TObject);
     procedure comboParetoGroupChange(Sender: TObject);
+    procedure rdeTargetObjectiveFunctionChange(Sender: TObject);
+    procedure rdeAcceptedObjectiveFunctionChange(Sender: TObject);
+    procedure rdeTestLambdaPhiChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -476,7 +479,8 @@ resourcestring
   StrDefinePriorInforma = 'Define Prior Information';
   StrWhenThePrediction = 'When the prediction analysis mode is used, there m' +
   'ust be an observation group named "predict" with exactly one observation ' +
-  'assigned to it.';
+  'assigned to it. This model fails that criterion. Do you want to continue ' +
+  'in spite of this problem?';
   StrBasic = 'Basic';
   StrPilotPoints = 'Pilot Points';
   StrControlData = 'Control Data';
@@ -860,6 +864,29 @@ begin
   rdeIREGADJ.IntegerValue := IREGADJ;
 end;
 
+procedure TfrmPEST.rdeAcceptedObjectiveFunctionChange(Sender: TObject);
+var
+  PD0: Double;
+  PD1: Double;
+begin
+  inherited;
+  if ([csLoading, csReading] * ComponentState) <> [] then
+  begin
+    Exit;
+  end;
+  PD0 := rdeTargetObjectiveFunction.RealValue;
+  PD1 := rdeAcceptedObjectiveFunction.RealValue;
+  if PD1 > PD0 then
+  begin
+    rdeAcceptedObjectiveFunction.Color := clWindow;
+  end
+  else
+  begin
+    rdeAcceptedObjectiveFunction.Color := clRed;
+  end;
+  rdeTestLambdaPhiChange(nil);
+end;
+
 procedure TfrmPEST.rdeFRACPHIMChange(Sender: TObject);
 var
   Value: Double;
@@ -955,6 +982,49 @@ begin
   else
   begin
     rdeSwitchCriterion.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdeTargetObjectiveFunctionChange(Sender: TObject);
+var
+  PD0: Double;
+begin
+  inherited;
+  if ([csLoading, csReading] * ComponentState) <> [] then
+  begin
+    Exit;
+  end;
+  PD0 := rdeTargetObjectiveFunction.RealValue;
+  if PD0 > 0 then
+  begin
+    rdeTargetObjectiveFunction.Color := clWindow;
+  end
+  else
+  begin
+    rdeTargetObjectiveFunction.Color := clRed;
+  end;
+  rdeAcceptedObjectiveFunctionChange(nil);
+end;
+
+procedure TfrmPEST.rdeTestLambdaPhiChange(Sender: TObject);
+var
+  PD1: Double;
+  PD2: Double;
+begin
+  inherited;
+  if ([csLoading, csReading] * ComponentState) <> [] then
+  begin
+    Exit;
+  end;
+  PD1 := rdeAcceptedObjectiveFunction.RealValue;
+  PD2 := rdeTestLambdaPhi.RealValue;
+  if PD2 > PD1 then
+  begin
+    rdeTestLambdaPhi.Color := clWindow;
+  end
+  else
+  begin
+    rdeTestLambdaPhi.Color := clRed;
   end;
 end;
 
@@ -1277,11 +1347,7 @@ var
   ANode: TTreeNode;
   ObsGroup: TPestObservationGroup;
   ChildNode: TTreeNode;
-  AnObject: TObject;
   PredictCount: Integer;
-  AnObs: TCustomObservationItem;
-  FluxObs: TFluxObservationGroup;
-  HobItem: THobItem;
 begin
   result := True;
   if comboPestMode.ItemIndex = Ord(pmPrediction) then
@@ -1297,20 +1363,7 @@ begin
         break;
       end;
     end;
-//    if not PredictGroupFound then
-//    begin
-//      Grid := framePriorInfoObservationGroups.Grid;
-//      PredictGroupFound := False;
-//      for ObsGroupIndex := 0 to framePriorInfoObservationGroups.seNumber.AsInteger - 1 do
-//      begin
-//        GroupName := LowerCase(Grid.Cells[Ord(pogcName), ObsGroupIndex + 1]);
-//        if GroupName = 'predict' then
-//        begin
-//          PredictGroupFound := True;
-//          break;
-//        end;
-//      end;
-//    end;
+
     if not PredictGroupFound then
     begin
       result := False;
@@ -1322,44 +1375,14 @@ begin
     while ANode <> nil do
     begin
       ObsGroup := ANode.Data;
-      ChildNode := ANode.getFirstChild;
-      while ChildNode <> nil do
+      if (ObsGroup <> nil) and (LowerCase(ObsGroup.ObsGroupName) = 'predict') then
       begin
-        AnObject := ChildNode.Data;
-        if AnObject is TCustomObservationItem then
+        ChildNode := ANode.getFirstChild;
+        while ChildNode <> nil do
         begin
-          AnObs := TCustomObservationItem(AnObject);
-          if ObsGroup <> nil then
-          begin
-            if SameText(AnObs.ObservationGroup, 'predict') then
-            begin
-              Inc(PredictCount);
-            end;
-          end;
-        end
-        else if AnObject is TFluxObservationGroup then
-        begin
-          FluxObs := TFluxObservationGroup(AnObject);
-          if ObsGroup <> nil then
-          begin
-            if SameText(FluxObs.ObservationGroup, 'predict') then
-            begin
-              Inc(PredictCount);
-            end;
-          end;
-        end
-        else
-        begin
-          HobItem := AnObject as THobItem;
-          if ObsGroup <> nil then
-          begin
-            if SameText(HobItem.ObservationGroup, 'predict') then
-            begin
-              Inc(PredictCount);
-            end;
-          end;
+          Inc(PredictCount);
+          ChildNode := ChildNode.GetNextSibling;
         end;
-        ChildNode := ChildNode.GetNextSibling;
       end;
 
       ANode := ANode.GetNextSibling;
@@ -1374,9 +1397,11 @@ begin
   if not PredictGroupOK then
   begin
     Beep;
-    MessageDlg(StrWhenThePrediction, mtError, [mbOK], 0);
-    ModalResult := mrNone;
-    Exit;
+    if MessageDlg(StrWhenThePrediction, mtError, [mbYes, mbNo], 0) <> mrYes then
+    begin
+      ModalResult := mrNone;
+      Exit;
+    end;
   end;
   SetData;
 end;

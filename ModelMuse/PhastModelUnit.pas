@@ -4673,7 +4673,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
     procedure ExportPestInput(FileName: string; RunPest: TPestExportChoice; SetNOPTMAX: Boolean = False);
-    procedure ExportParRepInput(FileName: string; RunParRep: Boolean);
+    function ExportParRepInput(FileName: string; RunParRep, RunPest: Boolean; New_noptmax: Integer = -1): string;
     procedure ExportSupCalcInput;
     procedure ExportSvdaPrep;
     procedure SetMf2005ObsGroupNames; override;
@@ -40931,11 +40931,12 @@ begin
 
 end;
 
-procedure TPhastModel.ExportParRepInput(FileName: string; RunParRep: Boolean);
+function TPhastModel.ExportParRepInput(FileName: string; RunParRep, RunPest: Boolean;
+  New_noptmax: Integer = -1): string;
 var
   Base: string;
   ExistingPestFile: string;
-  NewPestFile: string;
+//  NewPestFile: string;
   BatchFileName: string;
   PestName: string;
   ParRepName: string;
@@ -40945,7 +40946,7 @@ begin
   Base := ChangeFileExt(FileName, '');
   Base := ChangeFileExt(Base, '');
   ExistingPestFile := ExtractFileName(ChangeFileExt(Base, '.pst'));
-  NewPestFile := ExtractFileName(Base + '_parrep.pst');
+  result := ExtractFileName(Base + '_parrep.pst');
   BatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
     + 'RunParRep.bat';
 
@@ -40955,9 +40956,20 @@ begin
     + 'parrep.exe';
   BatchFile := TStringList.Create;
   try
-    BatchFile.Add(Format('"%0:s" %1:s %2:s %3:s 0', [ParRepName,
-      ExtractFileName(FileName), ExistingPestFile, NewPestFile]));
-    BatchFile.Add(Format('"%0:s" %1:s', [PestName, NewPestFile]));
+    if New_noptmax >= 0 then
+    begin
+      BatchFile.Add(Format('"%0:s" %1:s %2:s %3:s %4:d', [ParRepName,
+        ExtractFileName(FileName), ExistingPestFile, result, New_noptmax]));
+    end
+    else
+    begin
+      BatchFile.Add(Format('"%0:s" %1:s %2:s %3:s', [ParRepName,
+        ExtractFileName(FileName), ExistingPestFile, result]));
+    end;
+    if RunPest then
+    begin
+      BatchFile.Add(Format('"%0:s" %1:s', [PestName, result]));
+    end;
     BatchFile.Add('pause');
     BatchFile.SaveToFile(BatchFileName);
   finally
@@ -40980,6 +40992,8 @@ var
   BatchFile: TStringList;
   PestCheckName: string;
   PestCheckBatchFileName: string;
+  PestControlFileName: string;
+  LineIndex: Integer;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(self, StrPESTNotFound);
   if not PestUsed then
@@ -40988,7 +41002,7 @@ begin
   end;
   PestControlWriter := TPestControlFileWriter.Create(Self, etExport);
   try
-    PestControlWriter.WriteFile(FileName, SetNOPTMAX)
+    PestControlFileName := PestControlWriter.WriteFile(FileName, SetNOPTMAX)
   finally
     PestControlWriter.Free;
   end;
@@ -41008,6 +41022,12 @@ begin
       + 'pestchek.exe';
   end;
 
+  if PestProperties.PestControlData.PestMode = pmPrediction then
+  begin
+    PestControlFileName := ExportParRepInput(
+      ChangeFileExt(PestControlFileName, '.par'), RunPest <> pecNone, False);
+  end;
+
   if not FileExists(PestName) then
   begin
     //Beep;
@@ -41023,11 +41043,21 @@ begin
 
   BatchFile := TStringList.Create;
   try
-    BatchFile.Add(PestName + ChangeFileExt(ExtractFileName(FileName), ''));
+    if PestProperties.PestControlData.PestMode = pmPrediction then
+    begin
+      BatchFile.Add('RunParRep.bat');
+      LineIndex := 1;
+    end
+    else
+    begin
+      LineIndex := 0;
+    end;
+
+    BatchFile.Add(PestName + ChangeFileExt(ExtractFileName(PestControlFileName), ''));
     BatchFile.Add('pause');
     BatchFile.SaveToFile(BatchFileName);
 
-    BatchFile[0] := PestCheckName + ChangeFileExt(ExtractFileName(FileName), '');
+    BatchFile[LineIndex] := PestCheckName + ChangeFileExt(ExtractFileName(PestControlFileName), '');
     BatchFile.SaveToFile(PestCheckBatchFileName);
   finally
     BatchFile.Free;

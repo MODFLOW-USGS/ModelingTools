@@ -2,6 +2,7 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 485
   ClientWidth = 764
+  ExplicitTop = -47
   ExplicitWidth = 780
   ExplicitHeight = 524
   PixelsPerInch = 96
@@ -33,7 +34,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspSingularValueDecomp
+    ActivePage = jvspPrediction1
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -2504,6 +2505,7 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspPrediction1'
+      ExplicitLeft = 1
       object lblPredMinMax: TLabel
         Left = 157
         Top = 19
@@ -2621,6 +2623,7 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 2
         Text = '0'
+        OnChange = rdeTargetObjectiveFunctionChange
         DataType = dtReal
         Max = 1.000000000000000000
         CheckMin = True
@@ -2633,6 +2636,7 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 3
         Text = '0'
+        OnChange = rdeAcceptedObjectiveFunctionChange
         DataType = dtReal
         Max = 1.000000000000000000
         CheckMin = True
@@ -2645,6 +2649,7 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 4
         Text = '0'
+        OnChange = rdeTestLambdaPhiChange
         DataType = dtReal
         Max = 1.000000000000000000
         CheckMin = True
@@ -2704,6 +2709,8 @@ inherited frmPEST: TfrmPEST
         Width = 67
         Height = 26
         MaxValue = 2147483647.000000000000000000
+        MinValue = 1.000000000000000000
+        Value = 1.000000000000000000
         TabOrder = 9
       end
       object rdeAbsolutePredictionSwitch: TRbwDataEntry

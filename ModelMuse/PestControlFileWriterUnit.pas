@@ -58,7 +58,7 @@ type
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
-    procedure WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False);
+    function WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False): string;
   end;
 
 implementation
@@ -976,7 +976,14 @@ begin
   case PestControlData.LambdaForgive of
     lfForgive:
       begin
-        WriteString(' lamforgive');
+        if (PestControlData.PestMode = pmPrediction) then
+        begin
+          WriteString(' nolamforgive');
+        end
+        else
+        begin
+          WriteString(' lamforgive');
+        end;
       end;
     lfNoForgive:
       begin
@@ -1099,7 +1106,8 @@ begin
       Assert(False);
   end;
   // BOUNDSCALE
-  if PestControlData.Boundscaling = bsBoundsScaling then
+  if (PestControlData.Boundscaling = bsBoundsScaling)
+    and (PestControlData.PestMode <> pmPrediction) then
   begin
     WriteString(' boundscale');
   end
@@ -1251,7 +1259,7 @@ begin
 // The Derivatives is not currently supported.
 end;
 
-procedure TPestControlFileWriter.WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False);
+function TPestControlFileWriter.WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False): string;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParametersHaveB);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationGroup);
@@ -1271,6 +1279,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
+  result := FNameOfFile;
   OpenFile(FNameOfFile);
   try
     WriteFirstLine;

@@ -1,0 +1,22 @@
+# Name File for MODFLOW created on 8/15/2021 by ModelMuse Version 4.3.0.58
+BEGIN OPTIONS
+  LIST Prediction.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         Prediction.dis
+  IC6          Prediction.ic
+  NPF6         Prediction.npf
+  OBS6         Prediction.ob_gw
+  STO6         Prediction.sto
+  OC6          Prediction.oc
+  CHD6         Prediction.chd
+  GHB6         Prediction.ghb
+  WEL6         Prediction.wel
+  RIV6         Prediction.riv
+  DRN6         Prediction.drn
+  RCH6         Prediction.rch
+  EVT6         Prediction.evt
+END PACKAGES

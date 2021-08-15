@@ -4,7 +4,6 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   Caption = ' Select Model Results to Import'
   ClientHeight = 462
   ClientWidth = 647
-  ExplicitTop = -217
   ExplicitWidth = 663
   ExplicitHeight = 501
   PixelsPerInch = 96
@@ -167,6 +166,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -190,6 +190,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -213,6 +214,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'Browse'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
