@@ -300,7 +300,6 @@ const
   MaxDisplayChoiceCount = 10;
 
 resourcestring
-  StrModelResults = 'Model Results';
   StrLayerData = '|Layer Data';
   StrThreeDData = '|3D Data';
   KSystem = '|System';

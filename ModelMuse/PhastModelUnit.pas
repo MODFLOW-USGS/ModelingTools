@@ -10328,10 +10328,11 @@ const
 //                MAW input file.
 //    '4.3.0.58' Bug fix (not in released version) Fixed a bug in copying the
 //                starting and ending points of object sections.
+//    '4.3.0.59' No changes in released version.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.58';
+  IIModelVersion = '4.3.0.59';
 
 function IModelVersion: string;
 begin

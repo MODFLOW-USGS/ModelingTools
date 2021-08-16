@@ -26,6 +26,7 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
     Filter = 
       'MODFLOW 6 Feature files|*.chd; *.wel;*.drn;*.riv;*.ghb;*.rch;*.e' +
       'vt;*.csub;*.maw6;*.sfr;*.lak6;*.uzf'
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
     Text = ''
   end

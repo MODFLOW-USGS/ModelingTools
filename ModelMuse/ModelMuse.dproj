@@ -3,12 +3,12 @@
         <ProjectGuid>{DBACE99F-0221-4660-936F-15A30233FA90}</ProjectGuid>
         <MainSource>ModelMuse.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Beta</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>19.2</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -70,7 +70,7 @@
         <VerInfo_MajorVer>4</VerInfo_MajorVer>
         <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileVersion=4.3.0.58;ProductVersion=4.3.0.58</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=4.3.0.59;ProductVersion=4.3.0.59</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Manifest_File>None</Manifest_File>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
@@ -92,7 +92,7 @@
         <SanitizedProjectName>ModelMuse</SanitizedProjectName>
         <VerInfo_MinorVer>3</VerInfo_MinorVer>
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
-        <VerInfo_Build>58</VerInfo_Build>
+        <VerInfo_Build>59</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -119,8 +119,6 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <DCC_Define>MF2015;LeakChecking;$(DCC_Define)</DCC_Define>
-        <VerInfo_Build>53</VerInfo_Build>
-        <VerInfo_Keys>FileVersion=4.3.0.53;ProductVersion=4.3.0.53</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <BRCC_IncludePath>D:\jedi\jcl\jcl\lib\d16\win64;$(BRCC_IncludePath)</BRCC_IncludePath>

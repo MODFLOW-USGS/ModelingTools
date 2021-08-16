@@ -24,6 +24,7 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
     Width = 408
     Height = 26
     Filter = 'SUTRA input files (*.inp, sutra.fil)|*.inp;sutra.fil'
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
     Text = ''
     OnChange = fedModelFeatureFileChange
@@ -36,7 +37,6 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 252
     DesignSize = (
       424
       41)
@@ -79,6 +79,7 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
     Width = 408
     Height = 121
     OnClickCheck = clbFeaturesClickCheck
+    Anchors = [akLeft, akTop, akRight]
     ItemHeight = 18
     Items.Strings = (
       'Specified Pressure'

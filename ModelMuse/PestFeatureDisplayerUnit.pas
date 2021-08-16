@@ -42,6 +42,7 @@ type
     FScreenObjectList: TObjectList;
     FSutraModel: TSutraFilReader;
     FTimeStep: Integer;
+    FClassificationSuffix: string;
     procedure ImportSpecifiedPressures;
     procedure ImportSpecifiedU;
     procedure ImportFluidFluxes;
@@ -75,6 +76,9 @@ resourcestring
   'e mesh. The cell locations was (Layer: %0:d, Number: %1:d).';
   StrAFileContainedAFGrid = 'A file contained a features that was outside th' +
   'e grid. The cell locations was (Layer: %0:d, Row: %1:d, Column: %2:d).';
+  StrImportModelFeature = 'import model feature data sets.';
+  StrModelFeatures = '|Model Features';
+  StrImportedFrom0s = 'Imported from "%0:s" on %1:s';
 
 
 { TPestFeatureDisplayer }
@@ -221,6 +225,7 @@ var
   UzfHRootValueArrayItem: TValueArrayItem;
   UzfRootActValueArrayItem: TValueArrayItem;
   UzfFeature: TUzfFeature;
+  ClassificationSuffix: string;
   function CreateDataSet(const Root: string;
     Method: TValueAddMethod): TModflowBoundaryDisplayDataArray;
   begin
@@ -230,6 +235,8 @@ var
     result.AddMethod := Method;
     result.Name := GenerateNewName(Format('%0:s_SP_%1:d',
       [Root, StressPeriod]), InvalidNames, '_');
+    result.Classification := StrModelResults + StrModelFeatures + ClassificationSuffix;
+    result.Comment := Format(StrImportedFrom0s, [FileName, DateTimeToStr(Now)]);
     result.Formula := '0';
     if Method = vamAveragedDelayed then
     begin
@@ -266,6 +273,7 @@ var
       + '("' + StrImportedElevations + '")';
   end;
 begin
+  ClassificationSuffix := '';
   FeatureReader := TModflow6FileReader.Create(GridType);
   try
     FeatureReader.OpenFile(FileName);
@@ -344,17 +352,20 @@ begin
         begin
           HeadDataArray := CreateDataSet('CHD_Head', vamAveragedDelayed);
           Root := 'CHD';
+          ClassificationSuffix := '|CHD';
         end;
       m6ftWell:
         begin
           WellDataArray := CreateDataSet('WELL_Pumping_Rate', vamAddDelayed);
           Root := 'WEL';
+          ClassificationSuffix := '|WEL';
         end;
       m6ftDrn:
         begin
           DrnElevDataArray := CreateDataSet('DRN_Elevation', vamAveragedDelayed);
           DrnCondDataArray := CreateDataSet('DRN_Conductance', vamAveragedDelayed);
           Root := 'DRN';
+          ClassificationSuffix := '|DRN';
         end;
       m6ftRiv:
         begin
@@ -362,17 +373,20 @@ begin
           RivCondDataArray := CreateDataSet('RIV_Conductance', vamAveragedDelayed);
           RivRBotDataArray := CreateDataSet('RIV_Bottom', vamAveragedDelayed);
           Root := 'RIV';
+          ClassificationSuffix := '|RIV';
         end;
       m6ftGhb:
         begin
           GhbHeadDataArray := CreateDataSet('GHB_Head', vamAveragedDelayed);
           GhbCondDataArray := CreateDataSet('GHB_Conductance', vamAveragedDelayed);
           Root := 'GHB';
+          ClassificationSuffix := '|GHB';
         end;
       m6ftRch:
         begin
           RechargeDataArray := CreateDataSet('RCH_Recharge', vamAddDelayed);
           Root := 'RCH';
+          ClassificationSuffix := '|RCH';
         end;
       m6ftEvt:
         begin
@@ -380,14 +394,17 @@ begin
           EvtRateDataArray := CreateDataSet('EVT_Rate', vamAddDelayed);
           EvtDepthDataArray := CreateDataSet('EVT_Depth', vamAveragedDelayed);
           Root := 'EVT';
+          ClassificationSuffix := '|EVT';
         end;
       m6ftCSub:
         begin
           CSubStressOffsetDataArray := CreateDataSet('CSUB_Stress_Offset', vamAveragedDelayed);
           Root := 'CSUB';
+          ClassificationSuffix := '|CSUB';
         end;
       m6ftMaw:
         begin
+          ClassificationSuffix := '|MAW';
           for FeatureIndex := 0 to FFeatures.Count - 1 do
           begin
             MawFeature := FFeatures[FeatureIndex] as TMawFeature;
@@ -463,6 +480,7 @@ begin
           SfrRunoffDataArray := CreateDataSet('SFR_Runoff', vamAddDelayed);
           SfrUpstreamFractionDataArray := CreateDataSet('SFR_UpstreamFraction', vamAveragedDelayed);
           Root := 'SFR';
+          ClassificationSuffix := '|SFR';
         end;
       m6ftLak:
         begin
@@ -473,6 +491,7 @@ begin
           LakInflowDataArray := CreateDataSet('LAK_Inflow', vamAddDelayed);
           LakWithdrawalDataArray := CreateDataSet('LAK_Withdrawal', vamAddDelayed);
           Root := 'LAK';
+          ClassificationSuffix := '|LAK';
         end;
       m6ftUzf:
         begin
@@ -484,6 +503,7 @@ begin
           UzfHRootDataArray := CreateDataSet('UZF_RootPotential', vamAveragedDelayed);
           UzfRootActDataArray := CreateDataSet('UZF_RootActivityFunction', vamAveragedDelayed);
           Root := 'UZF';
+          ClassificationSuffix := '|UZF';
         end;
       else
         Assert(False);
@@ -1053,7 +1073,7 @@ end;
 
 function TUndoImportPestModelFeatureDisplay.Description: string;
 begin
-  result := 'import model feature data sets.';
+  result := StrImportModelFeature;
 end;
 
 { TPestSutraFeatureDisplayer }
@@ -1064,6 +1084,7 @@ begin
   FNewDataSets := TList.Create;
   FInvalidNames := TStringList.Create;
   FScreenObjectList := TObjectList.Create;
+  FClassificationSuffix := '';
 end;
 
 function TPestSutraFeatureDisplayer.CreateDataSet(const Root: string;
@@ -1076,6 +1097,8 @@ begin
   result.Orientation := dso3D;
   result.EvaluatedAt := eaNodes;
   result.AddMethod := Method;
+  result.Classification := StrModelResults + StrModelFeatures + FClassificationSuffix;
+  result.Comment := Format(StrImportedFrom0s, [FFileName, DateTimeToStr(Now)]);
   if FTimeStep >= 0 then
   begin
     result.Name := GenerateNewName(Format('%0:s_TS_%1:d',
@@ -1203,6 +1226,7 @@ var
 begin
   if FSutraInput.FluidSources.Count > 0 then
   begin
+    FClassificationSuffix := '|Specified Fluid Flux';
     ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.FluidSources.Count - 1 do
     begin
@@ -1281,6 +1305,7 @@ var
 begin
   if FSutraInput.GeneralizedTransports.Count > 0 then
   begin
+    FClassificationSuffix := '|Generalized Mass or Energy Flows';
     ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.GeneralizedTransports.Count - 1 do
     begin
@@ -1373,6 +1398,7 @@ var
 begin
   if FSutraInput.GeneralizedFlows.Count > 0 then
   begin
+    FClassificationSuffix := '|Generalized Fluid Flows';
     ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.GeneralizedFlows.Count - 1 do
     begin
@@ -1467,6 +1493,7 @@ var
 begin
   if FSutraInput.SpecifiedPressures.Count > 0 then
   begin
+    FClassificationSuffix := '|Specified Pressure';
     ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.SpecifiedPressures.Count - 1 do
     begin
@@ -1539,6 +1566,7 @@ var
 begin
   if FSutraInput.SpecifiedUs.Count > 0 then
   begin
+    FClassificationSuffix := '|Specified Temperature or Concentration';
     ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.SpecifiedUs.Count - 1 do
     begin
@@ -1606,6 +1634,7 @@ var
 begin
   if FSutraInput.USources.Count > 0 then
   begin
+    FClassificationSuffix := '|Specified Mass or Energy Flux';
     ActiveCount := 0;
     for FeatureIndex := 0 to FSutraInput.USources.Count - 1 do
     begin

@@ -923,6 +923,8 @@ resourcestring
   ' Model Solution package must be set to BICGSTAB instead of Conjugate ' +
   'Gradient,';
 
+  StrModelResults = 'Model Results';
+
 const
   // On Linux, @name is used to control the access permissions of files.
   // @name has no effect in Windows.

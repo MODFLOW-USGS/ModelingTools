@@ -410,6 +410,7 @@ var
   Item: TParamItem;
   RowIndex: Integer;
   IntList: TIntegerList;
+  ValIntList: TIntegerList;
   InvalidParameters: TStringList;
 begin
   inherited;
@@ -421,6 +422,7 @@ begin
       begin
         MyList := TStringList.Create;
         IntList := TIntegerList.Create;
+        ValIntList := TIntegerList.Create;
         InvalidParameters := TStringList.Create;
         try
           MyList.Assign(rdgParameters.Cols[Ord(pcName)]);
@@ -434,6 +436,7 @@ begin
             if RowIndex >= 1 then
             begin
               IntList.Add(RowIndex);
+              ValIntList.Add(ValIndex);
             end
             else
             begin
@@ -445,13 +448,13 @@ begin
             Beep;
             MessageDlg(Format(StrErrorReadingPvalF2, [InvalidParameters.Text]),
               mtError, [mbOK], 0);
-          end
-          else
+          end;
+//          else
           begin
-            Assert(IntList.Count = PvalList.Count);
-            for ValIndex := 0 to PvalList.Count - 1 do
+            Assert(IntList.Count = ValIntList.Count);
+            for ValIndex := 0 to IntList.Count - 1 do
             begin
-              Item := PvalList[ValIndex];
+              Item := PvalList[ValIntList[ValIndex]];
               RowIndex := IntList[ValIndex];
               rdgParameters.Cells[Ord(pcValue), RowIndex] :=
                 FloatToStr(Item.Value);
@@ -461,6 +464,7 @@ begin
           end;
         finally
           MyList.Free;
+          ValIntList.Free;
           IntList.Free;
           InvalidParameters.Free;
         end;

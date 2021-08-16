@@ -1616,11 +1616,6 @@ begin
       BatchFile.AddStrings(After);
       ParamEstBatchFile.AddStrings(After);
       ArchiveBatchFile.AddStrings(After);
-      for ListFileIndex := 0 to ListFiles.Count - 1 do
-      begin
-        AddOpenListFileLine(ListFiles[ListFileIndex], OpenListFile,
-          BatchFile, ProgramLocations);
-      end;
 
       if ExportModpath then
       begin
@@ -1749,6 +1744,13 @@ begin
         end;
       end;
     {$ENDIF}
+      // displaying the list file should be the last command before 
+      // exiting from the network drive.
+      for ListFileIndex := 0 to ListFiles.Count - 1 do
+      begin
+        AddOpenListFileLine(ListFiles[ListFileIndex], OpenListFile,
+          BatchFile, ProgramLocations);
+      end;
 
       if NetworkDrive then
       begin
