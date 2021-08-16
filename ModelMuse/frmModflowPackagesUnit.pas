@@ -391,6 +391,7 @@ type
     procedure CheckIPHDRY;
     procedure UpdateSpeciesNames;
     function ValidModpathChoice: Boolean;
+    function ValidMT3D: Boolean;
     property CurrentPackages: TModflowPackages read FCurrentPackages
       write SetCurrentPackages;
     procedure StorePackageDataInFrames(Packages: TModflowPackages);
@@ -546,6 +547,7 @@ resourcestring
   'e MT3D Basic package.';
   StrFirstorderChainRe = 'First-order chain reactions require at least two c' +
   'hemical species in the MT3D Basic package.';
+  StrMT3DCanOnlyBeUse = 'MT3D can only be used with structured grids.';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -986,6 +988,17 @@ begin
 
 end;
 
+function TfrmModflowPackages.ValidMT3D: Boolean;
+begin
+  result := True;
+  if frmGoPhast.DisvUsed and framePkgMt3dBasic.Selected then
+  begin
+    result := False;
+    Beep;
+    MessageDlg(StrMT3DCanOnlyBeUse, mtError, [mbOK], 0);
+  end;
+end;
+
 function TfrmModflowPackages.ValidModpathChoice: Boolean;
 begin
   result := True;
@@ -1010,6 +1023,8 @@ begin
   // left open for a long time.
   Handle;
   inherited;
+
+  ValidMT3D;
 
   if not ValidModpathChoice then
   begin
@@ -2944,6 +2959,7 @@ end;
 
 procedure TfrmModflowPackages.Mt3dmsBasicSelectedChange(Sender: TObject);
 begin
+  ValidMt3D;
   frameMt3dmsGcgPackage.CanSelect := framePkgMt3dBasic.Selected;
   frameMt3dmsGcgPackage.Selected := framePkgMt3dBasic.Selected;
 

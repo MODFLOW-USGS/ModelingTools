@@ -29,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspModpath
+    ActivePage = jvspMt3dmsBasic
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange

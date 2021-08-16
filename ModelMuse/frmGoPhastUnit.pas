@@ -2394,6 +2394,7 @@ resourcestring
   'e of this error is an attempt to open a ModelMuse file created by a newer' +
   ' version of ModelMuse than was used to open the file. This version of Mod' +
   'elMuse that you are using to open the file is %s. Check the';
+  StrMT3DCanOnlyBeUse = 'MT3D can only be used with structured grids.';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -14465,6 +14466,13 @@ var
   Mt3dExtension: string;
 begin
   inherited;
+  if DisvUsed then
+  begin
+    Beep;
+    MessageDlg(StrMT3DCanOnlyBeUse,
+      mtWarning, [mbOK], 0);
+    Exit;
+  end;
   if not PhastModel.Mt3dmsIsSelected then
   begin
     Beep;
