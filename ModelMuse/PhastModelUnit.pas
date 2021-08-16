@@ -4673,7 +4673,8 @@ that affects the model output should also have a comment. }
     procedure InvalidateContours; override;
     function Mt3dIsSelected: Boolean; override;
     procedure ExportPestInput(FileName: string; RunPest: TPestExportChoice; SetNOPTMAX: Boolean = False);
-    function ExportParRepInput(FileName: string; RunParRep, RunPest: Boolean; New_noptmax: Integer = -1): string;
+    function ExportParRepInput(FileName: string; RunParRep, RunPest,
+      IncludePause: Boolean; New_noptmax: Integer = -1): string;
     procedure ExportSupCalcInput;
     procedure ExportSvdaPrep;
     procedure SetMf2005ObsGroupNames; override;
@@ -40931,7 +40932,8 @@ begin
 
 end;
 
-function TPhastModel.ExportParRepInput(FileName: string; RunParRep, RunPest: Boolean;
+function TPhastModel.ExportParRepInput(FileName: string; RunParRep, RunPest,
+  IncludePause: Boolean;
   New_noptmax: Integer = -1): string;
 var
   Base: string;
@@ -40970,7 +40972,10 @@ begin
     begin
       BatchFile.Add(Format('"%0:s" %1:s', [PestName, result]));
     end;
-    BatchFile.Add('pause');
+    if IncludePause then
+    begin
+      BatchFile.Add('pause');
+    end;
     BatchFile.SaveToFile(BatchFileName);
   finally
     BatchFile.Free;
@@ -41022,10 +41027,11 @@ begin
       + 'pestchek.exe';
   end;
 
-  if PestProperties.PestControlData.PestMode = pmPrediction then
+  if PestProperties.PestControlData.PestMode in [pmPrediction, pmPareto] then
   begin
     PestControlFileName := ExportParRepInput(
-      ChangeFileExt(PestControlFileName, '.par'), RunPest <> pecNone, False);
+      ChangeFileExt(PestControlFileName, '.par'), RunPest <> pecNone, False,
+      False);
   end;
 
   if not FileExists(PestName) then
@@ -41043,9 +41049,9 @@ begin
 
   BatchFile := TStringList.Create;
   try
-    if PestProperties.PestControlData.PestMode = pmPrediction then
+    if PestProperties.PestControlData.PestMode in [pmPrediction, pmPareto] then
     begin
-      BatchFile.Add('RunParRep.bat');
+      BatchFile.Add('call RunParRep.bat');
       LineIndex := 1;
     end
     else
@@ -41053,7 +41059,8 @@ begin
       LineIndex := 0;
     end;
 
-    BatchFile.Add(PestName + ChangeFileExt(ExtractFileName(PestControlFileName), ''));
+    BatchFile.Add(PestName +
+      ChangeFileExt(ExtractFileName(PestControlFileName), ''));
     BatchFile.Add('pause');
     BatchFile.SaveToFile(BatchFileName);
 

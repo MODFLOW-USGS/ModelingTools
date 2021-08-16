@@ -1,0 +1,22 @@
+# Name File for MODFLOW created on 8/15/2021 by ModelMuse Version 4.3.0.58
+BEGIN OPTIONS
+  LIST ..\..\output\output.Pareto\Pareto.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ..\..\model\model.Pareto\Pareto.dis
+  IC6          ..\..\model\model.Pareto\Pareto.ic
+  NPF6         ..\..\model\model.Pareto\Pareto.npf
+  OBS6         ..\..\model\model.Pareto\Pareto.ob_gw
+  STO6         ..\..\model\model.Pareto\Pareto.sto
+  OC6          ..\..\model\model.Pareto\Pareto.oc
+  CHD6         ..\..\model\model.Pareto\Pareto.chd
+  GHB6         ..\..\model\model.Pareto\Pareto.ghb
+  WEL6         ..\..\model\model.Pareto\Pareto.wel
+  RIV6         ..\..\model\model.Pareto\Pareto.riv
+  DRN6         ..\..\model\model.Pareto\Pareto.drn
+  RCH6         ..\..\model\model.Pareto\Pareto.rch
+  EVT6         ..\..\model\model.Pareto\Pareto.evt
+END PACKAGES

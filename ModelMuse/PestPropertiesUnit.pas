@@ -1568,6 +1568,7 @@ begin
     ParameterChangeConvergenceCount :=
       PcdSource.ParameterChangeConvergenceCount;
     ObjectiveCriterion := PcdSource.ObjectiveCriterion;;
+    MakeFinalRun := PcdSource.MakeFinalRun;
     PhiAbandon := PcdSource.PhiAbandon;
     WriteCovariance := PcdSource.WriteCovariance;
     WriteCorrelations := PcdSource.WriteCorrelations;

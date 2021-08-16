@@ -13493,7 +13493,8 @@ begin
 
   if odRunParRep.Execute then
   begin
-    PhastModel.ExportParRepInput(odRunParRep.FileName, FRunParRep, FRunParRep, 0)
+    PhastModel.ExportParRepInput(odRunParRep.FileName, FRunParRep, FRunParRep,
+      True, 0)
   end;
 end;
 

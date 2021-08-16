@@ -1,0 +1,74 @@
+BEGIN OPTIONS
+  LISTING Pareto.Mf6ObsExtInsLst
+  INSTRUCTION Pareto.PestIns
+END OPTIONS
+
+BEGIN OBSERVATION_FILES
+FILENAME "Pareto.ob_gw_out_head.csv" TEXT
+END OBSERVATION_FILES
+
+BEGIN IDENTIFIERS
+  ID hd_test_H1
+  LOCATION 450 -550
+  OBSNAME hd_test_H1_1 2
+
+  ID hd_test_H2
+  LOCATION 450 -450
+  OBSNAME hd_test_H2_1 2
+
+  ID hd_test_H3
+  LOCATION 550 -450
+  OBSNAME hd_test_H3_1 2
+
+  ID hd_test_H4
+  LOCATION 550 -550
+  OBSNAME hd_test_H4_1 2
+
+  ID hd_HeadObs2_H5
+  LOCATION 650 -350
+  OBSNAME hd_HeadObs2_H5_1 1
+
+  ID hd_HeadObs2_H6
+  LOCATION 750 -350
+  OBSNAME hd_HeadObs2_H6_1 1
+
+  ID hd_HeadObs2_H7
+  LOCATION 750 -450
+  OBSNAME hd_HeadObs2_H7_1 1
+
+  ID hd_HeadObs2_H8
+  LOCATION 650 -450
+  OBSNAME hd_HeadObs2_H8_1 1
+
+  ID hd_Predict_H9
+  LOCATION 450 -250
+  OBSNAME hd_Predict_H9_1 2
+
+  ID hd_Predict_H10
+  LOCATION 450 -150
+  OBSNAME hd_Predict_H10_1 2
+
+  ID hd_Predict_H11
+  LOCATION 550 -150
+  OBSNAME hd_Predict_H11_1 2
+
+  ID hd_Predict_H12
+  LOCATION 550 -250
+  OBSNAME hd_Predict_H12_1 2
+
+END IDENTIFIERS
+
+BEGIN DERIVED_OBSERVATIONS
+# Defined by Object15
+  OBSNAME test1 PRINT
+  INTERPOLATE 456.720430107527 -521.68458781362 hd_test_H1_1 hd_test_H2_1 hd_test_H3_1 hd_test_H4_1
+
+# Defined by Object32
+  OBSNAME H2 PRINT
+  INTERPOLATE 662.813620071685 -351.433691756272 hd_HeadObs2_H5_1 hd_HeadObs2_H6_1 hd_HeadObs2_H7_1 hd_HeadObs2_H8_1
+
+# Defined by Object41
+  OBSNAME pred PRINT
+  INTERPOLATE 456.720430107527 -248.387096774194 hd_Predict_H9_1 hd_Predict_H10_1 hd_Predict_H11_1 hd_Predict_H12_1
+
+END DERIVED_OBSERVATIONS

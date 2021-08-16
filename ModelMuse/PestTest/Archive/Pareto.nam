@@ -1,0 +1,22 @@
+# Name File for MODFLOW created on 8/15/2021 by ModelMuse Version 4.3.0.58
+BEGIN OPTIONS
+  LIST Pareto.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         Pareto.dis
+  IC6          Pareto.ic
+  NPF6         Pareto.npf
+  OBS6         Pareto.ob_gw
+  STO6         Pareto.sto
+  OC6          Pareto.oc
+  CHD6         Pareto.chd
+  GHB6         Pareto.ghb
+  WEL6         Pareto.wel
+  RIV6         Pareto.riv
+  DRN6         Pareto.drn
+  RCH6         Pareto.rch
+  EVT6         Pareto.evt
+END PACKAGES

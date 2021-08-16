@@ -1151,7 +1151,14 @@ begin
     WriteFloat(PestControlData.ObjectiveCriterion);
   end;
   // LASTRUN
-  WriteInteger(Ord(PestControlData.MakeFinalRun));
+  if PestControlData.PestMode = pmPareto then
+  begin
+    WriteInteger(0);
+  end
+  else
+  begin
+    WriteInteger(Ord(PestControlData.MakeFinalRun));
+  end;
   // PHIABANDON
   WriteFloat(PestControlData.PhiAbandon);
 
@@ -1593,7 +1600,9 @@ procedure TPestControlFileWriter.WriteParameterGroups;
 var
   GroupIndex: Integer;
   AGroup: TPestParamGroup;
+  PestControlData: TPestControlData;
 begin
+  PestControlData := Model.PestProperties.PestControlData;
   WriteSectionHeader('parameter groups');
   for GroupIndex := 0 to Model.ParamGroups.Count - 1 do
   begin
@@ -1641,11 +1650,25 @@ begin
         end;
       fcSwitch:
         begin
-          WriteString(' switch');
+          if PestControlData.PestMode = pmPareto then
+          begin
+            WriteString(' always_3');
+          end
+          else
+          begin
+            WriteString(' switch');
+          end;
         end;
       fcSwitch5:
         begin
-          WriteString(' switch_5');
+          if PestControlData.PestMode = pmPareto then
+          begin
+            WriteString(' always_5');
+          end
+          else
+          begin
+            WriteString(' switch_5');
+          end;
         end;
       else Assert(False);
     end;
@@ -1956,6 +1979,9 @@ begin
   end;
   WriteSectionHeader('pareto');
   ParetoProperties := Model.PestProperties.ParetoProperties;
+
+  WriteString(ParetoProperties.ParetoGroupName);
+  NewLine;
 
   WriteFloat(ParetoProperties.InitialParetoWeight);
   WriteFloat(ParetoProperties.FinalParetoWeight);
