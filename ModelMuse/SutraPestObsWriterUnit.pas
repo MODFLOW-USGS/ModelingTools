@@ -1276,11 +1276,11 @@ begin
   case FExportType of
     etInstructions:
       begin
-        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeOut')));
+        WriteString(QuoteFileName(ChangeFileExt(ExtractFileName(FFileName), '.soeOut')));
       end;
     etExtractedValues:
       begin
-        WriteString(QuoteFileName(ChangeFileExt(FFileName, '.soeList')));
+        WriteString(QuoteFileName(ChangeFileExt(ExtractFileName(FFileName), '.soeList')));
       end;
     else
       Assert(False);
@@ -1291,12 +1291,12 @@ begin
     etInstructions:
       begin
         WriteString('  INSTRUCTION ');
-        WriteString(QuoteFileName(ChangeFileExt(FFileName, StrPestIns)));
+        WriteString(QuoteFileName(ChangeFileExt(ExtractFileName(FFileName), StrPestIns)));
       end;
     etExtractedValues:
       begin
         WriteString('  VALUES ');
-        WriteString(QuoteFileName(ChangeFileExt(FFileName, StrSutraValues)));
+        WriteString(QuoteFileName(ChangeFileExt(ExtractFileName(FFileName), StrSutraValues)));
       end;
     else
       Assert(False);

@@ -1903,7 +1903,7 @@ begin
     mtGroundWaterFlow: result := '  GWF6 ';
     else Assert(False);
   end;
-  result := result + '''' + ModelNameFile + ''' ''' + ModelName + '''';
+  result := result + '''' + ExtractFileName(ModelNameFile) + ''' ''' + ModelName + '''';
 end;
 
 { TBoundaryNode }

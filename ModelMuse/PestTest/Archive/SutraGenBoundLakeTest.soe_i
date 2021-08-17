@@ -1,6 +1,6 @@
 BEGIN OPTIONS
-  LISTING C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.soeOut
-  INSTRUCTION C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.PestIns
+  LISTING SutraGenBoundLakeTest.soeOut
+  INSTRUCTION SutraGenBoundLakeTest.PestIns
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

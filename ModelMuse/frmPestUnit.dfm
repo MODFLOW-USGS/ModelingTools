@@ -2,7 +2,6 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 485
   ClientWidth = 764
-  ExplicitTop = -47
   ExplicitWidth = 780
   ExplicitHeight = 524
   PixelsPerInch = 96
@@ -34,7 +33,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspPrediction1
+    ActivePage = jvspBasic
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -44,6 +43,10 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspBasic'
+      ExplicitLeft = 1
+      DesignSize = (
+        566
+        443)
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
@@ -71,6 +74,16 @@ inherited frmPEST: TfrmPEST
         Width = 172
         Height = 18
         Caption = 'Array substitution marker'
+      end
+      object htlblZoneBudget6: TJvHTLabel
+        Left = 17
+        Top = 255
+        Width = 181
+        Height = 19
+        Caption = 
+          '<a href="https://pesthomepage.org/">https://pesthomepage.org/</a' +
+          '>'
+        SuperSubScriptRatio = 0.666666666666666600
       end
       object cbPEST: TCheckBox
         Left = 16
@@ -119,10 +132,11 @@ inherited frmPEST: TfrmPEST
           '?')
       end
       object diredPest: TJvDirectoryEdit
-        Left = 16
-        Top = 256
-        Width = 305
+        Left = 17
+        Top = 280
+        Width = 536
         Height = 26
+        Anchors = [akLeft, akTop, akRight]
         TabOrder = 3
         Text = 'C:\PEST'
         OnChange = diredPestChange
@@ -2505,7 +2519,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspPrediction1'
-      ExplicitLeft = 1
       object lblPredMinMax: TLabel
         Left = 157
         Top = 19

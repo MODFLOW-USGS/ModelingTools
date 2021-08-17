@@ -27962,5 +27962,13 @@ object TTaskHistory
         'Dialog boxes'
         'Import'
         'Error checking')
+    end
+    item
+      Date = 44425.000000000000000000
+      Categories.Strings = (
+        'Dialog boxes'
+        'Import'
+        'PEST'
+        'Testing')
     end>
 end

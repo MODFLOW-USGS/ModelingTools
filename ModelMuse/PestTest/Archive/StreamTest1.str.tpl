@@ -1,7 +1,7 @@
 ptf @
 etf %
-%ReadArrays(C:\ModelingTools\ModelMuse\PestTest\StreamTest1.str.txt)%
-# STR: Stream package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+%ReadArrays(StreamTest1.str.txt)%
+# STR: Stream package file created on 8/17/2021 by ModelMuse version 4.3.0.59.
 # (and then modified by a parameter estimation program.)
     30     4     2     1     0  1.000000000000E+000      9   143 AUXILIARY IFACE # Data Set 2: MXACTS NSS NTRIB NDIV  ICALC CONST ISTCB1 ISTCB2 Option
     30     0     0 # Data Set 5: ITMP IRDFLG IPTFLG

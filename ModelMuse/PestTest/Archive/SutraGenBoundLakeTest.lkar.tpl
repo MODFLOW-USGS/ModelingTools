@@ -1,6 +1,6 @@
 ptf @
 etf %
-%ReadArrays(C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.lkar.txt)%
+%ReadArrays(SutraGenBoundLakeTest.lkar.txt)%
 LAKE     6 'SPECIFIED'
     17 %                    1 *  ~                    Lake_Bottom[1, 1, 9]~% 
     23 %                    1 *  ~                    Lake_Bottom[1, 1, 12]~% 

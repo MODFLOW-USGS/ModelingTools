@@ -2,7 +2,8 @@ ptf @
 #Script for PLPROC
 
 cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
-  id_type='indexed',file='C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.c_nod')
+  id_type='indexed',file='SutraGenBoundLakeTest.c_nod')
+
 #Read data to modify
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_PIndex1;column=2, &

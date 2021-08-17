@@ -12,7 +12,7 @@ uses
   FluxObservationUnit, ModflowHobUnit, System.UITypes,
   System.Generics.Collections, Vcl.Grids, RbwDataGrid4, JvSpin,
   OrderedCollectionUnit, ModflowParameterUnit,
-  ModflowTransientListParameterUnit, HufDefinition;
+  ModflowTransientListParameterUnit, HufDefinition, JvExStdCtrls, JvHtControls;
 
 type
   TPestObsGroupColumn = (pogcName, pogcRegularization, pogcUseTarget,
@@ -316,6 +316,7 @@ type
     seAltIterations: TJvSpinEdit;
     lblAltIterations: TLabel;
     rdgObservationsToReport: TRbwDataGrid4;
+    htlblZoneBudget6: TJvHTLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);

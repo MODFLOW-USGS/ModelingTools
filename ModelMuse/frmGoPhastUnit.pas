@@ -15336,11 +15336,11 @@ initialization
   MfOwhmDate := EncodeDate(2016, 6, 15);
   MfCfpDate := EncodeDate(2011, 2, 23);
   ModelMateDate := EncodeDate(2013, 11, 19);
-  Mf6Date := EncodeDate(2020, 6, 11);
+  Mf6Date := EncodeDate(2021, 7, 30);
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
-  PestDate := EncodeDate(2021,1,27);
+  PestDate := EncodeDate(2021,6,29);
 
   {$IFDEF Win64}
   RegisterExpectedMemoryLeak(GR32_Blend.AlphaTable);

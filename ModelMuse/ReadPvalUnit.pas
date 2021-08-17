@@ -14,11 +14,12 @@ type
   TParamList = TObjectList<TParamItem>;
 
 function ReadPvalFile(const FileName: string; List: TParamList): boolean;
+function ReadParFile(const FileName: string; List: TParamList): boolean;
 
 implementation
 
 uses
-  SysUtils, ModelMuseUtilities;
+  SysUtils, ModelMuseUtilities, System.Classes;
 
 function ReadPvalFile(const FileName: string; List: TParamList): boolean;
 var
@@ -57,102 +58,147 @@ begin
         if TryStrToInt(Lines[StartLine], Count) then
         begin
           result := True;
-//          if Length(Lines) >= StartLine+Count+1 then
-//          begin
-            Sep := FormatSettings.DecimalSeparator;
-            try
-              FormatSettings.DecimalSeparator := '.';
-              for Index := 1 to Count do
+          Sep := FormatSettings.DecimalSeparator;
+          try
+            FormatSettings.DecimalSeparator := '.';
+            for Index := 1 to Count do
+            begin
+              if StartLine+Index >= Length(Lines) then
               begin
-                if StartLine+Index >= Length(Lines) then
-                begin
-                  break;
-                end;
-                ALine := Lines[StartLine+Index];
-                if Trim(ALine) = '' then
-                begin
-                  Continue;
-                end;
-                SpacePos := Pos(' ', ALine);
+                break;
+              end;
+              ALine := Lines[StartLine+Index];
+              if Trim(ALine) = '' then
+              begin
+                Continue;
+              end;
+              SpacePos := Pos(' ', ALine);
+              if SpacePos > 10 then
+              begin
+                SpacePos := 10;
+              end;
+              if SpacePos = 0 then
+              begin
+                SpacePos := Pos(#9, ALine);
                 if SpacePos > 10 then
                 begin
                   SpacePos := 10;
                 end;
-                if SpacePos = 0 then
-                begin
-                  SpacePos := Pos(#9, ALine);
-                  if SpacePos > 10 then
-                  begin
-                    SpacePos := 10;
-                  end;
-                end;
-                AName := Trim(Copy(ALine, 1, SpacePos));
-                Value := Trim(Copy(ALine, SpacePos+1, MaxInt));
-                if TryFortranStrToFloat(Value, AValue) then
-                begin
-                  Item := TParamItem.Create;
-                  Item.Name := AName;
-                  Item.Value := AValue;
-                  List.Add(Item);
-                end
-                else
-                begin
-                  result := False;
-                  Exit;
-                end;
               end;
-
-              for LineIndex := StartLine+Count+1 to Length(Lines) - 1 do
+              AName := Trim(Copy(ALine, 1, SpacePos));
+              Value := Trim(Copy(ALine, SpacePos+1, MaxInt));
+              if TryFortranStrToFloat(Value, AValue) then
               begin
-                ALine := Lines[LineIndex];
-                if Trim(ALine) = '' then
-                begin
-                  Continue;
-                end;
-                if Pos('#--', ALine) = 1 then
-                begin
-                  ALine := Trim(Copy(ALine, 4, MAXINT));
-                end
-                else
-                begin
-                  Continue
-                end;
-                SpacePos := Pos(' ', ALine);
-                if SpacePos > 10 then
-                begin
-                  SpacePos := 10;
-                end;
-                if SpacePos = 0 then
-                begin
-                  SpacePos := Pos(#9, ALine);
-                  if SpacePos > 10 then
-                  begin
-                    SpacePos := 10;
-                  end;
-                end;
-                AName := Trim(Copy(ALine, 1, SpacePos));
-                Value := Trim(Copy(ALine, SpacePos+1, MaxInt));
-                if TryFortranStrToFloat(Value, AValue) then
-                begin
-                  Item := TParamItem.Create;
-                  Item.Name := AName;
-                  Item.Value := AValue;
-                  List.Add(Item);
-                end
-                else
-                begin
-                  result := False;
-                  Exit;
-                end;
+                Item := TParamItem.Create;
+                Item.Name := AName;
+                Item.Value := AValue;
+                List.Add(Item);
+              end
+              else
+              begin
+                result := False;
+                Exit;
               end;
-            finally
-              FormatSettings.DecimalSeparator := Sep;
             end;
-//          end;
+
+            for LineIndex := StartLine+Count+1 to Length(Lines) - 1 do
+            begin
+              ALine := Lines[LineIndex];
+              if Trim(ALine) = '' then
+              begin
+                Continue;
+              end;
+              if Pos('#--', ALine) = 1 then
+              begin
+                ALine := Trim(Copy(ALine, 4, MAXINT));
+              end
+              else
+              begin
+                Continue
+              end;
+              SpacePos := Pos(' ', ALine);
+              if SpacePos > 10 then
+              begin
+                SpacePos := 10;
+              end;
+              if SpacePos = 0 then
+              begin
+                SpacePos := Pos(#9, ALine);
+                if SpacePos > 10 then
+                begin
+                  SpacePos := 10;
+                end;
+              end;
+              AName := Trim(Copy(ALine, 1, SpacePos));
+              Value := Trim(Copy(ALine, SpacePos+1, MaxInt));
+              if TryFortranStrToFloat(Value, AValue) then
+              begin
+                Item := TParamItem.Create;
+                Item.Name := AName;
+                Item.Value := AValue;
+                List.Add(Item);
+              end
+              else
+              begin
+                result := False;
+                Exit;
+              end;
+            end;
+          finally
+            FormatSettings.DecimalSeparator := Sep;
+          end;
         end;
       end;
     end;
   end;
+end;
+
+function ReadParFile(const FileName: string; List: TParamList): boolean;
+var
+  Lines: TStringDynArray;
+  LineIndex: Integer;
+  Splitter: TStringList;
+  AName: string;
+  Value: string;
+  AValue: Extended;
+  Item: TParamItem;
+begin
+  result := False;
+  if (TFile.Exists(FileName)) then
+  begin
+    Lines := TFile.ReadAllLines(FileName);
+    if Length(Lines) > 0 then
+    begin
+      result := True;
+      Splitter := TStringList.Create;
+      try
+        for LineIndex := 1 to Length(Lines) - 1 do
+        begin
+          Splitter.DelimitedText := Trim(Lines[LineIndex]);
+          if Splitter.Count >= 2 then
+          begin
+            AName := Splitter[0];
+            Value := Splitter[1];
+            if TryFortranStrToFloat(Value, AValue) then
+            begin
+              Item := TParamItem.Create;
+              Item.Name := AName;
+              Item.Value := AValue;
+              List.Add(Item);
+            end
+            else
+            begin
+              result := False;
+              Exit;
+            end;
+          end;
+        end;
+      finally
+        Splitter.Free;
+      end;
+    end;
+  end;
+
 end;
 
 end.

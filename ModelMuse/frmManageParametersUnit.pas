@@ -134,8 +134,8 @@ uses
   IntListUnit, GoPhastTypes, PestPropertiesUnit;
 
 resourcestring
-  StrErrorReadingPvalF = 'Error reading Pval file. Check that it is a valid ' +
-  'Pval file.';
+  StrErrorReadingPvalF = 'Error reading %0:s file. Check that it is a valid ' +
+  '%0:s file.';
   StrErrorReadingPvalF2 = 'Error reading Pval file. The following parameter n' +
   'ames from the Pval file are not included in the model.'#13#10'%s';
   StrName = 'Name';
@@ -412,13 +412,47 @@ var
   IntList: TIntegerList;
   ValIntList: TIntegerList;
   InvalidParameters: TStringList;
+  Success: Boolean;
 begin
   inherited;
   if dlgOpenPval.Execute then
   begin
     PvalList := TParamList.Create;
     try
-      if ReadPvalFile(dlgOpenPval.FileName, PvalList) then
+      case dlgOpenPval.FilterIndex of
+        1:
+          begin
+            if SameText(ExtractFileExt(dlgOpenPval.FileName), '.pval') then
+            begin
+              Success := ReadPvalFile(dlgOpenPval.FileName, PvalList);
+            end
+            else
+            begin
+              Success := ReadParFile(dlgOpenPval.FileName, PvalList);
+            end;
+          end;
+        2:
+          begin
+            Success := ReadPvalFile(dlgOpenPval.FileName, PvalList);
+          end;
+        3:
+          begin
+            Success := ReadParFile(dlgOpenPval.FileName, PvalList);
+          end;
+        4:
+          begin
+            Success := ReadPvalFile(dlgOpenPval.FileName, PvalList);
+            if not Success then
+            begin
+              PvalList.Clear;
+              Success := ReadParFile(dlgOpenPval.FileName, PvalList);
+            end;
+          end;
+        else
+          Assert(False);
+      end;
+
+      if Success then
       begin
         MyList := TStringList.Create;
         IntList := TIntegerList.Create;
@@ -472,7 +506,22 @@ begin
       else
       begin
         Beep;
-        MessageDlg(StrErrorReadingPvalF, mtError, [mbOK], 0);
+        case dlgOpenPval.FilterIndex of
+          1, 4:
+            begin
+              MessageDlg(Format(StrErrorReadingPvalF, ['PVAR or PAR']), mtError, [mbOK], 0);
+            end;
+          2:
+            begin
+              MessageDlg(Format(StrErrorReadingPvalF, ['PVAR']), mtError, [mbOK], 0);
+            end;
+          3:
+            begin
+              MessageDlg(Format(StrErrorReadingPvalF, ['PAR']), mtError, [mbOK], 0);
+            end;
+          else
+            Assert(False);
+        end;
       end;
     finally
       PvalList.Free;

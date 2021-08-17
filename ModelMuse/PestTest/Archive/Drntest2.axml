@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Drntest2" FileType="bin">
+    <FileName Model_Name="Drntest2" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Drntest2" FileType="ancillary">
+    <FileName Model_Name="Drntest2" FileType="ancillary">Drntest2.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Drntest2" FileType="Model Input">
+    <FileName Model_Name="Drntest2" FileType="Model Input">arrays\Drntest2.Kx_1.arrays</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">arrays\Drntest2.Kx_2.arrays</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">arrays\Drntest2.Kx_3.arrays</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">arrays\Drntest2.test_1.arrays</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.bas</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.chd</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.dis</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.drn</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.gsf</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.jtf</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.lpf</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.mlt</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.nam.archive</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.ob_hob</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.oc</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.pcg</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.ptf</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">Drntest2.pval</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Input">usgs.Drntest2.reference</FileName>
+  </model>
+  <output Model_Name="Drntest2" FileType="Model Output">
+    <FileName Model_Name="Drntest2" FileType="Model Output">Drntest2.bdn</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Output">Drntest2.hob_out</FileName>
+    <FileName Model_Name="Drntest2" FileType="Model Output">Drntest2.lst</FileName>
+  </output>
+</Model_Archive_List>

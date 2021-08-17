@@ -56,9 +56,9 @@ inherited frmManageParameters: TfrmManageParameters
     object btnImportPval: TButton
       Left = 12
       Top = 6
-      Width = 121
+      Width = 211
       Height = 33
-      Caption = 'Import Pval file'
+      Caption = 'Import Pval or Par file'
       TabOrder = 0
       OnClick = btnImportPvalClick
     end
@@ -937,13 +937,13 @@ inherited frmManageParameters: TfrmManageParameters
         Height = 484
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 296
-        ExplicitHeight = 124
+        ExplicitWidth = 776
+        ExplicitHeight = 484
         inherited tvTree: TTreeView
           Width = 776
           Height = 484
-          ExplicitWidth = 296
-          ExplicitHeight = 124
+          ExplicitWidth = 776
+          ExplicitHeight = 484
         end
       end
     end
@@ -968,7 +968,9 @@ inherited frmManageParameters: TfrmManageParameters
     end
   end
   object dlgOpenPval: TOpenDialog
-    Filter = 'Pval files (*.pval)|*.pval|All files|*.*'
+    Filter = 
+      'Pval or Par files|*.pval;*.par;*.par.*|Pval files (*.pval)|*.pva' +
+      'l| Par files|*.par;*.par.*|All files|*.*'
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 168
     Top = 48

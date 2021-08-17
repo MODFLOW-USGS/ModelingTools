@@ -1,6 +1,6 @@
 BEGIN OPTIONS
-  LISTING C:\ModelingTools\ModelMuse\PestTest\SutraTest4.soeList
-  VALUES C:\ModelingTools\ModelMuse\PestTest\SutraTest4.SutraValues
+  LISTING SutraTest4.soeList
+  VALUES SutraTest4.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

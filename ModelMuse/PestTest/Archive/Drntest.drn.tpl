@@ -1,7 +1,7 @@
 ptf @
 etf %
-%ReadArrays(C:\ModelingTools\ModelMuse\PestTest\Drntest.drn.txt)%
-# DRN: Drain package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+%ReadArrays(Drntest.drn.txt)%
+# DRN: Drain package file created on 8/17/2021 by ModelMuse version 4.3.0.59.
 # (and then modified by a parameter estimation program.)
      4    -1 AUXILIARY IFACE NOPRINT # DataSet 2: MXACTD IDRNCB Option
      4     0 # Data Set 5: ITMP NP Stress period 1

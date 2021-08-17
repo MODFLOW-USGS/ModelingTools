@@ -1,0 +1,8 @@
+# Multiplier (MULT) File created on 8/17/2021 by ModelMuse version 4.3.0.59.
+     3 # NML
+VK_Par1_M1 # MLTNAM
+CONSTANT     1.000000000000E+000  # Multiplier array for VK_Par1 in Upper Aquifer
+VK_Par1_M2 # MLTNAM
+CONSTANT     1.000000000000E+000  # Multiplier array for VK_Par1 in Middle Aquifer
+VK_Par1_M3 # MLTNAM
+CONSTANT     1.000000000000E+000  # Multiplier array for VK_Par1 in Lower Aquifer

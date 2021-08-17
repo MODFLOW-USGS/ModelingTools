@@ -1,7 +1,7 @@
 ptf @
 etf %
-%ReadArrays(C:\ModelingTools\ModelMuse\PestTest\MF6_TestSfrMawLakMvrUzf.uzf.txt)%
-# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+%ReadArrays(MF6_TestSfrMawLakMvrUzf.uzf.txt)%
+# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 8/17/2021 by ModelMuse version 4.3.0.59.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     PRINT_INPUT

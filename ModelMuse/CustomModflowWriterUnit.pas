@@ -1578,8 +1578,8 @@ begin
       AFileName :=  QuoteFileName(ExpandFileName(ModflowLocation));
       if (Model.ModelSelection <> msModflow2015) then
       begin
-        ParamEstBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
-        WriteInstuctionsBatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
+        ParamEstBatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
+        WriteInstuctionsBatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
         WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
           StrObsSeriesExtractore, FileName)
@@ -1592,7 +1592,7 @@ begin
         WriteInstuctionsBatchFile.Add(AFileName {+ ' /wait'});
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf6WriteIns));
         WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
-          StrMf6ObsExtractorexe, FileName)
+          StrMf6ObsExtractorexe, ExtractFileName(FileName))
           + ' ' + InsFileName);
         WriteInstuctionsBatchFile.Add('pause');
       end;
@@ -1701,13 +1701,13 @@ begin
         if Model.ModelSelection = msModflow2015 then
         begin
           ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
-            StrMf6ObsExtractorexe, FileName)
+            StrMf6ObsExtractorexe, ExtractFileName(FileName))
             + ' ' + ChangeFileExt(ExtractFileName(FileName), '.Mf6ExtractValues'));
         end
         else
         begin
           ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
-            StrObsSeriesExtractore, FileName) + ' '
+            StrObsSeriesExtractore, ExtractFileName(FileName)) + ' '
             + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
         end;
       end;
@@ -9341,7 +9341,7 @@ begin
     begin
       NewLine;
       WriteString('  IMS6 ');
-      WriteString('''' +  ModelData.ImsFile + ''' ');
+      WriteString('''' +  ExtractFileName(ModelData.ImsFile) + ''' ');
     end;
     WriteString('''' +  ModelData.ModelName + ''' ');
 
@@ -9362,7 +9362,7 @@ begin
   NewLine;
 
   WriteString('  TDIS6 ');
-  WriteString('''' + TDisFileName+ '''');
+  WriteString('''' + ExtractFileName(TDisFileName) + '''');
   NewLine;
 
   WriteString('END TIMING');
@@ -10251,7 +10251,7 @@ begin
   begin
     WriteString(Model.PestProperties.ExtendedTemplateCharacter);
     WriteString('ReadArrays(');
-    WriteString(ArraysFileName);
+    WriteString(ExtractFileName(ArraysFileName));
     WriteString(')');
     WriteString(Model.PestProperties.ExtendedTemplateCharacter);
     NewLine;

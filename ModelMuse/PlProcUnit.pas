@@ -775,6 +775,7 @@ begin
         NewLine;
         GrbFileName := ChangeFileExt(AFileName, '');
         GrbFileName := ChangeFileExt(GrbFileName, '.gsf');
+        GrbFileName := ExtractFileName(GrbFileName);
         WriteString(Format('%0:s = read_mf_grid_specs(file="%1:s")',
           [KDisName, GrbFileName]));
       end;
@@ -791,6 +792,7 @@ begin
               GrbFileName := ChangeFileExt(AFileName, TSutraNodDisWriter.Extension);
             end;
         end;
+        GrbFileName := ExtractFileName(GrbFileName);
         WriteString(Format('%s = read_list_file(skiplines=1,dimensions=2, &',
           [KDisName]));
         NewLine;
@@ -1052,6 +1054,7 @@ begin
     end;
 
     ReadDiscretization(AFileName);
+    NewLine;
 
     WriteString('#Read data to modify');
     NewLine;

@@ -1,7 +1,7 @@
 ptf @
 etf %
-%ReadArrays(C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.inp.txt)%
-# Main SUTRA input file file created on 7/29/2021 by ModelMuse version 4.3.0.56.
+%ReadArrays(SutraGenBoundLakeTest.inp.txt)%
+# Main SUTRA input file file created on 8/17/2021 by ModelMuse version 4.3.0.59.
 # Data set 1
 _
 _

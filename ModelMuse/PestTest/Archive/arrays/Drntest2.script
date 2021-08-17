@@ -1,0 +1,30 @@
+read_scalar_file(file="C:\ModelingTools\ModelMuse\PestTest\arrays\Drntest2.ParamValues", valuecolumn=2, namecolumn=1)
+# Read coordinates of grid or mesh.
+cl1 = read_list_file(skiplines=1,dimensions=2,  &
+  id_type='indexed',  &
+  file='C:\ModelingTools\ModelMuse\PestTest\arrays\Drntest2.Blocks.clist')
+
+# Read Zone arrays for VK_Par1
+read_list_file(reference_clist=cl1,skiplines=1,dimensions=2,  &
+  slist=List1_L_1;column=2,  &
+  slist=List1_L_2;column=3,  &
+  slist=List1_L_3;column=4,  &
+  id_type='indexed',  &
+  file='C:\ModelingTools\ModelMuse\PestTest\arrays\Drntest2.VK_Par1_Zone.slist')
+
+# Read Multiplier arrays for VK_Par1
+read_list_file(reference_clist=cl1,skiplines=1,dimensions=2,  &
+  plist=List2_L_1;column=2,  &
+  plist=List2_L_2;column=3,  &
+  plist=List2_L_3;column=4,  &
+  id_type='indexed',  &
+  file='C:\ModelingTools\ModelMuse\PestTest\arrays\Drntest2.VK_Par1_Multiplier.plist')
+VK_1 = new_plist(reference_clist=cl1,value=0)
+VK_1 = VK_Par1*List2_L_1*List1_L_1
+VK_2 = new_plist(reference_clist=cl1,value=0)
+VK_2 = VK_Par1*List2_L_2*List1_L_2
+VK_3 = new_plist(reference_clist=cl1,value=0)
+VK_3 = VK_Par1*List2_L_3*List1_L_3
+write_column_data_file(file='Drntest2.VK_1', plist=VK_1)
+write_column_data_file(file='Drntest2.VK_2', plist=VK_2)
+write_column_data_file(file='Drntest2.VK_3', plist=VK_3)

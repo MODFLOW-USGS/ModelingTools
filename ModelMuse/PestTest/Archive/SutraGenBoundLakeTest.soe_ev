@@ -1,6 +1,6 @@
 BEGIN OPTIONS
-  LISTING C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.soeList
-  VALUES C:\ModelingTools\ModelMuse\PestTest\SutraGenBoundLakeTest.SutraValues
+  LISTING SutraGenBoundLakeTest.soeList
+  VALUES SutraGenBoundLakeTest.SutraValues
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

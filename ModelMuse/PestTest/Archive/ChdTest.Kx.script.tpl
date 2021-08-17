@@ -2,7 +2,8 @@ ptf @
 #Script for PLPROC
 
 #Read MODFLOW-2005 grid information file
-cl_Discretization = read_mf_grid_specs(file="C:\ModelingTools\ModelMuse\PestTest\ChdTest.gsf")#Read data to modify
+cl_Discretization = read_mf_grid_specs(file="ChdTest.gsf")
+#Read data to modify
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   slist=s_PIndex1;column=2, &
   plist=p_Value1;column=3, &

@@ -1,6 +1,6 @@
 BEGIN OPTIONS
-  LISTING C:\ModelingTools\ModelMuse\PestTest\SutraTest1.soeOut
-  INSTRUCTION C:\ModelingTools\ModelMuse\PestTest\SutraTest1.PestIns
+  LISTING SutraTest1.soeOut
+  INSTRUCTION SutraTest1.PestIns
 END OPTIONS
 
 BEGIN OBSERVATION_FILES

@@ -1,7 +1,7 @@
 ptf @
 etf %
-%ReadArrays(C:\ModelingTools\ModelMuse\PestTest\EtsTest.ets.txt)%
-# ETS: Evapotranspiration Segments package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+%ReadArrays(EtsTest.ets.txt)%
+# ETS: Evapotranspiration Segments package file created on 8/17/2021 by ModelMuse version 4.3.0.59.
 # (and then modified by a parameter estimation program.)
      2     9     0     3 # DataSet 1: NETSOP IEVTCB, NPETS, NETSEG
      1     1     1     1     1 # Data Set 4: INETSS INETSR INETSX [INIETS [INSGDF]] Stress period 1
