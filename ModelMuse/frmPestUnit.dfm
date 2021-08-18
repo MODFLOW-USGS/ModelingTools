@@ -26,14 +26,17 @@ inherited frmPEST: TfrmPEST
     Align = alLeft
     Indent = 19
     TabOrder = 0
+    OnMouseDown = tvPESTMouseDown
     Items.Links = {00000000}
+    ExplicitLeft = -1
+    ExplicitTop = -6
   end
   object plMain: TJvPageList
     Left = 198
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspBasic
+    ActivePage = jvspInversionControls
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -43,7 +46,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspBasic'
-      ExplicitLeft = 1
       DesignSize = (
         566
         443)
@@ -174,6 +176,20 @@ inherited frmPEST: TfrmPEST
         Height = 18
         Caption = 'Mode (PESTMODE)'
       end
+      object lblMaxCompDim: TLabel
+        Left = 93
+        Top = 102
+        Width = 369
+        Height = 18
+        Caption = 'Maximum Compression Dimension (MAXCOMPDIM)'
+      end
+      object lblZeroLimit: TLabel
+        Left = 93
+        Top = 130
+        Width = 306
+        Height = 18
+        Caption = 'Jacobian element threshold (DERZEROLIM)'
+      end
       object cbSaveRestart: TCheckBox
         Left = 23
         Top = 16
@@ -196,33 +212,12 @@ inherited frmPEST: TfrmPEST
           'regularization'
           'pareto')
       end
-    end
-    object jvspDimensions: TJvStandardPage
-      Left = 0
-      Top = 0
-      Width = 566
-      Height = 443
-      Caption = 'jvspDimensions'
-      object lblMaxCompDim: TLabel
-        Left = 85
-        Top = 6
-        Width = 369
-        Height = 18
-        Caption = 'Maximum Compression Dimension (MAXCOMPDIM)'
-      end
-      object lblZeroLimit: TLabel
-        Left = 85
-        Top = 34
-        Width = 306
-        Height = 18
-        Caption = 'Jacobian element threshold (DERZEROLIM)'
-      end
       object rdeMaxCompDim: TRbwDataEntry
-        Left = 6
-        Top = 3
+        Left = 22
+        Top = 107
         Width = 73
         Height = 22
-        TabOrder = 0
+        TabOrder = 2
         Text = '0'
         DataType = dtInteger
         Max = 1.000000000000000000
@@ -230,11 +225,11 @@ inherited frmPEST: TfrmPEST
         ChangeDisabledColor = True
       end
       object rdeZeroLimit: TRbwDataEntry
-        Left = 6
-        Top = 31
+        Left = 22
+        Top = 135
         Width = 73
         Height = 22
-        TabOrder = 1
+        TabOrder = 3
         Text = '0'
         DataType = dtReal
         Max = 1.000000000000000000

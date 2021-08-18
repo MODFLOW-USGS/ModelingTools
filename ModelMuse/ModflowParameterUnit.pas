@@ -31,6 +31,7 @@ type
     FHorizontalSpatialContinuityGroupName: string;
     FVertSpatialContinuityGroupName: string;
     FUseVertSpatialContinuityPriorInfo: Boolean;
+    FIsUsedInTemplate: Boolean;
     // See @link(MultiplierName).
     procedure SetMultiplierName(const Value: string);
     // See @link(UseMultiplier).
@@ -66,6 +67,7 @@ type
     procedure SetHorizontalSpatialContinuityGroupName(const Value: string);
     procedure SetUseVertSpatialContinuityPriorInfo(const Value: Boolean);
     procedure SetVertSpatialContinuityGroupName(const Value: string);
+    procedure SetIsUsedInTemplate(const Value: Boolean);
   protected
     // Besides setting the name of the parameter, @name also updates the
     // names of the @link(TDataArray)s used to define multiplier and zone
@@ -86,6 +88,7 @@ type
     // @link(MultiplierName), @link(UseMultiplier), @link(UseZone),
     // and @link(MultiplierArrayName) are the same as in the source item.
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    property IsUsedInTemplate: Boolean read FIsUsedInTemplate write SetIsUsedInTemplate;
   published
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name lists the multiplier array names exported to MODFLOW.
@@ -629,6 +632,11 @@ procedure TModflowSteadyParameter.SetHorizontalSpatialContinuityGroupName(
   const Value: string);
 begin
   SetCaseSensitiveStringProperty(FHorizontalSpatialContinuityGroupName, Value);
+end;
+
+procedure TModflowSteadyParameter.SetIsUsedInTemplate(const Value: Boolean);
+begin
+  FIsUsedInTemplate := Value;
 end;
 
 procedure TModflowSteadyParameter.SetUseMultiplier(const Value: boolean);

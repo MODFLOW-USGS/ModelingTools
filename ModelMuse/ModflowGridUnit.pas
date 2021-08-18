@@ -194,7 +194,7 @@ resourcestring
   StrOneOrMoreCellsHa = 'One or more cells have ratios of row to column widt' +
   'h that exceed the recommended maximum of 10.';
   StrColumn0dRow1 = 'Column %0:d, Row %1:d';
-  StrTheTopOfOneOrMo = 'The top of one or more cells is below its bottom.';
+  StrTheTopOfOneOrMo = 'The top of one or more cells is equal to or below its bottom.';
   StrThereIsADiscrepan = 'There is a discrepancy between the number of layer' +
   's in the MODFLOW grid and the number of layers specified via the MODFLOW ' +
   'Layer Groups. You need to change the MODFLOW Layer Groups so that there ' +
@@ -995,15 +995,20 @@ var
   LocalModel: TCustomModel;
   ActiveAbove: Boolean;
   ActiveBelow: Boolean;
+  CellsAllZeroThickness: array of Boolean;
+  InvalidLayers: TStringList;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrAllTheActiveCells);
   ErrorString := StrTheTopOfOneOrMo;
   Elevations := LayerElevations;
   LocalModel := Model as TCustomModel;
   DataArrayManager := LocalModel.DataArrayManager;
   Active := DataArrayManager.GetDataSetByName(rsActive);
   Active.Initialize;
+  SetLength(CellsAllZeroThickness, LayerCount);
   for LayerIndex := 1 to LayerCount - 1 do
   begin
+    CellsAllZeroThickness[LayerIndex] := True;
     for RowIndex := 0 to RowCount - 1 do
     begin
       for ColIndex := 0 to ColumnCount - 1 do
@@ -1014,8 +1019,7 @@ begin
           if Active.BooleanData[LayerIndex-1, RowIndex, ColIndex] then
           begin
             frmErrorsAndWarnings.AddError(Model,ErrorString,
-              Format(StrColumnDRow,
-                [ColIndex+1, RowIndex+1, LayerIndex]));
+              Format(StrColumnDRow, [ColIndex+1, RowIndex+1, LayerIndex]));
           end
           else if not LocalModel.IsLayerSimulated(LayerIndex-1) then
           begin
@@ -1031,14 +1035,46 @@ begin
             if ActiveAbove and ActiveBelow then
             begin
               frmErrorsAndWarnings.AddError(Model,ErrorString,
-                Format(StrColumnDRow,
-                  [ColIndex+1, RowIndex+1, LayerIndex]));
+                Format(StrColumnDRow, [ColIndex+1, RowIndex+1, LayerIndex]));
             end;
           end;
+        end
+        else if (Elevations[ColIndex, RowIndex, LayerIndex] =
+          Elevations[ColIndex, RowIndex, LayerIndex-1])
+          and Active.BooleanData[LayerIndex-1, RowIndex, ColIndex] then
+        begin
+          if (Model.ModelSelection <> msModflow2015) then
+          begin
+            frmErrorsAndWarnings.AddError(Model,ErrorString,
+            Format(StrColumnDRow, [ColIndex+1, RowIndex+1, LayerIndex]));
+          end;
+        end
+        else
+        begin
+          CellsAllZeroThickness[LayerIndex] := False;
         end;
       end;
     end;
   end;
+
+  InvalidLayers := TStringList.Create;
+  try
+    for LayerIndex := 0 to LayerCount - 1 do
+    begin
+      if CellsAllZeroThickness[LayerIndex] then
+      begin
+        InvalidLayers.Add(IntToStr(LayerIndex+1));
+      end;
+    end;
+    if InvalidLayers.Count > 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrAllTheActiveCells,
+        InvalidLayers.CommaText);
+    end;
+  finally
+    InvalidLayers.Free;
+  end;
+
   DataArrayManager.AddDataSetToCache(Active);
   DataArrayManager.CacheDataArrays;
 end;

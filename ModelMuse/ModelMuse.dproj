@@ -1763,6 +1763,17 @@
             <Form>frmImportSutraFeatures</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="frameCustomObservationResultsUnit.pas">
+            <Form>frameCustomObservationResults</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="framePestObservationResultsUnit.pas">
+            <Form>framePestObservationResults</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="PestObservationResults.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

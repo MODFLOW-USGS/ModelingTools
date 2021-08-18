@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PEST Properties Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">PEST Properties</text><text styleclass="Normal" translate="true"> dialog box is used to specify many of the input variables in the PEST control file. It is also used to activate or deactivate PEST and to specify the directory in which PEST is located. The dialog box is displayed by selecting &quot;Model|PEST Properties...&quot; ModelMuse only supports the use of PEST with MODFLOW and SUTRA </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The dialog box is a tree control on the left. Selecting one of the items in the tree control will cause the associated pane to appear on the right side of the dialog box.</text></para>
+  </body>
+</topic>

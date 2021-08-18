@@ -4309,7 +4309,8 @@ begin
         acGridDragRotate.Enabled := not DisvUsed;
         acGridAngle.Enabled := not DisvUsed;
         {$IFDEF PEST}
-        acEditObservationComparisons.Visible := PhastModel.PestUsed;
+        acEditObservationComparisons.Visible := True;
+        acEditObservationComparisons.Enabled := PhastModel.PestUsed;
         {$ELSE}
         acEditObservationComparisons.Visible := False;
         {$ENDIF}
@@ -4344,7 +4345,8 @@ begin
         acGridDragRotate.Enabled := False;
         acGridAngle.Enabled := False;
         {$IFDEF PEST}
-        acEditObservationComparisons.Visible := PhastModel.PestUsed;
+        acEditObservationComparisons.Visible := True;
+        acEditObservationComparisons.Enabled := PhastModel.PestUsed;
         acEditSutraFluxObs.Visible := PhastModel.PestUsed;
         {$ELSE}
         acEditObservationComparisons.Visible := False;

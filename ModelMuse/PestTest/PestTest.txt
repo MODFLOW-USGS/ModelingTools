@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1117
+1118
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1117,3 +1117,4 @@ Drntest2.gpt
 	Archive\arrays\Drntest2.test_1.arrays
 	Archive\arrays\Drntest2.VK_Par1_Multiplier.plist
 	Archive\arrays\Drntest2.VK_Par1_Zone.slist
+	Archive\usgs.Drntest2.reference

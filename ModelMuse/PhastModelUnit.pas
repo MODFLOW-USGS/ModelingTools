@@ -2470,7 +2470,8 @@ that affects the model output should also have a comment. }
     procedure SetFrontContourDataSet(const Value: TDataArray); virtual;
     procedure SetSideContourDataSet(const Value: TDataArray); virtual;
     procedure Loaded; override;
-    procedure InternalExportModflowModel(const FileName: string; ExportAllLgr: boolean); virtual;
+    procedure InternalExportModflowModel(const FileName: string;
+      ExportAllLgr: boolean); virtual;
     function GetFootprintProperties: TFootprintProperties; virtual; Abstract;
     procedure SetFootprintProperties(const Value: TFootprintProperties); virtual; Abstract;
     function GetParentModel: TCustomModel; virtual;
@@ -5926,6 +5927,8 @@ resourcestring
   StrIllegalGlobalVaria = 'Illegal global variable name';
   StrAGlobalVariableNa = 'A global variable named %s has the same name as a ' +
   'data set. The global variable has been deleted.';
+  StrTheFollowingParame = 'The following parameters are not used in any PEST' +
+  ' template.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -32215,6 +32218,13 @@ begin
   begin
     ModflowSteadyParameters[Index].AddedToPval := False;
   end;
+  if self is TPhastModel then
+  begin
+    for Index := 0 to ModflowSteadyParameters.Count - 1 do
+    begin
+      ModflowSteadyParameters[Index].IsUsedInTemplate := False;
+    end;
+  end;
 end;
 
 procedure TCustomModel.ClearViewedItems;
@@ -41153,6 +41163,8 @@ procedure TPhastModel.InternalExportModflowModel(const FileName: string;
 var
   TempDisFileWriter: TTemporalDiscretizationWriter  ;
   GeoRefWriter: TGeoRefWriter;
+  Index: Integer;
+  Param: TModflowSteadyParameter;
 begin
   inherited;
 
@@ -41190,6 +41202,20 @@ begin
     GeoRefWriter.WriteFile(FileName, smtMain);
   finally
     GeoRefWriter.Free;
+  end;
+
+  if PestUsed then
+  begin
+    for Index := 0 to ModflowSteadyParameters.Count - 1 do
+    begin
+      Param := ModflowSteadyParameters[Index];
+      if (Param.ParameterType = ptPEST)
+        and not Param.IsUsedInTemplate then
+      begin
+        frmErrorsAndWarnings.AddError(self, StrTheFollowingParame,
+          Param.ParameterName);
+      end;
+    end;
   end;
 
 end;

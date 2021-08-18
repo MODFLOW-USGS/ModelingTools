@@ -582,6 +582,7 @@ begin
               ModflowHfbBoundary.HydraulicConductivityFormula);
             if HydraulicConductivityParam <> nil then
             begin
+              HydraulicConductivityParam.IsUsedInTemplate := True;
               HydraulicConductivityPestName := HydraulicConductivityParam.ParameterName;
               HydraulicConductivityFormula := FortranFloatToStr(HydraulicConductivityParam.Value);
             end
@@ -607,6 +608,7 @@ begin
               ModflowHfbBoundary.ThicknessFormula);
             if ThicknessParam <> nil then
             begin
+              ThicknessParam.IsUsedInTemplate := True;
               ThicknessPestName := ThicknessParam.ParameterName;
               ThicknessFormula := FortranFloatToStr(ThicknessParam.Value);
             end
@@ -822,6 +824,7 @@ var
         Param := Model.GetPestParameterByName(HydraulicConductivitySeriesName);
         if Param <> nil then
         begin
+          Param.IsUsedInTemplate := True;
           Method := Barrier.FPestHydraulicConductivitySeriesMethods[TimeIndex];
           case Method of
             ppmMultiply:
@@ -851,6 +854,7 @@ var
         Param := Model.GetPestParameterByName(ThicknessSeriesName);
         if Param <> nil then
         begin
+          Param.IsUsedInTemplate := True;
           Method := Barrier.FPestThicknessSeriesMethods[TimeIndex];
           case Method of
             ppmMultiply:
@@ -1193,6 +1197,7 @@ begin
               HydraulicConductivityParam := Model.GetPestParameterByName(HfbItem.HydraulicConductivity);
               if HydraulicConductivityParam <> nil then
               begin
+                HydraulicConductivityParam.IsUsedInTemplate := True;
                 TransientExpressions.HydraulicConductivityFormula
                   := FortranFloatToStr(HydraulicConductivityParam.Value);
                 TransientExpressions.HydraulicConductivityPestName :=
@@ -1208,6 +1213,7 @@ begin
               ThicknessParam := Model.GetPestParameterByName(HfbItem.Thickness);
               if ThicknessParam <> nil then
               begin
+                ThicknessParam.IsUsedInTemplate := True;
                 TransientExpressions.ThicknessFormula
                   := FortranFloatToStr(ThicknessParam.Value);
                 TransientExpressions.ThicknessPestName := ThicknessParam.ParameterName;

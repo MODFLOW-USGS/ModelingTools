@@ -866,9 +866,18 @@ var
   PriorElevation: Double;
   NextElevation: Double;
   PriorElevationAssigned: Boolean;
+  CellsAllZeroThickness: array of Boolean;
+  InvalidLayers: TStringList;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrAllTheActiveCells);
   DisvGrid := Model.DisvGrid;
   IDomainDataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+
+  SetLength(CellsAllZeroThickness, DisvGrid.Layers.Count);
+  for LayerIndex := 0 to DisvGrid.Layers.Count -1 do
+  begin
+    CellsAllZeroThickness[LayerIndex] := True;
+  end;
 
   PriorLayer := 0;
   TopLayer := DisvGrid.Layers[0].Layer;
@@ -897,11 +906,32 @@ begin
           frmErrorsAndWarnings.AddWarning(Model, StrOverlappingLayers,
             Format(StrTheBottomOfCell,
             [CellIndex+1, LayerIndex+1, NextElevation, PriorLayer+1, PriorElevation]));
+        end
+        else
+        begin
+          CellsAllZeroThickness[LayerIndex] := False;
         end;
         PriorLayer := LayerIndex;
         PriorElevation := NextElevation;
       end;
     end;
+  end;
+  InvalidLayers := TStringList.Create;
+  try
+    for LayerIndex := 0 to DisvGrid.Layers.Count - 1 do
+    begin
+      if CellsAllZeroThickness[LayerIndex] then
+      begin
+        InvalidLayers.Add(IntToStr(LayerIndex+1));
+      end;
+    end;
+    if InvalidLayers.Count > 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrAllTheActiveCells,
+        InvalidLayers.CommaText);
+    end;
+  finally
+    InvalidLayers.Free;
   end;
 end;
 

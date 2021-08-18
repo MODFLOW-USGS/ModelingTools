@@ -879,6 +879,7 @@ begin
     Param := LocalModel.GetPestParameterByName(Formula);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
       Formula := FortranFloatToStr(Param.Value);
       BoundaryPestName[FormulaIndex] := Param.ParameterName;
     end
@@ -891,6 +892,7 @@ begin
       SeriesParam := LocalModel.GetPestParameterByName(PestSeriesName);
       if SeriesParam <> nil then
       begin
+        SeriesParam.IsUsedInTemplate := True;
         PestSeriesMethod := WellBoundary.PestBoundaryMethod[FormulaIndex];
         case PestSeriesMethod of
           ppmMultiply:
@@ -1655,6 +1657,7 @@ var
     Parameter := LocalModel.GetPestParameterByName(Formula);
     if Parameter <> nil then
     begin
+      Parameter.IsUsedInTemplate := True;
       Formula := FortranFloatToStr(Parameter.Value);
       PestItems.Add(Parameter.ParameterName);
     end

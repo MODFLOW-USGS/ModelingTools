@@ -3891,6 +3891,7 @@ begin
             end
             else
             begin
+              PestParam.IsUsedInTemplate := True;
               Case Method of
                 ppmMultiply:
                   begin
@@ -3921,6 +3922,7 @@ begin
           end
           else
           begin
+            PestParam.IsUsedInTemplate := True;
             Formula := ReplaceText(Formula, UnmodifiedFormula,
               FortranFloatToStr(PestParam.Value));
             PestParamName := PestParam.ParameterName;
@@ -4095,6 +4097,7 @@ begin
                       end
                       else
                       begin
+                        PestParam.IsUsedInTemplate := True;
                         Case Method of
                           ppmMultiply:
                             begin
@@ -4119,6 +4122,7 @@ begin
                   end
                   else
                   begin
+                    PestParam.IsUsedInTemplate := True;
                     Formula := FortranFloatToStr(PestParam.Value);
                     PestParamName := PestParam.ParameterName;
                   end;
@@ -4758,6 +4762,7 @@ begin
   end
   else
   begin
+    PestParam.IsUsedInTemplate := True;
     Formula := FortranFloatToStr(PestParam.Value);
     PestItems.Add(PestParam.ParameterName);
   end;
@@ -4788,6 +4793,7 @@ begin
     end
     else
     begin
+      PestParamSeries.IsUsedInTemplate := True;
       case SeriesMethod of
         ppmMultiply:
           begin

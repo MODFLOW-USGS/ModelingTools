@@ -732,7 +732,10 @@ uses
   PestFeatureDisplayerUnit in 'PestFeatureDisplayerUnit.pas',
   frmImportModflow6FeatureModifiedByPestUnit in 'frmImportModflow6FeatureModifiedByPestUnit.pas' {frmImportModflow6FeatureModifiedByPest},
   SutraImporter in 'SutraImporter.pas',
-  frmImportSutraFeaturesUnit in 'frmImportSutraFeaturesUnit.pas' {frmImportSutraFeatures};
+  frmImportSutraFeaturesUnit in 'frmImportSutraFeaturesUnit.pas' {frmImportSutraFeatures},
+  frameCustomObservationResultsUnit in 'frameCustomObservationResultsUnit.pas' {frameCustomObservationResults: TFrame},
+  framePestObservationResultsUnit in 'framePestObservationResultsUnit.pas' {framePestObservationResults: TFrame},
+  PestObservationResults in 'PestObservationResults.pas';
 
 {$R *.res}
 

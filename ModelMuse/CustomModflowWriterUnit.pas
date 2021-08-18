@@ -2939,6 +2939,7 @@ begin
     Param := Model.GetPestParameterByName(PestParName);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
       TemplateCharacter := Model.PestProperties.TemplateCharacter;
       result := Format(' %0:s                    %1:s%0:s',
         [TemplateCharacter, Param.ParameterName])
@@ -2971,6 +2972,7 @@ var
     SeriesParam := Model.GetPestParameterByName(PestSeriesValue);
     if SeriesParam <> nil then
     begin
+      SeriesParam.IsUsedInTemplate := True;
 	    SeriesValue := SeriesParam.Value;
       Model.WritePValAndTemplate(SeriesParam.ParameterName, SeriesParam.Value,
         SeriesParam);
@@ -3070,6 +3072,7 @@ var
     Param := Model.GetPestParameterByName(PestParValue);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
 	    ModifierValue := Param.Value;
       Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
       CellValueReplacement := Format(' %0:s                    %1:s%0:s',
@@ -9607,6 +9610,7 @@ begin
       Param := Model.GetPestParameterByName(PestName);
       if Param <> nil then
       begin
+        Param.IsUsedInTemplate := True;
         Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
         FPestParamUsed := True;
       end
@@ -9632,6 +9636,7 @@ begin
       Param := Model.GetPestParameterByName(PestName);
       if Param <> nil then
       begin
+        Param.IsUsedInTemplate := True;
         TemplateCharacter := Model.PestProperties.TemplateCharacter;
         Formula := Format(' %0:s                    %1:s%0:s ',
           [TemplateCharacter, Param.ParameterName]);
@@ -9926,6 +9931,7 @@ var
     Param := Model.GetPestParameterByName(PestParValue);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
 	    ModifierValue := Param.Value;
       //WriteTemplateReplace(PestParValue);
       Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
@@ -10268,6 +10274,7 @@ begin
   Param := Model.GetPestParameterByName(Formula);
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     PestNames.Add(Param.ParameterName);
     Formula := FortranFloatToStr(Param.Value);
     FPestParamUsed := True;
@@ -10291,6 +10298,7 @@ begin
     Param := Model.GetPestParameterByName(PestSeriesName);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
       FPestParamUsed := True;
       case SeriesMethod of
         ppmMultiply:

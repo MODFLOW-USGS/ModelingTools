@@ -1476,6 +1476,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 Rw := Param.Value;
 //                Formula := FortranFloatToStr(Param.Value);
@@ -1501,6 +1502,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 Rw := Param.Value;
               end
@@ -1522,6 +1524,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 Rskin := Param.Value;
               end
@@ -1543,6 +1546,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 Kskin := Param.Value;
               end
@@ -1568,6 +1572,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 Rw := Param.Value;
               end
@@ -1589,6 +1594,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 B := Param.Value;
               end
@@ -1610,6 +1616,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 C := Param.Value;
               end
@@ -1631,6 +1638,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 P := Param.Value;
               end
@@ -1656,6 +1664,7 @@ begin
               Param := Model.GetPestParameterByName(Formula);
               if Param <> nil then
               begin
+                Param.IsUsedInTemplate := True;
                 ParamName := Param.ParameterName;
                 CWC := Param.Value;
               end

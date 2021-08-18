@@ -1788,6 +1788,9 @@ resourcestring
   StrSParameterNames = '%s_Parameter_Names';
   StrSMultipliedByAP = '%s multiplied by a parameter value';
   StrMODFLOW6MVR = 'MODFLOW 6 MVR';
+  StrNoPESTParameterAs = 'No PEST parameter assigned';
+  StrNoPESTParametersA = 'No PEST parameters are assigned to any cell in the' +
+  ' data set "%s."';
 //  StrMT3DUSGSSFT = 'MT3D-USGS SFT';
 
 //function GetQuantum(NewSize: Integer): TSPAQuantum;
@@ -5964,6 +5967,7 @@ var
   AParam: TModflowSteadyParameter;
   AIndex: Integer;
   AParamName: string;
+  ParameterAssigned: Boolean;
 begin
   FSuppressCache := True;
   try
@@ -6015,6 +6019,7 @@ begin
     Assert(ParamDataArray <> nil);
     ParamDataArray.Initialize;
 
+    ParameterAssigned := False;
     for LayerIndex := 0 to LayerCount - 1 do
     begin
       for RowIndex := 0 to RowCount - 1 do
@@ -6032,7 +6037,9 @@ begin
             PIndex := PestParameters.IndexOf(AParamName);
             if PIndex >= 0 then
             begin
+              ParameterAssigned := True;
               AParam := PestParameters.Objects[PIndex] as TModflowSteadyParameter;
+              AParam.IsUsedInTemplate := True;
               UsedPestParameters.Add(AParam.ParameterName);
               RealData[LayerIndex, RowIndex, ColIndex] := AParam.Value *
                 RealData[LayerIndex, RowIndex, ColIndex];
@@ -6045,6 +6052,12 @@ begin
           end;
         end;
       end;
+    end;
+
+    if not ParameterAssigned then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrNoPESTParameterAs,
+        Format(StrNoPESTParametersA, [Name]))
     end;
 
   finally

@@ -79,11 +79,6 @@ type
     cbSaveRestart: TCheckBox;
     lblPestMode: TLabel;
     comboPestMode: TComboBox;
-    jvspDimensions: TJvStandardPage;
-    rdeMaxCompDim: TRbwDataEntry;
-    lblMaxCompDim: TLabel;
-    rdeZeroLimit: TRbwDataEntry;
-    lblZeroLimit: TLabel;
     jvspInversionControls: TJvStandardPage;
     rdeInitialLambda: TRbwDataEntry;
     lblInitialLambda: TLabel;
@@ -317,6 +312,10 @@ type
     lblAltIterations: TLabel;
     rdgObservationsToReport: TRbwDataGrid4;
     htlblZoneBudget6: TJvHTLabel;
+    rdeMaxCompDim: TRbwDataEntry;
+    rdeZeroLimit: TRbwDataEntry;
+    lblMaxCompDim: TLabel;
+    lblZeroLimit: TLabel;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -395,6 +394,8 @@ type
     procedure rdeTargetObjectiveFunctionChange(Sender: TObject);
     procedure rdeAcceptedObjectiveFunctionChange(Sender: TObject);
     procedure rdeTestLambdaPhiChange(Sender: TObject);
+    procedure tvPESTMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -485,8 +486,8 @@ resourcestring
   StrBasic = 'Basic';
   StrPilotPoints = 'Pilot Points';
   StrControlData = 'Control Data';
-  StrMode = 'Mode';
-  StrDimensions = 'Dimensions';
+  StrMode = 'Mode and Dimensions';
+//  StrDimensions = 'Dimensions';
   StrInversionControls1 = 'Inversion Controls 1';
   StrParameterAdjustment = 'Parameter Adjustment Controls';
   StrInversionControls2 = 'Inversion Controls 2';
@@ -1554,9 +1555,9 @@ begin
     ControlDataNode, StrMode) as TJvPageIndexNode;
   NewNode.PageIndex := jvspControlDataMode.PageIndex;
 
-  NewNode := tvPEST.Items.AddChild(
-    ControlDataNode, StrDimensions) as TJvPageIndexNode;
-  NewNode.PageIndex := jvspDimensions.PageIndex;
+//  NewNode := tvPEST.Items.AddChild(
+//    ControlDataNode, StrDimensions) as TJvPageIndexNode;
+//  NewNode.PageIndex := jvspDimensions.PageIndex;
 
   NewNode := tvPEST.Items.AddChild(
     ControlDataNode, StrInversionControls1) as TJvPageIndexNode;
@@ -3461,6 +3462,30 @@ begin
   else
   begin
     rdeWFMAX.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.tvPESTMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  SelectedNode: TJvPageIndexNode;
+begin
+  inherited;
+  if not (htOnButton in tvPEST.GetHitTestInfoAt(X, Y)) then
+  begin
+    SelectedNode := tvPEST.GetNodeAt(X, Y) as TJvPageIndexNode;
+    if (SelectedNode <> nil) and (SelectedNode.PageIndex < 0)
+      and SelectedNode.HasChildren then
+    begin
+      if not SelectedNode.Expanded then
+      begin
+        tvPEST.Selected := SelectedNode.GetFirstChild
+      end
+      else
+      begin
+        SelectedNode.Expanded := False;
+      end;
+    end;
   end;
 end;
 

@@ -887,27 +887,12 @@ var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
-//  pcs: Double;
-//  thick_frac: Double;
-//  rnb: Double;
-//  ssv_cc: Double;
-//  sse_cr: Double;
-//  theta: Double;
-//  kv: Double;
-//  h0: Double;
   DisvUsed: Boolean;
   icsubno: Integer;
   IDomain: TDataArray;
   InterbedSystemCount: Integer;
   IbIndex: Integer;
   boundname: string;
-//  PcsDataArrayPestNames: TDataArray;
-//  thick_fracDataArrayPestNames: TDataArray;
-//  rnbDataArrayPestNames: TDataArray;
-//  ssv_ccDataArrayPestNames: TDataArray;
-//  sse_crDataArrayPestNames: TDataArray;
-//  thetaDataArrayPestNames: TDataArray;
-//  kvDataArrayPestNames: TDataArray;
 begin
   if ninterbeds = 0 then
   begin

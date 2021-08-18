@@ -530,6 +530,7 @@ begin
       Param := Model.GetPestParameterByName(Formula);
       if Param <> nil then
       begin
+        Param.IsUsedInTemplate := True;
         Formula := FortranFloatToStr(Param.Value);
         PestParamName := Param.ParameterName;
       end

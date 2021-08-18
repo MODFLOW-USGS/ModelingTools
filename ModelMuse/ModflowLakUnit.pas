@@ -649,6 +649,7 @@ begin
   Param := Model.GetPestParameterByName(AString);
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     result := Param.Value;
     PestParValue := Param.ParameterName;
   end

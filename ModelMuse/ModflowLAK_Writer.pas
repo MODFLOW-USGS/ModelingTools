@@ -833,6 +833,7 @@ begin
   end;
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     case Method of
       ppmMultiply:
         Value := Value * Param.Value;

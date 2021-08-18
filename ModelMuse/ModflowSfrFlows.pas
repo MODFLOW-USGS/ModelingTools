@@ -410,6 +410,7 @@ var
     Param := LocalModel.GetPestParameterByName(Formula);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
       CurrentRecord.PestItem[PropertyIndex] := Formula;
       Formula := FortranFloatToStr(Param.Value);
     end
@@ -424,6 +425,7 @@ var
       Param := LocalModel.GetPestParameterByName(PestSeriesItem);
       if Param <> nil then
       begin
+        Param.IsUsedInTemplate := True;
         CurrentRecord.PestSeriesItem[PropertyIndex] := PestSeriesItem;
         CurrentRecord.PestSeriesMethod[PropertyIndex] :=
           SfrBoundary.PestBoundaryMethod[PropertyIndex+Offset];

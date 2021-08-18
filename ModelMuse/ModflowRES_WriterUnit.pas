@@ -436,6 +436,7 @@ begin
   Param := Model.GetPestParameterByName(TempFormula);
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     StartHeadPest.PestName := Param.ParameterName;
     StartHead := Param.Value;
     FPestParamUsed := True;
@@ -467,6 +468,7 @@ begin
   Param := Model.GetPestParameterByName(StartHeadPest.PestSeriesName);
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     case StartHeadPest.PestSeriesMethod of
       ppmAdd:
         begin
@@ -483,6 +485,7 @@ begin
   Param := Model.GetPestParameterByName(TempFormula);
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     EndHeadPest.PestName := Param.ParameterName;
     EndHead := Param.Value;
     FPestParamUsed := True;
@@ -514,6 +517,7 @@ begin
   Param := Model.GetPestParameterByName(EndHeadPest.PestSeriesName);
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     case EndHeadPest.PestSeriesMethod of
       ppmAdd:
         begin

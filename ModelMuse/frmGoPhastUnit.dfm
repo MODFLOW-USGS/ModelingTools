@@ -3637,7 +3637,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acPEST: TAction
       Category = 'Model'
-      Caption = '&PEST Properties'
+      Caption = '&PEST Properties...'
       OnExecute = acPESTExecute
     end
     object acRunPest: TAction

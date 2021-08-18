@@ -4,53 +4,49 @@ object frameHeadObservationResults: TframeHeadObservationResults
   Width = 528
   Height = 468
   TabOrder = 0
-  object pgcHeadObs: TPageControl
+  object pgcObservations: TPageControl
     Left = 0
     Top = 0
     Width = 528
     Height = 432
-    ActivePage = tabGraph
+    ActivePage = tabControls
     Align = alClient
     TabOrder = 0
     object tabControls: TTabSheet
       Caption = 'Controls'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblNegativeColor: TLabel
         Left = 3
         Top = 279
-        Width = 157
-        Height = 32
+        Width = 132
+        Height = 26
         Caption = 'Color for negative residuals'#13#10'(Simulated head too high)'
       end
       object lblColorPositive: TLabel
         Left = 255
         Top = 279
-        Width = 152
-        Height = 32
+        Width = 127
+        Height = 26
         Caption = 'Color for positive residuals'#13#10'(Simulated head too low)'
       end
       object lblMaxSymbolSize: TLabel
         Left = 130
         Top = 341
-        Width = 171
-        Height = 16
+        Width = 139
+        Height = 13
         Caption = 'Maximum symbol size (pixels)'
       end
       object lblHeadObsResults: TLabel
         Left = 3
         Top = 3
-        Width = 56
-        Height = 16
+        Width = 45
+        Height = 13
         Caption = 'File name'
       end
       object flnmedHeadObsResults: TJvFilenameEdit
         Left = 3
-        Top = 27
+        Top = 32
         Width = 505
-        Height = 24
+        Height = 21
         Filter = 'Head Observation Output files (*.hob_out)|*.hob_out'
         TabOrder = 0
         Text = ''
@@ -66,43 +62,43 @@ object frameHeadObservationResults: TframeHeadObservationResults
         object lblMaximumTime: TLabel
           Left = 252
           Top = 86
-          Width = 84
-          Height = 16
+          Width = 67
+          Height = 13
           Caption = 'Maximum time'
         end
         object lblMaxResidual: TLabel
           Left = 252
           Top = 24
-          Width = 104
-          Height = 16
+          Width = 84
+          Height = 13
           Caption = 'Maximum residual'
         end
         object lblMinimumTime: TLabel
           Left = 3
           Top = 86
-          Width = 81
-          Height = 16
+          Width = 63
+          Height = 13
           Caption = 'Minimum time'
         end
         object lblMinResidual: TLabel
           Left = 3
           Top = 24
-          Width = 101
-          Height = 16
+          Width = 80
+          Height = 13
           Caption = 'Minimum residual'
         end
         object lblMinLayer: TLabel
           Left = 3
           Top = 138
-          Width = 84
-          Height = 16
+          Width = 67
+          Height = 13
           Caption = 'Minimum layer'
         end
         object lblMaxLayer: TLabel
           Left = 252
           Top = 138
-          Width = 87
-          Height = 16
+          Width = 71
+          Height = 13
           Caption = 'Maximum layer'
         end
         inline framelmtMinimumTime: TframeDisplayLimit
@@ -118,6 +114,9 @@ object frameHeadObservationResults: TframeHeadObservationResults
             Height = 23
             ExplicitHeight = 23
           end
+          inherited comboBoolLimit: TComboBox
+            ExplicitHeight = 21
+          end
         end
         inline framelmtMaxResidual: TframeDisplayLimit
           Left = 252
@@ -131,6 +130,9 @@ object frameHeadObservationResults: TframeHeadObservationResults
           inherited cbCheck: TCheckBox
             Height = 23
             ExplicitHeight = 23
+          end
+          inherited comboBoolLimit: TComboBox
+            ExplicitHeight = 21
           end
         end
         inline framelmtMaximumTime: TframeDisplayLimit
@@ -146,6 +148,9 @@ object frameHeadObservationResults: TframeHeadObservationResults
             Height = 23
             ExplicitHeight = 23
           end
+          inherited comboBoolLimit: TComboBox
+            ExplicitHeight = 21
+          end
         end
         inline framelmtMinResidual: TframeDisplayLimit
           Left = 3
@@ -160,6 +165,9 @@ object frameHeadObservationResults: TframeHeadObservationResults
             Height = 23
             ExplicitHeight = 23
           end
+          inherited comboBoolLimit: TComboBox
+            ExplicitHeight = 21
+          end
         end
         inline framelmtMinLayer: TframeDisplayLimit
           Left = 3
@@ -170,6 +178,9 @@ object frameHeadObservationResults: TframeHeadObservationResults
           TabStop = True
           ExplicitLeft = 3
           ExplicitTop = 160
+          inherited comboBoolLimit: TComboBox
+            ExplicitHeight = 21
+          end
         end
         inline framelmtMaxLayer: TframeDisplayLimit
           Left = 252
@@ -180,6 +191,9 @@ object frameHeadObservationResults: TframeHeadObservationResults
           TabStop = True
           ExplicitLeft = 252
           ExplicitTop = 160
+          inherited comboBoolLimit: TComboBox
+            ExplicitHeight = 21
+          end
         end
       end
       object clrbtnNegative: TJvColorButton
@@ -204,7 +218,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
         Left = 3
         Top = 338
         Width = 121
-        Height = 24
+        Height = 21
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
@@ -223,15 +237,11 @@ object frameHeadObservationResults: TframeHeadObservationResults
     object tabValues: TTabSheet
       Caption = 'Values (read only)'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object rdgHeadObs: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 520
-        Height = 336
+        Height = 339
         Align = alClient
         ColCount = 8
         FixedCols = 0
@@ -249,6 +259,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
         Columns = <
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -272,6 +283,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -295,6 +307,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -318,6 +331,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -341,6 +355,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -364,6 +379,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -387,6 +403,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -410,6 +427,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -435,7 +453,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
       end
       object pnlValueControls: TPanel
         Left = 0
-        Top = 336
+        Top = 339
         Width = 520
         Height = 65
         Align = alBottom
@@ -474,10 +492,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
     object tabLegend: TTabSheet
       Caption = 'Legend'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object shpMax: TShape
         Left = 3
         Top = 3
@@ -495,30 +509,26 @@ object frameHeadObservationResults: TframeHeadObservationResults
       object lblMax: TLabel
         Left = 56
         Top = 9
-        Width = 36
-        Height = 16
+        Width = 30
+        Height = 13
         Caption = 'lblMax'
       end
       object lblHalfMax: TLabel
         Left = 56
         Top = 41
-        Width = 58
-        Height = 16
+        Width = 49
+        Height = 13
         Caption = 'lblHalfMax'
       end
     end
     object tabGraph: TTabSheet
       Caption = 'Graph'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pbHeadObs: TPaintBox
         Left = 0
         Top = 0
         Width = 520
-        Height = 320
+        Height = 323
         Align = alClient
         OnMouseDown = pbHeadObsMouseDown
         OnMouseMove = pbHeadObsMouseMove
@@ -528,7 +538,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
       end
       object pnlGraphControls: TPanel
         Left = 0
-        Top = 320
+        Top = 323
         Width = 520
         Height = 81
         Align = alBottom
@@ -537,8 +547,8 @@ object frameHeadObservationResults: TframeHeadObservationResults
         object lblGraphInstructions: TLabel
           Left = 255
           Top = 6
-          Width = 52
-          Height = 80
+          Width = 48
+          Height = 52
           Caption = 'Click on a point to highlight it.'
           WordWrap = True
         end
@@ -565,24 +575,25 @@ object frameHeadObservationResults: TframeHeadObservationResults
     Height = 36
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 434
     object lblRMS: TLabel
       Left = 194
       Top = 9
-      Width = 181
-      Height = 16
+      Width = 151
+      Height = 13
       Caption = 'Root Mean Square Residual = ?'
     end
     object comboModels: TComboBox
       Left = 8
       Top = 6
       Width = 180
-      Height = 24
+      Height = 21
       Style = csDropDownList
       TabOrder = 0
       OnChange = comboModelsChange
     end
   end
-  object qtreeHeadObs: TRbwQuadTree
+  object qtreeObservations: TRbwQuadTree
     MaxPoints = 100
     Left = 280
     Top = 16

@@ -449,7 +449,10 @@ begin
             end;
           end;
         else
-          Assert(False);
+          begin
+            Success := False;
+            Assert(False);
+          end;
       end;
 
       if Success then

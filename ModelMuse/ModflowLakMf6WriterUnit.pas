@@ -731,6 +731,7 @@ begin
         Param := Model.GetPestParameterByName(BottomElevation);
         if Param <> nil then
         begin
+          Param.IsUsedInTemplate := True;
           BottomElevation := FortranFloatToStr(Param.Value);
           PestParamName := Param.ParameterName;
         end
@@ -776,6 +777,7 @@ begin
         Param := Model.GetPestParameterByName(TopElevation);
         if Param <> nil then
         begin
+          Param.IsUsedInTemplate := True;
           TopElevation := FortranFloatToStr(Param.Value);
           PestParamName := Param.ParameterName;
         end
@@ -821,6 +823,7 @@ begin
         Param := Model.GetPestParameterByName(BedK);
         if Param <> nil then
         begin
+          Param.IsUsedInTemplate := True;
           BedK := FortranFloatToStr(Param.Value);
           PestParamName := Param.ParameterName;
         end
@@ -851,6 +854,7 @@ begin
         Param := Model.GetPestParameterByName(BedThickness);
         if Param <> nil then
         begin
+          Param.IsUsedInTemplate := True;
           BedThickness := FortranFloatToStr(Param.Value);
           PestParamName := Param.ParameterName;
         end
@@ -893,6 +897,7 @@ begin
         Param := Model.GetPestParameterByName(ConnectionLength);
         if Param <> nil then
         begin
+          Param.IsUsedInTemplate := True;
           ConnectionLength := FortranFloatToStr(Param.Value);
           PestParamName := Param.ParameterName;
         end
@@ -1103,6 +1108,7 @@ begin
   Param := Model.GetPestParameterByName(Formula);
   if Param <> nil then
   begin
+    Param.IsUsedInTemplate := True;
     Formula := FortranFloatToStr(Param.Value);
     PestParamName := Param.ParameterName;
   end
@@ -1235,6 +1241,7 @@ var
     Param := Model.GetPestParameterByName(Formula);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
       LakeSetting.PestName[DataSetIdentifier] := Param.ParameterName;
       Formula := FortranFloatToStr(Param.Value);
     end
@@ -1250,6 +1257,7 @@ var
     Param := Model.GetPestParameterByName(Modifier);
     if Param <> nil then
     begin
+      Param.IsUsedInTemplate := True;
       LakeSetting.PestSeries[DataSetIdentifier] := Param.ParameterName;
       Method := LakeBoundary.PestBoundaryMethod[DataSetIdentifier];
       LakeSetting.PestMethod[DataSetIdentifier] := Method;

@@ -150,6 +150,7 @@ begin
 //      InitialStagePestDataArray := nil;
       if InitialStageParam <> nil then
       begin
+        InitialStageParam.IsUsedInTemplate := True;
         OriginalInitialStageFormula := InitialStageFormula;
         InitialStageFormula := FortranFloatToStr(InitialStageParam.Value);
       end
@@ -168,6 +169,7 @@ begin
       InitialUParam := Model.GetPestParameterByName(InitialUFormula);
       if InitialUParam <> nil then
       begin
+        InitialUParam.IsUsedInTemplate := True;
         OriginalInitialUFormula := InitialUFormula;
         InitialUFormula := FortranFloatToStr(InitialUParam.Value)
       end
@@ -186,6 +188,7 @@ begin
       FractionRechargeDivertedParam := Model.GetPestParameterByName(FractionRechargeDivertedFormula);
       if FractionRechargeDivertedParam <> nil then
       begin
+        FractionRechargeDivertedParam.IsUsedInTemplate := True;
         OriginalFractionRechargeDivertedFormula := FractionRechargeDivertedFormula;
         FractionRechargeDivertedFormula := FortranFloatToStr(FractionRechargeDivertedParam.Value)
       end
@@ -204,6 +207,7 @@ begin
       FractionDischargeDivertedParam := Model.GetPestParameterByName(FractionDischargeDivertedFormula);
       if FractionDischargeDivertedParam <> nil then
       begin
+        FractionDischargeDivertedParam.IsUsedInTemplate := True;
         OriginalFractionDischargeDivertedFormula := FractionDischargeDivertedFormula;
         FractionDischargeDivertedFormula := FortranFloatToStr(FractionDischargeDivertedParam.Value)
       end

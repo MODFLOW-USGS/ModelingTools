@@ -957,6 +957,9 @@ resourcestring
   StrObjectS = 'Object: %s';
   StrObjectSTimeG = 'Object: %0:s; Time: %1:g';
   StrAssignedBy0sWit = 'Assigned by %0:s with formula = "%1:s."';
+  StrAllTheActiveCells = 'All the active cells in the following layers have ' +
+  'thicknesses less than or equal to zero.';
+
 
 implementation
 
