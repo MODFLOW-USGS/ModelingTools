@@ -22,7 +22,7 @@ inherited frmDisplayData: TfrmDisplayData
     Top = 0
     Width = 578
     Height = 501
-    ActivePage = jvspVectors
+    ActivePage = jvspHeadObsResults
     PropagateEnable = False
     Align = alClient
     OnChange = pglstMainChange

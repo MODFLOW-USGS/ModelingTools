@@ -11,8 +11,6 @@ object frameCustomObservationResults: TframeCustomObservationResults
     Height = 36
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 335
-    ExplicitWidth = 528
     object lblRMS: TLabel
       Left = 194
       Top = 9
@@ -37,9 +35,6 @@ object frameCustomObservationResults: TframeCustomObservationResults
     ActivePage = tabControls
     Align = alClient
     TabOrder = 1
-    ExplicitLeft = 8
-    ExplicitTop = 8
-    ExplicitWidth = 528
     object tabControls: TTabSheet
       Caption = 'Controls'
       object lblNegativeColor: TLabel

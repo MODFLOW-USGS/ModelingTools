@@ -551,10 +551,10 @@ resourcestring
   StrWithdrawalForThe = '(withdrawal for the Lake package)';
   StrMinimumStage = 'Minimum stage';
   StrMaximumStage = 'Maximum stage';
-  StrPrecipitation = 'Precipitation';
-  StrEvaporation = 'Evaporation';
-  StrOverlandRunoff = 'Overland runoff';
-  StrWithdrawal = 'Withdrawal';
+  StrPrecipitation = 'Precipitation L/T';
+  StrEvaporation = 'Evaporation L/T';
+  StrOverlandRunoff = 'Overland runoff L^3/T';
+  StrWithdrawal = 'Withdrawal L^3/T';
 
 //  StreamGageOutputTypes: TStringList;
 

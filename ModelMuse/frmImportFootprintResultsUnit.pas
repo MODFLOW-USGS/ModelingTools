@@ -30,8 +30,8 @@ type
     FWithdrawalDataSet: TDataArray;
     FCodeDataSet: TDataArray;
     FScreenObject: TScreenObject;
-    FAlreadyAsked: Boolean;
-    FCreateNewDataSet: Boolean;
+//    FAlreadyAsked: Boolean;
+//    FCreateNewDataSet: Boolean;
     procedure GetData;
     procedure SetData;
     function ReadResultFile: boolean;
@@ -162,6 +162,7 @@ var
   DataArray: TDataArray;
   DataSetName: string;
   ItemIndex: Integer;
+  CreateNewDataSet: Boolean;
 begin
   if (not chklstDataToImport.Checked[Ord(fpdtWithdrawals)])
     and (not chklstDataToImport.Checked[Ord(fpdtCode)]) then
@@ -169,78 +170,85 @@ begin
     Exit;
   end;
 
-  if ReadResultFile then
-  begin
-    NewDataSets := TList.Create;
-    try
-      FAlreadyAsked := False;
-      FCreateNewDataSet := True;
-      CreateWithdrawalDataSet(NewDataSets);
-      CreateCodeDataSet(NewDataSets);
-
-      NewScreenObjects := TList.Create;
+  try
+    if ReadResultFile then
+    begin
+      NewDataSets := TList.Create;
       try
-        CreateObject;
-        NewScreenObjects.Add(FScreenObject);
+  //      FAlreadyAsked := False;
+//        CreateNewDataSet := True;
+        CreateWithdrawalDataSet(NewDataSets);
+        CreateCodeDataSet(NewDataSets);
+
+        NewScreenObjects := TList.Create;
+        try
+          CreateObject;
+          NewScreenObjects.Add(FScreenObject);
 
 
-        if comboColorContourGrid.ItemIndex >= 0 then
-        begin
-          DataSetName := comboColorContourGrid.Items[
-            comboColorContourGrid.ItemIndex];
-          ItemIndex := chklstDataToImport.Items.IndexOf(DataSetName);
-          if ItemIndex >= 0 then
+          if comboColorContourGrid.ItemIndex >= 0 then
           begin
-            case ItemIndex of
-              0:
-                begin
-                  DataArray := FWithdrawalDataSet;
-                end;
-              1:
-                begin
-                  DataArray := FCodeDataSet;
-                end;
-              else
-                begin
-                  DataArray := nil;
-                  Assert(False);
-                end;
+            DataSetName := comboColorContourGrid.Items[
+              comboColorContourGrid.ItemIndex];
+            ItemIndex := chklstDataToImport.Items.IndexOf(DataSetName);
+            if ItemIndex >= 0 then
+            begin
+              case ItemIndex of
+                0:
+                  begin
+                    DataArray := FWithdrawalDataSet;
+                  end;
+                1:
+                  begin
+                    DataArray := FCodeDataSet;
+                  end;
+                else
+                  begin
+                    DataArray := nil;
+                    Assert(False);
+                  end;
+              end;
+            end
+            else
+            begin
+              DataArray := nil;
             end;
           end
           else
           begin
             DataArray := nil;
           end;
-        end
-        else
-        begin
-          DataArray := nil;
-        end;
 
-        AssignWithdrawalValues;
-        AssignCodeValues;
-        DisplayChoice := TDisplayChoice(rgDisplayChoice.ItemIndex);
-        Undo := TUndoImportFootprintResults.Create;
-        try
-          Undo.StoreNewScreenObjects(NewScreenObjects);
-          Undo.StoreNewDataSets(NewDataSets);
-          Undo.DisplayChoice := DisplayChoice;
-          Undo.DisplayDataSet := DataArray;
-          frmGoPhast.UndoStack.Submit(Undo)
-        except
-          Undo.Free;
-          raise
+          AssignWithdrawalValues;
+          AssignCodeValues;
+          DisplayChoice := TDisplayChoice(rgDisplayChoice.ItemIndex);
+          Undo := TUndoImportFootprintResults.Create;
+          try
+            Undo.StoreNewScreenObjects(NewScreenObjects);
+            Undo.StoreNewDataSets(NewDataSets);
+            Undo.DisplayChoice := DisplayChoice;
+            Undo.DisplayDataSet := DataArray;
+            frmGoPhast.UndoStack.Submit(Undo)
+          except
+            Undo.Free;
+            raise
+          end;
+
+        finally
+          NewScreenObjects.Free;
         end;
 
       finally
-        NewScreenObjects.Free;
+        NewDataSets.Free;
       end;
-
-    finally
-      NewDataSets.Free;
+    end;
+  except
+    on E: EAbortingImport do
+    begin
+      Beep;
+      MessageDlg(E.message, mtInformation, [mbOK], 0);
     end;
   end;
-
 end;
 
 procedure TfrmImportFootprintResults.UpdateColorContourList;
@@ -364,6 +372,7 @@ var
   Classification: string;
   NewFormula: string;
   NewDataType: TRbwDataType;
+  CreateNewDataSet: Boolean;
 begin
   if chklstDataToImport.Checked[Ord(fpdtWithdrawals)] then
   begin
@@ -372,9 +381,10 @@ begin
     FWithdrawalDataSet := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(NewName);
     if  FWithdrawalDataSet <> nil then
     begin
-      AskIfNewDataSet(FAlreadyAsked, FCreateNewDataSet);
+      CreateNewDataSet := AskUserIfNewDataSet;
+//      AskIfNewDataSet(FAlreadyAsked, CreateNewDataSet);
     end;
-    if FCreateNewDataSet then
+    if CreateNewDataSet then
     begin
       NewName := GenerateNewName(NewName);
       NewDataType := rdtDouble;
@@ -400,7 +410,9 @@ var
   Classification: string;
   NewName: string;
   NewFormula: string;
+  CreateNewDataSet: Boolean;
 begin
+  CreateNewDataSet := False;
   if chklstDataToImport.Checked[Ord(fpdtCode)] then
   begin
     NewName := chklstDataToImport.Items[Ord(fpdtCode)];
@@ -408,9 +420,10 @@ begin
     FCodeDataSet := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(NewName);
     if  FCodeDataSet <> nil then
     begin
-      AskIfNewDataSet(FAlreadyAsked, FCreateNewDataSet);
+      CreateNewDataSet := AskUserIfNewDataSet;
+//      AskIfNewDataSet(FAlreadyAsked, CreateNewDataSet);
     end;
-    if FCreateNewDataSet then
+    if CreateNewDataSet then
     begin
       NewName := GenerateNewName(NewName);
       NewDataType := rdtInteger;

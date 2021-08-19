@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="LakeMf6" FileType="bin">
-    <FileName Model_Name="LakeMf6" FileType="bin">..\..\..\WRDAPP\mf6.2.1\bin\mf6.exe</FileName>
+    <FileName Model_Name="LakeMf6" FileType="bin">..\..\..\WRDAPP\mf6.2.2\bin\mf6.exe</FileName>
     <FileName Model_Name="LakeMf6" FileType="bin">..\..\..\WRDAPP\mt3dusgs1.1.0\bin\mt3d-usgs_1.1.0_64.exe</FileName>
   </bin>
   <ancillary Model_Name="LakeMf6" FileType="ancillary">

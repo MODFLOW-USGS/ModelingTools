@@ -148,8 +148,6 @@ type
     FFileStream: TFileStream;
     FFileVariable: TFileVariable;
     FResultFormat: TModflowResultFormat;
-    FAskedUser: Boolean;
-    FCreateNewDataSet: Boolean;
     FMaxPeriod: Integer;
     FMaxTrans: integer;
     FMaxStep: Integer;
@@ -215,7 +213,6 @@ type
       AnArray: T3DTModflowArray; ModflowLayerIndex, DataSetLayerIndex: integer; CheckAllLayers: boolean;
       ValuesToIgnore: TOneDRealArray; AModel: TCustomModel);
     procedure SetData;
-    function AskUserIfNewDataSet: boolean;
     procedure AssignLimits(MinValues, MaxValues: TRealList;
       New3DArray: TDataArray; ValuesToIgnore: TOneDRealArray);
     procedure AssignObjectName(var ScreenObject: TScreenObject; LayerData: TDataArray);
@@ -309,11 +306,11 @@ resourcestring
 implementation
 
 uses Math, frmGoPhastUnit, RbwParser,
-  GIS_Functions, ValueArrayStorageUnit, ModelMuseUtilities, 
+  GIS_Functions, ValueArrayStorageUnit, ModelMuseUtilities,
   frmUpdateDataSetsUnit, UndoItemsScreenObjects,
   InterpolationUnit, HufDefinition, ModflowTimeUnit,
   frmGridValueUnit, shlobj, activex, AnsiStrings, frmDisplayDataUnit,
-  Mt3dmsChemSpeciesUnit, frmExportImageUnit, IOUtils, 
+  Mt3dmsChemSpeciesUnit, frmExportImageUnit, IOUtils,
   SwrReachObjectUnit, frmProgressUnit, Generics.Collections,
   frmBudgetPrecisionQueryUnit, ModflowBoundaryDisplayUnit, VectorDisplayUnit;
 
@@ -531,15 +528,13 @@ end;
 
 procedure TfrmSelectResultToImport.CreateOrRetrieveLayerDataSet(
   const Description: string; ILAY: integer;
-
   out LayerData: TDataArray; out OldComment: string;
   FileNames: string;
   AModel: TCustomModel; DataArrayType: TDataArrayType; Precision: TModflowPrecision;
   DataArrayForm: TDataArrayForm = dafLayer);
 var
   NewName: string;
-//  Grid: TModflowGrid;
-  CreateNewDataSet: boolean;
+  CreateNewDataSet: Boolean;
   Index: Integer;
   ScreenObject: TScreenObject;
   NewDataSetPosition: Integer;
@@ -745,7 +740,7 @@ begin
           ParentLayerData.Comment := ParentLayerData.Comment
             + sLineBreak + StrSWRTimeStep + IntToStr(SwrTimeStep);
         end;
-        
+
       else
         Assert(False);
     end;
@@ -1174,7 +1169,7 @@ begin
     AFileName := odSelectFiles.FileName;
     try
       result := ShowDataSets(AFileName);
-    except 
+    except
       on E: EInOutError do
       begin
         result := False;
@@ -2584,11 +2579,14 @@ var
   Alt3DArray: T3DTModflowArray;
   Vectors: TVectorCollection;
   VectorItem: TVectorItem;
+  UndoItem: TCustomUndo;
 begin
   inherited;
   ILAY := 0;
   NTRANS := 0;
   SwrTimeStep := 0;
+  FileNames := '';
+  Mt3dComponentName := '';
   FModifiedParentDataSets.Clear;
   MinValues := TRealList.Create;
   AltMinValues := TRealList.Create;
@@ -2601,8 +2599,6 @@ begin
   AltDataSetNames  := TStringList.Create;
   ScreenObjectsToDelete := TScreenObjectList.Create;
   NewCreateScreenObjects := TList.Create;
-  FileNames := '';
-  Mt3dComponentName := '';
   for RowIndex := 1 to rdgModels.RowCount - 1 do
   begin
     if rdgModels.Checked[Ord(mcUse), RowIndex] then
@@ -3385,24 +3381,39 @@ begin
       finally
         frmGoPhast.EndSupressDrawing;
       end;
-    finally
-      NewDataSets.Free;
-      ScreenObjectsToDelete.Free;
-      NewCreateScreenObjects.Free;
-      MinValues.Free;
-      AltMinValues.Free;
-      MaxValues.Free;
-      AltMaxValues.Free;
-      OldComments.Free;
-      AltOldComments.Free;
-      DataSetNames.Free;
-      AltDataSetNames.Free;
+    except
+      on E: EConvertError do
+      begin
+        Beep;
+        MessageDlg(Format(StrInvalidData, [E.message]), mtError, [mbOK], 0);
+      end;
+      on E: EAbortingImport do
+      begin
+        for Index := 0 to NewCreateScreenObjects.Count - 1 do
+        begin
+          UndoItem := NewCreateScreenObjects[Index];
+          UndoItem.Undo;
+          UndoItem.Free;
+        end;
+
+        frmGoPhast.PhastModel.DataArrayManager.HandleDeletedDataArrays(NewDataSets);
+        Beep;
+        MessageDlg(E.message, mtInformation, [mbOK], 0);
+      end;
+
     end;
-  except on  E: EConvertError do
-    begin
-      Beep;
-      MessageDlg(Format(StrInvalidData, [E.message]), mtError, [mbOK], 0);
-    end;
+  finally
+    NewDataSets.Free;
+    ScreenObjectsToDelete.Free;
+    NewCreateScreenObjects.Free;
+    MinValues.Free;
+    AltMinValues.Free;
+    MaxValues.Free;
+    AltMaxValues.Free;
+    OldComments.Free;
+    AltOldComments.Free;
+    DataSetNames.Free;
+    AltDataSetNames.Free;
   end;
 
 end;
@@ -3490,7 +3501,7 @@ begin
   FSwrSteps := TIntegerList.Create;
 
   FDescriptions := TStringList.Create;
-  FAskedUser := False;
+//  FAskedUser := False;
   SetDefaultDisplayOption;
 
   FilterDescriptions := TStringList.Create;
@@ -4660,11 +4671,6 @@ begin
   ScreenObject.Name := Root + IntToStr(ExistingObjectCount);
 end;
 
-function TfrmSelectResultToImport.AskUserIfNewDataSet: boolean;
-begin
-  result := AskIfNewDataSet(FAskedUser, FCreateNewDataSet);
-end;
-
 procedure TfrmSelectResultToImport.Read3DArray(var NLAY: Integer;
    var EndReached: Boolean; var KPER, KSTP: Integer; var TOTIM: TModflowDouble;
    var Description: string; var A3DArray: T3DTModflowArray; var AuxArray: TAuxArrays;
@@ -5585,4 +5591,3 @@ begin
 end;
 
 end.
-

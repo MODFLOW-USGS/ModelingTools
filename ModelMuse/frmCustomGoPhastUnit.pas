@@ -21,6 +21,10 @@ uses
   JvCombobox, JvListComb, Vcl.ExtCtrls;
 
 type
+  EAbortingImport = class(Exception);
+  TDatasetResponse = (drNew, drUpdate, drAbort);
+
+
   TEdgeDisplayEdit = class(TObject)
   private
     function GetDisplayTime: Double;
@@ -91,6 +95,8 @@ type
     procedure FormDestroy(Sender: TObject); virtual;
   private
     FCallingHelp: Boolean;
+    FCreateNewDataSet: Boolean;
+    FAskedUser: Boolean;
     function CallHelpRouter: boolean;
     procedure DestroyGLSceneViewers(ParentComponent: TComponent);
     procedure EnsureFormVisible;
@@ -112,6 +118,9 @@ type
     // @link(GlobalFont) and @link(GlobalColor) should be set in the
     // Applications OnCreate event handler.
     procedure SetAppearance;
+    // @name is used when importing data to a model.
+    // If the user cancels the dialog box, EAbortingImport is raised.
+    function AskUserIfNewDataSet: Boolean;
   public
     procedure MouseClick;
     procedure UpdateSubComponents(AComponent: TComponent);
@@ -235,7 +244,8 @@ implementation
 
 uses SubscriptionUnit, GoPhastTypes, ModflowPackagesUnit,
   frmGoPhastUnit, PhastModelUnit, ModflowPackageSelectionUnit,
-  frameCustomColorUnit, JvRollOut, Messages, ShellAPI, RbwInternetUtilities;
+  frameCustomColorUnit, JvRollOut, Messages, ShellAPI, RbwInternetUtilities,
+  frmUpdateDataSetsUnit;
 
 {$R *.dfm}
 
@@ -1822,6 +1832,39 @@ begin
   end;
   Combo.ItemIndex := NewIndex;
   PaintBox.Invalidate;
+end;
+
+function TfrmCustomGoPhast.AskUserIfNewDataSet: Boolean;
+var
+  UsedResponse: TDatasetResponse;
+begin
+  if FCreateNewDataSet then
+  begin
+    UsedResponse := drNew;
+  end
+  else
+  begin
+    UsedResponse := drUpdate;
+  end;
+  UsedResponse := AskIfNewDataSet(FAskedUser, UsedResponse);
+  case UsedResponse of
+    drNew:
+      begin
+        FCreateNewDataSet := True;
+      end;
+    drUpdate:
+      begin
+        FCreateNewDataSet := false;
+      end;
+    drAbort:
+      begin
+        raise EAbortingImport.Create('Aborting import of model results');
+      end;
+  else
+    begin
+      raise EAbortingImport.Create('Aborting import of model results');
+    end;
+  end;
 end;
 
 initialization

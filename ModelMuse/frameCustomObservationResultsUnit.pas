@@ -15,7 +15,7 @@ uses
   JvToolEdit, QuadTreeClass;
 
 type
-  TframeCustomObservationResults = class abstract(TFrame)
+  TframeCustomObservationResults = class(TFrame)
     pnlBottom: TPanel;
     lblRMS: TLabel;
     comboModels: TComboBox;

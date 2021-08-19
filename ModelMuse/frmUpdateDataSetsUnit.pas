@@ -17,14 +17,16 @@ type
     { Public declarations }
   end;
 
-function AskIfNewDataSet(var AlreadyAsked, PriorResponse: Boolean): boolean;
+function AskIfNewDataSet(var AlreadyAsked: Boolean;
+  var PriorResponse: TDatasetResponse): TDatasetResponse;
 
 var
   frmUpdateDataSets: TfrmUpdateDataSets;
 
 implementation
 
-function AskIfNewDataSet(var AlreadyAsked, PriorResponse: Boolean): boolean;
+function AskIfNewDataSet(var AlreadyAsked: Boolean;
+  var PriorResponse: TDatasetResponse): TDatasetResponse;
 begin
   if not AlreadyAsked then
   begin
@@ -32,7 +34,24 @@ begin
     frmUpdateDataSets := TfrmUpdateDataSets.Create(nil);
     try
       frmUpdateDataSets.ShowModal;
-      PriorResponse := frmUpdateDataSets.ModalResult <> mrOK;
+      case frmUpdateDataSets.ModalResult of
+        mrOK:
+          begin
+            PriorResponse := drUpdate;
+          end;
+        mrCancel:
+          begin
+            PriorResponse := drAbort;
+          end;
+        mrIgnore:
+          begin
+            PriorResponse := drNew
+          end;
+        else
+          begin
+            PriorResponse := drAbort;
+          end;
+      end;
     finally
       frmUpdateDataSets.Free;
     end;

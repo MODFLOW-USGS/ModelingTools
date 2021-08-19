@@ -3,8 +3,8 @@ inherited frmUpdateDataSets: TfrmUpdateDataSets
   ClientHeight = 189
   ClientWidth = 423
   Font.Height = -21
-  ExplicitWidth = 441
-  ExplicitHeight = 234
+  ExplicitWidth = 439
+  ExplicitHeight = 228
   PixelsPerInch = 96
   TextHeight = 24
   object Label1: TLabel
@@ -19,7 +19,7 @@ inherited frmUpdateDataSets: TfrmUpdateDataSets
   end
   object btnUpdate: TButton
     Left = 8
-    Top = 83
+    Top = 86
     Width = 194
     Height = 78
     Caption = 'Update the existing data sets with new values'
@@ -29,11 +29,11 @@ inherited frmUpdateDataSets: TfrmUpdateDataSets
   end
   object btnCreate: TButton
     Left = 221
-    Top = 83
+    Top = 86
     Width = 194
     Height = 78
     Caption = 'Create new data sets'
-    ModalResult = 2
+    ModalResult = 5
     TabOrder = 1
     WordWrap = True
   end

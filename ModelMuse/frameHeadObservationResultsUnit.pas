@@ -9,7 +9,7 @@ uses System.Types, System.UITypes,
   Dialogs, StdCtrls, ExtCtrls, Grids, RbwDataGrid4, JvSpin, JvExControls,
   JvColorBox, JvColorButton, frameDisplayLimitUnit, Mask, JvExMask, JvToolEdit,
   ComCtrls, GoPhastTypes, ModflowHeadObsResults, Generics.Collections,
-  UndoItems, QuadTreeClass, GrayTabs, frameCustomObservationResultsUnit;
+  UndoItems, QuadTreeClass, GrayTabs;
 
 type
   TUndoType = (utChange, utImport);
@@ -63,51 +63,51 @@ type
     function Description: string; override;
   end;
 
-  TframeHeadObservationResults = class(TframeCustomObservationResults)
-//    pgcObservations: TPageControl;
-//    tabControls: TTabSheet;
-//    lblNegativeColor: TLabel;
-//    lblColorPositive: TLabel;
-//    lblMaxSymbolSize: TLabel;
-//    lblHeadObsResults: TLabel;
-//    flnmedHeadObsResults: TJvFilenameEdit;
-//    grpbxFilter: TGroupBox;
-//    lblMaximumTime: TLabel;
-//    lblMaxResidual: TLabel;
-//    lblMinimumTime: TLabel;
-//    lblMinResidual: TLabel;
-//    framelmtMinimumTime: TframeDisplayLimit;
-//    framelmtMaxResidual: TframeDisplayLimit;
-//    framelmtMaximumTime: TframeDisplayLimit;
-//    framelmtMinResidual: TframeDisplayLimit;
-//    clrbtnNegative: TJvColorButton;
-//    clrbtnPositive: TJvColorButton;
-//    spinSymbolSize: TJvSpinEdit;
-//    cbShow: TCheckBox;
-//    tabValues: TTabSheet;
-//    rdgHeadObs: TRbwDataGrid4;
-//    pnlBottom: TPanel;
-//    comboModels: TComboBox;
-//    btnHightlightObjects: TButton;
-//    btnRestore: TButton;
-//    btnCopy: TButton;
-//    framelmtMinLayer: TframeDisplayLimit;
-//    lblMinLayer: TLabel;
-//    lblMaxLayer: TLabel;
-//    framelmtMaxLayer: TframeDisplayLimit;
-//    tabLegend: TTabSheet;
-//    shpMax: TShape;
-//    shpHalfMax: TShape;
-//    lblMax: TLabel;
-//    lblHalfMax: TLabel;
-//    lblRMS: TLabel;
-//    tabGraph: TTabSheet;
-//    pbHeadObs: TPaintBox;
-//    qtreeObservations: TRbwQuadTree;
-//    pnlValueControls: TPanel;
-//    pnlGraphControls: TPanel;
-//    rgGraphType: TRadioGroup;
-//    lblGraphInstructions: TLabel;
+  TframeHeadObservationResults = class(TFrame)
+    pgcHeadObs: TPageControl;
+    tabControls: TTabSheet;
+    lblNegativeColor: TLabel;
+    lblColorPositive: TLabel;
+    lblMaxSymbolSize: TLabel;
+    lblHeadObsResults: TLabel;
+    flnmedHeadObsResults: TJvFilenameEdit;
+    grpbxFilter: TGroupBox;
+    lblMaximumTime: TLabel;
+    lblMaxResidual: TLabel;
+    lblMinimumTime: TLabel;
+    lblMinResidual: TLabel;
+    framelmtMinimumTime: TframeDisplayLimit;
+    framelmtMaxResidual: TframeDisplayLimit;
+    framelmtMaximumTime: TframeDisplayLimit;
+    framelmtMinResidual: TframeDisplayLimit;
+    clrbtnNegative: TJvColorButton;
+    clrbtnPositive: TJvColorButton;
+    spinSymbolSize: TJvSpinEdit;
+    cbShow: TCheckBox;
+    tabValues: TTabSheet;
+    rdgHeadObs: TRbwDataGrid4;
+    pnlBottom: TPanel;
+    comboModels: TComboBox;
+    btnHightlightObjects: TButton;
+    btnRestore: TButton;
+    btnCopy: TButton;
+    framelmtMinLayer: TframeDisplayLimit;
+    lblMinLayer: TLabel;
+    lblMaxLayer: TLabel;
+    framelmtMaxLayer: TframeDisplayLimit;
+    tabLegend: TTabSheet;
+    shpMax: TShape;
+    shpHalfMax: TShape;
+    lblMax: TLabel;
+    lblHalfMax: TLabel;
+    lblRMS: TLabel;
+    tabGraph: TTabSheet;
+    pbHeadObs: TPaintBox;
+    qtreeHeadObs: TRbwQuadTree;
+    pnlValueControls: TPanel;
+    pnlGraphControls: TPanel;
+    rgGraphType: TRadioGroup;
+    lblGraphInstructions: TLabel;
     procedure flnmedHeadObsResultsChange(Sender: TObject);
     procedure comboModelsChange(Sender: TObject);
     procedure btnHightlightObjectsClick(Sender: TObject);
@@ -154,11 +154,11 @@ type
     { Private declarations }
   protected
     procedure Loaded; override;
-    procedure UpdateObsLinkList; override;
   public
     procedure GetData;
     procedure SetData;
     function ReadFile(const FileName: string): Boolean;
+    procedure UpdateChildModels;
     constructor Create(Owner: TComponent); override;
     destructor Destroy; override;
     procedure UpdateSelectedModel;
@@ -738,7 +738,7 @@ begin
 
   Count := 0;
 
-  qtreeObservations.Clear;
+  qtreeHeadObs.Clear;
   if Observations.Count > 0 then
   begin
     SimList := TList<THeadObsItem>.Create;
@@ -807,10 +807,10 @@ begin
         SimulatedMax := SimulatedMax + 1;
         SimulatedMin := SimulatedMin - 1;
       end;
-      qtreeObservations.XMax := ObservedMax;
-      qtreeObservations.XMin := ObservedMin;
-      qtreeObservations.YMax := SimulatedMax;
-      qtreeObservations.YMin := SimulatedMin;
+      qtreeHeadObs.XMax := ObservedMax;
+      qtreeHeadObs.XMin := ObservedMin;
+      qtreeHeadObs.YMax := SimulatedMax;
+      qtreeHeadObs.YMin := SimulatedMin;
 
   //    xysetdataarray(Data, 2, Count);
       xysetdataarray(Data, Count, 1);
@@ -848,7 +848,7 @@ begin
           end;
 //          if OkSimValue(SimValue) then
 //          begin
-            qtreeObservations.AddPoint(SimList[index].ObservedValue,
+            qtreeHeadObs.AddPoint(SimList[index].ObservedValue,
               SimValue, SimList[index]);
 
             Data[Count, 0] := SimList[index].ObservedValue;
@@ -877,7 +877,7 @@ begin
       except on E: exception do
         begin
           ShowMessage(e.message);
-          pgcObservations.ActivePageIndex := 0;
+          pgcHeadObs.ActivePageIndex := 0;
           Exit;
         end;
       end;
@@ -957,7 +957,7 @@ end;
 procedure TframeHeadObservationResults.Loaded;
 begin
   inherited;
-  pgcObservations.ActivePageIndex := 0;
+  pgcHeadObs.ActivePageIndex := 0;
   framelmtMinResidual.Enabled := True;
   framelmtMaxResidual.Enabled := True;
   framelmtMinimumTime.Enabled := True;
@@ -999,9 +999,9 @@ procedure TframeHeadObservationResults.pbHeadObsMouseUp(Sender: TObject;
 begin
   XYMouseup(Button, Shift, X, Y);
   FSelectedObsItem := nil;
-  if qtreeObservations.Count > 0 then
+  if qtreeHeadObs.Count > 0 then
   begin
-    FSelectedObsItem := qtreeObservations.NearestPointsFirstData
+    FSelectedObsItem := qtreeHeadObs.NearestPointsFirstData
       (xyexportb.xw, xyexportb.yw[1]);
     btnHightlightObjectsClick(nil);
   end;
@@ -1235,32 +1235,41 @@ begin
   end;
 end;
 
-procedure TframeHeadObservationResults.UpdateSelectedModel;
+procedure TframeHeadObservationResults.UpdateChildModels;
 var
-  ModelIndex: Integer;
-begin
-  ModelIndex := comboModels.ItemIndex;
-  GetData;
-  if ModelIndex < comboModels.Items.Count then
-  begin
-    comboModels.ItemIndex := ModelIndex;
-    comboModelsChange(nil);
-  end;
-end;
-
-procedure TframeHeadObservationResults.UpdateObsLinkList;
-var
-  Index: Integer;
-  AModel: TBaseModel;
   ChildIndex: Integer;
   ChildModel: TChildModel;
   LocalModel: TPhastModel;
+  Index: Integer;
+  AModel: TBaseModel;
+  ModelList: TList;
+  APointer: TObject;
 begin
+  ModelList := TList.Create;
+  try
+    ModelList.Add(frmGoPhast.PhastModel);
+    for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
+    begin
+      ModelList.Add(frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel);
+    end;
+    for Index := comboModels.Items.Count - 1 downto 0 do
+    begin
+      APointer := comboModels.Items.Objects[Index];
+      if ModelList.IndexOf(APointer) < 0 then
+      begin
+        comboModels.Items.Delete(Index);
+      end;
+    end;
+
+  finally
+    ModelList.Free;
+  end;
   if ObsLinkList = nil then
   begin
     ObsLinkList := TObsHeadLinkList.Create;
   end;
   ObsLinkList.Clear;
+
   LocalModel := frmGoPhast.PhastModel;
   ObsLinkList.Add(TObsHeadLink.Create(LocalModel));
   if LocalModel.LgrUsed then
@@ -1271,6 +1280,7 @@ begin
       ObsLinkList.Add(TObsHeadLink.Create(ChildModel));
     end;
   end;
+
   for Index := comboModels.Items.Count - 1 downto 0 do
   begin
     AModel := comboModels.Items.Objects[Index] as TBaseModel;
@@ -1278,6 +1288,42 @@ begin
     begin
       comboModels.Items.Delete(Index);
     end;
+  end;
+
+//  comboModels.Clear;
+  if comboModels.Items.IndexOfObject(LocalModel) < 0 then
+  begin
+    comboModels.Items.InsertObject(0, LocalModel.DisplayName, LocalModel);
+  end;
+  if LocalModel.LgrUsed then
+  begin
+    comboModels.Visible := True;
+    for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
+      if comboModels.Items.IndexOfObject(ChildModel) < 0 then
+      begin
+        comboModels.Items.InsertObject(ChildIndex+1, ChildModel.DisplayName, ChildModel);
+      end;
+    end;
+  end
+  else
+  begin
+    comboModels.Visible := False;
+  end;
+  comboModels.ItemIndex := 0;
+end;
+
+procedure TframeHeadObservationResults.UpdateSelectedModel;
+var
+  ModelIndex: Integer;
+begin
+  ModelIndex := comboModels.ItemIndex;
+  GetData;
+  if ModelIndex < comboModels.Items.Count then
+  begin
+    comboModels.ItemIndex := ModelIndex;
+    comboModelsChange(nil);
   end;
 end;
 
@@ -1325,7 +1371,7 @@ var
 begin
   result := '';
   if rdgHeadObs.SelectedRow <= 0 then
-  begin
+  begin 
     Exit;
   end;
   for RowIndex := 1 to rdgHeadObs.RowCount - 1 do

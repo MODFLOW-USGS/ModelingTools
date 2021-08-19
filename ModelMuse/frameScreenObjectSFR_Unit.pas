@@ -354,10 +354,10 @@ resourcestring
   StrDepthExponent = 'Depth exponent';
   StrWidthCoefficient = 'Width coefficient';
   StrWidthExponent = 'Width exponent';
-  StrFlowIntoUpstreamE = 'Flow into upstream end (FLOW)';
-  StrPrecipitationVolume = 'Precipitation rate (PTSW)';
-  StrEvapotranspirationV = 'Evapotranspiration rate (ETSW)';
-  StrRunoffVolumeRUNOF = 'Runoff volume (RUNOFF)';
+  StrFlowIntoUpstreamE = 'Flow into upstream end (FLOW) L^3/T';
+  StrPrecipitationVolume = 'Precipitation rate (PTSW) L/T';
+  StrEvapotranspirationV = 'Evapotranspiration rate (ETSW) L/T';
+  StrRunoffVolumeRUNOF = 'Runoff volume (RUNOFF) L^3/T';
   StrParameter = 'Parameter';
   StrParameterInstance = 'Parameter instance';
   StrStageCalculationI = 'Stage calculation (ICALC)';

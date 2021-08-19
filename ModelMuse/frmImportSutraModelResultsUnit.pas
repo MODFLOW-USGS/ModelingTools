@@ -87,8 +87,8 @@ type
     F_CCItem: TColorContourItem;
     FNodeFileName: string;
     FElementFileName: string;
-    FAskedUser: Boolean;
-    FCreateNewDataSet: Boolean;
+//    FAskedUser: Boolean;
+//    FCreateNewDataSet: Boolean;
     FAllNewDataSets: TList;
     procedure GetData;
     procedure SetData;
@@ -119,7 +119,7 @@ type
     procedure ImportSpecifiedPressureData(NewScreenObjects: TList);
     procedure ImportSpecifiedConcentrationData(NewScreenObjects: TList);
     procedure ImportLakeStageData(NewScreenObjects: TList);
-    function AskUserIfNewDataSet: boolean;
+//    function AskUserIfNewDataSet: boolean;
     procedure ImportRestartData(NewScreenObjects: TList);
     procedure CreateRestartNodeDataSets(DataSets: TList);
     procedure AssignRestartNodeValues(DataSets: TList;
@@ -256,10 +256,17 @@ begin
   begin
     try
       SetData;
-    except on E: EConvertError do
+    except
+      on E: EConvertError do
       begin
         Beep;
         MessageDlg(Format(StrThereWasAnErrorR, [E.message]), mtError, [mbOK], 0);
+        Exit;
+      end;
+      on E: EAbortingImport do
+      begin
+        Beep;
+        MessageDlg(E.message, mtInformation, [mbOK], 0);
         Exit;
       end;
     end;
@@ -567,22 +574,10 @@ begin
   Constraints.MinHeight := Height;
 end;
 
-function TfrmImportSutraModelResults.AskUserIfNewDataSet: boolean;
-begin
-  result := AskIfNewDataSet(FAskedUser, FCreateNewDataSet);
-//  if not FAskedUser then
-//  begin
-//    FAskedUser := True;
-//    frmUpdateDataSets := TfrmUpdateDataSets.Create(nil);
-//    try
-//      frmUpdateDataSets.ShowModal;
-//      FCreateNewDataSet := frmUpdateDataSets.ModalResult <> mrOK;
-//    finally
-//      frmUpdateDataSets.Free;
-//    end;
-//  end;
-//  result := FCreateNewDataSet;
-end;
+//function TfrmImportSutraModelResults.AskUserIfNewDataSet: boolean;
+//begin
+////  result := AskIfNewDataSet(FAskedUser, FCreateNewDataSet);
+//end;
 
 procedure TfrmImportSutraModelResults.ImportBoundaryDataForOneTimeStep(
   CustomList: TCustomItemList; TimeIndex: Integer;
@@ -1341,7 +1336,7 @@ begin
         + IntToStr(FResultList[StepIndex].TimeStep));
 
       AnObserver := frmGoPhast.PhastModel.GetObserverByName(NewName);
-      if (AnObserver = nil) or (not (AnObserver is TDataArray))
+      if (AnObserver = nil) {or (not (AnObserver is TDataArray))}
         or AskUserIfNewDataSet then
       begin
         NewName := GenerateNewName(NewName, nil, '_');
@@ -1594,7 +1589,7 @@ begin
       NewName := GenerateNewRoot(chklstDataToImport.Items[Ord(index)]);
 
       AnObserver := frmGoPhast.PhastModel.GetObserverByName(NewName);
-      if (AnObserver = nil) or (not (AnObserver is TDataArray))
+      if (AnObserver = nil) {or (not (AnObserver is TDataArray))}
         or AskUserIfNewDataSet then
       begin
         NewName := GenerateNewName(NewName, nil, '_');
@@ -1678,7 +1673,7 @@ begin
         + IntToStr(FResultList[StepIndex].TimeStep));
 
       AnObserver := frmGoPhast.PhastModel.GetObserverByName(NewName);
-      if (AnObserver = nil) or (not (AnObserver is TDataArray))
+      if (AnObserver = nil) {or (not (AnObserver is TDataArray))}
         or AskUserIfNewDataSet then
       begin
         NewName := GenerateNewName(NewName, nil, '_');
@@ -2442,6 +2437,8 @@ var
   NewScreenObjects: TList;
   Undo: TUndoImportSutraResults;
   DisplayChoice: TDisplayChoice;
+  AScreenObject: TScreenObject;
+  Index: Integer;
 begin
   FColorContourDataArray := nil;
   if (dlgOpenSutraFile.FilterIndex <> 7) then
@@ -2458,59 +2455,76 @@ begin
   try
     Undo := TUndoImportSutraResults.Create;
     try
-      case dlgOpenSutraFile.FilterIndex of
-        2:
-          begin
-            ImportNodeAndElementData(NewScreenObjects);
-          end;
-        3:
-          begin
-            ImportFluidSourcesData(NewScreenObjects);
-          end;
-        4:
-          begin
-            ImportSoluteSourcesData(NewScreenObjects);
-          end;
-        5:
-          begin
-            ImportSpecifiedPressureData(NewScreenObjects);
-          end;
-        6:
-          begin
-            ImportSpecifiedConcentrationData(NewScreenObjects);
-          end;
-        7:
-          begin
-            ImportRestartData(NewScreenObjects);
-          end;
-        8:
-          begin
-            ImportLakeStageData(NewScreenObjects);
-          end;
-        else
-          begin
-            Assert(False);
-          end;
-      end;
+      try
+        case dlgOpenSutraFile.FilterIndex of
+          2:
+            begin
+              ImportNodeAndElementData(NewScreenObjects);
+            end;
+          3:
+            begin
+              ImportFluidSourcesData(NewScreenObjects);
+            end;
+          4:
+            begin
+              ImportSoluteSourcesData(NewScreenObjects);
+            end;
+          5:
+            begin
+              ImportSpecifiedPressureData(NewScreenObjects);
+            end;
+          6:
+            begin
+              ImportSpecifiedConcentrationData(NewScreenObjects);
+            end;
+          7:
+            begin
+              ImportRestartData(NewScreenObjects);
+            end;
+          8:
+            begin
+              ImportLakeStageData(NewScreenObjects);
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
 
-      DisplayChoice := TDisplayChoice(rgDisplayChoice.ItemIndex);
-      if FColorContourDataArray <> nil then
-      begin
-        case DisplayChoice of
-          dcColor:
-            begin
-              frmGoPhast.acColoredGrid.Enabled := True;
-              frmGoPhast.acColoredGrid.Checked := True;
-              frmGoPhast.tb3DColors.Down := True;
-            end;
-          dcContour, dcNone:
-            begin
-              // do nothing
-            end;
-          else Assert(False);
+        DisplayChoice := TDisplayChoice(rgDisplayChoice.ItemIndex);
+        if FColorContourDataArray <> nil then
+        begin
+          case DisplayChoice of
+            dcColor:
+              begin
+                frmGoPhast.acColoredGrid.Enabled := True;
+                frmGoPhast.acColoredGrid.Checked := True;
+                frmGoPhast.tb3DColors.Down := True;
+              end;
+            dcContour, dcNone:
+              begin
+                // do nothing
+              end;
+            else Assert(False);
+          end;
+        end;
+      except
+        on E: EAbortingImport do
+        begin
+          for Index := 0 to NewScreenObjects.Count - 1 do
+          begin
+            AScreenObject := NewScreenObjects[Index];
+            AScreenObject.Free;
+//            if not AScreenObject.Deleted then
+//            begin
+//              AScreenObject.Deleted := True;
+//            end;
+          end;
+
+          frmGoPhast.PhastModel.DataArrayManager.HandleDeletedDataArrays(FAllNewDataSets);
+          raise
         end;
       end;
-
 
       Undo.StoreNewScreenObjects(NewScreenObjects);
       Undo.StoreNewDataSets(FAllNewDataSets);
