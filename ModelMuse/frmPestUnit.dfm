@@ -28,15 +28,13 @@ inherited frmPEST: TfrmPEST
     TabOrder = 0
     OnMouseDown = tvPESTMouseDown
     Items.Links = {00000000}
-    ExplicitLeft = -1
-    ExplicitTop = -6
   end
   object plMain: TJvPageList
     Left = 198
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspInversionControls
+    ActivePage = jvspPilotPoints
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -52,16 +50,16 @@ inherited frmPEST: TfrmPEST
       object lblTemplateCharacter: TLabel
         Left = 16
         Top = 40
-        Width = 132
+        Width = 138
         Height = 18
-        Caption = 'Template character'
+        Caption = 'Parameter delimiter'
       end
       object lblFormulaMarker: TLabel
         Left = 16
         Top = 104
-        Width = 110
+        Width = 121
         Height = 18
-        Caption = 'Formula marker'
+        Caption = 'Formula delimiter'
       end
       object lblPestDirectory: TLabel
         Left = 17
@@ -73,9 +71,9 @@ inherited frmPEST: TfrmPEST
       object lblArrayMarker: TLabel
         Left = 17
         Top = 168
-        Width = 172
+        Width = 183
         Height = 18
-        Caption = 'Array substitution marker'
+        Caption = 'Array substitution delimiter'
       end
       object htlblZoneBudget6: TJvHTLabel
         Left = 17

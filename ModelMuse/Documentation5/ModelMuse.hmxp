@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4158</config-value>
+      <config-value name="autohelpstart">4161</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -120,7 +120,6 @@
       <config-value name="make0status">(Complete)</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">(Complete)</config-value>
-      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -879,6 +878,7 @@ document.write('</frameset>');
       <helpcontext-number href="Editing_the_Grid" value="1660"/>
       <helpcontext-number href="ElevationToLayer" value="450"/>
       <helpcontext-number href="ElevationToModelLayer" value="460"/>
+      <helpcontext-number href="EnhancedTemplateProcessor" value="4161"/>
       <helpcontext-number href="Equation_Tab" value="2140"/>
       <helpcontext-number href="Errors_and_Warnings_Dialog_Box" value="2340"/>
       <helpcontext-number href="ETS_Evapotranspiration_Segments_Package" value="2690"/>
@@ -1170,6 +1170,7 @@ document.write('</frameset>');
       <helpcontext-number href="ModelMuse_Files" value="3440"/>
       <helpcontext-number href="ModelMuse_Frequently_Asked_Que" value="3993"/>
       <helpcontext-number href="ModelMuse_Introduction" value="10"/>
+      <helpcontext-number href="ModelMuse_Utility_Programs_for" value="4160"/>
       <helpcontext-number href="MODFLOW" value="950"/>
       <helpcontext-number href="MODFLOW_6_Example" value="4034"/>
       <helpcontext-number href="MODFLOW_6_Example_Activate_Bou" value="4041"/>

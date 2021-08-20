@@ -6,6 +6,15 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Basic Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Basic Pane is in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The Basic pane is where you </text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">activate or deactivate PEST in ModelMuse,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">specify the parameter delimiter,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">specify the formula delimiter,</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">specify the array substitution delimiter, and </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">specify the directory in which PEST is installed.</text></li>
+    </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The parameter delimiter is explained in section 2.2.3 of the PEST manual. When PEST creates the input file of a model from a template file, the parameter delimiter is used to mark a location into which a parameter value should be inserted. In addition to the parameter delimiter, two other delimiter must also be specified: the formula delimiter and the array substitution delimiter. These are not part of PEST. Instead they are used by the &quot;</text><link displaytype="text" defaultstyle="true" type="topiclink" href="EnhancedTemplateProcessor" styleclass="Normal" translate="true">EnhancedTemplateProcessor</link><text styleclass="Normal" translate="true">&quot; which is a utility program developed in conjunction with ModelMuse to do additional processing in template files. </text><link displaytype="text" defaultstyle="true" type="topiclink" href="EnhancedTemplateProcessor" styleclass="Normal" translate="true">EnhancedTemplateProcessor</link><text styleclass="Normal" translate="true"> can evaluate formulas included in template files or it can substitute values from arrays into template files. Because PEST may modify the arrays each time it runs the simulation, the array values that are substituted can be affected by the parameter estimation process. </text></para>
   </body>
 </topic>
