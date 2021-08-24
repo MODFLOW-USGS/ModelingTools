@@ -1731,7 +1731,7 @@ begin
   FBoundStick := 0;
   FUpgradeParamVectorBending := upvbNoBending;
   SwitchCriterion := 0.1;
-  FOptSwitchCount := 1;
+  FOptSwitchCount := 3;
   SplitSlopeCriterion := 0;
   FAutomaticUserIntervation := auiInactive;
   FSensitivityReuse := srNoReuse;

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Model</title>
   <body>
     <header>
@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The items under </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model</text><text styleclass="Normal" translate="true"> are used to set options specific to a particular model (Table 13). </text></para>
     <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 13. Model Menu</text></para>
-    <para styleclass="Normal" style="text-align:center;"><table rowcount="38" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="41" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Menu Item</text></para>
@@ -297,6 +297,14 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Manage SUTRA Boundary Observations</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_SUTRA_Boundary_Observati" styleclass="Strong" translate="true">Manage SUTRA Boundary Observations</link><text styleclass="Table Cell" translate="true"> dialog box</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">WellFootprint Properties...</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
@@ -309,6 +317,22 @@
         </td>
         <td style="vertical-align:top; width:485px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Footprint_Program_Location" styleclass="Strong" translate="true">WellFootprint Program Location</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Edit Observation Comparisons</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Observation_Comparisons_Dialog" styleclass="Strong" translate="true">Observation Comparisons</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Pest Properties</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Strong" translate="true">PEST Properties</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
         </td>
       </tr>
     </table></para>

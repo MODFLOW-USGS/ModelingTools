@@ -113,6 +113,11 @@ resourcestring
   'here must be exactly one observation assigned to the "predict" observatio' +
   'n group. In this model there were %d such observation assigned to the "pr' +
   'edict" group.';
+  StrTooManyParameters = 'Too many parameters subject to absolute change lim' +
+  'its.';
+  StrPESTAllowsAMaximu = 'PEST allows a maximum of 10 parameters to be subje' +
+  'ct to absolute change limits (ABSPARMAX). You specified absolute change l' +
+  'imits in %d parameters. The remainder will be skipped.';
 
 { TPestControlFileWriter }
 
@@ -949,7 +954,11 @@ begin
   // DPOINT
   // The decimal point is never needed because free format is used exclusively.
   WriteString(' nopoint');
-  // NUMCOM, JCFILE, and MESSFILE will be omited in all cases.
+
+  // NUMCOM, JCFILE, and MESSFILE will be omited in all cases because
+  // the supported versions of MODFLOW and SUTRA don't write derivatives.
+  // MODFLOW-2000 can write derivatives but it isn't supported.
+
   // OBSREREF
   // observation rereferencing is not supported in ModelMuse.
   WriteString(' noobsreref');
@@ -1049,10 +1058,16 @@ begin
     end;
   end;
 
-  for ParamIndex := 0 to F_AbsParMax.Count - 1 do
+  for ParamIndex := 0 to Min(10, F_AbsParMax.Count) - 1 do
   begin
     WriteString(Format(' absparmax(%0:d)=%1:g',
       [ParamIndex + 1,F_AbsParMax[ParamIndex]]));
+  end;
+
+  if F_AbsParMax.Count > 10 then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrTooManyParameters,
+      Format(StrPESTAllowsAMaximu, [F_AbsParMax.Count]));
   end;
 
   //FACORIG
@@ -1075,6 +1090,9 @@ begin
   WriteInteger(PestControlData.OptSwitchCount);
   // SPLITSWH
   WriteFloat(PestControlData.SplitSlopeCriterion);
+
+  // The Automatic user intervention section is not supported
+  // so PEST will only use default values.
   // DOAUI
   case PestControlData.AutomaticUserIntervation of
     auiInactive:
@@ -1092,6 +1110,7 @@ begin
     else
       Assert(False);
   end;
+
   // DOSENREUSE
   case PestControlData.SensitivityReuse of
     srNoReuse:
@@ -1131,16 +1150,22 @@ begin
   begin
     WriteInteger(PestControlData.MaxIterations);
   end;
+
   // PHIREDSTP
   WriteFloat(PestControlData.SlowConvergenceCriterion);
+
   // NPHISTP
   WriteInteger(PestControlData.SlowConvergenceCountCriterion);
+
   // NPHINORED
   WriteInteger(PestControlData.ConvergenceCountCriterion);
+
   // RELPARSTP
   WriteFloat(PestControlData.ParameterChangeConvergenceCriterion);
+
   // NRELPAR
   WriteInteger(PestControlData.ParameterChangeConvergenceCount);
+
   // PHISTOPTHRESH
   if PestControlData.PestMode in [pmPrediction, pmPareto] then
   begin
@@ -1150,6 +1175,7 @@ begin
   begin
     WriteFloat(PestControlData.ObjectiveCriterion);
   end;
+
   // LASTRUN
   if PestControlData.PestMode = pmPareto then
   begin
@@ -1159,6 +1185,7 @@ begin
   begin
     WriteInteger(Ord(PestControlData.MakeFinalRun));
   end;
+
   // PHIABANDON
   WriteFloat(PestControlData.PhiAbandon);
 
@@ -1279,6 +1306,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupUn);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidParameterVa);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrPredictionObservati);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyParameters);
 
   if not Model.PestUsed then
   begin

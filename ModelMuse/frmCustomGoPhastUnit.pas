@@ -1847,6 +1847,7 @@ begin
     UsedResponse := drUpdate;
   end;
   UsedResponse := AskIfNewDataSet(FAskedUser, UsedResponse);
+  result := UsedResponse = drNew;
   case UsedResponse of
     drNew:
       begin

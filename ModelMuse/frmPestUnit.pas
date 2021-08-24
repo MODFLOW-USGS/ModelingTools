@@ -396,6 +396,13 @@ type
     procedure rdeTestLambdaPhiChange(Sender: TObject);
     procedure tvPESTMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure rdeLambdaAdjChange(Sender: TObject);
+    procedure rdeMaxRelParamChangeChange(Sender: TObject);
+    procedure rdeMaxFacParamChangeChange(Sender: TObject);
+    procedure rdeFactorOriginalChange(Sender: TObject);
+    procedure rdePhiReductionCriterionChange(Sender: TObject);
+    procedure rdeSmallParameterReductionChange(Sender: TObject);
+    procedure rdeAbandonChange(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -869,6 +876,19 @@ begin
   rdeIREGADJ.IntegerValue := IREGADJ;
 end;
 
+procedure TfrmPEST.rdeAbandonChange(Sender: TObject);
+begin
+  inherited;
+  if rdeAbandon.RealValue = 0 then
+  begin
+    rdeAbandon.Color := clRed;
+  end
+  else
+  begin
+    rdeAbandon.Color := clWindow;
+  end;
+end;
+
 procedure TfrmPEST.rdeAcceptedObjectiveFunctionChange(Sender: TObject);
 var
   PD0: Double;
@@ -890,6 +910,19 @@ begin
     rdeAcceptedObjectiveFunction.Color := clRed;
   end;
   rdeTestLambdaPhiChange(nil);
+end;
+
+procedure TfrmPEST.rdeFactorOriginalChange(Sender: TObject);
+begin
+  inherited;
+  if rdeFactorOriginal.RealValue = 0 then
+  begin
+    rdeFactorOriginal.Color := clRed;
+  end
+  else
+  begin
+    rdeFactorOriginal.Color := clWindow;
+  end;
 end;
 
 procedure TfrmPEST.rdeFRACPHIMChange(Sender: TObject);
@@ -917,6 +950,45 @@ begin
   end;
 end;
 
+procedure TfrmPEST.rdeLambdaAdjChange(Sender: TObject);
+begin
+  inherited;
+  if Abs(rdeLambdaAdj.RealValue) <= 1 then
+  begin
+    rdeLambdaAdj.Color := clRed;
+  end
+  else
+  begin
+    rdeLambdaAdj.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdeMaxFacParamChangeChange(Sender: TObject);
+begin
+  inherited;
+  if rdeMaxFacParamChange.RealValue <= 1 then
+  begin
+    rdeMaxFacParamChange.Color := clRed;
+  end
+  else
+  begin
+    rdeMaxFacParamChange.Color := clWindow;
+  end;
+end;
+
+procedure TfrmPEST.rdeMaxRelParamChangeChange(Sender: TObject);
+begin
+  inherited;
+  if rdeMaxRelParamChange.RealValue = 0 then
+  begin
+    rdeMaxRelParamChange.Color := clRed;
+  end
+  else
+  begin
+    rdeMaxRelParamChange.Color := clWindow;
+  end;
+end;
+
 procedure TfrmPEST.rdePhimAcceptChange(Sender: TObject);
 begin
   inherited;
@@ -939,6 +1011,19 @@ begin
   end;
   AutoSetPhimAccept;
   SetrdePhimAcceptColor;
+end;
+
+procedure TfrmPEST.rdePhiReductionCriterionChange(Sender: TObject);
+begin
+  inherited;
+  if Abs(rdePhiReductionCriterion.RealValue) = 0 then
+  begin
+    rdePhiReductionCriterion.Color := clRed;
+  end
+  else
+  begin
+    rdePhiReductionCriterion.Color := clWindow;
+  end;
 end;
 
 procedure TfrmPEST.rdeREGSINGTHRESHChange(Sender: TObject);
@@ -975,6 +1060,19 @@ begin
   inherited;
   SetSearchDistanceColor;
 
+end;
+
+procedure TfrmPEST.rdeSmallParameterReductionChange(Sender: TObject);
+begin
+  inherited;
+  if Abs(rdeSmallParameterReduction.RealValue) = 0 then
+  begin
+    rdeSmallParameterReduction.Color := clRed;
+  end
+  else
+  begin
+    rdeSmallParameterReduction.Color := clWindow;
+  end;
 end;
 
 procedure TfrmPEST.rdeSwitchCriterionChange(Sender: TObject);

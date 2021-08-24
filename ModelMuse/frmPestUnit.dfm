@@ -34,7 +34,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspControlDataMode
+    ActivePage = jvspIterationControls
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -167,7 +167,6 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspControlDataMode'
-      ExplicitLeft = 1
       object lblPestMode: TLabel
         Left = 14
         Top = 40
@@ -303,6 +302,7 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 1
         Text = '0'
+        OnChange = rdeLambdaAdjChange
         DataType = dtReal
         Max = 1.000000000000000000
         ChangeDisabledColor = True
@@ -418,8 +418,10 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 0
         Text = '0'
+        OnChange = rdeMaxRelParamChangeChange
         DataType = dtReal
         Max = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdeMaxFacParamChange: TRbwDataEntry
@@ -428,9 +430,12 @@ inherited frmPEST: TfrmPEST
         Width = 81
         Height = 22
         TabOrder = 1
-        Text = '0'
+        Text = '1'
+        OnChange = rdeMaxFacParamChangeChange
         DataType = dtReal
         Max = 1.000000000000000000
+        Min = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdeFactorOriginal: TRbwDataEntry
@@ -440,8 +445,11 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 2
         Text = '0'
+        OnChange = rdeFactorOriginalChange
         DataType = dtReal
         Max = 1.000000000000000000
+        CheckMax = True
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdeBoundStick: TRbwDataEntry
@@ -458,7 +466,7 @@ inherited frmPEST: TfrmPEST
       end
       object cbParameterBending: TCheckBox
         Left = 6
-        Top = 124
+        Top = 132
         Width = 467
         Height = 21
         Caption = 'Upgrade parameter vector bending (UPVECBEND)'
@@ -640,6 +648,8 @@ inherited frmPEST: TfrmPEST
         Text = '0'
         DataType = dtInteger
         Max = 1.000000000000000000
+        Min = -2.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdePhiReductionCriterion: TRbwDataEntry
@@ -649,8 +659,10 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 1
         Text = '0'
+        OnChange = rdePhiReductionCriterionChange
         DataType = dtReal
         Max = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdePhiReductionCount: TRbwDataEntry
@@ -659,9 +671,11 @@ inherited frmPEST: TfrmPEST
         Width = 81
         Height = 22
         TabOrder = 2
-        Text = '0'
+        Text = '1'
         DataType = dtInteger
         Max = 1.000000000000000000
+        Min = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdeNoReductionCount: TRbwDataEntry
@@ -670,9 +684,11 @@ inherited frmPEST: TfrmPEST
         Width = 81
         Height = 22
         TabOrder = 3
-        Text = '0'
+        Text = '1'
         DataType = dtInteger
         Max = 1.000000000000000000
+        Min = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdeSmallParameterReduction: TRbwDataEntry
@@ -682,8 +698,10 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 4
         Text = '0'
+        OnChange = rdeSmallParameterReductionChange
         DataType = dtReal
         Max = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdeSmallParameterReductionCount: TRbwDataEntry
@@ -692,9 +710,11 @@ inherited frmPEST: TfrmPEST
         Width = 81
         Height = 22
         TabOrder = 5
-        Text = '0'
+        Text = '1'
         DataType = dtInteger
         Max = 1.000000000000000000
+        Min = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object rdePhiStoppingThreshold: TRbwDataEntry
@@ -703,9 +723,11 @@ inherited frmPEST: TfrmPEST
         Width = 81
         Height = 22
         TabOrder = 6
-        Text = '0'
+        Text = '1'
         DataType = dtReal
         Max = 1.000000000000000000
+        Min = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
       object cbLastRun: TCheckBox
@@ -726,8 +748,10 @@ inherited frmPEST: TfrmPEST
         Height = 22
         TabOrder = 8
         Text = '0'
+        OnChange = rdeAbandonChange
         DataType = dtReal
         Max = 1.000000000000000000
+        CheckMin = True
         ChangeDisabledColor = True
       end
     end

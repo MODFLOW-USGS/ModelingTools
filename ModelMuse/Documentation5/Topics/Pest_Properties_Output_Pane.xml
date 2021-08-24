@@ -2,10 +2,34 @@
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">PEST Properties Output Pane</title>
+  <keywords>
+    <keyword translate="true">ICOR</keyword>
+    <keyword translate="true">ICOV</keyword>
+    <keyword translate="true">IEIG</keyword>
+    <keyword translate="true">IRES</keyword>
+    <keyword translate="true">JCOSAVE</keyword>
+    <keyword translate="true">JCOSAVEITN</keyword>
+    <keyword translate="true">PARSAVEITN</keyword>
+    <keyword translate="true">PARSAVERUN</keyword>
+    <keyword translate="true">REISAVEITN</keyword>
+    <keyword translate="true">VERBOSEREC</keyword>
+  </keywords>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Output Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ICOV</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ICOR </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IEIG </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">IRES</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">JCOSAVE</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">VERBOSEREC</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">JCOSAVEITN</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">REISAVEITN</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PARSAVEITN</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PARSAVERUN</text></para>
   </body>
 </topic>
