@@ -34,7 +34,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspPilotPoints
+    ActivePage = jvspControlDataMode
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -167,8 +167,9 @@ inherited frmPEST: TfrmPEST
       Width = 566
       Height = 443
       Caption = 'jvspControlDataMode'
+      ExplicitLeft = 1
       object lblPestMode: TLabel
-        Left = 23
+        Left = 14
         Top = 40
         Width = 144
         Height = 18
@@ -189,15 +190,15 @@ inherited frmPEST: TfrmPEST
         Caption = 'Jacobian element threshold (DERZEROLIM)'
       end
       object cbSaveRestart: TCheckBox
-        Left = 23
-        Top = 16
+        Left = 14
+        Top = 17
         Width = 277
         Height = 17
         Caption = 'Save restart information (RSTFLE)'
         TabOrder = 0
       end
       object comboPestMode: TComboBox
-        Left = 22
+        Left = 14
         Top = 64
         Width = 203
         Height = 26
@@ -211,8 +212,8 @@ inherited frmPEST: TfrmPEST
           'pareto')
       end
       object rdeMaxCompDim: TRbwDataEntry
-        Left = 22
-        Top = 107
+        Left = 14
+        Top = 99
         Width = 73
         Height = 22
         TabOrder = 2
@@ -223,8 +224,8 @@ inherited frmPEST: TfrmPEST
         ChangeDisabledColor = True
       end
       object rdeZeroLimit: TRbwDataEntry
-        Left = 22
-        Top = 135
+        Left = 14
+        Top = 127
         Width = 73
         Height = 22
         TabOrder = 3

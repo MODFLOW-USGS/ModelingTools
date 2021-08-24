@@ -1346,7 +1346,7 @@ begin
   FTemplateCharacter := '@';
   FExtendedTemplateCharacter := '%';
   FArrayTemplateCharacter := '~';
-  FUseBetweenObservationsPilotPoints := True;
+  FUseBetweenObservationsPilotPoints := False;
   FArrayPilotPointSelection := appsNone;
   PilotPointBuffer := 0;
   FUseInitialValuePriorInfo := True;

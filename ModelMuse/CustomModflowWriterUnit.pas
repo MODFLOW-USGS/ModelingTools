@@ -1203,6 +1203,7 @@ resourcestring
   StrArrayFormulaFormat = ' %0:s                    %1:s                    %2' +
   ':s[%5:d,%6:d,%7:d]%1:s %4:s %3:g%0:s ';
   StrExtendedTemplateFormat = ' %0:s                    %1:s%0:s ';
+  StrErrorHandlingTheF = 'Error handling the following name file lines';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
@@ -8800,10 +8801,22 @@ begin
 
             if Model.ModelSelection = msModflow2015 then
             begin
+              if Splitter.Count < 2 then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorHandlingTheF,
+                  ALine);
+                Continue;
+              end;
               AFile := Splitter[1];
             end
             else
             begin
+              if Splitter.Count < 3 then
+              begin
+                frmErrorsAndWarnings.AddError(Model, StrErrorHandlingTheF,
+                  ALine);
+                Continue;
+              end;
               AFile := Splitter[2];
             end;
 

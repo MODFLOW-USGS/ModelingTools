@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4161</config-value>
+      <config-value name="autohelpstart">4162</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
@@ -1127,6 +1127,7 @@ document.write('</frameset>');
       <helpcontext-number href="Max" value="790"/>
       <helpcontext-number href="MaxI" value="800"/>
       <helpcontext-number href="MaxR" value="810"/>
+      <helpcontext-number href="MaxSutraNodeValueInElement" value="4162"/>
       <helpcontext-number href="MeanVertexValue" value="3972"/>
       <helpcontext-number href="MedianVertexValue" value="3973"/>
       <helpcontext-number href="Mesh" value="3686"/>

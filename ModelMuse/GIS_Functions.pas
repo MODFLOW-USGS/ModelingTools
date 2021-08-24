@@ -27,6 +27,17 @@ type
     function UsesVariable(const Variable: TCustomVariable): boolean; override;
   end;
 
+  TSutraMaxValueInNodeDataSet = class(TExpression)
+  protected
+    function GetVariablesUsed: TStringList; override;
+  public
+    {
+      @Name returns True if Variable is used by the @Link(TExpression)
+      or if the variable is named "Active".
+    }
+    function UsesVariable(const Variable: TCustomVariable): boolean; override;
+  end;
+
   TLayerSlope = class(TExpression)
   protected
     function GetVariablesUsed: TStringList; override;
@@ -167,6 +178,7 @@ const
   StrVerticalSubdivision = 'Vertical_Subdivision';
   StrSelectedCount = 'SelectedCount';
   StrSUTRA_MeshEdgeNode = 'SUTRA_MeshEdgeNode';
+//  StrMaxSutraNodeValueInElement = ;
   ObjectCurrentSegmentAngle = 'ObjectCurrentSegmentAngle';
   ObjectDegrees = 'ObjectCurrentSegmentAngleDegrees';
   ObjectDegreesLimited = 'ObjectCurrentSegmentAngleLimitedDegrees';
@@ -250,6 +262,24 @@ resourcestring
   StrInvalidFormulaFor = 'Invalid formula for third dimension formula in the' +
   ' following objects';
 
+function RemoveQuotes(const Value: string): string;
+begin
+  result := Trim(Value);
+  if Length(result) > 0 then
+  begin
+    if result[1] = '"' then
+    begin
+      result := Copy(result, 2, MAXINT);
+    end;
+    if Length(result) > 0 then
+    begin
+      if result[Length(result)] = '"' then
+      begin
+        result := Copy(result, 1, Length(result) - 1);
+      end;
+    end;
+  end;
+end;
 
 var
   SpecialImplementors: TList;
@@ -375,10 +405,15 @@ var
   SelectedCount_Function: TFunctionRecord;
   SutraMeshEdgeNodeFunction: TFunctionRecord;
 
+//  SutraMaxRealNodeValueFuntion: TFunctionRecord;
+
 //  DipDirectionRadiansFunction: TFunctionRecord;
 
   NodeInterpolate: TFunctionClass;
   NodeInterpolateSpecialImplementor: TSpecialImplementor;
+
+  SutraMaxNodeValueInElement: TFunctionClass;
+  SutraMaxNodeValueInElementSpecialImplementor: TSpecialImplementor;
 
   ActiveOnLayer: TFunctionClass;
   ActiveOnLayerSpecialImplementor: TSpecialImplementor;
@@ -1553,6 +1588,87 @@ begin
     result := Node3D.BoundaryNode;
   end;
 end;
+
+function _SutraMaxNodeValueAtElement(Values: array of pointer): double;
+var
+  SutraMesh3D: TSutraMesh3D;
+  NodeDataName: string;
+  LocalModel: TCustomModel;
+  DataArray: TDataArray;
+  Layer: Integer;
+  Column: Integer;
+//  Element3D: TSutraElement3D;
+  Element2D: TSutraElement2D;
+  Layers: Array of Integer;
+  Node: TSutraNode2D;
+  NodeIndex: Integer;
+  LayerIndex: Integer;
+  Value: Double;
+begin
+  result := 0;
+  if not (GlobalCurrentModel.ModelSelection in SutraSelection) then
+  begin
+    Exit;
+  end;
+  if GlobalEvaluatedAt <> eaBlocks then
+  begin
+    Exit;
+  end;
+  if Length(Values) < 0 then
+  begin
+    Exit;
+  end;
+  NodeDataName := PString(Values[0])^;
+
+  LocalModel := GlobalCurrentModel as TCustomModel;
+  DataArray := LocalModel.DataArrayManager.GetDataSetByName(NodeDataName);
+  if (DataArray = nil) or (DataArray.EvaluatedAt <> eaNodes)
+    or not (DataArray.DataType in [rdtDouble, rdtInteger]) then
+  begin
+    Exit;
+  end;
+  PushGlobalStack;
+  try
+    DataArray.Initialize;
+  finally
+    PopGlobalStack
+  end;
+  Layer := GlobalLayer-1;
+  Column := GlobalColumn-1;
+
+  SutraMesh3D := (LocalModel).SutraMesh;
+  Element2D := SutraMesh3D.Mesh2D.Elements[Column];
+
+  if (SutraMesh3D.MeshType = mt3D) and (DataArray.Orientation = dso3D) then
+  begin
+    SetLength(Layers, 2);
+    Layers[0] := Layer;
+    Layers[1] := Layer+1;
+  end
+  else
+  begin
+    SetLength(Layers, 1);
+    Layers[0] := 0;
+  end;
+
+  if Element2D.NodeCount > 0 then
+  begin
+    Node := Element2D.Nodes[0].Node;
+    result := DataArray.RealData[Layers[0], 0, Node.Number];
+
+    for NodeIndex := 0 to Element2D.NodeCount - 1 do
+    begin
+      Node := Element2D.Nodes[NodeIndex].Node;
+      for LayerIndex := 0 to Length(Layers) - 1 do
+      begin
+        Value := DataArray.RealData[Layers[LayerIndex], 0, Node.Number];
+        result := Max(Value, Result);
+      end;
+    end;
+  end;
+
+end;
+
 
 function _SelectedCount(Values: array of pointer): integer;
 var
@@ -7560,6 +7676,67 @@ begin
   end;
 end;
 
+{ TSutraMaxValueInNodeDataSet }
+
+function TSutraMaxValueInNodeDataSet.GetVariablesUsed: TStringList;
+var
+  DataSetName: string;
+  DataSet: TDataArray;
+  Index: Integer;
+  ArrayLength: Integer;
+  AVariable: TConstant;
+begin
+  result := inherited GetVariablesUsed;
+
+  if (frmGoPhast.ModelSelection in SutraSelection) then
+  begin
+    ArrayLength := Length(Data);
+    for Index := 0 to ArrayLength - 1 do
+    begin
+      if Data[Index].Datum <> nil then
+      begin
+        AVariable := TConstant(Data[Index].Datum);
+        DataSetName := RemoveQuotes(AVariable.Decompile);
+        DataSet := frmGoPhast.PhastModel.DataArrayManager.GetDataSetByName(DataSetName);
+        if (DataSet <> nil) and (DataSet.EvaluatedAt = eaNodes) then
+        begin
+          result.Add(DataSet.Name);
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TSutraMaxValueInNodeDataSet.UsesVariable(
+  const Variable: TCustomVariable): boolean;
+var
+  DataSetName: string;
+  ArrayLength: Integer;
+  Index: Integer;
+  AVariable: TConstant;
+begin
+  result := False;
+
+  if (frmGoPhast.ModelSelection in SutraSelection) then
+  begin
+    ArrayLength := Length(Data);
+    for Index := 0 to ArrayLength - 1 do
+    begin
+      if Data[Index].Datum <> nil then
+      begin
+        AVariable := TConstant(Data[Index].Datum);
+        DataSetName := RemoveQuotes(AVariable.Decompile);
+        result := SameText(DataSetName, Variable.Name);
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
+  end;
+
+end;
+
 initialization
   SpecialImplementors := TList.Create;
 
@@ -8308,6 +8485,21 @@ initialization
   SutraMeshEdgeNodeFunction.Prototype := StrSutra + StrSUTRA_MeshEdgeNode;
   SutraMeshEdgeNodeFunction.Hidden := False;
 
+  SutraMaxNodeValueInElement := TFunctionClass.Create;
+  SutraMaxNodeValueInElement.InputDataCount := 1;
+  SutraMaxNodeValueInElement.OptionalArguments := -0;
+  SutraMaxNodeValueInElement.RFunctionAddr := _SutraMaxNodeValueAtElement;
+  SutraMaxNodeValueInElement.Name := 'MaxSutraNodeValueInElement';
+  SutraMaxNodeValueInElement.Prototype := StrSutra +
+    'MaxSutraNodeValueInElement' + '(NameOfRealNodeDataSet)';
+  SutraMaxNodeValueInElement.InputDataTypes[0] := rdtString;
+  SutraMaxNodeValueInElement.AllowConversionToConstant := False;
+
+  SutraMaxNodeValueInElementSpecialImplementor := TSpecialImplementor.Create;
+  SutraMaxNodeValueInElementSpecialImplementor.FunctionClass := SutraMaxNodeValueInElement;
+  SutraMaxNodeValueInElementSpecialImplementor.Implementor := TSutraMaxValueInNodeDataSet;
+  SpecialImplementors.Add(SutraMaxNodeValueInElementSpecialImplementor);
+
   NodeInterpolate := TFunctionClass.Create;
   NodeInterpolate.InputDataCount := 3;
   NodeInterpolate.OptionalArguments := -1;
@@ -8605,6 +8797,9 @@ initialization
 
 finalization
   InvalidNames.Free;
+
+  SutraMaxNodeValueInElement.Free;
+  SutraMaxNodeValueInElementSpecialImplementor.Free;
 
   NodeInterpolate.Free;
   NodeInterpolateSpecialImplementor.Free;

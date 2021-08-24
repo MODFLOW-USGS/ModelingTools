@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">MaxSutraNodeValueInElement</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">MaxSutraNodeValueInElement</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">MaxSutraNodeValueInElement</text><text styleclass="Normal" translate="true">(NameOfRealNodeDataSet)</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">NameOfRealNodeDataSet is a text variable. Usually it will be a constant enclosed in quotation marks. It must identify the name of a real-number data set evaluated at nodes.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For data sets in SUTRA models evaluated at elements, MaxSutraNodeValueInElement will return the maximum value of the data set identified by NameOfRealNodeDataSet at of the nodes that define the corners of the current element.</text></para>
+  </body>
+</topic>
