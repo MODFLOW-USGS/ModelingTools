@@ -79,7 +79,6 @@ inherited frameSutraBoundary: TframeSutraBoundary
       Height = 91
       TabOrder = 1
       OnMouseUp = rdgSutraFeatureMouseUp
-      OnSelectCell = rdgSutraFeatureSelectCell
       OnSetEditText = rdgSutraFeatureSetEditText
       OnBeforeDrawCell = rdgSutraFeatureBeforeDrawCell
       OnColSize = rdgSutraFeatureColSize

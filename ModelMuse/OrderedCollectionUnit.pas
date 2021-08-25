@@ -319,6 +319,7 @@ type
     FUseInitialValuePriorInfo: Boolean;
     FRegularizationGroup: string;
     FAddedToPval: Boolean;
+    FStoredInitialValuePriorInfoWeight: TRealStorage;
     procedure NotifyHufKx;
     procedure NotifyHufKy;
     procedure NotifyHufKz;
@@ -345,6 +346,9 @@ type
     procedure SetAbsoluteN(const Value: double);
     procedure SetUseInitialValuePriorInfo(const Value: Boolean);
     procedure SetRegularizationGroup(const Value: string);
+    procedure SetStoredInitialValuePriorInfoWeight(const Value: TRealStorage);
+    function GetInitialValuePriorInfoWeight: double;
+    procedure SetInitialValuePriorInfoWeight(const Value: double);
   protected
     // See @link(ParameterName).
     FParameterName: string;
@@ -380,6 +384,8 @@ type
     // Absolute(N) and ABSPARMAX(N) in PEST
     property AbsoluteN: double read GetAbsoluteN write SetAbsoluteN;
     property AddedToPval: Boolean read FAddedToPval write FAddedToPval;
+    property InitialValuePriorInfoWeight: double
+      read GetInitialValuePriorInfoWeight write SetInitialValuePriorInfoWeight;
   published
     // @name is the name of the parameter.  All parameter names must be unique
     // but ensuring that they are unique is left up to the GUI rather than
@@ -463,10 +469,17 @@ type
     Stored False
     {$ENDIF}
     ;
+    property StoredInitialValuePriorInfoWeight: TRealStorage read FStoredInitialValuePriorInfoWeight write SetStoredInitialValuePriorInfoWeight;
     // @name is the regularization group of the parameter in the
     // initial value prior information equation.
     property RegularizationGroup: string read FRegularizationGroup
-      write SetRegularizationGroup;
+      write SetRegularizationGroup
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
   end;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
@@ -878,6 +891,7 @@ begin
     TiedParameterName := SourceParameter.TiedParameterName;
     AbsoluteN := SourceParameter.AbsoluteN;
     UseInitialValuePriorInfo := SourceParameter.UseInitialValuePriorInfo;
+    InitialValuePriorInfoWeight := SourceParameter.InitialValuePriorInfoWeight;
     RegularizationGroup := SourceParameter.RegularizationGroup;
     // RegularizationGroup
   end;
@@ -918,6 +932,9 @@ begin
   FStoredUpperBound.OnChange := OnInvalidateModelEvent;
   FStoredAbsoluteN := TRealStorage.Create;
   FStoredAbsoluteN.OnChange := OnInvalidateModelEvent;
+  FStoredInitialValuePriorInfoWeight := TRealStorage.Create;
+  FStoredInitialValuePriorInfoWeight.Value := 1;
+  FStoredInitialValuePriorInfoWeight.OnChange := OnInvalidateModelEvent;
   Scale := 1;
   FUseInitialValuePriorInfo := True;
 end;
@@ -945,6 +962,7 @@ begin
       end;
     end;
   end;
+  FStoredInitialValuePriorInfoWeight.Free;
   FStoredAbsoluteN.Free;
   FStoredUpperBound.Free;
   FStoredLowerBound.Free;
@@ -956,6 +974,11 @@ end;
 function TModflowParameter.GetAbsoluteN: double;
 begin
   result := StoredAbsoluteN.Value;
+end;
+
+function TModflowParameter.GetInitialValuePriorInfoWeight: double;
+begin
+  result := StoredInitialValuePriorInfoWeight.Value;
 end;
 
 function TModflowParameter.GetLowerBound: double;
@@ -1121,6 +1144,7 @@ begin
     (TiedParameterName = AnotherParameter.TiedParameterName) and
     (AbsoluteN = AnotherParameter.AbsoluteN) and
     (UseInitialValuePriorInfo = AnotherParameter.UseInitialValuePriorInfo) and
+    (InitialValuePriorInfoWeight = AnotherParameter.InitialValuePriorInfoWeight) and
     (RegularizationGroup = AnotherParameter.RegularizationGroup);
 end;
 
@@ -1137,6 +1161,11 @@ begin
     FChangeLimitation := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TModflowParameter.SetInitialValuePriorInfoWeight(const Value: double);
+begin
+  StoredInitialValuePriorInfoWeight.Value := Value;
 end;
 
 procedure TModflowParameter.SetLowerBound(const Value: double);
@@ -1450,6 +1479,12 @@ end;
 procedure TModflowParameter.SetStoredAbsoluteN(const Value: TRealStorage);
 begin
   FStoredAbsoluteN.Assign(Value);
+end;
+
+procedure TModflowParameter.SetStoredInitialValuePriorInfoWeight(
+  const Value: TRealStorage);
+begin
+  FStoredInitialValuePriorInfoWeight.Assign(Value);
 end;
 
 procedure TModflowParameter.SetStoredLowerBound(const Value: TRealStorage);

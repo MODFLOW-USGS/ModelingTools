@@ -32,6 +32,8 @@ type
     FVertSpatialContinuityGroupName: string;
     FUseVertSpatialContinuityPriorInfo: Boolean;
     FIsUsedInTemplate: Boolean;
+    FStoredVertSpatialContinuityPriorInfoWeight: TRealStorage;
+    FStoredHorizontalSpatialContinuityPriorInfoWeight: TRealStorage;
     // See @link(MultiplierName).
     procedure SetMultiplierName(const Value: string);
     // See @link(UseMultiplier).
@@ -68,6 +70,15 @@ type
     procedure SetUseVertSpatialContinuityPriorInfo(const Value: Boolean);
     procedure SetVertSpatialContinuityGroupName(const Value: string);
     procedure SetIsUsedInTemplate(const Value: Boolean);
+    procedure SetStoredHorizontalSpatialContinuityPriorInfoWeight(
+      const Value: TRealStorage);
+    procedure SetStoredVertSpatialContinuityPriorInfoWeight(
+      const Value: TRealStorage);
+    function GetHorizontalSpatialContinuityPriorInfoWeight: double;
+    function GetVertSpatialContinuityPriorInfoWeight: double;
+    procedure SetHorizontalSpatialContinuityPriorInfoWeight(
+      const Value: double);
+    procedure SetVertSpatialContinuityPriorInfoWeight(const Value: double);
   protected
     // Besides setting the name of the parameter, @name also updates the
     // names of the @link(TDataArray)s used to define multiplier and zone
@@ -89,6 +100,12 @@ type
     // and @link(MultiplierArrayName) are the same as in the source item.
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     property IsUsedInTemplate: Boolean read FIsUsedInTemplate write SetIsUsedInTemplate;
+    property HorizontalSpatialContinuityPriorInfoWeight: double
+      read GetHorizontalSpatialContinuityPriorInfoWeight
+      Write SetHorizontalSpatialContinuityPriorInfoWeight;
+    property VertSpatialContinuityPriorInfoWeight: double
+      read GetVertSpatialContinuityPriorInfoWeight
+      Write SetVertSpatialContinuityPriorInfoWeight;
   published
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name lists the multiplier array names exported to MODFLOW.
@@ -132,6 +149,15 @@ type
     Stored False
     {$ENDIF}
     ;
+    property StoredHorizontalSpatialContinuityPriorInfoWeight: TRealStorage
+      read FStoredHorizontalSpatialContinuityPriorInfoWeight
+      write SetStoredHorizontalSpatialContinuityPriorInfoWeight
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
     Property UseVertSpatialContinuityPriorInfo: Boolean
       read FUseVertSpatialContinuityPriorInfo
       write SetUseVertSpatialContinuityPriorInfo
@@ -144,6 +170,15 @@ type
     property VertSpatialContinuityGroupName: string
       read FVertSpatialContinuityGroupName
       write SetVertSpatialContinuityGroupName
+    {$IFDEF PEST}
+    Stored True
+    {$ELSE}
+    Stored False
+    {$ENDIF}
+    ;
+    property StoredVertSpatialContinuityPriorInfoWeight: TRealStorage
+      read FStoredVertSpatialContinuityPriorInfoWeight
+      write SetStoredVertSpatialContinuityPriorInfoWeight
     {$IFDEF PEST}
     Stored True
     {$ELSE}
@@ -235,6 +270,10 @@ begin
       SourceParameter.UseVertSpatialContinuityPriorInfo;
     VertSpatialContinuityGroupName :=
       SourceParameter.VertSpatialContinuityGroupName;
+    HorizontalSpatialContinuityPriorInfoWeight :=
+      SourceParameter.HorizontalSpatialContinuityPriorInfoWeight;
+    VertSpatialContinuityPriorInfoWeight :=
+      SourceParameter.VertSpatialContinuityPriorInfoWeight;
   end;
 end;
 
@@ -257,6 +296,14 @@ begin
   FMultiplierArrayNames:= TStringList.Create;
   FZoneArrayNames:= TStringList.Create;
   FNamesToRemove:= TStringList.Create;
+
+  FStoredHorizontalSpatialContinuityPriorInfoWeight := TRealStorage.Create;
+  FStoredHorizontalSpatialContinuityPriorInfoWeight.Value := 1;
+  FStoredHorizontalSpatialContinuityPriorInfoWeight.OnChange := OnInvalidateModelEvent;
+  FStoredVertSpatialContinuityPriorInfoWeight := TRealStorage.Create;
+  FStoredVertSpatialContinuityPriorInfoWeight.Value := 1;
+  FStoredVertSpatialContinuityPriorInfoWeight.OnChange := OnInvalidateModelEvent;
+
 end;
 
 destructor TModflowSteadyParameter.Destroy;
@@ -268,6 +315,8 @@ var
 begin
   UnLockGlobalVariables;
   UnlockDataSets;
+  FStoredVertSpatialContinuityPriorInfoWeight.Free;
+  FStoredHorizontalSpatialContinuityPriorInfoWeight.Free;
   FNamesToRemove.Free;
   FMultiplierArrayNames.Free;
   FZoneArrayNames.Free;
@@ -327,7 +376,9 @@ begin
     (UseHorizontalSpatialContinuityPriorInfo = AnotherParameter.UseHorizontalSpatialContinuityPriorInfo) and
     (HorizontalSpatialContinuityGroupName = AnotherParameter.HorizontalSpatialContinuityGroupName) and
     (UseVertSpatialContinuityPriorInfo = AnotherParameter.UseVertSpatialContinuityPriorInfo) and
-    (VertSpatialContinuityGroupName = AnotherParameter.VertSpatialContinuityGroupName);
+    (VertSpatialContinuityGroupName = AnotherParameter.VertSpatialContinuityGroupName) and
+    (HorizontalSpatialContinuityPriorInfoWeight = AnotherParameter.HorizontalSpatialContinuityPriorInfoWeight) and
+    (VertSpatialContinuityPriorInfoWeight = AnotherParameter.VertSpatialContinuityPriorInfoWeight);
 
 end;
 
@@ -355,6 +406,16 @@ begin
     List.Add(ArrayName);
     Collection.AddArrayName(ArrayName);
   end;
+end;
+
+function TModflowSteadyParameter.GetHorizontalSpatialContinuityPriorInfoWeight: double;
+begin
+  result := StoredHorizontalSpatialContinuityPriorInfoWeight.Value;
+end;
+
+function TModflowSteadyParameter.GetVertSpatialContinuityPriorInfoWeight: double;
+begin
+  result := StoredVertSpatialContinuityPriorInfoWeight.Value;
 end;
 
 function TModflowSteadyParameter.MultiplierArrayName(
@@ -628,6 +689,24 @@ begin
 
 end;
 
+procedure TModflowSteadyParameter.SetStoredHorizontalSpatialContinuityPriorInfoWeight(
+  const Value: TRealStorage);
+begin
+  FStoredHorizontalSpatialContinuityPriorInfoWeight.Assign(Value);
+end;
+
+procedure TModflowSteadyParameter.SetStoredVertSpatialContinuityPriorInfoWeight(
+  const Value: TRealStorage);
+begin
+  FStoredVertSpatialContinuityPriorInfoWeight.Assign(Value);
+end;
+
+procedure TModflowSteadyParameter.SetHorizontalSpatialContinuityPriorInfoWeight(
+  const Value: double);
+begin
+  StoredHorizontalSpatialContinuityPriorInfoWeight.Value := Value;
+end;
+
 procedure TModflowSteadyParameter.SetHorizontalSpatialContinuityGroupName(
   const Value: string);
 begin
@@ -693,6 +772,12 @@ procedure TModflowSteadyParameter.SetVertSpatialContinuityGroupName(
   const Value: string);
 begin
   SetCaseSensitiveStringProperty(FVertSpatialContinuityGroupName, Value);
+end;
+
+procedure TModflowSteadyParameter.SetVertSpatialContinuityPriorInfoWeight(
+  const Value: double);
+begin
+  StoredVertSpatialContinuityPriorInfoWeight.Value := Value;
 end;
 
 procedure TModflowSteadyParameter.CreateNewDataSetVariables(

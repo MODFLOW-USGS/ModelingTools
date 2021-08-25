@@ -1745,9 +1745,9 @@ begin
   ObjectiveCriterion := 0;
   FMakeFinalRun := mfrRun;
   PhiAbandon := 0;
-  FWriteCovariance := wmWrite;
-  FWriteCorrelations := wmWrite;
-  FWriteEigenVectors := wmWrite;
+  FWriteCovariance := wmDontWrite;
+  FWriteCorrelations := wmDontWrite;
+  FWriteEigenVectors := wmDontWrite;
   FSaveResolution := srDontSave;
   FSaveJacobian := sjSave;
   FSaveJacobianIteration := sjiDontSave;

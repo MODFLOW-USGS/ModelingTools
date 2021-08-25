@@ -10333,10 +10333,11 @@ const
 //                starting and ending points of object sections.
 //    '4.3.0.59' No changes in released version.
 //    '4.3.0.60' Added no function MaxSutraNodeValueInElement
+//    '4.3.0.61' No real change.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.60';
+  IIModelVersion = '4.3.0.61';
 
 function IModelVersion: string;
 begin

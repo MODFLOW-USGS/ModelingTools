@@ -1965,10 +1965,13 @@
         <topicref type="topic" id="444268605520503" build="ALL" modified="2021-08-18T16:09:02.475Z" icon="0" href="Pest_Properties_LQSR_Pane">
           <caption translate="true">PEST Properties LQSR Pane</caption>
         </topicref>
-        <topicref type="topic" id="444268753434801" build="ALL" modified="2021-08-18T16:20:51.945Z" icon="0">
-          <caption translate="true">PEST Properties Observations</caption>
-          <topicref type="topic" id="444264819169623" build="ALL" modified="2021-08-18T16:21:32.361Z" icon="0" href="PEST_Properties_Observation_Gr">
-            <caption translate="true">PEST Properties Observation Groups Pane</caption>
+        <topicref type="topic" id="444268753434801" build="ALL" modified="2021-08-25T10:59:54.488Z" icon="0">
+          <caption translate="true">Observation Group Properties and Assignments</caption>
+          <topicref type="topic" id="444264819169623" build="ALL" modified="2021-08-25T11:00:12.045Z" icon="0" href="PEST_Properties_Observation_Gr">
+            <caption translate="true">PEST Properties Observation Group Properties Pane</caption>
+            <topicref type="topic" id="44434754532940" modified="2021-08-25T13:11:12.594Z" icon="0" href="PestObsGroupProperties">
+              <caption translate="true">PestObsGroupProperties</caption>
+            </topicref>
           </topicref>
           <topicref type="topic" id="444264825345640" build="ALL" modified="2021-08-18T16:22:14.482Z" icon="0" href="PEST_Properties_Observation_G2">
             <caption translate="true">PEST Properties Observation Group Assignments Pane</caption>
@@ -1976,17 +1979,17 @@
         </topicref>
         <topicref type="topic" id="444265088054085" build="ALL" modified="2021-08-18T16:38:34.761Z" icon="0">
           <caption translate="true">PEST Properties Prior Information</caption>
-          <topicref type="topic" id="444264984471366" build="ALL" modified="2021-08-18T16:39:27.453Z" icon="0" href="PEST_Properties_Prior_Informat">
-            <caption translate="true">PEST Properties Prior Information Groups Pane</caption>
+          <topicref type="topic" id="444264984471366" build="ALL" modified="2021-08-25T12:42:02.545Z" icon="0" href="PEST_Properties_Prior_Informat">
+            <caption translate="true">PEST Properties Prior Information Group Properties Pane</caption>
           </topicref>
           <topicref type="topic" id="444265233874669" build="ALL" modified="2021-08-18T16:40:52.963Z" icon="0" href="PEST_Properties_Initial_Value_">
             <caption translate="true">PEST Properties Initial Value Prior Information Pane</caption>
           </topicref>
-          <topicref type="topic" id="444266683708933" build="ALL" modified="2021-08-18T16:41:45.196Z" icon="0" href="PEST_Properties_Within_Layer_C">
-            <caption translate="true">PEST Properties Within Layer Continuity Prior Information Pane</caption>
+          <topicref type="topic" id="444266683708933" build="ALL" modified="2021-08-25T14:08:47.554Z" icon="0" href="PEST_Properties_Within_Layer_C">
+            <caption translate="true">PEST Properties Within-Layer Continuity Prior Information Pane</caption>
           </topicref>
-          <topicref type="topic" id="444266040050719" build="ALL" modified="2021-08-18T16:42:15.906Z" icon="0" href="PEST_Properties_Between_Layer_">
-            <caption translate="true">PEST Properties Between Layer Continuity Prior Information Pane</caption>
+          <topicref type="topic" id="444266040050719" build="ALL" modified="2021-08-25T14:08:58.224Z" icon="0" href="PEST_Properties_Between_Layer_">
+            <caption translate="true">PEST Properties Between-Layer Continuity Prior Information Pane</caption>
           </topicref>
         </topicref>
         <topicref type="topic" id="444269022780787" build="ALL" modified="2021-08-18T16:43:23.371Z" icon="0">

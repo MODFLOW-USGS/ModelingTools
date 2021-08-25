@@ -101,10 +101,10 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4164</config-value>
+      <config-value name="autohelpstart">4169</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
-      <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\</config-value>
+      <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
       <config-value name="imageshortcuts"></config-value>
       <config-group name="custombuilds">
         <config-value name="DEMO">Demo Build</config-value>
@@ -120,6 +120,7 @@
       <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">(Complete)</config-value>
+      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -1316,6 +1317,8 @@ document.write('</frameset>');
       <helpcontext-number href="Pest_Properties_Iteration_Cont#PHIREDSTP" value="4165"/>
       <helpcontext-number href="Pest_Properties_LQSR_Pane" value="4146"/>
       <helpcontext-number href="Pest_Properties_Mode_and_Dimen" value="4139"/>
+      <helpcontext-number href="Pest_Properties_Mode_and_Dimen#MAXCOMPDIM" value="4166"/>
+      <helpcontext-number href="Pest_Properties_Mode_and_Dimen#PESTMODE" value="4167"/>
       <helpcontext-number href="PEST_Properties_Observation_G2" value="4148"/>
       <helpcontext-number href="PEST_Properties_Observation_Gr" value="4147"/>
       <helpcontext-number href="Pest_Properties_Output_Pane" value="4143"/>
@@ -1330,6 +1333,7 @@ document.write('</frameset>');
       <helpcontext-number href="PEST_Properties_Regularization" value="4155"/>
       <helpcontext-number href="Pest_Properties_Singular_Value" value="4145"/>
       <helpcontext-number href="PEST_Properties_Within_Layer_C" value="4151"/>
+      <helpcontext-number href="PestObsGroupProperties" value="4168"/>
       <helpcontext-number href="PHAST_Boundary_Conditions_Tab" value="1930"/>
       <helpcontext-number href="Phast_Examples" value="3392"/>
       <helpcontext-number href="Phast_Grid" value="3473"/>
@@ -2143,6 +2147,7 @@ document.write('</frameset>');
       <file-mod href="Import_Filter_Methods.xml"/>
       <file-mod href="ConvertUnits.xml"/>
       <file-mod href="Time_series_interpolation.xml"/>
+      <file-mod href="PestObsGroupProperties.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>

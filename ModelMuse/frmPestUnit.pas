@@ -18,7 +18,7 @@ type
   TPestObsGroupColumn = (pogcName, pogcRegularization, pogcUseTarget,
     pogcTarget, pogcFileName);
   TPilotPointColumns = (ppcX, ppcY);
-  TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName);
+  TPriorParmCol = (ppcName, ppcRegularization, ppcGroupName, ppcWeight);
   TParetoColumns = (pcName, pcReport);
 
   TUndoPestOptions = class(TCustomUndo)
@@ -316,6 +316,11 @@ type
     rdeZeroLimit: TRbwDataEntry;
     lblMaxCompDim: TLabel;
     lblZeroLimit: TLabel;
+    btnCheckAllInitialValue: TButton;
+    Panel8: TPanel;
+    btnMakeAllRegul: TButton;
+    btnWithinLayerPrior: TButton;
+    btnBetweenLayerPrior: TButton;
     procedure FormCreate(Sender: TObject); override;
     procedure MarkerChange(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -403,6 +408,10 @@ type
     procedure rdePhiReductionCriterionChange(Sender: TObject);
     procedure rdeSmallParameterReductionChange(Sender: TObject);
     procedure rdeAbandonChange(Sender: TObject);
+    procedure btnCheckAllInitialValueClick(Sender: TObject);
+    procedure btnMakeAllRegulClick(Sender: TObject);
+    procedure btnWithinLayerPriorClick(Sender: TObject);
+    procedure btnBetweenLayerPriorClick(Sender: TObject);
   private
     FObsList: TObservationList;
     FNewObsList: TObservationObjectList;
@@ -455,6 +464,7 @@ type
     procedure CheckPriorInfoGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
     procedure SetSearchDistanceColor;
     procedure AssignParetoObsReports(ParetoProperties: TParetoProperties);
+    procedure CheckAllFirstCol(Grid: TRbwDataGrid4);
     { Private declarations }
   public
     { Public declarations }
@@ -502,11 +512,11 @@ resourcestring
   StrOutput = 'Output';
   StrSingularValueDecom = 'Singular Value Decomposition';
   StrLQSR = 'LQSR';
-  StrObservations = 'Observations';
-  StrObservationGroups = 'Observation Groups';
+  StrObservations = 'Observation Group Properties and Assignments';
+  StrObservationGroups = 'Observation Groups Properties';
   StrObservationGroupAs = 'Observation Group Assignments';
   StrPriorInformation = 'Prior Information';
-  StrPriorInformationGr = 'Prior Information Groups';
+  StrPriorInformationGr = 'Prior Information Group Properties';
   StrInitialValuePrior = 'Initial Value Prior Information';
   StrWithinLayerContinu = 'Within-Layer Continuity Prior Information';
   StrBetweenLayerContin = 'Between-Layer Continuity Prior Information';
@@ -522,6 +532,7 @@ resourcestring
   StrYouMustDefineAtL = 'You must define at least two point observations to ' +
   'define pilot points between observations.';
   StrNoObservationPoint = 'No observation points defined.';
+  StrWeight = 'Weight';
 //  StrObservationsToMoni = 'Observations to monitor (OBS_REPORT_[N])';
 
 type
@@ -730,19 +741,31 @@ var
   ObsGroupIndex: Integer;
 begin
   inherited;
-  if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
+  if (ARow > 0) then
   begin
-    ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
-      IndexOf(rdgPriorInfoHorizContinuity.Cells[ACol, ARow]);
-    if ObsGroupIndex >= 1 then
+    if (ACol = Ord(ppcGroupName)) then
     begin
-      rdgPriorInfoHorizContinuity.Objects[ACol, ARow] :=
-        framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+      ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
+        IndexOf(rdgPriorInfoHorizContinuity.Cells[ACol, ARow]);
+      if ObsGroupIndex >= 1 then
+      begin
+        rdgPriorInfoHorizContinuity.Objects[ACol, ARow] :=
+          framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+      end;
+      AParam := rdgPriorInfoHorizContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+      if AParam <> nil then
+      begin
+        AParam.HorizontalSpatialContinuityGroupName := rdgPriorInfoHorizContinuity.Cells[ACol, ARow];
+      end;
     end;
-    AParam := rdgPriorInfoHorizContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
-    if AParam <> nil then
+    if (ACol = Ord(ppcWeight)) then
     begin
-      AParam.HorizontalSpatialContinuityGroupName := rdgPriorInfoHorizContinuity.Cells[ACol, ARow];
+      AParam := rdgPriorInfoHorizContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+      if AParam <> nil then
+      begin
+        AParam.HorizontalSpatialContinuityPriorInfoWeight :=
+          rdgPriorInfoHorizContinuity.RealValueDefault[ACol, ARow, 1];
+      end;
     end;
   end;
 end;
@@ -777,19 +800,30 @@ var
   ObsGroupIndex: Integer;
 begin
   inherited;
-  if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
+  if (ARow > 0) then
   begin
-    ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
-      IndexOf(rdgPriorInfoInitialValue.Cells[ACol, ARow]);
-    if ObsGroupIndex >= 1 then
+    if (ACol = Ord(ppcGroupName)) then
     begin
-      rdgPriorInfoInitialValue.Objects[ACol, ARow] :=
-        framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+      ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
+        IndexOf(rdgPriorInfoInitialValue.Cells[ACol, ARow]);
+      if ObsGroupIndex >= 1 then
+      begin
+        rdgPriorInfoInitialValue.Objects[ACol, ARow] :=
+          framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+      end;
+      AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
+      if AParam <> nil then
+      begin
+        AParam.RegularizationGroup := rdgPriorInfoInitialValue.Cells[ACol, ARow];
+      end;
     end;
-    AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
-    if AParam <> nil then
+    if (ACol = Ord(ppcWeight)) then
     begin
-      AParam.RegularizationGroup := rdgPriorInfoInitialValue.Cells[ACol, ARow];
+      AParam := rdgPriorInfoInitialValue.Objects[Ord(ppcName), ARow] as TModflowParameter;
+      if AParam <> nil then
+      begin
+        AParam.InitialValuePriorInfoWeight := rdgPriorInfoInitialValue.RealValueDefault[ACol, ARow, 1];
+      end;
     end;
   end;
 end;
@@ -824,19 +858,31 @@ var
   ObsGroupIndex: Integer;
 begin
   inherited;
-  if (ACol = Ord(ppcGroupName)) and (ARow > 0) then
+  if (ARow > 0) then
   begin
-    ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
-      IndexOf(rdgPriorInfoVertContinuity.Cells[ACol, ARow]);
-    if ObsGroupIndex >= 1 then
+    if (ACol = Ord(ppcGroupName)) then
     begin
-      rdgPriorInfoVertContinuity.Objects[ACol, ARow] :=
-        framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+      ObsGroupIndex := framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].
+        IndexOf(rdgPriorInfoVertContinuity.Cells[ACol, ARow]);
+      if ObsGroupIndex >= 1 then
+      begin
+        rdgPriorInfoVertContinuity.Objects[ACol, ARow] :=
+          framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)].Objects[ObsGroupIndex];
+      end;
+      AParam := rdgPriorInfoVertContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+      if AParam <> nil then
+      begin
+        AParam.VertSpatialContinuityGroupName := rdgPriorInfoVertContinuity.Cells[ACol, ARow];
+      end;
     end;
-    AParam := rdgPriorInfoVertContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
-    if AParam <> nil then
+    if (ACol = Ord(ppcWeight)) then
     begin
-      AParam.VertSpatialContinuityGroupName := rdgPriorInfoVertContinuity.Cells[ACol, ARow];
+      AParam := rdgPriorInfoVertContinuity.Objects[Ord(ppcName), ARow] as TModflowSteadyParameter;
+      if AParam <> nil then
+      begin
+        AParam.VertSpatialContinuityPriorInfoWeight :=
+          rdgPriorInfoVertContinuity.RealValueDefault[ACol, ARow, 1];
+      end;
     end;
   end;
 end;
@@ -1446,6 +1492,13 @@ begin
   end;
 end;
 
+procedure TfrmPEST.btnCheckAllInitialValueClick(Sender: TObject);
+begin
+  inherited;
+  cbInitialValue.Checked := True;
+  CheckAllFirstCol(rdgPriorInfoInitialValue);
+end;
+
 procedure TfrmPEST.btnImportShapeClick(Sender: TObject);
 begin
   inherited;
@@ -1464,6 +1517,12 @@ begin
   begin
     ImportPilotPoints(dlgOpenPilotPoints.FileName);
   end;
+end;
+
+procedure TfrmPEST.btnMakeAllRegulClick(Sender: TObject);
+begin
+  inherited;
+  CheckAllFirstCol(framePriorInfoObservationGroups.Grid);
 end;
 
 function TfrmPEST.PredictGroupOK: boolean;
@@ -1532,6 +1591,20 @@ begin
     end;
   end;
   SetData;
+end;
+
+procedure TfrmPEST.btnWithinLayerPriorClick(Sender: TObject);
+begin
+  inherited;
+  cbPriorInfoHorizContinuity.Checked := True;
+  CheckAllFirstCol(rdgPriorInfoHorizContinuity);
+end;
+
+procedure TfrmPEST.btnBetweenLayerPriorClick(Sender: TObject);
+begin
+  inherited;
+  cbPriorInfoVertContinuity.Checked := True;
+  CheckAllFirstCol(rdgPriorInfoVertContinuity);
 end;
 
 procedure TfrmPEST.cbAutomaticallySetPHIMACCEPTClick(Sender: TObject);
@@ -1792,14 +1865,17 @@ begin
   rdgPriorInfoInitialValue.Cells[Ord(ppcName), 0] := StrParameterName;
   rdgPriorInfoInitialValue.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
   rdgPriorInfoInitialValue.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
+  rdgPriorInfoInitialValue.Cells[Ord(ppcWeight), 0] := StrWeight;
 
   rdgPriorInfoHorizContinuity.Cells[Ord(ppcName), 0] := StrParameterName;
   rdgPriorInfoHorizContinuity.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
   rdgPriorInfoHorizContinuity.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
+  rdgPriorInfoHorizContinuity.Cells[Ord(ppcWeight), 0] := StrWeight;
 
   rdgPriorInfoVertContinuity.Cells[Ord(ppcName), 0] := StrParameterName;
   rdgPriorInfoVertContinuity.Cells[Ord(ppcRegularization), 0] := StrDefinePriorInforma;
   rdgPriorInfoVertContinuity.Cells[Ord(ppcGroupName), 0] := StrObservationGroupNa;
+  rdgPriorInfoVertContinuity.Cells[Ord(ppcWeight), 0] := StrWeight;
 
   rdgObservationsToReport.Cells[Ord(pcName), 0] := 'Observations';
   rdgObservationsToReport.Cells[Ord(pcReport), 0] := 'Generate report';
@@ -2333,6 +2409,7 @@ begin
       rdgPriorInfoInitialValue.Objects[Ord(ppcName), PIndex+1] := AParam;
       rdgPriorInfoInitialValue.Checked[Ord(ppcRegularization), PIndex+1] := AParam.UseInitialValuePriorInfo;
       rdgPriorInfoInitialValue.Cells[Ord(ppcGroupName), PIndex+1] := AParam.RegularizationGroup;
+      rdgPriorInfoInitialValue.RealValue[Ord(ppcWeight), PIndex+1] := AParam.InitialValuePriorInfoWeight;
       ObsIndex := PickList.IndexOf(AParam.RegularizationGroup);
       if ObsIndex >= 0 then
       begin
@@ -2349,6 +2426,7 @@ begin
       rdgPriorInfoHorizContinuity.Objects[Ord(ppcName), PIndex+1] := ASteadyParam;
       rdgPriorInfoHorizContinuity.Checked[Ord(ppcRegularization), PIndex+1] := ASteadyParam.UseHorizontalSpatialContinuityPriorInfo;
       rdgPriorInfoHorizContinuity.Cells[Ord(ppcGroupName), PIndex+1] := ASteadyParam.HorizontalSpatialContinuityGroupName;
+      rdgPriorInfoHorizContinuity.RealValue[Ord(ppcWeight), PIndex+1] := ASteadyParam.HorizontalSpatialContinuityPriorInfoWeight;
       ObsIndex := PickList.IndexOf(ASteadyParam.HorizontalSpatialContinuityGroupName);
       if ObsIndex >= 0 then
       begin
@@ -2365,6 +2443,7 @@ begin
       rdgPriorInfoVertContinuity.Objects[Ord(ppcName), PIndex+1] := ASteadyParam;
       rdgPriorInfoVertContinuity.Checked[Ord(ppcRegularization), PIndex+1] := ASteadyParam.UseVertSpatialContinuityPriorInfo;
       rdgPriorInfoVertContinuity.Cells[Ord(ppcGroupName), PIndex+1] := ASteadyParam.VertSpatialContinuityGroupName;
+      rdgPriorInfoVertContinuity.RealValue[Ord(ppcWeight), PIndex+1] := ASteadyParam.VertSpatialContinuityPriorInfoWeight;
       ObsIndex := PickList.IndexOf(ASteadyParam.VertSpatialContinuityGroupName);
       if ObsIndex >= 0 then
       begin
@@ -3309,6 +3388,17 @@ begin
     end;
   end;
 end;
+
+procedure TfrmPEST.CheckAllFirstCol(Grid: TRbwDataGrid4);
+var
+  RowIndex: Integer;
+begin
+  for RowIndex := 1 to Grid.RowCount - 1 do
+  begin
+    Grid.Checked[1, RowIndex] := True;
+  end;
+end;
+
 procedure TfrmPEST.FixObsGroupNames(ObsGridFrame: TframeGrid);
 var
   Grid: TRbwDataGrid4;
@@ -3770,15 +3860,24 @@ var
   ModifiedParam: TModflowParameter;
   ModelHufParameters: THufModflowParameters;
   ModelTransientListParameters: TModflowTransientListParameters;
+  ModifiedParamSteady: TModflowSteadyParameter;
+  ExistingParamSteady: TModflowSteadyParameter;
 begin
   ModelSteadyParameters := frmGoPhast.PhastModel.ModflowSteadyParameters;
   Assert(ModelSteadyParameters.Count = SteadyParameters.Count);
   for ParamIndex := 0 to SteadyParameters.Count -1 do
   begin
-    ExistingParam := ModelSteadyParameters[ParamIndex];
-    ModifiedParam := SteadyParameters[ParamIndex];
-    ExistingParam.UseInitialValuePriorInfo := ModifiedParam.UseInitialValuePriorInfo;
-    ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
+    ExistingParamSteady := ModelSteadyParameters[ParamIndex];
+    ModifiedParamSteady := SteadyParameters[ParamIndex];
+    ExistingParamSteady.UseInitialValuePriorInfo := ModifiedParamSteady.UseInitialValuePriorInfo;
+    ExistingParamSteady.RegularizationGroup := ModifiedParamSteady.RegularizationGroup;
+    ExistingParamSteady.InitialValuePriorInfoWeight := ModifiedParamSteady.InitialValuePriorInfoWeight;
+    ExistingParamSteady.UseHorizontalSpatialContinuityPriorInfo := ModifiedParamSteady.UseHorizontalSpatialContinuityPriorInfo;
+    ExistingParamSteady.HorizontalSpatialContinuityGroupName := ModifiedParamSteady.HorizontalSpatialContinuityGroupName;
+    ExistingParamSteady.HorizontalSpatialContinuityPriorInfoWeight := ModifiedParamSteady.HorizontalSpatialContinuityPriorInfoWeight;
+    ExistingParamSteady.UseVertSpatialContinuityPriorInfo := ModifiedParamSteady.UseVertSpatialContinuityPriorInfo;
+    ExistingParamSteady.VertSpatialContinuityGroupName := ModifiedParamSteady.VertSpatialContinuityGroupName;
+    ExistingParamSteady.VertSpatialContinuityPriorInfoWeight := ModifiedParamSteady.VertSpatialContinuityPriorInfoWeight;
   end;
   ModelHufParameters := frmGoPhast.PhastModel.HufParameters;
   Assert(ModelHufParameters.Count = HufParameters.Count);
@@ -3788,6 +3887,7 @@ begin
     ModifiedParam := HufParameters[ParamIndex];
     ExistingParam.UseInitialValuePriorInfo := ModifiedParam.UseInitialValuePriorInfo;
     ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
+    ExistingParam.InitialValuePriorInfoWeight := ModifiedParam.InitialValuePriorInfoWeight;
   end;
   ModelTransientListParameters := frmGoPhast.PhastModel.ModflowTransientParameters;
   Assert(ModelTransientListParameters.Count = TransientListParameters.Count);
@@ -3797,6 +3897,7 @@ begin
     ModifiedParam := TransientListParameters[ParamIndex];
     ExistingParam.UseInitialValuePriorInfo := ModifiedParam.UseInitialValuePriorInfo;
     ExistingParam.RegularizationGroup := ModifiedParam.RegularizationGroup;
+    ExistingParam.InitialValuePriorInfoWeight := ModifiedParam.InitialValuePriorInfoWeight;
   end;
 end;
 

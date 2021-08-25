@@ -62,6 +62,7 @@ object framePestObs: TframePestObs
         Width = 596
         Height = 184
         ColCount = 7
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goAlwaysShowEditor]
         OnSelectCell = frameObservationsGridSelectCell
         OnSetEditText = frameObservationsGridSetEditText
         Columns = <
@@ -296,6 +297,7 @@ object framePestObs: TframePestObs
         Width = 596
         Height = 115
         ColCount = 7
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goAlwaysShowEditor]
         OnEnter = frameObsComparisonsGridEnter
         OnSetEditText = frameObsComparisonsGridSetEditText
         Columns = <

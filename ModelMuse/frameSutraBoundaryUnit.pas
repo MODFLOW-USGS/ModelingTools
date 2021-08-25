@@ -303,6 +303,7 @@ begin
       ABoundary := BoundaryList[index];
       BoundValues := ABoundary.Values as TCustomSutraBoundaryCollection;
 
+      {$IFDEF PEST}
       case BoundaryType of
         sbtFluidSource, sbtSpecPress:
           begin
@@ -335,6 +336,7 @@ begin
             end;
           end;
       end;
+      {$ENDIF}
 
       if comboSchedule.ItemIndex > 0 then
       begin

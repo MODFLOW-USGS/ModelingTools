@@ -34,7 +34,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspIterationControls
+    ActivePage = jvspPriorInfoVertContinuity
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1964,15 +1964,16 @@ inherited frmPEST: TfrmPEST
       Caption = 'jvspPriorInfoObsGroups'
       inline framePriorInfoObservationGroups: TframeGrid
         Left = 0
-        Top = 0
+        Top = 57
         Width = 566
-        Height = 443
+        Height = 386
         Align = alClient
         TabOrder = 0
+        ExplicitTop = 43
         ExplicitWidth = 566
-        ExplicitHeight = 443
+        ExplicitHeight = 400
         inherited Panel: TPanel
-          Top = 402
+          Top = 345
           Width = 566
           ExplicitTop = 402
           ExplicitWidth = 566
@@ -2005,7 +2006,7 @@ inherited frmPEST: TfrmPEST
         end
         inherited Grid: TRbwDataGrid4
           Width = 566
-          Height = 402
+          Height = 345
           ColCount = 5
           OnExit = framePriorInfoObservationGroupsGridExit
           OnSelectCell = framePriorInfoObservationGroupsGridSelectCell
@@ -2138,6 +2139,24 @@ inherited frmPEST: TfrmPEST
           ExplicitHeight = 402
         end
       end
+      object Panel8: TPanel
+        Left = 0
+        Top = 0
+        Width = 566
+        Height = 57
+        Align = alTop
+        TabOrder = 1
+        object btnMakeAllRegul: TButton
+          Left = 6
+          Top = 12
+          Width = 171
+          Height = 39
+          Caption = 'Make all groups regularization groups'
+          TabOrder = 0
+          WordWrap = True
+          OnClick = btnMakeAllRegulClick
+        end
+      end
     end
     object jvspPriorInfoInitialValue: TJvStandardPage
       Left = 0
@@ -2147,11 +2166,11 @@ inherited frmPEST: TfrmPEST
       Caption = 'jvspPriorInfoInitialValue'
       object rdgPriorInfoInitialValue: TRbwDataGrid4
         Left = 0
-        Top = 41
+        Top = 105
         Width = 566
-        Height = 402
+        Height = 338
         Align = alClient
-        ColCount = 3
+        ColCount = 4
         FixedCols = 1
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
@@ -2238,14 +2257,40 @@ inherited frmPEST: TfrmPEST
             CaseSensitivePicklist = False
             CheckStyle = csCheck
             AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = True
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = 41
+        ExplicitHeight = 402
       end
       object Panel5: TPanel
         Left = 0
         Top = 0
         Width = 566
-        Height = 41
+        Height = 105
         Align = alTop
         TabOrder = 1
         object cbInitialValue: TCheckBox
@@ -2255,6 +2300,16 @@ inherited frmPEST: TfrmPEST
           Height = 17
           Caption = 'Use initial value prior information'
           TabOrder = 0
+        end
+        object btnCheckAllInitialValue: TButton
+          Left = 6
+          Top = 35
+          Width = 235
+          Height = 54
+          Caption = 'Use initial value prior information for all parameters.'
+          TabOrder = 1
+          WordWrap = True
+          OnClick = btnCheckAllInitialValueClick
         end
       end
     end
@@ -2268,7 +2323,7 @@ inherited frmPEST: TfrmPEST
         Left = 0
         Top = 0
         Width = 566
-        Height = 97
+        Height = 161
         Align = alTop
         TabOrder = 0
         object lblSearchDistance: TLabel
@@ -2314,14 +2369,26 @@ inherited frmPEST: TfrmPEST
           Height = 26
           TabOrder = 2
         end
+        object btnWithinLayerPrior: TButton
+          Left = 6
+          Top = 97
+          Width = 235
+          Height = 54
+          Caption = 
+            'Use within-layer continuity prior information for all parameters' +
+            '.'
+          TabOrder = 3
+          WordWrap = True
+          OnClick = btnWithinLayerPriorClick
+        end
       end
       object rdgPriorInfoHorizContinuity: TRbwDataGrid4
         Left = 0
-        Top = 97
+        Top = 161
         Width = 566
-        Height = 346
+        Height = 282
         Align = alClient
-        ColCount = 3
+        ColCount = 4
         FixedCols = 1
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 1
@@ -2408,8 +2475,34 @@ inherited frmPEST: TfrmPEST
             CaseSensitivePicklist = False
             CheckStyle = csCheck
             AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = True
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitTop = 97
+        ExplicitHeight = 346
       end
     end
     object jvspPriorInfoVertContinuity: TJvStandardPage
@@ -2422,25 +2515,37 @@ inherited frmPEST: TfrmPEST
         Left = 0
         Top = 0
         Width = 566
-        Height = 41
+        Height = 97
         Align = alTop
         TabOrder = 0
         object cbPriorInfoVertContinuity: TCheckBox
           Left = 6
-          Top = 12
+          Top = 14
           Width = 395
           Height = 17
           Caption = 'Use between-layer continuity prior information'
           TabOrder = 0
         end
+        object btnBetweenLayerPrior: TButton
+          Left = 6
+          Top = 37
+          Width = 251
+          Height = 54
+          Caption = 
+            'Use between-layer continuity prior information for all parameter' +
+            's.'
+          TabOrder = 1
+          WordWrap = True
+          OnClick = btnBetweenLayerPriorClick
+        end
       end
       object rdgPriorInfoVertContinuity: TRbwDataGrid4
         Left = 0
-        Top = 41
+        Top = 97
         Width = 566
-        Height = 402
+        Height = 346
         Align = alClient
-        ColCount = 3
+        ColCount = 4
         FixedCols = 1
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 1
@@ -2527,8 +2632,33 @@ inherited frmPEST: TfrmPEST
             CaseSensitivePicklist = False
             CheckStyle = csCheck
             AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = True
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitLeft = 1
       end
     end
     object jvspPrediction1: TJvStandardPage

@@ -66,7 +66,7 @@ inherited frmModflowTime: TfrmModflowTime
     Top = 0
     Width = 754
     Height = 292
-    ActivePage = tabMt3dms
+    ActivePage = tabModflow
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
@@ -216,6 +216,7 @@ inherited frmModflowTime: TfrmModflowTime
         Columns = <
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -240,6 +241,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -264,6 +266,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -288,6 +291,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -312,6 +316,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = 'F()'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -336,6 +341,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -362,6 +368,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -389,6 +396,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -413,6 +421,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           item
             AutoAdjustRowHeights = True
+            AutoAdjustCaptionRowHeights = False
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -559,7 +568,6 @@ inherited frmModflowTime: TfrmModflowTime
           end
           inherited sbDelete: TSpeedButton
             Left = 537
-            Hint = 'Delete row|Delete the selected row.'
             ExplicitLeft = 537
           end
           inherited seNumber: TJvSpinEdit
@@ -579,6 +587,7 @@ inherited frmModflowTime: TfrmModflowTime
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -602,6 +611,7 @@ inherited frmModflowTime: TfrmModflowTime
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -625,6 +635,7 @@ inherited frmModflowTime: TfrmModflowTime
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -648,6 +659,7 @@ inherited frmModflowTime: TfrmModflowTime
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -671,6 +683,7 @@ inherited frmModflowTime: TfrmModflowTime
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -694,6 +707,7 @@ inherited frmModflowTime: TfrmModflowTime
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -719,6 +733,7 @@ inherited frmModflowTime: TfrmModflowTime
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -742,6 +757,7 @@ inherited frmModflowTime: TfrmModflowTime
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

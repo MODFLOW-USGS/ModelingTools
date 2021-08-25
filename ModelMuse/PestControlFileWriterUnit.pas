@@ -378,8 +378,9 @@ var
       begin
         Equation := Format('1.0 * %0:s - 1.0 * %1:s = 0.0', [ParameterName1, ParameterName2]);
       end;
-      FPriorInfomationEquations.Add(Format(' %0:s          %1:s       1.00000     %2:s',
-        [EquationName, Equation, ObsGroupName]));
+      FPriorInfomationEquations.Add(Format(' %0:s          %1:s       %2:g     %3:s',
+        [EquationName, Equation,
+        AParam.VertSpatialContinuityPriorInfoWeight, ObsGroupName]));
     end;
   end;
   procedure WriteHorizontalContinuityEquations(Param: TModflowSteadyParameter;
@@ -498,8 +499,8 @@ var
           begin
             Equation := Format('1.0 * %0:s - 1.0 * %1:s = 0.0', [ParameterName1, ParameterName2]);
           end;
-          FPriorInfomationEquations.Add(Format(' %0:s          %1:s       1.00000     %2:s',
-            [EquationName, Equation, ObsGroupName]));
+          FPriorInfomationEquations.Add(Format(' %0:s          %1:s       %2:g     %3:s',
+            [EquationName, Equation, Param.HorizontalSpatialContinuityPriorInfoWeight, ObsGroupName]));
         end;
       end;
     finally
@@ -556,8 +557,8 @@ var
     begin
       Equation := Format('1.0 * %0:s = %1:g', [ParameterName, InitialValue]);
     end;
-    FPriorInfomationEquations.Add(Format(' %0:s          %1:s       1.00000     %2:s',
-      [EquationName, Equation, ObsGroupName]));
+    FPriorInfomationEquations.Add(Format(' %0:s          %1:s       %2:g     %3:s',
+      [EquationName, Equation, Param.InitialValuePriorInfoWeight, ObsGroupName]));
   end;
 begin
   FPriorInfomationEquations.Clear;
@@ -2231,11 +2232,21 @@ end;
 procedure TPestControlFileWriter.WriteSingularValueDecomposition;
 var
   SvdProperties: TSingularValueDecompositionProperties;
+  PestControlData: TPestControlData;
 begin
   SvdProperties := Model.PestProperties.SvdProperties;
   WriteSectionHeader('singular value decomposition');
 
-  WriteInteger(Ord(SvdProperties.Mode));
+  PestControlData := Model.PestProperties.PestControlData;
+  if PestControlData.PestMode = pmPrediction then
+  begin
+    WriteInteger(0);
+  end
+  else
+  begin
+    WriteInteger(Ord(SvdProperties.Mode));
+  end;
+
   WriteString(' # SVDMODE');
   NewLine;
 

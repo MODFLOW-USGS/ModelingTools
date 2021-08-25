@@ -1,9 +1,20 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>PEST Properties Initial Value Prior Information Pane</title>
+  <title translate="true">PEST Properties Initial Value Prior Information Pane</title>
   <body>
-    <header><para styleclass="Heading1">PEST Properties Initial Value Prior Information Pane</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Initial Value Prior Information Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Initial Value Prior Information </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Prior information equations are described in the PEST User Manual, Part I, Section 4.15.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can automatically create prior information equations related to the the initial values of parameters. This pane is where the user can choose to include such prior information equations.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">At the top of the pane is the </text><text styleclass="Strong" translate="true">Use initial value</text><text styleclass="Normal" translate="true"> prior information checkbox. If the check box is checked, the initial values prior information equations will be included in the PEST control file. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The pane contains a table with four columns.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Parameter Name</text><text styleclass="Normal" translate="true"> column lists all the unfixed and untied parameters.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Define Prior Information</text><text styleclass="Normal" translate="true"> column specifies that the user wishes to specify a prior information equation for the parameter related to its initial value. In the case of parameters associated with pilot points, a prior information equation will be defined for each pilot point.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Observation Group Name</text><text styleclass="Normal" translate="true"> column specifies the observation group to which the user wishes to assign the prior information equations.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Weight</text><text styleclass="Normal" translate="true"> column species the weight that will be assigned to each of the prior information equations.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To check all the check boxes in the </text><text styleclass="Strong" translate="true">Define Prior Information</text><text styleclass="Normal" translate="true"> column, click the button above the table.</text></para>
   </body>
 </topic>
