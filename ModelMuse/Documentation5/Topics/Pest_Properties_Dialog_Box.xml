@@ -28,11 +28,11 @@
     </table></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Singular_Value" styleclass="Normal" translate="true">PEST Properties Singular Value Decomposition Pane</link></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_LQSR_Pane" styleclass="Normal" translate="true">PEST Properties LQSR Pane</link></para>
-    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Observations]]></caption></toggle></para>
+    <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="100.00%" styleclass="Heading3_atoc_"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Heading3_atoc_"><caption translate="true"><![CDATA[Observation Group Properties]]></caption></toggle></para>
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_Gr" styleclass="Normal" translate="true">PEST Properties Observation Groups Pane</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_Gr" styleclass="Normal" translate="true">PEST Properties Observation Group Properties Pane</link></para>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_G2" styleclass="Normal" translate="true">PEST Properties Observation Group Assignments Pane</link></para>
         </td>
       </tr>
@@ -41,10 +41,10 @@
     <para styleclass="Heading3_atoc_" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Prior_Informat" styleclass="Normal" translate="true">PEST Properties Prior Information Groups Pane</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Prior_Informat" styleclass="Normal" translate="true">PEST Properties Prior Information Group Properties Pane</link></para>
           <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Initial_Value_" styleclass="Normal" translate="true">PEST Properties Initial Value Prior Information Pane</link></para>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Within_Layer_C" styleclass="Normal" translate="true">PEST Properties Within Layer Continuity Prior Information Pane</link></para>
-          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Between_Layer_" styleclass="Normal" translate="true">PEST Properties Between Layer Continuity Prior Information Pane</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Within_Layer_C" styleclass="Normal" translate="true">PEST Properties Within-Layer Continuity Prior Information Pane</link></para>
+          <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Between_Layer_" styleclass="Normal" translate="true">PEST Properties Between-Layer Continuity Prior Information Pane</link></para>
         </td>
       </tr>
     </table></para>

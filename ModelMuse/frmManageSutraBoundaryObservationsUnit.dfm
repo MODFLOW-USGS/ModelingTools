@@ -1,15 +1,17 @@
 inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservations
+  HelpType = htKeyword
+  HelpKeyword = 'Manage_SUTRA_Boundary_Observati'
   Caption = 'Manage SUTRA Boundary Observations'
   ClientHeight = 561
-  ClientWidth = 747
+  ClientWidth = 784
   OnKeyDown = FormKeyDown
   OnResize = FormResize
-  ExplicitWidth = 763
+  ExplicitWidth = 800
   ExplicitHeight = 600
   PixelsPerInch = 96
   TextHeight = 18
   object spltr1: TJvNetscapeSplitter
-    Left = 121
+    Left = 165
     Top = 0
     Height = 520
     Align = alLeft
@@ -17,21 +19,22 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     Maximized = False
     Minimized = False
     ButtonCursor = crDefault
+    ExplicitLeft = 121
     ExplicitTop = -124
     ExplicitHeight = 350
   end
   object pnlBottom: TPanel
     Left = 0
     Top = 520
-    Width = 747
+    Width = 784
     Height = 41
     Align = alBottom
     TabOrder = 0
     DesignSize = (
-      747
+      784
       41)
     object btnHelp: TBitBtn
-      Left = 466
+      Left = 503
       Top = 6
       Width = 87
       Height = 27
@@ -39,9 +42,10 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 2
+      OnClick = btnHelpClick
     end
     object btnCancel: TBitBtn
-      Left = 652
+      Left = 689
       Top = 6
       Width = 87
       Height = 27
@@ -51,7 +55,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       TabOrder = 4
     end
     object btnOk: TBitBtn
-      Left = 559
+      Left = 596
       Top = 6
       Width = 87
       Height = 27
@@ -86,7 +90,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
   object tvFluxObservations: TTreeView
     Left = 0
     Top = 0
-    Width = 121
+    Width = 165
     Height = 520
     Align = alLeft
     HideSelection = False
@@ -96,9 +100,9 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     OnChange = tvFluxObservationsChange
   end
   object pnlMain: TPanel
-    Left = 131
+    Left = 175
     Top = 0
-    Width = 616
+    Width = 609
     Height = 520
     Align = alClient
     BevelOuter = bvNone
@@ -106,16 +110,16 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     object pnlTop: TPanel
       Left = 0
       Top = 0
-      Width = 616
+      Width = 609
       Height = 65
       Align = alTop
       TabOrder = 0
       object lblObservationName: TLabel
         Left = 6
         Top = 6
-        Width = 185
+        Width = 148
         Height = 18
-        Caption = 'Observation location name'
+        Caption = 'Observation identifier'
       end
       object lblTreatment: TLabel
         Left = 200
@@ -138,7 +142,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
       end
       object comboTreatment: TComboBox
         Left = 200
-        Top = 26
+        Top = 30
         Width = 145
         Height = 26
         Style = csDropDownList
@@ -155,46 +159,49 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
     object pcMain: TJvPageControl
       Left = 0
       Top = 65
-      Width = 616
+      Width = 609
       Height = 455
-      ActivePage = tabObjects
+      ActivePage = tabObservationsTimes
       Align = alClient
       Enabled = False
       TabOrder = 1
+      ExplicitLeft = -4
+      ExplicitTop = 71
       object tabObservationsTimes: TTabSheet
         Caption = 'Observation times and values'
         inline frameSutraFluxObs: TframePestObs
           Left = 0
           Top = 0
-          Width = 608
+          Width = 601
           Height = 422
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 608
+          ExplicitWidth = 601
           ExplicitHeight = 422
           inherited splObservations: TSplitter
-            Top = 244
-            Width = 608
-            ExplicitTop = 144
-            ExplicitWidth = 491
+            Top = 205
+            Width = 601
+            ExplicitLeft = 2
+            ExplicitTop = 248
+            ExplicitWidth = 601
           end
           inherited grpDirectObs: TGroupBox
-            Width = 608
-            Height = 244
-            ExplicitWidth = 608
+            Width = 601
+            Height = 205
+            ExplicitWidth = 601
             ExplicitHeight = 244
             inherited frameObservations: TframeGrid
               Top = 20
-              Width = 604
-              Height = 222
+              Width = 597
+              Height = 183
               ExplicitTop = 20
-              ExplicitWidth = 604
+              ExplicitWidth = 597
               ExplicitHeight = 222
               inherited Panel: TPanel
-                Top = 181
-                Width = 604
+                Top = 142
+                Width = 597
                 ExplicitTop = 181
-                ExplicitWidth = 604
+                ExplicitWidth = 597
                 inherited lbNumber: TLabel
                   Width = 55
                   Height = 18
@@ -202,15 +209,15 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
                   ExplicitHeight = 18
                 end
                 inherited sbAdd: TSpeedButton
-                  Left = 316
+                  Left = 312
                   ExplicitLeft = 253
                 end
                 inherited sbInsert: TSpeedButton
-                  Left = 375
+                  Left = 371
                   ExplicitLeft = 300
                 end
                 inherited sbDelete: TSpeedButton
-                  Left = 433
+                  Left = 428
                   ExplicitLeft = 347
                 end
                 inherited seNumber: TJvSpinEdit
@@ -219,30 +226,30 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
                 end
               end
               inherited Grid: TRbwDataGrid4
-                Width = 604
-                Height = 181
-                ExplicitWidth = 604
+                Width = 597
+                Height = 142
+                ExplicitWidth = 597
                 ExplicitHeight = 181
               end
             end
           end
           inherited grpObsComparisons: TGroupBox
-            Top = 249
-            Width = 608
-            ExplicitTop = 249
-            ExplicitWidth = 608
+            Top = 210
+            Width = 601
+            ExplicitTop = 210
+            ExplicitWidth = 601
             inherited frameObsComparisons: TframeGrid
               Top = 20
-              Width = 604
-              Height = 151
+              Width = 597
+              Height = 190
               ExplicitTop = 20
-              ExplicitWidth = 604
+              ExplicitWidth = 597
               ExplicitHeight = 151
               inherited Panel: TPanel
-                Top = 110
-                Width = 604
+                Top = 149
+                Width = 597
                 ExplicitTop = 110
-                ExplicitWidth = 604
+                ExplicitWidth = 597
                 inherited lbNumber: TLabel
                   Width = 55
                   Height = 18
@@ -250,15 +257,15 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
                   ExplicitHeight = 18
                 end
                 inherited sbAdd: TSpeedButton
-                  Left = 316
+                  Left = 312
                   ExplicitLeft = 253
                 end
                 inherited sbInsert: TSpeedButton
-                  Left = 375
+                  Left = 371
                   ExplicitLeft = 300
                 end
                 inherited sbDelete: TSpeedButton
-                  Left = 433
+                  Left = 428
                   ExplicitLeft = 347
                 end
                 inherited seNumber: TJvSpinEdit
@@ -267,9 +274,9 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
                 end
               end
               inherited Grid: TRbwDataGrid4
-                Width = 604
-                Height = 110
-                ExplicitWidth = 604
+                Width = 597
+                Height = 149
+                ExplicitWidth = 597
                 ExplicitHeight = 110
               end
             end
@@ -281,7 +288,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         ImageIndex = 1
         OnResize = FormResize
         DesignSize = (
-          608
+          601
           422)
         object lblSrcLabel: TLabel
           Left = 14
@@ -429,7 +436,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
         object edFactorFormula: TJvEdit
           Left = 61
           Top = 392
-          Width = 443
+          Width = 436
           Height = 26
           Anchors = [akLeft, akRight, akBottom]
           TabOrder = 7
@@ -437,7 +444,7 @@ inherited frmManageSutraBoundaryObservations: TfrmManageSutraBoundaryObservation
           OnChange = edFactorFormulaChange
         end
         object btnFactorFormula: TButton
-          Left = 509
+          Left = 502
           Top = 390
           Width = 90
           Height = 30

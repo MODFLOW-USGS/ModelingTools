@@ -590,54 +590,16 @@ const
 var
   Grid: TRbwDataGrid4;
   RowIndex: Integer;
-//  PickList: TStringList;
-//  procedure FillPickList(Grid: TRbwDataGrid4);
-//  var
-//    ObsGroup: TPestObservationGroup;
-//    ObsIndex: Integer;
-//    RowIndex: Integer;
-//  begin
-//    PickList := TStringList.Create;
-//    try
-//      PickList.AddStrings(framePriorInfoObservationGroups.Grid.Cols[Ord(pogcName)]);
-//      PickList.Delete(0);
-//      while PickList.Count > framePriorInfoObservationGroups.seNumber.AsInteger do
-//      begin
-//        PickList.Delete(PickList.Count-1);
-//      end;
-//      Grid.Columns[Ord(ppcGroupName)].PickList := PickList;
-//      for RowIndex := 1 to Grid.RowCount - 1 do
-//      begin
-//        ObsGroup := Grid.Objects[Ord(ppcGroupName), RowIndex] as TPestObservationGroup;
-//        if (ObsGroup <> nil) then
-//        begin
-//          ObsIndex := PickList.IndexOfObject(ObsGroup);
-//          if (ObsIndex >= 0)
-//            and (PickList[ObsIndex] <> Grid.Cells[Ord(ppcGroupName), RowIndex]) then
-//          begin
-//            Grid.Cells[Ord(ppcGroupName), RowIndex] := PickList[ObsIndex];
-//          end;
-//        end;
-//      end;
-//      Grid.Invalidate;
-//    finally
-//      PickList.Free;
-//    end;
-//  end;
 begin
   inherited;
   if plMain.ActivePage = jvspObservationGroups then
   begin
     FixObsGroupNames(frameObservationGroups);
-//    comboObsGroup.Items.Clear;
-//    comboObsGroup.Items.Capacity := frameObservationGroups.seNumber.AsInteger;
     Grid := frameObservationGroups.Grid;
     for RowIndex := 1 to frameObservationGroups.seNumber.AsInteger do
     begin
       if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
       begin
-//        comboObsGroup.Items.AddObject(Grid.Cells[Ord(pogcName), RowIndex],
-//          Grid.Objects[Ord(pogcName), RowIndex]);
       end;
     end;
   end;
@@ -653,7 +615,14 @@ begin
   begin
     rdgPriorInfoVertContinuity.HideEditor;
   end;
-
+  if plMain.ActivePage = jvspPareto1 then
+  begin
+    rdgObservationsToReport.HideEditor;
+  end;
+  if plMain.ActivePage <> nil then
+  begin
+    HelpKeyWord := plMain.ActivePage.HelpKeyWord
+  end;
 end;
 
 procedure TfrmPEST.rdeWFMAXChange(Sender: TObject);
@@ -1878,7 +1847,7 @@ begin
   rdgPriorInfoVertContinuity.Cells[Ord(ppcWeight), 0] := StrWeight;
 
   rdgObservationsToReport.Cells[Ord(pcName), 0] := 'Observations';
-  rdgObservationsToReport.Cells[Ord(pcReport), 0] := 'Generate report';
+  rdgObservationsToReport.Cells[Ord(pcReport), 0] := 'Generate report (OBS_REPORT_(N)';
 //  frameParetoParameters.Grid.Cells[0,0] := StrObservationsToMoni;
   GetData;
 end;
@@ -3354,38 +3323,36 @@ var
   AnObs: TCustomObservationItem;
 begin
   ParetoGroup := comboParetoGroup.Text;
-  if ParetoGroup <> '' then
-  begin
-    rdgObservationsToReport.BeginUpdate;
-    ObsNames := TStringList.Create;
-    try
-      ObsNames.CaseSensitive := False;
-      for Index := 0 to FObsList.Count - 1 do
-      begin
-        AnObs := FObsList[Index];
-        if SameText(AnObs.ObservationGroup, ParetoGroup) then
-        begin
-          ObsNames.AddObject(AnObs.Name, AnObs);
-        end;
-      end;
-      rdgObservationsToReport.RowCount := Max(2, ObsNames.Count + 1);
-      if ObsNames.Count = 0 then
-      begin
-        rdgObservationsToReport.Cells[Ord(pcName), 1] := '';
-        rdgObservationsToReport.Checked[Ord(pcReport), 1] := False;
-      end;
-      for ObsIndex := 0 to ObsNames.Count - 1 do
-      begin
-        rdgObservationsToReport.Cells[Ord(pcName), ObsIndex + 1] := ObsNames[ObsIndex];
-        rdgObservationsToReport.Objects[Ord(pcName), ObsIndex + 1] := ObsNames.Objects[ObsIndex];
-        rdgObservationsToReport.Checked[Ord(pcReport), ObsIndex + 1] := ParetoProperties.ObservationsToReport.IndexOf(ObsNames[ObsIndex]) >= 0;
-      end;
-      comboObservationName.Items := ObsNames;
-      comboObservationName.ItemIndex := ObsNames.IndexOf(ParetoProperties.ObservationName);
-    finally
-      ObsNames.Free;
-      rdgObservationsToReport.EndUpdate;
+  rdgObservationsToReport.BeginUpdate;
+  ObsNames := TStringList.Create;
+  try
+    ObsNames.CaseSensitive := False;
+    for Index := 0 to FObsList.Count - 1 do
+    begin
+      AnObs := FObsList[Index];
+      ObsNames.AddObject(AnObs.Name, AnObs);
     end;
+    rdgObservationsToReport.RowCount := Max(2, ObsNames.Count + 1);
+    if ObsNames.Count = 0 then
+    begin
+      rdgObservationsToReport.Cells[Ord(pcName), 1] := '';
+      rdgObservationsToReport.Checked[Ord(pcReport), 1] := False;
+    end;
+    for ObsIndex := 0 to ObsNames.Count - 1 do
+    begin
+      rdgObservationsToReport.Cells[Ord(pcName), ObsIndex + 1] :=
+        ObsNames[ObsIndex];
+      rdgObservationsToReport.Objects[Ord(pcName), ObsIndex + 1] :=
+        ObsNames.Objects[ObsIndex];
+      rdgObservationsToReport.Checked[Ord(pcReport), ObsIndex + 1] :=
+        ParetoProperties.ObservationsToReport.IndexOf(ObsNames[ObsIndex]) >= 0;
+    end;
+    comboObservationName.Items := ObsNames;
+    comboObservationName.ItemIndex :=
+      ObsNames.IndexOf(ParetoProperties.ObservationName);
+  finally
+    ObsNames.Free;
+    rdgObservationsToReport.EndUpdate;
   end;
 end;
 

@@ -5929,6 +5929,11 @@ resourcestring
   'data set. The global variable has been deleted.';
   StrTheFollowingParame = 'The following parameters are not used in any PEST' +
   ' template.';
+  StrThePestUtilityFil = 'The Pest Utility file "parrep.exe" not found.';
+  StrParrepDoesNotExis = 'Parrep does not exist at "%s".';
+  StrParFileNotFound = '.par file not found';
+  StrTheParameterFileF = 'The parameter file from a previous estimation run ' +
+  'was not found at "%s".';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -40951,12 +40956,14 @@ function TPhastModel.ExportParRepInput(FileName: string; RunParRep, RunPest,
 var
   Base: string;
   ExistingPestFile: string;
-//  NewPestFile: string;
   BatchFileName: string;
   PestName: string;
   ParRepName: string;
   BatchFile: TStringList;
+  ParFileName: string;
 begin
+    frmErrorsAndWarnings.RemoveErrorGroup(self, StrThePestUtilityFil);
+    frmErrorsAndWarnings.RemoveErrorGroup(self, StrParFileNotFound);
 // FileName has for form base.par.number;
   Base := ChangeFileExt(FileName, '');
   Base := ChangeFileExt(Base, '');
@@ -40969,6 +40976,18 @@ begin
 
   ParRepName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
     + 'parrep.exe';
+  if not TFile.Exists(ParRepName) then
+  begin
+    frmErrorsAndWarnings.AddError(self, StrThePestUtilityFil,
+      Format(StrParrepDoesNotExis, [ParRepName]))
+  end;
+  ParFileName := ChangeFileExt(FileName, '.par');
+  if not TFile.Exists(ParFileName) then
+  begin
+    frmErrorsAndWarnings.AddError(self, StrParFileNotFound,
+      Format(StrTheParameterFileF, [ParFileName]))
+  end;
+
   BatchFile := TStringList.Create;
   try
     if New_noptmax >= 0 then

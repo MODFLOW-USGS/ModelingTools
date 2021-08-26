@@ -1,4 +1,6 @@
 inherited frmPEST: TfrmPEST
+  HelpType = htKeyword
+  HelpKeyword = 'Pest_Properties_Dialog_Box'
   Caption = 'PEST Properties'
   ClientHeight = 485
   ClientWidth = 764
@@ -34,7 +36,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspPareto1
+    ActivePage = jsvpPareto2
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -43,6 +45,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Basic_Pane'
       Caption = 'jvspBasic'
       DesignSize = (
         566
@@ -166,6 +170,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Mode_and_Dimen'
       Caption = 'jvspControlDataMode'
       object lblPestMode: TLabel
         Left = 14
@@ -240,6 +246,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Inversion_Cont'
       Caption = 'jvspInversionControls'
       object lblInitialLambda: TLabel
         Left = 95
@@ -380,6 +388,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Parameter_Adju'
       object lblMaxRelParamChange: TLabel
         Left = 93
         Top = 7
@@ -478,6 +488,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Inversion_Con2'
       Caption = 'jvspInversionControls2'
       object lblSwitchCriterion: TLabel
         Left = 93
@@ -582,6 +594,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Iteration_Cont'
       Caption = 'jvspIterationControls'
       object lblMaxIterations: TLabel
         Left = 93
@@ -760,6 +774,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Output_Pane'
       Caption = 'jvspOutputOptions'
       object cbWriteCov: TCheckBox
         Left = 6
@@ -850,6 +866,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Singular_Value'
       Caption = 'jvspSingularValueDecomp'
       object lblSvdMode: TLabel
         Left = 6
@@ -935,6 +953,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_LQSR_Pane'
       Caption = 'jvspLqsr'
       object lblMatrixTolerance: TLabel
         Left = 157
@@ -1037,6 +1057,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Observation_Gr'
       Caption = 'jvspObservationGroups'
       inline frameObservationGroups: TframeGrid
         Left = 0
@@ -1222,6 +1244,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Observation_G2'
       Caption = 'jvspObsGroupAssignments'
       inline frameParentObsGroups: TframeParentChild
         Left = 0
@@ -1245,6 +1269,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'Pest_Properties_Pilot_Points_P'
       Caption = 'jvspPilotPoints'
       object Panel2: TPanel
         Left = 0
@@ -1623,6 +1649,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Regularization'
       object lblPhimLim: TLabel
         Left = 127
         Top = 19
@@ -1824,6 +1852,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Regularizatio2'
       Caption = 'jvspRegularizationOption'
       object lblIREGADJ: TLabel
         Left = 103
@@ -1961,6 +1991,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Prior_Informat'
       Caption = 'jvspPriorInfoObsGroups'
       inline framePriorInfoObservationGroups: TframeGrid
         Left = 0
@@ -2163,6 +2195,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Initial_Value_'
       Caption = 'jvspPriorInfoInitialValue'
       object rdgPriorInfoInitialValue: TRbwDataGrid4
         Left = 0
@@ -2316,6 +2350,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Within_Layer_C'
       Caption = 'jvspPriorInfoHorizContinuity'
       object pnlPriorInfoContinuity: TPanel
         Left = 0
@@ -2506,6 +2542,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Between_Layer_'
       Caption = 'jvspPriorInfoVertContinuity'
       object Panel6: TPanel
         Left = 0
@@ -2661,6 +2699,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Prediction_Ana'
       Caption = 'jvspPrediction1'
       object lblPredMinMax: TLabel
         Left = 157
@@ -2899,6 +2939,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Prediction_An2'
       Caption = 'jvspPrediction2'
       object lblMaxNoPredictionImprovmentRuns: TLabel
         Left = 79
@@ -2987,6 +3029,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Pareto_Control'
       Caption = 'jvspPareto1'
       object Panel7: TPanel
         Left = 0
@@ -3171,7 +3215,7 @@ inherited frmPEST: TfrmPEST
           end
           item
             AutoAdjustRowHeights = False
-            AutoAdjustCaptionRowHeights = False
+            AutoAdjustCaptionRowHeights = True
             ButtonCaption = '...'
             ButtonFont.Charset = DEFAULT_CHARSET
             ButtonFont.Color = clWindowText
@@ -3187,13 +3231,17 @@ inherited frmPEST: TfrmPEST
             LimitToList = False
             MaxLength = 0
             ParentButtonFont = False
-            WordWrapCaptions = False
+            WordWrapCaptions = True
             WordWrapCells = False
             CaseSensitivePicklist = False
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitLeft = 1
+        ColWidths = (
+          64
+          119)
       end
     end
     object jsvpPareto2: TJvStandardPage
@@ -3201,6 +3249,8 @@ inherited frmPEST: TfrmPEST
       Top = 0
       Width = 566
       Height = 443
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Properties_Pareto_Alterna'
       Caption = 'jsvpPareto2'
       object lblObservationName: TLabel
         Left = 157
@@ -3296,6 +3346,7 @@ inherited frmPEST: TfrmPEST
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      OnClick = btnHelpClick
     end
     object btnOK: TBitBtn
       Left = 535

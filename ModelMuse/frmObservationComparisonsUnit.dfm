@@ -1,21 +1,27 @@
 inherited frmObservationComparisons: TfrmObservationComparisons
+  HelpType = htKeyword
+  HelpKeyword = 'Observation_Comparisons_Dialog'
   Caption = 'Observation Comparisons'
-  ClientWidth = 760
-  ExplicitWidth = 776
+  ClientHeight = 312
+  ClientWidth = 784
+  ExplicitWidth = 800
+  ExplicitHeight = 351
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 191
-    Width = 760
+    Top = 277
+    Width = 784
     Height = 35
     Align = alBottom
     TabOrder = 0
+    ExplicitTop = 191
+    ExplicitWidth = 760
     DesignSize = (
-      760
+      784
       35)
     object btnCancel: TBitBtn
-      Left = 672
+      Left = 696
       Top = 2
       Width = 83
       Height = 27
@@ -23,9 +29,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 672
     end
     object btnOK: TBitBtn
-      Left = 584
+      Left = 608
       Top = 2
       Width = 82
       Height = 27
@@ -34,16 +41,19 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 584
     end
     object btnHelp: TBitBtn
-      Left = 496
-      Top = 2
+      Left = 520
+      Top = 6
       Width = 82
       Height = 27
       Anchors = [akTop, akRight]
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      OnClick = btnHelpClick
+      ExplicitLeft = 496
     end
   end
   object treecomboInPlaceEditor: TRbwStringTreeCombo
@@ -111,15 +121,15 @@ inherited frmObservationComparisons: TfrmObservationComparisons
   inline frameObsComparisons: TframeGrid
     Left = 0
     Top = 0
-    Width = 760
-    Height = 191
+    Width = 784
+    Height = 277
     Align = alClient
     TabOrder = 2
     ExplicitWidth = 760
     ExplicitHeight = 191
     inherited Panel: TPanel
-      Top = 150
-      Width = 760
+      Top = 236
+      Width = 784
       ExplicitTop = 150
       ExplicitWidth = 760
       inherited lbNumber: TLabel
@@ -129,15 +139,15 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 399
+        Left = 412
         ExplicitLeft = 312
       end
       inherited sbInsert: TSpeedButton
-        Left = 475
+        Left = 490
         ExplicitLeft = 370
       end
       inherited sbDelete: TSpeedButton
-        Left = 546
+        Left = 564
         ExplicitLeft = 427
       end
       inherited seNumber: TJvSpinEdit
@@ -146,8 +156,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 760
-      Height = 150
+      Width = 784
+      Height = 236
       ColCount = 7
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
       OnExit = frameObsComparisonsGridExit
@@ -156,6 +166,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -179,6 +190,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -202,6 +214,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -217,7 +230,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
           LimitToList = False
           MaxLength = 0
           ParentButtonFont = False
-          WordWrapCaptions = False
+          WordWrapCaptions = True
           WordWrapCells = False
           CaseSensitivePicklist = False
           CheckStyle = csCheck
@@ -225,6 +238,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -240,7 +254,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
           LimitToList = False
           MaxLength = 0
           ParentButtonFont = False
-          WordWrapCaptions = False
+          WordWrapCaptions = True
           WordWrapCells = False
           CaseSensitivePicklist = False
           CheckStyle = csCheck
@@ -248,6 +262,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -271,29 +286,7 @@ inherited frmObservationComparisons: TfrmObservationComparisons
         end
         item
           AutoAdjustRowHeights = True
-          ButtonCaption = '...'
-          ButtonFont.Charset = DEFAULT_CHARSET
-          ButtonFont.Color = clWindowText
-          ButtonFont.Height = -11
-          ButtonFont.Name = 'Tahoma'
-          ButtonFont.Style = []
-          ButtonUsed = False
-          ButtonWidth = 20
-          CheckMax = False
-          CheckMin = False
-          ComboUsed = False
-          Format = rcf4Real
-          LimitToList = False
-          MaxLength = 0
-          ParentButtonFont = False
-          WordWrapCaptions = True
-          WordWrapCells = False
-          CaseSensitivePicklist = False
-          CheckStyle = csCheck
-          AutoAdjustColWidths = True
-        end
-        item
-          AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -306,6 +299,30 @@ inherited frmObservationComparisons: TfrmObservationComparisons
           CheckMin = False
           ComboUsed = False
           Format = rcf4String
+          LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
+          WordWrapCaptions = True
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+          AutoAdjustColWidths = True
+        end
+        item
+          AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
+          ButtonCaption = '...'
+          ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -11
+          ButtonFont.Name = 'Tahoma'
+          ButtonFont.Style = []
+          ButtonUsed = False
+          ButtonWidth = 20
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = False
+          Format = rcf4Real
           LimitToList = False
           MaxLength = 0
           ParentButtonFont = False

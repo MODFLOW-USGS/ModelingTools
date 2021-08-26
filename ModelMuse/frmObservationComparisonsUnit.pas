@@ -90,13 +90,13 @@ uses
 
 resourcestring
   StrObject0sObse = 'Object: "%0:s"; Observation name: "%1:s".';
-  StrObservationName = 'Observation Name';
-  StrObservationValue = 'Observation Value';
-  StrObservationWeight = 'Observation Weight';
+  StrObservationName = 'Observation Name (OBSNME)';
+  StrObservationValue = 'Observation Value (OBSVAL) (OBSVAL1 - OBSVAL2)';
+  StrObservationWeight = 'Observation Weight (WEIGHT)';
   StrComment = 'Comment';
-  StrFirstObservation = 'First Observation';
-  StrSecondObservation = 'Second Observation';
-  StrObservationGroup = 'Observation Group';
+  StrFirstObservation = 'First Observation (OBSNME1)';
+  StrSecondObservation = 'Second Observation (OBSNME2)';
+  StrObservationGroup = 'Observation Group (OBGNME)';
 
 {$R *.dfm}
 

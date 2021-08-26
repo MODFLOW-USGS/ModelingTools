@@ -57,15 +57,16 @@ type
   end;
 
 resourcestring
-  StrObservationName = 'Observation Name';
+  StrObservationName = 'Observation Name (OBSNME)';
   StrObservationType = 'Observation Type';
   StrObservationTime = 'Observation Time';
-  StrObservationValue = 'Observation Value';
-  StrObservationWeight = 'Observation Weight';
+  StrObservationValue = 'Observation Value (OBSVAL)';
+  StrObservationValueDif = 'Observation Value (OBSVAL) (OBSVAL1 - OBSVAL2)';
+  StrObservationWeight = 'Observation Weight (WEIGHT)';
   StrComment = 'Comment';
-  StrFirstObservation = 'First Observation';
-  StrSecondObservation = 'Second Observation';
-  StrObservationGroup = 'Observation Group';
+  StrFirstObservation = 'First Observation (OBSNME1)';
+  StrSecondObservation = 'Second Observation (OBSNME2)';
+  StrObservationGroup = 'Observation Group (OBGNME}';
 
 implementation
 
@@ -277,7 +278,7 @@ begin
     frameObsComparisons.Grid.Cells[Ord(poccName), 0] := StrObservationName;
     frameObsComparisons.Grid.Cells[Ord(poccObs1), 0] := StrFirstObservation;
     frameObsComparisons.Grid.Cells[Ord(poccObs2), 0] := StrSecondObservation;
-    frameObsComparisons.Grid.Cells[Ord(poccValue), 0] := StrObservationValue;
+    frameObsComparisons.Grid.Cells[Ord(poccValue), 0] := StrObservationValueDif;
     frameObsComparisons.Grid.Cells[Ord(poccWeight), 0] := StrObservationWeight;
     frameObsComparisons.Grid.Cells[Ord(poccGroup), 0] := StrObservationGroup;
     frameObsComparisons.Grid.Cells[Ord(poccComment), 0] := StrComment;

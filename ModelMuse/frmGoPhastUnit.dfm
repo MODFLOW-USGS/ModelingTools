@@ -3632,7 +3632,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acEditSutraFluxObs: TAction
       Category = 'Model'
-      Caption = 'Manage SUTRA Boundary Observations'
+      Caption = 'Manage SUTRA Boundary Observations...'
       OnExecute = acEditSutraFluxObsExecute
     end
     object acPEST: TAction

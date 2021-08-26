@@ -6,28 +6,27 @@ object framePestObs: TframePestObs
   TabOrder = 0
   object splObservations: TSplitter
     Left = 0
-    Top = 242
+    Top = 203
     Width = 600
     Height = 5
     Cursor = crVSplit
     Align = alBottom
-    ExplicitLeft = -1
-    ExplicitTop = 243
-    ExplicitWidth = 601
+    ExplicitTop = 246
   end
   object grpDirectObs: TGroupBox
     Left = 0
     Top = 0
     Width = 600
-    Height = 242
+    Height = 203
     Align = alClient
     Caption = 'Direct observations'
     TabOrder = 0
+    ExplicitHeight = 242
     inline frameObservations: TframeGrid
       Left = 2
       Top = 15
       Width = 596
-      Height = 225
+      Height = 186
       Align = alClient
       TabOrder = 0
       ExplicitLeft = 2
@@ -35,7 +34,7 @@ object framePestObs: TframePestObs
       ExplicitWidth = 596
       ExplicitHeight = 225
       inherited Panel: TPanel
-        Top = 184
+        Top = 145
         Width = 596
         ExplicitTop = 184
         ExplicitWidth = 596
@@ -60,9 +59,9 @@ object framePestObs: TframePestObs
       end
       inherited Grid: TRbwDataGrid4
         Width = 596
-        Height = 184
+        Height = 145
         ColCount = 7
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goAlwaysShowEditor]
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         OnSelectCell = frameObservationsGridSelectCell
         OnSetEditText = frameObservationsGridSetEditText
         Columns = <
@@ -255,9 +254,9 @@ object framePestObs: TframePestObs
   end
   object grpObsComparisons: TGroupBox
     Left = 0
-    Top = 247
+    Top = 208
     Width = 600
-    Height = 173
+    Height = 212
     Align = alBottom
     Caption = 'Observation comparisons'
     TabOrder = 1
@@ -265,7 +264,7 @@ object framePestObs: TframePestObs
       Left = 2
       Top = 15
       Width = 596
-      Height = 156
+      Height = 195
       Align = alClient
       TabOrder = 0
       ExplicitLeft = 2
@@ -273,7 +272,7 @@ object framePestObs: TframePestObs
       ExplicitWidth = 596
       ExplicitHeight = 156
       inherited Panel: TPanel
-        Top = 115
+        Top = 154
         Width = 596
         ExplicitTop = 115
         ExplicitWidth = 596
@@ -295,9 +294,9 @@ object framePestObs: TframePestObs
       end
       inherited Grid: TRbwDataGrid4
         Width = 596
-        Height = 115
+        Height = 154
         ColCount = 7
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goAlwaysShowEditor]
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
         OnEnter = frameObsComparisonsGridEnter
         OnSetEditText = frameObsComparisonsGridSetEditText
         Columns = <

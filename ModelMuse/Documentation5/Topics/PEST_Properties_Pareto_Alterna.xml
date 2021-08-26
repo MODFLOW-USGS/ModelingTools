@@ -5,6 +5,7 @@
   <keywords>
     <keyword translate="true">ABOVE_OR_BELOW</keyword>
     <keyword translate="true">ALT_TERM</keyword>
+    <keyword translate="true">NUM_ITER_THRESH</keyword>
     <keyword translate="true">OBS_TERM</keyword>
     <keyword translate="true">OBS_THRESH</keyword>
   </keywords>
@@ -12,12 +13,13 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Pareto Alternate Termination Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
-    <para styleclass="Normal"></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">ALT_TERM</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">OBS_TERM </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">ABOVE_OR_BELOW </text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">OBS_THRESH </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Pareto Alternate Termination </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The variables specified on the </text><text styleclass="Strong" translate="true">Pareto Alternate Termination</text><text styleclass="Normal" translate="true"> pane are described in the PEST User Manual, Part I, Section 13.2.2). More extensive descriptions of these variables are in the PEST user manual. The variables specified on this pane appear in the Pareto section of the PEST control file. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ALT_TERM</text><text styleclass="Normal" translate="true"> If ALT_TERM is activated, termination of PEST execution will occur if a user-nominated model output (i.e. an “observation” cited in the “observation data” section of the PEST control file) rises above, or falls below, a certain threshold, and stays above or below that threshold over a certain number of iterations.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">OBS_TERM</text><text styleclass="Normal" translate="true"> If ALT_TERM is activated, the monitored observation is OBS_TERM.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">ABOVE_OR_BELOW</text><text styleclass="Normal" translate="true"> If ALT_TERM is activated, ABOVE_OR_BELOW indicates whether PEST should terminate execution if OBS_TERM is above or below OBS_THRESH.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">OBS_THRESH</text><text styleclass="Normal" translate="true"> is the threshold for termination of PEST execution.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">NUM_ITER_THRESH</text><text styleclass="Normal" translate="true"> is the number of successive iterations for which this threshold must be either exceeded or undercut for termination of PEST execution.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

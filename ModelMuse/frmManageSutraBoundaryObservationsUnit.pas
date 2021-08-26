@@ -166,6 +166,11 @@ resourcestring
   'ber';
   StrDoYouWantToSave = 'Do you want to save your changes first?';
   StrEditSUTRAFluxObse = 'edit SUTRA flux observations';
+  StrSpecPresObs = 'Spec Pres Obs';
+  StrSpecFluidFlowObs = 'Spec Fluid Flow Obs';
+  StrSpecConcObs = 'Spec Conc Obs';
+  StrGenFlowObs = 'Gen Flow Obs';
+  StrGenTransportObs = 'Gen Transport Obs';
 
 {$R *.dfm}
 
@@ -783,20 +788,20 @@ begin
     if SutraBoundaries.SpecifiedPressure.Used then
     begin
       FSpecPresObjects.Add(ScreenObject);
-    end
-    else if SutraBoundaries.FluidSource.Used then
+    end;
+    if SutraBoundaries.FluidSource.Used then
     begin
       FSpecFluidFlowObjects.Add(ScreenObject);
-    end
-    else if SutraBoundaries.SpecifiedConcTemp.Used then
+    end;
+    if SutraBoundaries.SpecifiedConcTemp.Used then
     begin
       FSpecConcObjects.Add(ScreenObject);
-    end
-    else if SutraBoundaries.GeneralFlowBoundary.Used then
+    end;
+    if SutraBoundaries.GeneralFlowBoundary.Used then
     begin
       FGenFluidFlowObjects.Add(ScreenObject);
-    end
-    else if SutraBoundaries.GenTransportBoundary.Used then
+    end;
+    if SutraBoundaries.GenTransportBoundary.Used then
     begin
       FGenTransObjects.Add(ScreenObject);
     end;
@@ -804,7 +809,7 @@ begin
 
   FFluxObs.Assign(frmGoPhast.PhastModel.SutraFluxObs);
 
-  ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Pres Obs');
+  ParentNode := tvFluxObservations.Items.Add(nil, StrSpecPresObs);
   ParentNode.Data := FFluxObs.SpecPres;
   FSpecPresNode := ParentNode;
   for Index := 0 to FFluxObs.SpecPres.Count - 1 do
@@ -815,7 +820,7 @@ begin
     ANode.Data := SpecPresObsItem;
   end;
 
-  ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Fluid Flow Obs');
+  ParentNode := tvFluxObservations.Items.Add(nil, StrSpecFluidFlowObs);
   ParentNode.Data := FFluxObs.FluidFlow;
   FFluidFlowNode := ParentNode;
   for Index := 0 to FFluxObs.FluidFlow.Count - 1 do
@@ -826,7 +831,7 @@ begin
     ANode.Data := SpecFlowObsItem;
   end;
 
-  ParentNode := tvFluxObservations.Items.Add(nil, 'Spec Conc Obs');
+  ParentNode := tvFluxObservations.Items.Add(nil, StrSpecConcObs);
   ParentNode.Data := FFluxObs.SpecConc;
   FSpecConcNode := ParentNode;
   for Index := 0 to FFluxObs.SpecConc.Count - 1 do
@@ -839,7 +844,7 @@ begin
 
   if frmGoPhast.ModelSelection = msSutra30 then
   begin
-    ParentNode := tvFluxObservations.Items.Add(nil, 'Gen Flow Obs');
+    ParentNode := tvFluxObservations.Items.Add(nil, StrGenFlowObs);
     ParentNode.Data := FFluxObs.GenFlow;
     FGenFlowNode := ParentNode;
     for Index := 0 to FFluxObs.GenFlow.Count - 1 do
@@ -850,7 +855,7 @@ begin
       ANode.Data := SpecGenFlowItem;
     end;
 
-    ParentNode := tvFluxObservations.Items.Add(nil, 'Gen Transport Obs');
+    ParentNode := tvFluxObservations.Items.Add(nil, StrGenTransportObs);
     ParentNode.Data := FFluxObs.GenTrans;
     FGenTransNode := ParentNode;
     for Index := 0 to FFluxObs.GenTrans.Count - 1 do
