@@ -1,9 +1,22 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>PEST Properties Regularization Options Pane</title>
+  <title translate="true">PEST Properties Regularization Options Pane</title>
+  <keywords>
+    <keyword translate="true">IREGADJ</keyword>
+    <keyword translate="true">NOPTREGADJ</keyword>
+    <keyword translate="true">REGSINGTHRESH</keyword>
+    <keyword translate="true">REGWEIGHTRAT</keyword>
+  </keywords>
   <body>
-    <header><para styleclass="Heading1">PEST Properties Regularization Options Pane</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Regularization Options Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Regularization Options </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The variables specified on the </text><text styleclass="Strong" translate="true">Regularization Options</text><text styleclass="Normal" translate="true"> pane are described in the PEST User Manual, Part I, Section 9.3). More extensive descriptions of these variables are in the PEST user manual. The variables specified on this pane appear in the Regularisation analysis section of the PEST control file. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">IREGADJ</text><text styleclass="Normal" translate="true"> If IREGADJ is provided with a value of zero, then no inter-regularization-group weights adjustment takes place. However if IREGADJ is provided with a non-zero value, this instructs PEST to vary relatively of regularization weighting in ways that are discussed in Section 9.3 of the PEST User Manual.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">NOPTREGADJ</text><text styleclass="Normal" translate="true"> is required if IREGADJ is set to 4. NOPTREGADJ specifies the optimisation interval at which regularization weights are re-calculated</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">REGWEIGHTRAT</text><text styleclass="Normal" translate="true"> is required if IREGADJ is set to 4. REGWEIGHTRAT specifies the ratio of the highest to lowest regularization weight enforced through the weights compression process.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">REGSINGTHRESH</text><text styleclass="Normal" translate="true"> is required if IREGADJ is set to 4 or 5. REGSINGTHRESH defines the singular value ratio which is deemed to separate the calibration solution space from the calibration null space for the purpose of assigning a weight to each regularization observation and prior information equation.</text></para>
   </body>
 </topic>

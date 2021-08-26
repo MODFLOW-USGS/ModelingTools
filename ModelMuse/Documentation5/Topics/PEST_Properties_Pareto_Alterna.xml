@@ -1,9 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>PEST Properties Pareto Alternate Termination Pane</title>
+  <title translate="true">PEST Properties Pareto Alternate Termination Pane</title>
+  <keywords>
+    <keyword translate="true">ABOVE_OR_BELOW</keyword>
+    <keyword translate="true">ALT_TERM</keyword>
+    <keyword translate="true">OBS_TERM</keyword>
+    <keyword translate="true">OBS_THRESH</keyword>
+  </keywords>
   <body>
-    <header><para styleclass="Heading1">PEST Properties Pareto Alternate Termination Pane</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Pareto Alternate Termination Pane</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ALT_TERM</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">OBS_TERM </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ABOVE_OR_BELOW </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">OBS_THRESH </text></para>
+    <para styleclass="Normal"></para>
   </body>
 </topic>

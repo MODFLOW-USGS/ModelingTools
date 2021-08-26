@@ -34,7 +34,7 @@ inherited frmPEST: TfrmPEST
     Top = 0
     Width = 566
     Height = 443
-    ActivePage = jvspPriorInfoVertContinuity
+    ActivePage = jvspPareto1
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
@@ -1969,13 +1969,13 @@ inherited frmPEST: TfrmPEST
         Height = 386
         Align = alClient
         TabOrder = 0
-        ExplicitTop = 43
+        ExplicitTop = 57
         ExplicitWidth = 566
-        ExplicitHeight = 400
+        ExplicitHeight = 386
         inherited Panel: TPanel
           Top = 345
           Width = 566
-          ExplicitTop = 402
+          ExplicitTop = 345
           ExplicitWidth = 566
           DesignSize = (
             566
@@ -2136,7 +2136,7 @@ inherited frmPEST: TfrmPEST
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 566
-          ExplicitHeight = 402
+          ExplicitHeight = 345
         end
       end
       object Panel8: TPanel
@@ -2283,8 +2283,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 41
-        ExplicitHeight = 402
       end
       object Panel5: TPanel
         Left = 0
@@ -2501,8 +2499,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 97
-        ExplicitHeight = 346
       end
     end
     object jvspPriorInfoVertContinuity: TJvStandardPage
@@ -2658,7 +2654,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = 1
       end
     end
     object jvspPrediction1: TJvStandardPage
@@ -3000,7 +2995,6 @@ inherited frmPEST: TfrmPEST
         Height = 289
         Align = alTop
         BevelOuter = bvNone
-        Caption = 'Panel7'
         TabOrder = 0
         object lblFinalIterationCount: TLabel
           Left = 79
