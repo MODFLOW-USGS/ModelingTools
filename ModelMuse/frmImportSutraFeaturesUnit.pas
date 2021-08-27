@@ -30,8 +30,8 @@ type
     { Public declarations }
   end;
 
-var
-  frmImportSutraFeatures: TfrmImportSutraFeatures;
+//var
+//  frmImportSutraFeatures: TfrmImportSutraFeatures;
 
 implementation
 

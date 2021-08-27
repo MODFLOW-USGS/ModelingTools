@@ -9855,4 +9855,11 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 656
     Top = 120
   end
+  object pmExportModelSutra: TPopupMenu
+    Left = 432
+    Top = 72
+    object miExportPESTcontrolfile: TMenuItem
+      Action = acRunPest
+    end
+  end
 end

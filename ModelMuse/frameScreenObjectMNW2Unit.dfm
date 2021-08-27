@@ -23,7 +23,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
     Top = 22
     Width = 609
     Height = 454
-    ActivePage = tabLossControls
+    ActivePage = tabObservations
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -1423,7 +1423,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       end
     end
     object tabObservations: TTabSheet
-      Caption = 'Observations'
+      Caption = 'Calibration'
       ImageIndex = 5
       inline framePestObsMnw2: TframePestObs
         Left = 0
@@ -1435,25 +1435,27 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         ExplicitWidth = 601
         ExplicitHeight = 421
         inherited splObservations: TSplitter
-          Top = 243
+          Top = 244
           Width = 601
+          ExplicitTop = 243
+          ExplicitWidth = 601
         end
         inherited grpDirectObs: TGroupBox
           Width = 601
-          Height = 243
+          Height = 244
           ExplicitWidth = 601
-          ExplicitHeight = 243
+          ExplicitHeight = 244
           inherited frameObservations: TframeGrid
             Top = 20
             Width = 597
-            Height = 221
+            Height = 222
             ExplicitTop = 20
             ExplicitWidth = 597
-            ExplicitHeight = 221
+            ExplicitHeight = 222
             inherited Panel: TPanel
-              Top = 180
+              Top = 190
               Width = 597
-              ExplicitTop = 180
+              ExplicitTop = 190
               ExplicitWidth = 597
               inherited lbNumber: TLabel
                 Width = 55
@@ -1480,7 +1482,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             end
             inherited Grid: TRbwDataGrid4
               Width = 597
-              Height = 180
+              Height = 190
               Columns = <
                 item
                   AutoAdjustRowHeights = True
@@ -1657,26 +1659,26 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
                   AutoAdjustColWidths = True
                 end>
               ExplicitWidth = 597
-              ExplicitHeight = 180
+              ExplicitHeight = 190
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
-          Top = 248
+          Top = 249
           Width = 601
-          ExplicitTop = 248
+          ExplicitTop = 249
           ExplicitWidth = 601
           inherited frameObsComparisons: TframeGrid
             Top = 20
             Width = 597
-            Height = 151
+            Height = 150
             ExplicitTop = 20
             ExplicitWidth = 597
-            ExplicitHeight = 151
+            ExplicitHeight = 150
             inherited Panel: TPanel
-              Top = 110
+              Top = 115
               Width = 597
-              ExplicitTop = 110
+              ExplicitTop = 115
               ExplicitWidth = 597
               inherited lbNumber: TLabel
                 Width = 55
@@ -1702,9 +1704,9 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             end
             inherited Grid: TRbwDataGrid4
               Width = 597
-              Height = 110
+              Height = 115
               ExplicitWidth = 597
-              ExplicitHeight = 110
+              ExplicitHeight = 115
             end
           end
         end

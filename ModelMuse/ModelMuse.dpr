@@ -751,8 +751,6 @@ begin
   Application.CreateForm(TfrmProgressMM, frmProgressMM);
   Application.CreateForm(TfrmFormula, frmFormula);
   Application.CreateForm(TfrmColors, frmColors);
-  Application.CreateForm(TfrmImportModflow6FeatureModifiedByPest, frmImportModflow6FeatureModifiedByPest);
-  Application.CreateForm(TfrmImportSutraFeatures, frmImportSutraFeatures);
   if frmErrorsAndWarnings.HasMessages then
   begin
     frmErrorsAndWarnings.Show;

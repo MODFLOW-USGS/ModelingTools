@@ -1488,6 +1488,9 @@ begin
     ClearTable(frameExternalFileValues.Grid);
 
     {$IFDEF PEST}
+    dgUp.Cells[Ord(scStartTime), PestModifierRow]:= StrPestModifier;
+    dgUp.Cells[Ord(scStartTime), PestModifierRow]:= StrModificationMethod;
+
     PestMethod[dgUp, Ord(scK)] :=
       TSfrBoundary.DefaultBoundaryMethod(UpstreamKPosition);
     PestMethod[dgUp, Ord(scBedThickness)] :=
@@ -1498,6 +1501,9 @@ begin
       TSfrBoundary.DefaultBoundaryMethod(UpstreamWidthPosition);
     PestMethod[dgUp, Ord(scStreamDepth)] :=
       TSfrBoundary.DefaultBoundaryMethod(UpstreamDepthPosition);
+
+    dgDown.Cells[Ord(scStartTime), PestModifierRow]:= StrPestModifier;
+    dgDown.Cells[Ord(scStartTime), PestModifierRow]:= StrModificationMethod;
 
     PestMethod[dgDown, Ord(scK)] :=
       TSfrBoundary.DefaultBoundaryMethod(DownstreamKPosition);
@@ -1510,6 +1516,9 @@ begin
     PestMethod[dgDown, Ord(scStreamDepth)] :=
       TSfrBoundary.DefaultBoundaryMethod(DownstreamDepthPosition);
 
+    dgFlowTimes.Cells[Ord(sfcStartTime), PestModifierRow]:= StrPestModifier;
+    dgFlowTimes.Cells[Ord(sfcStartTime), PestModifierRow]:= StrModificationMethod;
+
     PestMethod[dgFlowTimes, Ord(sfcFlow)] :=
       TSfrBoundary.DefaultBoundaryMethod(FlowPosition);
     PestMethod[dgFlowTimes, Ord(sfcPrecip)] :=
@@ -1518,22 +1527,6 @@ begin
       TSfrBoundary.DefaultBoundaryMethod(EvapPosition);
     PestMethod[dgFlowTimes, Ord(sfcRunoff)] :=
       TSfrBoundary.DefaultBoundaryMethod(RunoffPosition);
-
-{
-  TSfrColumn = (scStartTime, scEndTime, scK, scBedThickness, scBedElevation,
-    scStreamWidth, scStreamDepth);
-  UpstreamKPosition = 0;
-  UpstreamBedThicknessPosition = 1;
-  UpstreamBedElevationPosition = 2;
-  UpstreamWidthPosition = 3;
-  UpstreamDepthPosition = 4;
-
-  DownstreamKPosition = 5;
-  DownstreamBedThicknessPosition = 6;
-  DownstreamBedElevationPosition = 7;
-  DownstreamWidthPosition = 8;
-  DownstreamDepthPosition = 9;
-}
 
     {$ENDIF}
   finally

@@ -315,6 +315,8 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           CheckStyle = csCheck
           AutoAdjustColWidths = False
         end>
+      ExplicitLeft = 1
+      ExplicitTop = 51
       ExplicitWidth = 461
       ExplicitHeight = 44
       ColWidths = (
@@ -539,7 +541,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
       end
     end
     object tabObservations: TTabSheet
-      Caption = 'Observations'
+      Caption = 'Calibration'
       ImageIndex = 2
       inline framePestObsLak: TframePestObs
         Left = 0
@@ -551,25 +553,25 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         ExplicitWidth = 455
         ExplicitHeight = 299
         inherited splObservations: TSplitter
-          Top = 121
+          Top = 122
           Width = 455
           ExplicitTop = -17
           ExplicitWidth = 455
         end
         inherited grpDirectObs: TGroupBox
           Width = 455
-          Height = 121
+          Height = 122
           ExplicitWidth = 455
-          ExplicitHeight = 121
+          ExplicitHeight = 122
           inherited frameObservations: TframeGrid
             Width = 451
-            Height = 104
+            Height = 105
             ExplicitWidth = 451
-            ExplicitHeight = 104
+            ExplicitHeight = 105
             inherited Panel: TPanel
-              Top = 63
+              Top = 73
               Width = 451
-              ExplicitTop = 63
+              ExplicitTop = 73
               ExplicitWidth = 451
               inherited sbAdd: TSpeedButton
                 Left = 233
@@ -586,22 +588,24 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
             end
             inherited Grid: TRbwDataGrid4
               Width = 451
-              Height = 63
+              Height = 73
               ExplicitWidth = 451
-              ExplicitHeight = 63
+              ExplicitHeight = 73
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
-          Top = 126
+          Top = 127
           Width = 455
-          ExplicitTop = 126
+          ExplicitTop = 127
           ExplicitWidth = 455
           inherited frameObsComparisons: TframeGrid
             Width = 451
             ExplicitWidth = 451
+            ExplicitHeight = 155
             inherited Panel: TPanel
               Width = 451
+              ExplicitTop = 120
               ExplicitWidth = 451
               inherited sbAdd: TSpeedButton
                 Left = 233
@@ -619,6 +623,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
             inherited Grid: TRbwDataGrid4
               Width = 451
               ExplicitWidth = 451
+              ExplicitHeight = 120
             end
           end
         end

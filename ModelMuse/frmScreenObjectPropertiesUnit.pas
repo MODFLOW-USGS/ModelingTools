@@ -2643,7 +2643,7 @@ resourcestring
   StrUZFSinkConcIn = 'UZF sink conc in ';
   StrSomethingWentWrong = 'Something went wrong in the Object Properties dia' +
   'log box. Please save your work and restart ModelMuse.';
-  StrSutraStateCalibrat = 'Sutra State Calibration Observation';
+  StrSutraStateCalibrat = 'Sutra State Calibration Observations';
   StrSpecPressureObserv = 'Spec Pressure Observations';
   StrSpecifiedConcTemp = 'Specified Conc/Temp Observations';
   StrGeneralizedFlowObs = 'Generalized Flow Observations';

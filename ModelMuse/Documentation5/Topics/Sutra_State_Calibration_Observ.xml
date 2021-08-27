@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Sutra State Calibration Observations</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Sutra State Calibration Observations</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Sutra State Calibration Observation</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Sutra Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. It is used to specify state observations such as pressure and termperature in SUTRA.</text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Direct Observations</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Name (OBSNME)</text><text styleclass="Normal" translate="true"> is the name of the direct or comparison observation.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation type</text><text styleclass="Normal" translate="true"> is the type of data to be extracted from the SUTRA output file for direct observations. </text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Group (OBGNME}</text><text styleclass="Normal" translate="true"> is the name of the observation group to which the observation is assigned. Observation group names are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_Gr" styleclass="Normal" translate="true">Pest Properties</link><text styleclass="Normal" translate="true"> dialog box. Observation group names can be be assigned later in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_G2" styleclass="Normal" translate="true">Pest Properties</link><text styleclass="Normal" translate="true"> dialog box if a suitable observation group has not yet been defined.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Observation Time</text><text styleclass="Normal" translate="true"> is the time at which the observation was made.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Value (OBSVAL)</text><text styleclass="Normal" translate="true"> is the measured value to which the simulated value should be compared.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Weight (WEIGHT)</text><text styleclass="Normal" translate="true"> is the weight assigned to the observation.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Comment</text><text styleclass="Normal" translate="true"> is an optional comment about the observation.</text></para>
+    <para styleclass="Strong"><text styleclass="Strong" translate="true">Observation Comparisons</text></para>
+    <para styleclass="Normal"><snippet src="ObsComparisons"/></para>
+  </body>
+</topic>

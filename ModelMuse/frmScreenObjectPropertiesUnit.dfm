@@ -2465,7 +2465,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMVR
+        ActivePage = jvspSFR
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -5563,21 +5563,21 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Height = 293
                   ExplicitHeight = 293
                   inherited splObservations: TSplitter
-                    Top = 115
+                    Top = 116
                     ExplicitTop = -23
                     ExplicitWidth = 573
                   end
                   inherited grpDirectObs: TGroupBox
-                    Height = 115
-                    ExplicitHeight = 115
+                    Height = 116
+                    ExplicitHeight = 76
                     inherited frameObservations: TframeGrid
                       Top = 21
-                      Height = 92
+                      Height = 93
                       ExplicitTop = 21
-                      ExplicitHeight = 92
+                      ExplicitHeight = 53
                       inherited Panel: TPanel
-                        Top = 51
-                        ExplicitTop = 51
+                        Top = 61
+                        ExplicitTop = 34
                         inherited lbNumber: TLabel
                           Width = 57
                           Height = 19
@@ -5599,22 +5599,22 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
-                        Height = 51
-                        ExplicitHeight = 51
+                        Height = 61
+                        ExplicitHeight = 12
                       end
                     end
                   end
                   inherited grpObsComparisons: TGroupBox
-                    Top = 120
-                    ExplicitTop = 120
+                    Top = 121
+                    ExplicitTop = 103
                     inherited frameObsComparisons: TframeGrid
                       Top = 21
-                      Height = 150
+                      Height = 149
                       ExplicitTop = 21
-                      ExplicitHeight = 150
+                      ExplicitHeight = 189
                       inherited Panel: TPanel
-                        Top = 109
-                        ExplicitTop = 109
+                        Top = 114
+                        ExplicitTop = 126
                         inherited lbNumber: TLabel
                           Width = 57
                           Height = 19
@@ -5636,8 +5636,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
-                        Height = 109
-                        ExplicitHeight = 109
+                        Height = 114
+                        ExplicitHeight = 148
                       end
                     end
                   end
@@ -6203,7 +6203,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       CheckStyle = csCheck
                       AutoAdjustColWidths = True
                     end>
-                  ExplicitTop = 57
                   ExplicitWidth = 573
                   ExplicitHeight = 385
                   ColWidths = (
@@ -6793,7 +6792,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited zbChannel: TQRbwZoomBox2
                   Top = 363
-                  Image32.Top = 0
                   ExplicitTop = 363
                 end
               end
@@ -7071,12 +7069,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       Row = 0
                     end>
                   ExplicitTop = 315
-                  inherited zbFlowDepthTable: TQRbwZoomBox2
-                    Image32.Top = 0
-                  end
-                  inherited zbFlowWidthTable: TQRbwZoomBox2
-                    Image32.Top = 0
-                  end
                 end
                 inherited frameFlowTable1: TframeFlowTable
                   Height = 315
@@ -7312,31 +7304,46 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabObservations: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 472
+                ExplicitWidth = 573
+                ExplicitHeight = 442
                 inherited frameSfrPestObs: TframePestObs
-                  Height = 472
+                  Width = 573
+                  Height = 442
                   ExplicitHeight = 472
                   inherited splObservations: TSplitter
-                    Top = 294
+                    Top = 265
+                    Width = 573
                     ExplicitTop = 264
                     ExplicitWidth = 573
                   end
                   inherited grpDirectObs: TGroupBox
-                    Height = 294
-                    ExplicitHeight = 294
+                    Width = 573
+                    Height = 265
+                    ExplicitHeight = 255
                     inherited frameObservations: TframeGrid
                       Top = 21
-                      Height = 271
+                      Width = 569
+                      Height = 242
                       ExplicitTop = 21
-                      ExplicitHeight = 271
+                      ExplicitHeight = 232
                       inherited Panel: TPanel
-                        Top = 230
-                        ExplicitTop = 230
+                        Top = 210
+                        Width = 569
+                        ExplicitTop = 213
                         inherited lbNumber: TLabel
                           Width = 57
                           Height = 19
                           ExplicitWidth = 57
                           ExplicitHeight = 19
+                        end
+                        inherited sbAdd: TSpeedButton
+                          Left = 298
+                        end
+                        inherited sbInsert: TSpeedButton
+                          Left = 352
+                        end
+                        inherited sbDelete: TSpeedButton
+                          Left = 407
                         end
                         inherited seNumber: TJvSpinEdit
                           Height = 27
@@ -7344,27 +7351,40 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
-                        Height = 230
-                        ExplicitHeight = 230
+                        Width = 569
+                        Height = 210
+                        ExplicitHeight = 240
                       end
                     end
                   end
                   inherited grpObsComparisons: TGroupBox
-                    Top = 299
-                    ExplicitTop = 299
+                    Top = 270
+                    Width = 573
+                    ExplicitTop = 282
                     inherited frameObsComparisons: TframeGrid
                       Top = 21
-                      Height = 150
+                      Width = 569
+                      Height = 149
                       ExplicitTop = 21
-                      ExplicitHeight = 150
+                      ExplicitHeight = 189
                       inherited Panel: TPanel
-                        Top = 109
-                        ExplicitTop = 109
+                        Top = 114
+                        Width = 569
+                        ExplicitTop = 126
                         inherited lbNumber: TLabel
                           Width = 57
                           Height = 19
                           ExplicitWidth = 57
                           ExplicitHeight = 19
+                        end
+                        inherited sbAdd: TSpeedButton
+                          Left = 298
+                        end
+                        inherited sbInsert: TSpeedButton
+                          Left = 352
+                        end
+                        inherited sbDelete: TSpeedButton
+                          Left = 407
                         end
                         inherited seNumber: TJvSpinEdit
                           Height = 27
@@ -7372,8 +7392,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         end
                       end
                       inherited Grid: TRbwDataGrid4
-                        Height = 109
-                        ExplicitHeight = 109
+                        Width = 569
+                        Height = 114
+                        ExplicitHeight = 114
                       end
                     end
                   end
@@ -8647,7 +8668,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
             end
             object tabGageObservations: TTabSheet
-              Caption = 'Observations'
+              Caption = 'Calibration'
               ImageIndex = 1
               inline frameGagePestObs: TframePestObs
                 Left = 0
@@ -8659,27 +8680,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 573
                 ExplicitHeight = 377
                 inherited splObservations: TSplitter
-                  Top = 199
+                  Top = 200
                   Width = 573
                   ExplicitTop = 199
                   ExplicitWidth = 573
                 end
                 inherited grpDirectObs: TGroupBox
                   Width = 573
-                  Height = 199
+                  Height = 200
                   ExplicitWidth = 573
-                  ExplicitHeight = 199
+                  ExplicitHeight = 160
                   inherited frameObservations: TframeGrid
                     Top = 21
                     Width = 569
-                    Height = 176
+                    Height = 177
                     ExplicitTop = 21
                     ExplicitWidth = 569
-                    ExplicitHeight = 176
+                    ExplicitHeight = 137
                     inherited Panel: TPanel
-                      Top = 135
+                      Top = 145
                       Width = 569
-                      ExplicitTop = 135
+                      ExplicitTop = 118
                       ExplicitWidth = 569
                       inherited lbNumber: TLabel
                         Width = 57
@@ -8706,28 +8727,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     inherited Grid: TRbwDataGrid4
                       Width = 569
-                      Height = 135
+                      Height = 145
                       ExplicitWidth = 569
-                      ExplicitHeight = 135
                     end
                   end
                 end
                 inherited grpObsComparisons: TGroupBox
-                  Top = 204
+                  Top = 205
                   Width = 573
-                  ExplicitTop = 204
+                  ExplicitTop = 187
                   ExplicitWidth = 573
                   inherited frameObsComparisons: TframeGrid
                     Top = 21
                     Width = 569
-                    Height = 150
+                    Height = 149
                     ExplicitTop = 21
                     ExplicitWidth = 569
-                    ExplicitHeight = 150
+                    ExplicitHeight = 189
                     inherited Panel: TPanel
-                      Top = 109
+                      Top = 114
                       Width = 569
-                      ExplicitTop = 109
+                      ExplicitTop = 126
                       ExplicitWidth = 569
                       inherited lbNumber: TLabel
                         Width = 57
@@ -8754,9 +8774,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                     inherited Grid: TRbwDataGrid4
                       Width = 569
-                      Height = 109
+                      Height = 114
                       ExplicitWidth = 569
-                      ExplicitHeight = 109
+                      ExplicitHeight = 114
                     end
                   end
                 end
@@ -12508,27 +12528,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitWidth = 573
                   ExplicitHeight = 371
                   inherited splObservations: TSplitter
-                    Top = 193
+                    Top = 194
                     Width = 573
                     ExplicitTop = 193
                     ExplicitWidth = 573
                   end
                   inherited grpDirectObs: TGroupBox
                     Width = 573
-                    Height = 193
+                    Height = 194
                     ExplicitWidth = 573
-                    ExplicitHeight = 193
+                    ExplicitHeight = 154
                     inherited frameObservations: TframeGrid
                       Top = 21
                       Width = 569
-                      Height = 170
+                      Height = 171
                       ExplicitTop = 21
                       ExplicitWidth = 569
-                      ExplicitHeight = 170
+                      ExplicitHeight = 131
                       inherited Panel: TPanel
-                        Top = 129
+                        Top = 139
                         Width = 569
-                        ExplicitTop = 129
+                        ExplicitTop = 121
                         ExplicitWidth = 569
                         inherited lbNumber: TLabel
                           Width = 57
@@ -12555,29 +12575,29 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       inherited Grid: TRbwDataGrid4
                         Width = 569
-                        Height = 129
+                        Height = 139
                         OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                         ExplicitWidth = 569
-                        ExplicitHeight = 129
+                        ExplicitHeight = 139
                       end
                     end
                   end
                   inherited grpObsComparisons: TGroupBox
-                    Top = 198
+                    Top = 199
                     Width = 573
-                    ExplicitTop = 198
+                    ExplicitTop = 199
                     ExplicitWidth = 573
                     inherited frameObsComparisons: TframeGrid
                       Top = 21
                       Width = 569
-                      Height = 150
+                      Height = 149
                       ExplicitTop = 21
                       ExplicitWidth = 569
-                      ExplicitHeight = 150
+                      ExplicitHeight = 189
                       inherited Panel: TPanel
-                        Top = 109
+                        Top = 114
                         Width = 569
-                        ExplicitTop = 109
+                        ExplicitTop = 132
                         ExplicitWidth = 569
                         inherited lbNumber: TLabel
                           Width = 57
@@ -12604,9 +12624,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       end
                       inherited Grid: TRbwDataGrid4
                         Width = 569
-                        Height = 109
+                        Height = 114
                         ExplicitWidth = 569
-                        ExplicitHeight = 109
+                        ExplicitHeight = 148
                       end
                     end
                   end
@@ -13766,27 +13786,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 581
             ExplicitHeight = 476
             inherited splObservations: TSplitter
-              Top = 298
+              Top = 299
               Width = 581
               ExplicitTop = 298
               ExplicitWidth = 581
             end
             inherited grpDirectObs: TGroupBox
               Width = 581
-              Height = 274
+              Height = 275
               ExplicitWidth = 581
-              ExplicitHeight = 274
+              ExplicitHeight = 235
               inherited frameObservations: TframeGrid
                 Top = 21
                 Width = 577
-                Height = 251
+                Height = 252
                 ExplicitTop = 21
                 ExplicitWidth = 577
-                ExplicitHeight = 251
+                ExplicitHeight = 212
                 inherited Panel: TPanel
-                  Top = 210
+                  Top = 220
                   Width = 577
-                  ExplicitTop = 210
+                  ExplicitTop = 193
                   ExplicitWidth = 577
                   inherited lbNumber: TLabel
                     Width = 57
@@ -13813,28 +13833,28 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 577
-                  Height = 210
+                  Height = 220
                   ExplicitWidth = 577
-                  ExplicitHeight = 210
+                  ExplicitHeight = 171
                 end
               end
             end
             inherited grpObsComparisons: TGroupBox
-              Top = 303
+              Top = 304
               Width = 581
-              ExplicitTop = 303
+              ExplicitTop = 286
               ExplicitWidth = 581
               inherited frameObsComparisons: TframeGrid
                 Top = 21
                 Width = 577
-                Height = 150
+                Height = 149
                 ExplicitTop = 21
                 ExplicitWidth = 577
-                ExplicitHeight = 150
+                ExplicitHeight = 189
                 inherited Panel: TPanel
-                  Top = 109
+                  Top = 114
                   Width = 577
-                  ExplicitTop = 109
+                  ExplicitTop = 126
                   ExplicitWidth = 577
                   inherited lbNumber: TLabel
                     Width = 57
@@ -13861,9 +13881,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 577
-                  Height = 109
+                  Height = 114
                   ExplicitWidth = 577
-                  ExplicitHeight = 109
+                  ExplicitHeight = 148
                 end
               end
             end
@@ -13889,27 +13909,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 581
             ExplicitHeight = 476
             inherited splObservations: TSplitter
-              Top = 298
+              Top = 299
               Width = 581
               ExplicitTop = 298
               ExplicitWidth = 581
             end
             inherited grpDirectObs: TGroupBox
               Width = 581
-              Height = 274
+              Height = 275
               ExplicitWidth = 581
-              ExplicitHeight = 274
+              ExplicitHeight = 235
               inherited frameObservations: TframeGrid
                 Top = 21
                 Width = 577
-                Height = 251
+                Height = 252
                 ExplicitTop = 21
                 ExplicitWidth = 577
-                ExplicitHeight = 251
+                ExplicitHeight = 212
                 inherited Panel: TPanel
-                  Top = 210
+                  Top = 220
                   Width = 577
-                  ExplicitTop = 210
+                  ExplicitTop = 193
                   ExplicitWidth = 577
                   inherited lbNumber: TLabel
                     Width = 57
@@ -13936,28 +13956,28 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 577
-                  Height = 210
+                  Height = 220
                   ExplicitWidth = 577
-                  ExplicitHeight = 210
+                  ExplicitHeight = 171
                 end
               end
             end
             inherited grpObsComparisons: TGroupBox
-              Top = 303
+              Top = 304
               Width = 581
-              ExplicitTop = 303
+              ExplicitTop = 286
               ExplicitWidth = 581
               inherited frameObsComparisons: TframeGrid
                 Top = 21
                 Width = 577
-                Height = 150
+                Height = 149
                 ExplicitTop = 21
                 ExplicitWidth = 577
-                ExplicitHeight = 150
+                ExplicitHeight = 189
                 inherited Panel: TPanel
-                  Top = 109
+                  Top = 114
                   Width = 577
-                  ExplicitTop = 109
+                  ExplicitTop = 126
                   ExplicitWidth = 577
                   inherited lbNumber: TLabel
                     Width = 57
@@ -13984,9 +14004,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 577
-                  Height = 109
+                  Height = 114
                   ExplicitWidth = 577
-                  ExplicitHeight = 109
+                  ExplicitHeight = 148
                 end
               end
             end
@@ -14911,28 +14931,27 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             ExplicitWidth = 605
             ExplicitHeight = 476
             inherited splObservations: TSplitter
-              Top = 298
+              Top = 299
               Width = 605
               ExplicitTop = 298
               ExplicitWidth = 605
             end
             inherited grpDirectObs: TGroupBox
               Width = 605
-              Height = 257
-              ExplicitTop = 41
+              Height = 258
               ExplicitWidth = 605
-              ExplicitHeight = 257
+              ExplicitHeight = 218
               inherited frameObservations: TframeGrid
                 Top = 21
                 Width = 601
-                Height = 234
+                Height = 235
                 ExplicitTop = 21
                 ExplicitWidth = 601
-                ExplicitHeight = 234
+                ExplicitHeight = 195
                 inherited Panel: TPanel
-                  Top = 193
+                  Top = 203
                   Width = 601
-                  ExplicitTop = 193
+                  ExplicitTop = 176
                   ExplicitWidth = 601
                   inherited lbNumber: TLabel
                     Width = 57
@@ -14958,28 +14977,28 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 601
-                  Height = 193
+                  Height = 203
                   ExplicitWidth = 601
-                  ExplicitHeight = 193
+                  ExplicitHeight = 154
                 end
               end
             end
             inherited grpObsComparisons: TGroupBox
-              Top = 303
+              Top = 304
               Width = 605
-              ExplicitTop = 303
+              ExplicitTop = 286
               ExplicitWidth = 605
               inherited frameObsComparisons: TframeGrid
                 Top = 21
                 Width = 601
-                Height = 150
+                Height = 149
                 ExplicitTop = 21
                 ExplicitWidth = 601
-                ExplicitHeight = 150
+                ExplicitHeight = 189
                 inherited Panel: TPanel
-                  Top = 109
+                  Top = 114
                   Width = 601
-                  ExplicitTop = 109
+                  ExplicitTop = 126
                   ExplicitWidth = 601
                   inherited lbNumber: TLabel
                     Width = 57
@@ -15006,16 +15025,14 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited Grid: TRbwDataGrid4
                   Width = 601
-                  Height = 109
+                  Height = 114
                   ExplicitWidth = 601
-                  ExplicitHeight = 109
+                  ExplicitHeight = 148
                 end
               end
             end
             inherited pnlCaption: TPanel
               Width = 605
-              ExplicitLeft = 0
-              ExplicitTop = 0
               ExplicitWidth = 605
             end
           end

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObsComparisons</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObsComparisons</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Name (OBSNME)</text><text styleclass="Normal" translate="true"> is the name of the comparison observation.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Group (OBGNME)</text><text styleclass="Normal" translate="true"> is the name of the observation group to which the observation is assigned. Observation group names are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_Gr" styleclass="Normal" translate="true">Pest Properties</link><text styleclass="Normal" translate="true"> dialog box. Observation group names can be be assigned later in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Properties_Observation_G2" styleclass="Normal" translate="true">Pest Properties</link><text styleclass="Normal" translate="true"> dialog box if a suitable observation group has not yet been defined.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">First Observation (OBSNME1)</text><text styleclass="Normal" translate="true"> is the name of the first observation that will be compared.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Second Observation (OBSNME2)</text><text styleclass="Normal" translate="true"> is the name of the second observation that will be compared.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Value (OBSVAL) (OBSVAL1 - OBSVAL2)</text><text styleclass="Normal" translate="true"> is the observed difference in value between the first and second observations. It is computed as value of the first observation minus the value of the second observation.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Weight (WEIGHT)</text><text styleclass="Normal" translate="true"> is the weight assigned to the comparison observation.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Comment</text><text styleclass="Normal" translate="true"> is an optional comment about the observation.</text></para>
+  </body>
+</topic>

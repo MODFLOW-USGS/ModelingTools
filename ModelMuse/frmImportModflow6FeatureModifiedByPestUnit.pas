@@ -25,8 +25,8 @@ type
     { Public declarations }
   end;
 
-var
-  frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModifiedByPest;
+//var
+//  frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModifiedByPest;
 
 implementation
 

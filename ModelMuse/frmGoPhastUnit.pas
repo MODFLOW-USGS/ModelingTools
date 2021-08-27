@@ -543,6 +543,8 @@ type
     ImportModelFeaturefromPEST1: TMenuItem;
     acImportSutraFeaturesFromPest: TAction;
     ImportModelFeaturefromPEST2: TMenuItem;
+    pmExportModelSutra: TPopupMenu;
+    miExportPESTcontrolfile: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -4326,7 +4328,7 @@ begin
 //        acSubdivide.Caption := 'Subdivide Grid &Cells...';
 //        acSubdivide.Hint := 'Subdivide grid cells|'
 //          + 'Click down and drag to select cells to be subdivided.';
-        btnRunModel.DropDown := nil;
+        btnRunModel.DropDown := pmExportModelSutra;
         miExportShapefile.Caption := StrMeshDataToShapef;
         acGenerateGrid.Caption := StrGenerateMesh1;
         acGenerateGrid.Hint := StrGenerateMesh2;
