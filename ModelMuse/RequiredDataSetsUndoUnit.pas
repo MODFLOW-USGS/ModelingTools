@@ -540,6 +540,7 @@ var
   ChildModel: TChildModel;
 begin
   inherited;
+  frmGoPhast.PhastModel.ClearPestParmDictionary;
   frmGoPhast.PhastModel.ModflowSteadyParameters.ClearNewDataSets;
   frmGoPhast.PhastModel.ModflowSteadyParameters := FNewSteadyParameters;
   frmGoPhast.PhastModel.ModflowSteadyParameters.RemoveOldDataSetVariables;
@@ -571,6 +572,7 @@ var
   ChildModel: TChildModel;
 begin
   inherited;
+  frmGoPhast.PhastModel.ClearPestParmDictionary;
   frmGoPhast.PhastModel.ModflowSteadyParameters  := FOldSteadyParameters;
   frmGoPhast.PhastModel.ModflowSteadyParameters.RemoveNewDataSets;
   frmGoPhast.PhastModel.ModflowSteadyParameters.RemoveOldDataSetVariables;

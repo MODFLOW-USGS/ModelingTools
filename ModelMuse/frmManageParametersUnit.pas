@@ -2413,7 +2413,6 @@ begin
   inherited;
   // Assigning the old properties undos assigning the parameter names
 //  FExistingScreenObjects.Assign(FOldProperties);
-  frmGoPhast.PhastModel.ClearPestParmDictionary;
   if (frmShowHideObjects <> nil) then
   begin
     frmShowHideObjects.UpdateScreenObjects;
@@ -2424,7 +2423,6 @@ procedure TUndoChangeParameters.Undo;
 begin
   inherited;
   FExistingScreenObjects.Assign(FOldProperties);
-  frmGoPhast.PhastModel.ClearPestParmDictionary;
   if (frmShowHideObjects <> nil) then
   begin
     frmShowHideObjects.UpdateScreenObjects;

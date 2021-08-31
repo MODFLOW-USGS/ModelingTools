@@ -40785,7 +40785,8 @@ var
   TempName: string;
 begin
   Assert(TFile.Exists(SupCalcProperties.FileName));
-  WorkingDirectory := IncludeTrailingPathDelimiter(ExtractFileDir(SupCalcProperties.FileName));
+  WorkingDirectory := IncludeTrailingPathDelimiter(
+    ExtractFileDir(SupCalcProperties.FileName));
   SetCurrentDir(WorkingDirectory);
   CaseName := ExtractFileName(ChangeFileExt(SupCalcProperties.FileName, ''));
   TempName := '';
@@ -40930,12 +40931,14 @@ begin
   BatchFile := TStringList.Create;
   try
     BatchFile.Add(Format('"%0:s" %1:s %2:s',
-      [PestCleanExecutableName, ExtractFileName(PestInputFileName), ExtractFileName(PreSvdaFileName)]));
+      [PestCleanExecutableName, ExtractFileName(PestInputFileName),
+      ExtractFileName(PreSvdaFileName)]));
     BatchFile.Add(Format('"%0:s" < %1:s',
       [SvdaPrepExecutableName, ExtractFileName(SvdaPrepInputFileName)]));
     if SvdaPrepProperties.RunPest then
     begin
-      BatchFile.Add('"' + PestName + '" ' + ChangeFileExt(ExtractFileName(SvdaFileName), ''));
+      BatchFile.Add('"' + PestName + '" '
+        + ChangeFileExt(ExtractFileName(SvdaFileName), ''));
     end;
     BatchFile.Add('pause');
     BatchFile.SaveToFile(BatchFileName);

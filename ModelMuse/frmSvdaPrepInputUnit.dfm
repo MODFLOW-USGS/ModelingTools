@@ -1,4 +1,6 @@
 inherited frmSvdaPrepInput: TfrmSvdaPrepInput
+  HelpType = htKeyword
+  HelpKeyword = 'SVDAPrep_Input_Dialog_Box'
   Caption = 'SVDAPREP Input'
   ClientHeight = 316
   ClientWidth = 367
@@ -41,7 +43,7 @@ inherited frmSvdaPrepInput: TfrmSvdaPrepInput
     Height = 26
     MaxValue = 2147483647.000000000000000000
     MinValue = 1.000000000000000000
-    Value = 1.000000000000000000
+    Value = 10.000000000000000000
     TabOrder = 1
   end
   object cbRunSvdaPrep: TCheckBox
@@ -69,6 +71,7 @@ inherited frmSvdaPrepInput: TfrmSvdaPrepInput
     Kind = bkHelp
     NumGlyphs = 2
     TabOrder = 4
+    OnClick = btnHelpClick
   end
   object btnOK: TBitBtn
     Left = 174

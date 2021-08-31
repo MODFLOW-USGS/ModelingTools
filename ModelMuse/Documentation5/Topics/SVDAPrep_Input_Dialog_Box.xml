@@ -1,9 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>SVDAPrep Input Dialog Box</title>
+  <title translate="true">SVDAPREP Input Dialog Box</title>
   <body>
-    <header><para styleclass="Heading1">SVDAPrep Input Dialog Box</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SVDAPREP Input Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">SVDAPREP Input</text><text styleclass="Normal" translate="true"> dialog box is used to modify a PEST control file to employ SVD-assisted inversion. It is displayed by selecting </text><text styleclass="Strong" translate="true">File|Export|PEST|Modify PEST Control File with SVDAPREP</text><text styleclass="Normal" translate="true">. If the OK button is pressed, ModelMuse will create a batch file to run SVDAPREP named RunSvdaPrep.bat.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">PEST control file name</text><text styleclass="Normal" translate="true"> This is the name of the PEST control file that will be modified by SVDAPREP. ModelMuse will export a new PEST control file with this name.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">For computation of super parameters use</text><text styleclass="Normal" translate="true">: X is the Jacobian matrix pertaining to base parameters (normally represented as J in the PEST User Manual), with any regularization removed from this matrix. Q is the observation weight matrix. If implemented, LSQR is applied to Q</text><text styleclass="Normal" style="font-size:8pt; vertical-align:super;" translate="true">1/2</text><text styleclass="Normal" translate="true">J. Option 1 is best unless there are more than about 2500 base parameters. In this case choose option 3 or option 4 as singular value decomposition becomes very slow when parameter numbers start to rise.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Number of super-parameters</text><text styleclass="Normal" translate="true"> Use as many as computing resources permit. The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SupCalc_Options_Dialog_Box" styleclass="Normal" translate="true">SUPCALC</link><text styleclass="Normal" translate="true"> utility described in the PEST User Manual part II attempts to calculate the optimal dimensions of the solution space for a particular inverse problem.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Run SVDAPREP</text><text styleclass="Normal" translate="true"> If this check box is checked, the RunSvdaPrep.bat will be started after the batch file is created.</text></para>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Run PEST after SVDAPREP</text><text styleclass="Normal" translate="true"> If this check box is checked, the RunSvdaPrep.bat batch file will contain a line to start PEST after SVDAPREP has modified the PEST control file.</text></para>
   </body>
 </topic>

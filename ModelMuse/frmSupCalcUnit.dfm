@@ -1,5 +1,7 @@
 inherited frmSupCalc: TfrmSupCalc
-  Caption = 'SupCalc Options'
+  HelpType = htKeyword
+  HelpKeyword = 'SupCalc_Options_Dialog_Box'
+  Caption = 'SUPCALC Options'
   ClientHeight = 287
   ClientWidth = 369
   ExplicitWidth = 385
@@ -53,6 +55,7 @@ inherited frmSupCalc: TfrmSupCalc
     Kind = bkHelp
     NumGlyphs = 2
     TabOrder = 2
+    OnClick = btnHelpClick
   end
   object btnOK: TBitBtn
     Left = 174
@@ -86,7 +89,7 @@ inherited frmSupCalc: TfrmSupCalc
     Top = 220
     Width = 217
     Height = 17
-    Caption = 'Run SupCalc'
+    Caption = 'Run SUPCALC'
     TabOrder = 6
   end
   object rdeExpected: TRbwDataEntry
