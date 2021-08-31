@@ -12,6 +12,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
+  ExplicitTop = -75
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -2465,7 +2466,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspSFR
+        ActivePage = jvspLAK
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -5346,8 +5347,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     AutoAdjustColWidths = False
                   end>
                 OnEndUpdate = frameLakdgModflowBoundaryEndUpdate
-                ExplicitLeft = 1
-                ExplicitTop = 51
                 ExplicitWidth = 579
                 ExplicitHeight = 141
                 RowHeights = (
@@ -5359,7 +5358,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Top = 218
               Width = 581
               Height = 139
-              ActivePage = frameLak.tabLakeProperties
+              ActivePage = frameLak.tabBathymetry
               ExplicitTop = 218
               ExplicitWidth = 581
               ExplicitHeight = 139
@@ -5370,21 +5369,40 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabGage: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 293
+                ExplicitWidth = 573
+                ExplicitHeight = 105
                 inherited gbGage: TGroupBox
-                  Width = 567
+                  Width = 685
                   ExplicitWidth = 567
+                  inherited cbGagStandard: TCheckBox
+                    Left = 5
+                    OnClick = frameLakcbGagStandardClick
+                    ExplicitLeft = 5
+                  end
+                  inherited cbGagFluxAndCond: TCheckBox
+                    Left = 5
+                    OnClick = frameLakcbGagFluxAndCondClick
+                    ExplicitLeft = 5
+                  end
+                  inherited cbGagDelta: TCheckBox
+                    Left = 5
+                    OnClick = frameLakcbGagDeltaClick
+                    ExplicitLeft = 5
+                  end
                   inherited cbGage4: TCheckBox
-                    Width = 561
+                    Width = 679
+                    OnClick = frameLakcbGage4Click
                     ExplicitWidth = 561
                   end
                 end
               end
               inherited tabBathymetry: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 293
+                ExplicitWidth = 573
+                ExplicitHeight = 105
                 inherited rdgLakeTable: TRbwDataGrid4
-                  Height = 188
+                  Width = 573
+                  Height = 0
                   OnEndUpdate = frameLakrdgLakeTableEndUpdate
                   ExplicitHeight = 188
                   ColWidths = (
@@ -5546,6 +5564,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     24)
                 end
                 inherited pnlBathChoice: TPanel
+                  Width = 573
                   inherited rgBathChoice: TRadioGroup
                     OnClick = frameLakrgBathChoiceClick
                   end
@@ -5667,6 +5686,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pcSFR: TPageControl
               Width = 581
               Height = 476
+              ActivePage = frameScreenObjectSFR.tabObservations
               OnChange = frameScreenObjectSFRpcSFRChange
               ExplicitWidth = 581
               ExplicitHeight = 476
@@ -13835,7 +13855,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Width = 577
                   Height = 220
                   ExplicitWidth = 577
-                  ExplicitHeight = 171
+                  ExplicitHeight = 220
                 end
               end
             end
@@ -13883,7 +13903,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Width = 577
                   Height = 114
                   ExplicitWidth = 577
-                  ExplicitHeight = 148
+                  ExplicitHeight = 114
                 end
               end
             end
@@ -13958,7 +13978,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Width = 577
                   Height = 220
                   ExplicitWidth = 577
-                  ExplicitHeight = 171
+                  ExplicitHeight = 220
                 end
               end
             end
@@ -14006,7 +14026,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Width = 577
                   Height = 114
                   ExplicitWidth = 577
-                  ExplicitHeight = 148
+                  ExplicitHeight = 114
                 end
               end
             end
@@ -16048,8 +16068,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 312
   end
   object rparserSideFormulaNodes: TRbwParser
-    Left = 264
-    Top = 280
+    Left = 272
+    Top = 272
   end
   object rparserThreeDFormulaNodes: TRbwParser
     Left = 376

@@ -4163,6 +4163,12 @@ var
   ParameterIndex: Integer;
   AParameter: TModflowSteadyParameter;
 begin
+  {$IFDEF PEST}
+    frameLak.tabObservations.Visible := frmGoPhast.PhastModel.PestUsed;
+  {$ELSE}
+    frameLak.tabObservations.Visible := False;
+  {$ENDIF}
+
   FPestBlockParametersAndDataSets.Clear;
   FPestNodeParametersAndDataSets.Clear;
   FPestParameters.Clear;

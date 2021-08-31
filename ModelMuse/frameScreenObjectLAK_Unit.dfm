@@ -335,7 +335,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     Top = 121
     Width = 463
     Height = 327
-    ActivePage = tabObservations
+    ActivePage = tabGage
     Align = alClient
     TabOrder = 3
     object tabLakeProperties: TTabSheet

@@ -20,6 +20,7 @@
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Unsaturated_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Unsaturated</link><text styleclass="Normal" translate="true"> tab</text></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="External_Flow_File" styleclass="Strong" translate="true">External Flow File</link><text styleclass="Normal" translate="true"> tab</text></para>
     <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Gage_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">Gage</link><text styleclass="Normal" translate="true"> tab</text></para>
+    <para styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Calibration_tabSfr" styleclass="Strong" translate="true">Calibration</link><text styleclass="Normal" translate="true"> tab</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If the UZF package is being used, any objects used to define streams in the SFR package would typically also be used to specify the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Required_by_MODFLOW" anchor="Discharge_Routing" styleclass="Table Cell" translate="true">Discharge_Routing</link><text styleclass="Table Cell" translate="true"> data set.</text></para>
   </body>
 </topic>

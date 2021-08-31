@@ -133,7 +133,7 @@ inherited frmDataSets: TfrmDataSets
     Top = 0
     Width = 320
     Height = 395
-    ActivePage = tabBasic
+    ActivePage = tabParameters
     Align = alRight
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -523,7 +523,7 @@ inherited frmDataSets: TfrmDataSets
       end
     end
     object tabParameters: TTabSheet
-      Caption = 'Pest Parameters'
+      Caption = 'PEST Parameters'
       ImageIndex = 3
       TabVisible = False
       object cbParametersUsed: TCheckBox
@@ -560,10 +560,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 69
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Comment'
+          ExplicitWidth = 69
         end
         object reComment: TRichEdit
           AlignWithMargins = True
@@ -592,10 +593,11 @@ inherited frmDataSets: TfrmDataSets
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 164
+          Width = 306
           Height = 19
           Align = alTop
           Caption = 'Associated model data'
+          ExplicitWidth = 164
         end
         object memoAssociatedDataSets: TMemo
           AlignWithMargins = True

@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">SUB: Subsidence and Aquifer System Compaction Package</title>
+  <title translate="true">SUB: Subsidence and Aquifer System Compaction Package Pane</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUB: Subsidence and Aquifer System Compaction Package</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUB: Subsidence and Aquifer System Compaction Package Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">SUB: Subsidence and Aquifer System Compaction Package</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Features_Tab" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Features</link><text styleclass="Normal" translate="true"> tab of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">Object Properties</link><text styleclass="Normal" translate="true"> dialog box. It is used to define calibration observations for PEST related to the SUB package.</text></para>
+    <para styleclass="Normal"><snippet src="PestDirectAndComparisonObserva"/></para>
   </body>
 </topic>

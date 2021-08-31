@@ -1039,6 +1039,9 @@
           </topicref>
           <topicref type="topic" id="394004687225829" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-11-14T14:17:44.290Z" icon="0" href="LAK_Object_Pane">
             <caption translate="true">LAK: Lake Package Pane</caption>
+            <topicref type="topic" id="444385759306733" modified="2021-08-30T14:32:58.717Z" icon="0" href="PestDirectAndComparisonObserva">
+              <caption translate="true">PestDirectAndComparisonObservations</caption>
+            </topicref>
           </topicref>
           <topicref type="topic" id="434207398811670" build="ALL" modified="2018-11-16T13:23:23.817Z" icon="0" href="LAK_Lake_package_for_MODFLOW_2">
             <caption translate="true">LAK: Lake Package for MODFLOW 6 Pane</caption>
@@ -1223,11 +1226,14 @@
           <topicref type="topic" id="437606308307844" build="ALL" modified="2019-10-22T16:31:48.140Z" icon="0" href="SFT_Stream_Flow_Transport_Pac2">
             <caption translate="true">SFT: Stream Flow Transport Package Pane</caption>
           </topicref>
-          <topicref type="topic" id="444355586708637" build="ALL" modified="2021-08-27T15:44:37.350Z" icon="0" href="Subsidence_and_Aquifer_System_">
-            <caption translate="true">SUB: Subsidence and Aquifer System Compaction Package</caption>
+          <topicref type="topic" id="444355586708637" build="ALL" modified="2021-08-30T15:11:09.078Z" icon="0" href="Subsidence_and_Aquifer_System_">
+            <caption translate="true">SUB: Subsidence and Aquifer System Compaction Package Pane</caption>
           </topicref>
-          <topicref type="topic" id="444357844001791" build="ALL" modified="2021-08-27T15:45:13.285Z" icon="0" href="SWT_Subsidence_and_Aquifer_Sys">
-            <caption translate="true">SWT Subsidence and Aquifer System Compaction Package for Water Table Aquifers</caption>
+          <topicref type="topic" id="444357844001791" build="ALL" modified="2021-08-30T15:11:26.435Z" icon="0" href="SWT_Subsidence_and_Aquifer_Sys">
+            <caption translate="true">SWT Subsidence and Aquifer System Compaction Package for Water Table Aquifers Pane</caption>
+          </topicref>
+          <topicref type="topic" id="444387578189113" modified="2021-08-30T17:32:43.838Z" icon="0" href="PestModifierAndMethod">
+            <caption translate="true">PestModifierAndMethod</caption>
           </topicref>
         </topicref>
         <topicref type="topic" id="414795484458440" build="ALL" modified="2013-07-24T08:34:53.583Z" icon="0" href="SUTRA_Features_Tab">
