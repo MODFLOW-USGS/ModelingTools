@@ -1744,6 +1744,9 @@ begin
 
     StartTime := Model.ModflowFullStressPeriods.First.StartTime;
     ScriptFileName := ChangeFileExt(FNameOfFile, '.SubObsScript');
+    Model.FileNameLines.Add(
+      Format('  SUB %s', [ExtractFileName(ScriptFileName)]));
+
     OpenFile(ScriptFileName);
     try
       WriteString('BEGIN OBSERVATIONS');

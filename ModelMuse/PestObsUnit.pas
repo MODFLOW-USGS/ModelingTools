@@ -17,19 +17,11 @@ type
     FStoredObservedValue: TRealStorage;
     FObservationGroup: string;
     FTempObsGroupObject: TObject;
-    procedure SetComment(const Value: string);
-    procedure SetName(const Value: string);
-    procedure SetObservedValue(const Value: double);
-    procedure SetWeight(const Value: Double);
-    function GetScreenObject: TObject;
     procedure SetStoredObservedValue(const Value: TRealStorage);
     procedure SetStoredWeight(const Value: TRealStorage);
-    function GetObservedValue: double;
-    function GetWeight: Double;
     procedure SetObservationGroup(const Value: string);
     procedure SetTempObsGroupObject(const Value: TObject);
     function GetPrint: Boolean;
-    function GetName: string;
     function GetObservationGroup: string;
     function GetGUID: string;
     procedure SetGUID(const Value: string);
@@ -37,6 +29,15 @@ type
     function QueryInterface(const IID: TGUID; out Obj): HRESULT; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
+    function GetScreenObject: TObject; virtual;
+    function GetName: string; virtual;
+    procedure SetName(const Value: string); virtual;
+    function GetObservedValue: double; virtual;
+    procedure SetObservedValue(const Value: double); virtual;
+    function GetWeight: Double; virtual;
+    procedure SetWeight(const Value: Double); virtual;
+    function GetComment: string; virtual;
+    procedure SetComment(const Value: string); virtual;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
@@ -63,7 +64,7 @@ type
       write SetStoredObservedValue;
     property StoredWeight: TRealStorage read FStoredWeight
       write SetStoredWeight;
-    property Comment: string read FComment write SetComment;
+    property Comment: string read GetComment write SetComment;
     property ObservationGroup: string read GetObservationGroup
       write SetObservationGroup;
     property ExportedName: string read FExportedName write FExportedName;
@@ -232,6 +233,11 @@ begin
   FStoredWeight.Free;
   FStoredObservedValue.Free;
   inherited;
+end;
+
+function TCustomObservationItem.GetComment: string;
+begin
+  result := FComment;
 end;
 
 function TCustomObservationItem.GetGUID: string;

@@ -1043,6 +1043,9 @@ begin
     StartTime := Model.ModflowFullStressPeriods.First.StartTime;
 
     FNameOfFile := ChangeFileExt(AFileName, '.swi_obs_Script');
+    Model.FileNameLines.Add(
+      Format('  SWI %s', [ExtractFileName(FNameOfFile)]));
+
     OpenFile(FNameOfFile);
     try
       WriteString('BEGIN OBSERVATIONS');
@@ -1255,7 +1258,7 @@ begin
     stStandardDev: Result := 1/Sqr(Statistic);
     stCoefVar:  Result := 1/Sqr(Statistic * ObservedValue);
     stWeight: Result := Statistic;
-    stSquaredWeight: Result := Sqr(Statistic);
+    stSquaredWeight: Result := Sqrt(Statistic);
     else
       Assert(False);
   end;

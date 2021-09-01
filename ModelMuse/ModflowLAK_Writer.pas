@@ -939,6 +939,8 @@ begin
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
   ScriptFileName := ChangeFileExt(AFileName, '.Lake_script');
+  Model.FileNameLines.Add(
+    Format('  LAK %s', [ExtractFileName(ScriptFileName)]));
 
   OpenFile(ScriptFileName);
   try

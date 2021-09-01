@@ -1489,7 +1489,7 @@ begin
 
     {$IFDEF PEST}
     dgUp.Cells[Ord(scStartTime), PestModifierRow]:= StrPestModifier;
-    dgUp.Cells[Ord(scStartTime), PestModifierRow]:= StrModificationMethod;
+    dgUp.Cells[Ord(scStartTime), PestMethodRow]:= StrModificationMethod;
 
     PestMethod[dgUp, Ord(scK)] :=
       TSfrBoundary.DefaultBoundaryMethod(UpstreamKPosition);
@@ -1503,7 +1503,7 @@ begin
       TSfrBoundary.DefaultBoundaryMethod(UpstreamDepthPosition);
 
     dgDown.Cells[Ord(scStartTime), PestModifierRow]:= StrPestModifier;
-    dgDown.Cells[Ord(scStartTime), PestModifierRow]:= StrModificationMethod;
+    dgDown.Cells[Ord(scStartTime), PestMethodRow]:= StrModificationMethod;
 
     PestMethod[dgDown, Ord(scK)] :=
       TSfrBoundary.DefaultBoundaryMethod(DownstreamKPosition);
@@ -1517,7 +1517,7 @@ begin
       TSfrBoundary.DefaultBoundaryMethod(DownstreamDepthPosition);
 
     dgFlowTimes.Cells[Ord(sfcStartTime), PestModifierRow]:= StrPestModifier;
-    dgFlowTimes.Cells[Ord(sfcStartTime), PestModifierRow]:= StrModificationMethod;
+    dgFlowTimes.Cells[Ord(sfcStartTime), PestMethodRow]:= StrModificationMethod;
 
     PestMethod[dgFlowTimes, Ord(sfcFlow)] :=
       TSfrBoundary.DefaultBoundaryMethod(FlowPosition);
@@ -4265,6 +4265,16 @@ begin
     ClearTable(dgSfrEquation);
     ClearTable(dgTableTime);
     ClearTable(rdgNetwork);
+
+    {$IFDEF PEST}
+    dgUp.Cells[Ord(scStartTime), PestModifierRow]:= StrPestModifier;
+    dgUp.Cells[Ord(scStartTime), PestMethodRow]:= StrModificationMethod;
+    dgDown.Cells[Ord(scStartTime), PestModifierRow]:= StrPestModifier;
+    dgDown.Cells[Ord(scStartTime), PestMethodRow]:= StrModificationMethod;
+    dgFlowTimes.Cells[Ord(sfcStartTime),PestModifierRow] := StrPestModifier;
+    dgFlowTimes.Cells[Ord(sfcStartTime),PestMethodRow] := StrModificationMethod;
+    {$ENDIF}
+
 
     rdgParameters.Cells[Ord(spicParameter), 1] :=
       rdgParameters.Columns[Ord(spicParameter)].PickList[0];

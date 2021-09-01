@@ -5,7 +5,7 @@ interface
 uses
   ModflowBoundaryUnit, GoPhastTypes, OrderedCollectionUnit,
   System.Classes, ModflowCellUnit, System.ZLib, DataSetUnit, System.SysUtils,
-  System.Generics.Collections;
+  System.Generics.Collections, PestObsUnit;
 
 type
   TSwiRecord = record
@@ -18,6 +18,22 @@ type
     procedure RecordStrings(Strings: TStringList);
   end;
 
+  TSwiObsItem = class;
+
+  TSwiPestObsItem = class(TCustomObservationItem)
+  private
+    FSwiObsItem: TSwiObsItem;
+  protected
+    function GetScreenObject: TObject; override;
+    function GetName: string; override;
+    procedure SetName(const Value: string); override;
+    function GetObservedValue: double; override;
+    procedure SetObservedValue(const Value: double); override;
+    function GetWeight: Double; override;
+    procedure SetWeight(const Value: Double); override;
+    function GetComment: string; override;
+    procedure SetComment(const Value: string); override;
+  end;
 
   TSwiObsItem = class(TCustomLocationObservation)
   private
@@ -25,13 +41,18 @@ type
     FObservedValue: double;
     FStatistic: double;
     FStatFlag: TStatFlag;
+    FPestObsItem: TSwiPestObsItem;
     procedure SetObservedValue(const Value: double);
     procedure SetName(const Value: string);
     procedure SetStatFlag(const Value: TStatFlag);
     procedure SetStatistic(const Value: double);
+    procedure SetPestObsItem(const Value: TSwiPestObsItem);
   protected
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
+    function ScreenObject: TObject;
   public
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent); override;
@@ -42,6 +63,7 @@ type
     property ObservedValue: double read FObservedValue write SetObservedValue;
     property Statistic: double read FStatistic write SetStatistic;
     property StatFlag: TStatFlag read FStatFlag write SetStatFlag;
+    property PestObsItem: TSwiPestObsItem read FPestObsItem write SetPestObsItem;
   end;
 
   TSwiObservationTimeList = class;
@@ -227,6 +249,19 @@ begin
 
 end;
 
+constructor TSwiObsItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FPestObsItem := TSwiPestObsItem.Create(nil);
+  FPestObsItem.FSwiObsItem := self;
+end;
+
+destructor TSwiObsItem.Destroy;
+begin
+  FPestObsItem.Free;
+  inherited;
+end;
+
 procedure TSwiObsItem.InvalidateModel;
 begin
   (Collection as TSwiObsCollection).InvalidateModel;
@@ -250,6 +285,20 @@ end;
 procedure TSwiObsItem.SetObservedValue(const Value: double);
 begin
   SetRealProperty(FObservedValue, Value);
+end;
+
+procedure TSwiObsItem.SetPestObsItem(const Value: TSwiPestObsItem);
+begin
+  FPestObsItem.Assign(Value);
+end;
+
+function TSwiObsItem.ScreenObject: TObject;
+begin
+  result := nil;
+  if Collection <> nil then
+  begin
+    result := (Collection as TSwiObsCollection).ScreenObject;
+  end;
 end;
 
 procedure TSwiObsItem.SetName(const Value: string);
@@ -899,6 +948,115 @@ begin
     begin
       OnInvalidate(Self);
     end;
+  end;
+end;
+
+{ TSwiPestObsItem }
+
+function TSwiPestObsItem.GetComment: string;
+begin
+  result := FSwiObsItem.Comment;
+end;
+
+function TSwiPestObsItem.GetName: string;
+begin
+ result := FSwiObsItem.Name;
+end;
+
+function TSwiPestObsItem.GetObservedValue: double;
+begin
+  result := FSwiObsItem.ObservedValue;
+end;
+
+function TSwiPestObsItem.GetScreenObject: TObject;
+begin
+  result := FSwiObsItem.ScreenObject;
+end;
+
+function TSwiPestObsItem.GetWeight: Double;
+begin
+  result := 0;
+  case FSwiObsItem.StatFlag of
+    stVariance:
+      begin
+        result := 1/FSwiObsItem.Statistic;
+      end;
+    stStandardDev:
+      begin
+        result := Sqr(1/FSwiObsItem.Statistic);
+      end;
+    stCoefVar:
+      begin
+        Result := 1/Sqr(FSwiObsItem.Statistic * FSwiObsItem.ObservedValue);
+      end;
+    stWeight:
+      begin
+        result := FSwiObsItem.Statistic
+      end;
+    stSquaredWeight:
+      begin
+        if FSwiObsItem.Statistic >= 0 then
+        begin
+          result := Sqrt(FSwiObsItem.Statistic);
+        end;
+      end;
+    else
+      begin
+        result := 0;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TSwiPestObsItem.SetComment(const Value: string);
+begin
+  FSwiObsItem.Comment := Value;
+end;
+
+procedure TSwiPestObsItem.SetName(const Value: string);
+begin
+ FSwiObsItem.Name := Value;
+end;
+
+procedure TSwiPestObsItem.SetObservedValue(const Value: double);
+begin
+  FSwiObsItem.ObservedValue := Value;
+end;
+
+procedure TSwiPestObsItem.SetWeight(const Value: Double);
+begin
+  Assert(Value >= 0);
+  if Value = 0 then
+  begin
+    FSwiObsItem.Statistic := 0;
+    Exit;
+  end;
+  case FSwiObsItem.StatFlag of
+    stVariance:
+      begin
+        FSwiObsItem.Statistic := 1/Value;
+      end;
+    stStandardDev:
+      begin
+        FSwiObsItem.Statistic := Sqrt(1/Value);
+      end;
+    stCoefVar:
+      begin
+        Assert(FSwiObsItem.ObservedValue <> 0);
+        FSwiObsItem.Statistic := Sqrt(1/Value)/FSwiObsItem.ObservedValue
+      end;
+    stWeight:
+      begin
+        FSwiObsItem.Statistic := Value;
+      end;
+    stSquaredWeight:
+      begin
+        FSwiObsItem.Statistic := Sqr(Value);
+      end;
+    else
+      begin
+        Assert(False);
+      end;
   end;
 end;
 

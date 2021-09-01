@@ -809,6 +809,8 @@ begin
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
   ScriptFileName := ChangeFileExt(AFileName, '.mnw_script');
+  Model.FileNameLines.Add(
+    Format('  MNW2 %s', [ExtractFileName(ScriptFileName)]));
 
   OpenFile(ScriptFileName);
   try

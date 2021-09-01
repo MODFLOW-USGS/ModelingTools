@@ -1451,6 +1451,8 @@ begin
 
     StartTime := Model.ModflowFullStressPeriods.First.StartTime;
     ScriptFileName := ChangeFileExt(FNameOfFile, '.SwtObsScript');
+    Model.FileNameLines.Add(
+      Format('  SWT %s', [ExtractFileName(ScriptFileName)]));
     OpenFile(ScriptFileName);
     try
       WriteString('BEGIN OBSERVATIONS');

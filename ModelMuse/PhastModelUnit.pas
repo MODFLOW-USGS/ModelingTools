@@ -32602,6 +32602,7 @@ var
   ModflowSwtObservations: TSwtObservations;
   ObservationGroup: TCustomSutraFluxObservations;
   ObsComparisons: TGlobalObservationComparisons;
+  ModflowSwiObservations: TSwiObsBoundary;
 begin
   for ObjectIndex := 0 to ScreenObjectCount - 1 do
   begin
@@ -32768,6 +32769,22 @@ begin
                 AnObs := ModflowSwtObservations.Comparisons[ObsIndex];
                 List.Add(AnObs);
               end;
+            end;
+          end;
+        end;
+
+        if ModflowPackages.SwiPackage.IsSelected  then
+        begin
+          if (AScreenObject.ModflowSwiObservations <> nil)
+            and AScreenObject.ModflowSwiObservations.Used
+            and (AScreenObject.ModflowSwiObservations.Values.Count > 0) then
+          begin
+            ModflowSwiObservations := AScreenObject.ModflowSwiObservations;
+            for ObsIndex := 0 to ModflowSwiObservations.Values.Count - 1 do
+            begin
+              AnObs := (ModflowSwiObservations.Values.Items[ObsIndex]
+                as TSwiObsItem).PestObsItem;
+              List.Add(AnObs);
             end;
           end;
         end;

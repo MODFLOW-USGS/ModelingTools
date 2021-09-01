@@ -320,6 +320,8 @@ begin
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
   ScriptFileName := ChangeFileExt(AFileName, '.Gag_script');
+  Model.FileNameLines.Add(
+    Format('  SFR %s', [ExtractFileName(ScriptFileName)]));
 
   OpenFile(ScriptFileName);
   try
