@@ -52,8 +52,8 @@ UzfTest.ptf UzfTest.pval
 UzfTest.PestIns UzfTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * uzf1 = 1       1.00000     regul_Grp0
- eq_2          1.0 * uzf2 = 2       1.00000     regul_Grp1
- eq_3          1.0 * uzf3 = 3       1.00000     regul_Grp2
- eq_4          1.0 * uzf4 = 4       1.00000     regul_Grp3
+ eq_1          1.0 * uzf1 = 1       1     regul_Grp0
+ eq_2          1.0 * uzf2 = 2       1     regul_Grp1
+ eq_3          1.0 * uzf3 = 3       1     regul_Grp2
+ eq_4          1.0 * uzf4 = 4       1     regul_Grp3
 

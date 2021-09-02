@@ -61,10 +61,10 @@ EvtTest.ptf EvtTest.pval
 EvtTest.PestIns EvtTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * EvtRate = 1.1       1.00000     regul_Grp5
- eq_2          1.0 * EvtDepth = 1.2       1.00000     regul_Grp6
- eq_3          1.0 * EvtSurface = -1.3       1.00000     regul_Grp7
- eq_4          1.0 * ModifierRa = 1.4       1.00000     regul_Grp8
- eq_5          1.0 * ModDep = 1.5       1.00000     regul_Grp9
- eq_6          1.0 * ModSurf = 1.6       1.00000     regul_Grp10
+ eq_1          1.0 * EvtRate = 1.1       1     regul_Grp5
+ eq_2          1.0 * EvtDepth = 1.2       1     regul_Grp6
+ eq_3          1.0 * EvtSurface = -1.3       1     regul_Grp7
+ eq_4          1.0 * ModifierRa = 1.4       1     regul_Grp8
+ eq_5          1.0 * ModDep = 1.5       1     regul_Grp9
+ eq_6          1.0 * ModSurf = 1.6       1     regul_Grp10
 

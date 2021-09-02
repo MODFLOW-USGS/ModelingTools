@@ -47,5 +47,5 @@ StreamTest1.Kx.script.tpl StreamTest1.Kx.script
 StreamTest1.PestIns StreamTest1.Mf2005Values
 
 * prior information
- eq_1          1.0 * test1 = 1.1       1.00000     regul_Grp0
+ eq_1          1.0 * test1 = 1.1       1     regul_Grp0
 

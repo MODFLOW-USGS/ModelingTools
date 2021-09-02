@@ -49,8 +49,8 @@ SutraTest4.ptf SutraTest4.pval
 SutraTest4.PestIns SutraTest4.SutraValues
 
 * prior information
- eq_1          1.0 * a = 1       1.00000     regul_Grp3
- eq_2          1.0 * b = 1       1.00000     regul_Grp4
- eq_3          1.0 * conc1 = 1       1.00000     regul_Grp5
- eq_4          1.0 * conc2 = 1       1.00000     regul_Grp6
+ eq_1          1.0 * a = 1       1     regul_Grp3
+ eq_2          1.0 * b = 1       1     regul_Grp4
+ eq_3          1.0 * conc1 = 1       1     regul_Grp5
+ eq_4          1.0 * conc2 = 1       1     regul_Grp6
 

@@ -50,6 +50,6 @@ HfbMf6Test2.ptf HfbMf6Test2.pval
 HfbMf6Test2.PestIns HfbMf6Test2.Mf6Values
 
 * prior information
- eq_1          1.0 * a = 1.1       1.00000     regul_Grp2
- eq_2          1.0 * CHD_MF6 = 1       1.00000     regul_Grp3
+ eq_1          1.0 * a = 1.1       1     regul_Grp2
+ eq_2          1.0 * CHD_MF6 = 1       1     regul_Grp3
 

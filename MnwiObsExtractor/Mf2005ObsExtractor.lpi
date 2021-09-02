@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <General>
+      <Flags>
+        <MainUnitHasCreateFormStatements Value="False"/>
+        <MainUnitHasScaledStatement Value="False"/>
+      </Flags>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="Mf2005ObsExtractor"/>
+      <UseAppBundle Value="False"/>
+      <ResourceType Value="res"/>
+    </General>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <DestinationDirectory Value="C:\ModelingTools\MnwiObsExtractor\TestDir"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0"/>
+    </RunParams>
+    <RequiredPackages Count="2">
+      <Item1>
+        <PackageName Value="sparta_generics"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+      </Item2>
+    </RequiredPackages>
+    <Units Count="14">
+      <Unit0>
+        <Filename Value="Mf2005ObsExtractor.lpr"/>
+        <IsPartOfProject Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="readmnwioutput.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ReadMnwiOutput"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\ModelMuse\RealListUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="readinstructions.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="readgageoutput.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="obextractortypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ObExtractorTypes"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="readnamefile.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ReadNameFile"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="SwiObsUtilities.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="simpletextwriter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SimpleTextWriter"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="subsidenceobsextractor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SubsidenceObsExtractor"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="swioutputreaderunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SwiOutputReaderUnit"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\ModelMuse\InterpolatedObsResourceUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\SWI_ObsExtractor\SwiObsReaderUnit.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="swtobsextractor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SwtObsExtractor"/>
+      </Unit13>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="Mf2005ObsExtractor"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="..\ModelMuse;..\SWI_ObsExtractor"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <IncludeAssertionCode Value="True"/>
+      </SyntaxOptions>
+    </Parsing>
+    <CodeGeneration>
+      <Checks>
+        <IOChecks Value="True"/>
+        <RangeChecks Value="True"/>
+        <OverflowChecks Value="True"/>
+        <StackChecks Value="True"/>
+      </Checks>
+      <VerifyObjMethodCallValidity Value="True"/>
+    </CodeGeneration>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

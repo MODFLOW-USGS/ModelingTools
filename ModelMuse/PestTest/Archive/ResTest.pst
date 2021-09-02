@@ -57,8 +57,8 @@ ResTest.Reservoir_Bed_Thickness.script.tpl ResTest.Reservoir_Bed_Thickness.scrip
 ResTest.PestIns ResTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * ResStrt = 2       1.00000     regul_Grp4
- eq_2          1.0 * ResEnd = 1       1.00000     regul_Grp5
- eq_3          1.0 * ResArr = 1       1.00000     regul_Grp6
- eq_4          1.0 * ResOffset = 0.1       1.00000     regul_Grp7
+ eq_1          1.0 * ResStrt = 2       1     regul_Grp4
+ eq_2          1.0 * ResEnd = 1       1     regul_Grp5
+ eq_3          1.0 * ResArr = 1       1     regul_Grp6
+ eq_4          1.0 * ResOffset = 0.1       1     regul_Grp7
 

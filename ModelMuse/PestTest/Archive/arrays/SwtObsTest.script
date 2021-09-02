@@ -1,0 +1,1 @@
+read_scalar_file(file="C:\ModelingTools\ModelMuse\PestTest\arrays\SwtObsTest.ParamValues", valuecolumn=2, namecolumn=1)

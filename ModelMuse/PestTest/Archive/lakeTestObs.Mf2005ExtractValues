@@ -1,0 +1,10 @@
+BEGIN OUTPUT_FILES
+  LIST lakeTestObs.Mf2005ObsExtInsLst
+  OBSERVATIONS_FILE lakeTestObs.Mf2005Values
+END OUTPUT_FILES
+
+BEGIN INPUT_FILES
+  LAK lakeTestObs.Lake_script
+  HOB lakeTestObs.hob_out
+END INPUT_FILES
+

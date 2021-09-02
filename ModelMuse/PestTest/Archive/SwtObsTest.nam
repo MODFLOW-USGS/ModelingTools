@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 9/2/2021 by ModelMuse Version 4.3.0.61
+LIST             11 SwtObsTest.lst REPLACE
+DATA(BINARY)      9 SwtObsTest.cbc REPLACE
+DIS              12 SwtObsTest.dis OLD
+BAS6             13 SwtObsTest.bas OLD
+OC               39 SwtObsTest.oc OLD
+DATA             37 SwtObsTest.fhd REPLACE
+DATA             38 SwtObsTest.fdn REPLACE
+SIP              35 SwtObsTest.sip OLD
+LPF              14 SwtObsTest.lpf OLD
+CHD              17 SwtObsTest.chd OLD
+WEL              20 SwtObsTest.wel OLD
+SWT              68 SwtObsTest.swt OLD
+DATA(BINARY)    116 SwtObsTest.Swt_Out REPLACE

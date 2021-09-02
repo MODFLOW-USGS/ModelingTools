@@ -46,5 +46,5 @@ DrtTest.ptf DrtTest.pval
 DrtTest.PestIns DrtTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * Drt = 1       1.00000     regul_Grp0
+ eq_1          1.0 * Drt = 1       1     regul_Grp0
 

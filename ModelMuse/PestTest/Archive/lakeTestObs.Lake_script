@@ -1,0 +1,5 @@
+BEGIN OBSERVATIONS
+  # Observations defined in Object4
+  FILENAME C:\ModelingTools\ModelMuse\PestTest\lakeTestObs.lakg2
+  OBSERVATION Lak_2Lake Stage(H)  1.000000000000E+000   1.000000000000E+000   1.000000000000E+000  PRINT
+END OBSERVATIONS

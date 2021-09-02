@@ -49,6 +49,6 @@ Mnw1Test.ptf Mnw1Test.pval
 Mnw1Test.PestIns Mnw1Test.Mf2005Values
 
 * prior information
- eq_1          1.0 * Pump = 1.1       1.00000     regul_Grp0
- eq_2          1.0 * RefElev = 0.1       1.00000     regul_Grp1
+ eq_1          1.0 * Pump = 1.1       1     regul_Grp0
+ eq_2          1.0 * RefElev = 0.1       1     regul_Grp1
 

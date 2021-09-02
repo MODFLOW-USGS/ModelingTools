@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="Mnw2ObsTest" FileType="bin">
+    <FileName Model_Name="Mnw2ObsTest" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="Mnw2ObsTest" FileType="ancillary">
+    <FileName Model_Name="Mnw2ObsTest" FileType="ancillary">Mnw2ObsTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="Mnw2ObsTest" FileType="Model Input">
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">arrays\Mnw2ObsTest.Kx_1.arrays</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">arrays\Mnw2ObsTest.Kx_2.arrays</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">arrays\Mnw2ObsTest.Kx_3.arrays</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.bas</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.chd</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.dis</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.gsf</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.jtf</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.lpf</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.mnw2</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.mnwi</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.nam.archive</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.oc</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.pcg</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.ptf</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">Mnw2ObsTest.pval</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Input">usgs.Mnw2ObsTest.reference</FileName>
+  </model>
+  <output Model_Name="Mnw2ObsTest" FileType="Model Output">
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Output">Mnw2ObsTest.cbc</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Output">Mnw2ObsTest.fdn</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Output">Mnw2ObsTest.fhd</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Output">Mnw2ObsTest.lst</FileName>
+    <FileName Model_Name="Mnw2ObsTest" FileType="Model Output">Mnw2ObsTest_Well3.mnwi_out</FileName>
+  </output>
+</Model_Archive_List>

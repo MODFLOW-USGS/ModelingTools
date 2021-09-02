@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="DryCells" FileType="bin">
+    <FileName Model_Name="DryCells" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="DryCells" FileType="ancillary">
+    <FileName Model_Name="DryCells" FileType="ancillary">DryCells.gpt</FileName>
+  </ancillary>
+  <model Model_Name="DryCells" FileType="Model Input">
+    <FileName Model_Name="DryCells" FileType="Model Input">arrays\DryCells.Kx_1.arrays</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">arrays\DryCells.Kx_2.arrays</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">arrays\DryCells.Kx_3.arrays</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.bas</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.chd</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.dis</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.drn</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.gag</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.gsf</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.jtf</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.lpf</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.nam.archive</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.ob_drob</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.ob_hob</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.oc</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.pcg</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.ptf</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.pval</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">DryCells.sfr</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Input">usgs.DryCells.reference</FileName>
+  </model>
+  <output Model_Name="DryCells" FileType="Model Output">
+    <FileName Model_Name="DryCells" FileType="Model Output">DryCells.bhd</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Output">DryCells.cbc</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Output">DryCells.drob_out</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Output">DryCells.fdn</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Output">DryCells.hob_out</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Output">DryCells.lst</FileName>
+    <FileName Model_Name="DryCells" FileType="Model Output">DryCells.sfrg1</FileName>
+  </output>
+</Model_Archive_List>

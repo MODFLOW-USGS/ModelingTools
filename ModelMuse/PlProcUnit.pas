@@ -669,6 +669,7 @@ begin
       if AParam.ParameterType = ptPEST then
       begin
         FPNames.AddObject(LowerCase(AParam.ParameterName), AParam);
+        AParam.IsUsedInTemplate := True;
       end;
     end;
     FPNames.Sorted := True;

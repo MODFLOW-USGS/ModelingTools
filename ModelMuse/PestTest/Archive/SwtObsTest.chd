@@ -1,0 +1,13 @@
+# CHD: Time-Variant Specified-Head package file created on 9/2/2021 by ModelMuse version 4.3.0.61.
+     8 AUXILIARY IFACE # MXACTC Option
+     8     0 # Data Set 5: ITMP NP Stress period 1
+     1    20     8  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     2    20     8  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     3    20     8  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     4    20     8  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     1    20     9  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     2    20     9  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     3    20     9  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+     4    20     9  1.000000000000E+002   1.000000000000E+002      0 # Data Set 6: Layer Row Column Shead Ehead IFACE
+    -1     0 # Data Set 5: ITMP NP Stress period 2
+    -1     0 # Data Set 5: ITMP NP Stress period 3

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="lakeTestObs" FileType="bin">
+    <FileName Model_Name="lakeTestObs" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="lakeTestObs" FileType="ancillary">
+    <FileName Model_Name="lakeTestObs" FileType="ancillary">lakeTestObs.gpt</FileName>
+  </ancillary>
+  <model Model_Name="lakeTestObs" FileType="Model Input">
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_1.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_2.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_3.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_4.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_5.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_7.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_8.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">arrays\lakeTestObs.Lakebed_Leakance_9.arrays</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.bas</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.chd</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.dis</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.gag</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.gsf</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.jtf</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.lak</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.lpf</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.nam.archive</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.ob_hob</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.oc</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.pcg</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.ptf</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">lakeTestObs.pval</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Input">usgs.lakeTestObs.reference</FileName>
+  </model>
+  <output Model_Name="lakeTestObs" FileType="Model Output">
+    <FileName Model_Name="lakeTestObs" FileType="Model Output">lakeTestObs.cbc</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Output">lakeTestObs.fdn</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Output">lakeTestObs.fhd</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Output">lakeTestObs.hob_out</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Output">lakeTestObs.lakg1</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Output">lakeTestObs.lakg2</FileName>
+    <FileName Model_Name="lakeTestObs" FileType="Model Output">lakeTestObs.lst</FileName>
+  </output>
+</Model_Archive_List>

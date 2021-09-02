@@ -1,0 +1,14 @@
+# Name File for MODFLOW created on 9/2/2021 by ModelMuse Version 4.3.0.61
+LIST             11 Mnw2ObsTest.lst REPLACE
+DATA(BINARY)      9 Mnw2ObsTest.cbc REPLACE
+DIS              12 Mnw2ObsTest.dis OLD
+BAS6             13 Mnw2ObsTest.bas OLD
+OC               39 Mnw2ObsTest.oc OLD
+DATA             37 Mnw2ObsTest.fhd REPLACE
+DATA             38 Mnw2ObsTest.fdn REPLACE
+PCG              18 Mnw2ObsTest.pcg OLD
+LPF              14 Mnw2ObsTest.lpf OLD
+CHD              17 Mnw2ObsTest.chd OLD
+MNW2             59 Mnw2ObsTest.mnw2 OLD
+MNWI             60 Mnw2ObsTest.mnwi OLD
+DATA          20205 Mnw2ObsTest_Well3.mnwi_out REPLACE

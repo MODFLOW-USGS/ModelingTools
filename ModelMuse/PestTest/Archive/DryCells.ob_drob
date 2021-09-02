@@ -1,0 +1,6 @@
+# DROB: Drain Observation package file created on 9/2/2021 by ModelMuse version 4.3.0.61.
+1 1 1 45 # Data Set 1: NQDR NQCDR NQTDR IUDROBSV
+1 # Data Set 2: TOMULTDR
+1 1 # Data Set 3: NQOBDR NQCLDR
+Drob1_1 1  1.000000000000E+000 -1.000000000000E+000  # Data Set 4: OBSNAM IREFSP TOFFSET FLWOBS
+1 10 10  1.000000000000E+000  # Data Set 5: Layer Row Column Factor

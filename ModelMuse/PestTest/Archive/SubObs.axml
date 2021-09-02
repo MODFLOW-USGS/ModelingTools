@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SubObs" FileType="bin">
+    <FileName Model_Name="SubObs" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SubObs" FileType="ancillary">
+    <FileName Model_Name="SubObs" FileType="ancillary">SubObs.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SubObs" FileType="Model Input">
+    <FileName Model_Name="SubObs" FileType="Model Input">arrays\SubObs.Layer1_D_Delay_Interbed_Equivalent_Thickness_1.arrays</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.bas</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.bcf</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.chd</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.dis</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.gsf</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.jtf</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.nam.archive</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.oc</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.ptf</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.pval</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.sip</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.sub</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">SubObs.wel</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Input">usgs.SubObs.reference</FileName>
+  </model>
+  <output Model_Name="SubObs" FileType="Model Output">
+    <FileName Model_Name="SubObs" FileType="Model Output">SubObs.cbc</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Output">SubObs.fdn</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Output">SubObs.fhd</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Output">SubObs.lst</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Output">SubObs.SubComIsOut</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Output">SubObs.SubComMlOut</FileName>
+    <FileName Model_Name="SubObs" FileType="Model Output">SubObs.SubSubOut</FileName>
+  </output>
+</Model_Archive_List>

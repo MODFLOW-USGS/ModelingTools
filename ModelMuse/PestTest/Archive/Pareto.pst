@@ -61,7 +61,7 @@ Pareto.ptf Pareto.pval
 Pareto.PestIns Pareto.Mf6Values
 
 * prior information
- eq_1          1.0 * Q_Par1 = 2       1.00000     regul_Grp5
+ eq_1          1.0 * Q_Par1 = 2       1     regul_Grp5
 
 * pareto
 predict

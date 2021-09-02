@@ -48,6 +48,6 @@ FarmTest1.ptf FarmTest1.pval
 FarmTest1.PestIns FarmTest1.Mf2005Values
 
 * prior information
- eq_1          1.0 * frm = 1000       1.00000     regul_Grp0
- eq_2          1.0 * WELLS1 = 1000       1.00000     regul_Grp1
+ eq_1          1.0 * frm = 1000       1     regul_Grp0
+ eq_2          1.0 * WELLS1 = 1000       1     regul_Grp1
 

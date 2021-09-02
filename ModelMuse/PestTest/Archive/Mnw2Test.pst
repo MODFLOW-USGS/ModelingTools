@@ -52,8 +52,8 @@ Mnw2Test.ptf Mnw2Test.pval
 Mnw2Test.PestIns Mnw2Test.Mf2005Values
 
 * prior information
- eq_1          1.0 * MnPump = 1.1       1.00000     regul_Grp0
- eq_2          1.0 * MnPump2 = -4E-005       1.00000     regul_Grp1
- eq_3          1.0 * MnRw = 0.51       1.00000     regul_Grp2
- eq_4          1.0 * MnwPP = 0.81       1.00000     regul_Grp3
+ eq_1          1.0 * MnPump = 1.1       1     regul_Grp0
+ eq_2          1.0 * MnPump2 = -4E-005       1     regul_Grp1
+ eq_3          1.0 * MnRw = 0.51       1     regul_Grp2
+ eq_4          1.0 * MnwPP = 0.81       1     regul_Grp3
 

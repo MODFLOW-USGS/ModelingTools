@@ -48,5 +48,5 @@ Drntest.test.script.tpl Drntest.test.script
 Drntest.PestIns Drntest.Mf2005Values
 
 * prior information
- eq_1          1.0 * DrCon2 = 0.001       1.00000     regul_Grp0
+ eq_1          1.0 * DrCon2 = 0.001       1     regul_Grp0
 

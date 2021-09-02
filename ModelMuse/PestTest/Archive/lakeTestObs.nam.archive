@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 9/2/2021 by ModelMuse Version 4.3.0.61
+LIST             11 ..\..\output\output.lakeTestObs\lakeTestObs.lst REPLACE
+DATA(BINARY)      9 ..\..\output\output.lakeTestObs\lakeTestObs.cbc REPLACE
+DIS              12 ..\..\model\model.lakeTestObs\lakeTestObs.dis OLD
+BAS6             13 ..\..\model\model.lakeTestObs\lakeTestObs.bas OLD
+OC               39 ..\..\model\model.lakeTestObs\lakeTestObs.oc OLD
+DATA             37 ..\..\output\output.lakeTestObs\lakeTestObs.fhd REPLACE
+DATA             38 ..\..\output\output.lakeTestObs\lakeTestObs.fdn REPLACE
+PCG              18 ..\..\model\model.lakeTestObs\lakeTestObs.pcg OLD
+LPF              14 ..\..\model\model.lakeTestObs\lakeTestObs.lpf OLD
+CHD              17 ..\..\model\model.lakeTestObs\lakeTestObs.chd OLD
+LAK              28 ..\..\model\model.lakeTestObs\lakeTestObs.lak OLD
+DATA          20205 ..\..\output\output.lakeTestObs\lakeTestObs.lakg1 REPLACE
+DATA          20206 ..\..\output\output.lakeTestObs\lakeTestObs.lakg2 REPLACE
+GAGE             40 ..\..\model\model.lakeTestObs\lakeTestObs.gag OLD
+HOB              41 ..\..\model\model.lakeTestObs\lakeTestObs.ob_hob OLD
+DATA             42 ..\..\output\output.lakeTestObs\lakeTestObs.hob_out REPLACE

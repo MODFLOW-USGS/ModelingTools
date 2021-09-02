@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SWI1" FileType="bin">
+    <FileName Model_Name="SWI1" FileType="bin">..\Debug\Win32\SwiObsExtractor.exe</FileName>
+    <FileName Model_Name="SWI1" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SWI1" FileType="ancillary">
+    <FileName Model_Name="SWI1" FileType="ancillary">SWI1.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SWI1" FileType="Model Input">
+    <FileName Model_Name="SWI1" FileType="Model Input">arrays\SWI1.Kx_1.arrays</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.bas</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.chd</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.dis</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.gsf</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.jtf</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.lpf</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.nam.archive</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.oc</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.pcg</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.ptf</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.pval</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.swi</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">SWI1.wel</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Input">usgs.SWI1.reference</FileName>
+  </model>
+  <output Model_Name="SWI1" FileType="Model Output">
+    <FileName Model_Name="SWI1" FileType="Model Output">SWI1.cbc</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Output">SWI1.fdn</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Output">SWI1.fhd</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Output">SWI1.lst</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Output">SWI1.swi_obs</FileName>
+    <FileName Model_Name="SWI1" FileType="Model Output">SWI1.zta</FileName>
+  </output>
+  <SWI_Observation_Extractor_Input_Files Model_Name="SWI1" FileType="SWI_Observation_Extractor Input">
+    <FileName Model_Name="SWI1" FileType="SWI_Observation_Extractor Input">GenerateSwiTemplate.bat</FileName>
+    <FileName Model_Name="SWI1" FileType="SWI_Observation_Extractor Input">GenerateSwiTemplate.bat.archive</FileName>
+    <FileName Model_Name="SWI1" FileType="SWI_Observation_Extractor Input">RunSwiObsExtractor.bat</FileName>
+    <FileName Model_Name="SWI1" FileType="SWI_Observation_Extractor Input">RunSwiObsExtractor.bat.archive</FileName>
+    <FileName Model_Name="SWI1" FileType="SWI_Observation_Extractor Input">SWI1.swi_obsit.archive</FileName>
+    <FileName Model_Name="SWI1" FileType="SWI_Observation_Extractor Input">SWI1.swi_obsiv.archive</FileName>
+  </SWI_Observation_Extractor_Input_Files>
+  <SWI_Observation_Extractor_Output_Files Model_Name="SWI1" FileType="SWI_Observation_Extractor Output">
+    <FileName Model_Name="SWI1" FileType="SWI_Observation_Extractor Output">SWI1.swi_obsi_out</FileName>
+  </SWI_Observation_Extractor_Output_Files>
+</Model_Archive_List>

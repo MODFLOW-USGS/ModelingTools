@@ -1,0 +1,17 @@
+# Name File for MODFLOW created on 9/2/2021 by ModelMuse Version 4.3.0.61
+LIST             11 lakeTestObs.lst REPLACE
+DATA(BINARY)      9 lakeTestObs.cbc REPLACE
+DIS              12 lakeTestObs.dis OLD
+BAS6             13 lakeTestObs.bas OLD
+OC               39 lakeTestObs.oc OLD
+DATA             37 lakeTestObs.fhd REPLACE
+DATA             38 lakeTestObs.fdn REPLACE
+PCG              18 lakeTestObs.pcg OLD
+LPF              14 lakeTestObs.lpf OLD
+CHD              17 lakeTestObs.chd OLD
+LAK              28 lakeTestObs.lak OLD
+DATA          20205 lakeTestObs.lakg1 REPLACE
+DATA          20206 lakeTestObs.lakg2 REPLACE
+GAGE             40 lakeTestObs.gag OLD
+HOB              41 lakeTestObs.ob_hob OLD
+DATA             42 lakeTestObs.hob_out REPLACE

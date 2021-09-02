@@ -49,5 +49,5 @@ CSubExampletest.Confining_Bed_InitialPorosity.script.tpl CSubExampletest.Confini
 CSubExampletest.PestIns CSubExampletest.Mf6Values
 
 * prior information
- eq_1          1.0 * a = 1       1.00000     regul_Grp0
+ eq_1          1.0 * a = 1       1     regul_Grp0
 

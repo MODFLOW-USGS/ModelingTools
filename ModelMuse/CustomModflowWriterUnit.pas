@@ -1143,7 +1143,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   System.AnsiStrings;
 
 resourcestring
-  StrTheFollowingParame = 'The following %s parameters are being skipped ' +
+  StrTheFollowingParameSkip = 'The following %s parameters are being skipped ' +
   'because they have no cells associated with them.';
   StrValueTooLong = 'Value too long';
   StrSIsTooLong10 = '%s is too long to be displayed with 10 characters';
@@ -1207,7 +1207,7 @@ resourcestring
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
-  StrObsSeriesExtractore = 'ObsSeriesExtractor.exe';
+  StrMf2005ObsExtractor = 'Mf2005ObsExtractor.exe';
   StrPlprocexe = 'plproc.exe';
   StrEnhancedTemplateProc = 'EnhancedTemplateProcessor.exe';
 
@@ -1583,7 +1583,7 @@ begin
         WriteInstuctionsBatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
         InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
         WriteInstuctionsBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
-          StrObsSeriesExtractore, FileName)
+          StrMf2005ObsExtractor, FileName)
           + ' ' + InsFileName);
         WriteInstuctionsBatchFile.Add('pause');
       end
@@ -1708,7 +1708,7 @@ begin
         else
         begin
           ParamEstBatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
-            StrObsSeriesExtractore, ExtractFileName(FileName)) + ' '
+            StrMf2005ObsExtractor, ExtractFileName(FileName)) + ' '
             + ChangeFileExt(ExtractFileName(FileName), '.Mf2005ExtractValues'));
         end;
       end;
@@ -1718,7 +1718,7 @@ begin
         begin
           InsFileName := ExtractFileName(ChangeFileExt(FileName, StrMf2005WriteIns));
           BatchFile.Add(TCustomFileWriter.PestUtilityProgramPath(
-            StrObsSeriesExtractore, FileName) + ' ' + InsFileName);
+            StrMf2005ObsExtractor, FileName) + ' ' + InsFileName);
         end
         else
         begin
@@ -5899,7 +5899,7 @@ begin
       Else Assert(False);
     end;
     ErrorMessage := Format(ErrorRoot, [Trim(PARTYP)]);
-    SkippedParamWarning := Format(StrTheFollowingParame, [Trim(PARTYP)]);
+    SkippedParamWarning := Format(StrTheFollowingParameSkip, [Trim(PARTYP)]);
     NoParametersError := Format(StrNoParametersAreBe, [Trim(PARTYP)]);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, ErrorMessage);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, SkippedParamWarning);
@@ -6069,7 +6069,7 @@ begin
     Else Assert(False);
   end;
   ErrorMessage := Format(ErrorRoot, [Trim(PARTYP)]);
-  SkippedParamWarning := Format(StrTheFollowingParame, [Trim(PARTYP)]);
+  SkippedParamWarning := Format(StrTheFollowingParameSkip, [Trim(PARTYP)]);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, ErrorMessage);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, SkippedParamWarning);
   for ParamIndex := 0 to Model.ModflowTransientParameters.Count - 1 do

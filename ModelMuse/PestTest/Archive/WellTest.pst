@@ -47,5 +47,5 @@ WellTest.Horizontal_Anisotropy.script.tpl WellTest.Horizontal_Anisotropy.script
 WellTest.PestIns WellTest.Mf2005Values
 
 * prior information
- eq_1          1.0 * abc = 1.1       1.00000     regul_Grp0
+ eq_1          1.0 * abc = 1.1       1     regul_Grp0
 

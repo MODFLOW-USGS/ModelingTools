@@ -1,0 +1,15 @@
+# Name File for MODFLOW created on 9/2/2021 by ModelMuse Version 4.3.0.61
+LIST             11 SWI1.lst REPLACE
+DATA(BINARY)      9 SWI1.cbc REPLACE
+DIS              12 SWI1.dis OLD
+BAS6             13 SWI1.bas OLD
+OC               39 SWI1.oc OLD
+DATA             37 SWI1.fhd REPLACE
+DATA             38 SWI1.fdn REPLACE
+PCG              18 SWI1.pcg OLD
+LPF              14 SWI1.lpf OLD
+CHD              17 SWI1.chd OLD
+WEL              20 SWI1.wel OLD
+SWI2            168 SWI1.swi OLD
+DATA            169 SWI1.swi_obs REPLACE
+DATA(BINARY)    170 SWI1.zta REPLACE

@@ -50,9 +50,9 @@ SutraGenBoundLakeTest.ptf SutraGenBoundLakeTest.pval
 SutraGenBoundLakeTest.PestIns SutraGenBoundLakeTest.SutraValues
 
 * prior information
- eq_1          1.0 * a = 1.1       1.00000     regul_Grp0
- eq_2          1.0 * IP = 8.1       1.00000     regul_Grp1
- eq_3          1.0 * IU = 0.1       1.00000     regul_Grp2
- eq_4          1.0 * RFrac = 0.11       1.00000     regul_Grp3
- eq_5          1.0 * DFrac = 0.09       1.00000     regul_Grp4
+ eq_1          1.0 * a = 1.1       1     regul_Grp0
+ eq_2          1.0 * IP = 8.1       1     regul_Grp1
+ eq_3          1.0 * IU = 0.1       1     regul_Grp2
+ eq_4          1.0 * RFrac = 0.11       1     regul_Grp3
+ eq_5          1.0 * DFrac = 0.09       1     regul_Grp4
 
