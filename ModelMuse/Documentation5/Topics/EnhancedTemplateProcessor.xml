@@ -1,9 +1,413 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>EnhancedTemplateProcessor</title>
+  <title translate="true">EnhancedTemplateProcessor</title>
   <body>
-    <header><para styleclass="Heading1">EnhancedTemplateProcessor</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">EnhancedTemplateProcessor</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">EnhancedTemplateProcessor is a tool for tool for creating model input files from a model based on a template. EnhancedTemplateProcessor can replace a formula in the template with the value derived by evaluating that formula. It can also optionally replace parameter names with the values associated with values associated with those names or replace a reference to an array with a value from an array.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Usage:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">EnhancedTemplateProcessor &lt;template name&gt; [&lt;PVAL file name&gt;][&lt;Arrays file name&gt;]</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Run EnhancedTemplateProcessor from the command line followed by the name of a template file and (optionally) the names of a PVAL file containing the names and values of the parameters that should be substituted into the file and a Arrays file name containing the names of arrays, their dimensions, and the names of files containing their data. If the file names contain whitespace, the names must be enclosed in quotation marks. If the file names do not contain whitespace, quotation marks around the file names are optional. The template file name must contain an extension. The output of the program is a file with the same name as the template except that the extension will have been removed from the file name. The contents of the output file will be the contents of the input file after having been processed.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">PVAL File Format:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The PVAL file format is the same as documented for MODFLOW-2005. However, If a line starts with “#--“, the remainder of the line will be treated as defining a parameter for the purposes of EnhancedTemplateProcessor. All such lines must follow the lines defining parameters for MODFLOW-2005 for to ensure that the lines will be ignored by MODFLOW-2005.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Arrays File Format:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The first line in the Arrays file must contain a single character that will be used to delineate array substitutions within the template. It must not be the space character. It also must be different from the parameter delimiter and formula delimiter used in template files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The remaining lines in the arrays file that are empty or start with the character “#” will be skipped. All other lines define three-dimensional arrays of real numbers. Each such line has the name of an array immediately followed by an open bracket character “[“. The open bracket character is followed by three positive integers and then a close bracket character “]”. The integers represent the number of layers, rows, and columns in the array respectively. The array dimensions must be separated by commas and/or one or more spaces. Following the close bracket character are the names of one or more files containing the data for the array. If the file names contain spaces, they must be enclosed in double quotation marks. Each line of these files must contain one or more or more values for the array. The values must be separated by commas and/or one or more space characters. When reading the array values, the column index will be incremented most frequently and the layer index will be incremented least frequently. Array names are not case sensitive. Array names may consist only of the characters “A” through” Z”, “a” through “z”, “0” through”9” and “_”. </text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Template file Format:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Array used for substitution can be read in either of two ways. Either the name of an arrays file can be included on the command line after the PVAL file name or it can be read using an ReadArrays command included in the template. A ReadArrays command must immediately follow the formula delimiter (see below). The ReadArrays command has a pair of parentheses enclosing the name of an arrays file. An example is shown below.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">%ReadArrays(C:\ModelingTools\ModelMuse\PestTest\Drntest.drn.arrays)%</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Any line containing the ReadArrays command will be processed for one arrays file. No other operations will be performed on that line and the line will not be included in the final output file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In each line of a template file that does not include a ReadArrays command, the first operation to be performed is to replace references to arrays with the array values. Each array reference must be preceded and followed by the array delineator defined on the first line of the array file. The number of spaces between the initial array delineator and the beginning of the array name determines the number of characters used to print the array value. In the text between the &#160;array delineators, the array name must appear immediately followed by the an open bracket character, the layer, row, and column indices and the closed bracket character. The layer, row, and column indices must be greater than or equal to1 and less than or equal to the layer count, row count, or column count respectively. The corresponding value will be printed, right justified, in place of the text between the array delineators inclusive.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If parameter names are to be replaced by parameter values, the first line of the file must begin with either &quot;ptf &quot; or &quot;jtf &quot; followed by a single character. The character, known as the “parameter delimiter”, is used to specify locations in the file at which parameter names are replaced by parameter values. The parameter names must be surrounded by a pair of the parameter delimiters. Extra spaces are allowed and encouraged before and after the parameter name but within the pair of the parameter delimiters. When the parameter name is replaced, everything between the parameter delimiters and the delimiters themselves will be replaced by the parameter value. If the parameter value is too long to fit within the available space, it will be truncated to fit. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The next line of the template (or the first line if the parameter delimiter line is not included) must begin with &quot;etf &quot; followed by a single character. This character is the formula delimiter. It plays a role similar to the parameter delimiter. A formula should be included between a pair of formula delimiters. However, the width of the available space is indicated differently from how it is done with parameter delimiters. The available space extends from the first formula delimiter through the first character before the beginning of the formula. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The parameter delimiter must be different from the formula delimiter. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The parameter delimiter character can not occur anywhere in the template except where it functions as a parameter delimiter.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The formula delimiter character can not occur anywhere in the template except where it functions as a formula delimiter.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There is no restriction imposed by EnhancedTemplateProcessor on the length of lines in template or PVAL files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There is no restriction imposed by EnhancedTemplateProcessor on the length of parameter names in PVAL files or template files.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Parameter names must not include whitespace.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Formulas:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Formulas must evaluate to a real number. Note that while logical operations are possible, a formula that depends on parameter values should be a continuous function of the parameters. Failing to follow this rule can result in a failure of the parameter estimation process.</text></para>
+    <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Operators:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true"> &#160;The following operators are available in formulas.</text></para>
+    <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 1. Operators in Formulas</text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="19" colcount="4" style="cell-padding:1px; cell-spacing:1px; border-width:1px; border-spacing:1px; cell-border-width:2px; border-color:#000000; border-style:solid;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Operator</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Meaning</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Data Types</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Result type</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">=</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">equals</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers, Booleans, text</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">&lt;&gt;</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">not equals</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers, Booleans, text</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">&gt;</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">greater than</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers, Booleans, text</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">&lt;</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">less than</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers, Booleans, text</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">&gt;=</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">greater than or equals</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers, Booleans, text</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">&lt;=</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">less than or equals</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers, Booleans, text</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">and</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">and</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Booleans</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">or</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">or</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Booleans</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">xor</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">exclusive or</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Booleans</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">not</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">not</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Booleans</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Boolean</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">mod</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">modulus (remainder)</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">integers</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">integer</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">div</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">integer division</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">integers</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">integer</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">^</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">raise a number to a power</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real number</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">**</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">raise a number to a power</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real number</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">*</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">multiplication</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real number, integer</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">/</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">division</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real number, integer</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">+</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">addition or concatenation</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">numbers, integers, text</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real number, integer, text</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">-</text></para>
+        </td>
+        <td>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">subtraction</text></para>
+        </td>
+        <td style="width:289px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real numbers, integers</text></para>
+        </td>
+        <td style="width:417px;">
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">real number, integer</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The operator precedence rules are shown in table 2. Operators that are part of the same group have equal precedence. Operators of equal precedence are evaluated in order from left to right.</text></para>
+    <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 2. Operator precedence rules </text></para>
+    <para styleclass="Normal"><table styleclass="Default" rowcount="6" colcount="2" style="cell-padding:1px; cell-spacing:1px; border-width:1px; border-spacing:1px; cell-border-width:2px; border-color:#000000; border-style:solid;">
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Operators</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Precedence</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">( )</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">first (highest)</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">not, ^, **</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">second</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">and, mod, div, *, /</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">third</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">or, xor, +, -</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">fourth</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">=, &lt;&gt;, &gt;, &lt;, &gt;=, &lt;=</text></para>
+        </td>
+        <td>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">fifth (lowest)</text></para>
+        </td>
+      </tr>
+    </table></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Functions:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The same logical, math, text, and trigonometric functions available in ModelMuse are also available in EnhancedTemplateProcessor.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Description of Operations:</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">EnhancedTemplateProcessor does not have equivalents of the PRECIS or DPOINT variables in PEST.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">EnhancedTemplateProcessor processes a template file in the following sequence.</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">EnhancedTemplateProcessor reads the names of the template file, PVAL file, and Array file from the command line. The PVAL and Array file are optional.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">It reads the PVAL file, if specified, and associates each parameter name with a real-number value. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">It reads the array file, if specified.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">It then opens the template file and reads the parameter delimiter (if specified) and formula delimiter. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">It then reads the following lines one by one. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If the line contains a ReadArrays command, the array is read.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In each line, array references are replaced by array values.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In each line, any parameter names enclosed within parameter delimiters are replaced by the associated values. </text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">In each line, any formulas in the line are evaluated &#160;and replaced with the evaluated value.</text></li>
+    </list>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Template Example:</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">ptf @</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">etf !</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">this is a line with nothing to replace in it.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with a parameter value &quot;@ &#160; HK1@&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with a formula &quot;! &#160; &#160; 2/3*100000!&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with formula containing two parameters and a formula &quot;! &#160; &#160; @ &#160;HK2 &#160; @ + @ &#160; HK3 &#160;@!&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with two array substitutions &quot;~ &#160; &#160; &#160; &#160; &#160; &#160;Kx[1,5,5]~&quot;, &quot;~ &#160; &#160; &#160; &#160; &#160; &#160;Kx[2,5,5]~&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Array substitution and a parameter inside a formula &quot;!~ &#160; &#160; &#160; &#160; &#160; &#160;Kx[1,5,5]~ + @ &#160;HK1 &#160; @ !&quot;</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">PVAL File Example:</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">18</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HK1 &#160; &#160; &#160; &#160;1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HK2 &#160; &#160; &#160; &#160;0.01</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HK3 &#160; &#160; &#160; &#160;0.0001</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">HK4 &#160; &#160; &#160; &#160;1E-6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA12_1 &#160; &#160;0.25</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA12_2 &#160; &#160;0.0025</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA12_3 &#160; &#160;2.5E-5</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA12_4 &#160; &#160;2.5E-7</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA3_1 &#160; &#160; 1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA3_2 &#160; &#160; 0.01</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA3_3 &#160; &#160; 0.0001</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">VKA3_4 &#160; &#160; 1E-6</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">KDEP_Par1 &#160;0.9</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">LVDA_Par1 1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">GHB 1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">DRAIN 1</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">RCH 0.00031</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">ETM 0.0004</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Example Arrays File:</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">~</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Kx[3, 10, 10] &quot;Drn test.lpf.Kx_1.txt&quot;, &quot;Drn test.lpf.Kx_2.txt&quot; &quot;Drn test.lpf.Kx_3.txt&quot;</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Example Output File:</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">this is a line with nothing to replace in it.</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with a parameter value &quot; &#160; &#160; &#160; 1&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with a formula &quot;66666.&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with formula containing two parameters and a formula &quot;0.0101&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">This is a line with two array substitutions &quot; &#160; &#160; &#160; 0.044&quot;, &quot; &#160; &#160; &#160; 0.144&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Code Example" translate="true">Array substitution and a parameter inside a formula &quot; &#160; 1.044&quot;</text></para>
+    <para styleclass="Normal"></para>
   </body>
 </topic>

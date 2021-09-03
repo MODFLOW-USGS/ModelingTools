@@ -1258,6 +1258,8 @@ resourcestring
   StrThereWasAnErrorReading = 'There was an error reading this %0:s file. Th' +
   'e error message was "%1:s" Contact the ModelMuse developer for more assis' +
   'tance.';
+  StrTheFollowingLines = 'The following lines from the file could not be rea' +
+  'd correctly and have been skipped. Only up to 10 lines will be displayed.';
 
 const
   StrSTARTLAY: AnsiString = 'START_LAY';
@@ -4606,6 +4608,7 @@ var
   XOffSet: double;
   YOffSet: double;
   OAngle : double;
+  ErrorLines: TStringList;
   function RotateToRealWorldCoordinates(
     const APoint: TPoint2D): TPoint2D;
   var
@@ -4742,6 +4745,7 @@ begin
   AssignFile(FTextFile, FFileName);
   GroupNames := TStringList.Create;
   Splitter:= TStringList.Create;
+  ErrorLines := TStringList.Create;
   try
     Splitter.Delimiter := ' ';
 
@@ -4825,6 +4829,7 @@ begin
       Splitter.DelimitedText := Trim(ALine);
       Assert(Splitter.Count = 26);
 
+      try
       SequenceNumber := StrToInt(Splitter[0]);
       ParticleGroup := StrToInt(Splitter[1]);
       ParticleID := StrToInt(Splitter[2]);
@@ -4871,8 +4876,22 @@ begin
           MaxParticleGroup := ParticleGroup;
         end;
       end;
+      except on EConvertError do
+        begin
+          if ErrorLines.Count < 10 then
+          begin
+            ErrorLines.Add(ALine);
+          end;
+        end;
+      end;
+    end;
+    if ErrorLines.Count > 0 then
+    begin
+      Beep;
+      MessageDlg(StrTheFollowingLines + sLineBreak + ErrorLines.Text, mtError, [mbOK], 0);
     end;
   finally
+    ErrorLines.Free;
     Splitter.Free;
     GroupNames.Free;
     CloseFile(FTextFile);
@@ -6553,6 +6572,7 @@ var
   NCol: Integer;
   LocalModel: TCustomModel;
   APoint2D: TPoint2D;
+  ErrorLines: TStringList;
   function RotateToRealWorldCoordinates(
     const APoint: TPoint2D): TPoint2D;
   var
@@ -6667,7 +6687,8 @@ begin
   NRow := Grid.RowCount;
   NCol := Grid.ColumnCount;
 
-  Splitter:= TStringList.Create;
+  Splitter := TStringList.Create;
+  ErrorLines := TStringList.Create;
   AssignFile(FTextFile, FFileName);
   try
     Splitter.Delimiter := ' ';
@@ -6712,6 +6733,7 @@ begin
       Splitter.DelimitedText := ALine;
       Assert(Splitter.Count = 14);
 
+      try
       TimeStepIndex := StrToInt(Splitter[0]);
       TS := StrToInt(Splitter[1]);
       TrackingTime := FortranStrToFloat(Splitter[2]);
@@ -6746,8 +6768,22 @@ begin
           MaxParticleGroup := ParticleGroup
         end;
       end;
+      except on EConvertError do
+        begin
+          if ErrorLines.Count < 10 then
+          begin
+            ErrorLines.Add(ALine);
+          end;
+        end;
+      end;
+    end;
+    if ErrorLines.Count > 0 then
+    begin
+      Beep;
+      MessageDlg(StrTheFollowingLines + sLineBreak + ErrorLines.Text, mtError, [mbOK], 0);
     end;
   finally
+    ErrorLines.Free;
     Splitter.Free;
     CloseFile(FTextFile);
   end;
@@ -8159,6 +8195,7 @@ var
   PIndex: Integer;
   APoint2D: TPoint2D;
   LineIndex: Integer;
+  ErrorLines: TStringList;
   function RotateToRealWorldCoordinates(
     const APoint: TPoint2D): TPoint2D;
   var
@@ -8276,6 +8313,7 @@ begin
 
   LineIndex := 0;
   Splitter:= TStringList.Create;
+  ErrorLines := TStringList.Create;
   AssignFile(FTextFile, FFileName);
   try
     try
@@ -8361,35 +8399,44 @@ begin
             end;
             Assert(Splitter.Count = 11, Format(StrErrorReadingTheFo, [LineIndex,ALine]));
 
-            CellNumber := StrToInt(Splitter[0]);
-            XPrime := FortranStrToFloat(Splitter[1]);
-            YPrime := FortranStrToFloat(Splitter[2]);
-            Z := FortranStrToFloat(Splitter[3]);
-            Time := FortranStrToFloat(Splitter[4]);
-            LocalX := FortranStrToFloat(Splitter[5]);
-            LocalY := FortranStrToFloat(Splitter[6]);
-            LocalZ := FortranStrToFloat(Splitter[7]);
-            Layer := StrToInt(Splitter[8]);
-            StressPeriod := StrToInt(Splitter[9]);
-            TimeStep := StrToInt(Splitter[10]);
+            try
+              CellNumber := StrToInt(Splitter[0]);
+              XPrime := FortranStrToFloat(Splitter[1]);
+              YPrime := FortranStrToFloat(Splitter[2]);
+              Z := FortranStrToFloat(Splitter[3]);
+              Time := FortranStrToFloat(Splitter[4]);
+              LocalX := FortranStrToFloat(Splitter[5]);
+              LocalY := FortranStrToFloat(Splitter[6]);
+              LocalZ := FortranStrToFloat(Splitter[7]);
+              Layer := StrToInt(Splitter[8]);
+              StressPeriod := StrToInt(Splitter[9]);
+              TimeStep := StrToInt(Splitter[10]);
 
-            CreateParticle;
+              CreateParticle;
 
-            if FirstLine then
-            begin
-              MinParticleGroup := ParticleGroup;
-              MaxParticleGroup := ParticleGroup;
-              FirstLine := False;
-            end
-            else
-            begin
-              if ParticleGroup < MinParticleGroup then
+              if FirstLine then
               begin
                 MinParticleGroup := ParticleGroup;
-              end;
-              if ParticleGroup > MaxParticleGroup then
-              begin
                 MaxParticleGroup := ParticleGroup;
+                FirstLine := False;
+              end
+              else
+              begin
+                if ParticleGroup < MinParticleGroup then
+                begin
+                  MinParticleGroup := ParticleGroup;
+                end;
+                if ParticleGroup > MaxParticleGroup then
+                begin
+                  MaxParticleGroup := ParticleGroup;
+                end;
+              end;
+            except on EConvertError do
+              begin
+                if ErrorLines.Count < 10 then
+                begin
+                  ErrorLines.Add(ALine);
+                end;
               end;
             end;
           end;
@@ -8402,7 +8449,13 @@ begin
         Exit;
       end;
     end;
+    if ErrorLines.Count > 0 then
+    begin
+      Beep;
+      MessageDlg(StrTheFollowingLines + sLineBreak + ErrorLines.Text, mtError, [mbOK], 0);
+    end;
   finally
+    ErrorLines.Free;
     Splitter.Free;
     try
       CloseFile(FTextFile);

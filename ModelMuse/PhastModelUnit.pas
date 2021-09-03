@@ -10339,10 +10339,13 @@ const
 //    '4.3.0.59' No changes in released version.
 //    '4.3.0.60' Added no function MaxSutraNodeValueInElement
 //    '4.3.0.61' No real change.
+//    '4.3.0.62' Change: When reading pathline, endpoint, or time-series files
+//                from MODPATH 7, ModelMuse will skip lines that contain NaN
+//                instead of numbers.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.61';
+  IIModelVersion = '4.3.0.62';
 
 function IModelVersion: string;
 begin
