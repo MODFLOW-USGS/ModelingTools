@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectVerticalLength</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObjectVerticalLength</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For objects drawn on the top view of the model with two Z coordinates, </text><text styleclass="Strong" translate="true">ObjectVerticalLength</text><text styleclass="Normal" translate="true"> returns the &#160;vertical length of the object within the grid or mesh. In most cases that will be the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Properties_Tab" anchor="HigherZ" styleclass="Normal" translate="true">Higher Z</link><text styleclass="Normal" translate="true"> formula minus the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Properties_Tab" anchor="HigherZ" styleclass="Normal" translate="true">Lower Z</link><text styleclass="Normal" translate="true"> formula. For other objects, it returns 0. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This function in combination with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVerticalIntersectLength" styleclass="Normal" translate="true">ObjectVerticalIntersectLength</link><text styleclass="Normal" translate="true"> can be used to distribute a value among several layers. ObjectVerticalIntersectLength/ObjectVerticalLength is the fraction of the vertical extent of an object intersected by the current cell or element.</text></para>
+  </body>
+</topic>

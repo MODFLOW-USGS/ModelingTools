@@ -93,6 +93,7 @@ inherited frameLakeOutlet: TframeLakeOutlet
     Columns = <
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -116,6 +117,7 @@ inherited frameLakeOutlet: TframeLakeOutlet
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -139,6 +141,7 @@ inherited frameLakeOutlet: TframeLakeOutlet
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -162,6 +165,7 @@ inherited frameLakeOutlet: TframeLakeOutlet
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -185,6 +189,7 @@ inherited frameLakeOutlet: TframeLakeOutlet
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -208,6 +213,7 @@ inherited frameLakeOutlet: TframeLakeOutlet
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -231,6 +237,7 @@ inherited frameLakeOutlet: TframeLakeOutlet
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

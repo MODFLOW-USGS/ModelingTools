@@ -220,6 +220,8 @@ begin
   Layer := -1;
   for Index := 0 to Model.Grid.LayerCount - 1 do
   begin
+    CheckArray(PorosityArray, Index, Format(StrPorosityLessThanO, [Index+1]),
+      cvmGreater, 0, etError);
     LayerGroup := Model.GetLayerGroupByLayer(Index);
     if LayerGroup.RunTimeSimulated then
     begin
@@ -702,6 +704,8 @@ begin
   WrongVersion := False;
   for Index := 0 to Model.LayerCount - 1 do
   begin
+    CheckArray(PorosityArray, Index, Format(StrPorosityLessThanO, [Index+1]),
+      cvmGreater, 0, etError);
     LayerGroup := Model.GetLayerGroupByLayer(Index);
     if LayerGroup.RunTimeSimulated then
     begin

@@ -351,6 +351,8 @@ var
   ObjectLengthFunction: TFunctionRecord;
   ObjectAreaFunction: TFunctionRecord;
   ObjectIntersectLengthFunction: TFunctionRecord;
+  ObjectVerticalIntersectLengthFunction: TFunctionRecord;
+  ObjectVerticalLengthFunction: TFunctionRecord;
   ObjectSectionIntersectLengthFunction: TFunctionRecord;
   ObjectIntersectAreaFunction: TFunctionRecord;
   ObjectNameFunction: TFunctionRecord;
@@ -594,6 +596,8 @@ begin
   AddItem(ObjectLengthFunction, True);
   AddItem(ObjectAreaFunction, True);
   AddItem(ObjectIntersectLengthFunction, True);
+  AddItem(ObjectVerticalIntersectLengthFunction, True);
+  AddItem(ObjectVerticalLengthFunction, True);
   AddItem(ObjectSectionIntersectLengthFunction, True);
   AddItem(ObjectIntersectAreaFunction, True);
   AddItem(ObjectNameFunction, True);
@@ -4991,6 +4995,182 @@ begin
   end;
 end;
 
+function _ObjectVerticalIntersectLength(Values: array of pointer): double;
+var
+  Column, Row, Layer: integer;
+  BottomElevation: Real;
+  TopElevation: Real;
+  LocalModel: TCustomModel;
+  Node3D: TSutraNode3D;
+  Element3D: TSutraElement3D;
+  DisvCell: TModflowDisVCell;
+  Grid: TCustomModelGrid;
+begin
+  result := 0;
+  if GlobalCurrentScreenObject = nil then
+  begin
+    Exit;
+  end;
+  if GlobalCurrentScreenObject.ElevationCount <> ecTwo then
+  begin
+    Exit;
+  end;
+  if GlobalCurrentScreenObject.ViewDirection <> vdTop then
+  begin
+    Exit;
+  end;
+  Column := GlobalColumn - 1;
+  Row := GlobalRow - 1;
+  Layer := GlobalLayer - 1;
+  BottomElevation := GlobalCurrentScreenObject.BottomElevation;
+  TopElevation := GlobalCurrentScreenObject.TopElevation;
+  LocalModel := GlobalCurrentModel as TCustomModel;
+  if LocalModel.ModelSelection in SutraSelection then
+  begin
+    if LocalModel.SutraMesh.MeshType <> mt3D then
+    begin
+      Exit;
+    end;
+    case GlobalCurrentScreenObject.EvaluatedAt of
+      eaNodes:
+        begin
+          Node3D := LocalModel.SutraMesh.NodeArray[Layer, Column];
+          TopElevation := Min(TopElevation, Node3D.Top);
+          BottomElevation := Max(BottomElevation, Node3D.Bottom);
+        end;
+      eaBlocks:
+        begin
+          Element3D := LocalModel.SutraMesh.ElementArray[Layer, Column];
+          TopElevation := Min(TopElevation, Element3D.UpperElevation);
+          BottomElevation := Max(BottomElevation, Element3D.LowerElevation);
+        end;
+      else
+        begin
+          Assert(False);
+        end;
+    end;
+    result := Max(TopElevation - BottomElevation, 0);
+  end
+  else if LocalModel.DisvUsed then
+  begin
+    DisvCell := LocalModel.DisvGrid.Cells[Layer, Column];
+    TopElevation := Min(TopElevation, DisvCell.Top);
+    BottomElevation := Max(BottomElevation, DisvCell.Bottom);
+    result := Max(TopElevation - BottomElevation, 0);
+  end
+  else
+  begin
+    Grid := LocalModel.Grid;
+    if LocalModel.ModelSelection in ModflowSelection then
+    begin
+      TopElevation := Min(Grid.CellElevation[Column, Row, Layer], TopElevation);
+      BottomElevation := Max(Grid.CellElevation[Column, Row, Layer+1], BottomElevation);
+    end
+    else
+    begin
+      Assert(LocalModel.ModelSelection = msPhast);
+      case GlobalCurrentScreenObject.EvaluatedAt of
+        eaBlocks:
+          begin
+            TopElevation := Min(Grid.CellElevation[Column, Row, Layer+1], TopElevation);
+            BottomElevation := Max(Grid.CellElevation[Column, Row, Layer], BottomElevation);
+          end;
+        eaNodes:
+          begin
+            TopElevation := Min(Grid.ThreeDCellCorner(Column, Row, Layer+1).Z, TopElevation);
+            BottomElevation := Max(Grid.ThreeDCellCorner(Column, Row, Layer).Z, BottomElevation);
+          end;
+      end;
+
+    end;
+    result := Max(TopElevation - BottomElevation, 0);
+  end;
+end;
+
+function _ObjectVerticalLength(Values: array of pointer): double;
+var
+  BottomElevation: Real;
+  TopElevation: Real;
+  Column, Row: integer;
+  Node3D: TSutraNode3D;
+  Element3D: TSutraElement3D;
+  DisvCell: TModflowDisVCell;
+  Grid: TCustomModelGrid;
+  LocalModel: TCustomModel;
+begin
+  result := 0;
+  if GlobalCurrentScreenObject = nil then
+  begin
+    Exit;
+  end;
+  if GlobalCurrentScreenObject.ElevationCount <> ecTwo then
+  begin
+    Exit;
+  end;
+  if GlobalCurrentScreenObject.ViewDirection <> vdTop then
+  begin
+    Exit;
+  end;
+  BottomElevation := GlobalCurrentScreenObject.BottomElevation;
+  TopElevation := GlobalCurrentScreenObject.TopElevation;
+  Column := GlobalColumn - 1;
+  Row := GlobalRow - 1;
+//  Layer := GlobalLayer - 1;
+  LocalModel := GlobalCurrentModel as TCustomModel;
+  if LocalModel.ModelSelection in SutraSelection then
+  begin
+    if LocalModel.SutraMesh.MeshType <> mt3D then
+    begin
+      Exit;
+    end;
+    case GlobalCurrentScreenObject.EvaluatedAt of
+      eaNodes:
+        begin
+          Node3D := LocalModel.SutraMesh.NodeArray[0, Column];
+          TopElevation := Min(TopElevation, Node3D.Top);
+          Node3D := LocalModel.SutraMesh.NodeArray[LocalModel.SutraMesh.LayerCount, Column];
+          BottomElevation := Max(BottomElevation, Node3D.Bottom);
+        end;
+      eaBlocks:
+        begin
+          Element3D := LocalModel.SutraMesh.ElementArray[0, Column];
+          TopElevation := Min(TopElevation, Element3D.UpperElevation);
+          Element3D := LocalModel.SutraMesh.ElementArray[LocalModel.SutraMesh.LayerCount-1, Column];
+          BottomElevation := Max(BottomElevation, Element3D.LowerElevation);
+        end;
+      else
+        begin
+          Assert(False);
+        end;
+    end;
+    result := Max(TopElevation - BottomElevation, 0);
+  end
+  else if LocalModel.DisvUsed then
+  begin
+    DisvCell := LocalModel.DisvGrid.Cells[0, Column];
+    TopElevation := Min(TopElevation, DisvCell.Top);
+    DisvCell := LocalModel.DisvGrid.Cells[LocalModel.DisvGrid.LayerCount-1, Column];
+    BottomElevation := Max(BottomElevation, DisvCell.Bottom);
+    result := Max(TopElevation - BottomElevation, 0);
+  end
+  else
+  begin
+    Grid := LocalModel.Grid;
+    if LocalModel.ModelSelection in ModflowSelection then
+    begin
+      TopElevation := Min(Grid.CellElevation[Column, Row, 0], TopElevation);
+      BottomElevation := Max(Grid.CellElevation[Column, Row, Grid.LayerCount], BottomElevation);
+    end
+    else
+    begin
+      Assert(LocalModel.ModelSelection = msPhast);
+      TopElevation := Min(Grid.CellElevation[Column, Row, Grid.LayerCount], TopElevation);
+      BottomElevation := Max(Grid.CellElevation[Column, Row, 0], BottomElevation);
+    end;
+    result := Max(TopElevation - BottomElevation, 0);
+  end;
+end;
+
 function _ObjectIntersectLength(Values: array of pointer): double;
 var
   Column, Row, Layer: integer;
@@ -8008,6 +8188,24 @@ initialization
   ObjectIntersectLengthFunction.Name := StrObjectIntersectLength;
   ObjectIntersectLengthFunction.Prototype :=
     StrObject+'ObjectIntersectLength({Column, Row, Layer})';
+
+  ObjectVerticalLengthFunction.ResultType := rdtDouble;
+  ObjectVerticalLengthFunction.RFunctionAddr := _ObjectVerticalLength;
+  SetLength(ObjectVerticalLengthFunction.InputDataTypes, 0);
+  ObjectVerticalLengthFunction.OptionalArguments := 0;
+  ObjectVerticalLengthFunction.CanConvertToConstant := False;
+  ObjectVerticalLengthFunction.Name := 'ObjectVerticalLength';
+  ObjectVerticalLengthFunction.Prototype :=
+    StrObject+'ObjectVerticalLength';
+
+  ObjectVerticalIntersectLengthFunction.ResultType := rdtDouble;
+  ObjectVerticalIntersectLengthFunction.RFunctionAddr := _ObjectVerticalIntersectLength;
+  SetLength(ObjectVerticalIntersectLengthFunction.InputDataTypes, 0);
+  ObjectVerticalIntersectLengthFunction.OptionalArguments := 0;
+  ObjectVerticalIntersectLengthFunction.CanConvertToConstant := False;
+  ObjectVerticalIntersectLengthFunction.Name := 'ObjectVerticalIntersectLength';
+  ObjectVerticalIntersectLengthFunction.Prototype :=
+    StrObject+'ObjectVerticalIntersectLength';
 
   ObjectSectionIntersectLengthFunction.ResultType := rdtDouble;
   ObjectSectionIntersectLengthFunction.RFunctionAddr := _ObjectIntersectSectionLength;

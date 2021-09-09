@@ -597,6 +597,12 @@
         <topicref type="topic" id="393235711552834" build="CHM,HLP,HXS,HTML,DEMO,USER2,USER3" modified="2007-08-29T15:15:52.637Z" icon="0" href="ObjectVertexZ">
           <caption translate="true">ObjectVertexZ</caption>
         </topicref>
+        <topicref type="topic" id="444465863752426" build="ALL" modified="2021-09-07T17:00:05.225Z" icon="0" href="ObjectVerticalIntersectLength">
+          <caption translate="true">ObjectVerticalIntersectLength</caption>
+        </topicref>
+        <topicref type="topic" id="44448299223986" build="ALL" modified="2021-09-07T16:59:45.463Z" icon="0" href="ObjectVerticalLength">
+          <caption translate="true">ObjectVerticalLength</caption>
+        </topicref>
         <topicref type="topic" id="422732199039738" build="ALL" modified="2015-09-26T09:16:43.827Z" icon="0" href="SelectedCount">
           <caption translate="true">SelectedCount</caption>
         </topicref>

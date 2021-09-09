@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">ObjectVerticalIntersectLength</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">ObjectVerticalIntersectLength</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">For objects drawn on the top view of the model with two Z coordinates, </text><text styleclass="Strong" translate="true">ObjectVerticalIntersectLength</text><text styleclass="Normal" translate="true"> returns the vertical length of intersection between the object and the current cell or element.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">This function in combination with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="ObjectVerticalLength" styleclass="Normal" translate="true">ObjectVerticalLength</link><text styleclass="Normal" translate="true"> can be used to distribute a value among several layers. ObjectVerticalIntersectLength/ObjectVerticalLength is the fraction of the vertical extent of an object intersected by the current cell or element.</text></para>
+  </body>
+</topic>

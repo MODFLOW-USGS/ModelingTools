@@ -85,6 +85,7 @@ var
   OutletItem: TLakeOutletTimeItem;
   OutletName: string;
 begin
+  ClearGrid;
   InitializeControls;
 
   OutletName := LakeOutlet.OutletObjectName;

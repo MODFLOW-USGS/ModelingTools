@@ -351,6 +351,7 @@ begin
         end;
         if Boundary <> nil then
         begin
+          {$IFDEF PEST}
           if rdgModflowBoundary.Cells[Ord(fhcHead),PestMethodRow] = '' then
           begin
             NewBoundary.PestFhbBoundaryMethod := Boundary.PestFhbBoundaryMethod;
@@ -367,6 +368,7 @@ begin
           begin
             NewBoundary.PestFhbBoundaryFormula := PestModifier[Ord(fhcHead)];
           end;
+          {$ENDIF}
           Boundary.Assign(NewBoundary);
         end;
       end;

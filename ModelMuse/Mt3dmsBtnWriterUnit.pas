@@ -156,6 +156,8 @@ begin
   DataArray.Initialize;
   for LayerIndex := 0 to Model.ModflowGrid.LayerCount - 1 do
   begin
+    CheckArray(DataArray, LayerIndex, Format(StrPorosityLessThanO, [LayerIndex+1]),
+      cvmGreater, 0, etError);
     if Model.IsLayerSimulated(LayerIndex) then
     begin
       WriteArray(DataArray, LayerIndex, Format(StrPRSITYLayerD,

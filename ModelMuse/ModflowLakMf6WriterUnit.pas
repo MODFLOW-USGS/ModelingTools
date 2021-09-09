@@ -288,6 +288,9 @@ resourcestring
   StrAtLayerRowColumn = 'At (Layer,Row,Column) = (%0:d,%1:d,%2:d), the lake ' +
   'bottom was greater than or equal to the lake top. The lake bottom and top' +
   ' were assigned via the following methods: "%3:s" and "%4:s"';
+  StrNoOutletProperties = 'No outlet properties defined';
+  StrInTheLakeDefinedProperties = 'In the lake defined by the object %0:s, n' +
+  'o outlet properties are defined for outlet %1:d.';
 
 { TModflowLAKMf6Writer }
 
@@ -322,6 +325,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeEtError);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeBottomAndTop);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoOutletProperties);
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrLakeTopIsAboveTh);
 
   IdentifyLakesAndLakeCells;
@@ -1359,6 +1363,7 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidLakeOutflow);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheFollowingObjectNoCells);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoOutletLakeDefin);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoOutletProperties);
 
   IdentifyLakesAndLakeCells;
   SetLakeCellProperties;
@@ -1925,6 +1930,16 @@ begin
             end;
           else
             Assert(False);
+        end;
+
+        if AnOutlet.Count = 0 then
+        begin
+          frmErrorsAndWarnings.AddError(Model, StrNoOutletProperties,
+            Format(StrInTheLakeDefinedProperties,
+            [ALake.FScreenObject.Name, OutletIndex+1]), ALake.FScreenObject);
+          NewLine;
+          Continue;
+
         end;
 
         ASetting := AnOutlet[0];

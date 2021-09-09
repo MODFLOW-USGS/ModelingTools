@@ -2411,6 +2411,17 @@ var
   Active: Boolean;
   OtherRow: Integer;
   OtherCol: Integer;
+  function GetActive(Layer, Row, Column: integer): Boolean;
+  begin
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      result := ActiveDataArray.IntegerData[Layer, Row, Column] > 0;
+    end
+    else
+    begin
+      result := ActiveDataArray.BooleanData[Layer, Row, Column];
+    end;
+  end;
 begin
 
   case ErrorType of
@@ -2418,7 +2429,14 @@ begin
     etWarning: frmErrorsAndWarnings.RemoveWarningGroup(Model, ErrorOrWarningMessage);
   end;
   result := True;
-  ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  end
+  else
+  begin
+    ActiveDataArray := FModel.DataArrayManager.GetDataSetByName(rsActive);
+  end;
   Assert(ActiveDataArray <> nil);
   ActiveDataArray.Initialize;
   DataArray.Initialize;
@@ -2438,7 +2456,7 @@ begin
           end;
         else Assert(False);
       end;
-      Active := ActiveDataArray.BooleanData[LayerIndex, RowIndex, ColIndex];
+      Active := GetActive(LayerIndex, RowIndex, ColIndex);
       OkValue := True;
       OtherRow := 0;
       OtherCol := 0;
@@ -2457,7 +2475,7 @@ begin
               if Value <> 0 then
               begin
                 if (RowIndex > 0)
-                  and ActiveDataArray.BooleanData[LayerIndex, RowIndex-1, ColIndex] then
+                  and GetActive(LayerIndex, RowIndex-1, ColIndex) then
                 begin
                   OtherValue1 := DataArray.RealData[LayerIndex, RowIndex-1, ColIndex];
                 end
@@ -2466,7 +2484,7 @@ begin
                   OtherValue1 := Value
                 end;
                 if (ColIndex > 0)
-                  and ActiveDataArray.BooleanData[LayerIndex, RowIndex, ColIndex-1] then
+                  and GetActive(LayerIndex, RowIndex, ColIndex-1) then
                 begin
                   OtherValue2 := DataArray.RealData[LayerIndex, RowIndex, ColIndex-1];
                 end

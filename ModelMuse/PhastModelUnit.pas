@@ -605,6 +605,7 @@ resourcestring
   StrFootprintInputClassification = 'WellFootprint';
   StrTheFollowingObjectNoCells = 'The following objects do not assign proper' +
   'ties to any cells.';
+  StrPorosityLessThanO = 'Porosity less than or equal to zero in layer %d.';
 const
   WettableLayers = [1,3];
 
@@ -10342,10 +10343,18 @@ const
 //    '4.3.0.62' Change: When reading pathline, endpoint, or time-series files
 //                from MODPATH 7, ModelMuse will skip lines that contain NaN
 //                instead of numbers.
+//    '4.3.0.63' Enhancement: When exporting MT3D and MODPATH files, ModelMuse
+//                issues an error message if the porosity is less than or equal
+//                to zero in any active cell.
+//               Enhancement: Added the functions ObjectVerticalLength and
+//                ObjectVerticalIntersectLength.
+//    '4.3.0.64' Bug fix: If a MODFLOW 6 Lake outlet has no transient data
+//                assigned, ModelMuse now issues an error message instead of
+//                failing.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.62';
+  IIModelVersion = '4.3.0.64';
 
 function IModelVersion: string;
 begin
