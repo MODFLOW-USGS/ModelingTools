@@ -159,7 +159,9 @@ inherited frmImportMultipleGriddedDataFiles: TfrmImportMultipleGriddedDataFiles
     end
   end
   object dlgOpenFiles: TOpenDialog
-    Filter = 'Text files (*.txt)|*.txt|All Files (*.*)|*.*'
+    Filter = 
+      'Text and array files|*.txt;*.arrays|Text files (*.txt)|*.txt|Arr' +
+      'ay files|*.arrays|All Files (*.*)|*.*'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofFileMustExist, ofEnableSizing]
     Left = 168
     Top = 16

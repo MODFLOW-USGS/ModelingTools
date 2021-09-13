@@ -220,7 +220,7 @@ const
      (Package: 'HUF'; PType: 'LVDA'; PClass: pctSteady),
      (Package: 'STR'; PType: 'STR'; PClass: pctTransient),
      (Package: 'FMP'; PType: 'QMAX'; PClass: pctTransient),
-     (Package: 'Many'; PType: 'Array'; PClass: pctPEST)
+     (Package: 'Many'; PType: 'PEST'; PClass: pctPEST)
      );
 
   ParamGroupColumn = Ord(pgcIncType);

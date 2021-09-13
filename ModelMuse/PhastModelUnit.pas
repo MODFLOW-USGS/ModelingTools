@@ -5289,6 +5289,7 @@ that affects the model output should also have a comment. }
 
 resourcestring
   StrGlobalVariables = 'Global Variables';
+  StrPestParamaeters = 'PEST Parameters';
 const
   StrNotepadexe = 'Notepad.exe';
 
@@ -10351,10 +10352,12 @@ const
 //    '4.3.0.64' Bug fix: If a MODFLOW 6 Lake outlet has no transient data
 //                assigned, ModelMuse now issues an error message instead of
 //                failing.
+//    '4.3.0.65' Bug fix: Fixed bug that would cause MODFLOW 6 MVR receivers
+//                to sometimes not be found if the receiver was a lake.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.64';
+  IIModelVersion = '4.3.0.65';
 
 function IModelVersion: string;
 begin
@@ -15512,6 +15515,7 @@ procedure TPhastModel.RegisterGlobalVariables(Parser: TRbwParser; IgnoreDuplicat
 var
   Variable: TGlobalVariable;
   VariableIndex: Integer;
+  VarClassification: string;
 begin
   for VariableIndex := 0 to GlobalVariables.Count - 1 do
   begin
@@ -15520,22 +15524,30 @@ begin
     begin
       Continue;
     end;
+    if GetPestParameterByName(Variable.Name) = nil then
+    begin
+      VarClassification := StrGlobalVariables
+    end
+    else
+    begin
+      VarClassification := StrPestParamaeters;
+    end;
     case Variable.Format of
       rdtDouble:
         begin
-          Parser.CreateVariable(Variable.Name, StrGlobalVariables, Variable.RealValue, Variable.Name);
+          Parser.CreateVariable(Variable.Name, VarClassification, Variable.RealValue, Variable.Name);
         end;
       rdtInteger:
         begin
-          Parser.CreateVariable(Variable.Name, StrGlobalVariables, Variable.IntegerValue, Variable.Name);
+          Parser.CreateVariable(Variable.Name, VarClassification, Variable.IntegerValue, Variable.Name);
         end;
       rdtBoolean:
         begin
-          Parser.CreateVariable(Variable.Name, StrGlobalVariables, Variable.BooleanValue, Variable.Name);
+          Parser.CreateVariable(Variable.Name, VarClassification, Variable.BooleanValue, Variable.Name);
         end;
       rdtString:
         begin
-          Parser.CreateVariable(Variable.Name, StrGlobalVariables, Variable.StringValue, Variable.Name);
+          Parser.CreateVariable(Variable.Name, VarClassification, Variable.StringValue, Variable.Name);
         end;
     else
       Assert(False);

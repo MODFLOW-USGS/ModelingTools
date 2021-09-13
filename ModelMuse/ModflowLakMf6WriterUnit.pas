@@ -2073,8 +2073,6 @@ begin
           begin
             AllTimes.AddUnique(ATime);
           end;
-//          AllTimes.AddUnique(OutletSetting.StartTime);
-//          AllTimes.AddUnique(OutletSetting.EndTime);
         end;
       end;
     end;
@@ -2085,12 +2083,28 @@ begin
     end;
     StressPeriodStartTimes.Sorted := True;
 
+    for TimeIndex := 0 to Model.ModflowFullStressPeriods.Count - 1 do
+    begin
+      MvrReceiver.ReceiverKey.StressPeriod := TimeIndex;
+      for LakeIndex := 0 to FLakes.Count - 1 do
+      begin
+        ALake := FLakes[LakeIndex];
+        Assert(ALake.FScreenObject <> nil);
+        MvrReceiver.ReceiverValues.Index := LakeIndex+1;
+        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
+          if (MoverWriter <> nil) and not WritingTemplate then
+          begin
+            MoverWriter.AddMvrReceiver(MvrReceiver);
+          end;
+      end;
+    end;
+
     for TimeIndex := 0 to AllTimes.Count - 1 do
     begin
       ATime := AllTimes[TimeIndex];
       StressPeriodIndex := StressPeriodStartTimes.IndexOf(ATime);
       Assert(StressPeriodIndex >= 0);
-      MvrReceiver.ReceiverKey.StressPeriod := StressPeriodIndex;
+//      MvrReceiver.ReceiverKey.StressPeriod := StressPeriodIndex;
       MvrRegSourceKey.StressPeriod := StressPeriodIndex;
 
       WriteString('BEGIN PERIOD ');
@@ -2102,7 +2116,7 @@ begin
       begin
         ALake := FLakes[LakeIndex];
         Assert(ALake.FScreenObject <> nil);
-        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
+//        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
         MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject;
         LocalScreenObject := ALake.FScreenObject as TScreenObject;
         MvrUsed := (MoverWriter <> nil)
@@ -2138,11 +2152,6 @@ begin
           begin
             WriteString('  ');
             WriteInteger(LakeIndex+1);
-            MvrReceiver.ReceiverValues.Index := LakeIndex+1;
-            if (MoverWriter <> nil) and not WritingTemplate then
-            begin
-              MoverWriter.AddMvrReceiver(MvrReceiver);
-            end;
             case ALakeSetting.Status of
               lsActive:
                 begin

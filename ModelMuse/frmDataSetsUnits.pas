@@ -945,6 +945,7 @@ var
   Eval: TEvaluatedAt;
   EvalString: string;
 begin
+  pcDataSets.ActivePageIndex := 0;
   memoAssociatedDataSets.WordWrap := True;
   for Eval := Low(TEvaluatedAt) to High(TEvaluatedAt) do
   begin
@@ -2787,6 +2788,7 @@ end;
 procedure TfrmDataSets.SetSelectedEdit(const Value: TDataArrayEdit);
 var
   NewInterpolatorName: string;
+  TabParamActive: Boolean;
 begin
 
   if (FSelectedEdit <> Value) or (Value = nil) then
@@ -2901,14 +2903,17 @@ begin
       end;
       memoAssociatedDataSets.Lines.Add(FSelectedEdit.AssociatedDataSets);
 
+      TabParamActive := pcDataSets.ActivePageIndex = tabParameters.PageIndex;
       tabParameters.TabVisible := (FSelectedEdit.DataType = rdtDouble)
         and (FSelectedEdit.DataArray <> nil)
         and FSelectedEdit.DataArray.PestParametersAllowed
-//        and (Pos(StrRequiredPart, FSelectedEdit.FullClassification) > 0)
         and (Pos(StrLayerDefinition, FSelectedEdit.FullClassification) <= 0)
         and (FSelectedEdit.DataArray.Name <> rsWetDryThreshold)
         and (not FSelectedEdit.DataArray.ParameterUsed);
-//        and not (dcFormula in FSelectedEdit.DataArray.Lock);
+      if TabParamActive and not tabParameters.TabVisible then
+      begin
+        pcDataSets.ActivePageIndex := 0;
+      end;
 
       if pcDataSets.ActivePageIndex < 0 then
       begin
