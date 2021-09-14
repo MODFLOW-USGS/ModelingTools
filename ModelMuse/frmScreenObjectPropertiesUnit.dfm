@@ -120,7 +120,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       end
       object cbIntersectedCells: TCheckBox
         Left = 8
-        Top = 279
+        Top = 272
         Width = 282
         Height = 24
         AllowGrayed = True
@@ -2465,7 +2465,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspLakMf6
+        ActivePage = jvspMNW2
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -8851,7 +8851,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pcMnw2: TPageControl
               Width = 581
-              ActivePage = frameMNW2.tabWellScreens
+              ActivePage = frameMNW2.tabLossControls
               OnChange = frameMNW2pcMnw2Change
               ExplicitWidth = 581
               inherited tabBasic: TTabSheet
@@ -8888,6 +8888,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabLossControls: TTabSheet
+                ExplicitWidth = 573
                 inherited edWellRadius: TJvComboEdit
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
                 end
@@ -12614,6 +12615,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         Width = 569
                         Height = 139
                         OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
+                        ExplicitTop = 0
                         ExplicitWidth = 569
                         ExplicitHeight = 139
                       end
@@ -12860,6 +12862,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pcLake: TPageControl
               Width = 581
               Height = 259
+              ActivePage = frameLakMf6.tabLakeTransientProperties
               ExplicitWidth = 581
               ExplicitHeight = 259
               inherited tabLakeProperties: TTabSheet
@@ -12968,7 +12971,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabLakeTransientProperties: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 301
+                ExplicitWidth = 573
+                ExplicitHeight = 225
               end
               inherited tabLakeTable: TTabSheet
                 ExplicitTop = 30
@@ -12977,11 +12981,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited frameLakeTable: TframeFormulaGrid
                   Width = 573
                   Height = 225
+                  ExplicitWidth = 573
                   ExplicitHeight = 225
                   inherited Panel: TPanel
                     Top = 184
                     Width = 573
                     ExplicitTop = 184
+                    ExplicitWidth = 573
                     inherited lbNumber: TLabel
                       Width = 206
                       Height = 19
@@ -13006,10 +13012,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Width = 573
                     Height = 127
                     OnButtonClick = frameResdgModflowBoundaryButtonClick
+                    ExplicitWidth = 573
                     ExplicitHeight = 127
                   end
                   inherited pnlTop: TPanel
                     Width = 573
+                    ExplicitWidth = 573
                     inherited edFormula: TLabeledEdit
                       Height = 27
                       EditLabel.Width = 59
@@ -14975,6 +14983,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited grpDirectObs: TGroupBox
               Width = 605
               Height = 258
+              ExplicitTop = 41
               ExplicitWidth = 605
               ExplicitHeight = 258
               inherited frameObservations: TframeGrid

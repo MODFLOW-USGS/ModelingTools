@@ -1,5 +1,5 @@
-..\Release\Win32\ModelMuse.exe
-4246
+..\Debug\Win32\ModelMuse.exe
+4257
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -4246,3 +4246,14 @@ HfbMf6Test.gpt
 	Archive\HfbMf6Test.pval
 	Archive\HfbMf6Test.tdis
 	Archive\usgs.HfbMf6Test.reference
+DisvIntersectAssignment.gpt
+	Archive\DisvIntersectAssignment.axml
+	Archive\DisvIntersectAssignment.disv
+	Archive\DisvIntersectAssignment.ic
+	Archive\DisvIntersectAssignment.ims
+	Archive\DisvIntersectAssignment.nam
+	Archive\DisvIntersectAssignment.nam.archive
+	Archive\DisvIntersectAssignment.npf
+	Archive\DisvIntersectAssignment.oc
+	Archive\DisvIntersectAssignment.tdis
+	Archive\usgs.DisvIntersectAssignment.reference

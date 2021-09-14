@@ -1,5 +1,5 @@
 ..\Release\Win32\ModelMuse.exe
-84
+92
 SutraTest1.gpt
 	Archive\SutraTest1.axml
 	Archive\SutraTest1.FluxBcs
@@ -84,3 +84,11 @@ SutraGenBoundInactivate.gpt
 	Archive\SutraGenBoundInactivate.lkbc
 	Archive\SutraGenBoundInactivate.lkin
 	Archive\usgs.SutraGenBoundInactivate.reference
+SutraIntersectAssignment.gpt
+	Archive\SutraIntersectAssignment.axml
+	Archive\SutraIntersectAssignment.c_ele
+	Archive\SutraIntersectAssignment.c_nod
+	Archive\SutraIntersectAssignment.c_nod3D
+	Archive\SutraIntersectAssignment.ics
+	Archive\SutraIntersectAssignment.inp
+	Archive\usgs.SutraIntersectAssignment.reference

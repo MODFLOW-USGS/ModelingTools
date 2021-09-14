@@ -279,6 +279,10 @@ begin
       end;
     end;
 
+    if ScalarFile.Count = 0 then
+    begin
+      Exit;
+    end;
     ScalarFileName := IncludeTrailingPathDelimiter(ArrayDir) + BaseName + '.ParamValues';
     ScalarFile.SaveToFile(ScalarFileName);
     ScalarFileTemplate.SaveToFile(ScalarFileName + '.tpl');

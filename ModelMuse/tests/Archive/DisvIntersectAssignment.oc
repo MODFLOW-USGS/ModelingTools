@@ -1,0 +1,12 @@
+# Output Control file created on 9/14/2021 by ModelMuse version 4.3.0.65.
+BEGIN OPTIONS
+  BUDGET FILEOUT 'DisvIntersectAssignment.cbc'
+  HEAD FILEOUT 'DisvIntersectAssignment.bhd'
+END OPTIONS
+
+BEGIN PERIOD      1
+  SAVE HEAD ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+

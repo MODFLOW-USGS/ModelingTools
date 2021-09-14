@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="Sf6Mf6" FileType="bin">
-    <FileName Model_Name="Sf6Mf6" FileType="bin">..\..\..\WRDAPP\mf6.1.1\bin\zbud6.exe</FileName>
     <FileName Model_Name="Sf6Mf6" FileType="bin">..\..\..\WRDAPP\mf6.2.2\bin\mf6.exe</FileName>
+    <FileName Model_Name="Sf6Mf6" FileType="bin">..\..\..\WRDAPP\mf6.2.2\bin\zbud6.exe</FileName>
   </bin>
   <ancillary Model_Name="Sf6Mf6" FileType="ancillary">
     <FileName Model_Name="Sf6Mf6" FileType="ancillary">Sf6Mf6.gpt</FileName>

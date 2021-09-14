@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="SutraIntersectAssignment" FileType="bin">
+    <FileName Model_Name="SutraIntersectAssignment" FileType="bin">..\..\..\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe</FileName>
+  </bin>
+  <ancillary Model_Name="SutraIntersectAssignment" FileType="ancillary">
+    <FileName Model_Name="SutraIntersectAssignment" FileType="ancillary">SutraIntersectAssignment.gpt</FileName>
+  </ancillary>
+  <model Model_Name="SutraIntersectAssignment" FileType="Model Input">
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Input">RunSutra.bat.archive</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Input">SutraIntersectAssignment.ics</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Input">SutraIntersectAssignment.inp</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Input">usgs.SutraIntersectAssignment.reference</FileName>
+  </model>
+  <output Model_Name="SutraIntersectAssignment" FileType="Model Output">
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Output">SutraIntersectAssignment.ele</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Output">SutraIntersectAssignment.lst</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Output">SutraIntersectAssignment.nod</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Output">SutraIntersectAssignment.rst</FileName>
+    <FileName Model_Name="SutraIntersectAssignment" FileType="Model Output">SutraIntersectAssignment.smy</FileName>
+  </output>
+</Model_Archive_List>

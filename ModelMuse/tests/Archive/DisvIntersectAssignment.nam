@@ -1,0 +1,13 @@
+# Name File for MODFLOW created on 9/14/2021 by ModelMuse Version 4.3.0.65
+BEGIN OPTIONS
+  LIST DisvIntersectAssignment.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DISV6        DisvIntersectAssignment.disv
+  IC6          DisvIntersectAssignment.ic
+  NPF6         DisvIntersectAssignment.npf
+  OC6          DisvIntersectAssignment.oc
+END PACKAGES

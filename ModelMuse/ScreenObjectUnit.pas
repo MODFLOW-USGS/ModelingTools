@@ -11814,7 +11814,7 @@ var
     end;
   end;
 begin
-  Mesh := (Model as TCustomModel).Mesh3D;// as TSutraMesh3D;
+  Mesh := (Model as TCustomModel).Mesh3D;
   Mesh2D := Mesh.Mesh2DI;
   Limits := Mesh.MeshLimits(vdTop, 0);
   EpsilonX := (Limits.MaxX-Limits.MinX)/1e7;
@@ -17206,7 +17206,7 @@ begin
     LayerLimit := -1;
     if Grid = nil then
     begin
-      Mesh := LocalModel.Mesh3D;// as TSutraMesh3D;
+      Mesh := LocalModel.Mesh3D;
       if Mesh <> nil then
       begin
         AddTopMeshSegments(AModel, EvaluatedAt, LowerElevDataSets,
@@ -44063,13 +44063,13 @@ procedure TCustomMeshDelegate.GetCellsToAssign(const DataSetFunction: string;
   AModel: TBaseModel);
 var
   Mesh: IMesh3D;
-  UsedFunction: string;
-  Compiler: TRbwParser;
-  UsedExpression: TExpression;
-  NameToDisplay: string;
-  VariablesForUsedExpression: TStringList;
-  CellIndex: Integer;
-  ACell: TCellAssignment;
+//  UsedFunction: string;
+//  Compiler: TRbwParser;
+//  UsedExpression: TExpression;
+//  NameToDisplay: string;
+//  VariablesForUsedExpression: TStringList;
+//  CellIndex: Integer;
+//  ACell: TCellAssignment;
 begin
   Assert(not FScreenObject.Deleted);
   Mesh := (AModel as TCustomModel).Mesh3D;
@@ -44502,7 +44502,14 @@ begin
                 GetCellBounds(LayerIndex,ColIndex);
                 if not ElevationOk then
                 begin
-                  Continue;
+                  if not (FScreenObject.SetValuesOfIntersectedCells
+                  and (((UpperLimit >= FScreenObject.FTopElevation)
+                  and (LowerLimit <= FScreenObject.FTopElevation))
+                  or ((UpperLimit >= FScreenObject.FBottomElevation)
+                  and (LowerLimit <= FScreenObject.FBottomElevation)))) then
+                  begin
+                    Continue;
+                  end;
                 end;
               end;
 
@@ -44538,8 +44545,26 @@ begin
     begin
       if FScreenObject.SetValuesOfEnclosedCells then
       begin
-        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
-          LocalModel.ColumnCount + 1);
+        if LocalModel.ModelSelection in SutraSelection then
+        begin
+          case EvaluatedAt of
+            eaBlocks:
+              begin
+                SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+                  LocalModel.ColumnCount + 1);
+              end;
+            eaNodes:
+              begin
+                SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+                  LocalModel.Mesh3D.Mesh2DI.NodeCount + 1);
+              end;
+          end;
+        end
+        else
+        begin
+          SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+            LocalModel.ColumnCount + 1);
+        end;
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];
@@ -44969,6 +44994,19 @@ begin
                                         ElevationIndex, 0,
                                         ColIndex, nil, SectionIndex, Annotation,
                                         AssignmentMethod));
+                                    end
+                                    else if FScreenObject.SetValuesOfIntersectedCells then
+                                    begin
+                                      if (Orientation = dsoTop)
+                                        or ((UpperBound >= FScreenObject.TopElevation)
+                                        and (LowerBound <= FScreenObject.TopElevation))
+                                        or ((UpperBound >= FScreenObject.BottomElevation)
+                                        and (LowerBound <= FScreenObject.BottomElevation)) then
+                                      begin
+                                        CellList.Add(TCellAssignment.Create(ElevationIndex,
+                                          0, ColIndex, nil, SectionIndex, Annotation,
+                                          AssignmentMethod));
+                                      end;
                                     end;
                                   end;
                                 eaNodes:
@@ -45004,8 +45042,26 @@ begin
     begin
       if FScreenObject.SetValuesOfEnclosedCells then
       begin
-        SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
-          LocalModel.ColumnCount + 1);
+        if LocalModel.ModelSelection in SutraSelection then
+        begin
+          case EvalAt of
+            eaBlocks:
+              begin
+                SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+                  LocalModel.ColumnCount + 1);
+              end;
+            eaNodes:
+              begin
+                SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+                  LocalModel.Mesh3D.Mesh2DI.NodeCount + 1);
+              end;
+          end;
+        end
+        else
+        begin
+          SetLength(UsedCells, LocalModel.LayerCount+1, LocalModel.RowCount+1,
+            LocalModel.ColumnCount + 1);
+        end;
         for CellIndex := 0 to CellList.Count - 1 do
         begin
           ACell := CellList[CellIndex];

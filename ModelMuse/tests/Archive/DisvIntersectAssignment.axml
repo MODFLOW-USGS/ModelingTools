@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="DisvIntersectAssignment" FileType="bin">
+    <FileName Model_Name="DisvIntersectAssignment" FileType="bin">..\..\..\WRDAPP\mf6.2.2\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="DisvIntersectAssignment" FileType="ancillary">
+    <FileName Model_Name="DisvIntersectAssignment" FileType="ancillary">DisvIntersectAssignment.gpt</FileName>
+  </ancillary>
+  <model Model_Name="DisvIntersectAssignment" FileType="Model Input">
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">DisvIntersectAssignment.disv</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">DisvIntersectAssignment.ic</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">DisvIntersectAssignment.ims</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">DisvIntersectAssignment.nam.archive</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">DisvIntersectAssignment.npf</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">DisvIntersectAssignment.oc</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">DisvIntersectAssignment.tdis</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Input">usgs.DisvIntersectAssignment.reference</FileName>
+  </model>
+  <output Model_Name="DisvIntersectAssignment" FileType="Model Output">
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Output">DisvIntersectAssignment.bhd</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Output">DisvIntersectAssignment.cbc</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Output">DisvIntersectAssignment.disv.grb</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Output">DisvIntersectAssignment.InnerSolution.CSV</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Output">DisvIntersectAssignment.lst</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Output">DisvIntersectAssignment.OuterSolution.CSV</FileName>
+    <FileName Model_Name="DisvIntersectAssignment" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

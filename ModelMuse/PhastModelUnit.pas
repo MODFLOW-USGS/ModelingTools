@@ -10354,10 +10354,14 @@ const
 //                failing.
 //    '4.3.0.65' Bug fix: Fixed bug that would cause MODFLOW 6 MVR receivers
 //                to sometimes not be found if the receiver was a lake.
+//    '4.3.0.66' Bug fix: Fixed assigning values to nodes or elements in SUTRA
+//                and cells in MODFLOW 6 DISV models when both intersected and
+//                enclosed items are to be assigned values when there are two
+//                elevation formulas.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.65';
+  IIModelVersion = '4.3.0.66';
 
 function IModelVersion: string;
 begin
