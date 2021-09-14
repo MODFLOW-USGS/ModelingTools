@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1307
+1220
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -60,9 +60,6 @@ PestPilotPointTest.gpt
 	Archive\arrays\PestPilotPointTest.Ky_1.arrays
 	Archive\arrays\PestPilotPointTest.Ky_2.arrays
 	Archive\arrays\PestPilotPointTest.Ky_3.arrays
-	Archive\arrays\PestPilotPointTest.ParamValues
-	Archive\arrays\PestPilotPointTest.ParamValues.tpl
-	Archive\arrays\PestPilotPointTest.script
 	Archive\usgs.PestPilotPointTest.reference
 SutraGenBoundLakeTest.gpt
 	Archive\SutraGenBoundLakeTest.Angle_Horizontal
@@ -166,9 +163,6 @@ GhbTest.gpt
 	Archive\GhbTest.pst
 	Archive\GhbTest.ptf
 	Archive\GhbTest.pval
-	Archive\arrays\GhbTest.ParamValues
-	Archive\arrays\GhbTest.ParamValues.tpl
-	Archive\arrays\GhbTest.script
 	Archive\usgs.GhbTest.reference
 lakeTest.gpt
 	Archive\lakeTest.axml
@@ -203,9 +197,6 @@ lakeTest.gpt
 	Archive\arrays\lakeTest.Lakebed_Leakance_7.arrays
 	Archive\arrays\lakeTest.Lakebed_Leakance_8.arrays
 	Archive\arrays\lakeTest.Lakebed_Leakance_9.arrays
-	Archive\arrays\lakeTest.ParamValues
-	Archive\arrays\lakeTest.ParamValues.tpl
-	Archive\arrays\lakeTest.script
 	Archive\usgs.lakeTest.reference
 MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.3.laktab
@@ -316,9 +307,6 @@ Mnw2Test.gpt
 	Archive\Mnw2Test.pst
 	Archive\Mnw2Test.ptf
 	Archive\Mnw2Test.pval
-	Archive\arrays\Mnw2Test.ParamValues
-	Archive\arrays\Mnw2Test.ParamValues.tpl
-	Archive\arrays\Mnw2Test.script
 	Archive\usgs.Mnw2Test.reference
 ResTest.gpt
 	Archive\ResTest.axml
@@ -344,10 +332,7 @@ ResTest.gpt
 	Archive\ResTest.Reservoir_Bed_Thickness.script.tpl
 	Archive\ResTest.resv
 	Archive\ResTest.resv.tpl
-	Archive\arrays\ResTest.ParamValues
-	Archive\arrays\ResTest.ParamValues.tpl
 	Archive\arrays\ResTest.Reservoir_Bed_Thickness_1.arrays
-	Archive\arrays\ResTest.script
 	Archive\usgs.ResTest.reference
 sfrtest2.gpt
 	Archive\sfrtest2.axml
@@ -370,9 +355,6 @@ sfrtest2.gpt
 	Archive\sfrtest2.pval
 	Archive\sfrtest2.sfr
 	Archive\sfrtest2.sfr.tpl
-	Archive\arrays\sfrtest2.ParamValues
-	Archive\arrays\sfrtest2.ParamValues.tpl
-	Archive\arrays\sfrtest2.script
 	Archive\usgs.sfrtest2.reference
 WellTest.gpt
 	Archive\WellTest.axml
@@ -401,9 +383,6 @@ WellTest.gpt
 	Archive\arrays\WellTest.Horizontal_Anisotropy_1.arrays
 	Archive\arrays\WellTest.Horizontal_Anisotropy_2.arrays
 	Archive\arrays\WellTest.Horizontal_Anisotropy_3.arrays
-	Archive\arrays\WellTest.ParamValues
-	Archive\arrays\WellTest.ParamValues.tpl
-	Archive\arrays\WellTest.script
 	Archive\usgs.WellTest.reference
 SutraTest1.gpt
 	Archive\SutraTest1.Angle_Horizontal
@@ -470,9 +449,6 @@ CSubExampletest.gpt
 	Archive\arrays\CSubExampletest.Confining_Bed_InitialPorosity_2.arrays
 	Archive\arrays\CSubExampletest.Confining_Bed_InitialPorosity_3.arrays
 	Archive\arrays\CSubExampletest.Confining_Bed_InitialPorosity_4.arrays
-	Archive\arrays\CSubExampletest.ParamValues
-	Archive\arrays\CSubExampletest.ParamValues.tpl
-	Archive\arrays\CSubExampletest.script
 	Archive\usgs.CSubExampletest.reference
 ChdTest.gpt
 	Archive\ChdTest.axml
@@ -501,9 +477,6 @@ ChdTest.gpt
 	Archive\arrays\ChdTest.Kx_1.arrays
 	Archive\arrays\ChdTest.Kx_2.arrays
 	Archive\arrays\ChdTest.Kx_3.arrays
-	Archive\arrays\ChdTest.ParamValues
-	Archive\arrays\ChdTest.ParamValues.tpl
-	Archive\arrays\ChdTest.script
 	Archive\usgs.ChdTest.reference
 Drntest.gpt
 	Archive\Drntest.axml
@@ -537,9 +510,6 @@ Drntest.gpt
 	Archive\arrays\Drntest.Kx_1.arrays
 	Archive\arrays\Drntest.Kx_2.arrays
 	Archive\arrays\Drntest.Kx_3.arrays
-	Archive\arrays\Drntest.ParamValues
-	Archive\arrays\Drntest.ParamValues.tpl
-	Archive\arrays\Drntest.script
 	Archive\arrays\Drntest.test_1.arrays
 	Archive\usgs.Drntest.reference
 DrtTest.gpt
@@ -563,9 +533,6 @@ DrtTest.gpt
 	Archive\DrtTest.pst
 	Archive\DrtTest.ptf
 	Archive\DrtTest.pval
-	Archive\arrays\DrtTest.ParamValues
-	Archive\arrays\DrtTest.ParamValues.tpl
-	Archive\arrays\DrtTest.script
 	Archive\usgs.DrtTest.reference
 HfbTest.gpt
 	Archive\HfbTest.axml
@@ -588,9 +555,6 @@ HfbTest.gpt
 	Archive\HfbTest.pst
 	Archive\HfbTest.ptf
 	Archive\HfbTest.pval
-	Archive\arrays\HfbTest.ParamValues
-	Archive\arrays\HfbTest.ParamValues.tpl
-	Archive\arrays\HfbTest.script
 	Archive\usgs.HfbTest.reference
 EtsTest.gpt
 	Archive\EtsTest.axml
@@ -621,9 +585,6 @@ EtsTest.gpt
 	Archive\arrays\EtsTest.Kx_1.arrays
 	Archive\arrays\EtsTest.Kx_2.arrays
 	Archive\arrays\EtsTest.Kx_3.arrays
-	Archive\arrays\EtsTest.ParamValues
-	Archive\arrays\EtsTest.ParamValues.tpl
-	Archive\arrays\EtsTest.script
 	Archive\usgs.EtsTest.reference
 EvtTest.gpt
 	Archive\EvtTest.axml
@@ -646,9 +607,6 @@ EvtTest.gpt
 	Archive\EvtTest.pval
 	Archive\EvtTest.riv
 	Archive\EvtTest.rvob_out.ins
-	Archive\arrays\EvtTest.ParamValues
-	Archive\arrays\EvtTest.ParamValues.tpl
-	Archive\arrays\EvtTest.script
 	Archive\usgs.EvtTest.reference
 FarmTest1.gpt
 	Archive\FarmTest1.axml
@@ -692,9 +650,6 @@ FarmTest1.gpt
 	Archive\FarmTest1.swr
 	Archive\FarmTest1.SW_Losses
 	Archive\FarmTest1.uzf
-	Archive\arrays\FarmTest1.ParamValues
-	Archive\arrays\FarmTest1.ParamValues.tpl
-	Archive\arrays\FarmTest1.script
 	Archive\usgs.FarmTest1.reference
 HfbMf6Test2.gpt
 	Archive\HfbMf6Test2.axml
@@ -718,9 +673,6 @@ HfbMf6Test2.gpt
 	Archive\HfbMf6Test2.ptf
 	Archive\HfbMf6Test2.pval
 	Archive\HfbMf6Test2.tdis
-	Archive\arrays\HfbMf6Test2.ParamValues
-	Archive\arrays\HfbMf6Test2.ParamValues.tpl
-	Archive\arrays\HfbMf6Test2.script
 	Archive\usgs.HfbMf6Test2.reference
 RechAddTest.gpt
 	Archive\RechAddTest.axml
@@ -743,9 +695,6 @@ RechAddTest.gpt
 	Archive\RechAddTest.pval
 	Archive\RechAddTest.rch
 	Archive\RechAddTest.rch.tpl
-	Archive\arrays\RechAddTest.ParamValues
-	Archive\arrays\RechAddTest.ParamValues.tpl
-	Archive\arrays\RechAddTest.script
 	Archive\usgs.RechAddTest.reference
 RechAddTestMf6.gpt
 	Archive\RechAddTestMf6.axml
@@ -769,9 +718,6 @@ RechAddTestMf6.gpt
 	Archive\RechAddTestMf6.rch
 	Archive\RechAddTestMf6.rch.tpl
 	Archive\RechAddTestMf6.tdis
-	Archive\arrays\RechAddTestMf6.ParamValues
-	Archive\arrays\RechAddTestMf6.ParamValues.tpl
-	Archive\arrays\RechAddTestMf6.script
 	Archive\usgs.RechAddTestMf6.reference
 ParamMf6Test.gpt
 	Archive\ParamMf6Test.axml
@@ -806,9 +752,6 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.tdis
 	Archive\ParamMf6Test.wel
 	Archive\ParamMf6Test.wel.tpl
-	Archive\arrays\ParamMf6Test.ParamValues
-	Archive\arrays\ParamMf6Test.ParamValues.tpl
-	Archive\arrays\ParamMf6Test.script
 	Archive\usgs.ParamMf6Test.reference
 StreamTest1.gpt
 	Archive\StreamTest1.axml
@@ -837,9 +780,6 @@ StreamTest1.gpt
 	Archive\arrays\StreamTest1.Kx_1.arrays
 	Archive\arrays\StreamTest1.Kx_2.arrays
 	Archive\arrays\StreamTest1.Kx_3.arrays
-	Archive\arrays\StreamTest1.ParamValues
-	Archive\arrays\StreamTest1.ParamValues.tpl
-	Archive\arrays\StreamTest1.script
 	Archive\usgs.StreamTest1.reference
 StrFhbTobTest.gpt
 	Archive\StrFhbTobTest.axml
@@ -869,9 +809,6 @@ StrFhbTobTest.gpt
 	Archive\StrFhbTobTest.stob_out.ins
 	Archive\StrFhbTobTest.str
 	Archive\StrFhbTobTest.tob
-	Archive\arrays\StrFhbTobTest.ParamValues
-	Archive\arrays\StrFhbTobTest.ParamValues.tpl
-	Archive\arrays\StrFhbTobTest.script
 	Archive\usgs.StrFhbTobTest.reference
 	Archive\usgs.StrFhbTobTest_MT3DMS.reference
 SutraTest2.gpt
@@ -999,9 +936,6 @@ UzfTest.gpt
 	Archive\UzfTest.sfr.tpl
 	Archive\UzfTest.uzf
 	Archive\UzfTest.uzf.tpl
-	Archive\arrays\UzfTest.ParamValues
-	Archive\arrays\UzfTest.ParamValues.tpl
-	Archive\arrays\UzfTest.script
 	Archive\usgs.UzfTest.reference
 Prediction.gpt
 	Archive\Prediction.axml
@@ -1036,9 +970,6 @@ Prediction.gpt
 	Archive\Prediction.tdis
 	Archive\Prediction.wel
 	Archive\Prediction.wel.tpl
-	Archive\arrays\Prediction.ParamValues
-	Archive\arrays\Prediction.ParamValues.tpl
-	Archive\arrays\Prediction.script
 	Archive\usgs.Prediction.reference
 Pareto.gpt
 	Archive\Pareto.axml
@@ -1073,9 +1004,6 @@ Pareto.gpt
 	Archive\Pareto.tdis
 	Archive\Pareto.wel
 	Archive\Pareto.wel.tpl
-	Archive\arrays\Pareto.ParamValues
-	Archive\arrays\Pareto.ParamValues.tpl
-	Archive\arrays\Pareto.script
 	Archive\usgs.Pareto.reference
 Drntest2.gpt
 	Archive\Drntest2.axml
@@ -1141,9 +1069,6 @@ SwtObsTest.gpt
 	Archive\SwtObsTest.swt
 	Archive\SwtObsTest.SwtObsScript
 	Archive\SwtObsTest.wel
-	Archive\arrays\SwtObsTest.ParamValues
-	Archive\arrays\SwtObsTest.ParamValues.tpl
-	Archive\arrays\SwtObsTest.script
 	Archive\arrays\SwtObsTest.Specific_Gravity_Saturated_1.arrays
 	Archive\usgs.SwtObsTest.reference
 SubObs.gpt
@@ -1205,9 +1130,6 @@ lakeTestObs.gpt
 	Archive\arrays\lakeTestObs.Lakebed_Leakance_7.arrays
 	Archive\arrays\lakeTestObs.Lakebed_Leakance_8.arrays
 	Archive\arrays\lakeTestObs.Lakebed_Leakance_9.arrays
-	Archive\arrays\lakeTestObs.ParamValues
-	Archive\arrays\lakeTestObs.ParamValues.tpl
-	Archive\arrays\lakeTestObs.script
 	Archive\usgs.lakeTestObs.reference
 Mnw2ObsTest.gpt
 	Archive\Mnw2ObsTest.axml
@@ -1235,9 +1157,6 @@ Mnw2ObsTest.gpt
 	Archive\arrays\Mnw2ObsTest.Kx_1.arrays
 	Archive\arrays\Mnw2ObsTest.Kx_2.arrays
 	Archive\arrays\Mnw2ObsTest.Kx_3.arrays
-	Archive\arrays\Mnw2ObsTest.ParamValues
-	Archive\arrays\Mnw2ObsTest.ParamValues.tpl
-	Archive\arrays\Mnw2ObsTest.script
 	Archive\usgs.Mnw2ObsTest.reference
 SWI1.gpt
 	Archive\SWI1.axml
@@ -1267,9 +1186,6 @@ SWI1.gpt
 	Archive\SWI1.swi_obs_Script
 	Archive\SWI1.wel
 	Archive\arrays\SWI1.Kx_1.arrays
-	Archive\arrays\SWI1.ParamValues
-	Archive\arrays\SWI1.ParamValues.tpl
-	Archive\arrays\SWI1.script
 	Archive\usgs.SWI1.reference
 DryCells.gpt
 	Archive\DryCells.axml
@@ -1303,7 +1219,4 @@ DryCells.gpt
 	Archive\arrays\DryCells.Kx_1.arrays
 	Archive\arrays\DryCells.Kx_2.arrays
 	Archive\arrays\DryCells.Kx_3.arrays
-	Archive\arrays\DryCells.ParamValues
-	Archive\arrays\DryCells.ParamValues.tpl
-	Archive\arrays\DryCells.script
 	Archive\usgs.DryCells.reference

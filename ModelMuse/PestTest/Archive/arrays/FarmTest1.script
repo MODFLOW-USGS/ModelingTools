@@ -1,1 +1,0 @@
-read_scalar_file(file="C:\ModelingTools\ModelMuse\PestTest\arrays\FarmTest1.ParamValues", valuecolumn=2, namecolumn=1)
