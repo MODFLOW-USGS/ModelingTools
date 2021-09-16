@@ -12,6 +12,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
+  ExplicitTop = -81
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -2465,7 +2466,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMNW2
+        ActivePage = jvspLAK
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -5357,7 +5358,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               Top = 218
               Width = 581
               Height = 139
-              ActivePage = frameLak.tabBathymetry
               ExplicitTop = 218
               ExplicitWidth = 581
               ExplicitHeight = 139
@@ -5367,10 +5367,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabGage: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 293
+                ExplicitWidth = 573
+                ExplicitHeight = 105
                 inherited gbGage: TGroupBox
-                  Width = 685
-                  ExplicitWidth = 685
+                  Width = 566
+                  ExplicitWidth = 566
                   inherited cbGagStandard: TCheckBox
                     Left = 5
                     OnClick = frameLakcbGagStandardClick
@@ -5387,7 +5388,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     ExplicitLeft = 5
                   end
                   inherited cbGage4: TCheckBox
-                    Width = 679
+                    Width = 560
                     OnClick = frameLakcbGage4Click
                     ExplicitWidth = 679
                   end
@@ -8931,15 +8932,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabWellScreens: TTabSheet
-                ExplicitWidth = 573
-                inherited Panel3: TPanel
-                  Width = 573
-                  ExplicitWidth = 573
-                end
                 inherited rdgVerticalScreens: TRbwDataGrid4
-                  Width = 573
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
-                  ExplicitWidth = 573
                   ColWidths = (
                     64
                     64
@@ -8953,14 +8947,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   RowHeights = (
                     24
                     24)
-                end
-                inherited Panel4: TPanel
-                  Width = 573
-                  ExplicitWidth = 573
-                  inherited Label2: TLabel
-                    Width = 567
-                    ExplicitWidth = 552
-                  end
                 end
               end
               inherited tabObservations: TTabSheet
@@ -11532,6 +11518,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 581
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'SWI2_Seawater_Intrusion_Packa2'
           Caption = 'jvspSWI_Obs'
           inline frameSwiObs: TframeSwiObsInterpolated
             Left = 0
@@ -12615,7 +12603,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                         Width = 569
                         Height = 139
                         OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
-                        ExplicitTop = 0
                         ExplicitWidth = 569
                         ExplicitHeight = 139
                       end
@@ -12674,14 +12661,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlName: TPanel
               Width = 581
+              ExplicitTop = 25
               ExplicitWidth = 581
               inherited edObsName: TLabeledEdit
                 Height = 27
-                EditLabel.Width = 205
+                EditLabel.Width = 252
                 EditLabel.Height = 19
                 EditLabel.ExplicitLeft = 6
                 EditLabel.ExplicitTop = -3
-                EditLabel.ExplicitWidth = 205
+                EditLabel.ExplicitWidth = 252
                 EditLabel.ExplicitHeight = 19
                 ExplicitHeight = 27
               end
@@ -12976,18 +12964,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabLakeTable: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 225
+                ExplicitHeight = 301
                 inherited frameLakeTable: TframeFormulaGrid
-                  Width = 573
-                  Height = 225
-                  ExplicitWidth = 573
-                  ExplicitHeight = 225
+                  Height = 301
+                  ExplicitWidth = 477
+                  ExplicitHeight = 301
                   inherited Panel: TPanel
-                    Top = 184
-                    Width = 573
-                    ExplicitTop = 184
-                    ExplicitWidth = 573
+                    Top = 260
+                    ExplicitTop = 260
+                    ExplicitWidth = 477
                     inherited lbNumber: TLabel
                       Width = 206
                       Height = 19
@@ -13009,15 +12994,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                   end
                   inherited Grid: TRbwDataGrid4
-                    Width = 573
-                    Height = 127
+                    Height = 203
                     OnButtonClick = frameResdgModflowBoundaryButtonClick
-                    ExplicitWidth = 573
-                    ExplicitHeight = 127
+                    ExplicitWidth = 477
+                    ExplicitHeight = 203
                   end
                   inherited pnlTop: TPanel
-                    Width = 573
-                    ExplicitWidth = 573
+                    ExplicitWidth = 477
                     inherited edFormula: TLabeledEdit
                       Height = 27
                       EditLabel.Width = 59
@@ -13819,6 +13802,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 581
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'Subsidence_and_Aquifer_System_'
           Caption = 'jvspSubPestObs'
           inline framePestObsSub: TframeSubPestObs
             Left = 0
@@ -13942,6 +13927,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 581
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'SWT_Subsidence_and_Aquifer_Sys'
           Caption = 'jvspSwtPestObs'
           inline framePestObsSwt: TframeSubPestObs
             Left = 0
@@ -14084,7 +14071,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraLake
+        ActivePage = jvspSutraSpecUObs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -14964,6 +14951,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 605
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'Sutra_State_Calibration_Observ'
           Caption = 'jvspSutraStateObs'
           inline frameSutraPestObsState: TframePestObsCaptioned
             Left = 0
@@ -15089,7 +15078,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 605
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'Generalized Flow Observations'
           Caption = 'jvspSutraSpecPresObs'
+          OnShow = jvspSutraSpecPresObsShow
           inline frameSutraSpecPresObs: TframeFluxObs
             Left = 0
             Top = 0
@@ -15124,7 +15116,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 605
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'Generalized Flow Observations'
           Caption = 'jvspSutraSpecFlowObs'
+          OnShow = jvspSutraSpecFlowObsShow
           inline frameSutraSpecifiedFluidFlowObs: TframeFluxObs
             Left = 0
             Top = 0
@@ -15159,7 +15154,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 605
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'Generalized Flow Observations'
           Caption = 'jvspSutraSpecUObs'
+          OnShow = jvspSutraSpecUObsShow
           inline frameSutraSpecUObs: TframeFluxObs
             Left = 0
             Top = 0
@@ -15192,7 +15190,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 605
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'SUTRA_Boundary_Observations'
           Caption = 'jvspSutraGenFlowObs'
+          OnShow = jvspSutraGenFlowObsShow
           inline frameSutraGenFlowObs: TframeFluxObs
             Left = 0
             Top = 0
@@ -15223,7 +15224,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Top = 0
           Width = 605
           Height = 476
+          HelpType = htKeyword
+          HelpKeyword = 'SUTRA_Boundary_Observations'
           Caption = 'jvspSutraGenTransObs'
+          OnShow = jvspSutraGenTransObsShow
           inline frameSutraGenTransObs: TframeFluxObs
             Left = 0
             Top = 0

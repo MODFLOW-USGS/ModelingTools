@@ -1598,7 +1598,8 @@ begin
         WriteInstuctionsBatchFile.Add('pause');
       end;
 
-      if frmGoPhast.PhastModel.InterpSwiObsDefined then
+      if frmGoPhast.PhastModel.InterpSwiObsDefined
+        and not frmGoPhast.PhastModel.PestUsed then
       begin
         SwiObsExtractorPath := ExtractFileDir(Application.ExeName);
         SwiObsExtractorPath := IncludeTrailingPathDelimiter(SwiObsExtractorPath);

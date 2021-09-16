@@ -8,6 +8,8 @@ uses
   System.Generics.Collections, PestObsUnit;
 
 type
+//  TSwiPostProcessor = (sppMF2005Extractor, sppSwiExtractor);
+
   TSwiRecord = record
     Cell: TCellLocation;
     Zeta: double;
@@ -157,10 +159,12 @@ type
   private
     FValues: TSwiObsCollection;
     FZetaSurfaceNumber: integer;
+//    FSwiPostProcessor: TSwiPostProcessor;
     procedure SetValues(const Value: TSwiObsCollection);
     function GetCellList(Index: integer): TSwiObsCellList;
     function GetCellListCount: integer;
     procedure SetZetaSurfaceNumber(const Value: integer);
+//    procedure SetSwiPostProcessor(const Value: TSwiPostProcessor);
   public
     procedure Assign(Source: TPersistent); override;
     // @name creates an instance of @classname.
@@ -184,6 +188,8 @@ type
     property Values: TSwiObsCollection read FValues write SetValues;
     //
     property ZetaSurfaceNumber: integer read FZetaSurfaceNumber write SetZetaSurfaceNumber;
+//    property SwiPostProcessor: TSwiPostProcessor read FSwiPostProcessor
+//      write SetSwiPostProcessor; Stored True;
   end;
 
   TSwiObservationTimeList = class(TCustomTimeList)
@@ -728,6 +734,15 @@ procedure TSwiObsBoundary.RemoveModelLink(AModel: TBaseModel);
 begin
   Values.RemoveModelLink(AModel);
 end;
+
+//procedure TSwiObsBoundary.SetSwiPostProcessor(const Value: TSwiPostProcessor);
+//begin
+//  if FSwiPostProcessor <> Value then
+//  begin
+//    FSwiPostProcessor := Value;
+//    InvalidateModel;
+//  end;
+//end;
 
 procedure TSwiObsBoundary.SetValues(const Value: TSwiObsCollection);
 begin

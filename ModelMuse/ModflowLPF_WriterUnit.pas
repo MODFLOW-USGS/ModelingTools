@@ -50,7 +50,7 @@ type
     procedure WriteLayerData; override;
   public
     procedure WriteFile(const AFileName: string);
-    procedure WritePestFile(const AFileName: string);
+//    procedure WritePestFile(const AFileName: string);
   end;
 
 const
@@ -68,8 +68,7 @@ resourcestring
 implementation
 
 uses ModflowUnitNumbers, ModflowOutputControlUnit,
-  frmErrorsAndWarningsUnit, frmProgressUnit, Forms, PestArrayWriterUnit,
-  PestParamRoots;
+  frmErrorsAndWarningsUnit, frmProgressUnit, Forms, PestParamRoots;
 
 resourcestring
   StrVKCBParameterImpro = 'VKCB parameter improperly defined.';
@@ -414,30 +413,30 @@ begin
   end;
 end;
 
-procedure TModflowLPF_Writer.WritePestFile(const AFileName: string);
-var
-  ValidParamTypes: TParameterTypes;
-  PestArrayWriter: TPestDataArrayWriter;
-begin
-  if not Model.ModflowPackages.LpfPackage.IsSelected then
-  begin
-    Exit
-  end;
-  if Model.ModflowFullStressPeriods.TransientModel then
-  begin
-    ValidParamTypes := AllLpfParameters;
-  end
-  else
-  begin
-    ValidParamTypes := SteadyLpfParameters;
-  end;
-  PestArrayWriter := TPestDataArrayWriter.Create(Model, etExport);
-  try
-    PestArrayWriter.WriteParamTypeArrays(ValidParamTypes, AFileName);
-  finally
-    PestArrayWriter.Free;
-  end;
-end;
+//procedure TModflowLPF_Writer.WritePestFile(const AFileName: string);
+//var
+//  ValidParamTypes: TParameterTypes;
+//  PestArrayWriter: TPestDataArrayWriter;
+//begin
+//  if not Model.ModflowPackages.LpfPackage.IsSelected then
+//  begin
+//    Exit
+//  end;
+//  if Model.ModflowFullStressPeriods.TransientModel then
+//  begin
+//    ValidParamTypes := AllLpfParameters;
+//  end
+//  else
+//  begin
+//    ValidParamTypes := SteadyLpfParameters;
+//  end;
+//  PestArrayWriter := TPestDataArrayWriter.Create(Model, etExport);
+//  try
+//    PestArrayWriter.WriteParamTypeArrays(ValidParamTypes, AFileName);
+//  finally
+//    PestArrayWriter.Free;
+//  end;
+//end;
 
 procedure TCustomLpfWriter.WritePestScripts;
 var

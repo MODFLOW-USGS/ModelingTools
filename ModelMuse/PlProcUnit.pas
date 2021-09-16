@@ -2167,10 +2167,13 @@ begin
 end;
 
 procedure TSutraData14BScriptWriter.WriteFiles(var AFileName: string);
+var
+  PLPROC_Location: string;
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
-  Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
+  PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+  Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
   GetUsedParameters;
@@ -2246,6 +2249,7 @@ end;
 procedure TSutraData14BScriptWriter.WriteKrigingFactors;
 var
   ScriptFileName: string;
+  PLPROC_Location: string;
 begin
   if (FPorosityPilotPointFiles.Count > 0)
     or (FThicknessPilotPointFiles.Count > 0) then
@@ -2259,8 +2263,9 @@ begin
       ReadPilotPoints;
       ReadDiscretization;
       SaveKrigingFactors;
-      Model.KrigfactorsScriptLines.Add(Format('plproc ''%s''',
-        [ExtractFileName(ScriptFileName)]));
+      PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+      Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
+        [PLPROC_Location, ExtractFileName(ScriptFileName)]));
 
     finally
       CloseFile
@@ -3284,10 +3289,13 @@ procedure TSutraData15BScriptWriter.WriteFiles(var AFileName: string);
 var
   Index: Integer;
   ADataRec: TDataRecord;
+  PLPROC_Location: string;
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
-  Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
+  PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+//  PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
+  Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
   GetUsedParameters;
@@ -3336,8 +3344,13 @@ begin
   NewLine;
   WriteString('  plist=p_EN2D;column=4, &');
   NewLine;
+  WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
+  NewLine;
+
   if Mesh.MeshType = mt3D then
   begin
+    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+    NewLine;
     ColIndex := 5;
     for LayerIndex := 1 to LayerCount do
     begin
@@ -3354,9 +3367,10 @@ begin
       NewLine;
       Inc(ColIndex);
     end;
+    WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
+    NewLine;
   end;
-  WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
-  NewLine;
+
   NewLine;
 end;
 
@@ -3365,6 +3379,7 @@ var
   ScriptFileName: string;
   index: Integer;
   PilotPointsUsed: Boolean;
+  PLPROC_Location: string;
 begin
   PilotPointsUsed := False;
   for index := 0 to FDataRecordList.Count - 1 do
@@ -3386,8 +3401,9 @@ begin
       ReadPilotPoints;
       ReadDiscretization;
       SaveKrigingFactors;
-      Model.KrigfactorsScriptLines.Add(Format('plproc ''%s''',
-        [ExtractFileName(ScriptFileName)]));
+      PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+      Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
+        [PLPROC_Location, ExtractFileName(ScriptFileName)]));
     finally
       CloseFile
     end;
@@ -3846,6 +3862,8 @@ end;
 
 procedure TSutraInitCondScriptWriter.WriteFiles(var AFileName: string;
   const DataArrayName: string; ID: string);
+var
+  PLPROC_Location: string;
 begin
   FID := ID;
   FDataArrayName := DataArrayName;
@@ -3853,7 +3871,9 @@ begin
   FMesh := Model.SutraMesh;
   FFileName := ChangeFileExt(AFileName, '.' + FDataArrayName + '.script');
   Model.SutraPestScripts.Add(FFileName);
-  Model.PestTemplateLines.Add(Format('plproc ''%s''', [ExtractFileName(FFileName)]));
+  PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+  Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''',
+   [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
   GetUsedParameters;
@@ -3947,6 +3967,7 @@ procedure TSutraInitCondScriptWriter.WriteKrigingFactors;
 var
   ScriptFileName: string;
   PilotPointsUsed: Boolean;
+  PLPROC_Location: string;
 begin
   PilotPointsUsed := FPilotPointFiles.Count > 0;
   if PilotPointsUsed then
@@ -3960,8 +3981,9 @@ begin
       ReadPilotPoints;
       ReadDiscretization;
       SaveKrigingFactors;
-      Model.KrigfactorsScriptLines.Add(Format('plproc ''%s''',
-        [ExtractFileName(ScriptFileName)]));
+      PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+      Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
+        [PLPROC_Location, ExtractFileName(ScriptFileName)]));
     finally
       CloseFile
     end;

@@ -374,6 +374,7 @@ var
   NewDataType: TRbwDataType;
   CreateNewDataSet: Boolean;
 begin
+  CreateNewDataSet := True;
   if chklstDataToImport.Checked[Ord(fpdtWithdrawals)] then
   begin
     NewName := chklstDataToImport.Items[Ord(fpdtWithdrawals)];

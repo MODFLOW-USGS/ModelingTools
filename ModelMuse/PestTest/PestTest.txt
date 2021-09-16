@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1220
+1249
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1035,16 +1035,10 @@ Drntest2.gpt
 	Archive\Drntest2.test.PstValues
 	Archive\Drntest2.test.script
 	Archive\Drntest2.test.script.tpl
-	Archive\arrays\Drntest2.Blocks.clist
 	Archive\arrays\Drntest2.Kx_1.arrays
 	Archive\arrays\Drntest2.Kx_2.arrays
 	Archive\arrays\Drntest2.Kx_3.arrays
-	Archive\arrays\Drntest2.ParamValues
-	Archive\arrays\Drntest2.ParamValues.tpl
-	Archive\arrays\Drntest2.script
 	Archive\arrays\Drntest2.test_1.arrays
-	Archive\arrays\Drntest2.VK_Par1_Multiplier.plist
-	Archive\arrays\Drntest2.VK_Par1_Zone.slist
 	Archive\usgs.Drntest2.reference
 SwtObsTest.gpt
 	Archive\SwtObsTest.axml
@@ -1220,3 +1214,38 @@ DryCells.gpt
 	Archive\arrays\DryCells.Kx_2.arrays
 	Archive\arrays\DryCells.Kx_3.arrays
 	Archive\usgs.DryCells.reference
+SutraTest5.gpt
+	Archive\SutraTest5.15B
+	Archive\SutraTest5.15B.script
+	Archive\SutraTest5.15B.script.tpl
+	Archive\SutraTest5.Angle_Horizontal
+	Archive\SutraTest5.Angle_Rotational
+	Archive\SutraTest5.Angle_Vertical
+	Archive\SutraTest5.axml
+	Archive\SutraTest5.c_ele
+	Archive\SutraTest5.c_nod
+	Archive\SutraTest5.c_nod3D
+	Archive\SutraTest5.FluxBcs
+	Archive\SutraTest5.ics
+	Archive\SutraTest5.inp
+	Archive\SutraTest5.jtf
+	Archive\SutraTest5.Longitudinal_Dispersivity_Max_Dir
+	Archive\SutraTest5.Longitudinal_Dispersivity_Mid_Dir
+	Archive\SutraTest5.Longitudinal_Dispersivity_Min_Dir
+	Archive\SutraTest5.Maximum_Permeability
+	Archive\SutraTest5.Middle_Permeability
+	Archive\SutraTest5.Minimum_Permeability
+	Archive\SutraTest5.Nodal_Porosity
+	Archive\SutraTest5.pst
+	Archive\SutraTest5.ptf
+	Archive\SutraTest5.pval
+	Archive\SutraTest5.soe_ev
+	Archive\SutraTest5.soe_i
+	Archive\SutraTest5.SPecPBcs
+	Archive\SutraTest5.SPecUBcs
+	Archive\SutraTest5.Transverse_Dispersivity_Max_Dir
+	Archive\SutraTest5.Transverse_Dispersivity_Mid_Dir
+	Archive\SutraTest5.Transverse_Dispersivity_Min_Dir
+	Archive\SutraTest5.UFluxBcs
+	Archive\SutraTest5.Unsat_Region_Elements
+	Archive\usgs.SutraTest5.reference

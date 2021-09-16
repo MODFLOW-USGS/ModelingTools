@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">SUTRA Boundary Observations</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">SUTRA Boundary Observations</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Spec Pressure Observations</text><text styleclass="Normal" translate="true">, </text><text styleclass="Strong" translate="true">Specified Flow Observations</text><text styleclass="Normal" translate="true">, </text><text styleclass="Strong" translate="true">Specified Conc/Temp Observations, Generalized Flow Observations</text><text styleclass="Normal" translate="true">, and</text><text styleclass="Strong" translate="true"> Generalized Transport Observations</text><text styleclass="Normal" translate="true"> panes are only visible for objects evaluated at nodes if one or more SUTRA observations of the corresponding type have been defined in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_SUTRA_Boundary_Observati" styleclass="Normal" translate="true">Manage SUTRA Boundary Observations</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Each such observation group is listed in a table on the pane. If the current object is a part of that observation group, a check box is checked next to the name of the observation group. If the current object also defines a boundary of the corresponding type, the user can add or remove the object from the observation group by checking or unchecking the checkbox next to the observation group name.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_SUTRA_Boundary_Observati" anchor="Factor" styleclass="Normal" translate="true">Factor</link><text styleclass="Normal" translate="true"> for a particular object can also be defined in the table.</text></para>
+  </body>
+</topic>

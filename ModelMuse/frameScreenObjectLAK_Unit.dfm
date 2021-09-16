@@ -348,19 +348,19 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         455
         299)
       object gbGage: TGroupBox
-        Left = 6
+        Left = 3
         Top = 17
         Width = 449
-        Height = 144
+        Height = 160
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Gage output'
         TabOrder = 0
         DesignSize = (
           449
-          144)
+          160)
         object cbGagStandard: TCheckBox
           Left = 3
-          Top = 16
+          Top = 24
           Width = 430
           Height = 17
           AllowGrayed = True
@@ -370,7 +370,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         object cbGagFluxAndCond: TCheckBox
           Left = 3
-          Top = 39
+          Top = 47
           Width = 443
           Height = 17
           AllowGrayed = True
@@ -381,7 +381,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         object cbGagDelta: TCheckBox
           Left = 3
-          Top = 62
+          Top = 70
           Width = 443
           Height = 17
           AllowGrayed = True
@@ -392,7 +392,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         object cbGage4: TCheckBox
           Left = 3
-          Top = 85
+          Top = 93
           Width = 443
           Height = 56
           AllowGrayed = True

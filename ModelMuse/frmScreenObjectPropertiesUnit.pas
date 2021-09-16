@@ -722,6 +722,11 @@ type
     procedure frameMT3D_SFTrdgModflowBoundarySelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
     procedure dgVerticiesExit(Sender: TObject);
+    procedure jvspSutraSpecFlowObsShow(Sender: TObject);
+    procedure jvspSutraGenFlowObsShow(Sender: TObject);
+    procedure jvspSutraGenTransObsShow(Sender: TObject);
+    procedure jvspSutraSpecPresObsShow(Sender: TObject);
+    procedure jvspSutraSpecUObsShow(Sender: TObject);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -3462,6 +3467,36 @@ begin
 
 
   end;
+end;
+
+procedure TfrmScreenObjectProperties.jvspSutraGenFlowObsShow(Sender: TObject);
+begin
+  inherited;
+  frameSutraGenFlowObs.rdgObservationGroups.HideEditor;
+end;
+
+procedure TfrmScreenObjectProperties.jvspSutraGenTransObsShow(Sender: TObject);
+begin
+  inherited;
+  frameSutraGenTransObs.rdgObservationGroups.HideEditor;
+end;
+
+procedure TfrmScreenObjectProperties.jvspSutraSpecFlowObsShow(Sender: TObject);
+begin
+  inherited;
+  frameSutraSpecifiedFluidFlowObs.rdgObservationGroups.HideEditor;
+end;
+
+procedure TfrmScreenObjectProperties.jvspSutraSpecPresObsShow(Sender: TObject);
+begin
+  inherited;
+  frameSutraSpecPresObs.rdgObservationGroups.HideEditor;
+end;
+
+procedure TfrmScreenObjectProperties.jvspSutraSpecUObsShow(Sender: TObject);
+begin
+  inherited;
+  frameSutraSpecUObs.rdgObservationGroups.HideEditor;
 end;
 
 procedure TfrmScreenObjectProperties.jvtlModflowBoundaryNavigatorChanging(

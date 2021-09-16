@@ -363,11 +363,14 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         inherited grpDirectObs: TGroupBox
           Width = 482
           ExplicitWidth = 482
+          ExplicitHeight = 243
           inherited frameObservations: TframeGrid
             Width = 478
             ExplicitWidth = 478
+            ExplicitHeight = 226
             inherited Panel: TPanel
               Width = 478
+              ExplicitTop = 194
               ExplicitWidth = 478
               inherited sbAdd: TSpeedButton
                 Left = 248
@@ -387,7 +390,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             end
             inherited Grid: TRbwDataGrid4
               Width = 478
+              ExplicitTop = 0
               ExplicitWidth = 478
+              ExplicitHeight = 194
             end
           end
         end
@@ -397,8 +402,10 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           inherited frameObsComparisons: TframeGrid
             Width = 478
             ExplicitWidth = 478
+            ExplicitHeight = 155
             inherited Panel: TPanel
               Width = 478
+              ExplicitTop = 120
               ExplicitWidth = 478
               inherited sbAdd: TSpeedButton
                 Left = 248
@@ -416,6 +423,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             inherited Grid: TRbwDataGrid4
               Width = 478
               ExplicitWidth = 478
+              ExplicitHeight = 120
             end
           end
         end
@@ -430,14 +438,15 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 19
     object edObsName: TLabeledEdit
       Left = 6
       Top = 19
       Width = 278
       Height = 21
-      EditLabel.Width = 136
+      EditLabel.Width = 167
       EditLabel.Height = 13
-      EditLabel.Caption = 'Observation name (obsnam)'
+      EditLabel.Caption = 'Observation group name (obsnam)'
       MaxLength = 40
       TabOrder = 0
       OnChange = edObsNameChange

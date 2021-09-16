@@ -2050,6 +2050,7 @@ type
     procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
     procedure WMExitSizeMove(var Message: TMessage); message WM_EXITSIZEMOVE;
     procedure EnablePilotPointItems;
+    procedure UpdateControlsEnabledOrVisible;
     { Public declarations }
   end;
 
@@ -4185,61 +4186,13 @@ begin
   end;
 end;
 
-procedure TfrmGoPhast.ModelSelectionChange(Sender: TObject);
-const
-  MinimumToolbarLeft = 11;
-  ToolbarExtraWidth = 15;
-  procedure UpdateRunShortCut(Action: TAction);
-  begin
-    if Action.Enabled then
-    begin
-      Action.ShortCut := ShortCut(Word('E'), [ssCtrl]);
-      btnRunModel.Action := Action;
-      btnRunModel.Caption := '';
-    end
-    else
-    begin
-      Action.ShortCut := 0;
-    end;
-  end;
+procedure TfrmGoPhast.UpdateControlsEnabledOrVisible;
 var
   ControlList: TList<TComponent>;
   ShowControls: Boolean;
   ControlIndex: Integer;
   AComponent: TComponent;
 begin
-  if csDestroying in ComponentState then
-  begin
-    Exit;
-  end;
-  case PhastModel.ModelSelection of
-    msUndefined: ; // ignore
-    msPhast:
-        acPhastActive.Checked := True;
-    msModflow:
-        acModflowActive.Checked := True;
-    msModflowLGR:
-        acModflowLgrActive.Checked := True;
-    msModflowLGR2:
-        acModflowLgr2Active.Checked := True;
-    msModflowNWT:
-        acModflowNwtActive.Checked := True;
-    msModflowFmp:
-        acModflowFmpActive.Checked := True;
-    msModflowCfp:
-        acModflowCfpActive.Checked := True;
-    msSutra22:
-        acSutra22Active.Checked := True;
-    msSutra30:
-        acSutra30Active.Checked := True;
-    msFootPrint:
-        acFootPrintActive.Checked := True;
-    msModflow2015:
-        acModflow6Active.Checked := True;
-    else
-      Assert(False);
-  end;
-
   {$IFDEF PEST}
   acImportMf6FeatureFromPest.Visible := PhastModel.ModelSelection = msModflow2015;
   acImportSutraFeaturesFromPest.Visible := PhastModel.ModelSelection in SutraSelection;
@@ -4349,7 +4302,8 @@ begin
         {$IFDEF PEST}
         acEditObservationComparisons.Visible := True;
         acEditObservationComparisons.Enabled := PhastModel.PestUsed;
-        acEditSutraFluxObs.Visible := PhastModel.PestUsed;
+        acEditSutraFluxObs.Visible := True;
+        acEditSutraFluxObs.Enabled := PhastModel.PestUsed;
         {$ELSE}
         acEditObservationComparisons.Visible := False;
         acEditSutraFluxObs.Visible := False;
@@ -4400,8 +4354,6 @@ begin
     comboZCount.ItemIndex := 2;
   end;
 
-  frameTopView.AdjustScales;
-
   EnableVisualization;
 
   if frameSideView.Visible and (frameSideView.Left < splitVertTop.Left) then
@@ -4436,14 +4388,6 @@ begin
 
   EnableFarmMenuItems;
 
-  // update the cursors.
-  dcMoveColCursor.RedrawCursor;
-  dcMoveRowCursor.RedrawCursor;
-  dcAddColCursor.RedrawCursor;
-  dcAddRowCursor.RedrawCursor;
-  dcSubdivide.RedrawCursor;
-  dcSetSpacing.RedrawCursor;
-
   tbarEditGrid.Visible := (PhastModel.ModelSelection in ModelsWithGrid) and not DisvUsed;
   tbarView3D.Visible := tbarEditGrid.Visible;
 
@@ -4453,51 +4397,11 @@ begin
       msModflow2015];
   acImportSutraModelResults.Enabled :=
     PhastModel.ModelSelection  in SutraSelection;
-  if PhastModel.ModelSelection  in SutraSelection then
-  begin
-    miGriddedData.Caption := StrMeshData;
-    miGriddedData.Hint := StrImportMeshDataAs;
-  end
-  else
-  begin
-    miGriddedData.Caption := StrGriddedData;
-    miGriddedData.Hint := StrImportGriddedData;
-  end;
 
-//  acImportGriddedDataFiles.Enabled :=
-//    not (PhastModel.ModelSelection  in SutraSelection);
   tlbMesh.Visible := PhastModel.ModelSelection  in SutraSelection;
   tlb3dViewMesh.Visible := (PhastModel.ModelSelection in SutraSelection) or DisVUsed;
   acImportSutraMesh.Enabled := PhastModel.ModelSelection in SutraSelection;
   acImportSutraFiles.Enabled := PhastModel.ModelSelection in SutraSelection;
-
-  SetToolbarPositions;
-
-
-//  tbarShowGrid.Left := Width - tbarShowGrid.Width- ToolbarExtraWidth;
-//  if tbarEditGrid.Visible then
-//  begin
-//    tbarEditGrid.Left := MinimumToolbarLeft;
-//    tbarCreateScreenObject.Left := tbarEditGrid.Left + tbarEditGrid.Width
-//      + ToolbarExtraWidth;
-//    tbarView3D.Left := tbarCreateScreenObject.Left
-//      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
-//    tbarView3D.Top := tbarCreateScreenObject.Top;
-//    tbarShowGrid.Left := tbarView3D.Left + tbarView3D.Width;
-//    tbarShowGrid.Top := tbarView3D.Top;
-//
-//  end
-//  else
-//  begin
-//    tlbMesh.Left := MinimumToolbarLeft;
-//    tbarCreateScreenObject.Left := tlbMesh.Left + tlbMesh.Width
-//      + ToolbarExtraWidth;
-//    tlb3dViewMesh.Left := tbarCreateScreenObject.Left
-//      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
-//    tlb3dViewMesh.Top := tbarCreateScreenObject.Top;
-//    tlbMesh.Top := tbarCreateScreenObject.Top;
-//    tbarShowGrid.Left := tlb3dViewMesh.Left + tlb3dViewMesh.Width;
-//  end;
 
   acExportModpath.Enabled :=
     PhastModel.ModelSelection in ModflowSelection;
@@ -4515,16 +4419,6 @@ begin
   acRunModflowCfp.Enabled := PhastModel.ModelSelection = msModflowCfp;
   acRunFootprint.Enabled := PhastModel.ModelSelection = msFootPrint;
   acRunModflow6.Enabled := PhastModel.ModelSelection = msModflow2015;
-
-  UpdateRunShortCut(acExportPhastInputFile);
-  UpdateRunShortCut(acRunModflow);
-  UpdateRunShortCut(acRunModflowLgr);
-  UpdateRunShortCut(acRunModflowNWT);
-  UpdateRunShortCut(acRunModflowFMP);
-  UpdateRunShortCut(acRunModflowCFP);
-  UpdateRunShortCut(acRunSUTRA);
-  UpdateRunShortCut(acRunFootprint);
-  UpdateRunShortCut(acRunModflow6);
 
   miLayers.Enabled :=
     PhastModel.ModelSelection in ModflowSelection;
@@ -4679,6 +4573,126 @@ begin
     ControlList.Free;
   end;
 
+  EnableModelMate;
+  EnableCTS;
+
+  acPEST.Enabled := ModelSelection in (ModflowSelection + SutraSelection);
+
+end;
+
+procedure TfrmGoPhast.ModelSelectionChange(Sender: TObject);
+const
+  MinimumToolbarLeft = 11;
+  ToolbarExtraWidth = 15;
+  procedure UpdateRunShortCut(Action: TAction);
+  begin
+    if Action.Enabled then
+    begin
+      Action.ShortCut := ShortCut(Word('E'), [ssCtrl]);
+      btnRunModel.Action := Action;
+      btnRunModel.Caption := '';
+    end
+    else
+    begin
+      Action.ShortCut := 0;
+    end;
+  end;
+begin
+  if csDestroying in ComponentState then
+  begin
+    Exit;
+  end;
+  case PhastModel.ModelSelection of
+    msUndefined: ; // ignore
+    msPhast:
+        acPhastActive.Checked := True;
+    msModflow:
+        acModflowActive.Checked := True;
+    msModflowLGR:
+        acModflowLgrActive.Checked := True;
+    msModflowLGR2:
+        acModflowLgr2Active.Checked := True;
+    msModflowNWT:
+        acModflowNwtActive.Checked := True;
+    msModflowFmp:
+        acModflowFmpActive.Checked := True;
+    msModflowCfp:
+        acModflowCfpActive.Checked := True;
+    msSutra22:
+        acSutra22Active.Checked := True;
+    msSutra30:
+        acSutra30Active.Checked := True;
+    msFootPrint:
+        acFootPrintActive.Checked := True;
+    msModflow2015:
+        acModflow6Active.Checked := True;
+    else
+      Assert(False);
+  end;
+
+  UpdateControlsEnabledOrVisible;
+
+  frameTopView.AdjustScales;
+
+  // update the cursors.
+  dcMoveColCursor.RedrawCursor;
+  dcMoveRowCursor.RedrawCursor;
+  dcAddColCursor.RedrawCursor;
+  dcAddRowCursor.RedrawCursor;
+  dcSubdivide.RedrawCursor;
+  dcSetSpacing.RedrawCursor;
+
+  if PhastModel.ModelSelection  in SutraSelection then
+  begin
+    miGriddedData.Caption := StrMeshData;
+    miGriddedData.Hint := StrImportMeshDataAs;
+  end
+  else
+  begin
+    miGriddedData.Caption := StrGriddedData;
+    miGriddedData.Hint := StrImportGriddedData;
+  end;
+
+//  acImportGriddedDataFiles.Enabled :=
+//    not (PhastModel.ModelSelection  in SutraSelection);
+  SetToolbarPositions;
+
+
+//  tbarShowGrid.Left := Width - tbarShowGrid.Width- ToolbarExtraWidth;
+//  if tbarEditGrid.Visible then
+//  begin
+//    tbarEditGrid.Left := MinimumToolbarLeft;
+//    tbarCreateScreenObject.Left := tbarEditGrid.Left + tbarEditGrid.Width
+//      + ToolbarExtraWidth;
+//    tbarView3D.Left := tbarCreateScreenObject.Left
+//      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
+//    tbarView3D.Top := tbarCreateScreenObject.Top;
+//    tbarShowGrid.Left := tbarView3D.Left + tbarView3D.Width;
+//    tbarShowGrid.Top := tbarView3D.Top;
+//
+//  end
+//  else
+//  begin
+//    tlbMesh.Left := MinimumToolbarLeft;
+//    tbarCreateScreenObject.Left := tlbMesh.Left + tlbMesh.Width
+//      + ToolbarExtraWidth;
+//    tlb3dViewMesh.Left := tbarCreateScreenObject.Left
+//      + tbarCreateScreenObject.Width + ToolbarExtraWidth;
+//    tlb3dViewMesh.Top := tbarCreateScreenObject.Top;
+//    tlbMesh.Top := tbarCreateScreenObject.Top;
+//    tbarShowGrid.Left := tlb3dViewMesh.Left + tlb3dViewMesh.Width;
+//  end;
+
+  UpdateRunShortCut(acExportPhastInputFile);
+  UpdateRunShortCut(acRunModflow);
+  UpdateRunShortCut(acRunModflowLgr);
+  UpdateRunShortCut(acRunModflowNWT);
+  UpdateRunShortCut(acRunModflowFMP);
+  UpdateRunShortCut(acRunModflowCFP);
+  UpdateRunShortCut(acRunSUTRA);
+  UpdateRunShortCut(acRunFootprint);
+  UpdateRunShortCut(acRunModflow6);
+
   if DisvUsed then
   begin
     SetActionChecked(acDisvGrid);
@@ -4687,11 +4701,6 @@ begin
   begin
     SetActionChecked(acStructuredGrid);
   end;
-
-  EnableModelMate;
-  EnableCTS;
-
-  acPEST.Enabled := ModelSelection in (ModflowSelection + SutraSelection);
 
 end;
 

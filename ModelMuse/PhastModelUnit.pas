@@ -20270,6 +20270,7 @@ var
   FootprintWell: TFootprintWell;
   Withdrawals: TDataArray;
   Position: Integer;
+//  ModflowSwiObservations: TSwiObsBoundary;
 //  StressPeriodIndex: Integer;
 //  StressPeriod: TModflowStressPeriod;
 //  Mt3dStressPeriod: TMt3dmsTimeItem;
@@ -20277,6 +20278,19 @@ begin
   FixScreenObjectNames;
   RenameOldVerticalLeakance;
   FixSpecifyingGridByThreeDObjects;
+
+//  if SwiObsUsed(nil) and FileVersionEqualOrEarlier('4.3.0.65') then
+//  begin
+//    for ScreenObjectIndex := 0 to ScreenObjectCount - 1 do
+//    begin
+//      AScreenObject := ScreenObjects[ScreenObjectIndex];
+//      ModflowSwiObservations := AScreenObject.ModflowSwiObservations;
+//      if (ModflowSwiObservations <> nil) and ModflowSwiObservations.Used then
+//      begin
+//        ModflowSwiObservations.SwiPostProcessor := sppSwiExtractor;
+//      end;
+//    end;
+//  end;
 
   if SfrIsSelected then
   begin
@@ -41990,9 +42004,6 @@ begin
           LPF_Writer := TModflowLPF_Writer.Create(self, etExport);
           try
             LPF_Writer.WriteFile(FileName);
-          {$IFDEF PEST}
-            LPF_Writer.WritePestFile(FileName);
-          {$ENDIF}
           finally
             LPF_Writer.Free;
           end;
