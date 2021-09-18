@@ -98,6 +98,7 @@ var
   CriticalDistance: Double;
   PIndex: Integer;
   ActiveDataSet: TDataArray;
+//  PilotPointsDefined: Boolean;
   function IsActive(LayerIndex, RowIndex, ColIndex: Integer): boolean;
   var
     ANode3D: TSutraNode3D;
@@ -134,11 +135,47 @@ begin
   Assert(DataArray <> nil);
   Assert(DataArray.PestParametersUsed);
   PestProperties := Model.PestProperties;
+//  PilotPointsDefined := Model.PilotPointCount > 0;
+  ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
+    DataArray.ParamDataSetName);
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    ActiveDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
+  end
+  else if Model.ModelSelection in SutraSelection then
+  begin
+    ActiveDataSet := nil;
+  end
+  else
+  begin
+    ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
+  end;
   if Model.PilotPointCount = 0 then
   begin
     frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
       Format(StrPilotPointsWillNo, [DataArray.Name]));
-    Exit;
+    for LayerIndex := 0 to DataArray.LayerCount - 1 do
+    begin
+      for RowIndex := 0 to DataArray.RowCount - 1 do
+      begin
+        for ColIndex := 0 to DataArray.ColumnCount - 1 do
+        begin
+          if IsActive(LayerIndex, RowIndex, ColIndex) then
+          begin
+            ParamName := UpperCase(
+              ParamNameDataArray.StringData[LayerIndex, RowIndex, ColIndex]);
+            AParam := Model.GetPestParameterByName(ParamName);
+            if (AParam <> nil) and AParam.UsePilotPoints then
+            begin
+              frmErrorsAndWarnings.AddWarning(Model, StrNoPilotPointsDefi,
+                Format(StrPilotPointsWillNo, [DataArray.Name]));
+              Exit;
+            end;
+          end;
+        end;
+      end;
+    end;
+//    Exit;
   end;
   CriticalDistance := Model.PilotPointBuffer;
   FFileName := ChangeFileExt(AFileName, '.' + DataArray.Name);// + Extension;
@@ -165,22 +202,10 @@ begin
         ParamQuadDictionary.Add(AParam, AQuadTree);
       end;
     end;
-    ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
-      DataArray.ParamDataSetName);
+//    ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
+//      DataArray.ParamDataSetName);
     SetLength(Values, DataArray.RowCount * DataArray.ColumnCount);
 
-    if Model.ModelSelection = msModflow2015 then
-    begin
-      ActiveDataSet := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
-    end
-    else if Model.ModelSelection in SutraSelection then
-    begin
-      ActiveDataSet := nil;
-    end
-    else
-    begin
-      ActiveDataSet := Model.DataArrayManager.GetDataSetByName(rsActive);
-    end;
 //    Assert(ActiveDataSet <> nil);
 
     for LayerIndex := 0 to DataArray.LayerCount - 1 do

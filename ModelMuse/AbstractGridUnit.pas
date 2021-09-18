@@ -3809,7 +3809,7 @@ begin
 
   if ColumnDirection = cdWestToEast then
   begin
-    if (result.Col > 0) and (result.Col < ColumnCount)
+    if (result.Col > 0) and (result.Col <= ColumnCount)
       and (ColumnPosition[result.Col] > APoint.X) then
     begin
       Dec(result.Col);
@@ -3826,7 +3826,7 @@ begin
   end
   else
   begin
-    if (result.Col > 0) and (result.Col < ColumnCount)
+    if (result.Col > 0) and (result.Col <= ColumnCount)
       and (ColumnPosition[result.Col] < APoint.X) then
     begin
       Dec(result.Col);
@@ -3844,7 +3844,7 @@ begin
 
   if RowDirection = rdSouthToNorth then
   begin
-    if (result.Row > 0) and (result.Row < RowCount)
+    if (result.Row > 0) and (result.Row <= RowCount)
       and (RowPosition[result.Row] > APoint.Y) then
     begin
       Dec(result.Row);
@@ -3861,7 +3861,7 @@ begin
   end
   else
   begin
-    if (result.Row > 0) and (result.Row < RowCount)
+    if (result.Row > 0) and (result.Row <= RowCount)
       and (RowPosition[result.Row] < APoint.Y) then
     begin
       Dec(result.Row);
