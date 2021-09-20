@@ -5936,6 +5936,12 @@ resourcestring
   StrParFileNotFound = '.par file not found';
   StrTheParameterFileF = 'The parameter file from a previous estimation run ' +
   'was not found at "%s".';
+  StrPESTCHEKNotFound = 'PESTCHEK not found';
+  StrNeitherI64pestchek = 'Neither I64pestchek.exe nor pestchek.exe were fou' +
+  'nd in %s';
+  StrSUPCALCNotFound = 'SUPCALC not found';
+  StrNeither164supcalce = 'Neither 164supcalc.exe nor supcalc.exe were found' +
+  ' in %s';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -40843,6 +40849,7 @@ var
   SupCalcInputName: string;
   TempName: string;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(self, StrSUPCALCNotFound);
   Assert(TFile.Exists(SupCalcProperties.FileName));
   WorkingDirectory := IncludeTrailingPathDelimiter(
     ExtractFileDir(SupCalcProperties.FileName));
@@ -40861,7 +40868,17 @@ begin
   end;
 
   SupCalcName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-    + 'supcalc.exe';
+    + '164supcalc.exe';
+  if not TFile.Exists(SupCalcName) then
+  begin
+    SupCalcName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
+      + 'supcalc.exe';
+    if not TFile.Exists(SupCalcName) then
+    begin
+      frmErrorsAndWarnings.AddError(self, StrSUPCALCNotFound,
+        Format(StrNeither164supcalce, [ProgramLocations.PestDirectory]));
+    end;
+  end;
   SupCalcInputName := WorkingDirectory + CaseName + '_SupCalcInput.txt';
 
   SupCalcInput := TStringList.Create;
@@ -40917,10 +40934,10 @@ var
 //  PestCleanInputFileName: string;
 //  PestCleanOutputFileName: string;
   PestDirectory: string;
-  PestDirParCalcName: string;
-  WorkDirParCalcName: string;
-  WorkDirPiCalcName: string;
-  PestDirPiCalcName: string;
+//  PestDirParCalcName: string;
+//  WorkDirParCalcName: string;
+//  WorkDirPiCalcName: string;
+//  PestDirPiCalcName: string;
   JcoFileName: string;
   NewJcoFileName: string;
   SvdaFileName: string;
@@ -40969,21 +40986,34 @@ begin
 
   PestName := GetPestName;
   PestCleanExecutableName := PestDirectory + 'pstclean.exe';
-  SvdaPrepExecutableName := PestDirectory + 'svdaprep.exe';
-
-  WorkDirParCalcName := WorkingDirectory + 'parcalc.exe';
-  WorkDirPiCalcName := WorkingDirectory + 'picalc.exe';
-
-  if not TFile.Exists(WorkDirParCalcName) then
+  SvdaPrepExecutableName := PestDirectory + 'i64svdaprep.exe';
+  if not TFile.Exists(SvdaPrepExecutableName) then
   begin
-    PestDirParCalcName := PestDirectory + 'parcalc.exe';
-    TFile.Copy(PestDirParCalcName, WorkDirParCalcName)
+    SvdaPrepExecutableName := PestDirectory + 'svdaprep.exe';
   end;
-  if not TFile.Exists(WorkDirPiCalcName) then
-  begin
-    PestDirPiCalcName := PestDirectory + 'picalc.exe';
-    TFile.Copy(PestDirPiCalcName, WorkDirPiCalcName)
-  end;
+
+//  WorkDirParCalcName := WorkingDirectory + 'i64parcalc.exe';
+//  if not TFile.Exists(WorkDirParCalcName) then
+//  begin
+//    WorkDirParCalcName := WorkingDirectory + 'parcalc.exe';
+//  end;
+//
+//  WorkDirPiCalcName := WorkingDirectory + 'i64picalc.exe';
+//  if not TFile.Exists(WorkDirPiCalcName) then
+//  begin
+//    WorkDirPiCalcName := WorkingDirectory + 'picalc.exe';
+//  end;
+
+//  if not TFile.Exists(WorkDirParCalcName) then
+//  begin
+//    PestDirParCalcName := PestDirectory + 'parcalc.exe';
+//    TFile.Copy(PestDirParCalcName, WorkDirParCalcName)
+//  end;
+//  if not TFile.Exists(WorkDirPiCalcName) then
+//  begin
+//    PestDirPiCalcName := PestDirectory + 'picalc.exe';
+//    TFile.Copy(PestDirPiCalcName, WorkDirPiCalcName)
+//  end;
 
   BatchFileName := WorkingDirectory + 'RunSvdaPrep.bat';
 
@@ -41094,6 +41124,7 @@ var
   PestControlFileName: string;
   LineIndex: Integer;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(self, StrPESTCHEKNotFound);
   frmErrorsAndWarnings.RemoveErrorGroup(self, StrPESTNotFound);
   if not PestUsed then
   begin
@@ -41119,6 +41150,12 @@ begin
   begin
     PestCheckName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
       + 'pestchek.exe';
+    if not FileExists(Trim(PestCheckName)) then
+    begin
+      frmErrorsAndWarnings.AddError(self, StrPESTCHEKNotFound,
+        Format(StrNeitherI64pestchek,
+        [ProgramLocations.PestDirectory]))
+    end;
   end;
 
   if PestProperties.PestControlData.PestMode in [pmPrediction, pmPareto] then

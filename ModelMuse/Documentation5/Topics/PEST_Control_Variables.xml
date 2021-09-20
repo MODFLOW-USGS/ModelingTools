@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">PEST Control Variables</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Control Variables</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Besides the definitions of parameters and observations, there are other variables required in the PEST control file. These are specified in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties</link><text styleclass="Normal" translate="true"> dialog box. The help for the Pest Properties dialog box contains abbreviated descriptions of the functions of these variables. For fuller documentation, see the PEST documentation </text><link displaytype="text" defaultstyle="true" type="weblink" href="https://pesthomepage.org/programs" target="_blank" styleclass="Normal" translate="true">distributed with PEST</link><text styleclass="Normal" translate="true">.</text></para>
+  </body>
+</topic>

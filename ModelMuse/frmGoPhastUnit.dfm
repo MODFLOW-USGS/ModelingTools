@@ -3642,7 +3642,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acRunPest: TAction
       Category = 'File'
-      Caption = 'Export PEST control file'
+      Caption = 'Export PEST Control File'
       Hint = 'Run PEST|Export PEST control file and run PEST'
       OnExecute = acRunPestExecute
     end
