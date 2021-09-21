@@ -129,6 +129,7 @@ const
   SkipLines1 = 3;
   SkipLines2 = 2;
   SkipLines3 = 5;
+  SkipLines4 = 10;
   TimeStepPosition = 1;
   TimePosition = 2;
 var
@@ -138,6 +139,7 @@ var
   TimeStepCount: Integer;
   StoredDecimalSeparator: Char;
   StoredR: TStoredResults;
+  ThirdSkip: integer;
 begin
   result := True;
   StoredDecimalSeparator := FormatSettings.DecimalSeparator;
@@ -171,9 +173,17 @@ begin
     Assert(TimeStepsIndex >= 0);
     TimeStepCount := StrToInt(FSplitter[TimeStepsIndex]);
     FStoredResults.Capacity := TimeStepCount;
+    if FSplitter.IndexOf('VOLUMETRIC') >= 0 then
+    begin
+      ThirdSkip := SkipLines4;
+    end
+    else
+    begin
+      ThirdSkip := SkipLines3;
+    end;
 //    SetLength(FStoredResults, TimeStepCount);
 
-    for LineIndex := 0 to SkipLines3 - 1 do
+    for LineIndex := 0 to ThirdSkip - 1 do
     begin
       FReader.ReadLine;
     end;
@@ -359,9 +369,9 @@ procedure TEleReader.ReadValueHeader;
 var
   ALine: string;
 begin
-  ALine := FReader.ReadLine;
-  FHasElement := Pos('Element', ALine) > 0;
-  if Pos('X origin', ALine) > 0 then
+  ALine := LowerCase(FReader.ReadLine);
+  FHasElement := Pos('element', ALine) > 0;
+  if Pos('x origin', ALine) > 0 then
   begin
     SetLength(FX, Count);
   end
@@ -369,7 +379,7 @@ begin
   begin
     SetLength(FX, 0);
   end;
-  if Pos('Y origin', ALine) > 0 then
+  if Pos('y origin', ALine) > 0 then
   begin
     SetLength(FY, Count);
   end
@@ -377,7 +387,7 @@ begin
   begin
     SetLength(FY, 0);
   end;
-  if Pos('Z origin', ALine) > 0 then
+  if Pos('z origin', ALine) > 0 then
   begin
     SetLength(FZ, Count);
   end
@@ -385,7 +395,7 @@ begin
   begin
     SetLength(FZ, 0);
   end;
-  if Pos('X velocity', ALine) > 0 then
+  if Pos('x velocity', ALine) > 0 then
   begin
     SetLength(FXVelocity, Count);
   end
@@ -393,7 +403,7 @@ begin
   begin
     SetLength(FXVelocity, 0);
   end;
-  if Pos('Y velocity', ALine) > 0 then
+  if Pos('y velocity', ALine) > 0 then
   begin
     SetLength(FYVelocity, Count);
   end
@@ -401,7 +411,7 @@ begin
   begin
     SetLength(FYVelocity, 0);
   end;
-  if Pos('Z velocity', ALine) > 0 then
+  if Pos('z velocity', ALine) > 0 then
   begin
     SetLength(FZVelocity, Count);
   end

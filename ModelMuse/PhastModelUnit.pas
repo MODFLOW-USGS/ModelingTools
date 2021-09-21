@@ -5942,6 +5942,9 @@ resourcestring
   StrSUPCALCNotFound = 'SUPCALC not found';
   StrNeither164supcalce = 'Neither 164supcalc.exe nor supcalc.exe were found' +
   ' in %s';
+  StrParcalcexeAndPica = 'parcalc.exe and picalc.exe must both be present in' +
+  ' the PEST directory to run PEST wish SVD Assist. You must install them th' +
+  'ere before continuing.';
 
 
   //  StrLakeMf6 = 'LakeMf6';
@@ -40868,7 +40871,7 @@ begin
   end;
 
   SupCalcName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
-    + '164supcalc.exe';
+    + 'i64supcalc.exe';
   if not TFile.Exists(SupCalcName) then
   begin
     SupCalcName := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory)
@@ -40931,20 +40934,18 @@ var
   BatchFileName: string;
   WorkingDirectory: String;
   PestCleanExecutableName: string;
-//  PestCleanInputFileName: string;
-//  PestCleanOutputFileName: string;
   PestDirectory: string;
-//  PestDirParCalcName: string;
-//  WorkDirParCalcName: string;
-//  WorkDirPiCalcName: string;
-//  PestDirPiCalcName: string;
+  WorkDirParCalcName: string;
+  WorkDirPiCalcName: string;
   JcoFileName: string;
   NewJcoFileName: string;
   SvdaFileName: string;
+  parcalcFileName: string;
+  picalcFileName: string;
 begin
+  PestDirectory := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory);
   WorkingDirectory := IncludeTrailingPathDelimiter(ExtractFileDir(SvdaPrepProperties.FileName));
   SetCurrentDir(WorkingDirectory);
-  PestDirectory := IncludeTrailingPathDelimiter(ProgramLocations.PestDirectory);
   ExportPestInput(SvdaPrepProperties.FileName, pecNone);
   PestInputFileName := ChangeFileExt(SvdaPrepProperties.FileName , '.pst');
   JcoFileName := ChangeFileExt(SvdaPrepProperties.FileName , '.jco');
@@ -40992,28 +40993,37 @@ begin
     SvdaPrepExecutableName := PestDirectory + 'svdaprep.exe';
   end;
 
-//  WorkDirParCalcName := WorkingDirectory + 'i64parcalc.exe';
-//  if not TFile.Exists(WorkDirParCalcName) then
-//  begin
-//    WorkDirParCalcName := WorkingDirectory + 'parcalc.exe';
-//  end;
-//
-//  WorkDirPiCalcName := WorkingDirectory + 'i64picalc.exe';
-//  if not TFile.Exists(WorkDirPiCalcName) then
-//  begin
-//    WorkDirPiCalcName := WorkingDirectory + 'picalc.exe';
-//  end;
+  parcalcFileName := PestDirectory + 'i64parcalc.exe';
+  if not TFile.Exists(parcalcFileName) then
+  begin
+    parcalcFileName := PestDirectory + 'parcalc.exe';
+  end;
 
-//  if not TFile.Exists(WorkDirParCalcName) then
-//  begin
-//    PestDirParCalcName := PestDirectory + 'parcalc.exe';
-//    TFile.Copy(PestDirParCalcName, WorkDirParCalcName)
-//  end;
-//  if not TFile.Exists(WorkDirPiCalcName) then
-//  begin
-//    PestDirPiCalcName := PestDirectory + 'picalc.exe';
-//    TFile.Copy(PestDirPiCalcName, WorkDirPiCalcName)
-//  end;
+  picalcFileName := PestDirectory + 'i64picalc.exe';
+  if not TFile.Exists(picalcFileName) then
+  begin
+    picalcFileName := PestDirectory + 'picalc.exe';
+  end;
+
+  if not TFile.Exists(parcalcFileName) or not TFile.Exists(picalcFileName) then
+  begin
+    Beep;
+    MessageDlg(StrParcalcexeAndPica, mtError, [mbOK], 0);
+    Exit;
+  end;
+
+  // parcalc and picalc must be in the working directory.
+  WorkDirParCalcName := WorkingDirectory + 'parcalc.exe';
+  WorkDirPiCalcName := WorkingDirectory + 'picalc.exe';
+
+  if not TFile.Exists(WorkDirParCalcName) then
+  begin
+    TFile.Copy(parcalcFileName, WorkDirParCalcName)
+  end;
+  if not TFile.Exists(WorkDirPiCalcName) then
+  begin
+    TFile.Copy(picalcFileName, WorkDirPiCalcName)
+  end;
 
   BatchFileName := WorkingDirectory + 'RunSvdaPrep.bat';
 
@@ -41054,8 +41064,8 @@ var
   BatchFile: TStringList;
   ParFileName: string;
 begin
-    frmErrorsAndWarnings.RemoveErrorGroup(self, StrThePestUtilityFil);
-    frmErrorsAndWarnings.RemoveErrorGroup(self, StrParFileNotFound);
+  frmErrorsAndWarnings.RemoveErrorGroup(self, StrThePestUtilityFil);
+  frmErrorsAndWarnings.RemoveErrorGroup(self, StrParFileNotFound);
 // FileName has for form base.par.number;
   Base := ChangeFileExt(FileName, '');
   Base := ChangeFileExt(Base, '');
@@ -41073,7 +41083,8 @@ begin
     frmErrorsAndWarnings.AddError(self, StrThePestUtilityFil,
       Format(StrParrepDoesNotExis, [ParRepName]))
   end;
-  ParFileName := ChangeFileExt(FileName, '.par');
+  ParFileName := ChangeFileExt(FileName, '');
+  ParFileName := ChangeFileExt(ParFileName, '.par');
   if not TFile.Exists(ParFileName) then
   begin
     frmErrorsAndWarnings.AddError(self, StrParFileNotFound,

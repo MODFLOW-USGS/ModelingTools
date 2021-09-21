@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>Visualizing Modified Model Input</title>
+  <title translate="true">Visualizing Modified Model Input</title>
   <body>
-    <header><para styleclass="Heading1">Visualizing Modified Model Input</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Visualizing Modified Model Input</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST operates by modifying the input files for MODFLOW. Those changes to the input files do not affect how the model is defined in ModelMuse. If you run the model again from ModelMuse, all the inputs will be the same as before parameter estimation was performed. However, ModelMuse provides ways of visualizing the modified model inputs created by PEST. The methods vary depending on the type of model and the type of input. </text></para>
   </body>
 </topic>
