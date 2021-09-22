@@ -10205,7 +10205,6 @@ begin
               ParamEstBatFile.Add(PLPROC_Location + INFLE);
             end;
           end;
-//          ParamEstBatFile.AddStrings(Model.PestTemplateLines);
 
           BatchFile.AddStrings(PhastModel.KrigfactorsScriptLines);
           BatchFile.AddStrings(PhastModel.PestTemplateLines);

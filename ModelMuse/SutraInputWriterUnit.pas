@@ -392,6 +392,8 @@ var
   PestParametersUsed: Boolean;
   DataFileWriter: TSutraNodeDataWriter;
   Sutra14BWriter: TSutraData14BScriptWriter;
+  TempFile: string;
+  ParameterZoneWriter: TParameterZoneWriter;
 begin
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
@@ -404,9 +406,18 @@ begin
     finally
       DataFileWriter.Free;
     end;
-    if Porosity.PestParametersUsed then
+    if Porosity.PestParametersUsed and not WritingTemplate then
     begin
       PestParametersUsed := True;
+      // Create an array file too in case the data set is used in
+      // a boundary condition.
+      ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+      try
+        TempFile := ChangeFileExt(FNameOfFile, '');
+        ParameterZoneWriter.WriteFile(TempFile, Porosity, Porosity.Name);
+      finally
+        ParameterZoneWriter.Free;
+      end;
     end;
   end;
 
@@ -422,9 +433,18 @@ begin
       finally
         DataFileWriter.Free;
       end;
-      if Thickness.PestParametersUsed then
+      if Thickness.PestParametersUsed and not WritingTemplate then
       begin
         PestParametersUsed := True;
+        // Create an array file too in case the data set is used in
+        // a boundary condition.
+        ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+        try
+          TempFile := ChangeFileExt(FNameOfFile, '');
+          ParameterZoneWriter.WriteFile(TempFile, Thickness, Thickness.Name);
+        finally
+          ParameterZoneWriter.Free;
+        end;
       end;
     end;
   end
@@ -532,11 +552,14 @@ begin
         Model.FilesToDelete.Add(TempFileName);
       end;
       NewLine;
-      Sutra14BWriter := TSutraData14BScriptWriter.Create(Model, etExport);
-      try
-        Sutra14BWriter.WriteFiles(FFileName);
-      finally
-        Sutra14BWriter.Free;
+      if not WritingTemplate then
+      begin
+        Sutra14BWriter := TSutraData14BScriptWriter.Create(Model, etExport);
+        try
+          Sutra14BWriter.WriteFiles(FFileName);
+        finally
+          Sutra14BWriter.Free;
+        end;
       end;
       if FMesh.MeshType = mt3D then
       begin
@@ -894,11 +917,14 @@ begin
         Model.FilesToDelete.Add(TempFileName);
       end;
       NewLine;
-      Sutra15BWriter := TSutraData15BScriptWriter.Create(Model, etExport);
-      try
-        Sutra15BWriter.WriteFiles(FFileName);
-      finally
-        Sutra15BWriter.Free;
+      if not WritingTemplate then
+      begin
+        Sutra15BWriter := TSutraData15BScriptWriter.Create(Model, etExport);
+        try
+          Sutra15BWriter.WriteFiles(FFileName);
+        finally
+          Sutra15BWriter.Free;
+        end;
       end;
       if FMesh.MeshType = mt3D then
       begin

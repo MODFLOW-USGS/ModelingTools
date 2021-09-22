@@ -4139,6 +4139,7 @@ begin
       NameDataArray.Visible := True;
       NameDataArray.OnInitialize := nil;
       NameDataArray.OnShouldUseOnInitialize := nil;
+      NameDataArray.SetDimensions(False);
     end
     else
     begin

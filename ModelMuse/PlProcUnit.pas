@@ -2875,6 +2875,8 @@ var
   procedure ReadData(DataArray: TDataArray; const DataRoot: string);
   var
     LayerIndex: Integer;
+    ParameterZoneWriter: TParameterZoneWriter;
+    TempFile: string;
   begin
     if DataArray <> nil then
     begin
@@ -2883,8 +2885,6 @@ var
       NewLine;
       ColIndex := 1;
 
-//      WriteString(Format('  slist=s_NN2D;column=%d, &', [ColIndex]));
-//      NewLine;
       Inc(ColIndex);
 
       for LayerIndex := 1 to LayerCount do
@@ -2897,9 +2897,6 @@ var
         if Mesh.MeshType = mt3D then
         begin
           Inc(ColIndex);
-
-//          WriteString(Format('  slist=s_Layer%0:d;column=%1:d, &', [LayerIndex, ColIndex]));
-//          NewLine;
           Inc(ColIndex);
         end;
 
@@ -2918,6 +2915,19 @@ var
         NewLine;
       end;
       NewLine;
+
+      // Create an array file too in case the data set is used in
+      // a boundary condition.
+      if DataArray.PestParametersUsed and (ScriptChoice = scWriteScript) then
+      begin
+        ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
+        try
+          TempFile := ChangeFileExt(FFileName, '');
+          ParameterZoneWriter.WriteFile(TempFile, DataArray, DataArray.Name);
+        finally
+          ParameterZoneWriter.Free;
+        end;
+      end;
     end;
   end;
 begin
@@ -3349,11 +3359,11 @@ begin
 
   if Mesh.MeshType = mt3D then
   begin
-    WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-    NewLine;
     ColIndex := 5;
     for LayerIndex := 1 to LayerCount do
     begin
+      WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+      NewLine;
       WriteString(Format('  plist=p_z%0:d;column=%1:d, &',
         [LayerIndex, ColIndex]));
       NewLine;
@@ -3366,8 +3376,9 @@ begin
         [LayerIndex, ColIndex]));
       NewLine;
       Inc(ColIndex);
+      WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
+      NewLine;
     end;
-    WriteString(Format('  id_type=''indexed'',file=''%s.c_ele'')', [FRoot]));
     NewLine;
   end;
 

@@ -1,0 +1,2 @@
+~
+MyMult[4, 1, 77] arrays\SutraTest1a.MyMult_1.arrays,arrays\SutraTest1a.MyMult_2.arrays,arrays\SutraTest1a.MyMult_3.arrays,arrays\SutraTest1a.MyMult_4.arrays
