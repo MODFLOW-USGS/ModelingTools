@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-4257
+4685
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -11,6 +11,8 @@ WellTest.gpt
 	Archive\WellTest.nam.archive
 	Archive\WellTest.oc
 	Archive\WellTest.pcg
+	Archive\WellTest.RunModel.Bat
+	Archive\WellTest.RunModflow.Bat
 	Archive\WellTest.wel
 	Archive\usgs.WellTest.reference
 ActiveOnLayerTest.gpt
@@ -23,6 +25,8 @@ ActiveOnLayerTest.gpt
 	Archive\ActiveOnLayerTest.nam.archive
 	Archive\ActiveOnLayerTest.oc
 	Archive\ActiveOnLayerTest.pcg
+	Archive\ActiveOnLayerTest.RunModel.Bat
+	Archive\ActiveOnLayerTest.RunModflow.Bat
 	Archive\usgs.ActiveOnLayerTest.reference
 AddPointBug.gpt
 	Archive\AddPointBug.axml
@@ -34,6 +38,8 @@ AddPointBug.gpt
 	Archive\AddPointBug.nam.archive
 	Archive\AddPointBug.oc
 	Archive\AddPointBug.pcg
+	Archive\AddPointBug.RunModel.Bat
+	Archive\AddPointBug.RunModflow.Bat
 	Archive\usgs.AddPointBug.reference
 AnisotropicInterpolator.gpt
 	Archive\AnisotropicInterpolator.axml
@@ -56,6 +62,8 @@ ChdTest2.gpt
 	Archive\ChdTest2.oc
 	Archive\ChdTest2.pcg
 	Archive\ChdTest2.pval
+	Archive\ChdTest2.RunModel.Bat
+	Archive\ChdTest2.RunModflow.Bat
 	Archive\usgs.ChdTest2.reference
 ChdTest3.gpt
 	Archive\ChdTest3.axml
@@ -71,6 +79,8 @@ ChdTest3.gpt
 	Archive\ChdTest3.nam.archive
 	Archive\ChdTest3.oc
 	Archive\ChdTest3.pval
+	Archive\ChdTest3.RunModel.Bat
+	Archive\ChdTest3.RunModflow.Bat
 	Archive\ChdTest3.zon
 	Archive\usgs.ChdTest3.reference
 ChdTest4.gpt
@@ -84,6 +94,8 @@ ChdTest4.gpt
 	Archive\ChdTest4.nam.archive
 	Archive\ChdTest4.oc
 	Archive\ChdTest4.pcg
+	Archive\ChdTest4.RunModel.Bat
+	Archive\ChdTest4.RunModflow.Bat
 	Archive\usgs.ChdTest4.reference
 ChdTest.gpt
 	Archive\ChdTest.axml
@@ -98,6 +110,8 @@ ChdTest.gpt
 	Archive\ChdTest.oc
 	Archive\ChdTest.pcg
 	Archive\ChdTest.pval
+	Archive\ChdTest.RunModel.Bat
+	Archive\ChdTest.RunModflow.Bat
 	Archive\usgs.ChdTest.reference
 decay.gpt
 	Archive\decay.axml
@@ -119,6 +133,8 @@ Drntest.gpt
 	Archive\Drntest.nam.archive
 	Archive\Drntest.oc
 	Archive\Drntest.pcg
+	Archive\Drntest.RunModel.Bat
+	Archive\Drntest.RunModflow.Bat
 	Archive\usgs.Drntest.reference
 drttest.gpt
 	Archive\drttest.axml
@@ -132,6 +148,8 @@ drttest.gpt
 	Archive\drttest.nam.archive
 	Archive\drttest.oc
 	Archive\drttest.pcg
+	Archive\drttest.RunModel.Bat
+	Archive\drttest.RunModflow.Bat
 	Archive\usgs.drttest.reference
 EmptyTitle.gpt
 	Archive\EmptyTitle.axml
@@ -147,6 +165,8 @@ encloseBug2.gpt
 	Archive\encloseBug2.nam.archive
 	Archive\encloseBug2.oc
 	Archive\encloseBug2.pcg
+	Archive\encloseBug2.RunModel.Bat
+	Archive\encloseBug2.RunModflow.Bat
 	Archive\usgs.encloseBug2.reference
 encloseBug.gpt
 	Archive\encloseBug.axml
@@ -158,6 +178,8 @@ encloseBug.gpt
 	Archive\encloseBug.nam.archive
 	Archive\encloseBug.oc
 	Archive\encloseBug.pcg
+	Archive\encloseBug.RunModel.Bat
+	Archive\encloseBug.RunModflow.Bat
 	Archive\usgs.encloseBug.reference
 EvtTest.gpt
 	Archive\EvtTest.axml
@@ -170,6 +192,8 @@ EvtTest.gpt
 	Archive\EvtTest.nam.archive
 	Archive\EvtTest.oc
 	Archive\EvtTest.pcg
+	Archive\EvtTest.RunModel.Bat
+	Archive\EvtTest.RunModflow.Bat
 	Archive\usgs.EvtTest.reference
 ex1.gpt
 	Archive\ex1.axml
@@ -201,6 +225,8 @@ ExampleModel.gpt
 	Archive\ExampleModel.oc
 	Archive\ExampleModel.pcg
 	Archive\ExampleModel.pval
+	Archive\ExampleModel.RunModel.Bat
+	Archive\ExampleModel.RunModflow.Bat
 	Archive\ExampleModel.zon
 	Archive\usgs.ExampleModel.reference
 GhbTest.gpt
@@ -215,6 +241,8 @@ GhbTest.gpt
 	Archive\GhbTest.nam.archive
 	Archive\GhbTest.oc
 	Archive\GhbTest.pcg
+	Archive\GhbTest.RunModel.Bat
+	Archive\GhbTest.RunModflow.Bat
 	Archive\usgs.GhbTest.reference
 Interpolator.gpt
 	Archive\Interpolator.axml
@@ -230,6 +258,8 @@ interptest.gpt
 	Archive\interptest.nam.archive
 	Archive\interptest.oc
 	Archive\interptest.pcg
+	Archive\interptest.RunModel.Bat
+	Archive\interptest.RunModflow.Bat
 	Archive\usgs.interptest.reference
 IsInsideTest.gpt
 	Archive\IsInsideTest.axml
@@ -241,6 +271,8 @@ IsInsideTest.gpt
 	Archive\IsInsideTest.nam.archive
 	Archive\IsInsideTest.oc
 	Archive\IsInsideTest.pcg
+	Archive\IsInsideTest.RunModel.Bat
+	Archive\IsInsideTest.RunModflow.Bat
 	Archive\usgs.IsInsideTest.reference
 kindred4.1.gpt
 	Archive\kindred4.1.axml
@@ -263,6 +295,8 @@ lakeTest.gpt
 	Archive\lakeTest.nam.archive
 	Archive\lakeTest.oc
 	Archive\lakeTest.pcg
+	Archive\lakeTest.RunModel.Bat
+	Archive\lakeTest.RunModflow.Bat
 	Archive\usgs.lakeTest.reference
 leaky.gpt
 	Archive\leaky.axml
@@ -297,6 +331,8 @@ McBug.gpt
 	Archive\McBug.oc
 	Archive\McBug.pcg
 	Archive\McBug.pval
+	Archive\McBug.RunModel.Bat
+	Archive\McBug.RunModflow.Bat
 	Archive\McBug.wel
 	Archive\McBug.zon
 	Archive\usgs.McBug.reference
@@ -310,6 +346,8 @@ mfGridDrawBug.gpt
 	Archive\mfGridDrawBug.nam.archive
 	Archive\mfGridDrawBug.oc
 	Archive\mfGridDrawBug.pcg
+	Archive\mfGridDrawBug.RunModel.Bat
+	Archive\mfGridDrawBug.RunModflow.Bat
 	Archive\usgs.mfGridDrawBug.reference
 NodeIntersect.gpt
 	Archive\NodeIntersect.axml
@@ -337,6 +375,8 @@ PointInvDistBug.gpt
 	Archive\PointInvDistBug.nam.archive
 	Archive\PointInvDistBug.oc
 	Archive\PointInvDistBug.pcg
+	Archive\PointInvDistBug.RunModel.Bat
+	Archive\PointInvDistBug.RunModflow.Bat
 	Archive\usgs.PointInvDistBug.reference
 pulse.gpt
 	Archive\pulse.axml
@@ -358,6 +398,8 @@ ResTest.gpt
 	Archive\ResTest.oc
 	Archive\ResTest.pcg
 	Archive\ResTest.resv
+	Archive\ResTest.RunModel.Bat
+	Archive\ResTest.RunModflow.Bat
 	Archive\usgs.ResTest.reference
 RivTest.gpt
 	Archive\RivTest.axml
@@ -371,6 +413,8 @@ RivTest.gpt
 	Archive\RivTest.oc
 	Archive\RivTest.pcg
 	Archive\RivTest.riv
+	Archive\RivTest.RunModel.Bat
+	Archive\RivTest.RunModflow.Bat
 	Archive\usgs.RivTest.reference
 sfrtest2.gpt
 	Archive\sfrtest2.axml
@@ -382,6 +426,8 @@ sfrtest2.gpt
 	Archive\sfrtest2.nam.archive
 	Archive\sfrtest2.oc
 	Archive\sfrtest2.pcg
+	Archive\sfrtest2.RunModel.Bat
+	Archive\sfrtest2.RunModflow.Bat
 	Archive\sfrtest2.sfr
 	Archive\usgs.sfrtest2.reference
 sfrtest3.gpt
@@ -397,6 +443,8 @@ sfrtest3.gpt
 	Archive\sfrtest3.oc
 	Archive\sfrtest3.pcg
 	Archive\sfrtest3.pval
+	Archive\sfrtest3.RunModel.Bat
+	Archive\sfrtest3.RunModflow.Bat
 	Archive\sfrtest3.sfr
 	Archive\usgs.sfrtest3.reference
 sfrtest4.gpt
@@ -410,6 +458,8 @@ sfrtest4.gpt
 	Archive\sfrtest4.nam.archive
 	Archive\sfrtest4.oc
 	Archive\sfrtest4.pcg
+	Archive\sfrtest4.RunModel.Bat
+	Archive\sfrtest4.RunModflow.Bat
 	Archive\sfrtest4.sfr
 	Archive\usgs.sfrtest4.reference
 sfrtest5.gpt
@@ -425,6 +475,8 @@ sfrtest5.gpt
 	Archive\sfrtest5.oc
 	Archive\sfrtest5.pcg
 	Archive\sfrtest5.pval
+	Archive\sfrtest5.RunModel.Bat
+	Archive\sfrtest5.RunModflow.Bat
 	Archive\sfrtest5.sfr
 	Archive\usgs.sfrtest5.reference
 Simple.gpt
@@ -438,6 +490,8 @@ Simple.gpt
 	Archive\Simple.nam.archive
 	Archive\Simple.oc
 	Archive\Simple.pcg
+	Archive\Simple.RunModel.Bat
+	Archive\Simple.RunModflow.Bat
 	Archive\usgs.Simple.reference
 test4.gpt
 	Archive\test4.axml
@@ -461,6 +515,8 @@ testEts2.gpt
 	Archive\testEts2.oc
 	Archive\testEts2.pcg
 	Archive\testEts2.pval
+	Archive\testEts2.RunModel.Bat
+	Archive\testEts2.RunModflow.Bat
 	Archive\testEts2.zon
 	Archive\arrays\testEts2.ets.ETS_Mult_1
 	Archive\arrays\testEts2.ets.ETS_Mult_2
@@ -484,6 +540,8 @@ testEts.gpt
 	Archive\testEts.oc
 	Archive\testEts.pcg
 	Archive\testEts.pval
+	Archive\testEts.RunModel.Bat
+	Archive\testEts.RunModflow.Bat
 	Archive\testEts.zon
 	Archive\arrays\testEts.ets.ETS_Mult_1
 	Archive\arrays\testEts.ets.ETS_Mult_2
@@ -509,6 +567,8 @@ TestGHB.gpt
 	Archive\TestGHB.pcg
 	Archive\TestGHB.pval
 	Archive\TestGHB.riv
+	Archive\TestGHB.RunModel.Bat
+	Archive\TestGHB.RunModflow.Bat
 	Archive\TestGHB.wel
 	Archive\usgs.TestGHB.reference
 TestGlo2.gpt
@@ -525,6 +585,8 @@ testGlobal.gpt
 	Archive\testGlobal.nam.archive
 	Archive\testGlobal.oc
 	Archive\testGlobal.pcg
+	Archive\testGlobal.RunModel.Bat
+	Archive\testGlobal.RunModflow.Bat
 	Archive\usgs.testGlobal.reference
 testGlobals.gpt
 	Archive\testGlobals.axml
@@ -536,6 +598,8 @@ testGlobals.gpt
 	Archive\testGlobals.nam.archive
 	Archive\testGlobals.oc
 	Archive\testGlobals.pcg
+	Archive\testGlobals.RunModel.Bat
+	Archive\testGlobals.RunModflow.Bat
 	Archive\usgs.testGlobals.reference
 testmodel.gpt
 	Archive\testmodel.axml
@@ -547,6 +611,8 @@ testmodel.gpt
 	Archive\testmodel.nam.archive
 	Archive\testmodel.oc
 	Archive\testmodel.pcg
+	Archive\testmodel.RunModel.Bat
+	Archive\testmodel.RunModflow.Bat
 	Archive\usgs.testmodel.reference
 testRch.gpt
 	Archive\testRch.axml
@@ -560,6 +626,8 @@ testRch.gpt
 	Archive\testRch.oc
 	Archive\testRch.pcg
 	Archive\testRch.rch
+	Archive\testRch.RunModel.Bat
+	Archive\testRch.RunModflow.Bat
 	Archive\usgs.testRch.reference
 unconf2.gpt
 	Archive\unconf2.axml
@@ -656,6 +724,8 @@ streamLinkTest.gpt
 	Archive\streamLinkTest.nam.archive
 	Archive\streamLinkTest.oc
 	Archive\streamLinkTest.pcg
+	Archive\streamLinkTest.RunModel.Bat
+	Archive\streamLinkTest.RunModflow.Bat
 	Archive\streamLinkTest.sfr
 	Archive\usgs.streamLinkTest.reference
 ModflowFrontSideTest.gpt
@@ -669,6 +739,8 @@ ModflowFrontSideTest.gpt
 	Archive\ModflowFrontSideTest.nam.archive
 	Archive\ModflowFrontSideTest.oc
 	Archive\ModflowFrontSideTest.pcg
+	Archive\ModflowFrontSideTest.RunModel.Bat
+	Archive\ModflowFrontSideTest.RunModflow.Bat
 	Archive\usgs.ModflowFrontSideTest.reference
 UzfTest.gpt
 	Archive\UzfTest.axml
@@ -682,6 +754,8 @@ UzfTest.gpt
 	Archive\UzfTest.nam.archive
 	Archive\UzfTest.oc
 	Archive\UzfTest.pcg
+	Archive\UzfTest.RunModel.Bat
+	Archive\UzfTest.RunModflow.Bat
 	Archive\UzfTest.sfr
 	Archive\UzfTest.uzf
 	Archive\usgs.UzfTest.reference
@@ -695,6 +769,8 @@ MultiSectionTest.gpt
 	Archive\MultiSectionTest.nam.archive
 	Archive\MultiSectionTest.oc
 	Archive\MultiSectionTest.pcg
+	Archive\MultiSectionTest.RunModel.Bat
+	Archive\MultiSectionTest.RunModflow.Bat
 	Archive\usgs.MultiSectionTest.reference
 AssignementTestPhast.gpt
 	Archive\AssignementTestPhast.axml
@@ -710,6 +786,8 @@ AssignementTest2Modflow.gpt
 	Archive\AssignementTest2Modflow.nam.archive
 	Archive\AssignementTest2Modflow.oc
 	Archive\AssignementTest2Modflow.pcg
+	Archive\AssignementTest2Modflow.RunModel.Bat
+	Archive\AssignementTest2Modflow.RunModflow.Bat
 	Archive\usgs.AssignementTest2Modflow.reference
 AssignementTest2Phast.gpt
 	Archive\AssignementTest2Phast.axml
@@ -725,6 +803,8 @@ AssignementTestModflow.gpt
 	Archive\AssignementTestModflow.nam.archive
 	Archive\AssignementTestModflow.oc
 	Archive\AssignementTestModflow.pcg
+	Archive\AssignementTestModflow.RunModel.Bat
+	Archive\AssignementTestModflow.RunModflow.Bat
 	Archive\usgs.AssignementTestModflow.reference
 ImportedValuesTest.gpt
 	Archive\ImportedValuesTest.axml
@@ -736,6 +816,8 @@ ImportedValuesTest.gpt
 	Archive\ImportedValuesTest.nam.archive
 	Archive\ImportedValuesTest.oc
 	Archive\ImportedValuesTest.pcg
+	Archive\ImportedValuesTest.RunModel.Bat
+	Archive\ImportedValuesTest.RunModflow.Bat
 	Archive\usgs.ImportedValuesTest.reference
 SpeedTestBug2.gpt
 	Archive\SpeedTestBug2.axml
@@ -747,6 +829,8 @@ SpeedTestBug2.gpt
 	Archive\SpeedTestBug2.nam.archive
 	Archive\SpeedTestBug2.oc
 	Archive\SpeedTestBug2.pcg
+	Archive\SpeedTestBug2.RunModel.Bat
+	Archive\SpeedTestBug2.RunModflow.Bat
 	Archive\usgs.SpeedTestBug2.reference
 HfbTest.gpt
 	Archive\HfbTest.axml
@@ -760,6 +844,8 @@ HfbTest.gpt
 	Archive\HfbTest.nam.archive
 	Archive\HfbTest.oc
 	Archive\HfbTest.pcg
+	Archive\HfbTest.RunModel.Bat
+	Archive\HfbTest.RunModflow.Bat
 	Archive\usgs.HfbTest.reference
 ChdTest5.gpt
 	Archive\ChdTest5.axml
@@ -776,6 +862,8 @@ ChdTest5.gpt
 	Archive\ChdTest5.oc
 	Archive\ChdTest5.pcg
 	Archive\ChdTest5.riv
+	Archive\ChdTest5.RunModel.Bat
+	Archive\ChdTest5.RunModflow.Bat
 	Archive\ChdTest5.sfr
 	Archive\ChdTest5.wel
 	Archive\usgs.ChdTest5.reference
@@ -793,6 +881,8 @@ RangeCheck.gpt
 	Archive\RangeCheck.oc
 	Archive\RangeCheck.pcg
 	Archive\RangeCheck.pval
+	Archive\RangeCheck.RunModel.Bat
+	Archive\RangeCheck.RunModflow.Bat
 	Archive\RangeCheck.zon
 	Archive\usgs.RangeCheck.reference
 AquiferiaInterpolate.gpt
@@ -805,6 +895,8 @@ AquiferiaInterpolate.gpt
 	Archive\AquiferiaInterpolate.nam.archive
 	Archive\AquiferiaInterpolate.oc
 	Archive\AquiferiaInterpolate.pcg
+	Archive\AquiferiaInterpolate.RunModel.Bat
+	Archive\AquiferiaInterpolate.RunModflow.Bat
 	Archive\usgs.AquiferiaInterpolate.reference
 Modpathtimetest.gpt
 	Archive\Modpathtimetest.axml
@@ -822,6 +914,8 @@ Modpathtimetest.gpt
 	Archive\Modpathtimetest.nam.archive
 	Archive\Modpathtimetest.oc
 	Archive\Modpathtimetest.pcg
+	Archive\Modpathtimetest.RunModel.Bat
+	Archive\Modpathtimetest.RunModflow.Bat
 	Archive\Modpathtimetest.strt
 	Archive\usgs.Modpathtimetest.reference
 	Archive\usgs.Modpathtimetest_Modpath.reference
@@ -839,6 +933,8 @@ DrnParamtest.gpt
 	Archive\DrnParamtest.oc
 	Archive\DrnParamtest.pcg
 	Archive\DrnParamtest.pval
+	Archive\DrnParamtest.RunModel.Bat
+	Archive\DrnParamtest.RunModflow.Bat
 	Archive\usgs.DrnParamtest.reference
 ObservationTest.gpt
 	Archive\ObservationTest.axml
@@ -860,6 +956,8 @@ ObservationTest.gpt
 	Archive\ObservationTest.pcg
 	Archive\ObservationTest.pval
 	Archive\ObservationTest.riv
+	Archive\ObservationTest.RunModel.Bat
+	Archive\ObservationTest.RunModflow.Bat
 	Archive\usgs.ObservationTest.reference
 ObjectIntersectLength.gpt
 	Archive\ObjectIntersectLength.axml
@@ -871,6 +969,8 @@ ObjectIntersectLength.gpt
 	Archive\ObjectIntersectLength.nam.archive
 	Archive\ObjectIntersectLength.oc
 	Archive\ObjectIntersectLength.pcg
+	Archive\ObjectIntersectLength.RunModel.Bat
+	Archive\ObjectIntersectLength.RunModflow.Bat
 	Archive\usgs.ObjectIntersectLength.reference
 PhastObjectIntersectAreaTest.gpt
 	Archive\PhastObjectIntersectAreaTest.axml
@@ -890,6 +990,8 @@ ModflowObjectInterectAreaTest.gpt
 	Archive\ModflowObjectInterectAreaTest.oc
 	Archive\ModflowObjectInterectAreaTest.pcg
 	Archive\ModflowObjectInterectAreaTest.pval
+	Archive\ModflowObjectInterectAreaTest.RunModel.Bat
+	Archive\ModflowObjectInterectAreaTest.RunModflow.Bat
 	Archive\ModflowObjectInterectAreaTest.wel
 	Archive\ModflowObjectInterectAreaTest.zon
 	Archive\usgs.ModflowObjectInterectAreaTest.reference
@@ -907,6 +1009,8 @@ HfbTest2.gpt
 	Archive\HfbTest2.oc
 	Archive\HfbTest2.pcg
 	Archive\HfbTest2.pval
+	Archive\HfbTest2.RunModel.Bat
+	Archive\HfbTest2.RunModflow.Bat
 	Archive\usgs.HfbTest2.reference
 GageTest.gpt
 	Archive\GageTest.axml
@@ -920,6 +1024,8 @@ GageTest.gpt
 	Archive\GageTest.nam.archive
 	Archive\GageTest.oc
 	Archive\GageTest.pcg
+	Archive\GageTest.RunModel.Bat
+	Archive\GageTest.RunModflow.Bat
 	Archive\GageTest.sfr
 	Archive\usgs.GageTest.reference
 ObservationTest2.gpt
@@ -943,6 +1049,8 @@ ObservationTest2.gpt
 	Archive\ObservationTest2.pcg
 	Archive\ObservationTest2.pval
 	Archive\ObservationTest2.riv
+	Archive\ObservationTest2.RunModel.Bat
+	Archive\ObservationTest2.RunModflow.Bat
 	Archive\usgs.ObservationTest2.reference
 sfrtest6.gpt
 	Archive\sfrtest6.axml
@@ -954,6 +1062,8 @@ sfrtest6.gpt
 	Archive\sfrtest6.nam.archive
 	Archive\sfrtest6.oc
 	Archive\sfrtest6.pcg
+	Archive\sfrtest6.RunModel.Bat
+	Archive\sfrtest6.RunModflow.Bat
 	Archive\sfrtest6.sfr
 	Archive\usgs.sfrtest6.reference
 VertexInterpolateTest.gpt
@@ -966,6 +1076,8 @@ VertexInterpolateTest.gpt
 	Archive\VertexInterpolateTest.nam.archive
 	Archive\VertexInterpolateTest.oc
 	Archive\VertexInterpolateTest.pcg
+	Archive\VertexInterpolateTest.RunModel.Bat
+	Archive\VertexInterpolateTest.RunModflow.Bat
 	Archive\usgs.VertexInterpolateTest.reference
 VertexInterpolateTest2.gpt
 	Archive\VertexInterpolateTest2.axml
@@ -983,6 +1095,8 @@ DrainElevDemo.gpt
 	Archive\DrainElevDemo.ob_drob
 	Archive\DrainElevDemo.oc
 	Archive\DrainElevDemo.pcg
+	Archive\DrainElevDemo.RunModel.Bat
+	Archive\DrainElevDemo.RunModflow.Bat
 	Archive\usgs.DrainElevDemo.reference
 WettingTest.gpt
 	Archive\WettingTest.axml
@@ -995,6 +1109,8 @@ WettingTest.gpt
 	Archive\WettingTest.nam.archive
 	Archive\WettingTest.oc
 	Archive\WettingTest.pcg
+	Archive\WettingTest.RunModel.Bat
+	Archive\WettingTest.RunModflow.Bat
 	Archive\usgs.WettingTest.reference
 HufTest1.gpt
 	Archive\HufTest1.axml
@@ -1014,6 +1130,8 @@ HufTest1.gpt
 	Archive\HufTest1.pcg
 	Archive\HufTest1.pval
 	Archive\HufTest1.rch
+	Archive\HufTest1.RunModel.Bat
+	Archive\HufTest1.RunModflow.Bat
 	Archive\HufTest1.wel
 	Archive\HufTest1.zon
 	Archive\arrays\HufTest1.evt.ET_Mult_2
@@ -1040,6 +1158,8 @@ HufTest4.gpt
 	Archive\HufTest4.pcg
 	Archive\HufTest4.pval
 	Archive\HufTest4.rch
+	Archive\HufTest4.RunModel.Bat
+	Archive\HufTest4.RunModflow.Bat
 	Archive\HufTest4.wel
 	Archive\HufTest4.zon
 	Archive\arrays\HufTest4.evt.ET_Mult_2
@@ -1065,6 +1185,8 @@ HufTest2.gpt
 	Archive\HufTest2.pcg
 	Archive\HufTest2.pval
 	Archive\HufTest2.rch
+	Archive\HufTest2.RunModel.Bat
+	Archive\HufTest2.RunModflow.Bat
 	Archive\HufTest2.wel
 	Archive\HufTest2.zon
 	Archive\arrays\HufTest2.evt.ET_Mult_2
@@ -1091,6 +1213,8 @@ HufTest3.gpt
 	Archive\HufTest3.pcg
 	Archive\HufTest3.pval
 	Archive\HufTest3.rch
+	Archive\HufTest3.RunModel.Bat
+	Archive\HufTest3.RunModflow.Bat
 	Archive\HufTest3.wel
 	Archive\HufTest3.zon
 	Archive\arrays\HufTest3.evt.ET_Mult_2
@@ -1118,6 +1242,8 @@ HufTest5.gpt
 	Archive\HufTest5.pcg
 	Archive\HufTest5.pval
 	Archive\HufTest5.rch
+	Archive\HufTest5.RunModel.Bat
+	Archive\HufTest5.RunModflow.Bat
 	Archive\HufTest5.wel
 	Archive\HufTest5.zon
 	Archive\arrays\HufTest5.evt.ET_Mult_2
@@ -1145,6 +1271,8 @@ HufTest6.gpt
 	Archive\HufTest6.pcg
 	Archive\HufTest6.pval
 	Archive\HufTest6.rch
+	Archive\HufTest6.RunModel.Bat
+	Archive\HufTest6.RunModflow.Bat
 	Archive\HufTest6.wel
 	Archive\HufTest6.zon
 	Archive\arrays\HufTest6.evt.ET_Mult_2
@@ -1173,6 +1301,8 @@ ImportedKdep.gpt
 	Archive\ImportedKdep.pcg
 	Archive\ImportedKdep.pval
 	Archive\ImportedKdep.rch
+	Archive\ImportedKdep.RunModel.Bat
+	Archive\ImportedKdep.RunModflow.Bat
 	Archive\ImportedKdep.wel
 	Archive\ImportedKdep.zon
 	Archive\arrays\ImportedKdep.evt.ET_Mult_2
@@ -1190,6 +1320,8 @@ RotateTest.gpt
 	Archive\RotateTest.nam.archive
 	Archive\RotateTest.oc
 	Archive\RotateTest.pcg
+	Archive\RotateTest.RunModel.Bat
+	Archive\RotateTest.RunModflow.Bat
 	Archive\usgs.RotateTest.reference
 DoubleWellTest.gpt
 	Archive\DoubleWellTest.axml
@@ -1201,6 +1333,8 @@ DoubleWellTest.gpt
 	Archive\DoubleWellTest.nam.archive
 	Archive\DoubleWellTest.oc
 	Archive\DoubleWellTest.pcg
+	Archive\DoubleWellTest.RunModel.Bat
+	Archive\DoubleWellTest.RunModflow.Bat
 	Archive\DoubleWellTest.wel
 	Archive\usgs.DoubleWellTest.reference
 FlowModel Recital1.gpt
@@ -1221,6 +1355,8 @@ FlowModel Recital1.gpt
 	Archive\FlowModel_Recital1.oc
 	Archive\FlowModel_Recital1.pcg
 	Archive\FlowModel_Recital1.rch
+	Archive\FlowModel_Recital1.RunModel.Bat
+	Archive\FlowModel_Recital1.RunModflow.Bat
 	Archive\FlowModel_Recital1.strt
 	Archive\usgs.FlowModel_Recital1.reference
 	Archive\usgs.FlowModel_Recital1_Modpath.reference
@@ -1244,6 +1380,8 @@ HufTest7.gpt
 	Archive\HufTest7.pcg
 	Archive\HufTest7.pval
 	Archive\HufTest7.rch
+	Archive\HufTest7.RunModel.Bat
+	Archive\HufTest7.RunModflow.Bat
 	Archive\HufTest7.wel
 	Archive\HufTest7.zon
 	Archive\arrays\HufTest7.evt.ET_Mult_2
@@ -1271,6 +1409,8 @@ HufTest8.gpt
 	Archive\HufTest8.pcg
 	Archive\HufTest8.pval
 	Archive\HufTest8.rch
+	Archive\HufTest8.RunModel.Bat
+	Archive\HufTest8.RunModflow.Bat
 	Archive\HufTest8.wel
 	Archive\HufTest8.zon
 	Archive\arrays\HufTest8.evt.ET_Mult_2
@@ -1289,6 +1429,8 @@ SkipTest.gpt
 	Archive\SkipTest.pcg
 	Archive\SkipTest.rch
 	Archive\SkipTest.riv
+	Archive\SkipTest.RunModel.Bat
+	Archive\SkipTest.RunModflow.Bat
 	Archive\SkipTest.wel
 	Archive\usgs.SkipTest.reference
 HeadObsOnCellEdges.gpt
@@ -1302,6 +1444,8 @@ HeadObsOnCellEdges.gpt
 	Archive\HeadObsOnCellEdges.ob_hob
 	Archive\HeadObsOnCellEdges.oc
 	Archive\HeadObsOnCellEdges.pcg
+	Archive\HeadObsOnCellEdges.RunModel.Bat
+	Archive\HeadObsOnCellEdges.RunModflow.Bat
 	Archive\usgs.HeadObsOnCellEdges.reference
 Mnw2Test.gpt
 	Archive\Mnw2Test.axml
@@ -1315,6 +1459,8 @@ Mnw2Test.gpt
 	Archive\Mnw2Test.nam.archive
 	Archive\Mnw2Test.oc
 	Archive\Mnw2Test.pcg
+	Archive\Mnw2Test.RunModel.Bat
+	Archive\Mnw2Test.RunModflow.Bat
 	Archive\usgs.Mnw2Test.reference
 BcfTest.gpt
 	Archive\BcfTest.axml
@@ -1327,6 +1473,8 @@ BcfTest.gpt
 	Archive\BcfTest.nam.archive
 	Archive\BcfTest.oc
 	Archive\BcfTest.pcg
+	Archive\BcfTest.RunModel.Bat
+	Archive\BcfTest.RunModflow.Bat
 	Archive\usgs.BcfTest.reference
 LpfTest.gpt
 	Archive\LpfTest.axml
@@ -1339,6 +1487,8 @@ LpfTest.gpt
 	Archive\LpfTest.nam.archive
 	Archive\LpfTest.oc
 	Archive\LpfTest.pcg
+	Archive\LpfTest.RunModel.Bat
+	Archive\LpfTest.RunModflow.Bat
 	Archive\usgs.LpfTest.reference
 HufTest10.gpt
 	Archive\HufTest10.axml
@@ -1360,6 +1510,8 @@ HufTest10.gpt
 	Archive\HufTest10.pcg
 	Archive\HufTest10.pval
 	Archive\HufTest10.rch
+	Archive\HufTest10.RunModel.Bat
+	Archive\HufTest10.RunModflow.Bat
 	Archive\HufTest10.wel
 	Archive\HufTest10.zon
 	Archive\arrays\HufTest10.evt.ET_Mult_2
@@ -1387,6 +1539,8 @@ HufTest9.gpt
 	Archive\HufTest9.pcg
 	Archive\HufTest9.pval
 	Archive\HufTest9.rch
+	Archive\HufTest9.RunModel.Bat
+	Archive\HufTest9.RunModflow.Bat
 	Archive\HufTest9.wel
 	Archive\HufTest9.zon
 	Archive\arrays\HufTest9.evt.ET_Mult_2
@@ -1404,6 +1558,8 @@ HufTest9.gpt
 	Archive\200WellTest.nam.archive
 	Archive\200WellTest.oc
 	Archive\200WellTest.pcg
+	Archive\200WellTest.RunModel.Bat
+	Archive\200WellTest.RunModflow.Bat
 	Archive\200WellTest.wel
 	Archive\usgs.200WellTest.reference
 ImportedSub.gpt
@@ -1416,6 +1572,8 @@ ImportedSub.gpt
 	Archive\ImportedSub.nam
 	Archive\ImportedSub.nam.archive
 	Archive\ImportedSub.oc
+	Archive\ImportedSub.RunModel.Bat
+	Archive\ImportedSub.RunModflow.Bat
 	Archive\ImportedSub.sip
 	Archive\ImportedSub.sub
 	Archive\ImportedSub.wel
@@ -1430,6 +1588,8 @@ ImportedSub2.gpt
 	Archive\ImportedSub2.nam
 	Archive\ImportedSub2.nam.archive
 	Archive\ImportedSub2.oc
+	Archive\ImportedSub2.RunModel.Bat
+	Archive\ImportedSub2.RunModflow.Bat
 	Archive\ImportedSub2.sip
 	Archive\ImportedSub2.sub
 	Archive\ImportedSub2.wel
@@ -1444,6 +1604,8 @@ ImportedSub3.gpt
 	Archive\ImportedSub3.nam
 	Archive\ImportedSub3.nam.archive
 	Archive\ImportedSub3.oc
+	Archive\ImportedSub3.RunModel.Bat
+	Archive\ImportedSub3.RunModflow.Bat
 	Archive\ImportedSub3.sip
 	Archive\ImportedSub3.sub
 	Archive\ImportedSub3.wel
@@ -1458,6 +1620,8 @@ ImportedSub4.gpt
 	Archive\ImportedSub4.nam
 	Archive\ImportedSub4.nam.archive
 	Archive\ImportedSub4.oc
+	Archive\ImportedSub4.RunModel.Bat
+	Archive\ImportedSub4.RunModflow.Bat
 	Archive\ImportedSub4.sip
 	Archive\ImportedSub4.sub
 	Archive\ImportedSub4.wel
@@ -1474,6 +1638,8 @@ testRch2.gpt
 	Archive\testRch2.oc
 	Archive\testRch2.pcg
 	Archive\testRch2.rch
+	Archive\testRch2.RunModel.Bat
+	Archive\testRch2.RunModflow.Bat
 	Archive\usgs.testRch2.reference
 ObservationTest3.gpt
 	Archive\ObservationTest3.axml
@@ -1496,6 +1662,8 @@ ObservationTest3.gpt
 	Archive\ObservationTest3.pcg
 	Archive\ObservationTest3.pval
 	Archive\ObservationTest3.riv
+	Archive\ObservationTest3.RunModel.Bat
+	Archive\ObservationTest3.RunModflow.Bat
 	Archive\usgs.ObservationTest3.reference
 ObservationTest4.gpt
 	Archive\ObservationTest4.axml
@@ -1518,6 +1686,8 @@ ObservationTest4.gpt
 	Archive\ObservationTest4.pcg
 	Archive\ObservationTest4.pval
 	Archive\ObservationTest4.riv
+	Archive\ObservationTest4.RunModel.Bat
+	Archive\ObservationTest4.RunModflow.Bat
 	Archive\usgs.ObservationTest4.reference
 rma.gpt
 	Archive\rma.axml
@@ -1535,6 +1705,8 @@ rma.gpt
 	Archive\rma.nam.archive
 	Archive\rma.oc
 	Archive\rma.pcg
+	Archive\rma.RunModel.Bat
+	Archive\rma.RunModflow.Bat
 	Archive\rma.strt
 	Archive\rma.wel
 	Archive\rma.zb_response
@@ -1553,6 +1725,8 @@ FractionBug.gpt
 	Archive\FractionBug.nam.archive
 	Archive\FractionBug.oc
 	Archive\FractionBug.pcg
+	Archive\FractionBug.RunModel.Bat
+	Archive\FractionBug.RunModflow.Bat
 	Archive\usgs.FractionBug.reference
 SwtTest.gpt
 	Archive\SwtTest.axml
@@ -1564,6 +1738,8 @@ SwtTest.gpt
 	Archive\SwtTest.nam
 	Archive\SwtTest.nam.archive
 	Archive\SwtTest.oc
+	Archive\SwtTest.RunModel.Bat
+	Archive\SwtTest.RunModflow.Bat
 	Archive\SwtTest.sip
 	Archive\SwtTest.swt
 	Archive\SwtTest.wel
@@ -1579,6 +1755,8 @@ BcfTest2.gpt
 	Archive\BcfTest2.nam.archive
 	Archive\BcfTest2.oc
 	Archive\BcfTest2.pcg
+	Archive\BcfTest2.RunModel.Bat
+	Archive\BcfTest2.RunModflow.Bat
 	Archive\usgs.BcfTest2.reference
 HydmodTest.gpt
 	Archive\HydmodTest.axml
@@ -1592,6 +1770,8 @@ HydmodTest.gpt
 	Archive\HydmodTest.nam.archive
 	Archive\HydmodTest.oc
 	Archive\HydmodTest.pcg
+	Archive\HydmodTest.RunModel.Bat
+	Archive\HydmodTest.RunModflow.Bat
 	Archive\HydmodTest.sfr
 	Archive\HydmodTest.sub
 	Archive\usgs.HydmodTest.reference
@@ -1609,6 +1789,8 @@ testEts3.gpt
 	Archive\testEts3.oc
 	Archive\testEts3.pcg
 	Archive\testEts3.pval
+	Archive\testEts3.RunModel.Bat
+	Archive\testEts3.RunModflow.Bat
 	Archive\testEts3.zon
 	Archive\arrays\testEts3.ets.ETS_Mult_1
 	Archive\arrays\testEts3.ets.ETS_Mult_2
@@ -1627,6 +1809,8 @@ RotatedVertexInterpolateTest.gpt
 	Archive\RotatedVertexInterpolateTest.nam.archive
 	Archive\RotatedVertexInterpolateTest.oc
 	Archive\RotatedVertexInterpolateTest.pcg
+	Archive\RotatedVertexInterpolateTest.RunModel.Bat
+	Archive\RotatedVertexInterpolateTest.RunModflow.Bat
 	Archive\usgs.RotatedVertexInterpolateTest.reference
 InterpolatedVerValRotated.gpt
 	Archive\InterpolatedVerValRotated.axml
@@ -1638,6 +1822,8 @@ InterpolatedVerValRotated.gpt
 	Archive\InterpolatedVerValRotated.nam.archive
 	Archive\InterpolatedVerValRotated.oc
 	Archive\InterpolatedVerValRotated.pcg
+	Archive\InterpolatedVerValRotated.RunModel.Bat
+	Archive\InterpolatedVerValRotated.RunModflow.Bat
 	Archive\usgs.InterpolatedVerValRotated.reference
 NatNeighborTest1.gpt
 	Archive\NatNeighborTest1.axml
@@ -1653,6 +1839,8 @@ NatNeighborTest2.gpt
 	Archive\NatNeighborTest2.nam.archive
 	Archive\NatNeighborTest2.oc
 	Archive\NatNeighborTest2.pcg
+	Archive\NatNeighborTest2.RunModel.Bat
+	Archive\NatNeighborTest2.RunModflow.Bat
 	Archive\usgs.NatNeighborTest2.reference
 UzfAdd.gpt
 	Archive\UzfAdd.axml
@@ -1665,6 +1853,8 @@ UzfAdd.gpt
 	Archive\UzfAdd.oc
 	Archive\UzfAdd.pcg
 	Archive\UzfAdd.rch
+	Archive\UzfAdd.RunModel.Bat
+	Archive\UzfAdd.RunModflow.Bat
 	Archive\UzfAdd.uzf
 	Archive\usgs.UzfAdd.reference
 RechAddTest.gpt
@@ -1681,6 +1871,8 @@ RechAddTest.gpt
 	Archive\RechAddTest.pcg
 	Archive\RechAddTest.pval
 	Archive\RechAddTest.rch
+	Archive\RechAddTest.RunModel.Bat
+	Archive\RechAddTest.RunModflow.Bat
 	Archive\RechAddTest.zon
 	Archive\arrays\RechAddTest.rch.R_Mult_1
 	Archive\arrays\RechAddTest.rch.R_Mult_2
@@ -1732,6 +1924,8 @@ Lgr_Test1.gpt
 	Archive\Lgr_Test1.oc
 	Archive\Lgr_Test1.pval
 	Archive\Lgr_Test1.rch
+	Archive\Lgr_Test1.RunModel.Bat
+	Archive\Lgr_Test1.RunModflow.Bat
 	Archive\Lgr_Test1.sip
 	Archive\Lgr_Test1.wel
 	Archive\Lgr_Test1.zon
@@ -1793,6 +1987,8 @@ Lgr_Test2.gpt
 	Archive\Lgr_Test2.nam.archive
 	Archive\Lgr_Test2.oc
 	Archive\Lgr_Test2.rch
+	Archive\Lgr_Test2.RunModel.Bat
+	Archive\Lgr_Test2.RunModflow.Bat
 	Archive\Lgr_Test2.sfr
 	Archive\Lgr_Test2.sip
 	Archive\Lgr_Test2.wel
@@ -1826,6 +2022,8 @@ Lgr_Test4.gpt
 	Archive\Lgr_Test4.nam.archive
 	Archive\Lgr_Test4.oc
 	Archive\Lgr_Test4.rch
+	Archive\Lgr_Test4.RunModel.Bat
+	Archive\Lgr_Test4.RunModflow.Bat
 	Archive\Lgr_Test4.sip
 	Archive\Lgr_Test4.wel
 	Archive\Lgr_Test4_Child_1.bas
@@ -1861,6 +2059,8 @@ Lgr_Test5.gpt
 	Archive\Lgr_Test5.pcg
 	Archive\Lgr_Test5.pval
 	Archive\Lgr_Test5.rch
+	Archive\Lgr_Test5.RunModel.Bat
+	Archive\Lgr_Test5.RunModflow.Bat
 	Archive\arrays\Lgr_Test5.rch.R_Mult_1
 	Archive\Lgr_Test5_Child_1.bas
 	Archive\Lgr_Test5_Child_1.chd
@@ -1899,6 +2099,8 @@ Lgr_Test3.gpt
 	Archive\Lgr_Test3.oc
 	Archive\Lgr_Test3.pcg
 	Archive\Lgr_Test3.rch
+	Archive\Lgr_Test3.RunModel.Bat
+	Archive\Lgr_Test3.RunModflow.Bat
 	Archive\Lgr_Test3.wel
 	Archive\Lgr_Test3_Child_1.bas
 	Archive\Lgr_Test3_Child_1.chd
@@ -1934,6 +2136,8 @@ Lgr_Test6.gpt
 	Archive\Lgr_Test6.pcg
 	Archive\Lgr_Test6.pval
 	Archive\Lgr_Test6.rch
+	Archive\Lgr_Test6.RunModel.Bat
+	Archive\Lgr_Test6.RunModflow.Bat
 	Archive\Lgr_Test6.wel
 	Archive\Lgr_Test6.zon
 	Archive\arrays\Lgr_Test6.evt.ET_Mult_2
@@ -1979,6 +2183,8 @@ Lgr_Test7.gpt
 	Archive\Lgr_Test7.nam.archive
 	Archive\Lgr_Test7.oc
 	Archive\Lgr_Test7.rch
+	Archive\Lgr_Test7.RunModel.Bat
+	Archive\Lgr_Test7.RunModflow.Bat
 	Archive\Lgr_Test7.sip
 	Archive\Lgr_Test7_Child_1.bas
 	Archive\Lgr_Test7_Child_1.bcf
@@ -2007,6 +2213,8 @@ Lgr_Test8.gpt
 	Archive\Lgr_Test8.nam
 	Archive\Lgr_Test8.nam.archive
 	Archive\Lgr_Test8.oc
+	Archive\Lgr_Test8.RunModel.Bat
+	Archive\Lgr_Test8.RunModflow.Bat
 	Archive\Lgr_Test8.sfr
 	Archive\Lgr_Test8.sip
 	Archive\Lgr_Test8.uzf
@@ -2038,6 +2246,8 @@ Lgr_Test9.gpt
 	Archive\Lgr_Test9.nam
 	Archive\Lgr_Test9.nam.archive
 	Archive\Lgr_Test9.oc
+	Archive\Lgr_Test9.RunModel.Bat
+	Archive\Lgr_Test9.RunModflow.Bat
 	Archive\Lgr_Test9.sfr
 	Archive\Lgr_Test9.sip
 	Archive\Lgr_Test9.uzf
@@ -2069,6 +2279,8 @@ Lgr_Test10.gpt
 	Archive\Lgr_Test10.nam.archive
 	Archive\Lgr_Test10.oc
 	Archive\Lgr_Test10.resv
+	Archive\Lgr_Test10.RunModel.Bat
+	Archive\Lgr_Test10.RunModflow.Bat
 	Archive\Lgr_Test10.sip
 	Archive\Lgr_Test10_Child_1.bas
 	Archive\Lgr_Test10_Child_1.bcf
@@ -2096,6 +2308,8 @@ Lgr_Test11.gpt
 	Archive\Lgr_Test11.nam.archive
 	Archive\Lgr_Test11.oc
 	Archive\Lgr_Test11.rch
+	Archive\Lgr_Test11.RunModel.Bat
+	Archive\Lgr_Test11.RunModflow.Bat
 	Archive\Lgr_Test11.sip
 	Archive\Lgr_Test11.wel
 	Archive\Lgr_Test11_Child_1.bas
@@ -2127,6 +2341,8 @@ NwtTest1.gpt
 	Archive\NwtTest1.oc
 	Archive\NwtTest1.pval
 	Archive\NwtTest1.rch
+	Archive\NwtTest1.RunModel.Bat
+	Archive\NwtTest1.RunModflow.Bat
 	Archive\NwtTest1.upw
 	Archive\NwtTest1.wel
 	Archive\NwtTest1.zon
@@ -2148,6 +2364,8 @@ NwtTest2.gpt
 	Archive\NwtTest2.nwt
 	Archive\NwtTest2.oc
 	Archive\NwtTest2.rch
+	Archive\NwtTest2.RunModel.Bat
+	Archive\NwtTest2.RunModflow.Bat
 	Archive\NwtTest2.sfr
 	Archive\NwtTest2.upw
 	Archive\NwtTest2.wel
@@ -2165,6 +2383,8 @@ NwtTest3.gpt
 	Archive\NwtTest3.nwt
 	Archive\NwtTest3.oc
 	Archive\NwtTest3.rch
+	Archive\NwtTest3.RunModel.Bat
+	Archive\NwtTest3.RunModflow.Bat
 	Archive\NwtTest3.sfr
 	Archive\NwtTest3.upw
 	Archive\NwtTest3.wel
@@ -2182,6 +2402,8 @@ NwtTest4.gpt
 	Archive\NwtTest4.nwt
 	Archive\NwtTest4.oc
 	Archive\NwtTest4.rch
+	Archive\NwtTest4.RunModel.Bat
+	Archive\NwtTest4.RunModflow.Bat
 	Archive\NwtTest4.sfr
 	Archive\NwtTest4.upw
 	Archive\NwtTest4.wel
@@ -2199,6 +2421,8 @@ NwtTest5.gpt
 	Archive\NwtTest5.nwt
 	Archive\NwtTest5.oc
 	Archive\NwtTest5.rch
+	Archive\NwtTest5.RunModel.Bat
+	Archive\NwtTest5.RunModflow.Bat
 	Archive\NwtTest5.sfr
 	Archive\NwtTest5.upw
 	Archive\NwtTest5.wel
@@ -2223,6 +2447,8 @@ SampleModelLgr.gpt
 	Archive\SampleModelLgr.pval
 	Archive\SampleModelLgr.rch
 	Archive\SampleModelLgr.riv
+	Archive\SampleModelLgr.RunModel.Bat
+	Archive\SampleModelLgr.RunModflow.Bat
 	Archive\SampleModelLgr.zb_response
 	Archive\SampleModelLgr.zb_response.archive
 	Archive\SampleModelLgr.zb_zones
@@ -2270,6 +2496,8 @@ LgrStreamLinkTest.gpt
 	Archive\LgrStreamLinkTest.nam.archive
 	Archive\LgrStreamLinkTest.oc
 	Archive\LgrStreamLinkTest.pcg
+	Archive\LgrStreamLinkTest.RunModel.Bat
+	Archive\LgrStreamLinkTest.RunModflow.Bat
 	Archive\LgrStreamLinkTest.sfr
 	Archive\LgrStreamLinkTest_Child_1.bas
 	Archive\LgrStreamLinkTest_Child_1.dis
@@ -2295,6 +2523,8 @@ LgrStreamLinkTest2.gpt
 	Archive\LgrStreamLinkTest2.oc
 	Archive\LgrStreamLinkTest2.pcg
 	Archive\LgrStreamLinkTest2.pval
+	Archive\LgrStreamLinkTest2.RunModel.Bat
+	Archive\LgrStreamLinkTest2.RunModflow.Bat
 	Archive\LgrStreamLinkTest2.sfr
 	Archive\LgrStreamLinkTest2_Child_1.bas
 	Archive\LgrStreamLinkTest2_Child_1.dis
@@ -2320,6 +2550,8 @@ LgrStreamLink.gpt
 	Archive\LgrStreamLink.nam.archive
 	Archive\LgrStreamLink.oc
 	Archive\LgrStreamLink.pcg
+	Archive\LgrStreamLink.RunModel.Bat
+	Archive\LgrStreamLink.RunModflow.Bat
 	Archive\LgrStreamLink.sfr
 	Archive\LgrStreamLink_Child_1.bas
 	Archive\LgrStreamLink_Child_1.dis
@@ -2345,6 +2577,8 @@ LgrStreamLinkPar.gpt
 	Archive\LgrStreamLinkPar.oc
 	Archive\LgrStreamLinkPar.pcg
 	Archive\LgrStreamLinkPar.pval
+	Archive\LgrStreamLinkPar.RunModel.Bat
+	Archive\LgrStreamLinkPar.RunModflow.Bat
 	Archive\LgrStreamLinkPar.sfr
 	Archive\LgrStreamLinkPar_Child_1.bas
 	Archive\LgrStreamLinkPar_Child_1.dis
@@ -2372,6 +2606,8 @@ LgrStreamLinkTest3.gpt
 	Archive\LgrStreamLinkTest3.oc
 	Archive\LgrStreamLinkTest3.pcg
 	Archive\LgrStreamLinkTest3.pval
+	Archive\LgrStreamLinkTest3.RunModel.Bat
+	Archive\LgrStreamLinkTest3.RunModflow.Bat
 	Archive\LgrStreamLinkTest3.sfr
 	Archive\LgrStreamLinkTest3_Child_1.bas
 	Archive\LgrStreamLinkTest3_Child_1.dis
@@ -2402,6 +2638,8 @@ ImportMt3dSteadyState.gpt
 	Archive\ImportMt3dSteadyState.nam
 	Archive\ImportMt3dSteadyState.nam.archive
 	Archive\ImportMt3dSteadyState.oc
+	Archive\ImportMt3dSteadyState.RunModel.Bat
+	Archive\ImportMt3dSteadyState.RunModflow.Bat
 	Archive\ImportMt3dSteadyState.sip
 	Archive\ImportMt3dSteadyState.ssm
 	Archive\ImportMt3dSteadyState.wel
@@ -2424,6 +2662,8 @@ ImportMt3dmsMultidiffusion.gpt
 	Archive\ImportMt3dmsMultidiffusion.nam
 	Archive\ImportMt3dmsMultidiffusion.nam.archive
 	Archive\ImportMt3dmsMultidiffusion.oc
+	Archive\ImportMt3dmsMultidiffusion.RunModel.Bat
+	Archive\ImportMt3dmsMultidiffusion.RunModflow.Bat
 	Archive\ImportMt3dmsMultidiffusion.sip
 	Archive\ImportMt3dmsMultidiffusion.ssm
 	Archive\ImportMt3dmsMultidiffusion.wel
@@ -2446,6 +2686,8 @@ ImportMt3dmsReinject.gpt
 	Archive\ImportMt3dmsReinject.nam
 	Archive\ImportMt3dmsReinject.nam.archive
 	Archive\ImportMt3dmsReinject.oc
+	Archive\ImportMt3dmsReinject.RunModel.Bat
+	Archive\ImportMt3dmsReinject.RunModflow.Bat
 	Archive\ImportMt3dmsReinject.sip
 	Archive\ImportMt3dmsReinject.ssm
 	Archive\ImportMt3dmsReinject.wel
@@ -2468,6 +2710,8 @@ ImportMt3dmsTob.gpt
 	Archive\ImportMt3dmsTob.nam
 	Archive\ImportMt3dmsTob.nam.archive
 	Archive\ImportMt3dmsTob.oc
+	Archive\ImportMt3dmsTob.RunModel.Bat
+	Archive\ImportMt3dmsTob.RunModflow.Bat
 	Archive\ImportMt3dmsTob.sip
 	Archive\ImportMt3dmsTob.ssm
 	Archive\ImportMt3dmsTob.tob
@@ -2492,6 +2736,8 @@ ImportMt3dmsZeroth.gpt
 	Archive\ImportMt3dmsZeroth.nam.archive
 	Archive\ImportMt3dmsZeroth.oc
 	Archive\ImportMt3dmsZeroth.rct
+	Archive\ImportMt3dmsZeroth.RunModel.Bat
+	Archive\ImportMt3dmsZeroth.RunModflow.Bat
 	Archive\ImportMt3dmsZeroth.sip
 	Archive\ImportMt3dmsZeroth.ssm
 	Archive\usgs.ImportMt3dmsZeroth.reference
@@ -2513,6 +2759,8 @@ ImportMt3dP07.gpt
 	Archive\ImportMt3dP07.nam
 	Archive\ImportMt3dP07.nam.archive
 	Archive\ImportMt3dP07.oc
+	Archive\ImportMt3dP07.RunModel.Bat
+	Archive\ImportMt3dP07.RunModflow.Bat
 	Archive\ImportMt3dP07.sip
 	Archive\ImportMt3dP07.ssm
 	Archive\ImportMt3dP07.wel
@@ -2535,6 +2783,8 @@ ImportedP1_Case1a.gpt
 	Archive\ImportedP1_Case1a.nam.archive
 	Archive\ImportedP1_Case1a.oc
 	Archive\ImportedP1_Case1a.pcg
+	Archive\ImportedP1_Case1a.RunModel.Bat
+	Archive\ImportedP1_Case1a.RunModflow.Bat
 	Archive\ImportedP1_Case1a.ssm
 	Archive\usgs.ImportedP1_Case1a.reference
 	Archive\usgs.ImportedP1_Case1a_MT3DMS.reference
@@ -2556,6 +2806,8 @@ ImportedP1_Case1b.gpt
 	Archive\ImportedP1_Case1b.nam.archive
 	Archive\ImportedP1_Case1b.oc
 	Archive\ImportedP1_Case1b.pcg
+	Archive\ImportedP1_Case1b.RunModel.Bat
+	Archive\ImportedP1_Case1b.RunModflow.Bat
 	Archive\ImportedP1_Case1b.ssm
 	Archive\usgs.ImportedP1_Case1b.reference
 	Archive\usgs.ImportedP1_Case1b_MT3DMS.reference
@@ -2578,6 +2830,8 @@ ImportedP1_Case1c.gpt
 	Archive\ImportedP1_Case1c.oc
 	Archive\ImportedP1_Case1c.pcg
 	Archive\ImportedP1_Case1c.rct
+	Archive\ImportedP1_Case1c.RunModel.Bat
+	Archive\ImportedP1_Case1c.RunModflow.Bat
 	Archive\ImportedP1_Case1c.ssm
 	Archive\usgs.ImportedP1_Case1c.reference
 	Archive\usgs.ImportedP1_Case1c_MT3DMS.reference
@@ -2600,6 +2854,8 @@ ImportedP1_Case1d.gpt
 	Archive\ImportedP1_Case1d.oc
 	Archive\ImportedP1_Case1d.pcg
 	Archive\ImportedP1_Case1d.rct
+	Archive\ImportedP1_Case1d.RunModel.Bat
+	Archive\ImportedP1_Case1d.RunModflow.Bat
 	Archive\ImportedP1_Case1d.ssm
 	Archive\usgs.ImportedP1_Case1d.reference
 	Archive\usgs.ImportedP1_Case1d_MT3DMS.reference
@@ -2621,6 +2877,8 @@ ImportedP2_nonequilibrium.gpt
 	Archive\ImportedP2_nonequilibrium.nam.archive
 	Archive\ImportedP2_nonequilibrium.oc
 	Archive\ImportedP2_nonequilibrium.rct
+	Archive\ImportedP2_nonequilibrium.RunModel.Bat
+	Archive\ImportedP2_nonequilibrium.RunModflow.Bat
 	Archive\ImportedP2_nonequilibrium.sip
 	Archive\ImportedP2_nonequilibrium.ssm
 	Archive\usgs.ImportedP2_nonequilibrium.reference
@@ -2643,6 +2901,8 @@ ImportedP2_nonlinear.gpt
 	Archive\ImportedP2_nonlinear.nam.archive
 	Archive\ImportedP2_nonlinear.oc
 	Archive\ImportedP2_nonlinear.rct
+	Archive\ImportedP2_nonlinear.RunModel.Bat
+	Archive\ImportedP2_nonlinear.RunModflow.Bat
 	Archive\ImportedP2_nonlinear.sip
 	Archive\ImportedP2_nonlinear.ssm
 	Archive\usgs.ImportedP2_nonlinear.reference
@@ -2664,6 +2924,8 @@ ImportedP3.gpt
 	Archive\ImportedP3.nam
 	Archive\ImportedP3.nam.archive
 	Archive\ImportedP3.oc
+	Archive\ImportedP3.RunModel.Bat
+	Archive\ImportedP3.RunModflow.Bat
 	Archive\ImportedP3.sip
 	Archive\ImportedP3.ssm
 	Archive\ImportedP3.wel
@@ -2686,6 +2948,8 @@ ImportedP4.gpt
 	Archive\ImportedP4.nam
 	Archive\ImportedP4.nam.archive
 	Archive\ImportedP4.oc
+	Archive\ImportedP4.RunModel.Bat
+	Archive\ImportedP4.RunModflow.Bat
 	Archive\ImportedP4.sip
 	Archive\ImportedP4.ssm
 	Archive\ImportedP4.wel
@@ -2708,6 +2972,8 @@ ImportedP5.gpt
 	Archive\ImportedP5.nam
 	Archive\ImportedP5.nam.archive
 	Archive\ImportedP5.oc
+	Archive\ImportedP5.RunModel.Bat
+	Archive\ImportedP5.RunModflow.Bat
 	Archive\ImportedP5.sip
 	Archive\ImportedP5.ssm
 	Archive\ImportedP5.wel
@@ -2730,6 +2996,8 @@ ImportedP6.gpt
 	Archive\ImportedP6.nam
 	Archive\ImportedP6.nam.archive
 	Archive\ImportedP6.oc
+	Archive\ImportedP6.RunModel.Bat
+	Archive\ImportedP6.RunModflow.Bat
 	Archive\ImportedP6.sip
 	Archive\ImportedP6.ssm
 	Archive\ImportedP6.wel
@@ -2754,6 +3022,8 @@ ImportedP8.gpt
 	Archive\ImportedP8.oc
 	Archive\ImportedP8.pcg
 	Archive\ImportedP8.rch
+	Archive\ImportedP8.RunModel.Bat
+	Archive\ImportedP8.RunModflow.Bat
 	Archive\ImportedP8.ssm
 	Archive\usgs.ImportedP8.reference
 	Archive\usgs.ImportedP8_MT3DMS.reference
@@ -2774,6 +3044,8 @@ ImportedP9.gpt
 	Archive\ImportedP9.nam
 	Archive\ImportedP9.nam.archive
 	Archive\ImportedP9.oc
+	Archive\ImportedP9.RunModel.Bat
+	Archive\ImportedP9.RunModflow.Bat
 	Archive\ImportedP9.sip
 	Archive\ImportedP9.ssm
 	Archive\ImportedP9.wel
@@ -2798,6 +3070,8 @@ ImportedP10.gpt
 	Archive\ImportedP10.oc
 	Archive\ImportedP10.pcg
 	Archive\ImportedP10.rch
+	Archive\ImportedP10.RunModel.Bat
+	Archive\ImportedP10.RunModflow.Bat
 	Archive\ImportedP10.ssm
 	Archive\ImportedP10.wel
 	Archive\usgs.ImportedP10.reference
@@ -2816,6 +3090,8 @@ SfrParam.gpt
 	Archive\SfrParam.oc
 	Archive\SfrParam.pcg
 	Archive\SfrParam.pval
+	Archive\SfrParam.RunModel.Bat
+	Archive\SfrParam.RunModflow.Bat
 	Archive\SfrParam.sfr
 	Archive\SfrParam.tab1
 	Archive\SfrParam.tab2
@@ -2834,6 +3110,8 @@ LakeBathymetryTest.gpt
 	Archive\LakeBathymetryTest.nam.archive
 	Archive\LakeBathymetryTest.oc
 	Archive\LakeBathymetryTest.rch
+	Archive\LakeBathymetryTest.RunModel.Bat
+	Archive\LakeBathymetryTest.RunModflow.Bat
 	Archive\LakeBathymetryTest.sip
 	Archive\usgs.LakeBathymetryTest.reference
 ObservationTest5.gpt
@@ -2853,6 +3131,8 @@ ObservationTest5.gpt
 	Archive\ObservationTest5.pcg
 	Archive\ObservationTest5.pval
 	Archive\ObservationTest5.riv
+	Archive\ObservationTest5.RunModel.Bat
+	Archive\ObservationTest5.RunModflow.Bat
 	Archive\usgs.ObservationTest5.reference
 MP6 Test1.gpt
 	Archive\MP6_Test1.axml
@@ -2871,6 +3151,8 @@ MP6 Test1.gpt
 	Archive\MP6_Test1.pcg
 	Archive\MP6_Test1.rch
 	Archive\MP6_Test1.riv
+	Archive\MP6_Test1.RunModel.Bat
+	Archive\MP6_Test1.RunModflow.Bat
 	Archive\MP6_Test1.strt
 	Archive\MP6_Test1.wel
 	Archive\usgs.MP6_Test1.reference
@@ -2892,6 +3174,8 @@ MP6 Test2.gpt
 	Archive\MP6_Test2.pcg
 	Archive\MP6_Test2.rch
 	Archive\MP6_Test2.riv
+	Archive\MP6_Test2.RunModel.Bat
+	Archive\MP6_Test2.RunModflow.Bat
 	Archive\MP6_Test2.strt
 	Archive\MP6_Test2.wel
 	Archive\usgs.MP6_Test2.reference
@@ -2913,6 +3197,8 @@ MP6 Test3.gpt
 	Archive\MP6_Test3.pcg
 	Archive\MP6_Test3.rch
 	Archive\MP6_Test3.riv
+	Archive\MP6_Test3.RunModel.Bat
+	Archive\MP6_Test3.RunModflow.Bat
 	Archive\MP6_Test3.strt
 	Archive\MP6_Test3.wel
 	Archive\usgs.MP6_Test3.reference
@@ -2934,6 +3220,8 @@ MP6 Test4.gpt
 	Archive\MP6_Test4.pcg
 	Archive\MP6_Test4.rch
 	Archive\MP6_Test4.riv
+	Archive\MP6_Test4.RunModel.Bat
+	Archive\MP6_Test4.RunModflow.Bat
 	Archive\MP6_Test4.strt
 	Archive\MP6_Test4.wel
 	Archive\usgs.MP6_Test4.reference
@@ -2955,6 +3243,8 @@ MP6 Test5.gpt
 	Archive\MP6_Test5.pcg
 	Archive\MP6_Test5.rch
 	Archive\MP6_Test5.riv
+	Archive\MP6_Test5.RunModel.Bat
+	Archive\MP6_Test5.RunModflow.Bat
 	Archive\MP6_Test5.strt
 	Archive\MP6_Test5.wel
 	Archive\usgs.MP6_Test5.reference
@@ -2976,6 +3266,8 @@ MP6 Test6.gpt
 	Archive\MP6_Test6.pcg
 	Archive\MP6_Test6.rch
 	Archive\MP6_Test6.riv
+	Archive\MP6_Test6.RunModel.Bat
+	Archive\MP6_Test6.RunModflow.Bat
 	Archive\MP6_Test6.strt
 	Archive\MP6_Test6.wel
 	Archive\usgs.MP6_Test6.reference
@@ -2997,6 +3289,8 @@ MP6 Test7.gpt
 	Archive\MP6_Test7.pcg
 	Archive\MP6_Test7.rch
 	Archive\MP6_Test7.riv
+	Archive\MP6_Test7.RunModel.Bat
+	Archive\MP6_Test7.RunModflow.Bat
 	Archive\MP6_Test7.strt
 	Archive\MP6_Test7.wel
 	Archive\usgs.MP6_Test7.reference
@@ -3018,6 +3312,8 @@ MP6 Test8.gpt
 	Archive\MP6_Test8.pcg
 	Archive\MP6_Test8.rch
 	Archive\MP6_Test8.riv
+	Archive\MP6_Test8.RunModel.Bat
+	Archive\MP6_Test8.RunModflow.Bat
 	Archive\MP6_Test8.strt
 	Archive\MP6_Test8.wel
 	Archive\usgs.MP6_Test8.reference
@@ -3039,6 +3335,8 @@ MP6 Test9.gpt
 	Archive\MP6_Test9.pcg
 	Archive\MP6_Test9.rch
 	Archive\MP6_Test9.riv
+	Archive\MP6_Test9.RunModel.Bat
+	Archive\MP6_Test9.RunModflow.Bat
 	Archive\MP6_Test9.strt
 	Archive\MP6_Test9.wel
 	Archive\usgs.MP6_Test9.reference
@@ -3056,6 +3354,8 @@ PcgnTest.gpt
 	Archive\PcgnTest.oc
 	Archive\PcgnTest.pcgn
 	Archive\PcgnTest.pval
+	Archive\PcgnTest.RunModel.Bat
+	Archive\PcgnTest.RunModflow.Bat
 	Archive\usgs.PcgnTest.reference
 testRch3.gpt
 	Archive\testRch3.axml
@@ -3072,6 +3372,8 @@ testRch3.gpt
 	Archive\testRch3.pcg
 	Archive\testRch3.pval
 	Archive\testRch3.rch
+	Archive\testRch3.RunModel.Bat
+	Archive\testRch3.RunModflow.Bat
 	Archive\testRch3.zon
 	Archive\arrays\testRch3.rch.R_Mult_1
 	Archive\arrays\testRch3.rch.R_Zone_1
@@ -3087,6 +3389,8 @@ MulitHeadObsWithQuasi3DModel.gpt
 	Archive\MulitHeadObsWithQuasi3DModel.ob_hob
 	Archive\MulitHeadObsWithQuasi3DModel.oc
 	Archive\MulitHeadObsWithQuasi3DModel.pcg
+	Archive\MulitHeadObsWithQuasi3DModel.RunModel.Bat
+	Archive\MulitHeadObsWithQuasi3DModel.RunModflow.Bat
 	Archive\usgs.MulitHeadObsWithQuasi3DModel.reference
 StreamTest1.gpt
 	Archive\StreamTest1.axml
@@ -3098,6 +3402,8 @@ StreamTest1.gpt
 	Archive\StreamTest1.nam.archive
 	Archive\StreamTest1.oc
 	Archive\StreamTest1.pcg
+	Archive\StreamTest1.RunModel.Bat
+	Archive\StreamTest1.RunModflow.Bat
 	Archive\StreamTest1.str
 	Archive\usgs.StreamTest1.reference
 StreamTest2.gpt
@@ -3117,6 +3423,8 @@ StreamTest2.gpt
 	Archive\StreamTest2.nam.archive
 	Archive\StreamTest2.oc
 	Archive\StreamTest2.pcg
+	Archive\StreamTest2.RunModel.Bat
+	Archive\StreamTest2.RunModflow.Bat
 	Archive\StreamTest2.ssm
 	Archive\StreamTest2.str
 	Archive\usgs.StreamTest2.reference
@@ -3138,6 +3446,8 @@ StrFhbTobTest.gpt
 	Archive\StrFhbTobTest.ob_stob
 	Archive\StrFhbTobTest.oc
 	Archive\StrFhbTobTest.pcg
+	Archive\StrFhbTobTest.RunModel.Bat
+	Archive\StrFhbTobTest.RunModflow.Bat
 	Archive\StrFhbTobTest.ssm
 	Archive\StrFhbTobTest.str
 	Archive\StrFhbTobTest.tob
@@ -3158,6 +3468,8 @@ CFM3_example2.gpt
 	Archive\CFM3_example2.oc
 	Archive\CFM3_example2.pcg
 	Archive\CFM3_example2.rch
+	Archive\CFM3_example2.RunModel.Bat
+	Archive\CFM3_example2.RunModflow.Bat
 	Archive\usgs.CFM3_example2.reference
 CFM3_example1.gpt
 	Archive\CFM3_example1.axml
@@ -3174,6 +3486,8 @@ CFM3_example1.gpt
 	Archive\CFM3_example1.oc
 	Archive\CFM3_example1.pcg
 	Archive\CFM3_example1.rch
+	Archive\CFM3_example1.RunModel.Bat
+	Archive\CFM3_example1.RunModflow.Bat
 	Archive\usgs.CFM3_example1.reference
 SWI4_2d.gpt
 	Archive\SWI4_2d.axml
@@ -3186,6 +3500,8 @@ SWI4_2d.gpt
 	Archive\SWI4_2d.nam.archive
 	Archive\SWI4_2d.oc
 	Archive\SWI4_2d.pcg
+	Archive\SWI4_2d.RunModel.Bat
+	Archive\SWI4_2d.RunModflow.Bat
 	Archive\SWI4_2d.swi
 	Archive\SWI4_2d.wel
 	Archive\usgs.SWI4_2d.reference
@@ -3200,6 +3516,8 @@ SWI4_2d_sww.gpt
 	Archive\SWI4_2d_sww.nam.archive
 	Archive\SWI4_2d_sww.oc
 	Archive\SWI4_2d_sww.pcg
+	Archive\SWI4_2d_sww.RunModel.Bat
+	Archive\SWI4_2d_sww.RunModflow.Bat
 	Archive\SWI4_2d_sww.swi
 	Archive\SWI4_2d_sww.wel
 	Archive\usgs.SWI4_2d_sww.reference
@@ -3214,6 +3532,8 @@ SWI6-1.gpt
 	Archive\SWI6-1.nam.archive
 	Archive\SWI6-1.oc
 	Archive\SWI6-1.pcg
+	Archive\SWI6-1.RunModel.Bat
+	Archive\SWI6-1.RunModflow.Bat
 	Archive\SWI6-1.swi
 	Archive\SWI6-1.wel
 	Archive\usgs.SWI6-1.reference
@@ -3228,6 +3548,8 @@ SWI5.gpt
 	Archive\SWI5.nam.archive
 	Archive\SWI5.oc
 	Archive\SWI5.pcg
+	Archive\SWI5.RunModel.Bat
+	Archive\SWI5.RunModflow.Bat
 	Archive\SWI5.swi
 	Archive\SWI5.wel
 	Archive\usgs.SWI5.reference
@@ -3242,6 +3564,8 @@ SWI3.gpt
 	Archive\SWI3.nam.archive
 	Archive\SWI3.oc
 	Archive\SWI3.pcg
+	Archive\SWI3.RunModel.Bat
+	Archive\SWI3.RunModflow.Bat
 	Archive\SWI3.swi
 	Archive\SWI3.wel
 	Archive\usgs.SWI3.reference
@@ -3256,6 +3580,8 @@ SWI2_Strat.gpt
 	Archive\SWI2_Strat.nam.archive
 	Archive\SWI2_Strat.oc
 	Archive\SWI2_Strat.pcg
+	Archive\SWI2_Strat.RunModel.Bat
+	Archive\SWI2_Strat.RunModflow.Bat
 	Archive\SWI2_Strat.swi
 	Archive\usgs.SWI2_Strat.reference
 SWI2_Cont.gpt
@@ -3269,6 +3595,8 @@ SWI2_Cont.gpt
 	Archive\SWI2_Cont.nam.archive
 	Archive\SWI2_Cont.oc
 	Archive\SWI2_Cont.pcg
+	Archive\SWI2_Cont.RunModel.Bat
+	Archive\SWI2_Cont.RunModflow.Bat
 	Archive\SWI2_Cont.swi
 	Archive\usgs.SWI2_Cont.reference
 SWI1.gpt
@@ -3282,6 +3610,8 @@ SWI1.gpt
 	Archive\SWI1.nam.archive
 	Archive\SWI1.oc
 	Archive\SWI1.pcg
+	Archive\SWI1.RunModel.Bat
+	Archive\SWI1.RunModflow.Bat
 	Archive\SWI1.swi
 	Archive\SWI1.wel
 	Archive\usgs.SWI1.reference
@@ -3295,6 +3625,8 @@ importedSWR.gpt
 	Archive\importedSWR.nam.archive
 	Archive\importedSWR.nwt
 	Archive\importedSWR.oc
+	Archive\importedSWR.RunModel.Bat
+	Archive\importedSWR.RunModflow.Bat
 	Archive\importedSWR.swr
 	Archive\importedSWR.upw
 	Archive\importedSWR.uzf
@@ -3313,6 +3645,8 @@ Mnw1Test.gpt
 	Archive\Mnw1Test.oc
 	Archive\Mnw1Test.pcg
 	Archive\Mnw1Test.rch
+	Archive\Mnw1Test.RunModel.Bat
+	Archive\Mnw1Test.RunModflow.Bat
 	Archive\usgs.Mnw1Test.reference
 FarmLgrTest1.gpt
 	Archive\FarmLgrTest1.axml
@@ -3342,6 +3676,8 @@ FarmLgrTest1.gpt
 	Archive\FarmLgrTest1.PSI
 	Archive\FarmLgrTest1.pval
 	Archive\FarmLgrTest1.ROOT
+	Archive\FarmLgrTest1.RunModel.Bat
+	Archive\FarmLgrTest1.RunModflow.Bat
 	Archive\FarmLgrTest1.SemiRouteDeliv
 	Archive\FarmLgrTest1.SemiRouteReturn
 	Archive\FarmLgrTest1.sfr
@@ -3405,6 +3741,8 @@ FarmTestDataSet7.gpt
 	Archive\FarmTestDataSet7.PSI
 	Archive\FarmTestDataSet7.pval
 	Archive\FarmTestDataSet7.ROOT
+	Archive\FarmTestDataSet7.RunModel.Bat
+	Archive\FarmTestDataSet7.RunModflow.Bat
 	Archive\FarmTestDataSet7.SemiRouteDeliv
 	Archive\FarmTestDataSet7.SemiRouteReturn
 	Archive\FarmTestDataSet7.sfr
@@ -3440,6 +3778,8 @@ FarmTestDataSet15.gpt
 	Archive\FarmTestDataSet15.PFLX
 	Archive\FarmTestDataSet15.PSI
 	Archive\FarmTestDataSet15.pval
+	Archive\FarmTestDataSet15.RunModel.Bat
+	Archive\FarmTestDataSet15.RunModflow.Bat
 	Archive\FarmTestDataSet15.SemiRouteDeliv
 	Archive\FarmTestDataSet15.SemiRouteReturn
 	Archive\FarmTestDataSet15.sfr
@@ -3477,6 +3817,8 @@ FarmTestDataSet17.gpt
 	Archive\FarmTestDataSet17.PSI
 	Archive\FarmTestDataSet17.pval
 	Archive\FarmTestDataSet17.ROOT
+	Archive\FarmTestDataSet17.RunModel.Bat
+	Archive\FarmTestDataSet17.RunModflow.Bat
 	Archive\FarmTestDataSet17.SemiRouteDeliv
 	Archive\FarmTestDataSet17.SemiRouteReturn
 	Archive\FarmTestDataSet17.sfr
@@ -3513,6 +3855,8 @@ FarmTestDataSet18.gpt
 	Archive\FarmTestDataSet18.PSI
 	Archive\FarmTestDataSet18.pval
 	Archive\FarmTestDataSet18.ROOT
+	Archive\FarmTestDataSet18.RunModel.Bat
+	Archive\FarmTestDataSet18.RunModflow.Bat
 	Archive\FarmTestDataSet18.SemiRouteDeliv
 	Archive\FarmTestDataSet18.SemiRouteReturn
 	Archive\FarmTestDataSet18.sfr
@@ -3550,6 +3894,8 @@ FarmTestDataSet25.gpt
 	Archive\FarmTestDataSet25.PSI
 	Archive\FarmTestDataSet25.pval
 	Archive\FarmTestDataSet25.ROOT
+	Archive\FarmTestDataSet25.RunModel.Bat
+	Archive\FarmTestDataSet25.RunModflow.Bat
 	Archive\FarmTestDataSet25.SemiRouteDeliv
 	Archive\FarmTestDataSet25.SemiRouteReturn
 	Archive\FarmTestDataSet25.sfr
@@ -3587,6 +3933,8 @@ FarmTestDataSet35.gpt
 	Archive\FarmTestDataSet35.PSI
 	Archive\FarmTestDataSet35.pval
 	Archive\FarmTestDataSet35.ROOT
+	Archive\FarmTestDataSet35.RunModel.Bat
+	Archive\FarmTestDataSet35.RunModflow.Bat
 	Archive\FarmTestDataSet35.SemiRouteDeliv
 	Archive\FarmTestDataSet35.SemiRouteReturn
 	Archive\FarmTestDataSet35.sfr
@@ -3625,6 +3973,8 @@ FarmTestDataSet39.gpt
 	Archive\FarmTestDataSet39.PSI
 	Archive\FarmTestDataSet39.pval
 	Archive\FarmTestDataSet39.ROOT
+	Archive\FarmTestDataSet39.RunModel.Bat
+	Archive\FarmTestDataSet39.RunModflow.Bat
 	Archive\FarmTestDataSet39.SemiRouteDeliv
 	Archive\FarmTestDataSet39.SemiRouteReturn
 	Archive\FarmTestDataSet39.sfr
@@ -3662,6 +4012,8 @@ FarmTestSwr.gpt
 	Archive\FarmTestSwr.PSI
 	Archive\FarmTestSwr.pval
 	Archive\FarmTestSwr.ROOT
+	Archive\FarmTestSwr.RunModel.Bat
+	Archive\FarmTestSwr.RunModflow.Bat
 	Archive\FarmTestSwr.SemiRouteDeliv
 	Archive\FarmTestSwr.SemiRouteReturn
 	Archive\FarmTestSwr.sfr
@@ -3698,6 +4050,8 @@ FarmMnw2Test.gpt
 	Archive\FarmMnw2Test.PSI
 	Archive\FarmMnw2Test.pval
 	Archive\FarmMnw2Test.ROOT
+	Archive\FarmMnw2Test.RunModel.Bat
+	Archive\FarmMnw2Test.RunModflow.Bat
 	Archive\FarmMnw2Test.SemiRouteDeliv
 	Archive\FarmMnw2Test.SemiRouteReturn
 	Archive\FarmMnw2Test.sfr
@@ -3733,6 +4087,8 @@ FarmTest1.gpt
 	Archive\FarmTest1.PSI
 	Archive\FarmTest1.pval
 	Archive\FarmTest1.ROOT
+	Archive\FarmTest1.RunModel.Bat
+	Archive\FarmTest1.RunModflow.Bat
 	Archive\FarmTest1.SemiRouteDeliv
 	Archive\FarmTest1.SemiRouteReturn
 	Archive\FarmTest1.sfr
@@ -3753,6 +4109,8 @@ HobTest.gpt
 	Archive\HobTest.ob_hob
 	Archive\HobTest.oc
 	Archive\HobTest.pcg
+	Archive\HobTest.RunModel.Bat
+	Archive\HobTest.RunModflow.Bat
 	Archive\usgs.HobTest.reference
 EncloseBug3.gpt
 	Archive\EncloseBug3.axml
@@ -3764,11 +4122,19 @@ EncloseBug3.gpt
 	Archive\EncloseBug3.nam.archive
 	Archive\EncloseBug3.oc
 	Archive\EncloseBug3.pcg
+	Archive\EncloseBug3.RunModel.Bat
+	Archive\EncloseBug3.RunModflow.Bat
 	Archive\usgs.EncloseBug3.reference
 NearestTest2.gpt
 	Archive\NearestTest2.axml
+	Archive\NearestTest2.c_ele
+	Archive\NearestTest2.c_nod
+	Archive\NearestTest2.c_nod3D
 	Archive\NearestTest2.ics
 	Archive\NearestTest2.inp
+	Archive\NearestTest2.RunModel.Bat
+	Archive\NearestTest2.RunSutra.bat
+	Archive\NearestTest2.SUTRA.FIL
 	Archive\usgs.NearestTest2.reference
 MnwSsmScreenTest.gpt
 	Archive\MnwSsmScreenTest.adv
@@ -3789,6 +4155,8 @@ MnwSsmScreenTest.gpt
 	Archive\MnwSsmScreenTest.nam.archive
 	Archive\MnwSsmScreenTest.oc
 	Archive\MnwSsmScreenTest.pcg
+	Archive\MnwSsmScreenTest.RunModel.Bat
+	Archive\MnwSsmScreenTest.RunModflow.Bat
 	Archive\MnwSsmScreenTest.ssm
 	Archive\usgs.MnwSsmScreenTest.reference
 	Archive\usgs.MnwSsmScreenTest_MT3DMS.reference
@@ -3802,6 +4170,8 @@ TestIntersectedAndEnclosedInSameObject.gpt
 	Archive\TestIntersectedAndEnclosedInSameObject.nam.archive
 	Archive\TestIntersectedAndEnclosedInSameObject.oc
 	Archive\TestIntersectedAndEnclosedInSameObject.pcg
+	Archive\TestIntersectedAndEnclosedInSameObject.RunModel.Bat
+	Archive\TestIntersectedAndEnclosedInSameObject.RunModflow.Bat
 	Archive\usgs.TestIntersectedAndEnclosedInSameObject.reference
 PhastCombinedEnclosedAndIntersected.gpt
 	Archive\PhastCombinedEnclosedAndIntersected.axml
@@ -3818,6 +4188,8 @@ RipImport.gpt
 	Archive\RipImport.nam.archive
 	Archive\RipImport.oc
 	Archive\RipImport.rip
+	Archive\RipImport.RunModel.Bat
+	Archive\RipImport.RunModflow.Bat
 	Archive\RipImport.sip
 	Archive\RipImport.str
 	Archive\RipImport.wel
@@ -3847,6 +4219,8 @@ FarmTimeSeriesBug.gpt
 	Archive\FarmTimeSeriesBug.PFLX
 	Archive\FarmTimeSeriesBug.PSI
 	Archive\FarmTimeSeriesBug.pval
+	Archive\FarmTimeSeriesBug.RunModel.Bat
+	Archive\FarmTimeSeriesBug.RunModflow.Bat
 	Archive\FarmTimeSeriesBug.SemiRouteDeliv
 	Archive\FarmTimeSeriesBug.SemiRouteReturn
 	Archive\FarmTimeSeriesBug.sfr
@@ -3868,6 +4242,8 @@ SubOwhm.gpt
 	Archive\SubOwhm.nam
 	Archive\SubOwhm.nam.archive
 	Archive\SubOwhm.oc
+	Archive\SubOwhm.RunModel.Bat
+	Archive\SubOwhm.RunModflow.Bat
 	Archive\SubOwhm.sip
 	Archive\SubOwhm.sub
 	Archive\SubOwhm.wel
@@ -3884,6 +4260,8 @@ SfrLinkTest3.gpt
 	Archive\SfrLinkTest3.nam.archive
 	Archive\SfrLinkTest3.oc
 	Archive\SfrLinkTest3.pcg
+	Archive\SfrLinkTest3.RunModel.Bat
+	Archive\SfrLinkTest3.RunModflow.Bat
 	Archive\SfrLinkTest3.sfr
 	Archive\SfrLinkTest3_Child_1.bas
 	Archive\SfrLinkTest3_Child_1.dis
@@ -3905,6 +4283,8 @@ FractionBug2.gpt
 	Archive\FractionBug2.nam.archive
 	Archive\FractionBug2.oc
 	Archive\FractionBug2.pcg
+	Archive\FractionBug2.RunModel.Bat
+	Archive\FractionBug2.RunModflow.Bat
 	Archive\usgs.FractionBug2.reference
 Sf6Mf6.gpt
 	Archive\Sf6Mf6.axml
@@ -3912,10 +4292,13 @@ Sf6Mf6.gpt
 	Archive\Sf6Mf6.dis
 	Archive\Sf6Mf6.ic
 	Archive\Sf6Mf6.ims
+	Archive\Sf6Mf6.mfsim.nam
 	Archive\Sf6Mf6.nam
 	Archive\Sf6Mf6.nam.archive
 	Archive\Sf6Mf6.npf
 	Archive\Sf6Mf6.oc
+	Archive\Sf6Mf6.RunModel.Bat
+	Archive\Sf6Mf6.RunModflow.Bat
 	Archive\Sf6Mf6.sfr
 	Archive\Sf6Mf6.sto
 	Archive\Sf6Mf6.tdis
@@ -3935,6 +4318,7 @@ LakeMf6.gpt
 	Archive\LakeMf6.ic
 	Archive\LakeMf6.ims
 	Archive\LakeMf6.lak6
+	Archive\LakeMf6.mfsim.nam
 	Archive\LakeMf6.mt_nam
 	Archive\LakeMf6.mt_nam.archive
 	Archive\LakeMf6.nam
@@ -3943,6 +4327,8 @@ LakeMf6.gpt
 	Archive\LakeMf6.ob_lak
 	Archive\LakeMf6.oc
 	Archive\LakeMf6.rch
+	Archive\LakeMf6.RunModel.Bat
+	Archive\LakeMf6.RunModflow.Bat
 	Archive\LakeMf6.ssm
 	Archive\LakeMf6.tdis
 	Archive\usgs.LakeMf6.reference
@@ -3967,6 +4353,8 @@ LakeNWT.gpt
 	Archive\LakeNWT.nwt
 	Archive\LakeNWT.oc
 	Archive\LakeNWT.rch
+	Archive\LakeNWT.RunModel.Bat
+	Archive\LakeNWT.RunModflow.Bat
 	Archive\LakeNWT.ssm
 	Archive\LakeNWT.upw
 	Archive\usgs.LakeNWT.reference
@@ -3982,6 +4370,7 @@ MF6_TestSfrMawLak.gpt
 	Archive\MF6_TestSfrMawLak.ims
 	Archive\MF6_TestSfrMawLak.lak6
 	Archive\MF6_TestSfrMawLak.maw6
+	Archive\MF6_TestSfrMawLak.mfsim.nam
 	Archive\MF6_TestSfrMawLak.mvr
 	Archive\MF6_TestSfrMawLak.nam
 	Archive\MF6_TestSfrMawLak.nam.archive
@@ -3999,6 +4388,8 @@ MF6_TestSfrMawLak.gpt
 	Archive\MF6_TestSfrMawLak.oc
 	Archive\MF6_TestSfrMawLak.rch
 	Archive\MF6_TestSfrMawLak.riv
+	Archive\MF6_TestSfrMawLak.RunModel.Bat
+	Archive\MF6_TestSfrMawLak.RunModflow.Bat
 	Archive\MF6_TestSfrMawLak.sfr
 	Archive\MF6_TestSfrMawLak.tdis
 	Archive\MF6_TestSfrMawLak.wel
@@ -4014,6 +4405,7 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.ims
 	Archive\MF6_TestSfrMawLakMvrUzf.lak6
 	Archive\MF6_TestSfrMawLakMvrUzf.maw6
+	Archive\MF6_TestSfrMawLakMvrUzf.mfsim.nam
 	Archive\MF6_TestSfrMawLakMvrUzf.mvr
 	Archive\MF6_TestSfrMawLakMvrUzf.nam
 	Archive\MF6_TestSfrMawLakMvrUzf.nam.archive
@@ -4033,6 +4425,8 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.oc
 	Archive\MF6_TestSfrMawLakMvrUzf.rch
 	Archive\MF6_TestSfrMawLakMvrUzf.riv
+	Archive\MF6_TestSfrMawLakMvrUzf.RunModel.Bat
+	Archive\MF6_TestSfrMawLakMvrUzf.RunModflow.Bat
 	Archive\MF6_TestSfrMawLakMvrUzf.sfr
 	Archive\MF6_TestSfrMawLakMvrUzf.tdis
 	Archive\MF6_TestSfrMawLakMvrUzf.uzf
@@ -4050,6 +4444,8 @@ DipKTest.gpt
 	Archive\DipKTest.oc
 	Archive\DipKTest.pcgn
 	Archive\DipKTest.pval
+	Archive\DipKTest.RunModel.Bat
+	Archive\DipKTest.RunModflow.Bat
 	Archive\DipKTest.zon
 	Archive\usgs.DipKTest.reference
 ExitEdgeTest.gpt
@@ -4057,10 +4453,13 @@ ExitEdgeTest.gpt
 	Archive\ExitEdgeTest.dis
 	Archive\ExitEdgeTest.ic
 	Archive\ExitEdgeTest.ims
+	Archive\ExitEdgeTest.mfsim.nam
 	Archive\ExitEdgeTest.nam
 	Archive\ExitEdgeTest.nam.archive
 	Archive\ExitEdgeTest.npf
 	Archive\ExitEdgeTest.oc
+	Archive\ExitEdgeTest.RunModel.Bat
+	Archive\ExitEdgeTest.RunModflow.Bat
 	Archive\ExitEdgeTest.tdis
 	Archive\usgs.ExitEdgeTest.reference
 UztTest2.gpt
@@ -4080,6 +4479,8 @@ UztTest2.gpt
 	Archive\UztTest2.nam.archive
 	Archive\UztTest2.nwt
 	Archive\UztTest2.oc
+	Archive\UztTest2.RunModel.Bat
+	Archive\UztTest2.RunModflow.Bat
 	Archive\UztTest2.ssm
 	Archive\UztTest2.upw
 	Archive\UztTest2.uzf
@@ -4104,6 +4505,8 @@ CTS1.gpt
 	Archive\CTS1.nam
 	Archive\CTS1.nam.archive
 	Archive\CTS1.oc
+	Archive\CTS1.RunModel.Bat
+	Archive\CTS1.RunModflow.Bat
 	Archive\CTS1.sip
 	Archive\CTS1.ssm
 	Archive\CTS1.wel
@@ -4130,6 +4533,8 @@ GWT.gpt
 	Archive\GWT.nam.archive
 	Archive\GWT.oc
 	Archive\GWT.rch
+	Archive\GWT.RunModel.Bat
+	Archive\GWT.RunModflow.Bat
 	Archive\GWT.sfr
 	Archive\GWT.sft
 	Archive\GWT.sip
@@ -4146,6 +4551,7 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.ic
 	Archive\ParamMf6Test.ims
 	Archive\ParamMf6Test.jtf
+	Archive\ParamMf6Test.mfsim.nam
 	Archive\ParamMf6Test.nam
 	Archive\ParamMf6Test.nam.archive
 	Archive\ParamMf6Test.npf
@@ -4153,6 +4559,8 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.pval
 	Archive\ParamMf6Test.rch
 	Archive\ParamMf6Test.riv
+	Archive\ParamMf6Test.RunModel.Bat
+	Archive\ParamMf6Test.RunModflow.Bat
 	Archive\ParamMf6Test.sto
 	Archive\ParamMf6Test.tdis
 	Archive\ParamMf6Test.wel
@@ -4163,10 +4571,13 @@ Mf6RechargeOptionTest.gpt
 	Archive\Mf6RechargeOptionTest.dis
 	Archive\Mf6RechargeOptionTest.ic
 	Archive\Mf6RechargeOptionTest.ims
+	Archive\Mf6RechargeOptionTest.mfsim.nam
 	Archive\Mf6RechargeOptionTest.nam
 	Archive\Mf6RechargeOptionTest.nam.archive
 	Archive\Mf6RechargeOptionTest.npf
 	Archive\Mf6RechargeOptionTest.oc
+	Archive\Mf6RechargeOptionTest.RunModel.Bat
+	Archive\Mf6RechargeOptionTest.RunModflow.Bat
 	Archive\Mf6RechargeOptionTest.tdis
 	Archive\usgs.Mf6RechargeOptionTest.reference
 HighestActivePhast.gpt
@@ -4180,10 +4591,13 @@ HighestActiveModflow.gpt
 	Archive\HighestActiveModflow.ghb
 	Archive\HighestActiveModflow.ic
 	Archive\HighestActiveModflow.ims
+	Archive\HighestActiveModflow.mfsim.nam
 	Archive\HighestActiveModflow.nam
 	Archive\HighestActiveModflow.nam.archive
 	Archive\HighestActiveModflow.npf
 	Archive\HighestActiveModflow.oc
+	Archive\HighestActiveModflow.RunModel.Bat
+	Archive\HighestActiveModflow.RunModflow.Bat
 	Archive\HighestActiveModflow.tdis
 	Archive\usgs.HighestActiveModflow.reference
 ProfileTest.gpt
@@ -4197,6 +4611,8 @@ ProfileTest.gpt
 	Archive\ProfileTest.nam.archive
 	Archive\ProfileTest.oc
 	Archive\ProfileTest.pcg
+	Archive\ProfileTest.RunModel.Bat
+	Archive\ProfileTest.RunModflow.Bat
 	Archive\usgs.ProfileTest.reference
 CSubExample.gpt
 	Archive\CSubExample.axml
@@ -4205,6 +4621,7 @@ CSubExample.gpt
 	Archive\CSubExample.dis
 	Archive\CSubExample.ic
 	Archive\CSubExample.ims
+	Archive\CSubExample.mfsim.nam
 	Archive\CSubExample.nam
 	Archive\CSubExample.nam.archive
 	Archive\CSubExample.npf
@@ -4212,6 +4629,8 @@ CSubExample.gpt
 	Archive\CSubExample.ob_gw
 	Archive\CSubExample.oc
 	Archive\CSubExample.rch
+	Archive\CSubExample.RunModel.Bat
+	Archive\CSubExample.RunModflow.Bat
 	Archive\CSubExample.sto
 	Archive\CSubExample.tdis
 	Archive\CSubExample.wel
@@ -4224,11 +4643,14 @@ HfbMf6Test2.gpt
 	Archive\HfbMf6Test2.ic
 	Archive\HfbMf6Test2.ims
 	Archive\HfbMf6Test2.jtf
+	Archive\HfbMf6Test2.mfsim.nam
 	Archive\HfbMf6Test2.nam
 	Archive\HfbMf6Test2.nam.archive
 	Archive\HfbMf6Test2.npf
 	Archive\HfbMf6Test2.oc
 	Archive\HfbMf6Test2.pval
+	Archive\HfbMf6Test2.RunModel.Bat
+	Archive\HfbMf6Test2.RunModflow.Bat
 	Archive\HfbMf6Test2.tdis
 	Archive\usgs.HfbMf6Test2.reference
 HfbMf6Test.gpt
@@ -4239,11 +4661,14 @@ HfbMf6Test.gpt
 	Archive\HfbMf6Test.ic
 	Archive\HfbMf6Test.ims
 	Archive\HfbMf6Test.jtf
+	Archive\HfbMf6Test.mfsim.nam
 	Archive\HfbMf6Test.nam
 	Archive\HfbMf6Test.nam.archive
 	Archive\HfbMf6Test.npf
 	Archive\HfbMf6Test.oc
 	Archive\HfbMf6Test.pval
+	Archive\HfbMf6Test.RunModel.Bat
+	Archive\HfbMf6Test.RunModflow.Bat
 	Archive\HfbMf6Test.tdis
 	Archive\usgs.HfbMf6Test.reference
 DisvIntersectAssignment.gpt
@@ -4251,9 +4676,12 @@ DisvIntersectAssignment.gpt
 	Archive\DisvIntersectAssignment.disv
 	Archive\DisvIntersectAssignment.ic
 	Archive\DisvIntersectAssignment.ims
+	Archive\DisvIntersectAssignment.mfsim.nam
 	Archive\DisvIntersectAssignment.nam
 	Archive\DisvIntersectAssignment.nam.archive
 	Archive\DisvIntersectAssignment.npf
 	Archive\DisvIntersectAssignment.oc
+	Archive\DisvIntersectAssignment.RunModel.Bat
+	Archive\DisvIntersectAssignment.RunModflow.Bat
 	Archive\DisvIntersectAssignment.tdis
 	Archive\usgs.DisvIntersectAssignment.reference

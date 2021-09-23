@@ -221,7 +221,7 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import SUTRA Files</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><anchor id="SutraFile" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Import|SUTRA Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import data from some SUTRA files for visualization. Data from data sets 14B, 15B and the initial conditions file can be imported if data in those data sets has been modified by PEST.</text></para>

@@ -1434,18 +1434,26 @@ var
 {$IFDEF PEST}
   KrigFactorsFileName: string;
 {$ENDIF}
+  FileRoot: string;
+  BackupParamEstBatFileName: string;
+  BackupRunModflow: string;
 begin
 
   ADirectory:= GetCurrentDir;
   try
+    FileRoot := ChangeFileExt(ExtractFileName(FileName), '.');
     NetworkDrive := IsNetworkDrive(FileName);
     result := ExtractFileDir(FileName);
     ModelDirectory := result;
     SetCurrentDir(result);
+    BackupParamEstBatFileName := IncludeTrailingPathDelimiter(result)
+      + FileRoot + StrRunModelBat;
     ParamEstBatFileName := IncludeTrailingPathDelimiter(result)
       + StrRunModelBat;
     WriteInstructionBatFileName := IncludeTrailingPathDelimiter(result)
       + 'WriteInstructions.Bat';
+    BackupRunModflow := IncludeTrailingPathDelimiter(result)
+      + FileRoot + 'RunModflow.Bat';
     result := IncludeTrailingPathDelimiter(result)
       + 'RunModflow.Bat';
 
@@ -1543,6 +1551,7 @@ begin
       begin
         if FileExists(ProgramLocations.ModelMonitorLocation) then
         begin
+
           MfsimName := ExtractFileDir(FileName);
           MfsimName := IncludeTrailingPathDelimiter(MfsimName) + 'mfsim.nam';
           BatchFile.Add('call '
@@ -1761,7 +1770,9 @@ begin
       ArchiveBatchFile.Add('pause');
 
       BatchFile.SaveToFile(result);
+      TFile.Copy(result, BackupRunModflow, True);
       ParamEstBatchFile.SaveToFile(ParamEstBatFileName);
+      TFile.Copy(ParamEstBatFileName, BackupParamEstBatFileName, True);
       ArchiveBatchFile.SaveToFile(result + ArchiveExt);
       Model.AddModelInputFile(result + ArchiveExt);
       if Model.PestUsed then
@@ -9180,11 +9191,17 @@ begin
 end;
 
 procedure TMf6_SimNameFileWriter.WriteFile(FileName: string);
+var
+  FileRoot: WideString;
+  BackupFileName: WideString;
 begin
   if Model.ModelSelection <> msModflow2015 then
   begin
     Exit;
   end;
+  FileRoot := ChangeFileExt(ExtractFileName(FileName), '.');
+  BackupFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName))
+    + FileRoot + 'mfsim.nam';
   FileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName)) + 'mfsim.nam';
   FInputFileName := FileName;
   OpenFile(FileName);
@@ -9223,6 +9240,7 @@ begin
   finally
     CloseFile;
   end;
+  TFile.Copy(FileName, BackupFileName, True);
   Model.AddModelInputFile(FileName);
   Model.AddModelOutputFile(ChangeFileExt(FileName, '.lst'));
 end;

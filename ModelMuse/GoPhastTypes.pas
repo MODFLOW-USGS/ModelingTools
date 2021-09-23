@@ -865,6 +865,8 @@ resourcestring
   StrTotalS = ' total %s (per layer)';
   StrMultiply = 'Multiply';
   StrAdd = 'Add';
+  StrModelFeatures = '|Model Features';
+
 
 
 const

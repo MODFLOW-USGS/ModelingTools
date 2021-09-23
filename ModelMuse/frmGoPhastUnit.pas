@@ -9802,6 +9802,9 @@ var
   INFLE: string;
   PestInputDataArrays: TDictionary<string, TDataArray>;
   PestDataArray: TDataArray;
+  FileRoot: string;
+  BackupParamEstBatFileName: string;
+  BackupBatchFileName: string;
   procedure AddPestDataArraysToDictionary(InputPestDataArrays: TArray<TDataArray>);
   var
     DataArray: TDataArray;
@@ -10175,12 +10178,12 @@ begin
         end;
 
         SutraFileWriter.WriteFile;
-        BatchFileName := ExtractFileDir(FileName);
-        ParamEstBatFileName := IncludeTrailingPathDelimiter(BatchFileName)
-          + StrRunModelBat;
-        BatchFileName := IncludeTrailingPathDelimiter(BatchFileName)
-          + 'RunSutra.bat';
-
+        BatchFileName := IncludeTrailingPathDelimiter(ExtractFileDir(FileName));
+        FileRoot := ChangeFileExt(ExtractFileName(FileName), '.');
+        ParamEstBatFileName := BatchFileName + StrRunModelBat;
+        BackupParamEstBatFileName := BatchFileName + FileRoot + StrRunModelBat;
+        BackupBatchFileName := BatchFileName + FileRoot + 'RunSutra.bat';
+        BatchFileName := BatchFileName + 'RunSutra.bat';
 
         BatchFile := TStringList.Create;
         ParamEstBatFile := TStringList.Create;
@@ -10233,6 +10236,8 @@ begin
           BatchFile.Add('pause');
           BatchFile.SaveToFile(BatchFileName);
           ParamEstBatFile.SaveToFile(ParamEstBatFileName);
+          TFile.Copy(ParamEstBatFileName, BackupParamEstBatFileName, True);
+          TFile.Copy(BatchFileName, BackupBatchFileName, True);
 
           BatchFile.Clear;
 
@@ -10291,12 +10296,7 @@ begin
         Schedules.Free;
         GenFlowNodeLists.Free;
         GeneralTransportList.Free;
-//        GeneralTransportList: TObjectList<TList<IGeneralTransportNodes>>;
         BcsFileNames.Free;
-//        FluidSourceNodes.Free;
-//        MassEnergySourceNodes.Free;
-//        SpecifiedPressureNodes.Free;
-//        SpecifiedTempConcNodes.Free;
         FreeAndNil(SutraFileWriter);
       end;
     except

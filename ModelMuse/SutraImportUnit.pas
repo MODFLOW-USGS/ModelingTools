@@ -238,7 +238,7 @@ begin
 
         try
           MakeNewDataSet(NewDataSets, '_Imported_Porosity',
-            strDefaultClassification + '|' + 'imported from SUTRA Data Set 14B file',
+            StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
             FileName, eaNodes, Porosity);
 
           Position := AScreenObject.AddDataSet(Porosity);
@@ -252,7 +252,7 @@ begin
           if Mesh.MeshType <> mt3D then
           begin
             MakeNewDataSet(NewDataSets, '_Imported_Thickness',
-              strDefaultClassification + '|' + 'imported from SUTRA Data Set 14B file',
+              StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 14B file',
               FileName, eaNodes, Thickness);
 
             Position := AScreenObject.AddDataSet(Thickness);
@@ -366,7 +366,7 @@ var
     var ValueArrayItem: TValueArrayItem);
   begin
     MakeNewDataSet(NewDataSets, Suffix,
-      strDefaultClassification + '|' + 'imported from SUTRA Data Set 15B file',
+      StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set 15B file',
       FileName, eaBlocks, DataSet);
 
     Position := AScreenObject.AddDataSet(DataSet);
@@ -759,7 +759,7 @@ begin
         try
           DataType := Copy(ExtractFileExt(FileName), 2, MAXINT);
           MakeNewDataSet(NewDataSets, '_Imported_' + DataType,
-            strDefaultClassification + '|' + 'imported from SUTRA Data Set initial condition file',
+            StrModelResults + StrModelFeatures + '|' + 'imported from SUTRA Data Set initial condition file',
             FileName, eaNodes, InitialValue);
 
           Position := AScreenObject.AddDataSet(InitialValue);

@@ -1,68 +1,113 @@
-..\Release\Win32\ModelMuse.exe
-92
+..\Debug\Win32\ModelMuse.exe
+146
 SutraTest1.gpt
 	Archive\SutraTest1.axml
+	Archive\SutraTest1.c_ele
+	Archive\SutraTest1.c_nod
+	Archive\SutraTest1.c_nod3D
 	Archive\SutraTest1.FluxBcs
 	Archive\SutraTest1.ics
 	Archive\SutraTest1.inp
+	Archive\SutraTest1.RunModel.Bat
+	Archive\SutraTest1.RunSutra.bat
 	Archive\SutraTest1.SPecPBcs
 	Archive\SutraTest1.SPecUBcs
+	Archive\SutraTest1.SUTRA.FIL
 	Archive\SutraTest1.UFluxBcs
 	Archive\usgs.SutraTest1.reference
 SutraTest2.gpt
 	Archive\SutraTest2.axml
+	Archive\SutraTest2.c_ele
+	Archive\SutraTest2.c_nod
+	Archive\SutraTest2.c_nod3D
 	Archive\SutraTest2.FluxBcs
 	Archive\SutraTest2.ics
 	Archive\SutraTest2.inp
+	Archive\SutraTest2.RunModel.Bat
+	Archive\SutraTest2.RunSutra.bat
 	Archive\SutraTest2.SPecPBcs
 	Archive\SutraTest2.SPecUBcs
+	Archive\SutraTest2.SUTRA.FIL
 	Archive\SutraTest2.UFluxBcs
 	Archive\usgs.SutraTest2.reference
 SutraTest3.gpt
 	Archive\SutraTest3.axml
+	Archive\SutraTest3.c_ele
+	Archive\SutraTest3.c_nod
+	Archive\SutraTest3.c_nod3D
 	Archive\SutraTest3.FluxBcs
 	Archive\SutraTest3.ics
 	Archive\SutraTest3.inp
+	Archive\SutraTest3.RunModel.Bat
+	Archive\SutraTest3.RunSutra.bat
 	Archive\SutraTest3.SPecPBcs
 	Archive\SutraTest3.SPecUBcs
+	Archive\SutraTest3.SUTRA.FIL
 	Archive\SutraTest3.UFluxBcs
 	Archive\usgs.SutraTest3.reference
 SutraTest4.gpt
 	Archive\SutraTest4.axml
+	Archive\SutraTest4.c_ele
+	Archive\SutraTest4.c_nod
+	Archive\SutraTest4.c_nod3D
 	Archive\SutraTest4.FluxBcs
 	Archive\SutraTest4.ics
 	Archive\SutraTest4.inp
+	Archive\SutraTest4.RunModel.Bat
+	Archive\SutraTest4.RunSutra.bat
 	Archive\SutraTest4.SPecPBcs
 	Archive\SutraTest4.SPecUBcs
+	Archive\SutraTest4.SUTRA.FIL
 	Archive\SutraTest4.UFluxBcs
 	Archive\usgs.SutraTest4.reference
 SutraTest5.gpt
 	Archive\SutraTest5.axml
+	Archive\SutraTest5.c_ele
+	Archive\SutraTest5.c_nod
+	Archive\SutraTest5.c_nod3D
 	Archive\SutraTest5.FluxBcs
 	Archive\SutraTest5.ics
 	Archive\SutraTest5.inp
+	Archive\SutraTest5.RunModel.Bat
+	Archive\SutraTest5.RunSutra.bat
 	Archive\SutraTest5.SPecPBcs
 	Archive\SutraTest5.SPecUBcs
+	Archive\SutraTest5.SUTRA.FIL
 	Archive\SutraTest5.UFluxBcs
 	Archive\usgs.SutraTest5.reference
 SutraTest6.gpt
 	Archive\SutraTest6.axml
+	Archive\SutraTest6.c_ele
+	Archive\SutraTest6.c_nod
+	Archive\SutraTest6.c_nod3D
 	Archive\SutraTest6.FluxBcs
 	Archive\SutraTest6.ics
 	Archive\SutraTest6.inp
+	Archive\SutraTest6.RunModel.Bat
+	Archive\SutraTest6.RunSutra.bat
 	Archive\SutraTest6.SPecPBcs
 	Archive\SutraTest6.SPecUBcs
+	Archive\SutraTest6.SUTRA.FIL
 	Archive\SutraTest6.UFluxBcs
 	Archive\usgs.SutraTest6.reference
 Island3D_InitialPressure.gpt
 	Archive\Island3D_InitialPressure.axml
+	Archive\Island3D_InitialPressure.c_ele
+	Archive\Island3D_InitialPressure.c_nod
+	Archive\Island3D_InitialPressure.c_nod3D
 	Archive\Island3D_InitialPressure.FluxBcs
 	Archive\Island3D_InitialPressure.ics
 	Archive\Island3D_InitialPressure.inp
+	Archive\Island3D_InitialPressure.RunModel.Bat
+	Archive\Island3D_InitialPressure.RunSutra.bat
 	Archive\Island3D_InitialPressure.SPecPBcs
+	Archive\Island3D_InitialPressure.SUTRA.FIL
 	Archive\usgs.Island3D_InitialPressure.reference
 SutraGenBoundLakeTest.gpt
 	Archive\SutraGenBoundLakeTest.axml
+	Archive\SutraGenBoundLakeTest.c_ele
+	Archive\SutraGenBoundLakeTest.c_nod
+	Archive\SutraGenBoundLakeTest.c_nod3D
 	Archive\SutraGenBoundLakeTest.GfbBCS
 	Archive\SutraGenBoundLakeTest.GtbBCS
 	Archive\SutraGenBoundLakeTest.ics
@@ -70,6 +115,9 @@ SutraGenBoundLakeTest.gpt
 	Archive\SutraGenBoundLakeTest.lkar
 	Archive\SutraGenBoundLakeTest.lkbc
 	Archive\SutraGenBoundLakeTest.lkin
+	Archive\SutraGenBoundLakeTest.RunModel.Bat
+	Archive\SutraGenBoundLakeTest.RunSutra.bat
+	Archive\SutraGenBoundLakeTest.SUTRA.FIL
 	Archive\usgs.SutraGenBoundLakeTest.reference
 SutraGenBoundInactivate.gpt
 	Archive\SutraGenBoundInactivate.axml
@@ -83,6 +131,9 @@ SutraGenBoundInactivate.gpt
 	Archive\SutraGenBoundInactivate.lkar
 	Archive\SutraGenBoundInactivate.lkbc
 	Archive\SutraGenBoundInactivate.lkin
+	Archive\SutraGenBoundInactivate.RunModel.Bat
+	Archive\SutraGenBoundInactivate.RunSutra.bat
+	Archive\SutraGenBoundInactivate.SUTRA.FIL
 	Archive\usgs.SutraGenBoundInactivate.reference
 SutraIntersectAssignment.gpt
 	Archive\SutraIntersectAssignment.axml
@@ -91,4 +142,7 @@ SutraIntersectAssignment.gpt
 	Archive\SutraIntersectAssignment.c_nod3D
 	Archive\SutraIntersectAssignment.ics
 	Archive\SutraIntersectAssignment.inp
+	Archive\SutraIntersectAssignment.RunModel.Bat
+	Archive\SutraIntersectAssignment.RunSutra.bat
+	Archive\SutraIntersectAssignment.SUTRA.FIL
 	Archive\usgs.SutraIntersectAssignment.reference

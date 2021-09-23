@@ -77,7 +77,6 @@ resourcestring
   StrAFileContainedAFGrid = 'A file contained a features that was outside th' +
   'e grid. The cell locations was (Layer: %0:d, Row: %1:d, Column: %2:d).';
   StrImportModelFeature = 'import model feature data sets.';
-  StrModelFeatures = '|Model Features';
   StrImportedFrom0s = 'Imported from "%0:s" on %1:s';
 
 

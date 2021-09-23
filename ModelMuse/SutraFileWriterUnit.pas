@@ -4,7 +4,7 @@ interface
 
 uses
   CustomModflowWriterUnit, PhastModelUnit, SysUtils,
-  Generics.Collections, SutraOptionsUnit;
+  Generics.Collections, SutraOptionsUnit, System.IOUtils;
 
 type
   TSutraFileType = (sftInp, sftIcs, sftLst, sftRst, sftNod, sftEle,
@@ -122,9 +122,12 @@ end;
 procedure TSutraFileWriter.WriteFile;
 var
   SutraFileName: string;
+  BackupName: string;
 begin
+  BackupName := ChangeFileExt(ExtractFileName(FFileRoot), '');
   SutraFileName := ExtractFileDir(FFileRoot);
   SutraFileName := IncludeTrailingPathDelimiter(SutraFileName);
+  BackupName := SutraFileName + BackupName + '.SUTRA.FIL';
   SutraFileName := SutraFileName + 'SUTRA.FIL';
 
   AddFile(sftLst, ChangeFileExt(FFileRoot, '.lst'));
@@ -135,6 +138,8 @@ begin
 
   FArchive := False;
   InternalWriteFile(SutraFileName);
+  Assert(TFile.Exists(SutraFileName));
+  TFile.Copy(SutraFileName, BackupName, True);
   FArchive := True;
   InternalWriteFile(SutraFileName + ArchiveExt);
   Model.AddModelInputFile(SutraFileName + ArchiveExt);

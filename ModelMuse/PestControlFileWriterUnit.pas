@@ -776,17 +776,18 @@ var
 begin
   result := 0;
   GetUsedTypes(UsedTypes);
+  // template for PVAL file
   for ParamIndex := 0 to Model.ModflowSteadyParameters.Count - 1 do
   begin
     AParam := Model.ModflowSteadyParameters[ParamIndex];
     if AParam.ParameterType in UsedTypes then
     begin
-      if not (AParam is TModflowSteadyParameter)
-        or not TModflowSteadyParameter(AParam).UsePilotPoints then
-      begin
+//      if not (AParam is TModflowSteadyParameter)
+//        {or not TModflowSteadyParameter(AParam).UsePilotPoints} then
+//      begin
         result := 1;
         break;
-      end;
+//      end;
     end;
   end;
 
@@ -1789,11 +1790,17 @@ var
     PARNME: string;
     N: Integer;
     PARVAL1: Double;
+    PilotPointParam: Boolean;
+    PARLBND: Double;
+    PARUBND: Double;
+    BoundFactor: double;
   begin
+    PilotPointParam := False;
     //PARNME
     if ParameterName <> '' then
     begin
       PARNME := ParameterName;
+      PilotPointParam := True;
     end
     else
     begin
@@ -1844,29 +1851,53 @@ var
 
     //PARVAL1
 
-    if ParameterName <> '' then
+    BoundFactor := 1.;
+    if PilotPointParam then
     begin
       PARVAL1 := Value;
-//      WriteFloat(Value);
+      if AParam.Value = 0 then
+      begin
+        BoundFactor := 1.;
+      end
+      else
+      begin
+        BoundFactor := PARVAL1/AParam.Value;
+      end;
     end
     else
     begin
       PARVAL1 := AParam.Value;
-//      WriteFloat(AParam.Value);
     end;
     WriteFloat(PARVAL1);
 
     //PARLBND
-    WriteFloat(AParam.LowerBound);
-    if PARVAL1 < AParam.LowerBound then
+    if not PilotPointParam then
+    begin
+      PARLBND := AParam.LowerBound
+    end
+    else
+    begin
+      PARLBND := AParam.LowerBound * BoundFactor;
+    end;
+    WriteFloat(PARLBND);
+    if PARVAL1 < PARLBND then
     begin
       frmErrorsAndWarnings.AddError(Model, StrInvalidParameterVa,
         Format(StrForParameter0s, [PARNME, StrLess, StrLower]))
     end;
 
     //PARUBND
-    WriteFloat(AParam.UpperBound);
-    if PARVAL1 > AParam.UpperBound then
+    if not PilotPointParam then
+    begin
+      PARUBND := AParam.UpperBound;
+    end
+    else
+    begin
+      PARUBND := AParam.UpperBound * BoundFactor;
+    end;
+
+    WriteFloat(PARUBND);
+    if PARVAL1 > PARUBND then
     begin
       frmErrorsAndWarnings.AddError(Model, StrInvalidParameterVa,
         Format(StrForParameter0s, [PARNME, StrGreater, StrUpper]))

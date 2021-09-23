@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1308
+1414
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -43,6 +43,7 @@ PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.Ky.script.tpl
 	Archive\PestPilotPointTest.Mf6ExtractValues
 	Archive\PestPilotPointTest.Mf6WriteIns
+	Archive\PestPilotPointTest.mfsim.nam
 	Archive\PestPilotPointTest.nam
 	Archive\PestPilotPointTest.nam.archive
 	Archive\PestPilotPointTest.npf
@@ -53,6 +54,8 @@ PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.pst
 	Archive\PestPilotPointTest.ptf
 	Archive\PestPilotPointTest.pval
+	Archive\PestPilotPointTest.RunModel.Bat
+	Archive\PestPilotPointTest.RunModflow.Bat
 	Archive\PestPilotPointTest.tdis
 	Archive\arrays\PestPilotPointTest.Kx_1.arrays
 	Archive\arrays\PestPilotPointTest.Kx_2.arrays
@@ -100,8 +103,11 @@ SutraGenBoundLakeTest.gpt
 	Archive\SutraGenBoundLakeTest.pst
 	Archive\SutraGenBoundLakeTest.ptf
 	Archive\SutraGenBoundLakeTest.pval
+	Archive\SutraGenBoundLakeTest.RunModel.Bat
+	Archive\SutraGenBoundLakeTest.RunSutra.bat
 	Archive\SutraGenBoundLakeTest.soe_ev
 	Archive\SutraGenBoundLakeTest.soe_i
+	Archive\SutraGenBoundLakeTest.SUTRA.FIL
 	Archive\SutraGenBoundLakeTest.TestDS
 	Archive\SutraGenBoundLakeTest.TestDS.PstValues
 	Archive\SutraGenBoundLakeTest.TestDS.script
@@ -135,6 +141,8 @@ importedSWR.gpt
 	Archive\importedSWR.pst
 	Archive\importedSWR.ptf
 	Archive\importedSWR.pval
+	Archive\importedSWR.RunModel.Bat
+	Archive\importedSWR.RunModflow.Bat
 	Archive\importedSWR.swr
 	Archive\importedSWR.swr.tpl
 	Archive\importedSWR.swr.txt
@@ -163,6 +171,8 @@ GhbTest.gpt
 	Archive\GhbTest.pst
 	Archive\GhbTest.ptf
 	Archive\GhbTest.pval
+	Archive\GhbTest.RunModel.Bat
+	Archive\GhbTest.RunModflow.Bat
 	Archive\usgs.GhbTest.reference
 lakeTest.gpt
 	Archive\lakeTest.axml
@@ -189,6 +199,8 @@ lakeTest.gpt
 	Archive\lakeTest.pst
 	Archive\lakeTest.ptf
 	Archive\lakeTest.pval
+	Archive\lakeTest.RunModel.Bat
+	Archive\lakeTest.RunModflow.Bat
 	Archive\arrays\lakeTest.Lakebed_Leakance_1.arrays
 	Archive\arrays\lakeTest.Lakebed_Leakance_2.arrays
 	Archive\arrays\lakeTest.Lakebed_Leakance_3.arrays
@@ -216,6 +228,7 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.maw6.tpl
 	Archive\MF6_TestSfrMawLakMvrUzf.Mf6ExtractValues
 	Archive\MF6_TestSfrMawLakMvrUzf.Mf6WriteIns
+	Archive\MF6_TestSfrMawLakMvrUzf.mfsim.nam
 	Archive\MF6_TestSfrMawLakMvrUzf.mvr
 	Archive\MF6_TestSfrMawLakMvrUzf.nam
 	Archive\MF6_TestSfrMawLakMvrUzf.nam.archive
@@ -239,6 +252,8 @@ MF6_TestSfrMawLakMvrUzf.gpt
 	Archive\MF6_TestSfrMawLakMvrUzf.pval
 	Archive\MF6_TestSfrMawLakMvrUzf.rch
 	Archive\MF6_TestSfrMawLakMvrUzf.riv
+	Archive\MF6_TestSfrMawLakMvrUzf.RunModel.Bat
+	Archive\MF6_TestSfrMawLakMvrUzf.RunModflow.Bat
 	Archive\MF6_TestSfrMawLakMvrUzf.sfr
 	Archive\MF6_TestSfrMawLakMvrUzf.sfr.tpl
 	Archive\MF6_TestSfrMawLakMvrUzf.sfr.txt
@@ -285,6 +300,8 @@ Mnw1Test.gpt
 	Archive\Mnw1Test.ptf
 	Archive\Mnw1Test.pval
 	Archive\Mnw1Test.rch
+	Archive\Mnw1Test.RunModel.Bat
+	Archive\Mnw1Test.RunModflow.Bat
 	Archive\usgs.Mnw1Test.reference
 Mnw2Test.gpt
 	Archive\Mnw2Test.axml
@@ -307,6 +324,8 @@ Mnw2Test.gpt
 	Archive\Mnw2Test.pst
 	Archive\Mnw2Test.ptf
 	Archive\Mnw2Test.pval
+	Archive\Mnw2Test.RunModel.Bat
+	Archive\Mnw2Test.RunModflow.Bat
 	Archive\usgs.Mnw2Test.reference
 ResTest.gpt
 	Archive\ResTest.axml
@@ -332,6 +351,8 @@ ResTest.gpt
 	Archive\ResTest.Reservoir_Bed_Thickness.script.tpl
 	Archive\ResTest.resv
 	Archive\ResTest.resv.tpl
+	Archive\ResTest.RunModel.Bat
+	Archive\ResTest.RunModflow.Bat
 	Archive\arrays\ResTest.Reservoir_Bed_Thickness_1.arrays
 	Archive\usgs.ResTest.reference
 sfrtest2.gpt
@@ -353,6 +374,8 @@ sfrtest2.gpt
 	Archive\sfrtest2.pst
 	Archive\sfrtest2.ptf
 	Archive\sfrtest2.pval
+	Archive\sfrtest2.RunModel.Bat
+	Archive\sfrtest2.RunModflow.Bat
 	Archive\sfrtest2.sfr
 	Archive\sfrtest2.sfr.tpl
 	Archive\usgs.sfrtest2.reference
@@ -378,6 +401,8 @@ WellTest.gpt
 	Archive\WellTest.pst
 	Archive\WellTest.ptf
 	Archive\WellTest.pval
+	Archive\WellTest.RunModel.Bat
+	Archive\WellTest.RunModflow.Bat
 	Archive\WellTest.wel
 	Archive\WellTest.wel.tpl
 	Archive\arrays\WellTest.Horizontal_Anisotropy_1.arrays
@@ -405,11 +430,14 @@ SutraTest1.gpt
 	Archive\SutraTest1.pst
 	Archive\SutraTest1.ptf
 	Archive\SutraTest1.pval
+	Archive\SutraTest1.RunModel.Bat
+	Archive\SutraTest1.RunSutra.bat
 	Archive\SutraTest1.soe_ev
 	Archive\SutraTest1.soe_i
 	Archive\SutraTest1.SPecPBcs
 	Archive\SutraTest1.SPecPBcs.tpl
 	Archive\SutraTest1.SPecUBcs
+	Archive\SutraTest1.SUTRA.FIL
 	Archive\SutraTest1.Transverse_Dispersivity_Max_Dir
 	Archive\SutraTest1.Transverse_Dispersivity_Min_Dir
 	Archive\SutraTest1.UFluxBcs
@@ -431,6 +459,7 @@ CSubExampletest.gpt
 	Archive\CSubExampletest.jtf
 	Archive\CSubExampletest.Mf6ExtractValues
 	Archive\CSubExampletest.Mf6WriteIns
+	Archive\CSubExampletest.mfsim.nam
 	Archive\CSubExampletest.nam
 	Archive\CSubExampletest.nam.archive
 	Archive\CSubExampletest.npf
@@ -442,6 +471,8 @@ CSubExampletest.gpt
 	Archive\CSubExampletest.ptf
 	Archive\CSubExampletest.pval
 	Archive\CSubExampletest.rch
+	Archive\CSubExampletest.RunModel.Bat
+	Archive\CSubExampletest.RunModflow.Bat
 	Archive\CSubExampletest.sto
 	Archive\CSubExampletest.tdis
 	Archive\CSubExampletest.wel
@@ -474,6 +505,8 @@ ChdTest.gpt
 	Archive\ChdTest.pst
 	Archive\ChdTest.ptf
 	Archive\ChdTest.pval
+	Archive\ChdTest.RunModel.Bat
+	Archive\ChdTest.RunModflow.Bat
 	Archive\arrays\ChdTest.Kx_1.arrays
 	Archive\arrays\ChdTest.Kx_2.arrays
 	Archive\arrays\ChdTest.Kx_3.arrays
@@ -503,6 +536,8 @@ Drntest.gpt
 	Archive\Drntest.pst
 	Archive\Drntest.ptf
 	Archive\Drntest.pval
+	Archive\Drntest.RunModel.Bat
+	Archive\Drntest.RunModflow.Bat
 	Archive\Drntest.test
 	Archive\Drntest.test.PstValues
 	Archive\Drntest.test.script
@@ -533,6 +568,8 @@ DrtTest.gpt
 	Archive\DrtTest.pst
 	Archive\DrtTest.ptf
 	Archive\DrtTest.pval
+	Archive\DrtTest.RunModel.Bat
+	Archive\DrtTest.RunModflow.Bat
 	Archive\usgs.DrtTest.reference
 HfbTest.gpt
 	Archive\HfbTest.axml
@@ -555,6 +592,8 @@ HfbTest.gpt
 	Archive\HfbTest.pst
 	Archive\HfbTest.ptf
 	Archive\HfbTest.pval
+	Archive\HfbTest.RunModel.Bat
+	Archive\HfbTest.RunModflow.Bat
 	Archive\usgs.HfbTest.reference
 EtsTest.gpt
 	Archive\EtsTest.axml
@@ -581,6 +620,8 @@ EtsTest.gpt
 	Archive\EtsTest.pst
 	Archive\EtsTest.ptf
 	Archive\EtsTest.pval
+	Archive\EtsTest.RunModel.Bat
+	Archive\EtsTest.RunModflow.Bat
 	Archive\EtsTest.txt
 	Archive\arrays\EtsTest.Kx_1.arrays
 	Archive\arrays\EtsTest.Kx_2.arrays
@@ -606,6 +647,8 @@ EvtTest.gpt
 	Archive\EvtTest.ptf
 	Archive\EvtTest.pval
 	Archive\EvtTest.riv
+	Archive\EvtTest.RunModel.Bat
+	Archive\EvtTest.RunModflow.Bat
 	Archive\EvtTest.rvob_out.ins
 	Archive\usgs.EvtTest.reference
 FarmTest1.gpt
@@ -641,6 +684,8 @@ FarmTest1.gpt
 	Archive\FarmTest1.ptf
 	Archive\FarmTest1.pval
 	Archive\FarmTest1.ROOT
+	Archive\FarmTest1.RunModel.Bat
+	Archive\FarmTest1.RunModflow.Bat
 	Archive\FarmTest1.SemiRouteDeliv
 	Archive\FarmTest1.SemiRouteReturn
 	Archive\FarmTest1.sfr
@@ -663,6 +708,7 @@ HfbMf6Test2.gpt
 	Archive\HfbMf6Test2.jtf
 	Archive\HfbMf6Test2.Mf6ExtractValues
 	Archive\HfbMf6Test2.Mf6WriteIns
+	Archive\HfbMf6Test2.mfsim.nam
 	Archive\HfbMf6Test2.nam
 	Archive\HfbMf6Test2.nam.archive
 	Archive\HfbMf6Test2.npf
@@ -672,6 +718,8 @@ HfbMf6Test2.gpt
 	Archive\HfbMf6Test2.pst
 	Archive\HfbMf6Test2.ptf
 	Archive\HfbMf6Test2.pval
+	Archive\HfbMf6Test2.RunModel.Bat
+	Archive\HfbMf6Test2.RunModflow.Bat
 	Archive\HfbMf6Test2.tdis
 	Archive\usgs.HfbMf6Test2.reference
 RechAddTest.gpt
@@ -695,6 +743,8 @@ RechAddTest.gpt
 	Archive\RechAddTest.pval
 	Archive\RechAddTest.rch
 	Archive\RechAddTest.rch.tpl
+	Archive\RechAddTest.RunModel.Bat
+	Archive\RechAddTest.RunModflow.Bat
 	Archive\usgs.RechAddTest.reference
 RechAddTestMf6.gpt
 	Archive\RechAddTestMf6.axml
@@ -706,6 +756,7 @@ RechAddTestMf6.gpt
 	Archive\RechAddTestMf6.jtf
 	Archive\RechAddTestMf6.Mf6ExtractValues
 	Archive\RechAddTestMf6.Mf6WriteIns
+	Archive\RechAddTestMf6.mfsim.nam
 	Archive\RechAddTestMf6.nam
 	Archive\RechAddTestMf6.nam.archive
 	Archive\RechAddTestMf6.npf
@@ -717,6 +768,8 @@ RechAddTestMf6.gpt
 	Archive\RechAddTestMf6.pval
 	Archive\RechAddTestMf6.rch
 	Archive\RechAddTestMf6.rch.tpl
+	Archive\RechAddTestMf6.RunModel.Bat
+	Archive\RechAddTestMf6.RunModflow.Bat
 	Archive\RechAddTestMf6.tdis
 	Archive\usgs.RechAddTestMf6.reference
 ParamMf6Test.gpt
@@ -735,6 +788,7 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.jtf
 	Archive\ParamMf6Test.Mf6ExtractValues
 	Archive\ParamMf6Test.Mf6WriteIns
+	Archive\ParamMf6Test.mfsim.nam
 	Archive\ParamMf6Test.nam
 	Archive\ParamMf6Test.nam.archive
 	Archive\ParamMf6Test.npf
@@ -748,6 +802,8 @@ ParamMf6Test.gpt
 	Archive\ParamMf6Test.rch.tpl
 	Archive\ParamMf6Test.riv
 	Archive\ParamMf6Test.riv.tpl
+	Archive\ParamMf6Test.RunModel.Bat
+	Archive\ParamMf6Test.RunModflow.Bat
 	Archive\ParamMf6Test.sto
 	Archive\ParamMf6Test.tdis
 	Archive\ParamMf6Test.wel
@@ -773,6 +829,8 @@ StreamTest1.gpt
 	Archive\StreamTest1.pst
 	Archive\StreamTest1.ptf
 	Archive\StreamTest1.pval
+	Archive\StreamTest1.RunModel.Bat
+	Archive\StreamTest1.RunModflow.Bat
 	Archive\StreamTest1.stob_out.ins
 	Archive\StreamTest1.str
 	Archive\StreamTest1.str.tpl
@@ -805,6 +863,8 @@ StrFhbTobTest.gpt
 	Archive\StrFhbTobTest.pst
 	Archive\StrFhbTobTest.ptf
 	Archive\StrFhbTobTest.pval
+	Archive\StrFhbTobTest.RunModel.Bat
+	Archive\StrFhbTobTest.RunModflow.Bat
 	Archive\StrFhbTobTest.ssm
 	Archive\StrFhbTobTest.stob_out.ins
 	Archive\StrFhbTobTest.str
@@ -835,12 +895,15 @@ SutraTest2.gpt
 	Archive\SutraTest2.pst
 	Archive\SutraTest2.ptf
 	Archive\SutraTest2.pval
+	Archive\SutraTest2.RunModel.Bat
+	Archive\SutraTest2.RunSutra.bat
 	Archive\SutraTest2.soe_ev
 	Archive\SutraTest2.soe_i
 	Archive\SutraTest2.SPecPBcs
 	Archive\SutraTest2.SPecPBcs.tpl
 	Archive\SutraTest2.SPecUBcs
 	Archive\SutraTest2.SPecUBcs.tpl
+	Archive\SutraTest2.SUTRA.FIL
 	Archive\SutraTest2.Transverse_Dispersivity_Max_Dir
 	Archive\SutraTest2.Transverse_Dispersivity_Mid_Dir
 	Archive\SutraTest2.Transverse_Dispersivity_Min_Dir
@@ -871,11 +934,14 @@ SutraTest2a.gpt
 	Archive\SutraTest2a.pst
 	Archive\SutraTest2a.ptf
 	Archive\SutraTest2a.pval
+	Archive\SutraTest2a.RunModel.Bat
+	Archive\SutraTest2a.RunSutra.bat
 	Archive\SutraTest2a.soe_ev
 	Archive\SutraTest2a.soe_i
 	Archive\SutraTest2a.SPecPBcs
 	Archive\SutraTest2a.SPecPBcs.tpl
 	Archive\SutraTest2a.SPecUBcs
+	Archive\SutraTest2a.SUTRA.FIL
 	Archive\SutraTest2a.Transverse_Dispersivity_Max_Dir
 	Archive\SutraTest2a.Transverse_Dispersivity_Mid_Dir
 	Archive\SutraTest2a.Transverse_Dispersivity_Min_Dir
@@ -902,11 +968,14 @@ SutraTest4.gpt
 	Archive\SutraTest4.pst
 	Archive\SutraTest4.ptf
 	Archive\SutraTest4.pval
+	Archive\SutraTest4.RunModel.Bat
+	Archive\SutraTest4.RunSutra.bat
 	Archive\SutraTest4.soe_ev
 	Archive\SutraTest4.soe_i
 	Archive\SutraTest4.SPecPBcs
 	Archive\SutraTest4.SPecPBcs.tpl
 	Archive\SutraTest4.SPecUBcs
+	Archive\SutraTest4.SUTRA.FIL
 	Archive\SutraTest4.Transverse_Dispersivity_Max_Dir
 	Archive\SutraTest4.Transverse_Dispersivity_Min_Dir
 	Archive\SutraTest4.UFluxBcs
@@ -932,6 +1001,8 @@ UzfTest.gpt
 	Archive\UzfTest.pst
 	Archive\UzfTest.ptf
 	Archive\UzfTest.pval
+	Archive\UzfTest.RunModel.Bat
+	Archive\UzfTest.RunModflow.Bat
 	Archive\UzfTest.sfr
 	Archive\UzfTest.sfr.tpl
 	Archive\UzfTest.uzf
@@ -953,6 +1024,7 @@ Prediction.gpt
 	Archive\Prediction.jtf
 	Archive\Prediction.Mf6ExtractValues
 	Archive\Prediction.Mf6WriteIns
+	Archive\Prediction.mfsim.nam
 	Archive\Prediction.nam
 	Archive\Prediction.nam.archive
 	Archive\Prediction.npf
@@ -966,6 +1038,8 @@ Prediction.gpt
 	Archive\Prediction.rch.tpl
 	Archive\Prediction.riv
 	Archive\Prediction.riv.tpl
+	Archive\Prediction.RunModel.Bat
+	Archive\Prediction.RunModflow.Bat
 	Archive\Prediction.sto
 	Archive\Prediction.tdis
 	Archive\Prediction.wel
@@ -987,6 +1061,7 @@ Pareto.gpt
 	Archive\Pareto.jtf
 	Archive\Pareto.Mf6ExtractValues
 	Archive\Pareto.Mf6WriteIns
+	Archive\Pareto.mfsim.nam
 	Archive\Pareto.nam
 	Archive\Pareto.nam.archive
 	Archive\Pareto.npf
@@ -1000,6 +1075,8 @@ Pareto.gpt
 	Archive\Pareto.rch.tpl
 	Archive\Pareto.riv
 	Archive\Pareto.riv.tpl
+	Archive\Pareto.RunModel.Bat
+	Archive\Pareto.RunModflow.Bat
 	Archive\Pareto.sto
 	Archive\Pareto.tdis
 	Archive\Pareto.wel
@@ -1031,6 +1108,8 @@ Drntest2.gpt
 	Archive\Drntest2.pst
 	Archive\Drntest2.ptf
 	Archive\Drntest2.pval
+	Archive\Drntest2.RunModel.Bat
+	Archive\Drntest2.RunModflow.Bat
 	Archive\Drntest2.test
 	Archive\Drntest2.test.PstValues
 	Archive\Drntest2.test.script
@@ -1056,6 +1135,8 @@ SwtObsTest.gpt
 	Archive\SwtObsTest.pst
 	Archive\SwtObsTest.ptf
 	Archive\SwtObsTest.pval
+	Archive\SwtObsTest.RunModel.Bat
+	Archive\SwtObsTest.RunModflow.Bat
 	Archive\SwtObsTest.sip
 	Archive\SwtObsTest.Specific_Gravity_Saturated.PstValues
 	Archive\SwtObsTest.Specific_Gravity_Saturated.script
@@ -1084,6 +1165,8 @@ SubObs.gpt
 	Archive\SubObs.pst
 	Archive\SubObs.ptf
 	Archive\SubObs.pval
+	Archive\SubObs.RunModel.Bat
+	Archive\SubObs.RunModflow.Bat
 	Archive\SubObs.sip
 	Archive\SubObs.sub
 	Archive\SubObs.SubObsScript
@@ -1116,6 +1199,8 @@ lakeTestObs.gpt
 	Archive\lakeTestObs.pst
 	Archive\lakeTestObs.ptf
 	Archive\lakeTestObs.pval
+	Archive\lakeTestObs.RunModel.Bat
+	Archive\lakeTestObs.RunModflow.Bat
 	Archive\arrays\lakeTestObs.Lakebed_Leakance_1.arrays
 	Archive\arrays\lakeTestObs.Lakebed_Leakance_2.arrays
 	Archive\arrays\lakeTestObs.Lakebed_Leakance_3.arrays
@@ -1148,6 +1233,8 @@ Mnw2ObsTest.gpt
 	Archive\Mnw2ObsTest.pst
 	Archive\Mnw2ObsTest.ptf
 	Archive\Mnw2ObsTest.pval
+	Archive\Mnw2ObsTest.RunModel.Bat
+	Archive\Mnw2ObsTest.RunModflow.Bat
 	Archive\arrays\Mnw2ObsTest.Kx_1.arrays
 	Archive\arrays\Mnw2ObsTest.Kx_2.arrays
 	Archive\arrays\Mnw2ObsTest.Kx_3.arrays
@@ -1172,6 +1259,8 @@ SWI1.gpt
 	Archive\SWI1.pst
 	Archive\SWI1.ptf
 	Archive\SWI1.pval
+	Archive\SWI1.RunModel.Bat
+	Archive\SWI1.RunModflow.Bat
 	Archive\SWI1.swi
 	Archive\SWI1.swi_obsit
 	Archive\SWI1.swi_obsit.archive
@@ -1207,6 +1296,8 @@ DryCells.gpt
 	Archive\DryCells.pst
 	Archive\DryCells.ptf
 	Archive\DryCells.pval
+	Archive\DryCells.RunModel.Bat
+	Archive\DryCells.RunModflow.Bat
 	Archive\DryCells.sfr
 	Archive\DryCells.sfr.tpl
 	Archive\DryCells.Sfr_script
@@ -1233,16 +1324,28 @@ SutraTest5.gpt
 	Archive\SutraTest5.Longitudinal_Dispersivity_Mid_Dir
 	Archive\SutraTest5.Longitudinal_Dispersivity_Min_Dir
 	Archive\SutraTest5.Maximum_Permeability
+	Archive\SutraTest5.Maximum_Permeability.PstValues
+	Archive\SutraTest5.Maximum_Permeability.script
+	Archive\SutraTest5.Maximum_Permeability.script.tpl
 	Archive\SutraTest5.Middle_Permeability
+	Archive\SutraTest5.Middle_Permeability.PstValues
+	Archive\SutraTest5.Middle_Permeability.script
+	Archive\SutraTest5.Middle_Permeability.script.tpl
 	Archive\SutraTest5.Minimum_Permeability
+	Archive\SutraTest5.Minimum_Permeability.PstValues
+	Archive\SutraTest5.Minimum_Permeability.script
+	Archive\SutraTest5.Minimum_Permeability.script.tpl
 	Archive\SutraTest5.Nodal_Porosity
 	Archive\SutraTest5.pst
 	Archive\SutraTest5.ptf
 	Archive\SutraTest5.pval
+	Archive\SutraTest5.RunModel.Bat
+	Archive\SutraTest5.RunSutra.bat
 	Archive\SutraTest5.soe_ev
 	Archive\SutraTest5.soe_i
 	Archive\SutraTest5.SPecPBcs
 	Archive\SutraTest5.SPecUBcs
+	Archive\SutraTest5.SUTRA.FIL
 	Archive\SutraTest5.Transverse_Dispersivity_Max_Dir
 	Archive\SutraTest5.Transverse_Dispersivity_Mid_Dir
 	Archive\SutraTest5.Transverse_Dispersivity_Min_Dir
@@ -1291,11 +1394,14 @@ SutraTest1a.gpt
 	Archive\SutraTest1a.pst
 	Archive\SutraTest1a.ptf
 	Archive\SutraTest1a.pval
+	Archive\SutraTest1a.RunModel.Bat
+	Archive\SutraTest1a.RunSutra.bat
 	Archive\SutraTest1a.soe_ev
 	Archive\SutraTest1a.soe_i
 	Archive\SutraTest1a.SPecPBcs
 	Archive\SutraTest1a.SPecPBcs.tpl
 	Archive\SutraTest1a.SPecUBcs
+	Archive\SutraTest1a.SUTRA.FIL
 	Archive\SutraTest1a.Transverse_Dispersivity_Max_Dir
 	Archive\SutraTest1a.Transverse_Dispersivity_Mid_Dir
 	Archive\SutraTest1a.Transverse_Dispersivity_Min_Dir

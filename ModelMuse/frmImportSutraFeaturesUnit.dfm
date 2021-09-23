@@ -1,4 +1,6 @@
 inherited frmImportSutraFeatures: TfrmImportSutraFeatures
+  HelpType = htKeyword
+  HelpKeyword = 'Import_SUTRA_Feature_Modified_'
   Caption = 'Import SUTRA Feature Modified by PEST'
   ClientHeight = 297
   ExplicitHeight = 336
@@ -23,7 +25,9 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
     Top = 32
     Width = 408
     Height = 26
-    Filter = 'SUTRA input files (*.inp, sutra.fil)|*.inp;sutra.fil'
+    Filter = 
+      'SUTRA input files (*.inp, sutra.fil,*.sutra.fil)|*.inp;sutra.fil' +
+      ';*.sutra.fil'
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
     Text = ''
@@ -71,6 +75,7 @@ inherited frmImportSutraFeatures: TfrmImportSutraFeatures
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      OnClick = btnHelpClick
     end
   end
   object clbFeatures: TCheckListBox

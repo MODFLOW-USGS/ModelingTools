@@ -33070,7 +33070,7 @@ var
   FirstLine: string;
   UseWithMF2005: Boolean;
 begin
-  if (FPValFile.Count > 0) or (FPestPValFile.Count > 0) then
+//  if (FPValFile.Count > 0) or (FPestPValFile.Count > 0) then
   begin
     UseWithMF2005 := FPValFile.Count > 0;
     if PackageGeneratedExternally('PVAL') then

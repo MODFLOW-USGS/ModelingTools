@@ -2,7 +2,7 @@ pcf
 * control data
 restart estimation # RSTFLE PESTMODE
      5     3     1     5     6     1 # NPAR NOBS NPARGP, NPRIOR NOBSGP, MAXCOMPRDIM
-     1     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
+     3     1 double nopoint noobsreref # NTPLFLE, NINSFLE, PRECIS, DPOINT, OBSREREF
   1.000000000000E+001  -3.000000000000E+000   3.000000000000E-001   1.000000000000E-002     10     0 lamforgive noderforgive # RLAMBDA1, RLAMFAC, PHIRATSUF, PHIREDLAM, NUMLAM, JACUPDATE, LAMFORGIVE, DERFORGIVE
   3.000000000000E+000   3.000000000000E+000   1.000000000000E-003      0     1 # RELPARMAX, FACPARMAX, FACORIG, IBOUNDSTICK, UPVECBEND
   1.000000000000E-001      1  0.000000000000E+000  noaui nosenreuse boundscale # PHIREDSWH, NOPTSWITCH, SPLITSWH, DOAUI, DOSENREUSE, BOUNDSCALE
@@ -47,6 +47,8 @@ RunModel.Bat
 
 * model input/output
 SutraGenBoundLakeTest.ptf SutraGenBoundLakeTest.pval
+SutraGenBoundLakeTest.TestDS.script.tpl SutraGenBoundLakeTest.TestDS.script
+SutraGenBoundLakeTest.Lake_Bottom.script.tpl SutraGenBoundLakeTest.Lake_Bottom.script
 SutraGenBoundLakeTest.PestIns SutraGenBoundLakeTest.SutraValues
 
 * prior information

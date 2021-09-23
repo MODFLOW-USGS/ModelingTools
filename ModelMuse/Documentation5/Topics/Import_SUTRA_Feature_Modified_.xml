@@ -6,6 +6,9 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Import SUTRA Feature Modified by PEST Dialog Box</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Enter topic text here.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Import SUTRA Feature Modified by PEST</text><text styleclass="Normal" translate="true"> is used to import data sets representing boundary conditions modified by PEST so that they can be visualized. The dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">File|Import SUTRA Features Modified by PEST</text><text styleclass="Normal" translate="true">. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The data can be imported just from the main SUTRA input file or from the entire model including time-dependent sources and boundary conditions (BCS) input files. If the data is imported just from the main SUTRA input file, only time-independent data will be imported. If the data is imported from the entire model, the boundary condition data will be imported for a single time step. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The dialog box has a list of check boxes for the various boundary types in SUTRA. If a check box is checked and one or more active boundaries of that type is included in the model for the selected time step, data for that boundary condition will be imported into the model.</text></para>
+    <para styleclass="Normal"></para>
   </body>
 </topic>
