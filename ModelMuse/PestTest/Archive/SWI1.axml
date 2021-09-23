@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="SWI1" FileType="bin">
-    <FileName Model_Name="SWI1" FileType="bin">..\Debug\Win32\SwiObsExtractor.exe</FileName>
     <FileName Model_Name="SWI1" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
   </bin>
   <ancillary Model_Name="SWI1" FileType="ancillary">

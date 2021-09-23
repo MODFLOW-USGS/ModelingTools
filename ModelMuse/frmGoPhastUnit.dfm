@@ -322,6 +322,7 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
+    ExplicitTop = -6
     object tbarEdit: TToolBar
       Left = 151
       Top = 34
@@ -3693,12 +3694,12 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acImportMf6FeatureFromPest: TAction
       Category = 'File'
-      Caption = 'Import Model Feature from PEST'
+      Caption = 'MODFLOW 6 Feature Modified by PEST'
       OnExecute = acImportMf6FeatureFromPestExecute
     end
     object acImportSutraFeaturesFromPest: TAction
       Category = 'File'
-      Caption = 'Import Model Feature from PEST'
+      Caption = 'SUTRA Feature Modified by PEST'
       OnExecute = acImportSutraFeaturesFromPestExecute
     end
   end

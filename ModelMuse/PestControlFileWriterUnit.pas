@@ -815,8 +815,8 @@ begin
   if Model.ModelSelection in SutraSelection then
   begin
     result := result + Model.SutraPestScripts.Count;
-  end
-  else
+  end;
+//  else
   begin
     for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
     begin
@@ -1435,8 +1435,8 @@ begin
       WriteString(' ' + INFLE);
       NewLine;
     end;
-  end
-  else
+  end;
+//  else
   begin
     for DSIndex := 0 to Model.DataArrayManager.DataSetCount - 1 do
     begin

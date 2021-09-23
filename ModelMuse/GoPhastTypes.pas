@@ -722,6 +722,7 @@ const
   // names of the most recently opened files.
   MRU_Section = 'MostRecentlyUsed';
   StrParameterType = 'Parameter Type';
+  StrEnhancedTemplateProc = 'EnhancedTemplateProcessor.exe';
 
 resourcestring
   StrModelTop = kModelTop;

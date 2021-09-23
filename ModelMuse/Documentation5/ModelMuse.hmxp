@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4230</config-value>
+      <config-value name="autohelpstart">4232</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1038,10 +1038,12 @@ document.write('</frameset>');
       <helpcontext-number href="Import_Filter_Methods" value="3986"/>
       <helpcontext-number href="Import_Gridded_Data_Dialog_Box" value="3460"/>
       <helpcontext-number href="Import_Gridded_Data_Files_Dial" value="3846"/>
+      <helpcontext-number href="Import_MODFLOW_6_Feature_Modif" value="4231"/>
       <helpcontext-number href="Import_MODFLOW_Model_Dialog_Box" value="3385"/>
       <helpcontext-number href="Import_Points_Dialog_Box" value="1580"/>
       <helpcontext-number href="Import_Shapefile_Dialog_Box" value="1560"/>
       <helpcontext-number href="Import_Surfer_Grid_File" value="3563"/>
+      <helpcontext-number href="Import_SUTRA_Feature_Modified_" value="4232"/>
       <helpcontext-number href="Import_SUTRA_Model_Results_Dia" value="3681"/>
       <helpcontext-number href="Import_T_PROGS_File_Dialog_Box" value="3672"/>
       <helpcontext-number href="Imported_Data_Tab" value="3443"/>

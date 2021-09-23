@@ -9802,7 +9802,6 @@ var
   INFLE: string;
   PestInputDataArrays: TDictionary<string, TDataArray>;
   PestDataArray: TDataArray;
-//  InputPestDataArrays: TArray<TDataArray>;
   procedure AddPestDataArraysToDictionary(InputPestDataArrays: TArray<TDataArray>);
   var
     DataArray: TDataArray;

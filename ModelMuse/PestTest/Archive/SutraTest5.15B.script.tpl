@@ -11,9 +11,13 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_z1;column=5, &
   slist=s_EN3D1;column=6, &
   slist=s_Active_1;column=7, &
+  id_type='indexed',file='SutraTest5.c_ele')
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_z2;column=8, &
   slist=s_EN3D2;column=9, &
   slist=s_Active_2;column=10, &
+  id_type='indexed',file='SutraTest5.c_ele')
+read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   plist=p_z3;column=11, &
   slist=s_EN3D3;column=12, &
   slist=s_Active_3;column=13, &

@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1249
+1308
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1249,3 +1249,62 @@ SutraTest5.gpt
 	Archive\SutraTest5.UFluxBcs
 	Archive\SutraTest5.Unsat_Region_Elements
 	Archive\usgs.SutraTest5.reference
+SutraTest1a.gpt
+	Archive\SutraTest1a.14B
+	Archive\SutraTest1a.14B.script
+	Archive\SutraTest1a.14B.script.tpl
+	Archive\SutraTest1a.15B
+	Archive\SutraTest1a.15B.script
+	Archive\SutraTest1a.15B.script.tpl
+	Archive\SutraTest1a.Angle_Horizontal
+	Archive\SutraTest1a.Angle_Rotational
+	Archive\SutraTest1a.Angle_Vertical
+	Archive\SutraTest1a.axml
+	Archive\SutraTest1a.c_ele
+	Archive\SutraTest1a.c_nod
+	Archive\SutraTest1a.c_nod3D
+	Archive\SutraTest1a.FluxBcs
+	Archive\SutraTest1a.FluxBcs.tpl
+	Archive\SutraTest1a.FluxBcs.txt
+	Archive\SutraTest1a.ics
+	Archive\SutraTest1a.inp
+	Archive\SutraTest1a.inp.tpl
+	Archive\SutraTest1a.inp.txt
+	Archive\SutraTest1a.jtf
+	Archive\SutraTest1a.Longitudinal_Dispersivity_Max_Dir
+	Archive\SutraTest1a.Longitudinal_Dispersivity_Mid_Dir
+	Archive\SutraTest1a.Longitudinal_Dispersivity_Min_Dir
+	Archive\SutraTest1a.Maximum_Permeability
+	Archive\SutraTest1a.Maximum_Permeability.PstValues
+	Archive\SutraTest1a.Maximum_Permeability.script
+	Archive\SutraTest1a.Maximum_Permeability.script.tpl
+	Archive\SutraTest1a.Middle_Permeability
+	Archive\SutraTest1a.Minimum_Permeability
+	Archive\SutraTest1a.MyMult
+	Archive\SutraTest1a.MyMult.PstValues
+	Archive\SutraTest1a.MyMult.script
+	Archive\SutraTest1a.MyMult.script.tpl
+	Archive\SutraTest1a.Nodal_Porosity
+	Archive\SutraTest1a.Nodal_Porosity.PstValues
+	Archive\SutraTest1a.Nodal_Porosity.script
+	Archive\SutraTest1a.Nodal_Porosity.script.tpl
+	Archive\SutraTest1a.pst
+	Archive\SutraTest1a.ptf
+	Archive\SutraTest1a.pval
+	Archive\SutraTest1a.soe_ev
+	Archive\SutraTest1a.soe_i
+	Archive\SutraTest1a.SPecPBcs
+	Archive\SutraTest1a.SPecPBcs.tpl
+	Archive\SutraTest1a.SPecUBcs
+	Archive\SutraTest1a.Transverse_Dispersivity_Max_Dir
+	Archive\SutraTest1a.Transverse_Dispersivity_Mid_Dir
+	Archive\SutraTest1a.Transverse_Dispersivity_Min_Dir
+	Archive\SutraTest1a.txt
+	Archive\SutraTest1a.UFluxBcs
+	Archive\SutraTest1a.Unsat_Region_Elements
+	Archive\SutraTest1a.Unsat_Region_Nodes
+	Archive\arrays\SutraTest1a.MyMult_1.arrays
+	Archive\arrays\SutraTest1a.MyMult_2.arrays
+	Archive\arrays\SutraTest1a.MyMult_3.arrays
+	Archive\arrays\SutraTest1a.MyMult_4.arrays
+	Archive\usgs.SutraTest1a.reference

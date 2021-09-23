@@ -1209,7 +1209,6 @@ const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
   StrMf2005ObsExtractor = 'Mf2005ObsExtractor.exe';
   StrPlprocexe = 'plproc.exe';
-  StrEnhancedTemplateProc = 'EnhancedTemplateProcessor.exe';
 
 var
 //  NameFile: TStringList;
@@ -2725,15 +2724,17 @@ end;
 procedure TCustomFileWriter.WritePestTemplateLine(AFileName: string);
 var
   PValFileName: string;
+  ALine: string;
 begin
   // strip off .tpl extension to get input file name.
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
   Model.FilesToDelete.Add(PValFileName);
   PValFileName := ChangeFileExt(PValFileName, '');
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
-  Model.PestTemplateLines.Add(PestUtilityProgramPath(
+  ALine := PestUtilityProgramPath(
     StrEnhancedTemplateProc, AFileName)
-    + ' ' + ExtractFileName(AFileName) + ' ' + PValFileName);
+    + ' ' + ExtractFileName(AFileName) + ' ' + PValFileName;
+  Model.PestTemplateLines.Add(ALine);
 
 end;
 
