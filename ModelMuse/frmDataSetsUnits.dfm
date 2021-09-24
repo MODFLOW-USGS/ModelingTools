@@ -133,7 +133,7 @@ inherited frmDataSets: TfrmDataSets
     Top = 0
     Width = 320
     Height = 395
-    ActivePage = tabBasic
+    ActivePage = tabParameters
     Align = alRight
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -531,7 +531,7 @@ inherited frmDataSets: TfrmDataSets
         Top = 17
         Width = 281
         Height = 17
-        Caption = 'PEST Parameters used'
+        Caption = 'PEST parameters used'
         TabOrder = 0
         OnClick = cbParametersUsedClick
       end

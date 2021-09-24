@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaMF6: Visualize Modified Model Input</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Visualize Modified Model Input</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model created by PEST after parameter estimation now has a different flow rate through the well and a non-uniform hydraulic conductivity distribution. ModelMuse provides ways to import both sets of data and visualize both. </text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Visualizing Well Flow Rates</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">File|Import|MODFLOW 6 Features Modified by PEST</text><text styleclass="Normal" translate="true">. Then select the input file for the Well package. In the dialog box, select the stress period for which to see the pumping rates. In this case there is only one stress period so choose stress period 1. ModelMuse will create a data set named Well_Pumping_Rate_SP_1 with the pumping rates in each cell. The data set will be classified under &quot;Optional|Model Results|Model Features. You can </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Color_Grid_Dialog_Box" styleclass="Normal" translate="true">color the grid</link><text styleclass="Normal" translate="true"> with this data set. The sum of the pumping rates for the wells that &#160;are part of the disposal pond is 0.017. The true value is 0.025. This new data set does not change how the pumping rate is defined in ModelMuse so if you export the model input files from ModelMuse again, it will use the original pumping rates defined in ModelMuse not the ones that PEST generated.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Visualizing Kx</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select </text><text styleclass="Strong" translate="true">File|Import|Gridded Data Files</text><text styleclass="Normal" translate="true"> and select the file for the Kx data set in the arrays subdirectory of your model directory. The new data set will be classified under User Defined|Created from text file. The name of the new data set will be based on the name of the file. A diagram of the estimated distribution of Kx is shown below.</text></para>
+    <para styleclass="Normal"><image src="Rma6Kx.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Diagram displaying the estimated distribution of Kx.</title><caption translate="true"><![CDATA[Diagram displaying the estimated distribution of Kx.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The true distribution from the model used to generate the observed values for the parameter estimation exercise is shown below.</text></para>
+    <para styleclass="Normal"><image src="RmaMf6KxTrue.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Diagram displaying the true distribution of Kx.</title><caption translate="true"><![CDATA[Diagram displaying the true distribution of Kx.]]></caption></image></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Both the estimated and true hydraulic conductivity distributions show patches of low hydraulic conductivity on the west and north east portions of the model with a higher hydraulic conductivity between the two bedrock islands. The true distribution has more extreme high and low values. </text></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

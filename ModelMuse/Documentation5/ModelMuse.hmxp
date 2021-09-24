@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4237</config-value>
+      <config-value name="autohelpstart">4250</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -120,7 +120,6 @@
       <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">(Complete)</config-value>
-      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -1486,7 +1485,20 @@ document.write('</frameset>');
       <helpcontext-number href="RMA_Using_MODPATH" value="3588"/>
       <helpcontext-number href="RMA_View_Results" value="3407"/>
       <helpcontext-number href="RMA_Wells" value="3405"/>
+      <helpcontext-number href="RmaMF6_Activate_PEST" value="4241"/>
+      <helpcontext-number href="RmaMF6_Apply_K_Parameter" value="4242"/>
+      <helpcontext-number href="RmaMF6_Apply_Seepage_Parameter" value="4243"/>
+      <helpcontext-number href="RmaMF6_Continue_if_No_Converge" value="4247"/>
+      <helpcontext-number href="RmaMF6_Define_Observation_Grou" value="4245"/>
+      <helpcontext-number href="RmaMF6_Define_Observations" value="4244"/>
+      <helpcontext-number href="RmaMF6_Define_Parameters_and_P" value="4238"/>
+      <helpcontext-number href="RmaMf6_Define_Pilot_Points" value="4240"/>
       <helpcontext-number href="RmaMF6_Model_Summary" value="4237"/>
+      <helpcontext-number href="RmaMF6_Next_Steps" value="4250"/>
+      <helpcontext-number href="RmaMF6_Run_PEST" value="4246"/>
+      <helpcontext-number href="RmaMF6_Understanding_the_RunMo" value="4249"/>
+      <helpcontext-number href="RmaMF6_Use_Anisotropy" value="4239"/>
+      <helpcontext-number href="RmaMF6_Visualize_Modified_Mode" value="4248"/>
       <helpcontext-number href="Rocky_Mountain_Arsenal" value="3391"/>
       <helpcontext-number href="Rooting_Depth_Pane" value="3811"/>
       <helpcontext-number href="Round" value="890"/>

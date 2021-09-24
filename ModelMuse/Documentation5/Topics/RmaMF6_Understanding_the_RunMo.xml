@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">RmaMF6: Understanding the RunModel Batch File</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Understanding the RunModel Batch File</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The command line for running the model in the PEST control file is &quot;RunModel.Bat.&quot; Besides running MODFLOW, there are a lot of other things that are done in the RunModel.Bat batchfile. Let&apos;s take a look at them. The commands in the batch file are shown below. The commands will vary depending on your model.</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;arrays\RmaMf6_Completed.Kx_1.arrays&quot; del &quot;arrays\RmaMf6_Completed.Kx_1.arrays&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.Mf6Values&quot; del &quot;RmaMf6_Completed.Mf6Values&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.wel&quot; del &quot;RmaMf6_Completed.wel&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;mfsim.lst&quot; del &quot;mfsim.lst&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.bhd&quot; del &quot;RmaMf6_Completed.bhd&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.cbc&quot; del &quot;RmaMf6_Completed.cbc&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.chob_out_chd.csv&quot; del &quot;RmaMf6_Completed.chob_out_chd.csv&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.InnerSolution.CSV&quot; del &quot;RmaMf6_Completed.InnerSolution.CSV&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.lst&quot; del &quot;RmaMf6_Completed.lst&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.ob_gw_out_head.csv&quot; del &quot;RmaMf6_Completed.ob_gw_out_head.csv&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">if exist &quot;RmaMf6_Completed.OuterSolution.CSV&quot; del &quot;RmaMf6_Completed.OuterSolution.CSV&quot;</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">&quot;C:\Pest17.3\plproc.exe&quot; RmaMf6_Completed.Kx.script</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">&quot;C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe&quot; RmaMf6_Completed.wel.tpl RmaMf6_Completed.pval</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">C:\WRDAPP\mf6.2.2\bin\mf6.exe</text></para>
+    <para styleclass="Code Example"><text styleclass="Normal" translate="true">&quot;C:\ModelingTools\ModelMuse\Debug\Win32\Mf6ObsExtractor.exe&quot; RmaMf6_Completed.Mf6ExtractValues</text></para>
+    <para style="margin-top:6px; margin-bottom:10px;"><text styleclass="Normal" translate="true">The first set of lines deletes output files and some input files from MODFLOW. That way, if something goes wrong with running the model, PEST can halt rather than continue to read the old output files from MODFLOW. The input files that it deletes are the files that contain the Kx data set (line 1) and the Well package input files (line 3). The simulated values from the model are deleted in line 2.</text></para>
+    <para style="margin-top:6px; margin-bottom:10px;"><text styleclass="Normal" translate="true">After deleting the files, last four lines have the following commands in order.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">PLPROC runs a script that generates the Kx data set.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">EnhancedTemplateProcessor generates the input file for the Well package.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW runs the model.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Mf6ObsExtractor extracts the simulated values from the MODFLOW output files.</text></li>
+    </list>
+  </body>
+</topic>

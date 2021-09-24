@@ -512,7 +512,7 @@ resourcestring
   StrOutput = 'Output';
   StrSingularValueDecom = 'Singular Value Decomposition';
   StrLQSR = 'LQSR';
-  StrObservations = 'Observation Group Properties and Assignments';
+  StrObservations = 'Observation Groups';
   StrObservationGroups = 'Observation Groups Properties';
   StrObservationGroupAs = 'Observation Group Assignments';
   StrPriorInformation = 'Prior Information';

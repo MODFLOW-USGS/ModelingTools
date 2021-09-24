@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaMF6: Activate PEST</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Activate PEST</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To activate PEST, select </text><text styleclass="Strong" translate="true">Model|PEST Properties...</text><text styleclass="Normal" translate="true"> and check the checkbox labeled </text><text styleclass="Strong" translate="true">Use PEST</text><text styleclass="Normal" translate="true"> on the </text><text styleclass="Strong" translate="true">Basic</text><text styleclass="Normal" translate="true"> pane.</text></para>
+  </body>
+</topic>

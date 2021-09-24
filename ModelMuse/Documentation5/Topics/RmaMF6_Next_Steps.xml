@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaMF6: Next Steps</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Next Steps</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The goal of this model is to understand the risk posed by the contaminants in the flow from the disposal pond to the water supply wells. To further evaluate this risk, we might want to use MODPATH or even run a solute transport simulation. MODPATH and solute transport simulations are covered in some of the other examples such as the original </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rocky_Mountain_Arsenal" styleclass="Normal" translate="true">Rocky Mountain Arsenal</link><text styleclass="Normal" translate="true"> example on which this example is based. </text></para>
+  </body>
+</topic>

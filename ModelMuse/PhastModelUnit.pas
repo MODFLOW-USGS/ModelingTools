@@ -10367,10 +10367,14 @@ const
 //                and cells in MODFLOW 6 DISV models when both intersected and
 //                enclosed items are to be assigned values when there are two
 //                elevation formulas.
+//    '4.3.0.67' Change: ModelMuse now creates backups of several files such as
+//                the RunModel file for use in tests of ModelMuse.
+//               Bug fix: not in released version. Fixed upper and lower bounds
+//                of pilot points.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.66';
+  IIModelVersion = '4.3.0.67';
 
 function IModelVersion: string;
 begin
@@ -33070,7 +33074,7 @@ var
   FirstLine: string;
   UseWithMF2005: Boolean;
 begin
-//  if (FPValFile.Count > 0) or (FPestPValFile.Count > 0) then
+  if (FPValFile.Count > 0) or (FPestPValFile.Count > 0) or PestUsed then
   begin
     UseWithMF2005 := FPValFile.Count > 0;
     if PackageGeneratedExternally('PVAL') then

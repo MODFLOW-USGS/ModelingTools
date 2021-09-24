@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaMf6: Define Pilot Points</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf6: Define Pilot Points</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">To define Pilot Points, select </text><text styleclass="Strong" translate="true">Model|PEST Properties...</text><text styleclass="Normal" translate="true"> and go to the Pilot Points pane. We will use </text><text styleclass="Strong" translate="true">Regularly spaced pilot points</text><text styleclass="Normal" translate="true"> with a </text><text styleclass="Strong" translate="true">square</text><text styleclass="Normal" translate="true"> pattern and a </text><text styleclass="Strong" translate="true">Pilot point spacing</text><text styleclass="Normal" translate="true"> of 800 m. We will set the </text><text styleclass="Strong" translate="true">Pilot point buffer</text><text styleclass="Normal" translate="true"> to 1200 m and we will show the candidate pilot points.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse allows pilot points to be defined outside the grid. If a parameter is assigned to the entire grid, the initial value for a pilot point inside the active area of the grid will be the data set value at the pilot point location. If the pilot point is outside the grid or in an inactive cell but the distance from the pilot point to an active cell is less than the pilot point buffer, the value assigned to the pilot point will be the value of the data set at the closest such cell.</text></para>
+  </body>
+</topic>

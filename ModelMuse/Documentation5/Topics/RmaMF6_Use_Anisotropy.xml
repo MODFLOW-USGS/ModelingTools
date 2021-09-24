@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">RmaMF6: Use Anisotropy</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Use Anisotropy</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">There are two things we want to estimate in the model, the hydraulic conductivity distribution and the seepage rate from the disposal pond. Initially, we assigned a uniform hydraulic conductivity of 0.0001 m/s because we didn&apos;t have any idea about the actual spatial distribution and this was our best guess about the average hydraulic conductivity. In MODFLOW, there are three components of the hydraulic conductivity to assign represented by the data sets Kx, Ky, and Kz. In this case, Kz is unimportant because there is only one layer. It is important to note hat Kx, Ky, and Kz are all independent data sets so if we only estimate Kx, Ky is unaffected. In ModelMuse, the default formula for Ky is Kx so normally, you don&apos;t have to worry about keeping them in synch with one another (if that is what you want to do). Once, the MODFLOW input files are being modified by PEST, however, that won&apos;t be the case by default. Fortunately, the Node Property Flow (NPF) package has options to use horizontal and vertical anisotropy instead of directly specifying Ky and Kz. To use those options, select </text><text styleclass="Strong" translate="true">Model|MODFLOW Packages and Programs</text><text styleclass="Normal" translate="true"> and in the NPF package, select the option to use horizontal anisotropy. Typically, you would also select the option to use vertical anisotropy but that will have no effect in this model because there is only one layer.</text></para>
+  </body>
+</topic>
