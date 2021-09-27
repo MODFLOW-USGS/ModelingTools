@@ -426,7 +426,7 @@ object TTaskHistory
     end
     item
       Name = 'GW_Chart'
-      Display = False
+      Display = True
     end
     item
       Name = 'Head obs for MF6'
@@ -28184,5 +28184,14 @@ object TTaskHistory
       Date = 44463.000000000000000000
       Categories.Strings = (
         'Documentation')
+    end
+    item
+      Date = 44464.000000000000000000
+    end
+    item
+      Date = 44465.000000000000000000
+    end
+    item
+      Date = 44466.000000000000000000
     end>
 end

@@ -285,7 +285,7 @@ type
     procedure DrawButtonText(Canvas: TCanvas; const Caption: string;
       TextBounds: TRect; State: TButtonState; BiDiFlags: Longint);
     procedure CalcButtonLayout(Canvas: TCanvas; const Client: TRect;
-      const Offset: TPoint; const Caption: string; Layout: TButtonLayout;
+      const POffset: TPoint; const Caption: string; Layout: TButtonLayout;
       Margin, Spacing: Integer; var GlyphPos: TPoint; var TextBounds: TRect;
       BiDiFlags: Longint);
   public
@@ -642,7 +642,7 @@ begin
 end;
 
 procedure TButtonGlyph.CalcButtonLayout(Canvas: TCanvas; const Client: TRect;
-  const Offset: TPoint; const Caption: string; Layout: TButtonLayout; Margin,
+  const POffset: TPoint; const Caption: string; Layout: TButtonLayout; Margin,
   Spacing: Integer; var GlyphPos: TPoint; var TextBounds: TRect;
   BiDiFlags: LongInt);
 var
@@ -755,11 +755,11 @@ begin
   { fixup the result variables }
   with GlyphPos do
   begin
-    Inc(X, Client.Left + Offset.X);
-    Inc(Y, Client.Top + Offset.Y);
+    Inc(X, Client.Left + POffset.X);
+    Inc(Y, Client.Top + POffset.Y);
   end;
-  OffsetRect(TextBounds, TextPos.X + Client.Left + Offset.X,
-    TextPos.Y + Client.Top + Offset.X);
+  OffsetRect(TextBounds, TextPos.X + Client.Left + POffset.X,
+    TextPos.Y + Client.Top + POffset.X);
 end;
     
 function TButtonGlyph.Draw(Canvas: TCanvas; const Client: TRect;

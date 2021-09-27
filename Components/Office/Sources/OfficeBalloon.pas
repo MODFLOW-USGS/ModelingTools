@@ -188,16 +188,37 @@ var
     @SMsgDlgInformation, @SMsgDlgConfirm, nil);
   IconIDs: array[TMsgDlgType] of PChar = (IDI_EXCLAMATION, IDI_HAND,
     IDI_ASTERISK, IDI_QUESTION, nil);
+{$IFDEF OVCL_COMPILER23}
   ButtonNames: array[TMsgDlgBtn] of string = (
     'Yes', 'No', 'OK', 'Cancel', 'Abort', 'Retry', 'Ignore', 'All', 'NoToAll',
-    'YesToAll', 'Help');
+    'YesToAll', 'Help', 'Close');
+{$ELSE}
+  ButtonNames: array[TMsgDlgBtn] of string = (
+    'Yes', 'No', 'OK', 'Cancel', 'Abort', 'Retry', 'Ignore', 'All', 'NoToAll',
+    'YesToAll', 'Help', 'Close');
+{$ENDIF}
+
+{$IFDEF OVCL_COMPILER23}
   ButtonCaptions: array[TMsgDlgBtn] of Pointer = (
     @SMsgDlgYes, @SMsgDlgNo, @SMsgDlgOK, @SMsgDlgCancel, @SMsgDlgAbort,
     @SMsgDlgRetry, @SMsgDlgIgnore, @SMsgDlgAll, @SMsgDlgNoToAll, @SMsgDlgYesToAll,
-    @SMsgDlgHelp);
+    @SMsgDlgHelp, @SMsgDlgClose);
   ButtonKinds: array[TMsgDlgBtn] of TBitBtnKind = (
     bkYes, bkNo, bkOK, bkCancel, bkAbort, bkRetry, bkIgnore, bkAll, bkNo,
-    bkYes, bkHelp);
+    bkYes, bkHelp, bkClose);
+{$ELSE}
+  ButtonCaptions: array[TMsgDlgBtn] of Pointer = (
+    @SMsgDlgYes, @SMsgDlgNo, @SMsgDlgOK, @SMsgDlgCancel, @SMsgDlgAbort,
+    @SMsgDlgRetry, @SMsgDlgIgnore, @SMsgDlgAll, @SMsgDlgNoToAll, @SMsgDlgYesToAll,
+    @SMsgDlgHelp, nil);
+  ButtonKinds: array[TMsgDlgBtn] of TBitBtnKind = (
+    bkYes, bkNo, bkOK, bkCancel, bkAbort, bkRetry, bkIgnore, bkAll, bkNo,
+    bkYes, bkHelp, bkCustom);
+{$ENDIF}
+
+{$IFDEF OVCL_COMPILER23}
+{$ELSE}
+{$ENDIF}
 
 var
   ButtonWidths : array[TMsgDlgBtn] of integer;  // initialized to zero
@@ -394,7 +415,7 @@ type
     procedure DrawButtonText(Canvas: TCanvas; const Caption: string;
       TextBounds: TRect; State: TButtonState; BiDiFlags: Longint);
     procedure CalcButtonLayout(Canvas: TCanvas; const Client: TRect;
-      const Offset: TPoint; const Caption: string; Layout: TButtonLayout;
+      const POffset: TPoint; const Caption: string; Layout: TButtonLayout;
       Margin, Spacing: Integer; var GlyphPos: TPoint; var TextBounds: TRect;
       BiDiFlags: Longint);
   public
@@ -751,7 +772,7 @@ begin
 end;
     
 procedure TButtonGlyph.CalcButtonLayout(Canvas: TCanvas; const Client: TRect;
-  const Offset: TPoint; const Caption: string; Layout: TButtonLayout; Margin,
+  const POffset: TPoint; const Caption: string; Layout: TButtonLayout; Margin,
   Spacing: Integer; var GlyphPos: TPoint; var TextBounds: TRect;
   BiDiFlags: LongInt);
 var
@@ -864,11 +885,11 @@ begin
   { fixup the result variables }
   with GlyphPos do
   begin
-    Inc(X, Client.Left + Offset.X);
-    Inc(Y, Client.Top + Offset.Y);
+    Inc(X, Client.Left + POffset.X);
+    Inc(Y, Client.Top + POffset.Y);
   end;
-  OffsetRect(TextBounds, TextPos.X + Client.Left + Offset.X,
-    TextPos.Y + Client.Top + Offset.X);
+  OffsetRect(TextBounds, TextPos.X + Client.Left + POffset.X,
+    TextPos.Y + Client.Top + POffset.X);
 end;
     
 function TButtonGlyph.Draw(Canvas: TCanvas; const Client: TRect;

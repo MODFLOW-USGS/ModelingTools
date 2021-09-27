@@ -1,7 +1,6 @@
-package VerInfoPkg;
+package siComboBoxPkgXE2;
 
 {$R *.res}
-{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -12,25 +11,25 @@ package VerInfoPkg;
 {$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION OFF}
+{$OPTIMIZATION ON}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
 {$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES ON}
+{$STACKFRAMES OFF}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
-{$WRITEABLECONST ON}
+{$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE DEBUG}
-{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'siComponents'}
 {$IMPLICITBUILD OFF}
 
 requires
+  rtl,
   vcl;
 
 contains
-  versinfo in 'versinfo.pas';
+  siComboBox in 'siComboBox.pas';
 
 end.

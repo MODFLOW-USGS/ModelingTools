@@ -1,4 +1,4 @@
-package VerInfoPkg;
+package DataGridXE2;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -20,17 +20,20 @@ package VerInfoPkg;
 {$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
-{$WRITEABLECONST ON}
+{$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$IMPLICITBUILD OFF}
+{$IMPLICITBUILD ON}
 
 requires
-  vcl;
+  rtl,
+  vcl,
+  dbrtl,
+  vcldb;
 
 contains
-  versinfo in 'versinfo.pas';
+  DataGrid in 'DataGrid.pas';
 
 end.

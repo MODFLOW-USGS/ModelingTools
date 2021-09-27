@@ -1,4 +1,4 @@
-package VerInfoPkg;
+package SetWindowStatePackageXE2;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -31,6 +31,6 @@ requires
   vcl;
 
 contains
-  versinfo in 'versinfo.pas';
+  SetWindowStateUnit in 'SetWindowStateUnit.pas';
 
 end.

@@ -1,6 +1,7 @@
 package OfficeVCL7;
 
 {$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS OFF}
 {$BOOLEVAL OFF}
@@ -16,12 +17,14 @@ package OfficeVCL7;
 {$RANGECHECKS OFF}
 {$REFERENCEINFO OFF}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST ON}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'OfficeVCL Library'}
 {$IMPLICITBUILD OFF}
 
@@ -34,11 +37,11 @@ contains
   autocombo in 'autocombo.pas',
   basecombo in 'basecombo.pas',
   BaseComboForm in 'BaseComboForm.pas' {frmCustomCombo},
-  ColorCombo in 'colorcombo.pas',
+  colorcombo in 'colorcombo.pas',
   ColorCombo2000 in 'ColorCombo2000.pas',
   ColorForm2000 in 'ColorForm2000.pas' {frmColorCombo2000},
-  ComboBox in 'combobox.pas',
-  comboedit in 'ComboEdit.pas',
+  combobox in 'combobox.pas',
+  ComboEdit in 'ComboEdit.pas',
   ComboForm in 'ComboForm.pas' {frmCombo},
   fontcombo in 'fontcombo.pas',
   glyphcombo in 'glyphcombo.pas',
@@ -48,7 +51,7 @@ contains
   OfficeReg in 'OfficeReg.pas',
   SpectrumCombo in 'SpectrumCombo.pas',
   SpectrumComboForm in 'SpectrumComboForm.pas' {frmSpectrumCombo},
-  TrackCombo in 'trackcombo.pas',
+  trackcombo in 'trackcombo.pas',
   TrackComboForm in 'TrackComboForm.pas' {frmTrackCombo},
   treecombo in 'treecombo.pas',
   TreeComboForm in 'TreeComboForm.pas' {frmTreeCombo},
@@ -61,7 +64,7 @@ contains
   OfficeHint in 'OfficeHint.pas',
   OfficeHintDsgn in 'OfficeHintDsgn.pas' {frmHintShape},
   OfficeBalloon in 'OfficeBalloon.pas',
-  OfficeTypes in 'officetypes.pas',
+  officetypes in 'officetypes.pas',
   OfficeButtons in 'OfficeButtons.pas',
   OfficePanel in 'OfficePanel.pas',
   OfficeToolBar in 'OfficeToolBar.pas';
