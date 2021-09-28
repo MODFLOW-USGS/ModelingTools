@@ -568,17 +568,12 @@ object frmModChart: TfrmModChart
         Left = 0
         Top = 0
         Width = 232
-        Height = 457
+        Height = 437
         ActivePage = tabGroups
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 437
         object tabControls: TTabSheet
           Caption = 'Controls'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           DesignSize = (
             224
             401)
@@ -664,15 +659,11 @@ object frmModChart: TfrmModChart
         object tabGroups: TTabSheet
           Caption = 'Groups'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object treeGroups1: TTreeView
             Left = 0
             Top = 0
             Width = 224
-            Height = 421
+            Height = 401
             Align = alClient
             Indent = 23
             TabOrder = 0
@@ -689,17 +680,12 @@ object frmModChart: TfrmModChart
         Left = 0
         Top = 0
         Width = 232
-        Height = 457
+        Height = 437
         ActivePage = tabSeries
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 437
         object tabDataOrderControls: TTabSheet
           Caption = 'Controls'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblN: TLabel
             Left = 72
             Top = 332
@@ -785,10 +771,6 @@ object frmModChart: TfrmModChart
         object tabSeries: TTabSheet
           Caption = 'Series'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblNumberOfSeries: TLabel
             Left = 72
             Top = 123
@@ -824,7 +806,7 @@ object frmModChart: TfrmModChart
           end
           object clbSeriesToPlot: TCheckListBox
             Left = 0
-            Top = 183
+            Top = 163
             Width = 224
             Height = 238
             OnClickCheck = clbSeriesToPlotClickCheck
@@ -957,7 +939,6 @@ object frmModChart: TfrmModChart
         TabOrder = 3
         WordWrap = True
         OnClick = btnReadClick
-        ExplicitTop = 258
       end
       object rdgIgnoreValueOS: TRbwDataGrid4
         Left = 8
@@ -1005,7 +986,6 @@ object frmModChart: TfrmModChart
           end>
         OnEndUpdate = rdgIgnoreValueOSEndUpdate
         WordWrapRowCaptions = False
-        ExplicitTop = 344
         ColWidths = (
           184)
       end
@@ -1018,7 +998,6 @@ object frmModChart: TfrmModChart
         Anchors = [akLeft, akBottom]
         TabOrder = 4
         OnChange = seIgnoreValueOSChange
-        ExplicitTop = 312
       end
     end
     object jvsp_pc: TJvStandardPage
@@ -1031,17 +1010,12 @@ object frmModChart: TfrmModChart
         Left = 0
         Top = 0
         Width = 232
-        Height = 457
+        Height = 437
         ActivePage = tabWhatToPlot
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 437
         object tabWhatToPlot: TTabSheet
           Caption = 'Plot choice'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object gbWhatToPlotPC: TGroupBox
             Left = 7
             Top = 0
@@ -1156,10 +1130,6 @@ object frmModChart: TfrmModChart
         object tabInfo: TTabSheet
           Caption = 'Information'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblPcExpl1: TLabel
             Left = 8
             Top = 0
@@ -1219,17 +1189,12 @@ object frmModChart: TfrmModChart
         Left = 0
         Top = 0
         Width = 232
-        Height = 457
+        Height = 437
         ActivePage = tabLinpControls
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 437
         object tabLinpControls: TTabSheet
           Caption = 'Controls'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object cbScale_linp: TCheckBox95
             Left = 7
             Top = 0
@@ -1337,10 +1302,6 @@ object frmModChart: TfrmModChart
         object tabLinpPlotSymbols: TTabSheet
           Caption = 'Plot Symbols'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object clbLinpPlotSymbol: TCheckListBox
             Left = 0
             Top = 0
@@ -1365,17 +1326,12 @@ object frmModChart: TfrmModChart
         Left = 0
         Top = 0
         Width = 232
-        Height = 457
+        Height = 437
         ActivePage = tabIntconfControls
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 437
         object tabIntconfControls: TTabSheet
           Caption = 'Controls'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblAdditionalFiles: TLabel
             Left = 8
             Top = 168
@@ -1435,10 +1391,6 @@ object frmModChart: TfrmModChart
         object tabWarnings: TTabSheet
           Caption = 'Warnings'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblRedCI: TLabel
             Left = 8
             Top = 108
@@ -1484,17 +1436,12 @@ object frmModChart: TfrmModChart
         Left = 0
         Top = 0
         Width = 232
-        Height = 457
+        Height = 437
         ActivePage = tabOptions
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 437
         object tabDataControls: TTabSheet
           Caption = 'Data'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblBlueRedDescripton: TLabel
             Left = 8
             Top = 336
@@ -1553,10 +1500,6 @@ object frmModChart: TfrmModChart
         object tabOptions: TTabSheet
           Caption = 'Options'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           DesignSize = (
             224
             401)
@@ -1601,7 +1544,6 @@ object frmModChart: TfrmModChart
             Anchors = [akLeft, akBottom]
             TabOrder = 1
             OnChange = RedrawChart
-            ExplicitTop = 128
           end
           object cbShowLabels: TCheckBox
             Left = 8
@@ -1612,7 +1554,6 @@ object frmModChart: TfrmModChart
             Caption = 'Show Labels'
             TabOrder = 2
             OnClick = RedrawChart
-            ExplicitTop = 168
           end
           object cbEarliestTimePlotted: TCheckBox95
             Left = 8
@@ -1628,7 +1569,6 @@ object frmModChart: TfrmModChart
             AlignmentBtn = taLeftJustify
             LikePushButton = False
             VerticalAlignment = vaTop
-            ExplicitTop = 192
           end
           object cbLatestTimePlotted: TCheckBox95
             Left = 8
@@ -1644,7 +1584,6 @@ object frmModChart: TfrmModChart
             AlignmentBtn = taLeftJustify
             LikePushButton = False
             VerticalAlignment = vaTop
-            ExplicitTop = 280
           end
           object adeEarliest: TArgusDataEntry
             Left = 8
@@ -1680,10 +1619,6 @@ object frmModChart: TfrmModChart
         object tabLegend: TTabSheet
           Caption = 'Legend'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           DesignSize = (
             224
             401)
@@ -1746,7 +1681,6 @@ object frmModChart: TfrmModChart
               end>
             OnEndUpdate = rdgXyztLegendEndUpdate
             WordWrapRowCaptions = False
-            ExplicitHeight = 257
           end
           object cbXyztLegend: TCheckBox
             Left = 0
@@ -1767,7 +1701,6 @@ object frmModChart: TfrmModChart
             Anchors = [akLeft, akBottom]
             TabOrder = 2
             OnChange = seXyztLegendCountChange
-            ExplicitTop = 330
           end
         end
       end
@@ -1860,17 +1793,12 @@ object frmModChart: TfrmModChart
         Left = 0
         Top = 0
         Width = 232
-        Height = 457
+        Height = 437
         ActivePage = tabParameters
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 437
         object tsBasic: TTabSheet
           Caption = 'Basic'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblN_AbsChg: TLabel
             Left = 64
             Top = 356
@@ -1930,10 +1858,6 @@ object frmModChart: TfrmModChart
         object tabParameters: TTabSheet
           Caption = 'Parameters'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object jvchklstParameters: TJvCheckListBox
             Left = 0
             Top = 0
@@ -2008,6 +1932,7 @@ object frmModChart: TfrmModChart
       Width = 232
       Height = 437
       Caption = 'jvsp_nm'
+      ExplicitTop = -6
       object lblPlotSymbolsNM: TLabel
         Left = 8
         Top = 120
@@ -2134,7 +2059,7 @@ object frmModChart: TfrmModChart
       end
       object lst_mcmcParameters: TJvxCheckListBox
         Left = 0
-        Top = 267
+        Top = 247
         Width = 232
         Height = 190
         CheckKind = ckRadioButtons
@@ -2218,14 +2143,13 @@ object frmModChart: TfrmModChart
       end
       object jvpl_mcmc_pred: TJvPageList
         Left = 0
-        Top = 151
+        Top = 131
         Width = 232
         Height = 306
         ActivePage = jvsp_mcmc_predProbability
         PropagateEnable = False
         Align = alBottom
         Anchors = [akLeft, akTop, akRight, akBottom]
-        ExplicitTop = 131
         object jvsp_mcmc_predHistogram: TJvStandardPage
           Left = 0
           Top = 0
@@ -2266,9 +2190,8 @@ object frmModChart: TfrmModChart
           Left = 0
           Top = 0
           Width = 232
-          Height = 286
+          Height = 306
           Caption = 'jvsp_mcmc_predProbability'
-          ExplicitHeight = 306
           object rgConfidenceInterval: TRadioGroup
             Left = 16
             Top = 16

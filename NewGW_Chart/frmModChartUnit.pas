@@ -1671,6 +1671,7 @@ begin
   begin
     Exit;
   end;
+  SetCurrentDir(ExtractFileDir(FileName));
 
   WithPrior := False;
   OpeningFile2 := True;
@@ -4273,6 +4274,10 @@ begin
     while not EOF(FFile) do
     begin
       ReadLn(FFile, Line);
+      if Line = ' "WITHOUT PRIOR:"' then
+      begin
+        break;
+      end;
       if (Line <> '') and (Line <> ' "NO PRIOR INFORMATION WAS USED IN THE REGRESSION"') then
       begin
         List.DelimitedText := Line;
