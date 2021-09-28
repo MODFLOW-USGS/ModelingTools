@@ -54,7 +54,7 @@ uses
   SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit,
   SutraOptionsUnit, SutraGeneralBoundaryUnit, SutraBoundaryUnit,
   SutraGenTransBoundUnit, IntListUnit, ObsInterfaceUnit,
-  PestObsExtractorInputWriterUnit;
+  PestObsExtractorInputWriterUnit, SutraTimeScheduleUnit;
 
 resourcestring
   StrTheObservationComp = 'The observation comparison item "%s" could not be' +
@@ -997,7 +997,26 @@ var
   TimeIndex: Integer;
   StateObs: TSutraStateObsItem;
   ID: string;
+  ObsTime: double;
+  SimulationType: TSimulationType;
+  TimeOptions: TSutraTimeOptions;
+  SutraTimeChoice: TSutraTimeChoice;
+  InitialTime: double;
 begin
+  SimulationType := Model.SutraOptions.SimulationType;
+  TimeOptions := (AModel as TPhastModel).SutraTimeOptions;
+  SutraTimeChoice := TimeOptions.Schedules[0].SutraTimeChoice;
+  if SutraTimeChoice = stcAbsolute then
+  begin
+    InitialTime := TimeOptions.Schedules[0].InitialTime;
+  end
+  else
+  begin
+    InitialTime := 0.0;
+  end;
+
+  { (stSteadyFlowSteadyTransport,
+    stSteadyFlowTransientTransport, stTransientFlowTransientTransport);}
   for ObjectIndex := 0 to FSutraObsObjects.Count - 1 do
   begin
     AScreenObject := FSutraObsObjects[ObjectIndex];
@@ -1007,6 +1026,7 @@ begin
       StateObs := SutraStateObs[TimeIndex];
       if StateObs.ObsType <> StrLakeStage then
       begin
+        ObsTime := StateObs.Time;
         ID := Copy(AScreenObject.Name, 1, MaxBoundNameLength);
         WriteString('  ID ');
         WriteString(ID);
@@ -1014,14 +1034,27 @@ begin
           0:
             begin
               WriteString(' P');
+              if SimulationType in
+                [stSteadyFlowSteadyTransport, stSteadyFlowTransientTransport] then
+              begin
+                ObsTime := InitialTime;
+              end;
             end;
           1:
             begin
               WriteString(' U');
+              if SimulationType = stSteadyFlowSteadyTransport then
+              begin
+                ObsTime := InitialTime;
+              end;
             end;
           2:
             begin
               WriteString(' S');
+              if SimulationType = stSteadyFlowSteadyTransport then
+              begin
+                ObsTime := InitialTime;
+              end;
             end;
         end;
         NewLine;
@@ -1045,7 +1078,7 @@ begin
               WriteString('_S');
             end;
         end;
-        WriteFloat(StateObs.Time);
+        WriteFloat(ObsTime);
         WriteString(' PRINT');
         NewLine;
       end;

@@ -2199,7 +2199,7 @@ begin
         FvstObsMf6Node, amInsertAfter);
       vstObjects.ReinitNode(FvstCalibrationObsMf6Node, False);
     end;
-    InitializeNodeData(FvstCalibrationObsMf6Node, nil);
+    InitializeNodeData(FvstCalibrationObsMf6Node, FCalibrationObs6List);
 
     if FvstModpathRoot = nil then
     begin
@@ -2291,16 +2291,7 @@ begin
       vstObjects.ReinitNode(FvstHeadObsMf6Node, False);
     end;
     InitializeNodeData(FvstHeadObsMf6Node, FHeadObs6List);
-
-    if FvstCalibrationObsMf6Node = nil then
-    begin
-      FvstCalibrationObsMf6Node := vstObjects.InsertNode(
-        FvstHeadObsMf6Node, amInsertAfter);
-      vstObjects.ReinitNode(FvstCalibrationObsMf6Node, False);
-    end;
-    InitializeNodeData(FvstCalibrationObsMf6Node, FCalibrationObs6List);
-
-    PriorNode := FvstCalibrationObsMf6Node;
+    PriorNode := FvstHeadObsMf6Node;
 
     InitializeMF_BoundaryNode(FvstDrawDownObsMf6Node, PriorNode, FDrawDownObs6List);
     InitializeMF_BoundaryNode(FvstChdObsMf6Node, PriorNode, FChdObs6List);
@@ -2316,6 +2307,16 @@ begin
     InitializeMF_BoundaryNode(FvstSfrObsMf6Node, PriorNode, FSfrObs6List);
     InitializeMF_BoundaryNode(FvstUzfObsMf6Node, PriorNode, FUzfObs6List);
     InitializeMF_BoundaryNode(FvstCsubObsMf6Node, PriorNode, FCsubObs6List);
+
+    if FvstCalibrationObsMf6Node = nil then
+    begin
+      FvstCalibrationObsMf6Node := vstObjects.InsertNode(
+        FvstObsMf6Node, amInsertAfter);
+      vstObjects.ReinitNode(FvstCalibrationObsMf6Node, False);
+    end;
+    InitializeNodeData(FvstCalibrationObsMf6Node, FCalibrationObs6List);
+
+    PriorNode := FvstCalibrationObsMf6Node;
 
     // add children of FvstModflowBoundaryConditionsRoot
     if FvstModflowChdNode = nil then
@@ -3327,9 +3328,10 @@ begin
       or (Node = FvstSutraFeaturesNode)
       or (Node = FvstFootprintFeaturesNode)
       or (Node = FvstObsMf6Node)
-      or (Node = FvstCalibrationObsMf6Node)
+//      or (Node = FvstCalibrationObsMf6Node)
       then
     begin
+      // This branch is for nodes that do not hold any objects themselves.
       if Sender.CheckState[Node] <> csMixedNormal then
       begin
         ChildNode := nil;
@@ -3385,6 +3387,7 @@ begin
     end
     else
     begin
+      // This branch is for root nodes that hold objects.
       Data := Sender.GetNodeData(Node);
       if (Data <> nil) and (Data.ScreenObjects <> nil) then
       begin

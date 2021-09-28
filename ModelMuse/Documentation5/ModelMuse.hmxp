@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4250</config-value>
+      <config-value name="autohelpstart">4262</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -120,6 +120,7 @@
       <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">(Complete)</config-value>
+      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -1485,6 +1486,18 @@ document.write('</frameset>');
       <helpcontext-number href="RMA_Using_MODPATH" value="3588"/>
       <helpcontext-number href="RMA_View_Results" value="3407"/>
       <helpcontext-number href="RMA_Wells" value="3405"/>
+      <helpcontext-number href="RmaMf2005_Activate_PEST" value="4254"/>
+      <helpcontext-number href="RmaMf2005_Apply_K_Parameter" value="4257"/>
+      <helpcontext-number href="RmaMf2005_Apply_Seepage_Parame" value="4258"/>
+      <helpcontext-number href="RmaMf2005_Define_Observations" value="4259"/>
+      <helpcontext-number href="RmaMf2005_Define_Pilot_Points" value="4256"/>
+      <helpcontext-number href="RmaMf2005_Model_Summary" value="4251"/>
+      <helpcontext-number href="RmaMf2005_Next_Steps" value="4262"/>
+      <helpcontext-number href="RmaMf2005_Run_PEST" value="4260"/>
+      <helpcontext-number href="RmaMf2005_STOPERROR_option" value="4253"/>
+      <helpcontext-number href="RmaMf2005_Use_Anisotropy" value="4252"/>
+      <helpcontext-number href="RmaMf2005_Visualize_Modified_M" value="4261"/>
+      <helpcontext-number href="RmaMf2005Define_Parameters_and" value="4255"/>
       <helpcontext-number href="RmaMF6_Activate_PEST" value="4241"/>
       <helpcontext-number href="RmaMF6_Apply_K_Parameter" value="4242"/>
       <helpcontext-number href="RmaMF6_Apply_Seepage_Parameter" value="4243"/>

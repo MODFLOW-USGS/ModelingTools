@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">RmaMf2005: Apply K Parameter</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf2005: Apply K Parameter</text></para>
+    </header>
+    <para styleclass="Normal"><snippet src="RmaMF6_Apply_K_Parameter"/></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If we had made K an HK parameter in the LPF package and we wanted to use pilot points, we would have used multiplier arrays with the HK parameter and defined a separate PEST parameter and applied it to the multiplier data set.</text></para>
+  </body>
+</topic>

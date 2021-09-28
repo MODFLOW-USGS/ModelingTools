@@ -482,6 +482,7 @@ var
   ACustomSchedule: TScreenObjectSchedule;
   FirstSchedule: TSutraTimeSchedule;
   TimeValues: TOneDRealArray;
+  TimeIndex: Integer;
 begin
   ScheduleCount := 0;
   if (FScheduleList.Count > 0) and (not FExtraTimesDefined) then
@@ -555,6 +556,13 @@ begin
   for ScheduleIndex := 0 to FCustomSchedules.Count - 1 do
   begin
     ACustomSchedule := FCustomSchedules[ScheduleIndex];
+    for TimeIndex := ACustomSchedule.Times.Count - 1 downto 1 do
+    begin
+      if ACustomSchedule.Times[TimeIndex].Value = ACustomSchedule.Times[TimeIndex-1].Value then
+      begin
+        ACustomSchedule.Times.Delete(TimeIndex);
+      end;
+    end;
     Inc(ScheduleCount);
     WriteCommentLine('Schedule ' + IntToStr(ScheduleCount));
     WriteASchedule(ReformatScheduleName(ACustomSchedule.Name),

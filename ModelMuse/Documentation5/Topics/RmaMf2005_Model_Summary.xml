@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">RmaMF6: Model Summary</title>
+  <title translate="true">RmaMf2005: Model Summary</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Model Summary</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf2005: Model Summary</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW 6 model differs from </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rocky_Mountain_Arsenal" styleclass="Normal" translate="true">the MODFLOW-2005 version of the model</link><text styleclass="Normal" translate="true"> by having a DISV grid. The DISV grid has a refined area around the extraction wells in the southern half of the model. The Ghost Node Correction package is used with the explicit option; the implicit option makes the model unstable. To use PEST with the model we will perform the following tasks.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW-2005 version of the Rocky Mountain Arsenal problem is nearly identical to the final model from </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rocky_Mountain_Arsenal" styleclass="Normal" translate="true">this previous tutorial</link><text styleclass="Normal" translate="true">. However, several unused objects have been added that we will use later in the example to help define observations. Just as with the MODFLOW 6 version of the model, we will perform the following tasks. In addition the pumping rate in the seepage pond has been changed so that the total seepage rate from the pond is 0.03 instead of 0.025.</text></para>
     <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Activate PEST.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define parameters to use in the model.</text></li>

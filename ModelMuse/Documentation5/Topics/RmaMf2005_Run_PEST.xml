@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaMf2005: Run PEST</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf2005: Run PEST</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">After making all the changes to the model, you have to run the model from ModelMuse one more time. Select </text><text styleclass="Strong" translate="true">File|Export|MODFLOW-2005 Input Files</text><text styleclass="Normal" translate="true">. ModelMuse will start a command line window that will in turn start ModelMonitor to run the model. When the model is done running close ModelMonitor. Several more operations will be performed in the command line window and then the MODFLOW listing file will be opened in a text editor. The operations between when MODFLOW finishes and the listing file is opened consist of creating a kriging factors file and a PEST instruction file. PLPROC is used to create the kriging factors file and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Mf2005ObsExtractor" styleclass="Normal" translate="true">Mf2005ObsExtractor</link><text styleclass="Normal" translate="true"> is used to create the instruction file. These files will be used when PEST runs the model.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">You can select </text><text styleclass="Strong" translate="true">File|Export|PEST|Export PEST Control File</text><text styleclass="Normal" translate="true"> to generate the PEST control file and then run either run PEST and PESTCHEK. Alternatively, you can use the RunPESTCHEK.bat or the RunPEST.bat batch files to start running PESTCHEK or PEST.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Once PEST has finished running, it would be a good idea to make a backup copy of the model input and output files to ensure you don&apos;t lose them if you accidentally overwrite them later on.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

@@ -10372,6 +10372,8 @@ const
 //               Bug fix: not in released version. Fixed upper and lower bounds
 //                of pilot points.
 
+//               Bug fix: Fixed saving CREFT in SUTRA models.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.67';

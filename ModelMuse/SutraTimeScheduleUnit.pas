@@ -279,6 +279,7 @@ begin
     InitialTimeStep := SourceSchedule.InitialTimeStep;
     LimitingTimeStep := SourceSchedule.LimitingTimeStep;
     TimeStepIncrement := SourceSchedule.TimeStepIncrement;
+    SutraTimeChoice := SourceSchedule.SutraTimeChoice;
   end
   else
   begin
