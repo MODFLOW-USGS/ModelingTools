@@ -262,7 +262,7 @@ end;
 
 function TCustomObservationItem.GetPrint: Boolean;
 begin
-  Result := (Weight > 0) or (LowerCase(ObservationGroup) = 'predict');
+  Result := True;// (Weight > 0) or (LowerCase(ObservationGroup) = 'predict');
 end;
 
 function TCustomObservationItem.GetScreenObject: TObject;
