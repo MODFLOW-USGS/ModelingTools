@@ -72,10 +72,10 @@ type
   strict protected
     // name is the file that is created by @classname.
     FFileStream: TFileStream;
-    FMainFileStream: TFileStream;
     FPestDataArrays: TDictionary<string, TDataArray>;
     // @name is the name of the file being created.
     FNameOfFile: string;
+    FFileStreamList: TList<TFileStream>;
   private
     // See @link(Model).
     FModel: TCustomModel;
@@ -2574,10 +2574,10 @@ end;
 
 procedure TCustomFileWriter.CloseFile;
 begin
-  if FFileStream = FMainFileStream then
-  begin
-    FMainFileStream := nil;
-  end;
+//  if FFileStream = FMainFileStream then
+//  begin
+//    FMainFileStream := nil;
+//  end;
   FreeAndNil(FFileStream);
 end;
 
@@ -2793,6 +2793,7 @@ constructor TCustomFileWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited Create;
+  FFileStreamList := TList<TFileStream>.Create;
   FPestDataArrays := TDictionary<string, TDataArray>.Create;
   FEvaluationType := EvaluationType;
   FModel := AModel;
@@ -2801,6 +2802,7 @@ end;
 destructor TCustomFileWriter.Destroy;
 begin
   FPestDataArrays.Free;
+  FFileStreamList.Free;
   inherited;
 end;
 
@@ -10184,8 +10186,9 @@ end;
 procedure TCustomFileWriter.OpenTempFile(const FileName: string);
 begin
   Assert(FFileStream <> nil);
-  Assert(FMainFileStream = nil);
-  FMainFileStream := FFileStream;
+  FFileStreamList.Add(FFileStream);
+//  Assert(FMainFileStream = nil);
+//  FMainFileStream := FFileStream;
   FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
 end;
 
@@ -10219,10 +10222,12 @@ end;
 
 procedure TCustomFileWriter.CloseTempFile;
 begin
-  Assert(FMainFileStream <> nil);
+  Assert(FFileStreamList.Count > 0);
+//  Assert(FMainFileStream <> nil);
   FreeAndNil(FFileStream);
-  FFileStream := FMainFileStream;
-  FMainFileStream := nil;
+  FFileStream := FFileStreamList.Last;
+  FFileStreamList.Delete(FFileStreamList.Count-1);
+//  FMainFileStream := nil;
 end;
 
 procedure TCustomModflowWriter.WriteValueOrFormula(Cell: TValueCell;

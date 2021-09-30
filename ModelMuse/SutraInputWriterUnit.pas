@@ -16,6 +16,7 @@ type
     Y: double;
     Z: double;
     Porosity: double;
+    Layer: Integer;
   end;
 
   TNodeDataList = TObjectList<TNodeData>;
@@ -41,6 +42,7 @@ type
     X: Double;
     Y: double;
     Z: Double;
+    Layer: Integer;
   end;
 
   TElementDataList = TObjectList<TElementData>;
@@ -394,6 +396,31 @@ var
   Sutra14BWriter: TSutraData14BScriptWriter;
   TempFile: string;
   ParameterZoneWriter: TParameterZoneWriter;
+  TempFileRoot: string;
+  procedure Write14BInternal(Layer: Integer);
+  var
+    NodeIndex: Integer;
+  begin
+    if Layer <= 1 then
+    begin
+      WriteCommentLine('Data set 14B');
+    end;
+    for NodeIndex := 0 to Nodes.Count - 1 do
+    begin
+      NodeData := Nodes[NodeIndex];
+      if (NodeData.Layer = Layer) or (Layer < 0) then
+      begin
+        Assert(NodeIndex = NodeData.Number);
+        WriteInteger(NodeData.Number + 1);
+        WriteInteger(NodeData.NREG);
+        WriteFloat(NodeData.X);
+        WriteFloat(NodeData.Y);
+        WriteFloat(NodeData.Z);
+        WriteFloat(NodeData.Porosity);
+        NewLine;
+      end;
+    end;
+  end;
 begin
   PestParametersUsed := False;
   Porosity := Model.DataArrayManager.GetDataSetByName(KNodalPorosity);
@@ -518,6 +545,7 @@ begin
           begin
             NodeData := TNodeData.Create;
             Nodes.Add(NodeData);
+            NodeData.Layer := LayerIndex+1;
             NodeData.Number := ANode3D.Number;
             if UnsatRegion = nil then
             begin
@@ -565,14 +593,31 @@ begin
       begin
         OpenTempFile(TempFileName);
         try
-          TempFileName := ExtractFileName(TempFileName)+ '_';
+          TempFileRoot := TempFileName + '_';
+          TempFileName := ExtractFileName(TempFileRoot);
           for LayerIndex := 1 to FMesh.LayerCount+1 do
           begin
             WriteString('@INSERT 99 ');
             WriteString(TempFileName + IntToStr(LayerIndex));
             Model.FilesToDelete.Add(TempFileName + IntToStr(LayerIndex));
             NewLine;
+
+            OpenTempFile(TempFileRoot + IntToStr(LayerIndex));
+            try
+              Write14BInternal(LayerIndex);
+            finally
+              CloseTempFile;
+            end;
           end;
+        finally
+          CloseTempFile;
+        end;
+      end
+      else
+      begin
+        OpenTempFile(TempFileName);
+        try
+          Write14BInternal(0);
         finally
           CloseTempFile;
         end;
@@ -580,19 +625,20 @@ begin
     end
     else
     begin
-      WriteCommentLine('Data set 14B');
-      for NodeIndex := 0 to Nodes.Count - 1 do
-      begin
-        NodeData := Nodes[NodeIndex];
-        Assert(NodeIndex = NodeData.Number);
-        WriteInteger(NodeData.Number + 1);
-        WriteInteger(NodeData.NREG);
-        WriteFloat(NodeData.X);
-        WriteFloat(NodeData.Y);
-        WriteFloat(NodeData.Z);
-        WriteFloat(NodeData.Porosity);
-        NewLine;
-      end;
+      Write14BInternal(-1);
+//      WriteCommentLine('Data set 14B');
+//      for NodeIndex := 0 to Nodes.Count - 1 do
+//      begin
+//        NodeData := Nodes[NodeIndex];
+//        Assert(NodeIndex = NodeData.Number);
+//        WriteInteger(NodeData.Number + 1);
+//        WriteInteger(NodeData.NREG);
+//        WriteFloat(NodeData.X);
+//        WriteFloat(NodeData.Y);
+//        WriteFloat(NodeData.Z);
+//        WriteFloat(NodeData.Porosity);
+//        NewLine;
+//      end;
     end;
   finally
     Nodes.Free;
@@ -679,6 +725,7 @@ var
   PestParametersUsed: Boolean;
   DataFileWriter: TSutraElementDataWriter;
   Sutra15BWriter: TSutraData15BScriptWriter;
+  TempFileRoot: string;
   procedure ExportDataForPest(DataArray: TDataArray);
   begin
     if Model.PestUsed then
@@ -695,125 +742,103 @@ var
       end;
     end;
   end;
-  procedure InternalWrite15B;
+  procedure InternalWrite15B(Layer: Integer);
   var
     ElementIndex: Integer;
   begin
-    WriteCommentLine('Data set 15B');
+    if Layer <= 1 then
+    begin
+      WriteCommentLine('Data set 15B');
+    end;
     for ElementIndex := 0 to ElementList.Count - 1 do
     begin
       ElData := ElementList[ElementIndex];
-      Assert(ElData.Number = ElementIndex);
-      WriteInteger(ElData.Number+1);
-      WriteInteger(ElData.LREG);
-      WriteFloat(ElData.PMAX);
-      if FMesh.MeshType = mt3D then
+      if (ElData.Layer = Layer) or (Layer <= 0) then
       begin
-        WriteFloat(ElData.PMID);
-      end;
-      WriteFloat(ElData.PMIN);
-      WriteFloat(ElData.ANGLE1);
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteFloat(ElData.ANGLE2);
-        WriteFloat(ElData.ANGLE3);
-      end;
-      WriteFloat(ElData.ALMAX);
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteFloat(ElData.ALMID);
-      end;
-      WriteFloat(ElData.ALMIN);
-      WriteFloat(ElData.ATMAX);
-      if FMesh.MeshType = mt3D then
-      begin
-        WriteFloat(ElData.ATMID);
-      end;
-      WriteFloat(ElData.ATMIN);
-      NewLine;
-      case FMesh.MeshType of
-        mt2D, mtProfile:
-          begin
-            if ElData.PMAX < ElData.PMIN then
+        Assert(ElData.Number = ElementIndex);
+        WriteInteger(ElData.Number+1);
+        WriteInteger(ElData.LREG);
+        WriteFloat(ElData.PMAX);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.PMID);
+        end;
+        WriteFloat(ElData.PMIN);
+        WriteFloat(ElData.ANGLE1);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.ANGLE2);
+          WriteFloat(ElData.ANGLE3);
+        end;
+        WriteFloat(ElData.ALMAX);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.ALMID);
+        end;
+        WriteFloat(ElData.ALMIN);
+        WriteFloat(ElData.ATMAX);
+        if FMesh.MeshType = mt3D then
+        begin
+          WriteFloat(ElData.ATMID);
+        end;
+        WriteFloat(ElData.ATMIN);
+        NewLine;
+        case FMesh.MeshType of
+          mt2D, mtProfile:
             begin
-              case FOptions.TransportChoice of
-                tcSolute, tcEnergy:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxPermMinPerm, IntToStr(ElData.Number+1));
-                  end;
-                tcSoluteHead:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxKMinK, IntToStr(ElData.Number+1));
-                  end;
-                else Assert(False);
+              if ElData.PMAX < ElData.PMIN then
+              begin
+                case FOptions.TransportChoice of
+                  tcSolute, tcEnergy:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxPermMinPerm, IntToStr(ElData.Number+1));
+                    end;
+                  tcSoluteHead:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxKMinK, IntToStr(ElData.Number+1));
+                    end;
+                  else Assert(False);
+                end;
               end;
             end;
-
-//            if ElData.ALMAX < ElData.ALMIN then
-//            begin
-//
-//            end;
-//
-//            if ElData.ATMAX < ElData.ATMIN then
-//            begin
-//
-//            end;
-          end;
-        mt3D:
-          begin
-            if ElData.PMAX < ElData.PMID then
+          mt3D:
             begin
-              case FOptions.TransportChoice of
-                tcSolute, tcEnergy:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxPermMidPerm, IntToStr(ElData.Number+1));
-                  end;
-                tcSoluteHead:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMaxKMidK, IntToStr(ElData.Number+1));
-                  end;
-                else Assert(False);
+              if ElData.PMAX < ElData.PMID then
+              begin
+                case FOptions.TransportChoice of
+                  tcSolute, tcEnergy:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxPermMidPerm, IntToStr(ElData.Number+1));
+                    end;
+                  tcSoluteHead:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMaxKMidK, IntToStr(ElData.Number+1));
+                    end;
+                  else Assert(False);
+                end;
+              end;
+              if ElData.PMID < ElData.PMIN then
+              begin
+                case FOptions.TransportChoice of
+                  tcSolute, tcEnergy:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMidPermMinPerm, IntToStr(ElData.Number+1));
+                    end;
+                  tcSoluteHead:
+                    begin
+                      frmErrorsAndWarnings.AddWarning(Model,
+                        StrMidKMinK, IntToStr(ElData.Number+1));
+                    end;
+                  else Assert(False);
+                end;
               end;
             end;
-            if ElData.PMID < ElData.PMIN then
-            begin
-              case FOptions.TransportChoice of
-                tcSolute, tcEnergy:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMidPermMinPerm, IntToStr(ElData.Number+1));
-                  end;
-                tcSoluteHead:
-                  begin
-                    frmErrorsAndWarnings.AddWarning(Model,
-                      StrMidKMinK, IntToStr(ElData.Number+1));
-                  end;
-                else Assert(False);
-              end;
-            end;
-
-//            if ElData.ALMAX < ElData.ALMID then
-//            begin
-//
-//            end;
-//            if ElData.ALMID < ElData.ALMIN then
-//            begin
-//
-//            end;
-//
-//            if ElData.ATMAX < ElData.ATMID then
-//            begin
-//
-//            end;
-//            if ElData.ATMID < ElData.ATMIN then
-//            begin
-//
-//            end;
-          end;
+        end;
       end;
     end
   end;
@@ -991,6 +1016,7 @@ begin
           if AnElement3D.Active then
           begin
             ElData := TElementData.Create;
+            ElData.Layer := LayerIndex + 1;
             ElementList.Add(ElData);
             ElData.Number := AnElement3D.ElementNumber;
             if UnsatRegion = nil then
@@ -1052,13 +1078,21 @@ begin
       begin
         OpenTempFile(TempFileName);
         try
-          TempFileName := ExtractFileName(TempFileName)+ '_';
+          TempFileRoot := TempFileName + '_';
+          TempFileName := ExtractFileName(TempFileRoot);
           for LayerIndex := 1 to FMesh.LayerCount do
           begin
             WriteString('@INSERT 99 ');
             WriteString(TempFileName + IntToStr(LayerIndex));
             Model.FilesToDelete.Add(TempFileName + IntToStr(LayerIndex));
             NewLine;
+
+            OpenTempFile(TempFileRoot + IntToStr(LayerIndex));
+            try
+              InternalWrite15B(LayerIndex);
+            finally
+              CloseTempFile;
+            end;
           end;
         finally
           CloseTempFile;
@@ -1068,7 +1102,7 @@ begin
       begin
         OpenTempFile(TempFileName);
         try
-          InternalWrite15B;
+          InternalWrite15B(0);
         finally
           CloseTempFile;
         end;
@@ -1076,7 +1110,7 @@ begin
     end
     else
     begin
-      InternalWrite15B;
+      InternalWrite15B(-1);
     end;
   finally
     ElementList.Free;

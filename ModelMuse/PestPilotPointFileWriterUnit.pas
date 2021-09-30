@@ -11,6 +11,7 @@ type
   TPilotPointWriter = class(TCustomFileWriter)
   private
     FFileName: string;
+    FMainFileStream: TFileStream;
     FTemplateFileStream: TFileStream;
     procedure OpenTemplateFile(const FileName: string);
     procedure CloseTemplateFile;

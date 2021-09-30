@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1414
+1424
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1309,6 +1309,9 @@ SutraTest5.gpt
 	Archive\SutraTest5.15B
 	Archive\SutraTest5.15B.script
 	Archive\SutraTest5.15B.script.tpl
+	Archive\SutraTest5.15B_1
+	Archive\SutraTest5.15B_2
+	Archive\SutraTest5.15B_3
 	Archive\SutraTest5.Angle_Horizontal
 	Archive\SutraTest5.Angle_Rotational
 	Archive\SutraTest5.Angle_Vertical
@@ -1356,9 +1359,16 @@ SutraTest1a.gpt
 	Archive\SutraTest1a.14B
 	Archive\SutraTest1a.14B.script
 	Archive\SutraTest1a.14B.script.tpl
+	Archive\SutraTest1a.14B_1
+	Archive\SutraTest1a.14B_2
+	Archive\SutraTest1a.14B_3
+	Archive\SutraTest1a.14B_4
 	Archive\SutraTest1a.15B
 	Archive\SutraTest1a.15B.script
 	Archive\SutraTest1a.15B.script.tpl
+	Archive\SutraTest1a.15B_1
+	Archive\SutraTest1a.15B_2
+	Archive\SutraTest1a.15B_3
 	Archive\SutraTest1a.Angle_Horizontal
 	Archive\SutraTest1a.Angle_Rotational
 	Archive\SutraTest1a.Angle_Vertical
