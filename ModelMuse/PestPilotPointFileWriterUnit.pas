@@ -42,6 +42,7 @@ procedure TPilotPointWriter.CloseTemplateFile;
 begin
   SwitchToMain;
   FreeAndNil(FTemplateFileStream);
+  FMainFileStream := nil;
 end;
 
 class function TPilotPointWriter.Extension: string;
