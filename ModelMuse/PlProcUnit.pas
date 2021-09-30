@@ -751,7 +751,7 @@ begin
             WriteString(Format('  target_clist=%s, &', [KDisName]));
           end;
           NewLine;
-          WriteString(Format('  source_clist=PilotPoints%d, &', [PPIndex+1]));
+          WriteString(Format('  source_clist=%0:sPilotPoints%1:d, &', [FPrefix, PPIndex+1]));
           NewLine;
           WriteString(Format('  file=%0:s%1:d;format=formatted)',
             [ExtractFileName(FKrigingFactorsFile), PPIndex+1]));

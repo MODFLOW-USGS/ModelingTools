@@ -1,22 +1,22 @@
 #Script for PLPROC for saving kriging factors
 
 #Read pilot point data
-PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
+K22PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk1_1';column=5, &
   id_type='character',file='PestPilotPointTest.Ky.Hk1.1.pp')
-PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
+K22PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk1_2';column=5, &
   id_type='character',file='PestPilotPointTest.Ky.Hk1.2.pp')
-PilotPoints5 = read_list_file(skiplines=0,dimensions=2, &
+K22PilotPoints5 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk1_3';column=5, &
   id_type='character',file='PestPilotPointTest.Ky.Hk1.3.pp')
-PilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
+K22PilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk2_1';column=5, &
   id_type='character',file='PestPilotPointTest.Ky.Hk2.1.pp')
-PilotPoints4 = read_list_file(skiplines=0,dimensions=2, &
+K22PilotPoints4 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk2_2';column=5, &
   id_type='character',file='PestPilotPointTest.Ky.Hk2.2.pp')
-PilotPoints6 = read_list_file(skiplines=0,dimensions=2, &
+K22PilotPoints6 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk2_3';column=5, &
   id_type='character',file='PestPilotPointTest.Ky.Hk2.3.pp')
 
@@ -41,26 +41,26 @@ cl_Discretization3 = read_mf6_grid_specs(file='PestPilotPointTest.dis.grb', &
 #Save Kriging factors
 calc_kriging_factors_auto_2d( &
   target_clist=cl_Discretization1, &
-  source_clist=PilotPoints1, &
+  source_clist=K22PilotPoints1, &
   file=PestPilotPointTest.Ky.Factors1;format=formatted)
 calc_kriging_factors_auto_2d( &
   target_clist=cl_Discretization2, &
-  source_clist=PilotPoints3, &
+  source_clist=K22PilotPoints3, &
   file=PestPilotPointTest.Ky.Factors3;format=formatted)
 calc_kriging_factors_auto_2d( &
   target_clist=cl_Discretization3, &
-  source_clist=PilotPoints5, &
+  source_clist=K22PilotPoints5, &
   file=PestPilotPointTest.Ky.Factors5;format=formatted)
 calc_kriging_factors_auto_2d( &
   target_clist=cl_Discretization1, &
-  source_clist=PilotPoints2, &
+  source_clist=K22PilotPoints2, &
   file=PestPilotPointTest.Ky.Factors2;format=formatted)
 calc_kriging_factors_auto_2d( &
   target_clist=cl_Discretization2, &
-  source_clist=PilotPoints4, &
+  source_clist=K22PilotPoints4, &
   file=PestPilotPointTest.Ky.Factors4;format=formatted)
 calc_kriging_factors_auto_2d( &
   target_clist=cl_Discretization3, &
-  source_clist=PilotPoints6, &
+  source_clist=K22PilotPoints6, &
   file=PestPilotPointTest.Ky.Factors6;format=formatted)
 

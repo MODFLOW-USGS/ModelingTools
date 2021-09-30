@@ -1,22 +1,22 @@
 #Script for PLPROC
 
 #Read pilot point data
-PilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
+KPilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk1_1';column=5, &
   id_type='character',file='PestPilotPointTest.Kx.Hk1.1.pp')
-PilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
+KPilotPoints3 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk1_2';column=5, &
   id_type='character',file='PestPilotPointTest.Kx.Hk1.2.pp')
-PilotPoints5 = read_list_file(skiplines=0,dimensions=2, &
+KPilotPoints5 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk1_3';column=5, &
   id_type='character',file='PestPilotPointTest.Kx.Hk1.3.pp')
-PilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
+KPilotPoints2 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk2_1';column=5, &
   id_type='character',file='PestPilotPointTest.Kx.Hk2.1.pp')
-PilotPoints4 = read_list_file(skiplines=0,dimensions=2, &
+KPilotPoints4 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk2_2';column=5, &
   id_type='character',file='PestPilotPointTest.Kx.Hk2.2.pp')
-PilotPoints6 = read_list_file(skiplines=0,dimensions=2, &
+KPilotPoints6 = read_list_file(skiplines=0,dimensions=2, &
   plist='Hk2_3';column=5, &
   id_type='character',file='PestPilotPointTest.Kx.Hk2.3.pp')
 
