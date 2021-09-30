@@ -10209,7 +10209,7 @@ begin
           end;
 
           BatchFile.AddStrings(PhastModel.KrigfactorsScriptLines);
-          BatchFile.AddStrings(PhastModel.PestTemplateLines);
+//          BatchFile.AddStrings(PhastModel.PestTemplateLines);
           ParamEstBatFile.AddStrings(PhastModel.PestTemplateLines);
 
           BatchFile.Add('"' + SutraFileName + '"');

@@ -532,7 +532,7 @@ begin
           Exit;
         end;
       end;
-      WritePestZones(DataArray, FInputFileName, NPF_WETDRY);
+      WritePestZones(DataArray, FInputFileName, NPF_WETDRY, 'WTD');
 
     finally
       Model.DataArrayManager.CacheDataArrays;

@@ -20,7 +20,7 @@ type
     FOptions: TSutraOptions;
     FLimit: Integer;
     FFileName: string;
-    procedure WriteDataArray(DataArray: TDataArray; ID: string);
+    procedure WriteDataArray(DataArray: TDataArray; const ID, Prefix: string);
     procedure WriteDataSet0;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -58,7 +58,8 @@ begin
   Assert(False);
 end;
 
-procedure TSutraInitialConditionsWriter.WriteDataArray(DataArray: TDataArray; ID: string);
+procedure TSutraInitialConditionsWriter.WriteDataArray(DataArray: TDataArray;
+  const ID, Prefix: string);
 var
   List: TDataValueList;
   index: Integer;
@@ -108,7 +109,7 @@ begin
         NewLine;
         ScriptWriter := TSutraInitCondScriptWriter.Create(Model, etExport);
         try
-          ScriptWriter.WriteFiles(FFileName, DataArray.Name, ID);
+          ScriptWriter.WriteFiles(FFileName, DataArray.Name, ID, Prefix);
         finally
           ScriptWriter.Free;
         end;
@@ -246,7 +247,7 @@ begin
         Assert(False);
     end;
 
-    WriteDataArray(InitialPressure, 'PVEC');
+    WriteDataArray(InitialPressure, 'PVEC', 'PVC');
 
   end;
 end;
@@ -299,7 +300,7 @@ begin
       else
         Assert(False);
     end;
-    WriteDataArray(InitialU, 'UVEC');
+    WriteDataArray(InitialU, 'UVEC', 'UVC');
   end;
 end;
 

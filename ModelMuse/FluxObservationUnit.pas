@@ -362,7 +362,7 @@ implementation
 
 uses
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, frmGoPhastUnit,
-  Modflow6ObsUnit, ModflowTimeUnit, PestPropertiesUnit;
+  Modflow6ObsUnit, ModflowTimeUnit, PestPropertiesUnit, RbwParser;
 
 resourcestring
   StrInvalidObservation = 'Invalid observation time in the %0:s observation: '
@@ -874,12 +874,27 @@ begin
 end;
 
 procedure TObservationFactor.SetFactor(const Value: string);
+var
+  Compiler: TRbwParser;
 begin
   if FFactor.Formula <> Value then
   begin
     InvalidateModel;
+    Compiler := nil;
+    if frmGoPhast.ModelSelection in ModflowSelection then
+    begin
+      Compiler := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
+    end
+    else if frmGoPhast.ModelSelection in SutraSelection then
+    begin
+      Compiler := frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes;
+    end
+    else
+    begin
+      Assert(False)
+    end;
     frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
-      FFactor, Value, frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
+      FFactor, Value, Compiler,
       nil, nil, self);
   end;
 end;

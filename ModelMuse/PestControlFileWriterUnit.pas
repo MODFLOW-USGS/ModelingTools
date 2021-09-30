@@ -71,7 +71,7 @@ uses
   ModflowRiverWriterUnit, ModflowGHB_WriterUnit, ModflowStrWriterUnit,
   ModflowPackagesUnit, DataSetUnit, PilotPointDataUnit, System.Math,
   QuadTreeClass, PointCollectionUnit, System.Generics.Collections, FastGEO,
-  System.Generics.Defaults;
+  System.Generics.Defaults, System.IOUtils;
 
 resourcestring
   StrNoParametersHaveB = 'No parameters have been defined';
@@ -118,6 +118,9 @@ resourcestring
   StrPESTAllowsAMaximu = 'PEST allows a maximum of 10 parameters to be subje' +
   'ct to absolute change limits (ABSPARMAX). You specified absolute change l' +
   'imits in %d parameters. The remainder will be skipped.';
+  StrInvalidPESTDelimit = 'Invalid PEST delimiter';
+  StrUseOfAsADeli = 'Use of "@" as a delimiter will cause errors with SUTRA ' +
+  'models. Fix this is the PEST Properties dialog box.';
 
 { TPestControlFileWriter }
 
@@ -1296,6 +1299,9 @@ begin
 end;
 
 function TPestControlFileWriter.WriteFile(const AFileName: string; SetNOPTMAX: Boolean = False): string;
+var
+  PestProperties: TPestProperties;
+  ArraysDir: string;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoParametersHaveB);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoObservationGroup);
@@ -1309,10 +1315,29 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidParameterVa);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrPredictionObservati);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyParameters);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPESTDelimit);
 
   if not Model.PestUsed then
   begin
     Exit;
+  end;
+
+  ArraysDir := IncludeTrailingPathDelimiter(ExtractFileDir(AFileName)) + 'arrays';
+  if not TDirectory.Exists(ArraysDir) then
+  begin
+    TDirectory.CreateDirectory(ArraysDir);
+  end;
+
+  if Model.ModelSelection in SutraSelection then
+  begin
+    PestProperties := Model.PestProperties;
+    if (PestProperties.TemplateCharacter = '@')
+      or (PestProperties.ExtendedTemplateCharacter = '@')
+      or (PestProperties.ArrayTemplateCharacter = '@') then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrInvalidPESTDelimit,
+        StrUseOfAsADeli)
+    end;
   end;
 
   FNameOfFile := FileName(AFileName);

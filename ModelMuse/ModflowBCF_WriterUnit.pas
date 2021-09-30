@@ -330,7 +330,9 @@ begin
   for DataArrayIndex := 0 to FPestDataArrays.Count - 1 do
   begin
     ADataArray := FPestDataArrays[DataArrayIndex];
-    WritePestZones(ADataArray, FInputFileName, Format(StrBCFd, [DataArrayIndex+1]));
+    WritePestZones(ADataArray, FInputFileName,
+      Format(StrBCFd, [DataArrayIndex+1]),
+      Format('BC%d', [DataArrayIndex+1]));
   end;
 end;
 

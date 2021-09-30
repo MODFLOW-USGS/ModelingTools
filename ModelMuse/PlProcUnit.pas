@@ -66,10 +66,11 @@ type
     FKrigingFactorsFile: string;
     FDataArrayID: string;
     FPilotPointFiles: TPilotPointFiles;
+    FPrefix: string;
     procedure WriteTemplateFile(const AFileName: string;
       ScriptChoice: TScriptChoice);
     procedure WriteValuesFile(const AFileName: string);
-    procedure WritePilotPointsFile(const AFileName: string);
+    procedure WritePilotPointsFile(const AFileName, Prefix: string);
     procedure AddParametersToPVAL;
     procedure ReadPilotPoints;
     procedure ReadDiscretization(const AFileName: string);
@@ -81,7 +82,7 @@ type
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(var AFileName: string; DataArray: TDataArray;
-      const DataArrayID: string);
+      const DataArrayID: string; Prefix: string = '');
   end;
 
   // Write a 2D CLIST file of SUTRA nodes for PEST
@@ -175,6 +176,7 @@ type
     DataArray: TDataArray;
     PilotPointFiles: TPilotPointFiles;
     ID: string;
+    Prefix: string;
     constructor Create;
     destructor Destroy; override;
   end;
@@ -216,7 +218,7 @@ type
     FMesh: TSutraMesh3D;
     FUsedParamList: TStringList;
     procedure WriteAFile(ScriptChoice: TScriptChoice);
-    procedure WritePilotPointFiles;
+    procedure WritePilotPointFiles(Prefix: string);
     procedure GetUsedParameters;
     procedure WriteKrigingFactors;
     procedure ReadPilotPoints;
@@ -229,7 +231,7 @@ type
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
-    procedure WriteFiles(var AFileName: string; const DataArrayName: string; ID: string);
+    procedure WriteFiles(var AFileName: string; const DataArrayName: string; ID, Prefix: string);
   end;
 
 implementation
@@ -647,11 +649,12 @@ begin
 end;
 
 procedure TParameterZoneWriter.WriteFile(var AFileName: string;
-  DataArray: TDataArray; const DataArrayID: string);
+  DataArray: TDataArray; const DataArrayID: string; Prefix: string = '');
 var
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
 begin
+  FPrefix := Prefix;
   FDataArray := DataArray;
   FDataArrayID := DataArrayID;
   FParamDataArray := Model.DataArrayManager.GetDataSetByName
@@ -675,7 +678,7 @@ begin
     FPNames.Sorted := True;
 
     WriteValuesFile(AFileName);
-    WritePilotPointsFile(AFileName);
+    WritePilotPointsFile(AFileName, Prefix);
     if FPilotPointsUsed then
     begin
       WriteKrigingFactorsScript(AFileName);
@@ -871,7 +874,8 @@ begin
         FileProperties := FPilotPointFiles[PPIndex];
         if FileProperties.Parameter = AParam then
         begin
-          WriteString(Format('PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &', [PPIndex+1]));
+          WriteString(Format('%0:sPilotPoints%1:d = read_list_file(skiplines=0,dimensions=2, &',
+            [FPrefix, PPIndex+1]));
           NewLine;
           PListName := Format('%0:s_%1:d',
             [AParam.ParameterName, FileProperties.Layer + 1]);
@@ -901,7 +905,7 @@ begin
   end;
 end;
 
-procedure TParameterZoneWriter.WritePilotPointsFile(const AFileName: string);
+procedure TParameterZoneWriter.WritePilotPointsFile(const AFileName, Prefix: string);
 var
   PilotPointWriter: TPilotPointWriter;
   PriorCount: Integer;
@@ -910,7 +914,7 @@ begin
   try
     PriorCount := FPilotPointFiles.Count;
     PilotPointWriter.WriteFile(AFileName, FDataArray, FPilotPointFiles,
-      FDataArrayID);
+      FDataArrayID, Prefix);
     FPilotPointsUsed := FPilotPointFiles.Count > PriorCount;
     FDataArray.PilotPointsUsed := FPilotPointsUsed
   finally
@@ -1721,7 +1725,7 @@ var
           [PListName, 5]));
 //          Inc(ColIndex);
         NewLine;
-        WriteString(Format('  id_type=''indexed'',file=''%s'')',
+        WriteString(Format('  id_type=''character'',file=''%s'')',
           [ExtractFileName(FileProperties.FileName)]));
         NewLine;
       end;
@@ -2285,7 +2289,7 @@ begin
     PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
     try
       PilotPointWriter.WriteFile(FFileName, Porosity, FPorosityPilotPointFiles,
-        'POR');
+        'POR', 'POR_');
     finally
       PilotPointWriter.Free;
     end;
@@ -2299,7 +2303,7 @@ begin
       PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
       try
         PilotPointWriter.WriteFile(FFileName, Thickness, FThicknessPilotPointFiles,
-          'Z');
+          'Z', 'Z_');
       finally
         PilotPointWriter.Free;
       end;
@@ -2570,7 +2574,7 @@ begin
 end;
 
 procedure TSutraData15BScriptWriter.GetUsedParameters;
-  procedure CreateDataRecord(DataArray: TDataArray; const ID: string);
+  procedure CreateDataRecord(DataArray: TDataArray; const ID, Prefix: string);
   var
     DataRecord: TDataRecord;
   begin
@@ -2580,6 +2584,7 @@ procedure TSutraData15BScriptWriter.GetUsedParameters;
       FDataRecordList.Add(DataRecord);
       DataRecord.DataArray := DataArray;
       DataRecord.ID := ID;
+      DataRecord.Prefix := Prefix;
     end;
   end;
 var
@@ -2605,7 +2610,7 @@ begin
     else Assert(False);
   end;
 //    DataRoot := 'PMAX';
-  CreateDataRecord(DataArray,  'PMAX');
+  CreateDataRecord(DataArray,  'PMAX', 'PMX');
   {$ENDREGION}
 
   {$REGION 'PMID'}
@@ -2624,7 +2629,7 @@ begin
   begin
     DataArray := nil;
   end;
-  CreateDataRecord(DataArray, 'PMID');
+  CreateDataRecord(DataArray, 'PMID', 'PMD');
   {$ENDREGION}
 
   {$REGION 'PMIN'}
@@ -2636,12 +2641,12 @@ begin
       DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);
     else Assert(False);
   end;
-  CreateDataRecord(DataArray, 'PMIN');
+  CreateDataRecord(DataArray, 'PMIN', 'PMN');
   {$ENDREGION}
 
 {$REGION 'ANGLE1'}
   DataArray := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
-  CreateDataRecord(DataArray, 'ANGLE1');
+  CreateDataRecord(DataArray, 'ANGLE1', 'AN1');
 {$ENDREGION}
 
 {$REGION 'ANGLE2'}
@@ -2653,7 +2658,7 @@ begin
   begin
     DataArray := nil;
   end;
-  CreateDataRecord(DataArray, 'ANGLE2');
+  CreateDataRecord(DataArray, 'ANGLE2', 'AN2');
 {$ENDREGION}
 
 {$REGION 'ANGLE3'}
@@ -2665,12 +2670,12 @@ begin
   begin
     DataArray := nil;
   end;
-  CreateDataRecord(DataArray, 'ANGLE3');
+  CreateDataRecord(DataArray, 'ANGLE3', 'AN3');
 {$ENDREGION}
 
 {$REGION 'ALMAX'}
   DataArray := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
-  CreateDataRecord(DataArray, 'ALMAX');
+  CreateDataRecord(DataArray, 'ALMAX', 'AMX');
 {$ENDREGION}
 
 {$REGION 'ALMID'}
@@ -2682,17 +2687,17 @@ begin
   begin
     DataArray := nil;
   end;
-  CreateDataRecord(DataArray, 'ALMID');
+  CreateDataRecord(DataArray, 'ALMID', 'AMD');
 {$ENDREGION}
 
 {$REGION 'ALMIN'}
   DataArray := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
-  CreateDataRecord(DataArray, 'ALMIN');
+  CreateDataRecord(DataArray, 'ALMIN', 'AMN');
 {$ENDREGION}
 
 {$REGION 'ATMAX'}
   DataArray := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
-  CreateDataRecord(DataArray, 'ATMAX');
+  CreateDataRecord(DataArray, 'ATMAX', 'TMX');
 {$ENDREGION}
 
 {$REGION 'ATMID'}
@@ -2704,12 +2709,12 @@ begin
   begin
     DataArray := nil;
   end;
-  CreateDataRecord(DataArray, 'ATMID');
+  CreateDataRecord(DataArray, 'ATMID', 'TMD');
 {$ENDREGION}
 
 {$REGION 'ATMIN'}
   DataArray := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
-  CreateDataRecord(DataArray, 'ATMIN');
+  CreateDataRecord(DataArray, 'ATMIN', 'TMN');
 {$ENDREGION}
 
   for Index := 0 to FDataRecordList.Count - 1 do
@@ -2773,7 +2778,7 @@ var
         WriteString(Format('  plist=''%0:s'';column=%1:d, &',
           [PListName, 5]));
         NewLine;
-        WriteString(Format('  id_type=''indexed'',file=''%s'')',
+        WriteString(Format('  id_type=''character'',file=''%s'')',
           [ExtractFileName(FileProperties.FileName)]));
         NewLine;
       end;
@@ -2923,7 +2928,7 @@ var
         ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
         try
           TempFile := ChangeFileExt(FFileName, '');
-          ParameterZoneWriter.WriteFile(TempFile, DataArray, DataArray.Name);
+          ParameterZoneWriter.WriteFile(TempFile, DataArray, DataArray.Name, DataRoot+ '_');
         finally
           ParameterZoneWriter.Free;
         end;
@@ -3435,7 +3440,7 @@ begin
       PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
       try
         PilotPointWriter.WriteFile(FFileName, ADataRec.DataArray,
-          ADataRec.PilotPointFiles, ADataRec.Id);
+          ADataRec.PilotPointFiles, ADataRec.Id, ADataRec.Prefix);
       finally
         PilotPointWriter.Free;
       end;
@@ -3541,7 +3546,7 @@ var
           [PListName, 5]));
 //          Inc(ColIndex);
         NewLine;
-        WriteString(Format('  id_type=''indexed'',file=''%s'')',
+        WriteString(Format('  id_type=''character'',file=''%s'')',
           [ExtractFileName(FileProperties.FileName)]));
         NewLine;
       end;
@@ -3872,7 +3877,7 @@ begin
 end;
 
 procedure TSutraInitCondScriptWriter.WriteFiles(var AFileName: string;
-  const DataArrayName: string; ID: string);
+  const DataArrayName: string; ID, Prefix: string);
 var
   PLPROC_Location: string;
 begin
@@ -3888,7 +3893,7 @@ begin
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
   GetUsedParameters;
-  WritePilotPointFiles;
+  WritePilotPointFiles(Prefix);
   WriteKrigingFactors;
 
   WriteAFile(scWriteScript);
@@ -4001,7 +4006,7 @@ begin
   end;
 end;
 
-procedure TSutraInitCondScriptWriter.WritePilotPointFiles;
+procedure TSutraInitCondScriptWriter.WritePilotPointFiles(Prefix: string);
 var
   PilotPointWriter: TPilotPointWriter;
 begin
@@ -4010,7 +4015,7 @@ begin
     PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
     try
       PilotPointWriter.WriteFile(FFileName, FDataArray,
-        FPilotPointFiles, FID);
+        FPilotPointFiles, FID, Prefix);
     finally
       PilotPointWriter.Free;
     end;

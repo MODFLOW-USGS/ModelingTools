@@ -129,7 +129,7 @@ type
       ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer = 0;
       ChangeSign: Boolean = False); overload;
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
-      const DataArrayID: string);
+      const DataArrayID, Prefix: string);
     procedure OpenTempFile(const FileName: string);
     procedure CloseTempFile;
     property NameOfFile: string read FNameOfFile;
@@ -10166,7 +10166,7 @@ begin
 end;
 
 procedure TCustomFileWriter.WritePestZones(DataArray: TDataArray;
-  InputFileName: string; const DataArrayID: string);
+  InputFileName: string; const DataArrayID, Prefix: string);
 var
   PestZoneWriter: TParameterZoneWriter;
 begin
@@ -10174,7 +10174,7 @@ begin
   begin
     PestZoneWriter := TParameterZoneWriter.Create(Model, etExport);
     try
-      PestZoneWriter.WriteFile(InputFileName, DataArray, DataArrayID);
+      PestZoneWriter.WriteFile(InputFileName, DataArray, DataArrayID, Prefix);
     finally
       PestZoneWriter.Free;
     end;

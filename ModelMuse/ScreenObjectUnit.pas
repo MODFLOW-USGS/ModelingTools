@@ -3460,6 +3460,7 @@ view. }
     // to do most of the work.
     procedure AssignValuesToDataSet(const DataSet: TDataArray;
       AModel: TBaseModel; UseLgrEdgeCells: TLgrCellTreatment); virtual;
+    // @name is used with MODFLOW 6 lakes and SUTRA PEST observations.
     procedure AssignValuesWithCellList(Formula: String;
       AModel: TBaseModel; CellList: TCellLocationList; Results: TRealList;
       var Annotation: string; DataIdentifier: string);
@@ -32002,10 +32003,24 @@ var
   CellLocation: TCellLocation;
 
 begin
+  // This procedure is used with MODFLOW 6 lakes and SUTRA PEST observations.
+
   Results.Clear;
   Annotation := '';
 
-  Compiler := GetCompiler(dso3D, eaBlocks);
+  Compiler := nil;
+  if AModel.ModelSelection in ModflowSelection then
+  begin
+    Compiler := GetCompiler(dso3D, eaBlocks);
+  end
+  else if AModel.ModelSelection in SutraSelection then
+  begin
+    Compiler := GetCompiler(dso3D, eaNodes);
+  end
+  else
+  begin
+    Assert(False);
+  end;
 
   ErrorFunction := Formula;
   try

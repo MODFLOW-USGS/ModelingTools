@@ -164,7 +164,7 @@ begin
     end;
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'SS');
-    WritePestZones(DataArray, FInputFileName, STO_SS);
+    WritePestZones(DataArray, FInputFileName, STO_SS, 'SS');
   end
   else
   begin
@@ -213,7 +213,7 @@ begin
   frmProgressMM.AddMessage('  Writing SY');
   DataArray := Model.DataArrayManager.GetDataSetByName(rsSpecificYield);
   WriteMf6_DataSet(DataArray, 'SY');
-  WritePestZones(DataArray, FInputFileName, STO_SY);
+  WritePestZones(DataArray, FInputFileName, STO_SY, 'SY');
 end;
 
 end.

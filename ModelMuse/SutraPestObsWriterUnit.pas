@@ -4,7 +4,8 @@ interface
 
 uses
   CustomModflowWriterUnit, PhastModelUnit, System.SysUtils, ScreenObjectUnit,
-  System.Classes, SutraPestObsUnit, System.Generics.Collections;
+  System.Classes, SutraPestObsUnit, System.Generics.Collections,
+  SutraOptionsUnit, SutraTimeScheduleUnit;
 
 type
   TExportType = (etInstructions, etExtractedValues);
@@ -21,6 +22,11 @@ type
     FDerivedObsList: TStringList;
     FExportType: TExportType;
     FSutraFluxObs: TSutraFluxObs;
+    FSimulationType: TSimulationType;
+    FTimeOptions: TSutraTimeOptions;
+    FSchedule1: TSutraTimeSchedule;
+    FSutraTimeChoice: TSutraTimeChoice;
+    FInitialTime: Double;
     procedure Evaluate;
     procedure WriteOptions;
     procedure WriteObservationsFileNames;
@@ -52,9 +58,9 @@ uses
   GoPhastTypes, SutraMeshUnit, FastGEO, ModelMuseUtilities,
   PestObsUnit, ObservationComparisonsUnit, frmErrorsAndWarningsUnit,
   SutraBoundariesUnit, FluxObservationUnit, RealListUnit, ModflowCellUnit,
-  SutraOptionsUnit, SutraGeneralBoundaryUnit, SutraBoundaryUnit,
+  SutraGeneralBoundaryUnit, SutraBoundaryUnit,
   SutraGenTransBoundUnit, IntListUnit, ObsInterfaceUnit,
-  PestObsExtractorInputWriterUnit, SutraTimeScheduleUnit;
+  PestObsExtractorInputWriterUnit;
 
 resourcestring
   StrTheObservationComp = 'The observation comparison item "%s" could not be' +
@@ -350,6 +356,19 @@ begin
   begin
     Exit;
   end;
+  FSimulationType := (Model as TPhastModel).SutraOptions.SimulationType;
+  FTimeOptions := (Model as TPhastModel).SutraTimeOptions;
+  FSchedule1 := FTimeOptions.Schedules[0].Schedule;
+  FSutraTimeChoice := FSchedule1.SutraTimeChoice;
+  if FSutraTimeChoice = stcAbsolute then
+  begin
+    FInitialTime := FSchedule1.InitialTime;
+  end
+  else
+  begin
+    FInitialTime := 0.0;
+  end;
+
   Evaluate;
 
   FExportType := etInstructions;
@@ -416,6 +435,7 @@ var
   ABoundary: TSutraGeneralFlowBoundary;
   NodeStart: Integer;
   NodeStarts: TList<Integer>;
+  ObsTime: Double;
   procedure UpdateNodeStart(AScreenObject: TScreenObject);
   var
     CellList: TCellAssignmentList;
@@ -559,7 +579,16 @@ begin
                 WriteString(IntToStr(ObsIndex));
                 WriteString('_');
                 WriteString(IntToStr(NodeNumber));
-                WriteFloat(GenFlowObs.Time);
+                if FSimulationType in
+                  [stSteadyFlowSteadyTransport, stSteadyFlowTransientTransport] then
+                begin
+                  ObsTime := FInitialTime;
+                end
+                else
+                begin
+                  ObsTime := GenFlowObs.Time;
+                end;
+                WriteFloat(ObsTime);
                 NewLine;
               end;
             end;
@@ -585,7 +614,15 @@ begin
                 WriteString(IntToStr(ObsIndex));
                 WriteString('_');
                 WriteString(IntToStr(NodeNumber));
-                WriteFloat(GenFlowObs.Time);
+                if FSimulationType = stSteadyFlowSteadyTransport then
+                begin
+                  ObsTime := FInitialTime;
+                end
+                else
+                begin
+                  ObsTime := GenFlowObs.Time;
+                end;
+                WriteFloat(ObsTime);
                 NewLine;
               end;
             end;
@@ -724,6 +761,7 @@ var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
   ABoundary: TSutraGeneralTransportBoundary;
+  ObsTime: Double;
   procedure UpdateNodeStart(AScreenObject: TScreenObject);
   var
     CellList: TCellAssignmentList;
@@ -863,7 +901,15 @@ begin
                 WriteString(IntToStr(ObsIndex));
                 WriteString('_');
                 WriteString(IntToStr(NodeNumber));
-                WriteFloat(GenTransObs.Time);
+                if FSimulationType = stSteadyFlowSteadyTransport then
+                begin
+                  ObsTime := FInitialTime;
+                end
+                else
+                begin
+                  ObsTime := GenTransObs.Time;
+                end;
+                WriteFloat(ObsTime);
                 NewLine;
               end;
             end;
@@ -998,25 +1044,7 @@ var
   StateObs: TSutraStateObsItem;
   ID: string;
   ObsTime: double;
-  SimulationType: TSimulationType;
-  TimeOptions: TSutraTimeOptions;
-  SutraTimeChoice: TSutraTimeChoice;
-  InitialTime: double;
 begin
-  SimulationType := Model.SutraOptions.SimulationType;
-  TimeOptions := (AModel as TPhastModel).SutraTimeOptions;
-  SutraTimeChoice := TimeOptions.Schedules[0].SutraTimeChoice;
-  if SutraTimeChoice = stcAbsolute then
-  begin
-    InitialTime := TimeOptions.Schedules[0].InitialTime;
-  end
-  else
-  begin
-    InitialTime := 0.0;
-  end;
-
-  { (stSteadyFlowSteadyTransport,
-    stSteadyFlowTransientTransport, stTransientFlowTransientTransport);}
   for ObjectIndex := 0 to FSutraObsObjects.Count - 1 do
   begin
     AScreenObject := FSutraObsObjects[ObjectIndex];
@@ -1034,26 +1062,26 @@ begin
           0:
             begin
               WriteString(' P');
-              if SimulationType in
+              if FSimulationType in
                 [stSteadyFlowSteadyTransport, stSteadyFlowTransientTransport] then
               begin
-                ObsTime := InitialTime;
+                ObsTime := FInitialTime;
               end;
             end;
           1:
             begin
               WriteString(' U');
-              if SimulationType = stSteadyFlowSteadyTransport then
+              if FSimulationType = stSteadyFlowSteadyTransport then
               begin
-                ObsTime := InitialTime;
+                ObsTime := FInitialTime;
               end;
             end;
           2:
             begin
               WriteString(' S');
-              if SimulationType = stSteadyFlowSteadyTransport then
+              if FSimulationType = stSteadyFlowSteadyTransport then
               begin
-                ObsTime := InitialTime;
+                ObsTime := FInitialTime;
               end;
             end;
         end;
@@ -1128,6 +1156,7 @@ var
   SutraStateObs: TSutraStateObservations;
   TimeIndex: Integer;
   StateObs: TSutraStateObsItem;
+  ObsTime: Double;
 begin
   CellList := TCellAssignmentList.Create;
   try
@@ -1186,7 +1215,16 @@ begin
               WriteString('    OBSNAME ');
               StateObs.ExportedName := StateObs.Name;
               WriteString(StateObs.Name);
-              WriteFloat(StateObs.Time);
+              if FSimulationType in
+                [stSteadyFlowSteadyTransport, stSteadyFlowTransientTransport] then
+              begin
+                ObsTime := FInitialTime;
+              end
+              else
+              begin
+                ObsTime := StateObs.Time;
+              end;
+              WriteFloat(ObsTime);
               WriteString(' PRINT');
               NewLine;
             end;
@@ -1379,6 +1417,7 @@ var
   LineIndex: Integer;
   NodeIndex: Integer;
   TimeIndex: Integer;
+  ObsTime: Double;
   procedure GetNodeNumbers(AScreenObject: TScreenObject);
   var
     CellList: TCellAssignmentList;
@@ -1498,7 +1537,15 @@ begin
         WriteString(IntToStr(NodeNumber));
         WriteString('_');
         WriteString(IntToStr(TimeIndex));
-        WriteFloat(TimeList[TimeIndex]);
+        if FSimulationType = stSteadyFlowSteadyTransport then
+        begin
+          ObsTime := FInitialTime;
+        end
+        else
+        begin
+          ObsTime := TimeList[TimeIndex];
+        end;
+        WriteFloat(ObsTime);
         NewLine;
       end;
     end;
@@ -1643,6 +1690,7 @@ var
   NodeNumberDictionary: TLineIndexDictionary;
   NodeIndex: Integer;
   TimeIndex: Integer;
+  ObsTime: Double;
   procedure GetNodeNumbers(AScreenObject: TScreenObject);
   var
     CellList: TCellAssignmentList;
@@ -1763,7 +1811,16 @@ begin
         WriteString(IntToStr(NodeNumber));
         WriteString('_');
         WriteString(IntToStr(TimeIndex));
-        WriteFloat(TimeList[TimeIndex]);
+        if FSimulationType in
+          [stSteadyFlowSteadyTransport, stSteadyFlowTransientTransport] then
+        begin
+          ObsTime := FInitialTime;
+        end
+        else
+        begin
+          ObsTime := TimeList[TimeIndex];
+        end;
+        WriteFloat(ObsTime);
         NewLine;
       end;
 
@@ -1782,7 +1839,15 @@ begin
         WriteString(IntToStr(NodeNumber));
         WriteString('_');
         WriteString(IntToStr(TimeIndex));
-        WriteFloat(TimeList[TimeIndex]);
+        if FSimulationType = stSteadyFlowSteadyTransport then
+        begin
+          ObsTime := FInitialTime;
+        end
+        else
+        begin
+          ObsTime := TimeList[TimeIndex];
+        end;
+        WriteFloat(ObsTime);
         NewLine;
       end;
     end;
@@ -1975,6 +2040,7 @@ var
   NodeIndex: Integer;
   TimeList: TRealList;
   TimeIndex: Integer;
+  ObsTime: Double;
   procedure GetNodeNumbers(AScreenObject: TScreenObject);
   var
     CellList: TCellAssignmentList;
@@ -2093,7 +2159,16 @@ begin
         WriteString(IntToStr(NodeNumber));
         WriteString('_');
         WriteString(IntToStr(TimeIndex));
-        WriteFloat(TimeList[TimeIndex]);
+        if FSimulationType in
+          [stSteadyFlowSteadyTransport, stSteadyFlowTransientTransport] then
+        begin
+          ObsTime := FInitialTime;
+        end
+        else
+        begin
+          ObsTime := TimeList[TimeIndex];
+        end;
+        WriteFloat(ObsTime);
         NewLine;
       end;
 
@@ -2112,7 +2187,15 @@ begin
         WriteString(IntToStr(NodeNumber));
         WriteString('_');
         WriteString(IntToStr(TimeIndex));
-        WriteFloat(TimeList[TimeIndex]);
+        if FSimulationType = stSteadyFlowSteadyTransport then
+        begin
+          ObsTime := FInitialTime;
+        end
+        else
+        begin
+          ObsTime := TimeList[TimeIndex];
+        end;
+        WriteFloat(ObsTime);
         NewLine;
       end;
     end;

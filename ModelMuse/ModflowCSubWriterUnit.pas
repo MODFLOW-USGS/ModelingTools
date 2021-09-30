@@ -641,25 +641,25 @@ begin
   end;
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'CG_SKE_CR');
-  WritePestZones(DataArray, FInputFileName, CSUB_CG_SKE_CR);
+  WritePestZones(DataArray, FInputFileName, CSUB_CG_SKE_CR, 'CSC');
 
   frmProgressMM.AddMessage('  Writing CG_THETA');
   DataArray := Model.DataArrayManager.GetDataSetByName(KInitialCoarsePoros);
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'CG_THETA');
-  WritePestZones(DataArray, FInputFileName, CSUB_CG_THETA);
+  WritePestZones(DataArray, FInputFileName, CSUB_CG_THETA, 'CCT');
 
   frmProgressMM.AddMessage('  Writing SGM');
   DataArray := Model.DataArrayManager.GetDataSetByName(KMoistSpecificGravi);
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'SGM');
-  WritePestZones(DataArray, FInputFileName, CCUB_SGM);
+  WritePestZones(DataArray, FInputFileName, CCUB_SGM, 'SGM');
 
   frmProgressMM.AddMessage('  Writing SGS');
   DataArray := Model.DataArrayManager.GetDataSetByName(KSaturatedSpecificG);
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'SGS');
-  WritePestZones(DataArray, FInputFileName, CSUB_SGS);
+  WritePestZones(DataArray, FInputFileName, CSUB_SGS, 'SGS');
 
   WriteEndGridData;
 end;

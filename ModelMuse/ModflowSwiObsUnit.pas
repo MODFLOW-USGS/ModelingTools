@@ -50,12 +50,12 @@ type
     procedure SetStatistic(const Value: double);
     procedure SetPestObsItem(const Value: TSwiPestObsItem);
   protected
-    constructor Create(Collection: TCollection); override;
-    destructor Destroy; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
     function ScreenObject: TObject;
   public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent); override;
   published

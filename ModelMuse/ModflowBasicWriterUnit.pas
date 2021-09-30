@@ -583,7 +583,7 @@ begin
     DataArray := Model.DataArrayManager.GetDataSetByName(rsModflow_Initial_Head);
     Assert(DataArray <> nil);
     WriteDataSet(DataSetName, DataArray);
-    WritePestZones(DataArray, FInputFileName, IC_STRT);
+    WritePestZones(DataArray, FInputFileName, IC_STRT, 'STR');
     Model.DataArrayManager.AddDataSetToCache(DataArray);
     Model.DataArrayManager.CacheDataArrays;
   end

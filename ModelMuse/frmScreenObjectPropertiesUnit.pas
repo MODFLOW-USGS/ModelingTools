@@ -26358,6 +26358,7 @@ var
   Edit: TScreenObjectDataEdit;
   DataArrayManager: TDataArrayManager;
   ASeries: TObSeries;
+  ModelSelection: TModelSelection;
 //  PestParamAllowed: Boolean;
 begin
   inherited;
@@ -26405,8 +26406,22 @@ begin
     begin
       Orientation := dso3D;
     end;
+    ModelSelection := frmGoPhast.ModelSelection;
+    if ModelSelection in ModflowSelection then
+    begin
     // All the MODFLOW boundary conditions are evaluated at blocks.
-    EvaluatedAt := eaBlocks;
+      EvaluatedAt := eaBlocks;
+    end
+    else if ModelSelection in SutraSelection then
+    begin
+    // All the SUTRA boundary conditions are evaluated at nodes.
+      EvaluatedAt := eaNodes;
+    end
+    else
+    begin
+      EvaluatedAt := eaBlocks;
+    end;
+
 
     DataArrayManager := frmGoPhast.PhastModel.DataArrayManager;
     for Index := 0 to DataArrayManager.DataSetCount - 1 do

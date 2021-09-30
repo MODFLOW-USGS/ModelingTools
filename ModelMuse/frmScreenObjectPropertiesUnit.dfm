@@ -12,7 +12,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitTop = -81
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -22,7 +21,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabModflowBoundaryConditions
+    ActivePage = tabSutraFeatures
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -5370,8 +5369,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 ExplicitWidth = 573
                 ExplicitHeight = 105
                 inherited gbGage: TGroupBox
-                  Width = 566
-                  ExplicitWidth = 566
+                  Width = 684
+                  ExplicitWidth = 684
                   inherited cbGagStandard: TCheckBox
                     Left = 5
                     OnClick = frameLakcbGagStandardClick
@@ -5388,22 +5387,19 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     ExplicitLeft = 5
                   end
                   inherited cbGage4: TCheckBox
-                    Width = 560
+                    Width = 678
                     OnClick = frameLakcbGage4Click
-                    ExplicitWidth = 679
+                    ExplicitWidth = 678
                   end
                 end
               end
               inherited tabBathymetry: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 105
+                ExplicitHeight = 293
                 inherited rdgLakeTable: TRbwDataGrid4
-                  Width = 573
-                  Height = 0
+                  Height = 188
                   OnEndUpdate = frameLakrdgLakeTableEndUpdate
-                  ExplicitWidth = 573
-                  ExplicitHeight = 0
+                  ExplicitHeight = 188
                   ColWidths = (
                     64
                     64
@@ -5563,8 +5559,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     24)
                 end
                 inherited pnlBathChoice: TPanel
-                  Width = 573
-                  ExplicitWidth = 573
                   inherited rgBathChoice: TRadioGroup
                     OnClick = frameLakrgBathChoiceClick
                   end
@@ -14071,7 +14065,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 605
         Height = 476
-        ActivePage = jvspSutraSpecUObs
+        ActivePage = jvspSutraSpecPresObs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplSutraFeaturesChange
@@ -15175,11 +15169,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 19
             end
             inherited rdgObservationGroups: TRbwDataGrid4
-              Top = 33
+              Top = 34
               Width = 599
               Height = 441
               OnStateChange = frameSutraSpecUObsrdgObservationGroupsStateChange
-              ExplicitTop = 33
+              ExplicitTop = 34
               ExplicitWidth = 599
               ExplicitHeight = 441
             end

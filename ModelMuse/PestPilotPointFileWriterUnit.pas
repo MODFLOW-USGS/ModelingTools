@@ -20,7 +20,7 @@ type
     class function Extension: string; override;
   public
     procedure WriteFile(AFileName: string; DataArray: TDataArray;
-      PilotPointFiles: TPilotPointFiles; const DataArrayID: string);
+      PilotPointFiles: TPilotPointFiles; const DataArrayID, Prefix: string);
   end;
 
 implementation
@@ -67,7 +67,7 @@ begin
 end;
 
 procedure TPilotPointWriter.WriteFile(AFileName: string; DataArray: TDataArray;
-  PilotPointFiles: TPilotPointFiles; const DataArrayID: string);
+  PilotPointFiles: TPilotPointFiles; const DataArrayID, Prefix: string);
 var
   ParamList: TList<TModflowSteadyParameter>;
   ParamIndex: Integer;
@@ -254,8 +254,8 @@ begin
           FileProperties.ParameterIndex := ParamIndex+1;
           FileProperties.FileName := AFileName;
           FileProperties.Layer := LayerIndex;
-          FileProperties.ParamFamily := Format('Fam%d_',
-            [PilotPointFiles.Count+1 + + Model.PilotPointData.Count]);
+          FileProperties.ParamFamily := Format('%s%d_',
+            [Prefix, PilotPointFiles.Count+1 + + Model.PilotPointData.Count]);
 //          FileProperties.ParamFamily := Format('%0:s_%1:d_%2:d_',
 //            [DataArrayID, ParamIndex+1, LayerIndex+1]);
 

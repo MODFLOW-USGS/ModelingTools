@@ -695,6 +695,128 @@ var
       end;
     end;
   end;
+  procedure InternalWrite15B;
+  var
+    ElementIndex: Integer;
+  begin
+    WriteCommentLine('Data set 15B');
+    for ElementIndex := 0 to ElementList.Count - 1 do
+    begin
+      ElData := ElementList[ElementIndex];
+      Assert(ElData.Number = ElementIndex);
+      WriteInteger(ElData.Number+1);
+      WriteInteger(ElData.LREG);
+      WriteFloat(ElData.PMAX);
+      if FMesh.MeshType = mt3D then
+      begin
+        WriteFloat(ElData.PMID);
+      end;
+      WriteFloat(ElData.PMIN);
+      WriteFloat(ElData.ANGLE1);
+      if FMesh.MeshType = mt3D then
+      begin
+        WriteFloat(ElData.ANGLE2);
+        WriteFloat(ElData.ANGLE3);
+      end;
+      WriteFloat(ElData.ALMAX);
+      if FMesh.MeshType = mt3D then
+      begin
+        WriteFloat(ElData.ALMID);
+      end;
+      WriteFloat(ElData.ALMIN);
+      WriteFloat(ElData.ATMAX);
+      if FMesh.MeshType = mt3D then
+      begin
+        WriteFloat(ElData.ATMID);
+      end;
+      WriteFloat(ElData.ATMIN);
+      NewLine;
+      case FMesh.MeshType of
+        mt2D, mtProfile:
+          begin
+            if ElData.PMAX < ElData.PMIN then
+            begin
+              case FOptions.TransportChoice of
+                tcSolute, tcEnergy:
+                  begin
+                    frmErrorsAndWarnings.AddWarning(Model,
+                      StrMaxPermMinPerm, IntToStr(ElData.Number+1));
+                  end;
+                tcSoluteHead:
+                  begin
+                    frmErrorsAndWarnings.AddWarning(Model,
+                      StrMaxKMinK, IntToStr(ElData.Number+1));
+                  end;
+                else Assert(False);
+              end;
+            end;
+
+//            if ElData.ALMAX < ElData.ALMIN then
+//            begin
+//
+//            end;
+//
+//            if ElData.ATMAX < ElData.ATMIN then
+//            begin
+//
+//            end;
+          end;
+        mt3D:
+          begin
+            if ElData.PMAX < ElData.PMID then
+            begin
+              case FOptions.TransportChoice of
+                tcSolute, tcEnergy:
+                  begin
+                    frmErrorsAndWarnings.AddWarning(Model,
+                      StrMaxPermMidPerm, IntToStr(ElData.Number+1));
+                  end;
+                tcSoluteHead:
+                  begin
+                    frmErrorsAndWarnings.AddWarning(Model,
+                      StrMaxKMidK, IntToStr(ElData.Number+1));
+                  end;
+                else Assert(False);
+              end;
+            end;
+            if ElData.PMID < ElData.PMIN then
+            begin
+              case FOptions.TransportChoice of
+                tcSolute, tcEnergy:
+                  begin
+                    frmErrorsAndWarnings.AddWarning(Model,
+                      StrMidPermMinPerm, IntToStr(ElData.Number+1));
+                  end;
+                tcSoluteHead:
+                  begin
+                    frmErrorsAndWarnings.AddWarning(Model,
+                      StrMidKMinK, IntToStr(ElData.Number+1));
+                  end;
+                else Assert(False);
+              end;
+            end;
+
+//            if ElData.ALMAX < ElData.ALMID then
+//            begin
+//
+//            end;
+//            if ElData.ALMID < ElData.ALMIN then
+//            begin
+//
+//            end;
+//
+//            if ElData.ATMAX < ElData.ATMID then
+//            begin
+//
+//            end;
+//            if ElData.ATMID < ElData.ATMIN then
+//            begin
+//
+//            end;
+          end;
+      end;
+    end
+  end;
 begin
   PestParametersUsed := False;
   MaxPerm := nil;
@@ -941,127 +1063,20 @@ begin
         finally
           CloseTempFile;
         end;
-      end;
+      end
+      else
+      begin
+        OpenTempFile(TempFileName);
+        try
+          InternalWrite15B;
+        finally
+          CloseTempFile;
+        end;
+      end
     end
     else
     begin
-      WriteCommentLine('Data set 15B');
-      for ElementIndex := 0 to ElementList.Count - 1 do
-      begin
-        ElData := ElementList[ElementIndex];
-        Assert(ElData.Number = ElementIndex);
-        WriteInteger(ElData.Number+1);
-        WriteInteger(ElData.LREG);
-        WriteFloat(ElData.PMAX);
-        if FMesh.MeshType = mt3D then
-        begin
-          WriteFloat(ElData.PMID);
-        end;
-        WriteFloat(ElData.PMIN);
-        WriteFloat(ElData.ANGLE1);
-        if FMesh.MeshType = mt3D then
-        begin
-          WriteFloat(ElData.ANGLE2);
-          WriteFloat(ElData.ANGLE3);
-        end;
-        WriteFloat(ElData.ALMAX);
-        if FMesh.MeshType = mt3D then
-        begin
-          WriteFloat(ElData.ALMID);
-        end;
-        WriteFloat(ElData.ALMIN);
-        WriteFloat(ElData.ATMAX);
-        if FMesh.MeshType = mt3D then
-        begin
-          WriteFloat(ElData.ATMID);
-        end;
-        WriteFloat(ElData.ATMIN);
-        NewLine;
-        case FMesh.MeshType of
-          mt2D, mtProfile:
-            begin
-              if ElData.PMAX < ElData.PMIN then
-              begin
-                case FOptions.TransportChoice of
-                  tcSolute, tcEnergy:
-                    begin
-                      frmErrorsAndWarnings.AddWarning(Model,
-                        StrMaxPermMinPerm, IntToStr(ElData.Number+1));
-                    end;
-                  tcSoluteHead:
-                    begin
-                      frmErrorsAndWarnings.AddWarning(Model,
-                        StrMaxKMinK, IntToStr(ElData.Number+1));
-                    end;
-                  else Assert(False);
-                end;
-              end;
-
-  //            if ElData.ALMAX < ElData.ALMIN then
-  //            begin
-  //
-  //            end;
-  //
-  //            if ElData.ATMAX < ElData.ATMIN then
-  //            begin
-  //
-  //            end;
-            end;
-          mt3D:
-            begin
-              if ElData.PMAX < ElData.PMID then
-              begin
-                case FOptions.TransportChoice of
-                  tcSolute, tcEnergy:
-                    begin
-                      frmErrorsAndWarnings.AddWarning(Model,
-                        StrMaxPermMidPerm, IntToStr(ElData.Number+1));
-                    end;
-                  tcSoluteHead:
-                    begin
-                      frmErrorsAndWarnings.AddWarning(Model,
-                        StrMaxKMidK, IntToStr(ElData.Number+1));
-                    end;
-                  else Assert(False);
-                end;
-              end;
-              if ElData.PMID < ElData.PMIN then
-              begin
-                case FOptions.TransportChoice of
-                  tcSolute, tcEnergy:
-                    begin
-                      frmErrorsAndWarnings.AddWarning(Model,
-                        StrMidPermMinPerm, IntToStr(ElData.Number+1));
-                    end;
-                  tcSoluteHead:
-                    begin
-                      frmErrorsAndWarnings.AddWarning(Model,
-                        StrMidKMinK, IntToStr(ElData.Number+1));
-                    end;
-                  else Assert(False);
-                end;
-              end;
-
-  //            if ElData.ALMAX < ElData.ALMID then
-  //            begin
-  //
-  //            end;
-  //            if ElData.ALMID < ElData.ALMIN then
-  //            begin
-  //
-  //            end;
-  //
-  //            if ElData.ATMAX < ElData.ATMID then
-  //            begin
-  //
-  //            end;
-  //            if ElData.ATMID < ElData.ATMIN then
-  //            begin
-  //
-  //            end;
-            end;
-        end;
-      end;
+      InternalWrite15B;
     end;
   finally
     ElementList.Free;

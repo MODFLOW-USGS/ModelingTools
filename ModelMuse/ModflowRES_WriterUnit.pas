@@ -389,7 +389,7 @@ begin
   DataArray := Model.DataArrayManager.GetDataSetByName(rsResBottom);
   Assert(DataArray <> nil);
   WriteArray(DataArray, 0, ' # Data Set 4: BRES', StrNoValueAssigned, 'BRES');
-  WritePestZones(DataArray, FInputFileName, StrBRES);
+  WritePestZones(DataArray, FInputFileName, StrBRES, 'BRE');
 end;
 
 procedure TModflowRES_Writer.WriteDataSet5;
@@ -399,7 +399,7 @@ begin
   DataArray := Model.DataArrayManager.GetDataSetByName(rsResKv);
   Assert(DataArray <> nil);
   WriteArray(DataArray, 0, ' # Data Set 5: HCres', StrNoValueAssigned, 'HCres');
-  WritePestZones(DataArray, FInputFileName, StrHCre);
+  WritePestZones(DataArray, FInputFileName, StrHCre, 'HCR');
 end;
 
 procedure TModflowRES_Writer.WriteDataSet6;
@@ -409,7 +409,7 @@ begin
   DataArray := Model.DataArrayManager.GetDataSetByName(rsResBedThickness);
   Assert(DataArray <> nil);
   WriteArray(DataArray, 0, ' # Data Set 6: Rbthck', StrNoValueAssigned, 'Rbthck');
-  WritePestZones(DataArray, FInputFileName, StrRbth);
+  WritePestZones(DataArray, FInputFileName, StrRbth, 'RBT');
 end;
 
 procedure TModflowRES_Writer.EvaluateStartAndEndHead(ResItem: TResItem; Reservoir: TResBoundary;
