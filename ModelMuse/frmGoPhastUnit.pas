@@ -2398,6 +2398,10 @@ resourcestring
   ' version of ModelMuse than was used to open the file. This version of Mod' +
   'elMuse that you are using to open the file is %s. Check the';
   StrMT3DCanOnlyBeUse = 'MT3D can only be used with structured grids.';
+  StrPESTMayNotBeAble = 'PEST may not be able to run properly because one of' +
+  ' the of the PEST delimiters is set to "@" which is also used by SUTRA in ' +
+  'a different way. You can change this on the Basic tab of the PEST Propert' +
+  'ies dialog box. ' + sLineBreak +'Do you want to try running SUTRA anyway?';
 
 //e with the version 1.0.9 of MODFLOW-NWT. ModelMuse can support either format. If you continue, ModelMuse will use the format for MODFLOW-NWT version 1.0.9. Do you want to continue?';
 
@@ -14613,6 +14617,7 @@ end;
 procedure TfrmGoPhast.acRunSutraExecute(Sender: TObject);
 var
   Options: TSutraOptions;
+  PestProperties: TPestProperties;
 begin
   inherited;
   if (PhastModel.SutraMesh = nil)
@@ -14640,6 +14645,21 @@ begin
     end;
   end;
 
+  if PhastModel.PestUsed and (ModelSelection in SutraSelection) then
+  begin
+    PestProperties := PhastModel.PestProperties;
+    if (PestProperties.TemplateCharacter = '@')
+      or (PestProperties.ExtendedTemplateCharacter = '@')
+      or (PestProperties.ArrayTemplateCharacter = '@') then
+    begin
+      Beep;
+      if (MessageDlg(StrPESTMayNotBeAble, mtWarning,
+        [mbYes, mbNo], 0, mbNo) <> mrYes) then
+      begin
+        Exit;
+      end;
+    end;
+  end;
 
   sdSutraInput.FileName := ChangeFileExt(PhastModel.ModelFileName, '.inp');
   if sdSutraInput.Execute then
