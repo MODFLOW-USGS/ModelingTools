@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4262</config-value>
+      <config-value name="autohelpstart">4268</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -120,7 +120,6 @@
       <config-value name="make0status">*</config-value>
       <config-value name="make3include">HTML,ALLMODELS</config-value>
       <config-value name="make3status">(Complete)</config-value>
-      <config-group name="bookmarks"/>
     </config-group>
     <config-group name="hlp">
       <config-value name="citation" translate="true"></config-value>
@@ -1512,6 +1511,12 @@ document.write('</frameset>');
       <helpcontext-number href="RmaMF6_Understanding_the_RunMo" value="4249"/>
       <helpcontext-number href="RmaMF6_Use_Anisotropy" value="4239"/>
       <helpcontext-number href="RmaMF6_Visualize_Modified_Mode" value="4248"/>
+      <helpcontext-number href="RmaSutra_Activate_PEST" value="4264"/>
+      <helpcontext-number href="RmaSutra_Apply_K_Parameter" value="4267"/>
+      <helpcontext-number href="RmaSutra_Apply_Seepage_Paramet" value="4268"/>
+      <helpcontext-number href="RmaSutra_Define_Parameters_and" value="4265"/>
+      <helpcontext-number href="RmaSutra_Define_Pilot_Points" value="4266"/>
+      <helpcontext-number href="RmaSutra_Model_Summary" value="4263"/>
       <helpcontext-number href="Rocky_Mountain_Arsenal" value="3391"/>
       <helpcontext-number href="Rooting_Depth_Pane" value="3811"/>
       <helpcontext-number href="Round" value="890"/>

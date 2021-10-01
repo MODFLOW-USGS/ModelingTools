@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaSutra: Model Summary</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaSutra: Model Summary</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The starting point for this model is an example SUTRA model named Rocky2D_Irregular.gpt distributed with ModelMuse but whose set up is not described in a tutorial. That model was modified by changing it from steady flow/steady transport to steady flow/transient transport. The maximum time was set to 631152000 with 100 time steps. Eight head observations have been specified. They will be converted to calibration observations. There is also an object named &quot;Flow_Factor&quot; that outlines the nodes that are part of a flow observation. To use PEST with the model we will perform the following tasks.</text></para>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Activate PEST.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Define parameters to use in the model.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Define parameter groups and assign parameters to them.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Apply parameters to data sets.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">If desired, define pilot points.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Apply parameters to boundary conditions.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Define observations.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Define observation groups.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Assign observations to observation groups.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Run PEST</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Visualize the modified model input.</text></li>
+    </list>
+  </body>
+</topic>

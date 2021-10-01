@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">RmaSutra: Define Pilot Points</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaSutra: Define Pilot Points</text></para>
+    </header>
+    <para styleclass="Normal"><snippet src="RmaMf6_Define_Pilot_Points"/></para>
+  </body>
+</topic>

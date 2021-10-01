@@ -4307,7 +4307,7 @@ begin
         acEditObservationComparisons.Visible := True;
         acEditObservationComparisons.Enabled := PhastModel.PestUsed;
         acEditSutraFluxObs.Visible := True;
-        acEditSutraFluxObs.Enabled := PhastModel.PestUsed;
+        acEditSutraFluxObs.Enabled := True; //PhastModel.PestUsed;
         {$ELSE}
         acEditObservationComparisons.Visible := False;
         acEditSutraFluxObs.Visible := False;

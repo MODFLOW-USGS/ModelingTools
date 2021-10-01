@@ -2649,11 +2649,11 @@ resourcestring
   StrSomethingWentWrong = 'Something went wrong in the Object Properties dia' +
   'log box. Please save your work and restart ModelMuse.';
   StrSutraStateCalibrat = 'Sutra State Calibration Observations';
-  StrSpecPressureObserv = 'Spec Pressure Observations';
-  StrSpecifiedConcTemp = 'Specified Conc/Temp Observations';
-  StrGeneralizedFlowObs = 'Generalized Flow Observations';
-  StrGeneralizedTranspor = 'Generalized Transport Observations';
-  StrSpecifiedFlowObser = 'Specified Flow Observations';
+  StrSpecPressureObserv = 'Observations at Spec Pressure';
+  StrSpecifiedConcTemp = 'Observations at Specified Conc/Temp';
+  StrGeneralizedFlowObs = 'Observations at Generalized Flow';
+  StrGeneralizedTranspor = 'Observations at Generalized Transport';
+  StrSpecifiedFlowObser = 'Observations at Specified Flows';
 
 {$R *.dfm}
 
@@ -14315,7 +14315,7 @@ var
 begin
   FSutraStateObsNode := nil;
   if  (frmGoPhast.ModelSelection in SutraSelection)
-    and (AScreenObject.Count = 1) and frmGoPhast.PhastModel.PestUsed
+    and (AScreenObject.Count = 1)// and frmGoPhast.PhastModel.PestUsed
     then
   begin
     Node := jvpltvSutraFeatures.Items.AddChild(nil,

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">RmaSutra: Activate PEST</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaSutra: Activate PEST</text></para>
+    </header>
+    <para styleclass="Normal"><snippet src="RmaMF6_Activate_PEST"/></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">By default, ModelMuse uses &quot;@&quot; as the parameter delimiter. However, SUTRA also uses @ in @Insert commands. To avoid a conflict choose another character as the parameter delimiter. The parameter delimiter, formula delimiters and array delimiters must all be different from one another and none of them should be teh &quot;@&quot; in SUTRA models.</text></para>
+  </body>
+</topic>
