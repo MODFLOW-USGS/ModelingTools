@@ -10371,12 +10371,12 @@ const
 //                the RunModel file for use in tests of ModelMuse.
 //               Bug fix: not in released version. Fixed upper and lower bounds
 //                of pilot points.
-
-//               Bug fix: Fixed saving CREFT in SUTRA models.
+//    '4.3.0.68' Bug fix: Fixed saving CREFT in SUTRA models.
+//               Bug fix: Fixed a bug where the LakeID was not set properly.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.67';
+  IIModelVersion = '4.3.0.68';
 
 function IModelVersion: string;
 begin
@@ -20378,7 +20378,7 @@ begin
     end;
   end;
 
-  if FileVersionEqualOrEarlier('2.8.0.18') then
+  if FileVersionEqualOrEarlier('4.3.0.67') then
   begin
     LakeIDArray := DataArrayManager.GetDataSetByName(rsLakeID);
     if LakeIDArray <> nil then

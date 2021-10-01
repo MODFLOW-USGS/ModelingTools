@@ -25150,6 +25150,10 @@ begin
             DataSetIndex := Item.ScreenObject.AddDataSet(DataArray);
             Item.ScreenObject.DataSetFormulas[DataSetIndex] := IntToStr(IntValue)
           end;
+        end
+        else
+        begin
+          Item.ScreenObject.RemoveDataSet(DataArray)
         end;
       end;
     end
