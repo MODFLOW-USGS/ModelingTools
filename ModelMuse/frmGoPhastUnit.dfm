@@ -3622,7 +3622,7 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acEditObservationComparisons: TAction
       Category = 'Model'
-      Caption = 'Edit Observation Comparisons...'
+      Caption = 'Edit Comparison Observations...'
       OnExecute = acEditObservationComparisonsExecute
     end
     object acAnonymizeObjects: TAction

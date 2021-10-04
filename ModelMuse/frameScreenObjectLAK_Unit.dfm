@@ -335,7 +335,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     Top = 121
     Width = 463
     Height = 327
-    ActivePage = tabGage
+    ActivePage = tabObservations
     Align = alClient
     TabOrder = 3
     object tabLakeProperties: TTabSheet
@@ -573,18 +573,6 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
               Width = 451
               ExplicitTop = 73
               ExplicitWidth = 451
-              inherited sbAdd: TSpeedButton
-                Left = 233
-                ExplicitLeft = 233
-              end
-              inherited sbInsert: TSpeedButton
-                Left = 277
-                ExplicitLeft = 277
-              end
-              inherited sbDelete: TSpeedButton
-                Left = 320
-                ExplicitLeft = 320
-              end
             end
             inherited Grid: TRbwDataGrid4
               Width = 451
@@ -602,28 +590,13 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           inherited frameObsComparisons: TframeGrid
             Width = 451
             ExplicitWidth = 451
-            ExplicitHeight = 155
             inherited Panel: TPanel
               Width = 451
-              ExplicitTop = 120
               ExplicitWidth = 451
-              inherited sbAdd: TSpeedButton
-                Left = 233
-                ExplicitLeft = 233
-              end
-              inherited sbInsert: TSpeedButton
-                Left = 277
-                ExplicitLeft = 277
-              end
-              inherited sbDelete: TSpeedButton
-                Left = 320
-                ExplicitLeft = 320
-              end
             end
             inherited Grid: TRbwDataGrid4
               Width = 451
               ExplicitWidth = 451
-              ExplicitHeight = 120
             end
           end
         end

@@ -21,7 +21,6 @@ object framePestObs: TframePestObs
     Align = alClient
     Caption = 'Direct observations'
     TabOrder = 0
-    ExplicitHeight = 203
     inline frameObservations: TframeGrid
       Left = 2
       Top = 15
@@ -32,31 +31,33 @@ object framePestObs: TframePestObs
       ExplicitLeft = 2
       ExplicitTop = 15
       ExplicitWidth = 596
-      ExplicitHeight = 186
+      ExplicitHeight = 226
       inherited Panel: TPanel
         Top = 194
         Width = 596
         Height = 32
-        ExplicitTop = 176
+        ExplicitTop = 195
         ExplicitWidth = 596
         ExplicitHeight = 32
+        inherited lbNumber: TLabel
+          Width = 145
+          Caption = 'Number of direct observations'
+          ExplicitWidth = 145
+        end
         inherited sbAdd: TSpeedButton
-          Left = 311
-          Top = 2
+          Left = 368
           OnClick = frameObservationssbAddClick
-          ExplicitLeft = 314
+          ExplicitLeft = 368
         end
         inherited sbInsert: TSpeedButton
-          Left = 369
-          Top = 2
+          Left = 397
           OnClick = frameObservationssbInsertClick
-          ExplicitLeft = 372
+          ExplicitLeft = 397
         end
         inherited sbDelete: TSpeedButton
           Left = 426
-          Top = 2
           OnClick = frameObservationssbDeleteClick
-          ExplicitLeft = 430
+          ExplicitLeft = 426
         end
         inherited seNumber: TJvSpinEdit
           OnChange = frameObservationsseNumberChange
@@ -245,7 +246,7 @@ object framePestObs: TframePestObs
             AutoAdjustColWidths = True
           end>
         ExplicitWidth = 596
-        ExplicitHeight = 145
+        ExplicitHeight = 194
         ColWidths = (
           64
           75
@@ -263,7 +264,7 @@ object framePestObs: TframePestObs
     Width = 600
     Height = 172
     Align = alBottom
-    Caption = 'Observation comparisons'
+    Caption = 'Comparison observations'
     TabOrder = 1
     inline frameObsComparisons: TframeGrid
       Left = 2
@@ -275,28 +276,30 @@ object framePestObs: TframePestObs
       ExplicitLeft = 2
       ExplicitTop = 15
       ExplicitWidth = 596
-      ExplicitHeight = 195
+      ExplicitHeight = 155
       inherited Panel: TPanel
         Top = 120
         Width = 596
         Height = 35
-        ExplicitTop = 138
+        ExplicitTop = 120
         ExplicitWidth = 596
         ExplicitHeight = 35
+        inherited lbNumber: TLabel
+          Width = 172
+          Caption = 'Number of comparison observations'
+          ExplicitWidth = 172
+        end
         inherited sbAdd: TSpeedButton
-          Left = 311
-          Top = 4
-          ExplicitLeft = 312
+          Left = 368
+          ExplicitLeft = 368
         end
         inherited sbInsert: TSpeedButton
-          Left = 369
-          Top = 4
-          ExplicitLeft = 370
+          Left = 397
+          ExplicitLeft = 397
         end
         inherited sbDelete: TSpeedButton
           Left = 426
-          Top = 4
-          ExplicitLeft = 427
+          ExplicitLeft = 426
         end
         inherited seNumber: TJvSpinEdit
           OnChange = frameObsComparisonsseNumberChange
@@ -479,7 +482,7 @@ object framePestObs: TframePestObs
             AutoAdjustColWidths = True
           end>
         ExplicitWidth = 596
-        ExplicitHeight = 154
+        ExplicitHeight = 120
         ColWidths = (
           64
           64

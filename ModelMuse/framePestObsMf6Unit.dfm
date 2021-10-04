@@ -2,7 +2,23 @@ inherited framePestObsMf6: TframePestObsMf6
   OnResize = FrameResize
   inherited grpDirectObs: TGroupBox
     inherited frameObservations: TframeGrid
+      inherited Panel: TPanel
+        Top = 168
+        Height = 58
+        ExplicitTop = 168
+        ExplicitHeight = 58
+        inherited sbAdd: TSpeedButton
+          Top = 20
+        end
+        inherited sbInsert: TSpeedButton
+          Top = 20
+        end
+        inherited sbDelete: TSpeedButton
+          Top = 20
+        end
+      end
       inherited Grid: TRbwDataGrid4
+        Height = 168
         ColCount = 9
         OnBeforeDrawCell = frameObservationsGridBeforeDrawCell
         Columns = <
@@ -230,7 +246,6 @@ inherited framePestObsMf6: TframePestObsMf6
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        ExplicitTop = 2
         ColWidths = (
           64
           75
@@ -244,8 +259,8 @@ inherited framePestObsMf6: TframePestObsMf6
       end
     end
     object cbMultilayer: TCheckBox
-      Left = 144
-      Top = 207
+      Left = 8
+      Top = 216
       Width = 97
       Height = 17
       Caption = 'Multilayer'

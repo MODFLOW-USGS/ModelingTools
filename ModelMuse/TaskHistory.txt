@@ -28218,5 +28218,18 @@ object TTaskHistory
       Categories.Strings = (
         'Error checking'
         'Documentation')
+    end
+    item
+      Date = 44471.000000000000000000
+    end
+    item
+      Date = 44472.000000000000000000
+    end
+    item
+      Date = 44473.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Dialog boxes'
+        'PEST')
     end>
 end

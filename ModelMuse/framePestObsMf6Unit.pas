@@ -285,7 +285,7 @@ procedure TframePestObsMf6.FrameResize(Sender: TObject);
 begin
   inherited;
   cbMultilayer.Parent := frameObservations.Panel;
-  cbMultilayer.Top := frameObservations.lbNumber.Top;
+  cbMultilayer.Top := frameObservations.lbNumber.Top + 24;
 end;
 
 procedure TframePestObsMf6.GetDirectObs(

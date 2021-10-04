@@ -10,7 +10,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
     Top = 0
     Width = 561
     Height = 506
-    ActivePage = tabGage
+    ActivePage = tabObservations
     Align = alClient
     TabOrder = 0
     object tabBasic: TTabSheet
@@ -2958,18 +2958,6 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
               Width = 549
               ExplicitTop = 252
               ExplicitWidth = 549
-              inherited sbAdd: TSpeedButton
-                Left = 287
-                ExplicitLeft = 287
-              end
-              inherited sbInsert: TSpeedButton
-                Left = 339
-                ExplicitLeft = 339
-              end
-              inherited sbDelete: TSpeedButton
-                Left = 392
-                ExplicitLeft = 392
-              end
             end
             inherited Grid: TRbwDataGrid4
               Width = 549
@@ -2987,28 +2975,13 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           inherited frameObsComparisons: TframeGrid
             Width = 549
             ExplicitWidth = 549
-            ExplicitHeight = 155
             inherited Panel: TPanel
               Width = 549
-              ExplicitTop = 120
               ExplicitWidth = 549
-              inherited sbAdd: TSpeedButton
-                Left = 287
-                ExplicitLeft = 287
-              end
-              inherited sbInsert: TSpeedButton
-                Left = 339
-                ExplicitLeft = 339
-              end
-              inherited sbDelete: TSpeedButton
-                Left = 392
-                ExplicitLeft = 392
-              end
             end
             inherited Grid: TRbwDataGrid4
               Width = 549
               ExplicitWidth = 549
-              ExplicitHeight = 120
             end
           end
         end

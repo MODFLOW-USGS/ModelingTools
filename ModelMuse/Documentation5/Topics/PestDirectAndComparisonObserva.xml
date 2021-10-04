@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PestDirectAndComparisonObservations</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">Two types of observations can be defined: </text><text styleclass="Strong" translate="true">Direct Observations</text><text styleclass="Normal" translate="true"> on the top and </text><text styleclass="Strong" translate="true">Observation Comparisons</text><text styleclass="Normal" translate="true"> on the bottom. </text><text styleclass="Strong" translate="true">Direct observations</text><text styleclass="Normal" translate="true"> come directly from an output file whereas with </text><text styleclass="Strong" translate="true">Observation comparisons,</text><text styleclass="Normal" translate="true"> the observation value is the difference between two direct observation values.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Two types of observations can be defined: </text><text styleclass="Strong" translate="true">Direct Observations</text><text styleclass="Normal" translate="true"> on the top and </text><text styleclass="Strong" translate="true">Comparison Observations</text><text styleclass="Normal" translate="true"> on the bottom. </text><text styleclass="Strong" translate="true">Direct observations</text><text styleclass="Normal" translate="true"> come directly from an output file whereas with </text><text styleclass="Strong" translate="true">Comparison Observations,</text><text styleclass="Normal" translate="true"> the observation value is the difference between two direct observation values.</text></para>
     <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Direct Observations</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Name (OBSNME)</text><text styleclass="Normal" translate="true"> is the name of the direct or comparison observation.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation type</text><text styleclass="Normal" translate="true"> is the type of data to be extracted from the output file for direct observations. </text></para>
@@ -15,7 +15,7 @@
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Value (OBSVAL)</text><text styleclass="Normal" translate="true"> is the measured value to which the simulated value should be compared.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Observation Weight (WEIGHT)</text><text styleclass="Normal" translate="true"> is the weight assigned to the observation.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">Comment</text><text styleclass="Normal" translate="true"> is an optional comment about the observation.</text></para>
-    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Observation Comparisons</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Comparison Observations</text></para>
     <para styleclass="Normal"><snippet src="ObsComparisons"/></para>
   </body>
 </topic>

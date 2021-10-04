@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4268</config-value>
+      <config-value name="autohelpstart">4271</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1485,6 +1485,7 @@ document.write('</frameset>');
       <helpcontext-number href="RMA_Using_MODPATH" value="3588"/>
       <helpcontext-number href="RMA_View_Results" value="3407"/>
       <helpcontext-number href="RMA_Wells" value="3405"/>
+      <helpcontext-number href="Rma2005_Define_Observation_Gro" value="4270"/>
       <helpcontext-number href="RmaMf2005_Activate_PEST" value="4254"/>
       <helpcontext-number href="RmaMf2005_Apply_K_Parameter" value="4257"/>
       <helpcontext-number href="RmaMf2005_Apply_Seepage_Parame" value="4258"/>
@@ -1514,6 +1515,8 @@ document.write('</frameset>');
       <helpcontext-number href="RmaSutra_Activate_PEST" value="4264"/>
       <helpcontext-number href="RmaSutra_Apply_K_Parameter" value="4267"/>
       <helpcontext-number href="RmaSutra_Apply_Seepage_Paramet" value="4268"/>
+      <helpcontext-number href="RmaSutra_Define_Observation_Gr" value="4271"/>
+      <helpcontext-number href="RmaSutra_Define_Observations" value="4269"/>
       <helpcontext-number href="RmaSutra_Define_Parameters_and" value="4265"/>
       <helpcontext-number href="RmaSutra_Define_Pilot_Points" value="4266"/>
       <helpcontext-number href="RmaSutra_Model_Summary" value="4263"/>

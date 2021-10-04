@@ -1458,22 +1458,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
               ExplicitTop = 190
               ExplicitWidth = 597
               inherited lbNumber: TLabel
-                Width = 55
+                Width = 208
                 Height = 18
-                ExplicitWidth = 55
+                ExplicitWidth = 208
                 ExplicitHeight = 18
-              end
-              inherited sbAdd: TSpeedButton
-                Left = 313
-                ExplicitLeft = 313
-              end
-              inherited sbInsert: TSpeedButton
-                Left = 370
-                ExplicitLeft = 370
-              end
-              inherited sbDelete: TSpeedButton
-                Left = 428
-                ExplicitLeft = 428
               end
               inherited seNumber: TJvSpinEdit
                 Height = 26
@@ -1681,21 +1669,10 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
               ExplicitTop = 115
               ExplicitWidth = 597
               inherited lbNumber: TLabel
-                Width = 55
+                Width = 251
                 Height = 18
-                ExplicitWidth = 55
+                ExplicitWidth = 251
                 ExplicitHeight = 18
-              end
-              inherited sbAdd: TSpeedButton
-                Left = 313
-                ExplicitLeft = 313
-              end
-              inherited sbInsert: TSpeedButton
-                Left = 370
-              end
-              inherited sbDelete: TSpeedButton
-                Left = 428
-                ExplicitLeft = 428
               end
               inherited seNumber: TJvSpinEdit
                 Height = 26
