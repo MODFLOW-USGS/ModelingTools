@@ -2882,6 +2882,7 @@ var
     LayerIndex: Integer;
     ParameterZoneWriter: TParameterZoneWriter;
     TempFile: string;
+    ArrayFileName: string;
   begin
     if DataArray <> nil then
     begin
@@ -2892,32 +2893,55 @@ var
 
       Inc(ColIndex);
 
-      for LayerIndex := 1 to LayerCount do
+      if not DataArray.PestParametersUsed then
       begin
-        // PLPROC has a limit of 5 s_lists per call of read_list_file.
-        // To avoid reaching that limit, a separate call is used for each layer.
-        WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
-        NewLine;
 
-        if Mesh.MeshType = mt3D then
+        for LayerIndex := 1 to LayerCount do
         begin
+          // PLPROC has a limit of 5 s_lists per call of read_list_file.
+          // To avoid reaching that limit, a separate call is used for each layer.
+          WriteString('read_list_file(reference_clist=''cl_Discretization'',skiplines=1, &');
+          NewLine;
+
+          if Mesh.MeshType = mt3D then
+          begin
+            Inc(ColIndex);
+            Inc(ColIndex);
+          end;
+
+          WriteString(Format('  plist=p_%0:s%1:d;column=%2:d, &',
+            [DataRoot, LayerIndex, ColIndex]));
+          NewLine;
           Inc(ColIndex);
+
+          WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &',
+            [DataRoot, LayerIndex, ColIndex]));
+          NewLine;
           Inc(ColIndex);
+
+          WriteString(Format('  file=''%0:s.%1:s'')',
+            [FRoot, DataArray.Name]));
+          NewLine;
         end;
-
-        WriteString(Format('  plist=p_%0:s%1:d;column=%2:d, &',
-          [DataRoot, LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-
-        WriteString(Format('  slist=s_%0:sPar%1:d;column=%2:d, &',
-          [DataRoot, LayerIndex, ColIndex]));
-        NewLine;
-        Inc(ColIndex);
-
-        WriteString(Format('  file=''%0:s.%1:s'')',
-          [FRoot, DataArray.Name]));
-        NewLine;
+      end
+      else
+      begin
+        for LayerIndex := 1 to LayerCount do
+        begin
+          WriteString(Format('  p_%0:s%1:d=new_plist(reference_clist=''cl_Discretization'',value=1.0)',
+            [DataRoot, LayerIndex]));
+          NewLine;
+          ArrayFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
+            [FRoot, DataArray.Name, LayerIndex]);
+          Model.FilesToDelete.Add(ArrayFileName);
+          WriteString(Format('  p_%0:s%1:d.read_list_as_array(file=''%2:s'')',
+            [DataRoot, LayerIndex, ArrayFileName]));
+          NewLine;
+          WriteString(Format('  s_%0:sPar%1:d=new_slist(reference_clist=''cl_Discretization'',value=%1:d)',
+            [DataRoot, LayerIndex]));
+          NewLine;
+//          NewLine;
+        end;
       end;
       NewLine;
 
@@ -2971,7 +2995,7 @@ begin
     ReadDiscretization;
     {$ENDREGION}
 
-    ReadPilotPoints;
+//    ReadPilotPoints;
 
     WriteString('#Read data to modify');
     NewLine;
@@ -3166,6 +3190,8 @@ begin
         begin
           if AParam.UsePilotPoints then
           begin
+            Continue;
+            {
             WriteString('    # Substituting interpolated values');
             NewLine;
 
@@ -3217,6 +3243,7 @@ begin
               [LayerIndex+1, AParam.ParameterName]));
               NewLine;
             end;
+            }
 
           end
           else
