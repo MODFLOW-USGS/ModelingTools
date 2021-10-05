@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1424
+1470
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1424,3 +1424,49 @@ SutraTest1a.gpt
 	Archive\arrays\SutraTest1a.MyMult_3.arrays
 	Archive\arrays\SutraTest1a.MyMult_4.arrays
 	Archive\usgs.SutraTest1a.reference
+RmaSutraNodeTest.gpt
+	Archive\RmaSutraNodeTest.15B
+	Archive\RmaSutraNodeTest.15B.script
+	Archive\RmaSutraNodeTest.15B.script.tpl
+	Archive\RmaSutraNodeTest.Angle_Horizontal
+	Archive\RmaSutraNodeTest.axml
+	Archive\RmaSutraNodeTest.c_ele
+	Archive\RmaSutraNodeTest.c_nod
+	Archive\RmaSutraNodeTest.c_nod3D
+	Archive\RmaSutraNodeTest.FluxBcs
+	Archive\RmaSutraNodeTest.FluxBcs.tpl
+	Archive\RmaSutraNodeTest.ics
+	Archive\RmaSutraNodeTest.inp
+	Archive\RmaSutraNodeTest.inp.tpl
+	Archive\RmaSutraNodeTest.jtf
+	Archive\RmaSutraNodeTest.Longitudinal_Dispersivity_Max_Dir
+	Archive\RmaSutraNodeTest.Longitudinal_Dispersivity_Min_Dir
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.pp
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.K.1.pp.tpl
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.krig_factors_script
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.PstValues
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script
+	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script.tpl
+	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity
+	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.K.1.pp
+	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.K.1.pp.tpl
+	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.krig_factors_script
+	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.PstValues
+	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.script
+	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.script.tpl
+	Archive\RmaSutraNodeTest.Nodal_Porosity
+	Archive\RmaSutraNodeTest.Nodal_Thickness
+	Archive\RmaSutraNodeTest.pst
+	Archive\RmaSutraNodeTest.ptf
+	Archive\RmaSutraNodeTest.pval
+	Archive\RmaSutraNodeTest.RunModel.Bat
+	Archive\RmaSutraNodeTest.RunSutra.bat
+	Archive\RmaSutraNodeTest.soe_ev
+	Archive\RmaSutraNodeTest.soe_i
+	Archive\RmaSutraNodeTest.SPecPBcs
+	Archive\RmaSutraNodeTest.SUTRA.FIL
+	Archive\RmaSutraNodeTest.Transverse_Dispersivity_Max_Dir
+	Archive\RmaSutraNodeTest.Transverse_Dispersivity_Min_Dir
+	Archive\RmaSutraNodeTest.Unsat_Region_Elements
+	Archive\usgs.RmaSutraNodeTest.reference

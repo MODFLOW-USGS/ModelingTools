@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="RmaSutraNodeTest" FileType="bin">
+    <FileName Model_Name="RmaSutraNodeTest" FileType="bin">..\..\..\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe</FileName>
+  </bin>
+  <ancillary Model_Name="RmaSutraNodeTest" FileType="ancillary">
+    <FileName Model_Name="RmaSutraNodeTest" FileType="ancillary">..\Installer\ModelMuse5_0\examples\PEST\test3\SUTRA.FIL</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="ancillary">RmaSutraNodeTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="RmaSutraNodeTest" FileType="Model Input">
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Input">RmaSutraNodeTest.FluxBcs</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Input">RmaSutraNodeTest.ics</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Input">RmaSutraNodeTest.inp</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Input">RmaSutraNodeTest.SPecPBcs</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Input">RunSutra.bat.archive</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Input">usgs.RmaSutraNodeTest.reference</FileName>
+  </model>
+  <output Model_Name="RmaSutraNodeTest" FileType="Model Output">
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest.bcof</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest.bcop</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest.ele</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest.lst</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest.nod</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest.rst</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest.smy</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs1.OBC</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs2.OBC</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs3.OBC</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs4.OBC</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs5.OBC</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs6.OBC</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs7.OBC</FileName>
+    <FileName Model_Name="RmaSutraNodeTest" FileType="Model Output">RmaSutraNodeTest_Head_Obs8.OBC</FileName>
+  </output>
+</Model_Archive_List>

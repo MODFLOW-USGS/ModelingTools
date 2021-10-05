@@ -24,8 +24,6 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   id_type='indexed',file='SutraTest5.c_ele')
 
 
-#Read pilot point data
-
 #Read data to modify
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
@@ -39,46 +37,37 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   file='SutraTest5.Unsat_Region_Elements')
 
 # Read Maximum_Permeability
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMAX1;column=4, &
-  slist=s_PMAXPar1;column=5, &
-  file='SutraTest5.Maximum_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMAX2;column=8, &
-  slist=s_PMAXPar2;column=9, &
-  file='SutraTest5.Maximum_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMAX3;column=12, &
-  slist=s_PMAXPar3;column=13, &
-  file='SutraTest5.Maximum_Permeability')
+  p_PMAX1=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMAX1.read_list_as_array(file='arrays\SutraTest5.Maximum_Permeability_1.arrays')
+  s_PMAXPar1=new_slist(reference_clist='cl_Discretization',value=1)
+  p_PMAX2=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMAX2.read_list_as_array(file='arrays\SutraTest5.Maximum_Permeability_2.arrays')
+  s_PMAXPar2=new_slist(reference_clist='cl_Discretization',value=2)
+  p_PMAX3=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMAX3.read_list_as_array(file='arrays\SutraTest5.Maximum_Permeability_3.arrays')
+  s_PMAXPar3=new_slist(reference_clist='cl_Discretization',value=3)
 
 # Read Middle_Permeability
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMID1;column=4, &
-  slist=s_PMIDPar1;column=5, &
-  file='SutraTest5.Middle_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMID2;column=8, &
-  slist=s_PMIDPar2;column=9, &
-  file='SutraTest5.Middle_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMID3;column=12, &
-  slist=s_PMIDPar3;column=13, &
-  file='SutraTest5.Middle_Permeability')
+  p_PMID1=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMID1.read_list_as_array(file='arrays\SutraTest5.Middle_Permeability_1.arrays')
+  s_PMIDPar1=new_slist(reference_clist='cl_Discretization',value=1)
+  p_PMID2=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMID2.read_list_as_array(file='arrays\SutraTest5.Middle_Permeability_2.arrays')
+  s_PMIDPar2=new_slist(reference_clist='cl_Discretization',value=2)
+  p_PMID3=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMID3.read_list_as_array(file='arrays\SutraTest5.Middle_Permeability_3.arrays')
+  s_PMIDPar3=new_slist(reference_clist='cl_Discretization',value=3)
 
 # Read Minimum_Permeability
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMIN1;column=4, &
-  slist=s_PMINPar1;column=5, &
-  file='SutraTest5.Minimum_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMIN2;column=8, &
-  slist=s_PMINPar2;column=9, &
-  file='SutraTest5.Minimum_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMIN3;column=12, &
-  slist=s_PMINPar3;column=13, &
-  file='SutraTest5.Minimum_Permeability')
+  p_PMIN1=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMIN1.read_list_as_array(file='arrays\SutraTest5.Minimum_Permeability_1.arrays')
+  s_PMINPar1=new_slist(reference_clist='cl_Discretization',value=1)
+  p_PMIN2=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMIN2.read_list_as_array(file='arrays\SutraTest5.Minimum_Permeability_2.arrays')
+  s_PMINPar2=new_slist(reference_clist='cl_Discretization',value=2)
+  p_PMIN3=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMIN3.read_list_as_array(file='arrays\SutraTest5.Minimum_Permeability_3.arrays')
+  s_PMINPar3=new_slist(reference_clist='cl_Discretization',value=3)
 
 # Read Angle_Horizontal
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &

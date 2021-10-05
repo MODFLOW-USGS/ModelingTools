@@ -193,11 +193,11 @@ type
     procedure WriteAFile(ScriptChoice: TScriptChoice);
     procedure WritePilotPointFiles;
     procedure GetUsedParameters;
-    procedure WriteKrigingFactors;
-    procedure ReadPilotPoints;
+//    procedure WriteKrigingFactors;
+//    procedure ReadPilotPoints;
     procedure ReadDiscretization;
-    procedure SaveKrigingFactors;
-    function GetKrigFactorRoot(ADataRec: TDataRecord): string;
+//    procedure SaveKrigingFactors;
+//    function GetKrigFactorRoot(ADataRec: TDataRecord): string;
   protected
     class function Extension: string; override;
   public
@@ -702,6 +702,7 @@ procedure TParameterZoneWriter.WriteKrigingFactorsScript(
   const AFileName: string);
 var
   ScriptFileName: string;
+  PLPROC_Location: string;
 begin
   ScriptFileName := ChangeFileExt(FParamValuesFileName, StrKrigfactorsscript);
   OpenFile(ScriptFileName);
@@ -710,11 +711,15 @@ begin
     NewLine;
     NewLine;
     ReadPilotPoints;
-    ReadDiscretization(AFileName);
-    SaveKrigingFactors(AFileName);
+    ReadDiscretization(ChangeFileExt(AFileName, ''));
+    SaveKrigingFactors(ChangeFileExt(AFileName, ''));
   finally
     CloseFile
   end;
+
+  PLPROC_Location := GetPLPROC_Location(FParamValuesFileName, Model);
+  Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
+    [PLPROC_Location, ExtractFileName(ScriptFileName)]));
 end;
 
 procedure TParameterZoneWriter.SaveKrigingFactors(const AFileName: string);
@@ -786,6 +791,7 @@ begin
     msSutra22, msSutra30:
       begin
         GrbFileName := ChangeFileExt(AFileName, '');
+        GrbFileName := ChangeFileExt(GrbFileName, '');
         case FDataArray.EvaluatedAt of
           eaBlocks:
             begin
@@ -913,7 +919,7 @@ begin
   PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
   try
     PriorCount := FPilotPointFiles.Count;
-    PilotPointWriter.WriteFile(AFileName, FDataArray, FPilotPointFiles,
+    PilotPointWriter.WriteFile(ChangeFileExt(AFileName, ''), FDataArray, FPilotPointFiles,
       FDataArrayID, Prefix);
     FPilotPointsUsed := FPilotPointFiles.Count > PriorCount;
     FDataArray.PilotPointsUsed := FPilotPointsUsed
@@ -942,7 +948,7 @@ begin
     FDataArray.ColumnCount);
 
   // Write values to be modified by PEST.
-  FParamValuesFileName := ChangeFileExt(AFileName, '.' + FDataArray.Name)
+  FParamValuesFileName := ChangeFileExt(ChangeFileExt(AFileName, ''), '.' + FDataArray.Name)
     + Extension;
   OpenFile(FParamValuesFileName);
   try
@@ -1058,7 +1064,7 @@ begin
       ReadPilotPoints;
     end;
 
-    ReadDiscretization(AFileName);
+    ReadDiscretization(ChangeFileExt(AFileName, ''));
     NewLine;
 
     WriteString('#Read data to modify');
@@ -1234,6 +1240,7 @@ begin
     {$ENDREGION}
 
     Root := ChangeFileExt(AFileName, '');
+    Root := ChangeFileExt(Root, '');
     WriteString('#Write new data values');
     NewLine;
     {$REGION 'Write new data values'}
@@ -2753,110 +2760,110 @@ begin
 
 end;
 
-procedure TSutraData15BScriptWriter.ReadPilotPoints;
-var
-  PIndex: Integer;
-  AParam: TModflowSteadyParameter;
-  DataArrayIndex: Integer;
-  ADataRec: TDataRecord;
-  procedure HandlePilotPointList(PilotPointFiles: TPilotPointFiles; const DataId: string);
-  var
-    PPIndex: Integer;
-    FileProperties: TPilotPointFileObject;
-    PListName: string;
-  begin
-    for PPIndex := 0 to PilotPointFiles.Count - 1 do
-    begin
-      FileProperties := PilotPointFiles[PPIndex];
-      if FileProperties.Parameter = AParam then
-      begin
-        WriteString(Format('%0:s_PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &',
-          [DataId, PPIndex+1]));
-        NewLine;
-        PListName := Format('%0:s_%1:s_%2:d',
-          [DataId, AParam.ParameterName, FileProperties.Layer + 1]);
-        WriteString(Format('  plist=''%0:s'';column=%1:d, &',
-          [PListName, 5]));
-        NewLine;
-        WriteString(Format('  id_type=''character'',file=''%s'')',
-          [ExtractFileName(FileProperties.FileName)]));
-        NewLine;
-      end;
-    end;
-  end;
-begin
-  WriteString('#Read pilot point data');
-  NewLine;
-  for PIndex := 0 to FUsedParamList.Count - 1 do
-  begin
-    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
-    if AParam.UsePilotPoints then
-    begin
-      for DataArrayIndex := 0 to FDataRecordList.Count - 1 do
-      begin
-        ADataRec := FDataRecordList[DataArrayIndex];
-        HandlePilotPointList(ADataRec.PilotPointFiles, ADataRec.ID);
-      end;
-    end;
-  end;
-  NewLine;
-end;
+//procedure TSutraData15BScriptWriter.ReadPilotPoints;
+//var
+//  PIndex: Integer;
+//  AParam: TModflowSteadyParameter;
+//  DataArrayIndex: Integer;
+//  ADataRec: TDataRecord;
+//  procedure HandlePilotPointList(PilotPointFiles: TPilotPointFiles; const DataId: string);
+//  var
+//    PPIndex: Integer;
+//    FileProperties: TPilotPointFileObject;
+//    PListName: string;
+//  begin
+//    for PPIndex := 0 to PilotPointFiles.Count - 1 do
+//    begin
+//      FileProperties := PilotPointFiles[PPIndex];
+//      if FileProperties.Parameter = AParam then
+//      begin
+//        WriteString(Format('%0:s_PilotPoints%d = read_list_file(skiplines=0,dimensions=2, &',
+//          [DataId, PPIndex+1]));
+//        NewLine;
+//        PListName := Format('%0:s_%1:s_%2:d',
+//          [DataId, AParam.ParameterName, FileProperties.Layer + 1]);
+//        WriteString(Format('  plist=''%0:s'';column=%1:d, &',
+//          [PListName, 5]));
+//        NewLine;
+//        WriteString(Format('  id_type=''character'',file=''%s'')',
+//          [ExtractFileName(FileProperties.FileName)]));
+//        NewLine;
+//      end;
+//    end;
+//  end;
+//begin
+//  WriteString('#Read pilot point data');
+//  NewLine;
+//  for PIndex := 0 to FUsedParamList.Count - 1 do
+//  begin
+//    AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+//    if AParam.UsePilotPoints then
+//    begin
+//      for DataArrayIndex := 0 to FDataRecordList.Count - 1 do
+//      begin
+//        ADataRec := FDataRecordList[DataArrayIndex];
+//        HandlePilotPointList(ADataRec.PilotPointFiles, ADataRec.ID);
+//      end;
+//    end;
+//  end;
+//  NewLine;
+//end;
 
-procedure TSutraData15BScriptWriter.SaveKrigingFactors;
-var
-  FileProperties: TPilotPointFileObject;
-  AParam: TModflowSteadyParameter;
-  Index: Integer;
-  ADataRec: TDataRecord;
-  KrigingFactorsFileRoot: string;
-  procedure HandleDataArray(DataID: string; DataArray: TDataArray;
-    PilotPointFiles: TPilotPointFiles; FileName: string);
-  var
-    PIndex: Integer;
-    PPIndex: Integer;
-  begin
-    for PIndex := 0 to FUsedParamList.Count - 1 do
-    begin
-      AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
-      if AParam.UsePilotPoints then
-      begin
-        for PPIndex := 0 to PilotPointFiles.Count - 1 do
-        begin
-          FileProperties := PilotPointFiles[PPIndex];
-          if FileProperties.Parameter = AParam then
-          begin
-            WriteString('calc_kriging_factors_auto_2d( &');
-            NewLine;
-            WriteString(Format('  target_clist=%s, &', [KDisName]));
-            NewLine;
-            WriteString(Format('  source_clist=%0:s_PilotPoints%1:d, &',
-              [DataID, PPIndex+1]));
-            NewLine;
-            WriteString(Format('  file=%0:s%1:d;format=formatted)',
-              [ExtractFileName(FileName), PPIndex+1]));
-            NewLine;
-          end;
-        end;
-      end;
-    end;
-    NewLine;
-  end;
-begin
-  WriteString('#Save Kriging factors');
-  NewLine;
-  for Index := 0 to FDataRecordList.Count - 1 do
-  begin
-    ADataRec := FDataRecordList[Index];
-    if ADataRec.PilotPointFiles.Count > 0 then
-    begin
-      KrigingFactorsFileRoot := GetKrigFactorRoot(ADataRec);
-      HandleDataArray(ADataRec.ID, ADataRec.DataArray, ADataRec.PilotPointFiles,
-        KrigingFactorsFileRoot);
-    end;
-  end;
-
-  NewLine;
-end;
+//procedure TSutraData15BScriptWriter.SaveKrigingFactors;
+//var
+//  FileProperties: TPilotPointFileObject;
+//  AParam: TModflowSteadyParameter;
+//  Index: Integer;
+//  ADataRec: TDataRecord;
+//  KrigingFactorsFileRoot: string;
+//  procedure HandleDataArray(DataID: string; DataArray: TDataArray;
+//    PilotPointFiles: TPilotPointFiles; FileName: string);
+//  var
+//    PIndex: Integer;
+//    PPIndex: Integer;
+//  begin
+//    for PIndex := 0 to FUsedParamList.Count - 1 do
+//    begin
+//      AParam := FUsedParamList.Objects[PIndex] as TModflowSteadyParameter;
+//      if AParam.UsePilotPoints then
+//      begin
+//        for PPIndex := 0 to PilotPointFiles.Count - 1 do
+//        begin
+//          FileProperties := PilotPointFiles[PPIndex];
+//          if FileProperties.Parameter = AParam then
+//          begin
+//            WriteString('calc_kriging_factors_auto_2d( &');
+//            NewLine;
+//            WriteString(Format('  target_clist=%s, &', [KDisName]));
+//            NewLine;
+//            WriteString(Format('  source_clist=%0:s_PilotPoints%1:d, &',
+//              [DataID, PPIndex+1]));
+//            NewLine;
+//            WriteString(Format('  file=%0:s%1:d;format=formatted)',
+//              [ExtractFileName(FileName), PPIndex+1]));
+//            NewLine;
+//          end;
+//        end;
+//      end;
+//    end;
+//    NewLine;
+//  end;
+//begin
+//  WriteString('#Save Kriging factors');
+//  NewLine;
+//  for Index := 0 to FDataRecordList.Count - 1 do
+//  begin
+//    ADataRec := FDataRecordList[Index];
+//    if ADataRec.PilotPointFiles.Count > 0 then
+//    begin
+//      KrigingFactorsFileRoot := GetKrigFactorRoot(ADataRec);
+//      HandleDataArray(ADataRec.ID, ADataRec.DataArray, ADataRec.PilotPointFiles,
+//        KrigingFactorsFileRoot);
+//    end;
+//  end;
+//
+//  NewLine;
+//end;
 
 procedure TSutraData15BScriptWriter.WriteAFile(ScriptChoice: TScriptChoice);
 var
@@ -2871,17 +2878,9 @@ var
   UsedDataRoots: TStringList;
   DataRoot: string;
   RootIndex: Integer;
-  PIndex: Integer;
-  FileIndex: Integer;
-  DataRec: TDataRecord;
-  FileProperties: TPilotPointFileObject;
-  UsedFileProperties: TPilotPointFileObject;
-  PListName: string;
   procedure ReadData(DataArray: TDataArray; const DataRoot: string);
   var
     LayerIndex: Integer;
-    ParameterZoneWriter: TParameterZoneWriter;
-    TempFile: string;
     ArrayFileName: string;
   begin
     if DataArray <> nil then
@@ -2940,23 +2939,9 @@ var
           WriteString(Format('  s_%0:sPar%1:d=new_slist(reference_clist=''cl_Discretization'',value=%1:d)',
             [DataRoot, LayerIndex]));
           NewLine;
-//          NewLine;
         end;
       end;
       NewLine;
-
-      // Create an array file too in case the data set is used in
-      // a boundary condition.
-      if DataArray.PestParametersUsed and (ScriptChoice = scWriteScript) then
-      begin
-        ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
-        try
-          TempFile := ChangeFileExt(FFileName, '');
-          ParameterZoneWriter.WriteFile(TempFile, DataArray, DataArray.Name, DataRoot+ '_');
-        finally
-          ParameterZoneWriter.Free;
-        end;
-      end;
     end;
   end;
 begin
@@ -2994,8 +2979,6 @@ begin
     {$REGION 'Element discretization'}
     ReadDiscretization;
     {$ENDREGION}
-
-//    ReadPilotPoints;
 
     WriteString('#Read data to modify');
     NewLine;
@@ -3191,60 +3174,6 @@ begin
           if AParam.UsePilotPoints then
           begin
             Continue;
-            {
-            WriteString('    # Substituting interpolated values');
-            NewLine;
-
-            UsedFileProperties := nil;
-            PIndex := 0;
-            DataRec := FDataRecordList[RootIndex];
-            for FileIndex := 0 to DataRec.PilotPointFiles.Count - 1 do
-            begin
-              FileProperties := DataRec.PilotPointFiles[FileIndex];
-              if (FileProperties.Parameter = AParam)
-                and (FileProperties.Layer = LayerIndex) then
-              begin
-                UsedFileProperties := FileProperties;
-                PIndex := FileIndex;
-                break;
-              end;
-            end;
-
-            if UsedFileProperties <> nil then
-            begin
-              PListName := Format('%0:s_%1:s_%2:d',
-                [DataRoot,AParam.ParameterName, LayerIndex+1]);
-              WriteString('    # Get interpolated values');
-              NewLine;
-              WriteString(Format(
-                '    temp=%0:s.krige_using_file(file=''%1:s%2:d'';form=''formatted'', &',
-                [PListName, ExtractFileName(GetKrigFactorRoot(DataRec)), PIndex+1]));
-              NewLine;
-              if AParam.Transform = ptLog then
-              begin
-                WriteString('      transform=''log'')');
-              end
-              else
-              begin
-                WriteString('      transform=''none'')');
-              end;
-              NewLine;
-              WriteString('    # Write interpolated values in zones');
-              NewLine;
-              WriteString(Format(
-                '    p_%3:s%0:d(select=(s_%3:sPar%0:d == %2:d)) = temp',
-                [LayerIndex + 1, AParam.ParameterName, ParameterIndex+1, DataRoot]));
-              NewLine;
-            end
-            else
-            begin
-            WriteString(Format(
-              '    # no interpolated values defined for parameter %1:s in layer %0:d',
-              [LayerIndex+1, AParam.ParameterName]));
-              NewLine;
-            end;
-            }
-
           end
           else
           begin
@@ -3329,35 +3258,27 @@ end;
 
 procedure TSutraData15BScriptWriter.WriteFiles(var AFileName: string);
 var
-  Index: Integer;
-  ADataRec: TDataRecord;
+//  Index: Integer;
   PLPROC_Location: string;
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
-//  PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
   Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]));
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
   GetUsedParameters;
   WritePilotPointFiles;
-  WriteKrigingFactors;
 
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
 
-  for Index := 0 to FDataRecordList.Count - 1 do
-  begin
-    ADataRec := FDataRecordList[Index];
-    Model.PilotPointData.AddPilotPointFileObjects(ADataRec.PilotPointFiles);
-  end;
 end;
 
-function TSutraData15BScriptWriter.GetKrigFactorRoot(ADataRec: TDataRecord): string;
-begin
-  result := FRoot + '.' + ADataRec.DataArray.Name + '.Factors';
-end;
+//function TSutraData15BScriptWriter.GetKrigFactorRoot(ADataRec: TDataRecord): string;
+//begin
+//  result := FRoot + '.' + ADataRec.DataArray.Name + '.Factors';
+//end;
 
 procedure TSutraData15BScriptWriter.ReadDiscretization;
 var
@@ -3417,60 +3338,53 @@ begin
   NewLine;
 end;
 
-procedure TSutraData15BScriptWriter.WriteKrigingFactors;
-var
-  ScriptFileName: string;
-  index: Integer;
-  PilotPointsUsed: Boolean;
-  PLPROC_Location: string;
-begin
-  PilotPointsUsed := False;
-  for index := 0 to FDataRecordList.Count - 1 do
-  begin
-    if FDataRecordList[index].PilotPointFiles.Count > 0 then
-    begin
-      PilotPointsUsed := True;
-      break;
-    end;
-  end;
-  if PilotPointsUsed then
-  begin
-    ScriptFileName := ChangeFileExt(FFileName, StrKrigfactorsscript);
-    OpenFile(ScriptFileName);
-    try
-      WriteString('#Script for PLPROC for saving kriging factors');
-      NewLine;
-      NewLine;
-      ReadPilotPoints;
-      ReadDiscretization;
-      SaveKrigingFactors;
-      PLPROC_Location := GetPLPROC_Location(FFileName, Model);
-      Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
-        [PLPROC_Location, ExtractFileName(ScriptFileName)]));
-    finally
-      CloseFile
-    end;
-  end;
-end;
+//procedure TSutraData15BScriptWriter.WriteKrigingFactors;
+//var
+//  ScriptFileName: string;
+//  index: Integer;
+//  PilotPointsUsed: Boolean;
+//  PLPROC_Location: string;
+//begin
+//  PilotPointsUsed := False;
+//  for index := 0 to FDataRecordList.Count - 1 do
+//  begin
+//    if FDataRecordList[index].PilotPointFiles.Count > 0 then
+//    begin
+//      PilotPointsUsed := True;
+//      break;
+//    end;
+//  end;
+//  if PilotPointsUsed then
+//  begin
+//    ScriptFileName := ChangeFileExt(FFileName, StrKrigfactorsscript);
+//    OpenFile(ScriptFileName);
+//    try
+//      WriteString('#Script for PLPROC for saving kriging factors');
+//      NewLine;
+//      NewLine;
+//      ReadPilotPoints;
+//      ReadDiscretization;
+//      SaveKrigingFactors;
+//      PLPROC_Location := GetPLPROC_Location(FFileName, Model);
+//      Model.KrigfactorsScriptLines.Add(Format('"%0:s" ''%1:s''',
+//        [PLPROC_Location, ExtractFileName(ScriptFileName)]));
+//    finally
+//      CloseFile
+//    end;
+//  end;
+//end;
 
 procedure TSutraData15BScriptWriter.WritePilotPointFiles;
 var
   Index: Integer;
   ADataRec: TDataRecord;
-  PilotPointWriter: TPilotPointWriter;
 begin
   for Index := 0 to FDataRecordList.Count - 1 do
   begin
     ADataRec := FDataRecordList[Index];
     if ADataRec.DataArray.PestParametersUsed then
     begin
-      PilotPointWriter := TPilotPointWriter.Create(Model, etExport);
-      try
-        PilotPointWriter.WriteFile(FFileName, ADataRec.DataArray,
-          ADataRec.PilotPointFiles, ADataRec.Id, ADataRec.Prefix);
-      finally
-        PilotPointWriter.Free;
-      end;
+      WritePestZones(ADataRec.DataArray, FFileName, ADataRec.Id, ADataRec.Prefix);
     end;
   end;
 end;

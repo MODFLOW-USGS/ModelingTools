@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4271</config-value>
+      <config-value name="autohelpstart">4275</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1520,6 +1520,9 @@ document.write('</frameset>');
       <helpcontext-number href="RmaSutra_Define_Parameters_and" value="4265"/>
       <helpcontext-number href="RmaSutra_Define_Pilot_Points" value="4266"/>
       <helpcontext-number href="RmaSutra_Model_Summary" value="4263"/>
+      <helpcontext-number href="RmaSutra_Next_Steps" value="4274"/>
+      <helpcontext-number href="RmaSutra_Run_PEST" value="4272"/>
+      <helpcontext-number href="RmaSutra_Visualize_Modified_Mo" value="4273"/>
       <helpcontext-number href="Rocky_Mountain_Arsenal" value="3391"/>
       <helpcontext-number href="Rooting_Depth_Pane" value="3811"/>
       <helpcontext-number href="Round" value="890"/>
@@ -1746,6 +1749,7 @@ document.write('</frameset>');
       <helpcontext-number href="Trunc" value="940"/>
       <helpcontext-number href="Unsat_ET_conc_in_UZT_Unsaturat" value="4069"/>
       <helpcontext-number href="Unsaturated_Tab" value="2160"/>
+      <helpcontext-number href="Unsupported_PEST_Capabilities" value="4275"/>
       <helpcontext-number href="UpperCase" value="1290"/>
       <helpcontext-number href="UPW_Upstream_Weighting_Package_Pane" value="3626"/>
       <helpcontext-number href="Using_Fishnet_Mesh_Quadrilater" value="3689"/>

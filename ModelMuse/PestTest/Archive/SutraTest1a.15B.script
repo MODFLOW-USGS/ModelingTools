@@ -24,8 +24,6 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   id_type='indexed',file='SutraTest1a.c_ele')
 
 
-#Read pilot point data
-
 #Read data to modify
 # Read Unsaturated Zone
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &
@@ -39,18 +37,15 @@ read_list_file(reference_clist='cl_Discretization',skiplines=1, &
   file='SutraTest1a.Unsat_Region_Elements')
 
 # Read Maximum_Permeability
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMAX1;column=4, &
-  slist=s_PMAXPar1;column=5, &
-  file='SutraTest1a.Maximum_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMAX2;column=8, &
-  slist=s_PMAXPar2;column=9, &
-  file='SutraTest1a.Maximum_Permeability')
-read_list_file(reference_clist='cl_Discretization',skiplines=1, &
-  plist=p_PMAX3;column=12, &
-  slist=s_PMAXPar3;column=13, &
-  file='SutraTest1a.Maximum_Permeability')
+  p_PMAX1=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMAX1.read_list_as_array(file='arrays\SutraTest1a.Maximum_Permeability_1.arrays')
+  s_PMAXPar1=new_slist(reference_clist='cl_Discretization',value=1)
+  p_PMAX2=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMAX2.read_list_as_array(file='arrays\SutraTest1a.Maximum_Permeability_2.arrays')
+  s_PMAXPar2=new_slist(reference_clist='cl_Discretization',value=2)
+  p_PMAX3=new_plist(reference_clist='cl_Discretization',value=1.0)
+  p_PMAX3.read_list_as_array(file='arrays\SutraTest1a.Maximum_Permeability_3.arrays')
+  s_PMAXPar3=new_slist(reference_clist='cl_Discretization',value=3)
 
 # Read Middle_Permeability
 read_list_file(reference_clist='cl_Discretization',skiplines=1, &

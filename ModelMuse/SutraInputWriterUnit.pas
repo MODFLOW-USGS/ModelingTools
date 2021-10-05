@@ -463,6 +463,8 @@ begin
       if Thickness.PestParametersUsed and not WritingTemplate then
       begin
         PestParametersUsed := True;
+
+
         // Create an array file too in case the data set is used in
         // a boundary condition.
         ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);

@@ -1,3 +1,6 @@
+if exist "arrays\SutraTest1a.Maximum_Permeability_1.arrays" del "arrays\SutraTest1a.Maximum_Permeability_1.arrays"
+if exist "arrays\SutraTest1a.Maximum_Permeability_2.arrays" del "arrays\SutraTest1a.Maximum_Permeability_2.arrays"
+if exist "arrays\SutraTest1a.Maximum_Permeability_3.arrays" del "arrays\SutraTest1a.Maximum_Permeability_3.arrays"
 if exist "arrays\SutraTest1a.MyMult_1.arrays" del "arrays\SutraTest1a.MyMult_1.arrays"
 if exist "arrays\SutraTest1a.MyMult_2.arrays" del "arrays\SutraTest1a.MyMult_2.arrays"
 if exist "arrays\SutraTest1a.MyMult_3.arrays" del "arrays\SutraTest1a.MyMult_3.arrays"
