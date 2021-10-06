@@ -12,7 +12,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   OnClose = FormClose
   OnKeyUp = FormKeyUp
   OnResize = FormResize
-  ExplicitTop = -125
   ExplicitWidth = 800
   ExplicitHeight = 594
   PixelsPerInch = 96
@@ -2466,7 +2465,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 581
         Height = 476
-        ActivePage = jvspMf6Obs
+        ActivePage = jvspMNW2
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -7281,7 +7280,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabGage: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 472
+                ExplicitWidth = 573
+                ExplicitHeight = 442
                 inherited rgGages: TRadioGroup
                   Height = 95
                   ExplicitHeight = 95
@@ -7289,7 +7289,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited gbObservationTypes: TGroupBox
                   Left = 2
                   Top = 104
-                  Width = 947
+                  Width = 967
                   Height = 329
                   ExplicitLeft = 2
                   ExplicitTop = 104
@@ -7320,6 +7320,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabObservations: TTabSheet
+                HelpType = htKeyword
+                HelpKeyword = 'Calibration_tabSfr'
                 ExplicitTop = 30
                 ExplicitWidth = 573
                 ExplicitHeight = 442
@@ -8877,7 +8879,12 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
               end
               inherited tabWellScreens: TTabSheet
+                ExplicitWidth = 573
+                inherited Panel3: TPanel
+                  Width = 573
+                end
                 inherited rdgVerticalScreens: TRbwDataGrid4
+                  Width = 573
                   OnButtonClick = frameResdgModflowBoundaryButtonClick
                   ColWidths = (
                     64
@@ -8893,8 +8900,16 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     24
                     24)
                 end
+                inherited Panel4: TPanel
+                  Width = 573
+                  inherited Label2: TLabel
+                    Width = 567
+                  end
+                end
               end
               inherited tabObservations: TTabSheet
+                HelpType = htKeyword
+                HelpKeyword = 'Calibration_TabMNW2'
                 ExplicitWidth = 573
                 inherited framePestObsMnw2: TframePestObs
                   Width = 573
@@ -12431,8 +12446,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               ExplicitHeight = 405
               inherited tabBasic: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 371
+                ExplicitHeight = 414
                 inherited lblTypesOfFlowObservation: TLabel
                   Width = 183
                   Height = 19
@@ -12455,8 +12469,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabMAW: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 573
-                ExplicitHeight = 371
+                ExplicitHeight = 414
                 inherited chklstMAW: TCheckListBox
                   Height = 270
                   ItemHeight = 19
@@ -13846,7 +13859,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             end
             inherited pnlCaption: TPanel
               Width = 581
-              ExplicitLeft = -4
               ExplicitWidth = 581
             end
           end
@@ -14985,7 +14997,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 605
           Height = 476
           HelpType = htKeyword
-          HelpKeyword = 'Generalized Flow Observations'
+          HelpKeyword = 'SUTRA_Boundary_Observations'
           Caption = 'jvspSutraSpecPresObs'
           OnShow = jvspSutraSpecPresObsShow
           inline frameSutraSpecPresObs: TframeFluxObs
@@ -15023,7 +15035,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 605
           Height = 476
           HelpType = htKeyword
-          HelpKeyword = 'Generalized Flow Observations'
+          HelpKeyword = 'SUTRA_Boundary_Observations'
           Caption = 'jvspSutraSpecFlowObs'
           OnShow = jvspSutraSpecFlowObsShow
           inline frameSutraSpecifiedFluidFlowObs: TframeFluxObs
@@ -15061,7 +15073,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           Width = 605
           Height = 476
           HelpType = htKeyword
-          HelpKeyword = 'Generalized Flow Observations'
+          HelpKeyword = 'SUTRA_Boundary_Observations'
           Caption = 'jvspSutraSpecUObs'
           OnShow = jvspSutraSpecUObsShow
           inline frameSutraSpecUObs: TframeFluxObs

@@ -1,4 +1,6 @@
 inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModifiedByPest
+  HelpType = htKeyword
+  HelpKeyword = 'Import_MODFLOW_6_Feature_Modif'
   Caption = 'Import MODFLOW 6 Feature Modified by PEST'
   ClientHeight = 174
   ExplicitHeight = 213
@@ -73,7 +75,7 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       OnClick = btnOKClick
     end
     object btnHelp: TBitBtn
-      Left = 131
+      Left = 130
       Top = 2
       Width = 91
       Height = 33
@@ -81,6 +83,7 @@ inherited frmImportModflow6FeatureModifiedByPest: TfrmImportModflow6FeatureModif
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      OnClick = btnHelpClick
     end
   end
 end

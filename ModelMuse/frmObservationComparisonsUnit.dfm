@@ -1,7 +1,7 @@
 inherited frmObservationComparisons: TfrmObservationComparisons
   HelpType = htKeyword
   HelpKeyword = 'Observation_Comparisons_Dialog'
-  Caption = 'Observation Comparisons'
+  Caption = 'Comparison Observations'
   ClientHeight = 312
   ClientWidth = 784
   ExplicitWidth = 800
@@ -15,8 +15,6 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 35
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 191
-    ExplicitWidth = 760
     DesignSize = (
       784
       35)
@@ -29,7 +27,6 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 672
     end
     object btnOK: TBitBtn
       Left = 608
@@ -41,7 +38,6 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 584
     end
     object btnHelp: TBitBtn
       Left = 520
@@ -53,7 +49,6 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 496
     end
   end
   object treecomboInPlaceEditor: TRbwStringTreeCombo
@@ -125,13 +120,13 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 277
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 760
-    ExplicitHeight = 191
+    ExplicitWidth = 784
+    ExplicitHeight = 277
     inherited Panel: TPanel
       Top = 236
       Width = 784
-      ExplicitTop = 150
-      ExplicitWidth = 760
+      ExplicitTop = 236
+      ExplicitWidth = 784
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -332,8 +327,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 760
-      ExplicitHeight = 150
+      ExplicitWidth = 784
+      ExplicitHeight = 236
     end
   end
 end

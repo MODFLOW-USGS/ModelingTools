@@ -309,6 +309,87 @@ begin
   end;
 end;
 
+function CompareTransform(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(Ord(P1.Transform) - Ord(P2.Transform));
+end;
+
+function CompareChangeLimitiation(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(Ord(P1.ChangeLimitation) - Ord(P2.ChangeLimitation));
+end;
+
+function CompareLowerBound(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(P1.LowerBound - P2.LowerBound);
+end;
+
+function CompareUpperBound(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(P1.UpperBound - P2.UpperBound);
+end;
+
+function CompareParameterGroup(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := AnsiCompareText(P1.ParameterGroup, P2.ParameterGroup);;
+end;
+
+function CompareScale(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(P1.Scale - P2.Scale);
+end;
+
+function CompareOffset(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(P1.Offset - P2.Offset);
+end;
+
+function CompareAbsolute(Item1, Item2: Pointer): Integer;
+var                 
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(P1.AbsoluteN - P2.AbsoluteN);
+end;
+
+function CompareTiedParameter(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TModflowParameter;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := AnsiCompareText(P1.TiedParameterName, P2.TiedParameterName);;
+end;
+
 function ComparePilotPoints(Item1, Item2: Pointer): Integer;
 var
   P1, P2: TModflowParameter;
@@ -392,6 +473,15 @@ begin
       pcMult: result := CompareMult(Item1, Item2);
       pcZone: result := CompareZone(Item1, Item2);
       pcPilotPoints: result := ComparePilotPoints(Item1, Item2);
+      pcPestTransform: result := CompareTransform(Item1, Item2);
+      pcChangeLimitation: result := CompareChangeLimitiation(Item1, Item2);
+      pcLowerBound: result := CompareLowerBound(Item1, Item2);
+      pcUpperBound: result := CompareUpperBound(Item1, Item2);
+      pcParamGroup: result := CompareParameterGroup(Item1, Item2);
+      pcScaled: result := CompareScale(Item1, Item2);
+      pcOffset: result := CompareOffset(Item1, Item2);
+      pcAbsolute: result := CompareAbsolute(Item1, Item2);
+      pcTiedParameter: result := CompareTiedParameter(Item1, Item2);
       else
         Exit;
     end;
