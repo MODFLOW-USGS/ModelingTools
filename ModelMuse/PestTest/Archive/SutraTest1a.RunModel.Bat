@@ -1,6 +1,12 @@
 if exist "arrays\SutraTest1a.Maximum_Permeability_1.arrays" del "arrays\SutraTest1a.Maximum_Permeability_1.arrays"
 if exist "arrays\SutraTest1a.Maximum_Permeability_2.arrays" del "arrays\SutraTest1a.Maximum_Permeability_2.arrays"
 if exist "arrays\SutraTest1a.Maximum_Permeability_3.arrays" del "arrays\SutraTest1a.Maximum_Permeability_3.arrays"
+if exist "arrays\SutraTest1a.Middle_Permeability_1.arrays" del "arrays\SutraTest1a.Middle_Permeability_1.arrays"
+if exist "arrays\SutraTest1a.Middle_Permeability_2.arrays" del "arrays\SutraTest1a.Middle_Permeability_2.arrays"
+if exist "arrays\SutraTest1a.Middle_Permeability_3.arrays" del "arrays\SutraTest1a.Middle_Permeability_3.arrays"
+if exist "arrays\SutraTest1a.Minimum_Permeability_1.arrays" del "arrays\SutraTest1a.Minimum_Permeability_1.arrays"
+if exist "arrays\SutraTest1a.Minimum_Permeability_2.arrays" del "arrays\SutraTest1a.Minimum_Permeability_2.arrays"
+if exist "arrays\SutraTest1a.Minimum_Permeability_3.arrays" del "arrays\SutraTest1a.Minimum_Permeability_3.arrays"
 if exist "arrays\SutraTest1a.MyMult_1.arrays" del "arrays\SutraTest1a.MyMult_1.arrays"
 if exist "arrays\SutraTest1a.MyMult_2.arrays" del "arrays\SutraTest1a.MyMult_2.arrays"
 if exist "arrays\SutraTest1a.MyMult_3.arrays" del "arrays\SutraTest1a.MyMult_3.arrays"
@@ -37,6 +43,12 @@ if exist "SutraTest1a_TIME_STEPS.OBS" del "SutraTest1a_TIME_STEPS.OBS"
 "C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1a.FluxBcs.tpl SutraTest1a.pval
 "C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1a.SPecPBcs.tpl SutraTest1a.pval
 "C:\Pest17.3\plproc.exe" 'SutraTest1a.14B.script'
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_1.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_2.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Middle_Permeability_3.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_1.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_2.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest1a.Minimum_Permeability_3.arrays.tpl
 "C:\Pest17.3\plproc.exe" 'SutraTest1a.15B.script'
 "C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" SutraTest1a.inp.tpl SutraTest1a.pval
 "C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe"

@@ -180,6 +180,33 @@ type
       write SetSpecifyLakeBottom stored True;
   end;
 
+  TSutraPestAnisotropyOptions = class(TGoPhastPersistent)
+  private
+    FUseAlmaxAlmidAnisotropy: Boolean;
+    FUseAtmaxAtminAnisotropy: Boolean;
+    FUsePmaxPminAnisotropy: Boolean;
+    FUseAtmaxAtmidAnisotropy: Boolean;
+    FUsePmaxPmidAnisotropy: Boolean;
+    FUseAlmaxAlminAnisotropy: Boolean;
+    procedure SetUseAlmaxAlmidAnisotropy(const Value: Boolean);
+    procedure SetUseAlmaxAlminAnisotropy(const Value: Boolean);
+    procedure SetUseAtmaxAtmidAnisotropy(const Value: Boolean);
+    procedure SetUseAtmaxAtminAnisotropy(const Value: Boolean);
+    procedure SetUsePmaxPmidAnisotropy(const Value: Boolean);
+    procedure SetUsePmaxPminAnisotropy(const Value: Boolean);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    procedure Assign(Source: TPersistent); override;
+    procedure Initialize;
+  published
+    property UsePmaxPmidAnisotropy: Boolean read FUsePmaxPmidAnisotropy write SetUsePmaxPmidAnisotropy;
+    property UsePmaxPminAnisotropy: Boolean read FUsePmaxPminAnisotropy write SetUsePmaxPminAnisotropy;
+    property UseAlmaxAlmidAnisotropy: Boolean read FUseAlmaxAlmidAnisotropy write SetUseAlmaxAlmidAnisotropy;
+    property UseAlmaxAlminAnisotropy: Boolean read FUseAlmaxAlminAnisotropy write SetUseAlmaxAlminAnisotropy;
+    property UseAtmaxAtmidAnisotropy: Boolean read FUseAtmaxAtmidAnisotropy write SetUseAtmaxAtmidAnisotropy;
+    property UseAtmaxAtminAnisotropy: Boolean read FUseAtmaxAtminAnisotropy write SetUseAtmaxAtminAnisotropy;
+  end;
+
   TSutraOptions = class(TGoPhastPersistent)
   strict private
     FModel: TBaseModel;
@@ -231,6 +258,7 @@ type
     FFullReadStartRestartFileName: string;
     FReadStart: TReadStart;
     FLakeOptions: TSutraLakeOptions;
+    FPestAnisotropyOptions: TSutraPestAnisotropyOptions;
     procedure SetTransportChoice(const Value: TTransportChoice);
     procedure SetSaturationChoice(const Value: TSaturationChoice);
     procedure SetTitleLines(const Value: AnsiString);
@@ -346,6 +374,8 @@ type
     function GetReadStartRestartFileName: string;
     procedure SetReadStartRestartFileName(const Value: string);
     procedure SetLakeOptions(const Value: TSutraLakeOptions);
+    procedure SetPestAnisotropyOptions(
+      const Value: TSutraPestAnisotropyOptions);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -608,6 +638,13 @@ type
       write SetReadStartRestartFileName;
     property LakeOptions: TSutraLakeOptions read FLakeOptions
       write SetLakeOptions;
+    property PestAnisotropyOptions: TSutraPestAnisotropyOptions read FPestAnisotropyOptions
+      write SetPestAnisotropyOptions
+    {$IFNDEF PEST}
+    stored False
+    {$ENDIF}
+    ;
+
   end;
 
 
@@ -681,7 +718,7 @@ begin
     FullReadStartRestartFileName := SourceOptions.FullReadStartRestartFileName;
 
     LakeOptions := SourceOptions.LakeOptions;
-    // SimulationType := SourceOptions.SimulationType;
+    PestAnisotropyOptions := SourceOptions.PestAnisotropyOptions;
     // SimulationType := SourceOptions.SimulationType;
     // SimulationType := SourceOptions.SimulationType;
     // SimulationType := SourceOptions.SimulationType;
@@ -698,11 +735,13 @@ begin
   begin
     inherited Create(nil);
     FLakeOptions := TSutraLakeOptions.Create(nil);
+    FPestAnisotropyOptions := TSutraPestAnisotropyOptions.Create(nil);
   end
   else
   begin
     inherited Create(Model.Invalidate);
     FLakeOptions := TSutraLakeOptions.Create(Model.Invalidate);
+    FPestAnisotropyOptions := TSutraPestAnisotropyOptions.Create(Model.Invalidate);
   end;
   Assert((Model = nil) or (Model is TCustomModel));
   FModel := Model;
@@ -784,6 +823,7 @@ end;
 
 destructor TSutraOptions.Destroy;
 begin
+  FPestAnisotropyOptions.Free;
   FLakeOptions.Free;
 
   FStoredTransportCriterion.Free;
@@ -1051,6 +1091,7 @@ begin
   FullReadStartRestartFileName := '';
 
   FLakeOptions.Initialize;
+  FPestAnisotropyOptions.Initialize;
 end;
 
 procedure TSutraOptions.SetBaseFluidDensity(const Value: double);
@@ -1169,6 +1210,12 @@ end;
 procedure TSutraOptions.SetNonLinPressureCriterion(const Value: double);
 begin
   StoredNonLinPressureCriterion.Value := Value;
+end;
+
+procedure TSutraOptions.SetPestAnisotropyOptions(
+  const Value: TSutraPestAnisotropyOptions);
+begin
+  FPestAnisotropyOptions.Assign(Value);
 end;
 
 procedure TSutraOptions.SetPresSolutionMethod(const Value
@@ -1840,6 +1887,82 @@ begin
     FUSourceSinkLakePresent := Value;
     InvalidateModel;
   end;
+end;
+
+{ TSutraPestAnisotropyOptions }
+
+procedure TSutraPestAnisotropyOptions.Assign(Source: TPersistent);
+var
+  AnisoSource: TSutraPestAnisotropyOptions;
+begin
+  if Source is TSutraPestAnisotropyOptions then
+  begin
+    AnisoSource := TSutraPestAnisotropyOptions(Source);
+    UsePmaxPmidAnisotropy := AnisoSource.UsePmaxPmidAnisotropy;
+    UsePmaxPminAnisotropy := AnisoSource.UsePmaxPminAnisotropy;
+    UseAlmaxAlmidAnisotropy := AnisoSource.UseAlmaxAlmidAnisotropy;
+    UseAlmaxAlminAnisotropy := AnisoSource.UseAlmaxAlminAnisotropy;
+    UseAtmaxAtmidAnisotropy := AnisoSource.UseAtmaxAtmidAnisotropy;
+    UseAtmaxAtminAnisotropy := AnisoSource.UseAtmaxAtminAnisotropy;
+  end
+  else
+  begin
+    inherited;
+  end;
+
+end;
+
+constructor TSutraPestAnisotropyOptions.Create(
+  InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited;
+  Initialize;
+end;
+
+procedure TSutraPestAnisotropyOptions.Initialize;
+begin
+  FUsePmaxPmidAnisotropy := True;
+  FUsePmaxPminAnisotropy := True;
+  FUseAlmaxAlmidAnisotropy := True;
+  FUseAlmaxAlminAnisotropy := True;
+  FUseAtmaxAtmidAnisotropy := True;
+  FUseAtmaxAtminAnisotropy := True;
+end;
+
+procedure TSutraPestAnisotropyOptions.SetUseAlmaxAlmidAnisotropy(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseAlmaxAlmidAnisotropy, Value);
+end;
+
+procedure TSutraPestAnisotropyOptions.SetUseAlmaxAlminAnisotropy(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseAlmaxAlminAnisotropy, Value);
+end;
+
+procedure TSutraPestAnisotropyOptions.SetUseAtmaxAtmidAnisotropy(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseAtmaxAtmidAnisotropy, Value);
+end;
+
+procedure TSutraPestAnisotropyOptions.SetUseAtmaxAtminAnisotropy(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUseAtmaxAtminAnisotropy, Value);
+end;
+
+procedure TSutraPestAnisotropyOptions.SetUsePmaxPmidAnisotropy(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUsePmaxPmidAnisotropy, Value);
+end;
+
+procedure TSutraPestAnisotropyOptions.SetUsePmaxPminAnisotropy(
+  const Value: Boolean);
+begin
+  SetBooleanProperty(FUsePmaxPminAnisotropy, Value);
 end;
 
 end.

@@ -44,7 +44,7 @@
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="..\MnwiObsExtractor\simpletextwriter.pas"/>
+        <Filename Value="..\Mf2005ObsExtractor\simpletextwriter.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="SimpleTextWriter"/>
       </Unit3>
@@ -58,7 +58,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\Components\RbwParser;..\MnwiObsExtractor"/>
+      <OtherUnitFiles Value="..\Components\RbwParser;..\Mf2005ObsExtractor"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>

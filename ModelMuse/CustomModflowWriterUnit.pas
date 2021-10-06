@@ -1496,7 +1496,7 @@ begin
     ArchiveBatchFile := TStringList.Create;
     WriteInstuctionsBatchFile := TStringList.Create;
     try
-      Model.AddFilestToDeleteToBatchFile(ParamEstBatchFile, ParamEstBatFileName);
+      Model.AddFilesToDeleteToBatchFile(ParamEstBatchFile, ParamEstBatFileName);
 
       PLPROC_Location := GetPLPROC_Location(FileName, Model);
       PLPROC_Location := Format('"%s" ', [PLPROC_Location]);

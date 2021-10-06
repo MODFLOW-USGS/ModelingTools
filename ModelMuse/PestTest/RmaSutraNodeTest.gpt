@@ -48995,6 +48995,12 @@ object Model: TPhastModel
   SutraOptions.LakeOptions.UseLakes = False
   SutraOptions.LakeOptions.AllNodesLakes = False
   SutraOptions.LakeOptions.SpecifyLakeBottom = False
+  SutraOptions.PestAnisotropyOptions.UsePmaxPmidAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UsePmaxPminAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAlmaxAlmidAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAlmaxAlminAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAtmaxAtmidAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAtmaxAtminAnisotropy = True
   SutraOutputControl.ListingPrintFrequency = 9999
   SutraOutputControl.ListingOptions = [sloNPrint, sloCPandS, sloCVel, sloCCorT, sloCBudg, sloCScrn]
   SutraOutputControl.NE_PrintFrequency = 10
@@ -53928,7 +53934,7 @@ object Model: TPhastModel
       DataSet.Orientation = dso3D
       DataSet.AngleType = atNone
       DataSet.ContourInterval.Value = 0.000000000000000000
-      DataSet.PestParametersUsed = True
+      DataSet.PestParametersUsed = False
       DataSet.UsedPestParameters.Strings = (
         'K')
       DataSet.PestParametersAllowed = True

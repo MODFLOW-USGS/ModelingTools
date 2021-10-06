@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4275</config-value>
+      <config-value name="autohelpstart">4279</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -640,6 +640,7 @@ document.write('</frameset>');
       <helpcontext-number href="ADV_Advection_Package_Pane#NPLANE" value="3657"/>
       <helpcontext-number href="ADV_Advection_Package_Pane#PERCEL" value="3654"/>
       <helpcontext-number href="ADV_Advection_Package_Pane#TVD" value="3655"/>
+      <helpcontext-number href="Anisotropy_Pane" value="4276"/>
       <helpcontext-number href="Anonymize_Selected_Point_Objec" value="4127"/>
       <helpcontext-number href="Appendix_1_ModelMonitor" value="3487"/>
       <helpcontext-number href="ArcCos" value="1310"/>
@@ -1486,6 +1487,7 @@ document.write('</frameset>');
       <helpcontext-number href="RMA_View_Results" value="3407"/>
       <helpcontext-number href="RMA_Wells" value="3405"/>
       <helpcontext-number href="Rma2005_Define_Observation_Gro" value="4270"/>
+      <helpcontext-number href="Rma2005_Prior_Information" value="4278"/>
       <helpcontext-number href="RmaMf2005_Activate_PEST" value="4254"/>
       <helpcontext-number href="RmaMf2005_Apply_K_Parameter" value="4257"/>
       <helpcontext-number href="RmaMf2005_Apply_Seepage_Parame" value="4258"/>
@@ -1508,6 +1510,7 @@ document.write('</frameset>');
       <helpcontext-number href="RmaMf6_Define_Pilot_Points" value="4240"/>
       <helpcontext-number href="RmaMF6_Model_Summary" value="4237"/>
       <helpcontext-number href="RmaMF6_Next_Steps" value="4250"/>
+      <helpcontext-number href="RmaMF6_Prior_Information" value="4277"/>
       <helpcontext-number href="RmaMF6_Run_PEST" value="4246"/>
       <helpcontext-number href="RmaMF6_Understanding_the_RunMo" value="4249"/>
       <helpcontext-number href="RmaMF6_Use_Anisotropy" value="4239"/>
@@ -1521,6 +1524,7 @@ document.write('</frameset>');
       <helpcontext-number href="RmaSutra_Define_Pilot_Points" value="4266"/>
       <helpcontext-number href="RmaSutra_Model_Summary" value="4263"/>
       <helpcontext-number href="RmaSutra_Next_Steps" value="4274"/>
+      <helpcontext-number href="RmaSutra_Prior_Information" value="4279"/>
       <helpcontext-number href="RmaSutra_Run_PEST" value="4272"/>
       <helpcontext-number href="RmaSutra_Visualize_Modified_Mo" value="4273"/>
       <helpcontext-number href="Rocky_Mountain_Arsenal" value="3391"/>

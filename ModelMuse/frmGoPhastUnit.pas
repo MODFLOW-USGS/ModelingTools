@@ -10198,7 +10198,7 @@ begin
             ParamEstBatFile.Add('pushd ' + ModelDirectory);
           end;
 
-          PhastModel.AddFilestToDeleteToBatchFile(ParamEstBatFile, ParamEstBatFileName);
+          PhastModel.AddFilesToDeleteToBatchFile(ParamEstBatFile, ParamEstBatFileName);
           PLPROC_Location := GetPLPROC_Location(FileName, PhastModel);
           PLPROC_Location := Format('"%s" ', [PLPROC_Location]);
           for DSIndex := 0 to PhastModel.DataArrayManager.DataSetCount - 1 do

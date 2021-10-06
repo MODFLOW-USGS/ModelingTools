@@ -24,6 +24,12 @@ if exist "SutraTest5_ObsSchec.OBS" del "SutraTest5_ObsSchec.OBS"
 "C:\Pest17.3\plproc.exe" SutraTest5.Maximum_Permeability.script
 "C:\Pest17.3\plproc.exe" SutraTest5.Minimum_Permeability.script
 "C:\Pest17.3\plproc.exe" SutraTest5.Middle_Permeability.script
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest5.Middle_Permeability_1.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest5.Middle_Permeability_2.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest5.Middle_Permeability_3.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest5.Minimum_Permeability_1.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest5.Minimum_Permeability_2.arrays.tpl
+"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" arrays\SutraTest5.Minimum_Permeability_3.arrays.tpl
 "C:\Pest17.3\plproc.exe" 'SutraTest5.15B.script'
 "C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe"
 "C:\ModelingTools\ModelMuse\Debug\Win32\SutraObsExtractor.exe" SutraTest5.soe_ev

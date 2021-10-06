@@ -122,7 +122,7 @@ resourcestring
     +'character was after the "]" character in "%1:s".';
   rsWhileReading = 'While reading %0:s, no array name was found in "%1:s".';
   rsWhileReading2 = 'While reading %0:s, no file name was found in "%1:s".';
-  rsWhileReading3 = 'While reading %0:s, the file name "%1:s" in "%1:s" does '
+  rsWhileReading3 = 'While reading %0:s, the file named "%1:s" in "%1:s" does '
     +'not exist.';
   rsWhileReading4 = 'While reading the dimensions of the array "%0:s" in the '
     +'line "%1:s" of "%2:s", the number of dimensions was not equal to 3.';
@@ -132,7 +132,7 @@ resourcestring
   rsTheArrayName = 'The array named "%0:s" has been defined more than once in '
     +'"%:1s".';
   rsThereAreTooM = 'There are too many numbers for the array "%0:s" being read'
-    +' from the file "1:s".';
+    +' from the file "%1:s".';
   rsThereAreNotE = 'There are not enough numbers for the array "%0:s" being '
     +'read from the file "1:s".';
   rsInvalidArray = 'Invalid array name "%0:s" in the line "%1:s" read from "%2'
@@ -401,6 +401,7 @@ var
   OriginalFormula: string;
   StartArrayNameFile: Integer;
   EndArrayNameFile: Integer;
+  ArrayNameLength: Integer;
   function CountFormulaDelimiterBefore(APosition: Integer): integer;
   var
     FormulaDelimiterPosition: Integer;
@@ -577,6 +578,11 @@ begin
     EndArrayNameFile := Pos(')', ALine);
     Assert(False, Format('Unbalanced parenthesis in "%s"', [OriginalLine]));
     FArrayNamesFile := Copy(ALine, StartArrayNameFile, EndArrayNameFile-StartArrayNameFile);
+    ArrayNameLength := Length(FArrayNamesFile);
+    if (ArrayNameLength > 0) and (FArrayNamesFile[1] = '"') and (FArrayNamesFile[ArrayNameLength] = '"') then
+    begin
+      FArrayNamesFile := Copy(FArrayNamesFile, 2, ArrayNameLength-2);
+    end;
     FArrayNamesFile := ExpandFileName(FArrayNamesFile);
     CreateArrayNameReader;
     ReadArrayFiles;

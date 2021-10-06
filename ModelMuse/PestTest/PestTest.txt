@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1470
+1490
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1354,6 +1354,18 @@ SutraTest5.gpt
 	Archive\SutraTest5.Transverse_Dispersivity_Min_Dir
 	Archive\SutraTest5.UFluxBcs
 	Archive\SutraTest5.Unsat_Region_Elements
+	Archive\arrays\SutraTest5.Middle_Permeability_1.arrays.tpl
+	Archive\arrays\SutraTest5.Middle_Permeability_1.ArraysFile
+	Archive\arrays\SutraTest5.Middle_Permeability_2.arrays.tpl
+	Archive\arrays\SutraTest5.Middle_Permeability_2.ArraysFile
+	Archive\arrays\SutraTest5.Middle_Permeability_3.arrays.tpl
+	Archive\arrays\SutraTest5.Middle_Permeability_3.ArraysFile
+	Archive\arrays\SutraTest5.Minimum_Permeability_1.arrays.tpl
+	Archive\arrays\SutraTest5.Minimum_Permeability_1.ArraysFile
+	Archive\arrays\SutraTest5.Minimum_Permeability_2.arrays.tpl
+	Archive\arrays\SutraTest5.Minimum_Permeability_2.ArraysFile
+	Archive\arrays\SutraTest5.Minimum_Permeability_3.arrays.tpl
+	Archive\arrays\SutraTest5.Minimum_Permeability_3.ArraysFile
 	Archive\usgs.SutraTest5.reference
 SutraTest1a.gpt
 	Archive\SutraTest1a.14B
@@ -1419,6 +1431,18 @@ SutraTest1a.gpt
 	Archive\SutraTest1a.UFluxBcs
 	Archive\SutraTest1a.Unsat_Region_Elements
 	Archive\SutraTest1a.Unsat_Region_Nodes
+	Archive\arrays\SutraTest1a.Middle_Permeability_1.arrays.tpl
+	Archive\arrays\SutraTest1a.Middle_Permeability_1.ArraysFile
+	Archive\arrays\SutraTest1a.Middle_Permeability_2.arrays.tpl
+	Archive\arrays\SutraTest1a.Middle_Permeability_2.ArraysFile
+	Archive\arrays\SutraTest1a.Middle_Permeability_3.arrays.tpl
+	Archive\arrays\SutraTest1a.Middle_Permeability_3.ArraysFile
+	Archive\arrays\SutraTest1a.Minimum_Permeability_1.arrays.tpl
+	Archive\arrays\SutraTest1a.Minimum_Permeability_1.ArraysFile
+	Archive\arrays\SutraTest1a.Minimum_Permeability_2.arrays.tpl
+	Archive\arrays\SutraTest1a.Minimum_Permeability_2.ArraysFile
+	Archive\arrays\SutraTest1a.Minimum_Permeability_3.arrays.tpl
+	Archive\arrays\SutraTest1a.Minimum_Permeability_3.ArraysFile
 	Archive\arrays\SutraTest1a.MyMult_1.arrays
 	Archive\arrays\SutraTest1a.MyMult_2.arrays
 	Archive\arrays\SutraTest1a.MyMult_3.arrays
@@ -1449,12 +1473,6 @@ RmaSutraNodeTest.gpt
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script
 	Archive\RmaSutraNodeTest.Maximum_Hydraulic_Conductivity.script.tpl
 	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity
-	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.K.1.pp
-	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.K.1.pp.tpl
-	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.krig_factors_script
-	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.PstValues
-	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.script
-	Archive\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity.script.tpl
 	Archive\RmaSutraNodeTest.Nodal_Porosity
 	Archive\RmaSutraNodeTest.Nodal_Thickness
 	Archive\RmaSutraNodeTest.pst
@@ -1469,4 +1487,6 @@ RmaSutraNodeTest.gpt
 	Archive\RmaSutraNodeTest.Transverse_Dispersivity_Max_Dir
 	Archive\RmaSutraNodeTest.Transverse_Dispersivity_Min_Dir
 	Archive\RmaSutraNodeTest.Unsat_Region_Elements
+	Archive\arrays\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity_1.arrays.tpl
+	Archive\arrays\RmaSutraNodeTest.Minimum_Hydraulic_Conductivity_1.ArraysFile
 	Archive\usgs.RmaSutraNodeTest.reference

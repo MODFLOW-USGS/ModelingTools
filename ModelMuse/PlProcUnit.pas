@@ -183,6 +183,20 @@ type
 
   TDataRecordList = TObjectList<TDataRecord>;
 
+  TAnisotropyWriter = class(TCustomFileWriter)
+  private
+    FRoot: string;
+    FDataArray: TDataArray;
+    FReferenceDataArray: TDataArray;
+    FAnistropy: array of Double;
+    procedure CalculateAnisotropy(LayerIndex: Integer);
+    procedure WriteTemplate(LayerIndex: Integer);
+  protected
+    class function Extension: string; override;
+  public
+    Procedure WriteFile(const Root: string; DataArray, ReferenceDataArray: TDataArray);
+  end;
+
   TSutraData15BScriptWriter = class(TCustomSutraPlprocFileWriter)
   private
     FRoot: string;
@@ -2878,10 +2892,39 @@ var
   UsedDataRoots: TStringList;
   DataRoot: string;
   RootIndex: Integer;
-  procedure ReadData(DataArray: TDataArray; const DataRoot: string);
+  PestAnisotropyOptions: TSutraPestAnisotropyOptions;
+  ReferenceDataArray: TDataArray;
+  procedure ReadData(DataArray: TDataArray; const DataRoot: string;
+    AnisotropyUsed: Boolean);
   var
     LayerIndex: Integer;
     ArrayFileName: string;
+    ReferenceFileName: string;
+    Anistropy: array of double;
+    ReferenceValue: double;
+    ColIndex: Integer;
+    AnisotropyWriter: TAnisotropyWriter;
+    procedure ImportArrayFile;
+    var
+      LayerIndex: Integer;
+      ArrayFileName: string;
+    begin
+      for LayerIndex := 1 to LayerCount do
+      begin
+        WriteString(Format('  p_%0:s%1:d=new_plist(reference_clist=''cl_Discretization'',value=1.0)',
+          [DataRoot, LayerIndex]));
+        NewLine;
+        ArrayFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
+          [FRoot, DataArray.Name, LayerIndex]);
+        Model.FilesToDelete.Add(ArrayFileName);
+        WriteString(Format('  p_%0:s%1:d.read_list_as_array(file=''%2:s'')',
+          [DataRoot, LayerIndex, ArrayFileName]));
+        NewLine;
+        WriteString(Format('  s_%0:sPar%1:d=new_slist(reference_clist=''cl_Discretization'',value=%1:d)',
+          [DataRoot, LayerIndex]));
+        NewLine;
+      end;
+    end;
   begin
     if DataArray <> nil then
     begin
@@ -2892,7 +2935,42 @@ var
 
       Inc(ColIndex);
 
-      if not DataArray.PestParametersUsed then
+      if AnisotropyUsed then
+      begin
+        ImportArrayFile;
+
+        if ScriptChoice = scWriteTemplate then
+        begin
+          AnisotropyWriter := TAnisotropyWriter.Create(Model, etExport);
+          try
+            AnisotropyWriter.WriteFile(FRoot, DataArray, ReferenceDataArray);
+          finally
+            AnisotropyWriter.Free;
+          end;
+        end;
+
+//        SetLength(Anistropy, DataArray.ColumnCount);
+//        for LayerIndex := 1 to LayerCount do
+//        begin
+//          ArrayFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
+//            [FRoot, DataArray.Name, LayerIndex]);
+//          ReferenceFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
+//            [FRoot, ReferenceDataArray.Name, LayerIndex]);
+//          for ColIndex := 1 to DataArray.ColumnCount do
+//          begin
+//            ReferenceValue := ReferenceDataArray.RealData[LayerIndex-1,0,ColIndex-1];
+//            if ReferenceValue = 0 then
+//            begin
+//              Anistropy[ColIndex-1] := 1;
+//            end
+//            else
+//            begin
+//              Anistropy[ColIndex-1] := DataArray.RealData[LayerIndex-1,0,ColIndex-1]/ReferenceValue;
+//            end;
+//          end;
+//        end;
+      end
+      else if not DataArray.PestParametersUsed then
       begin
 
         for LayerIndex := 1 to LayerCount do
@@ -2925,21 +3003,7 @@ var
       end
       else
       begin
-        for LayerIndex := 1 to LayerCount do
-        begin
-          WriteString(Format('  p_%0:s%1:d=new_plist(reference_clist=''cl_Discretization'',value=1.0)',
-            [DataRoot, LayerIndex]));
-          NewLine;
-          ArrayFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
-            [FRoot, DataArray.Name, LayerIndex]);
-          Model.FilesToDelete.Add(ArrayFileName);
-          WriteString(Format('  p_%0:s%1:d.read_list_as_array(file=''%2:s'')',
-            [DataRoot, LayerIndex, ArrayFileName]));
-          NewLine;
-          WriteString(Format('  s_%0:sPar%1:d=new_slist(reference_clist=''cl_Discretization'',value=%1:d)',
-            [DataRoot, LayerIndex]));
-          NewLine;
-        end;
+        ImportArrayFile;
       end;
       NewLine;
     end;
@@ -2952,6 +3016,7 @@ begin
 
   Mesh := Model.SutraMesh;
   Options := Model.SutraOptions;
+  PestAnisotropyOptions := Options.PestAnisotropyOptions;
 
   UsedDataRoots := TStringList.Create;
   OpenFile(FFileName);
@@ -3016,7 +3081,8 @@ begin
       else Assert(False);
     end;
 //    DataRoot := 'PMAX';
-    ReadData(DataArray,  'PMAX');
+    ReadData(DataArray,  'PMAX', False);
+    ReferenceDataArray := DataArray;
     {$ENDREGION}
 
     {$REGION 'PMID'}
@@ -3035,7 +3101,8 @@ begin
     begin
       DataArray := nil;
     end;
-    ReadData(DataArray, 'PMID');
+    ReadData(DataArray, 'PMID',
+      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UsePmaxPmidAnisotropy);
     {$ENDREGION}
 
     {$REGION 'PMIN'}
@@ -3047,12 +3114,13 @@ begin
         DataArray := Model.DataArrayManager.GetDataSetByName(KMinimumK);
       else Assert(False);
     end;
-    ReadData(DataArray, 'PMIN');
+    ReadData(DataArray, 'PMIN',
+      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UsePmaxPminAnisotropy);
     {$ENDREGION}
 
     {$REGION 'ANGLE1'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KHorizontalAngle);
-    ReadData(DataArray, 'ANGLE1');
+    ReadData(DataArray, 'ANGLE1', False);
     {$ENDREGION}
 
     {$REGION 'ANGLE2'}
@@ -3064,7 +3132,7 @@ begin
     begin
       DataArray := nil;
     end;
-    ReadData(DataArray, 'ANGLE2');
+    ReadData(DataArray, 'ANGLE2', False);
     {$ENDREGION}
 
     {$REGION 'ANGLE3'}
@@ -3076,12 +3144,13 @@ begin
     begin
       DataArray := nil;
     end;
-    ReadData(DataArray, 'ANGLE3');
+    ReadData(DataArray, 'ANGLE3', False);
     {$ENDREGION}
 
     {$REGION 'ALMAX'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMaxLongitudinalDisp);
-    ReadData(DataArray, 'ALMAX');
+    ReadData(DataArray, 'ALMAX', False);
+    ReferenceDataArray := DataArray;
     {$ENDREGION}
 
     {$REGION 'ALMID'}
@@ -3093,17 +3162,20 @@ begin
     begin
       DataArray := nil;
     end;
-    ReadData(DataArray, 'ALMID');
+    ReadData(DataArray, 'ALMID',
+      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAlmaxAlmidAnisotropy);
     {$ENDREGION}
 
     {$REGION 'ALMIN'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMinLongitudinalDisp);
-    ReadData(DataArray, 'ALMIN');
+    ReadData(DataArray, 'ALMIN',
+      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAlmaxAlminAnisotropy);
     {$ENDREGION}
 
     {$REGION 'ATMAX'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMaxTransverseDisp);
-    ReadData(DataArray, 'ATMAX');
+    ReadData(DataArray, 'ATMAX', False);
+    ReferenceDataArray := DataArray;
     {$ENDREGION}
 
     {$REGION 'ATMID'}
@@ -3115,12 +3187,14 @@ begin
     begin
       DataArray := nil;
     end;
-    ReadData(DataArray, 'ATMID');
+    ReadData(DataArray, 'ATMID',
+      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAtmaxAtmidAnisotropy);
     {$ENDREGION}
 
     {$REGION 'ATMIN'}
     DataArray := Model.DataArrayManager.GetDataSetByName(KMinTransverseDisp);
-    ReadData(DataArray, 'ATMIN');
+    ReadData(DataArray, 'ATMIN',
+      ReferenceDataArray.PestParametersUsed and PestAnisotropyOptions.UseAtmaxAtminAnisotropy);
     {$ENDREGION}
 
     WriteString('#Read parameter values');
@@ -3260,11 +3334,14 @@ procedure TSutraData15BScriptWriter.WriteFiles(var AFileName: string);
 var
 //  Index: Integer;
   PLPROC_Location: string;
+  ScriptLine: string;
 begin
   FFileName := FileName(AFileName);
   Model.SutraPestScripts.Add(FFileName);
+
   PLPROC_Location := GetPLPROC_Location(FFileName, Model);
-  Model.PestTemplateLines.Add(Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]));
+  ScriptLine := Format('"%0:s" ''%1:s''', [PLPROC_Location, ExtractFileName(FFileName)]);
+
   FRoot := ExtractFileName(ChangeFileExt(AFileName , ''));
   GetParameterNames(FParameterNames);
   GetUsedParameters;
@@ -3273,6 +3350,7 @@ begin
   WriteAFile(scWriteScript);
   WriteAFile(scWriteTemplate);
 
+  Model.PestTemplateLines.Add(ScriptLine);
 end;
 
 //function TSutraData15BScriptWriter.GetKrigFactorRoot(ADataRec: TDataRecord): string;
@@ -4032,6 +4110,121 @@ begin
   finally
     CloseFile;
   end;
+end;
+
+{ TAnisotropyWriter }
+
+procedure TAnisotropyWriter.CalculateAnisotropy(LayerIndex: Integer);
+var
+  ColIndex: Integer;
+  ReferenceValue: Double;
+begin
+  for ColIndex := 0 to FDataArray.ColumnCount-1 do
+  begin
+    ReferenceValue := FReferenceDataArray.RealData[LayerIndex,0,ColIndex];
+    if ReferenceValue = 0 then
+    begin
+      FAnistropy[ColIndex] := 1;
+    end
+    else
+    begin
+      FAnistropy[ColIndex] :=
+        FDataArray.RealData[LayerIndex,0,ColIndex]/ReferenceValue;
+    end;
+  end;
+end;
+
+class function TAnisotropyWriter.Extension: string;
+begin
+  result := '';
+end;
+
+procedure TAnisotropyWriter.WriteFile(const Root: string; DataArray,
+  ReferenceDataArray: TDataArray);
+var
+  LayerIndex: Integer;
+begin
+  FRoot := Root;
+  FDataArray := DataArray;
+  FReferenceDataArray := ReferenceDataArray;
+  SetLength(FAnistropy, FDataArray.ColumnCount);
+  for LayerIndex := 0 to FDataArray.LayerCount -1 do
+  begin
+    CalculateAnisotropy(LayerIndex);
+    WriteTemplate(LayerIndex);
+  end;
+end;
+
+procedure TAnisotropyWriter.WriteTemplate(LayerIndex: Integer);
+var
+  TemplateFileName: string;
+  ReferenceFileName: string;
+  ArrayFileName: string;
+  ExtendedTemplateCharacter: Char;
+  ArrayTemplateCharacter: Char;
+  ArrayFileReference: string;
+  ColIndex: Integer;
+  ALine: string;
+begin
+  ExtendedTemplateCharacter := Model.PestProperties.ExtendedTemplateCharacter;
+  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
+
+  ArrayFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
+    [FRoot, FDataArray.Name, LayerIndex+1]);
+  ReferenceFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
+   [FRoot, FReferenceDataArray.Name, LayerIndex+1]);
+  Model.FilesToDelete.Add(ArrayFileName);
+  ArrayFileReference := Format('arrays\%0:s.%1:s_%2:d.ArraysFile',
+    [FRoot, FDataArray.Name, LayerIndex+1]);
+  OpenFile(ExpandFileName(ArrayFileReference));
+  try
+    WriteString(ArrayTemplateCharacter);
+    NewLine;
+    WriteString(FReferenceDataArray.Name);
+    WriteString('[1,1,');
+    WriteInteger(FReferenceDataArray.ColumnCount);
+    WriteString('] ');
+    WriteString(ReferenceFileName);
+    NewLine;
+  finally
+    CloseFile;
+  end;
+
+  TemplateFileName := ArrayFileName + '.tpl';
+
+  OpenFile(ExpandFileName(TemplateFileName));
+  try
+    WriteString('etf ');
+    WriteString(ExtendedTemplateCharacter);
+    NewLine;
+    WriteString(ExtendedTemplateCharacter);
+    WriteString('ReadArrays(');
+    WriteString(ArrayFileReference);
+    WriteString(')');
+    WriteString(ExtendedTemplateCharacter);
+    NewLine;
+    for ColIndex := 0 to FReferenceDataArray.ColumnCount - 1 do
+    begin
+      WriteString(ExtendedTemplateCharacter);
+      WriteString('                ');
+      WriteFloat(FAnistropy[ColIndex]);
+      WriteString(' * ');
+      WriteString(ArrayTemplateCharacter);
+      WriteString('                ');
+      WriteString(FReferenceDataArray.Name);
+      WriteString('[1,1,');
+      WriteInteger(ColIndex+1);
+      WriteString(']');
+      WriteString(ArrayTemplateCharacter);
+      WriteString(ExtendedTemplateCharacter);
+      NewLine;
+    end;
+  finally
+    CloseFile;
+  end;
+  ALine := PestUtilityProgramPath(
+    StrEnhancedTemplateProc, TemplateFileName) + ' ' + TemplateFileName;
+  Model.PestTemplateLines.Add(ALine);
 end;
 
 end.

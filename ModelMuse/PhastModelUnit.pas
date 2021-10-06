@@ -3364,7 +3364,7 @@ that affects the model output should also have a comment. }
     // @name  is filled with the names of files to delete in the RunModel.bat
     // file used by PEST.
     property FilesToDelete: TStrings read GetFilesToDelete;
-    procedure AddFilestToDeleteToBatchFile(BatchFile: TStrings;
+    procedure AddFilesToDeleteToBatchFile(BatchFile: TStrings;
       const BatchFileName: string);
     property CanDrawContours: Boolean read FCanDrawContours
       write SetCanDrawContours;
@@ -30897,7 +30897,7 @@ begin
   TestAddModelModelFile(AFileName, FExternalFiles);
 end;
 
-procedure TCustomModel.AddFilestToDeleteToBatchFile(BatchFile: TStrings;
+procedure TCustomModel.AddFilesToDeleteToBatchFile(BatchFile: TStrings;
   const BatchFileName: string);
 var
   FileIndex: Integer;

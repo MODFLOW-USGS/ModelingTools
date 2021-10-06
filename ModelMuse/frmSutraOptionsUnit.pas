@@ -151,6 +151,14 @@ type
     cbAllNodesLakes: TCheckBox;
     cbSpecifyLakeBotton: TCheckBox;
     rcLakes: TRbwController;
+    jvspAnisotropy: TJvStandardPage;
+    gbAnisotropy: TGroupBox;
+    cbAnisoPmaxPmid: TCheckBox;
+    cbAnisoPmaxPmin: TCheckBox;
+    cbAnisoAlmaxAlmid: TCheckBox;
+    cbAnisoAlmaxAlmin: TCheckBox;
+    cbAnisoAtmaxAtmid: TCheckBox;
+    cbAnisoAtmaxAtmin: TCheckBox;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure seMaxIterationsChange(Sender: TObject);
@@ -227,6 +235,7 @@ resourcestring
   StrLakes = 'Lakes';
   StrDefaultLakeBoundar = 'Lake-Boundary Interactions';
   StrLakesCanOnlyBeUs = 'Lakes can only be used with 3D models.';
+  StrAnisotropy = 'Anisotropy';
 
 {$R *.dfm}
 
@@ -400,6 +409,9 @@ begin
     FLakeInteractionsNode.PageIndex := jvspDefaultLakeInteractions.PageIndex;
   end;
 
+  Node := jvpltvNavigation.Items.Add(nil, StrAnisotropy) as TJvPageIndexNode;
+  Node.PageIndex := jvspAnisotropy.PageIndex;
+
   jplMain.ActivePageIndex := 0;
 
   HelpKeyword := StoredHelpKeyword;
@@ -412,6 +424,7 @@ procedure TfrmSutraOptions.GetData;
 var
   SutraOptions: TSutraOptions;
   LakeOptions: TSutraLakeOptions;
+  AnisotropyOptions: TSutraPestAnisotropyOptions;
 begin
   FGettingData := true;
   try
@@ -533,6 +546,14 @@ begin
       := Ord(LakeOptions.GeneralizedFlowInteractionType);
     comboLakeGeneralizedTransportType.ItemIndex
       := Ord(LakeOptions.GeneralizedTransportInteractionType);
+
+    AnisotropyOptions := SutraOptions.PestAnisotropyOptions;
+    cbAnisoPmaxPmid.Checked := AnisotropyOptions.UsePmaxPmidAnisotropy;
+    cbAnisoPmaxPmin.Checked := AnisotropyOptions.UsePmaxPminAnisotropy;
+    cbAnisoAlmaxAlmid.Checked := AnisotropyOptions.UseAlmaxAlmidAnisotropy;
+    cbAnisoAlmaxAlmin.Checked := AnisotropyOptions.UseAlmaxAlminAnisotropy;
+    cbAnisoAtmaxAtmid.Checked := AnisotropyOptions.UseAtmaxAtmidAnisotropy;
+    cbAnisoAtmaxAtmin.Checked := AnisotropyOptions.UseAtmaxAtminAnisotropy;
 
     EnableControls;
   finally
@@ -824,6 +845,7 @@ var
   UndoItem: TUndoChangeSutraOptions;
   MeshType: TMeshType;
   LakeOptions: TSutraLakeOptions;
+  AnisotropyOptions: TSutraPestAnisotropyOptions;
 begin
   SutraOptions := TSutraOptions.Create(nil);
   try
@@ -912,6 +934,14 @@ begin
       := TGeneralizedFlowInteractionType(comboLakeGeneralizedFlowType.ItemIndex);
     LakeOptions.GeneralizedTransportInteractionType
       := TGeneralizedTransportInteractionType(comboLakeGeneralizedTransportType.ItemIndex);
+
+    AnisotropyOptions := SutraOptions.PestAnisotropyOptions;
+    AnisotropyOptions.UsePmaxPmidAnisotropy := cbAnisoPmaxPmid.Checked;
+    AnisotropyOptions.UsePmaxPminAnisotropy := cbAnisoPmaxPmin.Checked;
+    AnisotropyOptions.UseAlmaxAlmidAnisotropy := cbAnisoAlmaxAlmid.Checked;
+    AnisotropyOptions.UseAlmaxAlminAnisotropy := cbAnisoAlmaxAlmin.Checked;
+    AnisotropyOptions.UseAtmaxAtmidAnisotropy := cbAnisoAtmaxAtmid.Checked;
+    AnisotropyOptions.UseAtmaxAtminAnisotropy := cbAnisoAtmaxAtmin.Checked;
 
     UndoItem := TUndoChangeSutraOptions.Create(SutraOptions, MeshType);
     frmGoPhast.UndoStack.Submit(UndoItem);

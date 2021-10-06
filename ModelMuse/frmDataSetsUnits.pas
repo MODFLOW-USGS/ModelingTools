@@ -428,7 +428,7 @@ implementation
 uses frmGoPhastUnit, frmFormulaUnit, frmConvertChoiceUnit, InterpolationUnit,
   GIS_Functions, PhastModelUnit, frmShowHideObjectsUnit, GlobalVariablesUnit,
   StrUtils, OrderedCollectionUnit, HufDefinition, LayerStructureUnit,
-  SubscriptionUnit, Menus, frmSelectResultToImportUnit;
+  SubscriptionUnit, Menus, frmSelectResultToImportUnit, SutraOptionsUnit;
 
 resourcestring
   StrNone = 'none';
@@ -2789,6 +2789,7 @@ procedure TfrmDataSets.SetSelectedEdit(const Value: TDataArrayEdit);
 var
   NewInterpolatorName: string;
   TabParamActive: Boolean;
+  AnisotropyOptions: TSutraPestAnisotropyOptions;
 begin
 
   if (FSelectedEdit <> Value) or (Value = nil) then
@@ -2910,6 +2911,51 @@ begin
         and (Pos(StrLayerDefinition, FSelectedEdit.FullClassification) <= 0)
         and (FSelectedEdit.DataArray.Name <> rsWetDryThreshold)
         and (not FSelectedEdit.DataArray.ParameterUsed);
+      if tabParameters.TabVisible and
+        (frmGoPhast.ModelSelection in SutraSelection) then
+      begin
+        AnisotropyOptions := frmGoPhast.PhastModel.SutraOptions.PestAnisotropyOptions;
+        if (FSelectedEdit.DataArray.Name = KMiddlePermeability)
+          and AnisotropyOptions.UsePmaxPmidAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+        else if (FSelectedEdit.DataArray.Name = KMiddleK)
+          and AnisotropyOptions.UsePmaxPmidAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+        else if (FSelectedEdit.DataArray.Name = KMinimumPermeability)
+          and AnisotropyOptions.UsePmaxPminAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+        else if (FSelectedEdit.DataArray.Name = KMinimumK)
+          and AnisotropyOptions.UsePmaxPminAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+        else if (FSelectedEdit.DataArray.Name = KMidLongitudinalDisp)
+          and AnisotropyOptions.UseAlmaxAlmidAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+        else if (FSelectedEdit.DataArray.Name = KMinLongitudinalDisp)
+          and AnisotropyOptions.UseAlmaxAlminAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+        else if (FSelectedEdit.DataArray.Name = KMidTransverseDisp)
+          and AnisotropyOptions.UseAtmaxAtmidAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+        else if (FSelectedEdit.DataArray.Name = KMinTransverseDisp)
+          and AnisotropyOptions.UseAtmaxAtminAnisotropy then
+        begin
+          tabParameters.TabVisible := False;
+        end
+      end;
       if TabParamActive and not tabParameters.TabVisible then
       begin
         pcDataSets.ActivePageIndex := 0;

@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp,
   { you can add units after this }
-  ProcessTemplateUnit, SimpleTextWriter;
+  ProcessTemplateUnit;
 
 type
 

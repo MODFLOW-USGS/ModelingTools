@@ -69,7 +69,7 @@ inherited frmSutraOptions: TfrmSutraOptions
     Top = 0
     Width = 595
     Height = 512
-    ActivePage = jvspSolidAdsorption
+    ActivePage = jvspAnisotropy
     PropagateEnable = False
     Align = alClient
     OnChange = jplMainChange
@@ -1416,6 +1416,75 @@ inherited frmSutraOptions: TfrmSutraOptions
           Items.Strings = (
             'Like solute/energy source/sink (S)'
             'Like spec. conc./temp. (U)')
+        end
+      end
+    end
+    object jvspAnisotropy: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 595
+      Height = 512
+      HelpType = htKeyword
+      HelpKeyword = 'Anisotropy_Pane'
+      Caption = 'jvspAnisotropy'
+      ExplicitLeft = -4
+      ExplicitTop = 1
+      object gbAnisotropy: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 595
+        Height = 512
+        Align = alClient
+        Caption = 'Anisotropy option during parameter estimation'
+        TabOrder = 0
+        ExplicitLeft = -4
+        object cbAnisoPmaxPmid: TCheckBox
+          Left = 16
+          Top = 32
+          Width = 329
+          Height = 17
+          Caption = 'Use Anisotropy for PMID vs PMAX'
+          TabOrder = 0
+        end
+        object cbAnisoPmaxPmin: TCheckBox
+          Left = 16
+          Top = 55
+          Width = 329
+          Height = 17
+          Caption = 'Use Anisotropy for PMIN vs PMAX'
+          TabOrder = 1
+        end
+        object cbAnisoAlmaxAlmid: TCheckBox
+          Left = 16
+          Top = 80
+          Width = 329
+          Height = 17
+          Caption = 'Use Anisotropy for ALMID vs ALMAX'
+          TabOrder = 2
+        end
+        object cbAnisoAlmaxAlmin: TCheckBox
+          Left = 16
+          Top = 103
+          Width = 329
+          Height = 17
+          Caption = 'Use Anisotropy for ALMIN vs ALMAX'
+          TabOrder = 3
+        end
+        object cbAnisoAtmaxAtmid: TCheckBox
+          Left = 16
+          Top = 128
+          Width = 329
+          Height = 17
+          Caption = 'Use Anisotropy for ATMID vs ATMAX'
+          TabOrder = 4
+        end
+        object cbAnisoAtmaxAtmin: TCheckBox
+          Left = 16
+          Top = 151
+          Width = 329
+          Height = 17
+          Caption = 'Use Anisotropy for ATMIN vs ATMAX'
+          TabOrder = 5
         end
       end
     end
