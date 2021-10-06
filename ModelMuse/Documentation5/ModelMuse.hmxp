@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4279</config-value>
+      <config-value name="autohelpstart">4280</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1526,6 +1526,7 @@ document.write('</frameset>');
       <helpcontext-number href="RmaSutra_Next_Steps" value="4274"/>
       <helpcontext-number href="RmaSutra_Prior_Information" value="4279"/>
       <helpcontext-number href="RmaSutra_Run_PEST" value="4272"/>
+      <helpcontext-number href="RmaSutra_Use_Anisotropy" value="4280"/>
       <helpcontext-number href="RmaSutra_Visualize_Modified_Mo" value="4273"/>
       <helpcontext-number href="Rocky_Mountain_Arsenal" value="3391"/>
       <helpcontext-number href="Rooting_Depth_Pane" value="3811"/>

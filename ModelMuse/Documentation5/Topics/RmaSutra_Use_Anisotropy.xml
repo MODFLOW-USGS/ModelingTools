@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaSutra: Use Anisotropy</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaSutra: Use Anisotropy</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Unlike MODFLOW, SUTRA does not have a built-in option to use anisotropy for the permeability. However, ModelMuse can enforce enforce a constant ratio of the middle and minimum permeabilities to the maximum permeability during parameter estimation by PEST. The options to use anisotropy are specified on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Anisotropy_Pane" styleclass="Strong" translate="true">Anisotropy</link><text styleclass="Normal" translate="true"> of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SUTRA_Options_Dialog_Box" styleclass="Strong" translate="true">SUTRA Options</link><text styleclass="Normal" translate="true"> dialog box</text><text styleclass="Normal" translate="true">. There are similar options for the longitudinal and transverse dispersivity.</text></para>
+    <para styleclass="Normal"><image src="RmaSutraAnisotropy.png" scale="60.00%" width="589" height="445" styleclass="Image Caption"><title translate="true">options to use anisotropy during parameter estimation.</title><caption translate="true"><![CDATA[Screen capture of the Anisotropy pane of the SUTRA options dialog box illustrating the options to use anisotropy during parameter estimation.]]></caption></image></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

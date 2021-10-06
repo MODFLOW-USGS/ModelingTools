@@ -2895,6 +2895,9 @@
         <topicref type="topic" id="444706003092425" build="ALL" modified="2021-10-01T16:23:20.806Z" icon="0" href="RmaSutra_Model_Summary">
           <caption translate="true">RmaSutra: Model Summary</caption>
         </topicref>
+        <topicref type="topic" id="444756315597348" build="ALL" modified="2021-10-06T16:15:34.240Z" icon="0" href="RmaSutra_Use_Anisotropy">
+          <caption translate="true">RmaSutra: Use Anisotropy</caption>
+        </topicref>
         <topicref type="topic" id="444705244739005" build="ALL" modified="2021-10-01T16:40:55.867Z" icon="0" href="RmaSutra_Activate_PEST">
           <caption translate="true">RmaSutra: Activate PEST</caption>
         </topicref>
