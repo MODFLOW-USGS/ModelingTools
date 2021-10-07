@@ -17,6 +17,7 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define observations.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define observation groups.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Assign observations to observation groups.</text></li>
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Define prior information equations</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Run PEST</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Visualize the modified model input.</text></li>
     </list>

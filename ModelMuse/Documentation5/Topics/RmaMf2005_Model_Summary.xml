@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf2005: Model Summary</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW-2005 version of the Rocky Mountain Arsenal problem is nearly identical to the final model from </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rocky_Mountain_Arsenal" styleclass="Normal" translate="true">this previous tutorial</link><text styleclass="Normal" translate="true">. However, several unused objects have been added that we will use later in the example to help define observations. Just as with the MODFLOW 6 version of the model, we will perform the following tasks. In addition the pumping rate in the seepage pond has been changed so that the total seepage rate from the pond is 0.03 instead of 0.025.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The MODFLOW-2005 version of the Rocky Mountain Arsenal problem is nearly identical to the final model from </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Rocky_Mountain_Arsenal" styleclass="Normal" translate="true">this previous tutorial</link><text styleclass="Normal" translate="true">. However, several unused objects have been added that we will use later in the example to help define observations. Just as with the MODFLOW 6 version of the model, we will perform the following tasks.</text></para>
     <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Activate PEST.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define parameters to use in the model.</text></li>
@@ -17,6 +17,11 @@
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define observations.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Define observation groups.</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Assign observations to observation groups.</text></li>
+    </list>
+    <list id="3" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+      <li styleclass="Normal"><text styleclass="Normal" translate="true">Define prior information equations</text></li>
+    </list>
+    <list id="1" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Run PEST</text></li>
       <li styleclass="Normal"><text styleclass="Normal" translate="true">Visualize the modified model input.</text></li>
     </list>

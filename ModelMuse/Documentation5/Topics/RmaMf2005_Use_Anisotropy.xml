@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">RmaMf2005: Use Anisotropy</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf2005: Use Anisotropy</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">MODFLOW-2005 always uses horizontal anisotropy so unlike with MODFLOW 6, we don&apos;t need to do anything special for it. However, if we had more than one layer in the model, it would be desirable to use vertical anisotropy. We would specify that option in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Layer_Groups_Dialog_Box" styleclass="Normal" translate="true">MODFLOW Layer Groups</link><text styleclass="Normal" translate="true"> dialog box. We would need to specify the option separately for each layer group.</text></para>
+    <para styleclass="Normal"><image src="Mf2005VerticalAnisotropy.png" scale="60.00%" width="439" height="385" styleclass="Image Caption"><title translate="true">Screen capture illustrating how to specify vertical anisotropy in the MODFLOW Layer Groups dialog box.</title><caption translate="true"><![CDATA[Screen capture illustrating how to specify vertical anisotropy in the MODFLOW Layer Groups dialog box.]]></caption></image></para>
   </body>
 </topic>

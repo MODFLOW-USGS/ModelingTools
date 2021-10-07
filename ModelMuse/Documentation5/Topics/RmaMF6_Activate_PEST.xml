@@ -7,5 +7,6 @@
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMF6: Activate PEST</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">To activate PEST, select </text><text styleclass="Strong" translate="true">Model|PEST Properties...</text><text styleclass="Normal" translate="true"> and check the checkbox labeled </text><text styleclass="Strong" translate="true">Use PEST</text><text styleclass="Normal" translate="true"> on the </text><text styleclass="Strong" translate="true">Basic</text><text styleclass="Normal" translate="true"> pane. Be sure that the PEST directory is set to the directory where PEST is installed.</text></para>
+    <para styleclass="Normal"><image src="RmaMf6ActivatePest.png" scale="60.00%" width="574" height="388" styleclass="Image Caption"><title translate="true">Screen capture of the PEST Properties dialog box illustrating activating PEST.</title><caption translate="true"><![CDATA[Screen capture of the PEST Properties dialog box illustrating activating PEST.]]></caption></image></para>
   </body>
 </topic>
