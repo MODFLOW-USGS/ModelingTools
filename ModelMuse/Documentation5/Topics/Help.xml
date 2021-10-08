@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst-pr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Help</title>
   <body>
     <header>
@@ -86,7 +86,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">File Types</text></para>
         </td>
         <td style="vertical-align:top; width:310px; height:15px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display a list of file types handled by ModelMuse in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File_Types_Dialog_Box" styleclass="Table Cell" translate="true">File Types</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display a list of file types handled by ModelMuse in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="File_Types_Dialog_Box" styleclass="Strong" translate="true">File Types</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

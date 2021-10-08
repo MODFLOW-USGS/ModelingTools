@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title>Import MODFLOW 6 Feature Modified by PEST Dialog Box</title>
+  <title translate="true">Import MODFLOW 6 Feature Modified by PEST Dialog Box</title>
   <body>
-    <header><para styleclass="Heading1">Import MODFLOW 6 Feature Modified by PEST Dialog Box</para></header>
-    <para styleclass="Normal">Enter topic text here.</para>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Import MODFLOW 6 Feature Modified by PEST Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Import MODFLOW 6 Feature Modified by PEST</text><text styleclass="Normal" translate="true"> dialog box is used to import data sets representing boundary conditions modified by PEST so that they can be visualized. The dialog box is displayed by selecting </text><text styleclass="Strong" translate="true">File|Import MODFLOW 6 Features Modified by PEST</text><text styleclass="Normal" translate="true">. In the dialog box, the user selects a MODFLOW 6 boundary condition file for the current model and the stress period for which information is desired.</text></para>
   </body>
 </topic>

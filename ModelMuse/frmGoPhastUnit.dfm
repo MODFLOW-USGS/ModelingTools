@@ -2283,16 +2283,16 @@ inherited frmGoPhast: TfrmGoPhast
         Action = acSutraProgramLocations
         GroupIndex = 1
       end
+      object miEditSutraFluxObs: TMenuItem
+        Action = acEditSutraFluxObs
+        GroupIndex = 1
+      end
       object miFootprintProperties: TMenuItem
         Action = acFootprintProperties
         GroupIndex = 1
       end
       object miFootprintProgramLocation: TMenuItem
         Action = acFootprintProgramLocation
-        GroupIndex = 1
-      end
-      object miEditSutraFluxObs: TMenuItem
-        Action = acEditSutraFluxObs
         GroupIndex = 1
       end
       object miEditObservationComparisons: TMenuItem

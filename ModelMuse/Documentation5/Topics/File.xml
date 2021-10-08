@@ -6,7 +6,7 @@
     <header>
       <para styleclass="Heading2_atoc_"><text styleclass="Heading1" translate="true">File</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The menu items under File are listed in table 3. The commands under this menu have to do with opening, saving, importing or exporting files. Many of the choices under File|Import refer to features of data sets and objects that are described under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets Dialog Box</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The menu items under File are listed in table 3. The commands under this menu have to do with opening, saving, importing, or exporting files. Many of the choices under File|Import refer to features of data sets and objects that are described under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets Dialog Box</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 3. File Menu</text></para>
     <para styleclass="Normal" style="text-align:center;"><table rowcount="61" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
@@ -189,14 +189,6 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|MODFLOW 6 Feature Modified by PEST</text></para>
-        </td>
-        <td style="width:405px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import MODFLOW 6 </text><text styleclass="Normal" translate="true">features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_MODFLOW_6_Feature_Modif" styleclass="Strong" translate="true">Import MODFLOW 6 Feature Modified by PEST</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-        </td>
-      </tr>
-      <tr style="vertical-align:top">
-        <td style="width:221px;">
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|ModelMate Values</text></para>
         </td>
         <td style="width:405px;">
@@ -213,18 +205,26 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|SUTRA Features Modified by PEST</text></para>
-        </td>
-        <td style="width:405px;">
-          <para styleclass="Table Cell"><text styleclass="Normal" translate="true">Import SUTRA features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_SUTRA_Feature_Modified_" styleclass="Strong" translate="true">Import SUTRA Feature Modified by PEST</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
-        </td>
-      </tr>
-      <tr style="vertical-align:top">
-        <td style="width:221px;">
           <para styleclass="Table Header" style="text-align:left;"><anchor id="SutraFile" styleclass="Table Header"></anchor><text styleclass="Table Header" translate="true">Import|SUTRA Files</text></para>
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import data from some SUTRA files for visualization. Data from data sets 14B, 15B and the initial conditions file can be imported if data in those data sets has been modified by PEST.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:221px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|MODFLOW 6 Feature Modified by PEST</text></para>
+        </td>
+        <td style="width:405px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import MODFLOW 6 </text><text styleclass="Normal" translate="true">features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_MODFLOW_6_Feature_Modif" styleclass="Strong" translate="true">Import MODFLOW 6 Feature Modified by PEST</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:221px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|SUTRA Features Modified by PEST</text></para>
+        </td>
+        <td style="width:405px;">
+          <para styleclass="Table Cell"><text styleclass="Normal" translate="true">Import SUTRA features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_SUTRA_Feature_Modified_" styleclass="Strong" translate="true">Import SUTRA Feature Modified by PEST</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -318,19 +318,10 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export WellFootprint Input </text></para>
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Files</text></para>
-        </td>
-        <td style="width:405px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input file for Well Footprint and optionally executes Well Footprint. </text></para>
-        </td>
-      </tr>
-      <tr style="vertical-align:top">
-        <td style="width:221px;">
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|Pest|Pest Control File</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Export the PEST control file and optionally run either PEST or PESTCHEK. See also </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Working_with_PEST" styleclass="Table Cell" translate="true">Working with PEST</link><text styleclass="Table Cell" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -338,7 +329,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|Pest|Calculate Number of Superparameters</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SupCalc_Options_Dialog_Box" styleclass="Strong" translate="true">SUPCALC Options</link><text styleclass="Table Cell" translate="true"> dialog box to calculate the number of superparameters that can be used with SVDAPREP. </text><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Singlular_Value_Decompos" styleclass="Normal" translate="true">Using SVD Assist</link><text styleclass="Normal" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -346,7 +337,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|Pest|Modify PEST Control File with SVDAPREP</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SVDAPrep_Input_Dialog_Box" styleclass="Strong" translate="true">SVDAPREP Input</link><text styleclass="Table Cell" translate="true"> dialog box to run SVDAPREP and optionally run PEST. </text><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Singlular_Value_Decompos" styleclass="Normal" translate="true">Using SVD Assist</link><text styleclass="Normal" translate="true">.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -354,7 +345,15 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export|PEST|Replace Parameters in PEST Control File</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Replace the parameter values in in PEST control file with values from a .bpa or .par file generated by PEST. </text><text styleclass="Normal" translate="true">See also: </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Using_Singlular_Value_Decompos" styleclass="Normal" translate="true">Using SVD Assist</link><text styleclass="Normal" translate="true">.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:221px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Export WellFootprint Input Files</text></para>
+        </td>
+        <td style="width:405px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Creates the input file for Well Footprint and optionally executes Well Footprint. </text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

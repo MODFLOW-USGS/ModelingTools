@@ -2,7 +2,7 @@ unit GuiSettingsUnit;
 
 interface
 
-uses Classes, Forms, frameViewUnit, ZoomBox2, RbwRuler;
+uses Classes, Forms, frameViewUnit, ZoomBox2, RbwRuler, System.Math;
 
 type
   TGuiSettings = class(TPersistent)
@@ -1220,18 +1220,18 @@ function TGuiSettings.GetWidth: integer;
 begin
   if frmGoPhast.WindowState = wsNormal then
   begin
-    result := frmGoPhast.Width;
+    result := frmGoPhast.Width
   end
   else
   begin
-    result := frmGoPhast.OldWidth;
+    result := frmGoPhast.OldWidth
   end;
 
 end;
 
 procedure TGuiSettings.SetWidth(Value : integer);
 begin
-  frmGoPhast.Width := Value;
+  frmGoPhast.Width := Max(Value, 775);
 end;
 
 function TGuiSettings.GetWindowState: TWindowState;

@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The items under </text><text styleclass="Normal" style="font-weight:bold;" translate="true">Model</text><text styleclass="Normal" translate="true"> are used to set options specific to a particular model (Table 13). </text></para>
     <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 13. Model Menu</text></para>
-    <para styleclass="Normal" style="text-align:center;"><table rowcount="41" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="48" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td style="vertical-align:top; width:387px;">
           <para styleclass="Table Header"><text styleclass="Table Header" translate="true">Menu Item</text></para>
@@ -20,6 +20,14 @@
       <tr style="vertical-align:top">
         <td colspan="2" style="width:872px;">
           <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Edit Geo Reference</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Geo_Reference_Dialog_Box" styleclass="Strong" translate="true">Geo Reference</link><text styleclass="Table Cell" translate="true"> dialog box used to provide metadata about the model.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -92,7 +100,7 @@
           <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Manage Parameters...</text></para>
         </td>
         <td style="vertical-align:top; width:485px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Parameters_Dialog_Box" styleclass="Strong" translate="true">Manage Parameters</link><text styleclass="Table Cell" translate="true"> dialog box which is used to create, delete, or change the name, type or value of MODFLOW parameters. (This can also be done in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Table Cell" translate="true"> dialog box.)</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Manage_Parameters_Dialog_Box" styleclass="Strong" translate="true">Manage Parameters</link><text styleclass="Table Cell" translate="true"> dialog box which is used to create, delete, or change the name, type or value of MODFLOW and PEST parameters. (This can also be done in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Table Cell" translate="true"> dialog box.)</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
@@ -165,6 +173,54 @@
         </td>
         <td style="vertical-align:top; width:485px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Observations_Dialog_Box" styleclass="Strong" translate="true">SWR Observations</link><text styleclass="Table Cell" translate="true"> dialog box which is used to define observations in the SWR package. This dialog box can only be displayed if </text><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Print_Flags" anchor="SaveObservations" styleclass="Table Cell" translate="true">Save observations</link><text styleclass="Table Cell" translate="true"> in the SWR package has been set to SAVE_SWROBSERVATIONS or SAVE_SWROBSERVATIONS_ALL</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Farm Process|Farm Crops...</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Crop_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Crop Properties</link><text styleclass="Table Cell" translate="true"> dialog box which is used to specify such crop factors as rooting depth and factors that control consumptive use.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Farm Process|Farm Soils...</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Soil_Properties_Dialog_Bo" styleclass="Strong" translate="true">Farm Soil Properties</link><text styleclass="Table Cell" translate="true"> dialog box which </text><text styleclass="Normal" translate="true">is used to specify properties of the soil that affect evapotranspiration</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Farm Process|Farm Climate...</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Climate_Dialog_Box" styleclass="Strong" translate="true">Farm Climate</link><text styleclass="Table Cell" translate="true"> dialog box which </text><text styleclass="Normal" translate="true">is used to specify a time series of climate data. </text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Farm Process|Farm Allotment...</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farm_Allotment_Dialog_Box" styleclass="Strong" translate="true">Farm Allotment</link><text styleclass="Table Cell" translate="true"> dialog box which </text><text styleclass="Normal" translate="true">is used to specify an surface-water allotment height.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Farm Process|Farms...</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Farms_Dialog_Box" styleclass="Table Cell" translate="true">Farms</link><text styleclass="Table Cell" translate="true"> dialog box which </text><text styleclass="Normal" translate="true">is used to specify properties of the farms.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="vertical-align:top; width:387px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Ripearean ET Plant Groups</text></para>
+        </td>
+        <td style="vertical-align:top; width:485px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Display the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Riparian_ET_Plant_Groups_Dialo" styleclass="Strong" translate="true">Riparian ET Plant Groups</link><text styleclass="Table Cell" translate="true"> dialog box which </text><text styleclass="Normal" translate="true">is used to define the transpiration curves of riparian plant groups.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
