@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">PEST Properties Iteration Controls Pane</title>
+  <title translate="true">Iteration Controls Pane</title>
   <keywords>
     <keyword translate="true">LASTRUN</keyword>
     <keyword translate="true">NOPTMAX</keyword>
@@ -15,9 +15,9 @@
   </keywords>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Iteration Controls Pane</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Iteration Controls Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Iteration Controls </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Iteration Controls </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true"> under </text><text styleclass="Strong" translate="true">Control Data</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The variables specified on the </text><text styleclass="Strong" translate="true">Iteration Controls</text><text styleclass="Normal" translate="true"> pane are described in the PEST User Manual, Part I, Section 4.2.9). More extensive descriptions of these variables are in the PEST user manual.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">NOPTMAX</text><text styleclass="Normal" translate="true"> sets the maximum number of iterations that PEST is allowed to undertake on a particular parameter estimation run. </text></para>
     <para styleclass="Normal" style="margin-left:24px;"><text styleclass="Normal" translate="true">If NOPTMAX is set to 0, PEST will not estimate parameters, nor even calculate a Jacobian matrix. Instead it will terminate execution after just one model run. This setting can be used to ensure that PEST setup is correct; at the same time, it can be used to compute objective function components and residuals based on initial parameter values provided in the PEST control file.</text></para>

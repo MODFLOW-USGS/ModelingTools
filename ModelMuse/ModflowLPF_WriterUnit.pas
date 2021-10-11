@@ -111,6 +111,9 @@ resourcestring
   'ted';
   StrTheFollowingLPFPa = 'The following LPF parameters are applied to all ce' +
   'lls because no zones are defined for them.';
+  StrParameterNotUsed = 'Parameter not used';
+  StrTheParameterSIs = 'The parameter %s is not being used because the zone ' +
+  'array for it is false in every model layer.';
 
 { TModflowLPF_Writer }
 
@@ -156,6 +159,7 @@ begin
       Param := Model.ModflowSteadyParameters.Items[ParamIndex];
       if Param.ParameterType in ValidParamTypes then
       begin
+        FParameterUsed[Param.ParameterType] := True;
         if not Param.UseZone then
         begin
           if Param.ParameterType = ptLPF_VKCB then
@@ -171,6 +175,11 @@ begin
         else
         begin
           IdentifyZoneClusters(NCLU, Clusters, UniformLayers, LayerCount, Param);
+          if NCLU = 0 then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrParameterNotUsed,
+              Format(StrTheParameterSIs, [Param.ParameterName]));
+          end;
         end;
         if NCLU = 0 then
         begin
@@ -475,6 +484,7 @@ begin
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterZonesNot);
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrVKCBParameterImpro);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheNOPARCHECKOptLPF);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrParameterNotUsed);
 
     NameOfFile := FileName(AFileName);
     FInputFileName := NameOfFile;

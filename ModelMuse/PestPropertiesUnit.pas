@@ -1718,7 +1718,7 @@ begin
   FMaxCompressionDimension := 1;
   ZeroLimit := 0;
   InitalLambda := 10;
-  LambdaAdjustmentFactor := -3;
+  LambdaAdjustmentFactor := 2;
   PhiRatioSufficient := 0.3;
   PhiReductionLambda := 0.01;
   FNumberOfLambdas := 10;

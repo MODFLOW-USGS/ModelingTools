@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">PEST Properties Pareto Alternate Termination Pane</title>
+  <title translate="true">Pareto Alternate Termination Pane</title>
   <keywords>
     <keyword translate="true">ABOVE_OR_BELOW</keyword>
     <keyword translate="true">ALT_TERM</keyword>
@@ -11,9 +11,9 @@
   </keywords>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Pareto Alternate Termination Pane</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Pareto Alternate Termination Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Pareto Alternate Termination </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Pareto Alternate Termination </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true"> under </text><text styleclass="Strong" translate="true">Pareto</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The variables specified on the </text><text styleclass="Strong" translate="true">Pareto Alternate Termination</text><text styleclass="Normal" translate="true"> pane are described in the PEST User Manual, Part I, Section 13.2.2). More extensive descriptions of these variables are in the PEST user manual. The variables specified on this pane appear in the Pareto section of the PEST control file. </text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">ALT_TERM</text><text styleclass="Normal" translate="true"> If ALT_TERM is activated, termination of PEST execution will occur if a user-nominated model output (i.e. an “observation” cited in the “observation data” section of the PEST control file) rises above, or falls below, a certain threshold, and stays above or below that threshold over a certain number of iterations.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">OBS_TERM</text><text styleclass="Normal" translate="true"> If ALT_TERM is activated, the monitored observation is OBS_TERM.</text></para>

@@ -744,7 +744,7 @@ object PhastModel: TPhastModel
   FilesToArchive.Strings = (
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
-      'RmaMf2005Completed.gpt')
+      'MODFLOW-2005\RmaMf2005Completed.gpt')
   ModelInputFiles.Strings = (
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
@@ -859,7 +859,7 @@ object PhastModel: TPhastModel
       'RmaMf2005Completed.path')
   ModelFileName = 
     'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
-    'RmaMf2005Completed.gpt'
+    'MODFLOW-2005\RmaMf2005Completed.gpt'
   ModflowOptions.HDry = -2E20
   ModflowOptions.HNoFlow = -1E20
   ModflowOptions.StoredHDry.Value = -2E20
@@ -1045,7 +1045,14 @@ object PhastModel: TPhastModel
       Guid2 = '{47046527-D86C-449F-B41D-609270A53D3F}'
     end>
   SutraGlobalObservationComparisons = <>
-  Modflow6GlobalObservationComparisons = <>
+  Modflow6GlobalObservationComparisons = <
+    item
+      Name = 'Gradient'
+      StoredObservedValue.Value = 24.300000000000000000
+      StoredWeight.Value = 3.000000000000000000
+      Guid1 = '{B7CB463B-F542-4574-8B48-1F4E2A8C3EAA}'
+      Guid2 = '{E05C2108-BF91-4EA3-8B2F-E4E0B90FF8E0}'
+    end>
   SutraFluxObs.SpecPres = <>
   SutraFluxObs.FluidFlow = <>
   SutraFluxObs.SpecConc = <>
@@ -4643,10 +4650,10 @@ object PhastModel: TPhastModel
   GuiSettings.SideY = 2831.293447503332000000
   GuiSettings.Top = 39
   GuiSettings.TopViewHeight = 502
-  GuiSettings.TopViewWidth = 526
+  GuiSettings.TopViewWidth = 530
   GuiSettings.TopX = 1248.654463624314000000
   GuiSettings.TopY = 2831.293447503332000000
-  GuiSettings.Width = 771
+  GuiSettings.Width = 775
   GuiSettings.WindowState = wsNormal
   GuiSettings.TopHorizontalDigits = 0
   GuiSettings.TopHorizontalPrecision = 5
@@ -6207,7 +6214,7 @@ object PhastModel: TPhastModel
   PestProperties.PestControlData.MaxCompressionDimension = 1
   PestProperties.PestControlData.StoredZeroLimit.Value = 0.000000000000000000
   PestProperties.PestControlData.StoredInitalLambda.Value = 10.000000000000000000
-  PestProperties.PestControlData.StoredLambdaAdjustmentFactor.Value = -3.000000000000000000
+  PestProperties.PestControlData.StoredLambdaAdjustmentFactor.Value = 2.000000000000000000
   PestProperties.PestControlData.StoredPhiRatioSufficient.Value = 0.300000000000000000
   PestProperties.PestControlData.StoredPhiReductionLambda.Value = 0.010000000000000000
   PestProperties.PestControlData.NumberOfLambdas = 10

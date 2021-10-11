@@ -3,7 +3,7 @@ unit SutraBoundaryDisplayUnit;
 interface
 
 uses
-  DataSetUnit;
+  System.Classes, DataSetUnit;
 
 type
   TSutraBoundaryDisplayDataArray = class(TCustomBoundaryRealSparseDataSet)
@@ -26,5 +26,8 @@ procedure TSutraBoundaryDisplayDataArray.InitializeDisplayArray(
 begin
   // do nothing
 end;
+
+initialization
+  RegisterClass(TSutraBoundaryDisplayDataArray);
 
 end.

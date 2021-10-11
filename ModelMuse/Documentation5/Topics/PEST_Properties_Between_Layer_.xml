@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">PEST Properties Between-Layer Continuity Prior Information Pane</title>
+  <title translate="true">Between-Layer Continuity Prior Information Pane</title>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Between-Layer Continuity Prior Information Pane</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Between-Layer Continuity Prior Information Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Between-Layer Continuity Prior Information </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Between-Layer Continuity Prior Information </text><text styleclass="Normal" translate="true">pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true"> under </text><text styleclass="Strong" translate="true">Prior Information</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can automatically create prior information equations related to the the vertical continuity of pilot point values associated with parameters. This pane is where the user can choose to include such prior information equations.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">At the top of the pane is the </text><text styleclass="Strong" translate="true">Use between-layer value</text><text styleclass="Normal" translate="true"> prior information checkbox. If the check box is checked, the between-layer continuity prior information equations will be included in the PEST control file. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Prior information equations will be written for pilot point values related to the same parameter at the same horizontal location but in adjacent layers.</text></para>

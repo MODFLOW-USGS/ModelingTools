@@ -744,7 +744,7 @@ object PhastModel: TPhastModel
   FilesToArchive.Strings = (
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
-      'RmaMf2005_Truth.gpt')
+      'MODFLOW-2005\RmaMf2005_Truth.gpt')
   ModelInputFiles.Strings = (
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
@@ -847,7 +847,7 @@ object PhastModel: TPhastModel
       'RmaMf2005_Truth.path')
   ModelFileName = 
     'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
-    'RmaMf2005_Truth.gpt'
+    'MODFLOW-2005\RmaMf2005_Truth.gpt'
   ModflowOptions.HDry = -2E20
   ModflowOptions.HNoFlow = -1E20
   ModflowOptions.StoredHDry.Value = -2E20
@@ -966,6 +966,12 @@ object PhastModel: TPhastModel
   SutraOptions.LakeOptions.UseLakes = False
   SutraOptions.LakeOptions.AllNodesLakes = False
   SutraOptions.LakeOptions.SpecifyLakeBottom = False
+  SutraOptions.PestAnisotropyOptions.UsePmaxPmidAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UsePmaxPminAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAlmaxAlmidAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAlmaxAlminAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAtmaxAtmidAnisotropy = True
+  SutraOptions.PestAnisotropyOptions.UseAtmaxAtminAnisotropy = True
   SutraOutputControl.ListingPrintFrequency = 9999
   SutraOutputControl.ListingOptions = [sloNPrint, sloCPandS, sloCVel, sloCCorT, sloCBudg, sloCScrn]
   SutraOutputControl.NE_PrintFrequency = 9999
@@ -1011,7 +1017,14 @@ object PhastModel: TPhastModel
       Guid2 = '{46DBE576-E998-4AC3-8ED2-2B10CD5A7C59}'
     end>
   SutraGlobalObservationComparisons = <>
-  Modflow6GlobalObservationComparisons = <>
+  Modflow6GlobalObservationComparisons = <
+    item
+      Name = 'Gradient'
+      StoredObservedValue.Value = 24.300000000000000000
+      StoredWeight.Value = 3.000000000000000000
+      Guid1 = '{B7CB463B-F542-4574-8B48-1F4E2A8C3EAA}'
+      Guid2 = '{E05C2108-BF91-4EA3-8B2F-E4E0B90FF8E0}'
+    end>
   SutraFluxObs.SpecPres = <>
   SutraFluxObs.FluidFlow = <>
   SutraFluxObs.SpecConc = <>
@@ -5330,7 +5343,7 @@ object PhastModel: TPhastModel
       MixtureFormulas.Strings = (
         '')
     end>
-  Version = '4.3.0.67'
+  Version = '4.3.0.68'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 800
   GuiSettings.FrontX = 1242.002338823708000000
@@ -6797,7 +6810,7 @@ object PhastModel: TPhastModel
   PestProperties.PestControlData.MaxCompressionDimension = 1
   PestProperties.PestControlData.StoredZeroLimit.Value = 0.000000000000000000
   PestProperties.PestControlData.StoredInitalLambda.Value = 10.000000000000000000
-  PestProperties.PestControlData.StoredLambdaAdjustmentFactor.Value = -3.000000000000000000
+  PestProperties.PestControlData.StoredLambdaAdjustmentFactor.Value = 2.000000000000000000
   PestProperties.PestControlData.StoredPhiRatioSufficient.Value = 0.300000000000000000
   PestProperties.PestControlData.StoredPhiReductionLambda.Value = 0.010000000000000000
   PestProperties.PestControlData.NumberOfLambdas = 10

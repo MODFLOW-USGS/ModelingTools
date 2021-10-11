@@ -9809,6 +9809,7 @@ var
   FileRoot: string;
   BackupParamEstBatFileName: string;
   BackupBatchFileName: string;
+  ArrayDir: string;
   procedure AddPestDataArraysToDictionary(InputPestDataArrays: TArray<TDataArray>);
   var
     DataArray: TDataArray;
@@ -9863,6 +9864,15 @@ begin
       begin
         ShouldRunSutra := False;
       end;
+    end;
+  end;
+
+  if PhastModel.PestUsed then
+  begin
+    ArrayDir := IncludeTrailingPathDelimiter(ExtractFileDir(FileName)) + 'arrays';
+    if not TDirectory.Exists(ArrayDir) then
+    begin
+      TDirectory.CreateDirectory(ArrayDir)
     end;
   end;
 

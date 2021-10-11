@@ -513,7 +513,7 @@ resourcestring
   StrSingularValueDecom = 'Singular Value Decomposition';
   StrLQSR = 'LQSR';
   StrObservations = 'Observation Groups';
-  StrObservationGroups = 'Observation Groups Properties';
+  StrObservationGroups = 'Observation Group Properties';
   StrObservationGroupAs = 'Observation Group Assignments';
   StrPriorInformation = 'Prior Information';
   StrPriorInformationGr = 'Prior Information Group Properties';
@@ -521,11 +521,11 @@ resourcestring
   StrWithinLayerContinu = 'Within-Layer Continuity Prior Information';
   StrBetweenLayerContin = 'Between-Layer Continuity Prior Information';
   StrPredictionAnalysis = 'Prediction Analysis';
-  StrPredictionAnalysisC = 'Prediction Analysis Control';
+  StrPredictionAnalysisC = 'Prediction Analysis Controls';
   StrPredictionAnalysisT = 'Prediction Analysis Termination';
   StrRegularization = 'Regularization';
   StrRegularizationContr = 'Regularization Controls';
-  StrRegularizationOptio = 'Regularization Option';
+  StrRegularizationOptio = 'Regularization Options';
   StrPareto = 'Pareto';
   StrParetoControls = 'Pareto Controls';
   StrParetoAlternateTer = 'Pareto Alternate Termination';

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
 <topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
-  <title translate="true">PEST Properties Inversion Controls 1 Pane</title>
+  <title translate="true">Inversion Controls 1 Pane</title>
   <keywords>
     <keyword translate="true">DERFORGIVE</keyword>
     <keyword translate="true">JACUPDATE</keyword>
@@ -14,9 +14,9 @@
   </keywords>
   <body>
     <header>
-      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">PEST Properties Inversion Controls 1 Pane</text></para>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Inversion Controls 1 Pane</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Inversion Controls 1</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Inversion Controls 1</text><text styleclass="Normal" translate="true"> pane is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Pest_Properties_Dialog_Box" styleclass="Normal" translate="true">PEST Properties Dialog Box</link><text styleclass="Normal" translate="true"> under </text><text styleclass="Strong" translate="true">Control Data</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The variables specified on the </text><text styleclass="Strong" translate="true">Inversion Controls 1</text><text styleclass="Normal" translate="true"> pane are described in the PEST User Manual, Part I, Section 4.2.6). More extensive descriptions of these variables are in the PEST user manual.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">RLAMBDA1</text><text styleclass="Normal" translate="true"> is the initial value of the Marquardt lambda. This informs PEST of the first value that it should test during the first iteration of the inversion process. A value of 10.0 is appropriate in most cases.</text></para>
     <para styleclass="Normal"><text styleclass="Strong" translate="true">RLAMFAC</text><text styleclass="Normal" translate="true"> is the factor by which PEST adjusts the Marquardt lambda as it tests different values of this variable for their efficacy in lowering the objective function. RLAMFAC must be greater than 1.0; a value of 2.0 seems to work well on many occasions. When PEST reduces lambda it divides by RLAMFAC; when it increases lambda it multiplies by RLAMFAC. Alternatively, the Marquardt lambda can be given a negative value less than -1.0. Suppose that it is given a value of -3.0. Then PEST will adjust the lambda adjustment factor during each iteration of the inversion process so that lambda can achieve a value of 1.0 with three adjustments (if PEST decides to move it in this direction). This allows rapid adjustment of the Marquardt lambda if this is suddenly required, as can happen if local parameter insensitivity promulgates sudden problem ill-posedness. If supplying a negative value for RLAMFAC it is important to note that the higher the absolute value assigned to a negative RLAMFAC, the smaller will be the actual iteration-specific Marquardt lambda adjustment factor. This is opposite to the case for a positive setting of RLAMFAC. In both cases however, the absolute value of RLAMFAC must be greater than 1.0.</text></para>

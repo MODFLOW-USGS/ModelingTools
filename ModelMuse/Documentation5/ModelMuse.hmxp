@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4280</config-value>
+      <config-value name="autohelpstart">4281</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1124,6 +1124,7 @@ document.write('</frameset>');
       <helpcontext-number href="Manage_Head_Observations" value="3586"/>
       <helpcontext-number href="Manage_Image_Settings" value="3576"/>
       <helpcontext-number href="Manage_Parameters_Dialog_Box" value="3584"/>
+      <helpcontext-number href="Manage_Parameters_Dialog_Box#PilotPoints" value="4282"/>
       <helpcontext-number href="Manage_SUTRA_Boundary_Observati" value="4163"/>
       <helpcontext-number href="Manage_SUTRA_Boundary_Observati#Factor" value="4222"/>
       <helpcontext-number href="Mandatory_Print_Flags" value="3800"/>
@@ -1393,6 +1394,7 @@ document.write('</frameset>');
       <helpcontext-number href="PHAST_Program_Location" value="3540"/>
       <helpcontext-number href="PHAST-Style_Interpolation" value="250"/>
       <helpcontext-number href="Pi" value="870"/>
+      <helpcontext-number href="Pilot_Point_Explanation" value="4281"/>
       <helpcontext-number href="Points" value="1470"/>
       <helpcontext-number href="Polygons" value="1490"/>
       <helpcontext-number href="Polylines" value="1480"/>
@@ -2259,6 +2261,7 @@ document.write('</frameset>');
       <file-mod href="ObsComparisons.xml"/>
       <file-mod href="PestDirectAndComparisonObserva.xml"/>
       <file-mod href="PestModifierAndMethod.xml"/>
+      <file-mod href="Pilot_Point_Explanation.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>
