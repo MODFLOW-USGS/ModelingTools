@@ -49,7 +49,6 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitWidth = 578
           ExplicitHeight = 501
           inherited tabBasic: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 570
             ExplicitHeight = 468
@@ -136,9 +135,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabOptions: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 457
             ExplicitHeight = 453
             DesignSize = (
               457
@@ -281,7 +278,6 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitWidth = 578
           ExplicitHeight = 465
           inherited tabControls: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 570
             ExplicitHeight = 432
@@ -405,9 +401,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabValues: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 520
             ExplicitHeight = 399
             inherited rdgHeadObs: TRbwDataGrid4
               Height = 334
@@ -456,9 +450,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabLegend: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 520
             ExplicitHeight = 399
             inherited lblMax: TLabel
               Width = 44
@@ -474,9 +466,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabGraph: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 520
             ExplicitHeight = 399
             inherited pbHeadObs: TPaintBox
               Height = 318
@@ -539,7 +529,6 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitWidth = 578
           ExplicitHeight = 501
           inherited tabBasic: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 570
             ExplicitHeight = 468
@@ -646,9 +635,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabOptions: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 457
             ExplicitHeight = 454
             DesignSize = (
               457
@@ -702,7 +689,6 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitWidth = 578
           ExplicitHeight = 501
           inherited tabBasic: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 570
             ExplicitHeight = 468
@@ -803,9 +789,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabOptions: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 468
             ExplicitHeight = 465
             DesignSize = (
               468
@@ -842,9 +826,7 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabLegend: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
-            ExplicitWidth = 468
             ExplicitHeight = 465
             inherited imLegend: TImage
               Height = 465
@@ -917,7 +899,6 @@ inherited frmDisplayData: TfrmDisplayData
           Width = 578
           ExplicitWidth = 578
           inherited tabSelection: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitWidth = 570
             ExplicitHeight = 468
@@ -1017,10 +998,8 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited udDataSets: TJvUpDown
               Left = 433
-              Width = 16
               Height = 26
               ExplicitLeft = 433
-              ExplicitWidth = 16
               ExplicitHeight = 26
             end
             inherited rgUpdateLimitChoice: TRadioGroup
@@ -1056,11 +1035,9 @@ inherited frmDisplayData: TfrmDisplayData
             inherited udTime: TJvUpDown
               Left = 552
               Top = 26
-              Width = 17
               Height = 26
               ExplicitLeft = 552
               ExplicitTop = 26
-              ExplicitWidth = 17
               ExplicitHeight = 26
             end
             inherited comboTime3D: TJvComboBox
@@ -1071,7 +1048,6 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabFilters: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitHeight = 468
             inherited lblLowerLimit: TLabel
@@ -1151,7 +1127,6 @@ inherited frmDisplayData: TfrmDisplayData
             end
           end
           inherited tabLegend: TTabSheet
-            ExplicitLeft = 4
             ExplicitTop = 29
             ExplicitHeight = 468
             inherited imLegend: TImage
@@ -1408,6 +1383,12 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitWidth = 168
               ExplicitHeight = 18
             end
+            inherited lblModel: TLabel
+              Width = 123
+              Height = 18
+              ExplicitWidth = 123
+              ExplicitHeight = 18
+            end
             inherited frameCheck3DMax: TframeDisplayLimit
               inherited cbCheck: TCheckBox
                 Top = 0
@@ -1446,6 +1427,9 @@ inherited frmDisplayData: TfrmDisplayData
               Height = 26
               ExplicitTop = 434
               ExplicitHeight = 26
+            end
+            inherited clbxModel: TJvCheckListBox
+              ItemHeight = 18
             end
           end
           inherited tabLegend: TTabSheet
@@ -1619,10 +1603,8 @@ inherited frmDisplayData: TfrmDisplayData
         end
         inherited udVectors: TJvUpDown
           Left = 546
-          Width = 16
           Height = 26
           ExplicitLeft = 546
-          ExplicitWidth = 16
           ExplicitHeight = 26
         end
         inherited seMinSpacing2D: TJvSpinEdit

@@ -127,7 +127,7 @@ type
   private
     FUndoType: TUndoType;
     FCurrentModelLink: TObsHeadLink;
-    FGettingDate: Boolean;
+    FGettingData: Boolean;
     FImportResult: Boolean;
     ObsLinkList : TObsHeadLinkList;
     FSelectedObsItem: THeadObsItem;
@@ -890,7 +890,7 @@ end;
 procedure TframeHeadObservationResults.flnmedHeadObsResultsChange(
   Sender: TObject);
 begin
-  if FGettingDate then
+  if FGettingData then
   begin
     Exit;
   end;
@@ -921,7 +921,7 @@ end;
 procedure TframeHeadObservationResults.GetDataForAModel(AModel: TBaseModel;
   AHeadObsColl: THeadObsCollection);
 begin
-  FGettingDate := True;
+  FGettingData := True;
   try
     Initialize(AHeadObsColl);
     try
@@ -933,7 +933,7 @@ begin
     end;
     DisplayValues(AModel, AHeadObsColl);
   finally
-    FGettingDate := False;
+    FGettingData := False;
   end;
 end;
 

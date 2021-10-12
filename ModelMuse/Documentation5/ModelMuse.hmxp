@@ -883,6 +883,7 @@ document.write('</frameset>');
       <helpcontext-number href="ElevationToLayer" value="450"/>
       <helpcontext-number href="ElevationToModelLayer" value="460"/>
       <helpcontext-number href="EnhancedTemplateProcessor" value="4161"/>
+      <helpcontext-number href="EnhancedTemplateProcessor#Formulas" value="4283"/>
       <helpcontext-number href="Equation_Tab" value="2140"/>
       <helpcontext-number href="Errors_and_Warnings_Dialog_Box" value="2340"/>
       <helpcontext-number href="ETS_Evapotranspiration_Segments_Package" value="2690"/>

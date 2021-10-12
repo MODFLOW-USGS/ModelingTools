@@ -64,7 +64,7 @@ type
     FMinTimeLimit: TColoringLimit;
     FPositiveColor: TColor;
     FMinResidualLimit: TColoringLimit;
-    FDisplayResiduals: boolean;
+    FVisible: boolean;
     FMaxLayerLimit: TColoringLimit;
     FMaxWeightedResidualLimit: TColoringLimit;
     FMaxSymbolSize: integer;
@@ -72,7 +72,7 @@ type
     FMinLayerLimit: TColoringLimit;
     FPositiveColor32: TColor32;
     FNegativeColor32: TColor32;
-    procedure SetDisplayResiduals(const Value: boolean);
+    procedure SetVisible(const Value: boolean);
     procedure SetFileDate(const Value: TDateTime);
     procedure SetFileName(const Value: string);
     procedure SetMaxLayerLimit(const Value: TColoringLimit);
@@ -86,12 +86,18 @@ type
     procedure SetMinWeightedResidualLimit(const Value: TColoringLimit);
     procedure SetNegativeColor(const Value: TColor);
     procedure SetPositiveColor(const Value: TColor);
+    procedure InitializeVariables;
+    function GetItems(Index: Integer): TPestObsResult;
+    procedure SetItems(Index: Integer; const Value: TPestObsResult);
   public
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function ReadFromFile(AModel: TBaseModel): boolean;
     function Add: TPestObsResult;
+    procedure Clear;
+    property Items[Index: Integer]: TPestObsResult read GetItems
+      write SetItems; default;
   published
     property FileName: string read FFileName write SetFileName;
     property FileDate: TDateTime read FFileDate write SetFileDate;
@@ -112,7 +118,7 @@ type
     property NegativeColor: TColor read FNegativeColor write SetNegativeColor default clRed;
     property PositiveColor: TColor read FPositiveColor write SetPositiveColor default clBlue;
     property MaxSymbolSize: integer read FMaxSymbolSize write SetMaxSymbolSize default 20;
-    property Visible: boolean read FDisplayResiduals write SetDisplayResiduals default True;
+    property Visible: boolean read FVisible write SetVisible default True;
   end;
 
 implementation
@@ -224,9 +230,52 @@ begin
 end;
 
 procedure TPestObsCollection.Assign(Source: TPersistent);
+var
+  SourceCollection: TPestObsCollection;
+begin
+  if Source is TPestObsCollection then
+  begin
+    SourceCollection := TPestObsCollection(Source);
+    FileName := SourceCollection.FileName;
+    FileDate := SourceCollection.FileDate;
+    MaxResidualLimit := SourceCollection.MaxResidualLimit;
+    MinResidualLimit := SourceCollection.MinResidualLimit;
+    MaxWeightedResidualLimit := SourceCollection.MaxWeightedResidualLimit;
+    MinWeightedResidualLimit := SourceCollection.MinWeightedResidualLimit;
+    MaxTimeLimit := SourceCollection.MaxTimeLimit;
+    MinTimeLimit := SourceCollection.MinTimeLimit;
+    MaxLayerLimit := SourceCollection.MaxLayerLimit;
+    MinLayerLimit := SourceCollection.MinLayerLimit;
+    NegativeColor := SourceCollection.NegativeColor;
+    PositiveColor := SourceCollection.PositiveColor;
+    MaxSymbolSize := SourceCollection.MaxSymbolSize;
+    Visible := SourceCollection.Visible;
+  end;
+  inherited;
+end;
+
+procedure TPestObsCollection.Clear;
 begin
   inherited;
+  InitializeVariables;
+end;
 
+procedure TPestObsCollection.InitializeVariables;
+begin
+  FNegativeColor := clRed;
+  FPositiveColor := clBlue;
+  FMaxSymbolSize := 20;
+  FVisible := True;
+  FFileName := '';
+  FFileDate := 0;
+  FMaxResidualLimit.UseLimit := False;
+  FMinResidualLimit.UseLimit := False;
+  FMaxWeightedResidualLimit.UseLimit := False;
+  FMinWeightedResidualLimit.UseLimit := False;
+  FMaxTimeLimit.UseLimit := False;
+  FMinTimeLimit.UseLimit := False;
+  FMaxLayerLimit.UseLimit := False;
+  FMinLayerLimit.UseLimit := False;
 end;
 
 constructor TPestObsCollection.Create(Model: TBaseModel);
@@ -254,30 +303,7 @@ begin
 
   FMaxLayerLimit.DataType := rdtInteger;
   FMinLayerLimit.DataType := rdtInteger;
-
-  NegativeColor := clRed;
-  PositiveColor := clBlue;
-
-  FMaxSymbolSize := 20;
-  FDisplayResiduals := True;
-{
-    FMaxTimeLimit: TColoringLimit;
-    FMinWeightedResidualLimit: TColoringLimit;
-    FFileName: string;
-    FFileDate: TDateTime;
-    FMaxResidualLimit: TColoringLimit;
-    FMinTimeLimit: TColoringLimit;
-    FPositiveColor: TColor;
-    FMinResidualLimit: TColoringLimit;
-    FDisplayResiduals: boolean;
-    FMaxLayerLimit: TColoringLimit;
-    FMaxWeightedResidualLimit: TColoringLimit;
-    FMaxSymbolSize: integer;
-    FNegativeColor: TColor;
-    FMinLayerLimit: TColoringLimit;
-    FPositiveColor32: TColor32;
-    FNegativeColor32: TColor32;
-}
+  InitializeVariables;
 end;
 
 destructor TPestObsCollection.Destroy;
@@ -293,6 +319,11 @@ begin
   FMinResidualLimit.Free;
 
   inherited;
+end;
+
+function TPestObsCollection.GetItems(Index: Integer): TPestObsResult;
+begin
+  result := inherited Items[Index] as TPestObsResult;
 end;
 
 function TPestObsCollection.ReadFromFile(AModel: TBaseModel): boolean;
@@ -338,6 +369,7 @@ begin
           Item.OriginalOrder := LineIndex-1;
         end;
       end;
+      FileDate := TFile.GetLastWriteTime(FileName);
     finally
       Splitter.Free;
       ResidualsFile.Free;
@@ -351,11 +383,11 @@ begin
   result := True;
 end;
 
-procedure TPestObsCollection.SetDisplayResiduals(const Value: boolean);
+procedure TPestObsCollection.SetVisible(const Value: boolean);
 begin
-  if FDisplayResiduals <> Value then
+  if FVisible <> Value then
   begin
-    FDisplayResiduals := Value;
+    FVisible := Value;
     InvalidateModel;
   end;
 end;
@@ -372,6 +404,12 @@ begin
     FFileName := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TPestObsCollection.SetItems(Index: Integer;
+  const Value: TPestObsResult);
+begin
+  inherited Items[Index] := Value;
 end;
 
 procedure TPestObsCollection.SetMaxLayerLimit(const Value: TColoringLimit);

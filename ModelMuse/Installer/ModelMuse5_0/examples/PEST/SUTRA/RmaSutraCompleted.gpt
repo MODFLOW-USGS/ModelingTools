@@ -731,9 +731,9 @@ object Model: TPhastModel
       Variable.Locked = True
     end
     item
-      Variable.Name = 'Sepage'
+      Variable.Name = 'Seepage'
       Variable.Format = rdtString
-      Variable.StringValue = 'Sepage'
+      Variable.StringValue = 'Seepage'
       Variable.Comment = 'Parameter Type'
       Variable.Locked = True
     end>
@@ -50520,7 +50520,7 @@ object Model: TPhastModel
           PQFormula = '(0.03 * ObjectIntersectArea) / ObjectArea'
         end>
       ScreenObject.SutraBoundaries.FluidSource.UseBCTime = False
-      ScreenObject.SutraBoundaries.FluidSource.PestBoundaryValueFormula = 'Sepage'
+      ScreenObject.SutraBoundaries.FluidSource.PestBoundaryValueFormula = 'Seepage'
       ScreenObject.SutraBoundaries.FluidSource.PestBoundaryValueMethod = ppmMultiply
       ScreenObject.SutraBoundaries.FluidSource.PestAssociatedValueMethod = ppmMultiply
       ScreenObject.SutraBoundaries.MassEnergySource.Values = <>
@@ -97026,14 +97026,14 @@ object Model: TPhastModel
   GuiSettings.Height = 667
   GuiSettings.FrontX = 3271.136787140294000000
   GuiSettings.FrontY = 53.157448258410810000
-  GuiSettings.Left = 375
+  GuiSettings.Left = 380
   GuiSettings.MagnificationFront = 0.076547693261585950
   GuiSettings.MagnificationSide = 0.076547693261585950
   GuiSettings.MagnificationTop = 0.076547693261585950
   GuiSettings.SideWidth = 229
   GuiSettings.SideX = 7.515868526925750000
   GuiSettings.SideY = 4406.634827999300000000
-  GuiSettings.Top = 78
+  GuiSettings.Top = 112
   GuiSettings.TopViewHeight = 501
   GuiSettings.TopViewWidth = 769
   GuiSettings.TopX = 1710.018549499437000000
@@ -97086,7 +97086,7 @@ object Model: TPhastModel
       StoredVertSpatialContinuityPriorInfoWeight.Value = 1.000000000000000000
     end
     item
-      ParameterName = 'Sepage'
+      ParameterName = 'Seepage'
       ParameterType = ptPEST
       Value = 1.000000000000000000
       Transform = ptNoTransform

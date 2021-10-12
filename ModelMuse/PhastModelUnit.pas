@@ -42,7 +42,7 @@ uses System.UITypes,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
   PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit,
-  PilotPointDataUnit, SvdaPrepPropertiesUnit;
+  PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -2225,6 +2225,7 @@ that affects the model output should also have a comment. }
     FPilotPointData: TStoredPilotParamDataCollection;
     FKrigfactorsScriptLines: TStringList;
     FCanDrawContours: Boolean;
+    FPestObsCollection: TPestObsCollection;
     procedure CrossSectionChanged(Sender: TObject);
     procedure SetAlternateFlowPackage(const Value: boolean);
     procedure SetAlternateSolver(const Value: boolean);
@@ -2461,6 +2462,7 @@ that affects the model output should also have a comment. }
     procedure SetCanDrawContours(const Value: Boolean);
     function GetShortestHorizontalBlockEdge(Layer, Row,
       Column: Integer): double;
+    procedure SetPestObsCollection(const Value: TPestObsCollection);
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3595,6 +3597,12 @@ that affects the model output should also have a comment. }
     ;
     property PilotPointData: TStoredPilotParamDataCollection
       read FPilotPointData write SetPilotPointData
+    {$IFNDEF PEST}
+      stored False
+    {$ENDIF}
+    ;
+    property PestObsCollection: TPestObsCollection read FPestObsCollection
+      write SetPestObsCollection
     {$IFNDEF PEST}
       stored False
     {$ENDIF}
@@ -29144,6 +29152,8 @@ begin
 
   FPilotPointDataArrays := TDataArrayList.Create;
   FPilotPointData := TStoredPilotParamDataCollection.Create;
+
+  FPestObsCollection := TPestObsCollection.Create(self);
 //  FPestBoundaryDataArrays := TDictionary<string, TDataArray>.Create;
 end;
 
@@ -29660,6 +29670,7 @@ end;
 
 destructor TCustomModel.Destroy;
 begin
+  FPestObsCollection.Free;
 //  FPestBoundaryDataArrays.Free;
   FPestParamDictionay.Free;
   FPilotPointData.Free;
@@ -31028,6 +31039,7 @@ begin
 
   VelocityVectors.Clear;
   FPilotPointData.Clear;
+  FPestObsCollection.Clear;
 end;
 
 procedure TCustomModel.GenerateIrregularMesh(var ErrorMessage: string);
@@ -37564,6 +37576,9 @@ begin
     SwrObservations := SourceModel.SwrObservations;
     ModflowGlobalObservationComparisons := SourceModel.ModflowGlobalObservationComparisons;
     SutraGlobalObservationComparisons := SourceModel.SutraGlobalObservationComparisons;
+
+    PilotPointData := SourceModel.PilotPointData;
+    PestObsCollection := SourceModel.PestObsCollection;
 //    GeoRefFileName := SourceModel.GeoRefFileName;
 
     OnCrossSectionChanged := SourceModel.OnCrossSectionChanged;
@@ -47196,6 +47211,11 @@ begin
     FPathLine := TPathLineReader.Create(self);
   end;
   FPathLine.Assign(Value);
+end;
+
+procedure TCustomModel.SetPestObsCollection(const Value: TPestObsCollection);
+begin
+  FPestObsCollection.Assign(Value);
 end;
 
 function TCustomModel.GetPathLine: TPathLineReader;

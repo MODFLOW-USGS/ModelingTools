@@ -274,7 +274,6 @@ begin
     Exit;
   end;
   
-  
   Undo := TUndoChangeSelection.Create;
 
   frmGoPhast.ResetSelectedScreenObjects;
