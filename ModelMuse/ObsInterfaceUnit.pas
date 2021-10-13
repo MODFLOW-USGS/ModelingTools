@@ -27,7 +27,7 @@ type
     property ObservationGroup: string read GetObservationGroup;
   end;
 
-  ITimeObservationItem = interface(IObservationItem)
+  ITimeObservationItem = interface(IObservationItem) ['{13D232D3-243D-4175-9744-557A27ADCC2D}']
 //    function GetName: string;
 //    function GetObservedValue: double;
     function GetTime: double;

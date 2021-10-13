@@ -1280,6 +1280,7 @@ begin
         and (ViewDirection = vdTop) then
       begin
         LocalModel.DrawHeadObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+        LocalModel.DrawPestPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawSfrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawStrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
@@ -1290,12 +1291,18 @@ begin
           begin
             ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
             ChildModel.DrawHeadObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+            ChildModel.DrawPestPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
             ChildModel.DrawSfrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
             ChildModel.DrawStrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
             ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
             ChildModel.DrawSwrReachConnections(FModelImage, frmGoPhast.frameTopView.ZoomBox);
           end;
         end;
+      end
+      else if (LocalModel.ModelSelection in SutraSelection)
+        and (ViewDirection = vdTop) then
+      begin
+        LocalModel.DrawPestPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
       end;
       if (LocalModel.ModelSelection in ModflowSelection)
         {and not LocalModel.DisvUsed} then
@@ -1451,6 +1458,7 @@ begin
             and (ViewDirection = vdTop) then
           begin
             LocalModel.DrawHeadObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+            LocalModel.DrawPestPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
             LocalModel.DrawSfrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
             LocalModel.DrawStrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
             LocalModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
@@ -1461,12 +1469,18 @@ begin
               begin
                 ChildModel := LocalModel.ChildModels[ChildIndex].ChildModel;
                 ChildModel.DrawHeadObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                ChildModel.DrawPestPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
                 ChildModel.DrawSfrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
                 ChildModel.DrawStrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
                 ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
                 ChildModel.DrawSwrReachConnections(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
               end;
             end;
+          end
+          else if (LocalModel.ModelSelection in SutraSelection)
+            and (ViewDirection = vdTop) then
+          begin
+            LocalModel.DrawPestPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
           end;
           if (LocalModel.ModelSelection in ModflowSelection) then
           begin

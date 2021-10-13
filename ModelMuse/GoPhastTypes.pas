@@ -587,6 +587,7 @@ type
     procedure DefineProperties(Filer: TFiler); override;
   public
     procedure Assign(Source: TPersistent); override;
+    Constructor Create(OnChangeEvent: TNotifyEvent); overload;
   published
     property Value: real read FValue write SetValue;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -1080,6 +1081,12 @@ begin
   begin
     inherited;
   end;
+end;
+
+constructor TRealStorage.Create(OnChangeEvent: TNotifyEvent);
+begin
+  Inherited Create;
+  OnChange := OnChangeEvent;
 end;
 
 procedure TRealStorage.DefineProperties(Filer: TFiler);

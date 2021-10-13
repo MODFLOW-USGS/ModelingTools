@@ -46,7 +46,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
         Left = 3
         Top = 27
         Width = 505
-        Height = 24
+        Height = 21
         Filter = 'Head Observation Output files (*.hob_out)|*.hob_out'
         TabOrder = 0
         Text = ''
@@ -218,7 +218,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
         Left = 3
         Top = 338
         Width = 121
-        Height = 24
+        Height = 21
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
@@ -450,7 +450,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 336
       end
       object pnlValueControls: TPanel
         Left = 0
@@ -460,7 +459,6 @@ object frameHeadObservationResults: TframeHeadObservationResults
         Align = alBottom
         ParentBackground = False
         TabOrder = 1
-        ExplicitTop = 336
         object btnCopy: TButton
           Left = 111
           Top = 32
@@ -530,7 +528,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
         Left = 0
         Top = 0
         Width = 520
-        Height = 320
+        Height = 323
         Align = alClient
         OnMouseDown = pbHeadObsMouseDown
         OnMouseMove = pbHeadObsMouseMove
@@ -540,7 +538,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
       end
       object pnlGraphControls: TPanel
         Left = 0
-        Top = 320
+        Top = 323
         Width = 520
         Height = 81
         Align = alBottom
@@ -588,7 +586,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
       Left = 8
       Top = 6
       Width = 180
-      Height = 24
+      Height = 21
       Style = csDropDownList
       TabOrder = 0
       OnChange = comboModelsChange

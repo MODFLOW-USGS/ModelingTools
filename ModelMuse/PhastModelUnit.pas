@@ -3204,6 +3204,8 @@ that affects the model output should also have a comment. }
       write SetSaveBfhBoundaryConditions default True;
     procedure DrawHeadObservations(const BitMap: TPersistent;
       const ZoomBox: TQrbwZoomBox2); virtual;
+    procedure DrawPestPointObservations(const BitMap: TPersistent;
+      const ZoomBox: TQrbwZoomBox2);
     procedure InvalidateMfHobHeads(Sender: TObject);
     procedure InvalidateSwiObs(Sender: TObject);
     procedure InvalidateMt3dTobConcs(Sender: TObject);
@@ -24290,6 +24292,15 @@ begin
   if StoreHeadObsResults and FHeadObsResults.Visible then
   begin
     HeadObsResults.Draw(BitMap, ZoomBox);
+  end;
+end;
+
+procedure TCustomModel.DrawPestPointObservations(const BitMap: TPersistent;
+  const ZoomBox: TQrbwZoomBox2);
+begin
+  if PestObsCollection.Count > 0 then
+  begin
+    PestObsCollection.Draw(BitMap, ZoomBox);
   end;
 end;
 

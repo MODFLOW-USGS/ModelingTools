@@ -13,13 +13,14 @@ uses
   Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids, RbwDataGrid4, JvSpin, JvExControls,
   JvColorBox, JvColorButton, frameDisplayLimitUnit, Vcl.Mask, JvExMask,
   JvToolEdit, QuadTreeClass, ObsInterfaceUnit, PestObservationResults,
-  frmCustomGoPhastUnit, System.Generics.Collections, frmUndoUnit;
+  frmCustomGoPhastUnit, System.Generics.Collections, UndoItems,
+  ScreenObjectUnit, System.Generics.Defaults;
 
 type
   TUndoType = (utChange, utImport);
-  TPestObsColumns = (pocName, pocGroup, pocObject, pocMeasured, pocModeled,
-    pocResidual, pocWeight, pocWtMeas, pocWtMod, pocWtRes, pocMeasSD,
-    pocNaturalWeight);
+  TPestObsColumns = (pocName, pocGroup, pocObject, pocTime, pocMeasured,
+    pocModeled, pocResidual, pocWeight, pocWtMeas, pocWtMod, pocWtRes,
+    pocMeasSD, pocNaturalWeight, pocOriginalOrder);
 
   TCustomUndoChangePestObsResults = class(TCustomUndo)
   private
@@ -37,7 +38,6 @@ type
     Destructor Destroy; override;
   end;
 
-
   TframePestObservationResults = class(TFrame)
     pnlBottom: TPanel;
     lblRMS: TLabel;
@@ -54,14 +54,14 @@ type
     lblMaxResidual: TLabel;
     lblMinimumTime: TLabel;
     lblMinResidual: TLabel;
-    lblMinLayer: TLabel;
-    lblMaxLayer: TLabel;
+    lblMinWeightedResidual: TLabel;
+    lblMaxWeightedResidual: TLabel;
     framelmtMinimumTime: TframeDisplayLimit;
     framelmtMaxResidual: TframeDisplayLimit;
     framelmtMaximumTime: TframeDisplayLimit;
     framelmtMinResidual: TframeDisplayLimit;
-    framelmtMinLayer: TframeDisplayLimit;
-    framelmtMaxLayer: TframeDisplayLimit;
+    framelmtMinWeightedResidual: TframeDisplayLimit;
+    framelmtMaxWeightedResidual: TframeDisplayLimit;
     clrbtnNegative: TJvColorButton;
     clrbtnPositive: TJvColorButton;
     spinSymbolSize: TJvSpinEdit;
@@ -78,27 +78,45 @@ type
     lblMax: TLabel;
     lblHalfMax: TLabel;
     tabGraph: TTabSheet;
-    pbHeadObs: TPaintBox;
+    pbObservations: TPaintBox;
     pnlGraphControls: TPanel;
     lblGraphInstructions: TLabel;
     rgGraphType: TRadioGroup;
     qtreeObservations: TRbwQuadTree;
+    rgDrawChoice: TRadioGroup;
     procedure flnmedHeadObsResultsChange(Sender: TObject);
+    procedure btnCopyClick(Sender: TObject);
+    procedure btnHightlightObjectsClick(Sender: TObject);
+    procedure spinSymbolSizeChange(Sender: TObject);
+    procedure rgGraphTypeClick(Sender: TObject);
+    procedure pgcObservationsChange(Sender: TObject);
+    procedure pbObservationsMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure pbObservationsMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure pbObservationsMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure pbObservationsPaint(Sender: TObject);
   public
     procedure UpdateChildModels;
   protected
     procedure UpdateObsLinkList;
   private
-    FUsedObservations: TDictionary<string, IObservationItem>;
+//    FUsedObservations: TDictionary<string, IObservationItem>;
     FObservations: TPestObsCollection;
     FGettingData: Boolean;
     FImportResult: Boolean;
     FUndoType: TUndoType;
-    procedure GetExistingObservations;
+    FSelectedObsItem: TPestObsResult;
+//    procedure GetExistingObservations;
     procedure GetData;
     procedure SetData;
     procedure FillTable;
     procedure InitializeTableHeaders;
+    function GetSelectedObjectFromGrid: TScreenObject;
+    function GetSelectedObjectFromGraph: TScreenObject;
+    procedure PlotValues;
+    procedure TestForNewFile;
     { Private declarations }
   public
     constructor Create(Owner: TComponent); override;
@@ -109,21 +127,115 @@ type
 implementation
 
 uses
-  PestObsUnit, frmGoPhastUnit, ScreenObjectUnit;
+  PestObsUnit, frmGoPhastUnit, UndoItemsScreenObjects, frmGoToUnit, xygraph,
+  System.Math;
+
+var
+  Data: Tdatatype;
+
+resourcestring
+  StrTheFileSHasADi = 'The file %s has a different date than the imported re' +
+  'sults. Do you want to import it?';
 
 {$R *.dfm}
+
+procedure TframePestObservationResults.btnCopyClick(Sender: TObject);
+begin
+  rdgPestObs.CopyAllCellsToClipboard;
+end;
+
+procedure TframePestObservationResults.btnHightlightObjectsClick(
+  Sender: TObject);
+var
+  Undo: TUndoChangeSelection;
+//  ScreenObjects: TStringList;
+//  ScreenObjectIndex: Integer;
+  AScreenObject: TScreenObject;
+//  ScreenObjectName: string;
+//  NameIndex: Integer;
+  XCoordinate: real;
+  YCoordinate: real;
+begin
+//  ScreenObjects := TStringList.Create;
+//  try
+//    for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+//    begin
+//      AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
+//      if not AScreenObject.Deleted
+//        and (AScreenObject.ModflowBoundaries.ModflowHeadObservations <> nil)
+//        and AScreenObject.ModflowBoundaries.ModflowHeadObservations.Used then
+//      begin
+//        ScreenObjects.AddObject(AScreenObject.Name, AScreenObject)
+//      end;
+//    end;
+//    ScreenObjects.Sorted := True;
+
+    Undo := TUndoChangeSelection.Create;
+    frmGoPhast.ResetSelectedScreenObjects;
+
+    if Sender = btnHightlightObjects then
+    begin
+      AScreenObject := GetSelectedObjectFromGrid;
+    end
+    else
+    begin
+      AScreenObject := GetSelectedObjectFromGraph;
+    end;
+
+    Undo.SetPostSelection;
+
+    if Undo.SelectionChanged then
+    begin
+      frmGoPhast.UndoStack.Submit(Undo);
+    end
+    else
+    begin
+      Undo.Free;
+    end;
+
+//    NameIndex := ScreenObjects.IndexOf(ScreenObjectName);
+    if AScreenObject <> nil then
+    begin
+//      AScreenObject := ScreenObjects.Objects[NameIndex] as TScreenObject;
+      AScreenObject.Selected := True;
+      XCoordinate := AScreenObject.Points[0].X;
+      YCoordinate := AScreenObject.Points[0].Y;
+      case AScreenObject.ViewDirection of
+        vdTop:
+          begin
+            SetTopPosition(XCoordinate, YCoordinate);
+          end;
+        vdFront:
+          begin
+            SetFrontPosition(XCoordinate, YCoordinate);
+          end;
+        vdSide:
+          begin
+            SetSidePosition(YCoordinate, XCoordinate);
+          end;
+      else
+        Assert(False);
+      end;
+    end;
+
+//  finally
+//    ScreenObjects.Free;
+//  end;
+
+//  PlotValues;
+end;
 
 constructor TframePestObservationResults.Create(Owner: TComponent);
 begin
   inherited;
-  FUsedObservations := TDictionary<string, IObservationItem>.Create;
+//  FUsedObservations := TDictionary<string, IObservationItem>.Create;
   FObservations := TPestObsCollection.Create(nil);
 end;
 
 destructor TframePestObservationResults.Destroy;
 begin
   FObservations.Free;
-  FUsedObservations.Free;
+//  FUsedObservations.Free;
   inherited;
 end;
 
@@ -132,6 +244,7 @@ begin
   rdgPestObs.Cells[Ord(pocName), 0] := 'Observation Name';
   rdgPestObs.Cells[Ord(pocGroup), 0] := 'Group Name';
   rdgPestObs.Cells[Ord(pocObject), 0] := 'Object Name';
+  rdgPestObs.Cells[Ord(pocTime), 0] := 'Time';
   rdgPestObs.Cells[Ord(pocMeasured), 0] := 'Measured';
   rdgPestObs.Cells[Ord(pocModeled), 0] := 'Modeled';
   rdgPestObs.Cells[Ord(pocResidual), 0] := 'Residual';
@@ -141,17 +254,258 @@ begin
   rdgPestObs.Cells[Ord(pocWtRes), 0] := 'Weight * Residual';
   rdgPestObs.Cells[Ord(pocMeasSD), 0] := 'Measured SD';
   rdgPestObs.Cells[Ord(pocNaturalWeight), 0] := 'Natural Weight';
-//  TPestObsColumns = (pocName, pocGroup, pocObject, pocMeasured, pocModeled,
-//    pocResidual, pocWeight, pocWtMeas, pocWtMod, pocWtRes, pocMeasSD,
-//    pocNaturalWeight);
+end;
+
+procedure TframePestObservationResults.pbObservationsMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  XYMouseDown(Button, Shift, X, Y);
+end;
+
+procedure TframePestObservationResults.pbObservationsMouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  XYMouseMove(Shift, X, Y);
+end;
+
+procedure TframePestObservationResults.pbObservationsMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  XYMouseup(Button, Shift, X, Y);
+  FSelectedObsItem := nil;
+  if qtreeObservations.Count > 0 then
+  begin
+    FSelectedObsItem := qtreeObservations.NearestPointsFirstData
+      (xyexportb.xw, xyexportb.yw[1]);
+    btnHightlightObjectsClick(nil);
+  end;
+end;
+
+procedure TframePestObservationResults.pbObservationsPaint(Sender: TObject);
+begin
+  PlotValues;
+end;
+
+procedure TframePestObservationResults.pgcObservationsChange(Sender: TObject);
+begin
+  if pgcObservations.ActivePage = tabGraph then
+  begin
+    PlotValues
+  end;
+end;
+
+procedure TframePestObservationResults.PlotValues;
+var
+  index: Integer;
+  ObservedMin: Double;
+  SimulatedMin: Double;
+  ObservedMax: Double;
+  SimulatedMax: Double;
+  SimValue: Double;
+//  HobDry: Double;
+//  HDry: Real;
+//  HNoFlow: Real;
+  Initialized: Boolean;
+  Min1To1: double;
+  Max1To1: double;
+  Count: Integer;
+  SimList: TList<TPestObsResult>;
+  ObsItem: TPestObsResult;
+  function NearlyTheSame(const X, Y: extended): boolean;
+  const
+    Epsilon = 1e-6;
+  begin
+    result := (X = Y) or (Abs(X - Y) < Epsilon) or
+      (Abs(X - Y) / (Abs(X) + Abs(Y) + Epsilon) < Epsilon);
+  end;
+  function OkSimValue(ASimulatedValue: Double): Boolean;
+  begin
+//    if NearlyTheSame(HobDry, ASimulatedValue)
+//      or NearlyTheSame(HDry, ASimulatedValue)
+//      or NearlyTheSame(HNoFlow, ASimulatedValue)
+//       then
+//    begin
+//      Result := False;
+//    end
+//    else
+//    begin
+      result := True;
+//    end;
+  end;
+  function GetPlotValue(ObsItem: TPestObsResult): double;
+  begin
+    result := 0;
+    case rgGraphType.ItemIndex of
+      0: result := ObsItem.Modeled;
+      1: result := ObsItem.Residual;
+      2: result := ObsItem.WeightedResidual;
+      else
+        Assert(False);
+    end;
+  end;
+begin
+  qtreeObservations.Clear;
+  if FObservations.Count > 0 then
+  begin
+    SimList := TList<TPestObsResult>.Create;
+    try
+      SimList.Capacity := FObservations.Count;
+      ObservedMin := FObservations[0].Measured;
+      ObservedMax := ObservedMin;
+      Initialized := False;
+      SimulatedMin := 0;
+      SimulatedMax := 0;
+      for index := 0 to FObservations.Count - 1 do
+      begin
+        ObsItem := FObservations[index];
+        if ObsItem.Measured < ObservedMin then
+        begin
+          ObservedMin := ObsItem.Measured
+        end
+        else if ObsItem.Measured > ObservedMax then
+        begin
+          ObservedMax := ObsItem.Measured
+        end;
+
+        SimValue := GetPlotValue(ObsItem);
+        if OkSimValue(SimValue) then
+        begin
+          SimList.Add(ObsItem);
+//          if rgGraphType.ItemIndex = 1 then
+//          begin
+//            SimValue := ObsItem.Residual;
+//          end;
+//          Inc(Count);
+          if Initialized then
+          begin
+            if SimValue < SimulatedMin then
+            begin
+              SimulatedMin := SimValue
+            end
+            else if SimValue > SimulatedMax then
+            begin
+              SimulatedMax := SimValue
+            end;
+          end
+          else
+          begin
+            Initialized := True;
+            SimulatedMin := SimValue;
+            SimulatedMax := SimulatedMin;
+          end;
+        end;
+      end;
+
+      SimList.Sort(TComparer<TPestObsResult>.Construct(
+        function (const L, R: TPestObsResult): Integer
+          begin
+            result := Sign(L.Measured - R.Measured);
+          end
+        ));
+
+      if ObservedMax = ObservedMin then
+      begin
+        ObservedMax := ObservedMax + 1;
+        ObservedMin := ObservedMin - 1;
+      end;
+      if SimulatedMax = SimulatedMin then
+      begin
+        SimulatedMax := SimulatedMax + 1;
+        SimulatedMin := SimulatedMin - 1;
+      end;
+      qtreeObservations.XMax := ObservedMax;
+      qtreeObservations.XMin := ObservedMin;
+      qtreeObservations.YMax := SimulatedMax;
+      qtreeObservations.YMin := SimulatedMin;
+
+  //    xysetdataarray(Data, 2, Count);
+      xysetdataarray(Data, SimList.Count, 1);
+  //    SetLength(Data, 2, Count);
+
+      try
+        xycleargraph(pbObservations,clWhite,clBlack,1);
+
+        xystartgraph(0, 100, 0, 100, 50, 50, 50, 50, clipoff);
+
+        xyxaxis(clBlack,ObservedMin,ObservedMax,
+          (ObservedMax-ObservedMin)/10,0,'Observed',1,False,False,True, 2);
+
+        case rgGraphType.ItemIndex  of
+          0:
+            begin
+              xyyaxis(clBlack,SimulatedMin,SimulatedMax,
+                (SimulatedMax-SimulatedMin)/10,0,'Simulated',5,False,False,True, 2);
+            end;
+          1:
+            begin
+              xyyaxis(clBlack,Min(0, SimulatedMin), Max(0, SimulatedMax),
+                (SimulatedMax-SimulatedMin)/10,0,'Residual',5,False,False,True, 2);
+            end;
+          2:
+            begin
+              xyyaxis(clBlack,Min(0, SimulatedMin), Max(0, SimulatedMax),
+                (SimulatedMax-SimulatedMin)/10,0,'Weighted Residual',5,False,False,True, 2);
+            end;
+          else
+            Assert(False);
+        end;
+
+        Count := 1;
+        for index := 0 to SimList.Count - 1 do
+        begin
+          SimValue := GetPlotValue(SimList[index]);
+//          if OkSimValue(SimValue) then
+//          begin
+            qtreeObservations.AddPoint(SimList[index].Measured,
+              SimValue, SimList[index]);
+
+            Data[Count, 0] := SimList[index].Measured;
+            Data[Count, 1] := SimValue;
+            Inc(Count);
+//          end;
+        end;
+
+        xysymbol(1,0,0);
+        xyplotarray(data,2,2);
+
+        if rgGraphType.ItemIndex = 0 then
+        begin
+          Min1To1 := Max(SimulatedMin, ObservedMin);
+          Max1To1 := Min(SimulatedMax, ObservedMax);
+          xymove(Min1To1, Min1To1);
+          xyDraw(Max1To1, Max1To1);
+        end
+        else
+        begin
+          xymove(ObservedMin, 0);
+          xyDraw(ObservedMax, 0);
+        end;
+
+        xyfinish;
+      except on E: exception do
+        begin
+          ShowMessage(e.message);
+          pgcObservations.ActivePageIndex := 0;
+          Exit;
+        end;
+      end;
+    finally
+      SimList.Free;
+    end;
+  end
+end;
+
+procedure TframePestObservationResults.rgGraphTypeClick(Sender: TObject);
+begin
+  PlotValues;
 end;
 
 procedure TframePestObservationResults.FillTable;
 var
   ItemIndex: Integer;
   AnItem: TPestObsResult;
-  Obs: IObservationItem;
-  ScreenObject: TScreenObject;
+//  Obs: IObservationItem;
+//  ScreenObject: TScreenObject;
 begin
   if FObservations.Count > 0 then
   begin
@@ -161,23 +515,15 @@ begin
       AnItem := FObservations[ItemIndex];
       rdgPestObs.Cells[Ord(pocName), ItemIndex+1] := AnItem.Name;
       rdgPestObs.Cells[Ord(pocGroup), ItemIndex+1] := AnItem.GroupName;
-      if FUsedObservations.TryGetValue(AnItem.Name, Obs) then
-      begin
-        ScreenObject := Obs.ScreenObject as TScreenObject;
-        rdgPestObs.Cells[Ord(pocObject), ItemIndex+1] := ScreenObject.Name;
-        rdgPestObs.Objects[Ord(pocObject), ItemIndex+1] := ScreenObject;
-      end
-      else
-      begin
-        rdgPestObs.Cells[Ord(pocObject), ItemIndex+1] := '';
-        rdgPestObs.Objects[Ord(pocObject), ItemIndex+1] := nil;
-      end;
+      rdgPestObs.Cells[Ord(pocObject), ItemIndex+1] := AnItem.ObjectName;
+      rdgPestObs.Objects[Ord(pocObject), ItemIndex+1] :=  AnItem.ScreenObject;
+      rdgPestObs.RealValue[Ord(pocTime), ItemIndex+1] := AnItem.Time;
       rdgPestObs.RealValue[Ord(pocMeasured), ItemIndex+1] := AnItem.Measured;
-      rdgPestObs.RealValue[Ord(pocModeled), ItemIndex+1] := AnItem.Modelled;
+      rdgPestObs.RealValue[Ord(pocModeled), ItemIndex+1] := AnItem.Modeled;
       rdgPestObs.RealValue[Ord(pocResidual), ItemIndex+1] := AnItem.Residual;
       rdgPestObs.RealValue[Ord(pocWeight), ItemIndex+1] := AnItem.Weight;
       rdgPestObs.RealValue[Ord(pocWtMeas), ItemIndex+1] := AnItem.WeightedMeasured;
-      rdgPestObs.RealValue[Ord(pocWtMod), ItemIndex+1] := AnItem.WeightedModelled;
+      rdgPestObs.RealValue[Ord(pocWtMod), ItemIndex+1] := AnItem.WeightedModeled;
       rdgPestObs.RealValue[Ord(pocWtRes), ItemIndex+1] := AnItem.WeightedResidual;
       rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
       rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
@@ -199,7 +545,7 @@ begin
   if FileExists(flnmedHeadObsResults.FileName) then
   begin
     FObservations.FileName := flnmedHeadObsResults.FileName;
-    FImportResult := FObservations.ReadFromFile(frmGoPhast.PhastModel);
+    FImportResult := FObservations.ReadFromFile;
     FUndoType := utImport;
   end
   else
@@ -216,51 +562,106 @@ begin
   FGettingData := True;
   try
     InitializeTableHeaders;
-    GetExistingObservations;
     FObservations.Assign(frmGoPhast.PhastModel.PestObsCollection);
     flnmedHeadObsResults.FileName := FObservations.FileName;
     FillTable;
+
+    framelmtMinResidual.Limit := FObservations.MinResidualLimit;
+    framelmtMaxResidual.Limit := FObservations.MaxResidualLimit;
+    framelmtMinimumTime.Limit := FObservations.MinTimeLimit;
+    framelmtMaximumTime.Limit := FObservations.MaxTimeLimit;
+    framelmtMinWeightedResidual.Limit := FObservations.MinWeightedResidualLimit;
+    framelmtMaxWeightedResidual.Limit := FObservations.MaxWeightedResidualLimit;
+
+    rgDrawChoice.ItemIndex := Ord(FObservations.DrawChoice);
   finally
     FGettingData := False;
   end;
 end;
 
-procedure TframePestObservationResults.GetExistingObservations;
+function TframePestObservationResults.GetSelectedObjectFromGraph: TScreenObject;
 var
-  TempList: TObservationInterfaceList;
-  ObsIndex: Integer;
-  IObs: IObservationItem;
-  AnObs: TCustomObservationItem;
+  RowIndex: Integer;
+  Selection: TGridRect;
 begin
-  FUsedObservations.Clear;
-  TempList := TObservationInterfaceList.Create;
-  try
-    frmGoPhast.PhastModel.FillObsInterfaceItemList(TempList, True);
-    FUsedObservations.Capacity := TempList.Count;
-    for ObsIndex := 0 to TempList.Count - 1 do
+  result := nil;
+  if FSelectedObsItem <> nil then
+  begin
+    result := FSelectedObsItem.ScreenObject;
+    if result <> nil then
     begin
-      IObs := TempList[ObsIndex];
-      if IObs is TCustomObservationItem then
-      begin
-        AnObs := TCustomObservationItem(IObs);
-        if AnObs.Print then
-        begin
-          FUsedObservations.Add(IObs.Name, IObs);
-        end;
-      end
-      else
-      begin
-        FUsedObservations.Add(IObs.Name, IObs);
-      end;
+      result.Selected := True;
     end;
-  finally
-    TempList.Free;
+
+    RowIndex := rdgPestObs.Cols[Ord(pocName)].IndexOf(FSelectedObsItem.Name);
+    if RowIndex >= 1 then
+    begin
+      if rdgPestObs.VisibleRowCount < rdgPestObs.RowCount - rdgPestObs.FixedRows then
+      begin
+        rdgPestObs.TopRow := RowIndex;
+      end;
+      Selection := rdgPestObs.Selection;
+      Selection.Top := RowIndex;
+      Selection.Bottom := RowIndex;
+      rdgPestObs.Selection := Selection;
+    end;
   end;
+end;
+
+function TframePestObservationResults.GetSelectedObjectFromGrid: TScreenObject;
+begin
+  result := nil;
+  if rdgPestObs.SelectedRow <= 0 then
+  begin
+    Exit;
+  end;
+  result := rdgPestObs.Objects[Ord(pocObject), rdgPestObs.SelectedRow] as TScreenObject;
 end;
 
 procedure TframePestObservationResults.SetData;
 begin
+  FObservations.FileName := flnmedHeadObsResults.FileName;
+  FObservations.MinResidualLimit := framelmtMinResidual.Limit;
+  FObservations.MaxResidualLimit := framelmtMaxResidual.Limit;
+  FObservations.MinTimeLimit := framelmtMinimumTime.Limit;
+  FObservations.MaxTimeLimit := framelmtMaximumTime.Limit;
+  FObservations.MinWeightedResidualLimit := framelmtMinWeightedResidual.Limit;
+  FObservations.MaxWeightedResidualLimit := framelmtMaxWeightedResidual.Limit;
+  FObservations.DrawChoice := TDrawChoice(rgDrawChoice.ItemIndex);
+end;
 
+procedure TframePestObservationResults.spinSymbolSizeChange(Sender: TObject);
+begin
+  shpMax.Height := spinSymbolSize.AsInteger;
+  shpMax.Width := spinSymbolSize.AsInteger;
+  shpHalfMax.Width := shpMax.Width;
+  shpHalfMax.Height := Round(Sqrt(Sqr(spinSymbolSize.AsInteger/2)/2)*2);
+  shpHalfMax.Top := shpMax.Top + shpMax.Height + 8;
+  lblMax.Left := shpMax.Left + shpMax.Width + 8;
+  lblMax.Top := shpMax.Top + (shpMax.Height-lblMax.Height) div 2;
+  lblHalfMax.Left := lblMax.Left;
+  lblHalfMax.Top := shpHalfMax.Top + (shpHalfMax.Height-lblHalfMax.Height) div 2;
+end;
+
+procedure TframePestObservationResults.TestForNewFile;
+var
+  ReadFile: Boolean;
+  FileDate: TDateTime;
+begin
+  if FileExists(FObservations.FileName) then
+  begin
+    FileAge(FObservations.FileName, FileDate);
+    if FileDate <> FObservations.FileDate then
+    begin
+      ReadFile := MessageDlg(Format(StrTheFileSHasADi,
+        [FObservations.FileName]),
+        mtWarning, [mbYes, mbNo], 0) = mrYes;
+      if ReadFile then
+      begin
+        FObservations.ReadFromFile;
+      end;
+    end;
+  end;
 end;
 
 procedure TframePestObservationResults.UpdateChildModels;

@@ -96,6 +96,7 @@ resourcestring
   '%1:d. Value to be converted = %2:s.';
   StrTheNumberOfRowsO = 'The number of rows or columns in %s is less than ze' +
   'ro.';
+  StrErrorReadingASCII = 'Error reading ASCII raster file.';
 //  StrThereWasAnErrorW = 'There was an error when attempting to access the fi' +
 //  'le. Please check that the file is not locked by another process and that ' +
 //  'the file is an ASCII raster.';
@@ -355,7 +356,11 @@ begin
           Lines.DelimitedText := ALine;
           LineIndex := 0;
         end;
+        try
         AString := Trim(Lines[LineIndex]);
+        except on EStringListError do
+          raise EAsciiRasterError.Create(StrErrorReadingASCII);
+        end;
         try
           AValue := FortranStrToFloat(AString);
         except on EConvertError do

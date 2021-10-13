@@ -65,7 +65,7 @@ type
     FNegativeColor32: TColor32;
     FMaxResidual: double;
     FMaxSymbolSize: integer;
-    FDisplayResiduals: boolean;
+    FVisible: boolean;
     FMaxLayerLimit: TColoringLimit;
     FMinLayerLimit: TColoringLimit;
     procedure SetFileName(const Value: string);
@@ -79,7 +79,7 @@ type
     procedure SetNegativeColor(const Value: TColor);
     procedure SetPositiveColor(const Value: TColor);
     procedure SetMaxSymbolSize(const Value: integer);
-    procedure SetDisplayResiduals(const Value: boolean);
+    procedure SetVisible(const Value: boolean);
     procedure SetMaxLayerLimit(const Value: TColoringLimit);
     procedure SetMinLayerLimit(const Value: TColoringLimit);
   public
@@ -112,7 +112,7 @@ type
     property NegativeColor: TColor read FNegativeColor write SetNegativeColor default clRed;
     property PositiveColor: TColor read FPositiveColor write SetPositiveColor default clBlue;
     property MaxSymbolSize: integer read FMaxSymbolSize write SetMaxSymbolSize default 20;
-    property Visible: boolean read FDisplayResiduals write SetDisplayResiduals default True;
+    property Visible: boolean read FVisible write SetVisible default True;
   end;
 
 implementation
@@ -331,7 +331,7 @@ begin
   PositiveColor := clBlue;
 
   FMaxSymbolSize := 20;
-  FDisplayResiduals := True;
+  FVisible := True;
 end;
 
 destructor THeadObsCollection.Destroy;
@@ -822,11 +822,11 @@ begin
   end;
 end;
 
-procedure THeadObsCollection.SetDisplayResiduals(const Value: boolean);
+procedure THeadObsCollection.SetVisible(const Value: boolean);
 begin
-  if FDisplayResiduals <> Value then
+  if FVisible <> Value then
   begin
-    FDisplayResiduals := Value;
+    FVisible := Value;
     InvalidateModel;
   end;
 end;

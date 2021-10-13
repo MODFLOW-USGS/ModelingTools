@@ -35,6 +35,7 @@ object framePestObservationResults: TframePestObservationResults
     ActivePage = tabValues
     Align = alClient
     TabOrder = 1
+    OnChange = pgcObservationsChange
     object tabControls: TTabSheet
       Caption = 'Controls'
       object lblNegativeColor: TLabel
@@ -110,29 +111,29 @@ object framePestObservationResults: TframePestObservationResults
           Height = 13
           Caption = 'Minimum residual'
         end
-        object lblMinLayer: TLabel
+        object lblMinWeightedResidual: TLabel
           Left = 3
           Top = 138
-          Width = 67
+          Width = 127
           Height = 13
-          Caption = 'Minimum layer'
+          Caption = 'Minimum weighted residual'
         end
-        object lblMaxLayer: TLabel
+        object lblMaxWeightedResidual: TLabel
           Left = 252
           Top = 138
-          Width = 71
+          Width = 131
           Height = 13
-          Caption = 'Maximum layer'
+          Caption = 'Maximum weighted residual'
         end
         inline framelmtMinimumTime: TframeDisplayLimit
           Left = 3
-          Top = 107
+          Top = 105
           Width = 243
           Height = 35
           TabOrder = 2
           TabStop = True
           ExplicitLeft = 3
-          ExplicitTop = 107
+          ExplicitTop = 105
           inherited cbCheck: TCheckBox
             Height = 23
             ExplicitHeight = 23
@@ -192,7 +193,7 @@ object framePestObservationResults: TframePestObservationResults
             ExplicitHeight = 21
           end
         end
-        inline framelmtMinLayer: TframeDisplayLimit
+        inline framelmtMinWeightedResidual: TframeDisplayLimit
           Left = 3
           Top = 160
           Width = 243
@@ -201,11 +202,15 @@ object framePestObservationResults: TframePestObservationResults
           TabStop = True
           ExplicitLeft = 3
           ExplicitTop = 160
+          inherited cbCheck: TCheckBox
+            Top = 3
+            ExplicitTop = 3
+          end
           inherited comboBoolLimit: TComboBox
             ExplicitHeight = 21
           end
         end
-        inline framelmtMaxLayer: TframeDisplayLimit
+        inline framelmtMaxWeightedResidual: TframeDisplayLimit
           Left = 252
           Top = 160
           Width = 243
@@ -246,6 +251,7 @@ object framePestObservationResults: TframePestObservationResults
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
         TabOrder = 5
+        OnChange = spinSymbolSizeChange
       end
       object cbShow: TCheckBox
         Left = 6
@@ -254,6 +260,19 @@ object framePestObservationResults: TframePestObservationResults
         Height = 17
         Caption = 'Show residuals'
         TabOrder = 1
+      end
+      object rgDrawChoice: TRadioGroup
+        Left = 0
+        Top = 360
+        Width = 269
+        Height = 42
+        Caption = 'Plot choice'
+        Columns = 2
+        ItemIndex = 0
+        Items.Strings = (
+          'Residuals'
+          'Weighted residuals')
+        TabOrder = 6
       end
     end
     object tabValues: TTabSheet
@@ -265,7 +284,7 @@ object framePestObservationResults: TframePestObservationResults
         Width = 547
         Height = 339
         Align = alClient
-        ColCount = 12
+        ColCount = 13
         FixedCols = 0
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
@@ -565,6 +584,30 @@ object framePestObservationResults: TframePestObservationResults
             CaseSensitivePicklist = False
             CheckStyle = csCheck
             AutoAdjustColWidths = True
+          end
+          item
+            AutoAdjustRowHeights = False
+            AutoAdjustCaptionRowHeights = True
+            ButtonCaption = '...'
+            ButtonFont.Charset = DEFAULT_CHARSET
+            ButtonFont.Color = clWindowText
+            ButtonFont.Height = -11
+            ButtonFont.Name = 'Tahoma'
+            ButtonFont.Style = []
+            ButtonUsed = False
+            ButtonWidth = 20
+            CheckMax = False
+            CheckMin = False
+            ComboUsed = False
+            Format = rcf4Real
+            LimitToList = False
+            MaxLength = 0
+            ParentButtonFont = False
+            WordWrapCaptions = True
+            WordWrapCells = False
+            CaseSensitivePicklist = False
+            CheckStyle = csCheck
+            AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
       end
@@ -583,6 +626,7 @@ object framePestObservationResults: TframePestObservationResults
           Height = 25
           Caption = 'Copy to clipboard'
           TabOrder = 2
+          OnClick = btnCopyClick
         end
         object btnHightlightObjects: TButton
           Left = 4
@@ -592,6 +636,7 @@ object framePestObservationResults: TframePestObservationResults
           Caption = 'Highlight selected objects'
           TabOrder = 0
           WordWrap = True
+          OnClick = btnHightlightObjectsClick
         end
         object btnRestore: TButton
           Left = 111
@@ -638,12 +683,16 @@ object framePestObservationResults: TframePestObservationResults
     object tabGraph: TTabSheet
       Caption = 'Graph'
       ImageIndex = 3
-      object pbHeadObs: TPaintBox
+      object pbObservations: TPaintBox
         Left = 0
         Top = 0
         Width = 547
         Height = 323
         Align = alClient
+        OnMouseDown = pbObservationsMouseDown
+        OnMouseMove = pbObservationsMouseMove
+        OnMouseUp = pbObservationsMouseUp
+        OnPaint = pbObservationsPaint
         ExplicitWidth = 520
         ExplicitHeight = 233
       end
@@ -658,22 +707,24 @@ object framePestObservationResults: TframePestObservationResults
         object lblGraphInstructions: TLabel
           Left = 255
           Top = 6
-          Width = 48
+          Width = 210
           Height = 52
           Caption = 'Click on a point to highlight it.'
           WordWrap = True
         end
         object rgGraphType: TRadioGroup
           Left = 4
-          Top = 0
+          Top = 6
           Width = 245
           Height = 73
           Caption = 'Graph type'
-          ItemIndex = 0
+          ItemIndex = 2
           Items.Strings = (
             'Simulated vs. Observed'
-            'Residual vs. Observed')
+            'Residual vs. Observed'
+            'Weighted Residual vs. Observed')
           TabOrder = 0
+          OnClick = rgGraphTypeClick
         end
       end
     end
