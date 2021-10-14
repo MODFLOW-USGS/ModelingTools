@@ -253,7 +253,6 @@ begin
     Splitter1.Free;
     Splitter2.Free;
   end;
-
 end;
 
 function CompareObservedValue(Item1, Item2: Pointer): Integer;

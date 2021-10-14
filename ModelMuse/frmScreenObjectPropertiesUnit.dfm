@@ -11011,7 +11011,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   Top = 185
                   Width = 573
                   Height = 257
-                  ExplicitHeight = 171
+                  ExplicitTop = 185
+                  ExplicitWidth = 573
+                  ExplicitHeight = 257
                   inherited lblDescription: TLabel
                     Top = 24
                     Width = 563
@@ -11025,11 +11027,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     Width = 569
                     Height = 171
                     ExplicitTop = 84
-                    ExplicitHeight = 85
+                    ExplicitWidth = 569
+                    ExplicitHeight = 171
                     inherited Panel: TPanel
                       Top = 130
                       Width = 569
-                      ExplicitTop = 44
+                      ExplicitTop = 130
+                      ExplicitWidth = 569
                       inherited lbNumber: TLabel
                         Width = 57
                         Height = 19
@@ -11056,7 +11060,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     inherited Grid: TRbwDataGrid4
                       Width = 569
                       Height = 130
-                      ExplicitHeight = 44
+                      ExplicitWidth = 569
+                      ExplicitHeight = 130
                       ColWidths = (
                         172
                         64

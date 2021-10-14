@@ -370,7 +370,7 @@ object TTaskHistory
     end
     item
       Name = 'SUTRA 3.0'
-      Display = True
+      Display = False
     end
     item
       Name = 'Metadata Editor'
@@ -426,7 +426,7 @@ object TTaskHistory
     end
     item
       Name = 'GW_Chart'
-      Display = True
+      Display = False
     end
     item
       Name = 'Head obs for MF6'
@@ -470,7 +470,7 @@ object TTaskHistory
     end
     item
       Name = 'MT3D-USGS RCT'
-      Display = True
+      Display = False
     end>
   History = <
     item

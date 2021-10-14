@@ -2620,7 +2620,7 @@ begin
     if (ScreenObject.ModflowRchBoundary <> nil)
       and ScreenObject.ModflowRchBoundary.Used then
     begin
-      FDrtMassFluxObservations.Add(ScreenObject);
+      FRchMassFluxObservations.Add(ScreenObject);
     end;
     if (ScreenObject.ModflowEvtBoundary <> nil)
       and ScreenObject.ModflowEvtBoundary.Used then

@@ -164,7 +164,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           Top = 65
           Width = 653
           Height = 252
-          ActivePage = tabObservationsTimes
+          ActivePage = tabObjects
           Align = alClient
           TabOrder = 1
           object tabObservationsTimes: TTabSheet
@@ -212,6 +212,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               Columns = <
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -235,6 +236,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -258,6 +260,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -281,6 +284,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -304,6 +308,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -333,6 +338,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -552,6 +558,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
               Columns = <
                 item
                   AutoAdjustRowHeights = False
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -575,6 +582,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -598,6 +606,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -624,6 +633,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -647,6 +657,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -670,6 +681,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -693,6 +705,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -955,6 +968,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -978,6 +992,7 @@ inherited frmManageFluxObservations: TfrmManageFluxObservations
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

@@ -6403,8 +6403,6 @@ end;
 
 procedure TfrmScreenObjectProperties.SetPestMethod(Grid: TRbwDataGrid4;
   ACol: Integer; const Value: TPestParamMethod);
-//var
-//  ItemIndex: Integer;
 begin
   if PestMethodRow = 0 then
   begin
@@ -6753,6 +6751,10 @@ begin
       AllowChange := True;
     end
     else if (FEVT_Node <> nil) and (FEVT_Node.StateIndex <> 1) then
+    begin
+      AllowChange := True;
+    end
+    else if (FRCH_Node <> nil) and (FRCH_Node.StateIndex <> 1) then
     begin
       AllowChange := True;
     end
@@ -18891,7 +18893,7 @@ begin
 
   {$IFDEF PEST}
   PestMethod[Frame.rdgModflowBoundary, ColOffset+RechPostion] :=
-    TDrnBoundary.DefaultBoundaryMethod(RechPostion);
+    TRchBoundary.DefaultBoundaryMethod(RechPostion);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
   {$ENDIF}
   Frame.rdgModflowBoundary.HideEditor;
@@ -19230,9 +19232,9 @@ var
 begin
   {$IFDEF PEST}
   PestMethod[frameRes.rdgModflowBoundary, 2] :=
-    TDrnBoundary.DefaultBoundaryMethod(StartPosition);
+    TResBoundary.DefaultBoundaryMethod(StartPosition);
   PestMethod[frameRes.rdgModflowBoundary, 3] :=
-    TDrnBoundary.DefaultBoundaryMethod(EndPosition);
+    TResBoundary.DefaultBoundaryMethod(EndPosition);
 //  GetPestModifiers(frameRes, Parameter, ScreenObjectList);
   {$ENDIF}
   if not frmGoPhast.PhastModel.ResIsSelected then

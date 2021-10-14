@@ -881,18 +881,26 @@ begin
   begin
     InvalidateModel;
     Compiler := nil;
-    if frmGoPhast.ModelSelection in ModflowSelection then
+    if ScreenObject <> nil then
+    begin
+      if (ScreenObject as TScreenObject).EvaluatedAt = eaBlocks then
+      begin
+        Compiler := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
+      end
+      else
+      begin
+        Compiler := frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes;
+      end;
+    end
+    else if frmGoPhast.ModelSelection in ModflowSelection then
     begin
       Compiler := frmGoPhast.PhastModel.rpThreeDFormulaCompiler;
     end
     else if frmGoPhast.ModelSelection in SutraSelection then
     begin
       Compiler := frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes;
-    end
-    else
-    begin
-      Assert(False)
     end;
+    // if ModelSelection is msUnknown, it is OK for the Compiler to be nil.
     frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
       FFactor, Value, Compiler,
       nil, nil, self);
