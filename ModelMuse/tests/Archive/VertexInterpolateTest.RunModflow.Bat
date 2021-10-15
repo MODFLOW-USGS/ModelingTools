@@ -1,3 +1,3 @@
-call C:\ModelingTools\ModelMuse\Debug\Win64\ModelMonitor.exe -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n C:\ModelingTools\ModelMuse\tests\VertexInterpolateTest.nam
-C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe C:\ModelingTools\ModelMuse\tests\VertexInterpolateTest.lst
+call "C:\Program Files\USGS\ModelMuse4\bin\ModelMonitor.exe" -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n VertexInterpolateTest.nam
+C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe VertexInterpolateTest.lst
 pause

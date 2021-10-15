@@ -1,3 +1,3 @@
-call "C:\Program Files\USGS\ModelMuse4\bin\ModelMonitor.exe" -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n C:\ModelingTools\ModelMuse\tests\EvtTest.nam
-C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe C:\ModelingTools\ModelMuse\tests\EvtTest.lst
+call "C:\Program Files\USGS\ModelMuse4\bin\ModelMonitor.exe" -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n EvtTest.nam
+C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe EvtTest.lst
 pause

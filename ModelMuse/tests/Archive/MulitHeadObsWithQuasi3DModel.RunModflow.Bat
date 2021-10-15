@@ -1,3 +1,3 @@
-call C:\ModelingTools\ModelMuse\Debug\Win64\ModelMonitor.exe -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n C:\ModelingTools\ModelMuse\tests\MulitHeadObsWithQuasi3DModel.nam
-C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe C:\ModelingTools\ModelMuse\tests\MulitHeadObsWithQuasi3DModel.lst
+call "C:\Program Files\USGS\ModelMuse4\bin\ModelMonitor.exe" -m C:\WRDAPP\MF2005.1_12\bin\mf2005.exe -n MulitHeadObsWithQuasi3DModel.nam
+C:\WRDAPP\ListingAnalyst_1_2\bin\ListingAnalyst.exe MulitHeadObsWithQuasi3DModel.lst
 pause
