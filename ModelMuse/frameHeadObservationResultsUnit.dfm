@@ -9,7 +9,7 @@ object frameHeadObservationResults: TframeHeadObservationResults
     Top = 0
     Width = 528
     Height = 432
-    ActivePage = tabGraph
+    ActivePage = tabValues
     Align = alClient
     TabOrder = 0
     object tabControls: TTabSheet

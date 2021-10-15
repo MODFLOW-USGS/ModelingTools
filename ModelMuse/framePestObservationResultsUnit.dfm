@@ -32,7 +32,7 @@ object framePestObservationResults: TframePestObservationResults
     Top = 0
     Width = 555
     Height = 432
-    ActivePage = tabValues
+    ActivePage = tabGraph
     Align = alClient
     TabOrder = 1
     OnChange = pgcObservationsChange
@@ -288,6 +288,7 @@ object framePestObservationResults: TframePestObservationResults
         FixedCols = 0
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
+        OnMouseUp = rdgPestObsMouseUp
         ExtendedAutoDistributeText = False
         AutoMultiEdit = True
         AutoDistributeText = False
@@ -645,6 +646,7 @@ object framePestObservationResults: TframePestObservationResults
           Height = 25
           Caption = 'Original order'
           TabOrder = 1
+          OnClick = btnRestoreClick
         end
       end
     end
@@ -707,8 +709,8 @@ object framePestObservationResults: TframePestObservationResults
         object lblGraphInstructions: TLabel
           Left = 255
           Top = 6
-          Width = 210
-          Height = 52
+          Width = 141
+          Height = 13
           Caption = 'Click on a point to highlight it.'
           WordWrap = True
         end

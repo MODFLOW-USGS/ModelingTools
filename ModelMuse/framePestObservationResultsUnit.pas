@@ -97,6 +97,9 @@ type
     procedure pbObservationsMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure pbObservationsPaint(Sender: TObject);
+    procedure rdgPestObsMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure btnRestoreClick(Sender: TObject);
   public
     procedure UpdateChildModels;
   protected
@@ -128,16 +131,189 @@ implementation
 
 uses
   PestObsUnit, frmGoPhastUnit, UndoItemsScreenObjects, frmGoToUnit, xygraph,
-  System.Math;
+  System.Math, Contnrs;
 
+type
+  TGridCrack = class(TRbwDataGrid4);
+  TCompareMethod = class(TObject)
+    Method: TPestObsColumns;
+  end;
 var
   Data: Tdatatype;
+  SortOrder: TList = nil;
 
 resourcestring
   StrTheFileSHasADi = 'The file %s has a different date than the imported re' +
   'sults. Do you want to import it?';
 
 {$R *.dfm}
+
+function CompareTextItems(Item1, Item2: Pointer; Column: TPestObsColumns): Integer;
+var
+  P1, P2: TPestObsResult;
+  Splitter1: TStringList;
+  Splitter2: TStringList;
+  index: Integer;
+  Part1: string;
+  Part2: string;
+  Value1: Integer;
+  Value2: Integer;
+  Text1: string;
+  Text2: string;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  case Column of
+    pocName:
+      begin
+        Text1 := P1.Name;
+        Text2 := P2.Name;
+      end;
+    pocGroup:
+      begin
+        Text1 := P1.GroupName;
+        Text2 := P2.GroupName;
+      end;
+    pocObject:
+      begin
+        Text1 := P1.ObjectName;
+        Text2 := P2.ObjectName;
+      end;
+    else
+      Assert(False);
+  end;
+  Splitter1 := TStringList.Create;
+  Splitter2 := TStringList.Create;
+  try
+    Splitter1.Delimiter := '_';
+    Splitter2.Delimiter := '_';
+    Splitter1.DelimitedText := Text1;
+    Splitter2.DelimitedText := Text1;
+    for index := 0 to Min(Splitter1.Count, Splitter2.Count)  - 1 do
+    begin
+      Part1 := Splitter1[index];
+      Part2 := Splitter2[index];
+      if TryStrToInt(Part1, Value1) and TryStrToInt(Part2, Value2) then
+      begin
+        result := Value1-Value2
+      end
+      else
+      begin
+        result := AnsiCompareText(Part1, Part2);
+      end;
+      if result <> 0 then
+      begin
+        Exit;
+      end;
+    end;
+    result := AnsiCompareText(Text1, Text2);
+  finally
+    Splitter1.Free;
+    Splitter2.Free;
+  end;
+end;
+
+function CompareRealValue(Item1, Item2: Pointer; Column: TPestObsColumns): Integer;
+var
+  P1, P2: TPestObsResult;
+  Value1: Double;
+  Value2: Double;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  case Column of
+    pocTime:
+      begin
+        Value1 := P1.Time;
+        Value2 := P2.Time;
+      end;
+    pocMeasured:
+      begin
+        Value1 := P1.Measured;
+        Value2 := P2.Measured;
+      end;
+    pocModeled:
+      begin
+        Value1 := P1.Modeled;
+        Value2 := P2.Modeled;
+      end;
+    pocResidual:
+      begin
+        Value1 := P1.Residual;
+        Value2 := P2.Residual;
+      end;
+    pocWeight:
+      begin
+        Value1 := P1.Weight;
+        Value2 := P2.Weight;
+      end;
+    pocWtMeas:
+      begin
+        Value1 := P1.WeightedMeasured;
+        Value2 := P2.WeightedMeasured;
+      end;
+    pocWtMod:
+      begin
+        Value1 := P1.WeightedModeled;
+        Value2 := P2.WeightedModeled;
+      end;
+    pocWtRes:
+      begin
+        Value1 := P1.WeightedResidual;
+        Value2 := P2.WeightedResidual;
+      end;
+    pocMeasSD:
+      begin
+        Value1 := P1.MeasurementStdDeviation;
+        Value2 := P2.MeasurementStdDeviation;
+      end;
+    pocNaturalWeight:
+      begin
+        Value1 := P1.NaturalWeight;
+        Value2 := P2.NaturalWeight;
+      end;
+    else
+      Assert(False);
+  end;
+  result := Sign(Value1 - Value2);
+end;
+
+function CompareOriginalOrder(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TPestObsResult;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  result := Sign(P1.OriginalOrder - P2.OriginalOrder);
+end;
+
+function CompareObservations(Item1, Item2: Pointer): Integer;
+var
+  Index: Integer;
+  CM: TCompareMethod;
+begin
+  result := 0;
+  for Index := 0 to SortOrder.Count - 1 do
+  begin
+    CM := SortOrder[Index];
+    case CM.Method of
+      pocName, pocGroup, pocObject:
+        begin
+          result := CompareTextItems(Item1, Item2, CM.Method)
+        end;
+      pocTime, pocMeasured, pocModeled, pocResidual, pocWeight,
+        pocWtMeas, pocWtMod, pocWtRes, pocMeasSD, pocNaturalWeight:
+        begin
+          result := CompareRealValue(Item1, Item2, CM.Method);
+        end;
+      pocOriginalOrder: result := CompareOriginalOrder(Item1, Item2);
+    end;
+    if result <> 0 then
+    begin
+      Exit;
+    end;
+  end;
+end;
 
 procedure TframePestObservationResults.btnCopyClick(Sender: TObject);
 begin
@@ -148,82 +324,79 @@ procedure TframePestObservationResults.btnHightlightObjectsClick(
   Sender: TObject);
 var
   Undo: TUndoChangeSelection;
-//  ScreenObjects: TStringList;
-//  ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
-//  ScreenObjectName: string;
-//  NameIndex: Integer;
   XCoordinate: real;
   YCoordinate: real;
 begin
-//  ScreenObjects := TStringList.Create;
-//  try
-//    for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
-//    begin
-//      AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
-//      if not AScreenObject.Deleted
-//        and (AScreenObject.ModflowBoundaries.ModflowHeadObservations <> nil)
-//        and AScreenObject.ModflowBoundaries.ModflowHeadObservations.Used then
-//      begin
-//        ScreenObjects.AddObject(AScreenObject.Name, AScreenObject)
-//      end;
-//    end;
-//    ScreenObjects.Sorted := True;
+  Undo := TUndoChangeSelection.Create;
+  frmGoPhast.ResetSelectedScreenObjects;
 
-    Undo := TUndoChangeSelection.Create;
-    frmGoPhast.ResetSelectedScreenObjects;
+  if Sender = btnHightlightObjects then
+  begin
+    AScreenObject := GetSelectedObjectFromGrid;
+  end
+  else
+  begin
+    AScreenObject := GetSelectedObjectFromGraph;
+  end;
 
-    if Sender = btnHightlightObjects then
-    begin
-      AScreenObject := GetSelectedObjectFromGrid;
-    end
-    else
-    begin
-      AScreenObject := GetSelectedObjectFromGraph;
-    end;
+  Undo.SetPostSelection;
 
-    Undo.SetPostSelection;
-
-    if Undo.SelectionChanged then
-    begin
-      frmGoPhast.UndoStack.Submit(Undo);
-    end
-    else
-    begin
-      Undo.Free;
-    end;
+  if Undo.SelectionChanged then
+  begin
+    frmGoPhast.UndoStack.Submit(Undo);
+  end
+  else
+  begin
+    Undo.Free;
+  end;
 
 //    NameIndex := ScreenObjects.IndexOf(ScreenObjectName);
-    if AScreenObject <> nil then
-    begin
+  if AScreenObject <> nil then
+  begin
 //      AScreenObject := ScreenObjects.Objects[NameIndex] as TScreenObject;
-      AScreenObject.Selected := True;
-      XCoordinate := AScreenObject.Points[0].X;
-      YCoordinate := AScreenObject.Points[0].Y;
-      case AScreenObject.ViewDirection of
-        vdTop:
-          begin
-            SetTopPosition(XCoordinate, YCoordinate);
-          end;
-        vdFront:
-          begin
-            SetFrontPosition(XCoordinate, YCoordinate);
-          end;
-        vdSide:
-          begin
-            SetSidePosition(YCoordinate, XCoordinate);
-          end;
-      else
-        Assert(False);
-      end;
+    AScreenObject.Selected := True;
+    XCoordinate := AScreenObject.Points[0].X;
+    YCoordinate := AScreenObject.Points[0].Y;
+    case AScreenObject.ViewDirection of
+      vdTop:
+        begin
+          SetTopPosition(XCoordinate, YCoordinate);
+        end;
+      vdFront:
+        begin
+          SetFrontPosition(XCoordinate, YCoordinate);
+        end;
+      vdSide:
+        begin
+          SetSidePosition(YCoordinate, XCoordinate);
+        end;
+    else
+      Assert(False);
     end;
-
-//  finally
-//    ScreenObjects.Free;
-//  end;
-
-//  PlotValues;
+  end;
 end;
+
+procedure TframePestObservationResults.btnRestoreClick(Sender: TObject);
+var
+  ObsCol: TPestObsColumns;
+  Index: Integer;
+  CM: TCompareMethod;
+begin
+  ObsCol := pocOriginalOrder;
+  for Index := 0 to SortOrder.Count-1 do
+  begin
+    CM := SortOrder[Index];
+    if CM.Method = ObsCol then
+    begin
+      SortOrder.Extract(CM);
+      SortOrder.Insert(0, CM);
+      FillTable;
+      break;
+    end;
+  end;
+end;
+
 
 constructor TframePestObservationResults.Create(Owner: TComponent);
 begin
@@ -495,38 +668,84 @@ begin
   end
 end;
 
+procedure TframePestObservationResults.rdgPestObsMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  ACol: Integer;
+  ARow: Integer;
+  ObsCol: TPestObsColumns;
+  Index: integer;
+  CM: TCompareMethod;
+begin
+    rdgPestObs.MouseToCell(X, Y, ACol, ARow);
+    if (ARow = 0) and (ACol >= 0) and (ACol < rdgPestObs.ColCount) then
+    begin
+      TGridCrack(rdgPestObs).HideEditor;
+      ObsCol := TPestObsColumns(ACol);
+      for Index := 0 to SortOrder.Count-1 do
+      begin
+        CM := SortOrder[Index];
+        if CM.Method = ObsCol then
+        begin
+          SortOrder.Extract(CM);
+          SortOrder.Insert(0, CM);
+          FillTable;
+          break;
+        end;
+      end;
+    end;
+end;
+
 procedure TframePestObservationResults.rgGraphTypeClick(Sender: TObject);
 begin
-  PlotValues;
+  pbObservations.Invalidate;
 end;
 
 procedure TframePestObservationResults.FillTable;
 var
   ItemIndex: Integer;
   AnItem: TPestObsResult;
+  AList: TList;
 //  Obs: IObservationItem;
 //  ScreenObject: TScreenObject;
 begin
   if FObservations.Count > 0 then
   begin
-    rdgPestObs.RowCount := FObservations.Count;
-    for ItemIndex := 0 to FObservations.Count - 1 do
-    begin
-      AnItem := FObservations[ItemIndex];
-      rdgPestObs.Cells[Ord(pocName), ItemIndex+1] := AnItem.Name;
-      rdgPestObs.Cells[Ord(pocGroup), ItemIndex+1] := AnItem.GroupName;
-      rdgPestObs.Cells[Ord(pocObject), ItemIndex+1] := AnItem.ObjectName;
-      rdgPestObs.Objects[Ord(pocObject), ItemIndex+1] :=  AnItem.ScreenObject;
-      rdgPestObs.RealValue[Ord(pocTime), ItemIndex+1] := AnItem.Time;
-      rdgPestObs.RealValue[Ord(pocMeasured), ItemIndex+1] := AnItem.Measured;
-      rdgPestObs.RealValue[Ord(pocModeled), ItemIndex+1] := AnItem.Modeled;
-      rdgPestObs.RealValue[Ord(pocResidual), ItemIndex+1] := AnItem.Residual;
-      rdgPestObs.RealValue[Ord(pocWeight), ItemIndex+1] := AnItem.Weight;
-      rdgPestObs.RealValue[Ord(pocWtMeas), ItemIndex+1] := AnItem.WeightedMeasured;
-      rdgPestObs.RealValue[Ord(pocWtMod), ItemIndex+1] := AnItem.WeightedModeled;
-      rdgPestObs.RealValue[Ord(pocWtRes), ItemIndex+1] := AnItem.WeightedResidual;
-      rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
-      rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
+    rdgPestObs.BeginUpdate;
+    try
+      rdgPestObs.RowCount := FObservations.Count;
+      AList := TList.Create;
+      try
+        AList.Capacity := FObservations.Count;
+        for ItemIndex := 0 to FObservations.Count - 1 do
+        begin
+          AList.Add(FObservations[ItemIndex]);
+        end;
+        AList.Sort(CompareObservations);
+
+        for ItemIndex := 0 to AList.Count - 1 do
+        begin
+          AnItem := AList[ItemIndex];
+          rdgPestObs.Cells[Ord(pocName), ItemIndex+1] := AnItem.Name;
+          rdgPestObs.Cells[Ord(pocGroup), ItemIndex+1] := AnItem.GroupName;
+          rdgPestObs.Cells[Ord(pocObject), ItemIndex+1] := AnItem.ObjectName;
+          rdgPestObs.Objects[Ord(pocObject), ItemIndex+1] :=  AnItem.ScreenObject;
+          rdgPestObs.RealValue[Ord(pocTime), ItemIndex+1] := AnItem.Time;
+          rdgPestObs.RealValue[Ord(pocMeasured), ItemIndex+1] := AnItem.Measured;
+          rdgPestObs.RealValue[Ord(pocModeled), ItemIndex+1] := AnItem.Modeled;
+          rdgPestObs.RealValue[Ord(pocResidual), ItemIndex+1] := AnItem.Residual;
+          rdgPestObs.RealValue[Ord(pocWeight), ItemIndex+1] := AnItem.Weight;
+          rdgPestObs.RealValue[Ord(pocWtMeas), ItemIndex+1] := AnItem.WeightedMeasured;
+          rdgPestObs.RealValue[Ord(pocWtMod), ItemIndex+1] := AnItem.WeightedModeled;
+          rdgPestObs.RealValue[Ord(pocWtRes), ItemIndex+1] := AnItem.WeightedResidual;
+          rdgPestObs.RealValue[Ord(pocMeasSD), ItemIndex+1] := AnItem.MeasurementStdDeviation;
+          rdgPestObs.RealValue[Ord(pocNaturalWeight), ItemIndex+1] := AnItem.NaturalWeight;
+        end;
+      finally
+        AList.Free;
+      end;
+    finally
+      rdgPestObs.EndUpdate;
     end;
   end
   else
@@ -767,5 +986,33 @@ procedure TCustomUndoChangePestObsResults.UpdateGUI;
 begin
 
 end;
+
+procedure InitializeSortOrder;
+var
+  Index: TPestObsColumns;
+  CM: TCompareMethod;
+begin
+  SortOrder.Free;
+  SortOrder := TObjectList.Create;
+  for Index := Low(TPestObsColumns) to High(TPestObsColumns) do
+  begin
+    CM := TCompareMethod.Create;
+    CM.Method := Index;
+    if CM.Method = pocOriginalOrder then
+    begin
+      SortOrder.Insert(0, CM)
+    end
+    else
+    begin
+      SortOrder.Add(CM)
+    end;
+  end;
+end;
+
+initialization
+  InitializeSortOrder;
+
+finalization
+  SortOrder.Free;
 
 end.

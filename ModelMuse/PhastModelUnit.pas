@@ -10383,10 +10383,12 @@ const
 //                of pilot points.
 //    '4.3.0.68' Bug fix: Fixed saving CREFT in SUTRA models.
 //               Bug fix: Fixed a bug where the LakeID was not set properly.
+//    '4.3.0.69' Bug fix: Fixed the ability to define recharge solute flux
+//                observations in MT3D.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.68';
+  IIModelVersion = '4.3.0.69';
 
 function IModelVersion: string;
 begin

@@ -1256,7 +1256,7 @@ begin
       TextEditor := ExpandFileName(TextEditor);
     end;
     TextEditor := QuoteFileName(TextEditor);
-    ListFile := QuoteFileName(ListFile);
+    ListFile := QuoteFileName(ExtractFileName(ListFile));
     if IsNotePad then
     begin
       BatchFile.Add('Start ' + TextEditor + ' ' + ListFile);
@@ -1545,7 +1545,7 @@ begin
         BatchFile.Add('call '
           + QuoteFileName(ExpandFileName(ProgramLocations.ModelMonitorLocation))
           + ' -m ' + QuoteFileName(ExpandFileName(ModflowLocation))
-          + ' -n ' + QuoteFileName(FileName));
+          + ' -n ' + QuoteFileName(ExtractFileName(FileName)));
       end
       else
       begin
@@ -1557,7 +1557,7 @@ begin
           BatchFile.Add('call '
             + QuoteFileName(ExpandFileName(ProgramLocations.ModelMonitorLocation))
             + ' -m ' + QuoteFileName(ExpandFileName(ModflowLocation))
-            + ' -n ' + QuoteFileName(MfsimName)
+            + ' -n ' + QuoteFileName(ExtractFileName(MfsimName))
             + ' -mv 6');
         end
         else
@@ -1569,7 +1569,7 @@ begin
           end
           else
           begin
-            BatchFile.Add(AFileName + ' ' + QuoteFileName(FileName) + ' /wait');
+            BatchFile.Add(AFileName + ' ' + QuoteFileName(ExtractFileName(FileName)) + ' /wait');
           end;
         end;
       end;

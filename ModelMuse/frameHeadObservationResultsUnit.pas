@@ -579,7 +579,6 @@ begin
       break;
     end;
   end;
-
 end;
 
 procedure TframeHeadObservationResults.comboModelsChange(Sender: TObject);
