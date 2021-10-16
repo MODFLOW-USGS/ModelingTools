@@ -38,6 +38,17 @@ type
     Destructor Destroy; override;
   end;
 
+  TUndoChangePestObsResults = class(TCustomUndoChangePestObsResults)
+  protected
+    function Description: string; override;
+  end;
+
+  TUndoImportChangePestObsResults = class(TCustomUndoChangePestObsResults)
+  protected
+    function Description: string; override;
+  end;
+
+
   TframePestObservationResults = class(TFrame)
     pnlBottom: TPanel;
     lblRMS: TLabel;
@@ -105,15 +116,11 @@ type
   protected
     procedure UpdateObsLinkList;
   private
-//    FUsedObservations: TDictionary<string, IObservationItem>;
     FObservations: TPestObsCollection;
     FGettingData: Boolean;
     FImportResult: Boolean;
     FUndoType: TUndoType;
     FSelectedObsItem: TPestObsResult;
-//    procedure GetExistingObservations;
-    procedure GetData;
-    procedure SetData;
     procedure FillTable;
     procedure InitializeTableHeaders;
     function GetSelectedObjectFromGrid: TScreenObject;
@@ -124,6 +131,8 @@ type
   public
     constructor Create(Owner: TComponent); override;
     destructor Destroy; override;
+    procedure GetData;
+    procedure SetData;
     { Public declarations }
   end;
 
@@ -145,6 +154,9 @@ var
 resourcestring
   StrTheFileSHasADi = 'The file %s has a different date than the imported re' +
   'sults. Do you want to import it?';
+  StrRootMeanSquareRes = 'Root Mean Square Weighted Residual = %g';
+  StrImportPESTResults = 'import PEST results';
+  StrChangePESTResultO = 'change PEST result options';
 
 {$R *.dfm}
 
@@ -180,7 +192,11 @@ begin
         Text2 := P2.ObjectName;
       end;
     else
-      Assert(False);
+      begin
+        Text1 := '';
+        Text2 := '';
+        Assert(False);
+      end;
   end;
   Splitter1 := TStringList.Create;
   Splitter2 := TStringList.Create;
@@ -273,7 +289,11 @@ begin
         Value2 := P2.NaturalWeight;
       end;
     else
-      Assert(False);
+      begin
+        Value1 := 0;
+        Value2 := 0;
+        Assert(False);
+      end;
   end;
   result := Sign(Value1 - Value2);
 end;
@@ -706,8 +726,6 @@ var
   ItemIndex: Integer;
   AnItem: TPestObsResult;
   AList: TList;
-//  Obs: IObservationItem;
-//  ScreenObject: TScreenObject;
 begin
   if FObservations.Count > 0 then
   begin
@@ -747,9 +765,11 @@ begin
     finally
       rdgPestObs.EndUpdate;
     end;
+    lblRMS.Caption := Format(StrRootMeanSquareRes, [FObservations.RootMeanSquareWeightedResidual]);
   end
   else
   begin
+    lblRMS.Caption := 'Root Mean Square Weighted Residual = ?';
     ClearGrid(rdgPestObs);
   end;
 end;
@@ -780,7 +800,12 @@ procedure TframePestObservationResults.GetData;
 begin
   FGettingData := True;
   try
+    lblRMS.Caption := 'Root Mean Square Weighted Residual = ?';
     InitializeTableHeaders;
+    if FObservations = nil then
+    begin
+      FObservations := TPestObsCollection.Create(nil);
+    end;
     FObservations.Assign(frmGoPhast.PhastModel.PestObsCollection);
     flnmedHeadObsResults.FileName := FObservations.FileName;
     FillTable;
@@ -793,6 +818,8 @@ begin
     framelmtMaxWeightedResidual.Limit := FObservations.MaxWeightedResidualLimit;
 
     rgDrawChoice.ItemIndex := Ord(FObservations.DrawChoice);
+
+    FUndoType := utChange;
   finally
     FGettingData := False;
   end;
@@ -838,6 +865,8 @@ begin
 end;
 
 procedure TframePestObservationResults.SetData;
+var
+  Undo: TCustomUndoChangePestObsResults;
 begin
   FObservations.FileName := flnmedHeadObsResults.FileName;
   FObservations.MinResidualLimit := framelmtMinResidual.Limit;
@@ -847,6 +876,22 @@ begin
   FObservations.MinWeightedResidualLimit := framelmtMinWeightedResidual.Limit;
   FObservations.MaxWeightedResidualLimit := framelmtMaxWeightedResidual.Limit;
   FObservations.DrawChoice := TDrawChoice(rgDrawChoice.ItemIndex);
+  TestForNewFile;
+  Undo := nil;
+  case FUndoType of
+    utChange:
+      begin
+        Undo := TUndoChangePestObsResults.Create(FObservations);
+      end;
+    utImport:
+      begin
+        Undo := TUndoImportChangePestObsResults.Create(FObservations);
+      end;
+    else Assert(False);
+  end;
+  frmGoPhast.UndoStack.Submit(Undo);
+  FUndoType := utChange;
+
 end;
 
 procedure TframePestObservationResults.spinSymbolSizeChange(Sender: TObject);
@@ -1007,6 +1052,20 @@ begin
       SortOrder.Add(CM)
     end;
   end;
+end;
+
+{ TUndoImportChangePestObsResults }
+
+function TUndoImportChangePestObsResults.Description: string;
+begin
+  result := StrImportPESTResults
+end;
+
+{ TUndoChangePestObsResults }
+
+function TUndoChangePestObsResults.Description: string;
+begin
+  result := StrChangePESTResultO
 end;
 
 initialization

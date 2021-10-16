@@ -10,11 +10,12 @@ uses
   frameModpathTimeSeriesDisplayUnit, frameModpathEndpointDisplayUnit,
   frameCustomColorUnit, frameColorGridUnit, frameContourDataUnit,
   frameVectorsUnit, frameDrawCrossSectionUnit, frameSwrReachConnectionsUnit,
-  frameSwrObsDisplayUnit, Mask, JvExMask, JvSpin;
+  frameSwrObsDisplayUnit, Mask, JvExMask, JvSpin,
+  framePestObservationResultsUnit;
 
 type
   TPostPages = (ppColorGrid, ppContourData, ppPathline, ppEndPoints,
-    ppTimeSeries, ppHeadObs, ppSfrStreamLink, ppStrStreamLink,
+    ppTimeSeries, ppHeadObs, ppPestObs, ppSfrStreamLink, ppStrStreamLink,
     ppSwrReachConnections, ppSwrObsDisplay,
     ppVectors, ppCrossSection);
 
@@ -50,6 +51,8 @@ type
     frameSwrReachConnections: TframeSwrReachConnections;
     jvspSwrObsDisplay: TJvStandardPage;
     frameSwrObsDisplay: TframeSwrObsDisplay;
+    jvspPestObsResults: TJvStandardPage;
+    framePestObs: TframePestObservationResults;
     procedure btnApplyClick(Sender: TObject);
     procedure FormCreate(Sender: TObject); override;
     procedure pglstMainChange(Sender: TObject);
@@ -108,6 +111,7 @@ resourcestring
   StrCrossSections = 'Cross Sections';
   StrSWRReachConnection = 'SWR Reach Connections';
   StrSWRObservations = 'SWR Observations';
+  StrPESTObservationRes = 'PEST Observation Results';
 
 {$R *.dfm}
 
@@ -153,6 +157,10 @@ begin
   Node.PageIndex := jvspModpathTimeSeries.PageIndex;
   Node := tvpglstMain.Items.Add(nil, StrHeadObservationRes) as TJvPageIndexNode;
   Node.PageIndex := jvspHeadObsResults.PageIndex;
+
+  Node := tvpglstMain.Items.Add(nil, StrPESTObservationRes) as TJvPageIndexNode;
+  Node.PageIndex := jvspPestObsResults.PageIndex;
+
   Node := tvpglstMain.Items.Add(nil, StrStreamLinks) as TJvPageIndexNode;
   Node.PageIndex := jvspSfrStreamLinks.PageIndex;
   Node := tvpglstMain.Items.Add(nil, StrStreamStrLinks) as TJvPageIndexNode;
@@ -282,6 +290,7 @@ var
   SutraSelected: Boolean;
   SwrSelected: Boolean;
   Modflow6Selected: Boolean;
+  PestSelected: Boolean;
 begin
   Handle;
   tvpglstMain.Handle;
@@ -295,6 +304,7 @@ begin
   SwrSelected := ModflowSelected and LocalModel.SwrIsSelected;
   HeadObsSelected := ModflowSelected and LocalModel.HobIsSelected;
   SutraSelected := LocalModel.ModelSelection in SutraSelection;
+  PestSelected := LocalModel.PestUsed;
 
   if Ord(High(TPostPages)) <> tvpglstMain.Items.Count-1 then
   begin
@@ -314,6 +324,7 @@ begin
     or LocalModel.TimeSeries.HasData;
   tvpglstMain.Items[Ord(ppHeadObs)].Enabled :=
     HeadObsSelected or (LocalModel.HeadObsResults.Count > 0);
+  tvpglstMain.Items[Ord(ppPestObs)].Enabled := PestSelected;
   if LocalModel.ModelSelection = msModflow2015 then
   begin
     tvpglstMain.Items[Ord(ppSfrStreamLink)].Enabled := SfrMf6Selected;
@@ -357,6 +368,7 @@ begin
   end;
   frameColorGrid.GetData;
   frameContourData.GetData;
+  framePestObs.GetData;
 
 //  frameColorGrid.UpdateLabelsAndLegend;
 //  frameContourData.UpdateLabelsAndLegend;
@@ -403,6 +415,10 @@ begin
     begin
       frameHeadObservationResults.SetData;
     end;
+  end
+  else if pglstMain.ActivePage = jvspPestObsResults then
+  begin
+    framePestObs.SetData;
   end
   else if pglstMain.ActivePage = jvspModpathPathline then
   begin

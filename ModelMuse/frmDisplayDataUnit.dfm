@@ -22,7 +22,7 @@ inherited frmDisplayData: TfrmDisplayData
     Top = 0
     Width = 578
     Height = 501
-    ActivePage = jvspHeadObsResults
+    ActivePage = jvspPestObsResults
     PropagateEnable = False
     Align = alClient
     OnChange = pglstMainChange
@@ -1926,6 +1926,202 @@ inherited frmDisplayData: TfrmDisplayData
             24
             24
             24)
+        end
+      end
+    end
+    object jvspPestObsResults: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 578
+      Height = 501
+      Caption = 'jvspPestObsResults'
+      ExplicitLeft = 1
+      inline framePestObs: TframePestObservationResults
+        Left = 0
+        Top = 0
+        Width = 578
+        Height = 501
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 23
+        ExplicitTop = 33
+        inherited pnlBottom: TPanel
+          Top = 465
+          Width = 578
+          inherited lblRMS: TLabel
+            Width = 293
+            Height = 18
+            ExplicitWidth = 293
+            ExplicitHeight = 18
+          end
+          inherited comboModels: TComboBox
+            Height = 26
+            ExplicitHeight = 26
+          end
+        end
+        inherited pgcObservations: TPageControl
+          Width = 578
+          Height = 465
+          ActivePage = framePestObs.tabControls
+          inherited tabControls: TTabSheet
+            ExplicitTop = 29
+            ExplicitWidth = 570
+            ExplicitHeight = 432
+            inherited lblNegativeColor: TLabel
+              Width = 190
+              Height = 36
+              ExplicitWidth = 190
+              ExplicitHeight = 36
+            end
+            inherited lblColorPositive: TLabel
+              Width = 185
+              Height = 36
+              ExplicitWidth = 185
+              ExplicitHeight = 36
+            end
+            inherited lblMaxSymbolSize: TLabel
+              Width = 206
+              Height = 18
+              ExplicitWidth = 206
+              ExplicitHeight = 18
+            end
+            inherited lblHeadObsResults: TLabel
+              Width = 69
+              Height = 18
+              ExplicitWidth = 69
+              ExplicitHeight = 18
+            end
+            inherited flnmedHeadObsResults: TJvFilenameEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+            inherited grpbxFilter: TGroupBox
+              inherited lblMaximumTime: TLabel
+                Width = 101
+                Height = 18
+                ExplicitWidth = 101
+                ExplicitHeight = 18
+              end
+              inherited lblMaxResidual: TLabel
+                Width = 126
+                Height = 18
+                ExplicitWidth = 126
+                ExplicitHeight = 18
+              end
+              inherited lblMinimumTime: TLabel
+                Width = 97
+                Height = 18
+                ExplicitWidth = 97
+                ExplicitHeight = 18
+              end
+              inherited lblMinResidual: TLabel
+                Width = 122
+                Height = 18
+                ExplicitWidth = 122
+                ExplicitHeight = 18
+              end
+              inherited lblMinWeightedResidual: TLabel
+                Width = 189
+                Height = 18
+                ExplicitWidth = 189
+                ExplicitHeight = 18
+              end
+              inherited lblMaxWeightedResidual: TLabel
+                Width = 193
+                Height = 18
+                ExplicitWidth = 193
+                ExplicitHeight = 18
+              end
+              inherited framelmtMinimumTime: TframeDisplayLimit
+                inherited comboBoolLimit: TComboBox
+                  Height = 26
+                  ExplicitHeight = 26
+                end
+              end
+              inherited framelmtMaxResidual: TframeDisplayLimit
+                inherited comboBoolLimit: TComboBox
+                  Height = 26
+                  ExplicitHeight = 26
+                end
+              end
+              inherited framelmtMaximumTime: TframeDisplayLimit
+                inherited comboBoolLimit: TComboBox
+                  Height = 26
+                  ExplicitHeight = 26
+                end
+              end
+              inherited framelmtMinResidual: TframeDisplayLimit
+                inherited comboBoolLimit: TComboBox
+                  Height = 26
+                  ExplicitHeight = 26
+                end
+              end
+              inherited framelmtMinWeightedResidual: TframeDisplayLimit
+                inherited comboBoolLimit: TComboBox
+                  Height = 26
+                  ExplicitHeight = 26
+                end
+              end
+              inherited framelmtMaxWeightedResidual: TframeDisplayLimit
+                inherited comboBoolLimit: TComboBox
+                  Height = 26
+                  ExplicitHeight = 26
+                end
+              end
+            end
+            inherited spinSymbolSize: TJvSpinEdit
+              Height = 26
+              ExplicitHeight = 26
+            end
+          end
+          inherited tabValues: TTabSheet
+            ExplicitTop = 29
+            ExplicitHeight = 399
+            inherited rdgPestObs: TRbwDataGrid4
+              Height = 334
+              ExplicitHeight = 334
+            end
+            inherited pnlValueControls: TPanel
+              Top = 334
+              ExplicitTop = 334
+            end
+          end
+          inherited tabLegend: TTabSheet
+            ExplicitTop = 29
+            ExplicitHeight = 399
+            inherited lblMax: TLabel
+              Width = 44
+              Height = 18
+              ExplicitWidth = 44
+              ExplicitHeight = 18
+            end
+            inherited lblHalfMax: TLabel
+              Width = 71
+              Height = 18
+              ExplicitWidth = 71
+              ExplicitHeight = 18
+            end
+          end
+          inherited tabGraph: TTabSheet
+            ExplicitTop = 29
+            ExplicitWidth = 570
+            ExplicitHeight = 432
+            inherited pbObservations: TPaintBox
+              Width = 570
+              Height = 351
+            end
+            inherited pnlGraphControls: TPanel
+              Top = 351
+              Width = 570
+              ExplicitTop = 318
+              inherited lblGraphInstructions: TLabel
+                Width = 128
+                Height = 36
+                ExplicitWidth = 128
+                ExplicitHeight = 36
+              end
+            end
+          end
         end
       end
     end

@@ -14,9 +14,9 @@ object framePestObservationResults: TframePestObservationResults
     object lblRMS: TLabel
       Left = 194
       Top = 9
-      Width = 151
+      Width = 200
       Height = 13
-      Caption = 'Root Mean Square Residual = ?'
+      Caption = 'Root Mean Square Weighted Residual = ?'
     end
     object comboModels: TComboBox
       Left = 8
@@ -32,7 +32,7 @@ object framePestObservationResults: TframePestObservationResults
     Top = 0
     Width = 555
     Height = 432
-    ActivePage = tabGraph
+    ActivePage = tabControls
     Align = alClient
     TabOrder = 1
     OnChange = pgcObservationsChange
@@ -71,7 +71,7 @@ object framePestObservationResults: TframePestObservationResults
         Top = 27
         Width = 505
         Height = 21
-        Filter = 'Head Observation Output files (*.hob_out)|*.hob_out'
+        Filter = 'PEST Residuals file (*.res)|*.res'
         TabOrder = 0
         Text = ''
         OnChange = flnmedHeadObsResultsChange

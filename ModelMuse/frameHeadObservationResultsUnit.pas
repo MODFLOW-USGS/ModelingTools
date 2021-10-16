@@ -179,7 +179,7 @@ resourcestring
   'sults. Do you want to import it?';
   StrTheFileSHasADiMultiple = 'The following files %s have a different date '
   + 'than the imported results. Do you want to import them?';
-  StrChangeHeadResultP = 'change head result parameters';
+  StrChangeHeadResultP = 'change head result options';
   StrImportHeadResults = 'import head results';
   StrObservationName = 'Observation Name';
   StrX = 'X';

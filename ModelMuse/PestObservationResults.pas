@@ -121,11 +121,9 @@ type
     FPositiveColor: TColor;
     FMinResidualLimit: TColoringLimit;
     FVisible: boolean;
-//    FMaxLayerLimit: TColoringLimit;
     FMaxWeightedResidualLimit: TColoringLimit;
     FMaxSymbolSize: integer;
     FNegativeColor: TColor;
-//    FMinLayerLimit: TColoringLimit;
     FPositiveColor32: TColor32;
     FNegativeColor32: TColor32;
     FMaxObjectResidual: double;
@@ -134,12 +132,10 @@ type
     procedure SetVisible(const Value: boolean);
     procedure SetFileDate(const Value: TDateTime);
     procedure SetFileName(const Value: string);
-//    procedure SetMaxLayerLimit(const Value: TColoringLimit);
     procedure SetMaxResidualLimit(const Value: TColoringLimit);
     procedure SetMaxSymbolSize(const Value: integer);
     procedure SetMaxTimeLimit(const Value: TColoringLimit);
     procedure SetMaxWeightedResidualLimit(const Value: TColoringLimit);
-//    procedure SetMinLayerLimit(const Value: TColoringLimit);
     procedure SetMinResidualLimit(const Value: TColoringLimit);
     procedure SetMinTimeLimit(const Value: TColoringLimit);
     procedure SetMinWeightedResidualLimit(const Value: TColoringLimit);
@@ -163,6 +159,8 @@ type
     property Items[Index: Integer]: TPestObsResult read GetItems
       write SetItems; default;
     procedure Draw(const BitMap: TPersistent; const ZoomBox: TQrbwZoomBox2);
+    function RootMeanSquareResidual: double;
+    function RootMeanSquareWeightedResidual: double;
   published
     property FileName: string read FFileName write SetFileName;
     property FileDate: TDateTime read FFileDate write SetFileDate;
@@ -178,8 +176,6 @@ type
       write SetMaxTimeLimit;
     property MinTimeLimit: TColoringLimit read FMinTimeLimit
       write SetMinTimeLimit;
-//    property MaxLayerLimit: TColoringLimit read FMaxLayerLimit write SetMaxLayerLimit;
-//    property MinLayerLimit: TColoringLimit read FMinLayerLimit write SetMinLayerLimit;
     property NegativeColor: TColor read FNegativeColor write SetNegativeColor default clRed;
     property PositiveColor: TColor read FPositiveColor write SetPositiveColor default clBlue;
     property MaxSymbolSize: integer read FMaxSymbolSize write SetMaxSymbolSize default 20;
@@ -244,7 +240,7 @@ begin
   end;
   FStoredMeasured := TRealStorage.Create(InvalidateModelEvent);
   FStoredWeightedModeled := TRealStorage.Create(InvalidateModelEvent);
-  FStoredWeight := FStoredWeight.Create(InvalidateModelEvent);
+  FStoredWeight := TRealStorage.Create(InvalidateModelEvent);
   FStoredMeasurementStdDeviation := TRealStorage.Create(InvalidateModelEvent);
   FStoredWeightedMeasured := TRealStorage.Create(InvalidateModelEvent);
   FStoredResidual := TRealStorage.Create(InvalidateModelEvent);
@@ -646,7 +642,7 @@ begin
 //  FMinLayerLimit := TColoringLimit.Create;
   FMaxWeightedResidualLimit := TColoringLimit.Create;
   FMinWeightedResidualLimit := TColoringLimit.Create;
-  if FModel <> nil then
+//  if FModel <> nil then
   begin
     FUsedObservations := TDictionary<string, IObservationItem>.Create;
   end;
@@ -765,12 +761,12 @@ begin
         AnObs := TCustomObservationItem(IObs);
         if AnObs.Print then
         begin
-          FUsedObservations.Add(IObs.Name, IObs);
+          FUsedObservations.Add(LowerCase(IObs.Name), IObs);
         end;
       end
       else
       begin
-        FUsedObservations.Add(IObs.Name, IObs);
+        FUsedObservations.Add(LowerCase(IObs.Name), IObs);
       end;
     end;
   finally
@@ -792,6 +788,7 @@ var
   Item: TPestObsResult;
   Obs: IObservationItem;
   TimeObs: ITimeObservationItem;
+  TempFileName: string;
 begin
   GetExistingObservations;
   result := False;
@@ -806,7 +803,9 @@ begin
     ResidualsFile := TStringList.Create;
     Splitter := TStringList.Create;
     try
+      TempFileName := FileName;
       Clear;
+      FileName := TempFileName;
       ResidualsFile.LoadFromFile(FileName);
       for LineIndex := 1 to ResidualsFile.Count - 1 do
       begin
@@ -828,10 +827,17 @@ begin
           Item.NaturalWeight := FortranStrToFloat(Splitter[10]);
           Item.OriginalOrder := LineIndex-1;
 
-          if FUsedObservations.TryGetValue(Item.Name, Obs) then
+          if FUsedObservations.TryGetValue(LowerCase(Item.Name), Obs) then
           begin
             Item.FScreenObject := Obs.ScreenObject as TScreenObject;
-            Item.ObjectName := Item.FScreenObject.Name;
+            if Item.FScreenObject <> nil then
+            begin
+              Item.ObjectName := Item.FScreenObject.Name;
+            end
+            else
+            begin
+              Item.ObjectName := ''
+            end;
             if Supports(Obs, ITimeObservationItem, TimeObs) then
             begin
               Item.Time := TimeObs.Time;
@@ -861,6 +867,34 @@ begin
     end;
   end;
   result := True;
+end;
+
+function TPestObsCollection.RootMeanSquareResidual: double;
+var
+  ItemIndex: Integer;
+  Item: TPestObsResult;
+begin
+  result := 0;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    Item := Items[ItemIndex];
+    result := result + Sqr(Item.Residual);
+  end;
+  Result := Sqrt(result/Count);
+end;
+
+function TPestObsCollection.RootMeanSquareWeightedResidual: double;
+var
+  ItemIndex: Integer;
+  Item: TPestObsResult;
+begin
+  result := 0;
+  for ItemIndex := 0 to Count - 1 do
+  begin
+    Item := Items[ItemIndex];
+    result := result + Sqr(Item.WeightedResidual);
+  end;
+  Result := Sqrt(result/Count);
 end;
 
 procedure TPestObsCollection.SetVisible(const Value: boolean);
