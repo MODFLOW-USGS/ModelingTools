@@ -2,17 +2,17 @@ object framePestObservationResults: TframePestObservationResults
   Left = 0
   Top = 0
   Width = 555
-  Height = 468
+  Height = 490
   TabOrder = 0
   object pnlBottom: TPanel
     Left = 0
-    Top = 432
+    Top = 454
     Width = 555
     Height = 36
     Align = alBottom
     TabOrder = 0
     object lblRMS: TLabel
-      Left = 194
+      Left = 8
       Top = 9
       Width = 200
       Height = 13
@@ -25,13 +25,14 @@ object framePestObservationResults: TframePestObservationResults
       Height = 21
       Style = csDropDownList
       TabOrder = 0
+      Visible = False
     end
   end
   object pgcObservations: TPageControl
     Left = 0
     Top = 0
     Width = 555
-    Height = 432
+    Height = 454
     ActivePage = tabControls
     Align = alClient
     TabOrder = 1
@@ -54,7 +55,7 @@ object framePestObservationResults: TframePestObservationResults
       end
       object lblMaxSymbolSize: TLabel
         Left = 130
-        Top = 341
+        Top = 357
         Width = 139
         Height = 13
         Caption = 'Maximum symbol size (pixels)'
@@ -226,53 +227,56 @@ object framePestObservationResults: TframePestObservationResults
       end
       object clrbtnNegative: TJvColorButton
         Left = 3
-        Top = 311
+        Top = 319
         Width = 92
         OtherCaption = '&Other...'
         Options = []
+        Color = clRed
         TabOrder = 3
         TabStop = False
       end
       object clrbtnPositive: TJvColorButton
         Left = 255
-        Top = 311
+        Top = 319
         Width = 92
         OtherCaption = '&Other...'
         Options = []
+        Color = clBlue
         TabOrder = 4
         TabStop = False
       end
       object spinSymbolSize: TJvSpinEdit
         Left = 3
-        Top = 338
+        Top = 354
         Width = 121
         Height = 21
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
-        Value = 1.000000000000000000
+        Value = 20.000000000000000000
         TabOrder = 5
         OnChange = spinSymbolSizeChange
       end
       object cbShow: TCheckBox
-        Left = 6
+        Left = 3
         Top = 59
-        Width = 158
+        Width = 190
         Height = 17
-        Caption = 'Show residuals'
+        Caption = 'Show weighted residuals'
         TabOrder = 1
       end
       object rgDrawChoice: TRadioGroup
         Left = 0
-        Top = 360
-        Width = 269
+        Top = 381
+        Width = 347
         Height = 42
         Caption = 'Plot choice'
         Columns = 2
-        ItemIndex = 0
+        ItemIndex = 1
         Items.Strings = (
           'Residuals'
           'Weighted residuals')
         TabOrder = 6
+        OnClick = rgDrawChoiceClick
       end
     end
     object tabValues: TTabSheet
@@ -282,7 +286,7 @@ object framePestObservationResults: TframePestObservationResults
         Left = 0
         Top = 0
         Width = 547
-        Height = 339
+        Height = 361
         Align = alClient
         ColCount = 13
         FixedCols = 0
@@ -614,16 +618,16 @@ object framePestObservationResults: TframePestObservationResults
       end
       object pnlValueControls: TPanel
         Left = 0
-        Top = 339
+        Top = 361
         Width = 547
         Height = 65
         Align = alBottom
         ParentBackground = False
         TabOrder = 1
         object btnCopy: TButton
-          Left = 111
+          Left = 135
           Top = 32
-          Width = 107
+          Width = 138
           Height = 25
           Caption = 'Copy to clipboard'
           TabOrder = 2
@@ -632,7 +636,7 @@ object framePestObservationResults: TframePestObservationResults
         object btnHightlightObjects: TButton
           Left = 4
           Top = 6
-          Width = 101
+          Width = 125
           Height = 51
           Caption = 'Highlight selected objects'
           TabOrder = 0
@@ -640,9 +644,9 @@ object framePestObservationResults: TframePestObservationResults
           OnClick = btnHightlightObjectsClick
         end
         object btnRestore: TButton
-          Left = 111
+          Left = 135
           Top = 6
-          Width = 107
+          Width = 138
           Height = 25
           Caption = 'Original order'
           TabOrder = 1
@@ -689,7 +693,7 @@ object framePestObservationResults: TframePestObservationResults
         Left = 0
         Top = 0
         Width = 547
-        Height = 323
+        Height = 345
         Align = alClient
         OnMouseDown = pbObservationsMouseDown
         OnMouseMove = pbObservationsMouseMove
@@ -700,7 +704,7 @@ object framePestObservationResults: TframePestObservationResults
       end
       object pnlGraphControls: TPanel
         Left = 0
-        Top = 323
+        Top = 345
         Width = 547
         Height = 81
         Align = alBottom

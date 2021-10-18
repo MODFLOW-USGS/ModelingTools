@@ -10386,6 +10386,10 @@ const
 //    '4.3.0.69' Bug fix: Fixed the ability to define recharge solute flux
 //                observations in MT3D.
 
+//               Bug fix: Attempting to insert a new layer group when more than
+//                one layer group is selected no longer causes an access
+//                violation.
+
 const
   // version number of ModelMuse.
   IIModelVersion = '4.3.0.69';
@@ -24300,7 +24304,7 @@ end;
 procedure TCustomModel.DrawPestPointObservations(const BitMap: TPersistent;
   const ZoomBox: TQrbwZoomBox2);
 begin
-  if PestObsCollection.Count > 0 then
+  if (PestObsCollection.Count > 0) and PestObsCollection.Visible then
   begin
     PestObsCollection.Draw(BitMap, ZoomBox);
   end;

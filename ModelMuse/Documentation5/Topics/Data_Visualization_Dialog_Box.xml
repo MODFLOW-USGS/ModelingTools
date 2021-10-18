@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Data Visualization Dialog Box</title>
   <body>
     <header>
@@ -15,6 +15,7 @@
       <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH_Endpoint_Display" styleclass="Bullet List" translate="true">MODPATH End Points</link></li>
       <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="MODPATH_Time_Series_Display" styleclass="Bullet List" translate="true">MODPATH Time Series</link></li>
       <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Head_Observation_Results" styleclass="Bullet List" translate="true">Head Observation Results</link></li>
+      <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Observation_Results_Pane" styleclass="Bullet List" translate="true">PEST Observation Results</link></li>
       <li styleclass="Bullet List"><link displaytype="text" defaultstyle="true" type="topiclink" href="Stream_Links_Pane" styleclass="Bullet List" translate="true">SFR Stream Links</link></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Stream_Links_Pane" styleclass="Bullet List" translate="true">STR Stream Links</link></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="SWR_Reach_Connections" styleclass="Bullet List" translate="true">SWR Reach Connections</link></li>

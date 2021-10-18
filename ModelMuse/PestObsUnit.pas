@@ -25,6 +25,7 @@ type
     function GetObservationGroup: string;
     function GetGUID: string;
     procedure SetGUID(const Value: string);
+    function GetExportedName: string;
   protected
     function QueryInterface(const IID: TGUID; out Obj): HRESULT; stdcall;
     function _AddRef: Integer; stdcall;
@@ -67,7 +68,7 @@ type
     property Comment: string read GetComment write SetComment;
     property ObservationGroup: string read GetObservationGroup
       write SetObservationGroup;
-    property ExportedName: string read FExportedName write FExportedName;
+    property ExportedName: string read GetExportedName write FExportedName;
   end;
 
   TObservationList = TList<TCustomObservationItem>;
@@ -238,6 +239,11 @@ end;
 function TCustomObservationItem.GetComment: string;
 begin
   result := FComment;
+end;
+
+function TCustomObservationItem.GetExportedName: string;
+begin
+  Result := FExportedName;
 end;
 
 function TCustomObservationItem.GetGUID: string;

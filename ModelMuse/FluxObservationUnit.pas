@@ -79,6 +79,7 @@ type
 //    procedure SetObservationGroup(const Value: string);
   protected
     function GetName: string;
+    function GetExportedName: string;
     function GetWeight: Double;
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
@@ -613,6 +614,11 @@ begin
     GUID := SourceItem.GUID;
   end;
   inherited;
+end;
+
+function TFluxObservation.GetExportedName: string;
+begin
+  result := GetName;
 end;
 
 function TFluxObservation.GetFluxGroup: TFluxObservationGroup;

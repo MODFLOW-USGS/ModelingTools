@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4281</config-value>
+      <config-value name="autohelpstart">4285</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1354,6 +1354,7 @@ document.write('</frameset>');
       <helpcontext-number href="PEST_Calibration_Observations" value="4219"/>
       <helpcontext-number href="PEST_Control_Variables" value="4227"/>
       <helpcontext-number href="PEST_Examples" value="4234"/>
+      <helpcontext-number href="PEST_Observation_Results_Pane" value="4284"/>
       <helpcontext-number href="Pest_Properties_Basic_Pane" value="4137"/>
       <helpcontext-number href="PEST_Properties_Between_Layer_" value="4152"/>
       <helpcontext-number href="Pest_Properties_Dialog_Box" value="4136"/>
@@ -1491,6 +1492,7 @@ document.write('</frameset>');
       <helpcontext-number href="RMA_Wells" value="3405"/>
       <helpcontext-number href="Rma2005_Define_Observation_Gro" value="4270"/>
       <helpcontext-number href="Rma2005_Prior_Information" value="4278"/>
+      <helpcontext-number href="RMA2005_Visualize_Residuals" value="4285"/>
       <helpcontext-number href="RmaMf2005_Activate_PEST" value="4254"/>
       <helpcontext-number href="RmaMf2005_Apply_K_Parameter" value="4257"/>
       <helpcontext-number href="RmaMf2005_Apply_Seepage_Parame" value="4258"/>

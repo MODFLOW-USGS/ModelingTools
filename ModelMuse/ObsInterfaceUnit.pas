@@ -8,6 +8,7 @@ uses
 type
   IObservationItem = interface(IUnknown) ['{4355136D-762F-44C2-AD0B-E29FBC7EC7AD}']
     function GetName: string;
+    function GetExportedName: string;
     function GetGUID: string;
     function GetScreenObject: TObject;
     function GetObservedValue: double;
@@ -19,6 +20,7 @@ type
     procedure SetObservedValue(const Value: double);
 
     property Name: string read GetName;
+    property ExportedName: string read GetExportedName;
     property GUID: string read GetGUID;
     property ScreenObject: TObject read GetScreenObject;
     property ObservedValue: double read GetObservedValue

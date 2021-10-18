@@ -10,15 +10,15 @@ object frameDiscretization: TframeDiscretization
   object lbl1: TLabel
     Left = 8
     Top = 8
-    Width = 122
-    Height = 16
+    Width = 101
+    Height = 13
     Caption = 'Vertical discretization'
   end
   object lbl2: TLabel
     Left = 8
     Top = 59
-    Width = 114
-    Height = 16
+    Width = 93
+    Height = 13
     Caption = 'Layer size multiplier'
   end
   object pnlDiscritization: TPanel
@@ -64,6 +64,7 @@ object frameDiscretization: TframeDiscretization
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -107,8 +108,8 @@ object frameDiscretization: TframeDiscretization
         Caption = 'Discretization within layer group'
         Layout = tlCenter
         WordWrap = True
-        ExplicitWidth = 183
-        ExplicitHeight = 16
+        ExplicitWidth = 153
+        ExplicitHeight = 13
       end
     end
     object pnlPaintboxParent: TPanel

@@ -129,6 +129,8 @@ inherited frmSutraLayers: TfrmSutraLayers
     Height = 395
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 162
+    ExplicitHeight = 160
     object pnlTop: TPanel
       Left = 1
       Top = 1
@@ -185,8 +187,8 @@ inherited frmSutraLayers: TfrmSutraLayers
       TabOrder = 1
       ExplicitLeft = 1
       ExplicitTop = 92
-      ExplicitWidth = 441
-      ExplicitHeight = 302
+      ExplicitWidth = 160
+      ExplicitHeight = 67
       inherited lbl1: TLabel
         Width = 148
         Height = 18
@@ -220,8 +222,8 @@ inherited frmSutraLayers: TfrmSutraLayers
           Width = 193
           ExplicitWidth = 193
           inherited lbl3: TLabel
-            Width = 193
-            Height = 41
+            Width = 179
+            Height = 36
             ExplicitWidth = 179
             ExplicitHeight = 36
           end

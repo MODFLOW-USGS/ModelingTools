@@ -76,6 +76,7 @@ type
     function GetGUID: string;
     procedure SetGUID(const Value: string);
     function GetScreenObject: TObject;
+    function GetExportedName: string;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure InvalidateModel; override;
@@ -495,6 +496,11 @@ begin
 //    ObservationGroup := SourceItem.ObservationGroup;
   end;
   inherited;
+end;
+
+function THobItem.GetExportedName: string;
+begin
+  result := GetName;
 end;
 
 function THobItem.GetGUID: string;

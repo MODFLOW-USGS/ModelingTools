@@ -915,18 +915,14 @@ end;
 function TfrmLayers.AddNewUnit(Position: integer): TTreeNode;
 var
   LayerGroup: TLayerGroup;
-  Index: Integer;
-  TreeNode: TTreeNode;
+//  Index: Integer;
+//  TreeNode: TTreeNode;
   Sibling: TTreeNode;
   LayerNames: TStringList;
   LayerGroupIndex: integer;
   NewLayerName: string;
 begin
-  for Index := 0 to FSelectedTreeNodes.Count - 1 do
-  begin
-    TreeNode := FSelectedTreeNodes[Index];
-    TreeNode.Selected := False;
-  end;
+  tvLayerGroups.Selected := nil;
   FSelectedTreeNodes.Clear;
   FSelectedUnits.Clear;
   UpdateDiscretization;

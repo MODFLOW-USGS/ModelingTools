@@ -165,6 +165,8 @@ type
       out HeadObsRect: TRect);
     procedure ApplyCrossSectionSettings(AModel: TCustomModel;
       ASetting: TDisplaySettingsItem);
+    procedure DrawPestObsLegend(ACanvas: TCanvas; const LegendY: Integer;
+      out PestObsRect: TRect);
     property SelectedItem: TDrawItem read FSelectedItem write SetSelectedItem;
     procedure SelectItemToDrag(X: Integer; Y: Integer);
     function DragItem(X, Y: Integer): Boolean;
@@ -233,7 +235,7 @@ uses
   UndoItemsScreenObjects, ClassificationUnit, frmProgressUnit,
   frmErrorsAndWarningsUnit, Clipbrd, RbwParser, frmDisplayDataUnit,
   pngimage, jpeg, VectorDisplayUnit, ModflowHeadObsResults,
-  Generics.Collections, DrawMeshTypesUnit;
+  Generics.Collections, DrawMeshTypesUnit, PestObservationResults;
 
 resourcestring
   StrProgress = 'Progress';
@@ -2094,6 +2096,7 @@ var
   StartRight: integer;
   EndpointRect: TRect;
   RHeight: integer;
+  PestObsRect: TRect;
 begin
   ACanvas.Font := Font;
   LegendY := 60;
@@ -2118,11 +2121,19 @@ begin
   begin
     LegendY := LegendY + RHeight + 40;
   end;
+  DrawPestObsLegend(ACanvas, LegendY, PestObsRect);
+
+  RHeight := PestObsRect.Bottom - PestObsRect.Top;
+  if RHeight > 0 then
+  begin
+    LegendY := LegendY + RHeight + 40;
+  end;
   DrawEndpointLegend(ACanvas, LegendY, EndpointRect);
 
   DrawingRect.Left := Max(ColorRect.Right, ContourRect.Right);
   DrawingRect.Left := Max(DrawingRect.Left, HeadObsRect.Right);
   DrawingRect.Left := Max(DrawingRect.Left, EndpointRect.Right);
+  DrawingRect.Left := Max(DrawingRect.Left, PestObsRect.Right);
   DrawingRect.Top := 0;
     DrawingRect.Right := CanvasWidth;
   DrawingRect.Bottom := CanvasHeight;
@@ -2992,6 +3003,7 @@ begin
     finally
       ACanvas.Brush.Color := AColor;
     end;
+    HeadObsRect.Bottom := HeadObsRect.Bottom + MaxSymbolSize+Offset;
 
     ResidString := FloatToStr(MaxResid);
     Extent := ACanvas.TextExtent(ResidString);
@@ -3012,6 +3024,7 @@ begin
     finally
       ACanvas.Brush.Color := AColor;
     end;
+    HeadObsRect.Bottom := HeadObsRect.Bottom + MaxSymbolSize+SymbolLeft;
 
     ResidString := FloatToStr(-MaxResid/2);
     Extent := ACanvas.TextExtent(ResidString);
@@ -3020,6 +3033,114 @@ begin
     ACanvas.TextOut(TextLeft, TextTop, ResidString);
     HeadObsRect.Right := Max(HeadObsRect.Right, TextLeft + Extent.cx);
     HeadObsRect.Right := HeadObsRect.Right + Offset;
+
+//    YCoord := YCoord+MaxSymbolSize + Offset;
+  end;
+end;
+
+procedure TfrmExportImage.DrawPestObsLegend(ACanvas: TCanvas;
+  const LegendY: Integer; out PestObsRect: TRect);
+const
+  Offset = 8;
+var
+  ViewDirection: TViewDirection;
+  PhastModel: TPhastModel;
+  MaxResid: Double;
+//  ChildIndex: Integer;
+//  AChild: TChildModel;
+  MaxSymbolSize: Integer;
+  ResidString: string;
+  Extent: TSize;
+  TextLeft: Integer;
+  TextTop: Integer;
+  PriorMaxSymbolSize: Integer;
+  SymbolLeft: Integer;
+  AColor: TColor;
+  ObsImported: Boolean;
+  YCoord: integer;
+begin
+  YCoord := LegendY;
+  PestObsRect.Left := 0;
+  PestObsRect.Top := 0;
+  PestObsRect.BottomRight := PestObsRect.TopLeft;
+
+  ViewDirection := TViewDirection(comboView.ItemIndex);
+  if cbHeadObsLegend.Checked and (ViewDirection = vdTop) then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    ObsImported := PhastModel.PestObsCollection.Count > 0;
+    PhastModel.PestObsCollection.CalculateMaxValues;
+    MaxResid := 0;
+    case PhastModel.PestObsCollection.DrawChoice of
+      dcResidual:
+        begin
+          MaxResid := PhastModel.PestObsCollection.MaxObjectResidual;
+        end;
+      dcWeightedResidual:
+        begin
+          MaxResid := PhastModel.PestObsCollection.MaxObjectWeightedResidual;
+        end;
+      else
+        Assert(False);
+    end;
+//    if frmGoPhast.PhastModel.LgrUsed then
+//    begin
+//      for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
+//      begin
+//        AChild := frmGoPhast.PhastModel.ChildModels[ChildIndex].ChildModel;
+//        ObsImported := ObsImported or (AChild.PestObsCollection.Count > 0);
+//        AChild.PestObsCollection.CalculateMaxValues(AChild);
+//        if MaxResid < AChild.PestObsCollection.MaxResidual then
+//        begin
+//          MaxResid := AChild.PestObsCollection.MaxResidual;
+//        end;
+//      end;
+//    end;
+
+    if not ObsImported then
+    begin
+      Exit;
+    end;
+
+    MaxSymbolSize := PhastModel.PestObsCollection.MaxSymbolSize;
+
+    AColor := ACanvas.Brush.Color;
+    try
+      ACanvas.Brush.Color := PhastModel.PestObsCollection.PositiveColor;
+      ACanvas.Ellipse(Offset,YCoord,MaxSymbolSize+Offset,YCoord+MaxSymbolSize);
+    finally
+      ACanvas.Brush.Color := AColor;
+    end;
+    PestObsRect.Bottom := PestObsRect.Bottom + MaxSymbolSize+Offset;
+
+    ResidString := FloatToStr(MaxResid);
+    Extent := ACanvas.TextExtent(ResidString);
+    TextLeft := MaxSymbolSize+2*Offset;
+    TextTop :=  YCoord + (MaxSymbolSize-Extent.cy) div 2;
+    ACanvas.TextOut(TextLeft, TextTop, ResidString);
+    PestObsRect.Right := TextLeft + Extent.cx;
+
+    YCoord := YCoord+MaxSymbolSize + Offset;
+
+    PriorMaxSymbolSize := MaxSymbolSize;
+    MaxSymbolSize := Round(Sqrt(Sqr(MaxSymbolSize/2)/2)*2);
+    SymbolLeft := Offset + (PriorMaxSymbolSize - MaxSymbolSize) div 2;
+    AColor := ACanvas.Brush.Color;
+    try
+      ACanvas.Brush.Color := PhastModel.PestObsCollection.NegativeColor;
+      ACanvas.Ellipse(SymbolLeft,YCoord,MaxSymbolSize+SymbolLeft,YCoord+MaxSymbolSize);
+    finally
+      ACanvas.Brush.Color := AColor;
+    end;
+    PestObsRect.Bottom := PestObsRect.Bottom + MaxSymbolSize+SymbolLeft;
+
+    ResidString := FloatToStr(-MaxResid/2);
+    Extent := ACanvas.TextExtent(ResidString);
+    TextLeft := PriorMaxSymbolSize+2*Offset;
+    TextTop :=  YCoord + (MaxSymbolSize-Extent.cy) div 2;
+    ACanvas.TextOut(TextLeft, TextTop, ResidString);
+    PestObsRect.Right := Max(PestObsRect.Right, TextLeft + Extent.cx);
+    PestObsRect.Right := PestObsRect.Right + Offset;
 
 //    YCoord := YCoord+MaxSymbolSize + Offset;
   end;

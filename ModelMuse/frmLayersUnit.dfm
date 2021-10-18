@@ -226,8 +226,7 @@ inherited frmLayers: TfrmLayers
         Height = 407
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 154
-        ExplicitHeight = 127
+        ExplicitHeight = 407
         inherited lbl1: TLabel
           Width = 148
           Height = 18
@@ -258,8 +257,8 @@ inherited frmLayers: TfrmLayers
           end
           inherited pnl1: TPanel
             inherited lbl3: TLabel
-              Width = 179
-              Height = 36
+              Width = 185
+              Height = 41
               ExplicitWidth = 179
               ExplicitHeight = 36
             end
@@ -373,7 +372,7 @@ inherited frmLayers: TfrmLayers
         TabOrder = 0
         TabStop = True
         ExplicitWidth = 433
-        ExplicitHeight = 390
+        ExplicitHeight = 407
         inherited lblCount: TLabel
           Top = 381
           Width = 55
@@ -405,7 +404,7 @@ inherited frmLayers: TfrmLayers
           Height = 368
           AutoDistributeText = True
           ExplicitWidth = 433
-          ExplicitHeight = 351
+          ExplicitHeight = 368
           ColWidths = (
             64
             64
@@ -419,7 +418,7 @@ inherited frmLayers: TfrmLayers
         inherited seCount: TJvSpinEdit
           Top = 378
           Height = 26
-          ExplicitTop = 361
+          ExplicitTop = 378
           ExplicitHeight = 26
         end
       end
@@ -616,7 +615,6 @@ inherited frmLayers: TfrmLayers
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 349
         ColWidths = (
           64
           64
@@ -801,7 +799,6 @@ inherited frmLayers: TfrmLayers
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 349
         ColWidths = (
           64
           64

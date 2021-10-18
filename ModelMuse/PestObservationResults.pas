@@ -147,13 +147,11 @@ type
     procedure GetExistingObservations;
 //    procedure UpdateVisibleItems;
     procedure SetDrawChoice(const Value: TDrawChoice);
-    property MaxObjectResidual: double read FMaxObjectResidual;
-    property MaxObjectWeightedResidual: double read FMaxObjectWeightedResidual;
   public
     constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    function ReadFromFile: boolean;
+    function ReadFromFile(const AFileName: string): boolean;
     function Add: TPestObsResult;
     procedure Clear;
     property Items[Index: Integer]: TPestObsResult read GetItems
@@ -161,6 +159,9 @@ type
     procedure Draw(const BitMap: TPersistent; const ZoomBox: TQrbwZoomBox2);
     function RootMeanSquareResidual: double;
     function RootMeanSquareWeightedResidual: double;
+    property MaxObjectResidual: double read FMaxObjectResidual;
+    property MaxObjectWeightedResidual: double read FMaxObjectWeightedResidual;
+    procedure CalculateMaxValues;
   published
     property FileName: string read FFileName write SetFileName;
     property FileDate: TDateTime read FFileDate write SetFileDate;
@@ -176,23 +177,41 @@ type
       write SetMaxTimeLimit;
     property MinTimeLimit: TColoringLimit read FMinTimeLimit
       write SetMinTimeLimit;
-    property NegativeColor: TColor read FNegativeColor write SetNegativeColor default clRed;
-    property PositiveColor: TColor read FPositiveColor write SetPositiveColor default clBlue;
-    property MaxSymbolSize: integer read FMaxSymbolSize write SetMaxSymbolSize default 20;
+    property NegativeColor: TColor read FNegativeColor
+      write SetNegativeColor default clRed;
+    property PositiveColor: TColor read FPositiveColor
+      write SetPositiveColor default clBlue;
+    property MaxSymbolSize: integer read FMaxSymbolSize
+      write SetMaxSymbolSize default 20;
     property Visible: boolean read FVisible write SetVisible default True;
-    property DrawChoice: TDrawChoice read FDrawChoice write SetDrawChoice;
+    property DrawChoice: TDrawChoice read FDrawChoice
+      write SetDrawChoice default dcWeightedResidual;
   end;
 
 implementation
 
 uses RbwParser, System.IOUtils, frmErrorsAndWarningsUnit, ModelMuseUtilities,
-  PestObsUnit, PhastModelUnit, frmGoPhastUnit, BigCanvasMethods;
+  PestObsUnit, PhastModelUnit, frmGoPhastUnit, BigCanvasMethods, System.Math;
 
 resourcestring
   StrTheFileFromWhich = 'The file from which you are attempting to read ' +
   'residuals, %s, does not exist.';
 
 { TPestObsResult }
+
+function CompareAbsWeightedResiduals(Item1, Item2: Pointer): Integer;
+var
+  P1, P2: TPestObsResult;
+  Value1: Double;
+  Value2: Double;
+begin
+  P1 := Item1;
+  P2 := Item2;
+  Value1 := Abs(P1.WeightedResidual);
+  Value2 := Abs(P2.WeightedResidual);
+  result := -Sign(Value1 - Value2);
+end;
+
 
 procedure TPestObsResult.Assign(Source: TPersistent);
 var
@@ -208,6 +227,7 @@ begin
     Residual := ObsSource.Residual;
     Weight := ObsSource.Weight;
     WeightedMeasured := ObsSource.WeightedMeasured;
+    WeightedModeled := ObsSource.WeightedModeled;
     WeightedResidual := ObsSource.WeightedResidual;
     MeasurementStdDeviation := ObsSource.MeasurementStdDeviation;
     NaturalWeight := ObsSource.NaturalWeight;
@@ -604,8 +624,8 @@ end;
 
 procedure TPestObsCollection.InitializeVariables;
 begin
-  FNegativeColor := clRed;
-  FPositiveColor := clBlue;
+  NegativeColor := clRed;
+  PositiveColor := clBlue;
   FMaxSymbolSize := 20;
   FVisible := True;
   FFileName := '';
@@ -616,6 +636,7 @@ begin
   FMinWeightedResidualLimit.UseLimit := False;
   FMaxTimeLimit.UseLimit := False;
   FMinTimeLimit.UseLimit := False;
+  FDrawChoice := dcWeightedResidual;
 //  FMaxLayerLimit.UseLimit := False;
 //  FMinLayerLimit.UseLimit := False;
 end;
@@ -666,6 +687,78 @@ begin
   FMinResidualLimit.Free;
 
   inherited;
+end;
+
+procedure TPestObsCollection.CalculateMaxValues;
+var
+  Obs: TPestObsResult;
+  UsedObs: TList<TPestObsResult>;
+  ObsIndex: Integer;
+begin
+  FMaxObjectResidual := 0;
+  FMaxObjectWeightedResidual := 0;
+//  UsedObs := TList<TPestObsResult>.Create;
+  try
+    for ObsIndex := 0 to Count - 1 do
+    begin
+      Obs := Items[ObsIndex];
+      if (Obs.ScreenObject <> nil) and (Obs.ScreenObject.Count = 1) then
+      begin
+        Obs.Visible := True;
+        Obs.FX := Obs.FScreenObject.Points[0].X;
+        Obs.Fy := Obs.FScreenObject.Points[0].Y;
+        if MaxResidualLimit.UseLimit
+          and (Obs.Residual > MaxResidualLimit.RealLimitValue) then
+        begin
+          Obs.Visible := False;
+        end
+        else if MinResidualLimit.UseLimit
+          and (Obs.Residual < MinResidualLimit.RealLimitValue) then
+        begin
+          Obs.Visible := False;
+        end
+        else if MaxWeightedResidualLimit.UseLimit
+          and (Obs.WeightedResidual > MaxWeightedResidualLimit.RealLimitValue) then
+        begin
+          Obs.Visible := False;
+        end
+        else if MinWeightedResidualLimit.UseLimit
+          and (Obs.WeightedResidual < MinWeightedResidualLimit.RealLimitValue) then
+        begin
+          Obs.Visible := False;
+        end
+        else if MaxTimeLimit.UseLimit
+          and (Obs.Time > MaxTimeLimit.RealLimitValue) then
+        begin
+          Obs.Visible := False;
+        end
+        else if MinTimeLimit.UseLimit
+          and (Obs.Time < MinTimeLimit.RealLimitValue) then
+        begin
+          Obs.Visible := False;
+        end;
+        if Obs.Visible then
+        begin
+//          UsedObs.Add(Obs);
+          if Abs(Obs.Residual) > FMaxObjectResidual then
+          begin
+            FMaxObjectResidual := Abs(Obs.Residual);
+          end;
+          if Abs(Obs.WeightedResidual) > FMaxObjectWeightedResidual then
+          begin
+            FMaxObjectWeightedResidual := Abs(Obs.WeightedResidual);
+          end;
+        end;
+      end;
+    end;
+//    for ObsIndex := 0 to UsedObs.Count - 1 do
+//    begin
+//      Obs := UsedObs[ObsIndex];
+//      Obs.Draw(BitMap, ZoomBox);
+//    end;
+  finally
+//    UsedObs.Free;
+  end;
 end;
 
 procedure TPestObsCollection.Draw(const BitMap: TPersistent;
@@ -720,13 +813,13 @@ begin
         if Obs.Visible then
         begin
           UsedObs.Add(Obs);
-          if Obs.Residual > FMaxObjectResidual then
+          if Abs(Obs.Residual) > FMaxObjectResidual then
           begin
-            FMaxObjectResidual := Obs.Residual;
+            FMaxObjectResidual := Abs(Obs.Residual);
           end;
-          if Obs.WeightedResidual > FMaxObjectWeightedResidual then
+          if Abs(Obs.WeightedResidual) > FMaxObjectWeightedResidual then
           begin
-            FMaxObjectWeightedResidual := Obs.WeightedResidual;
+            FMaxObjectWeightedResidual := Abs(Obs.WeightedResidual);
           end;
         end;
       end;
@@ -761,12 +854,26 @@ begin
         AnObs := TCustomObservationItem(IObs);
         if AnObs.Print then
         begin
-          FUsedObservations.Add(LowerCase(IObs.Name), IObs);
+          if IObs.ExportedName <> '' then
+          begin
+            FUsedObservations.Add(LowerCase(IObs.ExportedName), IObs);
+          end
+          else
+          begin
+            FUsedObservations.Add(LowerCase(IObs.Name), IObs);
+          end;
         end;
       end
       else
       begin
-        FUsedObservations.Add(LowerCase(IObs.Name), IObs);
+        if IObs.ExportedName <> '' then
+        begin
+          FUsedObservations.Add(LowerCase(IObs.ExportedName), IObs);
+        end
+        else
+        begin
+          FUsedObservations.Add(LowerCase(IObs.Name), IObs);
+        end;
       end;
     end;
   finally
@@ -779,7 +886,7 @@ begin
   result := inherited Items[Index] as TPestObsResult;
 end;
 
-function TPestObsCollection.ReadFromFile: boolean;
+function TPestObsCollection.ReadFromFile(const AFileName: string): boolean;
 var
   ShowErrors: Boolean;
   ResidualsFile: TStringList;
@@ -788,24 +895,24 @@ var
   Item: TPestObsResult;
   Obs: IObservationItem;
   TimeObs: ITimeObservationItem;
-  TempFileName: string;
+  AList: TList;
+  Index: Integer;
 begin
   GetExistingObservations;
   result := False;
   ShowErrors := False;
   try
-    if not TFile.Exists(FileName) then
+    if not TFile.Exists(AFileName) then
     begin
       Beep;
-      MessageDlg(Format(StrTheFileFromWhich, [FileName]), mtError, [mbOK], 0);
+      MessageDlg(Format(StrTheFileFromWhich, [AFileName]), mtError, [mbOK], 0);
       Exit;
     end;
     ResidualsFile := TStringList.Create;
     Splitter := TStringList.Create;
     try
-      TempFileName := FileName;
       Clear;
-      FileName := TempFileName;
+      FileName := AFileName;
       ResidualsFile.LoadFromFile(FileName);
       for LineIndex := 1 to ResidualsFile.Count - 1 do
       begin
@@ -825,7 +932,7 @@ begin
           Item.WeightedResidual := FortranStrToFloat(Splitter[8]);
           Item.MeasurementStdDeviation := FortranStrToFloat(Splitter[9]);
           Item.NaturalWeight := FortranStrToFloat(Splitter[10]);
-          Item.OriginalOrder := LineIndex-1;
+//          Item.OriginalOrder := LineIndex-1;
 
           if FUsedObservations.TryGetValue(LowerCase(Item.Name), Obs) then
           begin
@@ -855,6 +962,24 @@ begin
           end;
         end;
       end;
+
+      AList := TList.Create;
+      try
+        for Index := 0 to Count - 1 do
+        begin
+          AList.Add(Items[Index]);
+        end;
+        AList.Sort(CompareAbsWeightedResiduals);
+        for Index := 0 to AList.Count - 1 do
+        begin
+          Item := AList[Index];
+          Item.Index := Index;
+          Item.OriginalOrder := Index;
+        end;
+      finally
+        AList.Free;
+      end;
+
       FileDate := TFile.GetLastWriteTime(FileName);
     finally
       Splitter.Free;

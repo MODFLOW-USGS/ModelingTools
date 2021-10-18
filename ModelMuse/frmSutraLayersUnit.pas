@@ -106,15 +106,11 @@ end;
 function TfrmSutraLayers.AddNewUnit(Position: integer): TTreeNode;
 var
   LayerGroup: TSutraLayerGroup;
-  Index: Integer;
-  TreeNode: TTreeNode;
+//  Index: Integer;
+//  TreeNode: TTreeNode;
   Sibling: TTreeNode;
 begin
-  for Index := 0 to FSelectedTreeNodes.Count - 1 do
-  begin
-    TreeNode := FSelectedTreeNodes[Index];
-    TreeNode.Selected := False;
-  end;
+  tvLayerGroups.Selected := nil;
   FSelectedTreeNodes.Clear;
   FSelectedUnits.Clear;
   UpdateDiscretization;

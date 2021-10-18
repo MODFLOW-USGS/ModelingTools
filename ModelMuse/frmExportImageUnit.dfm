@@ -396,7 +396,6 @@ inherited frmExportImage: TfrmExportImage
         Caption = '&View'
         TabOrder = 2
         OnExpand = cpViewExpand
-        ExplicitWidth = 185
         object Panel3: TPanel
           Left = 0
           Top = 0
@@ -520,7 +519,7 @@ inherited frmExportImage: TfrmExportImage
             Top = 260
             Width = 238
             Height = 17
-            Caption = 'Show head observation legend'
+            Caption = 'Show observation legend'
             Checked = True
             State = cbChecked
             TabOrder = 6

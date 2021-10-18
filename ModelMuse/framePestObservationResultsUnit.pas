@@ -48,7 +48,6 @@ type
     function Description: string; override;
   end;
 
-
   TframePestObservationResults = class(TFrame)
     pnlBottom: TPanel;
     lblRMS: TLabel;
@@ -111,6 +110,7 @@ type
     procedure rdgPestObsMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure btnRestoreClick(Sender: TObject);
+    procedure rgDrawChoiceClick(Sender: TObject);
   public
     procedure UpdateChildModels;
   protected
@@ -127,6 +127,7 @@ type
     function GetSelectedObjectFromGraph: TScreenObject;
     procedure PlotValues;
     procedure TestForNewFile;
+    procedure DisplayRMS;
     { Private declarations }
   public
     constructor Create(Owner: TComponent); override;
@@ -154,9 +155,14 @@ var
 resourcestring
   StrTheFileSHasADi = 'The file %s has a different date than the imported re' +
   'sults. Do you want to import it?';
-  StrRootMeanSquareRes = 'Root Mean Square Weighted Residual = %g';
+  StrRootMeanSquareWeightRes = 'Root Mean Square Weighted Residual = %g';
+  StrRootMeanSquareRes = 'Root Mean Square Residual = %g';
   StrImportPESTResults = 'import PEST results';
   StrChangePESTResultO = 'change PEST result options';
+  StrRootMeanSquareResQ = 'Root Mean Square Residual = ?';
+  StrRootMeanSquareWeiQ = 'Root Mean Square Weighted Residual = ?';
+  StrShowResiduals = 'Show residuals';
+  StrShowWeightedResidu = 'Show weighted residuals';
 
 {$R *.dfm}
 
@@ -716,6 +722,21 @@ begin
     end;
 end;
 
+procedure TframePestObservationResults.rgDrawChoiceClick(Sender: TObject);
+begin
+  DisplayRMS;
+  case rgDrawChoice.ItemIndex of
+    0:
+      begin
+        cbShow.Caption := StrShowResiduals;
+      end;
+    1:
+      begin
+        cbShow.Caption := StrShowWeightedResidu;
+      end;
+  end;
+end;
+
 procedure TframePestObservationResults.rgGraphTypeClick(Sender: TObject);
 begin
   pbObservations.Invalidate;
@@ -727,11 +748,12 @@ var
   AnItem: TPestObsResult;
   AList: TList;
 begin
+  FObservations.CalculateMaxValues;
   if FObservations.Count > 0 then
   begin
     rdgPestObs.BeginUpdate;
     try
-      rdgPestObs.RowCount := FObservations.Count;
+      rdgPestObs.RowCount := FObservations.Count+1;
       AList := TList.Create;
       try
         AList.Capacity := FObservations.Count;
@@ -765,13 +787,12 @@ begin
     finally
       rdgPestObs.EndUpdate;
     end;
-    lblRMS.Caption := Format(StrRootMeanSquareRes, [FObservations.RootMeanSquareWeightedResidual]);
   end
   else
   begin
-    lblRMS.Caption := 'Root Mean Square Weighted Residual = ?';
     ClearGrid(rdgPestObs);
   end;
+  DisplayRMS;
 end;
 
 procedure TframePestObservationResults.flnmedHeadObsResultsChange(
@@ -783,8 +804,7 @@ begin
   end;
   if FileExists(flnmedHeadObsResults.FileName) then
   begin
-    FObservations.FileName := flnmedHeadObsResults.FileName;
-    FImportResult := FObservations.ReadFromFile;
+    FImportResult := FObservations.ReadFromFile(flnmedHeadObsResults.FileName);
     FUndoType := utImport;
   end
   else
@@ -817,7 +837,13 @@ begin
     framelmtMinWeightedResidual.Limit := FObservations.MinWeightedResidualLimit;
     framelmtMaxWeightedResidual.Limit := FObservations.MaxWeightedResidualLimit;
 
+    clrbtnNegative.Color := FObservations.NegativeColor;
+    clrbtnPositive.Color := FObservations.PositiveColor;
+
     rgDrawChoice.ItemIndex := Ord(FObservations.DrawChoice);
+    cbShow.Checked := FObservations.Visible;
+    spinSymbolSize.AsInteger := FObservations.MaxSymbolSize;
+    spinSymbolSizeChange(nil);
 
     FUndoType := utChange;
   finally
@@ -876,6 +902,10 @@ begin
   FObservations.MinWeightedResidualLimit := framelmtMinWeightedResidual.Limit;
   FObservations.MaxWeightedResidualLimit := framelmtMaxWeightedResidual.Limit;
   FObservations.DrawChoice := TDrawChoice(rgDrawChoice.ItemIndex);
+  FObservations.Visible := cbShow.Checked;
+  FObservations.NegativeColor := clrbtnNegative.Color;
+  FObservations.PositiveColor := clrbtnPositive.Color;
+  FObservations.MaxSymbolSize := spinSymbolSize.AsInteger;
   TestForNewFile;
   Undo := nil;
   case FUndoType of
@@ -890,8 +920,45 @@ begin
     else Assert(False);
   end;
   frmGoPhast.UndoStack.Submit(Undo);
-  FUndoType := utChange;
+  GetData;
+//  FUndoType := utChange;
 
+end;
+
+procedure TframePestObservationResults.DisplayRMS;
+begin
+  if FObservations.Count > 0 then
+  begin
+    case rgDrawChoice.ItemIndex of
+      0:
+        begin
+          lblRMS.Caption := Format(StrRootMeanSquareRes, [FObservations.RootMeanSquareResidual]);
+          lblMax.Caption := FloatToStr(FObservations.MaxObjectResidual);
+          lblHalfMax.Caption := FloatToStr(FObservations.MaxObjectResidual/2);
+        end;
+      1:
+        begin
+          lblRMS.Caption := Format(StrRootMeanSquareWeightRes, [FObservations.RootMeanSquareWeightedResidual]);
+          lblMax.Caption := FloatToStr(FObservations.MaxObjectWeightedResidual);
+          lblHalfMax.Caption := FloatToStr(FObservations.MaxObjectWeightedResidual/2);
+        end;
+    end;
+  end
+  else
+  begin
+    lblMax.Caption := '';
+    lblHalfMax.Caption := '';
+    case rgDrawChoice.ItemIndex of
+      0:
+        begin
+          lblRMS.Caption := StrRootMeanSquareResQ;
+        end;
+      1:
+        begin
+          lblRMS.Caption := StrRootMeanSquareWeiQ;
+        end;
+    end;
+  end;
 end;
 
 procedure TframePestObservationResults.spinSymbolSizeChange(Sender: TObject);
@@ -922,7 +989,7 @@ begin
         mtWarning, [mbYes, mbNo], 0) = mrYes;
       if ReadFile then
       begin
-        FObservations.ReadFromFile;
+        FObservations.ReadFromFile(FObservations.FileName);
       end;
     end;
   end;
@@ -1029,7 +1096,14 @@ end;
 
 procedure TCustomUndoChangePestObsResults.UpdateGUI;
 begin
+  frmGoPhast.TopDiscretizationChanged := True;
+  frmGoPhast.frameTopView.ZoomBox.InvalidateImage32;
+//  frmGoPhast.EnableExportHeadObs(nil);
 
+//  if frmDisplayData <> nil then
+//  begin
+//    frmDisplayData.frameHeadObservationResults.UpdateSelectedModel;
+//  end;
 end;
 
 procedure InitializeSortOrder;

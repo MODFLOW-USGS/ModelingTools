@@ -957,6 +957,9 @@
         <topicref type="topic" id="407483930310218" build="ALL" modified="2011-10-17T11:22:47.090Z" icon="0" href="Head_Observation_Results">
           <caption translate="true">Head Observation Results Pane</caption>
         </topicref>
+        <topicref type="topic" id="444875875062253" build="ALL" modified="2021-10-18T15:12:50.063Z" icon="0" href="PEST_Observation_Results_Pane">
+          <caption translate="true">PEST Observation Results Pane</caption>
+        </topicref>
         <topicref type="topic" id="408334743143205" build="ALL" modified="2013-10-30T14:09:02.663Z" icon="0" href="Stream_Links_Pane">
           <caption translate="true">Stream Links Panes</caption>
         </topicref>
@@ -2885,6 +2888,9 @@
         </topicref>
         <topicref type="topic" id="444675119276293" build="ALL" modified="2021-09-28T13:29:56.963Z" icon="0" href="RmaMf2005_Run_PEST">
           <caption translate="true">RmaMf2005: Run PEST</caption>
+        </topicref>
+        <topicref type="topic" id="444877853025039" build="ALL" modified="2021-10-18T16:20:17.486Z" icon="0" href="RMA2005_Visualize_Residuals">
+          <caption translate="true">RMA2005: Visualize Residuals</caption>
         </topicref>
         <topicref type="topic" id="444675826229722" build="ALL" modified="2021-09-28T14:28:12.202Z" icon="0" href="RmaMf2005_Visualize_Modified_M">
           <caption translate="true">RmaMf2005: Visualize Modified Model Input</caption>
