@@ -137,6 +137,7 @@ object framePestObservationResults: TframePestObservationResults
           ExplicitTop = 105
           inherited cbCheck: TCheckBox
             Height = 23
+            Enabled = True
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
@@ -154,6 +155,7 @@ object framePestObservationResults: TframePestObservationResults
           ExplicitTop = 48
           inherited cbCheck: TCheckBox
             Height = 23
+            Enabled = True
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
@@ -171,6 +173,7 @@ object framePestObservationResults: TframePestObservationResults
           ExplicitTop = 107
           inherited cbCheck: TCheckBox
             Height = 23
+            Enabled = True
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
@@ -188,6 +191,7 @@ object framePestObservationResults: TframePestObservationResults
           ExplicitTop = 48
           inherited cbCheck: TCheckBox
             Height = 23
+            Enabled = True
             ExplicitHeight = 23
           end
           inherited comboBoolLimit: TComboBox
@@ -205,6 +209,7 @@ object framePestObservationResults: TframePestObservationResults
           ExplicitTop = 160
           inherited cbCheck: TCheckBox
             Top = 3
+            Enabled = True
             ExplicitTop = 3
           end
           inherited comboBoolLimit: TComboBox
@@ -220,6 +225,9 @@ object framePestObservationResults: TframePestObservationResults
           TabStop = True
           ExplicitLeft = 252
           ExplicitTop = 160
+          inherited cbCheck: TCheckBox
+            Enabled = True
+          end
           inherited comboBoolLimit: TComboBox
             ExplicitHeight = 21
           end
@@ -693,7 +701,7 @@ object framePestObservationResults: TframePestObservationResults
         Left = 0
         Top = 0
         Width = 547
-        Height = 345
+        Height = 328
         Align = alClient
         OnMouseDown = pbObservationsMouseDown
         OnMouseMove = pbObservationsMouseMove
@@ -704,16 +712,16 @@ object framePestObservationResults: TframePestObservationResults
       end
       object pnlGraphControls: TPanel
         Left = 0
-        Top = 345
+        Top = 328
         Width = 547
-        Height = 81
+        Height = 98
         Align = alBottom
         ParentBackground = False
         TabOrder = 0
         object lblGraphInstructions: TLabel
-          Left = 255
+          Left = 279
           Top = 6
-          Width = 141
+          Width = 250
           Height = 13
           Caption = 'Click on a point to highlight it.'
           WordWrap = True
@@ -721,8 +729,8 @@ object framePestObservationResults: TframePestObservationResults
         object rgGraphType: TRadioGroup
           Left = 4
           Top = 6
-          Width = 245
-          Height = 73
+          Width = 269
+          Height = 90
           Caption = 'Graph type'
           ItemIndex = 2
           Items.Strings = (

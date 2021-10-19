@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd" status="Under Construction">
+  <title translate="true">Visualize Residuals</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Visualize Residuals</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">PEST prints the weighted residuals and other information in a .res file. Data from this file can be plotted on the top view of the model or in a graph using the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="PEST_Observation_Results_Pane" styleclass="Normal" translate="true">PEST Observation Results</link><text styleclass="Normal" translate="true"> pane of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Visualization_Dialog_Box" styleclass="Normal" translate="true">Data Visualization</link><text styleclass="Normal" translate="true"> dialog box. </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">Select Data|Data Visualization and select the PEST Observation Results pane. Select the .res file for the model and click the Apply button and the weighted residuals will be plotted on the top view of the model. Only observations associated with a single object that has a single vertex will be plotted. Weighted residuals for prior information equations are not plotted.</text></para>
+  </body>
+</topic>

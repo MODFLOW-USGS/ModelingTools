@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4285</config-value>
+      <config-value name="autohelpstart">4288</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1520,6 +1520,7 @@ document.write('</frameset>');
       <helpcontext-number href="RmaMF6_Understanding_the_RunMo" value="4249"/>
       <helpcontext-number href="RmaMF6_Use_Anisotropy" value="4239"/>
       <helpcontext-number href="RmaMF6_Visualize_Modified_Mode" value="4248"/>
+      <helpcontext-number href="RmaMf6_Visualize_Residuals" value="4286"/>
       <helpcontext-number href="RmaSutra_Activate_PEST" value="4264"/>
       <helpcontext-number href="RmaSutra_Apply_K_Parameter" value="4267"/>
       <helpcontext-number href="RmaSutra_Apply_Seepage_Paramet" value="4268"/>
@@ -1533,6 +1534,7 @@ document.write('</frameset>');
       <helpcontext-number href="RmaSutra_Run_PEST" value="4272"/>
       <helpcontext-number href="RmaSutra_Use_Anisotropy" value="4280"/>
       <helpcontext-number href="RmaSutra_Visualize_Modified_Mo" value="4273"/>
+      <helpcontext-number href="RmaSutra_Visualize_Residuals" value="4288"/>
       <helpcontext-number href="Rocky_Mountain_Arsenal" value="3391"/>
       <helpcontext-number href="Rooting_Depth_Pane" value="3811"/>
       <helpcontext-number href="Round" value="890"/>
@@ -1793,6 +1795,7 @@ document.write('</frameset>');
       <helpcontext-number href="Vertices_Tab" value="2200"/>
       <helpcontext-number href="View" value="2260"/>
       <helpcontext-number href="Viewing_Model_Results2" value="3456"/>
+      <helpcontext-number href="Visualize_Residuals" value="4287"/>
       <helpcontext-number href="Visualizing_Data" value="3000"/>
       <helpcontext-number href="Visualizing_Data#RunModelEx1" value="3010"/>
       <helpcontext-number href="Visualizing_Modified_Model_Inp" value="4228"/>
@@ -2265,6 +2268,7 @@ document.write('</frameset>');
       <file-mod href="PestDirectAndComparisonObserva.xml"/>
       <file-mod href="PestModifierAndMethod.xml"/>
       <file-mod href="Pilot_Point_Explanation.xml"/>
+      <file-mod href="Visualize_Residuals.xml"/>
     </file>
     <file href="Topics/Invisible/*.xml" build="ALL" filetype="topic"/>
     <file href="Baggage/*.*" build="ALL" filetype="baggage"/>

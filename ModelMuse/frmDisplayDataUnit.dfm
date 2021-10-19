@@ -5,6 +5,7 @@ inherited frmDisplayData: TfrmDisplayData
   ClientHeight = 542
   ClientWidth = 784
   OnResize = FormResize
+  ExplicitTop = -104
   ExplicitWidth = 800
   ExplicitHeight = 581
   PixelsPerInch = 96
@@ -274,7 +275,6 @@ inherited frmDisplayData: TfrmDisplayData
         inherited pgcHeadObs: TPageControl
           Width = 578
           Height = 465
-          ActivePage = frameHeadObservationResults.tabControls
           ExplicitWidth = 578
           ExplicitHeight = 465
           inherited tabControls: TTabSheet
@@ -1935,7 +1935,6 @@ inherited frmDisplayData: TfrmDisplayData
       Width = 578
       Height = 501
       Caption = 'jvspPestObsResults'
-      ExplicitLeft = 1
       inline framePestObs: TframePestObservationResults
         Left = 0
         Top = 0
@@ -1943,11 +1942,13 @@ inherited frmDisplayData: TfrmDisplayData
         Height = 501
         Align = alClient
         TabOrder = 0
-        ExplicitLeft = 23
-        ExplicitTop = 33
+        ExplicitWidth = 578
+        ExplicitHeight = 501
         inherited pnlBottom: TPanel
           Top = 465
           Width = 578
+          ExplicitTop = 465
+          ExplicitWidth = 578
           inherited lblRMS: TLabel
             Width = 293
             Height = 18
@@ -1962,11 +1963,11 @@ inherited frmDisplayData: TfrmDisplayData
         inherited pgcObservations: TPageControl
           Width = 578
           Height = 465
-          ActivePage = framePestObs.tabControls
+          ExplicitWidth = 578
+          ExplicitHeight = 465
           inherited tabControls: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 570
-            ExplicitHeight = 432
+            ExplicitHeight = 421
             inherited lblNegativeColor: TLabel
               Width = 190
               Height = 36
@@ -2076,19 +2077,19 @@ inherited frmDisplayData: TfrmDisplayData
           end
           inherited tabValues: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 399
+            ExplicitHeight = 421
             inherited rdgPestObs: TRbwDataGrid4
-              Height = 334
-              ExplicitHeight = 334
+              Height = 356
+              ExplicitHeight = 356
             end
             inherited pnlValueControls: TPanel
-              Top = 334
-              ExplicitTop = 334
+              Top = 356
+              ExplicitTop = 356
             end
           end
           inherited tabLegend: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 399
+            ExplicitHeight = 421
             inherited lblMax: TLabel
               Width = 44
               Height = 18
@@ -2109,15 +2110,16 @@ inherited frmDisplayData: TfrmDisplayData
             inherited pbObservations: TPaintBox
               Width = 570
               Height = 351
+              ExplicitWidth = 570
+              ExplicitHeight = 351
             end
             inherited pnlGraphControls: TPanel
               Top = 351
               Width = 570
-              ExplicitTop = 318
+              ExplicitTop = 351
+              ExplicitWidth = 570
               inherited lblGraphInstructions: TLabel
-                Width = 128
                 Height = 36
-                ExplicitWidth = 128
                 ExplicitHeight = 36
               end
             end

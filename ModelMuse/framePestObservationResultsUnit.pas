@@ -115,6 +115,7 @@ type
     procedure UpdateChildModels;
   protected
     procedure UpdateObsLinkList;
+    procedure Loaded; override;
   private
     FObservations: TPestObsCollection;
     FGettingData: Boolean;
@@ -453,6 +454,19 @@ begin
   rdgPestObs.Cells[Ord(pocWtRes), 0] := 'Weight * Residual';
   rdgPestObs.Cells[Ord(pocMeasSD), 0] := 'Measured SD';
   rdgPestObs.Cells[Ord(pocNaturalWeight), 0] := 'Natural Weight';
+end;
+
+procedure TframePestObservationResults.Loaded;
+begin
+  inherited;
+  pgcObservations.ActivePageIndex := 0;
+  framelmtMinResidual.Enabled := True;
+  framelmtMaxResidual.Enabled := True;
+  framelmtMinimumTime.Enabled := True;
+  framelmtMaximumTime.Enabled := True;
+  framelmtMinWeightedResidual.Enabled := True;
+  framelmtMaxWeightedResidual.Enabled := True;
+
 end;
 
 procedure TframePestObservationResults.pbObservationsMouseDown(Sender: TObject;

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">RmaMf6: Visualize Residuals</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">RmaMf6: Visualize Residuals</text></para>
+    </header>
+    <para styleclass="Normal"><snippet src="Visualize_Residuals"/></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"><image src="RmaMf6ResidPlot.png" scale="100.00%" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><image src="Rma6ResVsObs.png" scale="60.00%" width="589" height="430" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"><image src="Rma6SimVsObs.png" scale="60.00%" width="589" height="430" styleclass="Image Caption"></image></para>
+    <para styleclass="Normal"></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>
