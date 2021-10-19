@@ -2004,6 +2004,10 @@ begin
       ChildModel.UpdateGrid;
     end;
     frmGoPhast.PhastModel.ModflowGrid.NotifyGridChanged(nil);
+    if frmGoPhast.DisvUsed then
+    begin
+      frmGoPhast.PhastModel.DisvGrid.NotifyMeshChanged(nil);
+    end;
     frmGoPhast.PhastModel.UpdateMapping;
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin
@@ -2044,6 +2048,10 @@ begin
       ChildModel.UpdateGrid;
     end;
     frmGoPhast.PhastModel.ModflowGrid.NotifyGridChanged(nil);
+    if frmGoPhast.DisvUsed then
+    begin
+      frmGoPhast.PhastModel.DisvGrid.NotifyMeshChanged(nil);
+    end;
     frmGoPhast.PhastModel.UpdateMapping;
     for ChildIndex := 0 to frmGoPhast.PhastModel.ChildModels.Count - 1 do
     begin

@@ -10385,14 +10385,16 @@ const
 //               Bug fix: Fixed a bug where the LakeID was not set properly.
 //    '4.3.0.69' Bug fix: Fixed the ability to define recharge solute flux
 //                observations in MT3D.
-
-//               Bug fix: Attempting to insert a new layer group when more than
+//    '4.3.0.70' Bug fix: Attempting to insert a new layer group when more than
 //                one layer group is selected no longer causes an access
 //                violation.
+//               Bug fix: Changing the layer size multiplier in the MODFLOW
+//                Layer Groups dialog box now causes DISV grids to be updated
+//                correctly.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.69';
+  IIModelVersion = '4.3.0.70';
 
 function IModelVersion: string;
 begin

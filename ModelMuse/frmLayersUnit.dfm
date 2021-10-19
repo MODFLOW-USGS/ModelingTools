@@ -21,7 +21,7 @@ inherited frmLayers: TfrmLayers
     Top = 0
     Width = 441
     Height = 440
-    ActivePage = tabSWT
+    ActivePage = tabDiscretization
     Align = alClient
     TabOrder = 1
     OnChange = pcLayerGroupsChange

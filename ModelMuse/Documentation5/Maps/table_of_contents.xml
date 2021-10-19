@@ -2108,6 +2108,9 @@
     <topicref type="topic" id="444595229123563" build="ALL" modified="2021-09-21T09:38:04.580Z" icon="0" href="Using_Singlular_Value_Decompos">
       <caption translate="true">Using SVD Assist</caption>
     </topicref>
+    <topicref type="topic" id="444885453368558" build="ALL" modified="2021-10-19T12:36:59.590Z" icon="0" href="Visualizing_Residuals">
+      <caption translate="true">Visualizing Residuals</caption>
+    </topicref>
     <topicref type="topic" id="444576308276006" build="ALL" modified="2021-09-18T12:02:44.385Z" icon="0" href="Visualizing_Modified_Model_Inp">
       <caption translate="true">Visualizing Modified Model Input</caption>
     </topicref>

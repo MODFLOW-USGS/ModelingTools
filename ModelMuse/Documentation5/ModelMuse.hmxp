@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4288</config-value>
+      <config-value name="autohelpstart">4289</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1799,6 +1799,7 @@ document.write('</frameset>');
       <helpcontext-number href="Visualizing_Data" value="3000"/>
       <helpcontext-number href="Visualizing_Data#RunModelEx1" value="3010"/>
       <helpcontext-number href="Visualizing_Modified_Model_Inp" value="4228"/>
+      <helpcontext-number href="Visualizing_Residuals" value="4289"/>
       <helpcontext-number href="Water_Policy_Flags" value="3797"/>
       <helpcontext-number href="Water_Policy_Flags#IDEFFL" value="3820"/>
       <helpcontext-number href="Water_Rights" value="3807"/>

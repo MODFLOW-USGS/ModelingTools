@@ -5,7 +5,6 @@ inherited frmDisplayData: TfrmDisplayData
   ClientHeight = 542
   ClientWidth = 784
   OnResize = FormResize
-  ExplicitTop = -104
   ExplicitWidth = 800
   ExplicitHeight = 581
   PixelsPerInch = 96
@@ -1934,6 +1933,8 @@ inherited frmDisplayData: TfrmDisplayData
       Top = 0
       Width = 578
       Height = 501
+      HelpType = htKeyword
+      HelpKeyword = 'PEST_Observation_Results_Pane'
       Caption = 'jvspPestObsResults'
       inline framePestObs: TframePestObservationResults
         Left = 0
@@ -1967,7 +1968,8 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitHeight = 465
           inherited tabControls: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 421
+            ExplicitWidth = 570
+            ExplicitHeight = 432
             inherited lblNegativeColor: TLabel
               Width = 190
               Height = 36
@@ -2105,8 +2107,7 @@ inherited frmDisplayData: TfrmDisplayData
           end
           inherited tabGraph: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 570
-            ExplicitHeight = 432
+            ExplicitHeight = 421
             inherited pbObservations: TPaintBox
               Width = 570
               Height = 351
@@ -2119,7 +2120,9 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitTop = 351
               ExplicitWidth = 570
               inherited lblGraphInstructions: TLabel
+                Width = 128
                 Height = 36
+                ExplicitWidth = 128
                 ExplicitHeight = 36
               end
             end

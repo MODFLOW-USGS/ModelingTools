@@ -51,6 +51,7 @@ inherited frmExportImage: TfrmExportImage
         Collapsed = True
         TabOrder = 0
         OnExpand = cpAnimationExpand
+        ExplicitWidth = 228
         ExpandedHeight = 386
         object pnlAnimation: TPanel
           Left = 0
@@ -258,6 +259,7 @@ inherited frmExportImage: TfrmExportImage
         Collapsed = True
         TabOrder = 1
         OnExpand = cpTextExpand
+        ExplicitWidth = 228
         ExpandedHeight = 386
         object pnlText: TPanel
           Left = 0
@@ -396,6 +398,7 @@ inherited frmExportImage: TfrmExportImage
         Caption = '&View'
         TabOrder = 2
         OnExpand = cpViewExpand
+        ExplicitWidth = 228
         object Panel3: TPanel
           Left = 0
           Top = 0

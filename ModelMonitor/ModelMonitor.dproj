@@ -3,7 +3,7 @@
         <ProjectGuid>{F0692F37-5658-4D31-AE39-86AE5A7161EF}</ProjectGuid>
         <MainSource>ModelMonitor.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
