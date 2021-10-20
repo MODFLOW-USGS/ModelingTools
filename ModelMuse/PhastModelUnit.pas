@@ -10391,10 +10391,12 @@ const
 //               Bug fix: Changing the layer size multiplier in the MODFLOW
 //                Layer Groups dialog box now causes DISV grids to be updated
 //                correctly.
+//    '4.3.0.71' Bug fix: Fixed the display of a warning message while exporting
+//                Shapefiles.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.70';
+  IIModelVersion = '4.3.0.71';
 
 function IModelVersion: string;
 begin

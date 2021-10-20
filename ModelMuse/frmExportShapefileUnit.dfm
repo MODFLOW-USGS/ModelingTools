@@ -271,6 +271,7 @@ inherited frmExportShapefile: TfrmExportShapefile
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

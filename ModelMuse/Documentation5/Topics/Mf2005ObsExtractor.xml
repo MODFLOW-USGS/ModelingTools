@@ -63,7 +63,6 @@
     <para styleclass="Heading4_atoc_" style="margin-left:48px;"><text styleclass="Normal" translate="true">STOB indicates that the file in the following &lt;filename&gt; is the output file of the STOB package.</text></para>
     <para styleclass="Heading4_atoc_" style="margin-left:48px;"><text styleclass="Normal" translate="true">DERIVED indicates that the file in the following &lt;filename&gt; defines observations derived from previously defined observations.</text></para>
     <para styleclass="Heading4_atoc_" style="margin-left:24px;"><text styleclass="Normal" translate="true">&lt;filename&gt; is the name of a file. &lt;filename&gt; may be enclosed in single or double quotation marks.</text></para>
-    <para styleclass="Heading4_atoc_" style="margin-left:24px;"></para>
     <para styleclass="Heading3_atoc_"><text styleclass="Heading3_atoc_" translate="true">Example</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" style="font-size:12pt;" translate="true">BEGIN OUTPUT_FILES</text></para>
     <para styleclass="Code Example"><text styleclass="Code Example" style="font-size:12pt;" translate="true"> &#160;LIST DryCells.Mf2005ObsExtInsLst</text></para>

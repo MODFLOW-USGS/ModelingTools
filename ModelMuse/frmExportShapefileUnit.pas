@@ -136,7 +136,7 @@ resourcestring
   StrMODFLOWHorizontalF = 'MODFLOW Horizontal Flow Barrier';
   StrExportGridDataTo = 'Export Grid Data to Shapefile';
   StrExportMeshDataTo = 'Export Mesh Data to Shapefile';
-  StrTheFileSizeOfThe2GB = 'The file size of the dBASE file (%g) for this Sh' +
+  StrTheFileSizeOfThe2GB = 'The file size of the dBASE file (%d) for this Sh' +
   'apefile exceeds 2 GB. It may not be useable in some software. Do you want' +
   ' to continue?';
   StrDoYouWantToSave = 'Do you want to save the a Shapefile at the %s?';
@@ -2028,7 +2028,7 @@ begin
       begin
         Beep;
         if MessageDlg(Format(StrTheFileSizeOfThe2GB, [DBaseFileSize]),
-        mtWarning, [mbYes, mbNo], 0) <> mrYes then
+          mtWarning, [mbYes, mbNo], 0) <> mrYes then
         begin
           Exit;
         end;
