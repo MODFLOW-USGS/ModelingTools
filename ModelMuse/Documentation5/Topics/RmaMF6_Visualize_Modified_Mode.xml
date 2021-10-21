@@ -15,8 +15,5 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The true distribution from the model used to generate the observed values for the parameter estimation exercise is shown below.</text></para>
     <para styleclass="Normal"><image src="RmaMf6KxTrue.png" scale="100.00%" styleclass="Image Caption"><title translate="true">Diagram displaying the true distribution of Kx.</title><caption translate="true"><![CDATA[Diagram displaying the true distribution of Kx.]]></caption></image></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Both the estimated and true hydraulic conductivity distributions show patches of low hydraulic conductivity on the west and north east portions of the model with a higher hydraulic conductivity between the two bedrock islands. The true distribution has more extreme high and low values. </text></para>
-    <para styleclass="Normal"></para>
-    <para styleclass="Normal"></para>
-    <para styleclass="Normal"></para>
   </body>
 </topic>
