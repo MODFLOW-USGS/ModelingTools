@@ -1,12 +1,16 @@
 program EnhancedTemplateProcessor;
 
+{#BACKUP EnhancedTemplateProcessor.lpr}
+{#BACKUP EnhancedTemplateProcessor.lpi}
+
 {$APPTYPE CONSOLE}
 
 {$R *.res}
 
 uses
   System.SysUtils,
-  ProcessTemplateUnit in 'ProcessTemplateUnit.pas';
+  ProcessTemplateUnit in 'ProcessTemplateUnit.pas',
+  DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';
 
 begin
   try

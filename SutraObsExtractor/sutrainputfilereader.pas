@@ -1,6 +1,8 @@
 unit SutraInputFileReader;
 
-{$mode objfpc}{$H+}
+{$IFDEF FPC}
+  {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -38,6 +40,7 @@ resourcestring
 
 function TSutraInputHandler.CreateObsFile(const FileName: string): TCustomOutputFile;
 begin
+  result := nil;
   case FSutraFileType of
     sftOBC:
       begin

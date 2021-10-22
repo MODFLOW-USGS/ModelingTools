@@ -606,6 +606,7 @@ var
   var
     ADerivedObs: TDerivedObs;
   begin
+    result := nil;
     if FDerivedObsDictionary.TryGetValue(UpperCase(ObsName), ADerivedObs) then
     begin
       result := ADerivedObs;
@@ -621,6 +622,7 @@ begin
   LocationList := TLocationList.Create;
   DerivedObsList := TDerivedObsList.Create;
   try
+    CurrentStatus := dosNone;
     case FPriorDerivedObsStatus of
       dosNone:
         begin
@@ -682,6 +684,7 @@ begin
           end;
         end;
     else
+      CurrentStatus := dosNone;
       Assert(False);
     end;
     FPriorDerivedObsStatus := CurrentStatus;

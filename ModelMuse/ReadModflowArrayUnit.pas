@@ -175,11 +175,17 @@ function CheckBudgetPrecision(AFile: TFileStream; out HufFormat: boolean;
 
 implementation
 
+{#BACKUP SwiObsUtilities.pas}
+
 uses
 {$IFDEF FPC}
   SwiObsUtilities;
 {$ELSE}
+  {$IFDEF Mf2005ObsExtractor}
+  SwiObsUtilities;
+  {$ELSE}
   ModelMuseUtilities;
+  {$ENDIF}
 {$ENDIF}
 
 resourcestring

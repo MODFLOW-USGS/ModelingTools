@@ -1,6 +1,8 @@
 unit SwiOutputReaderUnit;
 
+{$IFDEF FPC}
 {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -19,7 +21,11 @@ type
     Value: double;
   end;
 
+{$IFDEF FPC}
   TSwiCellList = specialize TList<TSwiCell>;
+{$ELSE}
+  TSwiCellList = TList<TSwiCell>;
+{$ENDIF}
 
   TSwiObsValue = class(TCustomWeightedObsValue)
   private
@@ -58,7 +64,14 @@ type
 
 implementation
 
-uses SimpleTextWriter;
+{#BACKUP SimpleTextWriter.pas}
+
+uses
+{$IFDEF FPC}
+  SimpleTextWriter;
+{$ELSE}
+  System.StrUtils;
+{$ENDIF}
 
 { TSwiObsValue }
 
@@ -223,7 +236,11 @@ end;
 procedure TSwiObsExtractor.ExtractSimulatedValues;
 var
   SwiObs: TSwiObs;
+  {$IFDEF FPC}
   Reader: TSimpleStreamReader;
+  {$ELSE}
+  Reader: TStreamReader;
+  {$ENDIF}
   BinaryReader: TFileStream;
   SwiObservation: TSwiObsValue;
   ObsIndex: Integer;
@@ -235,7 +252,11 @@ begin
     case FileFormat of
       sffAscii:
         begin
+          {$IFDEF FPC}
           Reader :=  TSimpleStreamReader.Create(ModelOutputFileName);
+          {$ELSE}
+          Reader :=  TStreamReader.Create(ModelOutputFileName);
+          {$ENDIF}
           SwiObs.ReadAsciiSwiObs(Reader);
         end;
       sffBinarySingle, sffBinaryDouble:

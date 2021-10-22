@@ -1,6 +1,8 @@
 unit readinstructions;
 
+{$IFDEF FPC}
 {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -36,7 +38,11 @@ type
       write FObsDictionary;
   end;
 
+{$IFDEF FPC}
   TObsProcessorList = specialize TObjectList<TObsProcessor>;
+{$ELSE}
+  TObsProcessorList = TObjectList<TObsProcessor>;
+{$ENDIF}
 
 implementation
 
@@ -271,6 +277,7 @@ begin
       end
       else if Splitter.Count = 3 then
       begin
+        FileFormat := sffAscii;
         if UpperCase(Splitter[0]) = StrSWIOBSFORMAT then
         begin
           Assert(FFileLink.FileType = iftSWI, Format(rsSIsOnlyValid,

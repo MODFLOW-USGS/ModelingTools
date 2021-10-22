@@ -4,6 +4,8 @@ unit SwiObsInputReader;
   {$mode Delphi}{$H+}
 {$ENDIF}  
 
+{#BACKUP SimpleTextWriter.pas}
+
 interface
 
 uses

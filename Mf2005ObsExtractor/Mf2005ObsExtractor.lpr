@@ -7,15 +7,14 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp, ReadMnwiOutput, RealListUnit,
-  InterpolatedObsResourceUnit, readinstructions, readgageoutput,
-  ObExtractorTypes, ReadNameFile, SimpleTextWriter, SubsidenceObsExtractor,
-  SwiObsUtilities, SwiOutputReaderUnit, SwiObsReaderUnit, SwtObsExtractor;
+  InterpolatedObsResourceUnit, DisclaimerTextUnit, readinstructions,
+  readgageoutput, ObExtractorTypes, ReadNameFile, SimpleTextWriter,
+  SubsidenceObsExtractor, SwiObsUtilities, SwiOutputReaderUnit,
+  SwiObsReaderUnit, SwtObsExtractor;
 
 type
 
-  { TCustomGageObsExtractor }
-
-  TMnwiObsExtractor = class(TCustomApplication)
+  TMf2005ObsExtractor = class(TCustomApplication)
   protected
     procedure DoRun; override;
   public
@@ -24,9 +23,9 @@ type
     procedure WriteHelp; virtual;
   end;
 
-{ TMnwiObsExtractor }
+{ TMf2005ObsExtractor }
 
-procedure TMnwiObsExtractor.DoRun;
+procedure TMf2005ObsExtractor.DoRun;
 var
   ErrorMsg: String;
   FileName: string;
@@ -108,18 +107,26 @@ begin
   Terminate;
 end;
 
-constructor TMnwiObsExtractor.Create(TheOwner: TComponent);
+constructor TMf2005ObsExtractor.Create(TheOwner: TComponent);
+var
+  LineIndex: Integer;
 begin
   inherited Create(TheOwner);
   StopOnException:=True;
+  WriteLn;
+  for LineIndex := 0 to Disclaimer.Count - 1 do
+  begin
+    WriteLn(Disclaimer[LineIndex]);
+  end;
+  WriteLn;
 end;
 
-destructor TMnwiObsExtractor.Destroy;
+destructor TMf2005ObsExtractor.Destroy;
 begin
   inherited Destroy;
 end;
 
-procedure TMnwiObsExtractor.WriteHelp;
+procedure TMf2005ObsExtractor.WriteHelp;
 begin
   { add your help code here }
   writeln('Usage: ', ExeName, ' -h', ' Displays this help message');
@@ -130,15 +137,18 @@ begin
 end;
 
 var
-  Application: TMnwiObsExtractor;
+  Application: TMf2005ObsExtractor;
   StartTime: TDateTime;
   ElapsedTime: TDateTime;
 begin
   StartTime := Now;
-  Application:=TMnwiObsExtractor.Create(nil);
-  Application.Title:='MF2005_ObsExtractor';
-  Application.Run;
-  Application.Free;
+  Application:=TMf2005ObsExtractor.Create(nil);
+  try
+    Application.Title:='Mf2005ObsExtractor';
+    Application.Run;
+  finally
+    Application.Free;
+  end;
   ElapsedTime := Now - StartTime;
   writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.

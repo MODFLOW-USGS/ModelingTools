@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp,
   { you can add units after this }
-  ProcessTemplateUnit;
+  ProcessTemplateUnit, DisclaimerTextUnit;
 
 type
 
@@ -56,9 +56,12 @@ var
 begin
   StartTime := Now;
   Application:=TEnhancedTemplateProcessor.Create(nil);
+  try
   Application.Title:='Enhanced Template Processor';
-  Application.Run;
-  Application.Free;
+    Application.Run;
+  finally
+    Application.Free;
+  end;
   ElapsedTime := Now - StartTime;
   writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.

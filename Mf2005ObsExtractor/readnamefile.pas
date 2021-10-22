@@ -1,6 +1,8 @@
 unit ReadNameFile;
 
+{$IFDEF FPC}
 {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -17,7 +19,12 @@ type
     FileName: string;
   end;
 
+{$IFDEF FPC}
   TInputFileLinks = specialize TList<TInputFileLink>;
+{$ELSE}
+  TInputFileLinks = TList<TInputFileLink>;
+{$ENDIF}
+
 
   { TNameFileReader }
 

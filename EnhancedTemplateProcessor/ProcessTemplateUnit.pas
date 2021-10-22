@@ -2,6 +2,8 @@ unit ProcessTemplateUnit;
 
 interface
 
+{#BACKUP SimpleTextWriter.pas}
+
 {$IFDEF FPC}
   {$MODE DELPHI}
 {$ENDIF}
@@ -93,7 +95,7 @@ procedure ProcessTemplate;
 implementation
 
 uses
-  StrUtils;
+  StrUtils, DisclaimerTextUnit;
 
 resourcestring
   StrUnableToReadTheN = 'Unable to read the number of parameters from the PV' +
@@ -275,6 +277,8 @@ begin
 end;
 
 constructor TParameterProcessor.Create;
+var
+  LineIndex: Integer;
 begin
   FParser := TRbwParser.Create(nil);
   FParameters := TParameterDictionary.Create;
@@ -282,6 +286,13 @@ begin
   FormatSettings.DecimalSeparator := '.';
 
   FArrayDelimiter := ' ';
+
+  WriteLn;
+  for LineIndex := 0 to Disclaimer.Count - 1 do
+  begin
+    WriteLn(Disclaimer[LineIndex]);
+  end;
+  WriteLn;
 end;
 
 destructor TParameterProcessor.Destroy;
@@ -373,6 +384,7 @@ begin
   end;
 
   try
+
     GetFileNames;
     OpenFiles;
     ReadPValFile;

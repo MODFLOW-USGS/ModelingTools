@@ -1,6 +1,8 @@
 unit ObExtractorTypes;
 
-{$mode objfpc}{$H+}
+{$IFDEF FPC}
+  {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -25,9 +27,15 @@ type
     Print: Boolean;
   end;
 
+{$ifdef FPC}
   TWeightedObsValueList = specialize TList<TCustomWeightedObsValue>;
   TCustomWeightedObsValueObjectList = specialize TObjectList<TCustomWeightedObsValue>;
   TCustomObsValueDictionary = specialize TDictionary<string, TCustomObsValue>;
+{$ELSE}
+  TWeightedObsValueList = TList<TCustomWeightedObsValue>;
+  TCustomWeightedObsValueObjectList = TObjectList<TCustomWeightedObsValue>;
+  TCustomObsValueDictionary = TDictionary<string, TCustomObsValue>;
+{$ENDIF}
 
   { TCustomObsExtractor }
 

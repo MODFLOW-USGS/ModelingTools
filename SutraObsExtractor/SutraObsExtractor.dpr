@@ -1,28 +1,29 @@
-program Mf6ObsExtractor ;
+program SutraObsExtractor;
 
 {$APPTYPE CONSOLE}
 
-//{$R *.res}
+{$R *.res}
 
-{#BACKUP Mf6ObsExtractor.lpr}
-{#BACKUP Mf6ObsExtractor.lpi}
+{#BACKUP SutraObsExtractor.lpr}
+{#BACKUP SutraObsExtractor.lpi}
 
 uses
   Classes,
   System.SysUtils,
-  custominputreader in 'custominputreader.pas',
-  customoutputfilereader in 'customoutputfilereader.pas',
-  inputfilereader in 'inputfilereader.pas',
-  outputfilereader in 'outputfilereader.pas',
-  FastGEO in '..\ModelMuse\FastGEO.pas',
+  sutrainputfilereader in 'sutrainputfilereader.pas',
+  sutraoutputfilereader in 'sutraoutputfilereader.pas',
+  custominputreader in '..\Mf6ObsExtractor\custominputreader.pas',
+  customoutputfilereader in '..\Mf6ObsExtractor\customoutputfilereader.pas',
   BasisFunctionUnit in '..\ModelMuse\BasisFunctionUnit.pas',
+  FastGEO in '..\ModelMuse\FastGEO.pas',
   SubPolygonUnit in '..\ModelMuse\SubPolygonUnit.pas',
+  RbwParser in '..\Components\RbwParser\RbwParser.pas',
   DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';
 
 type
-  TMf6ObsExtractor = class(TComponent)
+  TSutraObsExtractor = class(TComponent)
   protected
-    procedure DoRun; {$IFDEF FPC} override; {$endif}
+    procedure DoRun;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -90,59 +91,35 @@ begin
 end;
 
 
-{ TMf6ObsExtractor }
+{ TSutraObsExtractor }
 
-constructor TMf6ObsExtractor.Create;
-var
-  LineIndex: Integer;
-begin
-//  StopOnException:=True;
-  WriteLn;
-  for LineIndex := 0 to Disclaimer.Count - 1 do
-  begin
-    WriteLn(Disclaimer[LineIndex]);
-  end;
-  WriteLn;
-
-end;
-
-destructor TMf6ObsExtractor.Destroy;
-begin
-
-  inherited;
-end;
-
-procedure TMf6ObsExtractor.DoRun;
+procedure TSutraObsExtractor.DoRun;
 var
 //  ErrorMsg: String;
-  InputHandler : TInputHandler;
+  InputHandler : TSutraInputHandler;
   FileName: string;
   P: PChar;
 //  Opts: TStringList;
 //  NonOpts: TStringList;
-  //I: integer;
 begin
 //  Opts := TStringList.Create;
 //  NonOpts := TStringList.Create;
 //  try
-//    ErrorMsg := '';
-//    ErrorMsg:=CheckOptions('hf:', ['help', 'file'], Opts, NonOpts);
+//    // quick check parameters
+//    ErrorMsg:=CheckOptions('hf:', ['help', 'file:'], Opts, NonOpts);
 //    if ErrorMsg<>'' then begin
-//      raise Exception.Create(ErrorMsg);
+//      ShowException(Exception.Create(ErrorMsg));
 //      Terminate;
 //      Exit;
 //    end;
-    // quick check parameters
 
     // parse parameters
-    if HasOption('h', 'help') then
-    begin
+    if HasOption('h', 'help') then begin
       WriteHelp;
 //      Terminate;
       Exit;
     end;
 
-    FileName := '';
     FileName := GetOptionValue('f', 'file');
     if (FileName = '') and (ParamCount >= 1) then
     begin
@@ -167,17 +144,15 @@ begin
         Exit;
       end;
       WriteLn('Processing ', FileName);
-      InputHandler := TInputHandler.Create;
+      InputHandler := TSutraInputHandler.Create;
       try
         try
           InputHandler.ReadAndProcessInputFile(FileName);
-          WriteLn('normal termination');
+          WriteLn('Normal termination');
+
         Except on E: Exception do
           begin
-            WriteLn('');
-            WriteLn('ERROR');
             WriteLn(E.message);
-            WriteLn('');
           end;
         end;
       finally
@@ -189,48 +164,68 @@ begin
 //      Terminate;
       Exit;
     end;
+
+  { add your program here }
 //  finally
 //    Opts.Free;
 //    NonOpts.Free;
 //  end;
 
-  { add your program here }
-
   // stop program loop
 //  Terminate;
 end;
 
-procedure TMf6ObsExtractor.WriteHelp;
+constructor TSutraObsExtractor.Create(TheOwner: TComponent);
+var
+  LineIndex: Integer;
+begin
+  inherited Create(TheOwner);
+//  StopOnException:=True;
+  WriteLn;
+  for LineIndex := 0 to Disclaimer.Count - 1 do
+  begin
+    WriteLn(Disclaimer[LineIndex]);
+  end;
+  WriteLn;
+end;
+
+destructor TSutraObsExtractor.Destroy;
+begin
+  inherited Destroy;
+end;
+
+procedure TSutraObsExtractor.WriteHelp;
 var
   ExeName: string;
 begin
   ExeName := ParamStr(0);
+  { add your help code here }
   writeln('Usage: ', ExeName, ' -h', ' Displays this help message');
   writeln('Usage: ', ExeName, ' -f <filename>', ' processes the filename indicated by <filename>');
   writeln('Usage: ', ExeName, ' --file=<filename>', ' processes the filename indicated by <filename>');
   writeln('Usage: ', ExeName, ' <filename>', ' processes the filename indicated by <filename>');
 end;
 
+
 var
-  Application: TMf6ObsExtractor;
+  Application: TSutraObsExtractor;
   StartTime: TDateTime;
   ElapsedTime: TDateTime;
 begin
   try
     StartTime := Now;
-    Application:= TMf6ObsExtractor.Create(nil);
+    Application:= TSutraObsExtractor.Create(nil);
   //  Application.Title:='MODFLOW 6 Observation Extractor';
     try
       Application.DoRun;
-	finally
-	  Application.Free;
-	end;
+    finally
+      Application.Free;
+    end;
     ElapsedTime := Now - StartTime;
     writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
-  except on E: Exception do
-    begin
-      WriteLn(E.Message);
-    end;
-
+    { TODO -oUser -cConsole Main : Insert code here }
+  except
+    on E: Exception do
+      Writeln(E.ClassName, ': ', E.Message);
   end;
 end.

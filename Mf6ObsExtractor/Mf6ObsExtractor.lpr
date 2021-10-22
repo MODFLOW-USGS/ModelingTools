@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp, OutputFileReader, InputFileReader,
-  CustomInputReader, CustomOutputFileReader;
+  CustomInputReader, CustomOutputFileReader, DisclaimerTextUnit;
 
 type
 
@@ -110,9 +110,17 @@ begin
 end;
 
 constructor TMf6ObsExtractor.Create(TheOwner: TComponent);
+var
+  LineIndex: Integer;
 begin
   inherited Create(TheOwner);
   StopOnException:=True;
+  WriteLn;
+  for LineIndex := 0 to Disclaimer.Count - 1 do
+  begin
+    WriteLn(Disclaimer[LineIndex]);
+  end;
+  WriteLn;
 end;
 
 destructor TMf6ObsExtractor.Destroy;
@@ -136,9 +144,12 @@ var
 begin
   StartTime := Now;
   Application:=TMf6ObsExtractor.Create(nil);
+  try
   Application.Title:='MODFLOW 6 Observation Extractor';
-  Application.Run;
-  Application.Free;
+    Application.Run;
+  finally
+    Application.Free;
+  end;
   ElapsedTime := Now - StartTime;
   writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.

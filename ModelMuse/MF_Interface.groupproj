@@ -15,6 +15,15 @@
         <Projects Include="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\Mf2005ObsExtractor\Mf2005ObsExtractor.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\SutraObsExtractor\SutraObsExtractor.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +68,41 @@
     <Target Name="EnhancedTemplateProcessor:Make">
         <MSBuild Projects="..\EnhancedTemplateProcessor\EnhancedTemplateProcessor.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Mf6ObsExtractor ">
+        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj"/>
+    </Target>
+    <Target Name="Mf6ObsExtractor :Clean">
+        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Mf6ObsExtractor :Make">
+        <MSBuild Projects="..\Mf6ObsExtractor\Mf6ObsExtractor .dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Mf2005ObsExtractor">
+        <MSBuild Projects="..\Mf2005ObsExtractor\Mf2005ObsExtractor.dproj"/>
+    </Target>
+    <Target Name="Mf2005ObsExtractor:Clean">
+        <MSBuild Projects="..\Mf2005ObsExtractor\Mf2005ObsExtractor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Mf2005ObsExtractor:Make">
+        <MSBuild Projects="..\Mf2005ObsExtractor\Mf2005ObsExtractor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SutraObsExtractor">
+        <MSBuild Projects="..\SutraObsExtractor\SutraObsExtractor.dproj"/>
+    </Target>
+    <Target Name="SutraObsExtractor:Clean">
+        <MSBuild Projects="..\SutraObsExtractor\SutraObsExtractor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SutraObsExtractor:Make">
+        <MSBuild Projects="..\SutraObsExtractor\SutraObsExtractor.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor"/>
+        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor;Mf6ObsExtractor ;Mf2005ObsExtractor;SutraObsExtractor"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean"/>
+        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean;Mf6ObsExtractor :Clean;Mf2005ObsExtractor:Clean;SutraObsExtractor:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make"/>
+        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make;Mf6ObsExtractor :Make;Mf2005ObsExtractor:Make;SutraObsExtractor:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

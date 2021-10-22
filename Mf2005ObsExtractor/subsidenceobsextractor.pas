@@ -1,6 +1,8 @@
 unit SubsidenceObsExtractor;
 
+{$IFDEF FPC}
 {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -15,7 +17,11 @@ type
     Fraction: double;
   end;
 
+{$IFDEF FPC}
   TCellID_List = specialize TList<TCellID>;
+{$ELSE}
+  TCellID_List = TList<TCellID>;
+{$ENDIF}
 
   { TSubsidenceObsValue }
 
@@ -36,7 +42,11 @@ type
     property ObsType: string read FObsType write FObsType;
   end;
 
+{$IFDEF FPC}
   TSubsidenceObsValueList = specialize TList<TSubsidenceObsValue>;
+{$ELSE}
+  TSubsidenceObsValueList = TList<TSubsidenceObsValue>;
+{$ENDIF}
 
   { TSubsidenceObsExtractor }
 

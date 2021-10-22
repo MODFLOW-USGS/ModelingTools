@@ -1,6 +1,8 @@
 unit ReadMnwiOutput;
 
+{$IFDEF FPC}
 {$mode objfpc}{$H+}
+{$ENDIF}
 
 interface
 
@@ -95,6 +97,7 @@ var
 begin
   Assert(Index >= 0);
   AddIndex := Index - Ord(motHwell) -1;
+  result := MissingValue;
   if AddIndex >= 0 then
   begin
     if AddIndex < Length(MnwiRecord.Additional) then

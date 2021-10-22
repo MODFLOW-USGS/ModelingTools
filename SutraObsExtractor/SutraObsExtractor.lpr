@@ -6,9 +6,9 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SysUtils, FastGEO, BasisFunctionUnit, SubPolygonUnit, CustApp,
-  SutraInputFileReader, CustomInputReader, CustomOutputFileReader,
-  SutraOutputFileReader, RbwParser;
+  Classes, SysUtils, FastGEO, BasisFunctionUnit, SubPolygonUnit,
+  DisclaimerTextUnit, CustApp, SutraInputFileReader, CustomInputReader,
+  CustomOutputFileReader, SutraOutputFileReader, RbwParser;
 
 type
 
@@ -108,9 +108,17 @@ begin
 end;
 
 constructor TSutraObsExtractor.Create(TheOwner: TComponent);
+var
+  LineIndex: Integer;
 begin
   inherited Create(TheOwner);
   StopOnException:=True;
+  WriteLn;
+  for LineIndex := 0 to Disclaimer.Count - 1 do
+  begin
+    WriteLn(Disclaimer[LineIndex]);
+  end;
+  WriteLn;
 end;
 
 destructor TSutraObsExtractor.Destroy;
@@ -134,9 +142,12 @@ var
 begin
   StartTime := Now;
   Application:=TSutraObsExtractor.Create(nil);
+  try
   Application.Title:='SUTRA Observation Extractor';
-  Application.Run;
-  Application.Free;
+    Application.Run;
+  finally
+    Application.Free;
+  end;
   ElapsedTime := Now - StartTime;
   writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.
