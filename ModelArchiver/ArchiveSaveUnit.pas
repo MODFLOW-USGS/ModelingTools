@@ -936,6 +936,12 @@ begin
 
       if FActivity = aSaveArchive then
       begin
+        if CategoryNode.NodeText = StrModelOutputFiles then
+        begin
+          ArchiveFileName := IncludeTrailingPathDelimiter(GetArchivePath(Node))
+            + StrModelOutputFiles + '.'
+            + Node.NodeText +  '.zip';
+        end;
 //        DiskFileName := TPath.GetTempFileName;
 //        LocalZipFile.Open(DiskFileName, zmWrite);
         FDiskFileName := ArchiveFileName;

@@ -2220,7 +2220,16 @@ begin
 
     AFileName :=  '..\..\bin\' + ExtractFileName(ZoneBudgetLocation);
 //    Model.AddZoneBudgetInputFile(AFileName);
-    BatchFile.Add(AFileName + ' <' + InputFileName);
+
+    if Model.ModelSelection = msModflow2015 then
+    begin
+      BatchFile.Add(AFileName + ' ' + InputFileName);
+    end
+    else
+    begin
+      BatchFile.Add(AFileName + ' <' + InputFileName);
+    end;
+
     BatchFile.Add('pause');
     BatchFile.SaveToFile(ZoneBudBatName);
   finally

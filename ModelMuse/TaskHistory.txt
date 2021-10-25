@@ -28343,5 +28343,18 @@ object TTaskHistory
         'Documentation'
         'Installer'
         'PEST')
+    end
+    item
+      Date = 44492.000000000000000000
+    end
+    item
+      Date = 44493.000000000000000000
+    end
+    item
+      Date = 44494.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Design and Planning'
+        'PEST')
     end>
 end

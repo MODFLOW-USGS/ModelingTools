@@ -656,6 +656,7 @@ begin
     AFileName := ExtractFileName(AFileName);
     AFileName := ChangeFileExt(AFileName, '');
     AFileName := '..\..\output\output.' + AFileName  + '\' + AFileName;
+//    AFileName := '..\..\output\' + AFileName  + '\' + AFileName;
   end;
 
   if Model.DisvUsed then
@@ -699,6 +700,7 @@ begin
     AFileName := ExtractFileName(AFileName);
     AFileName := ChangeFileExt(AFileName, '');
     AFileName := '..\..\output\output.' + AFileName  + '\' + AFileName;
+//    AFileName := '..\..\output\' + AFileName  + '\' + AFileName;
   end;
   AFileName := ChangeFileExt(AFileName, StrCbcExt);
 
