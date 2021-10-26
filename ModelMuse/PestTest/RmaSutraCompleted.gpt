@@ -622,9 +622,7 @@ object Model: TPhastModel
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
       'SUTRA.FIL'
-    
-      'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_Beta\examples\PE' +
-      'ST\SUTRA\RmaSutraCompleted.gpt')
+    'C:\ModelingTools\ModelMuse\PestTest\RmaSutraCompleted.gpt')
   ModelInputFiles.Strings = (
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
@@ -706,9 +704,7 @@ object Model: TPhastModel
     
       'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_0\examples\PEST\' +
       'RmaSutraCompleted_TIME_STEPS.OBS')
-  ModelFileName = 
-    'C:\ModelingTools\ModelMuse\Installer\ModelMuse5_Beta\examples\PE' +
-    'ST\SUTRA\RmaSutraCompleted.gpt'
+  ModelFileName = 'C:\ModelingTools\ModelMuse\PestTest\RmaSutraCompleted.gpt'
   ModflowOptions.HDry = -1E20
   ModflowOptions.HNoFlow = -2E20
   ModflowOptions.StoredHDry.Value = -1E20

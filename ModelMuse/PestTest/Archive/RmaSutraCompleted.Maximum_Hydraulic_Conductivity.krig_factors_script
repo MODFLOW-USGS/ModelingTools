@@ -1,0 +1,15 @@
+#Script for PLPROC for saving kriging factors
+
+#Read pilot point data
+PMXPilotPoints1 = read_list_file(skiplines=0,dimensions=2, &
+  plist='K_1';column=5, &
+  id_type='character',file='RmaSutraCompleted.Maximum_Hydraulic_Conductivity.K.1.pp')
+
+cl_Discretization = read_list_file(skiplines=1,dimensions=2, &
+  id_type='indexed',file='RmaSutraCompleted.c_ele')
+#Save Kriging factors
+calc_kriging_factors_auto_2d( &
+  target_clist=cl_Discretization, &
+  source_clist=PMXPilotPoints1, &
+  file=RmaSutraCompleted.Maximum_Hydraulic_Conductivity.Factors1;format=formatted)
+

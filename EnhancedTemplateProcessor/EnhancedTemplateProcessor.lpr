@@ -62,6 +62,7 @@ begin
   finally
     Application.Free;
   end;
+  writeln('Normal termination');
   ElapsedTime := Now - StartTime;
   writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
 end.

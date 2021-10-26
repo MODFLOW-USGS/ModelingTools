@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="RmaSutraCompleted" FileType="bin">
+    <FileName Model_Name="RmaSutraCompleted" FileType="bin">..\..\..\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe</FileName>
+  </bin>
+  <ancillary Model_Name="RmaSutraCompleted" FileType="ancillary">
+    <FileName Model_Name="RmaSutraCompleted" FileType="ancillary">..\Installer\ModelMuse5_0\examples\PEST\RmaSutraCompleted.15B</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="ancillary">..\Installer\ModelMuse5_0\examples\PEST\S\RmaSutraCompleted.15B</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="ancillary">..\Installer\ModelMuse5_0\examples\PEST\S\SUTRA.FIL</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="ancillary">..\Installer\ModelMuse5_0\examples\PEST\SUTRA.FIL</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="ancillary">RmaSutraCompleted.gpt</FileName>
+  </ancillary>
+  <model Model_Name="RmaSutraCompleted" FileType="Model Input">
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Input">RmaSutraCompleted.FluxBcs</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Input">RmaSutraCompleted.ics</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Input">RmaSutraCompleted.inp</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Input">RmaSutraCompleted.SPecPBcs</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Input">RunSutra.bat.archive</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Input">SUTRA.FIL.archive</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Input">usgs.RmaSutraCompleted.reference</FileName>
+  </model>
+  <output Model_Name="RmaSutraCompleted" FileType="Model Output">
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted.bcof</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted.bcop</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted.ele</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted.lst</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted.nod</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted.rst</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted.smy</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs1.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs2.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs3.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs4.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs5.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs6.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs7.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_Head_Obs8.OBC</FileName>
+    <FileName Model_Name="RmaSutraCompleted" FileType="Model Output">RmaSutraCompleted_TIME_STEPS.OBS</FileName>
+  </output>
+</Model_Archive_List>

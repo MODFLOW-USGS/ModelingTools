@@ -12,11 +12,18 @@ uses
   ProcessTemplateUnit in 'ProcessTemplateUnit.pas',
   DisclaimerTextUnit in '..\ModelMuse\DisclaimerTextUnit.pas';
 
+var
+  StartTime: TDateTime;
+  ElapsedTime: TDateTime;
 begin
-  try
+  StartTime := Now;
+try
     ProcessTemplate;
     { TODO -oUser -cConsole Main : Insert code here }
-  except
+    writeln('Normal termination');
+    ElapsedTime := Now - StartTime;
+    writeln('Elapsed time: ' + TimeToStr(ElapsedTime));
+except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
   end;

@@ -588,7 +588,7 @@ begin
   begin
     StartArrayNameFile := Length(ReadArrays) + 2;
     EndArrayNameFile := Pos(')', ALine);
-    Assert(False, Format('Unbalanced parenthesis in "%s"', [OriginalLine]));
+    Assert(EndArrayNameFile > StartArrayNameFile, Format('Unbalanced parenthesis in "%s"', [OriginalLine]));
     FArrayNamesFile := Copy(ALine, StartArrayNameFile, EndArrayNameFile-StartArrayNameFile);
     ArrayNameLength := Length(FArrayNamesFile);
     if (ArrayNameLength > 0) and (FArrayNamesFile[1] = '"') and (FArrayNamesFile[ArrayNameLength] = '"') then

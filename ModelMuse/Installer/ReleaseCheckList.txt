@@ -5,8 +5,9 @@
 2. Update version number.
 2a. Turn off check for resource leaks in MadExcept.
 2b. Be sure the release version of disclaimer is used. See DisclaimerTextUnit.pas.
-3. Build 32 and 64-bit versions of ModelMuse, ModelMonitor and ModflowImporter
+3. Build 32 and 64-bit versions of ModelMuse, ModelMonitor and ModflowImporter and utility programs.
 4. Update revision history, including the release date.
+4a. If relevant, update About box with new abstract.
 5. Build help - chm and html
 5a. Check that help works for new things.
 6. Insert google analytics code for help and revision history.
