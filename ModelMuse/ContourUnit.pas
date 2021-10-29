@@ -3052,6 +3052,17 @@ begin
   end;
 
   Assert(Assigned(Mesh));
+
+  if FMeshOutline = nil then
+  begin
+//      LocalMesh := Mesh as TSutraMesh3D;
+    case ViewDirection of
+      vdTop: FMeshOutline := Mesh.TopOutline(Mesh.SelectedLayer);
+      vdFront: FMeshOutline := Mesh.FrontOutline;
+      else Assert(False);
+    end;
+  end;
+
 //  Assert(Assigned(FMeshOutline));
   Assert(Assigned(FTriangulationData));
   NeighborStart := 0;

@@ -10393,15 +10393,17 @@ const
 //                correctly.
 //    '4.3.0.71' Bug fix: Fixed the display of a warning message while exporting
 //                Shapefiles.
-
-//               Bug fix: Fixed export of Zonebudget files for archive.
+//    '4.3.0.72' Bug fix: Fixed export of Zonebudget files for archive.
+//               Bug fix: Fixed export of contours to shapefile in MODFLOW DISV
+//                models so that the contours were restricted to the active part
+//                of the current layer.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.71';
+  IIModelVersion = '4.3.0.72';
 
 function IModelVersion: string;
 begin

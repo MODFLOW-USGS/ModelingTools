@@ -9195,6 +9195,7 @@ var
   CombinedPointIndex: integer;
   ObjectNames: TStringList;
   AScreenObjectName: string;
+  ErrorMessages: TStringList;
 begin
   CombinedPointIndex := -1;
   frmProgressMM.ShouldContinue := True;
@@ -9221,6 +9222,7 @@ begin
         and (comboJoinObjects.ItemIndex = 1);
       GlobalDecompileType := dcValue;
       InvalidObjectNumbers := TIntegerList.Create;
+      ErrorMessages := TStringList.Create;
       InvalidFormulaNumbers := nil;
       MultiValueList := TList.Create;
       NewDataSets:= TList.Create;
@@ -10174,6 +10176,7 @@ begin
                         ScreenObjectList.Remove(AScreenObject);
 //                        AScreenObject.Free;
                         InvalidObjectNumbers.Add(Index+1);
+                        ErrorMessages.Add(Format('Object: %0:d; Error: %1:s', [Index + 1, E.Message]));
                         if FCombinedObjects then
                         begin
                           break
@@ -10364,13 +10367,13 @@ begin
             if MessageDlg(Format(StrDObjectsWereInva, [InvalidObjectNumbers.Count]),
               mtWarning, [mbYes, mbNo], 0)= mrYes then
             begin
-              ErrorString := '';
-              for Index := 0 to InvalidObjectNumbers.Count -1 do
-              begin
-                ErrorString := ErrorString
-                  + IntToStr(InvalidObjectNumbers[Index]) + ', ';
-              end;
-              SetLength(ErrorString, Length(ErrorString) -2);
+              ErrorString := ErrorMessages.Text;
+//              for Index := 0 to InvalidObjectNumbers.Count -1 do
+//              begin
+//                ErrorString := ErrorString
+//                  + IntToStr(InvalidObjectNumbers[Index]) + ', ';
+//              end;
+//              SetLength(ErrorString, Length(ErrorString) -2);
 
               MessageDlg(ErrorString, mtInformation, [mbOK], 0);
             end;
@@ -10394,6 +10397,7 @@ begin
           end;
         end;
       finally
+        ErrorMessages.Free;
         InvalidObjectNumbers.Free;
         InvalidFormulaNumbers.Free;
         MultiValueList.Free;
