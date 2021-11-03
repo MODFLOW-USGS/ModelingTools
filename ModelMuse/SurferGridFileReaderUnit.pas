@@ -283,6 +283,7 @@ resourcestring
   StrErrorReadingS = 'Error reading %s.';
   StrSIsNotASurferA = '%s is not a Surfer ASCII grid file.';
   StrSIsNotASurfer7 = '%s is not a Surfer 7 grid file.';
+  StrSDoesNotExist = '%s does not exist.';
 
 function SurferFileType(const FileName: string): TSurferFileType;
 var
@@ -292,7 +293,7 @@ begin
   result := sft6;
   if not FileExists(FileName) then
   begin
-    raise EGrdReadError.Create(Format('%s does not exist.', [FileName]));
+    raise EGrdReadError.Create(Format(StrSDoesNotExist, [FileName]));
   end;
   GrdFile := TFileStream.Create(FileName,
     fmOpenRead or fmShareCompat or fmShareDenyWrite);

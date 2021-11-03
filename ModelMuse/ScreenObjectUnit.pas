@@ -9689,7 +9689,28 @@ begin
           end;
 
           AFunction := Value;
-          Compiler.Compile(AFunction);
+          try
+            Compiler.Compile(AFunction);
+          except on E: ERbwParserError do
+            begin
+              frmFormulaErrors.AddFormulaError(Name, ADataSet.Name, Value, E.Message);
+              case ADataSet.DataType of
+                rdtDouble, rdtInteger:
+                  begin
+                    AFunction := '0';
+                  end;
+                rdtBoolean:
+                  begin
+                    AFunction := 'False';
+                  end;
+                rdtString:
+                  begin
+                    AFunction := '""';
+                  end;
+              end;
+              Compiler.Compile(AFunction);
+            end;
+          end;
           NewUseList.Assign(Compiler.CurrentExpression.VariablesUsed);
           CreateOrRetrieveFormulaObject(Index, ADataSet, FormulaObject);
           frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
