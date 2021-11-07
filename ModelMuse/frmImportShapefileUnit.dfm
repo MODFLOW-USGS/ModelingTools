@@ -85,7 +85,7 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Top = 0
     Width = 771
     Height = 555
-    ActivePage = tabOptions
+    ActivePage = tabData
     Align = alClient
     TabOrder = 0
     OnChange = pcImportShapeChange

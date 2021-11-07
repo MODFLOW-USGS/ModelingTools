@@ -10398,6 +10398,8 @@ const
 //                models so that the contours were restricted to the active part
 //                of the current layer.
 
+//               Enhancement: The initial dialog box now appears on the taskbar.
+
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 

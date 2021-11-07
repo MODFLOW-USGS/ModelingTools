@@ -172,6 +172,7 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure rdgLocationBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
     procedure rgTransportClick(Sender: TObject);
+    procedure CreateParams(var Params: TCreateParams); override;
   private
     // @name sets up the
     // @link(TPhastGrid) using the values displayed on @link(tabInitialGrid).
@@ -429,6 +430,13 @@ begin
   else
     Assert(False);
   end;
+end;
+
+procedure TfrmStartUp.CreateParams(var Params: TCreateParams);
+begin
+  inherited;
+  Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
+  Params.WndParent := 0;
 end;
 
 procedure TfrmStartUp.SetUpSutraModel;
