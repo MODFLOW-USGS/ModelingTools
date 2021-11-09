@@ -1,0 +1,164 @@
+Questions
+	Time steps can be different in flow and transport. If different, could a stress period have two steps for flow and three for transport?
+	Can a MODFLOW-2005 or MODFLOW-NWT flow model be linked with a MODFLOW 6 GWT model? Some of the statements in the FMI package description seem to imply that this is possible. However, I worry that the binary output from those models might be single precision whereas MODFLOW 6 would expect them to be double-precision.
+Bouyancy
+	Requires density or concentrations to be specified for boundaries.
+Time Lists
+Adaptive time step
+GWT
+  New high level option GWT in Packages and programs dialog box.
+    New pane for each package in GWT
+		IC
+		OC
+		OBS
+		ADV
+		DSP
+		SSM
+		MST
+		IST
+		CNC
+		SRC
+		SFT
+		LKT
+		MWT
+		UZT
+		FMI
+		IVT
+		Solver
+  Data sets
+		IC
+			Starting concentration
+		OC
+		OBS
+		ADV
+		DSP
+			Diffusion coefficient (new)
+			Longitudinal dispersivity horizontal (new)
+			Longitudinal dispersivity vertical (new)
+			Transverse dispersivity 1 (new)
+			Transverse dispersivity 2 (new)
+			vertical dispersivity (new)
+		SSM
+		MST
+			Porosity
+			DECAY
+			DECAY_SORBED (mobile)
+			BULK_DENSITY (mobile)
+			DISTCOEF (mobile)
+			SP2 (mobile)
+		IST
+			[CIM
+			THETAIM
+			ZETAIM
+			DECAY (immobile)
+			DECAY_SORBED (immobile)
+			BULK_DENSITY (immobile)
+			DISTCOEF (immobile)
+		CNC
+		SRC
+		SFT
+		LKT
+		MWT
+		UZT
+		FMI
+		IVT
+  Boundary data 
+		IC
+		OC
+		OBS
+		ADV
+		DSP
+		SSM
+		MST
+		IST
+		CNC
+			Concentration boundary with observation
+		SRC
+		  Mass source boundary with observation
+		SFT
+		  starting concentration
+		  STATUS 
+		  CONCENTRATION
+		  RAINFALL
+		  EVAPORATION 
+		  RUNOFF
+		  INFLOW
+		  12 observation types, most can be a reach or a group of reaches
+		LKT
+		  starting concentration
+		  STATUS
+		  CONCENTRATION
+		  RAINFALL
+		  EVAPORATION
+		  RUNOFF
+		  EXT-INFLOW
+		  13 observation types
+		MWT
+		  starting concentration
+		  STATUS 
+		  CONCENTRATION
+		  RATE
+		  9 observation types
+		UZT
+		  starting concentration
+		  STATUS
+		  CONCENTRATION
+		  INFILTRATION
+		  UZET
+		  9 observation types
+		FMI
+		IVT
+  Dialog boxes other than Packages and Programs
+		IC
+		OC
+			Modification to OC
+		OBS
+		  Object Properties
+		    concentration at a cell
+			flow across face
+		ADV
+		DSP
+		SSM
+		MST
+		IST
+		CNC
+		  Object Properties
+		    Constant conc,
+		    solute flow obs
+		SRC
+		  Mass source
+		  Mass source loading rate observation
+		SFT
+		  starting concentration
+		  STATUS 
+		  CONCENTRATION
+		  RAINFALL
+		  EVAPORATION 
+		  RUNOFF
+		  INFLOW
+		  12 observation types, most can be a reach or a group of reaches
+		LKT
+		  starting concentration
+		  STATUS
+		  CONCENTRATION
+		  RAINFALL
+		  EVAPORATION
+		  RUNOFF
+		  EXT-INFLOW
+		  13 observation types
+		MWT
+		  starting concentration
+		  STATUS 
+		  CONCENTRATION
+		  RATE
+		  9 observation types
+		UZT
+		  starting concentration
+		  STATUS
+		  CONCENTRATION
+		  INFILTRATION
+		  UZET
+		  9 observation types
+		FMI
+		IVT
+        
