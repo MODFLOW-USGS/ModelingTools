@@ -118,7 +118,7 @@ object TTaskHistory
     end
     item
       Name = 'Global variables'
-      Display = True
+      Display = False
     end
     item
       Name = 'LAK'
@@ -170,7 +170,7 @@ object TTaskHistory
     end
     item
       Name = 'Export Shapefile'
-      Display = False
+      Display = True
     end
     item
       Name = 'MODPATH'
@@ -258,7 +258,7 @@ object TTaskHistory
     end
     item
       Name = 'List File Analyzer'
-      Display = True
+      Display = False
     end
     item
       Name = 'Mesh Generation'
@@ -338,7 +338,7 @@ object TTaskHistory
     end
     item
       Name = 'MF-2015'
-      Display = False
+      Display = True
     end
     item
       Name = 'NPF'
@@ -366,7 +366,7 @@ object TTaskHistory
     end
     item
       Name = 'PEST'
-      Display = True
+      Display = False
     end
     item
       Name = 'SUTRA 3.0'
@@ -446,7 +446,7 @@ object TTaskHistory
     end
     item
       Name = 'PEST Observations'
-      Display = True
+      Display = False
     end
     item
       Name = 'Anonymize Objects'
@@ -454,19 +454,19 @@ object TTaskHistory
     end
     item
       Name = 'Pest parameter substitution'
-      Display = True
+      Display = False
     end
     item
       Name = 'Model Viewer SUTRA 4'
-      Display = True
+      Display = False
     end
     item
       Name = 'PEST Pilot Points'
-      Display = True
+      Display = False
     end
     item
       Name = 'PEST Regularization'
-      Display = True
+      Display = False
     end
     item
       Name = 'MT3D-USGS RCT'
@@ -28408,6 +28408,11 @@ object TTaskHistory
     end
     item
       Date = 44508.000000000000000000
+      Categories.Strings = (
+        'Design and Planning')
+    end
+    item
+      Date = 44509.000000000000000000
       Categories.Strings = (
         'Design and Planning')
     end>

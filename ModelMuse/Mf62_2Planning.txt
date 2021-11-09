@@ -47,7 +47,7 @@ GWT
 			DISTCOEF (mobile)
 			SP2 (mobile)
 		IST
-			[CIM
+			CIM
 			THETAIM
 			ZETAIM
 			DECAY (immobile)
@@ -61,7 +61,7 @@ GWT
 		MWT
 		UZT
 		FMI
-		IVT
+		MVT
   Boundary data 
 		IC
 		OC
@@ -107,7 +107,7 @@ GWT
 		  UZET
 		  9 observation types
 		FMI
-		IVT
+		MVT
   Dialog boxes other than Packages and Programs
 		IC
 		OC
@@ -160,5 +160,14 @@ GWT
 		  UZET
 		  9 observation types
 		FMI
-		IVT
+		MVT
+Other
+  NPF Save saturation
+  STO SS CONFINED ONLY
+  CSUB package convergence output  
+  GHB elevation as a aux parameter Density or conc aux files
+  RIV elevation as a aux parameter Density or conc aux files
+  LAK Density or conc aux files
+  SFR Density or conc aux files
+  MAW Density or conc aux files
         
