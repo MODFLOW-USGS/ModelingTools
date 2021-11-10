@@ -27,9 +27,14 @@ type
     FTimeStepMultiplier: double;
     FDrawDownReference: boolean;
     FAtsUsed: Boolean;
-    FAtsInitialStepSize: TRealStorage;
+    FStoredAtsInitialStepSize: TRealStorage;
+    FStoredAtsMaximumStepSize: TRealStorage;
+    FStoredAtsMinimumStepSize: TRealStorage;
+    FStoredAtsAdjustmentFactor: TRealStorage;
+    FStoredAtsFailureFactor: TRealStorage;
     // @name calls @link(TBaseModel.Invalidate) indirectly.
     procedure InvalidateModel;
+    procedure InvalModel(Sender: TObject);
     // See @link(EndTime).
     procedure SetEndTime(Value: double);
     // See @link(MaxLengthOfFirstTimeStep).
@@ -44,7 +49,21 @@ type
     procedure SetTimeStepMultiplier(const Value: double);
     procedure SetDrawDownReference(const Value: boolean);
     procedure SetAtsUsed(const Value: Boolean);
-    procedure SetAtsInitialStepSize(const Value: TRealStorage);
+    procedure SetStoredAtsInitialStepSize(const Value: TRealStorage);
+    procedure SetStoredAtsAdjustmentFactor(const Value: TRealStorage);
+    procedure SetStoredAtsFailureFactor(const Value: TRealStorage);
+    procedure SetStoredAtsMaximumStepSize(const Value: TRealStorage);
+    procedure SetStoredAtsMinimumStepSize(const Value: TRealStorage);
+    function GetAtsAdjustmentFactor: double;
+    function GetAtsFailureFactor: double;
+    function GetAtsInitialStepSize: double;
+    function GetAtsMaximumStepSize: double;
+    function GetAtsMinimumStepSize: double;
+    procedure SetAtsAdjustmentFactor(const Value: double);
+    procedure SetAtsFailureFactor(const Value: double);
+    procedure SetAtsInitialStepSize(const Value: double);
+    procedure SetAtsMaximumStepSize(const Value: double);
+    procedure SetAtsMinimumStepSize(const Value: double);
   public
     // @name copies Source to the current @classname.
     procedure Assign(Source: TPersistent); override;
@@ -56,6 +75,11 @@ type
     // @name is the number of steps in a stress period.
     function NumberOfSteps: integer;
     function LengthOfFirstTimeStep: double;
+    property AtsInitialStepSize: double read GetAtsInitialStepSize write SetAtsInitialStepSize;
+    property AtsMinimumStepSize: double read GetAtsMinimumStepSize write SetAtsMinimumStepSize;
+    property AtsMaximumStepSize: double read GetAtsMaximumStepSize write SetAtsMaximumStepSize;
+    property AtsAdjustmentFactor: double read GetAtsAdjustmentFactor write SetAtsAdjustmentFactor;
+    property AtsFailureFactor: double read GetAtsFailureFactor write SetAtsFailureFactor;
   published
     // If @name is true, the head at the end of this stress period
     // will be used as a reference head for computing drawdown.
@@ -87,7 +111,36 @@ type
       stored False
     {$ENDIF}
     ;
-    property AtsInitialStepSize: TRealStorage read FAtsInitialStepSize write SetAtsInitialStepSize;
+    property StoredAtsInitialStepSize: TRealStorage
+      read FStoredAtsInitialStepSize write SetStoredAtsInitialStepSize
+    {$IFNDEF ATS}
+      stored False
+    {$ENDIF}
+    ;
+    property StoredAtsMinimumStepSize: TRealStorage
+      read FStoredAtsMinimumStepSize write SetStoredAtsMinimumStepSize
+    {$IFNDEF ATS}
+      stored False
+    {$ENDIF}
+    ;
+    property StoredAtsMaximumStepSize: TRealStorage
+      read FStoredAtsMaximumStepSize write SetStoredAtsMaximumStepSize
+    {$IFNDEF ATS}
+      stored False
+    {$ENDIF}
+    ;
+    property StoredAtsAdjustmentFactor: TRealStorage
+      read FStoredAtsAdjustmentFactor write SetStoredAtsAdjustmentFactor
+    {$IFNDEF ATS}
+      stored False
+    {$ENDIF}
+    ;
+    property StoredAtsFailureFactor: TRealStorage
+      read FStoredAtsFailureFactor write SetStoredAtsFailureFactor
+    {$IFNDEF ATS}
+      stored False
+    {$ENDIF}
+    ;
   end;
 
   // @name is a collection of the data defining all the stress periods
@@ -222,6 +275,13 @@ begin
     TimeStepMultiplier := SourceMFStressPeriod.TimeStepMultiplier;
     StressPeriodType := SourceMFStressPeriod.StressPeriodType;
     DrawDownReference := SourceMFStressPeriod.DrawDownReference;
+
+    AtsUsed := SourceMFStressPeriod.AtsUsed;
+    AtsInitialStepSize := SourceMFStressPeriod.AtsInitialStepSize;
+    AtsMinimumStepSize := SourceMFStressPeriod.AtsMinimumStepSize;
+    AtsMaximumStepSize := Min(SourceMFStressPeriod.AtsMaximumStepSize, PeriodLength);
+    AtsAdjustmentFactor := SourceMFStressPeriod.AtsAdjustmentFactor;
+    AtsFailureFactor := SourceMFStressPeriod.AtsFailureFactor;
   end
   else
   begin
@@ -238,18 +298,67 @@ begin
   FTimeStepMultiplier := 0;
   FDrawDownReference := False;
   FStressPeriodType := sptSteadyState;
+
+  FStoredAtsInitialStepSize := TRealStorage.Create(InvalModel);
+  FStoredAtsMaximumStepSize := TRealStorage.Create(InvalModel);
+  FStoredAtsMinimumStepSize := TRealStorage.Create(InvalModel);
+  FStoredAtsAdjustmentFactor := TRealStorage.Create(InvalModel);
+  FStoredAtsFailureFactor := TRealStorage.Create(InvalModel);
+
+  FStoredAtsInitialStepSize.Value := 0;
+  FStoredAtsMaximumStepSize.Value := 1;
+  FStoredAtsMinimumStepSize.Value := 1E-5;
+  FStoredAtsAdjustmentFactor.Value := 2;
+  FStoredAtsFailureFactor.Value := 5;
+
   InvalidateModel;
 end;
 
 destructor TModflowStressPeriod.Destroy;
 begin
+  FStoredAtsInitialStepSize.Free;
+  FStoredAtsMaximumStepSize.Free;
+  FStoredAtsMinimumStepSize.Free;
+  FStoredAtsAdjustmentFactor.Free;
+  FStoredAtsFailureFactor.Free;
+
   InvalidateModel;
   inherited;
+end;
+
+function TModflowStressPeriod.GetAtsAdjustmentFactor: double;
+begin
+  result := StoredAtsAdjustmentFactor.Value;
+end;
+
+function TModflowStressPeriod.GetAtsFailureFactor: double;
+begin
+  result := StoredAtsFailureFactor.Value;
+end;
+
+function TModflowStressPeriod.GetAtsInitialStepSize: double;
+begin
+  result := StoredAtsInitialStepSize.Value;
+end;
+
+function TModflowStressPeriod.GetAtsMaximumStepSize: double;
+begin
+  result := StoredAtsMaximumStepSize.Value;
+end;
+
+function TModflowStressPeriod.GetAtsMinimumStepSize: double;
+begin
+  result := StoredAtsMinimumStepSize.Value;
 end;
 
 procedure TModflowStressPeriod.InvalidateModel;
 begin
   (Collection as TModflowStressPeriods).InvalidateModel;
+end;
+
+procedure TModflowStressPeriod.InvalModel(Sender: TObject);
+begin
+  InvalidateModel;
 end;
 
 function TModflowStressPeriod.LengthOfFirstTimeStep: double;
@@ -281,9 +390,58 @@ begin
   end;
 end;
 
-procedure TModflowStressPeriod.SetAtsInitialStepSize(const Value: TRealStorage);
+procedure TModflowStressPeriod.SetStoredAtsAdjustmentFactor(
+  const Value: TRealStorage);
 begin
-  FAtsInitialStepSize.Assign(Value);
+  FStoredAtsAdjustmentFactor.Assign(Value);
+end;
+
+procedure TModflowStressPeriod.SetStoredAtsFailureFactor(
+  const Value: TRealStorage);
+begin
+  FStoredAtsFailureFactor.Assign(Value);
+end;
+
+procedure TModflowStressPeriod.SetStoredAtsInitialStepSize(const Value: TRealStorage);
+begin
+  FStoredAtsInitialStepSize.Assign(Value);
+end;
+
+procedure TModflowStressPeriod.SetStoredAtsMaximumStepSize(
+  const Value: TRealStorage);
+begin
+  FStoredAtsMaximumStepSize.Assign(Value);
+end;
+
+procedure TModflowStressPeriod.SetStoredAtsMinimumStepSize(
+  const Value: TRealStorage);
+begin
+  FStoredAtsMinimumStepSize.Assign(Value);
+end;
+
+procedure TModflowStressPeriod.SetAtsAdjustmentFactor(const Value: double);
+begin
+  StoredAtsAdjustmentFactor.Value := Value;
+end;
+
+procedure TModflowStressPeriod.SetAtsFailureFactor(const Value: double);
+begin
+  StoredAtsFailureFactor.Value := Value;
+end;
+
+procedure TModflowStressPeriod.SetAtsInitialStepSize(const Value: double);
+begin
+  StoredAtsInitialStepSize.Value := Value;
+end;
+
+procedure TModflowStressPeriod.SetAtsMaximumStepSize(const Value: double);
+begin
+  StoredAtsMaximumStepSize.Value := Value;
+end;
+
+procedure TModflowStressPeriod.SetAtsMinimumStepSize(const Value: double);
+begin
+  StoredAtsMinimumStepSize.Value := Value;
 end;
 
 procedure TModflowStressPeriod.SetAtsUsed(const Value: Boolean);

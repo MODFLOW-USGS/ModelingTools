@@ -471,6 +471,10 @@ object TTaskHistory
     item
       Name = 'MT3D-USGS RCT'
       Display = False
+    end
+    item
+      Name = 'Adaptive Time Stepping'
+      Display = True
     end>
   History = <
     item
@@ -28414,6 +28418,7 @@ object TTaskHistory
     item
       Date = 44509.000000000000000000
       Categories.Strings = (
-        'Design and Planning')
+        'Design and Planning'
+        'Adaptive Time Stepping')
     end>
 end

@@ -41,6 +41,8 @@ type
     btnInsert: TButton;
     frameGrid: TframeGrid;
     btnConvertTimeUnits: TButton;
+    tabATS: TTabSheet;
+    rdgAts: TRbwDataGrid4;
     procedure FormCreate(Sender: TObject); override;
     procedure dgTimeSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -68,6 +70,10 @@ type
     procedure frameGridGridBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
     procedure comboTimeUnitChange(Sender: TObject);
     procedure btnConvertTimeUnitsClick(Sender: TObject);
+    procedure rdgAtsBeforeDrawCell(Sender: TObject; ACol, ARow: Integer);
+    procedure rdgAtsSelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
+    procedure FormShow(Sender: TObject);
   private
     FModflowStressPeriods: TModflowStressPeriods;
     FDeleting: Boolean;
@@ -119,6 +125,8 @@ uses Math, frmGoPhastUnit, frmTimeStepLengthCalculatorUnit, GoPhastTypes,
 type
   TTimeColumn = (tcStressPeriod, tcStartTime, tcEndTime, tcLength,
     tcTimeFirstStep, tcMultiplier, tcSteady, tcDrawDownReference, tcSteps);
+  TAdaptiveTimeStepColumns = (atsStressPeriod, atsUse, atsInitial, atsMin,
+    atsMax, atsAdjust, atsFailAdjust);
 
 resourcestring
   StrStressPeriod = 'Stress period';
@@ -172,6 +180,12 @@ resourcestring
   'd compatible with a formatted head or  drawdown file is 999,999. Save the' +
   'm in binary files instead using the "Model|MODFLOW Output Control" dialog' +
   ' box.';
+  StrUseATS = 'Use ATS';
+  StrInitialTimeStepLe = 'Initial Time Step Length';
+  StrMinimumTimeStepLe = 'Minimum Time Step Length';
+  StrMaximumTimeStepLe = 'Maximum Time Step Length';
+  StrAtsTimeStepMultiplier = 'Time Step Multiplier Factor';
+  StrTimeStepDivisorOn = 'Time Step Divisor on Failure';
 
 var
   MaxSteps: integer = 100;
@@ -311,6 +325,7 @@ begin
   inherited;
   if dgTime.SelectedRow >= dgTime.FixedRows then
   begin
+    rdgAts.DeleteRow(dgTime.SelectedRow);
     dgTime.DeleteRow(dgTime.SelectedRow);
     seNumPeriods.AsInteger := seNumPeriods.AsInteger - 1;
   end;
@@ -327,6 +342,7 @@ begin
     MessageDlg(StrYouNeedToSelectA, mtInformation, [mbOK], 0);
     Exit;
   end;
+  rdgAts.InsertRow(dgTime.SelectedRow);
   dgTime.InsertRow(dgTime.SelectedRow);
   seNumPeriods.AsInteger := seNumPeriods.AsInteger + 1;
   SetDeleteButtonEnabled;
@@ -491,6 +507,53 @@ begin
   ChangeSelectedCellsInColumn(dgTime, Ord(tcLength), rdePeriodLength.Text);
 end;
 
+procedure TfrmModflowTime.rdgAtsBeforeDrawCell(Sender: TObject; ACol,
+  ARow: Integer);
+var
+  AValue: Double;
+begin
+  inherited;
+  if (ARow >= 1) and rdgAts.Checked[Ord(atsUse), ARow] then
+  begin
+    if ACol = Ord(atsMin) then
+    begin
+      if rdgAts.Cells[ACol, ARow] <> '' then
+      begin
+        if rdgAts.RealValueDefault[ACol, ARow, 0] <= 0 then
+        begin
+          rdgAts.Canvas.Brush.Color := clRed;
+        end;
+      end;
+    end
+    else if ACol = Ord(atsMax) then
+    begin
+      if rdgAts.RealValueDefault[Ord(atsMin), ARow, 0] >=
+        rdgAts.RealValueDefault[Ord(atsMax), ARow, 0] then
+      begin
+        rdgAts.Canvas.Brush.Color := clRed;
+      end;
+    end
+    else if ACol in [Ord(atsAdjust), Ord(atsFailAdjust)] then
+    begin
+      AValue := rdgAts.RealValueDefault[ACol, ARow, 0];
+      if (AValue < 1) and (AValue <> 0) then
+      begin
+        rdgAts.Canvas.Brush.Color := clRed;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmModflowTime.rdgAtsSelectCell(Sender: TObject; ACol, ARow: Integer;
+  var CanSelect: Boolean);
+begin
+  inherited;
+  if (ARow >= 1) and (ACol >= Ord(atsInitial)) then
+  begin
+    CanSelect := rdgAts.Checked[Ord(atsUse), ARow];
+  end;
+end;
+
 procedure TfrmModflowTime.FillEmptyCells;
 var
   RowIndex: integer;
@@ -503,6 +566,7 @@ begin
     if dgTime.Cells[Ord(tcStressPeriod), RowIndex] = '' then
     begin
       dgTime.Cells[Ord(tcStressPeriod), RowIndex] := IntToStr(RowIndex);
+      rdgAts.Cells[Ord(tcStressPeriod), RowIndex] := IntToStr(RowIndex);
     end;
 
     if dgTime.Cells[Ord(tcStartTime), RowIndex] = '' then
@@ -631,6 +695,7 @@ begin
       AList.Free;
     end;
   end;
+  rdgAts.HideEditor;
 end;
 
 procedure TfrmModflowTime.seNumPeriodsChange(Sender: TObject);
@@ -652,6 +717,7 @@ begin
     end;
 
     dgTime.RowCount := seNumPeriods.AsInteger + 1;
+    rdgAts.RowCount := seNumPeriods.AsInteger + 1;
     FillEmptyCells;
     SetDeleteButtonEnabled;
   finally
@@ -670,6 +736,11 @@ var
 begin
   FGettingData := True;
   try
+    {$IFDEF ATS}
+    tabATS.TabVisible := frmGoPhast.ModelSelection = msModflow2015;
+    {$ELSE}
+    tabATS.TabVisible := False;
+    {$ENDIF}
     comboTimeUnit.ItemIndex := frmGoPhast.PhastModel.ModflowOptions.TimeUnit;
     seNumPeriods.AsInteger := frmGoPhast.PhastModel.ModflowStressPeriods.Count;
     FillEmptyCells;
@@ -694,11 +765,20 @@ begin
         dgTime.Checked[ord(tcDrawDownReference), RowIndex]
           := StressPeriod.DrawDownReference;
         UpdateNumberOfTimeSteps(RowIndex);
+
+        rdgAts.Cells[Ord(atsStressPeriod), RowIndex] := IntToStr(RowIndex);
+        rdgAts.Checked[Ord(atsUse), RowIndex] := StressPeriod.AtsUsed;
+        rdgAts.RealValue[Ord(atsInitial), RowIndex] := StressPeriod.AtsInitialStepSize;
+        rdgAts.RealValue[Ord(atsMin), RowIndex] := StressPeriod.AtsMinimumStepSize;
+        rdgAts.RealValue[Ord(atsMax), RowIndex] := StressPeriod.AtsMaximumStepSize;
+        rdgAts.RealValue[Ord(atsAdjust), RowIndex] := StressPeriod.AtsAdjustmentFactor;
+        rdgAts.RealValue[Ord(atsFailAdjust), RowIndex] := StressPeriod.AtsFailureFactor;
       end;
     finally
       dgTime.EndUpdate
     end;
 
+    tabMt3dms.TabVisible := frmGoPhast.PhastModel.Mt3dmsIsSelected;
     if frmGoPhast.PhastModel.Mt3dmsIsSelected then
     begin
       frameGrid.Grid.BeginUpdate;
@@ -722,7 +802,7 @@ begin
       end;
       frameGrid.seNumber.MinValue := 1;
     end
-    else
+    else if frmGoPhast.ModelSelection <> msModflow2015 then
     begin
       tabModflow.TabVisible := False;
       tabMt3dms.TabVisible := False;
@@ -807,9 +887,25 @@ begin
       [Ord(Low(TStressPeriodType))..Ord(High(TStressPeriodType))]);
     StressPeriod.StressPeriodType := TStressPeriodType(IntValue);
     StressPeriod.DrawDownReference :=
-      dgTime.Checked[Ord(tcDrawDownReference), Index]
-  end;
+      dgTime.Checked[Ord(tcDrawDownReference), Index];
 
+    StressPeriod.AtsUsed := rdgAts.Checked[Ord(atsUse), Index];
+    StressPeriod.AtsInitialStepSize :=
+      rdgAts.RealValueDefault[Ord(atsInitial), Index,
+      StressPeriod.AtsInitialStepSize];
+    StressPeriod.AtsMinimumStepSize :=
+      rdgAts.RealValueDefault[Ord(atsMin), Index,
+      StressPeriod.AtsMinimumStepSize];
+    StressPeriod.AtsMaximumStepSize :=
+      rdgAts.RealValueDefault[Ord(atsMax), Index,
+      StressPeriod.AtsMaximumStepSize];
+    StressPeriod.AtsAdjustmentFactor :=
+      rdgAts.RealValueDefault[Ord(atsAdjust), Index,
+      StressPeriod.AtsAdjustmentFactor];
+    StressPeriod.AtsFailureFactor :=
+      rdgAts.RealValueDefault[Ord(atsFailAdjust), Index,
+      StressPeriod.AtsFailureFactor];
+  end;
 
   Mt3dmsTimes := TMt3dmsTimeCollection.Create(nil);
   try
@@ -985,6 +1081,17 @@ begin
   dgTime.Cells[Ord(tcDrawDownReference), 0] := StrDrawdownReference;
   dgTime.Cells[Ord(tcSteps), 0] := StrNumberOfSteps;
 
+//  TAdaptiveTimeStepColumns = (atsStressPeriod, atsUse, atsInitial, atsMin,
+//    atsMax, atsAdjust, atsFailAdjust);
+
+  rdgAts.Cells[Ord(atsStressPeriod), 0] := StrStressPeriod;
+  rdgAts.Cells[Ord(atsUse), 0] := StrUseATS;
+  rdgAts.Cells[Ord(atsInitial), 0] := StrInitialTimeStepLe;
+  rdgAts.Cells[Ord(atsMin), 0] := StrMinimumTimeStepLe;
+  rdgAts.Cells[Ord(atsMax), 0] := StrMaximumTimeStepLe;
+  rdgAts.Cells[Ord(atsAdjust), 0] := StrAtsTimeStepMultiplier;
+  rdgAts.Cells[Ord(atsFailAdjust), 0] := StrTimeStepDivisorOn;
+
   lblPeriodLength.Caption := StrLength;
   lblMaxFirstTimeStepLength.Caption := StrMaxFirstTimeStep;
   lblMultiplier.Caption := StrMultiplier;
@@ -1045,6 +1152,12 @@ procedure TfrmModflowTime.FormResize(Sender: TObject);
 begin
   inherited;
   LayoutMultiRowEditControls;
+end;
+
+procedure TfrmModflowTime.FormShow(Sender: TObject);
+begin
+  inherited;
+  rdgAts.HideEditor;
 end;
 
 procedure TfrmModflowTime.frameGridGridBeforeDrawCell(Sender: TObject; ACol,

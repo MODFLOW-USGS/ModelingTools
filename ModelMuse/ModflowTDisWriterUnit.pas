@@ -7,10 +7,13 @@ uses System.Classes, SysUtils, CustomModflowWriterUnit, PhastModelUnit;
 type
   TTemporalDiscretizationWriter = class(TCustomModflowWriter)
   private
+    FAtsCount: Integer;
+    FAtsFileName: string;
     procedure WriteDataSet0;
     procedure WriteOptions;
     procedure WriteDimensions;
     procedure WriteStressPeriods;
+    procedure WriteAtsFile;
   public
     class function Extension: string; override; // abstract;
     procedure WriteFile(const AFileName: string);
@@ -30,6 +33,52 @@ resourcestring
 class function TTemporalDiscretizationWriter.Extension: string;
 begin
   Result := '.tdis';
+end;
+
+procedure TTemporalDiscretizationWriter.WriteAtsFile;
+var
+  StressPeriods: TModflowStressPeriods;
+  StressPeriodIndex: Integer;
+  AStressPeriod: TModflowStressPeriod;
+begin
+  FInputFileName := FAtsFileName;
+  Model.AddModelInputFile(FAtsFileName);
+  OpenFile(FInputFileName);
+  try
+    WriteCommentLine(File_Comment('ATS'));
+    NewLine;
+
+    WriteBeginDimensions;
+    WriteString('  MAXATS');
+    WriteInteger(FAtsCount);
+    NewLine;
+    WriteEndDimensions;
+
+
+    WriteString('BEGIN PERIODDATA');
+    NewLine;
+    StressPeriods := Model.ModflowFullStressPeriods;
+    for StressPeriodIndex := 0 to StressPeriods.Count - 1 do
+    begin
+      AStressPeriod := StressPeriods[StressPeriodIndex];
+      if AStressPeriod.AtsUsed then
+      begin
+        WriteInteger(StressPeriodIndex+1);
+        WriteFloat(AStressPeriod.AtsInitialStepSize);
+        WriteFloat(AStressPeriod.AtsMinimumStepSize);
+        WriteFloat(AStressPeriod.AtsMaximumStepSize);
+        WriteFloat(AStressPeriod.AtsAdjustmentFactor);
+        WriteFloat(AStressPeriod.AtsFailureFactor);
+        NewLine;
+      end;
+    end;
+    WriteString('END PERIODDATA');
+    NewLine
+
+
+  finally
+    CloseFile
+  end;
 end;
 
 procedure TTemporalDiscretizationWriter.WriteDataSet0;
@@ -87,11 +136,21 @@ begin
   finally
     CloseFile;
   end;
+
+  {$IFDEF ATS}
+  if FAtsCount > 0 then
+  begin
+    WriteAtsFile;
+  end;
+  {$ENDIF}
 end;
 
 procedure TTemporalDiscretizationWriter.WriteOptions;
 var
   TimeUnit: Integer;
+  StressPeriods: TModflowStressPeriods;
+  StressPeriodIndex: Integer;
+  AStressPeriod: TModflowStressPeriod;
 begin
   TimeUnit := Model.ModflowOptions.TimeUnit;
   WriteBeginOptions;
@@ -106,6 +165,26 @@ begin
     5: WriteString('years');
   end;
   NewLine;
+
+  {$IFDEF ATS}
+  FAtsCount := 0;
+  StressPeriods := Model.ModflowFullStressPeriods;
+  for StressPeriodIndex := 0 to StressPeriods.Count - 1 do
+  begin
+    AStressPeriod := StressPeriods[StressPeriodIndex];
+    if AStressPeriod.AtsUsed then
+    begin
+      Inc(FAtsCount);
+    end;
+  end;
+  if FAtsCount > 0 then
+  begin
+    FAtsFileName := ChangeFileExt(FInputFileName, '.ats');
+    WriteString('  ATS6 FILEIN ');
+    WriteString(ExtractFileName(FAtsFileName));
+    NewLine;
+  end;
+  {$ENDIF}
 
   WriteEndOptions;
 end;

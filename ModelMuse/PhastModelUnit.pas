@@ -39312,7 +39312,6 @@ begin
     StressPeriod.TimeStepMultiplier := 1;
   end;
 
-
   ModflowFullStressPeriods.Clear;
   TimeList := TRealList.Create;
   try
