@@ -26,6 +26,8 @@ type
     // See @link(TimeStepMultiplier).
     FTimeStepMultiplier: double;
     FDrawDownReference: boolean;
+    FAtsUsed: Boolean;
+    FAtsInitialStepSize: TRealStorage;
     // @name calls @link(TBaseModel.Invalidate) indirectly.
     procedure InvalidateModel;
     // See @link(EndTime).
@@ -41,6 +43,8 @@ type
     // See @link(TimeStepMultiplier).
     procedure SetTimeStepMultiplier(const Value: double);
     procedure SetDrawDownReference(const Value: boolean);
+    procedure SetAtsUsed(const Value: Boolean);
+    procedure SetAtsInitialStepSize(const Value: TRealStorage);
   public
     // @name copies Source to the current @classname.
     procedure Assign(Source: TPersistent); override;
@@ -78,6 +82,12 @@ type
     // over the length of the previous time step in the same stress period.
     property TimeStepMultiplier: double read FTimeStepMultiplier
       write SetTimeStepMultiplier;
+    property AtsUsed: Boolean read FAtsUsed write SetAtsUsed
+    {$IFNDEF ATS}
+      stored False
+    {$ENDIF}
+    ;
+    property AtsInitialStepSize: TRealStorage read FAtsInitialStepSize write SetAtsInitialStepSize;
   end;
 
   // @name is a collection of the data defining all the stress periods
@@ -267,6 +277,20 @@ begin
   if FMaxLengthOfFirstTimeStep <> Value then
   begin
     FMaxLengthOfFirstTimeStep := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TModflowStressPeriod.SetAtsInitialStepSize(const Value: TRealStorage);
+begin
+  FAtsInitialStepSize.Assign(Value);
+end;
+
+procedure TModflowStressPeriod.SetAtsUsed(const Value: Boolean);
+begin
+  if FAtsUsed <> Value then
+  begin
+    FAtsUsed := Value;
     InvalidateModel;
   end;
 end;
