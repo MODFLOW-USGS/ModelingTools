@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
   Vcl.StdCtrls, JvExStdCtrls, JvCombobox, JvListComb, Vcl.Grids, RbwDataGrid4,
-  ModflowPackageSelectionUnit, Vcl.Mask, JvExMask, JvSpin, Vcl.ComCtrls;
+  ModflowPackageSelectionUnit, Vcl.Mask, JvExMask, JvSpin, Vcl.ComCtrls,
+  ArgusDataEntry;
 
 type
   TSmsColumns = (scName, scOverride, scValue);
@@ -36,6 +37,8 @@ type
     cbNewton: TCheckBox;
     cbUnderRelaxation: TCheckBox;
     cbCsvInnerOutput: TCheckBox;
+    rdeAtsMaxFrac: TRbwDataEntry;
+    lblAtsMaxFrac: TLabel;
     procedure rdgNonlinearOptionsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure rdgNonlinearOptionsSetEditText(Sender: TObject; ACol, ARow: Integer;
@@ -199,6 +202,7 @@ begin
     cbNewton.Checked := SmsPackage.NewtonMF6;
     cbUnderRelaxation.Checked := SmsPackage.UnderRelaxationMF6;
     rcSelectionControllerEnabledChange(nil);
+    rdeAtsMaxFrac.RealValue := SmsPackage.AtsOuterMaxFraction;
 
     for SmsOveride := Low(TSmsOverride) to High(TSmsOverride) do
     begin
@@ -991,6 +995,7 @@ begin
 
   SmsPackage.NewtonMF6 := cbNewton.Checked;
   SmsPackage.UnderRelaxationMF6 := cbUnderRelaxation.Checked;
+  SmsPackage.AtsOuterMaxFraction := rdeAtsMaxFrac.RealValue;
 
   NewOverRides := [];
   for SmsOveride := Low(TSmsOverride) to High(TSmsOverride) do

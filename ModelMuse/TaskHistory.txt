@@ -28418,7 +28418,19 @@ object TTaskHistory
     item
       Date = 44509.000000000000000000
       Categories.Strings = (
-        'Design and Planning'
-        'Adaptive Time Stepping')
+        'Design and Planning')
+    end
+    item
+      Date = 44510.000000000000000000
+      Categories.Strings = (
+        'Adaptive Time Stepping'
+        'Design and Planning')
+    end
+    item
+      Date = 44511.000000000000000000
+      Categories.Strings = (
+        'Adaptive Time Stepping'
+        'Documentation'
+        'Testing')
     end>
 end

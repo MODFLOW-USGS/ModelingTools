@@ -495,6 +495,10 @@ begin
       Assert(False);
   end;
 
+  WriteString('  ATS_OUTER_MAXIMUM_FRACTION');
+  WriteFloat(FImsPackage.AtsOuterMaxFraction);
+  NewLine;
+
   WriteEndOptions;
 end;
 

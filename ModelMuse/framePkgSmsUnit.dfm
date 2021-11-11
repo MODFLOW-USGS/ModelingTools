@@ -11,15 +11,17 @@ inherited framePkgSms: TframePkgSms
   end
   inherited memoComments: TMemo
     Width = 464
+    Height = 35
     Enabled = True
     ExplicitWidth = 464
+    ExplicitHeight = 35
   end
   object pgcControls: TPageControl [3]
     Left = 0
-    Top = 157
+    Top = 103
     Width = 495
-    Height = 360
-    ActivePage = tabNonLinear
+    Height = 414
+    ActivePage = tabBasic
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
@@ -71,6 +73,16 @@ inherited framePkgSms: TframePkgSms
         Width = 263
         Height = 13
         Caption = 'Print contents of memory ([MEMORY_PRINT_OPTION) '
+      end
+      object lblAtsMaxFrac: TLabel
+        Left = 144
+        Top = 342
+        Width = 300
+        Height = 35
+        Caption = 
+          'max outer iterations fraction with ATS (ATS_OUTER_MAXIMUM_FRACTI' +
+          'ON)'
+        WordWrap = True
       end
       object comboPrintOption: TJvImageComboBox
         Left = 16
@@ -262,6 +274,19 @@ inherited framePkgSms: TframePkgSms
         Caption = 'Write inner solver convergence values to CSV file'
         TabOrder = 11
       end
+      object rdeAtsMaxFrac: TRbwDataEntry
+        Left = 17
+        Top = 344
+        Width = 121
+        Height = 22
+        TabOrder = 12
+        Text = '0'
+        DataType = dtReal
+        Max = 0.500000000000000000
+        CheckMax = True
+        CheckMin = True
+        ChangeDisabledColor = True
+      end
     end
     object tabNonLinear: TTabSheet
       Caption = 'Nonlinear'
@@ -270,7 +295,7 @@ inherited framePkgSms: TframePkgSms
         Left = 0
         Top = 0
         Width = 487
-        Height = 332
+        Height = 386
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -363,6 +388,7 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 332
         ColWidths = (
           84
           64
@@ -376,7 +402,7 @@ inherited framePkgSms: TframePkgSms
         Left = 0
         Top = 0
         Width = 487
-        Height = 332
+        Height = 386
         Align = alClient
         ColCount = 3
         FixedCols = 1
@@ -469,6 +495,7 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 332
         ColWidths = (
           84
           64
@@ -528,6 +555,9 @@ inherited framePkgSms: TframePkgSms
       end
       item
         Control = cbNewton
+      end
+      item
+        Control = rdeAtsMaxFrac
       end>
     Enabled = True
     OnEnabledChange = rcSelectionControllerEnabledChange

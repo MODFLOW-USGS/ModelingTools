@@ -29,7 +29,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 595
     Height = 516
-    ActivePage = jvspMt3dmsBasic
+    ActivePage = jvspIMS
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -10024,15 +10024,15 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
       end
     end
-    object jvspSMS: TJvStandardPage
+    object jvspIMS: TJvStandardPage
       Left = 0
       Top = 0
       Width = 595
       Height = 516
       HelpType = htKeyword
       HelpKeyword = 'SMS_Sparse_Matrix_Solution_Pac'
-      Caption = 'jvspSMS'
-      inline framePkgSMS: TframePkgSms
+      Caption = 'jvspIMS'
+      inline framePkgIMS: TframePkgSms
         Left = 0
         Top = 0
         Width = 595
@@ -10056,20 +10056,16 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 564
-          Height = 59
           ExplicitWidth = 564
-          ExplicitHeight = 59
         end
         inherited pgcControls: TPageControl
-          Top = 127
           Width = 595
-          Height = 389
-          ExplicitTop = 127
+          Height = 413
           ExplicitWidth = 595
-          ExplicitHeight = 389
+          ExplicitHeight = 413
           inherited tabBasic: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 327
+            ExplicitHeight = 380
             inherited lblPrintOption: TLabel
               Width = 79
               Height = 18
@@ -10161,55 +10157,55 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited rcSelectionController: TRbwController
           ControlList = <
             item
-              Control = framePkgSMS.lblComments
+              Control = framePkgIMS.lblComments
             end
             item
-              Control = framePkgSMS.memoComments
+              Control = framePkgIMS.memoComments
             end
             item
-              Control = framePkgSMS.comboPrintOption
+              Control = framePkgIMS.comboPrintOption
             end
             item
-              Control = framePkgSMS.comboComplexity
+              Control = framePkgIMS.comboComplexity
             end
             item
-              Control = framePkgSMS.seSolutionGroupMaxIter
+              Control = framePkgIMS.seSolutionGroupMaxIter
             end
             item
-              Control = framePkgSMS.cbContinue
+              Control = framePkgIMS.cbContinue
             end
             item
-              Control = framePkgSMS.cbCsvOutput
+              Control = framePkgIMS.cbCsvOutput
             end
             item
-              Control = framePkgSMS.rdgNonlinearOptions
+              Control = framePkgIMS.rdgNonlinearOptions
             end
             item
-              Control = framePkgSMS.rdgLinearOptions
+              Control = framePkgIMS.rdgLinearOptions
             end
             item
-              Control = framePkgSMS.lblUsePTC
+              Control = framePkgIMS.lblUsePTC
             end
             item
-              Control = framePkgSMS.comboUsePTC
+              Control = framePkgIMS.comboUsePTC
             end
             item
-              Control = framePkgSMS.lblMaxErrors
+              Control = framePkgIMS.lblMaxErrors
             end
             item
-              Control = framePkgSMS.seMaxErrors
+              Control = framePkgIMS.seMaxErrors
             end
             item
-              Control = framePkgSMS.cbCheckInput
+              Control = framePkgIMS.cbCheckInput
             end
             item
-              Control = framePkgSMS.lblMemoryPrint
+              Control = framePkgIMS.lblMemoryPrint
             end
             item
-              Control = framePkgSMS.comboMemoryPrint
+              Control = framePkgIMS.comboMemoryPrint
             end
             item
-              Control = framePkgSMS.cbNewton
+              Control = framePkgIMS.cbNewton
             end>
           OnEnabledChange = framePkgSMSrcSelectionControllerEnabledChange
         end

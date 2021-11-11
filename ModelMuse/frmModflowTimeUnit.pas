@@ -43,6 +43,9 @@ type
     btnConvertTimeUnits: TButton;
     tabATS: TTabSheet;
     rdgAts: TRbwDataGrid4;
+    pnlAts: TPanel;
+    cbUseAts: TCheckBox;
+    rdeAts: TRbwDataEntry;
     procedure FormCreate(Sender: TObject); override;
     procedure dgTimeSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
@@ -74,6 +77,12 @@ type
     procedure rdgAtsSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure rdgAtsHorizontalScroll(Sender: TObject);
+    procedure rdgAtsColSize(Sender: TObject; ACol, PriorWidth: Integer);
+    procedure rdeAtsChange(Sender: TObject);
+    procedure cbUseAtsClick(Sender: TObject);
+    procedure rdgAtsMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     FModflowStressPeriods: TModflowStressPeriods;
     FDeleting: Boolean;
@@ -86,6 +95,7 @@ type
       var MaxTimeStepLength: Double; var TimeStepMultiplier: Double);
     procedure SetDeleteButtonEnabled;
     procedure UpdateNumberOfTimeSteps(const ARow: integer);
+    procedure LayoutMultiRowAtsEditControls;
   { Private declarations }
   public
     { Public declarations }
@@ -181,11 +191,11 @@ resourcestring
   'm in binary files instead using the "Model|MODFLOW Output Control" dialog' +
   ' box.';
   StrUseATS = 'Use ATS';
-  StrInitialTimeStepLe = 'Initial Time Step Length';
-  StrMinimumTimeStepLe = 'Minimum Time Step Length';
-  StrMaximumTimeStepLe = 'Maximum Time Step Length';
-  StrAtsTimeStepMultiplier = 'Time Step Multiplier Factor';
-  StrTimeStepDivisorOn = 'Time Step Divisor on Failure';
+  StrInitialTimeStepLe = 'Initial Time Step Length (dt0)';
+  StrMinimumTimeStepLe = 'Minimum Time Step Length (dtmin)';
+  StrMaximumTimeStepLe = 'Maximum Time Step Length (dtmax)';
+  StrAtsTimeStepMultiplier = 'Time Step Multiplier Factor (dtadj)';
+  StrTimeStepDivisorOn = 'Time Step Divisor on Failure (dtfailadj)';
 
 var
   MaxSteps: integer = 100;
@@ -474,6 +484,12 @@ begin
   end;
 end;
 
+procedure TfrmModflowTime.cbUseAtsClick(Sender: TObject);
+begin
+  inherited;
+  ChangeSelectedCellsStateInColumn(rdgAts, Ord(atsUse), cbUseAts.State);
+end;
+
 procedure TfrmModflowTime.comboSteadyTransientChange(Sender: TObject);
 begin
   inherited;
@@ -493,6 +509,16 @@ procedure TfrmModflowTime.rdeMultiplierChange(Sender: TObject);
 begin
   inherited;
   ChangeSelectedCellsInColumn(dgTime, Ord(tcMultiplier), rdeMultiplier.Text);
+end;
+
+procedure TfrmModflowTime.rdeAtsChange(Sender: TObject);
+begin
+  inherited;
+  ChangeSelectedCellsInColumn(rdgAts, Ord(atsInitial), rdeAts.Text);
+  ChangeSelectedCellsInColumn(rdgAts, Ord(atsMin), rdeAts.Text);
+  ChangeSelectedCellsInColumn(rdgAts, Ord(atsMax), rdeAts.Text);
+  ChangeSelectedCellsInColumn(rdgAts, Ord(atsAdjust), rdeAts.Text);
+  ChangeSelectedCellsInColumn(rdgAts, Ord(atsFailAdjust), rdeAts.Text);
 end;
 
 procedure TfrmModflowTime.rdeMaxFirstStepLengthChange(Sender: TObject);
@@ -542,6 +568,28 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TfrmModflowTime.rdgAtsColSize(Sender: TObject; ACol,
+  PriorWidth: Integer);
+begin
+  inherited;
+  LayoutMultiRowAtsEditControls;
+end;
+
+procedure TfrmModflowTime.rdgAtsHorizontalScroll(Sender: TObject);
+begin
+  inherited;
+  LayoutMultiRowAtsEditControls;
+end;
+
+procedure TfrmModflowTime.rdgAtsMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  inherited;
+  EnableMultiEditControl(rdgAts, cbUseAts, Ord(atsUse));
+  EnableMultiEditControl(rdgAts, rdeAts, [Ord(atsInitial), Ord(atsMin),
+    Ord(atsMax), Ord(atsAdjust), Ord(atsFailAdjust)]);
 end;
 
 procedure TfrmModflowTime.rdgAtsSelectCell(Sender: TObject; ACol, ARow: Integer;
@@ -666,11 +714,22 @@ begin
   if [csLoading, csReading] * ComponentState <> [] then
   begin
     Exit
-  end;  
+  end;
   LayoutControls(dgTime, rdePeriodLength, lblPeriodLength, Ord(tcLength));
   LayoutControls(dgTime, rdeMaxFirstStepLength, lblMaxFirstTimeStepLength, Ord(tcTimeFirstStep));
   LayoutControls(dgTime, rdeMultiplier, lblMultiplier, Ord(tcMultiplier));
   LayoutControls(dgTime, comboSteadyTransient, lblSteadyTransient, Ord(tcSteady));
+end;
+
+procedure TfrmModflowTime.LayoutMultiRowAtsEditControls;
+begin
+  if [csLoading, csReading] * ComponentState <> [] then
+  begin
+    Exit
+  end;
+  LayoutControls(rdgAts, cbUseAts, nil, Ord(atsUse));
+  LayoutControls(rdgAts, rdeAts, nil, Min(Ord(atsInitial),
+    Max(rdgAts.LeftCol,Ord(atsInitial))));
 end;
 
 type TGridCrack = class(TRbwDataGrid4);
@@ -1081,9 +1140,6 @@ begin
   dgTime.Cells[Ord(tcDrawDownReference), 0] := StrDrawdownReference;
   dgTime.Cells[Ord(tcSteps), 0] := StrNumberOfSteps;
 
-//  TAdaptiveTimeStepColumns = (atsStressPeriod, atsUse, atsInitial, atsMin,
-//    atsMax, atsAdjust, atsFailAdjust);
-
   rdgAts.Cells[Ord(atsStressPeriod), 0] := StrStressPeriod;
   rdgAts.Cells[Ord(atsUse), 0] := StrUseATS;
   rdgAts.Cells[Ord(atsInitial), 0] := StrInitialTimeStepLe;
@@ -1098,6 +1154,7 @@ begin
   lblSteadyTransient.Caption := StrSSTR;
 
   LayoutMultiRowEditControls;
+  LayoutMultiRowAtsEditControls;
 
   FillEmptyCells;
 
@@ -1152,6 +1209,7 @@ procedure TfrmModflowTime.FormResize(Sender: TObject);
 begin
   inherited;
   LayoutMultiRowEditControls;
+  LayoutMultiRowAtsEditControls;
 end;
 
 procedure TfrmModflowTime.FormShow(Sender: TObject);

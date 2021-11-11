@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" status="Under Construction" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">IMS: Iterative Model Solution Package Pane</title>
   <body>
     <header>
@@ -32,6 +32,7 @@
           </list>
           <list id="5" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
             <li styleclass="Normal"><text styleclass="Strong" translate="true">UNDER_RELAXATION</text><text styleclass="Normal" translate="true">—keyword that indicates whether the groundwater head in a cell will be underrelaxed when water levels fall below the bottom of the model below any given cell. By default, Newton-Raphson UNDER RELAXATION is not applied.</text></li>
+            <li styleclass="Normal"><text styleclass="Strong" translate="true">ATS_OUTER_MAXIMUM_FRACTION</text><text styleclass="Normal" translate="true">—real value defining the fraction of the maximum allowable outer iterations used with the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" anchor="ATS" styleclass="Normal" translate="true">Adaptive Time Step</link><text styleclass="Normal" translate="true"> (ATS) capability if it is active. If this value is set to zero by the user, then this solution will have no effect on ATS behavior. This value must be greater than or equal to zero and less than or equal to 0.5 or the program will terminate with an error. If it is not specified by the user, then it is assigned a default value of one third. When the number of outer iterations for this solution is less than the product of this value and the maximum allowable outer iterations, then ATS will increase the time step length by a factor of </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" anchor="dtadj" styleclass="Normal" translate="true">DTADJ</link><text styleclass="Normal" translate="true"> in the ATS input file. When the number of outer iterations for this solution is greater than the maximum allowable outer iterations minus the product of this value and the maximum allowable outer iterations, then the ATS (if active) will decrease the time step length by a factor of 1 / </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Time_Dialog_Box" anchor="dtadj" styleclass="Normal" translate="true">DTADJ</link><text styleclass="Normal" translate="true">.</text></li>
           </list>
         </td>
       </tr>

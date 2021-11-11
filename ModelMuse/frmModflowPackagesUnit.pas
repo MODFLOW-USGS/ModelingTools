@@ -227,8 +227,8 @@ type
     framePkgNpf: TframePackageNpf;
     jvspSTO: TJvStandardPage;
     framePkgSto: TframePkgSto;
-    jvspSMS: TJvStandardPage;
-    framePkgSMS: TframePkgSms;
+    jvspIMS: TJvStandardPage;
+    framePkgIMS: TframePkgSms;
     jvspRIP: TJvStandardPage;
     framePkgRip: TframePackageRip;
     jvspMt3dUZT: TJvStandardPage;
@@ -915,7 +915,7 @@ begin
   begin
     if Packageused(StrGNCGhostNodeCorr)
       and (TEquationFormulation(framePkgGNC.rgFormulation.ItemIndex) = efImplicit)
-      and (framePkgSMS.LineAccel <> sllaBiCgStab)
+      and (framePkgIMS.LineAccel <> sllaBiCgStab)
       then
     begin
       Beep;
@@ -1624,7 +1624,7 @@ procedure TfrmModflowPackages.framePkgSMSrcSelectionControllerEnabledChange(
   Sender: TObject);
 begin
   inherited;
-  framePkgSMS.rcSelectionControllerEnabledChange(Sender);
+  framePkgIMS.rcSelectionControllerEnabledChange(Sender);
 
 end;
 
@@ -3672,7 +3672,7 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-    Packages.SmsPackage.Frame := framePkgSMS;
+    Packages.SmsPackage.Frame := framePkgIMS;
     FPackageList.Add(Packages.SmsPackage);
 
     Packages.MawPackage.Frame := framePkgMAW;
@@ -3683,7 +3683,7 @@ begin
   end
   else
   begin
-    framePkgSMS.NilNode;
+    framePkgIMS.NilNode;
     framePkgMAW.NilNode;
     framePkgMVR.NilNode;
   end;

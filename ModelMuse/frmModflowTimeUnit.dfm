@@ -70,6 +70,7 @@ inherited frmModflowTime: TfrmModflowTime
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
+    ExplicitTop = -4
     object tabModflow: TTabSheet
       Caption = 'MODFLOW'
       object pnlTop: TPanel
@@ -798,25 +799,29 @@ inherited frmModflowTime: TfrmModflowTime
       ImageIndex = 2
       object rdgAts: TRbwDataGrid4
         Left = 0
-        Top = 0
+        Top = 41
         Width = 746
-        Height = 259
+        Height = 218
         Align = alClient
         ColCount = 7
+        DefaultColWidth = 100
         FixedCols = 1
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
+        OnMouseUp = rdgAtsMouseUp
         OnSelectCell = rdgAtsSelectCell
         ExtendedAutoDistributeText = False
-        AutoMultiEdit = False
-        AutoDistributeText = False
+        AutoMultiEdit = True
+        AutoDistributeText = True
         AutoIncreaseColCount = False
         AutoIncreaseRowCount = False
         SelectedRowOrColumnColor = clAqua
         UnselectableColor = clBtnFace
         OnBeforeDrawCell = rdgAtsBeforeDrawCell
+        OnColSize = rdgAtsColSize
         ColorRangeSelection = False
+        OnHorizontalScroll = rdgAtsHorizontalScroll
         Columns = <
           item
             AutoAdjustRowHeights = False
@@ -987,10 +992,44 @@ inherited frmModflowTime: TfrmModflowTime
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = 272
-        ExplicitTop = 88
-        ExplicitWidth = 320
-        ExplicitHeight = 120
+        ExplicitTop = 120
+        ExplicitHeight = 139
+      end
+      object pnlAts: TPanel
+        Left = 0
+        Top = 0
+        Width = 746
+        Height = 41
+        Align = alTop
+        TabOrder = 1
+        ExplicitLeft = 176
+        ExplicitTop = 24
+        ExplicitWidth = 185
+        object cbUseAts: TCheckBox
+          Left = 72
+          Top = 18
+          Width = 97
+          Height = 17
+          Caption = 'Use'
+          Enabled = False
+          TabOrder = 0
+          OnClick = cbUseAtsClick
+        end
+        object rdeAts: TRbwDataEntry
+          Left = 224
+          Top = 13
+          Width = 145
+          Height = 22
+          Color = clBtnFace
+          Enabled = False
+          TabOrder = 1
+          Text = '0'
+          OnChange = rdeAtsChange
+          DataType = dtReal
+          Max = 1.000000000000000000
+          CheckMin = True
+          ChangeDisabledColor = True
+        end
       end
     end
   end

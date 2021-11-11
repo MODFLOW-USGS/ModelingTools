@@ -1046,6 +1046,7 @@ Type
     FNewtonMF6: Boolean;
     FUnderRelaxationMF6: Boolean;
     FCsvInnerOutput: TSmsSolutionPrint;
+    FStoredAtsOuterMaxFraction: TRealStorage;
     procedure SetBacktrackingNumber(const Value: Integer);
     procedure SetComplexity(const Value: TSmsComplexityOption);
     procedure SetInnerMaxIterations(const Value: integer);
@@ -1115,6 +1116,9 @@ Type
     procedure SetNewtonMF6(const Value: Boolean);
     procedure SetUnderRelaxationMF6(const Value: Boolean);
     procedure SetCsvInnerOutput(const Value: TSmsSolutionPrint);
+    procedure SetStoredAtsOuterMaxFraction(const Value: TRealStorage);
+    function GetAtsOuterMaxFraction: double;
+    procedure SetAtsOuterMaxFraction(const Value: double);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -1151,6 +1155,8 @@ Type
     property NewtonMF6: Boolean read GetNewtonMF6 write SetNewtonMF6;
     property UnderRelaxationMF6: Boolean read GetUnderRelaxationMF6
       write SetUnderRelaxationMF6;
+    property AtsOuterMaxFraction: double read GetAtsOuterMaxFraction
+      write SetAtsOuterMaxFraction;
   published
     // CONTINUE option in MODFLOW-6 Simulation Name File
     property ContinueModel: boolean read FContinueModel write SetContinueModel;
@@ -1368,6 +1374,8 @@ Type
     // @name is for backwards compatibility
     property RedBlackOrder: boolean read FRedBlackOrder write SetRedBlackOrder
       stored False;
+    // ATS_OUTER_MAXIMUM_FRACTION
+    property StoredAtsOuterMaxFraction: TRealStorage read FStoredAtsOuterMaxFraction write SetStoredAtsOuterMaxFraction;
   end;
 
   TLayerOption = (loTop, loSpecified, loTopActive);
@@ -18510,6 +18518,7 @@ begin
     MemoryPrint := SourceSms.MemoryPrint;
     NewtonMF6 := SourceSms.NewtonMF6;
     UnderRelaxationMF6 := SourceSms.UnderRelaxationMF6;
+    AtsOuterMaxFraction := SourceSms.AtsOuterMaxFraction;
   end;
   inherited;
 end;
@@ -18556,11 +18565,15 @@ begin
   FStoredUnderRelaxTheta := TRealStorage.Create;
   FStoredUnderRelaxTheta.OnChange := OnValueChanged;
 
+  FStoredAtsOuterMaxFraction := TRealStorage.Create;
+  FStoredAtsOuterMaxFraction.OnChange := OnValueChanged;
+
   InitializeVariables;
 end;
 
 destructor TSmsPackageSelection.Destroy;
 begin
+  FStoredAtsOuterMaxFraction.Free;
   FStoredInnerRclose.Free;
   FStoredOuterRClose.Free;
   FStoredOuterHclose.Free;
@@ -18590,6 +18603,11 @@ end;
 function TSmsPackageSelection.GetBacktrackingTolerance: double;
 begin
   Result := StoredBacktrackingTolerance.Value;
+end;
+
+function TSmsPackageSelection.GetAtsOuterMaxFraction: double;
+begin
+  result := StoredAtsOuterMaxFraction.Value;
 end;
 
 function TSmsPackageSelection.GetUsedLinAccel: TSmsLinLinearAcceleration;
@@ -18721,6 +18739,7 @@ begin
   FMaxErrors := -1;
   FCheckInput := ciCheckAll;
   FMemoryPrint := mpNone;
+  AtsOuterMaxFraction := 1/3;
 
   SmsOverrides := [];
 end;
@@ -18795,6 +18814,11 @@ begin
     FCsvOutput := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TSmsPackageSelection.SetAtsOuterMaxFraction(const Value: double);
+begin
+  StoredAtsOuterMaxFraction.Value := Value;
 end;
 
 procedure TSmsPackageSelection.SetInnerHclose(const Value: double);
@@ -18974,6 +18998,12 @@ begin
     FSolutionGroupMaxIteration := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TSmsPackageSelection.SetStoredAtsOuterMaxFraction(
+  const Value: TRealStorage);
+begin
+  FStoredAtsOuterMaxFraction.Assign(Value);
 end;
 
 procedure TSmsPackageSelection.SetStoredBacktrackingReductionFactor(
