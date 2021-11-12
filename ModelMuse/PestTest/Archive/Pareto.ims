@@ -1,9 +1,10 @@
-# IMS: Iterative Model Solution file created on 8/15/2021 by ModelMuse version 4.3.0.58.
+# IMS: Iterative Model Solution file created on 11/11/2021 by ModelMuse version 4.3.0.72.
 BEGIN OPTIONS
   PRINT_OPTION ALL
   COMPLEXITY SIMPLE
   CSV_OUTER_OUTPUT FILEOUT Pareto.OuterSolution.CSV
   CSV_INNER_OUTPUT FILEOUT Pareto.InnerSolution.CSV
+  ATS_OUTER_MAXIMUM_FRACTION  3.333333333333E-001 
 END OPTIONS
 
 BEGIN NONLINEAR
