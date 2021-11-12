@@ -733,7 +733,8 @@ uses
   SutraImporter in 'SutraImporter.pas',
   frmImportSutraFeaturesUnit in 'frmImportSutraFeaturesUnit.pas' {frmImportSutraFeatures},
   framePestObservationResultsUnit in 'framePestObservationResultsUnit.pas' {framePestObservationResults: TFrame},
-  PestObservationResults in 'PestObservationResults.pas';
+  PestObservationResults in 'PestObservationResults.pas',
+  Modflow6TimeSeriesUnit in 'Modflow6TimeSeriesUnit.pas';
 
 {$R *.res}
 

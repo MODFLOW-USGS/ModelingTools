@@ -560,7 +560,7 @@ type
     procedure SetItems(Index: Integer; const Value: TRealItem);
     procedure SetInitialValue(const Value: Real);
   public
-    constructor Create(InvalidateModelEvent: TNotifyEvent); overload;
+    constructor Create(InvalidateModelEvent: TNotifyEvent); overload; virtual;
     constructor Create(InvalidateModelEvent: TNotifyEvent; Values: TOneDRealArray); overload;
     function IsSame(RealCollection: TRealCollection): Boolean;
     property  Items[Index: Integer]: TRealItem read GetItems
@@ -718,6 +718,8 @@ const
 
   // @name is the maximum length of boundary names in MODFLOW 6.
   MaxBoundNameLength = 40;
+
+  MaxTimeSeriesNameLength = 24;
 
   // @name is the section name in the ini file that holds the
   // names of the most recently opened files.

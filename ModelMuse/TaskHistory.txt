@@ -350,7 +350,7 @@ object TTaskHistory
     end
     item
       Name = 'SMS'
-      Display = False
+      Display = True
     end
     item
       Name = 'SimulationNameFile'
@@ -474,6 +474,10 @@ object TTaskHistory
     end
     item
       Name = 'Adaptive Time Stepping'
+      Display = True
+    end
+    item
+      Name = 'MF6 Time Series'
       Display = True
     end>
   History = <
@@ -28424,13 +28428,17 @@ object TTaskHistory
       Date = 44510.000000000000000000
       Categories.Strings = (
         'Adaptive Time Stepping'
-        'Design and Planning')
+        'Design and Planning'
+        'Dialog boxes')
     end
     item
       Date = 44511.000000000000000000
       Categories.Strings = (
         'Adaptive Time Stepping'
         'Documentation'
-        'Testing')
+        'Testing'
+        'SMS'
+        'Dialog boxes'
+        'MF6 Time Series')
     end>
 end

@@ -1762,6 +1762,7 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="PestObservationResults.pas"/>
+        <DCCReference Include="Modflow6TimeSeriesUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
