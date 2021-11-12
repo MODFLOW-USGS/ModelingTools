@@ -804,6 +804,7 @@ begin
     seNumPeriods.AsInteger := frmGoPhast.PhastModel.ModflowStressPeriods.Count;
     FillEmptyCells;
     dgTime.BeginUpdate;
+    rdgAts.BeginUpdate;
     try
       for RowIndex := 1 to dgTime.RowCount - 1 do
       begin
@@ -834,7 +835,8 @@ begin
         rdgAts.RealValue[Ord(atsFailAdjust), RowIndex] := StressPeriod.AtsFailureFactor;
       end;
     finally
-      dgTime.EndUpdate
+      dgTime.EndUpdate;
+      rdgAts.EndUpdate;
     end;
 
     tabMt3dms.TabVisible := frmGoPhast.PhastModel.Mt3dmsIsSelected;

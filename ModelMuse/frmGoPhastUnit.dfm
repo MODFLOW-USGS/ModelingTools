@@ -2185,6 +2185,10 @@ inherited frmGoPhast: TfrmGoPhast
         Enabled = False
         GroupIndex = 1
       end
+      object EditTimeSeries1: TMenuItem
+        Action = acTimeSeries
+        GroupIndex = 1
+      end
       object N8: TMenuItem
         Caption = '-'
         GroupIndex = 1
@@ -3700,6 +3704,11 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'File'
       Caption = 'SUTRA Feature Modified by PEST'
       OnExecute = acImportSutraFeaturesFromPestExecute
+    end
+    object acTimeSeries: TAction
+      Category = 'Model'
+      Caption = 'Edit Time Series...'
+      OnExecute = acTimeSeriesExecute
     end
   end
   object ilDisabledImageList: TImageList

@@ -42,7 +42,8 @@ uses System.UITypes,
   ModflowIrregularMeshUnit, MeshRenumberingTypes, DrawMeshTypesUnit,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
   PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit,
-  PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults;
+  PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults,
+  Modflow6TimeSeriesUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';
@@ -2463,6 +2464,9 @@ that affects the model output should also have a comment. }
     function GetShortestHorizontalBlockEdge(Layer, Row,
       Column: Integer): double;
     procedure SetPestObsCollection(const Value: TPestObsCollection);
+    function GetTimesSeries: TTimesSeriesCollections; virtual; abstract;
+    procedure SetTimesSeries(const Value: TTimesSeriesCollections);
+      virtual; abstract;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3385,6 +3389,12 @@ that affects the model output should also have a comment. }
     property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
       read GetShortestHorizontalBlockEdge;
     procedure ClearPestArrayFileNames;
+    property TimesSeries: TTimesSeriesCollections read GetTimesSeries
+      write SetTimesSeries
+      {$IFNDEF Mf6TimeSeries}
+      Stored False
+      {$ENDIF}
+      ;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -3859,6 +3869,7 @@ that affects the model output should also have a comment. }
     FFilesToDelete: TStringList;
     FSvdaPrepProperties: TSvdaPrepProperties;
     FSupCalcProperties: TSupCalcProperties;
+    FTimesSeries: TTimesSeriesCollections;
     //     See @link(OwnsScreenObjects).
     function GetOwnsScreenObjects: boolean;
 //     See @link(ObjectList).
@@ -4057,7 +4068,9 @@ that affects the model output should also have a comment. }
     procedure SetSvdaPrepProperties(const Value: TSvdaPrepProperties);
     procedure SetSupCalcProperties(const Value: TSupCalcProperties);
     procedure FixScreenObjectNames;
-//    function GetPilotPoint(Index: Integer): TPoint2D;
+    procedure SetTimesSeries(const Value: TTimesSeriesCollections); override;
+    function GetTimesSeries: TTimesSeriesCollections; override;
+    //    function GetPilotPoint(Index: Integer): TPoint2D;
 //    function GetPilotPointSpacing: double;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); override;
@@ -4868,6 +4881,7 @@ that affects the model output should also have a comment. }
       write SetSvdaPrepProperties;
     property SupCalcProperties: TSupCalcProperties read FSupCalcProperties
       write SetSupCalcProperties;
+    property TimesSeries;
   end;
 
   TChildDiscretization = class(TOrderedItem)
@@ -5107,6 +5121,8 @@ that affects the model output should also have a comment. }
     function GetPestProperties: TPestProperties; override;
     procedure SetPestProperties(const Value: TPestProperties); override;
     function GetFilesToDelete: TStrings; override;
+    function GetTimesSeries: TTimesSeriesCollections; override;
+    procedure SetTimesSeries(const Value: TTimesSeriesCollections); override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -10397,15 +10413,18 @@ const
 //               Bug fix: Fixed export of contours to shapefile in MODFLOW DISV
 //                models so that the contours were restricted to the active part
 //                of the current layer.
-
-//               Enhancement: The initial dialog box now appears on the taskbar.
+//    '4.3.0.73' Enhancement: The initial dialog box now appears on the taskbar.
+//               Enhancement: Adaptive time stepping in MODFLOW 6 is supported.
+//               Bug fix: Fixed bug that could cause the lake package in
+//                MODFLOW 6 to be created incorrectly if the lake only had
+//                vertical connections.
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.72';
+  IIModelVersion = '4.3.0.73';
 
 function IModelVersion: string;
 begin
@@ -11310,6 +11329,8 @@ begin
 
   FSvdaPrepProperties := TSvdaPrepProperties.Create(Invalidate);
   FSupCalcProperties := TSupCalcProperties.Create(Invalidate);
+
+  FTimesSeries:= TTimesSeriesCollections.Create(Invalidate);
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -11731,6 +11752,7 @@ begin
       FClearing := False;
     end;
 
+    FTimesSeries.Free;
     FSupCalcProperties.Free;
     FSvdaPrepProperties.Free;
     FFilesToDelete.Free;
@@ -12483,6 +12505,7 @@ var
 begin
   SelectedModel := Self;
 
+  FTimesSeries.Clear;
   FCtsSystems.Clear;
 
   FColorLegend.ValueAssignmentMethod := vamAutomatic;
@@ -14752,6 +14775,11 @@ begin
   Invalidate(self);
 end;
 
+procedure TPhastModel.SetTimesSeries(const Value: TTimesSeriesCollections);
+begin
+  FTimesSeries.Assign(Value);
+end;
+
 procedure TPhastModel.SaveArchiveList(FileName: string);
 type
   TAttribType = (atAncillary, atBinary, atModelInput, atModelOutput,
@@ -16286,6 +16314,11 @@ begin
       Exit;
     end;
   end;
+end;
+
+function TPhastModel.GetTimesSeries: TTimesSeriesCollections;
+begin
+  result := FTimesSeries;
 end;
 
 procedure TCustomModel.UpdateFarmsFullStressPeriods(TimeList: TRealList);
@@ -45507,6 +45540,15 @@ begin
   result := ParentModel.GetSwrReachConnectionsPlot
 end;
 
+function TChildModel.GetTimesSeries: TTimesSeriesCollections;
+begin
+  result := nil;
+  if ParentModel <> nil then
+  begin
+    result := ParentModel.GetTimesSeries
+  end
+end;
+
 function TChildModel.GetUseGsflowFormat: boolean;
 begin
   result := False;
@@ -45918,6 +45960,14 @@ procedure TChildModel.SetSwrReachConnectionsPlot(
   const Value: TSwrReachConnectionsPlot);
 begin
   ParentModel.SetSwrReachConnectionsPlot(Value);
+end;
+
+procedure TChildModel.SetTimesSeries(const Value: TTimesSeriesCollections);
+begin
+  if ParentModel <> nil then
+  begin
+    ParentModel.SetTimesSeries(Value);
+  end;
 end;
 
 procedure TChildModel.SetUseGsflowFormat(const Value: boolean);

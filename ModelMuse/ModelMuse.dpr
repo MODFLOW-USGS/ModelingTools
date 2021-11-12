@@ -734,7 +734,9 @@ uses
   frmImportSutraFeaturesUnit in 'frmImportSutraFeaturesUnit.pas' {frmImportSutraFeatures},
   framePestObservationResultsUnit in 'framePestObservationResultsUnit.pas' {framePestObservationResults: TFrame},
   PestObservationResults in 'PestObservationResults.pas',
-  Modflow6TimeSeriesUnit in 'Modflow6TimeSeriesUnit.pas';
+  Modflow6TimeSeriesUnit in 'Modflow6TimeSeriesUnit.pas',
+  frmTimeSeriesUnit in 'frmTimeSeriesUnit.pas' {frmTimeSeries},
+  frameModflow6TimeSeriesUnit in 'frameModflow6TimeSeriesUnit.pas' {frameModflow6TimeSeries: TFrame};
 
 {$R *.res}
 

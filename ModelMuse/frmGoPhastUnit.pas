@@ -545,6 +545,8 @@ type
     ImportModelFeaturefromPEST2: TMenuItem;
     pmExportModelSutra: TPopupMenu;
     miExportPESTcontrolfile: TMenuItem;
+    acTimeSeries: TAction;
+    EditTimeSeries1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -746,6 +748,7 @@ type
     procedure acRunSvdaPrepExecute(Sender: TObject);
     procedure acImportMf6FeatureFromPestExecute(Sender: TObject);
     procedure acImportSutraFeaturesFromPestExecute(Sender: TObject);
+    procedure acTimeSeriesExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -2140,7 +2143,8 @@ uses
   SutraPestObsWriterUnit, frmManageSutraBoundaryObservationsUnit, frmPestUnit,
   PlProcUnit, PestControlFileWriterUnit, SutraImportUnit, frmSvdaPrepInputUnit,
   frmSupCalcUnit, PestPropertiesUnit,
-  frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit;
+  frmImportModflow6FeatureModifiedByPestUnit, frmImportSutraFeaturesUnit,
+  frmTimeSeriesUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -3441,7 +3445,10 @@ begin
   acImportMf6FeatureFromPest.Visible := False;
   acImportSutraFeaturesFromPest.Visible := False;
   {$ENDIF}
-  
+  {$IFNDEF Mf6TimeSeries}
+  acTimeSeries.Visible := False;
+  {$ENDIF}
+
   tbarEditScreenObjects.Width := 227;
   tbarView.Width := 176;
   tbarCreateScreenObject.Width := 231;
@@ -5710,6 +5717,12 @@ procedure TfrmGoPhast.acSWR_TabfilesExecute(Sender: TObject);
 begin
   inherited;
   ShowAForm(TfrmSwrTabfiles);
+end;
+
+procedure TfrmGoPhast.acTimeSeriesExecute(Sender: TObject);
+begin
+  inherited;
+  ShowAForm(TfrmTimeSeries);
 end;
 
 procedure TfrmGoPhast.acEditObservationComparisonsExecute(Sender: TObject);

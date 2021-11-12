@@ -48,20 +48,23 @@ type
   TTimesSeriesCollection = class(TPhastCollection)
   private
     FTimes: TRealCollection;
+    FGroupName: string;
     function GetItem(Index: Integer): TTimeSeriesItem;
     function GetTimeCount: Integer;
     procedure SetItem(Index: Integer; const Value: TTimeSeriesItem);
     procedure SetTimeCount(const Value: Integer);
     procedure SetTimes(const Value: TRealCollection);
+    procedure SetGroupName(const Value: string);
   public
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function GetValuesByName(const AName: string): TTimeSeriesItem;
     property TimeCount: Integer read GetTimeCount write SetTimeCount;
-    property Items[Index: Integer]: TTimeSeriesItem read GetItem write SetItem;
+    property Items[Index: Integer]: TTimeSeriesItem read GetItem write SetItem; default;
   published
     property Times: TRealCollection read FTimes write SetTimes;
+    property GroupName: string read FGroupName write SetGroupName;
   end;
 
   TimeSeriesCollectionItem = class(TPhastCollectionItem)
@@ -75,6 +78,15 @@ type
   published
     property TimesSeriesCollection: TTimesSeriesCollection
       read FTimesSeriesCollection write SetTimesSeriesCollection;
+  end;
+
+  TTimesSeriesCollections = class(TPhastCollection)
+  private
+    function GetItem(Index: Integer): TimeSeriesCollectionItem;
+    procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
+  public
+    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    property Items[Index: Integer]: TimeSeriesCollectionItem read GetItem write SetItem; default;
   end;
 
 implementation
@@ -196,10 +208,14 @@ end;
 { TTimesSeriesCollection }
 
 procedure TTimesSeriesCollection.Assign(Source: TPersistent);
+var
+  TSGroup: TTimesSeriesCollection;
 begin
   if Source is TTimesSeriesCollection then
   begin
-    Times := TTimesSeriesCollection(Source).Times;
+    TSGroup := TTimesSeriesCollection(Source);
+    Times := TSGroup.Times;
+    GroupName := TSGroup.GroupName;
   end;
   inherited;
 end;
@@ -242,6 +258,11 @@ begin
       break;
     end;
   end;
+end;
+
+procedure TTimesSeriesCollection.SetGroupName(const Value: string);
+begin
+  FGroupName := Value;
 end;
 
 procedure TTimesSeriesCollection.SetItem(Index: Integer;
@@ -303,6 +324,25 @@ procedure TimeSeriesCollectionItem.SetTimesSeriesCollection(
   const Value: TTimesSeriesCollection);
 begin
   FTimesSeriesCollection.Assign(Value);
+end;
+
+{ TTimesSeriesCollections }
+
+constructor TTimesSeriesCollections.Create(InvalidateModelEvent: TNotifyEvent);
+begin
+  inherited Create(TimeSeriesCollectionItem, InvalidateModelEvent);
+end;
+
+function TTimesSeriesCollections.GetItem(
+  Index: Integer): TimeSeriesCollectionItem;
+begin
+  result := inherited Items[Index] as TimeSeriesCollectionItem;
+end;
+
+procedure TTimesSeriesCollections.SetItem(Index: Integer;
+  const Value: TimeSeriesCollectionItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

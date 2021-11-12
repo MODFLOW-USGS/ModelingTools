@@ -1653,8 +1653,8 @@ begin
             end;
             if (lctVertical in LakeBoundary.LakeConnections) and (ACell.Layer + 1 < Model.LayerCount) then
             begin
-              if lctHorizontal in LakeBoundary.LakeConnections then
-              begin
+//              if lctHorizontal in LakeBoundary.LakeConnections then
+//              begin
                 if IDomainArray.IntegerData[ACell.Layer + 1, ACell.Row, ACell.Column] > 0 then
                 begin
                   ALakeCell := TLakeCell.Create;
@@ -1664,18 +1664,18 @@ begin
                   ALakeCell.LakeType := ltVert;
                   ALakeCell.LakeCell := ACell.Cell;
                 end;
-              end
-              else
-              begin
-                if IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
-                begin
-                  ALakeCell := TLakeCell.Create;
-                  ALake.FLakeCellList.Add(ALakeCell);
-                  ALakeCell.Cell := ACell.Cell;
-                  ALakeCell.LakeType := ltVert;
-                  ALakeCell.LakeCell := ACell.Cell;
-                end;
-              end;
+//              end
+//              else
+//              begin
+//                if IDomainArray.IntegerData[ACell.Layer, ACell.Row, ACell.Column] > 0 then
+//                begin
+//                  ALakeCell := TLakeCell.Create;
+//                  ALake.FLakeCellList.Add(ALakeCell);
+//                  ALakeCell.Cell := ACell.Cell;
+//                  ALakeCell.LakeType := ltVert;
+//                  ALakeCell.LakeCell := ACell.Cell;
+//                end;
+//              end;
             end;
           end;
         end;

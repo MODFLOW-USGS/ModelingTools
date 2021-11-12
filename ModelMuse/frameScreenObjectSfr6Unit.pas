@@ -1156,9 +1156,9 @@ begin
           begin
             Sfr6Item := Boundary.Values[TimeIndex] as TSfrMf6Item;
             Sfr6Item.StartTime := rdgModflowBoundary.
-              RealValue[Ord(s6cStartTime), TimeIndex+1+PestRowOffset];
+              RealValueDefault[Ord(s6cStartTime), TimeIndex+1+PestRowOffset, Sfr6Item.StartTime];
             Sfr6Item.EndTime := rdgModflowBoundary.
-              RealValue[Ord(s6cEndtime), TimeIndex+1+PestRowOffset];
+              RealValueDefault[Ord(s6cEndtime), TimeIndex+1+PestRowOffset, Sfr6Item.EndTime];
             if rdgModflowBoundary.ItemIndex[Ord(s6cStatus), TimeIndex+1+PestRowOffset] >= 0 then
             begin
               Sfr6Item.StreamStatus := TStreamStatus(rdgModflowBoundary.

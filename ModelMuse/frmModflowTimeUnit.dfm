@@ -70,7 +70,6 @@ inherited frmModflowTime: TfrmModflowTime
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
-    ExplicitTop = -4
     object tabModflow: TTabSheet
       Caption = 'MODFLOW'
       object pnlTop: TPanel
@@ -992,8 +991,6 @@ inherited frmModflowTime: TfrmModflowTime
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitTop = 120
-        ExplicitHeight = 139
       end
       object pnlAts: TPanel
         Left = 0
@@ -1002,9 +999,6 @@ inherited frmModflowTime: TfrmModflowTime
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitLeft = 176
-        ExplicitTop = 24
-        ExplicitWidth = 185
         object cbUseAts: TCheckBox
           Left = 72
           Top = 18
