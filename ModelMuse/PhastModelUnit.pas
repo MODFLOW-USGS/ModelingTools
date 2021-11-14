@@ -11330,7 +11330,7 @@ begin
   FSvdaPrepProperties := TSvdaPrepProperties.Create(Invalidate);
   FSupCalcProperties := TSupCalcProperties.Create(Invalidate);
 
-  FTimesSeries:= TTimesSeriesCollections.Create(Invalidate);
+  FTimesSeries:= TTimesSeriesCollections.Create(self);
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;

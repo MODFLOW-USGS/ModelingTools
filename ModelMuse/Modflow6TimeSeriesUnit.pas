@@ -3,7 +3,7 @@ unit Modflow6TimeSeriesUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, GoPhastTypes;
+  System.SysUtils, System.Classes, GoPhastTypes, OrderedCollectionUnit;
 
 type
   TTimeSeries = class(TRealCollection)
@@ -20,11 +20,12 @@ type
     procedure SetSeriesName(Value: string);
     procedure SetStoredScaleFactor(const Value: TRealStorage);
     procedure SetParamMethod(const Value: TPestParamMethod);
+    function IsSame(OtherTimeSeries: TTimeSeries): Boolean;
   public
-    property ScaleFactor: double read GetScaleFactor write SetScaleFactor;
     constructor Create(InvalidateModelEvent: TNotifyEvent); overload; override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    property ScaleFactor: double read GetScaleFactor write SetScaleFactor;
   published
     property SeriesName: string read FSeriesName write SetSeriesName;
     property InterpolationMethod: TMf6InterpolationMethods read FInterpolationMethod write SetInterpolationMethod;
@@ -33,10 +34,12 @@ type
     property ParamMethod: TPestParamMethod read FParamMethod write SetParamMethod;
   end;
 
-  TTimeSeriesItem = class(TPhastCollectionItem)
+  TTimeSeriesItem = class(TOrderedItem)
   private
     FTimeSeries: TTimeSeries;
     procedure SetTimeSeries(const Value: TTimeSeries);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     Constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -45,7 +48,7 @@ type
     property TimeSeries: TTimeSeries read FTimeSeries write SetTimeSeries;
   end;
 
-  TTimesSeriesCollection = class(TPhastCollection)
+  TTimesSeriesCollection = class(TOrderedCollection)
   private
     FTimes: TRealCollection;
     FGroupName: string;
@@ -56,21 +59,24 @@ type
     procedure SetTimes(const Value: TRealCollection);
     procedure SetGroupName(const Value: string);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(Model: TBaseModel);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function GetValuesByName(const AName: string): TTimeSeriesItem;
     property TimeCount: Integer read GetTimeCount write SetTimeCount;
     property Items[Index: Integer]: TTimeSeriesItem read GetItem write SetItem; default;
+    function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
   published
     property Times: TRealCollection read FTimes write SetTimes;
     property GroupName: string read FGroupName write SetGroupName;
   end;
 
-  TimeSeriesCollectionItem = class(TPhastCollectionItem)
+  TimeSeriesCollectionItem = class(TOrderedItem)
   private
     FTimesSeriesCollection: TTimesSeriesCollection;
     procedure SetTimesSeriesCollection(const Value: TTimesSeriesCollection);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
     Constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -80,13 +86,14 @@ type
       read FTimesSeriesCollection write SetTimesSeriesCollection;
   end;
 
-  TTimesSeriesCollections = class(TPhastCollection)
+  TTimesSeriesCollections = class(TOrderedCollection)
   private
     function GetItem(Index: Integer): TimeSeriesCollectionItem;
     procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
   public
-    Constructor Create(InvalidateModelEvent: TNotifyEvent);
+    Constructor Create(Model: TBaseModel);
     property Items[Index: Integer]: TimeSeriesCollectionItem read GetItem write SetItem; default;
+    function Add: TimeSeriesCollectionItem;
   end;
 
 implementation
@@ -124,6 +131,16 @@ end;
 function TTimeSeries.GetScaleFactor: double;
 begin
   result := StoredScaleFactor.Value;
+end;
+
+function TTimeSeries.IsSame(OtherTimeSeries: TTimeSeries): Boolean;
+begin
+  result := (ScaleFactor = OtherTimeSeries.ScaleFactor)
+    and (SeriesName = OtherTimeSeries.SeriesName)
+    and (InterpolationMethod = OtherTimeSeries.InterpolationMethod)
+    and (ScaleFactorParameter = OtherTimeSeries.ScaleFactorParameter)
+    and (ParamMethod = OtherTimeSeries.ParamMethod)
+    and inherited IsSame(OtherTimeSeries);
 end;
 
 procedure TTimeSeries.SetInterpolationMethod(
@@ -191,13 +208,20 @@ end;
 constructor TTimeSeriesItem.Create(Collection: TCollection);
 begin
   inherited;
-  FTimeSeries := TTimeSeries.Create(OnInvalidateModel);
+  FTimeSeries := TTimeSeries.Create(OnInvalidateModelEvent);
 end;
 
 destructor TTimeSeriesItem.Destroy;
 begin
   FTimeSeries.Free;
   inherited;
+end;
+
+function TTimeSeriesItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  result := (AnotherItem is TTimeSeriesItem)
+//    and (inherited IsSame(AnotherItem))
+    and (TimeSeries.IsSame(TTimeSeriesItem(AnotherItem).TimeSeries));
 end;
 
 procedure TTimeSeriesItem.SetTimeSeries(const Value: TTimeSeries);
@@ -220,10 +244,17 @@ begin
   inherited;
 end;
 
-constructor TTimesSeriesCollection.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TTimesSeriesCollection.Create(Model: TBaseModel);
 begin
-  inherited Create(TTimeSeriesItem, InvalidateModelEvent);
-  FTimes := TRealCollection.Create(InvalidateModelEvent);
+  inherited Create(TTimeSeriesItem, Model);
+  if Model = nil then
+  begin
+    FTimes := TRealCollection.Create(nil);
+  end
+  else
+  begin
+    FTimes := TRealCollection.Create(Model.Invalidate);
+  end;
 end;
 
 destructor TTimesSeriesCollection.Destroy;
@@ -257,6 +288,21 @@ begin
       result := AnItem;
       break;
     end;
+  end;
+end;
+
+function TTimesSeriesCollection.IsSame(
+  AnOrderedCollection: TOrderedCollection): boolean;
+var
+  OtherCollection: TTimesSeriesCollection;
+begin
+  result := (AnOrderedCollection is TTimesSeriesCollection)
+    and inherited IsSame(AnOrderedCollection);
+  if result then
+  begin
+    OtherCollection := TTimesSeriesCollection(TTimesSeriesCollection);
+    result := (GroupName = OtherCollection.GroupName)
+      and (Times.IsSame(OtherCollection.Times));
   end;
 end;
 
@@ -311,13 +357,21 @@ end;
 constructor TimeSeriesCollectionItem.Create(Collection: TCollection);
 begin
   inherited;
-  FTimesSeriesCollection := TTimesSeriesCollection.Create(OnInvalidateModel)
+  FTimesSeriesCollection := TTimesSeriesCollection.Create(Model)
 end;
 
 destructor TimeSeriesCollectionItem.Destroy;
 begin
   FTimesSeriesCollection.Free;
   inherited;
+end;
+
+function TimeSeriesCollectionItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  result := (AnotherItem is TimeSeriesCollectionItem)
+//    and (inherited IsSame(AnotherItem))
+    and (TimesSeriesCollection.IsSame(
+    TimeSeriesCollectionItem(AnotherItem).TimesSeriesCollection));
 end;
 
 procedure TimeSeriesCollectionItem.SetTimesSeriesCollection(
@@ -328,9 +382,14 @@ end;
 
 { TTimesSeriesCollections }
 
-constructor TTimesSeriesCollections.Create(InvalidateModelEvent: TNotifyEvent);
+function TTimesSeriesCollections.Add: TimeSeriesCollectionItem;
 begin
-  inherited Create(TimeSeriesCollectionItem, InvalidateModelEvent);
+  result := inherited Add as TimeSeriesCollectionItem;
+end;
+
+constructor TTimesSeriesCollections.Create(Model: TBaseModel);
+begin
+  inherited Create(TimeSeriesCollectionItem, Model);
 end;
 
 function TTimesSeriesCollections.GetItem(

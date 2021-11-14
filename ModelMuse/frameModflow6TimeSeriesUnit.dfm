@@ -11,7 +11,6 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     Height = 103
     Align = alBottom
     TabOrder = 0
-    ExplicitWidth = 320
     object lblTimeSeriesCount: TLabel
       Left = 8
       Top = 8
@@ -83,6 +82,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     Height = 143
     Align = alClient
     ColCount = 2
+    DefaultColWidth = 50
     FixedCols = 1
     RowCount = 6
     FixedRows = 0
@@ -203,7 +203,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
         CheckStyle = csCheck
       end
       item
-        AutoAdjustRowHeights = False
+        AutoAdjustRowHeights = True
         AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
@@ -224,7 +224,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
           'Stepwise'
           'Linear'
           'LinearEnd')
-        WordWrapCaptions = False
+        WordWrapCaptions = True
         WordWrapCells = False
         CaseSensitivePicklist = False
         CheckStyle = csCheck
@@ -252,7 +252,6 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
-    ExplicitTop = 43
   end
   object pnlTop: TPanel
     Left = 0
@@ -261,7 +260,6 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     Height = 41
     Align = alTop
     TabOrder = 2
-    ExplicitWidth = 320
     object edGroupName: TEdit
       Left = 8
       Top = 14

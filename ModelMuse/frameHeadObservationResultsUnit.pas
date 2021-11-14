@@ -9,7 +9,7 @@ uses System.Types, System.UITypes,
   Dialogs, StdCtrls, ExtCtrls, Grids, RbwDataGrid4, JvSpin, JvExControls,
   JvColorBox, JvColorButton, frameDisplayLimitUnit, Mask, JvExMask, JvToolEdit,
   ComCtrls, GoPhastTypes, ModflowHeadObsResults, Generics.Collections,
-  UndoItems, QuadTreeClass, GrayTabs;
+  UndoItems, QuadTreeClass, GrayTabs, Modflow6TimeSeriesUnit;
 
 type
   TUndoType = (utChange, utImport);

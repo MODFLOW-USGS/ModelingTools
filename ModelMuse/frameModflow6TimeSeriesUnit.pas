@@ -33,12 +33,14 @@ type
       ARow: Integer);
     procedure btnInsertTimeClick(Sender: TObject);
   private
+    FTimesSeriesGroupItem: TimeSeriesCollectionItem;
+    FTimesSeriesGroup: TTimesSeriesCollection;
     procedure InitializeTimeRows;
     { Private declarations }
   public
     procedure InitializeGrid;
-    procedure GetData(ATimesSeriesGroup: TTimesSeriesCollection; PestNames: TStringList);
-    procedure SetData(ATimesSeriesGroup: TTimesSeriesCollection);
+    procedure GetData(ATimesSeriesGroupItem: TimeSeriesCollectionItem; PestNames: TStringList);
+    procedure SetData;
     { Public declarations }
   end;
 
@@ -72,6 +74,8 @@ procedure TframeModflow6TimeSeries.btnDeleteTimeSeriesClick(Sender: TObject);
 begin
   if rrdgTimeSeries.Col >= 2 then
   begin
+    rrdgTimeSeries.Objects[rrdgTimeSeries.Col, 0].Free;
+    rrdgTimeSeries.Objects[rrdgTimeSeries.Col, 0] := nil;
     rrdgTimeSeries.DeleteColumn(rrdgTimeSeries.Col);
     seTimeSeriesCount.AsInteger := seTimeSeriesCount.AsInteger -1;
     seTimeSeriesCountChange(nil);
@@ -89,30 +93,36 @@ begin
 end;
 
 procedure TframeModflow6TimeSeries.GetData(
-  ATimesSeriesGroup: TTimesSeriesCollection; PestNames: TStringList);
+  ATimesSeriesGroupItem: TimeSeriesCollectionItem; PestNames: TStringList);
 var
   TimeIndex: Integer;
   SeriesIndex: Integer;
   ASeries: TTimeSeries;
   ColIndex: Integer;
+  ASeriesItem: TTimeSeriesItem;
 begin
-  edGroupName.Text := ATimesSeriesGroup.GroupName;
+  FTimesSeriesGroupItem := ATimesSeriesGroupItem;
+  FTimesSeriesGroup := ATimesSeriesGroupItem.TimesSeriesCollection;
+  edGroupName.Text := FTimesSeriesGroup.GroupName;
   rrdgTimeSeries.BeginUpdate;
   try
     rrdgTimeSeries.Rows[Ord(tsrPestModifier)].PickList := PestNames;
-    seTimeSeriesCount.AsInteger := ATimesSeriesGroup.Count;
-    seTimeCount.AsInteger := Max(1,ATimesSeriesGroup.Times.Count);
+    seTimeSeriesCount.AsInteger := FTimesSeriesGroup.Count;
+    seTimeCount.AsInteger := Max(1,FTimesSeriesGroup.Times.Count);
     InitializeGrid;
-    for TimeIndex := 0 to ATimesSeriesGroup.Times.Count - 1 do
+    for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
     begin
       rrdgTimeSeries.RealValue[Ord(tscTimes), TimeIndex + Ord(tsrFirstTime)]
-        := ATimesSeriesGroup.Times[TimeIndex].Value;
+        := FTimesSeriesGroup.Times[TimeIndex].Value;
     end;
 
-    for SeriesIndex := 0 to ATimesSeriesGroup.Count - 1 do
+    for SeriesIndex := 0 to FTimesSeriesGroup.Count - 1 do
     begin
       ColIndex := SeriesIndex + Ord(tscFirstSeries);
-      ASeries := ATimesSeriesGroup[SeriesIndex].TimeSeries;
+      ASeriesItem := FTimesSeriesGroup[SeriesIndex];
+      rrdgTimeSeries.Objects[SeriesIndex + Ord(tscFirstSeries), 0]
+        := ASeriesItem;
+      ASeries := ASeriesItem.TimeSeries;
       rrdgTimeSeries.Columns[SeriesIndex + Ord(tscFirstSeries)].
         AutoAdjustColWidths := True;
       rrdgTimeSeries.Cells[ColIndex, Ord(tsrName)] := ASeries.SeriesName;
@@ -132,8 +142,8 @@ begin
       rrdgTimeSeries.ItemIndex[ColIndex, Ord(tsrInterpolation)] :=
         Ord(ASeries.InterpolationMethod);
 
-      Assert(ASeries.Count = ATimesSeriesGroup.Times.Count);
-      for TimeIndex := 0 to ATimesSeriesGroup.Times.Count - 1 do
+      Assert(ASeries.Count = FTimesSeriesGroup.Times.Count);
+      for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
       begin
         rrdgTimeSeries.RealValue[ColIndex, TimeIndex + Ord(tsrFirstTime)]
           := ASeries[TimeIndex].Value;
@@ -212,8 +222,7 @@ begin
   end;
 end;
 
-procedure TframeModflow6TimeSeries.SetData(
-  ATimesSeriesGroup: TTimesSeriesCollection);
+procedure TframeModflow6TimeSeries.SetData;
 const
   NoValue = 3.0E30;
 var
@@ -222,20 +231,20 @@ var
   ASeries: TTimeSeries;
   ColIndex: Integer;
 begin
-  ATimesSeriesGroup.GroupName := edGroupName.Text;
-  ATimesSeriesGroup.Count := seTimeSeriesCount.AsInteger;
-  ATimesSeriesGroup.Times.Count := seTimeCount.AsInteger;
-  for TimeIndex := 0 to ATimesSeriesGroup.Times.Count - 1 do
+  FTimesSeriesGroup.GroupName := edGroupName.Text;
+  FTimesSeriesGroup.Count := seTimeSeriesCount.AsInteger;
+  FTimesSeriesGroup.TimeCount := seTimeCount.AsInteger;
+  for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
   begin
-    ATimesSeriesGroup.Times[TimeIndex].Value :=
+    FTimesSeriesGroup.Times[TimeIndex].Value :=
       rrdgTimeSeries.RealValueDefault[
       Ord(tscTimes), TimeIndex + Ord(tsrFirstTime), NoValue];
   end;
 
-  for SeriesIndex := 0 to ATimesSeriesGroup.Count - 1 do
+  for SeriesIndex := 0 to FTimesSeriesGroup.Count - 1 do
   begin
     ColIndex := SeriesIndex + Ord(tscFirstSeries);
-    ASeries := ATimesSeriesGroup[SeriesIndex].TimeSeries;
+    ASeries := FTimesSeriesGroup[SeriesIndex].TimeSeries;
     ASeries.SeriesName := rrdgTimeSeries.Cells[ColIndex, Ord(tsrName)];
     if rrdgTimeSeries.ItemIndex[ColIndex, Ord(tsrPestModifier)] <= 0 then
     begin
@@ -254,8 +263,8 @@ begin
       TMf6InterpolationMethods(rrdgTimeSeries.ItemIndex[
       ColIndex, Ord(tsrInterpolation)]);
 
-    Assert(ASeries.Count = ATimesSeriesGroup.Times.Count);
-    for TimeIndex := 0 to ATimesSeriesGroup.Times.Count - 1 do
+    Assert(ASeries.Count = FTimesSeriesGroup.Times.Count);
+    for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
     begin
       ASeries[TimeIndex].Value :=
         rrdgTimeSeries.RealValueDefault[
@@ -275,15 +284,30 @@ procedure TframeModflow6TimeSeries.seTimeSeriesCountChange(Sender: TObject);
 var
   ColIndex: Integer;
 begin
-//  TTimeSeriesRows = (tsrName, tsrPestModifier, tsrPestMethod, tsrScaleFactor,
-//    tsrInterpolation, tsrFirstTime);
-//  TTimeSeriesColumns = (tscLabel, tscTimes, tscFirstSeries);
   rrdgTimeSeries.BeginUpdate;
   try
+    for ColIndex := rrdgTimeSeries.ColCount - 1
+      downto seTimeSeriesCount.AsInteger + 2 do
+    begin
+      rrdgTimeSeries.Objects[ColIndex, 0].Free;
+      rrdgTimeSeries.Objects[ColIndex, 0] := nil;
+    end;
     rrdgTimeSeries.ColCount := seTimeSeriesCount.AsInteger + 2;
     btnDeleteTimeSeries.Enabled := seTimeSeriesCount.AsInteger > 0;
     for ColIndex := Ord(tscFirstSeries) to rrdgTimeSeries.ColCount - 1 do
     begin
+      if rrdgTimeSeries.Objects[ColIndex, 0] = nil then
+      begin
+        if FTimesSeriesGroup.Count > ColIndex - Ord(tscFirstSeries) then
+        begin
+          rrdgTimeSeries.Objects[ColIndex, 0] :=
+            FTimesSeriesGroup[ColIndex - Ord(tscFirstSeries)]
+        end
+        else
+        begin
+          rrdgTimeSeries.Objects[ColIndex, 0] := FTimesSeriesGroup.Add;
+        end;
+      end;
       rrdgTimeSeries.Columns[ColIndex].AutoAdjustColWidths := True;
       if (rrdgTimeSeries.Cells[ColIndex, Ord(tsrPestModifier)] = '')
         and (rrdgTimeSeries.Rows[Ord(tsrPestModifier)].PickList.Count > 0) then

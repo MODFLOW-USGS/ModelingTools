@@ -1,48 +1,52 @@
 inherited frmTimeSeries: TfrmTimeSeries
-  Caption = 'frmTimeSeries'
-  ClientHeight = 385
-  ClientWidth = 544
-  ExplicitWidth = 560
-  ExplicitHeight = 424
+  Caption = 'Time Series'
+  ClientHeight = 561
+  ClientWidth = 628
+  ExplicitTop = -148
+  ExplicitWidth = 644
+  ExplicitHeight = 600
   PixelsPerInch = 96
   TextHeight = 18
   object tvTimeSeries: TJvPageListTreeView
     Left = 0
     Top = 0
     Width = 121
-    Height = 344
+    Height = 520
     PageDefault = 0
     Align = alLeft
+    HideSelection = False
     Indent = 19
     TabOrder = 0
+    OnChange = tvTimeSeriesChange
     Items.Links = {00000000}
     ExplicitLeft = -6
-    ExplicitTop = 2
+    ExplicitHeight = 344
   end
   object plTimeSeries: TJvPageList
     Left = 121
     Top = 0
-    Width = 423
-    Height = 344
+    Width = 507
+    Height = 520
     PropagateEnable = False
     Align = alClient
-    ExplicitWidth = 303
-    ExplicitHeight = 185
+    ExplicitTop = 2
+    ExplicitWidth = 423
+    ExplicitHeight = 344
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 344
-    Width = 544
+    Top = 520
+    Width = 628
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 185
-    ExplicitWidth = 424
+    ExplicitTop = 344
+    ExplicitWidth = 544
     DesignSize = (
-      544
+      628
       41)
     object btnHelp: TBitBtn
-      Left = 255
+      Left = 339
       Top = 6
       Width = 91
       Height = 33
@@ -50,9 +54,10 @@ inherited frmTimeSeries: TfrmTimeSeries
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 255
     end
     object btnOK: TBitBtn
-      Left = 352
+      Left = 436
       Top = 6
       Width = 91
       Height = 33
@@ -79,9 +84,11 @@ inherited frmTimeSeries: TfrmTimeSeries
       ModalResult = 1
       NumGlyphs = 2
       TabOrder = 1
+      OnClick = btnOKClick
+      ExplicitLeft = 352
     end
     object btnCancel: TBitBtn
-      Left = 448
+      Left = 532
       Top = 6
       Width = 91
       Height = 33
@@ -89,6 +96,7 @@ inherited frmTimeSeries: TfrmTimeSeries
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 448
     end
     object btnAddGroup: TButton
       Left = 9
