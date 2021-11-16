@@ -3,7 +3,7 @@ unit FormulaManagerUnit;
 interface
 
 uses SysUtils, Classes, Contnrs, RbwParser, IntListUnit, Dialogs,
-  HashTableFacadeUnit;
+  HashTableFacadeUnit, Modflow6TimeSeriesUnit;
 
 type
   TChangeSubscription = procedure (Sender: TObject;

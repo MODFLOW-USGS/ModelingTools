@@ -78,6 +78,8 @@ type
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; virtual;
     function GetPestSeriesName(Index: Integer): string; virtual;
     function GetCellLocation: TCellLocation; virtual;
+    function GetMf6TimeSeriesName(Index: Integer): string; virtual;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); virtual;
   public
     Constructor Create; virtual;
     // @name is used for MODFLOW 6 PEST observations.
@@ -137,6 +139,8 @@ type
     // The section may not be correct in @name.
     // override GetCellLocation if the section needs to be correct.
     property CellLocation: TCellLocation read GetCellLocation;
+    property Mf6TimeSeriesName[Index: Integer]: string
+      read GetMf6TimeSeriesName write SetMf6TimeSeriesName;
   end;
 
   TValueCellType = class of TValueCell;
@@ -623,6 +627,11 @@ begin
   result := ''
 end;
 
+function TValueCell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  result := '';
+end;
+
 function TValueCell.IsIdentical(AnotherCell: TValueCell): boolean;
 begin
   result := False;
@@ -652,6 +661,11 @@ begin
     Assert(ScreenObject <> nil);
   end;
   Mf6ObsName := ReadCompStringSimple(Decomp);
+end;
+
+procedure TValueCell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+// do nothing
 end;
 
 procedure TValueCell.SetScreenObject(const Value: TObject);

@@ -10247,7 +10247,19 @@ var
   PestSeries: string;
   PestMethod: TPestParamMethod;
   DataArray: TDataArray;
+  TimeSeriesName: string;
 begin
+  if (Model.ModelSelection = msModflow2015) then
+  begin
+    TimeSeriesName := Cell.Mf6TimeSeriesName[Index];
+    if TimeSeriesName <> '' then
+    begin
+      WriteString(' ');
+      WriteString(TimeSeriesName);
+      Exit;
+    end;
+  end;
+
   Value := Cell.RealValue[Index, Model];
   if ChangeSign then
   begin

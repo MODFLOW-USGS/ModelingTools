@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = False
+      Display = True
     end
     item
       Name = 'core code'
@@ -28452,6 +28452,18 @@ object TTaskHistory
       Date = 44513.000000000000000000
       Categories.Strings = (
         'Dialog boxes'
+        'MF6 Time Series')
+    end
+    item
+      Date = 44514.000000000000000000
+    end
+    item
+      Date = 44515.000000000000000000
+    end
+    item
+      Date = 44516.000000000000000000
+      Categories.Strings = (
+        'CHD'
         'MF6 Time Series')
     end>
 end

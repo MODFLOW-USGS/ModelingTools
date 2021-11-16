@@ -4212,6 +4212,13 @@ begin
   acImportSutraFeaturesFromPest.Visible := False;
   {$ENDIF}
 
+  {$IFDEF Mf6TimeSeries}
+    acTimeSeries.Visible := PhastModel.ModelSelection in ModflowSelection;
+    acTimeSeries.Enabled := PhastModel.ModelSelection = msModflow2015;
+  {$ELSE}
+    acTimeSeries.Visible := False;
+  {$ENDIF}
+
   case PhastModel.ModelSelection of
     msUndefined: ; // ignore
     msPhast:

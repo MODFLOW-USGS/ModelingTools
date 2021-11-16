@@ -91,7 +91,7 @@ uses
 resourcestring
   StrObject0sObse = 'Object: "%0:s"; Observation name: "%1:s".';
   StrObservationName = 'Observation Name (OBSNME)';
-  StrObservationValue = 'Observation Value (OBSVAL) (OBSVAL1 - OBSVAL2)';
+  StrObservationValue = 'Observation Value (OBSVAL)' + sLineBreak +  '(OBSVAL1 - OBSVAL2)';
   StrObservationWeight = 'Observation Weight (WEIGHT)';
   StrComment = 'Comment';
   StrFirstObservation = 'First Observation (OBSNME1)';

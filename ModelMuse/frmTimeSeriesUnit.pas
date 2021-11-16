@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frmCustomGoPhastUnit, JvPageList,
   Vcl.ExtCtrls, JvExControls, Vcl.ComCtrls, JvExComCtrls, JvPageListTreeView,
   frameModflow6TimeSeriesUnit, Vcl.StdCtrls, Vcl.Buttons, Modflow6TimeSeriesUnit,
-  UndoItems;
+  UndoItems, Modflow6TimeSeriesCollectionsUnit;
 
 type
   TUndoChangeTimeSeries = class(TCustomUndo)

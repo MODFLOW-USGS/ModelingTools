@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, RbwDataGrid4,
   Vcl.StdCtrls, Vcl.Mask, JvExMask, JvSpin, Vcl.ExtCtrls,
-  Modflow6TimeSeriesUnit, Math, GoPhastTypes;
+  Modflow6TimeSeriesUnit, Math, GoPhastTypes, Modflow6TimeSeriesCollectionsUnit;
 
 type
 

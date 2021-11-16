@@ -21,7 +21,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Top = 0
     Width = 784
     Height = 514
-    ActivePage = tabModflowBoundaryConditions
+    ActivePage = tabComments
     Align = alClient
     TabHeight = 28
     TabOrder = 0
@@ -15886,7 +15886,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Top = 28
             Width = 281
             Height = 17
-            Caption = 'Vertex numbes visible'
+            Caption = 'Vertex numbers visible'
             TabOrder = 2
             OnClick = cbVertexLabelVisibleClick
           end

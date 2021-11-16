@@ -61,7 +61,7 @@ resourcestring
   StrObservationType = 'Observation Type';
   StrObservationTime = 'Observation Time';
   StrObservationValue = 'Observation Value (OBSVAL)';
-  StrObservationValueDif = 'Observation Value (OBSVAL) (OBSVAL1 - OBSVAL2)';
+  StrObservationValueDif = 'Observation Value (OBSVAL)' + sLineBreak +  '(OBSVAL1 - OBSVAL2)';
   StrObservationWeight = 'Observation Weight (WEIGHT)';
   StrComment = 'Comment';
   StrFirstObservation = 'First Observation (OBSNME1)';

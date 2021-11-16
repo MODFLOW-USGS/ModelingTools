@@ -246,7 +246,6 @@ begin
     end;
   end;
 
-
   LocalLayer := Model.
     DataSetLayerToModflowLayer(CHD_Cell.Layer);
   WriteInteger(LocalLayer);
@@ -256,18 +255,22 @@ begin
   end;
   WriteInteger(CHD_Cell.Column+1);
 
-  if (CHD_Cell.StartHeadPest <> '')
-    or (CHD_Cell.EndHeadPest <> '')
-    or (CHD_Cell.StartHeadPestSeriesName <> '')
-    or (CHD_Cell.EndHeadPestSeriesName <> '') then
+  if (CHD_Cell.HeadTimeSeriesName = '') then
   begin
-    FPestParamUsed := True;
+    if (CHD_Cell.StartHeadPest <> '')
+      or (CHD_Cell.EndHeadPest <> '')
+      or (CHD_Cell.StartHeadPestSeriesName <> '')
+      or (CHD_Cell.EndHeadPestSeriesName <> '') then
+    begin
+      FPestParamUsed := True;
+    end;
   end;
 
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
-    and ( CHD_Cell.HeadParameterName <> '') then
+    and ( CHD_Cell.HeadParameterName <> '')
+    and (CHD_Cell.HeadTimeSeriesName = '') then
   begin
     ParameterName := CHD_Cell.HeadParameterName;
     if CHD_Cell.HeadParameterValue = 0 then
@@ -278,7 +281,6 @@ begin
     begin
       MultiplierValue := CHD_Cell.StartingHead / CHD_Cell.HeadParameterValue;
     end;
-//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
     WriteModflowParamFormula(ParameterName, CHD_Cell.StartHeadPest,
       MultiplierValue, CHD_Cell);
   end
@@ -287,12 +289,9 @@ begin
     WriteValueOrFormula(CHD_Cell, ChdStartHeadPosition);
   end;
 
-//  WriteFloat(CHD_Cell.StartingHead);
   if (Model.ModelSelection <> msModflow2015) then
   begin
     WriteValueOrFormula(CHD_Cell, ChdEndHeadPosition);
-
-//    WriteFloat(CHD_Cell.EndingHead);
   end;
   WriteIface(CHD_Cell.IFace);
   WriteBoundName(CHD_Cell);
@@ -312,8 +311,6 @@ end;
 
 procedure TModflowCHD_Writer.WriteDataSets3And4;
 const
-//  ErrorRoot = 'One or more %s parameters have been eliminated '
-//    + 'because there are no cells associated with them.';
   DS3 = ' # Data Set 3: PARNAM PARTYP Parval NLST';
   DS3Instances = ' INSTANCES NUMINST';
   DS4A = ' # Data Set 4a: INSTNAM';
@@ -503,15 +500,12 @@ begin
       end;
     end;
 
-//    if Model.ModelSelection <> msModflow2015 then
+    frmProgressMM.AddMessage(StrWritingDataSets3and4);
+    WriteDataSets3And4;
+    Application.ProcessMessages;
+    if not frmProgressMM.ShouldContinue then
     begin
-      frmProgressMM.AddMessage(StrWritingDataSets3and4);
-      WriteDataSets3And4;
-      Application.ProcessMessages;
-      if not frmProgressMM.ShouldContinue then
-      begin
-        Exit;
-      end;
+      Exit;
     end;
 
     frmProgressMM.AddMessage(StrWritingDataSets5to7);

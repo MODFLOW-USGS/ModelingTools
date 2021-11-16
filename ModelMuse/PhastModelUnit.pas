@@ -43,7 +43,7 @@ uses System.UITypes,
   Mt3dCtsSystemUnit, ObservationComparisonsUnit, PestObsUnit, SutraPestObsUnit,
   PestPropertiesUnit, PestParamGroupsUnit, PestObsGroupUnit, ObsInterfaceUnit,
   PilotPointDataUnit, SvdaPrepPropertiesUnit, PestObservationResults,
-  Modflow6TimeSeriesUnit;
+  Modflow6TimeSeriesCollectionsUnit;
 
 const
   OldLongDispersivityName = 'Long_Dispersivity';

@@ -52,6 +52,7 @@ type
     EndHeadPestSeriesName: string;
     StartHeadPestSeriesMethod: TPestParamMethod;
     EndHeadPestSeriesMethod: TPestParamMethod;
+    HeadTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -179,6 +180,8 @@ type
     function GetStartHeadPest: string;
     function GetStartHeadPestSeriesMethod: TPestParamMethod;
     function GetStartHeadPestSeriesName: string;
+    function GetHeadTimeSeriesName: string;
+    procedure SetHeadTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -205,6 +208,8 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property StartingHead: double read GetStartingHead;
     property EndingHead: double read GetEndingHead;
@@ -219,8 +224,12 @@ type
     property EndHeadPest: string read GetEndHeadPest;
     property StartHeadPestSeriesName: string read GetStartHeadPestSeriesName;
     property EndHeadPestSeriesName: string read GetEndHeadPestSeriesName;
-    property StartHeadPestSeriesMethod: TPestParamMethod read GetStartHeadPestSeriesMethod;
-    property EndHeadPestSeriesMethod: TPestParamMethod read GetEndHeadPestSeriesMethod;
+    property StartHeadPestSeriesMethod: TPestParamMethod
+      read GetStartHeadPestSeriesMethod;
+    property EndHeadPestSeriesMethod: TPestParamMethod
+      read GetEndHeadPestSeriesMethod;
+    property HeadTimeSeriesName: string read GetHeadTimeSeriesName
+      write SetHeadTimeSeriesName;
   end;
 
 
@@ -875,16 +884,6 @@ var
   Position: integer;
   ParamName: string;
   LocalModel: TCustomModel;
-//  BoundaryList: TList;
-//  StressPeriods: TModflowStressPeriods;
-//  StartTime: Double;
-//  EndTime: Double;
-//  TimeCount: Integer;
-//  ItemIndex: Integer;
-//  TimeSeriesList: TTimeSeriesList;
-//  TimeSeries: TTimeSeries;
-//  SeriesIndex: Integer;
-//  InitialTime: Double;
 begin
   LocalModel := AModel as TCustomModel;
   FCurrentParameter := nil;
@@ -919,97 +918,6 @@ begin
     begin
       Times := ParamList.Objects[Position] as TList;
     end;
-
-//    if FCurrentParameter <> nil then
-//    begin
-//      BoundaryList := Param.Param.BoundaryList[AModel];
-//      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-//      StartTime := StressPeriods.First.StartTime;
-//      EndTime := StressPeriods.Last.EndTime;
-//      TimeCount := BoundaryList.Count;
-//      if TimeCount = 0 then
-//      begin
-//        frmErrorsAndWarnings.AddError(LocalModel, StrNoValidCHDBoundar,
-//          Format(StrNoValidCHDBoundar2, [FCurrentParameter.ParameterName]));
-//        Exit;
-//      end;
-//      for ItemIndex := 0 to BoundaryList.Count - 1 do
-//      begin
-//        BoundaryStorage := BoundaryList[ItemIndex];
-//        if BoundaryStorage.StartingTime > StartTime then
-//        begin
-//          Inc(TimeCount);
-//        end;
-//        StartTime := BoundaryStorage.EndingTime;
-//      end;
-//      BoundaryStorage := BoundaryList.Last;
-//      if BoundaryStorage.EndingTime <= EndTime then
-//      begin
-//        Inc(TimeCount);
-//      end;
-//
-//      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-//      TimeSeries := TTimeSeries.Create;
-//      TimeSeriesList.Add(TimeSeries);
-//      TimeSeries.SeriesCount := Length(BoundaryStorage.ChdArray);
-//      TimeSeries.TimeCount := TimeCount;
-//      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-//      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-//      for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-//      begin
-//        TimeSeries.SeriesNames[SeriesIndex] :=
-//          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-//          TimeSeriesList.Count, SeriesIndex+1]);
-//        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-//        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-//      end;
-//
-//      TimeCount := 0;
-//      StartTime := StressPeriods.First.StartTime;
-//      InitialTime := StartTime;
-//      for ItemIndex := 0 to BoundaryList.Count - 1 do
-//      begin
-//        BoundaryStorage := BoundaryList[ItemIndex];
-//        if BoundaryStorage.StartingTime > StartTime then
-//        begin
-//          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-//          for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-//          begin
-//            if ItemIndex > 0 then
-//            begin
-//              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-//            end
-//            else
-//            begin
-//              TimeSeries.Values[SeriesIndex,TimeCount] :=
-//                BoundaryStorage.ChdArray[SeriesIndex].StartingHead;
-//            end;
-//          end;
-//          Inc(TimeCount);
-//        end;
-//        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-//        for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-//        begin
-//          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//            BoundaryStorage.ChdArray[SeriesIndex].StartingHead;
-//          BoundaryStorage.ChdArray[SeriesIndex].TimeSeriesName :=
-//            TimeSeries.SeriesNames[SeriesIndex];
-//        end;
-//        StartTime := BoundaryStorage.EndingTime;
-//        Inc(TimeCount);
-//      end;
-//      BoundaryStorage := BoundaryList.Last;
-//      if BoundaryStorage.EndingTime <= EndTime then
-//      begin
-//        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-//        for SeriesIndex := 0 to Length(BoundaryStorage.ChdArray) - 1 do
-//        begin
-//          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//            BoundaryStorage.ChdArray[SeriesIndex].EndingHead;
-//        end;
-//      end;
-//    end;
-
 
     for ValueIndex := 0 to Param.Param.Count - 1 do
     begin
@@ -1321,6 +1229,11 @@ begin
   result := Values.HeadParameterValue;
 end;
 
+function TCHD_Cell.GetHeadTimeSeriesName: string;
+begin
+  result := Values.HeadTimeSeriesName;
+end;
+
 function TCHD_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -1336,6 +1249,18 @@ end;
 function TCHD_Cell.GetLayer: integer;
 begin
   result := Values.Cell.Layer;
+end;
+
+function TCHD_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  if Index = ChdStartHeadPosition then
+  begin
+    result := HeadTimeSeriesName;
+  end
+  else
+  begin
+    result := inherited;
+  end;
 end;
 
 function TCHD_Cell.GetPestName(Index: Integer): string;
@@ -1472,9 +1397,26 @@ begin
   Values.Cell.Column := Value;
 end;
 
+procedure TCHD_Cell.SetHeadTimeSeriesName(const Value: string);
+begin
+  Values.HeadTimeSeriesName := Value;
+end;
+
 procedure TCHD_Cell.SetLayer(const Value: integer);
 begin
   Values.Cell.Layer := Value;
+end;
+
+procedure TCHD_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  if Index = ChdStartHeadPosition then
+  begin
+    HeadTimeSeriesName := Value;
+  end
+  else
+  begin
+    inherited;
+  end;
 end;
 
 procedure TCHD_Cell.SetRow(const Value: integer);
@@ -1500,6 +1442,7 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(EndHeadPest));
   WriteCompInt(Comp, Strings.IndexOf(StartHeadPestSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(EndHeadPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(HeadTimeSeriesName));
   WriteCompInt(Comp, Ord(StartHeadPestSeriesMethod));
   WriteCompInt(Comp, Ord(EndHeadPestSeriesMethod));
 end;
@@ -1514,6 +1457,7 @@ begin
   Strings.Add(EndHeadPest);
   Strings.Add(StartHeadPestSeriesName);
   Strings.Add(EndHeadPestSeriesName);
+  Strings.Add(HeadTimeSeriesName);
 end;
 
 procedure TChdRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1532,6 +1476,7 @@ begin
   EndHeadPest := Annotations[ReadCompInt(Decomp)];
   StartHeadPestSeriesName := Annotations[ReadCompInt(Decomp)];
   EndHeadPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  HeadTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   StartHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   EndHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
