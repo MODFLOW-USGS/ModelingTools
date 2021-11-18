@@ -50,9 +50,9 @@ type
     EndHeadPest: string;
     StartHeadPestSeriesName: string;
     EndHeadPestSeriesName: string;
+    HeadTimeSeriesName: string;
     StartHeadPestSeriesMethod: TPestParamMethod;
     EndHeadPestSeriesMethod: TPestParamMethod;
-    HeadTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -106,7 +106,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); override;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
   public
@@ -509,13 +509,15 @@ procedure TChdCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
   AModel: TBaseModel; AScreenObject: TObject; PestName: string;
-  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string);
 var
   ChdStorage: TChdStorage;
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(Expression <> nil);
 
   ChdStorage := BoundaryStorage as TChdStorage;
@@ -526,6 +528,10 @@ begin
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
     Expression.Evaluate;
+    if BoundaryFunctionIndex = 0 then
+    begin
+      ChdStorage.ChdArray[Index].HeadTimeSeriesName := TimeSeriesName;
+    end;
     with ChdStorage.ChdArray[Index] do
     begin
       case BoundaryFunctionIndex of
@@ -536,6 +542,7 @@ begin
             StartHeadPest := PestName;
             StartHeadPestSeriesName := PestSeriesName;
             StartHeadPestSeriesMethod := PestSeriesMethod;
+//            HeadTimeSeriesName := TimeSeriesName;
           end;
         1:
           begin
@@ -765,6 +772,7 @@ begin
         Cell.Values.EndHeadPestSeriesName := BoundaryValues.EndHeadPestSeriesName;
         Cell.Values.StartHeadPestSeriesMethod := BoundaryValues.StartHeadPestSeriesMethod;
         Cell.Values.EndHeadPestSeriesMethod := BoundaryValues.EndHeadPestSeriesMethod;
+        Cell.Values.HeadTimeSeriesName := BoundaryValues.HeadTimeSeriesName;
         Cell.Values.Cell := BoundaryValues.Cell;
         Cell.Values.StartingHead :=
           StartHeadFactor * BoundaryValues.StartingHead

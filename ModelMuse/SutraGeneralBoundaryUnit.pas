@@ -136,7 +136,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); override;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -688,7 +688,8 @@ procedure TSutraGeneralFlowCollection.AssignCellList(
   Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
   Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string);
 begin
   inherited;
   // this needs to be changed?

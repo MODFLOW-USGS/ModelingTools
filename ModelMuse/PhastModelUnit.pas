@@ -2464,8 +2464,8 @@ that affects the model output should also have a comment. }
     function GetShortestHorizontalBlockEdge(Layer, Row,
       Column: Integer): double;
     procedure SetPestObsCollection(const Value: TPestObsCollection);
-    function GetTimesSeries: TTimesSeriesCollections; virtual; abstract;
-    procedure SetTimesSeries(const Value: TTimesSeriesCollections);
+    function GetMf6TimesSeries: TTimesSeriesCollections; virtual; abstract;
+    procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections);
       virtual; abstract;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
@@ -3389,8 +3389,8 @@ that affects the model output should also have a comment. }
     property ShortestHorizontalBlockEdge[Layer, Row, Column: Integer]: double
       read GetShortestHorizontalBlockEdge;
     procedure ClearPestArrayFileNames;
-    property TimesSeries: TTimesSeriesCollections read GetTimesSeries
-      write SetTimesSeries
+    property Mf6TimesSeries: TTimesSeriesCollections read GetMf6TimesSeries
+      write SetMf6TimesSeries
       {$IFNDEF Mf6TimeSeries}
       Stored False
       {$ENDIF}
@@ -4068,8 +4068,8 @@ that affects the model output should also have a comment. }
     procedure SetSvdaPrepProperties(const Value: TSvdaPrepProperties);
     procedure SetSupCalcProperties(const Value: TSupCalcProperties);
     procedure FixScreenObjectNames;
-    procedure SetTimesSeries(const Value: TTimesSeriesCollections); override;
-    function GetTimesSeries: TTimesSeriesCollections; override;
+    procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections); override;
+    function GetMf6TimesSeries: TTimesSeriesCollections; override;
     //    function GetPilotPoint(Index: Integer): TPoint2D;
 //    function GetPilotPointSpacing: double;
   protected
@@ -4710,7 +4710,7 @@ that affects the model output should also have a comment. }
     procedure DisconnectObservers;
     function GetPestName: string;
   published
-    // The following properties are obsolete.
+    property Mf6TimesSeries;
 
     // @name stores FlowOnly option in PHAST.
     property FlowOnly: boolean write SetFlowOnly stored False;
@@ -4881,7 +4881,6 @@ that affects the model output should also have a comment. }
       write SetSvdaPrepProperties;
     property SupCalcProperties: TSupCalcProperties read FSupCalcProperties
       write SetSupCalcProperties;
-    property TimesSeries;
   end;
 
   TChildDiscretization = class(TOrderedItem)
@@ -5121,8 +5120,8 @@ that affects the model output should also have a comment. }
     function GetPestProperties: TPestProperties; override;
     procedure SetPestProperties(const Value: TPestProperties); override;
     function GetFilesToDelete: TStrings; override;
-    function GetTimesSeries: TTimesSeriesCollections; override;
-    procedure SetTimesSeries(const Value: TTimesSeriesCollections); override;
+    function GetMf6TimesSeries: TTimesSeriesCollections; override;
+    procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections); override;
   public
     property CanUpdateGrid: Boolean read FCanUpdateGrid write SetCanUpdateGrid;
     function LayerGroupUsed(LayerGroup: TLayerGroup): boolean; override;
@@ -11157,6 +11156,7 @@ var
   ChangeNotifier: IChangeNotifier;
 begin
   inherited;
+  FTimesSeries:= TTimesSeriesCollections.Create(self);
 //  FUnitNumbers := TUnitNumbers.Create(self);
   FContourLabelSpacing := 100;
 
@@ -11178,7 +11178,7 @@ begin
   FEndPointLegend.ValueAssignmentMethod := vamAutomatic;
 
   FHufParameters := THufModflowParameters.Create(self);
-  FFormulaManager:= TFormulaManager.Create;
+  FFormulaManager:= TFormulaManager.Create(self);
   FUpdatingFullStressPeriods := False;
 
   FGridColors := TColorParameters.Create;
@@ -11330,7 +11330,6 @@ begin
   FSvdaPrepProperties := TSvdaPrepProperties.Create(Invalidate);
   FSupCalcProperties := TSupCalcProperties.Create(Invalidate);
 
-  FTimesSeries:= TTimesSeriesCollections.Create(self);
 end;
 
 procedure TPhastModel.CreateArchive(const FileName: string;
@@ -14775,7 +14774,7 @@ begin
   Invalidate(self);
 end;
 
-procedure TPhastModel.SetTimesSeries(const Value: TTimesSeriesCollections);
+procedure TPhastModel.SetMf6TimesSeries(const Value: TTimesSeriesCollections);
 begin
   FTimesSeries.Assign(Value);
 end;
@@ -16316,7 +16315,7 @@ begin
   end;
 end;
 
-function TPhastModel.GetTimesSeries: TTimesSeriesCollections;
+function TPhastModel.GetMf6TimesSeries: TTimesSeriesCollections;
 begin
   result := FTimesSeries;
 end;
@@ -45540,12 +45539,12 @@ begin
   result := ParentModel.GetSwrReachConnectionsPlot
 end;
 
-function TChildModel.GetTimesSeries: TTimesSeriesCollections;
+function TChildModel.GetMf6TimesSeries: TTimesSeriesCollections;
 begin
   result := nil;
   if ParentModel <> nil then
   begin
-    result := ParentModel.GetTimesSeries
+    result := ParentModel.GetMf6TimesSeries
   end
 end;
 
@@ -45962,11 +45961,11 @@ begin
   ParentModel.SetSwrReachConnectionsPlot(Value);
 end;
 
-procedure TChildModel.SetTimesSeries(const Value: TTimesSeriesCollections);
+procedure TChildModel.SetMf6TimesSeries(const Value: TTimesSeriesCollections);
 begin
   if ParentModel <> nil then
   begin
-    ParentModel.SetTimesSeries(Value);
+    ParentModel.SetMf6TimesSeries(Value);
   end;
 end;
 

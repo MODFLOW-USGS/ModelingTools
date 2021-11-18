@@ -194,11 +194,9 @@ type
   // descend from @link(TCustomMF_BoundColl) which descends from @name.
   TCustomNonSpatialBoundColl = class(TCustomObjectOrderedCollection)
   private
-    // See @link(ScreenObject)
-//    FScreenObject: TObject;
-    // @name is the @link(TModflowBoundary) that owns the current @classname.
+    // @name is the @link(TModflowScreenObjectProperty) that owns
+    // the current @classname.
     FBoundary: TModflowScreenObjectProperty;
-//    FBoundary: TModflowBoundary;
     // See @link(Items).
     procedure SetItem(Index: Integer; const Value: TCustomBoundaryItem);
     // See @link(Items).
@@ -535,7 +533,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); virtual; abstract;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); virtual; abstract;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -586,7 +584,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); override;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     // @name when the formula assigned by the user needs to be
     // expanded by the program @name is used to do that.
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
@@ -791,6 +789,7 @@ type
   TModflowScreenObjectProperty = class(TFormulaProperty)
   private
     FBoundaryObserver: TObserver;
+    FMf6TimeSeriesNames: TStringList;
   protected
     procedure GetPropertyObserver(Sender: TObject; List: TList); virtual;
     procedure RemoveSubscription(Sender: TObject; const AName: string);
@@ -821,6 +820,7 @@ type
     // @seealso(THfbBoundary).
     // @seealso(TSfrMf6Boundary).
     property BoundaryObserver: TObserver read FBoundaryObserver;
+    Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
     procedure StopTalkingToAnyone; virtual;
     procedure Invalidate;
@@ -830,6 +830,7 @@ type
       read GetPestBoundaryFormula write SetPestBoundaryFormula;
     property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
       read GetPestBoundaryMethod write SetPestBoundaryMethod;
+    property Mf6TimeSeriesNames: TStringList read FMf6TimeSeriesNames;
   end;
 
   TMultiHeadItem = class(TOrderedItem)
@@ -1114,7 +1115,7 @@ uses Math, Contnrs, ScreenObjectUnit, PhastModelUnit, ModflowGridUnit,
   frmFormulaErrorsUnit, frmGoPhastUnit, SparseArrayUnit, GlobalVariablesUnit,
   GIS_Functions, IntListUnit, ModflowCellUnit, frmProgressUnit, Dialogs,
   EdgeDisplayUnit, SolidGeom, frmErrorsAndWarningsUnit, ModflowParameterUnit,
-  CustomModflowWriterUnit, ModelMuseUtilities;
+  CustomModflowWriterUnit, ModelMuseUtilities, Modflow6TimeSeriesUnit;
 
 resourcestring
   StrInvalidResultType = 'Invalid result type';
@@ -1451,7 +1452,8 @@ procedure TCustomMF_ArrayBoundColl.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
   AModel: TBaseModel; AScreenObject: TObject; PestName: string;
-  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string);
 begin
   // this is only used with cell lists.
   Assert(False);
@@ -2214,8 +2216,8 @@ end;
 
 procedure TModflowParamBoundary.EvaluateListBoundaries(AModel: TBaseModel);
 begin
-  Parameters.EvaluateListBoundaries(AModel);
   inherited;
+  Parameters.EvaluateListBoundaries(AModel);
 end;
 
 procedure TModflowParamBoundary.RemoveModelLink(AModel: TBaseModel);
@@ -2334,6 +2336,7 @@ end;
 
 procedure TModflowBoundary.EvaluateListBoundaries(AModel: TBaseModel);
 begin
+  Mf6TimeSeriesNames.Clear;
   (Values as TCustomListArrayBoundColl).
     EvaluateListBoundaries(AModel);
 end;
@@ -2951,6 +2954,7 @@ var
   LocalScreenObject: TScreenObject;
   PhastModel: TPhastModel;
 begin
+  FMf6TimeSeriesNames.Free;
   LocalScreenObject := ScreenObject as TScreenObject;
   if (LocalScreenObject <> nil) then
   begin
@@ -3618,6 +3622,8 @@ var
   ADataSet: TDataArray;
   Method: TPestParamMethod;
   PestSeriesName: string;
+  TimeSeries: TMf6TimeSeries;
+  TimeSeriesName: string;
 begin
   if Count = 0 then
   begin
@@ -3831,9 +3837,12 @@ begin
                 PestParamName := '';
                 PestSeriesName := '';
                 Method := ppmMultiply;
+                TimeSeriesName := '';
+
                 AssignCellList(Expression, CellList, Boundaries[0, AModel],
                   BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-                  AScreenObject, PestParamName, PestSeriesName, Method);
+                  AScreenObject, PestParamName, PestSeriesName, Method,
+                  TimeSeriesName);
 
                 LocalModel.DataArrayManager.CacheDataArrays;
               end;
@@ -3858,11 +3867,19 @@ begin
       begin
         Formula := AdjustedFormula(BoundaryFunctionIndex, ItemIndex);
         // The UnmodifiedFormula might by a PEST parameter or a TDataArray
-        // that is modified by PEST.
+        // that is modified by PEST or the name of a time series for MODFLOW 6.
         UnmodifiedFormula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
 
-        PestSeriesName := BoundaryGroup.
-          PestBoundaryFormula[BoundaryFunctionIndex];
+        TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(UnmodifiedFormula);
+        if TimeSeries = nil then
+        begin
+          PestSeriesName := BoundaryGroup.
+            PestBoundaryFormula[BoundaryFunctionIndex];
+        end
+        else
+        begin
+          PestSeriesName := '';
+        end;
         Method := BoundaryGroup.
           PestBoundaryMethod[BoundaryFunctionIndex];
         if (PestSeriesName <> '') and (PestSeriesName <> '0') then
@@ -3912,6 +3929,10 @@ begin
         begin
           PestParamName := ADataSet.Name;
         end
+        else if TimeSeries <> nil then
+        begin
+          PestParamName := '';
+        end
         else
         begin
           // handle the situation if it is a PEST parameter
@@ -3928,7 +3949,11 @@ begin
             PestParamName := PestParam.ParameterName;
           end;
         end;
-        { TODO -cPEST : Add PEST support for PEST here }
+        if TimeSeries <> nil then
+        begin
+          Formula := '1.';
+        end;
+
         ErrorFormula := Formula;
         try
           Compiler.Compile(Formula)
@@ -4008,15 +4033,23 @@ begin
             CellList.Delete(EliminateIndicies[Index]);
           end;
 
-          PestSeriesName := BoundaryGroup.
-            PestBoundaryFormula[BoundaryFunctionIndex];
+          if TimeSeries <> nil then
+          begin
+            PestSeriesName := '' ;
+            TimeSeriesName := TimeSeries.SeriesName;
+          end
+          else
+          begin
+            PestSeriesName := BoundaryGroup.
+              PestBoundaryFormula[BoundaryFunctionIndex];
+            TimeSeriesName := '';
+          end;
           Method := BoundaryGroup.
             PestBoundaryMethod[BoundaryFunctionIndex];
 
-        { TODO -cPEST : Add PEST support for PEST here }
           AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
             BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-            AScreenObject, PestParamName, PestSeriesName, Method);
+            AScreenObject, PestParamName, PestSeriesName, Method, TimeSeriesName);
         finally
           Variables.Free;
           DataSets.Free;
@@ -4067,8 +4100,18 @@ begin
                     Formula := AnItem.BoundaryFormula[BoundaryFunctionIndex];
                   end;
 
-                  PestSeriesName := BoundaryGroup.
-                    PestBoundaryFormula[BoundaryFunctionIndex];
+                  TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(Formula);
+                  if TimeSeries = nil then
+                  begin
+                    PestSeriesName := BoundaryGroup.
+                      PestBoundaryFormula[BoundaryFunctionIndex];
+                    TimeSeriesName := '';
+                  end
+                  else
+                  begin
+                    PestSeriesName := '';
+                    TimeSeriesName := TimeSeries.SeriesName;
+                  end;
                   Method := BoundaryGroup.
                     PestBoundaryMethod[BoundaryFunctionIndex];
                   if (PestSeriesName <> '') and (PestSeriesName <> '0') then
@@ -4114,17 +4157,25 @@ begin
                   end;
 
                   // The Formula might by a PEST parameter or a TDataArray
-                  // that is modified by PEST.
-                  PestParam := LocalModel.GetPestParameterByName(Formula);
-                  if PestParam = nil then
+                  // that is modified by PEST or a MODFLOW 6 time series.
+                  if TimeSeries <> nil then
                   begin
                     PestParamName := '';
+                    Formula := '1.';
                   end
                   else
                   begin
-                    PestParam.IsUsedInTemplate := True;
-                    Formula := FortranFloatToStr(PestParam.Value);
-                    PestParamName := PestParam.ParameterName;
+                    PestParam := LocalModel.GetPestParameterByName(Formula);
+                    if PestParam = nil then
+                    begin
+                      PestParamName := '';
+                    end
+                    else
+                    begin
+                      PestParam.IsUsedInTemplate := True;
+                      Formula := FortranFloatToStr(PestParam.Value);
+                      PestParamName := PestParam.ParameterName;
+                    end;
                   end;
                   Compiler.Compile(Formula);
                   Expression := Compiler.CurrentExpression;
@@ -4140,7 +4191,8 @@ begin
 
                   AssignCellList(Expression, CellList, Boundaries[ItemCount, AModel],
                     BoundaryFunctionIndex, Variables, DataSets, LocalModel,
-                    AScreenObject, PestParamName, PestSeriesName, Method);
+                    AScreenObject, PestParamName, PestSeriesName, Method,
+                    TimeSeriesName);
                 end;
               finally
                 Variables.Free;
@@ -4265,6 +4317,15 @@ begin
     end;
 //    BoundaryObserver.TalksTo(Observer);
   end;
+end;
+
+constructor TModflowScreenObjectProperty.Create(Model: TBaseModel;
+  ScreenObject: TObject);
+begin
+  inherited;
+  FMf6TimeSeriesNames:= TStringList.Create;
+  FMf6TimeSeriesNames.Sorted := True;
+  FMf6TimeSeriesNames.Duplicates := dupIgnore;
 end;
 
 procedure TModflowScreenObjectProperty.CreateBoundaryObserver;

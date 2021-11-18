@@ -6,13 +6,14 @@ uses
   System.Classes, GoPhastTypes;
 
 type
-  TTimeSeries = class(TRealCollection)
+  TMf6TimeSeries = class(TRealCollection)
   private
     FSeriesName: string;
     FScaleFactorParameter: string;
     FInterpolationMethod: TMf6InterpolationMethods;
     FStoredScaleFactor: TRealStorage;
     FParamMethod: TPestParamMethod;
+    FNotifierComponent: TComponent;
     function GetScaleFactor: double;
     procedure SetInterpolationMethod(const Value: TMf6InterpolationMethods);
     procedure SetScaleFactor(const Value: double);
@@ -20,12 +21,13 @@ type
     procedure SetSeriesName(Value: string);
     procedure SetStoredScaleFactor(const Value: TRealStorage);
     procedure SetParamMethod(const Value: TPestParamMethod);
-    function IsSame(OtherTimeSeries: TTimeSeries): Boolean;
+    function IsSame(OtherTimeSeries: TMf6TimeSeries): Boolean;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent); overload; override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     property ScaleFactor: double read GetScaleFactor write SetScaleFactor;
+    property NotifierComponent: TComponent read FNotifierComponent;
   published
     property SeriesName: string read FSeriesName write SetSeriesName;
     property InterpolationMethod: TMf6InterpolationMethods read FInterpolationMethod write SetInterpolationMethod;
@@ -38,13 +40,13 @@ implementation
 
 { TTimeSeries }
 
-procedure TTimeSeries.Assign(Source: TPersistent);
+procedure TMf6TimeSeries.Assign(Source: TPersistent);
 var
-  TimeSeriesSource: TTimeSeries;
+  TimeSeriesSource: TMf6TimeSeries;
 begin
-  if Source is TTimeSeries then
+  if Source is TMf6TimeSeries then
   begin
-    TimeSeriesSource := TTimeSeries(Source);
+    TimeSeriesSource := TMf6TimeSeries(Source);
     SeriesName := TimeSeriesSource.SeriesName;
     InterpolationMethod := TimeSeriesSource.InterpolationMethod;
     ScaleFactor := TimeSeriesSource.ScaleFactor;
@@ -54,24 +56,26 @@ begin
   inherited;
 end;
 
-constructor TTimeSeries.Create(InvalidateModelEvent: TNotifyEvent);
+constructor TMf6TimeSeries.Create(InvalidateModelEvent: TNotifyEvent);
 begin
   inherited;
   FStoredScaleFactor := TRealStorage.Create(InvalidateModelEvent);
+  FNotifierComponent := TComponent.Create(nil);
 end;
 
-destructor TTimeSeries.Destroy;
+destructor TMf6TimeSeries.Destroy;
 begin
+  FNotifierComponent.Free;
   FStoredScaleFactor.Free;
   inherited;
 end;
 
-function TTimeSeries.GetScaleFactor: double;
+function TMf6TimeSeries.GetScaleFactor: double;
 begin
   result := StoredScaleFactor.Value;
 end;
 
-function TTimeSeries.IsSame(OtherTimeSeries: TTimeSeries): Boolean;
+function TMf6TimeSeries.IsSame(OtherTimeSeries: TMf6TimeSeries): Boolean;
 begin
   result := (ScaleFactor = OtherTimeSeries.ScaleFactor)
     and (SeriesName = OtherTimeSeries.SeriesName)
@@ -81,7 +85,7 @@ begin
     and inherited IsSame(OtherTimeSeries);
 end;
 
-procedure TTimeSeries.SetInterpolationMethod(
+procedure TMf6TimeSeries.SetInterpolationMethod(
   const Value: TMf6InterpolationMethods);
 begin
   if FInterpolationMethod <> Value then
@@ -91,7 +95,7 @@ begin
   end;
 end;
 
-procedure TTimeSeries.SetParamMethod(const Value: TPestParamMethod);
+procedure TMf6TimeSeries.SetParamMethod(const Value: TPestParamMethod);
 begin
   if FParamMethod <> Value then
   begin
@@ -100,12 +104,12 @@ begin
   end;
 end;
 
-procedure TTimeSeries.SetScaleFactor(const Value: double);
+procedure TMf6TimeSeries.SetScaleFactor(const Value: double);
 begin
   StoredScaleFactor.Value := Value;
 end;
 
-procedure TTimeSeries.SetScaleFactorParameter(const Value: string);
+procedure TMf6TimeSeries.SetScaleFactorParameter(const Value: string);
 begin
   if FScaleFactorParameter <> Value then
   begin
@@ -114,7 +118,7 @@ begin
   end;
 end;
 
-procedure TTimeSeries.SetSeriesName(Value: string);
+procedure TMf6TimeSeries.SetSeriesName(Value: string);
 begin
   Value := Copy(Value, 1, MaxTimeSeriesNameLength);
   if FSeriesName <> Value then
@@ -124,7 +128,7 @@ begin
   end;
 end;
 
-procedure TTimeSeries.SetStoredScaleFactor(const Value: TRealStorage);
+procedure TMf6TimeSeries.SetStoredScaleFactor(const Value: TRealStorage);
 begin
   FStoredScaleFactor.Assign(Value);
 end;

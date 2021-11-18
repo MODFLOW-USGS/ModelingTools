@@ -160,7 +160,7 @@ begin
   FPestNames.Insert(0, 'none');
 
   FTimesSeries := TTimesSeriesCollections.Create(nil);
-  FTimesSeries.Assign(frmGoPhast.PhastModel.TimesSeries);
+  FTimesSeries.Assign(frmGoPhast.PhastModel.Mf6TimesSeries);
   for SeriesIndex := 0 to FTimesSeries.Count - 1 do
   begin
     ASeriesItem := FTimesSeries[SeriesIndex];
@@ -215,7 +215,7 @@ constructor TUndoChangeTimeSeries.Create(
   var TimesSeries: TTimesSeriesCollections);
 begin
   FOldTimesSeries := TTimesSeriesCollections.Create(nil);
-  FOldTimesSeries.Assign(frmGoPhast.PhastModel.TimesSeries);
+  FOldTimesSeries.Assign(frmGoPhast.PhastModel.Mf6TimesSeries);
   FNewTimesSeries := TimesSeries;
   TimesSeries := nil;
 end;
@@ -234,12 +234,12 @@ end;
 
 procedure TUndoChangeTimeSeries.DoCommand;
 begin
-  frmGoPhast.PhastModel.TimesSeries.Assign(FNewTimesSeries);
+  frmGoPhast.PhastModel.Mf6TimesSeries.Assign(FNewTimesSeries);
 end;
 
 procedure TUndoChangeTimeSeries.Undo;
 begin
-  frmGoPhast.PhastModel.TimesSeries.Assign(FOldTimesSeries);
+  frmGoPhast.PhastModel.Mf6TimesSeries.Assign(FOldTimesSeries);
 end;
 
 end.

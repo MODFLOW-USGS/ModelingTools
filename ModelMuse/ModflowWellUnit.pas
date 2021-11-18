@@ -129,7 +129,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); override;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
   end;
 
   // Each @name stores a @link(TWellCollection).
@@ -418,7 +418,8 @@ procedure TWellCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
   AModel: TBaseModel; AScreenObject: TObject; PestName: string;
-  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string);
 var
   WellStorage: TWellStorage;
   CellList: TCellAssignmentList;

@@ -3,7 +3,7 @@ unit FormulaManagerUnit;
 interface
 
 uses SysUtils, Classes, Contnrs, RbwParser, IntListUnit, Dialogs,
-  HashTableFacadeUnit, Modflow6TimeSeriesUnit;
+  HashTableFacadeUnit, Modflow6TimeSeriesUnit, GoPhastTypes;
 
 type
   TChangeSubscription = procedure (Sender: TObject;
@@ -23,6 +23,7 @@ type
     FOnRestoreSubscriptionList: TList;
     FReferenceCountList: TIntegerList;
     FSubjectList: TList;
+    FTimeSeries: TMf6TimeSeries;
     procedure SetFormula(Value: string);
     procedure SetParser(const Value: TRbwParser);
     procedure CompileFormula(var Value: string);
@@ -68,8 +69,9 @@ type
     FList: TList;
     FSortedList: THashTableFacade;
     FEmptyFormula: TFormulaObject;
+    FModel: TBaseModel;
   public
-    Constructor Create;
+    Constructor Create(Model: TBaseModel);
     Destructor Destroy; override;
     function Add: TFormulaObject;
     procedure Remove(FormulaObject: TFormulaObject;
@@ -100,6 +102,7 @@ uses
 constructor TFormulaObject.Create(AOwner: TComponent);
 begin
   inherited;
+  FTimeSeries := nil;
   FNewSubscriptions := TStringList.Create;
   FReferenceCount := 1;
   FOnRemoveSubscriptionList := TList.Create;
@@ -149,6 +152,10 @@ end;
 
 destructor TFormulaObject.Destroy;
 begin
+  if FTimeSeries <> nil then
+  begin
+    RemoveFreeNotification(FTimeSeries.NotifierComponent);
+  end;
   FSubjectList.Free;
   FReferenceCountList.Free;
   FOnRestoreSubscriptionList.Free;
@@ -266,7 +273,11 @@ end;
 
 function TFormulaObject.GetDisplayFormula: string;
 begin
-  if (FExpression = nil) or not FNotifies then
+  if FTimeSeries <> nil then
+  begin
+    result := FTimeSeries.SeriesName;
+  end
+  else if (FExpression = nil) or not FNotifies then
   begin
     if (FParser <> nil) and (FFormula <> '') then
     begin
@@ -298,7 +309,11 @@ end;
 
 function TFormulaObject.GetFormula: string;
 begin
-  if (FExpression = nil) or not FNotifies then
+  if FTimeSeries <> nil then
+  begin
+    result := FTimeSeries.SeriesName;
+  end
+  else if (FExpression = nil) or not FNotifies then
   begin
     if (FParser <> nil) and (FFormula <> '') then
     begin
@@ -317,11 +332,18 @@ procedure TFormulaObject.Notification(AComponent: TComponent;
   Operation: TOperation);
 begin
   inherited;
-  if (Operation = opRemove)
-    and (FExpression <> nil)
-    and (FExpression.Notifier = AComponent) then
+  if (Operation = opRemove) then
   begin
-    FExpression := nil;
+    if (FExpression <> nil)
+      and (FExpression.Notifier = AComponent) then
+    begin
+      FExpression := nil;
+    end;
+    if (FTimeSeries <> nil)
+      and (FTimeSeries.NotifierComponent = AComponent) then
+    begin
+      FTimeSeries := nil;
+    end;
   end;
 end;
 
@@ -653,7 +675,7 @@ begin
     if (FParser <> nil) and (FFormula <> '') then
     begin
       try
-      CompileFormula(FFormula);
+        CompileFormula(FFormula);
       except on ERbwParserError do
         begin
           // ignore.
@@ -691,7 +713,6 @@ begin
   begin
     FormulaObject := Add;
   end
-//  else if FSortedList.Find(NewFormula, AnObject) then
   else if FSortedList.Search(NewFormula, APointer) then
   begin
     AnObject := APointer;
@@ -701,9 +722,31 @@ begin
   else
   begin
     FormulaObject := TFormulaObject.Create(nil);
+
     FormulaObject.Parser := Parser;
-    FormulaObject.SetFormula(NewFormula);
-//    if FSortedList.Find(FormulaObject.Formula, AnObject)
+
+    {$IFDEF Mf6TimeSeries}
+    if FModel.ModelSelection = msModflow2015 then
+    begin
+      FormulaObject.FTimeSeries :=
+        TCustomModel(FModel).Mf6TimesSeries.GetTimeSeriesByName(NewFormula);
+    end
+    else
+    begin
+      FormulaObject.FTimeSeries := nil;
+    end;
+    {$ELSE}
+    FormulaObject.FTimeSeries := nil;
+    {$ENDIF}
+    if FormulaObject.FTimeSeries <> nil then
+    begin
+      FormulaObject.FTimeSeries.NotifierComponent.FreeNotification(FormulaObject);
+      FormulaObject.FFormula := '0';
+    end
+    else
+    begin
+      FormulaObject.SetFormula(NewFormula);
+    end;
     if FSortedList.Search(FormulaObject.Formula, APointer)
     then
     begin
@@ -715,7 +758,6 @@ begin
     else
     begin
       FormulaObject.FPosition := FList.Add(FormulaObject);
-//      FSortedList.Add(FormulaObject.Formula, FormulaObject);
       FSortedList.Insert(FormulaObject.Formula, FormulaObject);
     end;
   end;
@@ -724,7 +766,7 @@ begin
     OnRestoreSubscription, Subject);
 
   // This is imperfect because not all Subjects will
-  // be TObservers.  
+  // be TObservers.
   if Subject is TObserver then
   begin
     if FormulaObject.FExpression <> nil then
@@ -826,8 +868,10 @@ begin
   FSortedList.IgnoreCase := False;
 end;
 
-constructor TFormulaManager.Create;
+constructor TFormulaManager.Create(Model: TBaseModel);
 begin
+  Assert((Model <> nil) and (Model is TCustomModel));
+  FModel := Model;
   FList := TObjectList.Create;
   FSortedList:= THashTableFacade.Create;
   FSortedList.IgnoreCase := False;

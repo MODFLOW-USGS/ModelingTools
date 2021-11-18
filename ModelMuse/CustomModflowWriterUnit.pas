@@ -16,7 +16,8 @@ uses Vcl.Forms, System.SysUtils, PestPropertiesUnit,
   ModflowOutputControlUnit, ScreenObjectUnit, ModflowBoundaryUnit,
   ModflowPackageSelectionUnit, ModflowTransientListParameterUnit,
   OrderedCollectionUnit, ModflowBoundaryDisplayUnit, ModflowParameterUnit,
-  System.Generics.Collections, SparseDataSets, Modflow6ObsUnit;
+  System.Generics.Collections, SparseDataSets, Modflow6ObsUnit,
+  Modflow6TimeSeriesCollectionsUnit;
 
 type
   // @name indicates whether the file in the name file is an input file
@@ -499,6 +500,7 @@ type
     procedure SetOwnsValueContents(const Value: Boolean);
   protected
     MAXBOUND: integer;
+    FTimeSeriesNames: TStringList;
     // @name is used for recording the locations of observations for
     // MODFLOW-6 flow observations.
     property FlowObsLocations: TBoundaryFlowObservationLocationList
@@ -724,9 +726,11 @@ type
     FObjectNames: TStringList;
     procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
       ErrorRoot: string; const TimeIndex: integer);
+    procedure WriteTimeSeriesFiles(InputFileName: string);
   strict protected
     FStressPeriod: Integer;
     FBoundaryIndex: Integer;
+
   protected
 
     // @name counts the maximum number of cells used in any stress period. This
@@ -4453,11 +4457,14 @@ begin
   DirectObsLines := Model.DirectObservationLines;
   CalculatedObsLines := Model.DerivedObservationLines;
   FileNameLines := Model.FileNameLines;
-
+  FTimeSeriesNames := TStringList.Create;
+  FTimeSeriesNames.Sorted := True;
+  FTimeSeriesNames.Duplicates := dupIgnore;
 end;
 
 destructor TCustomTransientWriter.Destroy;
 begin
+  FTimeSeriesNames.Free;
   FToMvrFlowObsLocations.Free;
 //  FMf6ObsArray.Free;
   FObsLocationCheck.Free;
@@ -4562,6 +4569,7 @@ begin
           [ScreenObject.Name]));
 
         Boundary.GetCellValues(FValues, FParamValues, Model, self);
+        FTimeSeriesNames.AddStrings(Boundary.Mf6TimeSeriesNames);
 
         if Mf6ObservationsUsed then
         begin
@@ -9472,6 +9480,27 @@ begin
   end;
 end;
 
+procedure TCustomListWriter.WriteTimeSeriesFiles(InputFileName: string);
+var
+  Groups: TTimesSeriesGroups;
+  GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+begin
+  if FTimeSeriesNames.Count > 0 then
+  begin
+    Groups := TTimesSeriesGroups.Create;
+    try
+      Model.Mf6TimesSeries.GetTimesSeriesGroups(FTimeSeriesNames, Groups);
+      for GroupIndex := 0 to Groups.Count - 1 do
+      begin
+        AGroup := Groups[GroupIndex];
+      end;
+    finally
+      Groups.Free;
+    end;
+  end;
+end;
+
 procedure TCustomListWriter.WriteListOptions(InputFileName: string);
 begin
   { TODO -cMODFLOW 6 : Support additional MODFLOW-6 options }
@@ -9486,6 +9515,7 @@ begin
 //  WritePrintFlowsOption;
   WriteSaveFlowsOption;
   WriteMoverOption;
+  WriteTimeSeriesFiles(InputFileName);
   // TIMESERIESFILE not currently supported.
   // NEWTON not currently supported.
 

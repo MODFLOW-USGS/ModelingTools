@@ -97,7 +97,7 @@ procedure TframeModflow6TimeSeries.GetData(
 var
   TimeIndex: Integer;
   SeriesIndex: Integer;
-  ASeries: TTimeSeries;
+  ASeries: TMf6TimeSeries;
   ColIndex: Integer;
   ASeriesItem: TTimeSeriesItem;
 begin
@@ -228,7 +228,7 @@ const
 var
   TimeIndex: Integer;
   SeriesIndex: Integer;
-  ASeries: TTimeSeries;
+  ASeries: TMf6TimeSeries;
   ColIndex: Integer;
 begin
   FTimesSeriesGroup.GroupName := edGroupName.Text;

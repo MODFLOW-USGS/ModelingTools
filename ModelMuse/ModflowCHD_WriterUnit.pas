@@ -345,17 +345,9 @@ begin
 end;
 
 procedure TModflowCHD_Writer.WriteListOptions(InputFileName: string);
-//var
-//  RivPackage: TRivPackage;
 begin
   inherited;
   WriteMf6ParamListOption;
-//  RivPackage := Package as TRivPackage;
-//  if RivPackage.NewtonFormulation = nfOn then
-//  begin
-//    WriteString('    NEWTON');
-//    NewLine;
-//  end;
 end;
 
 

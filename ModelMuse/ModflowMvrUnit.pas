@@ -186,7 +186,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); override;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
@@ -767,7 +767,8 @@ end;
 procedure TMvrItems.AssignCellList(Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
   Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string);
 var
   MvrStorage: TMvrSourceStorage;
   CellList: TCellAssignmentList;

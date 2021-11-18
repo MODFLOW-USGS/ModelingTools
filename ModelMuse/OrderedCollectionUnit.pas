@@ -502,7 +502,7 @@ implementation
 
 uses ModflowParameterUnit, LayerStructureUnit, PhastModelUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, ModflowTransientListParameterUnit,
-  ModflowSfrParamIcalcUnit, Generics.Collections,
+  ModflowSfrParamIcalcUnit, Generics.Collections, Modflow6TimeSeriesUnit,
   Generics.Defaults, Math, frmGoPhastUnit, LockedGlobalVariableChangers;
 
 function ParmeterTypeToStr(ParmType: TParameterType): string;
@@ -1746,16 +1746,27 @@ var
   DS: TObserver;
   ParentScreenObject: TScreenObject;
   Index: integer;
+  LocalModel: TCustomModel;
+  TimeSeries: TMf6TimeSeries;
   procedure CompileFormula(var AFormula: string; UsesList: TStringList);
   begin
     if AFormula <> '' then
     begin
-      try
-        Compiler.Compile(AFormula);
-        UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
-      except
-        on E: ERbwParserError do
-        begin
+      TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(AFormula);
+      if TimeSeries <> nil then
+      begin
+        AFormula := TimeSeries.SeriesName;
+        UsesList.Clear;
+      end
+      else
+      begin
+        try
+          Compiler.Compile(AFormula);
+          UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
+        except
+          on E: ERbwParserError do
+          begin
+          end;
         end;
       end;
     end;
@@ -1773,6 +1784,7 @@ begin
   begin
     Exit;
   end;
+  LocalModel := frmGoPhast.PhastModel;
   ParentScreenObject := ScreenObject as TScreenObject;
   if (ParentScreenObject = nil)
   // or not ParentScreenObject.CanInvalidateModel then

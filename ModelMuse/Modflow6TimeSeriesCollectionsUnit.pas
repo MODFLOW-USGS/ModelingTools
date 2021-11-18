@@ -4,13 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Classes, GoPhastTypes, OrderedCollectionUnit,
-    Modflow6TimeSeriesUnit;
+    Modflow6TimeSeriesUnit, Generics.Collections;
 
 type
   TTimeSeriesItem = class(TOrderedItem)
   private
-    FTimeSeries: TTimeSeries;
-    procedure SetTimeSeries(const Value: TTimeSeries);
+    FTimeSeries: TMf6TimeSeries;
+    procedure SetTimeSeries(const Value: TMf6TimeSeries);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -18,7 +18,7 @@ type
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
   published
-    property TimeSeries: TTimeSeries read FTimeSeries write SetTimeSeries;
+    property TimeSeries: TMf6TimeSeries read FTimeSeries write SetTimeSeries;
   end;
 
   TTimesSeriesCollection = class(TOrderedCollection)
@@ -35,7 +35,7 @@ type
     Constructor Create(Model: TBaseModel);
     Destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
-    function GetValuesByName(const AName: string): TTimeSeriesItem;
+    function GetValuesByName(const AName: string): TMf6TimeSeries;
     property TimeCount: Integer read GetTimeCount write SetTimeCount;
     property Items[Index: Integer]: TTimeSeriesItem read GetItem write SetItem; default;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
@@ -43,6 +43,8 @@ type
     property Times: TRealCollection read FTimes write SetTimes;
     property GroupName: string read FGroupName write SetGroupName;
   end;
+
+  TTimesSeriesGroups = TList<TTimesSeriesCollection>;
 
   TimeSeriesCollectionItem = class(TOrderedItem)
   private
@@ -67,6 +69,9 @@ type
     Constructor Create(Model: TBaseModel);
     property Items[Index: Integer]: TimeSeriesCollectionItem read GetItem write SetItem; default;
     function Add: TimeSeriesCollectionItem;
+    function GetTimeSeriesByName(ASeriesName: String): TMf6TimeSeries;
+    procedure GetTimesSeriesGroups(SeriesNames: TStrings;
+      Groups: TTimesSeriesGroups);
   end;
 
 implementation
@@ -88,7 +93,7 @@ end;
 constructor TTimeSeriesItem.Create(Collection: TCollection);
 begin
   inherited;
-  FTimeSeries := TTimeSeries.Create(OnInvalidateModelEvent);
+  FTimeSeries := TMf6TimeSeries.Create(OnInvalidateModelEvent);
 end;
 
 destructor TTimeSeriesItem.Destroy;
@@ -104,7 +109,7 @@ begin
     and (TimeSeries.IsSame(TTimeSeriesItem(AnotherItem).TimeSeries));
 end;
 
-procedure TTimeSeriesItem.SetTimeSeries(const Value: TTimeSeries);
+procedure TTimeSeriesItem.SetTimeSeries(const Value: TMf6TimeSeries);
 begin
   FTimeSeries.Assign(Value);
 end;
@@ -154,7 +159,7 @@ begin
 end;
 
 function TTimesSeriesCollection.GetValuesByName(
-  const AName: string): TTimeSeriesItem;
+  const AName: string): TMf6TimeSeries;
 var
   ItemIndex: Integer;
   AnItem: TTimeSeriesItem;
@@ -165,7 +170,7 @@ begin
     AnItem := Items[ItemIndex];
     if SameText(AnItem.TimeSeries.SeriesName, AName) then
     begin
-      result := AnItem;
+      result := AnItem.TimeSeries;
       break;
     end;
   end;
@@ -276,6 +281,74 @@ function TTimesSeriesCollections.GetItem(
   Index: Integer): TimeSeriesCollectionItem;
 begin
   result := inherited Items[Index] as TimeSeriesCollectionItem;
+end;
+
+function TTimesSeriesCollections.GetTimeSeriesByName(
+  ASeriesName: String): TMf6TimeSeries;
+var
+  GroupIndex: Integer;
+begin
+  result := nil;
+  if Model.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  for GroupIndex := 0 to Count - 1 do
+  begin
+    result := Items[GroupIndex].
+      TimesSeriesCollection.GetValuesByName(ASeriesName);
+    if result <> nil then
+    begin
+      Exit;
+    end;
+  end;
+end;
+
+procedure TTimesSeriesCollections.GetTimesSeriesGroups(SeriesNames: TStrings;
+  Groups: TTimesSeriesGroups);
+var
+  SeriesIndex: Integer;
+  GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+  LocalSeriesNames: TStringList;
+  GroupUsed: Boolean;
+  SeriesName: string;
+begin
+  Groups.Clear;
+  if (SeriesNames.Count = 1) and (SeriesNames[0] = '') then
+  begin
+    Exit;
+  end;
+  LocalSeriesNames := TStringList.Create;
+  try
+    LocalSeriesNames.AddStrings(SeriesNames);
+    for GroupIndex := 0 to Count - 1 do
+    begin
+      AGroup := Items[GroupIndex].TimesSeriesCollection;
+      GroupUsed := False;
+      for SeriesIndex := LocalSeriesNames.Count - 1 downto 0 do
+      begin
+        SeriesName := LocalSeriesNames[SeriesIndex];
+        if SeriesName <> '' then
+        begin
+          if AGroup.GetValuesByName(SeriesName) <> nil then
+          begin
+            GroupUsed := True;
+            LocalSeriesNames.Delete(SeriesIndex);
+          end;
+        end
+        else
+        begin
+          LocalSeriesNames.Delete(SeriesIndex);
+        end;
+      end;
+      if GroupUsed then
+      begin
+        Groups.Add(AGroup);
+      end;
+    end;
+  finally
+  end;
 end;
 
 procedure TTimesSeriesCollections.SetItem(Index: Integer;

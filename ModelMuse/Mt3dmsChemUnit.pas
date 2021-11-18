@@ -228,7 +228,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); override;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     procedure InsertNewSpecies(SpeciesIndex: integer; const Name: string);
     procedure DeleteSpecies(SpeciesIndex: integer);
     procedure CreateTimeLists;
@@ -247,7 +247,7 @@ type
       BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
       Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
       PestName: string; PestSeriesName: string;
-      PestSeriesMethod: TPestParamMethod); override;
+      PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     // @name is used in @link(RenameTimeList)
     function ConcName: string; virtual;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
@@ -655,7 +655,8 @@ procedure TCustomMt3dmsConcCollection.AssignCellList(Expression: TExpression;
   ACellList: TObject; BoundaryStorage: TCustomBoundaryStorage;
   BoundaryFunctionIndex: integer; Variables, DataSets: TList;
   AModel: TBaseModel; AScreenObject: TObject; PestName: string;
-  PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
+  PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string);
 var
   ConcStorage: TMt3dmsConcStorage;
   CellList: TCellAssignmentList;
@@ -2196,7 +2197,8 @@ procedure TCustomMt3dmsArrayConcCollection.AssignCellList(
   Expression: TExpression; ACellList: TObject;
   BoundaryStorage: TCustomBoundaryStorage; BoundaryFunctionIndex: integer;
   Variables, DataSets: TList; AModel: TBaseModel; AScreenObject: TObject;
-  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod);
+  PestName: string; PestSeriesName: string; PestSeriesMethod: TPestParamMethod;
+  TimeSeriesName: string);
 var
   ConcStorage: TMt3dmsConcStorage;
   CellList: TCellAssignmentList;
