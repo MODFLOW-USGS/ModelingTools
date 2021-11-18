@@ -1,0 +1,163 @@
+unit ModflowMf6TimeSeriesWriterUnit;
+
+interface
+
+uses
+  CustomModflowWriterUnit, Modflow6TimeSeriesCollectionsUnit;
+
+type
+  TMf6TimeSeriesWriter = class(TCustomModflowWriter)
+  private
+    FTimeSeries: TTimesSeriesCollection;
+    procedure WriteAttributes;
+    procedure WriteTimeSeries;
+    procedure WriteFileInternal;
+  public
+    // result is time series file name.
+    function WriteFile(PackageInputFileName: string;
+      TimeSeries: TTimesSeriesCollection): string;
+  end;
+
+
+implementation
+
+uses
+  frameModflow6TimeSeriesUnit, GoPhastTypes, ModflowParameterUnit,
+  Modflow6TimeSeriesUnit;
+
+{ TMf6TimeSeriesWriter }
+
+procedure TMf6TimeSeriesWriter.WriteAttributes;
+var
+  SeriesIndex: Integer;
+  TimeSeries: TMf6TimeSeries;
+  Param: TModflowSteadyParameter;
+begin
+  WriteString('BEGIN ATTRIBUTES');
+  NewLine;
+
+  if FTimeSeries.Count > 1 then
+  begin
+    WriteString('  NAMES');
+  end
+  else
+  begin
+    WriteString('  NAME');
+  end;
+
+  for SeriesIndex := FTimeSeries.Count - 1 downto 0 do
+  begin
+    WriteString(' ' + FTimeSeries[SeriesIndex].TimeSeries.SeriesName);
+  end;
+  NewLine;
+
+  if FTimeSeries.Count > 1 then
+  begin
+    WriteString('  METHODS');
+  end
+  else
+  begin
+    WriteString('  METHOD');
+  end;
+
+  for SeriesIndex := FTimeSeries.Count - 1 downto 0 do
+  begin
+    TimeSeries := FTimeSeries[SeriesIndex].TimeSeries;
+    case TimeSeries.InterpolationMethod of
+      mimStepwise:
+        begin
+          WriteString(' STEPWISE');
+        end;
+      mimLinear:
+        begin
+          WriteString(' LINEAR');
+        end;
+      mimLinearEnd:
+        begin
+          WriteString(' LINEAREND');
+        end;
+      else
+        Assert(False);
+    end;
+  end;
+  NewLine;
+
+  if FTimeSeries.Count > 1 then
+  begin
+    WriteString('  SFAS');
+  end
+  else
+  begin
+    WriteString('  SFAC');
+  end;
+
+  for SeriesIndex := FTimeSeries.Count - 1 downto 0 do
+  begin
+    TimeSeries := FTimeSeries[SeriesIndex].TimeSeries;
+
+    WritePestTemplateFormulaOrValue(TimeSeries.ScaleFactor, '',
+      TimeSeries.ScaleFactorParameter, TimeSeries.ParamMethod,
+      nil, nil);
+    Param := Model.GetPestParameterByName(TimeSeries.ScaleFactorParameter);
+    if Param <> nil then
+    begin
+      FPestParamUsed := True
+    end;
+  end;
+  NewLine;
+
+  WriteString('END ATTRIBUTES');
+  NewLine;
+  NewLine;
+end;
+
+function TMf6TimeSeriesWriter.WriteFile(PackageInputFileName: string;
+  TimeSeries: TTimesSeriesCollection): string;
+begin
+  FTimeSeries := TimeSeries;
+  FNameOfFile := PackageInputFileName + '.' + TimeSeries.GroupName + '.ts';
+  result := FNameOfFile;
+  FInputFileName := FNameOfFile;
+  FPestParamUsed := False;
+  WriteFileInternal;
+  if Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
+  end;
+end;
+
+procedure TMf6TimeSeriesWriter.WriteFileInternal;
+begin
+  OpenFile(FInputFileName);
+  try
+    WriteTemplateHeader;
+    WriteAttributes;
+    WriteTimeSeries;
+  finally
+    CloseFile;
+  end;
+end;
+
+procedure TMf6TimeSeriesWriter.WriteTimeSeries;
+var
+  TimeIndex: Integer;
+  SeriesIndex: Integer;
+  TimeSeries: TMf6TimeSeries;
+begin
+  for TimeIndex := 0 to FTimeSeries.TimeCount - 1 do
+  begin
+    WriteFloat(FTimeSeries.Times[TimeIndex].Value);
+    for SeriesIndex := FTimeSeries.Count - 1 downto 0 do
+    begin
+      TimeSeries := FTimeSeries[SeriesIndex].TimeSeries;
+      WriteFloat(TimeSeries[TimeIndex].Value);
+    end;
+    NewLine;
+  end;
+
+end;
+
+end.

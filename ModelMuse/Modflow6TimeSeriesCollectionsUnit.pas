@@ -39,12 +39,14 @@ type
     property TimeCount: Integer read GetTimeCount write SetTimeCount;
     property Items[Index: Integer]: TTimeSeriesItem read GetItem write SetItem; default;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
+    function Add: TTimeSeriesItem;
+
   published
     property Times: TRealCollection read FTimes write SetTimes;
     property GroupName: string read FGroupName write SetGroupName;
   end;
 
-  TTimesSeriesGroups = TList<TTimesSeriesCollection>;
+  TTimesSeriesGroups = TObjectList<TTimesSeriesCollection>;
 
   TimeSeriesCollectionItem = class(TOrderedItem)
   private
@@ -115,6 +117,11 @@ begin
 end;
 
 { TTimesSeriesCollection }
+
+function TTimesSeriesCollection.Add: TTimeSeriesItem;
+begin
+  result := inherited Add as TTimeSeriesItem;
+end;
 
 procedure TTimesSeriesCollection.Assign(Source: TPersistent);
 var
@@ -311,8 +318,10 @@ var
   GroupIndex: Integer;
   AGroup: TTimesSeriesCollection;
   LocalSeriesNames: TStringList;
-  GroupUsed: Boolean;
+//  GroupUsed: Boolean;
   SeriesName: string;
+  UsedGroup: TTimesSeriesCollection;
+  TimeSeries: TMf6TimeSeries;
 begin
   Groups.Clear;
   if (SeriesNames.Count = 1) and (SeriesNames[0] = '') then
@@ -325,15 +334,22 @@ begin
     for GroupIndex := 0 to Count - 1 do
     begin
       AGroup := Items[GroupIndex].TimesSeriesCollection;
-      GroupUsed := False;
+      UsedGroup := nil;
       for SeriesIndex := LocalSeriesNames.Count - 1 downto 0 do
       begin
         SeriesName := LocalSeriesNames[SeriesIndex];
         if SeriesName <> '' then
         begin
-          if AGroup.GetValuesByName(SeriesName) <> nil then
+          TimeSeries := AGroup.GetValuesByName(SeriesName);
+          if TimeSeries <> nil then
           begin
-            GroupUsed := True;
+            if UsedGroup = nil then
+            begin
+              UsedGroup := TTimesSeriesCollection.Create(nil);
+              UsedGroup.Times := AGroup.Times;
+              UsedGroup.GroupName := AGroup.GroupName;
+            end;
+            UsedGroup.Add.TimeSeries := TimeSeries;
             LocalSeriesNames.Delete(SeriesIndex);
           end;
         end
@@ -342,7 +358,7 @@ begin
           LocalSeriesNames.Delete(SeriesIndex);
         end;
       end;
-      if GroupUsed then
+      if UsedGroup <> nil then
       begin
         Groups.Add(AGroup);
       end;

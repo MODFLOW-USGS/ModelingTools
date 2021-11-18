@@ -2715,7 +2715,8 @@ begin
   begin
     FPestParamUsed := True;
   end;
-  if (not WritingTemplate) or ((PestParValue = '') and (PestSeriesValue = '')) then
+  if (not WritingTemplate) or ((PestParValue = '')
+    and (PestSeriesValue = '')) then
   begin
     if ChangeSign then
     begin
