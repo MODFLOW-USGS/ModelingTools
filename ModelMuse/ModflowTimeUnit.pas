@@ -709,7 +709,7 @@ begin
   for PeriodIndex := 0 to Count - 1 do
   begin
     StressPeriod := Items[PeriodIndex];
-    if (StressPeriod.StartTime <= ATime) and (StressPeriod.EndTime > ATime) then
+    if (StressPeriod.StartTime <= ATime) and (StressPeriod.EndTime >= ATime) then
     begin
       Period := PeriodIndex;
       ElapsedTime := StressPeriod.StartTime;

@@ -1030,7 +1030,7 @@ begin
   else
   begin
     LocalModel := frmGoPhast.PhastModel;
-    ATime := LocalModel.ModflowStressPeriods[FStressPeriod].EndTime;
+    ATime := LocalModel.ModflowStressPeriods[FStressPeriod-1].EndTime;
 
     result := TimeCollection.GetInterpolatedValue(LocalModel, ATime, Text,
       LocalModel.ModflowStressPeriods.First.StartTime);

@@ -189,6 +189,7 @@ var
   NextTimeIndex: Integer;
   FirstValue: Double;
   LastValue: Double;
+  StressPeriod: TModflowStressPeriod;
   function NearlyTheSame(A, B: double): Boolean;
   begin
     result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
@@ -197,11 +198,15 @@ begin
   Series := GetValuesByName(SeriesName);
   Assert(Series <> nil);
 
-  UsedTime := Time-StartTimeOffset;
+  UsedTime := Time -StartTimeOffset;
 
   LocalModel := Model as TCustomModel;
-  LocalModel.ModflowStressPeriods.TimeToPeriodAndStep(UsedTime, Period, Step);
-  TimeStep := LocalModel.ModflowStressPeriods[Period].GetTimeStep(Step);
+  LocalModel.ModflowStressPeriods.TimeToPeriodAndStep(Time, Period, Step);
+  StressPeriod := LocalModel.ModflowStressPeriods[Period];
+  TimeStep := StressPeriod.GetTimeStep(Step);
+
+  TimeStep.StartTime := TimeStep.StartTime-StartTimeOffset;
+  TimeStep.EndTime := TimeStep.EndTime-StartTimeOffset;
 
   StartTimeIndex := 0;
   for TimeIndex := 0 to TimeCount - 1 do
@@ -251,10 +256,10 @@ begin
           begin
             FirstValue := Series[StartTimeIndex].Value
           end
-          else if NearlyTheSame(Times[NextTimeIndex].Value, UsedTime) then
-          begin
-            FirstValue := Series[NextTimeIndex].Value
-          end
+//          else if NearlyTheSame(Times[NextTimeIndex].Value, UsedTime) then
+//          begin
+//            FirstValue := Series[NextTimeIndex].Value
+//          end
           else
           begin
             FirstValue := Interpolate(TimeStep.StartTime,
@@ -263,7 +268,7 @@ begin
     		  end;
           UsedTimes.Add(TimeStep.StartTime);
           UsedValues.Add(FirstValue);
-          for TimeIndex := StartTimeIndex to EndTimeIndex - 1 do
+          for TimeIndex := StartTimeIndex + 1 to EndTimeIndex - 1 do
           begin
             if Not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
             begin
@@ -291,7 +296,7 @@ begin
           else
           begin
             LastValue := Interpolate(TimeStep.EndTime,
-              Series[PreviousTimeIndex].Value, Times[EndTimeIndex].Value,
+              Times[PreviousTimeIndex].Value, Times[EndTimeIndex].Value,
               Series[PreviousTimeIndex].Value, Series[EndTimeIndex].Value);
           end;
           UsedTimes.Add(TimeStep.EndTime);
@@ -337,7 +342,7 @@ begin
         else
         begin
           result := Interpolate(TimeStep.EndTime,
-            Series[PreviousTimeIndex].Value, Times[EndTimeIndex].Value,
+            Times[PreviousTimeIndex].Value, Times[EndTimeIndex].Value,
             Series[PreviousTimeIndex].Value, Series[EndTimeIndex].Value);
         end;
       end;
