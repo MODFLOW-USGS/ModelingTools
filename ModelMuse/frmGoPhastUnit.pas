@@ -5204,7 +5204,7 @@ procedure TfrmGoPhast.acModflow6ActiveExecute(Sender: TObject);
 var
   UndoHfb: TUndoConvertHfbMf6;
   UndoConvertObs: TUndoConvertObservationsMf6;
-  UndoChd: TUndoConvertChd;
+//  UndoChd: TUndoConvertChd;
 begin
   inherited;
   if ModelSelection <> msModflow2015 then
@@ -5257,21 +5257,21 @@ begin
       end;
     end;
 
-    if PhastModel.ModflowPackages.ChdBoundary.IsSelected then
-    begin
-      UndoChd := TUndoConvertChd.Create;
-      try
-        if  UndoChd.ShouldConvert and
-          (MessageDlg(StrDoYouWantToConveChd, mtConfirmation,
-          [mbYes, mbNo], 0) = mrYes) then
-        begin
-          UndoStack.Submit(UndoChd);
-          UndoChd := nil;
-        end;
-      finally
-        UndoChd.Free;
-      end;
-    end;
+//    if PhastModel.ModflowPackages.ChdBoundary.IsSelected then
+//    begin
+//      UndoChd := TUndoConvertChd.Create;
+//      try
+//        if  UndoChd.ShouldConvert and
+//          (MessageDlg(StrDoYouWantToConveChd, mtConfirmation,
+//          [mbYes, mbNo], 0) = mrYes) then
+//        begin
+//          UndoStack.Submit(UndoChd);
+//          UndoChd := nil;
+//        end;
+//      finally
+//        UndoChd.Free;
+//      end;
+//    end;
 
     UndoConvertObs := TUndoConvertObservationsMf6.Create;
     try

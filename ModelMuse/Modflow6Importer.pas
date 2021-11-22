@@ -8,7 +8,7 @@ interface
 uses
   System.Classes, System.SysUtils, System.IOUtils, ModflowCellUnit,
   System.Generics.Collections, ModflowMawUnit, ModflowSfr6Unit,
-  ModflowLakMf6Unit;
+  ModflowLakMf6Unit, Modflow6TimeSeriesCollectionsUnit;
 
 type
   TModflow6Feature = class(TObject)
@@ -209,18 +209,19 @@ type
     m6ftRch, m6ftEvt, m6ftCSub, m6ftMAW, m6ftSFR, m6ftLak, m6ftUzf);
   TModflow6GridType = (m6gtStructured, mggrDisv);
 
-  TCustomModflow6FileReader = class (TObject)
-  protected
-    FInputFile: TStreamReader;
-  public
-    constructor Create;
-    procedure OpenFile(const FileName: string); virtual;
-    destructor Destroy; override;
-  end;
+//  TCustomModflow6FileReader = class (TObject)
+//  protected
+//    FInputFile: TStreamReader;
+//  public
+//    constructor Create;
+//    procedure OpenFile(const FileName: string); virtual;
+//    destructor Destroy; override;
+//  end;
 
-  TModflow6FileReader = class (TCustomModflow6FileReader)
+  TModflow6FileReader = class (TObject)
   private
     FFeatureType: TModflow6FeatureType;
+    FInputFile: TStreamReader;
     FGridType: TModflow6GridType;
     FNumberOfMawWells: Integer;
     FMawWellCells: array of array of TCellLocation;
@@ -234,6 +235,8 @@ type
     FNumberOfLakeCells: Integer;
     FUzfCells: array of TCellLocation;
     FNumberUzfCells: Integer;
+    FTimeSeries: TTimesSeriesCollections;
+    FStressPeriod: Integer;
     function ReadAFeature(const Splitter: TStringList): TModflow6Feature;
     function ReadAChdFeature(const Splitter: TStringList): TChdFeature;
     function ReadAWellFeature(const Splitter: TStringList): TWellFeature;
@@ -265,7 +268,7 @@ type
     procedure ReadNumberOfUzfCells;
     procedure ReadUzfCells;
     procedure ReadOptions;
-    procedure ReadTimeSeriesFile(TsFileName: string);
+    procedure ReadTimeSeriesFile(const TsFileName: string);
     function ReadFromTimeSeriesOrConvert(Text: string): double;
   public
     constructor Create(GridType: TModflow6GridType);
@@ -295,7 +298,7 @@ uses
   ModflowDRN_WriterUnit, ModflowRiverWriterUnit, ModflowGHB_WriterUnit,
   ModflowRCH_WriterUnit, ModflowETS_WriterUnit, ModflowCSubWriterUnit,
   ModflowMawWriterUnit, ModflowSfr6WriterUnit, ModflowLakMf6WriterUnit,
-  ModflowUzfMf6WriterUnit;
+  ModflowUzfMf6WriterUnit, PhastModelUnit, frmGoPhastUnit;
 
 { TModflow6FileReader }
 
@@ -304,10 +307,13 @@ begin
   inherited Create;
   FGridType := GridType;
   FSfrFeatures := TObjectList<TSfrFeature>.Create;
+  FTimeSeries := TTimesSeriesCollections.Create(nil);
 end;
 
 destructor TModflow6FileReader.Destroy;
 begin
+  FTimeSeries.Free;
+  FInputFile.Free;
   FSfrFeatures.Free;
   inherited;
 end;
@@ -441,6 +447,7 @@ procedure TModflow6FileReader.OpenFile(const FileName: string);
 var
   FileExtension: string;
 begin
+  FInputFile := TFile.OpenText(FileName);
   FileExtension := LowerCase(ExtractFileExt(FileName));
   if SameText(FileExtension, TModflowCHD_Writer.Extension) then
   begin
@@ -498,6 +505,8 @@ end;
 
 function TModflow6FileReader.ReadAChdFeature(
   const Splitter: TStringList): TChdFeature;
+var
+  Value: string;
 begin
   case FGridType of
     m6gtStructured:
@@ -517,7 +526,7 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        Value := := Splitter[3];
+        Value := Splitter[3];
       end;
     mggrDisv:
       begin
@@ -1008,8 +1017,24 @@ begin
 end;
 
 function TModflow6FileReader.ReadFromTimeSeriesOrConvert(Text: string): double;
+var
+  TimeCollection: TTimesSeriesCollection;
+  LocalModel: TPhastModel;
+  ATime: Double;
 begin
-  FortranStrToFloat(Text);
+  TimeCollection := FTimeSeries.GetTimesSeriesCollectionBySeriesName(Text);
+  if TimeCollection = nil then
+  begin
+    result := FortranStrToFloat(Text);
+  end
+  else
+  begin
+    LocalModel := frmGoPhast.PhastModel;
+    ATime := LocalModel.ModflowStressPeriods[FStressPeriod].EndTime;
+
+    result := TimeCollection.GetInterpolatedValue(LocalModel, ATime, Text,
+      LocalModel.ModflowStressPeriods.First.StartTime);
+  end;
 end;
 
 procedure TModflow6FileReader.ReadLakCells;
@@ -1345,6 +1370,7 @@ var
     end;
   end;
 begin
+  FStressPeriod := StressPeriod;
   Splitter := TStringList.Create;
   try
     result := TModflowFeatureList.Create;
@@ -1478,9 +1504,12 @@ begin
 
 end;
 
-procedure TModflow6FileReader.ReadTimeSeriesFile(TsFileName: string);
+procedure TModflow6FileReader.ReadTimeSeriesFile(const TsFileName: string);
+var
+  ATimeSeries: TTimesSeriesCollection;
 begin
-
+  ATimeSeries := FTimeSeries.Add.TimesSeriesCollection;
+  ATimeSeries.ReadFromFile(TsFileName)
 end;
 
 procedure TModflow6FileReader.ReadUzfCells;

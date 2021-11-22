@@ -70,15 +70,20 @@ type
 
   TTimesSeriesCollections = class(TOrderedCollection)
   private
+    FTimesSeriesDictionary: TDictionary<string, TTimesSeriesCollection>;
     function GetItem(Index: Integer): TimeSeriesCollectionItem;
     procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
   public
     Constructor Create(Model: TBaseModel);
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
     property Items[Index: Integer]: TimeSeriesCollectionItem read GetItem write SetItem; default;
     function Add: TimeSeriesCollectionItem;
     function GetTimeSeriesByName(ASeriesName: String): TMf6TimeSeries;
     procedure GetTimesSeriesGroups(SeriesNames: TStrings;
       Groups: TTimesSeriesGroups);
+    function GetTimesSeriesCollectionBySeriesName(
+      const ASeriesName: string): TTimesSeriesCollection;
   end;
 
 implementation
@@ -222,6 +227,7 @@ begin
     end;
   end;
 
+  result := 0;
   case Series.InterpolationMethod of
     mimStepwise:
       begin
@@ -259,7 +265,7 @@ begin
           UsedValues.Add(FirstValue);
           for TimeIndex := StartTimeIndex to EndTimeIndex - 1 do
           begin
-            if Not NearlyTheSame(Series[TimeIndex], NoValue then
+            if Not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
             begin
               UsedTimes.Add(Times[TimeIndex].Value);
               UsedValues.Add(Series[TimeIndex].Value);
@@ -601,9 +607,22 @@ begin
   result := inherited Add as TimeSeriesCollectionItem;
 end;
 
+procedure TTimesSeriesCollections.Assign(Source: TPersistent);
+begin
+  inherited;
+  FTimesSeriesDictionary.Clear;
+end;
+
 constructor TTimesSeriesCollections.Create(Model: TBaseModel);
 begin
   inherited Create(TimeSeriesCollectionItem, Model);
+  FTimesSeriesDictionary := TDictionary<string, TTimesSeriesCollection>.Create;
+end;
+
+destructor TTimesSeriesCollections.Destroy;
+begin
+  FTimesSeriesDictionary.Free;
+  inherited;
 end;
 
 function TTimesSeriesCollections.GetItem(
@@ -630,6 +649,33 @@ begin
     begin
       Exit;
     end;
+  end;
+end;
+
+function TTimesSeriesCollections.GetTimesSeriesCollectionBySeriesName(
+  const ASeriesName: string): TTimesSeriesCollection;
+var
+  GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+  SeriesIndex: Integer;
+  SeriesName:String;
+begin
+  result := nil;
+  if (Count > 0) then
+  begin
+    if (FTimesSeriesDictionary.Count = 0) then
+    begin
+      for GroupIndex := 0 to Count - 1 do
+      begin
+        AGroup := Items[GroupIndex].TimesSeriesCollection;
+        for SeriesIndex := 0 to AGroup.Count - 1 do
+        begin
+          SeriesName := AGroup[SeriesIndex].TimeSeries.SeriesName;
+          FTimesSeriesDictionary.Add(UpperCase(SeriesName), AGroup);
+        end;
+      end;
+    end;
+    FTimesSeriesDictionary.TryGetValue(UpperCase(ASeriesName), result);
   end;
 end;
 

@@ -917,21 +917,21 @@ type
     property ShouldConvert: Boolean read GetShouldConvert;
   end;
 
-  TUndoConvertChd = class(TCustomUndo)
-  private
-    FScreenObjects: TScreenObjectList;
-    FNewChdParam: TModflowTransientListParameter;
-    FChdBoundaries: TObjectList<TChdBoundary>;
-    function GetShouldConvert: Boolean;
-  protected
-    function Description: string; override;
-  public
-    constructor Create;
-    destructor Destroy; override;
-    procedure DoCommand; override;
-    procedure Undo; override;
-    property ShouldConvert: Boolean read GetShouldConvert;
-  end;
+//  TUndoConvertChd = class(TCustomUndo)
+//  private
+//    FScreenObjects: TScreenObjectList;
+//    FNewChdParam: TModflowTransientListParameter;
+//    FChdBoundaries: TObjectList<TChdBoundary>;
+//    function GetShouldConvert: Boolean;
+//  protected
+//    function Description: string; override;
+//  public
+//    constructor Create;
+//    destructor Destroy; override;
+//    procedure DoCommand; override;
+//    procedure Undo; override;
+//    property ShouldConvert: Boolean read GetShouldConvert;
+//  end;
 
   TUndoConvertObservationsMf6 = class(TCustomUpdateScreenObjectDisplayUndo)
   private
@@ -6254,102 +6254,102 @@ begin
 
 end;
 
-{ TUndoConvertChd }
-
-constructor TUndoConvertChd.Create;
-var
-  ScreenObjectIndex: Integer;
-  AScreenObject: TScreenObject;
-  AChdBoundary: TChdBoundary;
-begin
-  inherited Create;
-  FScreenObjects := TScreenObjectList.Create;
-  FChdBoundaries:= TObjectList<TChdBoundary>.Create;
-  for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
-  begin
-    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
-    if (not AScreenObject.Deleted)
-      and (AScreenObject.ModflowChdBoundary <> nil) then
-    begin
-      if AScreenObject.ModflowChdBoundary.Used
-        and (AScreenObject.ModflowChdBoundary.Values.Count > 0) then
-      begin
-        FScreenObjects.Add(AScreenObject);
-        AChdBoundary := TChdBoundary.Create(nil, nil);
-        AChdBoundary.Assign(AScreenObject.ModflowChdBoundary);
-        FChdBoundaries.Add(AChdBoundary);
-      end;
-    end;
-  end;
-end;
-
-function TUndoConvertChd.Description: string;
-begin
-
-end;
-
-destructor TUndoConvertChd.Destroy;
-begin
-  FScreenObjects.Free;
-  FChdBoundaries.Free;
-  inherited;
-end;
-
-procedure TUndoConvertChd.DoCommand;
-const
-  Root = 'CHD_MF6';
-var
-  ScreenObjectIndex: Integer;
-  AScreenObject: TScreenObject;
-  ParamItem: TModflowParamItem;
-  ModflowTransientParameters: TModflowTransientListParameters;
-  Index: Integer;
-  NewName: string;
-begin
-  inherited;
-  ModflowTransientParameters := frmGoPhast.PhastModel.ModflowTransientParameters;
-  NewName := Root;
-  Index := 1;
-  FNewChdParam := ModflowTransientParameters.GetParamByName(NewName);
-  while FNewChdParam <> nil do
-  begin
-    NewName := Format('%0:s_%1:d',[Root, Index]);
-    Inc(Index);
-    FNewChdParam := ModflowTransientParameters.GetParamByName(NewName);
-  end;
-  FNewChdParam := ModflowTransientParameters.Add;
-  FNewChdParam.Value := 1;
-  FNewChdParam.ParameterName := NewName;
-  FNewChdParam.ParameterType := ptCHD;
-  for ScreenObjectIndex := 0 to FScreenObjects.Count - 1 do
-  begin
-    AScreenObject := FScreenObjects[ScreenObjectIndex];
-    ParamItem := AScreenObject.ModflowChdBoundary.Parameters.Add;
-    ParamItem.Param.Assign(AScreenObject.ModflowChdBoundary.Values);
-    ParamItem.Param.Param := FNewChdParam;
-    AScreenObject.ModflowChdBoundary.Values.Clear;
-  end;
-end;
-
-function TUndoConvertChd.GetShouldConvert: Boolean;
-begin
-  result := (FScreenObjects.Count > 0)
-end;
-
-procedure TUndoConvertChd.Undo;
-var
-  ScreenObjectIndex: Integer;
-  AScreenObject: TScreenObject;
-begin
-  for ScreenObjectIndex := 0 to FScreenObjects.Count - 1 do
-  begin
-    AScreenObject := FScreenObjects[ScreenObjectIndex];
-    AScreenObject.ModflowChdBoundary := FChdBoundaries[ScreenObjectIndex];
-  end;
-  FreeAndNil(FNewChdParam);
-  inherited;
-end;
-
+//{ TUndoConvertChd }
+//
+//constructor TUndoConvertChd.Create;
+//var
+//  ScreenObjectIndex: Integer;
+//  AScreenObject: TScreenObject;
+//  AChdBoundary: TChdBoundary;
+//begin
+//  inherited Create;
+//  FScreenObjects := TScreenObjectList.Create;
+//  FChdBoundaries:= TObjectList<TChdBoundary>.Create;
+//  for ScreenObjectIndex := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+//  begin
+//    AScreenObject := frmGoPhast.PhastModel.ScreenObjects[ScreenObjectIndex];
+//    if (not AScreenObject.Deleted)
+//      and (AScreenObject.ModflowChdBoundary <> nil) then
+//    begin
+//      if AScreenObject.ModflowChdBoundary.Used
+//        and (AScreenObject.ModflowChdBoundary.Values.Count > 0) then
+//      begin
+//        FScreenObjects.Add(AScreenObject);
+//        AChdBoundary := TChdBoundary.Create(nil, nil);
+//        AChdBoundary.Assign(AScreenObject.ModflowChdBoundary);
+//        FChdBoundaries.Add(AChdBoundary);
+//      end;
+//    end;
+//  end;
+//end;
+//
+//function TUndoConvertChd.Description: string;
+//begin
+//
+//end;
+//
+//destructor TUndoConvertChd.Destroy;
+//begin
+//  FScreenObjects.Free;
+//  FChdBoundaries.Free;
+//  inherited;
+//end;
+//
+//procedure TUndoConvertChd.DoCommand;
+//const
+//  Root = 'CHD_MF6';
+//var
+//  ScreenObjectIndex: Integer;
+//  AScreenObject: TScreenObject;
+//  ParamItem: TModflowParamItem;
+//  ModflowTransientParameters: TModflowTransientListParameters;
+//  Index: Integer;
+//  NewName: string;
+//begin
+//  inherited;
+//  ModflowTransientParameters := frmGoPhast.PhastModel.ModflowTransientParameters;
+//  NewName := Root;
+//  Index := 1;
+//  FNewChdParam := ModflowTransientParameters.GetParamByName(NewName);
+//  while FNewChdParam <> nil do
+//  begin
+//    NewName := Format('%0:s_%1:d',[Root, Index]);
+//    Inc(Index);
+//    FNewChdParam := ModflowTransientParameters.GetParamByName(NewName);
+//  end;
+//  FNewChdParam := ModflowTransientParameters.Add;
+//  FNewChdParam.Value := 1;
+//  FNewChdParam.ParameterName := NewName;
+//  FNewChdParam.ParameterType := ptCHD;
+//  for ScreenObjectIndex := 0 to FScreenObjects.Count - 1 do
+//  begin
+//    AScreenObject := FScreenObjects[ScreenObjectIndex];
+//    ParamItem := AScreenObject.ModflowChdBoundary.Parameters.Add;
+//    ParamItem.Param.Assign(AScreenObject.ModflowChdBoundary.Values);
+//    ParamItem.Param.Param := FNewChdParam;
+//    AScreenObject.ModflowChdBoundary.Values.Clear;
+//  end;
+//end;
+//
+//function TUndoConvertChd.GetShouldConvert: Boolean;
+//begin
+//  result := (FScreenObjects.Count > 0)
+//end;
+//
+//procedure TUndoConvertChd.Undo;
+//var
+//  ScreenObjectIndex: Integer;
+//  AScreenObject: TScreenObject;
+//begin
+//  for ScreenObjectIndex := 0 to FScreenObjects.Count - 1 do
+//  begin
+//    AScreenObject := FScreenObjects[ScreenObjectIndex];
+//    AScreenObject.ModflowChdBoundary := FChdBoundaries[ScreenObjectIndex];
+//  end;
+//  FreeAndNil(FNewChdParam);
+//  inherited;
+//end;
+//
 end.
 
 

@@ -10417,13 +10417,14 @@ const
 //               Bug fix: Fixed bug that could cause the lake package in
 //                MODFLOW 6 to be created incorrectly if the lake only had
 //                vertical connections.
+//    '4.3.0.74' No change
 
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '4.3.0.73';
+  IIModelVersion = '4.3.0.74';
 
 function IModelVersion: string;
 begin
