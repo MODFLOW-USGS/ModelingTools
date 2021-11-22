@@ -30,13 +30,22 @@ type
     property NotifierComponent: TComponent read FNotifierComponent;
   published
     property SeriesName: string read FSeriesName write SetSeriesName;
-    property InterpolationMethod: TMf6InterpolationMethods read FInterpolationMethod write SetInterpolationMethod;
-    property StoredScaleFactor: TRealStorage read FStoredScaleFactor write SetStoredScaleFactor;
-    property ScaleFactorParameter: string read FScaleFactorParameter write SetScaleFactorParameter;
-    property ParamMethod: TPestParamMethod read FParamMethod write SetParamMethod;
+    property InterpolationMethod: TMf6InterpolationMethods
+      read FInterpolationMethod write SetInterpolationMethod;
+    property StoredScaleFactor: TRealStorage read FStoredScaleFactor
+      write SetStoredScaleFactor;
+    property ScaleFactorParameter: string read FScaleFactorParameter
+      write SetScaleFactorParameter;
+    property ParamMethod: TPestParamMethod read FParamMethod
+      write SetParamMethod;
+//    function GetInterpolatedValue(Model: TBaseModel; Time: double;
+//      StartTimeOffset: double = 0): double;
   end;
 
 implementation
+
+//uses
+//  PhastModelUnit, ModflowTimeUnit;
 
 { TTimeSeries }
 
@@ -69,6 +78,20 @@ begin
   FStoredScaleFactor.Free;
   inherited;
 end;
+
+//function TMf6TimeSeries.GetInterpolatedValue(Model: TBaseModel; Time: double;
+//  StartTimeOffset: double = 0): double;
+//var
+//  LocalModel: TCustomModel;
+//  Period: Integer;
+//  Step: Integer;
+//begin
+//  LocalModel := Model as TCustomModel;
+//  LocalModel.ModflowStressPeriods.TimeToPeriodAndStep(
+//    Time-StartTimeOffset, Period, Step);
+//  TimeStep := LocalModel.ModflowStressPeriods[Period].GetTimeStep(Step);
+//
+//end;
 
 function TMf6TimeSeries.GetScaleFactor: double;
 begin

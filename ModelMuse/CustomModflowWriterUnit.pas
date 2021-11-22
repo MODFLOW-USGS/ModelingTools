@@ -724,15 +724,14 @@ type
   TCustomListWriter = class(TCustomParameterTransientWriter)
   private
     FObjectNames: TStringList;
+    FTimeSeriesFileNames: TStringList;
     procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
       ErrorRoot: string; const TimeIndex: integer);
     procedure WriteTimeSeriesFiles(InputFileName: string);
   strict protected
     FStressPeriod: Integer;
     FBoundaryIndex: Integer;
-
   protected
-
     // @name counts the maximum number of cells used in any stress period. This
     // value is returned in MaximumNumberOfCells.
     procedure CountCells(var MaximumNumberOfCells: Integer); override;
@@ -1144,7 +1143,7 @@ uses frmErrorsAndWarningsUnit, ModflowUnitNumbers, frmGoPhastUnit,
   Modflow6ObsWriterUnit, ModflowTimeSeriesWriterUnit,
   ModflowTimeSeriesUnit, ModflowMvrWriterUnit, PlProcUnit,
   framePestObsCaptionedUnit, PestObsExtractorInputWriterUnit,
-  System.AnsiStrings;
+  System.AnsiStrings, ModflowMf6TimeSeriesWriterUnit;
 
 resourcestring
   StrTheFollowingParameSkip = 'The following %s parameters are being skipped ' +
@@ -2754,6 +2753,7 @@ begin
   // strip off .tpl extension to get input file name.
   PValFileName := ChangeFileExt(ExtractFileName(AFileName), '');
   Model.FilesToDelete.Add(PValFileName);
+  PValFileName := ChangeFileExt(PValFileName, '');
   PValFileName := ChangeFileExt(PValFileName, '');
   PValFileName := ChangeFileExt(PValFileName, StrPvalExt);
   ALine := PestUtilityProgramPath(
@@ -4788,6 +4788,7 @@ constructor TCustomListWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
+  FTimeSeriesFileNames := TStringList.Create;
 //  FBoundNames := TStringList.Create;
 
   FObjectNames := TStringList.Create;
@@ -5455,6 +5456,7 @@ end;
 destructor TCustomListWriter.Destroy;
 begin
   FObjectNames.Free;
+  FTimeSeriesFileNames.Free;
 //  FBoundNames.Free;
   inherited;
 end;
@@ -9486,18 +9488,36 @@ var
   Groups: TTimesSeriesGroups;
   GroupIndex: Integer;
   AGroup: TTimesSeriesCollection;
+  FileIndex: Integer;
+  TimeSeriesWriter: TMf6TimeSeriesWriter;
 begin
   if FTimeSeriesNames.Count > 0 then
   begin
-    Groups := TTimesSeriesGroups.Create;
-    try
-      Model.Mf6TimesSeries.GetTimesSeriesGroups(FTimeSeriesNames, Groups);
-      for GroupIndex := 0 to Groups.Count - 1 do
-      begin
-        AGroup := Groups[GroupIndex];
+    if not WritingTemplate then
+    begin
+      Groups := TTimesSeriesGroups.Create;
+      try
+        Model.Mf6TimesSeries.GetTimesSeriesGroups(FTimeSeriesNames, Groups);
+        for GroupIndex := 0 to Groups.Count - 1 do
+        begin
+          AGroup := Groups[GroupIndex];
+          TimeSeriesWriter := TMf6TimeSeriesWriter.Create(Model, etExport);
+          try
+            FTimeSeriesFileNames.Add(TimeSeriesWriter.
+              WriteFile(FInputFileName, AGroup));
+          finally
+            TimeSeriesWriter.Free;
+          end;
+        end;
+      finally
+        Groups.Free;
       end;
-    finally
-      Groups.Free;
+    end;
+    for FileIndex := 0 to FTimeSeriesFileNames.Count - 1 do
+    begin
+      WriteString('    TS6 FILEIN ');
+      WriteString(ExtractFileName(FTimeSeriesFileNames[FileIndex]));
+      NewLine;
     end;
   end;
 end;

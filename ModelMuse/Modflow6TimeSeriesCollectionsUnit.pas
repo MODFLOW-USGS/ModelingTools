@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, GoPhastTypes, OrderedCollectionUnit,
-    Modflow6TimeSeriesUnit, Generics.Collections;
+    Modflow6TimeSeriesUnit, Generics.Collections, System.IOUtils;
 
 type
   TTimeSeriesItem = class(TOrderedItem)
@@ -25,12 +25,15 @@ type
   private
     FTimes: TRealCollection;
     FGroupName: string;
+    FInputFile: TStreamReader;
     function GetItem(Index: Integer): TTimeSeriesItem;
     function GetTimeCount: Integer;
     procedure SetItem(Index: Integer; const Value: TTimeSeriesItem);
     procedure SetTimeCount(const Value: Integer);
     procedure SetTimes(const Value: TRealCollection);
     procedure SetGroupName(const Value: string);
+    procedure ReadAttributes;
+    procedure ReadTimeSeries;
   public
     Constructor Create(Model: TBaseModel);
     Destructor Destroy; override;
@@ -40,7 +43,9 @@ type
     property Items[Index: Integer]: TTimeSeriesItem read GetItem write SetItem; default;
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
     function Add: TTimeSeriesItem;
-
+    procedure ReadFromFile(const AFileName: string);
+    function GetInterpolatedValue(Model: TBaseModel; Time: double; const
+      SeriesName: string; StartTimeOffset: double = 0): double;
   published
     property Times: TRealCollection read FTimes write SetTimes;
     property GroupName: string read FGroupName write SetGroupName;
@@ -77,6 +82,9 @@ type
   end;
 
 implementation
+
+uses
+  ModelMuseUtilities, PhastModelUnit, ModflowTimeUnit;
 
 { TTimeSeriesItem }
 
@@ -155,6 +163,183 @@ begin
   inherited;
 end;
 
+function TTimesSeriesCollection.GetInterpolatedValue(Model: TBaseModel;
+  Time: double; const SeriesName: string; StartTimeOffset: double): double;
+const
+  NoValue = 3.0E30;
+  Epsilon = 1E-8;
+var
+  LocalModel: TCustomModel;
+  Period: Integer;
+  Step: Integer;
+  TimeStep: TTimeStep;
+  TimeIndex: Integer;
+  UsedTime: double;
+  Series: TMf6TimeSeries;
+  StartTimeIndex: Integer;
+  EndTimeIndex: Integer;
+  PreviousTimeIndex: Integer;
+  UsedTimes: TList<Double>;
+  UsedValues: TList<Double>;
+  NextTimeIndex: Integer;
+  FirstValue: Double;
+  LastValue: Double;
+  function NearlyTheSame(A, B: double): Boolean;
+  begin
+    result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
+  end;
+begin
+  Series := GetValuesByName(SeriesName);
+  Assert(Series <> nil);
+
+  UsedTime := Time-StartTimeOffset;
+
+  LocalModel := Model as TCustomModel;
+  LocalModel.ModflowStressPeriods.TimeToPeriodAndStep(UsedTime, Period, Step);
+  TimeStep := LocalModel.ModflowStressPeriods[Period].GetTimeStep(Step);
+
+  StartTimeIndex := 0;
+  for TimeIndex := 0 to TimeCount - 1 do
+  begin
+    if (Times[TimeIndex].Value <= TimeStep.StartTime)
+      and not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
+    begin
+      StartTimeIndex := TimeIndex;
+    end;
+    if (Times[TimeIndex].Value > TimeStep.StartTime) then
+    begin
+      break;
+    end;
+  end;
+  EndTimeIndex := StartTimeIndex;
+  for TimeIndex := StartTimeIndex to TimeCount - 1 do
+  begin
+    if (Times[TimeIndex].Value >= TimeStep.EndTime)
+      and not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
+    begin
+      EndTimeIndex := TimeIndex;
+      break;
+    end;
+  end;
+
+  case Series.InterpolationMethod of
+    mimStepwise:
+      begin
+        result := Series[StartTimeIndex].Value;
+      end;
+    mimLinear:
+      begin
+        UsedTimes := TList<Double>.Create;
+        UsedValues := TList<Double>.Create;
+        try
+          NextTimeIndex := EndTimeIndex;
+          for TimeIndex := StartTimeIndex +1 to EndTimeIndex do
+          begin
+            if not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
+            begin
+              NextTimeIndex := TimeIndex;
+              break;
+            end;
+		      end;
+          if NearlyTheSame(Times[StartTimeIndex].Value, UsedTime) then
+          begin
+            FirstValue := Series[StartTimeIndex].Value
+          end
+          else if NearlyTheSame(Times[NextTimeIndex].Value, UsedTime) then
+          begin
+            FirstValue := Series[NextTimeIndex].Value
+          end
+          else
+          begin
+            FirstValue := Interpolate(TimeStep.StartTime,
+              Times[StartTimeIndex].Value, Times[NextTimeIndex].Value,
+              Series[StartTimeIndex].Value, Series[NextTimeIndex].Value);
+    		  end;
+          UsedTimes.Add(TimeStep.StartTime);
+          UsedValues.Add(FirstValue);
+          for TimeIndex := StartTimeIndex to EndTimeIndex - 1 do
+          begin
+            if Not NearlyTheSame(Series[TimeIndex], NoValue then
+            begin
+              UsedTimes.Add(Times[TimeIndex].Value);
+              UsedValues.Add(Series[TimeIndex].Value);
+            end;
+          end;
+          PreviousTimeIndex :=  StartTimeIndex;
+          for TimeIndex := EndTimeIndex-1 downto StartTimeIndex do
+          begin
+            if not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
+            begin
+              PreviousTimeIndex := TimeIndex;
+              break;
+            end;
+          end;
+          if NearlyTheSame(Times[PreviousTimeIndex].Value, UsedTime) then
+          begin
+            LastValue := Series[PreviousTimeIndex].Value
+          end
+          else if NearlyTheSame(Times[EndTimeIndex].Value, UsedTime) then
+          begin
+            LastValue := Series[EndTimeIndex].Value
+          end
+          else
+          begin
+            LastValue := Interpolate(TimeStep.EndTime,
+              Series[PreviousTimeIndex].Value, Times[EndTimeIndex].Value,
+              Series[PreviousTimeIndex].Value, Series[EndTimeIndex].Value);
+          end;
+          UsedTimes.Add(TimeStep.EndTime);
+          UsedValues.Add(LastValue);
+          if (TimeStep.StartTime = TimeStep.EndTime) then
+          begin
+            result := UsedValues[0];
+          end
+          else
+          begin
+            result := 0;
+            for TimeIndex := 1 to UsedTimes.Count - 1 do
+            begin
+              result := result + (UsedValues[TimeIndex-1] + UsedValues[TimeIndex])
+                * (UsedTimes[TimeIndex] - UsedTimes[TimeIndex-1]);
+            end;
+            result := result/(UsedTimes.Last - UsedTimes.First)/2;
+          end;
+        finally
+          UsedTimes.Free;
+          UsedValues.Free;
+        end;
+      end;
+    mimLinearEnd:
+      begin
+        PreviousTimeIndex :=  StartTimeIndex;
+        for TimeIndex := EndTimeIndex-1 downto StartTimeIndex do
+        begin
+          if not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
+          begin
+            PreviousTimeIndex := TimeIndex;
+            break;
+          end;
+        end;
+        if NearlyTheSame(Times[PreviousTimeIndex].Value, UsedTime) then
+        begin
+          result := Series[PreviousTimeIndex].Value
+        end
+        else if NearlyTheSame(Times[EndTimeIndex].Value, UsedTime) then
+        begin
+          result := Series[EndTimeIndex].Value
+        end
+        else
+        begin
+          result := Interpolate(TimeStep.EndTime,
+            Series[PreviousTimeIndex].Value, Times[EndTimeIndex].Value,
+            Series[PreviousTimeIndex].Value, Series[EndTimeIndex].Value);
+        end;
+      end;
+    else
+      Assert(False);
+  end;
+end;
+
 function TTimesSeriesCollection.GetItem(Index: Integer): TTimeSeriesItem;
 begin
   result := inherited Items[Index] as TTimeSeriesItem;
@@ -195,6 +380,143 @@ begin
     OtherCollection := TTimesSeriesCollection(TTimesSeriesCollection);
     result := (GroupName = OtherCollection.GroupName)
       and (Times.IsSame(OtherCollection.Times));
+  end;
+end;
+
+procedure TTimesSeriesCollection.ReadAttributes;
+var
+  ALine: string;
+  Splitter: TStringList;
+  NameIndex: Integer;
+  MethodIndex: Integer;
+  Methods: TStringList;
+begin
+  Methods := TStringList.Create;
+  Splitter := TStringList.Create;
+  try
+    Methods.Add('STEPWISE');
+    Methods.Add('LINEAR');
+    Methods.Add('LINEAREND');
+
+    while not FInputFile.EndOfStream do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      if IsEndOfSection(ALine) then
+      begin
+        Exit;
+      end;
+      Splitter.DelimitedText := ALine;
+      if (Splitter[0] = 'NAME')or (Splitter[0] = 'NAMES') then
+      begin
+        Count := Splitter.Count - 1;
+        for NameIndex := 1 to Splitter.Count - 1 do
+        begin
+          Items[NameIndex-1].TimeSeries.SeriesName := Splitter[NameIndex];
+          Items[NameIndex-1].TimeSeries.ScaleFactor := 1;
+        end;
+      end
+      else if (Splitter[0] = 'METHOD')or (Splitter[0] = 'METHODS') then
+      begin
+        Assert(Count = Splitter.Count - 1);
+        for NameIndex := 1 to Splitter.Count - 1 do
+        begin
+          MethodIndex := Methods.IndexOf(Splitter[NameIndex]);
+          if MethodIndex >= 0 then
+          begin
+            Items[NameIndex-1].TimeSeries.InterpolationMethod :=
+              TMf6InterpolationMethods(MethodIndex);
+          end;
+        end;
+      end
+      else if (Splitter[0] = 'SFAC')or (Splitter[0] = 'SFACS') then
+      begin
+        Assert(Count = Splitter.Count - 1);
+        for NameIndex := 1 to Splitter.Count - 1 do
+        begin
+          begin
+            Items[NameIndex-1].TimeSeries.ScaleFactor :=
+              FortranStrToFloat(Splitter[NameIndex]);
+          end;
+        end;
+      end;
+    end;
+  finally
+    Methods.Free;
+    Splitter.Free;
+  end;
+end;
+
+procedure TTimesSeriesCollection.ReadFromFile(const AFileName: string);
+var
+  ALine: string;
+  Section: string;
+begin
+  FInputFile := TFile.OpenText(AFileName);
+  try
+    while not FInputFile.EndOfStream do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      if IsBeginningOfSection(ALine, Section) then
+      begin
+        if SameText(Section, 'ATTRIBUTES') then
+        begin
+          ReadAttributes
+        end
+        else if SameText(Section, 'TIMESERIES') then
+        begin
+          ReadTimeSeries;
+          Exit;
+        end;
+      end;
+    end;
+  finally
+    FInputFile.Free;
+  end;
+end;
+
+procedure TTimesSeriesCollection.ReadTimeSeries;
+var
+  Splitter: TStringList;
+  ALine: string;
+  NameIndex: Integer;
+begin
+  Splitter := TStringList.Create;
+  try
+    while not FInputFile.EndOfStream do
+    begin
+      ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+      if ALine = '' then
+      begin
+        Continue;
+      end;
+      if IsEndOfSection(ALine) then
+      begin
+        Exit;
+      end;
+      Splitter.DelimitedText := ALine;
+
+      Assert(Count = Splitter.Count - 1);
+      TimeCount := TimeCount + 1;
+      Times[TimeCount-1].Value := FortranStrToFloat(Splitter[0]);
+      for NameIndex := 1 to Splitter.Count - 1 do
+      begin
+        begin
+          Items[NameIndex-1].TimeSeries[TimeCount-1].Value :=
+            FortranStrToFloat(Splitter[NameIndex]);
+        end;
+      end;
+
+    end;
+  finally
+    Splitter.Free;
   end;
 end;
 
@@ -360,10 +682,11 @@ begin
       end;
       if UsedGroup <> nil then
       begin
-        Groups.Add(AGroup);
+        Groups.Add(UsedGroup);
       end;
     end;
   finally
+    LocalSeriesNames.Free;
   end;
 end;
 

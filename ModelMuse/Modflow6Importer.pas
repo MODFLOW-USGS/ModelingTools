@@ -209,10 +209,18 @@ type
     m6ftRch, m6ftEvt, m6ftCSub, m6ftMAW, m6ftSFR, m6ftLak, m6ftUzf);
   TModflow6GridType = (m6gtStructured, mggrDisv);
 
-  TModflow6FileReader = class (TObject)
+  TCustomModflow6FileReader = class (TObject)
+  protected
+    FInputFile: TStreamReader;
+  public
+    constructor Create;
+    procedure OpenFile(const FileName: string); virtual;
+    destructor Destroy; override;
+  end;
+
+  TModflow6FileReader = class (TCustomModflow6FileReader)
   private
     FFeatureType: TModflow6FeatureType;
-    FInputFile: TStreamReader;
     FGridType: TModflow6GridType;
     FNumberOfMawWells: Integer;
     FMawWellCells: array of array of TCellLocation;
@@ -226,18 +234,6 @@ type
     FNumberOfLakeCells: Integer;
     FUzfCells: array of TCellLocation;
     FNumberUzfCells: Integer;
-    {
-    @name removes comments from a line and converts it to upper case.
-    If the entire line is a comment, @name returns an empty string.
-    }
-    function ExtractNonCommentLine(const ALine: string): string;
-    {@name checks a line that has been proccessed by
-    @link(ExtractNonCommentLine) and returns @True if it marks the beginning
-    of a section. If it does mark the beginning of a section, Section identifies
-    the section.}
-    function IsBeginningOfSection(const ALine: string;
-      out Section: string): Boolean;
-    function IsEndOfSection(const ALine: string): Boolean;
     function ReadAFeature(const Splitter: TStringList): TModflow6Feature;
     function ReadAChdFeature(const Splitter: TStringList): TChdFeature;
     function ReadAWellFeature(const Splitter: TStringList): TWellFeature;
@@ -268,6 +264,9 @@ type
     procedure InitializeLakeProperties;
     procedure ReadNumberOfUzfCells;
     procedure ReadUzfCells;
+    procedure ReadOptions;
+    procedure ReadTimeSeriesFile(TsFileName: string);
+    function ReadFromTimeSeriesOrConvert(Text: string): double;
   public
     constructor Create(GridType: TModflow6GridType);
     procedure OpenFile(const FileName: string);
@@ -275,6 +274,19 @@ type
     destructor Destroy; override;
     property FeatureType: TModflow6FeatureType read FFeatureType;
   end;
+
+
+
+//  TTimeSeriesReader = class(TCustomModflow6FileReader)
+//  private
+//    FInputFile: TStreamReader;
+//    procedure ReadAttributes;
+//    procedure ReadTimeSeries;
+//  public
+//    constructor Create;
+//    procedure OpenFile(const FileName: string);
+//    destructor Destroy; override;
+//  end;
 
 implementation
 
@@ -297,7 +309,6 @@ end;
 destructor TModflow6FileReader.Destroy;
 begin
   FSfrFeatures.Free;
-  FInputFile.Free;
   inherited;
 end;
 
@@ -327,35 +338,6 @@ begin
   finally
     Splitter.Free;
   end;
-end;
-
-function TModflow6FileReader.ExtractNonCommentLine(const ALine: string): string;
-var
-  CommentMarkerPosition: Integer;
-begin
-  result := Trim(ALine);
-
-  if (Pos('#', result) = 1) or (Pos('!', result) = 1)  or (Pos('//', result) = 1) then
-  begin
-    result := '';
-    Exit;
-  end;
-  CommentMarkerPosition := Pos('#', result);
-  if CommentMarkerPosition > 1 then
-  begin
-    result := Copy(result, 1, CommentMarkerPosition-1);
-  end;
-  CommentMarkerPosition := Pos('!', result);
-  if CommentMarkerPosition > 1 then
-  begin
-    result := Copy(result, 1, CommentMarkerPosition-1);
-  end;
-  CommentMarkerPosition := Pos('//', result);
-  if CommentMarkerPosition > 1 then
-  begin
-    result := Copy(result, 1, CommentMarkerPosition-1);
-  end;
-  result := UpperCase(result);
 end;
 
 procedure TModflow6FileReader.FinalizeLakeFeatures(
@@ -431,35 +413,34 @@ begin
   end;
 end;
 
-function TModflow6FileReader.IsBeginningOfSection(const ALine: string;
-  out Section: string): Boolean;
-const
-  strBegin = 'BEGIN ';
-var
-  BeginPosition: Integer;
-begin
-  BeginPosition := Pos(strBegin, UpperCase(ALine));
-  result := BeginPosition = 1;
-  if result then
-  begin
-    Section := Copy(ALine, Length(strBegin)+1, MAXINT);
-  end
-  else
-  begin
-    Section := '';
-  end;
-end;
+//function TModflow6FileReader.IsBeginningOfSection(const ALine: string;
+//  out Section: string): Boolean;
+//const
+//  strBegin = 'BEGIN ';
+//var
+//  BeginPosition: Integer;
+//begin
+//  BeginPosition := Pos(strBegin, UpperCase(ALine));
+//  result := BeginPosition = 1;
+//  if result then
+//  begin
+//    Section := Copy(ALine, Length(strBegin)+1, MAXINT);
+//  end
+//  else
+//  begin
+//    Section := '';
+//  end;
+//end;
 
-function TModflow6FileReader.IsEndOfSection(const ALine: string): Boolean;
-begin
-  result := Pos('END', UpperCase(ALine)) = 1;
-end;
-
+//function TModflow6FileReader.IsEndOfSection(const ALine: string): Boolean;
+//begin
+//  result := Pos('END', UpperCase(ALine)) = 1;
+//end;
+//
 procedure TModflow6FileReader.OpenFile(const FileName: string);
 var
   FileExtension: string;
 begin
-  FInputFile := TFile.OpenText(FileName);
   FileExtension := LowerCase(ExtractFileExt(FileName));
   if SameText(FileExtension, TModflowCHD_Writer.Extension) then
   begin
@@ -513,7 +494,6 @@ begin
   begin
     Assert(False);
   end;
-
 end;
 
 function TModflow6FileReader.ReadAChdFeature(
@@ -533,18 +513,20 @@ begin
   end;
   result := TChdFeature.Create;
   ReadCell(Splitter, result);
+
   case FGridType of
     m6gtStructured:
       begin
-        result.FHead := FortranStrToFloat(Splitter[3]);
+        Value := := Splitter[3];
       end;
     mggrDisv:
       begin
-        result.FHead := FortranStrToFloat(Splitter[2]);
+        Value := Splitter[2];
       end;
     else
       Assert(False);
   end;
+  result.FHead := ReadFromTimeSeriesOrConvert(Value);
 end;
 
 function TModflow6FileReader.ReadACSubFeature(
@@ -1025,6 +1007,11 @@ begin
 
 end;
 
+function TModflow6FileReader.ReadFromTimeSeriesOrConvert(Text: string): double;
+begin
+  FortranStrToFloat(Text);
+end;
+
 procedure TModflow6FileReader.ReadLakCells;
 var
   Count: Integer;
@@ -1313,6 +1300,31 @@ begin
   end;
 end;
 
+procedure TModflow6FileReader.ReadOptions;
+const
+  FILEIN = 'FILEIN';
+var
+  ALine: string;
+  FileNameStart: Integer;
+  TsFileName: string;
+begin
+  while not FInputFile.EndOfStream do
+  begin
+    ALine := ExtractNonCommentLine(FInputFile.ReadLine);
+    if IsEndOfSection(ALine) then
+    begin
+      break;
+    end;
+    if Pos('TS6', ALine) = 1 then
+    begin
+      FileNameStart := Pos(FILEIN, ALine) + Length(FILEIN);
+      TsFileName := Trim(Copy(ALine, FileNameStart, MAXINT));
+      ReadTimeSeriesFile(TsFileName);
+    end;
+  end;
+
+end;
+
 function TModflow6FileReader.ReadStressPeriod(
   StressPeriod: Integer): TModflowFeatureList;
 var
@@ -1347,7 +1359,7 @@ begin
       begin
         if SameText(Section, 'OPTIONS') then
         begin
-          SkipToEndOfSection;
+          ReadOptions;
         end
         else if SameText(Section, 'DIMENSIONS') then
         begin
@@ -1463,6 +1475,11 @@ begin
   finally
     Splitter.Free;
   end;
+
+end;
+
+procedure TModflow6FileReader.ReadTimeSeriesFile(TsFileName: string);
+begin
 
 end;
 

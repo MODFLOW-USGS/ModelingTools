@@ -12,6 +12,8 @@ type
     procedure WriteAttributes;
     procedure WriteTimeSeries;
     procedure WriteFileInternal;
+  protected
+    class function Extension: string; override;
   public
     // result is time series file name.
     function WriteFile(PackageInputFileName: string;
@@ -27,11 +29,17 @@ uses
 
 { TMf6TimeSeriesWriter }
 
+class function TMf6TimeSeriesWriter.Extension: string;
+begin
+  result := '.ts';
+end;
+
 procedure TMf6TimeSeriesWriter.WriteAttributes;
 var
   SeriesIndex: Integer;
   TimeSeries: TMf6TimeSeries;
   Param: TModflowSteadyParameter;
+  ScaleFactor: Double;
 begin
   WriteString('BEGIN ATTRIBUTES');
   NewLine;
@@ -84,7 +92,7 @@ begin
 
   if FTimeSeries.Count > 1 then
   begin
-    WriteString('  SFAS');
+    WriteString('  SFACS');
   end
   else
   begin
@@ -94,15 +102,29 @@ begin
   for SeriesIndex := FTimeSeries.Count - 1 downto 0 do
   begin
     TimeSeries := FTimeSeries[SeriesIndex].TimeSeries;
-
-    WritePestTemplateFormulaOrValue(TimeSeries.ScaleFactor, '',
-      TimeSeries.ScaleFactorParameter, TimeSeries.ParamMethod,
-      nil, nil);
+    ScaleFactor := TimeSeries.ScaleFactor;
     Param := Model.GetPestParameterByName(TimeSeries.ScaleFactorParameter);
     if Param <> nil then
     begin
-      FPestParamUsed := True
+      case TimeSeries.ParamMethod of
+        ppmMultiply:
+          begin
+            ScaleFactor := ScaleFactor * Param.Value;
+          end;
+        ppmAdd:
+          begin
+            ScaleFactor := ScaleFactor + Param.Value;
+          end;
+        else
+          Assert(False);
+      end;
+      FPestParamUsed := True;
+      Model.WritePValAndTemplate(Param.ParameterName, Param.Value, Param);
     end;
+
+    WritePestTemplateFormulaOrValue(ScaleFactor, '',
+      TimeSeries.ScaleFactorParameter, TimeSeries.ParamMethod,
+      nil, nil);
   end;
   NewLine;
 
@@ -115,7 +137,7 @@ function TMf6TimeSeriesWriter.WriteFile(PackageInputFileName: string;
   TimeSeries: TTimesSeriesCollection): string;
 begin
   FTimeSeries := TimeSeries;
-  FNameOfFile := PackageInputFileName + '.' + TimeSeries.GroupName + '.ts';
+  FNameOfFile := PackageInputFileName + '.' + TimeSeries.GroupName + Extension;
   result := FNameOfFile;
   FInputFileName := FNameOfFile;
   FPestParamUsed := False;
@@ -131,7 +153,7 @@ end;
 
 procedure TMf6TimeSeriesWriter.WriteFileInternal;
 begin
-  OpenFile(FInputFileName);
+  OpenFile(FNameOfFile);
   try
     WriteTemplateHeader;
     WriteAttributes;
@@ -146,10 +168,14 @@ var
   TimeIndex: Integer;
   SeriesIndex: Integer;
   TimeSeries: TMf6TimeSeries;
+  StartTime: Double;
 begin
+  WriteString('BEGIN TIMESERIES');
+  StartTime := Model.ModflowFullStressPeriods.First.StartTime;
+  NewLine;
   for TimeIndex := 0 to FTimeSeries.TimeCount - 1 do
   begin
-    WriteFloat(FTimeSeries.Times[TimeIndex].Value);
+    WriteFloat(FTimeSeries.Times[TimeIndex].Value - StartTime);
     for SeriesIndex := FTimeSeries.Count - 1 downto 0 do
     begin
       TimeSeries := FTimeSeries[SeriesIndex].TimeSeries;
@@ -157,7 +183,8 @@ begin
     end;
     NewLine;
   end;
-
+  WriteString('END TIMESERIES');
+  NewLine;
 end;
 
 end.

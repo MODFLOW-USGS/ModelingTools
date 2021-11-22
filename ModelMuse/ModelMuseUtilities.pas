@@ -103,6 +103,22 @@ procedure MM_ObjectBinaryToText(const Input, Output: TStream);
 
 function PestObsName(const ObsName: string): string;
 
+{
+@name removes comments from a MODFLOW input file line
+and converts it to upper case.
+If the entire line is a comment, @name returns an empty string.
+}
+function ExtractNonCommentLine(const ALine: string): string;
+{@name checks a MODFLOW 6 input line that has been proccessed by
+@link(ExtractNonCommentLine) and returns @True if it marks the beginning
+of a section. If it does mark the beginning of a section, Section identifies
+the section.}
+function IsBeginningOfSection(const ALine: string;
+  out Section: string): Boolean;
+function IsEndOfSection(const ALine: string): Boolean;
+
+function Interpolate(X, StartX, EndX, StartY, EndY: double): double;
+
 implementation
 
 uses AnsiStrings, StrUtils, Dialogs, Math, frmGoPhastUnit,
@@ -1160,6 +1176,80 @@ begin
   result := StringReplace(result, ')', '_', [rfReplaceAll, rfIgnoreCase]);
   result := StringReplace(result, '!', '_', [rfReplaceAll, rfIgnoreCase]);
   result := StringReplace(result, '@', '_', [rfReplaceAll, rfIgnoreCase]);
+end;
+
+function ExtractNonCommentLine(const ALine: string): string;
+var
+  CommentMarkerPosition: Integer;
+begin
+  result := Trim(ALine);
+
+  if (Pos('#', result) = 1) or (Pos('!', result) = 1)  or (Pos('//', result) = 1) then
+  begin
+    result := '';
+    Exit;
+  end;
+  CommentMarkerPosition := Pos('#', result);
+  if CommentMarkerPosition > 1 then
+  begin
+    result := Copy(result, 1, CommentMarkerPosition-1);
+  end;
+  CommentMarkerPosition := Pos('!', result);
+  if CommentMarkerPosition > 1 then
+  begin
+    result := Copy(result, 1, CommentMarkerPosition-1);
+  end;
+  CommentMarkerPosition := Pos('//', result);
+  if CommentMarkerPosition > 1 then
+  begin
+    result := Copy(result, 1, CommentMarkerPosition-1);
+  end;
+  result := UpperCase(result);
+end;
+
+function IsBeginningOfSection(const ALine: string;
+  out Section: string): Boolean;
+const
+  strBegin = 'BEGIN ';
+var
+  BeginPosition: Integer;
+begin
+  BeginPosition := Pos(strBegin, UpperCase(ALine));
+  result := BeginPosition = 1;
+  if result then
+  begin
+    Section := Copy(ALine, Length(strBegin)+1, MAXINT);
+  end
+  else
+  begin
+    Section := '';
+  end;
+end;
+
+function IsEndOfSection(const ALine: string): Boolean;
+begin
+  result := Pos('END', UpperCase(ALine)) = 1;
+end;
+
+function Interpolate(X, StartX, EndX, StartY, EndY: double): double;
+begin
+  if X = StartX then
+  begin
+    result := StartY;
+  end
+  else if X = EndX then
+  begin
+    result := EndY;
+  end
+  else if StartX = EndX then
+  begin
+    result := (StartY+EndY)/2;
+  end
+  else
+  begin
+    result := StartY + (EndY-StartY)/(EndX-StartX)*(X-StartX);
+  end;
+
 end;
 
 initialization

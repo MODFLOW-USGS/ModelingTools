@@ -10,6 +10,11 @@ type
   // @value(sptTransient Transient stress period)
   TStressPeriodType = (sptSteadyState, sptTransient);
 
+  TTimeStep = record
+    StartTime: double;
+    EndTime: double;
+  end;
+
   // @name represents a single stress period in MODFLOW.
   TModflowStressPeriod = class(TCollectionItem)
   private
@@ -75,6 +80,7 @@ type
     // @name is the number of steps in a stress period.
     function NumberOfSteps: integer;
     function LengthOfFirstTimeStep: double;
+    function GetTimeStep(Step: Integer): TTimeStep;
     property AtsInitialStepSize: double read GetAtsInitialStepSize write SetAtsInitialStepSize;
     property AtsMinimumStepSize: double read GetAtsMinimumStepSize write SetAtsMinimumStepSize;
     property AtsMaximumStepSize: double read GetAtsMaximumStepSize write SetAtsMaximumStepSize;
@@ -349,6 +355,54 @@ end;
 function TModflowStressPeriod.GetAtsMinimumStepSize: double;
 begin
   result := StoredAtsMinimumStepSize.Value;
+end;
+
+function TModflowStressPeriod.GetTimeStep(Step: Integer): TTimeStep;
+var
+  InitialStepSize: Double;
+  StepSize: Double;
+  StepIndex: Integer;
+begin
+  if Step < 0 then
+  begin
+    result.StartTime := StartTime;
+    result.EndTime := StartTime;
+  end
+  else if Step >= NumberOfSteps then
+  begin
+    result.StartTime := EndTime;
+    result.EndTime := EndTime;
+  end
+  else if Step = 0 then
+  begin
+    result.StartTime := StartTime;
+    result.EndTime := StartTime + LengthOfFirstTimeStep;
+  end
+  else
+  begin
+    InitialStepSize := LengthOfFirstTimeStep;
+    if TimeStepMultiplier = 1 then
+    begin
+      result.StartTime := StartTime + InitialStepSize*Step;
+      result.EndTime := StartTime +  + InitialStepSize*(Step+1);
+    end
+    else
+    begin
+      StepSize := InitialStepSize;
+      result.StartTime := StartTime;
+      for StepIndex := 0 to Step - 1 do
+      begin
+        result.StartTime := result.StartTime + StepSize;
+        StepSize := StepSize*TimeStepMultiplier
+      end;
+      StepSize := StepSize*TimeStepMultiplier;
+      result.EndTime := result.StartTime +  + StepSize;
+    end;
+  end;
+  if result.EndTime > EndTime then
+  begin
+    result.EndTime := EndTime;
+  end;
 end;
 
 procedure TModflowStressPeriod.InvalidateModel;
