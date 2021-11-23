@@ -93,6 +93,7 @@
         <VerInfo_MinorVer>3</VerInfo_MinorVer>
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
         <VerInfo_Build>74</VerInfo_Build>
+        <DCC_UseMSBuildExternally>true</DCC_UseMSBuildExternally>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -132,6 +133,7 @@
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
         <DCC_Define>DEBUG;SWIObs;CSUB;SwiObsExtractor;PEST;MF6_2;Mf6TimeSeries;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
+        <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <BRCC_Defines>STR_Package;Mt3dUSGS;$(BRCC_Defines)</BRCC_Defines>
@@ -144,8 +146,6 @@
         <BRCC_Defines>STR_Package;FullDebugMode;$(BRCC_Defines)</BRCC_Defines>
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_Define>LeakChecking;$(DCC_Define)</DCC_Define>
-        <DCC_UseMSBuildExternally>true</DCC_UseMSBuildExternally>
-        <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
