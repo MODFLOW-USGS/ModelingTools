@@ -12,22 +12,12 @@ type
   // @link(StartingTime) and @link(EndingTime).
   // The @link(StartingTime) and @link(EndingTime) may or may not be
   // the starting and ending time of stress periods.
-  //  @longcode(
-  //  TChdRecord = record
-  //    Cell: TCellLocation;
-  //    StartingHead: double;
-  //    EndingHead: double;
-  //    StartingTime: double;
-  //    EndingTime: double;
-  //    StartAnnotation: string;
-  //    EndAnnotation: string;
-  //  end;
-  //  )
   // @member(Cell Cell is the cell to which this boundary applies.)
   // @member(StartingHead StartingHead is the specified head
   //   for this boundary at @link(StartingTime).)
   // @member(EndingHead EndingHead is the specified head
-  //   for this boundary at @link(EndingTime).)
+  //   for this boundary at @link(EndingTime). EndingHead is not used
+  //   in MODFLOW 6.)
   // @member(StartingTime StartingTime is when this boundary
   //   first begins to apply.)
   // @member(EndingTime EndingTime is when this boundary ceases to apply.)
@@ -35,6 +25,8 @@ type
   //  @link(StartingHead) was assigned.)
   // @member(EndAnnotation EndAnnotation tells how
   //  @link(EndingHead) was assigned.)
+  // @member(HeadTimeSeriesName HeadTimeSeriesName is the name of a time
+  //  series for MODFLOW 6.)
   TChdRecord = record
     Cell: TCellLocation;
     StartingHead: double;
@@ -43,7 +35,7 @@ type
     EndingTime: double;
     StartAnnotation: string;
     EndAnnotation: string;
-    TimeSeriesName: string;
+//    TimeSeriesName: string;
     HeadParameterName: string;
     HeadParameterValue: double;
     StartHeadPest: string;
@@ -171,7 +163,7 @@ type
     function GetStartingHead: double;
     function GetEndingHeadAnnotation: string;
     function GetStartingHeadAnnotation: string;
-    function GetTimeSeriesName: string;
+//    function GetTimeSeriesName: string;
     function GetHeadParameterName: string;
     function GetHeadParameterValue: double;
     function GetEndHeadPest: string;
@@ -213,7 +205,7 @@ type
   public
     property StartingHead: double read GetStartingHead;
     property EndingHead: double read GetEndingHead;
-    property TimeSeriesName: string read GetTimeSeriesName;
+//    property TimeSeriesName: string read GetTimeSeriesName;
     property StartingHeadAnnotation: string read GetStartingHeadAnnotation;
     property EndingHeadAnnotation: string read GetEndingHeadAnnotation;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
@@ -528,10 +520,10 @@ begin
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
     Expression.Evaluate;
-    if BoundaryFunctionIndex = 0 then
-    begin
-      ChdStorage.ChdArray[Index].HeadTimeSeriesName := TimeSeriesName;
-    end;
+//    if BoundaryFunctionIndex = 0 then
+//    begin
+//      ChdStorage.ChdArray[Index].HeadTimeSeriesName := TimeSeriesName;
+//    end;
     with ChdStorage.ChdArray[Index] do
     begin
       case BoundaryFunctionIndex of
@@ -542,7 +534,7 @@ begin
             StartHeadPest := PestName;
             StartHeadPestSeriesName := PestSeriesName;
             StartHeadPestSeriesMethod := PestSeriesMethod;
-//            HeadTimeSeriesName := TimeSeriesName;
+            HeadTimeSeriesName := TimeSeriesName;
           end;
         1:
           begin
@@ -765,7 +757,7 @@ begin
         Cell.StressPeriod := TimeIndex;
         Cell.Values.HeadParameterName := BoundaryValues.HeadParameterName;
         Cell.Values.HeadParameterValue := BoundaryValues.HeadParameterValue;
-        Cell.Values.TimeSeriesName := BoundaryValues.TimeSeriesName;
+//        Cell.Values.TimeSeriesName := BoundaryValues.TimeSeriesName;
         Cell.Values.StartHeadPest := BoundaryValues.StartHeadPest;
         Cell.Values.EndHeadPest := BoundaryValues.EndHeadPest;
         Cell.Values.StartHeadPestSeriesName := BoundaryValues.StartHeadPestSeriesName;
@@ -1365,10 +1357,10 @@ begin
   result := Values.StartAnnotation;
 end;
 
-function TCHD_Cell.GetTimeSeriesName: string;
-begin
-  result := Values.TimeSeriesName;
-end;
+//function TCHD_Cell.GetTimeSeriesName: string;
+//begin
+//  result := Values.TimeSeriesName;
+//end;
 
 function TCHD_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
@@ -1444,7 +1436,7 @@ begin
   WriteCompReal(Comp, HeadParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(StartAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(EndAnnotation));
-  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(HeadParameterName));
   WriteCompInt(Comp, Strings.IndexOf(StartHeadPest));
   WriteCompInt(Comp, Strings.IndexOf(EndHeadPest));
@@ -1459,7 +1451,7 @@ procedure TChdRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(StartAnnotation);
   Strings.Add(EndAnnotation);
-  Strings.Add(TimeSeriesName);
+//  Strings.Add(TimeSeriesName);
   Strings.Add(HeadParameterName);
   Strings.Add(StartHeadPest);
   Strings.Add(EndHeadPest);
@@ -1478,7 +1470,7 @@ begin
   HeadParameterValue := ReadCompReal(Decomp);
   StartAnnotation := Annotations[ReadCompInt(Decomp)];
   EndAnnotation := Annotations[ReadCompInt(Decomp)];
-  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   HeadParameterName := Annotations[ReadCompInt(Decomp)];
   StartHeadPest := Annotations[ReadCompInt(Decomp)];
   EndHeadPest := Annotations[ReadCompInt(Decomp)];

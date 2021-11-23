@@ -31,7 +31,7 @@ type
     procedure SetItem(Index: Integer; const Value: TTimeSeriesItem);
     procedure SetTimeCount(const Value: Integer);
     procedure SetTimes(const Value: TRealCollection);
-    procedure SetGroupName(const Value: string);
+    procedure SetGroupName(Value: string);
     procedure ReadAttributes;
     procedure ReadTimeSeries;
   public
@@ -89,7 +89,7 @@ type
 implementation
 
 uses
-  ModelMuseUtilities, PhastModelUnit, ModflowTimeUnit;
+  ModelMuseUtilities, PhastModelUnit, ModflowTimeUnit, ModflowParameterUnit;
 
 { TTimeSeriesItem }
 
@@ -190,6 +190,8 @@ var
   FirstValue: Double;
   LastValue: Double;
   StressPeriod: TModflowStressPeriod;
+  Param: TModflowSteadyParameter;
+  ScaleFactor: Double;
   function NearlyTheSame(A, B: double): Boolean;
   begin
     result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
@@ -236,6 +238,18 @@ begin
   case Series.InterpolationMethod of
     mimStepwise:
       begin
+        for TimeIndex := StartTimeIndex to EndTimeIndex do
+        begin
+          if (Times[TimeIndex].Value <= UsedTime)
+            and not NearlyTheSame(Series[TimeIndex].Value, NoValue) then
+          begin
+            result := Series[TimeIndex].Value;
+          end
+          else
+          begin
+            break;
+          end;
+        end;
         result := Series[StartTimeIndex].Value;
       end;
     mimLinear:
@@ -349,6 +363,22 @@ begin
     else
       Assert(False);
   end;
+  if Series.ScaleFactorParameter <> '' then
+  begin
+    Param := LocalModel.GetPestParameterByName(Series.ScaleFactorParameter);
+    Assert(Param <> nil);
+    case Series.ParamMethod of
+      ppmMultiply:
+        ScaleFactor := Series.ScaleFactor * Param.Value;
+      ppmAdd:
+        ScaleFactor := Series.ScaleFactor + Param.Value;
+    end;
+  end
+  else
+  begin
+    ScaleFactor := Series.ScaleFactor;
+  end;
+  result := result * ScaleFactor
 end;
 
 function TTimesSeriesCollection.GetItem(Index: Integer): TTimeSeriesItem;
@@ -531,9 +561,22 @@ begin
   end;
 end;
 
-procedure TTimesSeriesCollection.SetGroupName(const Value: string);
+procedure TTimesSeriesCollection.SetGroupName(Value: string);
 begin
-  FGroupName := Value;
+  Value := Trim(Value);
+  for CharIndex := 1 to Length(Value) do
+  begin
+    AChar := Value[CharIndex];
+    if (AChar <> '_') and (not AChar.IsLetterOrDigit) then
+    begin
+      Value[CharIndex] := '_'
+    end;
+  end;
+  if FGroupName <> Value then
+  begin
+    FGroupName := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TTimesSeriesCollection.SetItem(Index: Integer;

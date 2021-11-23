@@ -71,11 +71,6 @@ resourcestring
   StrTheFollowingDrainPest = 'The following Drain observation names may be valid' +
   ' for MODFLOW but they are not valid for PEST.';
   StrWritingDRNPackage = 'Writing DRN Package input.';
-//  StrWritingDataSet0 = '  Writing Data Set 0.';
-//  StrWritingDataSet1 = '  Writing Data Set 1.';
-//  StrWritingDataSet2 = '  Writing Data Set 2.';
-//  StrWritingDataSets3and4 = '  Writing Data Sets 3 and 4.';
-//  StrWritingDataSets5to7 = '  Writing Data Sets 5 to 7.';
   StrDrainElevationIsB = 'Drain elevation is below the bottom of the cell at' +
   ' the following locations.';
   StrLargeDrainElevatioDetailed = 'Large drain elevation gradient between %0:s and %' +
@@ -121,15 +116,14 @@ var
     Point2: TPoint2D;
     Gradient: Extended;
   begin
-    if OtherCell <> nil then
+    if (OtherCell <> nil)
+      and (Drn_Cell.ElevTimeSeriesName <> '')
+      and (OtherCell.ElevTimeSeriesName <> '') then
     begin
       DeltaDrnElevation := Abs(Drn_Cell.Elevation - OtherCell.Elevation);
       Point1 := Model.Grid.TwoDElementCenter(Drn_Cell.Column, Drn_Cell.Row);
       Point2 := Model.Grid.TwoDElementCenter(OtherCell.Column, OtherCell.Row);
       Gradient := DeltaDrnElevation/Distance(Point1, Point2);
-//      OtherCellBottomElevation := Model.Grid.CellElevation[
-//        OtherCell.Column, OtherCell.Row, OtherCell.Layer+1];
-//      DeltaCellElevation := Abs(OtherCellBottomElevation - CellBottomElevation);
       if Gradient > HighGradient  then
       begin
         ScreenObject := Drn_Cell.ScreenObject as TScreenObject;
@@ -160,7 +154,9 @@ begin
   if ActiveDataArray.BooleanData[Drn_Cell.Layer, Drn_Cell.Row, Drn_Cell.Column]
     then
   begin
-    if (Drn_Cell.Elevation < CellBottomElevation) then
+    if (Drn_Cell.Elevation < CellBottomElevation)
+      and (Drn_Cell.ElevTimeSeriesName <> '')
+     then
     begin
       Delta := CellBottomElevation - Drn_Cell.Elevation;
       ScreenObject := Drn_Cell.ScreenObject as TScreenObject;
@@ -182,14 +178,17 @@ begin
     AqCond := AquiferConductance(Drn_Cell.Layer, Drn_Cell.Row, Drn_Cell.Column);
     if AqCond > 0 then
     begin
-      Ratio := Drn_Cell.Conductance/AqCond;
-      if Ratio > HighConductanceContrast then
+      if Drn_Cell.ConductanceTimeSeriesName = '' then
       begin
-        ScreenObject := Drn_Cell.ScreenObject as TScreenObject;
-        frmErrorsAndWarnings.AddWarning(Model,StrHighDrainConductan,
-          Format(StrLayerRowColObjectAmount, [
-          Drn_Cell.Layer+1, Drn_Cell.Row+1, Drn_Cell.Column+1, ScreenObject.Name, Ratio]),
-          ScreenObject);
+        Ratio := Drn_Cell.Conductance/AqCond;
+        if Ratio > HighConductanceContrast then
+        begin
+          ScreenObject := Drn_Cell.ScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddWarning(Model,StrHighDrainConductan,
+            Format(StrLayerRowColObjectAmount, [
+            Drn_Cell.Layer+1, Drn_Cell.Row+1, Drn_Cell.Column+1, ScreenObject.Name, Ratio]),
+            ScreenObject);
+        end;
       end;
     end
     else
@@ -321,14 +320,6 @@ begin
   end;
   WriteInteger(Drn_Cell.Column+1);
 
-//  if (Drn_Cell.ElevationPest <> '')
-//    or (Drn_Cell.ConductancePest <> '')
-//    or (Drn_Cell.ElevationPestSeries <> '')
-//    or (Drn_Cell.ConductancePestSeries <> '') then
-//  begin
-//    FPestParamUsed := True;
-//  end;
-
   WriteValueOrFormula(Drn_Cell, DrnElevationPosition);
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
@@ -348,7 +339,6 @@ begin
       MultiplierValue := Drn_Cell.Conductance
         / Drn_Cell.ConductanceParameterValue;
     end;
-//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
     WriteModflowParamFormula(ParameterName, Drn_Cell.ConductancePest,
       MultiplierValue, Drn_Cell);
   end

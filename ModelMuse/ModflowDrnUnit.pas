@@ -28,7 +28,7 @@ type
     EndingTime: double;
     ConductanceAnnotation: string;
     ElevationAnnotation: string;
-    TimeSeriesName: string;
+//    TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
     ConductanceParameterName: string;
@@ -39,6 +39,8 @@ type
     ConductancePestSeries: string;
     ElevationPestSeriesMethod: TPestParamMethod;
     ConductancePestSeriesMethod: TPestParamMethod;
+    ElevTimeSeriesName: string;
+    ConductanceTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -164,7 +166,7 @@ type
     function GetConductance: double;
     function GetConductanceAnnotation: string;
     function GetElevationAnnotation: string;
-    function GetTimeSeriesName: string;
+//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
@@ -175,6 +177,10 @@ type
     function GetElevationPestSeries: string;
     function GetConductancePestSeriesMethod: TPestParamMethod;
     function GetElevationPestSeriesMethod: TPestParamMethod;
+    function GetConductanceTimeSeriesName: string;
+    function GetElevTimeSeriesName: string;
+    procedure SetConductanceTimeSeriesName(const Value: string);
+    procedure SetElevTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -193,6 +199,8 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     // With MODFLOW 6, Conductance includes the effect of the parameter,
     // if any. In a template, the appropriate formula would be
@@ -210,7 +218,7 @@ type
     property Elevation: double read GetElevation;
     property ConductanceAnnotation: string read GetConductanceAnnotation;
     property ElevationAnnotation: string read GetElevationAnnotation;
-    property TimeSeriesName: string read GetTimeSeriesName;
+//    property TimeSeriesName: string read GetTimeSeriesName;
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
@@ -226,6 +234,10 @@ type
       read GetElevationPestSeriesMethod;
     property ConductancePestSeriesMethod: TPestParamMethod
       read GetConductancePestSeriesMethod;
+    property ElevTimeSeriesName: string read GetElevTimeSeriesName
+      write SetElevTimeSeriesName;
+    property ConductanceTimeSeriesName: string read GetConductanceTimeSeriesName
+      write SetConductanceTimeSeriesName;
   end;
 
   // @name represents the MODFLOW Drain boundaries associated with
@@ -590,6 +602,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   { DONE -cPEST : Handle PestSeriesName }
   Assert(BoundaryFunctionIndex in [DrnElevationPosition, DrnConductancePosition]);
   Assert(Expression <> nil);
@@ -613,6 +626,7 @@ begin
             ElevationPest := PestName;
             ElevationPestSeries := PestSeriesName;
             ElevationPestSeriesMethod := PestSeriesMethod;
+            ElevTimeSeriesName := TimeSeriesName;
           end;
         DrnConductancePosition:
           begin
@@ -621,6 +635,7 @@ begin
             ConductancePest := PestName;
             ConductancePestSeries := PestSeriesName;
             ConductancePestSeriesMethod := PestSeriesMethod;
+            ConductanceTimeSeriesName := TimeSeriesName;
           end;
         else
           Assert(False);
@@ -747,6 +762,11 @@ begin
   result := Values.ElevationPestSeriesMethod;
 end;
 
+function TDrn_Cell.GetElevTimeSeriesName: string;
+begin
+  result := Values.ElevTimeSeriesName;
+end;
+
 function TDrn_Cell.GetElevationPestSeries: string;
 begin
   result := Values.ElevationPestSeries;
@@ -806,6 +826,11 @@ begin
   result := Values.ConductancePestSeriesMethod;
 end;
 
+function TDrn_Cell.GetConductanceTimeSeriesName: string;
+begin
+  result := Values.ConductanceTimeSeriesName;
+end;
+
 function TDrn_Cell.GetConductancePestSeries: string;
 begin
   result := Values.ConductancePestSeries;
@@ -814,6 +839,19 @@ end;
 function TDrn_Cell.GetLayer: integer;
 begin
   result := Values.Cell.Layer;
+end;
+
+function TDrn_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    DrnElevationPosition: result := ElevTimeSeriesName;
+    DrnConductancePosition: result := ConductanceTimeSeriesName;
+    else
+      begin
+        result := Inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 function TDrn_Cell.GetMvrIndex: Integer;
@@ -895,10 +933,10 @@ begin
   result := Values.Cell.Section;
 end;
 
-function TDrn_Cell.GetTimeSeriesName: string;
-begin
-  result := Values.TimeSeriesName;
-end;
+//function TDrn_Cell.GetTimeSeriesName: string;
+//begin
+//  result := Values.TimeSeriesName;
+//end;
 
 function TDrn_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
@@ -934,9 +972,34 @@ begin
   Values.Cell.Column := Value;
 end;
 
+procedure TDrn_Cell.SetConductanceTimeSeriesName(const Value: string);
+begin
+  Values.ConductanceTimeSeriesName := Value;
+end;
+
+procedure TDrn_Cell.SetElevTimeSeriesName(const Value: string);
+begin
+  Values.ElevTimeSeriesName := Value;
+end;
+
 procedure TDrn_Cell.SetLayer(const Value: integer);
 begin
   Values.Cell.Layer := Value;
+end;
+
+procedure TDrn_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  case Index of
+    DrnElevationPosition:
+      ElevTimeSeriesName := Value;
+    DrnConductancePosition:
+      ConductanceTimeSeriesName := Value;
+    else
+      begin
+        Inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 procedure TDrn_Cell.SetRow(const Value: integer);
@@ -1504,12 +1567,14 @@ begin
   WriteCompReal(Comp, ConductanceParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ElevationAnnotation));
-  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompInt(Comp, Strings.IndexOf(ElevationPest));
   WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
   WriteCompInt(Comp, Strings.IndexOf(ElevationPestSeries));
   WriteCompInt(Comp, Strings.IndexOf(ConductancePestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(ElevTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(ConductanceTimeSeriesName));
   WriteCompInt(Comp, Ord(ElevationPestSeriesMethod));
   WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
   WriteCompBoolean(Comp, MvrUsed);
@@ -1520,12 +1585,14 @@ procedure TDrnRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(ElevationAnnotation);
-  Strings.Add(TimeSeriesName);
+//  Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
   Strings.Add(ElevationPest);
   Strings.Add(ConductancePest);
   Strings.Add(ElevationPestSeries);
   Strings.Add(ConductancePestSeries);
+  Strings.Add(ElevTimeSeriesName);
+  Strings.Add(ConductanceTimeSeriesName);
 end;
 
 procedure TDrnRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1538,12 +1605,15 @@ begin
   ConductanceParameterValue := ReadCompReal(Decomp);
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   ElevationAnnotation := Annotations[ReadCompInt(Decomp)];
-  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
   ElevationPest := Annotations[ReadCompInt(Decomp)];
   ConductancePest := Annotations[ReadCompInt(Decomp)];
   ElevationPestSeries := Annotations[ReadCompInt(Decomp)];
   ConductancePestSeries := Annotations[ReadCompInt(Decomp)];
+  ElevTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  ConductanceTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
   ElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   MvrUsed := ReadCompBoolean(Decomp);

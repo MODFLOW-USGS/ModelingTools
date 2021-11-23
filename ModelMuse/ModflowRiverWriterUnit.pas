@@ -126,7 +126,9 @@ var
     Point2: TPoint2D;
     Gradient: Extended;
   begin
-    if OtherCell <> nil then
+    if (OtherCell <> nil)
+      and (OtherCell.RiverStageTimeSeriesName = '')
+      and (Riv_Cell.RiverStageTimeSeriesName = '') then
     begin
       DeltaRivElevation := Abs(Riv_Cell.RiverStage - OtherCell.RiverStage);
       Point1 := Model.Grid.TwoDElementCenter(Riv_Cell.Column, Riv_Cell.Row);
@@ -164,7 +166,8 @@ begin
     Riv_Cell.Column, Riv_Cell.Row, Riv_Cell.Layer+1];
   if ActiveDataArray.BooleanData[Riv_Cell.Layer, Riv_Cell.Row, Riv_Cell.Column] then
   begin
-    if (Riv_Cell.RiverStage < CellBottomElevation) then
+    if (Riv_Cell.RiverStage < CellBottomElevation)
+      and (Riv_Cell.RiverStageTimeSeriesName = '') then
     begin
       Delta := CellBottomElevation-Riv_Cell.RiverStage;
       ScreenObject := Riv_Cell.ScreenObject as TScreenObject;
@@ -184,7 +187,8 @@ begin
       end;
     end;
 
-    if (Riv_Cell.RiverBottom < CellBottomElevation) then
+    if (Riv_Cell.RiverBottom < CellBottomElevation)
+      and (Riv_Cell.RiverBottomTimeSeriesName = '') then
     begin
       Delta := CellBottomElevation - Riv_Cell.RiverBottom;
       ScreenObject := Riv_Cell.ScreenObject as TScreenObject;
@@ -204,7 +208,9 @@ begin
       end;
     end;
 
-    if Riv_Cell.RiverStage <= Riv_Cell.RiverBottom then
+    if (Riv_Cell.RiverStage <= Riv_Cell.RiverBottom)
+      and (Riv_Cell.RiverStageTimeSeriesName = '')
+      and (Riv_Cell.RiverBottomTimeSeriesName = '') then
     begin
       Delta := Riv_Cell.RiverBottom - Riv_Cell.RiverStage;
       ScreenObject := Riv_Cell.ScreenObject as TScreenObject;
@@ -217,14 +223,17 @@ begin
     AqCond := AquiferConductance(Riv_Cell.Layer, Riv_Cell.Row, Riv_Cell.Column);
     if AqCond > 0 then
     begin
-      Ratio := Riv_Cell.Conductance/AqCond;
-      if Ratio > HighConductanceContrast then
+      if (Riv_Cell.ConductanceTimeSeriesName = '') then
       begin
-        ScreenObject := Riv_Cell.ScreenObject as TScreenObject;
-        frmErrorsAndWarnings.AddWarning(Model,StrHighRiverConductan,
-          Format(StrLayerRowColObjectAmount, [
-          Riv_Cell.Layer+1, Riv_Cell.Row+1, Riv_Cell.Column+1, ScreenObject.Name, Ratio]),
-          ScreenObject);
+        Ratio := Riv_Cell.Conductance/AqCond;
+        if Ratio > HighConductanceContrast then
+        begin
+          ScreenObject := Riv_Cell.ScreenObject as TScreenObject;
+          frmErrorsAndWarnings.AddWarning(Model,StrHighRiverConductan,
+            Format(StrLayerRowColObjectAmount, [
+            Riv_Cell.Layer+1, Riv_Cell.Row+1, Riv_Cell.Column+1, ScreenObject.Name, Ratio]),
+            ScreenObject);
+        end;
       end;
     end
     else
@@ -409,7 +418,9 @@ begin
   end;
 //  WriteString(' ' + Riv_Cell.ConductanceAnnotation);
   NewLine;
-  if Riv_Cell.RiverStage <= Riv_Cell.RiverBottom then
+  if (Riv_Cell.RiverStage <= Riv_Cell.RiverBottom)
+    and (Riv_Cell.RiverStageTimeSeriesName = '')
+    and (Riv_Cell.RiverBottomTimeSeriesName = '') then
   begin
     Delta := Riv_Cell.RiverBottom - Riv_Cell.RiverStage;
     ScreenObject := Riv_Cell.ScreenObject as TScreenObject;

@@ -9,18 +9,6 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
 
 type
   {
-    @longcode(
-  TWellRecord = record
-    Cell: TCellLocation;
-    PumpingRate: double;
-    StartingTime: double;
-    EndingTime: double;
-    PumpingAnnotation: string;
-    procedure Cache(Comp: TCompressionStream; Strings: TStringList);
-    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
-    procedure RecordStrings(Strings: TStringList);
-  end;
-    )
     @name stores, the location, time and pumping rate for a well boundary.
   }
   TWellRecord = record
@@ -32,11 +20,12 @@ type
     PumpingRatePest: string;
     PumpingRatePestSeriesName: string;
     PumpingRatePestSeriesMethod: TPestParamMethod;
-    TimeSeriesName: string;
+//    TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
     PumpingParameterName: string;
     PumpingParameterValue: double;
+    PumpingRateTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -145,7 +134,7 @@ type
     StressPeriod: integer;
     function GetPumpingRate: double;
     function GetPumpingRateAnnotation: string;
-    function GetTimeSeriesName: string;
+//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetPumpingParameterName: string;
@@ -153,6 +142,8 @@ type
     function GetPumpingRatePest: string;
     function GetPumpingRatePestSeriesMethod: TPestParamMethod;
     function GetPumpingRatePestSeriesName: string;
+    function GetPumpingRateTimeSeriesName: string;
+    procedure SetPumpingRateTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -171,9 +162,11 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property PumpingRate: double read GetPumpingRate;
-    property TimeSeriesName: string read GetTimeSeriesName;
+//    property TimeSeriesName: string read GetTimeSeriesName;
     property PumpingRateAnnotation: string read GetPumpingRateAnnotation;
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
@@ -183,7 +176,12 @@ type
     // PEST parameters
     property PumpingRatePest: string read GetPumpingRatePest;
     property PumpingRatePestSeries: string read GetPumpingRatePestSeriesName;
-    property PumpingRatePestSeriesMethod: TPestParamMethod read GetPumpingRatePestSeriesMethod;
+    property PumpingRatePestSeriesMethod: TPestParamMethod
+      read GetPumpingRatePestSeriesMethod;
+
+    property PumpingRateTimeSeriesName: string read GetPumpingRateTimeSeriesName
+      write SetPumpingRateTimeSeriesName;
+
   end;
 
   // @name represents the MODFLOW Well boundaries associated with
@@ -427,6 +425,7 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 
@@ -447,6 +446,7 @@ begin
         PumpingRatePest := PestName;
         PumpingRatePestSeriesName := PestSeriesName;
         PumpingRatePestSeriesMethod := PestSeriesMethod;
+        PumpingRateTimeSeriesName := TimeSeriesName;
       end;
     except on E: EMathError do
       begin
@@ -457,6 +457,7 @@ begin
           PumpingRatePest := PestName;
           PumpingRatePestSeriesName := PestSeriesName;
           PumpingRatePestSeriesMethod := PestSeriesMethod;
+          PumpingRateTimeSeriesName := TimeSeriesName;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 
@@ -650,6 +651,18 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TWell_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    WelPumpingRatePosition: result := PumpingRateTimeSeriesName;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
 function TWell_Cell.GetMvrIndex: Integer;
 begin
   result := Values.MvrIndex;
@@ -731,6 +744,11 @@ begin
   result := Values.PumpingRatePestSeriesName;
 end;
 
+function TWell_Cell.GetPumpingRateTimeSeriesName: string;
+begin
+  result := Values.PumpingRateTimeSeriesName;
+end;
+
 function TWell_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -759,10 +777,10 @@ begin
   result := Values.Cell.Section;
 end;
 
-function TWell_Cell.GetTimeSeriesName: string;
-begin
-  result := Values.TimeSeriesName;
-end;
+//function TWell_Cell.GetTimeSeriesName: string;
+//begin
+//  result := Values.TimeSeriesName;
+//end;
 
 function TWell_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
@@ -800,6 +818,24 @@ end;
 procedure TWell_Cell.SetLayer(const Value: integer);
 begin
   Values.Cell.Layer := Value;
+end;
+
+procedure TWell_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  case Index of
+    WelPumpingRatePosition:
+      PumpingRateTimeSeriesName := Value;
+    else
+    begin
+      inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TWell_Cell.SetPumpingRateTimeSeriesName(const Value: string);
+begin
+  Values.PumpingRateTimeSeriesName := Value;
 end;
 
 procedure TWell_Cell.SetRow(const Value: integer);
@@ -1030,90 +1066,6 @@ begin
     begin
       Times := ParamList.Objects[Position] as TList;
     end;
-
-//    if FCurrentParameter <> nil then
-//    begin
-//      BoundaryList := Param.Param.BoundaryList[AModel];
-//      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-//      StartTime := StressPeriods.First.StartTime;
-//      EndTime := StressPeriods.Last.EndTime;
-//      TimeCount := BoundaryList.Count;
-//      for ItemIndex := 0 to BoundaryList.Count - 1 do
-//      begin
-//        BoundaryStorage := BoundaryList[ItemIndex];
-//        if BoundaryStorage.StartingTime > StartTime then
-//        begin
-//          Inc(TimeCount);
-//        end;
-//        StartTime := BoundaryStorage.EndingTime;
-//      end;
-//      BoundaryStorage := BoundaryList.Last;
-//      if BoundaryStorage.EndingTime <= EndTime then
-//      begin
-//        Inc(TimeCount);
-//      end;
-//
-//      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-//      TimeSeries := TTimeSeries.Create;
-//      TimeSeriesList.Add(TimeSeries);
-//      TimeSeries.SeriesCount := Length(BoundaryStorage.WellArray);
-//      TimeSeries.TimeCount := TimeCount;
-//      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-//      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-//      for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-//      begin
-//        TimeSeries.SeriesNames[SeriesIndex] :=
-//          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-//          TimeSeriesList.Count, SeriesIndex+1]);
-//        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-//        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-//      end;
-//
-//      TimeCount := 0;
-//      StartTime := StressPeriods.First.StartTime;
-//      InitialTime := StartTime;
-//      for ItemIndex := 0 to BoundaryList.Count - 1 do
-//      begin
-//        BoundaryStorage := BoundaryList[ItemIndex];
-//        if BoundaryStorage.StartingTime > StartTime then
-//        begin
-//          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-//          for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-//          begin
-//            if ItemIndex > 0 then
-//            begin
-//              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-//            end
-//            else
-//            begin
-//              TimeSeries.Values[SeriesIndex,TimeCount] :=
-//                BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
-//            end;
-//          end;
-//          Inc(TimeCount);
-//        end;
-//        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-//        for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-//        begin
-//          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//            BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
-//          BoundaryStorage.WellArray[SeriesIndex].TimeSeriesName :=
-//            TimeSeries.SeriesNames[SeriesIndex];
-//        end;
-//        StartTime := BoundaryStorage.EndingTime;
-//        Inc(TimeCount);
-//      end;
-//      BoundaryStorage := BoundaryList.Last;
-//      if BoundaryStorage.EndingTime <= EndTime then
-//      begin
-//        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-//        for SeriesIndex := 0 to Length(BoundaryStorage.WellArray) - 1 do
-//        begin
-//          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//            BoundaryStorage.WellArray[SeriesIndex].PumpingRate;
-//        end;
-//      end;
-//    end;
 
     for ValueIndex := 0 to Param.Param.Count - 1 do
     begin
@@ -1362,8 +1314,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PumpingRatePest));
   WriteCompInt(Comp, Strings.IndexOf(PumpingRatePestSeriesName));
   WriteCompInt(Comp, Ord(PumpingRatePestSeriesMethod));
-  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
+  WriteCompInt(Comp, Strings.IndexOf(PumpingRateTimeSeriesName));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -1373,8 +1327,9 @@ begin
   Strings.Add(PumpingRateAnnotation);
   Strings.Add(PumpingRatePest);
   Strings.Add(PumpingRatePestSeriesName);
-  Strings.Add(TimeSeriesName);
+//  Strings.Add(TimeSeriesName);
   Strings.Add(PumpingParameterName);
+  Strings.Add(PumpingRateTimeSeriesName);
 end;
 
 procedure TWellRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1388,8 +1343,9 @@ begin
   PumpingRatePest := Annotations[ReadCompInt(Decomp)];
   PumpingRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
   PumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
-  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   PumpingParameterName := Annotations[ReadCompInt(Decomp)];
+  PumpingRateTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 end;

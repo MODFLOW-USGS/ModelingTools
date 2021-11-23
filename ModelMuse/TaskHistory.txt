@@ -82,19 +82,19 @@ object TTaskHistory
     end
     item
       Name = 'GHB'
-      Display = False
+      Display = True
     end
     item
       Name = 'WEL'
-      Display = False
+      Display = True
     end
     item
       Name = 'RIV'
-      Display = False
+      Display = True
     end
     item
       Name = 'DRN'
-      Display = False
+      Display = True
     end
     item
       Name = 'DRT'
@@ -102,7 +102,7 @@ object TTaskHistory
     end
     item
       Name = 'RCH'
-      Display = False
+      Display = True
     end
     item
       Name = 'EVT'
@@ -28493,5 +28493,17 @@ object TTaskHistory
       Date = 44522.000000000000000000
       Categories.Strings = (
         'Bug fix')
+    end
+    item
+      Date = 44523.000000000000000000
+      Categories.Strings = (
+        'Testing'
+        'CHD'
+        'RIV'
+        'DRN'
+        'MF6 Time Series'
+        'GHB'
+        'WEL'
+        'RCH')
     end>
 end

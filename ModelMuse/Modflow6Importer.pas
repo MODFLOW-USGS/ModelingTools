@@ -298,7 +298,8 @@ uses
   ModflowDRN_WriterUnit, ModflowRiverWriterUnit, ModflowGHB_WriterUnit,
   ModflowRCH_WriterUnit, ModflowETS_WriterUnit, ModflowCSubWriterUnit,
   ModflowMawWriterUnit, ModflowSfr6WriterUnit, ModflowLakMf6WriterUnit,
-  ModflowUzfMf6WriterUnit, PhastModelUnit, frmGoPhastUnit;
+  ModflowUzfMf6WriterUnit, PhastModelUnit, frmGoPhastUnit,
+  Modflow6TimeSeriesUnit, GoPhastTypes;
 
 { TModflow6FileReader }
 
@@ -589,13 +590,13 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        result.FElev := FortranStrToFloat(Splitter[3]);
-        result.FCond := FortranStrToFloat(Splitter[4]);
+        result.FElev := ReadFromTimeSeriesOrConvert(Splitter[3]);
+        result.FCond := ReadFromTimeSeriesOrConvert(Splitter[4]);
       end;
     mggrDisv:
       begin
-        result.FElev := FortranStrToFloat(Splitter[2]);
-        result.FCond := FortranStrToFloat(Splitter[3]);
+        result.FElev := ReadFromTimeSeriesOrConvert(Splitter[2]);
+        result.FCond := ReadFromTimeSeriesOrConvert(Splitter[3]);
       end;
     else
       Assert(False);
@@ -679,13 +680,13 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        result.FHead := FortranStrToFloat(Splitter[3]);
-        result.FCond := FortranStrToFloat(Splitter[4]);
+        result.FHead := ReadFromTimeSeriesOrConvert(Splitter[3]);
+        result.FCond := ReadFromTimeSeriesOrConvert(Splitter[4]);
       end;
     mggrDisv:
       begin
-        result.FHead := FortranStrToFloat(Splitter[2]);
-        result.FCond := FortranStrToFloat(Splitter[3]);
+        result.FHead := ReadFromTimeSeriesOrConvert(Splitter[2]);
+        result.FCond := ReadFromTimeSeriesOrConvert(Splitter[3]);
       end;
     else
       Assert(False);
@@ -870,15 +871,15 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        result.FStage := FortranStrToFloat(Splitter[3]);
-        result.FCond := FortranStrToFloat(Splitter[4]);
-        result.FRBot := FortranStrToFloat(Splitter[5]);
+        result.FStage := ReadFromTimeSeriesOrConvert(Splitter[3]);
+        result.FCond := ReadFromTimeSeriesOrConvert(Splitter[4]);
+        result.FRBot := ReadFromTimeSeriesOrConvert(Splitter[5]);
       end;
     mggrDisv:
       begin
-        result.FStage := FortranStrToFloat(Splitter[2]);
-        result.FCond := FortranStrToFloat(Splitter[3]);
-        result.FRBot := FortranStrToFloat(Splitter[4]);
+        result.FStage := ReadFromTimeSeriesOrConvert(Splitter[2]);
+        result.FCond := ReadFromTimeSeriesOrConvert(Splitter[3]);
+        result.FRBot := ReadFromTimeSeriesOrConvert(Splitter[4]);
       end;
     else
       Assert(False);
@@ -982,11 +983,11 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        result.FQ := FortranStrToFloat(Splitter[3]);
+        result.FQ := ReadFromTimeSeriesOrConvert(Splitter[3]);
       end;
     mggrDisv:
       begin
-        result.FQ := FortranStrToFloat(Splitter[2]);
+        result.FQ := ReadFromTimeSeriesOrConvert(Splitter[2]);
       end;
     else
       Assert(False);
@@ -1021,6 +1022,7 @@ var
   TimeCollection: TTimesSeriesCollection;
   LocalModel: TPhastModel;
   ATime: Double;
+  ASeries: TMf6TimeSeries;
 begin
   TimeCollection := FTimeSeries.GetTimesSeriesCollectionBySeriesName(Text);
   if TimeCollection = nil then
@@ -1030,7 +1032,15 @@ begin
   else
   begin
     LocalModel := frmGoPhast.PhastModel;
-    ATime := LocalModel.ModflowStressPeriods[FStressPeriod-1].EndTime;
+    ASeries := TimeCollection.GetValuesByName(Text);
+    if ASeries.InterpolationMethod = mimStepwise then
+    begin
+      ATime := LocalModel.ModflowStressPeriods[FStressPeriod-1].StartTime;
+    end
+    else
+    begin
+      ATime := LocalModel.ModflowStressPeriods[FStressPeriod-1].EndTime;
+    end;
 
     result := TimeCollection.GetInterpolatedValue(LocalModel, ATime, Text,
       LocalModel.ModflowStressPeriods.First.StartTime);

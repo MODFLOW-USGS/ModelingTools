@@ -44,6 +44,9 @@ type
 
 implementation
 
+uses
+  System.SysUtils, System.Character;
+
 //uses
 //  PhastModelUnit, ModflowTimeUnit;
 
@@ -142,8 +145,19 @@ begin
 end;
 
 procedure TMf6TimeSeries.SetSeriesName(Value: string);
+var
+  CharIndex: Integer;
+  AChar: Char;
 begin
-  Value := Copy(Value, 1, MaxTimeSeriesNameLength);
+  Value := Trim(Copy(Trim(Value), 1, MaxTimeSeriesNameLength));
+  for CharIndex := 1 to Length(Value) do
+  begin
+    AChar := Value[CharIndex];
+    if (AChar <> '_') and (not AChar.IsLetterOrDigit) then
+    begin
+      Value[CharIndex] := '_'
+    end;
+  end;
   if FSeriesName <> Value then
   begin
     FSeriesName := Value;

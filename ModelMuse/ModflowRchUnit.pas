@@ -17,12 +17,13 @@ type
     StartingTime: double;
     EndingTime: double;
     RechargeRateAnnotation: string;
-    TimeSeriesName: string;
+//    TimeSeriesName: string;
     RechargeParameterName: string;
     RechargeParameterValue: double;
     RechargePest: string;
     RechargePestSeries: string;
     RechargePestMethod: TPestParamMethod;
+    RechargeTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -228,12 +229,14 @@ type
     FStressPeriod: integer;
     function GetRechargeRate: double;
     function GetRechargeRateAnnotation: string;
-    function GetTimeSeriesName: string;
+//    function GetTimeSeriesName: string;
     function GetRechargeParameterName: string;
     function GetRechargeParameterValue: double;
     function GetRechargePest: string;
     function GetRechargePestMethod: TPestParamMethod;
     function GetRechargePestSeries: string;
+    function GetRechargeTimeSeriesName: string;
+    procedure SetRechargeTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -252,12 +255,14 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TRchRecord read FValues write FValues;
     property RechargeRate: double read GetRechargeRate;
     property RechargeRateAnnotation: string read GetRechargeRateAnnotation;
-    property TimeSeriesName: string read GetTimeSeriesName;
+//    property TimeSeriesName: string read GetTimeSeriesName;
     property RechargeParameterName: string read GetRechargeParameterName;
     property RechargeParameterValue: double read GetRechargeParameterValue;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
@@ -265,6 +270,8 @@ type
     property RechargePest: string read GetRechargePest;
     property RechargePestSeries: string read GetRechargePestSeries;
     property RechargePestMethod: TPestParamMethod read GetRechargePestMethod;
+    property RechargeTimeSeriesName: string read GetRechargeTimeSeriesName
+      write SetRechargeTimeSeriesName;
   end;
 
   TRechargeLayerCell = class(TRechargeCell)
@@ -762,6 +769,21 @@ begin
   result := Values.Cell.Layer;
 end;
 
+function TRch_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    RechPosition:
+      begin
+        result := RechargeTimeSeriesName;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TRch_Cell.GetPestName(Index: Integer): string;
 begin
   case Index of
@@ -860,6 +882,11 @@ begin
   result := Values.RechargeRateAnnotation;
 end;
 
+function TRch_Cell.GetRechargeTimeSeriesName: string;
+begin
+  result := Values.RechargeTimeSeriesName;
+end;
+
 function TRch_Cell.GetRow: integer;
 begin
   result := Values.Cell.Row;
@@ -870,10 +897,10 @@ begin
   result := Values.Cell.Section;
 end;
 
-function TRch_Cell.GetTimeSeriesName: string;
-begin
-  result := Values.TimeSeriesName;
-end;
+//function TRch_Cell.GetTimeSeriesName: string;
+//begin
+//  result := Values.TimeSeriesName;
+//end;
 
 function TRch_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
@@ -909,6 +936,26 @@ end;
 procedure TRch_Cell.SetLayer(const Value: integer);
 begin
   FValues.Cell.Layer := Value;
+end;
+
+procedure TRch_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  case Index of
+    RechPosition:
+      begin
+        RechargeTimeSeriesName := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TRch_Cell.SetRechargeTimeSeriesName(const Value: string);
+begin
+  FValues.RechargeTimeSeriesName := Value;
 end;
 
 procedure TRch_Cell.SetRow(const Value: integer);
@@ -1936,11 +1983,13 @@ begin
   WriteCompReal(Comp, EndingTime);
   WriteCompReal(Comp, RechargeParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(RechargeRateAnnotation));
-  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(RechargeParameterName));
 
   WriteCompInt(Comp, Strings.IndexOf(RechargePest));
   WriteCompInt(Comp, Strings.IndexOf(RechargePestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(RechargeTimeSeriesName));
+
   WriteCompInt(Comp, Ord(RechargePestMethod));
 //  WriteCompString(Comp, RechargeRateAnnotation);
 end;
@@ -1948,10 +1997,12 @@ end;
 procedure TRchRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(RechargeRateAnnotation);
-  Strings.Add(TimeSeriesName);
+//  Strings.Add(TimeSeriesName);
   Strings.Add(RechargeParameterName);
   Strings.Add(RechargePest);
   Strings.Add(RechargePestSeries);
+  Strings.Add(RechargeTimeSeriesName);
+
 end;
 
 procedure TRchRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1962,11 +2013,12 @@ begin
   EndingTime := ReadCompReal(Decomp);
   RechargeParameterValue := ReadCompReal(Decomp);
   RechargeRateAnnotation := Annotations[ReadCompInt(Decomp)];
-  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RechargeParameterName := Annotations[ReadCompInt(Decomp)];
 //  RechargeRateAnnotation := ReadCompString(Decomp, Annotations);
   RechargePest := Annotations[ReadCompInt(Decomp)];
   RechargePestSeries := Annotations[ReadCompInt(Decomp)];
+  RechargeTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RechargePestMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 

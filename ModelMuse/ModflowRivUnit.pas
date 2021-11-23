@@ -43,11 +43,15 @@ type
     RiverStagePestSeriesMethod: TPestParamMethod;
     RiverBottomPestSeriesMethod: TPestParamMethod;
 
-    TimeSeriesName: string;
+//    TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
     ConductanceParameterName: string;
     ConductanceParameterValue: double;
+
+    ConductanceTimeSeriesName: string;
+    RiverStageTimeSeriesName: string;
+    RiverBottomTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -185,7 +189,7 @@ type
     function GetConductanceAnnotation: string;
     function GetRiverBottomAnnotation: string;
     function GetRiverStageAnnotation: string;
-    function GetTimeSeriesName: string;
+//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
@@ -199,6 +203,12 @@ type
     function GetRiverStagePest: string;
     function GetRiverStagePestSeriesMethod: TPestParamMethod;
     function GetRiverStagePestSeriesName: string;
+    function GetConductanceTimeSeriesName: string;
+    function GetRiverBottomTimeSeriesName: string;
+    function GetRiverStageTimeSeriesName: string;
+    procedure SetConductanceTimeSeriesName(const Value: string);
+    procedure SetRiverBottomTimeSeriesName(const Value: string);
+    procedure SetRiverStageTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -217,6 +227,8 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     // With MODFLOW 6, Conductance includes the effect of the parameter,
     // if any. In a template, the appropriate formula would be
@@ -236,7 +248,7 @@ type
     property ConductanceAnnotation: string read GetConductanceAnnotation;
     property RiverBottomAnnotation: string read GetRiverBottomAnnotation;
     property RiverStageAnnotation: string read GetRiverStageAnnotation;
-    property TimeSeriesName: string read GetTimeSeriesName;
+//    property TimeSeriesName: string read GetTimeSeriesName;
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
@@ -255,6 +267,9 @@ type
     property RiverStagePestSeriesMethod: TPestParamMethod read GetRiverStagePestSeriesMethod;
     property RiverBottomPestSeriesMethod: TPestParamMethod read GetRiverBottomPestSeriesMethod;
 
+    property ConductanceTimeSeriesName: string read GetConductanceTimeSeriesName write SetConductanceTimeSeriesName;
+    property RiverStageTimeSeriesName: string read GetRiverStageTimeSeriesName write SetRiverStageTimeSeriesName;
+    property RiverBottomTimeSeriesName: string read GetRiverBottomTimeSeriesName write SetRiverBottomTimeSeriesName;
   end;
 
   // @name represents the MODFLOW River boundaries associated with
@@ -670,6 +685,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(BoundaryFunctionIndex in
     [RivStagePosition,RivConductancePosition, RivBottomPosition]);
   Assert(Expression <> nil);
@@ -693,6 +709,7 @@ begin
             RiverStagePest := PestName;
             RiverStagePestSeriesName := PestSeriesName;
             RiverStagePestSeriesMethod := PestSeriesMethod;
+            RiverStageTimeSeriesName := TimeSeriesName;
           end;
         RivConductancePosition:
           begin
@@ -701,6 +718,7 @@ begin
             ConductancePest := PestName;
             ConductancePestSeriesName := PestSeriesName;
             ConductancePestSeriesMethod := PestSeriesMethod;
+            ConductanceTimeSeriesName := TimeSeriesName;
           end;
         RivBottomPosition:
           begin
@@ -709,6 +727,7 @@ begin
             RiverBottomPest := PestName;
             RiverBottomPestSeriesName := PestSeriesName;
             RiverBottomPestSeriesMethod := PestSeriesMethod;
+            RiverBottomTimeSeriesName := TimeSeriesName;
           end;
         else
           Assert(False);
@@ -887,6 +906,11 @@ begin
   result := Values.RiverBottomPestSeriesName;
 end;
 
+function TRiv_Cell.GetRiverBottomTimeSeriesName: string;
+begin
+  result := Values.RiverBottomTimeSeriesName;
+end;
+
 function TRiv_Cell.GetRiverStage: double;
 begin
   result := Values.RiverStage;
@@ -910,6 +934,11 @@ end;
 function TRiv_Cell.GetRiverStagePestSeriesName: string;
 begin
   result := Values.RiverStagePestSeriesName;
+end;
+
+function TRiv_Cell.GetRiverStageTimeSeriesName: string;
+begin
+  result := Values.RiverStageTimeSeriesName;
 end;
 
 procedure TRiv_Cell.Cache(Comp: TCompressionStream; Strings: TStringList);
@@ -959,6 +988,11 @@ begin
   result := Values.ConductancePestSeriesName;
 end;
 
+function TRiv_Cell.GetConductanceTimeSeriesName: string;
+begin
+  result := Values.ConductanceTimeSeriesName;
+end;
+
 function TRiv_Cell.GetIntegerAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
@@ -975,6 +1009,20 @@ end;
 function TRiv_Cell.GetLayer: integer;
 begin
   result := Values.Cell.Layer;
+end;
+
+function TRiv_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    RivStagePosition: result := RiverStageTimeSeriesName;
+    RivConductancePosition: result := ConductanceTimeSeriesName;
+    RivBottomPosition: result := RiverBottomTimeSeriesName;
+    else
+    begin
+      result := inherited;
+      Assert(False);
+    end;
+  end;
 end;
 
 function TRiv_Cell.GetMvrIndex: Integer;
@@ -1039,10 +1087,10 @@ begin
   result := Values.Cell.Section;
 end;
 
-function TRiv_Cell.GetTimeSeriesName: string;
-begin
-  result := Values.TimeSeriesName;
-end;
+//function TRiv_Cell.GetTimeSeriesName: string;
+//begin
+//  result := Values.TimeSeriesName;
+//end;
 
 function TRiv_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
@@ -1079,9 +1127,42 @@ begin
   Values.Cell.Column := Value;
 end;
 
+procedure TRiv_Cell.SetConductanceTimeSeriesName(const Value: string);
+begin
+  Values.ConductanceTimeSeriesName := Value;
+end;
+
 procedure TRiv_Cell.SetLayer(const Value: integer);
 begin
   Values.Cell.Layer := Value;
+end;
+
+procedure TRiv_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  inherited;
+  case Index of
+    RivStagePosition:
+      RiverStageTimeSeriesName := Value;
+    RivConductancePosition:
+      ConductanceTimeSeriesName := Value;
+    RivBottomPosition:
+      RiverBottomTimeSeriesName := Value;
+    else
+    begin
+      inherited;
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TRiv_Cell.SetRiverBottomTimeSeriesName(const Value: string);
+begin
+  Values.RiverBottomTimeSeriesName := Value;
+end;
+
+procedure TRiv_Cell.SetRiverStageTimeSeriesName(const Value: string);
+begin
+  Values.RiverStageTimeSeriesName := Value;
 end;
 
 procedure TRiv_Cell.SetRow(const Value: integer);
@@ -1769,8 +1850,13 @@ begin
   WriteCompInt(Comp, Ord(RiverStagePestSeriesMethod));
   WriteCompInt(Comp, Ord(RiverBottomPestSeriesMethod));
 
-  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
+
+  WriteCompInt(Comp, Strings.IndexOf(ConductanceTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RiverStageTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RiverBottomTimeSeriesName));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 //  WriteCompString(Comp, ConductanceAnnotation);
@@ -1791,8 +1877,12 @@ begin
   Strings.Add(RiverStagePestSeriesName);
   Strings.Add(RiverBottomPestSeriesName);
 
-  Strings.Add(TimeSeriesName);
+//  Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
+
+  Strings.Add(ConductanceTimeSeriesName);
+  Strings.Add(RiverStageTimeSeriesName);
+  Strings.Add(RiverBottomTimeSeriesName);
 end;
 
 procedure TRivRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1820,8 +1910,13 @@ begin
   RiverStagePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   RiverBottomPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
-  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
+
+  ConductanceTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RiverStageTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RiverBottomTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 //  ConductanceAnnotation := ReadCompString(Decomp, Annotations);

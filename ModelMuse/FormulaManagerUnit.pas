@@ -40,6 +40,7 @@ type
     procedure DeleteSubscriptionEvents(OnRemoveSubscription,
     OnRestoreSubscription: TChangeSubscription; Subject: TObject);
     function GetDisplayFormula: string;
+//    function GetHasTimeSeries: Boolean;
   protected
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); override;
@@ -55,6 +56,7 @@ type
     // @link(FixSubscriptions).
     procedure AddSubscriptionEvents(OnRemoveSubscription,
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
+//    property HasTimeSeries: Boolean read GetHasTimeSeries;
   end;
 
   {@name is used to update formulas when the names of variables used
@@ -327,6 +329,11 @@ begin
     FFormula := result;
   end;
 end;
+
+//function TFormulaObject.GetHasTimeSeries: Boolean;
+//begin
+//  result := FTimeSeries <> nil;
+//end;
 
 procedure TFormulaObject.Notification(AComponent: TComponent;
   Operation: TOperation);

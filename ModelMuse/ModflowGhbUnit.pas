@@ -16,7 +16,7 @@ type
     EndingTime: double;
     ConductanceAnnotation: string;
     BoundaryHeadAnnotation: string;
-    TimeSeriesName: string;
+//    TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
     ConductanceParameterName: string;
@@ -27,6 +27,8 @@ type
     BoundaryHeadPestSeriesName: string;
     ConductancePestSeriesMethod: TPestParamMethod;
     BoundaryHeadPestSeriesMethod: TPestParamMethod;
+    ConductanceTimeSeriesName: string;
+    BoundaryHeadTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -162,7 +164,7 @@ type
     function GetConductance: double;
     function GetBoundaryHeadAnnotation: string;
     function GetConductanceAnnotation: string;
-    function GetTimeSeriesName: string;
+//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
@@ -173,6 +175,10 @@ type
     function GetConductancePest: string;
     function GetConductancePestSeries: string;
     function GetConductancePestSeriesMethod: TPestParamMethod;
+    function GetBoundaryHeadTimeSeriesName: string;
+    function GetConductanceTimeSeriesName: string;
+    procedure SetBoundaryHeadTimeSeriesName(const Value: string);
+    procedure SetConductanceTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -199,10 +205,12 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property Conductance: double read GetConductance;
     property BoundaryHead: double read GetBoundaryHead;
-    property TimeSeriesName: string read GetTimeSeriesName;
+//    property TimeSeriesName: string read GetTimeSeriesName;
     property ConductanceAnnotation: string read GetConductanceAnnotation;
     property BoundaryHeadAnnotation: string read GetBoundaryHeadAnnotation;
     property MvrUsed: Boolean read GetMvrUsed;
@@ -219,6 +227,10 @@ type
       read GetBoundaryHeadPestSeriesMethod;
     property ConductancePestSeriesMethod: TPestParamMethod
       read GetConductancePestSeriesMethod;
+    property ConductanceTimeSeriesName: string read GetConductanceTimeSeriesName
+      write SetConductanceTimeSeriesName;
+    property BoundaryHeadTimeSeriesName: string
+      read GetBoundaryHeadTimeSeriesName write SetBoundaryHeadTimeSeriesName;
   end;
 
   // @name represents the MODFLOW General-Head boundaries associated with
@@ -588,6 +600,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(BoundaryFunctionIndex in [GhbHeadPosition,GhbConductancePosition]);
   Assert(Expression <> nil);
 
@@ -610,6 +623,7 @@ begin
             BoundaryHeadPest := PestName;
             BoundaryHeadPestSeriesName := PestSeriesName;
             BoundaryHeadPestSeriesMethod := PestSeriesMethod;
+            BoundaryHeadTimeSeriesName := TimeSeriesName;
           end;
         GhbConductancePosition:
           begin
@@ -618,6 +632,7 @@ begin
             ConductancePest := PestName;
             ConductancePestSeriesName := PestSeriesName;
             ConductancePestSeriesMethod := PestSeriesMethod;
+            ConductanceTimeSeriesName := TimeSeriesName;
           end;
         else
           Assert(False);
@@ -771,6 +786,11 @@ begin
   result := FValues.BoundaryHeadPestSeriesMethod;
 end;
 
+function TGhb_Cell.GetBoundaryHeadTimeSeriesName: string;
+begin
+  result := FValues.BoundaryHeadTimeSeriesName;
+end;
+
 function TGhb_Cell.GetColumn: integer;
 begin
   result := FValues.Cell.Column;
@@ -811,6 +831,11 @@ begin
   result := FValues.ConductancePestSeriesMethod;
 end;
 
+function TGhb_Cell.GetConductanceTimeSeriesName: string;
+begin
+  result := FValues.ConductanceTimeSeriesName;
+end;
+
 function TGhb_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -826,6 +851,25 @@ end;
 function TGhb_Cell.GetLayer: integer;
 begin
   result := FValues.Cell.Layer;
+end;
+
+function TGhb_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    GhbHeadPosition:
+      begin
+        result := BoundaryHeadTimeSeriesName;
+      end;
+    GhbConductancePosition:
+      begin
+        result := ConductanceTimeSeriesName;
+      end;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 function TGhb_Cell.GetMvrIndex: Integer;
@@ -936,10 +980,10 @@ begin
   result := FValues.Cell.Section;
 end;
 
-function TGhb_Cell.GetTimeSeriesName: string;
-begin
-  result := FValues.TimeSeriesName;
-end;
+//function TGhb_Cell.GetTimeSeriesName: string;
+//begin
+//  result := FValues.TimeSeriesName;
+//end;
 
 function TGhb_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
@@ -970,14 +1014,43 @@ begin
   FStressPeriod := ReadCompInt(Decomp);
 end;
 
+procedure TGhb_Cell.SetBoundaryHeadTimeSeriesName(const Value: string);
+begin
+  FValues.BoundaryHeadTimeSeriesName := Value;
+end;
+
 procedure TGhb_Cell.SetColumn(const Value: integer);
 begin
   FValues.Cell.Column := Value;
 end;
 
+procedure TGhb_Cell.SetConductanceTimeSeriesName(const Value: string);
+begin
+  FValues.ConductanceTimeSeriesName := Value;
+end;
+
 procedure TGhb_Cell.SetLayer(const Value: integer);
 begin
   FValues.Cell.Layer := Value;
+end;
+
+procedure TGhb_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  case Index of
+    GhbHeadPosition:
+      begin
+        BoundaryHeadTimeSeriesName := Value;
+      end;
+    GhbConductancePosition:
+      begin
+        ConductanceTimeSeriesName := Value;
+      end;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 procedure TGhb_Cell.SetRow(const Value: integer);
@@ -1250,91 +1323,6 @@ begin
       Times := ParamList.Objects[Position] as TList;
     end;
 
-//    if FCurrentParameter <> nil then
-//    begin
-//      BoundaryList := Param.Param.BoundaryList[AModel];
-//      StressPeriods := (AModel as TCustomModel).ModflowFullStressPeriods;
-//      StartTime := StressPeriods.First.StartTime;
-//      EndTime := StressPeriods.Last.EndTime;
-//      TimeCount := BoundaryList.Count;
-//      for ItemIndex := 0 to BoundaryList.Count - 1 do
-//      begin
-//        BoundaryStorage := BoundaryList[ItemIndex];
-//        if BoundaryStorage.StartingTime > StartTime then
-//        begin
-//          Inc(TimeCount);
-//        end;
-//        StartTime := BoundaryStorage.EndingTime;
-//      end;
-//      BoundaryStorage := BoundaryList.Last;
-//      if BoundaryStorage.EndingTime <= EndTime then
-//      begin
-//        Inc(TimeCount);
-//      end;
-//
-//      TimeSeriesList := FCurrentParameter.TimeSeriesList;
-//      TimeSeries := TTimeSeries.Create;
-//      TimeSeriesList.Add(TimeSeries);
-//      TimeSeries.SeriesCount := Length(BoundaryStorage.GhbArray);
-//      TimeSeries.TimeCount := TimeCount;
-//      TimeSeries.ParameterName := FCurrentParameter.ParameterName;
-//      TimeSeries.ObjectName := (ScreenObject as TScreenObject).Name;
-//      for SeriesIndex := 0 to Length(BoundaryStorage.GhbArray) - 1 do
-//      begin
-//        TimeSeries.SeriesNames[SeriesIndex] :=
-//          Format('%0:s_%1d_%2:d', [TimeSeries.ParameterName,
-//          TimeSeriesList.Count, SeriesIndex+1]);
-//        TimeSeries.InterpolationMethods[SeriesIndex] := Interp;
-//        TimeSeries.ScaleFactors[SeriesIndex] := FCurrentParameter.Value;
-//      end;
-//
-//      TimeCount := 0;
-//      StartTime := StressPeriods.First.StartTime;
-//      InitialTime := StartTime;
-//      for ItemIndex := 0 to BoundaryList.Count - 1 do
-//      begin
-//        BoundaryStorage := BoundaryList[ItemIndex];
-//        if BoundaryStorage.StartingTime > StartTime then
-//        begin
-//          TimeSeries.Times[TimeCount] := StartTime - InitialTime;
-//          for SeriesIndex := 0 to Length(BoundaryStorage.GhbArray) - 1 do
-//          begin
-//            if ItemIndex > 0 then
-//            begin
-//              TimeSeries.Values[SeriesIndex,TimeCount] := NoData;
-//            end
-//            else
-//            begin
-//              TimeSeries.Values[SeriesIndex,TimeCount] :=
-//                BoundaryStorage.GhbArray[SeriesIndex].Conductance;
-//            end;
-//          end;
-//          Inc(TimeCount);
-//        end;
-//        TimeSeries.Times[TimeCount] := BoundaryStorage.StartingTime - InitialTime;
-//        for SeriesIndex := 0 to Length(BoundaryStorage.GhbArray) - 1 do
-//        begin
-//          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//            BoundaryStorage.GhbArray[SeriesIndex].Conductance;
-//          BoundaryStorage.GhbArray[SeriesIndex].TimeSeriesName :=
-//            TimeSeries.SeriesNames[SeriesIndex];
-//        end;
-//        StartTime := BoundaryStorage.EndingTime;
-//        Inc(TimeCount);
-//      end;
-//      BoundaryStorage := BoundaryList.Last;
-//      if BoundaryStorage.EndingTime <= EndTime then
-//      begin
-//        TimeSeries.Times[TimeCount] := EndTime - InitialTime;
-//        for SeriesIndex := 0 to Length(BoundaryStorage.GhbArray) - 1 do
-//        begin
-//          TimeSeries.Values[SeriesIndex,TimeCount] :=
-//            BoundaryStorage.GhbArray[SeriesIndex].Conductance;
-//        end;
-//      end;
-//    end;
-
-
     PriorTime := StartOfFirstStressPeriod;
     ValueCount := 0;
     for ValueIndex := 0 to Param.Param.Count - 1 do
@@ -1359,7 +1347,7 @@ begin
         AssignCells(BoundaryStorage, Times, AModel);
         Inc(ValueCount);
       end;
-      if {(ValueIndex = Param.Param.Count - 1) and} ObservationsPresent then
+      if ObservationsPresent then
       begin
         if Item.EndTime < EndOfLastStressPeriod then
         begin
@@ -1648,7 +1636,7 @@ begin
   WriteCompReal(Comp, ConductanceParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadAnnotation));
-  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
+//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
   WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadPest));
@@ -1656,6 +1644,10 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadPestSeriesName));
   WriteCompInt(Comp, Ord(ConductancePestSeriesMethod));
   WriteCompInt(Comp, Ord(BoundaryHeadPestSeriesMethod));
+
+  WriteCompInt(Comp, Strings.IndexOf(ConductanceTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadTimeSeriesName));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -1664,12 +1656,14 @@ procedure TGhbRecord.RecordStrings(Strings: TStringList);
 begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(BoundaryHeadAnnotation);
-  Strings.Add(TimeSeriesName);
+//  Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
   Strings.Add(ConductancePest);
   Strings.Add(BoundaryHeadPest);
   Strings.Add(ConductancePestSeriesName);
   Strings.Add(BoundaryHeadPestSeriesName);
+  Strings.Add(ConductanceTimeSeriesName);
+  Strings.Add(BoundaryHeadTimeSeriesName);
 end;
 
 procedure TGhbRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -1682,7 +1676,7 @@ begin
   ConductanceParameterValue := ReadCompReal(Decomp);
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   BoundaryHeadAnnotation := Annotations[ReadCompInt(Decomp)];
-  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
   ConductancePest := Annotations[ReadCompInt(Decomp)];
   BoundaryHeadPest := Annotations[ReadCompInt(Decomp)];
@@ -1690,6 +1684,10 @@ begin
   BoundaryHeadPestSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductancePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   BoundaryHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  ConductanceTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  BoundaryHeadTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 end;
