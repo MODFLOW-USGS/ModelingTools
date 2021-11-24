@@ -2132,6 +2132,10 @@ begin
       DepthFractionAnnotations, SegmentCount-1);
     SetLength(EtsSurfDepthStorage.EtsSurfDepthArray[Index].
       EtFractionAnnotations, SegmentCount-1);
+    SetLength(EtsSurfDepthStorage.EtsSurfDepthArray[Index].
+      DepthFractionTimeSeries, SegmentCount-1);
+    SetLength(EtsSurfDepthStorage.EtsSurfDepthArray[Index].
+      EtFractionTimeSeries, SegmentCount-1);
   end;
   inherited;
 
