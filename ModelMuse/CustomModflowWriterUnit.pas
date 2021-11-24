@@ -89,6 +89,7 @@ type
     // regardless or whether the file being created is the actual input file
     // or a template file being created for PEST.
     FInputFileName: string;
+    FTimeSeriesNames: TStringList;
     // @name closes the file that is being exported.
     // @seealso(OpenFile)
     procedure CloseFile;
@@ -214,7 +215,8 @@ type
     differently
     }
     function DataArrayUsesPestParameters(const DataArray: TDataArray): boolean;
-  end;
+    property TimeSeriesNames: TStringList read FTimeSeriesNames;
+end;
 
   { @name is an abstract base class used as an ancestor for classes that
     write MODFLOW input files.
@@ -500,7 +502,7 @@ type
     procedure SetOwnsValueContents(const Value: Boolean);
   protected
     MAXBOUND: integer;
-    FTimeSeriesNames: TStringList;
+    FTimeSeriesFileNames: TStringList;
     // @name is used for recording the locations of observations for
     // MODFLOW-6 flow observations.
     property FlowObsLocations: TBoundaryFlowObservationLocationList
@@ -579,6 +581,7 @@ type
     procedure WriteMF6ObsOption(InputFileName: string);
     procedure WriteBoundName(ACell: TValueCell);
     Class function Mf6ObType: TObGeneral; virtual;
+    procedure WriteTimeSeriesFiles(InputFileName: string);
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -724,10 +727,8 @@ type
   TCustomListWriter = class(TCustomParameterTransientWriter)
   private
     FObjectNames: TStringList;
-    FTimeSeriesFileNames: TStringList;
     procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
       ErrorRoot: string; const TimeIndex: integer);
-    procedure WriteTimeSeriesFiles(InputFileName: string);
   strict protected
     FStressPeriod: Integer;
     FBoundaryIndex: Integer;
@@ -2807,6 +2808,9 @@ constructor TCustomFileWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited Create;
+  FTimeSeriesNames := TStringList.Create;
+  FTimeSeriesNames.Sorted := True;
+  FTimeSeriesNames.Duplicates := dupIgnore;
   FFileStreamList := TList<TFileStream>.Create;
   FPestDataArrays := TDictionary<string, TDataArray>.Create;
   FEvaluationType := EvaluationType;
@@ -2817,6 +2821,7 @@ destructor TCustomFileWriter.Destroy;
 begin
   FPestDataArrays.Free;
   FFileStreamList.Free;
+  FTimeSeriesNames.Free;
   inherited;
 end;
 
@@ -4445,6 +4450,7 @@ begin
   Assert(Model <> nil);
 //  FMf6ObsArray := nil;
 //  FScreenObjectLists := TObjectScreenObjectLists.Create;
+  FTimeSeriesFileNames := TStringList.Create;
   FValues := TObjectList.Create;
   if Mf6ObservationsUsed then
   begin
@@ -4458,14 +4464,15 @@ begin
   DirectObsLines := Model.DirectObservationLines;
   CalculatedObsLines := Model.DerivedObservationLines;
   FileNameLines := Model.FileNameLines;
-  FTimeSeriesNames := TStringList.Create;
-  FTimeSeriesNames.Sorted := True;
-  FTimeSeriesNames.Duplicates := dupIgnore;
+//  FTimeSeriesNames := TStringList.Create;
+//  FTimeSeriesNames.Sorted := True;
+//  FTimeSeriesNames.Duplicates := dupIgnore;
 end;
 
 destructor TCustomTransientWriter.Destroy;
 begin
-  FTimeSeriesNames.Free;
+  FTimeSeriesFileNames.Free;
+
   FToMvrFlowObsLocations.Free;
 //  FMf6ObsArray.Free;
   FObsLocationCheck.Free;
@@ -4788,7 +4795,6 @@ constructor TCustomListWriter.Create(Model: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
-  FTimeSeriesFileNames := TStringList.Create;
 //  FBoundNames := TStringList.Create;
 
   FObjectNames := TStringList.Create;
@@ -5456,7 +5462,6 @@ end;
 destructor TCustomListWriter.Destroy;
 begin
   FObjectNames.Free;
-  FTimeSeriesFileNames.Free;
 //  FBoundNames.Free;
   inherited;
 end;
@@ -9483,7 +9488,7 @@ begin
   end;
 end;
 
-procedure TCustomListWriter.WriteTimeSeriesFiles(InputFileName: string);
+procedure TCustomTransientWriter.WriteTimeSeriesFiles(InputFileName: string);
 var
   Groups: TTimesSeriesGroups;
   GroupIndex: Integer;

@@ -259,10 +259,11 @@ type
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
 
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -1206,7 +1207,7 @@ end;
 
 procedure TMnw2SpatialCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   WellRadiusArray: TDataArray;
   SkinRadiusArray: TDataArray;
@@ -1620,7 +1621,7 @@ end;
 
 procedure TMnw2SpatialCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

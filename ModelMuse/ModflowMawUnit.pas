@@ -525,7 +525,8 @@ type
       PestName: string; PestSeriesName: string;
       PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     function ShouldDeleteItemsWithZeroDuration: Boolean; override;
   public
     procedure Loaded; 
@@ -1329,7 +1330,9 @@ begin
 end;
 
 procedure TMawWellScreenCollection.AssignArrayCellValues(DataSets: TList;
-  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 begin
   // does anything need to be done here?
   // called from TCustomListArrayBoundColl.AssignArrayCellsWithItem

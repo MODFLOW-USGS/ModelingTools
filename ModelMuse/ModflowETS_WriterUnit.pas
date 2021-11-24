@@ -752,13 +752,8 @@ begin
   Assert(Model.ModelSelection = msModflow2015);
   WriteBeginOptions;
 
-{
-  WriteString('  READASARRAYS');
-  NewLine;
-}
   WriteString('  AUXILIARY IFACE');
   NewLine;
-
 
   PrintOutputOptions;
   WriteBoundNamesOption;
@@ -768,6 +763,8 @@ begin
     WriteString('  FIXED_CELL');
     NewLine;
   end;
+
+  WriteTimeSeriesFiles(InputFileName);
 
   WriteMF6ObsOption(InputFileName);
   WriteMf6ParamListOption;

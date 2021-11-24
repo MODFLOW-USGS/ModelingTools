@@ -107,12 +107,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -312,8 +313,10 @@ begin
   AddBoundary(TFmpRefEvapStorage.Create(AModel));
 end;
 
-procedure TFmpRefEvapCollection.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-  AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+procedure TFmpRefEvapCollection.AssignArrayCellValues(DataSets: TList;
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   RefEvapArray: TDataArray;
   Boundary: TFmpRefEvapStorage;
@@ -376,7 +379,7 @@ end;
 
 procedure TFmpRefEvapCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

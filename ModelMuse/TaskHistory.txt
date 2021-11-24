@@ -106,11 +106,11 @@ object TTaskHistory
     end
     item
       Name = 'EVT'
-      Display = False
+      Display = True
     end
     item
       Name = 'ETS'
-      Display = False
+      Display = True
     end
     item
       Name = 'RES'
@@ -28504,6 +28504,18 @@ object TTaskHistory
         'MF6 Time Series'
         'GHB'
         'WEL'
-        'RCH')
+        'RCH'
+        'Import')
+    end
+    item
+      Date = 44524.000000000000000000
+      Categories.Strings = (
+        'MF6 Time Series'
+        'core code'
+        'Refactoring'
+        'RCH'
+        'EVT'
+        'ETS'
+        'Import')
     end>
 end

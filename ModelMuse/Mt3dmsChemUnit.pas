@@ -265,9 +265,10 @@ type
     procedure CreateTimeLists;
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     procedure RenameTimeList(const OldSpeciesName, NewSpeciesName: string);
     procedure RenameItems(const OldSpeciesName, NewSpeciesName: string);
     procedure ChangeSpeciesItemPosition(OldIndex, NewIndex: integer);
@@ -2121,7 +2122,8 @@ end;
 
 procedure TCustomMt3dmsArrayConcCollection.AssignArrayCellValues(
   DataSets: TList; ItemIndex: Integer; AModel: TBaseModel;
-  PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestSeries: TStringList; PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
 //  EvapotranspirationSurfaceArray: TDataArray;
 //  EvapotranspirationDepthArray: TDataArray;
@@ -2324,7 +2326,7 @@ end;
 
 procedure TCustomMt3dmsArrayConcCollection.InitializeTimeLists(
   ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList;
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList;
   Writer: TObject);
 var
   BoundaryValues: TBoundaryValueArray;

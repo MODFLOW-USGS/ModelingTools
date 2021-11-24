@@ -176,12 +176,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -827,7 +828,7 @@ end;
 
 procedure TSfrCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList);
 const
   LGR_Offset = 1;
 var
@@ -1218,7 +1219,7 @@ end;
 
 procedure TSfrCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1248,6 +1249,7 @@ var
   InitialWaterContentItems: TStringList;
   BrooksCoreyExponentItems: TStringList;
   VerticalKItems: TStringList;
+  TimeSeriesItems: TStringList;
 begin
   ISFROPT := (Model as TPhastModel).ModflowPackages.SfrPackage.Isfropt;
 
@@ -1256,6 +1258,8 @@ begin
 
   ReachLengthItems := TStringList.Create;
   PestItemNames.Add(ReachLengthItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   Boundary := BoundaryGroup as TSfrBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -1267,7 +1271,7 @@ begin
       BoundaryValues[Index].Time := Item.StartTime;
       ItemFormula := Item.ReachLength;
       AssignBoundaryFormula(AModel, '', ppmMultiply,
-        ReachLengthItems, ItemFormula, Writer, BoundaryValues[Index]);
+        ReachLengthItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //      BoundaryValues[Index].Formula := Item.ReachLength;
     end;
@@ -1297,13 +1301,17 @@ begin
 
     HydraulicConductivityItems := TStringList.Create;
     PestItemNames.Add(HydraulicConductivityItems);
+    TimeSeriesItems := TStringList.Create;
+    TimeSeriesNames.Add(TimeSeriesItems);
+
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
       ItemFormula := Item.HydraulicConductivity;
       AssignBoundaryFormula(AModel, '', ppmMultiply,
-        HydraulicConductivityItems, ItemFormula, Writer, BoundaryValues[Index]);
+        HydraulicConductivityItems, TimeSeriesItems, ItemFormula, Writer,
+        BoundaryValues[Index]);
 
 //      BoundaryValues[Index].Formula := Item.HydraulicConductivity;
     end;
@@ -1312,13 +1320,16 @@ begin
 
     StreamBedThicknessItems := TStringList.Create;
     PestItemNames.Add(StreamBedThicknessItems);
+    TimeSeriesItems := TStringList.Create;
+    TimeSeriesNames.Add(TimeSeriesItems);
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
       ItemFormula := Item.StreamBedThickness;
       AssignBoundaryFormula(AModel, '', ppmMultiply,
-        StreamBedThicknessItems, ItemFormula, Writer, BoundaryValues[Index]);
+        StreamBedThicknessItems, TimeSeriesItems, ItemFormula, Writer,
+        BoundaryValues[Index]);
 //      BoundaryValues[Index].Formula := Item.StreamBedThickness;
     end;
     StreamBedThicknessData.Initialize(BoundaryValues, ScreenObject, lctZero);
@@ -1326,13 +1337,16 @@ begin
 
     StreamBedElevationItems := TStringList.Create;
     PestItemNames.Add(StreamBedElevationItems);
+    TimeSeriesItems := TStringList.Create;
+    TimeSeriesNames.Add(TimeSeriesItems);
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
       ItemFormula := Item.StreamBedElevation;
       AssignBoundaryFormula(AModel, '', ppmMultiply,
-        StreamBedElevationItems, ItemFormula, Writer, BoundaryValues[Index]);
+        StreamBedElevationItems, TimeSeriesItems, ItemFormula, Writer,
+        BoundaryValues[Index]);
 //      BoundaryValues[Index].Formula := Item.StreamBedElevation;
     end;
     StreamBedElevationData.Initialize(BoundaryValues, ScreenObject, lctZero);
@@ -1340,13 +1354,15 @@ begin
 
     StreamSlopeItems := TStringList.Create;
     PestItemNames.Add(StreamSlopeItems);
+    TimeSeriesItems := TStringList.Create;
+    TimeSeriesNames.Add(TimeSeriesItems);
     for Index := 0 to Count - 1 do
     begin
       Item := Items[Index] as TSfrItem;
       BoundaryValues[Index].Time := Item.StartTime;
       ItemFormula := Item.StreamSlope;
       AssignBoundaryFormula(AModel, '', ppmMultiply,
-        StreamSlopeItems, ItemFormula, Writer, BoundaryValues[Index]);
+        StreamSlopeItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 //      BoundaryValues[Index].Formula := Item.StreamSlope;
     end;
     StreamSlopeData.Initialize(BoundaryValues, ScreenObject, lctZero);
@@ -1356,13 +1372,16 @@ begin
     begin
       SaturatedWaterContentItems := TStringList.Create;
       PestItemNames.Add(SaturatedWaterContentItems);
+      TimeSeriesItems := TStringList.Create;
+      TimeSeriesNames.Add(TimeSeriesItems);
       for Index := 0 to Count - 1 do
       begin
         Item := Items[Index] as TSfrItem;
         BoundaryValues[Index].Time := Item.StartTime;
         ItemFormula := Item.SaturatedWaterContent;
         AssignBoundaryFormula(AModel, '', ppmMultiply,
-          SaturatedWaterContentItems, ItemFormula, Writer, BoundaryValues[Index]);
+          SaturatedWaterContentItems, TimeSeriesItems, ItemFormula, Writer,
+          BoundaryValues[Index]);
 //        BoundaryValues[Index].Formula := Item.SaturatedWaterContent;
       end;
       SaturatedWaterContent.Initialize(BoundaryValues, ScreenObject, lctZero);
@@ -1370,13 +1389,16 @@ begin
 
       InitialWaterContentItems := TStringList.Create;
       PestItemNames.Add(InitialWaterContentItems);
+      TimeSeriesItems := TStringList.Create;
+      TimeSeriesNames.Add(TimeSeriesItems);
       for Index := 0 to Count - 1 do
       begin
         Item := Items[Index] as TSfrItem;
         BoundaryValues[Index].Time := Item.StartTime;
         ItemFormula := Item.InitialWaterContent;
         AssignBoundaryFormula(AModel, '', ppmMultiply,
-          InitialWaterContentItems, ItemFormula, Writer, BoundaryValues[Index]);
+          InitialWaterContentItems, TimeSeriesItems, ItemFormula, Writer,
+          BoundaryValues[Index]);
 //        BoundaryValues[Index].Formula := Item.InitialWaterContent;
       end;
       InitialWaterContent.Initialize(BoundaryValues, ScreenObject, lctZero);
@@ -1384,13 +1406,16 @@ begin
 
       BrooksCoreyExponentItems := TStringList.Create;
       PestItemNames.Add(BrooksCoreyExponentItems);
+      TimeSeriesItems := TStringList.Create;
+      TimeSeriesNames.Add(TimeSeriesItems);
       for Index := 0 to Count - 1 do
       begin
         Item := Items[Index] as TSfrItem;
         BoundaryValues[Index].Time := Item.StartTime;
         ItemFormula := Item.BrooksCoreyExponent;
         AssignBoundaryFormula(AModel, '', ppmMultiply,
-          BrooksCoreyExponentItems, ItemFormula, Writer, BoundaryValues[Index]);
+          BrooksCoreyExponentItems, TimeSeriesItems, ItemFormula, Writer,
+          BoundaryValues[Index]);
 //        BoundaryValues[Index].Formula := Item.BrooksCoreyExponent;
       end;
       BrooksCoreyExponent.Initialize(BoundaryValues, ScreenObject, lctZero);
@@ -1400,13 +1425,16 @@ begin
       begin
         VerticalKItems := TStringList.Create;
         PestItemNames.Add(VerticalKItems);
+        TimeSeriesItems := TStringList.Create;
+        TimeSeriesNames.Add(TimeSeriesItems);
         for Index := 0 to Count - 1 do
         begin
           Item := Items[Index] as TSfrItem;
           BoundaryValues[Index].Time := Item.StartTime;
           ItemFormula := Item.VerticalK;
           AssignBoundaryFormula(AModel, '', ppmMultiply,
-            VerticalKItems, ItemFormula, Writer, BoundaryValues[Index]);
+            VerticalKItems, TimeSeriesItems, ItemFormula, Writer,
+            BoundaryValues[Index]);
 //          BoundaryValues[Index].Formula := Item.VerticalK;
         end;
         VerticalK.Initialize(BoundaryValues, ScreenObject, lctZero);

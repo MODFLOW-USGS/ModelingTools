@@ -623,15 +623,15 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        result.FSurface := FortranStrToFloat(Splitter[3]);
-        result.FRate := FortranStrToFloat(Splitter[4]);
-        result.FDepth := FortranStrToFloat(Splitter[5]);
+        result.FSurface := ReadFromTimeSeriesOrConvert(Splitter[3]);
+        result.FRate := ReadFromTimeSeriesOrConvert(Splitter[4]);
+        result.FDepth := ReadFromTimeSeriesOrConvert(Splitter[5]);
       end;
     mggrDisv:
       begin
-        result.FSurface := FortranStrToFloat(Splitter[2]);
-        result.FRate := FortranStrToFloat(Splitter[3]);
-        result.FDepth := FortranStrToFloat(Splitter[4]);
+        result.FSurface := ReadFromTimeSeriesOrConvert(Splitter[2]);
+        result.FRate := ReadFromTimeSeriesOrConvert(Splitter[3]);
+        result.FDepth := ReadFromTimeSeriesOrConvert(Splitter[4]);
       end;
     else
       Assert(False);
@@ -840,11 +840,11 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        result.FRecharge := FortranStrToFloat(Splitter[3]);
+        result.FRecharge := ReadFromTimeSeriesOrConvert(Splitter[3]);
       end;
     mggrDisv:
       begin
-        result.FRecharge := FortranStrToFloat(Splitter[2]);
+        result.FRecharge := ReadFromTimeSeriesOrConvert(Splitter[2]);
       end;
     else
       Assert(False);

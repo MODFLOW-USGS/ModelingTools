@@ -144,12 +144,12 @@ type
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -627,7 +627,7 @@ end;
 
 procedure TSfrSegmentCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   HydraulicConductivityArray: TDataArray;
   StreamBedThicknessArray: TDataArray;
@@ -833,7 +833,7 @@ end;
 
 procedure TSfrSegmentCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -867,6 +867,7 @@ var
   PestStreamDepthSeriesName: string;
   PestStreamDepthMethod: TPestParamMethod;
   PestStreamDepthItems: TStringList;
+  TimeSeriesItems: TStringList;
 begin
   ISFROPT := (AModel as TCustomModel).ModflowPackages.SfrPackage.Isfropt;
   SetLength(BoundaryValues, Count);
@@ -899,6 +900,8 @@ begin
   PestMethods.Add(PestHydraulicConductivityMethod);
   PestHydraulicConductivityItems := TStringList.Create;
   PestItemNames.Add(PestHydraulicConductivityItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -917,7 +920,7 @@ begin
     end;
     AssignBoundaryFormula(AModel, PestHydraulicConductivitySeriesName,
       PestHydraulicConductivityMethod, PestHydraulicConductivityItems,
-      ItemFormula, Writer, BoundaryValues[Index]);
+      TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TSfrSegmentTimeListLink;
   HydraulicConductivityData := ALink.FHydraulicConductivityData;
@@ -932,6 +935,8 @@ begin
   PestMethods.Add(PestStreamBedThicknessMethod);
   PestStreamBedThicknessItems := TStringList.Create;
   PestItemNames.Add(PestStreamBedThicknessItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -966,7 +971,7 @@ begin
     end;
     AssignBoundaryFormula(AModel, PestStreamBedThicknessSeriesName,
       PestStreamBedThicknessMethod, PestStreamBedThicknessItems,
-      ItemFormula, Writer, BoundaryValues[Index]);
+      TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamBedThicknessData := ALink.FStreamBedThicknessData;
   StreamBedThicknessData.Initialize(BoundaryValues, ScreenObject,
@@ -980,6 +985,8 @@ begin
   PestMethods.Add(PestStreamBedElevationMethod);
   PestStreamBedElevationItems := TStringList.Create;
   PestItemNames.Add(PestStreamBedElevationItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1014,7 +1021,7 @@ begin
     end;
     AssignBoundaryFormula(AModel, PestStreamBedElevationSeriesName,
       PestStreamBedElevationMethod, PestStreamBedElevationItems,
-      ItemFormula, Writer, BoundaryValues[Index]);
+      TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamBedElevationData := ALink.FStreamBedElevationData;
   StreamBedElevationData.Initialize(BoundaryValues, ScreenObject,
@@ -1028,6 +1035,8 @@ begin
   PestMethods.Add(PestStreamWidthMethod);
   PestStreamWidthItems := TStringList.Create;
   PestItemNames.Add(PestStreamWidthItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1055,7 +1064,7 @@ begin
     end;
     AssignBoundaryFormula(AModel, PestStreamWidthSeriesName,
       PestStreamWidthMethod, PestStreamWidthItems,
-      ItemFormula, Writer, BoundaryValues[Index]);
+      TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamWidthData := ALink.FStreamWidthData;
   StreamWidthData.Initialize(BoundaryValues, ScreenObject,
@@ -1069,6 +1078,8 @@ begin
   PestMethods.Add(PestStreamDepthMethod);
   PestStreamDepthItems := TStringList.Create;
   PestItemNames.Add(PestStreamDepthItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1088,7 +1099,7 @@ begin
 //      BoundaryValues[Index].Formula := '0';
     end;
     AssignBoundaryFormula(AModel, PestStreamDepthSeriesName,
-      PestStreamDepthMethod, PestStreamDepthItems,
+      PestStreamDepthMethod, PestStreamDepthItems, TimeSeriesItems,
       ItemFormula, Writer, BoundaryValues[Index]);
   end;
   StreamDepthData := ALink.FStreamDepthData;

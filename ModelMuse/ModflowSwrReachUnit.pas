@@ -136,7 +136,8 @@ type
     procedure InvalidateStage(Sender: TObject);
   protected
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(Expression: TExpression; ACellList: TObject;
@@ -649,7 +650,8 @@ end;
 
 procedure TSwrReachCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 begin
   Assert(False);
 end;

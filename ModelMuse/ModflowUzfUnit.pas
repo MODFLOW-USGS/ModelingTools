@@ -160,12 +160,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -200,12 +201,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList;ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -1570,7 +1572,7 @@ end;
 
 procedure TUzfExtinctionDepthCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   ExtinctionDepthRateArray: TDataArray;
   Boundary: TUzfExtinctDepthStorage;
@@ -1646,7 +1648,7 @@ end;
 
 procedure TUzfExtinctionDepthCollection.InitializeTimeLists(
   ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList;
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList;
   Writer: TObject);
 var
   TimeIndex: Integer;
@@ -1660,6 +1662,7 @@ var
   ExtinctionDepthMethod: TPestParamMethod;
   ExtinctionDepthItems: TStringList;
   ItemFormula: string;
+  TimeSeriesItems: TStringList;
 begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -1673,6 +1676,8 @@ begin
 
   ExtinctionDepthItems := TStringList.Create;
   PestItemNames.Add(ExtinctionDepthItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1681,7 +1686,7 @@ begin
 
     ItemFormula := Item.UzfExtinctDepth;
     AssignBoundaryFormula(AModel, PestExtinctionDepthSeriesName, ExtinctionDepthMethod,
-      ExtinctionDepthItems, ItemFormula, Writer, BoundaryValues[Index]);
+      ExtinctionDepthItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.UzfExtinctDepth;
   end;
@@ -1746,7 +1751,7 @@ end;
 
 procedure TUzfWaterContentCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   WaterContentArray: TDataArray;
   Boundary: TUzfWaterContentStorage;
@@ -1823,7 +1828,7 @@ end;
 
 procedure TUzfWaterContentCollection.InitializeTimeLists(
   ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList;
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList;
   Writer: TObject);
 var
   TimeIndex: Integer;
@@ -1837,6 +1842,7 @@ var
   WaterContentMethod: TPestParamMethod;
   WaterContentItems: TStringList;
   ItemFormula: string;
+  TimeSeriesItems: TStringList;
 begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -1848,6 +1854,8 @@ begin
 
   WaterContentItems := TStringList.Create;
   PestItemNames.Add(WaterContentItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1856,7 +1864,7 @@ begin
 
     ItemFormula := Item.UzfWaterContent;
     AssignBoundaryFormula(AModel, PestWaterContentSeriesName, WaterContentMethod,
-      WaterContentItems, ItemFormula, Writer, BoundaryValues[Index]);
+      WaterContentItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.UzfWaterContent;
   end;

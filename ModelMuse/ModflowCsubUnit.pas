@@ -234,7 +234,8 @@ type
       PestName: string; PestSeriesName: string;
       PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
    public
      function Add: TCSubItem;
      property Items[Index: Integer]: TCSubItem read GetItem write SetItem; default;
@@ -1205,7 +1206,8 @@ end;
 
 procedure TCSubCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 begin
   inherited;
   Assert(False);

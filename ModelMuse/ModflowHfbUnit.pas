@@ -138,7 +138,8 @@ type
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer;
       AModel: TBaseModel); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       override;
   public
@@ -1096,7 +1097,8 @@ end;
 
 procedure THfbCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 begin
   inherited;
 

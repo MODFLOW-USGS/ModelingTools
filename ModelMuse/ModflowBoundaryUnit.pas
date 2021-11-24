@@ -414,7 +414,7 @@ type
     procedure ClearTimeLists(AModel: TBaseModel);
     procedure AssignBoundaryFormula(AModel: TBaseModel;
       const SeriesName: string; SeriesMethod: TPestParamMethod;
-      PestItems: TStringList; const ItemFormula: string; Writer: TObject;
+      PestItems, TimeSeriesItems: TStringList; const ItemFormula: string; Writer: TObject;
       var BoundaryValue: TBoundaryValue);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -488,7 +488,8 @@ type
     //
     procedure AssignArrayCellsWithItem(Item: TCustomModflowBoundaryItem;
       ItemIndex: Integer; DataSets: TList; ListOfTimeLists: TList;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList);
   strict protected
     procedure AssignDirectlySpecifiedValues(AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); virtual;
@@ -497,7 +498,7 @@ type
     // cell locations in @link(Boundaries) for a particular time period.
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList); virtual; abstract;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); virtual; abstract;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure CountArrayBoundaryCells(var BoundaryCount: Integer;
@@ -507,7 +508,7 @@ type
     // Writer must be a TCustomFileWriter
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); virtual; abstract;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); virtual; abstract;
     // @name determines whether or not a single object may define more than
     // one boundary in the same cell. @name is set to @false in
     // @link(TChdCollection) because multiple CHD boundaries in the same
@@ -599,7 +600,7 @@ type
   protected
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
   end;
 
   // @name is used to store a series of @link(TDataArray)s for boundary
@@ -1491,7 +1492,7 @@ end;
 
 procedure TCustomMF_ListBoundColl.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 begin
   // this procedure is only used with arrays.
   Assert(false);
@@ -3318,7 +3319,7 @@ end;
 procedure TCustomListArrayBoundColl.AssignArrayCellsWithItem(
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; DataSets,
   ListOfTimeLists: TList; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   BoundaryCount: Integer;
   DataArray2: TDataArray;
@@ -3343,7 +3344,7 @@ begin
   CountArrayBoundaryCells(BoundaryCount, DataArray1, DataSets, AModel);
   SetBoundaryStartAndEndTime(BoundaryCount, Item, ItemIndex, AModel);
   AssignArrayCellValues(DataSets, ItemIndex, AModel, PestSeries, PestMethods,
-    PestItemNames);
+    PestItemNames, TimeSeriesNames);
   for TimeIndex := 0 to ListOfTimeLists.Count - 1 do
   begin
     TimeList1 := ListOfTimeLists[TimeIndex];
@@ -3439,6 +3440,7 @@ var
   PestSeries: TStringList;
   PestMethods: TPestMethodList;
   PestItemNames: TStringListObjectList;
+  TimeSeriesNames: TStringListObjectList;
 begin
   if Count = 0 then
   begin
@@ -3482,11 +3484,12 @@ begin
   PestSeries := TStringList.Create;
   PestMethods := TPestMethodList.Create;
   PestItemNames := TStringListObjectList.Create;
+  TimeSeriesNames := TStringListObjectList.Create;
   ListOfTimeLists := TList.Create;
   DataSets := TList.Create;
   try
     InitializeTimeLists(ListOfTimeLists, LocalModel, PestSeries, PestMethods,
-      PestItemNames, Writer);
+      PestItemNames, TimeSeriesNames, Writer);
     TestIfObservationsPresent(EndOfLastStressPeriod, StartOfFirstStressPeriod,
       ObservationsPresent);
     PriorTime := StartOfFirstStressPeriod;
@@ -3523,7 +3526,7 @@ begin
             DataSets.Clear;
             AssignArrayCellsWithItem(ExtraItem, ItemCount, DataSets,
               ListOfTimeLists, LocalModel, PestSeries, PestMethods,
-              PestItemNames);
+              PestItemNames, TimeSeriesNames);
             Inc(ItemCount);
           finally
             ExtraItem.Free;
@@ -3533,7 +3536,7 @@ begin
       end;
       DataSets.Clear;
       AssignArrayCellsWithItem(Item, ItemCount, DataSets, ListOfTimeLists,
-        LocalModel, PestSeries, PestMethods, PestItemNames);
+        LocalModel, PestSeries, PestMethods, PestItemNames, TimeSeriesNames);
       Inc(ItemCount);
       if (ItemIndex = Count - 1) and ObservationsPresent then
       begin
@@ -3545,7 +3548,8 @@ begin
             ExtraItem.FEndTime := EndOfLastStressPeriod;
             DataSets.Clear;
             AssignArrayCellsWithItem(ExtraItem, ItemCount, DataSets,
-              ListOfTimeLists, LocalModel, PestSeries, PestMethods, PestItemNames);
+              ListOfTimeLists, LocalModel, PestSeries, PestMethods,
+              PestItemNames, TimeSeriesNames);
             Inc(ItemCount);
           finally
             ExtraItem.Free;
@@ -3557,6 +3561,7 @@ begin
   finally
     DataSets.Free;
     ListOfTimeLists.Free;
+    TimeSeriesNames.Free;
     PestItemNames.Free;
     PestMethods.Free;
     PestSeries.Free;
@@ -4790,7 +4795,7 @@ end;
 
 procedure TCustomMF_BoundColl.AssignBoundaryFormula(AModel: TBaseModel;
   const SeriesName: string; SeriesMethod: TPestParamMethod;
-  PestItems: TStringList; const ItemFormula: string; Writer: TObject;
+  PestItems, TimeSeriesItems: TStringList; const ItemFormula: string; Writer: TObject;
   var BoundaryValue: TBoundaryValue);
 var
   LocalModel: TCustomModel;
@@ -4799,75 +4804,92 @@ var
   PestDataArray: TDataArray;
   PestParamSeries: TModflowSteadyParameter;
   CustomWriter: TCustomFileWriter;
+  TimeSeries: TMf6TimeSeries;
 begin
   CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
-  PestParam := LocalModel.GetPestParameterByName(ItemFormula);
-  if PestParam = nil then
+  TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(ItemFormula);
+  if TimeSeries = nil then
   begin
-    Formula := ItemFormula;
-    PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
-    if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+    TimeSeriesItems.Add('');
+    PestParam := LocalModel.GetPestParameterByName(ItemFormula);
+    if PestParam = nil then
     begin
-      PestItems.Add(PestDataArray.Name);
-      if CustomWriter = nil then
-      begin
-        CustomWriter := Writer as TCustomFileWriter;
-      end;
-      CustomWriter.AddUsedPestDataArray(PestDataArray);
-    end
-    else
-    begin
-      PestItems.Add('');
-    end;
-  end
-  else
-  begin
-    PestParam.IsUsedInTemplate := True;
-    Formula := FortranFloatToStr(PestParam.Value);
-    PestItems.Add(PestParam.ParameterName);
-  end;
-  if SeriesName <> '' then
-  begin
-    PestParamSeries := LocalModel.GetPestParameterByName(SeriesName);
-    if PestParamSeries = nil then
-    begin
-      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(SeriesName);
+      Formula := ItemFormula;
+      PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(Formula);
       if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
       begin
-        case SeriesMethod of
-          ppmMultiply:
-            begin
-              Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
-            end;
-          ppmAdd:
-            begin
-              Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
-            end;
-        end;
+        PestItems.Add(PestDataArray.Name);
         if CustomWriter = nil then
         begin
           CustomWriter := Writer as TCustomFileWriter;
         end;
         CustomWriter.AddUsedPestDataArray(PestDataArray);
+      end
+      else
+      begin
+        PestItems.Add('');
       end;
     end
     else
     begin
-      PestParamSeries.IsUsedInTemplate := True;
-      case SeriesMethod of
-        ppmMultiply:
-          begin
-            Formula := Format('(%0:s) * %1:g',
-              [Formula, PestParamSeries.Value]);
+      PestParam.IsUsedInTemplate := True;
+      Formula := FortranFloatToStr(PestParam.Value);
+      PestItems.Add(PestParam.ParameterName);
+    end;
+    if SeriesName <> '' then
+    begin
+      PestParamSeries := LocalModel.GetPestParameterByName(SeriesName);
+      if PestParamSeries = nil then
+      begin
+        PestDataArray := LocalModel.DataArrayManager.GetDataSetByName(SeriesName);
+        if (PestDataArray <> nil) and PestDataArray.PestParametersUsed then
+        begin
+          case SeriesMethod of
+            ppmMultiply:
+              begin
+                Formula := Format('(%0:s) * %1:s', [Formula, PestDataArray.Name]);
+              end;
+            ppmAdd:
+              begin
+                Formula := Format('(%0:s) + %1:s', [Formula, PestDataArray.Name]);
+              end;
           end;
-        ppmAdd:
+          if CustomWriter = nil then
           begin
-            Formula := Format('(%0:s) + %1:g',
-              [Formula, PestParamSeries.Value]);
+            CustomWriter := Writer as TCustomFileWriter;
           end;
+          CustomWriter.AddUsedPestDataArray(PestDataArray);
+        end;
+      end
+      else
+      begin
+        PestParamSeries.IsUsedInTemplate := True;
+        case SeriesMethod of
+          ppmMultiply:
+            begin
+              Formula := Format('(%0:s) * %1:g',
+                [Formula, PestParamSeries.Value]);
+            end;
+          ppmAdd:
+            begin
+              Formula := Format('(%0:s) + %1:g',
+                [Formula, PestParamSeries.Value]);
+            end;
+        end;
       end;
     end;
+  end
+  else
+  begin
+    if CustomWriter = nil then
+    begin
+      CustomWriter := Writer as TCustomFileWriter;
+      CustomWriter.TimeSeriesNames.Add(TimeSeries.SeriesName);
+    end;
+    PestItems.Add('');
+    TimeSeriesItems.Add(TimeSeries.SeriesName);
+    Formula := '1';
   end;
   BoundaryValue.Formula := Formula;
 end;

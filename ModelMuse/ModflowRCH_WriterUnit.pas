@@ -566,6 +566,8 @@ begin
     NewLine;
   end;
 
+  WriteTimeSeriesFiles(InputFileName);
+
   WriteMF6ObsOption(InputFileName);
   WriteMf6ParamListOption;
 
@@ -687,17 +689,6 @@ begin
         begin
           WriteValueOrFormula(RchCell, RechPosition);
         end;
-
-//        if RchCell.TimeSeriesName = '' then
-//        begin
-//          WriteFloat(RchCell.RechargeRate);
-//        end
-//        else
-//        begin
-//          WriteString(' ');
-//          WriteString(RchCell.TimeSeriesName);
-//          WriteString(' ');
-//        end;
 
         WriteIface(RchCell.IFace);
 

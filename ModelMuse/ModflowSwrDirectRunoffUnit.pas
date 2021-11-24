@@ -88,12 +88,12 @@ type
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -478,7 +478,8 @@ end;
 
 procedure TSwrDirectRunoffCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   ReachArray: TDataArray;
   RunoffArray: TDataArray;
@@ -563,7 +564,7 @@ end;
 
 procedure TSwrDirectRunoffCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -578,6 +579,7 @@ var
   RateMethod: TPestParamMethod;
   RateItems: TStringList;
   ItemFormula: string;
+  TimeSeriesItems: TStringList;
 begin
   Boundary := BoundaryGroup as TSwrDirectRunoffBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -608,6 +610,8 @@ begin
   PestMethods.Add(RateMethod);
   RateItems := TStringList.Create;
   PestItemNames.Add(RateItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -616,7 +620,7 @@ begin
 //    BoundaryValues[Index].Formula := Item.Runoff;
     ItemFormula := Item.Runoff;
     AssignBoundaryFormula(AModel, PestRateSeriesName, RateMethod,
-      RateItems, ItemFormula, Writer, BoundaryValues[Index]);
+      RateItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   RunoffData := ALink.FRunoffData;
   RunoffData.Initialize(BoundaryValues, ScreenObject, lctUse);

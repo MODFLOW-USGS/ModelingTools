@@ -4,7 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Classes, GoPhastTypes, OrderedCollectionUnit,
-    Modflow6TimeSeriesUnit, Generics.Collections, System.IOUtils;
+  Modflow6TimeSeriesUnit, Generics.Collections, System.IOUtils,
+  System.Character;
 
 type
   TTimeSeriesItem = class(TOrderedItem)
@@ -250,7 +251,6 @@ begin
             break;
           end;
         end;
-        result := Series[StartTimeIndex].Value;
       end;
     mimLinear:
       begin
@@ -363,20 +363,19 @@ begin
     else
       Assert(False);
   end;
+  ScaleFactor := Series.ScaleFactor;
   if Series.ScaleFactorParameter <> '' then
   begin
     Param := LocalModel.GetPestParameterByName(Series.ScaleFactorParameter);
     Assert(Param <> nil);
     case Series.ParamMethod of
       ppmMultiply:
-        ScaleFactor := Series.ScaleFactor * Param.Value;
+        ScaleFactor := ScaleFactor * Param.Value;
       ppmAdd:
-        ScaleFactor := Series.ScaleFactor + Param.Value;
+        ScaleFactor := ScaleFactor + Param.Value;
+      else
+        Assert(False);
     end;
-  end
-  else
-  begin
-    ScaleFactor := Series.ScaleFactor;
   end;
   result := result * ScaleFactor
 end;
@@ -562,6 +561,9 @@ begin
 end;
 
 procedure TTimesSeriesCollection.SetGroupName(Value: string);
+var
+  CharIndex: Integer;
+  AChar: Char;
 begin
   Value := Trim(Value);
   for CharIndex := 1 to Length(Value) do

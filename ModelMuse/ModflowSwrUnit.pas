@@ -91,10 +91,11 @@ type
       PestName: string; PestSeriesName: string;
       PestSeriesMethod: TPestParamMethod; TimeSeriesName: string); override;
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     function PackageAssignmentMethod(AModel: TBaseModel): TUpdateMethod; virtual; abstract;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
@@ -543,7 +544,8 @@ end;
 
 procedure TCustomSwrListCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   SwrArray: TDataArray;
   Boundary: TSwrStorage;
@@ -708,7 +710,7 @@ end;
 
 procedure TCustomSwrListCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -728,6 +730,7 @@ var
   ValueMethod: TPestParamMethod;
   ValueItems: TStringList;
   ItemFormula: string;
+  TimeSeriesItems: TStringList;
 begin
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
   SetLength(BoundaryValues, Count);
@@ -738,6 +741,8 @@ begin
   PestMethods.Add(ValueMethod);
   ValueItems := TStringList.Create;
   PestItemNames.Add(ValueItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -746,7 +751,7 @@ begin
 //    BoundaryValues[Index].Formula := Item.SwrValue;
     ItemFormula := Item.SwrValue;
     AssignBoundaryFormula(AModel, PestValueSeriesName, ValueMethod,
-      ValueItems, ItemFormula, Writer, BoundaryValues[Index]);
+      ValueItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TCustomSwrTimeListLink;
   SwrData := ALink.FSwrData;

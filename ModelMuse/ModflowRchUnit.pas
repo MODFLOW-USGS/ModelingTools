@@ -158,12 +158,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -195,12 +196,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -509,7 +511,7 @@ end;
 
 procedure TRchCollection.AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList);
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   RechargeRateArray: TDataArray;
   Boundary: TRchStorage;
@@ -528,6 +530,8 @@ var
   LocalRechargePestMethod: TPestParamMethod;
   RechargePestItems: TStringList;
   LocalRechargePest: string;
+  RechargeTimeItems: TStringList;
+  LocalRechargeTimeSeries: string;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -542,6 +546,8 @@ begin
   LocalRechargePestMethod := PestMethods[RechPosition];
   RechargePestItems := PestItemNames[RechPosition];
   LocalRechargePest := RechargePestItems[ItemIndex];
+  RechargeTimeItems := TimeSeriesNames[RechPosition];
+  LocalRechargeTimeSeries := RechargeTimeItems[ItemIndex];
 
   if LayerMin >= 0 then
   begin
@@ -568,6 +574,7 @@ begin
                 RechargePest := LocalRechargePest;
                 RechargePestSeries := LocalRechargePestSeries;
                 RechargePestMethod := LocalRechargePestMethod;
+                RechargeTimeSeriesName := LocalRechargeTimeSeries;
               end;
               Inc(BoundaryIndex);
             end;
@@ -587,7 +594,7 @@ end;
 
 procedure TRchCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -610,6 +617,7 @@ var
   PestRechargeSeriesName: string;
   RechargeItems: TStringList;
   ItemFormula: string;
+  TimeSeriesItems: TStringList;
 begin
   LocalModel := AModel as TCustomModel;
   ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
@@ -625,6 +633,9 @@ begin
   RechargeItems := TStringList.Create;
   PestItemNames.Add(RechargeItems);
 
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
+
   for Index := 0 to Count - 1 do
   begin
     Item := Items[Index] as TRchItem;
@@ -632,7 +643,7 @@ begin
 
     ItemFormula := Item.RechargeRate;
     AssignBoundaryFormula(AModel, PestRechargeSeriesName, RechargeMethod,
-      RechargeItems, ItemFormula, Writer, BoundaryValues[Index]);
+      RechargeItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
   end;
   ALink := TimeListLink.GetLink(AModel) as TRchTimeListLink;
@@ -1617,7 +1628,8 @@ end;
 
 procedure TRchLayerCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   RechargeLayerArray: TDataArray;
   Boundary: TRchLayerStorage;
@@ -1675,7 +1687,7 @@ end;
 
 procedure TRchLayerCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;

@@ -170,12 +170,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -1151,7 +1152,8 @@ end;
 
 procedure TUzfMf6Collection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 const
   PestOffset = 6;
 var
@@ -1358,7 +1360,7 @@ end;
 
 procedure TUzfMf6Collection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1369,6 +1371,7 @@ var
   SeriesName: string;
   SeriesMethod: TPestParamMethod;
   PestItems: TStringList;
+  TimeSeriesItems: TStringList;
   ItemFormula: string;
   TimeList: TModflowTimeList;
 begin
@@ -1382,6 +1385,8 @@ begin
 
   PestItems := TStringList.Create;
   PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1390,7 +1395,7 @@ begin
 
     ItemFormula := Item.Infiltration;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.Infiltration;
   end;
@@ -1407,6 +1412,8 @@ begin
 
   PestItems := TStringList.Create;
   PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1415,7 +1422,7 @@ begin
 
     ItemFormula := Item.PotentialET;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.PotentialET;
   end;
@@ -1430,6 +1437,8 @@ begin
 
   PestItems := TStringList.Create;
   PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1438,7 +1447,7 @@ begin
 
     ItemFormula := Item.ExtinctionDepth;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 
 //    BoundaryValues[Index].Formula := Item.ExtinctionDepth;
@@ -1454,6 +1463,8 @@ begin
 
   PestItems := TStringList.Create;
   PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1462,7 +1473,7 @@ begin
 
     ItemFormula := Item.ExtinctionWaterContent;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 
 //    BoundaryValues[Index].Formula := Item.ExtinctionWaterContent;
@@ -1478,6 +1489,8 @@ begin
 
   PestItems := TStringList.Create;
   PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1486,8 +1499,7 @@ begin
 
     ItemFormula := Item.AirEntryPotential;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
-
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.AirEntryPotential;
   end;
@@ -1502,6 +1514,8 @@ begin
 
   PestItems := TStringList.Create;
   PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1510,7 +1524,7 @@ begin
 
     ItemFormula := Item.RootPotential;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 
 //    BoundaryValues[Index].Formula := Item.RootPotential;
@@ -1526,6 +1540,8 @@ begin
 
   PestItems := TStringList.Create;
   PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1534,7 +1550,7 @@ begin
 
     ItemFormula := Item.RootActivity;
     AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-      PestItems, ItemFormula, Writer, BoundaryValues[Index]);
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.RootActivity;
   end;

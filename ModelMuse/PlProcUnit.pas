@@ -2898,10 +2898,10 @@ var
     AnisotropyUsed: Boolean);
   var
     LayerIndex: Integer;
-    ArrayFileName: string;
-    ReferenceFileName: string;
-    Anistropy: array of double;
-    ReferenceValue: double;
+//    ArrayFileName: string;
+//    ReferenceFileName: string;
+//    Anistropy: array of double;
+//    ReferenceValue: double;
     ColIndex: Integer;
     AnisotropyWriter: TAnisotropyWriter;
     procedure ImportArrayFile;
@@ -2948,27 +2948,6 @@ var
             AnisotropyWriter.Free;
           end;
         end;
-
-//        SetLength(Anistropy, DataArray.ColumnCount);
-//        for LayerIndex := 1 to LayerCount do
-//        begin
-//          ArrayFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
-//            [FRoot, DataArray.Name, LayerIndex]);
-//          ReferenceFileName := Format('arrays\%0:s.%1:s_%2:d.arrays',
-//            [FRoot, ReferenceDataArray.Name, LayerIndex]);
-//          for ColIndex := 1 to DataArray.ColumnCount do
-//          begin
-//            ReferenceValue := ReferenceDataArray.RealData[LayerIndex-1,0,ColIndex-1];
-//            if ReferenceValue = 0 then
-//            begin
-//              Anistropy[ColIndex-1] := 1;
-//            end
-//            else
-//            begin
-//              Anistropy[ColIndex-1] := DataArray.RealData[LayerIndex-1,0,ColIndex-1]/ReferenceValue;
-//            end;
-//          end;
-//        end;
       end
       else if not DataArray.PestParametersUsed then
       begin

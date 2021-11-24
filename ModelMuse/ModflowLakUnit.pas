@@ -199,12 +199,13 @@ type
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
-      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList; PestItemNames: TStringListObjectList); override;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList; AModel: TBaseModel;
       PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -1305,7 +1306,8 @@ end;
 
 procedure TLakCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList;
+  PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   MinimumStageArray: TDataArray;
   MaximumStageArray: TDataArray;
@@ -1486,7 +1488,7 @@ end;
 
 procedure TLakCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -1520,6 +1522,7 @@ var
   PestWithdrawalSeriesName: string;
   WithdrawalMethod: TPestParamMethod;
   WithdrawalItems: TStringList;
+  TimeSeriesItems: TStringList;
 begin
   Boundary := BoundaryGroup as TLakBoundary;
   ScreenObject := Boundary.ScreenObject as TScreenObject;
@@ -1531,6 +1534,8 @@ begin
 
   MinimumStageItems := TStringList.Create;
   PestItemNames.Add(MinimumStageItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   SetLength(BoundaryValues, Count);
   for Index := 0 to Count - 1 do
@@ -1540,7 +1545,7 @@ begin
 
     ItemFormula := Item.MinimumStage;
     AssignBoundaryFormula(AModel, PestMinimumStageSeriesName, MinimumStageMethod,
-      MinimumStageItems, ItemFormula, Writer, BoundaryValues[Index]);
+      MinimumStageItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 
 //    BoundaryValues[Index].Formula := Item.MinimumStage;
   end;
@@ -1555,6 +1560,8 @@ begin
 
   MaximumStageItems := TStringList.Create;
   PestItemNames.Add(MaximumStageItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1563,7 +1570,7 @@ begin
 
     ItemFormula := Item.MaximumStage;
     AssignBoundaryFormula(AModel, PestMaximumStageSeriesName, MaximumStageMethod,
-      MaximumStageItems, ItemFormula, Writer, BoundaryValues[Index]);
+      MaximumStageItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 //    BoundaryValues[Index].Formula := Item.MaximumStage;
   end;
   MaximumStageData := ALink.FMaximumStageData;
@@ -1576,6 +1583,8 @@ begin
 
   PrecipitationItems := TStringList.Create;
   PestItemNames.Add(PrecipitationItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1583,7 +1592,7 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     ItemFormula := Item.Precipitation;
     AssignBoundaryFormula(AModel, PestPrecipitationSeriesName, PrecipitationMethod,
-      PrecipitationItems, ItemFormula, Writer, BoundaryValues[Index]);
+      PrecipitationItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 //    BoundaryValues[Index].Formula := Item.Precipitation;
   end;
   PrecipitationData := ALink.FPrecipitationData;
@@ -1596,6 +1605,8 @@ begin
 
   EvaporationItems := TStringList.Create;
   PestItemNames.Add(EvaporationItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1603,7 +1614,7 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     ItemFormula := Item.Evaporation;
     AssignBoundaryFormula(AModel, PestEvaporationSeriesName, EvaporationMethod,
-      EvaporationItems, ItemFormula, Writer, BoundaryValues[Index]);
+      EvaporationItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 //    BoundaryValues[Index].Formula := Item.Evaporation;
   end;
   EvaporationData := ALink.FEvaporationData;
@@ -1616,6 +1627,8 @@ begin
 
   OverlandRunoffItems := TStringList.Create;
   PestItemNames.Add(OverlandRunoffItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1623,7 +1636,7 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     ItemFormula := Item.OverlandRunoff;
     AssignBoundaryFormula(AModel, PestOverlandRunoffSeriesName, OverlandRunoffMethod,
-      OverlandRunoffItems, ItemFormula, Writer, BoundaryValues[Index]);
+      OverlandRunoffItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 //    BoundaryValues[Index].Formula := Item.OverlandRunoff;
   end;
   OverlandRunoffData := ALink.FOverlandRunoffData;
@@ -1636,6 +1649,8 @@ begin
 
   WithdrawalItems := TStringList.Create;
   PestItemNames.Add(WithdrawalItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
 
   for Index := 0 to Count - 1 do
   begin
@@ -1643,7 +1658,7 @@ begin
     BoundaryValues[Index].Time := Item.StartTime;
     ItemFormula := Item.Withdrawal;
     AssignBoundaryFormula(AModel, PestWithdrawalSeriesName, WithdrawalMethod,
-      WithdrawalItems, ItemFormula, Writer, BoundaryValues[Index]);
+      WithdrawalItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
 //    BoundaryValues[Index].Formula := Item.Withdrawal;
   end;
   WithdrawalData := ALink.FWithdrawalData;

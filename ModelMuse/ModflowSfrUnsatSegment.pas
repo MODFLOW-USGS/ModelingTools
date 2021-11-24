@@ -130,12 +130,12 @@ type
     // TCustomListArrayBoundColl.AssignArrayCellValues)
     procedure AssignArrayCellValues(DataSets: TList;ItemIndex: Integer;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     // See @link(TCustomListArrayBoundColl.InitializeTimeLists
     // TCustomListArrayBoundColl.InitializeTimeLists)
     procedure InitializeTimeLists(ListOfTimeLists: TList;
       AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-      PestItemNames: TStringListObjectList; Writer: TObject); override;
+      PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     // See @link(TCustomNonSpatialBoundColl.ItemClass
     // TCustomNonSpatialBoundColl.ItemClass)
     class function ItemClass: TBoundaryItemClass; override;
@@ -527,7 +527,7 @@ end;
 
 procedure TSfrUnsatSegmentCollection.AssignArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
-  PestMethods: TPestMethodList; PestItemNames: TStringListObjectList);
+  PestMethods: TPestMethodList; PestItemNames, TimeSeriesNames: TStringListObjectList);
 var
   BrooksCoreyExponentArray: TDataArray;
   InitialWaterContentArray: TDataArray;
@@ -693,7 +693,7 @@ end;
 
 procedure TSfrUnsatSegmentCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
-  PestItemNames: TStringListObjectList; Writer: TObject);
+  PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
 var
   TimeIndex: Integer;
   BoundaryValues: TBoundaryValueArray;
@@ -723,6 +723,10 @@ var
 //  PestVerticalSaturatedKMethod: TPestParamMethod;
   PestVerticalSaturatedKItems: TStringList;
   ItemFormula: string;
+  BrooksCoreyExponentTimeSeriesItems: TStringList;
+  InitialWaterContentTimeSeriesItems: TStringList;
+  SaturatedWaterContentTimeSeriesItems: TStringList;
+  VerticalSaturatedKTimeSeriesItems: TStringList;
 begin
   ISFROPT := (Model as TPhastModel).ModflowPackages.SfrPackage.Isfropt;
 
@@ -746,6 +750,8 @@ begin
 //  PestMethods.Add(PestSaturatedWaterContentMethod);
   PestSaturatedWaterContentItems := TStringList.Create;
   PestItemNames.Add(PestSaturatedWaterContentItems);
+  SaturatedWaterContentTimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(SaturatedWaterContentTimeSeriesItems);
 
 //  PestInitialWaterContentSeriesName :=
 //    BoundaryGroup.PestBoundaryFormula[UnsatInitialWaterContentPosition+Offset];
@@ -755,6 +761,8 @@ begin
 //  PestMethods.Add(PestInitialWaterContentMethod);
   PestInitialWaterContentItems := TStringList.Create;
   PestItemNames.Add(PestInitialWaterContentItems);
+  InitialWaterContentTimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(InitialWaterContentTimeSeriesItems);
 
 //  PestBrooksCoreyExponentSeriesName :=
 //    BoundaryGroup.PestBoundaryFormula[UnsatBrooksCoreyExponentPosition+Offset];
@@ -764,6 +772,8 @@ begin
 //  PestMethods.Add(PestBrooksCoreyExponentMethod);
   PestBrooksCoreyExponentItems := TStringList.Create;
   PestItemNames.Add(PestBrooksCoreyExponentItems);
+  BrooksCoreyExponentTimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(BrooksCoreyExponentTimeSeriesItems);
 
 //  PestVerticalSaturatedKSeriesName :=
 //    BoundaryGroup.PestBoundaryFormula[UnsatVerticalSaturatedKPosition+Offset];
@@ -773,6 +783,8 @@ begin
 //  PestMethods.Add(PestVerticalSaturatedKMethod);
   PestVerticalSaturatedKItems := TStringList.Create;
   PestItemNames.Add(PestVerticalSaturatedKItems);
+  VerticalSaturatedKTimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(VerticalSaturatedKTimeSeriesItems);
 
   ScreenObject := Boundary.ScreenObject as TScreenObject;
   for Index := 0 to Count - 1 do
@@ -793,7 +805,7 @@ begin
 //      BoundaryValues[Index].Formula := '0';
     end;
     AssignBoundaryFormula(AModel, '',
-      ppmMultiply, PestBrooksCoreyExponentItems,
+      ppmMultiply, PestBrooksCoreyExponentItems, BrooksCoreyExponentTimeSeriesItems,
       ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TSfrUnsatSegmentTimeListLink;
@@ -819,7 +831,7 @@ begin
 //      BoundaryValues[Index].Formula := '0';
     end;
     AssignBoundaryFormula(AModel, '',
-      ppmMultiply, PestInitialWaterContentItems,
+      ppmMultiply, PestInitialWaterContentItems, InitialWaterContentTimeSeriesItems,
       ItemFormula, Writer, BoundaryValues[Index]);
   end;
   InitialWaterContentData := ALink.FInitialWaterContentData;
@@ -844,7 +856,7 @@ begin
 //      BoundaryValues[Index].Formula := '0';
     end;
     AssignBoundaryFormula(AModel, '',
-      ppmMultiply, PestSaturatedWaterContentItems,
+      ppmMultiply, PestSaturatedWaterContentItems, SaturatedWaterContentTimeSeriesItems,
       ItemFormula, Writer, BoundaryValues[Index]);
   end;
   SaturatedWaterContentData := ALink.FSaturatedWaterContentData;
@@ -869,7 +881,7 @@ begin
 //      BoundaryValues[Index].Formula := '0';
     end;
     AssignBoundaryFormula(AModel, '',
-      ppmMultiply, PestVerticalSaturatedKItems,
+      ppmMultiply, PestVerticalSaturatedKItems, VerticalSaturatedKTimeSeriesItems,
       ItemFormula, Writer, BoundaryValues[Index]);
   end;
   VerticalSaturatedKData := ALink.FVerticalSaturatedKData;
