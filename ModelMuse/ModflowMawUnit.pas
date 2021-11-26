@@ -13,7 +13,6 @@ type
     moConductanceCells, moFlowingWellConductance);
   TMawObs = set of TMawOb;
 
-
   // mcmTheim is for backwards compatibility.
   TMawConductanceMethod = (mcmSpecified, mcmThiem, mcmSkin, mcmCumulative,
     mcmMean, mcmTheim);
@@ -90,6 +89,8 @@ type
     PumpElevationPestSeriesMethod: TPestParamMethod;
     ScalingLengthPestSeriesMethod: TPestParamMethod;
 
+    RateTimeSeriesName: string;
+    WellHeadTimeSeriesName: string;
 
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
@@ -322,6 +323,8 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property WellNumber: Integer read GetWellNumber;
     property MawStatus: TMawStatus read GetMawStatus;
@@ -3249,6 +3252,9 @@ begin
   WriteCompInt(Comp, Ord(PumpElevationPestSeriesMethod));
   WriteCompInt(Comp, Ord(ScalingLengthPestSeriesMethod));
 
+  WriteCompInt(Comp, Strings.IndexOf(RateTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(WellHeadTimeSeriesName));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
@@ -3288,6 +3294,8 @@ begin
   Strings.Add(PumpElevationPestSeriesName);
   Strings.Add(ScalingLengthPestSeriesName);
 
+  Strings.Add(RateTimeSeriesName);
+  Strings.Add(WellHeadTimeSeriesName);
 end;
 
 procedure TMawTransientRecord.Restore(Decomp: TDecompressionStream;
@@ -3357,6 +3365,9 @@ begin
   MaxRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   PumpElevationPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   ScalingLengthPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  RateTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  WellHeadTimeSeriesName := Annotations[ReadCompInt(Decomp)];
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
@@ -4124,6 +4135,7 @@ var
   Index: Integer;
   ACell: TCellAssignment;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(BoundaryFunctionIndex in
     [MawFlowingWellElevationPosition..MawFlowingWellReductionLengthPosition]);
   Assert(Expression <> nil);
@@ -4163,6 +4175,7 @@ begin
             RatePest := PestName;
             RatePestSeriesName := PestSeriesName;
             RatePestSeriesMethod := PestSeriesMethod;
+            RateTimeSeriesName := TimeSeriesName;
           end;
         MawWellHeadPosition:
           begin
@@ -4171,6 +4184,7 @@ begin
             WellHeadPest := PestName;
             WellHeadPestSeriesName := PestSeriesName;
             WellHeadPestSeriesMethod := PestSeriesMethod;
+            WellHeadTimeSeriesName := TimeSeriesName;
           end;
         MawHeadLimitPosition:
           begin
@@ -4676,6 +4690,37 @@ begin
   result := FValues.MaxRateAnnotation
 end;
 
+function TMawCell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    MawFlowingWellElevationPosition:
+        result := inherited;
+    MawFlowingWellConductancePosition:
+        result := inherited;
+    MawRatePosition:
+      result := FValues.RateTimeSeriesName;
+    MawWellHeadPosition:
+      result := FValues.WellHeadTimeSeriesName;
+    MawHeadLimitPosition:
+        result := inherited;
+    MawMinRatePosition:
+        result := inherited;
+    MawMaxRatePosition:
+        result := inherited;
+    MawPumpElevationPosition:
+        result := inherited;
+    MawScalingLengthPosition:
+        result := inherited;
+    MawFlowingWellReductionLengthPosition:
+        result := inherited;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
 function TMawCell.GetMinRate: double;
 begin
   result := FValues.MinRate
@@ -4933,6 +4978,37 @@ end;
 procedure TMawCell.SetLayer(const Value: integer);
 begin
   FValues.Cell.Layer := Value;
+end;
+
+procedure TMawCell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  case Index of
+    MawFlowingWellElevationPosition:
+        inherited;
+    MawFlowingWellConductancePosition:
+        inherited;
+    MawRatePosition:
+      FValues.RateTimeSeriesName := Value;
+    MawWellHeadPosition:
+      FValues.WellHeadTimeSeriesName := Value;
+    MawHeadLimitPosition:
+        inherited;
+    MawMinRatePosition:
+        inherited;
+    MawMaxRatePosition:
+        inherited;
+    MawPumpElevationPosition:
+        inherited;
+    MawScalingLengthPosition:
+        inherited;
+    MawFlowingWellReductionLengthPosition:
+        inherited;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 procedure TMawCell.SetRow(const Value: integer);

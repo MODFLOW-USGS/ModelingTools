@@ -142,6 +142,7 @@ type
     StressOffsetPest: string;
     StressOffsetPestSeriesName: string;
     StressOffsetPestSeriesMethod: TPestParamMethod;
+    StressOffsetTimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -243,8 +244,8 @@ type
 
   TCSubCell = class(TValueCell)
   private
-    Values: TCSubRecord;
-    StressPeriod: integer;
+    FValues: TCSubRecord;
+    FStressPeriod: integer;
     function GetStressOffset: double;
     function GetStressOffsetAnnotation: string;
   protected
@@ -265,6 +266,8 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property StressOffset: double read GetStressOffset;
     property StressOffsetAnnotation: string read GetStressOffsetAnnotation;
@@ -978,11 +981,7 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(StressOffsetPest));
   WriteCompInt(Comp, Strings.IndexOf(StressOffsetPestSeriesName));
   WriteCompInt(Comp, Ord(StressOffsetPestSeriesMethod));
-  {
-    property StressOffsetModifier: string;
-    property StressOffsetSeriesModifier: string;
-    property StressOffsetSeriesMethod: TPestParamMethod;
-  }
+  WriteCompInt(Comp, Strings.IndexOf(StressOffsetTimeSeriesName));
 end;
 
 procedure TCSubRecord.RecordStrings(Strings: TStringList);
@@ -990,6 +989,7 @@ begin
   Strings.Add(StressOffsetAnnotation);
   Strings.Add(StressOffsetPest);
   Strings.Add(StressOffsetPestSeriesName);
+  Strings.Add(StressOffsetTimeSeriesName);
 end;
 
 procedure TCSubRecord.Restore(Decomp: TDecompressionStream;
@@ -1003,6 +1003,7 @@ begin
   StressOffsetPest := Annotations[ReadCompInt(Decomp)];
   StressOffsetPestSeriesName := Annotations[ReadCompInt(Decomp)];
   StressOffsetPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  StressOffsetTimeSeriesName := Annotations[ReadCompInt(Decomp)];
 end;
 
 { TCsubStorage }
@@ -1226,6 +1227,7 @@ var
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(BoundaryFunctionIndex = 0);
   Assert(Expression <> nil);
 
@@ -1246,6 +1248,7 @@ begin
         StressOffsetPest := PestName;
         StressOffsetPestSeriesName := PestSeriesName;
         StressOffsetPestSeriesMethod := PestSeriesMethod;
+        StressOffsetTimeSeriesName := TimeSeriesName;
       end;
     except on E: EMathError do
       begin
@@ -1256,6 +1259,7 @@ begin
           StressOffsetPest := PestName;
           StressOffsetPestSeriesName := PestSeriesName;
           StressOffsetPestSeriesMethod := PestSeriesMethod;
+          StressOffsetTimeSeriesName := TimeSeriesName;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 
@@ -1387,13 +1391,13 @@ end;
 procedure TCSubCell.Cache(Comp: TCompressionStream; Strings: TStringList);
 begin
   inherited;
-  Values.Cache(Comp, Strings);
-  WriteCompInt(Comp, StressPeriod);
+  FValues.Cache(Comp, Strings);
+  WriteCompInt(Comp, FStressPeriod);
 end;
 
 function TCSubCell.GetColumn: integer;
 begin
-  result := Values.Cell.Column;
+  result := FValues.Cell.Column;
 end;
 
 function TCSubCell.GetIntegerAnnotation(Index: integer;
@@ -1411,14 +1415,27 @@ end;
 
 function TCSubCell.GetLayer: integer;
 begin
-  result := Values.Cell.Layer;
+  result := FValues.Cell.Layer;
+end;
+
+function TCSubCell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  if Index = 0 then
+  begin
+    result := FValues.StressOffsetTimeSeriesName;
+  end
+  else
+  begin
+    result := inherited;
+    Assert(False);
+  end;
 end;
 
 function TCSubCell.GetPestName(Index: Integer): string;
 begin
   if Index = 0 then
   begin
-    result := Values.StressOffsetPest;
+    result := FValues.StressOffsetPest;
   end
   else
   begin
@@ -1431,7 +1448,7 @@ function TCSubCell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
 begin
   if Index = 0 then
   begin
-    result := Values.StressOffsetPestSeriesMethod;
+    result := FValues.StressOffsetPestSeriesMethod;
   end
   else
   begin
@@ -1444,7 +1461,7 @@ function TCSubCell.GetPestSeriesName(Index: Integer): string;
 begin
   if Index = 0 then
   begin
-    result := Values.StressOffsetPestSeriesName;
+    result := FValues.StressOffsetPestSeriesName;
   end
   else
   begin
@@ -1474,22 +1491,22 @@ end;
 
 function TCSubCell.GetRow: integer;
 begin
-  result := Values.Cell.Row;
+  result := FValues.Cell.Row;
 end;
 
 function TCSubCell.GetSection: integer;
 begin
-  result := Values.Cell.Section;
+  result := FValues.Cell.Section;
 end;
 
 function TCSubCell.GetStressOffset: double;
 begin
-  result := Values.StressOffset;
+  result := FValues.StressOffset;
 end;
 
 function TCSubCell.GetStressOffsetAnnotation: string;
 begin
-  result := Values.StressOffsetAnnotation;
+  result := FValues.StressOffsetAnnotation;
 end;
 
 function TCSubCell.IsIdentical(AnotherCell: TValueCell): boolean;
@@ -1503,37 +1520,50 @@ begin
     result :=
       (StressOffset = CSubCell.StressOffset)
       and (IFace = CSubCell.IFace)
-      and (Values.Cell = CSubCell.Values.Cell);
+      and (FValues.Cell = CSubCell.FValues.Cell);
   end;
 end;
 
 procedure TCSubCell.RecordStrings(Strings: TStringList);
 begin
   inherited;
-  Values.RecordStrings(Strings);
+  FValues.RecordStrings(Strings);
 end;
 
 procedure TCSubCell.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
 begin
   inherited;
-  Values.Restore(Decomp, Annotations);
-  StressPeriod := ReadCompInt(Decomp);
+  FValues.Restore(Decomp, Annotations);
+  FStressPeriod := ReadCompInt(Decomp);
 end;
 
 procedure TCSubCell.SetColumn(const Value: integer);
 begin
-  Values.Cell.Column := Value;
+  FValues.Cell.Column := Value;
 end;
 
 procedure TCSubCell.SetLayer(const Value: integer);
 begin
-  Values.Cell.Layer := Value;
+  FValues.Cell.Layer := Value;
+end;
+
+procedure TCSubCell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+begin
+  if Index = 0 then
+  begin
+    FValues.StressOffsetTimeSeriesName := Value;
+  end
+  else
+  begin
+    inherited;
+    Assert(False);
+  end;
 end;
 
 procedure TCSubCell.SetRow(const Value: integer);
 begin
-  Values.Cell.Row := Value;
+  FValues.Cell.Row := Value;
 end;
 
 { TCSubBoundary }
@@ -1610,8 +1640,8 @@ begin
         Assert(ScreenObject <> nil);
         Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);
-        Cell.StressPeriod := TimeIndex;
-        Cell.Values := BoundaryValues;
+        Cell.FStressPeriod := TimeIndex;
+        Cell.FValues := BoundaryValues;
         Cell.ScreenObject := ScreenObject;
         LocalModel.AdjustCellPosition(Cell);
       end;

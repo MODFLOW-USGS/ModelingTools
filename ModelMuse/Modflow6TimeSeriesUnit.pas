@@ -8,7 +8,7 @@ uses
 type
   TMf6TimeSeries = class(TRealCollection)
   private
-    FSeriesName: string;
+    FSeriesName: AnsiString;
     FScaleFactorParameter: string;
     FInterpolationMethod: TMf6InterpolationMethods;
     FStoredScaleFactor: TRealStorage;
@@ -18,7 +18,7 @@ type
     procedure SetInterpolationMethod(const Value: TMf6InterpolationMethods);
     procedure SetScaleFactor(const Value: double);
     procedure SetScaleFactorParameter(const Value: string);
-    procedure SetSeriesName(Value: string);
+    procedure SetSeriesName(Value: AnsiString);
     procedure SetStoredScaleFactor(const Value: TRealStorage);
     procedure SetParamMethod(const Value: TPestParamMethod);
     function IsSame(OtherTimeSeries: TMf6TimeSeries): Boolean;
@@ -29,7 +29,7 @@ type
     property ScaleFactor: double read GetScaleFactor write SetScaleFactor;
     property NotifierComponent: TComponent read FNotifierComponent;
   published
-    property SeriesName: string read FSeriesName write SetSeriesName;
+    property SeriesName: AnsiString read FSeriesName write SetSeriesName;
     property InterpolationMethod: TMf6InterpolationMethods
       read FInterpolationMethod write SetInterpolationMethod;
     property StoredScaleFactor: TRealStorage read FStoredScaleFactor
@@ -45,7 +45,7 @@ type
 implementation
 
 uses
-  System.SysUtils, System.Character;
+  System.SysUtils, System.Character, System.AnsiStrings;
 
 //uses
 //  PhastModelUnit, ModflowTimeUnit;
@@ -144,16 +144,19 @@ begin
   end;
 end;
 
-procedure TMf6TimeSeries.SetSeriesName(Value: string);
+procedure TMf6TimeSeries.SetSeriesName(Value: AnsiString);
+const
+  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '@', '#', '$', '%', '^', '&',
+     '*', '(', ')', '_', '-', '<', '>', '?', '.'];
 var
   CharIndex: Integer;
-  AChar: Char;
+  AChar: AnsiChar;
 begin
   Value := Trim(Copy(Trim(Value), 1, MaxTimeSeriesNameLength));
   for CharIndex := 1 to Length(Value) do
   begin
     AChar := Value[CharIndex];
-    if (AChar <> '_') and (not AChar.IsLetterOrDigit) then
+    if not (AChar in AllowableChars) then
     begin
       Value[CharIndex] := '_'
     end;

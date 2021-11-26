@@ -3079,6 +3079,7 @@ begin
         RemoveHufFunctions;
 
         // show the variables and functions
+        IncludeTimeSeries := False;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.
@@ -10522,6 +10523,7 @@ begin
       RemoveHufFunctions;
       PopupParent := self;
       // show the variables and functions
+      IncludeTimeSeries := False;
       UpdateTreeList;
       // put the formula in the TfrmFormula.
       Formula := NewValue;
@@ -10598,6 +10600,7 @@ begin
       RemoveHufFunctions;
       PopupParent := self;
       // show the variables and functions
+      IncludeTimeSeries := False;
       UpdateTreeList;
       // put the formula in the TfrmFormula.
       Formula := NewValue;
@@ -21775,6 +21778,7 @@ begin
           rbFormulaParser.RegisterVariable(Variable);
         end;
 
+        IncludeTimeSeries := False;
         UpdateTreeList;
         Formula := FunctionString;
 
@@ -23074,6 +23078,7 @@ begin
       PopupParent := self;
 
       // Show the functions and global variables.
+      IncludeTimeSeries := False;
       UpdateTreeList;
 
       // put the formula in the TfrmFormula.
@@ -23462,6 +23467,7 @@ begin
           end;
         end;
 
+        IncludeTimeSeries := True;
         UpdateTreeList;
         Formula := FunctionString;
 
@@ -23752,6 +23758,7 @@ begin
         end;
 
         // show the variables and functions
+        IncludeTimeSeries := False;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.
@@ -26481,6 +26488,7 @@ begin
         end;
 
         // show the variables and functions
+        IncludeTimeSeries := True;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.
@@ -28333,6 +28341,7 @@ begin
         end;
 
         // show the variables and functions
+        IncludeTimeSeries := False;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.
@@ -28957,6 +28966,7 @@ begin
         end;
 
         // show the variables and functions
+        IncludeTimeSeries := False;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.

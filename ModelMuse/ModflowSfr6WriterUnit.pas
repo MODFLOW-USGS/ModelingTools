@@ -815,7 +815,7 @@ begin
       Continue;
     end;
     frmProgressMM.AddMessage(Format(StrEvaluatingS, [ScreenObject.Name]));
-    
+
     SfrMf6Item := Boundary.Values.First as TSfrMf6Item;
     if SfrMf6Item.StartTime > Starttime then
     begin
@@ -928,6 +928,8 @@ begin
         frmErrorsAndWarnings.AddWarning(Model,
           NoSegmentsWarning, ScreenObject.Name, ScreenObject);
       end;
+      FTimeSeriesNames.AddStrings(Boundary.Mf6TimeSeriesNames);
+
     finally
       Dummy.Free;
     end;
@@ -1685,6 +1687,8 @@ begin
 
   WriteString('    BOUNDNAMES');
   NewLine;
+
+  WriteTimeSeriesFiles(FInputFileName);
 
   PrintFlowsOption;
   WriteSaveFlowsOption;

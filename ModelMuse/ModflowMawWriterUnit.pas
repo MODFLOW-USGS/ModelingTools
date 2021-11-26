@@ -288,6 +288,7 @@ begin
           end;
         end;
       end;
+      FTimeSeriesNames.AddStrings(Boundary.Mf6TimeSeriesNames);
 
     end;
   finally
@@ -902,6 +903,8 @@ begin
     WriteString(AFileName);
     NewLine;
   end;
+
+  WriteTimeSeriesFiles(FInputFileName);
 
   PrintFlowsOption;
   WriteSaveFlowsOption;

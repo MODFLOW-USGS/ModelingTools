@@ -220,6 +220,9 @@ many will be displayed at one time. }
     FDiagramObjectStorage: TList;
     FUpdating: Boolean;
     FSetColor: Boolean;
+    FIncludeTimeSeries: Boolean;
+    FTimeSeries: TTreeNode;
+    FTimesSeriesNames: TStringList;
     // See @link(Formula).
     function GetFormula: string;
     // @name inserts NewText into the formula at
@@ -233,6 +236,8 @@ many will be displayed at one time. }
     procedure GetGlobalVariables;
     procedure RemoveSpecialImplementor(AClass: TClass);
     procedure CreateNodesForVariables;
+    procedure SetIncludeTimeSeries(const Value: Boolean);
+    procedure CreateNodesForTimeSeries;
     { Private declarations }
   public
     procedure Initialize;
@@ -260,6 +265,8 @@ many will be displayed at one time. }
     property ResultSet: boolean read FResultSet;
     // @name creates the nodes in @link(tvItems).
     procedure UpdateTreeList;
+    property IncludeTimeSeries: Boolean read FIncludeTimeSeries
+      write SetIncludeTimeSeries;
     { Public declarations }
   end;
 
@@ -270,7 +277,8 @@ var
 implementation
 
 uses Contnrs, GIS_Functions, IntListUnit, frmGoPhastUnit, GlobalVariablesUnit,
-  PhastModelUnit, DataSetUnit;
+  PhastModelUnit, DataSetUnit, Modflow6TimeSeriesCollectionsUnit,
+  Modflow6TimeSeriesUnit;
 
 resourcestring
   StrErrorAppendingRTF = 'Error appending RTF data.';
@@ -623,6 +631,11 @@ begin
   tvFormulaDiagram.Items.Clear;
   FDiagramObjectStorage.Clear;
   AFormula := Formula;
+  if FTimesSeriesNames.IndexOf(AFormula) >= 0 then
+  begin
+    tvFormulaDiagram.Items.AddChild(nil, AFormula);
+    Exit;
+  end;
   if AFormula = '' then
   begin
     Exit;
@@ -890,6 +903,11 @@ begin
   jreFormula.SelectAll;
 end;
 
+procedure TfrmFormula.SetIncludeTimeSeries(const Value: Boolean);
+begin
+  FIncludeTimeSeries := Value and (frmGoPhast.ModelSelection = msModflow2015);
+end;
+
 procedure TfrmFormula.TimerSetSelection(Sender: TObject);
 begin
   inherited;
@@ -957,6 +975,7 @@ end;
 procedure TfrmFormula.FormCreate(Sender: TObject);
 begin
   inherited;
+  FTimesSeriesNames := TStringList.Create;
   jreFormula.DoubleBuffered := False;
   DataSetGroupName := StrDataSets;
 
@@ -972,6 +991,7 @@ procedure TfrmFormula.FormDestroy(Sender: TObject);
 begin
   inherited;
   FDiagramObjectStorage.Free;
+  FTimesSeriesNames.Free;
 end;
 
 procedure TfrmFormula.RemoveGIS_Functions;
@@ -1032,6 +1052,7 @@ begin
     end;
 
     CreateNodesForVariables;
+    CreateNodesForTimeSeries;
 
     FFunctions := tvItems.Items.Add(nil, StrFunctions);
     for Index := 0 to FunctionNames.Count - 1 do
@@ -1091,6 +1112,44 @@ end;
 procedure TfrmFormula.RemoveHufKx;
 begin
   RemoveSpecialImplementor(THufKx);
+end;
+
+procedure TfrmFormula.CreateNodesForTimeSeries;
+var
+  Mf6TimesSeries: TTimesSeriesCollections;
+  GroupIndex: Integer;
+  Group: TTimesSeriesCollection;
+  SeriesIndex: Integer;
+  ASeries: TMf6TimeSeries;
+  ParentNode: TTreeNode;
+begin
+  FTimesSeriesNames.Clear;
+  if IncludeTimeSeries then
+  begin
+    Mf6TimesSeries := frmGoPhast.PhastModel.Mf6TimesSeries;
+    if Mf6TimesSeries.Count > 0 then
+    begin
+      FTimesSeriesNames.Sorted := True;
+      FTimesSeriesNames.CaseSensitive := False;
+      FTimesSeriesNames.Duplicates := dupIgnore;
+      FTimeSeries := tvItems.Items.Add(nil, 'Time Series');
+      for GroupIndex := 0 to Mf6TimesSeries.Count - 1 do
+      begin
+        Group := Mf6TimesSeries[GroupIndex].TimesSeriesCollection;
+        if Group.Count > 0 then
+        begin
+          ParentNode := tvItems.Items.AddChild(FTimeSeries, Group.GroupName);
+          for SeriesIndex := 0 to Group.Count - 1 do
+          begin
+            ASeries := Group[SeriesIndex].TimeSeries;
+            tvItems.Items.AddChildObject(ParentNode, ASeries.SeriesName, ASeries);
+            FTimesSeriesNames.Add(ASeries.SeriesName);
+          end;
+        end;
+      end;
+    end;
+
+  end;
 end;
 
 procedure TfrmFormula.CreateNodesForVariables;
@@ -1238,7 +1297,11 @@ begin
   inherited;
   AFormula := Formula;
   try
-    if rbFormulaParser.Compile(AFormula) >= 0 then
+    if FTimesSeriesNames.IndexOf(AFormula) >= 0 then
+    begin
+      FResultSet := True;
+    end
+    else if rbFormulaParser.Compile(AFormula) >= 0 then
     begin
       FResultSet := True;
     end;
@@ -1381,6 +1444,10 @@ begin
     begin
       Value := FSelectedNode.Data;
       InsertText(Value.DecompileDisplay);
+    end
+    else if AnObject is TMf6TimeSeries then
+    begin
+      InsertText(TMf6TimeSeries(AnObject).SeriesName);
     end;
   end;
 end;

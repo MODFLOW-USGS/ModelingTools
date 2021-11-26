@@ -559,11 +559,11 @@ begin
   case FGridType of
     m6gtStructured:
       begin
-        result.FSig0 := FortranStrToFloat(Splitter[3]);
+        result.FSig0 := ReadFromTimeSeriesOrConvert(Splitter[3]);
       end;
     mggrDisv:
       begin
-        result.FSig0 := FortranStrToFloat(Splitter[2]);
+        result.FSig0 := ReadFromTimeSeriesOrConvert(Splitter[2]);
       end;
     else
       Assert(False);
@@ -728,27 +728,27 @@ begin
   end
   else if KeyWord = 'STAGE' then
   begin
-    FLakeProperties[LakeNo-1].FSTAGE := FortranStrToFloat(Splitter[2]);
+    FLakeProperties[LakeNo-1].FSTAGE := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'RAINFALL' then
   begin
-    FLakeProperties[LakeNo-1].FRAINFALL := FortranStrToFloat(Splitter[2]);
+    FLakeProperties[LakeNo-1].FRAINFALL := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'EVAPORATION' then
   begin
-    FLakeProperties[LakeNo-1].FEVAPORATION := FortranStrToFloat(Splitter[2]);
+    FLakeProperties[LakeNo-1].FEVAPORATION := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'RUNOFF' then
   begin
-    FLakeProperties[LakeNo-1].FRUNOFF := FortranStrToFloat(Splitter[2]);
+    FLakeProperties[LakeNo-1].FRUNOFF := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'INFLOW' then
   begin
-    FLakeProperties[LakeNo-1].FINFLOW := FortranStrToFloat(Splitter[2]);
+    FLakeProperties[LakeNo-1].FINFLOW := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'WITHDRAWAL' then
   begin
-    FLakeProperties[LakeNo-1].FWITHDRAWAL := FortranStrToFloat(Splitter[2]);
+    FLakeProperties[LakeNo-1].FWITHDRAWAL := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
 end;
 
@@ -794,11 +794,11 @@ begin
   end
   else if KeyWord = 'RATE' then
   begin
-    FMawWellProperties[WellNo-1].FRate := FortranStrToFloat(Splitter[2]);
+    FMawWellProperties[WellNo-1].FRate := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'WELL_HEAD' then
   begin
-    FMawWellProperties[WellNo-1].FWell_Head := FortranStrToFloat(Splitter[2]);
+    FMawWellProperties[WellNo-1].FWell_Head := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'HEAD_LIMIT' then
   begin
@@ -917,27 +917,27 @@ begin
   end
   else if KeyWord = 'MANNING' then
   begin
-    AReach.FManning := StrToFloat(Splitter[2]);
+    AReach.FManning := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'STAGE' then
   begin
-    AReach.FSTAGE := StrToFloat(Splitter[2]);
+    AReach.FSTAGE := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'INFLOW' then
   begin
-    AReach.FINFLOW := StrToFloat(Splitter[2]);
+    AReach.FINFLOW := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'RAINFALL' then
   begin
-    AReach.FRAINFALL := StrToFloat(Splitter[2]);
+    AReach.FRAINFALL := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'EVAPORATION' then
   begin
-    AReach.FEVAPORATION := StrToFloat(Splitter[2]);
+    AReach.FEVAPORATION := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'RUNOFF' then
   begin
-    AReach.FRUNOFF := StrToFloat(Splitter[2]);
+    AReach.FRUNOFF := ReadFromTimeSeriesOrConvert(Splitter[2]);
   end
   else if KeyWord = 'UPSTREAM_FRACTION' then
   begin
@@ -954,13 +954,13 @@ begin
   result := TUzfFeature.Create;
   UzfNo := StrToInt(Splitter[0]);
   result.Cell := FUzfCells[UzfNo-1];
-  result.FFinf := FortranStrToFloat(Splitter[1]);
-  result.FPet := FortranStrToFloat(Splitter[2]);
-  result.FExtdp := FortranStrToFloat(Splitter[3]);
-  result.FExtwc := FortranStrToFloat(Splitter[4]);
-  result.FHa := FortranStrToFloat(Splitter[5]);
-  result.FHRoot := FortranStrToFloat(Splitter[6]);
-  result.FRootAct := FortranStrToFloat(Splitter[7]);
+  result.FFinf := ReadFromTimeSeriesOrConvert(Splitter[1]);
+  result.FPet := ReadFromTimeSeriesOrConvert(Splitter[2]);
+  result.FExtdp := ReadFromTimeSeriesOrConvert(Splitter[3]);
+  result.FExtwc := ReadFromTimeSeriesOrConvert(Splitter[4]);
+  result.FHa := ReadFromTimeSeriesOrConvert(Splitter[5]);
+  result.FHRoot := ReadFromTimeSeriesOrConvert(Splitter[6]);
+  result.FRootAct := ReadFromTimeSeriesOrConvert(Splitter[7]);
 end;
 
 function TModflow6FileReader.ReadAWellFeature(

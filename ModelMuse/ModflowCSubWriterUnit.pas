@@ -168,6 +168,7 @@ begin
             NoAssignmentErrorRoot, ScreenObject.Name, ScreenObject);
         end;
         Boundary.GetCellValues(Values, nil, Model, self);
+        FTimeSeriesNames.AddStrings(Boundary.Mf6TimeSeriesNames);
       end
       else if ObservationsUsed and IsMf6Observation(ScreenObject) then
       begin
@@ -852,6 +853,8 @@ begin
     WriteString(CsvFile);
     NewLine;
   end;
+
+  WriteTimeSeriesFiles(FInputFileName);
 
   if FObservations.Count > 0 then
   begin

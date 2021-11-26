@@ -650,6 +650,8 @@ begin
     NewLine;
   end;
 
+  WriteTimeSeriesFiles(FInputFileName);
+
   if FObsList.Count > 0 then
   begin
     ObsFileName := ExtractFileName(ChangeFileExt(BaseName, ObservationExtension));
@@ -696,6 +698,8 @@ begin
 //  ArrayTemplateCharacter := Model.PestProperties.ArrayTemplateCharacter;
 
   WriteBeginPackageData;
+  WriteString('# <iuzno> <cellid(ncelldim)> <landflag> <ivertcon> <surfdep> <vks> <thtr> <thts> <thti> <eps> [<boundname>]');
+  NewLine;
 
   IDOMAINDataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
   SurfaceDepressionDepthDataArray :=

@@ -66,6 +66,14 @@ type
     RoughnessPestSeriesMethod: TPestParamMethod;
     DiversionPestSeriesMethods: array of TPestParamMethod;
 
+    InflowTimeSeriesName: string;
+    RainfallTimeSeriesName: string;
+    EvaporationTimeSeriesName: string;
+    RunoffTimeSeriesName: string;
+    StageTimeSeriesName: string;
+    RoughnessTimeSeriesName: string;
+    DiversionTimeSeriesName: array of string;
+
     Status: TStreamStatus;
     ReachNumber: Integer;
     MvrUsed: Boolean;
@@ -241,6 +249,8 @@ type
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);  override;
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     procedure RecordStrings(Strings: TStringList); override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
@@ -747,11 +757,23 @@ begin
   WriteCompInt(Comp, Ord(StagePestSeriesMethod));
   WriteCompInt(Comp, Ord(RoughnessPestSeriesMethod));
 
-
   for index := 0 to Length(DiversionPestSeriesMethods) - 1 do
   begin
     WriteCompInt(Comp, Ord(DiversionPestSeriesMethods[index]));
   end;
+
+  WriteCompInt(Comp, Strings.IndexOf(InflowTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RainfallTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(EvaporationTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RunoffTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(StageTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RoughnessTimeSeriesName));
+
+  for index := 0 to Length(DiversionTimeSeriesName) - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(DiversionTimeSeriesName[index]));
+  end;
+
 
   WriteCompInt(Comp, ReachNumber);
 
@@ -799,6 +821,17 @@ begin
   for index := 0 to Length(DiversionPestSeriesNames) - 1 do
   begin
     Strings.Add(DiversionPestSeriesNames[index]);
+  end;
+
+  Strings.Add(InflowTimeSeriesName);
+  Strings.Add(RainfallTimeSeriesName);
+  Strings.Add(EvaporationTimeSeriesName);
+  Strings.Add(RunoffTimeSeriesName);
+  Strings.Add(StageTimeSeriesName);
+  Strings.Add(RoughnessTimeSeriesName);
+  for index := 0 to Length(DiversionTimeSeriesName) - 1 do
+  begin
+    Strings.Add(DiversionTimeSeriesName[index]);
   end;
 end;
 
@@ -880,6 +913,19 @@ begin
   for index := 0 to ArraySize - 1 do
   begin
     DiversionPestSeriesMethods[index] := TPestParamMethod(ReadCompInt(Decomp));
+  end;
+
+  InflowTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RainfallTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  EvaporationTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RunoffTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  StageTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RoughnessTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  SetLength(DiversionTimeSeriesName, ArraySize);
+  for index := 0 to ArraySize - 1 do
+  begin
+    DiversionTimeSeriesName[index] := Annotations[ReadCompInt(Decomp)];
   end;
 
   ReachNumber := ReadCompInt(Decomp);
@@ -1643,6 +1689,7 @@ var
   RequiredLength: Integer;
   FractionAnnotation: string;
 begin
+  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   Assert(Expression <> nil);
 
   Sfr6Storage := BoundaryStorage as TSfrMf6Storage;
@@ -1665,6 +1712,7 @@ begin
             InflowPest := PestName;
             InflowPestSeriesName := PestSeriesName;
             InflowPestSeriesMethod := PestSeriesMethod;
+            InflowTimeSeriesName := TimeSeriesName;
           end;
         SfrMf6RainfallPosition:
           begin
@@ -1673,6 +1721,7 @@ begin
             RainfallPest := PestName;
             RainfallPestSeriesName := PestSeriesName;
             RainfallPestSeriesMethod := PestSeriesMethod;
+            RainfallTimeSeriesName := TimeSeriesName;
           end;
         SfrMf6EvaporationPosition:
           begin
@@ -1681,6 +1730,7 @@ begin
             EvaporationPest := PestName;
             EvaporationPestSeriesName := PestSeriesName;
             EvaporationPestSeriesMethod := PestSeriesMethod;
+            EvaporationTimeSeriesName := TimeSeriesName;
           end;
         SfrMf6RunoffPosition:
           begin
@@ -1689,6 +1739,7 @@ begin
             RunoffPest := PestName;
             RunoffPestSeriesName := PestSeriesName;
             RunoffPestSeriesMethod := PestSeriesMethod;
+            RunoffTimeSeriesName := TimeSeriesName;
           end;
         SfrMf6UpstreamFractionPosition:
           begin
@@ -1716,6 +1767,7 @@ begin
             StagePest := PestName;
             StagePestSeriesName := PestSeriesName;
             StagePestSeriesMethod := PestSeriesMethod;
+            StageTimeSeriesName := TimeSeriesName;
           end;
         SfrMf6RoughnessPosition:
           begin
@@ -1724,6 +1776,7 @@ begin
             RoughnessPest := PestName;
             RoughnessPestSeriesName := PestSeriesName;
             RoughnessPestSeriesMethod := PestSeriesMethod;
+            RoughnessTimeSeriesName := TimeSeriesName;
           end;
         else
           begin
@@ -1737,6 +1790,7 @@ begin
                 SetLength(DiversionPests, RequiredLength);
                 SetLength(DiversionPestSeriesNames, RequiredLength);
                 SetLength(DiversionPestSeriesMethods, RequiredLength);
+                SetLength(DiversionTimeSeriesName, RequiredLength);
               end;
               Diversions[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
                 := Expression.DoubleResult;
@@ -1748,6 +1802,8 @@ begin
                 := PestSeriesName;
               DiversionPestSeriesMethods[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
                 := PestSeriesMethod;
+              DiversionTimeSeriesName[BoundaryFunctionIndex - SfrMf6DiversionStartPosition]
+                := TimeSeriesName;
             end;
           end;
       end;
@@ -3614,6 +3670,23 @@ begin
   result := FValues.Cell.Layer;
 end;
 
+function TSfrMf6_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    SfrMf6InflowPosition: result := FValues.InflowTimeSeriesName;
+    SfrMf6RainfallPosition: result := FValues.RainfallTimeSeriesName;
+    SfrMf6EvaporationPosition: result := FValues.EvaporationTimeSeriesName;
+    SfrMf6RunoffPosition: result := FValues.RunoffTimeSeriesName;
+    SfrMf6UpstreamFractionPosition: result := inherited;
+    SfrMf6StagePosition: result := FValues.StageTimeSeriesName;
+    SfrMf6RoughnessPosition: result := FValues.RoughnessTimeSeriesName;
+    else
+      begin
+        result := inherited;
+      end;
+  end;
+end;
+
 function TSfrMf6_Cell.GetMvrIndex: Integer;
 begin
   result := Values.MvrIndex;
@@ -3742,6 +3815,31 @@ end;
 procedure TSfrMf6_Cell.SetLayer(const Value: integer);
 begin
   FValues.Cell.Layer := Value;
+end;
+
+procedure TSfrMf6_Cell.SetMf6TimeSeriesName(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    SfrMf6InflowPosition:
+      FValues.InflowTimeSeriesName := Value;
+    SfrMf6RainfallPosition:
+      FValues.RainfallTimeSeriesName := Value;
+    SfrMf6EvaporationPosition:
+      FValues.EvaporationTimeSeriesName := Value;
+    SfrMf6RunoffPosition:
+      FValues.RunoffTimeSeriesName := Value;
+    SfrMf6UpstreamFractionPosition:
+      inherited;
+    SfrMf6StagePosition:
+      FValues.StageTimeSeriesName := Value;
+    SfrMf6RoughnessPosition:
+      FValues.RoughnessTimeSeriesName := Value;
+    else
+      begin
+        inherited;
+      end;
+  end;
 end;
 
 procedure TSfrMf6_Cell.SetRow(const Value: integer);

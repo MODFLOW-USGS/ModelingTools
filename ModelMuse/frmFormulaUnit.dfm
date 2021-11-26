@@ -9,7 +9,6 @@ inherited frmFormula: TfrmFormula
   ClientWidth = 769
   Font.Height = 16
   Position = poOwnerFormCenter
-  ExplicitTop = -9
   ExplicitWidth = 785
   ExplicitHeight = 518
   PixelsPerInch = 96

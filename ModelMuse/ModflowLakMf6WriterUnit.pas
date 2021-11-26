@@ -77,6 +77,11 @@ type
     WidthPestParam: string;
     SlopePestParam: string;
     RoughPestParam: string;
+    RateTimeSeriesName: string;
+    InvertTimeSeriesName: string;
+    RoughTimeSeriesName: string;
+    WidthTimeSeriesName: string;
+    SlopeTimeSeriesName: string;
   end;
 
   TLakeOutletMf6 = class(TObjectList<TOutletSetting>)
@@ -98,6 +103,8 @@ type
     procedure SetPestName(Index: Integer; const Value: string);
     procedure SetPestSeries(Index: Integer; const Value: string);
     procedure SetValue(Index: Integer; const Value: double);
+    function GetTimeSeriesName(Index: Integer): string;
+    procedure SetTimeSeriesName(Index: Integer; const Value: string);
   public
     StartTime: double;
     EndTime: double;
@@ -130,10 +137,22 @@ type
     InflowPestMethod: TPestParamMethod;
     WithdrawalPestMethod: TPestParamMethod;
 
+    StageTimeSeriesName: string;
+    RainfallTimeSeriesName: string;
+    EvaporationTimeSeriesName: string;
+    RunoffTimeSeriesName: string;
+    InflowTimeSeriesName: string;
+    WithdrawalTimeSeriesName: string;
+
     property Value[Index: Integer]: double read GetValue write SetValue;
-    property PestName[Index: Integer]: string read GetPestName write SetPestName;
-    property PestSeries[Index: Integer]: string read GetPestSeries write SetPestSeries;
-    property PestMethod[Index: Integer]: TPestParamMethod read GetPestMethod write SetPestMethod;
+    property PestName[Index: Integer]: string read GetPestName
+      write SetPestName;
+    property PestSeries[Index: Integer]: string read GetPestSeries
+      write SetPestSeries;
+    property PestMethod[Index: Integer]: TPestParamMethod read GetPestMethod
+      write SetPestMethod;
+    property TimeSeriesName[Index: Integer]: string read GetTimeSeriesName
+      write SetTimeSeriesName;
   end;
 
   TLakeSettings = TObjectList<TLakeSetting>;
@@ -214,7 +233,7 @@ uses
   ModflowIrregularMeshUnit, AbstractGridUnit, RealListUnit, RbwParser,
   frmFormulaErrorsUnit, System.Math, Modflow6ObsWriterUnit,
   FastGEO, ModflowBoundaryDisplayUnit, ModflowMvrWriterUnit, ModflowMvrUnit,
-  ModflowParameterUnit, ModelMuseUtilities;
+  ModflowParameterUnit, ModelMuseUtilities, Modflow6TimeSeriesUnit;
 
 resourcestring
   StrTheFollowingObject = 'The following objects are supposed to define lake' +
@@ -400,12 +419,12 @@ begin
       end
       else
       begin
-//        WriteFloat(ACell.BedLeakance);
         WriteFormulaOrValueBasedOnAPestName(ACell.BedLeakancePestName,
           ACell.BedLeakance, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
       end;
 
-      if ACell.BotElev >= ACell.TopElev then
+      if (ACell.BotElev >= ACell.TopElev)
+        and (ACell.LakeType in [ltHoriz, ltHorizEmbed]) then
       begin
         frmErrorsAndWarnings.AddError(Model, StrLakeBottomAndTop,
           Format(StrAtLayerRowColumn,
@@ -419,11 +438,6 @@ begin
         ACell.TopElev, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
       WriteFormulaOrValueBasedOnAPestName(ACell.ConnLengthPestName,
         ACell.ConnLength, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
-//      WriteFormulaOrValueBasedOnAPestName(ACell.ConnWidthPestName,
-//        ACell.ConnWidth, ACell.Cell.Layer, ACell.Cell.Row, ACell.Cell.Column);
-//      WriteFloat(ACell.BotElev);
-//      WriteFloat(ACell.TopElev);
-//      WriteFloat(ACell.ConnLength);
       WriteFloat(ACell.ConnWidth);
       NewLine;
     end;
@@ -618,9 +632,6 @@ begin
               TableRow.Volume, -1, -1, -1);
             WriteFormulaOrValueBasedOnAPestName(TableRow.SurfaceAreaPestName,
               TableRow.SurfaceArea, -1, -1, -1);
-//            WriteFloat(TableRow.Stage);
-//            WriteFloat(TableRow.Volume);
-//            WriteFloat(TableRow.SurfaceArea);
             if Embeded then
             begin
               WriteFormulaOrValueBasedOnAPestName(TableRow.ExchangeAreaPestName,
@@ -653,7 +664,14 @@ var
   PestItem: string;
   PestSeries: string;
   PestMethod: TPestParamMethod;
+  TimeSeriesName: string;
 begin
+  TimeSeriesName := LakeSetting.TimeSeriesName[Index];
+  if TimeSeriesName <> '' then
+  begin
+    WriteString(' ' + TimeSeriesName);
+    Exit;
+  end;
   Value := LakeSetting.Value[Index];
   PestItem := LakeSetting.PestName[Index];
   PestSeries := LakeSetting.PestSeries[Index];
@@ -1010,6 +1028,7 @@ var
   OutletTimeItem: TLakeOutletTimeItem;
   OutletSetting: TOutletSetting;
   PestParamName: string;
+  TimeSeries: TMf6TimeSeries;
 begin
   for LakeIndex := 0 to FLakes.Count - 1 do
   begin
@@ -1050,35 +1069,95 @@ begin
           Outlet.Add(OutletSetting);
           OutletSetting.StartTime := OutletTimeItem.StartTime;
           OutletSetting.EndTime := OutletTimeItem.EndTime;
-          OutletSetting.Rate := EvaluateFormula(OutletTimeItem.Rate,
-            Format(StrLakeOutletRateIn,
-            [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name, PestParamName);
-          OutletSetting.RatePestParam := PestParamName;
+          TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Rate);
+          if TimeSeries = nil then
+          begin
+            OutletSetting.Rate := EvaluateFormula(OutletTimeItem.Rate,
+              Format(StrLakeOutletRateIn,
+              [OutletIndex +1, OutletSetting.StartTime]),
+              ALake.FScreenObject.Name, PestParamName);
+            OutletSetting.RatePestParam := PestParamName;
+            OutletSetting.RateTimeSeriesName := '';
+          end
+          else
+          begin
+            OutletSetting.Rate := 0;
+            OutletSetting.RatePestParam := '';
+            OutletSetting.RateTimeSeriesName := TimeSeries.SeriesName;
+            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+          end;
 
-          OutletSetting.Invert := EvaluateFormula(OutletTimeItem.Invert,
-            Format(StrLakeOutletInvertI,
-            [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name, PestParamName);
-          OutletSetting.InvertPestParam := PestParamName;
+          TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Invert);
+          if TimeSeries = nil then
+          begin
+            OutletSetting.Invert := EvaluateFormula(OutletTimeItem.Invert,
+              Format(StrLakeOutletInvertI,
+              [OutletIndex +1, OutletSetting.StartTime]),
+              ALake.FScreenObject.Name, PestParamName);
+            OutletSetting.InvertPestParam := PestParamName;
+            OutletSetting.InvertTimeSeriesName := '';
+          end
+          else
+          begin
+            OutletSetting.Invert := 0;
+            OutletSetting.InvertPestParam := '';
+            OutletSetting.InvertTimeSeriesName := TimeSeries.SeriesName;
+            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+          end;
 
-          OutletSetting.Width := EvaluateFormula(OutletTimeItem.Width,
-            Format(StrLakeOutletWidthIn,
-            [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name, PestParamName);
-          OutletSetting.WidthPestParam := PestParamName;
+          TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Width);
+          if TimeSeries = nil then
+          begin
+            OutletSetting.Width := EvaluateFormula(OutletTimeItem.Width,
+              Format(StrLakeOutletWidthIn,
+              [OutletIndex +1, OutletSetting.StartTime]),
+              ALake.FScreenObject.Name, PestParamName);
+            OutletSetting.WidthPestParam := PestParamName;
+            OutletSetting.WidthTimeSeriesName := '';
+          end
+          else
+          begin;
+            OutletSetting.Width := 0;
+            OutletSetting.WidthPestParam := '';
+            OutletSetting.WidthTimeSeriesName := TimeSeries.SeriesName;
+            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+          end;
 
-          OutletSetting.Slope := EvaluateFormula(OutletTimeItem.Slope,
-            Format(StrLakeOutletSlopeIn,
-            [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name, PestParamName);
-          OutletSetting.SlopePestParam := PestParamName;
+          TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Slope);
+          if TimeSeries = nil then
+          begin
+            OutletSetting.Slope := EvaluateFormula(OutletTimeItem.Slope,
+              Format(StrLakeOutletSlopeIn,
+              [OutletIndex +1, OutletSetting.StartTime]),
+              ALake.FScreenObject.Name, PestParamName);
+            OutletSetting.SlopePestParam := PestParamName;
+            OutletSetting.SlopeTimeSeriesName := '';
+          end
+          else
+          begin;
+            OutletSetting.Slope := 0;
+            OutletSetting.SlopePestParam := '';
+            OutletSetting.SlopeTimeSeriesName := TimeSeries.SeriesName;
+            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+          end;
 
-          OutletSetting.Rough := EvaluateFormula(OutletTimeItem.Roughness,
-            Format(StrLakeOutletRoughnes,
-            [OutletIndex +1, OutletSetting.StartTime]),
-            ALake.FScreenObject.Name, PestParamName);
-          OutletSetting.RoughPestParam := PestParamName;
+          TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Roughness);
+          if TimeSeries = nil then
+          begin
+            OutletSetting.Rough := EvaluateFormula(OutletTimeItem.Roughness,
+              Format(StrLakeOutletRoughnes,
+              [OutletIndex +1, OutletSetting.StartTime]),
+              ALake.FScreenObject.Name, PestParamName);
+            OutletSetting.RoughPestParam := PestParamName;
+            OutletSetting.RoughTimeSeriesName := '';
+          end
+          else
+          begin;
+            OutletSetting.Rough := 0;
+            OutletSetting.RoughPestParam := '';
+            OutletSetting.RoughTimeSeriesName := TimeSeries.SeriesName;
+            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+          end;
         end;
       end;
     end;
@@ -1240,51 +1319,65 @@ var
     Modifier: string;
     Method: TPestParamMethod;
     DummyVariable: string;
+    TimeSeries: TMf6TimeSeries;
   begin
     Formula := LakeItem.BoundaryFormula[DataSetIdentifier];
-    Param := Model.GetPestParameterByName(Formula);
-    if Param <> nil then
+    TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(Formula);
+    if TimeSeries = nil then
     begin
-      Param.IsUsedInTemplate := True;
-      LakeSetting.PestName[DataSetIdentifier] := Param.ParameterName;
-      Formula := FortranFloatToStr(Param.Value);
-    end
-    else
-    begin
-      LakeSetting.PestName[DataSetIdentifier] := '';
-    end;
-    LakeSetting.Value[DataSetIdentifier] := EvaluateFormula(Formula,
-      Format(FormatString,
-      [LakeSetting.StartTime]),
-      ALake.FScreenObject.Name, DummyVariable);
-    Modifier := LakeBoundary.PestBoundaryFormula[DataSetIdentifier];
-    Param := Model.GetPestParameterByName(Modifier);
-    if Param <> nil then
-    begin
-      Param.IsUsedInTemplate := True;
-      LakeSetting.PestSeries[DataSetIdentifier] := Param.ParameterName;
-      Method := LakeBoundary.PestBoundaryMethod[DataSetIdentifier];
-      LakeSetting.PestMethod[DataSetIdentifier] := Method;
-      case Method of
-        ppmMultiply:
-          begin
-            LakeSetting.Value[DataSetIdentifier] :=
-              LakeSetting.Value[DataSetIdentifier] * Param.Value;
-          end;
-        ppmAdd:
-          begin
-            LakeSetting.Value[DataSetIdentifier] :=
-              LakeSetting.Value[DataSetIdentifier] + Param.Value;
-          end;
-        else
-          begin
-            Assert(False);
-          end;
+      LakeSetting.TimeSeriesName[DataSetIdentifier] := '';
+      Param := Model.GetPestParameterByName(Formula);
+      if Param <> nil then
+      begin
+        Param.IsUsedInTemplate := True;
+        LakeSetting.PestName[DataSetIdentifier] := Param.ParameterName;
+        Formula := FortranFloatToStr(Param.Value);
+      end
+      else
+      begin
+        LakeSetting.PestName[DataSetIdentifier] := '';
+      end;
+      LakeSetting.Value[DataSetIdentifier] := EvaluateFormula(Formula,
+        Format(FormatString,
+        [LakeSetting.StartTime]),
+        ALake.FScreenObject.Name, DummyVariable);
+      Modifier := LakeBoundary.PestBoundaryFormula[DataSetIdentifier];
+      Param := Model.GetPestParameterByName(Modifier);
+      if Param <> nil then
+      begin
+        Param.IsUsedInTemplate := True;
+        LakeSetting.PestSeries[DataSetIdentifier] := Param.ParameterName;
+        Method := LakeBoundary.PestBoundaryMethod[DataSetIdentifier];
+        LakeSetting.PestMethod[DataSetIdentifier] := Method;
+        case Method of
+          ppmMultiply:
+            begin
+              LakeSetting.Value[DataSetIdentifier] :=
+                LakeSetting.Value[DataSetIdentifier] * Param.Value;
+            end;
+          ppmAdd:
+            begin
+              LakeSetting.Value[DataSetIdentifier] :=
+                LakeSetting.Value[DataSetIdentifier] + Param.Value;
+            end;
+          else
+            begin
+              Assert(False);
+            end;
+        end;
+      end
+      else
+      begin
+        LakeSetting.PestSeries[DataSetIdentifier] := ''
       end;
     end
     else
     begin
-      LakeSetting.PestSeries[DataSetIdentifier] := ''
+      LakeSetting.PestName[DataSetIdentifier] := '';
+      LakeSetting.PestSeries[DataSetIdentifier] := '';
+      LakeSetting.Value[DataSetIdentifier] := 0;
+      LakeSetting.TimeSeriesName[DataSetIdentifier] := TimeSeries.SeriesName;
+      FTimeSeriesNames.Add(TimeSeries.SeriesName);
     end;
   end;
 begin
@@ -1302,23 +1395,8 @@ begin
       LakeSetting.Status := LakeItem.Status;
 
       AssignValue(Lak6StagePosition, StrLakeStageAt0g);
-//      LakeSetting.Stage := EvaluateFormula(LakeItem.Stage,
-//        Format(StrLakeStageAt0g,
-//        [LakeSetting.StartTime]),
-//        ALake.FScreenObject.Name);
-
       AssignValue(Lak6RainfallPosition, StrLakeRainfallAt0);
-//      LakeSetting.Rainfall := EvaluateFormula(LakeItem.Rainfall,
-//        Format(StrLakeRainfallAt0,
-//        [LakeSetting.StartTime]),
-//        ALake.FScreenObject.Name);
-
       AssignValue(Lak6EvaporationPosition, StrLakeEvaporationAt);
-//      LakeSetting.Evaporation := EvaluateFormula(LakeItem.Evaporation,
-//        Format(StrLakeEvaporationAt,
-//        [LakeSetting.StartTime]),
-//        ALake.FScreenObject.Name);
-
       if LakeSetting.Evaporation < 0 then
       begin
         frmErrorsAndWarnings.AddError(Model, StrLakeEtError,
@@ -1327,22 +1405,8 @@ begin
       end;
 
       AssignValue(Lak6RunoffPosition, StrLakeRunoffAt0g);
-//      LakeSetting.Runoff := EvaluateFormula(LakeItem.Runoff,
-//        Format(StrLakeRunoffAt0g,
-//        [LakeSetting.StartTime]),
-//        ALake.FScreenObject.Name);
-
       AssignValue(Lak6InflowPosition, StrLakeInflowAt0g);
-//      LakeSetting.Inflow := EvaluateFormula(LakeItem.Inflow,
-//        Format( StrLakeInflowAt0g,
-//        [LakeSetting.StartTime]),
-//        ALake.FScreenObject.Name);
-
       AssignValue(Lak6WithdrawalPosition, StrLakeWithdrawalAt);
-//      LakeSetting.Withdrawal := EvaluateFormula(LakeItem.Withdrawal,
-//        Format(StrLakeWithdrawalAt,
-//        [LakeSetting.StartTime]),
-//        ALake.FScreenObject.Name);
     end;
   end;
 end;
@@ -1750,6 +1814,8 @@ begin
     NewLine;
   end;
 
+  WriteTimeSeriesFiles(FInputFileName);
+
   PrintFlowsOption;
   WriteSaveFlowsOption;
 
@@ -1944,19 +2010,55 @@ begin
 
         ASetting := AnOutlet[0];
 
-        WriteFormulaOrValueBasedOnAPestName(ASetting.InvertPestParam,
-          ASetting.Invert, -1, -1, -1);
-        WriteFormulaOrValueBasedOnAPestName(ASetting.WidthPestParam,
-          ASetting.Width, -1, -1, -1);
-        WriteFormulaOrValueBasedOnAPestName(ASetting.RoughPestParam,
-          ASetting.Rough, -1, -1, -1);
-        WriteFormulaOrValueBasedOnAPestName(ASetting.SlopePestParam,
-          ASetting.Slope, -1, -1, -1);
+        if ASetting.InvertTimeSeriesName = '' then
+        begin
+          WriteFormulaOrValueBasedOnAPestName(ASetting.InvertPestParam,
+            ASetting.Invert, -1, -1, -1);
+        end
+        else
+        begin
+          WriteString(' ' + ASetting.InvertTimeSeriesName);
+        end;
 
-//        WriteFloat(ASetting.Invert);
-//        WriteFloat(ASetting.Width);
-//        WriteFloat(ASetting.Rough);
-//        WriteFloat(ASetting.Slope);
+        if ASetting.WidthTimeSeriesName = '' then
+        begin
+          WriteFormulaOrValueBasedOnAPestName(ASetting.WidthPestParam,
+            ASetting.Width, -1, -1, -1);
+        end
+        else
+        begin
+          WriteString(' ' + ASetting.WidthTimeSeriesName);
+        end;
+
+        if ASetting.RoughTimeSeriesName = '' then
+        begin
+          WriteFormulaOrValueBasedOnAPestName(ASetting.RoughPestParam,
+            ASetting.Rough, -1, -1, -1);
+        end
+        else
+        begin
+          WriteString(' ' + ASetting.RoughTimeSeriesName);
+        end;
+
+        if ASetting.SlopeTimeSeriesName = '' then
+        begin
+          WriteFormulaOrValueBasedOnAPestName(ASetting.SlopePestParam,
+            ASetting.Slope, -1, -1, -1);
+        end
+        else
+        begin
+          WriteString(' ' + ASetting.SlopeTimeSeriesName);
+        end;
+
+//        WriteFormulaOrValueBasedOnAPestName(ASetting.InvertPestParam,
+//          ASetting.Invert, -1, -1, -1);
+//        WriteFormulaOrValueBasedOnAPestName(ASetting.WidthPestParam,
+//          ASetting.Width, -1, -1, -1);
+//        WriteFormulaOrValueBasedOnAPestName(ASetting.RoughPestParam,
+//          ASetting.Rough, -1, -1, -1);
+//        WriteFormulaOrValueBasedOnAPestName(ASetting.SlopePestParam,
+//          ASetting.Slope, -1, -1, -1);
+
         NewLine;
       end;
     end;
@@ -2104,7 +2206,6 @@ begin
       ATime := AllTimes[TimeIndex];
       StressPeriodIndex := StressPeriodStartTimes.IndexOf(ATime);
       Assert(StressPeriodIndex >= 0);
-//      MvrReceiver.ReceiverKey.StressPeriod := StressPeriodIndex;
       MvrRegSourceKey.StressPeriod := StressPeriodIndex;
 
       WriteString('BEGIN PERIOD ');
@@ -2116,7 +2217,6 @@ begin
       begin
         ALake := FLakes[LakeIndex];
         Assert(ALake.FScreenObject <> nil);
-//        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
         MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject;
         LocalScreenObject := ALake.FScreenObject as TScreenObject;
         MvrUsed := (MoverWriter <> nil)
@@ -2176,7 +2276,6 @@ begin
               WriteInteger(LakeIndex+1);
               WriteString('  STAGE');
               WriteLakeValueOrFormula(ALakeSetting, Lak6StagePosition);
-//              WriteFloat(ALakeSetting.Stage);
               NewLine;
             end;
 
@@ -2184,35 +2283,30 @@ begin
             WriteInteger(LakeIndex+1);
             WriteString('  RAINFALL');
             WriteLakeValueOrFormula(ALakeSetting, Lak6RainfallPosition);
-//            WriteFloat(ALakeSetting.Rainfall);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  EVAPORATION');
             WriteLakeValueOrFormula(ALakeSetting, Lak6EvaporationPosition);
-//            WriteFloat(ALakeSetting.Evaporation);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  RUNOFF');
             WriteLakeValueOrFormula(ALakeSetting, Lak6RunoffPosition);
-//            WriteFloat(ALakeSetting.Runoff);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  INFLOW');
             WriteLakeValueOrFormula(ALakeSetting, Lak6InflowPosition);
-//            WriteFloat(ALakeSetting.Inflow);
             NewLine;
 
             WriteString('  ');
             WriteInteger(LakeIndex+1);
             WriteString('  WITHDRAWAL');
             WriteLakeValueOrFormula(ALakeSetting, Lak6WithdrawalPosition);
-//            WriteFloat(ALakeSetting.Withdrawal);
             NewLine;
           end;
         end;
@@ -2245,40 +2339,72 @@ begin
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  RATE');
-              WriteFormulaOrValueBasedOnAPestName(OutletSetting.RatePestParam,
-                OutletSetting.Rate, -1, -1, -1);
-//              WriteFloat(OutletSetting.Rate);
+              if OutletSetting.RateTimeSeriesName = '' then
+              begin
+                WriteFormulaOrValueBasedOnAPestName(OutletSetting.RatePestParam,
+                  OutletSetting.Rate, -1, -1, -1);
+              end
+              else
+              begin
+                WriteString(' ' + OutletSetting.RateTimeSeriesName);
+              end;
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  INVERT');
-              WriteFormulaOrValueBasedOnAPestName(OutletSetting.InvertPestParam,
-                OutletSetting.Invert, -1, -1, -1);
-//              WriteFloat(OutletSetting.Invert);
+              if OutletSetting.InvertTimeSeriesName = '' then
+              begin
+                WriteFormulaOrValueBasedOnAPestName(OutletSetting.InvertPestParam,
+                  OutletSetting.Invert, -1, -1, -1);
+              end
+              else
+              begin
+                WriteString(' ' + OutletSetting.InvertTimeSeriesName);
+              end;
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  WIDTH');
-              WriteFormulaOrValueBasedOnAPestName(OutletSetting.WidthPestParam,
-                OutletSetting.Width, -1, -1, -1);
-//              WriteFloat(OutletSetting.Width);
+              if OutletSetting.WidthTimeSeriesName = '' then
+              begin
+                WriteFormulaOrValueBasedOnAPestName(OutletSetting.WidthPestParam,
+                  OutletSetting.Width, -1, -1, -1);
+              end
+              else
+              begin
+                WriteString(' ' + OutletSetting.WidthTimeSeriesName);
+              end;
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  SLOPE');
-              WriteFormulaOrValueBasedOnAPestName(OutletSetting.SlopePestParam,
-                OutletSetting.Slope, -1, -1, -1);
+              if OutletSetting.SlopeTimeSeriesName = '' then
+              begin
+                WriteFormulaOrValueBasedOnAPestName(OutletSetting.SlopePestParam,
+                  OutletSetting.Slope, -1, -1, -1);
+              end
+              else
+              begin
+                WriteString(' ' + OutletSetting.SlopeTimeSeriesName);
+              end;
 //              WriteFloat(OutletSetting.Slope);
               NewLine;
 
               WriteString('  ');
               WriteInteger(OutletNumber);
               WriteString('  ROUGH');
-              WriteFormulaOrValueBasedOnAPestName(OutletSetting.RoughPestParam,
-                OutletSetting.Rough, -1, -1, -1);
+              if OutletSetting.RoughTimeSeriesName = '' then
+              begin
+                WriteFormulaOrValueBasedOnAPestName(OutletSetting.RoughPestParam,
+                  OutletSetting.Rough, -1, -1, -1);
+              end
+              else
+              begin
+                WriteString(' ' + OutletSetting.RoughTimeSeriesName);
+              end;
 //              WriteFloat(OutletSetting.Rough);
               NewLine;
 
@@ -2434,6 +2560,41 @@ begin
   end;
 end;
 
+function TLakeSetting.GetTimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        result := StageTimeSeriesName;
+      end;
+    Lak6RainfallPosition:
+      begin
+        result := RainfallTimeSeriesName;
+      end;
+    Lak6RunoffPosition:
+      begin
+        result := RunoffTimeSeriesName;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        result := EvaporationTimeSeriesName;
+      end;
+    Lak6InflowPosition:
+      begin
+        result := InflowTimeSeriesName;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        result :=  WithdrawalTimeSeriesName;
+      end;
+    else
+    begin
+      result := '';
+      Assert(False);
+    end;
+  end;
+end;
+
 function TLakeSetting.GetValue(Index: Integer): double;
 begin
   case Index of
@@ -2564,6 +2725,40 @@ begin
     Lak6WithdrawalPosition:
       begin
         WithdrawalPestSeries  := Value;
+      end;
+    else
+    begin
+      Assert(False);
+    end;
+  end;
+end;
+
+procedure TLakeSetting.SetTimeSeriesName(Index: Integer; const Value: string);
+begin
+  case Index of
+    Lak6StagePosition:
+      begin
+        StageTimeSeriesName := Value;
+      end;
+    Lak6RainfallPosition:
+      begin
+        RainfallTimeSeriesName := Value;
+      end;
+    Lak6RunoffPosition:
+      begin
+        RunoffTimeSeriesName := Value;
+      end;
+    Lak6EvaporationPosition:
+      begin
+        EvaporationTimeSeriesName := Value;
+      end;
+    Lak6InflowPosition:
+      begin
+        InflowTimeSeriesName := Value;
+      end;
+    Lak6WithdrawalPosition:
+      begin
+        WithdrawalTimeSeriesName  := Value;
       end;
     else
     begin

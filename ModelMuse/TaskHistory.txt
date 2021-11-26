@@ -122,7 +122,7 @@ object TTaskHistory
     end
     item
       Name = 'LAK'
-      Display = False
+      Display = True
     end
     item
       Name = 'OC'
@@ -130,7 +130,7 @@ object TTaskHistory
     end
     item
       Name = 'SFR'
-      Display = False
+      Display = True
     end
     item
       Name = 'Import'
@@ -138,7 +138,7 @@ object TTaskHistory
     end
     item
       Name = 'UZF'
-      Display = False
+      Display = True
     end
     item
       Name = 'Solvers'
@@ -390,7 +390,7 @@ object TTaskHistory
     end
     item
       Name = 'MAW'
-      Display = False
+      Display = True
     end
     item
       Name = 'DISV'
@@ -438,7 +438,7 @@ object TTaskHistory
     end
     item
       Name = 'CSUB'
-      Display = False
+      Display = True
     end
     item
       Name = 'GwMounding'
@@ -28517,5 +28517,20 @@ object TTaskHistory
         'EVT'
         'ETS'
         'Import')
+    end
+    item
+      Date = 44525.000000000000000000
+    end
+    item
+      Date = 44526.000000000000000000
+      Categories.Strings = (
+        'Refactoring'
+        'Dialog boxes'
+        'LAK'
+        'SFR'
+        'UZF'
+        'MAW'
+        'CSUB'
+        'MF6 Time Series')
     end>
 end

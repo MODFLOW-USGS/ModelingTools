@@ -389,6 +389,7 @@ end;
     FMvrWriter: TObject;
     procedure SetMvrWriter(const Value: TObject);
   protected
+    FTimeSeriesFileNames: TStringList;
     procedure SetTimeListsUpToDate(TimeLists: TModflowBoundListOfTimeLists); overload;
     procedure SetTimeListsUpToDate(TimeLists: TList<TModflowBoundListOfTimeLists>); overload;
     // @name identifies the package that is being exported.
@@ -454,7 +455,7 @@ end;
     procedure WriteBeginConnectionData;
     procedure WriteEndConnectionData;
     procedure WriteBoundNamesOption;
-    //    procedure WriteNoNewtown;
+    procedure WriteTimeSeriesFiles(InputFileName: string);
   public
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
@@ -502,7 +503,6 @@ end;
     procedure SetOwnsValueContents(const Value: Boolean);
   protected
     MAXBOUND: integer;
-    FTimeSeriesFileNames: TStringList;
     // @name is used for recording the locations of observations for
     // MODFLOW-6 flow observations.
     property FlowObsLocations: TBoundaryFlowObservationLocationList
@@ -581,7 +581,7 @@ end;
     procedure WriteMF6ObsOption(InputFileName: string);
     procedure WriteBoundName(ACell: TValueCell);
     Class function Mf6ObType: TObGeneral; virtual;
-    procedure WriteTimeSeriesFiles(InputFileName: string);
+//    procedure WriteTimeSeriesFiles(InputFileName: string);
   public
     // @name creates and instance of @classname.
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
@@ -4450,7 +4450,6 @@ begin
   Assert(Model <> nil);
 //  FMf6ObsArray := nil;
 //  FScreenObjectLists := TObjectScreenObjectLists.Create;
-  FTimeSeriesFileNames := TStringList.Create;
   FValues := TObjectList.Create;
   if Mf6ObservationsUsed then
   begin
@@ -4471,8 +4470,6 @@ end;
 
 destructor TCustomTransientWriter.Destroy;
 begin
-  FTimeSeriesFileNames.Free;
-
   FToMvrFlowObsLocations.Free;
 //  FMf6ObsArray.Free;
   FObsLocationCheck.Free;
@@ -4834,6 +4831,7 @@ constructor TCustomPackageWriter.Create(AModel: TCustomModel;
   EvaluationType: TEvaluationType);
 begin
   inherited;
+  FTimeSeriesFileNames := TStringList.Create;
   FMvrWriter := nil;
 end;
 
@@ -7115,6 +7113,7 @@ end;
 destructor TCustomPackageWriter.Destroy;
 begin
   DSiTrimWorkingSet;
+  FTimeSeriesFileNames.Free;
   inherited;
 end;
 
@@ -9488,7 +9487,7 @@ begin
   end;
 end;
 
-procedure TCustomTransientWriter.WriteTimeSeriesFiles(InputFileName: string);
+procedure TCustomPackageWriter.WriteTimeSeriesFiles(InputFileName: string);
 var
   Groups: TTimesSeriesGroups;
   GroupIndex: Integer;
@@ -9517,6 +9516,7 @@ begin
       finally
         Groups.Free;
       end;
+      Model.ModelInputFiles.AddStrings(FTimeSeriesFileNames);
     end;
     for FileIndex := 0 to FTimeSeriesFileNames.Count - 1 do
     begin

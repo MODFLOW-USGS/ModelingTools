@@ -58,6 +58,14 @@ type
     RootPotentialPestSeriesMethod: TPestParamMethod;
     RootActivityPestSeriesMethod: TPestParamMethod;
 
+    InfiltrationTimeSeriesName: string;
+    PotentialETTimeSeriesName: string;
+    ExtinctionDepthTimeSeriesName: string;
+    ExtinctionWaterContentTimeSeriesName: string;
+    AirEntryPotentialTimeSeriesName: string;
+    RootPotentialTimeSeriesName: string;
+    RootActivityTimeSeriesName: string;
+
     MvrUsed: Boolean;
     MvrIndex: Integer;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
@@ -230,6 +238,20 @@ type
     function GetRootPotentialPest: string;
     function GetRootPotentialPestSeriesMethod: TPestParamMethod;
     function GetRootPotentialPestSeriesName: string;
+    function GetAirEntryPotentialTimeSeriesName: string;
+    function GetExtinctionDepthTimeSeriesName: string;
+    function GetExtinctionWaterContentTimeSeriesName: string;
+    function GetPotentialETTimeSeriesName: string;
+    function GetRootActivityTimeSeriesName: string;
+    function GetRootPotentialTimeSeriesName: string;
+    procedure SetAirEntryPotentialTimeSeriesName(const Value: string);
+    procedure SetExtinctionDepthTimeSeriesName(const Value: string);
+    procedure SetExtinctionWaterContentTimeSeriesName(const Value: string);
+    procedure SetInfiltrationTimeSeriesName(const Value: string);
+    procedure SetPotentialETTimeSeriesName(const Value: string);
+    procedure SetRootActivityTimeSeriesName(const Value: string);
+    procedure SetRootPotentialTimeSeriesName(const Value: string);
+    function GetInfiltrationTimeSeriesName: string;
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -248,6 +270,8 @@ type
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
   public
     property Infiltration: double read GetInfiltration;
     property PotentialET: double read GetPotentialET;
@@ -291,6 +315,25 @@ type
     property RootPotentialPestSeriesMethod: TPestParamMethod read GetRootPotentialPestSeriesMethod;
     property RootActivityPestSeriesMethod: TPestParamMethod read GetRootActivityPestSeriesMethod;
 
+    property InfiltrationTimeSeriesName: string
+      read GetInfiltrationTimeSeriesName write SetInfiltrationTimeSeriesName;
+    property PotentialETTimeSeriesName: string read GetPotentialETTimeSeriesName
+      write SetPotentialETTimeSeriesName;
+    property ExtinctionDepthTimeSeriesName: string
+      read GetExtinctionDepthTimeSeriesName
+      write SetExtinctionDepthTimeSeriesName;
+    property ExtinctionWaterContentTimeSeriesName: string
+      read GetExtinctionWaterContentTimeSeriesName
+      write SetExtinctionWaterContentTimeSeriesName;
+    property AirEntryPotentialTimeSeriesName: string
+      read GetAirEntryPotentialTimeSeriesName
+      write SetAirEntryPotentialTimeSeriesName;
+    property RootPotentialTimeSeriesName: string
+      read GetRootPotentialTimeSeriesName
+      write SetRootPotentialTimeSeriesName;
+    property RootActivityTimeSeriesName: string
+      read GetRootActivityTimeSeriesName
+      write SetRootActivityTimeSeriesName;
   end;
 
   TUzfMf6Boundary = class(TModflowBoundary)
@@ -701,6 +744,14 @@ begin
   WriteCompInt(Comp, Ord(RootPotentialPestSeriesMethod));
   WriteCompInt(Comp, Ord(RootActivityPestSeriesMethod));
 
+  WriteCompInt(Comp, Strings.IndexOf(InfiltrationTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(PotentialETTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(ExtinctionDepthTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(ExtinctionWaterContentTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(AirEntryPotentialTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RootPotentialTimeSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(RootActivityTimeSeriesName));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 
@@ -731,6 +782,14 @@ begin
   Strings.Add(AirEntryPotentialPestSeriesName);
   Strings.Add(RootPotentialPestSeriesName);
   Strings.Add(RootActivityPestSeriesName);
+
+  Strings.Add(InfiltrationTimeSeriesName);
+  Strings.Add(PotentialETTimeSeriesName);
+  Strings.Add(ExtinctionDepthTimeSeriesName);
+  Strings.Add(ExtinctionWaterContentTimeSeriesName);
+  Strings.Add(AirEntryPotentialTimeSeriesName);
+  Strings.Add(RootPotentialTimeSeriesName);
+  Strings.Add(RootActivityTimeSeriesName);
 end;
 
 procedure TUzfMf6Record.Restore(Decomp: TDecompressionStream;
@@ -779,6 +838,14 @@ begin
   AirEntryPotentialPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   RootPotentialPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   RootActivityPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  InfiltrationTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  PotentialETTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  ExtinctionDepthTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  ExtinctionWaterContentTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  AirEntryPotentialTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RootPotentialTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  RootActivityTimeSeriesName := Annotations[ReadCompInt(Decomp)];
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
@@ -1204,6 +1271,20 @@ var
   LocalRootPotentialPestSeriesMethod: TPestParamMethod;
   LocalRootActivityPestSeriesName: string;
   LocalRootActivityPestSeriesMethod: TPestParamMethod;
+  InfiltrationTimeSeries: TStringList;
+  LocalInfiltrationTimeSeriesName: String;
+  PotentialETTimeSeries: TStringList;
+  LocalPotentialETTimeSeriesName: String;
+  ExtinctionDepthTimeSeries: TStringList;
+  LocalExtinctionDepthTimeSeriesName: String;
+  ExtinctionWaterContentTimeSeries: TStringList;
+  LocalExtinctionWaterContentTimeSeriesName: String;
+  AirEntryPotentialTimeSeries: TStringList;
+  LocalAirEntryPotentialTimeSeriesName: String;
+  RootPotentialTimeSeries: TStringList;
+  LocalRootPotentialTimeSeriesName: String;
+  RootActivityTimeSeries: TStringList;
+  LocalRootActivityTimeSeriesName: String;
 begin
   LocalModel := AModel as TCustomModel;
   BoundaryIndex := 0;
@@ -1221,35 +1302,56 @@ begin
   InfiltrationItems := PestItemNames[InfiltrationPosition-PestOffset];
   LocalInfiltrationPest := InfiltrationItems[ItemIndex];
 
+  InfiltrationTimeSeries := TimeSeriesNames[InfiltrationPosition-PestOffset];
+  LocalInfiltrationTimeSeriesName := InfiltrationTimeSeries[ItemIndex];
+
   LocalPotentialETPestSeriesName := PestSeries[PotentialETPosition-PestOffset];
   LocalPotentialETPestSeriesMethod := PestMethods[PotentialETPosition-PestOffset];
   PotentialETItems := PestItemNames[PotentialETPosition-PestOffset];
   LocalPotentialETPest := PotentialETItems[ItemIndex];
+
+  PotentialETTimeSeries := TimeSeriesNames[PotentialETPosition-PestOffset];
+  LocalPotentialETTimeSeriesName := PotentialETTimeSeries[ItemIndex];
 
   LocalExtinctionDepthPestSeriesName := PestSeries[ExtinctionDepthPosition-PestOffset];
   LocalExtinctionDepthPestSeriesMethod := PestMethods[ExtinctionDepthPosition-PestOffset];
   ExtinctionDepthItems := PestItemNames[ExtinctionDepthPosition-PestOffset];
   LocalExtinctionDepthPest := ExtinctionDepthItems[ItemIndex];
 
+  ExtinctionDepthTimeSeries := TimeSeriesNames[ExtinctionDepthPosition-PestOffset];
+  LocalExtinctionDepthTimeSeriesName := ExtinctionDepthTimeSeries[ItemIndex];
+
   LocalExtinctionWaterContentPestSeriesName := PestSeries[ExtinctionWaterContentPosition-PestOffset];
   LocalExtinctionWaterContentPestSeriesMethod := PestMethods[ExtinctionWaterContentPosition-PestOffset];
   ExtinctionWaterContentItems := PestItemNames[ExtinctionWaterContentPosition-PestOffset];
   LocalExtinctionWaterContentPest := ExtinctionWaterContentItems[ItemIndex];
+
+  ExtinctionWaterContentTimeSeries := TimeSeriesNames[ExtinctionWaterContentPosition-PestOffset];
+  LocalExtinctionWaterContentTimeSeriesName := ExtinctionWaterContentTimeSeries[ItemIndex];
 
   LocalAirEntryPotentialPestSeriesName := PestSeries[AirEntryPotentialPosition-PestOffset];
   LocalAirEntryPotentialPestSeriesMethod := PestMethods[AirEntryPotentialPosition-PestOffset];
   AirEntryPotentialItems := PestItemNames[AirEntryPotentialPosition-PestOffset];
   LocalAirEntryPotentialPest := AirEntryPotentialItems[ItemIndex];
 
+  AirEntryPotentialTimeSeries := TimeSeriesNames[AirEntryPotentialPosition-PestOffset];
+  LocalAirEntryPotentialTimeSeriesName := AirEntryPotentialTimeSeries[ItemIndex];
+
   LocalRootPotentialPestSeriesName := PestSeries[RootPotentialPosition-PestOffset];
   LocalRootPotentialPestSeriesMethod := PestMethods[RootPotentialPosition-PestOffset];
   RootPotentialItems := PestItemNames[RootPotentialPosition-PestOffset];
   LocalRootPotentialPest := RootPotentialItems[ItemIndex];
 
+  RootPotentialTimeSeries := TimeSeriesNames[RootPotentialPosition-PestOffset];
+  LocalRootPotentialTimeSeriesName := RootPotentialTimeSeries[ItemIndex];
+
   LocalRootActivityPestSeriesName := PestSeries[RootActivityPosition-PestOffset];
   LocalRootActivityPestSeriesMethod := PestMethods[RootActivityPosition-PestOffset];
   RootActivityItems := PestItemNames[RootActivityPosition-PestOffset];
   LocalRootActivityPest := RootActivityItems[ItemIndex];
+
+  RootActivityTimeSeries := TimeSeriesNames[RootActivityPosition-PestOffset];
+  LocalRootActivityTimeSeriesName := RootActivityTimeSeries[ItemIndex];
 
   Boundary := Boundaries[ItemIndex, AModel] as TUzfMf6Storage;
   InfiltrationArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
@@ -1286,6 +1388,7 @@ begin
                 InfiltrationPest := LocalInfiltrationPest;
                 InfiltrationPestSeriesMethod := LocalInfiltrationPestSeriesMethod;
                 InfiltrationPestSeriesName := LocalInfiltrationPestSeriesName;
+                InfiltrationTimeSeriesName := LocalInfiltrationTimeSeriesName;
 
                 PotentialET := PotentialETArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
@@ -1294,6 +1397,7 @@ begin
                 PotentialETPest := LocalPotentialETPest;
                 PotentialETPestSeriesMethod := LocalPotentialETPestSeriesMethod;
                 PotentialETPestSeriesName := LocalPotentialETPestSeriesName;
+                PotentialETTimeSeriesName := LocalPotentialETTimeSeriesName;
 
                 ExtinctionDepth := ExtinctionDepthArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
@@ -1302,6 +1406,7 @@ begin
                 ExtinctionDepthPest := LocalExtinctionDepthPest;
                 ExtinctionDepthPestSeriesMethod := LocalExtinctionDepthPestSeriesMethod;
                 ExtinctionDepthPestSeriesName := LocalExtinctionDepthPestSeriesName;
+                ExtinctionDepthTimeSeriesName := LocalExtinctionDepthTimeSeriesName;
 
                 ExtinctionWaterContent := ExtinctionWaterContentArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
@@ -1310,6 +1415,7 @@ begin
                 ExtinctionWaterContentPest := LocalExtinctionWaterContentPest;
                 ExtinctionWaterContentPestSeriesMethod := LocalExtinctionWaterContentPestSeriesMethod;
                 ExtinctionWaterContentPestSeriesName := LocalExtinctionWaterContentPestSeriesName;
+                ExtinctionWaterContentTimeSeriesName := LocalExtinctionWaterContentTimeSeriesName;
 
                 AirEntryPotential := AirEntryPotentialArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
@@ -1318,6 +1424,7 @@ begin
                 AirEntryPotentialPest := LocalAirEntryPotentialPest;
                 AirEntryPotentialPestSeriesMethod := LocalAirEntryPotentialPestSeriesMethod;
                 AirEntryPotentialPestSeriesName := LocalAirEntryPotentialPestSeriesName;
+                AirEntryPotentialTimeSeriesName := LocalAirEntryPotentialTimeSeriesName;
 
                 RootPotential := RootPotentialArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
@@ -1326,6 +1433,7 @@ begin
                 RootPotentialPest := LocalRootPotentialPest;
                 RootPotentialPestSeriesMethod := LocalRootPotentialPestSeriesMethod;
                 RootPotentialPestSeriesName := LocalRootPotentialPestSeriesName;
+                RootPotentialTimeSeriesName := LocalRootPotentialTimeSeriesName;
 
                 RootActivity := RootActivityArray.
                   RealData[LayerIndex, RowIndex, ColIndex];
@@ -1334,6 +1442,7 @@ begin
                 RootActivityPest := LocalRootActivityPest;
                 RootActivityPestSeriesMethod := LocalRootActivityPestSeriesMethod;
                 RootActivityPestSeriesName := LocalRootActivityPestSeriesName;
+                RootActivityTimeSeriesName := LocalRootActivityTimeSeriesName;
               end;
               Inc(BoundaryIndex);
             end;
@@ -1884,6 +1993,11 @@ begin
   result := FValues.AirEntryPotentialPestSeriesName;
 end;
 
+function TUzfMf6_Cell.GetAirEntryPotentialTimeSeriesName: string;
+begin
+  result := FValues.AirEntryPotentialTimeSeriesName;
+end;
+
 function TUzfMf6_Cell.GetColumn: integer;
 begin
   result := FValues.Cell.Column;
@@ -1914,6 +2028,11 @@ begin
   result := FValues.ExtinctionDepthPestSeriesName;
 end;
 
+function TUzfMf6_Cell.GetExtinctionDepthTimeSeriesName: string;
+begin
+  result := FValues.ExtinctionDepthTimeSeriesName;
+end;
+
 function TUzfMf6_Cell.GetExtinctionWaterContent: double;
 begin
   result := FValues.ExtinctionWaterContent;
@@ -1937,6 +2056,11 @@ end;
 function TUzfMf6_Cell.GetExtinctionWaterContentPestSeriesName: string;
 begin
   result := FValues.ExtinctionWaterContentPestSeriesName;
+end;
+
+function TUzfMf6_Cell.GetExtinctionWaterContentTimeSeriesName: string;
+begin
+  result := FValues.ExtinctionWaterContentTimeSeriesName;
 end;
 
 function TUzfMf6_Cell.GetInfiltration: double;
@@ -1964,6 +2088,11 @@ begin
   result := FValues.InfiltrationPestSeriesName;
 end;
 
+function TUzfMf6_Cell.GetInfiltrationTimeSeriesName: string;
+begin
+  result := FValues.InfiltrationTimeSeriesName;
+end;
+
 function TUzfMf6_Cell.GetIntegerAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
@@ -1981,6 +2110,24 @@ end;
 function TUzfMf6_Cell.GetLayer: integer;
 begin
   result := FValues.Cell.Layer;
+end;
+
+function TUzfMf6_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+begin
+  case Index of
+    UzfMf6InfiltrationPosition: result := InfiltrationTimeSeriesName;
+    UzfMf6PotentialETPosition: result := PotentialETTimeSeriesName;
+    UzfMf6ExtinctionDepthPosition: result := ExtinctionDepthTimeSeriesName;
+    UzfMf6ExtinctionWaterContentPosition: result := ExtinctionWaterContentTimeSeriesName;
+    UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialTimeSeriesName;
+    UzfMf6RootPotentialPosition: result := RootPotentialTimeSeriesName;
+    UzfMf6RootActivityPosition: result := RootActivityTimeSeriesName;
+    else
+      begin
+        result := inherited;
+        Assert(False);
+      end;
+  end;
 end;
 
 function TUzfMf6_Cell.GetMvrIndex: Integer;
@@ -2072,6 +2219,11 @@ begin
   result := FValues.PotentialETPestSeriesName;
 end;
 
+function TUzfMf6_Cell.GetPotentialETTimeSeriesName: string;
+begin
+  result := FValues.PotentialETTimeSeriesName;
+end;
+
 function TUzfMf6_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
@@ -2128,6 +2280,11 @@ begin
   result := FValues.RootActivityPestSeriesName;
 end;
 
+function TUzfMf6_Cell.GetRootActivityTimeSeriesName: string;
+begin
+  result := FValues.RootActivityTimeSeriesName;
+end;
+
 function TUzfMf6_Cell.GetRootPotential: double;
 begin
   result := FValues.RootPotential;
@@ -2151,6 +2308,11 @@ end;
 function TUzfMf6_Cell.GetRootPotentialPestSeriesName: string;
 begin
   result := FValues.RootPotentialPestSeriesName;
+end;
+
+function TUzfMf6_Cell.GetRootPotentialTimeSeriesName: string;
+begin
+  result := FValues.RootPotentialTimeSeriesName;
 end;
 
 function TUzfMf6_Cell.GetRow: integer;
@@ -2196,14 +2358,76 @@ begin
   FStressPeriod := ReadCompInt(Decomp);
 end;
 
+procedure TUzfMf6_Cell.SetAirEntryPotentialTimeSeriesName(const Value: string);
+begin
+  FValues.AirEntryPotentialTimeSeriesName := Value;
+end;
+
 procedure TUzfMf6_Cell.SetColumn(const Value: integer);
 begin
   FValues.Cell.Column := Value;
 end;
 
+procedure TUzfMf6_Cell.SetExtinctionDepthTimeSeriesName(const Value: string);
+begin
+  FValues.ExtinctionDepthTimeSeriesName := Value;
+end;
+
+procedure TUzfMf6_Cell.SetExtinctionWaterContentTimeSeriesName(
+  const Value: string);
+begin
+  FValues.ExtinctionWaterContentTimeSeriesName := Value;
+end;
+
+procedure TUzfMf6_Cell.SetInfiltrationTimeSeriesName(const Value: string);
+begin
+  FValues.InfiltrationTimeSeriesName := Value;
+end;
+
 procedure TUzfMf6_Cell.SetLayer(const Value: integer);
 begin
   FValues.Cell.Layer := Value;
+end;
+
+procedure TUzfMf6_Cell.SetMf6TimeSeriesName(Index: Integer;
+  const Value: string);
+begin
+  case Index of
+    UzfMf6InfiltrationPosition:
+      InfiltrationTimeSeriesName := Value;
+    UzfMf6PotentialETPosition:
+      PotentialETTimeSeriesName := Value;
+    UzfMf6ExtinctionDepthPosition:
+      ExtinctionDepthTimeSeriesName := Value;
+    UzfMf6ExtinctionWaterContentPosition:
+      ExtinctionWaterContentTimeSeriesName := Value;
+    UzfMf6AirEntryPotentialPosition:
+      AirEntryPotentialTimeSeriesName := Value;
+    UzfMf6RootPotentialPosition:
+      RootPotentialTimeSeriesName := Value;
+    UzfMf6RootActivityPosition:
+      RootActivityTimeSeriesName := Value;
+    else
+      begin
+        inherited;
+        Assert(False);
+      end;
+  end;
+end;
+
+procedure TUzfMf6_Cell.SetPotentialETTimeSeriesName(const Value: string);
+begin
+  FValues.PotentialETTimeSeriesName := Value;
+end;
+
+procedure TUzfMf6_Cell.SetRootActivityTimeSeriesName(const Value: string);
+begin
+  FValues.RootActivityTimeSeriesName := Value;
+end;
+
+procedure TUzfMf6_Cell.SetRootPotentialTimeSeriesName(const Value: string);
+begin
+  FValues.RootPotentialTimeSeriesName := Value;
 end;
 
 procedure TUzfMf6_Cell.SetRow(const Value: integer);
