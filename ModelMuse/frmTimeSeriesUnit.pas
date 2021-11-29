@@ -72,6 +72,8 @@ resourcestring
   StrTimeSeriesNamesMuDataSets = 'Time series names must be different from t' +
   'he names of data sets or global variables. The following names are duplic' +
   'ates.';
+  StrTimeSeriesNamesMuPest = 'Time series names must be different from the n' +
+  'ames of any PEST parameters. The following names are duplicates.';
 
 {$R *.dfm}
 
@@ -257,10 +259,13 @@ var
   ASeries: TMf6TimeSeries;
   ObserverDuplicates: TStringList;
   Observer: TObject;
+  ParameterDuplicates: TStringList;
+  Parameter: TObject;
 begin
   DuplicateNames := TStringList.Create;
   SeriesNameList := TStringList.Create;
   ObserverDuplicates := TStringList.Create;
+  ParameterDuplicates := TStringList.Create;
   try
     SeriesNameList.CaseSensitive := False;
     SeriesNameList.Sorted := True;
@@ -286,12 +291,22 @@ begin
           end
           else
           begin
-            SeriesNameList.Add(String(ASeries.SeriesName));
+            Parameter := frmGoPhast.PhastModel.GetPestParameterByName(ASeries.SeriesName);
+            if Parameter <> nil then
+            begin
+              ParameterDuplicates.Add(String(ASeries.SeriesName));
+            end
+            else
+            begin
+              SeriesNameList.Add(String(ASeries.SeriesName));
+            end;
           end;
         end;
       end;
     end;
-    result := (DuplicateNames.Count = 0) and (ObserverDuplicates.Count = 0);
+    result := (DuplicateNames.Count = 0)
+      and (ObserverDuplicates.Count = 0)
+      and (ParameterDuplicates.Count = 0);
     if not result then
     begin
       if DuplicateNames.Count > 0 then
@@ -301,12 +316,20 @@ begin
       end;
       if ObserverDuplicates.Count > 0 then
       begin
-        ErrorMessage := StrTimeSeriesNamesMuDataSets + sLineBreak + ObserverDuplicates.Text;
+        ErrorMessage := StrTimeSeriesNamesMuDataSets + sLineBreak
+          + ObserverDuplicates.Text;
+        MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+      end;
+      if ParameterDuplicates.Count > 0 then
+      begin
+        ErrorMessage := StrTimeSeriesNamesMuPest + sLineBreak
+          + ParameterDuplicates.Text;
         MessageDlg(ErrorMessage, mtError, [mbOK], 0);
       end;
     end;
 
   finally
+    ParameterDuplicates.Free;
     ObserverDuplicates.Free;
     SeriesNameList.Free;
     DuplicateNames.Free;

@@ -161,6 +161,10 @@ begin
       Value[CharIndex] := '_'
     end;
   end;
+  if Value = '' then
+  begin
+    Value := '_';
+  end;
   if FSeriesName <> Value then
   begin
     FSeriesName := Value;

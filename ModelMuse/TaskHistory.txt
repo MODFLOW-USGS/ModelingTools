@@ -28551,6 +28551,7 @@ object TTaskHistory
         'MF6 Time Series'
         'Pest parameter substitution'
         'List File Analyzer'
-        'Global variables')
+        'Global variables'
+        'Design and Planning')
     end>
 end

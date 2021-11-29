@@ -589,6 +589,10 @@ begin
       Value[CharIndex] := '_'
     end;
   end;
+  if Value = '' then
+  begin
+    Value := '_';
+  end;
   if FGroupName <> Value then
   begin
     FGroupName := Value;
