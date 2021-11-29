@@ -2711,7 +2711,7 @@ procedure TCustomFileWriter.WritePestTemplateFormulaOrValue(Value: double;
   ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer;
   ChangeSign: Boolean);
 begin
-  if (PestParValue <> '') or (PestSeriesValue = '') then
+  if (PestParValue <> '') or (PestSeriesValue <> '') then
   begin
     FPestParamUsed := True;
   end;

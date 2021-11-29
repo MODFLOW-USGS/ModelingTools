@@ -1828,6 +1828,7 @@ that affects the model output should also have a comment. }
     FDeletedDataSets: TList;
     FDispersivityIndex: Integer;
     FPorosityIndex: Integer;
+    FDataSetNames: TStringList;
     // See @link(DataSetCount).
     function GetDataSetCount: integer;
     // See @link(DataSets).
@@ -1858,6 +1859,7 @@ that affects the model output should also have a comment. }
     function AddDataSet(const DataSet: TDataArray): Integer;
     procedure UpdateDataSetDimensions;
     procedure ClearPestArrayFileNames;
+    function GetDataSetNames: TStringList;
   public
     FDataArrayCreationRecords: array of TDataSetCreationData;
     FZetaDataDefinition: TDataSetCreationData;
@@ -1936,6 +1938,7 @@ that affects the model output should also have a comment. }
     procedure UpdateClassifications;
     procedure RemoveDataSet(ADataArray: TDataArray);
     procedure Loaded;
+    property DataSetNames: TStringList read GetDataSetNames;
   end;
 
   TChildModelCollection = class;
@@ -37013,6 +37016,7 @@ var
   Index: Integer;
   DataSet: TDataArray;
 begin
+  FDataSetNames.Free;
   for Index := 0 to FDeletedDataSets.Count - 1 do
   begin
     DataSet := FDeletedDataSets[Index];
@@ -37181,6 +37185,25 @@ begin
   begin
     result := LocalCount;
   end;
+end;
+
+function TDataArrayManager.GetDataSetNames: TStringList;
+var
+  Index: Integer;
+begin
+  if FDataSetNames = nil then
+  begin
+    FDataSetNames := TStringList.Create;
+  end
+  else
+  begin
+    FDataSetNames.Clear;
+  end;
+  for Index := 0 to DataSetCount - 1 do
+  begin
+    FDataSetNames.Add(DataSets[Index].Name);
+  end;
+  result := FDataSetNames;
 end;
 
 function TDataArrayManager.GetDataSet(const Index: integer): TDataArray;

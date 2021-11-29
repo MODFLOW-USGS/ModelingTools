@@ -776,6 +776,9 @@ begin
       end;
     end;
 
+    Names.AddStrings(frmGoPhast.PhastModel.DataArrayManager.DataSetNames);
+    Names.AddStrings(frmGoPhast.PhastModel.Mf6TimesSeries.TimeSeriesNames);
+
     result := PhastModelUnit.GenerateNewName(Root, Names);
   finally
     Names.Free;

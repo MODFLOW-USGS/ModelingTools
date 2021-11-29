@@ -76,8 +76,10 @@ type
   TGlobalVariables = class(TOrderedCollection)
   private
     FSearchList: TStringList;
+    FVariableNames: TStringList;
     function GetVariable(Index: integer): TGlobalVariable;
     procedure SetVariable(Index: integer; const Value: TGlobalVariable);
+    function GetGlobalVariableNames: TStringList;
   protected
     procedure FreeSearchList;
   public
@@ -91,6 +93,7 @@ type
     property Variables[Index: integer]: TGlobalVariable read GetVariable
       write SetVariable; default;
     procedure Sort; overload;
+    property GlobalVariableNames: TStringList read GetGlobalVariableNames;
   end;
 
 implementation
@@ -403,6 +406,7 @@ end;
 
 destructor TGlobalVariables.Destroy;
 begin
+  FVariableNames.Free;
   FreeSearchList;
   inherited;
 end;
@@ -410,6 +414,25 @@ end;
 procedure TGlobalVariables.FreeSearchList;
 begin
   FreeAndNil(FSearchList);
+end;
+
+function TGlobalVariables.GetGlobalVariableNames: TStringList;
+var
+  index: Integer;
+begin
+  if FVariableNames = nil then
+  begin
+    FVariableNames := TStringList.Create
+  end
+  else
+  begin
+    FVariableNames.Clear;
+  end;
+  for index := 0 to Count - 1 do
+  begin
+    FVariableNames.Add(Variables[index].Name);
+  end;
+  result := FVariableNames;
 end;
 
 function TGlobalVariables.GetVariable(Index: integer): TGlobalVariable;

@@ -74,7 +74,7 @@ object TTaskHistory
     end
     item
       Name = 'CHD'
-      Display = True
+      Display = False
     end
     item
       Name = 'core code'
@@ -82,19 +82,19 @@ object TTaskHistory
     end
     item
       Name = 'GHB'
-      Display = True
+      Display = False
     end
     item
       Name = 'WEL'
-      Display = True
+      Display = False
     end
     item
       Name = 'RIV'
-      Display = True
+      Display = False
     end
     item
       Name = 'DRN'
-      Display = True
+      Display = False
     end
     item
       Name = 'DRT'
@@ -102,15 +102,15 @@ object TTaskHistory
     end
     item
       Name = 'RCH'
-      Display = True
+      Display = False
     end
     item
       Name = 'EVT'
-      Display = True
+      Display = False
     end
     item
       Name = 'ETS'
-      Display = True
+      Display = False
     end
     item
       Name = 'RES'
@@ -118,11 +118,11 @@ object TTaskHistory
     end
     item
       Name = 'Global variables'
-      Display = False
+      Display = True
     end
     item
       Name = 'LAK'
-      Display = True
+      Display = False
     end
     item
       Name = 'OC'
@@ -130,7 +130,7 @@ object TTaskHistory
     end
     item
       Name = 'SFR'
-      Display = True
+      Display = False
     end
     item
       Name = 'Import'
@@ -138,7 +138,7 @@ object TTaskHistory
     end
     item
       Name = 'UZF'
-      Display = True
+      Display = False
     end
     item
       Name = 'Solvers'
@@ -258,7 +258,7 @@ object TTaskHistory
     end
     item
       Name = 'List File Analyzer'
-      Display = False
+      Display = True
     end
     item
       Name = 'Mesh Generation'
@@ -454,7 +454,7 @@ object TTaskHistory
     end
     item
       Name = 'Pest parameter substitution'
-      Display = False
+      Display = True
     end
     item
       Name = 'Model Viewer SUTRA 4'
@@ -28544,5 +28544,13 @@ object TTaskHistory
       Categories.Strings = (
         'Dialog boxes'
         'MF6 Time Series')
+    end
+    item
+      Date = 44529.000000000000000000
+      Categories.Strings = (
+        'MF6 Time Series'
+        'Pest parameter substitution'
+        'List File Analyzer'
+        'Global variables')
     end>
 end

@@ -25,14 +25,15 @@ type
   TTimesSeriesCollection = class(TOrderedCollection)
   private
     FTimes: TRealCollection;
-    FGroupName: string;
+    FGroupName: AnsiString;
     FInputFile: TStreamReader;
+    FTimeSeriesDictionary: TDictionary<string, TMf6TimeSeries>;
     function GetItem(Index: Integer): TTimeSeriesItem;
     function GetTimeCount: Integer;
     procedure SetItem(Index: Integer; const Value: TTimeSeriesItem);
     procedure SetTimeCount(const Value: Integer);
     procedure SetTimes(const Value: TRealCollection);
-    procedure SetGroupName(Value: string);
+    procedure SetGroupName(Value: AnsiString);
     procedure ReadAttributes;
     procedure ReadTimeSeries;
   public
@@ -49,7 +50,7 @@ type
       SeriesName: string; StartTimeOffset: double = 0): double;
   published
     property Times: TRealCollection read FTimes write SetTimes;
-    property GroupName: string read FGroupName write SetGroupName;
+    property GroupName: AnsiString read FGroupName write SetGroupName;
   end;
 
   TTimesSeriesGroups = TObjectList<TTimesSeriesCollection>;
@@ -71,9 +72,12 @@ type
 
   TTimesSeriesCollections = class(TOrderedCollection)
   private
-    FTimesSeriesDictionary: TDictionary<string, TTimesSeriesCollection>;
+    FTimeSeriesGroupsDictionary: TDictionary<string, TTimesSeriesCollection>;
+    FTimeSeriesDictionary: TDictionary<string, TMf6TimeSeries>;
+    FTimeSeriesNames: TStringList;
     function GetItem(Index: Integer): TimeSeriesCollectionItem;
     procedure SetItem(Index: Integer; const Value: TimeSeriesCollectionItem);
+    function GetTimeSeriesNames: TStringList;
   public
     Constructor Create(Model: TBaseModel);
     destructor Destroy; override;
@@ -85,6 +89,7 @@ type
       Groups: TTimesSeriesGroups);
     function GetTimesSeriesCollectionBySeriesName(
       const ASeriesName: string): TTimesSeriesCollection;
+    property TimeSeriesNames: TStringList read GetTimeSeriesNames;
   end;
 
 implementation
@@ -141,6 +146,7 @@ procedure TTimesSeriesCollection.Assign(Source: TPersistent);
 var
   TSGroup: TTimesSeriesCollection;
 begin
+  FTimeSeriesDictionary.Clear;
   if Source is TTimesSeriesCollection then
   begin
     TSGroup := TTimesSeriesCollection(Source);
@@ -161,10 +167,12 @@ begin
   begin
     FTimes := TRealCollection.Create(Model.Invalidate);
   end;
+  FTimeSeriesDictionary := TDictionary<string, TMf6TimeSeries>.Create;
 end;
 
 destructor TTimesSeriesCollection.Destroy;
 begin
+  FTimeSeriesDictionary.Free;
   FTimes.Free;
   inherited;
 end;
@@ -395,16 +403,20 @@ function TTimesSeriesCollection.GetValuesByName(
 var
   ItemIndex: Integer;
   AnItem: TTimeSeriesItem;
+  TimeSeries: TMf6TimeSeries;
 begin
   result := nil;
-  for ItemIndex := 0 to Count - 1 do
+  if (Count > 0) and (FTimeSeriesDictionary.Count = 0) then
   begin
-    AnItem := Items[ItemIndex];
-    if SameText(AnItem.TimeSeries.SeriesName, AName) then
+    for ItemIndex := 0 to Count - 1 do
     begin
-      result := AnItem.TimeSeries;
-      break;
+      TimeSeries := Items[ItemIndex].TimeSeries;
+      FTimeSeriesDictionary.Add(UpperCase(TimeSeries.SeriesName), TimeSeries);
     end;
+  end;
+  if not FTimeSeriesDictionary.TryGetValue(UpperCase(AName), result) then
+  begin
+    result := nil;
   end;
 end;
 
@@ -560,16 +572,19 @@ begin
   end;
 end;
 
-procedure TTimesSeriesCollection.SetGroupName(Value: string);
+procedure TTimesSeriesCollection.SetGroupName(Value: AnsiString);
+const
+  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '@', '#', '$', '%', '^', '&',
+     '*', '(', ')', '_', '-', '<', '>', '?', '.'];
 var
   CharIndex: Integer;
-  AChar: Char;
+  AChar: AnsiChar;
 begin
   Value := Trim(Value);
   for CharIndex := 1 to Length(Value) do
   begin
     AChar := Value[CharIndex];
-    if (AChar <> '_') and (not AChar.IsLetterOrDigit) then
+    if not (AChar in AllowableChars) then
     begin
       Value[CharIndex] := '_'
     end;
@@ -660,18 +675,21 @@ end;
 procedure TTimesSeriesCollections.Assign(Source: TPersistent);
 begin
   inherited;
-  FTimesSeriesDictionary.Clear;
+  FTimeSeriesGroupsDictionary.Clear;
+  FTimeSeriesDictionary.Clear;
 end;
 
 constructor TTimesSeriesCollections.Create(Model: TBaseModel);
 begin
   inherited Create(TimeSeriesCollectionItem, Model);
-  FTimesSeriesDictionary := TDictionary<string, TTimesSeriesCollection>.Create;
+  FTimeSeriesGroupsDictionary := TDictionary<string, TTimesSeriesCollection>.Create;
+  FTimeSeriesDictionary := TDictionary<string, TMf6TimeSeries>.Create;
 end;
 
 destructor TTimesSeriesCollections.Destroy;
 begin
-  FTimesSeriesDictionary.Free;
+  FTimeSeriesDictionary.Free;
+  FTimeSeriesGroupsDictionary.Free;
   inherited;
 end;
 
@@ -685,21 +703,59 @@ function TTimesSeriesCollections.GetTimeSeriesByName(
   ASeriesName: String): TMf6TimeSeries;
 var
   GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+  SeriesIndex: Integer;
+  ASeries: TMf6TimeSeries;
 begin
   result := nil;
   if Model.ModelSelection <> msModflow2015 then
   begin
     Exit;
   end;
-  for GroupIndex := 0 to Count - 1 do
+  if (Count > 0) and(FTimeSeriesDictionary.Count = 0) then
   begin
-    result := Items[GroupIndex].
-      TimesSeriesCollection.GetValuesByName(ASeriesName);
-    if result <> nil then
+    for GroupIndex := 0 to Count - 1 do
     begin
-      Exit;
+      AGroup := Items[GroupIndex].TimesSeriesCollection;
+      for SeriesIndex := 0 to AGroup.Count - 1 do
+      begin
+        ASeries := AGroup[SeriesIndex].TimeSeries;
+        FTimeSeriesDictionary.Add(UpperCase(ASeries.SeriesName), ASeries);
+      end;
     end;
   end;
+  if not FTimeSeriesDictionary.TryGetValue(UpperCase(ASeriesName), result) then
+  begin
+    result := nil;
+  end;
+
+end;
+
+function TTimesSeriesCollections.GetTimeSeriesNames: TStringList;
+var
+  GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+  SeriesIndex: Integer;
+  SeriesName:String;
+begin
+  if FTimeSeriesNames = nil then
+  begin
+    FTimeSeriesNames := TStringList.Create;
+  end
+  else
+  begin
+    FTimeSeriesNames.Clear
+  end;
+  for GroupIndex := 0 to Count - 1 do
+  begin
+    AGroup := Items[GroupIndex].TimesSeriesCollection;
+    for SeriesIndex := 0 to AGroup.Count - 1 do
+    begin
+      SeriesName := AGroup[SeriesIndex].TimeSeries.SeriesName;
+      FTimeSeriesNames.Add(SeriesName);
+    end;
+  end;
+  result := FTimeSeriesNames
 end;
 
 function TTimesSeriesCollections.GetTimesSeriesCollectionBySeriesName(
@@ -713,7 +769,7 @@ begin
   result := nil;
   if (Count > 0) then
   begin
-    if (FTimesSeriesDictionary.Count = 0) then
+    if (FTimeSeriesGroupsDictionary.Count = 0) then
     begin
       for GroupIndex := 0 to Count - 1 do
       begin
@@ -721,11 +777,14 @@ begin
         for SeriesIndex := 0 to AGroup.Count - 1 do
         begin
           SeriesName := AGroup[SeriesIndex].TimeSeries.SeriesName;
-          FTimesSeriesDictionary.Add(UpperCase(SeriesName), AGroup);
+          FTimeSeriesGroupsDictionary.Add(UpperCase(SeriesName), AGroup);
         end;
       end;
     end;
-    FTimesSeriesDictionary.TryGetValue(UpperCase(ASeriesName), result);
+    if not FTimeSeriesGroupsDictionary.TryGetValue(UpperCase(ASeriesName), result) then
+    begin
+      result := nil;
+    end;
   end;
 end;
 
@@ -736,7 +795,6 @@ var
   GroupIndex: Integer;
   AGroup: TTimesSeriesCollection;
   LocalSeriesNames: TStringList;
-//  GroupUsed: Boolean;
   SeriesName: string;
   UsedGroup: TTimesSeriesCollection;
   TimeSeries: TMf6TimeSeries;

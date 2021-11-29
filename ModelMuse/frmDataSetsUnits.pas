@@ -586,6 +586,9 @@ begin
       end;
     end;
 
+    Names.AddStrings(frmGoPhast.PhastModel.Mf6TimesSeries.TimeSeriesNames);
+    Names.AddStrings(frmGoPhast.PhastModel.GlobalVariables.GlobalVariableNames);
+
     result := PhastModelUnit.GenerateNewName(Root, Names);
   finally
     Names.Free;

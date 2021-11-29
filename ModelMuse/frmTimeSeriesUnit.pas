@@ -40,11 +40,14 @@ type
     procedure FormCreate(Sender: TObject); override;
     procedure FormDestroy(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
+    function GroupNamesOK: Boolean;
+    function SeriesNamesOK: Boolean;
   private
     FTimesSeries: TTimesSeriesCollections;
     FPestNames: TStringList;
     procedure edGroupNameChange(Sender: TObject);
     function AddNewFrame(NewName: string): TframeModflow6TimeSeries;
+    procedure AssignProperties;
     { Private declarations }
   public
     procedure GetData;
@@ -58,13 +61,23 @@ var
 implementation
 
 uses
-  System.Math, frmGoPhastUnit, ModflowParameterUnit, OrderedCollectionUnit;
+  System.Math, frmGoPhastUnit, ModflowParameterUnit, OrderedCollectionUnit,
+  System.UITypes;
+
+resourcestring
+  StrTimeSeriesGroupNa = 'Time series group names must be unique. The follow' +
+  'ing group names are duplicates.';
+  StrTimeSeriesNamesMu = 'Time series names must be unique. The following na' +
+  'mes are duplicates.';
+  StrTimeSeriesNamesMuDataSets = 'Time series names must be different from t' +
+  'he names of data sets or global variables. The following names are duplic' +
+  'ates.';
 
 {$R *.dfm}
 
 procedure TfrmTimeSeries.btnAddGroupClick(Sender: TObject);
 var
-  NewName: string;
+  NewName: String;
   NewFrame: TframeModflow6TimeSeries;
   NewItem: TimeSeriesCollectionItem;
 begin
@@ -73,7 +86,7 @@ begin
   NewName := 'NewGroup' + IntToStr(tvTimeSeries.Items.Count + 1);
   NewFrame := AddNewFrame(NewName);
   NewItem := FTimesSeries.Add;
-  NewItem.TimesSeriesCollection.GroupName := NewName;
+  NewItem.TimesSeriesCollection.GroupName := AnsiString(NewName);
   NewFrame.GetData(NewItem, FPestNames);
 end;
 
@@ -112,6 +125,17 @@ end;
 procedure TfrmTimeSeries.btnOKClick(Sender: TObject);
 begin
   inherited;
+  AssignProperties;
+  if not GroupNamesOK then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
+  if not SeriesNamesOK then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
   SetData;
 end;
 
@@ -164,12 +188,52 @@ begin
   for SeriesIndex := 0 to FTimesSeries.Count - 1 do
   begin
     ASeriesItem := FTimesSeries[SeriesIndex];
-    NewFrame := AddNewFrame(ASeriesItem.TimesSeriesCollection.GroupName);
+    NewFrame := AddNewFrame(String(ASeriesItem.TimesSeriesCollection.GroupName));
     NewFrame.GetData(ASeriesItem, FPestNames);
   end;
 end;
 
-procedure TfrmTimeSeries.SetData;
+function TfrmTimeSeries.GroupNamesOK: Boolean;
+var
+  GroupNameList: TStringList;
+  DuplicateNames: TStringList;
+  GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+  ErrorMessage: string;
+begin
+  DuplicateNames := TStringList.Create;
+  GroupNameList := TStringList.Create;
+  try
+    GroupNameList.CaseSensitive := False;
+    GroupNameList.Sorted := True;
+    DuplicateNames.Duplicates := dupIgnore;
+    DuplicateNames.Sorted := True;
+    for GroupIndex := 0 to FTimesSeries. Count - 1 do
+    begin
+      AGroup := FTimesSeries.Items[GroupIndex].TimesSeriesCollection;
+      if GroupNameList.IndexOf(String(AGroup.GroupName)) >= 0 then
+      begin
+        DuplicateNames.Add(String(AGroup.GroupName));
+      end
+      else
+      begin
+        GroupNameList.Add(String(AGroup.GroupName));
+      end;
+    end;
+    result := DuplicateNames.Count = 0;
+    if not result then
+    begin
+      ErrorMessage := StrTimeSeriesGroupNa + sLineBreak + DuplicateNames.Text;
+      MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+    end;
+
+  finally
+    GroupNameList.Free;
+    DuplicateNames.Free;
+  end;
+end;
+
+procedure TfrmTimeSeries.AssignProperties;
 var
   AFrame: TframeModflow6TimeSeries;
   SeriesIndex: Integer;
@@ -180,7 +244,77 @@ begin
     AFrame := plTimeSeries.Pages[SeriesIndex].Controls[0] as TframeModflow6TimeSeries;
     AFrame.SetData;
   end;
+end;
 
+function TfrmTimeSeries.SeriesNamesOK: Boolean;
+var
+  SeriesNameList: TStringList;
+  DuplicateNames: TStringList;
+  GroupIndex: Integer;
+  AGroup: TTimesSeriesCollection;
+  ErrorMessage: string;
+  SeriesIndex: Integer;
+  ASeries: TMf6TimeSeries;
+  ObserverDuplicates: TStringList;
+  Observer: TObject;
+begin
+  DuplicateNames := TStringList.Create;
+  SeriesNameList := TStringList.Create;
+  ObserverDuplicates := TStringList.Create;
+  try
+    SeriesNameList.CaseSensitive := False;
+    SeriesNameList.Sorted := True;
+    DuplicateNames.Duplicates := dupIgnore;
+    DuplicateNames.Sorted := True;
+    ObserverDuplicates.Sorted := True;
+    for GroupIndex := 0 to FTimesSeries. Count - 1 do
+    begin
+      AGroup := FTimesSeries.Items[GroupIndex].TimesSeriesCollection;
+      for SeriesIndex := 0 to AGroup.Count - 1 do
+      begin
+        ASeries := AGroup[SeriesIndex].TimeSeries;
+        if SeriesNameList.IndexOf(String(ASeries.SeriesName)) >= 0 then
+        begin
+          DuplicateNames.Add(String(ASeries.SeriesName));
+        end
+        else
+        begin
+          Observer := frmGoPhast.PhastModel.GetObserverByName(String(ASeries.SeriesName));
+          if Observer <> nil then
+          begin
+            ObserverDuplicates.Add(String(ASeries.SeriesName));
+          end
+          else
+          begin
+            SeriesNameList.Add(String(ASeries.SeriesName));
+          end;
+        end;
+      end;
+    end;
+    result := (DuplicateNames.Count = 0) and (ObserverDuplicates.Count = 0);
+    if not result then
+    begin
+      if DuplicateNames.Count > 0 then
+      begin
+        ErrorMessage := StrTimeSeriesNamesMu + sLineBreak + DuplicateNames.Text;
+        MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+      end;
+      if ObserverDuplicates.Count > 0 then
+      begin
+        ErrorMessage := StrTimeSeriesNamesMuDataSets + sLineBreak + ObserverDuplicates.Text;
+        MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+      end;
+    end;
+
+  finally
+    ObserverDuplicates.Free;
+    SeriesNameList.Free;
+    DuplicateNames.Free;
+  end;
+end;
+
+procedure TfrmTimeSeries.SetData;
+begin
   frmGoPhast.UndoStack.Submit(TUndoChangeTimeSeries.Create(FTimesSeries));
 end;
 
