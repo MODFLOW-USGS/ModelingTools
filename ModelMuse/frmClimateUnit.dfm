@@ -5,7 +5,7 @@ inherited frmClimate: TfrmClimate
   ClientHeight = 275
   ClientWidth = 599
   ExplicitWidth = 615
-  ExplicitHeight = 313
+  ExplicitHeight = 314
   PixelsPerInch = 96
   TextHeight = 18
   inline frameClimate: TframeFormulaGrid
@@ -55,6 +55,7 @@ inherited frmClimate: TfrmClimate
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -78,6 +79,7 @@ inherited frmClimate: TfrmClimate
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -101,6 +103,7 @@ inherited frmClimate: TfrmClimate
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -124,6 +127,7 @@ inherited frmClimate: TfrmClimate
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -147,6 +151,7 @@ inherited frmClimate: TfrmClimate
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -170,6 +175,7 @@ inherited frmClimate: TfrmClimate
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

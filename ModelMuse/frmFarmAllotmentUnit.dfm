@@ -5,7 +5,7 @@ inherited frmFarmAllotment: TfrmFarmAllotment
   ClientHeight = 330
   ClientWidth = 398
   ExplicitWidth = 414
-  ExplicitHeight = 368
+  ExplicitHeight = 369
   PixelsPerInch = 96
   TextHeight = 18
   inline frameAllotment: TframeFormulaGrid
@@ -55,6 +55,7 @@ inherited frmFarmAllotment: TfrmFarmAllotment
       Columns = <
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -78,6 +79,7 @@ inherited frmFarmAllotment: TfrmFarmAllotment
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -101,6 +103,7 @@ inherited frmFarmAllotment: TfrmFarmAllotment
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

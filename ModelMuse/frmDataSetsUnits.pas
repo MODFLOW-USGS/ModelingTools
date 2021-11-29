@@ -829,6 +829,7 @@ begin
         end;
 
         // show the variables and functions
+        IncludeTimeSeries := False;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.
@@ -3381,6 +3382,7 @@ begin
         end;
 
         // show the variables and functions
+        IncludeTimeSeries := False;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.

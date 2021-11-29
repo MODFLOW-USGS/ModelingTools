@@ -2214,6 +2214,7 @@ type
     procedure SetPestModifier(Grid: TRbwDataGrid4; ACol: Integer;
       const Value: string);
     function GetPestParameterAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
+    function GetModflow6TimeSeriesAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
     function GetPestModifierAssigned(Grid: TRbwDataGrid4;
       ACol: Integer): Boolean;
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
@@ -2510,7 +2511,7 @@ uses Math, StrUtils, JvToolEdit, frmGoPhastUnit, AbstractGridUnit,
   ModflowUzfMf6Unit, TimeUnit, Mt3dLktUnit, Mt3dSftUnit, ModflowCsubUnit,
   ModflowSubsidenceDefUnit, frmManageSutraBoundaryObservationsUnit,
   framePestObsMf6Unit, ModflowParameterUnit, ModflowDrnUnit, ModflowRivUnit,
-  ModflowResUnit;
+  ModflowResUnit, Modflow6TimeSeriesCollectionsUnit, Modflow6TimeSeriesUnit;
 
 resourcestring
   StrConcentrationObserv = 'Concentration Observations: ';
@@ -16895,6 +16896,61 @@ begin
   end;
 end;
 
+function TfrmScreenObjectProperties.GetModflow6TimeSeriesAllowed(
+  DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
+var
+  EtsLayerCol: Integer;
+  FirstSegmentLayer: Integer;
+begin
+  result := (frmGoPhast.ModelSelection = msModflow2015)
+    and ((DataGrid = frameRchParam.rdgModflowBoundary)
+    or (DataGrid = frameChdParam.rdgModflowBoundary)
+    or (DataGrid = frameCSUB.rdgModflowBoundary)
+    or (DataGrid = frameDrnParam.rdgModflowBoundary)
+    or (DataGrid = frameEtsParam.rdgModflowBoundary)
+    or (DataGrid = frameGhbParam.rdgModflowBoundary)
+    or (DataGrid = frameLakMf6.rdgModflowBoundary)
+    or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3,4])) // Only rate and stage
+    or (DataGrid = frameRivParam.rdgModflowBoundary)
+    or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol < 9)) // all but upstream fraction and diversions.
+    or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
+    )
+  ;
+  if (DataGrid = frameRchParam.rdgModflowBoundary)
+    and frmGoPhast.PhastModel.RchTimeVaryingLayers
+    and (ACol = 3) then
+  begin
+    // We are setting the formula for  the layer
+    // to which the recharge will be applied.
+    result := False;
+  end;
+  if (DataGrid = frameEtsParam.rdgModflowBoundary)
+    and frmGoPhast.PhastModel.EtsTimeVaryingLayers then
+  begin
+    EtsLayerCol := 5 +
+      (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
+    if ACol = EtsLayerCol then
+    begin
+      // We are setting the formula for  the layer
+      // to which the evapotranspiration will be applied.
+      result := False;
+    end;
+  end;
+  if (DataGrid = frameEtsParam.rdgModflowBoundary) and
+    (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount > 1) then
+  begin
+    EtsLayerCol := 5 +
+      (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
+    FirstSegmentLayer := 4;
+    if (ACol >= FirstSegmentLayer) and (ACol < EtsLayerCol) then
+    begin
+      // We are setting the formula for  the segment fractions
+      result := False;
+    end;
+  end;
+
+end;
+
 procedure TfrmScreenObjectProperties.GetModflowBoundaries(
   const AScreenObjectList: TList);
 begin
@@ -20235,17 +20291,33 @@ var
   TempCompiler: TRbwParser;
   CompiledFormula: TExpression;
   ResultType: TRbwDataType;
-//  DelCol: TDeliveryColumns;
   TestCol: Integer;
   CropIrrigationRequirement: TCropIrrigationRequirement;
   Divisor: integer;
   PestParamAllowed: Boolean;
+  TimeSeriesAllowed: Boolean;
+  Mf6TimesSeries: TTimesSeriesCollections;
+  TimeSeries: TMf6TimeSeries;
+  EtsLayerCol: Integer;
 begin
   PestParamAllowed := GetPestParameterAllowed(DataGrid, ACol);
   if Formula = '' then
   begin
     Formula := '0';
   end;
+
+  TimeSeries := nil;
+  TimeSeriesAllowed := GetModflow6TimeSeriesAllowed(DataGrid, ACol);
+  if TimeSeriesAllowed then
+  begin
+    Mf6TimesSeries := frmGoPhast.PhastModel.Mf6TimesSeries;
+    TimeSeries := Mf6TimesSeries.GetTimeSeriesByName(Formula);
+    if TimeSeries <> nil then
+    begin
+      Formula := '1';
+    end;
+  end;
+
   // CreateBoundaryFormula creates an Expression for a boundary condition
   // based on the text in DataGrid at ACol, ARow. Orientation, and EvaluatedAt
   // are used to chose the TRbwParser.
@@ -20313,6 +20385,16 @@ begin
       // We are setting the formula for  the layer
       // to which the recharge will be applied.
       ResultType := rdtInteger;
+    end
+    else if (DataGrid = frameEtsParam.rdgModflowBoundary)
+      and frmGoPhast.PhastModel.EtsTimeVaryingLayers then
+    begin
+      EtsLayerCol := 5 +
+        (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
+      if ACol = EtsLayerCol then
+      begin
+        ResultType := rdtInteger;
+      end;
     end
     else if DataGrid = frameFarmWell.rdgModflowBoundary then
     begin
@@ -20402,12 +20484,7 @@ begin
       ResultType := rdtDouble;
     end;
   end
-  else if
-//    (DataGrid = frameScreenObjectFarm.frameFormulaGridCrops.Grid)
-//    or (DataGrid = frameScreenObjectFarm.frameFormulaGridWaterRights.Grid)
-//    or (DataGrid = frameScreenObjectFarm.frameFormulaGridCosts.Grid)
-//    or
-    (DataGrid = frameFarmPrecip.rdgModflowBoundary)
+  else if (DataGrid = frameFarmPrecip.rdgModflowBoundary)
     or (DataGrid = frameFarmRefEvap.rdgModflowBoundary) then
   begin
     ResultType := rdtDouble;
@@ -20420,22 +20497,6 @@ begin
   begin
     ResultType := rdtInteger;
   end
-//  else if (DataGrid = frameScreenObjectFarm.frameDelivery.Grid) then
-//  begin
-//    DelCol := TDeliveryColumns((ACol - 2) mod 3);
-//    case DelCol of
-//      dcVolume:
-//        begin
-//          ResultType := rdtDouble;
-//        end;
-//      dcRank:
-//        begin
-//          ResultType := rdtInteger;
-//        end;
-//      else
-//        Assert(False);
-//    end;
-//  end
   else if (DataGrid = frameScreenObjectSfr6.rdgFormulas)
     or (DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) then
   begin
@@ -20480,18 +20541,39 @@ begin
     ((ResultType = rdtDouble) and (CompiledFormula.ResultType = rdtInteger))
       then
   begin
-    DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    if TimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := TimeSeries.SeriesName;
+    end
+    else
+    begin
+      DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    end;
   end
   else if PestParamAllowed then
   begin
-    DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    if TimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := TimeSeries.SeriesName;
+    end
+    else
+    begin
+      DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    end;
   end
   else
   begin
-    Formula := AdjustFormula(Formula, CompiledFormula.ResultType, ResultType);
-    TempCompiler.Compile(Formula);
-    CompiledFormula := TempCompiler.CurrentExpression;
-    DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    if TimeSeries <> nil then
+    begin
+      DataGrid.Cells[ACol, ARow] := TimeSeries.SeriesName;
+    end
+    else
+    begin
+      Formula := AdjustFormula(Formula, CompiledFormula.ResultType, ResultType);
+      TempCompiler.Compile(Formula);
+      CompiledFormula := TempCompiler.CurrentExpression;
+      DataGrid.Cells[ACol, ARow] := CompiledFormula.DecompileDisplay;
+    end;
   end;
   if Assigned(DataGrid.OnSetEditText) then
   begin
@@ -23078,7 +23160,7 @@ begin
       PopupParent := self;
 
       // Show the functions and global variables.
-      IncludeTimeSeries := False;
+      IncludeTimeSeries := GetModflow6TimeSeriesAllowed(DataGrid, ACol);
       UpdateTreeList;
 
       // put the formula in the TfrmFormula.
@@ -23467,7 +23549,7 @@ begin
           end;
         end;
 
-        IncludeTimeSeries := True;
+        IncludeTimeSeries := False;
         UpdateTreeList;
         Formula := FunctionString;
 
@@ -26488,7 +26570,7 @@ begin
         end;
 
         // show the variables and functions
-        IncludeTimeSeries := True;
+        IncludeTimeSeries := GetModflow6TimeSeriesAllowed(DataGrid, ACol);;
         UpdateTreeList;
 
         // put the formula in the TfrmFormula.

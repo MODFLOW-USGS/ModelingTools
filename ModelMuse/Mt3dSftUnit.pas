@@ -1596,44 +1596,17 @@ end;
 procedure TMt3dSftInitConcTimeListLink.CreateTimeLists;
 var
   Index: Integer;
-//  Mt3dmsConcData: TModflowTimeList;
-//  Item: TChemSpeciesItem;
   LocalModel: TPhastModel;
 begin
   TimeLists.Clear;
-//  FListOfTimeLists.Clear;
   LocalModel := frmGoPhast.PhastModel;
   for Index := 0 to LocalModel.MobileComponents.Count - 1 do
   begin
-//    Item := LocalModel.MobileComponents[Index];
-//    Mt3dmsConcData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-//    Mt3dmsConcData.NonParamDescription := Item.Name +  StrConcentration;
-//    Mt3dmsConcData.ParamDescription := Item.Name +  StrConcentrationMulti;
-//    if Model <> nil then
-//    begin
-//      Mt3dmsConcData.OnInvalidate :=
-//        (Model as TCustomModel).InvalidateMt3dmsChemSources;
-//    end;
-//    AddTimeList(Mt3dmsConcData);
-//    FListOfTimeLists.Add(Mt3dmsConcData);
     AddTimeList(nil);
-//    FListOfTimeLists.Add(nil);
   end;
   for Index := 0 to LocalModel.ImmobileComponents.Count - 1 do
   begin
-//    Item := LocalModel.ImmobileComponents[Index];
-//    Mt3dmsConcData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-//    Mt3dmsConcData.NonParamDescription := Item.Name +  StrConcentration;
-//    Mt3dmsConcData.ParamDescription := Item.Name +  StrConcentrationMulti;
-//    if Model <> nil then
-//    begin
-//      Mt3dmsConcData.OnInvalidate :=
-//        (Model as TCustomModel).InvalidateMt3dmsChemSources;
-//    end;
-//    AddTimeList(Mt3dmsConcData);
-//    FListOfTimeLists.Add(Mt3dmsConcData);
     AddTimeList(nil);
-//    FListOfTimeLists.Add(nil);
   end;
 end;
 

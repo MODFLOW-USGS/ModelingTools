@@ -184,6 +184,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -207,6 +208,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -230,6 +232,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'Edit'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -253,6 +256,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = False
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'Edit'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -366,6 +370,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -389,6 +394,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -412,6 +418,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -440,6 +447,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -581,6 +589,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               Columns = <
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -604,6 +613,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -627,6 +637,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = '...'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -655,6 +666,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
                 end
                 item
                   AutoAdjustRowHeights = True
+                  AutoAdjustCaptionRowHeights = False
                   ButtonCaption = 'F()'
                   ButtonFont.Charset = DEFAULT_CHARSET
                   ButtonFont.Color = clWindowText
@@ -746,6 +758,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -769,6 +782,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -792,6 +806,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -815,6 +830,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -838,6 +854,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = 'F()'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -922,6 +939,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
             Columns = <
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -945,6 +963,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText
@@ -968,6 +987,7 @@ inherited frmContaminantTreatmentSystems: TfrmContaminantTreatmentSystems
               end
               item
                 AutoAdjustRowHeights = True
+                AutoAdjustCaptionRowHeights = False
                 ButtonCaption = '...'
                 ButtonFont.Charset = DEFAULT_CHARSET
                 ButtonFont.Color = clWindowText

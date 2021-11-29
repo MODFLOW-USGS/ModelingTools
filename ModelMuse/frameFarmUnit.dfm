@@ -103,6 +103,7 @@ inherited frameFarm: TframeFarm
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -126,6 +127,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -149,6 +151,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -295,6 +298,7 @@ inherited frameFarm: TframeFarm
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -318,6 +322,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -341,6 +346,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -364,6 +370,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -387,6 +394,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -410,6 +418,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -433,6 +442,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -456,6 +466,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -479,6 +490,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -502,6 +514,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -843,6 +856,7 @@ inherited frameFarm: TframeFarm
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -866,6 +880,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -973,6 +988,7 @@ inherited frameFarm: TframeFarm
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -996,6 +1012,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1019,6 +1036,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1115,6 +1133,7 @@ inherited frameFarm: TframeFarm
           Columns = <
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1138,6 +1157,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -1161,6 +1181,7 @@ inherited frameFarm: TframeFarm
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = 'F()'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

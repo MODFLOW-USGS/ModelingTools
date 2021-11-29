@@ -4,8 +4,8 @@ inherited frmCropProperties: TfrmCropProperties
   Caption = 'Farm Crop Properties'
   ClientHeight = 522
   ClientWidth = 683
-  ExplicitWidth = 701
-  ExplicitHeight = 567
+  ExplicitWidth = 699
+  ExplicitHeight = 561
   PixelsPerInch = 96
   TextHeight = 18
   object splitterMain: TJvNetscapeSplitter

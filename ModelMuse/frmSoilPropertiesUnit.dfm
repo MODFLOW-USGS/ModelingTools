@@ -6,7 +6,7 @@ inherited frmSoilProperties: TfrmSoilProperties
   ClientWidth = 681
   OnResize = FormResize
   ExplicitWidth = 697
-  ExplicitHeight = 343
+  ExplicitHeight = 344
   PixelsPerInch = 96
   TextHeight = 18
   object pnlBottom: TPanel
@@ -101,6 +101,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       Columns = <
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -124,6 +125,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -147,6 +149,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -170,6 +173,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = '...'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -198,6 +202,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -221,6 +226,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -244,6 +250,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -267,6 +274,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText
@@ -290,6 +298,7 @@ inherited frmSoilProperties: TfrmSoilProperties
         end
         item
           AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
           ButtonCaption = 'F()'
           ButtonFont.Charset = DEFAULT_CHARSET
           ButtonFont.Color = clWindowText

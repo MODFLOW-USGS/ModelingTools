@@ -11056,6 +11056,7 @@ begin
 
 //      RemoveGIS_Functions;
       // show the variables and functions
+      IncludeTimeSeries := False;
       UpdateTreeList;
       Formula := AFormula;
 
@@ -12094,6 +12095,7 @@ begin
 
       RemoveGIS_Functions;
       // show the variables and functions
+      IncludeTimeSeries := False;
       UpdateTreeList;
       Formula := AFormula;
 

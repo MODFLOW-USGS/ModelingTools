@@ -17,7 +17,8 @@ type
     ftUZF, ftMt3dms, ftCfpFixed, ftCfpPipes, ftCfpRecharge, ftSwrReach,
     ftSwrRain, ftSwrET, ftSwrLateralInflow, ftSwrDirectRunoff, ftSwrStage,
     ftFmpFarmID, ftFmpCropID, ftFmpRefEvap, ftFmpPrecip, ftFmpWell,
-    ftMt3dRechConc, ftMt3dUnsatConc, ftMt3dSatConc, ftMaw);
+    ftMt3dRechConc, ftMt3dUnsatConc, ftMt3dSatConc, ftMaw, ftSfrMf6,
+    ftUzfMf6);
 
   TMfFeatureTypes = set of TMfFeatureType;
 
@@ -108,6 +109,7 @@ type
       SelectedType: TSutraFeatureTypeSelection);
     procedure GetItemsOfSelectedSutraFeature2(
       SelectedType: TSutraFeatureTypeSelection);
+    function Mf6TimeSeriesAllowed: Boolean;
     { Private declarations }
   public
     procedure GetData(ScreenObjects: TScreenObjectList);
@@ -121,7 +123,8 @@ uses
   frmGoPhastUnit, PhastModelUnit, GoPhastTypes, ModflowPackagesUnit,
   ModflowConstantHeadBoundaryUnit, RbwParser, ModflowMnw2Unit,
   ModflowCfpFixedUnit, ModflowCfpPipeUnit, frmFormulaUnit, DataSetUnit,
-  ModflowStrUnit, RealListUnit, SutraBoundariesUnit, ModflowMawUnit;
+  ModflowStrUnit, RealListUnit, SutraBoundariesUnit, ModflowMawUnit,
+  Modflow6TimeSeriesUnit, ModflowUzfMf6Unit;
 
 resourcestring
   StrNoObjectsOfTheSe = 'No objects of the selected type were selected for e' +
@@ -144,7 +147,6 @@ var
   Formula: string;
   TimeList: TModflowTimeList;
   DataType: TRbwDataType;
-//  frmFormula: TfrmFormula;
   DataArrayManager: TDataArrayManager;
   DataSetIndex: Integer;
   DataArray: TDataArray;
@@ -153,6 +155,7 @@ var
   RequiredTypeString: string;
   ErrorMessage: string;
   OkResultType: Boolean;
+  AnMF6TimeSeries: TMf6TimeSeries;
 begin
   inherited;
   TimeList := nil;
@@ -187,7 +190,6 @@ begin
   begin
     DataType := rdtDouble;
   end;
-//  frmFormula := TfrmFormula.Create(nil);
   try
     frmFormula.Initialize;
     frmFormula.IncludeGIS_Functions(eaBlocks);
@@ -215,30 +217,38 @@ begin
       end;
     end;
 
+    frmFormula.IncludeTimeSeries := Mf6TimeSeriesAllowed;
     frmFormula.UpdateTreeList;
     frmFormula.Formula := Formula;
     frmFormula.ShowModal;
     if frmFormula.ResultSet then
     begin
       Formula := frmFormula.Formula;
-      frmFormula.rbFormulaParser.Compile(Formula);
-      ResultDataType := frmFormula.rbFormulaParser.CurrentExpression.ResultType;
-      OkResultType := (ResultDataType = DataType)
-        or ((ResultDataType = rdtInteger) and (DataType = rdtDouble));
-      if not OkResultType then
+      AnMF6TimeSeries := nil;
+      if frmFormula.IncludeTimeSeries then
       begin
-        ResultTypeString := DataTypeToString(ResultDataType);
-        RequiredTypeString := DataTypeToString(DataType);
-        ErrorMessage := Format(StrTheDataTypeRequir,
-          [RequiredTypeString, ResultTypeString]);
-        Beep;
-        MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+        AnMF6TimeSeries := frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(Formula)
+      end;
+      if AnMF6TimeSeries = nil then
+      begin
+        frmFormula.rbFormulaParser.Compile(Formula);
+        ResultDataType := frmFormula.rbFormulaParser.CurrentExpression.ResultType;
+        OkResultType := (ResultDataType = DataType)
+          or ((ResultDataType = rdtInteger) and (DataType = rdtDouble));
+        if not OkResultType then
+        begin
+          ResultTypeString := DataTypeToString(ResultDataType);
+          RequiredTypeString := DataTypeToString(DataType);
+          ErrorMessage := Format(StrTheDataTypeRequir,
+            [RequiredTypeString, ResultTypeString]);
+          Beep;
+          MessageDlg(ErrorMessage, mtError, [mbOK], 0);
+        end;
       end;
       memoFormula.Text := frmFormula.Formula;
     end;
   finally
     frmFormula.Initialize;
-//    frmFormula.Free;
   end;
 end;
 
@@ -456,6 +466,15 @@ begin
             begin
               Include(FMfFeatureTypes, ftMaw);
             end;
+            if Packages.SfrModflow6Package.IsSelected then
+            begin
+              Include(FMfFeatureTypes, ftSfrMf6);
+            end;
+            if Packages.UzfMf6Package.IsSelected then
+            begin
+              Include(FMfFeatureTypes, ftUzfMf6);
+            end;
+
           end;
 
           Packages := PackageList[0];
@@ -579,7 +598,15 @@ begin
             FeatureSelection.FFeatureName :=
               Packages.SfrPackage.PackageIdentifier;
           end;
-          if ftSTR in FMfFeatureTypes then
+           if ftSfrMf6 in FMfFeatureTypes then
+          begin
+            FeatureSelection := TModflowFeatureTypeSelection.Create;
+            FSelectedFeatureTypes.Add(FeatureSelection);
+            FeatureSelection.FFeatureType := ftSfrMf6;
+            FeatureSelection.FFeatureName :=
+              Packages.SfrModflow6Package.PackageIdentifier;
+          end;
+         if ftSTR in FMfFeatureTypes then
           begin
             FeatureSelection := TModflowFeatureTypeSelection.Create;
             FSelectedFeatureTypes.Add(FeatureSelection);
@@ -755,6 +782,14 @@ begin
             FeatureSelection.FFeatureName :=
               Packages.MawPackage.PackageIdentifier;
           end;
+          if ftUzfMf6 in FMfFeatureTypes then
+          begin
+            FeatureSelection := TModflowFeatureTypeSelection.Create;
+            FSelectedFeatureTypes.Add(FeatureSelection);
+            FeatureSelection.FFeatureType := ftUzfMf6;
+            FeatureSelection.FFeatureName :=
+              Packages.UzfMf6Package.PackageIdentifier;
+          end;
 
           for FeatureIndex := FSelectedFeatureTypes.Count - 1 downto 0 do
           begin
@@ -874,7 +909,6 @@ begin
   begin
     TimeList := Boundary.Values.TimeLists[TimeListIndex, frmGoPhast.PhastModel];
     tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList);
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
   end;
 end;
 
@@ -997,13 +1031,12 @@ var
   UZFBoundary: TUzfBoundary;
 begin
   FirstScreenObject := SelectedType.FScreenObjects[0];
-//  Boundary := nil;
   case SelectedType.FFeatureType of
     ftCHD, ftWEL, ftDRN, ftDRT, ftGHB, ftLAK, ftMNW1, ftRES, ftRIV, ftSTR,
       ftMt3dms, ftCfpRecharge, ftSwrReach, ftSwrRain, ftSwrET,
       ftSwrLateralInflow, ftSwrDirectRunoff, ftSwrStage, ftFmpFarmID,
       ftFmpCropID, ftFmpRefEvap, ftFmpPrecip, ftFmpWell, ftMt3dRechConc,
-      ftMt3dUnsatConc, ftMt3dSatConc:
+      ftMt3dUnsatConc, ftMt3dSatConc, ftSfrMf6,ftUzfMf6:
       begin
         Boundary := FeatureTypeToBoundary(SelectedType.FFeatureType, FirstScreenObject);
         AddBoundaryParam2(Boundary, SelectedType.FNode);
@@ -1085,12 +1118,13 @@ begin
         tvFeatures.Items.AddChild(SelectedType.FNode, 'All Skin Ks');
         tvFeatures.Items.AddChild(SelectedType.FNode, 'All Skin Radii');
       end
+//    ftSfrMf6:
+//      begin
+//        Boundary := FeatureTypeToBoundary(SelectedType.FFeatureType, FirstScreenObject);
+//        AddBoundaryParam2(Boundary, SelectedType.FNode);
+//      end
     else Assert(False);
   end;
-//  if comboFeatureProperty.Items.Count = 1 then
-//  begin
-//    comboFeatureProperty.ItemIndex := 0;
-//  end;
 end;
 
 
@@ -1105,7 +1139,6 @@ begin
     TimeList := UzfBoundary.EvapotranspirationDemand.TimeLists[TimeListIndex,
       frmGoPhast.PhastModel];
     tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
   end;
   for TimeListIndex := 0 to UzfBoundary.ExtinctionDepth.TimeListCount(
     frmGoPhast.PhastModel) - 1 do
@@ -1113,7 +1146,6 @@ begin
     TimeList := UzfBoundary.ExtinctionDepth.TimeLists[TimeListIndex,
       frmGoPhast.PhastModel];
     tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
   end;
   for TimeListIndex := 0 to UzfBoundary.WaterContent.TimeListCount(
     frmGoPhast.PhastModel) - 1 do
@@ -1121,7 +1153,6 @@ begin
     TimeList := UzfBoundary.WaterContent.TimeLists[TimeListIndex,
       frmGoPhast.PhastModel];
     tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
   end;
 end;
 
@@ -1131,12 +1162,73 @@ begin
   EnableOkButton;
 end;
 
+function TfrmEditFeatureFormula.Mf6TimeSeriesAllowed: Boolean;
+var
+  SelectedType: TCustomFeatureTypeSelection;
+  MfSelectedType: TModflowFeatureTypeSelection;
+  TimeList: TModflowTimeList;
+  AnObject: TObject;
+begin
+  result := False;
+  if frmGoPhast.ModelSelection <> msModflow2015 then
+  begin
+    Exit;
+  end;
+  SelectedType := tvFeatures.Selected.Parent.Data;
+  if SelectedType is TModflowFeatureTypeSelection then
+  begin
+    MfSelectedType := TModflowFeatureTypeSelection(SelectedType);
+    if MfSelectedType.FFeatureType in [ftCHD, ftRCH, ftDRN, ftETS, ftGHB, ftRIV,
+      ftUzfMf6] then
+    begin
+      result := True;
+    end
+    else if MfSelectedType.FFeatureType = ftETS then
+    begin
+      TimeList := tvFeatures.Selected.Data;
+      if Pos('Fractional', TimeList.nonParamDescription) = 1 then
+      begin
+        result := False;
+      end
+      else
+      begin
+        result := TimeList.DataType = rdtDouble;
+      end;
+    end
+    else if MfSelectedType.FFeatureType = ftMaw then
+    begin
+      AnObject := tvFeatures.Selected.Data;
+      if AnObject is TModflowTimeList then
+      begin
+        TimeList := tvFeatures.Selected.Data;
+        if Pos('Multiaquifer', TimeList.nonParamDescription) = 1 then
+        begin
+          result := True;
+        end;
+      end;
+    end
+    else if MfSelectedType.FFeatureType = ftSfrMf6 then
+    begin
+      AnObject := tvFeatures.Selected.Data;
+      if AnObject is TModflowTimeList then
+      begin
+        TimeList := tvFeatures.Selected.Data;
+        if (TimeList.nonParamDescription <> StrSFR6UpstreamFracti)
+          and (TimeList.nonParamDescription <> StrSFR6ReachNumber)
+          and (TimeList.nonParamDescription <> StrSFR6StreamStatus) then
+        begin
+          result := True;
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TfrmEditFeatureFormula.GetSfrParam2(SfrBoundary: TSfrBoundary; ANode: TTreeNode);
 var
   TimeListIndex: Integer;
   TimeList: TModflowTimeList;
 begin
-    // SfrBoundary.ChannelValues
   tvFeatures.Items.AddChild(ANode, 'Channel Roughness');
   tvFeatures.Items.AddChild(ANode, 'Bank Roughness');
   for TimeListIndex := 0 to SfrBoundary.UpstreamSegmentValues.TimeListCount(frmGoPhast.PhastModel) - 1 do
@@ -1163,12 +1255,6 @@ begin
       frmGoPhast.PhastModel];
     tvFeatures.Items.AddChildObject(ANode, 'Downstream ' + TimeList.NonParamDescription, TimeList)
   end;
-//  for TimeListIndex := 0 to SfrBoundary.TableCollection.Count - 1 do
-//  begin
-//    TimeList := SfrBoundary.TableCollection.TimeLists[TimeListIndex,
-//      frmGoPhast.PhastModel];
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
-//  end;
 
   // SfrBoundary.SegmentFlows
   tvFeatures.Items.AddChild(ANode, 'Flow');
@@ -1181,13 +1267,6 @@ begin
   tvFeatures.Items.AddChild(ANode, 'Depth Exponent');
   tvFeatures.Items.AddChild(ANode, 'Width Coefficient');
   tvFeatures.Items.AddChild(ANode, 'Width Exponent');
-
-//  for TimeListIndex := 0 to SfrBoundary.ParamIcalc.Count - 1 do
-//  begin
-//    TimeList := SfrBoundary.ParamIcalc.TimeLists[TimeListIndex,
-//      frmGoPhast.PhastModel];
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
-//  end;
 end;
 
 procedure TfrmEditFeatureFormula.SetData;
@@ -1232,6 +1311,9 @@ var
   ModflowMawBoundary: TMawBoundary;
   ValueCount: Integer;
   ScreenIndex: Integer;
+  AnMF6TimeSeries: TMf6TimeSeries;
+  ModflowUzfMf6Boundary: TUzfMf6Boundary;
+  UzfFormulaIndex: Integer;
   procedure SetItemFormula(AnItem: TCustomBoundaryItem;
     FormulaIndex: Integer);
   begin
@@ -1301,21 +1383,32 @@ begin
     MF_SelectedType := nil;
     SutraSelectedType := SelectedType as TSutraFeatureTypeSelection;
   end;
+
+
   Formula := memoFormula.Text;
-  try
-    if frmGoPhast.ModelSelection in ModelsWithGrid then
-    begin
-      frmGoPhast.PhastModel.rpThreeDFormulaCompiler.Compile(Formula);
-    end
-    else
-    begin
-      frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes.Compile(Formula);
-    end;
-  except on ERbwParserError do
-    begin
-      Beep;
-      MessageDlg('Invalid Formula', mtError, [mbOK], 0);
-      Exit;
+  AnMF6TimeSeries := nil;
+  if Mf6TimeSeriesAllowed then
+  begin
+    AnMF6TimeSeries := frmGoPhast.PhastModel.Mf6TimesSeries.GetTimeSeriesByName(Formula)
+  end;
+
+  if AnMF6TimeSeries = nil then
+  begin
+    try
+      if frmGoPhast.ModelSelection in ModelsWithGrid then
+      begin
+        frmGoPhast.PhastModel.rpThreeDFormulaCompiler.Compile(Formula);
+      end
+      else
+      begin
+        frmGoPhast.PhastModel.rpThreeDFormulaCompilerNodes.Compile(Formula);
+      end;
+    except on ERbwParserError do
+      begin
+        Beep;
+        MessageDlg('Invalid Formula', mtError, [mbOK], 0);
+        Exit;
+      end;
     end;
   end;
 
@@ -1329,12 +1422,8 @@ begin
 
     FillPropertyCollection(OldProperties, SelectedType.FScreenObjects);
 
-//    Assert(comboFeatureType.ItemIndex >= 0);
-//    FormulaIndex := comboFeatureProperty.ItemIndex;
     FormulaIndex := tvFeatures.Selected.Parent.IndexOf(tvFeatures.Selected);
     Assert(FormulaIndex >= 0);
-//    SelectedType := TModflowFeatureTypeSelection(
-//      comboFeatureType.Items.Objects[comboFeatureType.ItemIndex]);
     UseAllTimes := comboAllTimes.ItemIndex = 0;
     if not UseAllTimes then
     begin
@@ -1353,7 +1442,7 @@ begin
             ftFhbHead, ftFhbFlow, ftMt3dms, ftCfpRecharge, ftSwrReach, ftSwrRain,
             ftSwrET, ftSwrLateralInflow, ftSwrDirectRunoff, ftSwrStage,
             ftFmpFarmID, ftFmpCropID, ftFmpRefEvap, ftFmpPrecip, ftFmpWell,
-            ftMt3dRechConc, ftMt3dUnsatConc, ftMt3dSatConc:
+            ftMt3dRechConc, ftMt3dUnsatConc, ftMt3dSatConc, ftSfrMf6, ftUzfMf6:
             begin
               Boundary := FeatureTypeToBoundary(MF_SelectedType.FFeatureType,
                 ScreenObject);
@@ -1564,7 +1653,6 @@ begin
               end
               else
               begin
-  //              SfrFormulaIndex := SfrFormulaIndex - EquationFlowFormulas;
                 Assert(False);
               end;
             end;
@@ -1590,8 +1678,6 @@ begin
                   end;
                 else Assert(False);
               end;
-    //          AddBoundaryParam(UZFBoundary);
-    //          GetUzfParam(UZFBoundary);
             end;
           ftCfpFixed:
             begin
@@ -1761,7 +1847,6 @@ begin
     TimeList := EtsBoundary.EtsSurfDepthCollection.TimeLists[TimeListIndex,
       frmGoPhast.PhastModel];
     tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
   end;
   if frmGoPhast.PhastModel.ModflowPackages.EtsPackage.TimeVaryingLayers then
   begin
@@ -1771,7 +1856,6 @@ begin
       TimeList := EtsBoundary.EvapotranspirationLayers.TimeLists[TimeListIndex,
         frmGoPhast.PhastModel];
       tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
-//      comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
     end;
   end;
 end;
@@ -1788,7 +1872,6 @@ begin
     begin
       TimeList := RchBoundary.RechargeLayers.TimeLists[TimeListIndex, frmGoPhast.PhastModel];
       tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
-//      comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
     end;
   end;
 end;
@@ -1803,7 +1886,6 @@ begin
   begin
     TimeList := EvtBoundary.EvtSurfDepthCollection.TimeLists[TimeListIndex,
       frmGoPhast.PhastModel];
-//    comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
     tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
   end;
   if frmGoPhast.PhastModel.ModflowPackages.EvtPackage.TimeVaryingLayers then
@@ -1813,7 +1895,6 @@ begin
     begin
       TimeList := EvtBoundary.EvapotranspirationLayers.TimeLists[TimeListIndex,
         frmGoPhast.PhastModel];
-//      comboFeatureProperty.Items.AddObject(TimeList.NonParamDescription, TimeList);
       tvFeatures.Items.AddChildObject(ANode, TimeList.NonParamDescription, TimeList)
     end;
   end;
@@ -1843,9 +1924,7 @@ begin
     ftSTR: Result := ScreenObject.ModflowStrBoundary;
     ftUZF: Result := ScreenObject.ModflowUzfBoundary;
     ftMt3dms: Result := ScreenObject.Mt3dmsConcBoundary;
-//    ftCfpFixed: Result := ScreenObject.ModflowCfpFixedHeads;
     ftCfpFixed: Result := nil;
-//    ftCfpPipes: result := ScreenObject.ModflowCfpPipes;
     ftCfpPipes: result := nil;
     ftCfpRecharge: Result := ScreenObject.ModflowCfpRchFraction;
     ftSwrReach: Result := ScreenObject.ModflowSwrReaches;
@@ -1863,6 +1942,8 @@ begin
     ftMt3dUnsatConc: Result := ScreenObject.Mt3dUztUnsatEtConcBoundary;
     ftMt3dSatConc: Result := ScreenObject.Mt3dUztSatEtConcBoundary;
     ftMaw: Result := ScreenObject.ModflowMawBoundary;
+    ftSfrMf6: result := ScreenObject.ModflowSfr6Boundary;
+    ftUzfMf6: result := ScreenObject.ModflowUzfMf6Boundary
     else Assert(False);
   end;
 end;
@@ -1884,7 +1965,6 @@ begin
     ScreenObjectClass := TScreenObjectClass(ScreenObject.ClassType);
     Item.ScreenObject := ScreenObjectClass.Create(nil);
     Item.ScreenObject.CanInvalidateModel := False;
-//    ScreenObject := List[Index];
     PriorCanInvalidateModel := ScreenObject.CanInvalidateModel;
     try
       ScreenObject.CanInvalidateModel := False;
@@ -2200,6 +2280,22 @@ begin
           begin
             if ((AScreenObject.ModflowMawBoundary <> nil)
               and AScreenObject.ModflowMawBoundary.Used) then
+            begin
+              SelectedType.FScreenObjects.Add(AScreenObject);
+            end;
+          end;
+        ftSfrMf6:
+          begin
+            if ((AScreenObject.ModflowSfr6Boundary <> nil)
+              and AScreenObject.ModflowSfr6Boundary.Used) then
+            begin
+              SelectedType.FScreenObjects.Add(AScreenObject);
+            end;
+          end;
+        ftUzfMf6:
+          begin
+            if ((AScreenObject.ModflowUzfMf6Boundary <> nil)
+              and AScreenObject.ModflowUzfMf6Boundary.Used) then
             begin
               SelectedType.FScreenObjects.Add(AScreenObject);
             end;

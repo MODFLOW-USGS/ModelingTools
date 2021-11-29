@@ -370,6 +370,7 @@ begin
         end;
       end;
 
+      IncludeTimeSeries := False;
       UpdateTreeList;
       Formula := FunctionString;
 

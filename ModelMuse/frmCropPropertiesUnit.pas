@@ -584,6 +584,7 @@ begin
       PopupParent := self;
 
       // Show the functions and global variables.
+      IncludeTimeSeries := False;
       UpdateTreeList;
 
       // put the formula in the TfrmFormula.

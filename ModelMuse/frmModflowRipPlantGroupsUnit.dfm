@@ -5,8 +5,8 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
   ClientHeight = 415
   ClientWidth = 617
   ExplicitWidth = 633
-  ExplicitHeight = 453
-  PixelsPerInch = 120
+  ExplicitHeight = 454
+  PixelsPerInch = 96
   TextHeight = 18
   object splMain: TSplitter
     Left = 177
@@ -128,7 +128,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         ExplicitTop = 6
       end
       object btnInsertPlantGroup: TSpeedButton
-        Left = 75
+        Left = 76
         Top = 5
         Width = 23
         Height = 22
@@ -392,10 +392,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
     object tabTranspirationRateCurve: TTabSheet
       Caption = 'Transpiration Rate Curve'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pbTranspirationCurve: TPaintBox
         Left = 275
         Top = 0
@@ -443,6 +439,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
           Columns = <
             item
               AutoAdjustRowHeights = False
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -466,6 +463,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText
@@ -490,6 +488,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
             end
             item
               AutoAdjustRowHeights = True
+              AutoAdjustCaptionRowHeights = False
               ButtonCaption = '...'
               ButtonFont.Charset = DEFAULT_CHARSET
               ButtonFont.Color = clWindowText

@@ -200,6 +200,7 @@ begin
       end;
 
       // Show the functions and global variables.
+      frmFormula.IncludeTimeSeries := False;
       frmFormula.UpdateTreeList;
 
       // put the formula in the TfrmFormula.
