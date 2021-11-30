@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="CFM3_example2" FileType="bin">
-    <FileName Model_Name="CFM3_example2" FileType="bin">C:\WRDAPP\CFP\mf2005cfp.exe</FileName>
+    <FileName Model_Name="CFM3_example2" FileType="bin">..\..\..\WRDAPP\CFP\mf2005cfp.exe</FileName>
   </bin>
   <ancillary Model_Name="CFM3_example2" FileType="ancillary">
     <FileName Model_Name="CFM3_example2" FileType="ancillary">CFM3_example2.gpt</FileName>

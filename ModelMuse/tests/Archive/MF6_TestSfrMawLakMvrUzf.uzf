@@ -1,4 +1,4 @@
-# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 2/16/2021 by ModelMuse version 4.3.0.40.
+# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 11/30/2021 by ModelMuse version 4.3.0.74.
 BEGIN OPTIONS
     PRINT_INPUT
     SAVE_FLOWS
@@ -17,6 +17,7 @@ BEGIN DIMENSIONS
 END DIMENSIONS
 
 BEGIN PACKAGEDATA
+# <iuzno> <cellid(ncelldim)> <landflag> <ivertcon> <surfdep> <vks> <thtr> <thts> <thti> <eps> [<boundname>]
        1     1     4     4     1     0  1.000000000000E+000   1.000000000000E-005   1.000000000000E-001   3.000000000000E-001   2.000000000000E-001   3.500000000000E+000  UZF
        2     1     4     5     1     0  1.000000000000E+000   1.000000000000E-005   1.000000000000E-001   3.000000000000E-001   2.000000000000E-001   3.500000000000E+000  UZF
        3     1     4     6     1     0  1.000000000000E+000   1.000000000000E-005   1.000000000000E-001   3.000000000000E-001   2.000000000000E-001   3.500000000000E+000  UZF
