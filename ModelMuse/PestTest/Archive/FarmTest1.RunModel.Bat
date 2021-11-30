@@ -1,6 +1,5 @@
 if exist "FarmTest1.fmp" del "FarmTest1.fmp"
 if exist "FarmTest1.Mf2005Values" del "FarmTest1.Mf2005Values"
-if exist "FarmTest1.sfr" del "FarmTest1.sfr"
 if exist "FarmTest1.cbc" del "FarmTest1.cbc"
 if exist "FarmTest1.fdn" del "FarmTest1.fdn"
 if exist "FarmTest1.FDS_BIN" del "FarmTest1.FDS_BIN"
@@ -22,7 +21,6 @@ if exist "FarmTest15.uzfg" del "FarmTest15.uzfg"
 if exist "OWHM_EX1.t.ByNode" del "OWHM_EX1.t.ByNode"
 if exist "OWHM_EX1.t.Qsum" del "OWHM_EX1.t.Qsum"
 if exist "OWHM_EX1.t.wl1" del "OWHM_EX1.t.wl1"
-"C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" FarmTest1.sfr.tpl FarmTest1.pval
 "C:\ModelingTools\ModelMuse\Debug\Win32\EnhancedTemplateProcessor.exe" FarmTest1.fmp.tpl FarmTest1.pval
 C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe FarmTest1.nam /wait
 "C:\ModelingTools\ModelMuse\Debug\Win32\Mf2005ObsExtractor.exe" FarmTest1.Mf2005ExtractValues

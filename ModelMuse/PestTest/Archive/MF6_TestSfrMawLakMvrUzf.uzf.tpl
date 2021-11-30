@@ -1,7 +1,7 @@
 ptf @
 etf %
 %ReadArrays(MF6_TestSfrMawLakMvrUzf.uzf.txt)%
-# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 8/17/2021 by ModelMuse version 4.3.0.59.
+# UZF6: Unsaturated-Zone Flow Package for MODFLOW 6 file created on 11/29/2021 by ModelMuse version 4.3.0.74.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     PRINT_INPUT
@@ -22,6 +22,7 @@ BEGIN DIMENSIONS
 END DIMENSIONS
 
 BEGIN PACKAGEDATA
+# <iuzno> <cellid(ncelldim)> <landflag> <ivertcon> <surfdep> <vks> <thtr> <thts> <thti> <eps> [<boundname>]
        1     1     4     4     1     0 %                    1 *  ~                    UZF6_Surface_Depression_Depth[1, 4, 4]~%   1.000000000000E-005   1.000000000000E-001   3.000000000000E-001   2.000000000000E-001   3.500000000000E+000  UZF
        2     1     4     5     1     0 %                    1 *  ~                    UZF6_Surface_Depression_Depth[1, 4, 5]~%   1.000000000000E-005   1.000000000000E-001   3.000000000000E-001   2.000000000000E-001   3.500000000000E+000  UZF
        3     1     4     6     1     0 %                    1 *  ~                    UZF6_Surface_Depression_Depth[1, 4, 6]~%   1.000000000000E-005   1.000000000000E-001   3.000000000000E-001   2.000000000000E-001   3.500000000000E+000  UZF
