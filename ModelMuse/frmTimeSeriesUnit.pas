@@ -90,6 +90,7 @@ begin
   NewItem := FTimesSeries.Add;
   NewItem.TimesSeriesCollection.GroupName := AnsiString(NewName);
   NewFrame.GetData(NewItem, FPestNames);
+  tvTimeSeries.Selected.Data := NewItem.TimesSeriesCollection;
 end;
 
 procedure TfrmTimeSeries.btnDeleteGroupClick(Sender: TObject);
@@ -98,11 +99,23 @@ var
   AFrame: TframeModflow6TimeSeries;
   APage: TJvCustomPage;
   NewActivePageIndex: Integer;
+  TimesSeriesCollection: TTimesSeriesCollection;
+  TimeSeries: TMf6TimeSeries;
+  SeriesIndex: Integer;
 begin
   inherited;
   if tvTimeSeries.Selected <> nil then
   begin
-    FTimesSeries.Items[plTimeSeries.ActivePageIndex].Free;
+    TimesSeriesCollection := tvTimeSeries.Selected.Data;
+    if TimesSeriesCollection <> nil then
+    begin
+      TimesSeriesCollection.Deleted := True;
+      for SeriesIndex := 0 to TimesSeriesCollection.Count - 1 do
+      begin
+        TimeSeries := TimesSeriesCollection[SeriesIndex].TimeSeries;
+        TimeSeries.Deleted := True;
+      end;
+    end;
     NewActivePageIndex := Max(plTimeSeries.ActivePageIndex-1,0);
     plTimeSeries.ActivePage.Free;
     tvTimeSeries.Selected.Free;
@@ -190,7 +203,12 @@ begin
   for SeriesIndex := 0 to FTimesSeries.Count - 1 do
   begin
     ASeriesItem := FTimesSeries[SeriesIndex];
+    if ASeriesItem.TimesSeriesCollection.Deleted then
+    begin
+      Continue;
+    end;
     NewFrame := AddNewFrame(String(ASeriesItem.TimesSeriesCollection.GroupName));
+    tvTimeSeries.Selected.Data := ASeriesItem.TimesSeriesCollection;
     NewFrame.GetData(ASeriesItem, FPestNames);
   end;
 end;
@@ -240,8 +258,8 @@ var
   AFrame: TframeModflow6TimeSeries;
   SeriesIndex: Integer;
 begin
-  Assert(plTimeSeries.PageCount = FTimesSeries.Count);
-  for SeriesIndex := 0 to FTimesSeries.Count - 1 do
+//  Assert(plTimeSeries.PageCount = FTimesSeries.Count);
+  for SeriesIndex := 0 to plTimeSeries.PageCount - 1 do
   begin
     AFrame := plTimeSeries.Pages[SeriesIndex].Controls[0] as TframeModflow6TimeSeries;
     AFrame.SetData;
@@ -358,6 +376,7 @@ begin
   result.edGroupName.Text := NewName;
   result.InitializeGrid;
   plTimeSeries.ActivePage := NewPage;
+  tvTimeSeries.Selected := NewNode;
 end;
 
 procedure TfrmTimeSeries.tvTimeSeriesChange(Sender: TObject; Node: TTreeNode);

@@ -14,6 +14,7 @@ type
     FStoredScaleFactor: TRealStorage;
     FParamMethod: TPestParamMethod;
     FNotifierComponent: TComponent;
+    FDeleted: Boolean;
     function GetScaleFactor: double;
     procedure SetInterpolationMethod(const Value: TMf6InterpolationMethods);
     procedure SetScaleFactor(const Value: double);
@@ -38,6 +39,7 @@ type
       write SetScaleFactorParameter;
     property ParamMethod: TPestParamMethod read FParamMethod
       write SetParamMethod;
+    property Deleted: Boolean read FDeleted write FDeleted;
 //    function GetInterpolatedValue(Model: TBaseModel; Time: double;
 //      StartTimeOffset: double = 0): double;
   end;
@@ -64,6 +66,7 @@ begin
     ScaleFactor := TimeSeriesSource.ScaleFactor;
     ScaleFactorParameter := TimeSeriesSource.ScaleFactorParameter;
     ParamMethod := TimeSeriesSource.ParamMethod;
+    Deleted := TimeSeriesSource.Deleted;
   end;
   inherited;
 end;
@@ -146,8 +149,8 @@ end;
 
 procedure TMf6TimeSeries.SetSeriesName(Value: AnsiString);
 const
-  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '@', '#', '$', '%', '^', '&',
-     '*', '(', ')', '_', '-', '<', '>', '?', '.'];
+  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '`','!', '@', '#', '$', '%',
+    '^', '&', '(', ')', '_', '-', '.', '+', '=', '{', '}', '[', ']'];
 var
   CharIndex: Integer;
   AChar: AnsiChar;

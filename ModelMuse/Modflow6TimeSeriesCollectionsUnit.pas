@@ -28,6 +28,7 @@ type
     FGroupName: AnsiString;
     FInputFile: TStreamReader;
     FTimeSeriesDictionary: TDictionary<string, TMf6TimeSeries>;
+    FDeleted: Boolean;
     function GetItem(Index: Integer): TTimeSeriesItem;
     function GetTimeCount: Integer;
     procedure SetItem(Index: Integer; const Value: TTimeSeriesItem);
@@ -48,9 +49,11 @@ type
     procedure ReadFromFile(const AFileName: string);
     function GetInterpolatedValue(Model: TBaseModel; Time: double; const
       SeriesName: string; StartTimeOffset: double = 0): double;
+    procedure Loaded;
   published
     property Times: TRealCollection read FTimes write SetTimes;
     property GroupName: AnsiString read FGroupName write SetGroupName;
+    property Deleted: Boolean read FDeleted write FDeleted;
   end;
 
   TTimesSeriesGroups = TObjectList<TTimesSeriesCollection>;
@@ -90,6 +93,7 @@ type
     function GetTimesSeriesCollectionBySeriesName(
       const ASeriesName: string): TTimesSeriesCollection;
     property TimeSeriesNames: TStringList read GetTimeSeriesNames;
+    procedure Loaded;
   end;
 
 implementation
@@ -152,6 +156,7 @@ begin
     TSGroup := TTimesSeriesCollection(Source);
     Times := TSGroup.Times;
     GroupName := TSGroup.GroupName;
+    Deleted := TSGroup.Deleted;
   end;
   inherited;
 end;
@@ -411,6 +416,10 @@ begin
     for ItemIndex := 0 to Count - 1 do
     begin
       TimeSeries := Items[ItemIndex].TimeSeries;
+      if TimeSeries.Deleted then
+      begin
+        Continue;
+      end;
       FTimeSeriesDictionary.Add(UpperCase(TimeSeries.SeriesName), TimeSeries);
     end;
   end;
@@ -432,6 +441,19 @@ begin
     OtherCollection := TTimesSeriesCollection(TTimesSeriesCollection);
     result := (GroupName = OtherCollection.GroupName)
       and (Times.IsSame(OtherCollection.Times));
+  end;
+end;
+
+procedure TTimesSeriesCollection.Loaded;
+var
+  SeriesIndex: Integer;
+begin
+  for SeriesIndex := Count - 1 downto 0 do
+  begin
+    if Items[SeriesIndex].TimeSeries.Deleted then
+    begin
+      Items[SeriesIndex].Free;
+    end;
   end;
 end;
 
@@ -574,8 +596,8 @@ end;
 
 procedure TTimesSeriesCollection.SetGroupName(Value: AnsiString);
 const
-  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '@', '#', '$', '%', '^', '&',
-     '*', '(', ')', '_', '-', '<', '>', '?', '.'];
+  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '`','!', '@', '#', '$', '%',
+    '^', '&', '(', ')', '_', '-', '.', '+', '=', '{', '}', '[', ']'];
 var
   CharIndex: Integer;
   AChar: AnsiChar;
@@ -721,9 +743,17 @@ begin
     for GroupIndex := 0 to Count - 1 do
     begin
       AGroup := Items[GroupIndex].TimesSeriesCollection;
+      if AGroup.Deleted then
+      begin
+        Continue;
+      end;
       for SeriesIndex := 0 to AGroup.Count - 1 do
       begin
         ASeries := AGroup[SeriesIndex].TimeSeries;
+        if ASeries.Deleted then
+        begin
+          Continue;
+        end;
         FTimeSeriesDictionary.Add(UpperCase(ASeries.SeriesName), ASeries);
       end;
     end;
@@ -740,7 +770,7 @@ var
   GroupIndex: Integer;
   AGroup: TTimesSeriesCollection;
   SeriesIndex: Integer;
-  SeriesName:String;
+  TimeSeries: TMf6TimeSeries;
 begin
   if FTimeSeriesNames = nil then
   begin
@@ -753,10 +783,18 @@ begin
   for GroupIndex := 0 to Count - 1 do
   begin
     AGroup := Items[GroupIndex].TimesSeriesCollection;
+    if AGroup.Deleted then
+    begin
+      Continue;
+    end;
     for SeriesIndex := 0 to AGroup.Count - 1 do
     begin
-      SeriesName := AGroup[SeriesIndex].TimeSeries.SeriesName;
-      FTimeSeriesNames.Add(SeriesName);
+      TimeSeries := AGroup[SeriesIndex].TimeSeries;
+      if TimeSeries.Deleted then
+      begin
+        Continue;
+      end;
+      FTimeSeriesNames.Add(TimeSeries.SeriesName);
     end;
   end;
   result := FTimeSeriesNames
@@ -768,7 +806,7 @@ var
   GroupIndex: Integer;
   AGroup: TTimesSeriesCollection;
   SeriesIndex: Integer;
-  SeriesName:String;
+  TimeSeries: TMf6TimeSeries;
 begin
   result := nil;
   if (Count > 0) then
@@ -778,10 +816,18 @@ begin
       for GroupIndex := 0 to Count - 1 do
       begin
         AGroup := Items[GroupIndex].TimesSeriesCollection;
+        if AGroup.Deleted then
+        begin
+          Continue;
+        end;
         for SeriesIndex := 0 to AGroup.Count - 1 do
         begin
-          SeriesName := AGroup[SeriesIndex].TimeSeries.SeriesName;
-          FTimeSeriesGroupsDictionary.Add(UpperCase(SeriesName), AGroup);
+          TimeSeries := AGroup[SeriesIndex].TimeSeries;
+          if TimeSeries.Deleted then
+          begin
+            Continue;
+          end;
+          FTimeSeriesGroupsDictionary.Add(UpperCase(TimeSeries.SeriesName), AGroup);
         end;
       end;
     end;
@@ -814,6 +860,10 @@ begin
     for GroupIndex := 0 to Count - 1 do
     begin
       AGroup := Items[GroupIndex].TimesSeriesCollection;
+      if AGroup.Deleted then
+      begin
+        Continue;
+      end;
       UsedGroup := nil;
       for SeriesIndex := LocalSeriesNames.Count - 1 downto 0 do
       begin
@@ -821,7 +871,7 @@ begin
         if SeriesName <> '' then
         begin
           TimeSeries := AGroup.GetValuesByName(SeriesName);
-          if TimeSeries <> nil then
+          if (TimeSeries <> nil) and not TimeSeries.Deleted then
           begin
             if UsedGroup = nil then
             begin
@@ -845,6 +895,23 @@ begin
     end;
   finally
     LocalSeriesNames.Free;
+  end;
+end;
+
+procedure TTimesSeriesCollections.Loaded;
+var
+  Index: Integer;
+begin
+  for Index := Count - 1 downto 0 do
+  begin
+    if Items[Index].TimesSeriesCollection.Deleted then
+    begin
+      Items[Index].Free;
+    end
+    else
+    begin
+      Items[Index].TimesSeriesCollection.Loaded;
+    end;
   end;
 end;
 

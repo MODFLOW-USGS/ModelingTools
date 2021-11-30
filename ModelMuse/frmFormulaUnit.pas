@@ -1136,12 +1136,20 @@ begin
       for GroupIndex := 0 to Mf6TimesSeries.Count - 1 do
       begin
         Group := Mf6TimesSeries[GroupIndex].TimesSeriesCollection;
+        if Group.Deleted then
+        begin
+          Continue;
+        end;
         if Group.Count > 0 then
         begin
           ParentNode := tvItems.Items.AddChild(FTimeSeries, Group.GroupName);
           for SeriesIndex := 0 to Group.Count - 1 do
           begin
             ASeries := Group[SeriesIndex].TimeSeries;
+            if ASeries.Deleted then
+            begin
+              Continue;
+            end;
             tvItems.Items.AddChildObject(ParentNode, ASeries.SeriesName, ASeries);
             FTimesSeriesNames.Add(ASeries.SeriesName);
           end;

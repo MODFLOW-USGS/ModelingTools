@@ -311,7 +311,7 @@ end;
 
 function TFormulaObject.GetFormula: string;
 begin
-  if FTimeSeries <> nil then
+  if (FTimeSeries <> nil) and not FTimeSeries.Deleted then
   begin
     result := FTimeSeries.SeriesName;
   end

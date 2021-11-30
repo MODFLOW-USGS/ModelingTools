@@ -18825,6 +18825,7 @@ var
   Component: TComponentCrack;
 begin
   inherited;
+  Mf6TimeSeries.Loaded;
   for Index := 0 to ComponentCount - 1 do
   begin
     Component := TComponentCrack(Components[Index]);

@@ -98,7 +98,7 @@ inherited frmTimeSeries: TfrmTimeSeries
     end
     object btnDeleteGroup: TButton
       Left = 104
-      Top = 8
+      Top = 6
       Width = 105
       Height = 25
       Caption = 'Delete Group'
