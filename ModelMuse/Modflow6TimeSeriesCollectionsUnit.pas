@@ -595,18 +595,15 @@ begin
 end;
 
 procedure TTimesSeriesCollection.SetGroupName(Value: AnsiString);
-const
-  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '`','!', '@', '#', '$', '%',
-    '^', '&', '(', ')', '_', '-', '.', '+', '=', '{', '}', '[', ']'];
 var
   CharIndex: Integer;
-  AChar: AnsiChar;
+  AChar: Char;
 begin
   Value := Trim(Value);
   for CharIndex := 1 to Length(Value) do
   begin
-    AChar := Value[CharIndex];
-    if not (AChar in AllowableChars) then
+    AChar := Char(Value[CharIndex]);
+    if (AChar = ' ') or not (TPath.IsValidFileNameChar(AChar)) then
     begin
       Value[CharIndex] := '_'
     end;

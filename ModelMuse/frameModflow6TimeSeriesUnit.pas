@@ -152,7 +152,7 @@ begin
       rrdgTimeSeries.ItemIndex[ColIndex, Ord(tsrInterpolation)] :=
         Ord(ASeries.InterpolationMethod);
 
-      Assert(ASeries.Count = FTimesSeriesGroup.Times.Count);
+//      Assert(ASeries.Count = FTimesSeriesGroup.Times.Count);
       for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
       begin
         rrdgTimeSeries.RealValue[ColIndex, TimeIndex + Ord(tsrFirstTime)]
@@ -294,6 +294,10 @@ procedure TframeModflow6TimeSeries.seTimeSeriesCountChange(Sender: TObject);
 var
   ColIndex: Integer;
   TimeSeries: TMf6TimeSeries;
+  ASeries: TMf6TimeSeries;
+  SeriesToUse: TMf6TimeSeries;
+  ColToUse: Integer;
+  SeriesIndex: Integer;
 begin
   rrdgTimeSeries.BeginUpdate;
   try
@@ -311,17 +315,29 @@ begin
     btnDeleteTimeSeries.Enabled := seTimeSeriesCount.AsInteger > 0;
     for ColIndex := Ord(tscFirstSeries) to rrdgTimeSeries.ColCount - 1 do
     begin
-      if rrdgTimeSeries.Objects[ColIndex, 0] = nil then
+      SeriesToUse := nil;
+      ColToUse := Ord(tscFirstSeries)-1;
+      for SeriesIndex := 0 to FTimesSeriesGroup.Count - 1 do
       begin
-        if FTimesSeriesGroup.Count > ColIndex - Ord(tscFirstSeries) then
+        ASeries := FTimesSeriesGroup[SeriesIndex].TimeSeries;
+        if ASeries.Deleted then
         begin
-          rrdgTimeSeries.Objects[ColIndex, 0] :=
-            FTimesSeriesGroup[ColIndex - Ord(tscFirstSeries)]
-        end
-        else
-        begin
-          rrdgTimeSeries.Objects[ColIndex, 0] := FTimesSeriesGroup.Add;
+          Continue;
         end;
+        Inc(ColToUse);
+        if ColToUse = ColIndex then
+        begin
+          SeriesToUse := ASeries;
+          break;
+        end;
+      end;
+      if SeriesToUse = nil then
+      begin
+        rrdgTimeSeries.Objects[ColIndex, 0] := FTimesSeriesGroup.Add.TimeSeries;
+      end
+      else
+      begin
+        rrdgTimeSeries.Objects[ColIndex, 0] := SeriesToUse;
       end;
       rrdgTimeSeries.Columns[ColIndex].AutoAdjustColWidths := True;
       if (rrdgTimeSeries.Cells[ColIndex, Ord(tsrPestModifier)] = '')

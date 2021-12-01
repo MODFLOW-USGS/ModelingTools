@@ -3697,12 +3697,12 @@ inherited frmGoPhast: TfrmGoPhast
     end
     object acImportMf6FeatureFromPest: TAction
       Category = 'File'
-      Caption = 'MODFLOW 6 Feature Modified by PEST'
+      Caption = 'MODFLOW 6 Feature'
       OnExecute = acImportMf6FeatureFromPestExecute
     end
     object acImportSutraFeaturesFromPest: TAction
       Category = 'File'
-      Caption = 'SUTRA Feature Modified by PEST'
+      Caption = 'SUTRA Feature'
       OnExecute = acImportSutraFeaturesFromPestExecute
     end
     object acTimeSeries: TAction

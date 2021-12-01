@@ -101,7 +101,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4290</config-value>
+      <config-value name="autohelpstart">4293</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1749,6 +1749,7 @@ document.write('</frameset>');
       <helpcontext-number href="Three-Dimensional_View" value="170"/>
       <helpcontext-number href="Time_Control_Dialog_Box" value="2870"/>
       <helpcontext-number href="Time_Control_Dialog_Box#Start_time" value="3420"/>
+      <helpcontext-number href="Time_Series_Dialog_Box" value="4293"/>
       <helpcontext-number href="Time_series_interpolation" value="4076"/>
       <helpcontext-number href="Time_Step_Length_Calculator" value="3509"/>
       <helpcontext-number href="Time_Tab" value="2090"/>

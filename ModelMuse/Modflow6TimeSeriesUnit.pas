@@ -47,7 +47,7 @@ type
 implementation
 
 uses
-  System.SysUtils, System.Character, System.AnsiStrings;
+  System.SysUtils, System.Character, System.AnsiStrings, System.IOUtils;
 
 //uses
 //  PhastModelUnit, ModflowTimeUnit;
@@ -148,18 +148,15 @@ begin
 end;
 
 procedure TMf6TimeSeries.SetSeriesName(Value: AnsiString);
-const
-  AllowableChars = ['a'..'z', 'A'..'Z', '0'..'9', '`','!', '@', '#', '$', '%',
-    '^', '&', '(', ')', '_', '-', '.', '+', '=', '{', '}', '[', ']'];
 var
   CharIndex: Integer;
-  AChar: AnsiChar;
+  AChar: Char;
 begin
   Value := Trim(Copy(Trim(Value), 1, MaxTimeSeriesNameLength));
   for CharIndex := 1 to Length(Value) do
   begin
-    AChar := Value[CharIndex];
-    if not (AChar in AllowableChars) then
+    AChar := Char(Value[CharIndex]);
+    if (AChar = ' ') or not (TPath.IsValidFileNameChar(AChar)) then
     begin
       Value[CharIndex] := '_'
     end;

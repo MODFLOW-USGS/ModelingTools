@@ -213,18 +213,18 @@
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|MODFLOW 6 Feature Modified by PEST</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|MODFLOW 6 Feature</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import MODFLOW 6 </text><text styleclass="Normal" translate="true">features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_MODFLOW_6_Feature_Modif" styleclass="Strong" translate="true">Import MODFLOW 6 Feature Modified by PEST</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import MODFLOW 6 </text><text styleclass="Normal" translate="true">features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_MODFLOW_6_Feature_Modif" styleclass="Strong" translate="true">Import MODFLOW 6 Feature</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
         <td style="width:221px;">
-          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|SUTRA Features Modified by PEST</text></para>
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|SUTRA Features</text></para>
         </td>
         <td style="width:405px;">
-          <para styleclass="Table Cell"><text styleclass="Normal" translate="true">Import SUTRA features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_SUTRA_Feature_Modified_" styleclass="Strong" translate="true">Import SUTRA Feature Modified by PEST</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
+          <para styleclass="Table Cell"><text styleclass="Normal" translate="true">Import SUTRA features for visualization. See the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_SUTRA_Feature_Modified_" styleclass="Strong" translate="true">Import SUTRA Feature</link><text styleclass="Normal" translate="true"> dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">
