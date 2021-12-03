@@ -53,40 +53,22 @@ type
     property EtsSurfDepthArray: TEtsSurfDepthArray read GetEtsSurfDepthArray;
   end;
 
-  TStringCollection = class;
-
-  TStringValueItem = class(TFormulaOrderedItem)
-  private
-    FValue: TFormulaObject;
-    FObserver: TObserver;
-    procedure SetValue(const Value: string);
-    function StringCollection: TStringCollection;
-    function GetValue: string;
-    procedure RemoveSubscription(Sender: TObject; const AName: string);
-    procedure RestoreSubscription(Sender: TObject; const AName: string);
-  protected
-    function IsSame(AnotherItem: TOrderedItem): boolean; override;
-    function GetObserver(Index: Integer): TObserver; override;
-    function GetScreenObject: TObject; override;
+  TEtsStringValueItem = class(TCustomStringValueItem)
   public
-    procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
-  published
-    property Value: string read GetValue write SetValue;
   end;
 
   TStringCollectionPurpose = (scpDepthFractions, scpEtFractions);
   TEtsSurfDepthCollection = class;
 
-  TStringCollection = class(TCustomObjectOrderedCollection)
+  TEtsStringCollection = class(TCustomStringCollection)
   private
     FPurpose: TStringCollectionPurpose;
-    FEtsSurfDepthCollection: TCollection;
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Model: TBaseModel; ScreenObject: TObject;
-      EtsSurfDepthCollection: TCollection);
+      EtsSurfDepthCollection: TCustomListArrayBoundColl);
     property Purpose: TStringCollectionPurpose read FPurpose write FPurpose;
   end;
 
@@ -96,13 +78,13 @@ type
   private
     FEvapotranspirationSurface: TFormulaObject;
     FEvapotranspirationDepth: TFormulaObject;
-    FDepthFractions: TStringCollection;
-    FEtFractions: TStringCollection;
+    FDepthFractions: TEtsStringCollection;
+    FEtFractions: TEtsStringCollection;
     // See @link(EvapotranspirationSurface).
     procedure SetEvapotranspirationSurface(const Value: string);
     procedure SetEvapotranspirationDepth(const Value: string);
-    procedure SetDepthFractions(const Value: TStringCollection);
-    procedure SetEtFractions(const Value: TStringCollection);
+    procedure SetDepthFractions(const Value: TEtsStringCollection);
+    procedure SetEtFractions(const Value: TEtsStringCollection);
     function GetEvapotranspirationDepth: string;
     function GetEvapotranspirationSurface: string;
   protected
@@ -129,9 +111,9 @@ type
       write SetEvapotranspirationSurface;
     property EvapotranspirationDepth: string read GetEvapotranspirationDepth
       write SetEvapotranspirationDepth;
-    property EtFractions: TStringCollection read FEtFractions
+    property EtFractions: TEtsStringCollection read FEtFractions
       write SetEtFractions;
-    property DepthFractions: TStringCollection read FDepthFractions
+    property DepthFractions: TEtsStringCollection read FDepthFractions
       write SetDepthFractions;
   end;
 
@@ -422,12 +404,6 @@ type
       {$ENDIF}
       ;
   end;
-
-procedure StringValueRemoveSubscription(Sender: TObject; Subject: TObject;
-  const AName: string);
-
-procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
-  const AName: string);
 
 resourcestring
   StrEvapotranspirationD_ETS = 'Evapotranspiration depth in the ETS package ' +
@@ -1437,12 +1413,14 @@ end;
 constructor TEtsSurfDepthItem.Create(Collection: TCollection);
 var
   Model: TBaseModel;
+  LocalCollection: TCustomListArrayBoundColl;
 begin
   inherited;
-  Model := (Collection as TOrderedCollection).Model;
-  FEtFractions := TStringCollection.Create(Model, ScreenObject, Collection);
+  LocalCollection := Collection as TCustomListArrayBoundColl;
+  Model := LocalCollection.Model;
+  FEtFractions := TEtsStringCollection.Create(Model, ScreenObject, LocalCollection);
   FEtFractions.Purpose := scpEtFractions;
-  FDepthFractions := TStringCollection.Create(Model, ScreenObject, Collection);
+  FDepthFractions := TEtsStringCollection.Create(Model, ScreenObject, LocalCollection);
   FDepthFractions.Purpose := scpDepthFractions;
 end;
 
@@ -1463,8 +1441,8 @@ end;
 
 function TEtsSurfDepthItem.GetBoundaryFormula(Index: integer): string;
 var
-  Item: TStringValueItem;
-  Collection: TStringCollection;
+  Item: TEtsStringValueItem;
+  Collection: TEtsStringCollection;
 begin
   case Index of
     EtsSurfacePosition: result := EvapotranspirationSurface;
@@ -1485,7 +1463,7 @@ begin
         begin
           Collection.Add;
         end;
-        Item := Collection.Items[Index] as TStringValueItem;
+        Item := Collection.Items[Index] as TEtsStringValueItem;
         result := Item.Value;
       end;
   end;
@@ -1506,7 +1484,7 @@ end;
 procedure TEtsSurfDepthItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Index: integer;
-  Item: TStringValueItem;
+  Item: TEtsStringValueItem;
 begin
   if Sender = FEvapotranspirationSurface then
   begin
@@ -1519,18 +1497,18 @@ begin
 
   for Index := 0 to EtFractions.Count - 1 do
   begin
-    Item := EtFractions.Items[Index] as TStringValueItem;
+    Item := EtFractions.Items[Index] as TEtsStringValueItem;
     if Item.FValue = Sender then
     begin
-      List.Add(Item.FObserver);
+      List.Add(Item.Observer);
     end;
   end;
   for Index := 0 to DepthFractions.Count - 1 do
   begin
-    Item := DepthFractions.Items[Index] as TStringValueItem;
+    Item := DepthFractions.Items[Index] as TEtsStringValueItem;
     if Item.FValue = Sender then
     begin
-      List.Add(Item.FObserver);
+      List.Add(Item.Observer);
     end;
   end;
 end;
@@ -1562,8 +1540,8 @@ end;
 procedure TEtsSurfDepthItem.SetBoundaryFormula(Index: integer;
   const Value: string);
 var
-  Item: TStringValueItem;
-  Collection: TStringCollection;
+  Item: TEtsStringValueItem;
+  Collection: TEtsStringCollection;
 begin
   case Index of
     0: EvapotranspirationSurface := Value;
@@ -1583,18 +1561,18 @@ begin
         begin
           Collection.Add;
         end;
-        Item := Collection.Items[Index] as TStringValueItem;
+        Item := Collection.Items[Index] as TEtsStringValueItem;
         Item.Value := Value;
       end;
   end;
 end;
 
-procedure TEtsSurfDepthItem.SetDepthFractions(const Value: TStringCollection);
+procedure TEtsSurfDepthItem.SetDepthFractions(const Value: TEtsStringCollection);
 begin
   FDepthFractions.Assign(Value);
 end;
 
-procedure TEtsSurfDepthItem.SetEtFractions(const Value: TStringCollection);
+procedure TEtsSurfDepthItem.SetEtFractions(const Value: TEtsStringCollection);
 begin
   FEtFractions.Assign(Value);
 end;
@@ -1924,7 +1902,7 @@ begin
         else
         begin
           BoundaryValues[Index].Formula := (Item.DepthFractions.
-            Items[SegmentIndex-1] as TStringValueItem).Value;
+            Items[SegmentIndex-1] as TEtsStringValueItem).Value;
         end;
         if BoundaryValues[Index].Formula = '' then
         begin
@@ -1950,7 +1928,7 @@ begin
         else
         begin
           BoundaryValues[Index].Formula := (Item.EtFractions.
-            Items[SegmentIndex-1] as TStringValueItem).Value;
+            Items[SegmentIndex-1] as TEtsStringValueItem).Value;
         end;
         if BoundaryValues[Index].Formula = '' then
         begin
@@ -2624,48 +2602,25 @@ begin
   end;
 end;
 
-{ TStringValueItem }
+{ TEtsStringValueItem }
 
-procedure TStringValueItem.Assign(Source: TPersistent);
-begin
-  // if Assign is updated, update IsSame too.
-  if Source is TStringValueItem then
-  begin
-    Value := TStringValueItem(Source).Value;
-  end;
-  inherited;
-end;
-
-procedure StringValueRemoveSubscription(Sender: TObject; Subject: TObject;
-  const AName: string);
-begin
-  (Subject as TStringValueItem).RemoveSubscription(Sender, AName);
-end;
-
-procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
-  const AName: string);
-begin
-  (Subject as TStringValueItem).RestoreSubscription(Sender, AName);
-end;
-
-constructor TStringValueItem.Create(Collection: TCollection);
+constructor TEtsStringValueItem.Create(Collection: TCollection);
 var
-  SCollection: TStringCollection;
+  SCollection: TEtsStringCollection;
   EtsSurfDepth: TEtsSurfDepthCollection;
   LocalScreenObject: TScreenObject;
 begin
   inherited;
-  FObserver:= TObserver.Create(nil);
-  SCollection := StringCollection;
-  EtsSurfDepth := SCollection.FEtsSurfDepthCollection as TEtsSurfDepthCollection;
+  SCollection := StringCollection as TEtsStringCollection;
+  EtsSurfDepth := SCollection.ParentCollection as TEtsSurfDepthCollection;
   case SCollection.Purpose of
     scpDepthFractions:
       begin
-        FObserver.OnUpToDateSet := EtsSurfDepth.InvalidateDepthFractions;
+        Observer.OnUpToDateSet := EtsSurfDepth.InvalidateDepthFractions;
       end;
     scpEtFractions:
       begin
-        FObserver.OnUpToDateSet := EtsSurfDepth.InvalidateEtFractions;
+        Observer.OnUpToDateSet := EtsSurfDepth.InvalidateEtFractions;
       end;
     else
       Assert(False);
@@ -2673,207 +2628,41 @@ begin
   LocalScreenObject := EtsSurfDepth.ScreenObject as TScreenObject;
   if (LocalScreenObject <> nil) and LocalScreenObject.CanInvalidateModel then
   begin
-    LocalScreenObject.TalksTo(FObserver);
+    LocalScreenObject.TalksTo(Observer);
   end;
-
-  OnRemoveSubscription := StringValueRemoveSubscription;
-  OnRestoreSubscription := StringValueRestoreSubscription;
-  FValue := frmGoPhast.PhastModel.FormulaManager.Add;
-  FValue.Parser := frmGoPhast.PhastModel.rpTopFormulaCompiler;
-  FValue.AddSubscriptionEvents(StringValueRemoveSubscription,
-  StringValueRestoreSubscription, self);
-
 end;
 
-destructor TStringValueItem.Destroy;
+destructor TEtsStringValueItem.Destroy;
 var
   LocalScreenObject: TScreenObject;
-  SCollection: TStringCollection;
+  SCollection: TEtsStringCollection;
   EtsSurfDepth: TEtsSurfDepthCollection;
 begin
-  Value := '0';
-  SCollection := StringCollection;
-  EtsSurfDepth := SCollection.FEtsSurfDepthCollection as TEtsSurfDepthCollection;
+  SCollection := StringCollection as TEtsStringCollection;
+  EtsSurfDepth := SCollection.ParentCollection as TEtsSurfDepthCollection;
   LocalScreenObject := EtsSurfDepth.ScreenObject as TScreenObject;
   if (LocalScreenObject <> nil) and LocalScreenObject.CanInvalidateModel then
   begin
-    LocalScreenObject.StopsTalkingTo(FObserver);
-  end;
-  frmGoPhast.PhastModel.FormulaManager.Remove(FValue,
-    StringValueRemoveSubscription,
-    StringValueRestoreSubscription, self);
-  FObserver.Free;
-  inherited;
-end;
-
-function TStringValueItem.GetObserver(Index: Integer): TObserver;
-begin
-  result := FObserver;
-end;
-
-function TStringValueItem.GetScreenObject: TObject;
-begin
-  result := StringCollection.ScreenObject;
-end;
-
-function TStringValueItem.GetValue: string;
-begin
-  Result := FValue.Formula;
-  FObserver.UpToDate := True;
-end;
-
-function TStringValueItem.IsSame(AnotherItem: TOrderedItem): boolean;
-begin
-  if AnotherItem is TStringValueItem then
-  begin
-    result := Value = TStringValueItem(AnotherItem).Value;
-  end
-  else
-  begin
-    result := false;
-  end;
-end;
-
-procedure TStringValueItem.RemoveSubscription(Sender: TObject;
-  const AName: string);
-var
-  DS: TObserver;
-begin
-  DS := frmGoPhast.PhastModel.GetObserverByName(AName);
-  DS.StopsTalkingTo(FObserver);
-end;
-
-procedure TStringValueItem.RestoreSubscription(Sender: TObject;
-  const AName: string);
-var
-  DS: TObserver;
-begin
-  DS := frmGoPhast.PhastModel.GetObserverByName(AName);
-  DS.TalksTo(FObserver);
-  FObserver.UpToDate := False;
-end;
-
-procedure TStringValueItem.SetValue(const Value: string);
-var
-  Dummy: Integer;
-begin
-  Dummy := 0;
-  UpdateFormulaBlocks(Value, Dummy, FValue);
-end;
-
-function TStringValueItem.StringCollection: TStringCollection;
-begin
-  result := Collection as TStringCollection;
-end;
-
-//procedure TStringValueItem.UpdateFormula(Value: string;
-//  var FormulaObject: TFormulaObject);
-//var
-//  ParentModel: TPhastModel;
-//  Compiler: TRbwParser;
-//begin
-//  if FormulaObject.Formula <> Value then
-//  begin
-//    ParentModel := Model as TPhastModel;
-//    if ParentModel <> nil then
-//    begin
-//      Compiler := ParentModel.rpThreeDFormulaCompiler;
-//      UpdateFormulaDependencies(FormulaObject.Formula, Value, FObserver, Compiler);
-//    end;
-//    InvalidateModel;
-//    frmGoPhast.PhastModel.FormulaManager.ChangeFormula(
-//      FormulaObject, Value,
-//      frmGoPhast.PhastModel.rpThreeDFormulaCompiler,
-//      StringValueRemoveSubscription,
-//      StringValueRestoreSubscription, self);
-//  end;
-//end;
-
-//procedure TStringValueItem.UpdateFormulaDependencies(OldFormula: string;
-//  var NewFormula: string; Observer: TObserver; Compiler: TRbwParser);
-//var
-//  OldUses: TStringList;
-//  NewUses: TStringList;
-//  Position: Integer;
-//  DS: TObserver;
-//  ParentScreenObject: TScreenObject;
-//  Index: integer;
-//  procedure CompileFormula(var AFormula: string;
-//    UsesList: TStringList);
-//  begin
-//    if AFormula <> '' then
-//    begin
-//      try
-//        Compiler.Compile(AFormula);
-//        UsesList.Assign(Compiler.CurrentExpression.VariablesUsed);
-//      except on E: ERbwParserError do
-//        begin
-//        end;
-//      end;
-//    end;
-//  end;
-//begin
-//  OldFormula := Trim(OldFormula);
-//  NewFormula := Trim(NewFormula);
-//  if OldFormula = NewFormula then
-//  begin
-//    Exit;
-//  end;
-//  ParentScreenObject := StringCollection.FScreenObject as TScreenObject;
-//  if (ParentScreenObject = nil)
-//    or not ParentScreenObject.CanInvalidateModel then
-//  begin
-//    Exit;
-//  end;
-//  OldUses := TStringList.Create;
-//  NewUses := TStringList.Create;
-//  try
-//    CompileFormula(OldFormula, OldUses);
-//    CompileFormula(NewFormula, NewUses);
-//    for Index := OldUses.Count - 1 downto 0 do
-//    begin
-//      Position := NewUses.IndexOf(OldUses[Index]);
-//      if Position >= 0 then
-//      begin
-//        OldUses.Delete(Index);
-//        NewUses.Delete(Position);
-//      end;
-//    end;
-//    for Index := 0 to OldUses.Count - 1 do
-//    begin
-//      DS := frmGoPhast.PhastModel.GetObserverByName(OldUses[Index]);
-//      Assert(DS <> nil);
-//      DS.StopsTalkingTo(Observer);
-//    end;
-//    for Index := 0 to NewUses.Count - 1 do
-//    begin
-//      DS := frmGoPhast.PhastModel.GetObserverByName(NewUses[Index]);
-//      Assert(DS <> nil);
-//      DS.TalksTo(Observer);
-//    end;
-//  finally
-//    NewUses.Free;
-//    OldUses.Free;
-//  end;
-//end;
-
-{ TStringCollection }
-
-procedure TStringCollection.Assign(Source: TPersistent);
-begin
-  if Source is TStringCollection then
-  begin
-    Purpose := TStringCollection(Source).Purpose;
+    LocalScreenObject.StopsTalkingTo(Observer);
   end;
   inherited;
 end;
 
-constructor TStringCollection.Create(Model: TBaseModel; ScreenObject: TObject;
-  EtsSurfDepthCollection: TCollection);
+{ TEtsStringCollection }
+
+procedure TEtsStringCollection.Assign(Source: TPersistent);
 begin
-  inherited Create(TStringValueItem, Model, ScreenObject);
-//  FScreenObject := ScreenObject;
-  FEtsSurfDepthCollection := EtsSurfDepthCollection;
+  if Source is TEtsStringCollection then
+  begin
+    Purpose := TEtsStringCollection(Source).Purpose;
+  end;
+  inherited;
+end;
+
+constructor TEtsStringCollection.Create(Model: TBaseModel; ScreenObject: TObject;
+  EtsSurfDepthCollection: TCustomListArrayBoundColl);
+begin
+  inherited Create(TEtsStringValueItem, Model, ScreenObject, EtsSurfDepthCollection);
 end;
 
 { TEtsLayerCollection }

@@ -2013,12 +2013,12 @@ begin
       FFieldDefinitions[StartIndex].FieldType := 'C';
       FFieldDefinitions[StartIndex].FieldName := 'LOW_Z';
       FieldNames.Add('LOW_Z');
-      Inc(StartIndex);
+//      Inc(StartIndex);
     end;
-//    if StartIndex < Length(FFieldDefinitions) then
-//    begin
-//      SetLength(FFieldDefinitions, StartIndex);
-//    end;
+
+    // If anything else is added, StartIndex need to be incremented after the
+    // last item above (LOW_Z).
+
     Assert(Length(FFieldDefinitions) = FieldNames.Count);
     FieldDefinitions := TStringList.Create;
     try
@@ -2115,7 +2115,7 @@ var
     EtTimeItem: TEvtItem;
     EtsSurfTimeItem: TEtsSurfDepthItem;
     FractionIndex: Integer;
-    FormulaItem: TStringValueItem;
+    FormulaItem: TEtsStringValueItem;
     EtLayerItem: TEvtLayerItem;
     EvtBoundary: TEvtBoundary;
     RchBoundary: TRchBoundary;
@@ -2581,7 +2581,7 @@ var
                       FractionIndex := StrToInt(Copy(BoundaryName.Name,
                         Length(StrMODFLOWEtsRateFraction), MaxInt))-1;
                       FormulaItem := EtsSurfTimeItem.EtFractions.Items
-                        [FractionIndex] as TStringValueItem;
+                        [FractionIndex] as TEtsStringValueItem;
                       Formula := AnsiString(FormulaItem.Value);
                     end
                     else if (Pos(StrMODFLOWEtsDepthFraction, BoundaryName.Name) = 1) then
@@ -2589,7 +2589,7 @@ var
                       FractionIndex := StrToInt(Copy(BoundaryName.Name,
                         Length(StrMODFLOWEtsDepthFraction), MaxInt))-1;
                       FormulaItem := EtsSurfTimeItem.DepthFractions.Items
-                        [FractionIndex] as TStringValueItem;
+                        [FractionIndex] as TEtsStringValueItem;
                       Formula := AnsiString(FormulaItem.Value);
                     end
                     else

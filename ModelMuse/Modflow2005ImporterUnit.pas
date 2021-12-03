@@ -18582,7 +18582,7 @@ end;
 procedure TEtsImporter.AssignSegments(LayerItem: TEtsSurfDepthItem;
   StressPeriodIndex: Integer);
 var
-  Item: TStringValueItem;
+  Item: TEtsStringValueItem;
   EtFProportionName: string;
   SegString: string;
   SegIndex: Integer;
@@ -18595,11 +18595,11 @@ begin
     SegString := SegIndexToStr(SegIndex);
     EtFProportionName := StrImportedETSFractionalRate + SegString
       + '_' + GetStressPeriodString(StressPeriodIndex);
-    Item := LayerItem.EtFractions.Add as TStringValueItem;
+    Item := LayerItem.EtFractions.Add as TEtsStringValueItem;
     Item.Value := EtFProportionName;
     DepthProportionName := 'Imported_ETS_FractionalDepth_' + SegString
       + '_' + GetStressPeriodString(StressPeriodIndex);
-    Item := LayerItem.DepthFractions.Add as TStringValueItem;
+    Item := LayerItem.DepthFractions.Add as TEtsStringValueItem;
     Item.Value := DepthProportionName;
   end;
 end;

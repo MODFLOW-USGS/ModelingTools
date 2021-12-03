@@ -236,6 +236,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     OnChecked = vstDataSetsChecked
     OnChecking = vstDataSetsChecking
     OnGetText = vstDataSetsGetText
+    Touch.InteractiveGestures = [igPan, igPressAndTap]
+    Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
     Columns = <>
   end
   object chklstTimes: TCheckListBox

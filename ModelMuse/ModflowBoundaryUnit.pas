@@ -603,6 +603,43 @@ type
       PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
   end;
 
+  TCustomStringCollection = class;
+
+  // @name is used to set multiple formulas of a similar
+  // type in one boundary. A descendent is used in the ETS package for
+  // depth and rate fractions
+  TCustomStringValueItem = class abstract(TFormulaOrderedItem)
+  private
+    FObserver: TObserver;
+    procedure SetValue(const Value: string);
+    function GetValue: string;
+    procedure RemoveSubscription(Sender: TObject; const AName: string);
+    procedure RestoreSubscription(Sender: TObject; const AName: string);
+  protected
+    FValue: TFormulaObject;
+    function StringCollection: TCustomStringCollection;
+    function GetScreenObject: TObject; override;
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    function GetObserver(Index: Integer): TObserver; override;
+    property Observer: TObserver read FObserver;
+  public
+    procedure Assign(Source: TPersistent); override;
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+  published
+    property Value: string read GetValue write SetValue;
+  end;
+
+  TCustomStringCollection = class abstract(TCustomObjectOrderedCollection)
+  private
+    FParentCollection: TCustomListArrayBoundColl;
+  protected
+    property ParentCollection: TCustomListArrayBoundColl read FParentCollection;
+  public
+    constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel;
+      AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);
+  end;
+
   // @name is used to store a series of @link(TDataArray)s for boundary
   // conditions in MODFLOW.
   TModflowTimeList = class(TCustomTimeList)
@@ -1108,6 +1145,12 @@ procedure RemoveScreenObjectPropertySubscription(Sender: TObject; Subject: TObje
   const AName: string);
 
 procedure RestoreScreenObjectPropertySubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+
+procedure StringValueRemoveSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+
+procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
   const AName: string);
 
 implementation
@@ -2865,6 +2908,17 @@ begin
   (Subject as TModflowScreenObjectProperty).RestoreSubscription(Sender, AName);
 end;
 
+procedure StringValueRemoveSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+begin
+  (Subject as TCustomStringValueItem).RemoveSubscription(Sender, AName);
+end;
+
+procedure StringValueRestoreSubscription(Sender: TObject; Subject: TObject;
+  const AName: string);
+begin
+  (Subject as TCustomStringValueItem).RestoreSubscription(Sender, AName);
+end;
 
 procedure TCustomBoundaryItem.RemoveSubscription(Sender: TObject; const AName: string);
 var
@@ -4892,6 +4946,110 @@ begin
     Formula := '1';
   end;
   BoundaryValue.Formula := Formula;
+end;
+
+{ TCustomStringValueItem }
+
+procedure TCustomStringValueItem.Assign(Source: TPersistent);
+begin
+  // if Assign is updated, update IsSame too.
+  if Source is TCustomStringValueItem then
+  begin
+    Value := TCustomStringValueItem(Source).Value;
+  end;
+  inherited;
+end;
+
+constructor TCustomStringValueItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FObserver:= TObserver.Create(nil);
+
+  OnRemoveSubscription := StringValueRemoveSubscription;
+  OnRestoreSubscription := StringValueRestoreSubscription;
+  FValue := frmGoPhast.PhastModel.FormulaManager.Add;
+  FValue.Parser := frmGoPhast.PhastModel.rpTopFormulaCompiler;
+  FValue.AddSubscriptionEvents(StringValueRemoveSubscription,
+  StringValueRestoreSubscription, self);
+end;
+
+destructor TCustomStringValueItem.Destroy;
+begin
+  Value := '0';
+  frmGoPhast.PhastModel.FormulaManager.Remove(FValue,
+    StringValueRemoveSubscription,
+    StringValueRestoreSubscription, self);
+  FObserver.Free;
+  inherited;
+end;
+
+function TCustomStringValueItem.GetObserver(Index: Integer): TObserver;
+begin
+  result := FObserver;
+end;
+
+function TCustomStringValueItem.GetScreenObject: TObject;
+begin
+  result := StringCollection.ScreenObject;
+end;
+
+function TCustomStringValueItem.GetValue: string;
+begin
+  Result := FValue.Formula;
+  FObserver.UpToDate := True;
+end;
+
+function TCustomStringValueItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  if AnotherItem is TCustomStringValueItem then
+  begin
+    result := Value = TCustomStringValueItem(AnotherItem).Value;
+  end
+  else
+  begin
+    result := false;
+  end;
+end;
+
+procedure TCustomStringValueItem.RemoveSubscription(Sender: TObject;
+  const AName: string);
+var
+  DS: TObserver;
+begin
+  DS := frmGoPhast.PhastModel.GetObserverByName(AName);
+  DS.StopsTalkingTo(FObserver);
+end;
+
+procedure TCustomStringValueItem.RestoreSubscription(Sender: TObject;
+  const AName: string);
+var
+  DS: TObserver;
+begin
+  DS := frmGoPhast.PhastModel.GetObserverByName(AName);
+  DS.TalksTo(FObserver);
+  FObserver.UpToDate := False;
+end;
+
+procedure TCustomStringValueItem.SetValue(const Value: string);
+var
+  Dummy: Integer;
+begin
+  Dummy := 0;
+  UpdateFormulaBlocks(Value, Dummy, FValue);
+end;
+
+function TCustomStringValueItem.StringCollection: TCustomStringCollection;
+begin
+  result := Collection as TCustomStringCollection;
+end;
+
+{ TCustomStringCollection }
+
+constructor TCustomStringCollection.Create(ItemClass: TCollectionItemClass;
+  Model: TBaseModel; AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);
+begin
+  inherited Create(ItemClass, Model, ScreenObject);
+  FParentCollection := ParentCollection;
 end;
 
 end.

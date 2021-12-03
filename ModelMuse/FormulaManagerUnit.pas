@@ -95,7 +95,7 @@ implementation
 
 uses
   frmGoPhastUnit, DataSetUnit, ScreenObjectUnit, ModflowBoundaryUnit, 
-  ModflowEtsUnit, ModflowSfrTable, SubscriptionUnit, GIS_Functions,
+  ModflowSfrTable, SubscriptionUnit, GIS_Functions,
   PhastModelUnit, Math, ModflowHfbUnit, Mt3dmsChemUnit,
   ModflowRipPlantGroupsUnit, ModflowMvrUnit, Modflow6ObsUnit;
 

@@ -1102,6 +1102,31 @@ resourcestring
   ' 6 observation in row %d';
   StrTheCsvAttributeNumber = 'The csv attribute number %d does not have a na' +
   'me. It will be skipped.';
+  StrErrorThereIsAMi = 'Error. There is a mismatch between the number of sha' +
+  'pes in the shape geometry file and the number of records in the shapefile' +
+  ' data base.';
+  StrFlowingWellReducti = 'Flowing Well Reduction Length';
+  StrObservationName = 'Observation name';
+  StrObservationType = 'Observation type';
+  StrObservationTime = 'Observation time';
+  StrObservedValue = 'Observed value';
+  StrObservationWeight = 'Observation weight';
+  StrStatus = 'Status';
+  StrStage = 'Stage';
+  StrRainfall = 'Rainfall';
+  StrRunoff2 = 'Runoff';
+  StrInflow = 'Inflow';
+  StrConstant = 'Constant';
+  StrOutflowSegmentITR = 'Outflow Segment (ITRIB)';
+  StrDiversionSegmentI = 'Diversion Segment (IUPSEG)';
+  StrConductance = 'Conductance';
+  StrStreambedBottom = 'Streambed Bottom';
+  StrStreambedTop = 'Streambed Top';
+  StrStreambedWidth = 'Streambed Width';
+  StrStreambedSlope = 'Streambed Slope';
+  StrStreambedRoughness = 'Streambed Roughness';
+  StrRCHRechargeRated = 'RCH_RechargeRate%d';
+  StrMeasured = 'Measured';
 
 const
   StrShapeMinX = 'ShapeMinX';
@@ -1647,7 +1672,7 @@ begin
           begin
             result := False;
             Beep;
-            MessageDlg('Error. There is a mismatch between the number of shapes in the shape geometry file and the number of records in the shapefile data base.', mtError, [mbOK], 0);
+            MessageDlg(StrErrorThereIsAMi, mtError, [mbOK], 0);
             Exit;
           end;
           Assert(xbShapeDataBase.RecordCount = FGeometryFile.Count);
@@ -2659,11 +2684,6 @@ begin
   finally
     PickList.Free;
   end;
-//  TMawColumns = (mcStartTime, mcEndTime, mcStatus, mcRate, mcWellHead,
-//    mcMawFlowingWell,
-//    mcMawFlowingWellElevation, mcFlowingWellConductance, mcRateLimitation,
-//    mcMinRate, mcMaxRate, mcPumpElevation, mcScalingLength, mcHeadLimitChoice,
-//    mcHeadLimit);
 end;
 
 procedure TfrmImportShapefile.ImportModflowMnw2Package(
@@ -3325,18 +3345,15 @@ begin
     AScreenObject.Modflow6Obs.Name :=
       'Obs' + IntToStr(FObsCount);
   end;
-//  AScreenObject.Modflow6Obs.Used := True;
   GeneralObs := [];
   if cbHeadObservation.Checked then
   begin
     Include(GeneralObs, ogHead);
   end;
-//  AScreenObject.Modflow6Obs.HeadObs := cbHeadObservation.Checked;
   if cbDrawdownObservation.Checked then
   begin
     Include(GeneralObs, ogDrawdown);
   end;
-//  AScreenObject.Modflow6Obs.DrawdownObs := cbDrawdownObservation.Checked;
   AScreenObject.Modflow6Obs.GroundwaterFlowObs
     := cbGroundwaterFlowObservation.Checked;
 
@@ -3387,10 +3404,6 @@ begin
     for RowIndex := 1 to seBoundaryTimeCount.AsInteger do
     begin
       AName := GetStringValueFromText(rdgBoundaryConditions.Cells[Ord(mpocName), RowIndex]);
-//      if AName = '' then
-//      begin
-//        Continue;
-//      end;
       TypeIndex := PestObsTypes.IndexOf(rdgBoundaryConditions.Cells[Ord(mpocType), RowIndex]);
       if TypeIndex < 0 then
       begin
@@ -3401,7 +3414,6 @@ begin
       begin
         raise EImportShapeFileError.Create(
           Format(StrNoObservationType, [RowIndex]));
-//        Continue;
       end;
 
       if AName = '' then
@@ -3416,7 +3428,6 @@ begin
       begin
         raise EImportShapeFileError.Create(
           Format(StrNoObservationTime, [RowIndex]));
-//        Continue;
       end;
       ObsValue := GetRealValueFromText(rdgBoundaryConditions.Cells[
         Ord(mpocValue), RowIndex], ShouldIgnore);
@@ -3424,7 +3435,6 @@ begin
       begin
         raise EImportShapeFileError.Create(
           Format(StrNoObservationValue, [RowIndex]));
-//        Continue;
       end;
       ObsWeight := GetRealValueFromText(rdgBoundaryConditions.Cells[
         Ord(mpocWeight), RowIndex], ShouldIgnore);
@@ -3432,7 +3442,6 @@ begin
       begin
         raise EImportShapeFileError.Create(
           Format(StrNoObservationWeigh,[RowIndex]));
-//        Continue;
       end;
 
       CalibObs := CalibrationObservations.Add;
@@ -3449,17 +3458,6 @@ begin
     end;
     CalibrationObservations.MultiLayer := GetBooleanValueFromText(comboMultilayer.Text);
   end;
-//  TMf6PestObsColumns = (mpocName, mpocType, mpocTime, mpocValue, mpocWeight);
-
-//  AScreenObject.Modflow6Obs.ChdFlowObs := chklstBoundaryFlow.Checked[Ord(morChdFlow)];
-//  AScreenObject.Modflow6Obs.DrnFlowObs := chklstBoundaryFlow.Checked[Ord(morDrnFlow)];
-//  AScreenObject.Modflow6Obs.GhbFlowObs := chklstBoundaryFlow.Checked[Ord(morGhbFlow)];
-//  AScreenObject.Modflow6Obs.RivFlowObs := chklstBoundaryFlow.Checked[Ord(morRivFlow)];
-//  AScreenObject.Modflow6Obs.WelFlowObs := chklstBoundaryFlow.Checked[Ord(morWelFlow)];
-//  AScreenObject.Modflow6Obs.RchFlowObs := chklstBoundaryFlow.Checked[Ord(morRchFlow)];
-//  AScreenObject.Modflow6Obs.EvtFlowObs := chklstBoundaryFlow.Checked[Ord(morEvtFlow)];
-
-
 end;
 
 procedure TfrmImportShapefile.ImportModflowCFP_Pipe(
@@ -3594,9 +3592,6 @@ begin
       begin
         Item.Status := TLakeStatus(ItemIndex);
       end;
-//  TLakeMf6Columns = (l6cStartTim, l6cEndTime, l6cStatus, l6cStage, l6cRainfall,
-//    l6cEvaporation, l6cRunoff, l6cInflow, l6cWithdrawal);
-
 
       AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
         Ord(l6cStage), Index + 1]);
@@ -3621,11 +3616,6 @@ begin
       AValue := GetRealFormulaFromText(rdgBoundaryConditions.Cells[
         Ord(l6cWithdrawal), Index + 1]);
       Item.Withdrawal := AValue;
-
-//      ConcItem := CreateConcItem(ConcBoundary, Index, Item);
-//      ImportConcItemForSeparateShapes(Index, ConcItem,
-//        StartingConcIndex);
-
     end;
   end
 end;
@@ -4279,26 +4269,15 @@ var
   Index: Integer;
   UseRow: Boolean;
   Item: TSfrMf6Item;
-//  IcalcItem: TSfrParamIcalcItem;
   StartTime: Extended;
   EndTime: Extended;
-//  SegmentFlowItem: TSfrSegmentFlowItem;
-//  ChannelItem: TSfrChannelItem;
-//  EqItem: TSfrEquationItem;
-//  SegItem: TSfrSegmentItem;
-//  First: boolean;
   Boundary: TSfrMf6Boundary;
-//  IPrior: integer;
-//  RCHLEN: string;
   FieldNumber: Integer;
-//  Value: Extended;
-//  ICalc: Integer;
   InitializeGrid: boolean;
   ColIndex: Integer;
   CellText: AnsiString;
   CachedPosition: Integer;
   FieldStorage: TFieldNumStorage;
-//  SFR_Mf6_Package: TSfrModflow6PackageSelection;
   StatusIndex: Integer;
   StatusStr: String;
   DownstreamIndex: Integer;
@@ -4310,8 +4289,6 @@ var
   StringValue: string;
   NoDiversionColCount: Integer;
 begin
-//  SFR_Mf6_Package := frmGoPhast.PhastModel.ModflowPackages.SfrModflow6Package;
-//  First := True;
   AScreenObject.CreateSfr6Boundary;
   Boundary := AScreenObject.ModflowSfr6Boundary;
   InitializeGrid := False;
@@ -4524,14 +4501,6 @@ begin
       DiversionItem.Priority := TDivisionPriority(PriorityIndex);
     end;
   end;
-
-//  frameDownstreamSegmentsSfrMf6.Grid.Cells[0,0] := StrDownstreamSegmentN;
-//  frameDownstreamSegmentsSfrMf6.Grid.Columns[0].PickList := FIntegerFieldNames;
-//
-//  frameDiversionsSfrMf6.Grid.Cells[0,0] := StrDiversionSegmentNu;
-//  frameDiversionsSfrMf6.Grid.Cells[1,0] := StrPriorityCprior;
-//  frameDiversionsSfrMf6.Grid.Columns[0].PickList := FIntegerFieldNames;
-
 end;
 
 procedure TfrmImportShapefile.ImportModflowHobPackage(
@@ -4683,7 +4652,7 @@ begin
   rdgBoundaryConditions.Cells[Ord(mcFlowingWellConductance), 0] :=
     StrFlowingWellConduct;
   rdgBoundaryConditions.Cells[Ord(mcFlowingWellReductionLength), 0] :=
-    'Flowing Well Reduction Length';
+    StrFlowingWellReducti;
   rdgBoundaryConditions.Cells[Ord(mcMinRate), 0] := StrMinimumFlowRate;
   rdgBoundaryConditions.Cells[Ord(mcMaxRate), 0] := StrMaximumFlowRate;
   rdgBoundaryConditions.Cells[Ord(mcPumpElevation), 0] := StrPumpElevation;
@@ -4736,33 +4705,6 @@ begin
 
   AssignColFeatureProperties;
 
-{
-  TMawColumns = (mcStartTime, mcEndTime, mcStatus, mcRate, mcWellHead,
-    mcMawFlowingWell,
-    mcMawFlowingWellElevation, mcFlowingWellConductance, mcRateLimitation,
-    mcMinRate, mcMaxRate, mcPumpElevation, mcScalingLength, mcHeadLimitChoice,
-    mcHeadLimit);
-
-    property MawStatus: TMawStatus read FMawStatus write SetMawStatus;
-    property Rate: string read GetRate write SetRate;
-    property WellHead: string read GetWellHead write SetWellHead;
-
-    property FlowingWell: TFlowingWell read FFlowingWell write SetFlowingWell;
-    property FlowingWellElevation: string read GetFlowingWellElevation write SetFlowingWellElevation;
-    property FlowingWellConductance: string read GetFlowingWellConductance write SetFlowingWellConductance;
-
-    // ShutOff and RateScaling can not be used simultaneously.
-    // RateLimitation chooses between no-limit, ShutOff, and RateScaling.
-    property RateLimitation: TRateLimitation read FRateLimitation write SetRateLimitation;
-    property MinRate: string read GetMinRate write SetMinRate;
-    property MaxRate: string read GetMaxRate write SetMaxRate;
-
-    property PumpElevation: string read GetPumpElevation write SetPumpElevation;
-    property ScalingLength: string read GetScalingLength write SetScalingLength;
-
-    property HeadLimitChoice: Boolean read FHeadLimitChoice write SetHeadLimitChoice;
-    property HeadLimit: string read GetHeadLimit write SetHeadLimit;
-}
   comboMawRadius.Items := FRealFieldAndGlobalVariablesNames;
   comboMawBottom.Items := FRealFieldAndGlobalVariablesNames;
   comboMawInitialHead.Items := FRealFieldAndGlobalVariablesNames;
@@ -4774,7 +4716,6 @@ begin
     frameMawWellScreens.Grid.Cells[Ord(mwscScreenBottom), 0] := StrScreenBottom;
     frameMawWellScreens.Grid.Cells[Ord(mwscSkinK), 0] := StrSkinHydraulicCondu;
     frameMawWellScreens.Grid.Cells[Ord(mwscSkinRadius), 0] := StrSkinRadius;
-  //  TMawWellScreenColumns = (mwscScreenTop, mwscScreenBottom, mwscSkinK, mwscSkinRadius);
     for WellScreenColIndex := Low(TMawWellScreenColumns) to High(TMawWellScreenColumns) do
     begin
       frameMawWellScreens.Grid.Columns[Ord(WellScreenColIndex)].ComboUsed := True;
@@ -4860,12 +4801,11 @@ begin
   begin
     rdgBoundaryConditions.ColCount := 5;
     AssignColFeatureProperties;
-    rdgBoundaryConditions.Cells[Ord(mpocName), 0] := 'Observation name';
-    rdgBoundaryConditions.Cells[Ord(mpocType), 0] := 'Observation type';
-    rdgBoundaryConditions.Cells[Ord(mpocTime), 0] := 'Observation time';
-    rdgBoundaryConditions.Cells[Ord(mpocValue), 0] := 'Observed value';
-    rdgBoundaryConditions.Cells[Ord(mpocWeight), 0] := 'Observation weight';
-    //  TMf6PestObsColumns = (mpocName, mpocType, mpocTime, mpocValue, mpocWeight);
+    rdgBoundaryConditions.Cells[Ord(mpocName), 0] := StrObservationName;
+    rdgBoundaryConditions.Cells[Ord(mpocType), 0] := StrObservationType;
+    rdgBoundaryConditions.Cells[Ord(mpocTime), 0] := StrObservationTime;
+    rdgBoundaryConditions.Cells[Ord(mpocValue), 0] := StrObservedValue;
+    rdgBoundaryConditions.Cells[Ord(mpocWeight), 0] := StrObservationWeight;
 
     rdgBoundaryConditions.Columns[Ord(mpocName)].PickList := FStringFieldNames;
     TypePickList := rdgBoundaryConditions.Columns[Ord(mpocType)].PickList;
@@ -4889,9 +4829,6 @@ begin
   end;
 
   comboMultilayer.Items.Assign(FBooleanFieldNames)
-
-//  comboMf6ObsElevation.Items := FRealFieldGlobalsAndDataSetsNames;
-//  comboMf6ObsLayer.Items := FIntegerFieldNames
 end;
 
 
@@ -5081,25 +5018,20 @@ begin
   rdgBoundaryConditions.Columns[Ord(l6cEndTime)].
     PickList.AddStrings(FRealFieldAndGlobalVariablesNames);
 
-  {
-  TLakeMf6Columns = (l6cStartTim, l6cEndTime, l6cStatus, l6cStage, l6cRainfall,
-    l6cEvaporation, l6cRunoff, l6cInflow, l6cWithdrawal);
-  }
-
-  rdgBoundaryConditions.Cells[Ord(l6cStatus), 0] := 'Status';
-  rdgBoundaryConditions.Cells[Ord(l6cStage), 0] := 'Stage';
-  rdgBoundaryConditions.Cells[Ord(l6cRainfall), 0] := 'Rainfall';
+  rdgBoundaryConditions.Cells[Ord(l6cStatus), 0] := StrStatus;
+  rdgBoundaryConditions.Cells[Ord(l6cStage), 0] := StrStage;
+  rdgBoundaryConditions.Cells[Ord(l6cRainfall), 0] := StrRainfall;
   rdgBoundaryConditions.Cells[Ord(l6cEvaporation), 0] := StrEvaporation;
-  rdgBoundaryConditions.Cells[Ord(l6cRunoff), 0] := 'Runoff';
-  rdgBoundaryConditions.Cells[Ord(l6cInflow), 0] := 'Inflow';
+  rdgBoundaryConditions.Cells[Ord(l6cRunoff), 0] := StrRunoff2;
+  rdgBoundaryConditions.Cells[Ord(l6cInflow), 0] := StrInflow;
   rdgBoundaryConditions.Cells[Ord(l6cWithdrawal), 0] := StrWithdrawal;
 
   rdgBoundaryConditions.Columns[Ord(l6cStatus)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(l6cStatus)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Clear;
-  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add('Active');
-  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add('Inactive');
-  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add('Constant');
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add(StrActive);
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add(StrInactive);
+  rdgBoundaryConditions.Columns[Ord(l6cStatus)].PickList.Add(StrConstant);
 //  rdgBoundaryConditions.Columns[l6cStatus].LimitToList := True;
 
   for Index := Ord(l6cStage) to Ord(l6cWithdrawal) do
@@ -5115,8 +5047,6 @@ end;
 
 procedure TfrmImportShapefile.InitializeBoundaryControlsForLAK;
 var
-//  TimeIndex: Integer;
-//  StressPeriod: TModflowStressPeriod;
   Index: Integer;
 begin
   plBoundary.ActivePage := jvspModflowLAK;
@@ -5139,12 +5069,6 @@ begin
   frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithStartTimes(
     rdgBoundaryConditions, Ord(lcStartTime));
 
-//  for TimeIndex := 0 to frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
-//  begin
-//    StressPeriod := frmGoPhast.PhastModel.ModflowStressPeriods.Items[TimeIndex];
-//    rdgBoundaryConditions.Columns[Ord(lcStartTime)].
-//      PickList.Add(FloatToStr(StressPeriod.StartTime));
-//  end;
   rdgBoundaryConditions.Columns[Ord(lcStartTime)].
     PickList.AddStrings(FRealFieldNames);
 
@@ -5155,12 +5079,6 @@ begin
   rdgBoundaryConditions.Columns[Ord(lcEndTime)].PickList.Clear;
   frmGoPhast.PhastModel.ModflowStressPeriods.FillPickListWithEndTimes(
     rdgBoundaryConditions, Ord(lcEndTime));
-//  for TimeIndex := 0 to frmGoPhast.PhastModel.ModflowStressPeriods.Count - 1 do
-//  begin
-//    StressPeriod := frmGoPhast.PhastModel.ModflowStressPeriods.Items[TimeIndex];
-//    rdgBoundaryConditions.Columns[Ord(lcEndTime)].
-//      PickList.Add(FloatToStr(StressPeriod.EndTime));
-//  end;
   rdgBoundaryConditions.Columns[Ord(lcEndTime)].
     PickList.AddStrings(FRealFieldNames);
 
@@ -5224,17 +5142,12 @@ begin
   rdgBoundaryConditions.Columns[Ord(strcEndTime)].
     PickList.AddStrings(FRealFieldAndGlobalVariablesNames);
 
-//  rdgBoundaryConditions.Cells[Ord(strcParameterName), 0] := StrParameterName;
-//  rdgBoundaryConditions.Columns[Ord(strcParameterName)].ComboUsed := True;
-//  rdgBoundaryConditions.Columns[Ord(strcParameterName)].Format := rcf4String;
-//  rdgBoundaryConditions.Columns[Ord(strcParameterName)].PickList := FStringFieldNames;
-
-  rdgBoundaryConditions.Cells[Ord(strcOutflow), 0] := 'Outflow Segment (ITRIB)';
+  rdgBoundaryConditions.Cells[Ord(strcOutflow), 0] := StrOutflowSegmentITR;
   rdgBoundaryConditions.Columns[Ord(strcOutflow)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(strcOutflow)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(strcOutflow)].PickList := FIntegerFieldNames;
 
-  rdgBoundaryConditions.Cells[Ord(strcDiversion), 0] := 'Diversion Segment (IUPSEG)';
+  rdgBoundaryConditions.Cells[Ord(strcDiversion), 0] := StrDiversionSegmentI;
   rdgBoundaryConditions.Columns[Ord(strcDiversion)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(strcDiversion)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(strcDiversion)].PickList := FIntegerFieldNames;
@@ -5245,25 +5158,25 @@ begin
   rdgBoundaryConditions.Columns[Ord(strcFlow)].PickList :=
     FRealFieldAndGlobalVariablesNames;
 
-  rdgBoundaryConditions.Cells[Ord(strcHead), 0] := 'Head';
+  rdgBoundaryConditions.Cells[Ord(strcHead), 0] := StrHead;
   rdgBoundaryConditions.Columns[Ord(strcHead)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(strcHead)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(strcHead)].PickList :=
     FRealFieldAndGlobalVariablesNames;
 
-  rdgBoundaryConditions.Cells[Ord(strcConductance), 0] := 'Conductance';
+  rdgBoundaryConditions.Cells[Ord(strcConductance), 0] := StrConductance;
   rdgBoundaryConditions.Columns[Ord(strcConductance)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(strcConductance)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(strcConductance)].PickList :=
     FRealFieldAndGlobalVariablesNames;
 
-  rdgBoundaryConditions.Cells[Ord(strcBedBottom), 0] := 'Streambed Bottom';
+  rdgBoundaryConditions.Cells[Ord(strcBedBottom), 0] := StrStreambedBottom;
   rdgBoundaryConditions.Columns[Ord(strcBedBottom)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(strcBedBottom)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(strcBedBottom)].PickList :=
     FRealFieldAndGlobalVariablesNames;
 
-  rdgBoundaryConditions.Cells[Ord(strcBedTop), 0] := 'Streambed Top';
+  rdgBoundaryConditions.Cells[Ord(strcBedTop), 0] := StrStreambedTop;
   rdgBoundaryConditions.Columns[Ord(strcBedTop)].ComboUsed := True;
   rdgBoundaryConditions.Columns[Ord(strcBedTop)].Format := rcf4String;
   rdgBoundaryConditions.Columns[Ord(strcBedTop)].PickList :=
@@ -5271,29 +5184,24 @@ begin
 
   if StageCalculated then
   begin
-    rdgBoundaryConditions.Cells[Ord(strcWidth), 0] := 'Streambed Width';
+    rdgBoundaryConditions.Cells[Ord(strcWidth), 0] := StrStreambedWidth;
     rdgBoundaryConditions.Columns[Ord(strcWidth)].ComboUsed := True;
     rdgBoundaryConditions.Columns[Ord(strcWidth)].Format := rcf4String;
     rdgBoundaryConditions.Columns[Ord(strcWidth)].PickList :=
       FRealFieldAndGlobalVariablesNames;
 
-    rdgBoundaryConditions.Cells[Ord(strcSlope), 0] := 'Streambed Slope';
+    rdgBoundaryConditions.Cells[Ord(strcSlope), 0] := StrStreambedSlope;
     rdgBoundaryConditions.Columns[Ord(strcSlope)].ComboUsed := True;
     rdgBoundaryConditions.Columns[Ord(strcSlope)].Format := rcf4String;
     rdgBoundaryConditions.Columns[Ord(strcSlope)].PickList :=
       FRealFieldAndGlobalVariablesNames;
 
-    rdgBoundaryConditions.Cells[Ord(strcRoughness), 0] := 'Streambed Roughness';
+    rdgBoundaryConditions.Cells[Ord(strcRoughness), 0] := StrStreambedRoughness;
     rdgBoundaryConditions.Columns[Ord(strcRoughness)].ComboUsed := True;
     rdgBoundaryConditions.Columns[Ord(strcRoughness)].Format := rcf4String;
     rdgBoundaryConditions.Columns[Ord(strcRoughness)].PickList :=
       FRealFieldAndGlobalVariablesNames;
   end;
-
-//  TStrColumn = (strcStartTime, strcEndTime, strcOutflow, strcDiversion,
-//    strcFlow, strcHead, strcConductance, strcBedBottom, strcBedTop)
-
-
 end;
 
 procedure TfrmImportShapefile.InitializeBoundaryControlsForSFR;
@@ -5817,7 +5725,7 @@ var
   AValue: Extended;
   FractionIndex: Integer;
   SurfDepthItem: TEtsSurfDepthItem;
-  FractItem: TStringValueItem;
+  FractItem: TEtsStringValueItem;
   LayerItem: TEvtLayerItem;
   AnIntFormula: string;
   AFormula: string;
@@ -5871,7 +5779,6 @@ begin
       Inc(Count);
       Item := AnItem as TEvtItem;
 
-//      Item := AScreenObject.ModflowEtsBoundary.Values.Add as TEvtItem;
       AValue := GetRealValueFromText(rdgBoundaryConditions.
         Cells[Ord(etscStartingTime), Index + 1], Dummy);
       Item.StartTime := AValue;
@@ -5990,11 +5897,11 @@ begin
           if FractionIndex < SurfDepthItem.DepthFractions.Count then
           begin
             FractItem := SurfDepthItem.DepthFractions.Items[FractionIndex]
-              as TStringValueItem;
+              as TEtsStringValueItem;
           end
           else
           begin
-            FractItem := SurfDepthItem.DepthFractions.Add as TStringValueItem;
+            FractItem := SurfDepthItem.DepthFractions.Add as TEtsStringValueItem;
           end;
           AValue := GetRealValueFromText(rdgBoundaryConditions.
             Cells[Ord(etscDepth)+1 + (FractionIndex * 2), Index + 1], Dummy);
@@ -6015,11 +5922,11 @@ begin
           if FractionIndex < SurfDepthItem.EtFractions.Count then
           begin
             FractItem := SurfDepthItem.EtFractions.Items[FractionIndex]
-              as TStringValueItem;
+              as TEtsStringValueItem;
           end
           else
           begin
-            FractItem := SurfDepthItem.EtFractions.Add as TStringValueItem;
+            FractItem := SurfDepthItem.EtFractions.Add as TEtsStringValueItem;
           end;
           AValue := GetRealValueFromText(rdgBoundaryConditions.
             Cells[Ord(etscDepth)+2 + (FractionIndex * 2), Index + 1], Dummy);
@@ -6048,12 +5955,12 @@ begin
         SurfDepthItem.EvapotranspirationDepth := AFormula;
         for FractionIndex := 0 to Packages.EtsPackage.SegmentCount - 2 do
         begin
-          FractItem := SurfDepthItem.DepthFractions.Add as TStringValueItem;
+          FractItem := SurfDepthItem.DepthFractions.Add as TEtsStringValueItem;
           AFormula := GetRealFormulaFromText(rdgBoundaryConditions.
             Cells[Ord(etscDepth)+1 + (FractionIndex * 2), Index + 1]);
           FractItem.Value := AFormula;
 
-          FractItem := SurfDepthItem.EtFractions.Add as TStringValueItem;
+          FractItem := SurfDepthItem.EtFractions.Add as TEtsStringValueItem;
           AFormula := GetRealFormulaFromText(rdgBoundaryConditions.
             Cells[Ord(etscDepth)+2 + (FractionIndex * 2), Index + 1]);
           FractItem.Value := AFormula;
@@ -6625,7 +6532,7 @@ begin
       begin
         AValue := GetRealValueFromText(rdgBoundaryConditions.
           Cells[Ord(rcFluxRate), Index + 1], Dummy);
-        ItemName := Format('RCH_RechargeRate%d', [Index]);
+        ItemName := Format(StrRCHRechargeRated, [Index]);
         ValueItem := AScreenObject.ImportedValues.ValueItemByName(
           ItemName);
         if ValueItem = nil then
@@ -6995,7 +6902,6 @@ begin
         Boundary, Count);
       Inc(Count);
       Item := AnItem as TDrnItem;
-//      Item := AScreenObject.ModflowDrnBoundary.Values.Add as TDrnItem;
       AValue := GetRealValueFromText(rdgBoundaryConditions.
         Cells[Ord(dcStartingTime), ItemIndex + 1], Dummy);
       Item.StartTime := AValue;
@@ -7236,7 +7142,6 @@ begin
       Inc(Count);
       Item := AnItem as TRivItem;
 
-//      Item := AScreenObject.ModflowRivBoundary.Values.Add as TRivItem;
       AValue := GetRealValueFromText(rdgBoundaryConditions.Cells[
         Ord(rivcStartingTime), Index + 1], Dummy);
       Item.StartTime := AValue;
@@ -7571,7 +7476,6 @@ begin
       Inc(Count);
       Item := AnItem as TGhbItem;
 
-//      Item := AScreenObject.ModflowGhbBoundary.Values.Add as TGhbItem;
       AValue := GetRealValueFromText(rdgBoundaryConditions.
         Cells[Ord(ghbcStartingTime), Index + 1], Dummy);
       Item.StartTime := AValue;
@@ -8020,7 +7924,6 @@ begin
     FieldStorage.FieldNumber := FieldNumber;
     FFieldNumbers.AddObject(string(FieldName), FieldStorage);
   end;
-//  FieldNumber := GetFieldNumberFromName(FieldName);
   if FieldNumber = 0 then
   begin
     if Trim(string(FieldName)) = '' then
@@ -8122,7 +8025,6 @@ begin
     FieldStorage.FieldNumber := FieldNumber;
     FFieldNumbers.AddObject(Text, FieldStorage);
   end;
-//  FieldNumber := GetFieldNumberFromName(Text);
   if FieldNumber <> 0 then
   begin
     if xbShapeDataBase.GetFieldType(FieldNumber) = xbfChar then
@@ -8137,11 +8039,6 @@ begin
   end
   else
   begin
-//    if FieldStorage.Formula <> '' then
-//    begin
-//      result := FieldStorage.Formula;
-//      Exit;
-//    end;
     if TryStrToFloat(Text, Value) then
     begin
       result := Text;
@@ -8259,7 +8156,6 @@ begin
     FieldStorage.FieldNumber := FieldNumber;
     FFieldNumbers.AddObject(string(Text), FieldStorage);
   end;
-//  FieldNumber := GetFieldNumberFromName(Text);
   if FieldNumber <> 0 then
   begin
     if xbShapeDataBase.GetFieldType(FieldNumber) = xbfChar then
@@ -8347,7 +8243,6 @@ begin
     FieldStorage.FieldNumber := FieldNumber;
     FFieldNumbers.AddObject(string(FieldName), FieldStorage);
   end;
-//  FieldNumber := GetFieldNumberFromName(FieldName);
   if FieldNumber = 0 then
   begin
     // not a field
@@ -8540,7 +8435,6 @@ begin
         AddModflowPackageToImportChoices(Packages.HobPackage);
         AddModflowPackageToImportChoices(Packages.LakPackage);
         AddModflowPackageToImportChoices(Packages.Mnw2Package);
-//        AddModflowPackageToImportChoices(Packages.Mf6ObservationUtility);
         AddModflowPackageToImportChoices(Packages.RchPackage);
         AddModflowPackageToImportChoices(Packages.ResPackage);
         AddModflowPackageToImportChoices(Packages.RivPackage);
@@ -8570,12 +8464,10 @@ begin
         AddModflowPackageToImportChoices(Packages.GhbBoundary);
         AddModflowPackageToImportChoices(Packages.Mf6ObservationUtility);
         AddModflowPackageToImportChoices(Packages.LakMf6Package);
-//        AddModflowPackageToImportChoices(Packages.HfbPackage);
         AddModflowPackageToImportChoices(Packages.RchPackage);
         AddModflowPackageToImportChoices(Packages.RivPackage);
         AddModflowPackageToImportChoices(Packages.MawPackage);
         AddModflowPackageToImportChoices(Packages.SfrModflow6Package);
-//        AddModflowPackageToImportChoices(Packages.UzfPackage);
         AddModflowPackageToImportChoices(Packages.WelPackage);
       end;
     msSutra22, msSutra30:
@@ -8906,7 +8798,6 @@ begin
         DataSet := frmGoPhast.PhastModel.DataArrayManager.
           GetDataSetByName(DataSetName);
         Assert(DataSet <> nil);
-//        DataSet := frmGoPhast.PhastModel.DataSets[Position];
         FieldIndex := GetFieldNumberFromName(AnsiString(dgFields.
           Cells[0, Index]));
         // A FieldIndex of zero indicates that the field does not come from
@@ -9901,18 +9792,6 @@ begin
 
 
                       if not FCombinedObjects then
-//                      begin
-//                        if Index = 0 then
-//                        begin
-//                          AScreenObject.Capacity := ShapeObject.FNumPoints;
-//                        end
-//                        else
-//                        begin
-//                          AScreenObject.Capacity := AScreenObject.Capacity
-//                            + ShapeObject.FNumPoints;
-//                        end;
-//                      end
-//                      else
                       begin
                         AScreenObject.Capacity := ShapeObject.FNumPoints;
                       end;
@@ -9997,7 +9876,6 @@ begin
                                 AScreenObject.AddPoint(PointRecord, NewSection);
                               end;
                             end;
-  //                          PriorPoint := PointRecord;
                           end;
 
                           if (cbImportZ.Checked
@@ -10023,7 +9901,7 @@ begin
                               if ShapeObject.FMArray[0]>= -1e38 then
                               begin
                                 PointValue := PointValueItem.Values.Add;
-                                PointValue.Name := 'Measured';
+                                PointValue.Name := StrMeasured;
                                 PointValue.Value := ShapeObject.FMArray[PointIndex];
                               end;
                             end;
@@ -10368,13 +10246,6 @@ begin
               mtWarning, [mbYes, mbNo], 0)= mrYes then
             begin
               ErrorString := ErrorMessages.Text;
-//              for Index := 0 to InvalidObjectNumbers.Count -1 do
-//              begin
-//                ErrorString := ErrorString
-//                  + IntToStr(InvalidObjectNumbers[Index]) + ', ';
-//              end;
-//              SetLength(ErrorString, Length(ErrorString) -2);
-
               MessageDlg(ErrorString, mtInformation, [mbOK], 0);
             end;
           end;
@@ -10658,22 +10529,6 @@ begin
   cbEnclosedCells.Caption := rsSetValueOfEnclosed + NodeElemString;
   cbIntersectedCells.Caption := rsSetValueOfIntersected + NodeElemString;
   cbInterpolation.Caption := rsSetValueOf + NodeElemString + rsByInterpolation;
-//  case rgEvaluatedAt.ItemIndex of
-//    0: // elements
-//      begin
-//        cbEnclosedCells.Caption := rsSetValueOfEnclosedElements;
-//        cbIntersectedCells.Caption := rsSetValueOfIntersectedElements;
-//        cbInterpolation.Caption := rsSetValueOfElementsByInterpolation;
-//      end;
-//    1: // cells
-//      begin
-//        cbEnclosedCells.Caption := rsSetValueOfEnclosedNodes;
-//        cbIntersectedCells.Caption := rsSetValueOfIntersectedNodes;
-//        cbInterpolation.Caption := rsSetValueOfNodesByInterpolation;
-//      end;
-//  else
-//    Assert(False);
-//  end;
 end;
 
 procedure TfrmImportShapefile.rdgBoundaryConditionsDistributeTextProgress(
@@ -10741,14 +10596,6 @@ begin
       DrawCell := True;
       dgFields.Canvas.Brush.Color := Color;
     end;
-//    if ACol = Ord(fgcInterpolator) then
-//    begin
-//      if dgFields.Cells[Ord(fgcDataSet), ARow] <> rsNewDataSet then
-//      begin
-//        DrawCell := True;
-//        dgFields.Canvas.Brush.Color := Color;
-//      end;
-//    end;
     if DrawCell then
     begin
       dgFields.Canvas.FillRect(Rect);
@@ -10948,7 +10795,6 @@ begin
   end;
   FShouldUpdateShowHideObjects := True;
   inherited;
-//  UpdateDisplay;
   WarnSfrLengthProblems(FNewScreenObjects);
   frmGoPhast.PhastModel.FormulaManager.Pack;
   UpdateFrmGridValue;
@@ -11036,7 +10882,6 @@ begin
   rpShapeCompiler.ClearVariables;
   rpShapeCompiler.ClearExpressions;
 
-//  with TfrmFormula.Create(self) do
   with frmFormula do
   begin
     try
@@ -11054,7 +10899,6 @@ begin
         TEValuatedAt(rgEvaluatedAt.ItemIndex));
       frmGoPhast.PhastModel.RegisterGlobalVariables(rpShapeCompiler);
 
-//      RemoveGIS_Functions;
       // show the variables and functions
       IncludeTimeSeries := False;
       UpdateTreeList;
@@ -11069,7 +10913,6 @@ begin
 
     finally
       Initialize;
-//      Free;
     end;
   end
 end;
@@ -11591,46 +11434,16 @@ begin
 end;
 
 procedure TfrmImportShapefile.comboFormulaInterpChange(Sender: TObject);
-//var
-//  combo: TComboBox;
 begin
   inherited;
-//  ChangeConductInterp(comboFormulaInterp.ItemIndex);
-
-//  combo := comboFormulaInterp;
   AssignFormulaInterpretationText(comboFormulaInterp);
 end;
 
 procedure TfrmImportShapefile.comboFormulaInterpDRTChange(Sender: TObject);
 begin
   inherited;
-//  ChangeConductInterp(comboFormulaInterpDRT.ItemIndex);
   AssignFormulaInterpretationText(comboFormulaInterpDRT)
 end;
-
-//procedure TfrmImportShapefile.ChangeConductInterp(Value: Integer);
-//begin
-//  if FConductanceCol >= 0 then
-//  begin
-//    case Value of
-//      0: // direct
-//        begin
-//          rdgBoundaryConditions.cells[FConductanceCol, 0] := StrConductance;
-//        end;
-//      1: // Specific
-//        begin
-//          rdgBoundaryConditions.cells[FConductanceCol, 0] := Format(StrSPerUnitLength, [StrConductance]);
-//        end;
-//      2: // Total
-//        begin
-//          rdgBoundaryConditions.cells[FConductanceCol, 0] := Format(StrTotalSPerLayer, [StrConductance]);
-//        end;
-//      else
-//
-//        Assert(False);
-//    end;
-//  end;
-//end;
 
 procedure TfrmImportShapefile.comboInterpolatersChange(Sender: TObject);
 var
@@ -11869,7 +11682,6 @@ begin
         end;
       rdtString:
         begin
-//          AFormula := 'TextToFloatDef(' +  AFormula + ', 0)';
         end;
     else
       Assert(False);

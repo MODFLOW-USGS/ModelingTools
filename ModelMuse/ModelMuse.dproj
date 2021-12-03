@@ -131,7 +131,7 @@
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <DCC_Define>DEBUG;SWIObs;CSUB;SwiObsExtractor;PEST;MF6_2;Mf6TimeSeries;$(DCC_Define)</DCC_Define>
+        <DCC_Define>DEBUG;SWIObs;SwiObsExtractor;PEST;Mf6TimeSeries;GWT;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
