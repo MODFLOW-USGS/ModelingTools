@@ -689,7 +689,7 @@ begin
     CheckConnectivity;
 
     WriteToNameFile(StrBAS, Model.UnitNumbers.UnitNumber(StrBAS),
-      FNameOfFile, foInput, Model);
+      FNameOfFile, foInput, Model, False, 'BAS');
     OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingBasicPackag);

@@ -720,7 +720,8 @@ begin
     end
     else
     begin
-      WriteToNameFile(FTYPE, Model.UnitNumbers.UnitNumber(FTYPE), FNameOfFile, foInput, Model);
+      WriteToNameFile(FTYPE, Model.UnitNumbers.UnitNumber(FTYPE), FNameOfFile,
+        foInput, Model, False, 'OC');
     end;
     OpenFile(FNameOfFile);
     try
