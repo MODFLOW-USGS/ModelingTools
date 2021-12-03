@@ -277,7 +277,7 @@ function TFormulaObject.GetDisplayFormula: string;
 begin
   if FTimeSeries <> nil then
   begin
-    result := FTimeSeries.SeriesName;
+    result := string(FTimeSeries.SeriesName);
   end
   else if (FExpression = nil) or not FNotifies then
   begin
@@ -313,7 +313,7 @@ function TFormulaObject.GetFormula: string;
 begin
   if (FTimeSeries <> nil) and not FTimeSeries.Deleted then
   begin
-    result := FTimeSeries.SeriesName;
+    result := string(FTimeSeries.SeriesName);
   end
   else if (FExpression = nil) or not FNotifies then
   begin

@@ -4041,7 +4041,7 @@ begin
           if TimeSeries <> nil then
           begin
             PestSeriesName := '' ;
-            TimeSeriesName := TimeSeries.SeriesName;
+            TimeSeriesName := String(TimeSeries.SeriesName);
           end
           else
           begin
@@ -4115,7 +4115,7 @@ begin
                   else
                   begin
                     PestSeriesName := '';
-                    TimeSeriesName := TimeSeries.SeriesName;
+                    TimeSeriesName := string(TimeSeries.SeriesName);
                   end;
                   Method := BoundaryGroup.
                     PestBoundaryMethod[BoundaryFunctionIndex];
@@ -4885,10 +4885,10 @@ begin
     if CustomWriter = nil then
     begin
       CustomWriter := Writer as TCustomFileWriter;
-      CustomWriter.TimeSeriesNames.Add(TimeSeries.SeriesName);
+      CustomWriter.TimeSeriesNames.Add(string(TimeSeries.SeriesName));
     end;
     PestItems.Add('');
-    TimeSeriesItems.Add(TimeSeries.SeriesName);
+    TimeSeriesItems.Add(string(TimeSeries.SeriesName));
     Formula := '1';
   end;
   BoundaryValue.Formula := Formula;

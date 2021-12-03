@@ -137,7 +137,8 @@ function TMf6TimeSeriesWriter.WriteFile(PackageInputFileName: string;
   TimeSeries: TTimesSeriesCollection): string;
 begin
   FTimeSeries := TimeSeries;
-  FNameOfFile := PackageInputFileName + '.' + string(TimeSeries.GroupName0 + Extension;
+  FNameOfFile := PackageInputFileName + '.'
+    + string(TimeSeries.GroupName) + Extension;
   result := FNameOfFile;
   FInputFileName := FNameOfFile;
   FPestParamUsed := False;

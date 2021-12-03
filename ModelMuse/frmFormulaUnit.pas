@@ -1151,7 +1151,7 @@ begin
               Continue;
             end;
             tvItems.Items.AddChildObject(ParentNode, String(ASeries.SeriesName), ASeries);
-            FTimesSeriesNames.Add(ASeries.SeriesName);
+            FTimesSeriesNames.Add(string(ASeries.SeriesName));
           end;
         end;
       end;

@@ -1755,7 +1755,7 @@ var
       TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(AFormula);
       if TimeSeries <> nil then
       begin
-        AFormula := TimeSeries.SeriesName;
+        AFormula := String(TimeSeries.SeriesName);
         UsesList.Clear;
       end
       else

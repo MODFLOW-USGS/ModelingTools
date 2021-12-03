@@ -10422,8 +10422,12 @@ const
 //                vertical connections.
 //    '4.3.0.74' No change
 
+//               Change: Changed the formula for the initial head in MODFLOW
+//                models to Model_Top.
+
 //               Enhancement: Added support for PEST with MODFLOW and SUTRA
 //                models.
+//               Enhancement: Added support for MODFLOW 6 Time Series files.
 
 const
   // version number of ModelMuse.

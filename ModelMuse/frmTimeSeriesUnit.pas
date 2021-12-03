@@ -302,14 +302,16 @@ begin
         end
         else
         begin
-          Observer := frmGoPhast.PhastModel.GetObserverByName(String(ASeries.SeriesName));
+          Observer := frmGoPhast.PhastModel.GetObserverByName(
+            String(ASeries.SeriesName));
           if Observer <> nil then
           begin
             ObserverDuplicates.Add(String(ASeries.SeriesName));
           end
           else
           begin
-            Parameter := frmGoPhast.PhastModel.GetPestParameterByName(ASeries.SeriesName);
+            Parameter := frmGoPhast.PhastModel.GetPestParameterByName(
+              string(ASeries.SeriesName));
             if Parameter <> nil then
             begin
               ParameterDuplicates.Add(String(ASeries.SeriesName));

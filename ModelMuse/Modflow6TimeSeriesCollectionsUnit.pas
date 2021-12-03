@@ -3,9 +3,9 @@ unit Modflow6TimeSeriesCollectionsUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, GoPhastTypes, OrderedCollectionUnit,
-  Modflow6TimeSeriesUnit, Generics.Collections, System.IOUtils,
-  System.Character;
+  System.AnsiStrings, System.SysUtils, System.Classes, GoPhastTypes,
+  OrderedCollectionUnit, Modflow6TimeSeriesUnit, Generics.Collections,
+  System.IOUtils, System.Character;
 
 type
   TTimeSeriesItem = class(TOrderedItem)
@@ -420,7 +420,7 @@ begin
       begin
         Continue;
       end;
-      FTimeSeriesDictionary.Add(UpperCase(TimeSeries.SeriesName), TimeSeries);
+      FTimeSeriesDictionary.Add(UpperCase(String(TimeSeries.SeriesName)), TimeSeries);
     end;
   end;
   if not FTimeSeriesDictionary.TryGetValue(UpperCase(AName), result) then
@@ -489,7 +489,7 @@ begin
         Count := Splitter.Count - 1;
         for NameIndex := 1 to Splitter.Count - 1 do
         begin
-          Items[NameIndex-1].TimeSeries.SeriesName := Splitter[NameIndex];
+          Items[NameIndex-1].TimeSeries.SeriesName := AnsiString(Splitter[NameIndex]);
           Items[NameIndex-1].TimeSeries.ScaleFactor := 1;
         end;
       end
@@ -599,7 +599,7 @@ var
   CharIndex: Integer;
   AChar: Char;
 begin
-  Value := Trim(Value);
+  Value := System.AnsiStrings.Trim(Value);
   for CharIndex := 1 to Length(Value) do
   begin
     AChar := Char(Value[CharIndex]);
@@ -751,7 +751,7 @@ begin
         begin
           Continue;
         end;
-        FTimeSeriesDictionary.Add(UpperCase(ASeries.SeriesName), ASeries);
+        FTimeSeriesDictionary.Add(UpperCase(string(ASeries.SeriesName)), ASeries);
       end;
     end;
   end;
@@ -791,7 +791,7 @@ begin
       begin
         Continue;
       end;
-      FTimeSeriesNames.Add(TimeSeries.SeriesName);
+      FTimeSeriesNames.Add(string(TimeSeries.SeriesName));
     end;
   end;
   result := FTimeSeriesNames
@@ -824,7 +824,7 @@ begin
           begin
             Continue;
           end;
-          FTimeSeriesGroupsDictionary.Add(UpperCase(TimeSeries.SeriesName), AGroup);
+          FTimeSeriesGroupsDictionary.Add(UpperCase(String(TimeSeries.SeriesName)), AGroup);
         end;
       end;
     end;

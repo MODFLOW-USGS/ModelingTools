@@ -20543,7 +20543,7 @@ begin
   begin
     if TimeSeries <> nil then
     begin
-      DataGrid.Cells[ACol, ARow] := TimeSeries.SeriesName;
+      DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
     end
     else
     begin
@@ -20554,7 +20554,7 @@ begin
   begin
     if TimeSeries <> nil then
     begin
-      DataGrid.Cells[ACol, ARow] := TimeSeries.SeriesName;
+      DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
     end
     else
     begin
@@ -20565,7 +20565,7 @@ begin
   begin
     if TimeSeries <> nil then
     begin
-      DataGrid.Cells[ACol, ARow] := TimeSeries.SeriesName;
+      DataGrid.Cells[ACol, ARow] := string(TimeSeries.SeriesName);
     end
     else
     begin

@@ -268,7 +268,7 @@ var
   ASeries: TMf6TimeSeries;
 //  ColIndex: Integer;
 begin
-  FTimesSeriesGroup.GroupName := AnsString(edGroupName.Text);
+  FTimesSeriesGroup.GroupName := AnsiString(edGroupName.Text);
 //  FTimesSeriesGroup.Count := seTimeSeriesCount.AsInteger;
   FTimesSeriesGroup.TimeCount := seTimeCount.AsInteger;
   for TimeIndex := 0 to FTimesSeriesGroup.Times.Count - 1 do
