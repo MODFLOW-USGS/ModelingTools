@@ -716,12 +716,12 @@ begin
     
     if Model.ModelSelection = msModflow2015 then
     begin
-      WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model);
+      WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model, False, 'OC');
     end
     else
     begin
       WriteToNameFile(FTYPE, Model.UnitNumbers.UnitNumber(FTYPE), FNameOfFile,
-        foInput, Model, False, 'OC');
+        foInput, Model);
     end;
     OpenFile(FNameOfFile);
     try

@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 7/7/2021 by ModelMuse Version 4.3.0.56
+# Name File for MODFLOW created on 12/3/2021 by ModelMuse Version 4.3.0.74
 BEGIN OPTIONS
   LIST ..\..\output\output.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.lst
   PRINT_INPUT
@@ -6,21 +6,21 @@ BEGIN OPTIONS
 END OPTIONS
 
 BEGIN PACKAGES
-  DIS6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.dis
-  IC6          ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.ic
-  NPF6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.npf
+  DIS6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.dis  DIS
+  IC6          ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.ic  IC
+  NPF6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.npf  NPF
   OBS6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.ob_gw
-  OC6          ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.oc
-  CHD6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.chd
-  GHB6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.ghb
-  WEL6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.wel
-  RIV6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.riv
-  DRN6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.drn
-  SFR6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.sfr
-  MAW6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.maw6
-  RCH6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.rch
-  EVT6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.evt
-  LAK6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.lak6
-  UZF6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.uzf
-  MVR6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.mvr
+  OC6          ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.oc  OC
+  CHD6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.chd  CHD-1
+  GHB6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.ghb  GHB-1
+  WEL6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.wel  WEL-1
+  RIV6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.riv  RIV-1
+  DRN6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.drn  DRN-1
+  SFR6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.sfr  SFR-1
+  MAW6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.maw6  MAW-1
+  RCH6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.rch  RCH-1
+  EVT6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.evt  EVT-1
+  LAK6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.lak6  LAK-1
+  UZF6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.uzf  UZF
+  MVR6         ..\..\model\model.MF6_TestSfrMawLakMvrUzf\MF6_TestSfrMawLakMvrUzf.mvr  MVR-1
 END PACKAGES

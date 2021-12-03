@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 7/8/2021 by ModelMuse Version 4.3.0.56
+# Name File for MODFLOW created on 12/3/2021 by ModelMuse Version 4.3.0.74
 BEGIN OPTIONS
   LIST ..\..\output\output.CSubExampletest\CSubExampletest.lst
   NEWTON
@@ -7,14 +7,14 @@ BEGIN OPTIONS
 END OPTIONS
 
 BEGIN PACKAGES
-  DIS6         ..\..\model\model.CSubExampletest\CSubExampletest.dis
-  IC6          ..\..\model\model.CSubExampletest\CSubExampletest.ic
-  NPF6         ..\..\model\model.CSubExampletest\CSubExampletest.npf
+  DIS6         ..\..\model\model.CSubExampletest\CSubExampletest.dis  DIS
+  IC6          ..\..\model\model.CSubExampletest\CSubExampletest.ic  IC
+  NPF6         ..\..\model\model.CSubExampletest\CSubExampletest.npf  NPF
   OBS6         ..\..\model\model.CSubExampletest\CSubExampletest.ob_gw
-  STO6         ..\..\model\model.CSubExampletest\CSubExampletest.sto
-  OC6          ..\..\model\model.CSubExampletest\CSubExampletest.oc
-  CHD6         ..\..\model\model.CSubExampletest\CSubExampletest.chd
-  WEL6         ..\..\model\model.CSubExampletest\CSubExampletest.wel
-  RCH6         ..\..\model\model.CSubExampletest\CSubExampletest.rch
-  CSUB6        ..\..\model\model.CSubExampletest\CSubExampletest.csub
+  STO6         ..\..\model\model.CSubExampletest\CSubExampletest.sto  STO
+  OC6          ..\..\model\model.CSubExampletest\CSubExampletest.oc  OC
+  CHD6         ..\..\model\model.CSubExampletest\CSubExampletest.chd  CHD-1
+  WEL6         ..\..\model\model.CSubExampletest\CSubExampletest.wel  WEL-1
+  RCH6         ..\..\model\model.CSubExampletest\CSubExampletest.rch  RCH-1
+  CSUB6        ..\..\model\model.CSubExampletest\CSubExampletest.csub  CSUB
 END PACKAGES

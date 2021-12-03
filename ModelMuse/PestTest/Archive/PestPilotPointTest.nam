@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 7/2/2021 by ModelMuse Version 4.3.0.56
+# Name File for MODFLOW created on 12/3/2021 by ModelMuse Version 4.3.0.74
 BEGIN OPTIONS
   LIST PestPilotPointTest.lst
   PRINT_INPUT
@@ -6,11 +6,11 @@ BEGIN OPTIONS
 END OPTIONS
 
 BEGIN PACKAGES
-  DIS6         PestPilotPointTest.dis
-  IC6          PestPilotPointTest.ic
-  NPF6         PestPilotPointTest.npf
+  DIS6         PestPilotPointTest.dis  DIS
+  IC6          PestPilotPointTest.ic  IC
+  NPF6         PestPilotPointTest.npf  NPF
   OBS6         PestPilotPointTest.ob_gw
-  OC6          PestPilotPointTest.oc
-  CHD6         PestPilotPointTest.chd
-  DRN6         PestPilotPointTest.drn
+  OC6          PestPilotPointTest.oc  OC
+  CHD6         PestPilotPointTest.chd  CHD-1
+  DRN6         PestPilotPointTest.drn  DRN-1
 END PACKAGES

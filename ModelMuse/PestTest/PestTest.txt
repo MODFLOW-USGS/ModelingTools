@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1532
+1531
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -689,7 +689,6 @@ FarmTest1.gpt
 	Archive\FarmTest1.SemiRouteDeliv
 	Archive\FarmTest1.SemiRouteReturn
 	Archive\FarmTest1.sfr
-	Archive\FarmTest1.sfr.tpl
 	Archive\FarmTest1.SID
 	Archive\FarmTest1.SoilProp
 	Archive\FarmTest1.swr
