@@ -603,7 +603,7 @@ begin
     if FShouldWriteFile and not WritingTemplate then
     begin
       WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrDRN),
-        NameOfFile, foInput, Model);
+        NameOfFile, foInput, Model, False, 'DRN-1');
     end;
 
 //      if Model.ModelSelection <> msModflow2015 then

@@ -553,8 +553,7 @@ begin
 
 //  ClearTimeLists(Model);
   FInputFileName := FFileName;
-  WriteToNameFile(Abbreviation, 0,
-    FFileName, foInput, Model);
+  WriteToNameFile(Abbreviation, 0, FFileName, foInput, Model, False, 'CSUB');
   FNameOfFile := FFileName;
   WriteFileInternal;
 

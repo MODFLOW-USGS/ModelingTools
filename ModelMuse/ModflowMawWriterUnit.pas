@@ -838,7 +838,7 @@ begin
   end;
 
   FNameOfFile := FileName(AFileName);
-  WriteToNameFile(StrMAW, 0, FNameOfFile, foInput, Model);
+  WriteToNameFile(StrMAW, 0, FNameOfFile, foInput, Model, False, 'MAW-1');
   Application.ProcessMessages;
   if not frmProgressMM.ShouldContinue then
   begin

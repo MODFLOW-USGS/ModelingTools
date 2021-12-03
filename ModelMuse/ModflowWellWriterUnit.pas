@@ -780,7 +780,7 @@ begin
     if not WritingTemplate then
     begin
       WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrWEL),
-        FNameOfFile, foInput, Model);
+        FNameOfFile, foInput, Model, False, 'WEL-1');
     end;
 
     if (Model.ModelSelection = msModflowNWT) and (Model.NWT_Format = nf1_0) then

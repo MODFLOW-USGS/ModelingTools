@@ -72,7 +72,7 @@ begin
       Exit;
     end;
     WriteToNameFile(FTYPE, Model.UnitNumbers.UnitNumber(StrIC),
-      FNameOfFile, foInput, Model);
+      FNameOfFile, foInput, Model, False, 'IC');
     OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage('Writing Initial Conditions Package input');

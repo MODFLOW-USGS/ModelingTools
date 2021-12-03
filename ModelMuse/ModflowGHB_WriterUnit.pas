@@ -640,7 +640,7 @@ begin
     if FShouldWriteFile and not WritingTemplate then
     begin
       WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrGHB),
-        NameOfFile, foInput, Model);
+        NameOfFile, foInput, Model, False, 'GHB-1');
     end;
 
     //      if Model.ModelSelection <> msModflow2015 then

@@ -367,12 +367,12 @@ end;
     class procedure WriteToNameFile(const Ftype: string;
       const UnitNumber: integer; FileName: string;
       const Option: TFileOption; AModel: TCustomModel;
-      RelativeFileName: boolean = False); overload;
+      RelativeFileName: boolean = False; PackageName: String  = ''); overload;
     class procedure WriteToNameFile(const Ftype: string;
       UnitNumber: integer; FileName: string;
       const Option: TFileOption; OutputSuppression: TOutputSuppression;
       AModel: TCustomModel;
-      RelativeFileName: boolean = False); overload;
+      RelativeFileName: boolean = False; PackageName: String = ''); overload;
     class procedure WriteToMt3dMsNameFile(const Ftype: string;
       const UnitNumber: integer; FileName: string; FileOption: TFileOption;
       AModel: TCustomModel; RelativeFileName: boolean = False; Option: String = '');
@@ -3825,7 +3825,7 @@ end;
 class procedure TCustomModflowWriter.WriteToNameFile(const Ftype: string;
   UnitNumber: integer; FileName: string; const Option: TFileOption;
   OutputSuppression: TOutputSuppression; AModel: TCustomModel;
-  RelativeFileName: boolean);
+  RelativeFileName: boolean = False; PackageName: String = '');
 var
   Line: string;
   UnitNumberString: string;
@@ -3947,6 +3947,10 @@ begin
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
     Line := '  ' + Line;
+    if PackageName <> '' then
+    begin
+      Line := Line + '  ' + PackageName;
+    end;
     case Option of
       foNone: Assert(False);
       foInput, foInputAlreadyExists:
@@ -3970,10 +3974,10 @@ end;
 class procedure TCustomModflowWriter.WriteToNameFile(const Ftype: string;
   const UnitNumber: integer; FileName: string; const Option: TFileOption;
   AModel: TCustomModel;
-  RelativeFileName: boolean = False);
+  RelativeFileName: boolean = False; PackageName: String = '');
 begin
   WriteToNameFile(Ftype, UnitNumber, FileName, Option, osShowAll, AModel,
-    RelativeFileName);
+    RelativeFileName, PackageName);
 end;
 
 function TCustomModflowWriter.IPRN_Real: integer;

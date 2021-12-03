@@ -454,7 +454,7 @@ begin
   if not WritingTemplate then
   begin
     WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrRCH),
-      FNameOfFile, foInput, Model);
+      FNameOfFile, foInput, Model, False, 'RCH-1');
   end;
   Evaluate;
   Application.ProcessMessages;

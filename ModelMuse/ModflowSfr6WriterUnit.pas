@@ -1617,7 +1617,7 @@ begin
   end;
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
-  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model);
+  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model, False, 'SFR-1');
   frmErrorsAndWarnings.BeginUpdate;
   try
 

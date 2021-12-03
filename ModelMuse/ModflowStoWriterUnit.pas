@@ -55,7 +55,7 @@ begin
 
   NameOfFile := FileName(AFileName);
   FInputFileName := NameOfFile;
-  WriteToNameFile(FTYPE, -1, NameOfFile, foInput, Model);
+  WriteToNameFile(FTYPE, -1, NameOfFile, foInput, Model, False, 'STO');
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage('Writing STO package input');

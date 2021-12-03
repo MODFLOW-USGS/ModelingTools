@@ -227,7 +227,7 @@ begin
     CheckSpecifiedHeadsConnected;
     NameOfFile := FileName(AFileName);
     FInputFileName := NameOfFile;
-    WriteToNameFile(StrNPF, -1, NameOfFile, foInput, Model);
+    WriteToNameFile(StrNPF, -1, NameOfFile, foInput, Model, False, 'NPF');
     OpenFile(NameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingNPFPackage);

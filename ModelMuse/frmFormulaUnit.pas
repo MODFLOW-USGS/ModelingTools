@@ -1142,7 +1142,7 @@ begin
         end;
         if Group.Count > 0 then
         begin
-          ParentNode := tvItems.Items.AddChild(FTimeSeries, Group.GroupName);
+          ParentNode := tvItems.Items.AddChild(FTimeSeries, String(Group.GroupName));
           for SeriesIndex := 0 to Group.Count - 1 do
           begin
             ASeries := Group[SeriesIndex].TimeSeries;
@@ -1150,7 +1150,7 @@ begin
             begin
               Continue;
             end;
-            tvItems.Items.AddChildObject(ParentNode, ASeries.SeriesName, ASeries);
+            tvItems.Items.AddChildObject(ParentNode, String(ASeries.SeriesName), ASeries);
             FTimesSeriesNames.Add(ASeries.SeriesName);
           end;
         end;
@@ -1455,7 +1455,7 @@ begin
     end
     else if AnObject is TMf6TimeSeries then
     begin
-      InsertText(TMf6TimeSeries(AnObject).SeriesName);
+      InsertText(String(TMf6TimeSeries(AnObject).SeriesName));
     end;
   end;
 end;

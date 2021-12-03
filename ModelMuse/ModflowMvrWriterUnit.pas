@@ -595,7 +595,7 @@ begin
 
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
-  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model);
+  WriteToNameFile(Abbreviation, -1, FNameOfFile, foInput, Model, False, 'MVR-1');
   frmErrorsAndWarnings.BeginUpdate;
   try
     Application.ProcessMessages;

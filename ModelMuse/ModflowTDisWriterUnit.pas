@@ -123,7 +123,6 @@ begin
   FInputFileName := NameOfFile;
   Model.SimNameWriter.TDisFileName := NameOfFile;
   Model.AddModelInputFile(NameOfFile);
-//  WriteToNameFile(FTYPE, -1, NameOfFile, foInput);
   OpenFile(NameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingTemporalDis);

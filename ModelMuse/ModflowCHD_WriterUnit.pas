@@ -396,7 +396,7 @@ begin
   if FShouldWriteFile then
   begin
     WriteToNameFile(FAbbreviation, Model.UnitNumbers.UnitNumber(StrCHD),
-      NameOfFile, foInput, Model);
+      NameOfFile, foInput, Model, False, 'CHD-1');
   end;
   if FShouldWriteFile or ShouldWriteObservationFile then
   begin

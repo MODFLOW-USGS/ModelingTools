@@ -504,7 +504,7 @@ begin
 
   FFileName := FileName(AFileName);
   FInputFileName := FFileName;
-  WriteToNameFile('LAK6', 0, FFileName, foInput, Model);
+  WriteToNameFile('LAK6', 0, FFileName, foInput, Model, False, 'LAK-1');
   FNameOfFile := FFileName;
 
   WriteLakeTables;
@@ -1083,8 +1083,8 @@ begin
           begin
             OutletSetting.Rate := 0;
             OutletSetting.RatePestParam := '';
-            OutletSetting.RateTimeSeriesName := TimeSeries.SeriesName;
-            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+            OutletSetting.RateTimeSeriesName := String(TimeSeries.SeriesName);
+            FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
           end;
 
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Invert);
@@ -1101,8 +1101,8 @@ begin
           begin
             OutletSetting.Invert := 0;
             OutletSetting.InvertPestParam := '';
-            OutletSetting.InvertTimeSeriesName := TimeSeries.SeriesName;
-            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+            OutletSetting.InvertTimeSeriesName := String(TimeSeries.SeriesName);
+            FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
           end;
 
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Width);
@@ -1119,8 +1119,8 @@ begin
           begin;
             OutletSetting.Width := 0;
             OutletSetting.WidthPestParam := '';
-            OutletSetting.WidthTimeSeriesName := TimeSeries.SeriesName;
-            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+            OutletSetting.WidthTimeSeriesName := String(TimeSeries.SeriesName);
+            FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
           end;
 
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Slope);
@@ -1137,8 +1137,8 @@ begin
           begin;
             OutletSetting.Slope := 0;
             OutletSetting.SlopePestParam := '';
-            OutletSetting.SlopeTimeSeriesName := TimeSeries.SeriesName;
-            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+            OutletSetting.SlopeTimeSeriesName := String(TimeSeries.SeriesName);
+            FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
           end;
 
           TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(OutletTimeItem.Roughness);
@@ -1155,8 +1155,8 @@ begin
           begin;
             OutletSetting.Rough := 0;
             OutletSetting.RoughPestParam := '';
-            OutletSetting.RoughTimeSeriesName := TimeSeries.SeriesName;
-            FTimeSeriesNames.Add(TimeSeries.SeriesName);
+            OutletSetting.RoughTimeSeriesName := String(TimeSeries.SeriesName);
+            FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
           end;
         end;
       end;
@@ -1376,8 +1376,8 @@ var
       LakeSetting.PestName[DataSetIdentifier] := '';
       LakeSetting.PestSeries[DataSetIdentifier] := '';
       LakeSetting.Value[DataSetIdentifier] := 0;
-      LakeSetting.TimeSeriesName[DataSetIdentifier] := TimeSeries.SeriesName;
-      FTimeSeriesNames.Add(TimeSeries.SeriesName);
+      LakeSetting.TimeSeriesName[DataSetIdentifier] := String(TimeSeries.SeriesName);
+      FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
     end;
   end;
 begin

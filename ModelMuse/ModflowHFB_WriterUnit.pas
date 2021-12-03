@@ -1689,7 +1689,7 @@ begin
   end;
   NameOfFile := FileName(AFileName);
   FInputFileName := NameOfFile;
-  WriteToNameFile(StrHFB, Model.UnitNumbers.UnitNumber(StrHFB), NameOfFile, foInput, Model);
+  WriteToNameFile(StrHFB, Model.UnitNumbers.UnitNumber(StrHFB), NameOfFile, foInput, Model, False, 'HFB');
   if Model.ModelSelection = msModflow2015 then
   begin
     EvaluateModflow6;

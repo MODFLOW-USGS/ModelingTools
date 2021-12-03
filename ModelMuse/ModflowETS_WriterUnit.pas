@@ -661,7 +661,7 @@ begin
     if not WritingTemplate then
     begin
       WriteToNameFile(Abbreviation, Model.UnitNumbers.UnitNumber(StrETS),
-        FNameOfFile, foInput, Model);
+        FNameOfFile, foInput, Model, False, 'EVT-1');
     end;
     FInputFileName := FNameOfFile;
     Evaluate;

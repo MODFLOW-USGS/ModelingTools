@@ -337,7 +337,7 @@ begin
   FInputFileName := FNameOfFile;
   if Model.ModelSelection = msModflow2015 then
   begin
-    WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model);
+    WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model, False, 'DIS');
   end
   else
   begin
@@ -1053,7 +1053,7 @@ begin
   FNameOfFile := FileName(AFileName);
   FInputFileName := FNameOfFile;
   Assert( Model.ModelSelection = msModflow2015);
-  WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model);
+  WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model, False, 'DISV');
   OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingDISVPackage);

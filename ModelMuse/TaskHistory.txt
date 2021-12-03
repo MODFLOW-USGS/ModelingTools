@@ -479,6 +479,10 @@ object TTaskHistory
     item
       Name = 'MF6 Time Series'
       Display = True
+    end
+    item
+      Name = 'MF6 GWT'
+      Display = True
     end>
   History = <
     item
@@ -28560,5 +28564,16 @@ object TTaskHistory
         'Undo'
         'MF6 Time Series'
         'Testing')
+    end
+    item
+      Date = 44531.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'MF6 Time Series')
+    end
+    item
+      Date = 44532.000000000000000000
+      Categories.Strings = (
+        'MF6 GWT')
     end>
 end

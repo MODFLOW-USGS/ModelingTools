@@ -14,9 +14,9 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
     object lblTimeSeriesCount: TLabel
       Left = 8
       Top = 8
-      Width = 107
+      Width = 104
       Height = 13
-      Caption = 'Number of Time Series'
+      Caption = 'Number of time series'
     end
     object lblTimeCount: TLabel
       Left = 8
