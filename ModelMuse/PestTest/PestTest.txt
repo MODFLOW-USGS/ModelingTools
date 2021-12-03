@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-1531
+1529
 PestPilotPointTest.gpt
 	Archive\PestPilotPointTest.axml
 	Archive\PestPilotPointTest.chd
@@ -1003,7 +1003,6 @@ UzfTest.gpt
 	Archive\UzfTest.RunModel.Bat
 	Archive\UzfTest.RunModflow.Bat
 	Archive\UzfTest.sfr
-	Archive\UzfTest.sfr.tpl
 	Archive\UzfTest.uzf
 	Archive\UzfTest.uzf.tpl
 	Archive\usgs.UzfTest.reference
@@ -1298,7 +1297,6 @@ DryCells.gpt
 	Archive\DryCells.RunModel.Bat
 	Archive\DryCells.RunModflow.Bat
 	Archive\DryCells.sfr
-	Archive\DryCells.sfr.tpl
 	Archive\DryCells.Sfr_script
 	Archive\arrays\DryCells.Kx_1.arrays
 	Archive\arrays\DryCells.Kx_2.arrays
