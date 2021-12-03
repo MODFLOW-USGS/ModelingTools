@@ -3,7 +3,8 @@ unit FormulaManagerUnit;
 interface
 
 uses SysUtils, Classes, Contnrs, RbwParser, IntListUnit, Dialogs,
-  HashTableFacadeUnit, Modflow6TimeSeriesUnit, GoPhastTypes;
+  HashTableFacadeUnit, Modflow6TimeSeriesUnit, GoPhastTypes,
+  System.Generics.Collections;
 
 type
   TChangeSubscription = procedure (Sender: TObject;
@@ -58,6 +59,8 @@ type
       OnRestoreSubscription: TChangeSubscription; Subject: TObject);
 //    property HasTimeSeries: Boolean read GetHasTimeSeries;
   end;
+
+  TFormulaObjectList = TList<TFormulaObject>;
 
   {@name is used to update formulas when the names of variables used
   in the formulas are changed.  The procedures @link(RemoveSubscriptions)

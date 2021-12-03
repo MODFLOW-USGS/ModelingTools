@@ -21,6 +21,7 @@ type
     EvapotranspirationDepthAnnotation: string;
     DepthFractionAnnotations: array of string;
     EtFractionAnnotations: array of string;
+    // MODFLOW 6 TimeSeries (unused)
     DepthFractionTimeSeries: array of string;
     EtFractionTimeSeries: array of string;
     // PEST
@@ -30,6 +31,7 @@ type
     DepthPest: string;
     DepthPestSeries: string;
     DepthPestMethod: TPestParamMethod;
+    // MODFLOW 6 TimeSeries
     SurfaceTimeSeries: string;
     DepthTimeSeries: string;
     procedure Assign(const Item: TEtsSurfDepthRecord);

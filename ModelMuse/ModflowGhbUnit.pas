@@ -21,14 +21,20 @@ type
     MvrIndex: Integer;
     ConductanceParameterName: string;
     ConductanceParameterValue: double;
+    // PEST
     ConductancePest: string;
     BoundaryHeadPest: string;
     ConductancePestSeriesName: string;
     BoundaryHeadPestSeriesName: string;
     ConductancePestSeriesMethod: TPestParamMethod;
     BoundaryHeadPestSeriesMethod: TPestParamMethod;
+    // MODFLOW 6 TimeSeries
     ConductanceTimeSeriesName: string;
     BoundaryHeadTimeSeriesName: string;
+    // GWT Concentrations
+    Concentrations: array of double;
+    ConcentrationAnnotations: array of string;
+    procedure Assign(const Item: TGhbRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -48,6 +54,13 @@ type
     property GhbArray: TGhbArray read GetGhbArray;
   end;
 
+  TGhbCollection = class;
+
+  TGhbGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TGhbCollection);
+  end;
+
   // @name represents a MODFLOW General Head boundary for one time interval.
   // @name is stored by @link(TGhbCollection).
   TGhbItem = class(TCustomModflowBoundaryItem)
@@ -56,12 +69,15 @@ type
     FBoundaryHead: TFormulaObject;
     // See @link(Conductance).
     FConductance: TFormulaObject;
+    FGwtConcentrations: TGhbGwtConcCollection;
+    FConcFormulas: TFormulaObjectList;
     // See @link(BoundaryHead).
     procedure SetBoundaryHead(const Value: string);
     // See @link(Conductance).
     procedure SetConductance(const Value: string);
     function GetBoundaryHead: string;
     function GetConductance: string;
+    procedure SetGwtConcentrations(const Value: TGhbGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -77,6 +93,7 @@ type
     function BoundaryFormulaCount: integer; override;
     function GetConductanceIndex: Integer; override;
   public
+    constructor Create(Collection: TCollection); override;
     Destructor Destroy; override;
   published
     // @name copies Source to this @classname.
@@ -87,6 +104,8 @@ type
     // @name is the formula used to set the conductance
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
+    property GwtConcentrations: TGhbGwtConcCollection read FGwtConcentrations
+      write SetGwtConcentrations;
   end;
 
   TGhbTimeListLink = class(TTimeListsModelLink)
@@ -371,6 +390,7 @@ begin
     Ghb := TGhbItem(Source);
     BoundaryHead := Ghb.BoundaryHead;
     Conductance := Ghb.Conductance;
+    GwtConcentrations := Ghb.GwtConcentrations;
   end;
   inherited;
 end;
@@ -391,6 +411,21 @@ end;
 function TGhbItem.BoundaryFormulaCount: integer;
 begin
   result := 2;
+  if GwtConcentrations <> nil then
+  begin
+    result := result + GwtConcentrations.Count;
+  end;
+end;
+
+constructor TGhbItem.Create(Collection: TCollection);
+var
+  GhbCol: TGhbCollection;
+begin
+  inherited;
+  GhbCol := Collection as TGhbCollection;
+  FGwtConcentrations := TGhbGwtConcCollection.Create(Model, ScreenObject,
+    GhbCol);
+  FConcFormulas := TFormulaObjectList.Create;
 end;
 
 procedure TGhbItem.CreateFormulaObjects;
@@ -400,18 +435,39 @@ begin
 end;
 
 destructor TGhbItem.Destroy;
+var
+  Index: Integer;
 begin
   BoundaryHead := '0';
   Conductance := '0';
+
+  for Index := 0 to FGwtConcentrations.Count - 1 do
+  begin
+    FGwtConcentrations[Index].Value := '0';
+  end;
+
+  FConcFormulas.Free;
+  FGwtConcentrations.Free;
   inherited;
 end;
 
 function TGhbItem.GetBoundaryFormula(Index: integer): string;
+var
+  Item: TGWtConcStringValueItem;
 begin
   case Index of
     GhbHeadPosition: result := BoundaryHead;
     GhbConductancePosition: result := Conductance;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 2);
+        while GwtConcentrations.Count <= Index do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        result := Item.Value;
+      end;
   end;
 end;
 
@@ -433,6 +489,9 @@ begin
 end;
 
 procedure TGhbItem.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  Item: TGWtConcStringValueItem;
+  ConcIndex: Integer;
 begin
   if Sender = FConductance then
   begin
@@ -441,6 +500,14 @@ begin
   if Sender = FBoundaryHead then
   begin
     List.Add(FObserverList[GhbHeadPosition]);
+  end;
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    Item := GwtConcentrations.Items[ConcIndex];
+    if Item.FValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
   end;
 end;
 
@@ -468,7 +535,8 @@ begin
   begin
     Item := TGhbItem(AnotherItem);
     result := (Item.BoundaryHead = BoundaryHead)
-      and (Item.Conductance = Conductance);
+      and (Item.Conductance = Conductance)
+      and (Item.GwtConcentrations = GwtConcentrations);
   end;
 end;
 
@@ -481,12 +549,23 @@ begin
 end;
 
 procedure TGhbItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  Item: TGWtConcStringValueItem;
 begin
   inherited;
   case Index of
     GhbHeadPosition: BoundaryHead := Value;
     GhbConductancePosition: Conductance := Value;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 2);
+        while Index >= GwtConcentrations.Count do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        Item.Value := Value;
+      end;
   end;
 end;
 
@@ -498,6 +577,11 @@ end;
 procedure TGhbItem.SetConductance(const Value: string);
 begin
   UpdateFormulaBlocks(Value, GhbConductancePosition, FConductance);
+end;
+
+procedure TGhbItem.SetGwtConcentrations(const Value: TGhbGwtConcCollection);
+begin
+  FGwtConcentrations.Assign(Value);
 end;
 
 { TGhbCollection }
@@ -1626,7 +1710,17 @@ end;
 
 { TGhbRecord }
 
+procedure TGhbRecord.Assign(const Item: TGhbRecord);
+begin
+  self := Item;
+  SetLength(Concentrations, Length(Concentrations));
+  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
+end;
+
 procedure TGhbRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, Conductance);
@@ -1636,7 +1730,6 @@ begin
   WriteCompReal(Comp, ConductanceParameterValue);
   WriteCompInt(Comp, Strings.IndexOf(ConductanceAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadAnnotation));
-//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
   WriteCompInt(Comp, Strings.IndexOf(ConductancePest));
   WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadPest));
@@ -1648,15 +1741,27 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(ConductanceTimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(BoundaryHeadTimeSeriesName));
 
+  Count := Length(Concentrations);
+  WriteCompInt(Comp, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompReal(Comp, Concentrations[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
+  end;
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
 
 procedure TGhbRecord.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
 begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(BoundaryHeadAnnotation);
-//  Strings.Add(TimeSeriesName);
   Strings.Add(ConductanceParameterName);
   Strings.Add(ConductancePest);
   Strings.Add(BoundaryHeadPest);
@@ -1664,9 +1769,16 @@ begin
   Strings.Add(BoundaryHeadPestSeriesName);
   Strings.Add(ConductanceTimeSeriesName);
   Strings.Add(BoundaryHeadTimeSeriesName);
+  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
+  begin
+    Strings.Add(ConcentrationAnnotations[Index]);
+  end;
 end;
 
 procedure TGhbRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   Conductance := ReadCompReal(Decomp);
@@ -1676,7 +1788,6 @@ begin
   ConductanceParameterValue := ReadCompReal(Decomp);
   ConductanceAnnotation := Annotations[ReadCompInt(Decomp)];
   BoundaryHeadAnnotation := Annotations[ReadCompInt(Decomp)];
-//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   ConductanceParameterName := Annotations[ReadCompInt(Decomp)];
   ConductancePest := Annotations[ReadCompInt(Decomp)];
   BoundaryHeadPest := Annotations[ReadCompInt(Decomp)];
@@ -1687,6 +1798,18 @@ begin
 
   ConductanceTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   BoundaryHeadTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  Count := ReadCompInt(Decomp);
+  SetLength(Concentrations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    Concentrations[Index] := ReadCompReal(Decomp);
+  end;
+  SetLength(ConcentrationAnnotations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
@@ -1784,6 +1907,14 @@ begin
   FBoundaryHeadData.Free;
   FConductanceData.Free;
   inherited;
+end;
+
+{ TGhbGwtConcCollection }
+
+constructor TGhbGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TGhbCollection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 end.

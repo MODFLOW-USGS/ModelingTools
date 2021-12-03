@@ -621,8 +621,9 @@ type
     function GetScreenObject: TObject; override;
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     function GetObserver(Index: Integer): TObserver; override;
-    property Observer: TObserver read FObserver;
   public
+    property Observer: TObserver read FObserver;
+    property FValueObject: TFormulaObject read FValue write FValue;
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -630,14 +631,27 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
+  TGWtConcStringValueItem = class(TCustomStringValueItem);
+
   TCustomStringCollection = class abstract(TCustomObjectOrderedCollection)
   private
-    FParentCollection: TCustomListArrayBoundColl;
+    FParentCollection: TCustomNonSpatialBoundColl;
   protected
-    property ParentCollection: TCustomListArrayBoundColl read FParentCollection;
+    property ParentCollection: TCustomNonSpatialBoundColl read FParentCollection;
   public
     constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel;
-      AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);
+      AScreenObject: TObject; ParentCollection: TCustomNonSpatialBoundColl);
+  end;
+
+  TGwtConcStringCollection = class(TCustomStringCollection)
+  private
+    function GetItems(Index: Integer): TGWtConcStringValueItem;
+    procedure SetItems(Index: Integer; const Value: TGWtConcStringValueItem);
+  public
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TCustomListArrayBoundColl);
+    property Items[Index: Integer]: TGWtConcStringValueItem read GetItems
+      write SetItems; default;
   end;
 
   // @name is used to store a series of @link(TDataArray)s for boundary
@@ -5046,10 +5060,31 @@ end;
 { TCustomStringCollection }
 
 constructor TCustomStringCollection.Create(ItemClass: TCollectionItemClass;
-  Model: TBaseModel; AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);
+  Model: TBaseModel; AScreenObject: TObject; ParentCollection: TCustomNonSpatialBoundColl);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
   FParentCollection := ParentCollection;
+end;
+
+{ TGwtConcStringCollection }
+
+constructor TGwtConcStringCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);
+begin
+  inherited Create(TGWtConcStringValueItem, Model, AScreenObject,
+    ParentCollection);
+end;
+
+function TGwtConcStringCollection.GetItems(
+  Index: Integer): TGWtConcStringValueItem;
+begin
+  result := inherited Items[Index] as  TGWtConcStringValueItem
+end;
+
+procedure TGwtConcStringCollection.SetItems(Index: Integer;
+  const Value: TGWtConcStringValueItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.
