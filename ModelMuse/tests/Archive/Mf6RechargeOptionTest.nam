@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 7/10/2020 by ModelMuse Version 4.2.0.27
+# Name File for MODFLOW created on 12/3/2021 by ModelMuse Version 4.3.0.74
 BEGIN OPTIONS
   LIST Mf6RechargeOptionTest.lst
   PRINT_INPUT
@@ -6,9 +6,9 @@ BEGIN OPTIONS
 END OPTIONS
 
 BEGIN PACKAGES
-  DIS6         Mf6RechargeOptionTest.dis
-  IC6          Mf6RechargeOptionTest.ic
-  NPF6         Mf6RechargeOptionTest.npf
-  OC6          Mf6RechargeOptionTest.oc
-  CHD6         Mf6RechargeOptionTest.chd
+  DIS6         Mf6RechargeOptionTest.dis  DIS
+  IC6          Mf6RechargeOptionTest.ic  IC
+  NPF6         Mf6RechargeOptionTest.npf  NPF
+  OC6          Mf6RechargeOptionTest.oc  OC
+  CHD6         Mf6RechargeOptionTest.chd  CHD-1
 END PACKAGES

@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 4/6/2021 by ModelMuse Version 4.3.0.0
+# Name File for MODFLOW created on 12/3/2021 by ModelMuse Version 4.3.0.74
 BEGIN OPTIONS
   LIST ..\..\output\output.HfbMf6Test2\HfbMf6Test2.lst
   PRINT_INPUT
@@ -6,10 +6,10 @@ BEGIN OPTIONS
 END OPTIONS
 
 BEGIN PACKAGES
-  DIS6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.dis
-  IC6          ..\..\model\model.HfbMf6Test2\HfbMf6Test2.ic
-  NPF6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.npf
-  OC6          ..\..\model\model.HfbMf6Test2\HfbMf6Test2.oc
-  CHD6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.chd
-  HFB6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.hfb
+  DIS6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.dis  DIS
+  IC6          ..\..\model\model.HfbMf6Test2\HfbMf6Test2.ic  IC
+  NPF6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.npf  NPF
+  OC6          ..\..\model\model.HfbMf6Test2\HfbMf6Test2.oc  OC
+  CHD6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.chd  CHD-1
+  HFB6         ..\..\model\model.HfbMf6Test2\HfbMf6Test2.hfb  HFB
 END PACKAGES
