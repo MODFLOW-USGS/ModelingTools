@@ -2774,6 +2774,7 @@ view. }
     function GetModflowSwtObservations: TSwtObservations;
     function StoreModflowSubObservations: Boolean;
     function StoreModflowSwtObservations: Boolean;
+    function GetDeleted: boolean;
 //    procedure SetVerticesArePilotPoints(const Value: Boolean);
     property SubPolygonCount: integer read GetSubPolygonCount;
     property SubPolygons[Index: integer]: TSubPolygon read GetSubPolygon;
@@ -3578,7 +3579,7 @@ view. }
     // of any @link(DataSetUnit.TDataArray).
     // This is accomplished by exiting immediately from
     // @Link(Draw) and @Link(AssignValuesToDataSet) if Deleted is true.
-    property Deleted: boolean read FDeleted write SetDeleted;
+    property Deleted: boolean read GetDeleted write SetDeleted;
     // @abstract(@name deletes the @link(TDataArray) specified by Index from
     // the list of @link(TDataArray)s affected by this @classname.)
     // @name removes a @link(DataSetUnit.TDataArray)
@@ -18984,6 +18985,11 @@ end;
 function TScreenObject.GetDataSets(const Index: integer): TDataArray;
 begin
   result := FDataSets[Index];
+end;
+
+function TScreenObject.GetDeleted: boolean;
+begin
+  result := FDeleted or (Count = 0);
 end;
 
 function TScreenObject.GetCount: integer;

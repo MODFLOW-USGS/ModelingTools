@@ -35143,7 +35143,7 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := rsModflow_Initial_Head;
   FDataArrayCreationRecords[Index].DisplayName := rsModflow_Initial_HeadDisplayName;
-  FDataArrayCreationRecords[Index].Formula := '0';
+  FDataArrayCreationRecords[Index].Formula := kModelTop;
   FDataArrayCreationRecords[Index].Classification := StrHydrology;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.ModflowInitialHeadUsed;
   FDataArrayCreationRecords[Index].DataSetShouldBeCreated := FCustomModel.ModflowUsed;
