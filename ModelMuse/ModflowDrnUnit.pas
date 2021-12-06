@@ -1392,7 +1392,6 @@ begin
   if FUsedObserver = nil then
   begin
     CreateObserver('PestDRN_Used_', FUsedObserver, nil);
-//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FUsedObserver;
 end;

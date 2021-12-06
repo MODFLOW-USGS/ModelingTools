@@ -2470,6 +2470,7 @@ that affects the model output should also have a comment. }
     function GetMf6TimesSeries: TTimesSeriesCollections; virtual; abstract;
     procedure SetMf6TimesSeries(const Value: TTimesSeriesCollections);
       virtual; abstract;
+    function GetGwtUsed: Boolean;
   protected
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
@@ -3063,6 +3064,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfChdEndingHead(Sender: TObject);
     procedure InvalidateMfGhbConductance(Sender: TObject);
     procedure InvalidateMfGhbBoundaryHead(Sender: TObject);
+    procedure InvalidateMfGhbConc(Sender: TObject);
     procedure InvalidateMfWellPumpage(Sender: TObject);
     procedure InvalidateMfRivConductance(Sender: TObject);
     procedure InvalidateMfRivStage(Sender: TObject);
@@ -3398,6 +3400,7 @@ that affects the model output should also have a comment. }
       Stored False
       {$ENDIF}
       ;
+    property GwtUsed: Boolean read GetGwtUsed;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -24155,6 +24158,11 @@ begin
   ModflowPackages.GhbBoundary.MfGhbBoundaryHead.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfGhbConc(Sender: TObject);
+begin
+  ModflowPackages.GhbBoundary.InvalidateGhbConcentrations;
+end;
+
 procedure TCustomModel.InvalidateMfGhbConductance(Sender: TObject);
 begin
   ModflowPackages.GhbBoundary.MfGhbConductance.Invalidate;
@@ -33411,17 +33419,6 @@ begin
   FGlobalVariables.Assign(Value);
 end;
 
-//procedure TPhastModel.RefreshDataArraysVariables;
-//begin
-//  CompilerList := TList.Create;
-//  try
-//    FillCompilerList(CompilerList);
-////    RefreshGlobalVariables(CompilerList);
-//  finally
-//    CompilerList.Free;
-//  end;
-//end;
-
 procedure TPhastModel.RefreshGlobalVariables(CompilerList: TList);
 var
   Compiler: TRbwParser;
@@ -35147,7 +35144,8 @@ begin
   FDataArrayCreationRecords[Index].DataType := rdtDouble;
   FDataArrayCreationRecords[Index].Name := rsModflow_Initial_Head;
   FDataArrayCreationRecords[Index].DisplayName := rsModflow_Initial_HeadDisplayName;
-  FDataArrayCreationRecords[Index].Formula := kModelTop;
+//  FDataArrayCreationRecords[Index].Formula := kModelTop;
+  FDataArrayCreationRecords[Index].Formula := '0';
   FDataArrayCreationRecords[Index].Classification := StrHydrology;
   FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.ModflowInitialHeadUsed;
   FDataArrayCreationRecords[Index].DataSetShouldBeCreated := FCustomModel.ModflowUsed;
@@ -47610,6 +47608,25 @@ begin
       result := ModflowGrid;
     end;
   end;
+end;
+
+function TCustomModel.GetGwtUsed: Boolean;
+var
+  Mt3dBasic: TMt3dBasic;
+begin
+  {$IFDEF GWT}
+  if ModelSelection = msModflow2015 then
+  begin
+    Mt3dBasic := ModflowPackages.Mt3dBasic;
+    result := Mt3dBasic.IsSelected and (Mt3dBasic.Mt3dVersion = mvMf6Gwt);
+  end
+  else
+  begin
+    result := False;
+  end;
+  {$ELSE}
+  result := False;
+  {$ENDIF}
 end;
 
 procedure TCustomModel.SetEndPoints(const Value: TEndPointReader);

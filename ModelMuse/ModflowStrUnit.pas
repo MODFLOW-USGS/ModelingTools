@@ -2811,10 +2811,9 @@ end;
 
 function TStrBoundary.GetUsedObserver: TObserver;
 begin
-//  if FUsedObserver = nil then
+  if FUsedObserver = nil then
   begin
     CreateObserver('PestStr_Used_', FUsedObserver, nil);
-//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FUsedObserver;
 end;

@@ -2345,7 +2345,6 @@ begin
   if FUsedObserver = nil then
   begin
     CreateObserver('PestLak_Used_', FUsedObserver, nil);
-//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FUsedObserver;
 end;

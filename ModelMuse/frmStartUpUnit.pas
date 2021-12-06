@@ -862,10 +862,9 @@ var
   ModelHeight: Real;
   LayerCount: Integer;
   CellCount: Integer;
+  MsInitialHead: TDataArray;
 begin
   SetModflowChoice;
-
-
 
   result := False;
   // get some initial data.
@@ -941,6 +940,11 @@ begin
   // Set the selected layer.
   frmGoPhast.ModflowGrid.SelectedLayer := 0;
   frmGoPhast.PhastModel.DataArrayManager.CreateInitialDataSets;
+
+  MsInitialHead := frmGoPhast.PhastModel.DataArrayManager.
+    GetDataSetByName(rsModflow_Initial_Head);
+  MsInitialHead.Formula := kModelTop;
+
   SetExaggeration;
   frmGoPhast.RestoreDefault2DView1Click(nil);
 //  InitializeView(ModelXWidth, ModelYWidth, ModelHeight);

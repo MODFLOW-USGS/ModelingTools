@@ -2219,7 +2219,6 @@ begin
   if FUsedObserver = nil then
   begin
     CreateObserver('PestSutraBundary_Used_', FUsedObserver, nil);
-//    FUsedObserver.OnUpToDateSet := HandleChangedValue;
   end;
   result := FUsedObserver;
 end;

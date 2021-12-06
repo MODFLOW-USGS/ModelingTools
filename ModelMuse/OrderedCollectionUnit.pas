@@ -196,6 +196,19 @@ type
     property ScreenObject: TObject read GetScreenObject;
   end;
 
+  TPestMethodItem = class(TOrderedItem)
+  private
+    FPestParamMethod: TPestParamMethod;
+    procedure SetPestParamMethod(const Value: TPestParamMethod);
+  protected
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property PestParamMethod: TPestParamMethod read FPestParamMethod
+      write SetPestParamMethod;
+  end;
+
   // @name is a base class for collections that avoid deleting their collection
   // items during assign whenever they can. @name is typically used to
   // allow editing of the collection in a GUI.  The model owns (directly or
@@ -257,6 +270,16 @@ type
     function IndexOf(Item: TOrderedItem): integer;
     // @name removes Item from the @classname if it is in it.
     procedure Remove(Item: TOrderedItem);
+  end;
+
+  TPestMethodCollection = class(TEnhancedOrderedCollection)
+  private
+    function GetItems(const Index: Integer): TPestMethodItem;
+    procedure SetItems(const Index: Integer; const Value: TPestMethodItem);
+  public
+    constructor Create(Model: TBaseModel);
+    property Items[const Index: Integer]: TPestMethodItem read GetItems
+      write SetItems; default;
   end;
 
   TCustomObjectOrderedCollection = class(TEnhancedOrderedCollection)
@@ -1866,5 +1889,59 @@ begin
   end;
 end;
 
+
+{ TPestMethodItem }
+
+procedure TPestMethodItem.Assign(Source: TPersistent);
+begin
+  if Source is TPestMethodItem then
+  begin
+    PestParamMethod := TPestMethodItem(Source).PestParamMethod;
+  end
+  else
+  begin
+    inherited;
+  end;
+end;
+
+function TPestMethodItem.IsSame(AnotherItem: TOrderedItem): boolean;
+begin
+  if AnotherItem is TPestMethodItem then
+  begin
+    result := PestParamMethod = TPestMethodItem(AnotherItem).PestParamMethod;
+  end
+  else
+  begin
+    result := False;
+  end;
+end;
+
+procedure TPestMethodItem.SetPestParamMethod(const Value: TPestParamMethod);
+begin
+  if FPestParamMethod <> Value then
+  begin
+    FPestParamMethod := Value;
+    InvalidateModel;
+  end;
+
+end;
+
+{ TPestMethodCollection }
+
+constructor TPestMethodCollection.Create(Model: TBaseModel);
+begin
+  inherited Create(TPestMethodItem, Model);
+end;
+
+function TPestMethodCollection.GetItems(const Index: Integer): TPestMethodItem;
+begin
+  result := inherited Items[Index] as TPestMethodItem;
+end;
+
+procedure TPestMethodCollection.SetItems(const Index: Integer;
+  const Value: TPestMethodItem);
+begin
+  inherited Items[Index] := Value;
+end;
 
 end.

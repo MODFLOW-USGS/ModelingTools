@@ -61,7 +61,7 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit, ModflowUnitNumbers,
   frmProgressUnit, Forms, DataSetUnit, FastGEO, ModflowMvrWriterUnit,
-  ModflowMvrUnit;
+  ModflowMvrUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrTheFollowingGHBOb = 'The following GHB observation names may be valid f' +
@@ -304,6 +304,8 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 //  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
@@ -329,6 +331,18 @@ begin
     FPestParamUsed := True;
   end;
 
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      if (GHB_Cell.ConcentrationPestNames[SpeciesIndex] <> '')
+       or (GHB_Cell.ConcentrationPestSeriesNames[SpeciesIndex] <> '') then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+  end;
+
   WriteValueOrFormula(Ghb_Cell, GhbHeadPosition);
 
 //  WriteFloat(GHB_Cell.BoundaryHead);
@@ -352,25 +366,24 @@ begin
     end;
     WriteModflowParamFormula(ParameterName, Ghb_Cell.ConductancePest,
       MultiplierValue, Ghb_Cell);
-//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
   end
   else
   begin
     WriteValueOrFormula(Ghb_Cell, GhbConductancePosition);
   end;
-//  if GHB_Cell.TimeSeriesName = '' then
-//  begin
-//    WriteFloat(GHB_Cell.Conductance);
-//  end
-//  else
-//  begin
-//    WriteString(' ');
-//    WriteString(GHB_Cell.TimeSeriesName);
-//    WriteString(' ');
-//  end;
 
   WriteIface(GHB_Cell.IFace);
+
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      WriteValueOrFormula(Ghb_Cell, GhbStartConcentration + SpeciesIndex);
+    end;
+  end;
+
   WriteBoundName(GHB_Cell);
+
   if Model.DisvUsed then
   begin
     WriteString(' # ' + DataSetIdentifier + ' Layer cell2d Bhead '
@@ -380,6 +393,16 @@ begin
   begin
     WriteString(' # ' + DataSetIdentifier + ' Layer Row Column Bhead '
       + VariableIdentifiers);
+  end;
+
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+      NewLine;
+    end;
   end;
 
   NewLine;
@@ -662,19 +685,25 @@ begin
 end;
 
 procedure TModflowGHB_Writer.WriteListOptions(InputFileName: string);
-//var
-//  GhbPackage: TGhbPackage;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
   inherited;
 
   WriteMf6ParamListOption;
 
-//  GhbPackage := Package as TGhbPackage;
-//  if GhbPackage.NewtonFormulation = nfOn then
-//  begin
-//    WriteString('    NEWTON');
-//    NewLine;
-//  end;
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString('  AUXILIARY ');
+      WriteString(ASpecies.Name);
+      NewLine;
+    end;
+  end;
+
 end;
 
 procedure TModflowGHB_Writer.WriteMoverOption;

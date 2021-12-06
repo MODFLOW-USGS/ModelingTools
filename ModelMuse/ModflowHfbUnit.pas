@@ -629,7 +629,6 @@ begin
       Observer := nil;
     end;
     CreateObserver('HFB_Used_', FUsedObserver, Observer);
-//    FObserverList.Add(FUsedObserver);
   end;
   result := FUsedObserver;
 end;

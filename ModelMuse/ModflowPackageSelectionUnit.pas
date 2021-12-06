@@ -175,6 +175,7 @@ Type
     property MfGhbBoundaryHead: TModflowBoundaryDisplayTimeList
       read FMfGhbBoundaryHead;
     procedure InvalidateAllTimeLists; override;
+    procedure InvalidateGhbConcentrations;
 //  published
 //    property NewtonFormulation;
   end;
@@ -3797,7 +3798,7 @@ Type
       write SetSteadyStateInterpolation stored False;
   end;
 
-  TMt3dVersion = (mvUSGS, mvMS);
+  TMt3dVersion = (mvUSGS, mvMS, mvMf6Gwt);
 
   TMt3dInitialChoice = (micSpecifyTimeStep, micUseFirst);
 
@@ -10612,6 +10613,12 @@ begin
   end;
 end;
 
+
+procedure TGhbPackage.InvalidateGhbConcentrations;
+begin
+  // This needs to be completed.
+//  Assert(False);
+end;
 
 { TDrnPackage }
 

@@ -236,8 +236,6 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
-        ExplicitWidth = 296
-        ExplicitHeight = 121
         object lblZDist: TLabel
           Left = 520
           Top = 110

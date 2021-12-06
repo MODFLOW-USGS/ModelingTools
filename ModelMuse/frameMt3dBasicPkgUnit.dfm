@@ -22,7 +22,7 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
     Margins.Top = 120
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = tabMT3D_USGS_Options
+    ActivePage = tabMT3D_Options
     Align = alClient
     TabOrder = 1
     object tabSpecies: TTabSheet
@@ -152,7 +152,6 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
                 CheckStyle = csCheck
                 AutoAdjustColWidths = False
               end>
-            ExplicitLeft = 1
             ExplicitWidth = 265
             ExplicitHeight = 241
           end
@@ -255,7 +254,6 @@ inherited frameMt3dBasicPkg: TframeMt3dBasicPkg
                 CheckStyle = csCheck
                 AutoAdjustColWidths = True
               end>
-            ExplicitLeft = -1
             ExplicitWidth = 248
             ExplicitHeight = 241
           end

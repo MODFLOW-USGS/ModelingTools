@@ -2217,6 +2217,7 @@ type
     function GetModflow6TimeSeriesAllowed(DataGrid: TRbwDataGrid4; ACol: Integer): boolean;
     function GetPestModifierAssigned(Grid: TRbwDataGrid4;
       ACol: Integer): Boolean;
+    function GwtColumnCount: integer;
 //    function GetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer): Boolean;
 //    procedure SetPestMethodAssigned(Grid: TRbwDataGrid4; ACol: Integer;
 //      const Value: Boolean);
@@ -6493,7 +6494,15 @@ begin
   begin
     comboVertexValueLabels.ItemIndex := -1;
   end;
+end;
 
+function TfrmScreenObjectProperties.GwtColumnCount: integer;
+begin
+  result := 0;
+  if frmGoPhast.PhastModel.GwtUsed then
+  begin
+    result := frmGoPhast.PhastModel.MobileComponents.Count;
+  end;
 end;
 
 procedure TfrmScreenObjectProperties.SetModflowBoundaryColCount;
@@ -6501,7 +6510,7 @@ var
   CropIrrigationRequirement: TCropIrrigationRequirement;
 begin
   frameChdParam.rdgModflowBoundary.ColCount := 4;
-  frameGhbParam.rdgModflowBoundary.ColCount := 4;
+  frameGhbParam.rdgModflowBoundary.ColCount := 4 + GwtColumnCount;
   frameWellParam.rdgModflowBoundary.ColCount := 3;
   frameRivParam.rdgModflowBoundary.ColCount := 5;
   frameDrnParam.rdgModflowBoundary.ColCount := 4;

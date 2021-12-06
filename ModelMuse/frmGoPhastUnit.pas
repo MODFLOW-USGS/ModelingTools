@@ -9460,18 +9460,25 @@ end;
 
 procedure TfrmGoPhast.SetMt3dCaption;
 begin
-  if PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS then
-  begin
-    acRunMt3dms.Caption := StrMT3DUSGSInputFile;
-    acRunMt3dms.Hint := StrRunMT3DUSGS;
-    miRunMt3dmsPopup.Caption := StrExportMT3DUSGSInp;
-  end
-  else
-  begin
-    Assert(PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS);
-    acRunMt3dms.Caption := StrMT3DMSInputFiles;
-    acRunMt3dms.Hint := StrRunMT3DMS;
-    miRunMt3dmsPopup.Caption := StrExportMT3DMSInput;
+  case PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion of
+    mvUSGS:
+      begin
+        acRunMt3dms.Caption := StrMT3DUSGSInputFile;
+        acRunMt3dms.Hint := StrRunMT3DUSGS;
+        miRunMt3dmsPopup.Caption := StrExportMT3DUSGSInp;
+      end;
+    mvMS:
+      begin
+        acRunMt3dms.Caption := StrMT3DMSInputFiles;
+        acRunMt3dms.Hint := StrRunMT3DMS;
+        miRunMt3dmsPopup.Caption := StrExportMT3DMSInput;
+      end;
+    mvMf6Gwt:
+      begin
+        acRunMt3dms.Caption := 'GWT Transport Files';
+        acRunMt3dms.Hint := 'Run GWT';
+        miRunMt3dmsPopup.Caption := 'Export GWT Input Files';
+      end;
   end;
 end;
 
