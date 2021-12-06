@@ -295,10 +295,11 @@ implementation
 
 uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
   frmGoPhastUnit, GIS_Functions, frmErrorsAndWarningsUnit,
-  ModflowTimeSeriesUnit, ModflowMvrUnit;
+  ModflowTimeSeriesUnit, ModflowMvrUnit, frmFormulaErrorsUnit;
 
 resourcestring
   StrPumpingRateMultip = ' pumping rate multiplier';
+  StrWellPumpingRate = 'Well pumping rate';
 
 { TWellItem }
 
@@ -448,7 +449,8 @@ begin
         PumpingRatePestSeriesMethod := PestSeriesMethod;
         PumpingRateTimeSeriesName := TimeSeriesName;
       end;
-    except on E: EMathError do
+    except
+      on E: EMathError do
       begin
         with WellStorage.WellArray[Index] do
         begin
@@ -465,6 +467,22 @@ begin
           Format(StrObject0sLayerError,
           [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
           ACell.Column+1, E.Message]), LocalScreenObject);
+      end;
+      on E: ERbwParserError do
+      begin
+        with WellStorage.WellArray[Index] do
+        begin
+          PumpingRate := 0;
+          PumpingRateAnnotation := StrWellFormulaError;
+          PumpingRatePest := PestName;
+          PumpingRatePestSeriesName := PestSeriesName;
+          PumpingRatePestSeriesMethod := PestSeriesMethod;
+          PumpingRateTimeSeriesName := TimeSeriesName;
+        end;
+        LocalScreenObject := ScreenObject as TScreenObject;
+
+        frmFormulaErrors.AddFormulaError(LocalScreenObject.Name,
+          StrWellPumpingRate, Expression.Decompile, E.Message);
       end;
     end;
   end;
