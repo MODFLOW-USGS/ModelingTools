@@ -28603,6 +28603,7 @@ object TTaskHistory
         'MF6 GWT'
         'GHB'
         'core code'
-        'Dialog boxes')
+        'Dialog boxes'
+        'List File Analyzer')
     end>
 end
