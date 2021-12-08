@@ -633,7 +633,7 @@ type
     property Value: string read GetValue write SetValue;
   end;
 
-  TGWtConcStringValueItem = class(TCustomStringValueItem);
+  TGwtConcStringValueItem = class(TCustomStringValueItem);
 
   TCustomStringCollection = class abstract(TCustomObjectOrderedCollection)
   private
@@ -647,12 +647,12 @@ type
 
   TGwtConcStringCollection = class(TCustomStringCollection)
   private
-    function GetItems(Index: Integer): TGWtConcStringValueItem;
-    procedure SetItems(Index: Integer; const Value: TGWtConcStringValueItem);
+    function GetItems(Index: Integer): TGwtConcStringValueItem;
+    procedure SetItems(Index: Integer; const Value: TGwtConcStringValueItem);
   public
     constructor Create(Model: TBaseModel; AScreenObject: TObject;
       ParentCollection: TCustomListArrayBoundColl);
-    property Items[Index: Integer]: TGWtConcStringValueItem read GetItems
+    property Items[Index: Integer]: TGwtConcStringValueItem read GetItems
       write SetItems; default;
   end;
 
@@ -5112,18 +5112,18 @@ end;
 constructor TGwtConcStringCollection.Create(Model: TBaseModel;
   AScreenObject: TObject; ParentCollection: TCustomListArrayBoundColl);
 begin
-  inherited Create(TGWtConcStringValueItem, Model, AScreenObject,
+  inherited Create(TGwtConcStringValueItem, Model, AScreenObject,
     ParentCollection);
 end;
 
 function TGwtConcStringCollection.GetItems(
-  Index: Integer): TGWtConcStringValueItem;
+  Index: Integer): TGwtConcStringValueItem;
 begin
-  result := inherited Items[Index] as  TGWtConcStringValueItem
+  result := inherited Items[Index] as  TGwtConcStringValueItem
 end;
 
 procedure TGwtConcStringCollection.SetItems(Index: Integer;
-  const Value: TGWtConcStringValueItem);
+  const Value: TGwtConcStringValueItem);
 begin
   inherited Items[Index] := Value;
 end;

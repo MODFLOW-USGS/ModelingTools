@@ -50,6 +50,7 @@ type
     Class function Mf6ObType: TObGeneral; override;
     function ObsFactors: TFluxObservationGroups; override;
     procedure WriteAdditionalAuxVariables; override;
+    procedure Evaluate; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -216,6 +217,20 @@ procedure TModflowGHB_Writer.DoBeforeWriteCells;
 begin
   inherited;
   InitializeCells;
+end;
+
+procedure TModflowGHB_Writer.Evaluate;
+begin
+  frmErrorsAndWarnings.BeginUpdate;
+  try
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrBoundaryHeadSetTo);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrConductanceSetToZ);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrConcentrationSetTo);
+    inherited;
+  finally
+    frmErrorsAndWarnings.EndUpdate;
+  end;
+
 end;
 
 class function TModflowGHB_Writer.Extension: string;

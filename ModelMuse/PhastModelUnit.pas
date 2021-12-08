@@ -3066,6 +3066,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfGhbBoundaryHead(Sender: TObject);
     procedure InvalidateMfGhbConc(Sender: TObject);
     procedure InvalidateMfWellPumpage(Sender: TObject);
+    procedure InvalidateMfWellConc(Sender: TObject);
     procedure InvalidateMfRivConductance(Sender: TObject);
     procedure InvalidateMfRivStage(Sender: TObject);
     procedure InvalidateMfRivBottom(Sender: TObject);
@@ -25584,6 +25585,12 @@ procedure TPhastModel.InvalidateMfSfrSegmentReachAndIcalc(Sender: TObject);
 begin
   ModflowPackages.SfrPackage.
     InvalidateMfSfrSegmentReachAndIcalc(Sender);
+end;
+
+procedure TCustomModel.InvalidateMfWellConc(Sender: TObject);
+begin
+//  This needs to be completed
+  Assert(False);
 end;
 
 procedure TCustomModel.InvalidateMfWellPumpage(Sender: TObject);

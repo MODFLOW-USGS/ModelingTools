@@ -20,12 +20,19 @@ type
     PumpingRatePest: string;
     PumpingRatePestSeriesName: string;
     PumpingRatePestSeriesMethod: TPestParamMethod;
-//    TimeSeriesName: string;
     MvrUsed: Boolean;
     MvrIndex: Integer;
     PumpingParameterName: string;
     PumpingParameterValue: double;
     PumpingRateTimeSeriesName: string;
+    // GWT Concentrations
+    Concentrations: array of double;
+    ConcentrationAnnotations: array of string;
+    ConcentrationPestNames: array of string;
+    ConcentrationPestSeriesNames: array of string;
+    ConcentrationPestSeriesMethods: array of TPestParamMethod;
+    ConcentrationTimeSeriesNames: array of string;
+    procedure Assign(const Item: TWellRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -48,15 +55,24 @@ type
     property WellArray: TWellArray read GetWellArray;
   end;
 
+  TWellCollection = class;
+
+  TWelGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TWellCollection);
+  end;
+
   // @name represents a MODFLOW well for one time interval.
   // @name is stored by @link(TWellCollection).
   TWellItem = class(TCustomModflowBoundaryItem)
   private
     // See @link(PumpingRate).
     FPumpingRate: TFormulaObject;
+    FGwtConcentrations: TWelGwtConcCollection;
     // See @link(PumpingRate).
     procedure SetPumpingRate(const Value: string);
     function GetPumpingRate: string;
+    procedure SetGwtConcentrations(const Value: TWelGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -71,6 +87,7 @@ type
     procedure InvalidateModel; override;
     function BoundaryFormulaCount: integer; override;
   public
+    constructor Create(Collection: TCollection); override;
     Destructor Destroy; override;
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
@@ -78,6 +95,8 @@ type
     // @name is the formula used to set the pumping rate
     // or the pumping rate multiplier of this boundary.
     property PumpingRate: string read GetPumpingRate write SetPumpingRate;
+    property GwtConcentrations: TWelGwtConcCollection read FGwtConcentrations
+      write SetGwtConcentrations;
   end;
 
   TMfWelTimeListLink = class(TTimeListsModelLink)
@@ -85,6 +104,7 @@ type
     // @name is used to compute the pumping rates for a series of
     // Wells over a series of time intervals.
     FPumpingRateData: TModflowTimeList;
+    FConcList: TList;
   protected
     procedure CreateTimeLists; override;
   public
@@ -96,6 +116,7 @@ type
   TWellCollection = class(TCustomMF_ListBoundColl)
   private
     procedure InvalidatePumpingRateData(Sender: TObject);
+    procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -290,6 +311,7 @@ resourcestring
 
 const
   WelPumpingRatePosition = 0;
+  WelStartConcentration = 1;
 
 implementation
 
@@ -300,15 +322,21 @@ uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
 resourcestring
   StrPumpingRateMultip = ' pumping rate multiplier';
   StrWellPumpingRate = 'Well pumping rate';
+  StrWellConcentrationS = 'Well Concentration set to zero because of a math ' +
+  'error';
 
 { TWellItem }
 
 procedure TWellItem.Assign(Source: TPersistent);
+var
+  WellSource: TWellItem;
 begin
   // if Assign is updated, update IsSame too.
   if Source is TWellItem then
   begin
-    PumpingRate := TWellItem(Source).PumpingRate;
+    WellSource := TWellItem(Source);
+    PumpingRate := WellSource.PumpingRate;
+    GwtConcentrations := WellSource.GwtConcentrations;
   end;
   inherited;
 end;
@@ -317,15 +345,37 @@ procedure TWellItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TWellCollection;
   PumpingRateObserver: TObserver;
+  ConductanceObserver: TObserver;
+  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TWellCollection;
   PumpingRateObserver := FObserverList[WelPumpingRatePosition];
   PumpingRateObserver.OnUpToDateSet := ParentCollection.InvalidatePumpingRateData;
+
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateGwtConcentrations;
+  end;
 end;
 
 function TWellItem.BoundaryFormulaCount: integer;
 begin
   result := 1;
+  if GwtConcentrations <> nil then
+  begin
+    result := result + GwtConcentrations.Count;
+  end;
+end;
+
+constructor TWellItem.Create(Collection: TCollection);
+var
+  WelCol: TWellCollection;
+begin
+  WelCol := Collection as TWellCollection;
+  FGwtConcentrations := TWelGwtConcCollection.Create(Model, ScreenObject,
+    WelCol);
+  inherited;
 end;
 
 procedure TWellItem.CreateFormulaObjects;
@@ -334,23 +384,52 @@ begin
 end;
 
 destructor TWellItem.Destroy;
+var
+  Index: Integer;
 begin
   PumpingRate := '0';
+  for Index := 0 to FGwtConcentrations.Count - 1 do
+  begin
+    FGwtConcentrations[Index].Value := '0';
+  end;
+  FGwtConcentrations.Free;
   inherited;
 end;
 
 function TWellItem.GetBoundaryFormula(Index: integer): string;
+var
+  Item: TGWtConcStringValueItem;
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRate;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 1);
+        while GwtConcentrations.Count <= Index do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        result := Item.Value;
+      end;
   end;
 end;
 
 procedure TWellItem.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  Item: TGwtConcStringValueItem;
+  ConcIndex: Integer;
 begin
   Assert(Sender = FPumpingRate);
   List.Add(FObserverList[WelPumpingRatePosition]);
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    Item := GwtConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
+  end;
 end;
 
 function TWellItem.GetPumpingRate: string;
@@ -370,6 +449,7 @@ begin
     and not PhastModel.Clearing then
   begin
     PhastModel.InvalidateMfWellPumpage(self);
+    PhastModel.InvalidateMfWellConc(self);
   end;
 end;
 
@@ -382,6 +462,7 @@ begin
   begin
     Item := TWellItem(AnotherItem);
     result := (Item.PumpingRate = PumpingRate)
+      and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
 
@@ -393,12 +474,28 @@ begin
 end;
 
 procedure TWellItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  Item: TGWtConcStringValueItem;
 begin
   inherited;
   case Index of
     WelPumpingRatePosition: PumpingRate := Value;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 1);
+        while Index >= GwtConcentrations.Count do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        Item.Value := Value;
+      end;
   end;
+end;
+
+procedure TWellItem.SetGwtConcentrations(const Value: TWelGwtConcCollection);
+begin
+  FGwtConcentrations.Assign(Value);
 end;
 
 procedure TWellItem.SetPumpingRate(const Value: string);
@@ -425,9 +522,24 @@ var
   Index: Integer;
   ACell: TCellAssignment;
   LocalScreenObject: TScreenObject;
+  ConcIndex: Integer;
+  AllowedIndicies: Set of Byte;
+  SpeciesIndex: Byte;
+  LocalModel: TCustomModel;
+  ErrorMessage: string;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
-  Assert(BoundaryFunctionIndex = 0);
+  AllowedIndicies := [0];
+  LocalModel := AModel as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      Include(AllowedIndicies, WelStartConcentration + SpeciesIndex);
+    end;
+  end;
+
+  Assert(BoundaryFunctionIndex in AllowedIndicies);
   Assert(Expression <> nil);
 
   WellStorage := BoundaryStorage as TWellStorage;
@@ -440,49 +552,107 @@ begin
     // 2. update locations
     try
       Expression.Evaluate;
-      with WellStorage.WellArray[Index] do
-      begin
-        PumpingRate := Expression.DoubleResult;
-        PumpingRateAnnotation := ACell.Annotation;
-        PumpingRatePest := PestName;
-        PumpingRatePestSeriesName := PestSeriesName;
-        PumpingRatePestSeriesMethod := PestSeriesMethod;
-        PumpingRateTimeSeriesName := TimeSeriesName;
+      case BoundaryFunctionIndex of
+        WelPumpingRatePosition:
+          begin
+            with WellStorage.WellArray[Index] do
+            begin
+              PumpingRate := Expression.DoubleResult;
+              PumpingRateAnnotation := ACell.Annotation;
+              PumpingRatePest := PestName;
+              PumpingRatePestSeriesName := PestSeriesName;
+              PumpingRatePestSeriesMethod := PestSeriesMethod;
+              PumpingRateTimeSeriesName := TimeSeriesName;
+            end;
+          end;
+        else
+          begin
+            ConcIndex := BoundaryFunctionIndex - WelStartConcentration;
+            with WellStorage.WellArray[Index] do
+            begin
+              Concentrations[ConcIndex] := Expression.DoubleResult;
+              ConcentrationAnnotations[ConcIndex] := ACell.Annotation;
+              ConcentrationPestNames[ConcIndex] := PestName;
+              ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+              ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+              ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+            end;
+          end;
       end;
     except
       on E: EMathError do
       begin
-        with WellStorage.WellArray[Index] do
-        begin
-          PumpingRate := 0;
-          PumpingRateAnnotation := StrWellFormulaError;
-          PumpingRatePest := PestName;
-          PumpingRatePestSeriesName := PestSeriesName;
-          PumpingRatePestSeriesMethod := PestSeriesMethod;
-          PumpingRateTimeSeriesName := TimeSeriesName;
+        case BoundaryFunctionIndex of
+          WelPumpingRatePosition:
+            begin
+              with WellStorage.WellArray[Index] do
+              begin
+                ErrorMessage := StrWellFormulaError;
+                PumpingRate := 0;
+                PumpingRateAnnotation := ErrorMessage;
+                PumpingRatePest := PestName;
+                PumpingRatePestSeriesName := PestSeriesName;
+                PumpingRatePestSeriesMethod := PestSeriesMethod;
+                PumpingRateTimeSeriesName := TimeSeriesName;
+              end;
+            end;
+          else
+            begin
+              ConcIndex := BoundaryFunctionIndex - WelStartConcentration;
+              with WellStorage.WellArray[Index] do
+              begin
+                Concentrations[ConcIndex] := 0;
+                ConcentrationAnnotations[ConcIndex] := StrWellConcentrationS;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
+            end;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 
-        frmErrorsAndWarnings.AddError(AModel, StrWellFormulaError,
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
           Format(StrObject0sLayerError,
           [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
           ACell.Column+1, E.Message]), LocalScreenObject);
       end;
       on E: ERbwParserError do
       begin
-        with WellStorage.WellArray[Index] do
-        begin
-          PumpingRate := 0;
-          PumpingRateAnnotation := StrWellFormulaError;
-          PumpingRatePest := PestName;
-          PumpingRatePestSeriesName := PestSeriesName;
-          PumpingRatePestSeriesMethod := PestSeriesMethod;
-          PumpingRateTimeSeriesName := TimeSeriesName;
+        case BoundaryFunctionIndex of
+          WelPumpingRatePosition:
+            begin
+              with WellStorage.WellArray[Index] do
+              begin
+                ErrorMessage := StrWellFormulaError;
+                PumpingRate := 0;
+                PumpingRateAnnotation := ErrorMessage;
+                PumpingRatePest := PestName;
+                PumpingRatePestSeriesName := PestSeriesName;
+                PumpingRatePestSeriesMethod := PestSeriesMethod;
+                PumpingRateTimeSeriesName := TimeSeriesName;
+              end;
+            end;
+          else
+            begin
+              ConcIndex := BoundaryFunctionIndex - WelStartConcentration;
+              with WellStorage.WellArray[Index] do
+              begin
+                Concentrations[ConcIndex] := 0;
+                ConcentrationAnnotations[ConcIndex] := StrWellConcentrationS;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
+            end;
         end;
         LocalScreenObject := ScreenObject as TScreenObject;
 
-        frmFormulaErrors.AddFormulaError(LocalScreenObject.Name,
-          StrWellPumpingRate, Expression.Decompile, E.Message);
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
+          Format(StrObject0sLayerError,
+          [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
+          ACell.Column+1, E.Message]), LocalScreenObject);
       end;
     end;
   end;
@@ -580,6 +750,41 @@ begin
   end;
 end;
 
+procedure TWellCollection.InvalidateGwtConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TMfWelTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TMfWelTimeListLink;
+    for Index := 0 to Link.FConcList.Count - 1 do
+    begin
+      TimeList := Link.FConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TMfWelTimeListLink;
+      for Index := 0 to Link.FConcList.Count - 1 do
+      begin
+        TimeList := Link.FConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TWellCollection.InvalidateModel;
 var
   PhastModel: TPhastModel;
@@ -591,6 +796,7 @@ begin
     and not PhastModel.Clearing then
   begin
     PhastModel.InvalidateMfWellPumpage(self);
+    PhastModel.InvalidateMfWellConc(self);
   end;
 end;
 
@@ -626,8 +832,30 @@ end;
 
 procedure TWellCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
+var
+  LocalModel: TCustomModel;
+  Index: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TWellStorage).FWellArray, BoundaryCount);
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for Index := 0 to BoundaryCount - 1 do
+    begin
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].Concentrations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationAnnotations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationPestNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationPestSeriesNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationPestSeriesMethods,
+        LocalModel.MobileComponents.Count);
+      SetLength(TWellStorage(Boundaries[ItemIndex, AModel]).FWellArray[Index].ConcentrationTimeSeriesNames,
+        LocalModel.MobileComponents.Count);
+    end;
+  end;
   inherited;
 end;
 
@@ -1320,7 +1548,21 @@ end;
 
 { TWellRecord }
 
+procedure TWellRecord.Assign(const Item: TWellRecord);
+begin
+  self := Item;
+  SetLength(Concentrations, Length(Concentrations));
+  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
+  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
+  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
+  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
+  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+end;
+
 procedure TWellRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, PumpingRate);
@@ -1335,21 +1577,68 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingRateTimeSeriesName));
 
+  Count := Length(Concentrations);
+  WriteCompInt(Comp, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompReal(Comp, Concentrations[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
+  end;
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 end;
 
 procedure TWellRecord.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
 begin
   Strings.Add(PumpingRateAnnotation);
   Strings.Add(PumpingRatePest);
   Strings.Add(PumpingRatePestSeriesName);
-//  Strings.Add(TimeSeriesName);
   Strings.Add(PumpingParameterName);
   Strings.Add(PumpingRateTimeSeriesName);
+  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
+  begin
+    Strings.Add(ConcentrationAnnotations[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestSeriesNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationTimeSeriesNames[Index]);
+  end;
 end;
 
 procedure TWellRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   PumpingRate := ReadCompReal(Decomp);
@@ -1363,6 +1652,39 @@ begin
 //  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   PumpingParameterName := Annotations[ReadCompInt(Decomp)];
   PumpingRateTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  Count := ReadCompInt(Decomp);
+  SetLength(Concentrations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    Concentrations[Index] := ReadCompReal(Decomp);
+  end;
+  SetLength(ConcentrationAnnotations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesMethods, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
+  end;
+  SetLength(ConcentrationTimeSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
 end;
@@ -1433,8 +1755,15 @@ end;
 { TMfWelTimeListLink }
 
 procedure TMfWelTimeListLink.CreateTimeLists;
+var
+  LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
 begin
   inherited;
+  FConcList := TObjectList.Create;
+
   FPumpingRateData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FPumpingRateData.NonParamDescription := StrPumpingRate;
   FPumpingRateData.ParamDescription := StrPumpingRateMultip;
@@ -1443,12 +1772,40 @@ begin
     FPumpingRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfWellPumpage;
   end;
   AddTimeList(FPumpingRateData);
+
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfWellConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FConcList.Add(ConcTimeList);
+    end;
+  end;
+
 end;
 
 destructor TMfWelTimeListLink.Destroy;
 begin
+  FConcList.Free;
   FPumpingRateData.Free;
   inherited;
+end;
+
+{ TWelGwtConcCollection }
+
+constructor TWelGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TWellCollection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 end.

@@ -86,7 +86,7 @@ object TTaskHistory
     end
     item
       Name = 'WEL'
-      Display = False
+      Display = True
     end
     item
       Name = 'RIV'
@@ -28611,6 +28611,7 @@ object TTaskHistory
       Categories.Strings = (
         'GHB'
         'core code'
-        'MF6 GWT')
+        'MF6 GWT'
+        'WEL')
     end>
 end

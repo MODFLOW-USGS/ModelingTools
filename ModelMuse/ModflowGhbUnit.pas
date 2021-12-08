@@ -74,7 +74,6 @@ type
     // See @link(Conductance).
     FConductance: TFormulaObject;
     FGwtConcentrations: TGhbGwtConcCollection;
-//    FConcFormulas: TFormulaObjectList;
     // See @link(BoundaryHead).
     procedure SetBoundaryHead(const Value: string);
     // See @link(Conductance).
@@ -416,10 +415,16 @@ const
   GhbConductancePosition = 1;
   GhbStartConcentration = 2;
 
+resourcestring
+  StrBoundaryHeadSetTo = 'GHB Boundary head set to zero because of a math error';
+  StrConductanceSetToZ = 'GHB Conductance set to zero because of a math error';
+  StrConcentrationSetTo = 'GHB Concentration set to zero because of a math error';
+
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
-  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit, ModflowMvrUnit;
+  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit, ModflowMvrUnit,
+  frmErrorsAndWarningsUnit;
 
 resourcestring
   StrConductance = 'Conductance';
@@ -499,8 +504,6 @@ begin
   begin
     FGwtConcentrations[Index].Value := '0';
   end;
-
-//  FConcFormulas.Free;
   FGwtConcentrations.Free;
   inherited;
 end;
@@ -544,7 +547,7 @@ end;
 
 procedure TGhbItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
-  Item: TGWtConcStringValueItem;
+  Item: TGwtConcStringValueItem;
   ConcIndex: Integer;
 begin
   if Sender = FConductance then
@@ -577,6 +580,7 @@ begin
   begin
     PhastModel.InvalidateMfGhbConductance(self);
     PhastModel.InvalidateMfGhbBoundaryHead(self);
+    PhastModel.InvalidateMfGhbConc(self);
   end;
 end;
 
@@ -590,7 +594,7 @@ begin
     Item := TGhbItem(AnotherItem);
     result := (Item.BoundaryHead = BoundaryHead)
       and (Item.Conductance = Conductance)
-      and (Item.GwtConcentrations = GwtConcentrations);
+      and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
 
@@ -741,6 +745,8 @@ var
   AllowedIndicies: Set of Byte;
   SpeciesIndex: Byte;
   LocalModel: TCustomModel;
+  ErrorMessage: string;
+  LocalScreenObject: TScreenObject;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   AllowedIndicies := [GhbHeadPosition,GhbConductancePosition];
@@ -764,38 +770,131 @@ begin
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
 
-    Expression.Evaluate;
-    with GhbStorage.GhbArray[Index] do
-    begin
-      case BoundaryFunctionIndex of
-        GhbHeadPosition:
-          begin
-            BoundaryHead := Expression.DoubleResult;
-            BoundaryHeadAnnotation := ACell.Annotation;
-            BoundaryHeadPest := PestName;
-            BoundaryHeadPestSeriesName := PestSeriesName;
-            BoundaryHeadPestSeriesMethod := PestSeriesMethod;
-            BoundaryHeadTimeSeriesName := TimeSeriesName;
+    try
+      Expression.Evaluate;
+      with GhbStorage.GhbArray[Index] do
+      begin
+        case BoundaryFunctionIndex of
+          GhbHeadPosition:
+            begin
+              BoundaryHead := Expression.DoubleResult;
+              BoundaryHeadAnnotation := ACell.Annotation;
+              BoundaryHeadPest := PestName;
+              BoundaryHeadPestSeriesName := PestSeriesName;
+              BoundaryHeadPestSeriesMethod := PestSeriesMethod;
+              BoundaryHeadTimeSeriesName := TimeSeriesName;
+            end;
+          GhbConductancePosition:
+            begin
+              Conductance := Expression.DoubleResult;
+              ConductanceAnnotation := ACell.Annotation;
+              ConductancePest := PestName;
+              ConductancePestSeriesName := PestSeriesName;
+              ConductancePestSeriesMethod := PestSeriesMethod;
+              ConductanceTimeSeriesName := TimeSeriesName;
+            end;
+          else
+            begin
+              ConcIndex := BoundaryFunctionIndex - GhbStartConcentration;
+              Concentrations[ConcIndex] := Expression.DoubleResult;
+              ConcentrationAnnotations[ConcIndex] := ACell.Annotation;;
+              ConcentrationPestNames[ConcIndex] := PestName;
+              ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+              ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+              ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+            end;
+        end;
+      end;
+    except
+      on E: EMathError do
+      begin
+        with GhbStorage.GhbArray[Index] do
+        begin
+          case BoundaryFunctionIndex of
+            GhbHeadPosition:
+              begin
+                BoundaryHead := 0;
+                ErrorMessage := StrBoundaryHeadSetTo;
+                BoundaryHeadAnnotation := ErrorMessage;
+                BoundaryHeadPest := PestName;
+                BoundaryHeadPestSeriesName := PestSeriesName;
+                BoundaryHeadPestSeriesMethod := PestSeriesMethod;
+                BoundaryHeadTimeSeriesName := TimeSeriesName;
+              end;
+            GhbConductancePosition:
+              begin
+                Conductance := 0;
+                ErrorMessage := StrConductanceSetToZ;
+                ConductanceAnnotation := ErrorMessage;
+                ConductancePest := PestName;
+                ConductancePestSeriesName := PestSeriesName;
+                ConductancePestSeriesMethod := PestSeriesMethod;
+                ConductanceTimeSeriesName := TimeSeriesName;
+              end;
+            else
+              begin
+                ConcIndex := BoundaryFunctionIndex - GhbStartConcentration;
+                Concentrations[ConcIndex] := 0;
+                ErrorMessage := StrConcentrationSetTo;
+                ConcentrationAnnotations[ConcIndex] := ErrorMessage;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
           end;
-        GhbConductancePosition:
-          begin
-            Conductance := Expression.DoubleResult;
-            ConductanceAnnotation := ACell.Annotation;
-            ConductancePest := PestName;
-            ConductancePestSeriesName := PestSeriesName;
-            ConductancePestSeriesMethod := PestSeriesMethod;
-            ConductanceTimeSeriesName := TimeSeriesName;
+        end;
+        LocalScreenObject := ScreenObject as TScreenObject;
+
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
+          Format(StrObject0sLayerError,
+          [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
+          ACell.Column+1, E.Message]), LocalScreenObject);
+      end;
+      on E: ERbwParserError do
+      begin
+        with GhbStorage.GhbArray[Index] do
+        begin
+          case BoundaryFunctionIndex of
+            GhbHeadPosition:
+              begin
+                BoundaryHead := 0;
+                ErrorMessage := StrBoundaryHeadSetTo;
+                BoundaryHeadAnnotation := ErrorMessage;
+                BoundaryHeadPest := PestName;
+                BoundaryHeadPestSeriesName := PestSeriesName;
+                BoundaryHeadPestSeriesMethod := PestSeriesMethod;
+                BoundaryHeadTimeSeriesName := TimeSeriesName;
+              end;
+            GhbConductancePosition:
+              begin
+                Conductance := 0;
+                ErrorMessage := StrConductanceSetToZ;
+                ConductanceAnnotation := ErrorMessage;
+                ConductancePest := PestName;
+                ConductancePestSeriesName := PestSeriesName;
+                ConductancePestSeriesMethod := PestSeriesMethod;
+                ConductanceTimeSeriesName := TimeSeriesName;
+              end;
+            else
+              begin
+                ConcIndex := BoundaryFunctionIndex - GhbStartConcentration;
+                Concentrations[ConcIndex] := 0;
+                ErrorMessage := StrConductanceSetToZ;
+                ConcentrationAnnotations[ConcIndex] := ErrorMessage;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
           end;
-        else
-          begin
-            ConcIndex := BoundaryFunctionIndex - GhbStartConcentration;
-            Concentrations[ConcIndex] := Expression.DoubleResult;
-            ConcentrationAnnotations[ConcIndex] := ACell.Annotation;;
-            ConcentrationPestNames[ConcIndex] := PestName;
-            ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
-            ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
-            ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
-          end;
+        end;
+        LocalScreenObject := ScreenObject as TScreenObject;
+
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
+          Format(StrObject0sLayerError,
+          [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
+          ACell.Column+1, E.Message]), LocalScreenObject);
       end;
     end;
   end;
@@ -954,6 +1053,7 @@ begin
   begin
     PhastModel.InvalidateMfGhbConductance(self);
     PhastModel.InvalidateMfGhbBoundaryHead(self);
+    PhastModel.InvalidateMfGhbConc(self);
   end;
 end;
 
