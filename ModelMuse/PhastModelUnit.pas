@@ -3401,6 +3401,7 @@ that affects the model output should also have a comment. }
       {$ENDIF}
       ;
     property GwtUsed: Boolean read GetGwtUsed;
+    Procedure UpdateGwtConc;
   published
     // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
@@ -16523,6 +16524,11 @@ begin
   begin
     FFrontTimeList := nil;
   end;
+end;
+
+procedure TCustomModel.UpdateGwtConc;
+begin
+  ModflowPackages.GhbBoundary.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -38808,6 +38814,7 @@ begin
   end;
   ModflowPackages.Loaded;
   DataArrayManager.Loaded;
+  UpdateGwtConc;
 end;
 
 function TCustomModel.LongitudinalDispersionUsed(Sender: TObject): boolean;

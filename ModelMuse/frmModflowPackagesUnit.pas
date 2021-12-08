@@ -4120,6 +4120,7 @@ var
   NewPackages: TModflowPackages;
   MfStressPeriods: TModflowStressPeriods;
   FirstStressPeriod: TModflowStressPeriod;
+  GwtChanged: Boolean;
 begin
   inherited;
   PhastModel := frmGoPhast.PhastModel;
@@ -4128,6 +4129,11 @@ begin
   try
     UpdateLayerGroupProperties(FNewPackages[0].Packages.BcfPackage);
     NewPackages := FNewPackages[0].Packages;
+
+    GwtChanged := (PhastModel.ModelSelection = msModflow2015)
+      and (PhastModel.GwtUsed = (NewPackages.Mt3dBasic.IsSelected
+      and (NewPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
+
     Mt3dmsNewlySelected := not OldPackages.Mt3dBasic.IsSelected
       and NewPackages.Mt3dBasic.IsSelected;
     PhastModel.ModflowPackages := NewPackages;
@@ -4184,6 +4190,11 @@ begin
     PhastModel.ModflowPackages.Mt3dSft.ChangeChemSpecies;
   end;
 
+  if GwtChanged or not FComponentsSame then
+  begin
+    PhastModel.UpdateGwtConc;
+  end;
+
   inherited;
   frmGoPhast.EnableLinkStreams;
   frmGoPhast.EnableManageFlowObservations;
@@ -4194,6 +4205,7 @@ begin
   frmGoPhast.EnableSwrActions;
   frmGoPhast.EnableCTS;
   SetMt3dCaption;
+
   if Mt3dmsNewlySelected then
   begin
     Beep;
@@ -4271,8 +4283,12 @@ var
   LayerGroup: TLayerGroup;
   ChildIndex: Integer;
   ChildModel: TChildModel;
+  PhastModel: TPhastModel;
+  OldPackages: TModflowPackages;
+  GwtChanged: Boolean;
 begin
   frmGoPhast.PhastModel.Mt3dmsTimes := FOldMt3dTimes;
+  PhastModel := frmGoPhast.PhastModel;
 
   frmGoPhast.PhastModel.ModflowPackages.SfrPackage.AssignParameterInstances := False;
   try
@@ -4282,6 +4298,12 @@ begin
       LayerGroup.InterblockTransmissivityMethod := FOldInterBlockTransmissivity[Index];
       LayerGroup.AquiferType := FOldAquiferType[Index];
     end;
+
+    OldPackages := FOldPackages[0].Packages;
+    GwtChanged := (PhastModel.ModelSelection = msModflow2015)
+      and (PhastModel.GwtUsed = (OldPackages.Mt3dBasic.IsSelected
+      and (OldPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
+
     frmGoPhast.PhastModel.ModflowPackages := FOldPackages[0].Packages;
     if frmGoPhast.PhastModel.LgrUsed then
     begin
@@ -4304,6 +4326,11 @@ begin
   if not FComponentsSame then
   begin
     frmGoPhast.PhastModel.ModflowPackages.Mt3dSft.ChangeChemSpecies;
+  end;
+
+  if GwtChanged or not FComponentsSame then
+  begin
+    frmGoPhast.PhastModel.UpdateGwtConc;
   end;
 
   inherited;
