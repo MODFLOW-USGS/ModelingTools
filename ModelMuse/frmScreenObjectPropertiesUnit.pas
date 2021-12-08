@@ -2741,13 +2741,26 @@ var
   PestParameterColumns: set of Byte;
   ParametersOnly: Boolean;
   UsedEvalAt: TEvaluatedAt;
+  SpeciesIndex: Byte;
 begin
   ParametersOnly := False;
   PestParameterColumns := [];
   UsedEvalAt := eaBlocks;
    { TODO  -cPEST: Support PEST here }
-  if (Sender = frameDrnParam.rdgModflowBoundary)
-    or (Sender = frameGhbParam.rdgModflowBoundary)
+
+  if (Sender = frameGhbParam.rdgModflowBoundary) then
+  begin
+    PestParameterColumns := [2,3];
+    if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        Include(PestParameterColumns, SpeciesIndex + 4);
+      end;
+    end;
+  end
+  else if (Sender = frameDrnParam.rdgModflowBoundary)
+//    or (Sender = frameGhbParam.rdgModflowBoundary)
     or (Sender = frameChdParam.rdgModflowBoundary)
     or (Sender = frameHfbMf6.rdgModflowBoundary)
     or (Sender = frameRes.rdgModflowBoundary)

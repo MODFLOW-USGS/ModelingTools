@@ -74,7 +74,7 @@ type
     // See @link(Conductance).
     FConductance: TFormulaObject;
     FGwtConcentrations: TGhbGwtConcCollection;
-    FConcFormulas: TFormulaObjectList;
+//    FConcFormulas: TFormulaObjectList;
     // See @link(BoundaryHead).
     procedure SetBoundaryHead(const Value: string);
     // See @link(Conductance).
@@ -293,7 +293,7 @@ type
     FUsedObserver: TObserver;
     FPestConductanceObserver: TObserver;
     FPestHeadObserver: TObserver;
-    FPestConcentrationFormulas: TStringList;
+    FPestConcentrationFormulas: TGhbGwtConcCollection;
     FPestConcentrationMethods: TPestMethodCollection;
     FConcentrationObservers: TObserverList;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
@@ -310,7 +310,7 @@ type
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateHeadData(Sender: TObject);
     procedure InvalidateConcData(Sender: TObject);
-    procedure SetPestConcentrationFormulas(const Value: TStringList);
+    procedure SetPestConcentrationFormulas(const Value: TGhbGwtConcCollection);
     procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
     function GetPConcentrationFormulas(const Index: Integer): string;
@@ -397,7 +397,7 @@ type
       Stored False
       {$ENDIF}
       ;
-    property PestConcentrationFormulas: TStringList read FPestConcentrationFormulas
+    property PestConcentrationFormulas: TGhbGwtConcCollection read FPestConcentrationFormulas
       write SetPestConcentrationFormulas
       {$IFNDEF GWT}
       Stored False
@@ -479,7 +479,7 @@ begin
   FGwtConcentrations := TGhbGwtConcCollection.Create(Model, ScreenObject,
     GhbCol);
   inherited;
-  FConcFormulas := TFormulaObjectList.Create;
+//  FConcFormulas := TFormulaObjectList.Create;
 end;
 
 procedure TGhbItem.CreateFormulaObjects;
@@ -500,7 +500,7 @@ begin
     FGwtConcentrations[Index].Value := '0';
   end;
 
-  FConcFormulas.Free;
+//  FConcFormulas.Free;
   FGwtConcentrations.Free;
   inherited;
 end;
@@ -558,7 +558,7 @@ begin
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     Item := GwtConcentrations.Items[ConcIndex];
-    if Item.FValueObject = Sender then
+    if Item.ValueObject = Sender then
     begin
       List.Add(Item.Observer);
     end;
@@ -738,9 +738,22 @@ var
   Index: Integer;
   ACell: TCellAssignment;
   ConcIndex: Integer;
+  AllowedIndicies: Set of Byte;
+  SpeciesIndex: Byte;
+  LocalModel: TCustomModel;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
-  Assert(BoundaryFunctionIndex in [GhbHeadPosition,GhbConductancePosition]);
+  AllowedIndicies := [GhbHeadPosition,GhbConductancePosition];
+  LocalModel := AModel as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      Include(AllowedIndicies, GhbStartConcentration + SpeciesIndex);
+    end;
+  end;
+
+  Assert(BoundaryFunctionIndex in AllowedIndicies);
   Assert(Expression <> nil);
 
   GhbStorage := BoundaryStorage as TGhbStorage;
@@ -817,8 +830,30 @@ end;
 
 procedure TGhbCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
+var
+  LocalModel: TCustomModel;
+  Index: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TGhbStorage).FGhbArray, BoundaryCount);
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for Index := 0 to BoundaryCount - 1 do
+    begin
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].Concentrations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].ConcentrationAnnotations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].ConcentrationPestNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].ConcentrationPestSeriesNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].ConcentrationPestSeriesMethods,
+        LocalModel.MobileComponents.Count);
+      SetLength(TGhbStorage(Boundaries[ItemIndex, AModel]).FGhbArray[Index].ConcentrationTimeSeriesNames,
+        LocalModel.MobileComponents.Count);
+    end;
+  end;
   inherited;
 end;
 
@@ -1408,7 +1443,7 @@ end;
 constructor TGhbBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
-  FPestConcentrationFormulas:= TStringList.Create;
+  FPestConcentrationFormulas:= TGhbGwtConcCollection.Create(Model, ScreenObject, nil);
   FPestConcentrationMethods := TPestMethodCollection.Create(Model);
   FConcentrationObservers := TObserverList.Create;
 
@@ -1435,8 +1470,8 @@ begin
   begin
     for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
     begin
-      AFormula := CreateFormulaObjectBlocks(dso3D);
-      FPestConcentrationFormulas.AddObject(AFormula.Formula, AFormula);
+//      AFormula := CreateFormulaObjectBlocks(dso3D);
+      FPestConcentrationFormulas.Add;
     end;
   end;
 end;
@@ -1629,21 +1664,23 @@ function TGhbBoundary.GetPConcentrationFormulas(const Index: Integer): string;
 var
   AFormula: TFormulaObject;
 begin
-  while Index >= FPestConcentrationFormulas.Count do
-  begin
-    AFormula := CreateFormulaObjectBlocks(dso3D);
-    FPestConcentrationFormulas.AddObject(AFormula.Formula, AFormula);
-    ConcentrationObserver[FPestConcentrationFormulas.Count-1];
-  end;
-  AFormula := FPestConcentrationFormulas.Objects[Index] as TFormulaObject;
-  if AFormula = nil then
-  begin
-    result := FPestConcentrationFormulas[Index]
-  end
-  else
-  begin
-    result := AFormula.Formula;
-  end;
+  result := FPestConcentrationFormulas[Index].Value;
+
+//  while Index >= FPestConcentrationFormulas.Count do
+//  begin
+//    AFormula := CreateFormulaObjectBlocks(dso3D);
+//    FPestConcentrationFormulas.AddObject(AFormula.Formula, AFormula);
+//    ConcentrationObserver[FPestConcentrationFormulas.Count-1];
+//  end;
+//  AFormula := FPestConcentrationFormulas.Objects[Index] as TFormulaObject;
+//  if AFormula = nil then
+//  begin
+//    result := FPestConcentrationFormulas[Index]
+//  end
+//  else
+//  begin
+//    result := AFormula.Formula;
+//  end;
 end;
 
 function TGhbBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
@@ -1754,7 +1791,7 @@ begin
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
-    if FPestConcentrationFormulas.Objects[Index] = Sender then
+    if FPestConcentrationFormulas[Index].ValueObject = Sender then
     begin
       List.Add(FObserverList[GhbStartConcentration + Index]);
     end;
@@ -1856,18 +1893,19 @@ end;
 procedure TGhbBoundary.SetPConcentrationFormulas(const Index: Integer;
   const Value: string);
 var
-  AFormula: TFormulaObject;  
+  AFormula: TFormulaObject;
 begin
-  while Index >= FPestConcentrationFormulas.Count do
-  begin
-    AFormula := CreateFormulaObjectBlocks(dso3D);
-    FPestConcentrationFormulas.AddObject(AFormula.Formula, AFormula);
-    ConcentrationObserver[FPestConcentrationFormulas.Count-1];
-  end;
-  AFormula := FPestConcentrationFormulas.Objects[Index] as TFormulaObject;
-  UpdateFormulaBlocks(Value, GhbStartConcentration+Index, AFormula);
-  FPestConcentrationFormulas[Index] := AFormula.Formula;
-  FPestConcentrationFormulas.Objects[Index] := AFormula;
+  FPestConcentrationFormulas[Index].Value := Value;
+//  while Index >= FPestConcentrationFormulas.Count do
+//  begin
+//    AFormula := CreateFormulaObjectBlocks(dso3D);
+//    FPestConcentrationFormulas.AddObject(AFormula.Formula, AFormula);
+//    ConcentrationObserver[FPestConcentrationFormulas.Count-1];
+//  end;
+//  AFormula := FPestConcentrationFormulas.Objects[Index] as TFormulaObject;
+//  UpdateFormulaBlocks(Value, GhbStartConcentration+Index, AFormula);
+//  FPestConcentrationFormulas[Index] := AFormula.Formula;
+//  FPestConcentrationFormulas.Objects[Index] := AFormula;
 end;
 
 procedure TGhbBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
@@ -1918,19 +1956,20 @@ begin
   end;
 end;
 
-procedure TGhbBoundary.SetPestConcentrationFormulas(const Value: TStringList);
+procedure TGhbBoundary.SetPestConcentrationFormulas(const Value: TGhbGwtConcCollection);
 var
   Index: Integer;
 begin
-  for Index := 0 to Value.Count - 1 do
-  begin
-    PConcentrationFormulas[Index] := Value[Index];
-  end;
-
-  while FPestConcentrationFormulas.Count > Value.Count do
-  begin
-    FPestConcentrationFormulas.Delete(FPestConcentrationFormulas.Count-1);
-  end;
+  FPestConcentrationFormulas.Assign(Value);
+//  for Index := 0 to Value.Count - 1 do
+//  begin
+//    PConcentrationFormulas[Index] := Value[Index];
+//  end;
+//
+//  while FPestConcentrationFormulas.Count > Value.Count do
+//  begin
+//    FPestConcentrationFormulas.Delete(FPestConcentrationFormulas.Count-1);
+//  end;
 end;
 
 procedure TGhbBoundary.SetPestConcentrationMethods(
@@ -2129,18 +2168,22 @@ begin
   begin
     ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
   end;
+  SetLength(ConcentrationPestNames, Count);
   for Index := 0 to Count - 1 do
   begin
     ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
   end;
+  SetLength(ConcentrationPestSeriesNames, Count);
   for Index := 0 to Count - 1 do
   begin
     ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
   end;
+  SetLength(ConcentrationPestSeriesMethods, Count);
   for Index := 0 to Count - 1 do
   begin
     ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
   end;
+  SetLength(ConcentrationTimeSeriesNames, Count);
   for Index := 0 to Count - 1 do
   begin
     ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
@@ -2224,7 +2267,7 @@ var
   ConcTimeList: TModflowTimeList;
 begin
   inherited;
-  FConcList := TList.Create;
+  FConcList := TObjectList.Create;
 
   FBoundaryHeadData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FConductanceData := TModflowTimeList.Create(Model, Boundary.ScreenObject);

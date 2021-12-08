@@ -484,6 +484,7 @@ type
   private
     FListDuplicatesAllowed: Boolean;
     FSectionDuplicatesAllowed: Boolean;
+    FCanUsePestParmeters: Boolean;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
     procedure AssignArrayCellsWithItem(Item: TCustomModflowBoundaryItem;
@@ -540,8 +541,9 @@ type
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string;
       virtual; abstract;
     function AllowInactiveMf6Cells: boolean; virtual;
-
   public
+    property CanUsePestParmeters: Boolean read FCanUsePestParmeters
+      write FCanUsePestParmeters;
     // @name is set to @True in @link(TSwrReachCollection),
     // @link(TStrCollection), @link(TSfrMf6Collection),
     // and in @link(TMvrBoundary) when the source is SFR.
@@ -623,7 +625,7 @@ type
     function GetObserver(Index: Integer): TObserver; override;
   public
     property Observer: TObserver read FObserver;
-    property FValueObject: TFormulaObject read FValue write FValue;
+    property ValueObject: TFormulaObject read FValue write FValue;
     procedure Assign(Source: TPersistent); override;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -1535,6 +1537,7 @@ begin
   inherited;
   FListDuplicatesAllowed := True;
   FSectionDuplicatesAllowed := False;
+  FCanUsePestParmeters := True;
 end;
 
 function TCustomListArrayBoundColl.OkListDataTypes(BoundaryIndex: Integer): TRbwDataTypes;
@@ -2065,11 +2068,13 @@ end;
 procedure TModflowParameters.EvaluateListBoundaries(AModel: TBaseModel);
 var
   Index: Integer;
+  ListCollection: TCustomMF_ListBoundColl;
 begin
   for Index := 0 to Count - 1 do
   begin
-    (Items[Index].Param as TCustomMF_ListBoundColl).
-      EvaluateListBoundaries(AModel);
+    ListCollection := Items[Index].Param as TCustomMF_ListBoundColl;
+    ListCollection.CanUsePestParmeters := False;
+    ListCollection.EvaluateListBoundaries(AModel);
   end;
 end;
 
@@ -3946,8 +3951,15 @@ begin
         TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(UnmodifiedFormula);
         if TimeSeries = nil then
         begin
-          PestSeriesName := BoundaryGroup.
-            PestBoundaryFormula[BoundaryFunctionIndex];
+          if CanUsePestParmeters then
+          begin
+            PestSeriesName := BoundaryGroup.
+              PestBoundaryFormula[BoundaryFunctionIndex];
+          end
+          else
+          begin
+            PestSeriesName := '';
+          end;
         end
         else
         begin
@@ -3998,7 +4010,7 @@ begin
         end;
 
         ADataSet := LocalModel.DataArrayManager.GetDataSetByName(UnmodifiedFormula);
-        if (ADataSet <> nil) and ADataSet.PestParametersUsed then
+        if (ADataSet <> nil) and ADataSet.PestParametersUsed and CanUsePestParmeters then
         begin
           PestParamName := ADataSet.Name;
         end
@@ -4008,8 +4020,15 @@ begin
         end
         else
         begin
+          if CanUsePestParmeters then
+          begin
+            PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
+          end
+          else
+          begin
+            PestParam := nil;
+          end;
           // handle the situation if it is a PEST parameter
-          PestParam := LocalModel.GetPestParameterByName(UnmodifiedFormula);
           if PestParam = nil then
           begin
             PestParamName := '';
@@ -4113,8 +4132,15 @@ begin
           end
           else
           begin
-            PestSeriesName := BoundaryGroup.
-              PestBoundaryFormula[BoundaryFunctionIndex];
+            if CanUsePestParmeters then
+            begin
+              PestSeriesName := BoundaryGroup.
+                PestBoundaryFormula[BoundaryFunctionIndex];
+            end
+            else
+            begin
+              PestSeriesName := '';
+            end;
             TimeSeriesName := '';
           end;
           Method := BoundaryGroup.
@@ -4176,8 +4202,15 @@ begin
                   TimeSeries := LocalModel.Mf6TimesSeries.GetTimeSeriesByName(Formula);
                   if TimeSeries = nil then
                   begin
-                    PestSeriesName := BoundaryGroup.
-                      PestBoundaryFormula[BoundaryFunctionIndex];
+                    if CanUsePestParmeters then
+                    begin
+                      PestSeriesName := BoundaryGroup.
+                        PestBoundaryFormula[BoundaryFunctionIndex];
+                    end
+                    else
+                    begin
+                      PestSeriesName := '';
+                    end;
                     TimeSeriesName := '';
                   end
                   else
@@ -4238,7 +4271,14 @@ begin
                   end
                   else
                   begin
-                    PestParam := LocalModel.GetPestParameterByName(Formula);
+                    if CanUsePestParmeters then
+                    begin
+                      PestParam := LocalModel.GetPestParameterByName(Formula);
+                    end
+                    else
+                    begin
+                      PestParam := nil
+                    end;
                     if PestParam = nil then
                     begin
                       PestParamName := '';
@@ -5063,6 +5103,7 @@ constructor TCustomStringCollection.Create(ItemClass: TCollectionItemClass;
   Model: TBaseModel; AScreenObject: TObject; ParentCollection: TCustomNonSpatialBoundColl);
 begin
   inherited Create(ItemClass, Model, ScreenObject);
+  // ParentCollection might be nil.
   FParentCollection := ParentCollection;
 end;
 

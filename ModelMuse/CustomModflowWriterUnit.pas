@@ -791,6 +791,9 @@ end;
       const DataSetIdentifier: string; List: TValueCellList;
       TimeIndex: integer); virtual;
     procedure WriteMoverOption; virtual;
+    // @name is used to write additional auxillary variables such as
+    // chemical species names with GWT.
+    procedure WriteAdditionalAuxVariables; virtual;
   public
     // @name is used to update the display of transient data used to color the
     // grid.
@@ -9531,11 +9534,17 @@ begin
   end;
 end;
 
+procedure TCustomListWriter.WriteAdditionalAuxVariables;
+begin
+  // do nothing
+end;
+
 procedure TCustomListWriter.WriteListOptions(InputFileName: string);
 begin
   { TODO -cMODFLOW 6 : Support additional MODFLOW-6 options }
   // PACKAGENAME not currently supported.
   WriteString('    AUXILIARY IFACE');
+  WriteAdditionalAuxVariables;
   NewLine;
 
   WriteString('    BOUNDNAMES');

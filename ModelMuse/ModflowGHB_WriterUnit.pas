@@ -49,6 +49,7 @@ type
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
     function ObsFactors: TFluxObservationGroups; override;
+    procedure WriteAdditionalAuxVariables; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -69,11 +70,6 @@ resourcestring
   StrTheFollowingGHBObPest = 'The following GHB observation names may be valid f' +
   'or MODFLOW but they are not valid for PEST.';
   StrWritingGHBPackage = 'Writing GHB Package input.';
-//  StrWritingDataSet0 = '  Writing Data Set 0.';
-//  StrWritingDataSet1 = '  Writing Data Set 1.';
-//  StrWritingDataSet2 = '  Writing Data Set 2.';
-//  StrWritingDataSets3and4 = '  Writing Data Sets 3 and 4.';
-//  StrWritingDataSets5to7 = '  Writing Data Sets 5 to 7.';
   StrGHBBoundaryHeadIs = 'GHB Boundary head is below the bottom of the cell ' +
   'at the following locations.';
   StrLargeGHBBoundaryHDetailed = 'Large GHB boundary head gradient between %' +
@@ -108,8 +104,6 @@ var
   procedure CheckGradient;
   var
     DeltaGhbElevation: double;
-//    OtherCellBottomElevation: Real;
-//    DeltaCellElevation: double;
     Cell1: string;
     Cell2: string;
     WarningMessage: string;
@@ -123,9 +117,6 @@ var
       Point1 := Model.Grid.TwoDElementCenter(Ghb_Cell.Column, Ghb_Cell.Row);
       Point2 := Model.Grid.TwoDElementCenter(OtherCell.Column, OtherCell.Row);
       Gradient := DeltaGhbElevation/Distance(Point1, Point2);
-//      OtherCellBottomElevation := Model.Grid.CellElevation[
-//        OtherCell.Column, OtherCell.Row, OtherCell.Layer+1];
-//      DeltaCellElevation := Abs(OtherCellBottomElevation - CellBottomElevation);
       if Gradient > HighGradient then
       begin
         ScreenObject := Ghb_Cell.ScreenObject as TScreenObject;
@@ -281,11 +272,6 @@ begin
   result := 'ghb'
 end;
 
-//function TModflowGHB_Writer.ObsTypeMF6: string;
-//begin
-//  result := ' ghb'
-//end;
-
 function TModflowGHB_Writer.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.GhbBoundary;
@@ -294,6 +280,21 @@ end;
 function TModflowGHB_Writer.ParameterType: TParameterType;
 begin
   result := ptGHB;
+end;
+
+procedure TModflowGHB_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
 end;
 
 procedure TModflowGHB_Writer.WriteCell(Cell: TValueCell;
@@ -306,7 +307,6 @@ var
   MultiplierValue: double;
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
-//  DataArray: TDataArray;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -344,8 +344,6 @@ begin
   end;
 
   WriteValueOrFormula(Ghb_Cell, GhbHeadPosition);
-
-//  WriteFloat(GHB_Cell.BoundaryHead);
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
@@ -395,15 +393,14 @@ begin
       + VariableIdentifiers);
   end;
 
-  if Model.GwtUsed then
-  begin
-    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-    begin
-      ASpecies := Model.MobileComponents[SpeciesIndex];
-      WriteString(' ' + ASpecies.Name);
-      NewLine;
-    end;
-  end;
+//  if Model.GwtUsed then
+//  begin
+//    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+//    begin
+//      ASpecies := Model.MobileComponents[SpeciesIndex];
+//      WriteString(' ' + ASpecies.Name);
+//    end;
+//  end;
 
   NewLine;
 
@@ -452,8 +449,6 @@ end;
 
 procedure TModflowGHB_Writer.WriteDataSets3And4;
 const
-//  ErrorRoot = 'One or more %s parameters have been eliminated '
-//    + 'because there are no cells associated with them.';
   DS3 = ' # Data Set 3: PARNAM PARTYP Parval NLST';
   DS3Instances = ' INSTANCES NUMINST';
   DS4A = ' # Data Set 4a: INSTNAM';
@@ -473,8 +468,16 @@ const
   VariableIdentifiers = 'Cond IFACE';
 var
   VI: string;
+  SpeciesIndex: Integer;
 begin
   VI := VariableIdentifiers;
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      VI := VI + ' ' + Model.MobileComponents[SpeciesIndex].Name;
+    end;
+  end;
   if Model.modelSelection = msModflow2015 then
   begin
     VI := VI + ' boundname';
@@ -588,12 +591,6 @@ begin
     WriteFluxObsFile(AFileName, StrIUGBOBSV, PackageAbbreviation,
       DataSet1Comment, DataSet2Comment, DataSet3Comment,
       Model.GhbObservations, Purpose);
-//  end
-//  else
-//  begin
-//    WriteFluxObsFileMF6(AFileName, StrIUGBOBSV, PackageAbbreviation,
-//      DataSet1Comment, DataSet2Comment, DataSet3Comment,
-//      Model.GhbObservations, Purpose);
   end;
 end;
 
@@ -685,25 +682,10 @@ begin
 end;
 
 procedure TModflowGHB_Writer.WriteListOptions(InputFileName: string);
-var
-  SpeciesIndex: Integer;
-  ASpecies: TMobileChemSpeciesItem;
 begin
   inherited;
 
   WriteMf6ParamListOption;
-
-  if Model.GwtUsed then
-  begin
-    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-    begin
-      ASpecies := Model.MobileComponents[SpeciesIndex];
-      WriteString('  AUXILIARY ');
-      WriteString(ASpecies.Name);
-      NewLine;
-    end;
-  end;
-
 end;
 
 procedure TModflowGHB_Writer.WriteMoverOption;
@@ -757,7 +739,6 @@ function TModflowGHB_Writer.IsMf6ToMvrObservation(
   AScreenObject: TScreenObject): Boolean;
 begin
   result := (AScreenObject.Modflow6Obs <> nil)
-//    and AScreenObject.Modflow6Obs.Used
     and (ogMvr in AScreenObject.Modflow6Obs.General);
 end;
 
