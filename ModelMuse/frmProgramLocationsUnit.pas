@@ -169,7 +169,7 @@ begin
       fedModpath.FileName := '';
     end;
     jvrltModpath.Caption := 'MODPATH v6';
-    htlblModPath.Caption := LinkString('https://www.usgs.gov/software/modpath-a-particle-tracking-model-modflow');
+    htlblModPath.Caption := LinkString('https://www.usgs.gov/software/modpath-particle-tracking-model-modflow');
   end
   else
   begin
@@ -179,7 +179,7 @@ begin
       fedModpath.FileName := '';
     end;
     jvrltModpath.Caption := 'MODPATH v7';
-    htlblModPath.Caption := LinkString('https://www.usgs.gov/software/modpath-a-particle-tracking-model-modflow');
+    htlblModPath.Caption := LinkString('https://www.usgs.gov/software/modpath-particle-tracking-model-modflow');
   end;
 
   try

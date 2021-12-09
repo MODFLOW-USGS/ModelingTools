@@ -7,7 +7,7 @@ inherited frmAbout: TfrmAbout
   FormStyle = fsStayOnTop
   OnHide = FormHide
   ExplicitWidth = 748
-  ExplicitHeight = 565
+  ExplicitHeight = 566
   PixelsPerInch = 96
   TextHeight = 18
   object pnlTop: TPanel
@@ -3064,6 +3064,7 @@ inherited frmAbout: TfrmAbout
       Width = 127
       Height = 19
       Caption = '<u><a href="mailto:rbwinst@usgs.gov">rbwinst@usgs.gov</a></u>'
+      SuperSubScriptRatio = 0.666666666666666600
     end
     object htlblVersion2: TJvHTLabel
       Left = 8
@@ -3073,6 +3074,7 @@ inherited frmAbout: TfrmAbout
       Caption = 
         '<u><a href="https://pubs.usgs.gov/tm/tm6A29">https://pubs.usgs.g' +
         'ov/tm/tm6A29</a></u>'
+      SuperSubScriptRatio = 0.666666666666666600
     end
     object htlblVersion3: TJvHTLabel
       Left = 8
@@ -3082,6 +3084,7 @@ inherited frmAbout: TfrmAbout
       Caption = 
         '<u><a href="https://dx.doi.org/10.3133/tm6a49">https://dx.doi.or' +
         'g/10.3133/tm6a49</a></u>'
+      SuperSubScriptRatio = 0.666666666666666600
     end
     object htlbl1: TJvHTLabel
       Left = 8
@@ -3091,6 +3094,7 @@ inherited frmAbout: TfrmAbout
       Caption = 
         '<u><a href="https://doi.org/10.3133/ofr20171137">https://doi.org' +
         '/10.3133/ofr20171137</a></u>'
+      SuperSubScriptRatio = 0.666666666666666600
     end
     object ctgrypnlgrp1: TCategoryPanelGroup
       Left = 328
@@ -3114,7 +3118,7 @@ inherited frmAbout: TfrmAbout
         object reReference: TRichEdit
           Left = 0
           Top = 0
-          Width = 397
+          Width = 395
           Height = 224
           Align = alClient
           Lines.Strings = (
@@ -3155,7 +3159,7 @@ inherited frmAbout: TfrmAbout
         object memoDisclaimer: TMemo
           Left = 0
           Top = 0
-          Width = 397
+          Width = 395
           Height = 0
           Align = alClient
           Lines.Strings = (
@@ -3306,6 +3310,7 @@ inherited frmAbout: TfrmAbout
     Columns = <
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -3329,6 +3334,7 @@ inherited frmAbout: TfrmAbout
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
@@ -3352,6 +3358,7 @@ inherited frmAbout: TfrmAbout
       end
       item
         AutoAdjustRowHeights = True
+        AutoAdjustCaptionRowHeights = False
         ButtonCaption = '...'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText

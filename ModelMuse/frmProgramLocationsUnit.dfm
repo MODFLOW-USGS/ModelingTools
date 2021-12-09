@@ -15,7 +15,6 @@ inherited frmProgramLocations: TfrmProgramLocations
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitWidth = 722
     DesignSize = (
       933
       41)
@@ -29,7 +28,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 458
     end
     object btnOK: TBitBtn
       Left = 757
@@ -41,7 +39,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 546
     end
     object btnCancel: TBitBtn
       Left = 845
@@ -52,7 +49,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 634
     end
   end
   object Panel1: TPanel
@@ -62,7 +58,6 @@ inherited frmProgramLocations: TfrmProgramLocations
     Height = 545
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 722
     object jvrltModflow2005: TJvRollOut
       Left = 1
       Top = 85
@@ -74,7 +69,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 1
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
       DesignSize = (
         931
         22)
@@ -106,7 +100,6 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModflowLGR: TJvRollOut
@@ -120,7 +113,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 2
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
       DesignSize = (
         931
         22)
@@ -131,11 +123,11 @@ inherited frmProgramLocations: TfrmProgramLocations
       object JvHTLabel1: TJvHTLabel
         Left = 15
         Top = 25
-        Width = 270
+        Width = 586
         Height = 19
         Caption = 
-          '<a href="https://water.usgs.gov/ogw/modflow-lgr/">https://water.' +
-          'usgs.gov/ogw/modflow-lgr/</a>'
+          '<a href="https://water.usgs.gov/water-resources/legacy-software/' +
+          '">https://water.usgs.gov/water-resources/legacy-software/</a>'
         SuperSubScriptRatio = 0.666666666666666600
       end
       object fedModflowLgr: TJvFilenameEdit
@@ -150,7 +142,6 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModflowLgr2: TJvRollOut
@@ -164,7 +155,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 3
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
       DesignSize = (
         931
         22)
@@ -175,11 +165,11 @@ inherited frmProgramLocations: TfrmProgramLocations
       object jvhtlblMfLgr2: TJvHTLabel
         Left = 15
         Top = 25
-        Width = 270
+        Width = 382
         Height = 19
         Caption = 
-          '<a href="https://water.usgs.gov/ogw/modflow-lgr/">https://water.' +
-          'usgs.gov/ogw/modflow-lgr/</a>'
+          '<a href="https://water.usgs.gov/water-resources/legacy-software/' +
+          '">https://water.usgs.gov/water-resources/legacy-software/</a>'
         SuperSubScriptRatio = 0.666666666666666600
       end
       object fedModflowLgr2: TJvFilenameEdit
@@ -194,24 +184,21 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModflowNWT: TJvRollOut
       Left = 1
       Top = 151
       Width = 931
-      Height = 22
+      Height = 80
       Align = alTop
       Caption = 'MODFLOW-NWT'
-      Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 4
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
       DesignSize = (
         931
-        22)
+        80)
       FAWidth = 145
       FAHeight = 80
       FCWidth = 22
@@ -219,12 +206,12 @@ inherited frmProgramLocations: TfrmProgramLocations
       object htlblModflowNWT: TJvHTLabel
         Left = 15
         Top = 25
-        Width = 550
+        Width = 536
         Height = 19
         Caption = 
-          '<a href="https://www.usgs.gov/software/modflow-nwt-a-newton-form' +
-          'ulation-modflow-2005">https://www.usgs.gov/software/modflow-nwt-' +
-          'a-newton-formulation-modflow-2005</a>'
+          '<a href="https://www.usgs.gov/software/modflow-nwt-newton-formul' +
+          'ation-modflow-2005">https://www.usgs.gov/software/modflow-nwt-ne' +
+          'wton-formulation-modflow-2005</a>'
         SuperSubScriptRatio = 0.666666666666666600
       end
       object fedModflowNWT: TJvFilenameEdit
@@ -239,12 +226,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModpath: TJvRollOut
       Left = 1
-      Top = 217
+      Top = 275
       Width = 931
       Height = 22
       Align = alTop
@@ -253,7 +239,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 7
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
       DesignSize = (
         931
         22)
@@ -284,12 +269,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltZoneBudget: TJvRollOut
       Left = 1
-      Top = 239
+      Top = 297
       Width = 931
       Height = 84
       Align = alTop
@@ -297,7 +281,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 8
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
       DesignSize = (
         931
         84)
@@ -308,13 +291,13 @@ inherited frmProgramLocations: TfrmProgramLocations
       object htlblZoneBudget: TJvHTLabel
         Left = 15
         Top = 25
-        Width = 879
+        Width = 865
         Height = 19
         Caption = 
-          '<a href="https://www.usgs.gov/software/zonebudget-a-program-comp' +
-          'uting-subregional-water-budgets-modflow-groundwater-flow-models"' +
-          '>https://www.usgs.gov/software/zonebudget-a-program-computing-su' +
-          'bregional-water-budgets-modflow-groundwater-flow-models</a>'
+          '<a href="https://www.usgs.gov/software/zonebudget-program-comput' +
+          'ing-subregional-water-budgets-modflow-groundwater-flow-models">h' +
+          'ttps://www.usgs.gov/software/zonebudget-program-computing-subreg' +
+          'ional-water-budgets-modflow-groundwater-flow-models</a>'
         SuperSubScriptRatio = 0.666666666666666600
       end
       object fedZonebudget: TJvFilenameEdit
@@ -329,12 +312,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltMt3dms: TJvRollOut
       Left = 1
-      Top = 407
+      Top = 403
       Width = 931
       Height = 22
       Align = alTop
@@ -343,7 +325,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 9
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
+      ExplicitTop = 407
       DesignSize = (
         931
         22)
@@ -371,12 +353,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModelMate: TJvRollOut
       Left = 1
-      Top = 451
+      Top = 447
       Width = 931
       Height = 22
       Align = alTop
@@ -385,7 +366,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 11
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
+      ExplicitTop = 451
       DesignSize = (
         931
         22)
@@ -413,12 +394,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltTextEditor: TJvRollOut
       Left = 1
-      Top = 473
+      Top = 469
       Width = 931
       Height = 22
       Align = alTop
@@ -427,7 +407,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 12
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
+      ExplicitTop = 473
       DesignSize = (
         931
         22)
@@ -447,12 +427,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModelMonitor: TJvRollOut
       Left = 1
-      Top = 495
+      Top = 491
       Width = 931
       Height = 22
       Align = alTop
@@ -461,7 +440,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 13
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
+      ExplicitTop = 495
       DesignSize = (
         931
         22)
@@ -481,12 +460,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModflowFmp: TJvRollOut
       Left = 1
-      Top = 195
+      Top = 253
       Width = 931
       Height = 22
       Align = alTop
@@ -494,7 +472,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 6
-      ExplicitWidth = 720
+      ExplicitTop = 195
       DesignSize = (
         931
         22)
@@ -535,12 +513,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModflowCFP: TJvRollOut
       Left = 1
-      Top = 173
+      Top = 231
       Width = 931
       Height = 22
       Align = alTop
@@ -548,7 +525,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 5
-      ExplicitWidth = 720
+      ExplicitTop = 173
       DesignSize = (
         931
         22)
@@ -580,7 +557,6 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltModflow6: TJvRollOut
@@ -593,7 +569,6 @@ inherited frmProgramLocations: TfrmProgramLocations
       ImageOptions.Images = ilShowHide
       TabOrder = 0
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
       DesignSize = (
         931
         84)
@@ -624,12 +599,11 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltMt3dUsgs: TJvRollOut
       Left = 1
-      Top = 429
+      Top = 425
       Width = 931
       Height = 22
       Align = alTop
@@ -637,7 +611,7 @@ inherited frmProgramLocations: TfrmProgramLocations
       Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 10
-      ExplicitWidth = 720
+      ExplicitTop = 429
       DesignSize = (
         931
         22)
@@ -666,23 +640,23 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
     object jvrltZonebudget6: TJvRollOut
       Left = 1
-      Top = 323
+      Top = 381
       Width = 931
-      Height = 84
+      Height = 22
       Align = alTop
       Caption = 'ZONEBUDGET 6'
+      Collapsed = True
       ImageOptions.Images = ilShowHide
       TabOrder = 14
       OnExpand = jvrltExpand
-      ExplicitWidth = 720
+      ExplicitTop = 261
       DesignSize = (
         931
-        84)
+        22)
       FAWidth = 145
       FAHeight = 84
       FCWidth = 22
@@ -710,7 +684,6 @@ inherited frmProgramLocations: TfrmProgramLocations
         TabOrder = 0
         Text = ''
         OnChange = fedModflowChange
-        ExplicitWidth = 687
       end
     end
   end
@@ -720,7 +693,7 @@ inherited frmProgramLocations: TfrmProgramLocations
     Left = 448
     Top = 48
     Bitmap = {
-      494C01010200050008000C000C00FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010200050004000C000C00FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000300000000C00000001002000000000000009
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

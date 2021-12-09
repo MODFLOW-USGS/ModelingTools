@@ -7477,13 +7477,14 @@ begin
   begin
     Result := btPhastWell;
   end
-  else if (Name = StrMODFLOWWellPumping)
+  else if (Name = StrMODFLOWWellPumping) or (Pos('WEL ', Name) = 1)
     then
   begin
     Result := btMfWell;
   end
   else if (Name = StrMODFLOWGhbConductance)
     or (Name = StrMODFLOWGhbHead)
+    or (Pos('GHB ', Name) = 1)
     then
   begin
     Result := btMfGhb;

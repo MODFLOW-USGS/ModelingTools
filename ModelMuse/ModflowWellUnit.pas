@@ -151,7 +151,7 @@ type
 
   TWell_Cell = class(TValueCell)
   private
-    Values: TWellRecord;
+    FValues: TWellRecord;
     StressPeriod: integer;
     function GetPumpingRate: double;
     function GetPumpingRateAnnotation: string;
@@ -165,7 +165,15 @@ type
     function GetPumpingRatePestSeriesName: string;
     function GetPumpingRateTimeSeriesName: string;
     procedure SetPumpingRateTimeSeriesName(const Value: string);
+    function GetConcentration(const Index: Integer): double;
+    function GetConcentrationAnnotation(const Index: Integer): string;
+    function GetConcentrationPestName(const Index: Integer): string;
+    function GetConcentrationPestSeriesMethod(
+      const Index: Integer): TPestParamMethod;
+    function GetConcentrationPestSeriesName(const Index: Integer): string;
+    function GetConcentrationTimeSeriesName(const Index: Integer): string;
   protected
+    property Values: TWellRecord read FValues;
     function GetColumn: integer; override;
     function GetLayer: integer; override;
     function GetRow: integer; override;
@@ -199,9 +207,22 @@ type
     property PumpingRatePestSeries: string read GetPumpingRatePestSeriesName;
     property PumpingRatePestSeriesMethod: TPestParamMethod
       read GetPumpingRatePestSeriesMethod;
-
+    // Time Series
     property PumpingRateTimeSeriesName: string read GetPumpingRateTimeSeriesName
       write SetPumpingRateTimeSeriesName;
+    // GWT
+    property Concentrations[const Index: Integer]: double
+      read GetConcentration;
+    property ConcentrationAnnotations[const Index: Integer]: string
+      read GetConcentrationAnnotation;
+    property ConcentrationPestNames[const Index: Integer]: string
+      read GetConcentrationPestName;
+    property ConcentrationPestSeriesNames[const Index: Integer]: string
+      read GetConcentrationPestSeriesName;
+    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
+      read GetConcentrationPestSeriesMethod;
+    property ConcentrationTimeSeriesNames[const Index: Integer]: string
+      read GetConcentrationTimeSeriesName;
 
   end;
 
@@ -226,6 +247,9 @@ type
     FPestPumpingRateFormula: TFormulaObject;
     FPestPumpingRateObserver: TObserver;
     FUsedObserver: TObserver;
+    FPestConcentrationFormulas: TWelGwtConcCollection;
+    FPestConcentrationMethods: TPestMethodCollection;
+    FConcentrationObservers: TObserverList;
     procedure SetTabFileName(const Value: string);
     function GetRelativeTabFileName: string;
     procedure SetRelativeTabFileName(const Value: string);
@@ -235,6 +259,10 @@ type
     procedure SetPestPumpingRateMethod(const Value: TPestParamMethod);
     function GetPestPumpingRateObserver: TObserver;
     procedure InvalidatePumpingRateData(Sender: TObject);
+    procedure InvalidateConcData(Sender: TObject);
+    procedure SetPestConcentrationFormulas(const Value: TWelGwtConcCollection);
+    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    function GetConcentrationObserver(const Index: Integer): TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -257,6 +285,8 @@ type
     procedure CreateObservers; //override;
     property PestPumpingRateObserver: TObserver
       read GetPestPumpingRateObserver;
+    property ConcentrationObserver[const Index: Integer]: TObserver
+      read GetConcentrationObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
@@ -304,10 +334,24 @@ type
       Stored False
       {$ENDIF}
       ;
+    property PestConcentrationFormulas: TWelGwtConcCollection
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConcentrationMethods: TPestMethodCollection
+      read FPestConcentrationMethods write SetPestConcentrationMethods
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 resourcestring
   StrWellFormulaError = 'Pumping rate set to zero because of a math error';
+  StrWellConcentrationS = 'Well Concentration set to zero because of a math ' +
+  'error';
 
 const
   WelPumpingRatePosition = 0;
@@ -322,8 +366,6 @@ uses ScreenObjectUnit, ModflowTimeUnit, PhastModelUnit, TempFiles,
 resourcestring
   StrPumpingRateMultip = ' pumping rate multiplier';
   StrWellPumpingRate = 'Well pumping rate';
-  StrWellConcentrationS = 'Well Concentration set to zero because of a math ' +
-  'error';
 
 { TWellItem }
 
@@ -398,7 +440,7 @@ end;
 
 function TWellItem.GetBoundaryFormula(Index: integer): string;
 var
-  Item: TGWtConcStringValueItem;
+  Item: TGwtConcStringValueItem;
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRate;
@@ -475,7 +517,7 @@ end;
 
 procedure TWellItem.SetBoundaryFormula(Index: integer; const Value: string);
 var
-  Item: TGWtConcStringValueItem;
+  Item: TGwtConcStringValueItem;
 begin
   inherited;
   case Index of
@@ -697,11 +739,11 @@ var
   ScreenObject: TScreenObject;
 begin
   result := '';
+  Item := Items[ItemIndex] as TWellItem;
   if FormulaIndex = 0 then
   begin
     Boundary := BoundaryGroup as TMfWellBoundary;
     ScreenObject := Boundary.ScreenObject as TScreenObject;
-    Item := Items[ItemIndex] as TWellItem;
     case Boundary.FormulaInterpretation of
       fiSpecific:
         begin
@@ -746,7 +788,7 @@ begin
   end
   else
   begin
-    Assert(False);
+    result := Item.BoundaryFormula[FormulaIndex];
   end;
 end;
 
@@ -880,6 +922,39 @@ begin
   result := Values.Cell.Column;
 end;
 
+function TWell_Cell.GetConcentration(const Index: Integer): double;
+begin
+  result := Values.Concentrations[Index];
+end;
+
+function TWell_Cell.GetConcentrationAnnotation(const Index: Integer): string;
+begin
+  result := Values.ConcentrationAnnotations[Index];
+end;
+
+function TWell_Cell.GetConcentrationPestName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestNames[Index];
+end;
+
+function TWell_Cell.GetConcentrationPestSeriesMethod(
+  const Index: Integer): TPestParamMethod;
+begin
+  result := FValues.ConcentrationPestSeriesMethods[Index];
+end;
+
+function TWell_Cell.GetConcentrationPestSeriesName(
+  const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestSeriesNames[Index];
+end;
+
+function TWell_Cell.GetConcentrationTimeSeriesName(
+  const Index: Integer): string;
+begin
+  result := FValues.ConcentrationTimeSeriesNames[Index];
+end;
+
 function TWell_Cell.GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string;
 begin
   result := '';
@@ -898,14 +973,16 @@ begin
 end;
 
 function TWell_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRateTimeSeriesName;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - WelStartConcentration;
+        result := FValues.ConcentrationTimeSeriesNames[ConcIndex];
+      end;
   end;
 end;
 
@@ -920,38 +997,44 @@ begin
 end;
 
 function TWell_Cell.GetPestName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRatePest;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - WelStartConcentration;
+        result := FValues.ConcentrationPestNames[ConcIndex];
+      end;
   end;
 end;
 
 function TWell_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRatePestSeriesMethod;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - WelStartConcentration;
+        result := FValues.ConcentrationPestSeriesMethods[ConcIndex];
+      end;
   end;
 end;
 
 function TWell_Cell.GetPestSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRatePestSeries;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - WelStartConcentration;
+        result := FValues.ConcentrationPestSeriesNames[ConcIndex];
+      end;
   end;
 end;
 
@@ -996,20 +1079,32 @@ begin
 end;
 
 function TWell_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
+var
+  ConcIndex: Integer;
 begin
-  result := '';
+//  result := '';
   case Index of
     WelPumpingRatePosition: result := PumpingRateAnnotation;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - WelStartConcentration;
+        result := FValues.ConcentrationAnnotations[ConcIndex];
+      end;
   end;
 end;
 
 function TWell_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
+var
+  ConcIndex: Integer;
 begin
-  result := 0;
+//  result := 0;
   case Index of
     WelPumpingRatePosition: result := PumpingRate;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - WelStartConcentration;
+        result := FValues.Concentrations[ConcIndex];
+      end;
   end;
 end;
 
@@ -1022,11 +1117,6 @@ function TWell_Cell.GetSection: integer;
 begin
   result := Values.Cell.Section;
 end;
-
-//function TWell_Cell.GetTimeSeriesName: string;
-//begin
-//  result := Values.TimeSeriesName;
-//end;
 
 function TWell_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
@@ -1058,35 +1148,37 @@ end;
 
 procedure TWell_Cell.SetColumn(const Value: integer);
 begin
-  Values.Cell.Column := Value;
+  FValues.Cell.Column := Value;
 end;
 
 procedure TWell_Cell.SetLayer(const Value: integer);
 begin
-  Values.Cell.Layer := Value;
+  FValues.Cell.Layer := Value;
 end;
 
 procedure TWell_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+var
+  ConcIndex: Integer;
 begin
   case Index of
     WelPumpingRatePosition:
       PumpingRateTimeSeriesName := Value;
     else
-    begin
-      inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - WelStartConcentration;
+        FValues.ConcentrationTimeSeriesNames[ConcIndex] := Value;
+      end;
   end;
 end;
 
 procedure TWell_Cell.SetPumpingRateTimeSeriesName(const Value: string);
 begin
-  Values.PumpingRateTimeSeriesName := Value;
+  FValues.PumpingRateTimeSeriesName := Value;
 end;
 
 procedure TWell_Cell.SetRow(const Value: integer);
 begin
-  Values.Cell.Row := Value;
+  FValues.Cell.Row := Value;
 end;
 
 { TMfWellBoundary }
@@ -1101,6 +1193,8 @@ begin
     RelativeTabFileName := SourceWell.RelativeTabFileName;
     PestPumpingRateFormula := SourceWell.PestPumpingRateFormula;
     PestPumpingRateMethod := SourceWell.PestPumpingRateMethod;
+    PestConcentrationFormulas := SourceWell.PestConcentrationFormulas;
+    PestConcentrationMethods := SourceWell.PestConcentrationMethods;
   end;
   inherited;
 end;
@@ -1174,7 +1268,7 @@ begin
         Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
-        Cell.Values := BoundaryValues;
+        Cell.FValues := BoundaryValues;
         Cell.ScreenObject := ScreenObject;
         LocalModel.AdjustCellPosition(Cell);
       end;
@@ -1197,6 +1291,10 @@ end;
 constructor TMfWellBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  FPestConcentrationFormulas:= TWelGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FConcentrationObservers := TObserverList.Create;
+
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;
@@ -1206,15 +1304,32 @@ begin
 end;
 
 procedure TMfWellBoundary.CreateFormulaObjects;
+var
+  LocalModel: TPhastModel;
+  ConcIndex: Integer;
 begin
   FPestPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+  LocalModel := ParentModel as TPhastModel;
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  begin
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestConcentrationFormulas.Add;
+    end;
+  end;
 end;
 
 procedure TMfWellBoundary.CreateObservers;
+var
+  Index: Integer;
 begin
   if ScreenObject <> nil then
   begin
     FObserverList.Add(PestPumpingRateObserver);
+    for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+    begin
+      FObserverList.Add(ConcentrationObserver[Index]);
+    end;
   end;
 end;
 
@@ -1235,10 +1350,20 @@ begin
 end;
 
 destructor TMfWellBoundary.Destroy;
+var
+  Index: Integer;
 begin
   PestPumpingRateFormula := '';
 
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    FPestConcentrationFormulas[Index].Value := '';
+  end;
+
   inherited;
+  FPestConcentrationMethods.Free;
+  FPestConcentrationFormulas.Free;
+  FConcentrationObservers.Free;
 end;
 
 procedure TMfWellBoundary.GetCellValues(ValueTimeList: TList;
@@ -1254,19 +1379,9 @@ var
   Position: integer;
   ParamName: string;
   LocalModel: TCustomModel;
-//  TimeSeriesList: TTimeSeriesList;
-//  BoundaryList: TList;
-//  TimeSeries: TTimeSeries;
-//  StartTime: Double;
-//  StressPeriods: TModflowStressPeriods;
-//  EndTime: Double;
-//  TimeCount: Integer;
-//  ItemIndex: Integer;
-//  SeriesIndex: Integer;
-//  InitialTime: Double;
 begin
   FCurrentParameter := nil;
-//  EvaluateArrayBoundaries;
+
   EvaluateListBoundaries(AModel);
   LocalModel := AModel as TCustomModel;
   FMaxTabCells := 0;
@@ -1279,17 +1394,16 @@ begin
       BoundaryStorage.CacheData;
     end;
   end;
-//  else
-//  begin
-    for ValueIndex := 0 to Values.Count - 1 do
+
+  for ValueIndex := 0 to Values.Count - 1 do
+  begin
+    if ValueIndex < Values.BoundaryCount[AModel] then
     begin
-      if ValueIndex < Values.BoundaryCount[AModel] then
-      begin
-        BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TWellStorage;
-        AssignCells(BoundaryStorage, ValueTimeList, AModel);
-      end;
+      BoundaryStorage := Values.Boundaries[ValueIndex, AModel] as TWellStorage;
+      AssignCells(BoundaryStorage, ValueTimeList, AModel);
     end;
-//  end;
+  end;
+
   for ParamIndex := 0 to Parameters.Count - 1 do
   begin
     Param := Parameters[ParamIndex];
@@ -1324,7 +1438,23 @@ begin
   end;
 end;
 
+function TMfWellBoundary.GetConcentrationObserver(
+  const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
+begin
+  while Index >= FConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('WelConc_%d', [Index+1]), AObserver, nil);
+    FConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidateConcData;
+  end;
+  result := FConcentrationObservers[Index];
+end;
+
 function TMfWellBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+var
+  ConcIndex: Integer;
 begin
   result := '';
   case FormulaIndex of
@@ -1333,12 +1463,21 @@ begin
         result := PestPumpingRateFormula;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - WelStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        result := PestConcentrationFormulas[ConcIndex].Value;
+      end;
   end;
 end;
 
 function TMfWellBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     WelPumpingRatePosition:
@@ -1346,8 +1485,14 @@ begin
         result := PestPumpingRateMethod;
       end;
     else
-      result := PestPumpingRateMethod;
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - WelStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        result := FPestConcentrationMethods[ConcIndex].PestParamMethod;
+      end;
   end;
 end;
 
@@ -1371,12 +1516,21 @@ begin
 end;
 
 procedure TMfWellBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  Index: Integer;
 begin
   if Sender = FPestPumpingRateFormula then
   begin
     if WelPumpingRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[WelPumpingRatePosition]);
+    end;
+  end;
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[WelStartConcentration + Index]);
     end;
   end;
 end;
@@ -1412,12 +1566,28 @@ begin
   InvalidateDisplay;
 end;
 
+procedure TMfWellBoundary.InvalidateConcData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMfWellConc(self);
+end;
+
 procedure TMfWellBoundary.InvalidateDisplay;
+var
+  Model: TPhastModel;
 begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
-    (ParentModel as TPhastModel).InvalidateMfWellPumpage(self);
+    Model := ParentModel as TPhastModel;
+    Model.InvalidateMfWellPumpage(self);
+    Model.InvalidateMfWellConc(self);
   end;
 end;
 
@@ -1460,6 +1630,8 @@ end;
 
 procedure TMfWellBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     WelPumpingRatePosition:
@@ -1467,12 +1639,21 @@ begin
         PestPumpingRateFormula := Value;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - WelStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        PestConcentrationFormulas[ConcIndex].Value := Value;
+      end;
   end;
 end;
 
 procedure TMfWellBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     WelPumpingRatePosition:
@@ -1480,8 +1661,27 @@ begin
         PestPumpingRateMethod := Value;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - WelStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        FPestConcentrationMethods[ConcIndex].PestParamMethod := Value;
+      end;
   end;
+end;
+
+procedure TMfWellBoundary.SetPestConcentrationFormulas(
+  const Value: TWelGwtConcCollection);
+begin
+  FPestConcentrationFormulas.Assign(Value);
+end;
+
+procedure TMfWellBoundary.SetPestConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestConcentrationMethods.Assign(Value);
 end;
 
 procedure TMfWellBoundary.SetPestPumpingRateFormula(const Value: string);
@@ -1573,7 +1773,6 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PumpingRatePest));
   WriteCompInt(Comp, Strings.IndexOf(PumpingRatePestSeriesName));
   WriteCompInt(Comp, Ord(PumpingRatePestSeriesMethod));
-//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingRateTimeSeriesName));
 
@@ -1649,7 +1848,6 @@ begin
   PumpingRatePest := Annotations[ReadCompInt(Decomp)];
   PumpingRatePestSeriesName := Annotations[ReadCompInt(Decomp)];
   PumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
-//  TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   PumpingParameterName := Annotations[ReadCompInt(Decomp)];
   PumpingRateTimeSeriesName := Annotations[ReadCompInt(Decomp)];
 

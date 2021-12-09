@@ -54,6 +54,7 @@ type
     function Mf6ObservationsUsed: Boolean; override;
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
+    procedure WriteAdditionalAuxVariables; override;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     Destructor Destroy; override;
@@ -68,7 +69,7 @@ implementation
 
 uses ModflowUnitNumbers, frmProgressUnit, Forms, frmErrorsAndWarningsUnit,
   System.IOUtils, ModflowTimeSeriesUnit, ModflowTimeSeriesWriterUnit,
-  ModflowMvrWriterUnit, ModflowMvrUnit, DataSetUnit;
+  ModflowMvrWriterUnit, ModflowMvrUnit, DataSetUnit, Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrWritingWELPackage = 'Writing WEL Package input.';
@@ -124,6 +125,7 @@ var
   NewItem: TWellItem;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrWellFormulaError);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrWellConcentrationS);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoWellsDefined);
   WellPackage := Package as TWellPackage;
   if WellPackage.UseTabFilesInThisModel then
@@ -325,6 +327,21 @@ begin
   result := ptQ;
 end;
 
+procedure TModflowWEL_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
+end;
+
 procedure TModflowWEL_Writer.WriteAndCheckCells(const VariableIdentifiers,
   DataSetIdentifier: string; List: TValueCellList; TimeIndex: integer);
 var
@@ -454,7 +471,8 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-//  DataArray: TDataArray;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -477,25 +495,17 @@ begin
     FPestParamUsed := True;
   end;
 
-//  if Model.PestUsed and (Model.ModelSelection = msModflow2015)
-//    and WritingTemplate
-//    and ( Well_Cell.PumpingParameterName <> '') then
-//  begin
-//    ParameterName := Well_Cell.PumpingParameterName;
-//    if Well_Cell.PumpingParameterValue = 0 then
-//    begin
-//      MultiplierValue := 0.0;
-//    end
-//    else
-//    begin
-//      MultiplierValue := Well_Cell.PumpingRate / Well_Cell.PumpingParameterValue;
-//    end;
-//    WriteTemplateFormula(ParameterName, MultiplierValue, ppmMultiply);
-//  end
-//  else
-//  begin
-//    WriteFloat(Well_Cell.PumpingRate);
-//  end;
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      if (Well_Cell.ConcentrationPestNames[SpeciesIndex] <> '')
+       or (Well_Cell.ConcentrationPestSeriesNames[SpeciesIndex] <> '') then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+  end;
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
@@ -524,6 +534,16 @@ begin
   end;
 
   WriteIface(Well_Cell.IFace);
+
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      WriteValueOrFormula(Well_Cell, WelStartConcentration + SpeciesIndex);
+    end;
+  end;
+
+
   WriteBoundName(Well_Cell);
   if Model.DisvUsed then
   begin
@@ -633,8 +653,16 @@ const
   VariableIdentifiers = 'Q IFACE';
 var
   VI: string;
+  SpeciesIndex: Integer;
 begin
   VI := VariableIdentifiers;
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      VI := VI + ' ' + Model.MobileComponents[SpeciesIndex].Name;
+    end;
+  end;
   if Model.modelSelection = msModflow2015 then
   begin
     VI := VI + ' boundname';

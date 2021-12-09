@@ -408,15 +408,6 @@ begin
       + VariableIdentifiers);
   end;
 
-//  if Model.GwtUsed then
-//  begin
-//    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-//    begin
-//      ASpecies := Model.MobileComponents[SpeciesIndex];
-//      WriteString(' ' + ASpecies.Name);
-//    end;
-//  end;
-
   NewLine;
 
   if GHB_Cell.MvrUsed and (MvrWriter <> nil) and not WritingTemplate then

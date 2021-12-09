@@ -11,13 +11,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   object htlblSutra22: TJvHTLabel
     Left = 105
     Top = 17
-    Width = 835
+    Width = 821
     Height = 19
     Caption = 
-      '<a href="https://www.usgs.gov/software/sutra-a-model-2d-or-3d-sa' +
-      'turated-unsaturated-variable-density-ground-water-flow-solute-or' +
-      '">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated' +
-      '-unsaturated-variable-density-ground-water-flow-solute-or</a>'
+      '<a href="https://www.usgs.gov/software/sutra-model-2d-or-3d-satu' +
+      'rated-unsaturated-variable-density-ground-water-flow-solute-or">' +
+      'https://www.usgs.gov/software/sutra-model-2d-or-3d-saturated-uns' +
+      'aturated-variable-density-ground-water-flow-solute-or</a>'
     SuperSubScriptRatio = 0.666666666666666600
   end
   object lblSutra22: TLabel
@@ -37,13 +37,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   object htlblSutra3: TJvHTLabel
     Left = 106
     Top = 76
-    Width = 835
+    Width = 821
     Height = 19
     Caption = 
-      '<a href="https://www.usgs.gov/software/sutra-a-model-2d-or-3d-sa' +
-      'turated-unsaturated-variable-density-ground-water-flow-solute-or' +
-      '">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated' +
-      '-unsaturated-variable-density-ground-water-flow-solute-or</a>'
+      '<a href="https://www.usgs.gov/software/sutra-model-2d-or-3d-satu' +
+      'rated-unsaturated-variable-density-ground-water-flow-solute-or">' +
+      'https://www.usgs.gov/software/sutra-model-2d-or-3d-saturated-uns' +
+      'aturated-variable-density-ground-water-flow-solute-or</a>'
     SuperSubScriptRatio = 0.666666666666666600
   end
   object lblSutra3: TLabel

@@ -104,7 +104,7 @@ var
   Browser: string;
 begin
   inherited;
-  LaunchURL(Browser, 'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuse.html');
+  LaunchURL(Browser, 'https://www.usgs.gov/software/modelmuse-graphical-user-interface-groundwater-models');
 end;
 
 procedure TfrmAbout.FormCreate(Sender: TObject);

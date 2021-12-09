@@ -70,6 +70,8 @@ Type
     procedure SetBooleanProperty(var Field: boolean; const Value: boolean);
     procedure SetRealProperty(var Field: real; const Value: real);
     procedure SetStringProperty(var Field: string; const Value: string);
+    procedure UpdatePkgUseList(NewUseList: TStringList;
+      ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
 //    Function StoreNewtonRapheson: boolean;
   public
     procedure Assign(Source: TPersistent); override;
@@ -112,6 +114,8 @@ Type
 
   TWellPackage = class(TModflowPackageSelection)
   private
+    // @name is implemented as a TObjectList;
+    FGwtConcentrationList: TList;
     FMfWellPumpage: TModflowBoundaryDisplayTimeList;
     FPublishedPhiRamp: TRealStorage;
     FUseTabFiles: boolean;
@@ -123,6 +127,7 @@ Type
 
     procedure SetPublishedPhiRamp(const Value: TRealStorage);
     procedure SetUseTabFiles(const Value: boolean);
+    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -135,6 +140,8 @@ Type
     procedure InitializeVariables; override;
     property PhiRamp: Double read GetPhiRamp write SetPhiRamp;
     function UseTabFilesInThisModel: boolean;
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
     property PublishedPhiRamp: TRealStorage read FPublishedPhiRamp
       write SetPublishedPhiRamp;
@@ -154,9 +161,9 @@ Type
     procedure GetMfGhbBoundaryHeadUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure InitializeGhbDisplay(Sender: TObject);
-    procedure GetGwtCondUseList(Sender: TObject; NewUseList: TStringList);
-    procedure UpdateGhbUseList(NewUseList: TStringList;
-      ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
+    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
+//    procedure UpdatePkgUseList(NewUseList: TStringList;
+//      ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -167,7 +174,7 @@ Type
     property MfGhbBoundaryHead: TModflowBoundaryDisplayTimeList
       read FMfGhbBoundaryHead;
     procedure InvalidateAllTimeLists; override;
-    procedure InvalidateGhbConcentrations;
+    procedure InvalidateConcentrations;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
   end;
 
@@ -5866,6 +5873,7 @@ resourcestring
   StrSFTRunoffConcd = 'SFT_Runoff_Conc_%d';
   StrSFTConstantConcd = 'SFT_Constant_Conc_%d';
   StrGHBS = 'GHB %s';
+  StrWelS = 'WEL %s';
 
 { TModflowPackageSelection }
 
@@ -10406,6 +10414,46 @@ end;
 
 { TWellPackage }
 
+procedure TWellPackage.AddRemoveRenameGwtConcentrationTimeLists;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  Components: TMobileChemSpeciesCollection;
+begin
+  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+  begin
+    Components := frmGoPhast.PhastModel.MobileComponents;
+    while FGwtConcentrationList.Count > Components.Count do
+    begin
+      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+      RemoveTimeList(TimeList);
+      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+    end;
+    while FGwtConcentrationList.Count < Components.Count do
+    begin
+      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      AddTimeList(TimeList);
+      FGwtConcentrationList.Add(TimeList);
+      TimeList.OnInitialize := InitializeMfWellPumpage;
+      TimeList.OnGetUseList := GetGwtConcUseList;
+    end;
+    for Index := 0 to Components.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.Name := Format(StrWelS, [Components[Index].Name])
+    end;
+  end
+  else
+  begin
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      RemoveTimeList(TimeList);
+    end;
+    FGwtConcentrationList.Clear;
+  end;
+end;
+
 procedure TWellPackage.Assign(Source: TPersistent);
 var
   WellSource: TWellPackage;
@@ -10432,12 +10480,15 @@ begin
     MfWellPumpage.OnTimeListUsed := PackageUsed;
     MfWellPumpage.Name := StrMODFLOWWellPumping;
     AddTimeList(MfWellPumpage);
+
+    FGwtConcentrationList := TObjectList.Create;
   end;
   InitializeVariables;
 end;
 
 destructor TWellPackage.Destroy;
 begin
+  FGwtConcentrationList.Free;
   FMfWellPumpage.Free;
   FPublishedPhiRamp.Free;
   inherited;
@@ -10446,6 +10497,19 @@ end;
 function TSfrPackageSelection.GetLossFactor: double;
 begin
   result := StoredLossFactor.Value;
+end;
+
+procedure TWellPackage.GetGwtConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FGwtConcentrationList.IndexOf(Sender);
+  DataSetName := Format(StrWelS,
+     [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
+  Index := Index+1;
+  UpdatePkgUseList(NewUseList, ptQ, Index, DataSetName);
 end;
 
 procedure TWellPackage.GetMfWellUseList(Sender: TObject;
@@ -10463,12 +10527,22 @@ procedure TWellPackage.InitializeMfWellPumpage(Sender: TObject);
 var
   WellWriter: TModflowWEL_Writer;
   List: TModflowBoundListOfTimeLists;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
 begin
   MfWellPumpage.CreateDataSets;
   List := TModflowBoundListOfTimeLists.Create;
   WellWriter := TModflowWEL_Writer.Create(FModel as TCustomModel, etDisplay);
   try
     List.Add(MfWellPumpage);
+
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.CreateDataSets;
+      List.Add(TimeList);
+    end;
+
     WellWriter.UpdateDisplay(List, [0]);
   finally
     WellWriter.Free;
@@ -10490,6 +10564,19 @@ begin
 //  if PackageUsed(FModel) then
   begin
     InvalidateMfWellPumpage(FModel);
+    InvalidateConcentrations;
+  end;
+end;
+
+procedure TWellPackage.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.Invalidate;
   end;
 end;
 
@@ -10556,7 +10643,7 @@ begin
       AddTimeList(TimeList);
       FGwtConcentrationList.Add(TimeList);
       TimeList.OnInitialize := InitializeGhbDisplay;
-      TimeList.OnGetUseList := GetGwtCondUseList;
+      TimeList.OnGetUseList := GetGwtConcUseList;
     end;
     for Index := 0 to Components.Count - 1 do
     begin
@@ -10607,7 +10694,7 @@ begin
   inherited;
 end;
 
-procedure TGhbPackage.GetGwtCondUseList(Sender: TObject;
+procedure TGhbPackage.GetGwtConcUseList(Sender: TObject;
   NewUseList: TStringList);
 var
   Index: integer;
@@ -10617,7 +10704,7 @@ begin
   DataSetName := Format(StrGHBS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
   Index := Index+2;
-  UpdateGhbUseList(NewUseList, ptGhb, Index, DataSetName);
+  UpdatePkgUseList(NewUseList, ptGhb, Index, DataSetName);
 end;
 
 procedure TGhbPackage.GetMfGhbBoundaryHeadUseList(Sender: TObject;
@@ -10675,12 +10762,12 @@ begin
   begin
     MfGhbBoundaryHead.Invalidate;
     MfGhbConductance.Invalidate;
-    InvalidateGhbConcentrations;
+    InvalidateConcentrations;
   end;
 end;
 
 
-procedure TGhbPackage.InvalidateGhbConcentrations;
+procedure TGhbPackage.InvalidateConcentrations;
 var
   Index: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
@@ -10692,15 +10779,16 @@ begin
   end;
 end;
 
-procedure TGhbPackage.UpdateGhbUseList(NewUseList: TStringList;
+procedure TModflowPackageSelection.UpdatePkgUseList(NewUseList: TStringList;
   ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
 var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
   Item: TCustomModflowBoundaryItem;
   ValueIndex: Integer;
-  Boundary: TGhbBoundary;
+//  Boundary: TGhbBoundary;
   LocalModel: TCustomModel;
+  ABoundary: TModflowParamBoundary;
 begin
   LocalModel := FModel as TCustomModel;
   for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
@@ -10710,12 +10798,12 @@ begin
     begin
       Continue;
     end;
-    Boundary := ScreenObject.ModflowGhbBoundary;
-    if (Boundary <> nil) and Boundary.Used then
+    ABoundary := ScreenObject.GetMfBoundary(ParamType);
+    if (ABoundary <> nil) and ABoundary.Used then
     begin
-      for ValueIndex := 0 to Boundary.Values.Count -1 do
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
-        Item := Boundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
         UpdateUseList(DataIndex, NewUseList, Item, DisplayName);
       end;
     end;

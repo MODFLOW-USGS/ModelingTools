@@ -16530,6 +16530,7 @@ end;
 procedure TCustomModel.UpdateGwtConc;
 begin
   ModflowPackages.GhbBoundary.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.WelPackage.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -24167,7 +24168,7 @@ end;
 
 procedure TCustomModel.InvalidateMfGhbConc(Sender: TObject);
 begin
-  ModflowPackages.GhbBoundary.InvalidateGhbConcentrations;
+  ModflowPackages.GhbBoundary.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateMfGhbConductance(Sender: TObject);
@@ -25589,8 +25590,7 @@ end;
 
 procedure TCustomModel.InvalidateMfWellConc(Sender: TObject);
 begin
-//  This needs to be completed
-  Assert(False);
+  ModflowPackages.WelPackage.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateMfWellPumpage(Sender: TObject);

@@ -2775,12 +2775,23 @@ begin
     end;
   end
   else if (Sender = frameWellParam.rdgModflowBoundary)
-    or (Sender = frameFarmWell.rdgModflowBoundary)
+    then
+  begin
+    PestParameterColumns := [2];
+    if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        Include(PestParameterColumns, SpeciesIndex + 3);
+      end;
+    end;
+  end
+  else if (Sender = frameFarmWell.rdgModflowBoundary)
     or (Sender = frameRchParam.rdgModflowBoundary)
     or (Sender = frameCSUB.rdgModflowBoundary)
     then
   begin
-    PestParameterColumns := [2]
+    PestParameterColumns := [2];
   end
   else if (Sender = frameRivParam.rdgModflowBoundary)
     or (Sender = frameDrtParam.rdgModflowBoundary)
@@ -2788,7 +2799,7 @@ begin
     or (Sender = frameEtsParam.rdgModflowBoundary)
     then
   begin
-    PestParameterColumns := [2,3,4]
+    PestParameterColumns := [2,3,4];
   end
   else if (Sender = frameScreenObjectSTR.rdgModflowBoundary) then
   begin
@@ -6524,7 +6535,7 @@ var
 begin
   frameChdParam.rdgModflowBoundary.ColCount := 4;
   frameGhbParam.rdgModflowBoundary.ColCount := 4 + GwtColumnCount;
-  frameWellParam.rdgModflowBoundary.ColCount := 3;
+  frameWellParam.rdgModflowBoundary.ColCount := 3 + GwtColumnCount;
   frameRivParam.rdgModflowBoundary.ColCount := 5;
   frameDrnParam.rdgModflowBoundary.ColCount := 4;
   frameDrtParam.rdgModflowBoundary.ColCount := 5;
@@ -16931,6 +16942,7 @@ begin
     or (DataGrid = frameDrnParam.rdgModflowBoundary)
     or (DataGrid = frameEtsParam.rdgModflowBoundary)
     or (DataGrid = frameGhbParam.rdgModflowBoundary)
+    or (DataGrid = frameWellParam.rdgModflowBoundary)
     or (DataGrid = frameLakMf6.rdgModflowBoundary)
     or ((DataGrid = frameMAW.rdgModflowBoundary) and (ACol in [3,4])) // Only rate and stage
     or (DataGrid = frameRivParam.rdgModflowBoundary)

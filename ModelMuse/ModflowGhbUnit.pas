@@ -256,7 +256,7 @@ type
       write SetConductanceTimeSeriesName;
     property BoundaryHeadTimeSeriesName: string
       read GetBoundaryHeadTimeSeriesName write SetBoundaryHeadTimeSeriesName;
-
+    // GWT
     property Concentrations[const Index: Integer]: double
       read GetConcentration;
     property ConcentrationAnnotations[const Index: Integer]: string
@@ -269,7 +269,6 @@ type
       read GetConcentrationPestSeriesMethod;
     property ConcentrationTimeSeriesNames[const Index: Integer]: string
       read GetConcentrationTimeSeriesName;
-      
   end;
 
   // @name represents the MODFLOW General-Head boundaries associated with
@@ -312,9 +311,9 @@ type
     procedure SetPestConcentrationFormulas(const Value: TGhbGwtConcCollection);
     procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
-    function GetPConcentrationFormulas(const Index: Integer): string;
-    procedure SetPConcentrationFormulas(const Index: Integer;
-      const Value: string);
+//    function GetPConcentrationFormulas(const Index: Integer): string;
+//    procedure SetPConcentrationFormulas(const Index: Integer;
+//      const Value: string);
 //    procedure SetInterp(const Value: TMf6InterpolationMethods);
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -368,8 +367,8 @@ type
     procedure InvalidateDisplay; override;
     class function DefaultBoundaryMethod(
       FormulaIndex: integer): TPestParamMethod; override;
-    property PConcentrationFormulas[const Index: Integer]: string
-      read GetPConcentrationFormulas write SetPConcentrationFormulas;
+//    property PConcentrationFormulas[const Index: Integer]: string
+//      read GetPConcentrationFormulas write SetPConcentrationFormulas;
   published
     property Interp;
     property PestHeadFormula: string read GetPestHeadFormula
@@ -396,8 +395,8 @@ type
       Stored False
       {$ENDIF}
       ;
-    property PestConcentrationFormulas: TGhbGwtConcCollection read FPestConcentrationFormulas
-      write SetPestConcentrationFormulas
+    property PestConcentrationFormulas: TGhbGwtConcCollection
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas
       {$IFNDEF GWT}
       Stored False
       {$ENDIF}
@@ -1561,7 +1560,6 @@ procedure TGhbBoundary.CreateFormulaObjects;
 var
   LocalModel: TPhastModel;
   ConcIndex: Integer;
-  AFormula: TFormulaObject;
 begin
   FPestHeadFormula := CreateFormulaObjectBlocks(dso3D);
   FPestConductanceFormula := CreateFormulaObjectBlocks(dso3D);
@@ -1570,7 +1568,6 @@ begin
   begin
     for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
     begin
-//      AFormula := CreateFormulaObjectBlocks(dso3D);
       FPestConcentrationFormulas.Add;
     end;
   end;
@@ -1611,9 +1608,16 @@ begin
 end;
 
 destructor TGhbBoundary.Destroy;
+var
+  Index: Integer;
 begin
   PestHeadFormula := '';
   PestConductanceFormula := '';
+
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    FPestConcentrationFormulas[Index].Value := '';
+  end;
 
   inherited;
 
@@ -1760,28 +1764,12 @@ begin
   result := FConcentrationObservers[Index];
 end;
 
-function TGhbBoundary.GetPConcentrationFormulas(const Index: Integer): string;
-var
-  AFormula: TFormulaObject;
-begin
-  result := FPestConcentrationFormulas[Index].Value;
-
-//  while Index >= FPestConcentrationFormulas.Count do
-//  begin
-//    AFormula := CreateFormulaObjectBlocks(dso3D);
-//    FPestConcentrationFormulas.AddObject(AFormula.Formula, AFormula);
-//    ConcentrationObserver[FPestConcentrationFormulas.Count-1];
-//  end;
-//  AFormula := FPestConcentrationFormulas.Objects[Index] as TFormulaObject;
-//  if AFormula = nil then
-//  begin
-//    result := FPestConcentrationFormulas[Index]
-//  end
-//  else
-//  begin
-//    result := AFormula.Formula;
-//  end;
-end;
+//function TGhbBoundary.GetPConcentrationFormulas(const Index: Integer): string;
+//var
+//  AFormula: TFormulaObject;
+//begin
+//  result := FPestConcentrationFormulas[Index].Value;
+//end;
 
 function TGhbBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 var
@@ -1800,7 +1788,11 @@ begin
     else
       begin
         ConcIndex := FormulaIndex - GhbStartConcentration;
-        result := PConcentrationFormulas[ConcIndex];
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        result := PestConcentrationFormulas[ConcIndex].Value;
       end;
   end;
 end;
@@ -1990,24 +1982,6 @@ begin
   result := ptGHB;
 end;
 
-procedure TGhbBoundary.SetPConcentrationFormulas(const Index: Integer;
-  const Value: string);
-var
-  AFormula: TFormulaObject;
-begin
-  FPestConcentrationFormulas[Index].Value := Value;
-//  while Index >= FPestConcentrationFormulas.Count do
-//  begin
-//    AFormula := CreateFormulaObjectBlocks(dso3D);
-//    FPestConcentrationFormulas.AddObject(AFormula.Formula, AFormula);
-//    ConcentrationObserver[FPestConcentrationFormulas.Count-1];
-//  end;
-//  AFormula := FPestConcentrationFormulas.Objects[Index] as TFormulaObject;
-//  UpdateFormulaBlocks(Value, GhbStartConcentration+Index, AFormula);
-//  FPestConcentrationFormulas[Index] := AFormula.Formula;
-//  FPestConcentrationFormulas.Objects[Index] := AFormula;
-end;
-
 procedure TGhbBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 var
@@ -2025,7 +1999,11 @@ begin
     else
       begin
         ConcIndex := FormulaIndex - GhbStartConcentration;
-        PConcentrationFormulas[ConcIndex] := Value;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        PestConcentrationFormulas[ConcIndex].Value := Value;
       end;
   end;
 end;
@@ -2061,15 +2039,6 @@ var
   Index: Integer;
 begin
   FPestConcentrationFormulas.Assign(Value);
-//  for Index := 0 to Value.Count - 1 do
-//  begin
-//    PConcentrationFormulas[Index] := Value[Index];
-//  end;
-//
-//  while FPestConcentrationFormulas.Count > Value.Count do
-//  begin
-//    FPestConcentrationFormulas.Delete(FPestConcentrationFormulas.Count-1);
-//  end;
 end;
 
 procedure TGhbBoundary.SetPestConcentrationMethods(
