@@ -49,6 +49,8 @@ type
     procedure WriteMoverOption; override;
     Class function Mf6ObType: TObGeneral; override;
     function ObsFactors: TFluxObservationGroups; override;
+    procedure WriteAdditionalAuxVariables; override;
+    procedure Evaluate; override;
   public
     procedure WriteFile(const AFileName: string);
     procedure WriteFluxObservationFile(const AFileName: string;
@@ -61,7 +63,8 @@ implementation
 
 uses ModflowTimeUnit, frmErrorsAndWarningsUnit,
   ModflowTransientListParameterUnit, ModflowUnitNumbers, frmProgressUnit, Forms,
-  DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit;
+  DataSetUnit, FastGEO, ModflowMvrWriterUnit, ModflowMvrUnit,
+  Mt3dmsChemSpeciesUnit;
 
 resourcestring
   StrInTheFollowingRiv = 'In the following river cells, the stage is equal to or below t' +
@@ -276,6 +279,15 @@ begin
   InitializeCells;
 end;
 
+procedure TModflowRIV_Writer.Evaluate;
+begin
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrRIVStageSetToZer);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrRIVConductanceSet);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrRIVBottomSetToZe);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrRIVConcentrationSe);
+  inherited;
+end;
+
 class function TModflowRIV_Writer.Extension: string;
 begin
   result := '.riv';
@@ -335,6 +347,21 @@ begin
   result := Model.ModflowPackages.RivPackage;
 end;
 
+procedure TModflowRIV_Writer.WriteAdditionalAuxVariables;
+var
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
+begin
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      ASpecies := Model.MobileComponents[SpeciesIndex];
+      WriteString(' ' + ASpecies.Name);
+    end;
+  end;
+end;
+
 procedure TModflowRIV_Writer.WriteCell(Cell: TValueCell;
   const DataSetIdentifier, VariableIdentifiers: string);
 var
@@ -345,7 +372,8 @@ var
   MvrKey: TMvrRegisterKey;
   ParameterName: string;
   MultiplierValue: double;
-//  DataArray: TDataArray;
+  SpeciesIndex: Integer;
+  ASpecies: TMobileChemSpeciesItem;
 begin
     { TODO -cPEST : Add PEST support for PEST here }
     // handle pest parameter
@@ -372,9 +400,19 @@ begin
     FPestParamUsed := True;
   end;
 
-  WriteValueOrFormula(Riv_Cell, RivStagePosition);
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      if (Riv_Cell.ConcentrationPestNames[SpeciesIndex] <> '')
+       or (Riv_Cell.ConcentrationPestSeriesNames[SpeciesIndex] <> '') then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+  end;
 
-//  WriteFloat(Riv_Cell.RiverStage);
+  WriteValueOrFormula(Riv_Cell, RivStagePosition);
 
   if Model.PestUsed and (Model.ModelSelection = msModflow2015)
     and WritingTemplate
@@ -398,13 +436,19 @@ begin
   begin
     WriteValueOrFormula(Riv_Cell, RivConductancePosition);
   end;
-//  WriteFloat(Riv_Cell.Conductance);
 
   WriteValueOrFormula(Riv_Cell, RivBottomPosition);
 
-//  WriteFloat(Riv_Cell.RiverBottom);
-
   WriteIface(Riv_Cell.IFace);
+
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      WriteValueOrFormula(Riv_Cell, RivStartConcentration + SpeciesIndex);
+    end;
+  end;
+
   WriteBoundName(Riv_Cell);
   if Model.DisvUsed then
   begin
@@ -509,8 +553,16 @@ const
   VariableIdentifiers = 'Cond Rbot IFACE';
 var
   VI: string;
+  SpeciesIndex: Integer;
 begin
   VI := VariableIdentifiers;
+  if Model.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
+    begin
+      VI := VI + ' ' + Model.MobileComponents[SpeciesIndex].Name;
+    end;
+  end;
   if Model.modelSelection = msModflow2015 then
   begin
     VI := VI + ' boundname';

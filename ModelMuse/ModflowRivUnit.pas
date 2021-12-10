@@ -31,27 +31,34 @@ type
     RiverStageAnnotation: string;
     RiverBottomAnnotation: string;
 
+    // PEST
     ConductancePest: string;
     RiverStagePest: string;
     RiverBottomPest: string;
-
     ConductancePestSeriesName: string;
     RiverStagePestSeriesName: string;
     RiverBottomPestSeriesName: string;
-
     ConductancePestSeriesMethod: TPestParamMethod;
     RiverStagePestSeriesMethod: TPestParamMethod;
     RiverBottomPestSeriesMethod: TPestParamMethod;
-
-//    TimeSeriesName: string;
+    // MVR
     MvrUsed: Boolean;
     MvrIndex: Integer;
+    // Parameters
     ConductanceParameterName: string;
     ConductanceParameterValue: double;
-
+    // Time Series
     ConductanceTimeSeriesName: string;
     RiverStageTimeSeriesName: string;
     RiverBottomTimeSeriesName: string;
+    // GWT Concentrations
+    Concentrations: array of double;
+    ConcentrationAnnotations: array of string;
+    ConcentrationPestNames: array of string;
+    ConcentrationPestSeriesNames: array of string;
+    ConcentrationPestSeriesMethods: array of TPestParamMethod;
+    ConcentrationTimeSeriesNames: array of string;
+    procedure Assign(const Item: TRivRecord);
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -71,6 +78,13 @@ type
     property RivArray: TRivArray read GetRivArray;
   end;
 
+  TRivCollection = class;
+
+  TRivGwtConcCollection = class(TGwtConcStringCollection)
+    constructor Create(Model: TBaseModel; AScreenObject: TObject;
+      ParentCollection: TRivCollection);
+  end;
+
   // @name represents a MODFLOW River boundary for one time interval.
   // @name is stored by @link(TRivCollection).
   TRivItem = class(TCustomModflowBoundaryItem)
@@ -81,6 +95,7 @@ type
     FRiverStage: TFormulaObject;
     // See @link(Conductance).
     FConductance: TFormulaObject;
+    FGwtConcentrations: TRivGwtConcCollection;
     // See @link(RiverBottom).
     procedure SetRiverBottom(const Value: string);
     // See @link(RiverStage).
@@ -90,6 +105,7 @@ type
     function GetConductance: string;
     function GetRiverBottom: string;
     function GetRiverStage: string;
+    procedure SetGwtConcentrations(const Value: TRivGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -107,6 +123,7 @@ type
   public
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
+    constructor Create(Collection: TCollection); override;
     Destructor Destroy; override;
   published
     // @name is the formula used to set the river stage
@@ -118,6 +135,12 @@ type
     // @name is the formula used to set the conductance
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
+    property GwtConcentrations: TRivGwtConcCollection read FGwtConcentrations
+      write SetGwtConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TRivTimeListLink = class(TTimeListsModelLink)
@@ -131,6 +154,7 @@ type
     // @name is used to compute the Conductances for a series of
     // River Boundaries over a series of time intervals.
     FConductanceData: TModflowTimeList;
+    FConcList: TList;
   protected
     procedure CreateTimeLists; override;
   public
@@ -144,6 +168,7 @@ type
     procedure InvalidateStageData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateRiverBottomData(Sender: TObject);
+    procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
     function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
@@ -170,6 +195,7 @@ type
     // TCustomMF_BoundColl.SetBoundaryStartAndEndTime)
     procedure SetBoundaryStartAndEndTime(BoundaryCount: Integer;
       Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel); override;
+    procedure InvalidateModel; override;
   end;
 
   // Each @name stores a @link(TRivCollection).
@@ -181,7 +207,7 @@ type
 
   TRiv_Cell = class(TValueCell)
   private
-    Values: TRivRecord;
+    FValues: TRivRecord;
     StressPeriod: integer;
     function GetRiverStage: double;
     function GetConductance: double;
@@ -209,7 +235,15 @@ type
     procedure SetConductanceTimeSeriesName(const Value: string);
     procedure SetRiverBottomTimeSeriesName(const Value: string);
     procedure SetRiverStageTimeSeriesName(const Value: string);
+    function GetConcentration(const Index: Integer): double;
+    function GetConcentrationAnnotation(const Index: Integer): string;
+    function GetConcentrationPestName(const Index: Integer): string;
+    function GetConcentrationPestSeriesMethod(
+      const Index: Integer): TPestParamMethod;
+    function GetConcentrationPestSeriesName(const Index: Integer): string;
+    function GetConcentrationTimeSeriesName(const Index: Integer): string;
   protected
+    property Values: TRivRecord read FValues;
     function GetColumn: integer; override;
     function GetLayer: integer; override;
     function GetRow: integer; override;
@@ -263,13 +297,32 @@ type
     property RiverStagePestSeries: string read GetRiverStagePestSeriesName;
     property RiverBottomPestSeries: string read GetRiverBottomPestSeriesName;
 
-    property ConductancePestSeriesMethod: TPestParamMethod read GetConductancePestSeriesMethod;
-    property RiverStagePestSeriesMethod: TPestParamMethod read GetRiverStagePestSeriesMethod;
-    property RiverBottomPestSeriesMethod: TPestParamMethod read GetRiverBottomPestSeriesMethod;
+    property ConductancePestSeriesMethod: TPestParamMethod
+      read GetConductancePestSeriesMethod;
+    property RiverStagePestSeriesMethod: TPestParamMethod
+      read GetRiverStagePestSeriesMethod;
+    property RiverBottomPestSeriesMethod: TPestParamMethod
+      read GetRiverBottomPestSeriesMethod;
 
-    property ConductanceTimeSeriesName: string read GetConductanceTimeSeriesName write SetConductanceTimeSeriesName;
-    property RiverStageTimeSeriesName: string read GetRiverStageTimeSeriesName write SetRiverStageTimeSeriesName;
-    property RiverBottomTimeSeriesName: string read GetRiverBottomTimeSeriesName write SetRiverBottomTimeSeriesName;
+    property ConductanceTimeSeriesName: string read GetConductanceTimeSeriesName
+      write SetConductanceTimeSeriesName;
+    property RiverStageTimeSeriesName: string read GetRiverStageTimeSeriesName
+      write SetRiverStageTimeSeriesName;
+    property RiverBottomTimeSeriesName: string read GetRiverBottomTimeSeriesName
+      write SetRiverBottomTimeSeriesName;
+    // GWT
+    property Concentrations[const Index: Integer]: double
+      read GetConcentration;
+    property ConcentrationAnnotations[const Index: Integer]: string
+      read GetConcentrationAnnotation;
+    property ConcentrationPestNames[const Index: Integer]: string
+      read GetConcentrationPestName;
+    property ConcentrationPestSeriesNames[const Index: Integer]: string
+      read GetConcentrationPestSeriesName;
+    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
+      read GetConcentrationPestSeriesMethod;
+    property ConcentrationTimeSeriesNames[const Index: Integer]: string
+      read GetConcentrationTimeSeriesName;
   end;
 
   // @name represents the MODFLOW River boundaries associated with
@@ -297,7 +350,9 @@ type
     FPestRiverBottomObserver: TObserver;
     FUsedObserver: TObserver;
     FPestRiverStageObserver: TObserver;
-//    FInterp: TMf6InterpolationMethods;
+    FPestConcentrationMethods: TPestMethodCollection;
+    FPestConcentrationFormulas: TRivGwtConcCollection;
+    FConcentrationObservers: TObserverList;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
@@ -313,10 +368,13 @@ type
     function GetPestConductanceObserver: TObserver;
     function GetPestRiverBottomObserver: TObserver;
     function GetPestRiverStageObserver: TObserver;
-//    procedure SetInterp(const Value: TMf6InterpolationMethods);
     procedure InvalidateStageData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateRiverBottomData(Sender: TObject);
+    procedure InvalidateConcData(Sender: TObject);
+    procedure SetPestConcentrationFormulas(const Value: TRivGwtConcCollection);
+    procedure SetPestConcentrationMethods(const Value: TPestMethodCollection);
+    function GetConcentrationObserver(const Index: Integer): TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -340,6 +398,8 @@ type
     property PestRiverStageObserver: TObserver read GetPestRiverStageObserver;
     property PestRiverBottomObserver: TObserver read GetPestRiverBottomObserver;
     property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    property ConcentrationObserver[const Index: Integer]: TObserver
+      read GetConcentrationObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
@@ -404,17 +464,40 @@ type
       Stored False
       {$ENDIF}
       ;
+    property PestConcentrationFormulas: TRivGwtConcCollection
+      read FPestConcentrationFormulas write SetPestConcentrationFormulas
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
+    property PestConcentrationMethods: TPestMethodCollection
+      read FPestConcentrationMethods write SetPestConcentrationMethods
+      {$IFNDEF GWT}
+      Stored False
+      {$ENDIF}
+      ;
   end;
 
 const
   RivStagePosition = 0;
   RivConductancePosition = 1;
   RivBottomPosition = 2;
+  RivStartConcentration = 3;
+
+resourcestring
+  StrRIVStageSetToZer = 'RIV stage set to zero because of a math error';
+  StrRIVConductanceSet = 'RIV conductance set to zero because of a math erro' +
+  'r';
+  StrRIVBottomSetToZe = 'RIV bottom set to zero because of a math error';
+  StrRIVConcentrationSe = 'RIV Concentration set to zero because of a math e' +
+  'rror';
+
 
 implementation
 
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit, TempFiles,
-  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit, ModflowMvrUnit;
+  frmGoPhastUnit, GIS_Functions, ModflowTimeSeriesUnit, ModflowMvrUnit,
+  frmErrorsAndWarningsUnit;
 
 { TRivItem }
 
@@ -429,6 +512,7 @@ begin
     RiverStage := Riv.RiverStage;
     Conductance := Riv.Conductance;
     RiverBottom := Riv.RiverBottom;
+    GwtConcentrations := Riv.GwtConcentrations;
   end;
   inherited;
 end;
@@ -439,6 +523,7 @@ var
   StageObserver: TObserver;
   ConductanceObserver: TObserver;
   BottomObserver: TObserver;
+  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TRivCollection;
   StageObserver := FObserverList[RivStagePosition];
@@ -447,11 +532,30 @@ begin
   ConductanceObserver.OnUpToDateSet := ParentCollection.InvalidateConductanceData;
   BottomObserver := FObserverList[RivBottomPosition];
   BottomObserver.OnUpToDateSet := ParentCollection.InvalidateRiverBottomData;
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateGwtConcentrations;
+  end;
 end;
 
 function TRivItem.BoundaryFormulaCount: integer;
 begin
   result := 3;
+  if GwtConcentrations <> nil then
+  begin
+    result := result + GwtConcentrations.Count;
+  end;
+end;
+
+constructor TRivItem.Create(Collection: TCollection);
+var
+  RivCol: TRivCollection;
+begin
+  RivCol := Collection as TRivCollection;
+  FGwtConcentrations := TRivGwtConcCollection.Create(Model, ScreenObject,
+    RivCol);
+  inherited;
 end;
 
 procedure TRivItem.CreateFormulaObjects;
@@ -463,6 +567,7 @@ end;
 
 destructor TRivItem.Destroy;
 begin
+  FGwtConcentrations.Free;
   RiverBottom := '0';
   RiverStage := '0';
   Conductance := '0';
@@ -470,12 +575,23 @@ begin
 end;
 
 function TRivItem.GetBoundaryFormula(Index: integer): string;
+var
+  Item: TGwtConcStringValueItem;
 begin
   case Index of
     RivStagePosition: result := RiverStage;
     RivConductancePosition: result := Conductance;
     RivBottomPosition: result := RiverBottom;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 3);
+        while GwtConcentrations.Count <= Index do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        result := Item.Value;
+      end;
   end;
 end;
 
@@ -491,6 +607,9 @@ begin
 end;
 
 procedure TRivItem.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  ConcIndex: Integer;
+  Item: TGwtConcStringValueItem;
 begin
   if Sender = FRiverStage then
   begin
@@ -503,6 +622,14 @@ begin
   if Sender = FRiverBottom then
   begin
     List.Add( FObserverList[RivBottomPosition]);
+  end;
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    Item := GwtConcentrations.Items[ConcIndex];
+    if Item.ValueObject = Sender then
+    begin
+      List.Add(Item.Observer);
+    end;
   end;
 end;
 
@@ -531,6 +658,7 @@ begin
     PhastModel.InvalidateMfRivConductance(self);
     PhastModel.InvalidateMfRivStage(self);
     PhastModel.InvalidateMfRivBottom(self);
+    PhastModel.InvalidateMfRivConc(self);
   end;
 end;
 
@@ -544,7 +672,8 @@ begin
     Item := TRivItem(AnotherItem);
     result := (Item.RiverStage = RiverStage)
       and (Item.Conductance = Conductance)
-      and (Item.RiverBottom = RiverBottom);
+      and (Item.RiverBottom = RiverBottom)
+      and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
 
@@ -559,13 +688,24 @@ begin
 end;
 
 procedure TRivItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  Item: TGwtConcStringValueItem;
 begin
   inherited;
   case Index of
     RivStagePosition: RiverStage := Value;
     RivConductancePosition: Conductance := Value;
     RivBottomPosition: RiverBottom := Value;
-    else Assert(False);
+    else
+      begin
+        Dec(Index, 3);
+        while Index >= GwtConcentrations.Count do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        Item.Value := Value;
+      end;
   end;
 end;
 
@@ -582,6 +722,11 @@ end;
 procedure TRivItem.SetConductance(const Value: string);
 begin
   UpdateFormulaBlocks(Value, RivConductancePosition, FConductance);
+end;
+
+procedure TRivItem.SetGwtConcentrations(const Value: TRivGwtConcCollection);
+begin
+  FGwtConcentrations.Assign(Value);
 end;
 
 { TRivCollection }
@@ -684,10 +829,26 @@ var
   CellList: TCellAssignmentList;
   Index: Integer;
   ACell: TCellAssignment;
+  ConcIndex: Integer;
+  AllowedIndicies: Set of Byte;
+  SpeciesIndex: Byte;
+  LocalModel: TCustomModel;
+  ErrorMessage: string;
+  LocalScreenObject: TScreenObject;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
-  Assert(BoundaryFunctionIndex in
-    [RivStagePosition,RivConductancePosition, RivBottomPosition]);
+
+  AllowedIndicies := [RivStagePosition,RivConductancePosition, RivBottomPosition];
+  LocalModel := AModel as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      Include(AllowedIndicies, RivStartConcentration + SpeciesIndex);
+    end;
+  end;
+
+  Assert(BoundaryFunctionIndex in AllowedIndicies);
   Assert(Expression <> nil);
 
   RivStorage := BoundaryStorage as TRivStorage;
@@ -698,39 +859,160 @@ begin
     UpdateCurrentScreenObject(AScreenObject as TScreenObject);
     UpdateRequiredListData(DataSets, Variables, ACell, AModel);
 
-    Expression.Evaluate;
-    with RivStorage.RivArray[Index] do
-    begin
-      case BoundaryFunctionIndex of
-        RivStagePosition:
-          begin
-            RiverStage := Expression.DoubleResult;
-            RiverStageAnnotation := ACell.Annotation;
-            RiverStagePest := PestName;
-            RiverStagePestSeriesName := PestSeriesName;
-            RiverStagePestSeriesMethod := PestSeriesMethod;
-            RiverStageTimeSeriesName := TimeSeriesName;
+    try
+      Expression.Evaluate;
+      with RivStorage.RivArray[Index] do
+      begin
+        case BoundaryFunctionIndex of
+          RivStagePosition:
+            begin
+              RiverStage := Expression.DoubleResult;
+              RiverStageAnnotation := ACell.Annotation;
+              RiverStagePest := PestName;
+              RiverStagePestSeriesName := PestSeriesName;
+              RiverStagePestSeriesMethod := PestSeriesMethod;
+              RiverStageTimeSeriesName := TimeSeriesName;
+            end;
+          RivConductancePosition:
+            begin
+              Conductance := Expression.DoubleResult;
+              ConductanceAnnotation := ACell.Annotation;
+              ConductancePest := PestName;
+              ConductancePestSeriesName := PestSeriesName;
+              ConductancePestSeriesMethod := PestSeriesMethod;
+              ConductanceTimeSeriesName := TimeSeriesName;
+            end;
+          RivBottomPosition:
+            begin
+              RiverBottom := Expression.DoubleResult;
+              RiverBottomAnnotation := ACell.Annotation;
+              RiverBottomPest := PestName;
+              RiverBottomPestSeriesName := PestSeriesName;
+              RiverBottomPestSeriesMethod := PestSeriesMethod;
+              RiverBottomTimeSeriesName := TimeSeriesName;
+            end;
+          else
+            begin
+              ConcIndex := BoundaryFunctionIndex - RivStartConcentration;
+              Concentrations[ConcIndex] := Expression.DoubleResult;
+              ConcentrationAnnotations[ConcIndex] := ACell.Annotation;;
+              ConcentrationPestNames[ConcIndex] := PestName;
+              ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+              ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+              ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+            end;
+        end;
+      end;
+    except
+      on E: EMathError do
+      begin
+        with RivStorage.RivArray[Index] do
+        begin
+          case BoundaryFunctionIndex of
+            RivStagePosition:
+              begin
+                ErrorMessage :=  StrRIVStageSetToZer;
+                RiverStage := 0;
+                RiverStageAnnotation := ErrorMessage;
+                RiverStagePest := PestName;
+                RiverStagePestSeriesName := PestSeriesName;
+                RiverStagePestSeriesMethod := PestSeriesMethod;
+                RiverStageTimeSeriesName := TimeSeriesName;
+              end;
+            RivConductancePosition:
+              begin
+                ErrorMessage :=  StrRIVConductanceSet;
+                Conductance := 0;
+                ConductanceAnnotation := ErrorMessage;
+                ConductancePest := PestName;
+                ConductancePestSeriesName := PestSeriesName;
+                ConductancePestSeriesMethod := PestSeriesMethod;
+                ConductanceTimeSeriesName := TimeSeriesName;
+              end;
+            RivBottomPosition:
+              begin
+                ErrorMessage :=  StrRIVBottomSetToZe;
+                RiverBottom := 0;
+                RiverBottomAnnotation := ErrorMessage;
+                RiverBottomPest := PestName;
+                RiverBottomPestSeriesName := PestSeriesName;
+                RiverBottomPestSeriesMethod := PestSeriesMethod;
+                RiverBottomTimeSeriesName := TimeSeriesName;
+              end;
+            else
+              begin
+                ErrorMessage := StrRIVConcentrationSe;
+                ConcIndex := BoundaryFunctionIndex - RivStartConcentration;
+                Concentrations[ConcIndex] := 0;
+                ConcentrationAnnotations[ConcIndex] := ErrorMessage;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
           end;
-        RivConductancePosition:
-          begin
-            Conductance := Expression.DoubleResult;
-            ConductanceAnnotation := ACell.Annotation;
-            ConductancePest := PestName;
-            ConductancePestSeriesName := PestSeriesName;
-            ConductancePestSeriesMethod := PestSeriesMethod;
-            ConductanceTimeSeriesName := TimeSeriesName;
+        end;
+        LocalScreenObject := ScreenObject as TScreenObject;
+
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
+          Format(StrObject0sLayerError,
+          [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
+          ACell.Column+1, E.Message]), LocalScreenObject);
+      end;
+      on E: ERbwParserError do
+      begin
+        with RivStorage.RivArray[Index] do
+        begin
+          case BoundaryFunctionIndex of
+            RivStagePosition:
+              begin
+                ErrorMessage :=  StrRIVStageSetToZer;
+                RiverStage := 0;
+                RiverStageAnnotation := ErrorMessage;
+                RiverStagePest := PestName;
+                RiverStagePestSeriesName := PestSeriesName;
+                RiverStagePestSeriesMethod := PestSeriesMethod;
+                RiverStageTimeSeriesName := TimeSeriesName;
+              end;
+            RivConductancePosition:
+              begin
+                ErrorMessage :=  StrRIVConductanceSet;;
+                Conductance := 0;
+                ConductanceAnnotation := ErrorMessage;
+                ConductancePest := PestName;
+                ConductancePestSeriesName := PestSeriesName;
+                ConductancePestSeriesMethod := PestSeriesMethod;
+                ConductanceTimeSeriesName := TimeSeriesName;
+              end;
+            RivBottomPosition:
+              begin
+                ErrorMessage :=  StrRIVBottomSetToZe;
+                RiverBottom := 0;
+                RiverBottomAnnotation := ErrorMessage;
+                RiverBottomPest := PestName;
+                RiverBottomPestSeriesName := PestSeriesName;
+                RiverBottomPestSeriesMethod := PestSeriesMethod;
+                RiverBottomTimeSeriesName := TimeSeriesName;
+              end;
+            else
+              begin
+                ErrorMessage := StrRIVConcentrationSe;
+                ConcIndex := BoundaryFunctionIndex - RivStartConcentration;
+                Concentrations[ConcIndex] := 0;
+                ConcentrationAnnotations[ConcIndex] := ErrorMessage;
+                ConcentrationPestNames[ConcIndex] := PestName;
+                ConcentrationPestSeriesNames[ConcIndex] := PestSeriesName;
+                ConcentrationPestSeriesMethods[ConcIndex] := PestSeriesMethod;
+                ConcentrationTimeSeriesNames[ConcIndex] := TimeSeriesName;
+              end;
           end;
-        RivBottomPosition:
-          begin
-            RiverBottom := Expression.DoubleResult;
-            RiverBottomAnnotation := ACell.Annotation;
-            RiverBottomPest := PestName;
-            RiverBottomPestSeriesName := PestSeriesName;
-            RiverBottomPestSeriesMethod := PestSeriesMethod;
-            RiverBottomTimeSeriesName := TimeSeriesName;
-          end;
-        else
-          Assert(False);
+        end;
+        LocalScreenObject := ScreenObject as TScreenObject;
+
+        frmErrorsAndWarnings.AddError(AModel, ErrorMessage,
+          Format(StrObject0sLayerError,
+          [LocalScreenObject.Name, ACell.Layer+1, ACell.Row+1,
+          ACell.Column+1, E.Message]), LocalScreenObject);
       end;
     end;
   end;
@@ -765,8 +1047,30 @@ end;
 
 procedure TRivCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
   Item: TCustomModflowBoundaryItem; ItemIndex: Integer; AModel: TBaseModel);
+var
+  LocalModel: TCustomModel;
+  Index: Integer;
 begin
   SetLength((Boundaries[ItemIndex, AModel] as TRivStorage).FRivArray, BoundaryCount);
+  LocalModel := Model as TCustomModel;
+  if LocalModel.GwtUsed then
+  begin
+    for Index := 0 to BoundaryCount - 1 do
+    begin
+      SetLength(TRivStorage(Boundaries[ItemIndex, AModel]).FRivArray[Index].Concentrations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRivStorage(Boundaries[ItemIndex, AModel]).FRivArray[Index].ConcentrationAnnotations,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRivStorage(Boundaries[ItemIndex, AModel]).FRivArray[Index].ConcentrationPestNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRivStorage(Boundaries[ItemIndex, AModel]).FRivArray[Index].ConcentrationPestSeriesNames,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRivStorage(Boundaries[ItemIndex, AModel]).FRivArray[Index].ConcentrationPestSeriesMethods,
+        LocalModel.MobileComponents.Count);
+      SetLength(TRivStorage(Boundaries[ItemIndex, AModel]).FRivArray[Index].ConcentrationTimeSeriesNames,
+        LocalModel.MobileComponents.Count);
+    end;
+  end;
   inherited;
 end;
 
@@ -792,6 +1096,58 @@ begin
       Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
       Link.FConductanceData.Invalidate;
     end;
+  end;
+end;
+
+procedure TRivCollection.InvalidateGwtConcentrations(Sender: TObject);
+var
+  Index: Integer;
+  TimeList: TModflowTimeList;
+  PhastModel: TPhastModel;
+  Link: TRivTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TRivTimeListLink;
+    for Index := 0 to Link.FConcList.Count - 1 do
+    begin
+      TimeList := Link.FConcList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
+      for Index := 0 to Link.FConcList.Count - 1 do
+      begin
+        TimeList := Link.FConcList[Index];
+        TimeList.Invalidate;
+      end;
+    end;
+  end;
+end;
+
+procedure TRivCollection.InvalidateModel;
+var
+  PhastModel: TPhastModel;
+begin
+  inherited;
+  PhastModel := Model as TPhastModel;
+  if (PhastModel <> nil)
+    and not (csDestroying in PhastModel.ComponentState)
+    and not PhastModel.Clearing then
+  begin
+    PhastModel.InvalidateMfRivConductance(self);
+    PhastModel.InvalidateMfRivStage(self);
+    PhastModel.InvalidateMfRivBottom(self);
+    PhastModel.InvalidateMfRivConc(self);
   end;
 end;
 
@@ -860,24 +1216,35 @@ end;
 { TRiv_Cell }
 
 function TRiv_Cell.GetRealAnnotation(Index: integer; AModel: TBaseModel): string;
+var
+  ConcIndex: Integer;
 begin
   result := '';
   case Index of
     RivStagePosition: result := RiverStageAnnotation;
     RivConductancePosition: result := ConductanceAnnotation;
     RivBottomPosition: result := RiverBottomAnnotation;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - RivStartConcentration;
+        result := FValues.ConcentrationAnnotations[ConcIndex];
+      end;
   end;
 end;
 
 function TRiv_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
+var
+  ConcIndex: Integer;
 begin
-  result := 0;
   case Index of
     RivStagePosition: result := RiverStage;
     RivConductancePosition: result := Conductance;
     RivBottomPosition: result := RiverBottom;
-    else Assert(False);
+    else
+      begin
+        ConcIndex := Index - RivStartConcentration;
+        result := FValues.Concentrations[ConcIndex];
+      end;
   end;
 end;
 
@@ -953,6 +1320,37 @@ begin
   result := Values.Cell.Column;
 end;
 
+function TRiv_Cell.GetConcentration(const Index: Integer): double;
+begin
+  result := FValues.Concentrations[Index];
+end;
+
+function TRiv_Cell.GetConcentrationAnnotation(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationAnnotations[Index];
+end;
+
+function TRiv_Cell.GetConcentrationPestName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestNames[Index];
+end;
+
+function TRiv_Cell.GetConcentrationPestSeriesMethod(
+  const Index: Integer): TPestParamMethod;
+begin
+  result := FValues.ConcentrationPestSeriesMethods[Index];
+end;
+
+function TRiv_Cell.GetConcentrationPestSeriesName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationPestSeriesNames[Index];
+end;
+
+function TRiv_Cell.GetConcentrationTimeSeriesName(const Index: Integer): string;
+begin
+  result := FValues.ConcentrationTimeSeriesNames[Index];
+end;
+
 function TRiv_Cell.GetConductance: double;
 begin
   result := Values.Conductance;
@@ -1012,16 +1410,18 @@ begin
 end;
 
 function TRiv_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RivStagePosition: result := RiverStageTimeSeriesName;
     RivConductancePosition: result := ConductanceTimeSeriesName;
     RivBottomPosition: result := RiverBottomTimeSeriesName;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - RivStartConcentration;
+        result := FValues.ConcentrationTimeSeriesNames[ConcIndex];
+      end;
   end;
 end;
 
@@ -1036,44 +1436,50 @@ begin
 end;
 
 function TRiv_Cell.GetPestName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RivStagePosition: result := RiverStagePest;
     RivConductancePosition: result := ConductancePest;
     RivBottomPosition: result := RiverBottomPest;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - RivStartConcentration;
+        result := FValues.ConcentrationPestNames[ConcIndex];
+      end;
   end;
 end;
 
 function TRiv_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RivStagePosition: result := RiverStagePestSeriesMethod;
     RivConductancePosition: result := ConductancePestSeriesMethod;
     RivBottomPosition: result := RiverBottomPestSeriesMethod;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - RivStartConcentration;
+        result := FValues.ConcentrationPestSeriesMethods[ConcIndex];
+      end;
   end;
 end;
 
 function TRiv_Cell.GetPestSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
 begin
   case Index of
     RivStagePosition: result := RiverStagePestSeries;
     RivConductancePosition: result := ConductancePestSeries;
     RivBottomPosition: result := RiverBottomPestSeries;
     else
-    begin
-      result := inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - RivStartConcentration;
+        result := FValues.ConcentrationPestSeriesNames[ConcIndex];
+      end;
   end;
 end;
 
@@ -1124,20 +1530,22 @@ end;
 
 procedure TRiv_Cell.SetColumn(const Value: integer);
 begin
-  Values.Cell.Column := Value;
+  FValues.Cell.Column := Value;
 end;
 
 procedure TRiv_Cell.SetConductanceTimeSeriesName(const Value: string);
 begin
-  Values.ConductanceTimeSeriesName := Value;
+  FValues.ConductanceTimeSeriesName := Value;
 end;
 
 procedure TRiv_Cell.SetLayer(const Value: integer);
 begin
-  Values.Cell.Layer := Value;
+  FValues.Cell.Layer := Value;
 end;
 
 procedure TRiv_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+var
+  ConcIndex: Integer;
 begin
   inherited;
   case Index of
@@ -1148,39 +1556,47 @@ begin
     RivBottomPosition:
       RiverBottomTimeSeriesName := Value;
     else
-    begin
-      inherited;
-      Assert(False);
-    end;
+      begin
+        ConcIndex := Index - RivStartConcentration;
+        FValues.ConcentrationTimeSeriesNames[ConcIndex] := Value;
+      end;
   end;
 end;
 
 procedure TRiv_Cell.SetRiverBottomTimeSeriesName(const Value: string);
 begin
-  Values.RiverBottomTimeSeriesName := Value;
+  FValues.RiverBottomTimeSeriesName := Value;
 end;
 
 procedure TRiv_Cell.SetRiverStageTimeSeriesName(const Value: string);
 begin
-  Values.RiverStageTimeSeriesName := Value;
+  FValues.RiverStageTimeSeriesName := Value;
 end;
 
 procedure TRiv_Cell.SetRow(const Value: integer);
 begin
-  Values.Cell.Row := Value;
+  FValues.Cell.Row := Value;
 end;
 
 { TRivBoundary }
 
 procedure TRivBoundary.Assign(Source: TPersistent);
-//var
-//  SourceRiv: TRivBoundary;
+var
+  SourceRiv: TRivBoundary;
 begin
-//  if Source is TRivBoundary then
-//  begin
-//    SourceRiv := TRivBoundary(Source);
-//    Interp := SourceRiv.Interp;
-//  end;
+  if Source is TRivBoundary then
+  begin
+    SourceRiv := TRivBoundary(Source);
+
+    PestRiverBottomFormula := SourceRiv.PestRiverBottomFormula;
+    PestRiverStageFormula := SourceRiv.PestRiverStageFormula;
+    PestConductanceFormula := SourceRiv.PestConductanceFormula;
+    PestRiverBottomMethod := SourceRiv.PestRiverBottomMethod;
+    PestRiverStageMethod := SourceRiv.PestRiverStageMethod;
+    PestConductanceMethod := SourceRiv.PestConductanceMethod;
+    PestConcentrationFormulas := SourceRiv.PestConcentrationFormulas;
+    PestConcentrationMethods := SourceRiv.PestConcentrationMethods;
+  end;
   inherited;
 end;
 
@@ -1256,7 +1672,7 @@ begin
         Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);
         Cell.StressPeriod := TimeIndex;
-        Cell.Values := BoundaryValues;
+        Cell.FValues := BoundaryValues;
         Cell.ScreenObject := ScreenObject;
         LocalModel.AdjustCellPosition(Cell);
       end;
@@ -1279,6 +1695,10 @@ end;
 constructor TRivBoundary.Create(Model: TBaseModel; ScreenObject: TObject);
 begin
   inherited;
+  FPestConcentrationFormulas:= TRivGwtConcCollection.Create(Model, ScreenObject, nil);
+  FPestConcentrationMethods := TPestMethodCollection.Create(Model);
+  FConcentrationObservers := TObserverList.Create;
+
   CreateFormulaObjects;
   CreateBoundaryObserver;
   CreateObservers;
@@ -1293,19 +1713,36 @@ begin
 end;
 
 procedure TRivBoundary.CreateFormulaObjects;
+var
+  LocalModel: TPhastModel;
+  ConcIndex: Integer;
 begin
   FPestRiverStageFormula := CreateFormulaObjectBlocks(dso3D);
   FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
   FPestRiverBottomFormula := CreateFormulaObjectBlocks(dso3D);
+  LocalModel := ParentModel as TPhastModel;
+  if (LocalModel <> nil) and LocalModel.GwtUsed then
+  begin
+    for ConcIndex := 0 to LocalModel.MobileComponents.Count - 1 do
+    begin
+      FPestConcentrationFormulas.Add;
+    end;
+  end;
 end;
 
 procedure TRivBoundary.CreateObservers;
+var
+  Index: Integer;
 begin
   if ScreenObject <> nil then
   begin
     FObserverList.Add(PestRiverStageObserver);
     FObserverList.Add(PestConductanceObserver);
     FObserverList.Add(PestRiverBottomObserver);
+    for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+    begin
+      FObserverList.Add(ConcentrationObserver[Index]);
+    end;
   end;
 end;
 
@@ -1327,19 +1764,28 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        result := ppmMultiply;
       end;
   end;
 end;
 
 destructor TRivBoundary.Destroy;
+var
+  Index: Integer;
 begin
   PestRiverStageFormula := '';
   PestRiverBottomFormula := '';
   PestConductanceFormula := '';
 
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    FPestConcentrationFormulas[Index].Value := '';
+  end;
+
   inherited;
+  FPestConcentrationMethods.Free;
+  FPestConcentrationFormulas.Free;
+  FConcentrationObservers.Free;
 end;
 
 procedure TRivBoundary.GetCellValues(ValueTimeList: TList;
@@ -1467,9 +1913,24 @@ begin
   end;
 end;
 
-function TRivBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+function TRivBoundary.GetConcentrationObserver(const Index: Integer): TObserver;
+var
+  AObserver: TObserver;
 begin
-  result := '';
+  while Index >= FConcentrationObservers.Count do
+  begin
+    CreateObserver(Format('RivConc_%d', [Index+1]), AObserver, nil);
+    FConcentrationObservers.Add(AObserver);
+    AObserver.OnUpToDateSet := InvalidateConcData;
+  end;
+  result := FConcentrationObservers[Index];
+end;
+
+function TRivBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
+var
+  ConcIndex: Integer;
+begin
+//  result := '';
   case FormulaIndex of
     RivStagePosition:
       begin
@@ -1484,12 +1945,21 @@ begin
         result := PestRiverBottomFormula;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - RivStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        result := PestConcentrationFormulas[ConcIndex].Value;
+      end;
   end;
 end;
 
 function TRivBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     RivStagePosition:
@@ -1506,8 +1976,12 @@ begin
       end;
     else
       begin
-        result := inherited;
-        Assert(False);
+        ConcIndex := FormulaIndex - RivStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        result := FPestConcentrationMethods[ConcIndex].PestParamMethod;
       end;
   end;
 end;
@@ -1570,6 +2044,8 @@ begin
 end;
 
 procedure TRivBoundary.GetPropertyObserver(Sender: TObject; List: TList);
+var
+  Index: Integer;
 begin
   if Sender = FPestRiverStageFormula then
   begin
@@ -1592,6 +2068,13 @@ begin
       List.Add(FObserverList[RivBottomPosition]);
     end;
   end;
+  for Index := 0 to FPestConcentrationFormulas.Count - 1 do
+  begin
+    if FPestConcentrationFormulas[Index].ValueObject = Sender then
+    begin
+      List.Add(FObserverList[RivStartConcentration + Index]);
+    end;
+  end;
 end;
 
 function TRivBoundary.GetUsedObserver: TObserver;
@@ -1607,6 +2090,18 @@ procedure TRivBoundary.HandleChangedValue(Observer: TObserver);
 begin
 //  inherited;
   InvalidateDisplay;
+end;
+
+procedure TRivBoundary.InvalidateConcData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMfRivConc(self);
 end;
 
 procedure TRivBoundary.InvalidateConductanceData(Sender: TObject);
@@ -1647,6 +2142,7 @@ begin
     Model.InvalidateMfRivConductance(self);
     Model.InvalidateMfRivStage(self);
     Model.InvalidateMfRivBottom(self);
+    Model.InvalidateMfRivConc(self);
   end;
 end;
 
@@ -1716,6 +2212,8 @@ end;
 
 procedure TRivBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     RivStagePosition:
@@ -1731,12 +2229,21 @@ begin
         PestRiverBottomFormula := Value;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - RivStartConcentration;
+        while ConcIndex >= PestConcentrationFormulas.Count do
+        begin
+          PestConcentrationFormulas.Add;
+        end;
+        PestConcentrationFormulas[ConcIndex].Value := Value;
+      end;
   end;
 end;
 
 procedure TRivBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
+var
+  ConcIndex: Integer;
 begin
   case FormulaIndex of
     RivStagePosition:
@@ -1752,8 +2259,27 @@ begin
         PestRiverBottomMethod := Value;
       end;
     else
-      Assert(False);
+      begin
+        ConcIndex := FormulaIndex - RivStartConcentration;
+        while ConcIndex >= FPestConcentrationMethods.Count do
+        begin
+          FPestConcentrationMethods.Add;
+        end;
+        FPestConcentrationMethods[ConcIndex].PestParamMethod := Value;
+      end;
   end;
+end;
+
+procedure TRivBoundary.SetPestConcentrationFormulas(
+  const Value: TRivGwtConcCollection);
+begin
+  FPestConcentrationFormulas.Assign(Value);
+end;
+
+procedure TRivBoundary.SetPestConcentrationMethods(
+  const Value: TPestMethodCollection);
+begin
+  FPestConcentrationMethods.Assign(Value);
 end;
 
 procedure TRivBoundary.SetPestConductanceFormula(const Value: string);
@@ -1824,7 +2350,21 @@ end;
 
 { TRivRecord }
 
+procedure TRivRecord.Assign(const Item: TRivRecord);
+begin
+  self := Item;
+  SetLength(Concentrations, Length(Concentrations));
+  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
+  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
+  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
+  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
+  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
+end;
+
 procedure TRivRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
+var
+  Index: Integer;
+  Count: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, Conductance);
@@ -1849,21 +2389,46 @@ begin
   WriteCompInt(Comp, Ord(RiverStagePestSeriesMethod));
   WriteCompInt(Comp, Ord(RiverBottomPestSeriesMethod));
 
-//  WriteCompInt(Comp, Strings.IndexOf(TimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(ConductanceParameterName));
 
   WriteCompInt(Comp, Strings.IndexOf(ConductanceTimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(RiverStageTimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(RiverBottomTimeSeriesName));
 
+  Count := Length(Concentrations);
+  WriteCompInt(Comp, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompReal(Comp, Concentrations[Index]);
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
+  end;
+  for Index := 0 to Count - 1 do
+  begin
+    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
+  end;
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
-//  WriteCompString(Comp, ConductanceAnnotation);
-//  WriteCompString(Comp, RiverStageAnnotation);
-//  WriteCompString(Comp, RiverBottomAnnotation);
 end;
 
 procedure TRivRecord.RecordStrings(Strings: TStringList);
+var
+  Index: Integer;
 begin
   Strings.Add(ConductanceAnnotation);
   Strings.Add(RiverStageAnnotation);
@@ -1882,9 +2447,29 @@ begin
   Strings.Add(ConductanceTimeSeriesName);
   Strings.Add(RiverStageTimeSeriesName);
   Strings.Add(RiverBottomTimeSeriesName);
+
+  for Index := 0 to Length(ConcentrationAnnotations) - 1 do
+  begin
+    Strings.Add(ConcentrationAnnotations[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationPestSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationPestSeriesNames[Index]);
+  end;
+  for Index := 0 to Length(ConcentrationTimeSeriesNames) - 1 do
+  begin
+    Strings.Add(ConcentrationTimeSeriesNames[Index]);
+  end;
 end;
 
 procedure TRivRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+var
+  Count: Integer;
+  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   Conductance := ReadCompReal(Decomp);
@@ -1915,6 +2500,38 @@ begin
   ConductanceTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RiverStageTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RiverBottomTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  Count := ReadCompInt(Decomp);
+  SetLength(Concentrations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    Concentrations[Index] := ReadCompReal(Decomp);
+  end;
+  SetLength(ConcentrationAnnotations, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
+  SetLength(ConcentrationPestSeriesMethods, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
+  end;
+  SetLength(ConcentrationTimeSeriesNames, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
+  end;
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
@@ -1995,8 +2612,13 @@ end;
 procedure TRivTimeListLink.CreateTimeLists;
 var
   LocalModel: TCustomModel;
+  PhastModel: TPhastModel;
+  SpeciesIndex: Integer;
+  ConcTimeList: TModflowTimeList;
 begin
   inherited;
+  FConcList := TObjectList.Create;
+
   FRiverBottomData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FRiverStageData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FConductanceData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
@@ -2016,14 +2638,41 @@ begin
   AddTimeList(FRiverStageData);
   AddTimeList(FConductanceData);
   AddTimeList(FRiverBottomData);
+
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.GwtUsed then
+  begin
+    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
+    begin
+      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
+      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
+      if Model <> nil then
+      begin
+        LocalModel := Model as TCustomModel;
+        ConcTimeList.OnInvalidate := LocalModel.InvalidateMfGhbConc;
+      end;
+      AddTimeList(ConcTimeList);
+      FConcList.Add(ConcTimeList);
+    end;
+  end;
 end;
 
 destructor TRivTimeListLink.Destroy;
 begin
+  FConcList.Free;
   FRiverStageData.Free;
   FConductanceData.Free;
   FRiverBottomData.Free;
   inherited;
+end;
+
+{ TRivGwtConcCollection }
+
+constructor TRivGwtConcCollection.Create(Model: TBaseModel;
+  AScreenObject: TObject; ParentCollection: TRivCollection);
+begin
+  inherited Create(Model, AScreenObject, ParentCollection);
 end;
 
 end.

@@ -7505,6 +7505,7 @@ begin
   else if (Name = StrMODFLOWRiverConductance)
     or (Name = StrMODFLOWRiverStage)
     or (Name = StrMODFLOWRiverBottom)
+    or (Pos('RIV ', Name) = 1)
     then
   begin
     Result := btMfRiv;

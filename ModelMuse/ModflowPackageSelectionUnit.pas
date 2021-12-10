@@ -162,8 +162,6 @@ Type
       NewUseList: TStringList);
     procedure InitializeGhbDisplay(Sender: TObject);
     procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
-//    procedure UpdatePkgUseList(NewUseList: TStringList;
-//      ParamType: TParameterType; DataIndex: integer; const DisplayName: string);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -229,6 +227,8 @@ Type
 
   TRivPackage = class(TModflowPackageSelection)
   private
+    // @name is implemented as a TObjectList;
+    FGwtConcentrationList: TList;
     FMfRivConductance: TModflowBoundaryDisplayTimeList;
     FMfRivBottom: TModflowBoundaryDisplayTimeList;
     FMfRivStage: TModflowBoundaryDisplayTimeList;
@@ -237,6 +237,7 @@ Type
       NewUseList: TStringList);
     procedure GetMfRivStageUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMfRivBottomUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -248,8 +249,8 @@ Type
     property MfRivBottom: TModflowBoundaryDisplayTimeList read FMfRivBottom;
     procedure InvalidateAllTimeLists; override;
     procedure InitializeVariables; override;
-//  published
-//    property NewtonFormulation;
+    procedure InvalidateConcentrations;
+    procedure AddRemoveRenameGwtConcentrationTimeLists;
   end;
 
   TChdPackage = class(TModflowPackageSelection)
@@ -5874,6 +5875,7 @@ resourcestring
   StrSFTConstantConcd = 'SFT_Constant_Conc_%d';
   StrGHBS = 'GHB %s';
   StrWelS = 'WEL %s';
+  StrRIVS = 'RIV %s';
 
 { TModflowPackageSelection }
 
@@ -10978,6 +10980,46 @@ end;
 
 { TRivPackage }
 
+procedure TRivPackage.AddRemoveRenameGwtConcentrationTimeLists;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+  Components: TMobileChemSpeciesCollection;
+begin
+  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+  begin
+    Components := frmGoPhast.PhastModel.MobileComponents;
+    while FGwtConcentrationList.Count > Components.Count do
+    begin
+      TimeList := FGwtConcentrationList[FGwtConcentrationList.Count-1];
+      RemoveTimeList(TimeList);
+      FGwtConcentrationList.Delete(FGwtConcentrationList.Count-1);
+    end;
+    while FGwtConcentrationList.Count < Components.Count do
+    begin
+      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+      AddTimeList(TimeList);
+      FGwtConcentrationList.Add(TimeList);
+      TimeList.OnInitialize := InitializeRivDisplay;
+      TimeList.OnGetUseList := GetGwtConcUseList;
+    end;
+    for Index := 0 to Components.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.Name := Format(StrRivS, [Components[Index].Name])
+    end;
+  end
+  else
+  begin
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      RemoveTimeList(TimeList);
+    end;
+    FGwtConcentrationList.Clear;
+  end;
+end;
+
 constructor TRivPackage.Create(Model: TBaseModel);
 begin
   inherited;
@@ -11003,16 +11045,32 @@ begin
     MfRivBottom.OnTimeListUsed := PackageUsed;
     MfRivBottom.Name := StrMODFLOWRiverBottom;
     AddTimeList(MfRivBottom);
+
+    FGwtConcentrationList := TObjectList.Create;
   end;
   InitializeVariables;
 end;
 
 destructor TRivPackage.Destroy;
 begin
+  FGwtConcentrationList.Free;
   FMfRivConductance.Free;
   FMfRivBottom.Free;
   FMfRivStage.Free;
   inherited;
+end;
+
+procedure TRivPackage.GetGwtConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  Index := FGwtConcentrationList.IndexOf(Sender);
+  DataSetName := Format(StrRIVS,
+     [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
+  Index := Index+3;
+  UpdatePkgUseList(NewUseList, ptRIV, Index, DataSetName);
 end;
 
 procedure TRivPackage.GetMfRivBottomUseList(Sender: TObject;
@@ -11037,6 +11095,8 @@ procedure TRivPackage.InitializeRivDisplay(Sender: TObject);
 var
   RivWriter: TModflowRIV_Writer;
   List: TModflowBoundListOfTimeLists;
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
 begin
   MfRivConductance.CreateDataSets;
   MfRivStage.CreateDataSets;
@@ -11048,6 +11108,14 @@ begin
     List.Add(MfRivStage);
     List.Add(MfRivConductance);
     List.Add(MfRivBottom);
+
+    for Index := 0 to FGwtConcentrationList.Count - 1 do
+    begin
+      TimeList := FGwtConcentrationList[Index];
+      TimeList.CreateDataSets;
+      List.Add(TimeList);
+    end;
+
     RivWriter.UpdateDisplay(List, [1]);
   finally
     RivWriter.Free;
@@ -11056,6 +11124,11 @@ begin
   MfRivConductance.ComputeAverage;
   MfRivStage.ComputeAverage;
   MfRivBottom.ComputeAverage;
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.ComputeAverage;
+  end;
 end;
 
 procedure TRivPackage.InitializeVariables;
@@ -11072,6 +11145,19 @@ begin
     MfRivConductance.Invalidate;
     MfRivStage.Invalidate;
     MfRivBottom.Invalidate;
+    InvalidateConcentrations;
+  end;
+end;
+
+procedure TRivPackage.InvalidateConcentrations;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FGwtConcentrationList.Count - 1 do
+  begin
+    TimeList := FGwtConcentrationList[Index];
+    TimeList.Invalidate;
   end;
 end;
 

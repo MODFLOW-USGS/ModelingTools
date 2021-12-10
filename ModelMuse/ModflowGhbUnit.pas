@@ -96,11 +96,11 @@ type
     function BoundaryFormulaCount: integer; override;
     function GetConductanceIndex: Integer; override;
   public
+    // @name copies Source to this @classname.
+    procedure Assign(Source: TPersistent);override;
     constructor Create(Collection: TCollection); override;
     Destructor Destroy; override;
   published
-    // @name copies Source to this @classname.
-    procedure Assign(Source: TPersistent);override;
     // @name is the formula used to set the boundary head
     // of this boundary.
     property BoundaryHead: string read GetBoundaryHead write SetBoundaryHead;
@@ -108,7 +108,11 @@ type
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
     property GwtConcentrations: TGhbGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations;
+      write SetGwtConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TGhbTimeListLink = class(TTimeListsModelLink)
@@ -182,7 +186,6 @@ type
     function GetConductance: double;
     function GetBoundaryHeadAnnotation: string;
     function GetConductanceAnnotation: string;
-//    function GetTimeSeriesName: string;
     function GetMvrUsed: Boolean;
     function GetMvrIndex: Integer;
     function GetConductanceParameterName: string;
@@ -235,7 +238,6 @@ type
   public
     property Conductance: double read GetConductance;
     property BoundaryHead: double read GetBoundaryHead;
-//    property TimeSeriesName: string read GetTimeSeriesName;
     property ConductanceAnnotation: string read GetConductanceAnnotation;
     property BoundaryHeadAnnotation: string read GetBoundaryHeadAnnotation;
     property MvrUsed: Boolean read GetMvrUsed;
@@ -483,7 +485,6 @@ begin
   FGwtConcentrations := TGhbGwtConcCollection.Create(Model, ScreenObject,
     GhbCol);
   inherited;
-//  FConcFormulas := TFormulaObjectList.Create;
 end;
 
 procedure TGhbItem.CreateFormulaObjects;
@@ -509,7 +510,7 @@ end;
 
 function TGhbItem.GetBoundaryFormula(Index: integer): string;
 var
-  Item: TGWtConcStringValueItem;
+  Item: TGwtConcStringValueItem;
 begin
   case Index of
     GhbHeadPosition: result := BoundaryHead;
@@ -607,7 +608,7 @@ end;
 
 procedure TGhbItem.SetBoundaryFormula(Index: integer; const Value: string);
 var
-  Item: TGWtConcStringValueItem;
+  Item: TGwtConcStringValueItem;
 begin
   inherited;
   case Index of
@@ -748,6 +749,7 @@ var
   LocalScreenObject: TScreenObject;
 begin
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
+
   AllowedIndicies := [GhbHeadPosition,GhbConductancePosition];
   LocalModel := AModel as TCustomModel;
   if LocalModel.GwtUsed then
@@ -1319,7 +1321,6 @@ function TGhb_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 var
   ConcIndex: Integer;
 begin
-//  result := 0;
   case Index of
     GhbHeadPosition:
       begin
@@ -1433,11 +1434,6 @@ procedure TGhbBoundary.Assign(Source: TPersistent);
 var
   SourceGhb: TGhbBoundary;
 begin
-//  if Source is TGhbBoundary then
-//  begin
-//    SourceGhb := TGhbBoundary(Source);
-//    Interp := SourceGhb.Interp;
-//  end;
   if Source is TGhbBoundary then
   begin
     SourceGhb := TGhbBoundary(Source);
@@ -1764,18 +1760,11 @@ begin
   result := FConcentrationObservers[Index];
 end;
 
-//function TGhbBoundary.GetPConcentrationFormulas(const Index: Integer): string;
-//var
-//  AFormula: TFormulaObject;
-//begin
-//  result := FPestConcentrationFormulas[Index].Value;
-//end;
-
 function TGhbBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 var
   ConcIndex: Integer;
 begin
-  result := '';
+//  result := '';
   case FormulaIndex of
     GhbHeadPosition:
       begin
@@ -2354,7 +2343,6 @@ begin
     FBoundaryHeadData.OnInvalidate := LocalModel.InvalidateMfGhbBoundaryHead;
   end;
 
-//  LocalModel := Model as TCustomModel;
   PhastModel := frmGoPhast.PhastModel;
   if PhastModel.GwtUsed then
   begin

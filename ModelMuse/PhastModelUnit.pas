@@ -3070,6 +3070,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfRivConductance(Sender: TObject);
     procedure InvalidateMfRivStage(Sender: TObject);
     procedure InvalidateMfRivBottom(Sender: TObject);
+    procedure InvalidateMfRivConc(Sender: TObject);
     procedure InvalidateMfDrnConductance(Sender: TObject);
     procedure InvalidateMfDrnElevation(Sender: TObject);
     procedure InvalidateMfDrtConductance(Sender: TObject);
@@ -16489,36 +16490,19 @@ begin
   end
   else if DrawMesh <> nil then
   begin
-    if (DrawMesh.LayerCount <= 0) {or (Mesh.RowCount <= 0) or (Mesh.ColumnCount <= 0)} then
+    if (DrawMesh.LayerCount <= 0) then
     begin
       FFrontTimeList := nil;
-//      Mesh.FrontDataSet := nil;
       Exit;
     end;
-//    LocalSelectedLayer := Mesh.SelectedLayer;
-//    LocalSelectedRow := Mesh.SelectedRow;
-//    LocalSelectedColumn := Mesh.SelectedColumn;
     try
       if not TimeList.UpToDate then
       begin
         TimeList.Initialize;
       end;
-//      TimeIndex := TimeList.FirstTimeGreaterThan(Time) - 1;
-//      if TimeIndex < 0 then
-//      begin
-//        Mesh.FrontDataSet := nil;
-//      end
-//      else
-//      begin
-//        Mesh.FrontDataSet := TimeList.Items[TimeIndex];
-//        Mesh.FrontDataSet.UpdateMinMaxValues;
-//      end;
       FFrontTimeList := TimeList;
       FFrontDisplayTime := Time;
     finally
-//      Mesh.SelectedLayer := LocalSelectedLayer;
-//      Mesh.SelectedRow := LocalSelectedRow;
-//      Mesh.SelectedColumn := LocalSelectedColumn;
     end;
   end
   else
@@ -16531,6 +16515,7 @@ procedure TCustomModel.UpdateGwtConc;
 begin
   ModflowPackages.GhbBoundary.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.WelPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.RivPackage.AddRemoveRenameGwtConcentrationTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -24209,6 +24194,11 @@ end;
 procedure TCustomModel.InvalidateMfRivBottom(Sender: TObject);
 begin
   ModflowPackages.RivPackage.MfRivBottom.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfRivConc(Sender: TObject);
+begin
+  ModflowPackages.RivPackage.InvalidateConcentrations;
 end;
 
 procedure TCustomModel.InvalidateMfRivConductance(Sender: TObject);

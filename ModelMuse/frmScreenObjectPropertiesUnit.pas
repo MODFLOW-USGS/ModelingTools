@@ -2794,7 +2794,18 @@ begin
     PestParameterColumns := [2];
   end
   else if (Sender = frameRivParam.rdgModflowBoundary)
-    or (Sender = frameDrtParam.rdgModflowBoundary)
+    then
+  begin
+    PestParameterColumns := [2,3,4];
+    if frmGoPhast.PhastModel.GwtUsed then
+    begin
+      for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
+      begin
+        Include(PestParameterColumns, SpeciesIndex + 5);
+      end;
+    end;
+  end
+  else if (Sender = frameDrtParam.rdgModflowBoundary)
     or (Sender = frameEvtParam.rdgModflowBoundary)
     or (Sender = frameEtsParam.rdgModflowBoundary)
     then
@@ -6532,11 +6543,13 @@ end;
 procedure TfrmScreenObjectProperties.SetModflowBoundaryColCount;
 var
   CropIrrigationRequirement: TCropIrrigationRequirement;
+  MobileSpeciesCount: Integer;
 begin
+  MobileSpeciesCount := GwtColumnCount;
   frameChdParam.rdgModflowBoundary.ColCount := 4;
-  frameGhbParam.rdgModflowBoundary.ColCount := 4 + GwtColumnCount;
-  frameWellParam.rdgModflowBoundary.ColCount := 3 + GwtColumnCount;
-  frameRivParam.rdgModflowBoundary.ColCount := 5;
+  frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
+  frameWellParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
+  frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
   frameDrnParam.rdgModflowBoundary.ColCount := 4;
   frameDrtParam.rdgModflowBoundary.ColCount := 5;
   CropIrrigationRequirement :=

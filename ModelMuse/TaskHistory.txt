@@ -90,7 +90,7 @@ object TTaskHistory
     end
     item
       Name = 'RIV'
-      Display = False
+      Display = True
     end
     item
       Name = 'DRN'
@@ -28621,5 +28621,11 @@ object TTaskHistory
         'MF6 GWT'
         'Dialog boxes'
         'GHB')
+    end
+    item
+      Date = 44540.000000000000000000
+      Categories.Strings = (
+        'RIV'
+        'MF6 GWT')
     end>
 end

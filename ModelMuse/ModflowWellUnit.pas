@@ -96,7 +96,11 @@ type
     // or the pumping rate multiplier of this boundary.
     property PumpingRate: string read GetPumpingRate write SetPumpingRate;
     property GwtConcentrations: TWelGwtConcCollection read FGwtConcentrations
-      write SetGwtConcentrations;
+      write SetGwtConcentrations
+      {$IFNDEF GWT}
+      stored False
+      {$ENDIF}
+      ;
   end;
 
   TMfWelTimeListLink = class(TTimeListsModelLink)
